@@ -1617,277 +1617,277 @@ execute menu_open by default *Ctrl-O* is set, but you can also define
 
 The following table lists all customizable keyboard shortcuts.
 
-=============================== =========================================
-Action                          Description
-=============================== =========================================
+=============================== ========================= =========================================
+Action                          Default shortcut          Description
+=============================== ========================= =========================================
 **File menu**
 
-New                             Creates a new file.
+New                             Ctrl-N                    Creates a new file.
 
-Open                            Opens a file.
+Open                            Ctrl-O                    Opens a file.
 
-Save                            Saves the current file.
+Save                            Ctrl-S                    Saves the current file.
 
-Save As                         Saves the current file under a new name.
+Save As                                                   Saves the current file under a new name.
 
-Save all                        Saves all open files.
+Save all                        Ctrl-Shift-S              Saves all open files.
 
-Close all                       Closes all open files.
+Close all                       Ctrl-Shift-W              Closes all open files.
 
-Close                           Closes the current file.
+Close                           Ctrl-W                    Closes the current file.
 
-Reload file                     Reloads the current file. All unsaved changes
-                                will be lost.
+Reload file                     Ctrl-R                    Reloads the current file. All unsaved changes
+                                                          will be lost.
 
-Print                           Prints the current file.
+Print                           Ctrl-P                    Prints the current file.
 
 **Edit menu**
 
-Undo                            Un-does the last action.
+Undo                            Ctrl-Z                    Un-does the last action.
 
-Redo                            Re-does the last action.
+Redo                            Ctrl-Y                    Re-does the last action.
 
-Cut                             Cut the current selection to the clipboard.
+Cut                             Ctrl-X                    Cut the current selection to the clipboard.
 
-Copy                            Copy the current selection to the clipboard.
+Copy                            Ctrl-C                    Copy the current selection to the clipboard.
 
-Paste                           Paste the clipboard text into the current document.
+Paste                           Ctrl-V                    Paste the clipboard text into the current document.
 
-Select all                      Makes a selection of all text in the current
-                                document.
+Select all                      Ctrl-A                    Makes a selection of all text in the current
+                                                          document.
 
-Insert date                     Inserts a customisable date.
+Insert date                     Shift-Alt-D               Inserts a customisable date.
 
-Preferences                     Opens preferences dialog.
+Preferences                     Ctrl-Alt-P                Opens preferences dialog.
 
 **Search menu**
 
-Find                            Opens the Find dialog.
+Find                            Ctrl-F                    Opens the Find dialog.
 
-Find Next                       Finds next result.
+Find Next                       Ctrl-G                    Finds next result.
 
-Find Previous                   Finds previous result.
+Find Previous                   Ctrl-Shift-G              Finds previous result.
 
-Replace                         Opens the Replace dialog.
+Replace                         Ctrl-H                    Opens the Replace dialog.
 
-Find in files                   Opens the Find in files dialog.
+Find in files                   Ctrl-Shift-F              Opens the Find in files dialog.
 
-Next message                    Jumps to the line with the next message from
-                                the last call to Find usage.
+Next message                                              Jumps to the line with the next message from
+                                                          the last call to Find usage.
 
-Go to line                      Opens the Go to line dialog.
+Go to line                      Ctrl-L                    Opens the Go to line dialog.
 
 **View menu**
 
-Fullscreen                      Switches to fullscreen mode.
+Fullscreen                      F11                       Switches to fullscreen mode.
 
-Toggle Messages Window          Toggles the message window (status and compiler
-                                messages) on and off.
+Toggle Messages Window                                    Toggles the message window (status and compiler
+                                                          messages) on and off.
 
-Toggle Sidebar                  Shows or hides the sidebar.
+Toggle Sidebar                                            Shows or hides the sidebar.
 
-Toggle all additional widgets   Hide and show all additional widgets like the
-                                notebook tabs, the toolbar, the messages window
-                                and the statusbar.
+Toggle all additional widgets                             Hide and show all additional widgets like the
+                                                          notebook tabs, the toolbar, the messages window
+                                                          and the statusbar.
 
 **Document menu**
 
-Zoom In                         Zooms in the text
+Zoom In                         Ctrl-+                    Zooms in the text
 
-Zoom Out                        Zooms out the text
+Zoom Out                        Ctrl--                    Zooms out the text
 
-Replace tabs by space           Replaces all tabs with the right amount of spaces.
+Replace tabs by space                                     Replaces all tabs with the right amount of spaces.
 
-Fold all                        Folds all contractible code blocks.
+Fold all                                                  Folds all contractible code blocks.
 
-Unfold all                      Unfolds all contracted code blocks.
+Unfold all                                                Unfolds all contracted code blocks.
 
 **Build menu**
 
-Compile                         Compiles the current file.
+Compile                         F8                        Compiles the current file.
 
-Build                           Builds (compiles if necessary and links) the
-                                current file.
+Build                           F9                        Builds (compiles if necessary and links) the
+                                                          current file.
 
-Make all                        Builds the current file with the Make tool.
+Make all                        Shift-F9                  Builds the current file with the Make tool.
 
-Make custom target              Builds the current file with the Make tool and a
-                                given target.
+Make custom target              Ctrl-Shift-F9             Builds the current file with the Make tool and a
+                                                          given target.
 
-Make object                     Compiles the current file with the Make tool.
+Make object                                               Compiles the current file with the Make tool.
 
-Next error                      Jumps to the line with the next error from the
-                                last build process.
+Next error                                                Jumps to the line with the next error from the
+                                                          last build process.
 
-Run                             Executes the current file in a terminal emulation.
+Run                             F5                        Executes the current file in a terminal emulation.
 
-Run (alternative command)       Executes the current file in a terminal emulation.
+Run (alternative command)                                 Executes the current file in a terminal emulation.
 
-Build options                   Opens the build options dialog.
+Build options                                             Opens the build options dialog.
 
 **Tools menu**
 
-Show Colour Chooser             Opens the Colour Chooser dialog.
+Show Color Chooser                                        Opens the Colour Chooser dialog.
 
 **Help menu**
 
-Help                            Opens the manual.
+Help                            F1                        Opens the manual.
 
 **Miscellaneous**
 
-Reload symbol list              Reloads the tag/symbol list.
+Reload symbol list              Ctrl-Shift-R              Reloads the tag/symbol list.
 
-Switch to Editor                Switches to editor widget.
+Switch to Editor                F2                        Switches to editor widget.
 
-Switch to Scribble              Switches to scribble widget.
+Switch to Scribble              F6                        Switches to scribble widget.
 
-Switch to VTE                   Switches to VTE widget.
+Switch to VTE                   F4                        Switches to VTE widget.
 
-Switch to Search Bar            Switches to the search bar in the toolbar (if
-                                visible).
+Switch to Search Bar            F7                        Switches to the search bar in the toolbar (if
+                                                          visible).
 
-Switch to left document         Switches to the previous open document.
+Switch to left document         Ctrl-PageUp               Switches to the previous open document.
 
-Switch to right document        Switches to the next open document.
+Switch to right document        Ctrl-PageDown             Switches to the next open document.
 
-Switch to last used document    Switches to the previously selected open document.
+Switch to last used document    Ctrl-Tab                  Switches to the previously selected open document.
 
-Move document left              Changes the current document with the left hand
-                                one.
+Move document left              Alt-PageUp                Changes the current document with the left hand
+                                                          one.
 
-Move document right             Changes the current document with the right hand
-                                one.
+Move document right             Alt-PageDown              Changes the current document with the right hand
+                                                          one.
 
-Move document first             Moves the current document to the first position.
+Move document first                                       Moves the current document to the first position.
 
-Move document last              Moves the current document to the last position.
+Move document last                                        Moves the current document to the last position.
 
-Navigate forward a location     Switches to the next location in the navigation
-                                history. See the section called `Code Navigation
-                                History`_.
+Navigate forward a location                               Switches to the next location in the navigation
+                                                          history. See the section called `Code Navigation
+                                                          History`_.
 
-Navigate back a location        Switches to the previous location in the
-                                navigation history. See the section called
-                                `Code Navigation History`_.
+Navigate back a location                                  Switches to the previous location in the
+                                                          navigation history. See the section called
+                                                          `Code Navigation History`_.
 
 **Editing operations**
 
-Toggle case of selection        Changes the case of the selection. A lowercase
-                                selection will be changed into uppercase and vice
-                                versa. If the selection contains lower- and
-                                uppercase characters, all will be converted to
-                                lowercase.
+Toggle case of selection        Ctrl-Alt-U                Changes the case of the selection. A lowercase
+                                                          selection will be changed into uppercase and vice
+                                                          versa. If the selection contains lower- and
+                                                          uppercase characters, all will be converted to
+                                                          lowercase.
 
-Duplicate line or selection     Duplicates the current line or selection.
+Duplicate line or selection     Ctrl-D                    Duplicates the current line or selection.
 
-Delete current line(s)          Deletes the current line (and any lines with a
-                                selection).
+Delete current line(s)          Ctrl-K                    Deletes the current line (and any lines with a
+                                                          selection).
 
-Cut current line(s)             Cuts the current line (and any lines with a
-                                selection) to the clipboard.
+Cut current line(s)             Ctrl-Shift-X              Cuts the current line (and any lines with a
+                                                          selection) to the clipboard.
 
-Copy current line(s)            Copies the current line (and any lines with a
-                                selection) to the clipboard.
+Copy current line(s)            Ctrl-Shift-C              Copies the current line (and any lines with a
+                                                          selection) to the clipboard.
 
-Transpose current line          Transposes the current line with the previous one.
+Transpose current line          Ctrl-T                    Transposes the current line with the previous one.
 
-Comment line                    Comments current line or selection.
+Comment line                                              Comments current line or selection.
 
-Uncomment line                  Uncomments current line or selection.
+Uncomment line                                            Uncomments current line or selection.
 
-Toggle line commentation        Comments a line if it is not commented or removes
-                                a comment if the line is commented.
+Toggle line commentation        Ctrl-E                    Comments a line if it is not commented or removes
+                                                          a comment if the line is commented.
 
-Increase indent                 Indents the current line or selection by one tab
-                                or by spaces in the amount of the tab width
-                                setting.
+Increase indent                 Ctrl-I                    Indents the current line or selection by one tab
+                                                          or by spaces in the amount of the tab width
+                                                          setting.
 
-Decrease indent                 Removes one tabulator or the amount fo spaces of
-                                the tab width setting from the indentation of the
-                                current line or selection.
+Decrease indent                 Ctrl-U                    Removes one tabulator or the amount fo spaces of
+                                                          the tab width setting from the indentation of the
+                                                          current line or selection.
 
-Increase indent by one space    Indents the current line or selection by one
-                                space.
+Increase indent by one space                              Indents the current line or selection by one
+                                                          space.
 
-Decrease indent by one space    Deindents the current line or selection by one
-                                space.
+Decrease indent by one space                              Deindents the current line or selection by one
+                                                          space.
 
-Smart line indent               Indents the current line or all selected lines
-                                with the same intentation as the previous line.
+Smart line indent                                         Indents the current line or all selected lines
+                                                          with the same intentation as the previous line.
 
-Goto matching brace             If the cursor is ahead or behind a brace, then it
-                                is moved to the brace which belongs to the current
-                                one. If this keyboard shortcut is pressed again,
-                                the cursor is moved back to the first brace.
+Goto matching brace             Ctrl-B                    If the cursor is ahead or behind a brace, then it
+                                                          is moved to the brace which belongs to the current
+                                                          one. If this keyboard shortcut is pressed again,
+                                                          the cursor is moved back to the first brace.
 
-Toggle marker                   Set a marker on the current line, or clear the
-                                marker if there already is one.
+Toggle marker                   Ctrl-M                    Set a marker on the current line, or clear the
+                                                          marker if there already is one.
 
-Goto next marker                Goto the next marker in the current document.
+Goto next marker                Ctrl-.                    Goto the next marker in the current document.
 
-Goto previous marker            Goto the previous marker in the current document.
+Goto previous marker            Ctrl-,                    Goto the previous marker in the current document.
 
-Complete word                   Shows auto completion list.
+Complete word                   Ctrl-Space                Shows auto completion list.
 
-Show calltip                    Shows call tips for the current function or
-                                method.
+Show calltip                    Alt-Space (Unix)          Shows call tips for the current function or
+                                Alt-Shift-Space (Windows) method.
 
-Show macro list                 Shows a list of available macros and variables in
-                                the workspace.
+Show macro list                 Ctrl-Return               Shows a list of available macros and variables in
+                                                          the workspace.
 
-Complete construct              If you type a construct like if or for and press
-                                this key, it will be completed with a matching
-                                template.
+Complete snippet                Tab                       If you type a construct like if or for and press
+                                                          this key, it will be completed with a matching
+                                                          template.
 
-Suppress construct completion   If you type a construct like if or for and press
-                                this key, it will not be completed, and a space or
-                                tab will be inserted, depending on what the
-                                construct completion keybinding is set to. For
-                                example, if you have set the construct completion
-                                keybinding to space, then setting this to
-                                Shift+space will prevent construct completion and
-                                insert a space.
+Suppress snippet completion                               If you type a construct like if or for and press
+                                                          this key, it will not be completed, and a space or
+                                                          tab will be inserted, depending on what the
+                                                          construct completion keybinding is set to. For
+                                                          example, if you have set the construct completion
+                                                          keybinding to space, then setting this to
+                                                          Shift+space will prevent construct completion and
+                                                          insert a space.
 
-Select current word             Selects the current word under the cursor.
+Select current word             Alt-Shift-W               Selects the current word under the cursor.
 
-Select current paragraph        Selects the current paragraph under the cursor
-                                which is defined by two empty lines around it.
+Select current paragraph        Alt-Shift-P               Selects the current paragraph under the cursor
+                                                          which is defined by two empty lines around it.
 
-Select current line(s)          Selects the current line under the cursor (and any
-                                partially selected lines).
+Select current line(s)          Alt-Shift-L               Selects the current line under the cursor (and any
+                                                          partially selected lines).
 
-Scroll to current line          Scrolls the current line into the centre of the
-                                view. The cursor position and or an existing
-                                selection will not be changed.
+Scroll to current line          Ctrl-Shift-L              Scrolls the current line into the centre of the
+                                                          view. The cursor position and or an existing
+                                                          selection will not be changed.
 
-Insert alternative whitespace   Inserts a tabulator character when spaces should
-                                be used for indentation and inserts space
-                                characters of the amount of a tabulator width when
-                                tabulators should be used for indentation.
+Insert alternative whitespace                             Inserts a tabulator character when spaces should
+                                                          be used for indentation and inserts space
+                                                          characters of the amount of a tabulator width when
+                                                          tabulators should be used for indentation.
 
 **Popup menu**
 
-Find Usage                      Finds all occurrences of the current word (near
-                                the keyboard cursor) or selection and displays
-                                them in the messages window.
+Find Usage                                                Finds all occurrences of the current word (near
+                                                          the keyboard cursor) or selection and displays
+                                                          them in the messages window.
 
-Go to tag definition            Jump to the definition of the current word (near
-                                the keyboard cursor). If the definition cannot be
-                                found (e.g. the relevant file is not open) Geany
-                                will beep and do nothing. See the section called
-                                `Go to tag definition`_.
+Go to tag definition                                      Jump to the definition of the current word (near
+                                                          the keyboard cursor). If the definition cannot be
+                                                          found (e.g. the relevant file is not open) Geany
+                                                          will beep and do nothing. See the section called
+                                                          `Go to tag definition`_.
 
-Go to tag declaration           Jump to the declaration of the current word (near
-                                the keyboard cursor). If the declaration cannot be
-                                found (e.g. the relevant file is not open) Geany
-                                will beep and do nothing. See the section called
-                                `Go to tag declaration`_.
+Go to tag declaration                                     Jump to the declaration of the current word (near
+                                                          the keyboard cursor). If the declaration cannot be
+                                                          found (e.g. the relevant file is not open) Geany
+                                                          will beep and do nothing. See the section called
+                                                          `Go to tag declaration`_.
 
-Context Action                  Executes a command and passes the current word
-                                (near the cursor postion) or selection as an
-                                argument. See the section called `Context
-                                actions`_.
-=============================== =========================================
+Context Action                                            Executes a command and passes the current word
+                                                          (near the cursor postion) or selection as an
+                                                          argument. See the section called `Context
+                                                          actions`_.
+=============================== ========================= =========================================
 
 
 

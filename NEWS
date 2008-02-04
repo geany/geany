@@ -87,6 +87,7 @@ Geany 0.13 (TBA)
       instead of the default home directory.
 
     Documentation:
+    * Show default shortcuts in Keybindings section.
     * Update Project section for project-based session support.
     * Add Indentation subsection under Editor section.
     * HACKING: Update 'Adding a filetype' section.
