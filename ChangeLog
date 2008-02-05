@@ -1,3 +1,9 @@
+2008-02-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * scintilla/include/Platform.h: Fix definition of PLAT_GTK_WIN32 on
+                                 Windows to fix Copy&Paste problems.
+
+
 2008-02-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * doc/geany.txt, doc/geany.html:

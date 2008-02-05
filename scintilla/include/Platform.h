@@ -33,7 +33,7 @@
 #undef PLAT_GTK
 #define PLAT_GTK 1
 
-#ifdef _MSC_VER
+#ifdef G_OS_WIN32
 #undef PLAT_GTK_WIN32
 #define PLAT_GTK_WIN32 1
 #endif
@@ -122,7 +122,7 @@ public:
 	}
 	int Width() { return right - left; }
 	int Height() { return bottom - top; }
-	bool Empty() { 
+	bool Empty() {
 		return (Height() <= 0) || (Width() <= 0);
 	}
 };
