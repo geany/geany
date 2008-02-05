@@ -2,6 +2,9 @@
 
  * scintilla/include/Platform.h: Fix definition of PLAT_GTK_WIN32 on
                                  Windows to fix Copy&Paste problems.
+ * New release: Geany 0.13 "Vensell".
+ * configure.in, geany.nsi, geany_private.rc, win32-config.h,
+   src/geany.h: Post-release version bump.
 
 
 2008-02-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
