@@ -842,7 +842,7 @@ void configure(GtkWidget *parent)
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
 
-	label = gtk_label_new("External open command:");
+	label = gtk_label_new(_("External open command:"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 	gtk_container_add(GTK_CONTAINER(vbox), label);
 

@@ -122,14 +122,14 @@ void configure(GtkWidget *parent)
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
 
-	label = gtk_label_new("Auto save interval:");
+	label = gtk_label_new(_("Auto save interval:"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 	gtk_container_add(GTK_CONTAINER(vbox), label);
 
 	spin = gtk_spin_button_new_with_range(1, 1800, 1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin), interval);
 
-	label = gtk_label_new("seconds");
+	label = gtk_label_new(_("seconds"));
 
 	hbox = gtk_hbox_new(FALSE, 5);
 	gtk_box_pack_start(GTK_BOX(hbox), spin, TRUE, TRUE, 0);
