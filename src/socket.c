@@ -183,9 +183,18 @@ gint socket_init(gint argc, gchar **argv)
 	if (sock < 0)
 		return -1;
 #else
+	gchar *display = gdk_get_display();
+	gint display_num = 0;
+
+	display = strchr(display, ':');
+	if (NZV(display))
+		display++;
+	if (NZV(display))
+		display_num = atoi(display);
 
 	if (socket_info.file_name == NULL)
-		socket_info.file_name = g_strdup_printf("%s%cgeany_socket", app->configdir, G_DIR_SEPARATOR);
+		socket_info.file_name = g_strdup_printf("%s%cgeany_socket.%d",
+			app->configdir, G_DIR_SEPARATOR, display_num);
 
 	sock = socket_fd_connect_unix(socket_info.file_name);
 	if (sock < 0)

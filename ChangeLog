@@ -7,6 +7,9 @@
    Create the Unix Domain Socket for detecting a running instance in
    system's tmp directory and create a symlink to it in Geany's
    configuration directory (closes #1888561).
+ * src/socket.c:
+   Include display number for the filename of the symbolic link to the
+   real Unix Domain Socket file (closes #1888565).
 
 
 2008-02-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
