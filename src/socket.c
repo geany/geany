@@ -54,6 +54,7 @@
 # include <sys/socket.h>
 # include <sys/un.h>
 # include <netinet/in.h>
+# include <glib/gstdio.h>
 #else
 # include <winsock2.h>
 # include <ws2tcpip.h>
@@ -67,6 +68,7 @@
 #include "document.h"
 #include "support.h"
 #include "ui_utils.h"
+#include "utils.h"
 
 
 
@@ -188,7 +190,7 @@ gint socket_init(gint argc, gchar **argv)
 	sock = socket_fd_connect_unix(socket_info.file_name);
 	if (sock < 0)
 	{
-		unlink(socket_info.file_name);
+		g_unlink(socket_info.file_name);
 		return socket_fd_open_unix(socket_info.file_name);
 	}
 #endif
@@ -220,9 +222,22 @@ gint socket_finalize(void)
 #ifdef G_OS_WIN32
 	WSACleanup();
 #else
-	if (socket_info.file_name)
+	if (socket_info.file_name != NULL)
 	{
-		unlink(socket_info.file_name);
+		gchar real_path[512];
+		gsize len;
+
+		real_path[0] = '\0';
+
+		// read the contents of the symbolic link socket_info.file_name and delete it
+		// readlink should return something like "/tmp/geany_socket.1202396669"
+		len = readlink(socket_info.file_name, real_path, sizeof(real_path) - 1);
+		if ((gint) len > 0)
+		{
+			real_path[len] = '\0';
+			g_unlink(real_path);
+		}
+		g_unlink(socket_info.file_name);
 		g_free(socket_info.file_name);
 	}
 #endif
@@ -263,6 +278,7 @@ static gint socket_fd_open_unix(const gchar *path)
 	gint sock;
 	struct sockaddr_un addr;
 	gint val;
+	gchar *real_path;
 
 	sock = socket(PF_UNIX, SOCK_STREAM, 0);
 
@@ -280,9 +296,32 @@ static gint socket_fd_open_unix(const gchar *path)
 		return -1;
 	}
 
+	// fix for #1888561:
+	// in case the configuration directory is located on a network file system or any other
+	// file system which doesn't support sockets, we just link the socket there and create the
+	// real socket in the system's tmp directory assuming it supports sockets
+	real_path = g_strdup_printf("%s%cgeany_socket.%d",
+		g_get_tmp_dir(), G_DIR_SEPARATOR, (gint) time(NULL));
+
+	if (utils_is_file_writeable(real_path) != 0)
+	{	// if real_path is not writable for us, fall back to /home/user/.geany/geany_socket
+		// instead of creating a symlink and print a warning
+		g_warning("Socket %s could not be written, using %s as fallback.", real_path, path);
+		setptr(real_path, g_strdup(path));
+	}
+	// create a symlink in e.g. /home/user/.geany/geany_socket to /tmp/geany_socket.1202396669
+	else if (symlink(real_path, path) != 0)
+	{
+		perror("symlink");
+		socket_fd_close(sock);
+		return -1;
+	}
+
 	memset(&addr, 0, sizeof(addr));
 	addr.sun_family = AF_UNIX;
-	strncpy(addr.sun_path, path, sizeof(addr.sun_path) - 1);
+	strncpy(addr.sun_path, real_path, sizeof(addr.sun_path) - 1);
+
+	g_free(real_path);
 
 	if (bind(sock, (struct sockaddr *)&addr, sizeof(addr)) < 0)
 	{

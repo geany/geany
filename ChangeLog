@@ -3,6 +3,10 @@
  * plugins/Makefile.am: Fix typo (thanks Slava Semushin for reporting).
  * scintilla/include/Platform.h:
    Use a better check for PLAT_GTK_WIN32 (backport from Scintilla CVS).
+ * src/socket.c:
+   Create the Unix Domain Socket for detecting a running instance in
+   system's tmp directory and create a symlink to it in Geany's
+   configuration directory (closes #1888561).
 
 
 2008-02-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
