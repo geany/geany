@@ -42,7 +42,7 @@ classbuilder_la_LIBADD  = $(GTK_LIBS)
 htmlchars_la_LIBADD     = $(GTK_LIBS)
 export_la_LIBADD        = $(GTK_LIBS)
 vcdiff_la_LIBADD        = $(GTK_LIBS)
-autosave_la_LIBAD       = $(GTK_LIBS)
+autosave_la_LIBADD      = $(GTK_LIBS)
 filebrowser_la_LIBADD   = $(GTK_LIBS)
 
 endif # PLUGINS

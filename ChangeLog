@@ -1,3 +1,8 @@
+2008-02-07  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * plugins/Makefile.am: Fix typo (thanks Slava Semushin for reporting).
+
+
 2008-02-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * plugins/autosave.c, plugins/filebrowser.c:
