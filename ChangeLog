@@ -1,6 +1,8 @@
 2008-02-07  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * plugins/Makefile.am: Fix typo (thanks Slava Semushin for reporting).
+ * scintilla/include/Platform.h:
+   Use a better check for PLAT_GTK_WIN32 (backport from Scintilla CVS).
 
 
 2008-02-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

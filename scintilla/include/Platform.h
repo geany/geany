@@ -33,7 +33,7 @@
 #undef PLAT_GTK
 #define PLAT_GTK 1
 
-#ifdef G_OS_WIN32
+#if defined(__WIN32__) || defined(_MSC_VER)
 #undef PLAT_GTK_WIN32
 #define PLAT_GTK_WIN32 1
 #endif
