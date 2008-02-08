@@ -78,7 +78,7 @@ void sci_set_mark_long_lines(ScintillaObject * sci, gint type, gint column, cons
 			return;
 		}
 	}
-	SSM(sci, SCI_SETEDGECOLUMN, column - 1, 0);
+	SSM(sci, SCI_SETEDGECOLUMN, column, 0);
 	SSM(sci, SCI_SETEDGECOLOUR, utils_strtod(colour, NULL, TRUE), 0);
 }
 

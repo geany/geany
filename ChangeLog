@@ -6,6 +6,8 @@
    Remove prefix from win32_get_file_filters() and win32_get_filters().
    Fix some encoding problems with filenames retrieved from the native
    Windows file dialogs.
+ * src/sci_wrappers.c:
+   Fix wrong placement of long line marker (closes #1889392).
 
 
 2008-02-07  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
