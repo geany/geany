@@ -1,3 +1,8 @@
+2008-02-09  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * bg.po: Update of Bulgarian translation (Thanks to Dilyan Rusev)
+
+
 2008-02-07 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
 
  * fr.po: Update of French translation (Thanks Jean-Philippe Moal)
@@ -6,6 +11,7 @@
 2008-02-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * uk.po: Update of Ukrainian translation (thanks Boris Dibrov).
+ * New release: Geany 0.13 "Vensell".
 
 
 2008-02-04  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
