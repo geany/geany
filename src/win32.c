@@ -56,7 +56,7 @@
 
 
 
-static gchar *win32_get_file_filters()
+static gchar *get_file_filters()
 {
 	gchar *string;
 	gint i, j, len;
@@ -97,7 +97,7 @@ static gchar *win32_get_file_filters()
 }
 
 
-static gchar *win32_get_filters(gboolean project_files)
+static gchar *get_filters(gboolean project_files)
 {
 	gchar *string;
 	gint i, len;
@@ -188,7 +188,11 @@ gchar *win32_show_project_folder_dialog(GtkWidget *parent, const gchar *title,
 
 	// convert the strange Windows folder list item something into an usual path string ;-)
 	if (pidl != NULL && SHGetPathFromIDList(pidl, fname))
+	{
+		// convert the resulting filename into UTF-8 (from whatever encoding it has at this moment)
+		setptr(fname, g_locale_to_utf8(fname, -1, NULL, NULL, NULL));
 		return fname;
+	}
 	else
 	{
 		g_free(fname);
@@ -209,7 +213,7 @@ gchar *win32_show_project_open_dialog(GtkWidget *parent, const gchar *title,
 	OPENFILENAME of;
 	gint retval;
 	gchar *fname = g_malloc(2048);
-	gchar *filters = win32_get_filters(project_file_filter);
+	gchar *filters = get_filters(project_file_filter);
 	gchar *dir = get_dir(initial_dir);
 
 	fname[0] = '\0';
@@ -256,7 +260,8 @@ gchar *win32_show_project_open_dialog(GtkWidget *parent, const gchar *title,
 		g_free(fname);
 		return NULL;
 	}
-
+	// convert the resulting filename into UTF-8 (from whatever encoding it has at this moment)
+	setptr(fname, g_locale_to_utf8(fname, -1, NULL, NULL, NULL));
 	return fname;
 }
 
@@ -268,7 +273,7 @@ gboolean win32_show_file_dialog(gboolean file_open, const gchar *initial_dir)
 	OPENFILENAME of;
 	gint retval;
 	gchar *fname = g_malloc(2048);
-	gchar *filters = win32_get_file_filters();
+	gchar *filters = get_file_filters();
 
 	fname[0] = '\0';
 
@@ -323,6 +328,10 @@ gboolean win32_show_file_dialog(gboolean file_open, const gchar *initial_dir)
 		x = of.nFileOffset - 1;
 		if (x != strlen(fname))
 		{	// open a single file
+
+			// convert the resulting filename into UTF-8
+			setptr(fname, g_locale_to_utf8(fname, -1, NULL, NULL, NULL));
+
 			document_open_file(fname, of.Flags & OFN_READONLY, NULL, NULL);
 		}
 		else
@@ -333,10 +342,15 @@ gboolean win32_show_file_dialog(gboolean file_open, const gchar *initial_dir)
 			{
 				if (! fname[x])
 				{
+					gchar *utf8_filename;
 					if (! fname[x+1]) break;
 
 					g_snprintf(file_name, 254, "%s\\%s", fname, fname + x + 1);
-					document_open_file(file_name, of.Flags & OFN_READONLY, NULL, NULL);
+
+					// convert the resulting filename into UTF-8
+					utf8_filename = g_locale_to_utf8(file_name, -1, NULL, NULL, NULL);
+					document_open_file(utf8_filename, of.Flags & OFN_READONLY, NULL, NULL);
+					g_free(utf8_filename);
 				}
 				x++;
 			}
@@ -346,7 +360,8 @@ gboolean win32_show_file_dialog(gboolean file_open, const gchar *initial_dir)
 	else
 	{
 		gint idx = document_get_cur_idx();
-		doc_list[idx].file_name = g_strdup(fname);
+		// convert the resulting filename into UTF-8
+		doc_list[idx].file_name = g_locale_to_utf8(fname, -1, NULL, NULL, NULL);
 		document_save_file(idx, TRUE);
 	}
 	g_free(fname);
@@ -424,7 +439,7 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 	gint retval;
 	gchar *fname = g_malloc(512);
 	gchar **field, *filename, *tmp;
-	gchar *filters = win32_get_filters(FALSE);
+	gchar *filters = get_filters(FALSE);
 
 	fname[0] = '\0';
 
@@ -457,7 +472,7 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 	of.lpstrInitialDir = NULL;
 	of.lpstrTitle = NULL;
 	of.lpstrDefExt = "exe";
-	of.Flags = OFN_ALLOWMULTISELECT | OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_EXPLORER;
+	of.Flags = OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_EXPLORER;
 	retval = GetOpenFileName(&of);
 
 	g_free(filters);
@@ -479,7 +494,8 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 	{
 		tmp = g_strdup(fname);
 		if (g_strv_length(field) > 1)
-			// haha, pfad- und dateinamen mit leerzeichen??
+			// add the command line args of the old command
+			/// TODO this fails badly when the old command contained spaces, we need quoting here
 			filename = g_strconcat(tmp, " ", field[1], NULL);
 		else
 		{

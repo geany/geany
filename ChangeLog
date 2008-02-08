@@ -1,3 +1,13 @@
+2008-02-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/project.c:
+   Fix crash on Windows when a project could not be opened.
+ * src/win32.c:
+   Remove prefix from win32_get_file_filters() and win32_get_filters().
+   Fix some encoding problems with filenames retrieved from the native
+   Windows file dialogs.
+
+
 2008-02-07  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * plugins/Makefile.am: Fix typo (thanks Slava Semushin for reporting).

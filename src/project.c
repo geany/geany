@@ -247,7 +247,7 @@ void project_open()
 		{
 			SHOW_ERR1(_("Project file \"%s\" could not be loaded."), file);
 		}
-		if (project_prefs.project_session)
+		else if (project_prefs.project_session)
 		{
 			configuration_open_files();
 			// open a new file if no other file was opened
