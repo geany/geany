@@ -12,6 +12,8 @@
    time stamp.
    Before creating a new socket, delete a maybe existing socket and its
    symlink.
+   Apply patch from Daniel Richard G. to include the hostname in the
+   socket filename (thanks).
  * src/utils.c, src/win32.c, src/win32.h:
    Add support for getting hostname on Windows.
 

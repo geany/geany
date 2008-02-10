@@ -210,18 +210,25 @@ gint socket_init(gint argc, gchar **argv)
 	if (sock < 0)
 		return -1;
 #else
-	gchar *display = gdk_get_display();
-	gint display_num = 0;
+	gchar *display_name = gdk_get_display();
+	gchar *hostname = utils_get_hostname();
+	gchar *p;
 
-	display = strchr(display, ':');
-	if (NZV(display))
-		display++;
-	if (NZV(display))
-		display_num = atoi(display);
+	if (display_name == NULL)
+		display_name = g_strdup("NODISPLAY");
+
+	// these lines are taken from dcopc.c in kdelibs
+	if ((p = strrchr(display_name, '.')) > strrchr(display_name, ':') && p != NULL)
+		*p = '\0';
+	while ((p = strchr(display_name, ':')) != NULL)
+		*p = '_';
 
 	if (socket_info.file_name == NULL)
-		socket_info.file_name = g_strdup_printf("%s%cgeany_socket.%d",
-			app->configdir, G_DIR_SEPARATOR, display_num);
+		socket_info.file_name = g_strdup_printf("%s%cgeany_socket.%s%s",
+			app->configdir, G_DIR_SEPARATOR, hostname, display_name);
+
+	g_free(display_name);
+	g_free(hostname);
 
 	sock = socket_fd_connect_unix(socket_info.file_name);
 	if (sock < 0)
