@@ -1048,7 +1048,9 @@ gboolean editor_start_auto_complete(gint idx, gint pos, gboolean force)
 
 	// entity autocompletion always in a HTML file, in a PHP file only when we are outside of <? ?>
 	if (ft->id == GEANY_FILETYPES_HTML ||
-		(ft->id == GEANY_FILETYPES_PHP && (style < SCE_HPHP_DEFAULT || style > SCE_HPHP_OPERATOR)))
+		(ft->id == GEANY_FILETYPES_PHP && (style < SCE_HPHP_DEFAULT || style > SCE_HPHP_OPERATOR) &&
+		 line != (sci_get_line_count(sci) - 1))) // this check is a workaround for a Scintilla bug:
+												 // the last line in a PHP gets wrong styling
 		ret = autocomplete_html(sci, root, rootlen);
 	else
 	{
