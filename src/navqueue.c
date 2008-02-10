@@ -137,10 +137,8 @@ static void add_new_position(gchar *tm_filename, gint line)
 
 /* Adds the current document position to the queue before adding the new position.
  * line is counted with 1 as the first line, not 0. */
-gboolean navqueue_goto_line(gint new_idx, gint line)
+gboolean navqueue_goto_line(gint old_idx, gint new_idx, gint line)
 {
-	gint old_idx = document_get_cur_idx();
-
 	g_return_val_if_fail(DOC_IDX_VALID(old_idx), FALSE);
 	g_return_val_if_fail(DOC_IDX_VALID(new_idx), FALSE);
 	g_return_val_if_fail(doc_list[new_idx].tm_file, FALSE);

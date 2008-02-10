@@ -641,7 +641,7 @@ static gboolean on_taglist_tree_selection_changed(GtkTreeSelection *selection)
 		{
 			gint idx = document_get_cur_idx();
 
-			navqueue_goto_line(idx, line);
+			navqueue_goto_line(idx, idx, line);
 		}
 	}
 	return FALSE;

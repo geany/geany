@@ -1073,6 +1073,8 @@ gboolean symbols_goto_tag(const gchar *name, gboolean definition)
 	gint type;
 	TMTag *tmtag;
 
+	gint old_idx = document_get_cur_idx();
+
 	// goto tag definition: all except prototypes / forward declarations / externs
 	type = (definition) ? tm_tag_max_t - forward_types : forward_types;
 
@@ -1087,7 +1089,7 @@ gboolean symbols_goto_tag(const gchar *name, gboolean definition)
 			new_idx = document_open_file(tmtag->atts.entry.file->work_object.file_name, FALSE, NULL, NULL);
 		}
 
-		if (navqueue_goto_line(new_idx, tmtag->atts.entry.line))
+		if (navqueue_goto_line(old_idx, new_idx, tmtag->atts.entry.line))
 			return TRUE;
 	}
 	// if we are here, there was no match and we are beeping ;-)

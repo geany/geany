@@ -32,7 +32,7 @@ void navqueue_init();
 void navqueue_free();
 
 
-gboolean navqueue_goto_line(gint new_idx, gint line);
+gboolean navqueue_goto_line(gint old_idx, gint new_idx, gint line);
 
 void navqueue_go_back();
 
