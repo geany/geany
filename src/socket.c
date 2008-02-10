@@ -40,6 +40,14 @@
  * to mark the end of data send a single '.'. Each message should be ended with \n.
  *
  * At the moment the commands open, line and column are available.
+ *
+ * About the socket files on Unix-like systems:
+ * Geany creates a socket in /tmp(or any other directory returned by g_get_tmp_dir()) and it creates
+ * a symlink in the current configuration to the created socket file. The symlink is named
+ * geany_socket.dispnum (dispnum is the number of the active X display).
+ * If the socket file in the temporara directory could not be created, Geany creates the socket file
+ * directly in the configuration directory as a fallback.
+ *
  */
 
 
@@ -151,6 +159,25 @@ void send_open_command(gint sock, gint argc, gchar **argv)
 }
 
 
+static void remove_socket_link_full()
+{
+	gchar real_path[512];
+	gsize len;
+
+	real_path[0] = '\0';
+
+	// read the contents of the symbolic link socket_info.file_name and delete it
+	// readlink should return something like "/tmp/geany_socket.1202396669"
+	len = readlink(socket_info.file_name, real_path, sizeof(real_path) - 1);
+	if ((gint) len > 0)
+	{
+		real_path[len] = '\0';
+		g_unlink(real_path);
+	}
+	g_unlink(socket_info.file_name);
+}
+
+
 /* (Unix domain) socket support to replace the old FIFO code
  * (taken from Sylpheed, thanks) */
 gint socket_init(gint argc, gchar **argv)
@@ -199,7 +226,7 @@ gint socket_init(gint argc, gchar **argv)
 	sock = socket_fd_connect_unix(socket_info.file_name);
 	if (sock < 0)
 	{
-		g_unlink(socket_info.file_name);
+		remove_socket_link_full(); // deletes the socket file and the symlink
 		return socket_fd_open_unix(socket_info.file_name);
 	}
 #endif
@@ -233,20 +260,7 @@ gint socket_finalize(void)
 #else
 	if (socket_info.file_name != NULL)
 	{
-		gchar real_path[512];
-		gsize len;
-
-		real_path[0] = '\0';
-
-		// read the contents of the symbolic link socket_info.file_name and delete it
-		// readlink should return something like "/tmp/geany_socket.1202396669"
-		len = readlink(socket_info.file_name, real_path, sizeof(real_path) - 1);
-		if ((gint) len > 0)
-		{
-			real_path[len] = '\0';
-			g_unlink(real_path);
-		}
-		g_unlink(socket_info.file_name);
+		remove_socket_link_full(); // deletes the socket file and the symlink
 		g_free(socket_info.file_name);
 	}
 #endif
@@ -309,8 +323,8 @@ static gint socket_fd_open_unix(const gchar *path)
 	// in case the configuration directory is located on a network file system or any other
 	// file system which doesn't support sockets, we just link the socket there and create the
 	// real socket in the system's tmp directory assuming it supports sockets
-	real_path = g_strdup_printf("%s%cgeany_socket.%d",
-		g_get_tmp_dir(), G_DIR_SEPARATOR, (gint) time(NULL));
+	real_path = g_strdup_printf("%s%cgeany_socket.%08x",
+		g_get_tmp_dir(), G_DIR_SEPARATOR, g_random_int());
 
 	if (utils_is_file_writeable(real_path) != 0)
 	{	// if real_path is not writable for us, fall back to /home/user/.geany/geany_socket

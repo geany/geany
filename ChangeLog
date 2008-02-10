@@ -1,3 +1,19 @@
+2008-02-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/navqueue.c, src/navqueue.h, src/symbols.c, src/treeviews.c:
+   Apply patch from Yura Siamashka to fix wrong navigation queue items
+   (thanks).
+ * src/editor.c:
+   Add workaround for a Scintilla bug in HTML/PHP lexer which styles the
+   last line of document wrong when in PHP mode.
+ * README.Packagers: Add some notes for package maintainers.
+ * src/socket.c:
+   Use a random integer as part of socket file name instead of current
+   time stamp.
+   Before creating a new socket, delete a maybe existing socket and its
+   symlink.
+
+
 2008-02-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/project.c:
@@ -6,7 +22,7 @@
    Remove prefix from win32_get_file_filters() and win32_get_filters().
    Fix some encoding problems with filenames retrieved from the native
    Windows file dialogs.
- * src/sci_wrappers.c:
+ * src/sciwrappers.c:
    Fix wrong placement of long line marker (closes #1889392).
 
 
