@@ -59,4 +59,6 @@ void win32_init_debug_code();
 
 gchar *win32_get_appdata_folder();
 
+gchar *win32_get_hostname();
+
 #endif

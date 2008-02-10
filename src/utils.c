@@ -699,20 +699,14 @@ gchar utils_brace_opposite(gchar ch)
 
 gchar *utils_get_hostname()
 {
-#ifndef HAVE_GETHOSTNAME
-	return g_strdup("localhost");
-#else
-	gchar *host = g_malloc(25);
-	if (gethostname(host, 24) == 0)
-	{
-		return host;
-	}
-	else
-	{
-		g_free(host);
-		return g_strdup("localhost");
-	}
+#ifdef G_OS_WIN32
+	return win32_get_hostname();
+#elif defined(HAVE_GETHOSTNAME)
+	gchar hostname[100];
+	if (gethostname(hostname, sizeof(hostname)) == 0)
+		return g_strdup(hostname);
 #endif
+	return g_strdup("localhost");
 }
 
 

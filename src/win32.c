@@ -700,4 +700,16 @@ gchar *win32_get_appdata_folder()
 	return folder;
 }
 
+
+gchar *win32_get_hostname()
+{
+	gchar hostname[100];
+	DWORD size = sizeof(hostname);
+
+	if (GetComputerName(hostname, &size))
+		return g_strdup(hostname);
+	else
+		return g_strdup("localhost");
+}
+
 #endif
