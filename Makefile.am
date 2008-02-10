@@ -28,6 +28,7 @@ EXTRA_DIST = \
 	geany.gladep \
 	HACKING \
 	README.I18N \
+	README.Packagers \
 	po/intl_stats.sh \
 	intltool-extract.in \
 	intltool-merge.in \
