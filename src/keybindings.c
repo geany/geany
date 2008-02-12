@@ -623,16 +623,16 @@ void keybindings_show_shortcuts()
 }
 
 
-static gboolean check_fixed_kb(GdkEventKey *event)
+static gboolean check_fixed_kb(guint keyval, guint state)
 {
 	// check alt-0 to alt-9 for setting current notebook page
-	if (event->state & GDK_MOD1_MASK && event->keyval >= GDK_0 && event->keyval <= GDK_9)
+	if (state & GDK_MOD1_MASK && keyval >= GDK_0 && keyval <= GDK_9)
 	{
-		gint page = event->keyval - GDK_0 - 1;
+		gint page = keyval - GDK_0 - 1;
 		gint npages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
 
 		// alt-0 is for the rightmost tab
-		if (event->keyval == GDK_0)
+		if (keyval == GDK_0)
 			page = npages - 1;
 		// invert the order if tabs are added on the other side
 		if (swap_alt_tab_order && ! prefs.tab_order_ltr)
@@ -641,14 +641,14 @@ static gboolean check_fixed_kb(GdkEventKey *event)
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), page);
 		return TRUE;
 	}
-	if (event->keyval == GDK_Page_Up || event->keyval == GDK_Page_Down)
+	if (keyval == GDK_Page_Up || keyval == GDK_Page_Down)
 	{
 		// switch to first or last document
-		if (event->state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK))
+		if (state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK))
 		{
-			if (event->keyval == GDK_Page_Up)
+			if (keyval == GDK_Page_Up)
 				gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), 0);
-			if (event->keyval == GDK_Page_Down)
+			if (keyval == GDK_Page_Down)
 				gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
 					gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) - 1);
 			return TRUE;
@@ -660,11 +660,11 @@ static gboolean check_fixed_kb(GdkEventKey *event)
 
 /* We have a special case for GEANY_KEYS_EDIT_COMPLETESNIPPET, because we need to
  * return FALSE if no completion occurs, so the tab or space is handled normally. */
-static gboolean check_snippet_completion(GdkEventKey *event)
+static gboolean check_snippet_completion(guint keyval, guint state)
 {
 	const guint i = GEANY_KEYS_EDIT_COMPLETESNIPPET;
 
-	if (keys[i]->key == event->keyval && keys[i]->mods == event->state)
+	if (keys[i]->key == keyval && keys[i]->mods == state)
 	{
 		gint idx = document_get_cur_idx();
 		GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(app->window));
@@ -729,35 +729,32 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 
 
 /* central keypress event handler, almost all keypress events go to this function */
-gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *ev, gpointer user_data)
 {
-	guint i, keyval = event->keyval;
+	guint i, state, keyval;
 
 	if (keyval == 0)
 		return FALSE;
 
+	keyval = ev->keyval;
+    state = ev->state & GEANY_KEYS_MODIFIER_MASK;
+
 	// hack to get around that CTRL+Shift+r results in GDK_R not GDK_r
-	if (event->state & GDK_SHIFT_MASK || event->state & GDK_LOCK_MASK)
+	if (state & GDK_SHIFT_MASK)
 		if (keyval >= GDK_A && keyval <= GDK_Z)
 			keyval += GDK_a - GDK_A;
-	// now ignore caps-lock
-	if (event->state & GDK_LOCK_MASK)
-		event->state -= GDK_LOCK_MASK;
-	// ignore numlock key, not necessary but nice
-	if (event->state & GDK_MOD2_MASK)
-		event->state -= GDK_MOD2_MASK;
 
 	// special cases
 #ifdef HAVE_VTE
-	if (vte_info.have_vte && check_vte(event->state, keyval))
+	if (vte_info.have_vte && check_vte(state, keyval))
 		return FALSE;
 #endif
-	if (check_snippet_completion(event))
+	if (check_snippet_completion(keyval, state))
 		return TRUE;
 
 	for (i = 0; i < GEANY_MAX_KEYS; i++)
 	{
-		if (keyval == keys[i]->key && event->state == keys[i]->mods)
+		if (keyval == keys[i]->key && state == keys[i]->mods)
 		{
 			if (keys[i]->cb_func == NULL)
 				return FALSE;	// ignore the keybinding
@@ -768,7 +765,7 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer u
 		}
 	}
 	// fixed keybindings can be overridden by user bindings
-	if (check_fixed_kb(event))
+	if (check_fixed_kb(keyval, state))
 		return TRUE;
 	return FALSE;
 }

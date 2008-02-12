@@ -1139,14 +1139,14 @@ static void on_cell_edited(GtkCellRendererText *cellrenderertext, gchar *path, g
 static gboolean on_keytype_dialog_response(GtkWidget *dialog, GdkEventKey *event, gpointer user_data)
 {
 	gchar *str;
+	gint state;
 
-	if (event->state == 0 && event->keyval == GDK_Escape)
+    state = event->state & GEANY_KEYS_MODIFIER_MASK;
+
+	if (event->keyval == GDK_Escape)
 		return FALSE;	// close the dialog, don't allow escape when detecting keybindings.
 
-	// ignore numlock key, not necessary but nice
-	if (event->state & GDK_MOD2_MASK) event->state -= GDK_MOD2_MASK;
-
-	str = gtk_accelerator_name(event->keyval, event->state);
+	str = gtk_accelerator_name(event->keyval, state);
 
 	gtk_label_set_text(GTK_LABEL(dialog_label), str);
 	g_free(str);
