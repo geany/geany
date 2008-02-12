@@ -52,7 +52,7 @@ UIWidgets		ui_widgets;
 
 static struct
 {
-	GtkWidget *document_buttons[39];	// widgets only sensitive when there is at least one document
+	GtkWidget *document_buttons[45];	// widgets only sensitive when there is at least one document
 }
 widgets;
 
@@ -562,29 +562,35 @@ static void init_document_widgets()
 	widgets.document_buttons[13] = lookup_widget(app->window, "menu_count_words1");
 	widgets.document_buttons[14] = lookup_widget(app->window, "menu_build1");
 	widgets.document_buttons[15] = lookup_widget(app->window, "add_comments1");
-	widgets.document_buttons[16] = lookup_widget(app->window, "search1");
-	widgets.document_buttons[17] = lookup_widget(app->window, "menu_paste1");
-	widgets.document_buttons[18] = lookup_widget(app->window, "menu_undo2");
-	widgets.document_buttons[19] = lookup_widget(app->window, "preferences2");
-	widgets.document_buttons[20] = lookup_widget(app->window, "menu_reload1");
-	widgets.document_buttons[21] = lookup_widget(app->window, "menu_document1");
-	widgets.document_buttons[22] = lookup_widget(app->window, "menu_markers_margin1");
-	widgets.document_buttons[23] = lookup_widget(app->window, "menu_linenumber_margin1");
-	widgets.document_buttons[24] = lookup_widget(app->window, "menu_choose_color1");
-	widgets.document_buttons[25] = lookup_widget(app->window, "menu_zoom_in1");
-	widgets.document_buttons[26] = lookup_widget(app->window, "menu_zoom_out1");
-	widgets.document_buttons[27] = lookup_widget(app->window, "normal_size1");
-	widgets.document_buttons[28] = lookup_widget(app->window, "toolbutton24");
-	widgets.document_buttons[29] = lookup_widget(app->window, "toolbutton25");
-	widgets.document_buttons[30] = lookup_widget(app->window, "entry_goto_line");
-	widgets.document_buttons[31] = lookup_widget(app->window, "treeview6");
-	widgets.document_buttons[32] = lookup_widget(app->window, "print1");
-	widgets.document_buttons[33] = lookup_widget(app->window, "menu_reload_as1");
-	widgets.document_buttons[34] = lookup_widget(app->window, "menu_select_all1");
-	widgets.document_buttons[35] = lookup_widget(app->window, "insert_date1");
-	widgets.document_buttons[36] = lookup_widget(app->window, "menu_format1");
-	widgets.document_buttons[37] = lookup_widget(app->window, "menu_open_selected_file1");
-	widgets.document_buttons[38] = lookup_widget(app->window, "page_setup1");
+	widgets.document_buttons[16] = lookup_widget(app->window, "menu_paste1");
+	widgets.document_buttons[17] = lookup_widget(app->window, "menu_undo2");
+	widgets.document_buttons[18] = lookup_widget(app->window, "preferences2");
+	widgets.document_buttons[19] = lookup_widget(app->window, "menu_reload1");
+	widgets.document_buttons[20] = lookup_widget(app->window, "menu_document1");
+	widgets.document_buttons[21] = lookup_widget(app->window, "menu_markers_margin1");
+	widgets.document_buttons[22] = lookup_widget(app->window, "menu_linenumber_margin1");
+	widgets.document_buttons[23] = lookup_widget(app->window, "menu_choose_color1");
+	widgets.document_buttons[24] = lookup_widget(app->window, "menu_zoom_in1");
+	widgets.document_buttons[25] = lookup_widget(app->window, "menu_zoom_out1");
+	widgets.document_buttons[26] = lookup_widget(app->window, "normal_size1");
+	widgets.document_buttons[27] = lookup_widget(app->window, "toolbutton24");
+	widgets.document_buttons[28] = lookup_widget(app->window, "toolbutton25");
+	widgets.document_buttons[29] = lookup_widget(app->window, "entry_goto_line");
+	widgets.document_buttons[30] = lookup_widget(app->window, "treeview6");
+	widgets.document_buttons[31] = lookup_widget(app->window, "print1");
+	widgets.document_buttons[32] = lookup_widget(app->window, "menu_reload_as1");
+	widgets.document_buttons[33] = lookup_widget(app->window, "menu_select_all1");
+	widgets.document_buttons[34] = lookup_widget(app->window, "insert_date1");
+	widgets.document_buttons[35] = lookup_widget(app->window, "menu_format1");
+	widgets.document_buttons[36] = lookup_widget(app->window, "menu_open_selected_file1");
+	widgets.document_buttons[37] = lookup_widget(app->window, "page_setup1");
+	widgets.document_buttons[38] = lookup_widget(app->window, "find1");
+	widgets.document_buttons[39] = lookup_widget(app->window, "find_next1");
+	widgets.document_buttons[40] = lookup_widget(app->window, "find_previous1");
+	widgets.document_buttons[41] = lookup_widget(app->window, "replace1");
+	widgets.document_buttons[42] = lookup_widget(app->window, "find_nextsel1");
+	widgets.document_buttons[43] = lookup_widget(app->window, "find_prevsel1");
+	widgets.document_buttons[44] = lookup_widget(app->window, "go_to_line1");
 }
 
 

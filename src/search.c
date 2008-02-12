@@ -532,8 +532,6 @@ void search_show_find_in_files_dialog(const gchar *dir)
 	gchar *sel = NULL;
 	gchar *cur_dir;
 
-	if (! DOC_IDX_VALID(idx)) return;
-
 	if (widgets.find_in_files_dialog == NULL)
 	{
 		GtkWidget *label, *label1, *checkbox1, *checkbox2, *check_wholeword,
@@ -700,6 +698,10 @@ void search_show_find_in_files_dialog(const gchar *dir)
 	{
 		gtk_entry_set_text(GTK_ENTRY(entry), cur_dir);
 		g_free(cur_dir);
+	}
+	else
+	{	// use default_open_path if no directory could be determined (e.g. when no files are open)
+		gtk_entry_set_text(GTK_ENTRY(entry), prefs.default_open_path);
 	}
 
 	// put the focus to the directory entry if it is empty

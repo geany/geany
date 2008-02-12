@@ -2623,7 +2623,8 @@ gchar *editor_get_default_selection(gint idx, const gchar *wordchars)
 {
 	gchar *s = NULL;
 
-	g_return_val_if_fail(DOC_IDX_VALID(idx), NULL);
+	if (! DOC_IDX_VALID(idx))
+		return NULL;
 
 	if (sci_get_lines_selected(doc_list[idx].sci) == 1)
 	{
