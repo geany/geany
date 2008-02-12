@@ -10,6 +10,12 @@
    Improve filename of created symlink to the socket file.
  * src/document.c: Don't force unique line ending characters when saving
                    files to avoid unexpected saving behaviour.
+ * src/keybindings.c, src/keybindings.h, src/prefs.c:
+   Use a modifiers mask to ignore unwanted modifiers(caps lock,
+   num lock) when handling key presses (maybe fixes #1891276).
+ * src/dialogs.c:
+   Fix compiler warnings.
+   Improve Save As dialog usability problems.
 
 
 2008-02-11  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

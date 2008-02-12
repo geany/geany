@@ -525,24 +525,34 @@ static void create_save_file_dialog()
 static gboolean gtk_show_save_as(const gchar *initdir)
 {
 	gint idx = document_get_cur_idx(), resp;
+	gboolean folder_set = FALSE;
 
 	if (ui_widgets.save_filesel == NULL)
 		create_save_file_dialog();
 
-	if (initdir && g_path_is_absolute(initdir))
-		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(ui_widgets.save_filesel),
-			initdir);
+	gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(ui_widgets.save_filesel));
 
-	// If the current document has a filename we use that as the default.
 	if (doc_list[idx].file_name != NULL)
 	{
-		gchar *locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
-		if (g_path_is_absolute(locale_filename))
-			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(ui_widgets.save_filesel), locale_filename);
+		if (g_path_is_absolute(doc_list[idx].file_name))
+		{
+			gchar *locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
+			gchar *locale_basename = g_path_get_basename(locale_filename);
+			gchar *locale_dirname = g_path_get_dirname(locale_filename);
+
+			folder_set = TRUE;
+			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(ui_widgets.save_filesel),
+				locale_dirname);
+			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(ui_widgets.save_filesel),
+				locale_basename);
+
+			g_free(locale_filename);
+			g_free(locale_basename);
+			g_free(locale_dirname);
+		}
 		else
 			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(ui_widgets.save_filesel),
 				doc_list[idx].file_name);
-		g_free(locale_filename);
 	}
 	else
 	{
@@ -555,11 +565,14 @@ static gboolean gtk_show_save_as(const gchar *initdir)
 		else
 			fname = g_strdup(GEANY_STRING_UNTITLED);
 
-		gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(ui_widgets.save_filesel));
 		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(ui_widgets.save_filesel), fname);
 
 		g_free(fname);
 	}
+
+	// if the folder wasn't set so far, we set it to the given directory
+	if (! folder_set && initdir != NULL && g_path_is_absolute(initdir))
+		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(ui_widgets.save_filesel), initdir);
 
 	// Run the dialog synchronously, pausing this function call
 	resp = gtk_dialog_run(GTK_DIALOG(ui_widgets.save_filesel));
@@ -797,7 +810,7 @@ on_input_dialog_response(GtkDialog *dialog,
                          gint response,
                          GtkWidget *entry)
 {
-	gboolean persistent = (gboolean) g_object_get_data(G_OBJECT(dialog), "has_combo");
+	gboolean persistent = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(dialog), "has_combo"));
 
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
@@ -878,7 +891,7 @@ dialogs_show_input(const gchar *title, const gchar *label_text, const gchar *def
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
 
-	g_object_set_data(G_OBJECT(dialog), "has_combo", (gpointer) persistent);
+	g_object_set_data(G_OBJECT(dialog), "has_combo", GINT_TO_POINTER(persistent));
 	g_object_set_data(G_OBJECT(dialog), "input_cb", (gpointer) input_cb);
 
 	add_input_widgets(dialog, vbox, label_text, default_text, persistent);
