@@ -8,6 +8,8 @@
    whithout a writable temporary directory and without a writable
    configuration directory.
    Improve filename of created symlink to the socket file.
+ * src/document.c: Don't force unique line ending characters when saving
+                   files to avoid unexpected saving behaviour.
 
 
 2008-02-11  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

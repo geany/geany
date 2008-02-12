@@ -1196,8 +1196,6 @@ gboolean document_save_file(gint idx, gboolean force)
 	if (prefs.strip_trailing_spaces) document_strip_trailing_spaces(idx);
 	// ensure the file has a newline at the end
 	if (prefs.final_new_line) document_ensure_final_newline(idx);
-	// ensure there are really the same EOL chars
-	sci_convert_eols(doc_list[idx].sci, sci_get_eol_mode(doc_list[idx].sci));
 
 	len = sci_get_length(doc_list[idx].sci) + 1;
 	if (doc_list[idx].has_bom && encodings_is_unicode_charset(doc_list[idx].encoding))
