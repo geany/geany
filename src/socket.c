@@ -179,7 +179,9 @@ static void remove_socket_link_full()
 
 
 /* (Unix domain) socket support to replace the old FIFO code
- * (taken from Sylpheed, thanks) */
+ * (taken from Sylpheed, thanks)
+ * Returns the created socket, -1 if an error occurred or -2 if another socket exists and files
+ * were sent to it. */
 gint socket_init(gint argc, gchar **argv)
 {
 	gint sock;
@@ -224,7 +226,7 @@ gint socket_init(gint argc, gchar **argv)
 		*p = '_';
 
 	if (socket_info.file_name == NULL)
-		socket_info.file_name = g_strdup_printf("%s%cgeany_socket.%s%s",
+		socket_info.file_name = g_strdup_printf("%s%cgeany_socket_%s_%s",
 			app->configdir, G_DIR_SEPARATOR, hostname, display_name);
 
 	g_free(display_name);
@@ -245,7 +247,7 @@ gint socket_init(gint argc, gchar **argv)
 	}
 
 	socket_fd_close(sock);
-	return -1;
+	return -2;
 }
 
 

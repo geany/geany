@@ -692,7 +692,7 @@ gint main(gint argc, gchar **argv)
 		socket_info.lock_socket = -1;
 		socket_info.lock_socket_tag = 0;
 		socket_info.lock_socket = socket_init(argc, argv);
-		if (socket_info.lock_socket < 0)
+		if (socket_info.lock_socket == -2)
 		{
 			// Socket exists
 			if (argc > 1)	// filenames were sent to first instance, so quit

@@ -1,3 +1,15 @@
+2008-02-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/editor.c, src/search.c, src/ui_utils.c:
+   Allow using Find In Files dialog even if no files are open
+   (closes #1891818).
+ * src/main.c, src/socket.c:
+   Allow start of Geany with given files on the command line but
+   whithout a writable temporary directory and without a writable
+   configuration directory.
+   Improve filename of created symlink to the socket file.
+
+
 2008-02-11  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * src/about.c, THANKS: Added Nikita E. Shalaev to list of
