@@ -561,7 +561,7 @@ static void on_openfiles_hide_item_clicked(GtkMenuItem *menuitem, gpointer user_
 
 static gboolean change_focus(gpointer data)
 {
-	gint idx = (gint) data;
+	gint idx = GPOINTER_TO_INT(data);
 
 	// idx might not be valid e.g. if user closed a tab whilst Geany is opening files
 	if (DOC_IDX_VALID(idx))
@@ -589,7 +589,7 @@ static void on_openfiles_tree_selection_changed(GtkTreeSelection *selection, gpo
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
 					gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook),
 					(GtkWidget*) doc_list[idx].sci));
-		g_idle_add((GSourceFunc) change_focus, (gpointer) idx);
+		g_idle_add((GSourceFunc) change_focus, GINT_TO_POINTER(idx));
 	}
 }
 

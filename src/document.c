@@ -763,7 +763,7 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_f
 
 	if (! g_file_get_contents(locale_filename, &filedata->data, NULL, &err))
 	{
-		ui_set_statusbar(TRUE, err->message);
+		ui_set_statusbar(TRUE, "%s", err->message);
 		g_error_free(err);
 		return FALSE;
 	}

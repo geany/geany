@@ -525,7 +525,7 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 		if (charset == NULL)
 			continue;
 
-		geany_debug("Trying to convert %d bytes of data from %s into UTF-8.", size, charset);
+		geany_debug("Trying to convert %d bytes of data from %s into UTF-8.", (gint) size, charset);
 		utf8_content = encodings_convert_to_utf8_from_charset(buffer, size, charset, FALSE);
 
 		if (utf8_content != NULL)

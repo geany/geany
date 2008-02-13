@@ -1,6 +1,8 @@
 2008-02-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/keybindings.h: Fix broken compilation with GTK < 2.10.
+ * src/document.c, src/encodings.c, src/treeviews.c, src/vte.c:
+   Fix some compiler warnings.
 
 
 2008-02-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

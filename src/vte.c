@@ -32,6 +32,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <signal.h>
 #include <string.h>
+#include <errno.h>
 
 #include "vte.h"
 #include "msgwindow.h"
@@ -557,7 +558,8 @@ const gchar* vte_get_working_directory()
 				{
 					g_free(vte_info.dir);
 					vte_info.dir = g_get_current_dir();
-					chdir(cwd);
+					if (chdir(cwd) != 0)
+						geany_debug("%s: %s", __func__, g_strerror(errno));
 				}
 				g_free(cwd);
 			}
