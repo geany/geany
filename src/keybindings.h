@@ -46,13 +46,12 @@ typedef struct KeyBinding
 
 
 // allowed modifier keys (especially no Caps lock, no Num lock)
-#define GEANY_KEYS_MODIFIER_MASK (GDK_SHIFT_MASK | \
-                       GDK_CONTROL_MASK | \
-                       GDK_MOD1_MASK | \
-                       GDK_META_MASK | \
-                       GDK_SUPER_MASK | \
-                       GDK_HYPER_MASK)
-
+#if GTK_CHECK_VERSION(2, 10, 0)
+# define GEANY_KEYS_MODIFIER_MASK (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_MOD1_MASK | \
+								   GDK_META_MASK | GDK_SUPER_MASK | GDK_HYPER_MASK)
+#else
+# define GEANY_KEYS_MODIFIER_MASK (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_MOD1_MASK)
+#endif
 
 // Plugin API
 typedef enum
