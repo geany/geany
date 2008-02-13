@@ -733,7 +733,7 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *ev, gpointer user
 {
 	guint i, state, keyval;
 
-	if (keyval == 0)
+	if (ev->keyval == 0)
 		return FALSE;
 
 	keyval = ev->keyval;
