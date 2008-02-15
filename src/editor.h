@@ -51,9 +51,10 @@ typedef struct EditorPrefs
 	gint		long_line_type;
 	gint		long_line_column;
 	gchar		*long_line_color;
-	gboolean	show_markers_margin;	// view menu
-	gboolean	show_linenumber_margin;	// view menu
-	gboolean	show_scrollbars;	// hidden pref
+	gboolean	show_markers_margin;		// view menu
+	gboolean	show_linenumber_margin;		// view menu
+	gboolean	show_scrollbars;			// hidden pref
+	gboolean	scroll_stop_at_last_line;	// hidden pref
 
 	// behaviour
 	gboolean	line_wrapping;

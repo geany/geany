@@ -93,7 +93,7 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 42;
+static const gint api_version = 43;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields

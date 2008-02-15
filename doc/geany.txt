@@ -1,4 +1,4 @@
-.. |(version)| replace:: 0.13
+.. |(version)| replace:: 0.14
 
 =======
  Geany
@@ -2502,6 +2502,7 @@ use_gtk_word_boundaries         Whether to look for the end of a word when      
                                 commands`_).
 auto_complete_whilst_editing    Whether to allow autocompletion when editing    false
                                 an existing line.
+scroll_stop_at_last_line        Disable scrolling past end of document          false
 **[interface]**
 show_symbol_list_expanders      Whether to show or hide the small expander      true
                                 icons on the symbol list treeview (only

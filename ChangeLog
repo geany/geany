@@ -4,6 +4,9 @@
                         end of a multi line comment (closes #1894084).
  * src/socket.c: Apply patch from Daniel Richard G. to update some
                  source code comments (thanks).
+ * doc/geany.html, doc/geany.txt, src/document.c, src/editor.h,
+   src/keyfile.c:
+   Add hidden preference to disable scrolling past end of document.
 
 
 2008-02-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
