@@ -88,6 +88,7 @@ static void findPythonTags (void)
     gint indent;
     const unsigned char *line;
     boolean inMultilineString = FALSE;
+    boolean wasInMultilineString = FALSE;
 	lastClass *lastclass = NULL;
     boolean inFunction = FALSE;
     gint fn_indent = 0;
@@ -102,17 +103,24 @@ static void findPythonTags (void)
 		strncmp ((const char*) cp, "\"\"\"", (size_t) 3) == 0)
 	    {
 		inMultilineString = (boolean) !inMultilineString;
+		if (! inMultilineString)
+			wasInMultilineString = TRUE;
 		cp += 3;
 	    }
 	    if (*cp=='\'' &&
 		strncmp ((const char*) cp, "'''", (size_t) 3) == 0)
 	    {
 		inMultilineString = (boolean) !inMultilineString;
+		if (! inMultilineString)
+			wasInMultilineString = TRUE;
 		cp += 3;
 	    }
 
-		if (*cp == '\0')
+		if (*cp == '\0' || wasInMultilineString)
+		{
+			wasInMultilineString = FALSE;
 			break;	// at end of multiline string
+		}
 
 		// update indent-sensitive things
 		if (!inMultilineString && !isspace(*cp))
