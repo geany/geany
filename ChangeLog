@@ -1,3 +1,11 @@
+2008-02-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * tagmanager/python.c: Fix parsing bug when there is text after the
+                        end of a multi line comment (closes #1894084).
+ * src/socket.c: Apply patch from Daniel Richard G. to update some
+                 source code comments (thanks).
+
+
 2008-02-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/keybindings.h: Fix broken compilation with GTK < 2.10.

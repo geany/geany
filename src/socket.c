@@ -42,10 +42,10 @@
  * At the moment the commands open, line and column are available.
  *
  * About the socket files on Unix-like systems:
- * Geany creates a socket in /tmp(or any other directory returned by g_get_tmp_dir()) and it creates
+ * Geany creates a socket in /tmp (or any other directory returned by g_get_tmp_dir()) and
  * a symlink in the current configuration to the created socket file. The symlink is named
- * geany_socket.dispnum (dispnum is the number of the active X display).
- * If the socket file in the temporara directory could not be created, Geany creates the socket file
+ * geany_socket_<hostname>_<displayname> (displayname is the name of the active X display).
+ * If the socket file cannot be created in the temporary directory, Geany creates the socket file
  * directly in the configuration directory as a fallback.
  *
  */
@@ -167,7 +167,7 @@ static void remove_socket_link_full()
 	real_path[0] = '\0';
 
 	// read the contents of the symbolic link socket_info.file_name and delete it
-	// readlink should return something like "/tmp/geany_socket.1202396669"
+	// readlink should return something like "/tmp/geany_socket.499602d2"
 	len = readlink(socket_info.file_name, real_path, sizeof(real_path) - 1);
 	if ((gint) len > 0)
 	{
@@ -336,12 +336,12 @@ static gint socket_fd_open_unix(const gchar *path)
 		g_get_tmp_dir(), G_DIR_SEPARATOR, g_random_int());
 
 	if (utils_is_file_writeable(real_path) != 0)
-	{	// if real_path is not writable for us, fall back to /home/user/.geany/geany_socket
+	{	// if real_path is not writable for us, fall back to ~/.geany/geany_socket_*_*
 		// instead of creating a symlink and print a warning
 		g_warning("Socket %s could not be written, using %s as fallback.", real_path, path);
 		setptr(real_path, g_strdup(path));
 	}
-	// create a symlink in e.g. /home/user/.geany/geany_socket to /tmp/geany_socket.1202396669
+	// create a symlink in e.g. ~/.geany/geany_socket_hostname__0 to /tmp/geany_socket.499602d2
 	else if (symlink(real_path, path) != 0)
 	{
 		perror("symlink");
