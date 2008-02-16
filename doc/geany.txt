@@ -177,6 +177,11 @@ Command line options
 ============  =======================  =================================================
 Short option  Long option              Function
 ============  =======================  =================================================
+*none*        +number                  Set initial line number for the first opened file
+                                       (same as --line, do not put a space between the + sign
+                                       and the number). E.g. "geany +7 foo.bar" will open the
+                                       file foo.bar and place the cursor in line 7.
+
 *none*        --column                 Set initial column number for the first opened file.
 
 -c dir_name   --config=directory_name  Use an alternate configuration directory. Default
@@ -234,6 +239,10 @@ Short option  Long option              Function
 *none*        [files ...]              Open all given files at startup. This option causes
                                        Geany to ignore loading stored files from the last
                                        session (if enabled).
+                                       Geany also recognises line and column information when
+                                       appended to the filename with colons, e.g.
+                                       "geany foo.bar:10:5" will open the file foo.bar and
+                                       place the cursor in line 10 at column 5.
 ============  =======================  =================================================
 
 Geany supports all generic GTK options, a list is available on the

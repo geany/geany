@@ -112,6 +112,7 @@ static gboolean print_prefix = FALSE;
 #ifdef HAVE_PLUGINS
 static gboolean no_plugins = FALSE;
 #endif
+static gboolean dummy = FALSE;
 
 // in alphabetical order of short options
 static GOptionEntry entries[] =
@@ -139,6 +140,7 @@ static GOptionEntry entries[] =
 	{ "vte-lib", 0, 0, G_OPTION_ARG_FILENAME, &lib_vte, N_("Filename of libvte.so"), NULL },
 #endif
 	{ "version", 'v', 0, G_OPTION_ARG_NONE, &show_version, N_("Show version and exit"), NULL },
+	{ "dummy", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &dummy, NULL, NULL }, // for +NNN line number arguments
 	{ NULL, 0, 0, 0, NULL, NULL, NULL }
 };
 
@@ -365,6 +367,58 @@ gchar *get_argv_filename(const gchar *filename)
 }
 
 
+/* get a :line:column specifier from the end of a filename (if present),
+ * return the line/column values, and remove the specifier from the string
+ * (Note that *line and *column must both be set to -1 initially) */
+static void get_line_and_column_from_filename(gchar *filename, gint *line, gint *column)
+{
+	gsize i;
+	gint colon_count = 0;
+	gboolean have_number = FALSE;
+	gsize len;
+
+	g_assert(*line == -1 && *column == -1);
+
+	if (! NZV(filename))
+		return;
+
+	len = strlen(filename);
+	for (i = len - 1; i >= 1; i--)
+	{
+		gboolean is_colon = filename[i] == ':';
+		gboolean is_digit = g_ascii_isdigit(filename[i]);
+
+		if (! is_colon && ! is_digit)
+			break;
+
+		if (is_colon)
+		{
+			if (++colon_count > 1)
+				break;	/* bail on 2+ colons in a row */
+		}
+		else
+			colon_count = 0;
+
+		if (is_digit)
+			have_number = TRUE;
+
+		if (is_colon && have_number)
+		{
+			gint number = atoi(&filename[i + 1]);
+
+			filename[i] = '\0';
+			have_number = FALSE;
+
+			*column = *line;
+			*line = number;
+		}
+
+		if (*column >= 0)
+			break;	/* line and column are set, so we're done */
+	}
+}
+
+
 static void setup_paths()
 {
 	gchar *data_dir;
@@ -424,6 +478,23 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 {
 	GError *error = NULL;
 	GOptionContext *context;
+	gint i;
+
+	// first initialise cl_options fields with default values
+	cl_options.load_session = TRUE;
+	cl_options.goto_line = -1;
+	cl_options.goto_column = -1;
+
+	// the GLib option parser can't handle the +NNN (line number) option,
+	// so we grab that here and replace it with a no-op */
+	for (i = 1; i < (*argc); i++)
+	{
+		if ((*argv)[i][0] != '+')
+			continue;
+
+		cl_options.goto_line = atoi((*argv)[i] + 1);
+		(*argv)[i] = "--dummy";
+	}
 
 	context = g_option_context_new(_("[FILES...]"));
 	g_option_context_add_main_entries(context, entries, GETTEXT_PACKAGE);
@@ -431,11 +502,6 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	g_option_context_add_group(context, gtk_get_option_group(FALSE));
 	g_option_context_parse(context, argc, argv, &error);
 	g_option_context_free(context);
-
-	// first initialise cl_options fields with default values
-	cl_options.load_session = TRUE;
-	cl_options.goto_line = -1;
-	cl_options.goto_column = -1;
 
 	if (error != NULL)
 	{
@@ -520,8 +586,6 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 
 	if (ft_names)
 	{
-		int i;
-
 		printf("Geany's internal filetype names:\n");
 		filetypes_init_types();
 		for (i = 0; i < GEANY_MAX_FILE_TYPES; i++)
@@ -596,6 +660,17 @@ static gboolean open_cl_files(gint argc, gchar **argv)
 	for(i = 1; i < argc; i++)
 	{
 		gchar *filename = get_argv_filename(argv[i]);
+
+		if (filename != NULL)
+		{
+			gint line = -1, column = -1;
+
+			get_line_and_column_from_filename(filename, &line, &column);
+			if (line >= 0)
+				cl_options.goto_line = line;
+			if (column >= 0)
+				cl_options.goto_column = column;
+		}
 
 		if (filename != NULL &&
 			g_file_test(filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
