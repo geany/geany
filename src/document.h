@@ -21,6 +21,12 @@
  *  $Id$
  */
 
+/**
+ *  @file document.h
+ *  Document related actions: new, save, open, etc.
+ *  Also Scintilla search actions.
+ **/
+
 
 #ifndef GEANY_DOCUMENT_H
 #define GEANY_DOCUMENT_H 1
@@ -36,72 +42,105 @@ typedef struct FileEncoding
 } FileEncoding;
 
 
-/* Structure for representing an open tab with all its related stuff. */
+/**
+ *  Structure for representing an open tab with all its properties.
+ **/
 typedef struct document
 {
+	/** General flag to represent this document is active and all properties are set correctly. */
 	gboolean		 is_valid;
+	/** Whether this %document support source code symbols(tags) to show in the sidebar. */
 	gboolean		 has_tags;
-	// the filename is encoded in UTF-8, but every GLibC function expect the locale representation
+	/** The UTF-8 encoded file name. Be careful glibc and GLib functions expect the locale
+	    representation of the file name which can be different from this.
+	    For conversion into locale encoding for use with file functions of GLib, you can use
+	    @ref utils_get_locale_from_utf8. */
 	gchar 			*file_name;
+	/** The encoding of the %document, must be a valid string representation of an encoding, can
+	 *  be retrieved with @ref encodings_get_charset_from_index. */
 	gchar 			*encoding;
+	/** Internally used flag to indicate whether the file of this %document has a byte-order-mark. */
 	gboolean		 has_bom;
+	/** The filetype for this %document, it's only a reference to one of the elements of the global
+	 *  filetypes array. */
 	filetype		*file_type;
+	/** TMWorkObject object for this %document. */
 	TMWorkObject	*tm_file;
+	/** The Scintilla object for this %document. */
 	ScintillaObject	*sci;
+	/** GtkLabel shown in the notebook header. */
 	GtkWidget		*tab_label;
+	/** GtkLabel shown in the notebook right-click menu. */
 	GtkWidget		*tabmenu_label;
+	/** GtkTreeView object for this %document within the Open Files treeview of the sidebar. */
 	GtkWidget		*tag_tree;
+	/** GtkTreeStore object for this %document within the Open Files treeview of the sidebar. */
 	GtkTreeStore	*tag_store;
-	GtkTreeIter		 iter;	// open files item for this document
+	/** Iter for this %document within the Open Files treeview of the sidebar. */
+	GtkTreeIter		 iter;
+	/** Whether this %document is read-only. */
 	gboolean		 readonly;
+	/** Whether this %document has been changed since it was last saved. */
 	gboolean		 changed;
+	/** %Document-specific line wrapping setting. */
 	gboolean		 line_wrapping;
+	/** %Document-specific indentation setting. */
 	gboolean		 auto_indent;
-	gfloat			 scroll_percent;	// % to scroll view by on paint, if positive.
-	time_t			 last_check;	// to remember the last disk check
+	/** Percentage to scroll view by on paint, if positive. */
+	gfloat			 scroll_percent;
+	/** Time of the last disk check. */
+	time_t			 last_check;
+	/** Modification time of this %document on disk. */
 	time_t			 mtime;
+	/** Internally used by the Undo/Redo management code. */
 	GTrashStack		*undo_actions;
+	/** Internally used by the Undo/Redo management code. */
 	GTrashStack		*redo_actions;
+	/** Internally used. */
 	FileEncoding	 saved_encoding;
+	/** %Document-specific tab setting. */
 	gboolean		 use_tabs;
 } document;
 
 
-/* dynamic array of document elements to hold all information of the notebook tabs */
+// Dynamic array of document elements to hold all information of the notebook tabs.
 extern GArray *doc_array;
 
-/* doc_list wraps doc_array so it can be used with C array syntax.
- * Example: doc_list[0].sci = NULL; */
+/**
+ *  doc_list wraps doc_array so it can be used with C array syntax.
+ *  Example: doc_list[0].sci = NULL;
+ **/
 #define doc_list ((document *)doc_array->data)
 
-#define DOC_IDX_VALID(idx) \
-	((idx) >= 0 && (guint)(idx) < doc_array->len && doc_list[idx].is_valid)
+/**
+ *  DOC_IDX_VALID checks whether the passed index points to a valid %document object by checking
+ *  important properties. It returns FALSE if the index is not valid and then this index
+ *  must not be used.
+ **/
+#define DOC_IDX_VALID(doc_idx) \
+	((doc_idx) >= 0 && (guint)(doc_idx) < doc_array->len && doc_list[doc_idx].is_valid)
 
+/**
+ *  DOC_FILENAME) returns the filename of the %document corresponding to the passed index or
+ *  GEANY_STRING_UNTITLED (e.g. _("untitled")) if the %document's filename was not yet set.
+ *  This macro never returns NULL.
+ **/
 #define DOC_FILENAME(doc_idx) \
-	((doc_list[doc_idx].file_name != NULL) ? \
-	(doc_list[doc_idx].file_name) : GEANY_STRING_UNTITLED)
+	((doc_list[doc_idx].file_name != NULL) ? (doc_list[doc_idx].file_name) : GEANY_STRING_UNTITLED)
 
 
-/* returns the document index which has the given filename.
- * is_tm_filename is needed when passing TagManager filenames because they are
- * dereferenced, and would not match the link filename. */
 gint document_find_by_filename(const gchar *filename, gboolean is_tm_filename);
 
 
-/* returns the document index which has sci */
 gint document_find_by_sci(ScintillaObject *sci);
 
 
-/* returns the index of the notebook page from the document index */
 gint document_get_notebook_page(gint doc_idx);
 
-/* returns the index of the given notebook page in the document list */
 gint document_get_n_idx(guint page_num);
 
-/* returns the index of the current notebook page in the document list */
 gint document_get_cur_idx();
 
-/* returns NULL if no documents are open */
 document *document_get_current();
 
 
@@ -113,33 +152,25 @@ void document_finalize();
 void document_set_text_changed(gint idx);
 
 
-// Apply just the prefs that can change in the Preferences dialog
 void document_apply_update_prefs(gint idx);
 
 
-/* removes the given notebook tab and clears the related entry in the document list */
 gboolean document_remove(guint page_num);
 
 
-/* See document.c. */
 gint document_new_file(const gchar *filename, filetype *ft, const gchar *text);
 
 gint document_clone(gint old_idx, const gchar *utf8_filename);
 
 
-/* See document.c. */
 gint document_open_file(const gchar *locale_filename, gboolean readonly,
 		filetype *ft, const gchar *forced_enc);
 
 gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean readonly,
 		filetype *ft, const gchar *forced_enc);
 
-/* Takes a new line separated list of filename URIs and opens each file.
- * length is the length of the string or -1 if it should be detected */
 void document_open_file_list(const gchar *data, gssize length);
 
-/* Takes a linked list of filename URIs and opens each file, ensuring the newly opened
- * documents and existing documents (if necessary) are only colourised once. */
 void document_open_files(const GSList *filenames, gboolean readonly, filetype *ft,
 		const gchar *forced_enc);
 
@@ -147,16 +178,11 @@ void document_open_files(const GSList *filenames, gboolean readonly, filetype *f
 gboolean document_reload_file(gint idx, const gchar *forced_enc);
 
 
-/* This saves the file.
- * When force is set then it is always saved, even if it is unchanged(useful when using Save As)
- * It returns whether the file could be saved or not. */
 gboolean document_save_file(gint idx, gboolean force);
 
 
 gboolean document_search_bar_find(gint idx, const gchar *text, gint flags, gboolean inc);
 
-/* General search function, used from the find dialog.
- * Returns -1 on failure or the start position of the matching text. */
 gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search_backwards,
 	gboolean scroll, GtkWidget *parent);
 
@@ -173,7 +199,6 @@ void document_set_font(gint idx, const gchar *font_name, gint size);
 
 void document_update_tag_list(gint idx, gboolean update);
 
-/* sets the filetype of the document (sets syntax highlighting and tagging) */
 void document_set_filetype(gint idx, filetype *type);
 
 gchar *document_get_eol_mode(gint idx);

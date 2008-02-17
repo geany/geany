@@ -22,8 +22,8 @@
  */
 
 /*
- * Document related actions: new, save, open, etc.
- * Also Scintilla search actions.
+ *  Document related actions: new, save, open, etc.
+ *  Also Scintilla search actions.
  */
 
 #include "geany.h"
@@ -121,10 +121,17 @@ static gchar *get_real_path_from_utf8(const gchar *utf8_filename)
 }
 
 
-/* filename is in UTF-8 for non-TagManager filenames.
- * is_tm_filename should only be used when passing a TagManager filename,
- * which is therefore locale-encoded and already a realpath().
- * Returns: the document index which has the given filename. */
+/**
+ *  Find and retrieve the index of the given filename @a filename in the %document list.
+ *
+ *  @param filename The filename to search (in UTF-8 encoding for non-TagManager filenames,
+ *         else in locale encoding).
+ *  @param is_tm_filename Whether the passed @a filename is a TagManager filename and therefore
+ *         locale-encoded and already a realpath().
+ *
+ *  @return The %document index which has the given filename @a filename or @c -1
+ *   if @a filename is not open.
+ **/
 gint document_find_by_filename(const gchar *filename, gboolean is_tm_filename)
 {
 	guint i;
@@ -187,7 +194,14 @@ gint document_get_notebook_page(gint doc_idx)
 }
 
 
-/* returns the index of the given notebook page in the document list */
+/**
+ *  Find and retrieve the index of the given notebook page @a page_num in the %document list.
+ *
+ *  @param page_num The notebook page number to search.
+ *
+ *  @return The index of the given notebook page @a page_num in the %document list or @c -1
+ *   if no documents are opened.
+ **/
 gint document_get_n_idx(guint page_num)
 {
 	ScintillaObject *sci;
@@ -200,7 +214,12 @@ gint document_get_n_idx(guint page_num)
 }
 
 
-/* returns the index of the current notebook page in the document list */
+/**
+ *  Find and retrieve the index of the current %document.
+ *
+ *  @return The index of the current notebook page in the %document list or @c -1
+ *   if no documents are opened.
+ **/
 gint document_get_cur_idx()
 {
 	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->notebook));
@@ -217,7 +236,11 @@ gint document_get_cur_idx()
 }
 
 
-/* returns NULL if no documents are open */
+/**
+ *  Find and retrieve the current %document.
+ *
+ *  @return A pointer to the current %document or @c NULL if there are no opened documents.
+ **/
 document *document_get_current()
 {
 	gint idx = document_get_cur_idx();
@@ -238,6 +261,13 @@ void document_finalize()
 }
 
 
+/**
+ *  Update the tab labels, the status bar, the window title and some save-sensitive buttons
+ *  according to the document's save state.
+ *  This is called by Geany mostly when opening or saving files.
+ *
+ *  @param idx The %document index to operate on.
+ **/
 void document_set_text_changed(gint idx)
 {
 	if (DOC_IDX_VALID(idx) && ! main_status.quitting)
@@ -478,7 +508,14 @@ static gint document_create_new_sci(const gchar *filename)
 }
 
 
-/* removes the given notebook tab and clears the related entry in the document list */
+/**
+ *  Remove the given notebook tab at @a page_num and clear all related information
+ *  in the document list.
+ *
+ *  @param page_num The notebook page number to remove.
+ *
+ *  @return @a TRUE if the document was actually removed or @a FALSE otherwise.
+ **/
 gboolean document_remove(guint page_num)
 {
 	gint idx = document_get_n_idx(page_num);
@@ -516,7 +553,11 @@ gboolean document_remove(guint page_num)
 			build_menu_update(-1);
 		}
 	}
-	else geany_debug("Error: idx: %d page_num: %d", idx, page_num);
+	else
+	{
+		geany_debug("Error: idx: %d page_num: %d", idx, page_num);
+		return FALSE;
+	}
 
 	return TRUE;
 }
@@ -531,12 +572,16 @@ static void store_saved_encoding(gint idx)
 }
 
 
-/* Create a new document.
- * filename is either the UTF-8 file name, or NULL.
- * If ft is NULL and filename is not NULL, then the filetype will be guessed
- * from the given filename.
- * text is the contents of the new file in valid UTF-8 encoding, or NULL.
- * Returns: idx of new file in doc_list. */
+/**
+ *  Creates a new %document.
+ *  After all, the "document-new" signal is emitted for plugins.
+ *
+ *  @param filename The file name in UTF-8 encoding, or @c NULL to open a file as "untitled".
+ *  @param ft The filetype to set or @c NULL to detect it from @a filename if not @c NULL.
+ *  @param text The initial content of the file (in UTF-8 encoding), or @c NULL.
+ *
+ *  @return The index of the new file in the @ref doc_list array.
+ **/
 gint document_new_file(const gchar *filename, filetype *ft, const gchar *text)
 {
 	gint idx = document_create_new_sci(filename);
@@ -597,11 +642,30 @@ gint document_new_file(const gchar *filename, filetype *ft, const gchar *text)
 }
 
 
-/* This is a wrapper for document_open_file_full(), see that function for details.
- * Do not use this when opening multiple files (unless using document_delay_colourise()). */
+/**
+ *  Open a %document specified by @a locale_filename.
+ *  After all, the "document-open" signal is emitted for plugins.
+ *
+ *  When opening more than one file, either:
+ *  -# Use document_open_files().
+ *  -# Call document_delay_colourise() before document_open_file() and
+ *     document_colourise_new() after opening all files.
+ *
+ *  This avoids unnecessary recolourising, saving significant processing when a lot of files
+ *  are open of a %filetype that supports user typenames, e.g. C.
+ *
+ *  @param locale_filename The filename of the %document to load, in locale encoding.
+ *  @param readonly Whether to open the %document in read-only mode.
+ *  @param ft The %filetype for the %document or @c NULL to auto-detect the %filetype.
+ *  @param forced_enc The file encoding to use or @c NULL to auto-detect the file encoding.
+ *
+ *  @return The index of the opened file or -1 if an error occurred.
+ **/
 gint document_open_file(const gchar *locale_filename, gboolean readonly,
 		filetype *ft, const gchar *forced_enc)
 {
+	/* This is a wrapper for document_open_file_full().
+	 * Do not use this when opening multiple files (unless using document_delay_colourise()). */
 	return document_open_file_full(-1, locale_filename, 0, readonly, ft, forced_enc);
 }
 
@@ -1087,8 +1151,18 @@ void document_open_file_list(const gchar *data, gssize length)
 }
 
 
-/* Takes a linked list of filename URIs and opens each file, ensuring the newly opened
- * documents and existing documents (if necessary) are only colourised once. */
+/**
+ *  Opens each file in the list @a filenames, ensuring the newly opened documents and
+ *  existing documents (if necessary) are only colourised once.
+ *  Internally, document_open_file() is called for every list item.
+ *
+ *  @param filenames A list of filenames to load, in locale encoding.
+ *  @param readonly Whether to open the %document in read-only mode.
+ *  @param ft The %filetype for the %document or @c NULL to auto-detect the %filetype.
+ *  @param forced_enc The file encoding to use or @c NULL to auto-detect the file encoding.
+ *
+ *  @return The index of the opened file or -1 if an error occurred.
+ **/
 void document_open_files(const GSList *filenames, gboolean readonly, filetype *ft,
 		const gchar *forced_enc)
 {
@@ -1104,9 +1178,15 @@ void document_open_files(const GSList *filenames, gboolean readonly, filetype *f
 }
 
 
-/* Reload document with index idx.
- * forced_enc can be NULL to detect the file encoding.
- * Returns: TRUE if successful. */
+/**
+ *  Reloads the %document with the given index @a idx with the specified file encoding
+ *  @a forced_enc or @c NULL to auto-detect the file encoding.
+ *
+ *  @param idx The %document index for the file to reload.
+ *  @param forced_enc The file encoding to use or @c NULL to auto-detect the file encoding.
+ *
+ *  @return @a TRUE if the %document was actually reloaded or @a FALSE otherwise.
+ **/
 gboolean document_reload_file(gint idx, const gchar *forced_enc)
 {
 	gint pos = 0;
@@ -1170,9 +1250,19 @@ static void get_line_column_from_pos(gint idx, guint byte_pos, gint *line, gint 
 }
 
 
-/* This saves the file.
- * When force is set then it is always saved, even if it is unchanged(useful when using Save As)
- * It returns whether the file could be saved or not. */
+/**
+ *  Save the %document specified by @a idx. Saving includes replacing tabs by spaces,
+ *  stripping trailing spaces and adding a final new line at the end of the file (all only if
+ *  user enabled these features). The filetype is set again or auto-detected if it wasn't
+ *  set yet. After all, the "document-save" signal is emitted for plugins.
+ *
+ *  If the file is not modified, this functions does nothing unless force is set to @c TRUE.
+ *
+ *  @param idx The %document index for the file to save.
+ *  @param force Whether to save the file even if it is not modified (e.g. for Save As).
+ *
+ *  @return @c TRUE if the file was saved or @c FALSE if the file could not or should not be saved.
+ **/
 gboolean document_save_file(gint idx, gboolean force)
 {
 	gchar *data;
@@ -2161,6 +2251,14 @@ void document_ensure_final_newline(gint idx)
 }
 
 
+/**
+ *  Sets the encoding of a %document.
+ *  This function only set the encoding of the %document, it does not any conversions. The new
+ *  encoding is used when e.g. saving the file.
+ *
+ *  @param idx The index of the %document.
+ *  @param new_encoding The encoding to be set for the %document.
+ **/
 void document_set_encoding(gint idx, const gchar *new_encoding)
 {
 	if (! DOC_IDX_VALID(idx) || new_encoding == NULL ||

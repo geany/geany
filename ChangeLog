@@ -1,3 +1,16 @@
+2008-02-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * configure.in, doc/Doxyfile.in, doc/Makefile.am, doc/plugins.dox,
+   src/dialogs.c, src/dialogs.h, src/document.c, src/document.h,
+   src/encodings.c, src/encodings.h, src/plugindata.h, src/utils.c,
+   src/utils.h:
+   Add support for generating API reference documentation using doxygen.
+   This is the first step, it is far away from being complete.
+   Add make target "api-doc" to generate the reference documentation.
+   Add documentation comments to a few functions.
+   Move basic plugin documentation from plugindata.h to doc/plugins.dox.
+
+
 2008-02-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * doc/geany.html, doc/geany.txt:

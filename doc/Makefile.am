@@ -1,7 +1,7 @@
 man_MANS=geany.1
 DOCDIR = $(DESTDIR)/$(datadir)/doc/@PACKAGE@
 IMAGE_FILES = images/*.png
-EXTRA_DIST = geany.html geany.css geany.txt geany.1 \
+EXTRA_DIST = geany.html geany.css geany.txt geany.1 plugins.dox \
 			 $(srcdir)/$(IMAGE_FILES)
 
 pdf: geany.txt
@@ -9,6 +9,9 @@ pdf: geany.txt
 	pdflatex geany.tex
 	rm -f geany.tex geany.aux geany.log geany.out
 	mv $(srcdir)/geany.pdf geany-$(VERSION).pdf
+
+api-doc: Doxyfile
+	doxygen >/dev/null
 
 doc: geany.txt
 	rst2html -stg --stylesheet=geany.css $(srcdir)/geany.txt geany.html

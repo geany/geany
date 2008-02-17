@@ -223,6 +223,17 @@ gboolean utils_goto_line(gint idx, gint line)
 }
 
 
+/**
+ *  Write the given @c text into a file with @c filename.
+ *  If the file doesn't exist, it will be created.
+ *  If it already exists, it will be overwritten.
+ *
+ *  @param filename The filename of the file to write, in locale encoding.
+ *  @param text The text to write into the file.
+ *
+ *  @return 0 if the directory was successfully created, otherwise the @c errno of the
+ *          failed operation is returned.
+ **/
 gint utils_write_file(const gchar *filename, const gchar *text)
 {
 	FILE *fp;
@@ -639,12 +650,18 @@ gdouble utils_scale_round (gdouble val, gdouble factor)
 }
 
 
-/* (taken from libexo from os-cillation)
- * NULL-safe string comparison. Returns TRUE if both a and b are
- * NULL or if a and b refer to valid strings which are equal.
- */
+/**
+ *  @a NULL-safe string comparison. Returns @a TRUE if both @c a and @c b are @a NULL
+ *  or if @c a and @c b refer to valid strings which are equal.
+ *
+ *  @param a Pointer to first string or @a NULL.
+ *  @param b Pointer to first string or @a NULL.
+ *
+ *  @return @a TRUE if @c a equals @c b, else @a FALSE.
+ **/
 gboolean utils_str_equal(const gchar *a, const gchar *b)
 {
+	/* (taken from libexo from os-cillation) */
 	if (a == NULL && b == NULL) return TRUE;
 	else if (a == NULL || b == NULL) return FALSE;
 
@@ -656,8 +673,13 @@ gboolean utils_str_equal(const gchar *a, const gchar *b)
 }
 
 
-/* removes the extension from filename and return the result in
- * a newly allocated string */
+/**
+ *  Remove the extension from @c filename and return the result in a newly allocated string.
+ *
+ *  @param filename The filename to operate on.
+ *
+ *  @return A newly-allocated string, should be freed when no longer needed.
+ **/
 gchar *utils_remove_ext_from_filename(const gchar *filename)
 {
 	gchar *last_dot = strrchr(filename, '.');
@@ -938,8 +960,20 @@ gchar *utils_get_initials(gchar *name)
 }
 
 
-/* Wrapper functions for Key-File-Parser from GLib in keyfile.c to reduce code size */
-gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gchar *key, const gint default_value)
+/**
+ *  Convenience function for g_key_file_get_integer() to add a default value argument.
+ *
+ *  @param config A GKeyFile object.
+ *  @param section The group name to look in for the key.
+ *  @param key The key to find.
+ *  @param default_value The default value which will be returned when @c section or @c key
+ *         don't exist.
+ *
+ *  @return The value associated with c key as an integer, or the given default value if the value
+ *          could not be retrieved.
+ **/
+gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gchar *key,
+							   const gint default_value)
 {
 	gint tmp;
 	GError *error = NULL;
@@ -956,7 +990,20 @@ gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gch
 }
 
 
-gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const gchar *key, const gboolean default_value)
+/**
+ *  Convenience function for g_key_file_get_boolean() to add a default value argument.
+ *
+ *  @param config A GKeyFile object.
+ *  @param section The group name to look in for the key.
+ *  @param key The key to find.
+ *  @param default_value The default value which will be returned when @c section or @c key
+ *         don't exist.
+ *
+ *  @return The value associated with c key as a boolean, or the given default value if the value
+ *          could not be retrieved.
+ **/
+gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const gchar *key,
+								   const gboolean default_value)
 {
 	gboolean tmp;
 	GError *error = NULL;
@@ -973,7 +1020,20 @@ gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const
 }
 
 
-gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gchar *key, const gchar *default_value)
+/**
+ *  Convenience function for g_key_file_get_string() to add a default value argument.
+ *
+ *  @param config A GKeyFile object.
+ *  @param section The group name to look in for the key.
+ *  @param key The key to find.
+ *  @param default_value The default value which will be returned when @c section or @c key
+ *         don't exist.
+ *
+ *  @return A newly allocated string, or the given default value if the value could not be
+ *          retrieved.
+ **/
+gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gchar *key,
+								const gchar *default_value)
 {
 	gchar *tmp;
 	GError *error = NULL;
@@ -1086,8 +1146,8 @@ void utils_beep()
 
 
 /* taken from busybox, thanks */
-gchar *utils_make_human_readable_str(unsigned long long size, unsigned long block_size,
-									 unsigned long display_unit)
+gchar *utils_make_human_readable_str(unsigned long long size, gulong block_size,
+									 gulong display_unit)
 {
 	/* The code will adjust for additional (appended) units. */
 	static const gchar zero_and_units[] = { '0', 0, 'K', 'M', 'G', 'T' };
@@ -1179,7 +1239,7 @@ gint utils_strtod(const gchar *source, gchar **end, gboolean with_route)
 }
 
 
-// Returns: new string with the current time formatted HH:MM:SS.
+// Returns: newly allocated string with the current time formatted HH:MM:SS.
 gchar *utils_get_current_time_string()
 {
 	const time_t tp = time(NULL);
@@ -1402,7 +1462,15 @@ gboolean utils_wrap_string(gchar *string, gint wrapstart)
 }
 
 
-/* Null-safe with fallback encoding conversion. */
+/**
+ *  Converts the given UTF-8 encoded string into locale encoding.
+ *  On Windows platforms, it does nothing and instead it just returns a copy of the input string.
+ *
+ *  @param utf8_text UTF-8 encoded text.
+ *
+ *  @return The converted string in locale encoding, or a copy of the input string if conversion
+ *    failed. Should be freed with g_free(). If @a utf8_text is @c NULL, @c NULL is returned.
+ **/
 gchar *utils_get_locale_from_utf8(const gchar *utf8_text)
 {
 #ifdef G_OS_WIN32
@@ -1422,7 +1490,15 @@ gchar *utils_get_locale_from_utf8(const gchar *utf8_text)
 }
 
 
-/* Null-safe with fallback encoding conversion. */
+/**
+ *  Converts the given string (in locale encoding) into UTF-8 encoding.
+ *  On Windows platforms, it does nothing and instead it just returns a copy of the input string.
+ *
+ *  @param locale_text Text in locale encoding.
+ *
+ *  @return The converted string in UTF-8 encoding, or a copy of the input string if conversion
+ *    failed. Should be freed with g_free(). If @a locale_text is @c NULL, @c NULL is returned.
+ **/
 gchar *utils_get_utf8_from_locale(const gchar *locale_text)
 {
 #ifdef G_OS_WIN32
@@ -1575,6 +1651,16 @@ g_mkdir_with_parents (const gchar *pathname,
 #endif
 
 
+/**
+ *  Create a directory if it doesn't already exist.
+ *  Create intermediate parent directories as needed, too.
+ *
+ *  @param path The path of the directory to create, in locale encoding.
+ *  @param create_parent_dirs Whether to create intermediate parent directories if necessary.
+ *
+ *  @return 0 if the directory was successfully created, otherwise the @c errno of the
+ *          failed operation is returned.
+ **/
 gint utils_mkdir(const gchar *path, gboolean create_parent_dirs)
 {
 	gint mode = 0700;
@@ -1590,12 +1676,19 @@ gint utils_mkdir(const gchar *path, gboolean create_parent_dirs)
 }
 
 
-/* Gets a sorted list of files from the specified directory.
- * Locale encoding is expected for path and used for the file list.
- * The list and the data in the list should be freed after use.
- * Returns: The list or NULL if no files found.
- * length will point to the number of non-NULL data items in the list, unless NULL.
- * error is the location for storing a possible error, or NULL. */
+/**
+ *  Gets a sorted list of files from the specified directory.
+ *  Locale encoding is expected for path and used for the file list. The list and the data
+ *  in the list should be freed after use.
+ *
+ *  @param path The path of the directory to scan, in locale encoding.
+ *  @param length The location to store the number of non-@a NULL data items in the list,
+ *                unless @a NULL.
+ *  @param error The is the location for storing a possible error, or @a NULL.
+ *
+ *  @return A newly allocated list or @a NULL if no files found. The list and its data should be
+ *          freed when no longer needed.
+ **/
 GSList *utils_get_file_list(const gchar *path, guint *length, GError **error)
 {
 	GSList *list = NULL;
@@ -1648,10 +1741,18 @@ gboolean utils_str_has_upper(const gchar *str)
 }
 
 
-/* Replaces all occurrences of needle in str with replace.
- * Currently this is not safe if replace matches needle.
- * Returns: TRUE if needle was found. */
-gboolean utils_string_replace_all(GString *str, const gchar *needle, const gchar *replace)
+/**
+ *  Replaces all occurrences of @c needle in @c haystack with @c replace.
+ *  Currently this is not safe if @c replace matches @c needle, so @c needle and @c replace
+ *  must not be equal.
+ *
+ *  @param haystack The input string to operate on. This string is modified in place.
+ *  @param needle The string which should be replaced.
+ *  @param replace The replacement for @c needle.
+ *
+ *  @return @a TRUE if @c needle was found, else @a FALSE.
+ **/
+gboolean utils_string_replace_all(GString *haystack, const gchar *needle, const gchar *replace)
 {
 	const gchar *c;
 	gssize pos = -1;
@@ -1661,15 +1762,15 @@ gboolean utils_string_replace_all(GString *str, const gchar *needle, const gchar
 
 	while (1)
 	{
-		c = strstr(str->str, needle);
+		c = strstr(haystack->str, needle);
 		if (c == NULL)
 			break;
 		else
 		{
-			pos = c - str->str;
-			g_string_erase(str, pos, strlen(needle));
+			pos = c - haystack->str;
+			g_string_erase(haystack, pos, strlen(needle));
 			if (replace)
-				g_string_insert(str, pos, replace);
+				g_string_insert(haystack, pos, replace);
 		}
 	}
 	return (pos != -1);

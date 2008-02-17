@@ -25,70 +25,13 @@
 #ifndef PLUGIN_H
 #define PLUGIN_H
 
-/**
- * Public symbols supported:
- *
- * version_check()
- * 	Use VERSION_CHECK() macro instead. Required by Geany.
- *
- * PluginInfo* info()
- * 	Use PLUGIN_INFO() macro to define it. Required by Geany.
- *
- * GeanyData* geany_data
- * 	Geany owned fields and functions.
- *
- * PluginFields* plugin_fields
- * 	Plugin owned fields, including flags.
- *
- * GeanyCallback geany_callbacks[]
- * 	An array for connecting GeanyObject events, which should be terminated with
- * 	{NULL, NULL, FALSE, NULL}. See signals below.
- *
- * void configure(GtkWidget *parent)
- * 	Called when the plugin should show a configure dialog to let the user set some basic
- *  plugin configuration. Optionally, can be omitted when not needed.
- *
- * void init(GeanyData *data)
- * 	Called after loading the plugin. data is the same as geany_data.
- *
- * void cleanup()
- * 	Called before unloading the plugin. Required for normal plugins - it should undo
- * 	everything done in init() - e.g. destroy menu items, free memory.
- */
 
 /**
- * Signals:
- *
- * "document-new"
- * 	Sent when a new document is created.
- *  Handler: void user_function(GObject *obj, gint idx, gpointer user_data);
- *
- * "document-open"
- * 	Sent when a file is opened.
- *  Handler: void user_function(GObject *obj, gint idx, gpointer user_data);
- *
- * "document-save"
- * 	Sent when a file is saved.
- *  Handler: void user_function(GObject *obj, gint idx, gpointer user_data);
- *
- * "document-activate"
- * 	Sent when switching notebook pages.
- *  Handler: void user_function(GObject *obj, gint idx, gpointer user_data);
- *
- * "project-open"
- * 	Sent after a project is opened but before session files are loaded.
- *  Handler: void user_function(GObject *obj, GKeyFile *config, gpointer user_data);
- *
- * "project-save"
- * 	Sent when a project is saved(happens when the project is created, the properties
- *  dialog is closed or Geany is exited). This signal is emitted shortly before Geany
- *  will write the contents of the GKeyFile to the disc.
- *  Handler: void user_function(GObject *obj, GKeyFile *config, gpointer user_data);
- *
- * "project-close"
- * 	Sent after a project is closed.
- *  Handler: void user_function(GObject *obj, gpointer user_data);
- */
+ *  @file plugindata.h
+ *  This file defines the plugin API, the interface between Geany and its plugins.
+ *  For detailed documentation of the plugin system please read the plugin
+ *  API documentation.
+ **/
 
 
 /* The API version should be incremented whenever any plugin data types below are
@@ -142,15 +85,21 @@ PluginInfo;
 	}
 
 
-/* For geany_callbacks array - see top of file. */
+/** callback array entry */
 typedef struct GeanyCallback
 {
+	/** The name of signal, must be an existing signal. For a list of available signals,
+	 *  please see the @link signals Signal documentation @endlink. */
 	gchar		*signal_name;
+	/** A callback function which is called when the signal is emitted. */
 	GCallback	callback;
+	/** Set to TRUE to connect your handler with g_signal_connect_after(). */
 	gboolean	after;
+	/** The user data passed to the signal handler. */
 	gpointer	user_data;
 }
 GeanyCallback;
+
 
 
 typedef enum

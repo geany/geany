@@ -22,6 +22,11 @@
  */
 
 
+/**
+ *  @file encodings.h
+ *  Encoding conversion and Byte Order Mark (BOM) handling.
+ **/
+
 /*
  * Modified by the gedit Team, 2002. See the gedit AUTHORS file for a
  * list of people on the gedit Team.
@@ -47,12 +52,19 @@ typedef enum
 	GEANY_ENCODING_GROUPS_MAX
 } GeanyEncodingGroup;
 
+
+/** Structure to represent an encoding to be used in Geany. */
 typedef struct
 {
+	/** The index of the encoding, must be one of GeanyEncodingIndex. */
 	gint   				 idx;
+	/** Internally used member for grouping */
 	gint   				 order;
+	/** Internally used member for grouping */
 	GeanyEncodingGroup   group;
+	/** String representation of the encoding, e.g. "ISO-8859-3" */
 	gchar				*charset;
+	/** Translatable and descriptive name of the encoding, e.g. "South European" */
 	gchar				*name;
 } GeanyEncoding;
 
@@ -85,6 +97,10 @@ gboolean encodings_is_unicode_charset(const gchar *string);
  * Copyright (C) 2002 Red Hat, Inc.
  */
 
+/**
+ * @enum GeanyEncodingIndex
+ * List of known and supported encodings.
+ **/
 typedef enum
 {
 	GEANY_ENCODING_ISO_8859_1,

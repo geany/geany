@@ -21,18 +21,24 @@
  * $Id$
  */
 
+/**
+ *  @file: utils.h
+ *  General utility functions, non-GTK related.
+ */
 
 #ifndef GEANY_UTILS_H
 #define GEANY_UTILS_H 1
 
-// Returns: TRUE if ptr points to a non-zero value.
+/** Returns: TRUE if @a ptr points to a non-zero value. */
 #define NZV(ptr) \
 	((ptr) && (ptr)[0])
 
-/* Free's ptr (if not NULL), then assigns result to it.
- * result can be an expression using the 'old' value of ptr.
- * It prevents a memory leak compared with: ptr = func(ptr); */
-#define setptr(ptr, result)\
+/**
+ *  Free's @a ptr (if not @c NULL), then assigns @a result to it.
+ *  @a result can be an expression using the 'old' value of @a ptr.
+ *  It prevents a memory leak compared with: @code ptr = func(ptr); @endcode
+ **/
+#define setptr(ptr, result) \
 	{\
 		gpointer setptr_tmp = ptr;\
 		ptr = result;\
@@ -42,7 +48,6 @@
 
 void utils_start_browser(const gchar *uri);
 
-/* taken from anjuta, to determine the EOL mode of the file */
 gint utils_get_line_endings(gchar* buffer, glong size);
 
 gboolean utils_isbrace(gchar c, gboolean include_angles);
@@ -59,13 +64,10 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag)
 
 gboolean utils_check_disk_status(gint idx, gboolean force);
 
-//gchar *utils_get_current_tag(gint idx, gint direction);
 gint utils_get_current_function(gint idx, const gchar **tagname);
 
-/* returns the end-of-line character(s) length of the specified editor */
 gint utils_get_eol_char_len(gint idx);
 
-/* returns the end-of-line character(s) of the specified editor */
 const gchar *utils_get_eol_char(gint idx);
 
 gboolean utils_atob(const gchar *str);
@@ -74,16 +76,9 @@ gboolean utils_is_absolute_path(const gchar *path);
 
 gdouble utils_scale_round(gdouble val, gdouble factor);
 
-/* (taken from libexo from os-cillation)
- * NULL-safe string comparison. Returns TRUE if both a and b are
- * NULL or if a and b refer to valid strings which are equal.
- */
 gboolean utils_str_equal(const gchar *a, const gchar *b);
 
-/* removes the extension from filename and return the result in
- * a newly allocated string */
 gchar *utils_remove_ext_from_filename(const gchar *filename);
-
 
 gchar utils_brace_opposite(gchar ch);
 
@@ -91,13 +86,11 @@ gchar *utils_get_hostname();
 
 gint utils_make_settings_dir();
 
-
 gboolean utils_string_replace_all(GString *str, const gchar *needle, const gchar *replace);
 
 gchar *utils_str_replace(gchar *haystack, const gchar *needle, const gchar *replacement);
 
 gint utils_strpos(const gchar* haystack, const gchar * needle);
-
 
 gchar *utils_get_date_time(const gchar *format, time_t *time_to_use);
 
@@ -121,15 +114,11 @@ gchar *utils_get_current_file_dir_utf8();
 
 void utils_beep();
 
-gchar *utils_make_human_readable_str(unsigned long long size, unsigned long block_size,
-									 unsigned long display_unit);
+gchar *utils_make_human_readable_str(unsigned long long size, gulong block_size,
+									 gulong display_unit);
 
-/* utils_strtod() converts a string containing a hex colour ("0x00ff00") into an integer.
- * Basically, it is the same as strtod() would do, but it does not understand hex colour values,
- * before ANSI-C99. With with_route set, it takes strings of the format "#00ff00". */
 gint utils_strtod(const gchar *source, gchar **end, gboolean with_route);
 
-// returned string must be freed.
 gchar *utils_get_current_time_string();
 
 GIOChannel *utils_set_up_io_channel(gint fd, GIOCondition cond, gboolean nblock,
@@ -137,37 +126,20 @@ GIOChannel *utils_set_up_io_channel(gint fd, GIOCondition cond, gboolean nblock,
 
 gchar **utils_read_file_in_array(const gchar *filename);
 
-/* Contributed by Stefan Oltmanns, thanks.
- * Replaces \\, \r, \n, \t and \uXXX by their real counterparts */
 gboolean utils_str_replace_escape(gchar *string);
 
-/* Wraps a string in place, replacing a space with a newline character.
- * wrapstart is the minimum position to start wrapping or -1 for default */
 gboolean utils_wrap_string(gchar *string, gint wrapstart);
 
-/* Simple wrapper for g_locale_from_utf8; returns a copy of utf8_text on failure. */
 gchar *utils_get_locale_from_utf8(const gchar *utf8_text);
 
-/* Simple wrapper for g_locale_to_utf8; returns a copy of locale_text on failure. */
 gchar *utils_get_utf8_from_locale(const gchar *locale_text);
 
-
-/* Frees all passed pointers if they are *ALL* non-NULL.
- * Do not use if any pointers may be NULL.
- * The first argument is nothing special, it will also be freed.
- * The list must be ended with NULL. */
 void utils_free_pointers(gpointer first, ...) G_GNUC_NULL_TERMINATED;
 
-/* Creates a string array deep copy of a series of non-NULL strings.
- * The first argument is nothing special.
- * The list must be ended with NULL.
- * If first is NULL, NULL is returned. */
 gchar **utils_strv_new(gchar *first, ...) G_GNUC_NULL_TERMINATED;
-
 
 gint utils_mkdir(const gchar *path, gboolean create_parent_dirs);
 
-/* Gets a sorted list of files in the specified directory. */
 GSList *utils_get_file_list(const gchar *path, guint *length, GError **error);
 
 gboolean utils_str_has_upper(const gchar *str);

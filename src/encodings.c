@@ -178,18 +178,17 @@ const GeanyEncoding *encodings_get_from_index(gint idx)
 }
 
 
-/*
- * gtk_status_icon_get_stock:
- * @idx: #GeanyEncodingIndex to retrieve the corresponding character set
+/**
+ *  Gets the character set name of the specified index e.g. for use with
+ *  @ref document_set_encoding().
  *
- * Gets the character set name of the specified index e.g. for use with
- * document_set_encoding.
+ *  @param idx @ref GeanyEncodingIndex to retrieve the corresponding character set.
  *
- * Return value: charset according to idx,
- *   or %NULL if the index is invalid.
  *
- * Since: 0.13
- */
+ *  @return The charset according to idx, or @c NULL if the index is invalid.
+ *
+ *  @since 0.13
+ **/
 const gchar* encodings_get_charset_from_index(gint idx)
 {
 	g_return_val_if_fail(idx >= 0 && idx < GEANY_ENCODINGS_MAX, NULL);
@@ -406,19 +405,18 @@ void encodings_init(void)
 }
 
 
-/*
- * encodings_convert_to_utf8_from_charset:
- * @buffer: the input string to convert
- * @size: the length of the string, or -1 if the string is nul-terminated
- * @charset: the charset to be used for conversion
- * @fast: TRUE to only convert the input and skip extended checks on the converted string
+/**
+ *  Tries to convert @a buffer into UTF-8 encoding from the encoding specified with @a charset.
+ *  If @a fast is not set, additional checks to validate the converted string are performed.
  *
- * Tries to convert @buffer into UTF-8 encoding from the encoding specified with @charset.
- * If @fast is not set, additional checks to validate the converted string are performed.
+ *  @param buffer The input string to convert.
+ *  @param size The length of the string, or -1 if the string is nul-terminated.
+ *  @param charset The charset to be used for conversion.
+ *  @param fast @c TRUE to only convert the input and skip extended checks on the converted string.
  *
- * Return value: If the conversion was successful, a newly allocated nul-terminated string,
- *   which must be freed with g_free(). Otherwise %NULL.
- */
+ *  @return If the conversion was successful, a newly allocated nul-terminated string,
+ *    which must be freed with g_free(). Otherwise @c NULL.
+ **/
 gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gsize size,
 											  const gchar *charset, gboolean fast)
 {
@@ -462,18 +460,17 @@ gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gsize size,
 }
 
 
-/*
- * encodings_convert_to_utf8:
- * @buffer: the input string to convert
- * @size: the length of the string, or -1 if the string is nul-terminated.
- * @used_encoding: return location of the detected encoding of the input string, or %NULL
+/**
+ *  Tries to convert @a buffer into UTF-8 encoding and store the detected original encoding in
+ *  @a used_encoding.
  *
- * Tries to convert @buffer into UTF-8 encoding and store the detected original encoding in
- * @used_encoding.
+ *  @param buffer the input string to convert.
+ *  @param size the length of the string, or -1 if the string is nul-terminated.
+ *  @param used_encoding return location of the detected encoding of the input string, or @c NULL.
  *
- * Return value: If the conversion was successful, a newly allocated nul-terminated string,
- *   which must be freed with g_free(). Otherwise %NULL.
- */
+ *  @return If the conversion was successful, a newly allocated nul-terminated string,
+ *    which must be freed with g_free(). Otherwise @c NULL.
+ **/
 gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encoding)
 {
 	gchar *locale_charset = NULL;

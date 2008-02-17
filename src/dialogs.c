@@ -581,8 +581,11 @@ static gboolean gtk_show_save_as(const gchar *initdir)
 #endif
 
 
-/* Show the Save As dialog for the current notebook page.
- * Returns: TRUE if the file was saved. */
+/**
+ *  Show the Save As dialog for the current notebook page.
+ *
+ *  @return @a TRUE if the file was saved, otherwise @a FALSE.
+ **/
 gboolean dialogs_show_save_as()
 {
 	gboolean result;
@@ -607,6 +610,16 @@ gboolean dialogs_show_save_as()
 }
 
 
+/**
+ *  Show a message box of the type @c type with @c text.
+ *  On Unix-like systems a GTK message dialog box is shown, on Win32 systems a native Windows
+ *  message dialog box is shown.
+ *
+ *  @param type A GtkMessageType, can be one of: GTK_MESSAGE_INFO, GTK_MESSAGE_WARNING,
+ *              GTK_MESSAGE_QUESTION, GTK_MESSAGE_ERROR
+ *  @param text Printf()-style format string.
+ *  @param ... Arguments for the @c text format string.
+ **/
 void dialogs_show_msgbox(gint type, const gchar *text, ...)
 {
 #ifndef G_OS_WIN32
@@ -1300,7 +1313,7 @@ void dialogs_show_file_properties(gint idx)
 
 
 static gboolean show_question(GtkWidget *parent, const gchar *yes_btn, const gchar *no_btn,
-	const gchar *question_text,	const gchar *extra_text)
+							  const gchar *question_text, const gchar *extra_text)
 {
 	gboolean ret = FALSE;
 #ifdef G_OS_WIN32
@@ -1337,6 +1350,16 @@ static gboolean show_question(GtkWidget *parent, const gchar *yes_btn, const gch
 }
 
 
+/**
+ *  Show a question message box with @c text and Yes/No buttons.
+ *  On Unix-like systems a GTK message dialog box is shown, on Win32 systems a native Windows
+ *  message dialog box is shown.
+ *
+ *  @param text Printf()-style format string.
+ *  @param ... Arguments for the @c text format string.
+ *
+ *  @return @a TRUE if the user answered with Yes, otherwise @a FALSE.
+ **/
 gboolean dialogs_show_question(const gchar *text, ...)
 {
 	gboolean ret = FALSE;

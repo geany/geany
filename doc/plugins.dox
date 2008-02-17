@@ -1,0 +1,266 @@
+/*
+ *      plugins.dox - this file is part of Geany, a fast and lightweight IDE
+ *
+ *      Copyright 2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *
+ *      This program is free software; you can redistribute it and/or modify
+ *      it under the terms of the GNU General Public License as published by
+ *      the Free Software Foundation; either version 2 of the License, or
+ *      (at your option) any later version.
+ *
+ *      This program is distributed in the hope that it will be useful,
+ *      but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *      GNU General Public License for more details.
+ *
+ *      You should have received a copy of the GNU General Public License
+ *      along with this program; if not, write to the Free Software
+ *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ *      MA 02110-1301, USA.
+ *
+ * $Id$
+ *
+ * This file contains additional plugin documentation like the signal system and a small howto.
+ * It is best viewed when filetype is set to C or C++.
+ */
+
+
+/**
+ *
+ *  @mainpage Geany Plugin API Documentation
+ *
+ *  @author Enrico Tröger, Nick Treleaven
+ *  @date $Date$
+ *
+ *  @section Intro
+ *  This is the Geany API documentation. It is far from being complete and should be
+ *  considered as a work in progress.
+ *  We will try to %document as many functions and structs as possible.
+ *
+ *  For additional documentation of things like plugin signals or a simple plugin please
+ *  see Related Pages.
+ *
+ *
+ *
+ *  @page symbols Plugin Symbols
+ *
+ *  The following symbols (functions) should be exported by every plugin. Some of them
+ *  are optional, i.e. they can be omitted, others are required and must be defined.
+ *
+ *  - @code version_check() @endcode
+ * 	  Use VERSION_CHECK() macro instead. Required by Geany.
+ *
+ *  - @code PluginInfo* info() @endcode
+ * 	  Use PLUGIN_INFO() macro to define it. Required by Geany.
+ *
+ *  - @code GeanyData* geany_data @endcode
+ * 	  Geany owned fields and functions.
+ *
+ *  - @code PluginFields* plugin_fields @endcode
+ * 	  Plugin owned fields, including flags.
+ *
+ *  - @code GeanyCallback geany_callbacks[] @endcode
+ * 	  An array for connecting GeanyObject events, which should be terminated with
+ * 	  {NULL, NULL, FALSE, NULL}. See @link signals Signal documentation @endlink.
+ *
+ *  - @code void configure(GtkWidget *parent) @endcode
+ * 	  Called when the plugin should show a configure dialog to let the user set some basic
+ *    plugin configuration. Optionally, can be omitted when not needed.
+ *
+ *  - @code void init(GeanyData *data) @endcode
+ * 	  Called after loading the plugin. data is the same as geany_data.
+ *
+ *  - @code void cleanup() @endcode
+ * 	  Called before unloading the plugin. Required for normal plugins - it should undo
+ * 	  everything done in init() - e.g. destroy menu items, free memory.
+ *
+ *
+ *
+ *  @page signals Plugin Signals
+ *
+ *
+ *  @section Usage
+ *
+ *  To use plugin signals in Geany, you simply create a GeanyCallback array, list the signals
+ *  you want to listen to and create the appropiate signal callbacks for each signal.
+ *  @note The GeanyCallback array has be ended with a final NULL entry.
+ *
+ *  The following code demonstrates how to use signals in Geany plugins. The code can be inserted
+ *  in your plugin code at any desired position.
+ *
+ *  @code
+static void on_document_open(GObject *obj, gint idx, gpointer user_data)
+{
+	printf("Example: %s was opened\n", DOC_FILENAME(idx));
+}
+
+GeanyCallback geany_callbacks[] =
+{
+	{ "document-open", (GCallback) &on_document_open, FALSE, NULL },
+	{ NULL, NULL, FALSE, NULL }
+};
+ *  @endcode
+ *
+ * 	@section Signals
+ *
+ *  @signaldef document-new
+ *  @signalproto
+ *  void user_function(GObject *obj, gint idx, gpointer user_data);
+ *  @endsignalproto
+ *  @signaldesc
+ *  Sent when a new %document is created.
+ *  @param obj a GeanyObject instance, should be ignored.
+ *  @param idx the index of the new %document.
+ *  @param user_data user data.
+ *  @endsignaldef
+ *
+ *  @signaldef document-open
+ *  @signalproto
+ *  void user_function(GObject *obj, gint idx, gpointer user_data);
+ *  @endsignalproto
+ *  @signaldesc
+ *  Sent when a new %document is opened.
+ *  @param obj a GeanyObject instance, should be ignored.
+ *  @param idx the index of the opened %document.
+ *  @param user_data user data.
+ *  @endsignaldef
+ *
+ *  @signaldef document-save
+ *  @signalproto
+ *  void user_function(GObject *obj, gint idx, gpointer user_data);
+ *  @endsignalproto
+ *  @signaldesc
+ *  Sent when a new %document is saved.
+ *  @param obj a GeanyObject instance, should be ignored.
+ *  @param idx the index of the saved %document.
+ *  @param user_data user data.
+ *  @endsignaldef
+ *
+ *  @signaldef document-activate
+ *  @signalproto
+ *  void user_function(GObject *obj, gint idx, gpointer user_data);
+ *  @endsignalproto
+ *  @signaldesc
+ *  Sent when switching notebook pages.
+ *  @param obj a GeanyObject instance, should be ignored.
+ *  @param idx the index of the new %document.
+ *  @param user_data user data.
+ *  @endsignaldef
+ *
+ *  @signaldef project-open
+ *  @signalproto
+ *  void user_function(GObject *obj, GKeyFile *config, gpointer user_data);
+ *  @endsignalproto
+ *  @signaldesc
+ *  Sent after a project is opened but before session files are loaded.
+ *  @param obj a GeanyObject instance, should be ignored.
+ *  @param config an exising GKeyFile object which can be used to read and write data.
+ *    It must not be closed or freed.
+ *  @param user_data user data.
+ *  @endsignaldef
+ *
+ *  @signaldef project-save
+ *  @signalproto
+ *  void user_function(GObject *obj, GKeyFile *config, gpointer user_data);
+ *  @endsignalproto
+ *  @signaldesc
+ *  Sent when a project is saved(happens when the project is created, the properties
+ *  dialog is closed or Geany is exited). This signal is emitted shortly before Geany
+ *  will write the contents of the GKeyFile to the disc.
+ *  @param obj a GeanyObject instance, should be ignored.
+ *  @param config an exising GKeyFile object which can be used to read and write data.
+ *    It must not be closed or freed.
+ *  @param user_data user data.
+ *  @endsignaldef
+ *
+ *  @signaldef project-close
+ *  @signalproto
+ *  void user_function(GObject *obj, GKeyFile *config, gpointer user_data);
+ *  @endsignalproto
+ *  @signaldesc
+ *  Sent after a project is closed.
+ *  @param obj a GeanyObject instance, should be ignored.
+ *  @param config an exising GKeyFile object which can be used to read and write data.
+ *    It must not be closed or freed.
+ *  @param user_data user data.
+ *  @endsignaldef
+ *
+ *
+ *
+ *  @page howto Plugin Howto
+ *
+ *  @section intro Introduction
+ *
+ *  Since Geany 0.12 there is a plugin interface to extend Geany's functionality and
+ *  add new features. This %document gives a briefly overview about how to add new
+ *  plugins by writing a simple "Hello World" plugin in C.
+ *
+ *
+ *  @section start Getting started
+ *
+ *  @subsection structure Plugin structure
+ *
+ *  Every plugin must contain some essential symbols unless it won't work. A complete
+ *  list of all necessary and optional symbols can be found in
+ *  @link symbols Plugin Symbols @endlink.
+ *  Every plugin should include "geany.h" and "plugindata.h" which provide necessary
+ *  preprocessor macros and other basic information.
+ *  There are two important preprocessor macros which need to be used at the beginning:
+ *  PLUGIN_INFO() and VERSION_CHECK().
+ *
+ *  PLUGIN_INFO() tells Geany about basic plugin information like name, description,
+ *  version and author of the plugin.
+ *
+ *  VERSION_CHECK() checks for compatibility of the API version which the plugin uses with
+ *  the used Geany sources. Furthermore, it also checks the binary compatiblity of the plugin
+ *  with Geany.
+ *
+ *  A few functions are necessary to let Geany work with the plugin, at least init() must
+ *  exist in the plugin. cleanup() should also be used to free allocated memory or destroy
+ *  created widgets.
+ *
+ *  @subsection buildenv Build environment
+ *
+ *  To be able to write plugins for Geany, you need the source code and some development
+ *  packages for GTK and its dependencies. I will only describe the way to compile and
+ *  build plugins on Unix-like systems [1].
+ *  If you already have the Geany source code and compiled it from them, you can skip the
+ *  following.
+ *
+ *  First you need to get the source code of Geany from the website at
+ *  http://geany.uvena.de/Download/Releases [2]. Then install the development files for GTK
+ *  and its dependencies. The easiest way to do this is to use your distribution's package
+ *  management system, e.g. on Debian and Ubuntu systems you can use
+ *  @code apt-get install libgtk2.0-dev intltool @endcode
+ *  This will install all necessary files to be able to compile Geany and plugins. On other
+ *  distributions, the package names and commands to use may differ.
+ *
+ *  Basically, we are done at this point and could continue with writing the plugin code.
+ *  You don't need necessarily to configure and build the Geany sources when the sources
+ *  have the same version as your running Geany installation. But if the version of the
+ *  sources differ from your Geany installation or especially when you used the source code
+ *  from the Subversion repository, we strongly recommend to configure and build these
+ *  sources and use it. To do so, run @code
+    ./configure && make
+    su -c "make install"
+ *  @endcode
+ *  in your Geany source directory. This will build and install Geany on your system.
+ *
+ *  [1] For Windows, it is basically the same but you might have some more work on setting up
+ *  the general build environment(compiler, GTK development files, ...). This is described on
+ *  Geany's website at http://geany.uvena.de/Support/BuildingOnWin32.
+ *
+ *  [2] You can also use the bleedging edge source code from our Subversion repository.
+ *  More information about this can be found at http://geany.uvena.de/Download/SVN.
+ *
+ * @section helloworld "Hello World"
+ *
+ *  We want to write a really simple "Hello World" plugin which opens a message dialog
+ *  and just prints "Hello World".
+ *
+ *
+ *  ... to be continued ...
+ *
+ *
+ **/

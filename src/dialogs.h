@@ -21,6 +21,11 @@
  * $Id$
  */
 
+/**
+ *  @file dialogs.h
+ *  File related dialogs, miscellaneous dialogs, font dialog.
+ **/
+
 
 #ifndef GEANY_DIALOGS_H
 #define GEANY_DIALOGS_H 1
