@@ -1,3 +1,10 @@
+2008-02-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/vte.c: Apply patch from Jeff Pohlmeyer to mark the VTE also as
+              clean when Ctrl-C is pressed (thanks).
+ * src/socket.c: Fix compiler warnings on Windows.
+
+
 2008-02-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * configure.in, doc/Doxyfile.in, doc/Makefile.am, doc/plugins.dox,
