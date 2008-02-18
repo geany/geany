@@ -159,6 +159,7 @@ void send_open_command(gint sock, gint argc, gchar **argv)
 }
 
 
+#ifndef G_OS_WIN32
 static void remove_socket_link_full()
 {
 	gchar real_path[512];
@@ -176,6 +177,7 @@ static void remove_socket_link_full()
 	}
 	g_unlink(socket_info.file_name);
 }
+#endif
 
 
 /* (Unix domain) socket support to replace the old FIFO code
