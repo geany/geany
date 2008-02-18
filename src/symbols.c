@@ -86,6 +86,24 @@ static gchar *user_tags_dir;
 static void html_tags_loaded();
 static void load_user_tags(filetype_id ft_id);
 
+/* tags_ignore is a NULL-terminated array of strings, read from ~/.geany/ignore.tags.
+ * This file contains a space or newline separated list of symbols which should be ignored
+ * by the C/C++ parser, see -I command line option of ctags for details. */
+gchar **c_tags_ignore = NULL;
+
+static void load_c_ignore_tags()
+{
+	gchar *path = g_strconcat(app->configdir, G_DIR_SEPARATOR_S "ignore.tags", NULL);
+	gchar *content;
+
+	if (g_file_get_contents(path, &content, NULL, NULL))
+	{
+		c_tags_ignore = g_strsplit_set(content, " \n\r", -1);
+		g_free(content);
+	}
+	g_free(path);
+}
+
 
 // Ensure that the global tags file for the file_type_idx filetype is loaded.
 void symbols_global_tags_loaded(gint file_type_idx)
@@ -97,6 +115,13 @@ void symbols_global_tags_loaded(gint file_type_idx)
 		return;
 
 	load_user_tags(file_type_idx);
+
+	// load ignore list for C/C++ parser
+	if ((file_type_idx == GEANY_FILETYPES_C || file_type_idx == GEANY_FILETYPES_CPP) &&
+		c_tags_ignore == NULL)
+	{
+		load_c_ignore_tags();
+	}
 
 	switch (file_type_idx)
 	{
@@ -306,6 +331,7 @@ const gchar **symbols_get_html_entities()
 void symbols_finalize()
 {
 	g_strfreev(html_entities);
+	g_strfreev(c_tags_ignore);
 }
 
 

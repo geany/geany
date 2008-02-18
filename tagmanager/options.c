@@ -24,6 +24,7 @@
 #include "options.h"
 #include "parse.h"
 
+#include <glib.h>
 
 #define CTAGS_ENVIRONMENT	"CTAGS"
 
@@ -150,6 +151,8 @@ extern boolean isIncludeFile (const char *const fileName)
     return FALSE;
 }
 
+// get the tags_ignore list, exported by Geany's symbols.h
+gchar **c_tags_ignore;
 
 /*  Determines whether or not "name" should be ignored, per the ignore list.
  */
@@ -157,7 +160,49 @@ extern boolean isIgnoreToken (const char *const name,
 			      boolean *const pIgnoreParens,
 			      const char **const replacement)
 {
-    return FALSE;
+	boolean result = FALSE;
+
+	if (c_tags_ignore != NULL)
+	{
+		const size_t nameLen = strlen (name);
+		unsigned int i;
+		guint len = g_strv_length (c_tags_ignore);
+
+		if (pIgnoreParens != NULL)
+			*pIgnoreParens = FALSE;
+
+		for (i = 0  ;  i < len ;  ++i)
+		{
+			vString *token = vStringNewInit (c_tags_ignore[i]);
+
+			if (strncmp (vStringValue (token), name, nameLen) == 0)
+			{
+				const size_t tokenLen = vStringLength (token);
+
+				if (nameLen == tokenLen)
+				{
+					result = TRUE;
+					break;
+				}
+				else if (tokenLen == nameLen + 1  &&
+						vStringChar (token, tokenLen - 1) == '+')
+				{
+					result = TRUE;
+					if (pIgnoreParens != NULL)
+						*pIgnoreParens = TRUE;
+					break;
+				}
+				else if (vStringChar (token, nameLen) == '=')
+				{
+					if (replacement != NULL)
+						*replacement = vStringValue (token) + nameLen + 1;
+					break;
+				}
+			}
+			vStringDelete (token);
+		}
+	}
+	return result;
 }
 
 void addIgnoreListFromFile (const char *const fileName)

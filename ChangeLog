@@ -3,6 +3,10 @@
  * src/vte.c: Apply patch from Jeff Pohlmeyer to mark the VTE also as
               clean when Ctrl-C is pressed (thanks).
  * src/socket.c: Fix compiler warnings on Windows.
+ * doc/geany.html, doc/geany.txt, src/symbols.c, src/symbols.h,
+   tagmanager/options.c:
+   Add support for reading tags(only for C/C++) from a file which should
+   be ignored while parsing the file (ctags command line option -I).
 
 
 2008-02-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

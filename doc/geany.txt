@@ -1124,6 +1124,31 @@ copy of the generated tags file because it will get overwritten when
 upgrading Geany.
 
 
+Ignore tags
+^^^^^^^^^^^
+
+You can also ignore certain tags if they would lead to wrong parsing of
+the code. Simply create a file called "ignore.tags" in your Geany
+configuration directory (usually ``~/.geany/``). Then list all tags
+you want to ignore in this file, separated by spaces and/or newlines.
+
+More detailed information about the usage from the Exuberant Ctags
+manual page::
+
+    Specifies a list of identifiers which are to be specially handled
+    while  parsing C and C++ source files. This option is specifically
+    provided to handle special cases arising through the use of
+    preprocessor macros. When the identifiers listed are simple identifiers,
+    these identifiers will be ignored during parsing of the source files.
+    If an identifier is suffixed with a '+' character, ctags will also
+    ignore any parenthesis-enclosed argument list which may immediately
+    follow the identifier in the source files.
+    If two identifiers are separated with the '=' character, the first
+    identifiers is replaced by the second identifiers for parsing purposes.
+
+For even more detailed information please read the manual page of
+Exuberant Ctags.
+
 
 Preferences
 -----------
