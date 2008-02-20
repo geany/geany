@@ -807,7 +807,7 @@ void sci_target_end(ScintillaObject *sci, gint end)
 
 gint sci_target_replace(ScintillaObject *sci, const gchar *text, gboolean regex)
 {
-	return SSM(sci, (regex) ? SCI_REPLACETARGETRE : SCI_REPLACETARGET, -1, (sptr_t) text);
+	return SSM(sci, (regex) ? SCI_REPLACETARGETRE : SCI_REPLACETARGET, (uptr_t) -1, (sptr_t) text);
 }
 
 

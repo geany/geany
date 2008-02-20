@@ -32,7 +32,7 @@ typedef enum {
     K_SECT1,
     K_SECT2,
     K_SECT3,
-    K_APPENDIX,
+    K_APPENDIX
 } docbookKind;
 
 static kindOption DocBookKinds [] = {

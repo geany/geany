@@ -46,6 +46,8 @@
 #include "vte.h"
 
 
+KeyBinding *keys[GEANY_MAX_KEYS];
+
 static const gboolean swap_alt_tab_order = FALSE;
 
 
@@ -103,10 +105,10 @@ static void cb_func_edit_global(guint key_id);
 // common function for keybindings using current word
 static void cb_func_current_word(guint key_id);
 
-static void add_menu_accels();
+static void add_menu_accels(void);
 
 
-static void init_default_kb()
+static void init_default_kb(void)
 {
 	// init all fields of keys with default values
 	keys[GEANY_KEYS_MENU_NEW] = fill(cb_func_file_action,
@@ -331,7 +333,7 @@ static void init_default_kb()
 }
 
 
-static void load_user_kb()
+static void load_user_kb(void)
 {
 	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "keybindings.conf", NULL);
 	gchar *val;
@@ -570,7 +572,7 @@ void keybindings_show_shortcuts()
 	gtk_widget_set_name(dialog, "GeanyDialog");
 
 	height = GEANY_WINDOW_MINIMAL_HEIGHT;
-	gtk_window_set_default_size(GTK_WINDOW(dialog), height * 0.8, height);
+	gtk_window_set_default_size(GTK_WINDOW(dialog), height * 8 / 10, height);
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
 
 	label3 = gtk_label_new(_("The following keyboard shortcuts are configurable:"));

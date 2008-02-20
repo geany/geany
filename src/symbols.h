@@ -37,17 +37,17 @@ const gchar *symbols_get_context_separator(gint ft_id);
 
 const GList *symbols_get_tag_list(gint idx, guint tag_types);
 
-GString *symbols_get_macro_list();
+GString *symbols_get_macro_list(void);
 
-const gchar **symbols_get_html_entities();
+const gchar **symbols_get_html_entities(void);
 
-void symbols_finalize();
+void symbols_finalize(void);
 
 gboolean symbols_recreate_tag_list(gint idx, gboolean sort_by_name);
 
 gint symbols_generate_global_tags(gint argc, gchar **argv, gboolean want_preprocess);
 
-void symbols_show_load_tags_dialog();
+void symbols_show_load_tags_dialog(void);
 
 gboolean symbols_goto_tag(const gchar *name, gboolean definition);
 

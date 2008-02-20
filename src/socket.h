@@ -26,20 +26,22 @@
 #define GEANY_SOCKET_H 1
 
 
-struct
+struct socket_info_struct
 {
 	gboolean	 ignore_socket;
 	gchar		*file_name;
 	GIOChannel	*read_ioc;
 	gint 		 lock_socket;
 	gint 		 lock_socket_tag;
-} socket_info;
+};
+
+extern struct socket_info_struct socket_info;
 
 gint socket_init(gint argc, gchar **argv);
 
 gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpointer data);
 
-gint socket_finalize();
+gint socket_finalize(void);
 
 
 #endif

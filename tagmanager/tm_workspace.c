@@ -29,7 +29,7 @@
 static TMWorkspace *theWorkspace = NULL;
 guint workspace_class_id = 0;
 
-static gboolean tm_create_workspace()
+static gboolean tm_create_workspace(void)
 {
 	workspace_class_id = tm_work_object_register(tm_workspace_free, tm_workspace_update
 		  , tm_workspace_find_object);
@@ -709,7 +709,7 @@ tm_get_current_function (GPtrArray * file_tags, const gulong line)
 		return function_tag;
 	}
 	return NULL;
-};
+}
 
 
 const GPtrArray *tm_workspace_get_parents(const gchar *name)

@@ -51,7 +51,7 @@ typedef const unsigned char *custr;
 */
 
 
-static void skip_rest_of_line()
+static void skip_rest_of_line(void)
 {
     int c;
     do {
@@ -71,7 +71,7 @@ static int get_line(char *buf)
     return i;
 }
 
-static int get_next_char()
+static int get_next_char(void)
 {
     int c, nxt;
     c = fileGetc();

@@ -63,7 +63,7 @@ typedef struct
 	GdkColor *colour_fore;
 	GdkColor *colour_back;
 } VteConfig;
-VteConfig *vc;
+extern VteConfig *vc;
 
 
 void vte_init(void);
@@ -78,7 +78,7 @@ const gchar* vte_get_working_directory(void);
 
 void vte_cwd(const gchar *filename, gboolean force);
 
-void vte_append_preferences_tab();
+void vte_append_preferences_tab(void);
 
 /*
 void vte_drag_data_received(GtkWidget *widget, GdkDragContext  *drag_context, gint x, gint y,

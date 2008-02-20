@@ -185,7 +185,7 @@ typedef enum
 }
 GeanyKeyCommand;
 
-KeyBinding	*keys[GEANY_MAX_KEYS];
+extern KeyBinding *keys[GEANY_MAX_KEYS];
 
 
 void keybindings_init(void);
@@ -197,7 +197,7 @@ void keybindings_cmd(GeanyKeyCommand cmd_id);
 /* just write the content of the keys array to the config file */
 void keybindings_write_to_file(void);
 
-void keybindings_show_shortcuts();
+void keybindings_show_shortcuts(void);
 
 /* central keypress event handler, almost all keypress events go to this function */
 gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data);

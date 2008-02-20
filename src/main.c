@@ -419,7 +419,7 @@ static void get_line_and_column_from_filename(gchar *filename, gint *line, gint 
 }
 
 
-static void setup_paths()
+static void setup_paths(void)
 {
 	gchar *data_dir;
 	gchar *doc_dir;
@@ -448,7 +448,7 @@ static void setup_paths()
 }
 
 
-static void locale_init()
+static void locale_init(void)
 {
 #ifdef ENABLE_NLS
 	gchar *locale_dir = NULL;
@@ -615,7 +615,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 
 
 // Returns 0 if config dir is OK.
-static gint setup_config_dir()
+static gint setup_config_dir(void)
 {
 	gint mkdir_result = 0;
 	gchar *tmp = app->configdir;
@@ -705,7 +705,7 @@ static gboolean open_cl_files(gint argc, gchar **argv)
 }
 
 
-static void load_project_file()
+static void load_project_file(void)
 {
 	gchar *locale_filename;
 
@@ -721,7 +721,7 @@ static void load_project_file()
 }
 
 
-static void load_settings()
+static void load_settings(void)
 {
 	configuration_load();
 	// let cmdline options overwrite configuration settings

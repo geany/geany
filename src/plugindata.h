@@ -72,7 +72,7 @@ PluginInfo;
 
 /* Sets the plugin name and a brief description of what it is. */
 #define PLUGIN_INFO(p_name, p_description, p_version, p_author) \
-	PluginInfo *info() \
+	PluginInfo *info(void) \
 	{ \
 		static PluginInfo p_info; \
 		\
@@ -160,10 +160,10 @@ typedef GeanyData PluginData;	// for compatibility with API < 7
 typedef struct DocumentFuncs
 {
 	gint	(*new_file) (const gchar *filename, struct filetype *ft, const gchar *text);
-	gint	(*get_cur_idx) ();
+	gint	(*get_cur_idx) (void);
 	gint	(*get_n_idx) (guint i);
 	gint	(*find_by_filename) (const gchar *filename, gboolean is_tm_filename);
-	struct document* (*get_current) ();
+	struct document* (*get_current) (void);
 	gboolean (*save_file)(gint idx, gboolean force);
 	gint	(*open_file)(const gchar *locale_filename, gboolean readonly,
 			struct filetype *ft, const gchar *forced_enc);
@@ -262,7 +262,7 @@ typedef struct DialogFuncs
 {
 	gboolean	(*show_question) (const gchar *text, ...);
 	void		(*show_msgbox) (gint type, const gchar *text, ...);
-	gboolean	(*show_save_as) ();
+	gboolean	(*show_save_as) (void);
 }
 DialogFuncs;
 

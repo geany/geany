@@ -54,28 +54,28 @@ typedef struct
 extern ProjectPrefs project_prefs;
 
 
-void project_new();
+void project_new(void);
 
-void project_open();
+void project_open(void);
 
 void project_close(gboolean open_default);
 
-void project_properties();
+void project_properties(void);
 
 
 gboolean project_load_file(const gchar *locale_file_name);
 
-gchar *project_get_base_path();
+gchar *project_get_base_path(void);
 
-gchar *project_get_make_dir();
+gchar *project_get_make_dir(void);
 
 
 void project_save_prefs(GKeyFile *config);
 
 void project_load_prefs(GKeyFile *config);
 
-void project_setup_prefs();
+void project_setup_prefs(void);
 
-void project_apply_prefs();
+void project_apply_prefs(void);
 
 #endif

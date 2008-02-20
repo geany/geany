@@ -60,7 +60,7 @@ enum
 {
 	FILEVIEW_COLUMN_ICON = 0,
 	FILEVIEW_COLUMN_NAME,
-	FILEVIEW_N_COLUMNS,
+	FILEVIEW_N_COLUMNS
 };
 
 static gboolean show_hidden_files = FALSE;
@@ -163,7 +163,7 @@ static gboolean is_top_level_directory(const gchar *dir)
 
 
 // adds ".." to the start of the file list
-static void add_top_level_entry()
+static void add_top_level_entry(void)
 {
 	GtkTreeIter iter;
 
@@ -178,7 +178,7 @@ static void add_top_level_entry()
 }
 
 
-static void clear()
+static void clear(void)
 {
 	gtk_list_store_clear(file_store);
 
@@ -190,7 +190,7 @@ static void clear()
 
 
 // recreate the tree model from current_dir.
-static void refresh()
+static void refresh(void)
 {
 	gchar *utf8_dir;
 	GSList *list;
@@ -217,14 +217,14 @@ static void refresh()
 }
 
 
-static void on_go_home()
+static void on_go_home(void)
 {
 	setptr(current_dir, g_strdup(g_get_home_dir()));
 	refresh();
 }
 
 
-static gchar *get_default_dir()
+static gchar *get_default_dir(void)
 {
 	const gchar *dir = NULL;
 
@@ -237,7 +237,7 @@ static gchar *get_default_dir()
 }
 
 
-static void on_current_path()
+static void on_current_path(void)
 {
 	gchar *fname;
 	gchar *dir;
@@ -260,7 +260,7 @@ static void on_current_path()
 }
 
 
-static void on_go_up()
+static void on_go_up(void)
 {
 	// remove the highest directory part (which becomes the basename of current_dir)
 	setptr(current_dir, g_path_get_dirname(current_dir));
@@ -495,7 +495,7 @@ static void on_hidden_files_clicked(GtkCheckMenuItem *item)
 }
 
 
-static GtkWidget *create_popup_menu()
+static GtkWidget *create_popup_menu(void)
 {
 	GtkWidget *item, *menu, *image;
 
@@ -629,7 +629,7 @@ static void on_path_entry_activate(GtkEntry *entry, gpointer user_data)
 }
 
 
-static void prepare_file_view()
+static void prepare_file_view(void)
 {
 	GtkCellRenderer *text_renderer, *icon_renderer;
 	GtkTreeViewColumn *column;
@@ -671,7 +671,7 @@ static void prepare_file_view()
 }
 
 
-static GtkWidget *make_toolbar()
+static GtkWidget *make_toolbar(void)
 {
 	GtkWidget *wid, *toolbar;
 	GtkTooltips *tooltips = GTK_TOOLTIPS(p_support->lookup_widget(
@@ -756,7 +756,7 @@ static gboolean completion_match_selected(GtkEntryCompletion *widget, GtkTreeMod
 }
 
 
-static void completion_create()
+static void completion_create(void)
 {
 	entry_completion = gtk_entry_completion_new();
 
@@ -915,7 +915,7 @@ void configure(GtkWidget *parent)
 }
 
 
-void cleanup()
+void cleanup(void)
 {
 	g_free(config_file);
 	g_free(open_cmd);

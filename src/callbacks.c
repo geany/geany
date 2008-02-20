@@ -93,7 +93,7 @@ static gboolean insert_callback_from_menu = FALSE;
 CallbacksData callbacks_data = {-1};
 
 
-static gboolean check_no_unsaved()
+static gboolean check_no_unsaved(void)
 {
 	guint i;
 
@@ -108,7 +108,7 @@ static gboolean check_no_unsaved()
 }
 
 
-static gboolean account_for_unsaved()
+static gboolean account_for_unsaved(void)
 {
 	gint p;
 
@@ -139,7 +139,7 @@ static void verify_click_pos(gint idx)
 
 
 // should only be called from on_exit_clicked
-static void quit_app()
+static void quit_app(void)
 {
 	guint i;
 

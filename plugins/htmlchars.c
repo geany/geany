@@ -61,7 +61,7 @@ static void sc_fill_store(GtkTreeStore *store);
 static gboolean sc_insert(GtkTreeModel *model, GtkTreeIter *iter);
 
 
-static void tools_show_dialog_insert_special_chars()
+static void tools_show_dialog_insert_special_chars(void)
 {
 	if (sc_dialog == NULL)
 	{
@@ -79,7 +79,7 @@ static void tools_show_dialog_insert_special_chars()
 		gtk_widget_set_name(sc_dialog, "GeanyDialog");
 
 		height = GEANY_WINDOW_MINIMAL_HEIGHT;
-		gtk_window_set_default_size(GTK_WINDOW(sc_dialog), height * 0.8, height);
+		gtk_window_set_default_size(GTK_WINDOW(sc_dialog), height * 8 / 10, height);
 		gtk_dialog_set_default_response(GTK_DIALOG(sc_dialog), GTK_RESPONSE_CANCEL);
 
 		label = gtk_label_new(_("Choose a special character from the list below and double click on it or use the button to insert it at the current cursor position."));
@@ -521,7 +521,7 @@ void init(GeanyData *data)
 
 
 /* Destroy widgets */
-void cleanup()
+void cleanup(void)
 {
 	gtk_widget_destroy(plugin_fields->menu_item);
 

@@ -27,16 +27,16 @@
 #define GEANY_NAVQUEUE_H 1
 
 
-void navqueue_init();
+void navqueue_init(void);
 
-void navqueue_free();
+void navqueue_free(void);
 
 
 gboolean navqueue_goto_line(gint old_idx, gint new_idx, gint line);
 
-void navqueue_go_back();
+void navqueue_go_back(void);
 
-void navqueue_go_forward();
+void navqueue_go_forward(void);
 
 
 #endif

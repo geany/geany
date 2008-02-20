@@ -79,7 +79,7 @@ gboolean auto_save(gpointer data)
 }
 
 
-void set_timeout()
+void set_timeout(void)
 {
 	if (src_id != G_MAXUINT)
 		g_source_remove(src_id);
@@ -195,7 +195,7 @@ void configure(GtkWidget *parent)
 }
 
 
-void cleanup()
+void cleanup(void)
 {
 	g_source_remove(src_id);
 	g_free(config_file);

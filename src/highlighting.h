@@ -33,8 +33,8 @@ typedef struct HighlightingStyle
 {
 	gint	foreground;
 	gint	background;
-	gboolean bold:1;
-	gboolean italic:1;
+	gboolean bold;
+	gboolean italic;
 } HighlightingStyle;
 
 

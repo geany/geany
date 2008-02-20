@@ -63,7 +63,7 @@ enum
 };
 
 #if ! GEANY_USE_WIN32_DIALOG
-static GtkWidget *add_file_open_extra_widget();
+static GtkWidget *add_file_open_extra_widget(void);
 #endif
 
 
@@ -163,7 +163,7 @@ on_file_open_check_hidden_toggled      (GtkToggleButton *togglebutton,
 
 
 #if ! GEANY_USE_WIN32_DIALOG
-static void create_open_file_dialog()
+static void create_open_file_dialog(void)
 {
 	GtkWidget *filetype_combo, *encoding_combo;
 	GtkWidget *viewbtn;
@@ -471,7 +471,7 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 
 
 #if ! GEANY_USE_WIN32_DIALOG
-static void create_save_file_dialog()
+static void create_save_file_dialog(void)
 {
 	GtkWidget *vbox, *check_open_new_tab, *rename_btn;
 	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
@@ -823,7 +823,7 @@ on_input_dialog_response(GtkDialog *dialog,
                          gint response,
                          GtkWidget *entry)
 {
-	gboolean persistent = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(dialog), "has_combo"));
+	gboolean persistent = (gboolean) GPOINTER_TO_INT(g_object_get_data(G_OBJECT(dialog), "has_combo"));
 
 	if (response == GTK_RESPONSE_ACCEPT)
 	{

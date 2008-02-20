@@ -719,7 +719,7 @@ gchar utils_brace_opposite(gchar ch)
 }
 
 
-gchar *utils_get_hostname()
+gchar *utils_get_hostname(void)
 {
 #ifdef G_OS_WIN32
 	return win32_get_hostname();
@@ -769,7 +769,7 @@ gint utils_is_file_writeable(const gchar *locale_filename)
 # define DIR_SEP ""
 #endif
 
-gint utils_make_settings_dir()
+gint utils_make_settings_dir(void)
 {
 	gint saved_errno = 0;
 	gchar *conf_file = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
@@ -1118,7 +1118,7 @@ gchar *utils_get_hex_from_color(GdkColor *color)
 /* Get directory from current file in the notebook.
  * Returns dir string that should be freed or NULL, depending on whether current file is valid.
  * Returned string is in UTF-8 encoding */
-gchar *utils_get_current_file_dir_utf8()
+gchar *utils_get_current_file_dir_utf8(void)
 {
 	gint cur_idx = document_get_cur_idx();
 
@@ -1139,7 +1139,7 @@ gchar *utils_get_current_file_dir_utf8()
 
 
 /* very simple convenience function */
-void utils_beep()
+void utils_beep(void)
 {
 	if (prefs.beep_on_errors) gdk_beep();
 }
@@ -1240,7 +1240,7 @@ gint utils_strtod(const gchar *source, gchar **end, gboolean with_route)
 
 
 // Returns: newly allocated string with the current time formatted HH:MM:SS.
-gchar *utils_get_current_time_string()
+gchar *utils_get_current_time_string(void)
 {
 	const time_t tp = time(NULL);
 	const struct tm *tmval = localtime(&tp);
@@ -1778,7 +1778,7 @@ gboolean utils_string_replace_all(GString *haystack, const gchar *needle, const 
 
 
 /* Get project or default startup directory (if set), or NULL. */
-const gchar *utils_get_default_dir_utf8()
+const gchar *utils_get_default_dir_utf8(void)
 {
 	if (app->project && NZV(app->project->base_path))
 	{

@@ -33,22 +33,22 @@
 typedef void (*InputCallback)(const gchar *);
 
 
-void dialogs_show_open_file();
+void dialogs_show_open_file(void);
 
-gboolean dialogs_show_save_as();
+gboolean dialogs_show_save_as(void);
 
 gboolean dialogs_show_unsaved_file(gint idx);
 
-void dialogs_show_open_font();
+void dialogs_show_open_font(void);
 
-void dialogs_show_word_count();
+void dialogs_show_word_count(void);
 
 void dialogs_show_color(gchar *colour);
 
 GtkWidget *dialogs_show_input(const gchar *title, const gchar *label_text,
 	const gchar *default_text, gboolean persistent, InputCallback input_cb);
 
-void dialogs_show_goto_line();
+void dialogs_show_goto_line(void);
 
 void dialogs_show_file_properties(gint idx);
 

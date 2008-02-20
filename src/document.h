@@ -131,22 +131,19 @@ extern GArray *doc_array;
 
 gint document_find_by_filename(const gchar *filename, gboolean is_tm_filename);
 
-
 gint document_find_by_sci(ScintillaObject *sci);
-
 
 gint document_get_notebook_page(gint doc_idx);
 
 gint document_get_n_idx(guint page_num);
 
-gint document_get_cur_idx();
+gint document_get_cur_idx(void);
 
-document *document_get_current();
+document *document_get_current(void);
 
+void document_init_doclist(void);
 
-void document_init_doclist();
-
-void document_finalize();
+void document_finalize(void);
 
 
 void document_set_text_changed(gint idx);
@@ -154,9 +151,7 @@ void document_set_text_changed(gint idx);
 
 void document_apply_update_prefs(gint idx);
 
-
 gboolean document_remove(guint page_num);
-
 
 gint document_new_file(const gchar *filename, filetype *ft, const gchar *text);
 
@@ -174,12 +169,9 @@ void document_open_file_list(const gchar *data, gssize length);
 void document_open_files(const GSList *filenames, gboolean readonly, filetype *ft,
 		const gchar *forced_enc);
 
-
 gboolean document_reload_file(gint idx, const gchar *forced_enc);
 
-
 gboolean document_save_file(gint idx, gboolean force);
-
 
 gboolean document_search_bar_find(gint idx, const gchar *text, gint flags, gboolean inc);
 
@@ -254,13 +246,11 @@ void document_redo(gint idx);
 
 void document_undo_add(gint idx, guint type, gpointer data);
 
-
 GdkColor *document_get_status(gint idx);
 
+void document_delay_colourise(void);
 
-void document_delay_colourise();
-
-void document_colourise_new();
+void document_colourise_new(void);
 
 void document_insert_colour(gint idx, const gchar *colour);
 

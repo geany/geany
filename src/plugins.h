@@ -28,13 +28,13 @@
 
 #ifdef HAVE_PLUGINS
 
-void plugins_init();
+void plugins_init(void);
 
-void plugins_free();
+void plugins_free(void);
 
-void plugins_create_active_list();
+void plugins_create_active_list(void);
 
-void plugins_update_tools_menu();
+void plugins_update_tools_menu(void);
 
 void plugins_update_document_sensitive(gboolean enabled);
 

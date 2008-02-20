@@ -232,7 +232,7 @@ gboolean on_treeviews_tooltip_queried(GtkWidget *widget, gint x, gint y, gboolea
 
 
 /* does some preparing things to the open files list widget */
-static void prepare_openfiles()
+static void prepare_openfiles(void)
 {
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
@@ -356,7 +356,7 @@ void treeviews_remove_document(gint idx)
 }
 
 
-static void create_taglist_popup_menu()
+static void create_taglist_popup_menu(void)
 {
 	GtkWidget *item;
 
@@ -423,7 +423,7 @@ static void on_list_symbol_activate(GtkCheckMenuItem *item, gpointer user_data)
 }
 
 
-static void create_openfiles_popup_menu()
+static void create_openfiles_popup_menu(void)
 {
 	GtkWidget *item;
 

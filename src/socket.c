@@ -91,10 +91,13 @@
 #endif
 
 
+struct socket_info_struct socket_info;
+
+
 #ifdef G_OS_WIN32
 static gint socket_fd_connect_inet	(gushort port);
 static gint socket_fd_open_inet		(gushort port);
-static void socket_init_win32();
+static void socket_init_win32		(void);
 #else
 static gint socket_fd_connect_unix	(const gchar *path);
 static gint socket_fd_open_unix		(const gchar *path);
@@ -160,7 +163,7 @@ void send_open_command(gint sock, gint argc, gchar **argv)
 
 
 #ifndef G_OS_WIN32
-static void remove_socket_link_full()
+static void remove_socket_link_full(void)
 {
 	gchar real_path[512];
 	gsize len;
@@ -457,7 +460,7 @@ static gint socket_fd_connect_inet(gushort port)
 }
 
 
-static void socket_init_win32()
+static void socket_init_win32(void)
 {
 	WSADATA wsadata;
 

@@ -434,7 +434,7 @@ static const char *getVarType (const statementInfo *const st);
 */
 
 /* Debugging functions added by Biswa */
-#if DEBUG_C
+#if defined(DEBUG_C) && DEBUG_C
 static char *tokenTypeName[] = {
     "none", "args", "'}'", "'{'", "','", "'::'", "keyword", "name",
     "package", "paren-name", "';'",	"spec", "*", "[]", "count"

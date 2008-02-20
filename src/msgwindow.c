@@ -595,7 +595,10 @@ static void parse_file_line(ParseData *data, gchar **filename, gint *line)
  * *filename must be freed unless it is NULL. */
 void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir, gchar **filename, gint *line)
 {
-	ParseData data = {string, build_info.dir, NULL, 0, 0, 0};
+	ParseData data = {NULL, NULL, NULL, 0, 0, 0};
+
+	data.string = string;
+	data.dir = build_info.dir;
 
 	*filename = NULL;
 	*line = -1;

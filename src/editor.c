@@ -77,7 +77,7 @@ on_editor_button_press_event           (GtkWidget *widget,
                                         gpointer user_data)
 {
 	gint idx = GPOINTER_TO_INT(user_data);
-	editor_info.click_pos = sci_get_position_from_xy(doc_list[idx].sci, event->x, event->y, FALSE);
+	editor_info.click_pos = sci_get_position_from_xy(doc_list[idx].sci, (gint)event->x, (gint)event->y, FALSE);
 
 	if (event->button == 1)
 	{
@@ -1997,7 +1997,7 @@ void editor_highlight_braces(ScintillaObject *sci, gint cur_pos)
 		brace_pos++;
 		if (! utils_isbrace(sci_get_char_at(sci, brace_pos), editor_prefs.brace_match_ltgt))
 		{
-			SSM(sci, SCI_BRACEBADLIGHT, -1, 0);
+			SSM(sci, SCI_BRACEBADLIGHT, (uptr_t)-1, 0);
 			return;
 		}
 	}

@@ -333,7 +333,7 @@ on_new_with_template                   (GtkMenuItem     *menuitem,
 
 
 // template items for the new file menu
-static void create_new_menu_items()
+static void create_new_menu_items(void)
 {
 	GtkWidget *template_menu = lookup_widget(app->window, "menu_new_with_template1_menu");
 	filetype_id ft_id;

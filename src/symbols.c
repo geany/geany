@@ -83,7 +83,7 @@ static TagFileInfo tag_file_info[GTF_MAX] =
 static gchar *user_tags_dir;
 
 
-static void html_tags_loaded();
+static void html_tags_loaded(void);
 static void load_user_tags(filetype_id ft_id);
 
 /* tags_ignore is a NULL-terminated array of strings, read from ~/.geany/ignore.tags.
@@ -91,7 +91,7 @@ static void load_user_tags(filetype_id ft_id);
  * by the C/C++ parser, see -I command line option of ctags for details. */
 gchar **c_tags_ignore = NULL;
 
-static void load_c_ignore_tags()
+static void load_c_ignore_tags(void)
 {
 	gchar *path = g_strconcat(app->configdir, G_DIR_SEPARATOR_S "ignore.tags", NULL);
 	gchar *content;
@@ -158,7 +158,7 @@ void symbols_global_tags_loaded(gint file_type_idx)
 
 
 // HTML tagfile is just a list of entities for autocompletion (e.g. '&amp;')
-static void html_tags_loaded()
+static void html_tags_loaded(void)
 {
 	TagFileInfo *tfi;
 
@@ -244,7 +244,7 @@ const gchar *symbols_get_context_separator(gint ft_id)
 }
 
 
-GString *symbols_get_macro_list()
+GString *symbols_get_macro_list(void)
 {
 	guint j, i;
 	const GPtrArray *tags;
@@ -319,7 +319,7 @@ static TMTag *find_workspace_tag(const gchar *tag_name, gint type)
 }
 
 
-const gchar **symbols_get_html_entities()
+const gchar **symbols_get_html_entities(void)
 {
 	if (html_entities == NULL)
 		html_tags_loaded(); // if not yet created, force creation of the array but shouldn't occur
@@ -328,7 +328,7 @@ const gchar **symbols_get_html_entities()
 }
 
 
-void symbols_finalize()
+void symbols_finalize(void)
 {
 	g_strfreev(html_entities);
 	g_strfreev(c_tags_ignore);
@@ -411,7 +411,7 @@ static const GList *get_tag_list(gint idx, guint tag_types, gboolean sort_by_nam
 			if (tag->type & tag_types)
 			{
 				if (! doc_is_utf8) utf8_name = encodings_convert_to_utf8_from_charset(tag->name,
-															-1, doc_list[idx].encoding, TRUE);
+															(gsize)-1, doc_list[idx].encoding, TRUE);
 				else utf8_name = tag->name;
 
 				if (utf8_name == NULL)
@@ -462,7 +462,7 @@ struct TreeviewSymbols
 } tv_iters;
 
 
-static void init_tag_iters()
+static void init_tag_iters(void)
 {
 	// init all GtkTreeIters with -1 to make them invalid to avoid crashes when switching between
 	// filetypes(e.g. config file to Python crashes Geany without this)
@@ -965,7 +965,7 @@ int symbols_generate_global_tags(int argc, char **argv, gboolean want_preprocess
 }
 
 
-void symbols_show_load_tags_dialog()
+void symbols_show_load_tags_dialog(void)
 {
 	GtkWidget *dialog;
 	GtkFileFilter *filter;
@@ -1037,7 +1037,7 @@ static GHashTable *get_tagfile_hash(const GSList *file_list)
 }
 
 
-static GHashTable *init_user_tags()
+static GHashTable *init_user_tags(void)
 {
 	GSList *file_list;
 	GHashTable *lang_hash;

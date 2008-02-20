@@ -73,9 +73,9 @@ enum	// Geany common styling
 typedef struct
 {
 	// can take values 1 or 2 (or 3)
-	guchar marker:2;
-	guchar lines:2;
-	guchar draw_line:3;
+	guint marker:2;
+	guint lines:2;
+	guint draw_line:3;
 } FoldingStyle;
 
 static struct
@@ -582,10 +582,10 @@ HighlightingStyle gsd_string_eol =	{0x000000, 0xe0c0e0, FALSE, FALSE};
 static void
 styleset_c_like_init(GKeyFile *config, GKeyFile *config_home, gint filetype_idx)
 {
-	HighlightingStyle uuid = {0x404080, 0xffffff, FALSE, FALSE};
-	HighlightingStyle operator = {0x301010, 0xffffff, FALSE, FALSE};
-	HighlightingStyle verbatim = {0x301010, 0xffffff, FALSE, FALSE};
-	HighlightingStyle regex = {0x105090, 0xffffff, FALSE, FALSE};
+	static HighlightingStyle uuid = {0x404080, 0xffffff, FALSE, FALSE};
+	static HighlightingStyle operator = {0x301010, 0xffffff, FALSE, FALSE};
+	static HighlightingStyle verbatim = {0x301010, 0xffffff, FALSE, FALSE};
+	static HighlightingStyle regex = {0x105090, 0xffffff, FALSE, FALSE};
 
 	StyleEntry entries[] =
 	{

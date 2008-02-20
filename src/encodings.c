@@ -53,6 +53,9 @@ static regex_t pregs[2];
 #endif
 
 
+GeanyEncoding encodings[GEANY_ENCODINGS_MAX];
+
+
 #define fill(Order, Group, Idx, Charset, Name) \
 		encodings[Idx].idx = Idx; \
 		encodings[Idx].order = Order; \
@@ -479,7 +482,7 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 	gchar *utf8_content;
 	gboolean check_regex = FALSE;
 	gboolean check_locale = FALSE;
-	guint i;
+	gint i;
 
 	if ((gint)size == -1)
 	{
@@ -488,7 +491,7 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 
 #ifdef HAVE_REGCOMP
 	// first try to read the encoding from the file content
-	for (i = 0; i < G_N_ELEMENTS(pregs) && ! check_regex; i++)
+	for (i = 0; i < (gint) G_N_ELEMENTS(pregs) && ! check_regex; i++)
 	{
 		if ((regex_charset = regex_match(&pregs[i], buffer, size)) != NULL)
 			check_regex = TRUE;
@@ -500,7 +503,7 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 
 	for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
 	{
-		if (i == (guint) encodings[GEANY_ENCODING_NONE].idx || i == (guint) -1)
+		if (i == encodings[GEANY_ENCODING_NONE].idx || i == -1)
 			continue;
 
 		if (check_regex)
@@ -522,7 +525,7 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 		if (charset == NULL)
 			continue;
 
-		geany_debug("Trying to convert %d bytes of data from %s into UTF-8.", (gint) size, charset);
+		geany_debug("Trying to convert %" G_GSIZE_FORMAT " bytes of data from %s into UTF-8.", size, charset);
 		utf8_content = encodings_convert_to_utf8_from_charset(buffer, size, charset, FALSE);
 
 		if (utf8_content != NULL)

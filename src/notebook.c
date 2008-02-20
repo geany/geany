@@ -74,7 +74,7 @@ notebook_find_tab_num_at_pos(GtkNotebook *notebook, gint x, gint y);
 static void
 notebook_tab_close_clicked_cb(GtkButton *button, gpointer user_data);
 
-static void setup_tab_dnd();
+static void setup_tab_dnd(void);
 
 
 static void focus_sci(GtkWidget *widget, gpointer user_data)
@@ -280,7 +280,7 @@ notebook_find_tab_num_at_pos(GtkNotebook *notebook, gint x, gint y)
 
 
 // call this after the number of tabs in app->notebook changes.
-static void tab_count_changed()
+static void tab_count_changed(void)
 {
 	switch (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)))
 	{

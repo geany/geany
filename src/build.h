@@ -62,9 +62,9 @@ typedef struct BuildMenuItems
 
 
 
-void build_init();
+void build_init(void);
 
-void build_finalize();
+void build_finalize(void);
 
 
 gboolean build_parse_make_dir(const gchar *string, gchar **prefix);

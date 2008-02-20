@@ -354,7 +354,7 @@ static void init_doc_struct(document *new_doc)
 
 /* returns the next free place(i.e. index) in the document list,
  * or -1 if the current doc_array is full */
-static gint document_get_new_idx()
+static gint document_get_new_idx(void)
 {
 	guint i;
 
@@ -1294,9 +1294,9 @@ gboolean document_save_file(gint idx, gboolean force)
 		// encoding, it will be converted to doc_list[idx].encoding below and this conversion
 		// also changes the BOM
 		data = (gchar*) g_malloc(len + 3);	// 3 chars for BOM
-		data[0] = 0xef;
-		data[1] = 0xbb;
-		data[2] = 0xbf;
+		data[0] = (gchar) 0xef;
+		data[1] = (gchar) 0xbb;
+		data[2] = (gchar) 0xbf;
 		sci_get_text(doc_list[idx].sci, len, data + 3);
 		len += 3;
 	}

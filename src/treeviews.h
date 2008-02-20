@@ -42,10 +42,10 @@ enum
 	SYMBOLS_COLUMN_ICON,
 	SYMBOLS_COLUMN_NAME,
 	SYMBOLS_COLUMN_LINE,
-	SYMBOLS_N_COLUMNS,
+	SYMBOLS_N_COLUMNS
 };
 
-void treeviews_init();
+void treeviews_init(void);
 
 void treeviews_update_tag_list(gint idx, gboolean update);
 
@@ -53,7 +53,7 @@ void treeviews_openfiles_add(gint idx);
 
 void treeviews_openfiles_update(gint idx);
 
-void treeviews_openfiles_update_all();
+void treeviews_openfiles_update_all(void);
 
 void treeviews_select_openfiles_item(gint idx);
 

@@ -100,7 +100,7 @@ void ui_table_add_row(GtkTable *table, gint row, ...) G_GNUC_NULL_TERMINATED;
 /* End of 'generic' functions */
 
 
-void ui_init();
+void ui_init(void);
 
 
 void ui_set_statusbar(gboolean log, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
@@ -113,7 +113,7 @@ void ui_set_window_title(gint index);
 
 void ui_set_editor_font(const gchar *font_name);
 
-void ui_set_fullscreen();
+void ui_set_fullscreen(void);
 
 
 void ui_update_popup_reundo_items(gint idx);
@@ -127,27 +127,27 @@ void ui_update_menu_copy_items(gint idx);
 
 void ui_update_insert_include_item(gint idx, gint item);
 
-void ui_update_fold_items();
+void ui_update_fold_items(void);
 
 
-void ui_create_insert_menu_items();
+void ui_create_insert_menu_items(void);
 
-void ui_create_insert_date_menu_items();
+void ui_create_insert_date_menu_items(void);
 
 
 void ui_save_buttons_toggle(gboolean enable);
 
-void ui_document_buttons_update();
+void ui_document_buttons_update(void);
 
 
-void ui_sidebar_show_hide();
+void ui_sidebar_show_hide(void);
 
 void ui_document_show_hide(gint idx);
 
 
 void ui_update_toolbar_icons(GtkIconSize size);
 
-void ui_update_toolbar_items();
+void ui_update_toolbar_items(void);
 
 
 GdkPixbuf *ui_new_pixbuf_from_inline(gint img, gboolean small_img);
@@ -155,20 +155,20 @@ GdkPixbuf *ui_new_pixbuf_from_inline(gint img, gboolean small_img);
 GtkWidget *ui_new_image_from_inline(gint img, gboolean small_img);
 
 
-void ui_create_recent_menu();
+void ui_create_recent_menu(void);
 
 void ui_add_recent_file(const gchar *utf8_filename);
 
 
-void ui_show_markers_margin();
+void ui_show_markers_margin(void);
 
-void ui_show_linenumber_margin();
+void ui_show_linenumber_margin(void);
 
 
 void ui_update_tab_status(gint idx);
 
 
-typedef gboolean TVMatchCallback();
+typedef gboolean TVMatchCallback(void);
 
 gboolean ui_tree_view_find_next(GtkTreeView *treeview, TVMatchCallback cb);
 

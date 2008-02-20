@@ -271,11 +271,11 @@ static void show_output(const gchar *std_output, const gchar *name_prefix,
 	if (force_encoding)
 	{
 		text = p_encoding->convert_to_utf8_from_charset(
-			std_output, -1, force_encoding, TRUE);
+			std_output, (gsize)-1, force_encoding, TRUE);
 	}
 	else
 	{
-		text = p_encoding->convert_to_utf8(std_output, -1, &detect_enc);
+		text = p_encoding->convert_to_utf8(std_output, (gsize)-1, &detect_enc);
 	}
 	if (text)
 	{
@@ -454,7 +454,7 @@ static GtkWidget *menu_vcdiff_file = NULL;
 static GtkWidget *menu_vcdiff_dir = NULL;
 static GtkWidget *menu_vcdiff_project = NULL;
 
-static void update_menu_items()
+static void update_menu_items(void)
 {
 	document	*doc;
 	gboolean	have_file;
@@ -525,7 +525,7 @@ void init(GeanyData *data)
 
 
 /* Called by Geany before unloading the plugin. */
-void cleanup()
+void cleanup(void)
 {
 	// remove the menu item added in init()
 	gtk_widget_destroy(plugin_fields->menu_item);

@@ -46,6 +46,7 @@
 
 
 VteInfo vte_info;
+VteConfig *vc;
 
 extern gchar **environ;
 static pid_t pid;
@@ -63,7 +64,7 @@ static const gchar VTE_WORDCHARS[] = "-A-Za-z0-9,./?%&#:_";
 #define VTE_TERMINAL(obj) (GTK_CHECK_CAST((obj), VTE_TYPE_TERMINAL, VteTerminal))
 #define VTE_TYPE_TERMINAL (vf->vte_terminal_get_type())
 
-static void create_vte();
+static void create_vte(void);
 static void vte_start(GtkWidget *widget);
 static gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpointer user_data);
 static gboolean vte_keyrelease(GtkWidget *widget, GdkEventKey *event, gpointer data);
@@ -87,7 +88,7 @@ enum
 	TARGET_TEXT,
 	TARGET_COMPOUND_TEXT,
 	TARGET_STRING,
-	TARGET_TEXT_PLAIN,
+	TARGET_TEXT_PLAIN
 };
 
 static const GtkTargetEntry dnd_targets[] =
@@ -140,7 +141,7 @@ static gchar **vte_get_child_environment(void)
 }
 
 
-static void override_menu_key()
+static void override_menu_key(void)
 {
 	if (gtk_menu_key_accel == NULL) // for restoring the default value
 		g_object_get(G_OBJECT(gtk_settings_get_default()), "gtk-menu-bar-accel",
@@ -206,7 +207,7 @@ void vte_init(void)
 }
 
 
-static void create_vte()
+static void create_vte(void)
 {
 	GtkWidget *vte, *scrollbar, *hbox, *frame;
 
@@ -532,7 +533,7 @@ gboolean vte_send_cmd(const gchar *cmd)
 
 /* Taken from Terminal by os-cillation: terminal_screen_get_working_directory, thanks.
  * Determines the working directory using various OS-specific mechanisms. */
-const gchar* vte_get_working_directory()
+const gchar* vte_get_working_directory(void)
 {
 	gchar  buffer[4096 + 1];
 	gchar *file;
@@ -631,7 +632,7 @@ static void check_run_in_vte_toggled(GtkToggleButton *togglebutton, GtkWidget *u
 }
 
 
-void vte_append_preferences_tab()
+void vte_append_preferences_tab(void)
 {
 	if (vte_info.have_vte)
 	{

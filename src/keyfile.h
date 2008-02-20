@@ -26,31 +26,31 @@
 #define GEANY_KEYFILE_H 1
 
 
-void configuration_save();
+void configuration_save(void);
 
-gboolean configuration_load();
+gboolean configuration_load(void);
 
-gboolean configuration_open_files();
+gboolean configuration_open_files(void);
 
-void configuration_reload_default_session();
+void configuration_reload_default_session(void);
 
-void configuration_save_default_session();
+void configuration_save_default_session(void);
 
 void configuration_load_session_files(GKeyFile *config);
 
 void configuration_save_session_files(GKeyFile *config);
 
-void configuration_read_filetype_extensions();
+void configuration_read_filetype_extensions(void);
 
-void configuration_read_snippets();
+void configuration_read_snippets(void);
 
 /* set some settings which are already read from the config file, but need other things, like the
  * realisation of the main window */
-void configuration_apply_settings();
+void configuration_apply_settings(void);
 
 #ifdef GEANY_DEBUG
 /* Generate the config files in "data/" from defaults */
-void configuration_generate_data_files();
+void configuration_generate_data_files(void);
 #endif
 
 #endif

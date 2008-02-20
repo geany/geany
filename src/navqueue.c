@@ -71,7 +71,7 @@ void navqueue_free()
 }
 
 
-static void adjust_buttons()
+static void adjust_buttons(void)
 {
 	if (g_queue_get_length(navigation_queue) < 2)
 	{

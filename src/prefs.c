@@ -87,10 +87,10 @@ enum
 {
 	KB_TREE_ACTION,
 	KB_TREE_SHORTCUT,
-	KB_TREE_INDEX,
+	KB_TREE_INDEX
 };
 
-static void init_kb_tree()
+static void init_kb_tree(void)
 {
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
@@ -124,7 +124,7 @@ static void init_kb_tree()
 }
 
 
-static void init_keybindings()
+static void init_keybindings(void)
 {
 	GtkTreeIter parent, iter;
 	gint i;

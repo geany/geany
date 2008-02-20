@@ -40,7 +40,7 @@ typedef enum
 	MSG_COMPILER,
 	MSG_MESSAGE,
 	MSG_SCRATCH,
-	MSG_VTE,
+	MSG_VTE
 } MessageWindowTabNum;
 
 
@@ -63,9 +63,9 @@ typedef struct
 extern MessageWindow msgwindow;
 
 
-void msgwin_init();
+void msgwin_init(void);
 
-void msgwin_finalize();
+void msgwin_finalize(void);
 
 void msgwin_show_hide(gboolean show);
 
@@ -87,11 +87,11 @@ void msgwin_status_add(const gchar *format, ...) G_GNUC_PRINTF (1, 2);
 
 void msgwin_menu_add_common_items(GtkMenu *menu);
 
-gboolean msgwin_goto_compiler_file_line();
+gboolean msgwin_goto_compiler_file_line(void);
 
 void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
 									  gchar **filename, gint *line);
 
-gboolean msgwin_goto_messages_file_line();
+gboolean msgwin_goto_messages_file_line(void);
 
 #endif

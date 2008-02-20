@@ -108,7 +108,7 @@ static gboolean
 search_find_in_files(const gchar *search_text, const gchar *dir, const gchar *opts);
 
 
-void search_init()
+void search_init(void)
 {
 	widgets.find_dialog		= NULL;
 	widgets.replace_dialog		= NULL;
@@ -120,7 +120,7 @@ void search_init()
 #define FREE_WIDGET(wid) \
 	if (wid && GTK_IS_WIDGET(wid)) gtk_widget_destroy(wid);
 
-void search_finalize()
+void search_finalize(void)
 {
 	FREE_WIDGET(widgets.find_dialog);
 	FREE_WIDGET(widgets.replace_dialog);
@@ -257,7 +257,7 @@ void search_find_selection(gint idx, gboolean search_backwards)
 }
 
 
-void search_show_find_dialog()
+void search_show_find_dialog(void)
 {
 	gint idx = document_get_cur_idx();
 	gchar *sel = NULL;
@@ -376,7 +376,7 @@ static void send_replace_dialog_response(GtkButton *button, gpointer user_data)
 }
 
 
-void search_show_replace_dialog()
+void search_show_replace_dialog(void)
 {
 	gint idx = document_get_cur_idx();
 	gchar *sel = NULL;
@@ -1012,7 +1012,7 @@ on_widget_key_pressed_set_focus(GtkWidget *widget, GdkEventKey *event, gpointer 
 }
 
 
-static GString *get_grep_options()
+static GString *get_grep_options(void)
 {
 	gboolean fgrep = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 					lookup_widget(widgets.find_in_files_dialog, "radio_fgrep")));

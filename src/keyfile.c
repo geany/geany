@@ -160,8 +160,11 @@ static void save_plugin_prefs(GKeyFile *config)
 		g_key_file_set_string_list(config, "plugins", "active_plugins",
 			(const gchar**)app->active_plugins, g_strv_length(app->active_plugins));
 	else
+	{
 		// use an empty dummy array to override maybe exisiting value
-		g_key_file_set_string_list(config, "plugins", "active_plugins", (const gchar*[1]){ "" }, 1);
+		const gchar *dummy[] = { "" };
+		g_key_file_set_string_list(config, "plugins", "active_plugins", dummy, 1);
+	}
 }
 #endif
 
@@ -375,7 +378,7 @@ static void save_hidden_prefs(GKeyFile *config)
 }
 
 
-void configuration_save()
+void configuration_save(void)
 {
 	GKeyFile *config = g_key_file_new();
 	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
@@ -744,7 +747,7 @@ static void load_ui_prefs(GKeyFile *config)
 /*
  * Save current session in default configuration file
  */
-void configuration_save_default_session()
+void configuration_save_default_session(void)
 {
 	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
 	gchar *data;
@@ -768,7 +771,7 @@ void configuration_save_default_session()
 /*
  * Only reload the session part of the default configuration
  */
-void configuration_reload_default_session()
+void configuration_reload_default_session(void)
 {
 	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
 	GKeyFile *config = g_key_file_new();
@@ -782,7 +785,7 @@ void configuration_reload_default_session()
 }
 
 
-gboolean configuration_load()
+gboolean configuration_load(void)
 {
 	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
 	GKeyFile *config = g_key_file_new();
@@ -813,7 +816,7 @@ gboolean configuration_load()
 /* Open session files
  * Note: notebook page switch handler and adding to recent files list is always disabled
  * for all files opened within this function */
-gboolean configuration_open_files()
+gboolean configuration_open_files(void)
 {
 	gint i;
 	guint pos;
@@ -901,7 +904,7 @@ gboolean configuration_open_files()
 
 /* set some settings which are already read from the config file, but need other things, like the
  * realisation of the main window */
-void configuration_apply_settings()
+void configuration_apply_settings(void)
 {
 	if (scribble_text)
 	{	// update the scribble widget, because now it's realized
@@ -936,7 +939,7 @@ static void generate_filetype_extensions(const gchar *output_dir);
 
 
 /* Generate the config files in "data/" from defaults */
-void configuration_generate_data_files()
+void configuration_generate_data_files(void)
 {
 	gchar *cur_dir, *gen_dir;
 
@@ -997,7 +1000,7 @@ static void generate_filetype_extensions(const gchar *output_dir)
 #endif
 
 
-void configuration_read_filetype_extensions()
+void configuration_read_filetype_extensions(void)
 {
 	guint i;
 	gsize len = 0;
@@ -1034,7 +1037,7 @@ void configuration_read_filetype_extensions()
 }
 
 
-void configuration_read_snippets()
+void configuration_read_snippets(void)
 {
 	gsize i, j, len = 0, len_keys = 0;
 	gchar *sysconfigfile, *userconfigfile;

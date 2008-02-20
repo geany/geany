@@ -24,7 +24,7 @@
 #ifndef GEANY_NOTEBOOK_H
 #define GEANY_NOTEBOOK_H 1
 
-void notebook_init();
+void notebook_init(void);
 
 /* Returns page number of notebook page, or -1 on error */
 gint notebook_new_tab(gint doc_idx);

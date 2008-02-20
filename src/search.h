@@ -47,13 +47,13 @@ typedef struct
 extern SearchPrefs search_prefs;
 
 
-void search_init();
+void search_init(void);
 
-void search_finalize();
+void search_finalize(void);
 
-void search_show_find_dialog();
+void search_show_find_dialog(void);
 
-void search_show_replace_dialog();
+void search_show_replace_dialog(void);
 
 void search_show_find_in_files_dialog(const gchar *dir);
 

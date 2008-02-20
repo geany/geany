@@ -75,7 +75,7 @@ typedef struct _PropertyDialogElements
 static gboolean update_config(const PropertyDialogElements *e);
 static void on_file_save_button_clicked(GtkButton *button, PropertyDialogElements *e);
 static void on_file_open_button_clicked(GtkButton *button, PropertyDialogElements *e);
-static gboolean close_open_project();
+static gboolean close_open_project(void);
 static gboolean load_config(const gchar *filename);
 static gboolean write_config(gboolean emit_signal);
 static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements *e);
@@ -299,7 +299,7 @@ void project_open()
 
 
 // Called when opening, closing and updating projects.
-static void update_ui()
+static void update_ui(void)
 {
 	ui_set_window_title(-1);
 	build_menu_update(-1);

@@ -179,7 +179,7 @@ typedef enum
 } GeanyEncodingIndex;
 
 
-GeanyEncoding encodings[GEANY_ENCODINGS_MAX];
+extern GeanyEncoding encodings[GEANY_ENCODINGS_MAX];
 
 
 GeanyEncodingIndex encodings_scan_unicode_bom(const gchar *string, gsize len, guint *bom_len);

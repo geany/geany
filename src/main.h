@@ -49,6 +49,6 @@ extern GeanyStatus main_status;
 
 gchar *get_argv_filename(const gchar *filename);
 
-void main_quit();
+void main_quit(void);
 
 #endif

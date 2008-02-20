@@ -59,7 +59,7 @@ widgets;
 
 static gchar *menu_item_get_text(GtkMenuItem *menu_item);
 
-static void update_recent_menu();
+static void update_recent_menu(void);
 static void recent_file_loaded(const gchar *utf8_filename);
 static void
 recent_file_activate_cb                (GtkMenuItem     *menuitem,
@@ -262,7 +262,7 @@ void ui_set_editor_font(const gchar *font_name)
 }
 
 
-void ui_set_fullscreen()
+void ui_set_fullscreen(void)
 {
 	if (ui_prefs.fullscreen)
 	{
@@ -361,7 +361,7 @@ void ui_update_insert_include_item(gint idx, gint item)
 }
 
 
-void ui_update_fold_items()
+void ui_update_fold_items(void)
 {
 	ui_widget_show_hide(lookup_widget(app->window, "menu_fold_all1"), editor_prefs.folding);
 	ui_widget_show_hide(lookup_widget(app->window, "menu_unfold_all1"), editor_prefs.folding);
@@ -403,7 +403,7 @@ static void insert_include_items(GtkMenu *me, GtkMenu *mp, gchar **includes, gch
 }
 
 
-void ui_create_insert_menu_items()
+void ui_create_insert_menu_items(void)
 {
 	GtkMenu *menu_edit = GTK_MENU(lookup_widget(app->window, "insert_include2_menu"));
 	GtkMenu *menu_popup = GTK_MENU(lookup_widget(app->popup_menu, "insert_include1_menu"));
@@ -470,7 +470,7 @@ static void insert_date_items(GtkMenu *me, GtkMenu *mp, gchar *label)
 }
 
 
-void ui_create_insert_date_menu_items()
+void ui_create_insert_date_menu_items(void)
 {
 	GtkMenu *menu_edit = GTK_MENU(lookup_widget(app->window, "insert_date1_menu"));
 	GtkMenu *menu_popup = GTK_MENU(lookup_widget(app->popup_menu, "insert_date2_menu"));
@@ -542,7 +542,7 @@ void ui_save_buttons_toggle(gboolean enable)
 }
 
 
-static void init_document_widgets()
+static void init_document_widgets(void)
 {
 	/* Cache the document-sensitive widgets so we don't have to keep looking them up
 	 * when using ui_document_buttons_update(). */
@@ -594,7 +594,7 @@ static void init_document_widgets()
 }
 
 
-void ui_document_buttons_update()
+void ui_document_buttons_update(void)
 {
 	guint i;
 	gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) ? TRUE : FALSE;
@@ -621,7 +621,7 @@ void ui_widget_show_hide(GtkWidget *widget, gboolean show)
 }
 
 
-void ui_sidebar_show_hide()
+void ui_sidebar_show_hide(void)
 {
 	GtkWidget *widget;
 
@@ -720,7 +720,7 @@ void ui_update_toolbar_icons(GtkIconSize size)
 }
 
 
-void ui_update_toolbar_items()
+void ui_update_toolbar_items(void)
 {
 	// show toolbar
 	GtkWidget *widget = lookup_widget(app->window, "menu_show_toolbar1");
@@ -833,7 +833,7 @@ GtkWidget *ui_new_image_from_inline(gint img, gboolean small_img)
 }
 
 
-void ui_create_recent_menu()
+void ui_create_recent_menu(void)
 {
 	GtkWidget *tmp;
 	guint i;
@@ -973,7 +973,7 @@ static void recent_file_loaded(const gchar *utf8_filename)
 }
 
 
-static void update_recent_menu()
+static void update_recent_menu(void)
 {
 	GtkWidget *tmp;
 	static GtkMenuToolButton *menu = NULL;
@@ -1028,7 +1028,7 @@ static void update_recent_menu()
 }
 
 
-void ui_show_markers_margin()
+void ui_show_markers_margin(void)
 {
 	gint i, idx, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
 
@@ -1040,7 +1040,7 @@ void ui_show_markers_margin()
 }
 
 
-void ui_show_linenumber_margin()
+void ui_show_linenumber_margin(void)
 {
 	gint i, idx, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
 
@@ -1397,7 +1397,7 @@ void ui_table_add_row(GtkTable *table, gint row, ...)
 }
 
 
-void ui_init()
+void ui_init(void)
 {
 	init_document_widgets();
 }

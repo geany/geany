@@ -70,7 +70,7 @@ item_activate(GtkMenuItem *menuitem, gpointer gdata)
 		GTK_DIALOG_DESTROY_WITH_PARENT,
 		GTK_MESSAGE_INFO,
 		GTK_BUTTONS_OK,
-		welcome_text);
+		"%s", welcome_text);
 	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
 		_("(From the %s plugin)"), info()->name);
 
@@ -146,7 +146,7 @@ void configure(GtkWidget *parent)
 /* Called by Geany before unloading the plugin.
  * Here any UI changes should be removed, memory freed and any other finalization done.
  * Be sure to leave Geany as it was before init(). */
-void cleanup()
+void cleanup(void)
 {
 	// remove the menu item added in init()
 	gtk_widget_destroy(plugin_fields->menu_item);

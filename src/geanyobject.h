@@ -76,7 +76,7 @@ struct _GeanyObjectClass
 	void (*document_activate)(gint idx);
 	void (*project_open)(GKeyFile *keyfile);
 	void (*project_save)(GKeyFile *keyfile);
-	void (*project_close)();
+	void (*project_close)(void);
 };
 
 GType		geany_object_get_type	(void);

@@ -737,7 +737,7 @@ void init(GeanyData *data)
 }
 
 
-void cleanup()
+void cleanup(void)
 {
 	gtk_widget_destroy(plugin_fields->menu_item);
 }

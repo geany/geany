@@ -56,7 +56,7 @@ typedef struct _TMWorkspace
  a workspace is created. Subsequent calls to the function will return the
  created workspace.
 */
-const TMWorkspace *tm_get_workspace();
+const TMWorkspace *tm_get_workspace(void);
 
 /*! Adds a work object (source file or project) to the workspace.
  \param work_object The work object to add to the project.

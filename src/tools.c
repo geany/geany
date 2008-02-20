@@ -209,7 +209,7 @@ void tools_execute_custom_command(gint idx, const gchar *command)
 }
 
 
-static void cc_show_dialog_custom_commands()
+static void cc_show_dialog_custom_commands(void)
 {
 	GtkWidget *dialog, *label, *vbox, *button;
 	guint i;
@@ -389,7 +389,7 @@ static void cc_insert_custom_command_items(GtkMenu *me, GtkMenu *mp, gchar *labe
 }
 
 
-void tools_create_insert_custom_command_menu_items()
+void tools_create_insert_custom_command_menu_items(void)
 {
 	GtkMenu *menu_edit = GTK_MENU(lookup_widget(app->window, "send_selection_to2_menu"));
 	GtkMenu *menu_popup = GTK_MENU(lookup_widget(app->popup_menu, "send_selection_to1_menu"));
@@ -509,7 +509,7 @@ word_count(gchar *text, guint *chars, guint *lines, guint *words)
 }
 
 
-void tools_word_count()
+void tools_word_count(void)
 {
 	GtkWidget *dialog, *label, *vbox, *table;
 	gint idx;

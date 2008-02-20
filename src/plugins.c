@@ -73,10 +73,10 @@ typedef struct Plugin
 	gulong		*signal_ids;		// signal IDs to disconnect when unloading
 	gsize		signal_ids_len;
 
-	PluginInfo*	(*info) ();	/* Returns plugin name, description */
+	PluginInfo*	(*info) (void);	/* Returns plugin name, description */
 	void	(*init) (GeanyData *data);	/* Called when the plugin is enabled */
 	void	(*configure) (GtkWidget *parent);	/* plugin configure dialog, optionally */
-	void	(*cleanup) ();		/* Called when the plugin is disabled or when Geany exits */
+	void	(*cleanup) (void);	/* Called when the plugin is disabled or when Geany exits */
 }
 Plugin;
 
@@ -240,7 +240,7 @@ static GeanyData geany_data = {
 
 
 static void
-geany_data_init()
+geany_data_init(void)
 {
 	geany_data.app = app;
 	geany_data.tools_menu = lookup_widget(app->window, "tools1_menu");
@@ -387,7 +387,7 @@ plugin_new(const gchar *fname)
 {
 	Plugin *plugin;
 	GModule *module;
-	PluginInfo* (*info)();
+	PluginInfo* (*info)(void);
 	PluginFields **plugin_fields;
 	GeanyData **p_geany_data;
 
@@ -554,7 +554,7 @@ static gchar *get_plugin_path()
 #endif
 
 
-static void load_plugin_paths()
+static void load_plugin_paths(void)
 {
 	gchar *path;
 
@@ -650,7 +650,7 @@ void plugins_update_document_sensitive(gboolean enabled)
 static gint
 plugin_has_menu(Plugin *a, Plugin *b)
 {
-	if (((PluginFields)a->fields).menu_item != NULL)
+	if (a->fields.menu_item != NULL)
 		return 0;
 
 	return 1;

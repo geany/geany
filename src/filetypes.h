@@ -88,9 +88,9 @@ typedef enum
 
 struct build_actions
 {
-	gboolean	can_compile:1;
-	gboolean	can_link:1;
-	gboolean	can_exec:1;
+	gboolean	can_compile;
+	gboolean	can_link;
+	gboolean	can_exec;
 };
 
 struct build_programs
@@ -128,10 +128,10 @@ extern filetype *filetypes[GEANY_MAX_FILE_TYPES];
 filetype *filetypes_get_from_uid(gint uid);
 
 /* Calls filetypes_init_types() and creates the filetype menu. */
-void filetypes_init();
+void filetypes_init(void);
 
 /* Create the filetype array and fill it with the known filetypes. */
-void filetypes_init_types();
+void filetypes_init_types(void);
 
 /* Detect the filetype for document idx, checking for a shebang, then filename extension. */
 filetype *filetypes_detect_from_file(gint idx);
@@ -141,17 +141,17 @@ filetype *filetypes_detect_from_file(gint idx);
 filetype *filetypes_detect_from_filename(const gchar *utf8_filename);
 
 /* frees the array and all related pointers */
-void filetypes_free_types();
+void filetypes_free_types(void);
 
 void filetypes_load_config(gint ft_id);
 
-void filetypes_save_commands();
+void filetypes_save_commands(void);
 
 void filetypes_select_radio_item(const filetype *ft);
 
 GtkFileFilter *filetypes_create_file_filter(filetype *ft);
 
-GtkFileFilter *filetypes_create_file_filter_all_source();
+GtkFileFilter *filetypes_create_file_filter_all_source(void);
 
 gchar *filetypes_get_conf_extension(gint filetype_idx);
 

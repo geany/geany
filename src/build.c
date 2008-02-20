@@ -1384,7 +1384,7 @@ on_includes_arguments_tex_dialog_response  (GtkDialog *dialog,
 }
 
 
-static void show_includes_arguments_tex()
+static void show_includes_arguments_tex(void)
 {
 	GtkWidget *dialog, *label, *entries[4], *vbox, *table;
 	gint idx = document_get_cur_idx();
@@ -1551,7 +1551,7 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
 }
 
 
-static void show_includes_arguments_gen()
+static void show_includes_arguments_gen(void)
 {
 	GtkWidget *dialog, *label, *entries[3], *vbox;
 	GtkWidget *ft_table = NULL;
@@ -1943,7 +1943,7 @@ on_make_custom_input_response(const gchar *input)
 
 
 static void
-show_make_custom()
+show_make_custom(void)
 {
 	static GtkWidget *dialog = NULL;	// keep dialog for combo history
 

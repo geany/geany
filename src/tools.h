@@ -25,12 +25,12 @@
 #ifndef GEANY_TOOLS_H
 #define GEANY_TOOLS_H 1
 
-void tools_create_insert_custom_command_menu_items();
+void tools_create_insert_custom_command_menu_items(void);
 
 void tools_execute_custom_command(gint idx, const gchar *command);
 
 
-void tools_word_count();
+void tools_word_count(void);
 
 void tools_color_chooser(gchar *color);
 

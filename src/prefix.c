@@ -287,4 +287,8 @@ br_prepend_prefix (void *symbol, char *path)
 	return newpath;
 }
 
+#else /* ENABLE_BINRELOC */
+
+typedef int iso_c_forbids_an_empty_source_file;
+
 #endif /* ENABLE_BINRELOC */

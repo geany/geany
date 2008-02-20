@@ -82,9 +82,9 @@ gchar *utils_remove_ext_from_filename(const gchar *filename);
 
 gchar utils_brace_opposite(gchar ch);
 
-gchar *utils_get_hostname();
+gchar *utils_get_hostname(void);
 
-gint utils_make_settings_dir();
+gint utils_make_settings_dir(void);
 
 gboolean utils_string_replace_all(GString *str, const gchar *needle, const gchar *replace);
 
@@ -108,18 +108,18 @@ void utils_replace_filename(gint idx);
 
 gchar *utils_get_hex_from_color(GdkColor *color);
 
-const gchar *utils_get_default_dir_utf8();
+const gchar *utils_get_default_dir_utf8(void);
 
-gchar *utils_get_current_file_dir_utf8();
+gchar *utils_get_current_file_dir_utf8(void);
 
-void utils_beep();
+void utils_beep(void);
 
 gchar *utils_make_human_readable_str(unsigned long long size, gulong block_size,
 									 gulong display_unit);
 
 gint utils_strtod(const gchar *source, gchar **end, gboolean with_route);
 
-gchar *utils_get_current_time_string();
+gchar *utils_get_current_time_string(void);
 
 GIOChannel *utils_set_up_io_channel(gint fd, GIOCondition cond, gboolean nblock,
 									GIOFunc func, gpointer data);
