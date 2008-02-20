@@ -49,19 +49,22 @@ noinst_HEADERS = \
 
 if MINGW
 # build Geany for Windows on non-Windows systems (cross-compile)
-WINDRES = /usr/local/cross-tools/bin/i386-mingw32msvc-windres
+WINDRES = $(host)-windres
 
 geany_SOURCES = $(SRCS) win32.c win32.h
 geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a -lstdc++ @GTK_LIBS@ \
 			$(INTLLIBS) -lgdi32 -limm32 -lshell32 -lole32 -luuid -liberty -lcomdlg32 -lcomctl32 \
 			geany_private.res
-AM_CFLAGS = -mms-bitfields
-geany_LDFLAGS =	-mwindows
+AM_CFLAGS = -DGEANY_DATADIR=\"data\" \
+			-DGEANY_LOCALEDIR=\"data\" \
+			-DGEANY_LIBDIR=\"\" \
+			-DGEANY_PREFIX=\"\" \
+geany_LDFLAGS =	-mwindows -mms-bitfields
 
 INCLUDES = -I$(srcdir)/../scintilla/include -I$(srcdir)/../tagmanager/include -DENABLE_NLS \
            -I/usr/local/cross-tools/include @GTK_CFLAGS@
 
-geany_windres.res:
+geany_private.res:
 	$(WINDRES) -i ../geany_private.rc --input-format=rc -o geany_private.res -O coff;
 
 clean-local:

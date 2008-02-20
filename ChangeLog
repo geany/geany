@@ -3,6 +3,8 @@
  * plugins/*, src/*, tagmanager/*:
    Apply patch from Daniel Richard G. to fix to fix several
    compiler warnings, C89 violations and minor code problems (thanks).
+ * configure.in, scintilla/ScintillaGTK.cxx, src/Makefile.am:
+   Apply patch from Yura Siamashka to fix cross-compiling (thanks).
 
 
 2008-02-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

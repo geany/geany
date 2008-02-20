@@ -117,28 +117,6 @@ AC_SUBST(GTK_LIBS)
 AC_ARG_ENABLE(deprecated, [  --disable-deprecated    Disable deprecated GTK functions. ],
 			  [GTK_CFLAGS="$GTK_CFLAGS -DG_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"], [])
 
-# socket support
-AC_ARG_ENABLE(socket, AC_HELP_STRING([--enable-socket],[enable if you want to detect a running instance [[default=yes]]]),
- [want_socket="$enableval"], [want_socket="yes"])
-
-if test "x$want_socket" = "xyes"; then
-	AC_DEFINE(HAVE_SOCKET, 1, [Define if you want to detect a running instance])
-	# this should bring in libsocket on Solaris:
-	AC_SEARCH_LIBS([connect],[socket],[],[],[])
-fi
-
-# VTE support
-AC_ARG_ENABLE(vte, AC_HELP_STRING([--enable-vte],
- [enable if you want virtual termninal support [[default=yes]]]),
- [want_vte="$enableval"], [want_vte="yes"])
-if test "x$want_vte" = "xyes"; then
-	AC_DEFINE(HAVE_VTE, 1, [Define if you want VTE support])
-fi
-AC_ARG_WITH(vte-module-path, AC_HELP_STRING([--with-vte-module-path=PATH],
- [Path to a loadable libvte [[default=None]]]), [AC_DEFINE_UNQUOTED([VTE_MODULE_PATH],
- ["$withval"], [Path to a loadable libvte])])
-
-
 # Plugins support
 AC_ARG_ENABLE(plugins, [AC_HELP_STRING([--disable-plugins], [compile without plugin support  [[default=no]]])], , enable_plugins=yes)
 
@@ -155,13 +133,45 @@ if test "x$build" = "x$host"; then
 	AC_CHECK_FILE([/dev/random], AC_DEFINE([HAVE_DEVRANDOM], [1], [Define that you found /dev/random]))
 fi
 
-if test "x$host" = "xi386-mingw32msvc"; then
+case "${host}" in
+    *mingw*)
 	AC_DEFINE_UNQUOTED([WIN32], 1, [we are cross compiling for WIN32])
 	want_vte="no"
+	want_socket="no"
 	AC_EXEEXT
-fi
-AM_CONDITIONAL(MINGW, test "x$host" = "xi386-mingw32msvc")
+	AM_CONDITIONAL(MINGW, true)
+	;;
+    *)
+        AM_CONDITIONAL(MINGW, false)
+	;;
+esac
 
+dnl skip check if already decided
+if test "x$want_socket" = "x"; then
+    # socket support
+    AC_ARG_ENABLE(socket, AC_HELP_STRING([--enable-socket],[enable if you want to detect a running instance [[default=yes]]]),
+     [want_socket="$enableval"], [want_socket="yes"])
+
+    if test "x$want_socket" = "xyes"; then
+    	AC_DEFINE(HAVE_SOCKET, 1, [Define if you want to detect a running instance])
+	# this should bring in libsocket on Solaris:
+	AC_SEARCH_LIBS([connect],[socket],[],[],[])
+    fi
+fi
+
+dnl skip check if already decided
+if test "x$want_vte" = "x"; then
+    # VTE support
+    AC_ARG_ENABLE(vte, AC_HELP_STRING([--enable-vte],
+     [enable if you want virtual termninal support [[default=yes]]]),
+     [want_vte="$enableval"], [want_vte="yes"])
+    if test "x$want_vte" = "xyes"; then
+    	AC_DEFINE(HAVE_VTE, 1, [Define if you want VTE support])
+    fi
+    AC_ARG_WITH(vte-module-path, AC_HELP_STRING([--with-vte-module-path=PATH],
+     [Path to a loadable libvte [[default=None]]]), [AC_DEFINE_UNQUOTED([VTE_MODULE_PATH],
+     ["$withval"], [Path to a loadable libvte])])
+fi
 
 GTK_VERSION=`$PKG_CONFIG --modversion gtk+-2.0`
 

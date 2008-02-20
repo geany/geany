@@ -15,7 +15,7 @@
 #include "Platform.h"
 
 #if PLAT_GTK_WIN32
-#include "Windows.h"
+#include "windows.h"
 #endif
 
 #include "Scintilla.h"
