@@ -3,11 +3,11 @@
 # Copyright (C) 2006 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
 #  <dario.santomarco@gmail.com>, 2006.
-#  <M.Baldinelli@agora.it>, 2006, 2007
+#  <M.Baldinelli@agora.it>, 2006, 2007, 2008
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: geany 0.13\n"
+"Project-Id-Version: geany 0.14svn\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-02-04 09:59+0100\n"
 "PO-Revision-Date: 2008-02-03 21:59+0100\n"

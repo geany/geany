@@ -6,7 +6,7 @@
 # Stavros Temertzidis <bullgr@gmail.com>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: el\n"
+"Project-Id-Version: geany 0.14svn\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-01-19 16:55+0100\n"
 "PO-Revision-Date: 2008-02-01 12:02+0200\n"

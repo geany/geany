@@ -1,11 +1,11 @@
 # French translations for geany package.
 # Copyright (C) 2006 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
-# Jean-Philippe Moal <skateinmars@skateinmars.net>, 2006, 2007.
+# Jean-Philippe Moal <skateinmars@skateinmars.net>, 2006, 2007, 2008.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: geany 0.13\n"
+"Project-Id-Version: geany 0.14svn\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-02-02 12:05+0100\n"
 "PO-Revision-Date: 2008-02-01 02:24+0100\n"

@@ -1,6 +1,6 @@
 # translation of pl.po to polski
 # Polish translations for geany package.
-# Copyright (C) 2006,2007 THE geany'S COPYRIGHT HOLDER
+# Copyright (C) 2006, 2007 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
 #
 # Jacek Wolszczak <shutdownrunner@o2.pl>, 2006.
@@ -8,7 +8,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: geany 0.13\n"
+"Project-Id-Version: geany 0.14\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-01-19 16:55+0100\n"
 "PO-Revision-Date: 2007-09-26 21:22+0000\n"

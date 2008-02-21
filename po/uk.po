@@ -1,10 +1,10 @@
 # Ukrainian translations for geany package.
 # Copyright (C) 2007 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
-# Boris Dibrov <dibrov.bor@gmail.com>, 2007
+# Boris Dibrov <dibrov.bor@gmail.com>, 2007, 2008
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 0.13 \n"
+"Project-Id-Version: Geany 0.14svn \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-02-05 12:17+0100\n"
 "PO-Revision-Date: 2008-02-04 12:44+0300\n"
