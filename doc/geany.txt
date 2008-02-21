@@ -2521,28 +2521,30 @@ restarting Geany. Search for the key name, then edit the value. Example:
 The table below show the key names of hidden preferences in the
 configuration file.
 
-==============================  ============================================    ==================
-Key                             Description                                     Default
-==============================  ============================================    ==================
+================================  ===========================================  ==================
+Key                               Description                                  Default
+================================  ===========================================  ==================
 **[editor]**
-brace_match_ltgt                Whether to highlight <, > angle brackets.       false
-show_editor_scrollbars          Whether to display scrollbars. If set to        true
-                                false, the horizontal and vertical
-                                scrollbars are hidden completely.
-use_tab_to_indent               Whether pressing tab when a line is selected    true
-                                will indent the line.
-use_gtk_word_boundaries         Whether to look for the end of a word when      true
-                                using word-boundary related Scintilla
-                                commands (see `Scintilla keyboard
-                                commands`_).
-auto_complete_whilst_editing    Whether to allow autocompletion when editing    false
-                                an existing line.
-scroll_stop_at_last_line        Disable scrolling past end of document          false
+brace_match_ltgt                  Whether to highlight <, > angle brackets.    false
+show_editor_scrollbars            Whether to display scrollbars. If set to     true
+                                  false, the horizontal and vertical
+                                  scrollbars are hidden completely.
+use_tab_to_indent                 Whether pressing tab when a line is          true
+                                  selected will indent the line.
+use_gtk_word_boundaries           Whether to look for the end of a word when   true
+                                  using word-boundary related Scintilla
+                                  commands (see `Scintilla keyboard
+                                  commands`_).
+complete_snippets_whilst_editing  Whether to allow completion of snippets      false
+                                  when editing an existing line (i.e. there
+                                  is some text after the current cursor
+                                  position on the line).
+scroll_stop_at_last_line          Disable scrolling past end of document       false
 **[interface]**
-show_symbol_list_expanders      Whether to show or hide the small expander      true
-                                icons on the symbol list treeview (only
-                                available with GTK 2.12 or above).
-==============================  ============================================    ==================
+show_symbol_list_expanders        Whether to show or hide the small expander   true
+                                  icons on the symbol list treeview (only
+                                  available with GTK 2.12 or above).
+================================  ===========================================  ==================
 
 
 Compile-time options

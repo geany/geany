@@ -370,7 +370,7 @@ static void save_hidden_prefs(GKeyFile *config)
 	write_hidden_pref_boolean(config, PACKAGE, "use_tab_to_indent", editor_prefs.use_tab_to_indent);
 	write_hidden_pref_boolean(config, PACKAGE, "brace_match_ltgt", editor_prefs.brace_match_ltgt);
 	write_hidden_pref_boolean(config, PACKAGE, "use_gtk_word_boundaries", editor_prefs.use_gtk_word_boundaries);
-	write_hidden_pref_boolean(config, PACKAGE, "auto_complete_whilst_editing", editor_prefs.auto_complete_whilst_editing);
+	write_hidden_pref_boolean(config, PACKAGE, "complete_snippets_whilst_editing", editor_prefs.complete_snippets_whilst_editing);
 	write_hidden_pref_boolean(config, PACKAGE, "scroll_stop_at_last_line", editor_prefs.scroll_stop_at_last_line);
 #if GTK_CHECK_VERSION(2, 12, 0)
 	write_hidden_pref_boolean(config, PACKAGE, "show_symbol_list_expanders", prefs.show_symbol_list_expanders);
@@ -528,7 +528,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	editor_prefs.smart_home_key = utils_get_setting_boolean(config, PACKAGE, "pref_editor_smart_home_key", TRUE);
 	editor_prefs.newline_strip = utils_get_setting_boolean(config, PACKAGE, "pref_editor_newline_strip", FALSE);
 	editor_prefs.use_gtk_word_boundaries = utils_get_setting_boolean(config, PACKAGE, "use_gtk_word_boundaries", TRUE);
-	editor_prefs.auto_complete_whilst_editing = utils_get_setting_boolean(config, PACKAGE, "auto_complete_whilst_editing", FALSE);
+	editor_prefs.complete_snippets_whilst_editing = utils_get_setting_boolean(config, PACKAGE, "complete_snippets_whilst_editing", FALSE);
 	editor_prefs.scroll_stop_at_last_line = utils_get_setting_boolean(config, PACKAGE, "scroll_stop_at_last_line", FALSE);
 
 	// Files

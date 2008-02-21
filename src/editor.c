@@ -1288,7 +1288,7 @@ gboolean editor_complete_snippet(gint idx, gint pos)
 
 	sci = doc_list[idx].sci;
 	// return if we are editing an existing line (chars on right of cursor)
-	if (! editor_prefs.auto_complete_whilst_editing && ! at_eol(sci, pos))
+	if (! editor_prefs.complete_snippets_whilst_editing && ! at_eol(sci, pos))
 		return FALSE;
 
 	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
