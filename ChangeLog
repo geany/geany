@@ -1,3 +1,9 @@
+2008-02-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * scintilla/Makefile.am, src/Makefile.am:
+   Fix more cross-compiling issues including little cleanup.
+
+
 2008-02-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * doc/geany.html, doc/geany.txt, src/editor.c, src/editor.h,

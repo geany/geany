@@ -89,11 +89,7 @@ $(LEXER_SRCS)
 
 libscintilla_a_SOURCES = $(SRCS)
 
-if MINGW
-INCLUDES=-I$(top_srcdir) -I$(srcdir)/include -I/usr/local/cross-tools/include @GTK_CFLAGS@
-else
 INCLUDES=-I$(top_srcdir) -I$(srcdir)/include @GTK_CFLAGS@
-endif
 
 marshallers: scintilla-marshal.list
 	glib-genmarshal --prefix scintilla_marshal scintilla-marshal.list --header > scintilla-marshal.h

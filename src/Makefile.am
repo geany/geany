@@ -47,22 +47,28 @@ noinst_HEADERS = \
 	support.h \
 	plugindata.h
 
+INCLUDES = -I$(srcdir)/../scintilla/include -I$(srcdir)/../tagmanager/include -I/tmp @GTK_CFLAGS@
+
+# tell automake we have a C++ file so it uses the C++ linker we need for Scintilla
+nodist_EXTRA_geany_SOURCES = dummy.cxx
+
 if MINGW
 # build Geany for Windows on non-Windows systems (cross-compile)
-WINDRES = $(host)-windres
 
 geany_SOURCES = $(SRCS) win32.c win32.h
-geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a -lstdc++ @GTK_LIBS@ \
-			$(INTLLIBS) -lgdi32 -limm32 -lshell32 -lole32 -luuid -liberty -lcomdlg32 -lcomctl32 \
-			geany_private.res
+
+geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a @GTK_LIBS@ $(INTLLIBS) \
+			  -lkernel32 -limm32 -lshfolder -lshell32 -lole32 -luuid -lcomdlg32 \
+			  -lcomctl32 -liberty -lwsock32 geany_private.res
+
 AM_CFLAGS = -DGEANY_DATADIR=\"data\" \
 			-DGEANY_LOCALEDIR=\"data\" \
 			-DGEANY_LIBDIR=\"\" \
-			-DGEANY_PREFIX=\"\" \
+			-DGEANY_PREFIX=\"\"
+
 geany_LDFLAGS =	-mwindows -mms-bitfields
 
-INCLUDES = -I$(srcdir)/../scintilla/include -I$(srcdir)/../tagmanager/include -DENABLE_NLS \
-           -I/usr/local/cross-tools/include @GTK_CFLAGS@
+WINDRES = $(host_alias)-windres
 
 geany_private.res:
 	$(WINDRES) -i ../geany_private.rc --input-format=rc -o geany_private.res -O coff;
@@ -75,16 +81,14 @@ else
 
 geany_SOURCES = $(SRCS) vte.c vte.h
 
-# tell automake we have a C++ file so it uses the C++ linker we need for Scintilla
-nodist_EXTRA_geany_SOURCES = dummy.cxx
 geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a @GTK_LIBS@  $(INTLLIBS)
 
-INCLUDES = \
-	-DGEANY_DATADIR=\""$(datadir)"\" -DGEANY_LIBDIR=\""$(libdir)"\" \
-	-DGEANY_LOCALEDIR=\""$(localedir)"\" -DGEANY_PREFIX=\""$(prefix)"\" \
-	-I$(srcdir)/../scintilla/include -I$(srcdir)/../tagmanager/include @GTK_CFLAGS@
+AM_CFLAGS = -DGEANY_DATADIR=\""$(datadir)"\" \
+			-DGEANY_LIBDIR=\""$(libdir)"\" \
+			-DGEANY_LOCALEDIR=\""$(localedir)"\" \
+			-DGEANY_PREFIX=\""$(prefix)"\"
 
 clean-local:
 
-
 endif
+
