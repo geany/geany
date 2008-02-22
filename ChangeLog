@@ -7,6 +7,11 @@
    src/editor.h:
    Don't scroll the editor view if it is unnecessary when using Find
    Next/Previous, Find Selected and when searching from the search bar.
+ * src/keybindings.c, src/sciwrappers.c:
+   Don't scroll the editor view if it is unnecessary when using Go to
+   Marker or Go to Matching Brace commands.
+   Make sci_set_current_line() not scroll the view, unlike
+   sci_goto_line().
 
 
 2008-02-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

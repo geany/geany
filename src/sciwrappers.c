@@ -401,9 +401,12 @@ void sci_set_current_position(ScintillaObject* sci, gint position, gboolean scro
 }
 
 
-void sci_set_current_line(ScintillaObject* sci, gint line )
+/* Set the cursor line without scrolling the view.
+ * Use sci_goto_line() to also scroll. */
+void sci_set_current_line(ScintillaObject* sci, gint line)
 {
-	SSM(sci, SCI_GOTOLINE, line, 0);
+	gint pos = sci_get_position_from_line(sci, line);
+	sci_set_current_position(sci, pos, FALSE);
 }
 
 

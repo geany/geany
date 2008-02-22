@@ -1135,8 +1135,8 @@ static void goto_matching_brace(gint idx)
 	new_pos = sci_find_bracematch(doc_list[idx].sci, pos);
 	if (new_pos != -1)
 	{
-		sci_goto_pos(doc_list[idx].sci, new_pos, TRUE); // set the cursor at the brace
-		doc_list[idx].scroll_percent = 0.5F;
+		sci_set_current_position(doc_list[idx].sci, new_pos, FALSE); // set the cursor at the brace
+		editor_display_current_line(idx, 0.5F);
 	}
 }
 
@@ -1187,8 +1187,8 @@ static void cb_func_edit_global(guint key_id)
 
 			if (mline != -1)
 			{
-				sci_goto_line(doc_list[idx].sci, mline, TRUE);
-				doc_list[idx].scroll_percent = 0.5F;
+				sci_set_current_line(doc_list[idx].sci, mline);
+				editor_display_current_line(idx, 0.5F);
 			}
 			break;
 		}
@@ -1198,8 +1198,8 @@ static void cb_func_edit_global(guint key_id)
 
 			if (mline != -1)
 			{
-				sci_goto_line(doc_list[idx].sci, mline, TRUE);
-				doc_list[idx].scroll_percent = 0.5F;
+				sci_set_current_line(doc_list[idx].sci, mline);
+				editor_display_current_line(idx, 0.5F);
 			}
 			break;
 		}
