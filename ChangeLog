@@ -1,3 +1,10 @@
+2008-02-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * tagmanager/options.c:
+   Use extern for c_tags_ignore declaration to avoid allocating a
+   second copy of it (patch by Daniel Richard G., thanks).
+
+
 2008-02-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * scintilla/Makefile.am, src/Makefile.am:

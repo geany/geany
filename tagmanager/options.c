@@ -152,7 +152,7 @@ extern boolean isIncludeFile (const char *const fileName)
 }
 
 // get the tags_ignore list, exported by Geany's symbols.h
-gchar **c_tags_ignore;
+extern gchar **c_tags_ignore;
 
 /*  Determines whether or not "name" should be ignored, per the ignore list.
  */
