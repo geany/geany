@@ -1475,16 +1475,20 @@ gboolean document_search_bar_find(gint idx, const gchar *text, gint flags, gbool
 
 	if (search_pos != -1)
 	{
+		gint line = sci_get_line_from_position(doc_list[idx].sci, ttf.chrgText.cpMin);
+
 		// unfold maybe folded results
-		sci_ensure_line_is_visible(doc_list[idx].sci,
-			sci_get_line_from_position(doc_list[idx].sci, ttf.chrgText.cpMin));
+		sci_ensure_line_is_visible(doc_list[idx].sci, line);
 
 		sci_set_selection_start(doc_list[idx].sci, ttf.chrgText.cpMin);
 		sci_set_selection_end(doc_list[idx].sci, ttf.chrgText.cpMax);
 
-		// we need to force scrolling in case the cursor is outside of the current visible area
-		// doc_list[].scroll_percent doesn't work because sci isn't always updated while searching
-		editor_scroll_to_line(doc_list[idx].sci, -1, 0.3F);
+		if (! editor_line_in_view(doc_list[idx].sci, line))
+		{
+			// we need to force scrolling in case the cursor is outside of the current visible area
+			// doc_list[].scroll_percent doesn't work because sci isn't always updated while searching
+			editor_scroll_to_line(doc_list[idx].sci, -1, 0.3F);
+		}
 		return TRUE;
 	}
 	else

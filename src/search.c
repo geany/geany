@@ -251,7 +251,9 @@ void search_find_selection(gint idx, gboolean search_backwards)
 	if (s)
 	{
 		setup_find_next(s);	// allow find next/prev
-		document_find_text(idx, s, 0, search_backwards, TRUE, NULL);
+
+		if (document_find_text(idx, s, 0, search_backwards, FALSE, NULL) > -1)
+			editor_display_current_line(idx, 0.3F);
 		g_free(s);
 	}
 }

@@ -1125,16 +1125,20 @@ on_find1_activate                      (GtkMenuItem     *menuitem,
 }
 
 
-void
-on_find_next1_activate                 (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+static void find_again(gboolean change_direction)
 {
 	gint idx = document_get_cur_idx();
 
+	g_return_if_fail(DOC_IDX_VALID(idx));
+
 	if (search_data.text)
 	{
+		gboolean forward = ! search_data.backwards;
 		gint result = document_find_text(idx, search_data.text, search_data.flags,
-			search_data.backwards, TRUE, NULL);
+			change_direction ? forward : !forward, FALSE, NULL);
+
+		if (result > -1)
+			editor_display_current_line(idx, 0.3F);
 
 		set_search_bar_background((result > -1) ? TRUE : FALSE);
 	}
@@ -1142,22 +1146,21 @@ on_find_next1_activate                 (GtkMenuItem     *menuitem,
 
 
 void
+on_find_next1_activate                 (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	find_again(FALSE);
+}
+
+
+void
 on_find_previous1_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
-
-	if (search_data.text == NULL) return;
-
 	if (search_data.flags & SCFIND_REGEXP)
 		utils_beep(); // Can't reverse search order for a regex (find next ignores search backwards)
 	else
-	{
-		gint result = document_find_text(idx, search_data.text, search_data.flags,
-			!search_data.backwards, TRUE, NULL);
-
-		set_search_bar_background((result > -1) ? TRUE : FALSE);
-	}
+		find_again(TRUE);
 }
 
 

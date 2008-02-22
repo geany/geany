@@ -2643,3 +2643,36 @@ gchar *editor_get_default_selection(gint idx, const gchar *wordchars)
 	}
 	return s;
 }
+
+
+/* Note: Usually the line should be made visible (not folded) before calling this.
+ * Returns: TRUE if line is/will be displayed to the user, or FALSE if it is
+ * outside the view. */
+gboolean editor_line_in_view(ScintillaObject *sci, gint line)
+{
+	gint vis1, los;
+
+	line = SSM(sci, SCI_VISIBLEFROMDOCLINE, line, 0);	// convert to visible line number
+	vis1 = SSM(sci, SCI_GETFIRSTVISIBLELINE, 0, 0);
+	los = SSM(sci, SCI_LINESONSCREEN, 0, 0);
+
+	return (line >= vis1 && line < vis1 + los);
+}
+
+
+/* If the current line is outside the current view window, scroll the line
+ * so it appears at percent_of_view. */
+void editor_display_current_line(gint idx, gfloat percent_of_view)
+{
+	ScintillaObject *sci = doc_list[idx].sci;
+	gint line = sci_get_current_line(sci);
+
+	// unfold maybe folded results
+	sci_ensure_line_is_visible(doc_list[idx].sci, line);
+
+	// scroll the line if it's off screen
+	if (! editor_line_in_view(sci, line))
+		doc_list[idx].scroll_percent = percent_of_view;
+}
+
+
