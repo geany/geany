@@ -10,6 +10,8 @@
    Apply patch by Pierre Joye to add new process spawning implementation
    for Windows. Make utils_spawn_* available to plugin API.
    This makes the VCdiff plugin to work on Windows (thanks).
+ * makefile.win32:
+   Make the make command overwritable, patch by Pierre Joye. Thanks.
 
 
 2008-02-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

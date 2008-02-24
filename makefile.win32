@@ -16,15 +16,16 @@ CC = gcc
 CXX = g++
 CP = copy
 RM = del
+MAKE = make
 -include localwin32.mk
 
 # Note: && is needed after cd because each line is executed in a different
 # shell. (cd .. is just for clarity).
 all: check-tools config.h
-	cd tagmanager && make -f makefile.win32 && cd ..
-	cd scintilla && make -f makefile.win32 && cd ..
-	cd plugins && make -f makefile.win32 && cd ..
-	cd src && make -f makefile.win32 && cd ..
+	cd tagmanager && $(MAKE) -f makefile.win32 && cd ..
+	cd scintilla && $(MAKE) -f makefile.win32 && cd ..
+	cd plugins && $(MAKE) -f makefile.win32 && cd ..
+	cd src && $(MAKE) -f makefile.win32 && cd ..
 
 # first check the required tools are installed
 check-tools:
@@ -43,7 +44,7 @@ clean-local:
 	-$(RM) geany_private.res geany.exe
 
 clean: deps
-	cd tagmanager && make -f makefile.win32 clean && cd ..
-	cd scintilla && make -f makefile.win32 clean && cd ..
-	cd plugins && make -f makefile.win32 clean && cd ..
-	cd src && make -f makefile.win32 clean && cd ..
+	cd tagmanager && $(MAKE) -f makefile.win32 clean && cd ..
+	cd scintilla && $(MAKE) -f makefile.win32 clean && cd ..
+	cd plugins && $(MAKE) -f makefile.win32 clean && cd ..
+	cd src && $(MAKE) -f makefile.win32 clean && cd ..
