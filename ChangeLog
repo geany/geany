@@ -2,6 +2,9 @@
 
  * tagmanager/options.c, src/symbols.c, src/symbols.h:
    Define c_tags_ignore in options.c (tagmanager) instead of symbols.c.
+ * configure.in:
+   Apply patch Yura Siamashka to add a check for the presence of
+   fnmatch(), thanks.
 
 
 2008-02-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

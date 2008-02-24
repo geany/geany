@@ -135,6 +135,9 @@ fi
 
 case "${host}" in
     *mingw*)
+	AC_CHECK_LIB(iberty, fnmatch, [], [
+		AC_MSG_ERROR([fnmatch dosn't present in libiberty. You need to update it, read http://geany.uvena.de/Support/CrossCompile for details.])
+		])
 	AC_DEFINE_UNQUOTED([WIN32], 1, [we are cross compiling for WIN32])
 	want_vte="no"
 	want_socket="no"
