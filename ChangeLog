@@ -5,6 +5,11 @@
  * configure.in:
    Apply patch Yura Siamashka to add a check for the presence of
    fnmatch(), thanks.
+ * THANKS, plugins/vcdiff.c, src/plugindata.h, src/plugins.c,
+   src/utils.c, src/utils.h, src/win32.c, src/win32.h:
+   Apply patch by Pierre Joye to add new process spawning implementation
+   for Windows. Make utils_spawn_* available to plugin API.
+   This makes the VCdiff plugin to work on Windows (thanks).
 
 
 2008-02-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

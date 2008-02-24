@@ -146,4 +146,13 @@ gboolean utils_str_has_upper(const gchar *str);
 
 gint utils_is_file_writeable(const gchar *locale_filename);
 
+
+gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
+						  GSpawnChildSetupFunc child_setup, gpointer user_data, gchar **std_out,
+						  gchar **std_err, gint *exit_status, GError **error);
+
+gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
+						   GSpawnChildSetupFunc child_setup, gpointer user_data, GPid *child_pid,
+						   GError **error);
+
 #endif

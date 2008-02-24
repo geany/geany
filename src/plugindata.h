@@ -36,7 +36,7 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 44;
+static const gint api_version = 45;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
@@ -241,6 +241,12 @@ typedef struct UtilsFuncs
 				 const gint default_value);
 	gchar*		(*get_setting_string) (GKeyFile *config, const gchar *section, const gchar *key,
 				 const gchar *default_value);
+	gboolean	(*spawn_sync) (const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
+				 GSpawnChildSetupFunc child_setup, gpointer user_data, gchar **std_out,
+				 gchar **std_err, gint *exit_status, GError **error);
+	gboolean	(*spawn_async) (const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
+				 GSpawnChildSetupFunc child_setup, gpointer user_data, GPid *child_pid,
+				 GError **error);
 }
 UtilsFuncs;
 

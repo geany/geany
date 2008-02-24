@@ -36,6 +36,7 @@
 #include "project.h"
 #include "pluginmacros.h"
 
+
 PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 
@@ -186,7 +187,7 @@ static void* find_cmd_env(gint cmd_type, gboolean cmd, const gchar* filename)
 }
 
 
-static void* get_cmd_env(gint cmd_type, gboolean cmd, const gchar* filename)
+static void* get_cmd_env(gint cmd_type, gboolean cmd, const gchar* filename, int *size)
 {
 	int i;
 	gint len = 0;
@@ -234,6 +235,9 @@ static void* get_cmd_env(gint cmd_type, gboolean cmd, const gchar* filename)
 		else
 			ret[i] = g_strdup(argv[i]);
 	}
+
+	*size = len;
+
 	g_free(dir);
 	g_free(base_filename);
 	return ret;
@@ -312,13 +316,15 @@ static gchar *make_diff(const gchar *filename, gint cmd)
 {
 	gchar	*std_output = NULL;
 	gchar	*std_error = NULL;
-	gint	exit_code;
 	gchar	*text = NULL;
 	gchar   *dir;
-	gchar **env  = get_cmd_env(cmd, FALSE, filename);
-	gchar **argv = get_cmd_env(cmd, TRUE, filename);
+	gint	 argc = 0;
+	gchar  **env  = get_cmd_env(cmd, FALSE, filename, &argc);
+	gchar  **argv = get_cmd_env(cmd, TRUE, filename, &argc);
+	gint	 exit_code = 0;
+	GError	*error = NULL;
 
-	if (!argv)
+	if (! argv)
 	{
 		if (env)
 			g_strfreev(env);
@@ -334,9 +340,10 @@ static gchar *make_diff(const gchar *filename, gint cmd)
 		dir = g_path_get_dirname(filename);
 	}
 
-	if (g_spawn_sync(dir, argv, env,  G_SPAWN_SEARCH_PATH, NULL, NULL, &std_output, &std_error, &exit_code, NULL))
+	if (p_utils->spawn_sync(dir, argv, env, G_SPAWN_SEARCH_PATH, NULL, NULL,
+			&std_output, &std_error, &exit_code, &error))
 	{
-		// CVS dump stuff to stderr when diff nested dirs
+		/* CVS dump stuff to stderr when diff nested dirs */
 		if (strcmp(argv[0], "cvs") != 0 && NZV(std_error))
 		{
 		    p_dialogs->show_msgbox(1,
@@ -350,12 +357,29 @@ static gchar *make_diff(const gchar *filename, gint cmd)
 		{
 			p_ui->set_statusbar(FALSE, _("No changes were made."));
 		}
+
+		if (NZV(std_error))
+		{
+			p_dialogs->show_msgbox(1, _("VCdiff command sent errors:\n%s\n."), std_error);
+		}
 	}
 	else
 	{
-		p_ui->set_statusbar(FALSE,
-			_("Something went really wrong."));
+		gchar *msg;
+
+		if (error != NULL)
+		{
+			msg = g_strdup(error->message);
+			g_error_free(error);
+		}
+		else
+		{	/* if we don't have an exact error message, print at least the failing command */
+			msg = g_strdup_printf(_("unknown error while trying to spawn a process for %s"),
+				argv[0]);
+		}
+		p_ui->set_statusbar(FALSE, _("An error occurred (%s)."), msg);
 	}
+
 	g_free(dir);
 	g_free(std_error);
 	g_strfreev(env);

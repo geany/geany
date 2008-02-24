@@ -153,7 +153,9 @@ static UtilsFuncs utils_funcs = {
 	&utils_mkdir,
 	&utils_get_setting_boolean,
 	&utils_get_setting_integer,
-	&utils_get_setting_string
+	&utils_get_setting_string,
+	&utils_spawn_sync,
+	&utils_spawn_async
 };
 
 static UIUtilsFuncs uiutils_funcs = {

@@ -1793,3 +1793,111 @@ const gchar *utils_get_default_dir_utf8(void)
 }
 
 
+static gboolean check_error(GError **error)
+{
+	if (error != NULL && *error != NULL)
+	{
+		/* imitate the GLib warning */
+		g_warning(
+			"GError set over the top of a previous GError or uninitialized memory.\n"
+			"This indicates a bug in someone's code. You must ensure an error is NULL "
+			"before it's set.");
+		/* after returning the code may segfault, but we don't care because we should
+		 * make sure *error is NULL */
+		return FALSE;
+	}
+	return TRUE;
+}
+
+
+/**
+ *  This is a wrapper function for g_spawn_sync() and internally calls this function on Unix-like
+ *  systems. On Win32 platforms, it uses the Windows API.
+ *
+ *  @param dir The child's current working directory, or @a NULL to inherit parent's.
+ *  @param argv The child's argument vector.
+ *  @param env The child's environment, or @a NULL to inherit parent's.
+ *  @param flags Flags from GSpawnFlags.
+ *  @param child_setup A function to run in the child just before exec().
+ *  @param user_data The user data for child_setup.
+ *  @param std_out The return location for child output.
+ *  @param std_err The return location for child error messages.
+ *  @param exit_status The child exit status, as returned by waitpid().
+ *  @param error The return location for error or @a NULL.
+ *
+ *  @return @a TRUE on success, @a FALSE if an error was set.
+ **/
+gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
+						  GSpawnChildSetupFunc child_setup, gpointer user_data, gchar **std_out,
+						  gchar **std_err, gint *exit_status, GError **error)
+{
+	gboolean result;
+
+	if (! check_error(error))
+		return FALSE;
+
+	if (argv == NULL)
+	{
+		*error = g_error_new(G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "argv must not be NULL");
+		return FALSE;
+	}
+
+	if (std_out)
+		*std_out = NULL;
+
+	if (std_err)
+		*std_err = NULL;
+
+#ifdef G_OS_WIN32
+	result = win32_spawn(dir, argv, env, flags, std_out, std_err, exit_status);
+	/** TODO create error messages in win32_spawn with appropriate error message text **/
+	if (! result)
+		*error = g_error_new(G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, _("Process could not be created."));
+#else
+	result = g_spawn_sync(dir, argv, env, flags, NULL, NULL, std_out, std_err, exit_status, error);
+#endif
+
+	return result;
+}
+
+
+/**
+ *  This is a wrapper function for g_spawn_async() and internally calls this function on Unix-like
+ *  systems. On Win32 platforms, it uses the Windows API.
+ *
+ *  @param dir The child's current working directory, or @a NULL to inherit parent's.
+ *  @param argv The child's argument vector.
+ *  @param env The child's environment, or @a NULL to inherit parent's.
+ *  @param flags Flags from GSpawnFlags.
+ *  @param child_setup A function to run in the child just before exec().
+ *  @param user_data The user data for child_setup.
+ *  @param child_pid The return location for child process ID, or NULL.
+ *  @param error The return location for error or @a NULL.
+ *
+ *  @return @a TRUE on success, @a FALSE if an error was set.
+ **/
+gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
+						   GSpawnChildSetupFunc child_setup, gpointer user_data, GPid *child_pid,
+						   GError **error)
+{
+	gboolean result;
+
+	if (! check_error(error))
+		return FALSE;
+
+	if (argv == NULL)
+	{
+		*error = g_error_new(G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "argv must not be NULL");
+		return FALSE;
+	}
+
+#ifdef G_OS_WIN32
+	result = win32_spawn(dir, argv, env, flags, NULL, NULL, NULL);
+	/** TODO create error messages in win32_spawn with appropriate error message text **/
+	if (! result)
+		*error = g_error_new(G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, _("Process could not be created."));
+#else
+	result = g_spawn_async(dir, argv, env, flags, NULL, NULL, child_pid, error);
+#endif
+	return result;
+}

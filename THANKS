@@ -41,6 +41,7 @@ Catalin Marinas <catalin(dot)marinas(at)gmail(dot)com> - newline strips trailing
 Bo Lorentsen <bl(at)lue(dot)dk> - project session patch
 Yura Siamashka <yurand2(at)gmail(dot)com> - many patches
 Daniel Richard G. <skunk(at)iskunk(dot)org> - some patches
+Pierre Joye <pierre(dot)php(at)gmail(dot)com> - Win32 process spawning patch
 
 Translators:
 ------------
