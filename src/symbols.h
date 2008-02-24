@@ -26,7 +26,6 @@
 #define GEANY_SYMBOLS_H 1
 
 extern const guint TM_GLOBAL_TYPE_MASK;
-extern gchar **c_tags_ignore;
 
 
 void symbols_global_tags_loaded(gint file_type_idx);

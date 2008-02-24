@@ -86,10 +86,8 @@ static gchar *user_tags_dir;
 static void html_tags_loaded(void);
 static void load_user_tags(filetype_id ft_id);
 
-/* tags_ignore is a NULL-terminated array of strings, read from ~/.geany/ignore.tags.
- * This file contains a space or newline separated list of symbols which should be ignored
- * by the C/C++ parser, see -I command line option of ctags for details. */
-gchar **c_tags_ignore = NULL;
+// get the tags_ignore list, exported by tagmanager's options.c
+extern gchar **c_tags_ignore;
 
 static void load_c_ignore_tags(void)
 {

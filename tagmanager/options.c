@@ -151,8 +151,10 @@ extern boolean isIncludeFile (const char *const fileName)
     return FALSE;
 }
 
-// get the tags_ignore list, exported by Geany's symbols.h
-extern gchar **c_tags_ignore;
+/* tags_ignore is a NULL-terminated array of strings, read from ~/.geany/ignore.tags.
+ * This file contains a space or newline separated list of symbols which should be ignored
+ * by the C/C++ parser, see -I command line option of ctags for details. */
+gchar **c_tags_ignore = NULL;
 
 /*  Determines whether or not "name" should be ignored, per the ignore list.
  */
