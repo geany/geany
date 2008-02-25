@@ -1852,10 +1852,6 @@ gboolean document_replace_all(gint idx, const gchar *find_text, const gchar *rep
 	count = document_replace_range(
 			idx, find_text, replace_text, flags, 0, len, TRUE, NULL);
 
-	if (count == 0)
-	{
-		utils_beep();
-	}
 	show_replace_summary(idx, count, find_text, replace_text, escaped_chars);
 	return (count > 0);
 }

@@ -962,8 +962,11 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		}
 		case GEANY_RESPONSE_REPLACE_IN_FILE:
 		{
-			document_replace_all(idx, find, replace, search_flags_re, search_replace_escape_re);
-			if (close_window) gtk_widget_hide(widgets.replace_dialog);
+			if (! document_replace_all(idx, find, replace, search_flags_re,
+				search_replace_escape_re))
+			{
+				utils_beep();
+			}
 			break;
 		}
 		case GEANY_RESPONSE_REPLACE_IN_SESSION:
@@ -980,20 +983,29 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 				if (document_replace_all(ix, find, replace, search_flags_re,
 					search_replace_escape_re)) count++;
 			}
+			if (count == 0)
+				utils_beep();
+
 			ui_set_statusbar(FALSE, _("Replaced text in %u files."), count);
 			// show which docs had replacements:
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_STATUS);
 
 			ui_save_buttons_toggle(doc_list[idx].changed);	// update save all
-			if (close_window) gtk_widget_hide(widgets.replace_dialog);
 			break;
 		}
 		case GEANY_RESPONSE_REPLACE_IN_SEL:
 		{
 			document_replace_sel(idx, find, replace, search_flags_re, search_replace_escape_re);
-			if (close_window) gtk_widget_hide(widgets.replace_dialog);
 			break;
 		}
+	}
+	switch (response)
+	{
+		case GEANY_RESPONSE_REPLACE_IN_SEL:
+		case GEANY_RESPONSE_REPLACE_IN_FILE:
+		case GEANY_RESPONSE_REPLACE_IN_SESSION:
+			if (close_window)
+				gtk_widget_hide(widgets.replace_dialog);
 	}
 	g_free(find);
 	g_free(replace);
