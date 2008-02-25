@@ -710,6 +710,7 @@ static boolean isDataTypeKeyword (const tokenInfo *const token)
     }
 }
 
+#if 0
 static boolean isVariableKeyword (const tokenInfo *const token)
 {
     switch (token->keyword)
@@ -725,6 +726,7 @@ static boolean isVariableKeyword (const tokenInfo *const token)
       default: return FALSE;
     }
 }
+#endif
 
 static boolean isContextualKeyword (const tokenInfo *const token)
 {
