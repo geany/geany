@@ -1,3 +1,10 @@
+2008-02-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/notebook.c:
+   When closing a tab when using left-to-right tabs, focus the next
+   document, not the previous.
+
+
 2008-02-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * tagmanager/options.c, src/symbols.c, src/symbols.h:
