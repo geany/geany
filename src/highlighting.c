@@ -387,10 +387,6 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 
 static void styleset_common(ScintillaObject *sci, gint style_bits, filetype_id ft_id)
 {
-	// load global tags file for autocompletion, calltips, etc.
-	if (ft_id < GEANY_FILETYPES_ALL)
-		symbols_global_tags_loaded(ft_id);
-
 	SSM(sci, SCI_STYLECLEARALL, 0, 0);
 
 	// caret colour and width
@@ -2949,7 +2945,11 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 
 void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 {
-	filetypes_load_config(filetype_idx);
+	filetypes_load_config(filetype_idx);	/* load filetypes.ext */
+
+	/* load tags files (some lexers highlight global typenames) */
+	if (filetype_idx < GEANY_FILETYPES_ALL)
+		symbols_global_tags_loaded(filetype_idx);
 
 	switch (filetype_idx)
 	{
