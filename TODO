@@ -1,16 +1,15 @@
 TODO List:
 ----------
-(features included in () have lower priority)
+(features included in brackets have lower priority)
 
 	Fix bugs:
 	o fix bug that prevents UTF-16, UTF-32 files from being loaded.
 	o tagmanager fails on UTF-16/32
 
-	Next version or later:
 
+	Next version or later:
 	o documentation: list and explain filetype modes
 	o documentation: preferences
-	o line breaking mode to limit words on a line for e.g. XML content
 	o common default highlighting styles configurable for all
 	  programming languages
 	o basic support for adding custom filetypes?
@@ -19,8 +18,7 @@ TODO List:
 	o recent projects menu
 	o project indentation settings support
 	o plugin keybindings
-	o include standard library tags only for C global.tags (offer
-	  separate GTK tags file for download)
+	o (line breaking mode to limit words on a line for e.g. XML content)
 	o (DBUS)
 	o (startup notification)
 	o (indent wrapped lines  - Scintilla issue)
@@ -34,6 +32,16 @@ TODO List:
 	  target...)
 	o (tango-like icons for the symbol list)
 	o (show autocompletion symbol icons - see SCI_REGISTERIMAGE)
+	o (custom template file support)
+
+
+	1.0:
+	o generating tags for latex/pascal/php
+	o include standard library tags only for C global.tags (offer
+	  separate GTK tags file for download)
+	o stable plugin ABI for the 1.0 series? (Split up geany_data, prefs,
+	  GeanyKeyCommand enum into groups)
+	o review documentation
 
 
 Wishlist
@@ -43,6 +51,6 @@ Note: These items might not get worked on.
 	o Some kind of support for ctags files.
 	o Scope resolution for object members.
 	o Multiline regex support (requires work on Scintilla)
+	o Split window editing.
 	o Python scripting plugin? (not as efficient as Lua, but perhaps
 	  more widely known)
-	o Split window editing.
