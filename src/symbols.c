@@ -103,16 +103,12 @@ static void load_c_ignore_tags(void)
 }
 
 
-// Ensure that the global tags file for the file_type_idx filetype is loaded.
+/* Ensure that the global tags file(s) for the file_type_idx filetype is loaded.
+ * This provides autocompletion, calltips, etc. */
 void symbols_global_tags_loaded(gint file_type_idx)
 {
 	TagFileInfo *tfi;
 	gint tag_type;
-
-	if (cl_options.ignore_global_tags || app->tm_workspace == NULL)
-		return;
-
-	load_user_tags(file_type_idx);
 
 	// load ignore list for C/C++ parser
 	if ((file_type_idx == GEANY_FILETYPES_C || file_type_idx == GEANY_FILETYPES_CPP) &&
@@ -120,6 +116,11 @@ void symbols_global_tags_loaded(gint file_type_idx)
 	{
 		load_c_ignore_tags();
 	}
+
+	if (cl_options.ignore_global_tags || app->tm_workspace == NULL)
+		return;
+
+	load_user_tags(file_type_idx);
 
 	switch (file_type_idx)
 	{

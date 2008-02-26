@@ -1,3 +1,12 @@
+2008-02-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/highlighting.c:
+   Move symbols_global_tags_loaded() out of styleset_common().
+ * src/symbols.c:
+   Load ignore.tags even when global tags loading is disabled on the
+   command-line, so that local tags in each open file can be ignored.
+
+
 2008-02-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/notebook.c:
