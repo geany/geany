@@ -20,7 +20,6 @@ TODO List:
 	o plugin keybindings
 	o (line breaking mode to limit words on a line for e.g. XML content)
 	o (DBUS)
-	o (startup notification)
 	o (indent wrapped lines  - Scintilla issue)
 	o (folder tree in the sidebar)
 	o (macro support)

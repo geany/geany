@@ -9,6 +9,9 @@
  * src/utils.c, src/win32.c, src/win32.h:
    Apply patch from Pierre Joye to improve new Win32 process spawning
    code (thanks).
+ * geany.desktop.in.in, TODO:
+   Enable startup notification in desktop entry file and remove it from
+   TODO list.
 
 
 2008-02-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
