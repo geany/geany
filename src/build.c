@@ -171,7 +171,7 @@ static GPid build_view_tex_file(gint idx, gint mode)
 	/* try convert in locale for stat() */
 	locale_filename = utils_get_locale_from_utf8(view_file);
 
-	/* check wether view_file exists */
+	/* check whether view_file exists */
 	if (g_stat(locale_filename, &st) != 0)
 	{
 		ui_set_statusbar(TRUE, _("Failed to view %s (make sure it is already compiled)"), view_file);
@@ -385,9 +385,9 @@ static GPid build_link_file(gint idx)
 
 	object_file = g_strdup_printf("%s.o", executable);
 
-	/* check wether object file (file.o) exists */
+	/* check whether object file (file.o) exists */
 	if (g_stat(object_file, &st) == 0)
-	{	/* check wether src is newer than object file */
+	{	/* check whether src is newer than object file */
 		if (g_stat(locale_filename, &st2) == 0)
 		{
 			if (st2.st_mtime > st.st_mtime)
