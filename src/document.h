@@ -103,7 +103,7 @@ typedef struct document
 } document;
 
 
-// Dynamic array of document elements to hold all information of the notebook tabs.
+/* Dynamic array of document elements to hold all information of the notebook tabs. */
 extern GArray *doc_array;
 
 /**
@@ -218,7 +218,8 @@ void document_set_encoding(gint idx, const gchar *new_encoding);
  * to the encoding or the Unicode BOM (which are Scintilla independet).
  * All Scintilla events are stored in the undo / redo buffer and are passed through. */
 
-// available UNDO actions, UNDO_SCINTILLA is a pseudo action to trigger Scintilla's undo management
+/* available UNDO actions, UNDO_SCINTILLA is a pseudo action to trigger Scintilla's
+ * undo management */
 enum
 {
 	UNDO_SCINTILLA = 0,
@@ -227,13 +228,13 @@ enum
 	UNDO_ACTIONS_MAX
 };
 
-// an undo action, also used for redo actions
+/* an undo action, also used for redo actions */
 typedef struct
 {
-	GTrashStack *next;	// pointer to the next stack element(required for the GTrashStack)
-	guint type;			// to identify the action
-	gpointer *data; 	// the old value (before the change), in case of a redo action it contains
-						// the new value
+	GTrashStack *next;	/* pointer to the next stack element(required for the GTrashStack) */
+	guint type;			/* to identify the action */
+	gpointer *data; 	/* the old value (before the change), in case of a redo action
+						 * it contains the new value */
 } undo_action;
 
 gboolean document_can_undo(gint idx);

@@ -91,8 +91,8 @@ typedef struct VC_RECORD
 	void** commands;
 	void** envs;
 	const gchar *program;
-	const gchar *subdir;	// version control subdirectory, e.g. ".svn"
-	gboolean check_parents;	// check parent dirs to find subdir
+	const gchar *subdir;	/* version control subdirectory, e.g. ".svn" */
+	gboolean check_parents;	/* check parent dirs to find subdir */
 } VC_RECORD;
 
 
@@ -270,8 +270,8 @@ static void show_output(const gchar *std_output, const gchar *name_prefix,
 	filename = g_path_get_basename(name_prefix);
 	setptr(filename, g_strconcat(filename, ".vc.diff", NULL));
 
-	// need to convert input text from the encoding of the original file into
-	// UTF-8 because internally Geany always needs UTF-8
+	/* need to convert input text from the encoding of the original file into
+	 * UTF-8 because internally Geany always needs UTF-8 */
 	if (force_encoding)
 	{
 		text = p_encoding->convert_to_utf8_from_charset(
@@ -514,7 +514,7 @@ void init(GeanyData *data)
 	menu_vcdiff_menu = gtk_menu_new ();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_vcdiff), menu_vcdiff_menu);
 
-	// Single file
+	/* Single file */
 	menu_vcdiff_file = gtk_menu_item_new_with_mnemonic(_("From Current _File"));
 	gtk_container_add(GTK_CONTAINER (menu_vcdiff_menu), menu_vcdiff_file);
 	gtk_tooltips_set_tip (tooltips, menu_vcdiff_file,
@@ -523,7 +523,7 @@ void init(GeanyData *data)
 	g_signal_connect((gpointer) menu_vcdiff_file, "activate",
 		G_CALLBACK(vcfile_activated), NULL);
 
-	// Directory
+	/* Directory */
 	menu_vcdiff_dir = gtk_menu_item_new_with_mnemonic(_("From Current _Directory"));
 	gtk_container_add(GTK_CONTAINER (menu_vcdiff_menu), menu_vcdiff_dir);
 	gtk_tooltips_set_tip (tooltips, menu_vcdiff_dir,
@@ -532,7 +532,7 @@ void init(GeanyData *data)
 	g_signal_connect((gpointer) menu_vcdiff_dir, "activate",
 		G_CALLBACK(vcdirectory_activated), NULL);
 
-	// Project
+	/* Project */
 	menu_vcdiff_project = gtk_menu_item_new_with_mnemonic(_("From Current _Project"));
 	gtk_container_add(GTK_CONTAINER (menu_vcdiff_menu), menu_vcdiff_project);
 	gtk_tooltips_set_tip (tooltips, menu_vcdiff_project,
@@ -551,6 +551,6 @@ void init(GeanyData *data)
 /* Called by Geany before unloading the plugin. */
 void cleanup(void)
 {
-	// remove the menu item added in init()
+	/* remove the menu item added in init() */
 	gtk_widget_destroy(plugin_fields->menu_item);
 }

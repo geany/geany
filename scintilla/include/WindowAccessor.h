@@ -1,10 +1,10 @@
-// Scintilla source code edit control
+/* Scintilla source code edit control */
 /** @file WindowAccessor.h
  ** Implementation of BufferAccess and StylingAccess on a Scintilla
  ** rapid easy access to contents of a Scintilla.
  **/
-// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
-// The License.txt file describes the conditions under which this software may be distributed.
+/* Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
+ * The License.txt file describes the conditions under which this software may be distributed. */
 
 #ifdef SCI_NAMESPACE
 namespace Scintilla {
@@ -13,7 +13,7 @@ namespace Scintilla {
 /**
  */
 class WindowAccessor : public Accessor {
-	// Private so WindowAccessor objects can not be copied
+	/* Private so WindowAccessor objects can not be copied */
 	WindowAccessor(const WindowAccessor &source) : Accessor(), props(source.props) {}
 	WindowAccessor &operator=(const WindowAccessor &) { return *this; }
 protected:
@@ -30,8 +30,8 @@ protected:
 	bool InternalIsLeadByte(char ch);
 	void Fill(int position);
 public:
-	WindowAccessor(WindowID id_, PropSet &props_) : 
-		Accessor(), id(id_), props(props_), 
+	WindowAccessor(WindowID id_, PropSet &props_) :
+		Accessor(), id(id_), props(props_),
 		lenDoc(-1), validLen(0), chFlags(0), chWhile(0) {
 	}
 	~WindowAccessor();
@@ -44,8 +44,8 @@ public:
 	void Flush();
 	int GetLineState(int line);
 	int SetLineState(int line, int state);
-	int GetPropertyInt(const char *key, int defaultValue=0) { 
-		return props.GetInt(key, defaultValue); 
+	int GetPropertyInt(const char *key, int defaultValue=0) {
+		return props.GetInt(key, defaultValue);
 	}
 	char *GetProperties() {
 		return props.ToString();

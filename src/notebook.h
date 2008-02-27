@@ -29,7 +29,7 @@ void notebook_init(void);
 /* Returns page number of notebook page, or -1 on error */
 gint notebook_new_tab(gint doc_idx);
 
-// Always use this instead of gtk_notebook_remove_page().
+/* Always use this instead of gtk_notebook_remove_page(). */
 void notebook_remove_page(gint page_num);
 
 #endif

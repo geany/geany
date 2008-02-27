@@ -54,7 +54,7 @@ static boolean isIdentifierCharacter (int c)
 }
 
 
-// remove all previous classes with more indent than the current one
+/* remove all previous classes with more indent than the current one */
 static GList *clean_class_list(GList *list, gint indent)
 {
 	GList *tmp, *tmp2;
@@ -83,7 +83,7 @@ static GList *clean_class_list(GList *list, gint indent)
 
 static void findPythonTags (void)
 {
-    GList *parents = NULL, *tmp; // list of classes which are around the token
+    GList *parents = NULL, *tmp; /* list of classes which are around the token */
     vString *name = vStringNew ();
     gint indent;
     const unsigned char *line;
@@ -119,10 +119,10 @@ static void findPythonTags (void)
 		if (*cp == '\0' || wasInMultilineString)
 		{
 			wasInMultilineString = FALSE;
-			break;	// at end of multiline string
+			break;	/* at end of multiline string */
 		}
 
-		// update indent-sensitive things
+		/* update indent-sensitive things */
 		if (!inMultilineString && !isspace(*cp))
 		{
 			if (inFunction)
@@ -150,9 +150,9 @@ static void findPythonTags (void)
 		++cp;
 		else if (isspace ((int) *cp))
 		{
-			// count indentation amount of current line
-			// the indentation has to be made with tabs only _or_ spaces only, if they are mixed
-			// the code below gets confused
+			/* count indentation amount of current line
+			 * the indentation has to be made with tabs only _or_ spaces only, if they are mixed
+			 * the code below gets confused */
 			if (cp == line)
 			{
 				do
@@ -162,7 +162,7 @@ static void findPythonTags (void)
 				} while (isspace(*cp));
 			}
 			else
-				cp++;	// non-indent whitespace
+				cp++;	/* non-indent whitespace */
 		}
 	    else if (*cp == '#')
 		break;
@@ -193,7 +193,7 @@ static void findPythonTags (void)
 				vStringClear (name);
 
 				lastclass = newclass;
-				break;	// ignore rest of line so that lastclass is not reset immediately
+				break;	/* ignore rest of line so that lastclass is not reset immediately */
 			}
 	    }
 	    else if (strncmp ((const char*) cp, "def", (size_t) 3) == 0)
@@ -218,7 +218,7 @@ static void findPythonTags (void)
 
 		    inFunction = TRUE;
 		    fn_indent = indent + 1;
-		    break;	// ignore rest of line so inFunction is not cancelled immediately
+		    break;	/* ignore rest of line so inFunction is not cancelled immediately */
 		}
 	    }
 		else if (!inFunction && *(const char*)cp == '=')
@@ -233,12 +233,12 @@ static void findPythonTags (void)
 			while (*eq)
 			{
 				if (*eq == '=')
-					goto skipvar;	// ignore '==' operator and 'x=5,y=6)' function lines
+					goto skipvar;	/* ignore '==' operator and 'x=5,y=6)' function lines */
 				if (*eq == '(')
-					break;	// allow 'x = func(b=2,y=2,' lines
+					break;	/* allow 'x = func(b=2,y=2,' lines */
 				eq++;
 			}
-			// go backwards to the start of the line, checking we have valid chars
+			/* go backwards to the start of the line, checking we have valid chars */
 			start = cp - 1;
 			while (start >= line && isspace ((int) *start))
 				--start;
@@ -249,9 +249,9 @@ static void findPythonTags (void)
 			sp = start;
 			while (sp >= line && isspace ((int) *sp))
 				--sp;
-			if ((sp + 1) != line)	// the line isn't a simple variable assignment
+			if ((sp + 1) != line)	/* the line isn't a simple variable assignment */
 				goto skipvar;
-			// the line is valid, parse the variable name
+			/* the line is valid, parse the variable name */
 			++start;
 			while (isIdentifierCharacter ((int) *start))
 			{
@@ -264,7 +264,7 @@ static void findPythonTags (void)
 				makeSimpleTag (name, PythonKinds, K_VARIABLE);
 			else
 				makeSimpleScopedTag (name, PythonKinds, K_VARIABLE,
-					PythonKinds[K_CLASS].name, lastclass->name, "public");	// class member variables
+					PythonKinds[K_CLASS].name, lastclass->name, "public");	/* class member variables */
 
 			vStringClear (name);
 
@@ -281,7 +281,7 @@ static void findPythonTags (void)
     }
     vStringDelete (name);
 
-    // clear the remaining elements in the list
+    /* clear the remaining elements in the list */
     tmp = g_list_first(parents);
     while (tmp != NULL)
     {

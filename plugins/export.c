@@ -119,7 +119,7 @@ static void write_latex_file(gint idx, const gchar *filename, gboolean use_zoom)
 /* converts a RGB colour into a LaTeX compatible representation, taken from SciTE */
 static gchar* get_tex_rgb(gint rgb_colour)
 {
-	//texcolor[rgb]{0,0.5,0}{....}
+	/* texcolor[rgb]{0,0.5,0}{....} */
 	gdouble rf = (rgb_colour % 256) / 256.0;
 	gdouble gf = ((rgb_colour & - 16711936) / 256) / 256.0;
 	gdouble bf = ((rgb_colour & 0xff0000) / 65536) / 256.0;
@@ -131,7 +131,7 @@ static gchar* get_tex_rgb(gint rgb_colour)
 }
 
 
-// convert a style number (0..127) into a string representation (aa, ab, .., ba, bb, .., zy, zz)
+/* convert a style number (0..127) into a string representation (aa, ab, .., ba, bb, .., zy, zz) */
 static gchar *get_tex_style(gint style)
 {
 	static gchar buf[4];
@@ -205,7 +205,7 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 
 	gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(app->window));
 
-	// if the current document has a filename we use it as the default.
+	/* if the current document has a filename we use it as the default. */
 	gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(dialog));
 	if (doc_list[idx].file_name != NULL)
 	{
@@ -222,9 +222,9 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 		file_name = g_strconcat(short_name, suffix, extension, NULL);
 		locale_filename = p_utils->get_locale_from_utf8(doc_list[idx].file_name);
 		locale_dirname = g_path_get_dirname(locale_filename);
-		// set the current name to base_name.html which probably doesn't exist yet so
-		// gtk_file_chooser_set_filename() can't be used and we need
-		// gtk_file_chooser_set_current_folder() additionally
+		/* set the current name to base_name.html which probably doesn't exist yet so
+		 * gtk_file_chooser_set_filename() can't be used and we need
+		 * gtk_file_chooser_set_current_folder() additionally */
 		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_dirname);
 		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), file_name);
 		g_free(locale_filename);
@@ -240,7 +240,7 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 		gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(dialog));
 		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), fname);
 
-		// use default startup directory(if set) if no files are open
+		/* use default startup directory(if set) if no files are open */
 		if (NZV(default_open_path) && g_path_is_absolute(default_open_path))
 		{
 			gchar *locale_path = p_utils->get_locale_from_utf8(default_open_path);
@@ -293,7 +293,7 @@ static const gchar *get_date(gint type)
 		return "";
 
 	if (type == DATE_TYPE_HTML)
-// needs testing
+/** needs testing */
 #ifdef _GNU_SOURCE
 		format = "%Y-%m-%dT%H:%M:%S%z";
 #else
@@ -326,7 +326,7 @@ static void on_file_save_dialog_response(GtkDialog *dialog, gint response, gpoin
 
 		utf8_filename = p_utils->get_utf8_from_locale(new_filename);
 
-		// check if file exists and ask whether to overwrite or not
+		/* check if file exists and ask whether to overwrite or not */
 		if (g_file_test(new_filename, G_FILE_TEST_EXISTS))
 		{
 			if (p_dialogs->show_question(
@@ -349,7 +349,7 @@ static void write_latex_file(gint idx, const gchar *filename, gboolean use_zoom)
 {
 	gint i, style = -1, old_style = 0, column = 0;
 	gchar c, c_next, *tmp;
-	// 0 - fore, 1 - back, 2 - bold, 3 - italic, 4 - font size, 5 - used(0/1)
+	/* 0 - fore, 1 - back, 2 - bold, 3 - italic, 4 - font size, 5 - used(0/1) */
 	gint styles[STYLE_MAX + 1][MAX_TYPES];
 	gboolean block_open = FALSE;
 	GString *body;
@@ -357,7 +357,7 @@ static void write_latex_file(gint idx, const gchar *filename, gboolean use_zoom)
 	GString *latex;
 	gint style_max = pow(2, p_sci->send_message(doc_list[idx].sci, SCI_GETSTYLEBITS, 0, 0));
 
-	// first read all styles from Scintilla
+	/* first read all styles from Scintilla */
 	for (i = 0; i < style_max; i++)
 	{
 		styles[i][FORE] = p_sci->send_message(doc_list[idx].sci, SCI_STYLEGETFORE, i, 0);
@@ -367,7 +367,7 @@ static void write_latex_file(gint idx, const gchar *filename, gboolean use_zoom)
 		styles[i][USED] = 0;
 	}
 
-	// read the document and write the LaTeX code
+	/* read the document and write the LaTeX code */
 	body = g_string_new("");
 	for (i = 0; i < p_sci->get_length(doc_list[idx].sci); i++)
 	{
@@ -388,14 +388,14 @@ static void write_latex_file(gint idx, const gchar *filename, gboolean use_zoom)
 
 			block_open = TRUE;
 		}
-		// escape the current character if necessary else just add it
+		/* escape the current character if necessary else just add it */
 		switch (c)
 		{
 			case '\r':
 			case '\n':
 			{
 				if (c == '\r' && c_next == '\n')
-					continue; // when using CR/LF skip CR and add the line break with LF
+					continue; /* when using CR/LF skip CR and add the line break with LF */
 
 				if (block_open)
 				{
@@ -411,7 +411,7 @@ static void write_latex_file(gint idx, const gchar *filename, gboolean use_zoom)
 				gint tab_stop = geany_data->editor_prefs->tab_width -
 					(column % geany_data->editor_prefs->tab_width);
 
-				column += tab_stop - 1; // -1 because we add 1 at the end of the loop
+				column += tab_stop - 1; /* -1 because we add 1 at the end of the loop */
 				g_string_append_printf(body, "\\hspace*{%dem}", tab_stop);
 				break;
 			}
@@ -420,7 +420,7 @@ static void write_latex_file(gint idx, const gchar *filename, gboolean use_zoom)
 				if (c_next == ' ')
 				{
 					g_string_append(body, "{\\hspace*{1em}}");
-					i++; // skip the next character
+					i++; /* skip the next character */
 				}
 				else
 					g_string_append_c(body, ' ');
@@ -452,37 +452,37 @@ static void write_latex_file(gint idx, const gchar *filename, gboolean use_zoom)
 				g_string_append(body, "\\symbol{94}");
 				break;
 			}
-			/// TODO still don't work for "---" or "----"
-			case '-':  // mask "--"
+			/** TODO still don't work for "---" or "----" */
+			case '-':  /* mask "--" */
 			{
 				if (c_next == '-')
 				{
 					g_string_append(body, "-\\/-");
-					i++; // skip the next character
+					i++; /* skip the next character */
 				}
 				else
 					g_string_append_c(body, '-');
 
 				break;
 			}
-			case '<':  // mask "<<"
+			case '<':  /* mask "<<" */
 			{
 				if (c_next == '<')
 				{
 					g_string_append(body, "<\\/<");
-					i++; // skip the next character
+					i++; /* skip the next character */
 				}
 				else
 					g_string_append_c(body, '<');
 
 				break;
 			}
-			case '>':  // mask ">>"
+			case '>':  /* mask ">>" */
 			{
 				if (c_next == '>')
 				{
 					g_string_append(body, ">\\/>");
-					i++; // skip the next character
+					i++; /* skip the next character */
 				}
 				else
 					g_string_append_c(body, '>');
@@ -499,10 +499,10 @@ static void write_latex_file(gint idx, const gchar *filename, gboolean use_zoom)
 		block_open = FALSE;
 	}
 
-	// force writing of style 0 (used at least for line breaks)
+	/* force writing of style 0 (used at least for line breaks) */
 	styles[0][USED] = 1;
 
-	// write used styles in the header
+	/* write used styles in the header */
 	cmds = g_string_new("");
 	for (i = 0; i <= STYLE_MAX; i++)
 	{
@@ -531,7 +531,7 @@ static void write_latex_file(gint idx, const gchar *filename, gboolean use_zoom)
 		}
 	}
 
-	// write all
+	/* write all */
 	latex = g_string_new(TEMPLATE_LATEX);
 	p_utils->string_replace_all(latex, "{export_content}", body->str);
 	p_utils->string_replace_all(latex, "{export_styles}", cmds->str);
@@ -553,7 +553,7 @@ static void write_html_file(gint idx, const gchar *filename, gboolean use_zoom)
 {
 	gint i, style = -1, old_style = 0, column = 0;
 	gchar c, c_next;
-	// 0 - fore, 1 - back, 2 - bold, 3 - italic, 4 - font size, 5 - used(0/1)
+	/* 0 - fore, 1 - back, 2 - bold, 3 - italic, 4 - font size, 5 - used(0/1) */
 	gint styles[STYLE_MAX + 1][MAX_TYPES];
 	gboolean span_open = FALSE;
 	const gchar *font_name;
@@ -564,7 +564,7 @@ static void write_html_file(gint idx, const gchar *filename, gboolean use_zoom)
 	GString *html;
 	gint style_max = pow(2, p_sci->send_message(doc_list[idx].sci, SCI_GETSTYLEBITS, 0, 0));
 
-	// first read all styles from Scintilla
+	/* first read all styles from Scintilla */
 	for (i = 0; i < style_max; i++)
 	{
 		styles[i][FORE] = ROTATE_RGB(p_sci->send_message(doc_list[idx].sci, SCI_STYLEGETFORE, i, 0));
@@ -574,22 +574,22 @@ static void write_html_file(gint idx, const gchar *filename, gboolean use_zoom)
 		styles[i][USED] = 0;
 	}
 
-	// read Geany's font and font size
+	/* read Geany's font and font size */
 	font_desc = pango_font_description_from_string(prefs->editor_font);
 	font_name = pango_font_description_get_family(font_desc);
-	//font_size = pango_font_description_get_size(font_desc) / PANGO_SCALE;
-	// take the zoom level also into account
+	/*font_size = pango_font_description_get_size(font_desc) / PANGO_SCALE;*/
+	/* take the zoom level also into account */
 	font_size = p_sci->send_message(doc_list[idx].sci, SCI_STYLEGETSIZE, 0, 0);
 	if (use_zoom)
 		font_size += p_sci->send_message(doc_list[idx].sci, SCI_GETZOOM, 0, 0);
 
-	// read the document and write the HTML body
+	/* read the document and write the HTML body */
 	body = g_string_new("");
 	for (i = 0; i < p_sci->get_length(doc_list[idx].sci); i++)
 	{
 		style = p_sci->get_style_at(doc_list[idx].sci, i);
 		c = p_sci->get_char_at(doc_list[idx].sci, i);
-		// p_sci->get_char_at() takes care of index boundaries and return 0 if i is too high
+		/* p_sci->get_char_at() takes care of index boundaries and return 0 if i is too high */
 		c_next = p_sci->get_char_at(doc_list[idx].sci, i + 1);
 
 		if ((style != old_style || ! span_open) && ! isspace(c))
@@ -604,14 +604,14 @@ static void write_html_file(gint idx, const gchar *filename, gboolean use_zoom)
 
 			span_open = TRUE;
 		}
-		// escape the current character if necessary else just add it
+		/* escape the current character if necessary else just add it */
 		switch (c)
 		{
 			case '\r':
 			case '\n':
 			{
 				if (c == '\r' && c_next == '\n')
-					continue; // when using CR/LF skip CR and add the line break with LF
+					continue; /* when using CR/LF skip CR and add the line break with LF */
 
 				if (span_open)
 				{
@@ -628,7 +628,7 @@ static void write_html_file(gint idx, const gchar *filename, gboolean use_zoom)
 				gint tab_stop = geany_data->editor_prefs->tab_width -
 					(column % geany_data->editor_prefs->tab_width);
 
-				column += tab_stop - 1; // -1 because we add 1 at the end of the loop
+				column += tab_stop - 1; /* -1 because we add 1 at the end of the loop */
 				for (j = 0; j < tab_stop; j++)
 				{
 					g_string_append(body, "&nbsp;");
@@ -665,7 +665,7 @@ static void write_html_file(gint idx, const gchar *filename, gboolean use_zoom)
 		span_open = FALSE;
 	}
 
-	// write used styles in the header
+	/* write used styles in the header */
 	css = g_string_new("");
 	g_string_append_printf(css,
 	"\tbody\n\t{\n\t\tfont-family: %s, monospace;\n\t\tfont-size: %dpt;\n\t}\n",
@@ -683,7 +683,7 @@ static void write_html_file(gint idx, const gchar *filename, gboolean use_zoom)
 		}
 	}
 
-	// write all
+	/* write all */
 	html = g_string_new(TEMPLATE_HTML);
 	p_utils->string_replace_all(html, "{export_date}", get_date(DATE_TYPE_HTML));
 	p_utils->string_replace_all(html, "{export_content}", body->str);
@@ -715,21 +715,21 @@ void init(GeanyData *data)
 	menu_export_menu = gtk_menu_new ();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_export), menu_export_menu);
 
-	// HTML
+	/* HTML */
 	menu_create_html = gtk_menu_item_new_with_mnemonic(_("As HTML"));
 	gtk_container_add(GTK_CONTAINER (menu_export_menu), menu_create_html);
 
 	g_signal_connect((gpointer) menu_create_html, "activate",
 		G_CALLBACK(on_menu_create_html_activate), NULL);
 
-	// LaTeX
+	/* LaTeX */
 	menu_create_latex = gtk_menu_item_new_with_mnemonic(_("As LaTeX"));
 	gtk_container_add(GTK_CONTAINER (menu_export_menu), menu_create_latex);
 
 	g_signal_connect((gpointer) menu_create_latex, "activate",
 		G_CALLBACK(on_menu_create_latex_activate), NULL);
 
-	// disable menu_item when there are no documents open
+	/* disable menu_item when there are no documents open */
 	plugin_fields->menu_item = menu_export;
 	plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
 

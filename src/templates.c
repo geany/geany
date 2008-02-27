@@ -43,7 +43,7 @@
 #define TEMPLATE_DATE_FORMAT "%Y-%m-%d"
 #define TEMPLATE_DATETIME_FORMAT "%d.%m.%Y %H:%M:%S %Z"
 
-// default templates, only for initial tempate file creation on first start of Geany
+/* default templates, only for initial tempate file creation on first start of Geany */
 static const gchar templates_gpl_notice[] = "\
 This program is free software; you can redistribute it and/or modify\n\
 it under the terms of the GNU General Public License as published by\n\
@@ -229,7 +229,7 @@ static gchar *templates[GEANY_MAX_TEMPLATES];
 static gchar *ft_templates[GEANY_MAX_FILE_TYPES] = {NULL};
 
 
-// some simple macros to reduce code size and make the code readable
+/* some simple macros to reduce code size and make the code readable */
 #define TEMPLATES_GET_FILENAME(shortname) \
 	g_strconcat(app->configdir, \
 		G_DIR_SEPARATOR_S GEANY_TEMPLATES_SUBDIR G_DIR_SEPARATOR_S, shortname, NULL)
@@ -242,7 +242,7 @@ static gchar *ft_templates[GEANY_MAX_FILE_TYPES] = {NULL};
 	g_file_get_contents(fname, contents_ptr, NULL, NULL);
 
 
-// prototype, because this function should never be used outside of templates.c
+/* prototype, because this function should never be used outside of templates.c */
 static gchar *templates_replace_all(gchar *source, const gchar *year, const gchar *date);
 
 
@@ -254,14 +254,14 @@ static void init_general_templates(const gchar *year, const gchar *date)
 	gchar *template_filename_function = TEMPLATES_GET_FILENAME("function");
 	gchar *template_filename_changelog = TEMPLATES_GET_FILENAME("changelog");
 
-	// create the template files in the configuration directory, if they don't exist
+	/* create the template files in the configuration directory, if they don't exist */
 	TEMPLATES_CREATE_FILE(template_filename_fileheader, templates_fileheader);
 	TEMPLATES_CREATE_FILE(template_filename_gpl, templates_gpl_notice);
 	TEMPLATES_CREATE_FILE(template_filename_bsd, templates_bsd_notice);
 	TEMPLATES_CREATE_FILE(template_filename_function, templates_function_description);
 	TEMPLATES_CREATE_FILE(template_filename_changelog, templates_changelog);
 
-	// read the contents
+	/* read the contents */
 	TEMPLATES_READ_FILE(template_filename_fileheader, &templates[GEANY_TEMPLATE_FILEHEADER]);
 	templates[GEANY_TEMPLATE_FILEHEADER] = templates_replace_all(templates[GEANY_TEMPLATE_FILEHEADER], year, date);
 
@@ -277,7 +277,7 @@ static void init_general_templates(const gchar *year, const gchar *date)
 	TEMPLATES_READ_FILE(template_filename_changelog, &templates[GEANY_TEMPLATE_CHANGELOG]);
 	templates[GEANY_TEMPLATE_CHANGELOG] = templates_replace_all(templates[GEANY_TEMPLATE_CHANGELOG], year, date);
 
-	// free the whole stuff
+	/* free the whole stuff */
 	g_free(template_filename_fileheader);
 	g_free(template_filename_gpl);
 	g_free(template_filename_bsd);
@@ -332,7 +332,7 @@ on_new_with_template                   (GtkMenuItem     *menuitem,
 }
 
 
-// template items for the new file menu
+/* template items for the new file menu */
 static void create_new_menu_items(void)
 {
 	GtkWidget *template_menu = lookup_widget(app->window, "menu_new_with_template1_menu");
@@ -382,17 +382,17 @@ void templates_init(void)
  * 6 characters are filled with whitespace when the comment characters include " *" */
 static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, guint indent)
 {
-	gchar *frame_start = "";	// to add before comment_text
-	gchar *frame_end = "";		// to add after comment_text
-	gchar *line_prefix;			// to add before every line in comment_text
+	gchar *frame_start = "";	/* to add before comment_text */
+	gchar *frame_end = "";		/* to add after comment_text */
+	gchar *line_prefix;			/* to add before every line in comment_text */
 	gchar *result;
 	gchar *tmp;
 	gchar *prefix;
 	gchar **lines;
 	guint i;
 
-	/// TODO the following switch could be replaced by some intelligent code which reads
-	/// frame_start, frame_end and line_prefix from the filetype definition files
+	/** TODO the following switch could be replaced by some intelligent code which reads
+	 ** frame_start, frame_end and line_prefix from the filetype definition files */
 	switch (filetype_idx)
 	{
 		case GEANY_FILETYPES_HTML:
@@ -488,7 +488,7 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 			break;
 		}
 
-		default: // guess /* */ is appropriate
+		default: /* assume C-like multi-line comment is appropriate */
 		{
 			frame_start = "/*\n";
 			frame_end = " */\n";
@@ -496,14 +496,14 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 		}
 	}
 
-	// construct the real prefix with given amount of whitespace
+	/* construct the real prefix with given amount of whitespace */
 	i = (indent > strlen(line_prefix)) ? (indent - strlen(line_prefix)) : strlen(line_prefix);
 	tmp = g_strnfill(i, ' ');
 	prefix = g_strconcat(line_prefix, tmp, NULL);
 	g_free(tmp);
 
 
-	// add line_prefix to every line of comment_text
+	/* add line_prefix to every line of comment_text */
 	lines = g_strsplit(comment_text, "\n", -1);
 	for (i = 0; i < (g_strv_length(lines) - 1); i++)
 	{
@@ -513,7 +513,7 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 	}
 	tmp = g_strjoinv("\n", lines);
 
-	// add frame_start and frame_end
+	/* add frame_start and frame_end */
 	result = g_strconcat(frame_start, tmp, frame_end, NULL);
 
 	g_free(prefix);
@@ -541,7 +541,7 @@ gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname)
 	filetype_id ft_id = filetype_idx;
 	filetype *ft = filetypes[ft_id];
 
-	filetypes_load_config(ft_id);	// load any user extension setting
+	filetypes_load_config(ft_id);	/* load any user extension setting */
 
 	if (fname == NULL)
 	{
@@ -583,7 +583,7 @@ gchar *templates_get_template_new_file(struct filetype *ft)
 	if (FILETYPE_ID(ft) == GEANY_FILETYPES_ALL)
 		return get_file_template(ft);
 
-	file_header = templates_get_template_fileheader(ft->id, NULL);	// file template only used for new files
+	file_header = templates_get_template_fileheader(ft->id, NULL);	/* file template only used for new files */
 	ft_template = get_file_template(ft);
 	ft_template = utils_str_replace(ft_template, "{fileheader}", file_header);
 	g_free(file_header);

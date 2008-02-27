@@ -105,24 +105,24 @@ static void findPerlTags (void)
 		cp += 2;
 		while (isspace (*cp)) cp++;
 
-	    // parse something like my($bla)
+	    /* parse something like my($bla) */
 	    if (*(const char*) cp == '(')
 	    {
 			cp++;
 			while (*(const char*) cp != ')')
 			{
 				while (isspace (*(const char*) cp)) cp++;
-				if (*(const char*) cp == ',') cp++;  // to skip ','
+				if (*(const char*) cp == ',') cp++;  /* to skip ',' */
 				while (isspace (*(const char*) cp)) cp++;
-				cp++; // to skip $ sign
+				cp++; /* to skip $ sign */
 				cp = createTagString(cp, K_MY);
 				while (isspace (*(const char*) cp)) cp++;
 			}
 	    }
-		// parse my $bla
+		/* parse my $bla */
 		else
 		{
-			cp++; // to skip the $ sign
+			cp++; /* to skip the $ sign */
 
 			if (! isalpha (*(const char*) cp)) continue;
 
@@ -134,24 +134,24 @@ static void findPerlTags (void)
 		cp += 3;
 		while (isspace (*cp)) cp++;
 
-	    // parse something like my($bla)
+	    /* parse something like my($bla) */
 	    if (*(const char*) cp == '(')
 	    {
 			cp++;
 			while (*(const char*) cp != ')')
 			{
 				while (isspace (*(const char*) cp)) cp++;
-				if (*(const char*) cp == ',') cp++;  // to skip ','
+				if (*(const char*) cp == ',') cp++;  /* to skip ',' */
 				while (isspace (*(const char*) cp)) cp++;
-				cp++; // to skip $ sign
+				cp++; /* to skip $ sign */
 				cp = createTagString(cp, K_OUR);
 				while (isspace (*(const char*) cp)) cp++;
 			}
 	    }
-		// parse my $bla
+		/* parse my $bla */
 		else
 		{
-			cp++; // to skip the $ sign
+			cp++; /* to skip the $ sign */
 
 			if (! isalpha (*(const char*) cp)) continue;
 
@@ -163,24 +163,24 @@ static void findPerlTags (void)
 		cp += 5;
 		while (isspace (*cp)) cp++;
 
-	    // parse something like my($bla)
+	    /* parse something like my($bla) */
 	    if (*(const char*) cp == '(')
 	    {
 			cp++;
 			while (*(const char*) cp != ')')
 			{
 				while (isspace (*(const char*) cp)) cp++;
-				if (*(const char*) cp == ',') cp++;  // to skip ','
+				if (*(const char*) cp == ',') cp++;  /* to skip ',' */
 				while (isspace (*(const char*) cp)) cp++;
-				cp++; // to skip $ sign
+				cp++; /* to skip $ sign */
 				cp = createTagString(cp, K_LOCAL);
 				while (isspace (*(const char*) cp)) cp++;
 			}
 	    }
-		// parse my $bla
+		/* parse my $bla */
 		else
 		{
-			cp++; // to skip the $ sign
+			cp++; /* to skip the $ sign */
 
 			if (! isalpha (*(const char*) cp)) continue;
 

@@ -49,7 +49,7 @@ static void makeRestTag (const vString* const name,
         tagEntryInfo e;
         initTagEntry (&e, vStringValue (name));
 
-        e.lineNumber--;	// we want the line before the '---' underline chars
+        e.lineNumber--;	/* we want the line before the '---' underline chars */
         e.kindName = kinds [kind].name;
         e.kind     = kinds [kind].letter;
 

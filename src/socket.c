@@ -145,7 +145,7 @@ void send_open_command(gint sock, gint argc, gchar **argv)
 	{
 		filename = get_argv_filename(argv[i]);
 
-		// if the filename is valid or if a new file should be opened is check on the other side
+		/* if the filename is valid or if a new file should be opened is check on the other side */
 		if (filename != NULL)
 		{
 			socket_fd_write_all(sock, filename, strlen(filename));
@@ -154,7 +154,7 @@ void send_open_command(gint sock, gint argc, gchar **argv)
 		else
 		{
 			g_printerr(_("Could not find file '%s'."), filename);
-			g_printerr("\n");	// keep translation from open_cl_files() in main.c.
+			g_printerr("\n");	/* keep translation from open_cl_files() in main.c. */
 		}
 		g_free(filename);
 	}
@@ -170,8 +170,8 @@ static void remove_socket_link_full(void)
 
 	real_path[0] = '\0';
 
-	// read the contents of the symbolic link socket_info.file_name and delete it
-	// readlink should return something like "/tmp/geany_socket.499602d2"
+	/* read the contents of the symbolic link socket_info.file_name and delete it
+	 * readlink should return something like "/tmp/geany_socket.499602d2" */
 	len = readlink(socket_info.file_name, real_path, sizeof(real_path) - 1);
 	if ((gint) len > 0)
 	{
@@ -193,8 +193,8 @@ gint socket_init(gint argc, gchar **argv)
 
 #ifdef G_OS_WIN32
 	HANDLE hmutex;
-	// we need a mutex name which is unique for the used configuration dir,
-	// but we can't use the whole path, so build a hash on the configdir and use it
+	/* we need a mutex name which is unique for the used configuration dir,
+	 * but we can't use the whole path, so build a hash on the configdir and use it */
 	gchar *mutex_name = g_strdup_printf("Geany%d", g_str_hash(app->configdir));
 
 	socket_init_win32();
@@ -224,7 +224,7 @@ gint socket_init(gint argc, gchar **argv)
 	if (display_name == NULL)
 		display_name = g_strdup("NODISPLAY");
 
-	// these lines are taken from dcopc.c in kdelibs
+	/* these lines are taken from dcopc.c in kdelibs */
 	if ((p = strrchr(display_name, '.')) > strrchr(display_name, ':') && p != NULL)
 		*p = '\0';
 	while ((p = strchr(display_name, ':')) != NULL)
@@ -240,12 +240,12 @@ gint socket_init(gint argc, gchar **argv)
 	sock = socket_fd_connect_unix(socket_info.file_name);
 	if (sock < 0)
 	{
-		remove_socket_link_full(); // deletes the socket file and the symlink
+		remove_socket_link_full(); /* deletes the socket file and the symlink */
 		return socket_fd_open_unix(socket_info.file_name);
 	}
 #endif
 
-	// remote command mode, here we have another running instance and want to use it
+	/* remote command mode, here we have another running instance and want to use it */
 	if (argc > 1)
 	{
 		send_open_command(sock, argc, argv);
@@ -274,7 +274,7 @@ gint socket_finalize(void)
 #else
 	if (socket_info.file_name != NULL)
 	{
-		remove_socket_link_full(); // deletes the socket file and the symlink
+		remove_socket_link_full(); /* deletes the socket file and the symlink */
 		g_free(socket_info.file_name);
 	}
 #endif
@@ -333,20 +333,20 @@ static gint socket_fd_open_unix(const gchar *path)
 		return -1;
 	}
 
-	// fix for #1888561:
-	// in case the configuration directory is located on a network file system or any other
-	// file system which doesn't support sockets, we just link the socket there and create the
-	// real socket in the system's tmp directory assuming it supports sockets
+	/* fix for #1888561:
+	 * in case the configuration directory is located on a network file system or any other
+	 * file system which doesn't support sockets, we just link the socket there and create the
+	 * real socket in the system's tmp directory assuming it supports sockets */
 	real_path = g_strdup_printf("%s%cgeany_socket.%08x",
 		g_get_tmp_dir(), G_DIR_SEPARATOR, g_random_int());
 
 	if (utils_is_file_writeable(real_path) != 0)
-	{	// if real_path is not writable for us, fall back to ~/.geany/geany_socket_*_*
-		// instead of creating a symlink and print a warning
+	{	/* if real_path is not writable for us, fall back to ~/.geany/geany_socket_*_* */
+		/* instead of creating a symlink and print a warning */
 		g_warning("Socket %s could not be written, using %s as fallback.", real_path, path);
 		setptr(real_path, g_strdup(path));
 	}
-	// create a symlink in e.g. ~/.geany/geany_socket_hostname__0 to /tmp/geany_socket.499602d2
+	/* create a symlink in e.g. ~/.geany/geany_socket_hostname__0 to /tmp/geany_socket.499602d2 */
 	else if (symlink(real_path, path) != 0)
 	{
 		perror("symlink");
@@ -484,7 +484,7 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 	fd = g_io_channel_unix_get_fd(source);
 	sock = accept(fd, (struct sockaddr *)&caddr, &caddr_len);
 
-	// first get the command
+	/* first get the command */
 	while (socket_fd_gets(sock, buf, sizeof(buf)) != -1)
 	{
 		if (strncmp(buf, "open", 4) == 0)
@@ -493,12 +493,12 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 
 			while (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && *buf != '.')
 			{
-				g_strstrip(buf); // remove \n char
+				g_strstrip(buf); /* remove \n char */
 
 				if (g_file_test(buf, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 					document_open_file(buf, FALSE, NULL, NULL);
 				else
-				{	// create new file if it doesn't exist
+				{	/* create new file if it doesn't exist */
 					gint idx;
 
 					idx = document_new_file(buf, NULL, NULL);
@@ -519,8 +519,8 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 		{
 			while (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && *buf != '.')
 			{
-				g_strstrip(buf); // remove \n char
-				// on any error we get 0 which should be safe enough as fallback
+				g_strstrip(buf); /* remove \n char */
+				/* on any error we get 0 which should be safe enough as fallback */
 				cl_options.goto_line = atoi(buf);
 			}
 		}
@@ -528,8 +528,8 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 		{
 			while (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && *buf != '.')
 			{
-				g_strstrip(buf); // remove \n char
-				// on any error we get 0 which should be safe enough as fallback
+				g_strstrip(buf); /* remove \n char */
+				/* on any error we get 0 which should be safe enough as fallback */
 				cl_options.goto_column = atoi(buf);
 			}
 		}
@@ -598,7 +598,7 @@ static gint socket_fd_check_io(gint fd, GIOCondition cond)
 	timeout.tv_usec = 0;
 
 #ifdef G_OS_UNIX
-	// checking for non-blocking mode
+	/* checking for non-blocking mode */
 
 	flags = fcntl(fd, F_GETFL, 0);
 	if (flags < 0)

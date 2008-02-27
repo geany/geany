@@ -303,14 +303,14 @@ gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 	return TRUE;
 }
 
-// alternative parser for PHP and LaTeX global tags files with the following format
-// tagname|return value|arglist|description\n
+/* alternative parser for PHP and LaTeX global tags files with the following format
+ * tagname|return value|arglist|description\n */
 gboolean tm_tag_init_from_file_alt(TMTag *tag, TMSourceFile *file, FILE *fp)
 {
 	guchar buf[BUFSIZ];
 	guchar *start, *end;
 	gboolean status;
-	//guchar changed_char = TA_NAME;
+	/*guchar changed_char = TA_NAME;*/
 
 	if ((NULL == fgets((gchar*)buf, BUFSIZ, fp)) || ('\0' == *buf))
 		return FALSE;
@@ -323,7 +323,7 @@ gboolean tm_tag_init_from_file_alt(TMTag *tag, TMSourceFile *file, FILE *fp)
 				++ end;
 			if (('\0' == *end) || ('\n' == *end))
 				status = FALSE;
-			//changed_char = *end;
+			/*changed_char = *end;*/
 			*end = '\0';
 			if (NULL == tag->name && !isprint(*start))
 					return FALSE;
@@ -356,9 +356,9 @@ TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, gint mode)
 
 	switch (mode)
 	{
-		case 4:	// pascal
-		case 6:	// php
-		case 8:	// latex
+		case 4:	/* pascal */
+		case 6:	/* php */
+		case 8:	/* latex */
 			result = tm_tag_init_from_file_alt(tag, file, fp);
 			break;
 
@@ -620,13 +620,13 @@ TMTag **tm_tags_find(const GPtrArray *sorted_tags_array, const char *name,
 	s_partial = partial;
 	result = (TMTag **) bsearch(&tag, sorted_tags_array->pdata, sorted_tags_array->len
 	  , sizeof(gpointer), tm_tag_compare);
-	// there can be matches on both sides of result
+	/* there can be matches on both sides of result */
 	if (result)
 	{
 		TMTag **last = (TMTag **) &sorted_tags_array->pdata[sorted_tags_array->len - 1];
 		TMTag **adv;
 
-		// First look for any matches after result
+		/* First look for any matches after result */
 		adv = result;
 		adv++;
 		for (; *adv && adv <= last; ++ adv)
@@ -635,7 +635,7 @@ TMTag **tm_tags_find(const GPtrArray *sorted_tags_array, const char *name,
 				break;
 			++tagMatches;
 		}
-		// Now look for matches from result and below
+		/* Now look for matches from result and below */
 		for (; result >= (TMTag **) sorted_tags_array->pdata; -- result)
 		{
 			if (0 != tm_tag_compare(&tag, (TMTag **) result))
@@ -643,7 +643,7 @@ TMTag **tm_tags_find(const GPtrArray *sorted_tags_array, const char *name,
 			++tagMatches;
 		}
 		*tagCount=tagMatches;
-		++ result;	// correct address for the last successful match
+		++ result;	/* correct address for the last successful match */
 	}
 	s_partial = FALSE;
 	return (TMTag **) result;

@@ -28,19 +28,19 @@
 /* structure for representing a project. */
 struct _GeanyProject
 {
-	gchar *name; 			// the name of the project
-	gchar *description; 	// short description of the project
+	gchar *name; 			/* the name of the project */
+	gchar *description; 	/* short description of the project */
 
-	gchar *file_name; 		// where the project file is stored (in UTF-8)
+	gchar *file_name; 		/* where the project file is stored (in UTF-8) */
 
-	gchar *base_path;		// base path of the project directory (in UTF-8, maybe relative)
-	gchar *run_cmd; 		// project run command (in UTF-8)
-	// ...					// fields for build process(run arguments and so on) should be added
+	gchar *base_path;		/* base path of the project directory (in UTF-8, maybe relative) */
+	gchar *run_cmd; 		/* project run command (in UTF-8) */
+	/* ...	*/				/* fields for build process(run arguments and so on) should be added */
 
-	gint type;				// identifier whether it is a pure Geany project or modified/extended
-							// by a plugin
+	gint type;				/* identifier whether it is a pure Geany project or modified/extended */
+							/* by a plugin */
 
-	gchar **file_patterns;	// array of filename extension patterns
+	gchar **file_patterns;	/* array of filename extension patterns */
 
 	gboolean make_in_base_path;
 };

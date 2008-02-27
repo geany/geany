@@ -86,7 +86,7 @@ extern parserDefinition* parserNew (const char* name)
 
 extern const char *getLanguageName (const langType language)
 {
-    //Assert (0 <= language  &&  language < (int) LanguageCount);
+    /*Assert (0 <= language  &&  language < (int) LanguageCount);*/
     if (language < 0) return NULL;
 	return LanguageTable [language]->name;
 }
@@ -541,7 +541,7 @@ static void printLangugageKindOptions (const langType language)
 	    for (i = 0  ;  i < lang->kindCount  ;  ++i)
 		printLangugageKindOption (lang->kinds + i);
 #ifdef HAVE_REGEX
-	// printRegexKindOptions (language); // unused
+	/*printRegexKindOptions (language);*/ /* unused */
 #endif
     }
 }

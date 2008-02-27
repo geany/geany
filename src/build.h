@@ -25,7 +25,7 @@
 #ifndef GEANY_BUILD_H
 #define GEANY_BUILD_H 1
 
-typedef enum	// Geany Build Options
+typedef enum	/* Geany Build Options */
 {
 	GBO_COMPILE,
 	GBO_BUILD,
@@ -36,8 +36,8 @@ typedef enum	// Geany Build Options
 
 typedef struct BuildInfo
 {
-	build_type	type;	// current action(one of the above enumeration)
-	GPid		pid;	// process id of the spawned process
+	build_type	type;	/* current action(one of the above enumeration) */
+	GPid		pid;	/* process id of the spawned process */
 	gchar		*dir;
 	guint		file_type_id;
 	gchar		*custom_target;

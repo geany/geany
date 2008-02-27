@@ -38,8 +38,8 @@ extern CommandLineOptions cl_options;
 
 typedef struct GeanyStatus
 {
-	gboolean	opening_session_files;	// state at startup while opening session files
-	gboolean	quitting;	// state when Geany is quitting completely
+	gboolean	opening_session_files;	/* state at startup while opening session files */
+	gboolean	quitting;	/* state when Geany is quitting completely */
 	gboolean	main_window_realized;
 }
 GeanyStatus;

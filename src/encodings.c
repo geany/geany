@@ -44,11 +44,11 @@
 
 #ifdef HAVE_REGCOMP
 # include <regex.h>
-// <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+/* <meta http-equiv="content-type" content="text/html; charset=UTF-8" /> */
 # define PATTERN_HTMLMETA "<meta[ \t\n\r\f]http-equiv[ \t\n\r\f]*=[ \t\n\r\f]*\"content-type\"[ \t\n\r\f]+content[ \t\n\r\f]*=[ \t\n\r\f]*\"text/x?html;[ \t\n\r\f]*charset=([a-z0-9_-]+)\"[ \t\n\r\f]*/?>"
-// " geany_encoding=utf-8 "
+/* " geany_encoding=utf-8 " */
 # define PATTERN_GEANY "[\t ]geany_encoding=([a-z0-9-]+)[\t ]"
-// precompiled regexps
+/* precompiled regexps */
 static regex_t pregs[2];
 #endif
 
@@ -232,9 +232,9 @@ void encodings_select_radio_item(const gchar *charset)
 		if (utils_str_equal(charset, encodings[i].charset)) break;
 		i++;
 	}
-	if (i == GEANY_ENCODINGS_MAX) i = GEANY_ENCODING_UTF_8; // fallback to UTF-8
+	if (i == GEANY_ENCODINGS_MAX) i = GEANY_ENCODING_UTF_8; /* fallback to UTF-8 */
 
-	// app->ignore_callback has to be set by the caller
+	/* app->ignore_callback has to be set by the caller */
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(radio_items[i]), TRUE);
 }
 
@@ -270,7 +270,7 @@ static gchar *regex_match(regex_t *preg, const gchar *buffer, gsize size)
 		return NULL;
 
 	if (size > 512)
-		tmp_buf = g_strndup(buffer, 512); // scan only the first 512 characters in the buffer
+		tmp_buf = g_strndup(buffer, 512); /* scan only the first 512 characters in the buffer */
 
 	retval = regexec(preg, (tmp_buf != NULL) ? tmp_buf : buffer, 10, pmatch, 0);
 	if (retval == 0 && pmatch[0].rm_so != -1 && pmatch[1].rm_so != -1)
@@ -319,7 +319,7 @@ void encodings_init(void)
 	regex_compile(&pregs[1], PATTERN_GEANY);
 #endif
 
-	// create encodings submenu in document menu
+	/* create encodings submenu in document menu */
 	menu[0] = lookup_widget(app->window, "set_encoding1_menu");
 	menu[1] = lookup_widget(app->window, "menu_reload_as1_menu");
 	cb_func[0] = G_CALLBACK(on_encoding_change);
@@ -363,7 +363,7 @@ void encodings_init(void)
 		gtk_container_add(GTK_CONTAINER(menu[k]), item_utf8);
 		gtk_widget_show_all(item_utf8);
 
-		/// TODO can it be optimized? ATM 3782 runs at line "if (encodings[j].group ...)"
+		/** TODO can it be optimized? ATM 3782 runs at line "if (encodings[j].group ...)" */
 		for (i = 0; i < GEANY_ENCODING_GROUPS_MAX; i++)
 		{
 			order = 0;
@@ -378,7 +378,7 @@ void encodings_init(void)
 				default: submenu = menu[k]; group_size = 1;
 			}
 
-			while (order < group_size)	// the biggest group has 13 elements
+			while (order < group_size)	/* the biggest group has 13 elements */
 			{
 				for (j = 0; j < GEANY_ENCODINGS_MAX; j++)
 				{
@@ -490,7 +490,7 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 	}
 
 #ifdef HAVE_REGCOMP
-	// first try to read the encoding from the file content
+	/* first try to read the encoding from the file content */
 	for (i = 0; i < (gint) G_N_ELEMENTS(pregs) && ! check_regex; i++)
 	{
 		if ((regex_charset = regex_match(&pregs[i], buffer, size)) != NULL)
@@ -498,7 +498,7 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 	}
 #endif
 
-	// current locale is not UTF-8, we have to check this charset
+	/* current locale is not UTF-8, we have to check this charset */
 	check_locale = ! g_get_charset((const gchar**) &charset);
 
 	for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
@@ -573,12 +573,12 @@ GeanyEncodingIndex encodings_scan_unicode_bom(const gchar *string, gsize len, gu
 		if ((guchar)string[0] == 0x00 && (guchar)string[1] == 0x00 &&
 				 (guchar)string[2] == 0xfe && (guchar)string[3] == 0xff)
 		{
-			return GEANY_ENCODING_UTF_32BE; // Big endian
+			return GEANY_ENCODING_UTF_32BE; /* Big endian */
 		}
 		if ((guchar)string[0] == 0xff && (guchar)string[1] == 0xfe &&
 				 (guchar)string[2] == 0x00 && (guchar)string[3] == 0x00)
 		{
-			return GEANY_ENCODING_UTF_32LE; // Little endian
+			return GEANY_ENCODING_UTF_32LE; /* Little endian */
 		}
 		if ((string[0] == 0x2b && string[1] == 0x2f && string[2] == 0x76) &&
 				 (string[3] == 0x38 || string[3] == 0x39 || string[3] == 0x2b || string[3] == 0x2f))
@@ -593,11 +593,11 @@ GeanyEncodingIndex encodings_scan_unicode_bom(const gchar *string, gsize len, gu
 
 		if ((guchar)string[0]==0xfe && (guchar)string[1] == 0xff)
 		{
-			return GEANY_ENCODING_UTF_16BE; // Big endian
+			return GEANY_ENCODING_UTF_16BE; /* Big endian */
 		}
 		if ((guchar)string[0] == 0xff && (guchar)string[1] == 0xfe)
 		{
-			return GEANY_ENCODING_UTF_16LE; // Little endian
+			return GEANY_ENCODING_UTF_16LE; /* Little endian */
 		}
 	}
 	if (bom_len)

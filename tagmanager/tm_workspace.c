@@ -88,7 +88,7 @@ const TMWorkspace *tm_get_workspace()
 
 gboolean tm_workspace_add_object(TMWorkObject *work_object)
 {
-	// theWorkspace should already have been created otherwise something went wrong
+	/* theWorkspace should already have been created otherwise something went wrong */
 	if (NULL == theWorkspace)
 		return FALSE;
 	if (NULL == theWorkspace->work_objects)
@@ -143,8 +143,8 @@ gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
 		g_ptr_array_add(theWorkspace->global_tags, tag);
 	fclose(fp);
 
-	// resort the whole array, because tm_tags_find expects a sorted array and it is not sorted
-	// when global.tags, php.tags and latex.tags are loaded at the same time
+	/* resort the whole array, because tm_tags_find expects a sorted array and it is not sorted
+	 * when global.tags, php.tags and latex.tags are loaded at the same time */
 	tm_tags_sort(theWorkspace->global_tags, global_tags_sort_attrs, TRUE);
 
 	return TRUE;
@@ -212,7 +212,7 @@ static void append_to_temp_file(FILE *fp, GList *file_list)
 		else
 		{
 			fwrite(contents, length, 1, fp);
-			fwrite("\n", 1, 1, fp);	// in case file doesn't end in newline (e.g. windows).
+			fwrite("\n", 1, 1, fp);	/* in case file doesn't end in newline (e.g. windows). */
 			g_free(contents);
 		}
 		node = g_list_next (node);
@@ -225,10 +225,10 @@ static gint get_global_tag_type_mask(gint lang)
 	{
 		case 0:
 		case 1:
-			// C/C++
+			/* C/C++ */
 			return tm_tag_class_t | tm_tag_typedef_t | tm_tag_enum_t | tm_tag_enumerator_t |
 				tm_tag_prototype_t |
-				tm_tag_function_t | tm_tag_method_t |	// for inline functions
+				tm_tag_function_t | tm_tag_method_t |	/* for inline functions */
 				tm_tag_macro_t | tm_tag_macro_with_arg_t;
 		default:
 			return tm_tag_max_t;
@@ -268,7 +268,7 @@ gboolean tm_workspace_create_global_tags(const char *config_dir, const char *pre
 #ifdef HAVE_GLOB_H
 	globbuf.gl_offs = 0;
 
-	if (includes[0][0] == '"')	// leading \" char for glob matching
+	if (includes[0][0] == '"')	/* leading \" char for glob matching */
 	for(idx_inc = 0; idx_inc < includes_count; idx_inc++)
 	{
  		int dirty_len = strlen(includes[idx_inc]);
@@ -306,7 +306,7 @@ gboolean tm_workspace_create_global_tags(const char *config_dir, const char *pre
   	}
   	else
 #endif
-	// no glob support or globbing not wanted
+	/* no glob support or globbing not wanted */
 	for(idx_inc = 0; idx_inc < includes_count; idx_inc++)
 	{
 		if (!g_hash_table_lookup(includes_files_hash,
@@ -358,7 +358,7 @@ gboolean tm_workspace_create_global_tags(const char *config_dir, const char *pre
 	}
 	else
 	{
-		// no pre-processing needed, so temp_file2 = temp_file
+		/* no pre-processing needed, so temp_file2 = temp_file */
 		g_free(temp_file2);
 		temp_file2 = temp_file;
 		temp_file = NULL;
@@ -540,11 +540,11 @@ const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *at
 	matches[0] = tm_tags_find(theWorkspace->work_object.tags_array, name, partial, &tagCount[0]);
 	matches[1] = tm_tags_find(theWorkspace->global_tags, name, partial, &tagCount[1]);
 
-	// file tags
+	/* file tags */
 	if (matches[0] && *matches[0])
 	{
-		// tag->atts.file.lang contains the line of the tag and
-		// tags->atts.entry.file->lang contains the language
+		/* tag->atts.file.lang contains the line of the tag and
+		 * tags->atts.entry.file->lang contains the language */
 		tags_lang = (*matches[0])->atts.entry.file->lang;
 
 		for (tagIter=0;tagIter<tagCount[0];++tagIter)
@@ -565,20 +565,20 @@ const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *at
 		}
 	}
 
-	// global tags
+	/* global tags */
 	if (matches[1] && *matches[1])
 	{
 		int tags_lang_alt = 0;
-		// tag->atts.file.lang contains the language and
-		// tags->atts.entry.file is NULL
+		/* tag->atts.file.lang contains the language and
+		 * tags->atts.entry.file is NULL */
 		tags_lang = (*matches[1])->atts.file.lang;
-		// tags_lang_alt is used to load C global tags only once for C and C++
-		// lang = 1 is C++, lang = 0 is C
-		// if we have lang 0, than accept also lang 1 for C++
-		if (tags_lang == 0)	// C or C++
+		/* tags_lang_alt is used to load C global tags only once for C and C++
+		 * lang = 1 is C++, lang = 0 is C
+		 * if we have lang 0, than accept also lang 1 for C++ */
+		if (tags_lang == 0)	/* C or C++ */
 			tags_lang_alt = 1;
 		else
-			tags_lang_alt = tags_lang; // otherwise just ignore it
+			tags_lang_alt = tags_lang; /* otherwise just ignore it */
 
 		for (tagIter=0;tagIter<tagCount[1];++tagIter)
 		{
@@ -608,12 +608,12 @@ const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *at
 static gboolean match_langs(gint lang, const TMTag *tag)
 {
 	if (tag->atts.entry.file)
-	{	// workspace tag
+	{	/* workspace tag */
 		if (lang == tag->atts.entry.file->lang)
 			return TRUE;
 	}
 	else
-	{	// global tag
+	{	/* global tag */
 		if (lang == tag->atts.file.lang)
 			return TRUE;
 	}
@@ -655,7 +655,7 @@ fill_find_tags_array (GPtrArray *dst, const GPtrArray *src,
 }
 
 
-// adapted from tm_workspace_find, Anjuta 2.02
+/* adapted from tm_workspace_find, Anjuta 2.02 */
 const GPtrArray *
 tm_workspace_find_scoped (const char *name, const char *scope, gint type,
 		TMTagAttrType *attrs, gboolean partial, langType lang, gboolean global_search)
@@ -674,7 +674,7 @@ tm_workspace_find_scoped (const char *name, const char *scope, gint type,
 						  name, scope, type, partial, lang, FALSE);
 	if (global_search)
 	{
-		// for a scoped tag, I think we always want the same language
+		/* for a scoped tag, I think we always want the same language */
 		fill_find_tags_array (tags, theWorkspace->global_tags,
 							  name, scope, type, partial, lang, FALSE);
 	}

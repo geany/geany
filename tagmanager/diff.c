@@ -52,10 +52,10 @@ static void findDiffTags (void)
 
 			tmp = (const unsigned char*) strrchr((const char*) cp,  '/');
 			if (tmp == NULL)
-			{	// if no / is contained try \ in case of a Windows filename
+			{	/* if no / is contained try \ in case of a Windows filename */
 				tmp = (const unsigned char*) strrchr((const char*) cp, '\\');
 				if (tmp == NULL)
-				{	// last fallback, probably the filename doesn't contain a path, so take it
+				{	/* last fallback, probably the filename doesn't contain a path, so take it */
 					if (strlen((const char*) cp) > 0)
 					{
 						tmp = cp;
@@ -65,7 +65,7 @@ static void findDiffTags (void)
 			}
 			if (tmp != NULL)
 			{
-				if (skipSlash) tmp++; // skip the leading slash or backslash
+				if (skipSlash) tmp++; /* skip the leading slash or backslash */
 				while (! isspace(*tmp) && *tmp != '\0')
 				{
 					vStringPut(filename, *tmp);

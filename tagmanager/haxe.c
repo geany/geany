@@ -34,7 +34,7 @@
  *	DATA DEFINITIONS
  */
 
-//static jmp_buf Exception;
+/*static jmp_buf Exception;*/
 
 typedef enum {
 	HXTAG_METHODS,
@@ -225,7 +225,7 @@ extern parserDefinition* HaxeParser (void)
 	def->kinds		= HxKinds;
 	def->kindCount	= KIND_COUNT (HxKinds);
 	def->parser		= findHxTags;
-	//def->initialize = initialize;
+	/*def->initialize = initialize;*/
 	return def;
 }
 

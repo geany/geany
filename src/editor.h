@@ -27,7 +27,7 @@
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
 
-// Note: Avoid using SSM in files not related to scintilla, use sciwrappers.h instead.
+/* Note: Avoid using SSM in files not related to scintilla, use sciwrappers.h instead. */
 #define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
 
 
@@ -44,26 +44,26 @@ typedef enum
  * Remember to increment abi_version in plugindata.h when changing items. */
 typedef struct EditorPrefs
 {
-	// display
+	/* display */
 	gboolean	show_white_space;
 	gboolean	show_indent_guide;
 	gboolean	show_line_endings;
 	gint		long_line_type;
 	gint		long_line_column;
 	gchar		*long_line_color;
-	gboolean	show_markers_margin;		// view menu
-	gboolean	show_linenumber_margin;		// view menu
-	gboolean	show_scrollbars;			// hidden pref
-	gboolean	scroll_stop_at_last_line;	// hidden pref
+	gboolean	show_markers_margin;		/* view menu */
+	gboolean	show_linenumber_margin;		/* view menu */
+	gboolean	show_scrollbars;			/* hidden pref */
+	gboolean	scroll_stop_at_last_line;	/* hidden pref */
 
-	// behaviour
+	/* behaviour */
 	gboolean	line_wrapping;
 	gboolean	use_indicators;
 	gboolean	folding;
 	gboolean	unfold_all_children;
 	gint		tab_width;
 	gboolean	use_tabs;
-	gboolean	use_tab_to_indent;	// hidden pref
+	gboolean	use_tab_to_indent;	/* hidden pref */
 	IndentMode	indent_mode;
 	gboolean	disable_dnd;
 	gboolean	smart_home_key;
@@ -74,9 +74,9 @@ typedef struct EditorPrefs
 	gint		symbolcompletion_min_chars;
 	gint		symbolcompletion_max_height;
 	GHashTable	*snippets;
-	gboolean	brace_match_ltgt;	// whether to highlight < and > chars (hidden pref)
-	gboolean	use_gtk_word_boundaries;	// hidden pref
-	gboolean	complete_snippets_whilst_editing;	// hidden pref
+	gboolean	brace_match_ltgt;	/* whether to highlight < and > chars (hidden pref) */
+	gboolean	use_gtk_word_boundaries;	/* hidden pref */
+	gboolean	complete_snippets_whilst_editing;	/* hidden pref */
 	gboolean	detect_tab_mode;
 } EditorPrefs;
 
@@ -85,8 +85,8 @@ extern EditorPrefs editor_prefs;
 
 typedef struct
 {
-	gchar	*current_word;	// holds word under the mouse or keyboard cursor
-	gint	click_pos;		// text position where the mouse was clicked
+	gchar	*current_word;	/* holds word under the mouse or keyboard cursor */
+	gint	click_pos;		/* text position where the mouse was clicked */
 } EditorInfo;
 
 extern EditorInfo editor_info;

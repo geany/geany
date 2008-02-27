@@ -63,7 +63,7 @@ static kindOption PhpKinds [] = {
 #define ALNUM "0-9A-Za-z\x7f-\xff"
 #endif
 */
-// eht16 - "A-Za-z\x7f-\xff" fails on other locales than "C" and so skip it
+/* "A-Za-z\x7f-\xff" fails on other locales than "C" and so skip it */
 #define ALPHA "[:alpha:]"
 #define ALNUM "[:alnum:]"
 

@@ -61,7 +61,7 @@ typedef struct
 	const gchar	*tag_file;
 } TagFileInfo;
 
-enum	// Geany tag files
+enum	/* Geany tag files */
 {
 	GTF_C,
 	GTF_PASCAL,
@@ -86,7 +86,7 @@ static gchar *user_tags_dir;
 static void html_tags_loaded(void);
 static void load_user_tags(filetype_id ft_id);
 
-// get the tags_ignore list, exported by tagmanager's options.c
+/* get the tags_ignore list, exported by tagmanager's options.c */
 extern gchar **c_tags_ignore;
 
 static void load_c_ignore_tags(void)
@@ -110,7 +110,7 @@ void symbols_global_tags_loaded(gint file_type_idx)
 	TagFileInfo *tfi;
 	gint tag_type;
 
-	// load ignore list for C/C++ parser
+	/* load ignore list for C/C++ parser */
 	if ((file_type_idx == GEANY_FILETYPES_C || file_type_idx == GEANY_FILETYPES_CPP) &&
 		c_tags_ignore == NULL)
 	{
@@ -131,8 +131,8 @@ void symbols_global_tags_loaded(gint file_type_idx)
 	switch (file_type_idx)
 	{
 		case GEANY_FILETYPES_CPP:
-			symbols_global_tags_loaded(GEANY_FILETYPES_C);	// load C global tags
-			// no C++ tagfile yet
+			symbols_global_tags_loaded(GEANY_FILETYPES_C);	/* load C global tags */
+			/* no C++ tagfile yet */
 			return;
 		case GEANY_FILETYPES_C:		tag_type = GTF_C; break;
 		case GEANY_FILETYPES_PASCAL:tag_type = GTF_PASCAL; break;
@@ -156,7 +156,7 @@ void symbols_global_tags_loaded(gint file_type_idx)
 }
 
 
-// HTML tagfile is just a list of entities for autocompletion (e.g. '&amp;')
+/* HTML tagfile is just a list of entities for autocompletion (e.g. '&amp;') */
 static void html_tags_loaded(void)
 {
 	TagFileInfo *tfi;
@@ -194,14 +194,14 @@ GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gin
 			tag = TM_TAG(typedefs->pdata[j]);
 			if (!(tag->atts.entry.scope))
 			{
-				// tag->atts.file.lang contains (for some reason) the line of the tag if
-				// tag->atts.entry.file is not NULL
+				/* tag->atts.file.lang contains (for some reason) the line of the tag if
+				 * tag->atts.entry.file is not NULL */
 				gint tag_lang =
 					(tag->atts.entry.file) ? tag->atts.entry.file->lang : tag->atts.file.lang;
 
-				// the check for tag_lang == lang is necessary to avoid wrong type colouring of
-				// e.g. PHP classes in C++ files
-				// lang = -2 disables the check
+				/* the check for tag_lang == lang is necessary to avoid wrong type colouring of
+				 * e.g. PHP classes in C++ files
+				 * lang = -2 disables the check */
 				if (tag->name && (tag_lang == lang || lang == -2))
 				{
 					if (j != 0)
@@ -222,9 +222,9 @@ const gchar *symbols_get_context_separator(gint ft_id)
 
 	switch (ft_id)
 	{
-		case GEANY_FILETYPES_C:	// for C++ .h headers or C structs
+		case GEANY_FILETYPES_C:	/* for C++ .h headers or C structs */
 		case GEANY_FILETYPES_CPP:
-		//~ case GEANY_FILETYPES_RUBY: // not sure what to use atm
+		/*case GEANY_FILETYPES_RUBY:*/ /* not sure what to use atm*/
 		{
 			static gchar cc[] = "::";
 
@@ -239,7 +239,7 @@ const gchar *symbols_get_context_separator(gint ft_id)
 			cosep = def;
 		}
 	}
-	return cosep;	// return ptr to static string
+	return cosep;	/* return ptr to static string */
 }
 
 
@@ -314,14 +314,14 @@ static TMTag *find_workspace_tag(const gchar *tag_name, gint type)
 				return tmtag;
 		}
 	}
-	return NULL;	// not found
+	return NULL;	/* not found */
 }
 
 
 const gchar **symbols_get_html_entities(void)
 {
 	if (html_entities == NULL)
-		html_tags_loaded(); // if not yet created, force creation of the array but shouldn't occur
+		html_tags_loaded(); /* if not yet created, force creation of the array but shouldn't occur */
 
 	return (const gchar **) html_entities;
 }
@@ -334,7 +334,7 @@ void symbols_finalize(void)
 }
 
 
-// small struct to track tag name and type together
+/* small struct to track tag name and type together */
 typedef struct GeanySymbol
 {
 	gchar	*str;
@@ -395,8 +395,8 @@ static const GList *get_tag_list(gint idx, guint tag_types, gboolean sort_by_nam
 			tag_names = NULL;
 		}
 
-		// encodings_convert_to_utf8_from_charset() fails with charset "None", so skip conversion
-		// for None at this point completely
+		/* encodings_convert_to_utf8_from_charset() fails with charset "None", so skip conversion
+		 * for None at this point completely */
 		if (utils_str_equal(doc_list[idx].encoding, "UTF-8") ||
 			utils_str_equal(doc_list[idx].encoding, "None"))
 			doc_is_utf8 = TRUE;
@@ -444,7 +444,7 @@ static const GList *get_tag_list(gint idx, guint tag_types, gboolean sort_by_nam
 }
 
 
-// amount of types in the symbol list (currently max. 8 are used)
+/* amount of types in the symbol list (currently max. 8 are used) */
 #define MAX_SYMBOL_TYPES	(sizeof(tv_iters) / sizeof(GtkTreeIter))
 
 struct TreeviewSymbols
@@ -463,8 +463,8 @@ struct TreeviewSymbols
 
 static void init_tag_iters(void)
 {
-	// init all GtkTreeIters with -1 to make them invalid to avoid crashes when switching between
-	// filetypes(e.g. config file to Python crashes Geany without this)
+	/* init all GtkTreeIters with -1 to make them invalid to avoid crashes when switching between
+	 * filetypes(e.g. config file to Python crashes Geany without this) */
 	tv_iters.tag_function.stamp = -1;
 	tv_iters.tag_class.stamp = -1;
 	tv_iters.tag_member.stamp = -1;
@@ -556,7 +556,7 @@ static void init_tag_list(gint idx)
 				&(tv_iters.tag_struct), _("Appendix"), NULL,
 				&(tv_iters.tag_other), _("Other"), NULL,
 				NULL);
-			//	&(tv_iters.tag_namespace), _("Other"), NULL, NULL);
+			/*	&(tv_iters.tag_namespace), _("Other"), NULL, NULL);	*/
 			break;
 		}
 		case GEANY_FILETYPES_HASKELL:
@@ -596,9 +596,9 @@ static void init_tag_list(gint idx)
 				&(tv_iters.tag_macro), _("Local"), NULL,
 				&(tv_iters.tag_variable), _("Our"), NULL,
 				NULL);
-				//&(tv_iters.tag_struct), _("Label"), NULL,
-				//&(tv_iters.tag_namespace), _("Begin"), NULL,
-				//&(tv_iters.tag_other), _("Other"), NULL, NULL);
+				/*&(tv_iters.tag_struct), _("Label"), NULL,*/
+				/*&(tv_iters.tag_namespace), _("Begin"), NULL,*/
+				/*&(tv_iters.tag_other), _("Other"), NULL, NULL);*/
 			break;
 		}
 		case GEANY_FILETYPES_PHP:
@@ -610,9 +610,9 @@ static void init_tag_list(gint idx)
 				&(tv_iters.tag_macro), _("Constants"), "classviewer-macro",
 				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
 				NULL);
-				//&(tv_iters.tag_struct), _("Label"),
-				//&(tv_iters.tag_namespace), _("Begin"),
-				//&(tv_iters.tag_other), _("Other"), NULL);
+				/*&(tv_iters.tag_struct), _("Label"),*/
+				/*&(tv_iters.tag_namespace), _("Begin"),*/
+				/*&(tv_iters.tag_other), _("Other"), NULL);*/
 			break;
 		}
 		case GEANY_FILETYPES_REST:
@@ -633,8 +633,8 @@ static void init_tag_list(gint idx)
 				&(tv_iters.tag_member), _("Singletons"), "classviewer-struct",
 				&(tv_iters.tag_function), _("Methods"), "classviewer-method",
 				NULL);
-				//&(tv_iters.tag_namespace), _("Begin"),
-				//&(tv_iters.tag_other), _("Other"), NULL);
+				/*&(tv_iters.tag_namespace), _("Begin"),*/
+				/*&(tv_iters.tag_other), _("Other"), NULL);*/
 			break;
 		}
 		case GEANY_FILETYPES_PYTHON:
@@ -645,25 +645,25 @@ static void init_tag_list(gint idx)
 				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
 				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
 				NULL);
-				//&(tv_iters.tag_macro), _("Mixin"),
-				//&(tv_iters.tag_variable), _("Variables"),
-				//&(tv_iters.tag_struct), _("Members"),
-				//&(tv_iters.tag_namespace), _("Begin"),
-				//&(tv_iters.tag_other), _("Other"), NULL);
+				/*&(tv_iters.tag_macro), _("Mixin"),*/
+				/*&(tv_iters.tag_variable), _("Variables"),*/
+				/*&(tv_iters.tag_struct), _("Members"),*/
+				/*&(tv_iters.tag_namespace), _("Begin"),*/
+				/*&(tv_iters.tag_other), _("Other"), NULL);*/
 			break;
 		}
 		case GEANY_FILETYPES_VHDL:
 		{
 			tag_list_add_groups(tag_store,
 				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
-				//&(tv_iters.tag_class), _("Constants"),
-				//&(tv_iters.tag_member), _("Members"),
-				//&(tv_iters.tag_macro), _("Macros"),
+				/*&(tv_iters.tag_class), _("Constants"),*/
+				/*&(tv_iters.tag_member), _("Members"),*/
+				/*&(tv_iters.tag_macro), _("Macros"),*/
 				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
 				NULL);
-				//&(tv_iters.tag_namespace), _("Namespaces"),
-				//&(tv_iters.tag_struct), _("Signals"),
-				//&(tv_iters.tag_other), _("Other"), NULL);
+				/*&(tv_iters.tag_namespace), _("Namespaces"),*/
+				/*&(tv_iters.tag_struct), _("Signals"),*/
+				/*&(tv_iters.tag_other), _("Other"), NULL);*/
 			break;
 		}
 		case GEANY_FILETYPES_JAVA:
@@ -674,8 +674,8 @@ static void init_tag_list(gint idx)
 				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
 				&(tv_iters.tag_function), _("Methods"), "classviewer-method",
 				&(tv_iters.tag_member), _("Members"), "classviewer-member",
-			//	&(tv_iters.tag_macro), _("Macros"),
-			//	&(tv_iters.tag_variable), _("Variables"),
+				/*&(tv_iters.tag_macro), _("Macros"),*/
+				/*&(tv_iters.tag_variable), _("Variables"),*/
 				&(tv_iters.tag_other), _("Other"), "classviewer-other",
 				NULL);
 			break;
@@ -743,15 +743,15 @@ static void hide_empty_rows(GtkTreeModel *model, GtkTreeStore *store)
 	guint i = 0;
 
 	if (! gtk_tree_model_get_iter_first(model, &iter))
-		return; // stop when first iter is invalid, i.e. no elements
+		return; /* stop when first iter is invalid, i.e. no elements */
 
-	do // first collect the iters we need to delete empty rows
+	do /* first collect the iters we need to delete empty rows */
 	{
 		if (! gtk_tree_model_iter_has_child(model, &iter))
 			iters[i++] = gtk_tree_iter_copy(&iter);
 	} while (gtk_tree_model_iter_next(model, &iter));
 
-	// now actually delete the collected iters
+	/* now actually delete the collected iters */
 	for (i = 0; i < MAX_SYMBOL_TYPES; i++)
 	{
 		if (iters[i] == NULL)
@@ -777,10 +777,12 @@ gboolean symbols_recreate_tag_list(gint idx, gboolean sort_by_name)
 		return FALSE;
 
 	gtk_tree_store_clear(doc_list[idx].tag_store);
-	// unref the store to speed up the filling(from TreeView Tutorial)
+	/* unref the store to speed up the filling(from TreeView Tutorial) */
 	model = gtk_tree_view_get_model(GTK_TREE_VIEW(doc_list[idx].tag_tree));
-	g_object_ref(model); // Make sure the model stays with us after the tree view unrefs it
-	gtk_tree_view_set_model(GTK_TREE_VIEW(doc_list[idx].tag_tree), NULL); // Detach model from view
+	/* Make sure the model stays with us after the tree view unrefs it */
+	g_object_ref(model);
+	/* Detach model from view */
+	gtk_tree_view_set_model(GTK_TREE_VIEW(doc_list[idx].tag_tree), NULL);
 
 	init_tag_list(idx);
 	for (tmp = (GList*)tags; tmp; tmp = g_list_next(tmp))
@@ -825,7 +827,7 @@ gboolean symbols_recreate_tag_list(gint idx, gboolean sort_by_name)
 			case tm_tag_typedef_t:
 			case tm_tag_enum_t:
 			{
-				// TODO: separate C-like types here also
+				/** TODO separate C-like types here also */
 				if (ft_id == GEANY_FILETYPES_HAXE)
 				{
 					if (tv_iters.tag_type.stamp == -1) break;
@@ -876,7 +878,8 @@ gboolean symbols_recreate_tag_list(gint idx, gboolean sort_by_name)
 		}
 	}
 	hide_empty_rows(model, doc_list[idx].tag_store);
-	gtk_tree_view_set_model(GTK_TREE_VIEW(doc_list[idx].tag_tree), model); // Re-attach model to view
+	/* Re-attach model to view */
+	gtk_tree_view_set_model(GTK_TREE_VIEW(doc_list[idx].tag_tree), model);
 	g_object_unref(model);
 	gtk_tree_view_expand_all(GTK_TREE_VIEW(doc_list[idx].tag_tree));
 	return TRUE;
@@ -894,7 +897,7 @@ static filetype *detect_global_tags_filetype(const gchar *utf8_filename)
 	tags_ext = strstr(shortname, ".tags");
 	if (tags_ext)
 	{
-		*tags_ext = '\0';	// remove .tags extension
+		*tags_ext = '\0';	/* remove .tags extension */
 		ft = filetypes_detect_from_filename(shortname);
 	}
 	g_free(shortname);
@@ -937,7 +940,7 @@ int symbols_generate_global_tags(int argc, char **argv, gboolean want_preprocess
 		if (want_preprocess && (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP))
 			command = g_strdup_printf("%s %s", pre_process, NVL(getenv("CFLAGS"), ""));
 		else
-			command = NULL;	// don't preprocess
+			command = NULL;	/* don't preprocess */
 
 		geany_debug("Generating %s tags file.", ft->name);
 		tm_get_workspace();
@@ -1025,7 +1028,7 @@ static GHashTable *get_tagfile_hash(const GSList *file_list)
 
 		if (FILETYPE_ID(ft) < GEANY_FILETYPES_ALL)
 		{
-			fnames = g_hash_table_lookup(hash, ft);	// may be NULL
+			fnames = g_hash_table_lookup(hash, ft);	/* may be NULL */
 			fnames = g_list_append(fnames, fname);
 			g_hash_table_insert(hash, ft, fnames);
 		}
@@ -1045,10 +1048,10 @@ static GHashTable *init_user_tags(void)
 	file_list = utils_get_file_list(user_tags_dir, NULL, NULL);
 	lang_hash = get_tagfile_hash(file_list);
 
-	// don't need to delete list contents because they are now used for hash contents
+	/* don't need to delete list contents because they are now used for hash contents */
 	g_slist_free(file_list);
 
-	// create the tags dir for next time if it doesn't exist
+	/* create the tags dir for next time if it doesn't exist */
 	if (! g_file_test(user_tags_dir, G_FILE_TEST_IS_DIR))
 	{
 		utils_mkdir(user_tags_dir, FALSE);
@@ -1069,7 +1072,7 @@ static void load_user_tags(filetype_id ft_id)
 
 	if (tags_loaded[ft_id])
 		return;
-	tags_loaded[ft_id] = TRUE;	// prevent reloading
+	tags_loaded[ft_id] = TRUE;	/* prevent reloading */
 
 	if (lang_hash == NULL)
 		lang_hash = init_user_tags();
@@ -1100,7 +1103,7 @@ gboolean symbols_goto_tag(const gchar *name, gboolean definition)
 
 	gint old_idx = document_get_cur_idx();
 
-	// goto tag definition: all except prototypes / forward declarations / externs
+	/* goto tag definition: all except prototypes / forward declarations / externs */
 	type = (definition) ? tm_tag_max_t - forward_types : forward_types;
 
 	tmtag = find_workspace_tag(name, type);
@@ -1108,7 +1111,7 @@ gboolean symbols_goto_tag(const gchar *name, gboolean definition)
 	{
 		gint new_idx = document_find_by_filename(
 			tmtag->atts.entry.file->work_object.file_name, TRUE);
-		// not found in opened document, should open
+		/* not found in opened document, should open */
 		if (new_idx == -1)
 		{
 			new_idx = document_open_file(tmtag->atts.entry.file->work_object.file_name, FALSE, NULL, NULL);
@@ -1117,7 +1120,7 @@ gboolean symbols_goto_tag(const gchar *name, gboolean definition)
 		if (navqueue_goto_line(old_idx, new_idx, tmtag->atts.entry.line))
 			return TRUE;
 	}
-	// if we are here, there was no match and we are beeping ;-)
+	/* if we are here, there was no match and we are beeping ;-) */
 	utils_beep();
 	if (type == forward_types)
 		ui_set_statusbar(FALSE, _("Forward declaration \"%s\" not found."), name);

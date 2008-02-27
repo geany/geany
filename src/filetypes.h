@@ -29,10 +29,10 @@
 #include "ScintillaWidget.h"
 
 
-// each group should be alpha-sorted, based on filetype::name (not enum name)
+/* each group should be alpha-sorted, based on filetype::name (not enum name) */
 typedef enum
 {
-	// normally compiled languages
+	/* normally compiled languages */
 	GEANY_FILETYPES_GROUP_COMPILED = 0,
 	GEANY_FILETYPES_ASM = GEANY_FILETYPES_GROUP_COMPILED,
 	GEANY_FILETYPES_C,
@@ -41,14 +41,14 @@ typedef enum
 	GEANY_FILETYPES_CAML,
 	GEANY_FILETYPES_D,
 	GEANY_FILETYPES_FORTRAN,
-	GEANY_FILETYPES_BASIC,	// FreeBasic
+	GEANY_FILETYPES_BASIC,	/* FreeBasic */
 	GEANY_FILETYPES_HASKELL,
 	GEANY_FILETYPES_HAXE,
 	GEANY_FILETYPES_JAVA,
 	GEANY_FILETYPES_PASCAL,
 	GEANY_FILETYPES_VHDL,
 
-	// script languages
+	/* script languages */
 	GEANY_FILETYPES_GROUP_SCRIPT,
 	GEANY_FILETYPES_FERITE = GEANY_FILETYPES_GROUP_SCRIPT,
 	GEANY_FILETYPES_JS,
@@ -62,14 +62,14 @@ typedef enum
 	GEANY_FILETYPES_SH,
 	GEANY_FILETYPES_TCL,
 
- 	// markup langauges
+ 	/* markup langauges */
 	GEANY_FILETYPES_GROUP_MARKUP,
 	GEANY_FILETYPES_CSS = GEANY_FILETYPES_GROUP_MARKUP,
 	GEANY_FILETYPES_DOCBOOK,
 	GEANY_FILETYPES_HTML,
  	GEANY_FILETYPES_XML,
 
-	// miscellaneous languages
+	/* miscellaneous languages */
 	GEANY_FILETYPES_GROUP_MISC,
 	GEANY_FILETYPES_CONF = GEANY_FILETYPES_GROUP_MISC,
 	GEANY_FILETYPES_DIFF,
@@ -77,11 +77,11 @@ typedef enum
 	GEANY_FILETYPES_REST,
 	GEANY_FILETYPES_SQL,
 
-	GEANY_FILETYPES_ALL,	// must be last filetype, used for 'None' item.
+	GEANY_FILETYPES_ALL,	/* must be last filetype, used for 'None' item. */
 	GEANY_MAX_FILE_TYPES
 } filetype_id;
 
-// Safe wrapper to get the id field of a possibly NULL filetype pointer.
+/* Safe wrapper to get the id field of a possibly NULL filetype pointer. */
 #define FILETYPE_ID(filetype_ptr) \
 	(((filetype_ptr) != NULL) ? (filetype_ptr)->id : GEANY_FILETYPES_ALL)
 
@@ -105,12 +105,12 @@ struct build_programs
 struct filetype
 {
 	filetype_id		  id;
-	guint	 		  uid;				// unique id as reference for saved filetype in config file
-	GtkWidget		 *item;				// holds a pointer to the menu item for this filetypes
-	langType 		  lang;				// represents the langType of tagmanager(see the table
-										// in tagmanager/parsers.h), -1 represents all, -2 none
-	gchar	 		 *name;				// will be used as name for tagmanager
-	gchar	 		 *title;			// will be shown in the file open dialog
+	guint	 		  uid;				/* unique id as reference for saved filetype in config file */
+	GtkWidget		 *item;				/* holds a pointer to the menu item for this filetypes */
+	langType 		  lang;				/* represents the langType of tagmanager(see the table */
+										/* in tagmanager/parsers.h), -1 represents all, -2 none */
+	gchar	 		 *name;				/* will be used as name for tagmanager */
+	gchar	 		 *title;			/* will be shown in the file open dialog */
 	gchar	 		 *extension;
 	gchar			**pattern;
 	gchar	 		 *context_action_cmd;
@@ -124,7 +124,7 @@ struct filetype
 extern filetype *filetypes[GEANY_MAX_FILE_TYPES];
 
 
-// If uid is valid, return corresponding filetype, otherwise NULL.
+/* If uid is valid, return corresponding filetype, otherwise NULL. */
 filetype *filetypes_get_from_uid(gint uid);
 
 /* Calls filetypes_init_types() and creates the filetype menu. */

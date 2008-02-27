@@ -46,16 +46,16 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords);
 
 typedef struct
 {
-	HighlightingStyle	 *styling;		// array of styles, NULL if not used or uninitialised
+	HighlightingStyle	 *styling;		/* array of styles, NULL if not used or uninitialised */
 	gchar				**keywords;
-	gchar				 *wordchars;	// NULL used for style sets with no styles
+	gchar				 *wordchars;	/* NULL used for style sets with no styles */
 } StyleSet;
 
-// each filetype has a styleset except GEANY_FILETYPE_ALL
+/* each filetype has a styleset except GEANY_FILETYPE_ALL */
 static StyleSet style_sets[GEANY_MAX_FILE_TYPES - 1] = {{NULL, NULL, NULL}};
 
 
-enum	// Geany common styling
+enum	/* Geany common styling */
 {
 	GCS_DEFAULT,
 	GCS_SELECTION,
@@ -72,7 +72,7 @@ enum	// Geany common styling
 
 typedef struct
 {
-	// can take values 1 or 2 (or 3)
+	/* can take values 1 or 2 (or 3) */
 	guint marker:2;
 	guint lines:2;
 	guint draw_line:3;
@@ -87,7 +87,7 @@ static struct
 } common_style_set;
 
 
-// used for default styles
+/* used for default styles */
 typedef struct
 {
 	gchar				*name;
@@ -148,7 +148,7 @@ static void get_keyfile_wordchars(GKeyFile *config, GKeyFile *configh, gchar **w
 }
 
 
-// convert 0x..RRGGBB to 0x..BBGGRR
+/* convert 0x..RRGGBB to 0x..BBGGRR */
 static gint rotate_rgb(gint color)
 {
 	return ((color & 0xFF0000) >> 16) +
@@ -240,7 +240,7 @@ static void get_keyfile_int(GKeyFile *config, GKeyFile *configh, const gchar *se
 	if (list != NULL && list[1] != NULL) style->background = strtol(list[1], &end2, 10);
 	else style->background = sdefault_val;
 
-	// if there was an error, strtol() returns 0 and end is list[x], so then we use default_val
+	/* if there was an error, strtol() returns 0 and end is list[x], so then we use default_val */
 	if (list == NULL || list[0] == end1) style->foreground = fdefault_val;
 	if (list == NULL || list[1] == end2) style->background = sdefault_val;
 
@@ -339,7 +339,7 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 
 	if (common_style_set_valid)
 		return;
-	common_style_set_valid = TRUE;	// ensure filetypes.common is only loaded once
+	common_style_set_valid = TRUE;	/* ensure filetypes.common is only loaded once */
 
 	get_keyfile_hex(config, config_home, "styling", "default",
 		"0x000000", "0xffffff", "false", &common_style_set.styling[GCS_DEFAULT]);
@@ -362,7 +362,7 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 	get_keyfile_hex(config, config_home, "styling", "white_space",
 		"0xc0c0c0", "0xffffff", "true", &common_style_set.styling[GCS_WHITE_SPACE]);
 	{
-		// hack because get_keyfile_int uses a Style struct
+		/* hack because get_keyfile_int uses a Style struct */
 		HighlightingStyle tmp_style;
 		get_keyfile_int(config, config_home, "styling", "folding_style",
 			1, 1, &tmp_style);
@@ -389,36 +389,36 @@ static void styleset_common(ScintillaObject *sci, gint style_bits, filetype_id f
 {
 	SSM(sci, SCI_STYLECLEARALL, 0, 0);
 
-	// caret colour and width
+	/* caret colour and width */
 	SSM(sci, SCI_SETCARETFORE, invert(common_style_set.styling[GCS_CARET].foreground), 0);
 	SSM(sci, SCI_SETCARETWIDTH, common_style_set.styling[GCS_CARET].background, 0);
 
-	// colourize the current line
+	/* colourize the current line */
 	SSM(sci, SCI_SETCARETLINEBACK, invert(common_style_set.styling[GCS_CURRENT_LINE].background), 0);
-	SSM(sci, SCI_SETCARETLINEVISIBLE, common_style_set.styling[GCS_CURRENT_LINE].bold, 0);	// bold=enable current line
+	SSM(sci, SCI_SETCARETLINEVISIBLE, common_style_set.styling[GCS_CURRENT_LINE].bold, 0);	/* bold=enable current line */
 
-	// indicator settings
+	/* indicator settings */
 	SSM(sci, SCI_INDICSETSTYLE, 2, INDIC_SQUIGGLE);
-	// why? if I let this out, the indicator remains green with PHP
+	/* why? if I let this out, the indicator remains green with PHP */
 	SSM(sci, SCI_INDICSETFORE, 0, invert(0x0000ff));
 	SSM(sci, SCI_INDICSETFORE, 2, invert(0x0000ff));
 
-	// define marker symbols
-	// 0 -> line marker
+	/* define marker symbols
+	 * 0 -> line marker */
 	SSM(sci, SCI_MARKERDEFINE, 0, SC_MARK_SHORTARROW);
 	SSM(sci, SCI_MARKERSETFORE, 0, invert(0x00007f));
 	SSM(sci, SCI_MARKERSETBACK, 0, invert(0x00ffff));
 
-	// 1 -> user marker
+	/* 1 -> user marker */
 	SSM(sci, SCI_MARKERDEFINE, 1, SC_MARK_PLUS);
 	SSM(sci, SCI_MARKERSETFORE, 1, invert(0x000000));
 	SSM(sci, SCI_MARKERSETBACK, 1, invert(0xB8F4B8));
 
-	// 2 -> folding marker, other folding settings
+	/* 2 -> folding marker, other folding settings */
 	SSM(sci, SCI_SETMARGINTYPEN, 2, SC_MARGIN_SYMBOL);
 	SSM(sci, SCI_SETMARGINMASKN, 2, SC_MASK_FOLDERS);
 
-	// drawing a horizontal line when text if folded
+	/* drawing a horizontal line when text if folded */
 	switch (common_style_set.folding_style.draw_line)
 	{
 		case 1:
@@ -438,7 +438,7 @@ static void styleset_common(ScintillaObject *sci, gint style_bits, filetype_id f
 		}
 	}
 
-	// choose the folding style - boxes or circles, I prefer boxes, so it is default ;-)
+	/* choose the folding style - boxes or circles, I prefer boxes, so it is default ;-) */
 	switch (common_style_set.folding_style.marker)
 	{
 		case 2:
@@ -459,7 +459,7 @@ static void styleset_common(ScintillaObject *sci, gint style_bits, filetype_id f
 		}
 	}
 
-	// choose the folding style - straight or curved, I prefer straight, so it is default ;-)
+	/* choose the folding style - straight or curved, I prefer straight, so it is default ;-) */
 	switch (common_style_set.folding_style.lines)
 	{
 		case 2:
@@ -500,10 +500,10 @@ static void styleset_common(ScintillaObject *sci, gint style_bits, filetype_id f
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.at.else", (sptr_t) "1");
 
 
-	// bold (3rd argument) is whether to override default foreground selection
+	/* bold (3rd argument) is whether to override default foreground selection */
 	if (common_style_set.styling[GCS_SELECTION].bold)
 		SSM(sci, SCI_SETSELFORE, 1, invert(common_style_set.styling[GCS_SELECTION].foreground));
-	// italic (4th argument) is whether to override default background selection
+	/* italic (4th argument) is whether to override default background selection */
 	if (common_style_set.styling[GCS_SELECTION].italic)
 		SSM(sci, SCI_SETSELBACK, 1, invert(common_style_set.styling[GCS_SELECTION].background));
 
@@ -511,13 +511,13 @@ static void styleset_common(ScintillaObject *sci, gint style_bits, filetype_id f
 
 
 	SSM(sci, SCI_SETFOLDMARGINCOLOUR, 1, invert(common_style_set.styling[GCS_MARGIN_FOLDING].background));
-	//SSM(sci, SCI_SETFOLDMARGINHICOLOUR, 1, invert(common_style_set.styling[GCS_MARGIN_FOLDING].background));
+	/*SSM(sci, SCI_SETFOLDMARGINHICOLOUR, 1, invert(common_style_set.styling[GCS_MARGIN_FOLDING].background));*/
 	set_sci_style(sci, STYLE_LINENUMBER, GEANY_FILETYPES_ALL, GCS_MARGIN_LINENUMBER);
 	set_sci_style(sci, STYLE_BRACELIGHT, GEANY_FILETYPES_ALL, GCS_BRACE_GOOD);
 	set_sci_style(sci, STYLE_BRACEBAD, GEANY_FILETYPES_ALL, GCS_BRACE_BAD);
 	set_sci_style(sci, STYLE_INDENTGUIDE, GEANY_FILETYPES_ALL, GCS_INDENT_GUIDE);
 
-	// bold = common whitespace settings enabled
+	/* bold = common whitespace settings enabled */
 	SSM(sci, SCI_SETWHITESPACEFORE, common_style_set.styling[GCS_WHITE_SPACE].bold,
 		invert(common_style_set.styling[GCS_WHITE_SPACE].foreground));
 	SSM(sci, SCI_SETWHITESPACEBACK, common_style_set.styling[GCS_WHITE_SPACE].italic,
@@ -535,7 +535,7 @@ static void assign_global_and_user_keywords(ScintillaObject *sci,
 	if (s == NULL)
 		s = g_string_sized_new(200);
 	else
-		g_string_append_c(s, ' '); // append a space as delimiter to the existing list of words
+		g_string_append_c(s, ' '); /* append a space as delimiter to the existing list of words */
 
 	g_string_append(s, user_words);
 
@@ -551,7 +551,7 @@ apply_filetype_properties(ScintillaObject *sci, gint lexer, filetype_id ft_id)
 	SSM(sci, SCI_SETLEXER, lexer, 0);
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[ft_id].wordchars);
-	// have to set whitespace after setting wordchars
+	/* have to set whitespace after setting wordchars */
 	SSM(sci, SCI_SETWHITESPACECHARS, 0, (sptr_t) whitespace_chars);
 
 	SSM(sci, SCI_AUTOCSETMAXHEIGHT, editor_prefs.symbolcompletion_max_height, 0);
@@ -574,7 +574,7 @@ HighlightingStyle gsd_pragma =		{0x007f7f, 0xffffff, FALSE, FALSE};
 HighlightingStyle gsd_string_eol =	{0x000000, 0xe0c0e0, FALSE, FALSE};
 
 
-// call new_style_array(filetype_idx, >= 20) before using this.
+/* call new_style_array(filetype_idx, >= 20) before using this. */
 static void
 styleset_c_like_init(GKeyFile *config, GKeyFile *config_home, gint filetype_idx)
 {
@@ -636,7 +636,7 @@ static void styleset_c_like(ScintillaObject *sci, gint filetype_idx)
 	set_sci_style(sci, SCE_C_COMMENTLINEDOC, filetype_idx, 16);
 	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORD, filetype_idx, 17);
 	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORDERROR, filetype_idx, 18);
-	// is used for local structs and typedefs
+	/* is used for local structs and typedefs */
 	set_sci_style(sci, SCE_C_GLOBALCLASS, filetype_idx, 19);
 }
 
@@ -668,10 +668,9 @@ static void styleset_c(ScintillaObject *sci)
 	apply_filetype_properties(sci, SCLEX_CPP, ft_id);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_C].keywords[0]);
-	//SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_C].keywords[1]);// see below
 	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_C].keywords[2]);
 
-	// assign global types, merge them with user defined keywords and set them
+	/* assign global types, merge them with user defined keywords and set them */
 	assign_global_and_user_keywords(sci, style_sets[GEANY_FILETYPES_C].keywords[1],
 		filetypes[ft_id]->lang);
 
@@ -713,10 +712,10 @@ static void styleset_cpp(ScintillaObject *sci)
 	apply_filetype_properties(sci, SCLEX_CPP, ft_id);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_CPP].keywords[0]);
-	//SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_CPP].keywords[1]); // see below
+	/* for SCI_SETKEYWORDS = 1, see below*/
 	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_CPP].keywords[2]);
 
-	// assign global types, merge them with user defined keywords and set them
+	/* assign global types, merge them with user defined keywords and set them */
 	assign_global_and_user_keywords(sci, style_sets[GEANY_FILETYPES_CPP].keywords[1],
 		filetypes[ft_id]->lang);
 
@@ -768,7 +767,7 @@ static void styleset_cs(ScintillaObject *sci)
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[ft_id].keywords[0]);
 	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[ft_id].keywords[2]);
 
-	// assign global types, merge them with user defined keywords and set them
+	/* assign global types, merge them with user defined keywords and set them */
 	assign_global_and_user_keywords(sci, style_sets[ft_id].keywords[1], filetypes[ft_id]->lang);
 
 	styleset_c_like(sci, ft_id);
@@ -828,8 +827,6 @@ static void styleset_pascal(ScintillaObject *sci)
 	set_sci_style(sci, SCE_C_REGEX, GEANY_FILETYPES_PASCAL, 9);
 	set_sci_style(sci, SCE_C_COMMENTLINE, GEANY_FILETYPES_PASCAL, 10);
 	set_sci_style(sci, SCE_C_COMMENTDOC, GEANY_FILETYPES_PASCAL, 11);
-
-	//SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
 }
 
 
@@ -964,7 +961,7 @@ static void styleset_php(ScintillaObject *sci)
 
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "phpscript.mode", (sptr_t) "1");
 
-	// use the same colouring as for XML
+	/* use the same colouring as for XML */
 	styleset_markup(sci, TRUE);
 }
 
@@ -987,7 +984,7 @@ static void styleset_html(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_HTML, ft_id);
 
-	// use the same colouring for HTML; XML and so on
+	/* use the same colouring for HTML; XML and so on */
 	styleset_markup(sci, TRUE);
 }
 
@@ -1074,7 +1071,7 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords)
 	if (style_sets[GEANY_FILETYPES_XML].styling == NULL)
 		filetypes_load_config(GEANY_FILETYPES_XML);
 
-	// don't set keywords for plain XML
+	/* don't set keywords for plain XML */
 	if (set_keywords)
 	{
 		SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_XML].keywords[0]);
@@ -1085,7 +1082,7 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords)
 	}
 	SSM(sci, SCI_SETKEYWORDS, 5, (sptr_t) style_sets[GEANY_FILETYPES_XML].keywords[5]);
 
-	// hotspotting, nice thing
+	/* hotspotting, nice thing */
 	SSM(sci, SCI_SETHOTSPOTACTIVEFORE, 1, invert(0xff0000));
 	SSM(sci, SCI_SETHOTSPOTACTIVEUNDERLINE, 1, 0);
 	SSM(sci, SCI_SETHOTSPOTSINGLELINE, 1, 0);
@@ -1147,10 +1144,10 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords)
 
 	SSM(sci, SCI_STYLESETFORE, SCE_HB_IDENTIFIER, invert(0x103000));
 	SSM(sci, SCI_STYLESETBACK, SCE_HB_IDENTIFIER, invert(0xffffff));
-//~ #define SCE_HB_START 70
 
-	// Show the whole section of VBScript
-/*	for (bstyle=SCE_HB_DEFAULT; bstyle<=SCE_HB_STRINGEOL; bstyle++)
+	/* Show the whole section of VBScript */
+/*
+	for (bstyle=SCE_HB_DEFAULT; bstyle<=SCE_HB_STRINGEOL; bstyle++)
 	{
 		SSM(sci, SCI_STYLESETBACK, bstyle, 0xf5f5f5);
 		// This call extends the backround colour of the last style on the line to the edge of the window
@@ -1666,7 +1663,7 @@ static void styleset_xml(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_XML, ft_id);
 
-	// use the same colouring for HTML; XML and so on
+	/* use the same colouring for HTML; XML and so on */
 	styleset_markup(sci, FALSE);
 }
 
@@ -1780,8 +1777,8 @@ static void styleset_docbook(ScintillaObject *sci)
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_DOCBOOK].keywords[0]);
 	SSM(sci, SCI_SETKEYWORDS, 5, (sptr_t) style_sets[GEANY_FILETYPES_DOCBOOK].keywords[1]);
 
-	// Unknown tags and attributes are highlighed in red.
-	// If a tag is actually OK, it should be added in lower case to the htmlKeyWords string.
+	/* Unknown tags and attributes are highlighed in red.
+	 * If a tag is actually OK, it should be added in lower case to the htmlKeyWords string. */
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_DOCBOOK, 0);
 	set_sci_style(sci, SCE_H_DEFAULT, GEANY_FILETYPES_DOCBOOK, 0);
@@ -1995,10 +1992,10 @@ static void styleset_asm(ScintillaObject *sci)
 	apply_filetype_properties(sci, SCLEX_ASM, ft_id);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_ASM].keywords[0]);
-	//SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_ASM].keywords[0]);
+	/*SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_ASM].keywords[0]);*/
 	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_ASM].keywords[1]);
 	SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) style_sets[GEANY_FILETYPES_ASM].keywords[2]);
-	//SSM(sci, SCI_SETKEYWORDS, 5, (sptr_t) style_sets[GEANY_FILETYPES_ASM].keywords[0]);
+	/*SSM(sci, SCI_SETKEYWORDS, 5, (sptr_t) style_sets[GEANY_FILETYPES_ASM].keywords[0]);*/
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_ASM, 0);
 	set_sci_style(sci, SCE_ASM_DEFAULT, GEANY_FILETYPES_ASM, 0);
@@ -2055,7 +2052,7 @@ static void styleset_fortran(ScintillaObject *sci)
 
 	styleset_common(sci, 5, ft_id);
 
-	apply_filetype_properties(sci, SCLEX_F77, ft_id);	// SCLEX_FORTRAN
+	apply_filetype_properties(sci, SCLEX_F77, ft_id);	/* SCLEX_FORTRAN */
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_FORTRAN].keywords[0]);
 	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_FORTRAN].keywords[1]);
@@ -2831,7 +2828,7 @@ static void styleset_basic(ScintillaObject *sci)
 	set_sci_style(sci, SCE_B_KEYWORD3, GEANY_FILETYPES_BASIC, 11);
 	set_sci_style(sci, SCE_B_KEYWORD4, GEANY_FILETYPES_BASIC, 12);
 	set_sci_style(sci, SCE_B_CONSTANT, GEANY_FILETYPES_BASIC, 13);
-	set_sci_style(sci, SCE_B_ASM, GEANY_FILETYPES_BASIC, 14); // (still?) unused by the lexer
+	set_sci_style(sci, SCE_B_ASM, GEANY_FILETYPES_BASIC, 14); /* (still?) unused by the lexer */
 	set_sci_style(sci, SCE_B_LABEL, GEANY_FILETYPES_BASIC, 15);
 	set_sci_style(sci, SCE_B_ERROR, GEANY_FILETYPES_BASIC, 16);
 	set_sci_style(sci, SCE_B_HEXNUMBER, GEANY_FILETYPES_BASIC, 17);
@@ -3003,7 +3000,7 @@ const HighlightingStyle *highlighting_get_style(gint ft_id, gint style_id)
 	if (style_sets[ft_id].styling == NULL)
 		filetypes_load_config(ft_id);
 
-	/// TODO style_id might not be the real array index (Scintilla styles are not always synced
-	///	with array indices)
+	/** TODO style_id might not be the real array index (Scintilla styles are not always synced
+	  * with array indices) */
 	return (const HighlightingStyle*) &style_sets[ft_id].styling[style_id];
 }

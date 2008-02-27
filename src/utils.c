@@ -106,27 +106,26 @@ gint utils_get_line_endings(gchar* buffer, glong size)
 	{
 		if ( buffer[i] == 0x0a )
 		{
-			// LF
+			/* LF */
 			lf++;
 		}
 		else if ( buffer[i] == 0x0d )
 		{
 			if (i >= (size-1))
 			{
-				// Last char
-				// CR
+				/* Last char, CR */
 				cr++;
 			}
 			else
 			{
 				if (buffer[i+1] != 0x0a)
 				{
-					// CR
+					/* CR */
 					cr++;
 				}
 				else
 				{
-					// CRLF
+					/* CRLF */
 					crlf++;
 				}
 				i++;
@@ -147,7 +146,6 @@ gint utils_get_line_endings(gchar* buffer, glong size)
 		mode = SC_EOL_CR;
 		max_mode = cr;
 	}
-	//geany_debug("EOL chars: LF = %d, CR = %d, CRLF = %d", lf, cr, crlf);
 
 	return mode;
 }
@@ -187,7 +185,7 @@ gboolean utils_is_opening_brace(gchar c, gboolean include_angles)
 }
 
 
-// line is counted with 1 as the first line, not 0
+/* line is counted with 1 as the first line, not 0 */
 gboolean utils_goto_file_line(const gchar *file, gboolean is_tm_filename, gint line)
 {
 	gint file_idx = document_find_by_filename(file, is_tm_filename);
@@ -198,24 +196,24 @@ gboolean utils_goto_file_line(const gchar *file, gboolean is_tm_filename, gint l
 }
 
 
-// line is counted with 1 as the first line, not 0
+/* line is counted with 1 as the first line, not 0 */
 gboolean utils_goto_line(gint idx, gint line)
 {
 	gint page_num;
 
-	line--;	// the User counts lines from 1, we begin at 0 so bring the User line to our one
+	line--;	/* the user counts lines from 1, we begin at 0 so bring the user line to our one */
 
 	if (idx == -1 || ! doc_list[idx].is_valid || line < 0)
 		return FALSE;
 
-	// mark the tag
+	/* mark the tag */
 	sci_marker_delete_all(doc_list[idx].sci, 0);
 	sci_set_marker_at_line(doc_list[idx].sci, line, TRUE, 0);
 
 	sci_goto_line(doc_list[idx].sci, line, TRUE);
 	doc_list[idx].scroll_percent = 0.25F;
 
-	// finally switch to the page
+	/* finally switch to the page */
 	page_num = gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(doc_list[idx].sci));
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), page_num);
 
@@ -276,14 +274,14 @@ gint utils_write_file(const gchar *filename, const gchar *text)
  */
 gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag)
 {
-	// 40 chars per tag should be enough, or not?
+	/* 40 chars per tag should be enough, or not? */
 	gint i = 0, max_tag_size = 40;
 	gchar *result = g_malloc(max_tag_size);
 	const gchar *begin, *cur;
 
 	if (size < 3)
 	{
-		// Smallest tag is "<p>" which is 3 characters
+		/* Smallest tag is "<p>" which is 3 characters */
 		return result;
 	}
 	begin = &sel[0];
@@ -292,7 +290,7 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag)
 	else
 		cur = &sel[size - 1];
 
-	cur--; // Skip past the >
+	cur--; /* Skip past the > */
 	while (cur > begin)
 	{
 		if (*cur == '<') break;
@@ -311,7 +309,7 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag)
 	}
 
 	result[i] = '\0';
-	// Return the tag name or ""
+	/* Return the tag name or "" */
 	return result;
 }
 
@@ -334,7 +332,7 @@ gboolean utils_check_disk_status(gint idx, gboolean force)
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 	if (g_stat(locale_filename, &st) != 0)
 	{
-		// TODO: warn user file on disk is missing
+		/** TODO: warn user file on disk is missing */
 	}
 	else if (doc_list[idx].mtime > t || st.st_mtime > t)
 	{
@@ -356,7 +354,7 @@ gboolean utils_check_disk_status(gint idx, gboolean force)
 			doc_list[idx].mtime = st.st_mtime;
 
 		g_free(base_name);
-		ret = TRUE; // file has changed
+		ret = TRUE; /* file has changed */
 	}
 	g_free(locale_filename);
 	return ret;
@@ -366,7 +364,7 @@ gboolean utils_check_disk_status(gint idx, gboolean force)
 /* This could perhaps be improved to check for #if, class etc. */
 static gint get_function_fold_number(gint idx)
 {
-	// for Java the functions are always one fold level above the class scope
+	/* for Java the functions are always one fold level above the class scope */
 	if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_JAVA)
 		return SC_FOLDLEVELBASE + 1;
 	else
@@ -383,7 +381,7 @@ static gboolean current_function_changed(gint cur_idx, gint cur_line, gint fold_
 	const gint fold_num = fold_level & SC_FOLDLEVELNUMBERMASK;
 	gboolean ret;
 
-	// check if the cached line and file index have changed since last time:
+	/* check if the cached line and file index have changed since last time: */
 	if (cur_idx < 0 || cur_idx != old_idx)
 		ret = TRUE;
 	else
@@ -391,7 +389,7 @@ static gboolean current_function_changed(gint cur_idx, gint cur_line, gint fold_
 		ret = FALSE;
 	else
 	{
-		// if the line has only changed by 1
+		/* if the line has only changed by 1 */
 		if (abs(cur_line - old_line) == 1)
 		{
 			const gint fn_fold =
@@ -407,7 +405,7 @@ static gboolean current_function_changed(gint cur_idx, gint cur_line, gint fold_
 		else ret = TRUE;
 	}
 
-	// record current line and file index for next time
+	/* record current line and file index for next time */
 	old_line = cur_line;
 	old_idx = cur_idx;
 	old_fold_num = fold_num;
@@ -428,7 +426,7 @@ static gchar *parse_function_at_line(ScintillaObject *sci, gint tag_line)
 	{
 		case SCLEX_RUBY:	fn_style = SCE_RB_DEFNAME; break;
 		case SCLEX_PYTHON:	fn_style = SCE_P_DEFNAME; break;
-		default: fn_style = SCE_C_IDENTIFIER;	// several lexers use SCE_C_IDENTIFIER
+		default: fn_style = SCE_C_IDENTIFIER;	/* several lexers use SCE_C_IDENTIFIER */
 	}
 	start = sci_get_position_from_line(sci, tag_line - 2);
 	max_pos = sci_get_position_from_line(sci, tag_line + 1);
@@ -446,7 +444,7 @@ static gchar *parse_function_at_line(ScintillaObject *sci, gint tag_line)
 }
 
 
-// Parse the function name
+/* Parse the function name */
 static gchar *parse_cpp_function_at_line(ScintillaObject *sci, gint tag_line)
 {
 	gint start, end, first_pos, max_pos;
@@ -457,31 +455,31 @@ static gchar *parse_cpp_function_at_line(ScintillaObject *sci, gint tag_line)
 	first_pos = end = sci_get_position_from_line(sci, tag_line);
 	max_pos = sci_get_position_from_line(sci, tag_line + 1);
 	tmp = 0;
-	// goto the begin of function body
+	/* goto the begin of function body */
 	while (end < max_pos &&
 		(tmp = sci_get_char_at(sci, end)) != '{' &&
 		tmp != 0) end++;
 	if (tmp == 0) end --;
 
-	// go back to the end of function identifier
+	/* go back to the end of function identifier */
 	while (end > 0 && end > first_pos - 500 &&
 		(tmp = sci_get_char_at(sci, end)) != '(' &&
 		tmp != 0) end--;
 	end--;
 	if (end < 0) end = 0;
 
-	// skip whitespaces between identifier and (
+	/* skip whitespaces between identifier and ( */
 	while (end > 0 && isspace(sci_get_char_at(sci, end))) end--;
 
 	start = end;
 	c = 0;
-	// Use tmp to find SCE_C_IDENTIFIER or SCE_C_GLOBALCLASS chars
+	/* Use tmp to find SCE_C_IDENTIFIER or SCE_C_GLOBALCLASS chars */
 	while (start >= 0 && ((tmp = sci_get_style_at(sci, start)) == SCE_C_IDENTIFIER
 		 ||  tmp == SCE_C_GLOBALCLASS
 		 || (c = sci_get_char_at(sci, start)) == '~'
 		 ||  c == ':'))
 		start--;
-	if (start != 0 && start < end) start++;	// correct for last non-matching char
+	if (start != 0 && start < end) start++;	/* correct for last non-matching char */
 
 	if (start == end) return NULL;
 	cur_tag = g_malloc(end - start + 2);
@@ -502,7 +500,7 @@ gint utils_get_current_function(gint idx, const gchar **tagname)
 	gint fold_level;
 	TMWorkObject *tm_file;
 
-	if (! DOC_IDX_VALID(idx))	// reset current function
+	if (! DOC_IDX_VALID(idx))	/* reset current function */
 	{
 		current_function_changed(-1, -1, -1);
 		g_free(cur_tag);
@@ -515,16 +513,16 @@ gint utils_get_current_function(gint idx, const gchar **tagname)
 
 	line = sci_get_current_line(doc_list[idx].sci);
 	fold_level = sci_get_fold_level(doc_list[idx].sci, line);
-	// check if the cached line and file index have changed since last time:
+	/* check if the cached line and file index have changed since last time: */
 	if (! current_function_changed(idx, line, fold_level))
 	{
-		// we can assume same current function as before
+		/* we can assume same current function as before */
 		*tagname = cur_tag;
 		return tag_line;
 	}
-	g_free(cur_tag); // free the old tag, it will be replaced.
+	g_free(cur_tag); /* free the old tag, it will be replaced. */
 
-	// if line is at base fold level, we're not in a function
+	/* if line is at base fold level, we're not in a function */
 	if ((fold_level & SC_FOLDLEVELNUMBERMASK) == SC_FOLDLEVELBASE)
 	{
 		cur_tag = g_strdup(_("unknown"));
@@ -534,7 +532,7 @@ gint utils_get_current_function(gint idx, const gchar **tagname)
 	}
 	tm_file = doc_list[idx].tm_file;
 
-	// if the document has no changes, get the previous function name from TM
+	/* if the document has no changes, get the previous function name from TM */
 	if(! doc_list[idx].changed && tm_file != NULL && tm_file->tags_array != NULL)
 	{
 		const TMTag *tag = (const TMTag*) tm_get_current_function(tm_file->tags_array, line);
@@ -558,7 +556,7 @@ gint utils_get_current_function(gint idx, const gchar **tagname)
 		const gint fn_fold = get_function_fold_number(idx);
 
 		tag_line = line;
-		do	// find the top level fold point
+		do	/* find the top level fold point */
 		{
 			tag_line = sci_get_fold_parent(doc_list[idx].sci, tag_line);
 			fold_level = sci_get_fold_level(doc_list[idx].sci, tag_line);
@@ -641,7 +639,7 @@ gboolean utils_is_absolute_path(const gchar *path)
 
 gdouble utils_scale_round (gdouble val, gdouble factor)
 {
-	//val = floor(val * factor + 0.5);
+	/*val = floor(val * factor + 0.5);*/
 	val = floor(val);
 	val = MAX(val, 0);
 	val = MIN(val, factor);
@@ -690,7 +688,8 @@ gchar *utils_remove_ext_from_filename(const gchar *filename)
 
 	if (! last_dot) return g_strdup(filename);
 
-	result = g_malloc(strlen(filename));	// assumes extension is small, so extra bytes don't matter
+	/* assumes extension is small, so extra bytes don't matter */
+	result = g_malloc(strlen(filename));
 	i = 0;
 	while ((filename + i) != last_dot)
 	{
@@ -741,18 +740,18 @@ gint utils_is_file_writeable(const gchar *locale_filename)
 
 	if (! g_file_test(locale_filename, G_FILE_TEST_EXISTS) &&
 		! g_file_test(locale_filename, G_FILE_TEST_IS_DIR))
-		// get the file's directory to check for write permission if it doesn't yet exist
+		/* get the file's directory to check for write permission if it doesn't yet exist */
 		file = g_path_get_dirname(locale_filename);
 	else
 		file = g_strdup(locale_filename);
 
 #ifdef G_OS_WIN32
-	// use _waccess on Windows, access() doesn't accept special characters
+	/* use _waccess on Windows, access() doesn't accept special characters */
 	ret = win32_check_write_permission(file);
 #else
 
-	// access set also errno to "FILE NOT FOUND" even if locale_filename is writeable, so use
-	// errno only when access() explicitly returns an error
+	/* access set also errno to "FILE NOT FOUND" even if locale_filename is writeable, so use
+	 * errno only when access() explicitly returns an error */
 	if (access(file, R_OK | W_OK) != 0)
 		ret = errno;
 	else
@@ -764,7 +763,7 @@ gint utils_is_file_writeable(const gchar *locale_filename)
 
 
 #ifdef G_OS_WIN32
-# define DIR_SEP "\\" // on Windows we need an additional dir separator
+# define DIR_SEP "\\" /* on Windows we need an additional dir separator */
 #else
 # define DIR_SEP ""
 #endif
@@ -786,11 +785,11 @@ gint utils_make_settings_dir(void)
 	}
 
 	if (saved_errno == 0 && ! g_file_test(conf_file, G_FILE_TEST_EXISTS))
-	{	// check whether geany.conf can be written
+	{	/* check whether geany.conf can be written */
 		saved_errno = utils_is_file_writeable(app->configdir);
 	}
 
-	// make subdir for filetype definitions
+	/* make subdir for filetype definitions */
 	if (saved_errno == 0)
 	{
 		gchar *filedefs_readme = g_strconcat(app->configdir, G_DIR_SEPARATOR_S,
@@ -812,7 +811,7 @@ gint utils_make_settings_dir(void)
 		g_free(filedefs_readme);
 	}
 
-	// make subdir for template files
+	/* make subdir for template files */
 	if (saved_errno == 0)
 	{
 		gchar *templates_readme = g_strconcat(app->configdir, G_DIR_SEPARATOR_S,
@@ -869,7 +868,7 @@ gchar *utils_str_replace(gchar *haystack, const gchar *needle, const gchar *repl
 	if (start == NULL || lt_pos == -1)
 		return haystack;
 
-	// substitute by copying
+	/* substitute by copying */
 	str = g_string_sized_new(strlen(haystack));
 	for (i = 0; i < lt_pos; i++)
 	{
@@ -1083,7 +1082,7 @@ void utils_replace_filename(gint idx)
 	filebase = g_strconcat(GEANY_STRING_UNTITLED, ".", (doc_list[idx].file_type)->extension, NULL);
 	filename = g_path_get_basename(doc_list[idx].file_name);
 
-	// only search the first 3 lines
+	/* only search the first 3 lines */
 	ttf.chrg.cpMin = 0;
 	ttf.chrg.cpMax = sci_get_position_from_line(doc_list[idx].sci, 3);
 	ttf.lpstrText = (gchar*)filebase;
@@ -1122,19 +1121,19 @@ gchar *utils_get_current_file_dir_utf8(void)
 {
 	gint cur_idx = document_get_cur_idx();
 
-	if (DOC_IDX_VALID(cur_idx)) // if valid page found
+	if (DOC_IDX_VALID(cur_idx)) /* if valid page found */
 	{
-		// get current filename
+		/* get current filename */
 		const gchar *cur_fname = doc_list[cur_idx].file_name;
 
 		if (cur_fname != NULL)
 		{
-			// get folder part from current filename
-			return g_path_get_dirname(cur_fname); // returns "." if no path
+			/* get folder part from current filename */
+			return g_path_get_dirname(cur_fname); /* returns "." if no path */
 		}
 	}
 
-	return NULL; // no file open
+	return NULL; /* no file open */
 }
 
 
@@ -1146,7 +1145,7 @@ void utils_beep(void)
 
 
 /* taken from busybox, thanks */
-gchar *utils_make_human_readable_str(unsigned long long size, gulong block_size,
+gchar *utils_make_human_readable_str(unsigned long size, gulong block_size,
 									 gulong display_unit)
 {
 	/* The code will adjust for additional (appended) units. */
@@ -1154,7 +1153,7 @@ gchar *utils_make_human_readable_str(unsigned long long size, gulong block_size,
 	static const gchar fmt[] = "%Lu %c%c";
 	static const gchar fmt_tenths[] = "%Lu.%d %c%c";
 
-	unsigned long long val;
+	unsigned long val;
 	gint frac;
 	const gchar *u;
 	const gchar *f;
@@ -1223,8 +1222,8 @@ gint utils_strtod(const gchar *source, gchar **end, gboolean with_route)
 		return -1;
 	}
 
-	// offset is set to 1 when the string starts with 0x, otherwise it starts with #
-	// and we don't need to increase the index
+	/* offset is set to 1 when the string starts with 0x, otherwise it starts with #
+	 * and we don't need to increase the index */
 	if (! with_route)
 		offset = 1;
 
@@ -1239,7 +1238,7 @@ gint utils_strtod(const gchar *source, gchar **end, gboolean with_route)
 }
 
 
-// Returns: newly allocated string with the current time formatted HH:MM:SS.
+/* Returns: newly allocated string with the current time formatted HH:MM:SS. */
 gchar *utils_get_current_time_string(void)
 {
 	const time_t tp = time(NULL);
@@ -1256,7 +1255,7 @@ GIOChannel *utils_set_up_io_channel(
 				gint fd, GIOCondition cond, gboolean nblock, GIOFunc func, gpointer data)
 {
 	GIOChannel *ioc;
-	//const gchar *encoding;
+	/*const gchar *encoding;*/
 
 	#ifdef G_OS_WIN32
 	ioc = g_io_channel_win32_new_fd(fd);
@@ -1281,7 +1280,7 @@ GIOChannel *utils_set_up_io_channel(
 		}
 	}
 */
-	// "auto-close" ;-)
+	/* "auto-close" ;-) */
 	g_io_channel_set_close_on_unref(ioc, TRUE);
 
 	g_io_add_watch(ioc, cond, func, data);
@@ -1340,7 +1339,7 @@ gboolean utils_str_replace_escape(gchar *string)
 					string[j] = '\t';
 					break;
 #if 0
-				case 'x': // Warning: May produce illegal utf-8 string!
+				case 'x': /* Warning: May produce illegal utf-8 string! */
 					i += 2;
 					if (i >= strlen(string))
 					{
@@ -1406,7 +1405,7 @@ gboolean utils_str_replace_escape(gchar *string)
 						j++;
 						string[j] = (unsigned char) ((unicodechar & 0x3F) | 0x80);
 					}
-					else if (unicodechar < 0x110000) // more chars are not allowed in unicode
+					else if (unicodechar < 0x110000) /* more chars are not allowed in unicode */
 					{
 						string[j] = (unsigned char) ((unicodechar >> 18) | 0xF0);
 						j++;
@@ -1474,8 +1473,8 @@ gboolean utils_wrap_string(gchar *string, gint wrapstart)
 gchar *utils_get_locale_from_utf8(const gchar *utf8_text)
 {
 #ifdef G_OS_WIN32
-	// just do nothing on Windows platforms, this ifdef is just to prevent unwanted conversions
-	// which would result in wrongly converted strings
+	/* just do nothing on Windows platforms, this ifdef is just to prevent unwanted conversions
+	 * which would result in wrongly converted strings */
 	return g_strdup(utf8_text);
 #else
 	gchar *locale_text;
@@ -1502,8 +1501,8 @@ gchar *utils_get_locale_from_utf8(const gchar *utf8_text)
 gchar *utils_get_utf8_from_locale(const gchar *locale_text)
 {
 #ifdef G_OS_WIN32
-	// just do nothing on Windows platforms, this ifdef is just to prevent unwanted conversions
-	// which would result in wrongly converted strings
+	/* just do nothing on Windows platforms, this ifdef is just to prevent unwanted conversions
+	 * which would result in wrongly converted strings */
 	return g_strdup(locale_text);
 #else
 	gchar *utf8_text;
@@ -1553,14 +1552,14 @@ gchar **utils_strv_new(gchar *first, ...)
 	if (first == NULL)
 		return NULL;
 
-	strvlen = 1;	// for first argument
+	strvlen = 1;	/* for first argument */
 
-    // count other arguments
+    /* count other arguments */
     va_start(args, first);
     for (; va_arg(args, gchar*) != NULL; strvlen++);
 	va_end(args);
 
-	strv = g_new(gchar*, strvlen + 1);	// +1 for NULL terminator
+	strv = g_new(gchar*, strvlen + 1);	/* +1 for NULL terminator */
 	strv[0] = g_strdup(first);
 
     va_start(args, first);
@@ -1576,7 +1575,7 @@ gchar **utils_strv_new(gchar *first, ...)
 
 
 #if ! GLIB_CHECK_VERSION(2, 8, 0)
-// Taken from GLib SVN, 2007-03-10
+/* Taken from GLib SVN, 2007-03-10 */
 /**
  * g_mkdir_with_parents:
  * @pathname: a pathname in the GLib file name encoding
@@ -1732,7 +1731,7 @@ gboolean utils_str_has_upper(const gchar *str)
 	while (*str != '\0')
 	{
 		c = g_utf8_get_char(str);
-		// check only letters and stop once the first non-capital was found
+		/* check only letters and stop once the first non-capital was found */
 		if (g_unichar_isalpha(c) && g_unichar_isupper(c))
 			return TRUE;
 		str = g_utf8_next_char(str);

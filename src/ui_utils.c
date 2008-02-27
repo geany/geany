@@ -52,7 +52,8 @@ UIWidgets		ui_widgets;
 
 static struct
 {
-	GtkWidget *document_buttons[45];	// widgets only sensitive when there is at least one document
+	/* widgets only sensitive when there is at least one document */
+	GtkWidget *document_buttons[45];
 }
 widgets;
 
@@ -75,7 +76,7 @@ static void set_statusbar(const gchar *text, gboolean allow_override)
 	const gint GEANY_STATUS_TIMEOUT = 1;
 
 	if (! prefs.statusbar_visible)
-		return; // just do nothing if statusbar is not visible
+		return; /* just do nothing if statusbar is not visible */
 
 	g_get_current_time(&timeval);
 
@@ -117,7 +118,7 @@ void ui_set_statusbar(gboolean log, const gchar *format, ...)
 void ui_update_statusbar(gint idx, gint pos)
 {
 	if (! prefs.statusbar_visible)
-		return; // just do nothing if statusbar is not visible
+		return; /* just do nothing if statusbar is not visible */
 
 	if (idx == -1) idx = document_get_cur_idx();
 
@@ -134,9 +135,9 @@ void ui_update_statusbar(gint idx, gint pos)
 		if (pos == -1) pos = sci_get_current_position(doc_list[idx].sci);
 		line = sci_get_line_from_position(doc_list[idx].sci, pos);
 
-		// Add temporary fix for sci infinite loop in Document::GetColumn(int)
-		// when current pos is beyond document end (can occur when removing
-		// blocks of selected lines especially esp. brace sections near end of file).
+		/* Add temporary fix for sci infinite loop in Document::GetColumn(int)
+		 * when current pos is beyond document end (can occur when removing
+		 * blocks of selected lines especially esp. brace sections near end of file). */
 		if (pos <= sci_get_length(doc_list[idx].sci))
 			col = sci_get_col_from_position(doc_list[idx].sci, pos);
 		else
@@ -148,11 +149,13 @@ void ui_update_statusbar(gint idx, gint pos)
 			sci_get_selected_text_length(doc_list[idx].sci) - 1);
 
 		g_string_append(stats_str,
-			(doc_list[idx].readonly) ? _("RO ") :	// RO = read-only
-				(sci_get_overtype(doc_list[idx].sci) ? _("OVR") : _("INS")));	// OVR = overwrite/overtype, INS = insert
+			/* RO = read-only */
+			(doc_list[idx].readonly) ? _("RO ") :
+				/* OVR = overwrite/overtype, INS = insert */
+				(sci_get_overtype(doc_list[idx].sci) ? _("OVR") : _("INS")));
 		g_string_append(stats_str, sp);
 		g_string_append(stats_str,
-			(doc_list[idx].use_tabs) ? _("TAB") : _("SP "));	// SP = space
+			(doc_list[idx].use_tabs) ? _("TAB") : _("SP "));	/* SP = space */
 		g_string_append(stats_str, sp);
 		g_string_append_printf(stats_str, "mode: %s",
 			document_get_eol_mode(idx));
@@ -160,7 +163,8 @@ void ui_update_statusbar(gint idx, gint pos)
 		g_string_append_printf(stats_str, "encoding: %s %s",
 			(doc_list[idx].encoding) ? doc_list[idx].encoding : _("unknown"),
 			(encodings_is_unicode_charset(doc_list[idx].encoding)) ?
-				((doc_list[idx].has_bom) ? _("(with BOM)") : "") : "");	// BOM = byte order mark
+				/* BOM = byte order mark */
+				((doc_list[idx].has_bom) ? _("(with BOM)") : "") : "");
 		g_string_append(stats_str, sp);
 		g_string_append_printf(stats_str, "filetype: %s",
 			(doc_list[idx].file_type) ? doc_list[idx].file_type->name :
@@ -168,7 +172,7 @@ void ui_update_statusbar(gint idx, gint pos)
 		g_string_append(stats_str, sp);
 		if (doc_list[idx].changed)
 		{
-			g_string_append(stats_str, _("MOD"));	// MOD = modified
+			g_string_append(stats_str, _("MOD"));	/* MOD = modified */
 			g_string_append(stats_str, sp);
 		}
 
@@ -176,11 +180,12 @@ void ui_update_statusbar(gint idx, gint pos)
 		g_string_append_printf(stats_str, "scope: %s",
 			cur_tag);
 
-		set_statusbar(stats_str->str, TRUE);	// can be overridden by status messages
+		/* can be overridden by status messages */
+		set_statusbar(stats_str->str, TRUE);
 	}
-	else	// no documents
+	else	/* no documents */
 	{
-		set_statusbar("", TRUE);	// can be overridden by status messages
+		set_statusbar("", TRUE);	/* can be overridden by status messages */
 	}
 }
 
@@ -235,7 +240,7 @@ void ui_set_editor_font(const gchar *font_name)
 	PangoFontDescription *font_desc;
 
 	g_return_if_fail(font_name != NULL);
-	// do nothing if font has not changed
+	/* do nothing if font has not changed */
 	if (prefs.editor_font != NULL)
 		if (strcmp(font_name, prefs.editor_font) == 0) return;
 
@@ -291,7 +296,7 @@ void ui_update_popup_reundo_items(gint idx)
 		enable_redo = document_can_redo(idx);
 	}
 
-	// index 0 is the popup menu, 1 is the menubar, 2 is the toolbar
+	/* index 0 is the popup menu, 1 is the menubar, 2 is the toolbar */
 	gtk_widget_set_sensitive(ui_widgets.undo_items[0], enable_undo);
 	gtk_widget_set_sensitive(ui_widgets.undo_items[1], enable_undo);
 	gtk_widget_set_sensitive(ui_widgets.undo_items[2], enable_undo);
@@ -528,11 +533,11 @@ void ui_save_buttons_toggle(gboolean enable)
 	gtk_widget_set_sensitive(ui_widgets.save_buttons[0], enable);
 	gtk_widget_set_sensitive(ui_widgets.save_buttons[1], enable);
 
-	// save all menu item and tool button
+	/* save all menu item and tool button */
 	for (i = 0; i < (guint) gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)); i++)
 	{
-		// count the amount of files where changes were made and if there are some,
-		// we need the save all button / item
+		/* count the amount of files where changes were made and if there are some,
+		 * we need the save all button / item */
 		if (! dirty_tabs && doc_list[i].is_valid && doc_list[i].changed)
 			dirty_tabs = TRUE;
 	}
@@ -556,7 +561,7 @@ static void init_document_widgets(void)
 	widgets.document_buttons[7] = lookup_widget(app->window, "menu_close_all1");
 	widgets.document_buttons[8] = lookup_widget(app->window, "menu_save_all1");
 	widgets.document_buttons[9] = lookup_widget(app->window, "toolbutton22");
-	widgets.document_buttons[10] = lookup_widget(app->window, "toolbutton13"); // compile_button
+	widgets.document_buttons[10] = lookup_widget(app->window, "toolbutton13"); /* compile_button */
 	widgets.document_buttons[11] = lookup_widget(app->window, "menu_save_as1");
 	widgets.document_buttons[12] = lookup_widget(app->window, "toolbutton23");
 	widgets.document_buttons[13] = lookup_widget(app->window, "menu_count_words1");
@@ -625,8 +630,8 @@ void ui_sidebar_show_hide(void)
 {
 	GtkWidget *widget;
 
-	// check that there are no other notebook pages before hiding the sidebar completely
-	// other pages could be e.g. the file browser plugin
+	/* check that there are no other notebook pages before hiding the sidebar completely
+	 * other pages could be e.g. the file browser plugin */
 	if (! prefs.sidebar_openfiles_visible && ! prefs.sidebar_symbol_visible &&
 		gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->treeview_notebook)) <= 2)
 	{
@@ -707,11 +712,11 @@ void ui_update_toolbar_icons(GtkIconSize size)
 	GtkWidget *widget = NULL;
 	GtkWidget *oldwidget = NULL;
 
-	// destroy old widget
+	/* destroy old widget */
 	widget = lookup_widget(app->window, "toolbutton22");
 	oldwidget = gtk_tool_button_get_icon_widget(GTK_TOOL_BUTTON(widget));
 	if (oldwidget && GTK_IS_WIDGET(oldwidget)) gtk_widget_destroy(oldwidget);
-	// create new widget
+	/* create new widget */
 	button_image = ui_new_image_from_inline(GEANY_IMAGE_SAVE_ALL, FALSE);
 	gtk_widget_show(button_image);
 	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(widget), button_image);
@@ -722,20 +727,20 @@ void ui_update_toolbar_icons(GtkIconSize size)
 
 void ui_update_toolbar_items(void)
 {
-	// show toolbar
+	/* show toolbar */
 	GtkWidget *widget = lookup_widget(app->window, "menu_show_toolbar1");
 	if (prefs.toolbar_visible && ! gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget)))
-	{
-		prefs.toolbar_visible = ! prefs.toolbar_visible;	// will be changed by the toggled callback
+	{	/* will be changed by the toggled callback */
+		prefs.toolbar_visible = ! prefs.toolbar_visible;
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), TRUE);
 	}
 	else if (! prefs.toolbar_visible && gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget)))
-	{
-		prefs.toolbar_visible = ! prefs.toolbar_visible;	// will be changed by the toggled callback
+	{	/* will be changed by the toggled callback */
+		prefs.toolbar_visible = ! prefs.toolbar_visible;
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), FALSE);
 	}
 
-	// fileops
+	/* fileops */
 	ui_widget_show_hide(lookup_widget(app->window, "menutoolbutton1"), prefs.toolbar_show_fileops);
 	ui_widget_show_hide(lookup_widget(app->window, "toolbutton9"), prefs.toolbar_show_fileops);
 	ui_widget_show_hide(lookup_widget(app->window, "toolbutton10"), prefs.toolbar_show_fileops);
@@ -744,44 +749,44 @@ void ui_update_toolbar_items(void)
 	ui_widget_show_hide(lookup_widget(app->window, "toolbutton15"), prefs.toolbar_show_fileops);
 	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem7"), prefs.toolbar_show_fileops);
 	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem2"), prefs.toolbar_show_fileops);
-	// search
+	/* search */
 	ui_widget_show_hide(lookup_widget(app->window, "entry1"), prefs.toolbar_show_search);
 	ui_widget_show_hide(lookup_widget(app->window, "toolbutton18"), prefs.toolbar_show_search);
 	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem5"), prefs.toolbar_show_search);
-	// goto line
+	/* goto line */
 	ui_widget_show_hide(lookup_widget(app->window, "entry_goto_line"), prefs.toolbar_show_goto);
 	ui_widget_show_hide(lookup_widget(app->window, "toolbutton25"), prefs.toolbar_show_goto);
 	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem8"), prefs.toolbar_show_goto);
-	// compile
+	/* compile */
 	ui_widget_show_hide(lookup_widget(app->window, "toolbutton13"), prefs.toolbar_show_compile);
 	ui_widget_show_hide(lookup_widget(app->window, "toolbutton26"), prefs.toolbar_show_compile);
 	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem6"), prefs.toolbar_show_compile);
-	// colour
+	/* colour */
 	ui_widget_show_hide(lookup_widget(app->window, "toolbutton24"), prefs.toolbar_show_colour);
 	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem3"), prefs.toolbar_show_colour);
-	// zoom
+	/* zoom */
 	ui_widget_show_hide(lookup_widget(app->window, "toolbutton20"), prefs.toolbar_show_zoom);
 	ui_widget_show_hide(lookup_widget(app->window, "toolbutton21"), prefs.toolbar_show_zoom);
 	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem4"), prefs.toolbar_show_zoom);
-	// indent
+	/* indent */
 	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_indent_dec"), prefs.toolbar_show_indent);
 	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_indent_inc"), prefs.toolbar_show_indent);
 	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem11"), prefs.toolbar_show_indent);
-	// undo
+	/* undo */
 	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_undo"), prefs.toolbar_show_undo);
 	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_redo"), prefs.toolbar_show_undo);
 	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem9"), prefs.toolbar_show_undo);
-	// navigation
+	/* navigation */
 	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_back"), prefs.toolbar_show_navigation);
 	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_forward"), prefs.toolbar_show_navigation);
 	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem10"), prefs.toolbar_show_navigation);
-	// quit
+	/* quit */
 	ui_widget_show_hide(lookup_widget(app->window, "toolbutton19"), prefs.toolbar_show_quit);
 	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem8"), prefs.toolbar_show_quit);
 }
 
 
-// Note: remember to unref the pixbuf once an image or window has added a reference.
+/* Note: remember to unref the pixbuf once an image or window has added a reference. */
 GdkPixbuf *ui_new_pixbuf_from_inline(gint img, gboolean small_img)
 {
 	switch(img)
@@ -817,7 +822,7 @@ GdkPixbuf *ui_new_pixbuf_from_inline(gint img, gboolean small_img)
 		default: return NULL;
 	}
 
-	//return gtk_image_new_from_pixbuf(pixbuf);
+	/*return gtk_image_new_from_pixbuf(pixbuf);*/
 }
 
 
@@ -828,7 +833,7 @@ GtkWidget *ui_new_image_from_inline(gint img, gboolean small_img)
 
 	pb = ui_new_pixbuf_from_inline(img, small_img);
 	wid = gtk_image_new_from_pixbuf(pb);
-	g_object_unref(pb);	// the image doesn't adopt our reference, so remove our ref.
+	g_object_unref(pb);	/* the image doesn't adopt our reference, so remove our ref. */
 	return wid;
 }
 
@@ -848,13 +853,13 @@ void ui_create_recent_menu(void)
 	for (i = 0; i < MIN(prefs.mru_length, g_queue_get_length(ui_prefs.recent_queue)); i++)
 	{
 		filename = g_queue_peek_nth(ui_prefs.recent_queue, i);
-		// create menu item for the recent files menu in the menu bar
+		/* create menu item for the recent files menu in the menu bar */
 		tmp = gtk_menu_item_new_with_label(filename);
 		gtk_widget_show(tmp);
 		gtk_menu_shell_append(GTK_MENU_SHELL(ui_widgets.recent_files_menubar), tmp);
 		g_signal_connect((gpointer) tmp, "activate",
 					G_CALLBACK(recent_file_activate_cb), NULL);
-		// create menu item for the recent files menu in the toolbar bar
+		/* create menu item for the recent files menu in the toolbar bar */
 		tmp = gtk_menu_item_new_with_label(filename);
 		gtk_widget_show(tmp);
 		gtk_menu_shell_append(GTK_MENU_SHELL(ui_widgets.recent_files_toolbar), tmp);
@@ -899,11 +904,11 @@ void ui_add_recent_file(const gchar *utf8_filename)
 		}
 		update_recent_menu();
 	}
-	else recent_file_loaded(utf8_filename);	// filename already in recent list
+	else recent_file_loaded(utf8_filename);	/* filename already in recent list */
 }
 
 
-// Returns: newly allocated string with the UTF-8 menu text.
+/* Returns: newly allocated string with the UTF-8 menu text. */
 static gchar *menu_item_get_text(GtkMenuItem *menu_item)
 {
 	const gchar *text = NULL;
@@ -915,7 +920,7 @@ static gchar *menu_item_get_text(GtkMenuItem *menu_item)
 		if (GTK_IS_LABEL(child))
 			text = gtk_label_get_text(GTK_LABEL(child));
 	}
-	// GTK owns text so it's much safer to return a copy of it in case the memory is reallocated
+	/* GTK owns text so it's much safer to return a copy of it in case the memory is reallocated */
 	return g_strdup(text);
 }
 
@@ -941,7 +946,7 @@ static void recent_file_loaded(const gchar *utf8_filename)
 	void *data;
 	GtkWidget *tmp;
 
-	// first reorder the queue
+	/* first reorder the queue */
 	item = g_queue_find_custom(ui_prefs.recent_queue, utf8_filename, (GCompareFunc) strcmp);
 	g_return_if_fail(item != NULL);
 
@@ -949,7 +954,7 @@ static void recent_file_loaded(const gchar *utf8_filename)
 	g_queue_remove(ui_prefs.recent_queue, data);
 	g_queue_push_head(ui_prefs.recent_queue, data);
 
-	// remove the old menuitem for the filename
+	/* remove the old menuitem for the filename */
 	children = gtk_container_get_children(GTK_CONTAINER(ui_widgets.recent_files_menubar));
 	item = g_list_find_custom(children, utf8_filename, (GCompareFunc) find_recent_file_item);
 	if (item != NULL) gtk_widget_destroy(GTK_WIDGET(item->data));
@@ -958,13 +963,14 @@ static void recent_file_loaded(const gchar *utf8_filename)
 	item = g_list_find_custom(children, utf8_filename, (GCompareFunc) find_recent_file_item);
 	if (item != NULL) gtk_widget_destroy(GTK_WIDGET(item->data));
 
-	// now prepend a new menuitem for the filename, first for the recent files menu in the menu bar
+	/* now prepend a new menuitem for the filename,
+	 * first for the recent files menu in the menu bar */
 	tmp = gtk_menu_item_new_with_label(utf8_filename);
 	gtk_widget_show(tmp);
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(ui_widgets.recent_files_menubar), tmp);
 	g_signal_connect((gpointer) tmp, "activate",
 				G_CALLBACK(recent_file_activate_cb), NULL);
-	// then for the recent files menu in the tool bar
+	/* then for the recent files menu in the tool bar */
 	tmp = gtk_menu_item_new_with_label(utf8_filename);
 	gtk_widget_show(tmp);
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(ui_widgets.recent_files_toolbar), tmp);
@@ -988,7 +994,7 @@ static void update_recent_menu(void)
 		gtk_menu_tool_button_set_menu(menu, ui_widgets.recent_files_toolbar);
 	}
 
-	// clean the MRU list before adding an item (menubar)
+	/* clean the MRU list before adding an item (menubar) */
 	children = gtk_container_get_children(GTK_CONTAINER(ui_widgets.recent_files_menubar));
 	if (g_list_length(children) > prefs.mru_length - 1)
 	{
@@ -1000,7 +1006,7 @@ static void update_recent_menu(void)
 		}
 	}
 
-	// clean the MRU list before adding an item (toolbar)
+	/* clean the MRU list before adding an item (toolbar) */
 	children = gtk_container_get_children(GTK_CONTAINER(ui_widgets.recent_files_toolbar));
 	if (g_list_length(children) > prefs.mru_length - 1)
 	{
@@ -1013,13 +1019,13 @@ static void update_recent_menu(void)
 	}
 
 	filename = g_queue_peek_head(ui_prefs.recent_queue);
-	// create item for the menu bar menu
+	/* create item for the menu bar menu */
 	tmp = gtk_menu_item_new_with_label(filename);
 	gtk_widget_show(tmp);
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(ui_widgets.recent_files_menubar), tmp);
 	g_signal_connect((gpointer) tmp, "activate",
 				G_CALLBACK(recent_file_activate_cb), NULL);
-	// create item for the tool bar menu
+	/* create item for the tool bar menu */
 	tmp = gtk_menu_item_new_with_label(filename);
 	gtk_widget_show(tmp);
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(ui_widgets.recent_files_toolbar), tmp);
@@ -1085,7 +1091,7 @@ const gint BUTTON_BOX_BORDER = 5;
  * Returns: the vbox. */
 GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog)
 {
-	GtkWidget *vbox = gtk_vbox_new(FALSE, 12);	// need child vbox to set a separate border.
+	GtkWidget *vbox = gtk_vbox_new(FALSE, 12);	/* need child vbox to set a separate border. */
 
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), BUTTON_BOX_BORDER);
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), vbox);
@@ -1161,11 +1167,11 @@ void ui_combo_box_add_to_history(GtkComboBox *combo, const gchar *text)
 		equal = utils_str_equal(combo_text, text);
 		g_free(combo_text);
 	}
-	if (equal) return;	// don't prepend duplicate
+	if (equal) return;	/* don't prepend duplicate */
 
 	gtk_combo_box_prepend_text(combo, text);
 
-	// limit history
+	/* limit history */
 	path = gtk_tree_path_new_from_indices(history_len, -1);
 	if (gtk_tree_model_get_iter(model, &iter, path))
 	{
@@ -1181,7 +1187,7 @@ void ui_update_tab_status(gint idx)
 {
 	GdkColor *color = document_get_status(idx);
 
-	// NULL color will reset to default
+	/* NULL color will reset to default */
 	gtk_widget_modify_fg(doc_list[idx].tab_label, GTK_STATE_NORMAL, color);
 	gtk_widget_modify_fg(doc_list[idx].tab_label, GTK_STATE_ACTIVE, color);
 	gtk_widget_modify_fg(doc_list[idx].tabmenu_label, GTK_STATE_NORMAL, color);
@@ -1201,25 +1207,25 @@ gboolean ui_tree_view_find_next(GtkTreeView *treeview, TVMatchCallback cb)
 	treesel = gtk_tree_view_get_selection(treeview);
 	if (gtk_tree_selection_get_selected(treesel, &model, &iter))
 	{
-		// get the next selected item
+		/* get the next selected item */
 		if (! gtk_tree_model_iter_next(model, &iter))
-			return FALSE;	// no more items
+			return FALSE;	/* no more items */
 	}
-	else	// no selection
+	else	/* no selection */
 	{
 		if (! gtk_tree_model_get_iter_first(model, &iter))
-			return TRUE;	// no items
+			return TRUE;	/* no items */
 	}
 	while (TRUE)
 	{
 		gtk_tree_selection_select_iter(treesel, &iter);
 		if (cb())
-			break;	// found next message
+			break;	/* found next message */
 
 		if (! gtk_tree_model_iter_next(model, &iter))
-			return FALSE;	// no more items
+			return FALSE;	/* no more items */
 	}
-	// scroll item in view
+	/* scroll item in view */
 	if (ui_prefs.msgwindow_visible)
 	{
 		GtkTreePath *path = gtk_tree_model_get_path(
@@ -1253,9 +1259,9 @@ GtkWidget *ui_path_box_new(const gchar *title, GtkFileChooserAction action, GtkE
 	hbox = gtk_hbox_new(FALSE, 6);
 	path_entry = GTK_WIDGET(entry);
 
-	// prevent path_entry being vertically stretched to the height of dirbtn
+	/* prevent path_entry being vertically stretched to the height of dirbtn */
 	vbox = gtk_vbox_new(FALSE, 0);
-	if (gtk_widget_get_parent(path_entry))	// entry->parent may be a GtkComboBoxEntry
+	if (gtk_widget_get_parent(path_entry))	/* entry->parent may be a GtkComboBoxEntry */
 	{
 		GtkWidget *parent = gtk_widget_get_parent(path_entry);
 
@@ -1341,7 +1347,7 @@ static void ui_path_box_open_clicked(GtkButton *button, gpointer user_data)
 	const gchar *title = g_object_get_data(G_OBJECT(path_box), "title");
 	gchar *utf8_path;
 
-	// TODO: extend for other actions
+	/* TODO: extend for other actions */
 	g_return_if_fail(action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 
 	if (title == NULL)
@@ -1365,7 +1371,7 @@ static void ui_path_box_open_clicked(GtkButton *button, gpointer user_data)
 
 void ui_statusbar_showhide(gboolean state)
 {
-	// handle statusbar visibility
+	/* handle statusbar visibility */
 	if (state)
 	{
 		gtk_widget_show(app->statusbar);

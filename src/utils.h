@@ -114,7 +114,7 @@ gchar *utils_get_current_file_dir_utf8(void);
 
 void utils_beep(void);
 
-gchar *utils_make_human_readable_str(unsigned long long size, gulong block_size,
+gchar *utils_make_human_readable_str(unsigned long size, gulong block_size,
 									 gulong display_unit);
 
 gint utils_strtod(const gchar *source, gchar **end, gboolean with_route);

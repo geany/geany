@@ -38,7 +38,7 @@ static kindOption ConfKinds [] = {
 
 static boolean isIdentifier (int c)
 {
-    // allow whitespace within keys and sections
+    /* allow whitespace within keys and sections */
     return (boolean)(isalnum (c) || isspace (c) ||  c == '_');
 }
 

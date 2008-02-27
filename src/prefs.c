@@ -96,7 +96,7 @@ static void init_kb_tree(void)
 	GtkTreeViewColumn *column;
 
 	tree = GTK_TREE_VIEW(lookup_widget(ui_widgets.prefs_dialog, "treeview7"));
-	//g_object_set(tree, "vertical-separator", 6, NULL);
+	/*g_object_set(tree, "vertical-separator", 6, NULL);*/
 
 	store = gtk_tree_store_new(3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
@@ -110,8 +110,8 @@ static void init_kb_tree(void)
 	column = gtk_tree_view_column_new_with_attributes(_("Shortcut"), renderer, "text", KB_TREE_SHORTCUT, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 
-	// set policy settings for the scollwedwindow around the treeview again, because glade
-	// doesn't keep the settings
+	/* set policy settings for the scollwedwindow around the treeview again, because glade
+	 * doesn't keep the settings */
 	gtk_scrolled_window_set_policy(
 			GTK_SCROLLED_WINDOW(lookup_widget(ui_widgets.prefs_dialog, "scrolledwindow8")),
 			GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
@@ -156,11 +156,11 @@ void prefs_init_dialog(void)
 	GtkWidget *widget;
 	GdkColor *color;
 
-	// General settings
+	/* General settings */
 	widget = lookup_widget(ui_widgets.prefs_dialog, "spin_mru");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), prefs.mru_length);
 
-	// startup
+	/* startup */
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_load_session");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.load_session);
 
@@ -176,7 +176,7 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_ask_for_quit");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.confirm_exit);
 
-	// behaviour
+	/* behaviour */
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_beep");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.beep_on_errors);
 
@@ -198,10 +198,10 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(ui_widgets.prefs_dialog, "startup_path_entry");
 	gtk_entry_set_text(GTK_ENTRY(widget), prefs.default_open_path);
 
-	project_setup_prefs();	// project files path
+	project_setup_prefs();	/* project files path */
 
 
-	// Interface settings
+	/* Interface settings */
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_list_symbol");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.sidebar_symbol_visible);
 
@@ -240,7 +240,7 @@ void prefs_init_dialog(void)
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.show_notebook_tabs);
-	// disable following setting if notebook tabs are hidden
+	/* disable following setting if notebook tabs are hidden */
 	on_show_notebook_tabs_toggled(GTK_TOGGLE_BUTTON(
 					lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs")), NULL);
 
@@ -260,7 +260,7 @@ void prefs_init_dialog(void)
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.statusbar_visible);
 
 
-	// Toolbar settings
+	/* Toolbar settings */
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.toolbar_visible);
 
@@ -311,12 +311,12 @@ void prefs_init_dialog(void)
 		default: widget = lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_small"); break;
 	}
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
-	// disable elements if toolbar is hidden
+	/* disable elements if toolbar is hidden */
 	on_toolbar_show_toggled(GTK_TOGGLE_BUTTON(
 					lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show")), NULL);
 
 
-	// Files settings
+	/* Files settings */
 	if (prefs.tab_order_ltr)
 		widget = lookup_widget(ui_widgets.prefs_dialog, "radio_tab_right");
 	else
@@ -324,12 +324,12 @@ void prefs_init_dialog(void)
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
 
 
-	// Editor settings
+	/* Editor settings */
 	widget = lookup_widget(ui_widgets.prefs_dialog, "spin_tab_width");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), editor_prefs.tab_width);
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
-	// luckily the index of the combo box items match the index of the encodings array
+	/* luckily the index of the combo box items match the index of the encodings array */
 	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), prefs.default_new_encoding);
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_open_encoding");
@@ -414,7 +414,7 @@ void prefs_init_dialog(void)
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), editor_prefs.symbolcompletion_min_chars);
 
 
-	// Tools Settings
+	/* Tools Settings */
 	if (prefs.tools_make_cmd)
 			gtk_entry_set_text(GTK_ENTRY(lookup_widget(ui_widgets.prefs_dialog, "entry_com_make")), prefs.tools_make_cmd);
 
@@ -428,7 +428,7 @@ void prefs_init_dialog(void)
 		gtk_entry_set_text(GTK_ENTRY(lookup_widget(ui_widgets.prefs_dialog, "entry_grep")), prefs.tools_grep_cmd);
 
 
-	// Template settings
+	/* Template settings */
 	widget = lookup_widget(ui_widgets.prefs_dialog, "entry_template_developer");
 	gtk_entry_set_text(GTK_ENTRY(widget), prefs.template_developer);
 
@@ -445,10 +445,10 @@ void prefs_init_dialog(void)
 	gtk_entry_set_text(GTK_ENTRY(widget), prefs.template_version);
 
 
-	// Keybindings
+	/* Keybindings */
 	init_keybindings();
 
-	// Printing
+	/* Printing */
 	{
 		GtkWidget *widget_gtk = lookup_widget(ui_widgets.prefs_dialog, "radio_print_gtk");
 		if (printing_prefs.use_gtk_printing)
@@ -460,7 +460,7 @@ void prefs_init_dialog(void)
 		if (gtk_check_version(2, 10, 0) != NULL)
 #endif
 		{
-			gtk_widget_set_sensitive(widget_gtk, FALSE); // disable the whole option block
+			gtk_widget_set_sensitive(widget_gtk, FALSE); /* disable the whole option block */
 			widget = lookup_widget(ui_widgets.prefs_dialog, "radio_print_external");
 		}
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
@@ -496,12 +496,12 @@ void prefs_init_dialog(void)
 #endif
 
 #ifdef HAVE_VTE
-	// make VTE switch visible only when VTE is compiled in, it is hidden by default
+	/* make VTE switch visible only when VTE is compiled in, it is hidden by default */
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_vte");
 	gtk_widget_show(widget);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vte_info.load_vte);
 
-	// VTE settings
+	/* VTE settings */
 	if (vte_info.have_vte)
 	{
 		widget = lookup_widget(ui_widgets.prefs_dialog, "font_term");
@@ -558,11 +558,11 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		GtkWidget *widget;
 		guint i;
 
-		// General settings
+		/* General settings */
 		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_mru");
 		prefs.mru_length = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
-		// startup
+		/* startup */
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_load_session");
 		prefs.load_session = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
@@ -578,7 +578,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_ask_for_quit");
 		prefs.confirm_exit = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		// behaviour
+		/* behaviour */
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_beep");
 		prefs.beep_on_errors = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
@@ -602,10 +602,10 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		g_free(prefs.default_open_path);
 		prefs.default_open_path = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
-		project_apply_prefs();	// project file path
+		project_apply_prefs();	/* project file path */
 
 
-		// Interface settings
+		/* Interface settings */
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_list_symbol");
 		prefs.sidebar_symbol_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
@@ -622,7 +622,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 			widget = lookup_widget(ui_widgets.prefs_dialog, "radio_long_line_background");
 			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) editor_prefs.long_line_type = 1;
 			else
-			{	// now only the disabled radio remains, so disable it
+			{	/* now only the disabled radio remains, so disable it */
 				editor_prefs.long_line_type = 2;
 			}
 		}
@@ -647,7 +647,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		prefs.statusbar_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 
-		// Toolbar settings
+		/* Toolbar settings */
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show");
 		prefs.toolbar_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
@@ -689,7 +689,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
 				prefs.toolbar_icon_style = 0;
 			else
-				// now only the text only radio remains, so set text only
+				/* now only the text only radio remains, so set text only */
 				prefs.toolbar_icon_style = 1;
 		}
 
@@ -701,12 +701,12 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 			prefs.toolbar_icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR;
 
 
-		// Files settings
+		/* Files settings */
 		widget = lookup_widget(ui_widgets.prefs_dialog, "radio_tab_right");
 		prefs.tab_order_ltr = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 
-		// Editor settings
+		/* Editor settings */
 		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_tab_width");
 		editor_prefs.tab_width = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
@@ -778,7 +778,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		{
 			gboolean use_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-			// override each document setting only if the default has changed
+			/* override each document setting only if the default has changed */
 			if (editor_prefs.use_tabs != use_tabs)
 			{
 				editor_prefs.use_tabs = use_tabs;
@@ -803,7 +803,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		editor_prefs.symbolcompletion_max_height = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
 
-		// Tools Settings
+		/* Tools Settings */
 		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_com_make");
 		g_free(prefs.tools_make_cmd);
 		prefs.tools_make_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
@@ -821,7 +821,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		prefs.tools_grep_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
 
-		// Template settings
+		/* Template settings */
 		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_template_developer");
 		g_free(prefs.template_developer);
 		prefs.template_developer = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
@@ -843,11 +843,11 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		prefs.template_version = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
 
-		// Keybindings
+		/* Keybindings */
 		if (edited) keybindings_write_to_file();
 
 
-		// Printing
+		/* Printing */
 		widget = lookup_widget(ui_widgets.prefs_dialog, "radio_print_gtk");
 		printing_prefs.use_gtk_printing = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
@@ -876,7 +876,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_vte");
 		vte_info.load_vte = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		// VTE settings
+		/* VTE settings */
 		if (vte_info.have_vte)
 		{
 			widget = lookup_widget(ui_widgets.prefs_dialog, "spin_scrollback");
@@ -915,9 +915,9 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		}
 #endif
 
-		// apply the changes made
+		/* apply the changes made */
 		ui_statusbar_showhide(prefs.statusbar_visible);
-		treeviews_openfiles_update_all(); // to update if full path setting has changed
+		treeviews_openfiles_update_all(); /* to update if full path setting has changed */
 		ui_update_toolbar_items();
 		ui_update_toolbar_icons(prefs.toolbar_icon_size);
 		gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), prefs.toolbar_icon_style);
@@ -928,7 +928,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), prefs.tab_pos_msgwin);
 		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->treeview_notebook), prefs.tab_pos_sidebar);
 
-		// re-colourise all open documents, if tab width or long line settings have changed
+		/* re-colourise all open documents, if tab width or long line settings have changed */
 		for (i = 0; i < doc_array->len; i++)
 		{
 			if (doc_list[i].is_valid)
@@ -940,7 +940,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		}
 		ui_document_show_hide(-1);
 
-		// store all settings
+		/* store all settings */
 		configuration_save();
 	}
 
@@ -1026,7 +1026,7 @@ void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 #ifdef HAVE_VTE
 		case 4:
 		{
-			// VTE settings
+			/* VTE settings */
 			if (strcmp(fontbtn, vc->font) == 0) break;
 			g_free(vc->font);
 			vc->font = g_strdup(gtk_font_button_get_font_name(widget));
@@ -1045,7 +1045,7 @@ static gboolean on_tree_view_button_press_event(
 	GtkTreeSelection *selection;
 	gchar *name;
 
-	// discard click events in the tree unless it is a double click
+	/* discard click events in the tree unless it is a double click */
 	if (widget == (GtkWidget*)tree && event->type != GDK_2BUTTON_PRESS)
 		return FALSE;
 
@@ -1053,7 +1053,7 @@ static gboolean on_tree_view_button_press_event(
 	if (gtk_tree_selection_get_selected(selection, &model, &g_iter))
 	{
 		if (gtk_tree_model_iter_has_child(model, &g_iter))
-		{	// double click on a section to expand or collapse it
+		{	/* double click on a section to expand or collapse it */
 			GtkTreePath *path = gtk_tree_model_get_path(model, &g_iter);
 
 			if (gtk_tree_view_row_expanded(tree, path))
@@ -1091,7 +1091,7 @@ static gboolean on_tree_view_button_press_event(
 								G_CALLBACK(on_keytype_dialog_response), NULL);
 			g_signal_connect(G_OBJECT(dialog), "response", G_CALLBACK(on_dialog_response), NULL);
 
-			// copy name to global variable to hold it, will be freed in on_dialog_response()
+			/* copy name to global variable to hold it, will be freed in on_dialog_response() */
 			dialog_key_name = g_strdup(name);
 
 			gtk_widget_show_all(dialog);
@@ -1118,14 +1118,14 @@ static void on_cell_edited(GtkCellRendererText *cellrenderertext, gchar *path, g
 
 		gtk_accelerator_parse(new_text, &lkey, &lmods);
 
-		// get index
+		/* get index */
 		gtk_tree_model_get(GTK_TREE_MODEL(store), &iter, 2, &idx, -1);
 
 		if (find_duplicate(idx, lkey, lmods, new_text))
 			return;
 
-		// set the values here, because of the above check, setting it in gtk_accelerator_parse would
-		// return a wrong key combination if it is duplicate
+		/* set the values here, because of the above check, setting it in
+		 * gtk_accelerator_parse would return a wrong key combination if it is duplicate */
 		keys[idx]->key = lkey;
 		keys[idx]->mods = lmods;
 
@@ -1144,7 +1144,7 @@ static gboolean on_keytype_dialog_response(GtkWidget *dialog, GdkEventKey *event
     state = event->state & GEANY_KEYS_MODIFIER_MASK;
 
 	if (event->keyval == GDK_Escape)
-		return FALSE;	// close the dialog, don't allow escape when detecting keybindings.
+		return FALSE;	/* close the dialog, don't allow escape when detecting keybindings. */
 
 	str = gtk_accelerator_name(event->keyval, state);
 
@@ -1163,7 +1163,7 @@ static void on_dialog_response(GtkWidget *dialog, gint response, gpointer iter)
 		guint lkey;
 		GdkModifierType lmods;
 
-		// get index
+		/* get index */
 		gtk_tree_model_get(GTK_TREE_MODEL(store), &g_iter, 2, &idx, -1);
 
 		gtk_accelerator_parse(gtk_label_get_text(GTK_LABEL(dialog_label)), &lkey, &lmods);
@@ -1171,8 +1171,8 @@ static void on_dialog_response(GtkWidget *dialog, gint response, gpointer iter)
 		if (find_duplicate(idx, lkey, lmods, gtk_label_get_text(GTK_LABEL(dialog_label))))
 			return;
 
-		// set the values here, because of the above check, setting it in gtk_accelerator_parse would
-		// return a wrong key combination if it is duplicate
+		/* set the values here, because of the above check, setting it in
+		 * gtk_accelerator_parse would return a wrong key combination if it is duplicate */
 		keys[idx]->key = lkey;
 		keys[idx]->mods = lmods;
 
@@ -1195,7 +1195,7 @@ static gboolean find_iter(guint i, GtkTreeIter *iter)
 	GtkTreeIter parent;
 
 	if (! gtk_tree_model_get_iter_first(model, &parent))
-		return FALSE;	// no items
+		return FALSE;	/* no items */
 
 	while (TRUE)
 	{
@@ -1216,17 +1216,18 @@ static gboolean find_iter(guint i, GtkTreeIter *iter)
 }
 
 
-// test if the entered key combination is already used
+/* test if the entered key combination is already used */
 static gboolean find_duplicate(guint idx, guint key, GdkModifierType mods, const gchar *action)
 {
 	guint i;
 
-	// allow duplicate if there is no key combination
+	/* allow duplicate if there is no key combination */
 	if (key == 0 && mods == 0) return FALSE;
 
 	for (i = 0; i < GEANY_MAX_KEYS; i++)
 	{
-		// search another item with the same key, but take not the key we are searching for(-> idx)
+		/* search another item with the same key,
+		 * but take not the key we are searching for(-> idx) */
 		if (keys[i]->key == key && keys[i]->mods == mods
 			&& ! (keys[i]->key == keys[idx]->key && keys[i]->mods == keys[idx]->mods))
 		{
@@ -1240,7 +1241,7 @@ static gboolean find_duplicate(guint idx, guint key, GdkModifierType mods, const
 				keys[i]->key = 0;
 				keys[i]->mods = 0;
 				if (find_iter(i, &iter))
-					gtk_tree_store_set(store, &iter, 1, NULL, -1);	// clear item
+					gtk_tree_store_set(store, &iter, 1, NULL, -1);	/* clear item */
 				continue;
 			}
 			return TRUE;
@@ -1263,7 +1264,7 @@ static void on_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gpointe
 {
 	gboolean sens = gtk_toggle_button_get_active(togglebutton);
 
-	// tab placement only enabled when tabs are visible
+	/* tab placement only enabled when tabs are visible */
 	gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "combo_tab_editor"), sens);
 	gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "check_show_tab_cross"), sens);
 }
@@ -1325,7 +1326,7 @@ void prefs_show_dialog(void)
 		gtk_widget_set_name(ui_widgets.prefs_dialog, "GeanyPrefsDialog");
 		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.prefs_dialog), GTK_WINDOW(app->window));
 
-		// init the default file encoding combo box
+		/* init the default file encoding combo box */
 		combo_new = lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
 		combo_open = lookup_widget(ui_widgets.prefs_dialog, "combo_open_encoding");
 		gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(combo_new), 3);
@@ -1338,13 +1339,13 @@ void prefs_show_dialog(void)
 			g_free(encoding_string);
 		}
 
-		// add manually GeanyWrapLabels because it can't be added with Glade
-		// page Tools
+		/* add manually GeanyWrapLabels because it can't be added with Glade
+		 * page Tools */
 		label = geany_wrap_label_new(_("Enter tool paths below. Tools you do not need can be left blank."));
 		gtk_widget_show(label);
 		gtk_box_pack_start(GTK_BOX(lookup_widget(ui_widgets.prefs_dialog, "vbox33")),
 			label, FALSE, TRUE, 5);
-		// page Templates
+		/* page Templates */
 		label = geany_wrap_label_new(_("Set the information to be used in templates. See the documentation for details."));
 		gtk_widget_show(label);
 		gtk_box_pack_start(GTK_BOX(lookup_widget(ui_widgets.prefs_dialog, "vbox31")),
@@ -1354,12 +1355,12 @@ void prefs_show_dialog(void)
 		gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
 		gtk_box_pack_start(GTK_BOX(lookup_widget(ui_widgets.prefs_dialog, "vbox9")),
 			label, FALSE, TRUE, 5);
-		// page Keybindings
+		/* page Keybindings */
 		label = geany_wrap_label_new(_("Here you can change keyboard shortcuts for various actions. Select one and press the Change button to enter a new shortcut, or double click on an action to edit the string representation of the shortcut directly."));
 		gtk_widget_show(label);
 		gtk_box_pack_start(GTK_BOX(lookup_widget(ui_widgets.prefs_dialog, "vbox32")),
 			label, FALSE, TRUE, 5);
-		// page Printing
+		/* page Printing */
 		label = geany_wrap_label_new(_("<i>Notice: Native GTK printing is only available if Geany was built against GTK 2.10 (or above) <b>and</b> Geany is running with GTK 2.10 (or above).</i>"));
 		gtk_widget_show(label);
 		gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
@@ -1387,7 +1388,7 @@ void prefs_show_dialog(void)
 				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(3));
 		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "long_line_color"),
 				"color-set", G_CALLBACK(on_prefs_color_choosed), GINT_TO_POINTER(1));
-		// file chooser buttons in the tools tab
+		/* file chooser buttons in the tools tab */
 		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "button_make"),
 				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(ui_widgets.prefs_dialog, "entry_com_make"));
 		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "button_term"),
@@ -1397,13 +1398,13 @@ void prefs_show_dialog(void)
 		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "button_grep"),
 				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(ui_widgets.prefs_dialog, "entry_grep"));
 
-		// tools commands
+		/* tools commands */
 		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "button_contextaction"),
 			"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction"));
 		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "button_contextaction"),
 			"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction"));
 
-		// printing
+		/* printing */
 		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "button_print_external_cmd"),
 			"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(ui_widgets.prefs_dialog, "entry_print_external_cmd"));
 		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "radio_print_gtk"),
@@ -1438,12 +1439,12 @@ on_prefs_tools_button_clicked           (GtkButton       *button,
 	GtkWidget *dialog;
 	gchar *filename, *tmp, **field;
 
-	// initialize the dialog
+	/* initialize the dialog */
 	dialog = gtk_file_chooser_dialog_new(_("Open File"), GTK_WINDOW(ui_widgets.prefs_dialog),
 					GTK_FILE_CHOOSER_ACTION_OPEN,
 					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
-	// cut the options from the command line
+	/* cut the options from the command line */
 	field = g_strsplit(gtk_entry_get_text(GTK_ENTRY(item)), " ", 2);
 	if (field[0])
 	{
@@ -1455,7 +1456,7 @@ on_prefs_tools_button_clicked           (GtkButton       *button,
 		}
 	}
 
-	// run it
+	/* run it */
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
 		tmp = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));

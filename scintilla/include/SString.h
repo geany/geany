@@ -1,15 +1,15 @@
-// SciTE - Scintilla based Text Editor
+/* SciTE - Scintilla based Text Editor */
 /** @file SString.h
  ** A simple string class.
  **/
-// Copyright 1998-2004 by Neil Hodgson <neilh@scintilla.org>
-// The License.txt file describes the conditions under which this software may be distributed.
+/* Copyright 1998-2004 by Neil Hodgson <neilh@scintilla.org>
+ * The License.txt file describes the conditions under which this software may be distributed. */
 
 #ifndef SSTRING_H
 #define SSTRING_H
 
 
-// These functions are implemented because each platform calls them something different.
+/* These functions are implemented because each platform calls them something different. */
 int CompareCaseInsensitive(const char *a, const char *b);
 int CompareNCaseInsensitive(const char *a, const char *b, size_t len);
 bool EqualCaseInsensitive(const char *a, const char *b);
@@ -18,9 +18,9 @@ bool EqualCaseInsensitive(const char *a, const char *b);
 namespace Scintilla {
 #endif
 
-// Define another string class.
-// While it would be 'better' to use std::string, that doubles the executable size.
-// An SString may contain embedded nul characters.
+/* Define another string class.
+ * While it would be 'better' to use std::string, that doubles the executable size.
+ * An SString may contain embedded nul characters. */
 
 /**
  * Base class from which the two other classes (SBuffer & SString)
@@ -34,12 +34,12 @@ public:
 	enum { measure_length=0xffffffffU};
 
 protected:
-	char *s;				///< The C string
-	lenpos_t sSize;			///< The size of the buffer, less 1: ie. the maximum size of the string
+	char *s;				/**< The C string */
+	lenpos_t sSize;			/**< The size of the buffer, less 1: ie. the maximum size of the string */
 
 	SContainer() : s(0), sSize(0) {}
 	~SContainer() {
-		delete []s;	// Suppose it was allocated using StringAllocate
+		delete []s;	/* Suppose it was allocated using StringAllocate */
 		s = 0;
 		sSize = 0;
 	}
@@ -64,8 +64,8 @@ public:
 	 * @return the pointer to the new string
 	 */
 	static char *StringAllocate(
-		const char *s,			///< The string to duplicate
-		lenpos_t len=measure_length);	///< The length of memory to allocate. Optional.
+		const char *s,			/**< The string to duplicate */
+		lenpos_t len=measure_length);	/**< The length of memory to allocate. Optional. */
 };
 
 
@@ -92,14 +92,14 @@ public:
 		}
 	}
 private:
-	/// Copy constructor
-	// Here only to be on the safe size, user should avoid returning SBuffer values.
+	/** Copy constructor */
+	/* Here only to be on the safe size, user should avoid returning SBuffer values. */
 	SBuffer(const SBuffer &source) : SContainer() {
 		s = StringAllocate(source.s, source.sSize);
 		sSize = (s) ? source.sSize : 0;
 	}
-	/// Default assignment operator
-	// Same here, shouldn't be used
+	/** Default assignment operator */
+	/* Same here, shouldn't be used */
 	SBuffer &operator=(const SBuffer &source) {
 		if (this != &source) {
 			delete []s;
@@ -134,8 +134,8 @@ public:
  * functions to allow reliable manipulations of these strings, other than simple appends, etc.
  */
 class SString : protected SContainer {
-	lenpos_t sLen;			///< The size of the string in s
-	lenpos_t sizeGrowth;	///< Minimum growth size when appending strings
+	lenpos_t sLen;			/**< The size of the string in s */
+	lenpos_t sizeGrowth;	/**< Minimum growth size when appending strings */
 	enum { sizeGrowthDefault = 64 };
 
 	bool grow(lenpos_t lenNew);
@@ -154,11 +154,11 @@ public:
 	SString(SBuffer &buf) : sizeGrowth(sizeGrowthDefault) {
 		s = buf.ptr();
 		sSize = sLen = buf.size();
-		// Consumes the given buffer!
+		/* Consumes the given buffer! */
 		buf.reset();
 	}
 	SString(const char *s_, lenpos_t first, lenpos_t last) : sizeGrowth(sizeGrowthDefault) {
-		// note: expects the "last" argument to point one beyond the range end (a la STL iterators)
+		/* note: expects the "last" argument to point one beyond the range end (a la STL iterators) */
 		s = StringAllocate(s_ + first, last - first);
 		sSize = sLen = (s) ? last - first : 0;
 	}
@@ -246,7 +246,7 @@ public:
 	void remove(lenpos_t pos, lenpos_t len);
 
 	SString &change(lenpos_t pos, char ch) {
-		if (pos < sLen) {					// character changed must be in string bounds
+		if (pos < sLen) {					/* character changed must be in string bounds */
 			*(s + pos) = ch;
 		}
 		return *this;
@@ -276,8 +276,8 @@ public:
  * @return the pointer to the new string
  */
 inline char *StringDup(
-	const char *s,			///< The string to duplicate
-	SContainer::lenpos_t len=SContainer::measure_length)	///< The length of memory to allocate. Optional.
+	const char *s,			/**< The string to duplicate*/
+	SContainer::lenpos_t len=SContainer::measure_length)	/**< The length of memory to allocate. Optional.*/
 {
 	return SContainer::StringAllocate(s, len);
 }

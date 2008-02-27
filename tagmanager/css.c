@@ -22,18 +22,18 @@ static kindOption CssKinds [] = {
     { TRUE, 'v', "variable",  "identities"  }
 };
 
-typedef enum _CssParserState {	// state of parsing
-	P_STATE_NONE,  				// default state
-	P_STATE_IN_COMMENT,			// into a comment, only multi line in CSS
-	P_STATE_IN_SINGLE_STRING,	// into a single quoted string
-	P_STATE_IN_DOUBLE_STRING,	// into a double quoted string
-	P_STATE_IN_DEFINITION,		// on the body of the style definition, nothing for us
-	P_STATE_IN_MEDIA,			// on a @media declaration, can be multi-line
-	P_STATE_IN_IMPORT,			// on a @import declaration, can be multi-line
-	P_STATE_IN_NAMESPACE,		// on a @namespace declaration
-	P_STATE_IN_PAGE,			// on a @page declaration
-	P_STATE_IN_FONTFACE,		// on a @font-face declaration
-	P_STATE_AT_END				// end of parsing
+typedef enum _CssParserState {	/* state of parsing */
+	P_STATE_NONE,  				/* default state */
+	P_STATE_IN_COMMENT,			/* into a comment, only multi line in CSS */
+	P_STATE_IN_SINGLE_STRING,	/* into a single quoted string */
+	P_STATE_IN_DOUBLE_STRING,	/* into a double quoted string */
+	P_STATE_IN_DEFINITION,		/* on the body of the style definition, nothing for us */
+	P_STATE_IN_MEDIA,			/* on a @media declaration, can be multi-line */
+	P_STATE_IN_IMPORT,			/* on a @import declaration, can be multi-line */
+	P_STATE_IN_NAMESPACE,		/* on a @namespace declaration */
+	P_STATE_IN_PAGE,			/* on a @page declaration */
+	P_STATE_IN_FONTFACE,		/* on a @font-face declaration */
+	P_STATE_AT_END				/* end of parsing */
 } CssParserState;
 
 static void makeCssSimpleTag( vString *name, cssKind kind, boolean delete )
@@ -49,16 +49,16 @@ static boolean isCssDeclarationAllowedChar( const unsigned char *cp )
 {
 	return  isalnum ((int) *cp) ||
 			isspace ((int) *cp) ||
-			*cp == '_' ||	// allowed char
-			*cp == '-' ||	// allowed char
-			*cp == '+' ||   // allow all sibling in a single tag
-			*cp == '>' ||   // allow all child in a single tag
-			*cp == '{' || 	// allow the start of the declaration
-			*cp == '.' || 	// allow classes and selectors
-			*cp == ',' || 	// allow multiple declarations
-			*cp == ':' ||   // allow pseudo classes
-			*cp == '*' || 	// allow globs as P + *
-			*cp == '#';		// allow ids
+			*cp == '_' ||	/* allowed char */
+			*cp == '-' ||	/* allowed char */
+			*cp == '+' ||   /* allow all sibling in a single tag */
+			*cp == '>' ||   /* allow all child in a single tag */
+			*cp == '{' || 	/* allow the start of the declaration */
+			*cp == '.' || 	/* allow classes and selectors */
+			*cp == ',' || 	/* allow multiple declarations */
+			*cp == ':' ||   /* allow pseudo classes */
+			*cp == '*' || 	/* allow globs as P + * */
+			*cp == '#';		/* allow ids */
 }
 
 static CssParserState parseCssDeclaration( const unsigned char **position, cssKind kind )
@@ -66,10 +66,10 @@ static CssParserState parseCssDeclaration( const unsigned char **position, cssKi
 	vString *name = vStringNew ();
 	const unsigned char *cp = *position;
 
-	// pick to the end of line including children and sibling
-	// if declaration is multiline go for the next line
+	/* pick to the end of line including children and sibling
+	 * if declaration is multiline go for the next line */
 	while ( isCssDeclarationAllowedChar(cp) ||
-			*cp == '\0' ) 	// track the end of line into the loop
+			*cp == '\0' ) 	/* track the end of line into the loop */
 	{
 		if( (int) *cp == '\0' )
 		{
@@ -107,21 +107,21 @@ static CssParserState parseCssLine( const unsigned char *line, CssParserState st
 {
 	vString *aux;
 
-	while( *line != '\0' ) // fileReadLine returns NULL terminated strings
+	while( *line != '\0' ) /* fileReadLine returns NULL terminated strings */
 	{
 		while (isspace ((int) *line))
 			++line;
 		switch( state )
 		{
 			case P_STATE_NONE:
-				// pick first char if alphanumeric is a selector
+				/* pick first char if alphanumeric is a selector */
 				if( isalnum ((int) *line) )
 					state = parseCssDeclaration( &line, K_SELECTOR );
-				else if( *line == '.' ) // a class
+				else if( *line == '.' ) /* a class */
 					state = parseCssDeclaration( &line, K_CLASS );
-				else if( *line == '#' ) // an id
+				else if( *line == '#' ) /* an id */
 					state = parseCssDeclaration( &line, K_ID );
-				else if( *line == '@' ) // at-rules, we'll ignore them
+				else if( *line == '@' ) /* at-rules, we'll ignore them */
 				{
 					++line;
 					aux = vStringNew();
@@ -143,7 +143,7 @@ static CssParserState parseCssLine( const unsigned char *line, CssParserState st
 						state = P_STATE_IN_FONTFACE;
 					vStringDelete (aux);
 				}
-				else if( *line == '*' && *(line-1) == '/' ) // multi-line comment
+				else if( *line == '*' && *(line-1) == '/' ) /* multi-line comment */
 					state = P_STATE_IN_COMMENT;
 			break;
 			case P_STATE_IN_COMMENT:
@@ -152,14 +152,14 @@ static CssParserState parseCssLine( const unsigned char *line, CssParserState st
 			break;
 			case  P_STATE_IN_SINGLE_STRING:
 				if( *line == '\'' && *(line-1) != '\\' )
-					state = P_STATE_IN_DEFINITION; // PAGE, FONTFACE and DEFINITION are treated the same way
+					state = P_STATE_IN_DEFINITION; /* PAGE, FONTFACE and DEFINITION are treated the same way */
 			break;
 			case  P_STATE_IN_DOUBLE_STRING:
 				if( *line=='"' && *(line-1) != '\\' )
-					state = P_STATE_IN_DEFINITION; // PAGE, FONTFACE and DEFINITION are treated the same way
+					state = P_STATE_IN_DEFINITION; /* PAGE, FONTFACE and DEFINITION are treated the same way */
 			break;
 			case  P_STATE_IN_MEDIA:
-				// skip to start of media body or line end
+				/* skip to start of media body or line end */
 				while( *line != '{' )
 				{
 					if( *line == '\0' )
@@ -171,7 +171,7 @@ static CssParserState parseCssLine( const unsigned char *line, CssParserState st
 			break;
 			case  P_STATE_IN_IMPORT:
 			case  P_STATE_IN_NAMESPACE:
-				// skip to end of declaration or line end
+				/* skip to end of declaration or line end */
 				while( *line != ';' )
 				{
 					if( *line == '\0' )

@@ -36,7 +36,7 @@
 #include <gdk-pixbuf/gdk-pixdata.h>
 
 #define MAX_PICS 10
-#define LOOP_DELAY 200000	// micro seconds
+#define LOOP_DELAY 200000	/* micro seconds */
 
 #define IMAGE_LOGO			10
 #define IMAGE_BUTTON_UP		11
@@ -271,9 +271,9 @@ static void on_button1_clicked(GtkButton *button, gpointer user_data)
 {
     unsigned short erg_a, erg_b, erg_c, i, l, m, n, loops;
 
-	if (is_running) return;	// prevent multiple clicks
+	if (is_running) return;	/* prevent multiple clicks */
 	is_running = TRUE;
-	// change button-image
+	/* change button-image */
 	gtk_image_set_from_pixbuf(GTK_IMAGE(image4), icons[IMAGE_BUTTON_DOWN]);
 
 	lap++;
@@ -285,16 +285,15 @@ static void on_button1_clicked(GtkButton *button, gpointer user_data)
 	erg_a = random_number(MAX_PICS);
 	erg_b = random_number(MAX_PICS);
 	erg_c = random_number(MAX_PICS);
-	//printf("Ani: %d, %d, %d\tErg: %d, %d, %d\n\n", l, m, n, erg_a, erg_b, erg_c);
 
-	// assign icons
+	/* assign icons */
 	loops = 30;
 	for(i = 0; i < loops; i++)
 	{
 		if (l > 9) l = 0;
 		if (m > 9) m = 0;
 		if (n > 9) n = 0;
-		// simulate stopping of first and second slot
+		/* simulate stopping of first and second slot */
 		if (i < (loops - 10))
 			gtk_image_set_from_pixbuf(GTK_IMAGE(image1), icons[l]);
 		else
@@ -308,7 +307,7 @@ static void on_button1_clicked(GtkButton *button, gpointer user_data)
 		l++;
 		m++;
 		n++;
-		// refresh()-replacement
+		/* refresh()-replacement */
 		while (g_main_context_iteration(NULL, FALSE));
 		g_usleep(LOOP_DELAY);
 	}
@@ -319,7 +318,7 @@ static void on_button1_clicked(GtkButton *button, gpointer user_data)
 
 	update_labels(gb_window, FALSE, i);
 
-	// change button image
+	/* change button image */
 	gtk_image_set_from_pixbuf(GTK_IMAGE(image4), icons[IMAGE_BUTTON_UP]);
 	is_running = FALSE;
 
@@ -1253,7 +1252,7 @@ static void init_images(void)
 
 	initialise_random_numbers();
 
-	// define start images
+	/* define start images */
 	i = random_number(MAX_PICS) + 1;
 	gtk_image_set_from_pixbuf(GTK_IMAGE(image1), icons[i]);
 	i = random_number(MAX_PICS) + 1;
@@ -1263,7 +1262,7 @@ static void init_images(void)
 }
 
 
-// main exit function
+/* main exit function */
 gint gb_destroyapp(GtkWidget *widget, gpointer gdata)
 {
 	if (is_running) return TRUE;

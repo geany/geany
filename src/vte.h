@@ -28,8 +28,9 @@
 #ifdef HAVE_VTE
 
 /* include stdlib.h AND unistd.h, because on GNU/Linux pid_t seems to be
- * in stdlib.h, on FreeBSD in unistd.h */
+ * in stdlib.h, on FreeBSD in unistd.h, sys/types.h is needed for C89 */
 #include <stdlib.h>
+#include <sys/types.h>
 #include <unistd.h>
 
 

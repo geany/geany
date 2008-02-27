@@ -1,5 +1,5 @@
 /*
- *   $Id:$
+ *   $Id$
  *
  *   Copyright (c) 2000-2006, Darren Hiebert, Elias Pschernig
  *
@@ -50,9 +50,9 @@ static kindOption BasicKinds[] = {
 };
 
 static KeyWord freebasic_keywords[] = {
-	{"dim", K_VARIABLE}, // must always be the first
-	{"common", K_VARIABLE}, // must always be the second
-	{"const", K_CONST}, // must always be the third
+	{"dim", K_VARIABLE}, /* must always be the first */
+	{"common", K_VARIABLE}, /* must always be the second */
+	{"const", K_CONST}, /* must always be the third */
 	{"function", K_FUNCTION},
 	{"sub", K_FUNCTION},
 	{"private sub", K_FUNCTION},
@@ -77,29 +77,29 @@ static int extract_dim (char const *pos, vString * name, BasicKind kind)
 	vStringClear (name);
 
 	if (strncasecmp (pos, "shared", 6) == 0)
-		pos += 6; // skip keyword "shared"
+		pos += 6; /* skip keyword "shared" */
 
 	while (isspace (*pos))
 		pos++;
 
-	// capture "dim as String str"
+	/* capture "dim as String str" */
 	if (strncasecmp (pos, "as", 2) == 0)
 	{
-			pos += 2; // skip keyword "as"
+			pos += 2; /* skip keyword "as" */
 
 		while (isspace (*pos))
 			pos++;
-		while (!isspace (*pos)) // skip next part which is a type
+		while (!isspace (*pos)) /* skip next part which is a type */
 			pos++;
 		while (isspace (*pos))
 			pos++;
-		// now we are at the name
+		/* now we are at the name */
 	}
 
-	// capture "dim as foo ptr bar"
+	/* capture "dim as foo ptr bar" */
 	if (strncasecmp (pos, "ptr", 3) == 0)
 	{
-		pos += 3; // skip keyword "ptr"
+		pos += 3; /* skip keyword "ptr" */
 
 		while (isspace (*pos))
 			pos++;
@@ -110,21 +110,21 @@ static int extract_dim (char const *pos, vString * name, BasicKind kind)
 	vStringTerminate (name);
 	makeSimpleTag (name, BasicKinds, kind);
 
-	// if the line contains a ',', we have multiple declarations
+	/* if the line contains a ',', we have multiple declarations */
 	while (*pos && strchr (pos, ','))
 	{
-		// skip all we don't need(e.g. "..., new_array(5), " we skip "(5)")
+		/* skip all we don't need(e.g. "..., new_array(5), " we skip "(5)") */
 		while (*pos != ',' && *pos != '\'')
 			pos++;
 
 		if (*pos == '\'')
-			return 0; // break if we are in a comment
+			return 0; /* break if we are in a comment */
 
 		while (isspace (*pos) || *pos == ',')
 			pos++;
 
 		if (*pos == '\'')
-			return 0; // break if we are in a comment
+			return 0; /* break if we are in a comment */
 
 		vStringClear (name);
 		for (; *pos && !isspace (*pos) && *pos != '(' && *pos != ',' && *pos != '='; pos++)
@@ -165,7 +165,7 @@ static int match_keyword (const char *p, KeyWord const *kw)
 	if (kw == &freebasic_keywords[0] ||
 		kw == &freebasic_keywords[1] ||
 		kw == &freebasic_keywords[2])
-		return extract_dim (p, name, kw->kind); // extract_dim adds the found tag(s)
+		return extract_dim (p, name, kw->kind); /* extract_dim adds the found tag(s) */
 
 	for (j = 0; j < 1; j++)
 	{

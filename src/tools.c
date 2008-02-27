@@ -114,11 +114,11 @@ static gboolean cc_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 		} while (rv == G_IO_STATUS_NORMAL || rv == G_IO_STATUS_AGAIN);
 
 		if (rv == G_IO_STATUS_EOF)
-		{	// Command completed successfully
+		{	/* Command completed successfully */
 			sci_replace_sel(doc_list[idx].sci, str->str);
 		}
 		else
-		{	// Something went wrong?
+		{	/* Something went wrong? */
 			g_warning("%s: %s\n", __func__, "Incomplete command output");
 		}
 		g_string_free(str, TRUE);
@@ -171,19 +171,19 @@ void tools_execute_custom_command(gint idx, const gchar *command)
 		gchar *sel;
 		gint len, remaining, wrote;
 
-		// use GIOChannel to monitor stdout
+		/* use GIOChannel to monitor stdout */
 		utils_set_up_io_channel(stdout_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
 				FALSE, cc_iofunc, GINT_TO_POINTER(idx));
-		// copy program's stderr to Geany's stdout to help error tracking
+		/* copy program's stderr to Geany's stdout to help error tracking */
 		utils_set_up_io_channel(stderr_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
 				FALSE, cc_iofunc_err, (gpointer)command);
 
-		// get selection
+		/* get selection */
 		len = sci_get_selected_text_length(doc_list[idx].sci);
 		sel = g_malloc0(len + 1);
 		sci_get_selected_text(doc_list[idx].sci, sel);
 
-		// write data to the command
+		/* write data to the command */
 		remaining = len - 1;
 		do
 		{
@@ -240,7 +240,7 @@ static void cc_show_dialog_custom_commands(void)
 		for (i = 0; i < g_strv_length(ui_prefs.custom_commands); i++)
 		{
 			if (ui_prefs.custom_commands[i][0] == '\0')
-				continue; // skip empty fields
+				continue; /* skip empty fields */
 
 			cc_add_command(&cc, i);
 		}
@@ -255,7 +255,7 @@ static void cc_show_dialog_custom_commands(void)
 
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
-		// get all hboxes which contain a label and an entry element
+		/* get all hboxes which contain a label and an entry element */
 		GList *children = gtk_container_get_children(GTK_CONTAINER(cc.box));
 		GList *tmp;
 		GSList *result_list = NULL;
@@ -266,15 +266,15 @@ static void cc_show_dialog_custom_commands(void)
 
 		while (children != NULL)
 		{
-			// get the contents of each hbox
+			/* get the contents of each hbox */
 			tmp = gtk_container_get_children(GTK_CONTAINER(children->data));
 
-			// first element of the list is the label, so skip it and get the entry element
+			/* first element of the list is the label, so skip it and get the entry element */
 			tmp = tmp->next;
 
 			text = gtk_entry_get_text(GTK_ENTRY(tmp->data));
 
-			// if the content of the entry is non-empty, add it to the result array
+			/* if the content of the entry is non-empty, add it to the result array */
 			if (text[0] != '\0')
 			{
 				result_list = g_slist_append(result_list, g_strdup(text));
@@ -282,7 +282,7 @@ static void cc_show_dialog_custom_commands(void)
 			}
 			children = children->next;
 		}
-		// create a new null-terminated array but only if there any commands defined
+		/* create a new null-terminated array but only if there any commands defined */
 		if (len > 0)
 		{
 			result = g_new(gchar*, len + 1);
@@ -293,12 +293,12 @@ static void cc_show_dialog_custom_commands(void)
 				result_list = result_list->next;
 				j++;
 			}
-			result[len] = NULL; // null-terminate the array
+			result[len] = NULL; /* null-terminate the array */
 		}
-		// set the new array
+		/* set the new array */
 		g_strfreev(ui_prefs.custom_commands);
 		ui_prefs.custom_commands = result;
-		// rebuild the menu items
+		/* rebuild the menu items */
 		tools_create_insert_custom_command_menu_items();
 
 		g_slist_free(result_list);
@@ -326,7 +326,7 @@ static void cc_on_custom_command_menu_activate(GtkMenuItem *menuitem, gpointer u
 	while (children != NULL)
 	{
 		if (i == (len - 2))
-			break; // stop before the last two elements (the seperator and the set entry)
+			break; /* stop before the last two elements (the seperator and the set entry) */
 
 		gtk_widget_set_sensitive(GTK_WIDGET(children->data), enable);
 		children = children->next;
@@ -351,8 +351,8 @@ static void cc_on_custom_command_activate(GtkMenuItem *menuitem, gpointer user_d
 		return;
 	}
 
-	// send it through the command and when the command returned the output the current selection
-	// will be replaced
+	/* send it through the command and when the command returned the output the current selection
+	 * will be replaced */
 	tools_execute_custom_command(idx, ui_prefs.custom_commands[command_idx]);
 }
 
@@ -398,7 +398,7 @@ void tools_create_insert_custom_command_menu_items(void)
 	GList *mp_children;
 	static gboolean signal_set = FALSE;
 
-	// first clean the menus to be able to rebuild them
+	/* first clean the menus to be able to rebuild them */
 	me_children = gtk_container_get_children(GTK_CONTAINER(menu_edit));
 	mp_children = gtk_container_get_children(GTK_CONTAINER(menu_popup));
 	while (me_children != NULL)
@@ -428,7 +428,7 @@ void tools_create_insert_custom_command_menu_items(void)
 		gint idx = 0;
 		for (i = 0; i < g_strv_length(ui_prefs.custom_commands); i++)
 		{
-			if (ui_prefs.custom_commands[i][0] != '\0') // skip empty fields
+			if (ui_prefs.custom_commands[i][0] != '\0') /* skip empty fields */
 			{
 				cc_insert_custom_command_items(menu_edit, menu_popup, ui_prefs.custom_commands[i], idx);
 				idx++;
@@ -436,7 +436,7 @@ void tools_create_insert_custom_command_menu_items(void)
 		}
 	}
 
-	// separator and Set menu item
+	/* separator and Set menu item */
 	item = gtk_separator_menu_item_new();
 	gtk_container_add(GTK_CONTAINER(menu_edit), item);
 	gtk_widget_show(item);
@@ -460,15 +460,13 @@ void tools_create_insert_custom_command_menu_items(void)
 /* (stolen from bluefish, thanks)
  * Returns number of characters, lines and words in the supplied gchar*.
  * Handles UTF-8 correctly. Input must be properly encoded UTF-8.
- * Words are defined as any characters grouped, separated with spaces.
- */
-static void
-word_count(gchar *text, guint *chars, guint *lines, guint *words)
+ * Words are defined as any characters grouped, separated with spaces. */
+static void word_count(gchar *text, guint *chars, guint *lines, guint *words)
 {
 	guint in_word = 0;
 	gunichar utext;
 
-	if (!text) return; // politely refuse to operate on NULL
+	if (!text) return; /* politely refuse to operate on NULL */
 
 	*chars = *words = *lines = 0;
 	while (*text != '\0')
@@ -492,19 +490,20 @@ word_count(gchar *text, guint *chars, guint *lines, guint *words)
 				}
 				break;
 			default:
-				utext = g_utf8_get_char_validated(text, 2); // This might be an utf-8 char
-				if (g_unichar_isspace(utext)) // Unicode encoded space?
+				utext = g_utf8_get_char_validated(text, 2); /* This might be an utf-8 char */
+				if (g_unichar_isspace(utext)) /* Unicode encoded space? */
 					goto mb_word_separator;
-				if (g_unichar_isgraph(utext)) // Is this something printable?
+				if (g_unichar_isgraph(utext)) /* Is this something printable? */
 					in_word = 1;
 				break;
 		}
-		text = g_utf8_next_char(text); // Even if the current char is 2 bytes, this will iterate correctly.
+		/* Even if the current char is 2 bytes, this will iterate correctly. */
+		text = g_utf8_next_char(text);
 	}
 
-	// Capture last word, if there's no whitespace at the end of the file.
+	/* Capture last word, if there's no whitespace at the end of the file. */
 	if (in_word) (*words)++;
-	// We start counting line numbers from 1
+	/* We start counting line numbers from 1 */
 	if (*chars > 0) (*lines)++;
 }
 
@@ -662,13 +661,13 @@ void tools_color_chooser(gchar *color)
 		g_signal_connect(ui_widgets.open_colorsel, "delete_event",
 						G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 	}
-	// if color is non-NULL set it in the dialog as preselected color
+	/* if color is non-NULL set it in the dialog as preselected color */
 	if (color != NULL && (color[0] == '0' || color[0] == '#'))
 	{
 		GdkColor gc;
 
 		if (color[0] == '0' && color[1] == 'x')
-		{	// we have a string of the format "0x00ff00" and we need it to "#00ff00"
+		{	/* we have a string of the format "0x00ff00" and we need it to "#00ff00" */
 			color[1] = '#';
 			color++;
 		}
@@ -679,7 +678,7 @@ void tools_color_chooser(gchar *color)
 							GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->colorsel), &gc);
 	}
 
-	// We make sure the dialog is visible.
+	/* We make sure the dialog is visible. */
 	gtk_window_present(GTK_WINDOW(ui_widgets.open_colorsel));
 #endif
 }

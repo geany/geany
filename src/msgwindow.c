@@ -47,15 +47,15 @@
 
 
 
-// used for parse_file_line
+/* used for parse_file_line */
 typedef struct
 {
-	const gchar *string;	// line data
-	const gchar *dir;		// working directory when string was generated
-	const gchar *pattern;	// pattern to split the error message into some fields
-	guint min_fields;		// used to detect errors after parsing
-	guint line_idx;			// idx of the field where the line is
-	gint file_idx;			// idx of the field where the filename is or -1
+	const gchar *string;	/* line data */
+	const gchar *dir;		/* working directory when string was generated */
+	const gchar *pattern;	/* pattern to split the error message into some fields */
+	guint min_fields;		/* used to detect errors after parsing */
+	guint line_idx;			/* idx of the field where the line is */
+	gint file_idx;			/* idx of the field where the filename is or -1 */
 } ParseData;
 
 MessageWindow msgwindow;
@@ -133,7 +133,7 @@ static void prepare_msg_tree_view(void)
 	GtkTreeSelection *selection;
 	PangoFontDescription *pfd;
 
-	// doc idx, line, fg, str
+	/* doc idx, line, fg, str */
 	msgwindow.store_msg = gtk_list_store_new(4, G_TYPE_INT, G_TYPE_INT,
 		GDK_TYPE_COLOR, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(msgwindow.tree_msg), GTK_TREE_MODEL(msgwindow.store_msg));
@@ -149,14 +149,15 @@ static void prepare_msg_tree_view(void)
 	gtk_widget_modify_font(msgwindow.tree_msg, pfd);
 	pango_font_description_free(pfd);
 
-	// use button-release-event so the selection has changed (connect_after button-press-event doesn't work)
+	/* use button-release-event so the selection has changed
+	 * (connect_after button-press-event doesn't work) */
 	g_signal_connect(G_OBJECT(msgwindow.tree_msg), "button-release-event",
 					G_CALLBACK(on_msgwin_button_press_event), GINT_TO_POINTER(MSG_MESSAGE));
 
-	// selection handling
+	/* selection handling */
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_msg));
 	gtk_tree_selection_set_mode(selection, GTK_SELECTION_SINGLE);
-	//g_signal_connect(G_OBJECT(selection), "changed", G_CALLBACK(on_msg_tree_selection_changed), NULL);
+	/*g_signal_connect(G_OBJECT(selection), "changed",G_CALLBACK(on_msg_tree_selection_changed), NULL);*/
 }
 
 
@@ -181,14 +182,15 @@ static void prepare_compiler_tree_view(void)
 	gtk_widget_modify_font(msgwindow.tree_compiler, pfd);
 	pango_font_description_free(pfd);
 
-	// use button-release-event so the selection has changed (connect_after button-press-event doesn't work)
+	/* use button-release-event so the selection has changed
+	 * (connect_after button-press-event doesn't work) */
 	g_signal_connect(G_OBJECT(msgwindow.tree_compiler), "button-release-event",
 					G_CALLBACK(on_msgwin_button_press_event), GINT_TO_POINTER(MSG_COMPILER));
 
-	// selection handling
+	/* selection handling */
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_compiler));
 	gtk_tree_selection_set_mode(selection, GTK_SELECTION_SINGLE);
-	//g_signal_connect(G_OBJECT(selection), "changed", G_CALLBACK(on_msg_tree_selection_changed), NULL);
+	/*g_signal_connect(G_OBJECT(selection), "changed", G_CALLBACK(on_msg_tree_selection_changed), NULL);*/
 }
 
 
@@ -197,7 +199,7 @@ static const GdkColor color_error = {0, 65535, 0, 0};
 static const GdkColor *get_color(gint msg_color)
 {
 	static const GdkColor dark_red = {0, 65535 / 2, 0, 0};
-	static const GdkColor blue = {0, 0, 0, 0xD000};	// not too bright ;-)
+	static const GdkColor blue = {0, 0, 0, 0xD000};	/* not too bright ;-) */
 	static const GdkColor black = {0, 0, 0, 0};
 
 	switch (msg_color)
@@ -222,7 +224,7 @@ void msgwin_compiler_add_fmt(gint msg_color, const gchar *format, ...)
 }
 
 
-// adds string to the compiler textview
+/* adds string to the compiler textview */
 void msgwin_compiler_add(gint msg_color, const gchar *msg)
 {
 	GtkTreeIter iter;
@@ -240,7 +242,7 @@ void msgwin_compiler_add(gint msg_color, const gchar *msg)
 		gtk_tree_path_free(path);
 	}
 
-	// calling build_menu_update for every build message would be overkill
+	/* calling build_menu_update for every build message would be overkill */
 	gtk_widget_set_sensitive(build_get_menu_items(-1)->item_next_error, TRUE);
 }
 
@@ -270,7 +272,7 @@ void msgwin_msg_add_fmt(gint msg_color, gint line, gint idx, const gchar *format
 }
 
 
-// adds string to the msg treeview
+/* adds string to the msg treeview */
 void msgwin_msg_add(gint msg_color, gint line, gint idx, const gchar *string)
 {
 	GtkTreeIter iter;
@@ -279,9 +281,9 @@ void msgwin_msg_add(gint msg_color, gint line, gint idx, const gchar *string)
 
 	if (! ui_prefs.msgwindow_visible) msgwin_show_hide(TRUE);
 
-	// work around a strange problem when adding very long lines(greater than 4000 bytes)
-	// cut the string to a maximum of 1024 bytes and discard the rest
-	/// TODO find the real cause for the display problem / if it is GtkTreeView file a bug report
+	/* work around a strange problem when adding very long lines(greater than 4000 bytes)
+	 * cut the string to a maximum of 1024 bytes and discard the rest */
+	/** TODO find the real cause for the display problem / if it is GtkTreeView file a bug report */
 	if (strlen(string) > 1024)
 		tmp = g_strndup(string, 1024);
 	else
@@ -309,7 +311,7 @@ void msgwin_status_add(const gchar *format, ...)
 	g_vsnprintf(string, 512, format, args);
 	va_end(args);
 
-	// add a timestamp to status messages
+	/* add a timestamp to status messages */
 	time_str = utils_get_current_time_string();
 	if (time_str == NULL)
 		statusmsg = g_strdup(string);
@@ -317,7 +319,7 @@ void msgwin_status_add(const gchar *format, ...)
 		statusmsg = g_strconcat(time_str, ": ", string, NULL);
 	g_free(time_str);
 
-	// add message to Status window
+	/* add message to Status window */
 	gtk_list_store_append(msgwindow.store_status, &iter);
 	gtk_list_store_set(msgwindow.store_status, &iter, 0, statusmsg, -1);
 	g_free(statusmsg);
@@ -479,7 +481,7 @@ gboolean msgwin_goto_compiler_file_line()
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_compiler));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter))
 	{
-		// if the item is not coloured red, it's not an error line
+		/* if the item is not coloured red, it's not an error line */
 		gtk_tree_model_get(model, &iter, 0, &color, -1);
 		if (! gdk_color_equal(color, &color_error))
 		{
@@ -510,12 +512,12 @@ gboolean msgwin_goto_compiler_file_line()
 				idx = document_find_by_filename(utf8_filename, FALSE);
 				g_free(utf8_filename);
 
-				if (idx < 0)	// file not already open
+				if (idx < 0)	/* file not already open */
 					idx = document_open_file(filename, FALSE, NULL, NULL);
 
 				if (idx >= 0 && doc_list[idx].is_valid)
 				{
-					if (! doc_list[idx].changed)	// if modified, line may be wrong
+					if (! doc_list[idx].changed)	/* if modified, line may be wrong */
 						document_set_indicator(idx, line - 1);
 					ret = utils_goto_line(idx, line);
 				}
@@ -537,7 +539,7 @@ static void parse_file_line(ParseData *data, gchar **filename, gint *line)
 {
 	gchar *end = NULL;
 	gchar **fields;
-	guint skip_dot_slash = 0;	// number of characters to skip at the beginning of the filename
+	guint skip_dot_slash = 0;	/* number of characters to skip at the beginning of the filename */
 
 	*filename = NULL;
 	*line = -1;
@@ -546,7 +548,7 @@ static void parse_file_line(ParseData *data, gchar **filename, gint *line)
 
 	fields = g_strsplit_set(data->string, data->pattern, data->min_fields);
 
-	// parse the line
+	/* parse the line */
 	if (g_strv_length(fields) < data->min_fields)
 	{
 		g_strfreev(fields);
@@ -555,17 +557,17 @@ static void parse_file_line(ParseData *data, gchar **filename, gint *line)
 
 	*line = strtol(fields[data->line_idx], &end, 10);
 
-	// if the line could not be read, line is 0 and an error occurred, so we leave
+	/* if the line could not be read, line is 0 and an error occurred, so we leave */
 	if (fields[data->line_idx] == end)
 	{
 		g_strfreev(fields);
 		return;
 	}
 
-	// let's stop here if there is no filename in the error message
+	/* let's stop here if there is no filename in the error message */
 	if (data->file_idx == -1)
 	{
-		// we have no filename in the error message, so take the current one and hope it's correct
+		/* we have no filename in the error message, so take the current one and hope it's correct */
 		document *doc = document_get_current();
 		if (doc != NULL)
 			*filename = g_strdup(doc->file_name);
@@ -573,11 +575,11 @@ static void parse_file_line(ParseData *data, gchar **filename, gint *line)
 		return;
 	}
 
-	// skip some characters at the beginning of the filename, at the moment only "./"
-	// can be extended if other "trash" is known
+	/* skip some characters at the beginning of the filename, at the moment only "./"
+	 * can be extended if other "trash" is known */
 	if (strncmp(fields[data->file_idx], "./", 2) == 0) skip_dot_slash = 2;
 
-	// get the build directory to get the path to look for other files
+	/* get the build directory to get the path to look for other files */
 	if (! utils_is_absolute_path(fields[data->file_idx]))
 		*filename = g_strconcat(data->dir, G_DIR_SEPARATOR_S,
 			fields[data->file_idx] + skip_dot_slash, NULL);
@@ -613,8 +615,8 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir, gch
 	{
 		case GEANY_FILETYPES_PHP:
 		{
-			// Parse error: parse error, unexpected T_CASE in brace_bug.php on line 3
-			// Parse error: syntax error, unexpected T_LNUMBER, expecting T_FUNCTION in bob.php on line 16
+			/* Parse error: parse error, unexpected T_CASE in brace_bug.php on line 3
+			 * Parse error: syntax error, unexpected T_LNUMBER, expecting T_FUNCTION in bob.php on line 16 */
 			gchar *tmp = strstr(string, " in ");
 
 			if(tmp != NULL)
@@ -636,19 +638,19 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir, gch
 		}
 		case GEANY_FILETYPES_PERL:
 		{
-			// syntax error at test.pl line 7, near "{
+			/* syntax error at test.pl line 7, near "{ */
 			data.pattern = " ";
 			data.min_fields = 6;
 			data.line_idx = 5;
 			data.file_idx = 3;
 			break;
 		}
-		// the error output of python and tcl equals
+		/* the error output of python and tcl equals */
 		case GEANY_FILETYPES_TCL:
 		case GEANY_FILETYPES_PYTHON:
 		{
-			// File "HyperArch.py", line 37, in ?
-			// (file "clrdial.tcl" line 12)
+			/* File "HyperArch.py", line 37, in ?
+			 * (file "clrdial.tcl" line 12) */
 			data.pattern = " \"";
 			data.min_fields = 6;
 			data.line_idx = 5;
@@ -658,8 +660,8 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir, gch
 		case GEANY_FILETYPES_BASIC:
 		case GEANY_FILETYPES_PASCAL:
 		{
-			// getdrive.bas(52) error 18: Syntax error in '? GetAllDrives'
-			// bandit.pas(149,3) Fatal: Syntax error, ";" expected but "ELSE" found
+			/* getdrive.bas(52) error 18: Syntax error in '? GetAllDrives'
+			 * bandit.pas(149,3) Fatal: Syntax error, ";" expected but "ELSE" found */
 			data.pattern = "(";
 			data.min_fields = 2;
 			data.line_idx = 1;
@@ -668,12 +670,12 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir, gch
 		}
 		case GEANY_FILETYPES_D:
 		{
-			// GNU D compiler front-end, gdc
-			// gantry.d:18: variable gantry.main.c reference to auto class must be auto
-			// warning - gantry.d:20: statement is not reachable
-			// Digital Mars dmd compiler
-			// warning - pi.d(118): implicit conversion of expression (digit) of type int ...
-			// gantry.d(18): variable gantry.main.c reference to auto class must be auto
+			/* GNU D compiler front-end, gdc
+			 * gantry.d:18: variable gantry.main.c reference to auto class must be auto
+			 * warning - gantry.d:20: statement is not reachable
+			 * Digital Mars dmd compiler
+			 * warning - pi.d(118): implicit conversion of expression (digit) of type int ...
+			 * gantry.d(18): variable gantry.main.c reference to auto class must be auto */
 			if (strncmp(string, "warning - ", 10) == 0)
 			{
 				data.pattern = " (:";
@@ -692,8 +694,8 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir, gch
 		}
 		case GEANY_FILETYPES_FERITE:
 		{
-			// Error: Parse Error: on line 5 in "/tmp/hello.fe"
-			// Error: Compile Error: on line 24, in /test/class.fe
+			/* Error: Parse Error: on line 5 in "/tmp/hello.fe"
+			 * Error: Compile Error: on line 24, in /test/class.fe */
 			if (strncmp(string, "Error: Compile Error", 20) == 0)
 			{
 				data.pattern = " ";
@@ -712,7 +714,7 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir, gch
 		}
 		case GEANY_FILETYPES_HTML:
 		{
-			// line 78 column 7 - Warning: <table> missing '>' for end of tag
+			/* line 78 column 7 - Warning: <table> missing '>' for end of tag */
 			data.pattern = " ";
 			data.min_fields = 4;
 			data.line_idx = 1;
@@ -724,16 +726,16 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir, gch
 		case GEANY_FILETYPES_CPP:
 		case GEANY_FILETYPES_RUBY:
 		case GEANY_FILETYPES_JAVA:
-			// only gcc is supported, I don't know any other C(++) compilers and their error messages
-			// empty.h:4: Warnung: type defaults to `int' in declaration of `foo'
-			// empty.c:21: error: conflicting types for `foo'
-			// Only parse file and line, so that linker errors will also work (with -g)
+			/* only gcc is supported, I don't know any other C(++) compilers and their error messages
+			 * empty.h:4: Warnung: type defaults to `int' in declaration of `foo'
+			 * empty.c:21: error: conflicting types for `foo'
+			 * Only parse file and line, so that linker errors will also work (with -g) */
 		case GEANY_FILETYPES_FORTRAN:
 		case GEANY_FILETYPES_LATEX:
-			// ./kommtechnik_2b.tex:18: Emergency stop.
-		case GEANY_FILETYPES_MAKE:	// Assume makefile is building with gcc
+			/* ./kommtechnik_2b.tex:18: Emergency stop. */
+		case GEANY_FILETYPES_MAKE:	/* Assume makefile is building with gcc */
 		case GEANY_FILETYPES_ALL:
-		default:	// The default is a GNU gcc type error
+		default:	/* The default is a GNU gcc type error */
 		{
 			if (build_info.file_type_id == GEANY_FILETYPES_JAVA &&
 				strncmp(string, "[javac]", 7) == 0)
@@ -746,7 +748,7 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir, gch
 				data.file_idx = 1;
 				break;
 			}
-			// don't accidently find libtool versions x:y:x and think it is a file name
+			/* don't accidently find libtool versions x:y:x and think it is a file name */
 			if (strstr(string, "libtool --mode=link") == NULL)
 			{
 				data.pattern = ":";
@@ -779,7 +781,7 @@ gboolean msgwin_goto_messages_file_line()
 		gtk_tree_model_get(model, &iter, 0, &line, 1, &idx, 3, &string, -1);
 		if (line >= 0 && idx >= 0)
 		{
-			ret = utils_goto_line(idx, line);	// checks valid idx
+			ret = utils_goto_line(idx, line);	/* checks valid idx */
 		}
 		else if (line < 0 && string != NULL)
 		{
@@ -787,9 +789,9 @@ gboolean msgwin_goto_messages_file_line()
 			msgwin_parse_grep_line(string, &filename, &line);
 			if (filename != NULL && line > -1)
 			{
-				// use document_open_file to find an already open file, or open it in place
+				/* use document_open_file to find an already open file, or open it in place */
 				idx = document_open_file(filename, FALSE, NULL, NULL);
-				// utils_goto_file_line will check valid filename.
+				/* utils_goto_file_line will check valid filename. */
 				ret = utils_goto_file_line(filename, FALSE, line);
 			}
 			g_free(filename);
@@ -814,7 +816,7 @@ static void msgwin_parse_grep_line(const gchar *string, gchar **filename, gint *
 
 	if (string == NULL || msgwindow.find_in_files_dir == NULL) return;
 
-	// conflict:3:conflicting types for `foo'
+	/* conflict:3:conflicting types for `foo' */
 	data.string = string;
 	data.dir = msgwindow.find_in_files_dir;
 	data.pattern = ":";
@@ -829,19 +831,19 @@ static void msgwin_parse_grep_line(const gchar *string, gchar **filename, gint *
 static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *event,
 																			gpointer user_data)
 {
-	// user_data might be NULL, GPOINTER_TO_INT returns 0 if called with NULL
+	/* user_data might be NULL, GPOINTER_TO_INT returns 0 if called with NULL */
 
 	if (event->button == 1)
 	{
 		switch (GPOINTER_TO_INT(user_data))
 		{
 			case MSG_COMPILER:
-			{	// single click in the compiler treeview
+			{	/* single click in the compiler treeview */
 				msgwin_goto_compiler_file_line();
 				break;
 			}
 			case MSG_MESSAGE:
-			{	// single click in the message treeview (results of 'Find usage')
+			{	/* single click in the message treeview (results of 'Find usage') */
 				msgwin_goto_messages_file_line();
 				break;
 			}
@@ -849,7 +851,7 @@ static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *
 	}
 
 	if (event->button == 3)
-	{	// popupmenu to hide or clear the active treeview
+	{	/* popupmenu to hide or clear the active treeview */
 		switch (GPOINTER_TO_INT(user_data))
 		{
 			case MSG_STATUS:
@@ -878,7 +880,7 @@ static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *
 
 void msgwin_switch_tab(MessageWindowTabNum tabnum, gboolean show)
 {
-	GtkWidget *widget = NULL;	// widget to focus
+	GtkWidget *widget = NULL;	/* widget to focus */
 
 	switch (tabnum)
 	{

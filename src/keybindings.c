@@ -96,13 +96,13 @@ static void cb_func_nav_back(guint key_id);
 static void cb_func_nav_forward(guint key_id);
 static void cb_func_toggle_sidebar(guint key_id);
 
-// common function for editing keybindings, only valid when scintilla has focus.
+/* common function for editing keybindings, only valid when scintilla has focus. */
 static void cb_func_edit(guint key_id);
 
-// common function for global editing keybindings.
+/* common function for global editing keybindings. */
 static void cb_func_edit_global(guint key_id);
 
-// common function for keybindings using current word
+/* common function for keybindings using current word */
 static void cb_func_current_word(guint key_id);
 
 static void add_menu_accels(void);
@@ -110,7 +110,7 @@ static void add_menu_accels(void);
 
 static void init_default_kb(void)
 {
-	// init all fields of keys with default values
+	/* init all fields of keys with default values */
 	keys[GEANY_KEYS_MENU_NEW] = fill(cb_func_file_action,
 		GDK_n, GDK_CONTROL_MASK, "menu_new", _("New"));
 	keys[GEANY_KEYS_MENU_OPEN] = fill(cb_func_file_action,
@@ -151,7 +151,7 @@ static void init_default_kb(void)
 	keys[GEANY_KEYS_MENU_PREFERENCES] = fill(cb_func_menu_preferences,
 		GDK_p, GDK_CONTROL_MASK | GDK_MOD1_MASK, "menu_preferences", _("Preferences"));
 
-	// search
+	/* search */
 	keys[GEANY_KEYS_MENU_FIND] = fill(cb_func_menu_search,
 		GDK_f, GDK_CONTROL_MASK, "menu_find", _("Find"));
 	keys[GEANY_KEYS_MENU_FINDNEXT] = fill(cb_func_menu_search,
@@ -301,7 +301,7 @@ static void init_default_kb(void)
 		GDK_space, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_calltip", _("Show calltip"));
 	keys[GEANY_KEYS_EDIT_MACROLIST] = fill(cb_func_edit,
 		GDK_Return, GDK_CONTROL_MASK, "edit_macrolist", _("Show macro list"));
-	keys[GEANY_KEYS_EDIT_COMPLETESNIPPET] = fill(NULL,	// has special callback
+	keys[GEANY_KEYS_EDIT_COMPLETESNIPPET] = fill(NULL,	/* has special callback */
 		GDK_Tab, 0, "edit_completesnippet", _("Complete snippet"));
 	keys[GEANY_KEYS_EDIT_SUPPRESSSNIPPETCOMPLETION] = fill(cb_func_edit,
 		0, 0, "edit_suppresssnippetcompletion", _("Suppress snippet completion"));
@@ -342,7 +342,7 @@ static void load_user_kb(void)
 	GdkModifierType mods;
 	GKeyFile *config = g_key_file_new();
 
-	// now load user defined keys
+	/* now load user defined keys */
 	if (g_key_file_load_from_file(config, configfile, G_KEY_FILE_KEEP_COMMENTS, NULL))
 	{
 		for (i = 0; i < GEANY_MAX_KEYS; i++)
@@ -367,7 +367,7 @@ void keybindings_init(void)
 	init_default_kb();
 	load_user_kb();
 
-	// set section name
+	/* set section name */
 	keys[GEANY_KEYS_GROUP_FILE]->section = _("File menu");
 	keys[GEANY_KEYS_GROUP_EDIT]->section = _("Edit menu");
 	keys[GEANY_KEYS_GROUP_SEARCH]->section = _("Search menu");
@@ -404,7 +404,7 @@ static void add_menu_accels()
 {
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
 
-	// apply the settings
+	/* apply the settings */
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_OPENSELECTED, menu_open_selected_file1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_SAVEALL, menu_save_all1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_SAVEAS, menu_save_as1);
@@ -443,7 +443,7 @@ static void add_menu_accels()
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_PROJECTPROPERTIES, project_properties1);
 
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_OPENCOLORCHOOSER, menu_choose_color1);
-	//~ GEANY_ADD_ACCEL(GEANY_KEYS_MENU_INSERTSPECIALCHARS, menu_insert_special_chars1);
+	/*GEANY_ADD_ACCEL(GEANY_KEYS_MENU_INSERTSPECIALCHARS, menu_insert_special_chars1);*/
 
 	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_TOGGLECASE, menu_toggle_case2);
 	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_COMMENTLINE, menu_comment_line1);
@@ -471,7 +471,7 @@ static void add_menu_accels()
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDIT_INCREASEINDENT, menu_increase_indent2);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDIT_DECREASEINDENT, menu_decrease_indent2);
 
-	// the build menu items are set if the build menus are created
+	/* the build menu items are set if the build menus are created */
 
 	gtk_window_add_accel_group(GTK_WINDOW(app->window), accel_group);
 }
@@ -485,7 +485,7 @@ void keybindings_write_to_file(void)
 	guint i;
 	GKeyFile *config = g_key_file_new();
 
- 	// add comment if the file is newly created
+ 	/* add comment if the file is newly created */
 	if (! g_key_file_load_from_file(config, configfile, G_KEY_FILE_KEEP_COMMENTS, NULL))
 	{
 		g_key_file_set_comment(config, NULL, NULL, "Keybindings for Geany\nThe format looks like \"<Control>a\" or \"<Shift><Alt>F1\".\nBut you can also change the keys in Geany's preferences dialog.", NULL);
@@ -498,7 +498,7 @@ void keybindings_write_to_file(void)
 		g_free(val);
 	}
 
-	// write the file
+	/* write the file */
 	data = g_key_file_to_data(config, NULL, NULL);
 	utils_write_file(configfile, data);
 
@@ -610,7 +610,7 @@ void keybindings_show_shortcuts()
 		GtkWidget *wid;
 
 		prefs_show_dialog();
-		// select the KB page
+		/* select the KB page */
 		wid = lookup_widget(ui_widgets.prefs_dialog, "frame22");
 		if (wid != NULL)
 		{
@@ -627,16 +627,16 @@ void keybindings_show_shortcuts()
 
 static gboolean check_fixed_kb(guint keyval, guint state)
 {
-	// check alt-0 to alt-9 for setting current notebook page
+	/* check alt-0 to alt-9 for setting current notebook page */
 	if (state & GDK_MOD1_MASK && keyval >= GDK_0 && keyval <= GDK_9)
 	{
 		gint page = keyval - GDK_0 - 1;
 		gint npages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
 
-		// alt-0 is for the rightmost tab
+		/* alt-0 is for the rightmost tab */
 		if (keyval == GDK_0)
 			page = npages - 1;
-		// invert the order if tabs are added on the other side
+		/* invert the order if tabs are added on the other side */
 		if (swap_alt_tab_order && ! prefs.tab_order_ltr)
 			page = (npages - 1) - page;
 
@@ -645,7 +645,7 @@ static gboolean check_fixed_kb(guint keyval, guint state)
 	}
 	if (keyval == GDK_Page_Up || keyval == GDK_Page_Down)
 	{
-		// switch to first or last document
+		/* switch to first or last document */
 		if (state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK))
 		{
 			if (keyval == GDK_Page_Up)
@@ -671,7 +671,7 @@ static gboolean check_snippet_completion(guint keyval, guint state)
 		gint idx = document_get_cur_idx();
 		GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(app->window));
 
-		// keybinding only valid when scintilla widget has focus
+		/* keybinding only valid when scintilla widget has focus */
 		if (DOC_IDX_VALID(idx) && focusw == GTK_WIDGET(doc_list[idx].sci))
 		{
 			ScintillaObject *sci = doc_list[idx].sci;
@@ -702,13 +702,13 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 		return FALSE;
 	if (gtk_window_get_focus(GTK_WINDOW(app->window)) != vc->vte)
 		return FALSE;
-	// prevent menubar flickering:
+	/* prevent menubar flickering: */
 	if (state == GDK_SHIFT_MASK && (keyval >= GDK_a && keyval <= GDK_z))
 		return FALSE;
-	if (state == 0 && (keyval < GDK_F1 || keyval > GDK_F35))	// e.g. backspace
+	if (state == 0 && (keyval < GDK_F1 || keyval > GDK_F35))	/* e.g. backspace */
 		return FALSE;
 
-	// make focus commands override any bash commands
+	/* make focus commands override any bash commands */
 	for (i = GEANY_KEYS_GROUP_FOCUS; i < GEANY_KEYS_GROUP_TABS; i++)
 	{
 		if (state == keys[i]->mods && keyval == keys[i]->key)
@@ -741,12 +741,12 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *ev, gpointer user
 	keyval = ev->keyval;
     state = ev->state & GEANY_KEYS_MODIFIER_MASK;
 
-	// hack to get around that CTRL+Shift+r results in GDK_R not GDK_r
+	/* hack to get around that CTRL+Shift+r results in GDK_R not GDK_r */
 	if (state & GDK_SHIFT_MASK)
 		if (keyval >= GDK_A && keyval <= GDK_Z)
 			keyval += GDK_a - GDK_A;
 
-	// special cases
+	/* special cases */
 #ifdef HAVE_VTE
 	if (vte_info.have_vte && check_vte(state, keyval))
 		return FALSE;
@@ -759,14 +759,14 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *ev, gpointer user
 		if (keyval == keys[i]->key && state == keys[i]->mods)
 		{
 			if (keys[i]->cb_func == NULL)
-				return FALSE;	// ignore the keybinding
+				return FALSE;	/* ignore the keybinding */
 
-			// call the corresponding callback function for this shortcut
+			/* call the corresponding callback function for this shortcut */
 			keys[i]->cb_func(i);
 			return TRUE;
 		}
 	}
-	// fixed keybindings can be overridden by user bindings
+	/* fixed keybindings can be overridden by user bindings */
 	if (check_fixed_kb(keyval, state))
 		return TRUE;
 	return FALSE;
@@ -999,7 +999,7 @@ static void cb_func_reloadtaglist(G_GNUC_UNUSED guint key_id)
 }
 
 
-// common function for keybindings using current word
+/* common function for keybindings using current word */
 static void cb_func_current_word(guint key_id)
 {
 	gint idx = document_get_cur_idx();
@@ -1076,7 +1076,7 @@ static void cb_func_switch_tablastused(G_GNUC_UNUSED guint key_id)
 			document_get_notebook_page(last_doc_idx));
 }
 
-// move document left/right/first/last
+/* move document left/right/first/last */
 static void cb_func_move_tab(guint key_id)
 {
 	gint idx = document_get_cur_idx();
@@ -1089,14 +1089,14 @@ static void cb_func_move_tab(guint key_id)
 
 	if (key_id == GEANY_KEYS_MOVE_TABLEFT)
 	{
-		gtk_notebook_reorder_child(nb, sci, cur_page - 1);	// notebook wraps around by default
+		gtk_notebook_reorder_child(nb, sci, cur_page - 1);	/* notebook wraps around by default */
 	}
 	else if (key_id == GEANY_KEYS_MOVE_TABRIGHT)
 	{
 		gint npage = cur_page + 1;
 
 		if (npage == gtk_notebook_get_n_pages(nb))
-			npage = 0;	// wraparound
+			npage = 0;	/* wraparound */
 		gtk_notebook_reorder_child(nb, sci, npage);
 	}
 	else if (key_id == GEANY_KEYS_MOVE_TABFIRST)
@@ -1130,12 +1130,12 @@ static void goto_matching_brace(gint idx)
 
 	pos = sci_get_current_position(doc_list[idx].sci);
 	if (! utils_isbrace(sci_get_char_at(doc_list[idx].sci, pos), TRUE))
-		pos--; // set pos to the brace
+		pos--; /* set pos to the brace */
 
 	new_pos = sci_find_bracematch(doc_list[idx].sci, pos);
 	if (new_pos != -1)
-	{
-		sci_set_current_position(doc_list[idx].sci, new_pos, FALSE); // set the cursor at the brace
+	{	/* set the cursor at the brace */
+		sci_set_current_position(doc_list[idx].sci, new_pos, FALSE);
 		editor_display_current_line(idx, 0.5F);
 	}
 }
@@ -1210,8 +1210,8 @@ static void cb_func_edit_global(guint key_id)
 static void duplicate_lines(ScintillaObject *sci)
 {
 	if (sci_get_lines_selected(sci) > 1)
-	{
-		editor_select_lines(sci, FALSE);	// ignore extra_line because of selecting lines from the line number column
+	{	/* ignore extra_line because of selecting lines from the line number column */
+		editor_select_lines(sci, FALSE);
 		sci_selection_duplicate(sci);
 	}
 	else if (sci_can_copy(sci))
@@ -1223,18 +1223,18 @@ static void duplicate_lines(ScintillaObject *sci)
 
 static void delete_lines(ScintillaObject *sci)
 {
-	editor_select_lines(sci, TRUE); // include last line (like cut lines, copy lines do)
-	sci_clear(sci);	// (SCI_LINEDELETE only does 1 line)
+	editor_select_lines(sci, TRUE); /* include last line (like cut lines, copy lines do) */
+	sci_clear(sci);	/* (SCI_LINEDELETE only does 1 line) */
 }
 
 
-// common function for editing keybindings, only valid when scintilla has focus.
+/* common function for editing keybindings, only valid when scintilla has focus. */
 static void cb_func_edit(guint key_id)
 {
 	gint idx = document_get_cur_idx();
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(app->window));
 
-	// edit keybindings only valid when scintilla widget has focus
+	/* edit keybindings only valid when scintilla widget has focus */
 	if (! DOC_IDX_VALID(idx) || focusw != GTK_WIDGET(doc_list[idx].sci)) return;
 
 	switch (key_id)
@@ -1354,8 +1354,8 @@ static void cb_func_menu_insert_date(G_GNUC_UNUSED guint key_id)
 
 static void cb_func_menu_insert_specialchars(G_GNUC_UNUSED guint key_id)
 {
-	// TODO: add plugin keybinding support
-	//~ on_menu_insert_special_chars1_activate(NULL, NULL);
+	/** TODO: add plugin keybinding support */
+	/*on_menu_insert_special_chars1_activate(NULL, NULL);*/
 }
 
 static void cb_func_nav_back(G_GNUC_UNUSED guint key_id)

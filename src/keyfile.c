@@ -76,8 +76,8 @@ static void save_recent_files(GKeyFile *config)
 	{
 		if (! g_queue_is_empty(ui_prefs.recent_queue))
 		{
-			// copy the values, this is necessary when this function is called from the
-			// preferences dialog or when quitting is canceled to keep the queue intact
+			/* copy the values, this is necessary when this function is called from the
+			 * preferences dialog or when quitting is canceled to keep the queue intact */
 			recent_files[i] = g_strdup(g_queue_peek_nth(ui_prefs.recent_queue, i));
 		}
 		else
@@ -86,7 +86,7 @@ static void save_recent_files(GKeyFile *config)
 			break;
 		}
 	}
-	// There is a bug in GTK2.6 g_key_file_set_string_list, we must NULL terminate.
+	/* There is a bug in GTK 2.6 g_key_file_set_string_list, we must NULL terminate. */
 	recent_files[prefs.mru_length] = NULL;
 	g_key_file_set_string_list(config, "files", "recent_files",
 				(const gchar**)recent_files, prefs.mru_length);
@@ -104,7 +104,7 @@ void configuration_save_session_files(GKeyFile *config)
 	npage = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->notebook));
 	g_key_file_set_integer(config, "files", "current_page", npage);
 
-	// store the filenames to reopen them the next time
+	/* store the filenames to reopen them the next time */
 	max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
 	for (i = 0; i < max; i++)
 	{
@@ -114,7 +114,7 @@ void configuration_save_session_files(GKeyFile *config)
 			gchar *fname;
 			filetype *ft = doc_list[idx].file_type;
 
-			if (ft == NULL)	// can happen when saving a new file when quitting
+			if (ft == NULL)	/* can happen when saving a new file when quitting */
 				ft = filetypes[GEANY_FILETYPES_ALL];
 			g_snprintf(entry, 13, "FILE_NAME_%d", j);
 			fname = g_strdup_printf("%d;%d;%d;%d;%d;%d;%d;%s;",
@@ -131,7 +131,7 @@ void configuration_save_session_files(GKeyFile *config)
 			j++;
 		}
 	}
-	// if open filenames less than saved session files, delete existing entries in the list
+	/* if open filenames less than saved session files, delete existing entries in the list */
 	i = j;
 	while (TRUE)
 	{
@@ -161,7 +161,7 @@ static void save_plugin_prefs(GKeyFile *config)
 			(const gchar**)app->active_plugins, g_strv_length(app->active_plugins));
 	else
 	{
-		// use an empty dummy array to override maybe exisiting value
+		/* use an empty dummy array to override maybe exisiting value */
 		const gchar *dummy[] = { "" };
 		g_key_file_set_string_list(config, "plugins", "active_plugins", dummy, 1);
 	}
@@ -173,7 +173,7 @@ static void save_dialog_prefs(GKeyFile *config)
 {
 	/* Some of the key names are not consistent, but this is for backwards compatibility */
 
-	// general
+	/* general */
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_load_session", prefs.load_session);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_project_session", project_prefs.project_session);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_save_winpos", prefs.save_winpos);
@@ -185,7 +185,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "auto_focus", prefs.auto_focus);
 	g_key_file_set_string(config, PACKAGE, "default_open_path", prefs.default_open_path);
 
-	// interface
+	/* interface */
 	g_key_file_set_boolean(config, PACKAGE, "sidebar_symbol_visible", prefs.sidebar_symbol_visible);
 	g_key_file_set_boolean(config, PACKAGE, "sidebar_openfiles_visible", prefs.sidebar_openfiles_visible);
 	g_key_file_set_boolean(config, PACKAGE, "sidebar_openfiles_fullpath", prefs.sidebar_openfiles_fullpath);
@@ -199,7 +199,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_integer(config, PACKAGE, "tab_pos_msgwin", prefs.tab_pos_msgwin);
 	g_key_file_set_integer(config, PACKAGE, "tab_pos_sidebar", prefs.tab_pos_sidebar);
 
-	// display
+	/* display */
 	g_key_file_set_boolean(config, PACKAGE, "show_indent_guide", editor_prefs.show_indent_guide);
 	g_key_file_set_boolean(config, PACKAGE, "show_white_space", editor_prefs.show_white_space);
 	g_key_file_set_boolean(config, PACKAGE, "show_line_endings", editor_prefs.show_line_endings);
@@ -209,7 +209,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_integer(config, PACKAGE, "long_line_column", editor_prefs.long_line_column);
 	g_key_file_set_string(config, PACKAGE, "long_line_color", editor_prefs.long_line_color);
 
-	// editor
+	/* editor */
 	g_key_file_set_integer(config, PACKAGE, "symbolcompletion_max_height", editor_prefs.symbolcompletion_max_height);
 	g_key_file_set_integer(config, PACKAGE, "symbolcompletion_min_chars", editor_prefs.symbolcompletion_min_chars);
 	g_key_file_set_boolean(config, PACKAGE, "use_folding", editor_prefs.folding);
@@ -227,7 +227,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_smart_home_key", editor_prefs.smart_home_key);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_newline_strip", editor_prefs.newline_strip);
 
-	// files
+	/* files */
 	g_key_file_set_string(config, PACKAGE, "pref_editor_default_new_encoding", encodings[prefs.default_new_encoding].charset);
 	if (prefs.default_open_encoding == -1)
 		g_key_file_set_string(config, PACKAGE, "pref_editor_default_open_encoding", "none");
@@ -238,7 +238,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_trail_space", prefs.strip_trailing_spaces);
 	g_key_file_set_integer(config, PACKAGE, "mru_length", prefs.mru_length);
 
-	// toolbar
+	/* toolbar */
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show", prefs.toolbar_visible);
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_search", prefs.toolbar_show_search);
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_goto", prefs.toolbar_show_goto);
@@ -253,21 +253,21 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_style", prefs.toolbar_icon_style);
 	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_size", prefs.toolbar_icon_size);
 
-	// templates
+	/* templates */
 	g_key_file_set_string(config, PACKAGE, "pref_template_developer", prefs.template_developer);
 	g_key_file_set_string(config, PACKAGE, "pref_template_company", prefs.template_company);
 	g_key_file_set_string(config, PACKAGE, "pref_template_mail", prefs.template_mail);
 	g_key_file_set_string(config, PACKAGE, "pref_template_initial", prefs.template_initial);
 	g_key_file_set_string(config, PACKAGE, "pref_template_version", prefs.template_version);
 
-	// tools settings
+	/* tools settings */
 	g_key_file_set_string(config, "tools", "make_cmd", prefs.tools_make_cmd ? prefs.tools_make_cmd : "");
 	g_key_file_set_string(config, "tools", "term_cmd", prefs.tools_term_cmd ? prefs.tools_term_cmd : "");
 	g_key_file_set_string(config, "tools", "browser_cmd", prefs.tools_browser_cmd ? prefs.tools_browser_cmd : "");
 	g_key_file_set_string(config, "tools", "grep_cmd", prefs.tools_grep_cmd ? prefs.tools_grep_cmd : "");
 	g_key_file_set_string(config, PACKAGE, "context_action_cmd", prefs.context_action_cmd);
 
-	// printing
+	/* printing */
 	g_key_file_set_string(config, "printing", "print_cmd", printing_prefs.external_print_cmd ? printing_prefs.external_print_cmd : "");
 	g_key_file_set_boolean(config, "printing", "use_gtk_printing", printing_prefs.use_gtk_printing);
 	g_key_file_set_boolean(config, "printing", "print_line_numbers", printing_prefs.print_line_numbers);
@@ -276,7 +276,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, "printing", "page_header_basename", printing_prefs.page_header_basename);
 	g_key_file_set_string(config, "printing", "page_header_datefmt", printing_prefs.page_header_datefmt);
 
-	// VTE
+	/* VTE */
 #ifdef HAVE_VTE
 	g_key_file_set_boolean(config, "VTE", "load_vte", vte_info.load_vte);
 	if (vte_info.load_vte && vc != NULL)
@@ -301,7 +301,7 @@ static void save_dialog_prefs(GKeyFile *config)
 		tmp_string = utils_get_hex_from_color(vc->colour_back);
 		g_key_file_set_string(config, "VTE", "colour_back", tmp_string);
 		g_free(tmp_string);
-		vte_get_working_directory();	// refresh vte_info.dir
+		vte_get_working_directory();	/* refresh vte_info.dir */
 		g_key_file_set_string(config, "VTE", "last_dir", vte_info.dir);
 	}
 #endif
@@ -315,7 +315,7 @@ static void save_ui_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "msgwindow_visible", ui_prefs.msgwindow_visible);
 	g_key_file_set_boolean(config, PACKAGE, "fullscreen", ui_prefs.fullscreen);
 
-	// get the text from the scribble textview
+	/* get the text from the scribble textview */
 	{
 		GtkTextBuffer *buffer;
 		GtkTextIter start, end;
@@ -354,12 +354,12 @@ static void save_ui_prefs(GKeyFile *config)
 				(const gchar**) ui_prefs.custom_commands, g_strv_length(ui_prefs.custom_commands));
 	}
 
-	// search
+	/* search */
 	g_key_file_set_string(config, "search", "fif_extra_options", search_prefs.fif_extra_options ? search_prefs.fif_extra_options : "");
 }
 
 
-// hidden prefs (don't overwrite them so users can edit them manually)
+/* hidden prefs (don't overwrite them so users can edit them manually) */
 #define write_hidden_pref_boolean(conf, pkg, key, val) \
 		if (! g_key_file_has_key((conf), (pkg), (key), NULL)) \
 			g_key_file_set_boolean((conf), (pkg), (key), (val));
@@ -392,12 +392,12 @@ void configuration_save(void)
 #endif
 	save_hidden_prefs(config);
 	save_ui_prefs(config);
-	project_save_prefs(config);	// save project filename, etc.
+	project_save_prefs(config);	/* save project filename, etc. */
 	save_recent_files(config);
 	if (cl_options.load_session)
 		configuration_save_session_files(config);
 
-	// write the file
+	/* write the file */
 	data = g_key_file_to_data(config, NULL, NULL);
 	utils_write_file(configfile, data);
 	g_free(data);
@@ -433,7 +433,7 @@ void configuration_load_session_files(GKeyFile *config)
 	}
 	g_strfreev(recent_files);
 
-	// the project may load another list than the main setting
+	/* the project may load another list than the main setting */
 	if (session_files != NULL)
 		g_ptr_array_free(session_files, TRUE);
 
@@ -469,7 +469,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	gchar *tmp_string, *tmp_string2;
 	const gchar *default_charset = NULL;
 
-	// general
+	/* general */
 	prefs.confirm_exit = utils_get_setting_boolean(config, PACKAGE, "pref_main_confirm_exit", FALSE);
 	prefs.suppress_search_dialogs = utils_get_setting_boolean(config, PACKAGE, "pref_main_suppress_search_dialogs", FALSE);
 	prefs.suppress_status_messages = utils_get_setting_boolean(config, PACKAGE, "pref_main_suppress_status_messages", FALSE);
@@ -481,7 +481,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	prefs.auto_focus = utils_get_setting_boolean(config, PACKAGE, "auto_focus", FALSE);
 	prefs.default_open_path = utils_get_setting_string(config, PACKAGE, "default_open_path", "");
 
-	// interface
+	/* interface */
 	prefs.tab_pos_editor = utils_get_setting_integer(config, PACKAGE, "tab_pos_editor", GTK_POS_TOP);
 	prefs.tab_pos_msgwin = utils_get_setting_integer(config, PACKAGE, "tab_pos_msgwin",GTK_POS_LEFT);
 	prefs.tab_pos_sidebar = utils_get_setting_integer(config, PACKAGE, "tab_pos_sidebar", GTK_POS_TOP);
@@ -499,13 +499,13 @@ static void load_dialog_prefs(GKeyFile *config)
 	prefs.show_symbol_list_expanders = utils_get_setting_boolean(config, PACKAGE, "show_symbol_list_expanders", TRUE);
 #endif
 
-	// display, editor
+	/* display, editor */
 	editor_prefs.long_line_type = utils_get_setting_integer(config, PACKAGE, "long_line_type", 0);
 	editor_prefs.long_line_color = utils_get_setting_string(config, PACKAGE, "long_line_color", "#C2EBC2");
 	editor_prefs.long_line_column = utils_get_setting_integer(config, PACKAGE, "long_line_column", 72);
 	editor_prefs.symbolcompletion_min_chars = utils_get_setting_integer(config, PACKAGE, "symbolcompletion_min_chars", GEANY_MIN_SYMBOLLIST_CHARS);
 	editor_prefs.symbolcompletion_max_height = utils_get_setting_integer(config, PACKAGE, "symbolcompletion_max_height", GEANY_MAX_SYMBOLLIST_HEIGHT);
-	editor_prefs.line_wrapping = utils_get_setting_boolean(config, PACKAGE, "line_breaking", FALSE); // default is off for better performance
+	editor_prefs.line_wrapping = utils_get_setting_boolean(config, PACKAGE, "line_breaking", FALSE); /* default is off for better performance */
 	editor_prefs.indent_mode = utils_get_setting_integer(config, PACKAGE, "indent_mode", INDENT_CURRENTCHARS);
 	editor_prefs.detect_tab_mode = utils_get_setting_integer(config, PACKAGE, "check_detect_indent", FALSE);
 	editor_prefs.use_tab_to_indent = utils_get_setting_boolean(config, PACKAGE, "use_tab_to_indent", FALSE);
@@ -531,8 +531,8 @@ static void load_dialog_prefs(GKeyFile *config)
 	editor_prefs.complete_snippets_whilst_editing = utils_get_setting_boolean(config, PACKAGE, "complete_snippets_whilst_editing", FALSE);
 	editor_prefs.scroll_stop_at_last_line = utils_get_setting_boolean(config, PACKAGE, "scroll_stop_at_last_line", FALSE);
 
-	// Files
-	// use current locale encoding as default for new files (should be UTF-8 in most cases)
+	/* Files
+	 * use current locale encoding as default for new files (should be UTF-8 in most cases) */
 	g_get_charset(&default_charset);
 	tmp_string = utils_get_setting_string(config, PACKAGE, "pref_editor_default_new_encoding",
 		default_charset);
@@ -563,7 +563,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	prefs.strip_trailing_spaces = utils_get_setting_boolean(config, PACKAGE, "pref_editor_trail_space", FALSE);
 	prefs.mru_length = utils_get_setting_integer(config, PACKAGE, "mru_length", GEANY_DEFAULT_MRU_LENGTH);
 
-	// toolbar
+	/* toolbar */
 	prefs.toolbar_visible = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show", TRUE);
 	prefs.toolbar_show_search = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_search", TRUE);
 	prefs.toolbar_show_goto = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_goto", TRUE);
@@ -584,7 +584,7 @@ static void load_dialog_prefs(GKeyFile *config)
 		prefs.toolbar_icon_size = utils_get_setting_integer(config, PACKAGE, "pref_toolbar_icon_size", tb_iconsize);
 	}
 
-	// VTE
+	/* VTE */
 #ifdef HAVE_VTE
 	vte_info.load_vte = utils_get_setting_boolean(config, "VTE", "load_vte", TRUE);
 	if (vte_info.load_vte)
@@ -595,10 +595,10 @@ static void load_dialog_prefs(GKeyFile *config)
 		vc = g_new0(VteConfig, 1);
 		vte_info.dir = utils_get_setting_string(config, "VTE", "last_dir", NULL);
 		if ((vte_info.dir == NULL || utils_str_equal(vte_info.dir, "")) && pw != NULL)
-			// last dir is not set, fallback to user's home directory
+			/* last dir is not set, fallback to user's home directory */
 			vte_info.dir = g_strdup(pw->pw_dir);
 		else if (vte_info.dir == NULL && pw == NULL)
-			// fallback to root
+			/* fallback to root */
 			vte_info.dir = g_strdup("/");
 
 		vc->emulation = utils_get_setting_string(config, "VTE", "emulation", "xterm");
@@ -622,7 +622,7 @@ static void load_dialog_prefs(GKeyFile *config)
 		g_free(tmp_string);
 	}
 #endif
-	// templates
+	/* templates */
 	prefs.template_developer = utils_get_setting_string(config, PACKAGE, "pref_template_developer", g_get_real_name());
 	prefs.template_company = utils_get_setting_string(config, PACKAGE, "pref_template_company", "");
 	tmp_string = utils_get_initials(prefs.template_developer);
@@ -637,7 +637,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	g_free(tmp_string);
 	g_free(tmp_string2);
 
-	// tools
+	/* tools */
 	tmp_string = g_find_program_in_path(GEANY_DEFAULT_TOOLS_MAKE);
 	prefs.tools_make_cmd = utils_get_setting_string(config, "tools", "make_cmd", tmp_string);
 	g_free(tmp_string);
@@ -656,10 +656,10 @@ static void load_dialog_prefs(GKeyFile *config)
 
 	prefs.context_action_cmd = utils_get_setting_string(config, PACKAGE, "context_action_cmd", "");
 
-	// printing
+	/* printing */
 	tmp_string2 = g_find_program_in_path(GEANY_DEFAULT_TOOLS_PRINTCMD);
 #ifdef G_OS_WIN32
-	// single quote paths on Win32 for g_spawn_command_line_async
+	/* single quote paths on Win32 for g_spawn_command_line_async */
 	tmp_string = g_strconcat("'", tmp_string2, "' '%f'", NULL);
 #else
 	tmp_string = g_strconcat(tmp_string2, " %f", NULL);
@@ -721,8 +721,8 @@ static void load_ui_prefs(GKeyFile *config)
 		ui_prefs.geometry[3] = geo[3];
 		ui_prefs.geometry[4] = geo[4];
 
-		// don't use insane values but when main windows was maximized last time, pos might be
-		// negative at least on Windows for some reason
+		/* don't use insane values but when main windows was maximized last time, pos might be
+		 * negative at least on Windows for some reason */
 		if (ui_prefs.geometry[4] != 1)
 		{
 			for (i = 0; i < 4; i++)
@@ -739,7 +739,7 @@ static void load_ui_prefs(GKeyFile *config)
 
 	g_free(geo);
 
-	// search
+	/* search */
 	search_prefs.fif_extra_options = utils_get_setting_string(config, "search", "fif_extra_options", "");
 }
 
@@ -758,7 +758,7 @@ void configuration_save_default_session(void)
 	if (cl_options.load_session)
 		configuration_save_session_files(config);
 
-	// write the file
+	/* write the file */
 	data = g_key_file_to_data(config, NULL, NULL);
 	utils_write_file(configfile, data);
 	g_free(data);
@@ -791,8 +791,8 @@ gboolean configuration_load(void)
 	GKeyFile *config = g_key_file_new();
 
 	if (! g_file_test(configfile, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
-	{	// config file does not (yet) exist, so try to load a global config file which may be
-		// created by distributors
+	{	/* config file does not (yet) exist, so try to load a global config file which may be */
+		/* created by distributors */
 		geany_debug("No config file found, try to use global configuration.");
 		setptr(configfile, g_strconcat(app->datadir, G_DIR_SEPARATOR_S "geany.conf", NULL));
 	}
@@ -822,7 +822,7 @@ gboolean configuration_open_files(void)
 	guint pos;
 	gboolean ret = FALSE, failure = FALSE;
 
-	// necessary to set it to TRUE for project session support
+	/* necessary to set it to TRUE for project session support */
 	main_status.opening_session_files = TRUE;
 
 	document_delay_colourise();
@@ -845,7 +845,7 @@ gboolean configuration_open_files(void)
 			use_tabs = atoi(tmp[4]);
 			auto_indent = atoi(tmp[5]);
 			line_wrapping = atoi(tmp[6]);
-			// try to get the locale equivalent for the filename
+			/* try to get the locale equivalent for the filename */
 			locale_filename = utils_get_locale_from_utf8(tmp[7]);
 
 			if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
@@ -890,11 +890,11 @@ gboolean configuration_open_files(void)
 		ui_set_statusbar(TRUE, _("Failed to load one or more session files."));
 	else if (session_notebook_page >= 0)
 	{
-		// exlicitly allow notebook switch page callback to be called for window title,
-		// encoding settings and so other things
+		/* exlicitly allow notebook switch page callback to be called for window title,
+		 * encoding settings and so other things */
 		main_status.opening_session_files = FALSE;
-		/// TODO if session_notebook_page is equal to the current notebook tab(the last opened)
-		/// the notebook switch page callback isn't triggered and e.g. menu items are not updated
+		/** TODO if session_notebook_page is equal to the current notebook tab(the last opened)
+		 ** the notebook switch page callback isn't triggered and e.g. menu items are not updated */
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), session_notebook_page);
 	}
 	main_status.opening_session_files = FALSE;
@@ -907,22 +907,22 @@ gboolean configuration_open_files(void)
 void configuration_apply_settings(void)
 {
 	if (scribble_text)
-	{	// update the scribble widget, because now it's realized
+	{	/* update the scribble widget, because now it's realized */
 		gtk_text_buffer_set_text(
 				gtk_text_view_get_buffer(GTK_TEXT_VIEW(lookup_widget(app->window, "textview_scribble"))),
 				scribble_text, -1);
 	}
 	g_free(scribble_text);
 
-	// set the position of the hpaned and vpaned
+	/* set the position of the hpaned and vpaned */
 	if (prefs.save_winpos)
 	{
 		gtk_paned_set_position(GTK_PANED(lookup_widget(app->window, "hpaned1")), hpan_position);
 		gtk_paned_set_position(GTK_PANED(lookup_widget(app->window, "vpaned1")), vpan_position);
 	}
 
-	// set fullscreen after initial draw so that returning to normal view is the right size.
-	// fullscreen mode is disabled by default, so act only if it is true
+	/* set fullscreen after initial draw so that returning to normal view is the right size.
+	 * fullscreen mode is disabled by default, so act only if it is true */
 	if (ui_prefs.fullscreen)
 	{
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_fullscreen1")), TRUE);
@@ -933,7 +933,7 @@ void configuration_apply_settings(void)
 
 
 #ifdef GEANY_DEBUG
-// Geany data file generation is only available with a debug build of Geany.
+/* Geany data file generation is only available with a debug build of Geany. */
 
 static void generate_filetype_extensions(const gchar *output_dir);
 
@@ -953,7 +953,7 @@ void configuration_generate_data_files(void)
 		return;
 	}
 	g_print("Generating system files in %s:\n", gen_dir);
-	// currently only filetype extensions are auto-generated.
+	/* currently only filetype extensions are auto-generated. */
 	generate_filetype_extensions(gen_dir);
 	g_free(gen_dir);
 }
@@ -970,19 +970,19 @@ static void generate_filetype_extensions(const gchar *output_dir)
 	config = g_key_file_new();
 	g_key_file_set_comment(config, NULL, NULL,
 		"*** This file generated by: geany --generate-data-files ***", NULL);
-	// add filetype keys
+	/* add filetype keys */
 	for (i = 0; i < GEANY_MAX_FILE_TYPES; i++)
 	{
 		g_key_file_set_string_list(config, "Extensions", filetypes[i]->name,
 			(const gchar**) filetypes[i]->pattern, g_strv_length(filetypes[i]->pattern));
 	}
-	// add comment
+	/* add comment */
 	g_key_file_set_comment(config, "Extensions", NULL,
 		"Filetype extension configuration file for Geany\n"
 		"Insert as many items as you want, seperate them with a \";\".\n"
 		"See Geany's main documentation for details.", NULL);
 
-	// write the file
+	/* write the file */
 	g_print("%s: ", __func__);
 	data = g_key_file_to_data(config, NULL, NULL);
 	basename = g_path_get_basename(configfile);
@@ -1015,7 +1015,7 @@ void configuration_read_filetype_extensions(void)
 	g_key_file_load_from_file(sysconfig, sysconfigfile, G_KEY_FILE_NONE, NULL);
 	g_key_file_load_from_file(userconfig, userconfigfile, G_KEY_FILE_NONE, NULL);
 
-	// read the keys
+	/* read the keys */
 	for (i = 0; i < GEANY_MAX_FILE_TYPES; i++)
 	{
 		gboolean userset =
@@ -1051,25 +1051,25 @@ void configuration_read_snippets(void)
 	sysconfigfile = g_strconcat(app->datadir, G_DIR_SEPARATOR_S, "snippets.conf", NULL);
 	userconfigfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "snippets.conf", NULL);
 
-	// check for old autocomplete.conf files (backwards compatibility)
+	/* check for old autocomplete.conf files (backwards compatibility) */
 	if (! g_file_test(userconfigfile, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 		setptr(userconfigfile,
 			g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "autocomplete.conf", NULL));
 
-	// load the actual config files
+	/* load the actual config files */
 	g_key_file_load_from_file(sysconfig, sysconfigfile, G_KEY_FILE_NONE, NULL);
 	g_key_file_load_from_file(userconfig, userconfigfile, G_KEY_FILE_NONE, NULL);
 
-	// keys are strings, values are GHashTables, so use g_free and g_hash_table_destroy
+	/* keys are strings, values are GHashTables, so use g_free and g_hash_table_destroy */
 	editor_prefs.snippets =
 		g_hash_table_new_full(g_str_hash, g_str_equal, g_free, (GDestroyNotify) g_hash_table_destroy);
 
-	// first read all globally defined auto completions
+	/* first read all globally defined auto completions */
 	groups_sys = g_key_file_get_groups(sysconfig, &len);
 	for (i = 0; i < len; i++)
 	{
 		keys_sys = g_key_file_get_keys(sysconfig, groups_sys[i], &len_keys, NULL);
-		// create new hash table for the read section (=> filetype)
+		/* create new hash table for the read section (=> filetype) */
 		tmp = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
 		g_hash_table_insert(editor_prefs.snippets, g_strdup(groups_sys[i]), tmp);
 
@@ -1081,7 +1081,7 @@ void configuration_read_snippets(void)
 		g_strfreev(keys_sys);
 	}
 
-	// now read defined completions in user's configuration directory and add / replace them
+	/* now read defined completions in user's configuration directory and add / replace them */
 	groups_user = g_key_file_get_groups(userconfig, &len);
 	for (i = 0; i < len; i++)
 	{
@@ -1089,7 +1089,7 @@ void configuration_read_snippets(void)
 
 		tmp = g_hash_table_lookup(editor_prefs.snippets, groups_user[i]);
 		if (tmp == NULL)
-		{	// new key found, create hash table
+		{	/* new key found, create hash table */
 			tmp = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
 			g_hash_table_insert(editor_prefs.snippets, g_strdup(groups_user[i]), tmp);
 		}
@@ -1097,12 +1097,12 @@ void configuration_read_snippets(void)
 		{
 			value = g_hash_table_lookup(tmp, keys_user[j]);
 			if (value == NULL)
-			{	// value = NULL means the key doesn't yet exist, so insert
+			{	/* value = NULL means the key doesn't yet exist, so insert */
 				g_hash_table_insert(tmp, g_strdup(keys_user[j]),
 						utils_get_setting_string(userconfig, groups_user[i], keys_user[j], ""));
 			}
 			else
-			{	// old key and value will be freed by destroy function (g_free)
+			{	/* old key and value will be freed by destroy function (g_free) */
 				g_hash_table_replace(tmp, g_strdup(keys_user[j]),
 						utils_get_setting_string(userconfig, groups_user[i], keys_user[j], ""));
 			}

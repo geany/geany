@@ -91,7 +91,7 @@ gboolean tm_workspace_remove_object(TMWorkObject *work_object, gboolean free, gb
  \sa tm_workspace_create_global_tags()
 */
 gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode);
-//gboolean tm_workspace_load_global_tags(const char *tags_file);
+/*gboolean tm_workspace_load_global_tags(const char *tags_file);*/
 
 /*! Creates a list of global tags. Ideally, this should be created once during
  installations so that all users can use the same file. Thsi is because a full

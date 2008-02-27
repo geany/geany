@@ -69,7 +69,7 @@ enum
 };
 
 
-// document-related variables
+/* document-related variables */
 typedef struct
 {
 	gint idx;
@@ -82,15 +82,16 @@ typedef struct
 	gint cur_pos;
 	gint styles[STYLE_MAX + 1][MAX_TYPES];
 	gdouble line_height;
-	gboolean long_line; // whether we have a wrapped line on page end to take care of on next page
-	// set in begin_print() to hold the time when printing was started to ensure all printed
-	// pages have the same date and time (in case of slow machines and many pages where rendering
-	// takes more than a second)
+	/* whether we have a wrapped line on page end to take care of on next page */
+	gboolean long_line;
+	/* set in begin_print() to hold the time when printing was started to ensure all printed
+	 * pages have the same date and time (in case of slow machines and many pages where rendering
+	 * takes more than a second) */
 	time_t print_time;
-	PangoLayout *layout; // commonly used layout object
+	PangoLayout *layout; /* commonly used layout object */
 } DocInfo;
 
-// widget references for the custom widget in the print dialog
+/* widget references for the custom widget in the print dialog */
 typedef struct
 {
 	GtkWidget *check_print_linenumbers;
@@ -106,7 +107,7 @@ static GtkPageSetup *page_setup = NULL;
 
 
 
-// returns the "width" (count of needed characters) for the given number
+/* returns the "width" (count of needed characters) for the given number */
 static gint get_line_numbers_arity(gint x)
 {
 	gint a = 0;
@@ -116,7 +117,7 @@ static gint get_line_numbers_arity(gint x)
 }
 
 
-// split a RGB colour into the three colour components
+/* split a RGB colour into the three colour components */
 static void get_rgb_values(gint c, gint *r, gint *g, gint *b)
 {
 	c = ROTATE_RGB(c);
@@ -130,8 +131,8 @@ static void get_rgb_values(gint c, gint *r, gint *g, gint *b)
 }
 
 
-// creates a commonly used layout object from the given context for use in get_page_count and
-// draw_page
+/* creates a commonly used layout object from the given context for use in get_page_count and
+ * draw_page */
 static PangoLayout *setup_pango_layout(GtkPrintContext *context, PangoFontDescription *desc)
 {
 	PangoLayout *layout;
@@ -155,10 +156,10 @@ static gint get_font_width(GtkPrintContext *context, PangoFontDescription *desc)
 	pc = gtk_print_context_create_pango_context(context);
 
 	metrics = pango_context_get_metrics(pc, desc, pango_context_get_language(pc));
-	/// TODO is this the best result we can get?
-	// digit and char width are mostly equal for monospace fonts, char width might be
-	// for dual width characters(e.g. Japanese) so use digit width to get sure we get the width
-	// for one character
+	/** TODO is this the best result we can get? */
+	/* digit and char width are mostly equal for monospace fonts, char width might be
+	 * for dual width characters(e.g. Japanese) so use digit width to get sure we get the width
+	 * for one character */
 	width = pango_font_metrics_get_approximate_digit_width(metrics) / PANGO_SCALE;
 
 	pango_font_metrics_unref(metrics);
@@ -180,12 +181,12 @@ static gint get_page_count(GtkPrintContext *context, DocInfo *dinfo)
 	height = gtk_print_context_get_height(context);
 
 	if (printing_prefs.print_line_numbers)
-		// remove line number margin space from overall width
+		/* remove line number margin space from overall width */
 		width -= dinfo->max_line_number_margin * dinfo->font_width;
 
 	pango_layout_set_width(dinfo->layout, width * PANGO_SCALE);
 
-	// add test text to get line height
+	/* add test text to get line height */
 	pango_layout_set_text(dinfo->layout, "Test 1", -1);
 	pango_layout_get_size(dinfo->layout, NULL, &layout_h);
 	if (layout_h <= 0)
@@ -244,18 +245,18 @@ static void add_page_header(PangoLayout *layout, cairo_t *cr, DocInfo *dinfo, gi
 	gchar *file_name = (printing_prefs.page_header_basename) ?
 		g_path_get_basename(tmp_file_name) : g_strdup(tmp_file_name);
 
-	// draw the frame
+	/* draw the frame */
 	cairo_set_line_width(cr, 0.3);
 	cairo_set_source_rgb(cr, 0, 0, 0);
 	cairo_rectangle(cr, 2, 2, width - 4, ph_height - 4);
 	cairo_stroke(cr);
 
-	// width - 8: 2px between doc border and frame border, 2px between frame border and text
-	// and this on left and right side, so (2 + 2) * 2
+	/* width - 8: 2px between doc border and frame border, 2px between frame border and text
+	 * and this on left and right side, so (2 + 2) * 2 */
 	pango_layout_set_width(layout, (width - 8) * PANGO_SCALE);
 
 	if ((g_utf8_strlen(file_name, -1) * dinfo->font_width) >= ((width - 4) - (dinfo->font_width * 2)))
-		// if the filename is wider than the available space on the line, skip parts of it
+		/* if the filename is wider than the available space on the line, skip parts of it */
 		pango_layout_set_ellipsize(layout, PANGO_ELLIPSIZE_MIDDLE);
 
 	data = g_strdup_printf("<b>%s</b>", file_name);
@@ -282,7 +283,7 @@ static void add_page_header(PangoLayout *layout, cairo_t *cr, DocInfo *dinfo, gi
 	g_free(data);
 	g_free(datetime);
 
-	// reset layout and re-position cairo context
+	/* reset layout and re-position cairo context */
 	pango_layout_set_alignment(layout, PANGO_ALIGN_LEFT);
 	pango_layout_set_ellipsize(layout, FALSE);
 	pango_layout_set_justify(layout, FALSE);
@@ -324,7 +325,7 @@ static void on_page_header_toggled(GtkToggleButton *togglebutton, gpointer user_
 
 
 static GtkWidget *create_custom_widget(GtkPrintOperation *operation, gpointer user_data)
-{	// copied from interface.c
+{	/* copied from interface.c */
 	GtkWidget *page;
 	GtkWidget *frame33;
 	GtkWidget *alignment36;
@@ -416,7 +417,7 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 
 	desc = pango_font_description_from_string(prefs.editor_font);
 
-	// init dinfo fields
+	/* init dinfo fields */
 	dinfo->lines = sci_get_line_count(doc_list[dinfo->idx].sci);
 	dinfo->lines_per_page = 0;
 	dinfo->cur_line = 0;
@@ -424,24 +425,26 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 	dinfo->long_line = FALSE;
 	dinfo->print_time = time(NULL);
 	dinfo->max_line_number_margin = get_line_numbers_arity(dinfo->lines) + 1;
-	// increase font width by 1 (looks better)
+	/* increase font width by 1 (looks better) */
 	dinfo->font_width = get_font_width(context, desc) + 1;
-	// create a PangoLayout to be commonly used in get_page_count and draw_page
+	/* create a PangoLayout to be commonly used in get_page_count and draw_page */
 	dinfo->layout = setup_pango_layout(context, desc);
-	// this is necessary because of possible line breaks on the printed page and then
-	// lines_per_page differs from document line count
+	/* this is necessary because of possible line breaks on the printed page and then
+	 * lines_per_page differs from document line count */
 	dinfo->n_pages = get_page_count(context, dinfo);
 
-	// read all styles from Scintilla
+	/* read all styles from Scintilla */
 	style_max = pow(2, scintilla_send_message(doc_list[dinfo->idx].sci, SCI_GETSTYLEBITS, 0, 0));
-	if (style_max == 32)	// if the lexer uses only the first 32 styles(style bits = 5), we need
-		style_max = STYLE_LASTPREDEFINED; 	// to add the pre-defined styles
+	/* if the lexer uses only the first 32 styles(style bits = 5),
+	 * we need to add the pre-defined styles */
+	if (style_max == 32)
+		style_max = STYLE_LASTPREDEFINED;
 	for (i = 0; i < style_max; i++)
 	{
 		dinfo->styles[i][FORE] = ROTATE_RGB(scintilla_send_message(
 			doc_list[dinfo->idx].sci, SCI_STYLEGETFORE, i, 0));
 		if (i == STYLE_LINENUMBER)
-		{	// ignore background colour for line number margin to avoid trouble with wrapped lines
+		{	/* ignore background colour for line number margin to avoid trouble with wrapped lines */
 			dinfo->styles[STYLE_LINENUMBER][BACK] = ROTATE_RGB(scintilla_send_message(
 				doc_list[dinfo->idx].sci, SCI_STYLEGETBACK, STYLE_DEFAULT, 0));
 		}
@@ -470,7 +473,7 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 	cairo_t *cr;
 	gdouble width, height;
 	gdouble x, y;
-	//~ gint layout_h;
+	/*gint layout_h;*/
 	gint count;
 	GString *str;
 
@@ -500,8 +503,8 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 	if (printing_prefs.print_page_header)
 		add_page_header(dinfo->layout, cr, dinfo, width, page_nr);
 
-	count = 0;	// the actual line counter for the current page, might be different from
-				// dinfo->cur_line due to possible line breaks
+	count = 0;	/* the actual line counter for the current page, might be different from
+				 * dinfo->cur_line due to possible line breaks */
 	while (count < dinfo->lines_per_page)
 	{
 		gchar c = 'a';
@@ -516,13 +519,13 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 		{
 			at_eol = FALSE;
 
-			g_string_erase(str, 0, str->len); // clear the string
+			g_string_erase(str, 0, str->len); /* clear the string */
 
-			// line numbers
+			/* line numbers */
 			if (printing_prefs.print_line_numbers && add_linenumber)
 			{
-				// if we had a wrapped line on the last page which needs to be continued, don't
-				// add a line number
+				/* if we had a wrapped line on the last page which needs to be continued, don't
+				 * add a line number */
 				if (dinfo->long_line)
 				{
 					add_linenumber = FALSE;
@@ -536,58 +539,59 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 
 					line_number = g_strdup_printf("%s%d ", fill, dinfo->cur_line + 1);
 					g_string_append(str, line_number);
-					dinfo->cur_line++; // increase document line
+					dinfo->cur_line++; /* increase document line */
 					add_linenumber = FALSE;
 					style = STYLE_LINENUMBER;
-					c = 'a'; // dummy value
+					c = 'a'; /* dummy value */
 					g_free(fill);
 					g_free(line_number);
 				}
 			}
-			// data
+			/* data */
 			else
 			{
 				style = sci_get_style_at(doc_list[dinfo->idx].sci, dinfo->cur_pos);
 				c = sci_get_char_at(doc_list[dinfo->idx].sci, dinfo->cur_pos);
 				if (c == '\0' || style == -1)
-				{	// if c gets 0, we are probably out of document boundaries, so stop
-					count = dinfo->lines_per_page; // to break out of outer loop
+				{	/* if c gets 0, we are probably out of document boundaries,
+					 * so stop to break out of outer loop */
+					count = dinfo->lines_per_page;
 					break;
 				}
 				dinfo->cur_pos++;
 
 
-				// convert tabs to spaces which seems to be better than using Pango tabs
+				/* convert tabs to spaces which seems to be better than using Pango tabs */
 				if (c == '\t')
 				{
 					gchar *s = g_strnfill(editor_prefs.tab_width, ' ');
 					g_string_append(str, s);
 					g_free(s);
 				}
-				// don't add line breaks, they are handled manually below
+				/* don't add line breaks, they are handled manually below */
 				else if (c == '\r' || c == '\n')
 				{
 					gchar c_next = sci_get_char_at(doc_list[dinfo->idx].sci, dinfo->cur_pos);
 					at_eol = TRUE;
 					if (c == '\r' && c_next == '\n')
-						dinfo->cur_pos++; // skip LF part of CR/LF
+						dinfo->cur_pos++; /* skip LF part of CR/LF */
 				}
 				else
 				{
-					g_string_append_c(str, c); // finally add the character
+					g_string_append_c(str, c); /* finally add the character */
 
-					// handle UTF-8: since we add char by char (better: byte by byte), we need to
-					// keep UTF-8 characters together(e.g. two bytes for one character)
-					// the input is always UTF-8 and c is signed, so all non-Ascii
-					// characters are less than 0 and consist of all bytes less than 0.
-					// style doesn't change since it is only one character with multiple bytes.
+					/* handle UTF-8: since we add char by char (better: byte by byte), we need to
+					 * keep UTF-8 characters together(e.g. two bytes for one character)
+					 * the input is always UTF-8 and c is signed, so all non-Ascii
+					 * characters are less than 0 and consist of all bytes less than 0.
+					 * style doesn't change since it is only one character with multiple bytes. */
 					while (c < 0)
 					{
 						c = sci_get_char_at(doc_list[dinfo->idx].sci, dinfo->cur_pos);
 						if (c < 0)
-						{	// only add the byte when it is part of the UTF-8 character
-							// otherwise we could add e.g. a '\n' and it won't be visible in the
-							// printed document
+						{	/* only add the byte when it is part of the UTF-8 character
+							 * otherwise we could add e.g. a '\n' and it won't be visible in the
+							 * printed document */
 							g_string_append_c(str, c);
 							dinfo->cur_pos++;
 						}
@@ -597,25 +601,25 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 
 			if (! at_eol)
 			{
-				// set text
+				/* set text */
 				pango_layout_set_text(dinfo->layout, str->str, -1);
-				// attributes
+				/* attributes */
 				layout_attr = pango_attr_list_new();
-				// foreground colour
+				/* foreground colour */
 				get_rgb_values(dinfo->styles[style][FORE], &colours[0], &colours[1], &colours[2]);
 				attr = pango_attr_foreground_new(colours[0], colours[1], colours[2]);
 				ADD_ATTR(layout_attr, attr);
-				// background colour
+				/* background colour */
 				get_rgb_values(dinfo->styles[style][BACK], &colours[0], &colours[1], &colours[2]);
 				attr = pango_attr_background_new(colours[0], colours[1], colours[2]);
 				ADD_ATTR(layout_attr, attr);
-				// bold text
+				/* bold text */
 				if (dinfo->styles[style][BOLD])
 				{
 					attr = pango_attr_weight_new(PANGO_WEIGHT_BOLD);
 					ADD_ATTR(layout_attr, attr);
 				}
-				// italic text
+				/* italic text */
 				if (dinfo->styles[style][ITALIC])
 				{
 					attr = pango_attr_style_new(PANGO_STYLE_ITALIC);
@@ -629,40 +633,40 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 			cairo_get_current_point(cr, &x, &y);
 
 
-			// normal line break at eol character in document
+			/* normal line break at eol character in document */
 			if (at_eol)
 			{
-				//~ pango_layout_get_size(dinfo->layout, NULL, &layout_h);
-				//~ cairo_move_to(cr, 0, y + (gdouble)layout_h / PANGO_SCALE);
+				/*pango_layout_get_size(dinfo->layout, NULL, &layout_h);*/
+				/*cairo_move_to(cr, 0, y + (gdouble)layout_h / PANGO_SCALE);*/
 				cairo_move_to(cr, 0, y + dinfo->line_height);
 
 				count++;
-
-				add_linenumber = TRUE; // we added a new document line so request a new line number
+				/* we added a new document line so request a new line number */
+				add_linenumber = TRUE;
 			}
 			else
 			{
 				gint x_offset = 0;
-				// maybe we need to force a line break because of too long line
+				/* maybe we need to force a line break because of too long line */
 				if (x >= (width - dinfo->font_width))
 				{
-					// don't start the line at horizontal origin because we need to skip the
-					// line number margin
+					/* don't start the line at horizontal origin because we need to skip the
+					 * line number margin */
 					if (printing_prefs.print_line_numbers)
 					{
 						x_offset = (dinfo->max_line_number_margin + 1) * dinfo->font_width;
 					}
 
-					//~ pango_layout_get_size(dinfo->layout, NULL, &layout_h);
-					//~ cairo_move_to(cr, x_offset, y + (gdouble)layout_h / PANGO_SCALE);
-					// this is faster but not exactly the same as above
+					/*pango_layout_get_size(dinfo->layout, NULL, &layout_h);*/
+					/*cairo_move_to(cr, x_offset, y + (gdouble)layout_h / PANGO_SCALE);*/
+					/* this is faster but not exactly the same as above */
 					cairo_move_to(cr, x_offset, y + dinfo->line_height);
 					cairo_get_current_point(cr, &x, &y);
 					count++;
 				}
 				if (count < dinfo->lines_per_page)
 				{
-					// str->len is counted in bytes not characters, so use g_utf8_strlen()
+					/* str->len is counted in bytes not characters, so use g_utf8_strlen() */
 					x_offset = (g_utf8_strlen(str->str, -1) * dinfo->font_width);
 
 					if (dinfo->long_line && count == 0)
@@ -675,25 +679,25 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 					cairo_move_to(cr, x + x_offset, y);
 				}
 				else
-				// we are on a wrapped line but we are out of lines on this page, so continue
-				// the current line on the next page and remember to continue in current line
+				/* we are on a wrapped line but we are out of lines on this page, so continue
+				 * the current line on the next page and remember to continue in current line */
 					dinfo->long_line = TRUE;
 			}
 		}
 	}
 
 	if (printing_prefs.print_line_numbers)
-	{	// print a thin line between the line number margin and the data
+	{	/* print a thin line between the line number margin and the data */
 		gint y_start = 0;
 
 		if (printing_prefs.print_page_header)
-			y_start = (dinfo->line_height * 3) - 2;	// "- 2": to connect the line number line to
-													// the page header frame
+			y_start = (dinfo->line_height * 3) - 2;	/* "- 2": to connect the line number line to
+													 * the page header frame */
 
 		cairo_set_line_width(cr, 0.3);
 		cairo_move_to(cr, (dinfo->max_line_number_margin * dinfo->font_width) + 1, y_start);
 		cairo_line_to(cr, (dinfo->max_line_number_margin * dinfo->font_width) + 1,
-			y + dinfo->line_height); // y is last added line, we reuse it
+			y + dinfo->line_height); /* y is last added line, we reuse it */
 		cairo_stroke(cr);
 	}
 
@@ -735,11 +739,12 @@ static void printing_print_gtk(gint idx)
 	DocInfo *dinfo;
 	PrintWidgets *widgets;
 
-	/// TODO check for monospace font, detect the widest character in the font and use it at font_width
+	/** TODO check for monospace font, detect the widest character in the font and
+	  * use it at font_width */
 
 	widgets = g_new0(PrintWidgets, 1);
 	dinfo = g_new0(DocInfo, 1);
-	// all other fields are initialised in begin_print()
+	/* all other fields are initialised in begin_print() */
 	dinfo->idx = idx;
 
 	op = gtk_print_operation_new();
@@ -767,7 +772,7 @@ static void printing_print_gtk(gint idx)
 		if (settings != NULL)
 			g_object_unref(settings);
 		settings = g_object_ref(gtk_print_operation_get_print_settings(op));
-		// status message is printed in the status-changed handler
+		/* status message is printed in the status-changed handler */
 	}
 	else if (res == GTK_PRINT_OPERATION_RESULT_ERROR)
 	{
@@ -797,7 +802,7 @@ void printing_page_setup_gtk(void)
 
 	page_setup = new_page_setup;
 }
-#endif // GTK 2.10
+#endif /* GTK 2.10 */
 
 
 /* simple file print using an external tool */
@@ -827,15 +832,16 @@ static void print_external(gint idx)
 #ifdef G_OS_WIN32
 		gchar *tmp_cmdline = g_strdup(cmdline);
 #else
-		// /bin/sh -c emulates the system() call and makes complex commands possible
-		// but only needed on non-win32 systems due to the lack of win32's shell capabilities
+		/* /bin/sh -c emulates the system() call and makes complex commands possible
+		 * but only needed on non-win32 systems due to the lack of win32's shell capabilities */
 		gchar *tmp_cmdline = g_strconcat("/bin/sh -c \"", cmdline, "\"", NULL);
 #endif
 
 		if (! g_spawn_command_line_async(tmp_cmdline, &error))
 		{
-			dialogs_show_msgbox(GTK_MESSAGE_ERROR, _("Printing of \"%s\" failed (return code: %s)."),
-								doc_list[idx].file_name, error->message);
+			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
+				_("Printing of \"%s\" failed (return code: %s)."),
+				doc_list[idx].file_name, error->message);
 			g_error_free(error);
 		}
 		else

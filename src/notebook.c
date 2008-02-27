@@ -89,7 +89,7 @@ static void focus_sci(GtkWidget *widget, gpointer user_data)
 
 void notebook_init()
 {
-	// focus the current document after clicking on a tab
+	/* focus the current document after clicking on a tab */
 	g_signal_connect_after(G_OBJECT(app->notebook), "button-release-event",
 		G_CALLBACK(focus_sci), NULL);
 
@@ -109,7 +109,7 @@ static void setup_tab_dnd()
 	*  This means a binary compiled against < 2.10 but run on >= 2.10
 	*  will not have tab DnD support, but this is necessary until
 	*  there is a fix for the older tab DnD code or GTK 2.10. */
-	if (gtk_check_version(2, 10, 0) == NULL) // null means version ok
+	if (gtk_check_version(2, 10, 0) == NULL) /* null means version ok */
 	{
 #if GTK_CHECK_VERSION(2, 10, 0)
 		g_signal_connect(G_OBJECT(notebook), "page-reordered",
@@ -118,7 +118,7 @@ static void setup_tab_dnd()
 		return;
 	}
 
-	// Set up drag movement callback
+	/* Set up drag movement callback */
 	g_signal_connect(G_OBJECT(notebook), "drag-motion",
 		G_CALLBACK(notebook_drag_motion_cb), NULL);
 
@@ -130,20 +130,20 @@ static void setup_tab_dnd()
 	 * mouse button, the selection continues.
 	 * Bug is present with gtk+2.6.8, not gtk+2.8.x - ntrel */
 #if ! GTK_CHECK_VERSION(2, 8, 0)
-	// handle higher gtk+ runtime than build environment
-	if (gtk_check_version(2, 8, 0) != NULL) // null means version ok
+	/* handle higher gtk+ runtime than build environment */
+	if (gtk_check_version(2, 8, 0) != NULL) /* null means version ok */
 	{
-		// workaround GTK+2.6 drag start bug when over sci widget:
+		/* workaround GTK+2.6 drag start bug when over sci widget: */
 		gtk_widget_add_events(notebook, GDK_POINTER_MOTION_MASK);
 		g_signal_connect(G_OBJECT(notebook), "motion-notify-event",
 			G_CALLBACK(notebook_motion_notify_event_cb), NULL);
 	}
 #endif
 
-	// set up drag motion for moving notebook pages
+	/* set up drag motion for moving notebook pages */
 	gtk_drag_dest_set(notebook, GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
 		drag_targets, G_N_ELEMENTS(drag_targets), GDK_ACTION_MOVE);
-	// set drag source, but for GTK+2.6 it's changed in motion-notify-event handler
+	/* set drag source, but for GTK+2.6 it's changed in motion-notify-event handler */
 	gtk_drag_source_set(notebook, GDK_BUTTON1_MASK,
 		drag_targets, G_N_ELEMENTS(drag_targets), GDK_ACTION_MOVE);
 }
@@ -157,25 +157,25 @@ static gboolean
 notebook_motion_notify_event_cb(GtkWidget *widget, GdkEventMotion *event,
 	gpointer user_data)
 {
-	static gboolean drag_enabled = TRUE; // stores current state
+	static gboolean drag_enabled = TRUE; /* stores current state */
 	GtkWidget *page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(app->notebook),
 			gtk_notebook_get_current_page(GTK_NOTEBOOK(app->notebook)));
 
 	if (page == NULL || event->x < 0 || event->y < 0) return FALSE;
 
-	if (event->window == page->window) // cursor over sci widget
+	if (event->window == page->window) /* cursor over sci widget */
 	{
-		if (drag_enabled) gtk_drag_source_unset(widget); // disable
+		if (drag_enabled) gtk_drag_source_unset(widget); /* disable */
 		drag_enabled = FALSE;
 	}
-	else // assume cursor over notebook tab
+	else /* assume cursor over notebook tab */
 	{
 		if (! drag_enabled)
 			gtk_drag_source_set(widget, GDK_BUTTON1_MASK,
 				drag_targets, G_N_ELEMENTS(drag_targets), GDK_ACTION_MOVE);
 		drag_enabled = TRUE;
 	}
-	return FALSE; // propagate event
+	return FALSE; /* propagate event */
 }
 #endif
 
@@ -186,7 +186,7 @@ notebook_page_reordered_cb(GtkNotebook *notebook, GtkWidget *child, guint page_n
 {
 	/* Not necessary to update open files treeview if it's sorted.
 	 * Note: if enabled, it's best to move the item instead of recreating all items. */
-	//treeviews_openfiles_update_all();
+	/*treeviews_openfiles_update_all();*/
 }
 
 
@@ -194,7 +194,7 @@ static gboolean
 notebook_drag_motion_cb(GtkWidget *widget, GdkDragContext *dc,
 	gint x, gint y, guint event_time, gpointer user_data)
 {
-	static gint oldx, oldy; // for determining direction of mouse drag
+	static gint oldx, oldy; /* for determining direction of mouse drag */
 	GtkNotebook *notebook = GTK_NOTEBOOK(widget);
 	gint ndest = notebook_find_tab_num_at_pos(notebook, x, y);
 	gint ncurr = gtk_notebook_get_current_page(notebook);
@@ -202,7 +202,7 @@ notebook_drag_motion_cb(GtkWidget *widget, GdkDragContext *dc,
 	if (ndest >= 0 && ndest != ncurr)
 	{
 		gboolean ok = FALSE;
-		// prevent oscillation between non-homogeneous sized tabs
+		/* prevent oscillation between non-homogeneous sized tabs */
 		switch(gtk_notebook_get_tab_pos(notebook))
 		{
 			case GTK_POS_LEFT:
@@ -241,11 +241,11 @@ notebook_find_tab_num_at_pos(GtkNotebook *notebook, gint x, gint y)
 	int page_num = 0;
 	GtkWidget *page;
 
-	// deal with less than 2 pages
+	/* deal with less than 2 pages */
 	switch(gtk_notebook_get_n_pages(notebook))
 	{case 0: return -1; case 1: return 0;}
 
-	tab_pos = gtk_notebook_get_tab_pos(notebook); // which edge
+	tab_pos = gtk_notebook_get_tab_pos(notebook); /* which edge */
 
 	while ((page = gtk_notebook_get_nth_page(notebook, page_num)))
 	{
@@ -255,12 +255,12 @@ notebook_find_tab_num_at_pos(GtkNotebook *notebook, gint x, gint y)
 		g_return_val_if_fail(tab != NULL, -1);
 
 		if (!GTK_WIDGET_MAPPED(GTK_WIDGET(tab)))
-		{ // skip hidden tabs, e.g. tabs scrolled out of view
+		{ /* skip hidden tabs, e.g. tabs scrolled out of view */
 			page_num++;
 			continue;
 		}
 
-		// subtract notebook pos to remove possible border padding
+		/* subtract notebook pos to remove possible border padding */
 		max_x = tab->allocation.x + tab->allocation.width -
 			GTK_WIDGET(notebook)->allocation.x;
 		max_y = tab->allocation.y + tab->allocation.height -
@@ -279,7 +279,7 @@ notebook_find_tab_num_at_pos(GtkNotebook *notebook, gint x, gint y)
 }
 
 
-// call this after the number of tabs in app->notebook changes.
+/* call this after the number of tabs in app->notebook changes. */
 static void tab_count_changed(void)
 {
 	switch (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)))
@@ -303,10 +303,10 @@ static void tab_count_changed(void)
 
 gboolean notebook_tab_label_cb(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
-	// toggle additional widgets on double click
+	/* toggle additional widgets on double click */
 	if (event->type == GDK_2BUTTON_PRESS)
 		on_menu_toggle_all_additional_widgets1_activate(NULL, NULL);
-	// close tab on middle click
+	/* close tab on middle click */
 	if (event->button == 2)
 		document_remove(gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(user_data)));
 
@@ -385,9 +385,9 @@ gint notebook_new_tab(gint doc_idx)
 
 	tab_count_changed();
 
-	// This is where tab DnD is enabled for GTK 2.10 and higher
+	/* This is where tab DnD is enabled for GTK 2.10 and higher */
 #if GTK_CHECK_VERSION(2, 10, 0)
-	if (gtk_check_version(2, 10, 0) == NULL) // null means version ok
+	if (gtk_check_version(2, 10, 0) == NULL) /* null means version ok */
 	{
 		gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(app->notebook), page, TRUE);
 	}

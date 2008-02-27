@@ -124,15 +124,15 @@ static void tools_show_dialog_insert_special_chars(void)
 
 		sc_fill_store(sc_store);
 
-		//gtk_tree_view_expand_all(special_characters_tree);
+		/*gtk_tree_view_expand_all(special_characters_tree);*/
 		gtk_tree_view_set_search_column(sc_tree, COLUMN_HTML_NAME);
 	}
 	gtk_widget_show_all(sc_dialog);
 }
 
 
-// fill the tree model with data
-/// TODO move this in a file and make it extendable for more data types
+/* fill the tree model with data
+ ** TODO move this in a file and make it extendable for more data types */
 static void sc_fill_store(GtkTreeStore *store)
 {
 	GtkTreeIter iter;
@@ -405,14 +405,14 @@ static void sc_fill_store(GtkTreeStore *store)
 	for (i = 0; i < G_N_ELEMENTS(chars); i++)
 	{
 		if (chars[i][1] == NULL)
-		{	// add a category
+		{	/* add a category */
 			gtk_tree_store_append(store, &iter, NULL);
 			gtk_tree_store_set(store, &iter, COLUMN_CHARACTER, chars[i][0], -1);
 			if (parent_iter != NULL) gtk_tree_iter_free(parent_iter);
 			parent_iter = gtk_tree_iter_copy(&iter);
 		}
 		else
-		{	// add child to parent_iter
+		{	/* add child to parent_iter */
 			gtk_tree_store_append(store, &iter, parent_iter);
 			gtk_tree_store_set(store, &iter, COLUMN_CHARACTER, chars[i][0],
 											 COLUMN_HTML_NAME, chars[i][1], -1);
@@ -458,7 +458,7 @@ static void sc_on_tools_show_dialog_insert_special_chars_response(GtkDialog *dia
 
 		if (gtk_tree_selection_get_selected(selection, &model, &iter))
 		{
-			// only hide dialog if selection was not a category
+			/* only hide dialog if selection was not a category */
 			if (sc_insert(model, &iter))
 				gtk_widget_hide(GTK_WIDGET(dialog));
 		}
@@ -476,11 +476,11 @@ static void sc_on_tree_row_activated(GtkTreeView *treeview, GtkTreePath *path,
 
 	if (gtk_tree_model_get_iter(model, &iter, path))
 	{
-		// only hide dialog if selection was not a category
+		/* only hide dialog if selection was not a category */
 		if (sc_insert(model, &iter))
 			gtk_widget_hide(sc_dialog);
 		else
-		{	// double click on a category to toggle the expand or collapse it
+		{	/* double click on a category to toggle the expand or collapse it */
 			if (gtk_tree_view_row_expanded(sc_tree, path))
 				gtk_tree_view_collapse_row(sc_tree, path);
 			else
@@ -494,7 +494,7 @@ static void sc_on_tree_row_activated(GtkTreeView *treeview, GtkTreePath *path,
 static void
 item_activate(GtkMenuItem *menuitem, gpointer gdata)
 {
-	// refuse opening the dialog if we don't have an active tab
+	/* refuse opening the dialog if we don't have an active tab */
 	gint idx = p_document->get_cur_idx();
 
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
@@ -508,13 +508,13 @@ void init(GeanyData *data)
 {
 	GtkWidget *demo_item;
 
-	// Add an item to the Tools menu
+	/* Add an item to the Tools menu */
 	demo_item = gtk_menu_item_new_with_mnemonic(_("_Insert Special HTML Characters"));
 	gtk_widget_show(demo_item);
 	gtk_container_add(GTK_CONTAINER(geany_data->tools_menu), demo_item);
 	g_signal_connect(G_OBJECT(demo_item), "activate", G_CALLBACK(item_activate), NULL);
 
-	// disable menu_item when there are no documents open
+	/* disable menu_item when there are no documents open */
 	plugin_fields->menu_item = demo_item;
 	plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
 }

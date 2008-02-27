@@ -35,7 +35,7 @@
 #define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
 
 
-// stolen from cssed (http://cssed.sf.net), thanks
+/* stolen from cssed (http://cssed.sf.net), thanks */
 
 
 /* line numbers visibility */
@@ -49,7 +49,7 @@ void sci_set_line_numbers(ScintillaObject * sci, gboolean set, gint extra_width)
 		g_snprintf(tmp_str, 15, "_%d%d", len, extra_width);
 		width = SSM(sci, SCI_TEXTWIDTH, STYLE_LINENUMBER, (sptr_t) tmp_str);
 		SSM (sci, SCI_SETMARGINWIDTHN, 0, width);
-		SSM (sci, SCI_SETMARGINSENSITIVEN, 0, FALSE); // use default behaviour
+		SSM (sci, SCI_SETMARGINSENSITIVEN, 0, FALSE); /* use default behaviour */
 	}
 	else
 	{
@@ -194,14 +194,14 @@ void sci_convert_eols( ScintillaObject* sci, gint eolmode)
 
 void sci_add_text(ScintillaObject* sci, const gchar* text)
 {
-	if( text != NULL ){// if null text is passed to scintilla will segfault
+	if( text != NULL ){ /* if null text is passed to scintilla will segfault */
 		SSM( sci, SCI_ADDTEXT, strlen(text), (sptr_t) text);
 	}
 }
 
 void sci_set_text(ScintillaObject* sci, const gchar* text)
 {
-	if( text != NULL ){// if null text is passed to scintilla will segfault
+	if( text != NULL ){ /* if null text is passed to scintilla will segfault */
 		SSM( sci, SCI_SETTEXT, 0, (sptr_t) text);
 	}
 }
@@ -209,7 +209,7 @@ void sci_set_text(ScintillaObject* sci, const gchar* text)
 
 void sci_add_text_buffer(ScintillaObject* sci, const gchar* text, gint len)
 {
-	if( text != NULL ){// if null text is passed to scintilla will segfault
+	if( text != NULL ){ /* if null text is passed to scintilla will segfault */
 		SSM(sci, SCI_CLEARALL, 0, 0);
 		SSM(sci, SCI_ADDTEXT, len, (sptr_t) text);
 	}
@@ -233,7 +233,7 @@ void sci_undo( ScintillaObject* sci )
 	if( sci_can_undo(sci) )
 		SSM( sci, SCI_UNDO, 0, 0);
 	else
-	{ // change it to a document function
+	{ /* change it to a document function */
 
 	}
 }
@@ -244,7 +244,7 @@ void sci_redo( ScintillaObject* sci )
 	if( sci_can_redo( sci ) )
 		SSM( sci, SCI_REDO,0,0);
 	else
-	{ // change it to a document function
+	{ /* change it to a document function */
 
 	}
 }
@@ -396,7 +396,7 @@ void sci_set_current_position(ScintillaObject* sci, gint position, gboolean scro
 	else
 	{
 		SSM(sci, SCI_SETCURRENTPOS, position, 0);
-		SSM(sci, SCI_SETANCHOR, position, 0); // to avoid creation of a selection
+		SSM(sci, SCI_SETANCHOR, position, 0); /* to avoid creation of a selection */
 	}
 }
 
@@ -494,7 +494,7 @@ gint sci_get_line_length(ScintillaObject* sci,gint line)
 }
 
 
-// Returns: a NULL-terminated copy of the line text
+/* Returns: a NULL-terminated copy of the line text */
 gchar *sci_get_line(ScintillaObject* sci, gint line_num)
 {
 	gint len = sci_get_line_length(sci, line_num);
@@ -506,7 +506,7 @@ gchar *sci_get_line(ScintillaObject* sci, gint line_num)
 }
 
 
-// the last char will be null terminated
+/* the last char will be null terminated */
 void sci_get_text(ScintillaObject* sci, gint len, gchar* text)
 {
 	SSM( sci, SCI_GETTEXT, len, (sptr_t) text );
@@ -529,7 +529,7 @@ gint sci_get_selected_text_length(ScintillaObject* sci)
 
 gint sci_get_position_from_xy(ScintillaObject* sci, gint x, gint y, gboolean nearby)
 {
-	// for nearby return -1 if there is no character near to the x,y point.
+	/* for nearby return -1 if there is no character near to the x,y point. */
 	return SSM(sci, (nearby) ? SCI_POSITIONFROMPOINTCLOSE : SCI_POSITIONFROMPOINT, x, y);
 }
 
@@ -646,7 +646,7 @@ void sci_use_popup(ScintillaObject *sci, gboolean enable)
 }
 
 
-// you can also call this has_selection
+/* you can also call this has_selection */
 gboolean sci_can_copy(ScintillaObject *sci)
 {
 	if (SSM(sci, SCI_GETSELECTIONEND,0,0) - SSM(sci, SCI_GETSELECTIONSTART,0,0))
@@ -829,7 +829,7 @@ gboolean sci_get_readonly(ScintillaObject *sci)
 	return SSM(sci, SCI_GETREADONLY, 0, 0);
 }
 
-// a simple convenience function to not have SSM() in the outside of this file
+/* a simple convenience function to not have SSM() in the outside of this file */
  void sci_cmd(ScintillaObject * sci, gint cmd)
 {
 	SSM(sci, cmd, 0, 0);
@@ -850,7 +850,7 @@ gint sci_get_lines_selected(ScintillaObject *sci)
 	gint end = SSM(sci, SCI_GETSELECTIONEND, 0, 0);
 
 	if (start == end)
-		return 0; // no selection
+		return 0; /* no selection */
 
 	return SSM(sci, SCI_LINEFROMPOSITION, end, 0) - SSM(sci, SCI_LINEFROMPOSITION, start, 0) + 1;
 }

@@ -69,8 +69,8 @@
 
 /* Temporary source compatibility macros - do not use these in new code. */
 #define dialogs			geany_data->dialogs
-#define documents		geany_data->documents	// avoids conflict with document typedef
-#define encodings		geany_data->encoding	// avoids conflict with document::encoding
+#define documents		geany_data->documents	/* avoids conflict with document typedef */
+#define encodings		geany_data->encoding	/* avoids conflict with document::encoding */
 #define highlighting	geany_data->highlighting
 #define keybindings		geany_data->keybindings
 #define msgwindow		geany_data->msgwindow
@@ -78,7 +78,7 @@
 #define search			geany_data->search
 #define support			geany_data->support
 #define templates		geany_data->templates
-#define tagmanager		geany_data->tm			// avoids conflict with "struct tm *t"
+#define tagmanager		geany_data->tm			/* avoids conflict with "struct tm *t" */
 #define ui				geany_data->ui
 #define utils			geany_data->utils
 

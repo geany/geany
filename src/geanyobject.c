@@ -41,8 +41,8 @@ typedef struct _GeanyObjectPrivate GeanyObjectPrivate;
 
 struct _GeanyObjectPrivate
 {
-	/* add your private declarations here */
-	gchar dummy; // to avoid warnings (g_type_class_add_private: assertion `private_size > 0' failed)
+	/* to avoid warnings (g_type_class_add_private: assertion `private_size > 0' failed) */
+	gchar dummy;
 };
 
 static void geany_object_class_init			(GeanyObjectClass *klass);

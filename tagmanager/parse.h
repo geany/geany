@@ -15,6 +15,8 @@
 */
 #include "general.h"	/* must always come first */
 
+#include <sys/types.h>
+
 #include "parsers.h"	/* contains list of parsers */
 #include "strlist.h"
 #include "entry.h"

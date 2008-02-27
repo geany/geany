@@ -36,12 +36,12 @@
 #include "tm_tagmanager.h"
 
 #ifndef PLAT_GTK
-#   define PLAT_GTK 1	// needed when including ScintillaWidget.h
+#   define PLAT_GTK 1	/* needed when including ScintillaWidget.h */
 #endif
 
 
-// for detailed description look in the documentation, things are not
-// listed in the documentation should not be changed ;-)
+/* for detailed description look in the documentation, things are not
+ * listed in the documentation should not be changed */
 #define GEANY_FILEDEFS_SUBDIR			"filedefs"
 #define GEANY_TEMPLATES_SUBDIR			"templates"
 #define GEANY_CODENAME					"Selit"
@@ -61,7 +61,8 @@
 #define GEANY_WINDOW_MINIMAL_HEIGHT		350
 #define GEANY_WINDOW_DEFAULT_WIDTH		900
 #define GEANY_WINDOW_DEFAULT_HEIGHT		600
-// some default settings which are used at the very first start of Geany to fill configuration file
+/* some default settings which are used at the very first start of Geany to fill
+ * the configuration file */
 #define GEANY_DEFAULT_TOOLS_MAKE		"make"
 #ifdef G_OS_WIN32
 #define GEANY_DEFAULT_TOOLS_TERMINAL	"cmd.exe"
@@ -78,7 +79,7 @@
 
 
 
-// useful forward declarations
+/* useful forward declarations */
 typedef struct filetype filetype;
 typedef struct _GeanyProject GeanyProject;
 
@@ -91,17 +92,18 @@ typedef struct GeanyApp
 	gchar				*configdir;
 	gchar				*datadir;
 	gchar				*docdir;
-	gchar			   **active_plugins; // list of plugin filenames to load at startup
+	gchar			   **active_plugins; 	/* list of plugin filenames to load at startup */
 	const TMWorkspace	*tm_workspace;
-	GeanyProject		*project;	// currently active project or NULL if none is open
-	gboolean			ignore_callback;	// should not be used in new code (use clicked instead of toggled signal)
+	GeanyProject		*project;			/* currently active project or NULL if none is open */
+	gboolean			ignore_callback;	/* should not be used in new code
+	                                           (use clicked instead of toggled signal) */
 
 	/* Important widgets */
 	GtkWidget			*window;
 	GtkWidget			*toolbar;
 	GtkWidget			*treeview_notebook;
 	GtkWidget			*notebook;
-	GtkWidget			*statusbar;	// use ui_set_statusbar() to set
+	GtkWidget			*statusbar;			/* use ui_set_statusbar() to set */
 	GtkWidget			*popup_menu;
 }
 GeanyApp;
@@ -140,7 +142,7 @@ enum
 #endif
 
 
-// prototype is here so that all files can use it.
+/* prototype is here so that all files can use it. */
 void geany_debug(gchar const *format, ...) G_GNUC_PRINTF (1, 2);
 
 #endif

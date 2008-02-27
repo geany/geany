@@ -58,19 +58,26 @@ static const gint abi_version = 20;
 	}
 
 
+/** Plugin info structure to hold basic information about a plugin.
+ *  Should only be set with PLUGIN_INFO. */
 typedef struct PluginInfo
 {
-	gchar	*name;			// name of plugin
-	gchar	*description;	// description of plugin
-	gchar	*version;		// version of plugin
-	gchar	*author;		// author of plugin
-	gpointer reserved2;		// reserved for later use
+	/** The name of the plugin. */
+	gchar	*name;
+	/** The description of the plugin. */
+	gchar	*description;
+	/** The version of the plugin. */
+	gchar	*version;
+	/** The author of the plugin. */
+	gchar	*author;
+	/** Reserved for later use. */
+	gpointer reserved2;
 }
 PluginInfo;
 
 #include <string.h>
 
-/* Sets the plugin name and a brief description of what it is. */
+/** Set the plugin name and some other basic information about a plugin. */
 #define PLUGIN_INFO(p_name, p_description, p_version, p_author) \
 	PluginInfo *info(void) \
 	{ \
@@ -102,32 +109,36 @@ GeanyCallback;
 
 
 
+/** Flags to be set by plugins in PluginFields struct. */
 typedef enum
 {
-	PLUGIN_IS_DOCUMENT_SENSITIVE	= 1 << 0	// if menu_item should be disabled when there are no documents
+	/** Whether a plugin's menu item should be disabled when there are no open documents */
+	PLUGIN_IS_DOCUMENT_SENSITIVE	= 1 << 0
 }
 PluginFlags;
 
-/* Fields set and owned by the plugin.
- * Note: Remember to increment api_version (and abi_version if necessary) when
- * making changes. */
+/** Fields set and owned by the plugin. */
+/* Note: Remember to increment api_version (and abi_version if necessary) when making changes. */
 typedef struct PluginFields
 {
+	/** Bitmask of PluginFlags. */
 	PluginFlags	flags;
-	GtkWidget	*menu_item;	// required if using PLUGIN_IS_DOCUMENT_SENSITIVE, ignored otherwise
+	/** Pointer to a plugin's menu item which will be automatically enabled/disabled when there
+	 *  are no open documents and PLUGIN_IS_DOCUMENT_SENSITIVE is set.
+	 *  This is required if using PLUGIN_IS_DOCUMENT_SENSITIVE, ignored otherwise */
+	GtkWidget	*menu_item;
 }
 PluginFields;
 
 
-/* These are fields and functions owned by Geany.
- * Fields and functions will be appended when needed by plugin authors.
- * Note: Remember to increment api_version (and abi_version if necessary) when
- * making changes. */
+/** These are fields and functions owned by Geany.
+ *  Fields and functions will be appended when needed by plugin authors. */
+/* Note: Remember to increment api_version (and abi_version if necessary) when making changes. */
 typedef struct GeanyData
 {
-	GeanyApp	*app;	// Geany application data fields
-	GtkWidget	*tools_menu;	// Almost all plugins should add menu items to the Tools menu only
-	GArray		*doc_array;	// array of document pointers
+	GeanyApp	*app;	/* Geany application data fields */
+	GtkWidget	*tools_menu;	/* Almost all plugins should add menu items to the Tools menu only */
+	GArray		*doc_array;	/* array of document pointers */
 	struct filetype		**filetypes;
 	struct GeanyPrefs	*prefs;
 	struct EditorPrefs	*editor_prefs;
@@ -150,7 +161,7 @@ typedef struct GeanyData
 }
 GeanyData;
 
-typedef GeanyData PluginData;	// for compatibility with API < 7
+typedef GeanyData PluginData;	/* for compatibility with API < 7 */
 
 
 /* For more info about these functions, see the main source code.

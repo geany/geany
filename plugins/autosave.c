@@ -60,14 +60,14 @@ gboolean auto_save(gpointer data)
 		{
 			idx = p_document->get_n_idx(i);
 
-			// skip current file to save it lastly, skip files without name
+			/* skip current file to save it lastly, skip files without name */
 			if (idx != cur_idx && doc_list[idx].file_name != NULL)
 				if (p_document->save_file(idx, FALSE))
 					saved_files++;
 		}
 	}
-	// finally save current file, do it after all other files to get correct window title and
-	// symbol list
+	/* finally save current file, do it after all other files to get correct window title and
+	 * symbol list */
 	if (doc_list[cur_idx].file_name != NULL)
 		if (p_document->save_file(cur_idx, FALSE))
 			saved_files++;
@@ -156,7 +156,7 @@ void configure(GtkWidget *parent)
 
 	gtk_widget_show_all(vbox);
 
-	// run the dialog and check for the response code
+	/* run the dialog and check for the response code */
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
 		GKeyFile *config = g_key_file_new();
@@ -180,13 +180,13 @@ void configure(GtkWidget *parent)
 		}
 		else
 		{
-			// write config to file
+			/* write config to file */
 			data = g_key_file_to_data(config, NULL, NULL);
 			p_utils->write_file(config_file, data);
 			g_free(data);
 		}
 
-		set_timeout(); // apply the changes
+		set_timeout(); /* apply the changes */
 
 		g_free(config_dir);
 		g_key_file_free(config);

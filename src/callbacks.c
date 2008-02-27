@@ -75,20 +75,20 @@
 #endif
 
 
-// represents the state while closing all tabs(used to prevent notebook switch page signals)
+/* represents the state while closing all tabs(used to prevent notebook switch page signals) */
 static gboolean closing_all = FALSE;
 
-// flag to indicate the explicit change of a toggle button of the toolbar menu and so the
-// toggled callback should ignore the change since it is not triggered by the user
+/* flag to indicate the explicit change of a toggle button of the toolbar menu and so the
+ * toggled callback should ignore the change since it is not triggered by the user */
 static gboolean ignore_toolbar_toggle = FALSE;
 
-// flag to indicate that an insert callback was triggered from the file menu,
-// so we need to store the current cursor position in editor_info.click_pos.
+/* flag to indicate that an insert callback was triggered from the file menu,
+ * so we need to store the current cursor position in editor_info.click_pos. */
 static gboolean insert_callback_from_menu = FALSE;
 
-// represents the state at switching a notebook page(in the left treeviews widget), to not emit
-// the selection-changed signal from tv.tree_openfiles
-//static gboolean switch_tv_notebook_page = FALSE;
+/* represents the state at switching a notebook page(in the left treeviews widget), to not emit
+ * the selection-changed signal from tv.tree_openfiles */
+/*static gboolean switch_tv_notebook_page = FALSE; */
 
 CallbacksData callbacks_data = {-1};
 
@@ -104,7 +104,7 @@ static gboolean check_no_unsaved(void)
 			return FALSE;
 		}
 	}
-	return TRUE;	// no unsaved edits
+	return TRUE;	/* no unsaved edits */
 }
 
 
@@ -126,8 +126,8 @@ static gboolean account_for_unsaved(void)
 }
 
 
-// set editor_info.click_pos to the current cursor position if insert_callback_from_menu is TRUE
-// to prevent invalid cursor positions which can cause segfaults
+/* set editor_info.click_pos to the current cursor position if insert_callback_from_menu is TRUE
+ * to prevent invalid cursor positions which can cause segfaults */
 static void verify_click_pos(gint idx)
 {
 	if (insert_callback_from_menu)
@@ -138,14 +138,14 @@ static void verify_click_pos(gint idx)
 }
 
 
-// should only be called from on_exit_clicked
+/* should only be called from on_exit_clicked */
 static void quit_app(void)
 {
 	guint i;
 
 	configuration_save();
 
-	// ignore changes for all tabs (already asked user in on_exit_clicked)
+	/* ignore changes for all tabs (already asked user in on_exit_clicked) */
 	for (i = 0; i < doc_array->len; i++)
 	{
 		if (doc_list[i].is_valid && doc_list[i].changed)
@@ -154,7 +154,7 @@ static void quit_app(void)
 		}
 	}
 	if (app->project != NULL)
-		project_close(FALSE);	// save project session files
+		project_close(FALSE);	/* save project session files */
 
 	on_close_all1_activate(NULL, NULL);
 
@@ -162,7 +162,7 @@ static void quit_app(void)
 }
 
 
-// wrapper function to abort exit process if cancel button is pressed
+/* wrapper function to abort exit process if cancel button is pressed */
 gboolean
 on_exit_clicked                        (GtkWidget *widget, gpointer gdata)
 {
@@ -234,7 +234,7 @@ on_save_all1_activate                  (GtkMenuItem     *menuitem,
 	gint i, idx, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
 	gint cur_idx = document_get_cur_idx();
 
-	document_delay_colourise();	// avoid recolourising all C files after each save
+	document_delay_colourise();	/* avoid recolourising all C files after each save */
 
 	for (i = 0; i < max; i++)
 	{
@@ -242,7 +242,7 @@ on_save_all1_activate                  (GtkMenuItem     *menuitem,
 		if (! doc_list[idx].changed) continue;
 		if (doc_list[idx].file_name == NULL)
 		{
-			// display unnamed document
+			/* display unnamed document */
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
 				document_get_notebook_page(idx));
 			dialogs_show_save_as();
@@ -274,7 +274,7 @@ on_close_all1_activate                 (GtkMenuItem     *menuitem,
 	}
 	closing_all = FALSE;
 	tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
-	// if cancel is clicked, cancel the complete exit process
+	/* if cancel is clicked, cancel the complete exit process */
 	return ret;
 }
 
@@ -303,15 +303,15 @@ on_file1_activate                      (GtkMenuItem     *menuitem,
 	gtk_widget_set_sensitive(ui_widgets.recent_files_menuitem,
 						g_queue_get_length(ui_prefs.recent_queue) > 0);
 #if GTK_CHECK_VERSION(2, 10, 0)
-	// hide Page setup when GTK printing is not used
-	// (on GTK < 2.10 the menu item is hidden completely)
+	/* hide Page setup when GTK printing is not used
+	 * (on GTK < 2.10 the menu item is hidden completely) */
 	ui_widget_show_hide(ui_widgets.print_page_setup,
 		printing_prefs.use_gtk_printing || gtk_check_version(2, 10, 0) != NULL);
 #endif
 }
 
 
-// edit actions, c&p & co, from menu bar and from popup menu
+/* edit actions, c&p & co, from menu bar and from popup menu */
 void
 on_edit1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
@@ -399,8 +399,9 @@ on_paste1_activate                     (GtkMenuItem     *menuitem,
 	if (IS_SCINTILLA(focusw) && idx >= 0)
 	{
 #ifdef G_OS_WIN32
-		// insert the text manually for now, because the auto conversion of EOL characters by
-		// by Scintilla seems to make problems
+		/* insert the text manually for now, because the auto conversion of EOL characters by
+		 * by Scintilla seems to make problems */
+		/** TODO this is probably obsolete now since we fixed PLAT_GTK_WIN32 in Scintilla */
 		if (gtk_clipboard_wait_is_text_available(gtk_clipboard_get(GDK_NONE)))
 		{
 			gchar *content = gtk_clipboard_wait_for_text(gtk_clipboard_get(GDK_NONE));
@@ -455,7 +456,7 @@ on_preferences1_activate               (GtkMenuItem     *menuitem,
 }
 
 
-// about menu item
+/* about menu item */
 void
 on_info1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
@@ -464,7 +465,7 @@ on_info1_activate                      (GtkMenuItem     *menuitem,
 }
 
 
-// open file
+/* open file */
 void
 on_open1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
@@ -473,7 +474,7 @@ on_open1_activate                      (GtkMenuItem     *menuitem,
 }
 
 
-// quit toolbar button
+/* quit toolbar button */
 void
 on_toolbutton19_clicked                (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
@@ -482,7 +483,7 @@ on_toolbutton19_clicked                (GtkToolButton   *toolbutton,
 }
 
 
-// reload file
+/* reload file */
 void
 on_toolbutton23_clicked                (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
@@ -491,7 +492,7 @@ on_toolbutton23_clicked                (GtkToolButton   *toolbutton,
 }
 
 
-// also used for reloading when user_data is -1
+/* also used for reloading when user_data is -1 */
 void
 on_reload_as_activate                  (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
@@ -563,7 +564,7 @@ on_change_font1_activate               (GtkMenuItem     *menuitem,
 }
 
 
-// new file
+/* new file */
 void
 on_toolbutton8_clicked                 (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
@@ -571,7 +572,7 @@ on_toolbutton8_clicked                 (GtkToolButton   *toolbutton,
 	document_new_file(NULL, NULL, NULL);
 }
 
-// open file
+/* open file */
 void
 on_toolbutton9_clicked                 (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
@@ -580,7 +581,7 @@ on_toolbutton9_clicked                 (GtkToolButton   *toolbutton,
 }
 
 
-// save file
+/* save file */
 void
 on_toolbutton10_clicked                (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
@@ -596,7 +597,7 @@ static void set_search_bar_background(gboolean success)
 	static gboolean old_value = TRUE;
 	GtkWidget *widget = lookup_widget(app->window, "entry1");
 
-	// only update if really needed
+	/* only update if really needed */
 	if (search_data.search_bar && old_value != success)
 	{
 		gtk_widget_modify_base(widget, GTK_STATE_NORMAL, success ? NULL : &red);
@@ -607,7 +608,7 @@ static void set_search_bar_background(gboolean success)
 }
 
 
-// store text, clear search flags so we can use Search->Find Next/Previous
+/* store text, clear search flags so we can use Search->Find Next/Previous */
 static void setup_find_next(GtkEditable *editable)
 {
 	g_free(search_data.text);
@@ -618,7 +619,7 @@ static void setup_find_next(GtkEditable *editable)
 }
 
 
-// search text
+/* search text */
 void
 on_entry1_activate                     (GtkEntry        *entry,
                                         gpointer         user_data)
@@ -632,7 +633,7 @@ on_entry1_activate                     (GtkEntry        *entry,
 }
 
 
-// search text
+/* search text */
 void
 on_entry1_changed                      (GtkEditable     *editable,
                                         gpointer         user_data)
@@ -660,7 +661,7 @@ on_entry1_key_press_event              (GtkWidget       *widget,
 }
 
 
-// search text
+/* search text */
 void
 on_toolbutton18_clicked                (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
@@ -697,7 +698,7 @@ on_toolbar_small_icons1_activate       (GtkMenuItem     *menuitem,
 }
 
 
-// hides toolbar from toolbar popup menu
+/* hides toolbar from toolbar popup menu */
 void
 on_hide_toolbar1_activate              (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
@@ -707,7 +708,7 @@ on_hide_toolbar1_activate              (GtkMenuItem     *menuitem,
 }
 
 
-// zoom in from menu bar and popup menu
+/* zoom in from menu bar and popup menu */
 void
 on_zoom_in1_activate                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
@@ -723,7 +724,7 @@ on_zoom_in1_activate                   (GtkMenuItem     *menuitem,
 	}
 }
 
-// zoom out from menu bar and popup menu
+/* zoom out from menu bar and popup menu */
 void
 on_zoom_out1_activate                   (GtkMenuItem     *menuitem,
                                          gpointer         user_data)
@@ -751,7 +752,7 @@ on_normal_size1_activate               (GtkMenuItem     *menuitem,
 }
 
 
-// close tab
+/* close tab */
 void
 on_toolbutton15_clicked                (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
@@ -771,7 +772,7 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
 }
 
 
-// changes window-title on switching tabs and lots of other things
+/* changes window-title on switching tabs and lots of other things */
 void
 on_notebook1_switch_page_after         (GtkNotebook     *notebook,
                                         GtkNotebookPage *page,
@@ -782,7 +783,7 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
 
 	if (closing_all) return;
 
-	// guint == -1 seems useless, but it isn't!
+	/* guint == -1 seems useless, but it isn't! */
 	if (page_num == (guint) -1 && page != NULL)
 		idx = document_find_by_sci(SCINTILLA(page));
 	else
@@ -791,9 +792,9 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
 	if (idx >= 0 && main_status.opening_session_files == FALSE)
 	{
 		treeviews_select_openfiles_item(idx);
-		document_set_text_changed(idx);	// also sets window title and status bar
+		document_set_text_changed(idx);	/* also sets window title and status bar */
 		ui_update_popup_reundo_items(idx);
-		ui_document_show_hide(idx); // update the document menu
+		ui_document_show_hide(idx); /* update the document menu */
 		build_menu_update(idx);
 		treeviews_update_tag_list(idx, FALSE);
 
@@ -817,7 +818,7 @@ on_tv_notebook_switch_page             (GtkNotebook     *notebook,
                                         guint            page_num,
                                         gpointer         user_data)
 {
-	// suppress selection changed signal when switching to the open files list
+	/* suppress selection changed signal when switching to the open files list */
 	app->ignore_callback = TRUE;
 }
 
@@ -1054,7 +1055,7 @@ on_find_usage1_activate                (GtkMenuItem     *menuitem,
 	if (! DOC_IDX_VALID(idx)) return;
 
 	if (sci_can_copy(doc_list[idx].sci))
-	{	// take selected text if there is a selection
+	{	/* take selected text if there is a selection */
 		search_text = g_malloc(sci_get_selected_text_length(doc_list[idx].sci) + 1);
 		sci_get_selected_text(doc_list[idx].sci, search_text);
 		flags = SCFIND_MATCHCASE;
@@ -1158,7 +1159,8 @@ on_find_previous1_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	if (search_data.flags & SCFIND_REGEXP)
-		utils_beep(); // Can't reverse search order for a regex (find next ignores search backwards)
+		/* Can't reverse search order for a regex (find next ignores search backwards) */
+		utils_beep();
 	else
 		find_again(TRUE);
 }
@@ -1280,14 +1282,14 @@ on_help1_activate                      (GtkMenuItem     *menuitem,
 #ifdef G_OS_WIN32
 	skip = 8;
 	uri = g_strconcat("file:///", app->docdir, "/Manual.html", NULL);
-	g_strdelimit(uri, "\\", '/'); // replace '\\' by '/'
+	g_strdelimit(uri, "\\", '/'); /* replace '\\' by '/' */
 #else
 	skip = 7;
 	uri = g_strconcat("file://", app->docdir, "index.html", NULL);
 #endif
 
 	if (! g_file_test(uri + skip, G_FILE_TEST_IS_REGULAR))
-	{	// fall back to online documentation if it is not found on the hard disk
+	{	/* fall back to online documentation if it is not found on the hard disk */
 		g_free(uri);
 		uri = g_strconcat(GEANY_HOMEPAGE, "manual/index.html", NULL);
 	}
@@ -1328,8 +1330,8 @@ on_comments_function_activate          (GtkMenuItem     *menuitem,
 		return;
 	}
 
-	// utils_get_current_function returns -1 on failure, so sci_get_position_from_line
-	// returns the current position, so it should be safe
+	/* utils_get_current_function returns -1 on failure, so sci_get_position_from_line
+	 * returns the current position, so it should be safe */
 	line = utils_get_current_function(idx, &cur_tag);
 	pos = sci_get_position_from_line(doc_list[idx].sci, line - 1);
 
@@ -1352,7 +1354,7 @@ on_comments_multiline_activate         (GtkMenuItem     *menuitem,
 		return;
 	}
 
-	verify_click_pos(idx); // make sure that the click_pos is valid
+	verify_click_pos(idx); /* make sure that the click_pos is valid */
 
 	editor_insert_multiline_comment(idx);
 }
@@ -1367,7 +1369,7 @@ on_comments_gpl_activate               (GtkMenuItem     *menuitem,
 
 	text = templates_get_template_licence(FILETYPE_ID(doc_list[idx].file_type), GEANY_TEMPLATE_GPL);
 
-	verify_click_pos(idx); // make sure that the click_pos is valid
+	verify_click_pos(idx); /* make sure that the click_pos is valid */
 
 	sci_insert_text(doc_list[idx].sci, editor_info.click_pos, text);
 	g_free(text);
@@ -1384,7 +1386,7 @@ on_comments_bsd_activate               (GtkMenuItem     *menuitem,
 
 	text = templates_get_template_licence(FILETYPE_ID(doc_list[idx].file_type), GEANY_TEMPLATE_BSD);
 
-	verify_click_pos(idx); // make sure that the click_pos is valid
+	verify_click_pos(idx); /* make sure that the click_pos is valid */
 
 	sci_insert_text(doc_list[idx].sci, editor_info.click_pos, text);
 	g_free(text);
@@ -1401,8 +1403,8 @@ on_comments_changelog_activate         (GtkMenuItem     *menuitem,
 
 	text = templates_get_template_changelog();
 	sci_insert_text(doc_list[idx].sci, 0, text);
-	// sets the cursor to the right position to type the changelog text,
-	// the template has 21 chars + length of name and email
+	/* sets the cursor to the right position to type the changelog text,
+	 * the template has 21 chars + length of name and email */
 	sci_goto_pos(doc_list[idx].sci, 21 + strlen(prefs.template_developer) + strlen(prefs.template_mail), TRUE);
 
 	g_free(text);
@@ -1443,8 +1445,8 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 	gchar *format;
-	gchar time_str[300]; // the entered format string can be maximal 256 chars long, so we have
-						 // 44 additional characters for strtime's conversion
+	gchar time_str[300]; /* the entered format string can be maximal 256 chars long, so we have
+						  * 44 additional characters for strtime's conversion */
 	time_t t;
 	struct tm *tm;
 
@@ -1466,7 +1468,7 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
 		format = ui_prefs.custom_date_format;
 	else
 	{
-		// set default value
+		/* set default value */
 		if (utils_str_equal("", ui_prefs.custom_date_format))
 		{
 			g_free(ui_prefs.custom_date_format);
@@ -1479,12 +1481,12 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
 		return;
 	}
 
-	// get the current time
+	/* get the current time */
 	t = time(NULL);
 	tm = localtime(&t);
 	if (strftime(time_str, sizeof time_str, format, tm) != 0)
 	{
-		verify_click_pos(idx); // make sure that the click_pos is valid
+		verify_click_pos(idx); /* make sure that the click_pos is valid */
 
 		sci_insert_text(doc_list[idx].sci, editor_info.click_pos, time_str);
 		sci_goto_pos(doc_list[idx].sci, editor_info.click_pos + strlen(time_str), FALSE);
@@ -1508,7 +1510,7 @@ on_insert_include_activate             (GtkMenuItem     *menuitem,
 
 	if (! DOC_IDX_VALID(idx) || user_data == NULL) return;
 
-	verify_click_pos(idx); // make sure that the click_pos is valid
+	verify_click_pos(idx); /* make sure that the click_pos is valid */
 
 	if (utils_str_equal(user_data, "blank"))
 	{
@@ -1568,7 +1570,7 @@ void
 on_go_to_line1_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	// this is search menu cb; call popup menu goto cb
+	/* this is search menu cb; call popup menu goto cb */
 	on_go_to_line_activate(menuitem, user_data);
 }
 
@@ -1639,8 +1641,8 @@ on_menu_show_sidebar1_toggled          (GtkCheckMenuItem *checkmenuitem,
 
 	if (ui_prefs.sidebar_visible)
 	{
-		// to remember the active page because GTK (e.g. 2.8.18) doesn't do it and shows always
-		// the last page (for unknown reason, with GTK 2.6.4 it works)
+		/* to remember the active page because GTK (e.g. 2.8.18) doesn't do it and shows always
+		 * the last page (for unknown reason, with GTK 2.6.4 it works) */
 		active_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->treeview_notebook));
 	}
 
@@ -1738,7 +1740,7 @@ on_menu_increase_indent1_activate      (GtkMenuItem     *menuitem,
 		old_pos = sci_get_current_position(doc_list[idx].sci);
 		line = sci_get_line_from_position(doc_list[idx].sci, old_pos);
 		ind_pos = sci_get_line_indent_position(doc_list[idx].sci, line);
-		// when using tabs increase cur pos by 1, when using space increase it by tab_width
+		/* when using tabs increase cur pos by 1, when using space increase it by tab_width */
 		step = (doc_list[idx].use_tabs) ? 1 : editor_prefs.tab_width;
 		new_pos = (old_pos > ind_pos) ? old_pos + step : old_pos;
 
@@ -1908,7 +1910,7 @@ on_menu_open_selected_file1_activate   (GtkMenuItem     *menuitem,
 		if (g_path_is_absolute(sel))
 			filename = g_strdup(sel);
 		else
-		{	// relative filename, add the path of the current file
+		{	/* relative filename, add the path of the current file */
 			gchar *path;
 
 			path = g_path_get_dirname(doc_list[idx].file_name);
@@ -1917,7 +1919,7 @@ on_menu_open_selected_file1_activate   (GtkMenuItem     *menuitem,
 			if (! g_file_test(filename, G_FILE_TEST_EXISTS) &&
 				app->project != NULL && NZV(app->project->base_path))
 			{
-				// try the project's base path
+				/* try the project's base path */
 				setptr(path, project_get_base_path());
 				setptr(filename, g_build_path(G_DIR_SEPARATOR_S, path, sel, NULL));
 			}
@@ -1943,8 +1945,8 @@ on_remove_markers1_activate            (GtkMenuItem     *menuitem,
 	if (! DOC_IDX_VALID(idx))
 		return;
 
-	sci_marker_delete_all(doc_list[idx].sci, 0);	// delete the yellow tag marker
-	sci_marker_delete_all(doc_list[idx].sci, 1);	// delete user markers
+	sci_marker_delete_all(doc_list[idx].sci, 0);	/* delete the yellow tag marker */
+	sci_marker_delete_all(doc_list[idx].sci, 1);	/* delete user markers */
 }
 
 
@@ -1968,7 +1970,7 @@ on_context_action1_activate            (GtkMenuItem     *menuitem,
 	if (! DOC_IDX_VALID(idx)) return;
 
 	if (sci_can_copy(doc_list[idx].sci))
-	{	// take selected text if there is a selection
+	{	/* take selected text if there is a selection */
 		word = g_malloc(sci_get_selected_text_length(doc_list[idx].sci) + 1);
 		sci_get_selected_text(doc_list[idx].sci, word);
 	}
@@ -1977,7 +1979,7 @@ on_context_action1_activate            (GtkMenuItem     *menuitem,
 		word = g_strdup(editor_info.current_word);
 	}
 
-	// use the filetype specific command if available, fallback to global command otherwise
+	/* use the filetype specific command if available, fallback to global command otherwise */
 	if (doc_list[idx].file_type != NULL &&
 		doc_list[idx].file_type->context_action_cmd != NULL &&
 		*doc_list[idx].file_type->context_action_cmd != '\0')
@@ -1989,7 +1991,7 @@ on_context_action1_activate            (GtkMenuItem     *menuitem,
 		command = g_strdup(prefs.context_action_cmd);
 	}
 
-	// substitute the wildcard %s and run the command if it is non empty
+	/* substitute the wildcard %s and run the command if it is non empty */
 	if (command != NULL && *command != '\0')
 	{
 		command = utils_str_replace(command, "%s", word);
@@ -2011,10 +2013,12 @@ on_menu_toggle_all_additional_widgets1_activate
                                         gpointer         user_data)
 {
 	static gint hide_all = -1;
-	GtkCheckMenuItem *msgw = GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_messages_window1"));
-	GtkCheckMenuItem *toolbari = GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_toolbar1"));
+	GtkCheckMenuItem *msgw = GTK_CHECK_MENU_ITEM(
+		lookup_widget(app->window, "menu_show_messages_window1"));
+	GtkCheckMenuItem *toolbari = GTK_CHECK_MENU_ITEM(
+		lookup_widget(app->window, "menu_show_toolbar1"));
 
-	// get the initial state (necessary if Geany was closed with hide_all = TRUE)
+	/* get the initial state (necessary if Geany was closed with hide_all = TRUE) */
 	if (hide_all == -1)
 	{
 		if (! gtk_check_menu_item_get_active(msgw) &&
@@ -2027,7 +2031,7 @@ on_menu_toggle_all_additional_widgets1_activate
 			hide_all = FALSE;
 	}
 
-	hide_all = ! hide_all; // toggle
+	hide_all = ! hide_all; /* toggle */
 
 	if (hide_all)
 	{

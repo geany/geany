@@ -49,7 +49,7 @@ PLUGIN_INFO(_("File Browser"), _("Adds a file browser tab to the sidebar."), VER
 	_("The Geany developer team"))
 
 
-// number of characters to skip the root of an absolute path("c:" or "d:" on Windows)
+/* number of characters to skip the root of an absolute path("c:" or "d:" on Windows) */
 #ifdef G_OS_WIN32
 # define ROOT_OFFSET 2
 #else
@@ -73,8 +73,8 @@ static GtkTreeIter			*last_dir_iter = NULL;
 static GtkEntryCompletion	*entry_completion = NULL;
 
 static GtkWidget	*path_entry;
-static gchar		*current_dir = NULL;	// in locale-encoding
-static gchar		*open_cmd;				// in locale-encoding
+static gchar		*current_dir = NULL;	/* in locale-encoding */
+static gchar		*open_cmd;				/* in locale-encoding */
 static gchar		*config_file;
 
 static struct
@@ -85,7 +85,7 @@ static struct
 } popup_items;
 
 
-// Returns: whether name should be hidden.
+/* Returns: whether name should be hidden. */
 static gboolean check_hidden(const gchar *base_name)
 {
 	gsize len;
@@ -117,7 +117,7 @@ static gboolean check_hidden(const gchar *base_name)
 }
 
 
-// name is in locale encoding
+/* name is in locale encoding */
 static void add_item(const gchar *name)
 {
 	GtkTreeIter iter;
@@ -162,7 +162,7 @@ static gboolean is_top_level_directory(const gchar *dir)
 }
 
 
-// adds ".." to the start of the file list
+/* adds ".." to the start of the file list */
 static void add_top_level_entry(void)
 {
 	GtkTreeIter iter;
@@ -182,20 +182,20 @@ static void clear(void)
 {
 	gtk_list_store_clear(file_store);
 
-	// reset the directory item pointer
+	/* reset the directory item pointer */
 	if (last_dir_iter != NULL)
 		gtk_tree_iter_free(last_dir_iter);
 	last_dir_iter = NULL;
 }
 
 
-// recreate the tree model from current_dir.
+/* recreate the tree model from current_dir. */
 static void refresh(void)
 {
 	gchar *utf8_dir;
 	GSList *list;
 
-	// don't clear when the new path doesn't exist
+	/* don't clear when the new path doesn't exist */
 	if (! g_file_test(current_dir, G_FILE_TEST_EXISTS))
 		return;
 
@@ -262,7 +262,7 @@ static void on_current_path(void)
 
 static void on_go_up(void)
 {
-	// remove the highest directory part (which becomes the basename of current_dir)
+	/* remove the highest directory part (which becomes the basename of current_dir) */
 	setptr(current_dir, g_path_get_dirname(current_dir));
 	refresh();
 }
@@ -412,7 +412,7 @@ static void open_selected_files(GList *list)
 		files = g_slist_append(files, fname);
 	}
 	p_document->open_files(files, FALSE, NULL, NULL);
-	g_slist_foreach(files, (GFunc) g_free, NULL);	// free filenames
+	g_slist_foreach(files, (GFunc) g_free, NULL);	/* free filenames */
 	g_slist_free(files);
 }
 
@@ -442,7 +442,7 @@ static void on_open_clicked(GtkMenuItem *menuitem, gpointer user_data)
 	{
 		if (check_single_selection(treesel))
 		{
-			GtkTreePath *treepath = list->data;	// first selected item
+			GtkTreePath *treepath = list->data;	/* first selected item */
 
 			open_folder(treepath);
 		}
@@ -472,7 +472,7 @@ static void on_find_in_files(GtkMenuItem *menuitem, gpointer user_data)
 
 	if (is_dir)
 	{
-		GtkTreePath *treepath = list->data;	// first selected item
+		GtkTreePath *treepath = list->data;	/* first selected item */
 
 		dir = get_tree_path_filename(treepath);
 	}
@@ -573,7 +573,7 @@ static void update_popup_menu(GtkWidget *popup_menu)
 }
 
 
-// delay updating popup menu until the selection has been set
+/* delay updating popup menu until the selection has been set */
 static gboolean on_button_release(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
 	if (event->button == 3)
@@ -602,7 +602,7 @@ static gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer dat
 
 	if ((event->keyval == GDK_Up ||
 		event->keyval == GDK_KP_Up) &&
-		(event->state & GDK_MOD1_MASK))	// FIXME: Alt-Up doesn't seem to work!
+		(event->state & GDK_MOD1_MASK))	/* FIXME: Alt-Up doesn't seem to work! */
 		on_go_up();
 	return FALSE;
 }
@@ -657,7 +657,7 @@ static void prepare_file_view(void)
 	gtk_widget_modify_font(file_view, pfd);
 	pango_font_description_free(pfd);
 
-	// selection handling
+	/* selection handling */
 	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(file_view));
 	gtk_tree_selection_set_mode(select, GTK_SELECTION_MULTIPLE);
 
@@ -721,8 +721,8 @@ static gboolean completion_match_func(GtkEntryCompletion *completion, const gcha
 	if (str != NULL && icon != NULL && p_utils->str_equal(icon, GTK_STOCK_DIRECTORY) &&
 		! g_str_has_suffix(key, G_DIR_SEPARATOR_S))
 	{
-		// key is something like "/tmp/te" and str is a filename like "test",
-		// so strip the path from key to make them comparable
+		/* key is something like "/tmp/te" and str is a filename like "test",
+		 * so strip the path from key to make them comparable */
 		gchar *base_name = g_path_get_basename(key);
 		gchar *str_lowered = g_utf8_strdown(str, -1);
 		result = g_str_has_prefix(str_lowered, base_name);
@@ -746,7 +746,7 @@ static gboolean completion_match_selected(GtkEntryCompletion *widget, GtkTreeMod
 		gchar *text = g_strconcat(current_dir, G_DIR_SEPARATOR_S, str, NULL);
 		gtk_entry_set_text(GTK_ENTRY(path_entry), text);
 		gtk_editable_set_position(GTK_EDITABLE(path_entry), -1);
-		// force change of directory when completion is done
+		/* force change of directory when completion is done */
 		on_path_entry_activate(GTK_ENTRY(path_entry), NULL);
 		g_free(text);
 	}
@@ -874,7 +874,7 @@ void configure(GtkWidget *parent)
 
 	gtk_widget_show_all(vbox);
 
-	// run the dialog and check for the response code
+	/* run the dialog and check for the response code */
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
 		GKeyFile *config = g_key_file_new();
@@ -899,13 +899,13 @@ void configure(GtkWidget *parent)
 		}
 		else
 		{
-			// write config to file
+			/* write config to file */
 			data = g_key_file_to_data(config, NULL, NULL);
 			p_utils->write_file(config_file, data);
 			g_free(data);
 		}
 
-		// apply the changes
+		/* apply the changes */
 		refresh();
 
 		g_free(config_dir);

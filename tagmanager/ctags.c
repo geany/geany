@@ -540,7 +540,7 @@ extern boolean doesFileExist (const char *const fileName)
     return (boolean) (g_stat (fileName, &fileStatus) == 0);
 }
 
-//#ifndef HAVE_FGETPOS
+/*#ifndef HAVE_FGETPOS*/
 /*
 extern int fgetpos ( stream, pos )
     FILE *const stream;
@@ -562,7 +562,7 @@ extern int fsetpos ( stream, pos )
     return fseek (stream, *pos, SEEK_SET);
 }
 */
-//#endif
+/*#endif*/
 
 extern void addTotals (const unsigned int files,
 		       const long unsigned int lines,

@@ -87,7 +87,7 @@ static void document_redo_add(gint idx, guint type, gpointer data);
 static gboolean update_type_keywords(ScintillaObject *sci, gint lang);
 
 
-// ignore the case of filenames and paths under WIN32, causes errors if not
+/* ignore the case of filenames and paths under WIN32, causes errors if not */
 #ifdef G_OS_WIN32
 #define filenamecmp(a,b)	strcasecmp((a), (b))
 #else
@@ -141,9 +141,9 @@ gint document_find_by_filename(const gchar *filename, gboolean is_tm_filename)
 	if (! filename) return -1;
 
 	if (is_tm_filename)
-		return find_by_tm_filename(filename);	// more efficient
+		return find_by_tm_filename(filename);	/* more efficient */
 
-	realname = get_real_path_from_utf8(filename);	// dereference symlinks, /../ junk in path
+	realname = get_real_path_from_utf8(filename);	/* dereference symlinks, /../ junk in path */
 	if (! realname) return -1;
 
 	for (i = 0; i < doc_array->len; i++)
@@ -288,7 +288,7 @@ void document_set_use_tabs(gint idx, gboolean use_tabs)
 
 	doc->use_tabs = use_tabs;
 	sci_set_use_tabs(doc->sci, use_tabs);
-	// remove indent spaces on backspace, if using spaces to indent
+	/* remove indent spaces on backspace, if using spaces to indent */
 	SSM(doc->sci, SCI_SETBACKSPACEUNINDENTS, ! use_tabs, 0);
 }
 
@@ -304,7 +304,7 @@ void document_set_line_wrapping(gint idx, gboolean wrap)
 }
 
 
-// Apply just the prefs that can change in the Preferences dialog
+/* Apply just the prefs that can change in the Preferences dialog */
 void document_apply_update_prefs(gint idx)
 {
 	ScintillaObject *sci = doc_list[idx].sci;
@@ -371,19 +371,19 @@ static gint document_get_new_idx(void)
 
 static void setup_sci_keys(ScintillaObject *sci)
 {
-	// disable some Scintilla keybindings to be able to redefine them cleanly
-	sci_clear_cmdkey(sci, 'A' | (SCMOD_CTRL << 16)); // select all
-	sci_clear_cmdkey(sci, 'D' | (SCMOD_CTRL << 16)); // duplicate
-	sci_clear_cmdkey(sci, 'T' | (SCMOD_CTRL << 16)); // line transpose
-	sci_clear_cmdkey(sci, 'T' | (SCMOD_CTRL << 16) | (SCMOD_SHIFT << 16)); // line copy
-	sci_clear_cmdkey(sci, 'L' | (SCMOD_CTRL << 16)); // line cut
-	sci_clear_cmdkey(sci, 'L' | (SCMOD_CTRL << 16) | (SCMOD_SHIFT << 16)); // line delete
-	sci_clear_cmdkey(sci, SCK_UP | (SCMOD_CTRL << 16)); // scroll line up
-	sci_clear_cmdkey(sci, SCK_DOWN | (SCMOD_CTRL << 16)); // scroll line down
+	/* disable some Scintilla keybindings to be able to redefine them cleanly */
+	sci_clear_cmdkey(sci, 'A' | (SCMOD_CTRL << 16)); /* select all */
+	sci_clear_cmdkey(sci, 'D' | (SCMOD_CTRL << 16)); /* duplicate */
+	sci_clear_cmdkey(sci, 'T' | (SCMOD_CTRL << 16)); /* line transpose */
+	sci_clear_cmdkey(sci, 'T' | (SCMOD_CTRL << 16) | (SCMOD_SHIFT << 16)); /* line copy */
+	sci_clear_cmdkey(sci, 'L' | (SCMOD_CTRL << 16)); /* line cut */
+	sci_clear_cmdkey(sci, 'L' | (SCMOD_CTRL << 16) | (SCMOD_SHIFT << 16)); /* line delete */
+	sci_clear_cmdkey(sci, SCK_UP | (SCMOD_CTRL << 16)); /* scroll line up */
+	sci_clear_cmdkey(sci, SCK_DOWN | (SCMOD_CTRL << 16)); /* scroll line down */
 
 	if (editor_prefs.use_gtk_word_boundaries)
 	{
-		// use GtkEntry-like word boundaries
+		/* use GtkEntry-like word boundaries */
 		sci_assign_cmdkey(sci, SCK_RIGHT | (SCMOD_CTRL << 16), SCI_WORDRIGHTEND);
 		sci_assign_cmdkey(sci, SCK_RIGHT | (SCMOD_CTRL << 16) | (SCMOD_SHIFT << 16), SCI_WORDRIGHTENDEXTEND);
 		sci_assign_cmdkey(sci, SCK_DELETE | (SCMOD_CTRL << 16), SCI_DELWORDRIGHTEND);
@@ -395,7 +395,7 @@ static void setup_sci_keys(ScintillaObject *sci)
 	sci_assign_cmdkey(sci, SCK_DOWN | (SCMOD_CTRL << 16), SCI_PARADOWN);
 	sci_assign_cmdkey(sci, SCK_DOWN | (SCMOD_CTRL << 16) | (SCMOD_SHIFT << 16), SCI_PARADOWNEXTEND);
 
-	sci_clear_cmdkey(sci, SCK_BACK | (SCMOD_ALT << 16)); // clear Alt-Backspace (Undo)
+	sci_clear_cmdkey(sci, SCK_BACK | (SCMOD_ALT << 16)); /* clear Alt-Backspace (Undo) */
 }
 
 
@@ -414,12 +414,12 @@ static gint document_create_new_sci(const gchar *filename)
 	if (cur_pages == 1)
 	{
 		gint idx = document_get_cur_idx();
-		// remove the empty document and open a new one
+		/* remove the empty document and open a new one */
 		if (doc_list[idx].file_name == NULL && ! doc_list[idx].changed) document_remove(0);
 	}
 
 	new_idx = document_get_new_idx();
-	if (new_idx == -1)	// expand the array, no free places
+	if (new_idx == -1)	/* expand the array, no free places */
 	{
 		document new_doc;
 		init_doc_struct(&new_doc);
@@ -436,8 +436,8 @@ static gint document_create_new_sci(const gchar *filename)
 	gtk_widget_show(GTK_WIDGET(sci));
 
 	sci_set_codepage(sci, SC_CP_UTF8);
-	//SSM(sci, SCI_SETWRAPSTARTINDENT, 4, 0);
-	// disable scintilla provided popup menu
+	/*SSM(sci, SCI_SETWRAPSTARTINDENT, 4, 0);*/
+	/* disable scintilla provided popup menu */
 	sci_use_popup(sci, FALSE);
 
 	setup_sci_keys(sci);
@@ -450,15 +450,15 @@ static gint document_create_new_sci(const gchar *filename)
 	sci_set_lines_wrapped(sci, editor_prefs.line_wrapping);
 	sci_set_scrollbar_mode(sci, editor_prefs.show_scrollbars);
 	sci_set_caret_policy_x(sci, CARET_JUMPS | CARET_EVEN, 0);
-	//sci_set_caret_policy_y(sci, CARET_JUMPS | CARET_EVEN, 0);
+	/*sci_set_caret_policy_y(sci, CARET_JUMPS | CARET_EVEN, 0);*/
 	SSM(sci, SCI_AUTOCSETSEPARATOR, '\n', 0);
-	// (dis)allow scrolling past end of document
+	/* (dis)allow scrolling past end of document */
 	SSM(sci, SCI_SETENDATLASTLINE, editor_prefs.scroll_stop_at_last_line, 0);
 
-	// signal for insert-key(works without too, but to update the right status bar)
-	//g_signal_connect((GtkWidget*) sci, "key-press-event",
-					//G_CALLBACK(keybindings_got_event), GINT_TO_POINTER(new_idx));
-	// signal for the popup menu
+	/* signal for insert-key(works without too, but to update the right status bar) */
+	/*g_signal_connect((GtkWidget*) sci, "key-press-event",
+					 G_CALLBACK(keybindings_got_event), GINT_TO_POINTER(new_idx));*/
+	/* signal for the popup menu */
 	g_signal_connect(G_OBJECT(sci), "button-press-event",
 					G_CALLBACK(on_editor_button_press_event), GINT_TO_POINTER(new_idx));
 	g_signal_connect(G_OBJECT(sci), "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
@@ -472,7 +472,7 @@ static gint document_create_new_sci(const gchar *filename)
 	this->tag_store = NULL;
 	this->tag_tree = NULL;
 
-	// store important pointers in the tab list
+	/* store important pointers in the tab list */
 	this->file_name = (filename) ? g_strdup(filename) : NULL;
 	this->encoding = NULL;
 	this->saved_encoding.encoding = NULL;
@@ -487,12 +487,12 @@ static gint document_create_new_sci(const gchar *filename)
 	this->auto_indent = (editor_prefs.indent_mode != INDENT_NONE);
 	this->has_tags = FALSE;
 
-	treeviews_openfiles_add(new_idx);	// sets this->iter
+	treeviews_openfiles_add(new_idx);	/* sets this->iter */
 
 	tabnum = notebook_new_tab(new_idx);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), tabnum);
 
-	// select document in sidebar
+	/* select document in sidebar */
 	{
 		GtkTreeSelection *sel;
 
@@ -502,7 +502,7 @@ static gint document_create_new_sci(const gchar *filename)
 
 	ui_document_buttons_update();
 
-	this->is_valid = TRUE;	// do this last to prevent UI updating with NULL items.
+	this->is_valid = TRUE;	/* do this last to prevent UI updating with NULL items. */
 	g_assert(doc_list[new_idx].sci == sci);
 	return new_idx;
 }
@@ -546,7 +546,7 @@ gboolean document_remove(guint page_num)
 		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
 		{
 			treeviews_update_tag_list(-1, FALSE);
-			//on_notebook1_switch_page(GTK_NOTEBOOK(app->notebook), NULL, 0, NULL);
+			/*on_notebook1_switch_page(GTK_NOTEBOOK(app->notebook), NULL, 0, NULL);*/
 			ui_set_window_title(-1);
 			ui_save_buttons_toggle(FALSE);
 			ui_document_buttons_update();
@@ -563,7 +563,7 @@ gboolean document_remove(guint page_num)
 }
 
 
-// used to keep a record of the unchanged document state encoding
+/* used to keep a record of the unchanged document state encoding */
 static void store_saved_encoding(gint idx)
 {
 	g_free(doc_list[idx].saved_encoding.encoding);
@@ -588,7 +588,7 @@ gint document_new_file(const gchar *filename, filetype *ft, const gchar *text)
 
 	g_assert(idx != -1);
 
-	sci_set_undo_collection(doc_list[idx].sci, FALSE); // avoid creation of an undo action
+	sci_set_undo_collection(doc_list[idx].sci, FALSE); /* avoid creation of an undo action */
 	if (text)
 		sci_set_text(doc_list[idx].sci, text);
 	else
@@ -607,26 +607,26 @@ gint document_new_file(const gchar *filename, filetype *ft, const gchar *text)
 	doc_list[idx].changed = FALSE;
 
 	doc_list[idx].encoding = g_strdup(encodings[prefs.default_new_encoding].charset);
-	// store the opened encoding for undo/redo
+	/* store the opened encoding for undo/redo */
 	store_saved_encoding(idx);
 
-	//document_set_filetype(idx, (ft == NULL) ? filetypes[GEANY_FILETYPES_ALL] : ft);
-	if (ft == NULL && filename != NULL) // guess the filetype from the filename if one is given
+	/*document_set_filetype(idx, (ft == NULL) ? filetypes[GEANY_FILETYPES_ALL] : ft);*/
+	if (ft == NULL && filename != NULL) /* guess the filetype from the filename if one is given */
 		ft = filetypes_detect_from_file(idx);
 
-	document_set_filetype(idx, ft);	// also clears taglist
+	document_set_filetype(idx, ft);	/* also clears taglist */
 	if (ft == NULL)
 		highlighting_set_styles(doc_list[idx].sci, GEANY_FILETYPES_ALL);
 	ui_set_window_title(idx);
 	build_menu_update(idx);
 	document_update_tag_list(idx, FALSE);
 	document_set_text_changed(idx);
-	ui_document_show_hide(idx); // update the document menu
+	ui_document_show_hide(idx); /* update the document menu */
 
 	sci_set_line_numbers(doc_list[idx].sci, editor_prefs.show_linenumber_margin, 0);
 	sci_goto_pos(doc_list[idx].sci, 0, TRUE);
 
-	// "the" SCI signal (connect after initial setup(i.e. adding text))
+	/* "the" SCI signal (connect after initial setup(i.e. adding text)) */
 	g_signal_connect((GtkWidget*) doc_list[idx].sci, "sci-notify",
 				G_CALLBACK(on_editor_notification), GINT_TO_POINTER(idx));
 
@@ -672,17 +672,17 @@ gint document_open_file(const gchar *locale_filename, gboolean readonly,
 
 typedef struct
 {
-	gchar		*data;	// null-terminated file data
-	gsize		 size;	// actual file size on disk
-	gsize		 len;	// string length of data
+	gchar		*data;	/* null-terminated file data */
+	gsize		 size;	/* actual file size on disk */
+	gsize		 len;	/* string length of data */
 	gchar		*enc;
 	gboolean	 bom;
-	time_t		 mtime;	// modification time, read by stat::st_mtime
+	time_t		 mtime;	/* modification time, read by stat::st_mtime */
 	gboolean	 readonly;
 } FileData;
 
 
-// reload file with specified encoding
+/* reload file with specified encoding */
 static gboolean
 handle_forced_encoding(FileData *filedata, const gchar *forced_enc)
 {
@@ -717,7 +717,7 @@ handle_forced_encoding(FileData *filedata, const gchar *forced_enc)
 }
 
 
-// detect encoding and convert to UTF-8 if necessary
+/* detect encoding and convert to UTF-8 if necessary */
 static gboolean
 handle_encoding(FileData *filedata)
 {
@@ -726,13 +726,13 @@ handle_encoding(FileData *filedata)
 
 	if (filedata->size == 0)
 	{
-		// we have no data so assume UTF-8, filedata->len can be 0 even we have an empty
-		// e.g. UTF32 file with a BOM(so size is 4, len is 0)
+		/* we have no data so assume UTF-8, filedata->len can be 0 even we have an empty
+		 * e.g. UTF32 file with a BOM(so size is 4, len is 0) */
 		filedata->enc = g_strdup("UTF-8");
 	}
 	else
 	{
-		// first check for a BOM
+		/* first check for a BOM */
 		GeanyEncodingIndex enc_idx =
 			encodings_scan_unicode_bom(filedata->data, filedata->size, NULL);
 
@@ -741,7 +741,7 @@ handle_encoding(FileData *filedata)
 			filedata->enc = g_strdup(encodings[enc_idx].charset);
 			filedata->bom = TRUE;
 
-			if (enc_idx != GEANY_ENCODING_UTF_8) // the BOM indicated something else than UTF-8
+			if (enc_idx != GEANY_ENCODING_UTF_8) /* the BOM indicated something else than UTF-8 */
 			{
 				gchar *converted_text = encodings_convert_to_utf8_from_charset(
 										filedata->data, filedata->size, filedata->enc, FALSE);
@@ -753,7 +753,7 @@ handle_encoding(FileData *filedata)
 				}
 				else
 				{
-					// there was a problem converting data from BOM encoding type
+					/* there was a problem converting data from BOM encoding type */
 					g_free(filedata->enc);
 					filedata->enc = NULL;
 					filedata->bom = FALSE;
@@ -761,16 +761,16 @@ handle_encoding(FileData *filedata)
 			}
 		}
 
-		if (filedata->enc == NULL)	// either there was no BOM or the BOM encoding failed
+		if (filedata->enc == NULL)	/* either there was no BOM or the BOM encoding failed */
 		{
-			// try UTF-8 first
+			/* try UTF-8 first */
 			if (g_utf8_validate(filedata->data, filedata->len, NULL))
 			{
 				filedata->enc = g_strdup("UTF-8");
 			}
 			else
 			{
-				// detect the encoding
+				/* detect the encoding */
 				gchar *converted_text = encodings_convert_to_utf8(filedata->data,
 					filedata->size, &filedata->enc);
 
@@ -796,9 +796,9 @@ handle_bom(FileData *filedata)
 	encodings_scan_unicode_bom(filedata->data, filedata->size, &bom_len);
 	g_return_if_fail(bom_len != 0);
 
-	// use filedata->len here because the contents are already converted into UTF-8
+	/* use filedata->len here because the contents are already converted into UTF-8 */
 	filedata->len -= bom_len;
-	// overwrite the BOM with the remainder of the file contents, plus the NULL terminator.
+	/* overwrite the BOM with the remainder of the file contents, plus the NULL terminator. */
 	g_memmove(filedata->data, filedata->data + bom_len, filedata->len + 1);
 	filedata->data = g_realloc(filedata->data, filedata->len + 1);
 }
@@ -833,19 +833,19 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_f
 		return FALSE;
 	}
 
-	// use strlen to check for null chars
+	/* use strlen to check for null chars */
 	filedata->size = (gsize) st.st_size;
 	filedata->len = strlen(filedata->data);
 
-	// temporarily retrieve the encoding idx based on the BOM to suppress the following warning
-	// if we have a BOM
+	/* temporarily retrieve the encoding idx based on the BOM to suppress the following warning
+	 * if we have a BOM */
 	tmp_enc_idx = encodings_scan_unicode_bom(filedata->data, filedata->size, NULL);
 
 	/* check whether the size of the loaded data is equal to the size of the file in the filesystem */
 	if (filedata->len != filedata->size && (
-		tmp_enc_idx == GEANY_ENCODING_UTF_8 || // tmp_enc_idx can be UTF-7/8/16/32, UCS and None
-		tmp_enc_idx == GEANY_ENCODING_UTF_7 || // filter out UTF-7/8 and None where no NULL bytes
-		tmp_enc_idx == GEANY_ENCODING_NONE))   // are allowed
+		tmp_enc_idx == GEANY_ENCODING_UTF_8 || /* tmp_enc_idx can be UTF-7/8/16/32, UCS and None */
+		tmp_enc_idx == GEANY_ENCODING_UTF_7 || /* filter out UTF-7/8 and None where no NULL bytes */
+		tmp_enc_idx == GEANY_ENCODING_NONE))   /* are allowed */
 	{
 		gchar *warn_msg = _("The file \"%s\" could not be opened properly and has been truncated. "
 				"This can occur if the file contains a NULL byte. "
@@ -856,14 +856,14 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_f
 
 		ui_set_statusbar(TRUE, warn_msg, utf8_filename);
 
-		// set the file to read-only mode because saving it is probably dangerous
+		/* set the file to read-only mode because saving it is probably dangerous */
 		filedata->readonly = TRUE;
 	}
 
 	/* Determine character encoding and convert to UTF-8 */
 	if (forced_enc != NULL)
 	{
-		// the encoding should be ignored(requested by user), so open the file "as it is"
+		/* the encoding should be ignored(requested by user), so open the file "as it is" */
 		if (utils_str_equal(forced_enc, encodings[GEANY_ENCODING_NONE].charset))
 		{
 			filedata->bom = FALSE;
@@ -899,7 +899,7 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_f
 static void set_cursor_position(gint idx, gint pos)
 {
 	if (cl_options.goto_line >= 0)
-	{	// goto line which was specified on command line and then undefine the line
+	{	/* goto line which was specified on command line and then undefine the line */
 		sci_goto_line(doc_list[idx].sci, cl_options.goto_line - 1, TRUE);
 		doc_list[idx].scroll_percent = 0.5F;
 		cl_options.goto_line = -1;
@@ -911,7 +911,7 @@ static void set_cursor_position(gint idx, gint pos)
 	}
 
 	if (cl_options.goto_column >= 0)
-	{	// goto column which was specified on command line and then undefine the column
+	{	/* goto column which was specified on command line and then undefine the column */
 		gint cur_pos = sci_get_current_position(doc_list[idx].sci);
 		sci_set_current_position(doc_list[idx].sci, cur_pos + cl_options.goto_column, FALSE);
 		doc_list[idx].scroll_percent = 0.5F;
@@ -936,7 +936,7 @@ static gboolean detect_use_tabs(ScintillaObject *sci)
 		else
 		if (c == ' ')
 		{
-			// check at least 2 spaces
+			/* check at least 2 spaces */
 			if (sci_get_char_at(sci, pos + 1) == ' ')
 				spaces++;
 		}
@@ -944,7 +944,7 @@ static gboolean detect_use_tabs(ScintillaObject *sci)
 	if (spaces == 0 && tabs == 0)
 		return editor_prefs.use_tabs;
 
-	// Skew comparison by a factor of 2 in favour of default editor pref
+	/* Skew comparison by a factor of 2 in favour of default editor pref */
 	if (editor_prefs.use_tabs)
 		return ! (spaces > tabs * 2);
 	else
@@ -975,9 +975,9 @@ gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean
 	filetype *use_ft;
 	FileData filedata;
 
-	//struct timeval tv, tv1;
-	//struct timezone tz;
-	//gettimeofday(&tv, &tz);
+	/*struct timeval tv, tv1;*/
+	/*struct timezone tz;*/
+	/*gettimeofday(&tv, &tz);*/
 
 	if (reload)
 	{
@@ -986,7 +986,7 @@ gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean
 	}
 	else
 	{
-		// filename must not be NULL when opening a file
+		/* filename must not be NULL when opening a file */
 		if (filename == NULL)
 		{
 			ui_set_statusbar(FALSE, _("Invalid filename"));
@@ -994,26 +994,26 @@ gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean
 		}
 
 		locale_filename = g_strdup(filename);
-		// try to get the UTF-8 equivalent for the filename, fallback to filename if error
+		/* try to get the UTF-8 equivalent for the filename, fallback to filename if error */
 		utf8_filename = utils_get_utf8_from_locale(locale_filename);
 
-		// if file is already open, switch to it and go
+		/* if file is already open, switch to it and go */
 		idx = document_find_by_filename(utf8_filename, FALSE);
 		if (idx >= 0)
 		{
-			ui_add_recent_file(utf8_filename);	// either add or reorder recent item
+			ui_add_recent_file(utf8_filename);	/* either add or reorder recent item */
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
 					gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook),
 					(GtkWidget*) doc_list[idx].sci));
 			g_free(utf8_filename);
 			g_free(locale_filename);
-			utils_check_disk_status(idx, TRUE);	// force a file changed check
+			utils_check_disk_status(idx, TRUE);	/* force a file changed check */
 			set_cursor_position(idx, pos);
 			return idx;
 		}
 	}
 
-	// if default encoding for opening files is set, use it if no forced encoding is set
+	/* if default encoding for opening files is set, use it if no forced encoding is set */
 	if (prefs.default_open_encoding >= 0 && forced_enc == NULL)
 		forced_enc = encodings[prefs.default_open_encoding].charset;
 
@@ -1025,27 +1025,27 @@ gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean
 	}
 
 	if (! reload) idx = document_create_new_sci(utf8_filename);
-	g_return_val_if_fail(idx != -1, -1);	// really should not happen
+	g_return_val_if_fail(idx != -1, -1);	/* really should not happen */
 
-	sci_set_undo_collection(doc_list[idx].sci, FALSE); // avoid creation of an undo action
+	sci_set_undo_collection(doc_list[idx].sci, FALSE); /* avoid creation of an undo action */
 	sci_empty_undo_buffer(doc_list[idx].sci);
 
-	// add the text to the ScintillaObject
-	sci_set_readonly(doc_list[idx].sci, FALSE);	// to allow replacing text
-	sci_set_text(doc_list[idx].sci, filedata.data);	// NULL terminated data
+	/* add the text to the ScintillaObject */
+	sci_set_readonly(doc_list[idx].sci, FALSE);	/* to allow replacing text */
+	sci_set_text(doc_list[idx].sci, filedata.data);	/* NULL terminated data */
 
-	// detect & set line endings
+	/* detect & set line endings */
 	editor_mode = utils_get_line_endings(filedata.data, filedata.len);
 	sci_set_eol_mode(doc_list[idx].sci, editor_mode);
 	g_free(filedata.data);
 
 	if (reload)
-		document_set_use_tabs(idx, doc_list[idx].use_tabs); // resetup sci
+		document_set_use_tabs(idx, doc_list[idx].use_tabs); /* resetup sci */
 	else
 	if (! editor_prefs.detect_tab_mode)
 		document_set_use_tabs(idx, editor_prefs.use_tabs);
 	else
-	{	// detect & set tabs/spaces
+	{	/* detect & set tabs/spaces */
 		gboolean use_tabs = detect_use_tabs(doc_list[idx].sci);
 
 		if (use_tabs != editor_prefs.use_tabs)
@@ -1056,42 +1056,42 @@ gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean
 
 	sci_set_undo_collection(doc_list[idx].sci, TRUE);
 
-	doc_list[idx].mtime = filedata.mtime; // get the modification time from file and keep it
+	doc_list[idx].mtime = filedata.mtime; /* get the modification time from file and keep it */
 	doc_list[idx].changed = FALSE;
-	g_free(doc_list[idx].encoding);	// if reloading, free old encoding
+	g_free(doc_list[idx].encoding);	/* if reloading, free old encoding */
 	doc_list[idx].encoding = filedata.enc;
 	doc_list[idx].has_bom = filedata.bom;
-	store_saved_encoding(idx);	// store the opened encoding for undo/redo
+	store_saved_encoding(idx);	/* store the opened encoding for undo/redo */
 
 	doc_list[idx].readonly = readonly || filedata.readonly;
 	sci_set_readonly(doc_list[idx].sci, doc_list[idx].readonly);
 
-	// update line number margin width
+	/* update line number margin width */
 	sci_set_line_numbers(doc_list[idx].sci, editor_prefs.show_linenumber_margin, 0);
 
-	// set the cursor position according to pos, cl_options.goto_line and cl_options.goto_column
+	/* set the cursor position according to pos, cl_options.goto_line and cl_options.goto_column */
 	set_cursor_position(idx, pos);
 
 	if (! reload)
 	{
-		// "the" SCI signal (connect after initial setup(i.e. adding text))
+		/* "the" SCI signal (connect after initial setup(i.e. adding text)) */
 		g_signal_connect((GtkWidget*) doc_list[idx].sci, "sci-notify",
 					G_CALLBACK(on_editor_notification), GINT_TO_POINTER(idx));
 
 		use_ft = (ft != NULL) ? ft : filetypes_detect_from_file(idx);
 	}
 	else
-	{	// reloading
+	{	/* reloading */
 		document_undo_clear(idx);
 		use_ft = ft;
 	}
-	// update taglist, typedef keywords and build menu if necessary
+	/* update taglist, typedef keywords and build menu if necessary */
 	document_set_filetype(idx, use_ft);
 
-	document_set_text_changed(idx);	// also updates tab state
-	ui_document_show_hide(idx);	// update the document menu
+	document_set_text_changed(idx);	/* also updates tab state */
+	ui_document_show_hide(idx);	/* update the document menu */
 
-	// finally add current file to recent files menu, but not the files from the last session
+	/* finally add current file to recent files menu, but not the files from the last session */
 	if (! main_status.opening_session_files)
 		ui_add_recent_file(utf8_filename);
 
@@ -1107,8 +1107,8 @@ gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean
 
 	g_free(utf8_filename);
 	g_free(locale_filename);
-	//gettimeofday(&tv1, &tz);
-	//geany_debug("%s: %d", filename, (gint)(tv1.tv_usec - tv.tv_usec));
+	/*gettimeofday(&tv1, &tz);*/
+	/*geany_debug("%s: %d", filename, (gint)(tv1.tv_usec - tv.tv_usec)); */
 
 	return idx;
 }
@@ -1194,7 +1194,7 @@ gboolean document_reload_file(gint idx, const gchar *forced_enc)
 	if (! DOC_IDX_VALID(idx))
 		return FALSE;
 
-	// try to set the cursor to the position before reloading
+	/* try to set the cursor to the position before reloading */
 	pos = sci_get_current_position(doc_list[idx].sci);
 	idx = document_open_file_full(idx, NULL, pos, doc_list[idx].readonly,
 					doc_list[idx].file_type, forced_enc);
@@ -1218,7 +1218,7 @@ static gboolean document_update_timestamp(gint idx)
 		return FALSE;
 	}
 
-	doc_list[idx].mtime = st.st_mtime; // get the modification time from file and keep it
+	doc_list[idx].mtime = st.st_mtime; /* get the modification time from file and keep it */
 	g_free(locale_filename);
 	return TRUE;
 }
@@ -1231,14 +1231,14 @@ static void get_line_column_from_pos(gint idx, guint byte_pos, gint *line, gint 
 	gint i;
 	gint line_start;
 
-	// for some reason we can use byte count instead of character count here
+	/* for some reason we can use byte count instead of character count here */
 	*line = sci_get_line_from_position(doc_list[idx].sci, byte_pos);
 	line_start = sci_get_position_from_line(doc_list[idx].sci, *line);
-	// get the column in the line
+	/* get the column in the line */
 	*column = byte_pos - line_start;
 
-	// any non-ASCII characters are encoded with two bytes(UTF-8, always in Scintilla), so
-	// skip one byte(i++) and decrease the column number which is based on byte count
+	/* any non-ASCII characters are encoded with two bytes(UTF-8, always in Scintilla), so
+	 * skip one byte(i++) and decrease the column number which is based on byte count */
 	for (i = line_start; i < (line_start + *column); i++)
 	{
 		if (sci_get_char_at(doc_list[idx].sci, i) < 0)
@@ -1271,7 +1271,7 @@ gboolean document_save_file(gint idx, gboolean force)
 	gchar *locale_filename = NULL;
 
 	if (! DOC_IDX_VALID(idx)) return FALSE;
-	// the "changed" flag should exclude the "readonly" flag, but check it anyway for safety
+	/* the "changed" flag should exclude the "readonly" flag, but check it anyway for safety */
 	if (! force && (! doc_list[idx].changed || doc_list[idx].readonly)) return FALSE;
 
 	if (doc_list[idx].file_name == NULL)
@@ -1281,19 +1281,19 @@ gboolean document_save_file(gint idx, gboolean force)
 		return FALSE;
 	}
 
-	// replaces tabs by spaces
+	/* replaces tabs by spaces */
 	if (prefs.replace_tabs) document_replace_tabs(idx);
-	// strip trailing spaces
+	/* strip trailing spaces */
 	if (prefs.strip_trailing_spaces) document_strip_trailing_spaces(idx);
-	// ensure the file has a newline at the end
+	/* ensure the file has a newline at the end */
 	if (prefs.final_new_line) document_ensure_final_newline(idx);
 
 	len = sci_get_length(doc_list[idx].sci) + 1;
 	if (doc_list[idx].has_bom && encodings_is_unicode_charset(doc_list[idx].encoding))
-	{	// always write a UTF-8 BOM because in this moment the text itself is still in UTF-8
-		// encoding, it will be converted to doc_list[idx].encoding below and this conversion
-		// also changes the BOM
-		data = (gchar*) g_malloc(len + 3);	// 3 chars for BOM
+	{	/* always write a UTF-8 BOM because in this moment the text itself is still in UTF-8
+		 * encoding, it will be converted to doc_list[idx].encoding below and this conversion
+		 * also changes the BOM */
+		data = (gchar*) g_malloc(len + 3);	/* 3 chars for BOM */
 		data[0] = (gchar) 0xef;
 		data[1] = (gchar) 0xbb;
 		data[2] = (gchar) 0xbf;
@@ -1306,7 +1306,7 @@ gboolean document_save_file(gint idx, gboolean force)
 		sci_get_text(doc_list[idx].sci, len, data);
 	}
 
-	// save in original encoding, skip when it is already UTF-8 or has the encoding "None"
+	/* save in original encoding, skip when it is already UTF-8 or has the encoding "None" */
 	if (doc_list[idx].encoding != NULL && ! utils_str_equal(doc_list[idx].encoding, "UTF-8") &&
 		! utils_str_equal(doc_list[idx].encoding, encodings[GEANY_ENCODING_NONE].charset))
 	{
@@ -1315,7 +1315,7 @@ gboolean document_save_file(gint idx, gboolean force)
 		gsize bytes_read;
 		gsize conv_len;
 
-		// try to convert it from UTF-8 to original encoding
+		/* try to convert it from UTF-8 to original encoding */
 		conv_file_contents = g_convert(data, len-1, doc_list[idx].encoding, "UTF-8",
 													&bytes_read, &conv_len, &conv_error);
 
@@ -1332,11 +1332,11 @@ gboolean document_save_file(gint idx, gboolean force)
 				gint line, column;
 				gint context_len;
 				gunichar unic;
-				gint max_len = MIN((gint)bytes_read + 6, len - 1); // don't read over the doc length
-				context = g_malloc(7); // read 6 bytes from Sci + '\0'
+				gint max_len = MIN((gint)bytes_read + 6, len - 1); /* don't read over the doc length */
+				context = g_malloc(7); /* read 6 bytes from Sci + '\0' */
 				sci_get_text_range(doc_list[idx].sci, bytes_read, max_len, context);
 
-				// take only one valid Unicode character from the context and discard the leftover
+				/* take only one valid Unicode character from the context and discard the leftover */
 				unic = g_utf8_get_char_validated(context, -1);
 				context_len = g_unichar_to_utf8(unic, context);
 				context[context_len] = '\0';
@@ -1393,16 +1393,16 @@ gboolean document_save_file(gint idx, gboolean force)
 		return FALSE;
 	}
 
-	// store the opened encoding for undo/redo
+	/* store the opened encoding for undo/redo */
 	store_saved_encoding(idx);
 
-	// ignore the following things if we are quitting
+	/* ignore the following things if we are quitting */
 	if (! main_status.quitting)
 	{
 		gchar *base_name = g_path_get_basename(doc_list[idx].file_name);
 
-		// set line numbers again, to reset the margin width, if
-		// there are more lines than before
+		/* set line numbers again, to reset the margin width, if
+		 * there are more lines than before */
 		sci_set_line_numbers(doc_list[idx].sci, editor_prefs.show_linenumber_margin, 0);
 		sci_set_savepoint(doc_list[idx].sci);
 
@@ -1457,15 +1457,15 @@ gboolean document_search_bar_find(gint idx, const gchar *text, gint flags, gbool
 		return TRUE;
 
 	start_pos = (inc) ? sci_get_selection_start(doc_list[idx].sci) :
-		sci_get_selection_end(doc_list[idx].sci);	// equal if no selection
+		sci_get_selection_end(doc_list[idx].sci);	/* equal if no selection */
 
-	// search cursor to end
+	/* search cursor to end */
 	ttf.chrg.cpMin = start_pos;
 	ttf.chrg.cpMax = sci_get_length(doc_list[idx].sci);
 	ttf.lpstrText = (gchar *)text;
 	search_pos = sci_find_text(doc_list[idx].sci, flags, &ttf);
 
-	// if no match, search start to cursor
+	/* if no match, search start to cursor */
 	if (search_pos == -1)
 	{
 		ttf.chrg.cpMin = 0;
@@ -1477,16 +1477,16 @@ gboolean document_search_bar_find(gint idx, const gchar *text, gint flags, gbool
 	{
 		gint line = sci_get_line_from_position(doc_list[idx].sci, ttf.chrgText.cpMin);
 
-		// unfold maybe folded results
+		/* unfold maybe folded results */
 		sci_ensure_line_is_visible(doc_list[idx].sci, line);
 
 		sci_set_selection_start(doc_list[idx].sci, ttf.chrgText.cpMin);
 		sci_set_selection_end(doc_list[idx].sci, ttf.chrgText.cpMax);
 
 		if (! editor_line_in_view(doc_list[idx].sci, line))
-		{
-			// we need to force scrolling in case the cursor is outside of the current visible area
-			// doc_list[].scroll_percent doesn't work because sci isn't always updated while searching
+		{	/* we need to force scrolling in case the cursor is outside of the current visible area
+			 * doc_list[].scroll_percent doesn't work because sci isn't always updated
+			 * while searching */
 			editor_scroll_to_line(doc_list[idx].sci, -1, 0.3F);
 		}
 		return TRUE;
@@ -1498,7 +1498,7 @@ gboolean document_search_bar_find(gint idx, const gchar *text, gint flags, gbool
 			ui_set_statusbar(FALSE, _("\"%s\" was not found."), text);
 		}
 		utils_beep();
-		sci_goto_pos(doc_list[idx].sci, start_pos, FALSE);	// clear selection
+		sci_goto_pos(doc_list[idx].sci, start_pos, FALSE);	/* clear selection */
 		return FALSE;
 	}
 }
@@ -1514,13 +1514,13 @@ gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 
 	g_return_val_if_fail(text != NULL, -1);
 	if (idx == -1 || ! *text) return -1;
-	// Sci doesn't support searching backwards with a regex
+	/* Sci doesn't support searching backwards with a regex */
 	if (flags & SCFIND_REGEXP) search_backwards = FALSE;
 
 	selection_start = sci_get_selection_start(doc_list[idx].sci);
 	selection_end = sci_get_selection_end(doc_list[idx].sci);
 	if ((selection_end - selection_start) > 0)
-	{ // there's a selection so go to the end
+	{ /* there's a selection so go to the end */
 		if (search_backwards)
 			sci_goto_pos(doc_list[idx].sci, selection_start, TRUE);
 		else
@@ -1535,7 +1535,7 @@ gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 
 	if (search_pos != -1)
 	{
-		// unfold maybe folded results
+		/* unfold maybe folded results */
 		sci_ensure_line_is_visible(doc_list[idx].sci,
 			sci_get_line_from_position(doc_list[idx].sci, search_pos));
 		if (scroll)
@@ -1545,7 +1545,7 @@ gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 	{
 		gint sci_len = sci_get_length(doc_list[idx].sci);
 
-		// if we just searched the whole text, give up searching.
+		/* if we just searched the whole text, give up searching. */
 		if ((selection_end == 0 && ! search_backwards) ||
 			(selection_end == sci_len && search_backwards))
 		{
@@ -1554,7 +1554,7 @@ gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 			return -1;
 		}
 
-		// we searched only part of the document, so ask whether to wraparound.
+		/* we searched only part of the document, so ask whether to wraparound. */
 		if (prefs.suppress_search_dialogs ||
 			dialogs_show_question_full(parent, GTK_STOCK_FIND, GTK_STOCK_CANCEL,
 				_("Wrap search and find again?"), _("\"%s\" was not found."), text))
@@ -1564,7 +1564,7 @@ gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 			sci_set_current_position(doc_list[idx].sci, (search_backwards) ? sci_len : 0, FALSE);
 			ret = document_find_text(idx, text, flags, search_backwards, scroll, parent);
 			if (ret == -1)
-			{	// return to original cursor position if not found
+			{	/* return to original cursor position if not found */
 				sci_set_current_position(doc_list[idx].sci, selection_start, FALSE);
 			}
 			return ret;
@@ -1584,41 +1584,41 @@ gint document_replace_text(gint idx, const gchar *find_text, const gchar *replac
 	g_return_val_if_fail(find_text != NULL && replace_text != NULL, -1);
 	if (idx == -1 || ! *find_text) return -1;
 
-	// Sci doesn't support searching backwards with a regex
+	/* Sci doesn't support searching backwards with a regex */
 	if (flags & SCFIND_REGEXP) search_backwards = FALSE;
 
 	selection_start = sci_get_selection_start(doc_list[idx].sci);
 	selection_end = sci_get_selection_end(doc_list[idx].sci);
 	if (selection_end == selection_start)
 	{
-		// no selection so just find the next match
+		/* no selection so just find the next match */
 		document_find_text(idx, find_text, flags, search_backwards, TRUE, NULL);
 		return -1;
 	}
-	// there's a selection so go to the start before finding to search through it
-	// this ensures there is a match
+	/* there's a selection so go to the start before finding to search through it
+	 * this ensures there is a match */
 	if (search_backwards)
 		sci_goto_pos(doc_list[idx].sci, selection_end, TRUE);
 	else
 		sci_goto_pos(doc_list[idx].sci, selection_start, TRUE);
 
 	search_pos = document_find_text(idx, find_text, flags, search_backwards, TRUE, NULL);
-	// return if the original selected text did not match (at the start of the selection)
+	/* return if the original selected text did not match (at the start of the selection) */
 	if (search_pos != selection_start) return -1;
 
 	if (search_pos != -1)
 	{
 		gint replace_len;
-		// search next/prev will select matching text, which we use to set the replace target
+		/* search next/prev will select matching text, which we use to set the replace target */
 		sci_target_from_selection(doc_list[idx].sci);
 		replace_len = sci_target_replace(doc_list[idx].sci, replace_text, flags & SCFIND_REGEXP);
-		// select the replacement - find text will skip past the selected text
+		/* select the replacement - find text will skip past the selected text */
 		sci_set_selection_start(doc_list[idx].sci, search_pos);
 		sci_set_selection_end(doc_list[idx].sci, search_pos + replace_len);
 	}
 	else
 	{
-		// no match in the selection
+		/* no match in the selection */
 		utils_beep();
 	}
 	return search_pos;
@@ -1639,7 +1639,7 @@ static void show_replace_summary(gint idx, gint count, const gchar *find_text,
 	filename = g_path_get_basename(DOC_FILENAME(idx));
 
 	if (escaped_chars)
-	{	// escape special characters for showing
+	{	/* escape special characters for showing */
 		escaped_find_text = g_strescape(find_text, NULL);
 		escaped_replace_text = g_strescape(replace_text, NULL);
 		ui_set_statusbar(TRUE, _("%s: replaced %d occurrence(s) of \"%s\" with \"%s\"."),
@@ -1690,12 +1690,12 @@ document_replace_range(gint idx, const gchar *find_text, const gchar *replace_te
 		search_pos = sci_find_text(sci, flags, &ttf);
 		find_len = ttf.chrgText.cpMax - ttf.chrgText.cpMin;
 		if (search_pos == -1)
-			break;	// no more matches
+			break;	/* no more matches */
 		if (find_len == 0 && ! NZV(replace_text))
-			break;	// nothing to do
+			break;	/* nothing to do */
 
 		if (search_pos + find_len > end)
-			break;	// found text is partly out of range
+			break;	/* found text is partly out of range */
 		else
 		{
 			gint movepastEOL = 0;
@@ -1714,21 +1714,21 @@ document_replace_range(gint idx, const gchar *find_text, const gchar *replace_te
 				flags & SCFIND_REGEXP);
 			count++;
 			if (search_pos == end)
-				break;	// Prevent hang when replacing regex $
+				break;	/* Prevent hang when replacing regex $ */
 
-			// make the next search start after the replaced text
+			/* make the next search start after the replaced text */
 			start = search_pos + replace_len + movepastEOL;
 			if (find_len == 0)
-				start = SSM(sci, SCI_POSITIONAFTER, start, 0);	// prevent '[ ]*' regex rematching part of replaced text
+				start = SSM(sci, SCI_POSITIONAFTER, start, 0);	/* prevent '[ ]*' regex rematching part of replaced text */
 			ttf.chrg.cpMin = start;
-			end += replace_len - find_len;	// update end of range now text has changed
+			end += replace_len - find_len;	/* update end of range now text has changed */
 			ttf.chrg.cpMax = end;
 		}
 	}
 	sci_end_undo_action(sci);
 
 	if (count > 0)
-	{	// scroll last match in view, will destroy the existing selection
+	{	/* scroll last match in view, will destroy the existing selection */
 		if (scroll_to_match)
 			sci_goto_pos(sci, ttf.chrg.cpMin, TRUE);
 
@@ -1751,7 +1751,7 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 
 	selection_start = sci_get_selection_start(doc_list[idx].sci);
 	selection_end = sci_get_selection_end(doc_list[idx].sci);
-	// do we have a selection?
+	/* do we have a selection? */
 	if ((selection_end - selection_start) == 0)
 	{
 		utils_beep();
@@ -1760,7 +1760,7 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 
 	selection_mode = sci_get_selection_mode(doc_list[idx].sci);
 	selected_lines = sci_get_lines_selected(doc_list[idx].sci);
-	// handle rectangle, multi line selections (it doesn't matter on a single line)
+	/* handle rectangle, multi line selections (it doesn't matter on a single line) */
 	if (selection_mode == SC_SEL_RECTANGLE && selected_lines > 1)
 	{
 		gint first_line, line;
@@ -1768,7 +1768,7 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 		sci_start_undo_action(doc_list[idx].sci);
 
 		first_line = sci_get_line_from_position(doc_list[idx].sci, selection_start);
-		// Find the last line with chars selected (not EOL char)
+		/* Find the last line with chars selected (not EOL char) */
 		last_line = sci_get_line_from_position(doc_list[idx].sci,
 			selection_end - utils_get_eol_char_len(idx));
 		last_line = MAX(first_line, last_line);
@@ -1777,10 +1777,10 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 			gint line_start = sci_get_pos_at_line_sel_start(doc_list[idx].sci, line);
 			gint line_end = sci_get_pos_at_line_sel_end(doc_list[idx].sci, line);
 
-			// skip line if there is no selection
+			/* skip line if there is no selection */
 			if (line_start != INVALID_POSITION)
 			{
-				// don't let document_replace_range() scroll to match to keep our selection
+				/* don't let document_replace_range() scroll to match to keep our selection */
 				gint new_sel_end;
 
 				count += document_replace_range(idx, find_text, replace_text, flags,
@@ -1788,7 +1788,7 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 				if (new_sel_end != -1)
 				{
 					replaced = TRUE;
-					// this gets the greatest column within the selection after replacing
+					/* this gets the greatest column within the selection after replacing */
 					max_column = MAX(max_column,
 						new_sel_end - sci_get_position_from_line(doc_list[idx].sci, line));
 				}
@@ -1796,7 +1796,7 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 		}
 		sci_end_undo_action(doc_list[idx].sci);
 	}
-	else	// handle normal line selection
+	else	/* handle normal line selection */
 	{
 		count += document_replace_range(idx, find_text, replace_text, flags,
 						selection_start, selection_end, TRUE, &selection_end);
@@ -1805,22 +1805,21 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 	}
 
 	if (replaced)
-	{	// update the selection for the new endpoint
+	{	/* update the selection for the new endpoint */
 
 		if (selection_mode == SC_SEL_RECTANGLE && selected_lines > 1)
 		{
-			// now we can scroll to the selection and destroy it because we rebuild it later
-			//sci_goto_pos(doc_list[idx].sci, selection_start, FALSE);
+			/* now we can scroll to the selection and destroy it because we rebuild it later */
+			/*sci_goto_pos(doc_list[idx].sci, selection_start, FALSE);*/
 
-			// Note: the selection will be wrapped to last_line + 1 if max_column is greater than
-			// the highest column on the last line. The wrapped selection is completely different
-			// from the original one, so skip the selection at all
-			/// TODO is there a better way to handle the wrapped selection?
+			/* Note: the selection will be wrapped to last_line + 1 if max_column is greater than
+			 * the highest column on the last line. The wrapped selection is completely different
+			 * from the original one, so skip the selection at all */
+			/** TODO is there a better way to handle the wrapped selection? */
 			if ((sci_get_line_length(doc_list[idx].sci, last_line) - 1) >= max_column)
-			{
-				// for keeping and adjusting the selection in multi line rectangle selection we
-				// need the last line of the original selection and the greatest column number after
-				// replacing and set the selection end to the last line at the greatest column
+			{	/* for keeping and adjusting the selection in multi line rectangle selection we
+				 * need the last line of the original selection and the greatest column number after
+				 * replacing and set the selection end to the last line at the greatest column */
 				sci_set_selection_start(doc_list[idx].sci, selection_start);
 				sci_set_selection_end(doc_list[idx].sci,
 					sci_get_position_from_line(doc_list[idx].sci, last_line) + max_column);
@@ -1833,14 +1832,14 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 			sci_set_selection_end(doc_list[idx].sci, selection_end);
 		}
 	}
-	else // no replacements
+	else /* no replacements */
 		utils_beep();
 
 	show_replace_summary(idx, count, find_text, replace_text, escaped_chars);
 }
 
 
-// returns TRUE if at least one replacement was made.
+/* returns TRUE if at least one replacement was made. */
 gboolean document_replace_all(gint idx, const gchar *find_text, const gchar *replace_text,
 		gint flags, gboolean escaped_chars)
 {
@@ -1863,11 +1862,11 @@ void document_set_font(gint idx, const gchar *font_name, gint size)
 
 	for (style = 0; style <= 127; style++)
 		sci_set_font(doc_list[idx].sci, style, font_name, size);
-	// line number and braces
+	/* line number and braces */
 	sci_set_font(doc_list[idx].sci, STYLE_LINENUMBER, font_name, size);
 	sci_set_font(doc_list[idx].sci, STYLE_BRACELIGHT, font_name, size);
 	sci_set_font(doc_list[idx].sci, STYLE_BRACEBAD, font_name, size);
-	// zoom to 100% to prevent confusion
+	/* zoom to 100% to prevent confusion */
 	sci_zoom_off(doc_list[idx].sci);
 }
 
@@ -1879,12 +1878,12 @@ void document_update_tag_list(gint idx, gboolean update)
 	 * when creating a new document with a partial filename set. */
 	gboolean success = FALSE;
 
-	// if the filetype doesn't have a tag parser or it is a new file
+	/* if the filetype doesn't have a tag parser or it is a new file */
 	if (idx == -1 || doc_list[idx].file_type == NULL ||
 		app->tm_workspace == NULL ||
 		! filetype_has_tags(doc_list[idx].file_type) || ! doc_list[idx].file_name)
 	{
-		// set the default (empty) tag list
+		/* set the default (empty) tag list */
 		treeviews_update_tag_list(idx, FALSE);
 		return;
 	}
@@ -1944,9 +1943,9 @@ static gboolean get_project_typenames(const GString **types, gint lang)
 	{
 		g_string_free(s, TRUE);
 		*types = last_typenames;
-		return FALSE;	// project typenames haven't changed
+		return FALSE;	/* project typenames haven't changed */
 	}
-	// cache typename list for next time
+	/* cache typename list for next time */
 	if (last_typenames)
 		g_string_free(last_typenames, TRUE);
 	last_typenames = s;
@@ -1972,7 +1971,7 @@ static gboolean update_type_keywords(ScintillaObject *sci, gint lang)
 		return FALSE;
 
 	if (! get_project_typenames(&s, lang))
-	{	// typenames have not changed
+	{	/* typenames have not changed */
 		if (s != NULL && sci != NULL)
 		{
 			gint keyword_idx = editor_lexer_get_type_keyword_idx(sci_get_lexer(sci));
@@ -2025,11 +2024,11 @@ void document_set_filetype(gint idx, filetype *type)
 		(doc_list[idx].encoding != NULL) ? doc_list[idx].encoding : "unknown");
 
 	ft_changed = (doc_list[idx].file_type != type);
-	if (ft_changed)	// filetype has changed
+	if (ft_changed)	/* filetype has changed */
 	{
 		doc_list[idx].file_type = type;
 
-		// delete tm file object to force creation of a new one
+		/* delete tm file object to force creation of a new one */
 		if (doc_list[idx].tm_file != NULL)
 		{
 			tm_workspace_remove_object(doc_list[idx].tm_file, TRUE, TRUE);
@@ -2116,7 +2115,7 @@ void document_clear_indicators(gint idx)
 		sci_start_styling(doc_list[idx].sci, 0, INDIC2_MASK);
 		sci_set_styling(doc_list[idx].sci, last_pos, 0);
 	}
-	sci_marker_delete_all(doc_list[idx].sci, 0);	// remove the yellow error line marker
+	sci_marker_delete_all(doc_list[idx].sci, 0);	/* remove the yellow error line marker */
 }
 
 
@@ -2131,12 +2130,12 @@ void document_set_indicator(gint idx, gint line)
 	start = sci_get_position_from_line(doc_list[idx].sci, line);
 	end = sci_get_position_from_line(doc_list[idx].sci, line + 1);
 
-	// skip blank lines
+	/* skip blank lines */
 	if ((start + 1) == end ||
 		sci_get_line_length(doc_list[idx].sci, line) == utils_get_eol_char_len(idx))
 		return;
 
-	// don't set the indicator on whitespace
+	/* don't set the indicator on whitespace */
 	len = end - start;
 	linebuf = sci_get_line(doc_list[idx].sci, line);
 
@@ -2148,7 +2147,7 @@ void document_set_indicator(gint idx, gint line)
 	current_mask &= INDICS_MASK;
 	current_mask |= INDIC2_MASK;
 	sci_start_styling(doc_list[idx].sci, start + i, INDIC2_MASK);
-	//geany_debug("%p\tline: %d\tstart-end: %d - %d\t%d - %i", doc_list[idx].sci, line, start, end, len, i);
+	/*geany_debug("%p\tline: %d\tstart-end: %d - %d\t%d - %i", doc_list[idx].sci, line, start, end, len, i);*/
 	sci_set_styling(doc_list[idx].sci, len - i, current_mask);
 }
 
@@ -2180,8 +2179,8 @@ void document_replace_tabs(gint idx)
 		sci_target_start(doc_list[idx].sci, search_pos);
 		sci_target_end(doc_list[idx].sci, search_pos + 1);
 		sci_target_replace(doc_list[idx].sci, tab_str, FALSE);
-		ttf.chrg.cpMin = search_pos + current_tab_true_length - 1;	// next search starts after replacement
-		ttf.chrg.cpMax += current_tab_true_length - 1;	// update end of range now text has changed
+		ttf.chrg.cpMin = search_pos + current_tab_true_length - 1;	/* next search starts after replacement */
+		ttf.chrg.cpMax += current_tab_true_length - 1;	/* update end of range now text has changed */
 		g_free(tab_str);
 	}
 	sci_end_undo_action(doc_list[idx].sci);
@@ -2317,8 +2316,8 @@ void document_undo_clear(gint idx)
 	doc_list[idx].changed = FALSE;
 	if (! main_status.quitting) document_set_text_changed(idx);
 
-	//geany_debug("%s: new undo stack height: %d, new redo stack height: %d", __func__,
-				//g_trash_stack_height(&doc_list[idx].undo_actions), g_trash_stack_height(&doc_list[idx].redo_actions));
+	/*geany_debug("%s: new undo stack height: %d, new redo stack height: %d", __func__,
+				 *g_trash_stack_height(&doc_list[idx].undo_actions), g_trash_stack_height(&doc_list[idx].redo_actions)); */
 }
 
 
@@ -2338,8 +2337,8 @@ void document_undo_add(gint idx, guint type, gpointer data)
 	document_set_text_changed(idx);
 	ui_update_popup_reundo_items(idx);
 
-	//geany_debug("%s: new stack height: %d, added type: %d", __func__,
-				//g_trash_stack_height(&doc_list[idx].undo_actions), action->type);
+	/*geany_debug("%s: new stack height: %d, added type: %d", __func__,
+				 *g_trash_stack_height(&doc_list[idx].undo_actions), action->type); */
 }
 
 
@@ -2374,7 +2373,7 @@ void document_undo(gint idx)
 
 	if (action == NULL)
 	{
-		// fallback, should not be necessary
+		/* fallback, should not be necessary */
 		geany_debug("%s: fallback used", __func__);
 		sci_undo(doc_list[idx].sci);
 	}
@@ -2400,7 +2399,7 @@ void document_undo(gint idx)
 			}
 			case UNDO_ENCODING:
 			{
-				// use the "old" encoding
+				/* use the "old" encoding */
 				document_redo_add(idx, UNDO_ENCODING, g_strdup(doc_list[idx].encoding));
 
 				document_set_encoding(idx, (const gchar*)action->data);
@@ -2415,11 +2414,11 @@ void document_undo(gint idx)
 			default: break;
 		}
 	}
-	g_free(action); // free the action which was taken from the stack
+	g_free(action); /* free the action which was taken from the stack */
 
 	update_changed_state(idx);
 	ui_update_popup_reundo_items(idx);
-	//geany_debug("%s: new stack height: %d", __func__, g_trash_stack_height(&doc_list[idx].undo_actions));
+	/*geany_debug("%s: new stack height: %d", __func__, g_trash_stack_height(&doc_list[idx].undo_actions));*/
 }
 
 
@@ -2444,7 +2443,7 @@ void document_redo(gint idx)
 
 	if (action == NULL)
 	{
-		// fallback, should not be necessary
+		/* fallback, should not be necessary */
 		geany_debug("%s: fallback used", __func__);
 		sci_redo(doc_list[idx].sci);
 	}
@@ -2484,11 +2483,11 @@ void document_redo(gint idx)
 			default: break;
 		}
 	}
-	g_free(action); // free the action which was taken from the stack
+	g_free(action); /* free the action which was taken from the stack */
 
 	update_changed_state(idx);
 	ui_update_popup_reundo_items(idx);
-	//geany_debug("%s: new stack height: %d", __func__, g_trash_stack_height(&doc_list[idx].redo_actions));
+	/*geany_debug("%s: new stack height: %d", __func__, g_trash_stack_height(&doc_list[idx].redo_actions));*/
 }
 
 
@@ -2508,8 +2507,8 @@ static void document_redo_add(gint idx, guint type, gpointer data)
 	document_set_text_changed(idx);
 	ui_update_popup_reundo_items(idx);
 
-	//geany_debug("%s: new stack height: %d, added type: %d", __func__,
-				//g_trash_stack_height(&doc_list[idx].redo_actions), action->type);
+	/*geany_debug("%s: new stack height: %d, added type: %d", __func__,
+				 *g_trash_stack_height(&doc_list[idx].redo_actions), action->type); */
 }
 
 
@@ -2526,11 +2525,11 @@ GdkColor *document_get_status(gint idx)
 	else if (doc_list[idx].readonly)
 		color = &green;
 
-	return color;	// return pointer to static GdkColor.
+	return color;	/* return pointer to static GdkColor. */
 }
 
 
-// useful debugging function (usually debug macros aren't enabled)
+/* useful debugging function (usually debug macros aren't enabled) */
 #ifdef GEANY_DEBUG
 document *doc(gint idx)
 {
@@ -2550,7 +2549,7 @@ void document_delay_colourise()
 	g_return_if_fail(delay_colourise == FALSE);
 	g_return_if_fail(doc_indexes == NULL);
 
-	// make an array containing all the current document indexes
+	/* make an array containing all the current document indexes */
 	doc_indexes = g_array_new(FALSE, FALSE, sizeof(gint));
 	for (n = 0; n < (gint) doc_array->len; n++)
 	{
@@ -2570,15 +2569,15 @@ void document_colourise_new()
 	/* A bitset representing which docs need [re]colourising.
 	 * (use gint8 to save memory because gboolean = gint) */
 	gint8 *doc_set = g_newa(gint8, doc_array->len);
-	gboolean recolour = FALSE;	// whether to recolourise existing typenames
+	gboolean recolour = FALSE;	/* whether to recolourise existing typenames */
 
 	g_return_if_fail(delay_colourise == TRUE);
 	g_return_if_fail(doc_indexes != NULL);
 
-	// first assume recolourising all docs
+	/* first assume recolourising all docs */
 	memset(doc_set, TRUE, doc_array->len * sizeof(gint8));
 
-	// remove existing docs from the set if they don't use typenames or typenames haven't changed
+	/* remove existing docs from the set if they don't use typenames or typenames haven't changed */
 	recolour = update_type_keywords(NULL, -2);
 	for (i = 0; i < doc_indexes->len; i++)
 	{
@@ -2591,7 +2590,7 @@ void document_colourise_new()
 			doc_set[n] = FALSE;
 		}
 	}
-	// colourise all in the doc_set
+	/* colourise all in the doc_set */
 	for (n = 0; n < doc_array->len; n++)
 	{
 		if (doc_set[n] && doc_list[n].is_valid)
@@ -2624,11 +2623,11 @@ void document_insert_colour(gint idx, const gchar *colour)
 		{
 			sci_set_selection_start(doc_list[idx].sci, start + 2);
 			sci_set_selection_end(doc_list[idx].sci, start + 8);
-			replacement++; // skip the leading "0x"
+			replacement++; /* skip the leading "0x" */
 		}
 		else if (sci_get_char_at(doc_list[idx].sci, start - 1) == '#')
-		{	// double clicking something like #00ffff may only select 00ffff because of wordchars
-			replacement++; // so skip the '#' to only replace the colour value
+		{	/* double clicking something like #00ffff may only select 00ffff because of wordchars */
+			replacement++; /* so skip the '#' to only replace the colour value */
 		}
 		sci_replace_sel(doc_list[idx].sci, replacement);
 	}
@@ -2639,18 +2638,18 @@ void document_insert_colour(gint idx, const gchar *colour)
 
 gint document_clone(gint old_idx, const gchar *utf8_filename)
 {
-	// create a new file and copy file content and properties
+	/* create a new file and copy file content and properties */
 	gint len, idx;
 	gchar *text;
 
 	len = sci_get_length(doc_list[old_idx].sci) + 1;
 	text = (gchar*) g_malloc(len);
 	sci_get_text(doc_list[old_idx].sci, len, text);
-	// use old file type (or maybe NULL for auto detect would be better?)
+	/* use old file type (or maybe NULL for auto detect would be better?) */
 	idx = document_new_file(utf8_filename, doc_list[old_idx].file_type, text);
 	g_free(text);
 
-	// copy file properties
+	/* copy file properties */
 	doc_list[idx].line_wrapping = doc_list[old_idx].line_wrapping;
 	doc_list[idx].readonly = doc_list[old_idx].readonly;
 	doc_list[idx].has_bom = doc_list[old_idx].has_bom;

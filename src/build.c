@@ -168,10 +168,10 @@ static GPid build_view_tex_file(gint idx, gint mode)
 	executable = utils_remove_ext_from_filename(doc_list[idx].file_name);
 	view_file = g_strconcat(executable, (mode == LATEX_CMD_VIEW_DVI) ? ".dvi" : ".pdf", NULL);
 
-	// try convert in locale for stat()
+	/* try convert in locale for stat() */
 	locale_filename = utils_get_locale_from_utf8(view_file);
 
-	// check wether view_file exists
+	/* check wether view_file exists */
 	if (g_stat(locale_filename, &st) != 0)
 	{
 		ui_set_statusbar(TRUE, _("Failed to view %s (make sure it is already compiled)"), view_file);
@@ -180,27 +180,27 @@ static GPid build_view_tex_file(gint idx, gint mode)
 		return (GPid) 1;
 	}
 
-	// replace %f and %e in the run_cmd string
+	/* replace %f and %e in the run_cmd string */
 	cmd_string = g_strdup((mode == LATEX_CMD_VIEW_DVI) ?
 										g_strdup(doc_list[idx].file_type->programs->run_cmd) :
 										g_strdup(doc_list[idx].file_type->programs->run_cmd2));
 	cmd_string = utils_str_replace(cmd_string, "%f", view_file);
 	cmd_string = utils_str_replace(cmd_string, "%e", executable);
 
-	// try convert in locale
+	/* try convert in locale */
 	locale_cmd_string = utils_get_locale_from_utf8(cmd_string);
 
 	/* get the terminal path */
 	locale_term_cmd = utils_get_locale_from_utf8(prefs.tools_term_cmd);
-	// split the term_cmd, so arguments will work too
+	/* split the term_cmd, so arguments will work too */
 	term_argv = g_strsplit(locale_term_cmd, " ", -1);
 	term_argv_len = g_strv_length(term_argv);
 
-	// check that terminal exists (to prevent misleading error messages)
+	/* check that terminal exists (to prevent misleading error messages) */
 	if (term_argv[0] != NULL)
 	{
 		gchar *tmp = term_argv[0];
-		// g_find_program_in_path checks tmp exists and is executable
+		/* g_find_program_in_path checks tmp exists and is executable */
 		term_argv[0] = g_find_program_in_path(tmp);
 		g_free(tmp);
 	}
@@ -216,8 +216,9 @@ static GPid build_view_tex_file(gint idx, gint mode)
 		return (GPid) 1;
 	}
 
-	// (RUN_SCRIPT_CMD should be ok in UTF8 without converting in locale because it contains no umlauts)
-	working_dir = g_path_get_dirname(locale_filename); /// TODO do we need project support here?
+	/* RUN_SCRIPT_CMD should be ok in UTF8 without converting in locale because
+	 * it contains no umlauts */
+	working_dir = g_path_get_dirname(locale_filename); /** TODO do we need project support here? */
 	script_name = g_build_filename(working_dir, RUN_SCRIPT_CMD, NULL);
 	if (! build_create_shellscript(script_name, locale_cmd_string, TRUE))
 	{
@@ -236,7 +237,7 @@ static GPid build_view_tex_file(gint idx, gint mode)
 		argv[i] = g_strdup(term_argv[i]);
 	}
 #ifdef G_OS_WIN32
-		// command line arguments only for cmd.exe
+		/* command line arguments only for cmd.exe */
 		if (strstr(argv[0], "cmd.exe") != NULL)
 		{
 			argv[term_argv_len   ]  = g_strdup("/Q /C");
@@ -271,7 +272,7 @@ static GPid build_view_tex_file(gint idx, gint mode)
 
 	if (run_info.pid > 0)
 	{
-		//setpgid(0, getppid());
+		/*setpgid(0, getppid());*/
 		g_child_watch_add(run_info.pid, (GChildWatchFunc) run_exit_cb, NULL);
 		build_menu_update(idx);
 	}
@@ -285,7 +286,7 @@ static GPid build_view_tex_file(gint idx, gint mode)
 }
 
 
-// get curfile.o in locale encoding from document::file_name
+/* get curfile.o in locale encoding from document::file_name */
 static gchar *get_object_filename(gint idx)
 {
 	gchar *locale_filename, *short_file, *noext, *object_file;
@@ -333,14 +334,14 @@ static GPid build_make_file(gint idx, gint build_opts)
 		g_string_append(cmdstr, build_info.custom_target);
 		dir = project_get_make_dir();
 	}
-	else	// GBO_MAKE_ALL
+	else	/* GBO_MAKE_ALL */
 	{
 		build_info.type = GBO_MAKE_ALL;
 		g_string_append(cmdstr, "all");
 		dir = project_get_make_dir();
 	}
 
-	pid = build_spawn_cmd(idx, cmdstr->str, dir);	// if dir is NULL, idx filename is used
+	pid = build_spawn_cmd(idx, cmdstr->str, dir);	/* if dir is NULL, idx filename is used */
 	g_free(dir);
 	g_string_free(cmdstr, TRUE);
 	return pid;
@@ -373,7 +374,7 @@ static GPid build_link_file(gint idx)
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 
 	executable = utils_remove_ext_from_filename(locale_filename);
-	// check for filename extension and abort if filename doesn't have one
+	/* check for filename extension and abort if filename doesn't have one */
 	if (utils_str_equal(locale_filename, executable))
 	{
 		ui_set_statusbar(TRUE, _("Command stopped because the current file has no extension."));
@@ -384,15 +385,15 @@ static GPid build_link_file(gint idx)
 
 	object_file = g_strdup_printf("%s.o", executable);
 
-	// check wether object file (file.o) exists
+	/* check wether object file (file.o) exists */
 	if (g_stat(object_file, &st) == 0)
-	{	// check wether src is newer than object file
+	{	/* check wether src is newer than object file */
 		if (g_stat(locale_filename, &st2) == 0)
 		{
 			if (st2.st_mtime > st.st_mtime)
 			{
-				// set object_file to NULL, so the source file will be used for linking,
-				// more precisely then we compile and link instead of just linking
+				/* set object_file to NULL, so the source file will be used for linking,
+				 * more precisely then we compile and link instead of just linking */
 				g_free(object_file);
 				object_file = NULL;
 			}
@@ -409,9 +410,9 @@ static GPid build_link_file(gint idx)
 	g_string_append_c(cmdstr, ' ');
 
 	if (doc_list[idx].file_type->id == GEANY_FILETYPES_D)
-	{	// the dmd compiler needs -of instead of -o and it accepts no whitespace after -of
+	{	/* the dmd compiler needs -of instead of -o and it accepts no whitespace after -of */
 		gchar *tmp = g_path_get_basename(executable);
-		// add double quotes around the executable file name in case of filenames with spaces
+		/* add double quotes around the executable file name in case of filenames with spaces */
 		g_string_append(cmdstr, "-of \"");
 		g_string_append(cmdstr, tmp);
 		g_string_append_c(cmdstr, '\"');
@@ -420,7 +421,7 @@ static GPid build_link_file(gint idx)
 	else
 	{
 		gchar *tmp = g_path_get_basename(executable);
-		// add double quotes around the executable file name in case of filenames with spaces
+		/* add double quotes around the executable file name in case of filenames with spaces */
 		g_string_append(cmdstr, "-o \"");
 		g_string_append(cmdstr, tmp);
 		g_string_append_c(cmdstr, '\"');
@@ -514,7 +515,7 @@ static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir)
 	executable = utils_remove_ext_from_filename(locale_filename);
 
 	cmd_string = g_strdup(cmd);
-	// replace %f and %e in the command string
+	/* replace %f and %e in the command string */
 	tmp = g_path_get_basename(locale_filename);
 	cmd_string = utils_str_replace(cmd_string, "%f", tmp);
 	g_free(tmp);
@@ -524,12 +525,12 @@ static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir)
 	g_free(executable);
 
 #ifdef G_OS_WIN32
-	// due to g_shell_parse_argv() we need to enclose the command(first element) of cmd_string with
-	// "" if the command contains a full path(i.e. backslashes) otherwise the backslashes will be
-	// eaten by g_shell_parse_argv().
+	/* due to g_shell_parse_argv() we need to enclose the command(first element) of cmd_string with
+	 * "" if the command contains a full path(i.e. backslashes) otherwise the backslashes will be
+	 * eaten by g_shell_parse_argv(). */
 	setptr(cmd_string, quote_executable(cmd_string));
 	if (! g_shell_parse_argv(cmd_string, NULL, &argv, NULL))
-		// if automatic parsing failed, fall back to simple, unsafe argv creation
+		/* if automatic parsing failed, fall back to simple, unsafe argv creation */
 		argv = g_strsplit(cmd_string, " ", 0);
 #else
 	argv = g_new0(gchar *, 4);
@@ -550,7 +551,7 @@ static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir)
 	g_free(utf8_working_dir);
 	g_free(utf8_cmd_string);
 
-	// set the build info for the message window
+	/* set the build info for the message window */
 	g_free(build_info.dir);
 	build_info.dir = g_strdup(working_dir);
 	build_info.file_type_id = FILETYPE_ID(doc_list[idx].file_type);
@@ -574,7 +575,7 @@ static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir)
 		build_menu_update(idx);
 	}
 
-	// use GIOChannels to monitor stdout and stderr
+	/* use GIOChannels to monitor stdout and stderr */
 	utils_set_up_io_channel(stdout_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
 		TRUE, build_iofunc, GINT_TO_POINTER(0));
 	utils_set_up_io_channel(stderr_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
@@ -606,15 +607,15 @@ static gchar *get_build_executable(const gchar *locale_filename, gboolean check_
 	{
 		gchar *check_executable = NULL;
 
-		// add .class extension for JAVA source files (only for stat)
+		/* add .class extension for JAVA source files (only for stat) */
 		if (ft_id == GEANY_FILETYPES_JAVA)
 		{
 #ifdef G_OS_WIN32
 			gchar *tmp;
-			// there is already the extension .exe, so first remove it and then add .class
+			/* there is already the extension .exe, so first remove it and then add .class */
 			tmp = utils_remove_ext_from_filename(long_executable);
 			check_executable = g_strconcat(tmp, ".class", NULL);
-			// store the filename without "exe" extension for Java, tmp will be freed by setptr
+			/* store the filename without "exe" extension for Java, tmp will be freed by setptr */
 			setptr(long_executable, tmp);
 #else
 			check_executable = g_strconcat(long_executable, ".class", NULL);
@@ -623,7 +624,7 @@ static gchar *get_build_executable(const gchar *locale_filename, gboolean check_
 		else
 			check_executable = g_strdup(long_executable);
 
-		// check for filename extension and abort if filename doesn't have one
+		/* check for filename extension and abort if filename doesn't have one */
 		if (utils_str_equal(locale_filename, check_executable))
 		{
 			ui_set_statusbar(TRUE, _("Command stopped because the current file has no extension."));
@@ -632,7 +633,7 @@ static gchar *get_build_executable(const gchar *locale_filename, gboolean check_
 			return NULL;
 		}
 
-		// check whether executable exists
+		/* check whether executable exists */
 		if (g_stat(check_executable, &st) != 0)
 		{
 			gchar *utf8_check_executable = utils_get_utf8_from_locale(check_executable);
@@ -646,7 +647,7 @@ static gchar *get_build_executable(const gchar *locale_filename, gboolean check_
 		g_free(check_executable);
 	}
 
-	// remove path
+	/* remove path */
 	setptr(long_executable, g_path_get_basename(long_executable));
 	return long_executable;
 }
@@ -679,7 +680,7 @@ static gchar *prepare_run_script(gint idx, gchar **vte_cmd_nonscript)
 		project->run_cmd :
 		ft->programs->run_cmd;
 
-	// only check for existing executable, if executable is required by %e
+	/* only check for existing executable, if executable is required by %e */
 	check_exists = (strstr(cmd, "%e") != NULL);
 	executable = get_build_executable(locale_filename, check_exists, FILETYPE_ID(ft));
 	if (executable == NULL)
@@ -697,9 +698,9 @@ static gchar *prepare_run_script(gint idx, gchar **vte_cmd_nonscript)
 	else
 		working_dir = g_path_get_dirname(locale_filename);
 
-	// only test whether working dir exists, don't change it or else Windows support will break
-	// (gspawn-win32-helper.exe is used by GLib and must be in $PATH which means current working
-	//  dir where geany.exe was started from, so we can't change it)
+	/* only test whether working dir exists, don't change it or else Windows support will break
+	 * (gspawn-win32-helper.exe is used by GLib and must be in $PATH which means current working
+	 *  dir where geany.exe was started from, so we can't change it) */
 	if (! g_file_test(working_dir, G_FILE_TEST_EXISTS) ||
 		! g_file_test(working_dir, G_FILE_TEST_IS_DIR))
 	{
@@ -710,7 +711,7 @@ static gchar *prepare_run_script(gint idx, gchar **vte_cmd_nonscript)
 		return NULL;
 	}
 
-	// replace %f and %e in the run_cmd string
+	/* replace %f and %e in the run_cmd string */
 	cmd = g_strdup(cmd);
 	tmp = g_path_get_basename(locale_filename);
 	cmd = utils_str_replace(cmd, "%f", tmp);
@@ -729,12 +730,13 @@ static gchar *prepare_run_script(gint idx, gchar **vte_cmd_nonscript)
 			return working_dir;
 		}
 		else
-			// don't wait for user input at the end of script when we are running in VTE
+			/* don't wait for user input at the end of script when we are running in VTE */
 			autoclose = TRUE;
 	}
 #endif
 
-	// (RUN_SCRIPT_CMD should be ok in UTF8 without converting in locale because it contains no umlauts)
+	/* RUN_SCRIPT_CMD should be ok in UTF8 without converting in locale because it
+	 * contains no umlauts */
 	tmp = g_build_filename(working_dir, RUN_SCRIPT_CMD, NULL);
 	result = build_create_shellscript(tmp, cmd, autoclose);
 	if (! result)
@@ -788,11 +790,11 @@ static GPid build_run_cmd(gint idx)
 		else
 			vte_cmd = g_strconcat(RUN_SCRIPT_CMD, "\n", NULL);
 
-		// change into current directory if it is not done by default or we have a project and
-		// project run command(working_dir is already set accordingly)
+		/* change into current directory if it is not done by default or we have a project and
+		 * project run command(working_dir is already set accordingly) */
 		if (! vc->follow_path || (project != NULL && NZV(project->run_cmd)))
 		{
-			// we need to convert the working_dir back to UTF-8 because the VTE expects it
+			/* we need to convert the working_dir back to UTF-8 because the VTE expects it */
 			gchar *utf8_working_dir = utils_get_utf8_from_locale(working_dir);
 			vte_cwd(utf8_working_dir, TRUE);
 			g_free(utf8_working_dir);
@@ -801,7 +803,7 @@ static GPid build_run_cmd(gint idx)
 			ui_set_statusbar(FALSE,
 		_("Could not execute the file in the VTE because it probably contains a command."));
 
-		// show the VTE
+		/* show the VTE */
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_VTE);
 		gtk_widget_grab_focus(vc->vte);
 		msgwin_show_hide(TRUE);
@@ -820,15 +822,15 @@ static GPid build_run_cmd(gint idx)
 
 		/* get the terminal path */
 		locale_term_cmd = utils_get_locale_from_utf8(prefs.tools_term_cmd);
-		// split the term_cmd, so arguments will work too
+		/* split the term_cmd, so arguments will work too */
 		term_argv = g_strsplit(locale_term_cmd, " ", -1);
 		term_argv_len = g_strv_length(term_argv);
 
-		// check that terminal exists (to prevent misleading error messages)
+		/* check that terminal exists (to prevent misleading error messages) */
 		if (term_argv[0] != NULL)
 		{
 			gchar *tmp = term_argv[0];
-			// g_find_program_in_path checks whether tmp exists and is executable
+			/* g_find_program_in_path checks whether tmp exists and is executable */
 			term_argv[0] = g_find_program_in_path(tmp);
 			g_free(tmp);
 		}
@@ -847,7 +849,7 @@ static GPid build_run_cmd(gint idx)
 			argv[i] = g_strdup(term_argv[i]);
 		}
 #ifdef G_OS_WIN32
-		// command line arguments only for cmd.exe
+		/* command line arguments only for cmd.exe */
 		if (strstr(argv[0], "cmd.exe") != NULL)
 		{
 			argv[term_argv_len   ]  = g_strdup("/Q /C");
@@ -895,12 +897,12 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 {
 	if (cond & (G_IO_IN | G_IO_PRI))
 	{
-		//GIOStatus s;
+		/*GIOStatus s;*/
 		gchar *msg;
 
 		while (g_io_channel_read_line(ioc, &msg, NULL, NULL, NULL) && msg)
 		{
-			//if (s != G_IO_STATUS_NORMAL && s != G_IO_STATUS_EOF) break;
+			/*if (s != G_IO_STATUS_NORMAL && s != G_IO_STATUS_EOF) break;*/
 			gint color;
 			gchar *tmp;
 
@@ -923,8 +925,8 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 				{
 					gint idx = document_find_by_filename(filename, FALSE);
 
-					document_set_indicator(idx, line - 1);	// will check valid idx
-					color = COLOR_RED;	// error message parsed on the line
+					document_set_indicator(idx, line - 1);	/* will check valid idx */
+					color = COLOR_RED;	/* error message parsed on the line */
 				}
 				g_free(filename);
 			}
@@ -954,7 +956,7 @@ gboolean build_parse_make_dir(const gchar *string, gchar **prefix)
 		gsize len;
 		gchar *input;
 
-		// get the start of the path
+		/* get the start of the path */
 		pos = strstr(string, "/");
 
 		if (pos == NULL)
@@ -962,10 +964,10 @@ gboolean build_parse_make_dir(const gchar *string, gchar **prefix)
 
 		input = g_strdup(pos);
 
-		// kill the ' at the end of the path
+		/* kill the ' at the end of the path */
 		len = strlen(input);
 		input[len - 1] = '\0';
-		input = g_realloc(input, len);	// shorten by 1
+		input = g_realloc(input, len);	/* shorten by 1 */
 		*prefix = input;
 
 		return TRUE;
@@ -983,7 +985,7 @@ static void show_build_result_message(gboolean failure)
 	{
 		msg = _("Compilation failed.");
 		msgwin_compiler_add(COLOR_DARK_RED, msg);
-		// If msgwindow is hidden, user will want to display it to see the error
+		/* If msgwindow is hidden, user will want to display it to see the error */
 		if (! ui_prefs.msgwindow_visible)
 		{
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER);
@@ -1016,18 +1018,19 @@ static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 	}
 	else if (WIFSIGNALED(status))
 	{
-		// the terminating signal: WTERMSIG (status));
+		/* the terminating signal: WTERMSIG (status)); */
 		failure = TRUE;
 	}
 	else
-	{	// any other failure occured
+	{	/* any other failure occured */
 		failure = TRUE;
 	}
 	show_build_result_message(failure);
 #else
 	DWORD exit_code;
 	GetExitCodeProcess(child_pid, &exit_code);
-	// not sure whether the cast to int is necessary, no idea what DWORD really is (seems like int)
+	/* not sure whether the cast to int is necessary, no idea what DWORD really is
+	 * (seems to be similar to an int) */
 	show_build_result_message((int) exit_code);
 #endif
 
@@ -1035,7 +1038,7 @@ static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 	g_spawn_close_pid(child_pid);
 
 	build_info.pid = 0;
-	// enable build items again
+	/* enable build items again */
 	build_menu_update(-1);
 }
 
@@ -1045,13 +1048,13 @@ static void run_exit_cb(GPid child_pid, gint status, gpointer user_data)
 	g_spawn_close_pid(child_pid);
 
 	run_info.pid = 0;
-	// reset the stop button and menu item to the original meaning
+	/* reset the stop button and menu item to the original meaning */
 	build_menu_update(-1);
 }
 
 
-// write a little shellscript to call the executable (similar to anjuta_launcher but "internal")
-// fname is the full file name (including path) for the script to create
+/* write a little shellscript to call the executable (similar to anjuta_launcher but "internal")
+ * fname is the full file name (including path) for the script to create */
 static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, gboolean autoclose)
 {
 	FILE *fp;
@@ -1097,7 +1100,7 @@ static void create_build_menu_gen(BuildMenuItems *menu_items)
 
 	menu = gtk_menu_new();
 
-	// compile the code
+	/* compile the code */
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Compile"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
@@ -1109,7 +1112,7 @@ static void create_build_menu_gen(BuildMenuItems *menu_items)
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_compile_activate), NULL);
 	menu_items->item_compile = item;
 
-	// build the code
+	/* build the code */
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Build"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
@@ -1123,7 +1126,7 @@ static void create_build_menu_gen(BuildMenuItems *menu_items)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
-	// build the code with make all
+	/* build the code with make all */
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Make All"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
@@ -1134,7 +1137,7 @@ static void create_build_menu_gen(BuildMenuItems *menu_items)
 		GINT_TO_POINTER(GBO_MAKE_ALL));
 	menu_items->item_make_all = item;
 
-	// build the code with make custom
+	/* build the code with make custom */
 	item = gtk_image_menu_item_new_with_mnemonic(_("Make Custom _Target"));
 	gtk_widget_show(item);
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_MAKEOWNTARGET, item);
@@ -1145,7 +1148,7 @@ static void create_build_menu_gen(BuildMenuItems *menu_items)
 		GINT_TO_POINTER(GBO_MAKE_CUSTOM));
 	menu_items->item_make_custom = item;
 
-	// build the code with make object
+	/* build the code with make object */
 	item = gtk_image_menu_item_new_with_mnemonic(_("Make _Object"));
 	gtk_widget_show(item);
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_MAKEOBJECT, item);
@@ -1160,7 +1163,7 @@ static void create_build_menu_gen(BuildMenuItems *menu_items)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
-	// next error
+	/* next error */
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Next Error"));
 	gtk_widget_show(item);
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_NEXTERROR, item);
@@ -1172,7 +1175,7 @@ static void create_build_menu_gen(BuildMenuItems *menu_items)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
-	// execute the code
+	/* execute the code */
 	item = gtk_image_menu_item_new_from_stock("gtk-execute", accel_group);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
@@ -1186,7 +1189,7 @@ static void create_build_menu_gen(BuildMenuItems *menu_items)
 	gtk_container_add(GTK_CONTAINER(menu), separator);
 	gtk_widget_set_sensitive(separator, FALSE);
 
-	// arguments
+	/* arguments */
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Set Includes and Arguments"));
 	gtk_widget_show(item);
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_OPTIONS, item);
@@ -1201,7 +1204,7 @@ static void create_build_menu_gen(BuildMenuItems *menu_items)
 	menu_items->item_set_args = item;
 
 	menu_items->menu = menu;
-	g_object_ref((gpointer)menu_items->menu);	// to hold it after removing
+	g_object_ref((gpointer)menu_items->menu);	/* to hold it after removing */
 }
 
 
@@ -1213,7 +1216,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 
 	menu = gtk_menu_new();
 
-	// DVI
+	/* DVI */
 	item = gtk_image_menu_item_new_with_mnemonic(_("LaTeX -> DVI"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
@@ -1226,7 +1229,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 				G_CALLBACK(on_build_tex_activate), GINT_TO_POINTER(LATEX_CMD_TO_DVI));
 	menu_items->item_compile = item;
 
-	// PDF
+	/* PDF */
 	item = gtk_image_menu_item_new_with_mnemonic(_("LaTeX -> PDF"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
@@ -1243,7 +1246,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
-	// build the code with make all
+	/* build the code with make all */
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Make All"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
@@ -1254,7 +1257,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 		GINT_TO_POINTER(GBO_MAKE_ALL));
 	menu_items->item_make_all = item;
 
-	// build the code with make custom
+	/* build the code with make custom */
 	item = gtk_image_menu_item_new_with_mnemonic(_("Make Custom _Target"));
 	gtk_widget_show(item);
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_MAKEOWNTARGET, item);
@@ -1269,7 +1272,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
-	// next error
+	/* next error */
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Next Error"));
 	gtk_widget_show(item);
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_NEXTERROR, item);
@@ -1281,8 +1284,8 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
-	// DVI view
-#define LATEX_VIEW_DVI_LABEL _("View DVI File") // used later again
+	/* DVI view */
+#define LATEX_VIEW_DVI_LABEL _("View DVI File") /* used later again */
 	item = gtk_image_menu_item_new_with_mnemonic(LATEX_VIEW_DVI_LABEL);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
@@ -1295,7 +1298,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 						G_CALLBACK(on_build_execute_activate), GINT_TO_POINTER(LATEX_CMD_VIEW_DVI));
 	menu_items->item_exec = item;
 
-	// PDF view
+	/* PDF view */
 	item = gtk_image_menu_item_new_with_mnemonic(_("View PDF File"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
@@ -1308,13 +1311,13 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 						G_CALLBACK(on_build_execute_activate), GINT_TO_POINTER(LATEX_CMD_VIEW_PDF));
 	menu_items->item_exec2 = item;
 
-	// separator
+	/* separator */
 	separator = gtk_separator_menu_item_new();
 	gtk_widget_show(separator);
 	gtk_container_add(GTK_CONTAINER(menu), separator);
 	gtk_widget_set_sensitive(separator, FALSE);
 
-	// arguments
+	/* arguments */
 	item = gtk_image_menu_item_new_with_mnemonic(_("Set Arguments"));
 	gtk_widget_show(item);
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_OPTIONS, item);
@@ -1331,7 +1334,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	gtk_window_add_accel_group(GTK_WINDOW(app->window), accel_group);
 
 	menu_items->menu = menu;
-	g_object_ref((gpointer)menu_items->menu);	// to hold it after removing
+	g_object_ref((gpointer)menu_items->menu);	/* to hold it after removing */
 }
 
 
@@ -1409,7 +1412,7 @@ static void show_includes_arguments_tex(void)
 	gtk_table_set_row_spacings(GTK_TABLE(table), 6);
 	gtk_container_add(GTK_CONTAINER(vbox), table);
 
-	// LaTeX -> DVI args
+	/* LaTeX -> DVI args */
 	if (ft->programs->compiler != NULL && ft->actions->can_compile)
 	{
 		label = gtk_label_new(_("DVI creation:"));
@@ -1428,7 +1431,7 @@ static void show_includes_arguments_tex(void)
 					gtk_widget_ref(entries[0]), (GDestroyNotify)gtk_widget_unref);
 	}
 
-	// LaTeX -> PDF args
+	/* LaTeX -> PDF args */
 	if (ft->programs->linker != NULL && ft->actions->can_link)
 	{
 		label = gtk_label_new(_("PDF creation:"));
@@ -1447,7 +1450,7 @@ static void show_includes_arguments_tex(void)
 					gtk_widget_ref(entries[1]), (GDestroyNotify)gtk_widget_unref);
 	}
 
-	// View LaTeX -> DVI args
+	/* View LaTeX -> DVI args */
 	if (ft->programs->run_cmd != NULL)
 	{
 		label = gtk_label_new(_("DVI preview:"));
@@ -1466,7 +1469,7 @@ static void show_includes_arguments_tex(void)
 					gtk_widget_ref(entries[2]), (GDestroyNotify)gtk_widget_unref);
 	}
 
-	// View LaTeX -> PDF args
+	/* View LaTeX -> PDF args */
 	if (ft->programs->run_cmd2 != NULL)
 	{
 		label = gtk_label_new(_("PDF preview:"));
@@ -1491,9 +1494,9 @@ static void show_includes_arguments_tex(void)
 	gtk_container_add(GTK_CONTAINER(vbox), label);
 
 	gtk_widget_show_all(dialog);
-	// run modally to prevent user changing idx filetype
+	/* run modally to prevent user changing idx filetype */
 	response = gtk_dialog_run(GTK_DIALOG(dialog));
-	// call the callback manually
+	/* call the callback manually */
 	on_includes_arguments_tex_dialog_response(GTK_DIALOG(dialog), response, ft);
 
 	gtk_widget_destroy(dialog);
@@ -1577,7 +1580,7 @@ static void show_includes_arguments_gen(void)
 	if (ft->actions->can_compile || ft->actions->can_link || ft->actions->can_exec)
 	{
 		GtkWidget *align, *frame;
-		// in-dialog heading for the "Set Includes and Arguments" dialog
+		/* in-dialog heading for the "Set Includes and Arguments" dialog */
 		gchar *frame_title = g_strdup_printf(_("%s commands"), ft->title);
 
 		frame = ui_frame_new_with_alignment(frame_title, &align);
@@ -1590,7 +1593,7 @@ static void show_includes_arguments_gen(void)
 		row = 0;
 	}
 
-	// include-args
+	/* include-args */
 	if (ft->actions->can_compile)
 	{
 		label = gtk_label_new(_("Compile:"));
@@ -1611,7 +1614,7 @@ static void show_includes_arguments_gen(void)
 					gtk_widget_ref(entries[0]), (GDestroyNotify)gtk_widget_unref);
 	}
 
-	// lib-args
+	/* lib-args */
 	if (ft->actions->can_link)
 	{
 		label = gtk_label_new(_("Build:"));
@@ -1632,7 +1635,7 @@ static void show_includes_arguments_gen(void)
 					gtk_widget_ref(entries[1]), (GDestroyNotify)gtk_widget_unref);
 	}
 
-	// program-args
+	/* program-args */
 	if (ft->actions->can_exec)
 	{
 		label = gtk_label_new(_("Execute:"));
@@ -1652,7 +1655,7 @@ static void show_includes_arguments_gen(void)
 		g_object_set_data_full(G_OBJECT(dialog), "includes_entry3",
 						gtk_widget_ref(entries[2]), (GDestroyNotify)gtk_widget_unref);
 
-		// disable the run command if there is a valid project run command set
+		/* disable the run command if there is a valid project run command set */
 		if (app->project && NZV(app->project->run_cmd))
 			gtk_widget_set_sensitive(entries[2], FALSE);
 	}
@@ -1663,9 +1666,9 @@ static void show_includes_arguments_gen(void)
 	gtk_container_add(GTK_CONTAINER(vbox), label);
 
 	gtk_widget_show_all(dialog);
-	// run modally to prevent user changing idx filetype
+	/* run modally to prevent user changing idx filetype */
 	response = gtk_dialog_run(GTK_DIALOG(dialog));
-	// call the callback manually
+	/* call the callback manually */
 	on_includes_arguments_dialog_response(GTK_DIALOG(dialog), response, ft);
 
 	gtk_widget_destroy(dialog);
@@ -1691,7 +1694,7 @@ static gboolean is_c_header(const gchar *fname)
 	{
 		ext = strrchr(fname, '.');
 	}
-	return (ext == NULL) ? FALSE : (*(ext + 1) == 'h');	// match *.h*
+	return (ext == NULL) ? FALSE : (*(ext + 1) == 'h');	/* match *.h* */
 }
 
 
@@ -1731,7 +1734,7 @@ void build_menu_update(gint idx)
 
 	can_make = have_path && build_info.pid <= (GPid) 1;
 
-	// disable compile and link for C/C++ header files
+	/* disable compile and link for C/C++ header files */
 	if (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP)
 		can_build = can_make && ! is_c_header(doc_list[idx].file_name);
 	else
@@ -1749,7 +1752,7 @@ void build_menu_update(gint idx)
 		gtk_widget_set_sensitive(menu_items->item_make_object, can_make);
 
 	if (app->project && NZV(app->project->run_cmd))
-		can_run = have_path;	// for now run is disabled for all untitled files
+		can_run = have_path;	/* for now run is disabled for all untitled files */
 	else
 		can_run = have_path && ft->actions->can_exec;
 
@@ -1774,10 +1777,10 @@ void build_menu_update(gint idx)
 	gtk_widget_set_sensitive(widgets.compile_button, can_build && ft->actions->can_compile);
 	gtk_widget_set_sensitive(widgets.run_button, can_run || can_stop);
 
-	// show the stop command if a program is running, otherwise show run command
+	/* show the stop command if a program is running, otherwise show run command */
 	set_stop_button(can_stop);
 
-	// simply enable next error command if the compiler window has any items
+	/* simply enable next error command if the compiler window has any items */
 	have_errors = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(msgwindow.store_compiler),
 		NULL) > 0;
 	if (menu_items->item_next_error)
@@ -1785,7 +1788,7 @@ void build_menu_update(gint idx)
 }
 
 
-// Call build_menu_update() instead of calling this directly.
+/* Call build_menu_update() instead of calling this directly. */
 static void set_stop_button(gboolean stop)
 {
 	GtkStockItem sitem;
@@ -1797,7 +1800,7 @@ static void set_stop_button(gboolean stop)
 	if (! stop && utils_str_equal(
 		gtk_tool_button_get_stock_id(GTK_TOOL_BUTTON(widgets.run_button)), "gtk-execute")) return;
 
-	// use the run button also as stop button
+	/* use the run button also as stop button */
 	if (stop)
 	{
 		gtk_tool_button_set_stock_id(GTK_TOOL_BUTTON(widgets.run_button), "gtk-stop");
@@ -1817,7 +1820,7 @@ static void set_stop_button(gboolean stop)
 
 		if (menuitem != NULL)
 		{
-			// LaTeX hacks ;-(
+			/* LaTeX hacks ;-( */
 			if (run_info.file_type_id == GEANY_FILETYPES_LATEX)
 			{
 				gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem),
@@ -1945,7 +1948,7 @@ on_make_custom_input_response(const gchar *input)
 static void
 show_make_custom(void)
 {
-	static GtkWidget *dialog = NULL;	// keep dialog for combo history
+	static GtkWidget *dialog = NULL;	/* keep dialog for combo history */
 
 	if (! dialog)
 		dialog = dialogs_show_input(_("Make Custom Target"),
@@ -1976,7 +1979,7 @@ on_build_make_activate                 (GtkMenuItem     *menuitem,
 		}
 
 		case GBO_MAKE_OBJECT:
-		// fall through
+		/* fall through */
 		case GBO_MAKE_ALL:
 		{
 			if (doc_list[idx].changed) document_save_file(idx, FALSE);
@@ -1992,13 +1995,13 @@ static gboolean use_html_builtin(gint idx, filetype *ft)
 	gboolean use_builtin = FALSE;
 	if (ft->id == GEANY_FILETYPES_HTML)
 	{
-		// we have a project, check its run_cmd
+		/* we have a project, check its run_cmd */
 		if (app->project != NULL)
 		{
 			if (utils_str_equal(app->project->run_cmd, "builtin"))
 				use_builtin = TRUE;
 		}
-		// no project, check for filetype run_cmd
+		/* no project, check for filetype run_cmd */
 		else if (ft->actions->can_exec && utils_str_equal(ft->programs->run_cmd, "builtin"))
 			use_builtin = TRUE;
 	}
@@ -2026,7 +2029,7 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 	if (! DOC_IDX_VALID(idx))
 		return;
 
-	// make the process "stopable"
+	/* make the process "stopable" */
 	if (run_info.pid > (GPid) 1)
 	{
 		kill_process(&run_info.pid);
@@ -2036,17 +2039,17 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 	ft_id = FILETYPE_ID(doc_list[idx].file_type);
 	ft = filetypes[ft_id];
 	if (ft_id == GEANY_FILETYPES_LATEX)
-	{	// run LaTeX file
+	{	/* run LaTeX file */
 		if (build_view_tex_file(idx, GPOINTER_TO_INT(user_data)) == (GPid) 0)
 		{
 			ui_set_statusbar(TRUE, _("Failed to execute the view program"));
 		}
 	}
-	// use_html_builtin() checks for HTML builtin request and returns FALSE if not
+	/* use_html_builtin() checks for HTML builtin request and returns FALSE if not */
 	else if (! use_html_builtin(idx, ft))
-	{	// run everything else
+	{	/* run everything else */
 
-		// save the file only if the run command uses it
+		/* save the file only if the run command uses it */
 		if (doc_list[idx].changed &&
 			strstr(ft->programs->run_cmd, "%f") != NULL)
 				document_save_file(idx, FALSE);
@@ -2070,8 +2073,8 @@ static void kill_process(GPid *pid)
 #ifdef G_OS_WIN32
 	g_return_if_fail(*pid != NULL);
 	result = TerminateProcess(*pid, 0);
-	// TerminateProcess() returns TRUE on success, for the check below we have to convert
-	// it to FALSE (and vice versa)
+	/* TerminateProcess() returns TRUE on success, for the check below we have to convert
+	 * it to FALSE (and vice versa) */
 	result = ! result;
 #else
 	g_return_if_fail(*pid > 1);

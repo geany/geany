@@ -65,7 +65,7 @@ static int getWord(const char * ref, const char **ptr)
     if (*ref)
 		return FALSE;
 
-	if (*p == '*') // to allow something like \section*{foobar}
+	if (*p == '*') /* to allow something like \section*{foobar} */
 		p++;
 
     *ptr = p;
@@ -127,7 +127,7 @@ static void findTeXTags(void)
     while ((line = (const char*)fileReadLine()) != NULL)
     {
  	const char *cp = line;
- 	//int escaped = 0;
+ 	/*int escaped = 0;*/
 
  	for (; *cp != '\0'; cp++)
  	{

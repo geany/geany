@@ -72,7 +72,7 @@ typedef struct
 static menu_items mi;
 
 static GtkListStore	*store_openfiles;
-static GtkWidget *tag_window;	// scrolled window that holds the symbol list GtkTreeView
+static GtkWidget *tag_window;	/* scrolled window that holds the symbol list GtkTreeView */
 
 /* callback prototypes */
 static void on_taglist_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user_data);
@@ -126,10 +126,10 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 		gtk_tree_view_set_level_indentation(GTK_TREE_VIEW(tree), 10);
 #endif
 
-	// selection handling
+	/* selection handling */
 	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
 	gtk_tree_selection_set_mode(select, GTK_SELECTION_SINGLE);
-	// callback for changed selection not necessary, will be handled by button-press-event
+	/* callback for changed selection not necessary, will be handled by button-press-event */
 }
 
 
@@ -145,7 +145,7 @@ on_default_tag_tree_button_press_event(GtkWidget *widget, GdkEventButton *event,
 }
 
 
-// update = rescan the tags for document[idx].filename
+/* update = rescan the tags for document[idx].filename */
 void treeviews_update_tag_list(gint idx, gboolean update)
 {
 	if (gtk_bin_get_child(GTK_BIN(tag_window)))
@@ -156,7 +156,7 @@ void treeviews_update_tag_list(gint idx, gboolean update)
 		GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW(tag_window);
 		GtkWidget *label;
 
-		// default_tag_tree is a GtkViewPort with a GtkLabel inside it
+		/* default_tag_tree is a GtkViewPort with a GtkLabel inside it */
 		tv.default_tag_tree = gtk_viewport_new(
 			gtk_scrolled_window_get_hadjustment(scrolled_window),
 			gtk_scrolled_window_get_vadjustment(scrolled_window));
@@ -166,10 +166,10 @@ void treeviews_update_tag_list(gint idx, gboolean update)
 		gtk_widget_show_all(tv.default_tag_tree);
 		g_signal_connect(G_OBJECT(tv.default_tag_tree), "button-press-event",
 			G_CALLBACK(on_default_tag_tree_button_press_event), NULL);
-		g_object_ref((gpointer)tv.default_tag_tree);	// to hold it after removing
+		g_object_ref((gpointer)tv.default_tag_tree);	/* to hold it after removing */
 	}
 
-	// show default empty tag tree if there are no tags
+	/* show default empty tag tree if there are no tags */
 	if (idx == -1 || doc_list[idx].file_type == NULL ||
 		! filetype_has_tags(doc_list[idx].file_type))
 	{
@@ -178,7 +178,7 @@ void treeviews_update_tag_list(gint idx, gboolean update)
 	}
 
 	if (update)
-	{	// updating the tag list in the left tag window
+	{	/* updating the tag list in the left tag window */
 		if (doc_list[idx].tag_tree == NULL)
 		{
 			doc_list[idx].tag_store = gtk_tree_store_new(
@@ -186,10 +186,10 @@ void treeviews_update_tag_list(gint idx, gboolean update)
 			doc_list[idx].tag_tree = gtk_tree_view_new();
 			prepare_taglist(doc_list[idx].tag_tree, doc_list[idx].tag_store);
 			gtk_widget_show(doc_list[idx].tag_tree);
-			g_object_ref((gpointer)doc_list[idx].tag_tree);	// to hold it after removing
+			g_object_ref((gpointer)doc_list[idx].tag_tree);	/* to hold it after removing */
 		}
 
-		doc_list[idx].has_tags = symbols_recreate_tag_list(idx, TRUE); // sort by name by default
+		doc_list[idx].has_tags = symbols_recreate_tag_list(idx, TRUE); /* sort by name by default */
 	}
 
 	if (doc_list[idx].has_tags)
@@ -242,8 +242,8 @@ static void prepare_openfiles(void)
 
 	tv.tree_openfiles = lookup_widget(app->window, "treeview6");
 
-	// store the short filename to show, and the index as reference,
-	// the colour (black/red/green) and the full name for the tooltip
+	/* store the short filename to show, and the index as reference,
+	 * the colour (black/red/green) and the full name for the tooltip */
 #if GTK_CHECK_VERSION(2, 12, 0)
 	store_openfiles = gtk_list_store_new(4, G_TYPE_STRING, G_TYPE_INT, GDK_TYPE_COLOR, G_TYPE_STRING);
 #else
@@ -251,8 +251,8 @@ static void prepare_openfiles(void)
 #endif
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tv.tree_openfiles), GTK_TREE_MODEL(store_openfiles));
 
-	// set policy settings for the scolledwindow around the treeview again, because glade
-	// doesn't keep the settings
+	/* set policy settings for the scolledwindow around the treeview again, because glade
+	 * doesn't keep the settings */
 	gtk_scrolled_window_set_policy(
 			GTK_SCROLLED_WINDOW(lookup_widget(app->window, "scrolledwindow7")),
 			GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
@@ -265,7 +265,7 @@ static void prepare_openfiles(void)
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(tv.tree_openfiles), FALSE);
 
-	// sort opened filenames in the store_openfiles treeview
+	/* sort opened filenames in the store_openfiles treeview */
 	sortable = GTK_TREE_SORTABLE(GTK_TREE_MODEL(store_openfiles));
 	gtk_tree_sortable_set_sort_column_id(sortable, 0, GTK_SORT_ASCENDING);
 
@@ -274,7 +274,7 @@ static void prepare_openfiles(void)
 	pango_font_description_free(pfd);
 
 #if GTK_CHECK_VERSION(2, 12, 0)
-	// GTK 2.12 tooltips
+	/* GTK 2.12 tooltips */
 	gtk_widget_set_has_tooltip(tv.tree_openfiles, TRUE);
 	g_signal_connect(G_OBJECT(tv.tree_openfiles), "query-tooltip",
 						G_CALLBACK(on_treeviews_tooltip_queried), NULL);
@@ -283,7 +283,7 @@ static void prepare_openfiles(void)
 	g_signal_connect(G_OBJECT(tv.tree_openfiles), "button-press-event",
 						G_CALLBACK(on_treeviews_button_press_event), GINT_TO_POINTER(TREEVIEW_OPENFILES));
 
-	// selection handling
+	/* selection handling */
 	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));
 	gtk_tree_selection_set_mode(select, GTK_SELECTION_SINGLE);
 	g_signal_connect(G_OBJECT(select), "changed", G_CALLBACK(on_openfiles_tree_selection_changed), NULL);
@@ -348,7 +348,7 @@ void treeviews_remove_document(gint idx)
 		gtk_widget_destroy(doc_list[idx].tag_tree);
 		if (GTK_IS_TREE_VIEW(doc_list[idx].tag_tree))
 		{
-			// Because it was ref'd in treeviews_update_tag_list, it needs unref'ing
+			/* Because it was ref'd in treeviews_update_tag_list, it needs unref'ing */
 			g_object_unref((gpointer)doc_list[idx].tag_tree);
 		}
 		doc_list[idx].tag_tree = NULL;
@@ -563,7 +563,7 @@ static gboolean change_focus(gpointer data)
 {
 	gint idx = GPOINTER_TO_INT(data);
 
-	// idx might not be valid e.g. if user closed a tab whilst Geany is opening files
+	/* idx might not be valid e.g. if user closed a tab whilst Geany is opening files */
 	if (DOC_IDX_VALID(idx))
 	{
 		GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(app->window));
@@ -582,7 +582,7 @@ static void on_openfiles_tree_selection_changed(GtkTreeSelection *selection, gpo
 	GtkTreeModel *model;
 	gint idx = 0;
 
-	// use switch_notebook_page to ignore changing the notebook page because it is already done
+	/* use switch_notebook_page to ignore changing the notebook page because it is already done */
 	if (gtk_tree_selection_get_selected(selection, &model, &iter) && ! app->ignore_callback)
 	{
 		gtk_tree_model_get(model, &iter, 1, &idx, -1);
@@ -652,7 +652,7 @@ static gboolean on_treeviews_button_press_event(GtkWidget *widget, GdkEventButto
 												gpointer user_data)
 {
 	if (event->type == GDK_2BUTTON_PRESS && GPOINTER_TO_INT(user_data) == TREEVIEW_SYMBOL)
-	{	// double click on parent node(section) expands/collapses it
+	{	/* double click on parent node(section) expands/collapses it */
 		GtkTreeModel *model;
 		GtkTreeSelection *selection;
 		GtkTreeIter iter;
@@ -675,14 +675,14 @@ static gboolean on_treeviews_button_press_event(GtkWidget *widget, GdkEventButto
 		}
 	}
 	else if (event->button == 1 && GPOINTER_TO_INT(user_data) == TREEVIEW_SYMBOL)
-	{	// allow reclicking of taglist treeview item
+	{	/* allow reclicking of taglist treeview item */
 		GtkTreeSelection *select = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
-		// delay the query of selection state because this callback is executed before GTK
-		// changes the selection (g_signal_connect_after would be better but it doesn't work)
+		/* delay the query of selection state because this callback is executed before GTK
+		 * changes the selection (g_signal_connect_after would be better but it doesn't work) */
 		g_idle_add((GSourceFunc) on_taglist_tree_selection_changed, select);
 	}
 	else if (event->button == 3)
-	{	// popupmenu to hide or clear the active treeview
+	{	/* popupmenu to hide or clear the active treeview */
 		if (GPOINTER_TO_INT(user_data) == TREEVIEW_OPENFILES)
 		{
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(mi.documents_show_documents),
@@ -702,7 +702,7 @@ static gboolean on_treeviews_button_press_event(GtkWidget *widget, GdkEventButto
 				prefs.sidebar_symbol_visible);
 			gtk_menu_popup(GTK_MENU(tv.popup_taglist), NULL, NULL, NULL, NULL,
 																event->button, event->time);
-			return TRUE;	// prevent selection changed signal for symbol tags
+			return TRUE;	/* prevent selection changed signal for symbol tags */
 		}
 	}
 	return FALSE;

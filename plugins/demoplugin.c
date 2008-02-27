@@ -35,11 +35,11 @@
  */
 
 
-#include "geany.h"		// for the GeanyApp data type
-#include "support.h"	// for the _() translation macro (see also po/POTFILES.in)
+#include "geany.h"		/* for the GeanyApp data type */
+#include "support.h"	/* for the _() translation macro (see also po/POTFILES.in) */
 
-#include "plugindata.h"		// this defines the plugin API
-#include "pluginmacros.h"	// some useful macros to avoid typing geany_data so often
+#include "plugindata.h"		/* this defines the plugin API */
+#include "pluginmacros.h"	/* some useful macros to avoid typing geany_data so often */
 
 
 /* These items are set by Geany before init() is called. */
@@ -55,7 +55,7 @@ VERSION_CHECK(7)
 PLUGIN_INFO(_("Demo"), _("Example plugin."), VERSION, _("The Geany developer team"))
 
 
-// text to be shown in the plugin dialog
+/* text to be shown in the plugin dialog */
 static gchar *welcome_text = NULL;
 
 
@@ -85,7 +85,7 @@ void init(GeanyData *data)
 {
 	GtkWidget *demo_item;
 
-	// Add an item to the Tools menu
+	/* Add an item to the Tools menu */
 	demo_item = gtk_menu_item_new_with_mnemonic(_("_Demo Plugin"));
 	gtk_widget_show(demo_item);
 	gtk_container_add(GTK_CONTAINER(geany_data->tools_menu), demo_item);
@@ -93,7 +93,7 @@ void init(GeanyData *data)
 
 	welcome_text = g_strdup(_("Hello World!"));
 
-	// keep a pointer to the menu item, so we can remove it when the plugin is unloaded
+	/* keep a pointer to the menu item, so we can remove it when the plugin is unloaded */
 	plugin_fields->menu_item = demo_item;
 }
 
@@ -107,7 +107,7 @@ void configure(GtkWidget *parent)
 {
 	GtkWidget *dialog, *label, *entry, *vbox;
 
-	// example configuration dialog
+	/* example configuration dialog */
 	dialog = gtk_dialog_new_with_buttons(_("Demo"),
 		GTK_WINDOW(parent), GTK_DIALOG_DESTROY_WITH_PARENT,
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
@@ -115,8 +115,8 @@ void configure(GtkWidget *parent)
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
 
-	// add a label and a text entry t the dialog
-	label = gtk_label_new("Welcome text to show:");
+	/* add a label and a text entry to the dialog */
+	label = gtk_label_new(_("Welcome text to show:"));
 	gtk_widget_show(label);
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 	entry = gtk_entry_new();
@@ -128,16 +128,16 @@ void configure(GtkWidget *parent)
 	gtk_container_add(GTK_CONTAINER(vbox), entry);
 	gtk_widget_show(vbox);
 
-	// run the dialog and check for the response code
+	/* run the dialog and check for the response code */
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
 		g_free(welcome_text);
 		welcome_text = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry)));
-		// maybe the plugin should write here the settings into a file
-		// (e.g. using GLib's GKeyFile API)
-		// all plugin specific files should be created in:
-		// app->configdir G_DIR_SEPARATOR_S plugins G_DIR_SEPARATOR_S pluginname G_DIR_SEPARATOR_S
-		// e.g. this could be: ~/.geany/plugins/Demo/, please use app->configdir
+		/* maybe the plugin should write here the settings into a file
+		 * (e.g. using GLib's GKeyFile API)
+		 * all plugin specific files should be created in:
+		 * app->configdir G_DIR_SEPARATOR_S plugins G_DIR_SEPARATOR_S pluginname G_DIR_SEPARATOR_S
+		 * e.g. this could be: ~/.geany/plugins/Demo/, please use app->configdir */
 	}
 	gtk_widget_destroy(dialog);
 }
@@ -148,8 +148,8 @@ void configure(GtkWidget *parent)
  * Be sure to leave Geany as it was before init(). */
 void cleanup(void)
 {
-	// remove the menu item added in init()
+	/* remove the menu item added in init() */
 	gtk_widget_destroy(plugin_fields->menu_item);
-	// release other allocated strings and objects
+	/* release other allocated strings and objects */
 	g_free(welcome_text);
 }

@@ -57,7 +57,7 @@ static gboolean popup_menu_created = FALSE;
 static gchar *gtk_menu_key_accel = NULL;
 static gint vte_prefs_tab_num = -1;
 
-// use vte wordchars to select paths
+/* use vte wordchars to select paths */
 static const gchar VTE_WORDCHARS[] = "-A-Za-z0-9,./?%&#:_";
 
 
@@ -104,13 +104,13 @@ static const GtkTargetEntry dnd_targets[] =
 /* taken from anjuta, thanks */
 static gchar **vte_get_child_environment(void)
 {
-	// code from gnome-terminal, sort of.
+	/* code from gnome-terminal, sort of. */
 	gchar **p;
 	gint i;
 	gchar **retval;
 #define EXTRA_ENV_VARS 5
 
-	// count env vars that are set
+	/* count env vars that are set */
 	for (p = environ; *p; p++);
 
 	i = p - environ;
@@ -118,12 +118,12 @@ static gchar **vte_get_child_environment(void)
 
 	for (i = 0, p = environ; *p; p++)
 	{
-		// Strip all these out, we'll replace some of them
+		/* Strip all these out, we'll replace some of them */
 		if ((strncmp(*p, "COLUMNS=", 8) == 0) ||
 		    (strncmp(*p, "LINES=", 6) == 0)   ||
 		    (strncmp(*p, "TERM=", 5) == 0))
 		{
-			// nothing: do not copy
+			/* nothing: do not copy */
 		}
 		else
 		{
@@ -143,7 +143,7 @@ static gchar **vte_get_child_environment(void)
 
 static void override_menu_key(void)
 {
-	if (gtk_menu_key_accel == NULL) // for restoring the default value
+	if (gtk_menu_key_accel == NULL) /* for restoring the default value */
 		g_object_get(G_OBJECT(gtk_settings_get_default()), "gtk-menu-bar-accel",
 																	&gtk_menu_key_accel, NULL);
 
@@ -159,7 +159,7 @@ static void override_menu_key(void)
 void vte_init(void)
 {
 	if (vte_info.have_vte == FALSE)
-	{	// app->have_vte can be false, even if VTE is compiled in, think of command line option
+	{	/* app->have_vte can be false, even if VTE is compiled in, think of command line option */
 		geany_debug("Disabling terminal support");
 		return;
 	}
@@ -202,7 +202,7 @@ void vte_init(void)
 
 	create_vte();
 
-	// setup the f10 menu override (so it works before the widget is first realized).
+	/* setup the F10 menu override (so it works before the widget is first realised). */
 	override_menu_key();
 }
 
@@ -247,7 +247,7 @@ static void create_vte(void)
 	gtk_widget_show_all(frame);
 	gtk_notebook_insert_page(GTK_NOTEBOOK(msgwindow.notebook), frame, gtk_label_new(_("Terminal")), MSG_VTE);
 
-	// the vte widget has to be realised before color changes take effect
+	/* the vte widget has to be realised before color changes take effect */
 	g_signal_connect(G_OBJECT(vte), "realize", G_CALLBACK(vte_apply_user_settings), NULL);
 }
 
@@ -266,8 +266,9 @@ void vte_close(void)
 	g_free(vc->colour_fore);
 	g_free(vc);
 	g_free(gtk_menu_key_accel);
-	// don't unload the module explicitly because it causes a segfault on FreeBSD
-	//g_module_close(module);
+	/* don't unload the module explicitly because it causes a segfault on FreeBSD */
+	/** TODO is this still/really true? */
+	/*g_module_close(module); */
 }
 
 
@@ -278,7 +279,7 @@ static gboolean vte_keyrelease(GtkWidget *widget, GdkEventKey *event, gpointer d
 			 event->keyval == GDK_KP_Enter ||
 			 ((event->keyval == GDK_c) && (event->state & GDK_CONTROL_MASK)))
 	{
-		clean = TRUE; // assume any text on the prompt has been executed when pressing Enter/Return
+		clean = TRUE; /* assume any text on the prompt has been executed when pressing Enter/Return */
 	}
 	return FALSE;
 }
@@ -287,7 +288,7 @@ static gboolean vte_keyrelease(GtkWidget *widget, GdkEventKey *event, gpointer d
 static gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	if (vc->enable_bash_keys)
-		return FALSE;	// Ctrl-[CD] will be handled by the VTE itself
+		return FALSE;	/* Ctrl-[CD] will be handled by the VTE itself */
 
 	if (event->type != GDK_KEY_RELEASE)
 		return FALSE;
@@ -299,7 +300,7 @@ static gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer dat
 		event->state & GDK_CONTROL_MASK &&
 		! (event->state & GDK_SHIFT_MASK) && ! (event->state & GDK_MOD1_MASK))
 	{
-		vte_get_working_directory(); // try to keep the working directory when restarting the VTE
+		vte_get_working_directory(); /* try to keep the working directory when restarting the VTE */
 
 		if (pid > 0)
 		{
@@ -327,7 +328,7 @@ static void vte_start(GtkWidget *widget)
 	gchar **env;
 	gchar **argv;
 
-	// split the shell command line, so arguments will work too
+	/* split the shell command line, so arguments will work too */
 	argv = g_strsplit(vc->shell, " ", -1);
 
 	if (argv != NULL)
@@ -339,7 +340,7 @@ static void vte_start(GtkWidget *widget)
 		g_strfreev(argv);
 	}
 	else
-		pid = 0; // use 0 as invalid pid
+		pid = 0; /* use 0 as invalid pid */
 
 	clean = TRUE;
 }
@@ -347,7 +348,7 @@ static void vte_start(GtkWidget *widget)
 
 static void vte_restart(GtkWidget *widget)
 {
-		vte_get_working_directory(); // try to keep the working directory when restarting the VTE
+		vte_get_working_directory(); /* try to keep the working directory when restarting the VTE */
 	 	if (pid > 0)
 		{
 			kill(pid, SIGINT);
@@ -404,7 +405,7 @@ static void vte_register_symbols(GModule *mod)
 void vte_apply_user_settings(void)
 {
 	if (! ui_prefs.msgwindow_visible) return;
-	//if (! GTK_WIDGET_REALIZED(vc->vte)) gtk_widget_realize(vc->vte);
+	/*if (! GTK_WIDGET_REALIZED(vc->vte)) gtk_widget_realize(vc->vte);*/
 	vf->vte_terminal_set_scrollback_lines(VTE_TERMINAL(vc->vte), vc->scrollback_lines);
 	vf->vte_terminal_set_scroll_on_keystroke(VTE_TERMINAL(vc->vte), vc->scroll_on_key);
 	vf->vte_terminal_set_scroll_on_output(VTE_TERMINAL(vc->vte), vc->scroll_on_out);
@@ -523,7 +524,7 @@ gboolean vte_send_cmd(const gchar *cmd)
 	if (clean)
 	{
 		vf->vte_terminal_feed_child(VTE_TERMINAL(vc->vte), cmd, strlen(cmd));
-		clean = TRUE; // vte_terminal_feed_child() also marks the vte as not clean
+		clean = TRUE; /* vte_terminal_feed_child() also marks the vte as not clean */
 		return TRUE;
 	}
 	else
@@ -589,10 +590,10 @@ void vte_cwd(const gchar *filename, gboolean force)
 		else
 			path = g_path_get_dirname(filename);
 
-		vte_get_working_directory(); // refresh vte_info.dir
+		vte_get_working_directory(); /* refresh vte_info.dir */
 		if (! utils_str_equal(path, vte_info.dir))
 		{
-			// use g_shell_quote to avoid problems with spaces, '!' or something else in path
+			/* use g_shell_quote to avoid problems with spaces, '!' or something else in path */
 			gchar *quoted_path = g_shell_quote(path);
 			gchar *cmd = g_strconcat("cd ", quoted_path, "\n", NULL);
 			if (! vte_send_cmd(cmd))
@@ -780,8 +781,8 @@ void vte_append_preferences_tab(void)
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_follow_path), FALSE);
 		gtk_container_add(GTK_CONTAINER(box), check_follow_path);
 
-		// create check_skip_script checkbox before the check_skip_script checkbox to be able to
-		// use the object for the toggled handler of check_skip_script checkbox
+		/* create check_skip_script checkbox before the check_skip_script checkbox to be able to
+		 * use the object for the toggled handler of check_skip_script checkbox */
 		check_skip_script = gtk_check_button_new_with_mnemonic(_("Don't use run script"));
 		gtk_tooltips_set_tip(tooltips, check_skip_script, _("Don't use the simple run script which is usually used to display the exit status of the executed program."), NULL);
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_skip_script), FALSE);
@@ -794,7 +795,7 @@ void vte_append_preferences_tab(void)
 		g_signal_connect((gpointer) check_run_in_vte, "toggled",
 			G_CALLBACK(check_run_in_vte_toggled), check_skip_script);
 
-		// now add the check_skip_script checkbox after the check_run_in_vte checkbox
+		/* now add the check_skip_script checkbox after the check_run_in_vte checkbox */
 		gtk_container_add(GTK_CONTAINER(box), check_skip_script);
 
 		gtk_box_pack_start(GTK_BOX(vbox), box, FALSE, FALSE, 0);

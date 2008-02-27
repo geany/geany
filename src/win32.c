@@ -92,7 +92,7 @@ static gchar *get_file_filters()
 		g_string_append_printf(str, "%s\t%s\t", filetypes[i]->title, tmp);
 		g_free(tmp);
 	}
-	// create meta file filter "All Source"
+	/* create meta file filter "All Source" */
 	for (i = 0; i < GEANY_MAX_FILE_TYPES; i++)
 	{
 		for (j = 0; filetypes[i]->pattern[j] != NULL; j++)
@@ -104,11 +104,11 @@ static gchar *get_file_filters()
 	g_string_append_printf(str, "%s\t%s\t", _("All Source"), all_patterns->str);
 	g_string_free(all_patterns, TRUE);
 
-	g_string_append_c(str, '\t'); // the final \0 byte to mark the end of the string
+	g_string_append_c(str, '\t'); /* the final \0 byte to mark the end of the string */
 	string = str->str;
 	g_string_free(str, FALSE);
 
-	// replace all "\t"s by \0
+	/* replace all "\t"s by \0 */
 	len = strlen(string);
 	for(i = 0; i < len; i++)
 	{
@@ -136,7 +136,7 @@ static gchar *get_filters(gboolean project_files)
 			filetypes[GEANY_FILETYPES_ALL]->pattern[0], "\t", NULL);
 	}
 
-	// replace all "\t"s by \0
+	/* replace all "\t"s by \0 */
 	len = strlen(string);
 	for(i = 0; i < len; i++)
 	{
@@ -170,7 +170,7 @@ INT CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
 
 		case BFFM_SELCHANGED:
 		{
-			// set the status window to the currently selected path.
+			/* set the status window to the currently selected path. */
 			static TCHAR szDir[MAX_PATH];
 			if (SHGetPathFromIDList((LPITEMIDLIST) lp, szDir))
 			{
@@ -207,10 +207,10 @@ gchar *win32_show_project_folder_dialog(GtkWidget *parent, const gchar *title,
 	pidl = SHBrowseForFolder(&bi);
 	g_free(dir);
 
-	// convert the strange Windows folder list item something into an usual path string ;-)
+	/* convert the strange Windows folder list item something into an usual path string ;-) */
 	if (pidl != NULL && SHGetPathFromIDList(pidl, fname))
 	{
-		// convert the resulting filename into UTF-8 (from whatever encoding it has at this moment)
+		/* convert the resulting filename into UTF-8 (from whatever encoding it has at this moment) */
 		setptr(fname, g_locale_to_utf8(fname, -1, NULL, NULL, NULL));
 		return fname;
 	}
@@ -281,7 +281,7 @@ gchar *win32_show_project_open_dialog(GtkWidget *parent, const gchar *title,
 		g_free(fname);
 		return NULL;
 	}
-	// convert the resulting filename into UTF-8 (from whatever encoding it has at this moment)
+	/* convert the resulting filename into UTF-8 (from whatever encoding it has at this moment) */
 	setptr(fname, g_locale_to_utf8(fname, -1, NULL, NULL, NULL));
 	return fname;
 }
@@ -348,15 +348,15 @@ gboolean win32_show_file_dialog(gboolean file_open, const gchar *initial_dir)
 
 		x = of.nFileOffset - 1;
 		if (x != strlen(fname))
-		{	// open a single file
+		{	/* open a single file */
 
-			// convert the resulting filename into UTF-8
+			/* convert the resulting filename into UTF-8 */
 			setptr(fname, g_locale_to_utf8(fname, -1, NULL, NULL, NULL));
 
 			document_open_file(fname, of.Flags & OFN_READONLY, NULL, NULL);
 		}
 		else
-		{	// open multiple files
+		{	/* open multiple files */
 			document_delay_colourise();
 
 			for (; ;)
@@ -368,7 +368,7 @@ gboolean win32_show_file_dialog(gboolean file_open, const gchar *initial_dir)
 
 					g_snprintf(file_name, 254, "%s\\%s", fname, fname + x + 1);
 
-					// convert the resulting filename into UTF-8
+					/* convert the resulting filename into UTF-8 */
 					utf8_filename = g_locale_to_utf8(file_name, -1, NULL, NULL, NULL);
 					document_open_file(utf8_filename, of.Flags & OFN_READONLY, NULL, NULL);
 					g_free(utf8_filename);
@@ -381,7 +381,7 @@ gboolean win32_show_file_dialog(gboolean file_open, const gchar *initial_dir)
 	else
 	{
 		gint idx = document_get_cur_idx();
-		// convert the resulting filename into UTF-8
+		/* convert the resulting filename into UTF-8 */
 		doc_list[idx].file_name = g_locale_to_utf8(fname, -1, NULL, NULL, NULL);
 		document_save_file(idx, TRUE);
 	}
@@ -394,7 +394,7 @@ void win32_show_font_dialog(void)
 {
 	CHOOSEFONT cf;
 	gint retval;
-	static LOGFONT lf;        // logical font structure
+	static LOGFONT lf;        /* logical font structure */
 
 	memset(&cf, 0, sizeof cf);
 	cf.lStructSize = sizeof cf;
@@ -408,18 +408,17 @@ void win32_show_font_dialog(void)
 	{
 		if (CommDlgExtendedError())
 		{
-			//gchar error[100];
-			//snprintf(error, 255, _("Font dialog box error (%x)"), (int)CommDlgExtendedError());
-			//MessageBox(NULL, "Font not availab", _("Error"), MB_OK | MB_ICONERROR);
+			/*gchar error[100];*/
+			/*snprintf(error, 255, _("Font dialog box error (%x)"), (int)CommDlgExtendedError());*/
+			/*MessageBox(NULL, "Font not availab", _("Error"), MB_OK | MB_ICONERROR);*/
 		}
 		return;
 	}
 	else
 	{
-			gchar *editorfont = g_strdup_printf("%s %d", lf.lfFaceName,
-				(cf.iPointSize / 10));
-			ui_set_editor_font(editorfont);
-			g_free(editorfont);
+		gchar *editorfont = g_strdup_printf("%s %d", lf.lfFaceName, (cf.iPointSize / 10));
+		ui_set_editor_font(editorfont);
+		g_free(editorfont);
 	}
 }
 
@@ -432,7 +431,7 @@ void win32_show_color_dialog(const gchar *colour)
 	gchar *hex = g_malloc0(12);
 	gint idx = document_get_cur_idx();
 
-	// Initialize CHOOSECOLOR
+	/* Initialize CHOOSECOLOR */
 	memset(&cc, 0, sizeof cc);
 	cc.lStructSize = sizeof(cc);
 	cc.hwndOwner = GDK_WINDOW_HWND(app->window->window);
@@ -464,7 +463,7 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 
 	fname[0] = '\0';
 
-	// cut the options from the command line
+	/* cut the options from the command line */
 	field = g_strsplit(gtk_entry_get_text(GTK_ENTRY(item)), " ", 2);
 	if (field[0] && g_file_test(field[0], G_FILE_TEST_EXISTS))
 	{
@@ -489,7 +488,7 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 	of.lpstrFile = fname;
 	of.nMaxFile = 512;
 	of.lpstrFileTitle = NULL;
-	//of.lpstrInitialDir = g_get_home_dir();
+	/*of.lpstrInitialDir = g_get_home_dir();*/
 	of.lpstrInitialDir = NULL;
 	of.lpstrTitle = NULL;
 	of.lpstrDefExt = "exe";
@@ -515,8 +514,8 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 	{
 		tmp = g_strdup(fname);
 		if (g_strv_length(field) > 1)
-			// add the command line args of the old command
-			/// TODO this fails badly when the old command contained spaces, we need quoting here
+			/* add the command line args of the old command */
+			/** TODO this fails badly when the old command contained spaces, we need quoting here */
 			filename = g_strconcat(tmp, " ", field[1], NULL);
 		else
 		{
@@ -573,8 +572,8 @@ gboolean win32_message_dialog(GtkWidget *parent, GtkMessageType type, const gcha
 		}
 	}
 
-	// convert the Unicode chars to wide chars
-	/// TODO test if LANG == C then possibly skip conversion => g_win32_getlocale()
+	/* convert the Unicode chars to wide chars */
+	/** TODO test if LANG == C then possibly skip conversion => g_win32_getlocale() */
 	MultiByteToWideChar(CP_UTF8, 0, msg, -1, w_msg, G_N_ELEMENTS(w_msg));
 	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, G_N_ELEMENTS(w_title));
 
@@ -583,7 +582,7 @@ gboolean win32_message_dialog(GtkWidget *parent, GtkMessageType type, const gcha
 	else if (app->window != NULL)
 		parent_hwnd = GDK_WINDOW_HWND(app->window->window);
 
-	// display the message box
+	/* display the message box */
 	rc = MessageBoxW(parent_hwnd, w_msg, w_title, t);
 
 	if (type == GTK_MESSAGE_QUESTION && rc != IDYES)
@@ -613,7 +612,7 @@ gint win32_message_dialog_unsaved(const gchar *msg)
 	HWND parent_hwnd = NULL;
 	gint ret;
 
-	// convert the Unicode chars to wide chars
+	/* convert the Unicode chars to wide chars */
 	MultiByteToWideChar(CP_UTF8, 0, msg, -1, w_msg, G_N_ELEMENTS(w_msg));
 	MultiByteToWideChar(CP_UTF8, 0, _("Question"), -1, w_title, G_N_ELEMENTS(w_title));
 
@@ -646,22 +645,22 @@ static void debug_setup_console()
 	CONSOLE_SCREEN_BUFFER_INFO coninfo;
 	FILE	*fp;
 
-	// allocate a console for this app
+	/* allocate a console for this app */
 	AllocConsole();
 
-	// set the screen buffer to be big enough to let us scroll text
+	/* set the screen buffer to be big enough to let us scroll text */
 	GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &coninfo);
 	coninfo.dwSize.Y = MAX_CONSOLE_LINES;
 	SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), coninfo.dwSize);
 
-	// redirect unbuffered STDOUT to the console
+	/* redirect unbuffered STDOUT to the console */
 	lStdHandle = (long)GetStdHandle(STD_OUTPUT_HANDLE);
 	hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
 	fp = _fdopen(hConHandle, "w");
 	*stdout = *fp;
 	setvbuf(stdout, NULL, _IONBF, 0);
 
-	// redirect unbuffered STDERR to the console
+	/* redirect unbuffered STDERR to the console */
 	lStdHandle = (long)GetStdHandle(STD_ERROR_HANDLE);
 	hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
 	fp = _fdopen(hConHandle, "w");
@@ -685,9 +684,9 @@ void win32_init_debug_code()
 #ifndef GEANY_DEBUG
 	if (app->debug_mode)
 #endif
-	{	// create a console window to get log messages on Windows
+	{	/* create a console window to get log messages on Windows */
 		debug_setup_console();
-		// change the log handlers to output log messages in ther created console window
+		/* change the log handlers to output log messages in ther created console window */
 		g_log_set_handler("GLib",
 			G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION, debug_log_handler, NULL);
 		g_log_set_default_handler(debug_log_handler, NULL);

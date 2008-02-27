@@ -16,7 +16,6 @@
 
 #include <string.h>
 #include <setjmp.h>
-//#include <glib.h>
 
 #include "entry.h"
 #include "get.h"
@@ -354,7 +353,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "goto",           KEYWORD_GOTO,           { 1, 1, 1, 1, 0 } },
 	{ "if",             KEYWORD_IF,             { 1, 1, 1, 1, 0 } },
 	{ "implements",     KEYWORD_IMPLEMENTS,     { 0, 0, 0, 1, 0 } },
-	{ "import",         KEYWORD_IMPORT,         { 0, 1, 0, 1, 0 } },	// D
+	{ "import",         KEYWORD_IMPORT,         { 0, 1, 0, 1, 0 } },	/* D */
 	{ "inline",         KEYWORD_INLINE,         { 0, 1, 0, 0, 0 } },
 	{ "inout",          KEYWORD_INOUT,          { 0, 0, 0, 0, 1 } },
 	{ "input",          KEYWORD_INPUT,          { 0, 0, 0, 0, 1 } },
@@ -369,7 +368,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "m_state",        KEYWORD_M_STATE,        { 0, 0, 0, 0, 1 } },
 	{ "m_trans",        KEYWORD_M_TRANS,        { 0, 0, 0, 0, 1 } },
 	{ "mutable",        KEYWORD_MUTABLE,        { 0, 1, 0, 0, 0 } },
-	{ "module",         KEYWORD_MODULE,         { 0, 1, 0, 0, 0 } },	// D
+	{ "module",         KEYWORD_MODULE,         { 0, 1, 0, 0, 0 } },	/* D */
 	{ "namespace",      KEYWORD_NAMESPACE,      { 0, 1, 1, 0, 0 } },
 	{ "native",         KEYWORD_NATIVE,         { 0, 0, 0, 1, 0 } },
 	{ "new",            KEYWORD_NEW,            { 0, 1, 1, 1, 0 } },
@@ -399,7 +398,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "synchronized",   KEYWORD_SYNCHRONIZED,   { 0, 0, 0, 1, 0 } },
 	{ "task",           KEYWORD_TASK,           { 0, 0, 0, 0, 1 } },
 	{ "template",       KEYWORD_TEMPLATE,       { 0, 1, 0, 0, 0 } },
-	{ "this",           KEYWORD_THIS,           { 0, 0, 1, 1, 0 } },	// allow D ctor tags
+	{ "this",           KEYWORD_THIS,           { 0, 0, 1, 1, 0 } },	/* allow D ctor tags */
 	{ "throw",          KEYWORD_THROW,          { 0, 1, 1, 1, 0 } },
 	{ "throws",         KEYWORD_THROWS,         { 0, 0, 0, 1, 0 } },
 	{ "trans",          KEYWORD_TRANS,          { 0, 0, 0, 0, 1 } },
@@ -1223,7 +1222,7 @@ static void makeTag (const tokenInfo *const token,
 	vString *scope = vStringNew ();
 	tagEntryInfo e;
 
-    // take only functions which are introduced by "function ..."
+    /* take only functions which are introduced by "function ..." */
     if (type == TAG_FUNCTION && isLanguage (Lang_ferite) &&
 		strncmp("function", st->firstToken->name->buffer, 8) != 0)
     {
@@ -1353,7 +1352,7 @@ static void qualifyVariableTag (const statementInfo *const st,
 	makeTag (nameToken, st, TRUE, TAG_TYPEDEF);
     else if (st->declaration == DECL_PACKAGE)
 	makeTag (nameToken, st, FALSE, TAG_PACKAGE);
-    else if (st->declaration == DECL_MODULE) // handle modules in D as namespaces
+    else if (st->declaration == DECL_MODULE) /* handle modules in D as namespaces */
 	makeTag (nameToken, st, FALSE, TAG_NAMESPACE);
     else if (isValidTypeSpecifier (st->declaration))
     {
@@ -1825,7 +1824,7 @@ static void processToken (tokenInfo *const token, statementInfo *const st)
 	case KEYWORD_EXTERN:
 		if (! isLanguage (Lang_csharp) || !st->gotName)
 		{
-			//reinitStatement (st, FALSE);
+			/*reinitStatement (st, FALSE);*/
 			st->scope = SCOPE_EXTERN;
 			st->declaration = DECL_BASE;
 		}
@@ -1834,7 +1833,7 @@ static void processToken (tokenInfo *const token, statementInfo *const st)
 	case KEYWORD_STATIC:
 		if (! isLanguage (Lang_java) && ! isLanguage (Lang_csharp))
 		{
-			//reinitStatement (st, FALSE);
+			/*reinitStatement (st, FALSE);*/
 			st->scope = SCOPE_STATIC;
 			st->declaration = DECL_BASE;
 		}
@@ -2770,14 +2769,14 @@ static void initializeDParser (const langType language)
 {
     contextual_fake_count = 0;
     Lang_d = language;
-    buildKeywordHash (language, 1);	// C++ keywords
+    buildKeywordHash (language, 1);	/* C++ keywords */
 }
 
 static void initializeFeriteParser (const langType language)
 {
     contextual_fake_count = 0;
     Lang_ferite = language;
-    buildKeywordHash (language, 1);	// C++ keywords
+    buildKeywordHash (language, 1);	/* C++ keywords */
 }
 
 static void initializeCsharpParser (const langType language)

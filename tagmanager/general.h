@@ -20,7 +20,7 @@
 # include "mac.h"
 #endif
 
-// include unistd.h preventively becuase at least under MacOSX it is needed for off_t
+/* include unistd.h preventively because at least under MacOSX it is needed for off_t */
 #include <unistd.h>
 
 /*
@@ -87,12 +87,12 @@
 #  define FA_DIREC _A_SUBDIR
 #  define ff_name name
 # endif
-// provide the prototype for cross-compiling/Windows
+/* provide the prototype for cross-compiling/Windows */
 char *lrealpath(const char *filename);
 #endif
 
 #ifndef HAVE_FNMATCH_H
-// provide the prototype for cross-compiling/Windows
+/* provide the prototype for cross-compiling/Windows */
 int fnmatch(const char *pattern, const char *string, int flags);
 #endif
 

@@ -54,7 +54,7 @@
 #include "search.h"
 #include "highlighting.h"
 
-void keybindings_cmd(gint cmd_id);	// don't require keybindings.h enum in plugindata.h
+void keybindings_cmd(gint cmd_id);	/* don't require keybindings.h enum in plugindata.h */
 
 
 
@@ -68,9 +68,9 @@ void keybindings_cmd(gint cmd_id);	// don't require keybindings.h enum in plugin
 typedef struct Plugin
 {
 	GModule 	*module;
-	gchar		*filename;		// plugin filename (/path/libname.so)
+	gchar		*filename;		/* plugin filename (/path/libname.so) */
 	PluginFields	fields;
-	gulong		*signal_ids;		// signal IDs to disconnect when unloading
+	gulong		*signal_ids;		/* signal IDs to disconnect when unloading */
 	gsize		signal_ids_len;
 
 	PluginInfo*	(*info) (void);	/* Returns plugin name, description */
@@ -81,8 +81,8 @@ typedef struct Plugin
 Plugin;
 
 
-static GList *plugin_list = NULL; // list of all available, loadable plugins
-static GList *active_plugin_list = NULL; // list of only actually loaded plugins
+static GList *plugin_list = NULL; /* list of all available, loadable plugins */
+static GList *active_plugin_list = NULL; /* list of only actually loaded plugins */
 static GtkWidget *separator = NULL;
 static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data);
 
@@ -346,7 +346,7 @@ is_active_plugin(const gchar *name)
 
 	g_return_val_if_fail(name, FALSE);
 
-	// if app->active_plugins is NULL, guess it was not yet set and don't load any plugins
+	/* if app->active_plugins is NULL, guess it was not yet set and don't load any plugins */
 	if (app->active_plugins == NULL || (len = g_strv_length(app->active_plugins)) == 0)
 		return FALSE;
 
@@ -457,7 +457,7 @@ plugin_new(const gchar *fname)
 				info()->name);
 	}
 
-	// only initialise the plugin if it should be loaded
+	/* only initialise the plugin if it should be loaded */
 	if (is_active_plugin(fname))
 	{
 		plugin_init(plugin);
@@ -486,7 +486,7 @@ plugin_unload(Plugin *plugin)
 	g_return_if_fail(plugin->module);
 
 	if (g_list_find(active_plugin_list, plugin))
-	{	// only do cleanup if the plugin was actually loaded
+	{	/* only do cleanup if the plugin was actually loaded */
 		if (plugin->cleanup)
 			plugin->cleanup();
 
@@ -561,7 +561,7 @@ static void load_plugin_paths(void)
 	gchar *path;
 
 	path = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", NULL);
-	// first load plugins in ~/.geany/plugins/, then in $prefix/lib/geany
+	/* first load plugins in ~/.geany/plugins/, then in $prefix/lib/geany */
 	load_plugins(path);
 	g_free(path);
 #ifdef G_OS_WIN32
@@ -627,11 +627,11 @@ void plugins_free()
 		g_list_free(plugin_list);
 	}
 	if (active_plugin_list != NULL)
-		// no need to do more here, active_plugin_list holds the same pointer as plugin_list
+		/* no need to do more here, active_plugin_list holds the same pointer as plugin_list */
 		g_list_free(active_plugin_list);
 
 	g_object_unref(geany_object);
-	geany_object = NULL; // to mark the object as invalid for any code which tries to emit signals
+	geany_object = NULL; /* to mark the object as invalid for any code which tries to emit signals */
 }
 
 
@@ -737,24 +737,24 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 		PLUGIN_COLUMN_CHECK, &old_state, PLUGIN_COLUMN_PLUGIN, &p, -1);
 	if (p == NULL)
 		return;
-	state = ! old_state; // toggle the state
+	state = ! old_state; /* toggle the state */
 	gtk_list_store_set(pm_widgets.store, &iter, PLUGIN_COLUMN_CHECK, state, -1);
 
-	// load/unload the plugin once it was toggled for correct behaviour of the preferences button
-	// we want to call plugin's configure() only after init() has been called
+	/* load/unload the plugin once it was toggled for correct behaviour of the preferences button
+	 * we want to call plugin's configure() only after init() has been called */
 
-	// plugin should be loaded, so load it if it is not already
+	/* plugin should be loaded, so load it if it is not already */
 	if (state && g_list_find(active_plugin_list, p) == NULL)
 	{
 		plugin_init(p);
 	}
-	// plugin should be unloaded, so unload it if it is loaded
+	/* plugin should be unloaded, so unload it if it is loaded */
 	if (! state && g_list_find(active_plugin_list, p) != NULL)
 	{
 		plugin_unload(p);
 	}
 
-	// set again the sensitiveness of the configure button
+	/* set again the sensitiveness of the configure button */
 	gtk_widget_set_sensitive(pm_widgets.configure_button,
 		p->configure != NULL && g_list_find(active_plugin_list, p) != NULL);
 
@@ -791,7 +791,7 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
 	gtk_tree_sortable_set_sort_column_id(
 		GTK_TREE_SORTABLE(store), PLUGIN_COLUMN_NAME, GTK_SORT_ASCENDING);
 
-	// selection handling
+	/* selection handling */
 	sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
 	gtk_tree_selection_set_mode(sel, GTK_SELECTION_SINGLE);
 	g_signal_connect((gpointer) sel, "changed", G_CALLBACK(pm_selection_changed), NULL);

@@ -86,12 +86,12 @@
 GeanyApp *app;
 
 GeanyStatus	 main_status;
-CommandLineOptions cl_options;	// fields initialised in parse_command_line_options
+CommandLineOptions cl_options;	/* fields initialised in parse_command_line_options */
 
 
 static gboolean want_plugins;
 
-// command-line options
+/* command-line options */
 static gboolean debug_mode = FALSE;
 static gboolean ignore_global_tags = FALSE;
 static gboolean no_msgwin = FALSE;
@@ -114,7 +114,7 @@ static gboolean no_plugins = FALSE;
 #endif
 static gboolean dummy = FALSE;
 
-// in alphabetical order of short options
+/* in alphabetical order of short options */
 static GOptionEntry entries[] =
 {
 	{ "column", 0, 0, G_OPTION_ARG_INT, &cl_options.goto_column, N_("Set initial column number for the first opened file (useful in conjunction with --line)"), NULL },
@@ -140,7 +140,7 @@ static GOptionEntry entries[] =
 	{ "vte-lib", 0, 0, G_OPTION_ARG_FILENAME, &lib_vte, N_("Filename of libvte.so"), NULL },
 #endif
 	{ "version", 'v', 0, G_OPTION_ARG_NONE, &show_version, N_("Show version and exit"), NULL },
-	{ "dummy", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &dummy, NULL, NULL }, // for +NNN line number arguments
+	{ "dummy", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &dummy, NULL, NULL }, /* for +NNN line number arguments */
 	{ NULL, 0, 0, 0, NULL, NULL, NULL }
 };
 
@@ -168,7 +168,7 @@ static void apply_settings(void)
 {
 	ui_update_fold_items();
 
-	// toolbar, message window and sidebar are by default visible, so don't change it if it is true
+	/* toolbar, message window and sidebar are by default visible, so don't change it if it is true */
 	if (! prefs.toolbar_visible)
 	{
 		app->ignore_callback = TRUE;
@@ -190,31 +190,31 @@ static void apply_settings(void)
 		app->ignore_callback = FALSE;
 	}
 	ui_sidebar_show_hide();
-	// sets the icon style of the toolbar
+	/* sets the icon style of the toolbar */
 	switch (prefs.toolbar_icon_style)
 	{
 		case GTK_TOOLBAR_BOTH:
 		{
-			//gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "images_and_text1")), TRUE);
+			/*gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "images_and_text1")), TRUE);*/
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(ui_widgets.toolbar_menu, "images_and_text2")), TRUE);
 			break;
 		}
 		case GTK_TOOLBAR_ICONS:
 		{
-			//gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "images_only1")), TRUE);
+			/*gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "images_only1")), TRUE);*/
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(ui_widgets.toolbar_menu, "images_only2")), TRUE);
 			break;
 		}
 		case GTK_TOOLBAR_TEXT:
 		{
-			//gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "text_only1")), TRUE);
+			/*gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "text_only1")), TRUE);*/
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(ui_widgets.toolbar_menu, "text_only2")), TRUE);
 			break;
 		}
 	}
 	gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), prefs.toolbar_icon_style);
 
-	// sets the icon size of the toolbar, use user preferences (.gtkrc) if not set
+	/* sets the icon size of the toolbar, use user preferences (.gtkrc) if not set */
 	if (prefs.toolbar_icon_size == GTK_ICON_SIZE_SMALL_TOOLBAR ||
 		prefs.toolbar_icon_size == GTK_ICON_SIZE_LARGE_TOOLBAR)
 	{
@@ -222,7 +222,7 @@ static void apply_settings(void)
 	}
 	ui_update_toolbar_icons(prefs.toolbar_icon_size);
 
-	// line number and markers margin are by default enabled
+	/* line number and markers margin are by default enabled */
 	if (! editor_prefs.show_markers_margin)
 	{
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_markers_margin1")), FALSE);
@@ -234,7 +234,7 @@ static void apply_settings(void)
 		editor_prefs.show_linenumber_margin = FALSE;
 	}
 
-	// interprets the saved window geometry
+	/* interprets the saved window geometry */
 	if (prefs.save_winpos && ui_prefs.geometry[0] != -1)
 	{
 		gtk_window_move(GTK_WINDOW(app->window), ui_prefs.geometry[0], ui_prefs.geometry[1]);
@@ -243,7 +243,7 @@ static void apply_settings(void)
 			gtk_window_maximize(GTK_WINDOW(app->window));
 	}
 
-	// hide statusbar if desired
+	/* hide statusbar if desired */
 	if (! prefs.statusbar_visible)
 	{
 		gtk_widget_hide(app->statusbar);
@@ -257,25 +257,25 @@ static void apply_settings(void)
 				(editor_prefs.indent_mode != INDENT_NONE));
 	app->ignore_callback = FALSE;
 
-	// connect the toolbar dropdown menu for the new button
+	/* connect the toolbar dropdown menu for the new button */
 	gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(
 			lookup_widget(app->window, "menutoolbutton1")), ui_widgets.new_file_menu);
 
-	// set the tab placements of the notebooks
+	/* set the tab placements of the notebooks */
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->notebook), prefs.tab_pos_editor);
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), prefs.tab_pos_msgwin);
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->treeview_notebook), prefs.tab_pos_sidebar);
 
 	ui_update_toolbar_items();
 
-	// whether to show notebook tabs or not
+	/* whether to show notebook tabs or not */
 	gtk_notebook_set_show_tabs(GTK_NOTEBOOK(app->notebook), prefs.show_notebook_tabs);
 }
 
 
 static void main_init(void)
 {
-	// inits
+	/* inits */
 	app->window				= NULL;
 	app->project			= NULL;
 	app->active_plugins		= NULL;
@@ -301,7 +301,7 @@ static void main_init(void)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(ui_widgets.recent_files_menuitem),
 							ui_widgets.recent_files_menubar);
 
-	// store important pointers for later reference
+	/* store important pointers for later reference */
 	app->toolbar = lookup_widget(app->window, "toolbar1");
 	app->treeview_notebook = lookup_widget(app->window, "notebook3");
 	app->notebook = lookup_widget(app->window, "notebook1");
@@ -333,13 +333,13 @@ static void main_init(void)
 
 	ui_init();
 
-	// set widget names for matching with .gtkrc-2.0
+	/* set widget names for matching with .gtkrc-2.0 */
 	gtk_widget_set_name(app->window, "GeanyMainWindow");
 	gtk_widget_set_name(ui_widgets.toolbar_menu, "GeanyToolbarMenu");
 	gtk_widget_set_name(app->popup_menu, "GeanyEditMenu");
 
 #if ! GTK_CHECK_VERSION(2, 10, 0)
-	// hide Page setup menu item, it isn't supported with non-GTK printing
+	/* hide Page setup menu item, it isn't supported with non-GTK printing */
 	gtk_widget_hide(ui_widgets.print_page_setup);
 #endif
 
@@ -356,7 +356,7 @@ gchar *get_argv_filename(const gchar *filename)
 		result = g_strdup(filename);
 	else
 	{
-		// use current dir
+		/* use current dir */
 		gchar *cur_dir = g_get_current_dir();
 
 		result = g_strjoin(
@@ -424,22 +424,22 @@ static void setup_paths(void)
 	gchar *data_dir;
 	gchar *doc_dir;
 
-	// set paths
+	/* set paths */
 #ifdef G_OS_WIN32
-	// take the installation directory(the one where geany.exe is located) as the base for the
-	// documentation and data files
+	/* use the installation directory(the one where geany.exe is located) as the base for the
+	 * documentation and data files */
 	gchar *install_dir = g_win32_get_package_installation_directory("geany", NULL);
 
-	data_dir = g_strconcat(install_dir, "\\data", NULL); // e.g. C:\Program Files\geany\data
+	data_dir = g_strconcat(install_dir, "\\data", NULL); /* e.g. C:\Program Files\geany\data */
 	doc_dir = g_strconcat(install_dir, "\\doc", NULL);
 
 	g_free(install_dir);
 #else
-	data_dir = g_strconcat(GEANY_DATADIR, "/geany/", NULL); // e.g. /usr/share/geany
+	data_dir = g_strconcat(GEANY_DATADIR, "/geany/", NULL); /* e.g. /usr/share/geany */
 	doc_dir = g_strconcat(GEANY_DATADIR, "/doc/geany/html/", NULL);
 #endif
 
-	// convert path names to locale encoding
+	/* convert path names to locale encoding */
 	app->datadir = utils_get_locale_from_utf8(data_dir);
 	app->docdir = utils_get_locale_from_utf8(doc_dir);
 
@@ -459,7 +459,7 @@ static void locale_init(void)
 
 #ifdef G_OS_WIN32
 	gchar *install_dir = g_win32_get_package_installation_directory("geany", NULL);
-	// e.g. C:\Program Files\geany\lib\locale
+	/* e.g. C:\Program Files\geany\lib\locale */
 	locale_dir = g_strconcat(install_dir, "\\lib\\locale", NULL);
 	g_free(install_dir);
 #else
@@ -480,13 +480,13 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	GOptionContext *context;
 	gint i;
 
-	// first initialise cl_options fields with default values
+	/* first initialise cl_options fields with default values */
 	cl_options.load_session = TRUE;
 	cl_options.goto_line = -1;
 	cl_options.goto_column = -1;
 
-	// the GLib option parser can't handle the +NNN (line number) option,
-	// so we grab that here and replace it with a no-op */
+	/* the GLib option parser can't handle the +NNN (line number) option,
+	 * so we grab that here and replace it with a no-op */
 	for (i = 1; i < (*argc); i++)
 	{
 		if ((*argv)[i][0] != '+')
@@ -570,7 +570,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	if (generate_datafiles)
 	{
 		filetypes_init_types();
-		configuration_generate_data_files();	// currently only filetype_extensions.conf
+		configuration_generate_data_files();	/* currently only filetype_extensions.conf */
 		exit(0);
 	}
 #endif
@@ -579,7 +579,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 		gboolean ret;
 
 		filetypes_init_types();
-		configuration_read_filetype_extensions();	// needed for *.lang.tags filetype matching
+		configuration_read_filetype_extensions();	/* needed for *.lang.tags filetype matching */
 		ret = symbols_generate_global_tags(*argc, *argv, ! no_preprocessing);
 		exit(ret);
 	}
@@ -607,20 +607,20 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	cl_options.ignore_global_tags = ignore_global_tags;
 
 	if (! gtk_init_check(NULL, NULL))
-	{	// check whether we have a valid X display and exit if not
+	{	/* check whether we have a valid X display and exit if not */
 		g_printerr("Geany: cannot open display\n");
 		exit(1);
 	}
 }
 
 
-// Returns 0 if config dir is OK.
+/* Returns 0 if config dir is OK. */
 static gint setup_config_dir(void)
 {
 	gint mkdir_result = 0;
 	gchar *tmp = app->configdir;
 
-	// convert configdir to locale encoding to avoid troubles
+	/* convert configdir to locale encoding to avoid troubles */
 	app->configdir = utils_get_locale_from_utf8(app->configdir);
 	g_free(tmp);
 
@@ -648,7 +648,7 @@ static void signal_cb(gint sig)
 }
 
 
-// open files from command line
+/* open files from command line */
 static gboolean open_cl_files(gint argc, gchar **argv)
 {
 	gint i;
@@ -678,12 +678,12 @@ static gboolean open_cl_files(gint argc, gchar **argv)
 			gint idx;
 
 			idx = document_open_file(filename, FALSE, NULL, NULL);
-			// add recent file manually because opening_session_files is set
+			/* add recent file manually because opening_session_files is set */
 			if (DOC_IDX_VALID(idx))
 				ui_add_recent_file(doc_list[idx].file_name);
 		}
 		else if (filename != NULL)
-		{	// create new file if it doesn't exist
+		{	/* create new file if it doesn't exist */
 			gint idx;
 
 			idx = document_new_file(filename, NULL, NULL);
@@ -694,7 +694,7 @@ static gboolean open_cl_files(gint argc, gchar **argv)
 		{
 			gchar *msg = _("Could not find file '%s'.");
 
-			g_printerr(msg, filename);	// also print to the terminal
+			g_printerr(msg, filename);	/* also print to the terminal */
 			g_printerr("\n");
 			ui_set_statusbar(TRUE, msg, filename);
 		}
@@ -717,14 +717,14 @@ static void load_project_file(void)
 		project_load_file(locale_filename);
 
 	g_free(locale_filename);
-	g_free(project_prefs.session_file);	// no longer needed
+	g_free(project_prefs.session_file);	/* no longer needed */
 }
 
 
 static void load_settings(void)
 {
 	configuration_load();
-	// let cmdline options overwrite configuration settings
+	/* let cmdline options overwrite configuration settings */
 #ifdef HAVE_VTE
 	vte_info.have_vte = (no_vte) ? FALSE : vte_info.load_vte;
 #endif
@@ -753,15 +753,15 @@ gint main(gint argc, gchar **argv)
 
 	signal(SIGTERM, signal_cb);
 #ifdef G_OS_UNIX
-	// SIGQUIT is used to kill spawned children and we get also this signal, so ignore
+	/* SIGQUIT is used to kill spawned children and we get also this signal, so ignore */
 	signal(SIGQUIT, SIG_IGN);
-	// ignore SIGPIPE signal for preventing sudden death of program
+	/* ignore SIGPIPE signal for preventing sudden death of program */
 	signal(SIGPIPE, SIG_IGN);
 #endif
 
 	config_dir_result = setup_config_dir();
 #ifdef HAVE_SOCKET
-    // check and create (unix domain) socket for remote operation
+    /* check and create (unix domain) socket for remote operation */
 	if (! socket_info.ignore_socket)
 	{
 		socket_info.lock_socket = -1;
@@ -769,8 +769,8 @@ gint main(gint argc, gchar **argv)
 		socket_info.lock_socket = socket_init(argc, argv);
 		if (socket_info.lock_socket == -2)
 		{
-			// Socket exists
-			if (argc > 1)	// filenames were sent to first instance, so quit
+			/* Socket exists */
+			if (argc > 1)	/* filenames were sent to first instance, so quit */
 			{
 				g_free(app->configdir);
 				g_free(app->datadir);
@@ -778,7 +778,7 @@ gint main(gint argc, gchar **argv)
 				g_free(app);
 				return 0;
 			}
-			// Start a new instance if no command line strings were passed
+			/* Start a new instance if no command line strings were passed */
 			socket_info.ignore_socket = TRUE;
 			cl_options.load_session = FALSE;
 		}
@@ -790,7 +790,7 @@ gint main(gint argc, gchar **argv)
 		gtk_major_version, gtk_minor_version, gtk_micro_version,
 		glib_major_version, glib_minor_version, glib_micro_version);
 
-	// inits
+	/* inits */
 	main_init();
 	gtk_widget_set_size_request(app->window, GEANY_WINDOW_MINIMAL_WIDTH, GEANY_WINDOW_MINIMAL_HEIGHT);
 	gtk_window_set_default_size(GTK_WINDOW(app->window), GEANY_WINDOW_DEFAULT_WIDTH, GEANY_WINDOW_DEFAULT_HEIGHT);
@@ -814,16 +814,16 @@ gint main(gint argc, gchar **argv)
 	configuration_read_filetype_extensions();
 	configuration_read_snippets();
 
-	// set window icon
+	/* set window icon */
 	{
 		GdkPixbuf *pb;
 
 		pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO, FALSE);
 		gtk_window_set_icon(GTK_WINDOW(app->window), pb);
-		g_object_unref(pb);	// free our reference
+		g_object_unref(pb);	/* free our reference */
 	}
 
-	// registering some basic events
+	/* registering some basic events */
 	g_signal_connect(G_OBJECT(app->window), "delete_event", G_CALLBACK(on_exit_clicked), NULL);
 	g_signal_connect(G_OBJECT(app->window), "key-press-event", G_CALLBACK(keybindings_got_event), NULL);
 	g_signal_connect(G_OBJECT(app->toolbar), "button-press-event", G_CALLBACK(toolbar_popup_menu), NULL);
@@ -844,16 +844,16 @@ gint main(gint argc, gchar **argv)
 		ui_set_statusbar(TRUE, _("Configuration directory could not be created (%s)."),
 			g_strerror(config_dir_result));
 
-	// apply all configuration options
+	/* apply all configuration options */
 	apply_settings();
 
 #ifdef HAVE_PLUGINS
-	// load any enabled plugins before we open any documents
+	/* load any enabled plugins before we open any documents */
 	if (want_plugins)
 		plugins_init();
 #endif
 
-	// load any command line files or session files
+	/* load any command line files or session files */
 	main_status.opening_session_files = TRUE;
 	if (! open_cl_files(argc, argv))
 	{
@@ -861,7 +861,7 @@ gint main(gint argc, gchar **argv)
 		{
 			load_project_file();
 
-			// load session files into tabs, as they are found in the session_files variable
+			/* load session files into tabs, as they are found in the session_files variable */
 			if (! configuration_open_files())
 			{
 				ui_update_popup_copy_items(-1);
@@ -871,7 +871,7 @@ gint main(gint argc, gchar **argv)
 	}
 	main_status.opening_session_files = FALSE;
 
-	// open a new file if no other file was opened
+	/* open a new file if no other file was opened */
 	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
 		document_new_file(NULL, NULL, NULL);
 
@@ -884,14 +884,14 @@ gint main(gint argc, gchar **argv)
 	build_menu_update(idx);
 	treeviews_update_tag_list(idx, FALSE);
 
-	// finally realize the window to show the user what we have done
+	/* finally realize the window to show the user what we have done */
 	gtk_widget_show(app->window);
 	main_status.main_window_realized = TRUE;
 
 	configuration_apply_settings();
 
 #ifdef HAVE_SOCKET
-	// register the callback of socket input
+	/* register the callback of socket input */
 	if (! socket_info.ignore_socket && socket_info.lock_socket > 0)
 	{
 		socket_info.read_ioc = g_io_channel_unix_new(socket_info.lock_socket);
@@ -900,7 +900,7 @@ gint main(gint argc, gchar **argv)
 	}
 #endif
 
-	//g_timeout_add(0, (GSourceFunc)destroyapp, NULL); // useful for start time tests
+	/*g_timeout_add(0, (GSourceFunc)destroyapp, NULL);*/ /* useful for start time tests*/
 	gtk_main();
 	return 0;
 }
@@ -980,7 +980,7 @@ void main_quit()
 #endif
 	gtk_widget_destroy(app->window);
 
-	// destroy popup menus
+	/* destroy popup menus */
 	if (app->popup_menu && GTK_IS_WIDGET(app->popup_menu))
 					gtk_widget_destroy(app->popup_menu);
 	if (ui_widgets.toolbar_menu && GTK_IS_WIDGET(ui_widgets.toolbar_menu))
@@ -1002,11 +1002,11 @@ void main_quit()
 }
 
 
-// malloc compatibility code
+/* malloc compatibility code */
 #undef malloc
 void *malloc(size_t n);
 
-// Allocate an N-byte block of memory from the heap. If N is zero, allocate a 1-byte block.
+/* Allocate an N-byte block of memory from the heap. If N is zero, allocate a 1-byte block. */
 void *rpl_malloc(size_t n)
 {
 	if (n == 0)

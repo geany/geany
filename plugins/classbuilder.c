@@ -99,10 +99,10 @@ class {class_name}{base_decl}\n\
 		{destructor_decl}\
 	\n\
 	private:\n\
-		// add your private declarations\n\
+		/* add your private declarations */\n\
 };\n\
 \n\
-#endif // {header_guard}\n\
+#endif /* {header_guard} */ \n\
 ";
 
 static const gchar templates_cpp_class_source[] = "{fileheader}\n\n\
@@ -481,7 +481,7 @@ void show_dialog_create_class(gint type)
 		cc_dlg_on_create_class(cc_dlg);
 
 	gtk_widget_destroy(cc_dlg->dialog);
-//	g_object_unref(G_OBJECT(cc_dlg->dialog));
+/*	g_object_unref(G_OBJECT(cc_dlg->dialog));	*/
 }
 
 
@@ -725,7 +725,7 @@ static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg)
 		}
 	}
 
-	// only create the files if the filename is not empty
+	/* only create the files if the filename is not empty */
 	if (! p_utils->str_equal(class_info->source, ""))
 	{
 		text = get_template_class_source(class_info);

@@ -45,40 +45,40 @@ filetype *filetypes[GEANY_MAX_FILE_TYPES];
  * The order must not be changed but can be appended to. */
 enum
 {
-	FILETYPE_UID_C = 0,		// 0
-	FILETYPE_UID_CPP,		// 1
-	FILETYPE_UID_JAVA,		// 2
-	FILETYPE_UID_PERL,		// 3
-	FILETYPE_UID_PHP,		// 4
-	FILETYPE_UID_XML,		// 5
-	FILETYPE_UID_DOCBOOK,	// 6
-	FILETYPE_UID_PYTHON,	// 7
-	FILETYPE_UID_LATEX,		// 8
-	FILETYPE_UID_PASCAL,	// 9
-	FILETYPE_UID_SH,		// 10
-	FILETYPE_UID_MAKE,		// 11
-	FILETYPE_UID_CSS,		// 12
-	FILETYPE_UID_CONF,		// 13
-	FILETYPE_UID_ASM,		// 14
-	FILETYPE_UID_SQL,		// 15
-	FILETYPE_UID_CAML,		// 16
-	FILETYPE_UID_OMS,		// 17
-	FILETYPE_UID_RUBY,		// 18
-	FILETYPE_UID_TCL,		// 19
-	FILETYPE_UID_ALL,		// 20
-	FILETYPE_UID_D,			// 21
-	FILETYPE_UID_FORTRAN,	// 22
-	FILETYPE_UID_DIFF,		// 23
-	FILETYPE_UID_FERITE,	// 24
-	FILETYPE_UID_HTML,		// 25
-	FILETYPE_UID_VHDL,		// 26
-	FILETYPE_UID_JS,		// 27
-	FILETYPE_UID_LUA,		// 28
-	FILETYPE_UID_HASKELL,	// 29
-	FILETYPE_UID_CS,		// 30
-	FILETYPE_UID_BASIC,		// 31
-	FILETYPE_UID_HAXE,		// 32
-	FILETYPE_UID_REST		// 33
+	FILETYPE_UID_C = 0,		/* 0 */
+	FILETYPE_UID_CPP,		/* 1 */
+	FILETYPE_UID_JAVA,		/* 2 */
+	FILETYPE_UID_PERL,		/* 3 */
+	FILETYPE_UID_PHP,		/* 4 */
+	FILETYPE_UID_XML,		/* 5 */
+	FILETYPE_UID_DOCBOOK,	/* 6 */
+	FILETYPE_UID_PYTHON,	/* 7 */
+	FILETYPE_UID_LATEX,		/* 8 */
+	FILETYPE_UID_PASCAL,	/* 9 */
+	FILETYPE_UID_SH,		/* 10 */
+	FILETYPE_UID_MAKE,		/* 11 */
+	FILETYPE_UID_CSS,		/* 12 */
+	FILETYPE_UID_CONF,		/* 13 */
+	FILETYPE_UID_ASM,		/* 14 */
+	FILETYPE_UID_SQL,		/* 15 */
+	FILETYPE_UID_CAML,		/* 16 */
+	FILETYPE_UID_OMS,		/* 17 */
+	FILETYPE_UID_RUBY,		/* 18 */
+	FILETYPE_UID_TCL,		/* 19 */
+	FILETYPE_UID_ALL,		/* 20 */
+	FILETYPE_UID_D,			/* 21 */
+	FILETYPE_UID_FORTRAN,	/* 22 */
+	FILETYPE_UID_DIFF,		/* 23 */
+	FILETYPE_UID_FERITE,	/* 24 */
+	FILETYPE_UID_HTML,		/* 25 */
+	FILETYPE_UID_VHDL,		/* 26 */
+	FILETYPE_UID_JS,		/* 27 */
+	FILETYPE_UID_LUA,		/* 28 */
+	FILETYPE_UID_HASKELL,	/* 29 */
+	FILETYPE_UID_CS,		/* 30 */
+	FILETYPE_UID_BASIC,		/* 31 */
+	FILETYPE_UID_HAXE,		/* 32 */
+	FILETYPE_UID_REST		/* 33 */
 };
 
 
@@ -99,7 +99,7 @@ void filetypes_init_types()
 		filetypes[ft_id]->actions = g_new0(struct build_actions, 1);
 	}
 
-#define C	// these macros are only to ease navigation
+#define C	/* these macros are only to ease navigation */
 	filetypes[GEANY_FILETYPES_C]->id = GEANY_FILETYPES_C;
 	filetypes[GEANY_FILETYPES_C]->uid = FILETYPE_UID_C;
 	filetypes[GEANY_FILETYPES_C]->lang = 0;
@@ -155,7 +155,7 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_JAVA]->comment_open = g_strdup("/*");
 	filetypes[GEANY_FILETYPES_JAVA]->comment_close = g_strdup("*/");
 
-#define PAS // to avoid warnings when building under Windows, the symbol PASCAL is there defined
+#define PAS /* to avoid warnings when building under Windows, the symbol PASCAL is there defined */
 	filetypes[GEANY_FILETYPES_PASCAL]->id = GEANY_FILETYPES_PASCAL;
 	filetypes[GEANY_FILETYPES_PASCAL]->uid = FILETYPE_UID_PASCAL;
 	filetypes[GEANY_FILETYPES_PASCAL]->lang = 4;
@@ -510,36 +510,36 @@ void filetypes_init()
 	create_sub_menu(sub_menu_markup, sub_item_markup, _("_Markup Languages"));
 	create_sub_menu(sub_menu_misc, sub_item_misc, _("M_iscellaneous Languages"));
 
-	// Append all filetypes to the filetype menu
+	/* Append all filetypes to the filetype menu */
 	for (ft_id = 0; ft_id < GEANY_MAX_FILE_TYPES; ft_id++)
 	{
 		filetype *ft = filetypes[ft_id];
 		const gchar *title = ft->title;
 
-		// insert separators for different filetype groups
+		/* insert separators for different filetype groups */
 		switch (ft_id)
 		{
-			case GEANY_FILETYPES_GROUP_COMPILED:	// programming
+			case GEANY_FILETYPES_GROUP_COMPILED:	/* programming */
 			{
 				sub_menu = sub_menu_programming;
 				break;
 			}
-			case GEANY_FILETYPES_GROUP_SCRIPT:	// scripts
+			case GEANY_FILETYPES_GROUP_SCRIPT:	/* scripts */
 			{
 				sub_menu = sub_menu_scripts;
 				break;
 			}
-			case GEANY_FILETYPES_GROUP_MARKUP:	// markup
-			{	// (include also CSS, not really markup but fit quite well to HTML)
+			case GEANY_FILETYPES_GROUP_MARKUP:	/* markup */
+			{	/* (include also CSS, not really markup but fit quite well to HTML) */
 				sub_menu = sub_menu_markup;
 				break;
 			}
-			case GEANY_FILETYPES_GROUP_MISC:	// misc
+			case GEANY_FILETYPES_GROUP_MISC:	/* misc */
 			{
 				sub_menu = sub_menu_misc;
 				break;
 			}
-			case GEANY_FILETYPES_ALL:	// none
+			case GEANY_FILETYPES_ALL:	/* none */
 			{
 				sub_menu = filetype_menu;
 				title = _("None");
@@ -553,7 +553,7 @@ void filetypes_init()
 }
 
 
-// If uid is valid, return corresponding filetype, otherwise NULL.
+/* If uid is valid, return corresponding filetype, otherwise NULL. */
 filetype *filetypes_get_from_uid(gint uid)
 {
 	gint i;
@@ -580,7 +580,7 @@ static filetype *find_shebang(gint idx)
 		gchar *basename_interpreter = tmp;
 
 		if (strncmp(tmp, "env ", 4) == 0 && strlen(tmp) > 4)
-		{	// skip "env" and read the following interpreter
+		{	/* skip "env" and read the following interpreter */
 			basename_interpreter +=4;
 		}
 
@@ -613,15 +613,15 @@ static filetype *find_shebang(gint idx)
 
 		g_free(tmp);
 	}
-	// detect XML files
+	/* detect XML files */
 	if (strncmp(line, "<?xml", 5) == 0)
 	{
-		// HTML and DocBook files might also start with <?xml, so detect them based on filename
-		// extension and use the detected filetype, else assume XML
+		/* HTML and DocBook files might also start with <?xml, so detect them based on filename
+		 * extension and use the detected filetype, else assume XML */
 		ft = filetypes_detect_from_filename(doc_list[idx].file_name);
 		if (FILETYPE_ID(ft) != GEANY_FILETYPES_HTML &&
 			FILETYPE_ID(ft) != GEANY_FILETYPES_DOCBOOK &&
-			FILETYPE_ID(ft) != GEANY_FILETYPES_PERL &&	// Perl, Python and PHP only to be safe
+			FILETYPE_ID(ft) != GEANY_FILETYPES_PERL &&	/* Perl, Python and PHP only to be safe */
 			FILETYPE_ID(ft) != GEANY_FILETYPES_PHP &&
 			FILETYPE_ID(ft) != GEANY_FILETYPES_PYTHON)
 
@@ -645,8 +645,8 @@ filetype *filetypes_detect_from_file(gint idx)
 	if (! DOC_IDX_VALID(idx))
 		return filetypes[GEANY_FILETYPES_ALL];
 
-	// try to find a shebang and if found use it prior to the filename extension
-	// also checks for <?xml
+	/* try to find a shebang and if found use it prior to the filename extension
+	 * also checks for <?xml */
 	ft = find_shebang(idx);
 	if (ft != NULL) return ft;
 
@@ -665,10 +665,10 @@ filetype *filetypes_detect_from_filename(const gchar *utf8_filename)
 	gchar *base_filename;
 	gint i, j;
 
-	// to match against the basename of the file(because of Makefile*)
+	/* to match against the basename of the file(because of Makefile*) */
 	base_filename = g_path_get_basename(utf8_filename);
 #ifdef G_OS_WIN32
-	// use lower case basename
+	/* use lower case basename */
 	setptr(base_filename, g_utf8_strdown(base_filename, -1));
 #endif
 
@@ -694,7 +694,7 @@ filetype *filetypes_detect_from_filename(const gchar *utf8_filename)
 
 void filetypes_select_radio_item(const filetype *ft)
 {
-	// app->ignore_callback has to be set by the caller
+	/* app->ignore_callback has to be set by the caller */
 	if (ft == NULL)
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(
 			radio_items[filetypes[GEANY_FILETYPES_ALL]->id]), TRUE);
@@ -763,7 +763,7 @@ static void load_settings(gint ft, GKeyFile *config, GKeyFile *configh)
 	GError *error = NULL;
 	gboolean tmp;
 
-	// default extension
+	/* default extension */
 	result = g_key_file_get_string(configh, "settings", "extension", NULL);
 	if (result == NULL) result = g_key_file_get_string(config, "settings", "extension", NULL);
 	if (result != NULL)
@@ -771,7 +771,7 @@ static void load_settings(gint ft, GKeyFile *config, GKeyFile *configh)
 		setptr(filetypes[ft]->extension, result);
 	}
 
-	// read comment notes
+	/* read comment notes */
 	result = g_key_file_get_string(configh, "settings", "comment_open", NULL);
 	if (result == NULL) result = g_key_file_get_string(config, "settings", "comment_open", NULL);
 	if (result != NULL)
@@ -799,7 +799,7 @@ static void load_settings(gint ft, GKeyFile *config, GKeyFile *configh)
 	}
 	else filetypes[ft]->comment_use_indent = tmp;
 
-	// read context action
+	/* read context action */
 	result = g_key_file_get_string(configh, "settings", "context_action_cmd", NULL);
 	if (result == NULL) result = g_key_file_get_string(config, "settings", "context_action_cmd", NULL);
 	if (result != NULL)
@@ -807,7 +807,7 @@ static void load_settings(gint ft, GKeyFile *config, GKeyFile *configh)
 		filetypes[ft]->context_action_cmd = result;
 	}
 
-	// read build settings
+	/* read build settings */
 	result = g_key_file_get_string(configh, "build_settings", "compiler", NULL);
 	if (result == NULL) result = g_key_file_get_string(config, "build_settings", "compiler", NULL);
 	if (result != NULL)
@@ -874,7 +874,7 @@ void filetypes_load_config(gint ft_id)
 	config = g_key_file_new();
 	config_home = g_key_file_new();
 	{
-		// highlighting uses GEANY_FILETYPES_ALL for common settings
+		/* highlighting uses GEANY_FILETYPES_ALL for common settings */
 		gchar *ext = (ft_id != GEANY_FILETYPES_ALL) ?
 			filetypes_get_conf_extension(ft_id) : g_strdup("common");
 		gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.", ext, NULL);
@@ -901,7 +901,7 @@ gchar *filetypes_get_conf_extension(gint filetype_idx)
 {
 	gchar *result;
 
-	// Handle any special extensions different from lowercase filetype->name
+	/* Handle any special extensions different from lowercase filetype->name */
 	switch (filetype_idx)
 	{
 		case GEANY_FILETYPES_CPP: result = g_strdup("cpp"); break;
@@ -985,8 +985,6 @@ GtkFileFilter *filetypes_create_file_filter(filetype *ft)
 	new_filter = gtk_file_filter_new();
 	gtk_file_filter_set_name(new_filter, ft->title);
 
-	// (GEANY_FILETYPES_MAX_PATTERNS - 1) because the last field in pattern is NULL
-	//for (i = 0; i < (GEANY_MAX_PATTERNS - 1) && ft->pattern[i]; i++)
 	for (i = 0; ft->pattern[i]; i++)
 	{
 		gtk_file_filter_add_pattern(new_filter, ft->pattern[i]);
@@ -996,7 +994,7 @@ GtkFileFilter *filetypes_create_file_filter(filetype *ft)
 }
 
 
-// Indicates whether there is a tag parser for the filetype or not.
+/* Indicates whether there is a tag parser for the filetype or not. */
 gboolean filetype_has_tags(filetype *ft)
 {
 	g_return_val_if_fail(ft != NULL, FALSE);

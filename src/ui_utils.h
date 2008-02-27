@@ -28,7 +28,7 @@
 typedef struct UIPrefs
 {
 	/* State of the main window when Geany was closed */
-	gint		geometry[5];	// 0:x, 1:y, 2:width, 3:height, flag for maximized state
+	gint		geometry[5];	/* 0:x, 1:y, 2:width, 3:height, flag for maximized state */
 	gboolean	fullscreen;
 	gboolean	sidebar_visible;
 	gboolean	msgwindow_visible;

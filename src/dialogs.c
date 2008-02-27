@@ -84,7 +84,7 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 						lookup_widget(GTK_WIDGET(dialog), "encoding_combo")));
 		filetype *ft = NULL;
 		gchar *charset = NULL;
-		gboolean ro = (response == GTK_RESPONSE_APPLY);	// View clicked
+		gboolean ro = (response == GTK_RESPONSE_APPLY);	/* View clicked */
 
 		if (filetype_idx >= 0 && filetype_idx < GEANY_FILETYPES_ALL) ft = filetypes[filetype_idx];
 		if (encoding_idx >= 0 && encoding_idx < GEANY_ENCODINGS_MAX)
@@ -94,7 +94,7 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 		if (filelist != NULL)
 		{
 			document_open_files(filelist, ro, ft, charset);
-			g_slist_foreach(filelist, (GFunc) g_free, NULL);	// free filenames
+			g_slist_foreach(filelist, (GFunc) g_free, NULL);	/* free filenames */
 		}
 		g_slist_free(filelist);
 	}
@@ -103,7 +103,7 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 
 
 #if ! GEANY_USE_WIN32_DIALOG
-// callback for the text entry for typing in filename
+/* callback for the text entry for typing in filename */
 static void
 on_file_open_entry_activate            (GtkEntry        *entry,
                                         gpointer         user_data)
@@ -135,7 +135,7 @@ on_file_open_selection_changed         (GtkFileChooser  *filechooser,
 
 	if (filename)
 	{
-		// try to get the UTF-8 equivalent for the filename, fallback to filename if error
+		/* try to get the UTF-8 equivalent for the filename, fallback to filename if error */
 		gchar *utf8_filename = utils_get_utf8_from_locale(filename);
 
 		gtk_entry_set_text(GTK_ENTRY(lookup_widget(
@@ -196,15 +196,15 @@ static void create_open_file_dialog(void)
 	gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_filesel), GTK_WINDOW(app->window));
 	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(ui_widgets.open_filesel), TRUE);
 
-	// add checkboxes and filename entry
+	/* add checkboxes and filename entry */
 	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
 		add_file_open_extra_widget());
 	filetype_combo = lookup_widget(ui_widgets.open_filesel, "filetype_combo");
 
-	// add FileFilters(start with "All Files")
+	/* add FileFilters(start with "All Files") */
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
 				filetypes_create_file_filter(filetypes[GEANY_FILETYPES_ALL]));
-	// now create meta filter "All Source"
+	/* now create meta filter "All Source" */
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
 				filetypes_create_file_filter_all_source());
 	for (i = 0; i < GEANY_MAX_FILE_TYPES - 1; i++)
@@ -216,7 +216,7 @@ static void create_open_file_dialog(void)
 	gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), _("Detect by file extension"));
 	gtk_combo_box_set_active(GTK_COMBO_BOX(filetype_combo), GEANY_MAX_FILE_TYPES - 1);
 
-	// fill encoding combo box
+	/* fill encoding combo box */
 	encoding_combo = lookup_widget(ui_widgets.open_filesel, "encoding_combo");
 	for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
 	{
@@ -242,11 +242,11 @@ void dialogs_show_open_file()
 {
 	gchar *initdir;
 
-	// set dialog directory to the current file's directory, if present
+	/* set dialog directory to the current file's directory, if present */
 	initdir = utils_get_current_file_dir_utf8();
 
-	// use project or default startup directory (if set) if no files are open
-	/// TODO should it only be used when initally open the dialog and not on every show?
+	/* use project or default startup directory (if set) if no files are open */
+	/** TODO should it only be used when initally open the dialog and not on every show? */
 	if (! initdir)
 		initdir = g_strdup(utils_get_default_dir_utf8());
 
@@ -256,8 +256,8 @@ void dialogs_show_open_file()
 	win32_show_file_dialog(TRUE, initdir);
 #else /* X11, not win32: use GTK_FILE_CHOOSER */
 
-	/* We use the same file selection widget each time, so first
-		of all we create it if it hasn't already been created. */
+	/* We use the same file selection widget each time, so first of all we create it
+	 * if it hasn't already been created. */
 	if (ui_widgets.open_filesel == NULL)
 		create_open_file_dialog();
 
@@ -287,7 +287,7 @@ static GtkWidget *add_file_open_extra_widget()
 
 	table = gtk_table_new(2, 4, FALSE);
 
-	// line 1 with checkbox and encoding combo
+	/* line 1 with checkbox and encoding combo */
 	check_hidden = gtk_check_button_new_with_mnemonic(_("Show _hidden files"));
 	gtk_button_set_focus_on_click(GTK_BUTTON(check_hidden), FALSE);
 	gtk_widget_show(check_hidden);
@@ -295,7 +295,7 @@ static GtkWidget *add_file_open_extra_widget()
 					(GtkAttachOptions) (GTK_FILL | GTK_EXPAND),
 					(GtkAttachOptions) (0), 0, 5);
 
-	// spacing
+	/* spacing */
 	gtk_table_attach(GTK_TABLE(table), gtk_label_new(""), 1, 2, 0, 1,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 5, 5);
@@ -305,7 +305,7 @@ static GtkWidget *add_file_open_extra_widget()
 	gtk_table_attach(GTK_TABLE(table), encoding_label, 2, 3, 0, 1,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 4, 5);
-	// the ebox is for the tooltip, because gtk_combo_box can't show tooltips
+	/* the ebox is for the tooltip, because gtk_combo_box can't show tooltips */
 	encoding_ebox = gtk_event_box_new();
 	encoding_combo = gtk_combo_box_new_text();
 	gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(encoding_combo), 3);
@@ -316,16 +316,16 @@ static GtkWidget *add_file_open_extra_widget()
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 5);
 
-	// line 2 with filename entry and filetype combo
+	/* line 2 with filename entry and filetype combo */
 	file_entry = gtk_entry_new();
 	gtk_widget_show(file_entry);
-	//gtk_editable_set_editable(GTK_EDITABLE(file_entry), FALSE);
+	/*gtk_editable_set_editable(GTK_EDITABLE(file_entry), FALSE);*/
 	gtk_entry_set_activates_default(GTK_ENTRY(file_entry), TRUE);
 	gtk_table_attach(GTK_TABLE(table), file_entry, 0, 1, 1, 2,
 					(GtkAttachOptions) (GTK_FILL | GTK_EXPAND),
 					(GtkAttachOptions) (0), 0, 5);
 
-	// spacing
+	/* spacing */
 	gtk_table_attach(GTK_TABLE(table), gtk_label_new(""), 1, 2, 1, 2,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 5, 5);
@@ -335,7 +335,7 @@ static GtkWidget *add_file_open_extra_widget()
 	gtk_table_attach(GTK_TABLE(table), filetype_label, 2, 3, 1, 2,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 4, 5);
-	// the ebox is for the tooltip, because gtk_combo_box can't show tooltips
+	/* the ebox is for the tooltip, because gtk_combo_box can't show tooltips */
 	filetype_ebox = gtk_event_box_new();
 	filetype_combo = gtk_combo_box_new_text();
 	gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(filetype_combo), 2);
@@ -386,7 +386,7 @@ static void handle_save_as(const gchar *utf8_filename, gboolean open_new_tab,
 	g_return_if_fail(NZV(utf8_filename));
 
 	if (open_new_tab)
-	{	// "open" the saved file in a new tab
+	{	/* "open" the saved file in a new tab */
 		idx = document_clone(idx, utf8_filename);
 	}
 	else
@@ -402,7 +402,7 @@ static void handle_save_as(const gchar *utf8_filename, gboolean open_new_tab,
 				g_free(old_filename);
 				g_free(new_filename);
 			}
-			// create a new tm_source_file object otherwise tagmanager won't work correctly
+			/* create a new tm_source_file object otherwise tagmanager won't work correctly */
 			tm_workspace_remove_object(doc_list[idx].tm_file, TRUE, TRUE);
 			doc_list[idx].tm_file = NULL;
 			g_free(doc_list[idx].file_name);
@@ -416,7 +416,7 @@ static void handle_save_as(const gchar *utf8_filename, gboolean open_new_tab,
 	if (! open_new_tab)
 		build_menu_update(idx);
 
-	// finally add current file to recent files menu
+	/* finally add current file to recent files menu */
 	ui_add_recent_file(doc_list[idx].file_name);
 }
 
@@ -432,7 +432,7 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 	{
 		case GEANY_RESPONSE_RENAME:
 			rename_file = TRUE;
-			// fall through
+			/* fall through */
 		case GTK_RESPONSE_ACCEPT:
 		{
 			gchar *new_filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(ui_widgets.save_filesel));
@@ -440,14 +440,14 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 					GTK_TOGGLE_BUTTON(lookup_widget(ui_widgets.save_filesel, "check_open_new_tab")));
 			gchar *utf8_filename;
 
-			if (! NZV(new_filename))	// rename doesn't check for empty filename
+			if (! NZV(new_filename))	/* rename doesn't check for empty filename */
 			{
 				utils_beep();
 				g_free(new_filename);
 				return;
 			}
 			utf8_filename = utils_get_utf8_from_locale(new_filename);
-			// check if file exists and ask whether to overwrite or not
+			/* check if file exists and ask whether to overwrite or not */
 			if (g_file_test(new_filename, G_FILE_TEST_EXISTS))
 			{
 				if (dialogs_show_question(
@@ -570,11 +570,11 @@ static gboolean gtk_show_save_as(const gchar *initdir)
 		g_free(fname);
 	}
 
-	// if the folder wasn't set so far, we set it to the given directory
+	/* if the folder wasn't set so far, we set it to the given directory */
 	if (! folder_set && initdir != NULL && g_path_is_absolute(initdir))
 		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(ui_widgets.save_filesel), initdir);
 
-	// Run the dialog synchronously, pausing this function call
+	/* Run the dialog synchronously, pausing this function call */
 	resp = gtk_dialog_run(GTK_DIALOG(ui_widgets.save_filesel));
 	return (resp == GTK_RESPONSE_ACCEPT);
 }
@@ -593,8 +593,8 @@ gboolean dialogs_show_save_as()
 
 	initdir = utils_get_current_file_dir_utf8();
 
-	// use project or default startup directory (if set) if no files are open
-	/// TODO should it only be used when initally open the dialog and not on every show?
+	/* use project or default startup directory (if set) if no files are open */
+	/** TODO should it only be used when initally open the dialog and not on every show? */
 	if (! initdir)
 		initdir = g_strdup(utils_get_default_dir_utf8());
 
@@ -652,7 +652,7 @@ void dialogs_show_msgbox_with_secondary(gint type, const gchar *text, const gcha
 #endif
 
 #ifdef G_OS_WIN32
-	// put the two strings together because Windows message boxes don't support secondary texts
+	/* put the two strings together because Windows message boxes don't support secondary texts */
 	gchar *string = g_strconcat(text, "\n", secondary, NULL);
 	win32_message_dialog(NULL, type, string);
 	g_free(string);
@@ -675,7 +675,7 @@ gboolean dialogs_show_unsaved_file(gint idx)
 	gchar *msg, *msg2, *short_fn = NULL;
 	gint ret;
 
-	// display the file tab to remind the user of the document
+	/* display the file tab to remind the user of the document */
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
 		document_get_notebook_page(idx));
 
@@ -720,7 +720,7 @@ gboolean dialogs_show_unsaved_file(gint idx)
 				ret = dialogs_show_save_as();
 			}
 			else
-				// document_save_file() returns the status if the file could be saved
+				/* document_save_file() returns the status if the file could be saved */
 				ret = document_save_file(idx, FALSE);
 			break;
 		}
@@ -751,7 +751,7 @@ static void
 on_font_ok_button_clicked              (GtkButton       *button,
                                         gpointer         user_data)
 {
-	// We do the same thing as apply, but we close the dialog after.
+	/* We do the same thing as apply, but we close the dialog after. */
 	on_font_apply_button_clicked(button, NULL);
 	gtk_widget_hide(ui_widgets.open_fontsel);
 }
@@ -856,7 +856,7 @@ static void add_input_widgets(GtkWidget *dialog, GtkWidget *vbox,
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 	gtk_container_add(GTK_CONTAINER(vbox), label);
 
-	if (persistent)	// remember previous entry text in a combo box
+	if (persistent)	/* remember previous entry text in a combo box */
 	{
 		GtkWidget *combo = gtk_combo_box_entry_new_text();
 
@@ -961,7 +961,7 @@ void dialogs_show_file_properties(gint idx)
 	gint mode = 0;
 #endif
 
-// define this ones, to avoid later trouble
+/* define this ones, to avoid later trouble */
 #ifndef S_IRUSR
 # define S_IRUSR 0
 # define S_IWUSR 0
@@ -988,8 +988,8 @@ void dialogs_show_file_properties(gint idx)
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 	if (g_stat(locale_filename, &st) == 0)
 	{
-		// first copy the returned string and the trim it, to not modify the static glibc string
-		// g_strchomp() is used to remove trailing EOL chars, which are there for whatever reason
+		/* first copy the returned string and the trim it, to not modify the static glibc string
+		 * g_strchomp() is used to remove trailing EOL chars, which are there for whatever reason */
 		time_changed  = g_strchomp(g_strdup(ctime(&st.st_ctime)));
 		time_modified = g_strchomp(g_strdup(ctime(&st.st_mtime)));
 		time_accessed = g_strchomp(g_strdup(ctime(&st.st_atime)));
@@ -1157,10 +1157,10 @@ void dialogs_show_file_properties(gint idx)
 					(GtkAttachOptions) (0), 0, 0);
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 
-	// add table
+	/* add table */
 	gtk_container_add(GTK_CONTAINER(vbox), table);
 
-	// create table with the permissions
+	/* create table with the permissions */
 	perm_table = gtk_table_new(5, 4, TRUE);
 	gtk_table_set_row_spacings(GTK_TABLE(perm_table), 5);
 	gtk_table_set_col_spacings(GTK_TABLE(perm_table), 5);
@@ -1172,7 +1172,7 @@ void dialogs_show_file_properties(gint idx)
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 
-	// Header
+	/* Header */
 	label = gtk_label_new(_("Read:"));
 	gtk_table_attach(GTK_TABLE(perm_table), label, 1, 2, 1, 2,
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
@@ -1194,7 +1194,7 @@ void dialogs_show_file_properties(gint idx)
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0);
 
-	// Owner
+	/* Owner */
 	label = gtk_label_new(_("Owner:"));
 	gtk_table_attach(GTK_TABLE(perm_table), label, 0, 1, 2, 3,
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
@@ -1230,7 +1230,7 @@ void dialogs_show_file_properties(gint idx)
 	gtk_button_set_alignment(GTK_BUTTON(check), 0.5, 0);
 
 
-	// Group
+	/* Group */
 	label = gtk_label_new(_("Group:"));
 	gtk_table_attach(GTK_TABLE(perm_table), label, 0, 1, 3, 4,
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
@@ -1266,7 +1266,7 @@ void dialogs_show_file_properties(gint idx)
 	gtk_button_set_alignment(GTK_BUTTON(check), 0.5, 0);
 
 
-	// Other
+	/* Other */
 	label = gtk_label_new(_("Other:"));
 	gtk_table_attach(GTK_TABLE(perm_table), label, 0, 1, 4, 5,
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
@@ -1332,12 +1332,12 @@ static gboolean show_question(GtkWidget *parent, const gchar *yes_btn, const gch
 		GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_QUESTION,
 		GTK_BUTTONS_NONE, "%s", question_text);
 	gtk_widget_set_name(dialog, "GeanyDialog");
-	// question_text will be in bold if optional extra_text used
+	/* question_text will be in bold if optional extra_text used */
 	if (extra_text != NULL)
 		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
 			"%s", extra_text);
 
-	// For a cancel button, use cancel response so user can press escape to cancel
+	/* For a cancel button, use cancel response so user can press escape to cancel */
 	gtk_dialog_add_button(GTK_DIALOG(dialog), no_btn,
 		utils_str_equal(no_btn, GTK_STOCK_CANCEL) ? GTK_RESPONSE_CANCEL : GTK_RESPONSE_NO);
 	gtk_dialog_add_button(GTK_DIALOG(dialog), yes_btn, GTK_RESPONSE_YES);

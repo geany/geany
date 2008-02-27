@@ -27,25 +27,25 @@
 
 typedef void (*KBCallback) (guint key_id);
 
-// holds all user-definable key bindings
+/* holds all user-definable key bindings */
 typedef struct KeyBinding
 {
 	guint key;
 	GdkModifierType mods;
-	// at the moment only needed as keys for the configuration file because indices or translatable
-	// strings as keys are not very useful
+	/* at the moment only needed as keys for the configuration file because indices or translatable
+	 * strings as keys are not very useful */
 	const gchar *name;
 	const gchar *label;
-	// function pointer to a callback function, just to keep the code in keypress event
-	// callback function clear
+	/* function pointer to a callback function, just to keep the code in keypress event
+	 * callback function clear */
 	KBCallback cb_func;
-	// string to use as a section name in the preferences dialog in keybinding treeview as well as
-	// in the keybinding help dialog, set only for the first binding in the section
+	/* string to use as a section name in the preferences dialog in keybinding treeview as well as
+	 * in the keybinding help dialog, set only for the first binding in the section */
 	gchar *section;
 } KeyBinding;
 
 
-// allowed modifier keys (especially no Caps lock, no Num lock)
+/* allowed modifier keys (especially NOT Caps lock, no Num lock) */
 #if GTK_CHECK_VERSION(2, 10, 0)
 # define GEANY_KEYS_MODIFIER_MASK (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_MOD1_MASK | \
 								   GDK_META_MASK | GDK_SUPER_MASK | GDK_HYPER_MASK)
@@ -53,7 +53,7 @@ typedef struct KeyBinding
 # define GEANY_KEYS_MODIFIER_MASK (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_MOD1_MASK)
 #endif
 
-// Plugin API
+/* Plugin API */
 typedef enum
 {
 	GEANY_KEYS_GROUP_FILE = 0,

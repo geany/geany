@@ -51,13 +51,13 @@ ProjectPrefs project_prefs = { NULL, 0 };
 
 static struct
 {
-	gchar *project_file_path; // in UTF-8
+	gchar *project_file_path; /* in UTF-8 */
 } local_prefs = {NULL};
 
 
 static gboolean entries_modified;
 
-// simple struct to keep references to the elements of the properties dialog
+/* simple struct to keep references to the elements of the properties dialog */
 typedef struct _PropertyDialogElements
 {
 	GtkWidget *dialog;
@@ -85,8 +85,8 @@ static void on_entries_changed(GtkEditable *editable, PropertyDialogElements *e)
 #define SHOW_ERR(args) dialogs_show_msgbox(GTK_MESSAGE_ERROR, args)
 #define SHOW_ERR1(args,more) dialogs_show_msgbox(GTK_MESSAGE_ERROR, args, more)
 #define MAX_NAME_LEN 50
-// "projects" is part of the default project base path so be careful when translating
-// please avoid special characters and spaces, look at the source for details or ask Frank
+/* "projects" is part of the default project base path so be careful when translating
+ * please avoid special characters and spaces, look at the source for details or ask Frank */
 #define PROJECT_DIR _("projects")
 
 
@@ -168,9 +168,9 @@ void project_new()
 
 	gtk_container_add(GTK_CONTAINER(vbox), table);
 
-	// signals
+	/* signals */
 	g_signal_connect((gpointer) e->name, "changed", G_CALLBACK(on_name_entry_changed), e);
-	// run the callback manually to initialise the base_path and file_name fields
+	/* run the callback manually to initialise the base_path and file_name fields */
 	on_name_entry_changed(GTK_EDITABLE(e->name), e);
 
 	g_signal_connect((gpointer) e->file_name, "changed", G_CALLBACK(on_entries_changed), e);
@@ -201,7 +201,7 @@ static void run_open_dialog(GtkDialog *dialog)
 	{
 		gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
 
-		// try to load the config
+		/* try to load the config */
 		if (! project_load_file(filename))
 		{
 			gchar *utf8_filename = utils_get_utf8_from_locale(filename);
@@ -216,8 +216,8 @@ static void run_open_dialog(GtkDialog *dialog)
 		if (project_prefs.project_session)
 		{
 			configuration_open_files();
-			// open a new file if no other file was opened
-			/// TODO refactor the following into a function to be used here and in main()
+			/* open a new file if no other file was opened */
+			/** TODO refactor the following into a function to be used here and in main() */
 			if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
 				document_new_file(NULL, NULL, NULL);
 		}
@@ -242,7 +242,7 @@ void project_open()
 	file = win32_show_project_open_dialog(app->window, _("Open Project"), dir, FALSE, TRUE);
 	if (file != NULL)
 	{
-		// try to load the config
+		/* try to load the config */
 		if (! project_load_file(file))
 		{
 			SHOW_ERR1(_("Project file \"%s\" could not be loaded."), file);
@@ -250,7 +250,7 @@ void project_open()
 		else if (project_prefs.project_session)
 		{
 			configuration_open_files();
-			// open a new file if no other file was opened
+			/* open a new file if no other file was opened */
 			if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
 				document_new_file(NULL, NULL, NULL);
 		}
@@ -264,7 +264,7 @@ void project_open()
 			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
 	gtk_widget_set_name(dialog, "GeanyDialogProject");
 
-	// set default Open, so pressing enter can open multiple files
+	/* set default Open, so pressing enter can open multiple files */
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
 	gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
 	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), TRUE);
@@ -272,7 +272,7 @@ void project_open()
 	gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(app->window));
 	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(dialog), TRUE);
 
-	// add FileFilters
+	/* add FileFilters */
 	filter = gtk_file_filter_new();
 	gtk_file_filter_set_name(filter, _("All files"));
 	gtk_file_filter_add_pattern(filter, "*");
@@ -298,7 +298,7 @@ void project_open()
 }
 
 
-// Called when opening, closing and updating projects.
+/* Called when opening, closing and updating projects. */
 static void update_ui(void)
 {
 	ui_set_window_title(-1);
@@ -306,7 +306,7 @@ static void update_ui(void)
 }
 
 
-// open_default will make function reload default session files on close
+/* open_default will make function reload default session files on close */
 void project_close(gboolean open_default)
 {
 	gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
@@ -314,7 +314,7 @@ void project_close(gboolean open_default)
 
 	ui_set_statusbar(TRUE, _("Project \"%s\" closed."), app->project->name);
 
-	// use write_config() to save project session files
+	/* use write_config() to save project session files */
 	write_config(FALSE);
 
 	g_free(app->project->name);
@@ -328,19 +328,19 @@ void project_close(gboolean open_default)
 
 	if (project_prefs.project_session)
 	{
-		// close all existing tabs first
+		/* close all existing tabs first */
 		for (i = 0; i < max; i++)
 		{
 			if (! document_remove(0))
 				break;
 		}
 
-		// after closing all tabs let's open the tabs found in the default config
+		/* after closing all tabs let's open the tabs found in the default config */
 		if (open_default == TRUE && cl_options.load_session)
 		{
 			configuration_reload_default_session();
 			configuration_open_files();
-			// open a new file if no other file was opened
+			/* open a new file if no other file was opened */
 			if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
 				document_new_file(NULL, NULL, NULL);
 		}
@@ -398,7 +398,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	gtk_misc_set_alignment(GTK_MISC(label), -1, 0);
 
 	e->file_name = gtk_entry_new();
-	gtk_editable_set_editable(GTK_EDITABLE(e->file_name), FALSE);	// read-only
+	gtk_editable_set_editable(GTK_EDITABLE(e->file_name), FALSE);	/* read-only */
 	gtk_table_attach(GTK_TABLE(table), e->file_name, 1, 2, 1, 2,
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
@@ -467,7 +467,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 
 #if 0
 	label = gtk_label_new(_("File patterns:"));
-	// <small>Separate multiple patterns by a new line</small>
+	/* <small>Separate multiple patterns by a new line</small> */
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 6, 7,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (GTK_FILL), 0, 0);
@@ -500,18 +500,18 @@ void project_properties()
 
 	create_properties_dialog(e);
 
-	// fill the elements with the appropriate data
+	/* fill the elements with the appropriate data */
 	gtk_entry_set_text(GTK_ENTRY(e->name), p->name);
 
 	if (p->description != NULL)
-	{	// set text
+	{	/* set text */
 		GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e->description));
 		gtk_text_buffer_set_text(buffer, p->description, -1);
 	}
 
 #if 0
 	if (p->file_patterns != NULL)
-	{	// set the file patterns
+	{	/* set the file patterns */
 		gint i;
 		gint len = g_strv_length(p->file_patterns);
 		GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e->patterns));
@@ -545,7 +545,7 @@ void project_properties()
 	{
 		if (! update_config(e))
 			goto retry;
-		// successfully updated properties
+		/* successfully updated properties */
 		update_ui();
 	}
 
@@ -612,7 +612,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 		return FALSE;
 	}
 
-	// finally test whether the given project file can be written
+	/* finally test whether the given project file can be written */
 	locale_filename = utils_get_locale_from_utf8(file_name);
 	if ((err_code = utils_is_file_writeable(locale_filename)) != 0)
 	{
@@ -623,11 +623,11 @@ static gboolean update_config(const PropertyDialogElements *e)
 
 	base_path = gtk_entry_get_text(GTK_ENTRY(e->base_path));
 	if (NZV(base_path))
-	{	// check whether the given directory actually exists
+	{	/* check whether the given directory actually exists */
 		gchar *locale_path = utils_get_locale_from_utf8(base_path);
 
 		if (! g_path_is_absolute(locale_path))
-		{	// relative base path, so add base dir of project file name
+		{	/* relative base path, so add base dir of project file name */
 			gchar *dir = g_path_get_dirname(locale_filename);
 			setptr(locale_path, g_strconcat(dir, G_DIR_SEPARATOR_S, locale_path, NULL));
 			g_free(dir);
@@ -667,12 +667,12 @@ static gboolean update_config(const PropertyDialogElements *e)
 	p->file_name = g_strdup(file_name);
 
 	if (p->base_path != NULL) g_free(p->base_path);
-	p->base_path = g_strdup(NZV(base_path) ? base_path : "./"); // use "." if base_path is empty
+	p->base_path = g_strdup(NZV(base_path) ? base_path : "./"); /* use "." if base_path is empty */
 
-	if (! new_project)	// save properties specific fields
+	if (! new_project)	/* save properties specific fields */
 	{
 		GtkTextIter start, end;
-		//gchar *tmp;
+		/*gchar *tmp;*/
 		GtkTextBuffer *buffer;
 
 		p->make_in_base_path = gtk_toggle_button_get_active(
@@ -680,7 +680,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 		if (p->run_cmd != NULL) g_free(p->run_cmd);
 		p->run_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(e->run_cmd)));
 
-		// get and set the project description
+		/* get and set the project description */
 		buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e->description));
 		gtk_text_buffer_get_start_iter(buffer, &start);
 		gtk_text_buffer_get_end_iter(buffer, &end);
@@ -688,7 +688,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 		p->description = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
 
 #if 0
-		// get and set the project file patterns
+		/* get and set the project file patterns */
 		buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e->patterns));
 		gtk_text_buffer_get_start_iter(buffer, &start);
 		gtk_text_buffer_get_end_iter(buffer, &end);
@@ -711,7 +711,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 #ifndef G_OS_WIN32
 static void run_dialog(GtkWidget *dialog, GtkWidget *entry)
 {
-	// set filename in the file chooser dialog
+	/* set filename in the file chooser dialog */
 	const gchar *utf8_filename = gtk_entry_get_text(GTK_ENTRY(entry));
 	gchar *locale_filename = utils_get_locale_from_utf8(utf8_filename);
 
@@ -719,7 +719,7 @@ static void run_dialog(GtkWidget *dialog, GtkWidget *entry)
 	{
 		if (g_file_test(locale_filename, G_FILE_TEST_EXISTS))
 			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), utf8_filename);
-		else // if the file doesn't yet exist, use at least the current directory
+		else /* if the file doesn't yet exist, use at least the current directory */
 		{
 			gchar *locale_dir = g_path_get_dirname(locale_filename);
 			gchar *name = g_path_get_basename(utf8_filename);
@@ -739,7 +739,7 @@ static void run_dialog(GtkWidget *dialog, GtkWidget *entry)
 	}
 	g_free(locale_filename);
 
-	// run it
+	/* run it */
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
 		gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
@@ -768,7 +768,7 @@ static void on_file_save_button_clicked(GtkButton *button, PropertyDialogElement
 #else
 	GtkWidget *dialog;
 
-	// initialise the dialog
+	/* initialise the dialog */
 	dialog = gtk_file_chooser_dialog_new(_("Choose Project Filename"), NULL,
 					GTK_FILE_CHOOSER_ACTION_SAVE,
 					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -797,7 +797,7 @@ static void on_file_open_button_clicked(GtkButton *button, PropertyDialogElement
 #else
 	GtkWidget *dialog;
 
-	// initialise the dialog
+	/* initialise the dialog */
 	dialog = gtk_file_chooser_dialog_new(_("Choose Project Run Command"), NULL,
 					GTK_FILE_CHOOSER_ACTION_OPEN,
 					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -884,7 +884,7 @@ static gboolean load_config(const gchar *filename)
 	GKeyFile *config;
 	GeanyProject *p;
 
-	// there should not be an open project
+	/* there should not be an open project */
 	g_return_val_if_fail(app->project == NULL && filename != NULL, FALSE);
 
 	config = g_key_file_new();
@@ -906,13 +906,13 @@ static gboolean load_config(const gchar *filename)
 
 	if (project_prefs.project_session)
 	{
-		// save current (non-project) session (it could has been changed since program startup)
+		/* save current (non-project) session (it could has been changed since program startup) */
 		configuration_save_default_session();
-		// now close all open files
-		/// TODO make this a general, non-callback function, use it also in project_close()
-		///      and remove include of callbacks.h
+		/* now close all open files */
+		/** TODO make this a general, non-callback function, use it also in project_close()
+		  * and remove include of callbacks.h */
 		on_close_all1_activate(NULL, NULL);
-		// read session files so they can be opened with configuration_open_files()
+		/* read session files so they can be opened with configuration_open_files() */
 		configuration_load_session_files(config);
 	}
 
@@ -945,7 +945,7 @@ static gboolean write_config(gboolean emit_signal)
 	p = app->project;
 
 	config = g_key_file_new();
-	// try to load an existing config to keep manually added comments
+	/* try to load an existing config to keep manually added comments */
 	filename = utils_get_locale_from_utf8(p->file_name);
 	g_key_file_load_from_file(config, filename, G_KEY_FILE_NONE, NULL);
 
@@ -961,7 +961,7 @@ static gboolean write_config(gboolean emit_signal)
 		g_key_file_set_string_list(config, "project", "file_patterns",
 			(const gchar**) p->file_patterns, g_strv_length(p->file_patterns));
 
-	// store the session files into the project too
+	/* store the session files into the project too */
 	if (project_prefs.project_session)
 		configuration_save_session_files(config);
 
@@ -969,7 +969,7 @@ static gboolean write_config(gboolean emit_signal)
 	{
 		g_signal_emit_by_name(geany_object, "project-save", config);
 	}
-	// write the file
+	/* write the file */
 	data = g_key_file_to_data(config, NULL, NULL);
 	ret = (utils_write_file(filename, data) == 0);
 
@@ -995,7 +995,7 @@ gchar *project_get_base_path()
 		if (g_path_is_absolute(project->base_path))
 			return g_strdup(project->base_path);
 		else
-		{	// build base_path out of project file name's dir and base_path
+		{	/* build base_path out of project file name's dir and base_path */
 			gchar *path;
 			gchar *dir = g_path_get_dirname(project->file_name);
 

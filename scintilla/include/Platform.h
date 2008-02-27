@@ -1,18 +1,18 @@
-// Scintilla source code edit control
+/* Scintilla source code edit control */
 /** @file Platform.h
  ** Interface to platform facilities. Also includes some basic utilities.
  ** Implemented in PlatGTK.cxx for GTK+/Linux, PlatWin.cxx for Windows, and PlatWX.cxx for wxWindows.
  **/
-// Copyright 1998-2003 by Neil Hodgson <neilh@scintilla.org>
-// The License.txt file describes the conditions under which this software may be distributed.
+/* Copyright 1998-2003 by Neil Hodgson <neilh@scintilla.org>
+ * The License.txt file describes the conditions under which this software may be distributed. */
 
 #ifndef PLATFORM_H
 #define PLATFORM_H
 
-// PLAT_GTK = GTK+ on Linux or Win32
-// PLAT_GTK_WIN32 is defined additionally when running PLAT_GTK under Win32
-// PLAT_WIN = Win32 API on Win32 OS
-// PLAT_WX is wxWindows on any supported platform
+/* PLAT_GTK = GTK+ on Linux or Win32
+ * PLAT_GTK_WIN32 is defined additionally when running PLAT_GTK under Win32
+ * PLAT_WIN = Win32 API on Win32 OS
+ * PLAT_WX is wxWindows on any supported platform */
 
 #define PLAT_GTK 0
 #define PLAT_GTK_WIN32 0
@@ -52,8 +52,8 @@
 namespace Scintilla {
 #endif
 
-// Underlying the implementation of the platform classes are platform specific types.
-// Sometimes these need to be passed around by client code so they are defined here
+/* Underlying the implementation of the platform classes are platform specific types.
+ * Sometimes these need to be passed around by client code so they are defined here */
 
 typedef void *FontID;
 typedef void *SurfaceID;
@@ -75,7 +75,7 @@ public:
 	explicit Point(int x_=0, int y_=0) : x(x_), y(y_) {
 	}
 
-	// Other automatically defined methods (assignment, copy constructor, destructor) are fine
+	/* Other automatically defined methods (assignment, copy constructor, destructor) are fine */
 
 	static Point FromLong(long lpoint);
 };
@@ -96,7 +96,7 @@ public:
 		left(left_), top(top_), right(right_), bottom(bottom_) {
 	}
 
-	// Other automatically defined methods (assignment, copy constructor, destructor) are fine
+	/* Other automatically defined methods (assignment, copy constructor, destructor) are fine */
 
 	bool operator==(PRectangle &rc) {
 		return (rc.left == left) && (rc.right == right) &&
@@ -240,7 +240,7 @@ struct ColourPair {
 	}
 };
 
-class Window;	// Forward declaration for Palette
+class Window;	/* Forward declaration for Palette */
 
 /**
  * Colour palette management.
@@ -250,10 +250,10 @@ class Palette {
 	int size;
 	ColourPair *entries;
 #if PLAT_GTK
-	void *allocatedPalette; // GdkColor *
+	void *allocatedPalette; /* GdkColor * */
 	int allocatedLen;
 #endif
-	// Private so Palette objects can not be copied
+	/* Private so Palette objects can not be copied */
 	Palette(const Palette &) {}
 	Palette &operator=(const Palette &) { return *this; }
 public:
@@ -286,7 +286,7 @@ protected:
 #if PLAT_WX
 	int ascent;
 #endif
-	// Private so Font objects can not be copied
+	/* Private so Font objects can not be copied */
 	Font(const Font &) {}
 	Font &operator=(const Font &) { id=0; return *this; }
 public:
@@ -298,7 +298,7 @@ public:
 	virtual void Release();
 
 	FontID GetID() { return id; }
-	// Alias another font - caller guarantees not to Release
+	/* Alias another font - caller guarantees not to Release */
 	void SetID(FontID id_) { id = id_; }
 	friend class Surface;
         friend class SurfaceImpl;
@@ -309,7 +309,7 @@ public:
  */
 class Surface {
 private:
-	// Private so Surface objects can not be copied
+	/* Private so Surface objects can not be copied */
 	Surface(const Surface &) {}
 	Surface &operator=(const Surface &) { return *this; }
 public:
@@ -475,13 +475,13 @@ class DynamicLibrary {
 public:
 	virtual ~DynamicLibrary() {};
 
-	/// @return Pointer to function "name", or NULL on failure.
+	/** @return Pointer to function "name", or NULL on failure. */
 	virtual Function FindFunction(const char *name) = 0;
 
-	/// @return true if the library was loaded successfully.
+	/** @return true if the library was loaded successfully. */
 	virtual bool IsValid() = 0;
 
-	/// @return An instance of a DynamicLibrary subclass with "modulePath" loaded.
+	/** @return An instance of a DynamicLibrary subclass with "modulePath" loaded. */
 	static DynamicLibrary *Load(const char *modulePath);
 };
 
@@ -490,12 +490,12 @@ public:
  * and chrome colour. Not a creatable object, more of a module with several functions.
  */
 class Platform {
-	// Private so Platform objects can not be copied
+	/* Private so Platform objects can not be copied */
 	Platform(const Platform &) {}
 	Platform &operator=(const Platform &) { return *this; }
 public:
-	// Should be private because no new Platforms are ever created
-	// but gcc warns about this
+	/* Should be private because no new Platforms are ever created
+	 * but gcc warns about this */
 	Platform() {}
 	~Platform() {}
 	static ColourDesired Chrome();
@@ -514,10 +514,10 @@ public:
 	static int DBCSCharLength(int codePage, const char *s);
 	static int DBCSCharMaxLength();
 
-	// These are utility functions not really tied to a platform
+	/* These are utility functions not really tied to a platform */
 	static int Minimum(int a, int b);
 	static int Maximum(int a, int b);
-	// Next three assume 16 bit shorts and 32 bit longs
+	/* Next three assume 16 bit shorts and 32 bit longs */
 	static long LongFromTwoShorts(short a,short b) {
 		return (a) | ((b) << 16);
 	}
@@ -547,7 +547,7 @@ public:
 }
 #endif
 
-// Shut up annoying Visual C++ warnings:
+/* Shut up annoying Visual C++ warnings: */
 #ifdef _MSC_VER
 #pragma warning(disable: 4244 4309 4514 4710)
 #endif

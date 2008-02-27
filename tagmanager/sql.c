@@ -309,10 +309,10 @@ static void dispToken (tokenInfo *const token, char * location)
 
 static boolean isIdentChar1 (const int c)
 {
-    // Other databases are less restrictive on the first character of
-    // an identifier.
-    // isIdentChar1 is used to identify the first character of an
-    // identifier, so we are removing some restrictions.
+    /* Other databases are less restrictive on the first character of
+     * an identifier.
+     * isIdentChar1 is used to identify the first character of an
+     * identifier, so we are removing some restrictions. */
     return (boolean)
 	(isalpha (c) || c == '@' || c == '_' );
 }
@@ -420,7 +420,7 @@ static void parseString (vString *const string, const int delimiter)
     while (! end)
     {
 	c = fileGetc ();
-//        printf( "\nps: %c\n", c  );
+/*        printf( "\nps: %c\n", c  ); */
 	if (c == EOF)
 	    end = TRUE;
 	else if (c == delimiter)
@@ -468,7 +468,7 @@ getNextChar:
     do
     {
 	c = fileGetc ();
-//        printf( "\nrtc: %c\n", c );
+/*        printf( "\nrtc: %c\n", c ); */
         /*
          * Added " to the list of ignores, not sure what this
          * might break but it gets by this issue:
@@ -572,7 +572,7 @@ getNextChar:
 	    }
 	    break;
     }
-    //dispToken(token, "rte");
+    /*dispToken(token, "rte");*/
 }
 
 /*
@@ -626,7 +626,7 @@ static void skipArgumentList (tokenInfo *const token)
     if (isType (token, TOKEN_OPEN_PAREN))	/* arguments? */
     {
         nest_level++;
-	//findToken (token, TOKEN_CLOSE_PAREN);
+	/*findToken (token, TOKEN_CLOSE_PAREN);*/
         while (! (isType (token, TOKEN_CLOSE_PAREN) && (nest_level == 0)))
         {
             readToken (token);
@@ -641,7 +641,7 @@ static void skipArgumentList (tokenInfo *const token)
                     nest_level--;
                 }
             }
-        } //while
+        } /*while*/
 	readToken (token);
     }
 }
@@ -703,9 +703,9 @@ static void parseSubProgram (tokenInfo *const token)
     {
         if (isKeyword (token, KEYWORD_return))
         {
-            // Read RETURN
+            /* Read RETURN */
             readToken (token);
-            // Read datatype
+            /* Read datatype */
             readToken (token);
         }
     }
@@ -727,8 +727,8 @@ static void parseSubProgram (tokenInfo *const token)
                     isType (name, TOKEN_STRING))
                 makeSqlTag (name, kind);
 
-            //dispToken(name, "SubProgram: parseBlock name");
-            //dispToken(token, "SubProgram: parseBlock token");
+            /*dispToken(name, "SubProgram: parseBlock name");*/
+            /*dispToken(token, "SubProgram: parseBlock token");*/
             parseBlock (token, TRUE);
             vStringClear (token->scope);
         }
@@ -738,8 +738,8 @@ static void parseSubProgram (tokenInfo *const token)
 
 static void parseRecord (tokenInfo *const token)
 {
-    // Make it a bit forgiving, this is called from
-    // multiple functions, parseTable, parseType
+    /* Make it a bit forgiving, this is called from
+     * multiple functions, parseTable, parseType */
     if (!isType (token, TOKEN_OPEN_PAREN))
 	readToken (token);
 
@@ -796,7 +796,7 @@ static void parseRecord (tokenInfo *const token)
              */
             if (isType (token, TOKEN_OPEN_PAREN))
             {
-                // Reads to the next token after the TOKEN_CLOSE_PAREN
+                /* Reads to the next token after the TOKEN_CLOSE_PAREN */
                 skipArgumentList(token);
             }
         }
@@ -809,7 +809,7 @@ static void parseType (tokenInfo *const token)
     vString * saveScope = vStringNew ();
 
     vStringCopy(saveScope, token->scope);
-    // If a scope has been set, add it to the name
+    /* If a scope has been set, add it to the name */
     addToScope (name, token->scope);
     readToken (name);
     if (isType (name, TOKEN_IDENTIFIER))
@@ -1034,7 +1034,7 @@ static void parseStatements (tokenInfo *const token)
                 case KEYWORD_if:
                     while (! isKeyword (token, KEYWORD_then))
                         readToken (token);
-                    //readToken (token);
+                    /*readToken (token);*/
                     parseStatements (token);
                     break;
 
@@ -1077,7 +1077,7 @@ static void parseBlock (tokenInfo *const token, const boolean local)
     if (! isKeyword (token, KEYWORD_begin))
     {
         readToken (token);
-        //dispToken(token, "parseBlock calling parseDeclare");
+        /*dispToken(token, "parseBlock calling parseDeclare");*/
         parseDeclare (token, local);
     }
     if (isKeyword (token, KEYWORD_begin))
@@ -1105,21 +1105,21 @@ static void parsePackage (tokenInfo *const token)
     readToken (name);
     if (isKeyword (name, KEYWORD_body))
         readToken (name);
-    //dispToken(token, "parsePackage after BODY");
-    // Chceck for owner.pkg_name
+    /*dispToken(token, "parsePackage after BODY");*/
+    /* Chceck for owner.pkg_name */
     while (! isKeyword (token, KEYWORD_is))
     {
         readToken (token);
         if ( isType(token, TOKEN_PERIOD) )
         {
             readToken (name);
-            //dispToken(name, "parsePackage new name");
+            /*dispToken(name, "parsePackage new name");*/
         }
     }
     dispToken(name, "parsePackage name");
     if (isKeyword (token, KEYWORD_is))
     {
-        //dispToken(token, "parsePackage processing IS");
+        /*dispToken(token, "parsePackage processing IS");*/
         if (isType (name, TOKEN_IDENTIFIER) ||
                     isType (name, TOKEN_STRING))
             makeSqlTag (name, SQLTAG_PACKAGE);
@@ -1133,16 +1133,16 @@ static void parseTable (tokenInfo *const token)
 {
     tokenInfo *const name = newToken ();
 
-    // This deals with these formats
-    //     create table t1 (c1 int);
-    //     create global tempoary table t2 (c1 int);
-    //     create table "t3" (c1 int);
-    //     create table bob.t4 (c1 int);
-    //     create table bob."t5" (c1 int);
-    //     create table "bob"."t6" (c1 int);
-    //     create table bob."t7" (c1 int);
-    // Proxy tables use this format:
-    //     create existing table bob."t7" AT '...';
+    /* This deals with these formats
+     *     create table t1 (c1 int);
+     *     create global tempoary table t2 (c1 int);
+     *     create table "t3" (c1 int);
+     *     create table bob.t4 (c1 int);
+     *     create table bob."t5" (c1 int);
+     *     create table "bob"."t6" (c1 int);
+     *     create table bob."t7" (c1 int);
+     * Proxy tables use this format:
+     *     create existing table bob."t7" AT '...'; */
 
     readToken (name);
     readToken (token);
@@ -1177,12 +1177,12 @@ static void parseIndex (tokenInfo *const token)
     tokenInfo *const name  = newToken ();
     tokenInfo *const owner = newToken ();
 
-    // This deals with these formats
-    //     create index i1 on t1(c1) create index "i2" on t1(c1)
-    //     create virtual unique clustered index "i3" on t1(c1)
-    //     create unique clustered index "i4" on t1(c1)
-    //     create clustered index "i5" on t1(c1)
-    //     create bitmap index "i6" on t1(c1)
+    /* This deals with these formats
+     *     create index i1 on t1(c1) create index "i2" on t1(c1)
+     *     create virtual unique clustered index "i3" on t1(c1)
+     *     create unique clustered index "i4" on t1(c1)
+     *     create clustered index "i5" on t1(c1)
+     *     create bitmap index "i6" on t1(c1) */
 
     readToken (name);
     readToken (token);
@@ -1213,11 +1213,11 @@ static void parseEvent (tokenInfo *const token)
 {
     tokenInfo *const name = newToken ();
 
-    // This deals with these formats
-    //     create event e1 handler begin end;
-    //     create event "e2" handler begin end;
-    //     create event dba."e3" handler begin end;
-    //     create event "dba"."e4" handler begin end;
+    /* This deals with these formats
+     *     create event e1 handler begin end;
+     *     create event "e2" handler begin end;
+     *     create event dba."e3" handler begin end;
+     *     create event "dba"."e4" handler begin end; */
 
     readToken (name);
     readToken (token);
@@ -1254,14 +1254,14 @@ static void parseTrigger (tokenInfo *const token)
     tokenInfo *const name  = newToken ();
     tokenInfo *const table = newToken ();
 
-    // This deals with these formats
-    //     create or replace trigger tr1 begin end;
-    //     create trigger "tr2" begin end;
-    //     drop trigger "droptr1";
-    //     create trigger "tr3" CALL sp_something();
-    //     create trigger "owner"."tr4" begin end;
-    //     create trigger "tr5" not valid;
-    //     create trigger "tr6" begin end;
+    /* This deals with these formats
+     *     create or replace trigger tr1 begin end;
+     *     create trigger "tr2" begin end;
+     *     drop trigger "droptr1";
+     *     create trigger "tr3" CALL sp_something();
+     *     create trigger "owner"."tr4" begin end;
+     *     create trigger "tr5" not valid;
+     *     create trigger "tr6" begin end; */
 
     readToken (name);
     readToken (token);
@@ -1326,11 +1326,11 @@ static void parsePublication (tokenInfo *const token)
 {
     tokenInfo *const name = newToken ();
 
-    // This deals with these formats
-    //     create or replace publication pu1 ()
-    //     create publication "pu2" ()
-    //     create publication dba."pu3" ()
-    //     create publication "dba"."pu4" ()
+    /* This deals with these formats
+     *     create or replace publication pu1 ()
+     *     create publication "pu2" ()
+     *     create publication dba."pu3" ()
+     *     create publication "dba"."pu4" () */
 
     readToken (name);
     readToken (token);
@@ -1355,14 +1355,14 @@ static void parseService (tokenInfo *const token)
 {
     tokenInfo *const name = newToken ();
 
-    // This deals with these formats
-    //     CREATE SERVICE s1 TYPE 'HTML'
-    //         AUTHORIZATION OFF USER DBA AS
-    //         SELECT *
-    //           FROM SYS.SYSTABLE;
-    //     CREATE SERVICE "s2" TYPE 'HTML'
-    //         AUTHORIZATION OFF USER DBA AS
-    //         CALL sp_Something();
+    /* This deals with these formats
+     *     CREATE SERVICE s1 TYPE 'HTML'
+     *         AUTHORIZATION OFF USER DBA AS
+     *         SELECT *
+     *           FROM SYS.SYSTABLE;
+     *     CREATE SERVICE "s2" TYPE 'HTML'
+     *         AUTHORIZATION OFF USER DBA AS
+     *         CALL sp_Something(); */
 
     readToken (name);
     readToken (token);
@@ -1382,8 +1382,8 @@ static void parseDomain (tokenInfo *const token)
 {
     tokenInfo *const name = newToken ();
 
-    // This deals with these formats
-    //     CREATE DOMAIN|DATATYPE [AS] your_name ...;
+    /* This deals with these formats
+     *     CREATE DOMAIN|DATATYPE [AS] your_name ...; */
 
     readToken (name);
     if (isKeyword (name, KEYWORD_is))
@@ -1402,15 +1402,15 @@ static void parseDomain (tokenInfo *const token)
 
 static void parseDrop (tokenInfo *const token)
 {
-    // This deals with these formats
-    //     DROP TABLE|PROCEDURE|DOMAIN|DATATYPE name;
-    //
-    // Just simply skip over these statements.
-    // They are often confused with PROCEDURE prototypes
-    // since the syntax is similar, this effectively deals with
-    // the issue for all types.
+    /* This deals with these formats
+     *     DROP TABLE|PROCEDURE|DOMAIN|DATATYPE name;
+     *
+     * Just simply skip over these statements.
+     * They are often confused with PROCEDURE prototypes
+     * since the syntax is similar, this effectively deals with
+     * the issue for all types. */
 
-    //dispToken(token, "parseDrop");
+    /*dispToken(token, "parseDrop");*/
     findToken (token, TOKEN_SEMICOLON);
 }
 
@@ -1418,11 +1418,11 @@ static void parseVariable (tokenInfo *const token)
 {
     tokenInfo *const name = newToken ();
 
-    // This deals with these formats
-    //     create variable varname1 integer;
-    //     create variable @varname2 integer;
-    //     create variable "varname3" integer;
-    //     drop   variable @varname3;
+    /* This deals with these formats
+     *     create variable varname1 integer;
+     *     create variable @varname2 integer;
+     *     create variable "varname3" integer;
+     *     drop   variable @varname3; */
 
     readToken (name);
     readToken (token);
@@ -1441,11 +1441,11 @@ static void parseSynonym (tokenInfo *const token)
 {
     tokenInfo *const name = newToken ();
 
-    // This deals with these formats
-    //     create variable varname1 integer;
-    //     create variable @varname2 integer;
-    //     create variable "varname3" integer;
-    //     drop   variable @varname3;
+    /* This deals with these formats
+     *     create variable varname1 integer;
+     *     create variable @varname2 integer;
+     *     create variable "varname3" integer;
+     *     drop   variable @varname3; */
 
     readToken (name);
     readToken (token);
@@ -1464,11 +1464,11 @@ static void parseView (tokenInfo *const token)
 {
     tokenInfo *const name = newToken ();
 
-    // This deals with these formats
-    //     create variable varname1 integer;
-    //     create variable @varname2 integer;
-    //     create variable "varname3" integer;
-    //     drop   variable @varname3;
+    /* This deals with these formats
+     *     create variable varname1 integer;
+     *     create variable @varname2 integer;
+     *     create variable "varname3" integer;
+     *     drop   variable @varname3; */
 
     readToken (name);
     readToken (token);
@@ -1508,10 +1508,10 @@ static void parseMLTable (tokenInfo *const token)
     tokenInfo *const table   = newToken ();
     tokenInfo *const event   = newToken ();
 
-    // This deals with these formats
-    //    call ml_add_table_script( 'version', 'table_name', 'event',
-    //         'some SQL statement'
-    //         );
+    /* This deals with these formats
+     *    call ml_add_table_script( 'version', 'table_name', 'event',
+     *         'some SQL statement'
+     *         ); */
 
     readToken (token);
     if ( isType (token, TOKEN_OPEN_PAREN) )
@@ -1567,10 +1567,10 @@ static void parseMLConn (tokenInfo *const token)
     tokenInfo *const version = newToken ();
     tokenInfo *const event   = newToken ();
 
-    // This deals with these formats
-    //    call ml_add_connection_script( 'version', 'event',
-    //         'some SQL statement'
-    //         );
+    /* This deals with these formats
+     *    call ml_add_connection_script( 'version', 'event',
+     *         'some SQL statement'
+     *         ); */
 
     readToken (token);
     if ( isType (token, TOKEN_OPEN_PAREN) )
@@ -1613,7 +1613,7 @@ static void parseSqlFile (tokenInfo *const token)
     do
     {
 	readToken (token);
-        //dispToken(token, "psf");
+        /*dispToken(token, "psf");*/
 
 	if (isType (token, TOKEN_BLOCK_LABEL_BEGIN))
 	    parseLabel (token);
