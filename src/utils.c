@@ -94,7 +94,7 @@ void utils_start_browser(const gchar *uri)
 
 
 /* taken from anjuta, to determine the EOL mode of the file */
-gint utils_get_line_endings(gchar* buffer, glong size)
+gint utils_get_line_endings(const gchar* buffer, glong size)
 {
 	gint i;
 	guint cr, lf, crlf, max_mode;
@@ -941,7 +941,7 @@ gchar *utils_get_date_time(const gchar *format, time_t *time_to_use)
 }
 
 
-gchar *utils_get_initials(gchar *name)
+gchar *utils_get_initials(const gchar *name)
 {
 	gint i = 1, j = 1;
 	gchar *initials = g_malloc0(5);
@@ -1542,7 +1542,7 @@ void utils_free_pointers(gpointer first, ...)
  * The first argument is nothing special.
  * The list must be ended with NULL.
  * If first is NULL, NULL is returned. */
-gchar **utils_strv_new(gchar *first, ...)
+gchar **utils_strv_new(const gchar *first, ...)
 {
 	gsize strvlen, i;
 	va_list args;
@@ -1734,6 +1734,7 @@ gboolean utils_str_has_upper(const gchar *str)
 		/* check only letters and stop once the first non-capital was found */
 		if (g_unichar_isalpha(c) && g_unichar_isupper(c))
 			return TRUE;
+		/** FIXME don't write a const string */
 		str = g_utf8_next_char(str);
 	}
 	return FALSE;

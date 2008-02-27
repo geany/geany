@@ -2,6 +2,10 @@
 
  * plugins/*, scintilla/*, src/*, tagmanager/*:
    Replace all C++-style comments with usual C-like multi-line comments.
+ * src/keybindings.c: Fix ignoring of some keybindings when caps lock is
+                      active (introduced in r2253).
+ * src/document.c, src/utils.c, src/utils.h:
+   Fix a few more compiler warnings (type conversion warnings).
 
 
 2008-02-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

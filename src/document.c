@@ -1127,7 +1127,7 @@ void document_open_file_list(const gchar *data, gssize length)
 	if (length < 0)
 		length = strlen(data);
 
-	switch (utils_get_line_endings((gchar*) data, length))
+	switch (utils_get_line_endings(data, length))
 	{
 		case SC_EOL_CR: list = g_strsplit(data, "\r", 0); break;
 		case SC_EOL_CRLF: list = g_strsplit(data, "\r\n", 0); break;

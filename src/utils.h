@@ -48,7 +48,7 @@
 
 void utils_start_browser(const gchar *uri);
 
-gint utils_get_line_endings(gchar* buffer, glong size);
+gint utils_get_line_endings(const gchar* buffer, glong size);
 
 gboolean utils_isbrace(gchar c, gboolean include_angles);
 
@@ -90,11 +90,11 @@ gboolean utils_string_replace_all(GString *str, const gchar *needle, const gchar
 
 gchar *utils_str_replace(gchar *haystack, const gchar *needle, const gchar *replacement);
 
-gint utils_strpos(const gchar* haystack, const gchar * needle);
+gint utils_strpos(const gchar* haystack, const gchar *needle);
 
 gchar *utils_get_date_time(const gchar *format, time_t *time_to_use);
 
-gchar *utils_get_initials(gchar *name);
+gchar *utils_get_initials(const gchar *name);
 
 gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const gchar *key, const gboolean default_value);
 
@@ -136,7 +136,7 @@ gchar *utils_get_utf8_from_locale(const gchar *locale_text);
 
 void utils_free_pointers(gpointer first, ...) G_GNUC_NULL_TERMINATED;
 
-gchar **utils_strv_new(gchar *first, ...) G_GNUC_NULL_TERMINATED;
+gchar **utils_strv_new(const gchar *first, ...) G_GNUC_NULL_TERMINATED;
 
 gint utils_mkdir(const gchar *path, gboolean create_parent_dirs);
 
