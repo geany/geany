@@ -6,6 +6,9 @@
                       active (introduced in r2253).
  * src/document.c, src/utils.c, src/utils.h:
    Fix a few more compiler warnings (type conversion warnings).
+ * src/utils.c, src/win32.c, src/win32.h:
+   Apply patch from Pierre Joye to improve new Win32 process spawning
+   code (thanks).
 
 
 2008-02-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

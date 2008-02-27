@@ -1849,10 +1849,7 @@ gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFla
 		*std_err = NULL;
 
 #ifdef G_OS_WIN32
-	result = win32_spawn(dir, argv, env, flags, std_out, std_err, exit_status);
-	/** TODO create error messages in win32_spawn with appropriate error message text **/
-	if (! result)
-		*error = g_error_new(G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, _("Process could not be created."));
+	result = win32_spawn(dir, argv, env, flags, std_out, std_err, exit_status, error);
 #else
 	result = g_spawn_sync(dir, argv, env, flags, NULL, NULL, std_out, std_err, exit_status, error);
 #endif
@@ -1892,10 +1889,7 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 	}
 
 #ifdef G_OS_WIN32
-	result = win32_spawn(dir, argv, env, flags, NULL, NULL, NULL);
-	/** TODO create error messages in win32_spawn with appropriate error message text **/
-	if (! result)
-		*error = g_error_new(G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, _("Process could not be created."));
+	result = win32_spawn(dir, argv, env, flags, NULL, NULL, NULL, error);
 #else
 	result = g_spawn_async(dir, argv, env, flags, NULL, NULL, child_pid, error);
 #endif

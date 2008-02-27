@@ -33,23 +33,16 @@ void win32_show_font_dialog(void);
 
 void win32_show_color_dialog(const gchar *colour);
 
-/* Creates a native Windows message box of the given type and returns always TRUE
- * or FALSE representing th pressed Yes or No button.
- * If type is not GTK_MESSAGE_QUESTION, it returns always TRUE. */
 gboolean win32_message_dialog(GtkWidget *parent, GtkMessageType type, const gchar *msg);
 
-/* Special dialog to ask for an action when closing an unsaved file */
 gint win32_message_dialog_unsaved(const gchar *msg);
 
-/* Just a simple wrapper function to open a browser window */
 void win32_open_browser(const gchar *uri);
 
 gchar *win32_show_project_open_dialog(GtkWidget *parent, const gchar *title,
 								      const gchar *initial_dir, gboolean allow_new_file,
 								      gboolean project_file_filter);
 
-/* Shows a folder selection dialog.
- * The selected folder name is returned. */
 gchar *win32_show_project_folder_dialog(GtkWidget *parent, const gchar *title,
 										const gchar *initial_dir);
 
@@ -62,6 +55,6 @@ gchar *win32_get_appdata_folder();
 gchar *win32_get_hostname();
 
 gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
-					 gchar **std_out, gchar **std_err, gint *exit_status);
+					 gchar **std_out, gchar **std_err, gint *exit_status, GError **error);
 
 #endif
