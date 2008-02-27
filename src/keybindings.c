@@ -742,9 +742,11 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *ev, gpointer user
     state = ev->state & GEANY_KEYS_MODIFIER_MASK;
 
 	/* hack to get around that CTRL+Shift+r results in GDK_R not GDK_r */
-	if (state & GDK_SHIFT_MASK)
+	if ((ev->state & GDK_SHIFT_MASK) || (ev->state & GDK_LOCK_MASK))
 		if (keyval >= GDK_A && keyval <= GDK_Z)
 			keyval += GDK_a - GDK_A;
+
+	/*geany_debug("%d (%d) %d (%d)", keyval, ev->keyval, state, ev->state);*/
 
 	/* special cases */
 #ifdef HAVE_VTE
