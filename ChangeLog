@@ -3,6 +3,8 @@
  * src/utils.c, src/utils.h, tagmanager/parse.h:
    Replace unsigned long in guint64 and use int instead of off_t
    (patch by Daniel Richard G., thanks).
+ * src/sciwrappers.c: Make Scintilla remember the current column when
+                      changing the cursor position (#1902732).
 
 
 2008-02-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

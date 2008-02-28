@@ -398,6 +398,7 @@ void sci_set_current_position(ScintillaObject* sci, gint position, gboolean scro
 		SSM(sci, SCI_SETCURRENTPOS, position, 0);
 		SSM(sci, SCI_SETANCHOR, position, 0); /* to avoid creation of a selection */
 	}
+	SSM(sci, SCI_CHOOSECARETX, 0, 0);
 }
 
 
