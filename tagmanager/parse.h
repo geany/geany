@@ -15,8 +15,6 @@
 */
 #include "general.h"	/* must always come first */
 
-#include <sys/types.h>
-
 #include "parsers.h"	/* contains list of parsers */
 #include "strlist.h"
 #include "entry.h"
@@ -69,7 +67,7 @@ typedef struct {
 typedef parserDefinition* (parserDefinitionFunc) (void);
 
 typedef struct {
-    off_t start;	/* character index in line where match starts */
+    int start;		/* character index in line where match starts */
     size_t length;	/* length of match */
 } regexMatch;
 

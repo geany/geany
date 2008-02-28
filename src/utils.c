@@ -1145,7 +1145,7 @@ void utils_beep(void)
 
 
 /* taken from busybox, thanks */
-gchar *utils_make_human_readable_str(unsigned long size, gulong block_size,
+gchar *utils_make_human_readable_str(guint64 size, gulong block_size,
 									 gulong display_unit)
 {
 	/* The code will adjust for additional (appended) units. */
@@ -1153,7 +1153,7 @@ gchar *utils_make_human_readable_str(unsigned long size, gulong block_size,
 	static const gchar fmt[] = "%Lu %c%c";
 	static const gchar fmt_tenths[] = "%Lu.%d %c%c";
 
-	unsigned long val;
+	guint64 val;
 	gint frac;
 	const gchar *u;
 	const gchar *f;

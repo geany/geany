@@ -1,3 +1,10 @@
+2008-02-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/utils.c, src/utils.h, tagmanager/parse.h:
+   Replace unsigned long in guint64 and use int instead of off_t
+   (patch by Daniel Richard G., thanks).
+
+
 2008-02-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * plugins/*, scintilla/*, src/*, tagmanager/*:
