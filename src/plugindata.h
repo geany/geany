@@ -36,12 +36,12 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 45;
+static const gint api_version = 46;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
  * are only appended, as this doesn't affect existing fields. */
-static const gint abi_version = 20;
+static const gint abi_version = 21;
 
 /* This performs runtime checks that try to ensure:
  * 1. Geany ABI data types are compatible with this plugin.
@@ -311,8 +311,7 @@ EncodingFuncs;
 
 typedef struct KeybindingFuncs
 {
-	/* See GeanyKeyCommand enum for cmd_id. */
-	void		(*send_command) (gint cmd_id);
+	void		(*send_command) (gint group_id, gint cmd_id);
 }
 KeybindingFuncs;
 

@@ -495,6 +495,12 @@ static void on_hidden_files_clicked(GtkCheckMenuItem *item)
 }
 
 
+static void on_hide_sidebar(void)
+{
+	p_keybindings->send_command(GEANY_KEYGROUP_VIEW, GEANY_KEYS_MENU_SIDEBAR);
+}
+
+
 static GtkWidget *create_popup_menu(void)
 {
 	GtkWidget *item, *menu, *image;
@@ -545,9 +551,7 @@ static GtkWidget *create_popup_menu(void)
 		gtk_image_new_from_stock("gtk-close", GTK_ICON_SIZE_MENU));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect_swapped((gpointer) item, "activate",
-		G_CALLBACK(p_keybindings->send_command),
-		GINT_TO_POINTER(GEANY_KEYS_MENU_SIDEBAR));
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_hide_sidebar), NULL);
 
 	return menu;
 }

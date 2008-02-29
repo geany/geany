@@ -53,9 +53,7 @@
 #include "encodings.h"
 #include "search.h"
 #include "highlighting.h"
-
-void keybindings_cmd(gint cmd_id);	/* don't require keybindings.h enum in plugindata.h */
-
+#include "keybindings.h"
 
 
 #ifdef G_OS_WIN32
@@ -189,7 +187,7 @@ static EncodingFuncs encoding_funcs = {
 };
 
 static KeybindingFuncs keybindings_funcs = {
-	&keybindings_cmd
+	&keybindings_send_command
 };
 
 static TagManagerFuncs tagmanager_funcs = {

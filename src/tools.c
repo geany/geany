@@ -361,6 +361,7 @@ static void cc_insert_custom_command_items(GtkMenu *me, GtkMenu *mp, gchar *labe
 {
 	GtkWidget *item;
 	gint key_idx = -1;
+	KeyBinding *kb;
 
 	switch (idx)
 	{
@@ -369,10 +370,13 @@ static void cc_insert_custom_command_items(GtkMenu *me, GtkMenu *mp, gchar *labe
 		case 2: key_idx = GEANY_KEYS_EDIT_SENDTOCMD3; break;
 	}
 
+	if (key_idx != -1)
+		kb = keybindings_lookup_item(GEANY_KEYGROUP_EDITING, key_idx);
+
 	item = gtk_menu_item_new_with_label(label);
 	if (key_idx != -1)
 		gtk_widget_add_accelerator(item, "activate", gtk_accel_group_new(),
-			keys[key_idx]->key, keys[key_idx]->mods, GTK_ACCEL_VISIBLE);
+			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
 	gtk_container_add(GTK_CONTAINER(me), item);
 	gtk_widget_show(item);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(cc_on_custom_command_activate),
@@ -381,7 +385,7 @@ static void cc_insert_custom_command_items(GtkMenu *me, GtkMenu *mp, gchar *labe
 	item = gtk_menu_item_new_with_label(label);
 	if (key_idx != -1)
 		gtk_widget_add_accelerator(item, "activate", gtk_accel_group_new(),
-			keys[key_idx]->key, keys[key_idx]->mods, GTK_ACCEL_VISIBLE);
+			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
 	gtk_container_add(GTK_CONTAINER(mp), item);
 	gtk_widget_show(item);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(cc_on_custom_command_activate),

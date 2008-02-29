@@ -1,3 +1,21 @@
+2008-02-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/build.c, src/keybindings.c, src/keybindings.h, src/tools.c,
+   src/prefs.c, src/plugindata.h, src/callbacks.c, src/plugins.c,
+   plugins/filebrowser.c:
+   Change keybindings code to use keybinding groups, each with a
+   separate enum set, which will make the plugin ABI more stable,
+   and lay the groundwork for plugin keybindings support.
+   Note: this breaks the plugin API.
+   Disable setting menu accelerators (temporary).
+   Disable Keyboard Shortcuts dialog (temporary).
+   Disable snippets completion (temporary).
+   Disable focus commands in the VTE (temporary).
+   Make Tags group use separate cb_func_tags callback.
+   Rename keybindings_cmd() to keybindings_send_command().
+   Add keybindings_lookup_item().
+
+
 2008-02-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/utils.c, src/utils.h, tagmanager/parse.h:

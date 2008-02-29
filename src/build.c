@@ -1087,10 +1087,14 @@ static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, g
 }
 
 
+#if 1	/* tmp */
+#define GEANY_ADD_WIDGET_ACCEL(gkey, menuitem)
+#else
 #define GEANY_ADD_WIDGET_ACCEL(gkey, menuitem) \
 	if (keys[(gkey)]->key != 0) \
 		gtk_widget_add_accelerator(menuitem, "activate", accel_group, \
 			keys[(gkey)]->key, keys[(gkey)]->mods, GTK_ACCEL_VISIBLE)
+#endif
 
 static void create_build_menu_gen(BuildMenuItems *menu_items)
 {
