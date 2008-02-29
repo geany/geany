@@ -15,6 +15,7 @@ TODO List:
 	o basic support for adding custom filetypes?
 	o configurable filetype and project make commands (e.g. using
 	  bud for D)
+	o configurable filetype regex for build errors
 	o recent projects menu
 	o project indentation settings support
 	o plugin keybindings
@@ -41,6 +42,7 @@ TODO List:
 	o stable plugin ABI for the 1.0 series? (Split up geany_data, prefs,
 	  GeanyKeyCommand enum into groups)
 	o review documentation
+	o look into using a geany-dev package for plugin development
 
 
 Wishlist
