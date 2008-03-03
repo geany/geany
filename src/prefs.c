@@ -1241,7 +1241,7 @@ static void clear_tree_shortcut(gsize group_id, gsize keybinding_id)
 		return;
 
 	/* find child kb node*/
-	if (! find_child_iter(&parent, group_id, &child))
+	if (! find_child_iter(&parent, keybinding_id, &child))
 		return;
 
 	gtk_tree_store_set(store, &child, KB_TREE_SHORTCUT, NULL, -1);	/* clear shortcut */
