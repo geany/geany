@@ -765,10 +765,10 @@ static gboolean check_fixed_kb(guint keyval, guint state)
  * return FALSE if no completion occurs, so the tab or space is handled normally. */
 static gboolean check_snippet_completion(guint keyval, guint state)
 {
-return FALSE; /* tmp */
-#if 0
-	const guint i = GEANY_KEYS_EDIT_COMPLETESNIPPET;
-	if (keys[i]->key == keyval && keys[i]->mods == state)
+	KeyBinding *kb = keybindings_lookup_item(GEANY_KEYGROUP_TAGS,
+		GEANY_KEYS_EDIT_COMPLETESNIPPET);
+
+	if (kb->key == keyval && kb->mods == state)
 	{
 		gint idx = document_get_cur_idx();
 		GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(app->window));
@@ -784,7 +784,6 @@ return FALSE; /* tmp */
 		}
 	}
 	return FALSE;
-#endif
 }
 
 

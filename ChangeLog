@@ -5,6 +5,7 @@
    Fix clearing a shortcut when overriding it in Prefs dialog.
  * src/keybindings.c:
    Re-enable focus commands in the VTE.
+   Re-enable snippets completion.
 
 
 2008-02-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
