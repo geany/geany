@@ -704,6 +704,20 @@ static void init_tag_list(gint idx)
 				NULL);
 			break;
 		}
+		case GEANY_FILETYPES_FORTRAN:
+		{
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_namespace), _("Module"), NULL,
+				&(tv_iters.tag_struct), _("Interfaces"), "classviewer-struct",
+				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
+				&(tv_iters.tag_member), _("Subroutines"), "classviewer-method",
+				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
+				&(tv_iters.tag_type), _("Types"), "classviewer-namespace",
+				&(tv_iters.tag_macro), _("Blocks"), "classviewer-member",
+				&(tv_iters.tag_other), _("Other"), "classviewer-other",
+				NULL);
+			break;
+		}
 		case GEANY_FILETYPES_D:
 		default:
 		{

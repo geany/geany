@@ -171,17 +171,17 @@ static tokenInfo *Parent = NULL;
 /* indexed by tagType */
 static kindOption FortranKinds [] = {
     { TRUE,  'b', "block data", "block data"},
-    { TRUE,  'c', "common",     "common blocks"},
+    { TRUE,  'c', "macro",      "common blocks"},
     { TRUE,  'e', "entry",      "entry points"},
     { TRUE,  'f', "function",   "functions"},
-    { TRUE,  'i', "interface",  "interfaces"},
+    { TRUE,  'i', "struct",     "interfaces"},
     { TRUE,  'k', "component",  "type components"},
     { TRUE,  'l', "label",      "labels"},
     { FALSE, 'L', "local",      "local and common block variables"},
-    { TRUE,  'm', "module",     "modules"},
+    { TRUE,  'm', "namespace",  "modules"},
     { TRUE,  'n', "namelist",   "namelists"},
-    { TRUE,  'p', "program",    "programs"},
-    { TRUE,  's', "subroutine", "subroutines"},
+    { TRUE,  'p', "package",    "programs"},
+    { TRUE,  's', "member",     "subroutines"},
     { TRUE,  't', "type",       "derived types"},
     { TRUE,  'v', "variable",   "module variables"}
 };
