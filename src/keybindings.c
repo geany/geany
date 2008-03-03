@@ -798,7 +798,7 @@ static gboolean set_sensitive(gpointer widget)
 
 static gboolean check_vte(GdkModifierType state, guint keyval)
 {
-	/*guint i;*/
+	guint i;
 	GtkWidget *widget;
 
 	if (! vc->enable_bash_keys)
@@ -811,14 +811,14 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 	if (state == 0 && (keyval < GDK_F1 || keyval > GDK_F35))	/* e.g. backspace */
 		return FALSE;
 
-#if 0	/* tmp */
 	/* make focus commands override any bash commands */
-	for (i = GEANY_KEYS_GROUP_FOCUS; i < GEANY_KEYS_GROUP_TABS; i++)
+	for (i = 0; i < GEANY_KEYS_FOCUS_COUNT; i++)
 	{
-		if (state == keys[i]->mods && keyval == keys[i]->key)
+		KeyBinding *kb = keybindings_lookup_item(GEANY_KEYGROUP_FOCUS, i);
+
+		if (state == kb->mods && keyval == kb->key)
 			return FALSE;
 	}
-#endif
 
 	/* Temporarily disable the menus to prevent conflicting menu accelerators
 	 * from overriding the VTE bash shortcuts.

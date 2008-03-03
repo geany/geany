@@ -3,6 +3,8 @@
  * src/prefs.c:
    Fix segfault when setting custom keybindings in Prefs dialog.
    Fix clearing a shortcut when overriding it in Prefs dialog.
+ * src/keybindings.c:
+   Re-enable focus commands in the VTE.
 
 
 2008-02-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
