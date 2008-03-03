@@ -1119,7 +1119,7 @@ static KeyBinding *lookup_kb_from_iter(G_GNUC_UNUSED GtkTreeModel *model, GtkTre
 
 	/* lookup the parent to get group index */
 	gtk_tree_model_iter_parent(GTK_TREE_MODEL(store), &parent, iter);
-	gtk_tree_model_get(GTK_TREE_MODEL(store), iter, KB_TREE_INDEX, &group_idx, -1);
+	gtk_tree_model_get(GTK_TREE_MODEL(store), &parent, KB_TREE_INDEX, &group_idx, -1);
 
 	return keybindings_lookup_item(group_idx, keybinding_idx);
 }

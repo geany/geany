@@ -1,3 +1,9 @@
+2008-03-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/prefs.c:
+   Fix segfault when setting custom keybindings in Prefs dialog.
+
+
 2008-02-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/build.c, src/keybindings.c, src/keybindings.h, src/tools.c,
