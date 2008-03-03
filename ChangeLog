@@ -6,6 +6,7 @@
  * src/keybindings.c:
    Re-enable focus commands in the VTE.
    Re-enable snippets completion.
+   Re-enable Keyboard Shortcuts dialog.
 
 
 2008-02-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

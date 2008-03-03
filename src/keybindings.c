@@ -620,40 +620,41 @@ void keybindings_free(void)
 
 static void get_shortcut_labels_text(GString **text_names_str, GString **text_keys_str)
 {
-#if 0
-	guint i;
+	gsize g, i;
 	GString *text_names = g_string_sized_new(600);
 	GString *text_keys = g_string_sized_new(600);
 
 	*text_names_str = text_names;
 	*text_keys_str = text_keys;
 
-	for (i = 0; i < GEANY_MAX_KEYS; i++)
+	for (g = 0; g < keybinding_groups->len; g++)
 	{
-		gchar *shortcut;
+		KeyBindingGroup *group = g_ptr_array_index(keybinding_groups, g);
 
-		if (keys[i]->section != NULL)
+		if (g == 0)
 		{
-			if (i == GEANY_KEYS_MENU_NEW)
-			{
-				g_string_append_printf(text_names, "<b>%s</b>\n", keys[i]->section);
-				g_string_append(text_keys, "\n");
-			}
-			else
-			{
-				g_string_append_printf(text_names, "\n<b>%s</b>\n", keys[i]->section);
-				g_string_append(text_keys, "\n\n");
-			}
+			g_string_append_printf(text_names, "<b>%s</b>\n", group->label);
+			g_string_append(text_keys, "\n");
+		}
+		else
+		{
+			g_string_append_printf(text_names, "\n<b>%s</b>\n", group->label);
+			g_string_append(text_keys, "\n\n");
 		}
 
-		shortcut = gtk_accelerator_get_label(keys[i]->key, keys[i]->mods);
-		g_string_append(text_names, keys[i]->label);
-		g_string_append(text_names, "\n");
-		g_string_append(text_keys, shortcut);
-		g_string_append(text_keys, "\n");
-		g_free(shortcut);
+		for (i = 0; i < group->count; i++)
+		{
+			KeyBinding *kb = &group->keys[i];
+			gchar *shortcut;
+
+			shortcut = gtk_accelerator_get_label(kb->key, kb->mods);
+			g_string_append(text_names, kb->label);
+			g_string_append(text_names, "\n");
+			g_string_append(text_keys, shortcut);
+			g_string_append(text_keys, "\n");
+			g_free(shortcut);
+		}
 	}
-#endif
 }
 
 
@@ -663,7 +664,7 @@ void keybindings_show_shortcuts()
 	GString *text_names;
 	GString *text_keys;
 	gint height, response;
-return;/* tmp */
+
 	dialog = gtk_dialog_new_with_buttons(_("Keyboard Shortcuts"), GTK_WINDOW(app->window),
 				GTK_DIALOG_DESTROY_WITH_PARENT,
 				GTK_STOCK_EDIT, GTK_RESPONSE_APPLY,
