@@ -483,26 +483,30 @@ void keybindings_init(void)
 }
 
 
-#define GEANY_ADD_ACCEL(gkey, wid) \
-	if (keys[(gkey)]->key != 0) \
-		gtk_widget_add_accelerator( \
-			lookup_widget(app->window, G_STRINGIFY(wid)), \
-			"activate", accel_group, keys[(gkey)]->key, keys[(gkey)]->mods, \
-			GTK_ACCEL_VISIBLE)
+static void add_menu_accel(KeyBindingGroup *group, guint kb_id,
+	GtkAccelGroup *accel_group, GtkWidget *menuitem)
+{
+	KeyBinding *kb = &group->keys[kb_id];
 
-#define GEANY_ADD_POPUP_ACCEL(gkey, wid) \
-	if (keys[(gkey)]->key != 0) \
-		gtk_widget_add_accelerator( \
-			lookup_widget(app->popup_menu, G_STRINGIFY(wid)), \
-			"activate", accel_group, keys[(gkey)]->key, keys[(gkey)]->mods, \
-			GTK_ACCEL_VISIBLE)
+	if (kb->key != 0)
+		gtk_widget_add_accelerator(menuitem, "activate", accel_group,
+			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
+}
 
+
+#define GEANY_ADD_ACCEL(kb_id, wid) \
+	add_menu_accel(group, kb_id, accel_group, lookup_widget(app->window, G_STRINGIFY(wid)))
+
+#define GEANY_ADD_POPUP_ACCEL(kb_id, wid) \
+	add_menu_accel(group, kb_id, accel_group, lookup_widget(app->popup_menu, G_STRINGIFY(wid)))
+
+/* set the menu item accelerator shortcuts (just for visibility, they are handled anyway) */
 static void add_menu_accels()
 {
-#if 0 /* tmp */
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
+	KeyBindingGroup *group;
 
-	/* apply the settings */
+	group = g_ptr_array_index(keybinding_groups, GEANY_KEYGROUP_FILE);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_OPENSELECTED, menu_open_selected_file1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_SAVEALL, menu_save_all1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_SAVEAS, menu_save_as1);
@@ -510,13 +514,18 @@ static void add_menu_accels()
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_CLOSE, menu_close1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_CLOSEALL, menu_close_all1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_RELOADFILE, menu_reload1);
+
+	group = g_ptr_array_index(keybinding_groups, GEANY_KEYGROUP_EDIT);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_UNDO, menu_undo2);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_REDO, menu_redo2);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_SELECTALL, menu_select_all1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_INSERTDATE, insert_date_custom1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_PREFERENCES, preferences1);
+
+	group = g_ptr_array_index(keybinding_groups, GEANY_KEYGROUP_HELP);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_HELP, help1);
 
+	group = g_ptr_array_index(keybinding_groups, GEANY_KEYGROUP_SEARCH);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FIND, find1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FINDNEXT, find_next1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FINDPREVIOUS, find_previous1);
@@ -527,6 +536,7 @@ static void add_menu_accels()
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_NEXTMESSAGE, next_message1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_GOTOLINE, go_to_line1);
 
+	group = g_ptr_array_index(keybinding_groups, GEANY_KEYGROUP_VIEW);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_TOGGLEALL, menu_toggle_all_additional_widgets1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FULLSCREEN, menu_fullscreen1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_MESSAGEWINDOW, menu_show_messages_window1);
@@ -534,15 +544,19 @@ static void add_menu_accels()
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_ZOOMIN, menu_zoom_in1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_ZOOMOUT, menu_zoom_out1);
 
+	group = g_ptr_array_index(keybinding_groups, GEANY_KEYGROUP_DOCUMENT);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_REPLACETABS, menu_replace_tabs);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FOLDALL, menu_fold_all1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_UNFOLDALL, menu_unfold_all1);
 
+	group = g_ptr_array_index(keybinding_groups, GEANY_KEYGROUP_FILE);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_PROJECTPROPERTIES, project_properties1);
 
+	group = g_ptr_array_index(keybinding_groups, GEANY_KEYGROUP_TOOLS);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_OPENCOLORCHOOSER, menu_choose_color1);
 	/*GEANY_ADD_ACCEL(GEANY_KEYS_MENU_INSERTSPECIALCHARS, menu_insert_special_chars1);*/
 
+	group = g_ptr_array_index(keybinding_groups, GEANY_KEYGROUP_EDITING);
 	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_TOGGLECASE, menu_toggle_case2);
 	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_COMMENTLINE, menu_comment_line1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_UNCOMMENTLINE, menu_uncomment_line1);
@@ -551,16 +565,27 @@ static void add_menu_accels()
 	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_INCREASEINDENT, menu_increase_indent1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_DECREASEINDENT, menu_decrease_indent1);
 
+	group = g_ptr_array_index(keybinding_groups, GEANY_KEYGROUP_EDIT);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_UNDO, undo1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_REDO, redo1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_SELECTALL, menu_select_all2);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_INSERTDATE, insert_date_custom2);
+
+	group = g_ptr_array_index(keybinding_groups, GEANY_KEYGROUP_FILE);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_OPENSELECTED, menu_open_selected_file2);
+
+	group = g_ptr_array_index(keybinding_groups, GEANY_KEYGROUP_EDITING);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_POPUP_FINDUSAGE, find_usage1);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_POPUP_CONTEXTACTION, context_action1);
+
+	group = g_ptr_array_index(keybinding_groups, GEANY_KEYGROUP_TAGS);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_POPUP_GOTOTAGDEFINITION, goto_tag_definition1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_POPUP_GOTOTAGDECLARATION, goto_tag_declaration1);
-	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_POPUP_CONTEXTACTION, context_action1);
+
+	group = g_ptr_array_index(keybinding_groups, GEANY_KEYGROUP_SEARCH);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_GOTOLINE, go_to_line);
+
+	group = g_ptr_array_index(keybinding_groups, GEANY_KEYGROUP_EDITING);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDIT_TOGGLECASE, toggle_case1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDIT_COMMENTLINE, menu_comment_line2);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDIT_UNCOMMENTLINE, menu_uncomment_line2);
@@ -572,7 +597,6 @@ static void add_menu_accels()
 	/* the build menu items are set if the build menus are created */
 
 	gtk_window_add_accel_group(GTK_WINDOW(app->window), accel_group);
-#endif
 }
 
 

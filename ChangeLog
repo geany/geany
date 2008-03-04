@@ -7,6 +7,8 @@
    Re-enable focus commands in the VTE.
    Re-enable snippets completion.
    Re-enable Keyboard Shortcuts dialog.
+ * src/build.c, src/keybindings.c:
+   Re-enable setting menu accelerators.
 
 
 2008-02-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
