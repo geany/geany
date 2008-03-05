@@ -162,7 +162,7 @@ extern int lookupKeyword (const char *const string, langType language)
 {
     const unsigned long hashedValue = hashValue (string);
     hashEntry *entry = getHashTableEntry (hashedValue);
-    int value = 0;
+    int value = -1;
 
     while (entry != NULL)
     {

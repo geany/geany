@@ -6,6 +6,13 @@
    from this feature.
  * src/document.c:
    Don't open zero byte sized files read-only (e.g. files in /proc).
+ * src/symbols.c, tagmanager/fortran.c, tagmanager/keyword.c,
+   tagmanager/js.c, tagmanager/asm.c, tagmanager/c.c:
+   Backport js.c and asm.c from CTags SVN.
+   Fix Assembler tagmanager support and add appropriate symbol types.
+   Fix JavaScript parse bug (#1895242).
+   Change default return value of lookupKeyword() in keyword.c as it was
+   done in CTags SVN(r339) and adjust affected parsers.
 
 
 2008-03-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

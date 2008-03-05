@@ -718,6 +718,16 @@ static void init_tag_list(gint idx)
 				NULL);
 			break;
 		}
+		case GEANY_FILETYPES_ASM:
+		{
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_namespace), _("Labels"), "classviewer-namespace",
+				&(tv_iters.tag_function), _("Macros"), "classviewer-method",
+				&(tv_iters.tag_macro), _("Defines"), "classviewer-macro",
+				&(tv_iters.tag_struct), _("Types"), "classviewer-struct",
+				NULL);
+			break;
+		}
 		case GEANY_FILETYPES_D:
 		default:
 		{
