@@ -4,6 +4,8 @@
    Apply patch from Yura Siamashka to use she-bang filetype detection
    also in filetypes_detect_from_filename() which let plugins benefit
    from this feature.
+ * src/document.c:
+   Don't open zero byte sized files read-only (e.g. files in /proc).
 
 
 2008-03-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

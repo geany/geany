@@ -842,7 +842,9 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_f
 	tmp_enc_idx = encodings_scan_unicode_bom(filedata->data, filedata->size, NULL);
 
 	/* check whether the size of the loaded data is equal to the size of the file in the filesystem */
-	if (filedata->len != filedata->size && (
+	/* file size may be 0 to allow opening files in /proc/ which have typically a file size
+	 * of 0 bytes */
+	if (filedata->len != filedata->size && filedata->size != 0 && (
 		tmp_enc_idx == GEANY_ENCODING_UTF_8 || /* tmp_enc_idx can be UTF-7/8/16/32, UCS and None */
 		tmp_enc_idx == GEANY_ENCODING_UTF_7 || /* filter out UTF-7/8 and None where no NULL bytes */
 		tmp_enc_idx == GEANY_ENCODING_NONE))   /* are allowed */
