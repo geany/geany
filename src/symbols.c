@@ -912,7 +912,7 @@ static filetype *detect_global_tags_filetype(const gchar *utf8_filename)
 	if (tags_ext)
 	{
 		*tags_ext = '\0';	/* remove .tags extension */
-		ft = filetypes_detect_from_filename(shortname);
+		ft = filetypes_detect_from_extension(shortname);
 	}
 	g_free(shortname);
 

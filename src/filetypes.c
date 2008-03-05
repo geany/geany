@@ -26,6 +26,7 @@
  */
 
 #include <string.h>
+#include <glib/gstdio.h>
 
 #include "geany.h"
 #include "filetypes.h"
@@ -569,9 +570,43 @@ filetype *filetypes_get_from_uid(gint uid)
 }
 
 
-static filetype *find_shebang(gint idx)
+/* Detect filetype only based on the filename extension.
+ * utf8_filename can include the full path. */
+filetype *filetypes_detect_from_extension(const gchar *utf8_filename)
 {
-	gchar *line = sci_get_line(doc_list[idx].sci, 0);
+	GPatternSpec *pattern;
+	gchar *base_filename;
+	gint i, j;
+
+	/* to match against the basename of the file(because of Makefile*) */
+	base_filename = g_path_get_basename(utf8_filename);
+#ifdef G_OS_WIN32
+	/* use lower case basename */
+	setptr(base_filename, g_utf8_strdown(base_filename, -1));
+#endif
+
+	for(i = 0; i < GEANY_MAX_FILE_TYPES; i++)
+	{
+		for (j = 0; filetypes[i]->pattern[j] != NULL; j++)
+		{
+			pattern = g_pattern_spec_new(filetypes[i]->pattern[j]);
+			if (g_pattern_match_string(pattern, base_filename))
+			{
+				g_free(base_filename);
+				g_pattern_spec_free(pattern);
+				return filetypes[i];
+			}
+			g_pattern_spec_free(pattern);
+		}
+	}
+
+	g_free(base_filename);
+	return filetypes[GEANY_FILETYPES_ALL];
+}
+
+
+static filetype *find_shebang(const gchar *utf8_filename, const gchar *line)
+{
 	filetype *ft = NULL;
 
 	if (strlen(line) > 2 && line[0] == '#' && line[1] == '!')
@@ -614,46 +649,60 @@ static filetype *find_shebang(gint idx)
 		g_free(tmp);
 	}
 	/* detect XML files */
-	if (strncmp(line, "<?xml", 5) == 0)
+	if (utf8_filename && strncmp(line, "<?xml", 5) == 0)
 	{
 		/* HTML and DocBook files might also start with <?xml, so detect them based on filename
 		 * extension and use the detected filetype, else assume XML */
-		ft = filetypes_detect_from_filename(doc_list[idx].file_name);
+		ft = filetypes_detect_from_extension(utf8_filename);
 		if (FILETYPE_ID(ft) != GEANY_FILETYPES_HTML &&
 			FILETYPE_ID(ft) != GEANY_FILETYPES_DOCBOOK &&
 			FILETYPE_ID(ft) != GEANY_FILETYPES_PERL &&	/* Perl, Python and PHP only to be safe */
 			FILETYPE_ID(ft) != GEANY_FILETYPES_PHP &&
 			FILETYPE_ID(ft) != GEANY_FILETYPES_PYTHON)
-
+		{
 			ft = filetypes[GEANY_FILETYPES_XML];
+		}
 	}
 	else if (strncmp(line, "<?php", 5) == 0)
 	{
 		ft = filetypes[GEANY_FILETYPES_PHP];
 	}
 
-	g_free(line);
 	return ft;
 }
 
 
-/* Detect the filetype for document idx, checking for a shebang, then filename extension. */
+/* Detect the filetype checking for a shebang, then filename extension. */
+static filetype *filetypes_detect_from_file_internal(const gchar *utf8_filename, const gchar *line)
+{
+	filetype *ft;
+
+	/* try to find a shebang and if found use it prior to the filename extension
+	 * also checks for <?xml */
+	ft = find_shebang(utf8_filename, line);
+	if (ft != NULL)
+		return ft;
+
+	if (utf8_filename == NULL)
+		return filetypes[GEANY_FILETYPES_ALL];
+
+	return filetypes_detect_from_extension(utf8_filename);
+}
+
+
+/* Detect the filetype for document idx. */
 filetype *filetypes_detect_from_file(gint idx)
 {
 	filetype *ft;
+	gchar *line;
 
 	if (! DOC_IDX_VALID(idx))
 		return filetypes[GEANY_FILETYPES_ALL];
 
-	/* try to find a shebang and if found use it prior to the filename extension
-	 * also checks for <?xml */
-	ft = find_shebang(idx);
-	if (ft != NULL) return ft;
-
-	if (doc_list[idx].file_name == NULL)
-		return filetypes[GEANY_FILETYPES_ALL];
-
-	return filetypes_detect_from_filename(doc_list[idx].file_name);
+	line = sci_get_line(doc_list[idx].sci, 0);
+	ft = filetypes_detect_from_file_internal(doc_list[idx].file_name, line);
+	g_free(line);
+	return ft;
 }
 
 
@@ -661,34 +710,22 @@ filetype *filetypes_detect_from_file(gint idx)
  * utf8_filename can include the full path. */
 filetype *filetypes_detect_from_filename(const gchar *utf8_filename)
 {
-	GPatternSpec *pattern;
-	gchar *base_filename;
-	gint i, j;
+	gchar line[1024];
+	FILE *f;
+	gchar *locale_name = utils_get_locale_from_utf8(utf8_filename);
 
-	/* to match against the basename of the file(because of Makefile*) */
-	base_filename = g_path_get_basename(utf8_filename);
-#ifdef G_OS_WIN32
-	/* use lower case basename */
-	setptr(base_filename, g_utf8_strdown(base_filename, -1));
-#endif
-
-	for(i = 0; i < GEANY_MAX_FILE_TYPES; i++)
+	f = g_fopen(locale_name, "r");
+	g_free(locale_name);
+	if (f != NULL)
 	{
-		for (j = 0; filetypes[i]->pattern[j] != NULL; j++)
+		if (fgets(line, sizeof(line), f) != NULL)
 		{
-			pattern = g_pattern_spec_new(filetypes[i]->pattern[j]);
-			if (g_pattern_match_string(pattern, base_filename))
-			{
-				g_free(base_filename);
-				g_pattern_spec_free(pattern);
-				return filetypes[i];
-			}
-			g_pattern_spec_free(pattern);
+			fclose(f);
+			return filetypes_detect_from_file_internal(utf8_filename, line);
 		}
+		fclose(f);
 	}
-
-	g_free(base_filename);
-	return filetypes[GEANY_FILETYPES_ALL];
+	return filetypes_detect_from_extension(utf8_filename);
 }
 
 

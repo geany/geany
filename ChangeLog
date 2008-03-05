@@ -1,3 +1,11 @@
+2008-03-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/filetypes.c, src/filetypes.h, src/symbols.c:
+   Apply patch from Yura Siamashka to use she-bang filetype detection
+   also in filetypes_detect_from_filename() which let plugins benefit
+   from this feature.
+
+
 2008-03-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * tagmanager/fortran.c, src/symbols.c:
@@ -54,7 +62,7 @@
  * tagmanager/options.c, src/symbols.c, src/symbols.h:
    Define c_tags_ignore in options.c (tagmanager) instead of symbols.c.
  * configure.in:
-   Apply patch Yura Siamashka to add a check for the presence of
+   Apply patch from Yura Siamashka to add a check for the presence of
    fnmatch(), thanks.
  * THANKS, plugins/vcdiff.c, src/plugindata.h, src/plugins.c,
    src/utils.c, src/utils.h, src/win32.c, src/win32.h:

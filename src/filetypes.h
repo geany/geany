@@ -136,6 +136,8 @@ void filetypes_init_types(void);
 /* Detect the filetype for document idx, checking for a shebang, then filename extension. */
 filetype *filetypes_detect_from_file(gint idx);
 
+filetype *filetypes_detect_from_extension(const gchar *utf8_filename);
+
 /* Detect filetype based on the filename extension.
  * utf8_filename can include the full path. */
 filetype *filetypes_detect_from_filename(const gchar *utf8_filename);
