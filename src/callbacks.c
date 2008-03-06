@@ -931,24 +931,43 @@ void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 	if (sci_can_copy(sci))
 	{
-		gchar *result;
+		gchar *result = NULL;
+		gint cmd;
 		gint text_len = sci_get_selected_text_length(sci);
+		gboolean rectsel = scintilla_send_message(sci, SCI_SELECTIONISRECTANGLE, 0, 0);
 
 		text = g_malloc(text_len + 1);
 		sci_get_selected_text(sci, text);
 
 		if (utils_str_has_upper(text))
-			result = g_utf8_strdown(text, -1);
+        {
+			if (rectsel)
+				cmd = SCI_LOWERCASE;
+			else
+				result = g_utf8_strdown(text, -1);
+
+		}
 		else
-			result = g_utf8_strup(text, -1);
+		{
+			if (rectsel)
+				cmd = SCI_UPPERCASE;
+			else
+				result = g_utf8_strup(text, -1);
 
-		sci_replace_sel(sci, result);
+		}
 
-		g_free(result);
+		if (result != NULL)
+		{
+			sci_replace_sel(sci, result);
+			g_free(result);
+			if (keep_sel)
+				sci_set_selection_start(sci, sci_get_current_position(sci) - text_len + 1);
+		}
+		else
+			sci_cmd(sci, cmd);
+
 		g_free(text);
 
-		if (keep_sel)
-			sci_set_selection_start(sci, sci_get_current_position(sci) - text_len + 1);
 	}
 }
 

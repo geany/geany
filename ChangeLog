@@ -1,3 +1,10 @@
+2008-03-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/callbacks.c:
+   Apply patch from Jeff Pohlmeyer (thanks) to fix toggle case with
+   rectangular selections (works only for Ascii characters).
+
+
 2008-03-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/filetypes.c, src/filetypes.h, src/symbols.c:
