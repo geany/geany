@@ -1,3 +1,13 @@
+2008-03-07  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * doc/Doxyfile.in, doc/Makefile.am:
+   Use doxygen option QUIET to disable non-warning messages instead of
+   redirecting output to /dev/null.
+ * src/keyfile.c:
+   When opening session files, don't try to set document properties if
+   the document can't be opened.
+
+
 2008-03-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/callbacks.c:

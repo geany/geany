@@ -11,7 +11,7 @@ pdf: geany.txt
 	mv $(srcdir)/geany.pdf geany-$(VERSION).pdf
 
 api-doc: Doxyfile
-	doxygen >/dev/null
+	doxygen
 
 doc: geany.txt
 	rst2html -stg --stylesheet=geany.css $(srcdir)/geany.txt geany.html
