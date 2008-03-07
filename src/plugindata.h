@@ -43,7 +43,7 @@ static const gint api_version = 46;
  * are only appended, as this doesn't affect existing fields. */
 static const gint abi_version = 21;
 
-/* This performs runtime checks that try to ensure:
+/** This performs runtime checks that try to ensure:
  * 1. Geany ABI data types are compatible with this plugin.
  * 2. Geany sources provide the required API for this plugin. */
 /* TODO: if possible, the API version should be checked at compile time, not runtime. */
@@ -90,6 +90,27 @@ PluginInfo;
 		p_info.author = (p_author); \
 		return &p_info; \
 	}
+
+
+/** Declare and initialise a keybinding group.
+ * @code KeyBindingGroup plugin_key_group[1]; @endcode
+ * You must then set the @c plugin_key_group::keys[] entries for the group in init().
+ * The @c plugin_key_group::label field is set by Geany after @c init()
+ * is called, to the name of the plugin.
+ * @param group_name A unique group name (without quotes) to be used in the
+ * configuration file, such as @c html_chars.
+ * @param key_count	The number of keybindings the group will hold.
+ * @note This is a single element array for implementation reasons,
+ * but you can treat it like a pointer. */
+#define PLUGIN_KEY_GROUP(group_name, key_count) \
+	static KeyBinding plugin_keys[key_count]; \
+	\
+	/* We have to declare plugin_key_group as a single element array.
+	 * Declaring as a pointer to a struct doesn't work with g_module_symbol(). */ \
+	KeyBindingGroup plugin_key_group[1] = \
+	{ \
+		{G_STRINGIFY(group_name), NULL, key_count, plugin_keys} \
+	};
 
 
 /** callback array entry */

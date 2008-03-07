@@ -28,6 +28,7 @@
 #include "support.h"
 #include "plugindata.h"
 #include "document.h"
+#include "keybindings.h"
 #include "pluginmacros.h"
 
 
@@ -39,6 +40,16 @@ VERSION_CHECK(7)
 
 PLUGIN_INFO(_("HTML Characters"), _("Inserts HTML character entities like '&amp;'."), VERSION,
 	_("The Geany developer team"))
+
+
+/* Keybinding(s) */
+enum
+{
+	KB_INSERT_HTML_CHARS,
+	KB_COUNT
+};
+
+PLUGIN_KEY_GROUP(html_chars, KB_COUNT)
 
 
 enum
@@ -503,13 +514,39 @@ item_activate(GtkMenuItem *menuitem, gpointer gdata)
 }
 
 
+static void kb_activate(G_GNUC_UNUSED guint key_id)
+{
+	item_activate(NULL, NULL);
+}
+
+
+/* simple convenience function to fill a KeyBinding struct item */
+static void add_kb(KeyBindingGroup *group, gsize kb_id,
+		KBCallback func, guint key, GdkModifierType mod,
+		const gchar *name, const gchar *label)
+{
+	KeyBinding *kb;
+
+	g_assert(kb_id < group->count);
+
+	kb = &group->keys[kb_id];
+
+	kb->name = name;
+	kb->label = label;
+	kb->key = key;
+	kb->mods = mod;
+	kb->cb_func = func;
+}
+
+
 /* Called by Geany to initialize the plugin */
 void init(GeanyData *data)
 {
 	GtkWidget *demo_item;
+	const gchar *menu_text = _("_Insert Special HTML Characters");
 
 	/* Add an item to the Tools menu */
-	demo_item = gtk_menu_item_new_with_mnemonic(_("_Insert Special HTML Characters"));
+	demo_item = gtk_menu_item_new_with_mnemonic(menu_text);
 	gtk_widget_show(demo_item);
 	gtk_container_add(GTK_CONTAINER(geany_data->tools_menu), demo_item);
 	g_signal_connect(G_OBJECT(demo_item), "activate", G_CALLBACK(item_activate), NULL);
@@ -517,6 +554,10 @@ void init(GeanyData *data)
 	/* disable menu_item when there are no documents open */
 	plugin_fields->menu_item = demo_item;
 	plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
+
+	/* setup keybindings */
+	add_kb(plugin_key_group, KB_INSERT_HTML_CHARS, kb_activate,
+		0, 0, "insert_html_chars", menu_text);
 }
 
 

@@ -78,7 +78,6 @@ static void cb_func_menu_unfoldall(guint key_id);
 static void cb_func_reloadtaglist(guint key_id);
 
 static void cb_func_menu_opencolorchooser(guint key_id);
-static void cb_func_menu_insert_specialchars(guint key_id);
 
 static void cb_func_build_action(guint key_id);
 
@@ -289,8 +288,6 @@ static void init_default_kb(void)
 
 	add_kb(group, GEANY_KEYS_MENU_OPENCOLORCHOOSER, cb_func_menu_opencolorchooser,
 		0, 0, "menu_opencolorchooser", _("Show Color Chooser"));
-	add_kb(group, GEANY_KEYS_MENU_INSERTSPECIALCHARS, cb_func_menu_insert_specialchars,
-		0, 0, "menu_insert_specialchars", _("Insert Special HTML Characters"));
 
 	group = ADD_KB_GROUP(HELP, _("Help menu"));
 
@@ -554,7 +551,6 @@ static void add_menu_accels()
 
 	group = g_ptr_array_index(keybinding_groups, GEANY_KEYGROUP_TOOLS);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_OPENCOLORCHOOSER, menu_choose_color1);
-	/*GEANY_ADD_ACCEL(GEANY_KEYS_MENU_INSERTSPECIALCHARS, menu_insert_special_chars1);*/
 
 	group = g_ptr_array_index(keybinding_groups, GEANY_KEYGROUP_EDITING);
 	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_TOGGLECASE, menu_toggle_case2);
@@ -1513,12 +1509,6 @@ static void cb_func_menu_replacetabs(G_GNUC_UNUSED guint key_id)
 static void cb_func_menu_insert_date(G_GNUC_UNUSED guint key_id)
 {
 	gtk_menu_item_activate(GTK_MENU_ITEM(lookup_widget(app->window, "insert_date_custom1")));
-}
-
-static void cb_func_menu_insert_specialchars(G_GNUC_UNUSED guint key_id)
-{
-	/** TODO: add plugin keybinding support */
-	/*on_menu_insert_special_chars1_activate(NULL, NULL);*/
 }
 
 static void cb_func_nav_back(G_GNUC_UNUSED guint key_id)

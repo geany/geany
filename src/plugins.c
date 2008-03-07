@@ -66,20 +66,21 @@
 typedef struct Plugin
 {
 	GModule 	*module;
-	gchar		*filename;		/* plugin filename (/path/libname.so) */
+	gchar		*filename;				/* plugin filename (/path/libname.so) */
 	PluginFields	fields;
-	gulong		*signal_ids;		/* signal IDs to disconnect when unloading */
+	gulong		*signal_ids;			/* signal IDs to disconnect when unloading */
 	gsize		signal_ids_len;
+	KeyBindingGroup	*key_group;
 
-	PluginInfo*	(*info) (void);	/* Returns plugin name, description */
+	PluginInfo*	(*info) (void);			/* Returns plugin name, description */
 	void	(*init) (GeanyData *data);	/* Called when the plugin is enabled */
 	void	(*configure) (GtkWidget *parent);	/* plugin configure dialog, optionally */
-	void	(*cleanup) (void);	/* Called when the plugin is disabled or when Geany exits */
+	void	(*cleanup) (void);			/* Called when the plugin is disabled or when Geany exits */
 }
 Plugin;
 
 
-static GList *plugin_list = NULL; /* list of all available, loadable plugins */
+static GList *plugin_list = NULL; 		/* list of all available, loadable plugins */
 static GList *active_plugin_list = NULL; /* list of only actually loaded plugins */
 static GtkWidget *separator = NULL;
 static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data);
@@ -358,6 +359,15 @@ is_active_plugin(const gchar *name)
 
 
 static void
+add_kb_group(Plugin *plugin)
+{
+	g_ptr_array_add(keybinding_groups, plugin->key_group);
+
+	plugin->key_group->label = plugin->info()->name;
+}
+
+
+static void
 plugin_init(Plugin *plugin)
 {
 	GeanyCallback *callbacks;
@@ -374,6 +384,11 @@ plugin_init(Plugin *plugin)
 	g_module_symbol(plugin->module, "geany_callbacks", (void *) &callbacks);
 	if (callbacks)
 		add_callbacks(plugin, callbacks);
+
+	g_module_symbol(plugin->module, "plugin_key_group",
+		(void *) &plugin->key_group);
+	if (plugin->key_group)
+		add_kb_group(plugin);
 
 	active_plugin_list = g_list_append(active_plugin_list, plugin);
 
@@ -483,16 +498,20 @@ plugin_unload(Plugin *plugin)
 	g_return_if_fail(plugin);
 	g_return_if_fail(plugin->module);
 
-	if (g_list_find(active_plugin_list, plugin))
-	{	/* only do cleanup if the plugin was actually loaded */
-		if (plugin->cleanup)
-			plugin->cleanup();
+	/* only do cleanup if the plugin was actually loaded */
+	if (! g_list_find(active_plugin_list, plugin))
+		return;
 
-		remove_callbacks(plugin);
+	if (plugin->cleanup)
+		plugin->cleanup();
 
-		active_plugin_list = g_list_remove(active_plugin_list, plugin);
-		geany_debug("Unloaded: %s", plugin->filename);
-	}
+	remove_callbacks(plugin);
+
+	if (plugin->key_group)
+		g_ptr_array_remove_fast(keybinding_groups, plugin->key_group);
+
+	active_plugin_list = g_list_remove(active_plugin_list, plugin);
+	geany_debug("Unloaded: %s", plugin->filename);
 }
 
 

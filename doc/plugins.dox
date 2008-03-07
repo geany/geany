@@ -49,10 +49,10 @@
  *  are optional, i.e. they can be omitted, others are required and must be defined.
  *
  *  - @code version_check() @endcode
- * 	  Use VERSION_CHECK() macro instead. Required by Geany.
+ * 	  Use the VERSION_CHECK() macro instead. Required by Geany.
  *
  *  - @code PluginInfo* info() @endcode
- * 	  Use PLUGIN_INFO() macro to define it. Required by Geany.
+ * 	  Use the PLUGIN_INFO() macro to define it. Required by Geany.
  *
  *  - @code GeanyData* geany_data @endcode
  * 	  Geany owned fields and functions.
@@ -63,6 +63,9 @@
  *  - @code GeanyCallback geany_callbacks[] @endcode
  * 	  An array for connecting GeanyObject events, which should be terminated with
  * 	  {NULL, NULL, FALSE, NULL}. See @link signals Signal documentation @endlink.
+ *
+ *  - @code KeyBindingGroup plugin_key_group[1] @endcode
+ * 	  Use the PLUGIN_KEY_GROUP() macro to define it.
  *
  *  - @code void configure(GtkWidget *parent) @endcode
  * 	  Called when the plugin should show a configure dialog to let the user set some basic
@@ -84,7 +87,7 @@
  *
  *  To use plugin signals in Geany, you simply create a GeanyCallback array, list the signals
  *  you want to listen to and create the appropiate signal callbacks for each signal.
- *  @note The GeanyCallback array has be ended with a final NULL entry.
+ *  @note The GeanyCallback array has to be ended with a final NULL entry.
  *
  *  The following code demonstrates how to use signals in Geany plugins. The code can be inserted
  *  in your plugin code at any desired position.
@@ -193,7 +196,7 @@ GeanyCallback geany_callbacks[] =
  *  @section intro Introduction
  *
  *  Since Geany 0.12 there is a plugin interface to extend Geany's functionality and
- *  add new features. This %document gives a briefly overview about how to add new
+ *  add new features. This %document gives a brief overview about how to add new
  *  plugins by writing a simple "Hello World" plugin in C.
  *
  *

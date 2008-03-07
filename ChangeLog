@@ -1,3 +1,22 @@
+2008-03-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.h:
+   Add documentation for keybindings structs.
+ * src/keybindings.c:
+   Allow plugins to use keybindings_lookup_item().
+ * src/keybindings.c, src/keybindings.h, src/plugindata.h,
+   src/plugins.c, doc/plugins.dox, plugins/htmlchars.c:
+   Add support for plugin keybindings using the PLUGIN_KEY_GROUP()
+   macro. Note: plugin keybindings are not yet loaded from the keyfile.
+   Add a plugin keybinding for 'Insert Special HTML Characters'.
+
+
+2008-03-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/build.c, src/keybindings.c:
+   Re-enable setting menu accelerators.
+
+
 2008-03-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/prefs.c:
@@ -7,8 +26,6 @@
    Re-enable focus commands in the VTE.
    Re-enable snippets completion.
    Re-enable Keyboard Shortcuts dialog.
- * src/build.c, src/keybindings.c:
-   Re-enable setting menu accelerators.
 
 
 2008-02-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
