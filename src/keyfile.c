@@ -855,10 +855,14 @@ gboolean configuration_open_files(void)
 					-1, locale_filename, pos, ro, ft,
 					(enc_idx >= 0 && enc_idx < GEANY_ENCODINGS_MAX) ?
 						encodings[enc_idx].charset : NULL);
-				document_set_use_tabs(new_idx, use_tabs);
-				doc_list[new_idx].auto_indent = auto_indent;
-				document_set_line_wrapping(new_idx, line_wrapping);
-				ret = TRUE;
+
+				if (DOC_IDX_VALID(new_idx))
+				{
+					document_set_use_tabs(new_idx, use_tabs);
+					document_set_line_wrapping(new_idx, line_wrapping);
+					doc_list[new_idx].auto_indent = auto_indent;
+					ret = TRUE;
+				}
 			}
 			else
 			{
