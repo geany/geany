@@ -67,6 +67,9 @@ enum	/* Geany common styling */
 	GCS_CARET,
 	GCS_INDENT_GUIDE,
 	GCS_WHITE_SPACE,
+	GCS_LINE_WRAP_VISUALS,
+	GCS_LINE_WRAP_INDENT,
+	GCS_TRANSLUCENCY,
 	GCS_MAX
 };
 
@@ -377,6 +380,17 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 		get_keyfile_int(config, config_home, "styling", "caret_width",
 			1, 0, &tmp_style);
 		common_style_set.styling[GCS_CARET].background = tmp_style.foreground;
+		get_keyfile_int(config, config_home, "styling", "line_wrap_visuals",
+			3, 0, &tmp_style);
+		common_style_set.styling[GCS_LINE_WRAP_VISUALS].foreground = tmp_style.foreground;
+		common_style_set.styling[GCS_LINE_WRAP_VISUALS].background = tmp_style.background;
+		get_keyfile_int(config, config_home, "styling", "line_wrap_indent",
+			0, 0, &tmp_style);
+		common_style_set.styling[GCS_LINE_WRAP_INDENT].foreground = tmp_style.foreground;
+		get_keyfile_int(config, config_home, "styling", "translucency",
+			256, 256, &tmp_style);
+		common_style_set.styling[GCS_TRANSLUCENCY].foreground = tmp_style.foreground;
+		common_style_set.styling[GCS_TRANSLUCENCY].background = tmp_style.background;
 	}
 
 	get_keyfile_wordchars(config, config_home, &common_style_set.wordchars);
@@ -389,13 +403,29 @@ static void styleset_common(ScintillaObject *sci, gint style_bits, filetype_id f
 {
 	SSM(sci, SCI_STYLECLEARALL, 0, 0);
 
-	/* caret colour and width */
+	/* caret colour, style and width */
 	SSM(sci, SCI_SETCARETFORE, invert(common_style_set.styling[GCS_CARET].foreground), 0);
 	SSM(sci, SCI_SETCARETWIDTH, common_style_set.styling[GCS_CARET].background, 0);
+	if (common_style_set.styling[GCS_CARET].bold)
+		SSM(sci, SCI_SETCARETSTYLE, CARETSTYLE_BLOCK, 0);
+	else
+		SSM(sci, SCI_SETCARETSTYLE, CARETSTYLE_LINE, 0);
 
 	/* colourize the current line */
 	SSM(sci, SCI_SETCARETLINEBACK, invert(common_style_set.styling[GCS_CURRENT_LINE].background), 0);
-	SSM(sci, SCI_SETCARETLINEVISIBLE, common_style_set.styling[GCS_CURRENT_LINE].bold, 0);	/* bold=enable current line */
+	/* bold=enable current line */
+	SSM(sci, SCI_SETCARETLINEVISIBLE, common_style_set.styling[GCS_CURRENT_LINE].bold, 0);
+
+	/* Translucency for current line and selection */
+	SSM(sci, SCI_SETCARETLINEBACKALPHA, common_style_set.styling[GCS_TRANSLUCENCY].foreground, 0);
+	SSM(sci, SCI_SETSELALPHA, common_style_set.styling[GCS_TRANSLUCENCY].background, 0);
+
+	/* line wrapping visuals */
+	SSM(sci, SCI_SETWRAPVISUALFLAGS,
+		common_style_set.styling[GCS_LINE_WRAP_VISUALS].foreground, 0);
+	SSM(sci, SCI_SETWRAPVISUALFLAGSLOCATION,
+		common_style_set.styling[GCS_LINE_WRAP_VISUALS].background, 0);
+	SSM(sci, SCI_SETWRAPSTARTINDENT, common_style_set.styling[GCS_LINE_WRAP_INDENT].foreground, 0);
 
 	/* indicator settings */
 	SSM(sci, SCI_INDICSETSTYLE, 2, INDIC_SQUIGGLE);

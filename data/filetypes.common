@@ -20,7 +20,14 @@ margin_folding=0x000000;0xdfdfdf;false;false
 # use the third argument to enable or disable the highlighting of the current line (has to be true/false)
 current_line=0x0;0xf0f0f0;true;false
 
-# colour of the caret(the blinking cursor), only first argument is interpreted
+# translucency for the current line(first argument) and the selection (second argument)
+# values between 0 and 256 are accepted. Note for Windows 95, 98 and ME users:
+# keep this value at 256 to disable translucency otherwise Geany might crash
+# only the first and second argument is interpreted
+translucency=256;256;false;false
+
+# colour of the caret(the blinking cursor), only first and third argument is interpreted
+# set the third argument to true to change the caret into a block caret
 caret=0x000000;0x0;false;false
 
 # width of the caret(the blinking cursor), only first argument is interpreted
@@ -48,6 +55,18 @@ folding_horiz_line=2;0;false;false
 # only first argument is interpreted, sets whether all defined colours should be inverted
 invert_all=0;0;false;false
 
+# only first and second argument is interpreted
+# first argument: drawing of visual flags to indicate a line is wrapped. This is a bitmask of the
+# values: 0 - No visual flags, 1 - Visual flag at end of subline of a wrapped line, 2 - Visual flag
+# at begin of subline of a wrapped line, Subline is indented by at least 1 to make room for the flag.
+# second argument: wether the visual flags to indicate a line is wrapped are drawn near the border
+# or near the text. This is a bitmask of the values: 0 - Visual flags drawn near border,
+# 1 - Visual flag at end of subline drawn near text, 2 - Visual flag at begin of subline drawn near text
+line_wrap_visuals=3;0;false;false
+
+# sets the size of indentation of sublines for wrapped lines in terms of the width of a space,
+# only first argument is interpreted
+line_wrap_indent=0;0;false;false
 
 [settings]
 # which characters should be skipped when moving (or included when deleting) to word boundaries

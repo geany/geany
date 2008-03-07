@@ -6,6 +6,11 @@
  * src/keyfile.c:
    When opening session files, don't try to set document properties if
    the document can't be opened.
+ * data/filetypes.common, doc/geany.html, doc/geany.txt,
+   src/highlighting.c, src/sciwrappers.c:
+   Add opton to style "caret" to change the caret into a block caret.
+   Add new styles "translucency", "line_wrap_visuals" and
+   "line_wrap_indent" to filetypes.common (#1905141).
 
 
 2008-03-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

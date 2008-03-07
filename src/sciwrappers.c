@@ -164,10 +164,7 @@ gboolean sci_get_visible_white_spaces(ScintillaObject* sci)
 void sci_set_lines_wrapped(ScintillaObject* sci, gboolean set )
 {
 	if (set)
-	{
 		SSM(sci,SCI_SETWRAPMODE,SC_WRAP_WORD,0);
-		SSM(sci, SCI_SETWRAPVISUALFLAGS, SC_WRAPVISUALFLAG_END | SC_WRAPVISUALFLAG_START, 0);
-	}
 	else
 		SSM(sci,SCI_SETWRAPMODE,SC_WRAP_NONE,0);
 }
