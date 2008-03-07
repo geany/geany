@@ -21,6 +21,11 @@
  * $Id$
  */
 
+/**
+ * @file keybindings.h
+ * Configurable keyboard shortcuts.
+ **/
+
 
 #ifndef GEANY_KEYBINDINGS_H
 #define GEANY_KEYBINDINGS_H 1
@@ -36,27 +41,24 @@
 
 typedef void (*KBCallback) (guint key_id);
 
-/* holds all user-definable key bindings */
+/** Represents a single keybinding action */
 typedef struct KeyBinding
 {
-	guint key;
-	GdkModifierType mods;
-	/* at the moment only needed as keys for the configuration file because indices or translatable
-	 * strings as keys are not very useful */
-	const gchar *name;
-	const gchar *label;
-	/* function pointer to a callback function, just to keep the code in keypress event
-	 * callback function clear */
-	KBCallback cb_func;
+	guint key;				/**< Key value in lower-case, such as @c GDK_a */
+	GdkModifierType mods;	/**< Modifier keys, such as @c GDK_CONTROL_MASK */
+	const gchar *name;		/**< Key name for the configuration file, such as @c "menu_new" */
+	const gchar *label;		/**< Label used in the preferences dialog keybindings tab */
+	KBCallback cb_func;		/**< Callback function called when the key combination is pressed */
 } KeyBinding;
 
 
+/** A collection of keybindings grouped together. */
 typedef struct KeyBindingGroup
 {
-	const gchar *name;		/* group name used for keyfile group */
-	const gchar *label;		/* group label in preferences dialog in keybinding treeview */
-	gsize count;			/* count of KeyBinding structs in keys */
-	KeyBinding *keys;		/* fixed array of KeyBinding structs */
+	const gchar *name;		/**< Group name used in the configuration file, such as @c "html_chars" */
+	const gchar *label;		/**< Group label used in the preferences dialog keybindings tab */
+	gsize count;			/**< Count of KeyBinding structs in @a keys */
+	KeyBinding *keys;		/**< Fixed array of KeyBinding structs */
 }
 KeyBindingGroup;
 
