@@ -916,21 +916,28 @@ KeyBinding *keybindings_lookup_item(guint group_id, guint cmd_id)
 {
 	KeyBindingGroup *group;
 
-	g_return_val_if_fail(group_id < GEANY_KEYGROUP_COUNT, NULL);	/* plugins can't use this */
+	g_return_val_if_fail(group_id < keybinding_groups->len, NULL);
 
 	group = g_ptr_array_index(keybinding_groups, group_id);
 
-	g_return_val_if_fail(group && cmd_id < group->count, NULL);
+	g_return_val_if_fail(group, NULL);
+	g_return_val_if_fail(cmd_id < group->count, NULL);
 
 	return &group->keys[cmd_id];
 }
 
 
-/* Mimic a (built-in only) keybinding action */
+/** Mimic a (built-in only) keybinding action.
+ * 	Example: @code keybindings_send_command(GEANY_KEYGROUP_FILE, GEANY_KEYS_MENU_OPEN); @endcode
+ * 	@param group_id The index for the key group that contains the @a cmd_id keybinding.
+ * 	@param cmd_id The keybinding command index. */
 void keybindings_send_command(gint group_id, gint cmd_id)
 {
-	KeyBinding *kb = keybindings_lookup_item(group_id, cmd_id);
+	KeyBinding *kb;
 
+	g_return_if_fail(group_id < GEANY_KEYGROUP_COUNT);	/* can't use this for plugin groups */
+
+	kb = keybindings_lookup_item(group_id, cmd_id);
 	if (kb)
 		kb->cb_func(cmd_id);
 }
