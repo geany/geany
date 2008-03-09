@@ -454,6 +454,7 @@ static gint document_create_new_sci(const gchar *filename)
 	SSM(sci, SCI_AUTOCSETSEPARATOR, '\n', 0);
 	/* (dis)allow scrolling past end of document */
 	SSM(sci, SCI_SETENDATLASTLINE, editor_prefs.scroll_stop_at_last_line, 0);
+	SSM(sci, SCI_SETSCROLLWIDTHTRACKING, 1, 0);
 
 	/* signal for insert-key(works without too, but to update the right status bar) */
 	/*g_signal_connect((GtkWidget*) sci, "key-press-event",

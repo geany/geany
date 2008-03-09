@@ -1,3 +1,10 @@
+2008-03-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/document.c:
+  Use SCI_SETSCROLLWIDTHTRACKING to improve horizontal scrollbar
+  behaviour by always adjusting to the longest line (part of #1905141).
+
+
 2008-03-07  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * doc/Doxyfile.in, doc/Makefile.am:
