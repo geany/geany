@@ -615,6 +615,17 @@ static void init_tag_list(gint idx)
 				/*&(tv_iters.tag_other), _("Other"), NULL);*/
 			break;
 		}
+		case GEANY_FILETYPES_HTML:
+		{
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_function), _("JavaScript functions"), NULL,
+				&(tv_iters.tag_member), _("Anchor"), NULL,
+				&(tv_iters.tag_namespace), _("Heading (H1)"), NULL,
+				&(tv_iters.tag_class), _("Heading (H2)"), NULL,
+				&(tv_iters.tag_variable), _("Heading (H3)"), NULL,
+				NULL);
+			break;
+		}
 		case GEANY_FILETYPES_REST:
 		{
 			tag_list_add_groups(tag_store,

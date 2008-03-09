@@ -1,8 +1,12 @@
 2008-03-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/document.c:
-  Use SCI_SETSCROLLWIDTHTRACKING to improve horizontal scrollbar
-  behaviour by always adjusting to the longest line (part of #1905141).
+   Use SCI_SETSCROLLWIDTHTRACKING to improve horizontal scrollbar
+   behaviour by always adjusting to the longest line (part of #1905141).
+ * src/filetypes.c, src/symbols.c, tagmanager/parsers.h,
+   tagmanager/makefile.win32, tagmanager/html.c, tagmanager/Makefile.am:
+   Add HTML parser to get h1, h2, h3 symbols as well as link anchors and
+   JavaScript functions (closes #1896068).
 
 
 2008-03-07  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

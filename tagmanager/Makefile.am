@@ -36,6 +36,7 @@ libtagmanager_a_SOURCES =\
 	fortran.c\
 	haskell.c\
 	haxe.c\
+	html.c\
 	js.c\
 	lua.c\
 	make.c\

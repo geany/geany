@@ -364,7 +364,7 @@ void filetypes_init_types()
 #define HTML
 	filetypes[GEANY_FILETYPES_HTML]->id = GEANY_FILETYPES_HTML;
 	filetypes[GEANY_FILETYPES_HTML]->uid = FILETYPE_UID_HTML;
-	filetypes[GEANY_FILETYPES_HTML]->lang = -2;
+	filetypes[GEANY_FILETYPES_HTML]->lang = 29;
 	filetypes[GEANY_FILETYPES_HTML]->name = g_strdup("HTML");
 	filetypes[GEANY_FILETYPES_HTML]->title = g_strdup_printf(_("%s source file"), "HTML");
 	filetypes[GEANY_FILETYPES_HTML]->extension = g_strdup("html");
