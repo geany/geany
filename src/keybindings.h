@@ -39,7 +39,7 @@
 #endif
 
 
-typedef void (*KBCallback) (guint key_id);
+typedef void (*KeyCallback) (guint key_id);
 
 /** Represents a single keybinding action */
 typedef struct KeyBinding
@@ -48,7 +48,8 @@ typedef struct KeyBinding
 	GdkModifierType mods;	/**< Modifier keys, such as @c GDK_CONTROL_MASK */
 	const gchar *name;		/**< Key name for the configuration file, such as @c "menu_new" */
 	const gchar *label;		/**< Label used in the preferences dialog keybindings tab */
-	KBCallback cb_func;		/**< Callback function called when the key combination is pressed */
+	KeyCallback callback;	/**< Callback function called when the key combination is pressed */
+	GtkWidget *menu_item;	/**< Menu item widget for setting the menu accelerator */
 } KeyBinding;
 
 
@@ -253,9 +254,13 @@ void keybindings_init(void);
 
 void keybindings_free(void);
 
-void keybindings_send_command(gint group_id, gint cmd_id);
+void keybindings_set_item(KeyBindingGroup *group, gsize key_id,
+		KeyCallback callback, guint key, GdkModifierType mod,
+		const gchar *name, const gchar *label, GtkWidget *menu_item);
 
-KeyBinding *keybindings_lookup_item(guint group_id, guint cmd_id);
+void keybindings_send_command(gint group_id, gint key_id);
+
+KeyBinding *keybindings_lookup_item(guint group_id, guint key_id);
 
 /* just write the content of the keys array to the config file */
 void keybindings_write_to_file(void);

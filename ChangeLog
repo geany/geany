@@ -1,3 +1,14 @@
+2008-03-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c, src/keybindings.h, src/plugindata.h,
+   src/plugins.c, plugins/htmlchars.c:
+   Add keybindings_set_item() to the plugin API and update the HTML
+   Characters plugin.
+   Rename KBCallback, cmd_id, cb_func with clearer names.
+   Add KeyBinding::menu_item field for setting accelerators (currently
+   does nothing).
+
+
 2008-03-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keybindings.h:

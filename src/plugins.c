@@ -188,7 +188,8 @@ static EncodingFuncs encoding_funcs = {
 };
 
 static KeybindingFuncs keybindings_funcs = {
-	&keybindings_send_command
+	&keybindings_send_command,
+	&keybindings_set_item
 };
 
 static TagManagerFuncs tagmanager_funcs = {

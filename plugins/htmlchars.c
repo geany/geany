@@ -520,25 +520,6 @@ static void kb_activate(G_GNUC_UNUSED guint key_id)
 }
 
 
-/* simple convenience function to fill a KeyBinding struct item */
-static void add_kb(KeyBindingGroup *group, gsize kb_id,
-		KBCallback func, guint key, GdkModifierType mod,
-		const gchar *name, const gchar *label)
-{
-	KeyBinding *kb;
-
-	g_assert(kb_id < group->count);
-
-	kb = &group->keys[kb_id];
-
-	kb->name = name;
-	kb->label = label;
-	kb->key = key;
-	kb->mods = mod;
-	kb->cb_func = func;
-}
-
-
 /* Called by Geany to initialize the plugin */
 void init(GeanyData *data)
 {
@@ -556,8 +537,8 @@ void init(GeanyData *data)
 	plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
 
 	/* setup keybindings */
-	add_kb(plugin_key_group, KB_INSERT_HTML_CHARS, kb_activate,
-		0, 0, "insert_html_chars", menu_text);
+	p_keybindings->set_item(plugin_key_group, KB_INSERT_HTML_CHARS, kb_activate,
+		0, 0, "insert_html_chars", menu_text, demo_item);
 }
 
 
