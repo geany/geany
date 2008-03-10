@@ -15,6 +15,8 @@
    Load keybindings keyfile after plugins have loaded at startup, so
    their shortcuts are also loaded. Still to do: loading individual
    plugin keybindings after startup.
+ * src/keybindings.c, src/keybindings.h:
+   Move snippet completion keybindings into Editing group.
 
 
 2008-03-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

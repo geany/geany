@@ -385,6 +385,10 @@ static void init_default_kb(void)
 		GDK_Down, GDK_MOD1_MASK, "edit_scrolllinedown", _("Scroll down the view by one line"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_EDIT_INSERTALTWHITESPACE, cb_func_editing,
 		0, 0, "edit_insertwhitespace", _("Insert alternative whitespace"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_EDIT_COMPLETESNIPPET, NULL,	/* handled specially in check_snippet_completion() */
+		GDK_Tab, 0, "edit_completesnippet", _("Complete snippet"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_EDIT_SUPPRESSSNIPPETCOMPLETION, cb_func_editing,
+		0, 0, "edit_suppresssnippetcompletion", _("Suppress snippet completion"), NULL);
 
 	/* popup menu editing commands */
 	keybindings_set_item(group, GEANY_KEYS_POPUP_FINDUSAGE, cb_func_current_word,
@@ -400,10 +404,6 @@ static void init_default_kb(void)
 		GDK_space, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_calltip", _("Show calltip"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_EDIT_MACROLIST, cb_func_tags,
 		GDK_Return, GDK_CONTROL_MASK, "edit_macrolist", _("Show macro list"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_EDIT_COMPLETESNIPPET, NULL,	/* has special callback */
-		GDK_Tab, 0, "edit_completesnippet", _("Complete snippet"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_EDIT_SUPPRESSSNIPPETCOMPLETION, cb_func_tags,
-		0, 0, "edit_suppresssnippetcompletion", _("Suppress snippet completion"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_POPUP_GOTOTAGDEFINITION, cb_func_current_word,
 		0, 0, "popup_gototagdefinition", _("Go to Tag Definition"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_POPUP_GOTOTAGDECLARATION, cb_func_current_word,
@@ -792,7 +792,7 @@ static gboolean check_fixed_kb(guint keyval, guint state)
  * return FALSE if no completion occurs, so the tab or space is handled normally. */
 static gboolean check_snippet_completion(guint keyval, guint state)
 {
-	KeyBinding *kb = keybindings_lookup_item(GEANY_KEYGROUP_TAGS,
+	KeyBinding *kb = keybindings_lookup_item(GEANY_KEYGROUP_EDITING,
 		GEANY_KEYS_EDIT_COMPLETESNIPPET);
 
 	if (kb->key == keyval && kb->mods == state)
@@ -1461,6 +1461,24 @@ static void cb_func_editing(guint key_id)
 			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 2)
 				tools_execute_custom_command(idx, ui_prefs.custom_commands[2]);
 			break;
+		case GEANY_KEYS_EDIT_SUPPRESSSNIPPETCOMPLETION:
+		{
+			KeyBinding *kb = keybindings_lookup_item(GEANY_KEYGROUP_EDITING,
+				GEANY_KEYS_EDIT_COMPLETESNIPPET);
+
+			switch (kb->key)
+			{
+				case GDK_space:
+					sci_add_text(doc_list[idx].sci, " ");
+					break;
+				case GDK_Tab:
+					sci_cmd(doc_list[idx].sci, SCI_TAB);
+					break;
+				default:
+					break;
+			}
+			break;
+		}
 	}
 }
 
@@ -1485,24 +1503,6 @@ static void cb_func_tags(guint key_id)
 		case GEANY_KEYS_EDIT_MACROLIST:
 			editor_show_macro_list(doc_list[idx].sci);
 			break;
-		case GEANY_KEYS_EDIT_SUPPRESSSNIPPETCOMPLETION:
-		{
-			KeyBinding *kb = keybindings_lookup_item(GEANY_KEYGROUP_TAGS,
-				GEANY_KEYS_EDIT_COMPLETESNIPPET);
-
-			switch (kb->key)
-			{
-				case GDK_space:
-					sci_add_text(doc_list[idx].sci, " ");
-					break;
-				case GDK_Tab:
-					sci_cmd(doc_list[idx].sci, SCI_TAB);
-					break;
-				default:
-					break;
-			}
-			break;
-		}
 	}
 }
 

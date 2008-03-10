@@ -66,7 +66,7 @@ KeyBindingGroup;
 extern GPtrArray *keybinding_groups;	/* array of KeyBindingGroup pointers */
 
 
-/* Plugin API enums - append only to maintain plugin ABI */
+/** Keybinding group IDs */
 enum
 {
 	GEANY_KEYGROUP_FILE,
@@ -85,6 +85,7 @@ enum
 	GEANY_KEYGROUP_COUNT
 };
 
+/** File group keybinding command IDs */
 enum
 {
 	GEANY_KEYS_MENU_NEW,
@@ -101,6 +102,7 @@ enum
 	GEANY_KEYS_FILE_COUNT
 };
 
+/** Edit group keybinding command IDs */
 enum
 {
 	GEANY_KEYS_MENU_UNDO,
@@ -114,6 +116,7 @@ enum
 	GEANY_KEYS_EDIT_COUNT
 };
 
+/** Search group keybinding command IDs */
 enum
 {
 	GEANY_KEYS_MENU_FIND,
@@ -128,6 +131,7 @@ enum
 	GEANY_KEYS_SEARCH_COUNT
 };
 
+/** View group keybinding command IDs */
 enum
 {
 	GEANY_KEYS_MENU_TOGGLEALL,
@@ -139,6 +143,7 @@ enum
 	GEANY_KEYS_VIEW_COUNT
 };
 
+/** Document group keybinding command IDs */
 enum
 {
 	GEANY_KEYS_MENU_REPLACETABS,
@@ -148,6 +153,7 @@ enum
 	GEANY_KEYS_DOCUMENT_COUNT
 };
 
+/** Build group keybinding command IDs */
 enum
 {
 	GEANY_KEYS_BUILD_COMPILE,
@@ -162,18 +168,21 @@ enum
 	GEANY_KEYS_BUILD_COUNT
 };
 
+/** Tools group keybinding command IDs */
 enum
 {
 	GEANY_KEYS_MENU_OPENCOLORCHOOSER,
 	GEANY_KEYS_TOOLS_COUNT
 };
 
+/** Help group keybinding command IDs */
 enum
 {
 	GEANY_KEYS_MENU_HELP,
 	GEANY_KEYS_HELP_COUNT
 };
 
+/** Focus group keybinding command IDs */
 enum
 {
 	GEANY_KEYS_SWITCH_EDITOR,
@@ -183,6 +192,7 @@ enum
 	GEANY_KEYS_FOCUS_COUNT
 };
 
+/** Notebook tab group keybinding command IDs */
 enum
 {
 	GEANY_KEYS_SWITCH_TABLEFT,
@@ -195,6 +205,7 @@ enum
 	GEANY_KEYS_NOTEBOOK_COUNT
 };
 
+/** Editing group keybinding command IDs */
 enum
 {
 	GEANY_KEYS_EDIT_TOGGLECASE,
@@ -225,23 +236,25 @@ enum
 	GEANY_KEYS_EDIT_SCROLLLINEUP,
 	GEANY_KEYS_EDIT_SCROLLLINEDOWN,
 	GEANY_KEYS_EDIT_INSERTALTWHITESPACE,
+	GEANY_KEYS_EDIT_COMPLETESNIPPET,
+	GEANY_KEYS_EDIT_SUPPRESSSNIPPETCOMPLETION,
 	GEANY_KEYS_POPUP_FINDUSAGE,
 	GEANY_KEYS_POPUP_CONTEXTACTION,
 	GEANY_KEYS_EDITING_COUNT
 };
 
+/** Tags group keybinding command IDs */
 enum
 {
 	GEANY_KEYS_EDIT_AUTOCOMPLETE,
 	GEANY_KEYS_EDIT_CALLTIP,
 	GEANY_KEYS_EDIT_MACROLIST,
-	GEANY_KEYS_EDIT_COMPLETESNIPPET,
-	GEANY_KEYS_EDIT_SUPPRESSSNIPPETCOMPLETION,
 	GEANY_KEYS_POPUP_GOTOTAGDEFINITION,
 	GEANY_KEYS_POPUP_GOTOTAGDECLARATION,
 	GEANY_KEYS_TAGS_COUNT
 };
 
+/** Other group keybinding command IDs */
 enum
 {
 	GEANY_KEYS_NAV_FORWARD,
