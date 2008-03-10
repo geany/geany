@@ -9,6 +9,8 @@
    does nothing).
  * src/keybindings.c, src/keybindings.h, src/plugindata.h:
    Make keybindings_send_command() take guint parameters, not gint.
+ * src/plugindata.h:
+   Avoid including keybindings.h.
 
 
 2008-03-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

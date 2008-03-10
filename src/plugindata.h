@@ -22,12 +22,6 @@
  * $Id$
  */
 
-#ifndef PLUGIN_H
-#define PLUGIN_H
-
-#include "keybindings.h"	/* needed for KeyCallback typedef */
-
-
 /**
  *  @file plugindata.h
  *  This file defines the plugin API, the interface between Geany and its plugins.
@@ -35,6 +29,9 @@
  *  API documentation.
  **/
 
+
+#ifndef PLUGIN_H
+#define PLUGIN_H
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
@@ -332,11 +329,14 @@ typedef struct EncodingFuncs
 EncodingFuncs;
 
 
+struct KeyBindingGroup;
+typedef void (*_KeyCallback) (guint key_id);
+
 typedef struct KeybindingFuncs
 {
 	void		(*send_command) (guint group_id, guint key_id);
 	void		(*set_item) (struct KeyBindingGroup *group, gsize key_id,
-					KeyCallback callback, guint key, GdkModifierType mod,
+					_KeyCallback callback, guint key, GdkModifierType mod,
 					const gchar *name, const gchar *label, GtkWidget *menu_item);
 }
 KeybindingFuncs;
