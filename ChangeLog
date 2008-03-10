@@ -11,6 +11,10 @@
    Make keybindings_send_command() take guint parameters, not gint.
  * src/plugindata.h:
    Avoid including keybindings.h.
+ * src/keybindings.c, src/keybindings.h, src/main.c:
+   Load keybindings keyfile after plugins have loaded at startup, so
+   their shortcuts are also loaded. Still to do: loading individual
+   plugin keybindings after startup.
 
 
 2008-03-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

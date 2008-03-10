@@ -476,6 +476,11 @@ void keybindings_init(void)
 	keybinding_groups = g_ptr_array_sized_new(GEANY_KEYGROUP_COUNT);
 
 	init_default_kb();
+}
+
+
+void keybindings_load_keyfile(void)
+{
 	load_user_kb();
 	add_menu_accels();
 }

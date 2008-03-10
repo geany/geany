@@ -252,6 +252,8 @@ enum
 
 void keybindings_init(void);
 
+void keybindings_load_keyfile(void);
+
 void keybindings_free(void);
 
 void keybindings_set_item(KeyBindingGroup *group, gsize key_id,
