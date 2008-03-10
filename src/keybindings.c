@@ -928,7 +928,7 @@ KeyBinding *keybindings_lookup_item(guint group_id, guint key_id)
  * 	Example: @code keybindings_send_command(GEANY_KEYGROUP_FILE, GEANY_KEYS_MENU_OPEN); @endcode
  * 	@param group_id The index for the key group that contains the @a key_id keybinding.
  * 	@param key_id The keybinding command index. */
-void keybindings_send_command(gint group_id, gint key_id)
+void keybindings_send_command(guint group_id, guint key_id)
 {
 	KeyBinding *kb;
 

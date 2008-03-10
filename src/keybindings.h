@@ -258,7 +258,7 @@ void keybindings_set_item(KeyBindingGroup *group, gsize key_id,
 		KeyCallback callback, guint key, GdkModifierType mod,
 		const gchar *name, const gchar *label, GtkWidget *menu_item);
 
-void keybindings_send_command(gint group_id, gint key_id);
+void keybindings_send_command(guint group_id, guint key_id);
 
 KeyBinding *keybindings_lookup_item(guint group_id, guint key_id);
 

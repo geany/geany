@@ -38,7 +38,7 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 47;
+static const gint api_version = 48;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
@@ -334,7 +334,7 @@ EncodingFuncs;
 
 typedef struct KeybindingFuncs
 {
-	void		(*send_command) (gint group_id, gint key_id);
+	void		(*send_command) (guint group_id, guint key_id);
 	void		(*set_item) (struct KeyBindingGroup *group, gsize key_id,
 					KeyCallback callback, guint key, GdkModifierType mod,
 					const gchar *name, const gchar *label, GtkWidget *menu_item);

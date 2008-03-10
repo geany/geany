@@ -7,6 +7,8 @@
    Rename KBCallback, cmd_id, cb_func with clearer names.
    Add KeyBinding::menu_item field for setting accelerators (currently
    does nothing).
+ * src/keybindings.c, src/keybindings.h, src/plugindata.h:
+   Make keybindings_send_command() take guint parameters, not gint.
 
 
 2008-03-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
