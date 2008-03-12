@@ -30,6 +30,8 @@
  * doc/geany.txt, doc/geany.html:
    Update 'Filtering out version control files' section for new versions
    of GNU Grep.
+ * src/keybindings.c:
+   Fix bug with keybindings using check_current_word().
 
 
 2008-03-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

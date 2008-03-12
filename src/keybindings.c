@@ -1108,7 +1108,7 @@ static gboolean check_current_word(void)
 	gint idx = document_get_cur_idx();
 	gint pos;
 
-	if (DOC_IDX_VALID(idx))
+	if (! DOC_IDX_VALID(idx))
 		return FALSE;
 
 	pos = sci_get_current_position(doc_list[idx].sci);
