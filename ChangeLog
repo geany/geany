@@ -1,3 +1,34 @@
+2008-03-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/build.c, src/keybindings.c, src/keybindings.h,
+   src/tools.c, src/prefs.c, src/plugindata.h, src/callbacks.c,
+   src/plugins.c, src/main.c, doc/plugins.dox, plugins/filebrowser.c,
+   plugins/htmlchars.c:
+   Merge plugin-keybindings branch:
+   Change keybindings code to use keybinding groups, each with a
+   separate enum set, which will make the plugin ABI more stable, and
+   lay the groundwork for plugin keybindings support.
+   Note: this breaks the plugin API.
+   Rename keybindings_cmd() to keybindings_send_command(), which now
+   takes a group_id argument.
+   Add keybindings_lookup_item().
+   Add documentation for keybindings structs.
+   Add support for plugin keybindings using the PLUGIN_KEY_GROUP()
+   macro.
+   Add a plugin keybinding for 'Insert Special HTML Characters'.
+   Rename KBCallback, cmd_id, cb_func with clearer names.
+   Add KeyBinding::menu_item field for setting accelerators (currently
+   does nothing).
+   Load keybindings keyfile after plugins have loaded at startup, so
+   their shortcuts are also loaded. Still to do: loading individual
+   plugin keybindings after startup.
+   Group most keybinding callbacks together according to keybinding
+   group.
+   Add keybindings_set_item() and add it to the plugin API.
+   Set main menu widget accels with keybindings_set_item() - they are
+   ignored for now. Popup menu accels are set separately.
+
+
 2008-03-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/document.c:

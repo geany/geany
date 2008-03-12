@@ -73,7 +73,8 @@ static gboolean on_tree_view_button_press_event(
 static void on_cell_edited(GtkCellRendererText *cellrenderertext, gchar *path, gchar *new_text, gpointer user_data);
 static gboolean on_keytype_dialog_response(GtkWidget *dialog, GdkEventKey *event, gpointer user_data);
 static void on_dialog_response(GtkWidget *dialog, gint response, gpointer user_data);
-static gboolean find_duplicate(guint idx, guint key, GdkModifierType mods, const gchar *action);
+static gboolean find_duplicate(KeyBinding *search_kb,
+		guint key, GdkModifierType mods, const gchar *action);
 static void on_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_use_folding_toggled(GtkToggleButton *togglebutton, gpointer user_data);
@@ -127,25 +128,30 @@ static void init_kb_tree(void)
 static void init_keybindings(void)
 {
 	GtkTreeIter parent, iter;
-	gint i;
-	gchar *key_string;
+	gsize g, i;
 
 	if (store == NULL)
 		init_kb_tree();
 
-	for (i = 0; i < GEANY_MAX_KEYS; i++)
+	for (g = 0; g < keybinding_groups->len; g++)
 	{
-		if (keys[i]->section != NULL)
-		{
-			gtk_tree_store_append(store, &parent, NULL);
-			gtk_tree_store_set(store, &parent, KB_TREE_ACTION, keys[i]->section, -1);
-		}
+		KeyBindingGroup *group = g_ptr_array_index(keybinding_groups, g);
 
-		key_string = gtk_accelerator_name(keys[i]->key, keys[i]->mods);
-		gtk_tree_store_append(store, &iter, &parent);
-		gtk_tree_store_set(store, &iter, KB_TREE_ACTION, keys[i]->label,
-			KB_TREE_SHORTCUT, key_string, KB_TREE_INDEX, i, -1);
-		g_free(key_string);
+		gtk_tree_store_append(store, &parent, NULL);
+		gtk_tree_store_set(store, &parent, KB_TREE_ACTION, group->label,
+			KB_TREE_INDEX, g, -1);
+
+		for (i = 0; i < group->count; i++)
+		{
+			KeyBinding *kb = &group->keys[i];
+			gchar *key_string;
+
+			key_string = gtk_accelerator_name(kb->key, kb->mods);
+			gtk_tree_store_append(store, &iter, &parent);
+			gtk_tree_store_set(store, &iter, KB_TREE_ACTION, kb->label,
+				KB_TREE_SHORTCUT, key_string, KB_TREE_INDEX, i, -1);
+			g_free(key_string);
+		}
 	}
 	gtk_tree_view_expand_all(GTK_TREE_VIEW(tree));
 }
@@ -1065,7 +1071,7 @@ static gboolean on_tree_view_button_press_event(
 			return TRUE;
 		}
 
-		gtk_tree_model_get(model, &g_iter, 0, &name, -1);
+		gtk_tree_model_get(model, &g_iter, KB_TREE_ACTION, &name, -1);
 		if (name != NULL)
 		{
 			GtkWidget *dialog;
@@ -1103,33 +1109,48 @@ static gboolean on_tree_view_button_press_event(
 }
 
 
+static KeyBinding *lookup_kb_from_iter(G_GNUC_UNUSED GtkTreeModel *model, GtkTreeIter *iter)
+{
+	guint group_idx, keybinding_idx;
+	GtkTreeIter parent;
+
+	/* get kb index */
+	gtk_tree_model_get(GTK_TREE_MODEL(store), iter, KB_TREE_INDEX, &keybinding_idx, -1);
+
+	/* lookup the parent to get group index */
+	gtk_tree_model_iter_parent(GTK_TREE_MODEL(store), &parent, iter);
+	gtk_tree_model_get(GTK_TREE_MODEL(store), &parent, KB_TREE_INDEX, &group_idx, -1);
+
+	return keybindings_lookup_item(group_idx, keybinding_idx);
+}
+
+
 static void on_cell_edited(GtkCellRendererText *cellrenderertext, gchar *path, gchar *new_text, gpointer user_data)
 {
 	if (path != NULL && new_text != NULL)
 	{
-		guint idx;
+		GtkTreeIter iter;
 		guint lkey;
 		GdkModifierType lmods;
-		GtkTreeIter iter;
+		KeyBinding *kb;
 
 		gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(store), &iter, path);
 		if (gtk_tree_model_iter_has_child(GTK_TREE_MODEL(store), &iter))
-			return;
+			return;	/* ignore group items */
 
 		gtk_accelerator_parse(new_text, &lkey, &lmods);
 
-		/* get index */
-		gtk_tree_model_get(GTK_TREE_MODEL(store), &iter, 2, &idx, -1);
+		kb = lookup_kb_from_iter(GTK_TREE_MODEL(store), &iter);
 
-		if (find_duplicate(idx, lkey, lmods, new_text))
+		if (find_duplicate(kb, lkey, lmods, new_text))
 			return;
 
 		/* set the values here, because of the above check, setting it in
 		 * gtk_accelerator_parse would return a wrong key combination if it is duplicate */
-		keys[idx]->key = lkey;
-		keys[idx]->mods = lmods;
+		kb->key = lkey;
+		kb->mods = lmods;
 
-		gtk_tree_store_set(store, &iter, 1, new_text, -1);
+		gtk_tree_store_set(store, &iter, KB_TREE_SHORTCUT, new_text, -1);
 
 		edited = TRUE;
 	}
@@ -1155,29 +1176,28 @@ static gboolean on_keytype_dialog_response(GtkWidget *dialog, GdkEventKey *event
 }
 
 
-static void on_dialog_response(GtkWidget *dialog, gint response, gpointer iter)
+static void on_dialog_response(GtkWidget *dialog, gint response, G_GNUC_UNUSED gpointer iter)
 {
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
-		guint idx;
 		guint lkey;
 		GdkModifierType lmods;
+		KeyBinding *kb;
 
-		/* get index */
-		gtk_tree_model_get(GTK_TREE_MODEL(store), &g_iter, 2, &idx, -1);
+		kb = lookup_kb_from_iter(GTK_TREE_MODEL(store), &g_iter);
 
 		gtk_accelerator_parse(gtk_label_get_text(GTK_LABEL(dialog_label)), &lkey, &lmods);
 
-		if (find_duplicate(idx, lkey, lmods, gtk_label_get_text(GTK_LABEL(dialog_label))))
+		if (find_duplicate(kb, lkey, lmods, gtk_label_get_text(GTK_LABEL(dialog_label))))
 			return;
 
 		/* set the values here, because of the above check, setting it in
 		 * gtk_accelerator_parse would return a wrong key combination if it is duplicate */
-		keys[idx]->key = lkey;
-		keys[idx]->mods = lmods;
+		kb->key = lkey;
+		kb->mods = lmods;
 
 		gtk_tree_store_set(store, &g_iter,
-				1, gtk_label_get_text(GTK_LABEL(dialog_label)), -1);
+			KB_TREE_SHORTCUT, gtk_label_get_text(GTK_LABEL(dialog_label)), -1);
 
 		g_free(dialog_key_name);
 		dialog_key_name = NULL;
@@ -1188,63 +1208,81 @@ static void on_dialog_response(GtkWidget *dialog, gint response, gpointer iter)
 }
 
 
-static gboolean find_iter(guint i, GtkTreeIter *iter)
+/* Look for a (1st-level) child of parent whose KB_TREE_INDEX matches i,
+ * setting iter to point to the node if found.
+ * If parent is NULL, look for a parent node whose KB_TREE_INDEX matches i. */
+static gboolean find_child_iter(GtkTreeIter *parent, guint i, GtkTreeIter *iter)
 {
 	GtkTreeModel *model = GTK_TREE_MODEL(store);
 	guint idx;
-	GtkTreeIter parent;
 
-	if (! gtk_tree_model_get_iter_first(model, &parent))
-		return FALSE;	/* no items */
+	/* get first child of parent */
+	if (! gtk_tree_model_iter_children(model, iter, parent))
+		return FALSE;
 
-	while (TRUE)
+	while (TRUE)	/* foreach child */
 	{
-		if (! gtk_tree_model_iter_children(model, iter, &parent))
-			return FALSE;
-
-		while (TRUE)
-		{
-			gtk_tree_model_get(model, iter, 2, &idx, -1);
-			if (idx == i)
-				return TRUE;
-			if (! gtk_tree_model_iter_next(model, iter))
-				break;
-		}
-		if (! gtk_tree_model_iter_next(model, &parent))
-			return FALSE;
+		gtk_tree_model_get(model, iter, KB_TREE_INDEX, &idx, -1);
+		if (idx == i)
+			return TRUE;
+		if (! gtk_tree_model_iter_next(model, iter))
+			return FALSE;	/* no more children */
 	}
 }
 
 
-/* test if the entered key combination is already used */
-static gboolean find_duplicate(guint idx, guint key, GdkModifierType mods, const gchar *action)
+static void clear_tree_shortcut(gsize group_id, gsize keybinding_id)
 {
-	guint i;
+	GtkTreeIter parent;
+	GtkTreeIter child;
+
+	/* find parent kb group */
+	if (! find_child_iter(NULL, group_id, &parent))
+		return;
+
+	/* find child kb node*/
+	if (! find_child_iter(&parent, keybinding_id, &child))
+		return;
+
+	gtk_tree_store_set(store, &child, KB_TREE_SHORTCUT, NULL, -1);	/* clear shortcut */
+}
+
+
+/* test if the entered key combination is already used */
+static gboolean find_duplicate(KeyBinding *search_kb,
+		guint key, GdkModifierType mods, const gchar *action)
+{
+	gsize g, i;
 
 	/* allow duplicate if there is no key combination */
 	if (key == 0 && mods == 0) return FALSE;
 
-	for (i = 0; i < GEANY_MAX_KEYS; i++)
+	for (g = 0; g < keybinding_groups->len; g++)
 	{
-		/* search another item with the same key,
-		 * but take not the key we are searching for(-> idx) */
-		if (keys[i]->key == key && keys[i]->mods == mods
-			&& ! (keys[i]->key == keys[idx]->key && keys[i]->mods == keys[idx]->mods))
-		{
-			if (dialogs_show_question_full(app->window, _("_Override"), GTK_STOCK_CANCEL,
-				_("Override that keybinding?"),
-				_("The combination '%s' is already used for \"%s\"."),
-				action, keys[i]->label))
-			{
-				GtkTreeIter iter;
+		KeyBindingGroup *group = g_ptr_array_index(keybinding_groups, g);
 
-				keys[i]->key = 0;
-				keys[i]->mods = 0;
-				if (find_iter(i, &iter))
-					gtk_tree_store_set(store, &iter, 1, NULL, -1);	/* clear item */
-				continue;
+		for (i = 0; i < group->count; i++)
+		{
+			KeyBinding *keys = group->keys;
+			KeyBinding *kb = &keys[i];
+
+			/* search another item with the same key,
+			 * but don't search the key we're looking for keys[idx] */
+			if (kb->key == key && kb->mods == mods
+				&& ! (kb->key == search_kb->key && kb->mods == search_kb->mods))
+			{
+				if (dialogs_show_question_full(app->window, _("_Override"), GTK_STOCK_CANCEL,
+					_("Override that keybinding?"),
+					_("The combination '%s' is already used for \"%s\"."),
+					action, kb->label))
+				{
+					kb->key = 0;
+					kb->mods = 0;
+					clear_tree_shortcut(g, i);
+					continue;
+				}
+				return TRUE;
 			}
-			return TRUE;
 		}
 	}
 	return FALSE;

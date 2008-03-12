@@ -1087,16 +1087,29 @@ static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, g
 }
 
 
-#define GEANY_ADD_WIDGET_ACCEL(gkey, menuitem) \
-	if (keys[(gkey)]->key != 0) \
-		gtk_widget_add_accelerator(menuitem, "activate", accel_group, \
-			keys[(gkey)]->key, keys[(gkey)]->mods, GTK_ACCEL_VISIBLE)
+/* note: copied from keybindings.c.
+ * Perhaps the separate Tex menu could be merged with the default build menu?
+ * Then this could be done with Glade and set the accels in keybindings.c. */
+static void add_menu_accel(KeyBindingGroup *group, guint kb_id,
+	GtkAccelGroup *accel_group, GtkWidget *menuitem)
+{
+	KeyBinding *kb = &group->keys[kb_id];
+
+	if (kb->key != 0)
+		gtk_widget_add_accelerator(menuitem, "activate", accel_group,
+			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
+}
+
+
+#define GEANY_ADD_WIDGET_ACCEL(kb_id, menuitem) \
+	add_menu_accel(group, kb_id, accel_group, menuitem)
 
 static void create_build_menu_gen(BuildMenuItems *menu_items)
 {
 	GtkWidget *menu, *item = NULL, *image, *separator;
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
 	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
+	KeyBindingGroup *group = g_ptr_array_index(keybinding_groups, GEANY_KEY_GROUP_BUILD);
 
 	menu = gtk_menu_new();
 
@@ -1213,6 +1226,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	GtkWidget *menu, *item, *image, *separator;
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
 	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
+	KeyBindingGroup *group = g_ptr_array_index(keybinding_groups, GEANY_KEY_GROUP_BUILD);
 
 	menu = gtk_menu_new();
 

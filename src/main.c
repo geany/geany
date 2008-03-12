@@ -853,6 +853,9 @@ gint main(gint argc, gchar **argv)
 		plugins_init();
 #endif
 
+	/* load keybinding settings after plugins have added their groups */
+	keybindings_load_keyfile();
+
 	/* load any command line files or session files */
 	main_status.opening_session_files = TRUE;
 	if (! open_cl_files(argc, argv))
