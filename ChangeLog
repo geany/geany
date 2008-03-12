@@ -27,6 +27,9 @@
    Add keybindings_set_item() and add it to the plugin API.
    Set main menu widget accels with keybindings_set_item() - they are
    ignored for now. Popup menu accels are set separately.
+ * doc/geany.txt, doc/geany.html:
+   Update 'Filtering out version control files' section for new versions
+   of GNU Grep.
 
 
 2008-03-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

@@ -877,13 +877,11 @@ grep's ``--exclude`` flag to filter out filenames.
 
 SVN Example: ``--exclude=*.svn-base``
 
-.. note::
-    The GNU Grep project added support for excluding directories, using
-    the --exclude-dir flag. At the time of writing (April 2007) this is
-    unreleased outside of version control. Check your Grep manual to
-    see if your version supports it.
+The --exclude argument only matches the file name part, not the path. If
+you have GNU Grep >= 2.5.2 you can use the ``--exclude-dir`` argument to
+filter out CVS and hidden directories like ``.svn``.
 
-CVS Example: ``--exclude-dir=.* --exclude-dir=CVS``
+Example: ``--exclude-dir=.* --exclude-dir=CVS``
 
 
 Replace
