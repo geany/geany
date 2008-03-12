@@ -497,7 +497,7 @@ static void on_hidden_files_clicked(GtkCheckMenuItem *item)
 
 static void on_hide_sidebar(void)
 {
-	p_keybindings->send_command(GEANY_KEYGROUP_VIEW, GEANY_KEYS_MENU_SIDEBAR);
+	p_keybindings->send_command(GEANY_KEY_GROUP_VIEW, GEANY_KEYS_VIEW_SIDEBAR);
 }
 
 

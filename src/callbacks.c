@@ -654,7 +654,7 @@ on_entry1_key_press_event              (GtkWidget       *widget,
 {
 	if (event->keyval == GDK_Escape)
 	{
-		keybindings_send_command(GEANY_KEYGROUP_FOCUS, GEANY_KEYS_SWITCH_EDITOR);
+		keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
 		return TRUE;
 	}
 	return FALSE;
@@ -925,7 +925,7 @@ void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 	if (! sci_can_copy(sci))
 	{
-		keybindings_send_command(GEANY_KEYGROUP_EDITING, GEANY_KEYS_EDIT_SELECTWORD);
+		keybindings_send_command(GEANY_KEY_GROUP_SELECT, GEANY_KEYS_SELECT_WORD);
 		keep_sel = FALSE;
 	}
 
@@ -1114,7 +1114,7 @@ void
 on_compile_button_clicked              (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
 {
-	keybindings_send_command(GEANY_KEYGROUP_BUILD, GEANY_KEYS_BUILD_COMPILE);
+	keybindings_send_command(GEANY_KEY_GROUP_BUILD, GEANY_KEYS_BUILD_COMPILE);
 }
 
 
@@ -1562,7 +1562,7 @@ void
 on_run_button_clicked                  (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
 {
-	keybindings_send_command(GEANY_KEYGROUP_BUILD, GEANY_KEYS_BUILD_RUN);
+	keybindings_send_command(GEANY_KEY_GROUP_BUILD, GEANY_KEYS_BUILD_RUN);
 }
 
 
@@ -1718,7 +1718,7 @@ void
 on_menu_duplicate_line1_activate       (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	keybindings_send_command(GEANY_KEYGROUP_EDITING, GEANY_KEYS_EDIT_DUPLICATELINE);
+	keybindings_send_command(GEANY_KEY_GROUP_EDITOR, GEANY_KEYS_EDITOR_DUPLICATELINE);
 }
 
 

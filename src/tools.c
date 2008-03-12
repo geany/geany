@@ -365,13 +365,13 @@ static void cc_insert_custom_command_items(GtkMenu *me, GtkMenu *mp, gchar *labe
 
 	switch (idx)
 	{
-		case 0: key_idx = GEANY_KEYS_EDIT_SENDTOCMD1; break;
-		case 1: key_idx = GEANY_KEYS_EDIT_SENDTOCMD2; break;
-		case 2: key_idx = GEANY_KEYS_EDIT_SENDTOCMD3; break;
+		case 0: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD1; break;
+		case 1: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD2; break;
+		case 2: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD3; break;
 	}
 
 	if (key_idx != -1)
-		kb = keybindings_lookup_item(GEANY_KEYGROUP_EDITING, key_idx);
+		kb = keybindings_lookup_item(GEANY_KEY_GROUP_FORMAT, key_idx);
 
 	item = gtk_menu_item_new_with_label(label);
 	if (key_idx != -1)

@@ -1,3 +1,17 @@
+2008-03-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/build.c, src/keybindings.c, src/keybindings.h, src/tools.c,
+   src/callbacks.c, plugins/filebrowser.c:
+   Break down Edit, Editing, Tags, Other keybinding groups into Editor,
+   Clipboard, Select, Format, Insert groups and rename GEANY_KEYS_*
+   accordingly.
+   Group most keybinding callbacks together according to keybinding
+   group.
+   Add underscore for GEANY_KEYGROUP_*.
+   Set main menu widget with keybindings_set_item() - this is still
+   ignored for now. Popup menu accels are set separately.
+
+
 2008-03-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keybindings.c, src/keybindings.h, src/plugindata.h,

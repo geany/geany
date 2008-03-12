@@ -1109,7 +1109,7 @@ static void create_build_menu_gen(BuildMenuItems *menu_items)
 	GtkWidget *menu, *item = NULL, *image, *separator;
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
 	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
-	KeyBindingGroup *group = g_ptr_array_index(keybinding_groups, GEANY_KEYGROUP_BUILD);
+	KeyBindingGroup *group = g_ptr_array_index(keybinding_groups, GEANY_KEY_GROUP_BUILD);
 
 	menu = gtk_menu_new();
 
@@ -1226,7 +1226,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	GtkWidget *menu, *item, *image, *separator;
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
 	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
-	KeyBindingGroup *group = g_ptr_array_index(keybinding_groups, GEANY_KEYGROUP_BUILD);
+	KeyBindingGroup *group = g_ptr_array_index(keybinding_groups, GEANY_KEY_GROUP_BUILD);
 
 	menu = gtk_menu_new();
 
