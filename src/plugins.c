@@ -339,26 +339,6 @@ static void add_callbacks(Plugin *plugin, GeanyCallback *callbacks)
 }
 
 
-static gboolean
-is_active_plugin(const gchar *name)
-{
-	gint i, len;
-
-	g_return_val_if_fail(name, FALSE);
-
-	/* if app->active_plugins is NULL, guess it was not yet set and don't load any plugins */
-	if (app->active_plugins == NULL || (len = g_strv_length(app->active_plugins)) == 0)
-		return FALSE;
-
-	for (i = 0; i < len; i++)
-	{
-		if (utils_str_equal(name, app->active_plugins[i]))
-			return TRUE;
-	}
-	return FALSE;
-}
-
-
 static void
 add_kb_group(Plugin *plugin)
 {
