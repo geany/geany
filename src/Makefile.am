@@ -41,11 +41,28 @@ SRCS = \
 	ui_utils.c ui_utils.h \
 	utils.c utils.h
 
-# just to make "make distcheck" happy
-noinst_HEADERS = \
+
+geany_includedir = $(includedir)/geany/
+geany_include_HEADERS = \
+	dialogs.h \
+	document.h \
+	editor.h \
+	encodings.h \
+	filetypes.h \
+	highlighting.h \
+	keybindings.h \
 	geany.h \
+	msgwindow.h \
+	plugins.h \
+	plugindata.h \
+	project.h \
+	sciwrappers.h \
+	search.h \
 	support.h \
-	plugindata.h
+	templates.h \
+	ui_utils.h \
+	utils.h
+
 
 INCLUDES = -I$(srcdir)/../scintilla/include -I$(srcdir)/../tagmanager/include @GTK_CFLAGS@
 

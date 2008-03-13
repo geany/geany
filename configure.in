@@ -245,6 +245,7 @@ doc/Makefile
 doc/geany.1
 geany.spec
 geany.desktop.in
+geany.pc
 doc/Doxyfile
 ])
 

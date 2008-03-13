@@ -23,6 +23,7 @@ SYS_DATA_FILES = \
 EXTRA_DIST = \
 	autogen.sh \
 	geany.desktop.in \
+	geany.pc.in \
 	geany.spec \
 	geany.glade \
 	geany.gladep \
@@ -91,6 +92,9 @@ rpm: dist
 
 
 logodir = $(datadir)/pixmaps
+
+pkgconfig_DATA = geany.pc
+pkgconfigdir = $(libdir)/pkgconfig
 
 desktopdir = $(datadir)/applications
 desktop_in_files = geany.desktop.in

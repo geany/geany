@@ -6,6 +6,9 @@ EXTRA_DIST = \
 
 plugindir = $(libdir)/geany
 
+plugins_includedir = $(includedir)/geany/
+plugins_include_HEADERS = pluginmacros.h
+
 demoplugin_la_LDFLAGS    = -module -avoid-version
 classbuilder_la_LDFLAGS  = -module -avoid-version
 htmlchars_la_LDFLAGS     = -module -avoid-version
