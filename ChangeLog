@@ -25,6 +25,8 @@
    Add missing accelerator for string "Toggle All Additional Widgets".
  * plugins/htmlchars.c: Use a separate string for keybinding label to
                         avoid display of an underscore.
+ * src/callbacks.c, src/tools.c: Fix compiler warnings about
+                                 uninitialized variables.
 
 
 2008-03-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

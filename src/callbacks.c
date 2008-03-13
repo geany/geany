@@ -398,7 +398,8 @@ on_paste1_activate                     (GtkMenuItem     *menuitem,
 	else
 	if (IS_SCINTILLA(focusw) && idx >= 0)
 	{
-#ifdef G_OS_WIN32
+#if 0
+//#ifdef G_OS_WIN32
 		/* insert the text manually for now, because the auto conversion of EOL characters by
 		 * by Scintilla seems to make problems */
 		/** TODO this is probably obsolete now since we fixed PLAT_GTK_WIN32 in Scintilla */
@@ -932,7 +933,7 @@ void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer user_data)
 	if (sci_can_copy(sci))
 	{
 		gchar *result = NULL;
-		gint cmd;
+		gint cmd = SCI_LOWERCASE;
 		gint text_len = sci_get_selected_text_length(sci);
 		gboolean rectsel = scintilla_send_message(sci, SCI_SELECTIONISRECTANGLE, 0, 0);
 
