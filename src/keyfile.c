@@ -638,21 +638,10 @@ static void load_dialog_prefs(GKeyFile *config)
 	g_free(tmp_string2);
 
 	/* tools */
-	tmp_string = g_find_program_in_path(GEANY_DEFAULT_TOOLS_MAKE);
-	prefs.tools_make_cmd = utils_get_setting_string(config, "tools", "make_cmd", tmp_string);
-	g_free(tmp_string);
-
-	tmp_string = g_find_program_in_path(GEANY_DEFAULT_TOOLS_TERMINAL);
-	prefs.tools_term_cmd = utils_get_setting_string(config, "tools", "term_cmd", tmp_string);
-	g_free(tmp_string);
-
-	tmp_string = g_find_program_in_path(GEANY_DEFAULT_TOOLS_BROWSER);
-	prefs.tools_browser_cmd = utils_get_setting_string(config, "tools", "browser_cmd", tmp_string);
-	g_free(tmp_string);
-
-	tmp_string = g_find_program_in_path(GEANY_DEFAULT_TOOLS_GREP);
-	prefs.tools_grep_cmd = utils_get_setting_string(config, "tools", "grep_cmd", tmp_string);
-	g_free(tmp_string);
+	prefs.tools_make_cmd = utils_get_setting_string(config, "tools", "make_cmd", GEANY_DEFAULT_TOOLS_MAKE);
+	prefs.tools_term_cmd = utils_get_setting_string(config, "tools", "term_cmd", GEANY_DEFAULT_TOOLS_TERMINAL);
+	prefs.tools_browser_cmd = utils_get_setting_string(config, "tools", "browser_cmd", GEANY_DEFAULT_TOOLS_BROWSER);
+	prefs.tools_grep_cmd = utils_get_setting_string(config, "tools", "grep_cmd", GEANY_DEFAULT_TOOLS_GREP);
 
 	prefs.context_action_cmd = utils_get_setting_string(config, PACKAGE, "context_action_cmd", "");
 

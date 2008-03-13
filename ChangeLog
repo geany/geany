@@ -5,6 +5,11 @@
    a notice how to change the used font (#1907117).
  * src/plugins.c: Don't load all available plugins on startup, it's only
                   necessary opening the plugin manager.
+ * src/keyfile.c, src/search.c:
+   Use the default values for various tools if they don't exist in the
+   config file instead of using g_find_program_in_path(), patch by
+   Yura Siamashka (thanks).
+   Fix executable check for grep command.
 
 
 2008-03-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

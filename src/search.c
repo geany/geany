@@ -1150,6 +1150,7 @@ static gboolean
 search_find_in_files(const gchar *search_text, const gchar *dir, const gchar *opts)
 {
 	gchar **argv_prefix, **argv, **opts_argv;
+	gchar *command_grep;
 	guint opts_argv_len, i;
 	GPid child_pid;
 	gint stdout_fd;
@@ -1158,7 +1159,8 @@ search_find_in_files(const gchar *search_text, const gchar *dir, const gchar *op
 
 	if (! search_text || ! *search_text || ! dir) return TRUE;
 
-	if (! g_file_test(prefs.tools_grep_cmd, G_FILE_TEST_IS_EXECUTABLE))
+	command_grep = g_find_program_in_path(prefs.tools_grep_cmd);
+	if (command_grep == NULL)
 	{
 		ui_set_statusbar(TRUE, _("Cannot execute grep tool '%s';"
 			" check the path setting in Preferences."), prefs.tools_grep_cmd);
@@ -1171,7 +1173,7 @@ search_find_in_files(const gchar *search_text, const gchar *dir, const gchar *op
 	/* set grep command and options */
 	argv_prefix = g_new0(gchar*, 1 + opts_argv_len + 3 + 1);	/* last +1 for recursive arg */
 
-	argv_prefix[0] = g_strdup(prefs.tools_grep_cmd);
+	argv_prefix[0] = command_grep;
 	for (i = 0; i < opts_argv_len; i++)
 	{
 		argv_prefix[i + 1] = g_strdup(opts_argv[i]);
