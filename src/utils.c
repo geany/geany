@@ -332,7 +332,7 @@ gboolean utils_check_disk_status(gint idx, gboolean force)
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 	if (g_stat(locale_filename, &st) != 0)
 	{
-		/** TODO: warn user file on disk is missing */
+		/* TODO: warn user file on disk is missing */
 	}
 	else if (doc_list[idx].mtime > t || st.st_mtime > t)
 	{
@@ -1734,7 +1734,7 @@ gboolean utils_str_has_upper(const gchar *str)
 		/* check only letters and stop once the first non-capital was found */
 		if (g_unichar_isalpha(c) && g_unichar_isupper(c))
 			return TRUE;
-		/** FIXME don't write a const string */
+		/* FIXME don't write a const string */
 		str = g_utf8_next_char(str);
 	}
 	return FALSE;

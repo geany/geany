@@ -6,6 +6,8 @@
  * src/keybindings.c, src/keybindings.h, src/plugins.c, doc/plugins.dox:
    Check plugin keybinding group name is valid.
    Ignore plugin keybinding groups with no elements defined.
+ * src/utils.c, src/document.c:
+   Fix Doxygen undocumented parameter warnings.
 
 
 2008-03-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

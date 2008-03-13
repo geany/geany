@@ -1818,7 +1818,7 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 			/* Note: the selection will be wrapped to last_line + 1 if max_column is greater than
 			 * the highest column on the last line. The wrapped selection is completely different
 			 * from the original one, so skip the selection at all */
-			/** TODO is there a better way to handle the wrapped selection? */
+			/* TODO is there a better way to handle the wrapped selection? */
 			if ((sci_get_line_length(doc_list[idx].sci, last_line) - 1) >= max_column)
 			{	/* for keeping and adjusting the selection in multi line rectangle selection we
 				 * need the last line of the original selection and the greatest column number after
