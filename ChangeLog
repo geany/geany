@@ -1,3 +1,10 @@
+2008-03-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/plugindata.h, doc/plugins.dox:
+   Update documentation for plugin_key_group[] to mention declaring it
+   manually.
+
+
 2008-03-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * doc/geany.html, doc/geany.txt, src/search.c:

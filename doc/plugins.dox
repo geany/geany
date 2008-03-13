@@ -65,7 +65,12 @@
  * 	  {NULL, NULL, FALSE, NULL}. See @link signals Signal documentation @endlink.
  *
  *  - @code KeyBindingGroup plugin_key_group[1] @endcode
- * 	  Use the PLUGIN_KEY_GROUP() macro to define it.
+ * 	  Most plugins should use the PLUGIN_KEY_GROUP() macro to define it. However,
+ *    its fields are not read until after init() is called for the plugin, so it
+ *    is possible to setup a variable number of keybindings, e.g. based on the
+ *    plugin's configuration file.
+ *    @note This is a single element array for implementation reasons,
+ *    but you can treat it like a pointer.
  *
  *  - @code void configure(GtkWidget *parent) @endcode
  * 	  Called when the plugin should show a configure dialog to let the user set some basic

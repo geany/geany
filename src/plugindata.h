@@ -98,9 +98,7 @@ PluginInfo;
  * is called, to the name of the plugin.
  * @param group_name A unique group name (without quotes) to be used in the
  * configuration file, such as @c html_chars.
- * @param key_count	The number of keybindings the group will hold.
- * @note This is a single element array for implementation reasons,
- * but you can treat it like a pointer. */
+ * @param key_count	The number of keybindings the group will hold. */
 #define PLUGIN_KEY_GROUP(group_name, key_count) \
 	static KeyBinding plugin_keys[key_count]; \
 	\
