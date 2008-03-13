@@ -65,6 +65,8 @@ KeyBindingGroup;
 
 extern GPtrArray *keybinding_groups;	/* array of KeyBindingGroup pointers */
 
+extern const gchar keybindings_keyfile_group_name[];
+
 
 /** Keybinding group IDs */
 enum

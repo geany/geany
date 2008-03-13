@@ -342,9 +342,18 @@ static void add_callbacks(Plugin *plugin, GeanyCallback *callbacks)
 static void
 add_kb_group(Plugin *plugin)
 {
-	g_ptr_array_add(keybinding_groups, plugin->key_group);
+	g_return_if_fail(NZV(plugin->key_group->name));
+	g_return_if_fail(! g_str_equal(plugin->key_group->name, keybindings_keyfile_group_name));
+
+	if (plugin->key_group->count == 0)
+	{
+		plugin->key_group = NULL;	/* Ignore the group */
+		return;
+	}
 
 	plugin->key_group->label = plugin->info()->name;
+
+	g_ptr_array_add(keybinding_groups, plugin->key_group);
 }
 
 

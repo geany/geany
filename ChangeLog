@@ -3,6 +3,9 @@
  * src/plugindata.h, doc/plugins.dox:
    Update documentation for plugin_key_group[] to mention declaring it
    manually.
+ * src/keybindings.c, src/keybindings.h, src/plugins.c, doc/plugins.dox:
+   Check plugin keybinding group name is valid.
+   Ignore plugin keybinding groups with no elements defined.
 
 
 2008-03-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

@@ -49,7 +49,7 @@
 GPtrArray *keybinding_groups;	/* array of KeyBindingGroup pointers */
 
 /* keyfile group name for non-plugin KB groups */
-static const gchar default_group_name[] = "Bindings";
+const gchar keybindings_keyfile_group_name[] = "Bindings";
 
 static const gboolean swap_alt_tab_order = FALSE;
 
@@ -143,7 +143,7 @@ static KeyBindingGroup *add_kb_group(KeyBindingGroup *group,
  * add_kb_group(&groups[GEANY_KEY_GROUP_FILE], NULL, _("File menu"),
  * 	GEANY_KEYS_FILE_COUNT, FILE_keys); */
 #define ADD_KB_GROUP(group_id, label) \
-	add_kb_group(&groups[GEANY_KEY_GROUP_ ## group_id], default_group_name, label, \
+	add_kb_group(&groups[GEANY_KEY_GROUP_ ## group_id], keybindings_keyfile_group_name, label, \
 		GEANY_KEYS_ ## group_id ## _COUNT, group_id ## _keys)
 
 /* Init all fields of keys with default values.

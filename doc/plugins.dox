@@ -68,7 +68,11 @@
  * 	  Most plugins should use the PLUGIN_KEY_GROUP() macro to define it. However,
  *    its fields are not read until after init() is called for the plugin, so it
  *    is possible to setup a variable number of keybindings, e.g. based on the
- *    plugin's configuration file.
+ *    plugin's configuration file settings.
+ *    - The @c name field must not be empty or match Geany's default group name.
+ *    - Ths @c label field is set by Geany after init() is called to the name of the
+ *    plugin.
+ *
  *    @note This is a single element array for implementation reasons,
  *    but you can treat it like a pointer.
  *
