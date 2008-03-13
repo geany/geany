@@ -1,3 +1,12 @@
+2008-03-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * doc/geany.html, doc/geany.txt, src/search.c:
+   Use monospace font for text entry fields in search dialogs and add
+   a notice how to change the used font (#1907117).
+ * src/plugins.c: Don't load all available plugins on startup, it's only
+                  necessary opening the plugin manager.
+
+
 2008-03-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/build.c, src/keybindings.c, src/keybindings.h,

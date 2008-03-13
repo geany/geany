@@ -398,8 +398,12 @@ plugin_init(Plugin *plugin)
 }
 
 
+/* Load and init a plugin.
+ * init_plugin decides whether the plugin's init() function should be called or not. If it is
+ * called, the plugin will be started, if not the plugin will be read only (for the list of
+ * available plugins in the plugin manager). */
 static Plugin*
-plugin_new(const gchar *fname)
+plugin_new(const gchar *fname, gboolean init_plugin)
 {
 	Plugin *plugin;
 	GModule *module;
@@ -454,6 +458,8 @@ plugin_new(const gchar *fname)
 	plugin->filename = g_strdup(fname);
 	plugin->module = module;
 
+	plugin_list = g_list_append(plugin_list, plugin);
+
 	g_module_symbol(module, "geany_data", (void *) &p_geany_data);
 	if (p_geany_data)
 		*p_geany_data = &geany_data;
@@ -472,7 +478,7 @@ plugin_new(const gchar *fname)
 	}
 
 	/* only initialise the plugin if it should be loaded */
-	if (is_active_plugin(fname))
+	if (init_plugin)
 	{
 		plugin_init(plugin);
 	}
@@ -532,6 +538,23 @@ plugin_free(Plugin *plugin)
 }
 
 
+/* load active plugins at startup */
+static void
+load_active_plugins()
+{
+	guint i, len;
+
+	if (app->active_plugins == NULL || (len = g_strv_length(app->active_plugins)) == 0)
+		return;
+
+	for (i = 0; i < len; i++)
+	{
+		if (NZV(app->active_plugins[i]))
+			plugin_new(app->active_plugins[i], TRUE);
+	}
+}
+
+
 static void
 load_plugins(const gchar *path)
 {
@@ -548,11 +571,7 @@ load_plugins(const gchar *path)
 			continue;
 
 		fname = g_strconcat(path, G_DIR_SEPARATOR_S, item->data, NULL);
-		plugin = plugin_new(fname);
-		if (plugin != NULL)
-		{
-			plugin_list = g_list_append(plugin_list, plugin);
-		}
+		plugin = plugin_new(fname, FALSE);
 		g_free(fname);
 	}
 
@@ -608,7 +627,7 @@ void plugins_init()
 	separator = gtk_separator_menu_item_new();
 	gtk_container_add(GTK_CONTAINER(geany_data.tools_menu), separator);
 
-	load_plugin_paths();
+	load_active_plugins();
 
 	plugins_update_tools_menu();
 }
@@ -863,6 +882,14 @@ void pm_on_configure_button_clicked(GtkButton *button, gpointer user_data)
 static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GtkWidget *vbox, *vbox2, *label_vbox, *hbox, *swin, *label, *label2;
+	static gboolean plugin_list_loaded = FALSE;
+
+	/* before showing the dialog, we need to create the list of available plugins */
+	if (! plugin_list_loaded)
+	{
+		load_plugin_paths();
+		plugin_list_loaded = TRUE;
+	}
 
 	pm_widgets.dialog = gtk_dialog_new_with_buttons(_("Plugins"), GTK_WINDOW(app->window),
 						GTK_DIALOG_DESTROY_WITH_PARENT,
