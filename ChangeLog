@@ -14,6 +14,8 @@
    tagmanager/include/Makefile.am, Makefile.am, geany.pc.in,
    configure.in:
    Install header files and add a pkg-config file for external plugins.
+ * geany.glade, src/interface.c:
+   Add missing accelerator for string "Toggle All Additional Widgets".
 
 
 2008-03-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
