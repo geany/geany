@@ -36,7 +36,7 @@ PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 
 
-VERSION_CHECK(7)
+VERSION_CHECK(48)
 
 PLUGIN_INFO(_("HTML Characters"), _("Inserts HTML character entities like '&amp;'."), VERSION,
 	_("The Geany developer team"))
@@ -525,6 +525,7 @@ void init(GeanyData *data)
 {
 	GtkWidget *demo_item;
 	const gchar *menu_text = _("_Insert Special HTML Characters");
+	const gchar *kb_label = _("Insert Special HTML Characters");
 
 	/* Add an item to the Tools menu */
 	demo_item = gtk_menu_item_new_with_mnemonic(menu_text);
@@ -538,7 +539,7 @@ void init(GeanyData *data)
 
 	/* setup keybindings */
 	p_keybindings->set_item(plugin_key_group, KB_INSERT_HTML_CHARS, kb_activate,
-		0, 0, "insert_html_chars", menu_text, demo_item);
+		0, 0, "insert_html_chars", kb_label, demo_item);
 }
 
 
