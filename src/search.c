@@ -268,7 +268,7 @@ static void load_monospace_style()
 	static const gchar *rcstyle =
 		"style \"geany-monospace\"\n" \
 		"{\n" \
-		"    font_name=\"Monospace 16\"\n" \
+		"    font_name=\"Monospace\"\n" \
 		"}\n" \
 		"widget \"GeanyDialogSearch.*.GtkEntry\" style \"geany-monospace\"";
 	static gboolean load = TRUE;
