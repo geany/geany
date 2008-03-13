@@ -840,6 +840,30 @@ matching lines will be highlighted. Markers and highlighting can be
 removed by selecting the Remove Markers command from the Document menu.
 
 
+Change font in search dialog text fields
+````````````````````````````````````````
+
+All search related dialogs use a Monospace for the text input fields to
+increase the readibility of input text. This is useful when you are
+typing e.g. regular expressions with spaces, periods and commas which
+might it hard to read with a proportional font.
+
+If you want to change the font for some reason, you can do this easily
+by inserting the following style into your ``.gtkrc-2.0``
+(usually found in your home directory on UNIX-like systems and in the
+etc subdirectory of your Geany installation on Windows)::
+
+    style "search_style"
+    {
+        font_name="Monospace 8"
+    }
+    widget "GeanyDialogSearch.*.GtkEntry" style:highest "search_style"
+
+Please note the addition ":highest" in the last line which sets the priority
+of this style to the highest available. Otherwise, the style is ignored
+for the search dialogs.
+
+
 Find usage
 ^^^^^^^^^^
 

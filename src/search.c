@@ -259,6 +259,28 @@ void search_find_selection(gint idx, gboolean search_backwards)
 }
 
 
+/* this will load a GTK rc style to set a monospace font for text fields(GtkEntry) in all
+ * search dialogs. This needs to be done only once.
+ * The monospace font should increase readibility of regular expressions containing spaces, points,
+ * commas and similar (#1907117). */
+static void load_monospace_style()
+{
+	static const gchar *rcstyle =
+		"style \"geany-monospace\"\n" \
+		"{\n" \
+		"    font_name=\"Monospace 16\"\n" \
+		"}\n" \
+		"widget \"GeanyDialogSearch.*.GtkEntry\" style \"geany-monospace\"";
+	static gboolean load = TRUE;
+
+	if (load)
+	{
+		gtk_rc_parse_string(rcstyle);
+		load = FALSE;
+	}
+}
+
+
 void search_show_find_dialog(void)
 {
 	gint idx = document_get_cur_idx();
@@ -273,6 +295,8 @@ void search_show_find_dialog(void)
 		GtkWidget *label, *entry, *sbox, *vbox;
 		GtkWidget *exp, *bbox, *button, *check_close;
 		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
+
+		load_monospace_style();
 
 		widgets.find_dialog = gtk_dialog_new_with_buttons(_("Find"),
 			GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -393,6 +417,8 @@ void search_show_replace_dialog(void)
 			*check_close, *button, *rbox, *fbox, *vbox, *exp, *bbox;
 		GtkSizeGroup *label_size;
 		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
+
+		load_monospace_style();
 
 		widgets.replace_dialog = gtk_dialog_new_with_buttons(_("Replace"),
 			GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -541,6 +567,8 @@ void search_show_find_in_files_dialog(const gchar *dir)
 		GtkWidget *dbox, *sbox, *cbox, *rbox, *rbtn, *hbox, *vbox;
 		GtkSizeGroup *size_group;
 		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
+
+		load_monospace_style();
 
 		widgets.find_in_files_dialog = gtk_dialog_new_with_buttons(
 			_("Find in Files"), GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
