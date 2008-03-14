@@ -25,6 +25,11 @@
    command on Windows (code moved from build.c).
  * geany.spec.in: Add pkg-config file and new include directory to the
                   files section (thanks to Dominic Hopf).
+ * src/tools.c:
+   Fix freeze when reading from stderr when using "Send Selection To".
+   Don't modify current selection if the executed command returned error
+   messages and/or an unsuccessful exit code.
+   Improve error reporting when using "Send Selection To" (#1909452).
 
 
 2008-03-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

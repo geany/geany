@@ -49,6 +49,7 @@
 #include "keybindings.h"
 #include "templates.h"
 #include "win32.h"
+#include "dialogs.h"
 
 
 /* custom commands code*/
@@ -58,6 +59,9 @@ struct cc_dialog
 	GtkWidget *box;
 };
 
+static gboolean cc_error_occurred = FALSE;
+static gboolean cc_reading_finished = FALSE;
+static GString *cc_buffer;
 
 static void cc_add_command(struct cc_dialog *cc, gint idx)
 {
@@ -91,18 +95,18 @@ static gboolean cc_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 {
 	if (cond & (G_IO_IN | G_IO_PRI))
 	{
-		gint idx = GPOINTER_TO_INT(data);
 		gchar *msg = NULL;
-		GString *str = g_string_sized_new(256);
 		GIOStatus rv;
 		GError *err = NULL;
+
+		cc_buffer = g_string_sized_new(256);
 
 		do
 		{
 			rv = g_io_channel_read_line(ioc, &msg, NULL, NULL, &err);
 			if (msg != NULL)
 			{
-				g_string_append(str, msg);
+				g_string_append(cc_buffer, msg);
 				g_free(msg);
 			}
 			if (err != NULL)
@@ -113,15 +117,10 @@ static gboolean cc_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 			}
 		} while (rv == G_IO_STATUS_NORMAL || rv == G_IO_STATUS_AGAIN);
 
-		if (rv == G_IO_STATUS_EOF)
-		{	/* Command completed successfully */
-			sci_replace_sel(doc_list[idx].sci, str->str);
-		}
-		else
+		if (rv != G_IO_STATUS_EOF)
 		{	/* Something went wrong? */
 			g_warning("%s: %s\n", __func__, "Incomplete command output");
 		}
-		g_string_free(str, TRUE);
 	}
 	return FALSE;
 }
@@ -132,16 +131,95 @@ static gboolean cc_iofunc_err(GIOChannel *ioc, GIOCondition cond, gpointer data)
 	if (cond & (G_IO_IN | G_IO_PRI))
 	{
 		gchar *msg = NULL;
+		GString *str = g_string_sized_new(256);
+		GIOStatus rv;
 
-		while (g_io_channel_read_line(ioc, &msg, NULL, NULL, NULL) && msg != NULL)
+		do
 		{
-			g_warning("%s: %s", (const gchar*) data, g_strstrip(msg));
-			g_free(msg);
+			rv = g_io_channel_read_line(ioc, &msg, NULL, NULL, NULL);
+			if (msg != NULL)
+			{
+				g_string_append(str, msg);
+				g_free(msg);
+			}
+		} while (rv == G_IO_STATUS_NORMAL || rv == G_IO_STATUS_AGAIN);
+
+		if (NZV(str->str))
+		{
+			g_warning("%s: %s\n", (const gchar *) data, str->str);
+			ui_set_statusbar(TRUE,
+				_("The executed custom command returned an error. "
+				"Your selection was not changed. Error message: %s"),
+				str->str);
+			cc_error_occurred = TRUE;
+
 		}
+		g_string_free(str, TRUE);
+	}
+	cc_reading_finished = TRUE;
+	return FALSE;
+}
+
+
+static gboolean cc_replace_sel_cb(gpointer user_data)
+{
+	gint idx = GPOINTER_TO_INT(user_data);
+
+	if (! cc_reading_finished)
+	{	/* keep this function in the main loop until cc_iofunc_err() has finished */
 		return TRUE;
 	}
 
+	if (! cc_error_occurred && cc_buffer != NULL)
+	{	/* Command completed successfully */
+		sci_replace_sel(doc_list[idx].sci, cc_buffer->str);
+		g_string_free(cc_buffer, TRUE);
+		cc_buffer = NULL;
+	}
+
+	cc_error_occurred = FALSE;
+	cc_reading_finished = FALSE;
+
 	return FALSE;
+}
+
+
+/* check whether the executed command failed and if so do nothing.
+ * If it returned with a sucessful exit code, replace the selection. */
+static void cc_exit_cb(GPid child_pid, gint status, gpointer user_data)
+{
+	/* if there was already an error, skip further checks */
+	if (! cc_error_occurred)
+	{
+#ifdef G_OS_UNIX
+		if (WIFEXITED(status))
+		{
+			if (WEXITSTATUS(status) != EXIT_SUCCESS)
+				cc_error_occurred = TRUE;
+		}
+		else if (WIFSIGNALED(status))
+		{	/* the terminating signal: WTERMSIG (status)); */
+			cc_error_occurred = TRUE;
+		}
+		else
+		{	/* any other failure occured */
+			cc_error_occurred = TRUE;
+		}
+#else
+		cc_error_occurred = ! win32_get_exit_status(child_pid);
+#endif
+
+		if (cc_error_occurred)
+		{	/* here we are sure cc_error_occurred was set due to an unsuccessful exit code
+			 * and so we add an error message */
+			/* TODO maybe include the exit code in the error message */
+			ui_set_statusbar(TRUE,
+				_("The executed custom command exited with an unsuccessful exit code."));
+		}
+	}
+
+	g_idle_add(cc_replace_sel_cb, user_data);
+	g_spawn_close_pid(child_pid);
 }
 
 
@@ -165,15 +243,20 @@ void tools_execute_custom_command(gint idx, const gchar *command)
 	argv = g_strsplit(command, " ", -1);
 	ui_set_statusbar(TRUE, _("Passing data and executing custom command: %s"), command);
 
-	if (g_spawn_async_with_pipes(NULL, argv, NULL, G_SPAWN_SEARCH_PATH,
+	cc_error_occurred = FALSE;
+
+	if (g_spawn_async_with_pipes(NULL, argv, NULL, G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD,
 						NULL, NULL, &pid, &stdin_fd, &stdout_fd, &stderr_fd, &error))
 	{
 		gchar *sel;
 		gint len, remaining, wrote;
 
+		if (pid > 0)
+			g_child_watch_add(pid, (GChildWatchFunc) cc_exit_cb, GINT_TO_POINTER(idx));
+
 		/* use GIOChannel to monitor stdout */
 		utils_set_up_io_channel(stdout_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
-				FALSE, cc_iofunc, GINT_TO_POINTER(idx));
+				FALSE, cc_iofunc, NULL);
 		/* copy program's stderr to Geany's stdout to help error tracking */
 		utils_set_up_io_channel(stderr_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
 				FALSE, cc_iofunc_err, (gpointer)command);
@@ -202,6 +285,7 @@ void tools_execute_custom_command(gint idx, const gchar *command)
 	else
 	{
 		geany_debug("g_spawn_async_with_pipes() failed: %s", error->message);
+		ui_set_statusbar(TRUE, _("Custom command failed: %s"), error->message);
 		g_error_free(error);
 	}
 
