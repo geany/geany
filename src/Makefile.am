@@ -55,6 +55,7 @@ geany_include_HEADERS = \
 	msgwindow.h \
 	plugins.h \
 	plugindata.h \
+	prefs.h \
 	project.h \
 	sciwrappers.h \
 	search.h \
