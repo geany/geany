@@ -2,6 +2,11 @@
 
  * src/keybindings.c:
    Set main menu accelerators for keybindings.
+ * src/keybindings.c, src/keybindings.h, src/plugindata.h,
+   plugins/htmlchars.c:
+   Make KeyBinding name and label fields non-const strings so they can
+   be freed by any plugins that need to use malloc'd strings.
+   Document KeyCallback typedef.
 
 
 2008-03-14  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

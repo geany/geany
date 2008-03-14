@@ -39,15 +39,18 @@
 #endif
 
 
+/** Function pointer type used for keybinding callbacks */
 typedef void (*KeyCallback) (guint key_id);
 
 /** Represents a single keybinding action */
+/* Note: name and label are not const strings so plugins can set them to malloc'd strings
+ * and free them in cleanup(). */
 typedef struct KeyBinding
 {
 	guint key;				/**< Key value in lower-case, such as @c GDK_a */
 	GdkModifierType mods;	/**< Modifier keys, such as @c GDK_CONTROL_MASK */
-	const gchar *name;		/**< Key name for the configuration file, such as @c "menu_new" */
-	const gchar *label;		/**< Label used in the preferences dialog keybindings tab */
+	gchar *name;			/**< Key name for the configuration file, such as @c "menu_new" */
+	gchar *label;			/**< Label used in the preferences dialog keybindings tab */
 	KeyCallback callback;	/**< Callback function called when the key combination is pressed */
 	GtkWidget *menu_item;	/**< Menu item widget for setting the menu accelerator */
 } KeyBinding;
@@ -302,7 +305,7 @@ void keybindings_free(void);
 
 void keybindings_set_item(KeyBindingGroup *group, gsize key_id,
 		KeyCallback callback, guint key, GdkModifierType mod,
-		const gchar *name, const gchar *label, GtkWidget *menu_item);
+		gchar *name, gchar *label, GtkWidget *menu_item);
 
 void keybindings_send_command(guint group_id, guint key_id);
 

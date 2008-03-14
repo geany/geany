@@ -101,7 +101,7 @@ static void add_popup_menu_accels(void);
 /** Simple convenience function to fill a KeyBinding struct item */
 void keybindings_set_item(KeyBindingGroup *group, gsize key_id,
 		KeyCallback callback, guint key, GdkModifierType mod,
-		const gchar *name, const gchar *label, GtkWidget *menu_item)
+		gchar *name, gchar *label, GtkWidget *menu_item)
 {
 	KeyBinding *kb;
 

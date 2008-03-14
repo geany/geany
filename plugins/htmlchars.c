@@ -525,7 +525,7 @@ void init(GeanyData *data)
 {
 	GtkWidget *demo_item;
 	const gchar *menu_text = _("_Insert Special HTML Characters");
-	const gchar *kb_label = _("Insert Special HTML Characters");
+	gchar *kb_label = _("Insert Special HTML Characters");
 
 	/* Add an item to the Tools menu */
 	demo_item = gtk_menu_item_new_with_mnemonic(menu_text);
