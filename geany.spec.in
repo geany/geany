@@ -51,3 +51,5 @@ Some features:
 %{_datadir}/doc/%{name}/
 %{_mandir}/man1/%{name}.1.gz
 %{_datadir}/icons/hicolor/16x16/apps/classviewer-*.png
+%{_includedir}/geany/
+%{_libdir}/pkgconfig/
