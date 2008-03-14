@@ -51,6 +51,7 @@ GPtrArray *keybinding_groups;	/* array of KeyBindingGroup pointers */
 /* keyfile group name for non-plugin KB groups */
 const gchar keybindings_keyfile_group_name[] = "Bindings";
 
+static GtkAccelGroup *kb_accel_group = NULL;
 static const gboolean swap_alt_tab_order = FALSE;
 
 
@@ -441,6 +442,17 @@ static void init_default_kb(void)
 }
 
 
+void keybindings_init(void)
+{
+	keybinding_groups = g_ptr_array_sized_new(GEANY_KEY_GROUP_COUNT);
+
+	init_default_kb();
+
+	kb_accel_group = gtk_accel_group_new();
+	gtk_window_add_accel_group(GTK_WINDOW(app->window), kb_accel_group);
+}
+
+
 typedef void (*KBItemCallback) (KeyBindingGroup *group, KeyBinding *kb, gpointer user_data);
 
 static void keybindings_foreach(KBItemCallback cb, gpointer user_data)
@@ -461,7 +473,15 @@ static void keybindings_foreach(KBItemCallback cb, gpointer user_data)
 }
 
 
-static void get_keyfile_kb(KeyBindingGroup *group, KeyBinding *kb, gpointer user_data)
+static void apply_kb_accel(KeyBinding *kb)
+{
+	if (kb->key != 0 && kb->menu_item)
+		gtk_widget_add_accelerator(kb->menu_item, "activate", kb_accel_group,
+			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
+}
+
+
+static void load_kb(KeyBindingGroup *group, KeyBinding *kb, gpointer user_data)
 {
 	GKeyFile *config = user_data;
 	gchar *val;
@@ -474,6 +494,8 @@ static void get_keyfile_kb(KeyBindingGroup *group, KeyBinding *kb, gpointer user
 		gtk_accelerator_parse(val, &key, &mods);
 		kb->key = key;
 		kb->mods = mods;
+
+		apply_kb_accel(kb);
 	}
 	g_free(val);
 }
@@ -487,18 +509,10 @@ static void load_user_kb(void)
 	/* now load user defined keys */
 	if (g_key_file_load_from_file(config, configfile, G_KEY_FILE_KEEP_COMMENTS, NULL))
 	{
-		keybindings_foreach(get_keyfile_kb, config);
+		keybindings_foreach(load_kb, config);
 	}
 	g_free(configfile);
 	g_key_file_free(config);
-}
-
-
-void keybindings_init(void)
-{
-	keybinding_groups = g_ptr_array_sized_new(GEANY_KEY_GROUP_COUNT);
-
-	init_default_kb();
 }
 
 
