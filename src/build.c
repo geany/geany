@@ -55,6 +55,7 @@
 #include "vte.h"
 #include "project.h"
 #include "editor.h"
+#include "win32.h"
 
 
 BuildInfo build_info = {GBO_COMPILE, 0, NULL, GEANY_FILETYPES_ALL, NULL};
@@ -1027,11 +1028,7 @@ static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 	}
 	show_build_result_message(failure);
 #else
-	DWORD exit_code;
-	GetExitCodeProcess(child_pid, &exit_code);
-	/* not sure whether the cast to int is necessary, no idea what DWORD really is
-	 * (seems to be similar to an int) */
-	show_build_result_message((int) exit_code);
+	show_build_result_message(! win32_get_exit_status(child_pid));
 #endif
 
 	utils_beep();

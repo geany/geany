@@ -638,6 +638,17 @@ void win32_open_browser(const gchar *uri)
 }
 
 
+/* Returns TRUE if the command, which child_pid refers to, returned with a successful exit code,
+ * otherwise FALSE. */
+gboolean win32_get_exit_status(GPid child_pid)
+{
+	DWORD exit_code;
+	GetExitCodeProcess(child_pid, &exit_code);
+	
+	return (exit_code == 0);
+}
+
+
 static void debug_setup_console()
 {
 	static const WORD MAX_CONSOLE_LINES = 500;

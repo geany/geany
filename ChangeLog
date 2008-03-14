@@ -9,6 +9,9 @@
  * src/Makefile.am: Add prefs.h to the list of installed header files.
  * src/win32.c: Fix crashes on Windows when error argument of
                 utils_spawn_* is NULL.
+ * src/build.c, src/win32.c, src/win32.h:
+   Add win32_get_exit_status() to retrieve the exit code from a
+   command on Windows (code moved from build.c).
 
 
 2008-03-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
