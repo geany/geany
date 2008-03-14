@@ -787,7 +787,8 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 		{
 			gchar *msg = g_win32_error_message(GetLastError());
 			geany_debug("win32_spawn: Second CreateFile failed (%d)", (gint) GetLastError());
-			*error = g_error_new(G_SPAWN_ERROR, G_FILE_ERROR, msg);
+			if (error != NULL)
+				*error = g_error_new(G_SPAWN_ERROR, G_FILE_ERROR, msg);
 			g_free(msg);
 			return FALSE;
 		}
@@ -800,7 +801,8 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 		{
 			gchar *msg = g_win32_error_message(GetLastError());
 			geany_debug("win32_spawn: Second CreateFile failed (%d)", (gint) GetLastError());
-			*error = g_error_new(G_SPAWN_ERROR, G_FILE_ERROR, msg);
+			if (error != NULL)
+				*error = g_error_new(G_SPAWN_ERROR, G_FILE_ERROR, msg);
 			g_free(msg);
 			return FALSE;
 		}
@@ -821,7 +823,8 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 	{
 		gchar *msg = g_win32_error_message(GetLastError());
 		geany_debug("win32_spawn: Stdout pipe creation failed (%d)", (gint) GetLastError());
-		*error = g_error_new(G_SPAWN_ERROR, G_FILE_ERROR_PIPE, msg);
+		if (error != NULL)
+			*error = g_error_new(G_SPAWN_ERROR, G_FILE_ERROR_PIPE, msg);
 		g_free(msg);
 		return FALSE;
 	}
@@ -834,7 +837,8 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 	{
 		gchar *msg = g_win32_error_message(GetLastError());
 		geany_debug("win32_spawn: Stderr pipe creation failed");
-		*error = g_error_new(G_SPAWN_ERROR, G_FILE_ERROR_PIPE, msg);
+		if (error != NULL)
+			*error = g_error_new(G_SPAWN_ERROR, G_FILE_ERROR_PIPE, msg);
 		g_free(msg);
 		return FALSE;
 	}
@@ -847,8 +851,8 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 	{
 		gchar *msg = g_win32_error_message(GetLastError());
 		geany_debug("win32_spawn: Stdin pipe creation failed");
-		*error = g_error_new(G_SPAWN_ERROR, G_FILE_ERROR_PIPE, g_win32_error_message (GetLastError()));
-		*error = g_error_new(G_SPAWN_ERROR, G_FILE_ERROR_PIPE, msg);
+		if (error != NULL)
+			*error = g_error_new(G_SPAWN_ERROR, G_FILE_ERROR_PIPE, msg);
 		g_free(msg);
 		return FALSE;
 	}
@@ -911,7 +915,8 @@ static gboolean GetContentFromHandle(HANDLE hFile, gchar **content, GError **err
 	{
 		gchar *msg = g_win32_error_message(GetLastError());
 		geany_debug("GetContentFromHandle: Alloc failed");
-		*error = g_error_new(G_SPAWN_ERROR, G_SPAWN_ERROR, msg);
+		if (error != NULL)
+			*error = g_error_new(G_SPAWN_ERROR, G_SPAWN_ERROR, msg);
 		g_free(msg);
 		return FALSE;
 	}
@@ -922,7 +927,8 @@ static gboolean GetContentFromHandle(HANDLE hFile, gchar **content, GError **err
 	{
 		gchar *msg = g_win32_error_message(GetLastError());
 		geany_debug("GetContentFromHandle: Cannot read tempfile");
-		*error = g_error_new(G_SPAWN_ERROR, G_FILE_ERROR_FAILED, msg);
+		if (error != NULL)
+			*error = g_error_new(G_SPAWN_ERROR, G_FILE_ERROR_FAILED, msg);
 		g_free(msg);
 		return FALSE;
 	}
@@ -931,7 +937,8 @@ static gboolean GetContentFromHandle(HANDLE hFile, gchar **content, GError **err
 	{
 		gchar *msg = g_win32_error_message(GetLastError());
 		geany_debug("GetContentFromHandle: CloseHandle failed (%d)", (gint) GetLastError());
-		*error = g_error_new(G_SPAWN_ERROR, G_FILE_ERROR_FAILED, msg);
+		if (error != NULL)
+			*error = g_error_new(G_SPAWN_ERROR, G_FILE_ERROR_FAILED, msg);
 		g_free(msg);
 		g_free(buffer);
 		*content = NULL;
@@ -976,7 +983,8 @@ static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline
 	{
 		gchar *msg = g_win32_error_message(GetLastError());
 		geany_debug("CreateChildProcess: CreateProcess failed");
-		*error = g_error_new(G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, msg);
+		if (*error != NULL)
+			*error = g_error_new(G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, msg);
 		g_free(msg);
 		return FALSE;
 	}
@@ -994,8 +1002,9 @@ static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline
 		if (GetExitCodeProcess(piProcInfo.hProcess, &gw_spawn->dwExitCode) != 0)
 		{
 			gchar *msg = g_win32_error_message(GetLastError());
-			geany_debug("GetExitCodeProcess failed");
-			*error = g_error_new(G_SPAWN_ERROR, G_FILE_ERROR_FAILED, msg);
+			geany_debug("GetExitCodeProcess failed: %s", msg);
+			if (error != NULL)
+				*error = g_error_new(G_SPAWN_ERROR, G_FILE_ERROR_FAILED, msg);
 			g_free(msg);
 		}
 		CloseHandle(piProcInfo.hProcess);
@@ -1017,7 +1026,8 @@ static VOID ReadFromPipe(HANDLE hRead, HANDLE hWrite, HANDLE hFile, GError **err
 	{
 		gchar *msg = g_win32_error_message(GetLastError());
 		geany_debug("ReadFromPipe: Closing handle failed");
-		*error = g_error_new(G_SPAWN_ERROR, G_FILE_ERROR_PIPE, msg);
+		if (error != NULL)
+			*error = g_error_new(G_SPAWN_ERROR, G_FILE_ERROR_PIPE, msg);
 		g_free(msg);
 		return;
 	}
@@ -1052,7 +1062,8 @@ static HANDLE GetTempFileHandle(GError **error)
 	{
 		gchar *msg = g_win32_error_message(GetLastError());
 		geany_debug("GetTempFileHandle: GetTempPath failed (%d)", (gint) GetLastError());
-		*error = g_error_new(G_SPAWN_ERROR, G_FILE_ERROR, msg);
+		if (error != NULL)
+			*error = g_error_new(G_SPAWN_ERROR, G_FILE_ERROR, msg);
 		g_free(msg);
 		return NULL;
 	}
@@ -1066,7 +1077,8 @@ static HANDLE GetTempFileHandle(GError **error)
 	{
 		gchar *msg = g_win32_error_message(GetLastError());
 		geany_debug("GetTempFileName failed (%d)", (gint) GetLastError());
-		*error = g_error_new(G_SPAWN_ERROR, G_FILE_ERROR, msg);
+		if (error != NULL)
+			*error = g_error_new(G_SPAWN_ERROR, G_FILE_ERROR, msg);
 		g_free(msg);
 		return NULL;
 	}
@@ -1083,7 +1095,8 @@ static HANDLE GetTempFileHandle(GError **error)
 	{
 		gchar *msg = g_win32_error_message(GetLastError());
 		geany_debug("GetTempFileHandle: Second CreateFile failed (%d)", (gint) GetLastError());
-		*error = g_error_new(G_SPAWN_ERROR, G_FILE_ERROR, msg);
+		if (error != NULL)
+			*error = g_error_new(G_SPAWN_ERROR, G_FILE_ERROR, msg);
 		g_free(msg);
 		return NULL;
 	}
