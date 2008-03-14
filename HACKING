@@ -4,6 +4,23 @@ This file contains information for anyone wanting to work on the Geany
 codebase. You should be aware of the open source licenses used - see
 the README file or the documentation.
 
+Writing plugins
+---------------
+You should generate and read the plugin API documentation, see below.
+
+src/plugindata.h contains the plugin API data types and some notes.
+See plugins/demoplugin.c for a very basic example plugin.
+src/plugins.c loads and unloads plugins (you shouldn't need to read
+this really).
+
+Plugin API documentation
+^^^^^^^^^^^^^^^^^^^^^^^^
+You can generate documentation for the plugin API using the doxygen
+tool. Run 'make api-doc' in the doc subdirectory. The documentation will
+be output to doc/reference/index.html.
+
+See the Related Pages section for a link to the plugin howto.
+
 Patches
 -------
 We are happy to receive patches, but it's best to check with us by email
@@ -27,6 +44,26 @@ File organization
 callbacks.c is just for Glade callbacks.
 Avoid adding code to geany.h if it will fit better elsewhere.
 See the top of each src/*.c file for a brief description of what it's for.
+
+Keeping the plugin ABI stable
+-----------------------------
+Please be aware that anything with a doc-comment (a comment with an
+extra asterix: '/**') is something in the plugin API. Things like enums
+and structs can still be appended to, ensuring that all the existing
+elements stay in place - this will keep the ABI stable.
+
+Before the 1.0 release series, the ABI can change when necessary, and
+even the API can change. An ABI change just means that all plugins will
+not load and they must be rebuilt.  An API change means that some plugins
+might not build correctly.
+
+When reordering or changing existing elements of structs that are used as
+part of the plugin API, you should increment abi_version in plugindata.h.
+This is not needed if you're just appending fields to structs. The
+api_version value should be incremented for any changes to the plugin API,
+including appending elements.
+
+If you're in any doubt when making changes to plugin API code, just ask us.
 
 Glade
 -----
@@ -55,7 +92,8 @@ so we always declare variables before statements. You can use
 this.
 You should also try to write ISO C90 code for portability, so always
 use C /* */ comments and function_name(void) instead of function_name().
-This is for compatibility with various Unix-like compilers.
+This is for compatibility with various Unix-like compilers. You can use
+-ansi in your CFLAGS to help check this.
 
 Style
 -----
@@ -87,13 +125,6 @@ NOTES
 =====
 Some of these notes below are brief (or maybe incomplete) - please
 contact the mailing list for more information.
-
-Modifying data types
---------------------
-When reordering or changing existing elements of structs that are used as
-part of the plugin API, you should increment abi_version in plugindata.h
-(and api_version if changing elements). This is not needed if you're
-just appending fields to structs.
 
 Using pre-defined autotools values
 ----------------------------------
@@ -198,13 +229,6 @@ In symbols.c:
 Update init_tag_list() for foo, listing the tm_tag_* types corresponding
 to the s_tag_type_names strings used in foo.c for FooKinds.
 
-
-PLUGINS
-=======
-
-src/plugindata.h contains the plugin API data types and some notes.
-See plugins/demoplugin.c for a very basic example plugin.
-src/plugins.c loads and unloads plugins.
 
 Loading a plugin from GDB
 -------------------------

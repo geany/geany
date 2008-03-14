@@ -7,6 +7,12 @@
    Make KeyBinding name and label fields non-const strings so they can
    be freed by any plugins that need to use malloc'd strings.
    Document KeyCallback typedef.
+ * HACKING:
+   Replace Plugins chapter with 'Writing plugins' section.
+   Add generating plugin API documentation section.
+   Replace 'Modifying data types' with 'Keeping the plugin ABI stable'
+   section.
+   Add note about using -ansi.
 
 
 2008-03-14  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
