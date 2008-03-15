@@ -3366,22 +3366,51 @@ void Editor::AddChar(char ch) {
 // AddCharUTF inserts an array of bytes which may or may not be in UTF-8.
 void Editor::AddCharUTF(char *s, unsigned int len, bool treatAsDBCS) {
 	bool wasSelection = currentPos != anchor;
-	ClearSelection();
-	bool charReplaceAction = false;
-	if (inOverstrike && !wasSelection && !RangeContainsProtected(currentPos, currentPos + 1)) {
-		if (currentPos < (pdoc->Length())) {
-			if (!IsEOLChar(pdoc->CharAt(currentPos))) {
-				charReplaceAction = true;
-				pdoc->BeginUndoAction();
-				pdoc->DelChar(currentPos);
+    if(wasSelection && selType == selRectangle ) {
+        int startPos;
+        int endPos;
+
+        int c1 = pdoc->GetColumn(currentPos);
+        int c2 = pdoc->GetColumn(anchor);
+        int offset = c1 < c2 ? c1 : c2;
+
+        pdoc->BeginUndoAction();
+        SelectionLineIterator lineIterator(this, false);
+        while (lineIterator.Iterate()) {
+            startPos = lineIterator.startPos;
+            endPos   = lineIterator.endPos;
+
+            if(pdoc->GetColumn(endPos) >= offset){
+                unsigned int chars = endPos - startPos;
+                if (0 != chars) {
+                    pdoc->DeleteChars(startPos, chars);
+                }
+                pdoc->InsertString(startPos, s, len);
+            }
+        }
+        anchor += len;
+        currentPos += len;
+        SetRectangularRange();
+        pdoc->EndUndoAction();
+
+    } else {
+		ClearSelection();
+		bool charReplaceAction = false;
+		if (inOverstrike && !wasSelection && !RangeContainsProtected(currentPos, currentPos + 1)) {
+			if (currentPos < (pdoc->Length())) {
+				if (!IsEOLChar(pdoc->CharAt(currentPos))) {
+					charReplaceAction = true;
+					pdoc->BeginUndoAction();
+					pdoc->DelChar(currentPos);
+				}
 			}
 		}
-	}
-	if (pdoc->InsertString(currentPos, s, len)) {
-		SetEmptySelection(currentPos + len);
-	}
-	if (charReplaceAction) {
-		pdoc->EndUndoAction();
+		if (pdoc->InsertString(currentPos, s, len)) {
+			SetEmptySelection(currentPos + len);
+		}
+		if (charReplaceAction) {
+			pdoc->EndUndoAction();
+		}
 	}
 	// If in wrap mode rewrap current line so EnsureCaretVisible has accurate information
 	if (wrapState != eWrapNone) {
@@ -3537,14 +3566,41 @@ bool Editor::CanPaste() {
 }
 
 void Editor::Clear() {
-	if (currentPos == anchor) {
+    bool wasSelection = currentPos != anchor;
+    if(wasSelection && selType == selRectangle ) {
+        int startPos;
+        int endPos;
+
+        int c1 = pdoc->GetColumn(currentPos);
+        int c2 = pdoc->GetColumn(anchor);
+        int offset = c1 < c2 ? c1 : c2;
+
+        pdoc->BeginUndoAction();
+        SelectionLineIterator lineIterator(this, false);
+        while (lineIterator.Iterate()) {
+            startPos = lineIterator.startPos;
+            endPos   = lineIterator.endPos;
+
+            if(pdoc->GetColumn(endPos) >= offset){
+                unsigned int chars = endPos - startPos;
+                if (0 != chars) {
+                    pdoc->DeleteChars(startPos, chars);
+                } else
+		    pdoc->DelChar(startPos);
+            }
+        }
+        SetRectangularRange();
+        pdoc->EndUndoAction();
+
+    } else if (currentPos == anchor) {
 		if (!RangeContainsProtected(currentPos, currentPos + 1)) {
 			DelChar();
 		}
 	} else {
 		ClearSelection();
 	}
-	SetEmptySelection(currentPos);
+	if( !wasSelection )
+	    SetEmptySelection(currentPos);
 }
 
 void Editor::SelectAll() {
@@ -3580,7 +3636,33 @@ void Editor::DelChar() {
 }
 
 void Editor::DelCharBack(bool allowLineStartDeletion) {
-	if (currentPos == anchor) {
+	bool wasSelection = currentPos != anchor;
+    if(wasSelection && selType == selRectangle ) {
+        int startPos;
+        int endPos;
+
+        int c1 = pdoc->GetColumn(currentPos);
+        int c2 = pdoc->GetColumn(anchor);
+        int offset = c1 < c2 ? c1 : c2;
+
+        pdoc->BeginUndoAction();
+        SelectionLineIterator lineIterator(this, false);
+        while (lineIterator.Iterate()) {
+            startPos = lineIterator.startPos;
+            endPos   = lineIterator.endPos;
+
+            if(pdoc->GetColumn(endPos) >= offset){
+                unsigned int chars = endPos - startPos;
+                if (0 != chars) {
+                    pdoc->DeleteChars(startPos, chars);
+                } else
+		    pdoc->DelCharBack(startPos);
+            }
+        }
+        SetRectangularRange();
+        pdoc->EndUndoAction();
+
+    } else 	if (currentPos == anchor) {
 		if (!RangeContainsProtected(currentPos - 1, currentPos)) {
 			int lineCurrentPos = pdoc->LineFromPosition(currentPos);
 			if (allowLineStartDeletion || (pdoc->LineStart(lineCurrentPos) != currentPos)) {

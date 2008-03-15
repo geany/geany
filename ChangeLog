@@ -2,6 +2,8 @@
 
  * src/projects.c: Fix wrong directory when choosing project filename
                    in the New Project dialog.
+ * scintilla/Editor.cxx: Add (basic) column mode editing, pasting text
+                         does not work. Patch by chuck, thanks.
 
 
 2008-03-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
