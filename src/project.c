@@ -718,7 +718,15 @@ static void run_dialog(GtkWidget *dialog, GtkWidget *entry)
 	if (g_path_is_absolute(locale_filename))
 	{
 		if (g_file_test(locale_filename, G_FILE_TEST_EXISTS))
-			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), utf8_filename);
+		{
+			/* if the current filename is a directory, we must use
+			 * gtk_file_chooser_set_current_folder(which expects a locale filename) otherwise
+			 * we end up in the parent directory */
+			if (g_file_test(locale_filename, G_FILE_TEST_IS_DIR))
+				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_filename);
+			else
+				gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), utf8_filename);
+		}
 		else /* if the file doesn't yet exist, use at least the current directory */
 		{
 			gchar *locale_dir = g_path_get_dirname(locale_filename);
