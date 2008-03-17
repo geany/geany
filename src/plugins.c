@@ -80,10 +80,19 @@ typedef struct Plugin
 Plugin;
 
 
-static GList *plugin_list = NULL; 		/* list of all available, loadable plugins */
-static GList *active_plugin_list = NULL; /* list of only actually loaded plugins */
+/* list of all available, loadable plugins, only valid as long as the plugin manager dialog is
+ * opened, afterwards it will be destroyed */
+static GList *plugin_list = NULL;
+static GList *active_plugin_list = NULL; /* list of only actually loaded plugins, always valid */
 static GtkWidget *separator = NULL;
 static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data);
+
+
+enum
+{
+	PLUGIN_FREE_NON_ACTIVE,
+	PLUGIN_FREE_ALL
+};
 
 
 static DocumentFuncs doc_funcs = {
@@ -255,8 +264,7 @@ geany_data_init(void)
 
 
 /* Prevent the same plugin filename being loaded more than once.
- * Note: g_module_name always returns the .so name, even when Plugin::filename
- * is an .la file. */
+ * Note: g_module_name always returns the .so name, even when Plugin::filename is an .la file. */
 static gboolean
 plugin_loaded(GModule *module)
 {
@@ -277,8 +285,41 @@ plugin_loaded(GModule *module)
 		}
 		g_free(basename_loaded);
 	}
+	/* Look also through the list of active plugins. This prevents problems when we have the same
+	 * plugin in libdir/geany/ AND in configdir/plugins/ and the one in libdir/geany/ is loaded
+	 * as active plugin. The plugin manager list would only take the one in configdir/geany/ and
+	 * the plugin manager would list both plugins. Additionally, unloading the active plugin
+	 * would cause a crash. */
+	for (item = active_plugin_list; item != NULL; item = g_list_next(item))
+	{
+		basename_loaded = g_path_get_basename(g_module_name(((Plugin*)item->data)->module));
+
+		if (utils_str_equal(basename_module, basename_loaded))
+		{
+			g_free(basename_loaded);
+			g_free(basename_module);
+			return TRUE;
+		}
+		g_free(basename_loaded);
+	}
 	g_free(basename_module);
 	return FALSE;
+}
+
+
+static Plugin *find_active_plugin_by_name(const gchar *filename)
+{
+	GList *item;
+
+	g_return_val_if_fail(filename, FALSE);
+
+	for (item = active_plugin_list; item != NULL; item = g_list_next(item))
+	{
+		if (utils_str_equal(filename, ((Plugin*)item->data)->filename))
+			return item->data;
+	}
+
+	return NULL;
 }
 
 
@@ -390,9 +431,10 @@ plugin_init(Plugin *plugin)
 /* Load and init a plugin.
  * init_plugin decides whether the plugin's init() function should be called or not. If it is
  * called, the plugin will be started, if not the plugin will be read only (for the list of
- * available plugins in the plugin manager). */
+ * available plugins in the plugin manager).
+ * When add_to_list is set, the plugin will be added to the plugin manager's plugin_list. */
 static Plugin*
-plugin_new(const gchar *fname, gboolean init_plugin)
+plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 {
 	Plugin *plugin;
 	GModule *module;
@@ -402,6 +444,17 @@ plugin_new(const gchar *fname, gboolean init_plugin)
 
 	g_return_val_if_fail(fname, NULL);
 	g_return_val_if_fail(g_module_supported(), NULL);
+
+	/* find the plugin in the list of already loaded, active plugins and use it, otherwise
+	 * load the module */
+	plugin = find_active_plugin_by_name(fname);
+	if (plugin != NULL)
+	{
+		geany_debug("Plugin \"%s\" already loaded.", fname);
+		if (add_to_list)
+			plugin_list = g_list_append(plugin_list, plugin);
+		return plugin;
+	}
 
 	/* Don't use G_MODULE_BIND_LAZY otherwise we can get unresolved symbols at runtime,
 	 * causing a segfault. Without that flag the module will safely fail to load.
@@ -447,8 +500,6 @@ plugin_new(const gchar *fname, gboolean init_plugin)
 	plugin->filename = g_strdup(fname);
 	plugin->module = module;
 
-	plugin_list = g_list_append(plugin_list, plugin);
-
 	g_module_symbol(module, "geany_data", (void *) &p_geany_data);
 	if (p_geany_data)
 		*p_geany_data = &geany_data;
@@ -466,11 +517,12 @@ plugin_new(const gchar *fname, gboolean init_plugin)
 				info()->name);
 	}
 
-	/* only initialise the plugin if it should be loaded */
 	if (init_plugin)
-	{
 		plugin_init(plugin);
-	}
+
+	if (add_to_list)
+		plugin_list = g_list_append(plugin_list, plugin);
+
 	return plugin;
 }
 
@@ -488,17 +540,17 @@ static void remove_callbacks(Plugin *plugin)
 }
 
 
+static gboolean is_active_plugin(Plugin *plugin)
+{
+	return (g_list_find(active_plugin_list, plugin) != NULL);
+}
+
+
 static void
 plugin_unload(Plugin *plugin)
 {
-	g_return_if_fail(plugin);
-	g_return_if_fail(plugin->module);
 
-	/* only do cleanup if the plugin was actually loaded */
-	if (! g_list_find(active_plugin_list, plugin))
-		return;
-
-	if (plugin->cleanup)
+	if (is_active_plugin(plugin) && plugin->cleanup)
 		plugin->cleanup();
 
 	remove_callbacks(plugin);
@@ -512,18 +564,25 @@ plugin_unload(Plugin *plugin)
 
 
 static void
-plugin_free(Plugin *plugin)
+plugin_free(Plugin *plugin, gpointer data)
 {
 	g_return_if_fail(plugin);
 	g_return_if_fail(plugin->module);
 
+	/* don't do anything when closing the plugin manager and it is an active plugin */
+	if (GPOINTER_TO_INT(data) == PLUGIN_FREE_NON_ACTIVE && is_active_plugin(plugin))
+		return;
+
 	plugin_unload(plugin);
 
-	if (! g_module_close(plugin->module))
+	if (plugin->module != NULL && ! g_module_close(plugin->module))
 		g_warning("%s: %s", plugin->filename, g_module_error());
+
+	plugin_list = g_list_remove(plugin_list, plugin);
 
 	g_free(plugin->filename);
 	g_free(plugin);
+	plugin = NULL;
 }
 
 
@@ -539,13 +598,13 @@ load_active_plugins()
 	for (i = 0; i < len; i++)
 	{
 		if (NZV(app->active_plugins[i]))
-			plugin_new(app->active_plugins[i], TRUE);
+			plugin_new(app->active_plugins[i], TRUE, FALSE);
 	}
 }
 
 
 static void
-load_plugins(const gchar *path)
+load_plugins_from_path(const gchar *path)
 {
 	GSList *list, *item;
 	gchar *fname, *tmp;
@@ -560,7 +619,7 @@ load_plugins(const gchar *path)
 			continue;
 
 		fname = g_strconcat(path, G_DIR_SEPARATOR_S, item->data, NULL);
-		plugin = plugin_new(fname, FALSE);
+		plugin = plugin_new(fname, FALSE, TRUE);
 		g_free(fname);
 	}
 
@@ -582,20 +641,20 @@ static gchar *get_plugin_path()
 #endif
 
 
-static void load_plugin_paths(void)
+static void load_plugins(void)
 {
 	gchar *path;
 
 	path = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", NULL);
 	/* first load plugins in ~/.geany/plugins/, then in $prefix/lib/geany */
-	load_plugins(path);
+	load_plugins_from_path(path);
 	g_free(path);
 #ifdef G_OS_WIN32
 	path = get_plugin_path();
 #else
 	path = g_strconcat(GEANY_LIBDIR, G_DIR_SEPARATOR_S "geany", NULL);
 #endif
-	load_plugins(path);
+	load_plugins_from_path(path);
 
 	g_free(path);
 }
@@ -647,14 +706,11 @@ void plugins_create_active_list()
 
 void plugins_free()
 {
-	if (plugin_list != NULL)
-	{
-		g_list_foreach(plugin_list, (GFunc) plugin_free, NULL);
-		g_list_free(plugin_list);
-	}
 	if (active_plugin_list != NULL)
-		/* no need to do more here, active_plugin_list holds the same pointer as plugin_list */
+	{
+		g_list_foreach(active_plugin_list, (GFunc) plugin_free,	GINT_TO_POINTER(PLUGIN_FREE_ALL));
 		g_list_free(active_plugin_list);
+	}
 
 	g_object_unref(geany_object);
 	geany_object = NULL; /* to mark the object as invalid for any code which tries to emit signals */
@@ -724,7 +780,6 @@ void pm_selection_changed(GtkTreeSelection *selection, gpointer user_data)
 	GtkTreeIter iter;
 	GtkTreeModel *model;
 	Plugin *p;
-	PluginInfo *pi;
 
 	if (gtk_tree_selection_get_selected(selection, &model, &iter))
 	{
@@ -733,6 +788,7 @@ void pm_selection_changed(GtkTreeSelection *selection, gpointer user_data)
 		if (p != NULL)
 		{
 			gchar *text;
+			PluginInfo *pi;
 
 			pi = p->info();
 			text = g_strdup_printf(
@@ -752,6 +808,7 @@ void pm_selection_changed(GtkTreeSelection *selection, gpointer user_data)
 static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer data)
 {
 	gboolean old_state, state;
+	gchar *file_name;
 	GtkTreeIter iter;
 	GtkTreePath *path = gtk_tree_path_new_from_string(pth);
 	Plugin *p;
@@ -764,25 +821,22 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 	if (p == NULL)
 		return;
 	state = ! old_state; /* toggle the state */
-	gtk_list_store_set(pm_widgets.store, &iter, PLUGIN_COLUMN_CHECK, state, -1);
 
-	/* load/unload the plugin once it was toggled for correct behaviour of the preferences button
-	 * we want to call plugin's configure() only after init() has been called */
+	/* save the filename of the plugin */
+	file_name = g_strdup(p->filename);
+	/* remove old plugin */
+	plugin_free(p, GINT_TO_POINTER(PLUGIN_FREE_ALL));
+	/* add new one */
+	p = plugin_new(file_name, state, TRUE);
+	gtk_list_store_set(pm_widgets.store, &iter,
+		PLUGIN_COLUMN_CHECK, state,
+		PLUGIN_COLUMN_PLUGIN, p, -1);
 
-	/* plugin should be loaded, so load it if it is not already */
-	if (state && g_list_find(active_plugin_list, p) == NULL)
-	{
-		plugin_init(p);
-	}
-	/* plugin should be unloaded, so unload it if it is loaded */
-	if (! state && g_list_find(active_plugin_list, p) != NULL)
-	{
-		plugin_unload(p);
-	}
+	g_free(file_name);
 
 	/* set again the sensitiveness of the configure button */
 	gtk_widget_set_sensitive(pm_widgets.configure_button,
-		p->configure != NULL && g_list_find(active_plugin_list, p) != NULL);
+		p->configure != NULL && is_active_plugin(p));
 
 }
 
@@ -834,10 +888,9 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
 	{
 		for (; list != NULL; list = list->next)
 		{
-			gboolean active = (g_list_find(active_plugin_list, list->data) != NULL) ? TRUE : FALSE;
 			gtk_list_store_append(store, &iter);
 			gtk_list_store_set(store, &iter,
-				PLUGIN_COLUMN_CHECK, active,
+				PLUGIN_COLUMN_CHECK, is_active_plugin(list->data),
 				PLUGIN_COLUMN_NAME, ((Plugin*)list->data)->info()->name,
 				PLUGIN_COLUMN_FILE, ((Plugin*)list->data)->filename,
 				PLUGIN_COLUMN_PLUGIN, list->data,
@@ -868,17 +921,25 @@ void pm_on_configure_button_clicked(GtkButton *button, gpointer user_data)
 }
 
 
+static void pm_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
+{
+	if (plugin_list != NULL)
+	{
+		/* remove all non-active plugins from the list */
+		g_list_foreach(plugin_list, (GFunc) plugin_free, GINT_TO_POINTER(PLUGIN_FREE_NON_ACTIVE));
+		g_list_free(plugin_list);
+		plugin_list = NULL;
+	}
+	gtk_widget_destroy(GTK_WIDGET(dialog));
+}
+
+
 static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GtkWidget *vbox, *vbox2, *label_vbox, *hbox, *swin, *label, *label2;
-	static gboolean plugin_list_loaded = FALSE;
 
 	/* before showing the dialog, we need to create the list of available plugins */
-	if (! plugin_list_loaded)
-	{
-		load_plugin_paths();
-		plugin_list_loaded = TRUE;
-	}
+	load_plugins();
 
 	pm_widgets.dialog = gtk_dialog_new_with_buttons(_("Plugins"), GTK_WINDOW(app->window),
 						GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -927,8 +988,8 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	gtk_box_pack_start(GTK_BOX(vbox2), swin, TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox2), label_vbox, FALSE, FALSE, 0);
 
-	g_signal_connect_swapped((gpointer) pm_widgets.dialog, "response",
-		G_CALLBACK(gtk_widget_destroy), pm_widgets.dialog);
+	g_signal_connect((gpointer) pm_widgets.dialog, "response",
+		G_CALLBACK(pm_dialog_response), NULL);
 
 	gtk_container_add(GTK_CONTAINER(vbox), vbox2);
 	gtk_widget_show_all(pm_widgets.dialog);

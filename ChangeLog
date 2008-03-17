@@ -6,6 +6,11 @@
    Fix broken auto multiline comment with files in CR/LF mode.
  * src/win32.c:
    Fix encoding problems with project file dialogs.
+ * src/plugins.c:
+   Rework internal handling of plugin/module loading.
+   At startup, only load enabled plugins, all others are only loaded
+   when the plugin manager is opened and get completely unloaded when
+   it is closed.
 
 
 2008-03-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
