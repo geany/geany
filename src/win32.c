@@ -147,13 +147,25 @@ static gchar *get_filters(gboolean project_files)
 }
 
 
-/* Returns the directory part of the given filename. */
-static gchar *get_dir(const gchar *filename)
+/* Converts the given UTF-8 filename into something usable for Windows and
+ * returns the directory part of the given filename. */
+static gchar *get_dir(const gchar *utf8_filename)
 {
-	if (! g_file_test(filename, G_FILE_TEST_IS_DIR))
-		return g_path_get_dirname(filename);
+	gchar *result;
+	/* don't use utils_get_locale_from_utf8() here because it does only g_strdup() on Windows */
+	gchar *locale_filename = g_locale_from_utf8(utf8_filename, -1, NULL, NULL, NULL);
+
+	/* g_file_test() needs the UTF-8 name, the resulted string is used with the Windows API
+	 * where we need the locale encoding */
+	if (! g_file_test(utf8_filename, G_FILE_TEST_IS_DIR))
+	{
+		result = g_path_get_dirname(locale_filename);
+		g_free(locale_filename);
+	}
 	else
-		return g_strdup(filename);
+		result = locale_filename;
+	
+	return result;
 }
 
 
@@ -185,6 +197,7 @@ INT CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
 
 
 /* Shows a folder selection dialog.
+ * initial_dir is expected in UTF-8
  * The selected folder name is returned. */
 gchar *win32_show_project_folder_dialog(GtkWidget *parent, const gchar *title,
 										const gchar *initial_dir)
@@ -193,6 +206,7 @@ gchar *win32_show_project_folder_dialog(GtkWidget *parent, const gchar *title,
 	LPCITEMIDLIST pidl;
 	gchar *fname = g_malloc(MAX_PATH);
 	gchar *dir = get_dir(initial_dir);
+	gchar *result = NULL;
 
 	if (parent == NULL)
 		parent = app->window;
@@ -209,22 +223,29 @@ gchar *win32_show_project_folder_dialog(GtkWidget *parent, const gchar *title,
 	g_free(dir);
 
 	/* convert the strange Windows folder list item something into an usual path string ;-) */
-	if (pidl != NULL && SHGetPathFromIDList(pidl, fname))
+	if (pidl != 0)
 	{
-		/* convert the resulting filename into UTF-8 (from whatever encoding it has at this moment) */
-		setptr(fname, g_locale_to_utf8(fname, -1, NULL, NULL, NULL));
-		return fname;
+		if (SHGetPathFromIDList(pidl, fname))
+		{
+			/* Convert the resulting filename into UTF-8 (from whatever encoding it has at
+			 * this moment). Don't use utils_get_utf8_from_locale() here because it does only
+			 * g_strdup() on Windows. */
+			setptr(fname, g_locale_to_utf8(fname, -1, NULL, NULL, NULL));
+			result = fname;
+		}
+		/* SHBrowseForFolder() probably leaks memory here, but how to free the allocated memory? */
 	}
 	else
 	{
 		g_free(fname);
-		return NULL;
 	}
+	return result;
 }
 
 
 /* Shows a file open dialog.
  * If allow_new_file is set, the file to be opened doesn't have to exist.
+ * initial_dir is expected in UTF-8
  * The selected file name is returned.
  * If project_file_filter is set, the file open dialog will have a file filter for Geany project
  * files, a filter for executables otherwise. */
