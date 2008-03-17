@@ -544,10 +544,6 @@ Once a rectangular selection exists you can start editing the text within
 this selection and the modifications will be done for every line in the
 selection.
 
-.. note::
-    Copying and pasting text with rectangular selections doesn't work.
-    It might give unexpected results and damage your text.
-
 
 Drag and drop of text
 ^^^^^^^^^^^^^^^^^^^^^
