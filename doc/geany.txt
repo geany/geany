@@ -533,6 +533,22 @@ children of a fold point" option is enabled, pressing Shift will disable
 it for this click and vice versa.
 
 
+Column mode editing
+^^^^^^^^^^^^^^^^^^^
+
+There is basic support for column mode editing. To use it, create a
+rectangular selection by holding down the Control key while selecting
+some text. It is also possible to create a zero-column selection but
+be careful because there is no visual indication of this selection.
+Once a rectangular selection exists you can start editing the text within
+this selection and the modifications will be done for every line in the
+selection.
+
+.. note::
+    Copying and pasting text with rectangular selections doesn't work.
+    It might give unexpected results and damage your text.
+
+
 Drag and drop of text
 ^^^^^^^^^^^^^^^^^^^^^
 

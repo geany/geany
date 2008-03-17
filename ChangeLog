@@ -1,3 +1,8 @@
+2008-03-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * doc/geany.txt, doc/geany.html: Add a note about column mode editing.
+
+
 2008-03-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/projects.c: Fix wrong directory when choosing project filename
