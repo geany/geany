@@ -2782,7 +2782,6 @@ create_prefs_dialog (void)
   prefs_dialog = gtk_dialog_new ();
   gtk_window_set_title (GTK_WINDOW (prefs_dialog), _("Preferences"));
   gtk_window_set_modal (GTK_WINDOW (prefs_dialog), TRUE);
-  gtk_window_set_skip_taskbar_hint (GTK_WINDOW (prefs_dialog), TRUE);
   gtk_window_set_skip_pager_hint (GTK_WINDOW (prefs_dialog), TRUE);
   gtk_window_set_type_hint (GTK_WINDOW (prefs_dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
 

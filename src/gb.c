@@ -77,7 +77,7 @@ static void create_window(void)
 	gtk_window_set_position(GTK_WINDOW(gb_window), GTK_WIN_POS_CENTER);
 	gtk_window_set_destroy_with_parent(GTK_WINDOW(gb_window), TRUE);
 	gtk_window_set_type_hint(GTK_WINDOW(gb_window), GDK_WINDOW_TYPE_HINT_DIALOG);
-	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(gb_window), TRUE);
+	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(gb_window), FALSE);
 	gtk_window_set_modal(GTK_WINDOW(gb_window), TRUE);
 	gtk_window_set_skip_pager_hint(GTK_WINDOW(gb_window), TRUE);
 	gtk_window_set_icon(GTK_WINDOW(gb_window), icons[IMAGE_LOGO]);

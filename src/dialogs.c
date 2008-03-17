@@ -191,7 +191,7 @@ static void create_open_file_dialog(void)
 	gtk_widget_set_size_request(ui_widgets.open_filesel, -1, 460);
 	gtk_window_set_modal(GTK_WINDOW(ui_widgets.open_filesel), TRUE);
 	gtk_window_set_destroy_with_parent(GTK_WINDOW(ui_widgets.open_filesel), TRUE);
-	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(ui_widgets.open_filesel), TRUE);
+	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(ui_widgets.open_filesel), FALSE);
 	gtk_window_set_type_hint(GTK_WINDOW(ui_widgets.open_filesel), GDK_WINDOW_TYPE_HINT_DIALOG);
 	gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_filesel), GTK_WINDOW(app->window));
 	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(ui_widgets.open_filesel), TRUE);
@@ -480,7 +480,7 @@ static void create_save_file_dialog(void)
 				GTK_FILE_CHOOSER_ACTION_SAVE, NULL, NULL);
 	gtk_window_set_modal(GTK_WINDOW(ui_widgets.save_filesel), TRUE);
 	gtk_window_set_destroy_with_parent(GTK_WINDOW(ui_widgets.save_filesel), TRUE);
-	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(ui_widgets.save_filesel), TRUE);
+	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(ui_widgets.save_filesel), FALSE);
 	gtk_window_set_type_hint(GTK_WINDOW(ui_widgets.save_filesel), GDK_WINDOW_TYPE_HINT_DIALOG);
 	gtk_widget_set_name(ui_widgets.save_filesel, "GeanyDialog");
 
@@ -647,16 +647,13 @@ void dialogs_show_msgbox(gint type, const gchar *text, ...)
 
 void dialogs_show_msgbox_with_secondary(gint type, const gchar *text, const gchar *secondary)
 {
-#ifndef G_OS_WIN32
-	GtkWidget *dialog;
-#endif
-
 #ifdef G_OS_WIN32
 	/* put the two strings together because Windows message boxes don't support secondary texts */
 	gchar *string = g_strconcat(text, "\n", secondary, NULL);
 	win32_message_dialog(NULL, type, string);
 	g_free(string);
 #else
+	GtkWidget *dialog;
 	dialog = gtk_message_dialog_new(GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
                                   type, GTK_BUTTONS_OK, "%s", text);
 	gtk_widget_set_name(dialog, "GeanyDialog");

@@ -19,6 +19,9 @@
  * data/filetypes.python, src/highlighting.c:
    Add additional keyword group for python and slightly change the
    foreground colour for style "word2".
+ * geany.glade, src/dialogs.c, src/interface.c:
+   Fix modal dialog problems on Windows by not setting taskbar hint
+   (closes #1916994).
 
 
 2008-03-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
