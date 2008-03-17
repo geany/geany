@@ -61,11 +61,10 @@ context_action_cmd=
 # %e will be replaced by the filename without extension
 # (use only one of it at one time)
 compiler=dmd -w -c "%f"
-# the -of option is automatically added by Geany
-linker=dmd -w "%f"
+linker=dmd -w -of"%e" "%f"
 # you can also use the gdc compiler, please use the "gdmd" wrapper script(included with gdc)
 #compiler=gdmd -w -c "%f"
-#linker=gdmd -w "%f"
+#linker=gdmd -w -of"%e" "%f"
 
 run_cmd="./%e"
 

@@ -49,5 +49,5 @@ context_action_cmd=
 # %e will be replaced by the filename without extension
 # (use only one of it at one time)
 compiler=ocamlc -c "%f"
-linker=ocamlc "%f"
+linker=ocamlc -o "%e" "%f"
 run_cmd="./%e"

@@ -54,7 +54,6 @@ context_action_cmd=
 # %e will be replaced by the filename without extension
 # (use only one of it at one time)
 compiler=g77 -Wall -c "%f"
-# the -o option is automatically added by Geany
-linker=g77 -Wall "%f"
+linker=g77 -Wall -o "%e" "%f"
 run_cmd="./%e"
 

@@ -351,92 +351,21 @@ static GPid build_make_file(gint idx, gint build_opts)
 
 static GPid build_compile_file(gint idx)
 {
-	const gchar *cmd;
-
-	if (idx < 0 || doc_list[idx].file_name == NULL) return (GPid) 1;
-
-	cmd = doc_list[idx].file_type->programs->compiler;
+	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_name == NULL)
+		return (GPid) 1;
 
 	build_info.type = GBO_COMPILE;
-	return build_spawn_cmd(idx, cmd, NULL);
+	return build_spawn_cmd(idx, doc_list[idx].file_type->programs->compiler, NULL);
 }
 
 
 static GPid build_link_file(gint idx)
 {
-	GString *cmdstr;
-	GPid pid;
-	gchar *executable = NULL;
-	gchar *object_file, *locale_filename;
-	struct stat st, st2;
-
-	if (idx < 0 || doc_list[idx].file_name == NULL) return (GPid) 1;
-
-	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
-
-	executable = utils_remove_ext_from_filename(locale_filename);
-	/* check for filename extension and abort if filename doesn't have one */
-	if (utils_str_equal(locale_filename, executable))
-	{
-		ui_set_statusbar(TRUE, _("Command stopped because the current file has no extension."));
-		utils_beep();
-		utils_free_pointers(locale_filename, executable, NULL);
+	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_name == NULL)
 		return (GPid) 1;
-	}
-
-	object_file = g_strdup_printf("%s.o", executable);
-
-	/* check whether object file (file.o) exists */
-	if (g_stat(object_file, &st) == 0)
-	{	/* check whether src is newer than object file */
-		if (g_stat(locale_filename, &st2) == 0)
-		{
-			if (st2.st_mtime > st.st_mtime)
-			{
-				/* set object_file to NULL, so the source file will be used for linking,
-				 * more precisely then we compile and link instead of just linking */
-				g_free(object_file);
-				object_file = NULL;
-			}
-		}
-		else
-		{
-			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
-					_("Something very strange is occurred, could not stat %s (%s)."),
-					doc_list[idx].file_name, g_strerror(errno));
-		}
-	}
-
-	cmdstr = g_string_new(doc_list[idx].file_type->programs->linker);
-	g_string_append_c(cmdstr, ' ');
-
-	if (doc_list[idx].file_type->id == GEANY_FILETYPES_D)
-	{	/* the dmd compiler needs -of instead of -o and it accepts no whitespace after -of */
-		gchar *tmp = g_path_get_basename(executable);
-		/* add double quotes around the executable file name in case of filenames with spaces */
-		g_string_append(cmdstr, "-of \"");
-		g_string_append(cmdstr, tmp);
-		g_string_append_c(cmdstr, '\"');
-		g_free(tmp);
-	}
-	else
-	{
-		gchar *tmp = g_path_get_basename(executable);
-		/* add double quotes around the executable file name in case of filenames with spaces */
-		g_string_append(cmdstr, "-o \"");
-		g_string_append(cmdstr, tmp);
-		g_string_append_c(cmdstr, '\"');
-		g_free(tmp);
-	}
-
-	g_free(executable);
-	g_free(object_file);
-	g_free(locale_filename);
 
 	build_info.type = GBO_BUILD;
-	pid = build_spawn_cmd(idx, cmdstr->str, NULL);
-	g_string_free(cmdstr, TRUE);
-	return pid;
+	return build_spawn_cmd(idx, doc_list[idx].file_type->programs->linker, NULL);
 }
 
 
