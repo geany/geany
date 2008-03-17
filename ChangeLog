@@ -1,6 +1,9 @@
 2008-03-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
- * doc/geany.txt, doc/geany.html: Add a note about column mode editing.
+ * doc/geany.txt, doc/geany.html:
+   Add a note about column mode editing.
+ * src/editor.c:
+   Fix broken auto multiline comment with files in CR/LF mode.
 
 
 2008-03-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

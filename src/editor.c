@@ -65,7 +65,7 @@ static gchar indent[100];
 static void on_new_line_added(gint idx);
 static gboolean handle_xml(gint idx, gchar ch);
 static void get_indent(document *doc, gint pos, gboolean use_this_line);
-static void auto_multiline(ScintillaObject *sci, gint pos);
+static void auto_multiline(gint idx, gint pos);
 static gboolean is_comment(gint lexer, gint style);
 static void auto_close_bracket(ScintillaObject *sci, gint pos, gchar c);
 static void editor_auto_table(document *doc, gint pos);
@@ -467,7 +467,7 @@ static void on_new_line_added(gint idx)
 	if (editor_prefs.complete_snippets)
 	{
 		/* " * " auto completion in multiline C/C++/D/Java comments */
-		auto_multiline(sci, pos);
+		auto_multiline(idx, pos);
 
 		editor_auto_latex(idx, pos);
 	}
@@ -2026,9 +2026,10 @@ static gboolean is_doc_comment_char(gchar c, gint lexer)
 }
 
 
-static void auto_multiline(ScintillaObject *sci, gint pos)
+static void auto_multiline(gint idx, gint pos)
 {
-	gint style = SSM(sci, SCI_GETSTYLEAT, pos - 2, 0);
+	ScintillaObject *sci = doc_list[idx].sci;
+	gint style = SSM(sci, SCI_GETSTYLEAT, pos - 1 - utils_get_eol_char_len(idx), 0);
 	gint lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 	gint i;
 
