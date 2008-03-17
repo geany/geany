@@ -16,6 +16,9 @@
    Remove old and useless code from build_link_file().
    Don't add "-o" compiler option automatically instead make it
    configurable through linker command.
+ * data/filetypes.python, src/highlighting.c:
+   Add additional keyword group for python and slightly change the
+   foreground colour for style "word2".
 
 
 2008-03-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

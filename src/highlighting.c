@@ -1494,12 +1494,13 @@ static void styleset_python_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 	get_keyfile_hex(config, config_home, "styling", "identifier", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PYTHON].styling[11]);
 	get_keyfile_hex(config, config_home, "styling", "commentblock", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PYTHON].styling[12]);
 	get_keyfile_hex(config, config_home, "styling", "stringeol", "0x000000", "0xe0c0e0", "false", &style_sets[GEANY_FILETYPES_PYTHON].styling[13]);
-	get_keyfile_hex(config, config_home, "styling", "word2", "0x800060", "0xffffff", "true", &style_sets[GEANY_FILETYPES_PYTHON].styling[14]);
+	get_keyfile_hex(config, config_home, "styling", "word2", "0xdd00a6", "0xffffff", "true", &style_sets[GEANY_FILETYPES_PYTHON].styling[14]);
 	get_keyfile_hex(config, config_home, "styling", "decorator", "0x808000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PYTHON].styling[15]);
 
-	style_sets[GEANY_FILETYPES_PYTHON].keywords = g_new(gchar*, 2);
+	style_sets[GEANY_FILETYPES_PYTHON].keywords = g_new(gchar*, 3);
 	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_PYTHON, 0, "and as assert break class continue def del elif else except exec finally for from global if import in is lambda not or pass print raise return try while with yield False None True");
-	style_sets[GEANY_FILETYPES_PYTHON].keywords[1] = NULL;
+	get_keyfile_keywords(config, config_home, "keywords", "identifiers", GEANY_FILETYPES_PYTHON, 1, "");
+	style_sets[GEANY_FILETYPES_PYTHON].keywords[2] = NULL;
 
 	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_PYTHON].wordchars);
@@ -1515,6 +1516,7 @@ static void styleset_python(ScintillaObject *sci)
 	apply_filetype_properties(sci, SCLEX_PYTHON, ft_id);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_PYTHON].keywords[0]);
+	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_PYTHON].keywords[1]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_PYTHON, 0);
 	set_sci_style(sci, SCE_P_DEFAULT, GEANY_FILETYPES_PYTHON, 0);

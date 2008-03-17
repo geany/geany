@@ -15,12 +15,14 @@ operator=0x300080;0xffffff;false;false
 identifier=0x000000;0xffffff;false;false
 commentblock=0x808080;0xffffff;false;false
 stringeol=0x000000;0xe0c0e0;false;false
-word2=0x800060;0xffffff;true;false
+word2=0xdd00a6;0xffffff;true;false
 decorator=0x808000;0xffffff;false;false
 
 [keywords]
 # all items must be in one line
 primary=and as assert break class continue def del elif else except exec finally for from global if import in is lambda not or pass print raise return try while with yield False None True
+# additional keywords, will be highlighted with style "word2"
+identifiers=
 
 
 [settings]
