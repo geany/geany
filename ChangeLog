@@ -2,6 +2,8 @@
 
  * src/treeviews.c, src/symbols.c, src/symbols.h:
    Save sorting order of the symbol list when saving a file (#1917262).
+ * data/filetype_extensions.conf, src/filetypes.c:
+   Add ".xhtml" extension for filetype XML (#1914587).
 
 
 2008-03-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

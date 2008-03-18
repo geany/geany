@@ -346,7 +346,7 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_XML]->title = g_strdup(_("XML document"));
 	filetypes[GEANY_FILETYPES_XML]->extension = g_strdup("xml");
 	filetypes[GEANY_FILETYPES_XML]->pattern = utils_strv_new(
-		"*.xml", "*.sgml", "*.xsl", "*.xslt", "*.xsd", NULL);
+		"*.xml", "*.sgml", "*.xsl", "*.xslt", "*.xsd", "*.xhtml", NULL);
 	filetypes[GEANY_FILETYPES_XML]->comment_open = g_strdup("<!--");
 	filetypes[GEANY_FILETYPES_XML]->comment_close = g_strdup("-->");
 
