@@ -189,7 +189,7 @@ void treeviews_update_tag_list(gint idx, gboolean update)
 			g_object_ref((gpointer)doc_list[idx].tag_tree);	/* to hold it after removing */
 		}
 
-		doc_list[idx].has_tags = symbols_recreate_tag_list(idx, TRUE); /* sort by name by default */
+		doc_list[idx].has_tags = symbols_recreate_tag_list(idx, SYMBOLS_SORT_USE_PREVIOUS);
 	}
 
 	if (doc_list[idx].has_tags)
@@ -602,14 +602,14 @@ static void on_taglist_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user_d
 		{
 			gint idx = document_get_cur_idx();
 			if (DOC_IDX_VALID(idx))
-				doc_list[idx].has_tags = symbols_recreate_tag_list(idx, TRUE);
+				doc_list[idx].has_tags = symbols_recreate_tag_list(idx, SYMBOLS_SORT_BY_NAME);
 			break;
 		}
 		case SYMBOL_ACTION_SORT_BY_APPEARANCE:
 		{
 			gint idx = document_get_cur_idx();
 			if (DOC_IDX_VALID(idx))
-				doc_list[idx].has_tags = symbols_recreate_tag_list(idx, FALSE);
+				doc_list[idx].has_tags = symbols_recreate_tag_list(idx, SYMBOLS_SORT_BY_APPEARANCE);
 			break;
 		}
 		case SYMBOL_ACTION_HIDE:

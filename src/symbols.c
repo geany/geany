@@ -368,11 +368,11 @@ static gint compare_symbol_lines(const GeanySymbol *a, const GeanySymbol *b)
 }
 
 
-static const GList *get_tag_list(gint idx, guint tag_types, gboolean sort_by_name)
+static const GList *get_tag_list(gint idx, guint tag_types, gint sort_mode)
 {
 	static GList *tag_names = NULL;
 
-	if (idx >= 0 && doc_list[idx].is_valid && doc_list[idx].tm_file &&
+	if (DOC_IDX_VALID(idx) && doc_list[idx].tm_file &&
 		doc_list[idx].tm_file->tags_array)
 	{
 		TMTag *tag;
@@ -432,7 +432,7 @@ static const GList *get_tag_list(gint idx, guint tag_types, gboolean sort_by_nam
 				if (! doc_is_utf8) g_free(utf8_name);
 			}
 		}
-		if (sort_by_name)
+		if (sort_mode == SYMBOLS_SORT_BY_NAME)
 			tag_names = g_list_sort(tag_names, (GCompareFunc) compare_symbol);
 		else
 			tag_names = g_list_sort(tag_names, (GCompareFunc) compare_symbol_lines);
@@ -797,17 +797,23 @@ static void hide_empty_rows(GtkTreeModel *model, GtkTreeStore *store)
 }
 
 
-gboolean symbols_recreate_tag_list(gint idx, gboolean sort_by_name)
+gboolean symbols_recreate_tag_list(gint idx, gint sort_mode)
 {
 	GList *tmp;
 	const GList *tags;
 	GtkTreeIter iter;
 	GtkTreeModel *model;
+	static gint prev_sort_mode = SYMBOLS_SORT_BY_NAME;
 	filetype_id ft_id = FILETYPE_ID(doc_list[idx].file_type);
 
 	g_return_val_if_fail(DOC_IDX_VALID(idx), FALSE);
 
-	tags = get_tag_list(idx, tm_tag_max_t, sort_by_name);
+	if (sort_mode == SYMBOLS_SORT_USE_PREVIOUS)
+		sort_mode = prev_sort_mode;
+	else
+		prev_sort_mode = sort_mode;
+
+	tags = get_tag_list(idx, tm_tag_max_t, sort_mode);
 	if (doc_list[idx].tm_file == NULL || tags == NULL)
 		return FALSE;
 

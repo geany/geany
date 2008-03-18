@@ -27,6 +27,13 @@
 
 extern const guint TM_GLOBAL_TYPE_MASK;
 
+enum
+{
+	SYMBOLS_SORT_BY_NAME,
+	SYMBOLS_SORT_BY_APPEARANCE,
+	SYMBOLS_SORT_USE_PREVIOUS
+};
+
 
 void symbols_global_tags_loaded(gint file_type_idx);
 
@@ -42,7 +49,7 @@ const gchar **symbols_get_html_entities(void);
 
 void symbols_finalize(void);
 
-gboolean symbols_recreate_tag_list(gint idx, gboolean sort_by_name);
+gboolean symbols_recreate_tag_list(gint idx, gint sort_mode);
 
 gint symbols_generate_global_tags(gint argc, gchar **argv, gboolean want_preprocess);
 
