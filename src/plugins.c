@@ -641,7 +641,8 @@ static gchar *get_plugin_path()
 #endif
 
 
-static void load_plugins(void)
+/* Load (but don't initialize) all plugins for the Plugin Manager dialog */
+static void load_all_plugins(void)
 {
 	gchar *path;
 
@@ -837,7 +838,6 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 	/* set again the sensitiveness of the configure button */
 	gtk_widget_set_sensitive(pm_widgets.configure_button,
 		p->configure != NULL && is_active_plugin(p));
-
 }
 
 
@@ -939,7 +939,7 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	GtkWidget *vbox, *vbox2, *label_vbox, *hbox, *swin, *label, *label2;
 
 	/* before showing the dialog, we need to create the list of available plugins */
-	load_plugins();
+	load_all_plugins();
 
 	pm_widgets.dialog = gtk_dialog_new_with_buttons(_("Plugins"), GTK_WINDOW(app->window),
 						GTK_DIALOG_DESTROY_WITH_PARENT,
