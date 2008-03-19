@@ -667,7 +667,7 @@ void plugins_init()
 	geany_data_init();
 	geany_object = geany_object_new();
 
-	widget = gtk_menu_item_new_with_mnemonic(_("Plugin Manager"));
+	widget = gtk_menu_item_new_with_mnemonic(_("_Plugin Manager"));
 	gtk_container_add(GTK_CONTAINER (geany_data.tools_menu), widget);
 	gtk_widget_show(widget);
 	g_signal_connect((gpointer) widget, "activate", G_CALLBACK(pm_show_dialog), NULL);
@@ -943,13 +943,12 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 
 	pm_widgets.dialog = gtk_dialog_new_with_buttons(_("Plugins"), GTK_WINDOW(app->window),
 						GTK_DIALOG_DESTROY_WITH_PARENT,
-						GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+						GTK_STOCK_OK, GTK_RESPONSE_CANCEL, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(pm_widgets.dialog));
 	gtk_widget_set_name(pm_widgets.dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
 
 	gtk_window_set_default_size(GTK_WINDOW(pm_widgets.dialog), 400, 350);
-	gtk_dialog_set_default_response(GTK_DIALOG(pm_widgets.dialog), GTK_RESPONSE_CANCEL);
 
 	pm_widgets.tree = gtk_tree_view_new();
 	pm_widgets.store = gtk_list_store_new(
