@@ -21,6 +21,9 @@
  * src/plugins.c:
    Load and save plugin keybindings when toggling plugins in the Plugin
    Manager.
+ * doc/geany.txt, doc/geany.html:
+   Update configurable keybindings section for new plugin groups
+   ordering.
 
 
 2008-03-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

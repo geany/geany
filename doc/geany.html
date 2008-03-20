@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.4.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.4: http://docutils.sourceforge.net/" />
 <title>Geany</title>
 <meta name="authors" content="Enrico Tröger  Nick Treleaven  Frank Lanitz" />
 <meta name="date" content="2008-03-17" />
@@ -1790,7 +1790,7 @@ execute menu_open by default <em>Ctrl-O</em> is set, but you can also define
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td><strong>File menu</strong></td>
+<tr><td><strong>File</strong></td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
 </tr>
@@ -1831,7 +1831,7 @@ will be lost.</td>
 <td>Ctrl-P</td>
 <td>Prints the current file.</td>
 </tr>
-<tr><td><strong>Edit menu</strong></td>
+<tr><td><strong>Editor</strong></td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
 </tr>
@@ -1842,6 +1842,68 @@ will be lost.</td>
 <tr><td>Redo</td>
 <td>Ctrl-Y</td>
 <td>Re-does the last action.</td>
+</tr>
+<tr><td>Delete current line(s)</td>
+<td>Ctrl-K</td>
+<td>Deletes the current line (and any lines with a
+selection).</td>
+</tr>
+<tr><td>Duplicate line or selection</td>
+<td>Ctrl-D</td>
+<td>Duplicates the current line or selection.</td>
+</tr>
+<tr><td>Transpose current line</td>
+<td>Ctrl-T</td>
+<td>Transposes the current line with the previous one.</td>
+</tr>
+<tr><td>Scroll to current line</td>
+<td>Ctrl-Shift-L</td>
+<td>Scrolls the current line into the centre of the
+view. The cursor position and or an existing
+selection will not be changed.</td>
+</tr>
+<tr><td>Complete word</td>
+<td>Ctrl-Space</td>
+<td>Shows auto completion list.</td>
+</tr>
+<tr><td>Show calltip</td>
+<td>Alt-Space (Unix)
+Alt-Shift-Space (Windows)</td>
+<td>Shows call tips for the current function or
+method.</td>
+</tr>
+<tr><td>Show macro list</td>
+<td>Ctrl-Return</td>
+<td>Shows a list of available macros and variables in
+the workspace.</td>
+</tr>
+<tr><td>Complete snippet</td>
+<td>Tab</td>
+<td>If you type a construct like if or for and press
+this key, it will be completed with a matching
+template.</td>
+</tr>
+<tr><td>Suppress snippet completion</td>
+<td>&nbsp;</td>
+<td>If you type a construct like if or for and press
+this key, it will not be completed, and a space or
+tab will be inserted, depending on what the
+construct completion keybinding is set to. For
+example, if you have set the construct completion
+keybinding to space, then setting this to
+Shift+space will prevent construct completion and
+insert a space.</td>
+</tr>
+<tr><td>Context Action</td>
+<td>&nbsp;</td>
+<td>Executes a command and passes the current word
+(near the cursor postion) or selection as an
+argument. See the section called <a class="reference" href="#context-actions">Context
+actions</a>.</td>
+</tr>
+<tr><td><strong>Clipboard</strong></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
 </tr>
 <tr><td>Cut</td>
 <td>Ctrl-X</td>
@@ -1855,20 +1917,115 @@ will be lost.</td>
 <td>Ctrl-V</td>
 <td>Paste the clipboard text into the current document.</td>
 </tr>
+<tr><td>Cut current line(s)</td>
+<td>Ctrl-Shift-X</td>
+<td>Cuts the current line (and any lines with a
+selection) to the clipboard.</td>
+</tr>
+<tr><td>Copy current line(s)</td>
+<td>Ctrl-Shift-C</td>
+<td>Copies the current line (and any lines with a
+selection) to the clipboard.</td>
+</tr>
+<tr><td><strong>Select</strong></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
 <tr><td>Select all</td>
 <td>Ctrl-A</td>
 <td>Makes a selection of all text in the current
 document.</td>
 </tr>
+<tr><td>Select current word</td>
+<td>Alt-Shift-W</td>
+<td>Selects the current word under the cursor.</td>
+</tr>
+<tr><td>Select current paragraph</td>
+<td>Alt-Shift-P</td>
+<td>Selects the current paragraph under the cursor
+which is defined by two empty lines around it.</td>
+</tr>
+<tr><td>Select current line(s)</td>
+<td>Alt-Shift-L</td>
+<td>Selects the current line under the cursor (and any
+partially selected lines).</td>
+</tr>
+<tr><td><strong>Insert</strong></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
 <tr><td>Insert date</td>
 <td>Shift-Alt-D</td>
 <td>Inserts a customisable date.</td>
+</tr>
+<tr><td>Insert alternative whitespace</td>
+<td>&nbsp;</td>
+<td>Inserts a tabulator character when spaces should
+be used for indentation and inserts space
+characters of the amount of a tabulator width when
+tabulators should be used for indentation.</td>
+</tr>
+<tr><td><strong>Format</strong></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>Toggle case of selection</td>
+<td>Ctrl-Alt-U</td>
+<td>Changes the case of the selection. A lowercase
+selection will be changed into uppercase and vice
+versa. If the selection contains lower- and
+uppercase characters, all will be converted to
+lowercase.</td>
+</tr>
+<tr><td>Comment line</td>
+<td>&nbsp;</td>
+<td>Comments current line or selection.</td>
+</tr>
+<tr><td>Uncomment line</td>
+<td>&nbsp;</td>
+<td>Uncomments current line or selection.</td>
+</tr>
+<tr><td>Toggle line commentation</td>
+<td>Ctrl-E</td>
+<td>Comments a line if it is not commented or removes
+a comment if the line is commented.</td>
+</tr>
+<tr><td>Increase indent</td>
+<td>Ctrl-I</td>
+<td>Indents the current line or selection by one tab
+or by spaces in the amount of the tab width
+setting.</td>
+</tr>
+<tr><td>Decrease indent</td>
+<td>Ctrl-U</td>
+<td>Removes one tabulator or the amount fo spaces of
+the tab width setting from the indentation of the
+current line or selection.</td>
+</tr>
+<tr><td>Increase indent by one space</td>
+<td>&nbsp;</td>
+<td>Indents the current line or selection by one
+space.</td>
+</tr>
+<tr><td>Decrease indent by one space</td>
+<td>&nbsp;</td>
+<td>Deindents the current line or selection by one
+space.</td>
+</tr>
+<tr><td>Smart line indent</td>
+<td>&nbsp;</td>
+<td>Indents the current line or all selected lines
+with the same intentation as the previous line.</td>
+</tr>
+<tr><td><strong>Settings</strong></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
 </tr>
 <tr><td>Preferences</td>
 <td>Ctrl-Alt-P</td>
 <td>Opens preferences dialog.</td>
 </tr>
-<tr><td><strong>Search menu</strong></td>
+<tr><td><strong>Search</strong></td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
 </tr>
@@ -1897,11 +2054,69 @@ document.</td>
 <td>Jumps to the line with the next message from
 the last call to Find usage.</td>
 </tr>
+<tr><td>Find Usage</td>
+<td>&nbsp;</td>
+<td>Finds all occurrences of the current word (near
+the keyboard cursor) or selection and displays
+them in the messages window.</td>
+</tr>
+<tr><td><strong>Go to</strong></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>Navigate forward a location</td>
+<td>&nbsp;</td>
+<td>Switches to the next location in the navigation
+history. See the section called <a class="reference" href="#code-navigation-history">Code Navigation
+History</a>.</td>
+</tr>
+<tr><td>Navigate back a location</td>
+<td>&nbsp;</td>
+<td>Switches to the previous location in the
+navigation history. See the section called
+<a class="reference" href="#code-navigation-history">Code Navigation History</a>.</td>
+</tr>
 <tr><td>Go to line</td>
 <td>Ctrl-L</td>
 <td>Opens the Go to line dialog.</td>
 </tr>
-<tr><td><strong>View menu</strong></td>
+<tr><td>Goto matching brace</td>
+<td>Ctrl-B</td>
+<td>If the cursor is ahead or behind a brace, then it
+is moved to the brace which belongs to the current
+one. If this keyboard shortcut is pressed again,
+the cursor is moved back to the first brace.</td>
+</tr>
+<tr><td>Toggle marker</td>
+<td>Ctrl-M</td>
+<td>Set a marker on the current line, or clear the
+marker if there already is one.</td>
+</tr>
+<tr><td>Goto next marker</td>
+<td>Ctrl-.</td>
+<td>Goto the next marker in the current document.</td>
+</tr>
+<tr><td>Goto previous marker</td>
+<td>Ctrl-,</td>
+<td>Goto the previous marker in the current document.</td>
+</tr>
+<tr><td>Go to tag definition</td>
+<td>&nbsp;</td>
+<td>Jump to the definition of the current word (near
+the keyboard cursor). If the definition cannot be
+found (e.g. the relevant file is not open) Geany
+will beep and do nothing. See the section called
+<a class="reference" href="#go-to-tag-definition">Go to tag definition</a>.</td>
+</tr>
+<tr><td>Go to tag declaration</td>
+<td>&nbsp;</td>
+<td>Jump to the declaration of the current word (near
+the keyboard cursor). If the declaration cannot be
+found (e.g. the relevant file is not open) Geany
+will beep and do nothing. See the section called
+<a class="reference" href="#go-to-tag-declaration">Go to tag declaration</a>.</td>
+</tr>
+<tr><td><strong>View</strong></td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
 </tr>
@@ -1924,10 +2139,6 @@ messages) on and off.</td>
 notebook tabs, the toolbar, the messages window
 and the statusbar.</td>
 </tr>
-<tr><td><strong>Document menu</strong></td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
 <tr><td>Zoom In</td>
 <td>Ctrl-+</td>
 <td>Zooms in the text</td>
@@ -1935,6 +2146,65 @@ and the statusbar.</td>
 <tr><td>Zoom Out</td>
 <td>Ctrl--</td>
 <td>Zooms out the text</td>
+</tr>
+<tr><td><strong>Focus</strong></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>Switch to Editor</td>
+<td>F2</td>
+<td>Switches to editor widget.</td>
+</tr>
+<tr><td>Switch to Scribble</td>
+<td>F6</td>
+<td>Switches to scribble widget.</td>
+</tr>
+<tr><td>Switch to VTE</td>
+<td>F4</td>
+<td>Switches to VTE widget.</td>
+</tr>
+<tr><td>Switch to Search Bar</td>
+<td>F7</td>
+<td>Switches to the search bar in the toolbar (if
+visible).</td>
+</tr>
+<tr><td><strong>Notebook tabs</strong></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>Switch to left document</td>
+<td>Ctrl-PageUp</td>
+<td>Switches to the previous open document.</td>
+</tr>
+<tr><td>Switch to right document</td>
+<td>Ctrl-PageDown</td>
+<td>Switches to the next open document.</td>
+</tr>
+<tr><td>Switch to last used document</td>
+<td>Ctrl-Tab</td>
+<td>Switches to the previously selected open document.</td>
+</tr>
+<tr><td>Move document left</td>
+<td>Alt-PageUp</td>
+<td>Changes the current document with the left hand
+one.</td>
+</tr>
+<tr><td>Move document right</td>
+<td>Alt-PageDown</td>
+<td>Changes the current document with the right hand
+one.</td>
+</tr>
+<tr><td>Move document first</td>
+<td>&nbsp;</td>
+<td>Moves the current document to the first position.</td>
+</tr>
+<tr><td>Move document last</td>
+<td>&nbsp;</td>
+<td>Moves the current document to the last position.</td>
+</tr>
+<tr><td><strong>Document</strong></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
 </tr>
 <tr><td>Replace tabs by space</td>
 <td>&nbsp;</td>
@@ -1948,7 +2218,11 @@ and the statusbar.</td>
 <td>&nbsp;</td>
 <td>Unfolds all contracted code blocks.</td>
 </tr>
-<tr><td><strong>Build menu</strong></td>
+<tr><td>Reload symbol list</td>
+<td>Ctrl-Shift-R</td>
+<td>Reloads the tag/symbol list.</td>
+</tr>
+<tr><td><strong>Build</strong></td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
 </tr>
@@ -1991,7 +2265,7 @@ last build process.</td>
 <td>&nbsp;</td>
 <td>Opens the build options dialog.</td>
 </tr>
-<tr><td><strong>Tools menu</strong></td>
+<tr><td><strong>Tools</strong></td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
 </tr>
@@ -1999,267 +2273,13 @@ last build process.</td>
 <td>&nbsp;</td>
 <td>Opens the Colour Chooser dialog.</td>
 </tr>
-<tr><td><strong>Help menu</strong></td>
+<tr><td><strong>Help</strong></td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
 </tr>
 <tr><td>Help</td>
 <td>F1</td>
 <td>Opens the manual.</td>
-</tr>
-<tr><td><strong>Miscellaneous</strong></td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr><td>Reload symbol list</td>
-<td>Ctrl-Shift-R</td>
-<td>Reloads the tag/symbol list.</td>
-</tr>
-<tr><td>Switch to Editor</td>
-<td>F2</td>
-<td>Switches to editor widget.</td>
-</tr>
-<tr><td>Switch to Scribble</td>
-<td>F6</td>
-<td>Switches to scribble widget.</td>
-</tr>
-<tr><td>Switch to VTE</td>
-<td>F4</td>
-<td>Switches to VTE widget.</td>
-</tr>
-<tr><td>Switch to Search Bar</td>
-<td>F7</td>
-<td>Switches to the search bar in the toolbar (if
-visible).</td>
-</tr>
-<tr><td>Switch to left document</td>
-<td>Ctrl-PageUp</td>
-<td>Switches to the previous open document.</td>
-</tr>
-<tr><td>Switch to right document</td>
-<td>Ctrl-PageDown</td>
-<td>Switches to the next open document.</td>
-</tr>
-<tr><td>Switch to last used document</td>
-<td>Ctrl-Tab</td>
-<td>Switches to the previously selected open document.</td>
-</tr>
-<tr><td>Move document left</td>
-<td>Alt-PageUp</td>
-<td>Changes the current document with the left hand
-one.</td>
-</tr>
-<tr><td>Move document right</td>
-<td>Alt-PageDown</td>
-<td>Changes the current document with the right hand
-one.</td>
-</tr>
-<tr><td>Move document first</td>
-<td>&nbsp;</td>
-<td>Moves the current document to the first position.</td>
-</tr>
-<tr><td>Move document last</td>
-<td>&nbsp;</td>
-<td>Moves the current document to the last position.</td>
-</tr>
-<tr><td>Navigate forward a location</td>
-<td>&nbsp;</td>
-<td>Switches to the next location in the navigation
-history. See the section called <a class="reference" href="#code-navigation-history">Code Navigation
-History</a>.</td>
-</tr>
-<tr><td>Navigate back a location</td>
-<td>&nbsp;</td>
-<td>Switches to the previous location in the
-navigation history. See the section called
-<a class="reference" href="#code-navigation-history">Code Navigation History</a>.</td>
-</tr>
-<tr><td><strong>Editing operations</strong></td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr><td>Toggle case of selection</td>
-<td>Ctrl-Alt-U</td>
-<td>Changes the case of the selection. A lowercase
-selection will be changed into uppercase and vice
-versa. If the selection contains lower- and
-uppercase characters, all will be converted to
-lowercase.</td>
-</tr>
-<tr><td>Duplicate line or selection</td>
-<td>Ctrl-D</td>
-<td>Duplicates the current line or selection.</td>
-</tr>
-<tr><td>Delete current line(s)</td>
-<td>Ctrl-K</td>
-<td>Deletes the current line (and any lines with a
-selection).</td>
-</tr>
-<tr><td>Cut current line(s)</td>
-<td>Ctrl-Shift-X</td>
-<td>Cuts the current line (and any lines with a
-selection) to the clipboard.</td>
-</tr>
-<tr><td>Copy current line(s)</td>
-<td>Ctrl-Shift-C</td>
-<td>Copies the current line (and any lines with a
-selection) to the clipboard.</td>
-</tr>
-<tr><td>Transpose current line</td>
-<td>Ctrl-T</td>
-<td>Transposes the current line with the previous one.</td>
-</tr>
-<tr><td>Comment line</td>
-<td>&nbsp;</td>
-<td>Comments current line or selection.</td>
-</tr>
-<tr><td>Uncomment line</td>
-<td>&nbsp;</td>
-<td>Uncomments current line or selection.</td>
-</tr>
-<tr><td>Toggle line commentation</td>
-<td>Ctrl-E</td>
-<td>Comments a line if it is not commented or removes
-a comment if the line is commented.</td>
-</tr>
-<tr><td>Increase indent</td>
-<td>Ctrl-I</td>
-<td>Indents the current line or selection by one tab
-or by spaces in the amount of the tab width
-setting.</td>
-</tr>
-<tr><td>Decrease indent</td>
-<td>Ctrl-U</td>
-<td>Removes one tabulator or the amount fo spaces of
-the tab width setting from the indentation of the
-current line or selection.</td>
-</tr>
-<tr><td>Increase indent by one space</td>
-<td>&nbsp;</td>
-<td>Indents the current line or selection by one
-space.</td>
-</tr>
-<tr><td>Decrease indent by one space</td>
-<td>&nbsp;</td>
-<td>Deindents the current line or selection by one
-space.</td>
-</tr>
-<tr><td>Smart line indent</td>
-<td>&nbsp;</td>
-<td>Indents the current line or all selected lines
-with the same intentation as the previous line.</td>
-</tr>
-<tr><td>Goto matching brace</td>
-<td>Ctrl-B</td>
-<td>If the cursor is ahead or behind a brace, then it
-is moved to the brace which belongs to the current
-one. If this keyboard shortcut is pressed again,
-the cursor is moved back to the first brace.</td>
-</tr>
-<tr><td>Toggle marker</td>
-<td>Ctrl-M</td>
-<td>Set a marker on the current line, or clear the
-marker if there already is one.</td>
-</tr>
-<tr><td>Goto next marker</td>
-<td>Ctrl-.</td>
-<td>Goto the next marker in the current document.</td>
-</tr>
-<tr><td>Goto previous marker</td>
-<td>Ctrl-,</td>
-<td>Goto the previous marker in the current document.</td>
-</tr>
-<tr><td>Complete word</td>
-<td>Ctrl-Space</td>
-<td>Shows auto completion list.</td>
-</tr>
-<tr><td>Show calltip</td>
-<td>Alt-Space (Unix)
-Alt-Shift-Space (Windows)</td>
-<td>Shows call tips for the current function or
-method.</td>
-</tr>
-<tr><td>Show macro list</td>
-<td>Ctrl-Return</td>
-<td>Shows a list of available macros and variables in
-the workspace.</td>
-</tr>
-<tr><td>Complete snippet</td>
-<td>Tab</td>
-<td>If you type a construct like if or for and press
-this key, it will be completed with a matching
-template.</td>
-</tr>
-<tr><td>Suppress snippet completion</td>
-<td>&nbsp;</td>
-<td>If you type a construct like if or for and press
-this key, it will not be completed, and a space or
-tab will be inserted, depending on what the
-construct completion keybinding is set to. For
-example, if you have set the construct completion
-keybinding to space, then setting this to
-Shift+space will prevent construct completion and
-insert a space.</td>
-</tr>
-<tr><td>Select current word</td>
-<td>Alt-Shift-W</td>
-<td>Selects the current word under the cursor.</td>
-</tr>
-<tr><td>Select current paragraph</td>
-<td>Alt-Shift-P</td>
-<td>Selects the current paragraph under the cursor
-which is defined by two empty lines around it.</td>
-</tr>
-<tr><td>Select current line(s)</td>
-<td>Alt-Shift-L</td>
-<td>Selects the current line under the cursor (and any
-partially selected lines).</td>
-</tr>
-<tr><td>Scroll to current line</td>
-<td>Ctrl-Shift-L</td>
-<td>Scrolls the current line into the centre of the
-view. The cursor position and or an existing
-selection will not be changed.</td>
-</tr>
-<tr><td>Insert alternative whitespace</td>
-<td>&nbsp;</td>
-<td>Inserts a tabulator character when spaces should
-be used for indentation and inserts space
-characters of the amount of a tabulator width when
-tabulators should be used for indentation.</td>
-</tr>
-<tr><td><strong>Popup menu</strong></td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr><td>Find Usage</td>
-<td>&nbsp;</td>
-<td>Finds all occurrences of the current word (near
-the keyboard cursor) or selection and displays
-them in the messages window.</td>
-</tr>
-<tr><td>Go to tag definition</td>
-<td>&nbsp;</td>
-<td>Jump to the definition of the current word (near
-the keyboard cursor). If the definition cannot be
-found (e.g. the relevant file is not open) Geany
-will beep and do nothing. See the section called
-<a class="reference" href="#go-to-tag-definition">Go to tag definition</a>.</td>
-</tr>
-<tr><td>Go to tag declaration</td>
-<td>&nbsp;</td>
-<td>Jump to the declaration of the current word (near
-the keyboard cursor). If the declaration cannot be
-found (e.g. the relevant file is not open) Geany
-will beep and do nothing. See the section called
-<a class="reference" href="#go-to-tag-declaration">Go to tag declaration</a>.</td>
-</tr>
-<tr><td>Context Action</td>
-<td>&nbsp;</td>
-<td>Executes a command and passes the current word
-(near the cursor postion) or selection as an
-argument. See the section called <a class="reference" href="#context-actions">Context
-actions</a>.</td>
 </tr>
 </tbody>
 </table>
@@ -3491,7 +3511,7 @@ USE OR PERFORMANCE OF THIS SOFTWARE.</p>
 <div class="footer">
 <hr class="footer" />
 <a class="reference" href="geany.txt">View document source</a>.
-Generated on: 2008-03-17 13:43 UTC.
+Generated on: 2008-03-20 16:47 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 
 </div>
