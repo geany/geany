@@ -1,7 +1,7 @@
 man_MANS=geany.1
 DOCDIR = $(DESTDIR)/$(datadir)/doc/@PACKAGE@
 IMAGE_FILES = images/*.png
-EXTRA_DIST = geany.html geany.css geany.txt geany.1 plugins.dox \
+EXTRA_DIST = geany.html geany.css geany.txt geany.1 plugins.dox plugin-symbols.c \
 			 $(srcdir)/$(IMAGE_FILES)
 
 pdf: geany.txt

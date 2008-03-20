@@ -43,52 +43,9 @@
  *
  *
  *
- *  @page symbols Plugin Symbols
- *
- *  The following symbols (functions) should be exported by every plugin. Some of them
- *  are optional, i.e. they can be omitted, others are required and must be defined.
- *
- *  - @code version_check() @endcode
- * 	  Use the VERSION_CHECK() macro instead. Required by Geany.
- *
- *  - @code PluginInfo* info() @endcode
- * 	  Use the PLUGIN_INFO() macro to define it. Required by Geany.
- *
- *  - @code GeanyData* geany_data @endcode
- * 	  Geany owned fields and functions.
- *
- *  - @code PluginFields* plugin_fields @endcode
- * 	  Plugin owned fields, including flags.
- *
- *  - @code GeanyCallback geany_callbacks[] @endcode
- * 	  An array for connecting GeanyObject events, which should be terminated with
- * 	  {NULL, NULL, FALSE, NULL}. See @link signals Signal documentation @endlink.
- *
- *  - @code KeyBindingGroup plugin_key_group[1] @endcode
- * 	  Most plugins should use the PLUGIN_KEY_GROUP() macro to define it. However,
- *    its fields are not read until after init() is called for the plugin, so it
- *    is possible to setup a variable number of keybindings, e.g. based on the
- *    plugin's configuration file settings.
- *    - The @c name field must not be empty or match Geany's default group name.
- *    - Ths @c label field is set by Geany after init() is called to the name of the
- *    plugin.
- *
- *    @note This is a single element array for implementation reasons,
- *    but you can treat it like a pointer.
- *
- *  - @code void configure(GtkWidget *parent) @endcode
- * 	  Called when the plugin should show a configure dialog to let the user set some basic
- *    plugin configuration. Optionally, can be omitted when not needed.
- *
- *  - @code void init(GeanyData *data) @endcode
- * 	  Called after loading the plugin. data is the same as geany_data.
- *
- *  - @code void cleanup() @endcode
- * 	  Called before unloading the plugin. Required for normal plugins - it should undo
- * 	  everything done in init() - e.g. destroy menu items, free memory.
- *
- *
- *
+ */
+
+/**
  *  @page signals Plugin Signals
  *
  *
@@ -215,7 +172,7 @@ GeanyCallback geany_callbacks[] =
  *
  *  Every plugin must contain some essential symbols unless it won't work. A complete
  *  list of all necessary and optional symbols can be found in
- *  @link symbols Plugin Symbols @endlink.
+ *  @link plugin-symbols.c Plugin Symbols @endlink.
  *  Every plugin should include "geany.h" and "plugindata.h" which provide necessary
  *  preprocessor macros and other basic information.
  *  There are two important preprocessor macros which need to be used at the beginning:

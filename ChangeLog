@@ -1,3 +1,11 @@
+2008-03-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * doc/plugin-symbols.c, doc/Makefile.am, doc/plugins.dox:
+   Move plugin symbols page into separate source file so that symbols
+   are listed as variables and functions and are autolinked.
+   Edit plugin symbols description, document some function parameters.
+
+
 2008-03-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/plugins.c:
