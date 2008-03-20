@@ -4,6 +4,9 @@
    Move plugin symbols page into separate source file so that symbols
    are listed as variables and functions and are autolinked.
    Edit plugin symbols description, document some function parameters.
+ * doc/plugins.dox:
+   Add page links on the main page (easier than going to Related Pages,
+   and we can also list special files like plugin-symbols.c).
 
 
 2008-03-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

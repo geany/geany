@@ -38,11 +38,13 @@
  *  considered as a work in progress.
  *  We will try to %document as many functions and structs as possible.
  *
- *  For additional documentation of things like plugin signals or a simple plugin please
- *  see Related Pages.
+ *  To get started, see the @link howto Plugin Howto @endlink.
  *
+ *  Other pages:
+ *  - @link signals Plugin Signals @endlink.
+ *  - @link plugin-symbols.c Plugin Symbols @endlink.
  *
- *
+ *  @Note Some of these pages are also listed in Related Pages.
  */
 
 /**
