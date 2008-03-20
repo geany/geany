@@ -1,9 +1,9 @@
 TODO List:
 ----------
-(features included in brackets have lower priority)
+Note: features included in brackets have lower priority.
 
 	Fix bugs:
-	o fix bug that prevents UTF-16, UTF-32 files from being loaded.
+	o fix bug that prevents UTF-16, UTF-32 files from being loaded
 	o tagmanager fails on UTF-16/32
 
 
@@ -18,13 +18,14 @@ TODO List:
 	o configurable filetype regex for build errors
 	o recent projects menu
 	o project indentation settings support
-	o plugin keybindings
+	o improve Compile toolbar button for Make (drop down radio list?)
+	o (selectable menu of arguments to use for Make, from Make Custom)
 	o (line breaking mode to limit words on a line for e.g. XML content)
 	o (DBUS)
 	o (indent wrapped lines  - Scintilla issue)
 	o (folder tree in the sidebar)
 	o (macro support)
-	o (better regex support)
+	o (better search & replace regex support)
 	o (parsing tags from a memory buffer instead of a file on disk)
 	o (calltip support for non-C-like languages that use
 	  function_name(arguments) syntax)
@@ -42,16 +43,16 @@ TODO List:
 	o stable plugin ABI for the 1.0 series? (Split up geany_data, prefs,
 	  GeanyKeyCommand enum into groups)
 	o review documentation
-	o look into using a geany-dev package for plugin development
+	o review any hidden prefs/compile time constants that could be in the
+	  Prefs dialog, e.g. invert_all syntax highlighting pref
 
 
 Wishlist
 --------
-Note: These items might not get worked on.
+Note: these items might not get worked on.
 
-	o Some kind of support for ctags files.
-	o Scope resolution for object members.
+	o Some kind of support for ctags files
+	o Scope resolution for object members
 	o Multiline regex support (requires work on Scintilla)
-	o Split window editing.
-	o Python scripting plugin? (not as efficient as Lua, but perhaps
-	  more widely known)
+	o Split window editing
+	o Python plugin interface
