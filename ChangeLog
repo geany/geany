@@ -24,6 +24,8 @@
  * doc/geany.txt, doc/geany.html:
    Update configurable keybindings section for new plugin groups
    ordering.
+ * doc/geany.txt, doc/geany.html:
+   s/tabulator/tab/.
 
 
 2008-03-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

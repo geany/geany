@@ -1782,10 +1782,10 @@ Select current line(s)          Alt-Shift-L               Selects the current li
 
 Insert date                     Shift-Alt-D               Inserts a customisable date.
 
-Insert alternative whitespace                             Inserts a tabulator character when spaces should
+Insert alternative whitespace                             Inserts a tab character when spaces should
                                                           be used for indentation and inserts space
-                                                          characters of the amount of a tabulator width when
-                                                          tabulators should be used for indentation.
+                                                          characters of the amount of a tab width when
+                                                          tabs should be used for indentation.
 
 **Format**
 
@@ -1806,7 +1806,7 @@ Increase indent                 Ctrl-I                    Indents the current li
                                                           or by spaces in the amount of the tab width
                                                           setting.
 
-Decrease indent                 Ctrl-U                    Removes one tabulator or the amount fo spaces of
+Decrease indent                 Ctrl-U                    Removes one tab or the amount of spaces of
                                                           the tab width setting from the indentation of the
                                                           current line or selection.
 
