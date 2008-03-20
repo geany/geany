@@ -314,14 +314,50 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag)
 }
 
 
+static gboolean reload_idx(gpointer data)
+{
+	gint idx = GPOINTER_TO_INT(data);
+
+	/* check idx is still valid now we're idle, in case it was closed */
+	if (DOC_IDX_VALID(idx))
+	{
+		document_reload_file(idx, NULL);
+	}
+	return FALSE;
+}
+
+
+static gboolean check_reload(gint idx)
+{
+	gchar *base_name = g_path_get_basename(doc_list[idx].file_name);
+	gboolean want_reload;
+
+	want_reload = dialogs_show_question_full(NULL, _("_Reload"), GTK_STOCK_CANCEL,
+		_("Do you want to reload it?"),
+		_("The file '%s' on the disk is more recent than\n"
+			"the current buffer."), base_name);
+	if (want_reload)
+	{
+		/* delay reloading because we need to wait for any pending scintilla messages
+		 * to be processed, otherwise the reloaded document might not be colourised
+		 * properly */
+		g_idle_add(reload_idx, GINT_TO_POINTER(idx));
+	}
+	g_free(base_name);
+	return want_reload;
+}
+
+
 /* Set force to force a disk check, otherwise it is ignored if there was a check
- * in the last GEANY_CHECK_FILE_DELAY seconds. */
+ * in the last GEANY_CHECK_FILE_DELAY seconds.
+ * @return @c TRUE if the file has changed. */
 gboolean utils_check_disk_status(gint idx, gboolean force)
 {
 	struct stat st;
 	time_t t;
 	gchar *locale_filename;
 	gboolean ret = FALSE;
+	const time_t delay_time = 10;	/* seconds to delay disk checks for */
 
 	if (idx == -1 || doc_list[idx].file_name == NULL) return FALSE;
 
@@ -334,26 +370,17 @@ gboolean utils_check_disk_status(gint idx, gboolean force)
 	{
 		/* TODO: warn user file on disk is missing */
 	}
-	else if (doc_list[idx].mtime > t || st.st_mtime > t)
+	else if (doc_list[idx].mtime - delay_time > t || st.st_mtime > t)
 	{
 		geany_debug("Strange: Something is wrong with the time stamps.");
 	}
 	else if (doc_list[idx].mtime < st.st_mtime)
 	{
-		gchar *base_name = g_path_get_basename(doc_list[idx].file_name);
-
-		if (dialogs_show_question_full(NULL, _("_Reload"), GTK_STOCK_CANCEL,
-			_("Do you want to reload it?"),
-			_("The file '%s' on the disk is more recent than\n"
-				"the current buffer."), base_name))
-		{
-			document_reload_file(idx, NULL);
-			doc_list[idx].last_check = t;
-		}
+		if (check_reload(idx))
+			doc_list[idx].last_check = t + delay_time;	/* Disable checking until after reload */
 		else
-			doc_list[idx].mtime = st.st_mtime;
+			doc_list[idx].mtime = st.st_mtime;	/* Ignore this change on disk completely */
 
-		g_free(base_name);
 		ret = TRUE; /* file has changed */
 	}
 	g_free(locale_filename);

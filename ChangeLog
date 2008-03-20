@@ -7,6 +7,10 @@
  * doc/plugins.dox:
    Add page links on the main page (easier than going to Related Pages,
    and we can also list special files like plugin-symbols.c).
+ * src/utils.c:
+   When detecting a change on disk, reload the file after all pending
+   Scintilla messages have been processed, to prevent problems with
+   partial colourisation.
 
 
 2008-03-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
