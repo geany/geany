@@ -16,6 +16,8 @@
    When detecting a change on disk, reload the file after all pending
    Scintilla messages have been processed, to prevent problems with
    partial colourisation.
+ * src/symbols.c:
+   Fix bug with showing macro list items all on one line.
 
 
 2008-03-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

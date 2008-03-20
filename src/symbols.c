@@ -271,7 +271,7 @@ GString *symbols_get_macro_list(void)
 	tm_tags_sort(ftags, NULL, FALSE);
 	for (j = 0; j < ftags->len; j++)
 	{
-		if (j > 0) g_string_append_c(words, ' ');
+		if (j > 0) g_string_append_c(words, '\n');
 		g_string_append(words, TM_TAG(ftags->pdata[j])->name);
 	}
 	g_ptr_array_free(ftags, TRUE);
