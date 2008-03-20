@@ -76,6 +76,21 @@ You can build Glade 2.10 and run the binary in place, without installing
 it - this should work fine even if you have another version of Glade
 installed on the system.
 
+GTK API documentation
+---------------------
+The official GTK 2.6 API documentation is not available online anymore,
+so we put them on http://geany.uvena.de/manual/gtk/.
+There is also a tarball with all available files for download and use
+with devhelp.
+
+Using the 2.6 API documentation of the GTK libs (including GLib, GDK and
+Pango) has the advantages that you don't get confused by any newer API
+additions and you don't have to take care about whether you can use
+them or not.
+This is because Geany depends on GTK 2.6. API symbols from newer
+GTK/GLib versions should be avoided to keep the source code building
+against GTK 2.6.
+
 Coding
 ------
 Don't write long functions with a lot of variables and/or scopes - break
