@@ -24,8 +24,9 @@
  * doc/geany.txt, doc/geany.html:
    Update configurable keybindings section for new plugin groups
    ordering.
- * doc/geany.txt, doc/geany.html:
    s/tabulator/tab/.
+   Move scroll by one line shortcuts to configurable keybindings
+   section.
 
 
 2008-03-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
