@@ -18,6 +18,9 @@
    partial colourisation.
  * src/symbols.c:
    Fix bug with showing macro list items all on one line.
+ * src/plugins.c:
+   Load and save plugin keybindings when toggling plugins in the Plugin
+   Manager.
 
 
 2008-03-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

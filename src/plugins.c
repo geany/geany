@@ -825,10 +825,18 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 
 	/* save the filename of the plugin */
 	file_name = g_strdup(p->filename);
-	/* remove old plugin */
+
+	/* unload plugin module */
+	if (!state)
+		keybindings_write_to_file();	/* save shortcuts (only need this group, but it doesn't take long) */
 	plugin_free(p, GINT_TO_POINTER(PLUGIN_FREE_ALL));
-	/* add new one */
+
+	/* reload plugin module and initialize it if item is checked */
 	p = plugin_new(file_name, state, TRUE);
+	if (state)
+		keybindings_load_keyfile();		/* load shortcuts */
+
+	/* update model */
 	gtk_list_store_set(pm_widgets.store, &iter,
 		PLUGIN_COLUMN_CHECK, state,
 		PLUGIN_COLUMN_PLUGIN, p, -1);
