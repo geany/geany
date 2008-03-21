@@ -648,6 +648,7 @@ static void init_tag_list(gint idx)
 				/*&(tv_iters.tag_other), _("Other"), NULL);*/
 			break;
 		}
+		case GEANY_FILETYPES_TCL:
 		case GEANY_FILETYPES_PYTHON:
 		{
 			tag_list_add_groups(tag_store,

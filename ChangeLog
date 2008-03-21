@@ -8,6 +8,9 @@
    documentation.
  * data/snippets.conf:
    Add better "for" completion for Python.
+ * tagmanager/tcl.c, src/symbols.c:
+   Update TCL parser from CTags SVN which adds new symbol types for
+   classes and methods (closes #1918748).
 
 
 2008-03-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
