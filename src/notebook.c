@@ -409,19 +409,18 @@ notebook_tab_close_clicked_cb(GtkButton *button, gpointer user_data)
 /* Always use this instead of gtk_notebook_remove_page(). */
 void notebook_remove_page(gint page_num)
 {
-	gint oldpage = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->notebook));
+	gint curpage = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->notebook));
 
+	/* Focus the next page, not the previous */
+	if (curpage == page_num && prefs.tab_order_ltr)
+	{
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), curpage + 1);
+	}
+
+	/* now remove the page (so we don't temporarily switch to the previous page) */
 	gtk_notebook_remove_page(GTK_NOTEBOOK(app->notebook), page_num);
 
 	tab_count_changed();
-
-	/* Focus the next page, not the previous */
-	if (oldpage == page_num && prefs.tab_order_ltr)
-	{
-		/* Unless the first tab was closed */
-		if (oldpage > 0)
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), oldpage);
-	}
 }
 
 
