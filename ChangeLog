@@ -11,6 +11,9 @@
  * tagmanager/tcl.c, src/symbols.c:
    Update TCL parser from CTags SVN which adds new symbol types for
    classes and methods (closes #1918748).
+ * data/snippets.conf:
+   Add missing colon to "for" snippet for Python and set cursor position
+   (thanks mamaar on IRC).
 
 
 2008-03-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
