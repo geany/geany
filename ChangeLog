@@ -6,6 +6,8 @@
  * src/prefix.h, src/main.c, src/Makefile.am, doc/Makefile.am:
    Use configure's --docdir option when installing and using the
    documentation.
+ * data/snippets.conf:
+   Add better "for" completion for Python.
 
 
 2008-03-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
