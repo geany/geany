@@ -40,7 +40,7 @@ GeanyData		*geany_data;
 VERSION_CHECK(7)
 
 PLUGIN_INFO(_("Class Builder"), _("Creates source files for new class types."), VERSION,
-	_("The Geany developer team"))
+	"Alexander Rodin")
 
 
 enum
