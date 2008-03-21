@@ -1253,6 +1253,34 @@ static void get_line_column_from_pos(gint idx, guint byte_pos, gint *line, gint 
 }
 
 
+/*
+ * Save the %document specified by @a idx, detecting the filetype.
+ *
+ * @param idx The %document index for the file to save.
+ * @return @c TRUE if the file was saved or @c FALSE if the file could not be saved.
+ * @see document_save_file().
+ */
+gboolean document_save_file_as(gint idx)
+{
+	if (! DOC_IDX_VALID(idx)) return FALSE;
+
+	/* detect filetype */
+	if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_ALL)
+	{
+		filetype *ft = filetypes_detect_from_file(idx);
+
+		document_set_filetype(idx, ft);
+		if (document_get_cur_idx() == idx)
+		{
+			app->ignore_callback = TRUE;
+			filetypes_select_radio_item(doc_list[idx].file_type);
+			app->ignore_callback = FALSE;
+		}
+	}
+	return document_save_file(idx, TRUE);
+}
+
+
 /**
  *  Save the %document specified by @a idx. Saving includes replacing tabs by spaces,
  *  stripping trailing spaces and adding a final new line at the end of the file (all only if
@@ -1413,19 +1441,8 @@ gboolean document_save_file(gint idx, gboolean force)
 		 * timestamp can be ahead of time(NULL) */
 		document_update_timestamp(idx);
 
-		if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_ALL)
-		{
-			filetype *ft = filetypes_detect_from_file(idx);
-			document_set_filetype(idx, ft);
-			if (document_get_cur_idx() == idx)
-			{
-				app->ignore_callback = TRUE;
-				filetypes_select_radio_item(doc_list[idx].file_type);
-				app->ignore_callback = FALSE;
-			}
-		}
-		else
-			document_set_filetype(idx, doc_list[idx].file_type);
+		/* update filetype-related things */
+		document_set_filetype(idx, doc_list[idx].file_type);
 
 		tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
 		gtk_label_set_text(GTK_LABEL(doc_list[idx].tab_label), base_name);

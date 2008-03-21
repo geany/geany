@@ -171,15 +171,19 @@ void document_open_files(const GSList *filenames, gboolean readonly, filetype *f
 
 gboolean document_reload_file(gint idx, const gchar *forced_enc);
 
+
+gboolean document_save_file_as(gint idx);
+
 gboolean document_save_file(gint idx, gboolean force);
+
 
 gboolean document_search_bar_find(gint idx, const gchar *text, gint flags, gboolean inc);
 
 gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search_backwards,
-	gboolean scroll, GtkWidget *parent);
+		gboolean scroll, GtkWidget *parent);
 
 gint document_replace_text(gint idx, const gchar *find_text, const gchar *replace_text,
-	gint flags, gboolean search_backwards);
+		gint flags, gboolean search_backwards);
 
 gboolean document_replace_all(gint idx, const gchar *find_text, const gchar *replace_text,
 		gint flags, gboolean escaped_chars);

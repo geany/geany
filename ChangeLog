@@ -11,6 +11,9 @@
    When closing tabs that were opened left-to-right, don't temporarily
    focus the previous tab when closing tabs, to prevent unnecessary
    checking for disk changes.
+ * src/win32.c, src/dialogs.c, src/document.c, src/document.h:
+   Only use filetype detection after Save As, not on every save when the
+   filetype is None (fixes #1891778).
 
 
 2008-03-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

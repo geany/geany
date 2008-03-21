@@ -386,7 +386,7 @@ static void handle_save_as(const gchar *utf8_filename, gboolean open_new_tab,
 	g_return_if_fail(NZV(utf8_filename));
 
 	if (open_new_tab)
-	{	/* "open" the saved file in a new tab */
+	{	/* "open" the saved file in a new tab and switch to it */
 		idx = document_clone(idx, utf8_filename);
 	}
 	else
@@ -411,7 +411,7 @@ static void handle_save_as(const gchar *utf8_filename, gboolean open_new_tab,
 	}
 
 	utils_replace_filename(idx);
-	document_save_file(idx, TRUE);
+	document_save_file_as(idx);
 
 	if (! open_new_tab)
 		build_menu_update(idx);

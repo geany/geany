@@ -164,7 +164,7 @@ static gchar *get_dir(const gchar *utf8_filename)
 	}
 	else
 		result = locale_filename;
-	
+
 	return result;
 }
 
@@ -405,7 +405,7 @@ gboolean win32_show_file_dialog(gboolean file_open, const gchar *initial_dir)
 		gint idx = document_get_cur_idx();
 		/* convert the resulting filename into UTF-8 */
 		doc_list[idx].file_name = g_locale_to_utf8(fname, -1, NULL, NULL, NULL);
-		document_save_file(idx, TRUE);
+		document_save_file_as(idx);
 	}
 	g_free(fname);
 	return (retval != 0);
@@ -665,7 +665,7 @@ gboolean win32_get_exit_status(GPid child_pid)
 {
 	DWORD exit_code;
 	GetExitCodeProcess(child_pid, &exit_code);
-	
+
 	return (exit_code == 0);
 }
 
