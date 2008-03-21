@@ -410,14 +410,10 @@ static void handle_save_as(const gchar *utf8_filename, gboolean open_new_tab,
 		doc_list[idx].file_name = g_strdup(utf8_filename);
 	}
 
-	utils_replace_filename(idx);
 	document_save_file_as(idx);
 
 	if (! open_new_tab)
 		build_menu_update(idx);
-
-	/* finally add current file to recent files menu */
-	ui_add_recent_file(doc_list[idx].file_name);
 }
 
 

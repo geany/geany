@@ -22,6 +22,9 @@
  * src/win32.c, src/dialogs.c, src/document.c, src/document.h:
    Only use filetype detection after Save As, not on every save when the
    filetype is None (fixes #1891778).
+ * src/dialogs.c, src/document.c:
+   Replace untitled file header filename after Save As and add to recent
+   files on Windows too.
 
 
 2008-03-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

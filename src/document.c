@@ -1262,6 +1262,8 @@ static void get_line_column_from_pos(gint idx, guint byte_pos, gint *line, gint 
  */
 gboolean document_save_file_as(gint idx)
 {
+	gboolean ret;
+
 	if (! DOC_IDX_VALID(idx)) return FALSE;
 
 	/* detect filetype */
@@ -1277,7 +1279,12 @@ gboolean document_save_file_as(gint idx)
 			app->ignore_callback = FALSE;
 		}
 	}
-	return document_save_file(idx, TRUE);
+	utils_replace_filename(idx);
+
+	ret = document_save_file(idx, TRUE);
+	if (ret)
+		ui_add_recent_file(doc_list[idx].file_name);
+	return ret;
 }
 
 
