@@ -14,6 +14,9 @@
  * data/snippets.conf:
    Add missing colon to "for" snippet for Python and set cursor position
    (thanks mamaar on IRC).
+ * src/win32.c:
+   Fix crash on Windows due to missing error message when a process
+   spawning fails.
 
 
 2008-03-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

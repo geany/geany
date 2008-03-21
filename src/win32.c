@@ -902,6 +902,8 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 	if (!fSuccess)
 	{
 		geany_debug("win32_spawn: Create process failed");
+		if (error != NULL)
+			*error = g_error_new(G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "Create process failed");
 		return FALSE;
 	}
 
@@ -1014,7 +1016,7 @@ static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline
 	if (bFuncRetn == 0)
 	{
 		gchar *msg = g_win32_error_message(GetLastError());
-		geany_debug("CreateChildProcess: CreateProcess failed");
+		geany_debug("CreateChildProcess: CreateProcess failed (%s)", msg);
 		if (*error != NULL)
 			*error = g_error_new(G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, msg);
 		g_free(msg);
