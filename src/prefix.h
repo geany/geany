@@ -63,6 +63,7 @@
 	#undef GEANY_PREFIX
 	#undef GEANY_DATADIR
 	#undef GEANY_LIBDIR
+	#undef GEANY_DOCDIR
 	#undef GEANY_LOCALEDIR
 
 	#define SELFPATH	(br_thread_local_store (br_locate ((void *) "")))
@@ -76,6 +77,7 @@
 	#define GEANY_PREFIX		(br_thread_local_store (br_locate_prefix ((void *) "")))
 	#define GEANY_DATADIR		(br_thread_local_store (br_prepend_prefix ((void *) "", "/share")))
 	#define GEANY_LIBDIR		(br_thread_local_store (br_prepend_prefix ((void *) "", "/lib")))
+	#define GEANY_DOCDIR		(br_thread_local_store (br_prepend_prefix ((void *) "", "/share/doc/geany")))
 	#define GEANY_LOCALEDIR		(br_thread_local_store (br_prepend_prefix ((void *) "", "/share/locale")))
 #endif /* BR_NO_MACROS */
 

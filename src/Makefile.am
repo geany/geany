@@ -80,8 +80,9 @@ geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a @GTK_LIB
 			  -lcomctl32 -liberty -lwsock32 geany_private.res
 
 AM_CFLAGS = -DGEANY_DATADIR=\"data\" \
-			-DGEANY_LOCALEDIR=\"data\" \
+			-DGEANY_DOCDIR=\"\" \
 			-DGEANY_LIBDIR=\"\" \
+			-DGEANY_LOCALEDIR=\"data\" \
 			-DGEANY_PREFIX=\"\"
 
 geany_LDFLAGS =	-mwindows -mms-bitfields
@@ -102,6 +103,7 @@ geany_SOURCES = $(SRCS) vte.c vte.h
 geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a @GTK_LIBS@  $(INTLLIBS)
 
 AM_CFLAGS = -DGEANY_DATADIR=\""$(datadir)"\" \
+			-DGEANY_DOCDIR=\""$(docdir)"\" \
 			-DGEANY_LIBDIR=\""$(libdir)"\" \
 			-DGEANY_LOCALEDIR=\""$(localedir)"\" \
 			-DGEANY_PREFIX=\""$(prefix)"\"

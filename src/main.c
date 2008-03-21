@@ -436,7 +436,7 @@ static void setup_paths(void)
 	g_free(install_dir);
 #else
 	data_dir = g_strconcat(GEANY_DATADIR, "/geany/", NULL); /* e.g. /usr/share/geany */
-	doc_dir = g_strconcat(GEANY_DATADIR, "/doc/geany/html/", NULL);
+	doc_dir = g_strconcat(GEANY_DOCDIR, "/html/", NULL);
 #endif
 
 	/* convert path names to locale encoding */
