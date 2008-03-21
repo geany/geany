@@ -39,6 +39,7 @@
 #include "symbols.h"
 #include "navqueue.h"
 
+#include <gdk/gdkkeysyms.h>
 
 SidebarTreeviews tv;
 
@@ -82,6 +83,8 @@ static void on_openfiles_hide_item_clicked(GtkMenuItem *menuitem, gpointer user_
 static gboolean on_taglist_tree_selection_changed(GtkTreeSelection *selection);
 static gboolean on_treeviews_button_press_event(GtkWidget *widget, GdkEventButton *event,
 																			gpointer user_data);
+static gboolean on_treeviews_key_press_event(GtkWidget *widget, GdkEventKey *event,
+																			gpointer user_data);
 static void on_list_document_activate(GtkCheckMenuItem *item, gpointer user_data);
 static void on_list_symbol_activate(GtkCheckMenuItem *item, gpointer user_data);
 
@@ -117,6 +120,8 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
 	g_signal_connect(G_OBJECT(tree), "button-press-event",
 					G_CALLBACK(on_treeviews_button_press_event), GINT_TO_POINTER(TREEVIEW_SYMBOL));
+	g_signal_connect(G_OBJECT(tree), "key-press-event",
+					G_CALLBACK(on_treeviews_key_press_event), GINT_TO_POINTER(TREEVIEW_SYMBOL));
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(tree), FALSE);
 
@@ -643,6 +648,23 @@ static gboolean on_taglist_tree_selection_changed(GtkTreeSelection *selection)
 
 			navqueue_goto_line(idx, idx, line);
 		}
+	}
+	return FALSE;
+}
+
+
+static gboolean on_treeviews_key_press_event(GtkWidget *widget, GdkEventKey *event,
+											 gpointer user_data)
+{
+	if (event->keyval == GDK_Return ||
+		event->keyval == GDK_ISO_Enter ||
+		event->keyval == GDK_KP_Enter ||
+		event->keyval == GDK_space)
+	{
+		GtkTreeSelection *select = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
+		/* delay the query of selection state because this callback is executed before GTK
+		 * changes the selection (g_signal_connect_after would be better but it doesn't work) */
+		g_idle_add((GSourceFunc) on_taglist_tree_selection_changed, select);
 	}
 	return FALSE;
 }

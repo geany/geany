@@ -17,6 +17,8 @@
  * src/win32.c:
    Fix crash on Windows due to missing error message when a process
    spawning fails.
+ * src/treeviews.c:
+   Allow selecting items in the symbol list by pressing Enter or Space.
 
 
 2008-03-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
