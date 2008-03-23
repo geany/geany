@@ -740,6 +740,12 @@ static void init_tag_list(gint idx)
 				NULL);
 			break;
 		}
+		case GEANY_FILETYPES_MAKE:
+			tag_list_add_groups(tag_store,
+				&tv_iters.tag_function, _("Targets"), "classviewer-method",
+				&tv_iters.tag_macro, _("Macros"), "classviewer-macro",
+				NULL);
+			break;
 		case GEANY_FILETYPES_D:
 		default:
 		{
