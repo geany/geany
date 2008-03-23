@@ -89,6 +89,7 @@ static void cb_func_switch_editor(guint key_id);
 static void cb_func_switch_scribble(guint key_id);
 static void cb_func_switch_vte(guint key_id);
 static void cb_func_switch_search_bar(guint key_id);
+static void cb_func_switch_sidebar(guint key_id);
 static void cb_func_switch_tableft(guint key_id);
 static void cb_func_switch_tabright(guint key_id);
 static void cb_func_switch_tablastused(guint key_id);
@@ -379,6 +380,8 @@ static void init_default_kb(void)
 		GDK_F4, 0, "switch_vte", _("Switch to VTE"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_FOCUS_SEARCHBAR, cb_func_switch_search_bar,
 		GDK_F7, 0, "switch_search_bar", _("Switch to Search Bar"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_FOCUS_SIDEBAR, cb_func_switch_sidebar,
+		0, 0, "switch_sidebar", _("Switch to Sidebar"), NULL);
 
 	group = ADD_KB_GROUP(NOTEBOOK, _("Notebook tab"));
 
@@ -1155,6 +1158,17 @@ static void cb_func_switch_search_bar(G_GNUC_UNUSED guint key_id)
 {
 	if (prefs.toolbar_visible && prefs.toolbar_show_search)
 		gtk_widget_grab_focus(lookup_widget(app->window, "entry1"));
+}
+
+static void cb_func_switch_sidebar(G_GNUC_UNUSED guint key_id)
+{
+	if (ui_prefs.sidebar_visible)
+	{
+		gint page_num = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->treeview_notebook));
+		GtkWidget *swin = gtk_notebook_get_nth_page(GTK_NOTEBOOK(app->treeview_notebook), page_num);
+
+		gtk_widget_grab_focus(gtk_bin_get_child(GTK_BIN(swin)));
+	}
 }
 
 static void cb_func_switch_vte(G_GNUC_UNUSED guint key_id)
