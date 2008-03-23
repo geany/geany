@@ -2499,6 +2499,7 @@ create_prefs_dialog (void)
   GtkWidget *check_suppress_status_msgs;
   GtkWidget *check_auto_focus;
   GtkWidget *check_ask_suppress_search_dialogs;
+  GtkWidget *check_search_use_current_word;
   GtkWidget *label199;
   GtkWidget *frame25;
   GtkWidget *alignment28;
@@ -2936,6 +2937,13 @@ create_prefs_dialog (void)
   GTK_WIDGET_UNSET_FLAGS (check_ask_suppress_search_dialogs, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_ask_suppress_search_dialogs, _("Always wrap search around the document and hide the Find dialog after clicking Find Next/Previous"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_ask_suppress_search_dialogs), FALSE);
+
+  check_search_use_current_word = gtk_check_button_new_with_mnemonic (_("Use the current word under the cursor for Find dialogs"));
+  gtk_widget_show (check_search_use_current_word);
+  gtk_box_pack_start (GTK_BOX (vbox21), check_search_use_current_word, FALSE, FALSE, 0);
+  GTK_WIDGET_UNSET_FLAGS (check_search_use_current_word, GTK_CAN_FOCUS);
+  gtk_tooltips_set_tip (tooltips, check_search_use_current_word, _("Use current word under the cursor when opening the Find, Find in Files or Replace dialog and there is no selection."), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_search_use_current_word), FALSE);
 
   label199 = gtk_label_new (_("<b>Miscellaneous</b>"));
   gtk_widget_show (label199);
@@ -4492,6 +4500,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_suppress_status_msgs, "check_suppress_status_msgs");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_auto_focus, "check_auto_focus");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_ask_suppress_search_dialogs, "check_ask_suppress_search_dialogs");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_search_use_current_word, "check_search_use_current_word");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label199, "label199");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame25, "frame25");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment28, "alignment28");

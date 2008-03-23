@@ -179,6 +179,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_save_winpos", prefs.save_winpos);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_confirm_exit", prefs.confirm_exit);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_suppress_search_dialogs", prefs.suppress_search_dialogs);
+	g_key_file_set_boolean(config, PACKAGE, "pref_main_search_use_current_word", prefs.search_use_current_word);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_suppress_status_messages", prefs.suppress_status_messages);
 	g_key_file_set_boolean(config, PACKAGE, "switch_msgwin_pages", prefs.switch_msgwin_pages);
 	g_key_file_set_boolean(config, PACKAGE, "beep_on_errors", prefs.beep_on_errors);
@@ -472,6 +473,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	/* general */
 	prefs.confirm_exit = utils_get_setting_boolean(config, PACKAGE, "pref_main_confirm_exit", FALSE);
 	prefs.suppress_search_dialogs = utils_get_setting_boolean(config, PACKAGE, "pref_main_suppress_search_dialogs", FALSE);
+	prefs.search_use_current_word = utils_get_setting_boolean(config, PACKAGE, "pref_main_search_use_current_word", TRUE);
 	prefs.suppress_status_messages = utils_get_setting_boolean(config, PACKAGE, "pref_main_suppress_status_messages", FALSE);
 	prefs.load_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_load_session", TRUE);
 	project_prefs.project_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_project_session", TRUE);

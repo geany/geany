@@ -247,7 +247,9 @@ void search_find_selection(gint idx, gboolean search_backwards)
 	}
 #endif
 
-	if (!s)	{ s=editor_get_default_selection(idx, NULL); }
+	if (!s)
+		s=editor_get_default_selection(idx, TRUE, NULL);
+
 	if (s)
 	{
 		setup_find_next(s);	/* allow find next/prev */
@@ -288,7 +290,7 @@ void search_show_find_dialog(void)
 
 	g_return_if_fail(DOC_IDX_VALID(idx));
 
-	sel = editor_get_default_selection(idx, NULL);
+	sel = editor_get_default_selection(idx, prefs.search_use_current_word, NULL);
 
 	if (widgets.find_dialog == NULL)
 	{
@@ -409,7 +411,7 @@ void search_show_replace_dialog(void)
 
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
 
-	sel = editor_get_default_selection(idx, NULL);
+	sel = editor_get_default_selection(idx, prefs.search_use_current_word, NULL);
 
 	if (widgets.replace_dialog == NULL)
 	{
@@ -708,13 +710,13 @@ void search_show_find_in_files_dialog(const gchar *dir)
 				G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 
 		gtk_widget_show_all(widgets.find_in_files_dialog);
-		sel = editor_get_default_selection(idx, NULL);
+		sel = editor_get_default_selection(idx, prefs.search_use_current_word, NULL);
 	}
 
 	entry = GTK_BIN(combo)->child;
 	/* only set selection if the dialog is not already visible, or has just been created */
 	if (! sel && ! GTK_WIDGET_VISIBLE(widgets.find_in_files_dialog))
-		sel = editor_get_default_selection(idx, NULL);
+		sel = editor_get_default_selection(idx, prefs.search_use_current_word, NULL);
 	if (sel)
 		gtk_entry_set_text(GTK_ENTRY(entry), sel);
 	g_free(sel);

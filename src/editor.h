@@ -145,7 +145,7 @@ void editor_finalize(void);
 void editor_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_t wordlen,
 	const gchar *wc);
 
-gchar *editor_get_default_selection(gint idx, const gchar *wordchars);
+gchar *editor_get_default_selection(gint idx, gboolean use_current_word, const gchar *wordchars);
 
 void editor_select_word(ScintillaObject *sci);
 

@@ -36,6 +36,7 @@ typedef struct GeanyPrefs
 	gboolean		confirm_exit;
 	gboolean		beep_on_errors;
 	gboolean		suppress_search_dialogs;
+	gboolean		search_use_current_word;
 	gboolean		suppress_status_messages;
 	gboolean		switch_msgwin_pages;
 	gboolean		auto_focus;

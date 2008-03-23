@@ -1921,7 +1921,7 @@ on_menu_open_selected_file1_activate   (GtkMenuItem     *menuitem,
 
 	if (! DOC_IDX_VALID(idx)) return;
 
-	sel = editor_get_default_selection(idx, GEANY_WORDCHARS"./");
+	sel = editor_get_default_selection(idx, TRUE, GEANY_WORDCHARS"./");
 
 	if (sel != NULL)
 	{

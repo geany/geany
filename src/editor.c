@@ -2626,7 +2626,7 @@ void editor_finalize()
 
 /* wordchars: NULL or a string containing characters to match a word.
  * Returns: the current selection or the current word. */
-gchar *editor_get_default_selection(gint idx, const gchar *wordchars)
+gchar *editor_get_default_selection(gint idx, gboolean use_current_word, const gchar *wordchars)
 {
 	gchar *s = NULL;
 
@@ -2640,7 +2640,7 @@ gchar *editor_get_default_selection(gint idx, const gchar *wordchars)
 		s = g_malloc(len + 1);
 		sci_get_selected_text(doc_list[idx].sci, s);
 	}
-	else if (sci_get_lines_selected(doc_list[idx].sci) == 0)
+	else if (sci_get_lines_selected(doc_list[idx].sci) == 0 && use_current_word)
 	{	/* use the word at current cursor position */
 		gchar word[GEANY_MAX_WORD_LENGTH];
 

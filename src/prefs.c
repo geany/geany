@@ -198,6 +198,9 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_ask_suppress_search_dialogs");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.suppress_search_dialogs);
 
+	widget = lookup_widget(ui_widgets.prefs_dialog, "check_search_use_current_word");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.search_use_current_word);
+
 	widget = lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction");
 	gtk_entry_set_text(GTK_ENTRY(widget), prefs.context_action_cmd);
 
@@ -596,6 +599,9 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_suppress_status_msgs");
 		prefs.suppress_status_messages = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(ui_widgets.prefs_dialog, "check_search_use_current_word");
+		prefs.search_use_current_word = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_auto_focus");
 		prefs.auto_focus = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));

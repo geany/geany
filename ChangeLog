@@ -7,6 +7,11 @@
  * tagmanager/make.c, src/symbols.c:
    Update Makefile parser from CTags SVN and improve it to detect
    targets in Makefiles.
+ * geany.glade, src/interface.c, src/prefs.c, src/prefs.h, src/keyfile.c
+   src/callbacks.c, src/search.c, src/editor.c, src/editor.h,
+   geany.glade:
+   Add preference for not using the current word under the cursor when
+   opening Find dialogs.
 
 
 2008-03-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
