@@ -26,6 +26,18 @@ current_line=0x0;0xf0f0f0;true;false
 # only the first and second argument is interpreted
 translucency=256;256;false;false
 
+# style for a highlighted line (e.g when using Goto line or goto tag)
+# only the first and second argument is interpreted
+marker_line=0x000000;0xffff00;false;false
+
+# style for a highlighted search result (e.g when using "Mark" in Search dialogs)
+# only the first and second argument is interpreted
+marker_search=0x000000;0xB8F4B8;false;false
+
+# translucency for the line marker(first argument) and the search marker (second argument)
+# only the first and second argument is interpreted
+marker_translucency=256;256;false;false
+
 # colour of the caret(the blinking cursor), only first and third argument is interpreted
 # set the third argument to true to change the caret into a block caret
 caret=0x000000;0x0;false;false

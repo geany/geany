@@ -2311,7 +2311,7 @@ line_wrap_indent
     *Example:* ``line_wrap_indent=0;0;false;false``
 
 translucency
-    Translucency for the current line(first argument) and the selection
+    Translucency for the current line (first argument) and the selection
     (second argument). Values between 0 and 256 are accepted.
 
     Note for Windows 95, 98 and ME users:
@@ -2320,6 +2320,35 @@ translucency
     Only the first and second argument is interpreted.
 
     *Example:* ``translucency=256;256;false;false``
+
+marker_line
+    The style for a highlighted line (e.g when using Goto line or goto tag).
+    The forground colour (first argument) is only used when the Markers margin
+    is enabled (see View menu).
+
+    Only the first and second argument is interpreted.
+
+    *Example:* ``marker_line=0x000000;0xffff00;false;false``
+
+marker_search
+    The style for a highlighted search result (e.g when using "Mark" in
+    Search dialogs). The foreground colour (first argument) is only used
+    when the Markers margin is enabled (see View menu).
+
+    Only the first and second argument is interpreted.
+
+    *Example:* ``marker_search=0x000000;0xB8F4B8;false;false``
+
+marker_translucency
+    Translucency for the line marker (first argument) and the search marker
+    (second argument). Values between 0 and 256 are accepted.
+
+    Note for Windows 95, 98 and ME users:
+    keep this value at 256 to disable translucency otherwise Geany might crash.
+
+    Only the first and second argument is interpreted.
+
+    *Example:* ``marker_translucency=256;256;false;false``
 
 whitespace_chars
     Characters to treat as whitespace. These characters are ignored

@@ -70,6 +70,9 @@ enum	/* Geany common styling */
 	GCS_LINE_WRAP_VISUALS,
 	GCS_LINE_WRAP_INDENT,
 	GCS_TRANSLUCENCY,
+	GCS_MARKER_LINE,
+	GCS_MARKER_SEARCH,
+	GCS_MARKER_TRANSLUCENCY,
 	GCS_MAX
 };
 
@@ -364,6 +367,10 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 		"0xc0c0c0", "0xffffff", "false", &common_style_set.styling[GCS_INDENT_GUIDE]);
 	get_keyfile_hex(config, config_home, "styling", "white_space",
 		"0xc0c0c0", "0xffffff", "true", &common_style_set.styling[GCS_WHITE_SPACE]);
+	get_keyfile_hex(config, config_home, "styling", "marker_line",
+		"0x000000", "0xffff00", "false", &common_style_set.styling[GCS_MARKER_LINE]);
+	get_keyfile_hex(config, config_home, "styling", "marker_search",
+		"0x000000", "0xB8F4B8", "false", &common_style_set.styling[GCS_MARKER_SEARCH]);
 	{
 		/* hack because get_keyfile_int uses a Style struct */
 		HighlightingStyle tmp_style;
@@ -391,6 +398,10 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 			256, 256, &tmp_style);
 		common_style_set.styling[GCS_TRANSLUCENCY].foreground = tmp_style.foreground;
 		common_style_set.styling[GCS_TRANSLUCENCY].background = tmp_style.background;
+		get_keyfile_int(config, config_home, "styling", "marker_translucency",
+			256, 256, &tmp_style);
+		common_style_set.styling[GCS_MARKER_TRANSLUCENCY].foreground = tmp_style.foreground;
+		common_style_set.styling[GCS_MARKER_TRANSLUCENCY].background = tmp_style.background;
 	}
 
 	get_keyfile_wordchars(config, config_home, &common_style_set.wordchars);
@@ -436,13 +447,15 @@ static void styleset_common(ScintillaObject *sci, gint style_bits, filetype_id f
 	/* define marker symbols
 	 * 0 -> line marker */
 	SSM(sci, SCI_MARKERDEFINE, 0, SC_MARK_SHORTARROW);
-	SSM(sci, SCI_MARKERSETFORE, 0, invert(0x00007f));
-	SSM(sci, SCI_MARKERSETBACK, 0, invert(0x00ffff));
+	SSM(sci, SCI_MARKERSETFORE, 0, invert(common_style_set.styling[GCS_MARKER_LINE].foreground));
+	SSM(sci, SCI_MARKERSETBACK, 0, invert(common_style_set.styling[GCS_MARKER_LINE].background));
+	SSM(sci, SCI_MARKERSETALPHA, 0, common_style_set.styling[GCS_MARKER_TRANSLUCENCY].foreground);
 
 	/* 1 -> user marker */
 	SSM(sci, SCI_MARKERDEFINE, 1, SC_MARK_PLUS);
-	SSM(sci, SCI_MARKERSETFORE, 1, invert(0x000000));
-	SSM(sci, SCI_MARKERSETBACK, 1, invert(0xB8F4B8));
+	SSM(sci, SCI_MARKERSETFORE, 1, invert(common_style_set.styling[GCS_MARKER_SEARCH].foreground));
+	SSM(sci, SCI_MARKERSETBACK, 1, invert(common_style_set.styling[GCS_MARKER_SEARCH].background));
+	SSM(sci, SCI_MARKERSETALPHA, 1, common_style_set.styling[GCS_MARKER_TRANSLUCENCY].background);
 
 	/* 2 -> folding marker, other folding settings */
 	SSM(sci, SCI_SETMARGINTYPEN, 2, SC_MARGIN_SYMBOL);
