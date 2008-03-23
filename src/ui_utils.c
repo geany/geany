@@ -536,14 +536,17 @@ void ui_save_buttons_toggle(gboolean enable)
 	/* save all menu item and tool button */
 	for (i = 0; i < (guint) gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)); i++)
 	{
-		/* count the amount of files where changes were made and if there are some,
+		/* check whether there are files where changes were made and if there are some,
 		 * we need the save all button / item */
-		if (! dirty_tabs && doc_list[i].is_valid && doc_list[i].changed)
+		if (DOC_IDX_VALID(i) && doc_list[i].changed)
+		{
 			dirty_tabs = TRUE;
+			break;
+		}
 	}
 
-	gtk_widget_set_sensitive(ui_widgets.save_buttons[2], (dirty_tabs > 0) ? TRUE : FALSE);
-	gtk_widget_set_sensitive(ui_widgets.save_buttons[3], (dirty_tabs > 0) ? TRUE : FALSE);
+	gtk_widget_set_sensitive(ui_widgets.save_buttons[2], dirty_tabs);
+	gtk_widget_set_sensitive(ui_widgets.save_buttons[3], dirty_tabs);
 }
 
 
