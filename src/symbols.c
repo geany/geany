@@ -327,14 +327,9 @@ static TMTag *find_workspace_tag(const gchar *tag_name, gint type)
 		for (j = 0; j < work_objects->len; j++)
 		{
 			TMWorkObject *workobj = TM_WORK_OBJECT(work_objects->pdata[j]);
-			const GPtrArray *tags;
 			TMTag *tmtag;
 
-			tags = tm_tags_extract(workobj->tags_array, type);
-			if (tags == NULL)
-				continue;
-
-			tmtag = symbols_find_tm_tag(tags, tag_name);
+			tmtag = find_work_object_tag(workobj, tag_name, type);
 			if (tmtag != NULL)
 				return tmtag;
 		}
