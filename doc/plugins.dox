@@ -44,7 +44,7 @@
  *  - @link signals Plugin Signals @endlink.
  *  - @link plugin-symbols.c Plugin Symbols @endlink.
  *
- *  @Note Some of these pages are also listed in Related Pages.
+ *  @note Some of these pages are also listed in Related Pages.
  */
 
 /**
