@@ -6,6 +6,8 @@
    Add note about allowing appending of keybindings to groups without
    breaking the API.
    Undo unnecessary ABI change.
+ * src/plugindata.h:
+   Redo ABI change (it was for r2389 editor.h change, oops).
 
 
 2008-03-23  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
