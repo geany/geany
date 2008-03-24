@@ -436,6 +436,24 @@ get_whitespace(gint width, gboolean use_tabs)
 }
 
 
+static void check_python_indent(gint idx, gint pos)
+{
+	document *doc = &doc_list[idx];
+	gint last_char = pos - utils_get_eol_char_len(idx) - 1;
+
+	/* add extra indentation for Python after colon */
+	if (sci_get_char_at(doc->sci, last_char) == ':' &&
+		sci_get_style_at(doc->sci, last_char) == SCE_P_OPERATOR)
+	{
+		/* creates and inserts one tabulator sign or
+		 * whitespace of the amount of the tab width */
+		gchar *text = get_whitespace(editor_prefs.tab_width, doc->use_tabs);
+		sci_add_text(doc->sci, text);
+		g_free(text);
+	}
+}
+
+
 static void on_new_line_added(gint idx)
 {
 	ScintillaObject *sci = doc_list[idx].sci;
@@ -448,20 +466,9 @@ static void on_new_line_added(gint idx)
 		get_indent(&doc_list[idx], pos, FALSE);
 		sci_add_text(sci, indent);
 
-		if (editor_prefs.indent_mode > INDENT_BASIC)
-		{
-			/* add extra indentation for Python after colon */
-			if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_PYTHON &&
-				sci_get_char_at(sci, pos - 2) == ':' &&
-				sci_get_style_at(sci, pos - 2) == SCE_P_OPERATOR)
-			{
-				/* creates and inserts one tabulator sign or
-				 * whitespace of the amount of the tab width */
-				gchar *text = get_whitespace(editor_prefs.tab_width, doc_list[idx].use_tabs);
-				sci_add_text(sci, text);
-				g_free(text);
-			}
-		}
+		if (editor_prefs.indent_mode > INDENT_BASIC &&
+			FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_PYTHON)
+			check_python_indent(idx, pos);
 	}
 
 	if (editor_prefs.complete_snippets)
