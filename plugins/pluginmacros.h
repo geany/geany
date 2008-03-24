@@ -40,6 +40,7 @@
 #define p_dialogs		geany_data->dialogs
 #define p_document		geany_data->documents
 #define p_encoding		geany_data->encoding
+#define p_filetype		geany_data->filetype
 #define p_highlighting	geany_data->highlighting
 #define p_keybindings	geany_data->keybindings
 #define p_msgwindow		geany_data->msgwindow
