@@ -1,3 +1,10 @@
+2008-03-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/plugins.c, src/plugindata.h:
+   Add document_set_filetype() and filetypes_get_from_uid() to
+   the plugin API.
+
+
 2008-03-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/editor.c:

@@ -107,7 +107,8 @@ static DocumentFuncs doc_funcs = {
 	&document_remove,
 	&document_reload_file,
 	&document_set_encoding,
-	&document_set_text_changed
+	&document_set_text_changed,
+	&document_set_filetype
 };
 
 static ScintillaFuncs sci_funcs = {
@@ -220,7 +221,8 @@ static HighlightingFuncs highlighting_funcs = {
 
 
 static FiletypeFuncs filetype_funcs = {
-	&filetypes_detect_from_filename
+	&filetypes_detect_from_filename,
+	&filetypes_get_from_uid
 };
 
 

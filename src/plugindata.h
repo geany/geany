@@ -35,7 +35,7 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 50;
+static const gint api_version = 51;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
@@ -193,15 +193,16 @@ typedef struct DocumentFuncs
 	gint	(*get_n_idx) (guint i);
 	gint	(*find_by_filename) (const gchar *filename, gboolean is_tm_filename);
 	struct document* (*get_current) (void);
-	gboolean (*save_file)(gint idx, gboolean force);
-	gint	(*open_file)(const gchar *locale_filename, gboolean readonly,
+	gboolean (*save_file) (gint idx, gboolean force);
+	gint	(*open_file) (const gchar *locale_filename, gboolean readonly,
 			struct filetype *ft, const gchar *forced_enc);
-	void	(*open_files)(const GSList *filenames, gboolean readonly, struct filetype *ft,
+	void	(*open_files) (const GSList *filenames, gboolean readonly, struct filetype *ft,
 			const gchar *forced_enc);
-	gboolean (*remove)(guint page_num);
-	gboolean (*reload_file)(gint idx, const gchar *forced_enc);
-	void	(*set_encoding)(gint idx, const gchar *new_encoding);
-	void	(*set_text_changed)(gint idx);
+	gboolean (*remove) (guint page_num);
+	gboolean (*reload_file) (gint idx, const gchar *forced_enc);
+	void	(*set_encoding) (gint idx, const gchar *new_encoding);
+	void	(*set_text_changed) (gint idx);
+	void	(*set_filetype) (gint idx, filetype *type);
 }
 DocumentFuncs;
 
@@ -350,6 +351,7 @@ HighlightingFuncs;
 typedef struct FiletypeFuncs
 {
 	filetype*	(*detect_from_filename) (const gchar *utf8_filename);
+	filetype*	(*get_from_uid) (gint uid);
 }
 FiletypeFuncs;
 
