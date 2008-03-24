@@ -81,6 +81,10 @@
    Fix asking detect reload question again if the user doesn't respond
    within 10 seconds (oops).
 
+2008-03-22  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * THANKS, src/about.c: Adjusted email of Brahmann.
+
 
 2008-03-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
