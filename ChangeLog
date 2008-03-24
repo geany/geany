@@ -8,6 +8,9 @@
    Undo unnecessary ABI change.
  * src/plugindata.h:
    Redo ABI change (it was for r2389 editor.h change, oops).
+ * src/symbols.c:
+   Make Go to Tag commands look for the tag in the current document
+   before searching the workspace.
 
 
 2008-03-23  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

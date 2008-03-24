@@ -294,20 +294,45 @@ symbols_find_tm_tag(const GPtrArray *tags, const gchar *tag_name)
 }
 
 
-static TMTag *find_workspace_tag(const gchar *tag_name, gint type)
+static TMTag *find_work_object_tag(const TMWorkObject *workobj,
+		const gchar *tag_name, gint type)
 {
-	guint j;
 	const GPtrArray *tags;
 	TMTag *tmtag;
 
-	if (app->tm_workspace != NULL && app->tm_workspace->work_objects != NULL)
+	if (workobj != NULL)
 	{
-		for (j = 0; j < app->tm_workspace->work_objects->len; j++)
+		tags = tm_tags_extract(workobj->tags_array, type);
+		if (tags != NULL)
 		{
-			tags = tm_tags_extract(
-				TM_WORK_OBJECT(app->tm_workspace->work_objects->pdata[j])->tags_array,
-				type);
-			if (tags == NULL) continue;
+			tmtag = symbols_find_tm_tag(tags, tag_name);
+			if (tmtag != NULL)
+				return tmtag;
+		}
+	}
+	return NULL;	/* not found */
+}
+
+
+static TMTag *find_workspace_tag(const gchar *tag_name, gint type)
+{
+	guint j;
+	const GPtrArray *work_objects;
+
+	if (app->tm_workspace != NULL)
+		work_objects = app->tm_workspace->work_objects;
+
+	if (work_objects != NULL)
+	{
+		for (j = 0; j < work_objects->len; j++)
+		{
+			TMWorkObject *workobj = TM_WORK_OBJECT(work_objects->pdata[j]);
+			const GPtrArray *tags;
+			TMTag *tmtag;
+
+			tags = tm_tags_extract(workobj->tags_array, type);
+			if (tags == NULL)
+				continue;
 
 			tmtag = symbols_find_tm_tag(tags, tag_name);
 			if (tmtag != NULL)
@@ -1147,14 +1172,20 @@ gboolean symbols_goto_tag(const gchar *name, gboolean definition)
 {
 	const gint forward_types = tm_tag_prototype_t | tm_tag_externvar_t;
 	gint type;
-	TMTag *tmtag;
-
+	TMTag *tmtag = NULL;
 	gint old_idx = document_get_cur_idx();
 
 	/* goto tag definition: all except prototypes / forward declarations / externs */
 	type = (definition) ? tm_tag_max_t - forward_types : forward_types;
 
-	tmtag = find_workspace_tag(name, type);
+	/* first look in the current document */
+	if (doc_list[old_idx].tm_file)
+		tmtag = find_work_object_tag(doc_list[old_idx].tm_file, name, type);
+
+	/* if not found, look in the workspace */
+	if (tmtag == NULL)
+		tmtag = find_workspace_tag(name, type);
+
 	if (tmtag != NULL)
 	{
 		gint new_idx = document_find_by_filename(
