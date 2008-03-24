@@ -71,6 +71,9 @@ extern GPtrArray *keybinding_groups;	/* array of KeyBindingGroup pointers */
 extern const gchar keybindings_keyfile_group_name[];
 
 
+/* Note: keybinding_groups is not in the API, so we don't need to increment the ABI when
+ * appending keybindings or keygroups, as the _COUNT item shouldn't be used by plugins. */
+
 /** Keybinding group IDs */
 enum
 {
