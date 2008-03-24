@@ -211,7 +211,8 @@ GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gin
 			}
 		}
 	}
-	g_ptr_array_free(typedefs, TRUE);
+	if (typedefs)
+		g_ptr_array_free(typedefs, TRUE);
 	return s;
 }
 
@@ -246,7 +247,6 @@ const gchar *symbols_get_context_separator(gint ft_id)
 GString *symbols_get_macro_list(void)
 {
 	guint j, i;
-	const GPtrArray *tags;
 	GPtrArray *ftags;
 	GString *words;
 
@@ -258,6 +258,8 @@ GString *symbols_get_macro_list(void)
 
 	for (j = 0; j < app->tm_workspace->work_objects->len; j++)
 	{
+		GPtrArray *tags;
+
 		tags = tm_tags_extract(TM_WORK_OBJECT(app->tm_workspace->work_objects->pdata[j])->tags_array,
 			tm_tag_enum_t | tm_tag_variable_t | tm_tag_macro_t | tm_tag_macro_with_arg_t);
 		if (NULL != tags)
@@ -266,6 +268,7 @@ GString *symbols_get_macro_list(void)
 			{
 				g_ptr_array_add(ftags, (gpointer) tags->pdata[i]);
 			}
+			g_ptr_array_free(tags, TRUE);
 		}
 	}
 	tm_tags_sort(ftags, NULL, FALSE);
@@ -297,7 +300,7 @@ symbols_find_tm_tag(const GPtrArray *tags, const gchar *tag_name)
 static TMTag *find_work_object_tag(const TMWorkObject *workobj,
 		const gchar *tag_name, gint type)
 {
-	const GPtrArray *tags;
+	GPtrArray *tags;
 	TMTag *tmtag;
 
 	if (workobj != NULL)
@@ -306,6 +309,9 @@ static TMTag *find_work_object_tag(const TMWorkObject *workobj,
 		if (tags != NULL)
 		{
 			tmtag = symbols_find_tm_tag(tags, tag_name);
+
+			g_ptr_array_free(tags, TRUE);
+
 			if (tmtag != NULL)
 				return tmtag;
 		}
