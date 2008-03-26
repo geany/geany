@@ -1137,4 +1137,85 @@ static HANDLE GetTempFileHandle(GError **error)
 	return hTempFile;
 }
 
+
+/* From GDK (they got it from MS Knowledge Base article Q130698) */
+static gboolean resolve_link(HWND hWnd, wchar_t *link, gchar **lpszPath)
+{
+	WIN32_FILE_ATTRIBUTE_DATA wfad;
+	HRESULT hres;
+	IShellLinkW *pslW = NULL;
+	IPersistFile *ppf = NULL;
+
+	/* Check if the file is empty first because IShellLink::Resolve for some reason succeeds
+	 * with an empty file and returns an empty "link target". (#524151) */
+	if (!GetFileAttributesExW(link, GetFileExInfoStandard, &wfad) ||
+		(wfad.nFileSizeHigh == 0 && wfad.nFileSizeLow == 0))
+	{
+	  return FALSE;
+	}
+
+	/* Assume failure to start with: */
+	*lpszPath = 0;
+
+	CoInitialize(NULL);
+
+	hres = CoCreateInstance(
+		&CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, &IID_IShellLinkW, (LPVOID *) &pslW);
+
+	if (SUCCEEDED(hres))
+	{
+		/* The IShellLink interface supports the IPersistFile interface.
+		 * Get an interface pointer to it. */
+		hres = pslW->lpVtbl->QueryInterface(pslW, &IID_IPersistFile, (LPVOID *) &ppf);
+	}     
+
+	if (SUCCEEDED(hres))
+	{
+		/* Load the file. */
+		hres = ppf->lpVtbl->Load(ppf, link, STGM_READ);
+	}
+
+	if (SUCCEEDED(hres))
+	{
+		/* Resolve the link by calling the Resolve() interface function. */
+		hres = pslW->lpVtbl->Resolve(pslW, hWnd, SLR_ANY_MATCH | SLR_NO_UI);
+	}
+
+	if (SUCCEEDED(hres))
+	{
+		wchar_t wtarget[MAX_PATH];
+
+		hres = pslW->lpVtbl->GetPath(pslW, wtarget, MAX_PATH, NULL, 0);
+		if (SUCCEEDED(hres))
+			*lpszPath = g_utf16_to_utf8(wtarget, -1, NULL, NULL, NULL);
+	}
+
+	if (ppf)
+		ppf->lpVtbl->Release(ppf);
+
+	if (pslW)
+		pslW->lpVtbl->Release(pslW);
+
+	return SUCCEEDED(hres);
+}
+
+
+/* Checks whether file_name is a Windows shortcut. file_name is expected in UTF-8 encoding.
+ * If file_name is a Windows shortcut, it returns the target in UTF-8 encoding.
+ * If it is not a shortcut, it returns a newly allocated copy of file_name. */
+gchar *win32_get_shortcut_target(const gchar *file_name)
+{
+	gchar *path = NULL;
+	wchar_t *wfilename = g_utf8_to_utf16(file_name, -1, NULL, NULL, NULL);
+
+	resolve_link(GDK_WINDOW_HWND(app->window->window), wfilename, &path);
+	g_free(wfilename);
+	
+	if (path == NULL)
+		return g_strdup(file_name);
+	else
+		return path;
+}
+
+
 #endif

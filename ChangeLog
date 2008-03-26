@@ -7,6 +7,9 @@
  * plugins/vcdiff.c:
    Fix two memory leaks and prevent showing two dialog boxes with the
    same error message.
+ * src/document.c, src/win32.c, src/win32.h:
+   Add support for resolving Windows shortcuts when opening files and
+   open the shortcut's target.
 
 
 2008-03-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

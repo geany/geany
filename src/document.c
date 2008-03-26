@@ -71,6 +71,7 @@
 #include "callbacks.h"
 #include "geanyobject.h"
 #include "highlighting.h"
+#include "win32.h"
 
 
 /* dynamic array of document elements to hold all information of the notebook tabs */
@@ -996,7 +997,12 @@ gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean
 			return -1;
 		}
 
+#ifdef G_OS_WIN32
+		/* if filename is a shortcut, try to resolve it */
+		locale_filename = win32_get_shortcut_target(filename); 
+#else
 		locale_filename = g_strdup(filename);
+#endif
 		/* try to get the UTF-8 equivalent for the filename, fallback to filename if error */
 		utf8_filename = utils_get_utf8_from_locale(locale_filename);
 

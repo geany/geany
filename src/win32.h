@@ -59,4 +59,6 @@ gboolean win32_get_exit_status(GPid child_pid);
 gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
 					 gchar **std_out, gchar **std_err, gint *exit_status, GError **error);
 
+gchar *win32_get_shortcut_target(const gchar *file_name);
+
 #endif
