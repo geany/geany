@@ -2,6 +2,8 @@
 
  * scintilla/*, scintilla/include/*:
    Update Scintilla to version 1.76.
+ * scintilla/include/Scintilla.iface:
+   Add this file for plugin authors.
 
 
 2008-03-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
