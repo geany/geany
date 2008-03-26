@@ -43,7 +43,7 @@ PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 
 
-VERSION_CHECK(26)
+PLUGIN_VERSION_CHECK(26)
 
 PLUGIN_INFO(_("File Browser"), _("Adds a file browser tab to the sidebar."), VERSION,
 	_("The Geany developer team"))

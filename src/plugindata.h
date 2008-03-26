@@ -35,18 +35,18 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 51;
+static const gint api_version = 52;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
  * are only appended, as this doesn't affect existing fields. */
 static const gint abi_version = 23;
 
-/** This performs runtime checks that try to ensure:
- * 1. Geany ABI data types are compatible with this plugin.
- * 2. Geany sources provide the required API for this plugin. */
-/* TODO: if possible, the API version should be checked at compile time, not runtime. */
-#define VERSION_CHECK(api_required) \
+/** Check the plugin can be loaded by Geany.
+ * This performs runtime checks that try to ensure:
+ * - Geany ABI data types are compatible with this plugin.
+ * - Geany sources provide the required API for this plugin. */
+#define PLUGIN_VERSION_CHECK(api_required) \
 	gint version_check(gint abi_ver) \
 	{ \
 		if (abi_ver != abi_version) \
@@ -373,5 +373,12 @@ typedef struct TagManagerFuncs
 	gboolean		(*workspace_remove_object) (TMWorkObject *w, gboolean do_free, gboolean update);
 }
 TagManagerFuncs;
+
+
+/* Deprecated aliases */
+#ifndef GEANY_DISABLE_DEPRECATED
+#define VERSION_CHECK(api_required) \
+	PLUGIN_VERSION_CHECK(api_required)
+#endif
 
 #endif

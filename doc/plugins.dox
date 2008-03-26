@@ -41,8 +41,8 @@
  *  To get started, see the @link howto Plugin Howto @endlink.
  *
  *  Other pages:
- *  - @link signals Plugin Signals @endlink.
- *  - @link plugin-symbols.c Plugin Symbols @endlink.
+ *  - @link signals Plugin Signals @endlink
+ *  - @link plugin-symbols.c Plugin Symbols @endlink
  *
  *  @note Some of these pages are also listed in Related Pages.
  */
@@ -178,14 +178,14 @@ GeanyCallback geany_callbacks[] =
  *  Every plugin should include "geany.h" and "plugindata.h" which provide necessary
  *  preprocessor macros and other basic information.
  *  There are two important preprocessor macros which need to be used at the beginning:
- *  PLUGIN_INFO() and VERSION_CHECK().
+ *  PLUGIN_INFO() and PLUGIN_VERSION_CHECK().
  *
  *  PLUGIN_INFO() tells Geany about basic plugin information like name, description,
  *  version and author of the plugin.
  *
- *  VERSION_CHECK() checks for compatibility of the API version which the plugin uses with
- *  the used Geany sources. Furthermore, it also checks the binary compatiblity of the plugin
- *  with Geany.
+ *  PLUGIN_VERSION_CHECK() checks for compatibility of the API version which
+ *  the plugin uses with the used Geany sources. Furthermore, it also checks
+ *  the binary compatiblity of the plugin with Geany.
  *
  *  A few functions are necessary to let Geany work with the plugin, at least init() must
  *  exist in the plugin. cleanup() should also be used to free allocated memory or destroy

@@ -49,7 +49,7 @@ GeanyData		*geany_data;
 
 /* Check that Geany supports plugin API version 7 or later, and check
  * for binary compatibility. */
-VERSION_CHECK(7)
+PLUGIN_VERSION_CHECK(7)
 
 /* All plugins must set name, description, version and author. */
 PLUGIN_INFO(_("Demo"), _("Example plugin."), VERSION, _("The Geany developer team"))

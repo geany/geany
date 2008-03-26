@@ -9,6 +9,13 @@
  * plugins/pluginmacros.h:
    Rename p_filetype p_filetypes to keep the symmetry with filetypes_*,
    and define it also when GEANY_DISABLE_DEPRECATED is not set.
+ * HACKING:
+   Add note about not appending to structs like KeyBindingGroup and
+   GeanyCallback.
+ * src/plugindata.h, doc/plugin-symbols.c, doc/plugins.dox, plugins/*.c:
+   Rename VERSION_CHECK PLUGIN_VERSION_CHECK, but keep a deprecated
+   alias so outside plugins still compile.
+   Update our plugins to use this.
 
 
 2008-03-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

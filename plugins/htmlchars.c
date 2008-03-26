@@ -36,7 +36,7 @@ PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 
 
-VERSION_CHECK(48)
+PLUGIN_VERSION_CHECK(48)
 
 PLUGIN_INFO(_("HTML Characters"), _("Inserts HTML character entities like '&amp;'."), VERSION,
 	_("The Geany developer team"))

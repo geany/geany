@@ -41,7 +41,7 @@ PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 
 
-VERSION_CHECK(27)
+PLUGIN_VERSION_CHECK(27)
 
 PLUGIN_INFO(_("VC Diff"), _("Creates a patch of a file against version control."), VERSION,
 	_("The Geany developer team"))
