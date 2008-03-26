@@ -424,7 +424,9 @@ static void FoldCppDoc(unsigned int startPos, int length, int initStyle,
 				levelNext--;
 			}
 		}
-		if (atEOL) {
+		if (!IsASpace(ch))
+			visibleChars++;
+		if (atEOL || (i == endPos-1)) {
 			int levelUse = levelCurrent;
 			if (foldAtElse) {
 				levelUse = levelMinCurrent;
@@ -442,8 +444,6 @@ static void FoldCppDoc(unsigned int startPos, int length, int initStyle,
 			levelMinCurrent = levelCurrent;
 			visibleChars = 0;
 		}
-		if (!IsASpace(ch))
-			visibleChars++;
 	}
 }
 

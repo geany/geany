@@ -225,8 +225,8 @@ void Editor::DropGraphics() {
 
 void Editor::InvalidateStyleData() {
 	stylesValid = false;
-	palette.Release();
 	DropGraphics();
+	palette.Release();
 	llc.Invalidate(LineLayout::llInvalid);
 	posCache.Clear();
 	if (selType == selRectangle) {
@@ -719,19 +719,26 @@ void Editor::SetRectangularRange() {
 	}
 }
 
-void Editor::InvalidateSelection(int currentPos_, int anchor_) {
-	int firstAffected = anchor;
-	if (firstAffected > currentPos)
-		firstAffected = currentPos;
-	if (firstAffected > anchor_)
-		firstAffected = anchor_;
+void Editor::InvalidateSelection(int currentPos_, int anchor_, bool invalidateWholeSelection) {
+	if (anchor != anchor_ || selType == selRectangle) {
+		invalidateWholeSelection = true;
+	}
+	int firstAffected = currentPos;
+	if (invalidateWholeSelection) {
+		if (firstAffected > anchor)
+			firstAffected = anchor;
+		if (firstAffected > anchor_)
+			firstAffected = anchor_;
+	}
 	if (firstAffected > currentPos_)
 		firstAffected = currentPos_;
-	int lastAffected = anchor;
-	if (lastAffected < currentPos)
-		lastAffected = currentPos;
-	if (lastAffected < anchor_)
-		lastAffected = anchor_;
+	int lastAffected = currentPos;
+	if (invalidateWholeSelection) {
+		if (lastAffected < anchor)
+			lastAffected = anchor;
+		if (lastAffected < anchor_)
+			lastAffected = anchor_;
+	}
 	if (lastAffected < (currentPos_ + 1))	// +1 ensures caret repainted
 		lastAffected = (currentPos_ + 1);
 	needUpdateUI = true;
@@ -742,7 +749,7 @@ void Editor::SetSelection(int currentPos_, int anchor_) {
 	currentPos_ = pdoc->ClampPositionIntoDocument(currentPos_);
 	anchor_ = pdoc->ClampPositionIntoDocument(anchor_);
 	if ((currentPos != currentPos_) || (anchor != anchor_)) {
-		InvalidateSelection(currentPos_, anchor_);
+		InvalidateSelection(currentPos_, anchor_, true);
 		currentPos = currentPos_;
 		anchor = anchor_;
 	}
@@ -753,7 +760,7 @@ void Editor::SetSelection(int currentPos_, int anchor_) {
 void Editor::SetSelection(int currentPos_) {
 	currentPos_ = pdoc->ClampPositionIntoDocument(currentPos_);
 	if (currentPos != currentPos_) {
-		InvalidateSelection(currentPos_, currentPos_);
+		InvalidateSelection(currentPos_, anchor, false);
 		currentPos = currentPos_;
 	}
 	SetRectangularRange();
@@ -1400,7 +1407,7 @@ void Editor::LinesJoin() {
 	}
 }
 
-const char *StringFromEOLMode(int eolMode) {
+const char *Editor::StringFromEOLMode(int eolMode) {
 	if (eolMode == SC_EOL_CRLF) {
 		return "\r\n";
 	} else if (eolMode == SC_EOL_CR) {
@@ -2382,8 +2389,10 @@ void Editor::DrawLine(Surface *surface, ViewStyle &vsDraw, int line, int lineVis
 						if (ll->chars[cpos + startseg] == ' ') {
 							if (drawWhitespaceBackground &&
 							        (!inIndentation || vsDraw.viewWhitespace == wsVisibleAlways)) {
-								PRectangle rcSpace(ll->positions[cpos + startseg] + xStart, rcSegment.top,
-								        ll->positions[cpos + startseg + 1] + xStart, rcSegment.bottom);
+								PRectangle rcSpace(ll->positions[cpos + startseg] + xStart - subLineStart,
+									rcSegment.top,
+									ll->positions[cpos + startseg + 1] + xStart - subLineStart,
+									rcSegment.bottom);
 								surface->FillRectangle(rcSpace, vsDraw.whitespaceBackground.allocated);
 							}
 						} else {
@@ -2515,7 +2524,10 @@ void Editor::DrawLine(Surface *surface, ViewStyle &vsDraw, int line, int lineVis
 									if (!twoPhaseDraw && drawWhitespaceBackground &&
 									        (!inIndentation || vsDraw.viewWhitespace == wsVisibleAlways)) {
 										textBack = vsDraw.whitespaceBackground.allocated;
-										PRectangle rcSpace(ll->positions[cpos + startseg] + xStart, rcSegment.top, ll->positions[cpos + startseg + 1] + xStart, rcSegment.bottom);
+										PRectangle rcSpace(ll->positions[cpos + startseg] + xStart - subLineStart,
+											rcSegment.top,
+											ll->positions[cpos + startseg + 1] + xStart - subLineStart,
+											rcSegment.bottom);
 										surface->FillRectangle(rcSpace, textBack);
 									}
 									PRectangle rcDot(xmid + xStart - subLineStart, rcSegment.top + vsDraw.lineHeight / 2, 0, 0);
@@ -2770,6 +2782,7 @@ void Editor::Paint(Surface *surfaceWindow, PRectangle rcArea) {
 	//Platform::DebugPrintf("Paint:%1d (%3d,%3d) ... (%3d,%3d)\n",
 	//	paintingAllText, rcArea.left, rcArea.top, rcArea.right, rcArea.bottom);
 
+	pixmapLine->Release();
 	RefreshStyleData();
 	RefreshPixMaps(surfaceWindow);
 
@@ -2799,10 +2812,17 @@ void Editor::Paint(Surface *surfaceWindow, PRectangle rcArea) {
 	pdoc->EnsureStyledTo(endPosPaint);
 	bool paintAbandonedByStyling = paintState == paintAbandoned;
 	if (needUpdateUI) {
+		// Deselect palette by selecting a temporary palette
+		Palette palTemp;
+		surfaceWindow->SetPalette(&palTemp, true);
+
 		NotifyUpdateUI();
 		needUpdateUI = false;
+
 		RefreshStyleData();
 		RefreshPixMaps(surfaceWindow);
+		surfaceWindow->SetPalette(&palette, true);
+		pixmapLine->SetPalette(&palette, !hasFocus);
 	}
 
 	// Call priority lines wrap on a window of lines which are likely
@@ -3515,6 +3535,12 @@ void Editor::ClearDocumentStyle() {
 	pdoc->ClearLevels();
 }
 
+void Editor::CopyAllowLine() {
+	SelectionText selectedText;
+	CopySelectionRange(&selectedText, true);
+	CopyToClipboard(selectedText);
+}
+
 void Editor::Cut() {
 	pdoc->CheckReadOnly();
 	if (!pdoc->IsReadOnly() && !SelectionContainsProtected()) {
@@ -4118,6 +4144,7 @@ void Editor::NotifyMacroRecord(unsigned int iMessage, uptr_t wParam, sptr_t lPar
 	case SCI_PAGEUPRECTEXTEND:
 	case SCI_PAGEDOWNRECTEXTEND:
 	case SCI_SELECTIONDUPLICATE:
+	case SCI_COPYALLOWLINE:
 		break;
 
 		// Filter out all others like display changes. Also, newlines are redundant
@@ -4984,14 +5011,37 @@ char *Editor::CopyRange(int start, int end) {
 	return text;
 }
 
-void Editor::CopySelectionFromRange(SelectionText *ss, int start, int end) {
-	ss->Set(CopyRange(start, end), end - start + 1,
-	        pdoc->dbcsCodePage, vs.styles[STYLE_DEFAULT].characterSet, false);
+void Editor::CopySelectionFromRange(SelectionText *ss, bool allowLineCopy, int start, int end) {
+	bool isLine = allowLineCopy && (start == end);
+	if (isLine) {
+		int currentLine = pdoc->LineFromPosition(currentPos);
+		start = pdoc->LineStart(currentLine);
+		end = pdoc->LineEnd(currentLine);
+
+		char *text = CopyRange(start, end);
+		int textLen = text ? strlen(text) : 0;
+		// include room for \r\n\0
+		textLen += 3;
+		char *textWithEndl = new char[textLen];
+		textWithEndl[0] = '\0';
+		if (text)
+			strncat(textWithEndl, text, textLen);
+		if (pdoc->eolMode != SC_EOL_LF)
+			strncat(textWithEndl, "\r", textLen);
+		if (pdoc->eolMode != SC_EOL_CR)
+			strncat(textWithEndl, "\n", textLen);
+		ss->Set(textWithEndl, strlen(textWithEndl),
+			pdoc->dbcsCodePage, vs.styles[STYLE_DEFAULT].characterSet, false, true);
+		delete []text;
+	} else {
+		ss->Set(CopyRange(start, end), end - start + 1,
+			pdoc->dbcsCodePage, vs.styles[STYLE_DEFAULT].characterSet, false, false);
+	}
 }
 
-void Editor::CopySelectionRange(SelectionText *ss) {
+void Editor::CopySelectionRange(SelectionText *ss, bool allowLineCopy) {
 	if (selType == selStream) {
-		CopySelectionFromRange(ss, SelectionStart(), SelectionEnd());
+		CopySelectionFromRange(ss, allowLineCopy, SelectionStart(), SelectionEnd());
 	} else {
 		char *text = 0;
 		int size = 0;
@@ -5029,7 +5079,7 @@ void Editor::CopySelectionRange(SelectionText *ss) {
 			}
 		}
 		ss->Set(text, size + 1, pdoc->dbcsCodePage,
-		        vs.styles[STYLE_DEFAULT].characterSet, selType == selRectangle);
+			vs.styles[STYLE_DEFAULT].characterSet, selType == selRectangle, selType == selLines);
 	}
 }
 
@@ -5038,14 +5088,14 @@ void Editor::CopyRangeToClipboard(int start, int end) {
 	end = pdoc->ClampPositionIntoDocument(end);
 	SelectionText selectedText;
 	selectedText.Set(CopyRange(start, end), end - start + 1,
-	        pdoc->dbcsCodePage, vs.styles[STYLE_DEFAULT].characterSet, false);
+		pdoc->dbcsCodePage, vs.styles[STYLE_DEFAULT].characterSet, false, false);
 	CopyToClipboard(selectedText);
 }
 
 void Editor::CopyText(int length, const char *text) {
 	SelectionText selectedText;
 	selectedText.Copy(text, length + 1,
-	        pdoc->dbcsCodePage, vs.styles[STYLE_DEFAULT].characterSet, false);
+		pdoc->dbcsCodePage, vs.styles[STYLE_DEFAULT].characterSet, false, false);
 	CopyToClipboard(selectedText);
 }
 
@@ -5470,11 +5520,11 @@ void Editor::ButtonMove(Point pt) {
 			if (lineMove < 0) {
 				lineMove = cs.DisplayFromDoc(pdoc->LinesTotal() - 1);
 			}
-			ScrollTo(lineMove - LinesOnScreen() + 5);
+			ScrollTo(lineMove - LinesOnScreen() + 1);
 			Redraw();
 		} else if (pt.y < rcClient.top) {
 			int lineMove = cs.DisplayFromDoc(LineFromLocation(pt));
-			ScrollTo(lineMove - 5);
+			ScrollTo(lineMove - 1);
 			Redraw();
 		}
 		EnsureCaretVisible(false, false, true);
@@ -6020,6 +6070,10 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 
 	case SCI_COPY:
 		Copy();
+		break;
+
+	case SCI_COPYALLOWLINE:
+		CopyAllowLine();
 		break;
 
 	case SCI_COPYRANGE:
@@ -7482,7 +7536,7 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 				moveExtendsSelection = !moveExtendsSelection || (selType != selStream);
 				selType = selStream;
 			}
-			InvalidateSelection(currentPos, anchor);
+			InvalidateSelection(currentPos, anchor, true);
 		}
 	case SCI_GETSELECTIONMODE:
 		switch (selType) {

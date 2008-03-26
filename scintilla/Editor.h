@@ -54,16 +54,17 @@ public:
 	char *s;
 	int len;
 	bool rectangular;
+	bool lineCopy;
 	int codePage;
 	int characterSet;
-	SelectionText() : s(0), len(0), rectangular(false), codePage(0), characterSet(0) {}
+	SelectionText() : s(0), len(0), rectangular(false), lineCopy(false), codePage(0), characterSet(0) {}
 	~SelectionText() {
 		Free();
 	}
 	void Free() {
-		Set(0, 0, 0, 0, false);
+		Set(0, 0, 0, 0, false, false);
 	}
-	void Set(char *s_, int len_, int codePage_, int characterSet_, bool rectangular_) {
+	void Set(char *s_, int len_, int codePage_, int characterSet_, bool rectangular_, bool lineCopy_) {
 		delete []s;
 		s = s_;
 		if (s)
@@ -73,8 +74,9 @@ public:
 		codePage = codePage_;
 		characterSet = characterSet_;
 		rectangular = rectangular_;
+		lineCopy = lineCopy_;
 	}
-	void Copy(const char *s_, int len_, int codePage_, int characterSet_, bool rectangular_) {
+	void Copy(const char *s_, int len_, int codePage_, int characterSet_, bool rectangular_, bool lineCopy_) {
 		delete []s;
 		s = new char[len_];
 		if (s) {
@@ -88,9 +90,10 @@ public:
 		codePage = codePage_;
 		characterSet = characterSet_;
 		rectangular = rectangular_;
+		lineCopy = lineCopy_;
 	}
 	void Copy(const SelectionText &other) {
-		Copy(other.s, other.len, other.codePage, other.characterSet, other.rectangular);
+		Copy(other.s, other.len, other.codePage, other.characterSet, other.rectangular, other.lineCopy);
 	}
 };
 
@@ -276,7 +279,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	int SelectionStart();
 	int SelectionEnd();
 	void SetRectangularRange();
-	void InvalidateSelection(int currentPos_, int anchor_);
+	void InvalidateSelection(int currentPos_, int anchor_, bool invalidateWholeSelection);
 	void SetSelection(int currentPos_, int anchor_);
 	void SetSelection(int currentPos_);
 	void SetEmptySelection(int currentPos_);
@@ -342,6 +345,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void Cut();
 	void PasteRectangular(int pos, const char *ptr, int len);
 	virtual void Copy() = 0;
+	virtual void CopyAllowLine();
 	virtual bool CanPaste();
 	virtual void Paste() = 0;
 	void Clear();
@@ -406,8 +410,8 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 
 	virtual void CopyToClipboard(const SelectionText &selectedText) = 0;
 	char *CopyRange(int start, int end);
-	void CopySelectionFromRange(SelectionText *ss, int start, int end);
-	void CopySelectionRange(SelectionText *ss);
+	void CopySelectionFromRange(SelectionText *ss, bool allowLineCopy, int start, int end);
+	void CopySelectionRange(SelectionText *ss, bool allowLineCopy=false);
 	void CopyRangeToClipboard(int start, int end);
 	void CopyText(int length, const char *text);
 	void SetDragPosition(int newPos);
@@ -459,6 +463,8 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	virtual sptr_t DefWndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) = 0;
 	void StyleSetMessage(unsigned int iMessage, uptr_t wParam, sptr_t lParam);
 	sptr_t StyleGetMessage(unsigned int iMessage, uptr_t wParam, sptr_t lParam);
+
+	static const char *StringFromEOLMode(int eolMode);
 
 public:
 	// Public so the COM thunks can access it.

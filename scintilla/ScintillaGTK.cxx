@@ -78,7 +78,7 @@
 #pragma warning(disable: 4505)
 #endif
 
-#if GTK_CHECK_VERSION(2,2,0)
+#if GTK_CHECK_VERSION(2,6,0)
 #define USE_GTK_CLIPBOARD
 #endif
 
@@ -1155,11 +1155,6 @@ void ScintillaGTK::ScrollText(int linesToMove) {
 
 	gdk_gc_unref(gc);
 #else
-    // check if e.g. an existing scroll event has occurred
-    if (rgnUpdate != NULL) {
-        Redraw();
-        return;
-    }
 	gdk_window_scroll(wi->window, 0, -diff);
 	gdk_window_process_updates(wi->window, FALSE);
 #endif
@@ -1417,7 +1412,7 @@ void ScintillaGTK::GetGtkSelectionText(GtkSelectionData *selectionData, Selectio
 	if ((selectionType != GDK_TARGET_STRING) && (selectionType != atomUTF8)) {
 		char *empty = new char[1];
 		empty[0] = '\0';
-		selText.Set(empty, 0, SC_CP_UTF8, 0, false);
+		selText.Set(empty, 0, SC_CP_UTF8, 0, false, false);
 		return;
 	}
 
@@ -1436,16 +1431,16 @@ void ScintillaGTK::GetGtkSelectionText(GtkSelectionData *selectionData, Selectio
 			// Unknown encoding so assume in Latin1
 			char *destPrevious = dest;
 			dest = UTF8FromLatin1(dest, len);
-			selText.Set(dest, len, SC_CP_UTF8, 0, selText.rectangular);
+			selText.Set(dest, len, SC_CP_UTF8, 0, selText.rectangular, false);
 			delete []destPrevious;
 		} else {
 			// Assume buffer is in same encoding as selection
 			selText.Set(dest, len, pdoc->dbcsCodePage,
-				vs.styles[STYLE_DEFAULT].characterSet, isRectangular);
+				vs.styles[STYLE_DEFAULT].characterSet, isRectangular, false);
 		}
 	} else {	// UTF-8
 		dest = Document::TransformLineEnds(&len, data, len, pdoc->eolMode);
-		selText.Set(dest, len, SC_CP_UTF8, 0, isRectangular);
+		selText.Set(dest, len, SC_CP_UTF8, 0, isRectangular, false);
 #ifdef USE_CONVERTER
 		const char *charSetBuffer = CharacterSetID();
 		if (!IsUnicodeMode() && *charSetBuffer) {
@@ -1453,7 +1448,7 @@ void ScintillaGTK::GetGtkSelectionText(GtkSelectionData *selectionData, Selectio
 				// Convert to locale
 				dest = ConvertText(&len, selText.s, selText.len, charSetBuffer, "UTF-8", true);
 				selText.Set(dest, len, pdoc->dbcsCodePage,
-					vs.styles[STYLE_DEFAULT].characterSet, selText.rectangular);
+					vs.styles[STYLE_DEFAULT].characterSet, selText.rectangular, false);
 		}
 #endif
 	}
@@ -1516,15 +1511,15 @@ void ScintillaGTK::ReceivedDrop(GtkSelectionData *selection_data) {
 
 void ScintillaGTK::GetSelection(GtkSelectionData *selection_data, guint info, SelectionText *text) {
 #if PLAT_GTK_WIN32
-	// Many native win32 programs require \n line endings, so make a copy of
-	// the clip text now with newlines converted.  Use { } to hide symbols
+	// GDK on Win32 expands any \n into \r\n, so make a copy of
+	// the clip text now with newlines converted to \n.  Use { } to hide symbols
 	// from code below
 	SelectionText *newline_normalized = NULL;
 	{
 		int tmpstr_len;
 		char *tmpstr = Document::TransformLineEnds(&tmpstr_len, text->s, text->len, SC_EOL_LF);
 		newline_normalized = new SelectionText();
-		newline_normalized->Set(tmpstr, tmpstr_len, SC_CP_UTF8, 0, text->rectangular);
+		newline_normalized->Set(tmpstr, tmpstr_len, SC_CP_UTF8, 0, text->rectangular, false);
 		text = newline_normalized;
 	}
 #endif
@@ -1538,7 +1533,7 @@ void ScintillaGTK::GetSelection(GtkSelectionData *selection_data, guint info, Se
 			int new_len;
 			char* tmputf = ConvertText(&new_len, text->s, text->len, "UTF-8", charSet, false);
 			converted = new SelectionText();
-			converted->Set(tmputf, new_len, SC_CP_UTF8, 0, text->rectangular);
+			converted->Set(tmputf, new_len, SC_CP_UTF8, 0, text->rectangular, false);
 			text = converted;
 		}
 	}

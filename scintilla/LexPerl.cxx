@@ -2,7 +2,7 @@
 /** @file LexPerl.cxx
  ** Lexer for subset of Perl.
  **/
-// Copyright 1998-2007 by Neil Hodgson <neilh@scintilla.org>
+// Copyright 1998-2008 by Neil Hodgson <neilh@scintilla.org>
 // Lexical analysis fixes by Kein-Hong Man <mkh@pl.jaring.my>
 // The License.txt file describes the conditions under which this software may be distributed.
 
@@ -666,8 +666,9 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
 								}
 							} else {
                                 // bare identifier, if '/', /PATTERN/ unless digit/space immediately after '/'
+                                // if '//', always expect defined-or operator to follow identifier
 								if (!isHereDoc &&
-                                    (isspacechar(chNext) || isdigit(chNext)))
+                                    (isspacechar(chNext) || isdigit(chNext) || chNext == '/'))
                                     preferRE = false;
 								// HERE docs cannot have a space after the >>
                                 if (isspacechar(chNext))
@@ -688,13 +689,14 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
                         // adopt heuristics similar to vim-style rules:
                         // keywords always forced as /PATTERN/: split, if, elsif, while
                         // everything else /PATTERN/ unless digit/space immediately after '/'
+                        // for '//', defined-or favoured unless special keywords
                         bkend = bk + 1;
 						while (bk > 0 && styler.StyleAt(bk-1) == SCE_PL_WORD) {
 							bk--;
 						}
                         if (isPerlKeyword(bk, bkend, reWords, styler))
                             break;
-                        if (isspacechar(chNext) || isdigit(chNext))
+                        if (isspacechar(chNext) || isdigit(chNext) || chNext == '/')
                             preferRE = false;
                         break;
 					// other styles uses the default, preferRE=false
@@ -724,7 +726,12 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
                         state = SCE_PL_REGEX;
                         Quote.New(1);
                         Quote.Open(ch);
-                    } else {        // / operator
+                    } else {        // / and // operators
+                        if (chNext == '/') {
+                            i++;
+                            ch = chNext;
+                            chNext = chNext2;
+                        }
                         goto handleOperator;
                     }
                 }
