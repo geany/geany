@@ -5,6 +5,7 @@ noinst_HEADERS = \
 	KeyWords.h \
 	Platform.h \
 	PropSet.h \
+	Scintilla.iface \
 	WindowAccessor.h \
 	SString.h
 
