@@ -19,8 +19,6 @@ You can generate documentation for the plugin API using the doxygen
 tool. Run 'make api-doc' in the doc subdirectory. The documentation will
 be output to doc/reference/index.html.
 
-See the Related Pages section for a link to the plugin howto.
-
 Patches
 -------
 We are happy to receive patches, but it's best to check with us by email
@@ -49,8 +47,13 @@ Keeping the plugin ABI stable
 -----------------------------
 Please be aware that anything with a doc-comment (a comment with an
 extra asterix: '/**') is something in the plugin API. Things like enums
-and structs can still be appended to, ensuring that all the existing
-elements stay in place - this will keep the ABI stable.
+and structs can usually still be appended to, ensuring that all the
+existing elements stay in place - this will keep the ABI stable.
+
+Note: Some structs like KeyBindingGroup and GeanyCallback cannot be
+appended to without breaking the ABI because they are used to declare
+structs by plugins, not just for accessing struct members through
+a pointer.
 
 Before the 1.0 release series, the ABI can change when necessary, and
 even the API can change. An ABI change just means that all plugins will
