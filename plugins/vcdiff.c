@@ -357,10 +357,10 @@ static gchar *make_diff(const gchar *filename, gint cmd)
 		{
 			p_ui->set_statusbar(FALSE, _("No changes were made."));
 		}
-
-		if (NZV(std_error))
+		/* win32_spawn() returns sometimes TRUE but error is set anyway, has to be fixed */
+		if (error != NULL)
 		{
-			p_dialogs->show_msgbox(1, _("VCdiff command sent errors:\n%s\n."), std_error);
+			g_error_free(error);
 		}
 	}
 	else
@@ -378,6 +378,7 @@ static gchar *make_diff(const gchar *filename, gint cmd)
 				argv[0]);
 		}
 		p_ui->set_statusbar(FALSE, _("An error occurred (%s)."), msg);
+		g_free(msg);
 	}
 
 	g_free(dir);
