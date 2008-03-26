@@ -5,7 +5,6 @@ noinst_HEADERS = \
 	KeyWords.h \
 	Platform.h \
 	PropSet.h \
-	Scintilla.iface \
 	WindowAccessor.h \
 	SString.h
 
@@ -13,4 +12,5 @@ scintilla_includedir = $(includedir)/geany/scintilla/
 scintilla_include_HEADERS = \
 	SciLexer.h \
 	Scintilla.h \
+	Scintilla.iface \
 	ScintillaWidget.h
