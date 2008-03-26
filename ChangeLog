@@ -1,3 +1,10 @@
+2008-03-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * plugins/pluginmacros.h:
+   Rename p_filetype p_filetypes to keep the symmetry with filetypes_*,
+   and define it also when GEANY_DISABLE_DEPRECATED is not set.
+
+
 2008-03-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/plugins.c, src/plugindata.h:
@@ -20,6 +27,7 @@
  * src/symbols.c:
    Make Go to Tag commands look for the tag in the current document
    before searching the workspace.
+   Fix memory leaks when using tm_tags_extract().
 
 
 2008-03-23  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
