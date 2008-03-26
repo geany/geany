@@ -32,15 +32,17 @@
 #define prefs			geany_data->prefs
 #define project			app->project
 
-#ifdef GEANY_DISABLE_DEPRECATED
 
 /* These macros are named the same as the first word in the core function name,
  * but with a 'p_' prefix to prevent conflicts with other tag names.
  * Example: document_open_file() -> p_document->open_file() */
+#define p_filetypes		geany_data->filetype
+
+#ifdef GEANY_DISABLE_DEPRECATED
+
 #define p_dialogs		geany_data->dialogs
 #define p_document		geany_data->documents
 #define p_encoding		geany_data->encoding
-#define p_filetype		geany_data->filetype
 #define p_highlighting	geany_data->highlighting
 #define p_keybindings	geany_data->keybindings
 #define p_msgwindow		geany_data->msgwindow
@@ -67,6 +69,7 @@
 #define p_tm			tagmanager
 #define p_ui			ui
 #define p_utils			utils
+
 
 /* Temporary source compatibility macros - do not use these in new code. */
 #define dialogs			geany_data->dialogs
