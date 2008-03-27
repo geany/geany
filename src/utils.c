@@ -378,8 +378,8 @@ gboolean utils_check_disk_status(gint idx, gboolean force)
 	{
 		if (check_reload(idx))
 		{
-			/* Disable checking until after reload */
-			doc_list[idx].last_check = time(NULL) + delay_time;
+			/* Disable checking until after reload, so ignore this change for now */
+			doc_list[idx].mtime = st.st_mtime;
 		}
 		else
 			doc_list[idx].mtime = st.st_mtime;	/* Ignore this change on disk completely */

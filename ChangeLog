@@ -5,6 +5,9 @@
  * src/plugindata.h:
    Document most of GeanyData, add links to files.
    Make PluginData alias deprecated.
+ * src/utils.c:
+   Fix getting asked whether to reload a file twice, when a disk check
+   is forced immediately after a disk check has been done.
 
 
 2008-03-26  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
