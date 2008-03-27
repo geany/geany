@@ -282,6 +282,7 @@ GString *symbols_get_macro_list(void)
 }
 
 
+/* Note: if tags is sorted, we can use bsearch or tm_tags_find() to speed this up. */
 static TMTag *
 symbols_find_tm_tag(const GPtrArray *tags, const gchar *tag_name)
 {
