@@ -109,7 +109,7 @@ void configuration_save_session_files(GKeyFile *config)
 	for (i = 0; i < max; i++)
 	{
 		idx = document_get_n_idx(i);
-		if (idx >= 0 && doc_list[idx].file_name)
+		if (idx >= 0 && g_path_is_absolute(DOC_FILENAME(idx)))
 		{
 			gchar *fname;
 			filetype *ft = doc_list[idx].file_type;
