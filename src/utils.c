@@ -357,7 +357,6 @@ gboolean utils_check_disk_status(gint idx, gboolean force)
 	time_t t;
 	gchar *locale_filename;
 	gboolean ret = FALSE;
-	const time_t delay_time = 10;	/* seconds to delay disk checks for */
 
 	if (idx == -1 || doc_list[idx].file_name == NULL) return FALSE;
 
@@ -370,7 +369,7 @@ gboolean utils_check_disk_status(gint idx, gboolean force)
 	{
 		/* TODO: warn user file on disk is missing */
 	}
-	else if (doc_list[idx].mtime - delay_time > t || st.st_mtime > t)
+	else if (doc_list[idx].mtime > t || st.st_mtime > t)
 	{
 		geany_debug("Strange: Something is wrong with the time stamps.");
 	}
