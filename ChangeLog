@@ -16,6 +16,9 @@
    Check file on disk for changes (with timeout) when pressing a key.
  * src/keyfile.c:
    Ignore documents with no absolute path when saving session files.
+ * src/build.c:
+   Fix segfault with Run command when a project is open and the current
+   file's filetype has no run command.
 
 
 2008-03-26  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

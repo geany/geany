@@ -1991,6 +1991,7 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 
 		/* save the file only if the run command uses it */
 		if (doc_list[idx].changed &&
+			NZV(ft->programs->run_cmd) &&	/* can happen when project is open */
 			strstr(ft->programs->run_cmd, "%f") != NULL)
 				document_save_file(idx, FALSE);
 
