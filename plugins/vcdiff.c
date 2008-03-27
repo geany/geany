@@ -21,7 +21,7 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-/* VCdiff plugin */
+/* Version Diff plugin */
 /* This small plugin uses svn/git/etc. to generate a diff against the current
  * version inside version control.
  * Which VC program to use is detected by looking for a version control subdirectory,
@@ -43,7 +43,7 @@ GeanyData		*geany_data;
 
 PLUGIN_VERSION_CHECK(27)
 
-PLUGIN_INFO(_("VC Diff"), _("Creates a patch of a file against version control."), VERSION,
+PLUGIN_INFO(_("Version Diff"), _("Creates a patch of a file against version control."), VERSION,
 	_("The Geany developer team"))
 
 
@@ -506,7 +506,7 @@ void init(GeanyData *data)
 
 	tooltips = gtk_tooltips_new();
 
-	menu_vcdiff = gtk_image_menu_item_new_with_mnemonic(_("_VCdiff"));
+	menu_vcdiff = gtk_image_menu_item_new_with_mnemonic(_("_Version Diff"));
 	gtk_container_add(GTK_CONTAINER(data->tools_menu), menu_vcdiff);
 
 	g_signal_connect((gpointer) menu_vcdiff, "activate",
