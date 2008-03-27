@@ -8,6 +8,10 @@
  * src/utils.c:
    Fix getting asked whether to reload a file twice, when a disk check
    is forced immediately after a disk check has been done.
+ * src/document.c:
+   Split document_create_new_sci() into document_create() and
+   create_new_sci().
+   Rename filename parameter utf8_filename.
 
 
 2008-03-26  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

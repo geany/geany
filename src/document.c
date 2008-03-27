@@ -331,7 +331,7 @@ void document_apply_update_prefs(gint idx)
 
 
 /* Sets is_valid to FALSE and initializes some members to NULL, to mark it uninitialized.
- * The flag is_valid is set to TRUE in document_create_new_sci(). */
+ * The flag is_valid is set to TRUE in document_create(). */
 static void init_doc_struct(document *new_doc)
 {
 	new_doc->is_valid = FALSE;
@@ -400,11 +400,51 @@ static void setup_sci_keys(ScintillaObject *sci)
 }
 
 
-/* creates a new tab in the notebook and does all related stuff
- * finally it returns the index of the created document */
-static gint document_create_new_sci(const gchar *filename)
+/* Create new editor (the scintilla widget) */
+static ScintillaObject *create_new_sci(gint new_idx)
 {
 	ScintillaObject	*sci;
+
+	sci = SCINTILLA(scintilla_new());
+	scintilla_set_id(sci, new_idx);
+
+	gtk_widget_show(GTK_WIDGET(sci));
+
+	sci_set_codepage(sci, SC_CP_UTF8);
+	/*SSM(sci, SCI_SETWRAPSTARTINDENT, 4, 0);*/
+	/* disable scintilla provided popup menu */
+	sci_use_popup(sci, FALSE);
+
+	setup_sci_keys(sci);
+
+	sci_set_tab_indents(sci, editor_prefs.use_tab_to_indent);
+	sci_set_symbol_margin(sci, editor_prefs.show_markers_margin);
+	sci_set_line_numbers(sci, editor_prefs.show_linenumber_margin, 0);
+	sci_set_lines_wrapped(sci, editor_prefs.line_wrapping);
+	sci_set_scrollbar_mode(sci, editor_prefs.show_scrollbars);
+	sci_set_caret_policy_x(sci, CARET_JUMPS | CARET_EVEN, 0);
+	/*sci_set_caret_policy_y(sci, CARET_JUMPS | CARET_EVEN, 0);*/
+	SSM(sci, SCI_AUTOCSETSEPARATOR, '\n', 0);
+	/* (dis)allow scrolling past end of document */
+	SSM(sci, SCI_SETENDATLASTLINE, editor_prefs.scroll_stop_at_last_line, 0);
+	SSM(sci, SCI_SETSCROLLWIDTHTRACKING, 1, 0);
+
+	/* signal for insert-key(works without too, but to update the right status bar) */
+	/*g_signal_connect((GtkWidget*) sci, "key-press-event",
+					 G_CALLBACK(keybindings_got_event), GINT_TO_POINTER(new_idx));*/
+	/* signal for the popup menu */
+	g_signal_connect(G_OBJECT(sci), "button-press-event",
+					G_CALLBACK(on_editor_button_press_event), GINT_TO_POINTER(new_idx));
+	g_signal_connect(G_OBJECT(sci), "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
+
+	return sci;
+}
+
+
+/* Creates a new document and editor, adding a tab in the notebook.
+ * @return The index of the created document */
+static gint document_create(const gchar *utf8_filename)
+{
 	PangoFontDescription *pfd;
 	gchar *fname;
 	gint new_idx;
@@ -429,41 +469,9 @@ static gint document_create_new_sci(const gchar *filename)
 	}
 	this = &doc_list[new_idx];
 
-	/* SCI - Code */
-	sci = SCINTILLA(scintilla_new());
-	scintilla_set_id(sci, new_idx);
-	this->sci = sci;
-
-	gtk_widget_show(GTK_WIDGET(sci));
-
-	sci_set_codepage(sci, SC_CP_UTF8);
-	/*SSM(sci, SCI_SETWRAPSTARTINDENT, 4, 0);*/
-	/* disable scintilla provided popup menu */
-	sci_use_popup(sci, FALSE);
-
-	setup_sci_keys(sci);
+	this->sci = create_new_sci(new_idx);
 
 	document_apply_update_prefs(new_idx);
-
-	sci_set_tab_indents(sci, editor_prefs.use_tab_to_indent);
-	sci_set_symbol_margin(sci, editor_prefs.show_markers_margin);
-	sci_set_line_numbers(sci, editor_prefs.show_linenumber_margin, 0);
-	sci_set_lines_wrapped(sci, editor_prefs.line_wrapping);
-	sci_set_scrollbar_mode(sci, editor_prefs.show_scrollbars);
-	sci_set_caret_policy_x(sci, CARET_JUMPS | CARET_EVEN, 0);
-	/*sci_set_caret_policy_y(sci, CARET_JUMPS | CARET_EVEN, 0);*/
-	SSM(sci, SCI_AUTOCSETSEPARATOR, '\n', 0);
-	/* (dis)allow scrolling past end of document */
-	SSM(sci, SCI_SETENDATLASTLINE, editor_prefs.scroll_stop_at_last_line, 0);
-	SSM(sci, SCI_SETSCROLLWIDTHTRACKING, 1, 0);
-
-	/* signal for insert-key(works without too, but to update the right status bar) */
-	/*g_signal_connect((GtkWidget*) sci, "key-press-event",
-					 G_CALLBACK(keybindings_got_event), GINT_TO_POINTER(new_idx));*/
-	/* signal for the popup menu */
-	g_signal_connect(G_OBJECT(sci), "button-press-event",
-					G_CALLBACK(on_editor_button_press_event), GINT_TO_POINTER(new_idx));
-	g_signal_connect(G_OBJECT(sci), "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
 
 	pfd = pango_font_description_from_string(prefs.editor_font);
 	fname = g_strdup_printf("!%s", pango_font_description_get_family(pfd));
@@ -475,7 +483,7 @@ static gint document_create_new_sci(const gchar *filename)
 	this->tag_tree = NULL;
 
 	/* store important pointers in the tab list */
-	this->file_name = (filename) ? g_strdup(filename) : NULL;
+	this->file_name = (utf8_filename) ? g_strdup(utf8_filename) : NULL;
 	this->encoding = NULL;
 	this->saved_encoding.encoding = NULL;
 	this->saved_encoding.has_bom = FALSE;
@@ -505,7 +513,6 @@ static gint document_create_new_sci(const gchar *filename)
 	ui_document_buttons_update();
 
 	this->is_valid = TRUE;	/* do this last to prevent UI updating with NULL items. */
-	g_assert(doc_list[new_idx].sci == sci);
 	return new_idx;
 }
 
@@ -586,7 +593,7 @@ static void store_saved_encoding(gint idx)
  **/
 gint document_new_file(const gchar *filename, filetype *ft, const gchar *text)
 {
-	gint idx = document_create_new_sci(filename);
+	gint idx = document_create(filename);
 
 	g_assert(idx != -1);
 
@@ -999,7 +1006,7 @@ gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean
 
 #ifdef G_OS_WIN32
 		/* if filename is a shortcut, try to resolve it */
-		locale_filename = win32_get_shortcut_target(filename); 
+		locale_filename = win32_get_shortcut_target(filename);
 #else
 		locale_filename = g_strdup(filename);
 #endif
@@ -1033,7 +1040,7 @@ gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean
 		return -1;
 	}
 
-	if (! reload) idx = document_create_new_sci(utf8_filename);
+	if (! reload) idx = document_create(utf8_filename);
 	g_return_val_if_fail(idx != -1, -1);	/* really should not happen */
 
 	sci_set_undo_collection(doc_list[idx].sci, FALSE); /* avoid creation of an undo action */
