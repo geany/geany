@@ -149,43 +149,41 @@ typedef struct PluginFields
 PluginFields;
 
 
-/** These are fields and functions owned by Geany.
- *  Fields and functions will be appended when needed by plugin authors. */
-/* Note: Remember to increment api_version (and abi_version if necessary) when making changes. */
+/** This contains pointers to global variables and functions owned by Geany for plugins to use.
+ *  Variables and functions will be appended when needed by plugin authors. */
 typedef struct GeanyData
 {
-	GeanyApp	*app;	/* Geany application data fields */
-	GtkWidget	*tools_menu;	/* Almost all plugins should add menu items to the Tools menu only */
-	GArray		*doc_array;	/* array of document pointers */
+	GeanyApp	*app;					/**< Geany application data fields */
+	GtkWidget	*tools_menu;			/**< Most plugins should add menu items to the Tools menu only */
+	GArray		*doc_array;				/**< Dynamic array of document pointers */
 	struct filetype		**filetypes;
 	struct GeanyPrefs	*prefs;
-	struct EditorPrefs	*editor_prefs;
-	struct BuildInfo	*build_info;
+	struct EditorPrefs	*editor_prefs;	/**< Editor settings */
+	struct BuildInfo	*build_info;	/**< Current build information */
 
-	struct DocumentFuncs		*documents;
-	struct ScintillaFuncs		*sci;
-	struct TemplateFuncs		*templates;
-	struct UtilsFuncs			*utils;
-	struct UIUtilsFuncs			*ui;
-	struct SupportFuncs			*support;
-	struct DialogFuncs			*dialogs;
-	struct MsgWinFuncs			*msgwindow;
-	struct EncodingFuncs		*encoding;
-	struct KeybindingFuncs		*keybindings;
-	struct TagManagerFuncs		*tm;
-	struct SearchFuncs			*search;
-	struct HighlightingFuncs	*highlighting;
-	struct FiletypeFuncs		*filetype;
+	struct DocumentFuncs		*documents;		/**< See document.h */
+	struct ScintillaFuncs		*sci;			/**< See sciwrappers.h */
+	struct TemplateFuncs		*templates;		/**< See templates.h */
+	struct UtilsFuncs			*utils;			/**< See utils.h */
+	struct UIUtilsFuncs			*ui;			/**< See ui_utils.h */
+	struct SupportFuncs			*support;		/**< See support.h */
+	struct DialogFuncs			*dialogs;		/**< See dialogs.h */
+	struct MsgWinFuncs			*msgwindow;		/**< See msgwindow.h */
+	struct EncodingFuncs		*encoding;		/**< See encodings.h */
+	struct KeybindingFuncs		*keybindings;	/**< See keybindings.h */
+	struct TagManagerFuncs		*tm;			/**< See tagmanager/include */
+	struct SearchFuncs			*search;		/**< See search.h */
+	struct HighlightingFuncs	*highlighting;	/**< See highlighting.h */
+	struct FiletypeFuncs		*filetype;		/**< See filetypes.h */
 }
 GeanyData;
 
-typedef GeanyData PluginData;	/* for compatibility with API < 7 */
-
 
 /* For more info about these functions, see the main source code.
- * E.g. for GeanyData::document->new_file(), see document_new_file() in document.[hc]. */
+ * E.g. for GeanyData::documents->new_file(), see document_new_file() in document.c. */
 
 
+/* See document.h */
 typedef struct DocumentFuncs
 {
 	gint	(*new_file) (const gchar *filename, struct filetype *ft, const gchar *text);
@@ -206,8 +204,10 @@ typedef struct DocumentFuncs
 }
 DocumentFuncs;
 
+
 struct _ScintillaObject;
 
+/* See sciwrappers.h */
 typedef struct ScintillaFuncs
 {
 	long int (*send_message) (struct _ScintillaObject* sci, unsigned int iMessage,
@@ -248,12 +248,16 @@ typedef struct ScintillaFuncs
 }
 ScintillaFuncs;
 
+
+/* See templates.h */
 typedef struct TemplateFuncs
 {
 	gchar*		(*get_template_fileheader) (gint filetype_idx, const gchar *fname);
 }
 TemplateFuncs;
 
+
+/* See utils.h */
 typedef struct UtilsFuncs
 {
 	gboolean	(*str_equal) (const gchar *a, const gchar *b);
@@ -280,6 +284,8 @@ typedef struct UtilsFuncs
 }
 UtilsFuncs;
 
+
+/* See ui_utils.h */
 typedef struct UIUtilsFuncs
 {
 	GtkWidget*	(*dialog_vbox_new) (GtkDialog *dialog);
@@ -294,6 +300,8 @@ typedef struct UIUtilsFuncs
 }
 UIUtilsFuncs;
 
+
+/* See dialogs.h */
 typedef struct DialogFuncs
 {
 	gboolean	(*show_question) (const gchar *text, ...);
@@ -302,6 +310,8 @@ typedef struct DialogFuncs
 }
 DialogFuncs;
 
+
+/* See support.h */
 typedef struct SupportFuncs
 {
 	GtkWidget*	(*lookup_widget) (GtkWidget *widget, const gchar *widget_name);
@@ -309,6 +319,7 @@ typedef struct SupportFuncs
 SupportFuncs;
 
 
+/* See msgwindow.h */
 typedef struct MsgWinFuncs
 {
 	/* status_add() does not set the status bar - use ui->set_statusbar() instead. */
@@ -318,6 +329,7 @@ typedef struct MsgWinFuncs
 MsgWinFuncs;
 
 
+/* See encodings.h */
 typedef struct EncodingFuncs
 {
 	gchar*			(*convert_to_utf8) (const gchar *buffer, gsize size, gchar **used_encoding);
@@ -331,6 +343,7 @@ EncodingFuncs;
 struct KeyBindingGroup;
 typedef void (*_KeyCallback) (guint key_id);
 
+/* See keybindings.h */
 typedef struct KeybindingFuncs
 {
 	void		(*send_command) (guint group_id, guint key_id);
@@ -341,6 +354,7 @@ typedef struct KeybindingFuncs
 KeybindingFuncs;
 
 
+/* See highlighting.h */
 typedef struct HighlightingFuncs
 {
 	const struct HighlightingStyle* (*get_style) (gint ft_id, gint style_id);
@@ -348,6 +362,7 @@ typedef struct HighlightingFuncs
 HighlightingFuncs;
 
 
+/* See filetypes.h */
 typedef struct FiletypeFuncs
 {
 	filetype*	(*detect_from_filename) (const gchar *utf8_filename);
@@ -356,12 +371,15 @@ typedef struct FiletypeFuncs
 FiletypeFuncs;
 
 
+/* See search.h */
 typedef struct SearchFuncs
 {
 	void		(*show_find_in_files_dialog) (const gchar *dir);
 }
 SearchFuncs;
 
+
+/* See tagmanager/include */
 typedef struct TagManagerFuncs
 {
 	gchar*			(*get_real_path) (const gchar *file_name);
@@ -377,8 +395,12 @@ TagManagerFuncs;
 
 /* Deprecated aliases */
 #ifndef GEANY_DISABLE_DEPRECATED
+
+typedef GeanyData PluginData;	/* for compatibility with API < 7 */
+
 #define VERSION_CHECK(api_required) \
 	PLUGIN_VERSION_CHECK(api_required)
+
 #endif
 
 #endif

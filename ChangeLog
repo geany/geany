@@ -2,6 +2,9 @@
 
  * plugins/vcdiff.c:
    Rename VCDiff plugin Version Diff.
+ * src/plugindata.h:
+   Document most of GeanyData, add links to files.
+   Make PluginData alias deprecated.
 
 
 2008-03-26  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
