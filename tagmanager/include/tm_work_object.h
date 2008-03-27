@@ -102,7 +102,7 @@ gboolean tm_work_object_init(TMWorkObject *work_object, guint type, const char *
 	  , gboolean create);
 
 /*!
- Initializes a new TMWorkObject structure and returns a pointer to it. You souldn't
+ Initializes a new TMWorkObject structure and returns a pointer to it. You shouldn't
  have to call this function.
  \return NULL on failure
  \sa tm_source_file_new() , tm_project_new()

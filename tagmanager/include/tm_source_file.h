@@ -75,7 +75,7 @@ void tm_source_file_destroy(TMSourceFile *source_file);
 /*! Frees a TMSourceFile structure, including all contents */
 void tm_source_file_free(gpointer source_file);
 
-/*! Updates the source file by reparsing is the modification time is greater
+/*! Updates the source file by reparsing if the modification time is greater
  than the timestamp in the structure, or if force is TRUE. The tags array and
  the tags themselves are destroyed and re-created, hence any other tag arrays
  pointing to these tags should be rebuilt as well. All sorting information is
