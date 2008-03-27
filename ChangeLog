@@ -12,6 +12,8 @@
    Split document_create_new_sci() into document_create() and
    create_new_sci().
    Rename filename parameter utf8_filename.
+ * src/keybindings.c:
+   Check file on disk for changes (with timeout) when pressing a key.
 
 
 2008-03-26  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

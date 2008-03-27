@@ -842,6 +842,17 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 #endif
 
 
+static void check_disk_status(void)
+{
+	gint idx = document_get_cur_idx();
+
+	if (DOC_IDX_VALID(idx))
+	{
+		utils_check_disk_status(idx, FALSE);
+	}
+}
+
+
 /* central keypress event handler, almost all keypress events go to this function */
 gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *ev, gpointer user_data)
 {
@@ -850,6 +861,8 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *ev, gpointer user
 
 	if (ev->keyval == 0)
 		return FALSE;
+
+	check_disk_status();
 
 	keyval = ev->keyval;
     state = ev->state & GEANY_KEYS_MODIFIER_MASK;
