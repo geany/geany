@@ -2,6 +2,7 @@
 
  * src/editor.c: Unfold hidden code when the fold point modified
                  (e.g. commented out, fixes #1923350).
+ * geany.pc.in: Add datadir and localedir to Geany's pkgconfig file.
 
 
 2008-03-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
