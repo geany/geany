@@ -899,8 +899,8 @@ toolbar_popup_menu                     (GtkWidget *widget,
 		switch (prefs.toolbar_icon_size)
 		{
 			case GTK_ICON_SIZE_LARGE_TOOLBAR:
-					widget = lookup_widget(ui_widgets.toolbar_menu, "large_icons1"); break;
-			default: widget = lookup_widget(ui_widgets.toolbar_menu, "small_icons1"); break;
+					w = lookup_widget(ui_widgets.toolbar_menu, "large_icons1"); break;
+			default: w = lookup_widget(ui_widgets.toolbar_menu, "small_icons1"); break;
 		}
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(w), TRUE);
 
