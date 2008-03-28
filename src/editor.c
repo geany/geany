@@ -267,6 +267,99 @@ static void on_char_added(gint idx, SCNotification *nt)
 }
 
 
+/* expand() and fold_changed() are copied from SciTE (thanks) to fix #1923350. */
+static void expand(ScintillaObject *sci, gint *line, gboolean doExpand,
+		gboolean force, gint visLevels, gint level)
+{
+	gint lineMaxSubord = SSM(sci, SCI_GETLASTCHILD, *line, level & SC_FOLDLEVELNUMBERMASK);
+	gint levelLine = level;
+	(*line)++;
+	while (*line <= lineMaxSubord)
+	{
+		if (force)
+		{
+			if (visLevels > 0)
+				SSM(sci, SCI_SHOWLINES, *line, *line);
+			else
+				SSM(sci, SCI_HIDELINES, *line, *line);
+		}
+		else
+		{
+			if (doExpand)
+				SSM(sci, SCI_SHOWLINES, *line, *line);
+		}
+		if (levelLine == -1)
+			levelLine = SSM(sci, SCI_GETFOLDLEVEL, *line, 0);
+		if (levelLine & SC_FOLDLEVELHEADERFLAG)
+		{
+			if (force)
+			{
+				if (visLevels > 1)
+					SSM(sci, SCI_SETFOLDEXPANDED, *line, 1);
+				else
+					SSM(sci, SCI_SETFOLDEXPANDED, *line, 0);
+				expand(sci, line, doExpand, force, visLevels - 1, -1);
+			}
+			else
+			{
+				if (doExpand)
+				{
+					if (!SSM(sci, SCI_GETFOLDEXPANDED, *line, 0))
+						SSM(sci, SCI_SETFOLDEXPANDED, *line, 1);
+					expand(sci, line, TRUE, force, visLevels - 1, -1);
+				}
+				else
+				{
+					expand(sci, line, FALSE, force, visLevels - 1, -1);
+				}
+			}
+		}
+		else
+		{
+			(*line)++;
+		}
+	}
+}
+
+
+static void fold_changed(ScintillaObject *sci, gint line, gint levelNow, gint levelPrev)
+{
+	if (levelNow & SC_FOLDLEVELHEADERFLAG)
+	{
+		if (! (levelPrev & SC_FOLDLEVELHEADERFLAG))
+		{
+			/* Adding a fold point */
+			SSM(sci, SCI_SETFOLDEXPANDED, line, 1);
+			expand(sci, &line, TRUE, FALSE, 0, levelPrev);
+		}
+	}
+	else if (levelPrev & SC_FOLDLEVELHEADERFLAG)
+	{
+		if (! SSM(sci, SCI_GETFOLDEXPANDED, line, 0))
+		{	/* Removing the fold from one that has been contracted so should expand
+			 * otherwise lines are left invisible with no way to make them visible */
+			SSM(sci, SCI_SETFOLDEXPANDED, line, 1);
+			expand(sci, &line, TRUE, FALSE, 0, levelPrev);
+		}
+	}
+	else if (! (levelNow & SC_FOLDLEVELWHITEFLAG) &&
+			((levelPrev & SC_FOLDLEVELNUMBERMASK) > (levelNow & SC_FOLDLEVELNUMBERMASK)))
+	{
+		/* See if should still be hidden */
+		gint parentLine = SSM(sci, SCI_GETFOLDPARENT, line, 0);
+		if (parentLine < 0)
+		{
+			SSM(sci, SCI_SHOWLINES, line, line);
+		}
+		else if (SSM(sci, SCI_GETFOLDEXPANDED, parentLine, 0) &&
+				SSM(sci, SCI_GETLINEVISIBLE, parentLine, 0))
+		{
+			SSM(sci, SCI_SHOWLINES, line, line);
+		}
+	}
+}
+
+
 static void ensure_range_visible(ScintillaObject *sci, gint posStart, gint posEnd,
 		gboolean enforcePolicy)
 {
@@ -325,6 +418,11 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 			{
 				/* get notified about undo changes */
 				document_undo_add(idx, UNDO_SCINTILLA, NULL);
+			}
+			if (editor_prefs.folding && (nt->modificationType & SC_MOD_CHANGEFOLD) != 0)
+			{
+				/* handle special fold cases, e.g. #1923350 */
+				fold_changed(sci, nt->line, nt->foldLevelNow, nt->foldLevelPrev);
 			}
 			break;
 		}
