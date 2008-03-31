@@ -480,12 +480,12 @@ static GtkWidget *vte_create_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
-	item = gtk_image_menu_item_new_with_label(_("Set Path From Document"));
+	item = gtk_image_menu_item_new_with_mnemonic(_("_Set Path From Document"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect((gpointer)item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_CHANGEPATH));
 
-	item = gtk_image_menu_item_new_with_label(_("Restart Terminal"));
+	item = gtk_image_menu_item_new_with_mnemonic(_("_Restart Terminal"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect((gpointer)item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_RESTARTTERMINAL));

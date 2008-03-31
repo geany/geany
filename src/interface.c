@@ -572,32 +572,32 @@ create_window1 (void)
   add_comments1_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (add_comments1), add_comments1_menu);
 
-  menu_add_changelog_entry1 = gtk_menu_item_new_with_mnemonic (_("Insert ChangeLog Entry"));
+  menu_add_changelog_entry1 = gtk_menu_item_new_with_mnemonic (_("Insert _ChangeLog Entry"));
   gtk_widget_show (menu_add_changelog_entry1);
   gtk_container_add (GTK_CONTAINER (add_comments1_menu), menu_add_changelog_entry1);
   gtk_tooltips_set_tip (tooltips, menu_add_changelog_entry1, _("Inserts a typical ChangeLog entry in the current file"), NULL);
 
-  insert_file_header1 = gtk_menu_item_new_with_mnemonic (_("Insert File Header"));
+  insert_file_header1 = gtk_menu_item_new_with_mnemonic (_("Insert File _Header"));
   gtk_widget_show (insert_file_header1);
   gtk_container_add (GTK_CONTAINER (add_comments1_menu), insert_file_header1);
   gtk_tooltips_set_tip (tooltips, insert_file_header1, _("Inserts a file header at the beginning of the file"), NULL);
 
-  insert_function_description2 = gtk_menu_item_new_with_mnemonic (_("Insert Function Description"));
+  insert_function_description2 = gtk_menu_item_new_with_mnemonic (_("Insert _Function Description"));
   gtk_widget_show (insert_function_description2);
   gtk_container_add (GTK_CONTAINER (add_comments1_menu), insert_function_description2);
   gtk_tooltips_set_tip (tooltips, insert_function_description2, _("Inserts a description before the current function"), NULL);
 
-  insert_multiline_comment2 = gtk_menu_item_new_with_mnemonic (_("Insert Multiline Comment"));
+  insert_multiline_comment2 = gtk_menu_item_new_with_mnemonic (_("Insert _Multiline Comment"));
   gtk_widget_show (insert_multiline_comment2);
   gtk_container_add (GTK_CONTAINER (add_comments1_menu), insert_multiline_comment2);
   gtk_tooltips_set_tip (tooltips, insert_multiline_comment2, _("Inserts a multiline comment"), NULL);
 
-  insert_gpl_notice2 = gtk_menu_item_new_with_mnemonic (_("Insert GPL Notice"));
+  insert_gpl_notice2 = gtk_menu_item_new_with_mnemonic (_("Insert _GPL Notice"));
   gtk_widget_show (insert_gpl_notice2);
   gtk_container_add (GTK_CONTAINER (add_comments1_menu), insert_gpl_notice2);
   gtk_tooltips_set_tip (tooltips, insert_gpl_notice2, _("Inserts a GPL notice (should be done at the beginning of the file)"), NULL);
 
-  insert_bsd_license_notice2 = gtk_menu_item_new_with_mnemonic (_("Insert BSD License Notice"));
+  insert_bsd_license_notice2 = gtk_menu_item_new_with_mnemonic (_("Insert _BSD License Notice"));
   gtk_widget_show (insert_bsd_license_notice2);
   gtk_container_add (GTK_CONTAINER (add_comments1_menu), insert_bsd_license_notice2);
   gtk_tooltips_set_tip (tooltips, insert_bsd_license_notice2, _("Inserts a BSD licence notice (should be done at the beginning of the file)"), NULL);
@@ -805,13 +805,13 @@ create_window1 (void)
   indent_type1_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (indent_type1), indent_type1_menu);
 
-  tabs1 = gtk_radio_menu_item_new_with_mnemonic (tabs1_group, _("Tabs"));
+  tabs1 = gtk_radio_menu_item_new_with_mnemonic (tabs1_group, _("_Tabs"));
   tabs1_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (tabs1));
   gtk_widget_show (tabs1);
   gtk_container_add (GTK_CONTAINER (indent_type1_menu), tabs1);
   gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (tabs1), TRUE);
 
-  spaces1 = gtk_radio_menu_item_new_with_mnemonic (tabs1_group, _("Spaces"));
+  spaces1 = gtk_radio_menu_item_new_with_mnemonic (tabs1_group, _("_Spaces"));
   tabs1_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (spaces1));
   gtk_widget_show (spaces1);
   gtk_container_add (GTK_CONTAINER (indent_type1_menu), spaces1);
@@ -1940,19 +1940,19 @@ create_toolbar_popup_menu1 (void)
 
   toolbar_popup_menu1 = gtk_menu_new ();
 
-  images_and_text2 = gtk_radio_menu_item_new_with_mnemonic (images_and_text2_group, _("Images and text"));
+  images_and_text2 = gtk_radio_menu_item_new_with_mnemonic (images_and_text2_group, _("Images _and Text"));
   images_and_text2_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (images_and_text2));
   gtk_widget_show (images_and_text2);
   gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), images_and_text2);
   gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (images_and_text2), TRUE);
 
-  images_only2 = gtk_radio_menu_item_new_with_mnemonic (images_and_text2_group, _("Images only"));
+  images_only2 = gtk_radio_menu_item_new_with_mnemonic (images_and_text2_group, _("_Images Only"));
   images_and_text2_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (images_only2));
   gtk_widget_show (images_only2);
   gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), images_only2);
   gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (images_only2), TRUE);
 
-  text_only2 = gtk_radio_menu_item_new_with_mnemonic (images_and_text2_group, _("Text only"));
+  text_only2 = gtk_radio_menu_item_new_with_mnemonic (images_and_text2_group, _("_Text Only"));
   images_and_text2_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (text_only2));
   gtk_widget_show (text_only2);
   gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), text_only2);
@@ -1963,12 +1963,12 @@ create_toolbar_popup_menu1 (void)
   gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), separator1);
   gtk_widget_set_sensitive (separator1, FALSE);
 
-  large_icons1 = gtk_radio_menu_item_new_with_mnemonic (large_icons1_group, _("Large icons"));
+  large_icons1 = gtk_radio_menu_item_new_with_mnemonic (large_icons1_group, _("_Large Icons"));
   large_icons1_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (large_icons1));
   gtk_widget_show (large_icons1);
   gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), large_icons1);
 
-  small_icons1 = gtk_radio_menu_item_new_with_mnemonic (large_icons1_group, _("Small icons"));
+  small_icons1 = gtk_radio_menu_item_new_with_mnemonic (large_icons1_group, _("_Small Icons"));
   large_icons1_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (small_icons1));
   gtk_widget_show (small_icons1);
   gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), small_icons1);
@@ -1978,7 +1978,7 @@ create_toolbar_popup_menu1 (void)
   gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), separator20);
   gtk_widget_set_sensitive (separator20, FALSE);
 
-  hide_toolbar1 = gtk_image_menu_item_new_with_mnemonic (_("Hide toolbar"));
+  hide_toolbar1 = gtk_image_menu_item_new_with_mnemonic (_("_Hide toolbar"));
   gtk_widget_show (hide_toolbar1);
   gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), hide_toolbar1);
 
@@ -2214,7 +2214,7 @@ create_edit_menu1 (void)
   gtk_container_add (GTK_CONTAINER (edit_menu1), separator17);
   gtk_widget_set_sensitive (separator17, FALSE);
 
-  comments = gtk_image_menu_item_new_with_mnemonic (_("Insert Comments"));
+  comments = gtk_image_menu_item_new_with_mnemonic (_("I_nsert Comments"));
   gtk_widget_show (comments);
   gtk_container_add (GTK_CONTAINER (edit_menu1), comments);
 
@@ -2225,32 +2225,32 @@ create_edit_menu1 (void)
   comments_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (comments), comments_menu);
 
-  add_changelog_entry2 = gtk_menu_item_new_with_mnemonic (_("Insert ChangeLog Entry"));
+  add_changelog_entry2 = gtk_menu_item_new_with_mnemonic (_("Insert _ChangeLog Entry"));
   gtk_widget_show (add_changelog_entry2);
   gtk_container_add (GTK_CONTAINER (comments_menu), add_changelog_entry2);
   gtk_tooltips_set_tip (tooltips, add_changelog_entry2, _("Inserts a typical ChangeLog entry in the current file"), NULL);
 
-  insert_file_header2 = gtk_menu_item_new_with_mnemonic (_("Insert File Header"));
+  insert_file_header2 = gtk_menu_item_new_with_mnemonic (_("Insert File _Header"));
   gtk_widget_show (insert_file_header2);
   gtk_container_add (GTK_CONTAINER (comments_menu), insert_file_header2);
   gtk_tooltips_set_tip (tooltips, insert_file_header2, _("Inserts a file header at the beginning of the file"), NULL);
 
-  insert_function_description1 = gtk_menu_item_new_with_mnemonic (_("Insert Function Description"));
+  insert_function_description1 = gtk_menu_item_new_with_mnemonic (_("Insert _Function Description"));
   gtk_widget_show (insert_function_description1);
   gtk_container_add (GTK_CONTAINER (comments_menu), insert_function_description1);
   gtk_tooltips_set_tip (tooltips, insert_function_description1, _("Inserts a description before the current function"), NULL);
 
-  insert_multiline_comment1 = gtk_menu_item_new_with_mnemonic (_("Insert Multiline Comment"));
+  insert_multiline_comment1 = gtk_menu_item_new_with_mnemonic (_("Insert _Multiline Comment"));
   gtk_widget_show (insert_multiline_comment1);
   gtk_container_add (GTK_CONTAINER (comments_menu), insert_multiline_comment1);
   gtk_tooltips_set_tip (tooltips, insert_multiline_comment1, _("Inserts a multiline comment"), NULL);
 
-  insert_gpl_notice1 = gtk_menu_item_new_with_mnemonic (_("Insert GPL Notice"));
+  insert_gpl_notice1 = gtk_menu_item_new_with_mnemonic (_("Insert _GPL Notice"));
   gtk_widget_show (insert_gpl_notice1);
   gtk_container_add (GTK_CONTAINER (comments_menu), insert_gpl_notice1);
   gtk_tooltips_set_tip (tooltips, insert_gpl_notice1, _("Inserts a GPL notice (should be done at the beginning of the file)"), NULL);
 
-  insert_bsd_license_notice1 = gtk_menu_item_new_with_mnemonic (_("Insert BSD License Notice"));
+  insert_bsd_license_notice1 = gtk_menu_item_new_with_mnemonic (_("Insert _BSD License Notice"));
   gtk_widget_show (insert_bsd_license_notice1);
   gtk_container_add (GTK_CONTAINER (comments_menu), insert_bsd_license_notice1);
   gtk_tooltips_set_tip (tooltips, insert_bsd_license_notice1, _("Inserts a BSD licence notice (should be done at the beginning of the file)"), NULL);
@@ -2269,7 +2269,7 @@ create_edit_menu1 (void)
   invisible10 = gtk_menu_item_new_with_mnemonic (_("invisible"));
   gtk_container_add (GTK_CONTAINER (insert_date2_menu), invisible10);
 
-  insert_include1 = gtk_image_menu_item_new_with_mnemonic (_("Insert \"include <...>\""));
+  insert_include1 = gtk_image_menu_item_new_with_mnemonic (_("In_sert \"include <...>\""));
   gtk_widget_show (insert_include1);
   gtk_container_add (GTK_CONTAINER (edit_menu1), insert_include1);
 
@@ -2304,7 +2304,7 @@ create_edit_menu1 (void)
   gtk_widget_show (goto_tag_declaration1);
   gtk_container_add (GTK_CONTAINER (edit_menu1), goto_tag_declaration1);
 
-  context_action1 = gtk_menu_item_new_with_mnemonic (_("Context Action"));
+  context_action1 = gtk_menu_item_new_with_mnemonic (_("Conte_xt Action"));
   gtk_widget_show (context_action1);
   gtk_container_add (GTK_CONTAINER (edit_menu1), context_action1);
 
@@ -2313,7 +2313,7 @@ create_edit_menu1 (void)
   gtk_container_add (GTK_CONTAINER (edit_menu1), separator15);
   gtk_widget_set_sensitive (separator15, FALSE);
 
-  go_to_line = gtk_image_menu_item_new_with_mnemonic (_("Go to Line"));
+  go_to_line = gtk_image_menu_item_new_with_mnemonic (_("_Go to Line"));
   gtk_widget_show (go_to_line);
   gtk_container_add (GTK_CONTAINER (edit_menu1), go_to_line);
   gtk_tooltips_set_tip (tooltips, go_to_line, _("Go to the entered line"), NULL);
@@ -3428,7 +3428,7 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (0), 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label170), 0, 0.5);
 
-  radio_toolbar_imagetext = gtk_radio_button_new_with_mnemonic (NULL, _("Images and text"));
+  radio_toolbar_imagetext = gtk_radio_button_new_with_mnemonic (NULL, _("Images _and Text"));
   gtk_widget_show (radio_toolbar_imagetext);
   gtk_table_attach (GTK_TABLE (table9), radio_toolbar_imagetext, 1, 2, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
@@ -3436,7 +3436,7 @@ create_prefs_dialog (void)
   gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_toolbar_imagetext), radio_toolbar_imagetext_group);
   radio_toolbar_imagetext_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_toolbar_imagetext));
 
-  radio_toolbar_small = gtk_radio_button_new_with_mnemonic (NULL, _("Small icons"));
+  radio_toolbar_small = gtk_radio_button_new_with_mnemonic (NULL, _("_Small Icons"));
   gtk_widget_show (radio_toolbar_small);
   gtk_table_attach (GTK_TABLE (table9), radio_toolbar_small, 2, 3, 1, 2,
                     (GtkAttachOptions) (GTK_FILL),
@@ -3444,7 +3444,7 @@ create_prefs_dialog (void)
   gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_toolbar_small), radio_toolbar_small_group);
   radio_toolbar_small_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_toolbar_small));
 
-  radio_toolbar_large = gtk_radio_button_new_with_mnemonic (NULL, _("Large icons"));
+  radio_toolbar_large = gtk_radio_button_new_with_mnemonic (NULL, _("_Large Icons"));
   gtk_widget_show (radio_toolbar_large);
   gtk_table_attach (GTK_TABLE (table9), radio_toolbar_large, 1, 2, 1, 2,
                     (GtkAttachOptions) (GTK_FILL),
@@ -3452,7 +3452,7 @@ create_prefs_dialog (void)
   gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_toolbar_large), radio_toolbar_small_group);
   radio_toolbar_small_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_toolbar_large));
 
-  radio_toolbar_text = gtk_radio_button_new_with_mnemonic (NULL, _("Text only"));
+  radio_toolbar_text = gtk_radio_button_new_with_mnemonic (NULL, _("_Text Only"));
   gtk_widget_show (radio_toolbar_text);
   gtk_table_attach (GTK_TABLE (table9), radio_toolbar_text, 3, 4, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
@@ -3460,7 +3460,7 @@ create_prefs_dialog (void)
   gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_toolbar_text), radio_toolbar_imagetext_group);
   radio_toolbar_imagetext_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_toolbar_text));
 
-  radio_toolbar_image = gtk_radio_button_new_with_mnemonic (NULL, _("Images only"));
+  radio_toolbar_image = gtk_radio_button_new_with_mnemonic (NULL, _("_Images Only"));
   gtk_widget_show (radio_toolbar_image);
   gtk_table_attach (GTK_TABLE (table9), radio_toolbar_image, 2, 3, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
@@ -3676,14 +3676,14 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), 0, 0);
 
-  radio_indent_tabs = gtk_radio_button_new_with_mnemonic (NULL, _("Tabs"));
+  radio_indent_tabs = gtk_radio_button_new_with_mnemonic (NULL, _("_Tabs"));
   gtk_widget_show (radio_indent_tabs);
   gtk_box_pack_start (GTK_BOX (hbox8), radio_indent_tabs, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, radio_indent_tabs, _("Whether to use tabs or spaces when indentation is inserted."), NULL);
   gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_indent_tabs), radio_indent_tabs_group);
   radio_indent_tabs_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_indent_tabs));
 
-  radio_indent_spaces = gtk_radio_button_new_with_mnemonic (NULL, _("Spaces"));
+  radio_indent_spaces = gtk_radio_button_new_with_mnemonic (NULL, _("_Spaces"));
   gtk_widget_show (radio_indent_spaces);
   gtk_box_pack_start (GTK_BOX (hbox8), radio_indent_spaces, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, radio_indent_spaces, _("Whether to use tabs or spaces when indentation is inserted."), NULL);

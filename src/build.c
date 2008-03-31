@@ -1157,7 +1157,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	menu = gtk_menu_new();
 
 	/* DVI */
-	item = gtk_image_menu_item_new_with_mnemonic(_("LaTeX -> DVI"));
+	item = gtk_image_menu_item_new_with_mnemonic(_("LaTeX -> _DVI"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item, _("Compiles the current file into a DVI file"), NULL);
@@ -1170,7 +1170,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	menu_items->item_compile = item;
 
 	/* PDF */
-	item = gtk_image_menu_item_new_with_mnemonic(_("LaTeX -> PDF"));
+	item = gtk_image_menu_item_new_with_mnemonic(_("LaTeX -> _PDF"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item, _("Compiles the current file into a PDF file"), NULL);
@@ -1225,7 +1225,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
 	/* DVI view */
-#define LATEX_VIEW_DVI_LABEL _("View DVI File") /* used later again */
+#define LATEX_VIEW_DVI_LABEL _("_View DVI File") /* used later again */
 	item = gtk_image_menu_item_new_with_mnemonic(LATEX_VIEW_DVI_LABEL);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
@@ -1239,7 +1239,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	menu_items->item_exec = item;
 
 	/* PDF view */
-	item = gtk_image_menu_item_new_with_mnemonic(_("View PDF File"));
+	item = gtk_image_menu_item_new_with_mnemonic(_("V_iew PDF File"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_RUN2, item);
@@ -1258,7 +1258,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	gtk_widget_set_sensitive(separator, FALSE);
 
 	/* arguments */
-	item = gtk_image_menu_item_new_with_mnemonic(_("Set Arguments"));
+	item = gtk_image_menu_item_new_with_mnemonic(_("_Set Arguments"));
 	gtk_widget_show(item);
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_OPTIONS, item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
