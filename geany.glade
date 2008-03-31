@@ -2937,7 +2937,7 @@
   <child>
     <widget class="GtkImageMenuItem" id="insert_include1">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">In_sert &quot;include &lt;...&gt;&quot;</property>
+      <property name="label" translatable="yes">_Insert &quot;include &lt;...&gt;&quot;</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
@@ -2975,7 +2975,7 @@
   <child>
     <widget class="GtkImageMenuItem" id="find_usage1">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">Find Usage</property>
+      <property name="label" translatable="yes">Find _Usage</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="on_find_usage1_activate" last_modification_time="Fri, 27 May 2005 21:55:12 GMT"/>
 
@@ -2996,7 +2996,7 @@
   <child>
     <widget class="GtkMenuItem" id="goto_tag_definition1">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">Go to Tag Definition</property>
+      <property name="label" translatable="yes">Go to _Tag Definition</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="on_goto_tag_activate" last_modification_time="Sun, 29 May 2005 22:08:28 GMT"/>
     </widget>
@@ -3005,7 +3005,7 @@
   <child>
     <widget class="GtkMenuItem" id="goto_tag_declaration1">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">Go to Tag Declaration</property>
+      <property name="label" translatable="yes">Go to T_ag Declaration</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="on_goto_tag_activate" last_modification_time="Sun, 29 May 2005 22:08:28 GMT"/>
     </widget>

@@ -2269,7 +2269,7 @@ create_edit_menu1 (void)
   invisible10 = gtk_menu_item_new_with_mnemonic (_("invisible"));
   gtk_container_add (GTK_CONTAINER (insert_date2_menu), invisible10);
 
-  insert_include1 = gtk_image_menu_item_new_with_mnemonic (_("In_sert \"include <...>\""));
+  insert_include1 = gtk_image_menu_item_new_with_mnemonic (_("_Insert \"include <...>\""));
   gtk_widget_show (insert_include1);
   gtk_container_add (GTK_CONTAINER (edit_menu1), insert_include1);
 
@@ -2288,7 +2288,7 @@ create_edit_menu1 (void)
   gtk_container_add (GTK_CONTAINER (edit_menu1), separator7);
   gtk_widget_set_sensitive (separator7, FALSE);
 
-  find_usage1 = gtk_image_menu_item_new_with_mnemonic (_("Find Usage"));
+  find_usage1 = gtk_image_menu_item_new_with_mnemonic (_("Find _Usage"));
   gtk_widget_show (find_usage1);
   gtk_container_add (GTK_CONTAINER (edit_menu1), find_usage1);
 
@@ -2296,11 +2296,11 @@ create_edit_menu1 (void)
   gtk_widget_show (image1974);
   gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (find_usage1), image1974);
 
-  goto_tag_definition1 = gtk_menu_item_new_with_mnemonic (_("Go to Tag Definition"));
+  goto_tag_definition1 = gtk_menu_item_new_with_mnemonic (_("Go to _Tag Definition"));
   gtk_widget_show (goto_tag_definition1);
   gtk_container_add (GTK_CONTAINER (edit_menu1), goto_tag_definition1);
 
-  goto_tag_declaration1 = gtk_menu_item_new_with_mnemonic (_("Go to Tag Declaration"));
+  goto_tag_declaration1 = gtk_menu_item_new_with_mnemonic (_("Go to T_ag Declaration"));
   gtk_widget_show (goto_tag_declaration1);
   gtk_container_add (GTK_CONTAINER (edit_menu1), goto_tag_declaration1);
 

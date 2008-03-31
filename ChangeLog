@@ -5,6 +5,10 @@
    Add missing mnemonics (except for 3 popup menu items, ran out of
    letters).
    Capitalize some menu items.
+ * src/interface.c, geany.glade:
+   Add 3 remaining mnemonics for popup menu, copy Insert include
+   mnemonic - even though these have conflicts, just let GTK toggle
+   between them.
 
 
 2008-03-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
