@@ -1,3 +1,49 @@
+Geany 0.14 (TBA)
+
+    General:
+    * Don't beep when using Replace All in Session unless all open files
+      have no replacements (fixes #1893796).
+    * Only use filetype detection after Save As, not on every save when the
+      filetype is None (fixes #1891778).
+    * Make Go to Tag commands look for the tag in the current document
+      before searching the workspace.
+    * Check file on disk for changes also when pressing a key.
+    * Ignore documents with no absolute path when saving session files.
+    * Fix segfault with Run command when a project is open and the current
+      file's filetype has no run command.
+    * Make Next Error and Next Message commands add positions to the
+      navigation queue, so the user can move backwards through the list items
+      and return to where they were.
+
+    Interface:
+    * When closing a tab when using left-to-right tabs, focus the next
+      document, not the previous.
+    * Move Load Tags item from File to Tools menu.
+
+    Editor:
+    * Don't scroll the editor view if it is unnecessary when using Find
+      Next/Previous, Find Selected, incremental search, Go to Marker or Go to
+      Matching Brace commands.
+    * Fix bug with showing macro list items all on one line.
+    * Fix Python auto-indentation when line endings are set to CR/LF.
+
+    Windows:
+    * Replace untitled file header filename after Save As and add to recent
+      files on Windows too.
+
+    Plugins:
+    * Add configurable plugin keybindings support.
+    * Add a HTML Characters keybinding to show the dialog.
+    * Rename VCDiff plugin Version Diff.
+
+    Plugin API:
+    * Add PLUGIN_KEY_GROUP and keybindings_set_item() to setup a keybinding
+      group.
+    * keybindings_send_command() arguments have changed because of
+      keybinding groups - this breaks the API for plugins already using it.
+    * Make VERSION_CHECK deprecated in favour of PLUGIN_VERSION_CHECK.
+
+
 Geany 0.13 (February 05, 2008)
 
     General:
