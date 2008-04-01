@@ -1,3 +1,11 @@
+2008-04-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, src/plugins.c, geany.glade:
+   Move Load Tags item from File to Tools menu.
+   Capitalize Page Setup item.
+   Add separator before Plugin Manager item.
+
+
 2008-03-31  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/build.c, src/interface.c, src/vte.c, plugins/export.c,

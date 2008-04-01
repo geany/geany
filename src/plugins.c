@@ -670,6 +670,10 @@ void plugins_init()
 	geany_data_init();
 	geany_object = geany_object_new();
 
+	widget = gtk_separator_menu_item_new();
+	gtk_widget_show(widget);
+	gtk_container_add(GTK_CONTAINER(geany_data.tools_menu), widget);
+
 	widget = gtk_menu_item_new_with_mnemonic(_("_Plugin Manager"));
 	gtk_container_add(GTK_CONTAINER (geany_data.tools_menu), widget);
 	gtk_widget_show(widget);
