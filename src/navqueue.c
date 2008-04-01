@@ -134,24 +134,28 @@ static void add_new_position(gchar *tm_filename, gint line)
 }
 
 
-/* Adds the current document position to the queue before adding the new position.
- * line is counted with 1 as the first line, not 0. */
+/* Adds old file position and new file position to the navqueue, then goes to the new position.
+ * Currently navqueue positions are only be added for documents that have a tagmanager work
+ * object.
+ * @param if old_idx is not valid (e.g. -1), no old position is set.
+ * @param line is counted with 1 as the first line, not 0. */
 gboolean navqueue_goto_line(gint old_idx, gint new_idx, gint line)
 {
-	g_return_val_if_fail(DOC_IDX_VALID(old_idx), FALSE);
 	g_return_val_if_fail(DOC_IDX_VALID(new_idx), FALSE);
-	g_return_val_if_fail(doc_list[new_idx].tm_file, FALSE);
 	g_return_val_if_fail(line >= 1, FALSE);
 
-	/* first add old file as old position */
-	if (doc_list[old_idx].tm_file)
+	/* first add old file position */
+	if (DOC_IDX_VALID(old_idx) && doc_list[old_idx].tm_file)
 	{
 		gint cur_line = sci_get_current_line(doc_list[old_idx].sci);
 
 		add_new_position(doc_list[old_idx].tm_file->file_name, cur_line + 1);
 	}
 
-	add_new_position(doc_list[new_idx].tm_file->file_name, line);
+	/* now add new file position */
+	if (doc_list[new_idx].tm_file)
+		add_new_position(doc_list[new_idx].tm_file->file_name, line);
+
 	return utils_goto_line(new_idx, line);
 }
 

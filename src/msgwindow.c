@@ -41,6 +41,7 @@
 #include "build.h"
 #include "main.h"
 #include "vte.h"
+#include "navqueue.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -477,6 +478,7 @@ gboolean msgwin_goto_compiler_file_line()
 	gchar *string;
 	gboolean ret = FALSE;
 	GdkColor *color;
+	gint old_idx = document_get_cur_idx();
 
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_compiler));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter))
@@ -515,11 +517,12 @@ gboolean msgwin_goto_compiler_file_line()
 				if (idx < 0)	/* file not already open */
 					idx = document_open_file(filename, FALSE, NULL, NULL);
 
-				if (idx >= 0 && doc_list[idx].is_valid)
+				if (DOC_IDX_VALID(idx))
 				{
 					if (! doc_list[idx].changed)	/* if modified, line may be wrong */
 						document_set_indicator(idx, line - 1);
-					ret = utils_goto_line(idx, line);
+
+					ret = navqueue_goto_line(old_idx, idx, line);
 				}
 			}
 			g_free(filename);
@@ -775,13 +778,14 @@ gboolean msgwin_goto_messages_file_line()
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_msg));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter))
 	{
-		gint idx, line;
+		gint idx, line, old_idx = document_get_cur_idx();
 		gchar *string;
 
 		gtk_tree_model_get(model, &iter, 0, &line, 1, &idx, 3, &string, -1);
 		if (line >= 0 && idx >= 0)
 		{
-			ret = utils_goto_line(idx, line);	/* checks valid idx */
+			if (DOC_IDX_VALID(idx))
+				ret = navqueue_goto_line(old_idx, idx, line);
 		}
 		else if (line < 0 && string != NULL)
 		{
@@ -791,8 +795,8 @@ gboolean msgwin_goto_messages_file_line()
 			{
 				/* use document_open_file to find an already open file, or open it in place */
 				idx = document_open_file(filename, FALSE, NULL, NULL);
-				/* utils_goto_file_line will check valid filename. */
-				ret = utils_goto_file_line(filename, FALSE, line);
+				if (DOC_IDX_VALID(idx))
+					ret = navqueue_goto_line(old_idx, idx, line);
 			}
 			g_free(filename);
 		}

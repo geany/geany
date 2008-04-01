@@ -4,6 +4,12 @@
    Move Load Tags item from File to Tools menu.
    Capitalize Page Setup item.
    Add separator before Plugin Manager item.
+ * src/navqueue.c, src/msgwindow.c:
+   Make navqueue_goto_line() ignore an invalid old document index, and
+   ignore any documents that don't have a tagmanager work object.
+   Make Next Error and Next Message commands add positions to the
+   navqueue, so the user can return to where they were and also so they
+   can move backwards through error and message items.
 
 
 2008-03-31  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
