@@ -1260,6 +1260,7 @@ create_window1 (void)
   gtk_widget_show (notebook_info);
   gtk_container_add (GTK_CONTAINER (viewport1), notebook_info);
   gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook_info), GTK_POS_LEFT);
+  gtk_notebook_set_scrollable (GTK_NOTEBOOK (notebook_info), TRUE);
 
   scrolledwindow4 = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_show (scrolledwindow4);

@@ -2217,7 +2217,7 @@
 		      <property name="show_tabs">True</property>
 		      <property name="show_border">True</property>
 		      <property name="tab_pos">GTK_POS_LEFT</property>
-		      <property name="scrollable">False</property>
+		      <property name="scrollable">True</property>
 		      <property name="enable_popup">False</property>
 
 		      <child>

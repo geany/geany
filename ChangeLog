@@ -13,6 +13,8 @@
    Avoid setting line number margin twice when creating new tabs, also
    don't call gtk_notebook_set_current_page() explicitly as it isn't
    necessary.
+ * geany.glade, src/interface.c:
+   Make the notebook tabs in the messages window scrollable.
 
 
 2008-04-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
