@@ -329,11 +329,13 @@ void project_close(gboolean open_default)
 	if (project_prefs.project_session)
 	{
 		/* close all existing tabs first */
+		main_status.closing_all = TRUE;
 		for (i = 0; i < max; i++)
 		{
 			if (! document_remove(0))
 				break;
 		}
+		main_status.closing_all = FALSE;
 
 		/* after closing all tabs let's open the tabs found in the default config */
 		if (open_default == TRUE && cl_options.load_session)

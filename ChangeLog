@@ -3,6 +3,9 @@
  * src/dialogs.c:
    Fix GTK warnings in open file dialog by using a positive response ID
    for the View button.
+ * src/callbacks.c, src/main.h, src/project.c:
+   Ignore notebook_switch_page signal handler when closing projects
+   to speed it up a little bit with many session files.
 
 
 2008-04-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

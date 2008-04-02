@@ -75,9 +75,6 @@
 #endif
 
 
-/* represents the state while closing all tabs(used to prevent notebook switch page signals) */
-static gboolean closing_all = FALSE;
-
 /* flag to indicate the explicit change of a toggle button of the toolbar menu and so the
  * toggled callback should ignore the change since it is not triggered by the user */
 static gboolean ignore_toolbar_toggle = FALSE;
@@ -263,7 +260,7 @@ on_close_all1_activate                 (GtkMenuItem     *menuitem,
 	gboolean ret = TRUE;
 	gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
 
-	closing_all = TRUE;
+	main_status.closing_all = TRUE;
 	for(i = 0; i < max; i++)
 	{
 		if (! document_remove(0))
@@ -272,7 +269,7 @@ on_close_all1_activate                 (GtkMenuItem     *menuitem,
 			break;
 		}
 	}
-	closing_all = FALSE;
+	main_status.closing_all = FALSE;
 	tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
 	/* if cancel is clicked, cancel the complete exit process */
 	return ret;
@@ -782,7 +779,8 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
 {
 	gint idx;
 
-	if (closing_all) return;
+	if (main_status.opening_session_files || main_status.closing_all)
+		return;
 
 	/* guint == -1 seems useless, but it isn't! */
 	if (page_num == (guint) -1 && page != NULL)
@@ -790,7 +788,7 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
 	else
 		idx = document_get_n_idx(page_num);
 
-	if (idx >= 0 && main_status.opening_session_files == FALSE)
+	if (idx >= 0)
 	{
 		treeviews_select_openfiles_item(idx);
 		document_set_text_changed(idx);	/* also sets window title and status bar */
