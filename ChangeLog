@@ -6,6 +6,9 @@
  * src/callbacks.c, src/main.h, src/project.c:
    Ignore notebook_switch_page signal handler when closing projects
    to speed it up a little bit with many session files.
+ * po/intl_stats.sh, scripts/intl_stats.sh:
+   Move intl_stats.sh script to scripts directory and make it working
+   from top source directory.
 
 
 2008-04-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
