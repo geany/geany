@@ -59,7 +59,8 @@
 
 enum
 {
-	GEANY_RESPONSE_RENAME
+	GEANY_RESPONSE_RENAME,
+	GEANY_RESPONSE_VIEW
 };
 
 #if ! GEANY_USE_WIN32_DIALOG
@@ -75,7 +76,7 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 {
 	gtk_widget_hide(ui_widgets.open_filesel);
 
-	if (response == GTK_RESPONSE_ACCEPT || response == GTK_RESPONSE_APPLY)
+	if (response == GTK_RESPONSE_ACCEPT || response == GEANY_RESPONSE_VIEW)
 	{
 		GSList *filelist;
 		gint filetype_idx = gtk_combo_box_get_active(GTK_COMBO_BOX(
@@ -84,7 +85,7 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 						lookup_widget(GTK_WIDGET(dialog), "encoding_combo")));
 		filetype *ft = NULL;
 		gchar *charset = NULL;
-		gboolean ro = (response == GTK_RESPONSE_APPLY);	/* View clicked */
+		gboolean ro = (response == GEANY_RESPONSE_VIEW);	/* View clicked */
 
 		if (filetype_idx >= 0 && filetype_idx < GEANY_FILETYPES_ALL) ft = filetypes[filetype_idx];
 		if (encoding_idx >= 0 && encoding_idx < GEANY_ENCODINGS_MAX)
@@ -175,18 +176,15 @@ static void create_open_file_dialog(void)
 			GTK_FILE_CHOOSER_ACTION_OPEN, NULL, NULL);
 	gtk_widget_set_name(ui_widgets.open_filesel, "GeanyDialog");
 
-	viewbtn = gtk_button_new_with_mnemonic(_("_View"));
+	viewbtn = gtk_dialog_add_button(GTK_DIALOG(ui_widgets.open_filesel), _("_View"),
+				GEANY_RESPONSE_VIEW);
 	gtk_tooltips_set_tip(tooltips, viewbtn,
 		_("Opens the file in read-only mode. If you choose more than one file to open, all files will be opened read-only."), NULL);
-	gtk_widget_show(viewbtn);
-	gtk_dialog_add_action_widget(GTK_DIALOG(ui_widgets.open_filesel),
-		viewbtn, GTK_RESPONSE_APPLY);
 
 	gtk_dialog_add_buttons(GTK_DIALOG(ui_widgets.open_filesel),
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 		GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
-	gtk_dialog_set_default_response(GTK_DIALOG(ui_widgets.open_filesel),
-		GTK_RESPONSE_ACCEPT);
+	gtk_dialog_set_default_response(GTK_DIALOG(ui_widgets.open_filesel), GTK_RESPONSE_ACCEPT);
 
 	gtk_widget_set_size_request(ui_widgets.open_filesel, -1, 460);
 	gtk_window_set_modal(GTK_WINDOW(ui_widgets.open_filesel), TRUE);
@@ -480,12 +478,10 @@ static void create_save_file_dialog(void)
 	gtk_window_set_type_hint(GTK_WINDOW(ui_widgets.save_filesel), GDK_WINDOW_TYPE_HINT_DIALOG);
 	gtk_widget_set_name(ui_widgets.save_filesel, "GeanyDialog");
 
-	rename_btn = gtk_button_new_with_mnemonic(_("R_ename"));
+	rename_btn = gtk_dialog_add_button(GTK_DIALOG(ui_widgets.save_filesel), _("R_ename"),
+					GEANY_RESPONSE_RENAME);
 	gtk_tooltips_set_tip(tooltips, rename_btn,
 		_("Save the file and rename it."), NULL);
-	gtk_widget_show(rename_btn);
-	gtk_dialog_add_action_widget(GTK_DIALOG(ui_widgets.save_filesel),
-		rename_btn, GEANY_RESPONSE_RENAME);
 
 	gtk_dialog_add_buttons(GTK_DIALOG(ui_widgets.save_filesel),
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,

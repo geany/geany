@@ -1,3 +1,10 @@
+2008-04-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/dialogs.c:
+   Fix GTK warnings in open file dialog by using a positive response ID
+   for the View button.
+
+
 2008-04-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/interface.c, src/plugins.c, geany.glade:
