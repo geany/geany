@@ -419,7 +419,6 @@ static ScintillaObject *create_new_sci(gint new_idx)
 
 	sci_set_tab_indents(sci, editor_prefs.use_tab_to_indent);
 	sci_set_symbol_margin(sci, editor_prefs.show_markers_margin);
-	sci_set_line_numbers(sci, editor_prefs.show_linenumber_margin, 0);
 	sci_set_lines_wrapped(sci, editor_prefs.line_wrapping);
 	sci_set_scrollbar_mode(sci, editor_prefs.show_scrollbars);
 	sci_set_caret_policy_x(sci, CARET_JUMPS | CARET_EVEN, 0);
@@ -500,7 +499,6 @@ static gint document_create(const gchar *utf8_filename)
 	treeviews_openfiles_add(new_idx);	/* sets this->iter */
 
 	tabnum = notebook_new_tab(new_idx);
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), tabnum);
 
 	/* select document in sidebar */
 	{
