@@ -105,6 +105,7 @@ static gboolean check_no_unsaved(void)
 }
 
 
+/* @return TRUE if all files were saved or had their changes discarded. */
 static gboolean account_for_unsaved(void)
 {
 	gint p;
@@ -135,25 +136,38 @@ static void verify_click_pos(gint idx)
 }
 
 
-/* should only be called from on_exit_clicked */
-static void quit_app(void)
+static void force_close_all()
 {
-	guint i;
+	guint i, len = doc_array->len;
 
-	configuration_save();
+	main_status.closing_all = TRUE;
 
-	/* ignore changes for all tabs (already asked user in on_exit_clicked) */
-	for (i = 0; i < doc_array->len; i++)
+	/* all documents should be accounted for, so ignore any changes */
+	for (i = 0; i < len; i++)
 	{
 		if (doc_list[i].is_valid && doc_list[i].changed)
 		{
 			doc_list[i].changed = FALSE;
 		}
 	}
+	for (i = 0; i < len; i++)
+	{
+		if (doc_list[i].is_valid)
+			document_remove(0);
+	}
+	main_status.closing_all = FALSE;
+}
+
+
+/* should only be called from on_exit_clicked */
+static void quit_app(void)
+{
+	configuration_save();
+
 	if (app->project != NULL)
 		project_close(FALSE);	/* save project session files */
 
-	on_close_all1_activate(NULL, NULL);
+	force_close_all();
 
 	main_quit();
 }
@@ -253,26 +267,23 @@ on_save_all1_activate                  (GtkMenuItem     *menuitem,
 }
 
 
+static gboolean close_all(void)
+{
+	if (! account_for_unsaved())
+		return FALSE;
+
+	force_close_all();
+
+	tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
+	return TRUE;
+}
+
+
 gboolean
 on_close_all1_activate                 (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gboolean ret = TRUE;
-	gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
-
-	main_status.closing_all = TRUE;
-	for(i = 0; i < max; i++)
-	{
-		if (! document_remove(0))
-		{
-			ret = FALSE;
-			break;
-		}
-	}
-	main_status.closing_all = FALSE;
-	tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
-	/* if cancel is clicked, cancel the complete exit process */
-	return ret;
+	return close_all();
 }
 
 
