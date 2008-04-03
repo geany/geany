@@ -97,6 +97,7 @@ static void cb_func_move_tab(guint key_id);
 static void cb_func_toggle_sidebar(guint key_id);
 
 static void add_popup_menu_accels(void);
+static void apply_kb_accel(KeyBinding *kb);
 
 
 /** Simple convenience function to fill a KeyBinding struct item */
@@ -116,6 +117,8 @@ void keybindings_set_item(KeyBindingGroup *group, gsize key_id,
 	kb->mods = mod;
 	kb->callback = callback;
 	kb->menu_item = menu_item;
+
+	apply_kb_accel(kb);
 }
 
 
@@ -315,7 +318,7 @@ static void init_default_kb(void)
 		GDK_g, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "menu_findprevious", _("Find Previous"),
 		LW(find_previous1));
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_FINDNEXTSEL, cb_func_search_action,
-		0, 0, "menu_findnextsel", _("Find Next Selection"),LW(find_nextsel1));
+		0, 0, "menu_findnextsel", _("Find Next Selection"), LW(find_nextsel1));
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_FINDPREVSEL, cb_func_search_action,
 		0, 0, "menu_findprevsel", _("Find Previous Selection"), LW(find_prevsel1));
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_REPLACE, cb_func_search_action,
@@ -449,9 +452,10 @@ void keybindings_init(void)
 {
 	keybinding_groups = g_ptr_array_sized_new(GEANY_KEY_GROUP_COUNT);
 
+	kb_accel_group = gtk_accel_group_new();
+
 	init_default_kb();
 
-	kb_accel_group = gtk_accel_group_new();
 	gtk_window_add_accel_group(GTK_WINDOW(app->window), kb_accel_group);
 }
 
