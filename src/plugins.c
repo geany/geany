@@ -338,6 +338,8 @@ plugin_check_version(GModule *module)
 		result = version_check(abi_version);
 		if (result < 0)
 		{
+			ui_set_statusbar(TRUE, _("The plugin \"%s\" is not binary compatible with this "
+				"release of Geany - please recompile it."), g_module_name(module));
 			geany_debug("Plugin \"%s\" is not binary compatible with this "
 				"release of Geany - recompile it.", g_module_name(module));
 			return FALSE;
