@@ -5,6 +5,10 @@
    so that clicking cancel keeps all documents open.
    This also prevents the UI from not being updated after cancelling
    Close All.
+ * NEWS, plugins/filebrowser.c:
+   Add configurable keybindings for focusing the Path Entry and File
+   List.
+   Refactor load_settings() from init().
 
 
 2008-04-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

@@ -34,6 +34,7 @@ Geany 0.14 (TBA)
     Plugins:
     * Add configurable plugin keybindings support.
     * Add a HTML Characters keybinding to show the dialog.
+    * Add File Browser keybindings to focus the Path Entry and File List
     * Rename VCDiff plugin Version Diff.
 
     Plugin API:

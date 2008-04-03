@@ -49,6 +49,17 @@ PLUGIN_INFO(_("File Browser"), _("Adds a file browser tab to the sidebar."), VER
 	_("The Geany developer team"))
 
 
+/* Keybinding(s) */
+enum
+{
+	KB_FOCUS_FILE_LIST,
+	KB_FOCUS_PATH_ENTRY,
+	KB_COUNT
+};
+
+PLUGIN_KEY_GROUP(file_browser, KB_COUNT)
+
+
 /* number of characters to skip the root of an absolute path("c:" or "d:" on Windows) */
 #ifdef G_OS_WIN32
 # define ROOT_OFFSET 2
@@ -785,12 +796,48 @@ static void completion_create(void)
 	else \
 		(var) = (tmp);
 
-void init(GeanyData *data)
+static void load_settings(void)
 {
-	GtkWidget *scrollwin, *toolbar;
 	GKeyFile *config = g_key_file_new();
 	GError *error = NULL;
 	gboolean tmp;
+
+	config_file = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
+		"filebrowser", G_DIR_SEPARATOR_S, "filebrowser.conf", NULL);
+	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
+	open_cmd = g_key_file_get_string(config, "filebrowser", "open_command", &error);
+	if (error != NULL)
+	{
+		open_cmd = g_strdup("nautilus \"%d\"");
+		g_error_free(error);
+		error = NULL;
+	}
+	tmp = g_key_file_get_boolean(config, "filebrowser", "show_hidden_files", &error);
+	CHECK_READ_SETTING(show_hidden_files, error, tmp);
+	tmp = g_key_file_get_boolean(config, "filebrowser", "hide_object_files", &error);
+	CHECK_READ_SETTING(hide_object_files, error, tmp);
+
+	g_key_file_free(config);
+}
+
+
+static void kb_activate(guint key_id)
+{
+	switch (key_id)
+	{
+		case KB_FOCUS_FILE_LIST:
+			gtk_widget_grab_focus(file_view);
+			break;
+		case KB_FOCUS_PATH_ENTRY:
+			gtk_widget_grab_focus(path_entry);
+			break;
+	}
+}
+
+
+void init(GeanyData *data)
+{
+	GtkWidget *scrollwin, *toolbar;
 
 	file_view_vbox = gtk_vbox_new(FALSE, 0);
 	toolbar = make_toolbar();
@@ -815,22 +862,13 @@ void init(GeanyData *data)
 	gtk_notebook_append_page(GTK_NOTEBOOK(app->treeview_notebook), file_view_vbox,
 		gtk_label_new(_("Files")));
 
-	config_file = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
-		"filebrowser", G_DIR_SEPARATOR_S, "filebrowser.conf", NULL);
-	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
-	open_cmd = g_key_file_get_string(config, "filebrowser", "open_command", &error);
-	if (error != NULL)
-	{
-		open_cmd = g_strdup("nautilus \"%d\"");
-		g_error_free(error);
-		error = NULL;
-	}
-	tmp = g_key_file_get_boolean(config, "filebrowser", "show_hidden_files", &error);
-	CHECK_READ_SETTING(show_hidden_files, error, tmp);
-	tmp = g_key_file_get_boolean(config, "filebrowser", "hide_object_files", &error);
-	CHECK_READ_SETTING(hide_object_files, error, tmp);
+	load_settings();
 
-	g_key_file_free(config);
+	/* setup keybindings */
+	p_keybindings->set_item(plugin_key_group, KB_FOCUS_FILE_LIST, kb_activate,
+		0, 0, "focus_file_list", _("Focus File List"), NULL);
+	p_keybindings->set_item(plugin_key_group, KB_FOCUS_PATH_ENTRY, kb_activate,
+		0, 0, "focus_path_entry", _("Focus Path Entry"), NULL);
 }
 
 
