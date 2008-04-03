@@ -685,7 +685,8 @@ void keybindings_show_shortcuts(void)
 	gtk_widget_set_name(dialog, "GeanyDialog");
 
 	height = GEANY_WINDOW_MINIMAL_HEIGHT;
-	gtk_window_set_default_size(GTK_WINDOW(dialog), height * 8 / 10, height);
+	gtk_window_set_default_size(GTK_WINDOW(dialog), -1, height);
+
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
 
 	label3 = gtk_label_new(_("The following keyboard shortcuts are configurable:"));
@@ -709,7 +710,7 @@ void keybindings_show_shortcuts(void)
 	gtk_container_add(GTK_CONTAINER(hbox), label2);
 
 	swin = gtk_scrolled_window_new(NULL, NULL);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin), GTK_POLICY_AUTOMATIC,
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin), GTK_POLICY_NEVER,
 		GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(swin), hbox);
 

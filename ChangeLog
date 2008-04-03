@@ -2,6 +2,8 @@
 
  * src/keybindings.c:
    Fix missing menu accelerators for default keybindings on startup.
+   Fix too small dialog window when showing the keyboard shortcuts
+   dialog from the help menu.
 
 
 2008-04-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
