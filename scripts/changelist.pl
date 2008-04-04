@@ -10,7 +10,7 @@
 
 use strict;
 
-my $scriptname = "changelist";
+my $scriptname = "changelist.pl";
 my $argc = $#ARGV + 1;
 
 ($argc == 2)

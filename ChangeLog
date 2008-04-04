@@ -1,6 +1,8 @@
 2008-04-04  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
- * Makefile.am: Fixed issue on make dist with intl_stats.sh-script.
+ * Makefile.am: Fix issue on make dist with intl_stats.sh-script.
+ * scripts/changelist.pl: Make help output better readable if there are
+   not enough arguments given.
 
 
 2008-04-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
