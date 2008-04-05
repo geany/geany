@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.14svn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-02 12:05+0100\n"
+"POT-Creation-Date: 2008-01-19 16:55+0100\n"
 "PO-Revision-Date: 2008-02-01 00:47+0100\n"
 "Last-Translator: Toni Garcia-Navarro <topi@elpiset.net>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
@@ -28,57 +28,57 @@ msgstr "Geany"
 msgid "Integrated Development Environment"
 msgstr "Entorn Integrat de Desenvolupament"
 
-#: ../src/about.c:122
+#: ../src/about.c:120
 msgid "About Geany"
 msgstr "Quant a Geany"
 
-#: ../src/about.c:173
+#: ../src/about.c:171
 msgid "A fast and lightweight IDE"
 msgstr "Un IDE lleuger i veloç"
 
-#: ../src/about.c:194
+#: ../src/about.c:192
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(compilat el %s)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:225
+#: ../src/about.c:223
 msgid "Info"
 msgstr "Informació"
 
-#: ../src/about.c:241
+#: ../src/about.c:239
 msgid "Developers"
 msgstr "Desenvolupadors"
 
-#: ../src/about.c:250
+#: ../src/about.c:248
 msgid "maintainer"
 msgstr "mantenidor"
 
-#: ../src/about.c:258
+#: ../src/about.c:256
 msgid "developer"
 msgstr "desenvolupador"
 
-#: ../src/about.c:266
+#: ../src/about.c:264
 msgid "translation maintainer"
 msgstr "coordinador de traduccions"
 
-#: ../src/about.c:275
+#: ../src/about.c:273
 msgid "Translators"
 msgstr "Traductors"
 
-#: ../src/about.c:295
+#: ../src/about.c:293
 msgid "Previous Translators"
 msgstr "Antics Traductors"
 
-#: ../src/about.c:314
+#: ../src/about.c:312
 msgid "Credits"
 msgstr "Crèdits"
 
-#: ../src/about.c:328
+#: ../src/about.c:326
 msgid "License"
 msgstr "Llicència"
 
-#: ../src/about.c:337
+#: ../src/about.c:335
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -109,7 +109,7 @@ msgstr ""
 "no s'hagi creat)"
 
 #: ../src/build.c:261 ../src/build.c:562 ../src/build.c:871
-#: ../src/search.c:1170
+#: ../src/search.c:1171
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Ha fallat el procés (%s)"
@@ -343,62 +343,62 @@ msgstr "No es pot aturar el procés (%s)."
 msgid "No more build errors."
 msgstr "No hi ha més errors de compilació."
 
-#: ../src/callbacks.c:182
+#: ../src/callbacks.c:179
 msgid "Do you really want to quit?"
 msgstr "Esteu segurs de voler sortir?"
 
-#: ../src/callbacks.c:513 ../src/interface.c:357 ../src/treeviews.c:448
+#: ../src/callbacks.c:510 ../src/interface.c:357 ../src/treeviews.c:448
 #: ../src/utils.c:336
 msgid "_Reload"
 msgstr "A_ctualitza"
 
-#: ../src/callbacks.c:514
+#: ../src/callbacks.c:511
 msgid "Any unsaved changes will be lost."
 msgstr "Qualsevol canvi no guardat es perdrà!"
 
-#: ../src/callbacks.c:515
+#: ../src/callbacks.c:512
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Esteu segurs que voleu actualitzar '%s'?"
 
-#: ../src/callbacks.c:1324 ../src/callbacks.c:1348
+#: ../src/callbacks.c:1321 ../src/callbacks.c:1345
 msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr "Heu d'indicat el tipus de fitxer abans d'utilitzar aquesta funció."
 
-#: ../src/callbacks.c:1450 ../src/ui_utils.c:480
+#: ../src/callbacks.c:1447 ../src/ui_utils.c:480
 msgid "dd.mm.yyyy"
 msgstr "dd.mm.aaaa"
 
-#: ../src/callbacks.c:1452 ../src/ui_utils.c:481
+#: ../src/callbacks.c:1449 ../src/ui_utils.c:481
 msgid "mm.dd.yyyy"
 msgstr "mm.dd.aaaa"
 
-#: ../src/callbacks.c:1454 ../src/ui_utils.c:482
+#: ../src/callbacks.c:1451 ../src/ui_utils.c:482
 msgid "yyyy/mm/dd"
 msgstr "aaaa/mm/dd"
 
-#: ../src/callbacks.c:1456 ../src/ui_utils.c:491
+#: ../src/callbacks.c:1453 ../src/ui_utils.c:491
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "dd.mm.aaaa hh:mm:ss"
 
-#: ../src/callbacks.c:1458 ../src/ui_utils.c:492
+#: ../src/callbacks.c:1455 ../src/ui_utils.c:492
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "mm.dd.aaaa hh.mm.ss"
 
-#: ../src/callbacks.c:1460 ../src/ui_utils.c:493
+#: ../src/callbacks.c:1457 ../src/ui_utils.c:493
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "aaaa/mm/dd hh:mm:ss"
 
-#: ../src/callbacks.c:1462 ../src/ui_utils.c:502
+#: ../src/callbacks.c:1459 ../src/ui_utils.c:502
 msgid "_Use Custom Date Format"
 msgstr "_Usa Format de Data Propi"
 
-#: ../src/callbacks.c:1473
+#: ../src/callbacks.c:1470
 msgid "Custom Date Format"
 msgstr "Format de Data"
 
-#: ../src/callbacks.c:1474
+#: ../src/callbacks.c:1471
 msgid ""
 "Enter here a custom date and time format. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
@@ -406,11 +406,11 @@ msgstr ""
 "Indiqueu el format de la data i l'hora. Podeu utilitzar qualsevol variable "
 "suportada per la funció ANSI C strftime."
 
-#: ../src/callbacks.c:1493
+#: ../src/callbacks.c:1490
 msgid "Date format string could not be converted (possibly too long)."
 msgstr "El format de data no pot ser convertit (probablement és massa llarg)."
 
-#: ../src/callbacks.c:1791
+#: ../src/callbacks.c:1788
 msgid "No more message items."
 msgstr "No hi ha més missatges."
 
@@ -739,8 +739,8 @@ msgstr "No s'ha trobat \"%s\""
 msgid "Wrap search and find again?"
 msgstr "Tornar a començar la cerca des del principi?"
 
-#: ../src/document.c:1542 ../src/search.c:869 ../src/search.c:1359
-#: ../src/search.c:1360
+#: ../src/document.c:1542 ../src/search.c:859 ../src/search.c:1360
+#: ../src/search.c:1361
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "No s'ha trobat '%s'."
@@ -937,7 +937,7 @@ msgstr "Fitxer de configuració"
 msgid "reStructuredText file"
 msgstr "Fitxer reStructuredText"
 
-#: ../src/filetypes.c:481 ../src/project.c:277
+#: ../src/filetypes.c:481 ../src/project.c:265
 msgid "All files"
 msgstr "Tots els fitxers"
 
@@ -2910,11 +2910,11 @@ msgstr "Dreceres de Teclat"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Les dreceres de teclat següents són configurables:"
 
-#: ../src/keyfile.c:700
+#: ../src/keyfile.c:702
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "Escriviu el que vulgueu, es pot usar com a bloc d'anotacions"
 
-#: ../src/keyfile.c:885
+#: ../src/keyfile.c:886
 msgid "Failed to load one or more session files."
 msgstr "Hi ha hagut un error en carregar un o més fitxers de sessió."
 
@@ -3159,26 +3159,26 @@ msgstr "<b>Pàgina %d de %d</b>"
 msgid "Document Setup"
 msgstr "Configuració del Document"
 
-#: ../src/printing.c:724
+#: ../src/printing.c:715
 #, c-format
 msgid "Printing of file %s was cancelled."
 msgstr "S'ha cancel·lat la impressió del fitxer %s."
 
-#: ../src/printing.c:726 ../src/printing.c:843
+#: ../src/printing.c:717 ../src/printing.c:834
 #, c-format
 msgid "File %s printed."
 msgstr "S'ha imprès el fitxer '%s'."
 
-#: ../src/printing.c:774
+#: ../src/printing.c:765
 #, c-format
 msgid "Printing of %s failed (%s)."
 msgstr "Ha fallat la impressió de %s (%s)."
 
-#: ../src/printing.c:814
+#: ../src/printing.c:805
 msgid "Please set a print command in the preferences dialog first"
 msgstr "Cal que abans especifiqueu una ordre d'impressió en Preferències"
 
-#: ../src/printing.c:822
+#: ../src/printing.c:813
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -3189,38 +3189,38 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/printing.c:837
+#: ../src/printing.c:828
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
 msgstr "Ha fallat la impressió de \"%s\" (codi de retorn: %s)."
 
 #. "projects" is part of the default project base path so be careful when translating
 #. please avoid special characters and spaces, look at the source for details or ask Frank
-#: ../src/project.c:90
+#: ../src/project.c:89
 msgid "projects"
 msgstr "projectes"
 
-#: ../src/project.c:110
+#: ../src/project.c:109
 msgid "New Project"
 msgstr "Projecte Nou"
 
-#: ../src/project.c:118
+#: ../src/project.c:117
 msgid "C_reate"
 msgstr "C_rea"
 
-#: ../src/project.c:132 ../src/project.c:382
+#: ../src/project.c:131 ../src/project.c:367
 msgid "Name:"
 msgstr "Nom:"
 
-#: ../src/project.c:140 ../src/project.c:394
+#: ../src/project.c:139 ../src/project.c:379
 msgid "Filename:"
 msgstr "Nom de fitxer:"
 
-#: ../src/project.c:156 ../src/project.c:423
+#: ../src/project.c:155 ../src/project.c:408
 msgid "Base path:"
 msgstr "Directori base:"
 
-#: ../src/project.c:161 ../src/project.c:431
+#: ../src/project.c:160 ../src/project.c:416
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
@@ -3230,45 +3230,45 @@ msgstr ""
 "un directori nou, o un ja existent. Podeu usar directoris relatius al fitxer "
 "de projecte."
 
-#: ../src/project.c:164 ../src/project.c:434
+#: ../src/project.c:163 ../src/project.c:419
 msgid "Choose Project Base Path"
 msgstr "Tria Directori Base del Projecte"
 
-#: ../src/project.c:209 ../src/project.c:248 ../src/project.c:871
+#: ../src/project.c:208 ../src/project.c:241 ../src/project.c:856
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "No s'ha pogut carregar el fitxer de projecte \"%s\"."
 
-#: ../src/project.c:242 ../src/project.c:261
+#: ../src/project.c:235 ../src/project.c:249
 msgid "Open Project"
 msgstr "Obre un Projecte"
 
-#: ../src/project.c:281
+#: ../src/project.c:269
 msgid "Project files"
 msgstr "Fitxers del projecte"
 
-#: ../src/project.c:315
+#: ../src/project.c:303
 #, c-format
 msgid "Project \"%s\" closed."
 msgstr "S'ha tancat el projecte \"%s\"."
 
-#: ../src/project.c:370
+#: ../src/project.c:355
 msgid "Project Properties"
 msgstr "Propietats del Projecte"
 
-#: ../src/project.c:406
+#: ../src/project.c:391
 msgid "Description:"
 msgstr "Descripció:"
 
-#: ../src/project.c:440
+#: ../src/project.c:425
 msgid "Make in base path"
 msgstr "Munta en el directori base"
 
-#: ../src/project.c:445
+#: ../src/project.c:430
 msgid "Run command:"
 msgstr "Ordre d'execució:"
 
-#: ../src/project.c:453
+#: ../src/project.c:438
 msgid ""
 "Command-line to run in the project base directory. Options can be appended "
 "to the command. Leave blank to use the default run command."
@@ -3276,67 +3276,67 @@ msgstr ""
 "Ordre a executar en el directori base del projecte. Es poden afegir opcions "
 "a l'ordre. Deixeu-ho en blanc per usar l'ordre per defecte."
 
-#: ../src/project.c:469
+#: ../src/project.c:454
 msgid "File patterns:"
 msgstr "Patrons de fitxer:"
 
-#: ../src/project.c:565
+#: ../src/project.c:550
 msgid "Do you want to close it before proceeding?"
 msgstr "Voleu tancar-lo abans de procedir?"
 
-#: ../src/project.c:566
+#: ../src/project.c:551
 #, c-format
 msgid "The '%s' project is already open."
 msgstr "El projecte '%s' ja està obert."
 
-#: ../src/project.c:596
+#: ../src/project.c:581
 msgid "The specified project name is too short."
 msgstr "El nom de projecte especificat és massa curt."
 
-#: ../src/project.c:602
+#: ../src/project.c:587
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr "El nom de projecte especificat és massa llarg (màxim %d caràcters)."
 
-#: ../src/project.c:610
+#: ../src/project.c:595
 msgid "You have specified an invalid project filename."
 msgstr "Heu especificat un nom de fitxer per al projecte invàlid."
 
-#: ../src/project.c:619
+#: ../src/project.c:604
 #, c-format
 msgid "Project file could not be written (%s)."
 msgstr "No es pot escriure el fitxer de projecte (%s)."
 
-#: ../src/project.c:639
+#: ../src/project.c:624
 msgid "Create the project's base path directory?"
 msgstr "Voleu crear el directori base per al projecte?"
 
-#: ../src/project.c:640
+#: ../src/project.c:625
 #, c-format
 msgid "The path \"%s\" does not exist."
 msgstr "El directori \"%s\" no existeix."
 
-#: ../src/project.c:703
+#: ../src/project.c:688
 #, c-format
 msgid "Project \"%s\" created."
 msgstr "S'ha creat el projecte \"%s\"."
 
-#: ../src/project.c:705
+#: ../src/project.c:690
 #, c-format
 msgid "Project \"%s\" saved."
 msgstr "S'ha desat el projecte \"%s\"."
 
 #. initialise the dialog
-#: ../src/project.c:761 ../src/project.c:772
+#: ../src/project.c:746 ../src/project.c:757
 msgid "Choose Project Filename"
 msgstr "Tria Nom de Fitxer del Projecte"
 
 #. initialise the dialog
-#: ../src/project.c:790 ../src/project.c:801
+#: ../src/project.c:775 ../src/project.c:786
 msgid "Choose Project Run Command"
 msgstr "Tria l'Ordre per Executar el Projecte"
 
-#: ../src/project.c:864
+#: ../src/project.c:849
 #, c-format
 msgid "Project \"%s\" opened."
 msgstr "S'ha obert el projecte \"%s\"."
@@ -3485,50 +3485,50 @@ msgstr "Opcions e_xtra:"
 msgid "Other options to pass to Grep"
 msgstr "Altres opcions per a Grep"
 
-#: ../src/search.c:871 ../src/search.c:1366 ../src/search.c:1367
+#: ../src/search.c:861 ../src/search.c:1367 ../src/search.c:1368
 #, c-format
 msgid "Found %d matches for \"%s\"."
 msgstr "S'han trobat %d coincidències de \"%s\"."
 
-#: ../src/search.c:979
+#: ../src/search.c:980
 #, c-format
 msgid "Replaced text in %u files."
 msgstr "S'ha reemplaçat el text en %u fitxers."
 
-#: ../src/search.c:1080
+#: ../src/search.c:1081
 msgid "Invalid directory for find in files."
 msgstr "El directori per cercar als fitxers no és vàlid."
 
-#: ../src/search.c:1098
+#: ../src/search.c:1099
 msgid "No text to find."
 msgstr "No hi ha text per cercar."
 
-#: ../src/search.c:1119
+#: ../src/search.c:1120
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
 msgstr ""
 "No s'ha pogut executar l'eina 'grep' '%s'; comproveu la ruta a Preferències."
 
-#: ../src/search.c:1184
+#: ../src/search.c:1185
 #, c-format
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (al directori: %s)"
 
-#: ../src/search.c:1212
+#: ../src/search.c:1213
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "No s'ha pogut obrir el directori (%s)"
 
-#: ../src/search.c:1260
+#: ../src/search.c:1261
 msgid "Search failed."
 msgstr "Ha fallat la cerca."
 
-#: ../src/search.c:1273 ../src/search.c:1274
+#: ../src/search.c:1274 ../src/search.c:1275
 #, c-format
 msgid "Search completed with %d matches."
 msgstr "S'ha finalitzat la cerca amb %d coincidències."
 
-#: ../src/search.c:1278
+#: ../src/search.c:1279
 msgid "No matches found."
 msgstr "No s'han trobat coincidències."
 
@@ -3881,11 +3881,11 @@ msgstr "STL de C++"
 msgid "_Set Custom Date Format"
 msgstr "_Especifica el Format de Data Propi"
 
-#: ../src/ui_utils.c:1343
+#: ../src/ui_utils.c:1344
 msgid "Select Folder"
 msgstr "Selecciona Directori"
 
-#: ../src/ui_utils.c:1343
+#: ../src/ui_utils.c:1344
 msgid "Select File"
 msgstr "Selecciona Fitxer"
 
@@ -4446,7 +4446,8 @@ msgid "Autosave: Saved %d files automatically."
 msgstr "Autodesa: S'han desat %d fitxers automàticament."
 
 #: ../plugins/autosave.c:141
-msgid "Print status message if files have been automatically saved"
+#, fuzzy
+msgid "Print status message if files have been automatcally saved"
 msgstr "Mostra un missatge d'estat si els fitxers s'han desat automàticament"
 
 #: ../plugins/autosave.c:147

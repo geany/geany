@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 0.14svn \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-05 12:17+0100\n"
+"POT-Creation-Date: 2008-01-19 16:55+0100\n"
 "PO-Revision-Date: 2008-02-04 12:44+0300\n"
 "Last-Translator: Boris Dibrov <dibrov.bor@gmail.com>\n"
 "Language-Team: \n"
@@ -29,58 +29,58 @@ msgstr "Geany"
 msgid "Integrated Development Environment"
 msgstr "Об'єднане середовище розробки"
 
-#: ../src/about.c:122
+#: ../src/about.c:120
 msgid "About Geany"
 msgstr "Про Geany"
 
-#: ../src/about.c:173
+#: ../src/about.c:171
 msgid "A fast and lightweight IDE"
 msgstr "Швидке та легке графічне середовище"
 
-#: ../src/about.c:194
+#: ../src/about.c:192
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(побудова під час, або після %s)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:225
+#: ../src/about.c:223
 msgid "Info"
 msgstr "Інформація"
 
-#: ../src/about.c:241
+#: ../src/about.c:239
 msgid "Developers"
 msgstr "Розробники"
 
-#: ../src/about.c:250
+#: ../src/about.c:248
 msgid "maintainer"
 msgstr "підтримка"
 
-#: ../src/about.c:258
+#: ../src/about.c:256
 msgid "developer"
 msgstr "розробник"
 
-#: ../src/about.c:266
+#: ../src/about.c:264
 msgid "translation maintainer"
 msgstr "перекладацька підтримка"
 
-#: ../src/about.c:275
+#: ../src/about.c:273
 msgid "Translators"
 msgstr "Перекладачі"
 
-#: ../src/about.c:295
+#: ../src/about.c:293
 msgid "Previous Translators"
 msgstr "Попередні перекладачі"
 
-#: ../src/about.c:314
+#: ../src/about.c:312
 #, fuzzy
 msgid "Credits"
 msgstr "Допомагали"
 
-#: ../src/about.c:328
+#: ../src/about.c:326
 msgid "License"
 msgstr "Ліцезнія"
 
-#: ../src/about.c:337
+#: ../src/about.c:335
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -108,7 +108,7 @@ msgid "Failed to execute \"%s\" (start-script could not be created)"
 msgstr "Помилка виконання \"%s\" (стартовий скрипт не був створений)"
 
 #: ../src/build.c:261 ../src/build.c:562 ../src/build.c:871
-#: ../src/search.c:1170
+#: ../src/search.c:1171
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Помилка процесу (%s)"
@@ -344,63 +344,63 @@ msgstr "Не має змоги зупинити процес (%s)."
 msgid "No more build errors."
 msgstr "Більше не має помилок побудови."
 
-#: ../src/callbacks.c:182
+#: ../src/callbacks.c:179
 msgid "Do you really want to quit?"
 msgstr "Ви дійсно бажаєте вийти?"
 
-#: ../src/callbacks.c:513 ../src/interface.c:357 ../src/treeviews.c:448
+#: ../src/callbacks.c:510 ../src/interface.c:357 ../src/treeviews.c:448
 #: ../src/utils.c:336
 msgid "_Reload"
 msgstr "_Перезавантажити"
 
-#: ../src/callbacks.c:514
+#: ../src/callbacks.c:511
 msgid "Any unsaved changes will be lost."
 msgstr "Будь-які не збережені зміни будуть втрачені."
 
-#: ../src/callbacks.c:515
+#: ../src/callbacks.c:512
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Ви впевнені, що бажаєте перезавантажити '%s'?"
 
-#: ../src/callbacks.c:1324 ../src/callbacks.c:1348
+#: ../src/callbacks.c:1321 ../src/callbacks.c:1345
 msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr ""
 "Будь-ласка оберіть тип для поточного файлу перед використанням цієї функції."
 
-#: ../src/callbacks.c:1450 ../src/ui_utils.c:480
+#: ../src/callbacks.c:1447 ../src/ui_utils.c:480
 msgid "dd.mm.yyyy"
 msgstr "дд.мм.рррр"
 
-#: ../src/callbacks.c:1452 ../src/ui_utils.c:481
+#: ../src/callbacks.c:1449 ../src/ui_utils.c:481
 msgid "mm.dd.yyyy"
 msgstr "мм.дд.рррр"
 
-#: ../src/callbacks.c:1454 ../src/ui_utils.c:482
+#: ../src/callbacks.c:1451 ../src/ui_utils.c:482
 msgid "yyyy/mm/dd"
 msgstr "рррр/мм/дд"
 
-#: ../src/callbacks.c:1456 ../src/ui_utils.c:491
+#: ../src/callbacks.c:1453 ../src/ui_utils.c:491
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "дд.мм.рррр гг:хх:сс"
 
-#: ../src/callbacks.c:1458 ../src/ui_utils.c:492
+#: ../src/callbacks.c:1455 ../src/ui_utils.c:492
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "мм.дд.рррр гг:хх:сс"
 
-#: ../src/callbacks.c:1460 ../src/ui_utils.c:493
+#: ../src/callbacks.c:1457 ../src/ui_utils.c:493
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "рррр/мм/дд гг:хх:сс"
 
-#: ../src/callbacks.c:1462 ../src/ui_utils.c:502
+#: ../src/callbacks.c:1459 ../src/ui_utils.c:502
 msgid "_Use Custom Date Format"
 msgstr "Ви_користовувати власний формат дати"
 
-#: ../src/callbacks.c:1473
+#: ../src/callbacks.c:1470
 msgid "Custom Date Format"
 msgstr "Власний формат дати"
 
-#: ../src/callbacks.c:1474
+#: ../src/callbacks.c:1471
 msgid ""
 "Enter here a custom date and time format. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
@@ -408,12 +408,12 @@ msgstr ""
 "Тут введіть власний формат дати й часу. Ви можете використовувати будь який "
 "формат часу що буде використаний функцією ANSI C strftime."
 
-#: ../src/callbacks.c:1493
+#: ../src/callbacks.c:1490
 msgid "Date format string could not be converted (possibly too long)."
 msgstr ""
 "Не вдається конвертувати  рядок формату дати (можливо рядок занадто довгий)."
 
-#: ../src/callbacks.c:1791
+#: ../src/callbacks.c:1788
 msgid "No more message items."
 msgstr "Більше не залишилося повідомлень."
 
@@ -743,8 +743,8 @@ msgstr "\"%s\" не знайдено."
 msgid "Wrap search and find again?"
 msgstr "Повернутися до початку і шукати знову?"
 
-#: ../src/document.c:1542 ../src/search.c:869 ../src/search.c:1359
-#: ../src/search.c:1360
+#: ../src/document.c:1542 ../src/search.c:859 ../src/search.c:1360
+#: ../src/search.c:1361
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "\"%s\" не зустрічається у файлі."
@@ -942,7 +942,7 @@ msgstr "Файл конфігурацій"
 msgid "reStructuredText file"
 msgstr "файл reStructuredText"
 
-#: ../src/filetypes.c:481 ../src/project.c:277
+#: ../src/filetypes.c:481 ../src/project.c:265
 msgid "All files"
 msgstr "Усі файли"
 
@@ -2908,13 +2908,13 @@ msgstr "Гарячі клавіші"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Наступні гарячі клавіші були налаштовані:"
 
-#: ../src/keyfile.c:700
+#: ../src/keyfile.c:702
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
 "Друкуйте тут усе що забажаєте і використовуйте це вікно для приміток або як "
 "чернетку"
 
-#: ../src/keyfile.c:885
+#: ../src/keyfile.c:886
 msgid "Failed to load one or more session files."
 msgstr "Помилка завантаження одного або більше файлів сесії."
 
@@ -3025,11 +3025,11 @@ msgstr "Повідомлення про статус"
 msgid "_Hide Message Window"
 msgstr "_Приховати вікно повідомлень"
 
-#: ../src/plugins.c:583
+#: ../src/plugins.c:579
 msgid "Plugin Manager"
 msgstr "Менеджер додатків"
 
-#: ../src/plugins.c:711
+#: ../src/plugins.c:707
 #, c-format
 msgid ""
 "Plugin: %s %s\n"
@@ -3040,27 +3040,27 @@ msgstr ""
 "Опис: %s\n"
 "Автор(-и): %s"
 
-#: ../src/plugins.c:772
+#: ../src/plugins.c:768
 msgid "Active"
 msgstr "Активно"
 
-#: ../src/plugins.c:778
+#: ../src/plugins.c:774
 msgid "Plugin"
 msgstr "Додаток"
 
-#: ../src/plugins.c:784
+#: ../src/plugins.c:780
 msgid "File"
 msgstr "Файл"
 
-#: ../src/plugins.c:802
+#: ../src/plugins.c:798
 msgid "No plugins available."
 msgstr "Не доступно жодного додатку."
 
-#: ../src/plugins.c:847
+#: ../src/plugins.c:843
 msgid "Plugins"
 msgstr "Додатки"
 
-#: ../src/plugins.c:868
+#: ../src/plugins.c:864
 msgid ""
 "Below is a list of available plugins. Select the plugins which should be "
 "loaded when Geany is started."
@@ -3068,7 +3068,7 @@ msgstr ""
 "Нижче представлено список доступних додатків. Оберіть додатки що будуть "
 "завантажені під час запуску Geany."
 
-#: ../src/plugins.c:876
+#: ../src/plugins.c:872
 msgid "<b>Plugin details:</b>"
 msgstr "<b>Деталі додатку:</b>"
 
@@ -3159,26 +3159,26 @@ msgstr "<b>Сторінка %d з %d</b>"
 msgid "Document Setup"
 msgstr "Налаштування документу"
 
-#: ../src/printing.c:724
+#: ../src/printing.c:715
 #, c-format
 msgid "Printing of file %s was cancelled."
 msgstr "Друкування \"%s\" було відмінено."
 
-#: ../src/printing.c:726 ../src/printing.c:843
+#: ../src/printing.c:717 ../src/printing.c:834
 #, c-format
 msgid "File %s printed."
 msgstr "Файл %s надруковано."
 
-#: ../src/printing.c:774
+#: ../src/printing.c:765
 #, c-format
 msgid "Printing of %s failed (%s)."
 msgstr "Друкування \"%s\" завершилося помилкою %s)."
 
-#: ../src/printing.c:814
+#: ../src/printing.c:805
 msgid "Please set a print command in the preferences dialog first"
 msgstr "Спочатку будь-ласка вкажіть команду друку у діалозі налаштування"
 
-#: ../src/printing.c:822
+#: ../src/printing.c:813
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -3189,149 +3189,149 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/printing.c:837
+#: ../src/printing.c:828
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
 msgstr "Друкування \"%s\" завершилося помилкою (повернутий код: %s)."
 
 #. "projects" is part of the default project base path so be careful when translating
 #. please avoid special characters and spaces, look at the source for details or ask Frank
-#: ../src/project.c:90
+#: ../src/project.c:89
 msgid "projects"
 msgstr "проекти"
 
-#: ../src/project.c:110
+#: ../src/project.c:109
 msgid "New Project"
 msgstr "Новий проект"
 
-#: ../src/project.c:118
+#: ../src/project.c:117
 msgid "C_reate"
 msgstr "С_творити"
 
-#: ../src/project.c:132 ../src/project.c:382
+#: ../src/project.c:131 ../src/project.c:367
 msgid "Name:"
 msgstr "Назва:"
 
-#: ../src/project.c:140 ../src/project.c:394
+#: ../src/project.c:139 ../src/project.c:379
 msgid "Filename:"
 msgstr "Назва файлу:"
 
-#: ../src/project.c:156 ../src/project.c:423
+#: ../src/project.c:155 ../src/project.c:408
 msgid "Base path:"
 msgstr "Базова тека:"
 
-#: ../src/project.c:161 ../src/project.c:431
+#: ../src/project.c:160 ../src/project.c:416
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
 "project filename."
 msgstr ""
 
-#: ../src/project.c:164 ../src/project.c:434
+#: ../src/project.c:163 ../src/project.c:419
 msgid "Choose Project Base Path"
 msgstr "Оберіть базову теку проекту"
 
-#: ../src/project.c:209 ../src/project.c:248 ../src/project.c:871
+#: ../src/project.c:208 ../src/project.c:241 ../src/project.c:856
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "Файл проекту \"%s\" не може бути завантажено."
 
-#: ../src/project.c:242 ../src/project.c:261
+#: ../src/project.c:235 ../src/project.c:249
 msgid "Open Project"
 msgstr "Відкрити проект"
 
-#: ../src/project.c:281
+#: ../src/project.c:269
 msgid "Project files"
 msgstr "Файли проекту"
 
-#: ../src/project.c:315
+#: ../src/project.c:303
 #, c-format
 msgid "Project \"%s\" closed."
 msgstr "Проект \"%s\" зачинено."
 
-#: ../src/project.c:370
+#: ../src/project.c:355
 msgid "Project Properties"
 msgstr "Властивості проекту"
 
-#: ../src/project.c:406
+#: ../src/project.c:391
 msgid "Description:"
 msgstr "Опис:"
 
-#: ../src/project.c:440
+#: ../src/project.c:425
 msgid "Make in base path"
 msgstr "Виконати make за базовим шляхом"
 
-#: ../src/project.c:445
+#: ../src/project.c:430
 msgid "Run command:"
 msgstr "Виконати команду:"
 
-#: ../src/project.c:453
+#: ../src/project.c:438
 msgid ""
 "Command-line to run in the project base directory. Options can be appended "
 "to the command. Leave blank to use the default run command."
 msgstr ""
 
-#: ../src/project.c:469
+#: ../src/project.c:454
 msgid "File patterns:"
 msgstr "Зразки файлу:"
 
-#: ../src/project.c:565
+#: ../src/project.c:550
 msgid "Do you want to close it before proceeding?"
 msgstr "Ви дійсно бажаєте закрити це перед продовженням?"
 
-#: ../src/project.c:566
+#: ../src/project.c:551
 #, c-format
 msgid "The '%s' project is already open."
 msgstr "Проект '%s' вже відкрито."
 
-#: ../src/project.c:596
+#: ../src/project.c:581
 msgid "The specified project name is too short."
 msgstr "Введене ім'я проекту занадто мале."
 
-#: ../src/project.c:602
+#: ../src/project.c:587
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr "Введене ім'я проекту занадто довге (максимально %d символів)."
 
-#: ../src/project.c:610
+#: ../src/project.c:595
 msgid "You have specified an invalid project filename."
 msgstr "Ви вказали неприпустиму назву файлу проекту."
 
-#: ../src/project.c:619
+#: ../src/project.c:604
 #, c-format
 msgid "Project file could not be written (%s)."
 msgstr "Неможливо записати файл проекту (%s)."
 
-#: ../src/project.c:639
+#: ../src/project.c:624
 msgid "Create the project's base path directory?"
 msgstr "Чи створити базову теку для проекту?"
 
-#: ../src/project.c:640
+#: ../src/project.c:625
 #, c-format
 msgid "The path \"%s\" does not exist."
 msgstr "Шлях \"%s\" не існує."
 
-#: ../src/project.c:703
+#: ../src/project.c:688
 #, c-format
 msgid "Project \"%s\" created."
 msgstr "Проект \"%s\" створено."
 
-#: ../src/project.c:705
+#: ../src/project.c:690
 #, c-format
 msgid "Project \"%s\" saved."
 msgstr "Проект \"%s\" збережено."
 
 #. initialise the dialog
-#: ../src/project.c:761 ../src/project.c:772
+#: ../src/project.c:746 ../src/project.c:757
 msgid "Choose Project Filename"
 msgstr "Вкажіть назву проекту"
 
 #. initialise the dialog
-#: ../src/project.c:790 ../src/project.c:801
+#: ../src/project.c:775 ../src/project.c:786
 msgid "Choose Project Run Command"
 msgstr "Вкажіть команду для виконання проекту"
 
-#: ../src/project.c:864
+#: ../src/project.c:849
 #, c-format
 msgid "Project \"%s\" opened."
 msgstr "Проект \"%s\" відкрито."
@@ -3477,50 +3477,50 @@ msgstr "_Екстра опції:"
 msgid "Other options to pass to Grep"
 msgstr ""
 
-#: ../src/search.c:871 ../src/search.c:1366 ../src/search.c:1367
+#: ../src/search.c:861 ../src/search.c:1367 ../src/search.c:1368
 #, c-format
 msgid "Found %d matches for \"%s\"."
 msgstr "Знайдено %d співпадінь для \"%s\"."
 
-#: ../src/search.c:979
+#: ../src/search.c:980
 #, c-format
 msgid "Replaced text in %u files."
 msgstr "Замінити текст у %u файлах."
 
-#: ../src/search.c:1080
+#: ../src/search.c:1081
 msgid "Invalid directory for find in files."
 msgstr "Помилкова тека для пошуку файлів."
 
-#: ../src/search.c:1098
+#: ../src/search.c:1099
 msgid "No text to find."
 msgstr "Немає тексту для пошуку."
 
-#: ../src/search.c:1119
+#: ../src/search.c:1120
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
 msgstr ""
 "Неможливо виконати інструмент виділення '%s'; перевірте шлях у налаштуваннях."
 
-#: ../src/search.c:1184
+#: ../src/search.c:1185
 #, c-format
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (у теці: %s)"
 
-#: ../src/search.c:1212
+#: ../src/search.c:1213
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "Не можу відкрити теку (%s)"
 
-#: ../src/search.c:1260
+#: ../src/search.c:1261
 msgid "Search failed."
 msgstr "Помилка пошуку."
 
-#: ../src/search.c:1273 ../src/search.c:1274
+#: ../src/search.c:1274 ../src/search.c:1275
 #, c-format
 msgid "Search completed with %d matches."
 msgstr "Пошук закінчено з %d співпадіннями."
 
-#: ../src/search.c:1278
+#: ../src/search.c:1279
 msgid "No matches found."
 msgstr "Жодних співпадінь."
 
@@ -3871,11 +3871,11 @@ msgstr "C++ STL"
 msgid "_Set Custom Date Format"
 msgstr "Вкажіть власний формат _часу"
 
-#: ../src/ui_utils.c:1343
+#: ../src/ui_utils.c:1344
 msgid "Select Folder"
 msgstr "Оберіть теку"
 
-#: ../src/ui_utils.c:1343
+#: ../src/ui_utils.c:1344
 msgid "Select File"
 msgstr "Оберіть файл"
 
@@ -4435,7 +4435,7 @@ msgstr "Автозбереження: збережено %d файлів авт�
 
 #: ../plugins/autosave.c:141
 #, fuzzy
-msgid "Print status message if files have been automatically saved"
+msgid "Print status message if files have been automatcally saved"
 msgstr "Виводити повідомлення якщо файл був автоматично збережений"
 
 #: ../plugins/autosave.c:147

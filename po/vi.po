@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 0.14svn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-02 12:05+0100\n"
+"POT-Creation-Date: 2008-01-19 16:55+0100\n"
 "PO-Revision-Date: 2008-02-02 12:31+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
@@ -29,57 +29,57 @@ msgstr "Geany"
 msgid "Integrated Development Environment"
 msgstr "Môi trường Phát triển Hợp nhất"
 
-#: ../src/about.c:122
+#: ../src/about.c:120
 msgid "About Geany"
 msgstr "Giới thiệu Geany"
 
-#: ../src/about.c:173
+#: ../src/about.c:171
 msgid "A fast and lightweight IDE"
 msgstr "Một IDE nhanh và nhẹ nhàng"
 
-#: ../src/about.c:194
+#: ../src/about.c:192
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(xây dựng vào hay sau %s)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:225
+#: ../src/about.c:223
 msgid "Info"
 msgstr "Thông tin"
 
-#: ../src/about.c:241
+#: ../src/about.c:239
 msgid "Developers"
 msgstr "Nhà phát triển"
 
-#: ../src/about.c:250
+#: ../src/about.c:248
 msgid "maintainer"
 msgstr "nhà duy trì"
 
-#: ../src/about.c:258
+#: ../src/about.c:256
 msgid "developer"
 msgstr "nhà phát triển"
 
-#: ../src/about.c:266
+#: ../src/about.c:264
 msgid "translation maintainer"
 msgstr "nhà duy trì bản dịch"
 
-#: ../src/about.c:275
+#: ../src/about.c:273
 msgid "Translators"
 msgstr "Dịch giả"
 
-#: ../src/about.c:295
+#: ../src/about.c:293
 msgid "Previous Translators"
 msgstr "Dịch giả trước"
 
-#: ../src/about.c:314
+#: ../src/about.c:312
 msgid "Credits"
 msgstr "Công trạng"
 
-#: ../src/about.c:328
+#: ../src/about.c:326
 msgid "License"
 msgstr "Giấy Phép"
 
-#: ../src/about.c:337
+#: ../src/about.c:335
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -107,7 +107,7 @@ msgid "Failed to execute \"%s\" (start-script could not be created)"
 msgstr "Lỗi thực hiện « %s » (không thể tạo văn lệnh khởi chạy)"
 
 #: ../src/build.c:261 ../src/build.c:562 ../src/build.c:871
-#: ../src/search.c:1170
+#: ../src/search.c:1171
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Tiến trình bị lỗi (%s)"
@@ -342,62 +342,62 @@ msgstr "Tiến trình không dừng chạy được (%s)."
 msgid "No more build errors."
 msgstr "Không có lỗi xây dựng nào nữa."
 
-#: ../src/callbacks.c:182
+#: ../src/callbacks.c:179
 msgid "Do you really want to quit?"
 msgstr "Bạn thật sự muốn thoát không?"
 
-#: ../src/callbacks.c:513 ../src/interface.c:357 ../src/treeviews.c:448
+#: ../src/callbacks.c:510 ../src/interface.c:357 ../src/treeviews.c:448
 #: ../src/utils.c:336
 msgid "_Reload"
 msgstr "Tải _lại"
 
-#: ../src/callbacks.c:514
+#: ../src/callbacks.c:511
 msgid "Any unsaved changes will be lost."
 msgstr "Các thay đổi chưa lưu sẽ bị mất."
 
-#: ../src/callbacks.c:515
+#: ../src/callbacks.c:512
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Bạn có chắc muốn tải lại « %s » không?"
 
-#: ../src/callbacks.c:1324 ../src/callbacks.c:1348
+#: ../src/callbacks.c:1321 ../src/callbacks.c:1345
 msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr "Hãy đặt kiểu tập tin cho tập tin hiện thời, trước khi sử dụng hàm này."
 
-#: ../src/callbacks.c:1450 ../src/ui_utils.c:480
+#: ../src/callbacks.c:1447 ../src/ui_utils.c:480
 msgid "dd.mm.yyyy"
 msgstr "nn.tt.NNNN"
 
-#: ../src/callbacks.c:1452 ../src/ui_utils.c:481
+#: ../src/callbacks.c:1449 ../src/ui_utils.c:481
 msgid "mm.dd.yyyy"
 msgstr "tt.nn.NNNN"
 
-#: ../src/callbacks.c:1454 ../src/ui_utils.c:482
+#: ../src/callbacks.c:1451 ../src/ui_utils.c:482
 msgid "yyyy/mm/dd"
 msgstr "NNNN/tt/nn"
 
-#: ../src/callbacks.c:1456 ../src/ui_utils.c:491
+#: ../src/callbacks.c:1453 ../src/ui_utils.c:491
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "nn.tt.NNNN GG:pp:gg"
 
-#: ../src/callbacks.c:1458 ../src/ui_utils.c:492
+#: ../src/callbacks.c:1455 ../src/ui_utils.c:492
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "tt.nn.NNNN GG:pp:gg"
 
-#: ../src/callbacks.c:1460 ../src/ui_utils.c:493
+#: ../src/callbacks.c:1457 ../src/ui_utils.c:493
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "NNNN/tt/nn GG:pp:gg"
 
-#: ../src/callbacks.c:1462 ../src/ui_utils.c:502
+#: ../src/callbacks.c:1459 ../src/ui_utils.c:502
 msgid "_Use Custom Date Format"
 msgstr "_Dùng định dạng ngày riêng"
 
-#: ../src/callbacks.c:1473
+#: ../src/callbacks.c:1470
 msgid "Custom Date Format"
 msgstr "Định dạng ngày riêng"
 
-#: ../src/callbacks.c:1474
+#: ../src/callbacks.c:1471
 msgid ""
 "Enter here a custom date and time format. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
@@ -406,11 +406,11 @@ msgstr ""
 "ký tự chuyển đổi nào dùng được với hàm strftime kiểu C ANSI. Xem « man "
 "strftime » để tìm thêm thông tin."
 
-#: ../src/callbacks.c:1493
+#: ../src/callbacks.c:1490
 msgid "Date format string could not be converted (possibly too long)."
 msgstr "Không thể chuyển đổi chuỗi định dạng ngày tháng (có thể quá dài)."
 
-#: ../src/callbacks.c:1791
+#: ../src/callbacks.c:1788
 msgid "No more message items."
 msgstr "Không có mục thông điệp nào nữa."
 
@@ -644,9 +644,9 @@ msgid ""
 "cause data loss.\n"
 "The file was set to read-only."
 msgstr ""
-"Tập tin « %s » không thể mở được, cũng bị cắt ngắn. Trường hợp này có thể "
-"xảy ra nếu tập tin chứa byte vô giá trị (NULL). Ghi chú rằng việc lưu tập "
-"tin này có thể gây ra dữ liệu bị mất.\n"
+"Tập tin « %s » không thể mở được, cũng bị cắt ngắn. Trường hợp này có thể xảy "
+"ra nếu tập tin chứa byte vô giá trị (NULL). Ghi chú rằng việc lưu tập tin "
+"này có thể gây ra dữ liệu bị mất.\n"
 "Tập tin đã được đặt thành tình trạng chỉ đọc."
 
 #: ../src/document.c:809
@@ -740,8 +740,8 @@ msgstr "Không tìm thấy « %s »."
 msgid "Wrap search and find again?"
 msgstr "Cuộn qua việc tìm và tìm lại không?"
 
-#: ../src/document.c:1542 ../src/search.c:869 ../src/search.c:1359
-#: ../src/search.c:1360
+#: ../src/document.c:1542 ../src/search.c:859 ../src/search.c:1360
+#: ../src/search.c:1361
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Không tìm thấy cái nào tương ứng với « %s »."
@@ -943,7 +943,7 @@ msgstr "Tập tin cấu hình"
 msgid "reStructuredText file"
 msgstr "Tập tin reStructuredText"
 
-#: ../src/filetypes.c:481 ../src/project.c:277
+#: ../src/filetypes.c:481 ../src/project.c:265
 msgid "All files"
 msgstr "Mọi tập tin"
 
@@ -2902,11 +2902,11 @@ msgstr "Phím tắt"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Có thể cấu hình những phím tắt này:"
 
-#: ../src/keyfile.c:700
+#: ../src/keyfile.c:702
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "Gõ bất cứ đoạn nào vào đây: dùng nó là bảng thông báo/viết tháu"
 
-#: ../src/keyfile.c:885
+#: ../src/keyfile.c:886
 msgid "Failed to load one or more session files."
 msgstr "Lỗi nạp một hay nhiều tập tin phiên chạy."
 
@@ -3145,26 +3145,26 @@ msgstr "<b>Trang %d trên %d</b>"
 msgid "Document Setup"
 msgstr "Thiết lập Tài liệu"
 
-#: ../src/printing.c:724
+#: ../src/printing.c:715
 #, c-format
 msgid "Printing of file %s was cancelled."
 msgstr "Tiến trình in tập tin %s bị thôi."
 
-#: ../src/printing.c:726 ../src/printing.c:843
+#: ../src/printing.c:717 ../src/printing.c:834
 #, c-format
 msgid "File %s printed."
 msgstr "Tập tin %s đã được in."
 
-#: ../src/printing.c:774
+#: ../src/printing.c:765
 #, c-format
 msgid "Printing of %s failed (%s)."
 msgstr "Tiến trình in tập tin %s bị lỗi (%s)."
 
-#: ../src/printing.c:814
+#: ../src/printing.c:805
 msgid "Please set a print command in the preferences dialog first"
 msgstr "Trước tiên hãy đặt một câu lệnh in trong hộp thoại Tùy thích."
 
-#: ../src/printing.c:822
+#: ../src/printing.c:813
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -3175,39 +3175,39 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/printing.c:837
+#: ../src/printing.c:828
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
 msgstr "Lỗi in « %s » (mã trả lại: %s)."
 
 #. "projects" is part of the default project base path so be careful when translating
 #. please avoid special characters and spaces, look at the source for details or ask Frank
-#: ../src/project.c:90
+#: ../src/project.c:89
 msgid "projects"
 msgstr "dự án"
 
-#: ../src/project.c:110
+#: ../src/project.c:109
 msgid "New Project"
 msgstr "Dự án mới"
 
-#: ../src/project.c:118
+#: ../src/project.c:117
 msgid "C_reate"
 msgstr "Tạ_o"
 
 # Name: don't translate/Tên: đừng dịch
-#: ../src/project.c:132 ../src/project.c:382
+#: ../src/project.c:131 ../src/project.c:367
 msgid "Name:"
 msgstr "Tên:"
 
-#: ../src/project.c:140 ../src/project.c:394
+#: ../src/project.c:139 ../src/project.c:379
 msgid "Filename:"
 msgstr "Tên tập tin:"
 
-#: ../src/project.c:156 ../src/project.c:423
+#: ../src/project.c:155 ../src/project.c:408
 msgid "Base path:"
 msgstr "Đường dẫn cơ bản:"
 
-#: ../src/project.c:161 ../src/project.c:431
+#: ../src/project.c:160 ../src/project.c:416
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
@@ -3217,45 +3217,45 @@ msgstr ""
 "mục tồn tại cũng được. Bạn cũng có thể đặt đường dẫn tương đối so với tên "
 "tập tin dự án."
 
-#: ../src/project.c:164 ../src/project.c:434
+#: ../src/project.c:163 ../src/project.c:419
 msgid "Choose Project Base Path"
 msgstr "Chọn đường dẫn cơ bản dự án"
 
-#: ../src/project.c:209 ../src/project.c:248 ../src/project.c:871
+#: ../src/project.c:208 ../src/project.c:241 ../src/project.c:856
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "Không thể nạp tập tin dự án « %s »."
 
-#: ../src/project.c:242 ../src/project.c:261
+#: ../src/project.c:235 ../src/project.c:249
 msgid "Open Project"
 msgstr "Mở dự án"
 
-#: ../src/project.c:281
+#: ../src/project.c:269
 msgid "Project files"
 msgstr "Tập tin dự án"
 
-#: ../src/project.c:315
+#: ../src/project.c:303
 #, c-format
 msgid "Project \"%s\" closed."
 msgstr "Dự án « %s » đã được đóng."
 
-#: ../src/project.c:370
+#: ../src/project.c:355
 msgid "Project Properties"
 msgstr "Tài sản dự án"
 
-#: ../src/project.c:406
+#: ../src/project.c:391
 msgid "Description:"
 msgstr "Mô tả:"
 
-#: ../src/project.c:440
+#: ../src/project.c:425
 msgid "Make in base path"
 msgstr "Tạo trên đường dẫn cơ bản"
 
-#: ../src/project.c:445
+#: ../src/project.c:430
 msgid "Run command:"
 msgstr "Chạy lệnh:"
 
-#: ../src/project.c:453
+#: ../src/project.c:438
 msgid ""
 "Command-line to run in the project base directory. Options can be appended "
 "to the command. Leave blank to use the default run command."
@@ -3263,67 +3263,67 @@ msgstr ""
 "Chuỗi dòng lệnh cần chạy trong thư mục cơ bản của dự án. Cũng có thể phụ "
 "thêm tùy chọn vào lệnh này. Bỏ rỗng để dùng lệnh chạy mặc định."
 
-#: ../src/project.c:469
+#: ../src/project.c:454
 msgid "File patterns:"
 msgstr "Mẫu tập tin:"
 
-#: ../src/project.c:565
+#: ../src/project.c:550
 msgid "Do you want to close it before proceeding?"
 msgstr "Bạn có muốn đóng nó trước khi tiếp tục không?"
 
-#: ../src/project.c:566
+#: ../src/project.c:551
 #, c-format
 msgid "The '%s' project is already open."
 msgstr "Dự án « %s » đã mở."
 
-#: ../src/project.c:596
+#: ../src/project.c:581
 msgid "The specified project name is too short."
 msgstr "Bạn đã ghi rõ một tên dự án quá ngắn."
 
-#: ../src/project.c:602
+#: ../src/project.c:587
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr "Bạn đã ghi rõ một tên dự án quá dài (tối đa %d ký tự)."
 
-#: ../src/project.c:610
+#: ../src/project.c:595
 msgid "You have specified an invalid project filename."
 msgstr "Bạn đã ghi rõ một tên dự án không hợp lệ."
 
-#: ../src/project.c:619
+#: ../src/project.c:604
 #, c-format
 msgid "Project file could not be written (%s)."
 msgstr "Không thể ghi tập tin dự án (%s)."
 
-#: ../src/project.c:639
+#: ../src/project.c:624
 msgid "Create the project's base path directory?"
 msgstr "Tạo thư mục cơ bản của dự án không?"
 
-#: ../src/project.c:640
+#: ../src/project.c:625
 #, c-format
 msgid "The path \"%s\" does not exist."
 msgstr "Đường dẫn « %s » không tồn tại."
 
-#: ../src/project.c:703
+#: ../src/project.c:688
 #, c-format
 msgid "Project \"%s\" created."
 msgstr "Dự án « %s » đã được tạo."
 
-#: ../src/project.c:705
+#: ../src/project.c:690
 #, c-format
 msgid "Project \"%s\" saved."
 msgstr "Dự án « %s » đã được lưu."
 
 #. initialise the dialog
-#: ../src/project.c:761 ../src/project.c:772
+#: ../src/project.c:746 ../src/project.c:757
 msgid "Choose Project Filename"
 msgstr "Chọn tên tập tin dự án"
 
 #. initialise the dialog
-#: ../src/project.c:790 ../src/project.c:801
+#: ../src/project.c:775 ../src/project.c:786
 msgid "Choose Project Run Command"
 msgstr "Chọn lệnh chạy dự án"
 
-#: ../src/project.c:864
+#: ../src/project.c:849
 #, c-format
 msgid "Project \"%s\" opened."
 msgstr "Dự án « %s » đã được mở."
@@ -3353,8 +3353,8 @@ msgid ""
 "Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
 "corresponding control characters."
 msgstr ""
-"Thay thế dãy « \\\\ », « \\t », « \\n », « \\r » và « \\uXXXX » (ký tự "
-"Unicode) bằng ký tự điều khiển tương ứng. "
+"Thay thế dãy « \\\\ », « \\t », « \\n », « \\r » và « \\uXXXX » (ký tự Unicode) "
+"bằng ký tự điều khiển tương ứng. "
 
 #: ../src/search.c:177 ../src/search.c:620
 msgid "C_ase sensitive"
@@ -3471,51 +3471,51 @@ msgstr "Tù_y chọn thêm:"
 msgid "Other options to pass to Grep"
 msgstr "Tùy chọn khác cần gửi cho Grep"
 
-#: ../src/search.c:871 ../src/search.c:1366 ../src/search.c:1367
+#: ../src/search.c:861 ../src/search.c:1367 ../src/search.c:1368
 #, c-format
 msgid "Found %d matches for \"%s\"."
 msgstr "Tìm %d mục tương ứng với « %s »."
 
-#: ../src/search.c:979
+#: ../src/search.c:980
 #, c-format
 msgid "Replaced text in %u files."
 msgstr "Mới thay thế văn bản trong %u tập tin."
 
-#: ../src/search.c:1080
+#: ../src/search.c:1081
 msgid "Invalid directory for find in files."
 msgstr "Thư mục không hợp lệ để tìm trong tập tin."
 
-#: ../src/search.c:1098
+#: ../src/search.c:1099
 msgid "No text to find."
 msgstr "Không có đoạn cần tìm."
 
-#: ../src/search.c:1119
+#: ../src/search.c:1120
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
 msgstr ""
 "Không thể thực hiện công cụ grep « %s »: kiểm tra xem thiết lập đường dẫn là "
 "đúng trong Tùy thích."
 
-#: ../src/search.c:1184
+#: ../src/search.c:1185
 #, c-format
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (trong thư mục: %s)"
 
-#: ../src/search.c:1212
+#: ../src/search.c:1213
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "Không thể mở thư mục (%s)"
 
-#: ../src/search.c:1260
+#: ../src/search.c:1261
 msgid "Search failed."
 msgstr "Lỗi tìm kiếm."
 
-#: ../src/search.c:1273 ../src/search.c:1274
+#: ../src/search.c:1274 ../src/search.c:1275
 #, c-format
 msgid "Search completed with %d matches."
 msgstr "Mới tìm kiếm xong: khớp %d mục."
 
-#: ../src/search.c:1278
+#: ../src/search.c:1279
 msgid "No matches found."
 msgstr "Không tìm thấy."
 
@@ -3868,11 +3868,11 @@ msgstr "C++ STL"
 msgid "_Set Custom Date Format"
 msgstr "Đặt định dạng ngày _riêng"
 
-#: ../src/ui_utils.c:1343
+#: ../src/ui_utils.c:1344
 msgid "Select Folder"
 msgstr "Chọn thư mục"
 
-#: ../src/ui_utils.c:1343
+#: ../src/ui_utils.c:1344
 msgid "Select File"
 msgstr "Chọn tập tin"
 
@@ -4392,8 +4392,8 @@ msgid ""
 "%d will be replaced with the path name of the selected file without the "
 "filename"
 msgstr ""
-"Câu lệnh cần thực hiện khi sử dụng chức năng « Mở bằng ». Cũng có thể dùng "
-"ký tự đại diện « %f » và « %d ».\n"
+"Câu lệnh cần thực hiện khi sử dụng chức năng « Mở bằng ». Cũng có thể dùng ký "
+"tự đại diện « %f » và « %d ».\n"
 "%f\tsẽ được thay thế bằng tên tập tin (cũng có đường dẫn đầy đủ)\n"
 "%d\tsẽ được thay thế bằng tên đường dẫn của tập tin đã chọn (không có tên "
 "tập tin)"
@@ -4433,7 +4433,8 @@ msgid "Autosave: Saved %d files automatically."
 msgstr "Tự động lưu : %d tập tin đã được lưu tự động."
 
 #: ../plugins/autosave.c:141
-msgid "Print status message if files have been automatically saved"
+#, fuzzy
+msgid "Print status message if files have been automatcally saved"
 msgstr "In thông điệp trạng thái nếu tập tin đã được lưu tự động"
 
 #: ../plugins/autosave.c:147
@@ -4675,8 +4676,7 @@ msgstr "Lưu chỉ tập tin còn mở hiện tại"
 #~ msgid ""
 #~ "There is already an open project \"%s\". Do you want to close it before "
 #~ "proceed?"
-#~ msgstr ""
-#~ "Đã có dự án mở « %s ». Bạn có muốn đóng nó trước khi tiếp tục không?"
+#~ msgstr "Đã có dự án mở « %s ». Bạn có muốn đóng nó trước khi tiếp tục không?"
 
 #~ msgid "(Unsaved)"
 #~ msgstr "(Chưa lưu)"

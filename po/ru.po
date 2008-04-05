@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.14svn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-09 01:50+0300\n"
+"POT-Creation-Date: 2008-01-19 16:55+0100\n"
 "PO-Revision-Date: 2008-02-08 02:44+0300\n"
 "Last-Translator: Sm@cker <smacker@mail.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -31,57 +31,57 @@ msgstr "Geany"
 msgid "Integrated Development Environment"
 msgstr "Интегрированная среда разработки"
 
-#: ../src/about.c:122
+#: ../src/about.c:120
 msgid "About Geany"
 msgstr "О Geany"
 
-#: ../src/about.c:173
+#: ../src/about.c:171
 msgid "A fast and lightweight IDE"
 msgstr "Быстрая и легковесная среда разработки"
 
-#: ../src/about.c:194
+#: ../src/about.c:192
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(собрано %s или позднее)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:225
+#: ../src/about.c:223
 msgid "Info"
 msgstr "Информация"
 
-#: ../src/about.c:241
+#: ../src/about.c:239
 msgid "Developers"
 msgstr "Разработчики"
 
-#: ../src/about.c:250
+#: ../src/about.c:248
 msgid "maintainer"
 msgstr "ведущий разработчик"
 
-#: ../src/about.c:258
+#: ../src/about.c:256
 msgid "developer"
 msgstr "разработчик"
 
-#: ../src/about.c:266
+#: ../src/about.c:264
 msgid "translation maintainer"
 msgstr "ведущий переводчик"
 
-#: ../src/about.c:275
+#: ../src/about.c:273
 msgid "Translators"
 msgstr "переводчики"
 
-#: ../src/about.c:295
+#: ../src/about.c:293
 msgid "Previous Translators"
 msgstr "Предыдущие переводчики"
 
-#: ../src/about.c:314
+#: ../src/about.c:312
 msgid "Credits"
 msgstr "О Нас"
 
-#: ../src/about.c:328
+#: ../src/about.c:326
 msgid "License"
 msgstr "Лицензия"
 
-#: ../src/about.c:337
+#: ../src/about.c:335
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -99,7 +99,8 @@ msgstr "Ошибка при просмотре %s (убедитесь что ф�
 msgid ""
 "Could not find terminal \"%s\" (check path for Terminal tool setting in "
 "Preferences)"
-msgstr "Не могу найти терминал \"%s\" (проверьте путь для терминала в Настройках)"
+msgstr ""
+"Не могу найти терминал \"%s\" (проверьте путь для терминала в Настройках)"
 
 #: ../src/build.c:224 ../src/build.c:744
 #, c-format
@@ -107,7 +108,7 @@ msgid "Failed to execute \"%s\" (start-script could not be created)"
 msgstr "Ошибка запуска \"%s\" (стартовый скрипт не может быть создан)"
 
 #: ../src/build.c:261 ../src/build.c:562 ../src/build.c:871
-#: ../src/search.c:1170
+#: ../src/search.c:1171
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Процесс дал сбой (%s)"
@@ -137,8 +138,10 @@ msgid "Failed to change the working directory to \"%s\""
 msgstr "Не могу сменить рабочий каталог на \"%s\""
 
 #: ../src/build.c:802
-msgid "Could not execute the file in the VTE because it probably contains a command."
-msgstr "Невозможно запустить файл в VTE, так как он, возможно, содержит команду."
+msgid ""
+"Could not execute the file in the VTE because it probably contains a command."
+msgstr ""
+"Невозможно запустить файл в VTE, так как он, возможно, содержит команду."
 
 #: ../src/build.c:984
 msgid "Compilation failed."
@@ -316,8 +319,10 @@ msgid "Make Custom Target"
 msgstr "Построить свою цель"
 
 #: ../src/build.c:1952
-msgid "Enter custom options here, all entered text is passed to the make command."
-msgstr "Введите здесь свои опции, весь введенный текст передается команде make."
+msgid ""
+"Enter custom options here, all entered text is passed to the make command."
+msgstr ""
+"Введите здесь свои опции, весь введенный текст передается команде make."
 
 #: ../src/build.c:2042
 msgid "Failed to execute the view program"
@@ -336,63 +341,64 @@ msgstr "Процесс невозможно остановить (%s)."
 msgid "No more build errors."
 msgstr "Ошибок сборки больше нет."
 
-#: ../src/callbacks.c:182
+#: ../src/callbacks.c:179
 msgid "Do you really want to quit?"
 msgstr "Вы действительно хотите выйти?"
 
-#: ../src/callbacks.c:513 ../src/interface.c:357 ../src/treeviews.c:448
+#: ../src/callbacks.c:510 ../src/interface.c:357 ../src/treeviews.c:448
 #: ../src/utils.c:336
 msgid "_Reload"
 msgstr "_Обновить"
 
-#: ../src/callbacks.c:514
+#: ../src/callbacks.c:511
 msgid "Any unsaved changes will be lost."
 msgstr "Любые несохраненные изменения будут потеряны."
 
-#: ../src/callbacks.c:515
+#: ../src/callbacks.c:512
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Вы уверены, что хотите обновить '%s'?"
 
-#: ../src/callbacks.c:1324 ../src/callbacks.c:1348
-msgid "Please set the filetype for the current file before using this function."
+#: ../src/callbacks.c:1321 ../src/callbacks.c:1345
+msgid ""
+"Please set the filetype for the current file before using this function."
 msgstr ""
 "Пожалуйста, установите тип файла для текущего документа перед использованием "
 "этой функции"
 
-#: ../src/callbacks.c:1450 ../src/ui_utils.c:480
+#: ../src/callbacks.c:1447 ../src/ui_utils.c:480
 msgid "dd.mm.yyyy"
 msgstr "дд.мм.гггг"
 
-#: ../src/callbacks.c:1452 ../src/ui_utils.c:481
+#: ../src/callbacks.c:1449 ../src/ui_utils.c:481
 msgid "mm.dd.yyyy"
 msgstr "мм.дд.гггг"
 
-#: ../src/callbacks.c:1454 ../src/ui_utils.c:482
+#: ../src/callbacks.c:1451 ../src/ui_utils.c:482
 msgid "yyyy/mm/dd"
 msgstr "гггг/мм/дд"
 
-#: ../src/callbacks.c:1456 ../src/ui_utils.c:491
+#: ../src/callbacks.c:1453 ../src/ui_utils.c:491
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "дд.мм.гггг час:мин:сек"
 
-#: ../src/callbacks.c:1458 ../src/ui_utils.c:492
+#: ../src/callbacks.c:1455 ../src/ui_utils.c:492
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "мм.дд.гггг час:мин:сек"
 
-#: ../src/callbacks.c:1460 ../src/ui_utils.c:493
+#: ../src/callbacks.c:1457 ../src/ui_utils.c:493
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "гггг/мм/дддд час:мин:сек"
 
-#: ../src/callbacks.c:1462 ../src/ui_utils.c:502
+#: ../src/callbacks.c:1459 ../src/ui_utils.c:502
 msgid "_Use Custom Date Format"
 msgstr "_Использовать свой формат даты"
 
-#: ../src/callbacks.c:1473
+#: ../src/callbacks.c:1470
 msgid "Custom Date Format"
 msgstr "Свой формат даты"
 
-#: ../src/callbacks.c:1474
+#: ../src/callbacks.c:1471
 msgid ""
 "Enter here a custom date and time format. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
@@ -400,11 +406,12 @@ msgstr ""
 "Введите свое описание формата даты и времени. Вы можете использовать любые "
 "параметры конверсии, применимые к функции strftime ANSI C."
 
-#: ../src/callbacks.c:1493
+#: ../src/callbacks.c:1490
 msgid "Date format string could not be converted (possibly too long)."
-msgstr "Невозможно конвертировать строку формата даты (возможно, слишком длинная)"
+msgstr ""
+"Невозможно конвертировать строку формата даты (возможно, слишком длинная)"
 
-#: ../src/callbacks.c:1791
+#: ../src/callbacks.c:1788
 msgid "No more message items."
 msgstr "Сообщений больше нет."
 
@@ -530,7 +537,8 @@ msgstr "Введите строку, на которую перейти:"
 msgid ""
 "An error occurred or file information could not be retrieved (e.g. from a "
 "new file)."
-msgstr "Произошла ошибка или информация о файле не может быть получена (новый файл?)."
+msgstr ""
+"Произошла ошибка или информация о файле не может быть получена (новый файл?)."
 
 #: ../src/dialogs.c:975 ../src/dialogs.c:976 ../src/dialogs.c:977
 #: ../src/dialogs.c:983 ../src/dialogs.c:984 ../src/dialogs.c:985
@@ -734,8 +742,8 @@ msgstr "Невозможно найти \"%s\"."
 msgid "Wrap search and find again?"
 msgstr "Перейти в начало и возобновить поиск?"
 
-#: ../src/document.c:1542 ../src/search.c:869 ../src/search.c:1359
-#: ../src/search.c:1360
+#: ../src/document.c:1542 ../src/search.c:859 ../src/search.c:1360
+#: ../src/search.c:1361
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Совпадений для  \"%s\" не найдено."
@@ -932,7 +940,7 @@ msgstr "Конфигурационный файл"
 msgid "reStructuredText file"
 msgstr "Файл reStructuredText"
 
-#: ../src/filetypes.c:481 ../src/project.c:277
+#: ../src/filetypes.c:481 ../src/project.c:265
 msgid "All files"
 msgstr "Все типы"
 
@@ -1124,7 +1132,8 @@ msgid "Insert BSD License Notice"
 msgstr "Вставить уведомление лицензии BSD"
 
 #: ../src/interface.c:603 ../src/interface.c:2256
-msgid "Inserts a BSD licence notice (should be done at the beginning of the file)"
+msgid ""
+"Inserts a BSD licence notice (should be done at the beginning of the file)"
 msgstr "Вставляет BSD-уведомление (должно быть вставлено в начале файла)"
 
 #: ../src/interface.c:605 ../src/interface.c:2258
@@ -1357,7 +1366,8 @@ msgid "_Color Chooser"
 msgstr "_Выбор цвета"
 
 #: ../src/interface.c:981 ../src/interface.c:1122
-msgid "Open a color chooser dialog, to interactively pick colors from a palette."
+msgid ""
+"Open a color chooser dialog, to interactively pick colors from a palette."
 msgstr ""
 "Открыть диалог выбора цвета, позволяющий интерактивно выбирать цвет из "
 "палитры."
@@ -1371,8 +1381,7 @@ msgid ""
 "Counts the words and characters in the current selection or the whole "
 "document"
 msgstr ""
-"Подсчитывает слова и знаки в текущей выделенной области или во всем "
-"документе"
+"Подсчитывает слова и знаки в текущей выделенной области или во всем документе"
 
 #: ../src/interface.c:992 ../src/interface.c:999
 msgid "_Help"
@@ -1865,7 +1874,8 @@ msgid "Show Back and Forward buttons"
 msgstr "Показывать кнопки \"Вперед\" и \"Назад\""
 
 #: ../src/interface.c:3337
-msgid "Display the Back and Forward buttons in the toolbar used for code navigation"
+msgid ""
+"Display the Back and Forward buttons in the toolbar used for code navigation"
 msgstr ""
 "Показывать на панели инструментов кнопки \"Вперед\" и \"Назад\" для "
 "перемещения по тексту программы"
@@ -1876,7 +1886,8 @@ msgstr "Показывать кнопки \"Собрать\" и \"Запусти
 
 #: ../src/interface.c:3344
 msgid "Display the Compile and Run buttons in the toolbar"
-msgstr "Показывать на панели инструментов кнопки для компиляции и запуска программы"
+msgstr ""
+"Показывать на панели инструментов кнопки для компиляции и запуска программы"
 
 #: ../src/interface.c:3347
 msgid "Show Color Chooser button"
@@ -1892,7 +1903,8 @@ msgstr "Показывать кнопки \"Увеличить\" и \"Умень
 
 #: ../src/interface.c:3358 ../src/interface.c:3365
 msgid "Display the Zoom In and Zoom Out buttons in the toolbar"
-msgstr "Показывать на панели задач кнопки для увеличения и уменьшения размера текста"
+msgstr ""
+"Показывать на панели задач кнопки для увеличения и уменьшения размера текста"
 
 #: ../src/interface.c:3361
 msgid "Show Increase and Decrease Indentation buttons"
@@ -2183,7 +2195,8 @@ msgstr "Авто-завершение XML тегов"
 
 #: ../src/interface.c:3788
 msgid "Automatic completion and closing of XML tags (includes HTML tags)"
-msgstr "Автоматическое завершение и закрытие открытых XML тегов (включая HTML теги)"
+msgstr ""
+"Автоматическое завершение и закрытие открытых XML тегов (включая HTML теги)"
 
 #: ../src/interface.c:3791
 msgid "Automatic symbol completion"
@@ -2287,8 +2300,10 @@ msgid "Recent files list length:"
 msgstr "Длинна списка недавних файлов:"
 
 #: ../src/interface.c:3986
-msgid "Specifies the number of files which are stored in the Recent files list."
-msgstr "Определяет количество файлов, сохраняемых в списке недавно открытых файлов."
+msgid ""
+"Specifies the number of files which are stored in the Recent files list."
+msgstr ""
+"Определяет количество файлов, сохраняемых в списке недавно открытых файлов."
 
 #: ../src/interface.c:3995 ../src/symbols.c:520 ../plugins/filebrowser.c:812
 msgid "Files"
@@ -2320,7 +2335,8 @@ msgstr ""
 
 #: ../src/interface.c:4067
 msgid "Path (and possibly additional arguments) to your favorite browser"
-msgstr "Путь (и, возможно, дополнительные аргументы) к вашему любимому браузеру"
+msgstr ""
+"Путь (и, возможно, дополнительные аргументы) к вашему любимому браузеру"
 
 #: ../src/interface.c:4099
 msgid "Grep:"
@@ -2439,7 +2455,8 @@ msgid "Print page numbers"
 msgstr "Печатать номера страниц"
 
 #: ../src/interface.c:4391 ../src/printing.c:350
-msgid "Add page numbers at the bottom of each page. It takes 2 lines of the page."
+msgid ""
+"Add page numbers at the bottom of each page. It takes 2 lines of the page."
 msgstr "Добавлять в конец каждой страницы номера страниц. Это займет 2 строки."
 
 #: ../src/interface.c:4394 ../src/printing.c:354
@@ -2898,11 +2915,12 @@ msgstr "Клавиатурные сочетания"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Следующие клавиатурные сокращения можно настроить:"
 
-#: ../src/keyfile.c:700
+#: ../src/keyfile.c:702
 msgid "Type here what you want, use it as a notice/scratch board"
-msgstr "Здесь можно писать что угодно, используйте это для заметок и быстрых записей"
+msgstr ""
+"Здесь можно писать что угодно, используйте это для заметок и быстрых записей"
 
-#: ../src/keyfile.c:885
+#: ../src/keyfile.c:886
 msgid "Failed to load one or more session files."
 msgstr "Не удалось загрузить один или несколько файлов сессии."
 
@@ -3016,11 +3034,11 @@ msgstr "Дежурные сообщения"
 msgid "_Hide Message Window"
 msgstr "Скрыть окно сообщений"
 
-#: ../src/plugins.c:583
+#: ../src/plugins.c:579
 msgid "Plugin Manager"
 msgstr "Менеджер плагинов"
 
-#: ../src/plugins.c:711
+#: ../src/plugins.c:707
 #, c-format
 msgid ""
 "Plugin: %s %s\n"
@@ -3031,27 +3049,27 @@ msgstr ""
 "Описание: %s\n"
 "Автор(ы): %s"
 
-#: ../src/plugins.c:772
+#: ../src/plugins.c:768
 msgid "Active"
 msgstr "Активный"
 
-#: ../src/plugins.c:778
+#: ../src/plugins.c:774
 msgid "Plugin"
 msgstr "Плагин"
 
-#: ../src/plugins.c:784
+#: ../src/plugins.c:780
 msgid "File"
 msgstr "Файл"
 
-#: ../src/plugins.c:802
+#: ../src/plugins.c:798
 msgid "No plugins available."
 msgstr "Нет доступных плагинов"
 
-#: ../src/plugins.c:847
+#: ../src/plugins.c:843
 msgid "Plugins"
 msgstr "Плагины"
 
-#: ../src/plugins.c:868
+#: ../src/plugins.c:864
 msgid ""
 "Below is a list of available plugins. Select the plugins which should be "
 "loaded when Geany is started."
@@ -3059,7 +3077,7 @@ msgstr ""
 "Внизу находится список доступных плагинов. Выбирите те из них, которые вы "
 "хотите загружать при запуске Geany."
 
-#: ../src/plugins.c:876
+#: ../src/plugins.c:872
 msgid "<b>Plugin details:</b>"
 msgstr "<b>Подробнее о плагине:</b>"
 
@@ -3146,26 +3164,27 @@ msgstr "<b>Страница %d из %d</b>"
 msgid "Document Setup"
 msgstr "<b>Настройка документа</b>"
 
-#: ../src/printing.c:724
+#: ../src/printing.c:715
 #, c-format
 msgid "Printing of file %s was cancelled."
 msgstr "Печать файла \"%s\" была отменена"
 
-#: ../src/printing.c:726 ../src/printing.c:843
+#: ../src/printing.c:717 ../src/printing.c:834
 #, c-format
 msgid "File %s printed."
 msgstr "Файл %s распечатан."
 
-#: ../src/printing.c:774
+#: ../src/printing.c:765
 #, c-format
 msgid "Printing of %s failed (%s)."
 msgstr "Печать \"%s\" завершилась с ошибкой (%s)."
 
-#: ../src/printing.c:814
+#: ../src/printing.c:805
 msgid "Please set a print command in the preferences dialog first"
-msgstr "Пожалуйста, укажите команду для печати в соответствующем диалоге настроек"
+msgstr ""
+"Пожалуйста, укажите команду для печати в соответствующем диалоге настроек"
 
-#: ../src/printing.c:822
+#: ../src/printing.c:813
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -3176,38 +3195,38 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/printing.c:837
+#: ../src/printing.c:828
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
 msgstr "Печать \"%s\" завершилась с ошибкой (код ошибки: %s)."
 
 #. "projects" is part of the default project base path so be careful when translating
 #. please avoid special characters and spaces, look at the source for details or ask Frank
-#: ../src/project.c:90
+#: ../src/project.c:89
 msgid "projects"
 msgstr "проекты"
 
-#: ../src/project.c:110
+#: ../src/project.c:109
 msgid "New Project"
 msgstr "Новый проект"
 
-#: ../src/project.c:118
+#: ../src/project.c:117
 msgid "C_reate"
 msgstr "С_оздать"
 
-#: ../src/project.c:132 ../src/project.c:382
+#: ../src/project.c:131 ../src/project.c:367
 msgid "Name:"
 msgstr "Имя:"
 
-#: ../src/project.c:140 ../src/project.c:394
+#: ../src/project.c:139 ../src/project.c:379
 msgid "Filename:"
 msgstr "Имя файла:"
 
-#: ../src/project.c:156 ../src/project.c:423
+#: ../src/project.c:155 ../src/project.c:408
 msgid "Base path:"
 msgstr "Путь к каталогу:"
 
-#: ../src/project.c:161 ../src/project.c:431
+#: ../src/project.c:160 ../src/project.c:416
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
@@ -3217,45 +3236,45 @@ msgstr ""
 "новый каталог, так и уже существующий. Вы можете использовать относительные "
 "пути (относительно имени проекта)."
 
-#: ../src/project.c:164 ../src/project.c:434
+#: ../src/project.c:163 ../src/project.c:419
 msgid "Choose Project Base Path"
 msgstr "Выберите путь к каталогу проекта:"
 
-#: ../src/project.c:209 ../src/project.c:248 ../src/project.c:871
+#: ../src/project.c:208 ../src/project.c:241 ../src/project.c:856
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "Файл проекта \"%s\" не может быть загружен."
 
-#: ../src/project.c:242 ../src/project.c:261
+#: ../src/project.c:235 ../src/project.c:249
 msgid "Open Project"
 msgstr "Открыть проект"
 
-#: ../src/project.c:281
+#: ../src/project.c:269
 msgid "Project files"
 msgstr "Файлы проекта"
 
-#: ../src/project.c:315
+#: ../src/project.c:303
 #, c-format
 msgid "Project \"%s\" closed."
 msgstr "Проект \"%s\" закрыт."
 
-#: ../src/project.c:370
+#: ../src/project.c:355
 msgid "Project Properties"
 msgstr "Свойства проекта"
 
-#: ../src/project.c:406
+#: ../src/project.c:391
 msgid "Description:"
 msgstr "Описание:"
 
-#: ../src/project.c:440
+#: ../src/project.c:425
 msgid "Make in base path"
 msgstr "Собрать в каталоге проекта"
 
-#: ../src/project.c:445
+#: ../src/project.c:430
 msgid "Run command:"
 msgstr "Команда запуска:"
 
-#: ../src/project.c:453
+#: ../src/project.c:438
 msgid ""
 "Command-line to run in the project base directory. Options can be appended "
 "to the command. Leave blank to use the default run command."
@@ -3263,67 +3282,67 @@ msgstr ""
 "Командная строка для выполнения внутри каталога проекта. К команде можно "
 "добавлять опции. Оставьте пустым для использования команды по умолчанию."
 
-#: ../src/project.c:469
+#: ../src/project.c:454
 msgid "File patterns:"
 msgstr "Шаблоны файлов:"
 
-#: ../src/project.c:565
+#: ../src/project.c:550
 msgid "Do you want to close it before proceeding?"
 msgstr "Хотите закрыть его до продолжения действия?"
 
-#: ../src/project.c:566
+#: ../src/project.c:551
 #, c-format
 msgid "The '%s' project is already open."
 msgstr "Проект \"%s\" уже открыт"
 
-#: ../src/project.c:596
+#: ../src/project.c:581
 msgid "The specified project name is too short."
 msgstr "Указанное имя проекта слишком короткое"
 
-#: ../src/project.c:602
+#: ../src/project.c:587
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr "Указанное имя проекта слишком длинное (максимум %d символов)."
 
-#: ../src/project.c:610
+#: ../src/project.c:595
 msgid "You have specified an invalid project filename."
 msgstr "Было задано недопустимое имя проекта."
 
-#: ../src/project.c:619
+#: ../src/project.c:604
 #, c-format
 msgid "Project file could not be written (%s)."
 msgstr "Невозможна запись в файл проекта (%s)."
 
-#: ../src/project.c:639
+#: ../src/project.c:624
 msgid "Create the project's base path directory?"
 msgstr "Создать каталог проекта?"
 
-#: ../src/project.c:640
+#: ../src/project.c:625
 #, c-format
 msgid "The path \"%s\" does not exist."
 msgstr "Путь \"%s\" не существует."
 
-#: ../src/project.c:703
+#: ../src/project.c:688
 #, c-format
 msgid "Project \"%s\" created."
 msgstr "Проект \"%s\" создан."
 
-#: ../src/project.c:705
+#: ../src/project.c:690
 #, c-format
 msgid "Project \"%s\" saved."
 msgstr "Проект %s сохранен."
 
 #. initialise the dialog
-#: ../src/project.c:761 ../src/project.c:772
+#: ../src/project.c:746 ../src/project.c:757
 msgid "Choose Project Filename"
 msgstr "Выберите имя проекта"
 
 #. initialise the dialog
-#: ../src/project.c:790 ../src/project.c:801
+#: ../src/project.c:775 ../src/project.c:786
 msgid "Choose Project Run Command"
 msgstr "Выберите команду запсука проекта"
 
-#: ../src/project.c:864
+#: ../src/project.c:849
 #, c-format
 msgid "Project \"%s\" opened."
 msgstr "Проект \"%s\" открыт."
@@ -3461,7 +3480,8 @@ msgstr "_Инвертировать результаты поиска"
 
 #: ../src/search.c:636
 msgid "Invert the sense of matching, to select non-matching lines."
-msgstr "Обратить смысл совпадения с шаблоном, выбирая только несовпадающие строки."
+msgstr ""
+"Обратить смысл совпадения с шаблоном, выбирая только несовпадающие строки."
 
 #: ../src/search.c:652
 msgid "E_xtra options:"
@@ -3471,49 +3491,50 @@ msgstr "Дополнительные опции:"
 msgid "Other options to pass to Grep"
 msgstr "Прочие параметры для передачи утилите grep"
 
-#: ../src/search.c:871 ../src/search.c:1366 ../src/search.c:1367
+#: ../src/search.c:861 ../src/search.c:1367 ../src/search.c:1368
 #, c-format
 msgid "Found %d matches for \"%s\"."
 msgstr "Найдено %d совпадений для \"%s\"."
 
-#: ../src/search.c:979
+#: ../src/search.c:980
 #, c-format
 msgid "Replaced text in %u files."
 msgstr "Текст заменён в %u файлах."
 
-#: ../src/search.c:1080
+#: ../src/search.c:1081
 msgid "Invalid directory for find in files."
 msgstr "Для поиска в файлах указан недопустимый каталог."
 
-#: ../src/search.c:1098
+#: ../src/search.c:1099
 msgid "No text to find."
 msgstr "Нет текста для поиска."
 
-#: ../src/search.c:1119
+#: ../src/search.c:1120
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
-msgstr "Не могу выполнить утилиту grep \"%s\"; проверьте путь, заданный в настройках."
+msgstr ""
+"Не могу выполнить утилиту grep \"%s\"; проверьте путь, заданный в настройках."
 
-#: ../src/search.c:1184
+#: ../src/search.c:1185
 #, c-format
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (в каталоге: %s)"
 
-#: ../src/search.c:1212
+#: ../src/search.c:1213
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "Не могу открыть каталог (%s)"
 
-#: ../src/search.c:1260
+#: ../src/search.c:1261
 msgid "Search failed."
 msgstr "Поиск не удался."
 
-#: ../src/search.c:1273 ../src/search.c:1274
+#: ../src/search.c:1274 ../src/search.c:1275
 #, c-format
 msgid "Search completed with %d matches."
 msgstr "Поиск завершен, найдено %d совпадений."
 
-#: ../src/search.c:1278
+#: ../src/search.c:1279
 msgid "No matches found."
 msgstr "Совпадений для не найдено."
 
@@ -3864,11 +3885,11 @@ msgstr "С++ STL"
 msgid "_Set Custom Date Format"
 msgstr "_Установить формат даты"
 
-#: ../src/ui_utils.c:1343
+#: ../src/ui_utils.c:1344
 msgid "Select Folder"
 msgstr "Выбрать каталог"
 
-#: ../src/ui_utils.c:1343
+#: ../src/ui_utils.c:1344
 msgid "Select File"
 msgstr "Выбрать файл"
 
@@ -3905,7 +3926,8 @@ msgstr "Методы _ввода"
 msgid ""
 "Could not change the directory in the VTE because it probably contains a "
 "command."
-msgstr "Невозможно изменить каталог в VTE, так как, возможно, он содержит команду."
+msgstr ""
+"Невозможно изменить каталог в VTE, так как, возможно, он содержит команду."
 
 #: ../src/vte.c:646
 msgid "Terminal plugin"
@@ -3975,7 +3997,8 @@ msgstr "Оболочка:"
 msgid ""
 "Sets the path to the shell which should be started inside the terminal "
 "emulation."
-msgstr "Устанавливает путь к оболочке, которая должна быть запущена в терминале."
+msgstr ""
+"Устанавливает путь к оболочке, которая должна быть запущена в терминале."
 
 #: ../src/vte.c:753
 msgid "Scroll on keystroke"
@@ -3998,8 +4021,10 @@ msgid "Override Geany keybindings"
 msgstr "Переопределить горячие клавиши Geany"
 
 #: ../src/vte.c:765
-msgid "Allows the VTE to receive keyboard shortcuts (apart from focus commands)."
-msgstr "Позволяет VTE получать сочетания горячих клавиш (не считая команд фокуса)."
+msgid ""
+"Allows the VTE to receive keyboard shortcuts (apart from focus commands)."
+msgstr ""
+"Позволяет VTE получать сочетания горячих клавиш (не считая команд фокуса)."
 
 #: ../src/vte.c:769
 msgid "Disable menu shortcut key (F10 by default)"
@@ -4020,7 +4045,8 @@ msgstr "Следовать пути текущего файла"
 
 #: ../src/vte.c:775
 msgid "Whether to execute \"cd $path\" when you switch between opened files."
-msgstr "Выполняет \"cd $path\" когда вы переключаетесь между открытыми файлами."
+msgstr ""
+"Выполняет \"cd $path\" когда вы переключаетесь между открытыми файлами."
 
 #. create check_skip_script checkbox before the check_skip_script checkbox to be able to
 #. use the object for the toggled handler of check_skip_script checkbox
@@ -4241,7 +4267,8 @@ msgid "_Use current zoom level"
 msgstr "_Использовать текущий уровень увеличения"
 
 #: ../plugins/export.c:190
-msgid "Renders the font size of the document together with the current zoom level."
+msgid ""
+"Renders the font size of the document together with the current zoom level."
 msgstr "Отобразить текст документа текущим размером шрифта."
 
 #: ../plugins/export.c:274
@@ -4423,7 +4450,8 @@ msgid "Autosave: Saved %d files automatically."
 msgstr "Автоматическое сохранение: %d файлов сохранено."
 
 #: ../plugins/autosave.c:141
-msgid "Print status message if files have been automatically saved"
+#, fuzzy
+msgid "Print status message if files have been automatcally saved"
 msgstr "Выводить дежурное сообщение при автоматическом сохранении файлов"
 
 #: ../plugins/autosave.c:147
@@ -4815,4 +4843,3 @@ msgstr "Сохранить тольк текущий открытый файл"
 
 #~ msgid "Build with \"make\" (custom target)"
 #~ msgstr "Построить с \"make\" (своя цель)"
-
