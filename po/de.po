@@ -1,15 +1,15 @@
 # German translations for geany package.
-# Copyright (C) 2006,2007 THE geany'S COPYRIGHT HOLDER
+# Copyright (C) 2006-2008 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
 # Enrico Tröger <enrico.troeger@uvena.de> 2006,2007, 2008
 # Frank Lanitz <frank@frank.uvena.de> 2006, 2007, 2008
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: geany 0.14svn\n"
+"Project-Id-Version: geany 0.14\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-04-05 11:38+0200\n"
-"PO-Revision-Date: 2008-03-17 23:37+0100\n"
+"PO-Revision-Date: 2008-04-06 13:57+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
@@ -219,9 +219,8 @@ msgstr ""
 
 #. DVI
 #: ../src/build.c:1160
-#, fuzzy
 msgid "LaTeX -> _DVI"
-msgstr "LaTeX -> DVI"
+msgstr "LaTeX -> _DVI"
 
 #: ../src/build.c:1163
 msgid "Compiles the current file into a DVI file"
@@ -229,9 +228,8 @@ msgstr "Kompiliert die aktuelle Datei als DVI-Datei."
 
 #. PDF
 #: ../src/build.c:1173
-#, fuzzy
 msgid "LaTeX -> _PDF"
-msgstr "LaTeX -> PDF"
+msgstr "LaTeX -> _PDF"
 
 #: ../src/build.c:1176
 msgid "Compiles the current file into a PDF file"
@@ -239,9 +237,8 @@ msgstr "Kompiliert die aktuelle Datei als PDF-Datei."
 
 #. DVI view
 #: ../src/build.c:1228
-#, fuzzy
 msgid "_View DVI File"
-msgstr "DVI-Datei anzeigen"
+msgstr "_DVI-Datei anzeigen"
 
 #: ../src/build.c:1233 ../src/build.c:1246
 msgid "Compile and view the current file"
@@ -249,15 +246,13 @@ msgstr "Kompiliert und zeigt die aktuelle Datei an"
 
 #. PDF view
 #: ../src/build.c:1242
-#, fuzzy
 msgid "V_iew PDF File"
-msgstr "PDF-Datei anzeigen"
+msgstr "_PDF-Datei anzeigen"
 
 #. arguments
 #: ../src/build.c:1261
-#, fuzzy
 msgid "_Set Arguments"
-msgstr "Programm-Parameter angeben"
+msgstr "_Programm-Parameter angeben"
 
 #: ../src/build.c:1266
 msgid "Sets the program paths and arguments"
@@ -1018,7 +1013,6 @@ msgid "R_eload As"
 msgstr "N_eu laden als"
 
 #: ../src/interface.c:392
-#, fuzzy
 msgid "Page Set_up"
 msgstr "Seiteneigensc_haften"
 
@@ -1091,45 +1085,40 @@ msgid "I_nsert Comments"
 msgstr "K_ommentare einfügen"
 
 #: ../src/interface.c:564 ../src/interface.c:2222
-#, fuzzy
 msgid "Insert _ChangeLog Entry"
-msgstr "ChangeLog-Eintrag hinzufügen"
+msgstr "_ChangeLog-Eintrag hinzufügen"
 
 #: ../src/interface.c:567 ../src/interface.c:2225
 msgid "Inserts a typical ChangeLog entry in the current file"
 msgstr "Fügt einen typischen ChangeLog-Eintrag an den Anfang der Datei ein."
 
 #: ../src/interface.c:569 ../src/interface.c:2227
-#, fuzzy
 msgid "Insert File _Header"
-msgstr "Dateikopf einfügen"
+msgstr "_Dateikopf einfügen"
 
 #: ../src/interface.c:572 ../src/interface.c:2230
 msgid "Inserts a file header at the beginning of the file"
 msgstr "Fügt einen Dateikopf am Anfang einer neu erzeugten Datei ein."
 
 #: ../src/interface.c:574 ../src/interface.c:2232
-#, fuzzy
 msgid "Insert _Function Description"
-msgstr "Funktionsbeschreibung einfügen"
+msgstr "_Funktionsbeschreibung einfügen"
 
 #: ../src/interface.c:577 ../src/interface.c:2235
 msgid "Inserts a description before the current function"
 msgstr "Fügt eine Funktionsbeschreibung vor der Funktion ein."
 
 #: ../src/interface.c:579 ../src/interface.c:2237
-#, fuzzy
 msgid "Insert _Multiline Comment"
-msgstr "Mehrzeiligen Kommentar einfügen"
+msgstr "_Mehrzeiligen Kommentar einfügen"
 
 #: ../src/interface.c:582 ../src/interface.c:2240
 msgid "Inserts a multiline comment"
 msgstr "Fügt einen mehrzeiligen Kommentar ein."
 
 #: ../src/interface.c:584 ../src/interface.c:2242
-#, fuzzy
 msgid "Insert _GPL Notice"
-msgstr "GPL-Hinweis einfügen"
+msgstr "_GPL-Hinweis einfügen"
 
 #: ../src/interface.c:587 ../src/interface.c:2245
 msgid "Inserts a GPL notice (should be done at the beginning of the file)"
@@ -1138,9 +1127,8 @@ msgstr ""
 "Datei sein)."
 
 #: ../src/interface.c:589 ../src/interface.c:2247
-#, fuzzy
 msgid "Insert _BSD License Notice"
-msgstr "BSD-Lizenz-Hinweis einfügen"
+msgstr "_BSD-Lizenz-Hinweis einfügen"
 
 #: ../src/interface.c:592 ../src/interface.c:2250
 msgid ""
@@ -1277,14 +1265,12 @@ msgid "In_dent Type"
 msgstr "Art der _Einrückung"
 
 #: ../src/interface.c:797 ../src/interface.c:3673
-#, fuzzy
 msgid "_Tabs"
-msgstr "Tabulatoren"
+msgstr "_Tabulatoren"
 
 #: ../src/interface.c:803 ../src/interface.c:3680
-#, fuzzy
 msgid "_Spaces"
-msgstr "Leerzeichen"
+msgstr "_Leerzeichen"
 
 #: ../src/interface.c:814
 msgid "Read _Only"
@@ -1538,54 +1524,44 @@ msgid "Scribble"
 msgstr "Notizen"
 
 #: ../src/interface.c:1937 ../src/interface.c:3425
-#, fuzzy
 msgid "Images _and Text"
-msgstr "Icons und Text"
+msgstr "Icons _und Text"
 
 #: ../src/interface.c:1943 ../src/interface.c:3457
-#, fuzzy
 msgid "_Images Only"
-msgstr "Nur Icons"
+msgstr "Nur _Symbole"
 
 #: ../src/interface.c:1949 ../src/interface.c:3449
-#, fuzzy
 msgid "_Text Only"
-msgstr "Nur Text"
+msgstr "Nur _Text"
 
 #: ../src/interface.c:1960 ../src/interface.c:3441
-#, fuzzy
 msgid "_Large Icons"
-msgstr "Große Symbole"
+msgstr "_Große Symbole"
 
 #: ../src/interface.c:1965 ../src/interface.c:3433
-#, fuzzy
 msgid "_Small Icons"
-msgstr "Kleine Symbole"
+msgstr "_Kleine Symbole"
 
 #: ../src/interface.c:1975
-#, fuzzy
 msgid "_Hide toolbar"
-msgstr "Werkzeugliste verbergen"
+msgstr "Werkzeugliste _verbergen"
 
 #: ../src/interface.c:2285
-#, fuzzy
 msgid "Find _Usage"
-msgstr "Auftreten finden"
+msgstr "_Auftreten finden"
 
 #: ../src/interface.c:2293
-#, fuzzy
 msgid "Go to _Tag Definition"
-msgstr "Gehe zu Tag Definition"
+msgstr "Gehe zu _Tag Definition"
 
 #: ../src/interface.c:2297
-#, fuzzy
 msgid "Go to T_ag Declaration"
-msgstr "Gehe zu Tag Deklaration"
+msgstr "Gehe zu T_ag Deklaration"
 
 #: ../src/interface.c:2301
-#, fuzzy
 msgid "Conte_xt Action"
-msgstr "Kontextaktion"
+msgstr "_Kontextaktion"
 
 #: ../src/interface.c:2313
 msgid "Go to the entered line"
@@ -1725,13 +1701,15 @@ msgstr ""
 
 #: ../src/interface.c:2935
 msgid "Use the current word under the cursor for Find dialogs"
-msgstr ""
+msgstr "Aktuelle Cursorposition zur Suche heranziehen."
 
 #: ../src/interface.c:2939
 msgid ""
 "Use current word under the cursor when opening the Find, Find in Files or "
 "Replace dialog and there is no selection."
 msgstr ""
+"Stellt ein, ob, wenn keine Auswahl getroffen wurde, das aktuelle Wort, auf "
+"dem der Cursor steht, zum »Ausahl finden« herangezogen werden soll."
 
 #: ../src/interface.c:2942 ../src/interface.c:3272 ../src/interface.c:3991
 msgid "<b>Miscellaneous</b>"
@@ -2885,12 +2863,10 @@ msgid "Switch to Search Bar"
 msgstr "Zu dem Suchfenster wechseln "
 
 #: ../src/keybindings.c:387
-#, fuzzy
 msgid "Switch to Sidebar"
-msgstr "Zu dem Suchfenster wechseln "
+msgstr "Zur Seitenleiste  wechseln"
 
 #: ../src/keybindings.c:389
-#, fuzzy
 msgid "Notebook tab"
 msgstr "Dateireiter"
 
@@ -3112,11 +3088,12 @@ msgid ""
 "The plugin \"%s\" is not binary compatible with this release of Geany - "
 "please recompile it."
 msgstr ""
+"Das Plugin »%s« ist nicht binär kompatibel mit dieser Version von Geany. "
+"Bitte neu kompilieren."
 
 #: ../src/plugins.c:679
-#, fuzzy
 msgid "_Plugin Manager"
-msgstr "Plugin Manager"
+msgstr "_Plugin Manager"
 
 #: ../src/plugins.c:804
 #, c-format
@@ -3804,7 +3781,7 @@ msgstr "Definitionen"
 
 #: ../src/symbols.c:772
 msgid "Targets"
-msgstr ""
+msgstr "Targets"
 
 #: ../src/symbols.c:784
 msgid "Namespaces"
@@ -4056,14 +4033,12 @@ msgid "Terminal"
 msgstr "Terminal"
 
 #: ../src/vte.c:483
-#, fuzzy
 msgid "_Set Path From Document"
-msgstr "Pfad des Dokumentes übernehmen"
+msgstr "Pfad des Dokumentes _übernehmen"
 
 #: ../src/vte.c:488
-#, fuzzy
 msgid "_Restart Terminal"
-msgstr "Terminal neustarten"
+msgstr "Terminal _neustarten"
 
 #: ../src/vte.c:499
 msgid "_Input Methods"
@@ -4318,14 +4293,12 @@ msgid "Create Cla_ss"
 msgstr "Klasse _erstellen"
 
 #: ../plugins/classbuilder.c:787
-#, fuzzy
 msgid "_C++ Class"
-msgstr "C++-Klasse"
+msgstr "_C++-Klasse"
 
 #: ../plugins/classbuilder.c:790
-#, fuzzy
 msgid "_GTK+ Class"
-msgstr "GTK+-Klasse"
+msgstr "_GTK+-Klasse"
 
 #: ../plugins/htmlchars.c:41
 msgid "HTML Characters"
@@ -4442,20 +4415,17 @@ msgstr "_Exportieren"
 
 #. HTML
 #: ../plugins/export.c:719
-#, fuzzy
 msgid "As _HTML"
-msgstr "Als HTML exportieren"
+msgstr "Als _HTML exportieren"
 
 #. LaTeX
 #: ../plugins/export.c:726
-#, fuzzy
 msgid "As _LaTeX"
-msgstr "Als LaTeX exportieren"
+msgstr "Als _LaTeX exportieren"
 
 #: ../plugins/vcdiff.c:46
-#, fuzzy
 msgid "Version Diff"
-msgstr "VC Diff"
+msgstr "Version Diff"
 
 #: ../plugins/vcdiff.c:46
 msgid "Creates a patch of a file against version control."
@@ -4490,9 +4460,8 @@ msgid "An error occurred (%s)."
 msgstr "Ein Fehler ist aufgetreten (%s)."
 
 #: ../plugins/vcdiff.c:509
-#, fuzzy
 msgid "_Version Diff"
-msgstr "VC Diff"
+msgstr "_Version Diff"
 
 #. Single file
 #: ../plugins/vcdiff.c:519
@@ -4568,11 +4537,11 @@ msgstr "Pfad des Dokumentes übernehmen"
 
 #: ../plugins/filebrowser.c:869
 msgid "Focus File List"
-msgstr ""
+msgstr "Dateiliste in den Vordergrund"
 
 #: ../plugins/filebrowser.c:871
 msgid "Focus Path Entry"
-msgstr ""
+msgstr "Pfad in den Vordergrund"
 
 #: ../plugins/filebrowser.c:887
 msgid "External open command:"
@@ -4636,7 +4605,6 @@ msgid "seconds"
 msgstr "Sekunden"
 
 #: ../plugins/autosave.c:141
-#, fuzzy
 msgid "Print status message if files have been automatically saved"
 msgstr "Statusmeldung ausgeben wenn Dateien automatisch gespeichert wurden."
 
