@@ -1,3 +1,8 @@
+2008-04-06  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * THANKS: Added Dominic Hopf to list of translation supporters.
+
+
 2008-04-04  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Makefile.am: Fix issue on make dist with intl_stats.sh-script.

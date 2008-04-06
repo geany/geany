@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: geany 0.14\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-04-05 11:38+0200\n"
-"PO-Revision-Date: 2008-04-06 13:57+0100\n"
-"Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
+"PO-Revision-Date: 2008-04-06 19:03+0100\n"
+"Last-Translator: Dominic Hopf <dh@dmaphy.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -18,6 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GERMANY\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Language: German\n"
 
 #: ../geany.desktop.in.h:1
 msgid "A fast and lightweight IDE using GTK2"
@@ -122,7 +123,7 @@ msgstr "%s (im Verzeichnis: %s)"
 #: ../src/build.c:560
 msgid "Command stopped because the current file has no extension."
 msgstr ""
-"Die Ausführung des Kommandos wurde unterbrochen, da die Datei keine  "
+"Die Ausführung des Kommandos wurde unterbrochen, da die Datei keine "
 "Dateiendung besitzt."
 
 #: ../src/build.c:571
@@ -140,16 +141,16 @@ msgstr "Konnte nicht in das Arbeitsverzeichnis »%s« wechseln"
 msgid ""
 "Could not execute the file in the VTE because it probably contains a command."
 msgstr ""
-"Konnte nicht die Datei in der VTE ausführen weil eventuell ein Befehl auf "
+"Konnte die Datei nicht in der VTE ausführen weil eventuell ein Befehl auf "
 "der Kommandozeile steht."
 
 #: ../src/build.c:916
 msgid "Compilation failed."
-msgstr "Übersetzung fehlgeschlagen."
+msgstr "Kompilierung fehlgeschlagen."
 
 #: ../src/build.c:930
 msgid "Compilation finished successfully."
-msgstr "Übersetzung erfolgreich beendet."
+msgstr "Kompilierung erfolgreich beendet."
 
 #. compile the code
 #: ../src/build.c:1043
@@ -167,7 +168,7 @@ msgstr "_Erstellen"
 
 #: ../src/build.c:1059
 msgid "Builds the current file (generate an executable file)"
-msgstr "Übersetzt die aktuelle Datei (erzeugt eine ausführbare Datei)"
+msgstr "Kompiliert die aktuelle Datei (erzeugt eine ausführbare Datei)"
 
 #. build the code with make all
 #: ../src/build.c:1069 ../src/build.c:1190
@@ -176,7 +177,7 @@ msgstr "_Make all"
 
 #: ../src/build.c:1072 ../src/build.c:1193
 msgid "Builds the current file with the make tool and the default target"
-msgstr "Übersetzt die aktuelle Datei mit »make« und dem Default-Target"
+msgstr "Kompiliert die aktuelle Datei mit »make« und dem Default-Target"
 
 #. build the code with make custom
 #: ../src/build.c:1080 ../src/build.c:1201
@@ -185,7 +186,7 @@ msgstr "Make (eigenes _Target)"
 
 #: ../src/build.c:1084 ../src/build.c:1205
 msgid "Builds the current file with the make tool and the specified target"
-msgstr "Übersetzt die aktuelle Datei mit »make« und dem angegebenem Target"
+msgstr "Kompiliert die aktuelle Datei mit »make« und dem angegebenem Target"
 
 #. build the code with make object
 #: ../src/build.c:1091
@@ -372,11 +373,11 @@ msgstr "Bitte legen Sie den Dateityp fest, bevor Sie diese Funktion benutzen."
 
 #: ../src/callbacks.c:1484 ../src/ui_utils.c:485
 msgid "dd.mm.yyyy"
-msgstr "TT.MM.JJ"
+msgstr "TT.MM.JJJJ"
 
 #: ../src/callbacks.c:1486 ../src/ui_utils.c:486
 msgid "mm.dd.yyyy"
-msgstr "MM.TT.JJ"
+msgstr "MM.TT.JJJJ"
 
 #: ../src/callbacks.c:1488 ../src/ui_utils.c:487
 msgid "yyyy/mm/dd"
@@ -486,7 +487,7 @@ msgstr ""
 #: ../src/dialogs.c:448 ../plugins/export.c:333
 #, c-format
 msgid "The file '%s' already exists. Do you want to overwrite it?"
-msgstr "Die Datei »%s« existiert bereits. Soll sie überschreiben werden?"
+msgstr "Die Datei »%s« existiert bereits. Soll sie überschrieben werden?"
 
 #: ../src/dialogs.c:473
 msgid "Save File"
@@ -543,7 +544,7 @@ msgid ""
 "new file)."
 msgstr ""
 "Es ist ein Fehler aufgetreten oder Datei-Informationen konnten nicht gelesen "
-"werden(z.B. bei einer neuen, ungespeicherten Datei)."
+"werden (z.B. bei einer neuen, noch nicht gespeicherten Datei)."
 
 #: ../src/dialogs.c:990 ../src/dialogs.c:991 ../src/dialogs.c:992
 #: ../src/dialogs.c:998 ../src/dialogs.c:999 ../src/dialogs.c:1000
@@ -642,7 +643,7 @@ msgstr "Neue Datei \"%s\" geöffnet."
 #: ../src/document.c:830 ../src/document.c:1229
 #, c-format
 msgid "Could not open file %s (%s)"
-msgstr "Konnte Datei '%s' nicht öffnen(%s)."
+msgstr "Konnte Datei '%s' nicht öffnen (%s)."
 
 #: ../src/document.c:859
 #, c-format
@@ -653,7 +654,7 @@ msgid ""
 "The file was set to read-only."
 msgstr ""
 "Die Datei »%s« konnte nicht ordnungsgemäß geladen werden und wurde evtl.  "
-"abgeschnitten. Die kann zu Datenverlust beim Speichern führen!\n"
+"abgeschnitten. Dies kann zu Datenverlust beim Speichern führen!\n"
 "Die Datei wird schreibgeschützt geöffnet."
 
 #: ../src/document.c:883
@@ -667,8 +668,8 @@ msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
 "supported."
 msgstr ""
-"Die Datei \"%s\" scheint keine Textdatei zu sein, oder das Format wird nicht "
-"unterstützt."
+"Die Datei \"%s\" scheint keine Textdatei zu sein, oder die Zeichenkodierung "
+"wird nicht unterstützt."
 
 #: ../src/document.c:1001
 msgid "Invalid filename"
@@ -695,7 +696,7 @@ msgstr "Datei %s neu geladen."
 #: ../src/document.c:1118
 #, c-format
 msgid "File %s opened(%d%s)."
-msgstr "Datei %s geöffnet(%d%s)."
+msgstr "Datei %s geöffnet (%d%s)."
 
 #: ../src/document.c:1120
 msgid ", read-only"
@@ -711,8 +712,8 @@ msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
 "remains unsaved."
 msgstr ""
-"Beim Konvertieren der Datei von UTF-8 in \"%s\" ist ein Fehler aufgetreten. "
-"Die Datei bleibt ungespeichert."
+"Beim Konvertieren der Datei von UTF-8 nach \"%s\" ist ein Fehler "
+"aufgetreten. Die Datei bleibt ungespeichert."
 
 #: ../src/document.c:1395
 #, c-format
@@ -857,11 +858,11 @@ msgstr "Unicode"
 #: ../src/encodings.c:120 ../src/encodings.c:121 ../src/encodings.c:122
 #: ../src/encodings.c:123
 msgid "Chinese Simplified"
-msgstr "Chinesisch vereinfacht"
+msgstr "Chinesisch, vereinfacht"
 
 #: ../src/encodings.c:124 ../src/encodings.c:125 ../src/encodings.c:126
 msgid "Chinese Traditional"
-msgstr "Chinesisch traditionell"
+msgstr "Chinesisch, traditionell"
 
 #: ../src/encodings.c:127 ../src/encodings.c:128 ../src/encodings.c:129
 msgid "Japanese"
@@ -1334,7 +1335,7 @@ msgstr "_Alle ausklappen"
 
 #: ../src/interface.c:900
 msgid "Unfolds all contracted code blocks"
-msgstr "Klappt alle ausgeblendeten Codeblöcke wieder ausklappen"
+msgstr "Blendet alle ausgeblendeten Quelltext-Blöcke wieder ein."
 
 #: ../src/interface.c:907
 msgid "Remove _Markers"
@@ -1709,7 +1710,7 @@ msgid ""
 "Replace dialog and there is no selection."
 msgstr ""
 "Stellt ein, ob, wenn keine Auswahl getroffen wurde, das aktuelle Wort, auf "
-"dem der Cursor steht, zum »Ausahl finden« herangezogen werden soll."
+"dem der Cursor steht, zum »Auswahl finden« herangezogen werden soll."
 
 #: ../src/interface.c:2942 ../src/interface.c:3272 ../src/interface.c:3991
 msgid "<b>Miscellaneous</b>"
@@ -2068,9 +2069,9 @@ msgid ""
 "below) changed to the color set below. (This is recommended if you use "
 "proportional fonts)"
 msgstr ""
-"Die Hintergrundfarbe der Zeichen, die hinter der angegebenen Cursor-Position"
-"(siehe unten) stehen, wird auf die unten angegebene Farbe geändert  "
-"(nützlich für proportionale Schriftarten)."
+"Die Hintergrundfarbe der Zeichen, die hinter der angegebenen Cursor-Position "
+"(siehe unten) stehen, wird auf die unten angegebene Farbe geändert (nützlich "
+"für proportionale Schriftarten)."
 
 #: ../src/interface.c:3594
 msgid "Disabled"
@@ -2102,7 +2103,7 @@ msgstr "Übereinstimmende Klammerung"
 
 #: ../src/interface.c:3655
 msgid "The width in chars, which one tab character will take"
-msgstr "Die Breite in Zeichen, die ein Tabalutar-Zeichen einnimmt"
+msgstr "Die Breite in Zeichen, die ein Tabalutor-Zeichen einnimmt"
 
 #: ../src/interface.c:3660
 msgid "Tab width:"
@@ -2143,7 +2144,7 @@ msgid ""
 "key always moves the caret to the start of the current line, regardless of "
 "its current position."
 msgstr ""
-"Wenn die intelligente Pos1-taste (home) aktiviert ist, springt der Cursor "
+"Wenn die intelligente Pos1-Taste (Home) aktiviert ist, springt der Cursor "
 "bei Tastendruck zum ersten Zeichen der Editorzeile. Sollte er sich bereits "
 "dort befinden, springt er zum Beginn der kompletten Zeile. Wenn diese Option "
 "nicht aktiviert ist, springt der Cursor immer zum Beginn der Zeile ohne auf "
@@ -2161,23 +2162,25 @@ msgstr "Deaktiviert Drag and Drop für das komplette Editorfenster."
 
 #: ../src/interface.c:3737
 msgid "Enable folding"
-msgstr "Quellcode-Ausblendung aktivieren"
+msgstr "Quelltext-Ausblendung aktivieren"
 
 #: ../src/interface.c:3740
 msgid "Whether to enable folding the code"
-msgstr "Legt fest, ob es möglich sein soll, Teile des Quellcodes auszublenden."
+msgstr ""
+"Legt fest, ob es möglich sein soll, Teile des Quelltextes auszublenden."
 
 #: ../src/interface.c:3743
 msgid "Fold/Unfold all children of a fold point"
-msgstr "Alle untergeordneten Codeblöcke ebenfalls ein/ausklappen"
+msgstr "Alle untergeordneten Quelltextblöcke ebenfalls ein/ausklappen"
 
 #: ../src/interface.c:3746
 msgid ""
 "Fold or unfold all children of a fold point. By pressing the Shift key while "
 "clicking on a fold symbol the contrary behaviour is used."
 msgstr ""
-"Konnte nicht die Datei in der VTE ausführen weil eventuell ein Befehl auf "
-"der Kommandozeile steht."
+"Blendet alle untergeordneten Punkte zum Ein- bzw. Ausblenden von Quelltext "
+"mit ein und aus. Der Druck auf die Feststelltaste (Shift) während eines "
+"Klicks auf ein Ausblende-Symbol bewirkt das Gegenteil."
 
 #: ../src/interface.c:3749
 msgid "Use indicators to show compile errors"
@@ -2261,7 +2264,7 @@ msgstr ""
 
 #: ../src/interface.c:3836
 msgid "<b>Completions</b>"
-msgstr "<b>Cervollständigungen</b>"
+msgstr "<b>Vervollständigungen</b>"
 
 #: ../src/interface.c:3841 ../src/keybindings.c:210
 msgid "Editor"
@@ -2281,11 +2284,11 @@ msgstr "Standardzeichenkodierung (existierende Dateien):"
 
 #: ../src/interface.c:3898
 msgid "Sets the default encoding for opening existing files."
-msgstr "Setzt die Standardzeichenkodierung für zu öffnende Dateien"
+msgstr "Setzt die Standard-Zeichenkodierung für zu öffnende Dateien"
 
 #: ../src/interface.c:3904
 msgid "Use fixed encoding when opening files"
-msgstr "Benutze feststehende Kodierung beim Öffnen neuer Dateien"
+msgstr "Benutze feststehende Zeichenkodierung beim Öffnen neuer Dateien"
 
 #: ../src/interface.c:3909
 msgid ""
@@ -2314,7 +2317,7 @@ msgstr "Leerzeichen am Zeilenende entfernen"
 
 #: ../src/interface.c:3942
 msgid "Removes trailing spaces and tabs and the end of lines"
-msgstr "Entfernt Leerzeichen an Zeilenenden"
+msgstr "Entfernt Leerzeichen am Ende einer Zeile"
 
 #: ../src/interface.c:3945 ../src/keybindings.c:409
 msgid "Replace tabs by space"
@@ -2504,7 +2507,7 @@ msgstr "Basisname der aktuellen Datei benutzen"
 #: ../src/interface.c:4419 ../src/printing.c:376
 msgid "Print only the basename(without the path) of the printed file."
 msgstr ""
-"Nur den Basisdateinamen(ohne die Pfadangabe) der zu druckenden Datei "
+"Nur den Basisdateinamen (ohne die Pfadangabe) der zu druckenden Datei "
 "verwenden."
 
 #: ../src/interface.c:4426 ../src/printing.c:383
@@ -2692,11 +2695,11 @@ msgstr "Kommentierung umschalten"
 
 #: ../src/keybindings.c:275
 msgid "Comment line(s)"
-msgstr "Zeile(n) auskommentieren"
+msgstr "Zeile(n) kommentieren"
 
 #: ../src/keybindings.c:277
 msgid "Uncomment line(s)"
-msgstr "Zeile(n) einkommentieren"
+msgstr "Kommentarzeichen entfernen"
 
 #: ../src/keybindings.c:279
 msgid "Increase indent"
@@ -2864,7 +2867,7 @@ msgstr "Zu dem Suchfenster wechseln "
 
 #: ../src/keybindings.c:387
 msgid "Switch to Sidebar"
-msgstr "Zur Seitenleiste  wechseln"
+msgstr "Zur Seitenleiste wechseln"
 
 #: ../src/keybindings.c:389
 msgid "Notebook tab"
@@ -2904,11 +2907,11 @@ msgstr "Dokument"
 
 #: ../src/keybindings.c:411
 msgid "Fold all"
-msgstr "Alle einklappen"
+msgstr "Alle einblenden"
 
 #: ../src/keybindings.c:413
 msgid "Unfold all"
-msgstr "Alle ausklappen"
+msgstr "Alle ausblenden"
 
 #: ../src/keybindings.c:415
 msgid "Reload symbol list"
@@ -3088,8 +3091,8 @@ msgid ""
 "The plugin \"%s\" is not binary compatible with this release of Geany - "
 "please recompile it."
 msgstr ""
-"Das Plugin »%s« ist nicht binär kompatibel mit dieser Version von Geany. "
-"Bitte neu kompilieren."
+"Das Plugin »%s« ist nicht kompatibel mit dieser Version von Geany. Bitte neu "
+"kompilieren."
 
 #: ../src/plugins.c:679
 msgid "_Plugin Manager"
@@ -3240,7 +3243,7 @@ msgstr "Drucken der Datei \"%s\" ist fehlgeschlagen (%s)."
 #: ../src/printing.c:819
 msgid "Please set a print command in the preferences dialog first"
 msgstr ""
-"Bitte geben Sie zuerst einen befehl zum Drucken im einstellungsdialog an"
+"Bitte geben Sie zuerst einen Befehl zum Drucken in den Einstellungen an."
 
 #: ../src/printing.c:827
 #, c-format
@@ -3291,7 +3294,7 @@ msgid ""
 "project filename."
 msgstr ""
 "Basisverzeichnis aller Dateien, die zu einem Projekt gehören. Es kann sowohl "
-"ein bereits existierender, als auch ein neu zu erstellendes Verzeichnis "
+"ein bereits existierendes, als auch ein neu zu erstellendes Verzeichnis "
 "sein. Weiterhin kann es sowohl in relativer als auch absoluter Form "
 "eingegeben werden."
 
@@ -3362,7 +3365,7 @@ msgstr "Der eingegebene Projektname ist zu kurz."
 #: ../src/project.c:604
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
-msgstr "Der eingegebene Projektname ist zu lang (max %d Zeichen)."
+msgstr "Der eingegebene Projektname ist zu lang (max. %d Zeichen)."
 
 #: ../src/project.c:612
 msgid "You have specified an invalid project filename."
@@ -3375,7 +3378,7 @@ msgstr "Projektdatei konnte nicht geschrieben werden (%s)."
 
 #: ../src/project.c:641
 msgid "Create the project's base path directory?"
-msgstr "Soll der Projektbasisverzeichnis erstellt werden?"
+msgstr "Soll das Projektbasisverzeichnis erstellt werden?"
 
 #: ../src/project.c:642
 #, c-format
@@ -3724,7 +3727,7 @@ msgstr "Variablen"
 
 #: ../src/symbols.c:648
 msgid "JavaScript functions"
-msgstr "Javascript Funktionen"
+msgstr "Javascript-Funktionen"
 
 #: ../src/symbols.c:649
 msgid "Anchor"
@@ -3964,7 +3967,7 @@ msgstr "ÜBER"
 
 #: ../src/ui_utils.c:155
 msgid "INS"
-msgstr "EINF"
+msgstr "EINFG"
 
 #: ../src/ui_utils.c:158
 msgid "TAB"
@@ -4146,7 +4149,7 @@ msgstr "Geany Tastenkombination überschreiben"
 msgid ""
 "Allows the VTE to receive keyboard shortcuts (apart from focus commands)."
 msgstr ""
-"Erlaubt die VTE über Tastaturkürzel an zu sprechen (mit Ausnahme der Fokus "
+"Erlaubt die VTE über Tastenkürzel anzusprechen (mit Ausnahme der Fokus "
 "Kommandos)."
 
 #: ../src/vte.c:774
@@ -4246,11 +4249,11 @@ msgstr "Klassenname:"
 
 #: ../plugins/classbuilder.c:386
 msgid "Header file:"
-msgstr "Header-Datei"
+msgstr "Header-Datei:"
 
 #: ../plugins/classbuilder.c:395
 msgid "Source file:"
-msgstr "Quelldatei"
+msgstr "Quelldatei:"
 
 #: ../plugins/classbuilder.c:401
 msgid "Inheritance"
@@ -4262,7 +4265,7 @@ msgstr "Basisklasse:"
 
 #: ../plugins/classbuilder.c:423
 msgid "Base header:"
-msgstr "Basis Header-Datei::"
+msgstr "Basis Header-Datei:"
 
 #: ../plugins/classbuilder.c:431
 msgid "Global"
@@ -4327,7 +4330,7 @@ msgid ""
 "the button to insert it at the current cursor position."
 msgstr ""
 "Wählen Sie das gesuchte Sonderzeichen aus der Liste aus und fügen Sie es mit "
-"einem Doppelklick oder über die Button »Einfügen« in Ihre aktuelles Dokument "
+"einem Doppelklick oder über den Button »Einfügen« in Ihr aktuelles Dokument "
 "ein."
 
 #: ../plugins/htmlchars.c:109
@@ -4452,7 +4455,7 @@ msgstr "Es wurden keine Änderungen vorgenommen."
 #: ../plugins/vcdiff.c:377
 #, c-format
 msgid "unknown error while trying to spawn a process for %s"
-msgstr "unbekannter Fehler beim Versuch, den Prozess %s auszuführen."
+msgstr "Unbekannter Fehler beim Versuch, den Prozess %s auszuführen."
 
 #: ../plugins/vcdiff.c:380
 #, c-format
@@ -4575,7 +4578,7 @@ msgid ""
 "Don't show generated object files in the file browser, this includes *.o, *."
 "obj. *.so, *.dll, *.a, *.lib"
 msgstr ""
-"Erzeugte Objektdateien nicht im Dateibrowser anzeigen(*.o, *.obj. *.so, *."
+"Erzeugte Objektdateien nicht im Dateibrowser anzeigen (*.o, *.obj. *.so, *."
 "dll, *.a, *.lib)."
 
 #: ../plugins/filebrowser.c:940 ../plugins/autosave.c:179
