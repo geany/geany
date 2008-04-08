@@ -217,9 +217,7 @@ static void run_open_dialog(GtkDialog *dialog)
 		{
 			configuration_open_files();
 			/* open a new file if no other file was opened */
-			/** TODO refactor the following into a function to be used here and in main() */
-			if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
-				document_new_file(NULL, NULL, NULL);
+			document_new_file_if_non_open();
 		}
 	}
 }
@@ -251,8 +249,7 @@ void project_open()
 		{
 			configuration_open_files();
 			/* open a new file if no other file was opened */
-			if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
-				document_new_file(NULL, NULL, NULL);
+			document_new_file_if_non_open();
 		}
 		g_free(file);
 	}
@@ -343,8 +340,7 @@ void project_close(gboolean open_default)
 			configuration_reload_default_session();
 			configuration_open_files();
 			/* open a new file if no other file was opened */
-			if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
-				document_new_file(NULL, NULL, NULL);
+			document_new_file_if_non_open();
 		}
 	}
 

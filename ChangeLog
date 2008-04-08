@@ -1,3 +1,10 @@
+2008-04-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/document.c, src/document.h, src/main.c, src/project.c:
+   Add document_new_file_if_non_open() to open new documents if no
+   other documents are open.
+
+
 2008-04-06  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * THANKS: Added Dominic Hopf to list of translation supporters.
@@ -7,7 +14,7 @@
 
  * Makefile.am: Fix issue on make dist with intl_stats.sh-script.
  * scripts/changelist.pl: Make help output better readable if there are
-   not enough arguments given.
+                          not enough arguments given.
 
 
 2008-04-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -153,6 +153,8 @@ void document_apply_update_prefs(gint idx);
 
 gboolean document_remove(guint page_num);
 
+gint document_new_file_if_non_open();
+
 gint document_new_file(const gchar *filename, filetype *ft, const gchar *text);
 
 gint document_clone(gint old_idx, const gchar *utf8_filename);
