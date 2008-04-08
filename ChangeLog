@@ -8,6 +8,8 @@
  * Makefile.am, scripts/intl_stats.sh, po/intl_stats.sh:
    Move intl_stats.sh script back to po directory to not have to
    include the scripts directory in the distribution.
+ * src/win32.c:
+   Fix compiler warnings by correct type casting.
 
 
 2008-04-06  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

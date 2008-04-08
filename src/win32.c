@@ -1145,6 +1145,8 @@ static gboolean resolve_link(HWND hWnd, wchar_t *link, gchar **lpszPath)
 	HRESULT hres;
 	IShellLinkW *pslW = NULL;
 	IPersistFile *ppf = NULL;
+	LPVOID pslWV = NULL;
+	LPVOID ppfV = NULL;
 
 	/* Check if the file is empty first because IShellLink::Resolve for some reason succeeds
 	 * with an empty file and returns an empty "link target". (#524151) */
@@ -1160,18 +1162,20 @@ static gboolean resolve_link(HWND hWnd, wchar_t *link, gchar **lpszPath)
 	CoInitialize(NULL);
 
 	hres = CoCreateInstance(
-		&CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, &IID_IShellLinkW, (LPVOID *) &pslW);
+		&CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, &IID_IShellLinkW, &pslWV);
 
 	if (SUCCEEDED(hres))
 	{
 		/* The IShellLink interface supports the IPersistFile interface.
 		 * Get an interface pointer to it. */
-		hres = pslW->lpVtbl->QueryInterface(pslW, &IID_IPersistFile, (LPVOID *) &ppf);
+		pslW = (IShellLinkW*) pslWV;
+		hres = pslW->lpVtbl->QueryInterface(pslW, &IID_IPersistFile, &ppfV);
 	}     
 
 	if (SUCCEEDED(hres))
 	{
 		/* Load the file. */
+		ppf = (IPersistFile*) ppfV;
 		hres = ppf->lpVtbl->Load(ppf, link, STGM_READ);
 	}
 
