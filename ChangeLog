@@ -3,6 +3,8 @@
  * src/document.c, src/document.h, src/main.c, src/project.c:
    Add document_new_file_if_non_open() to open new documents if no
    other documents are open.
+ * src/editor.c:
+   Backport a bugfix from Scite to fix folding problems.
 
 
 2008-04-06  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

@@ -342,7 +342,7 @@ static void fold_changed(ScintillaObject *sci, gint line, gint levelNow, gint le
 			expand(sci, &line, TRUE, FALSE, 0, levelPrev);
 		}
 	}
-	else if (! (levelNow & SC_FOLDLEVELWHITEFLAG) &&
+	if (! (levelNow & SC_FOLDLEVELWHITEFLAG) &&
 			((levelPrev & SC_FOLDLEVELNUMBERMASK) > (levelNow & SC_FOLDLEVELNUMBERMASK)))
 	{
 		/* See if should still be hidden */
