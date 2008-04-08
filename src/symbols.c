@@ -324,7 +324,7 @@ static TMTag *find_work_object_tag(const TMWorkObject *workobj,
 static TMTag *find_workspace_tag(const gchar *tag_name, gint type)
 {
 	guint j;
-	const GPtrArray *work_objects;
+	const GPtrArray *work_objects = NULL;
 
 	if (app->tm_workspace != NULL)
 		work_objects = app->tm_workspace->work_objects;

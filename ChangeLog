@@ -10,6 +10,8 @@
    include the scripts directory in the distribution.
  * src/win32.c:
    Fix compiler warnings by correct type casting.
+ * src/symbols.c:
+   Fix possible crash by an uninitialized variable.
 
 
 2008-04-06  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
