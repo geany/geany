@@ -72,7 +72,7 @@ $(RES): ../geany_private.rc ../pixmaps/geany.ico
 # this calls parent clean-local target because del ../file won't work
 clean:
 	-$(RM) deps.mak *.o
-	cd .. && make -f makefile.win32 clean-local && cd src
+	cd .. && $(MAKE) -f makefile.win32 clean-local && cd src
 
 exec:
 	$(EXECDIR)\geany.exe
