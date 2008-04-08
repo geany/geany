@@ -30,7 +30,7 @@ EXTRA_DIST = \
 	HACKING \
 	README.I18N \
 	README.Packagers \
-	scripts/intl_stats.sh \
+	po/intl_stats.sh \
 	intltool-extract.in \
 	intltool-merge.in \
 	intltool-update.in \
