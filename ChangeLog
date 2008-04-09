@@ -1,3 +1,9 @@
+2008-04-09  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * src/ui_utils.c: Make some more strings translateable. Thanks to
+   Adrovane Kade for reporting.
+
+
 2008-04-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * configure.in:

@@ -157,16 +157,16 @@ void ui_update_statusbar(gint idx, gint pos)
 		g_string_append(stats_str,
 			(doc_list[idx].use_tabs) ? _("TAB") : _("SP "));	/* SP = space */
 		g_string_append(stats_str, sp);
-		g_string_append_printf(stats_str, "mode: %s",
+		g_string_append_printf(stats_str, _("mode: %s"),
 			document_get_eol_mode(idx));
 		g_string_append(stats_str, sp);
-		g_string_append_printf(stats_str, "encoding: %s %s",
+		g_string_append_printf(stats_str, _("encoding: %s %s"),
 			(doc_list[idx].encoding) ? doc_list[idx].encoding : _("unknown"),
 			(encodings_is_unicode_charset(doc_list[idx].encoding)) ?
 				/* BOM = byte order mark */
 				((doc_list[idx].has_bom) ? _("(with BOM)") : "") : "");
 		g_string_append(stats_str, sp);
-		g_string_append_printf(stats_str, "filetype: %s",
+		g_string_append_printf(stats_str, _("filetype: %s"),
 			(doc_list[idx].file_type) ? doc_list[idx].file_type->name :
 				filetypes[GEANY_FILETYPES_ALL]->name);
 		g_string_append(stats_str, sp);
@@ -177,7 +177,7 @@ void ui_update_statusbar(gint idx, gint pos)
 		}
 
 		utils_get_current_function(idx, &cur_tag);
-		g_string_append_printf(stats_str, "scope: %s",
+		g_string_append_printf(stats_str, _("scope: %s"),
 			cur_tag);
 
 		/* can be overridden by status messages */
