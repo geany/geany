@@ -40,13 +40,14 @@ vcdiff_la_SOURCES        = vcdiff.c
 autosave_la_SOURCES      = autosave.c
 filebrowser_la_SOURCES   = filebrowser.c
 
-demoplugin_la_LIBADD    = $(GTK_LIBS)
-classbuilder_la_LIBADD  = $(GTK_LIBS)
-htmlchars_la_LIBADD     = $(GTK_LIBS)
-export_la_LIBADD        = $(GTK_LIBS)
-vcdiff_la_LIBADD        = $(GTK_LIBS)
-autosave_la_LIBADD      = $(GTK_LIBS)
-filebrowser_la_LIBADD   = $(GTK_LIBS)
+# we don't need to link against GTK libraries (or do we?)
+#~ demoplugin_la_LIBADD    = $(GTK_LIBS)
+#~ classbuilder_la_LIBADD  = $(GTK_LIBS)
+#~ htmlchars_la_LIBADD     = $(GTK_LIBS)
+#~ export_la_LIBADD        = $(GTK_LIBS)
+#~ vcdiff_la_LIBADD        = $(GTK_LIBS)
+#~ autosave_la_LIBADD      = $(GTK_LIBS)
+#~ filebrowser_la_LIBADD   = $(GTK_LIBS)
 
 endif # PLUGINS
 

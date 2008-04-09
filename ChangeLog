@@ -2,6 +2,8 @@
 
  * configure.in:
    Add an explicit check for a C++ compiler (#1938040).
+ * plugins/Makefile.am:
+   Avoid linking plugins against GTK libraries which seems unnecessary.
 
 
 2008-04-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
