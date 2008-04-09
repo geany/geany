@@ -1,3 +1,9 @@
+2008-04-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * configure.in:
+   Add an explicit check for a C++ compiler (#1938040).
+
+
 2008-04-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/document.c, src/document.h, src/main.c, src/project.c:

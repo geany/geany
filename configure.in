@@ -13,6 +13,13 @@ AC_MINIX
 AC_PROG_CC
 
 AC_PROG_CXX
+# check for C++ compiler explicitly and fail if none is found, do this check
+# after AC_PROG_CXX has set the CXX environment variable
+AC_CHECK_PROG([have_cxx], [$CXX], [yes], [no])
+if test "x$have_cxx" = "xno"; then
+	AC_MSG_ERROR([No C++ compiler not found. Please install a C++ compiler.])
+fi
+
 #AC_PROG_RANLIB
 AC_PROG_INSTALL
 AC_PROG_LN_S
