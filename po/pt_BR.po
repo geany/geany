@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Geany 0.14\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-04-05 11:38+0200\n"
-"PO-Revision-Date: 2008-02-02 09:58-0300\n"
+"PO-Revision-Date: 2008-04-09 13:18-0300\n"
 "Last-Translator: Adrovane Marques Kade <adrovane@gmail.com>\n"
 "Language-Team: Portuguese <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
@@ -216,9 +216,8 @@ msgstr ""
 
 #. DVI
 #: ../src/build.c:1160
-#, fuzzy
 msgid "LaTeX -> _DVI"
-msgstr "LaTeX -> DVI"
+msgstr "LaTeX -> _DVI"
 
 #: ../src/build.c:1163
 msgid "Compiles the current file into a DVI file"
@@ -226,9 +225,8 @@ msgstr "Compila o arquivo atual para um arquivo DVI"
 
 #. PDF
 #: ../src/build.c:1173
-#, fuzzy
 msgid "LaTeX -> _PDF"
-msgstr "LaTeX -> PDF"
+msgstr "LaTeX -> _PDF"
 
 #: ../src/build.c:1176
 msgid "Compiles the current file into a PDF file"
@@ -236,9 +234,8 @@ msgstr "Compila o arquivo atual para um arquivo PDF"
 
 #. DVI view
 #: ../src/build.c:1228
-#, fuzzy
 msgid "_View DVI File"
-msgstr "Visualizar Arquivo DVI"
+msgstr "_Visualizar Arquivo DVI"
 
 #: ../src/build.c:1233 ../src/build.c:1246
 msgid "Compile and view the current file"
@@ -246,15 +243,13 @@ msgstr "Compila e visualiza o arquivo atual"
 
 #. PDF view
 #: ../src/build.c:1242
-#, fuzzy
 msgid "V_iew PDF File"
-msgstr "Visualizar Arquivo PDF"
+msgstr "V_isualizar Arquivo PDF"
 
 #. arguments
 #: ../src/build.c:1261
-#, fuzzy
 msgid "_Set Arguments"
-msgstr "Definir Argumentos"
+msgstr "_Definir Argumentos"
 
 #: ../src/build.c:1266
 msgid "Sets the program paths and arguments"
@@ -1017,9 +1012,8 @@ msgid "R_eload As"
 msgstr "R_ecarregar Como"
 
 #: ../src/interface.c:392
-#, fuzzy
 msgid "Page Set_up"
-msgstr "C_onfigurar página"
+msgstr "Config_urar página"
 
 #: ../src/interface.c:399
 msgid "Prints the current file"
@@ -1075,11 +1069,11 @@ msgstr "D_uplicar Linha ou Seleção"
 
 #: ../src/interface.c:517 ../src/interface.c:2175
 msgid "_Increase Indent"
-msgstr "Aumen_tar Indentação"
+msgstr "Aumen_tar Endentação"
 
 #: ../src/interface.c:525 ../src/interface.c:2183
 msgid "_Decrease Indent"
-msgstr "Dimi_nuir Indentação"
+msgstr "Dimi_nuir Endentação"
 
 #: ../src/interface.c:538 ../src/interface.c:2196
 msgid "_Send Selection to"
@@ -1090,54 +1084,48 @@ msgid "I_nsert Comments"
 msgstr "Inserir _Comentários"
 
 #: ../src/interface.c:564 ../src/interface.c:2222
-#, fuzzy
 msgid "Insert _ChangeLog Entry"
-msgstr "Inserir Entrada de ChangeLog"
+msgstr "Inserir Entrada de _ChangeLog"
 
 #: ../src/interface.c:567 ../src/interface.c:2225
 msgid "Inserts a typical ChangeLog entry in the current file"
 msgstr "Insere uma entrada de ChangeLog típica no arquivo atual"
 
 #: ../src/interface.c:569 ../src/interface.c:2227
-#, fuzzy
 msgid "Insert File _Header"
-msgstr "Inserir Cabeçalho de Arquivo"
+msgstr "Inserir Cabeçal_ho de Arquivo"
 
 #: ../src/interface.c:572 ../src/interface.c:2230
 msgid "Inserts a file header at the beginning of the file"
 msgstr "Insere um cabeçalho no início do arquivo"
 
 #: ../src/interface.c:574 ../src/interface.c:2232
-#, fuzzy
 msgid "Insert _Function Description"
-msgstr "Inserir Descrição de Função"
+msgstr "Inserir Descrição de _Função"
 
 #: ../src/interface.c:577 ../src/interface.c:2235
 msgid "Inserts a description before the current function"
 msgstr "Insere uma descrição antes da função atual"
 
 #: ../src/interface.c:579 ../src/interface.c:2237
-#, fuzzy
 msgid "Insert _Multiline Comment"
-msgstr "Inserir Comentário Multi-linha"
+msgstr "Inserir Comentário _Multilinha"
 
 #: ../src/interface.c:582 ../src/interface.c:2240
 msgid "Inserts a multiline comment"
 msgstr "Insere um comentário multi-linha"
 
 #: ../src/interface.c:584 ../src/interface.c:2242
-#, fuzzy
 msgid "Insert _GPL Notice"
-msgstr "Inserir Advertência da GPL"
+msgstr "Inserir Advertência da _GPL"
 
 #: ../src/interface.c:587 ../src/interface.c:2245
 msgid "Inserts a GPL notice (should be done at the beginning of the file)"
 msgstr "Insere uma advertência da GPL (deve ser feito no início do arquivo)"
 
 #: ../src/interface.c:589 ../src/interface.c:2247
-#, fuzzy
 msgid "Insert _BSD License Notice"
-msgstr "Inserir Advertência de Licença BSD"
+msgstr "Inserir Advertência de Licença _BSD"
 
 #: ../src/interface.c:592 ../src/interface.c:2250
 msgid ""
@@ -1198,9 +1186,8 @@ msgid "Change the default font"
 msgstr "Altera a fonte padrão"
 
 #: ../src/interface.c:718
-#, fuzzy
 msgid "To_ggle All Additional Widgets"
-msgstr "Exibir/esconder todos os painéis adicionais"
+msgstr "Exibir/ocultar Todos os _Painéis Adicionais"
 
 #: ../src/interface.c:722
 msgid "Full_screen"
@@ -1273,14 +1260,12 @@ msgid "In_dent Type"
 msgstr "T_ipo de endentação"
 
 #: ../src/interface.c:797 ../src/interface.c:3673
-#, fuzzy
 msgid "_Tabs"
-msgstr "Tabs"
+msgstr "_Tabs"
 
 #: ../src/interface.c:803 ../src/interface.c:3680
-#, fuzzy
 msgid "_Spaces"
-msgstr "Espaços"
+msgstr "E_spaços"
 
 #: ../src/interface.c:814
 msgid "Read _Only"
@@ -1533,54 +1518,44 @@ msgid "Scribble"
 msgstr "Rascunho"
 
 #: ../src/interface.c:1937 ../src/interface.c:3425
-#, fuzzy
 msgid "Images _and Text"
-msgstr "Imagens e texto"
+msgstr "Im_agens e Texto"
 
 #: ../src/interface.c:1943 ../src/interface.c:3457
-#, fuzzy
 msgid "_Images Only"
-msgstr "Somente imagens"
+msgstr "Somente _Imagens"
 
 #: ../src/interface.c:1949 ../src/interface.c:3449
-#, fuzzy
 msgid "_Text Only"
-msgstr "Somente texto"
+msgstr "Somente _Texto"
 
 #: ../src/interface.c:1960 ../src/interface.c:3441
-#, fuzzy
 msgid "_Large Icons"
-msgstr "Ícones Grandes"
+msgstr "Ícones _Grandes"
 
 #: ../src/interface.c:1965 ../src/interface.c:3433
-#, fuzzy
 msgid "_Small Icons"
-msgstr "Ícones Pequenos"
+msgstr "Ícone_s Pequenos"
 
 #: ../src/interface.c:1975
-#, fuzzy
 msgid "_Hide toolbar"
-msgstr "Esconder barra de ferramentas"
+msgstr "_Ocultar Barra de Ferramentas"
 
 #: ../src/interface.c:2285
-#, fuzzy
 msgid "Find _Usage"
-msgstr "Encontrar Uso"
+msgstr "Encontrar _Uso"
 
 #: ../src/interface.c:2293
-#, fuzzy
 msgid "Go to _Tag Definition"
-msgstr "Ir para a Definição do Rótulo"
+msgstr "Ir para a Definição do Ró_tulo"
 
 #: ../src/interface.c:2297
-#, fuzzy
 msgid "Go to T_ag Declaration"
-msgstr "Ir para a Declaração do Rótulo"
+msgstr "Ir p_ara a Declaração do Rótulo"
 
 #: ../src/interface.c:2301
-#, fuzzy
 msgid "Conte_xt Action"
-msgstr "Ação Contextual"
+msgstr "Ação Conte_xtual"
 
 #: ../src/interface.c:2313
 msgid "Go to the entered line"
@@ -1718,13 +1693,15 @@ msgstr ""
 
 #: ../src/interface.c:2935
 msgid "Use the current word under the cursor for Find dialogs"
-msgstr ""
+msgstr "Usar a palavra sob o cursor para os diálogos Pesquisar"
 
 #: ../src/interface.c:2939
 msgid ""
 "Use current word under the cursor when opening the Find, Find in Files or "
 "Replace dialog and there is no selection."
 msgstr ""
+"Usa a palavra atualmente sob o cursor quando for aberto um diálogo "
+"Pesquisar, Pesquisar em Arquivos ou Substituir, e não houver nenhuma seleção."
 
 #: ../src/interface.c:2942 ../src/interface.c:3272 ../src/interface.c:3991
 msgid "<b>Miscellaneous</b>"
@@ -2585,9 +2562,8 @@ msgid "Reload file"
 msgstr "Recarregar arquivo"
 
 #: ../src/keybindings.c:205
-#, fuzzy
 msgid "Project"
-msgstr "_Projeto"
+msgstr "Projeto"
 
 #: ../src/keybindings.c:208
 msgid "Project properties"
@@ -2652,7 +2628,7 @@ msgstr "Exibir lista de macros"
 
 #: ../src/keybindings.c:242
 msgid "Clipboard"
-msgstr ""
+msgstr "Área de Transferência"
 
 #: ../src/keybindings.c:245
 msgid "Cut"
@@ -2675,9 +2651,8 @@ msgid "Cut current line(s)"
 msgstr "Recortar linha(s) atual(is)"
 
 #: ../src/keybindings.c:255
-#, fuzzy
 msgid "Select"
-msgstr "Selecionar Tudo"
+msgstr "Selecionar"
 
 #: ../src/keybindings.c:258
 msgid "Select All"
@@ -2696,9 +2671,8 @@ msgid "Select current paragraph"
 msgstr "Selecionar parágrafo atual"
 
 #: ../src/keybindings.c:266
-#, fuzzy
 msgid "Format"
-msgstr "_Formatar"
+msgstr "Formatar"
 
 #: ../src/keybindings.c:270
 msgid "Toggle Case of Selection"
@@ -2749,9 +2723,8 @@ msgid "Send to Custom Command 3"
 msgstr "Enviar para Comando Personalizado 3"
 
 #: ../src/keybindings.c:297
-#, fuzzy
 msgid "Insert"
-msgstr "_Inserir"
+msgstr "Inserir"
 
 #: ../src/keybindings.c:300
 msgid "Insert date"
@@ -2762,14 +2735,12 @@ msgid "Insert alternative whitespace"
 msgstr "Inserir espaço em branco alternativo"
 
 #: ../src/keybindings.c:305
-#, fuzzy
 msgid "Settings"
-msgstr "Seções"
+msgstr "Definições"
 
 #: ../src/keybindings.c:311
-#, fuzzy
 msgid "Search"
-msgstr "_Pesquisar"
+msgstr "Pesquisar"
 
 #: ../src/keybindings.c:314 ../src/search.c:303
 msgid "Find"
@@ -2808,9 +2779,8 @@ msgid "Find Usage"
 msgstr "Encontrar Uso"
 
 #: ../src/keybindings.c:334
-#, fuzzy
 msgid "Go to"
-msgstr "Ir para Linha"
+msgstr "Ir Para"
 
 #: ../src/keybindings.c:344
 msgid "Go to matching brace"
@@ -2837,9 +2807,8 @@ msgid "Go to Tag Declaration"
 msgstr "Ir para a Declaração do Rótulo"
 
 #: ../src/keybindings.c:359
-#, fuzzy
 msgid "View"
-msgstr "E_xibir"
+msgstr "Exibir"
 
 #: ../src/keybindings.c:362
 msgid "Toggle All Additional Widgets"
@@ -2866,9 +2835,8 @@ msgid "Zoom Out"
 msgstr "Diminuir Zoom"
 
 #: ../src/keybindings.c:376
-#, fuzzy
 msgid "Focus"
-msgstr "_Documento"
+msgstr "Foco"
 
 #: ../src/keybindings.c:379
 msgid "Switch to Editor"
@@ -2887,14 +2855,12 @@ msgid "Switch to Search Bar"
 msgstr "Ir para a Barra de Pesquisa"
 
 #: ../src/keybindings.c:387
-#, fuzzy
 msgid "Switch to Sidebar"
-msgstr "Ir para a Barra de Pesquisa"
+msgstr "Alternar para Barra Lateral"
 
 #: ../src/keybindings.c:389
-#, fuzzy
 msgid "Notebook tab"
-msgstr " Comandos de aba do bloco de notas"
+msgstr "Aba do Bloco de Notas"
 
 #: ../src/keybindings.c:392
 msgid "Switch to left document"
@@ -2925,9 +2891,8 @@ msgid "Move document last"
 msgstr "Mover documento para o fim"
 
 #: ../src/keybindings.c:406
-#, fuzzy
 msgid "Document"
-msgstr "_Documento"
+msgstr "Documento"
 
 #: ../src/keybindings.c:411
 msgid "Fold all"
@@ -3112,11 +3077,12 @@ msgid ""
 "The plugin \"%s\" is not binary compatible with this release of Geany - "
 "please recompile it."
 msgstr ""
+"O plugin \"%s\" não é um binário compatível com esta versão do Geany. Por "
+"favor, recompile-o."
 
 #: ../src/plugins.c:679
-#, fuzzy
 msgid "_Plugin Manager"
-msgstr "Gerenciador de Plugins"
+msgstr "Gerenciador de _Plugins"
 
 #: ../src/plugins.c:804
 #, c-format
@@ -3744,25 +3710,24 @@ msgid "Variables"
 msgstr "Variáveis"
 
 #: ../src/symbols.c:648
-#, fuzzy
 msgid "JavaScript functions"
-msgstr "Arquivo-fonte Javascript"
+msgstr "Funções JavaScript"
 
 #: ../src/symbols.c:649
 msgid "Anchor"
-msgstr ""
+msgstr "Âncora"
 
 #: ../src/symbols.c:650
 msgid "Heading (H1)"
-msgstr ""
+msgstr "Cabeçalho (H1)"
 
 #: ../src/symbols.c:651
 msgid "Heading (H2)"
-msgstr ""
+msgstr "Cabeçalho (H2)"
 
 #: ../src/symbols.c:652
 msgid "Heading (H3)"
-msgstr ""
+msgstr "Cabeçalho (H3)"
 
 #: ../src/symbols.c:669
 msgid "Modules"
@@ -3787,24 +3752,23 @@ msgstr "Rótulos"
 
 #: ../src/symbols.c:752
 msgid "Subroutines"
-msgstr ""
+msgstr "Sub-rotinas"
 
 #: ../src/symbols.c:755
 msgid "Blocks"
-msgstr ""
+msgstr "Blocos"
 
 #: ../src/symbols.c:764 ../src/symbols.c:773 ../src/symbols.c:796
 msgid "Macros"
 msgstr "Macros"
 
 #: ../src/symbols.c:765
-#, fuzzy
 msgid "Defines"
-msgstr "Linhas:"
+msgstr "Definições"
 
 #: ../src/symbols.c:772
 msgid "Targets"
-msgstr ""
+msgstr "Destinos"
 
 #: ../src/symbols.c:784
 msgid "Namespaces"
@@ -3879,10 +3843,14 @@ msgid ""
 "The executed custom command returned an error. Your selection was not "
 "changed. Error message: %s"
 msgstr ""
+"O comando personalizado executado retornou um erro. A sua seleção não foi "
+"alterada. Mensagem de erro: %s"
 
 #: ../src/tools.c:217
 msgid "The executed custom command exited with an unsuccessful exit code."
 msgstr ""
+"O comando personalizado executado terminou com um código de saída mal-"
+"sucedido."
 
 #: ../src/tools.c:244
 #, c-format
@@ -3890,9 +3858,9 @@ msgid "Passing data and executing custom command: %s"
 msgstr "Enviando dados e executando comando personalizado: %s"
 
 #: ../src/tools.c:288
-#, fuzzy, c-format
+#, c-format
 msgid "Custom command failed: %s"
-msgstr "Nenhum comando personalizado definido."
+msgstr "Comando personalizado falhou: %s"
 
 #: ../src/tools.c:302 ../src/tools.c:535
 msgid "Set Custom Commands"
@@ -4053,14 +4021,12 @@ msgid "Terminal"
 msgstr "Terminal"
 
 #: ../src/vte.c:483
-#, fuzzy
 msgid "_Set Path From Document"
-msgstr "Definir Caminho a Partir do Documento"
+msgstr "Definir _Caminho a Partir do Documento"
 
 #: ../src/vte.c:488
-#, fuzzy
 msgid "_Restart Terminal"
-msgstr "Reiniciar Terminal"
+msgstr "_Reiniciar Terminal"
 
 #: ../src/vte.c:499
 msgid "_Input Methods"
@@ -4316,14 +4282,12 @@ msgid "Create Cla_ss"
 msgstr "_Criar Classe"
 
 #: ../plugins/classbuilder.c:787
-#, fuzzy
 msgid "_C++ Class"
-msgstr "Classe C++"
+msgstr "Classe _C++"
 
 #: ../plugins/classbuilder.c:790
-#, fuzzy
 msgid "_GTK+ Class"
-msgstr "Classe GTK+"
+msgstr "Classe _GTK+"
 
 #: ../plugins/htmlchars.c:41
 msgid "HTML Characters"
@@ -4440,20 +4404,17 @@ msgstr "_Exportar"
 
 #. HTML
 #: ../plugins/export.c:719
-#, fuzzy
 msgid "As _HTML"
-msgstr "Como HTML"
+msgstr "Como _HTML"
 
 #. LaTeX
 #: ../plugins/export.c:726
-#, fuzzy
 msgid "As _LaTeX"
-msgstr "Como LaTeX"
+msgstr "Como _LaTeX"
 
 #: ../plugins/vcdiff.c:46
-#, fuzzy
 msgid "Version Diff"
-msgstr "VC Diff"
+msgstr "Versão Diff"
 
 #: ../plugins/vcdiff.c:46
 msgid "Creates a patch of a file against version control."
@@ -4480,17 +4441,16 @@ msgstr "Nenhuma alteração foi feita."
 #: ../plugins/vcdiff.c:377
 #, c-format
 msgid "unknown error while trying to spawn a process for %s"
-msgstr ""
+msgstr "erro desconhecido ao tentar gerar um processo para %s"
 
 #: ../plugins/vcdiff.c:380
 #, c-format
 msgid "An error occurred (%s)."
-msgstr ""
+msgstr "Ocorreu um erro (%s)."
 
 #: ../plugins/vcdiff.c:509
-#, fuzzy
 msgid "_Version Diff"
-msgstr "VC Diff"
+msgstr "_Versão Diff"
 
 #. Single file
 #: ../plugins/vcdiff.c:519
@@ -4566,16 +4526,15 @@ msgstr "Definir caminho a partir do documento"
 
 #: ../plugins/filebrowser.c:869
 msgid "Focus File List"
-msgstr ""
+msgstr "Focar Lista de Arquivos"
 
 #: ../plugins/filebrowser.c:871
 msgid "Focus Path Entry"
-msgstr ""
+msgstr "Focar Entrada de Caminho"
 
 #: ../plugins/filebrowser.c:887
-#, fuzzy
 msgid "External open command:"
-msgstr "Comando de Ação Contextual:"
+msgstr "Comando para abrir externo:"
 
 #: ../plugins/filebrowser.c:896
 #, c-format
@@ -4629,18 +4588,16 @@ msgstr "Auto-salvar: %d arquivos foram salvos automaticamente."
 
 #: ../plugins/autosave.c:125
 msgid "Auto save interval:"
-msgstr ""
+msgstr "Intervalo de auto-salvar:"
 
 #: ../plugins/autosave.c:132
-#, fuzzy
 msgid "seconds"
-msgstr " %s comandos"
+msgstr "segundos"
 
 #: ../plugins/autosave.c:141
-#, fuzzy
 msgid "Print status message if files have been automatically saved"
 msgstr ""
-"Imprime uma mensagem de estado se os arquivos forem automaticamente salvos"
+"Imprime uma mensagem de estado se os arquivos foram automaticamente salvos"
 
 #: ../plugins/autosave.c:147
 msgid "Save only current open file"
