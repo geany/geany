@@ -186,13 +186,13 @@ gboolean utils_is_opening_brace(gchar c, gboolean include_angles)
 
 
 /* line is counted with 1 as the first line, not 0 */
-gboolean utils_goto_file_line(const gchar *file, gboolean is_tm_filename, gint line)
+gboolean utils_goto_file_pos(const gchar *file, gboolean is_tm_filename, gint pos)
 {
 	gint file_idx = document_find_by_filename(file, is_tm_filename);
 
 	if (file_idx < 0) return FALSE;
 
-	return utils_goto_line(file_idx, line);
+	return utils_goto_pos(file_idx, pos);
 }
 
 
@@ -203,7 +203,7 @@ gboolean utils_goto_line(gint idx, gint line)
 
 	line--;	/* the user counts lines from 1, we begin at 0 so bring the user line to our one */
 
-	if (idx == -1 || ! doc_list[idx].is_valid || line < 0)
+	if (! DOC_IDX_VALID(idx) || line < 0)
 		return FALSE;
 
 	/* mark the tag */
@@ -211,6 +211,31 @@ gboolean utils_goto_line(gint idx, gint line)
 	sci_set_marker_at_line(doc_list[idx].sci, line, TRUE, 0);
 
 	sci_goto_line(doc_list[idx].sci, line, TRUE);
+	doc_list[idx].scroll_percent = 0.25F;
+
+	/* finally switch to the page */
+	page_num = gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(doc_list[idx].sci));
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), page_num);
+
+	return TRUE;
+}
+
+
+gboolean utils_goto_pos(gint idx, gint pos)
+{
+	gint page_num;
+	gint line;
+
+	if (! DOC_IDX_VALID(idx) || pos < 0)
+		return FALSE;
+
+	line = sci_get_line_from_position(doc_list[idx].sci, pos);
+
+	/* mark the tag */
+	sci_marker_delete_all(doc_list[idx].sci, 0);
+	sci_set_marker_at_line(doc_list[idx].sci, line, TRUE, 0);
+
+	sci_goto_pos(doc_list[idx].sci, pos, TRUE);
 	doc_list[idx].scroll_percent = 0.25F;
 
 	/* finally switch to the page */

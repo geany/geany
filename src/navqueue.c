@@ -39,9 +39,7 @@
 typedef struct
 {
 	gchar *file;	/* this is the tagmanager filename, not document::file_name */
-	/** TODO maybe it is better to work on positions than on lines to be more accurate when
-	  * switching back or forward, sci_get_position_from_line() could be used for tm_tag lines */
-	gint line;	/* line is counted with 1 as the first line, not 0 */
+	gint pos;
 } filepos;
 
 static GQueue *navigation_queue;
@@ -96,29 +94,29 @@ static void adjust_buttons(void)
 
 
 static gboolean
-queue_pos_matches(guint queue_pos, const gchar *fname, gint line)
+queue_pos_matches(guint queue_pos, const gchar *fname, gint pos)
 {
 	if (queue_pos < g_queue_get_length(navigation_queue))
 	{
 		filepos *fpos = g_queue_peek_nth(navigation_queue, queue_pos);
 
-		return (utils_str_equal(fpos->file, fname) && fpos->line == line);
+		return (utils_str_equal(fpos->file, fname) && fpos->pos == pos);
 	}
 	return FALSE;
 }
 
 
-static void add_new_position(gchar *tm_filename, gint line)
+static void add_new_position(gchar *tm_filename, gint pos)
 {
 	filepos *npos;
 	guint i;
 
-	if (queue_pos_matches(nav_queue_pos, tm_filename, line))
+	if (queue_pos_matches(nav_queue_pos, tm_filename, pos))
 		return;	/* prevent duplicates */
 
 	npos = g_new0(filepos, 1);
 	npos->file = tm_filename;
-	npos->line = line;
+	npos->pos = pos;
 
 	/* if we've jumped to a new position from inside the queue rather than going forward */
 	if (nav_queue_pos > 0)
@@ -141,22 +139,28 @@ static void add_new_position(gchar *tm_filename, gint line)
  * @param line is counted with 1 as the first line, not 0. */
 gboolean navqueue_goto_line(gint old_idx, gint new_idx, gint line)
 {
+	gint pos;
+
 	g_return_val_if_fail(DOC_IDX_VALID(new_idx), FALSE);
 	g_return_val_if_fail(line >= 1, FALSE);
+
+	pos = sci_get_position_from_line(doc_list[new_idx].sci, line - 1);
 
 	/* first add old file position */
 	if (DOC_IDX_VALID(old_idx) && doc_list[old_idx].tm_file)
 	{
-		gint cur_line = sci_get_current_line(doc_list[old_idx].sci);
+		gint cur_pos = sci_get_current_position(doc_list[old_idx].sci);
 
-		add_new_position(doc_list[old_idx].tm_file->file_name, cur_line + 1);
+		add_new_position(doc_list[old_idx].tm_file->file_name, cur_pos);
 	}
 
 	/* now add new file position */
 	if (doc_list[new_idx].tm_file)
-		add_new_position(doc_list[new_idx].tm_file->file_name, line);
+	{
+		add_new_position(doc_list[new_idx].tm_file->file_name, pos);
+	}
 
-	return utils_goto_line(new_idx, line);
+	return utils_goto_pos(new_idx, pos);
 }
 
 
@@ -171,7 +175,7 @@ void navqueue_go_back()
 
 	/* jump back */
 	fprev = g_queue_peek_nth(navigation_queue, nav_queue_pos + 1);
-	if (utils_goto_file_line(fprev->file, TRUE, fprev->line))
+	if (utils_goto_file_pos(fprev->file, TRUE, fprev->pos))
 	{
 		nav_queue_pos++;
 	}
@@ -194,7 +198,7 @@ void navqueue_go_forward()
 
 	/* jump forward */
 	fnext = g_queue_peek_nth(navigation_queue, nav_queue_pos - 1);
-	if (utils_goto_file_line(fnext->file, TRUE, fnext->line))
+	if (utils_goto_file_pos(fnext->file, TRUE, fnext->pos))
 	{
 		nav_queue_pos--;
 	}

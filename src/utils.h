@@ -54,9 +54,11 @@ gboolean utils_isbrace(gchar c, gboolean include_angles);
 
 gboolean utils_is_opening_brace(gchar c, gboolean include_angles);
 
-gboolean utils_goto_file_line(const gchar *file, gboolean is_tm_filename, gint line);
+gboolean utils_goto_file_pos(const gchar *file, gboolean is_tm_filename, gint pos);
 
 gboolean utils_goto_line(gint idx, gint line);
+
+gboolean utils_goto_pos(gint idx, gint pos);
 
 gint utils_write_file(const gchar *filename, const gchar *text);
 
