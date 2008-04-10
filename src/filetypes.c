@@ -476,7 +476,7 @@ void filetypes_init_types()
 
 #define ALL
 	filetypes[GEANY_FILETYPES_ALL]->id = GEANY_FILETYPES_ALL;
-	filetypes[GEANY_FILETYPES_ALL]->name = g_strdup("None");
+	filetypes[GEANY_FILETYPES_ALL]->name = g_strdup(_("None"));
 	filetypes[GEANY_FILETYPES_ALL]->uid = FILETYPE_UID_ALL;
 	filetypes[GEANY_FILETYPES_ALL]->lang = -2;
 	filetypes[GEANY_FILETYPES_ALL]->title = g_strdup(_("All files"));
