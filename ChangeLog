@@ -1,7 +1,14 @@
+2008-04-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/editor.c:
+   Fix a couple of wrong or missing checks to prevent auto completion
+   in comments in several filetypes.
+
+
 2008-04-09  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
- * src/ui_utils.c: Make some more strings translateable. Thanks to
-   Adrovane Kade for reporting.
+ * src/ui_utils.c: Make some more strings translatable. Thanks to
+                   Adrovane Kade for reporting.
 
 
 2008-04-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
