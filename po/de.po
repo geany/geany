@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-09 23:03+0200\n"
+"POT-Creation-Date: 2008-04-10 22:57+0200\n"
 "PO-Revision-Date: 2008-04-09 23:06+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
@@ -353,7 +353,7 @@ msgid "Do you really want to quit?"
 msgstr "Soll Geany wirklich beendet werden?"
 
 #: ../src/callbacks.c:523 ../src/interface.c:356 ../src/treeviews.c:453
-#: ../src/utils.c:335
+#: ../src/utils.c:360
 msgid "_Reload"
 msgstr "_Neu laden"
 
@@ -548,8 +548,8 @@ msgstr ""
 
 #: ../src/dialogs.c:990 ../src/dialogs.c:991 ../src/dialogs.c:992
 #: ../src/dialogs.c:998 ../src/dialogs.c:999 ../src/dialogs.c:1000
-#: ../src/ui_utils.c:164 ../src/utils.c:536 ../src/utils.c:557
-#: ../src/utils.c:610
+#: ../src/ui_utils.c:164 ../src/utils.c:561 ../src/utils.c:582
+#: ../src/utils.c:635
 msgid "unknown"
 msgstr "unbekannt"
 
@@ -946,6 +946,11 @@ msgstr "Konfigurationsdatei"
 msgid "reStructuredText file"
 msgstr "reST Quelldatei"
 
+#: ../src/filetypes.c:479 ../src/filetypes.c:546 ../src/interface.c:3644
+#: ../src/templates.c:350
+msgid "None"
+msgstr "Keiner"
+
 #: ../src/filetypes.c:482 ../src/project.c:274
 msgid "All files"
 msgstr "Alle Dateien"
@@ -965,10 +970,6 @@ msgstr "_Markup-Sprachen"
 #: ../src/filetypes.c:512
 msgid "M_iscellaneous Languages"
 msgstr "_Sonstige Sprachen"
-
-#: ../src/filetypes.c:546 ../src/interface.c:3644 ../src/templates.c:350
-msgid "None"
-msgstr "Keiner"
 
 #: ../src/filetypes.c:1001 ../src/win32.c:105
 msgid "All Source"
@@ -4038,11 +4039,11 @@ msgstr "Ordner wählen"
 msgid "Select File"
 msgstr "Datei wählen"
 
-#: ../src/utils.c:336
+#: ../src/utils.c:361
 msgid "Do you want to reload it?"
 msgstr "Möchten Sie die Datei neu laden?"
 
-#: ../src/utils.c:337
+#: ../src/utils.c:362
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
