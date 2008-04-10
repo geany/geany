@@ -3,6 +3,9 @@
  * src/editor.c:
    Fix a couple of wrong or missing checks to prevent auto completion
    in comments in several filetypes.
+ * scripts/create_php_tags.php, data/php.tags:
+   Add script to generate PHP tags file (by Matti Mårds, thanks).
+   Update PHP tags file to latest PHP API docs (closes #1888691).
 
 
 2008-04-09  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
