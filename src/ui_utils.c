@@ -128,6 +128,13 @@ void ui_update_statusbar(gint idx, gint pos)
 		const gchar sp[] = "      ";
 		guint line, col;
 		const gchar *cur_tag;
+		gchar *filetype_name;
+
+		/* workaround to make the name of filetype GEANY_FILETYPES_ALL translatable */
+		if (doc_list[idx].file_type == NULL || doc_list[idx].file_type->id == GEANY_FILETYPES_ALL)
+			filetype_name = _("None");
+		else
+			filetype_name = doc_list[idx].file_type->name;
 
 		if (stats_str == NULL)
 			stats_str = g_string_sized_new(120);
@@ -166,9 +173,7 @@ void ui_update_statusbar(gint idx, gint pos)
 				/* BOM = byte order mark */
 				((doc_list[idx].has_bom) ? _("(with BOM)") : "") : "");
 		g_string_append(stats_str, sp);
-		g_string_append_printf(stats_str, _("filetype: %s"),
-			(doc_list[idx].file_type) ? doc_list[idx].file_type->name :
-				filetypes[GEANY_FILETYPES_ALL]->name);
+		g_string_append_printf(stats_str, _("filetype: %s"), filetype_name);
 		g_string_append(stats_str, sp);
 		if (doc_list[idx].changed)
 		{
