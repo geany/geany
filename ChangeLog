@@ -1,7 +1,14 @@
+2008-04-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * THANKS, doc/geany.txt, doc/geany.html:
+   Add documentation for several options in the preferences dialog
+   (patch from Robert McGinley, thanks).
+
+
 2008-04-10  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * src/filetypes.c: Make another string translatable. Thanks to Adrovane
-   Kade for reporting.
+                    Kade for reporting.
 
 
 2008-04-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
