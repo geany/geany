@@ -6,6 +6,8 @@
  * src/filetypes.c, src/ui_utils.c:
    Revert the translatable filetype name of filetype All, add a
    workaround in ui_update_statusbar() instead.
+ * data/filetypes.xml, src/highlighting.c:
+   Update PHP keywords (closes #1939931).
 
 
 2008-04-10  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
