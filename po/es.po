@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-11 23:17+0200\n"
+"POT-Creation-Date: 2008-04-05 11:38+0200\n"
 "PO-Revision-Date: 2006-09-29 00:05+0100\n"
 "Last-Translator: Damián Viano <des@damianv.com.ar>\n"
 "Language-Team: Spanish <geany-i18n@uvena.de>\n"
@@ -351,7 +351,7 @@ msgid "Do you really want to quit?"
 msgstr "¿Realmente desea salir?"
 
 #: ../src/callbacks.c:523 ../src/interface.c:356 ../src/treeviews.c:453
-#: ../src/utils.c:360
+#: ../src/utils.c:335
 msgid "_Reload"
 msgstr "_Recargar"
 
@@ -371,31 +371,31 @@ msgstr ""
 "Por favor seleccione el tipo de archivo para el archivo actual antes de "
 "utilizar esta función."
 
-#: ../src/callbacks.c:1484 ../src/ui_utils.c:490
+#: ../src/callbacks.c:1484 ../src/ui_utils.c:485
 msgid "dd.mm.yyyy"
 msgstr "dd.mm.aaaa"
 
-#: ../src/callbacks.c:1486 ../src/ui_utils.c:491
+#: ../src/callbacks.c:1486 ../src/ui_utils.c:486
 msgid "mm.dd.yyyy"
 msgstr "mm.dd.aaaa"
 
-#: ../src/callbacks.c:1488 ../src/ui_utils.c:492
+#: ../src/callbacks.c:1488 ../src/ui_utils.c:487
 msgid "yyyy/mm/dd"
 msgstr "aaaa/mm/dd"
 
-#: ../src/callbacks.c:1490 ../src/ui_utils.c:501
+#: ../src/callbacks.c:1490 ../src/ui_utils.c:496
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "dd.mm.aaaa hh:mm:ss"
 
-#: ../src/callbacks.c:1492 ../src/ui_utils.c:502
+#: ../src/callbacks.c:1492 ../src/ui_utils.c:497
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "mm.dd.aaaa hh:mm:ss"
 
-#: ../src/callbacks.c:1494 ../src/ui_utils.c:503
+#: ../src/callbacks.c:1494 ../src/ui_utils.c:498
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "aaaa/mm/dd hh:mm:ss"
 
-#: ../src/callbacks.c:1496 ../src/ui_utils.c:512
+#: ../src/callbacks.c:1496 ../src/ui_utils.c:507
 msgid "_Use Custom Date Format"
 msgstr "_Usar Formato de Fecha Personalizado"
 
@@ -550,8 +550,8 @@ msgstr ""
 
 #: ../src/dialogs.c:990 ../src/dialogs.c:991 ../src/dialogs.c:992
 #: ../src/dialogs.c:998 ../src/dialogs.c:999 ../src/dialogs.c:1000
-#: ../src/ui_utils.c:171 ../src/utils.c:561 ../src/utils.c:582
-#: ../src/utils.c:635
+#: ../src/ui_utils.c:164 ../src/utils.c:536 ../src/utils.c:557
+#: ../src/utils.c:610
 msgid "unknown"
 msgstr "desconocido"
 
@@ -584,7 +584,7 @@ msgid "<b>Encoding:</b>"
 msgstr "<b>Codificación</b>"
 
 #. BOM = byte order mark
-#: ../src/dialogs.c:1100 ../src/ui_utils.c:174
+#: ../src/dialogs.c:1100 ../src/ui_utils.c:167
 msgid "(with BOM)"
 msgstr "(con BOM)"
 
@@ -637,17 +637,17 @@ msgstr "Otros:"
 msgid "File %s closed."
 msgstr "El archivo %s fue cerrado."
 
-#: ../src/document.c:655
+#: ../src/document.c:645
 #, c-format
 msgid "New file \"%s\" opened."
 msgstr "Nuevo archivo \"%s\" abierto."
 
-#: ../src/document.c:840 ../src/document.c:1239
+#: ../src/document.c:830 ../src/document.c:1229
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "No se pudo abrir el archivo %s (%s)"
 
-#: ../src/document.c:869
+#: ../src/document.c:859
 #, c-format
 msgid ""
 "The file \"%s\" could not be opened properly and has been truncated. This "
@@ -660,12 +660,12 @@ msgstr ""
 "consciente de que grabarlo puede provocar perdida de datos.\n"
 "El archivo fue abierto como sólo lectura."
 
-#: ../src/document.c:893
+#: ../src/document.c:883
 #, c-format
 msgid "The file \"%s\" is not valid %s."
 msgstr "El archivo \"%s\" no es %s válido."
 
-#: ../src/document.c:902
+#: ../src/document.c:892
 #, c-format
 msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
@@ -673,42 +673,42 @@ msgid ""
 msgstr ""
 "El archivo \"%s\" no aparenta ser de texto o la codificación no es soportada"
 
-#: ../src/document.c:1011
+#: ../src/document.c:1001
 msgid "Invalid filename"
 msgstr "Nombre de archivo invalido"
 
-#: ../src/document.c:1076
+#: ../src/document.c:1066
 #, c-format
 msgid "Setting %s indentation mode."
 msgstr "Usando %s modo de formateo"
 
-#: ../src/document.c:1077
+#: ../src/document.c:1067
 msgid "Tabs"
 msgstr "Tabulaciones"
 
-#: ../src/document.c:1077
+#: ../src/document.c:1067
 msgid "Spaces"
 msgstr "Espacios"
 
-#: ../src/document.c:1126
+#: ../src/document.c:1116
 #, c-format
 msgid "File %s reloaded."
 msgstr "Archivo %s recargado."
 
-#: ../src/document.c:1128
+#: ../src/document.c:1118
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "Archivo %s abierto(%d%s)"
 
-#: ../src/document.c:1130
+#: ../src/document.c:1120
 msgid ", read-only"
 msgstr ", sólo lectura"
 
-#: ../src/document.c:1338 ../src/document.c:1450
+#: ../src/document.c:1328 ../src/document.c:1440
 msgid "Error saving file."
 msgstr "Error guardando archivo."
 
-#: ../src/document.c:1384
+#: ../src/document.c:1374
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -717,7 +717,7 @@ msgstr ""
 "Ocurrió un error mientras se convertía el archivo desde UTF-8 en \"%s\". El "
 "archivo no fue guardado.n"
 
-#: ../src/document.c:1405
+#: ../src/document.c:1395
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -726,50 +726,50 @@ msgstr ""
 "Mensaje de error: %s\n"
 "El error ocurrió en \"%s\" (linea: %d, columna: %d)."
 
-#: ../src/document.c:1410
+#: ../src/document.c:1400
 #, c-format
 msgid "Error message: %s."
 msgstr "Mensaje de error: %s."
 
-#: ../src/document.c:1438
+#: ../src/document.c:1428
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Error guardando archivo (%s)."
 
-#: ../src/document.c:1478
+#: ../src/document.c:1468
 #, c-format
 msgid "File %s saved."
 msgstr "Archivo %s guardado."
 
-#: ../src/document.c:1546 ../src/document.c:1600 ../src/document.c:1608
+#: ../src/document.c:1536 ../src/document.c:1590 ../src/document.c:1598
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "no se encontró \"%s\"."
 
-#: ../src/document.c:1608
+#: ../src/document.c:1598
 msgid "Wrap search and find again?"
 msgstr "Volver al principio y buscar de nuevo?"
 
-#: ../src/document.c:1683 ../src/search.c:903 ../src/search.c:1407
+#: ../src/document.c:1673 ../src/search.c:903 ../src/search.c:1407
 #: ../src/search.c:1408
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "No se encontraron coincidencias para \"%s\"."
 
-#: ../src/document.c:1693 ../src/document.c:1700
+#: ../src/document.c:1683 ../src/document.c:1690
 #, c-format
 msgid "%s: replaced %d occurrence(s) of \"%s\" with \"%s\"."
 msgstr "%s: se reemplazaron %d ocurrencia(s) de \"%s\" con \"%s\"."
 
-#: ../src/document.c:2112
+#: ../src/document.c:2102
 msgid "Win (CRLF)"
 msgstr "Win (CRLF)"
 
-#: ../src/document.c:2113
+#: ../src/document.c:2103
 msgid "Mac (CR)"
 msgstr "Mac (CR)"
 
-#: ../src/document.c:2115
+#: ../src/document.c:2105
 msgid "Unix (LF)"
 msgstr "Unix (LF)"
 
@@ -948,7 +948,7 @@ msgstr "Archivo de configuración"
 msgid "reStructuredText file"
 msgstr "Archivo de reStructuredText"
 
-#: ../src/filetypes.c:482 ../src/project.c:274
+#: ../src/filetypes.c:482 ../src/project.c:277
 msgid "All files"
 msgstr "Todos los archivos"
 
@@ -969,7 +969,6 @@ msgid "M_iscellaneous Languages"
 msgstr "Lenguajes M_isceláneos"
 
 #: ../src/filetypes.c:546 ../src/interface.c:3644 ../src/templates.c:350
-#: ../src/ui_utils.c:135
 msgid "None"
 msgstr "Ninguno"
 
@@ -3275,19 +3274,19 @@ msgstr "Nuevo Proyecto"
 msgid "C_reate"
 msgstr "C_rear"
 
-#: ../src/project.c:132 ../src/project.c:380
+#: ../src/project.c:132 ../src/project.c:384
 msgid "Name:"
 msgstr "Nómbre:"
 
-#: ../src/project.c:140 ../src/project.c:392
+#: ../src/project.c:140 ../src/project.c:396
 msgid "Filename:"
 msgstr "Nombre de Archivo:"
 
-#: ../src/project.c:156 ../src/project.c:421
+#: ../src/project.c:156 ../src/project.c:425
 msgid "Base path:"
 msgstr "Ruta base:"
 
-#: ../src/project.c:161 ../src/project.c:429
+#: ../src/project.c:161 ../src/project.c:433
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
@@ -3297,45 +3296,45 @@ msgstr ""
 "ser una ruta nueva o un árbol de directorios ya existente. Pueden usarse "
 "rutas relativas al archivo de proyecto."
 
-#: ../src/project.c:164 ../src/project.c:432
+#: ../src/project.c:164 ../src/project.c:436
 msgid "Choose Project Base Path"
 msgstr "Elija la Ruta Base del Proyecto"
 
-#: ../src/project.c:209 ../src/project.c:246 ../src/project.c:877
+#: ../src/project.c:209 ../src/project.c:248 ../src/project.c:881
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "El archivo de proyecto \"%s\" no pudo ser cargado."
 
-#: ../src/project.c:240 ../src/project.c:258
+#: ../src/project.c:242 ../src/project.c:261
 msgid "Open Project"
 msgstr "Abrir Proyecto"
 
-#: ../src/project.c:278
+#: ../src/project.c:281
 msgid "Project files"
 msgstr "Archivos del proyecto"
 
-#: ../src/project.c:312
+#: ../src/project.c:315
 #, c-format
 msgid "Project \"%s\" closed."
 msgstr "Proyecto \"%s\" cerrado."
 
-#: ../src/project.c:368
+#: ../src/project.c:372
 msgid "Project Properties"
 msgstr "Propiedades del Proyecto"
 
-#: ../src/project.c:404
+#: ../src/project.c:408
 msgid "Description:"
 msgstr "Descripción:"
 
-#: ../src/project.c:438
+#: ../src/project.c:442
 msgid "Make in base path"
 msgstr "Make en el directorio base"
 
-#: ../src/project.c:443
+#: ../src/project.c:447
 msgid "Run command:"
 msgstr "Comando de ejecución:"
 
-#: ../src/project.c:451
+#: ../src/project.c:455
 msgid ""
 "Command-line to run in the project base directory. Options can be appended "
 "to the command. Leave blank to use the default run command."
@@ -3343,67 +3342,67 @@ msgstr ""
 "Linea de comandos a correr en la ruta base del proyecto. Opciones pueden ser "
 "agregadas al comando. Dejar en blanco para usar el comando por defecto."
 
-#: ../src/project.c:467
+#: ../src/project.c:471
 msgid "File patterns:"
 msgstr "Patrones de archivos:"
 
-#: ../src/project.c:563
+#: ../src/project.c:567
 msgid "Do you want to close it before proceeding?"
 msgstr "¿Quiere cerrarlo antes de proceder?"
 
-#: ../src/project.c:564
+#: ../src/project.c:568
 #, c-format
 msgid "The '%s' project is already open."
 msgstr "El proyecto '%s' ya está abierto. "
 
-#: ../src/project.c:594
+#: ../src/project.c:598
 msgid "The specified project name is too short."
 msgstr "El nombre de proyecto especificado es muy corto."
 
-#: ../src/project.c:600
+#: ../src/project.c:604
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr "El nombre de proyecto especificado es muy largo (máx. %d carácteres)."
 
-#: ../src/project.c:608
+#: ../src/project.c:612
 msgid "You have specified an invalid project filename."
 msgstr "Ha especificado un nombre de archivo de proyecto inválido."
 
-#: ../src/project.c:617
+#: ../src/project.c:621
 #, c-format
 msgid "Project file could not be written (%s)."
 msgstr "El archivo de proyecto no pudo ser escrito (%s)."
 
-#: ../src/project.c:637
+#: ../src/project.c:641
 msgid "Create the project's base path directory?"
 msgstr "¿Crear el directorio de la ruta base del proyecto?"
 
-#: ../src/project.c:638
+#: ../src/project.c:642
 #, c-format
 msgid "The path \"%s\" does not exist."
 msgstr "La ruta \"%s\" no existe."
 
-#: ../src/project.c:701
+#: ../src/project.c:705
 #, c-format
 msgid "Project \"%s\" created."
 msgstr "Proyecto \"%s\" creado."
 
-#: ../src/project.c:703
+#: ../src/project.c:707
 #, c-format
 msgid "Project \"%s\" saved."
 msgstr "Proyecto \"%s\" guardado."
 
 #. initialise the dialog
-#: ../src/project.c:767 ../src/project.c:778
+#: ../src/project.c:771 ../src/project.c:782
 msgid "Choose Project Filename"
 msgstr "Elija el Nombre del archivo de Proyecto"
 
 #. initialise the dialog
-#: ../src/project.c:796 ../src/project.c:807
+#: ../src/project.c:800 ../src/project.c:811
 msgid "Choose Project Run Command"
 msgstr "Elija el Comando de Ejecución del Proyecto"
 
-#: ../src/project.c:870
+#: ../src/project.c:874
 #, c-format
 msgid "Project \"%s\" opened."
 msgstr "Proyecto \"%s\" abierto."
@@ -3951,99 +3950,79 @@ msgid "Show _Full Path Name"
 msgstr "Mostrar la ruta _completa"
 
 #. Status bar statistics: col = column, sel = selection.
-#: ../src/ui_utils.c:154
+#: ../src/ui_utils.c:147
 #, c-format
 msgid "line: %d\t col: %d\t sel: %d\t "
 msgstr "linea: %d\t col: %d\t sel: %d\t "
 
 #. RO = read-only
-#: ../src/ui_utils.c:160
+#: ../src/ui_utils.c:153
 msgid "RO "
 msgstr "SL"
 
 #. OVR = overwrite/overtype, INS = insert
-#: ../src/ui_utils.c:162
+#: ../src/ui_utils.c:155
 msgid "OVR"
 msgstr "SOB"
 
-#: ../src/ui_utils.c:162
+#: ../src/ui_utils.c:155
 msgid "INS"
 msgstr "INS"
 
-#: ../src/ui_utils.c:165
+#: ../src/ui_utils.c:158
 msgid "TAB"
 msgstr "TAB"
 
-#: ../src/ui_utils.c:165
+#: ../src/ui_utils.c:158
 msgid "SP "
 msgstr "SP "
 
-#: ../src/ui_utils.c:167
-#, c-format
-msgid "mode: %s"
-msgstr ""
-
-#: ../src/ui_utils.c:170
-#, fuzzy, c-format
-msgid "encoding: %s %s"
-msgstr "Elegir _codificación:"
-
-#: ../src/ui_utils.c:176
-#, fuzzy, c-format
-msgid "filetype: %s"
-msgstr "Seleccionar tipo de archivo:"
-
-#: ../src/ui_utils.c:180
+#: ../src/ui_utils.c:175
 msgid "MOD"
 msgstr "MOD"
 
-#: ../src/ui_utils.c:185
-#, c-format
-msgid "scope: %s"
-msgstr ""
-
-#: ../src/ui_utils.c:270
+#: ../src/ui_utils.c:265
 #, c-format
 msgid "Font updated (%s)."
 msgstr "Fuente actualizada (%s)."
 
-#: ../src/ui_utils.c:459
+#: ../src/ui_utils.c:454
 msgid "C Standard Library"
 msgstr "Biblioteca Estandard de C"
 
-#: ../src/ui_utils.c:460
+#: ../src/ui_utils.c:455
 msgid "ISO C99"
 msgstr "ISO C99"
 
-#: ../src/ui_utils.c:461
+#: ../src/ui_utils.c:456
 msgid "C++ (C Standard Library)"
 msgstr "C++ (Biblioteca Estandard de C)"
 
-#: ../src/ui_utils.c:462
+#: ../src/ui_utils.c:457
 msgid "C++ Standard Library"
 msgstr "Biblioteca Estandard de C++"
 
-#: ../src/ui_utils.c:463
+#: ../src/ui_utils.c:458
 msgid "C++ STL"
 msgstr "C++ STL"
 
-#: ../src/ui_utils.c:529
+#: ../src/ui_utils.c:524
 msgid "_Set Custom Date Format"
 msgstr "_Configurar Formato de Fecha Personalizado"
 
-#: ../src/ui_utils.c:1363
+#: ../src/ui_utils.c:1358
 msgid "Select Folder"
 msgstr "Seleccionar Carpeta"
 
-#: ../src/ui_utils.c:1363
+#: ../src/ui_utils.c:1358
 msgid "Select File"
 msgstr "Seleccionar Archivo"
 
-#: ../src/utils.c:361
+#: ../src/utils.c:336
 msgid "Do you want to reload it?"
 msgstr "¿Quiere recargarlo?"
 
-#: ../src/utils.c:362
+#: ../src/utils.c:337
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
@@ -4634,6 +4613,18 @@ msgstr "Imprimir mensage de estado si se grabaron archivos automáticamente"
 #: ../plugins/autosave.c:147
 msgid "Save only current open file"
 msgstr "Grabar sólo el archivo actualmente abierto"
+
+#~ msgid "mode: %s"
+#~ msgstr "modo: %s"
+
+#~ msgid "encoding: %s %s"
+#~ msgstr "codificación: %s %s"
+
+#~ msgid "filetype: %s"
+#~ msgstr "Tipo de archivo: %s"
+
+#~ msgid "scope: %s"
+#~ msgstr "alcance: %s"
 
 #~ msgid "Something very strange is occurred, could not stat %s (%s)."
 #~ msgstr ""
