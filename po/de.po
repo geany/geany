@@ -1296,7 +1296,7 @@ msgstr "Ze_ichenkodierung festlegen"
 
 #: ../src/interface.c:848
 msgid "Set Line E_ndings"
-msgstr "Zeilenen_den konvertieren"
+msgstr "Zeilenen_den festlegen"
 
 #: ../src/interface.c:855
 msgid "Convert and Set to _CR/LF (Win)"
