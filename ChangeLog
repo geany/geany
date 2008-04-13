@@ -4,6 +4,9 @@
    Fix wrong return value for on_close_all1_activate() callback.
    Fix broken Close All command by not double checking for validity
    of a document.
+ * TODO:
+   Remove "documentation: preferences" item as it has been mostly done
+   by Robert McGinley.
 
 
 2008-04-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

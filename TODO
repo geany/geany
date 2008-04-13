@@ -9,7 +9,6 @@ Note: features included in brackets have lower priority.
 
 	Next version or later:
 	o documentation: list and explain filetype modes
-	o documentation: preferences
 	o common default highlighting styles configurable for all
 	  programming languages
 	o basic support for adding custom filetypes?
