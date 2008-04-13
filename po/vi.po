@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 0.14svn\n"
+"Project-Id-Version: Geany 0.14\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-04-05 11:38+0200\n"
 "PO-Revision-Date: 2008-02-02 12:31+0100\n"

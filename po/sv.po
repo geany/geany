@@ -5,7 +5,7 @@
 # Tony Mattsson <superxorn@gmail.com>, 2007
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 0.14svn\n"
+"Project-Id-Version: Geany 0.14\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-04-05 11:38+0200\n"
 "PO-Revision-Date: 2007-12-27 13:35+0100\n"
