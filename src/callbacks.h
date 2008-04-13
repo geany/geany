@@ -102,7 +102,7 @@ void
 on_close1_activate                     (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
-gboolean
+void
 on_close_all1_activate                 (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 

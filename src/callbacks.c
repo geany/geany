@@ -152,9 +152,11 @@ static void force_close_all()
 	}
 	for (i = 0; i < len; i++)
 	{
-		if (doc_list[i].is_valid)
-			document_remove(0);
+		/* we don't need to check here for whether doc_list[i] is valid,
+		 * it's done in document_remove(). */
+		document_remove(0);
 	}
+
 	main_status.closing_all = FALSE;
 }
 
@@ -279,11 +281,11 @@ static gboolean close_all(void)
 }
 
 
-gboolean
+void
 on_close_all1_activate                 (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	return close_all();
+	close_all();
 }
 
 

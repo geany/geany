@@ -1,3 +1,11 @@
+2008-04-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/callbacks.c, src/callbacks.h:
+   Fix wrong return value for on_close_all1_activate() callback.
+   Fix broken Close All command by not double checking for validity
+   of a document.
+
+
 2008-04-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * THANKS, doc/geany.txt, doc/geany.html:
