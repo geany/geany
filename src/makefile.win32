@@ -52,7 +52,12 @@ endif
 WIN_LIBS=-mwindows -lkernel32 -limm32 -lshfolder -lshell32 \
 		 -lole32 -luuid -lcomdlg32 -lcomctl32 -liberty -lwsock32
 
-CCFLAGS=-Wall -O2 -g -mms-bitfields $(DEFINES) $(INCLUDEDIRS)
+CBASEFLAGS=-Wall -pipe -mms-bitfields $(DEFINES) $(INCLUDEDIRS)
+ifdef DEBUG
+CFLAGS=-O0 -g $(CBASEFLAGS)
+else
+CFLAGS=-O2 $(CBASEFLAGS)
+endif
 
 OBJS =	about.o build.o callbacks.o dialogs.o document.o editor.o encodings.o filetypes.o \
 		geanyobject.o geanywraplabel.o highlighting.o interface.o keybindings.o keyfile.o \
@@ -61,7 +66,7 @@ OBJS =	about.o build.o callbacks.o dialogs.o document.o editor.o encodings.o fil
 		ui_utils.o utils.o win32.o
 
 .c.o:
-	$(CC) $(CCFLAGS) -c $<
+	$(CC) $(CFLAGS) -c $<
 
 # all: binclean $(TARGET) #exec
 all: $(TARGET)
@@ -86,7 +91,7 @@ $(TARGET): $(OBJS) $(RES) ../scintilla/scintilla.a ../tagmanager/tagmanager.a
 	 $(WIN_LIBS)
 
 deps.mak:
-	$(CC) -MM  $(CCFLAGS) *.c >deps.mak
+	$(CC) -MM  $(CFLAGS) *.c >deps.mak
 
 # Generate header dependencies with "make deps.mak"
 include deps.mak

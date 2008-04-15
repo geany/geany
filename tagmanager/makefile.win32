@@ -24,10 +24,15 @@ GTK_INCLUDES= \
 
 INCLUDEDIRS=-I include $(GTK_INCLUDES)
 
-CCFLAGS=-Wall -O2 -g -mms-bitfields -DPACKAGE=\"geany\" -DG_OS_WIN32 -Wno-missing-braces -Wno-char-subscripts $(INCLUDEDIRS)
+CBASEFLAGS=-Wall -pipe -mms-bitfields -DPACKAGE=\"geany\" -DG_OS_WIN32 -Wno-missing-braces -Wno-char-subscripts $(INCLUDEDIRS)
+ifdef DEBUG
+CFLAGS= -O0 -g $(CBASEFLAGS)
+else
+CFLAGS=-O2 $(CBASEFLAGS)
+endif
 
 .c.o:
-	$(CC) $(REGEX_DEFINES) $(CCFLAGS) -w -c $<
+	$(CC) $(REGEX_DEFINES) $(CFLAGS) -w -c $<
 
 all: $(COMPLIB)
 
@@ -43,7 +48,7 @@ tm_symbol.o tm_file_entry.o tm_tagmanager.o
 	$(RANLIB) $@
 
 deps.mak:
-	$(CC) -MM  $(CCFLAGS) *.c >deps.mak
+	$(CC) -MM  $(CFLAGS) *.c >deps.mak
 
 # Generate header dependencies with "make deps.mak"
 include deps.mak

@@ -2,6 +2,11 @@
 
  * doc/images/pref_dialog_gen.png:
    Update for 0.14.
+ * plugins/makefile.win32, scintilla/makefile.win32, src/makefile.win32,
+   tagmanager/makefile.win32:
+   Add DEBUG flag to all Windows makefiles to make it possible to build
+   with debug symbols and without optimizations also on Windows
+   (using make DEBUG=1).
 
 
 2008-04-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
