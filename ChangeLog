@@ -1,3 +1,9 @@
+2008-04-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * doc/images/pref_dialog_gen.png:
+   Update for 0.14.
+
+
 2008-04-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/callbacks.c, src/callbacks.h:
