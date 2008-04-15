@@ -7,14 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 0.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-05 11:38+0200\n"
-"PO-Revision-Date: 2008-04-07 10:35+0200\n"
+"POT-Creation-Date: 2008-04-15 09:48+0200\n"
+"PO-Revision-Date: 2008-04-15 09:27+0200\n"
 "Last-Translator: kilo aka Gabor Kmetyko <kg.kilo@gmail.com>\n"
 "Language-Team: Hungarian <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms:  nplurals=1; plural=0;\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #: ../geany.desktop.in.h:1
 msgid "A fast and lightweight IDE using GTK2"
@@ -28,57 +29,57 @@ msgstr "Geany"
 msgid "Integrated Development Environment"
 msgstr "Integrált Fejlesztői Felület"
 
-#: ../src/about.c:122
+#: ../src/about.c:123
 msgid "About Geany"
 msgstr "Geany verzió"
 
-#: ../src/about.c:173
+#: ../src/about.c:174
 msgid "A fast and lightweight IDE"
 msgstr "Gyors és pehelykönnyű IDE"
 
-#: ../src/about.c:194
+#: ../src/about.c:195
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(készült %s-on)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:225
+#: ../src/about.c:226
 msgid "Info"
 msgstr "Információ"
 
-#: ../src/about.c:241
+#: ../src/about.c:242
 msgid "Developers"
 msgstr "Fejlesztők"
 
-#: ../src/about.c:250
+#: ../src/about.c:251
 msgid "maintainer"
 msgstr "karbantartó"
 
-#: ../src/about.c:258
+#: ../src/about.c:259
 msgid "developer"
 msgstr "fejlesztő"
 
-#: ../src/about.c:266
+#: ../src/about.c:267
 msgid "translation maintainer"
 msgstr "fordítás karbantartója"
 
-#: ../src/about.c:275
+#: ../src/about.c:276
 msgid "Translators"
 msgstr "Fordítók"
 
-#: ../src/about.c:295
+#: ../src/about.c:296
 msgid "Previous Translators"
 msgstr "Előző fordítók"
 
-#: ../src/about.c:314
+#: ../src/about.c:315
 msgid "Credits"
 msgstr "Közreműködők"
 
-#: ../src/about.c:328
+#: ../src/about.c:329
 msgid "License"
 msgstr "Licenc"
 
-#: ../src/about.c:337
+#: ../src/about.c:338
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -122,7 +123,8 @@ msgstr "%s (%s könyvtárban)"
 
 #: ../src/build.c:560
 msgid "Command stopped because the current file has no extension."
-msgstr "Parancs végrehajtása megállt, mert a jelenlegi fájlnak nincs kiterjesztése."
+msgstr ""
+"Parancs végrehajtása megállt, mert a jelenlegi fájlnak nincs kiterjesztése."
 
 #: ../src/build.c:571
 #, c-format
@@ -137,7 +139,8 @@ msgid "Failed to change the working directory to \"%s\""
 msgstr "Nem sikerült a munkakönyvtárat átállítani erre: \"%s\""
 
 #: ../src/build.c:734
-msgid "Could not execute the file in the VTE because it probably contains a command."
+msgid ""
+"Could not execute the file in the VTE because it probably contains a command."
 msgstr ""
 "Nem sikerült a fájlt végrehajtani a VTE-n belül, mert feltehetően egy "
 "parancsot tartalmaz."
@@ -186,7 +189,8 @@ msgstr "Egyedi cél készí_tése"
 
 #: ../src/build.c:1084 ../src/build.c:1205
 msgid "Builds the current file with the make tool and the specified target"
-msgstr "Build-eli a jelenlegi fájlt a make eszközzel és a megadott célállománnyal"
+msgstr ""
+"Build-eli a jelenlegi fájlt a make eszközzel és a megadott célállománnyal"
 
 #. build the code with make object
 #: ../src/build.c:1091
@@ -326,7 +330,8 @@ msgid "Make Custom Target"
 msgstr "Egyedi cél készítése"
 
 #: ../src/build.c:1895
-msgid "Enter custom options here, all entered text is passed to the make command."
+msgid ""
+"Enter custom options here, all entered text is passed to the make command."
 msgstr ""
 "Adja meg itt az egyedi opciókat, minden bevitt szöveg átadásra kerül a make "
 "parancs számára."
@@ -348,61 +353,62 @@ msgstr "A folyamatot nem sikerült leállítani (%s)."
 msgid "No more build errors."
 msgstr "Nincs több fordítási hiba."
 
-#: ../src/callbacks.c:193
+#: ../src/callbacks.c:195
 msgid "Do you really want to quit?"
 msgstr "Valóban ki szeretne lépni?"
 
-#: ../src/callbacks.c:523 ../src/interface.c:356 ../src/treeviews.c:453
-#: ../src/utils.c:335
+#: ../src/callbacks.c:525 ../src/interface.c:356 ../src/treeviews.c:453
+#: ../src/utils.c:360
 msgid "_Reload"
 msgstr "Ú_jraolvasás"
 
-#: ../src/callbacks.c:524
+#: ../src/callbacks.c:526
 msgid "Any unsaved changes will be lost."
 msgstr "Minden nem mentett változtatás el fog veszni."
 
-#: ../src/callbacks.c:525
+#: ../src/callbacks.c:527
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Biztosan újra akarja olvasni '%s'-t?"
 
-#: ../src/callbacks.c:1358 ../src/callbacks.c:1382
-msgid "Please set the filetype for the current file before using this function."
+#: ../src/callbacks.c:1360 ../src/callbacks.c:1384
+msgid ""
+"Please set the filetype for the current file before using this function."
 msgstr "Mielőtt ezt a funkciót használná, adja meg a jelenlegi fájl típusát."
 
-#: ../src/callbacks.c:1484 ../src/ui_utils.c:485
+#: ../src/callbacks.c:1486 ../src/ui_utils.c:490
 msgid "dd.mm.yyyy"
 msgstr "nn.hh.éééé"
 
-#: ../src/callbacks.c:1486 ../src/ui_utils.c:486
+#: ../src/callbacks.c:1488 ../src/ui_utils.c:491
 msgid "mm.dd.yyyy"
 msgstr "hh.nn.éééé"
 
-#: ../src/callbacks.c:1488 ../src/ui_utils.c:487
+#: ../src/callbacks.c:1490 ../src/ui_utils.c:492
 msgid "yyyy/mm/dd"
 msgstr "éééé/hh/nn"
 
-#: ../src/callbacks.c:1490 ../src/ui_utils.c:496
+#: ../src/callbacks.c:1492 ../src/ui_utils.c:501
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "nn.hh.éééé óó:pp:mm"
 
-#: ../src/callbacks.c:1492 ../src/ui_utils.c:497
+#: ../src/callbacks.c:1494 ../src/ui_utils.c:502
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "hh.nn.éééé óó:pp:mm"
 
-#: ../src/callbacks.c:1494 ../src/ui_utils.c:498
+#: ../src/callbacks.c:1496 ../src/ui_utils.c:503
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "éééé/hh/nn óó:pp:mm"
 
-#: ../src/callbacks.c:1496 ../src/ui_utils.c:507
+#: ../src/callbacks.c:1498 ../src/ui_utils.c:512
 msgid "_Use Custom Date Format"
 msgstr "Egyedi dát_umformátum használata"
 
-#: ../src/callbacks.c:1507
+#: ../src/callbacks.c:1509
 msgid "Custom Date Format"
 msgstr "Egyedi dátumformátum"
 
-#: ../src/callbacks.c:1508
+#: ../src/callbacks.c:1510
 msgid ""
 "Enter here a custom date and time format. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
@@ -410,11 +416,12 @@ msgstr ""
 "Adja meg itt az egyedi dátum és idő formátumot. Minden olyan konverziós "
 "jelölés használható, amit az ANSI C strftime függvénnyel használni lehet."
 
-#: ../src/callbacks.c:1527
+#: ../src/callbacks.c:1529
 msgid "Date format string could not be converted (possibly too long)."
-msgstr "A dátumformátum stringet nem lehetett átalakítani (feltehetően túl hosszú)."
+msgstr ""
+"A dátumformátum stringet nem lehetett átalakítani (feltehetően túl hosszú)."
 
-#: ../src/callbacks.c:1825
+#: ../src/callbacks.c:1827
 msgid "No more message items."
 msgstr "Nincs több üzenet."
 
@@ -546,8 +553,8 @@ msgstr ""
 
 #: ../src/dialogs.c:990 ../src/dialogs.c:991 ../src/dialogs.c:992
 #: ../src/dialogs.c:998 ../src/dialogs.c:999 ../src/dialogs.c:1000
-#: ../src/ui_utils.c:164 ../src/utils.c:536 ../src/utils.c:557
-#: ../src/utils.c:610
+#: ../src/ui_utils.c:171 ../src/utils.c:561 ../src/utils.c:582
+#: ../src/utils.c:635
 msgid "unknown"
 msgstr "ismeretlen"
 
@@ -580,7 +587,7 @@ msgid "<b>Encoding:</b>"
 msgstr "<b>Kódolás:</b>"
 
 #. BOM = byte order mark
-#: ../src/dialogs.c:1100 ../src/ui_utils.c:167
+#: ../src/dialogs.c:1100 ../src/ui_utils.c:174
 msgid "(with BOM)"
 msgstr "(BOM-mal)"
 
@@ -633,17 +640,17 @@ msgstr "Egyéb:"
 msgid "File %s closed."
 msgstr "%s fájl bezárva."
 
-#: ../src/document.c:645
+#: ../src/document.c:655
 #, c-format
 msgid "New file \"%s\" opened."
 msgstr "\"%s\" új fájl megnyitva."
 
-#: ../src/document.c:830 ../src/document.c:1229
+#: ../src/document.c:840 ../src/document.c:1239
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Nem lehetett megnyitni a(z) %s fájlt (%s)"
 
-#: ../src/document.c:859
+#: ../src/document.c:869
 #, c-format
 msgid ""
 "The file \"%s\" could not be opened properly and has been truncated. This "
@@ -656,12 +663,12 @@ msgstr ""
 "arra, hogy ez adatvesztéshez vezethet.\n"
 "A fájlt csak olvashatóvá tettük."
 
-#: ../src/document.c:883
+#: ../src/document.c:893
 #, c-format
 msgid "The file \"%s\" is not valid %s."
 msgstr "A(z) \"%s\" fájl nem érvényes %s."
 
-#: ../src/document.c:892
+#: ../src/document.c:902
 #, c-format
 msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
@@ -670,42 +677,42 @@ msgstr ""
 "A(z) \"%s\" fájl nem tűnik szöveges fájlnak, vagy a fájl kódolása nem "
 "támogatott."
 
-#: ../src/document.c:1001
+#: ../src/document.c:1011
 msgid "Invalid filename"
 msgstr "Érvénytelen fájlnév"
 
-#: ../src/document.c:1066
+#: ../src/document.c:1076
 #, c-format
 msgid "Setting %s indentation mode."
 msgstr "%s behúzás üzemmód beállítása."
 
-#: ../src/document.c:1067
+#: ../src/document.c:1077
 msgid "Tabs"
 msgstr "Tabulátorok"
 
-#: ../src/document.c:1067
+#: ../src/document.c:1077
 msgid "Spaces"
 msgstr "Szóközök"
 
-#: ../src/document.c:1116
+#: ../src/document.c:1126
 #, c-format
 msgid "File %s reloaded."
 msgstr "%s fájl újraolvasva."
 
-#: ../src/document.c:1118
+#: ../src/document.c:1128
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "%s fájl megnyitva (%d%s)."
 
-#: ../src/document.c:1120
+#: ../src/document.c:1130
 msgid ", read-only"
 msgstr ", csak olvasható"
 
-#: ../src/document.c:1328 ../src/document.c:1440
+#: ../src/document.c:1338 ../src/document.c:1450
 msgid "Error saving file."
 msgstr "Hiba a fájl mentésekor."
 
-#: ../src/document.c:1374
+#: ../src/document.c:1384
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -714,7 +721,7 @@ msgstr ""
 "Hiba történt a fájl UTF-8-ból konvertálásakor itt: \"%s\". A fájl nem került "
 "mentésre."
 
-#: ../src/document.c:1395
+#: ../src/document.c:1405
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -723,50 +730,50 @@ msgstr ""
 "Hibaüzenet: %s\n"
 "A hiba itt történt: \"%s\" (sor: %d, oszlop: %d)."
 
-#: ../src/document.c:1400
+#: ../src/document.c:1410
 #, c-format
 msgid "Error message: %s."
 msgstr "Hibaüzenet: %s."
 
-#: ../src/document.c:1428
+#: ../src/document.c:1438
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Hiba a fájl mentésekor (%s)."
 
-#: ../src/document.c:1468
+#: ../src/document.c:1478
 #, c-format
 msgid "File %s saved."
 msgstr "%s fájl elmentve."
 
-#: ../src/document.c:1536 ../src/document.c:1590 ../src/document.c:1598
+#: ../src/document.c:1546 ../src/document.c:1600 ../src/document.c:1608
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" nem található."
 
-#: ../src/document.c:1598
+#: ../src/document.c:1608
 msgid "Wrap search and find again?"
 msgstr "Újbóli keresés a fájl elejétől?"
 
-#: ../src/document.c:1673 ../src/search.c:903 ../src/search.c:1407
+#: ../src/document.c:1683 ../src/search.c:903 ../src/search.c:1407
 #: ../src/search.c:1408
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Nincs találat erre: \"%s\"."
 
-#: ../src/document.c:1683 ../src/document.c:1690
+#: ../src/document.c:1693 ../src/document.c:1700
 #, c-format
 msgid "%s: replaced %d occurrence(s) of \"%s\" with \"%s\"."
 msgstr "%s: %d előfordulás cserélve, \"%s\" helyett \"%s\"."
 
-#: ../src/document.c:2102
+#: ../src/document.c:2112
 msgid "Win (CRLF)"
 msgstr "Win (CRLF)"
 
-#: ../src/document.c:2103
+#: ../src/document.c:2113
 msgid "Mac (CR)"
 msgstr "Mac (CR)"
 
-#: ../src/document.c:2105
+#: ../src/document.c:2115
 msgid "Unix (LF)"
 msgstr "Unix (LF)"
 
@@ -945,7 +952,7 @@ msgstr "Config fájl"
 msgid "reStructuredText file"
 msgstr "reStructuredText fájl"
 
-#: ../src/filetypes.c:482 ../src/project.c:277
+#: ../src/filetypes.c:482 ../src/project.c:274
 msgid "All files"
 msgstr "Minden fájl"
 
@@ -966,6 +973,7 @@ msgid "M_iscellaneous Languages"
 msgstr "Egyéb _nyelvek"
 
 #: ../src/filetypes.c:546 ../src/interface.c:3644 ../src/templates.c:350
+#: ../src/ui_utils.c:135
 msgid "None"
 msgstr "Semmi"
 
@@ -1129,7 +1137,8 @@ msgid "Insert _BSD License Notice"
 msgstr "_BSD licensz megjegyzés beszúrása"
 
 #: ../src/interface.c:592 ../src/interface.c:2250
-msgid "Inserts a BSD licence notice (should be done at the beginning of the file)"
+msgid ""
+"Inserts a BSD licence notice (should be done at the beginning of the file)"
 msgstr "BSD licensz megjegyzést illeszt be (a fájl elejére kell kerüljön)"
 
 #: ../src/interface.c:594 ../src/interface.c:2252
@@ -1198,7 +1207,8 @@ msgstr "Üzenet _ablak megjelenítése"
 
 #: ../src/interface.c:729
 msgid "Toggle the window with status and compiler messages on and off"
-msgstr "Ki/bekapcsolja az állapotokat és fordítóüzeneteket megjelenítő ablakot "
+msgstr ""
+"Ki/bekapcsolja az állapotokat és fordítóüzeneteket megjelenítő ablakot "
 
 #: ../src/interface.c:732
 msgid "Show _Toolbar"
@@ -1272,7 +1282,8 @@ msgstr "Csak _olvasható"
 
 #: ../src/interface.c:817
 msgid "Treat this file as read-only. No changes can be made."
-msgstr "A fájlt csak olvashatóként kezeli. Nem lehet benne változtatásokat tenni."
+msgstr ""
+"A fájlt csak olvashatóként kezeli. Nem lehet benne változtatásokat tenni."
 
 #: ../src/interface.c:819
 msgid "_Write Unicode BOM"
@@ -1367,7 +1378,8 @@ msgid "_Color Chooser"
 msgstr "_Színválasztó"
 
 #: ../src/interface.c:970 ../src/interface.c:1116
-msgid "Open a color chooser dialog, to interactively pick colors from a palette."
+msgid ""
+"Open a color chooser dialog, to interactively pick colors from a palette."
 msgstr ""
 "Megnyit egy színválasztó dialógus ablakot, hogy interaktív módon lehessen "
 "egy palettáról színt választani."
@@ -1620,7 +1632,9 @@ msgstr "Projekt-alapú munkamenet fájlok használata"
 msgid ""
 "Whether to store a project's session files and open them when re-opening the "
 "project."
-msgstr "Eltárolja-e a projekt munkamenet fájljait és megnyissa-e őket a projekt újbóli megnyitásakor?"
+msgstr ""
+"Eltárolja-e a projekt munkamenet fájljait és megnyissa-e őket a projekt "
+"újbóli megnyitásakor?"
 
 #: ../src/interface.c:2885
 msgid "<b>Projects</b>"
@@ -1694,7 +1708,9 @@ msgstr "Kurzor alatti szó használata a Keresés dialógushoz"
 msgid ""
 "Use current word under the cursor when opening the Find, Find in Files or "
 "Replace dialog and there is no selection."
-msgstr "A kurzor alatti szót használja a Keresés, Keresés fájlokban vagy Csere dialógusablakok megnyitásakor, ha amúgy nincs kijelölés."
+msgstr ""
+"A kurzor alatti szót használja a Keresés, Keresés fájlokban vagy Csere "
+"dialógusablakok megnyitásakor, ha amúgy nincs kijelölés."
 
 #: ../src/interface.c:2942 ../src/interface.c:3272 ../src/interface.c:3991
 msgid "<b>Miscellaneous</b>"
@@ -1882,7 +1898,8 @@ msgid "Show Back and Forward buttons"
 msgstr "Vissza és Előre gombok megjelenítése"
 
 #: ../src/interface.c:3338
-msgid "Display the Back and Forward buttons in the toolbar used for code navigation"
+msgid ""
+"Display the Back and Forward buttons in the toolbar used for code navigation"
 msgstr ""
 "Megjeleníti a Vissza és az Előre gombokat az eszköztáron a kódon belül "
 "történő mozgáshoz"
@@ -2097,7 +2114,8 @@ msgstr "Tabulátort vagy szóközt használjon, ha behúzás történik?"
 msgid ""
 "Whether to detect the indentation type from file contents when a file is "
 "opened."
-msgstr "Fájl megnyitásakor megállapítsa-e a fájltartalom alapján a behúzások típusát?"
+msgstr ""
+"Fájl megnyitásakor megállapítsa-e a fájltartalom alapján a behúzások típusát?"
 
 #: ../src/interface.c:3701
 msgid "<b>Indentation</b>"
@@ -2175,7 +2193,8 @@ msgstr "Soremelés levágja a sorvégi szóközöket"
 
 #: ../src/interface.c:3758
 msgid "Enable newline to strip the trailing spaces on the previous line."
-msgstr "Engedélyezi, hogy soremeléskor az előző sor végéről levágja a szóközöket."
+msgstr ""
+"Engedélyezi, hogy soremeléskor az előző sor végéről levágja a szóközöket."
 
 #: ../src/interface.c:3761
 msgid "<b>Features</b>"
@@ -2243,7 +2262,8 @@ msgstr "Szerkesztő"
 
 #: ../src/interface.c:3873
 msgid "Sets the default encoding for newly created files."
-msgstr "Beállítja az alapértelmezett kódolást újonnan létrehozott fájlok esetén."
+msgstr ""
+"Beállítja az alapértelmezett kódolást újonnan létrehozott fájlok esetén."
 
 #: ../src/interface.c:3879
 msgid "Default encoding (new files):"
@@ -2303,7 +2323,8 @@ msgid "Recent files list length:"
 msgstr "Legutóbbi fájlok listájának hossza:"
 
 #: ../src/interface.c:3987
-msgid "Specifies the number of files which are stored in the Recent files list."
+msgid ""
+"Specifies the number of files which are stored in the Recent files list."
 msgstr "Megadja, hogy hány fájl jelenjen meg a Legutóbbi fájlok listáján."
 
 #: ../src/interface.c:3996 ../src/symbols.c:572 ../plugins/filebrowser.c:863
@@ -2436,7 +2457,8 @@ msgstr "Parancs:"
 #: ../src/interface.c:4352
 #, c-format
 msgid "Path to the command for printing files (use %f for the filename)."
-msgstr "Elérési út a fájl nyomtatási parancshoz (használjon %f-et a fájlnév helyén)."
+msgstr ""
+"Elérési út a fájl nyomtatási parancshoz (használjon %f-et a fájlnév helyén)."
 
 #: ../src/interface.c:4362
 msgid "Use an external command for printing"
@@ -2455,8 +2477,10 @@ msgid "Print page numbers"
 msgstr "Oldalszámozás nyomtatása"
 
 #: ../src/interface.c:4392 ../src/printing.c:351
-msgid "Add page numbers at the bottom of each page. It takes 2 lines of the page."
-msgstr "Oldalszám elhelyezése minden oldal alján. Ez 2 sort foglal el az oldalon."
+msgid ""
+"Add page numbers at the bottom of each page. It takes 2 lines of the page."
+msgstr ""
+"Oldalszám elhelyezése minden oldal alján. Ez 2 sort foglal el az oldalon."
 
 #: ../src/interface.c:4395 ../src/printing.c:355
 msgid "Print page header"
@@ -3056,7 +3080,9 @@ msgstr "Üzenet ablak el_rejtése"
 msgid ""
 "The plugin \"%s\" is not binary compatible with this release of Geany - "
 "please recompile it."
-msgstr "A(z) \"%s\" bővítmény binárisan nem kompatibilis a Geany ezen kiadásával - fordítsa újra azt!"
+msgstr ""
+"A(z) \"%s\" bővítmény binárisan nem kompatibilis a Geany ezen kiadásával - "
+"fordítsa újra azt!"
 
 #: ../src/plugins.c:679
 msgid "_Plugin Manager"
@@ -3240,19 +3266,19 @@ msgstr "Új projekt"
 msgid "C_reate"
 msgstr "Lét_rehozás"
 
-#: ../src/project.c:132 ../src/project.c:384
+#: ../src/project.c:132 ../src/project.c:380
 msgid "Name:"
 msgstr "Név:"
 
-#: ../src/project.c:140 ../src/project.c:396
+#: ../src/project.c:140 ../src/project.c:392
 msgid "Filename:"
 msgstr "Fájlnév:"
 
-#: ../src/project.c:156 ../src/project.c:425
+#: ../src/project.c:156 ../src/project.c:421
 msgid "Base path:"
 msgstr "Alapkönyvtár:"
 
-#: ../src/project.c:161 ../src/project.c:433
+#: ../src/project.c:161 ../src/project.c:429
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
@@ -3262,45 +3288,45 @@ msgstr ""
 "létező elérési út is. Lehet használni a projekt fájlnevéhez képest relatív "
 "elérési utakat is."
 
-#: ../src/project.c:164 ../src/project.c:436
+#: ../src/project.c:164 ../src/project.c:432
 msgid "Choose Project Base Path"
 msgstr "Adja meg a projekt alapkönyvtárát"
 
-#: ../src/project.c:209 ../src/project.c:248 ../src/project.c:881
+#: ../src/project.c:209 ../src/project.c:246 ../src/project.c:877
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "Nem sikerült betölteni a(z) \"%s\" projekt fájlt."
 
-#: ../src/project.c:242 ../src/project.c:261
+#: ../src/project.c:240 ../src/project.c:258
 msgid "Open Project"
 msgstr "Projekt megnyitása"
 
-#: ../src/project.c:281
+#: ../src/project.c:278
 msgid "Project files"
 msgstr "Projekt fájlok"
 
-#: ../src/project.c:315
+#: ../src/project.c:312
 #, c-format
 msgid "Project \"%s\" closed."
 msgstr "\"%s\" projekt bezárva."
 
-#: ../src/project.c:372
+#: ../src/project.c:368
 msgid "Project Properties"
 msgstr "Projekt tulajdonságai"
 
-#: ../src/project.c:408
+#: ../src/project.c:404
 msgid "Description:"
 msgstr "Leírás:"
 
-#: ../src/project.c:442
+#: ../src/project.c:438
 msgid "Make in base path"
 msgstr "Make parancs az alapkönyvtárban"
 
-#: ../src/project.c:447
+#: ../src/project.c:443
 msgid "Run command:"
 msgstr "Parancs indítása:"
 
-#: ../src/project.c:455
+#: ../src/project.c:451
 msgid ""
 "Command-line to run in the project base directory. Options can be appended "
 "to the command. Leave blank to use the default run command."
@@ -3308,67 +3334,67 @@ msgstr ""
 "A projekt alapkönytárában futtatandó parancssor. A parancshoz opciókat is "
 "lehet fűzni. Hagyja üresen az alapértelmezett futtatás parancs használatához."
 
-#: ../src/project.c:471
+#: ../src/project.c:467
 msgid "File patterns:"
 msgstr "Fájl minták:"
 
-#: ../src/project.c:567
+#: ../src/project.c:563
 msgid "Do you want to close it before proceeding?"
 msgstr "Szeretné bezárni, mielőtt folytatja?"
 
-#: ../src/project.c:568
+#: ../src/project.c:564
 #, c-format
 msgid "The '%s' project is already open."
 msgstr "A(z) '%s' projekt már nyitva van."
 
-#: ../src/project.c:598
+#: ../src/project.c:594
 msgid "The specified project name is too short."
 msgstr "A megadott projekt név túl rövid."
 
-#: ../src/project.c:604
+#: ../src/project.c:600
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr "A megadott projekt név túl hosszú (max. %d karakter)."
 
-#: ../src/project.c:612
+#: ../src/project.c:608
 msgid "You have specified an invalid project filename."
 msgstr "Érvénytelen projekt fájlnevet adott meg."
 
-#: ../src/project.c:621
+#: ../src/project.c:617
 #, c-format
 msgid "Project file could not be written (%s)."
 msgstr "A projekt fájl nem írható (%s)."
 
-#: ../src/project.c:641
+#: ../src/project.c:637
 msgid "Create the project's base path directory?"
 msgstr "Létre kívánja hozni a projekt alapkönyvtárát?"
 
-#: ../src/project.c:642
+#: ../src/project.c:638
 #, c-format
 msgid "The path \"%s\" does not exist."
 msgstr "A(z) \"%s\" elérési út nem létezik."
 
-#: ../src/project.c:705
+#: ../src/project.c:701
 #, c-format
 msgid "Project \"%s\" created."
 msgstr "\"%s\" projekt létrehozásra került."
 
-#: ../src/project.c:707
+#: ../src/project.c:703
 #, c-format
 msgid "Project \"%s\" saved."
 msgstr "\"%s\" projekt elmentve."
 
 #. initialise the dialog
-#: ../src/project.c:771 ../src/project.c:782
+#: ../src/project.c:767 ../src/project.c:778
 msgid "Choose Project Filename"
 msgstr "Adja meg a projekt nevét"
 
 #. initialise the dialog
-#: ../src/project.c:800 ../src/project.c:811
+#: ../src/project.c:796 ../src/project.c:807
 msgid "Choose Project Run Command"
 msgstr "Adja meg a projekt futtatási parancsát"
 
-#: ../src/project.c:874
+#: ../src/project.c:870
 #, c-format
 msgid "Project \"%s\" opened."
 msgstr "\"%s\" projekt megnyitásra került."
@@ -3823,7 +3849,9 @@ msgstr "\"%s\" definíciója nem található."
 msgid ""
 "The executed custom command returned an error. Your selection was not "
 "changed. Error message: %s"
-msgstr "A futtatott egyedi parancs hibát adott vissza. A kijelölt részlet nem került megváltoztatásra. Hibaüzenet: %s"
+msgstr ""
+"A futtatott egyedi parancs hibát adott vissza. A kijelölt részlet nem került "
+"megváltoztatásra. Hibaüzenet: %s"
 
 #: ../src/tools.c:217
 msgid "The executed custom command exited with an unsuccessful exit code."
@@ -3912,79 +3940,99 @@ msgid "Show _Full Path Name"
 msgstr "Teljes _elérési út megjelenítése"
 
 #. Status bar statistics: col = column, sel = selection.
-#: ../src/ui_utils.c:147
+#: ../src/ui_utils.c:154
 #, c-format
 msgid "line: %d\t col: %d\t sel: %d\t "
 msgstr "sor: %d\t osz.: %d\t kij.: %d\t "
 
 #. RO = read-only
-#: ../src/ui_utils.c:153
+#: ../src/ui_utils.c:160
 msgid "RO "
 msgstr "OLV"
 
 #. OVR = overwrite/overtype, INS = insert
-#: ../src/ui_utils.c:155
+#: ../src/ui_utils.c:162
 msgid "OVR"
 msgstr "ÁTÍR"
 
-#: ../src/ui_utils.c:155
+#: ../src/ui_utils.c:162
 msgid "INS"
 msgstr "BESZÚR"
 
-#: ../src/ui_utils.c:158
+#: ../src/ui_utils.c:165
 msgid "TAB"
 msgstr "TAB"
 
-#: ../src/ui_utils.c:158
+#: ../src/ui_utils.c:165
 msgid "SP "
 msgstr "SP "
 
-#: ../src/ui_utils.c:175
+#: ../src/ui_utils.c:167
+#, c-format
+msgid "mode: %s"
+msgstr "Üzemmód: %s"
+
+#: ../src/ui_utils.c:170
+#, c-format
+msgid "encoding: %s %s"
+msgstr "Kódolás: %s %s"
+
+#: ../src/ui_utils.c:176
+#, c-format
+msgid "filetype: %s"
+msgstr "Fájltípus: %s"
+
+#: ../src/ui_utils.c:180
 msgid "MOD"
 msgstr "MÓDOSÍT"
 
-#: ../src/ui_utils.c:265
+#: ../src/ui_utils.c:185
+#, c-format
+msgid "scope: %s"
+msgstr "Érv.kör: %s"
+
+#: ../src/ui_utils.c:270
 #, c-format
 msgid "Font updated (%s)."
 msgstr "Betűtípus frissítve (%s)."
 
-#: ../src/ui_utils.c:454
+#: ../src/ui_utils.c:459
 msgid "C Standard Library"
 msgstr "C Standard Library"
 
-#: ../src/ui_utils.c:455
+#: ../src/ui_utils.c:460
 msgid "ISO C99"
 msgstr "ISO C99"
 
-#: ../src/ui_utils.c:456
+#: ../src/ui_utils.c:461
 msgid "C++ (C Standard Library)"
 msgstr "C++ (C Standard Library)"
 
-#: ../src/ui_utils.c:457
+#: ../src/ui_utils.c:462
 msgid "C++ Standard Library"
 msgstr "C++ Standard Library"
 
-#: ../src/ui_utils.c:458
+#: ../src/ui_utils.c:463
 msgid "C++ STL"
 msgstr "C++ STL"
 
-#: ../src/ui_utils.c:524
+#: ../src/ui_utils.c:529
 msgid "_Set Custom Date Format"
 msgstr "Egyedi dátumformátum megadása"
 
-#: ../src/ui_utils.c:1358
+#: ../src/ui_utils.c:1363
 msgid "Select Folder"
 msgstr "Könyvtár kiválasztása"
 
-#: ../src/ui_utils.c:1358
+#: ../src/ui_utils.c:1363
 msgid "Select File"
 msgstr "Fájl kiválasztása"
 
-#: ../src/utils.c:336
+#: ../src/utils.c:361
 msgid "Do you want to reload it?"
 msgstr "Újra akarja olvasni?"
 
-#: ../src/utils.c:337
+#: ../src/utils.c:362
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
@@ -4110,7 +4158,8 @@ msgid "Override Geany keybindings"
 msgstr "Geany billentyű-hozzárendelések felülbírálata"
 
 #: ../src/vte.c:770
-msgid "Allows the VTE to receive keyboard shortcuts (apart from focus commands)."
+msgid ""
+"Allows the VTE to receive keyboard shortcuts (apart from focus commands)."
 msgstr ""
 "Engedélyezi, hogy a VTE billentyűparancsokat fogadjon (a fókusz parancsokon "
 "kívül)."
@@ -4360,7 +4409,8 @@ msgid "_Use current zoom level"
 msgstr "Jelenlegi _nagyítás használata"
 
 #: ../plugins/export.c:190
-msgid "Renders the font size of the document together with the current zoom level."
+msgid ""
+"Renders the font size of the document together with the current zoom level."
 msgstr ""
 "A dokumentum fontméretét a jelenlegi nagyítás mértékének megfelelően "
 "jeleníti meg."
@@ -4786,4 +4836,3 @@ msgstr "Csak az aktuális megnyitott fájlt mentse"
 #, fuzzy
 #~ msgid "From _directory"
 #~ msgstr "_Könyvtár:"
-
