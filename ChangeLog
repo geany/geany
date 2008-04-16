@@ -11,6 +11,9 @@
    Move plugin keyfile pref saving and loading to plugins.c.
  * src/plugindata.h, src/geany.h, src/plugins.c, src/main.c:
    Remove active_plugins from GeanyApp.
+ * src/plugins.c, NEWS:
+   When quitting, remember plugin filenames that couldn't be loaded at
+   startup as well as active plugins.
 
 
 2008-04-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

@@ -37,6 +37,8 @@ Geany 0.14 (TBA)
     * Add a HTML Characters keybinding to show the dialog.
     * Add File Browser keybindings to focus the Path Entry and File List
     * Rename VCDiff plugin Version Diff.
+    * When quitting, remember plugin filenames that couldn't be loaded at
+      startup as well as active plugins.
 
     Plugin API:
     * Add PLUGIN_KEY_GROUP and keybindings_set_item() to setup a keybinding

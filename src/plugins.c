@@ -85,7 +85,10 @@ Plugin;
 static GList *plugin_list = NULL;
 static GList *active_plugin_list = NULL; /* list of only actually loaded plugins, always valid */
 static gchar **active_plugins_pref = NULL; 	/* list of plugin filenames to load at startup */
+static GList *failed_plugins_list = NULL;	/* plugins the user wants active but can't be used */
+
 static GtkWidget *separator = NULL;
+
 static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data);
 
 
@@ -597,13 +600,19 @@ load_active_plugins()
 {
 	guint i, len;
 
-	if (active_plugins_pref == NULL || (len = g_strv_length(active_plugins_pref)) == 0)
+	len = g_strv_length(active_plugins_pref);
+	if (active_plugins_pref == NULL || len == 0)
 		return;
 
 	for (i = 0; i < len; i++)
 	{
-		if (NZV(active_plugins_pref[i]))
-			plugin_new(active_plugins_pref[i], TRUE, FALSE);
+		const gchar *fname = active_plugins_pref[i];
+
+		if (NZV(fname))
+		{
+			if (plugin_new(fname, TRUE, FALSE) == NULL)
+				failed_plugins_list = g_list_append(failed_plugins_list, g_strdup(fname));
+		}
 	}
 }
 
@@ -613,7 +622,6 @@ load_plugins_from_path(const gchar *path)
 {
 	GSList *list, *item;
 	gchar *fname, *tmp;
-	Plugin *plugin;
 
 	list = utils_get_file_list(path, NULL, NULL);
 
@@ -624,7 +632,7 @@ load_plugins_from_path(const gchar *path)
 			continue;
 
 		fname = g_strconcat(path, G_DIR_SEPARATOR_S, item->data, NULL);
-		plugin = plugin_new(fname, FALSE, TRUE);
+		plugin_new(fname, FALSE, TRUE);
 		g_free(fname);
 	}
 
@@ -695,19 +703,30 @@ static void update_active_plugins_pref(void)
 {
 	gint i = 0;
 	GList *list;
+	gsize count = g_list_length(active_plugin_list) + g_list_length(failed_plugins_list);
 
 	g_strfreev(active_plugins_pref);
 
-	if (active_plugin_list == NULL)
+	if (count == 0)
 	{
 		active_plugins_pref = NULL;
 		return;
 	}
 
-	active_plugins_pref = g_new0(gchar*, g_list_length(active_plugin_list) + 1);
+	active_plugins_pref = g_new0(gchar*, count + 1);
+
 	for (list = g_list_first(active_plugin_list); list != NULL; list = list->next)
 	{
-		active_plugins_pref[i] = g_strdup(((Plugin*)list->data)->filename);
+		Plugin *plugin = list->data;
+
+		active_plugins_pref[i] = g_strdup(plugin->filename);
+		i++;
+	}
+	for (list = g_list_first(failed_plugins_list); list != NULL; list = list->next)
+	{
+		const gchar *fname = list->data;
+
+		active_plugins_pref[i] = g_strdup(fname);
 		i++;
 	}
 	active_plugins_pref[i] = NULL;
@@ -740,6 +759,11 @@ void plugins_load_prefs(GKeyFile *config)
 
 void plugins_free(void)
 {
+	if (failed_plugins_list != NULL)
+	{
+		g_list_foreach(failed_plugins_list, (GFunc) g_free,	NULL);
+		g_list_free(failed_plugins_list);
+	}
 	if (active_plugin_list != NULL)
 	{
 		g_list_foreach(active_plugin_list, (GFunc) plugin_free,	GINT_TO_POINTER(PLUGIN_FREE_ALL));
