@@ -84,6 +84,7 @@ Plugin;
  * opened, afterwards it will be destroyed */
 static GList *plugin_list = NULL;
 static GList *active_plugin_list = NULL; /* list of only actually loaded plugins, always valid */
+static gchar **active_plugins_pref = NULL; 	/* list of plugin filenames to load at startup */
 static GtkWidget *separator = NULL;
 static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data);
 
@@ -596,13 +597,13 @@ load_active_plugins()
 {
 	guint i, len;
 
-	if (app->active_plugins == NULL || (len = g_strv_length(app->active_plugins)) == 0)
+	if (active_plugins_pref == NULL || (len = g_strv_length(active_plugins_pref)) == 0)
 		return;
 
 	for (i = 0; i < len; i++)
 	{
-		if (NZV(app->active_plugins[i]))
-			plugin_new(app->active_plugins[i], TRUE, FALSE);
+		if (NZV(active_plugins_pref[i]))
+			plugin_new(active_plugins_pref[i], TRUE, FALSE);
 	}
 }
 
@@ -690,36 +691,37 @@ void plugins_init()
 }
 
 
-static void create_active_list(void)
+static void update_active_plugins_pref(void)
 {
 	gint i = 0;
 	GList *list;
 
-	g_strfreev(app->active_plugins);
+	g_strfreev(active_plugins_pref);
 
 	if (active_plugin_list == NULL)
 	{
-		app->active_plugins = NULL;
+		active_plugins_pref = NULL;
 		return;
 	}
 
-	app->active_plugins = g_new0(gchar*, g_list_length(active_plugin_list) + 1);
+	active_plugins_pref = g_new0(gchar*, g_list_length(active_plugin_list) + 1);
 	for (list = g_list_first(active_plugin_list); list != NULL; list = list->next)
 	{
-		app->active_plugins[i] = g_strdup(((Plugin*)list->data)->filename);
+		active_plugins_pref[i] = g_strdup(((Plugin*)list->data)->filename);
 		i++;
 	}
-	app->active_plugins[i] = NULL;
+	active_plugins_pref[i] = NULL;
 }
 
 
 void plugins_save_prefs(GKeyFile *config)
 {
 	g_key_file_set_boolean(config, "plugins", "load_plugins", prefs.load_plugins);
-	create_active_list();
-	if (app->active_plugins != NULL)
+
+	update_active_plugins_pref();
+	if (active_plugins_pref != NULL)
 		g_key_file_set_string_list(config, "plugins", "active_plugins",
-			(const gchar**)app->active_plugins, g_strv_length(app->active_plugins));
+			(const gchar**)active_plugins_pref, g_strv_length(active_plugins_pref));
 	else
 	{
 		/* use an empty dummy array to override maybe exisiting value */
@@ -732,17 +734,18 @@ void plugins_save_prefs(GKeyFile *config)
 void plugins_load_prefs(GKeyFile *config)
 {
 	prefs.load_plugins = utils_get_setting_boolean(config, "plugins", "load_plugins", TRUE);
-	app->active_plugins = g_key_file_get_string_list(config, "plugins", "active_plugins", NULL, NULL);
+	active_plugins_pref = g_key_file_get_string_list(config, "plugins", "active_plugins", NULL, NULL);
 }
 
 
-void plugins_free()
+void plugins_free(void)
 {
 	if (active_plugin_list != NULL)
 	{
 		g_list_foreach(active_plugin_list, (GFunc) plugin_free,	GINT_TO_POINTER(PLUGIN_FREE_ALL));
 		g_list_free(active_plugin_list);
 	}
+	g_strfreev(active_plugins_pref);
 
 	g_object_unref(geany_object);
 	geany_object = NULL; /* to mark the object as invalid for any code which tries to emit signals */

@@ -92,7 +92,6 @@ typedef struct GeanyApp
 	gchar				*configdir;
 	gchar				*datadir;
 	gchar				*docdir;
-	gchar			   **active_plugins; 	/* list of plugin filenames to load at startup */
 	const TMWorkspace	*tm_workspace;
 	GeanyProject		*project;			/* currently active project or NULL if none is open */
 	gboolean			ignore_callback;	/* should not be used in new code

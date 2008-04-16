@@ -9,6 +9,8 @@
    Fix geany_debug() warnings with Close All.
  * src/keyfile.c, src/plugins.c, src/plugins.h:
    Move plugin keyfile pref saving and loading to plugins.c.
+ * src/plugindata.h, src/geany.h, src/plugins.c, src/main.c:
+   Remove active_plugins from GeanyApp.
 
 
 2008-04-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
