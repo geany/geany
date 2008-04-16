@@ -648,6 +648,48 @@ static void signal_cb(gint sig)
 }
 
 
+static void handle_cl_filename(gchar *const filename)
+{
+	gint idx;
+
+	if (filename != NULL)
+	{
+		gint line = -1, column = -1;
+
+		get_line_and_column_from_filename(filename, &line, &column);
+		if (line >= 0)
+			cl_options.goto_line = line;
+		if (column >= 0)
+			cl_options.goto_column = column;
+	}
+
+	if (filename != NULL &&
+		g_file_test(filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+	{
+		idx = document_open_file(filename, FALSE, NULL, NULL);
+		/* add recent file manually because opening_session_files is set */
+		if (DOC_IDX_VALID(idx))
+			ui_add_recent_file(doc_list[idx].file_name);
+	}
+	else if (filename != NULL)
+	{	/* create new file if it doesn't exist */
+		idx = document_new_file(filename, NULL, NULL);
+		if (DOC_IDX_VALID(idx))
+		{
+			ui_add_recent_file(doc_list[idx].file_name);
+		}
+	}
+	else
+	{
+		const gchar *msg = _("Could not find file '%s'.");
+
+		g_printerr(msg, filename);	/* also print to the terminal */
+		g_printerr("\n");
+		ui_set_statusbar(TRUE, msg, filename);
+	}
+}
+
+
 /* open files from command line */
 static gboolean open_cl_files(gint argc, gchar **argv)
 {
@@ -657,47 +699,11 @@ static gboolean open_cl_files(gint argc, gchar **argv)
 
 	document_delay_colourise();
 
-	for(i = 1; i < argc; i++)
+	for (i = 1; i < argc; i++)
 	{
 		gchar *filename = get_argv_filename(argv[i]);
 
-		if (filename != NULL)
-		{
-			gint line = -1, column = -1;
-
-			get_line_and_column_from_filename(filename, &line, &column);
-			if (line >= 0)
-				cl_options.goto_line = line;
-			if (column >= 0)
-				cl_options.goto_column = column;
-		}
-
-		if (filename != NULL &&
-			g_file_test(filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
-		{
-			gint idx;
-
-			idx = document_open_file(filename, FALSE, NULL, NULL);
-			/* add recent file manually because opening_session_files is set */
-			if (DOC_IDX_VALID(idx))
-				ui_add_recent_file(doc_list[idx].file_name);
-		}
-		else if (filename != NULL)
-		{	/* create new file if it doesn't exist */
-			gint idx;
-
-			idx = document_new_file(filename, NULL, NULL);
-			if (DOC_IDX_VALID(idx))
-				ui_add_recent_file(doc_list[idx].file_name);
-		}
-		else
-		{
-			gchar *msg = _("Could not find file '%s'.");
-
-			g_printerr(msg, filename);	/* also print to the terminal */
-			g_printerr("\n");
-			ui_set_statusbar(TRUE, msg, filename);
-		}
+		handle_cl_filename(filename);
 		g_free(filename);
 	}
 	document_colourise_new();
