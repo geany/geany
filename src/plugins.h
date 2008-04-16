@@ -32,7 +32,9 @@ void plugins_init(void);
 
 void plugins_free(void);
 
-void plugins_create_active_list(void);
+void plugins_save_prefs(GKeyFile *config);
+
+void plugins_load_prefs(GKeyFile *config);
 
 void plugins_update_tools_menu(void);
 

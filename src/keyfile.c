@@ -151,24 +151,6 @@ void configuration_save_session_files(GKeyFile *config)
 }
 
 
-#ifdef HAVE_PLUGINS
-static void save_plugin_prefs(GKeyFile *config)
-{
-	g_key_file_set_boolean(config, "plugins", "load_plugins", prefs.load_plugins);
-	plugins_create_active_list();
-	if (app->active_plugins != NULL)
-		g_key_file_set_string_list(config, "plugins", "active_plugins",
-			(const gchar**)app->active_plugins, g_strv_length(app->active_plugins));
-	else
-	{
-		/* use an empty dummy array to override maybe exisiting value */
-		const gchar *dummy[] = { "" };
-		g_key_file_set_string_list(config, "plugins", "active_plugins", dummy, 1);
-	}
-}
-#endif
-
-
 static void save_dialog_prefs(GKeyFile *config)
 {
 	/* Some of the key names are not consistent, but this is for backwards compatibility */
@@ -389,7 +371,7 @@ void configuration_save(void)
 
 	save_dialog_prefs(config);
 #ifdef HAVE_PLUGINS
-	save_plugin_prefs(config);
+	plugins_save_prefs(config);
 #endif
 	save_hidden_prefs(config);
 	save_ui_prefs(config);
@@ -672,15 +654,6 @@ static void load_dialog_prefs(GKeyFile *config)
 }
 
 
-#ifdef HAVE_PLUGINS
-static void load_plugin_prefs(GKeyFile *config)
-{
-	prefs.load_plugins = utils_get_setting_boolean(config, "plugins", "load_plugins", TRUE);
-	app->active_plugins = g_key_file_get_string_list(config, "plugins", "active_plugins", NULL, NULL);
-}
-#endif
-
-
 static void load_ui_prefs(GKeyFile *config)
 {
 	gint *geo;
@@ -792,7 +765,7 @@ gboolean configuration_load(void)
 
 	load_dialog_prefs(config);
 #ifdef HAVE_PLUGINS
-	load_plugin_prefs(config);
+	plugins_load_prefs(config);
 #endif
 	load_ui_prefs(config);
 	project_load_prefs(config);

@@ -690,7 +690,7 @@ void plugins_init()
 }
 
 
-void plugins_create_active_list()
+static void create_active_list(void)
 {
 	gint i = 0;
 	GList *list;
@@ -710,6 +710,29 @@ void plugins_create_active_list()
 		i++;
 	}
 	app->active_plugins[i] = NULL;
+}
+
+
+void plugins_save_prefs(GKeyFile *config)
+{
+	g_key_file_set_boolean(config, "plugins", "load_plugins", prefs.load_plugins);
+	create_active_list();
+	if (app->active_plugins != NULL)
+		g_key_file_set_string_list(config, "plugins", "active_plugins",
+			(const gchar**)app->active_plugins, g_strv_length(app->active_plugins));
+	else
+	{
+		/* use an empty dummy array to override maybe exisiting value */
+		const gchar *dummy[] = { "" };
+		g_key_file_set_string_list(config, "plugins", "active_plugins", dummy, 1);
+	}
+}
+
+
+void plugins_load_prefs(GKeyFile *config)
+{
+	prefs.load_plugins = utils_get_setting_boolean(config, "plugins", "load_plugins", TRUE);
+	app->active_plugins = g_key_file_get_string_list(config, "plugins", "active_plugins", NULL, NULL);
 }
 
 
