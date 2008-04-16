@@ -48,6 +48,7 @@ Geany 0.14 (TBA)
     * Make VERSION_CHECK deprecated in favour of PLUGIN_VERSION_CHECK.
 
     Internationalisation:
+    * New translations: ro.
     * Updated translations: bg, de, en_GB, es, fr, hu, it, pt_BR, ru.
 
 

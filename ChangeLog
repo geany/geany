@@ -1,3 +1,9 @@
+2008-04-16  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * THANKS, NEWS, src/about.c, po/LINGUAS, po/ro.po:
+   Added Romanian translation (Thanks to Alex Eftimie).
+
+
 2008-04-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/interface.c, src/callbacks.c, src/callbacks.h, NEWS, geany.glade:
