@@ -1579,6 +1579,9 @@ create_window1 (void)
   g_signal_connect ((gpointer) menu_info1, "activate",
                     G_CALLBACK (on_info1_activate),
                     NULL);
+  g_signal_connect ((gpointer) toolbar1, "key_press_event",
+                    G_CALLBACK (on_escape_key_press_event),
+                    NULL);
   g_signal_connect ((gpointer) menutoolbutton1, "clicked",
                     G_CALLBACK (on_toolbutton_new_clicked),
                     NULL);
@@ -1636,17 +1639,11 @@ create_window1 (void)
   g_signal_connect ((gpointer) entry1, "changed",
                     G_CALLBACK (on_entry1_changed),
                     NULL);
-  g_signal_connect ((gpointer) entry1, "key_press_event",
-                    G_CALLBACK (on_entry1_key_press_event),
-                    NULL);
   g_signal_connect ((gpointer) toolbutton18, "clicked",
                     G_CALLBACK (on_toolbutton18_clicked),
                     NULL);
   g_signal_connect ((gpointer) entry_goto_line, "activate",
                     G_CALLBACK (on_entry_goto_line_activate),
-                    NULL);
-  g_signal_connect ((gpointer) entry_goto_line, "key_press_event",
-                    G_CALLBACK (on_entry_goto_line_key_press_event),
                     NULL);
   g_signal_connect ((gpointer) toolbutton25, "clicked",
                     G_CALLBACK (on_toolbutton_goto_clicked),
@@ -1660,6 +1657,9 @@ create_window1 (void)
   g_signal_connect_after ((gpointer) notebook3, "switch_page",
                           G_CALLBACK (on_tv_notebook_switch_page_after),
                           NULL);
+  g_signal_connect ((gpointer) notebook3, "key_press_event",
+                    G_CALLBACK (on_escape_key_press_event),
+                    NULL);
   g_signal_connect ((gpointer) notebook1, "switch_page",
                     G_CALLBACK (on_notebook1_switch_page),
                     NULL);

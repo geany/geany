@@ -14,6 +14,7 @@ Geany 0.14 (TBA)
     * Make Next Error and Next Message commands add positions to the
       navigation queue, so the user can move backwards through the list items
       and return to where they were.
+    * Make pressing escape in the sidebar focus the editor.
 
     Interface:
     * When closing a tab when using left-to-right tabs, focus the next

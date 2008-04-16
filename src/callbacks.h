@@ -562,17 +562,6 @@ on_motion_event                        (GtkWidget       *widget,
                                         GdkEventMotion  *event,
                                         gpointer         user_data);
 
-
-gboolean
-on_entry1_key_press_event              (GtkWidget       *widget,
-                                        GdkEventKey     *event,
-                                        gpointer         user_data);
-
-gboolean
-on_entry_goto_line_key_press_event     (GtkWidget       *widget,
-                                        GdkEventKey     *event,
-                                        gpointer         user_data);
-
 void
 on_tv_notebook_switch_page_after       (GtkNotebook     *notebook,
                                         GtkNotebookPage *page,
@@ -598,4 +587,9 @@ on_page_setup1_activate                (GtkMenuItem     *menuitem,
 
 void
 on_tools1_activate                     (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+gboolean
+on_escape_key_press_event              (GtkWidget       *widget,
+                                        GdkEventKey     *event,
                                         gpointer         user_data);

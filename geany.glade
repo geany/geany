@@ -1498,6 +1498,7 @@
 	  <property name="toolbar_style">GTK_TOOLBAR_ICONS</property>
 	  <property name="tooltips">True</property>
 	  <property name="show_arrow">True</property>
+	  <signal name="key_press_event" handler="on_escape_key_press_event" last_modification_time="Thu, 03 Apr 2008 16:47:57 GMT"/>
 
 	  <child>
 	    <widget class="GtkMenuToolButton" id="menutoolbutton1">
@@ -1903,7 +1904,6 @@
 		  <property name="activates_default">False</property>
 		  <signal name="activate" handler="on_entry1_activate" last_modification_time="Sat, 30 Apr 2005 23:58:03 GMT"/>
 		  <signal name="changed" handler="on_entry1_changed" last_modification_time="Tue, 03 May 2005 09:18:59 GMT"/>
-		  <signal name="key_press_event" handler="on_entry1_key_press_event" last_modification_time="Wed, 18 Jul 2007 14:55:05 GMT"/>
 		</widget>
 	      </child>
 	    </widget>
@@ -1963,7 +1963,6 @@
 		  <property name="activates_default">False</property>
 		  <property name="width_chars">8</property>
 		  <signal name="activate" handler="on_entry_goto_line_activate" last_modification_time="Sun, 26 Feb 2006 17:07:52 GMT"/>
-		  <signal name="key_press_event" handler="on_entry_goto_line_key_press_event" last_modification_time="Wed, 18 Jul 2007 15:09:25 GMT"/>
 		</widget>
 	      </child>
 	    </widget>
@@ -2061,6 +2060,7 @@
 		  <property name="enable_popup">False</property>
 		  <signal name="switch_page" handler="on_tv_notebook_switch_page" last_modification_time="Sun, 20 Nov 2005 00:41:15 GMT"/>
 		  <signal name="switch_page" handler="on_tv_notebook_switch_page_after" after="yes" last_modification_time="Tue, 16 Oct 2007 07:03:41 GMT"/>
+		  <signal name="key_press_event" handler="on_escape_key_press_event" last_modification_time="Thu, 03 Apr 2008 16:44:50 GMT"/>
 
 		  <child>
 		    <widget class="GtkScrolledWindow" id="scrolledwindow2">

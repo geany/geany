@@ -1,3 +1,10 @@
+2008-04-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, src/callbacks.c, src/callbacks.h, NEWS, geany.glade:
+   Make pressing escape in the sidebar focus the editor.
+   Group toolbar GtkEntry escape key checks into a common callback.
+
+
 2008-04-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * doc/images/pref_dialog_gen.png:
