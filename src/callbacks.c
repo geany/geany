@@ -150,10 +150,8 @@ static void force_close_all()
 			doc_list[i].changed = FALSE;
 		}
 	}
-	for (i = 0; i < len; i++)
+	while (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) > 0)
 	{
-		/* we don't need to check here for whether doc_list[i] is valid,
-		 * it's done in document_remove(). */
 		document_remove(0);
 	}
 

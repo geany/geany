@@ -5,6 +5,8 @@
    Group toolbar GtkEntry escape key checks into a common callback.
  * src/main.c:
    Refactor handle_cl_filename() from open_cl_files().
+ * src/callbacks.c:
+   Fix geany_debug() warnings with Close All.
 
 
 2008-04-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
