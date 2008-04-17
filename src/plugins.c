@@ -54,6 +54,7 @@
 #include "search.h"
 #include "highlighting.h"
 #include "keybindings.h"
+#include "navqueue.h"
 
 
 #ifdef G_OS_WIN32
@@ -229,6 +230,9 @@ static FiletypeFuncs filetype_funcs = {
 	&filetypes_get_from_uid
 };
 
+static NavQueueFuncs navqueue_funcs = {
+	&navqueue_goto_line
+};
 
 static GeanyData geany_data = {
 	NULL,
@@ -252,7 +256,8 @@ static GeanyData geany_data = {
 	&tagmanager_funcs,
 	&search_funcs,
 	&highlighting_funcs,
-	&filetype_funcs
+	&filetype_funcs,
+	&navqueue_funcs
 };
 
 

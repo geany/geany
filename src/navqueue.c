@@ -132,11 +132,16 @@ static void add_new_position(gchar *tm_filename, gint pos)
 }
 
 
-/* Adds old file position and new file position to the navqueue, then goes to the new position.
- * Currently navqueue positions are only be added for documents that have a tagmanager work
- * object.
- * @param if old_idx is not valid (e.g. -1), no old position is set.
- * @param line is counted with 1 as the first line, not 0. */
+/**
+ *  Add old file position and new file position to the navqueue, then goes to the new position.
+ *
+ *  @param old_idx the %document index of the previous position, if set as invalid (-1) then no old
+ *         position is set
+ *  @param new_idx the %document index of the new position, must be valid.
+ *  @param line the line number of the new position. It is counted with 1 as the first line, not 0.
+ *
+ *  @return @a TRUE if the cursor has changed the position to @a line or @a FALSE otherwise.
+ **/
 gboolean navqueue_goto_line(gint old_idx, gint new_idx, gint line)
 {
 	gint pos;
@@ -147,17 +152,17 @@ gboolean navqueue_goto_line(gint old_idx, gint new_idx, gint line)
 	pos = sci_get_position_from_line(doc_list[new_idx].sci, line - 1);
 
 	/* first add old file position */
-	if (DOC_IDX_VALID(old_idx) && doc_list[old_idx].tm_file)
+	if (DOC_IDX_VALID(old_idx) && doc_list[old_idx].file_name)
 	{
 		gint cur_pos = sci_get_current_position(doc_list[old_idx].sci);
 
-		add_new_position(doc_list[old_idx].tm_file->file_name, cur_pos);
+		add_new_position(doc_list[old_idx].file_name, cur_pos);
 	}
 
 	/* now add new file position */
-	if (doc_list[new_idx].tm_file)
+	if (doc_list[new_idx].file_name)
 	{
-		add_new_position(doc_list[new_idx].tm_file->file_name, pos);
+		add_new_position(doc_list[new_idx].file_name, pos);
 	}
 
 	return utils_goto_pos(new_idx, pos);
@@ -175,7 +180,7 @@ void navqueue_go_back()
 
 	/* jump back */
 	fprev = g_queue_peek_nth(navigation_queue, nav_queue_pos + 1);
-	if (utils_goto_file_pos(fprev->file, TRUE, fprev->pos))
+	if (utils_goto_file_pos(fprev->file, FALSE, fprev->pos))
 	{
 		nav_queue_pos++;
 	}
@@ -198,7 +203,7 @@ void navqueue_go_forward()
 
 	/* jump forward */
 	fnext = g_queue_peek_nth(navigation_queue, nav_queue_pos - 1);
-	if (utils_goto_file_pos(fnext->file, TRUE, fnext->pos))
+	if (utils_goto_file_pos(fnext->file, FALSE, fnext->pos))
 	{
 		nav_queue_pos--;
 	}

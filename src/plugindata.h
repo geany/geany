@@ -35,7 +35,7 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 52;
+static const gint api_version = 53;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
@@ -175,6 +175,7 @@ typedef struct GeanyData
 	struct SearchFuncs			*search;		/**< See search.h */
 	struct HighlightingFuncs	*highlighting;	/**< See highlighting.h */
 	struct FiletypeFuncs		*filetype;		/**< See filetypes.h */
+	struct NavQueueFuncs        *navqueue;      /**< See navqueue.h */
 }
 GeanyData;
 
@@ -391,6 +392,11 @@ typedef struct TagManagerFuncs
 	gboolean		(*workspace_remove_object) (TMWorkObject *w, gboolean do_free, gboolean update);
 }
 TagManagerFuncs;
+
+typedef struct NavQueueFuncs
+{
+	gboolean		(*goto_line) (gint old_idx, gint new_idx, gint line);
+}NavQueueFuncs;
 
 
 /* Deprecated aliases */

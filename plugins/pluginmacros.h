@@ -37,6 +37,7 @@
  * but with a 'p_' prefix to prevent conflicts with other tag names.
  * Example: document_open_file() -> p_document->open_file() */
 #define p_filetypes		geany_data->filetype
+#define p_navqueue		geany_data->navqueue
 
 #ifdef GEANY_DISABLE_DEPRECATED
 

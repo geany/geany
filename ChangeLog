@@ -1,3 +1,14 @@
+2008-04-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/navqueue.c, src/plugindata.h, src/navqueue.h, src/plugins.c,
+   plugins/pluginmacros.h:
+   Add navqueue_goto_line() to plugin API.
+   Make navqueue_goto_line() store document filename instead of
+   tagmanager filename (patch by Yura Siamashka, thanks).
+   This makes it also possible to add navigation history items for files
+   without a tagmanager filename.
+
+
 2008-04-16  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * THANKS, NEWS, src/about.c, po/LINGUAS, po/ro.po:

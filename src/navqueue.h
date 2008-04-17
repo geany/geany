@@ -22,6 +22,11 @@
  * $Id$
  */
 
+/**
+ *  @file navqueue.h
+ * Simple code navigation
+ **/
+
 
 #ifndef GEANY_NAVQUEUE_H
 #define GEANY_NAVQUEUE_H 1
