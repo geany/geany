@@ -7,6 +7,9 @@
    tagmanager filename (patch by Yura Siamashka, thanks).
    This makes it also possible to add navigation history items for files
    without a tagmanager filename.
+ * tagmanager/make.c:
+   Improve Makefile parser for better parsing of targets
+   (from CTags' patches tracker, for reference this is patch v3).
 
 
 2008-04-16  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
