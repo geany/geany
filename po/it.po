@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-13 23:14+0200\n"
-"PO-Revision-Date: 2008-04-12 23:36+0100\n"
+"POT-Creation-Date: 2008-04-18 22:22+0200\n"
+"PO-Revision-Date: 2008-04-18 21:29+0100\n"
 "Last-Translator: Max <M.Baldinelli@agora.it>\n"
 "Language-Team:  <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
@@ -32,57 +32,57 @@ msgstr "Geany"
 msgid "Integrated Development Environment"
 msgstr "Ambiente di sviluppo integrato"
 
-#: ../src/about.c:122
+#: ../src/about.c:123
 msgid "About Geany"
 msgstr "Informazioni su Geany"
 
-#: ../src/about.c:173
+#: ../src/about.c:174
 msgid "A fast and lightweight IDE"
 msgstr "Un IDE veloce e leggero"
 
-#: ../src/about.c:194
+#: ../src/about.c:195
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(generato il %s)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:225
+#: ../src/about.c:226
 msgid "Info"
 msgstr "Informazioni"
 
-#: ../src/about.c:241
+#: ../src/about.c:242
 msgid "Developers"
 msgstr "Sviluppatori"
 
-#: ../src/about.c:250
+#: ../src/about.c:251
 msgid "maintainer"
 msgstr "curatore"
 
-#: ../src/about.c:258
+#: ../src/about.c:259
 msgid "developer"
 msgstr "sviluppatore"
 
-#: ../src/about.c:266
+#: ../src/about.c:267
 msgid "translation maintainer"
 msgstr "curatore delle traduzioni"
 
-#: ../src/about.c:275
+#: ../src/about.c:276
 msgid "Translators"
 msgstr "Traduttori"
 
-#: ../src/about.c:295
+#: ../src/about.c:296
 msgid "Previous Translators"
 msgstr "Traduttori precedenti"
 
-#: ../src/about.c:314
+#: ../src/about.c:315
 msgid "Credits"
 msgstr "Ringraziamenti"
 
-#: ../src/about.c:328
+#: ../src/about.c:329
 msgid "License"
 msgstr "Licenza"
 
-#: ../src/about.c:337
+#: ../src/about.c:338
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -349,64 +349,64 @@ msgstr "Impossibile interrompere il processo (%s)."
 msgid "No more build errors."
 msgstr "Non ci sono altri errori di compilazione."
 
-#: ../src/callbacks.c:195
+#: ../src/callbacks.c:193
 msgid "Do you really want to quit?"
 msgstr "Si vuole veramente uscire?"
 
-#: ../src/callbacks.c:525 ../src/interface.c:356 ../src/treeviews.c:453
+#: ../src/callbacks.c:523 ../src/interface.c:356 ../src/treeviews.c:453
 #: ../src/utils.c:360
 msgid "_Reload"
 msgstr "_Ripristina"
 
-#: ../src/callbacks.c:526
+#: ../src/callbacks.c:524
 msgid "Any unsaved changes will be lost."
 msgstr "Le modifiche non salvate andranno perse."
 
-#: ../src/callbacks.c:527
+#: ../src/callbacks.c:525
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Si è sicuri di voler ripristinare '%s'?"
 
-#: ../src/callbacks.c:1360 ../src/callbacks.c:1384
+#: ../src/callbacks.c:1335 ../src/callbacks.c:1359
 msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr ""
 "Impostare il tipo di file per il file corrente prima di usare questa "
 "funzione."
 
-#: ../src/callbacks.c:1486 ../src/ui_utils.c:490
+#: ../src/callbacks.c:1461 ../src/ui_utils.c:490
 msgid "dd.mm.yyyy"
 msgstr "gg.mm.aaaa"
 
-#: ../src/callbacks.c:1488 ../src/ui_utils.c:491
+#: ../src/callbacks.c:1463 ../src/ui_utils.c:491
 msgid "mm.dd.yyyy"
 msgstr "mm.gg.aaaa"
 
-#: ../src/callbacks.c:1490 ../src/ui_utils.c:492
+#: ../src/callbacks.c:1465 ../src/ui_utils.c:492
 msgid "yyyy/mm/dd"
 msgstr "aaaa/mm/gg"
 
-#: ../src/callbacks.c:1492 ../src/ui_utils.c:501
+#: ../src/callbacks.c:1467 ../src/ui_utils.c:501
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "gg.mm.aaaa hh:mm:ss"
 
-#: ../src/callbacks.c:1494 ../src/ui_utils.c:502
+#: ../src/callbacks.c:1469 ../src/ui_utils.c:502
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "mm.gg.aaaa hh:mm:ss"
 
-#: ../src/callbacks.c:1496 ../src/ui_utils.c:503
+#: ../src/callbacks.c:1471 ../src/ui_utils.c:503
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "aaaa/mm/gg hh:mm:ss"
 
-#: ../src/callbacks.c:1498 ../src/ui_utils.c:512
+#: ../src/callbacks.c:1473 ../src/ui_utils.c:512
 msgid "_Use Custom Date Format"
 msgstr "_Usa il formato di data personalizzato"
 
-#: ../src/callbacks.c:1509
+#: ../src/callbacks.c:1484
 msgid "Custom Date Format"
 msgstr "Formato di data personalizzato"
 
-#: ../src/callbacks.c:1510
+#: ../src/callbacks.c:1485
 msgid ""
 "Enter here a custom date and time format. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
@@ -415,13 +415,13 @@ msgstr ""
 "gli specificatori di conversione che è possibile usare nella funzione ANSI C "
 "strftime."
 
-#: ../src/callbacks.c:1529
+#: ../src/callbacks.c:1504
 msgid "Date format string could not be converted (possibly too long)."
 msgstr ""
 "Impossibile convertire la stringa di formato della data (forse è troppo "
 "lunga)."
 
-#: ../src/callbacks.c:1827
+#: ../src/callbacks.c:1802
 msgid "No more message items."
 msgstr "Non ci sono altri messaggi."
 
@@ -2576,7 +2576,7 @@ msgstr "Usa la funzionalità di stampa nativa di GTK"
 msgid "Printing"
 msgstr "Stampa"
 
-#: ../src/keybindings.c:179 ../src/plugins.c:882
+#: ../src/keybindings.c:179 ../src/plugins.c:937
 msgid "File"
 msgstr "File"
 
@@ -3009,13 +3009,13 @@ msgstr "Scorciatoie da tastiera"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Sono definite le seguenti scorciatoie da tastiera:"
 
-#: ../src/keyfile.c:696
+#: ../src/keyfile.c:669
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
 "E' possibile scrivere qualunque cosa, questa è una bacheca per bozze e "
 "appunti"
 
-#: ../src/keyfile.c:885
+#: ../src/keyfile.c:858
 msgid "Failed to load one or more session files."
 msgstr "Caricamento di uno o più file della sessione non riuscito."
 
@@ -3087,16 +3087,16 @@ msgstr "Imposta il file di libreria per il supporto al terminale (libvte.so)"
 msgid "Show version and exit"
 msgstr "Mostra le informazioni sulla versione ed esce"
 
-#: ../src/main.c:499
+#: ../src/main.c:498
 msgid "[FILES...]"
 msgstr "[FILE...]"
 
-#: ../src/main.c:516
+#: ../src/main.c:515
 #, c-format
 msgid "(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"
 msgstr "(compilato il %s con GTK %d.%d.%d, GLib %d.%d.%d)"
 
-#: ../src/main.c:631
+#: ../src/main.c:630
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -3108,17 +3108,17 @@ msgstr ""
 "configurazione.\n"
 "Avviare ugualmente Geany?"
 
-#: ../src/main.c:695 ../src/socket.c:156
+#: ../src/main.c:683 ../src/socket.c:156
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Impossibile trovare il file '%s'."
 
-#: ../src/main.c:842
+#: ../src/main.c:847
 #, c-format
 msgid "This is Geany %s."
 msgstr "Geany %s."
 
-#: ../src/main.c:844
+#: ../src/main.c:849
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Impossibile creare la cartella di configurazione (%s)."
@@ -3131,7 +3131,7 @@ msgstr "Messaggi di stato"
 msgid "_Hide Message Window"
 msgstr "_Nascondi la finestra dei messaggi"
 
-#: ../src/plugins.c:341
+#: ../src/plugins.c:350
 #, c-format
 msgid ""
 "The plugin \"%s\" is not binary compatible with this release of Geany - "
@@ -3140,11 +3140,11 @@ msgstr ""
 "Il plugin \"%s\" non è compatibile con questa versione di Geany e dev'essere "
 "ricompilato."
 
-#: ../src/plugins.c:679
+#: ../src/plugins.c:693
 msgid "_Plugin Manager"
 msgstr "Gestione _Plugin"
 
-#: ../src/plugins.c:804
+#: ../src/plugins.c:859
 #, c-format
 msgid ""
 "Plugin: %s %s\n"
@@ -3155,23 +3155,23 @@ msgstr ""
 "Descrizione: %s\n"
 "Autore(i): %s"
 
-#: ../src/plugins.c:870
+#: ../src/plugins.c:925
 msgid "Active"
 msgstr "Attivo"
 
-#: ../src/plugins.c:876
+#: ../src/plugins.c:931
 msgid "Plugin"
 msgstr "Plugin"
 
-#: ../src/plugins.c:900
+#: ../src/plugins.c:955
 msgid "No plugins available."
 msgstr "Nessun plugin disponibile."
 
-#: ../src/plugins.c:960
+#: ../src/plugins.c:1015
 msgid "Plugins"
 msgstr "Plugin"
 
-#: ../src/plugins.c:980
+#: ../src/plugins.c:1035
 msgid ""
 "Below is a list of available plugins. Select the plugins which should be "
 "loaded when Geany is started."
@@ -3179,7 +3179,7 @@ msgstr ""
 "Qui sotto è presente una lista di plugin disponibili. Selezionare i plugin "
 "da caricare all'avvio di Geany."
 
-#: ../src/plugins.c:988
+#: ../src/plugins.c:1043
 msgid "<b>Plugin details:</b>"
 msgstr "<b>Dettagli del plugin</b>"
 
@@ -4047,17 +4047,17 @@ msgstr "SP"
 #: ../src/ui_utils.c:167
 #, c-format
 msgid "mode: %s"
-msgstr ""
+msgstr "modo: %s"
 
 #: ../src/ui_utils.c:170
-#, fuzzy, c-format
+#, c-format
 msgid "encoding: %s %s"
-msgstr "Imposta _codifica:"
+msgstr "codifica: %s %s"
 
 #: ../src/ui_utils.c:176
-#, fuzzy, c-format
+#, c-format
 msgid "filetype: %s"
-msgstr "Imposta il tipo del file:"
+msgstr "tipo del file: %s"
 
 #: ../src/ui_utils.c:180
 msgid "MOD"
@@ -4066,7 +4066,7 @@ msgstr "MOD"
 #: ../src/ui_utils.c:185
 #, c-format
 msgid "scope: %s"
-msgstr ""
+msgstr "ambito: %s"
 
 #: ../src/ui_utils.c:270
 #, c-format
