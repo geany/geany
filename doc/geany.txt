@@ -373,6 +373,18 @@ Example of a simple ``.gtkrc-2.0``::
     widget "GeanyPrefsDialog" style "geanyStyle"
 
 
+Documents
+---------
+
+Switching between documents
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The documents list and the editor tabs are two different ways
+to switch between documents using the mouse. When you hit the key
+combination to move between tabs, the order is determined by the tab
+order, not alphabetical as shown in the documents list (regardless
+of whether or not editor tabs are visible).
+
 
 Character sets and Unicode Byte-Order-Mark (BOM)
 ------------------------------------------------
@@ -654,7 +666,7 @@ To add a custom command, just go to the Set Custom Commands dialog
 in the Format sub menu of the Edit and Popup menu. Then click on Add
 to get a new text entry and type the command. You can also specify
 some command line options. To delete a command, just clear the text
-entry and press Ok. It will be deleted automatically.
+entry and press OK. It will be deleted automatically.
 
 
 Context actions
@@ -1189,7 +1201,7 @@ Preferences
 
 You may adjust Geany's settings using the Edit --> Preferences
 dialog. Any changes you make there can be applied by hitting either
-the Apply or the Ok button. These settings will persist between Geany
+the Apply or the OK button. These settings will persist between Geany
 sessions. Note that most settings here have descriptive popup bubble
 help -- just hover the mouse over the item in question to get help
 on it.
@@ -1203,13 +1215,11 @@ There are also some rarer `Hidden preferences`_.
 
 .. note::
     In the paragraphs that follow, the text describing a dialog tab
-    (if present) comes after the screenshot of that tab.
+    comes after the screenshot of that tab.
 
 
 General tab in preferences dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-General tab in preferences dialog
 
 .. image:: ./images/pref_dialog_gen.png
 
@@ -1217,28 +1227,31 @@ Startup
 ```````
 
 Load files from the last session
-    On opening geany immediately begin using the same files you had open the
-    last time you had Geany open.
+    On startup, load the same files you had open the last time you
+    used Geany.
+
 Load virtual terminal support
-    Load the modules for creating a terminal in the tabs.
+    Load the library for running a terminal in the message window area.
+
 Enable plugin support
     Allow plugins to be used in Geany.
 
 Shutdown
 ````````
 Save window position and geometry
-    Save the current position and size of geany so next time you open Geany
-    its in the same location
+    Save the current position and size of the main window so next time
+    you open Geany it's in the same location.
+
 Confirm Exit
-    Have a dialog pop up to confirm that you really want to shutdown Geany.
+    Have a dialog pop up to confirm that you really want to quit Geany.
 
 Projects
 ````````
 
 Use project-based session files
-    Save your current session as a project. You will be able to resume different
-    projects automatically opening the files you had open when you closed that
-    project.
+    Save your current session when closing projects. You will be able to
+    resume different project sessions, automatically opening the files
+    you had open previously.
 
 Miscellaneous
 `````````````
@@ -1247,92 +1260,87 @@ Beep on errors when compilation has finished
     Have the computer make a beeping sound when compilation of your program
     has completed or any errors occurred.
 
-Switch status message list at new message
+.. Switch status message list at new message
 
-Suppress status message in the status bar
+.. Suppress status message in the status bar
 
-Autofocus widgets (focus follows mouse)
+.. Autofocus widgets (focus follows mouse)
 
-Always wrap search and hide the find dialog
+.. Always wrap search and hide the find dialog
 
 Use current word under the cursor for Find dialogs
-    Use the currently selected word when you open one of the Search dialogs.
+    Use the currently selected word as the search text when you open
+    one of the Search dialogs.
 
 
 Interface tab in preferences dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Interface tab in preferences dialog
-
 .. image:: ./images/pref_dialog_interface.png
-
-The documents list and the editor tabs are two different ways
-to switch between documents using the mouse. When you hit the key
-combination to move between tabs, the order is determined by the tab
-order, not alphabetical as shown in the documents list (regardless
-whether or not editor tabs are visible).
 
 Sidebar
 ```````
 
 Show symbol list
-    Shows the list of functions, variables, and other information in the
-    current file (tab) you are editing.
+    Show the list of functions, variables, and other information in the
+    current document you are editing.
 
 Show documents list
-    Shows all the files you have open currently. This can be used to navigate
-    files instead of using the tabular interface.
+    Show all the documents you have open currently. This can be used to
+    change between documents (see `Switching between documents`_) and
+    to perform some common operations such as saving, closing and reloading.
 
 Show full path name in documents list
     Show the full directory path of the files you are editing in the
-    Documents list.
+    *Documents* list.
 
 Fonts
 `````
 
 Editor
-    Change the font used in the editing widget of your files.
+    Change the font used to display documents.
 
 Symbol list
-    Change the font used in the listing of symbols in the Symbols sidebar tab.
+    Change the font used for the Symbols sidebar tab.
 
 Message window
-    Change the font used to display messages in the the Message window/tab.
+    Change the font used for the message window area.
 
 Editor tabs
 ```````````
 
 Show editor tabs
-    All open files have a tab so you can switch between them using a tab interface
-    instead of having to use the Documents window.
+    Show a notebook tab for all documents so you can switch between them
+    using the mouse (instead of using the Documents window).
 
 Show close buttons
-    Each tab has its own close button so you can easily close open documents without
-    having to select then file close them.
+    Make each tab show a close button so you can easily close open
+    documents.
 
 Placement of new file tabs
-    When you open a new file create its tab to the left or right of all existing tabs.
+    Whether to create a document with its notebook tab to the left or
+    right of all existing tabs.
 
 Tab positions
 `````````````
 
 Editor
-    Set the positioning of the editor's tabs to the right, left, top, or bottom
-    of the editing window.
+    Set the positioning of the editor's notebook tabs to the right,
+    left, top, or bottom of the editing window.
 
 Sidebar
-    Set the positioning of the sidebar's tabs to the right, left, top, or bottom
-    of the sidebar window.
+    Set the positioning of the sidebar's notebook tabs to the right,
+    left, top, or bottom of the sidebar window.
 
 Message window
-    Set the positioning of the message window's tabs to the right, left, top, or
-    bottom of the message window.
+    Set the positioning of the message window's notebook tabs to the
+    right, left, top, or bottom of the message window.
 
 Miscellaneous
 `````````````
 
 Show status bar
-    Show the status bar at the bottom of the Geany window. Gives information about
+    Show the status bar at the bottom of the main window. It gives information about
     the file you are editing like the line and column you are on, whether any
     modifications were done, the file encoding, the filetype and other information.
 
@@ -1340,7 +1348,7 @@ Show status bar
 Toolbar tab in preferences dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Effects the toolbar underneath the menu.
+Affects the main toolbar underneath the menu bar.
 
 .. image:: ./images/pref_dialog_toolbar.png
 
@@ -1348,49 +1356,52 @@ Toolbar
 ```````
 
 Show Toolbar
-    Remove the toolbar entirely from the window or show it.
+    Whether to show the toolbar.
 
 Items
 `````
 
 Show file operation buttons
-    Show the buttons to open new file, open an existing file, save a file,
-    save all files.
+    Show the buttons to open a new file, open an existing file, save a file,
+    and save all files.
 
 Show Redo and Undo buttons
-    Show the undo change redo change buttons.
+    Show the undo/redo change buttons.
 
 Show Back and Forward buttons
-    Show the buttons to move forward and backwards through tabs.
+    Show the buttons to navigate forwards and backwards between positions
+    in the current session's documents.
 
 Show Compile and Run buttons
     Show the buttons to run or compile a file.
 
 Show Color Chooser button
-    Show the button to choose the color of the text you are typing.
+    Show the button to run the color chooser dialog.
 
 Show Zoom In and Zoom Out buttons
     Show the buttons to zoom in closer to a document or zoom out.
 
 Show Increase and Decrease Indentation buttons
-    Show the buttons to make all indentations larger or smaller.
+    Show the buttons to increase or decrease the current line or
+    selection's indentation.
 
 Show Search field
-    Show the search text area so that you do not have to Ctrl+F or go into
-    the search menu.
+    Show the incremental search bar in the toolbar (quicker than using
+    the Find command).
 
 Show Go to Line field
-    Show the goto text area so you do not have to use the command keys or the menu.
+    Show a line number text entry (quicker than using the Go to Line
+    command).
 
 Show Quit button
-    Show a button so that you can quit geany.
+    Show a button to quit geany.
 
 Appearance
 ``````````
 
 Icon Style
-    Select the icon style by using icons and text, only the images (icons only),
-    or only the text.
+    Select the toolbar icon style to use - either icons and text, just
+    icons or just text.
 
 Icon size
     Select the size of the icons you see (large or small).
@@ -1408,32 +1419,37 @@ Display
 ```````
 
 Show indendation guides
-    Show vertical lines to show where you have hit tabs so you can more easily
-    line up text.
+    Show vertical lines to help show how much leading indentation there
+    is on each line.
 
 Show whitespaces
-    Mark all tabs or large sets of spaces with "-->" to highlight where exactly
-    are which kinds of whitespace.
+    Mark all tabs with an arrow "-->" symbol and spaces with dots to
+    show which kinds of whitespace are used.
 
 Show line endings
-    Inserts a symbol everywhere that the return/enter key has been pressed.
+    Displays a symbol everywhere that a carriage return or line feed
+    is present.
 
 Long line marker
 ````````````````
 
+The long line marker helps to indicate overly-long lines, or as a hint
+for when to break the line.
+
 Type
     Line
-        Print a vertical line in the editor window at the given cursor position.
+        Show a thin vertical line in the editor window at the given column
+        position.
     Background
-        The background colour of characters after the given cursor position changed
-        to the color set below. (This is recommended if you use proportional fonts)
+        Change the background color of characters after the given column
+        position to the color set below. (This is recommended over the
+        *Line* setting if you use proportional fonts).
     Disabled
-        Don't show a long line marker at all.
+        Don't mark long lines at all.
 
 Long line marker
-    The long line marker is a thin vertical line in the editor. It helps to mark
-    long lines, or as a hint when to break the line. Set this value to a value
-    greater than zero to specify the column where it should appear.
+    Set this value to a value greater than zero to specify the column
+    where it should appear.
 
 Long line marker color
     Set the color of the long line marker.
@@ -1441,83 +1457,92 @@ Long line marker color
 Editor tab in preferences dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Editor tab in preferences dialog
-
 .. image:: ./images/pref_dialog_edit.png
 
-Line wrapping refers to the display of the text in the
-editor. (Currently, there is no setting to have Geany automatically
-insert newlines into your document while you type.)
+Indentation group
+`````````````````
 
-Indentation
-```````````
+See `Indentation`_ for more information.
 
 Type
-    Decide whether to use tabs or spaces when you hit the tab button.
+    Whether to use tabs or spaces for indentation.
 
 Tab width
-    The space width of a tab. Example when you hit tab it is the size
-    of hitting the space bar 4 times.
+    The width of a single indent size in spaces. By default the indent
+    size is the equivalent of 4 spaces.
 
 Auto-indent mode
-    The type of auto indentation you wish to follow, for example indent
-    to match braces or to match the last line.
+    The type of auto-indentation you wish to use after pressing Enter,
+    if any.
+
+    Basic
+        Just add the indentation of the previous line.
+    Current chars
+        Add indentation based on the current filetype and any characters at
+        the end of the line such as ``{``, ``}`` for C, ``:`` for Python.
+    Match braces
+        Like *Current chars* but for C-like languages, make a closing
+        ``}`` brace line up with the matching opening brace.
 
 Features
 ````````
 
 Line wrapping
-    Should long lines be wrapped around to the next line or should they be
-    allowed to keep typeing on the current line and get as long as you wish.
+    Show long lines wrapped around to new display lines.
+
+    .. note::
+        Currently, there is no setting to have Geany automatically insert
+        newlines into your document while you type.
 
 Enable "smart" home key
-    When you hit the home key on your keyboard it goes to the beginning of
-    text on the line not the very, very beginning of the line.
+    Whether to move the cursor to the first non-whitespace character
+    on the line when you hit the home key on your keyboard. Pressing it
+    again will go to the very start of the line.
 
 Disable Drag and Drop
-    Do not allow the dragging and droping of selected text in the documents.
+    Do not allow the dragging and dropping of selected text in documents.
 
 Enable folding
-    Allow ares of a document to be be collapsed for easier navigation/editing.
+    Allow groups of lines in a document to be collapsed for easier
+    navigation/editing.
 
 Fold/Unfold all children of a fold point
-    When a parent is folded should all the children in it also be folded and
-    when it is unfolded all the children are unfolded also.
+    Whether to fold/unfold all child fold points when a parent line
+    is folded.
 
 Use indicators to show compile errors
-    When there are compile erros use red squiggles to indicate them in the
-    editor area.
+    Underline lines with compile errors using red squiggles to indicate
+    them in the editor area.
 
 Newline strip trailing spaces
-    When you hit the enter/return key remove the random white space at the end
-    of the line you are leaving.
+    Remove any white space at the end of the line when you hit the
+    Enter/Return key.
 
 Completions
 ```````````
 
 Snippet Completion
-    Help finish your code by allowing the editor to try and figure out what your
-    typing.
+    Whether to replace special keywords after typing Tab into a
+    pre-defined text snippet.
+    See `User-definable snippets`_.
 
 XML tag autocompletion
     When you open an XML tag automatically generate its completion tag.
 
 Automatic symbol completion
-    When you start to type a symbol look for the full string and allow it to be
-    found for you.
+    When you start to type a symbol name, look for the full string to
+    allow it to be completed for you.
 
 Characters to type for completion
-    Number of characters before the autocompletion looks for a match to what you
-    are typing.
+    Number of characters of a word to type before autocompletion is
+    displayed.
 
 Rows of symbol completion list
-    The number of symbols shown in the autocompletion.
+    The maximum number of symbols to show in the autocompletion window.
 
 
 Files tab in preferences dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Files tab in preferences dialog
 
 .. image:: ./images/pref_dialog_files.png
 
@@ -1525,38 +1550,42 @@ New files
 `````````
 
 Default encoding (new files)
-    The type of file encoding you wish to use on files you are creating.
+    The type of file encoding you wish to use when creating files.
 
 Used fixed encoding when opening files
-    Assume all files you are opening are using the following type of encoding.
+    Assume all files you are opening are using the type of encoding specified below.
 
 Default encoding (existing files)
     Opens all files with the specified encoding instead of auto-detecting it.
-    Use this option when Geany continuously opens your files with a wrong encoding.
+    Use this option when it's not possible for Geany to detect the exact encoding.
 
 Saving files
 ````````````
+Perform special formatting operations when a document is saved. These
+can each be undone with the Undo command as usual.
 
 Ensure newline at file end
-    If there is no newline at the end of your file when you save then it is added.
+    Add a newline at the end of the document if one is missing.
 
 Strip trailing spaces
-    Remove the trailing spaces on a file when you save it.
+    Remove the trailing spaces on each line of the document.
 
 Replace tabs by space
-    Replace all tabs in a document with spaces.
+    Replace all tabs in the document with the equivalent number of spaces.
+
+    .. note::
+        It is better to use spaces to indent than use this preference - see
+        `Indentation`_.
 
 Miscellaneous
 `````````````
 
 Recent files list length
-    The total length allowed of the recently used files list.
+    The number of files to remember in the recently used files list.
 
 
 Tools tab in preferences dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Tools tab in preferences dialog
 
 .. image:: ./images/pref_dialog_tools.png
 
@@ -1576,16 +1605,16 @@ Grep
     The location of the grep executable.
 
 .. note::
-    For Windows users: at time of writing it is recommended to use the
-    grep.exe from the UnxUtils project
+    For Windows users: at the time of writing it is recommended to use
+    the grep.exe from the UnxUtils project
     (http://sourceforge.net/projects/unxutils). The grep.exe from the
-    Mingw project for instance doesn't work with Geany at the moment.
+    Mingw project for instance might not work with Geany at the moment.
 
 Commands
 ````````
 
 Context action
-    When you perform a context action the executable that is launched.
+    Set this to a command to execute on the current word.
     You can use the "%s" wildcard to pass the current word below the cursor
     to the specified command.
 
@@ -1593,9 +1622,11 @@ Context action
 Template tab in preferences dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This data will be used to create the header for files created using the
-existing templates that geany has. For changes made here to take effect
-a restart of geany is required.
+This data is used as metadata for various template text to insert into
+a document, such as the file header. You only need to set fields that
+you want to use in your template files.
+
+.. note:: For changes made here to take effect a restart of geany is required.
 
 .. image:: ./images/pref_dialog_templ.png
 
@@ -1604,23 +1635,25 @@ Template data
 
 Developer
     The name of the developer who will be creating files.
+
 Initials
     The initials of the developer.
 
 Mail address
     The email address of the developer.
 
+    .. note::
+        You may wish to add anti-spam markup, e.g. ``name<at>site<dot>ext``.
+
 Company
     The company the developer is working for.
 
 Initial version
-    The intial version of files you will be creating.
+    The initial version of files you will be creating.
 
 
 Keybinding tab in preferences dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Keybinding tab in preferences dialog
 
 .. image:: ./images/pref_dialog_keys.png
 
@@ -1634,38 +1667,36 @@ bound to a key combination, and may not be available as a menu item.
 Printing tab in preferences dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Printing tab in preferences dialog
-
 .. image:: ./images/pref_dialog_printing.png
 
 Use external command for printing
     Use a system command to print your file out.
 
 Use native GTK printing
-    Let GTK handle your print request.
+    Let the GTK GUI toolkit handle your print request.
 
 Print line numbers
     Print the line numbers on the left of your paper.
 
 Print page number
-    Print the page number in the bottom right of your paper.
+    Print the page number on the bottom right of your paper.
 
 Print page header
-    Print a header on every page that is sent to printer.
+    Print a header on every page that is sent to the printer.
 
 Use base name of the printed file
-    The header does not use the entire path only the filename.
+    Don't use the entire path for the header, only the filename.
 
 Date format
-    How the date should be printed on the paper. You can use the same
-    format specifiers as in the ANSI C function strftime(). For details
-    please see http://man.cx/strftime.
+    How the date should be printed. You can use the same format
+    specifiers as in the ANSI C function strftime(). For details please
+    see http://man.cx/strftime.
 
 
 VTE tab in preferences dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-VTE tab in preferences dialog
+See also: `Virtual terminal emulator widget (VTE)`_.
 
 .. image:: ./images/pref_dialog_vte.png
 
@@ -1673,7 +1704,7 @@ Terminal widget
 ```````````````
 
 Terminal font
-    Select the font that will be used in the terminal emulation.
+    Select the font that will be used in the terminal emulation control.
 
 Foreground color
     Select the font color.
@@ -1694,7 +1725,7 @@ Shell
     The location of the shell on your system.
 
 Scroll on keystroke
-    Scroll when a specific keystroke is used.
+    Scroll the terminal to the prompt line when pressing a key.
 
 Scroll on output
     Scroll the output down.
@@ -1706,10 +1737,12 @@ Disable menu shortcut key (F10 by default)
     Disable the menu shortcut when you are in the virtual terminal.
 
 Follow path of the current file
-    The path of the terminal changes the the path of the current file.
+    Make the path of the terminal change according to the path of the
+    current file.
 
 Execute programs in VTE
-    You are able to execute programs in the virtual terminal.
+    Execute programs in the virtual terminal instead of using the external
+    terminal tool.
 
 Don't use run script
     Don't use the simple run script which is usually used to display

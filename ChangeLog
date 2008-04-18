@@ -1,7 +1,20 @@
+2008-04-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * doc/geany.txt, doc/geany.html:
+   Move 'Switching between documents' from prefs Interface section into
+   new Documents section.
+   Remove repeated title text of preference dialog tab sections.
+   Edit preferences descriptions for clarity.
+   Comment out some unexplained General preferences.
+   Fix some prefs typos, add some links and expand some descriptions.
+   Correct some wrong preferences descriptions (e.g. Back/Forward
+   buttons).
+
+
 2008-04-18  Frank Lanitz  <frank@Merkur>
 
- * THANKS, NEWS, src/about.c: Added Chikahiro Masami as new translator 
-   for Japanese translation. 
+ * THANKS, NEWS, src/about.c: Added Chikahiro Masami as new translator
+   for Japanese translation.
 
 
 2008-04-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
