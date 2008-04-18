@@ -33,6 +33,7 @@ Note: features included in brackets have lower priority.
 	o (tango-like icons for the symbol list)
 	o (show autocompletion symbol icons - see SCI_REGISTERIMAGE)
 	o (custom template file support)
+	o (GFileMonitor support, if/when GIO gets merged with GLib)
 
 
 	1.0:
