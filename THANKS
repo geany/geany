@@ -31,7 +31,7 @@ Anh Phạm <cs(dot)phamtuananh(at)gmail(dot)com> - various patches
 Guillaume Hoffmann <guillaumh(at)gmail(dot)com> - Haskell filetype patch
 Peter Strand <peter(at)zarquon(dot)se> - Haskell CTags patch
 Dave Moore <wrex006(at)gmail(dot)com> - code navigation patch
-François Cami <francois.cami(at)free(dot)fr>, Guillaume Duviol - tab replacement patch
+François Cami <francois(dot)cami(at)free(dot)fr>, Guillaume Duviol - tab replacement patch
 Alexander Rodin <rodin(dot)alexander(at)gmail(dot)com> - class builder patch
 Shiv <shivakumar(dot)gn(at)gmail(dot)com> - Sun Studio compiler compatibility patch
 Jean-François Wauthy <pollux(at)xfce(dot)org> - Symbol list icons patch
@@ -64,7 +64,7 @@ Gabor Kmetyko aka kilo <kg_kilo(at)freemail(dot)hu> - hu
 M.Baldinelli <m(dot)baldinelli(at)agora(dot)it> - it
 Dario Santomarco <dariello(at)yahoo(dot)it> - it
 Tarot Osuji <tarot(at)sdf(dot)lonestar(dot)org> - ja
-Chikahiro Masami <cmasa.z321(at)gmail(dot)com> - ja
+Chikahiro Masami <cmasa(dot)z321(at)gmail(dot)com> - ja
 Kurt De Bree <kdebree(at)telenet(dot)be> - nl
 Jacek Wolszczak <shutdownrunner(at)o2(dot)pl> - pl_PL
 Jarosław Foksa <jfoksa(at)gmail(dot)com> - pl_PL
@@ -76,8 +76,8 @@ Nikita E. Shalaev <nshalaev(at)eu(dot)spb(dot)ru> - ru_RU
 Tony Mattsson <superxorn(at)gmail(dot)com> - sv
 Boris Dibrov <dibrov(dot)bor(at)gmail(dot)com> - uk
 Clytie Siddall <clytie(at)riverland(dot)net(dot)au> - vi_VN
-Dormouse Young <dormouse.young(at)gmail(dot)com> - zh_CN
-KoViCH <kovich.ian(at)gmail(dot)com> - zh_TW
+Dormouse Young <dormouse(dot)young(at)gmail(dot)com> - zh_CN
+KoViCH <kovich(dot)ian(at)gmail(dot)com> - zh_TW
 
 Projects:
 ---------
