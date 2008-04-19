@@ -71,6 +71,7 @@
 #include "callbacks.h"
 #include "geanyobject.h"
 #include "highlighting.h"
+#include "navqueue.h"
 #include "win32.h"
 
 
@@ -535,6 +536,7 @@ gboolean document_remove(guint page_num)
 		}
 		notebook_remove_page(page_num);
 		treeviews_remove_document(idx);
+		navqueue_remove_file(doc_list[idx].file_name);
 		msgwin_status_add(_("File %s closed."), DOC_FILENAME(idx));
 		g_free(doc_list[idx].encoding);
 		g_free(doc_list[idx].saved_encoding.encoding);

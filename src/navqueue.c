@@ -38,7 +38,7 @@
 /* for the navigation history queue */
 typedef struct
 {
-	gchar *file;	/* this is the tagmanager filename, not document::file_name */
+	gchar *file;	/* This is the document's filename, in UTF-8 */
 	gint pos;
 } filepos;
 
@@ -106,16 +106,16 @@ queue_pos_matches(guint queue_pos, const gchar *fname, gint pos)
 }
 
 
-static void add_new_position(gchar *tm_filename, gint pos)
+static void add_new_position(gchar *utf8_filename, gint pos)
 {
 	filepos *npos;
 	guint i;
 
-	if (queue_pos_matches(nav_queue_pos, tm_filename, pos))
+	if (queue_pos_matches(nav_queue_pos, utf8_filename, pos))
 		return;	/* prevent duplicates */
 
 	npos = g_new0(filepos, 1);
-	npos->file = tm_filename;
+	npos->file = utf8_filename;
 	npos->pos = pos;
 
 	/* if we've jumped to a new position from inside the queue rather than going forward */
@@ -216,3 +216,29 @@ void navqueue_go_forward()
 	adjust_buttons();
 }
 
+
+static gint find_by_filename(gconstpointer a, gconstpointer b)
+{
+	if (utils_str_equal(((const filepos*)a)->file, (const gchar*) b))
+		return 0;
+	else
+		return 1;
+}
+
+
+/* Remove all elements with the given filename */
+void navqueue_remove_file(const gchar *filename)
+{
+	GList *match;
+
+	if (filename == NULL)
+		return;
+
+	while ((match = g_queue_find_custom(navigation_queue, filename, find_by_filename)))
+	{
+		g_free(match->data);
+		g_queue_delete_link(navigation_queue, match);
+	}
+
+	adjust_buttons();
+}

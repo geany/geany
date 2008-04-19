@@ -36,6 +36,8 @@ void navqueue_init(void);
 
 void navqueue_free(void);
 
+void navqueue_remove_file(const gchar *filename);
+
 
 gboolean navqueue_goto_line(gint old_idx, gint new_idx, gint line);
 
