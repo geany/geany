@@ -1,4 +1,4 @@
-Geany 0.14 (TBA)
+Geany 0.14 (April 19, 2008)
 
     General:
     * Don't beep when using Replace All in Session unless all open files
@@ -15,6 +15,21 @@ Geany 0.14 (TBA)
       navigation queue, so the user can move backwards through the list items
       and return to where they were.
     * Make pressing escape in the sidebar focus the editor.
+    * Make navigation queue position based to restore the line and column when
+      returning to a previous position (closes #1936927).
+    * Save sorting order of the symbol list when saving a file (fixes #1917262).
+    * Improve "Send Selection To" code (fixes #1909452).
+    * Install header files and add a pkg-config file for external plugins.
+    * Use monospace font for text entry fields in search dialogs (#1907117).
+    * Don't open zero byte sized files read-only (e.g. files in /proc).
+
+    Filetypes:
+    * Improve Makefile parser to detect targets.
+    * Update PHP tags file to latest PHP API docs (closes #1888691).
+    * Add translucency settings to filetypes.common for semi-transparency.
+    * Add HTML parser to get h1, h2, h3 symbols as well as link anchors and
+      JavaScript functions (fixes #1896068).
+    * Update Javascript, TCL and Assembler parser.
 
     Interface:
     * When closing a tab when using left-to-right tabs, focus the next
@@ -27,10 +42,19 @@ Geany 0.14 (TBA)
       Matching Brace commands.
     * Fix bug with showing macro list items all on one line.
     * Fix Python auto-indentation when line endings are set to CR/LF.
+    * Unfold hidden code when the fold point modified (fixes #1923350).
+    * Update Scintilla to version 1.76.
+    * Add (basic) column mode editing (patch by "chuck").
 
     Windows:
     * Replace untitled file header filename after Save As and add to recent
       files on Windows too.
+    * Resolve Windows shortcuts when opening files.
+    * Fix modal dialog problems on Windows by not setting taskbar hint
+      (closes #1916994).
+    * Add new process spawning implementation. This makes the VCdiff plugin
+      to work on Windows (patch by Pierre Joye, thanks).
+    * Fix crash on Windows when a project could not be opened.
 
     Plugins:
     * Add configurable plugin keybindings support.
@@ -46,6 +70,10 @@ Geany 0.14 (TBA)
     * keybindings_send_command() arguments have changed because of
       keybinding groups - this breaks the API for plugins already using it.
     * Make VERSION_CHECK deprecated in favour of PLUGIN_VERSION_CHECK.
+
+    Documentation:
+    * Add descriptions for several options in the preferences dialog
+      (patch from Robert McGinley).
 
     Internationalisation:
     * New translations: ro.

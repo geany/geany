@@ -4,6 +4,7 @@
    Make property tags be recognised in the symbol list.
  * src/document.c, src/navqueue.c, src/navqueue.h:
    Clean related navigation queue items when closing a document.
+ * New release: Geany 0.14 "Selit".
 
 
 2008-04-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
