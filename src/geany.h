@@ -44,7 +44,7 @@
  * listed in the documentation should not be changed */
 #define GEANY_FILEDEFS_SUBDIR			"filedefs"
 #define GEANY_TEMPLATES_SUBDIR			"templates"
-#define GEANY_CODENAME					"Selit"
+#define GEANY_CODENAME					"Quillan"
 #define GEANY_HOMEPAGE					"http://geany.uvena.de/"
 #define GEANY_PROJECT_EXT				"geany"
 #define GEANY_USE_WIN32_DIALOG			0

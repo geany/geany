@@ -5,6 +5,9 @@
  * src/document.c, src/navqueue.c, src/navqueue.h:
    Clean related navigation queue items when closing a document.
  * New release: Geany 0.14 "Selit".
+ * configure.in, geany.nsi, geany_private.rc, win32-config.h,
+   doc/geany.txt, doc/geany.html, src/geany.h:
+   Post-release version bump.
 
 
 2008-04-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
