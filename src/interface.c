@@ -3363,7 +3363,7 @@ create_prefs_dialog (void)
   gtk_widget_show (check_toolbar_indent);
   gtk_box_pack_start (GTK_BOX (vbox16), check_toolbar_indent, FALSE, FALSE, 0);
   GTK_WIDGET_UNSET_FLAGS (check_toolbar_indent, GTK_CAN_FOCUS);
-  gtk_tooltips_set_tip (tooltips, check_toolbar_indent, _("Display the Zoom In and Zoom Out buttons in the toolbar"), NULL);
+  gtk_tooltips_set_tip (tooltips, check_toolbar_indent, _("Display the Increase and Decrease Indentation buttons in the toolbar"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_toolbar_indent), FALSE);
 
   check_toolbar_search = gtk_check_button_new_with_mnemonic (_("Show Search field"));

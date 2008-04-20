@@ -4,6 +4,9 @@
    Don't chmod created run script when using the Run command and
    execute the script with /bin/sh on Unix-like systems to be able
    to run files on FAT filesystems.
+ * geany.glade, src/interface.c:
+   Fix wrong tooltip for "Show Increase and Decrease Indentation
+   buttons" in the preferences dialog.
 
 
 2008-04-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
