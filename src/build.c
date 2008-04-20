@@ -792,7 +792,7 @@ static GPid build_run_cmd(gint idx)
 		}
 #else
 		argv[term_argv_len   ]  = g_strdup("-e");
-		argv[term_argv_len + 1] = g_strdup(RUN_SCRIPT_CMD);
+		argv[term_argv_len + 1] = g_strconcat("/bin/sh ", RUN_SCRIPT_CMD, NULL);
 #endif
 		argv[term_argv_len + 2] = NULL;
 
@@ -1000,13 +1000,6 @@ static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, g
 	fputs(str, fp);
 	g_free(str);
 
-#ifndef G_OS_WIN32
-	if (chmod(fname, 0700) != 0)
-	{
-		g_unlink(fname);
-		return FALSE;
-	}
-#endif
 	fclose(fp);
 
 	return TRUE;

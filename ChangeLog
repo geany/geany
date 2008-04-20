@@ -1,3 +1,11 @@
+2008-04-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/build.c:
+   Don't chmod created run script when using the Run command and
+   execute the script with /bin/sh on Unix-like systems to be able
+   to run files on FAT filesystems.
+
+
 2008-04-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * tagmanager/js.c:
