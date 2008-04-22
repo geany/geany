@@ -27,11 +27,11 @@ static void installHtmlRegex (const langType language)
  * <h1><a href="#id109">Some Text</a></h1>
  * but it fails matching simple headings like
  * <h1>Some Text</h1> */
-/*#define INNER_HEADING "[ \t]*(<.*>(.*+)<.*>[ \t]*"*/
+/*#define INNER_HEADING "[ \t]*<.*>(.+)<.*>[ \t]*"*/
 
 /* this matches simple heading without nested tags */
 /** TODO combine both pattern to be able to match both heading styles */
-#define INNER_HEADING "[ \t]*(.*+)[ \t]*"
+#define INNER_HEADING "[ \t]*(.+)[ \t]*"
 
 	addTagRegex (language,
 		"<a"
