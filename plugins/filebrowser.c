@@ -83,10 +83,12 @@ static GtkListStore			*file_store;
 static GtkTreeIter			*last_dir_iter = NULL;
 static GtkEntryCompletion	*entry_completion = NULL;
 
+static GtkWidget	*filter_entry;
 static GtkWidget	*path_entry;
 static gchar		*current_dir = NULL;	/* in locale-encoding */
 static gchar		*open_cmd;				/* in locale-encoding */
 static gchar		*config_file;
+static gchar 		*filter = NULL;
 
 static struct
 {
@@ -128,6 +130,21 @@ static gboolean check_hidden(const gchar *base_name)
 }
 
 
+/* Returns: whether name has been removed by filter. */
+static gboolean check_filtered(const gchar *base_name)
+{
+	if (filter == NULL)
+		return FALSE;
+
+	if (! p_utils->str_equal(base_name, "*") && ! g_pattern_match_simple(filter, base_name))
+	{
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+
 /* name is in locale encoding */
 static void add_item(const gchar *name)
 {
@@ -136,6 +153,9 @@ static void add_item(const gchar *name)
 	gboolean dir;
 
 	if (! show_hidden_files && check_hidden(name))
+		return;
+
+	if (check_filtered(name))
 		return;
 
 	fname = g_strconcat(current_dir, G_DIR_SEPARATOR_S, name, NULL);
@@ -623,6 +643,16 @@ static gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer dat
 }
 
 
+static void on_clear_filter(GtkEntry *entry, gpointer user_data)
+{
+	setptr(filter, NULL);
+
+	gtk_entry_set_text(GTK_ENTRY(filter_entry), "");
+
+	refresh();
+}
+
+
 static void on_path_entry_activate(GtkEntry *entry, gpointer user_data)
 {
 	gchar *new_dir = (gchar*) gtk_entry_get_text(entry);
@@ -640,6 +670,20 @@ static void on_path_entry_activate(GtkEntry *entry, gpointer user_data)
 		new_dir = g_strdup(g_get_home_dir());
 
 	setptr(current_dir, new_dir);
+
+	on_clear_filter(NULL, NULL);
+}
+
+
+static void on_filter_activate(GtkEntry *entry, gpointer user_data)
+{
+	setptr(filter, g_strdup(gtk_entry_get_text(entry)));
+
+	if (! NZV(filter))
+	{
+		setptr(filter, g_strdup("*"));
+	}
+
 	refresh();
 }
 
@@ -720,7 +764,30 @@ static GtkWidget *make_toolbar(void)
 	g_signal_connect(G_OBJECT(wid), "clicked", G_CALLBACK(on_current_path), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
+	wid = (GtkWidget *) gtk_tool_button_new_from_stock(GTK_STOCK_CLEAR);
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(wid), tooltips, _("Clear the filter"), NULL);
+	g_signal_connect(G_OBJECT(wid), "clicked", G_CALLBACK(on_clear_filter), NULL);
+	gtk_container_add(GTK_CONTAINER(toolbar), wid);
+
 	return toolbar;
+}
+
+
+static GtkWidget *make_filterbar(void)
+{
+	GtkWidget *label, *filterbar;
+
+	filterbar = gtk_hbox_new(FALSE, 1);
+
+	label = gtk_label_new(_("Filter:"));
+
+	filter_entry = gtk_entry_new();
+	g_signal_connect(G_OBJECT(filter_entry), "activate", G_CALLBACK(on_filter_activate), NULL);
+
+	gtk_box_pack_start(GTK_BOX(filterbar), label, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(filterbar), filter_entry, TRUE, TRUE, 0);
+
+	return filterbar;
 }
 
 
@@ -837,11 +904,16 @@ static void kb_activate(guint key_id)
 
 void init(GeanyData *data)
 {
-	GtkWidget *scrollwin, *toolbar;
+	GtkWidget *scrollwin, *toolbar, *filterbar;
+
+	filter = NULL;
 
 	file_view_vbox = gtk_vbox_new(FALSE, 0);
 	toolbar = make_toolbar();
 	gtk_box_pack_start(GTK_BOX(file_view_vbox), toolbar, FALSE, FALSE, 0);
+
+	filterbar = make_filterbar();
+	gtk_box_pack_start(GTK_BOX(file_view_vbox), filterbar, FALSE, FALSE, 0);
 
 	path_entry = gtk_entry_new();
 	gtk_box_pack_start(GTK_BOX(file_view_vbox), path_entry, FALSE, FALSE, 2);
@@ -961,6 +1033,7 @@ void cleanup(void)
 {
 	g_free(config_file);
 	g_free(open_cmd);
+	g_free(filter);
 	gtk_widget_destroy(file_view_vbox);
 	g_object_unref(G_OBJECT(entry_completion));
 }
