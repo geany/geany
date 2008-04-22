@@ -38,7 +38,7 @@
 /* for the navigation history queue */
 typedef struct
 {
-	gchar *file;	/* This is the document's filename, in UTF-8 */
+	const gchar *file;	/* This is the document's filename, in UTF-8 */
 	gint pos;
 } filepos;
 
@@ -106,7 +106,7 @@ queue_pos_matches(guint queue_pos, const gchar *fname, gint pos)
 }
 
 
-static void add_new_position(gchar *utf8_filename, gint pos)
+static void add_new_position(const gchar *utf8_filename, gint pos)
 {
 	filepos *npos;
 	guint i;
