@@ -902,8 +902,10 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 					if (count == 0)
 						ui_set_statusbar(FALSE, _("No matches found for \"%s\"."), search_data.text);
 					else
-						ui_set_statusbar(FALSE, _("Found %d matches for \"%s\"."), count,
-							search_data.text);
+						ui_set_statusbar(FALSE,
+							ngettext("Found %d match for \"%s\".",
+									 "Found %d matches for \"%s\".", count),
+							count, search_data.text);
 				}
 				break;
 		}
@@ -1016,7 +1018,9 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			if (count == 0)
 				utils_beep();
 
-			ui_set_statusbar(FALSE, _("Replaced text in %u files."), count);
+			ui_set_statusbar(FALSE,
+				ngettext("Replaced text in %u file.",
+						 "Replaced text in %u files.", count), count);
 			/* show which docs had replacements: */
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_STATUS);
 
@@ -1318,8 +1322,13 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 					GTK_TREE_MODEL(msgwindow.store_msg), NULL) - 1;
 
 				msgwin_msg_add_fmt(COLOR_BLUE, -1, -1,
-					_("Search completed with %d matches."), count);
-				ui_set_statusbar(FALSE, _("Search completed with %d matches."), count);
+					ngettext("Search completed with %d matches.",
+							 "Search completed with %d matches.", count),
+					count);
+				ui_set_statusbar(FALSE,
+						ngettext("Search completed with %d matches.",
+								 "Search completed with %d matches.", count),
+						count);
 				break;
 			}
 			case 1:
@@ -1411,9 +1420,12 @@ void search_find_usage(const gchar *search_text, gint flags, gboolean in_session
 	{
 		gint count = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(msgwindow.store_msg), NULL);
 
-		ui_set_statusbar(FALSE, _("Found %d matches for \"%s\"."), count, search_text);
-		msgwin_msg_add_fmt(COLOR_BLUE, -1, -1, _("Found %d matches for \"%s\"."), count,
-			search_text);
+		ui_set_statusbar(FALSE, ngettext(
+			"Found %d matches for \"%s\".", "Found %d matches for \"%s\".", count),
+			count, search_text);
+		msgwin_msg_add_fmt(COLOR_BLUE, -1, -1, ngettext(
+			"Found %d matches for \"%s\".", "Found %d matches for \"%s\".", count),
+			count, search_text);
 	}
 }
 

@@ -1692,15 +1692,19 @@ static void show_replace_summary(gint idx, gint count, const gchar *find_text,
 	{	/* escape special characters for showing */
 		escaped_find_text = g_strescape(find_text, NULL);
 		escaped_replace_text = g_strescape(replace_text, NULL);
-		ui_set_statusbar(TRUE, _("%s: replaced %d occurrence(s) of \"%s\" with \"%s\"."),
-						filename, count, escaped_find_text, escaped_replace_text);
+		ui_set_statusbar(TRUE, ngettext(
+			"%s: replaced %d occurrence of \"%s\" with \"%s\".",
+			"%s: replaced %d occurrences of \"%s\" with \"%s\".",
+			count),	filename, count, escaped_find_text, escaped_replace_text);
 		g_free(escaped_find_text);
 		g_free(escaped_replace_text);
 	}
 	else
 	{
-		ui_set_statusbar(TRUE, _("%s: replaced %d occurrence(s) of \"%s\" with \"%s\"."),
-						filename, count, find_text, replace_text);
+		ui_set_statusbar(TRUE, ngettext(
+			"%s: replaced %d occurrence of \"%s\" with \"%s\".",
+			"%s: replaced %d occurrences of \"%s\" with \"%s\".",
+			count), filename, count, find_text, replace_text);
 	}
 	g_free(filename);
 }

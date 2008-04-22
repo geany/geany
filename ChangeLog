@@ -5,6 +5,8 @@
  * src/prefs.c:
    Fix wrong usage of gtk_file_chooser_get_filename() in callback of
    Open File dialogs in the preferences dialog.
+ * plugins/autosave.c, src/search.c, src/document.c:
+   Make use of ngettext() for strings with plural forms.
 
 
 2008-04-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
