@@ -1503,17 +1503,22 @@ on_prefs_tools_button_clicked           (GtkButton       *button,
 	/* run it */
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
+		gchar *utf8_filename;
+
 		tmp = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+		utf8_filename = utils_get_utf8_from_locale(tmp);
+
 		if (g_strv_length(field) > 1)
-			filename = g_strconcat(tmp, " ", field[1], NULL);
+			filename = g_strconcat(utf8_filename, " ", field[1], NULL);
 		else
 		{
-			filename = tmp;
-			tmp = NULL;
+			filename = utf8_filename;
+			utf8_filename = NULL;
 		}
 		gtk_entry_set_text(GTK_ENTRY(item), filename);
 		g_free(filename);
 		g_free(tmp);
+		g_free(utf8_filename);
 	}
 
 	g_strfreev(field);
