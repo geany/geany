@@ -74,7 +74,7 @@ gboolean auto_save(gpointer data)
 
 	if (saved_files > 0 && print_msg)
 		p_ui->set_statusbar(FALSE, ngettext(
-			"Autosave: Saved %d files automatically.",
+			"Autosave: Saved %d file automatically.",
 			"Autosave: Saved %d files automatically.", saved_files),
 			saved_files);
 
