@@ -7,6 +7,8 @@
    Open File dialogs in the preferences dialog.
  * plugins/autosave.c, src/search.c, src/document.c:
    Make use of ngettext() for strings with plural forms.
+ * Makefile.am:
+   Add target "sign" to sign generated tarballs with gpg.
 
 
 2008-04-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
