@@ -605,8 +605,7 @@ load_active_plugins()
 {
 	guint i, len;
 
-	len = g_strv_length(active_plugins_pref);
-	if (active_plugins_pref == NULL || len == 0)
+	if (active_plugins_pref == NULL || (len = g_strv_length(active_plugins_pref)) == 0)
 		return;
 
 	for (i = 0; i < len; i++)
