@@ -374,7 +374,7 @@ static gboolean check_reload(gint idx)
 
 
 /* Set force to force a disk check, otherwise it is ignored if there was a check
- * in the last GEANY_CHECK_FILE_DELAY seconds.
+ * in the last file_prefs.disk_check_timeout seconds.
  * @return @c TRUE if the file has changed. */
 gboolean utils_check_disk_status(gint idx, gboolean force)
 {
@@ -383,11 +383,13 @@ gboolean utils_check_disk_status(gint idx, gboolean force)
 	gchar *locale_filename;
 	gboolean ret = FALSE;
 
+	if (file_prefs.disk_check_timeout == 0) return FALSE;
 	if (idx == -1 || doc_list[idx].file_name == NULL) return FALSE;
 
 	t = time(NULL);
 
-	if (! force && doc_list[idx].last_check > (t - GEANY_CHECK_FILE_DELAY)) return FALSE;
+	if (! force && doc_list[idx].last_check > (t - file_prefs.disk_check_timeout))
+		return FALSE;
 
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 	if (g_stat(locale_filename, &st) != 0)

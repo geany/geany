@@ -61,6 +61,8 @@
 
 GeanyPrefs prefs;
 
+GeanyFilePrefs file_prefs;
+
 static gchar *dialog_key_name;
 static GtkTreeIter g_iter;
 static GtkTreeStore *store = NULL;
@@ -163,9 +165,6 @@ void prefs_init_dialog(void)
 	GdkColor *color;
 
 	/* General settings */
-	widget = lookup_widget(ui_widgets.prefs_dialog, "spin_mru");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), prefs.mru_length);
-
 	/* startup */
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_load_session");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.load_session);
@@ -331,6 +330,12 @@ void prefs_init_dialog(void)
 	else
 		widget = lookup_widget(ui_widgets.prefs_dialog, "radio_tab_left");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
+
+	widget = lookup_widget(ui_widgets.prefs_dialog, "spin_mru");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), prefs.mru_length);
+
+	widget = lookup_widget(ui_widgets.prefs_dialog, "spin_disk_check");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), file_prefs.disk_check_timeout);
 
 
 	/* Editor settings */
@@ -568,9 +573,6 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		guint i;
 
 		/* General settings */
-		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_mru");
-		prefs.mru_length = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
-
 		/* startup */
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_load_session");
 		prefs.load_session = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
@@ -716,6 +718,12 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		/* Files settings */
 		widget = lookup_widget(ui_widgets.prefs_dialog, "radio_tab_right");
 		prefs.tab_order_ltr = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_mru");
+		prefs.mru_length = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+
+		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_disk_check");
+		file_prefs.disk_check_timeout = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
 
 		/* Editor settings */

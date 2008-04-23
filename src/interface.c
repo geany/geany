@@ -2680,6 +2680,9 @@ create_prefs_dialog (void)
   GtkWidget *label147;
   GtkObject *spin_mru_adj;
   GtkWidget *spin_mru;
+  GtkWidget *label208;
+  GtkObject *spin_disk_check_adj;
+  GtkWidget *spin_disk_check;
   GtkWidget *label198;
   GtkWidget *label174;
   GtkWidget *vbox23;
@@ -3988,6 +3991,23 @@ create_prefs_dialog (void)
   gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_mru), TRUE);
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spin_mru), TRUE);
 
+  label208 = gtk_label_new (_("Disk check timeout:"));
+  gtk_widget_show (label208);
+  gtk_table_attach (GTK_TABLE (table10), label208, 0, 1, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label208), 0, 0.5);
+
+  spin_disk_check_adj = gtk_adjustment_new (30, 0, 10000, 1, 10, 10);
+  spin_disk_check = gtk_spin_button_new (GTK_ADJUSTMENT (spin_disk_check_adj), 1, 0);
+  gtk_widget_show (spin_disk_check);
+  gtk_table_attach (GTK_TABLE (table10), spin_disk_check, 1, 2, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, spin_disk_check, _("How often to check for changes to document files on disk, in seconds. Zero disables checking."), NULL);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_disk_check), TRUE);
+  gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spin_disk_check), TRUE);
+
   label198 = gtk_label_new (_("<b>Miscellaneous</b>"));
   gtk_widget_show (label198);
   gtk_frame_set_label_widget (GTK_FRAME (frame17), label198);
@@ -4671,6 +4691,8 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, table10, "table10");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label147, "label147");
   GLADE_HOOKUP_OBJECT (prefs_dialog, spin_mru, "spin_mru");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label208, "label208");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, spin_disk_check, "spin_disk_check");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label198, "label198");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label174, "label174");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox23, "vbox23");

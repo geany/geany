@@ -241,6 +241,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_replace_tabs", prefs.replace_tabs);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_trail_space", prefs.strip_trailing_spaces);
 	g_key_file_set_integer(config, PACKAGE, "mru_length", prefs.mru_length);
+	g_key_file_set_integer(config, PACKAGE, "disk_check_timeout", file_prefs.disk_check_timeout);
 
 	/* toolbar */
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show", prefs.toolbar_visible);
@@ -567,6 +568,8 @@ static void load_dialog_prefs(GKeyFile *config)
 	prefs.final_new_line = utils_get_setting_boolean(config, PACKAGE, "pref_editor_new_line", TRUE);
 	prefs.strip_trailing_spaces = utils_get_setting_boolean(config, PACKAGE, "pref_editor_trail_space", FALSE);
 	prefs.mru_length = utils_get_setting_integer(config, PACKAGE, "mru_length", GEANY_DEFAULT_MRU_LENGTH);
+	file_prefs.disk_check_timeout = utils_get_setting_integer(config, PACKAGE,
+		"disk_check_timeout", GEANY_DISK_CHECK_TIMEOUT);
 
 	/* toolbar */
 	prefs.toolbar_visible = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show", TRUE);

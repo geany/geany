@@ -100,6 +100,15 @@ GeanyPrefs;
 extern GeanyPrefs prefs;
 
 
+typedef struct GeanyFilePrefs
+{
+	gint	disk_check_timeout;
+}
+GeanyFilePrefs;
+
+extern GeanyFilePrefs file_prefs;
+
+
 void prefs_init_dialog(void);
 
 void prefs_show_dialog(void);
