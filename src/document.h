@@ -148,10 +148,13 @@ void document_finalize(void);
 
 void document_set_text_changed(gint idx);
 
-
 void document_apply_update_prefs(gint idx);
 
+
+void document_close_all();
+
 gboolean document_remove(guint page_num);
+
 
 gint document_new_file_if_non_open();
 

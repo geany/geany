@@ -516,6 +516,14 @@ static gint document_create(const gchar *utf8_filename)
 }
 
 
+void document_close_all()
+{
+	/* the code is in callbacks.c because when quitting, checking for changes
+	 * has to be done before saving the session */
+	on_close_all1_activate(NULL, NULL);
+}
+
+
 /**
  *  Remove the given notebook tab at @a page_num and clear all related information
  *  in the document list.

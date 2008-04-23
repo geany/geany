@@ -44,7 +44,6 @@
 #include "build.h"
 #include "document.h"
 #include "geanyobject.h"
-#include "callbacks.h"
 
 
 ProjectPrefs project_prefs = { NULL, 0 };
@@ -306,7 +305,6 @@ static void update_ui(void)
 /* open_default will make function reload default session files on close */
 void project_close(gboolean open_default)
 {
-	gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
 	g_return_if_fail(app->project != NULL);
 
 	ui_set_statusbar(TRUE, _("Project \"%s\" closed."), app->project->name);
@@ -326,13 +324,7 @@ void project_close(gboolean open_default)
 	if (project_prefs.project_session)
 	{
 		/* close all existing tabs first */
-		main_status.closing_all = TRUE;
-		for (i = 0; i < max; i++)
-		{
-			if (! document_remove(0))
-				break;
-		}
-		main_status.closing_all = FALSE;
+		document_close_all(NULL, NULL);
 
 		/* after closing all tabs let's open the tabs found in the default config */
 		if (open_default == TRUE && cl_options.load_session)
@@ -348,8 +340,6 @@ void project_close(gboolean open_default)
 	{
 		g_signal_emit_by_name(geany_object, "project-close");
 	}
-
-	tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
 	update_ui();
 }
 
@@ -915,9 +905,7 @@ static gboolean load_config(const gchar *filename)
 		/* save current (non-project) session (it could has been changed since program startup) */
 		configuration_save_default_session();
 		/* now close all open files */
-		/** TODO make this a general, non-callback function, use it also in project_close()
-		  * and remove include of callbacks.h */
-		on_close_all1_activate(NULL, NULL);
+		document_close_all(NULL, NULL);
 		/* read session files so they can be opened with configuration_open_files() */
 		configuration_load_session_files(config);
 	}
