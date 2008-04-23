@@ -27,6 +27,11 @@
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
 
+#define GEANY_WORDCHARS					"_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+#define GEANY_TOGGLE_MARK				"~ "
+#define GEANY_MAX_WORD_LENGTH			192
+#define GEANY_MAX_AUTOCOMPLETE_WORDS	30
+
 /* Note: Avoid using SSM in files not related to scintilla, use sciwrappers.h instead. */
 #define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
 

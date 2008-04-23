@@ -25,6 +25,9 @@
 #ifndef GEANY_PROJECT_H
 #define GEANY_PROJECT_H 1
 
+#define GEANY_PROJECT_EXT				"geany"
+
+
 /* structure for representing a project. */
 struct _GeanyProject
 {

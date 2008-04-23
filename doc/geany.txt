@@ -3104,61 +3104,32 @@ show_symbol_list_expanders        Whether to show or hide the small expander   t
 Compile-time options
 ====================
 
-There are some options which can only be changed at compile time. To
-change these options, edit the file src/geany.h. Look for a block of
-lines starting with ``#define GEANY_*``. Any definitions which are
-not listed here should not be changed.
+There are some options which can only be changed at compile time,
+and some options which are used as the default for configurable
+options. To change these options, edit the appropriate source file
+in the ``src`` subdirectory. Look for a block of lines starting with
+``#define GEANY_*``. Any definitions which are not listed here should
+not be changed.
 
 .. note::
     Most users should not need to change these options.
 
+src/geany.h
+-----------
+
 ==============================  ============================================  ==================
 Option                          Description                                   Default
 ==============================  ============================================  ==================
-GEANY_WORDCHARS                 These characters define word boundaries when  *look at sourcecode*
-                                making selections and searching using word
-                                matching options.
-GEANY_MAX_AUTOCOMPLETE_WORDS    How many auto completion suggestions should   30
-                                Geany provide.
-GEANY_MAX_AUTOCOMPLETE_HEIGHT   How many suggestions should be visible in     10
-                                the auto completion list.
-GEANY_MIN_SYMBOLLIST_CHARS      How many characters you need to type to       4
-                                trigger the auto completion list.
-GEANY_PROJECT_EXT               The default filename extension for Geany      geany
-                                project files. It is used when creating new
-                                projects and as filter mask for the project
-                                open dialog.
 GEANY_STRING_UNTITLED           A string used as the default name for new     untitled
                                 files. Be aware that the string can be
                                 translated, so change it only if you know
                                 what you are doing.
-GEANY_CHECK_FILE_DELAY          Time in seconds between checking a file for   30
-                                external changes.
-GEANY_TOGGLE_MARK               A string which is used to mark a toggled      "~ "
-                                comment.
-                                external changes.
 GEANY_WINDOW_MINIMAL_WIDTH      The minimal width of the main window.         620
 GEANY_WINDOW_MINIMAL_HEIGHT     The minimal height of the main window.        440
 GEANY_WINDOW_DEFAULT_WIDTH      The default width of the main window at the   900
                                 first start.
 GEANY_WINDOW_DEFAULT_HEIGHT     The default height of the main window at the  600
                                 first start.
- **Default values**
-GEANY_DEFAULT_TOOLS_MAKE        The make tool. This can also include a path.  "make"
-GEANY_DEFAULT_TOOLS_TERMINAL    A terminal emulator. It has to accept the     "xterm"
-                                command line option "-e". This can also
-                                include a path.
-GEANY_DEFAULT_TOOLS_BROWSER     A web browser. This can also include a path.  "firefox"
-GEANY_DEFAULT_TOOLS_PRINTCMD    A printing tool. It should be able to accept  "lpr"
-                                and process plain text files. This can also
-                                include a path.
-GEANY_DEFAULT_TOOLS_GREP        A grep tool. It should be compatible with     "grep"
-                                GNU grep. This can also include a path.
-GEANY_DEFAULT_MRU_LENGHTH       The length of the "Recent files" list.        10
-GEANY_DEFAULT_FONT_SYMBOL_LIST  The font used in sidebar to show symbols and  "Sans 9"
-                                open files.
-GEANY_DEFAULT_FONT_MSG_WINDOW   The font used in the messages window.         "Sans 9"
-GEANY_DEFAULT_FONT_EDITOR       The font used in the editor window.           "Monospace 10"
  **Windows specific**
 GEANY_USE_WIN32_DIALOG          Set this to 1 if you want to use the default  0
                                 Windows file open and save dialogs instead
@@ -3169,6 +3140,62 @@ GEANY_USE_WIN32_DIALOG          Set this to 1 if you want to use the default  0
                                 when building on a non-Win32 system.*
 ==============================  ============================================  ==================
 
+project.h
+---------
+
+==============================  ============================================  ==================
+Option                          Description                                   Default
+==============================  ============================================  ==================
+GEANY_PROJECT_EXT               The default filename extension for Geany      geany
+                                project files. It is used when creating new
+                                projects and as filter mask for the project
+                                open dialog.
+==============================  ============================================  ==================
+
+editor.h
+--------
+
+==============================  ============================================  ==================
+Option                          Description                                   Default
+==============================  ============================================  ==================
+GEANY_WORDCHARS                 These characters define word boundaries when  a string with:
+                                making selections and searching using word    a-z, A-Z, 0-9 and
+                                matching options.                             underscore.
+GEANY_TOGGLE_MARK               A string which is used to mark a toggled      "~ "
+                                comment.
+                                external changes.
+GEANY_MAX_AUTOCOMPLETE_WORDS    How many auto completion suggestions should   30
+                                Geany provide.
+==============================  ============================================  ==================
+
+keyfile.c
+---------
+
+These are default settings that can be overridden in the `Preferences`_ dialog.
+
+==============================  ============================================  ==================
+Option                          Description                                   Default
+==============================  ============================================  ==================
+GEANY_MIN_SYMBOLLIST_CHARS      How many characters you need to type to       4
+                                trigger the auto completion list.
+GEANY_DISK_CHECK_TIMEOUT        Time in seconds between checking a file for   30
+                                external changes.
+GEANY_DEFAULT_TOOLS_MAKE        The make tool. This can also include a path.  "make"
+GEANY_DEFAULT_TOOLS_TERMINAL    A terminal emulator. It has to accept the     "xterm"
+                                command line option "-e". This can also
+                                include a path.
+GEANY_DEFAULT_TOOLS_BROWSER     A web browser. This can also include a path.  "firefox"
+GEANY_DEFAULT_TOOLS_PRINTCMD    A printing tool. It should be able to accept  "lpr"
+                                and process plain text files. This can also
+                                include a path.
+GEANY_DEFAULT_TOOLS_GREP        A grep tool. It should be compatible with     "grep"
+                                GNU grep. This can also include a path.
+GEANY_DEFAULT_MRU_LENGTH        The length of the "Recent files" list.        10
+GEANY_DEFAULT_FONT_SYMBOL_LIST  The font used in sidebar to show symbols and  "Sans 9"
+                                open files.
+GEANY_DEFAULT_FONT_MSG_WINDOW   The font used in the messages window.         "Sans 9"
+GEANY_DEFAULT_FONT_EDITOR       The font used in the editor window.           "Monospace 10"
+==============================  ============================================  ==================
 
 
 

@@ -53,6 +53,7 @@
 #include "sciwrappers.h"
 #include "dialogs.h"
 #include "filetypes.h"
+#include "project.h"
 
 #define BUFSIZE 4096
 
@@ -1170,7 +1171,7 @@ static gboolean resolve_link(HWND hWnd, wchar_t *link, gchar **lpszPath)
 		 * Get an interface pointer to it. */
 		pslW = (IShellLinkW*) pslWV;
 		hres = pslW->lpVtbl->QueryInterface(pslW, &IID_IPersistFile, &ppfV);
-	}     
+	}
 
 	if (SUCCEEDED(hres))
 	{
@@ -1214,7 +1215,7 @@ gchar *win32_get_shortcut_target(const gchar *file_name)
 
 	resolve_link(GDK_WINDOW_HWND(app->window->window), wfilename, &path);
 	g_free(wfilename);
-	
+
 	if (path == NULL)
 		return g_strdup(file_name);
 	else

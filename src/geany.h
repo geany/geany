@@ -46,37 +46,12 @@
 #define GEANY_TEMPLATES_SUBDIR			"templates"
 #define GEANY_CODENAME					"Quillan"
 #define GEANY_HOMEPAGE					"http://geany.uvena.de/"
-#define GEANY_PROJECT_EXT				"geany"
 #define GEANY_USE_WIN32_DIALOG			0
-#define GEANY_CHECK_FILE_DELAY			30
-#define GEANY_WORDCHARS					"_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-#define GEANY_TOGGLE_MARK				"~ "
-#define GEANY_MAX_WORD_LENGTH			192
-#define GEANY_MAX_AUTOCOMPLETE_WORDS	30
-#define GEANY_MAX_SYMBOLLIST_HEIGHT		10
-#define GEANY_MIN_SYMBOLLIST_CHARS		4
 #define GEANY_STRING_UNTITLED			_("untitled")
-#define GEANY_MSGWIN_HEIGHT				208
 #define GEANY_WINDOW_MINIMAL_WIDTH		550
 #define GEANY_WINDOW_MINIMAL_HEIGHT		350
 #define GEANY_WINDOW_DEFAULT_WIDTH		900
 #define GEANY_WINDOW_DEFAULT_HEIGHT		600
-/* some default settings which are used at the very first start of Geany to fill
- * the configuration file */
-#define GEANY_DEFAULT_TOOLS_MAKE		"make"
-#ifdef G_OS_WIN32
-#define GEANY_DEFAULT_TOOLS_TERMINAL	"cmd.exe"
-#else
-#define GEANY_DEFAULT_TOOLS_TERMINAL	"xterm"
-#endif
-#define GEANY_DEFAULT_TOOLS_BROWSER		"firefox"
-#define GEANY_DEFAULT_TOOLS_PRINTCMD	"lpr"
-#define GEANY_DEFAULT_TOOLS_GREP		"grep"
-#define GEANY_DEFAULT_MRU_LENGTH		10
-#define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Sans 9"
-#define GEANY_DEFAULT_FONT_MSG_WINDOW	"Sans 9"
-#define GEANY_DEFAULT_FONT_EDITOR		"Monospace 10"
-
 
 
 /* useful forward declarations */

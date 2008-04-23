@@ -46,6 +46,7 @@
 #include "main.h"
 #include "navqueue.h"
 #include "ui_utils.h"
+#include "editor.h"
 
 
 const guint TM_GLOBAL_TYPE_MASK =

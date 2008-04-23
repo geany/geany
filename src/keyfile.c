@@ -60,6 +60,27 @@
 #include "plugins.h"
 
 
+/* some default settings which are used at the very first start of Geany to fill
+ * the configuration file */
+#define GEANY_MAX_SYMBOLLIST_HEIGHT		10
+#define GEANY_MIN_SYMBOLLIST_CHARS		4
+#define GEANY_MSGWIN_HEIGHT				208
+#define GEANY_DISK_CHECK_TIMEOUT		30
+#define GEANY_DEFAULT_TOOLS_MAKE		"make"
+#ifdef G_OS_WIN32
+#define GEANY_DEFAULT_TOOLS_TERMINAL	"cmd.exe"
+#else
+#define GEANY_DEFAULT_TOOLS_TERMINAL	"xterm"
+#endif
+#define GEANY_DEFAULT_TOOLS_BROWSER		"firefox"
+#define GEANY_DEFAULT_TOOLS_PRINTCMD	"lpr"
+#define GEANY_DEFAULT_TOOLS_GREP		"grep"
+#define GEANY_DEFAULT_MRU_LENGTH		10
+#define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Sans 9"
+#define GEANY_DEFAULT_FONT_MSG_WINDOW	"Sans 9"
+#define GEANY_DEFAULT_FONT_EDITOR		"Monospace 10"
+
+
 static gchar *scribble_text = NULL;
 static GPtrArray *session_files = NULL;
 static gint session_notebook_page;

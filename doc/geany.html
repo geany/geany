@@ -3,10 +3,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.4.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.4: http://docutils.sourceforge.net/" />
 <title>Geany</title>
 <meta name="authors" content="Enrico Tröger  Nick Treleaven  Frank Lanitz" />
-<meta name="date" content="2008-04-18" />
+<meta name="date" content="2008-04-19" />
 <style type="text/css">
 
 /*
@@ -133,7 +133,7 @@ dt {
 <br />Nick Treleaven
 <br />Frank Lanitz</td></tr>
 <tr><th class="docinfo-name">Date:</th>
-<td>2008-04-18</td></tr>
+<td>2008-04-19</td></tr>
 <tr><th class="docinfo-name">Version:</th>
 <td>0.15</td></tr>
 </tbody>
@@ -355,9 +355,15 @@ of this program, and also in the chapter <a class="reference" href="#gnu-general
 </ul>
 </li>
 <li><a class="reference" href="#hidden-preferences" id="id140" name="id140">Hidden preferences</a></li>
-<li><a class="reference" href="#compile-time-options" id="id141" name="id141">Compile-time options</a></li>
-<li><a class="reference" href="#gnu-general-public-license" id="id142" name="id142">GNU General Public License</a></li>
-<li><a class="reference" href="#license-for-scintilla-and-scite" id="id143" name="id143">License for Scintilla and SciTE</a></li>
+<li><a class="reference" href="#compile-time-options" id="id141" name="id141">Compile-time options</a><ul>
+<li><a class="reference" href="#src-geany-h" id="id142" name="id142">src/geany.h</a></li>
+<li><a class="reference" href="#project-h" id="id143" name="id143">project.h</a></li>
+<li><a class="reference" href="#editor-h" id="id144" name="id144">editor.h</a></li>
+<li><a class="reference" href="#keyfile-c" id="id145" name="id145">keyfile.c</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#gnu-general-public-license" id="id146" name="id146">GNU General Public License</a></li>
+<li><a class="reference" href="#license-for-scintilla-and-scite" id="id147" name="id147">License for Scintilla and SciTE</a></li>
 </ul>
 </div>
 <div class="section">
@@ -3485,19 +3491,23 @@ available with GTK 2.12 or above).</td>
 </div>
 <div class="section">
 <h1><a class="toc-backref" href="#id141" id="compile-time-options" name="compile-time-options">Compile-time options</a></h1>
-<p>There are some options which can only be changed at compile time. To
-change these options, edit the file src/geany.h. Look for a block of
-lines starting with <tt class="docutils literal"><span class="pre">#define</span> <span class="pre">GEANY_*</span></tt>. Any definitions which are
-not listed here should not be changed.</p>
+<p>There are some options which can only be changed at compile time,
+and some options which are used as the default for configurable
+options. To change these options, edit the appropriate source file
+in the <tt class="docutils literal"><span class="pre">src</span></tt> subdirectory. Look for a block of lines starting with
+<tt class="docutils literal"><span class="pre">#define</span> <span class="pre">GEANY_*</span></tt>. Any definitions which are not listed here should
+not be changed.</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
 <p class="last">Most users should not need to change these options.</p>
 </div>
+<div class="section">
+<h2><a class="toc-backref" href="#id142" id="src-geany-h" name="src-geany-h">src/geany.h</a></h2>
 <table border="1" class="docutils">
 <colgroup>
-<col width="32%" />
-<col width="47%" />
-<col width="21%" />
+<col width="33%" />
+<col width="48%" />
+<col width="20%" />
 </colgroup>
 <thead valign="bottom">
 <tr><th class="head">Option</th>
@@ -3506,51 +3516,12 @@ not listed here should not be changed.</p>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>GEANY_WORDCHARS</td>
-<td>These characters define word boundaries when
-making selections and searching using word
-matching options.</td>
-<td><em>look at sourcecode</em></td>
-</tr>
-<tr><td>GEANY_MAX_AUTOCOMPLETE_WORDS</td>
-<td>How many auto completion suggestions should
-Geany provide.</td>
-<td>30</td>
-</tr>
-<tr><td>GEANY_MAX_AUTOCOMPLETE_HEIGHT</td>
-<td>How many suggestions should be visible in
-the auto completion list.</td>
-<td>10</td>
-</tr>
-<tr><td>GEANY_MIN_SYMBOLLIST_CHARS</td>
-<td>How many characters you need to type to
-trigger the auto completion list.</td>
-<td>4</td>
-</tr>
-<tr><td>GEANY_PROJECT_EXT</td>
-<td>The default filename extension for Geany
-project files. It is used when creating new
-projects and as filter mask for the project
-open dialog.</td>
-<td>geany</td>
-</tr>
 <tr><td>GEANY_STRING_UNTITLED</td>
 <td>A string used as the default name for new
 files. Be aware that the string can be
 translated, so change it only if you know
 what you are doing.</td>
 <td>untitled</td>
-</tr>
-<tr><td>GEANY_CHECK_FILE_DELAY</td>
-<td>Time in seconds between checking a file for
-external changes.</td>
-<td>30</td>
-</tr>
-<tr><td>GEANY_TOGGLE_MARK</td>
-<td>A string which is used to mark a toggled
-comment.
-external changes.</td>
-<td>&quot;~ &quot;</td>
 </tr>
 <tr><td>GEANY_WINDOW_MINIMAL_WIDTH</td>
 <td>The minimal width of the main window.</td>
@@ -3570,9 +3541,110 @@ first start.</td>
 first start.</td>
 <td>600</td>
 </tr>
-<tr><td><strong>Default values</strong></td>
+<tr><td><strong>Windows specific</strong></td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
+</tr>
+<tr><td>GEANY_USE_WIN32_DIALOG</td>
+<td>Set this to 1 if you want to use the default
+Windows file open and save dialogs instead
+GTK's file open and save dialogs. The
+default Windows file dialogs are missing
+some nice features like choosing a filetype
+or an encoding. <em>Do not touch this setting
+when building on a non-Win32 system.</em></td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id143" id="project-h" name="project-h">project.h</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="48%" />
+<col width="20%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Option</th>
+<th class="head">Description</th>
+<th class="head">Default</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>GEANY_PROJECT_EXT</td>
+<td>The default filename extension for Geany
+project files. It is used when creating new
+projects and as filter mask for the project
+open dialog.</td>
+<td>geany</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id144" id="editor-h" name="editor-h">editor.h</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="48%" />
+<col width="20%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Option</th>
+<th class="head">Description</th>
+<th class="head">Default</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>GEANY_WORDCHARS</td>
+<td>These characters define word boundaries when
+making selections and searching using word
+matching options.</td>
+<td>a string with:
+a-z, A-Z, 0-9 and
+underscore.</td>
+</tr>
+<tr><td>GEANY_TOGGLE_MARK</td>
+<td>A string which is used to mark a toggled
+comment.
+external changes.</td>
+<td>&quot;~ &quot;</td>
+</tr>
+<tr><td>GEANY_MAX_AUTOCOMPLETE_WORDS</td>
+<td>How many auto completion suggestions should
+Geany provide.</td>
+<td>30</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id145" id="keyfile-c" name="keyfile-c">keyfile.c</a></h2>
+<p>These are default settings that can be overridden in the <a class="reference" href="#preferences">Preferences</a> dialog.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="48%" />
+<col width="20%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Option</th>
+<th class="head">Description</th>
+<th class="head">Default</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>GEANY_MIN_SYMBOLLIST_CHARS</td>
+<td>How many characters you need to type to
+trigger the auto completion list.</td>
+<td>4</td>
+</tr>
+<tr><td>GEANY_DISK_CHECK_TIMEOUT</td>
+<td>Time in seconds between checking a file for
+external changes.</td>
+<td>30</td>
 </tr>
 <tr><td>GEANY_DEFAULT_TOOLS_MAKE</td>
 <td>The make tool. This can also include a path.</td>
@@ -3599,7 +3671,7 @@ include a path.</td>
 GNU grep. This can also include a path.</td>
 <td>&quot;grep&quot;</td>
 </tr>
-<tr><td>GEANY_DEFAULT_MRU_LENGHTH</td>
+<tr><td>GEANY_DEFAULT_MRU_LENGTH</td>
 <td>The length of the &quot;Recent files&quot; list.</td>
 <td>10</td>
 </tr>
@@ -3616,25 +3688,12 @@ open files.</td>
 <td>The font used in the editor window.</td>
 <td>&quot;Monospace 10&quot;</td>
 </tr>
-<tr><td><strong>Windows specific</strong></td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr><td>GEANY_USE_WIN32_DIALOG</td>
-<td>Set this to 1 if you want to use the default
-Windows file open and save dialogs instead
-GTK's file open and save dialogs. The
-default Windows file dialogs are missing
-some nice features like choosing a filetype
-or an encoding. <em>Do not touch this setting
-when building on a non-Win32 system.</em></td>
-<td>0</td>
-</tr>
 </tbody>
 </table>
 </div>
+</div>
 <div class="section">
-<h1><a class="toc-backref" href="#id142" id="gnu-general-public-license" name="gnu-general-public-license">GNU General Public License</a></h1>
+<h1><a class="toc-backref" href="#id146" id="gnu-general-public-license" name="gnu-general-public-license">GNU General Public License</a></h1>
 <pre class="literal-block">
             GNU GENERAL PUBLIC LICENSE
                Version 2, June 1991
@@ -3979,7 +4038,7 @@ Public License instead of this License.
 </pre>
 </div>
 <div class="section">
-<h1><a class="toc-backref" href="#id143" id="license-for-scintilla-and-scite" name="license-for-scintilla-and-scite">License for Scintilla and SciTE</a></h1>
+<h1><a class="toc-backref" href="#id147" id="license-for-scintilla-and-scite" name="license-for-scintilla-and-scite">License for Scintilla and SciTE</a></h1>
 <p>Copyright 1998-2003 by Neil Hodgson &lt;neilh(at)scintilla(dot)org&gt;</p>
 <p>All Rights Reserved</p>
 <p>Permission to use, copy, modify, and distribute this software and
@@ -3999,7 +4058,7 @@ USE OR PERFORMANCE OF THIS SOFTWARE.</p>
 <div class="footer">
 <hr class="footer" />
 <a class="reference" href="geany.txt">View document source</a>.
-Generated on: 2008-04-19 10:38 UTC.
+Generated on: 2008-04-23 16:28 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 
 </div>
