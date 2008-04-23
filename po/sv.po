@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Geany 0.14\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-04-05 11:38+0200\n"
-"PO-Revision-Date: 2007-12-27 13:35+0100\n"
+"PO-Revision-Date: 2008-04-23 22:30+0100\n"
 "Last-Translator: Tony Mattsson <superxorn@gmail.com>\n"
 "Language-Team: Swedish <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
@@ -133,6 +133,8 @@ msgstr "Misslyckades ändra arbetssökvägen till \"%s\""
 msgid ""
 "Could not execute the file in the VTE because it probably contains a command."
 msgstr ""
+"Kunde inte exekvera filen i VTE därför att det troligvis innehåller ett "
+"kommando."
 
 #: ../src/build.c:916
 msgid "Compilation failed."
@@ -211,7 +213,6 @@ msgstr ""
 
 #. DVI
 #: ../src/build.c:1160
-#, fuzzy
 msgid "LaTeX -> _DVI"
 msgstr "LaTeX -> DVI"
 
@@ -221,7 +222,6 @@ msgstr "Kompilerar filen till en DVI-fil"
 
 #. PDF
 #: ../src/build.c:1173
-#, fuzzy
 msgid "LaTeX -> _PDF"
 msgstr "LaTeX -> PDF"
 
@@ -231,7 +231,6 @@ msgstr "Kompilerar filen till en PDF-fil"
 
 #. DVI view
 #: ../src/build.c:1228
-#, fuzzy
 msgid "_View DVI File"
 msgstr "Visa DVI-fil"
 
@@ -241,13 +240,11 @@ msgstr "Kompilera och visa aktuell fil"
 
 #. PDF view
 #: ../src/build.c:1242
-#, fuzzy
 msgid "V_iew PDF File"
 msgstr "Visa PDF-fil"
 
 #. arguments
 #: ../src/build.c:1261
-#, fuzzy
 msgid "_Set Arguments"
 msgstr "Ange argument"
 
@@ -698,14 +695,13 @@ msgid "Error saving file."
 msgstr "Filen kunde ej sparas."
 
 #: ../src/document.c:1374
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
 "remains unsaved."
 msgstr ""
 "Ett fel inträffade medan filen konverterades från UTF-8 vid \"%s\". Filen "
-"sparades inte.\n"
-"Felmeddelande: %s\n"
+"sparades inte."
 
 #: ../src/document.c:1395
 #, c-format
@@ -713,11 +709,13 @@ msgid ""
 "Error message: %s\n"
 "The error occurred at \"%s\" (line: %d, column: %d)."
 msgstr ""
+"Felmeddelande: %s\n"
+"Felet inträffade vid \"%s\" (rad: %d, kolumn: %d)."
 
 #: ../src/document.c:1400
-#, fuzzy, c-format
+#, c-format
 msgid "Error message: %s."
-msgstr "(%s) kunde ej sparas"
+msgstr "Felmeddelande: %s"
 
 #: ../src/document.c:1428
 #, c-format
@@ -1004,7 +1002,6 @@ msgid "R_eload As"
 msgstr "Ladda om som"
 
 #: ../src/interface.c:392
-#, fuzzy
 msgid "Page Set_up"
 msgstr "Sidinställningar"
 
@@ -1077,7 +1074,6 @@ msgid "I_nsert Comments"
 msgstr "Infoga kommentarer"
 
 #: ../src/interface.c:564 ../src/interface.c:2222
-#, fuzzy
 msgid "Insert _ChangeLog Entry"
 msgstr "Infoga ChangeLog"
 
@@ -1086,7 +1082,6 @@ msgid "Inserts a typical ChangeLog entry in the current file"
 msgstr "Infoga en typisk ChangeLog"
 
 #: ../src/interface.c:569 ../src/interface.c:2227
-#, fuzzy
 msgid "Insert File _Header"
 msgstr "Infoga filhuvud"
 
@@ -1095,7 +1090,6 @@ msgid "Inserts a file header at the beginning of the file"
 msgstr "Infoga filhuvud i början av filen"
 
 #: ../src/interface.c:574 ../src/interface.c:2232
-#, fuzzy
 msgid "Insert _Function Description"
 msgstr "Infoga funktionsbeskrivning"
 
@@ -1104,7 +1098,6 @@ msgid "Inserts a description before the current function"
 msgstr "Infoga en beskrivning innan funktionen"
 
 #: ../src/interface.c:579 ../src/interface.c:2237
-#, fuzzy
 msgid "Insert _Multiline Comment"
 msgstr "Infoga flerradskommentar"
 
@@ -1113,7 +1106,6 @@ msgid "Inserts a multiline comment"
 msgstr "Infoga multipla kommentarer"
 
 #: ../src/interface.c:584 ../src/interface.c:2242
-#, fuzzy
 msgid "Insert _GPL Notice"
 msgstr "Infoga en GPL-beskrivning"
 
@@ -1122,7 +1114,6 @@ msgid "Inserts a GPL notice (should be done at the beginning of the file)"
 msgstr "Infoga en GPL-beskrivning (bör göras i början av filen)"
 
 #: ../src/interface.c:589 ../src/interface.c:2247
-#, fuzzy
 msgid "Insert _BSD License Notice"
 msgstr "Infoga en BSD-beskrivning"
 
@@ -1184,7 +1175,6 @@ msgid "Change the default font"
 msgstr "Byt förvalt teckensnitt"
 
 #: ../src/interface.c:718
-#, fuzzy
 msgid "To_ggle All Additional Widgets"
 msgstr "Visa / göm verktygsfält"
 
@@ -1259,12 +1249,10 @@ msgid "In_dent Type"
 msgstr "Indragstyp"
 
 #: ../src/interface.c:797 ../src/interface.c:3673
-#, fuzzy
 msgid "_Tabs"
 msgstr "Tabulatorer"
 
 #: ../src/interface.c:803 ../src/interface.c:3680
-#, fuzzy
 msgid "_Spaces"
 msgstr "Mellanslag"
 
@@ -1474,12 +1462,10 @@ msgid "Zoom out the text"
 msgstr "Förminska texten"
 
 #: ../src/interface.c:1139
-#, fuzzy
 msgid "Decrease indentation"
 msgstr "Minska indrag"
 
 #: ../src/interface.c:1144
-#, fuzzy
 msgid "Increase indentation"
 msgstr "Öka indrag"
 
@@ -1520,52 +1506,42 @@ msgid "Scribble"
 msgstr "Scribble"
 
 #: ../src/interface.c:1937 ../src/interface.c:3425
-#, fuzzy
 msgid "Images _and Text"
 msgstr "Bilder och text"
 
 #: ../src/interface.c:1943 ../src/interface.c:3457
-#, fuzzy
 msgid "_Images Only"
 msgstr "Endast bilder"
 
 #: ../src/interface.c:1949 ../src/interface.c:3449
-#, fuzzy
 msgid "_Text Only"
 msgstr "Endast text"
 
 #: ../src/interface.c:1960 ../src/interface.c:3441
-#, fuzzy
 msgid "_Large Icons"
 msgstr "Stora ikoner"
 
 #: ../src/interface.c:1965 ../src/interface.c:3433
-#, fuzzy
 msgid "_Small Icons"
 msgstr "Små ikoner"
 
 #: ../src/interface.c:1975
-#, fuzzy
 msgid "_Hide toolbar"
 msgstr "Göm verktygsfält"
 
 #: ../src/interface.c:2285
-#, fuzzy
 msgid "Find _Usage"
 msgstr "Visa användning"
 
 #: ../src/interface.c:2293
-#, fuzzy
 msgid "Go to _Tag Definition"
 msgstr "Gå till Tagg-definition"
 
 #: ../src/interface.c:2297
-#, fuzzy
 msgid "Go to T_ag Declaration"
 msgstr "Gå till Tagg-deklaration"
 
 #: ../src/interface.c:2301
-#, fuzzy
 msgid "Conte_xt Action"
 msgstr "Snabbmenyhändelse"
 
@@ -1599,12 +1575,11 @@ msgstr ""
 
 #: ../src/interface.c:2822
 msgid "Enable plugin support"
-msgstr "Aktivera stöd för insticksmoduler"
+msgstr "Aktivera stöd för tillägg"
 
 #: ../src/interface.c:2826
-#, fuzzy
 msgid "<b>Startup</b>"
-msgstr "<b>Sidofält</b>"
+msgstr "<b>Sätt på</b>"
 
 #: ../src/interface.c:2845
 msgid "Save window position and geometry"
@@ -1623,25 +1598,24 @@ msgid "Shows a confirmation dialog on exit."
 msgstr "Begär bekräftelse vid avslut."
 
 #: ../src/interface.c:2859
-#, fuzzy
 msgid "<b>Shutdown</b>"
-msgstr "<b>Starta och avsluta</b>"
+msgstr "<b>Stäng av</b>"
 
 #: ../src/interface.c:2878
-#, fuzzy
 msgid "Use project-based session files"
-msgstr "Geany projektfiler"
+msgstr "Använd projektbaserade sessionsfiler"
 
 #: ../src/interface.c:2882
 msgid ""
 "Whether to store a project's session files and open them when re-opening the "
 "project."
 msgstr ""
+"Huruvida projektets sessionsfiler skall sparas för att senare öppna den när "
+"projektet åter öppnas"
 
 #: ../src/interface.c:2885
-#, fuzzy
 msgid "<b>Projects</b>"
-msgstr "<b>Sökvägar</b>"
+msgstr "<b>Projekt</b>"
 
 #: ../src/interface.c:2904
 msgid "Beep on errors or when compilation has finished"
@@ -1704,13 +1678,15 @@ msgstr ""
 
 #: ../src/interface.c:2935
 msgid "Use the current word under the cursor for Find dialogs"
-msgstr ""
+msgstr "Använd order under muspekaren i vid Sök"
 
 #: ../src/interface.c:2939
 msgid ""
 "Use current word under the cursor when opening the Find, Find in Files or "
 "Replace dialog and there is no selection."
 msgstr ""
+"Använd ordet under muspekaren när Sök, Sök i filer eller Ersätt väljs och "
+"det inte finns något markerat tidigare"
 
 #: ../src/interface.c:2942 ../src/interface.c:3272 ../src/interface.c:3991
 msgid "<b>Miscellaneous</b>"
@@ -1927,9 +1903,8 @@ msgid "Display the Zoom In and Zoom Out buttons in the toolbar"
 msgstr "Visa förstoringsknapparna i verktygsfältet"
 
 #: ../src/interface.c:3362
-#, fuzzy
 msgid "Show Increase and Decrease Indentation buttons"
-msgstr "Visa Gör Om- och Ångra-knapparna"
+msgstr "Visa knapparna för att öka/minska indrag"
 
 #: ../src/interface.c:3369
 msgid "Show Search field"
@@ -2160,7 +2135,6 @@ msgstr ""
 "läsning"
 
 #: ../src/interface.c:3743
-#, fuzzy
 msgid "Fold/Unfold all children of a fold point"
 msgstr "Vik upp alla vid uppvikningspunkten"
 
@@ -2169,6 +2143,8 @@ msgid ""
 "Fold or unfold all children of a fold point. By pressing the Shift key while "
 "clicking on a fold symbol the contrary behaviour is used."
 msgstr ""
+"Vik eller vik upp allt vid vikningspunkten. Genom att hålla in shift-"
+"tangenten medan du klickar på vikningspunkten kan motsatt effekt uppnås."
 
 #: ../src/interface.c:3749
 msgid "Use indicators to show compile errors"
@@ -2233,7 +2209,7 @@ msgstr "Antal rader att visa i autokompletteringslistan."
 
 #: ../src/interface.c:3813
 msgid "Characters to type for completion:"
-msgstr ""
+msgstr "Tecken att skriva för komplettering:"
 
 #: ../src/interface.c:3820
 msgid "Rows of symbol completion list:"
@@ -2243,7 +2219,7 @@ msgstr "Rader i symbolkompletteringslistan:"
 msgid ""
 "The amount of characters which are necessary to show the symbol auto "
 "completion list."
-msgstr ""
+msgstr "Mängden tecken som behövs för att visa symbolautokompletteringslistan."
 
 #: ../src/interface.c:3836
 msgid "<b>Completions</b>"
@@ -2557,7 +2533,6 @@ msgid "Reload file"
 msgstr "Ladda om fil"
 
 #: ../src/keybindings.c:205
-#, fuzzy
 msgid "Project"
 msgstr "Projekt"
 
@@ -2624,20 +2599,19 @@ msgstr "Visa macrolistan"
 
 #: ../src/keybindings.c:242
 msgid "Clipboard"
-msgstr ""
+msgstr "Klippbord"
 
 #: ../src/keybindings.c:245
 msgid "Cut"
-msgstr ""
+msgstr "Klipp ut"
 
 #: ../src/keybindings.c:247
-#, fuzzy
 msgid "Copy"
-msgstr "Företag:"
+msgstr "Kopiera"
 
 #: ../src/keybindings.c:249
 msgid "Paste"
-msgstr ""
+msgstr "Klistra in"
 
 #: ../src/keybindings.c:251
 msgid "Copy current line(s)"
@@ -2648,9 +2622,8 @@ msgid "Cut current line(s)"
 msgstr "Klipp ut rad(er)"
 
 #: ../src/keybindings.c:255
-#, fuzzy
 msgid "Select"
-msgstr "Markera allt"
+msgstr "Markera"
 
 #: ../src/keybindings.c:258
 msgid "Select All"
@@ -2669,7 +2642,6 @@ msgid "Select current paragraph"
 msgstr "Välj paragraf"
 
 #: ../src/keybindings.c:266
-#, fuzzy
 msgid "Format"
 msgstr "Format"
 
@@ -2722,7 +2694,6 @@ msgid "Send to Custom Command 3"
 msgstr "Definiera användarkommando 3"
 
 #: ../src/keybindings.c:297
-#, fuzzy
 msgid "Insert"
 msgstr "Infoga"
 
@@ -2735,12 +2706,10 @@ msgid "Insert alternative whitespace"
 msgstr "Infoga alternativt tomt tecken"
 
 #: ../src/keybindings.c:305
-#, fuzzy
 msgid "Settings"
-msgstr "Markeringar"
+msgstr "Inställningar"
 
 #: ../src/keybindings.c:311
-#, fuzzy
 msgid "Search"
 msgstr "Sök"
 
@@ -2781,7 +2750,6 @@ msgid "Find Usage"
 msgstr "Visa användning"
 
 #: ../src/keybindings.c:334
-#, fuzzy
 msgid "Go to"
 msgstr "Gå till rad"
 
@@ -2810,7 +2778,6 @@ msgid "Go to Tag Declaration"
 msgstr "Gå till Tagg-deklaration"
 
 #: ../src/keybindings.c:359
-#, fuzzy
 msgid "View"
 msgstr "Visa"
 
@@ -2840,7 +2807,7 @@ msgstr "Förminska"
 
 #: ../src/keybindings.c:376
 msgid "Focus"
-msgstr ""
+msgstr "Fokusera"
 
 #: ../src/keybindings.c:379
 msgid "Switch to Editor"
@@ -2859,12 +2826,10 @@ msgid "Switch to Search Bar"
 msgstr "Växla till sökfältet"
 
 #: ../src/keybindings.c:387
-#, fuzzy
 msgid "Switch to Sidebar"
-msgstr "Växla till sökfältet"
+msgstr "Växla till sidofältet"
 
 #: ../src/keybindings.c:389
-#, fuzzy
 msgid "Notebook tab"
 msgstr "Anteckningsblockets tab-kommandon"
 
@@ -2889,17 +2854,14 @@ msgid "Move document right"
 msgstr "Flytta dokumentet till höger"
 
 #: ../src/keybindings.c:402
-#, fuzzy
 msgid "Move document first"
-msgstr "Flytta dokumentet till vänster"
+msgstr "Flytta dokumentet först"
 
 #: ../src/keybindings.c:404
-#, fuzzy
 msgid "Move document last"
-msgstr "Flytta dokumentet till vänster"
+msgstr "Flytta dokumentet sist"
 
 #: ../src/keybindings.c:406
-#, fuzzy
 msgid "Document"
 msgstr "Dokument"
 
@@ -3013,11 +2975,11 @@ msgstr "Ladda inte autokompletteringsdata (se dokumentationen)"
 
 #: ../src/main.c:134
 msgid "Don't load plugins"
-msgstr "Ladda inte plugins"
+msgstr "Ladda inte tillägg"
 
 #: ../src/main.c:136
 msgid "Print Geany's installation prefix"
-msgstr ""
+msgstr "Visa Geany's installationsprefix"
 
 #: ../src/main.c:137
 msgid "don't load the previous session's files"
@@ -3085,9 +3047,10 @@ msgid ""
 "The plugin \"%s\" is not binary compatible with this release of Geany - "
 "please recompile it."
 msgstr ""
+"Tillägget \"%s\" är inte binärt kompatibel med denna version av Geany. Var "
+"god, kompilera om modulen."
 
 #: ../src/plugins.c:679
-#, fuzzy
 msgid "_Plugin Manager"
 msgstr "Tillägshanteraren"
 
@@ -3207,19 +3170,18 @@ msgstr ""
 "eller högre.</i>"
 
 #: ../src/printing.c:270
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Page %d of %d</b>"
-msgstr "<b>Ändrad:</b>"
+msgstr "<b>Sida %d av %d</b>"
 
 #: ../src/printing.c:338
-#, fuzzy
 msgid "Document Setup"
-msgstr "Dokumentmeny"
+msgstr "Dokumentinställningar"
 
 #: ../src/printing.c:728
-#, fuzzy, c-format
+#, c-format
 msgid "Printing of file %s was cancelled."
-msgstr "Utskriften \"%s\" misslyckades (felkod: %s)."
+msgstr "Utskriften av filen %s avbröts"
 
 #: ../src/printing.c:730 ../src/printing.c:849
 #, c-format
@@ -3227,13 +3189,13 @@ msgid "File %s printed."
 msgstr "Fil %s utskriven."
 
 #: ../src/printing.c:779
-#, fuzzy, c-format
+#, c-format
 msgid "Printing of %s failed (%s)."
 msgstr "Utskriften \"%s\" misslyckades (felkod: %s)."
 
 #: ../src/printing.c:819
 msgid "Please set a print command in the preferences dialog first"
-msgstr ""
+msgstr "Ställ in ett utskriftskommando i inställningarna först"
 
 #: ../src/printing.c:827
 #, c-format
@@ -3278,7 +3240,6 @@ msgid "Base path:"
 msgstr "Bassökväg:"
 
 #: ../src/project.c:161 ../src/project.c:433
-#, fuzzy
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
@@ -3319,7 +3280,7 @@ msgstr "Beskrivning:"
 
 #: ../src/project.c:442
 msgid "Make in base path"
-msgstr ""
+msgstr "Kör Make i bassökvägen"
 
 #: ../src/project.c:447
 msgid "Run command:"
@@ -3340,7 +3301,7 @@ msgid "Do you want to close it before proceeding?"
 msgstr "Vill du stänga innan du fortsätter?"
 
 #: ../src/project.c:568
-#, fuzzy, c-format
+#, c-format
 msgid "The '%s' project is already open."
 msgstr "Projektet '%s' är redan öppnat."
 
@@ -3358,9 +3319,9 @@ msgid "You have specified an invalid project filename."
 msgstr "Du har valt ett ogiltigt filnamn."
 
 #: ../src/project.c:621
-#, fuzzy, c-format
+#, c-format
 msgid "Project file could not be written (%s)."
-msgstr "Projektfilen kunde inte skrivas."
+msgstr "Projektfilen kunde inte skrivas (%s)."
 
 #: ../src/project.c:641
 msgid "Create the project's base path directory?"
@@ -3449,7 +3410,6 @@ msgstr "Sök efter:"
 
 #. Now add the multiple match options
 #: ../src/search.c:347
-#, fuzzy
 msgid "_Find All"
 msgstr "Hitta alla"
 
@@ -3483,13 +3443,11 @@ msgid "Replace & Fi_nd"
 msgstr "Sök & ersätt"
 
 #: ../src/search.c:445
-#, fuzzy
 msgid "Replace wit_h:"
-msgstr "Ersätt inom:"
+msgstr "Ersätt med:"
 
 #. Now add the multiple replace options
 #: ../src/search.c:492
-#, fuzzy
 msgid "Re_place All"
 msgstr "Ersätt alla"
 
@@ -3506,7 +3464,6 @@ msgid "_Directory:"
 msgstr "Sökväg:"
 
 #: ../src/search.c:621
-#, fuzzy
 msgid "Fixed s_trings"
 msgstr "Fixerade strängar"
 
@@ -3713,30 +3670,28 @@ msgid "Variables"
 msgstr "Variabler"
 
 #: ../src/symbols.c:648
-#, fuzzy
 msgid "JavaScript functions"
-msgstr "Javascript källkodsfil"
+msgstr "Javascript funktioner"
 
 #: ../src/symbols.c:649
 msgid "Anchor"
-msgstr ""
+msgstr "Ankare"
 
 #: ../src/symbols.c:650
 msgid "Heading (H1)"
-msgstr ""
+msgstr "Rubrik (H1)"
 
 #: ../src/symbols.c:651
 msgid "Heading (H2)"
-msgstr ""
+msgstr "Rubrik (H2)"
 
 #: ../src/symbols.c:652
 msgid "Heading (H3)"
-msgstr ""
+msgstr "Rubrik (H3)"
 
 #: ../src/symbols.c:669
-#, fuzzy
 msgid "Modules"
-msgstr "Modul"
+msgstr "Moduler"
 
 #: ../src/symbols.c:671
 msgid "Singletons"
@@ -3752,30 +3707,28 @@ msgid "Members"
 msgstr "Medlemmar"
 
 #: ../src/symbols.c:741 ../src/symbols.c:763
-#, fuzzy
 msgid "Labels"
-msgstr "Etikett"
+msgstr "Etiketter"
 
 #: ../src/symbols.c:752
 msgid "Subroutines"
-msgstr ""
+msgstr "Subrutiner"
 
 #: ../src/symbols.c:755
 msgid "Blocks"
-msgstr ""
+msgstr "Block"
 
 #: ../src/symbols.c:764 ../src/symbols.c:773 ../src/symbols.c:796
 msgid "Macros"
 msgstr "Makron"
 
 #: ../src/symbols.c:765
-#, fuzzy
 msgid "Defines"
-msgstr "Rader:"
+msgstr "Definitioner"
 
 #: ../src/symbols.c:772
 msgid "Targets"
-msgstr ""
+msgstr "Mål"
 
 #: ../src/symbols.c:784
 msgid "Namespaces"
@@ -3791,7 +3744,7 @@ msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Okänd filändelse för filen \"%s\".\n"
 
 #: ../src/symbols.c:1028
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create tags file, perhaps because no tags were found.\n"
 msgstr "Misslyckades med att skapa tagg-fil.\n"
 
@@ -3849,10 +3802,12 @@ msgid ""
 "The executed custom command returned an error. Your selection was not "
 "changed. Error message: %s"
 msgstr ""
+"Det exekverade kommandot returnerade ett fel. Din markering ändrades inte. "
+"Felmeddelande: %s"
 
 #: ../src/tools.c:217
 msgid "The executed custom command exited with an unsuccessful exit code."
-msgstr ""
+msgstr "Det exekverade kommandot returnerade en felkod."
 
 #: ../src/tools.c:244
 #, c-format
@@ -3860,9 +3815,9 @@ msgid "Passing data and executing custom command: %s"
 msgstr "Skickar data och exekverar användarkommando: %s"
 
 #: ../src/tools.c:288
-#, fuzzy, c-format
+#, c-format
 msgid "Custom command failed: %s"
-msgstr "Inga användarkommandon har definierats."
+msgstr "Det egendefinierade kommandot misslyckades: %s"
 
 #: ../src/tools.c:302 ../src/tools.c:535
 msgid "Set Custom Commands"
@@ -4021,12 +3976,10 @@ msgid "Terminal"
 msgstr "Terminal"
 
 #: ../src/vte.c:483
-#, fuzzy
 msgid "_Set Path From Document"
-msgstr "Ange sökväg"
+msgstr "Ange sökväg från dokumentet"
 
 #: ../src/vte.c:488
-#, fuzzy
 msgid "_Restart Terminal"
 msgstr "Starta om terminalen"
 
@@ -4039,6 +3992,7 @@ msgid ""
 "Could not change the directory in the VTE because it probably contains a "
 "command."
 msgstr ""
+"Kunde ej ändra sökväg i VTE därför att det troligvis innehåller ett kommando."
 
 #: ../src/vte.c:651
 msgid "Terminal plugin"
@@ -4125,14 +4079,13 @@ msgid "Whether to scroll to the bottom when output is generated."
 msgstr "Huruvida texten i fönstret längst ner skall rullas när utmatning sker."
 
 #: ../src/vte.c:768
-#, fuzzy
 msgid "Override Geany keybindings"
-msgstr "Vill du bryta tangentbindning?"
+msgstr "Vill du bryta Geanys tangentbindning?"
 
 #: ../src/vte.c:770
 msgid ""
 "Allows the VTE to receive keyboard shortcuts (apart from focus commands)."
-msgstr ""
+msgstr "Tillåter VTE att motta tangentbordskommandon (förutom fokuskommandon)."
 
 #: ../src/vte.c:774
 msgid "Disable menu shortcut key (F10 by default)"
@@ -4160,13 +4113,15 @@ msgstr ""
 #. * use the object for the toggled handler of check_skip_script checkbox
 #: ../src/vte.c:786
 msgid "Don't use run script"
-msgstr ""
+msgstr "Använd inte körbart skript"
 
 #: ../src/vte.c:787
 msgid ""
 "Don't use the simple run script which is usually used to display the exit "
 "status of the executed program."
 msgstr ""
+"Använd inte det enkla körskriptet som vanligtvis används för att visa "
+"felmeddelanden för exekverat program."
 
 #: ../src/vte.c:791
 msgid "Execute programs in VTE"
@@ -4273,12 +4228,10 @@ msgid "Create Cla_ss"
 msgstr "Skapa klass"
 
 #: ../plugins/classbuilder.c:787
-#, fuzzy
 msgid "_C++ Class"
 msgstr "C++ klass"
 
 #: ../plugins/classbuilder.c:790
-#, fuzzy
 msgid "_GTK+ Class"
 msgstr "GTK+ klass"
 
@@ -4397,20 +4350,17 @@ msgstr "Exportera"
 
 #. HTML
 #: ../plugins/export.c:719
-#, fuzzy
 msgid "As _HTML"
 msgstr "Som HTML"
 
 #. LaTeX
 #: ../plugins/export.c:726
-#, fuzzy
 msgid "As _LaTeX"
 msgstr "Som LATEX"
 
 #: ../plugins/vcdiff.c:46
-#, fuzzy
 msgid "Version Diff"
-msgstr "VC Diff"
+msgstr "Version Diff"
 
 #: ../plugins/vcdiff.c:46
 msgid "Creates a patch of a file against version control."
@@ -4437,17 +4387,16 @@ msgstr "Inga ändringar gjordes."
 #: ../plugins/vcdiff.c:377
 #, c-format
 msgid "unknown error while trying to spawn a process for %s"
-msgstr ""
+msgstr "okänt fel vid startandet av en process för %s"
 
 #: ../plugins/vcdiff.c:380
 #, c-format
 msgid "An error occurred (%s)."
-msgstr ""
+msgstr "Ett fel inträffade (%s)"
 
 #: ../plugins/vcdiff.c:509
-#, fuzzy
 msgid "_Version Diff"
-msgstr "VC Diff"
+msgstr "_Version Diff"
 
 #. Single file
 #: ../plugins/vcdiff.c:519
@@ -4491,14 +4440,13 @@ msgstr "För många saker markerade!"
 #: ../plugins/filebrowser.c:371
 #, c-format
 msgid "Could not execute configured external command '%s' (%s)."
-msgstr ""
+msgstr "Kunde inte exekvera konfigurerat externt kommando '%s' (%s)."
 
 #: ../plugins/filebrowser.c:530
 msgid "Open _externally"
-msgstr ""
+msgstr "Öppna externt"
 
 #: ../plugins/filebrowser.c:540
-#, fuzzy
 msgid "_Find in Files"
 msgstr "Sök i filer"
 
@@ -4524,16 +4472,15 @@ msgstr "Ange sökväg"
 
 #: ../plugins/filebrowser.c:869
 msgid "Focus File List"
-msgstr ""
+msgstr "Fokusera fillistan"
 
 #: ../plugins/filebrowser.c:871
 msgid "Focus Path Entry"
-msgstr ""
+msgstr "Fokusera sökvägen"
 
 #: ../plugins/filebrowser.c:887
-#, fuzzy
 msgid "External open command:"
-msgstr "Andra kommandon"
+msgstr "Öppna via externt kommando:"
 
 #: ../plugins/filebrowser.c:896
 #, c-format
@@ -4544,59 +4491,59 @@ msgid ""
 "%d will be replaced with the path name of the selected file without the "
 "filename"
 msgstr ""
+"Kommandot att exekvera med \"Öppna med\". Du kan använda %f och %d "
+"wildcards.\n"
+"%f kommer att ersättas med filnamnet och fullständig sökväg\n"
+"%d kommer att ersättas med sökvägen till vald fil (utan filnamnet)"
 
 #: ../plugins/filebrowser.c:902
-#, fuzzy
 msgid "Show hidden files"
 msgstr "Visa gömda filer"
 
 #: ../plugins/filebrowser.c:907
-#, fuzzy
 msgid "Hide object files"
-msgstr "Projektfiler"
+msgstr "Göm objektfiler"
 
 #: ../plugins/filebrowser.c:911
 msgid ""
 "Don't show generated object files in the file browser, this includes *.o, *."
 "obj. *.so, *.dll, *.a, *.lib"
 msgstr ""
+"Visa inte genererade objektfiler i filläsaren, detta inkluderar *.o, *.obj. "
+"*.so, *.dll, *.a, *.lib"
 
 #: ../plugins/filebrowser.c:940 ../plugins/autosave.c:179
-#, fuzzy
 msgid "Plugin configuration directory could not be created."
-msgstr "Konfigureringsmappen kunde inte skapas (%s)"
+msgstr "Konfigureringsmappen för insticksmoduler kunde inte skapas."
 
 #: ../plugins/autosave.c:40 ../plugins/autosave.c:118
-#, fuzzy
 msgid "Auto Save"
-msgstr "Spara"
+msgstr "Spara automatiskt"
 
 #: ../plugins/autosave.c:40
 msgid "Save automatically all open files in a given time interval."
-msgstr ""
+msgstr "Spara automatiskt alla öppna filer inom en given tidsintervall."
 
 #: ../plugins/autosave.c:76
 #, c-format
 msgid "Autosave: Saved %d files automatically."
-msgstr ""
+msgstr "Autospara: Sparade %d filer automatiskt."
 
 #: ../plugins/autosave.c:125
 msgid "Auto save interval:"
-msgstr ""
+msgstr "Intervall för autosparande:"
 
 #: ../plugins/autosave.c:132
-#, fuzzy
 msgid "seconds"
-msgstr "%s kommandon"
+msgstr "sekunder"
 
 #: ../plugins/autosave.c:141
 msgid "Print status message if files have been automatically saved"
-msgstr ""
+msgstr "Skriv statusmeddelande om filer sparats automatiskt"
 
 #: ../plugins/autosave.c:147
-#, fuzzy
 msgid "Save only current open file"
-msgstr "Spara fil"
+msgstr "Spara endast den öppna filen"
 
 #~ msgid "Something very strange is occurred, could not stat %s (%s)."
 #~ msgstr "Något underligt hände, kunde inte starta %s (%s)"
