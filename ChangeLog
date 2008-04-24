@@ -1,3 +1,11 @@
+2008-04-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * data/filetypes.xml, data/filetypes.javascript, src/highlighting.c:
+   Unify the embedded JavaScript styles with the styles of the
+   JavaScript filetype for a more consistent styling of JavaScript in
+   general.
+
+
 2008-04-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/utils.c:
