@@ -1,3 +1,10 @@
+2008-04-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/utils.c:
+   Make utils_get_file_list() use a case-insensitive search so that the
+   file browser lists files and directories in a more intuitive order.
+
+
 2008-04-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/win32.c, src/project.h, src/geany.h, src/keyfile.c,

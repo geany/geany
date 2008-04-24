@@ -1765,7 +1765,7 @@ GSList *utils_get_file_list(const gchar *path, guint *length, GError **error)
 		const gchar *filename = g_dir_read_name(dir);
 		if (filename == NULL) break;
 
-		list = g_slist_insert_sorted(list, g_strdup(filename), (GCompareFunc) strcmp);
+		list = g_slist_insert_sorted(list, g_strdup(filename), (GCompareFunc) g_strcasecmp);
 		len++;
 	}
 	g_dir_close(dir);
