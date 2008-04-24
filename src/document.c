@@ -516,14 +516,6 @@ static gint document_create(const gchar *utf8_filename)
 }
 
 
-void document_close_all()
-{
-	/* the code is in callbacks.c because when quitting, checking for changes
-	 * has to be done before saving the session */
-	on_close_all1_activate(NULL, NULL);
-}
-
-
 /**
  *  Remove the given notebook tab at @a page_num and clear all related information
  *  in the document list.
@@ -2721,6 +2713,71 @@ gint document_clone(gint old_idx, const gchar *utf8_filename)
 
 	ui_document_show_hide(idx);
 	return idx;
+}
+
+
+/* @note If successful, this should always be followed up with a call to
+ * document_close_all().
+ * @return TRUE if all files were saved or had their changes discarded. */
+gboolean document_account_for_unsaved(void)
+{
+	gint p;
+	guint i, len = doc_array->len;
+
+	for (p = 0; p < gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)); p++)
+	{
+		gint idx = document_get_n_idx(p);
+
+		if (doc_list[idx].changed)
+		{
+			if (! dialogs_show_unsaved_file(idx))
+				return FALSE;
+		}
+	}
+	/* all documents should now be accounted for, so ignore any changes */
+	for (i = 0; i < len; i++)
+	{
+		if (doc_list[i].is_valid && doc_list[i].changed)
+		{
+			doc_list[i].changed = FALSE;
+		}
+	}
+	return TRUE;
+}
+
+
+static void force_close_all(void)
+{
+	guint i, len = doc_array->len;
+
+	/* check all documents have been accounted for */
+	for (i = 0; i < len; i++)
+	{
+		if (doc_list[i].is_valid)
+		{
+			g_return_if_fail(!doc_list[i].changed);
+		}
+	}
+	main_status.closing_all = TRUE;
+
+	while (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) > 0)
+	{
+		document_remove(0);
+	}
+
+	main_status.closing_all = FALSE;
+}
+
+
+gboolean document_close_all(void)
+{
+	if (! document_account_for_unsaved())
+		return FALSE;
+
+	force_close_all();
+
+	tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
+	return TRUE;
 }
 
 

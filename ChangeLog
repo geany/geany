@@ -11,6 +11,11 @@
  * src/utils.c:
    Make utils_get_file_list() use a case-insensitive search so that the
    file browser lists files and directories in a more intuitive order.
+ * src/project.c:
+   Fix build because of wrong document_close_all() usage - oops.
+ * src/callbacks.c, src/document.c, src/document.h:
+   Move Close All functions to document.c.
+   Add document_account_for_unsaved().
 
 
 2008-04-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

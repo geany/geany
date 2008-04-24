@@ -105,25 +105,6 @@ static gboolean check_no_unsaved(void)
 }
 
 
-/* @return TRUE if all files were saved or had their changes discarded. */
-static gboolean account_for_unsaved(void)
-{
-	gint p;
-
-	for (p = 0; p < gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)); p++)
-	{
-		gint idx = document_get_n_idx(p);
-
-		if (doc_list[idx].changed)
-		{
-			if (! dialogs_show_unsaved_file(idx))
-				return FALSE;
-		}
-	}
-	return TRUE;
-}
-
-
 /* set editor_info.click_pos to the current cursor position if insert_callback_from_menu is TRUE
  * to prevent invalid cursor positions which can cause segfaults */
 static void verify_click_pos(gint idx)
@@ -136,29 +117,6 @@ static void verify_click_pos(gint idx)
 }
 
 
-static void force_close_all()
-{
-	guint i, len = doc_array->len;
-
-	main_status.closing_all = TRUE;
-
-	/* all documents should be accounted for, so ignore any changes */
-	for (i = 0; i < len; i++)
-	{
-		if (doc_list[i].is_valid && doc_list[i].changed)
-		{
-			doc_list[i].changed = FALSE;
-		}
-	}
-	while (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) > 0)
-	{
-		document_remove(0);
-	}
-
-	main_status.closing_all = FALSE;
-}
-
-
 /* should only be called from on_exit_clicked */
 static void quit_app(void)
 {
@@ -167,7 +125,7 @@ static void quit_app(void)
 	if (app->project != NULL)
 		project_close(FALSE);	/* save project session files */
 
-	force_close_all();
+	document_close_all();
 
 	main_quit();
 }
@@ -181,7 +139,7 @@ on_exit_clicked                        (GtkWidget *widget, gpointer gdata)
 
 	if (! check_no_unsaved())
 	{
-		if (account_for_unsaved())
+		if (document_account_for_unsaved())
 		{
 			quit_app();
 			return FALSE;
@@ -267,23 +225,11 @@ on_save_all1_activate                  (GtkMenuItem     *menuitem,
 }
 
 
-static gboolean close_all(void)
-{
-	if (! account_for_unsaved())
-		return FALSE;
-
-	force_close_all();
-
-	tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
-	return TRUE;
-}
-
-
 void
 on_close_all1_activate                 (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	close_all();
+	document_close_all();
 }
 
 

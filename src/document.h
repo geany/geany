@@ -151,9 +151,11 @@ void document_set_text_changed(gint idx);
 void document_apply_update_prefs(gint idx);
 
 
-void document_close_all();
-
 gboolean document_remove(guint page_num);
+
+gboolean document_account_for_unsaved(void);
+
+gboolean document_close_all(void);
 
 
 gint document_new_file_if_non_open();
