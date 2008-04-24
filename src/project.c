@@ -324,7 +324,7 @@ void project_close(gboolean open_default)
 	if (project_prefs.project_session)
 	{
 		/* close all existing tabs first */
-		document_close_all(NULL, NULL);
+		document_close_all();
 
 		/* after closing all tabs let's open the tabs found in the default config */
 		if (open_default == TRUE && cl_options.load_session)
@@ -905,7 +905,7 @@ static gboolean load_config(const gchar *filename)
 		/* save current (non-project) session (it could has been changed since program startup) */
 		configuration_save_default_session();
 		/* now close all open files */
-		document_close_all(NULL, NULL);
+		document_close_all();
 		/* read session files so they can be opened with configuration_open_files() */
 		configuration_load_session_files(config);
 	}
