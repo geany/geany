@@ -677,19 +677,13 @@ gboolean utils_atob(const gchar *str)
 }
 
 
+/* NULL-safe version of g_path_is_absolute(). */
 gboolean utils_is_absolute_path(const gchar *path)
 {
 	if (! path || *path == '\0')
 		return FALSE;
-#ifdef G_OS_WIN32
-	if (path[0] == '\\' || path[1] == ':')
-		return TRUE;
-#else
-	if (path[0] == '/')
-		return TRUE;
-#endif
 
-	return FALSE;
+	return g_path_is_absolute(path);
 }
 
 

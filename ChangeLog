@@ -2,6 +2,9 @@
 
  * src/document.c:
    Add/reorder a recent file item when closing a document.
+ * src/utils.c:
+   Make utils_is_absolute_path() a NULL-safe version of
+   g_path_is_absolute().
 
 
 2008-04-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
