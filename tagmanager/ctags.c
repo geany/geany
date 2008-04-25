@@ -219,7 +219,7 @@ char *CurrentDirectory = NULL;
 #ifdef HAVE_MKSTEMP
 static const char *ExecutableProgram = NULL;
 #endif
-static const char *ExecutableName = NULL;
+static const char *ExecutableName = "geany";
 static stringList* Excluded = NULL;
 
 static struct { long files, lines, bytes; } Totals = { 0, 0, 0 };

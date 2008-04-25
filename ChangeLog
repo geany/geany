@@ -5,6 +5,9 @@
    from document_save_file().
    Include missing error string in error message when writing the
    file failed.
+ * tagmanager/ctags.c:
+   Set ExecutableName to "geany" to prevent possible crashes on
+   Windows and maybe other systems.
 
 
 2008-04-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
