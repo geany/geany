@@ -8,12 +8,12 @@ msgstr ""
 "Project-Id-Version: geany 0.14\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-04-05 11:38+0200\n"
-"PO-Revision-Date: 2008-04-13 16:02+0100\n"
+"PO-Revision-Date: 2008-04-22 11:42+0200\n"
 "Last-Translator: Moal Jean-Philippe <skateinmars@skateinmars.net>\n"
 "Language-Team: French <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit"
 "X-Poedit-Country: FRANCE\n"
 
 #: ../geany.desktop.in.h:1
@@ -194,7 +194,7 @@ msgstr "Compile le fichier courant en utilisant l'outil make"
 #. next error
 #: ../src/build.c:1106 ../src/build.c:1216
 msgid "_Next Error"
-msgstr "Prochai_ne erreur"
+msgstr "Erreur suiva_nte"
 
 #: ../src/build.c:1121 ../src/interface.c:1105
 msgid "Run or view the current file"
@@ -1173,7 +1173,7 @@ msgstr "Rechercher la sélection _vers l'arrière"
 
 #: ../src/interface.c:680
 msgid "Next _Message"
-msgstr "Prochain _message"
+msgstr "_Message suivant"
 
 #: ../src/interface.c:689 ../src/interface.c:2310
 msgid "_Go to Line"
@@ -1698,7 +1698,7 @@ msgid ""
 "clicking Find Next/Previous"
 msgstr ""
 "Toujours reprendre la recherche en boucle et cacher la fenêtre de recherche "
-"après un clic sur Prochain/Précédent"
+"après un clic sur Suivant/Précédent"
 
 #: ../src/interface.c:2935
 msgid "Use the current word under the cursor for Find dialogs"
@@ -2806,7 +2806,7 @@ msgstr "Rechercher dans les fichiers"
 
 #: ../src/keybindings.c:330
 msgid "Next Message"
-msgstr "Prochain message"
+msgstr "Message suivant"
 
 #: ../src/keybindings.c:332
 msgid "Find Usage"
@@ -2826,7 +2826,7 @@ msgstr "Ajouter/Supprimer un marqueur"
 
 #: ../src/keybindings.c:350
 msgid "Go to next marker"
-msgstr "Se rendre au prochain marqueur"
+msgstr "Se rendre au marqueur suivant"
 
 #: ../src/keybindings.c:353
 msgid "Go to previous marker"
@@ -2958,7 +2958,7 @@ msgstr "Make object"
 
 #: ../src/keybindings.c:431
 msgid "Next error"
-msgstr "Prochaine erreur"
+msgstr "Erreur suivante"
 
 #: ../src/keybindings.c:433
 msgid "Run"
@@ -3480,7 +3480,7 @@ msgstr "_Précédent"
 
 #: ../src/search.c:316
 msgid "_Next"
-msgstr "Prochai_n"
+msgstr "Suiva_nt"
 
 #: ../src/search.c:320 ../src/search.c:442 ../src/search.c:601
 msgid "_Search for:"
