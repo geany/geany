@@ -534,6 +534,10 @@ gboolean document_remove(guint page_num)
 		{
 			return FALSE;
 		}
+		/* TODO: check g_file_test(doc_list[idx].real_name, G_FILE_TEST_EXISTS) */
+		if (! main_status.closing_all && g_path_is_absolute(DOC_FILENAME(idx)))
+			ui_add_recent_file(doc_list[idx].file_name);
+
 		notebook_remove_page(page_num);
 		treeviews_remove_document(idx);
 		navqueue_remove_file(doc_list[idx].file_name);
