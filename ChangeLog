@@ -1,3 +1,12 @@
+2008-04-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/document.c:
+   Refactor write_data_to_disk() and save_convert_to_encoding()
+   from document_save_file().
+   Include missing error string in error message when writing the
+   file failed.
+
+
 2008-04-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/document.c:

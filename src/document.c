@@ -1315,6 +1315,98 @@ gboolean document_save_file_as(gint idx)
 }
 
 
+static gsize save_convert_to_encoding(gint idx, gchar *data, gsize *len)
+{
+	GError *conv_error = NULL;
+	gchar* conv_file_contents = NULL;
+	gsize bytes_read;
+	gsize conv_len;
+
+	g_return_val_if_fail(data != NULL, FALSE);
+	g_return_val_if_fail(len != NULL, FALSE);
+
+	/* try to convert it from UTF-8 to original encoding */
+	conv_file_contents = g_convert(data, *len - 1, doc_list[idx].encoding, "UTF-8",
+												&bytes_read, &conv_len, &conv_error);
+
+	if (conv_error != NULL)
+	{
+		gchar *text = g_strdup_printf(
+_("An error occurred while converting the file from UTF-8 in \"%s\". The file remains unsaved."),
+			doc_list[idx].encoding);
+		gchar *error_text;
+
+		if (conv_error->code == G_CONVERT_ERROR_ILLEGAL_SEQUENCE)
+		{
+			gchar *context = NULL;
+			gint line, column;
+			gint context_len;
+			gunichar unic;
+			/* don't read over the doc length */
+			gint max_len = MIN((gint)bytes_read + 6, (gint)*len - 1);
+			context = g_malloc(7); /* read 6 bytes from Sci + '\0' */
+			sci_get_text_range(doc_list[idx].sci, bytes_read, max_len, context);
+
+			/* take only one valid Unicode character from the context and discard the leftover */
+			unic = g_utf8_get_char_validated(context, -1);
+			context_len = g_unichar_to_utf8(unic, context);
+			context[context_len] = '\0';
+			get_line_column_from_pos(idx, bytes_read, &line, &column);
+
+			error_text = g_strdup_printf(
+				_("Error message: %s\nThe error occurred at \"%s\" (line: %d, column: %d)."),
+				conv_error->message, context, line + 1, column);
+			g_free(context);
+		}
+		else
+			error_text = g_strdup_printf(_("Error message: %s."), conv_error->message);
+
+		geany_debug("encoding error: %s", conv_error->message);
+		dialogs_show_msgbox_with_secondary(GTK_MESSAGE_ERROR, text, error_text);
+		g_error_free(conv_error);
+		g_free(text);
+		g_free(error_text);
+		return FALSE;
+	}
+	else
+	{
+		g_free(data);
+		data = conv_file_contents;
+		*len = conv_len;
+	}
+
+	return TRUE;
+}
+
+
+static gint write_data_to_disk(gint idx, const gchar *data, gint len)
+{
+	FILE *fp;
+	gint bytes_written;
+	gchar *locale_filename = NULL;
+	gint err = 0;
+
+	g_return_val_if_fail(data != NULL, EINVAL);
+
+	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
+	fp = g_fopen(locale_filename, "wb");
+	if (fp == NULL)
+	{
+		g_free(locale_filename);
+		return errno;
+	}
+
+	bytes_written = fwrite(data, sizeof(gchar), len, fp);
+
+	if (len != bytes_written)
+		err = errno;
+
+	fclose(fp);
+
+	return err;
+}
+
+
 /**
  *  Save the %document specified by @a idx. Saving includes replacing tabs by spaces,
  *  stripping trailing spaces and adding a final new line at the end of the file (all only if
@@ -1331,13 +1423,15 @@ gboolean document_save_file_as(gint idx)
 gboolean document_save_file(gint idx, gboolean force)
 {
 	gchar *data;
-	FILE *fp;
-	gint bytes_written, len;
-	gchar *locale_filename = NULL;
+	gsize len;
+	gint err;
 
-	if (! DOC_IDX_VALID(idx)) return FALSE;
+	if (! DOC_IDX_VALID(idx))
+		return FALSE;
+
 	/* the "changed" flag should exclude the "readonly" flag, but check it anyway for safety */
-	if (! force && (! doc_list[idx].changed || doc_list[idx].readonly)) return FALSE;
+	if (! force && (! doc_list[idx].changed || doc_list[idx].readonly))
+		return FALSE;
 
 	if (doc_list[idx].file_name == NULL)
 	{
@@ -1375,59 +1469,10 @@ gboolean document_save_file(gint idx, gboolean force)
 	if (doc_list[idx].encoding != NULL && ! utils_str_equal(doc_list[idx].encoding, "UTF-8") &&
 		! utils_str_equal(doc_list[idx].encoding, encodings[GEANY_ENCODING_NONE].charset))
 	{
-		GError *conv_error = NULL;
-		gchar* conv_file_contents = NULL;
-		gsize bytes_read;
-		gsize conv_len;
-
-		/* try to convert it from UTF-8 to original encoding */
-		conv_file_contents = g_convert(data, len-1, doc_list[idx].encoding, "UTF-8",
-													&bytes_read, &conv_len, &conv_error);
-
-		if (conv_error != NULL)
+		if  (! save_convert_to_encoding(idx, data, &len))
 		{
-			gchar *text = g_strdup_printf(
-				_("An error occurred while converting the file from UTF-8 in \"%s\". The file remains unsaved."),
-				doc_list[idx].encoding);
-			gchar *error_text;
-
-			if (conv_error->code == G_CONVERT_ERROR_ILLEGAL_SEQUENCE)
-			{
-				gchar *context = NULL;
-				gint line, column;
-				gint context_len;
-				gunichar unic;
-				gint max_len = MIN((gint)bytes_read + 6, len - 1); /* don't read over the doc length */
-				context = g_malloc(7); /* read 6 bytes from Sci + '\0' */
-				sci_get_text_range(doc_list[idx].sci, bytes_read, max_len, context);
-
-				/* take only one valid Unicode character from the context and discard the leftover */
-				unic = g_utf8_get_char_validated(context, -1);
-				context_len = g_unichar_to_utf8(unic, context);
-				context[context_len] = '\0';
-				get_line_column_from_pos(idx, bytes_read, &line, &column);
-
-				error_text = g_strdup_printf(
-					_("Error message: %s\nThe error occurred at \"%s\" (line: %d, column: %d)."),
-					conv_error->message, context, line + 1, column);
-				g_free(context);
-			}
-			else
-				error_text = g_strdup_printf(_("Error message: %s."), conv_error->message);
-
-			geany_debug("encoding error: %s", conv_error->message);
-			dialogs_show_msgbox_with_secondary(GTK_MESSAGE_ERROR, text, error_text);
-			g_error_free(conv_error);
 			g_free(data);
-			g_free(text);
-			g_free(error_text);
 			return FALSE;
-		}
-		else
-		{
-			g_free(data);
-			data = conv_file_contents;
-			len = conv_len;
 		}
 	}
 	else
@@ -1435,25 +1480,13 @@ gboolean document_save_file(gint idx, gboolean force)
 		len = strlen(data);
 	}
 
-	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
-	fp = g_fopen(locale_filename, "wb");
-	g_free(locale_filename);
-
-	if (fp == NULL)
-	{
-		ui_set_statusbar(TRUE, _("Error saving file (%s)."), g_strerror(errno));
-		utils_beep();
-		g_free(data);
-		return FALSE;
-	}
-	bytes_written = fwrite(data, sizeof (gchar), len, fp);
-	fclose (fp);
-
+	/* actually write the content of data to the file on disk */
+	err = write_data_to_disk(idx, data, len);
 	g_free(data);
 
-	if (len != bytes_written)
+	if (err != 0)
 	{
-		ui_set_statusbar(TRUE, _("Error saving file."));
+		ui_set_statusbar(TRUE, _("Error saving file (%s)."), g_strerror(err));
 		utils_beep();
 		return FALSE;
 	}
