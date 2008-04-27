@@ -1315,18 +1315,18 @@ gboolean document_save_file_as(gint idx)
 }
 
 
-static gsize save_convert_to_encoding(gint idx, gchar *data, gsize *len)
+static gsize save_convert_to_encoding(gint idx, gchar **data, gsize *len)
 {
 	GError *conv_error = NULL;
 	gchar* conv_file_contents = NULL;
 	gsize bytes_read;
 	gsize conv_len;
 
-	g_return_val_if_fail(data != NULL, FALSE);
+	g_return_val_if_fail(data != NULL || *data == NULL, FALSE);
 	g_return_val_if_fail(len != NULL, FALSE);
 
 	/* try to convert it from UTF-8 to original encoding */
-	conv_file_contents = g_convert(data, *len - 1, doc_list[idx].encoding, "UTF-8",
+	conv_file_contents = g_convert(*data, *len - 1, doc_list[idx].encoding, "UTF-8",
 												&bytes_read, &conv_len, &conv_error);
 
 	if (conv_error != NULL)
@@ -1370,8 +1370,8 @@ _("An error occurred while converting the file from UTF-8 in \"%s\". The file re
 	}
 	else
 	{
-		g_free(data);
-		data = conv_file_contents;
+		g_free(*data);
+		*data = conv_file_contents;
 		*len = conv_len;
 	}
 
@@ -1469,7 +1469,7 @@ gboolean document_save_file(gint idx, gboolean force)
 	if (doc_list[idx].encoding != NULL && ! utils_str_equal(doc_list[idx].encoding, "UTF-8") &&
 		! utils_str_equal(doc_list[idx].encoding, encodings[GEANY_ENCODING_NONE].charset))
 	{
-		if  (! save_convert_to_encoding(idx, data, &len))
+		if  (! save_convert_to_encoding(idx, &data, &len))
 		{
 			g_free(data);
 			return FALSE;

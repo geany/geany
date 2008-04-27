@@ -15,6 +15,9 @@
  * autogen.sh:
    Don't check for CVS directory as we don't use CVS anymore and remove
    non-portable -path option of find.
+ * src/document.c:
+   Fix crash when trying to change the encoding of a file
+   (introduced in r2529).
 
 
 2008-04-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
