@@ -6,12 +6,15 @@
    Add configure option --enable-gnu-regex to implicitly build the
    included GNU regex library (in case the host system doesn't provide
    a usable regex library).
-   Rename tagmanger/include/regex.h in tagmanager/include/gnuregex.h
+   Rename tagmanager/include/regex.h in tagmanager/include/gnuregex.h
    to avoid unintended inclusion in source files (this fixes the
    OpenSolaris crashes).
  * src/encodings.c:
    Don't use GNU regex specific regex_t::buffer element to build also
    without this extension (e.g. on OpenSolaris).
+ * autogen.sh:
+   Don't check for CVS directory as we don't use CVS anymore and remove
+   non-portable -path option of find.
 
 
 2008-04-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
