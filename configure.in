@@ -184,7 +184,7 @@ dnl skip check if already decided
 if test "x$want_vte" = "x"; then
     # VTE support
     AC_ARG_ENABLE(vte, AC_HELP_STRING([--enable-vte],
-     [enable if you want virtual termninal support [[default=yes]]]),
+     [enable if you want virtual terminal support [[default=yes]]]),
      [want_vte="$enableval"], [want_vte="yes"])
     if test "x$want_vte" = "xyes"; then
     	AC_DEFINE(HAVE_VTE, 1, [Define if you want VTE support])
