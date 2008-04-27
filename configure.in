@@ -33,7 +33,7 @@ LIBTOOL="$LIBTOOL --silent"
 # autoscan start
 
 # Checks for header files.
-AC_CHECK_HEADERS([fcntl.h fnmatch.h glob.h libintl.h limits.h stddef.h stdlib.h string.h sys/time.h unistd.h])
+AC_CHECK_HEADERS([fcntl.h fnmatch.h glob.h libintl.h limits.h regex.h stddef.h stdlib.h string.h sys/time.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_OFF_T
@@ -125,13 +125,24 @@ AC_ARG_ENABLE(deprecated, [  --disable-deprecated    Disable deprecated GTK func
 			  [GTK_CFLAGS="$GTK_CFLAGS -DG_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"], [])
 
 # Plugins support
-AC_ARG_ENABLE(plugins, [AC_HELP_STRING([--disable-plugins], [compile without plugin support  [[default=no]]])], , enable_plugins=yes)
+AC_ARG_ENABLE(plugins, [AC_HELP_STRING([--disable-plugins], [compile without plugin support  [default=no]])], , enable_plugins=yes)
 
 if test "x$enable_plugins" = "xyes" ; then
 	AC_DEFINE(HAVE_PLUGINS, 1, [Define if plugins are enabled.])
 	AM_CONDITIONAL(PLUGINS, true)
 else
 	AM_CONDITIONAL(PLUGINS, false)
+fi
+
+# Use included GNU regex library
+AC_ARG_ENABLE(gnu-regex, [AC_HELP_STRING([--enable-gnu-regex], [compile with included GNU regex library  [default=no]])], , enable_gnu_regex=no)
+
+if test "x$enable_gnu_regex" = "xyes" ; then
+	AC_DEFINE(USE_INCLUDED_REGEX, 1, [Define if included GNU regex code should be used.])
+	AC_DEFINE(HAVE_REGCOMP, 1, [Define if you have the `regcomp' function.])
+	AM_CONDITIONAL(USE_INCLUDED_REGEX, true)
+else
+	AM_CONDITIONAL(USE_INCLUDED_REGEX, false)
 fi
 
 # Check for random number paths (skip when cross compiling)

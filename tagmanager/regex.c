@@ -120,9 +120,9 @@ init_syntax_once ()
 #define SYNTAX(c) re_syntax_table[c]
 
 #endif /* not emacs */
-
+
 /* Get the interface, including the syntax bits.  */
-#include "regex.h"
+#include "gnuregex.h"
 
 /* isalpha etc. are used for the character classes.  */
 #include <ctype.h>

@@ -43,13 +43,18 @@
 
 
 #ifdef HAVE_REGCOMP
-# include <regex.h>
+# ifdef HAVE_REGEX_H
+#  include <regex.h>
+# else
+#  include "gnuregex.h"
+# endif
 /* <meta http-equiv="content-type" content="text/html; charset=UTF-8" /> */
 # define PATTERN_HTMLMETA "<meta[ \t\n\r\f]http-equiv[ \t\n\r\f]*=[ \t\n\r\f]*\"content-type\"[ \t\n\r\f]+content[ \t\n\r\f]*=[ \t\n\r\f]*\"text/x?html;[ \t\n\r\f]*charset=([a-z0-9_-]+)\"[ \t\n\r\f]*/?>"
 /* " geany_encoding=utf-8 " */
 # define PATTERN_GEANY "[\t ]geany_encoding=([a-z0-9-]+)[\t ]"
 /* precompiled regexps */
 static regex_t pregs[2];
+static gboolean pregs_loaded = FALSE;
 #endif
 
 
@@ -266,7 +271,7 @@ static gchar *regex_match(regex_t *preg, const gchar *buffer, gsize size)
 	gchar *encoding = NULL;
 	regmatch_t pmatch[10];
 
-	if (buffer == NULL || preg->buffer == NULL)
+	if (! pregs_loaded || buffer == NULL)
 		return NULL;
 
 	if (size > 512)
@@ -289,10 +294,10 @@ static gchar *regex_match(regex_t *preg, const gchar *buffer, gsize size)
 void encodings_finalize(void)
 {
 #ifdef HAVE_REGCOMP
-	guint i;
-	for (i = 0; i < G_N_ELEMENTS(pregs); i++)
+	if (pregs_loaded)
 	{
-		if (pregs[i].buffer == NULL)
+		guint i;
+		for (i = 0; i < G_N_ELEMENTS(pregs); i++)
 		{
 			regfree(&pregs[i]);
 		}
@@ -315,8 +320,12 @@ void encodings_init(void)
 	init_encodings();
 
 #ifdef HAVE_REGCOMP
-	regex_compile(&pregs[0], PATTERN_HTMLMETA);
-	regex_compile(&pregs[1], PATTERN_GEANY);
+	if (! pregs_loaded)
+	{
+		regex_compile(&pregs[0], PATTERN_HTMLMETA);
+		regex_compile(&pregs[1], PATTERN_GEANY);
+		pregs_loaded = TRUE;
+	}
 #endif
 
 	/* create encodings submenu in document menu */

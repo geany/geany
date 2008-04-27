@@ -1,3 +1,19 @@
+2008-04-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * configure.in, tagmanager/lregex.c, tagmanager/include/regex.h,
+   tagmanager/regex.c,tagmanager/include/Makefile.am,
+   tagmanager/include/gnuregex.h, tagmanager/Makefile.am :
+   Add configure option --enable-gnu-regex to implicitly build the
+   included GNU regex library (in case the host system doesn't provide
+   a usable regex library).
+   Rename tagmanger/include/regex.h in tagmanager/include/gnuregex.h
+   to avoid unintended inclusion in source files (this fixes the
+   OpenSolaris crashes).
+ * src/encodings.c:
+   Don't use GNU regex specific regex_t::buffer element to build also
+   without this extension (e.g. on OpenSolaris).
+
+
 2008-04-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/document.c:

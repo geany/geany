@@ -1,5 +1,5 @@
 noinst_HEADERS = \
-	regex.h
+	gnuregex.h
 
 tagmanager_includedir = $(includedir)/geany/tagmanager/
 tagmanager_include_HEADERS = \

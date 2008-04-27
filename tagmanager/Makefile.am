@@ -73,3 +73,6 @@ libtagmanager_a_SOURCES =\
 	tm_file_entry.c\
 	tm_tagmanager.c
 
+if USE_INCLUDED_REGEX
+libtagmanager_a_SOURCES += regex.c
+endif
