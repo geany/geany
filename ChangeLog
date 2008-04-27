@@ -18,6 +18,9 @@
  * src/document.c:
    Fix crash when trying to change the encoding of a file
    (introduced in r2529).
+ * src/keybindings.c:
+   Allow Ctrl-A (or whatever "Select All" has been set to) to select
+   all text in the scribble text widget (closes #1952335).
 
 
 2008-04-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

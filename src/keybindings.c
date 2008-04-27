@@ -1522,6 +1522,16 @@ static void cb_func_select_action(guint key_id)
 {
 	gint idx = document_get_cur_idx();
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(app->window));
+	static GtkWidget *scribble_widget = NULL;
+
+	/* special case for Select All in the scribble widget */
+	if (scribble_widget == NULL) /* lookup the scribble widget only once */
+		scribble_widget = lookup_widget(app->window, "textview_scribble");
+	if (key_id == GEANY_KEYS_SELECT_ALL && focusw == scribble_widget)
+	{
+		g_signal_emit_by_name(scribble_widget, "select-all", TRUE);
+		return;
+	}
 
 	/* keybindings only valid when scintilla widget has focus */
 	if (! DOC_IDX_VALID(idx) || focusw != GTK_WIDGET(doc_list[idx].sci)) return;
