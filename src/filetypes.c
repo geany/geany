@@ -37,6 +37,7 @@
 #include "utils.h"
 #include "document.h"
 #include "sciwrappers.h"
+#include "ui_utils.h"
 
 
 GHashTable *filetypes_hash = NULL;	/**< Array of filetype pointers */
@@ -88,7 +89,7 @@ enum
 
 static GtkWidget *radio_items[GEANY_MAX_FILE_TYPES];
 
-static void filetypes_create_menu_item(GtkWidget *menu, const gchar *label, filetype *ftype);
+static void create_radio_menu_item(GtkWidget *menu, const gchar *label, filetype *ftype);
 
 
 static void fill_filetypes(void)
@@ -520,16 +521,13 @@ void filetypes_init_types()
 	gtk_widget_show((item));
 
 
-/* Calls filetypes_init_types() and creates the filetype menu. */
-void filetypes_init()
+static void create_set_filetype_menu()
 {
 	filetype_id ft_id;
 	GtkWidget *filetype_menu = lookup_widget(app->window, "set_filetype1_menu");
 	GtkWidget *sub_menu = filetype_menu;
 	GtkWidget *sub_menu_programming, *sub_menu_scripts, *sub_menu_markup, *sub_menu_misc;
 	GtkWidget *sub_item_programming, *sub_item_scripts, *sub_item_markup, *sub_item_misc;
-
-	filetypes_init_types();
 
 	create_sub_menu(sub_menu_programming, sub_item_programming, _("_Programming Languages"));
 	create_sub_menu(sub_menu_scripts, sub_item_scripts, _("_Scripting Languages"));
@@ -574,8 +572,15 @@ void filetypes_init()
 			default: break;
 		}
 		ft->item = NULL;
-		filetypes_create_menu_item(sub_menu, title, ft);
+		create_radio_menu_item(sub_menu, title, ft);
 	}
+}
+
+
+void filetypes_init()
+{
+	filetypes_init_types();
+	create_set_filetype_menu();
 }
 
 
@@ -776,7 +781,7 @@ on_filetype_change                     (GtkMenuItem     *menuitem,
 }
 
 
-static void filetypes_create_menu_item(GtkWidget *menu, const gchar *label, filetype *ftype)
+static void create_radio_menu_item(GtkWidget *menu, const gchar *label, filetype *ftype)
 {
 	static GSList *group = NULL;
 	GtkWidget *tmp;
