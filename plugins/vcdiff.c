@@ -286,8 +286,8 @@ static void show_output(const gchar *std_output, const gchar *name_prefix,
 		idx = find_by_filename(filename);
 		if ( idx == -1)
 		{
-			idx = p_document->new_file(filename,
-				geany_data->filetypes[GEANY_FILETYPES_DIFF], text);
+			filetype *ft = p_filetypes->lookup_by_name("Diff");
+			idx = p_document->new_file(filename, ft, text);
 		}
 		else
 		{

@@ -39,7 +39,10 @@
 #include "sciwrappers.h"
 
 
-filetype *filetypes[GEANY_MAX_FILE_TYPES];
+GHashTable *filetypes_hash = NULL;	/**< Array of filetype pointers */
+
+/* built-in filetypes only */
+filetype *builtin_filetypes[GEANY_MAX_FILE_TYPES] = {NULL};
 
 
 /* This is the order of unique ids used in the config file.
@@ -88,18 +91,8 @@ static GtkWidget *radio_items[GEANY_MAX_FILE_TYPES];
 static void filetypes_create_menu_item(GtkWidget *menu, const gchar *label, filetype *ftype);
 
 
-/* Create the filetype array and fill it with the known filetypes. */
-void filetypes_init_types()
+static void fill_filetypes(void)
 {
-	filetype_id ft_id;
-
-	for (ft_id = 0; ft_id < GEANY_MAX_FILE_TYPES; ft_id++)
-	{
-		filetypes[ft_id] = g_new0(filetype, 1);
-		filetypes[ft_id]->programs = g_new0(struct build_programs, 1);
-		filetypes[ft_id]->actions = g_new0(struct build_actions, 1);
-	}
-
 #define C	/* these macros are only to ease navigation */
 	filetypes[GEANY_FILETYPES_C]->id = GEANY_FILETYPES_C;
 	filetypes[GEANY_FILETYPES_C]->uid = FILETYPE_UID_C;
@@ -487,6 +480,38 @@ void filetypes_init_types()
 }
 
 
+static void create_builtin_filetypes(void)
+{
+	filetype_id ft_id;
+
+	for (ft_id = 0; ft_id < GEANY_MAX_FILE_TYPES; ft_id++)
+	{
+		filetypes[ft_id] = g_new0(filetype, 1);
+		filetypes[ft_id]->programs = g_new0(struct build_programs, 1);
+		filetypes[ft_id]->actions = g_new0(struct build_actions, 1);
+	}
+	fill_filetypes();
+}
+
+
+/* Create the filetype array and fill it with the known filetypes. */
+void filetypes_init_types()
+{
+	filetype_id ft_id;
+
+	g_return_if_fail(filetypes_hash == NULL);
+
+	create_builtin_filetypes();
+
+	filetypes_hash = g_hash_table_new(g_str_hash, g_str_equal);
+
+	for (ft_id = 0; ft_id < GEANY_MAX_FILE_TYPES; ft_id++)
+	{
+		filetypes_add(filetypes[ft_id]);
+	}
+}
+
+
 #define create_sub_menu(menu, item, title) \
 	(menu) = gtk_menu_new(); \
 	(item) = gtk_menu_item_new_with_mnemonic((title)); \
@@ -765,32 +790,38 @@ static void filetypes_create_menu_item(GtkWidget *menu, const gchar *label, file
 }
 
 
+static void free_filetype(G_GNUC_UNUSED gpointer key, gpointer value,
+		G_GNUC_UNUSED gpointer user_data)
+{
+	filetype *ft = value;
+
+	g_return_if_fail(ft != NULL);
+
+	g_free(ft->name);
+	g_free(ft->title);
+	g_free(ft->extension);
+	g_free(ft->comment_open);
+	g_free(ft->comment_close);
+	g_free(ft->context_action_cmd);
+	g_free(ft->programs->compiler);
+	g_free(ft->programs->linker);
+	g_free(ft->programs->run_cmd);
+	g_free(ft->programs->run_cmd2);
+	g_free(ft->programs);
+	g_free(ft->actions);
+
+	g_strfreev(ft->pattern);
+	g_free(ft);
+}
+
+
 /* frees the array and all related pointers */
 void filetypes_free_types()
 {
-	gint i;
+	g_return_if_fail(filetypes_hash != NULL);
 
-	for(i = 0; i < GEANY_MAX_FILE_TYPES; i++)
-	{
-		if (filetypes[i])
-		{
-			g_free(filetypes[i]->name);
-			g_free(filetypes[i]->title);
-			g_free(filetypes[i]->extension);
-			g_free(filetypes[i]->comment_open);
-			g_free(filetypes[i]->comment_close);
-			g_free(filetypes[i]->context_action_cmd);
-			g_free(filetypes[i]->programs->compiler);
-			g_free(filetypes[i]->programs->linker);
-			g_free(filetypes[i]->programs->run_cmd);
-			g_free(filetypes[i]->programs->run_cmd2);
-			g_free(filetypes[i]->programs);
-			g_free(filetypes[i]->actions);
-
-			g_strfreev(filetypes[i]->pattern);
-			g_free(filetypes[i]);
-		}
-	}
+	g_hash_table_foreach(filetypes_hash, free_filetype, NULL);
+	g_hash_table_destroy(filetypes_hash);
 }
 
 
@@ -1037,6 +1068,40 @@ gboolean filetype_has_tags(filetype *ft)
 	g_return_val_if_fail(ft != NULL, FALSE);
 
 	return ft->lang >= 0;
+}
+
+
+/* Add a filetype pointer to the list of available filetypes. */
+void filetypes_add(filetype *ft)
+{
+	g_return_if_fail(ft);
+	g_return_if_fail(ft->name);
+
+	g_hash_table_insert(filetypes_hash, ft->name, ft);
+}
+
+
+/* Remove a filetype pointer from the list of available filetypes. */
+void filetypes_remove(filetype *ft)
+{
+	g_return_if_fail(ft);
+
+	if (!g_hash_table_remove(filetypes_hash, ft))
+		g_warning("Could not remove filetype %p!", ft);
+}
+
+
+/** Find a filetype pointer from its @c name field. */
+filetype *filetypes_lookup_by_name(const gchar *name)
+{
+	filetype *ft;
+
+	g_return_val_if_fail(NZV(name), NULL);
+
+	ft = g_hash_table_lookup(filetypes_hash, name);
+	if (ft == NULL)
+		g_warning("Could not find filetype '%s'!", name);
+	return ft;
 }
 
 

@@ -121,7 +121,15 @@ struct filetype
 	struct build_actions	*actions;
 };
 
-extern filetype *filetypes[GEANY_MAX_FILE_TYPES];
+#define filetypes	builtin_filetypes
+extern filetype *builtin_filetypes[GEANY_MAX_FILE_TYPES];
+
+
+void filetypes_add(filetype *ft);
+
+void filetypes_remove(filetype *ft);
+
+filetype *filetypes_lookup_by_name(const gchar *name);
 
 
 /* If uid is valid, return corresponding filetype, otherwise NULL. */
