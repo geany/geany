@@ -42,7 +42,7 @@
 GHashTable *filetypes_hash = NULL;	/**< Array of filetype pointers */
 
 /* built-in filetypes only */
-filetype *builtin_filetypes[GEANY_MAX_FILE_TYPES] = {NULL};
+filetype *built_in_filetypes[GEANY_MAX_BUILT_IN_FILETYPES] = {NULL};
 
 
 /* This is the order of unique ids used in the config file.
@@ -480,11 +480,11 @@ static void fill_filetypes(void)
 }
 
 
-static void create_builtin_filetypes(void)
+static void create_built_in_filetypes(void)
 {
 	filetype_id ft_id;
 
-	for (ft_id = 0; ft_id < GEANY_MAX_FILE_TYPES; ft_id++)
+	for (ft_id = 0; ft_id < GEANY_MAX_BUILT_IN_FILETYPES; ft_id++)
 	{
 		filetypes[ft_id] = g_new0(filetype, 1);
 		filetypes[ft_id]->programs = g_new0(struct build_programs, 1);
@@ -501,11 +501,11 @@ void filetypes_init_types()
 
 	g_return_if_fail(filetypes_hash == NULL);
 
-	create_builtin_filetypes();
+	create_built_in_filetypes();
 
 	filetypes_hash = g_hash_table_new(g_str_hash, g_str_equal);
 
-	for (ft_id = 0; ft_id < GEANY_MAX_FILE_TYPES; ft_id++)
+	for (ft_id = 0; ft_id < GEANY_MAX_BUILT_IN_FILETYPES; ft_id++)
 	{
 		filetypes_add(filetypes[ft_id]);
 	}

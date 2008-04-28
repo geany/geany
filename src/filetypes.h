@@ -78,7 +78,8 @@ typedef enum
 	GEANY_FILETYPES_SQL,
 
 	GEANY_FILETYPES_ALL,	/* must be last filetype, used for 'None' item. */
-	GEANY_MAX_FILE_TYPES
+	GEANY_MAX_BUILT_IN_FILETYPES,
+	GEANY_MAX_FILE_TYPES = GEANY_MAX_BUILT_IN_FILETYPES
 } filetype_id;
 
 /* Safe wrapper to get the id field of a possibly NULL filetype pointer. */
@@ -121,8 +122,8 @@ struct filetype
 	struct build_actions	*actions;
 };
 
-#define filetypes	builtin_filetypes
-extern filetype *builtin_filetypes[GEANY_MAX_FILE_TYPES];
+#define filetypes	built_in_filetypes
+extern filetype *built_in_filetypes[GEANY_MAX_BUILT_IN_FILETYPES];
 
 
 void filetypes_add(filetype *ft);
