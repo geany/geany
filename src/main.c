@@ -870,7 +870,9 @@ gint main(gint argc, gchar **argv)
 			load_project_file();
 
 			/* load session files into tabs, as they are found in the session_files variable */
-			if (! configuration_open_files())
+			configuration_open_files();
+
+			if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
 			{
 				ui_update_popup_copy_items(-1);
 				ui_update_popup_reundo_items(-1);

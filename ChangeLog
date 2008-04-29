@@ -1,3 +1,9 @@
+2008-04-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keyfile.c, src/keyfile.h, src/main.c:
+   Refactor open_session_file() from configuration_open_files().
+
+
 2008-04-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/plugindata.h, src/filetypes.c, src/filetypes.h, src/plugins.c,

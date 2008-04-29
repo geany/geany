@@ -30,7 +30,7 @@ void configuration_save(void);
 
 gboolean configuration_load(void);
 
-gboolean configuration_open_files(void);
+void configuration_open_files(void);
 
 void configuration_reload_default_session(void);
 
