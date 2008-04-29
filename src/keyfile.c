@@ -115,6 +115,27 @@ static void save_recent_files(GKeyFile *config)
 }
 
 
+static gchar *get_session_file_string(gint idx)
+{
+	gchar *fname;
+	filetype *ft = doc_list[idx].file_type;
+
+	if (ft == NULL)	/* can happen when saving a new file when quitting */
+		ft = filetypes[GEANY_FILETYPES_ALL];
+
+	fname = g_strdup_printf("%d;%d;%d;%d;%d;%d;%d;%s;",
+		sci_get_current_position(doc_list[idx].sci),
+		ft->uid,
+		doc_list[idx].readonly,
+		encodings_get_idx_from_charset(doc_list[idx].encoding),
+		doc_list[idx].use_tabs,
+		doc_list[idx].auto_indent,
+		doc_list[idx].line_wrapping,
+		doc_list[idx].file_name);
+	return fname;
+}
+
+
 void configuration_save_session_files(GKeyFile *config)
 {
 	gint idx, npage;
@@ -133,20 +154,9 @@ void configuration_save_session_files(GKeyFile *config)
 		if (idx >= 0 && g_path_is_absolute(DOC_FILENAME(idx)))
 		{
 			gchar *fname;
-			filetype *ft = doc_list[idx].file_type;
 
-			if (ft == NULL)	/* can happen when saving a new file when quitting */
-				ft = filetypes[GEANY_FILETYPES_ALL];
 			g_snprintf(entry, 13, "FILE_NAME_%d", j);
-			fname = g_strdup_printf("%d;%d;%d;%d;%d;%d;%d;%s;",
-				sci_get_current_position(doc_list[idx].sci),
-				ft->uid,
-				doc_list[idx].readonly,
-				encodings_get_idx_from_charset(doc_list[idx].encoding),
-				doc_list[idx].use_tabs,
-				doc_list[idx].auto_indent,
-				doc_list[idx].line_wrapping,
-				doc_list[idx].file_name);
+			fname = get_session_file_string(idx);
 			g_key_file_set_string(config, "files", entry, fname);
 			g_free(fname);
 			j++;

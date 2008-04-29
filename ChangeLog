@@ -2,6 +2,9 @@
 
  * src/keyfile.c, src/keyfile.h, src/main.c:
    Refactor open_session_file() from configuration_open_files().
+ * src/keyfile.c:
+   Refactor get_session_file_string() from
+   configuration_save_session_files().
 
 
 2008-04-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
