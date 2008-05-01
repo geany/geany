@@ -40,52 +40,10 @@
 #include "ui_utils.h"
 
 
-GHashTable *filetypes_hash = NULL;	/**< Array of filetype pointers */
+GHashTable *filetypes_hash = NULL;	/* Hash of filetype pointers based on name keys */
 
 /* built-in filetypes only */
 filetype *built_in_filetypes[GEANY_MAX_BUILT_IN_FILETYPES] = {NULL};
-
-
-/* This is the order of unique ids used in the config file.
- * The order must not be changed but can be appended to. */
-enum
-{
-	FILETYPE_UID_C = 0,		/* 0 */
-	FILETYPE_UID_CPP,		/* 1 */
-	FILETYPE_UID_JAVA,		/* 2 */
-	FILETYPE_UID_PERL,		/* 3 */
-	FILETYPE_UID_PHP,		/* 4 */
-	FILETYPE_UID_XML,		/* 5 */
-	FILETYPE_UID_DOCBOOK,	/* 6 */
-	FILETYPE_UID_PYTHON,	/* 7 */
-	FILETYPE_UID_LATEX,		/* 8 */
-	FILETYPE_UID_PASCAL,	/* 9 */
-	FILETYPE_UID_SH,		/* 10 */
-	FILETYPE_UID_MAKE,		/* 11 */
-	FILETYPE_UID_CSS,		/* 12 */
-	FILETYPE_UID_CONF,		/* 13 */
-	FILETYPE_UID_ASM,		/* 14 */
-	FILETYPE_UID_SQL,		/* 15 */
-	FILETYPE_UID_CAML,		/* 16 */
-	FILETYPE_UID_OMS,		/* 17 */
-	FILETYPE_UID_RUBY,		/* 18 */
-	FILETYPE_UID_TCL,		/* 19 */
-	FILETYPE_UID_ALL,		/* 20 */
-	FILETYPE_UID_D,			/* 21 */
-	FILETYPE_UID_FORTRAN,	/* 22 */
-	FILETYPE_UID_DIFF,		/* 23 */
-	FILETYPE_UID_FERITE,	/* 24 */
-	FILETYPE_UID_HTML,		/* 25 */
-	FILETYPE_UID_VHDL,		/* 26 */
-	FILETYPE_UID_JS,		/* 27 */
-	FILETYPE_UID_LUA,		/* 28 */
-	FILETYPE_UID_HASKELL,	/* 29 */
-	FILETYPE_UID_CS,		/* 30 */
-	FILETYPE_UID_BASIC,		/* 31 */
-	FILETYPE_UID_HAXE,		/* 32 */
-	FILETYPE_UID_REST		/* 33 */
-};
-
 
 static GtkWidget *radio_items[GEANY_MAX_FILE_TYPES];
 
@@ -96,7 +54,6 @@ static void fill_filetypes(void)
 {
 #define C	/* these macros are only to ease navigation */
 	filetypes[GEANY_FILETYPES_C]->id = GEANY_FILETYPES_C;
-	filetypes[GEANY_FILETYPES_C]->uid = FILETYPE_UID_C;
 	filetypes[GEANY_FILETYPES_C]->lang = 0;
 	filetypes[GEANY_FILETYPES_C]->name = g_strdup("C");
 	filetypes[GEANY_FILETYPES_C]->title = g_strdup_printf(_("%s source file"), "C");
@@ -107,7 +64,6 @@ static void fill_filetypes(void)
 
 #define CPP
 	filetypes[GEANY_FILETYPES_CPP]->id = GEANY_FILETYPES_CPP;
-	filetypes[GEANY_FILETYPES_CPP]->uid = FILETYPE_UID_CPP;
 	filetypes[GEANY_FILETYPES_CPP]->lang = 1;
 	filetypes[GEANY_FILETYPES_CPP]->name = g_strdup("C++");
 	filetypes[GEANY_FILETYPES_CPP]->title = g_strdup_printf(_("%s source file"), "C++");
@@ -119,7 +75,6 @@ static void fill_filetypes(void)
 
 #define CS
 	filetypes[GEANY_FILETYPES_CS]->id = GEANY_FILETYPES_CS;
-	filetypes[GEANY_FILETYPES_CS]->uid = FILETYPE_UID_CS;
 	filetypes[GEANY_FILETYPES_CS]->lang = 25;
 	filetypes[GEANY_FILETYPES_CS]->name = g_strdup("C#");
 	filetypes[GEANY_FILETYPES_CS]->title = g_strdup_printf(_("%s source file"), "C#");
@@ -130,7 +85,6 @@ static void fill_filetypes(void)
 
 #define D
 	filetypes[GEANY_FILETYPES_D]->id = GEANY_FILETYPES_D;
-	filetypes[GEANY_FILETYPES_D]->uid = FILETYPE_UID_D;
 	filetypes[GEANY_FILETYPES_D]->lang = 17;
 	filetypes[GEANY_FILETYPES_D]->name = g_strdup("D");
 	filetypes[GEANY_FILETYPES_D]->title = g_strdup_printf(_("%s source file"), "D");
@@ -142,7 +96,6 @@ static void fill_filetypes(void)
 #define JAVA
 	filetypes[GEANY_FILETYPES_JAVA]->id = GEANY_FILETYPES_JAVA;
 	filetypes[GEANY_FILETYPES_JAVA]->name = g_strdup("Java");
-	filetypes[GEANY_FILETYPES_JAVA]->uid = FILETYPE_UID_JAVA;
 	filetypes[GEANY_FILETYPES_JAVA]->lang = 2;
 	filetypes[GEANY_FILETYPES_JAVA]->title = g_strdup_printf(_("%s source file"), "Java");
 	filetypes[GEANY_FILETYPES_JAVA]->extension = g_strdup("java");
@@ -152,7 +105,6 @@ static void fill_filetypes(void)
 
 #define PAS /* to avoid warnings when building under Windows, the symbol PASCAL is there defined */
 	filetypes[GEANY_FILETYPES_PASCAL]->id = GEANY_FILETYPES_PASCAL;
-	filetypes[GEANY_FILETYPES_PASCAL]->uid = FILETYPE_UID_PASCAL;
 	filetypes[GEANY_FILETYPES_PASCAL]->lang = 4;
 	filetypes[GEANY_FILETYPES_PASCAL]->name = g_strdup("Pascal");
 	filetypes[GEANY_FILETYPES_PASCAL]->title = g_strdup_printf(_("%s source file"), "Pascal");
@@ -164,7 +116,6 @@ static void fill_filetypes(void)
 
 #define ASM
 	filetypes[GEANY_FILETYPES_ASM]->id = GEANY_FILETYPES_ASM;
-	filetypes[GEANY_FILETYPES_ASM]->uid = FILETYPE_UID_ASM;
 	filetypes[GEANY_FILETYPES_ASM]->lang = 9;
 	filetypes[GEANY_FILETYPES_ASM]->name = g_strdup("ASM");
 	filetypes[GEANY_FILETYPES_ASM]->title = g_strdup_printf(_("%s source file"), "Assembler");
@@ -175,7 +126,6 @@ static void fill_filetypes(void)
 
 #define BASIC
 	filetypes[GEANY_FILETYPES_BASIC]->id = GEANY_FILETYPES_BASIC;
-	filetypes[GEANY_FILETYPES_BASIC]->uid = FILETYPE_UID_BASIC;
 	filetypes[GEANY_FILETYPES_BASIC]->lang = 26;
 	filetypes[GEANY_FILETYPES_BASIC]->name = g_strdup("FreeBasic");
 	filetypes[GEANY_FILETYPES_BASIC]->title = g_strdup_printf(_("%s source file"), "FreeBasic");
@@ -186,7 +136,6 @@ static void fill_filetypes(void)
 
 #define FORTRAN
 	filetypes[GEANY_FILETYPES_FORTRAN]->id = GEANY_FILETYPES_FORTRAN;
-	filetypes[GEANY_FILETYPES_FORTRAN]->uid = FILETYPE_UID_FORTRAN;
 	filetypes[GEANY_FILETYPES_FORTRAN]->lang = 18;
 	filetypes[GEANY_FILETYPES_FORTRAN]->name = g_strdup("Fortran");
 	filetypes[GEANY_FILETYPES_FORTRAN]->title = g_strdup_printf(_("%s source file"), "Fortran (F77)");
@@ -198,7 +147,6 @@ static void fill_filetypes(void)
 
 #define CAML
 	filetypes[GEANY_FILETYPES_CAML]->id = GEANY_FILETYPES_CAML;
-	filetypes[GEANY_FILETYPES_CAML]->uid = FILETYPE_UID_CAML;
 	filetypes[GEANY_FILETYPES_CAML]->lang = -2;
 	filetypes[GEANY_FILETYPES_CAML]->name = g_strdup("CAML");
 	filetypes[GEANY_FILETYPES_CAML]->title = g_strdup_printf(_("%s source file"), "(O)Caml");
@@ -209,7 +157,6 @@ static void fill_filetypes(void)
 
 #define PERL
 	filetypes[GEANY_FILETYPES_PERL]->id = GEANY_FILETYPES_PERL;
-	filetypes[GEANY_FILETYPES_PERL]->uid = FILETYPE_UID_PERL;
 	filetypes[GEANY_FILETYPES_PERL]->lang = 5;
 	filetypes[GEANY_FILETYPES_PERL]->name = g_strdup("Perl");
 	filetypes[GEANY_FILETYPES_PERL]->title = g_strdup_printf(_("%s source file"), "Perl");
@@ -221,7 +168,6 @@ static void fill_filetypes(void)
 
 #define PHP
 	filetypes[GEANY_FILETYPES_PHP]->id = GEANY_FILETYPES_PHP;
-	filetypes[GEANY_FILETYPES_PHP]->uid = FILETYPE_UID_PHP;
 	filetypes[GEANY_FILETYPES_PHP]->lang = 6;
 	filetypes[GEANY_FILETYPES_PHP]->name = g_strdup("PHP");
 	filetypes[GEANY_FILETYPES_PHP]->title = g_strdup_printf(_("%s source file"), "PHP");
@@ -233,7 +179,6 @@ static void fill_filetypes(void)
 
 #define JAVASCRIPT
 	filetypes[GEANY_FILETYPES_JS]->id = GEANY_FILETYPES_JS;
-	filetypes[GEANY_FILETYPES_JS]->uid = FILETYPE_UID_JS;
 	filetypes[GEANY_FILETYPES_JS]->lang = 23;
 	filetypes[GEANY_FILETYPES_JS]->name = g_strdup("Javascript");
 	filetypes[GEANY_FILETYPES_JS]->title = g_strdup_printf(_("%s source file"), "Javascript");
@@ -244,7 +189,6 @@ static void fill_filetypes(void)
 
 #define PYTHON
 	filetypes[GEANY_FILETYPES_PYTHON]->id = GEANY_FILETYPES_PYTHON;
-	filetypes[GEANY_FILETYPES_PYTHON]->uid = FILETYPE_UID_PYTHON;
 	filetypes[GEANY_FILETYPES_PYTHON]->lang = 7;
 	filetypes[GEANY_FILETYPES_PYTHON]->name = g_strdup("Python");
 	filetypes[GEANY_FILETYPES_PYTHON]->title = g_strdup_printf(_("%s source file"), "Python");
@@ -255,7 +199,6 @@ static void fill_filetypes(void)
 
 #define RUBY
 	filetypes[GEANY_FILETYPES_RUBY]->id = GEANY_FILETYPES_RUBY;
-	filetypes[GEANY_FILETYPES_RUBY]->uid = FILETYPE_UID_RUBY;
 	filetypes[GEANY_FILETYPES_RUBY]->lang = 14;
 	filetypes[GEANY_FILETYPES_RUBY]->name = g_strdup("Ruby");
 	filetypes[GEANY_FILETYPES_RUBY]->title = g_strdup_printf(_("%s source file"), "Ruby");
@@ -266,7 +209,6 @@ static void fill_filetypes(void)
 
 #define TCL
 	filetypes[GEANY_FILETYPES_TCL]->id = GEANY_FILETYPES_TCL;
-	filetypes[GEANY_FILETYPES_TCL]->uid = FILETYPE_UID_TCL;
 	filetypes[GEANY_FILETYPES_TCL]->lang = 15;
 	filetypes[GEANY_FILETYPES_TCL]->name = g_strdup("Tcl");
 	filetypes[GEANY_FILETYPES_TCL]->title = g_strdup_printf(_("%s source file"), "Tcl");
@@ -277,7 +219,6 @@ static void fill_filetypes(void)
 
 #define LUA
 	filetypes[GEANY_FILETYPES_LUA]->id = GEANY_FILETYPES_LUA;
-	filetypes[GEANY_FILETYPES_LUA]->uid = FILETYPE_UID_LUA;
 	filetypes[GEANY_FILETYPES_LUA]->lang = 22;
 	filetypes[GEANY_FILETYPES_LUA]->name = g_strdup("Lua");
 	filetypes[GEANY_FILETYPES_LUA]->title = g_strdup_printf(_("%s source file"), "Lua");
@@ -288,7 +229,6 @@ static void fill_filetypes(void)
 
 #define FERITE
 	filetypes[GEANY_FILETYPES_FERITE]->id = GEANY_FILETYPES_FERITE;
-	filetypes[GEANY_FILETYPES_FERITE]->uid = FILETYPE_UID_FERITE;
 	filetypes[GEANY_FILETYPES_FERITE]->lang = 19;
 	filetypes[GEANY_FILETYPES_FERITE]->name = g_strdup("Ferite");
 	filetypes[GEANY_FILETYPES_FERITE]->title = g_strdup_printf(_("%s source file"), "Ferite");
@@ -299,7 +239,6 @@ static void fill_filetypes(void)
 
 #define HASKELL
 	filetypes[GEANY_FILETYPES_HASKELL]->id = GEANY_FILETYPES_HASKELL;
-	filetypes[GEANY_FILETYPES_HASKELL]->uid = FILETYPE_UID_HASKELL;
 	filetypes[GEANY_FILETYPES_HASKELL]->lang = 24;
 	filetypes[GEANY_FILETYPES_HASKELL]->name = g_strdup("Haskell");
 	filetypes[GEANY_FILETYPES_HASKELL]->title = g_strdup_printf(_("%s source file"), "Haskell");
@@ -310,7 +249,6 @@ static void fill_filetypes(void)
 
 #define SH
 	filetypes[GEANY_FILETYPES_SH]->id = GEANY_FILETYPES_SH;
-	filetypes[GEANY_FILETYPES_SH]->uid = FILETYPE_UID_SH;
 	filetypes[GEANY_FILETYPES_SH]->lang = 16;
 	filetypes[GEANY_FILETYPES_SH]->name = g_strdup("Sh");
 	filetypes[GEANY_FILETYPES_SH]->title = g_strdup(_("Shell script file"));
@@ -322,7 +260,6 @@ static void fill_filetypes(void)
 
 #define MAKE
 	filetypes[GEANY_FILETYPES_MAKE]->id = GEANY_FILETYPES_MAKE;
-	filetypes[GEANY_FILETYPES_MAKE]->uid = FILETYPE_UID_MAKE;
 	filetypes[GEANY_FILETYPES_MAKE]->lang = 3;
 	filetypes[GEANY_FILETYPES_MAKE]->name = g_strdup("Make");
 	filetypes[GEANY_FILETYPES_MAKE]->title = g_strdup(_("Makefile"));
@@ -334,7 +271,6 @@ static void fill_filetypes(void)
 
 #define XML
 	filetypes[GEANY_FILETYPES_XML]->id = GEANY_FILETYPES_XML;
-	filetypes[GEANY_FILETYPES_XML]->uid = FILETYPE_UID_XML;
 	filetypes[GEANY_FILETYPES_XML]->lang = -2;
 	filetypes[GEANY_FILETYPES_XML]->name = g_strdup("XML");
 	filetypes[GEANY_FILETYPES_XML]->title = g_strdup(_("XML document"));
@@ -346,7 +282,6 @@ static void fill_filetypes(void)
 
 #define DOCBOOK
 	filetypes[GEANY_FILETYPES_DOCBOOK]->id = GEANY_FILETYPES_DOCBOOK;
-	filetypes[GEANY_FILETYPES_DOCBOOK]->uid = FILETYPE_UID_DOCBOOK;
 	filetypes[GEANY_FILETYPES_DOCBOOK]->lang = 12;
 	filetypes[GEANY_FILETYPES_DOCBOOK]->name = g_strdup("Docbook");
 	filetypes[GEANY_FILETYPES_DOCBOOK]->title = g_strdup_printf(_("%s source file"), "Docbook");
@@ -357,7 +292,6 @@ static void fill_filetypes(void)
 
 #define HTML
 	filetypes[GEANY_FILETYPES_HTML]->id = GEANY_FILETYPES_HTML;
-	filetypes[GEANY_FILETYPES_HTML]->uid = FILETYPE_UID_HTML;
 	filetypes[GEANY_FILETYPES_HTML]->lang = 29;
 	filetypes[GEANY_FILETYPES_HTML]->name = g_strdup("HTML");
 	filetypes[GEANY_FILETYPES_HTML]->title = g_strdup_printf(_("%s source file"), "HTML");
@@ -369,7 +303,6 @@ static void fill_filetypes(void)
 
 #define CSS
 	filetypes[GEANY_FILETYPES_CSS]->id = GEANY_FILETYPES_CSS;
-	filetypes[GEANY_FILETYPES_CSS]->uid = FILETYPE_UID_CSS;
 	filetypes[GEANY_FILETYPES_CSS]->lang = 13;
 	filetypes[GEANY_FILETYPES_CSS]->name = g_strdup("CSS");
 	filetypes[GEANY_FILETYPES_CSS]->title = g_strdup(_("Cascading StyleSheet"));
@@ -380,7 +313,6 @@ static void fill_filetypes(void)
 
 #define SQL
 	filetypes[GEANY_FILETYPES_SQL]->id = GEANY_FILETYPES_SQL;
-	filetypes[GEANY_FILETYPES_SQL]->uid = FILETYPE_UID_SQL;
 	filetypes[GEANY_FILETYPES_SQL]->lang = 11;
 	filetypes[GEANY_FILETYPES_SQL]->name = g_strdup("SQL");
 	filetypes[GEANY_FILETYPES_SQL]->title = g_strdup(_("SQL Dump file"));
@@ -391,7 +323,6 @@ static void fill_filetypes(void)
 
 #define LATEX
 	filetypes[GEANY_FILETYPES_LATEX]->id = GEANY_FILETYPES_LATEX;
-	filetypes[GEANY_FILETYPES_LATEX]->uid = FILETYPE_UID_LATEX;
 	filetypes[GEANY_FILETYPES_LATEX]->lang = 8;
 	filetypes[GEANY_FILETYPES_LATEX]->name = g_strdup("LaTeX");
 	filetypes[GEANY_FILETYPES_LATEX]->title = g_strdup_printf(_("%s source file"), "LaTeX");
@@ -402,7 +333,6 @@ static void fill_filetypes(void)
 
 #define OMS
 	filetypes[GEANY_FILETYPES_OMS]->id = GEANY_FILETYPES_OMS;
-	filetypes[GEANY_FILETYPES_OMS]->uid = FILETYPE_UID_OMS;
 	filetypes[GEANY_FILETYPES_OMS]->lang = -2;
 	filetypes[GEANY_FILETYPES_OMS]->name = g_strdup("O-Matrix");
 	filetypes[GEANY_FILETYPES_OMS]->title = g_strdup_printf(_("%s source file"), "O-Matrix");
@@ -413,7 +343,6 @@ static void fill_filetypes(void)
 
 #define VHDL
 	filetypes[GEANY_FILETYPES_VHDL]->id = GEANY_FILETYPES_VHDL;
-	filetypes[GEANY_FILETYPES_VHDL]->uid = FILETYPE_UID_VHDL;
 	filetypes[GEANY_FILETYPES_VHDL]->lang = 21;
 	filetypes[GEANY_FILETYPES_VHDL]->name = g_strdup("VHDL");
 	filetypes[GEANY_FILETYPES_VHDL]->title = g_strdup_printf(_("%s source file"), "VHDL");
@@ -424,7 +353,6 @@ static void fill_filetypes(void)
 
 #define DIFF
 	filetypes[GEANY_FILETYPES_DIFF]->id = GEANY_FILETYPES_DIFF;
-	filetypes[GEANY_FILETYPES_DIFF]->uid = FILETYPE_UID_DIFF;
 	filetypes[GEANY_FILETYPES_DIFF]->lang = 20;
 	filetypes[GEANY_FILETYPES_DIFF]->name = g_strdup("Diff");
 	filetypes[GEANY_FILETYPES_DIFF]->title = g_strdup(_("Diff file"));
@@ -435,7 +363,6 @@ static void fill_filetypes(void)
 
 #define CONF
 	filetypes[GEANY_FILETYPES_CONF]->id = GEANY_FILETYPES_CONF;
-	filetypes[GEANY_FILETYPES_CONF]->uid = FILETYPE_UID_CONF;
 	filetypes[GEANY_FILETYPES_CONF]->lang = 10;
 	filetypes[GEANY_FILETYPES_CONF]->name = g_strdup("Conf");
 	filetypes[GEANY_FILETYPES_CONF]->title = g_strdup(_("Config file"));
@@ -447,7 +374,6 @@ static void fill_filetypes(void)
 
 #define HAXE
 	filetypes[GEANY_FILETYPES_HAXE]->id = GEANY_FILETYPES_HAXE;
-	filetypes[GEANY_FILETYPES_HAXE]->uid = FILETYPE_UID_HAXE;
 	filetypes[GEANY_FILETYPES_HAXE]->lang = 27;
 	filetypes[GEANY_FILETYPES_HAXE]->name = g_strdup("Haxe");
 	filetypes[GEANY_FILETYPES_HAXE]->title = g_strdup_printf(_("%s source file"), "Haxe");
@@ -458,7 +384,6 @@ static void fill_filetypes(void)
 
 #define REST
 	filetypes[GEANY_FILETYPES_REST]->id = GEANY_FILETYPES_REST;
-	filetypes[GEANY_FILETYPES_REST]->uid = FILETYPE_UID_REST;
 	filetypes[GEANY_FILETYPES_REST]->lang = 28;
 	filetypes[GEANY_FILETYPES_REST]->name = g_strdup("reStructuredText");
 	filetypes[GEANY_FILETYPES_REST]->title = g_strdup(_("reStructuredText file"));
@@ -471,7 +396,6 @@ static void fill_filetypes(void)
 #define ALL
 	filetypes[GEANY_FILETYPES_ALL]->id = GEANY_FILETYPES_ALL;
 	filetypes[GEANY_FILETYPES_ALL]->name = g_strdup("None");
-	filetypes[GEANY_FILETYPES_ALL]->uid = FILETYPE_UID_ALL;
 	filetypes[GEANY_FILETYPES_ALL]->lang = -2;
 	filetypes[GEANY_FILETYPES_ALL]->title = g_strdup(_("All files"));
 	filetypes[GEANY_FILETYPES_ALL]->extension = g_strdup("*");
@@ -581,22 +505,6 @@ void filetypes_init()
 {
 	filetypes_init_types();
 	create_set_filetype_menu();
-}
-
-
-/* If uid is valid, return corresponding filetype, otherwise NULL. */
-filetype *filetypes_get_from_uid(gint uid)
-{
-	gint i;
-
-	for (i = 0; i < GEANY_MAX_FILE_TYPES; i++)
-	{
-		filetype *ft = filetypes[i];
-
-		if (ft->uid == (guint) uid)
-			return ft;
-	}
-	return NULL;
 }
 
 
@@ -1105,7 +1013,7 @@ filetype *filetypes_lookup_by_name(const gchar *name)
 
 	ft = g_hash_table_lookup(filetypes_hash, name);
 	if (ft == NULL)
-		g_warning("Could not find filetype '%s'!", name);
+		geany_debug("Could not find filetype '%s'.", name);
 	return ft;
 }
 

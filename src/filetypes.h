@@ -106,7 +106,6 @@ struct build_programs
 struct filetype
 {
 	filetype_id		  id;
-	guint	 		  uid;				/* unique id as reference for saved filetype in config file */
 	GtkWidget		 *item;				/* holds a pointer to the menu item for this filetypes */
 	langType 		  lang;				/* represents the langType of tagmanager(see the table */
 										/* in tagmanager/parsers.h), -1 represents all, -2 none */
@@ -132,9 +131,6 @@ void filetypes_remove(filetype *ft);
 
 filetype *filetypes_lookup_by_name(const gchar *name);
 
-
-/* If uid is valid, return corresponding filetype, otherwise NULL. */
-filetype *filetypes_get_from_uid(gint uid);
 
 /* Calls filetypes_init_types() and creates the filetype menu. */
 void filetypes_init(void);

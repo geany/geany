@@ -123,9 +123,9 @@ static gchar *get_session_file_string(gint idx)
 	if (ft == NULL)	/* can happen when saving a new file when quitting */
 		ft = filetypes[GEANY_FILETYPES_ALL];
 
-	fname = g_strdup_printf("%d;%d;%d;%d;%d;%d;%d;%s;",
+	fname = g_strdup_printf("%d;%s;%d;%d;%d;%d;%d;%s;",
 		sci_get_current_position(doc_list[idx].sci),
-		ft->uid,
+		ft->name,
 		doc_list[idx].readonly,
 		encodings_get_idx_from_charset(doc_list[idx].encoding),
 		doc_list[idx].use_tabs,
@@ -814,13 +814,14 @@ gboolean configuration_load(void)
 static gboolean open_session_file(gchar **tmp)
 {
 	guint pos;
+	const gchar *ft_name;
 	gchar *locale_filename;
-	gint ft_uid, enc_idx;
+	gint enc_idx;
 	gboolean ro, use_tabs, auto_indent, line_wrapping;
 	gboolean ret = FALSE;
 
 	pos = atoi(tmp[0]);
-	ft_uid = atoi(tmp[1]);
+	ft_name = tmp[1];
 	ro = atoi(tmp[2]);
 	enc_idx = atoi(tmp[3]);
 	use_tabs = atoi(tmp[4]);
@@ -831,7 +832,7 @@ static gboolean open_session_file(gchar **tmp)
 
 	if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 	{
-		filetype *ft = filetypes_get_from_uid(ft_uid);
+		filetype *ft = filetypes_lookup_by_name(ft_name);
 		gint new_idx = document_open_file_full(
 			-1, locale_filename, pos, ro, ft,
 			(enc_idx >= 0 && enc_idx < GEANY_ENCODINGS_MAX) ?

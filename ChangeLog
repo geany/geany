@@ -1,3 +1,10 @@
+2008-05-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/plugindata.h, src/keyfile.c, src/filetypes.c, src/filetypes.h:
+   Store filetype::name instead of unique ID when saving sessions.
+   Remove all filetype UID code.
+
+
 2008-04-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keyfile.c, src/keyfile.h, src/main.c:
