@@ -515,12 +515,12 @@ void filetypes_init()
 }
 
 
-static gboolean match_basename(G_GNUC_UNUSED const gchar *ft_name, filetype *ft,
-		gpointer user_data)
+static gboolean match_basename(G_GNUC_UNUSED gpointer key, gpointer value, gpointer user_data)
 {
-	gboolean ret = FALSE;
+	filetype *ft = value;
 	const gchar *base_filename = user_data;
 	gint j;
+	gboolean ret = FALSE;
 
 	/* Don't match '*' because it comes before any custom filetypes */
 	if (ft->id == GEANY_FILETYPES_ALL)
@@ -556,7 +556,7 @@ filetype *filetypes_detect_from_extension(const gchar *utf8_filename)
 	setptr(base_filename, g_utf8_strdown(base_filename, -1));
 #endif
 
-	ft = filetypes_find(match_basename, base_filename);
+	ft = g_hash_table_find(filetypes_hash, match_basename, base_filename);
 	if (ft == NULL)
 		ft = filetypes[GEANY_FILETYPES_ALL];
 
@@ -1037,13 +1037,6 @@ filetype *filetypes_lookup_by_name(const gchar *name)
 	if (ft == NULL)
 		geany_debug("Could not find filetype '%s'.", name);
 	return ft;
-}
-
-
-/* Call a predicate function for each filetype until it returns TRUE. */
-filetype *filetypes_find(FileTypePredicate predicate, gpointer user_data)
-{
-	return g_hash_table_find(filetypes_hash, (GHRFunc) predicate, user_data);
 }
 
 

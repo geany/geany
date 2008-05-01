@@ -10,6 +10,10 @@
    in filetypes_hash.
  * src/filetypes.c:
    Add filetypes_new() to create and initialize a new filetype.
+ * src/filetypes.c, src/filetypes.h:
+   Remove filetypes_find(), which will be replaced with a dynamic array
+   of filetype pointers (more flexible and backwards compatible with
+   existing code).
 
 
 2008-04-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
