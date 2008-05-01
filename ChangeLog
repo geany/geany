@@ -8,6 +8,8 @@
    filetype in filetypes_hash until TRUE is returned.
    Make filetypes_detect_from_extension() work for all filetypes
    in filetypes_hash.
+ * src/filetypes.c:
+   Add filetypes_new() to create and initialize a new filetype.
 
 
 2008-04-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

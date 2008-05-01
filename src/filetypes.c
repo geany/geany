@@ -50,7 +50,7 @@ static GtkWidget *radio_items[GEANY_MAX_FILE_TYPES];
 static void create_radio_menu_item(GtkWidget *menu, const gchar *label, filetype *ftype);
 
 
-static void fill_filetypes(void)
+static void init_builtin_filetypes(void)
 {
 #define C	/* these macros are only to ease navigation */
 	filetypes[GEANY_FILETYPES_C]->id = GEANY_FILETYPES_C;
@@ -405,17 +405,18 @@ static void fill_filetypes(void)
 }
 
 
-static void create_built_in_filetypes(void)
+/* initialize fields. */
+static filetype *filetypes_new(void)
 {
-	filetype_id ft_id;
+	filetype *ft = g_new0(filetype, 1);
 
-	for (ft_id = 0; ft_id < GEANY_MAX_BUILT_IN_FILETYPES; ft_id++)
-	{
-		filetypes[ft_id] = g_new0(filetype, 1);
-		filetypes[ft_id]->programs = g_new0(struct build_programs, 1);
-		filetypes[ft_id]->actions = g_new0(struct build_actions, 1);
-	}
-	fill_filetypes();
+/*
+	ft->id = GEANY_FILETYPES_OTHER;
+*/
+	ft->lang = -2;	/* no tagmanager parser */
+	ft->programs = g_new0(struct build_programs, 1);
+	ft->actions = g_new0(struct build_actions, 1);
+	return ft;
 }
 
 
@@ -426,10 +427,16 @@ void filetypes_init_types()
 
 	g_return_if_fail(filetypes_hash == NULL);
 
-	create_built_in_filetypes();
-
 	filetypes_hash = g_hash_table_new(g_str_hash, g_str_equal);
 
+	/* Create built-in filetypes */
+	for (ft_id = 0; ft_id < GEANY_MAX_BUILT_IN_FILETYPES; ft_id++)
+	{
+		filetypes[ft_id] = filetypes_new();
+	}
+	init_builtin_filetypes();
+
+	/* Add built-in filetypes to the hash */
 	for (ft_id = 0; ft_id < GEANY_MAX_BUILT_IN_FILETYPES; ft_id++)
 	{
 		filetypes_add(filetypes[ft_id]);
