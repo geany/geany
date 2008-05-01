@@ -3,6 +3,11 @@
  * src/plugindata.h, src/keyfile.c, src/filetypes.c, src/filetypes.h:
    Store filetype::name instead of unique ID when saving sessions.
    Remove all filetype UID code.
+ * src/filetypes.c, src/filetypes.h:
+   Add filetypes_find() that calls a predicate function for each
+   filetype in filetypes_hash until TRUE is returned.
+   Make filetypes_detect_from_extension() work for all filetypes
+   in filetypes_hash.
 
 
 2008-04-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

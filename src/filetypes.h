@@ -131,6 +131,12 @@ void filetypes_remove(filetype *ft);
 
 filetype *filetypes_lookup_by_name(const gchar *name);
 
+/* This can be cast to GHRFunc */
+typedef gboolean (*FileTypePredicate) (const gchar *ft_name, filetype *ft,
+		gpointer user_data);
+
+filetype *filetypes_find(FileTypePredicate predicate, gpointer user_data);
+
 
 /* Calls filetypes_init_types() and creates the filetype menu. */
 void filetypes_init(void);

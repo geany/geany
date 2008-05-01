@@ -508,38 +508,53 @@ void filetypes_init()
 }
 
 
+static gboolean match_basename(G_GNUC_UNUSED const gchar *ft_name, filetype *ft,
+		gpointer user_data)
+{
+	gboolean ret = FALSE;
+	const gchar *base_filename = user_data;
+	gint j;
+
+	/* Don't match '*' because it comes before any custom filetypes */
+	if (ft->id == GEANY_FILETYPES_ALL)
+		return FALSE;
+
+	for (j = 0; ft->pattern[j] != NULL; j++)
+	{
+		GPatternSpec *pattern = g_pattern_spec_new(ft->pattern[j]);
+
+		if (g_pattern_match_string(pattern, base_filename))
+		{
+			ret = TRUE;
+			g_pattern_spec_free(pattern);
+			break;
+		}
+		g_pattern_spec_free(pattern);
+	}
+	return ret;
+}
+
+
 /* Detect filetype only based on the filename extension.
  * utf8_filename can include the full path. */
 filetype *filetypes_detect_from_extension(const gchar *utf8_filename)
 {
-	GPatternSpec *pattern;
 	gchar *base_filename;
-	gint i, j;
+	filetype *ft;
 
-	/* to match against the basename of the file(because of Makefile*) */
+	/* to match against the basename of the file (because of Makefile*) */
 	base_filename = g_path_get_basename(utf8_filename);
 #ifdef G_OS_WIN32
 	/* use lower case basename */
 	setptr(base_filename, g_utf8_strdown(base_filename, -1));
 #endif
 
-	for(i = 0; i < GEANY_MAX_FILE_TYPES; i++)
-	{
-		for (j = 0; filetypes[i]->pattern[j] != NULL; j++)
-		{
-			pattern = g_pattern_spec_new(filetypes[i]->pattern[j]);
-			if (g_pattern_match_string(pattern, base_filename))
-			{
-				g_free(base_filename);
-				g_pattern_spec_free(pattern);
-				return filetypes[i];
-			}
-			g_pattern_spec_free(pattern);
-		}
-	}
+	ft = filetypes_find(match_basename, base_filename);
+	if (ft == NULL)
+		ft = filetypes[GEANY_FILETYPES_ALL];
 
 	g_free(base_filename);
-	return filetypes[GEANY_FILETYPES_ALL];
+	return ft;
 }
 
 
@@ -1015,6 +1030,13 @@ filetype *filetypes_lookup_by_name(const gchar *name)
 	if (ft == NULL)
 		geany_debug("Could not find filetype '%s'.", name);
 	return ft;
+}
+
+
+/* Call a predicate function for each filetype until it returns TRUE. */
+filetype *filetypes_find(FileTypePredicate predicate, gpointer user_data)
+{
+	return g_hash_table_find(filetypes_hash, (GHRFunc) predicate, user_data);
 }
 
 
