@@ -40,10 +40,10 @@
 #include "ui_utils.h"
 
 
+GPtrArray *filetypes_array = NULL;	/* Dynamic array of filetype pointers */
+
 GHashTable *filetypes_hash = NULL;	/* Hash of filetype pointers based on name keys */
 
-/* built-in filetypes only */
-filetype *built_in_filetypes[GEANY_MAX_BUILT_IN_FILETYPES] = {NULL};
 
 static GtkWidget *radio_items[GEANY_MAX_FILE_TYPES];
 
@@ -420,13 +420,15 @@ static filetype *filetypes_new(void)
 }
 
 
-/* Create the filetype array and fill it with the known filetypes. */
+/* Create the filetypes array and fill it with the known filetypes. */
 void filetypes_init_types()
 {
 	filetype_id ft_id;
 
+	g_return_if_fail(filetypes_array == NULL);
 	g_return_if_fail(filetypes_hash == NULL);
 
+	filetypes_array = g_ptr_array_sized_new(GEANY_MAX_BUILT_IN_FILETYPES);
 	filetypes_hash = g_hash_table_new(g_str_hash, g_str_equal);
 
 	/* Create built-in filetypes */
@@ -436,7 +438,7 @@ void filetypes_init_types()
 	}
 	init_builtin_filetypes();
 
-	/* Add built-in filetypes to the hash */
+	/* Add built-in filetypes to the hash now the name fields are set */
 	for (ft_id = 0; ft_id < GEANY_MAX_BUILT_IN_FILETYPES; ft_id++)
 	{
 		filetypes_add(filetypes[ft_id]);
@@ -725,10 +727,9 @@ static void create_radio_menu_item(GtkWidget *menu, const gchar *label, filetype
 }
 
 
-static void free_filetype(G_GNUC_UNUSED gpointer key, gpointer value,
-		G_GNUC_UNUSED gpointer user_data)
+static void free_filetype(gpointer data, G_GNUC_UNUSED gpointer user_data)
 {
-	filetype *ft = value;
+	filetype *ft = data;
 
 	g_return_if_fail(ft != NULL);
 
@@ -753,9 +754,11 @@ static void free_filetype(G_GNUC_UNUSED gpointer key, gpointer value,
 /* frees the array and all related pointers */
 void filetypes_free_types()
 {
+	g_return_if_fail(filetypes_array != NULL);
 	g_return_if_fail(filetypes_hash != NULL);
 
-	g_hash_table_foreach(filetypes_hash, free_filetype, NULL);
+	g_ptr_array_foreach(filetypes_array, free_filetype, NULL);
+	g_ptr_array_free(filetypes_array, TRUE);
 	g_hash_table_destroy(filetypes_hash);
 }
 
@@ -1012,6 +1015,7 @@ void filetypes_add(filetype *ft)
 	g_return_if_fail(ft);
 	g_return_if_fail(ft->name);
 
+	g_ptr_array_add(filetypes_array, ft);
 	g_hash_table_insert(filetypes_hash, ft->name, ft);
 }
 
@@ -1020,6 +1024,8 @@ void filetypes_add(filetype *ft)
 void filetypes_remove(filetype *ft)
 {
 	g_return_if_fail(ft);
+
+	g_ptr_array_remove(filetypes_array, ft);
 
 	if (!g_hash_table_remove(filetypes_hash, ft))
 		g_warning("Could not remove filetype %p!", ft);

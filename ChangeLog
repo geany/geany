@@ -14,6 +14,9 @@
    Remove filetypes_find(), which will be replaced with a dynamic array
    of filetype pointers (more flexible and backwards compatible with
    existing code).
+ * src/plugindata.h, src/filetypes.c, src/filetypes.h, src/plugins.c:
+   Add filetypes_array to GeanyData for plugins to access a dynamic
+   array of filetype pointers.
 
 
 2008-04-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

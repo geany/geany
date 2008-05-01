@@ -121,8 +121,11 @@ struct filetype
 	struct build_actions	*actions;
 };
 
-#define filetypes	built_in_filetypes
-extern filetype *built_in_filetypes[GEANY_MAX_BUILT_IN_FILETYPES];
+extern GPtrArray *filetypes_array;
+
+/* Wrap filetypes_array so it can be used with C array syntax.
+ * Example: filetypes[GEANY_FILETYPES_C]->name = ...; */
+#define filetypes	((filetype **)filetypes_array->pdata)
 
 
 void filetypes_add(filetype *ft);
