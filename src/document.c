@@ -1487,6 +1487,8 @@ gboolean document_save_file(gint idx, gboolean force)
 	if (err != 0)
 	{
 		ui_set_statusbar(TRUE, _("Error saving file (%s)."), g_strerror(err));
+		dialogs_show_msgbox_with_secondary(GTK_MESSAGE_ERROR,
+			_("Error saving file."), g_strerror(err));
 		utils_beep();
 		return FALSE;
 	}
