@@ -42,15 +42,15 @@ static void installHtmlRegex (const langType language)
 		"\\2", "m,member,named anchors", "i");
 
 	addTagRegex (language,
-		"<h1>" INNER_HEADING "</h1>",
+		"<h1.*>" INNER_HEADING "</h1>",
 		"\\1", "n,namespace,H1 heading", "i");
 
 	addTagRegex (language,
-		"<h2>" INNER_HEADING "</h2>",
+		"<h2.*>" INNER_HEADING "</h2>",
 		"\\1", "c,class,H2 heading", "i");
 
 	addTagRegex (language,
-		"<h3>" INNER_HEADING "</h3>",
+		"<h3.*>" INNER_HEADING "</h3>",
 		"\\1", "v,variable,H3 heading", "i");
 
 	addTagRegex (language, "^[ \t]*function[ \t]*([A-Za-z0-9_]+)[ \t]*\\(",

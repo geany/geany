@@ -5,6 +5,8 @@
    not be saved.
  * THANKS, src/about.c:
    Update email address of Dormouse Young.
+ * tagmanager/html.c:
+   Fix parsing when heading tags contain attributes (part of #1896068).
 
 
 2008-04-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
