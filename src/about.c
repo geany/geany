@@ -63,7 +63,7 @@ const gchar *translators[][2] = {
 	{ "sv", "Tony Mattsson &lt;superxorn@gmail.com&gt;" },
 	{ "uk", "Boris Dibrov &lt;dibrov.bor@gmail.com&gt;" },
 	{ "vi_VN", "Clytie Siddall &lt;clytie@riverland.net.au&gt;" },
-	{ "zh_CN", "Dormouse Young &lt;dormouse.young@gmail.com&gt;" },
+	{ "zh_CN", "Dormouse Young &lt;mouselinux@163.com&gt;" },
 	{ "zh_TW", "KoViCH &lt;kovich.ian@gmail.com&gt;" }
 };
 static const gint translators_len = G_N_ELEMENTS(translators);

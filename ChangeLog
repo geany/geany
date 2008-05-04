@@ -3,6 +3,8 @@
  * src/document.c:
    Show an error dialog with an appropriate message when a file could
    not be saved.
+ * THANKS, src/about.c:
+   Update email address of Dormouse Young.
 
 
 2008-04-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
