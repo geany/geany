@@ -40,12 +40,20 @@
 #include "ui_utils.h"
 
 
+/* This type 'inherits' from filetype so FullFileType* can be cast to filetype*. */
+typedef struct FullFileType
+{
+	filetype	public;
+	/* Private fields */
+	GtkWidget	*menu_item;			/* holds a pointer to the menu item for this filetype */
+}
+FullFileType;
+
+
 GPtrArray *filetypes_array = NULL;	/* Dynamic array of filetype pointers */
 
 GHashTable *filetypes_hash = NULL;	/* Hash of filetype pointers based on name keys */
 
-
-static GtkWidget *radio_items[GEANY_MAX_FILE_TYPES];
 
 static void create_radio_menu_item(GtkWidget *menu, const gchar *label, filetype *ftype);
 
@@ -408,12 +416,13 @@ static void init_builtin_filetypes(void)
 /* initialize fields. */
 static filetype *filetypes_new(void)
 {
-	filetype *ft = g_new0(filetype, 1);
+	FullFileType *fft = g_new0(FullFileType, 1);
+	filetype *ft = (filetype*) fft;
 
 /*
 	ft->id = GEANY_FILETYPES_OTHER;
 */
-	ft->lang = -2;	/* no tagmanager parser */
+	ft->lang = -2;	/* assume no tagmanager parser */
 	ft->programs = g_new0(struct build_programs, 1);
 	ft->actions = g_new0(struct build_actions, 1);
 	return ft;
@@ -504,7 +513,6 @@ static void create_set_filetype_menu()
 			}
 			default: break;
 		}
-		ft->item = NULL;
 		create_radio_menu_item(sub_menu, title, ft);
 	}
 }
@@ -693,12 +701,16 @@ filetype *filetypes_detect_from_filename(const gchar *utf8_filename)
 
 void filetypes_select_radio_item(const filetype *ft)
 {
+	FullFileType *fft;
+
 	/* app->ignore_callback has to be set by the caller */
+	g_return_if_fail(app->ignore_callback);
+
 	if (ft == NULL)
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(
-			radio_items[filetypes[GEANY_FILETYPES_ALL]->id]), TRUE);
-	else
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(radio_items[ft->id]), TRUE);
+		ft = filetypes[GEANY_FILETYPES_ALL];
+
+	fft = (FullFileType*)ft;
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(fft->menu_item), TRUE);
 }
 
 
@@ -717,10 +729,11 @@ static void create_radio_menu_item(GtkWidget *menu, const gchar *label, filetype
 {
 	static GSList *group = NULL;
 	GtkWidget *tmp;
+	FullFileType *fft = (FullFileType*)ftype;
 
 	tmp = gtk_radio_menu_item_new_with_label(group, label);
 	group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(tmp));
-	radio_items[ftype->id] = tmp;
+	fft->menu_item = tmp;
 	gtk_widget_show(tmp);
 	gtk_container_add(GTK_CONTAINER(menu), tmp);
 	g_signal_connect((gpointer) tmp, "activate", G_CALLBACK(on_filetype_change), (gpointer) ftype);

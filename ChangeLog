@@ -1,3 +1,13 @@
+2008-05-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/filetypes.c, src/filetypes.h:
+   Remove unused filetype::item field.
+   Create FullFileType private type that 'inherits' from filetype
+   (FullFileType* can be cast to filetype*). This is used in
+   filetypes_new() to hide filetype struct fields from the API.
+   Remove radio_items[] and use FullFileType::menu_item instead.
+
+
 2008-05-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/plugindata.h, src/keyfile.c, src/filetypes.c, src/filetypes.h:

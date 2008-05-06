@@ -106,7 +106,6 @@ struct build_programs
 struct filetype
 {
 	filetype_id		  id;
-	GtkWidget		 *item;				/* holds a pointer to the menu item for this filetypes */
 	langType 		  lang;				/* represents the langType of tagmanager(see the table */
 										/* in tagmanager/parsers.h), -1 represents all, -2 none */
 	gchar	 		 *name;				/* will be used as name for tagmanager */
