@@ -994,10 +994,12 @@ Regular expressions
 
 You can use regular expressions in the Find and Replace dialogs
 by selecting the Use regular expressions check box. The syntax is
-POSIX-like, as described below in `Regular expressions`_.
+POSIX-like, as described in the table below.
 
 .. note::
-    Searching backwards with regular expressions is not supported.
+    (1) Searching backwards with regular expressions is not supported.
+    (2) \\r and \\n are never matched because regular expression
+        searches are made line per line (stripped of end-of-line chars).
 
 **In a regular expression, the following characters are interpreted:**
 
