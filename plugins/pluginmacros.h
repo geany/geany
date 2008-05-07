@@ -28,7 +28,8 @@
 #define PLUGINMACROS_H
 
 #define app				geany_data->app
-#define doc_array		geany_data->doc_array
+#define doc_array		geany_data->doc_array			/* Allows use of doc_list[] macro */
+#define filetypes_array	geany_data->filetypes_array		/* Allows use of filetypes[] macro */
 #define prefs			geany_data->prefs
 #define project			app->project
 

@@ -8,6 +8,8 @@
    Move print_filetypes() out of parse_command_line_options();
  * src/dialogs.c, src/filetypes.c:
    Make Open dialog file filter work for custom filetypes.
+ * plugins/pluginmacros.h:
+   Add filetypes_array macro to allow use of filetypes[ft_id].
 
 
 2008-05-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
