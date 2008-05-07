@@ -396,7 +396,8 @@ TagManagerFuncs;
 typedef struct NavQueueFuncs
 {
 	gboolean		(*goto_line) (gint old_idx, gint new_idx, gint line);
-}NavQueueFuncs;
+}
+NavQueueFuncs;
 
 
 /* Deprecated aliases */
@@ -407,6 +408,12 @@ typedef GeanyData PluginData;	/* for compatibility with API < 7 */
 #define VERSION_CHECK(api_required) \
 	PLUGIN_VERSION_CHECK(api_required)
 
-#endif
+#define GEANY_MAX_FILE_TYPES \
+	filetypes_array->len
+
+#define GEANY_FILETYPES_ALL \
+	GEANY_FILETYPES_NONE
+
+#endif	/* GEANY_DISABLE_DEPRECATED */
 
 #endif
