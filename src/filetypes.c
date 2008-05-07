@@ -978,19 +978,21 @@ void filetypes_save_commands()
 GtkFileFilter *filetypes_create_file_filter_all_source()
 {
 	GtkFileFilter *new_filter;
-	gint i, j;
+	guint i, j;
 
 	new_filter = gtk_file_filter_new();
 	gtk_file_filter_set_name(new_filter, _("All Source"));
 
-	for (i = 0; i < GEANY_FILETYPES_ALL; i++)
+	for (i = 0; i < filetypes_array->len; i++)
 	{
+		if (i == GEANY_FILETYPES_ALL)
+			continue;
+
 		for (j = 0; filetypes[i]->pattern[j]; j++)
 		{
 			gtk_file_filter_add_pattern(new_filter, filetypes[i]->pattern[j]);
 		}
 	}
-
 	return new_filter;
 }
 

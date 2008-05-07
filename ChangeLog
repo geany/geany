@@ -6,6 +6,8 @@
    filetypes_array->len.
    Highlighting and templates now use GEANY_MAX_BUILT_IN_FILETYPES.
    Move print_filetypes() out of parse_command_line_options();
+ * src/dialogs.c, src/filetypes.c:
+   Make Open dialog file filter work for custom filetypes.
 
 
 2008-05-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

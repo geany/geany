@@ -87,7 +87,9 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 		gchar *charset = NULL;
 		gboolean ro = (response == GEANY_RESPONSE_VIEW);	/* View clicked */
 
-		if (filetype_idx >= 0 && filetype_idx < GEANY_FILETYPES_ALL) ft = filetypes[filetype_idx];
+		/* ignore detect from file item */
+		if (filetype_idx >= 0 && filetype_idx < GEANY_FILETYPES_ALL)
+			ft = filetypes[filetype_idx];
 		if (encoding_idx >= 0 && encoding_idx < GEANY_ENCODINGS_MAX)
 			charset = encodings[encoding_idx].charset;
 
@@ -205,8 +207,11 @@ static void create_open_file_dialog(void)
 	/* now create meta filter "All Source" */
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
 				filetypes_create_file_filter_all_source());
-	for (i = 0; i < filetypes_array->len - 1; i++)
+	for (i = 0; i < filetypes_array->len; i++)
 	{
+		if (i == GEANY_FILETYPES_ALL)
+			continue;
+
 		gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), filetypes[i]->title);
 		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
 				filetypes_create_file_filter(filetypes[i]));
