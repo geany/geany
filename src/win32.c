@@ -128,14 +128,14 @@ static gchar *get_filters(gboolean project_files)
 	if (project_files)
 	{
 		string = g_strconcat(_("Geany project files"), "\t", "*." GEANY_PROJECT_EXT, "\t",
-			filetypes[GEANY_FILETYPES_ALL]->title, "\t",
-			filetypes[GEANY_FILETYPES_ALL]->pattern[0], "\t", NULL);
+			filetypes[GEANY_FILETYPES_NONE]->title, "\t",
+			filetypes[GEANY_FILETYPES_NONE]->pattern[0], "\t", NULL);
 	}
 	else
 	{
 		string = g_strconcat(_("Executables"), "\t", "*.exe;*.bat;*.cmd", "\t",
-			filetypes[GEANY_FILETYPES_ALL]->title, "\t",
-			filetypes[GEANY_FILETYPES_ALL]->pattern[0], "\t", NULL);
+			filetypes[GEANY_FILETYPES_NONE]->title, "\t",
+			filetypes[GEANY_FILETYPES_NONE]->pattern[0], "\t", NULL);
 	}
 
 	/* replace all "\t"s by \0 */
@@ -332,7 +332,7 @@ gboolean win32_show_file_dialog(gboolean file_open, const gchar *initial_dir)
 	of.lpstrFilter = filters;
 
 	of.lpstrCustomFilter = NULL;
-	of.nFilterIndex = GEANY_FILETYPES_ALL + 1;
+	of.nFilterIndex = GEANY_FILETYPES_NONE + 1;
 	of.lpstrFile = fname;
 	of.lpstrInitialDir = initial_dir;
 	of.nMaxFile = 2048;

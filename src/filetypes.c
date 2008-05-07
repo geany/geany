@@ -403,14 +403,14 @@ static void init_builtin_filetypes(void)
 	filetypes[GEANY_FILETYPES_REST]->comment_close = NULL;
 
 #define ALL
-	filetypes[GEANY_FILETYPES_ALL]->id = GEANY_FILETYPES_ALL;
-	filetypes[GEANY_FILETYPES_ALL]->name = g_strdup("None");
-	filetypes[GEANY_FILETYPES_ALL]->lang = -2;
-	filetypes[GEANY_FILETYPES_ALL]->title = g_strdup(_("All files"));
-	filetypes[GEANY_FILETYPES_ALL]->extension = g_strdup("*");
-	filetypes[GEANY_FILETYPES_ALL]->pattern = utils_strv_new("*", NULL);
-	filetypes[GEANY_FILETYPES_ALL]->comment_open = NULL;
-	filetypes[GEANY_FILETYPES_ALL]->comment_close = NULL;
+	filetypes[GEANY_FILETYPES_NONE]->id = GEANY_FILETYPES_NONE;
+	filetypes[GEANY_FILETYPES_NONE]->name = g_strdup("None");
+	filetypes[GEANY_FILETYPES_NONE]->lang = -2;
+	filetypes[GEANY_FILETYPES_NONE]->title = g_strdup(_("All files"));
+	filetypes[GEANY_FILETYPES_NONE]->extension = g_strdup("*");
+	filetypes[GEANY_FILETYPES_NONE]->pattern = utils_strv_new("*", NULL);
+	filetypes[GEANY_FILETYPES_NONE]->comment_open = NULL;
+	filetypes[GEANY_FILETYPES_NONE]->comment_close = NULL;
 }
 
 
@@ -506,7 +506,7 @@ static void create_set_filetype_menu()
 				sub_menu = sub_menu_misc;
 				break;
 			}
-			case GEANY_FILETYPES_ALL:	/* none */
+			case GEANY_FILETYPES_NONE:	/* none */
 			{
 				sub_menu = filetype_menu;
 				title = _("None");
@@ -534,7 +534,7 @@ static gboolean match_basename(G_GNUC_UNUSED gpointer key, gpointer value, gpoin
 	gboolean ret = FALSE;
 
 	/* Don't match '*' because it comes before any custom filetypes */
-	if (ft->id == GEANY_FILETYPES_ALL)
+	if (ft->id == GEANY_FILETYPES_NONE)
 		return FALSE;
 
 	for (j = 0; ft->pattern[j] != NULL; j++)
@@ -569,7 +569,7 @@ filetype *filetypes_detect_from_extension(const gchar *utf8_filename)
 
 	ft = g_hash_table_find(filetypes_hash, match_basename, base_filename);
 	if (ft == NULL)
-		ft = filetypes[GEANY_FILETYPES_ALL];
+		ft = filetypes[GEANY_FILETYPES_NONE];
 
 	g_free(base_filename);
 	return ft;
@@ -655,7 +655,7 @@ static filetype *filetypes_detect_from_file_internal(const gchar *utf8_filename,
 		return ft;
 
 	if (utf8_filename == NULL)
-		return filetypes[GEANY_FILETYPES_ALL];
+		return filetypes[GEANY_FILETYPES_NONE];
 
 	return filetypes_detect_from_extension(utf8_filename);
 }
@@ -668,7 +668,7 @@ filetype *filetypes_detect_from_file(gint idx)
 	gchar *line;
 
 	if (! DOC_IDX_VALID(idx))
-		return filetypes[GEANY_FILETYPES_ALL];
+		return filetypes[GEANY_FILETYPES_NONE];
 
 	line = sci_get_line(doc_list[idx].sci, 0);
 	ft = filetypes_detect_from_file_internal(doc_list[idx].file_name, line);
@@ -708,7 +708,7 @@ void filetypes_select_radio_item(const filetype *ft)
 	g_return_if_fail(app->ignore_callback);
 
 	if (ft == NULL)
-		ft = filetypes[GEANY_FILETYPES_ALL];
+		ft = filetypes[GEANY_FILETYPES_NONE];
 
 	fft = (FullFileType*)ft;
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(fft->menu_item), TRUE);
@@ -894,8 +894,8 @@ void filetypes_load_config(gint ft_id)
 	config = g_key_file_new();
 	config_home = g_key_file_new();
 	{
-		/* highlighting uses GEANY_FILETYPES_ALL for common settings */
-		gchar *ext = (ft_id != GEANY_FILETYPES_ALL) ?
+		/* highlighting uses GEANY_FILETYPES_NONE for common settings */
+		gchar *ext = (ft_id != GEANY_FILETYPES_NONE) ?
 			filetypes_get_conf_extension(ft_id) : g_strdup("common");
 		gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.", ext, NULL);
 		gchar *f = g_strconcat(app->configdir,
@@ -940,7 +940,7 @@ void filetypes_save_commands()
 		G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.", NULL);
 	gint i;
 
-	for (i = 0; i < GEANY_FILETYPES_ALL; i++)
+	for (i = 0; i < GEANY_FILETYPES_NONE; i++)
 	{
 		struct build_programs *bp = filetypes[i]->programs;
 		GKeyFile *config_home;
@@ -985,7 +985,7 @@ GtkFileFilter *filetypes_create_file_filter_all_source()
 
 	for (i = 0; i < filetypes_array->len; i++)
 	{
-		if (i == GEANY_FILETYPES_ALL)
+		if (i == GEANY_FILETYPES_NONE)
 			continue;
 
 		for (j = 0; filetypes[i]->pattern[j]; j++)

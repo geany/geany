@@ -298,7 +298,7 @@ static void init_ft_templates(const gchar *year, const gchar *date)
 
 		switch (ft_id)
 		{
-			case GEANY_FILETYPES_ALL:	TEMPLATES_CREATE_FILE(fname, templates_filetype_none); break;
+			case GEANY_FILETYPES_NONE:	TEMPLATES_CREATE_FILE(fname, templates_filetype_none); break;
 			case GEANY_FILETYPES_C:		TEMPLATES_CREATE_FILE(fname, templates_filetype_c); break;
 			case GEANY_FILETYPES_CPP:	TEMPLATES_CREATE_FILE(fname, templates_filetype_cpp); break;
 			case GEANY_FILETYPES_D:		TEMPLATES_CREATE_FILE(fname, templates_filetype_d); break;
@@ -346,7 +346,7 @@ static void create_new_menu_items(void)
 
 		if (ft_templates[ft_id] == NULL)
 			continue;
-		if (ft_id == GEANY_FILETYPES_ALL)
+		if (ft_id == GEANY_FILETYPES_NONE)
 			label = _("None");
 		tmp_menu = gtk_menu_item_new_with_label(label);
 		tmp_button = gtk_menu_item_new_with_label(label);
@@ -482,7 +482,7 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 			break;
 		}
 
-		case GEANY_FILETYPES_ALL:
+		case GEANY_FILETYPES_NONE:
 		{
 			line_prefix = "";
 			break;
@@ -545,7 +545,7 @@ gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname)
 
 	if (fname == NULL)
 	{
-		if (ft_id == GEANY_FILETYPES_ALL)
+		if (ft_id == GEANY_FILETYPES_NONE)
 			shortname = g_strdup(GEANY_STRING_UNTITLED);
 		else
 			shortname = g_strconcat(GEANY_STRING_UNTITLED, ".", ft->extension, NULL);
@@ -580,7 +580,7 @@ gchar *templates_get_template_new_file(struct filetype *ft)
 	gchar *ft_template = NULL;
 	gchar *file_header = NULL;
 
-	if (FILETYPE_ID(ft) == GEANY_FILETYPES_ALL)
+	if (FILETYPE_ID(ft) == GEANY_FILETYPES_NONE)
 		return get_file_template(ft);
 
 	file_header = templates_get_template_fileheader(ft->id, NULL);	/* file template only used for new files */

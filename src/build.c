@@ -58,7 +58,7 @@
 #include "win32.h"
 
 
-BuildInfo build_info = {GBO_COMPILE, 0, NULL, GEANY_FILETYPES_ALL, NULL};
+BuildInfo build_info = {GBO_COMPILE, 0, NULL, GEANY_FILETYPES_NONE, NULL};
 
 static gchar *current_dir_entered = NULL;
 
@@ -66,7 +66,7 @@ static struct
 {
 	GPid pid;
 	gint file_type_id;
-} run_info = {0, GEANY_FILETYPES_ALL};
+} run_info = {0, GEANY_FILETYPES_NONE};
 
 #ifdef G_OS_WIN32
 static const gchar RUN_SCRIPT_CMD[] = "geany_run_script.bat";
@@ -1642,7 +1642,7 @@ void build_menu_update(gint idx)
 	if (idx == -1)
 		idx = document_get_cur_idx();
 	if (idx == -1 ||
-		(FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_ALL &&
+		(FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_NONE &&
 			doc_list[idx].file_name == NULL))
 	{
 		gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), FALSE);
@@ -1703,7 +1703,7 @@ void build_menu_update(gint idx)
 		((ft->actions->can_compile ||
 		ft->actions->can_link ||
 		ft->actions->can_exec) &&
-		FILETYPE_ID(ft) != GEANY_FILETYPES_ALL);
+		FILETYPE_ID(ft) != GEANY_FILETYPES_NONE);
 	if (menu_items->item_set_args)
 		gtk_widget_set_sensitive(menu_items->item_set_args, can_set_args);
 
@@ -1776,7 +1776,7 @@ static void set_stop_button(gboolean stop)
 
 
 /* Creates the relevant build menu if necessary.
- * If filetype_idx is -1, the current filetype is used, or GEANY_FILETYPES_ALL */
+ * If filetype_idx is -1, the current filetype is used, or GEANY_FILETYPES_NONE */
 BuildMenuItems *build_get_menu_items(gint filetype_idx)
 {
 	BuildMenuItems *items;

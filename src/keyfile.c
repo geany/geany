@@ -121,7 +121,7 @@ static gchar *get_session_file_string(gint idx)
 	filetype *ft = doc_list[idx].file_type;
 
 	if (ft == NULL)	/* can happen when saving a new file when quitting */
-		ft = filetypes[GEANY_FILETYPES_ALL];
+		ft = filetypes[GEANY_FILETYPES_NONE];
 
 	fname = g_strdup_printf("%d;%s;%d;%d;%d;%d;%d;%s;",
 		sci_get_current_position(doc_list[idx].sci),
