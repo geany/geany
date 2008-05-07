@@ -415,7 +415,7 @@ static void init_builtin_filetypes(void)
 
 
 /* initialize fields. */
-static filetype *filetypes_new(void)
+static filetype *filetype_new(void)
 {
 	FullFileType *fft = g_new0(FullFileType, 1);
 	filetype *ft = (filetype*) fft;
@@ -427,6 +427,17 @@ static filetype *filetypes_new(void)
 	ft->programs = g_new0(struct build_programs, 1);
 	ft->actions = g_new0(struct build_actions, 1);
 	return ft;
+}
+
+
+/* Add a filetype pointer to the list of available filetypes. */
+static void filetype_add(filetype *ft)
+{
+	g_return_if_fail(ft);
+	g_return_if_fail(ft->name);
+
+	g_ptr_array_add(filetypes_array, ft);
+	g_hash_table_insert(filetypes_hash, ft->name, ft);
 }
 
 
@@ -444,14 +455,14 @@ void filetypes_init_types()
 	/* Create built-in filetypes */
 	for (ft_id = 0; ft_id < GEANY_MAX_BUILT_IN_FILETYPES; ft_id++)
 	{
-		filetypes[ft_id] = filetypes_new();
+		filetypes[ft_id] = filetype_new();
 	}
 	init_builtin_filetypes();
 
 	/* Add built-in filetypes to the hash now the name fields are set */
 	for (ft_id = 0; ft_id < GEANY_MAX_BUILT_IN_FILETYPES; ft_id++)
 	{
-		filetypes_add(filetypes[ft_id]);
+		filetype_add(filetypes[ft_id]);
 	}
 }
 
@@ -741,7 +752,21 @@ static void create_radio_menu_item(GtkWidget *menu, const gchar *label, filetype
 }
 
 
-static void free_filetype(gpointer data, G_GNUC_UNUSED gpointer user_data)
+#if 0
+/* Remove a filetype pointer from the list of available filetypes. */
+static void filetype_remove(filetype *ft)
+{
+	g_return_if_fail(ft);
+
+	g_ptr_array_remove(filetypes_array, ft);
+
+	if (!g_hash_table_remove(filetypes_hash, ft))
+		g_warning("Could not remove filetype %p!", ft);
+}
+#endif
+
+
+static void filetype_free(gpointer data, G_GNUC_UNUSED gpointer user_data)
 {
 	filetype *ft = data;
 
@@ -771,7 +796,7 @@ void filetypes_free_types()
 	g_return_if_fail(filetypes_array != NULL);
 	g_return_if_fail(filetypes_hash != NULL);
 
-	g_ptr_array_foreach(filetypes_array, free_filetype, NULL);
+	g_ptr_array_foreach(filetypes_array, filetype_free, NULL);
 	g_ptr_array_free(filetypes_array, TRUE);
 	g_hash_table_destroy(filetypes_hash);
 }
@@ -1022,29 +1047,6 @@ gboolean filetype_has_tags(filetype *ft)
 	g_return_val_if_fail(ft != NULL, FALSE);
 
 	return ft->lang >= 0;
-}
-
-
-/* Add a filetype pointer to the list of available filetypes. */
-void filetypes_add(filetype *ft)
-{
-	g_return_if_fail(ft);
-	g_return_if_fail(ft->name);
-
-	g_ptr_array_add(filetypes_array, ft);
-	g_hash_table_insert(filetypes_hash, ft->name, ft);
-}
-
-
-/* Remove a filetype pointer from the list of available filetypes. */
-void filetypes_remove(filetype *ft)
-{
-	g_return_if_fail(ft);
-
-	g_ptr_array_remove(filetypes_array, ft);
-
-	if (!g_hash_table_remove(filetypes_hash, ft))
-		g_warning("Could not remove filetype %p!", ft);
 }
 
 

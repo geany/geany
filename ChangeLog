@@ -18,6 +18,9 @@
  * src/plugindata.h:
    Add deprecated aliases for GEANY_MAX_FILE_TYPES and
    GEANY_FILETYPES_ALL.
+ * src/filetypes.c, src/filetypes.h:
+   Rename static functions for filetype creation & addition.
+   Make filetypes_add(), filetypes_remove() static.
 
 
 2008-05-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

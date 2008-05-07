@@ -126,10 +126,6 @@ extern GPtrArray *filetypes_array;
 #define filetypes	((filetype **)filetypes_array->pdata)
 
 
-void filetypes_add(filetype *ft);
-
-void filetypes_remove(filetype *ft);
-
 filetype *filetypes_lookup_by_name(const gchar *name);
 
 
