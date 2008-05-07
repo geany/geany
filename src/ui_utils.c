@@ -130,8 +130,8 @@ void ui_update_statusbar(gint idx, gint pos)
 		const gchar *cur_tag;
 		gchar *filetype_name;
 
-		/* workaround to make the name of filetype GEANY_FILETYPES_ALL translatable */
-		if (doc_list[idx].file_type == NULL || doc_list[idx].file_type->id == GEANY_FILETYPES_ALL)
+		/* workaround to make the name of filetype GEANY_FILETYPES_NONE translatable */
+		if (doc_list[idx].file_type == NULL || doc_list[idx].file_type->id == GEANY_FILETYPES_NONE)
 			filetype_name = _("None");
 		else
 			filetype_name = doc_list[idx].file_type->name;

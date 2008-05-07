@@ -1,3 +1,47 @@
+2008-05-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/templates.c, src/build.c, src/utils.c, src/win32.c,
+   src/highlighting.c, src/dialogs.c, src/plugindata.h,
+   src/msgwindow.c, src/keyfile.c, src/keyfile.h, src/filetypes.c,
+   src/filetypes.h, src/document.c, src/plugins.c, src/main.c,
+   src/symbols.c, src/ui_utils.c, plugins/vcdiff.c,
+   plugins/pluginmacros.h:
+   Merge revisions 2537:2558 from the custom-filetypes branch:
+   Note: this breaks the API.
+   This commit is to restructure most of the filetypes code that
+   affects the plugin API, custom filetype support is not implemented.
+   Add filetypes_array to GeanyData for plugins to access a dynamic
+   array of filetype pointers.
+   Remove old filetypes array from API.
+   Use a hash table for filetypes, using filetype::name keys.
+   Replace filetypes_get_from_uid() with filetypes_lookup_by_name().
+   Store filetype::name instead of unique ID when saving sessions.
+   Remove all filetype UID code.
+   Add GEANY_MAX_BUILT_IN_FILETYPES.
+   Remove GEANY_MAX_FILE_TYPES - use filetypes_array->len (or
+   GEANY_MAX_BUILT_IN_FILETYPES) instead.
+   Rename GEANY_FILETYPES_ALL GEANY_FILETYPES_NONE.
+   Make Open dialog file filter work for filetypes added after
+   GEANY_FILETYPES_NONE (really the None filetype should be made the
+   first element in filetypes_array, but this would need rewriting
+   quite a lot of code).
+   Add deprecated aliases for GEANY_MAX_FILE_TYPES and
+   GEANY_FILETYPES_ALL.
+   Remove unused filetype::item field.
+   Create FullFileType private type that 'inherits' from filetype
+   (FullFileType* can be cast to filetype*). This is used in
+   filetype_new() to hide filetype struct fields from the API.
+   Remove radio_items[] and use FullFileType::menu_item instead.
+   Make filetypes_detect_from_extension() work for all filetypes
+   in filetypes_hash.
+   Add filetype_new() to create and initialize a new filetype.
+   Refactor open_session_file() from configuration_open_files().
+   Refactor get_session_file_string() from
+   configuration_save_session_files().
+   Refactor create_set_filetype_menu() from filetypes_init().
+   Move print_filetypes() out of parse_command_line_options();
+
+
 2008-05-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * doc/geany.txt, doc/geany.html:

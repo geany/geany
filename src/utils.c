@@ -607,7 +607,7 @@ gint utils_get_current_function(gint idx, const gchar **tagname)
 	/* parse the current function name here because TM line numbers may have changed,
 	 * and it would take too long to reparse the whole file. */
 	if (doc_list[idx].file_type != NULL &&
-		doc_list[idx].file_type->id != GEANY_FILETYPES_ALL)
+		doc_list[idx].file_type->id != GEANY_FILETYPES_NONE)
 	{
 		const gint fn_fold = get_function_fold_number(idx);
 

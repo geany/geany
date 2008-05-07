@@ -227,7 +227,7 @@ static HighlightingFuncs highlighting_funcs = {
 
 static FiletypeFuncs filetype_funcs = {
 	&filetypes_detect_from_filename,
-	&filetypes_get_from_uid
+	&filetypes_lookup_by_name
 };
 
 static NavQueueFuncs navqueue_funcs = {
@@ -267,7 +267,7 @@ geany_data_init(void)
 	geany_data.app = app;
 	geany_data.tools_menu = lookup_widget(app->window, "tools1_menu");
 	geany_data.doc_array = doc_array;
-	geany_data.filetypes = filetypes;
+	geany_data.filetypes_array = filetypes_array;
 	geany_data.prefs = &prefs;
 	geany_data.editor_prefs = &editor_prefs;
 	geany_data.build_info = &build_info;

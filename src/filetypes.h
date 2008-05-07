@@ -77,13 +77,13 @@ typedef enum
 	GEANY_FILETYPES_REST,
 	GEANY_FILETYPES_SQL,
 
-	GEANY_FILETYPES_ALL,	/* must be last filetype, used for 'None' item. */
-	GEANY_MAX_FILE_TYPES
+	GEANY_FILETYPES_NONE,	/* must be last filetype */
+	GEANY_MAX_BUILT_IN_FILETYPES	/* Use filetypes_array->len instead */
 } filetype_id;
 
 /* Safe wrapper to get the id field of a possibly NULL filetype pointer. */
 #define FILETYPE_ID(filetype_ptr) \
-	(((filetype_ptr) != NULL) ? (filetype_ptr)->id : GEANY_FILETYPES_ALL)
+	(((filetype_ptr) != NULL) ? (filetype_ptr)->id : GEANY_FILETYPES_NONE)
 
 
 struct build_actions
@@ -105,8 +105,6 @@ struct build_programs
 struct filetype
 {
 	filetype_id		  id;
-	guint	 		  uid;				/* unique id as reference for saved filetype in config file */
-	GtkWidget		 *item;				/* holds a pointer to the menu item for this filetypes */
 	langType 		  lang;				/* represents the langType of tagmanager(see the table */
 										/* in tagmanager/parsers.h), -1 represents all, -2 none */
 	gchar	 		 *name;				/* will be used as name for tagmanager */
@@ -121,11 +119,15 @@ struct filetype
 	struct build_actions	*actions;
 };
 
-extern filetype *filetypes[GEANY_MAX_FILE_TYPES];
+extern GPtrArray *filetypes_array;
+
+/* Wrap filetypes_array so it can be used with C array syntax.
+ * Example: filetypes[GEANY_FILETYPES_C]->name = ...; */
+#define filetypes	((filetype **)filetypes_array->pdata)
 
 
-/* If uid is valid, return corresponding filetype, otherwise NULL. */
-filetype *filetypes_get_from_uid(gint uid);
+filetype *filetypes_lookup_by_name(const gchar *name);
+
 
 /* Calls filetypes_init_types() and creates the filetype menu. */
 void filetypes_init(void);

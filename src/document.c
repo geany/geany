@@ -633,13 +633,13 @@ gint document_new_file(const gchar *filename, filetype *ft, const gchar *text)
 	/* store the opened encoding for undo/redo */
 	store_saved_encoding(idx);
 
-	/*document_set_filetype(idx, (ft == NULL) ? filetypes[GEANY_FILETYPES_ALL] : ft);*/
+	/*document_set_filetype(idx, (ft == NULL) ? filetypes[GEANY_FILETYPES_NONE] : ft);*/
 	if (ft == NULL && filename != NULL) /* guess the filetype from the filename if one is given */
 		ft = filetypes_detect_from_file(idx);
 
 	document_set_filetype(idx, ft);	/* also clears taglist */
 	if (ft == NULL)
-		highlighting_set_styles(doc_list[idx].sci, GEANY_FILETYPES_ALL);
+		highlighting_set_styles(doc_list[idx].sci, GEANY_FILETYPES_NONE);
 	ui_set_window_title(idx);
 	build_menu_update(idx);
 	document_update_tag_list(idx, FALSE);
@@ -1294,7 +1294,7 @@ gboolean document_save_file_as(gint idx)
 	if (! DOC_IDX_VALID(idx)) return FALSE;
 
 	/* detect filetype */
-	if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_ALL)
+	if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_NONE)
 	{
 		filetype *ft = filetypes_detect_from_file(idx);
 

@@ -737,7 +737,7 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir, gch
 		case GEANY_FILETYPES_LATEX:
 			/* ./kommtechnik_2b.tex:18: Emergency stop. */
 		case GEANY_FILETYPES_MAKE:	/* Assume makefile is building with gcc */
-		case GEANY_FILETYPES_ALL:
+		case GEANY_FILETYPES_NONE:
 		default:	/* The default is a GNU gcc type error */
 		{
 			if (build_info.file_type_id == GEANY_FILETYPES_JAVA &&

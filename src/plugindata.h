@@ -30,17 +30,17 @@
  **/
 
 
-#ifndef PLUGIN_H
-#define PLUGIN_H
+#ifndef PLUGINDATA_H
+#define PLUGINDATA_H
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 53;
+static const gint api_version = 56;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
  * are only appended, as this doesn't affect existing fields. */
-static const gint abi_version = 24;
+static const gint abi_version = 27;
 
 /** Check the plugin can be loaded by Geany.
  * This performs runtime checks that try to ensure:
@@ -155,9 +155,9 @@ typedef struct GeanyData
 {
 	GeanyApp	*app;					/**< Geany application data fields */
 	GtkWidget	*tools_menu;			/**< Most plugins should add menu items to the Tools menu only */
-	GArray		*doc_array;				/**< Dynamic array of document pointers */
-	struct filetype		**filetypes;
-	struct GeanyPrefs	*prefs;
+	GArray		*doc_array;				/**< Dynamic array of document structs */
+	GPtrArray	*filetypes_array;		/**< Dynamic array of filetype pointers */
+	struct GeanyPrefs	*prefs;			/* Note: this will be split up in future versions */
 	struct EditorPrefs	*editor_prefs;	/**< Editor settings */
 	struct BuildInfo	*build_info;	/**< Current build information */
 
@@ -367,7 +367,7 @@ HighlightingFuncs;
 typedef struct FiletypeFuncs
 {
 	filetype*	(*detect_from_filename) (const gchar *utf8_filename);
-	filetype*	(*get_from_uid) (gint uid);
+	filetype*	(*lookup_by_name) (const gchar *name);
 }
 FiletypeFuncs;
 
@@ -396,7 +396,8 @@ TagManagerFuncs;
 typedef struct NavQueueFuncs
 {
 	gboolean		(*goto_line) (gint old_idx, gint new_idx, gint line);
-}NavQueueFuncs;
+}
+NavQueueFuncs;
 
 
 /* Deprecated aliases */
@@ -407,6 +408,12 @@ typedef GeanyData PluginData;	/* for compatibility with API < 7 */
 #define VERSION_CHECK(api_required) \
 	PLUGIN_VERSION_CHECK(api_required)
 
-#endif
+#define GEANY_MAX_FILE_TYPES \
+	filetypes_array->len
+
+#define GEANY_FILETYPES_ALL \
+	GEANY_FILETYPES_NONE
+
+#endif	/* GEANY_DISABLE_DEPRECATED */
 
 #endif

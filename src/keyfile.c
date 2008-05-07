@@ -115,6 +115,27 @@ static void save_recent_files(GKeyFile *config)
 }
 
 
+static gchar *get_session_file_string(gint idx)
+{
+	gchar *fname;
+	filetype *ft = doc_list[idx].file_type;
+
+	if (ft == NULL)	/* can happen when saving a new file when quitting */
+		ft = filetypes[GEANY_FILETYPES_NONE];
+
+	fname = g_strdup_printf("%d;%s;%d;%d;%d;%d;%d;%s;",
+		sci_get_current_position(doc_list[idx].sci),
+		ft->name,
+		doc_list[idx].readonly,
+		encodings_get_idx_from_charset(doc_list[idx].encoding),
+		doc_list[idx].use_tabs,
+		doc_list[idx].auto_indent,
+		doc_list[idx].line_wrapping,
+		doc_list[idx].file_name);
+	return fname;
+}
+
+
 void configuration_save_session_files(GKeyFile *config)
 {
 	gint idx, npage;
@@ -133,20 +154,9 @@ void configuration_save_session_files(GKeyFile *config)
 		if (idx >= 0 && g_path_is_absolute(DOC_FILENAME(idx)))
 		{
 			gchar *fname;
-			filetype *ft = doc_list[idx].file_type;
 
-			if (ft == NULL)	/* can happen when saving a new file when quitting */
-				ft = filetypes[GEANY_FILETYPES_ALL];
 			g_snprintf(entry, 13, "FILE_NAME_%d", j);
-			fname = g_strdup_printf("%d;%d;%d;%d;%d;%d;%d;%s;",
-				sci_get_current_position(doc_list[idx].sci),
-				ft->uid,
-				doc_list[idx].readonly,
-				encodings_get_idx_from_charset(doc_list[idx].encoding),
-				doc_list[idx].use_tabs,
-				doc_list[idx].auto_indent,
-				doc_list[idx].line_wrapping,
-				doc_list[idx].file_name);
+			fname = get_session_file_string(idx);
 			g_key_file_set_string(config, "files", entry, fname);
 			g_free(fname);
 			j++;
@@ -801,14 +811,58 @@ gboolean configuration_load(void)
 }
 
 
+static gboolean open_session_file(gchar **tmp)
+{
+	guint pos;
+	const gchar *ft_name;
+	gchar *locale_filename;
+	gint enc_idx;
+	gboolean ro, use_tabs, auto_indent, line_wrapping;
+	gboolean ret = FALSE;
+
+	pos = atoi(tmp[0]);
+	ft_name = tmp[1];
+	ro = atoi(tmp[2]);
+	enc_idx = atoi(tmp[3]);
+	use_tabs = atoi(tmp[4]);
+	auto_indent = atoi(tmp[5]);
+	line_wrapping = atoi(tmp[6]);
+	/* try to get the locale equivalent for the filename */
+	locale_filename = utils_get_locale_from_utf8(tmp[7]);
+
+	if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+	{
+		filetype *ft = filetypes_lookup_by_name(ft_name);
+		gint new_idx = document_open_file_full(
+			-1, locale_filename, pos, ro, ft,
+			(enc_idx >= 0 && enc_idx < GEANY_ENCODINGS_MAX) ?
+				encodings[enc_idx].charset : NULL);
+
+		if (DOC_IDX_VALID(new_idx))
+		{
+			document_set_use_tabs(new_idx, use_tabs);
+			document_set_line_wrapping(new_idx, line_wrapping);
+			doc_list[new_idx].auto_indent = auto_indent;
+			ret = TRUE;
+		}
+	}
+	else
+	{
+		geany_debug("Could not find file '%s'.", tmp[7]);
+	}
+
+	g_free(locale_filename);
+	return ret;
+}
+
+
 /* Open session files
  * Note: notebook page switch handler and adding to recent files list is always disabled
  * for all files opened within this function */
-gboolean configuration_open_files(void)
+void configuration_open_files(void)
 {
 	gint i;
-	guint pos;
-	gboolean ret = FALSE, failure = FALSE;
+	gboolean failure = FALSE;
 
 	/* necessary to set it to TRUE for project session support */
 	main_status.opening_session_files = TRUE;
@@ -822,43 +876,8 @@ gboolean configuration_open_files(void)
 
 		if (tmp != NULL && g_strv_length(tmp) == 8)
 		{
-			gchar *locale_filename;
-			gint ft_uid, enc_idx;
-			gboolean ro, use_tabs, auto_indent, line_wrapping;
-
-			pos = atoi(tmp[0]);
-			ft_uid = atoi(tmp[1]);
-			ro = atoi(tmp[2]);
-			enc_idx = atoi(tmp[3]);
-			use_tabs = atoi(tmp[4]);
-			auto_indent = atoi(tmp[5]);
-			line_wrapping = atoi(tmp[6]);
-			/* try to get the locale equivalent for the filename */
-			locale_filename = utils_get_locale_from_utf8(tmp[7]);
-
-			if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
-			{
-				filetype *ft = filetypes_get_from_uid(ft_uid);
-				gint new_idx = document_open_file_full(
-					-1, locale_filename, pos, ro, ft,
-					(enc_idx >= 0 && enc_idx < GEANY_ENCODINGS_MAX) ?
-						encodings[enc_idx].charset : NULL);
-
-				if (DOC_IDX_VALID(new_idx))
-				{
-					document_set_use_tabs(new_idx, use_tabs);
-					document_set_line_wrapping(new_idx, line_wrapping);
-					doc_list[new_idx].auto_indent = auto_indent;
-					ret = TRUE;
-				}
-			}
-			else
-			{
+			if (! open_session_file(tmp))
 				failure = TRUE;
-				geany_debug("Could not find file '%s'.", tmp[7]);
-			}
-
-			g_free(locale_filename);
 		}
 		g_strfreev(tmp);
 
@@ -882,7 +901,7 @@ gboolean configuration_open_files(void)
 		ui_set_statusbar(TRUE, _("Failed to load one or more session files."));
 	else if (session_notebook_page >= 0)
 	{
-		/* exlicitly allow notebook switch page callback to be called for window title,
+		/* explicitly allow notebook switch page callback to be called for window title,
 		 * encoding settings and so other things */
 		main_status.opening_session_files = FALSE;
 		/** TODO if session_notebook_page is equal to the current notebook tab(the last opened)
@@ -890,7 +909,6 @@ gboolean configuration_open_files(void)
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), session_notebook_page);
 	}
 	main_status.opening_session_files = FALSE;
-	return ret;
 }
 
 
@@ -963,7 +981,7 @@ static void generate_filetype_extensions(const gchar *output_dir)
 	g_key_file_set_comment(config, NULL, NULL,
 		"*** This file generated by: geany --generate-data-files ***", NULL);
 	/* add filetype keys */
-	for (i = 0; i < GEANY_MAX_FILE_TYPES; i++)
+	for (i = 0; i < filetypes_array->len; i++)
 	{
 		g_key_file_set_string_list(config, "Extensions", filetypes[i]->name,
 			(const gchar**) filetypes[i]->pattern, g_strv_length(filetypes[i]->pattern));
@@ -1008,7 +1026,7 @@ void configuration_read_filetype_extensions(void)
 	g_key_file_load_from_file(userconfig, userconfigfile, G_KEY_FILE_NONE, NULL);
 
 	/* read the keys */
-	for (i = 0; i < GEANY_MAX_FILE_TYPES; i++)
+	for (i = 0; i < filetypes_array->len; i++)
 	{
 		gboolean userset =
 			g_key_file_has_key(userconfig, "Extensions", filetypes[i]->name, NULL);

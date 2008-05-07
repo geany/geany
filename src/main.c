@@ -473,6 +473,21 @@ static void locale_init(void)
 }
 
 
+static void print_filetypes(void)
+{
+	guint i;
+
+	filetypes_init_types();
+	printf("Geany's internal filetype names:\n");
+
+	for (i = 0; i < filetypes_array->len; i++)
+	{
+		printf("%s\n", filetypes[i]->name);
+	}
+	filetypes_free_types();
+}
+
+
 static void parse_command_line_options(gint *argc, gchar ***argv)
 {
 	GError *error = NULL;
@@ -585,13 +600,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 
 	if (ft_names)
 	{
-		printf("Geany's internal filetype names:\n");
-		filetypes_init_types();
-		for (i = 0; i < GEANY_MAX_FILE_TYPES; i++)
-		{
-			printf("%s\n", filetypes[i]->name);
-		}
-		filetypes_free_types();
+		print_filetypes();
 		exit(0);
 	}
 
@@ -870,7 +879,9 @@ gint main(gint argc, gchar **argv)
 			load_project_file();
 
 			/* load session files into tabs, as they are found in the session_files variable */
-			if (! configuration_open_files())
+			configuration_open_files();
+
+			if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
 			{
 				ui_update_popup_copy_items(-1);
 				ui_update_popup_reundo_items(-1);

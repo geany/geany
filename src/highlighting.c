@@ -52,7 +52,7 @@ typedef struct
 } StyleSet;
 
 /* each filetype has a styleset except GEANY_FILETYPE_ALL */
-static StyleSet style_sets[GEANY_MAX_FILE_TYPES - 1] = {{NULL, NULL, NULL}};
+static StyleSet style_sets[GEANY_MAX_BUILT_IN_FILETYPES - 1] = {{NULL, NULL, NULL}};
 
 
 enum	/* Geany common styling */
@@ -273,7 +273,7 @@ static void set_sci_style(ScintillaObject *sci, gint style, gint ft, gint stylin
 {
 	HighlightingStyle *style_ptr;
 
-	if (ft == GEANY_FILETYPES_ALL)
+	if (ft == GEANY_FILETYPES_NONE)
 		style_ptr = &common_style_set.styling[styling_index];
 	else
 		style_ptr = &style_sets[ft].styling[styling_index];
@@ -289,7 +289,7 @@ void highlighting_free_styles()
 {
 	gint i;
 
-	for (i = 0; i < GEANY_MAX_FILE_TYPES - 1; i++)
+	for (i = 0; i < GEANY_MAX_BUILT_IN_FILETYPES - 1; i++)
 	{
 		StyleSet *style_ptr;
 		style_ptr = &style_sets[i];
@@ -555,10 +555,10 @@ static void styleset_common(ScintillaObject *sci, gint style_bits, filetype_id f
 
 	SSM(sci, SCI_SETFOLDMARGINCOLOUR, 1, invert(common_style_set.styling[GCS_MARGIN_FOLDING].background));
 	/*SSM(sci, SCI_SETFOLDMARGINHICOLOUR, 1, invert(common_style_set.styling[GCS_MARGIN_FOLDING].background));*/
-	set_sci_style(sci, STYLE_LINENUMBER, GEANY_FILETYPES_ALL, GCS_MARGIN_LINENUMBER);
-	set_sci_style(sci, STYLE_BRACELIGHT, GEANY_FILETYPES_ALL, GCS_BRACE_GOOD);
-	set_sci_style(sci, STYLE_BRACEBAD, GEANY_FILETYPES_ALL, GCS_BRACE_BAD);
-	set_sci_style(sci, STYLE_INDENTGUIDE, GEANY_FILETYPES_ALL, GCS_INDENT_GUIDE);
+	set_sci_style(sci, STYLE_LINENUMBER, GEANY_FILETYPES_NONE, GCS_MARGIN_LINENUMBER);
+	set_sci_style(sci, STYLE_BRACELIGHT, GEANY_FILETYPES_NONE, GCS_BRACE_GOOD);
+	set_sci_style(sci, STYLE_BRACEBAD, GEANY_FILETYPES_NONE, GCS_BRACE_BAD);
+	set_sci_style(sci, STYLE_INDENTGUIDE, GEANY_FILETYPES_NONE, GCS_INDENT_GUIDE);
 
 	/* bold = common whitespace settings enabled */
 	SSM(sci, SCI_SETWHITESPACEFORE, common_style_set.styling[GCS_WHITE_SPACE].bold,
@@ -1864,11 +1864,11 @@ static void styleset_docbook(ScintillaObject *sci)
 
 static void styleset_none(ScintillaObject *sci)
 {
-	const filetype_id ft_id = GEANY_FILETYPES_ALL;
+	const filetype_id ft_id = GEANY_FILETYPES_NONE;
 
 	SSM(sci, SCI_SETLEXER, SCLEX_NULL, 0);
 
-	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_ALL, GCS_DEFAULT);
+	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_NONE, GCS_DEFAULT);
 
 	styleset_common(sci, 5, ft_id);
 
@@ -2944,12 +2944,12 @@ static void styleset_haxe(ScintillaObject *sci)
 void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *configh)
 {
 	/* All stylesets depend on filetypes.common */
-	if (filetype_idx != GEANY_FILETYPES_ALL)
-		filetypes_load_config(GEANY_FILETYPES_ALL);
+	if (filetype_idx != GEANY_FILETYPES_NONE)
+		filetypes_load_config(GEANY_FILETYPES_NONE);
 
 	switch (filetype_idx)
 	{
-		init_styleset_case(GEANY_FILETYPES_ALL,		common);
+		init_styleset_case(GEANY_FILETYPES_NONE,		common);
 		init_styleset_case(GEANY_FILETYPES_ASM,		asm);
 		init_styleset_case(GEANY_FILETYPES_BASIC,	basic);
 		init_styleset_case(GEANY_FILETYPES_C,		c);
@@ -2997,7 +2997,7 @@ void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 	filetypes_load_config(filetype_idx);	/* load filetypes.ext */
 
 	/* load tags files (some lexers highlight global typenames) */
-	if (filetype_idx < GEANY_FILETYPES_ALL)
+	if (filetype_idx < GEANY_FILETYPES_NONE)
 		symbols_global_tags_loaded(filetype_idx);
 
 	switch (filetype_idx)
@@ -3035,7 +3035,7 @@ void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 		styleset_case(GEANY_FILETYPES_VHDL,		vhdl);
 		styleset_case(GEANY_FILETYPES_XML,		xml);
 		default:
-		styleset_case(GEANY_FILETYPES_ALL,		none);
+		styleset_case(GEANY_FILETYPES_NONE,		none);
 	}
 }
 
@@ -3046,7 +3046,7 @@ void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
  * style_id is a Scintilla lexer style, see scintilla/SciLexer.h */
 const HighlightingStyle *highlighting_get_style(gint ft_id, gint style_id)
 {
-	if (ft_id < 0 || ft_id > GEANY_MAX_FILE_TYPES)
+	if (ft_id < 0 || ft_id > GEANY_MAX_BUILT_IN_FILETYPES)
 		return NULL;
 
 	if (style_sets[ft_id].styling == NULL)

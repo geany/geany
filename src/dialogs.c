@@ -87,7 +87,9 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 		gchar *charset = NULL;
 		gboolean ro = (response == GEANY_RESPONSE_VIEW);	/* View clicked */
 
-		if (filetype_idx >= 0 && filetype_idx < GEANY_FILETYPES_ALL) ft = filetypes[filetype_idx];
+		/* ignore detect from file item */
+		if (filetype_idx >= 0 && filetype_idx < GEANY_FILETYPES_NONE)
+			ft = filetypes[filetype_idx];
 		if (encoding_idx >= 0 && encoding_idx < GEANY_ENCODINGS_MAX)
 			charset = encodings[encoding_idx].charset;
 
@@ -169,7 +171,7 @@ static void create_open_file_dialog(void)
 	GtkWidget *filetype_combo, *encoding_combo;
 	GtkWidget *viewbtn;
 	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
-	gint i;
+	guint i;
 	gchar *encoding_string;
 
 	ui_widgets.open_filesel = gtk_file_chooser_dialog_new(_("Open File"), GTK_WINDOW(app->window),
@@ -201,18 +203,21 @@ static void create_open_file_dialog(void)
 
 	/* add FileFilters(start with "All Files") */
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
-				filetypes_create_file_filter(filetypes[GEANY_FILETYPES_ALL]));
+				filetypes_create_file_filter(filetypes[GEANY_FILETYPES_NONE]));
 	/* now create meta filter "All Source" */
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
 				filetypes_create_file_filter_all_source());
-	for (i = 0; i < GEANY_MAX_FILE_TYPES - 1; i++)
+	for (i = 0; i < filetypes_array->len; i++)
 	{
+		if (i == GEANY_FILETYPES_NONE)
+			continue;
+
 		gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), filetypes[i]->title);
 		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
 				filetypes_create_file_filter(filetypes[i]));
 	}
 	gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), _("Detect by file extension"));
-	gtk_combo_box_set_active(GTK_COMBO_BOX(filetype_combo), GEANY_MAX_FILE_TYPES - 1);
+	gtk_combo_box_set_active(GTK_COMBO_BOX(filetype_combo), filetypes_array->len - 1);
 
 	/* fill encoding combo box */
 	encoding_combo = lookup_widget(ui_widgets.open_filesel, "encoding_combo");
@@ -550,7 +555,7 @@ static gboolean gtk_show_save_as(const gchar *initdir)
 	{
 		gchar *fname = NULL;
 
-		if (doc_list[idx].file_type != NULL && doc_list[idx].file_type->id != GEANY_FILETYPES_ALL &&
+		if (doc_list[idx].file_type != NULL && doc_list[idx].file_type->id != GEANY_FILETYPES_NONE &&
 			doc_list[idx].file_type->extension != NULL)
 			fname = g_strconcat(GEANY_STRING_UNTITLED, ".",
 								doc_list[idx].file_type->extension, NULL);
