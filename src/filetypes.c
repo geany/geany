@@ -46,6 +46,7 @@ typedef struct FullFileType
 	filetype	public;
 	/* Private fields */
 	GtkWidget	*menu_item;			/* holds a pointer to the menu item for this filetype */
+	gboolean	keyfile_loaded;
 }
 FullFileType;
 
@@ -477,7 +478,7 @@ static void create_set_filetype_menu()
 	create_sub_menu(sub_menu_misc, sub_item_misc, _("M_iscellaneous Languages"));
 
 	/* Append all filetypes to the filetype menu */
-	for (ft_id = 0; ft_id < GEANY_MAX_FILE_TYPES; ft_id++)
+	for (ft_id = 0; ft_id < filetypes_array->len; ft_id++)
 	{
 		filetype *ft = filetypes[ft_id];
 		const gchar *title = ft->title;
@@ -882,13 +883,13 @@ static void load_system_keyfile(GKeyFile *key_file, const gchar *file, GKeyFileF
 void filetypes_load_config(gint ft_id)
 {
 	GKeyFile *config, *config_home;
-	static gboolean loaded[GEANY_MAX_FILE_TYPES] = {FALSE};
+	FullFileType *fft = (FullFileType*)filetypes[ft_id];
 
-	g_return_if_fail(ft_id >= 0 && ft_id < GEANY_MAX_FILE_TYPES);
+	g_return_if_fail(ft_id >= 0 && ft_id < (gint) filetypes_array->len);
 
-	if (loaded[ft_id])
+	if (fft->keyfile_loaded)
 		return;
-	loaded[ft_id] = TRUE;
+	fft->keyfile_loaded = TRUE;
 
 	config = g_key_file_new();
 	config_home = g_key_file_new();

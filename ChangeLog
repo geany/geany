@@ -1,3 +1,13 @@
+2008-05-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/templates.c, src/win32.c, src/highlighting.c, src/dialogs.c,
+   src/keyfile.c, src/filetypes.c, src/filetypes.h, src/main.c:
+   Remove GEANY_MAX_FILE_TYPES and replace most uses of it with
+   filetypes_array->len.
+   Highlighting and templates now use GEANY_MAX_BUILT_IN_FILETYPES.
+   Move print_filetypes() out of parse_command_line_options();
+
+
 2008-05-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/filetypes.c, src/filetypes.h:

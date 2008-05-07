@@ -169,7 +169,7 @@ static void create_open_file_dialog(void)
 	GtkWidget *filetype_combo, *encoding_combo;
 	GtkWidget *viewbtn;
 	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
-	gint i;
+	guint i;
 	gchar *encoding_string;
 
 	ui_widgets.open_filesel = gtk_file_chooser_dialog_new(_("Open File"), GTK_WINDOW(app->window),
@@ -205,14 +205,14 @@ static void create_open_file_dialog(void)
 	/* now create meta filter "All Source" */
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
 				filetypes_create_file_filter_all_source());
-	for (i = 0; i < GEANY_MAX_FILE_TYPES - 1; i++)
+	for (i = 0; i < filetypes_array->len - 1; i++)
 	{
 		gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), filetypes[i]->title);
 		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
 				filetypes_create_file_filter(filetypes[i]));
 	}
 	gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), _("Detect by file extension"));
-	gtk_combo_box_set_active(GTK_COMBO_BOX(filetype_combo), GEANY_MAX_FILE_TYPES - 1);
+	gtk_combo_box_set_active(GTK_COMBO_BOX(filetype_combo), filetypes_array->len - 1);
 
 	/* fill encoding combo box */
 	encoding_combo = lookup_widget(ui_widgets.open_filesel, "encoding_combo");

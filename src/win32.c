@@ -88,14 +88,14 @@ static gchar *get_file_filters()
 	GString *all_patterns = g_string_sized_new(100);
 	gchar *tmp;
 
-	for (i = 0; i < GEANY_MAX_FILE_TYPES; i++)
+	for (i = 0; i < filetypes_array->len; i++)
 	{
 		tmp = g_strjoinv(";", filetypes[i]->pattern);
 		g_string_append_printf(str, "%s\t%s\t", filetypes[i]->title, tmp);
 		g_free(tmp);
 	}
 	/* create meta file filter "All Source" */
-	for (i = 0; i < GEANY_MAX_FILE_TYPES; i++)
+	for (i = 0; i < filetypes_array->len; i++)
 	{
 		for (j = 0; filetypes[i]->pattern[j] != NULL; j++)
 		{

@@ -226,7 +226,7 @@ if __name__ == '__main__': main()\n\
 ";
 
 static gchar *templates[GEANY_MAX_TEMPLATES];
-static gchar *ft_templates[GEANY_MAX_FILE_TYPES] = {NULL};
+static gchar *ft_templates[GEANY_MAX_BUILT_IN_FILETYPES] = {NULL};
 
 
 /* some simple macros to reduce code size and make the code readable */
@@ -290,7 +290,7 @@ static void init_ft_templates(const gchar *year, const gchar *date)
 {
 	filetype_id ft_id;
 
-	for (ft_id = 0; ft_id < GEANY_MAX_FILE_TYPES; ft_id++)
+	for (ft_id = 0; ft_id < GEANY_MAX_BUILT_IN_FILETYPES; ft_id++)
 	{
 		gchar *ext = filetypes_get_conf_extension(ft_id);
 		gchar *shortname = g_strconcat("filetype.", ext, NULL);
@@ -338,7 +338,7 @@ static void create_new_menu_items(void)
 	GtkWidget *template_menu = lookup_widget(app->window, "menu_new_with_template1_menu");
 	filetype_id ft_id;
 
-	for (ft_id = 0; ft_id < GEANY_MAX_FILE_TYPES; ft_id++)
+	for (ft_id = 0; ft_id < GEANY_MAX_BUILT_IN_FILETYPES; ft_id++)
 	{
 		GtkWidget *tmp_menu, *tmp_button;
 		filetype *ft = filetypes[ft_id];

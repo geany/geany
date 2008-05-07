@@ -78,8 +78,7 @@ typedef enum
 	GEANY_FILETYPES_SQL,
 
 	GEANY_FILETYPES_ALL,	/* must be last filetype, used for 'None' item. */
-	GEANY_MAX_BUILT_IN_FILETYPES,
-	GEANY_MAX_FILE_TYPES = GEANY_MAX_BUILT_IN_FILETYPES
+	GEANY_MAX_BUILT_IN_FILETYPES	/* Use filetypes_array->len instead */
 } filetype_id;
 
 /* Safe wrapper to get the id field of a possibly NULL filetype pointer. */
