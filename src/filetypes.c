@@ -537,16 +537,33 @@ void filetypes_init()
 }
 
 
-static gboolean match_basename(G_GNUC_UNUSED gpointer key, gpointer value, gpointer user_data)
+typedef gboolean FileTypesPredicate(filetype *ft, gpointer user_data);
+
+/* Find a filetype that predicate returns TRUE for, otherwise return NULL.
+ * Only search source file filetypes. */
+static filetype *filetypes_find_source(FileTypesPredicate predicate, gpointer user_data)
 {
-	filetype *ft = value;
+	guint i;
+
+	for (i = 0; i < filetypes_array->len; i++)
+	{
+		filetype *ft = filetypes[i];
+
+		if (i == GEANY_FILETYPES_NONE)
+			continue;	/* None is not for source files */
+
+		if (predicate(ft, user_data))
+			return ft;
+	}
+	return NULL;
+}
+
+
+static gboolean match_basename(filetype *ft, gpointer user_data)
+{
 	const gchar *base_filename = user_data;
 	gint j;
 	gboolean ret = FALSE;
-
-	/* Don't match '*' because it comes before any custom filetypes */
-	if (ft->id == GEANY_FILETYPES_NONE)
-		return FALSE;
 
 	for (j = 0; ft->pattern[j] != NULL; j++)
 	{
@@ -578,7 +595,7 @@ filetype *filetypes_detect_from_extension(const gchar *utf8_filename)
 	setptr(base_filename, g_utf8_strdown(base_filename, -1));
 #endif
 
-	ft = g_hash_table_find(filetypes_hash, match_basename, base_filename);
+	ft = filetypes_find_source(match_basename, base_filename);
 	if (ft == NULL)
 		ft = filetypes[GEANY_FILETYPES_NONE];
 

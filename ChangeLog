@@ -1,3 +1,12 @@
+2008-05-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/filetypes.c:
+   Fix C headers getting detected as C++ files (iterate through
+   filetypes_array, not filetypes_hash as the order is not consistent
+   with the filetype_id enum).
+   Add static function filetypes_find_source().
+
+
 2008-05-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/templates.c, src/build.c, src/utils.c, src/win32.c,
