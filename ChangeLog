@@ -8,6 +8,10 @@
    only works when typing characters past the line breaking column
    number.
    Add 'Line breaking column' editor pref.
+ * src/callbacks.c, src/callbacks.h, src/interface.c, src/keyfile.c,
+   src/main.c, src/ui_utils.c, geany.glade:
+   Rename old uses of line breaking -> line wrapping. This includes the
+   keyfile pref, so any users with this enabled will have to reset it.
 
 
 2008-05-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

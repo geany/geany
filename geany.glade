@@ -1008,13 +1008,13 @@
 		<widget class="GtkMenu" id="menu_document1_menu">
 
 		  <child>
-		    <widget class="GtkCheckMenuItem" id="menu_line_breaking1">
+		    <widget class="GtkCheckMenuItem" id="menu_line_wrapping1">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Wrap the line at the window border and continue it on the next line. Note: line wrapping has a high performance cost for large documents so should be disabled on slow machines.</property>
 		      <property name="label" translatable="yes">_Line Wrapping</property>
 		      <property name="use_underline">True</property>
 		      <property name="active">True</property>
-		      <signal name="toggled" handler="on_line_breaking1_toggled" last_modification_time="Sun, 04 Sep 2005 11:12:08 GMT"/>
+		      <signal name="toggled" handler="on_line_wrapping1_toggled" last_modification_time="Sun, 04 Sep 2005 11:12:08 GMT"/>
 		    </widget>
 		  </child>
 
