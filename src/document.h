@@ -100,6 +100,7 @@ typedef struct document
 	FileEncoding	 saved_encoding;
 	/** %Document-specific tab setting. */
 	gboolean		 use_tabs;
+	gboolean		 line_breaking;	/**< Whether to split long lines as you type. */
 } document;
 
 

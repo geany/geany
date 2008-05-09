@@ -19,7 +19,6 @@ Note: features included in brackets have lower priority.
 	o project indentation settings support
 	o improve Compile toolbar button for Make (drop down radio list?)
 	o (selectable menu of arguments to use for Make, from Make Custom)
-	o (line breaking mode to limit words on a line for e.g. XML content)
 	o (DBUS)
 	o (indent wrapped lines  - Scintilla issue)
 	o (folder tree in the sidebar)

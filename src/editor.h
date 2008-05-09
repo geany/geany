@@ -83,6 +83,7 @@ typedef struct EditorPrefs
 	gboolean	use_gtk_word_boundaries;	/* hidden pref */
 	gboolean	complete_snippets_whilst_editing;	/* hidden pref */
 	gboolean	detect_tab_mode;
+	gint		line_break_column;
 } EditorPrefs;
 
 extern EditorPrefs editor_prefs;

@@ -1436,7 +1436,7 @@ Long line marker
 ````````````````
 
 The long line marker helps to indicate overly-long lines, or as a hint
-for when to break the line.
+to the user for when to break the line.
 
 Type
     Line
@@ -1492,10 +1492,6 @@ Features
 Line wrapping
     Show long lines wrapped around to new display lines.
 
-    .. note::
-        Currently, there is no setting to have Geany automatically insert
-        newlines into your document while you type.
-
 Enable "smart" home key
     Whether to move the cursor to the first non-whitespace character
     on the line when you hit the home key on your keyboard. Pressing it
@@ -1519,6 +1515,10 @@ Use indicators to show compile errors
 Newline strip trailing spaces
     Remove any white space at the end of the line when you hit the
     Enter/Return key.
+
+Line breaking column
+    The editor column number to insert a newline at when Line Breaking
+    is enabled for the current document.
 
 Completions
 ```````````

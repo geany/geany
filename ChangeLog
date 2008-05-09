@@ -1,3 +1,15 @@
+2008-05-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, src/prefs.c, src/callbacks.c, src/callbacks.h,
+   src/keyfile.c, src/document.c, src/document.h, src/editor.c,
+   src/editor.h, src/ui_utils.c, geany.glade, TODO, doc/geany.txt,
+   doc/geany.html:
+   Add basic Line Breaking option in the Document menu. Line breaking
+   only works when typing characters past the line breaking column
+   number.
+   Add 'Line breaking column' editor pref.
+
+
 2008-05-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/filetypes.c:

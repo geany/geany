@@ -351,6 +351,7 @@ static void init_doc_struct(document *new_doc)
 	new_doc->undo_actions = NULL;
 	new_doc->redo_actions = NULL;
 	new_doc->scroll_percent = -1.0F;
+	new_doc->line_breaking = FALSE;
 }
 
 

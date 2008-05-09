@@ -2105,3 +2105,19 @@ on_escape_key_press_event              (GtkWidget       *widget,
 	}
 	return FALSE;
 }
+
+
+void
+on_line_breaking1_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	document *doc;
+
+	if (app->ignore_callback)
+		return;
+
+	doc = document_get_current();
+	g_return_if_fail(doc);
+
+	doc->line_breaking = !doc->line_breaking;
+}

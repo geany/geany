@@ -31,6 +31,8 @@
 #include <ctype.h>
 #include <string.h>
 
+#include <gdk/gdkkeysyms.h>
+
 #include "SciLexer.h"
 #include "geany.h"
 
@@ -206,6 +208,48 @@ static void on_update_ui(gint idx, G_GNUC_UNUSED SCNotification *nt)
 }
 
 
+static void check_line_breaking(gint idx, gint pos, gchar c)
+{
+	document *doc = &doc_list[idx];
+	ScintillaObject *sci = doc->sci;
+	gint line, lstart;
+
+	if (!doc->line_breaking)
+		return;
+
+	if (c == GDK_space)
+		pos--;	/* Use previous space, not new one */
+	else
+	if (strchr(GEANY_WORDCHARS, c) == NULL)
+		return;
+
+	line = sci_get_current_line(sci);
+	lstart = sci_get_position_from_line(sci, line);
+
+	if (pos - lstart < editor_prefs.line_break_column)
+		return;
+
+	/* look for the last space before editor_prefs.line_break_column */
+	pos = MIN(pos, lstart + editor_prefs.line_break_column);
+
+	while (pos > lstart)
+	{
+		c = sci_get_char_at(sci, --pos);
+		if (c == GDK_space)
+		{
+			gint indent_size = sci_get_line_indentation(sci, line);
+
+			/* break the line after the space */
+			sci_insert_text(sci, pos + 1, utils_get_eol_char(idx));
+
+			if (doc->auto_indent)
+				sci_set_line_indentation(sci, line + 1, indent_size);
+			return;
+		}
+	}
+}
+
+
 static void on_char_added(gint idx, SCNotification *nt)
 {
 	ScintillaObject *sci = doc_list[idx].sci;
@@ -264,6 +308,7 @@ static void on_char_added(gint idx, SCNotification *nt)
 		}
 		default: editor_start_auto_complete(idx, pos, FALSE);
 	}
+	check_line_breaking(idx, pos, nt->ch);
 }
 
 
