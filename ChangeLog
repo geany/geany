@@ -16,6 +16,8 @@
    Update Code Navigation section for build errors and message items.
    Correct Load Tags menu item being in the Tools menu now.
    Document 'Disk check timeout' pref.
+ * src/plugindata.h:
+   Update api_version for new line breaking struct fields.
 
 
 2008-05-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
