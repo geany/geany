@@ -316,7 +316,7 @@ on_website1_activate                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_line_breaking1_toggled              (GtkCheckMenuItem *checkmenuitem,
+on_line_wrapping1_toggled              (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data);
 
 void

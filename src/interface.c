@@ -149,7 +149,7 @@ create_window1 (void)
   GtkWidget *normal_size1;
   GtkWidget *menu_document1;
   GtkWidget *menu_document1_menu;
-  GtkWidget *menu_line_breaking1;
+  GtkWidget *menu_line_wrapping1;
   GtkWidget *line_breaking1;
   GtkWidget *menu_use_auto_indentation1;
   GtkWidget *indent_type1;
@@ -777,11 +777,11 @@ create_window1 (void)
   menu_document1_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_document1), menu_document1_menu);
 
-  menu_line_breaking1 = gtk_check_menu_item_new_with_mnemonic (_("_Line Wrapping"));
-  gtk_widget_show (menu_line_breaking1);
-  gtk_container_add (GTK_CONTAINER (menu_document1_menu), menu_line_breaking1);
-  gtk_tooltips_set_tip (tooltips, menu_line_breaking1, _("Wrap the line at the window border and continue it on the next line. Note: line wrapping has a high performance cost for large documents so should be disabled on slow machines."), NULL);
-  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_line_breaking1), TRUE);
+  menu_line_wrapping1 = gtk_check_menu_item_new_with_mnemonic (_("_Line Wrapping"));
+  gtk_widget_show (menu_line_wrapping1);
+  gtk_container_add (GTK_CONTAINER (menu_document1_menu), menu_line_wrapping1);
+  gtk_tooltips_set_tip (tooltips, menu_line_wrapping1, _("Wrap the line at the window border and continue it on the next line. Note: line wrapping has a high performance cost for large documents so should be disabled on slow machines."), NULL);
+  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_line_wrapping1), TRUE);
 
   line_breaking1 = gtk_check_menu_item_new_with_mnemonic (_("Line _Breaking"));
   gtk_widget_show (line_breaking1);
@@ -1500,8 +1500,8 @@ create_window1 (void)
   g_signal_connect ((gpointer) normal_size1, "activate",
                     G_CALLBACK (on_normal_size1_activate),
                     NULL);
-  g_signal_connect ((gpointer) menu_line_breaking1, "toggled",
-                    G_CALLBACK (on_line_breaking1_toggled),
+  g_signal_connect ((gpointer) menu_line_wrapping1, "toggled",
+                    G_CALLBACK (on_line_wrapping1_toggled),
                     NULL);
   g_signal_connect ((gpointer) line_breaking1, "toggled",
                     G_CALLBACK (on_line_breaking1_activate),
@@ -1799,7 +1799,7 @@ create_window1 (void)
   GLADE_HOOKUP_OBJECT (window1, normal_size1, "normal_size1");
   GLADE_HOOKUP_OBJECT (window1, menu_document1, "menu_document1");
   GLADE_HOOKUP_OBJECT (window1, menu_document1_menu, "menu_document1_menu");
-  GLADE_HOOKUP_OBJECT (window1, menu_line_breaking1, "menu_line_breaking1");
+  GLADE_HOOKUP_OBJECT (window1, menu_line_wrapping1, "menu_line_wrapping1");
   GLADE_HOOKUP_OBJECT (window1, line_breaking1, "line_breaking1");
   GLADE_HOOKUP_OBJECT (window1, menu_use_auto_indentation1, "menu_use_auto_indentation1");
   GLADE_HOOKUP_OBJECT (window1, indent_type1, "indent_type1");

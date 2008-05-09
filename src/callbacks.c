@@ -964,7 +964,7 @@ on_show_line_numbers1_toggled          (GtkCheckMenuItem *checkmenuitem,
 
 
 void
-on_line_breaking1_toggled              (GtkCheckMenuItem *checkmenuitem,
+on_line_wrapping1_toggled              (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data)
 {
 	if (! app->ignore_callback)

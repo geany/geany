@@ -251,7 +251,7 @@ static void apply_settings(void)
 
 	app->ignore_callback = TRUE;
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(
-				lookup_widget(app->window, "menu_line_breaking1")), editor_prefs.line_wrapping);
+				lookup_widget(app->window, "menu_line_wrapping1")), editor_prefs.line_wrapping);
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(
 				lookup_widget(app->window, "menu_use_auto_indentation1")),
 				(editor_prefs.indent_mode != INDENT_NONE));
