@@ -12,6 +12,10 @@
    src/main.c, src/ui_utils.c, geany.glade:
    Rename old uses of line breaking -> line wrapping. This includes the
    keyfile pref, so any users with this enabled will have to reset it.
+ * doc/geany.txt, doc/geany.html:
+   Update Code Navigation section for build errors and message items.
+   Correct Load Tags menu item being in the Tools menu now.
+   Document 'Disk check timeout' pref.
 
 
 2008-05-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
