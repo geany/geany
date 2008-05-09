@@ -20,6 +20,8 @@
    Update api_version for new line breaking struct fields.
  * src/filetypes.c:
    Set filetype::id automatically in filetype_add().
+ * src/filetypes.c:
+   Add source_only argument for filetypes_find_source() and rename.
 
 
 2008-05-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

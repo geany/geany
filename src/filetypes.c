@@ -504,9 +504,9 @@ void filetypes_init()
 
 typedef gboolean FileTypesPredicate(filetype *ft, gpointer user_data);
 
-/* Find a filetype that predicate returns TRUE for, otherwise return NULL.
- * Only search source file filetypes. */
-static filetype *filetypes_find_source(FileTypesPredicate predicate, gpointer user_data)
+/* Find a filetype that predicate returns TRUE for, otherwise return NULL. */
+static filetype *filetypes_find(gboolean source_only,
+		FileTypesPredicate predicate, gpointer user_data)
 {
 	guint i;
 
@@ -514,7 +514,7 @@ static filetype *filetypes_find_source(FileTypesPredicate predicate, gpointer us
 	{
 		filetype *ft = filetypes[i];
 
-		if (i == GEANY_FILETYPES_NONE)
+		if (source_only && i == GEANY_FILETYPES_NONE)
 			continue;	/* None is not for source files */
 
 		if (predicate(ft, user_data))
@@ -560,7 +560,7 @@ filetype *filetypes_detect_from_extension(const gchar *utf8_filename)
 	setptr(base_filename, g_utf8_strdown(base_filename, -1));
 #endif
 
-	ft = filetypes_find_source(match_basename, base_filename);
+	ft = filetypes_find(TRUE, match_basename, base_filename);
 	if (ft == NULL)
 		ft = filetypes[GEANY_FILETYPES_NONE];
 
