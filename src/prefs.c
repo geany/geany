@@ -1483,7 +1483,7 @@ void prefs_show_dialog(void)
 	}
 
 	prefs_init_dialog();
-	gtk_widget_show(ui_widgets.prefs_dialog);
+	gtk_window_present(GTK_WINDOW(ui_widgets.prefs_dialog));
 }
 
 

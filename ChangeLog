@@ -1,3 +1,10 @@
+2008-05-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/dialogs.c, src/prefs.c:
+   Use gtk_window_present() instead of gtk_widget_show() for Open File
+   and Preferences dialog.
+
+
 2008-05-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/interface.c, src/prefs.c, src/callbacks.c, src/callbacks.h,

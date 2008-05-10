@@ -272,7 +272,7 @@ void dialogs_show_open_file()
 	}
 
 	gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(ui_widgets.open_filesel));
-	gtk_widget_show(ui_widgets.open_filesel);
+	gtk_window_present(GTK_WINDOW(ui_widgets.open_filesel));
 #endif
 	g_free(initdir);
 }
