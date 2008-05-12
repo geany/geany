@@ -52,6 +52,7 @@ php_operator=0x102060;0xffffff;false;false
 php_hstring_variable=0x101060;0xffffff;false;false
 php_complex_variable=0x105010;0xffffff;false;false
 
+# used for JavaScript, ASP Javascript, VBScript
 jscript_start=0x008080;0xffffff;false;false
 jscript_default=0x000000;0xffffff;false;false
 jscript_comment=0xd00000;0xffffff;false;false
@@ -65,6 +66,9 @@ jscript_singlestring=0xff901e;0xffffff;false;false
 # same as operators
 jscript_symbols=0x301010;0xffffff;false;false
 jscript_stringeol=0x000000;0xe0c0e0;false;false
+
+# for embedded Python script (<script language="python">...</script>), Python styles from
+# filetypes.python are used
 
 [keywords]
 html=a abbr acronym address applet area b base basefont bdo big blockquote body br button caption center cite code col colgroup dd del dfn dir div dl dt em embed fieldset font form frame frameset h1 h2 h3 h4 h5 h6 head hr html i iframe img input ins isindex kbd label legend li link map menu meta noframes noscript object ol optgroup option p param pre q quality s samp script select small span strike strong style sub sup table tbody td textarea tfoot th thead title tr tt u ul var xmlns leftmargin topmargin abbr accept-charset accept accesskey action align alink alt archive axis background bgcolor border cellpadding cellspacing char charoff charset checked cite class classid clear codebase codetype color cols colspan compact content coords data datafld dataformatas datapagesize datasrc datetime declare defer dir disabled enctype face for frame frameborder selected headers height href hreflang hspace http-equiv id ismap label lang language link longdesc marginwidth marginheight maxlength media framespacing method multiple name nohref noresize noshade nowrap object onblur onchange onclick ondblclick onfocus onkeydown onkeypress onkeyup onload onmousedown onmousemove onmouseover onmouseout onmouseup onreset onselect onsubmit onunload profile prompt pluginspage readonly rel rev rows rowspan rules scheme scope scrolling shape size span src standby start style summary tabindex target text title type usemap valign value valuetype version vlink vspace width text password checkbox radio submit reset file hidden image public doctype xml

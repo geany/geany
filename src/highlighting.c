@@ -1098,7 +1098,7 @@ static void styleset_markup_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 	get_keyfile_keywords(config, config_home, "keywords", "html", GEANY_FILETYPES_XML, 0, "a abbr acronym address applet area b base basefont bdo big blockquote body br button caption center cite code col colgroup dd del dfn dir div dl dt em embed fieldset font form frame frameset h1 h2 h3 h4 h5 h6 head hr html i iframe img input ins isindex kbd label legend li link map menu meta noframes noscript object ol optgroup option p param pre q quality s samp script select small span strike strong style sub sup table tbody td textarea tfoot th thead title tr tt u ul var xmlns leftmargin topmargin abbr accept-charset accept accesskey action align alink alt archive axis background bgcolor border cellpadding cellspacing char charoff charset checked cite class classid clear codebase codetype color cols colspan compact content coords data datafld dataformatas datapagesize datasrc datetime declare defer dir disabled enctype face for frame frameborder selected headers height href hreflang hspace http-equiv id ismap label lang language link longdesc marginwidth marginheight maxlength media framespacing method multiple name nohref noresize noshade nowrap object onblur onchange onclick ondblclick onfocus onkeydown onkeypress onkeyup onload onmousedown onmousemove onmouseover onmouseout onmouseup onreset onselect onsubmit onunload profile prompt pluginspage readonly rel rev rows rowspan rules scheme scope scrolling shape size span src standby start style summary tabindex target text title type usemap valign value valuetype version vlink vspace width text password checkbox radio submit reset file hidden image public doctype xml");
 	get_keyfile_keywords(config, config_home, "keywords", "javascript", GEANY_FILETYPES_XML, 1, "abs abstract acos anchor asin atan atan2 big bold boolean break byte case catch ceil char charAt charCodeAt class concat const continue cos Date debugger default delete do double else enum escape eval exp export extends false final finally fixed float floor fontcolor fontsize for fromCharCode function goto if implements import in indexOf Infinity instanceof int interface isFinite isNaN italics join lastIndexOf length link log long Math max MAX_VALUE min MIN_VALUE NaN native NEGATIVE_INFINITY new null Number package parseFloat parseInt pop POSITIVE_INFINITY pow private protected public push random return reverse round shift short sin slice small sort splice split sqrt static strike string String sub substr substring sup super switch synchronized tan this throw throws toLowerCase toString toUpperCase transient true try typeof undefined unescape unshift valueOf var void volatile while with");
 	get_keyfile_keywords(config, config_home, "keywords", "vbscript", GEANY_FILETYPES_XML, 2, "and as byref byval case call const continue dim do each else elseif end error exit false for function global goto if in loop me new next not nothing on optional or private public redim rem resume select set sub then to true type while with boolean byte currency date double integer long object single string type variant");
-	get_keyfile_keywords(config, config_home, "keywords", "python", GEANY_FILETYPES_XML, 3, "and assert break class continue complex def del elif else except exec finally for from global if import in inherit is int lambda not or pass print raise return tuple try unicode while yield long float str list");
+	get_keyfile_keywords(config, config_home, "keywords", "python", GEANY_FILETYPES_XML, 3, "and as assert break class continue def del elif else except exec finally for from global if import in is lambda not or pass print raise return try while with yield False None True");
 	get_keyfile_keywords(config, config_home, "keywords", "php", GEANY_FILETYPES_XML, 4, "abstract and array as bool boolean break case catch cfunction __class__ class clone const continue declare default die directory do double echo else elseif empty enddeclare endfor endforeach endif endswitch endwhile eval exception exit extends false __file__ final float for foreach __function__ function global if implements include include_once int integer interface isset __line__ list __method__ new null object old_function or parent php_user_filter print private protected public real require require_once resource return __sleep static stdclass string switch this throw true try unset use var __wakeup while xor");
 	get_keyfile_keywords(config, config_home, "keywords", "sgml", GEANY_FILETYPES_XML, 5, "ELEMENT DOCTYPE ATTLIST ENTITY NOTATION");
 	style_sets[GEANY_FILETYPES_XML].keywords[6] = NULL;
@@ -1113,6 +1113,9 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords)
 	/* Used by several filetypes */
 	if (style_sets[GEANY_FILETYPES_XML].styling == NULL)
 		filetypes_load_config(GEANY_FILETYPES_XML);
+
+	/* manually initialise filetype Python for use with embedded Python */
+	filetypes_load_config(GEANY_FILETYPES_PYTHON);
 
 	/* don't set keywords for plain XML */
 	if (set_keywords)
@@ -1169,55 +1172,7 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords)
 	set_sci_style(sci, SCE_H_SGML_1ST_PARAM_COMMENT, GEANY_FILETYPES_XML, 30);
 	set_sci_style(sci, SCE_H_SGML_ERROR, GEANY_FILETYPES_XML, 31);
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HB_DEFAULT, invert(0x000000));
-	SSM(sci, SCI_STYLESETBACK, SCE_HB_DEFAULT, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HB_COMMENTLINE, invert(0x808080));
-	SSM(sci, SCI_STYLESETBACK, SCE_HB_COMMENTLINE, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HB_NUMBER, invert(0x008080));
-	SSM(sci, SCI_STYLESETBACK, SCE_HB_NUMBER, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HB_WORD, invert(0x008080));
-	SSM(sci, SCI_STYLESETBACK, SCE_HB_WORD, invert(0xffffff));
-	SSM(sci, SCI_STYLESETBOLD, SCE_HB_WORD, 1);
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HB_STRING, invert(0x008000));
-	SSM(sci, SCI_STYLESETBACK, SCE_HB_STRING, invert(0x008000));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HB_IDENTIFIER, invert(0x103000));
-	SSM(sci, SCI_STYLESETBACK, SCE_HB_IDENTIFIER, invert(0xffffff));
-
-	/* Show the whole section of VBScript */
-/*
-	for (bstyle=SCE_HB_DEFAULT; bstyle<=SCE_HB_STRINGEOL; bstyle++)
-	{
-		SSM(sci, SCI_STYLESETBACK, bstyle, 0xf5f5f5);
-		// This call extends the backround colour of the last style on the line to the edge of the window
-		SSM(sci, SCI_STYLESETEOLFILLED, bstyle, 1);
-	}
-*/
-	SSM(sci,SCI_STYLESETBACK, SCE_HB_STRINGEOL, invert(0x7F7FFF));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HBA_DEFAULT, invert(0x000000));
-	SSM(sci, SCI_STYLESETBACK, SCE_HBA_DEFAULT, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HBA_COMMENTLINE, invert(0x808080));
-	SSM(sci, SCI_STYLESETBACK, SCE_HBA_COMMENTLINE, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HBA_NUMBER, invert(0x008080));
-	SSM(sci, SCI_STYLESETBACK, SCE_HBA_NUMBER, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HBA_WORD, invert(0x008080));
-	SSM(sci, SCI_STYLESETBACK, SCE_HBA_WORD, invert(0xffffff));
-	SSM(sci, SCI_STYLESETBOLD, SCE_HBA_WORD, 1);
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HBA_STRING, invert(0x008000));
-	SSM(sci, SCI_STYLESETBACK, SCE_HBA_STRING, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HBA_IDENTIFIER, invert(0x103000));
-	SSM(sci, SCI_STYLESETBACK, SCE_HBA_IDENTIFIER, invert(0xffffff));
-
+	/* embedded JavaScript */
 	set_sci_style(sci, SCE_HJ_START, GEANY_FILETYPES_XML, 43);
 	set_sci_style(sci, SCE_HJ_DEFAULT, GEANY_FILETYPES_XML, 44);
 	set_sci_style(sci, SCE_HJ_COMMENT, GEANY_FILETYPES_XML, 45);
@@ -1231,92 +1186,71 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords)
 	set_sci_style(sci, SCE_HJ_SYMBOLS, GEANY_FILETYPES_XML, 53);
 	set_sci_style(sci, SCE_HJ_STRINGEOL, GEANY_FILETYPES_XML, 54);
 
+	/* for HB, VBScript?, use the same styles as for JavaScript */
+	set_sci_style(sci, SCE_HB_START, GEANY_FILETYPES_XML, 43);
+	set_sci_style(sci, SCE_HB_DEFAULT, GEANY_FILETYPES_XML, 44);
+	set_sci_style(sci, SCE_HB_COMMENTLINE, GEANY_FILETYPES_XML, 46);
+	set_sci_style(sci, SCE_HB_NUMBER, GEANY_FILETYPES_XML, 48);
+	set_sci_style(sci, SCE_HB_WORD, GEANY_FILETYPES_XML, 49);
+	set_sci_style(sci, SCE_HB_STRING, GEANY_FILETYPES_XML, 51);
+	set_sci_style(sci, SCE_HB_IDENTIFIER, GEANY_FILETYPES_XML, 53);
+	set_sci_style(sci, SCE_HB_STRINGEOL, GEANY_FILETYPES_XML, 54);
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_START, invert(0x808000));
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_START, invert(0xf0f0f0));
-	SSM(sci, SCI_STYLESETEOLFILLED, SCE_HP_START, 1);
+	/* for HBA, VBScript?, use the same styles as for JavaScript */
+	set_sci_style(sci, SCE_HBA_START, GEANY_FILETYPES_XML, 43);
+	set_sci_style(sci, SCE_HBA_DEFAULT, GEANY_FILETYPES_XML, 44);
+	set_sci_style(sci, SCE_HBA_COMMENTLINE, GEANY_FILETYPES_XML, 46);
+	set_sci_style(sci, SCE_HBA_NUMBER, GEANY_FILETYPES_XML, 48);
+	set_sci_style(sci, SCE_HBA_WORD, GEANY_FILETYPES_XML, 49);
+	set_sci_style(sci, SCE_HBA_STRING, GEANY_FILETYPES_XML, 51);
+	set_sci_style(sci, SCE_HBA_IDENTIFIER, GEANY_FILETYPES_XML, 53);
+	set_sci_style(sci, SCE_HBA_STRINGEOL, GEANY_FILETYPES_XML, 54);
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_DEFAULT, invert(0x000000));
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_DEFAULT, invert(0xffffff));
+	/* for HJA, ASP Javascript, use the same styles as for JavaScript */
+	set_sci_style(sci, SCE_HJA_START, GEANY_FILETYPES_XML, 43);
+	set_sci_style(sci, SCE_HJA_DEFAULT, GEANY_FILETYPES_XML, 44);
+	set_sci_style(sci, SCE_HJA_COMMENT, GEANY_FILETYPES_XML, 45);
+	set_sci_style(sci, SCE_HJA_COMMENTLINE, GEANY_FILETYPES_XML, 46);
+	set_sci_style(sci, SCE_HJA_COMMENTDOC, GEANY_FILETYPES_XML, 47);
+	set_sci_style(sci, SCE_HJA_NUMBER, GEANY_FILETYPES_XML, 48);
+	set_sci_style(sci, SCE_HJA_WORD, GEANY_FILETYPES_XML, 49);
+	set_sci_style(sci, SCE_HJA_KEYWORD, GEANY_FILETYPES_XML, 50);
+	set_sci_style(sci, SCE_HJA_DOUBLESTRING, GEANY_FILETYPES_XML, 51);
+	set_sci_style(sci, SCE_HJA_SINGLESTRING, GEANY_FILETYPES_XML, 52);
+	set_sci_style(sci, SCE_HJA_SYMBOLS, GEANY_FILETYPES_XML, 53);
+	set_sci_style(sci, SCE_HJA_STRINGEOL, GEANY_FILETYPES_XML, 54);
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_COMMENTLINE, invert(0x808080));
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_COMMENTLINE, invert(0xffffff));
+	/* for embedded Python we use the Python styles */
+	set_sci_style(sci, SCE_HP_START, GEANY_FILETYPES_XML, 43);
+	set_sci_style(sci, SCE_HP_DEFAULT, GEANY_FILETYPES_PYTHON, 0);
+	set_sci_style(sci, SCE_HP_COMMENTLINE, GEANY_FILETYPES_PYTHON, 1);
+	set_sci_style(sci, SCE_HP_NUMBER, GEANY_FILETYPES_PYTHON, 2);
+	set_sci_style(sci, SCE_HP_STRING, GEANY_FILETYPES_PYTHON, 3);
+	set_sci_style(sci, SCE_HP_CHARACTER, GEANY_FILETYPES_PYTHON, 4);
+	set_sci_style(sci, SCE_HP_WORD, GEANY_FILETYPES_PYTHON, 5);
+	set_sci_style(sci, SCE_HP_TRIPLE, GEANY_FILETYPES_PYTHON, 6);
+	set_sci_style(sci, SCE_HP_TRIPLEDOUBLE, GEANY_FILETYPES_PYTHON, 7);
+	set_sci_style(sci, SCE_HP_CLASSNAME, GEANY_FILETYPES_PYTHON, 8);
+	set_sci_style(sci, SCE_HP_DEFNAME, GEANY_FILETYPES_PYTHON, 9);
+	set_sci_style(sci, SCE_HP_OPERATOR, GEANY_FILETYPES_PYTHON, 10);
+	set_sci_style(sci, SCE_HP_IDENTIFIER, GEANY_FILETYPES_PYTHON, 11);
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_NUMBER, invert(0x008080));
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_NUMBER, invert(0xffffff));
+	/* for embedded HPA (what is this?) we use the Python styles */
+	set_sci_style(sci, SCE_HPA_START, GEANY_FILETYPES_XML, 43);
+	set_sci_style(sci, SCE_HPA_DEFAULT, GEANY_FILETYPES_PYTHON, 0);
+	set_sci_style(sci, SCE_HPA_COMMENTLINE, GEANY_FILETYPES_PYTHON, 1);
+	set_sci_style(sci, SCE_HPA_NUMBER, GEANY_FILETYPES_PYTHON, 2);
+	set_sci_style(sci, SCE_HPA_STRING, GEANY_FILETYPES_PYTHON, 3);
+	set_sci_style(sci, SCE_HPA_CHARACTER, GEANY_FILETYPES_PYTHON, 4);
+	set_sci_style(sci, SCE_HPA_WORD, GEANY_FILETYPES_PYTHON, 5);
+	set_sci_style(sci, SCE_HPA_TRIPLE, GEANY_FILETYPES_PYTHON, 6);
+	set_sci_style(sci, SCE_HPA_TRIPLEDOUBLE, GEANY_FILETYPES_PYTHON, 7);
+	set_sci_style(sci, SCE_HPA_CLASSNAME, GEANY_FILETYPES_PYTHON, 8);
+	set_sci_style(sci, SCE_HPA_DEFNAME, GEANY_FILETYPES_PYTHON, 9);
+	set_sci_style(sci, SCE_HPA_OPERATOR, GEANY_FILETYPES_PYTHON, 10);
+	set_sci_style(sci, SCE_HPA_IDENTIFIER, GEANY_FILETYPES_PYTHON, 11);
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_WORD, invert(0x990000));
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_WORD, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_STRING, invert(0x008000));
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_STRING, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_CHARACTER, invert(0x006060));
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_CHARACTER, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_TRIPLE, invert(0x002060));
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_TRIPLE, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_TRIPLEDOUBLE, invert(0x002060));
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_TRIPLEDOUBLE, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_CLASSNAME, invert(0x202010));
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_CLASSNAME, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_CLASSNAME, invert(0x102020));
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_CLASSNAME, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_OPERATOR, invert(0x602020));
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_OPERATOR, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_IDENTIFIER, invert(0x001060));
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_IDENTIFIER, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HPA_START, invert(0x808000));
-	SSM(sci, SCI_STYLESETBACK, SCE_HPA_START, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HPA_DEFAULT, invert(0x000000));
-	SSM(sci, SCI_STYLESETBACK, SCE_HPA_DEFAULT, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HPA_COMMENTLINE, invert(0x808080));
-	SSM(sci, SCI_STYLESETBACK, SCE_HPA_COMMENTLINE, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HPA_NUMBER, invert(0x408000));
-	SSM(sci, SCI_STYLESETBACK, SCE_HPA_NUMBER, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HPA_STRING, invert(0x008080));
-	SSM(sci, SCI_STYLESETBACK, SCE_HPA_STRING, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HPA_CHARACTER, invert(0x505080));
-	SSM(sci, SCI_STYLESETBACK, SCE_HPA_CHARACTER, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HPA_WORD, invert(0x990000));
-	SSM(sci, SCI_STYLESETBACK, SCE_HPA_WORD, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HPA_TRIPLE, invert(0x002060));
-	SSM(sci, SCI_STYLESETBACK, SCE_HPA_TRIPLE, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HPA_TRIPLEDOUBLE, invert(0x002060));
-	SSM(sci, SCI_STYLESETBACK, SCE_HPA_TRIPLEDOUBLE, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HPA_CLASSNAME, invert(0x202010));
-	SSM(sci, SCI_STYLESETBACK, SCE_HPA_CLASSNAME, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HPA_DEFNAME, invert(0x102020));
-	SSM(sci, SCI_STYLESETBACK, SCE_HPA_DEFNAME, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HPA_OPERATOR, invert(0x601010));
-	SSM(sci, SCI_STYLESETBACK, SCE_HPA_OPERATOR, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HPA_IDENTIFIER, invert(0x105010));
-	SSM(sci, SCI_STYLESETBACK, SCE_HPA_IDENTIFIER, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_COMMENTLINE, invert(0x808080));
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_COMMENTLINE, invert(0xffffff));
-
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_NUMBER, invert(0x408000));
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_NUMBER, invert(0xffffff));
-
+	/* PHP */
 	set_sci_style(sci, SCE_HPHP_DEFAULT, GEANY_FILETYPES_XML, 32);
 	set_sci_style(sci, SCE_HPHP_SIMPLESTRING, GEANY_FILETYPES_XML, 33);
 	set_sci_style(sci, SCE_HPHP_HSTRING, GEANY_FILETYPES_XML, 34);
@@ -2949,7 +2883,7 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 
 	switch (filetype_idx)
 	{
-		init_styleset_case(GEANY_FILETYPES_NONE,		common);
+		init_styleset_case(GEANY_FILETYPES_NONE,	common);
 		init_styleset_case(GEANY_FILETYPES_ASM,		asm);
 		init_styleset_case(GEANY_FILETYPES_BASIC,	basic);
 		init_styleset_case(GEANY_FILETYPES_C,		c);

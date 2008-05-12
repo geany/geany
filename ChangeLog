@@ -1,3 +1,11 @@
+2008-05-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/highlighting.c, data/filetypes.xml:
+   Use Javascript styles for any VBScript and ASP code embedded in a
+   HTML file.
+   Use Python styles for embedded Python code.
+
+
 2008-05-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/dialogs.c, src/prefs.c:
