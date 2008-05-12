@@ -6,6 +6,9 @@
    Use Python styles for embedded Python code.
  * src/highlighting.c:
    Remove hotspot code as it was never really used.
+ * src/socket.c:
+   Iconify the main window on Windows before de-iconifying it when
+   opening files remotely to ensure the main window pops up.
 
 
 2008-05-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
