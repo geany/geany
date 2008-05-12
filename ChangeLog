@@ -9,6 +9,10 @@
  * src/socket.c:
    Iconify the main window on Windows before de-iconifying it when
    opening files remotely to ensure the main window pops up.
+ * src/symbols.c:
+   Clear a document's symbol list first after it was detached from its
+   container to prevent crashes when saving files with collapsed
+   symbol list items.
 
 
 2008-05-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

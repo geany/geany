@@ -807,19 +807,19 @@ static void init_tag_list(gint idx)
 /* the following code surely can be improved, at the moment it collects some iters
  * for removal and after that the actual removal is done. I didn't find a way to find and remove
  * an empty row in one loop (next iter fails then) */
-static void hide_empty_rows(GtkTreeModel *model, GtkTreeStore *store)
+static void hide_empty_rows(GtkTreeStore *store)
 {
 	GtkTreeIter iter, *iters[MAX_SYMBOL_TYPES] = { NULL };
 	guint i = 0;
 
-	if (! gtk_tree_model_get_iter_first(model, &iter))
+	if (! gtk_tree_model_get_iter_first(GTK_TREE_MODEL(store), &iter))
 		return; /* stop when first iter is invalid, i.e. no elements */
 
 	do /* first collect the iters we need to delete empty rows */
 	{
-		if (! gtk_tree_model_iter_has_child(model, &iter))
+		if (! gtk_tree_model_iter_has_child(GTK_TREE_MODEL(store), &iter))
 			iters[i++] = gtk_tree_iter_copy(&iter);
-	} while (gtk_tree_model_iter_next(model, &iter));
+	} while (gtk_tree_model_iter_next(GTK_TREE_MODEL(store), &iter));
 
 	/* now actually delete the collected iters */
 	for (i = 0; i < MAX_SYMBOL_TYPES; i++)
@@ -837,7 +837,6 @@ gboolean symbols_recreate_tag_list(gint idx, gint sort_mode)
 	GList *tmp;
 	const GList *tags;
 	GtkTreeIter iter;
-	GtkTreeModel *model;
 	static gint prev_sort_mode = SYMBOLS_SORT_BY_NAME;
 	filetype_id ft_id = FILETYPE_ID(doc_list[idx].file_type);
 
@@ -852,13 +851,12 @@ gboolean symbols_recreate_tag_list(gint idx, gint sort_mode)
 	if (doc_list[idx].tm_file == NULL || tags == NULL)
 		return FALSE;
 
-	gtk_tree_store_clear(doc_list[idx].tag_store);
-	/* unref the store to speed up the filling(from TreeView Tutorial) */
-	model = gtk_tree_view_get_model(GTK_TREE_VIEW(doc_list[idx].tag_tree));
 	/* Make sure the model stays with us after the tree view unrefs it */
-	g_object_ref(model);
+	g_object_ref(GTK_TREE_MODEL(doc_list[idx].tag_store));
 	/* Detach model from view */
 	gtk_tree_view_set_model(GTK_TREE_VIEW(doc_list[idx].tag_tree), NULL);
+	/* Clear all contents */
+	gtk_tree_store_clear(doc_list[idx].tag_store);
 
 	init_tag_list(idx);
 	for (tmp = (GList*)tags; tmp; tmp = g_list_next(tmp))
@@ -953,11 +951,13 @@ gboolean symbols_recreate_tag_list(gint idx, gint sort_mode)
 				g_object_unref(icon);
 		}
 	}
-	hide_empty_rows(model, doc_list[idx].tag_store);
+	hide_empty_rows(doc_list[idx].tag_store);
 	/* Re-attach model to view */
-	gtk_tree_view_set_model(GTK_TREE_VIEW(doc_list[idx].tag_tree), model);
-	g_object_unref(model);
+	gtk_tree_view_set_model(GTK_TREE_VIEW(doc_list[idx].tag_tree),
+		GTK_TREE_MODEL(doc_list[idx].tag_store));
+	g_object_unref(GTK_TREE_MODEL(doc_list[idx].tag_store));
 	gtk_tree_view_expand_all(GTK_TREE_VIEW(doc_list[idx].tag_tree));
+
 	return TRUE;
 }
 
