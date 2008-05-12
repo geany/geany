@@ -1128,12 +1128,6 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords)
 	}
 	SSM(sci, SCI_SETKEYWORDS, 5, (sptr_t) style_sets[GEANY_FILETYPES_XML].keywords[5]);
 
-	/* hotspotting, nice thing */
-	SSM(sci, SCI_SETHOTSPOTACTIVEFORE, 1, invert(0xff0000));
-	SSM(sci, SCI_SETHOTSPOTACTIVEUNDERLINE, 1, 0);
-	SSM(sci, SCI_SETHOTSPOTSINGLELINE, 1, 0);
-	SSM(sci, SCI_STYLESETHOTSPOT, SCE_H_QUESTION, 1);
-
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_XML, 0);
 	set_sci_style(sci, SCE_H_DEFAULT, GEANY_FILETYPES_XML, 0);
 	set_sci_style(sci, SCE_H_TAG, GEANY_FILETYPES_XML, 1);
