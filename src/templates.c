@@ -43,6 +43,10 @@
 #define TEMPLATE_DATE_FORMAT "%Y-%m-%d"
 #define TEMPLATE_DATETIME_FORMAT "%d.%m.%Y %H:%M:%S %Z"
 
+
+static GtkWidget *new_with_template_menu = NULL;	/* File menu submenu */
+
+
 /* default templates, only for initial tempate file creation on first start of Geany */
 static const gchar templates_gpl_notice[] = "\
 This program is free software; you can redistribute it and/or modify\n\
@@ -335,7 +339,6 @@ on_new_with_template                   (GtkMenuItem     *menuitem,
 /* template items for the new file menu */
 static void create_new_menu_items(void)
 {
-	GtkWidget *template_menu = lookup_widget(app->window, "menu_new_with_template1_menu");
 	filetype_id ft_id;
 
 	for (ft_id = 0; ft_id < GEANY_MAX_BUILT_IN_FILETYPES; ft_id++)
@@ -352,12 +355,112 @@ static void create_new_menu_items(void)
 		tmp_button = gtk_menu_item_new_with_label(label);
 		gtk_widget_show(tmp_menu);
 		gtk_widget_show(tmp_button);
-		gtk_container_add(GTK_CONTAINER(template_menu), tmp_menu);
+		gtk_container_add(GTK_CONTAINER(new_with_template_menu), tmp_menu);
 		gtk_container_add(GTK_CONTAINER(ui_widgets.new_file_menu), tmp_button);
 		g_signal_connect((gpointer) tmp_menu, "activate",
 			G_CALLBACK(on_new_with_template), (gpointer) ft);
 		g_signal_connect((gpointer) tmp_button, "activate",
 			G_CALLBACK(on_new_with_template), (gpointer) ft);
+	}
+}
+
+
+static gchar *get_template_from_file(const gchar *locale_fname, filetype *ft)
+{
+	GString template = {NULL, 0, 0};
+
+	g_file_get_contents(locale_fname, &template.str, &template.len, NULL);
+
+	if (template.len > 0)
+	{
+		gchar *file_header;
+
+		template.allocated_len = template.len + 1;
+
+		file_header = templates_get_template_fileheader(FILETYPE_ID(ft), NULL);
+		utils_string_replace_all(&template, "{fileheader}", file_header);
+		g_free(file_header);
+	}
+	return template.str;
+}
+
+
+static void
+on_new_with_file_template(GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer user_data)
+{
+	gchar *fname = ui_menu_item_get_text(menuitem);
+	filetype *ft;
+	gchar *template;
+
+	ft = filetypes_detect_from_extension(fname);
+	setptr(fname, utils_get_locale_from_utf8(fname));
+	/* fname is just the basename from the menu item, so prepend the custom files path */
+	setptr(fname, g_build_path(G_DIR_SEPARATOR_S, app->configdir, GEANY_TEMPLATES_SUBDIR,
+		"files", fname, NULL));
+	template = get_template_from_file(fname, ft);
+	g_free(fname);
+
+	document_new_file(NULL, ft, template);
+	g_free(template);
+}
+
+
+static void add_file_item(gpointer data, gpointer user_data)
+{
+	GtkWidget *tmp_menu, *tmp_button;
+	gchar *label;
+
+	g_return_if_fail(data);
+
+	label = utils_get_utf8_from_locale(data);
+
+	tmp_menu = gtk_menu_item_new_with_label(label);
+	tmp_button = gtk_menu_item_new_with_label(label);
+
+	g_free(label);
+
+	gtk_widget_show(tmp_menu);
+	gtk_widget_show(tmp_button);
+	gtk_container_add(GTK_CONTAINER(new_with_template_menu), tmp_menu);
+	gtk_container_add(GTK_CONTAINER(ui_widgets.new_file_menu), tmp_button);
+	g_signal_connect((gpointer) tmp_menu, "activate",
+		G_CALLBACK(on_new_with_file_template), NULL);
+	g_signal_connect((gpointer) tmp_button, "activate",
+		G_CALLBACK(on_new_with_file_template), NULL);
+}
+
+
+static gboolean add_custom_template_items(void)
+{
+	gchar *path = g_build_path(G_DIR_SEPARATOR_S, app->configdir, GEANY_TEMPLATES_SUBDIR,
+		"files", NULL);
+	GSList *list = utils_get_file_list(path, NULL, NULL);
+	gboolean ret = list != NULL;
+
+	g_slist_foreach(list, add_file_item, NULL);
+	g_slist_foreach(list, (GFunc) g_free, NULL);
+	g_slist_free(list);
+	g_free(path);
+	return ret;
+}
+
+
+static void create_file_template_menus(void)
+{
+	GtkWidget *sep1, *sep2;
+
+	new_with_template_menu = lookup_widget(app->window, "menu_new_with_template1_menu");
+	create_new_menu_items();
+
+	sep1 = gtk_separator_menu_item_new();
+	gtk_container_add(GTK_CONTAINER(new_with_template_menu), sep1);
+	sep2 = gtk_separator_menu_item_new();
+	gtk_container_add(GTK_CONTAINER(ui_widgets.new_file_menu), sep2);
+
+	if (add_custom_template_items())
+	{
+		gtk_widget_show(sep1);
+		gtk_widget_show(sep2);
 	}
 }
 
@@ -369,10 +472,11 @@ void templates_init(void)
 
 	init_general_templates(year, date);
 	init_ft_templates(year, date);
-	create_new_menu_items();
 
 	g_free(date);
 	g_free(year);
+
+	create_file_template_menus();
 }
 
 

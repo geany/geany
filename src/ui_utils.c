@@ -58,8 +58,6 @@ static struct
 widgets;
 
 
-static gchar *menu_item_get_text(GtkMenuItem *menu_item);
-
 static void update_recent_menu(void);
 static void recent_file_loaded(const gchar *utf8_filename);
 static void
@@ -885,7 +883,7 @@ static void
 recent_file_activate_cb                (GtkMenuItem     *menuitem,
                                         G_GNUC_UNUSED gpointer         user_data)
 {
-	gchar *utf8_filename = menu_item_get_text(menuitem);
+	gchar *utf8_filename = ui_menu_item_get_text(menuitem);
 	gchar *locale_filename = utils_get_locale_from_utf8(utf8_filename);
 
 	if (document_open_file(locale_filename, FALSE, NULL, NULL) > -1)
@@ -921,7 +919,7 @@ void ui_add_recent_file(const gchar *utf8_filename)
 
 
 /* Returns: newly allocated string with the UTF-8 menu text. */
-static gchar *menu_item_get_text(GtkMenuItem *menu_item)
+gchar *ui_menu_item_get_text(GtkMenuItem *menu_item)
 {
 	const gchar *text = NULL;
 
@@ -939,7 +937,7 @@ static gchar *menu_item_get_text(GtkMenuItem *menu_item)
 
 static gint find_recent_file_item(gconstpointer list_data, gconstpointer user_data)
 {
-	gchar *menu_text = menu_item_get_text(GTK_MENU_ITEM(list_data));
+	gchar *menu_text = ui_menu_item_get_text(GTK_MENU_ITEM(list_data));
 	gint result;
 
 	if (utils_str_equal(menu_text, user_data))

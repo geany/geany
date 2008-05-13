@@ -80,6 +80,8 @@ void ui_widget_show_hide(GtkWidget *widget, gboolean show);
 
 void ui_widget_modify_font_from_string(GtkWidget *wid, const gchar *str);
 
+gchar *ui_menu_item_get_text(GtkMenuItem *menu_item);
+
 GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alignment);
 
 GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog);

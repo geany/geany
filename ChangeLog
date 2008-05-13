@@ -1,3 +1,14 @@
+2008-05-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/templates.c, src/utils.c, src/ui_utils.h, src/ui_utils.c,
+   doc/geany.txt, doc/geany.html, TODO:
+   Add support for custom file templates found at startup in the
+   ~/.geany/templates/files directory. These are currently shown
+   underneath filetype templates in the New with Template menu.
+   Add ui_menu_item_get_text().
+   Make utils_string_replace_all() ignore empty haystacks.
+
+
 2008-05-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/highlighting.c, data/filetypes.xml:

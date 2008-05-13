@@ -1807,6 +1807,8 @@ gboolean utils_string_replace_all(GString *haystack, const gchar *needle, const 
 	const gchar *c;
 	gssize pos = -1;
 
+	if (haystack->len == 0)
+		return FALSE;
 	g_return_val_if_fail(NZV(needle), FALSE);
 	g_return_val_if_fail(! NZV(replace) || strstr(replace, needle) == NULL, FALSE);
 

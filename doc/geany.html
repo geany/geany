@@ -340,30 +340,34 @@ of this program, and also in the chapter <a class="reference" href="#gnu-general
 <li><a class="reference" href="#filetype-extensions" id="id131" name="id131">Filetype extensions</a></li>
 <li><a class="reference" href="#templates" id="id132" name="id132">Templates</a><ul>
 <li><a class="reference" href="#template-metadata" id="id133" name="id133">Template metadata</a></li>
-<li><a class="reference" href="#filetype-templates" id="id134" name="id134">Filetype templates</a></li>
-<li><a class="reference" href="#customizing-templates" id="id135" name="id135">Customizing templates</a><ul>
-<li><a class="reference" href="#template-wildcards" id="id136" name="id136">Template wildcards</a></li>
+<li><a class="reference" href="#file-templates" id="id134" name="id134">File templates</a><ul>
+<li><a class="reference" href="#custom-file-templates" id="id135" name="id135">Custom file templates</a></li>
+<li><a class="reference" href="#filetype-templates" id="id136" name="id136">Filetype templates</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#customizing-templates" id="id137" name="id137">Customizing templates</a><ul>
+<li><a class="reference" href="#template-wildcards" id="id138" name="id138">Template wildcards</a></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference" href="#contributing-to-this-document" id="id137" name="id137">Contributing to this document</a></li>
-<li><a class="reference" href="#scintilla-keyboard-commands" id="id138" name="id138">Scintilla keyboard commands</a><ul>
-<li><a class="reference" href="#keyboard-commands" id="id139" name="id139">Keyboard commands</a></li>
+<li><a class="reference" href="#contributing-to-this-document" id="id139" name="id139">Contributing to this document</a></li>
+<li><a class="reference" href="#scintilla-keyboard-commands" id="id140" name="id140">Scintilla keyboard commands</a><ul>
+<li><a class="reference" href="#keyboard-commands" id="id141" name="id141">Keyboard commands</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#hidden-preferences" id="id140" name="id140">Hidden preferences</a></li>
-<li><a class="reference" href="#compile-time-options" id="id141" name="id141">Compile-time options</a><ul>
-<li><a class="reference" href="#src-geany-h" id="id142" name="id142">src/geany.h</a></li>
-<li><a class="reference" href="#project-h" id="id143" name="id143">project.h</a></li>
-<li><a class="reference" href="#editor-h" id="id144" name="id144">editor.h</a></li>
-<li><a class="reference" href="#keyfile-c" id="id145" name="id145">keyfile.c</a></li>
+<li><a class="reference" href="#hidden-preferences" id="id142" name="id142">Hidden preferences</a></li>
+<li><a class="reference" href="#compile-time-options" id="id143" name="id143">Compile-time options</a><ul>
+<li><a class="reference" href="#src-geany-h" id="id144" name="id144">src/geany.h</a></li>
+<li><a class="reference" href="#project-h" id="id145" name="id145">project.h</a></li>
+<li><a class="reference" href="#editor-h" id="id146" name="id146">editor.h</a></li>
+<li><a class="reference" href="#keyfile-c" id="id147" name="id147">keyfile.c</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#gnu-general-public-license" id="id146" name="id146">GNU General Public License</a></li>
-<li><a class="reference" href="#license-for-scintilla-and-scite" id="id147" name="id147">License for Scintilla and SciTE</a></li>
+<li><a class="reference" href="#gnu-general-public-license" id="id148" name="id148">GNU General Public License</a></li>
+<li><a class="reference" href="#license-for-scintilla-and-scite" id="id149" name="id149">License for Scintilla and SciTE</a></li>
 </ul>
 </div>
 <div class="section">
@@ -3166,28 +3170,42 @@ restart Geany after making changes, because they are only read
 at startup.</p>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id134" id="filetype-templates" name="filetype-templates">Filetype templates</a></h3>
-<p>Filetype templates are templates used as the basis of a new file. To
+<h3><a class="toc-backref" href="#id134" id="file-templates" name="file-templates">File templates</a></h3>
+<p>File templates are templates used as the basis of a new file. To
 use them, choose the <em>New (with Template)</em> menu item from the <em>File</em>
 menu.</p>
-<p>By default, templates are created for some filetypes. Other filetype
+<p>By default, templates are created for some filetypes. Custom file
 templates can be added by creating the appropriate template file and
 restarting Geany. You can also edit the default filetype templates.</p>
+<p>The file's contents are just the text to place in the document,
+except for the optional <tt class="docutils literal"><span class="pre">{fileheader}</span></tt> template wildcard. This can
+be placed anywhere, but is usually on the first line of the file,
+followed by a blank line.</p>
+<div class="section">
+<h4><a class="toc-backref" href="#id135" id="custom-file-templates" name="custom-file-templates">Custom file templates</a></h4>
+<p>These are read from the <tt class="docutils literal"><span class="pre">~/.geany/templates/files</span></tt> directory (created
+the first time Geany is started). The filetype to use is detected from
+the template file's extension, if any. For example, creating a file
+<tt class="docutils literal"><span class="pre">main.c</span></tt> would add a menu item which created a new document with the
+filetype set to 'C'.</p>
+<p>The template file is read from disk when the corresponding menu item is
+clicked, so you don't need to restart Geany after editing a custom file
+template.</p>
+</div>
+<div class="section">
+<h4><a class="toc-backref" href="#id136" id="filetype-templates" name="filetype-templates">Filetype templates</a></h4>
 <p>Filetype template files are read from the <tt class="docutils literal"><span class="pre">~/.geany/templates</span></tt>
 directory, and are named &quot;filetype.&quot; followed by the filetype
 name, e.g. &quot;filetype.python&quot;, &quot;filetype.sh&quot;, etc. If you are
 unsure about the filetype name extensions, they are the same as
 the filetype configuration file extensions, commonly installed in
 <tt class="docutils literal"><span class="pre">/usr/share/geany</span></tt>, with the prefix &quot;filetypes.&quot;.</p>
-<p>The file's contents are just the text to place in the document,
-except for the optional <tt class="docutils literal"><span class="pre">{fileheader}</span></tt> template wildcard. This can
-be placed anywhere, but is usually on the first line of the file,
-followed by a blank line.</p>
-<p>There is also a template file <tt class="docutils literal"><span class="pre">template.none</span></tt> which is used when
+<p>There is also a template file <tt class="docutils literal"><span class="pre">filetype.none</span></tt> which is used when
 the New command is used without a filetype. This is empty by default.</p>
 </div>
+</div>
 <div class="section">
-<h3><a class="toc-backref" href="#id135" id="customizing-templates" name="customizing-templates">Customizing templates</a></h3>
+<h3><a class="toc-backref" href="#id137" id="customizing-templates" name="customizing-templates">Customizing templates</a></h3>
 <p>Each template can be customized to your needs. The templates are
 stored in the <tt class="docutils literal"><span class="pre">~/.geany/templates/</span></tt> directory (see the section called
 <a class="reference" href="#command-line-options">Command line options</a> for further information about the configuration
@@ -3195,7 +3213,7 @@ directory). Just open the desired template with an editor (ideally,
 Geany ;-) ) and edit the template to your needs. There are some
 wildcards which will be automatically replaced by Geany at startup.</p>
 <div class="section">
-<h4><a class="toc-backref" href="#id136" id="template-wildcards" name="template-wildcards">Template wildcards</a></h4>
+<h4><a class="toc-backref" href="#id138" id="template-wildcards" name="template-wildcards">Template wildcards</a></h4>
 <p>All wildcards must be enclosed by &quot;{&quot; and &quot;}&quot;, e.g. {date}.</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -3304,7 +3322,7 @@ templates.</td>
 </div>
 </div>
 <div class="section">
-<h1><a class="toc-backref" href="#id137" id="contributing-to-this-document" name="contributing-to-this-document">Contributing to this document</a></h1>
+<h1><a class="toc-backref" href="#id139" id="contributing-to-this-document" name="contributing-to-this-document">Contributing to this document</a></h1>
 <p>This document (<tt class="docutils literal"><span class="pre">geany.txt</span></tt>) is written in <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a>
 (or &quot;reST&quot;). The source file for it is located in Geany's <tt class="docutils literal"><span class="pre">doc</span></tt>
 subdirectory.  If you intend on making changes, you should grab the
@@ -3324,7 +3342,7 @@ to build the docs. The package is named <tt class="docutils literal"><span class
 and Fedora systems.</p>
 </div>
 <div class="section">
-<h1><a class="toc-backref" href="#id138" id="scintilla-keyboard-commands" name="scintilla-keyboard-commands">Scintilla keyboard commands</a></h1>
+<h1><a class="toc-backref" href="#id140" id="scintilla-keyboard-commands" name="scintilla-keyboard-commands">Scintilla keyboard commands</a></h1>
 <p>Copyright © 1998, 2006 Neil Hodgson &lt;neilh(at)scintilla(dot)org&gt;</p>
 <p>This appendix is distributed under the terms of the License for
 Scintilla and SciTE. A copy of this license can be found in the file
@@ -3333,7 +3351,7 @@ program and in the appendix of this document. See <a class="reference" href="#li
 Scintilla and SciTE</a>.</p>
 <p>20 June 2006</p>
 <div class="section">
-<h2><a class="toc-backref" href="#id139" id="keyboard-commands" name="keyboard-commands">Keyboard commands</a></h2>
+<h2><a class="toc-backref" href="#id141" id="keyboard-commands" name="keyboard-commands">Keyboard commands</a></h2>
 <p>Keyboard commands for Scintilla mostly follow common Windows and GTK+
 conventions. All move keys (arrows, page up/down, home and end)
 allows to extend or reduce the stream selection when holding the
@@ -3427,7 +3445,7 @@ menus. Some less common commands with no menu equivalent are:</p>
 </div>
 </div>
 <div class="section">
-<h1><a class="toc-backref" href="#id140" id="hidden-preferences" name="hidden-preferences">Hidden preferences</a></h1>
+<h1><a class="toc-backref" href="#id142" id="hidden-preferences" name="hidden-preferences">Hidden preferences</a></h1>
 <p>There are some uncommon preferences that are not shown in the Preferences
 dialog. These can be set by editing <tt class="docutils literal"><span class="pre">~/.geany/geany.conf</span></tt>, then
 restarting Geany. Search for the key name, then edit the value. Example:</p>
@@ -3499,7 +3517,7 @@ available with GTK 2.12 or above).</td>
 </table>
 </div>
 <div class="section">
-<h1><a class="toc-backref" href="#id141" id="compile-time-options" name="compile-time-options">Compile-time options</a></h1>
+<h1><a class="toc-backref" href="#id143" id="compile-time-options" name="compile-time-options">Compile-time options</a></h1>
 <p>There are some options which can only be changed at compile time,
 and some options which are used as the default for configurable
 options. To change these options, edit the appropriate source file
@@ -3511,7 +3529,7 @@ not be changed.</p>
 <p class="last">Most users should not need to change these options.</p>
 </div>
 <div class="section">
-<h2><a class="toc-backref" href="#id142" id="src-geany-h" name="src-geany-h">src/geany.h</a></h2>
+<h2><a class="toc-backref" href="#id144" id="src-geany-h" name="src-geany-h">src/geany.h</a></h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="33%" />
@@ -3568,7 +3586,7 @@ when building on a non-Win32 system.</em></td>
 </table>
 </div>
 <div class="section">
-<h2><a class="toc-backref" href="#id143" id="project-h" name="project-h">project.h</a></h2>
+<h2><a class="toc-backref" href="#id145" id="project-h" name="project-h">project.h</a></h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="33%" />
@@ -3593,7 +3611,7 @@ open dialog.</td>
 </table>
 </div>
 <div class="section">
-<h2><a class="toc-backref" href="#id144" id="editor-h" name="editor-h">editor.h</a></h2>
+<h2><a class="toc-backref" href="#id146" id="editor-h" name="editor-h">editor.h</a></h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="33%" />
@@ -3630,7 +3648,7 @@ Geany provide.</td>
 </table>
 </div>
 <div class="section">
-<h2><a class="toc-backref" href="#id145" id="keyfile-c" name="keyfile-c">keyfile.c</a></h2>
+<h2><a class="toc-backref" href="#id147" id="keyfile-c" name="keyfile-c">keyfile.c</a></h2>
 <p>These are default settings that can be overridden in the <a class="reference" href="#preferences">Preferences</a> dialog.</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -3702,7 +3720,7 @@ open files.</td>
 </div>
 </div>
 <div class="section">
-<h1><a class="toc-backref" href="#id146" id="gnu-general-public-license" name="gnu-general-public-license">GNU General Public License</a></h1>
+<h1><a class="toc-backref" href="#id148" id="gnu-general-public-license" name="gnu-general-public-license">GNU General Public License</a></h1>
 <pre class="literal-block">
             GNU GENERAL PUBLIC LICENSE
                Version 2, June 1991
@@ -4047,7 +4065,7 @@ Public License instead of this License.
 </pre>
 </div>
 <div class="section">
-<h1><a class="toc-backref" href="#id147" id="license-for-scintilla-and-scite" name="license-for-scintilla-and-scite">License for Scintilla and SciTE</a></h1>
+<h1><a class="toc-backref" href="#id149" id="license-for-scintilla-and-scite" name="license-for-scintilla-and-scite">License for Scintilla and SciTE</a></h1>
 <p>Copyright 1998-2003 by Neil Hodgson &lt;neilh(at)scintilla(dot)org&gt;</p>
 <p>All Rights Reserved</p>
 <p>Permission to use, copy, modify, and distribute this software and
@@ -4067,7 +4085,7 @@ USE OR PERFORMANCE OF THIS SOFTWARE.</p>
 <div class="footer">
 <hr class="footer" />
 <a class="reference" href="geany.txt">View document source</a>.
-Generated on: 2008-05-09 14:39 UTC.
+Generated on: 2008-05-13 17:12 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 
 </div>
