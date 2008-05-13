@@ -435,13 +435,17 @@ static gboolean add_custom_template_items(void)
 	gchar *path = g_build_path(G_DIR_SEPARATOR_S, app->configdir, GEANY_TEMPLATES_SUBDIR,
 		"files", NULL);
 	GSList *list = utils_get_file_list(path, NULL, NULL);
-	gboolean ret = list != NULL;
 
+	if (list == NULL)
+	{
+		utils_mkdir(path, FALSE);
+		return FALSE;
+	}
 	g_slist_foreach(list, add_file_item, NULL);
 	g_slist_foreach(list, (GFunc) g_free, NULL);
 	g_slist_free(list);
 	g_free(path);
-	return ret;
+	return TRUE;
 }
 
 

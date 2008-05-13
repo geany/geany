@@ -7,6 +7,8 @@
    underneath filetype templates in the New with Template menu.
    Add ui_menu_item_get_text().
    Make utils_string_replace_all() ignore empty haystacks.
+ * src/templates.c:
+   Create ~/.geany/templates/files directory if it doesn't exist.
 
 
 2008-05-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
