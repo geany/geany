@@ -347,11 +347,16 @@ static void init_doc_struct(document *new_doc)
 	new_doc->tm_file = NULL;
 	new_doc->encoding = NULL;
 	new_doc->has_bom = FALSE;
+	new_doc->saved_encoding.encoding = NULL;
+	new_doc->saved_encoding.has_bom = FALSE;
 	new_doc->sci = NULL;
 	new_doc->undo_actions = NULL;
 	new_doc->redo_actions = NULL;
 	new_doc->scroll_percent = -1.0F;
 	new_doc->line_breaking = FALSE;
+	new_doc->mtime = 0;
+	new_doc->changed = FALSE;
+	new_doc->last_check = time(NULL);
 }
 
 
@@ -464,11 +469,13 @@ static gint document_create(const gchar *utf8_filename)
 	if (new_idx == -1)	/* expand the array, no free places */
 	{
 		document new_doc;
-		init_doc_struct(&new_doc);
 		new_idx = doc_array->len;
 		g_array_append_val(doc_array, new_doc);
 	}
 	this = &doc_list[new_idx];
+	init_doc_struct(this);	/* initialize default document settings */
+
+	this->file_name = (utf8_filename) ? g_strdup(utf8_filename) : NULL;
 
 	this->sci = create_new_sci(new_idx);
 
@@ -479,24 +486,6 @@ static gint document_create(const gchar *utf8_filename)
 	document_set_font(new_idx, fname, pango_font_description_get_size(pfd) / PANGO_SCALE);
 	pango_font_description_free(pfd);
 	g_free(fname);
-
-	this->tag_store = NULL;
-	this->tag_tree = NULL;
-
-	/* store important pointers in the tab list */
-	this->file_name = (utf8_filename) ? g_strdup(utf8_filename) : NULL;
-	this->encoding = NULL;
-	this->saved_encoding.encoding = NULL;
-	this->saved_encoding.has_bom = FALSE;
-	this->tm_file = NULL;
-	this->file_type = NULL;
-	this->mtime = 0;
-	this->changed = FALSE;
-	this->last_check = time(NULL);
-	this->readonly = FALSE;
-	this->line_wrapping = editor_prefs.line_wrapping;
-	this->auto_indent = (editor_prefs.indent_mode != INDENT_NONE);
-	this->has_tags = FALSE;
 
 	treeviews_openfiles_add(new_idx);	/* sets this->iter */
 

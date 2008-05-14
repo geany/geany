@@ -30,6 +30,9 @@
  * src/document.c:
    Recolourise the document in document_reload_file() because the
    text may have changed (should fix #1948857).
+ * src/document.c:
+   Fix line breaking not getting reset for new documents sometimes.
+   Merge all document default settings into init_doc_struct().
 
 
 2008-05-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
