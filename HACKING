@@ -174,7 +174,8 @@ For tag parsing (e.g. for the symbol list), see 'Adding a TagManager
 parser' below.
 
 Add GEANY_FILETYPES_FOO to filetypes.h.
-Initialize GEANY_FILETYPES_FOO in filetypes_init_types() of filetypes.c.
+Initialize GEANY_FILETYPES_FOO in init_builtin_filetypes() of
+filetypes.c.
 Rebuild Geany.
 From your geany/ directory, run:
 src/geany --generate-data-files
@@ -186,28 +187,37 @@ you need GEANY_DEBUG to be defined when building Geany for the
 --generate-data-files argument to work - this is always defined in the
 SVN version. Alternatively, edit the file by hand.
 
+filetypes.* configuration file
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 All languages need a data/filetypes.foo configuration file. See
-data/filetypes.c for an example. For languages with a Scintilla lexer,
-there should be a [styling] section, to correspond to the styles used
-in styleset_foo().
+data/filetypes.c for an example.
 
 Programming languages should have:
 [keywords] if the lexer supports it.
 [settings] mostly for comment settings.
 [build_settings] for commands to run.
 
+For languages with a Scintilla lexer, there should be a [styling] section,
+to correspond to the styles used in styleset_foo() in highlighting.c -
+see below.
+
+Syntax highlighting
+^^^^^^^^^^^^^^^^^^^
 For syntax highlighting, you will need to edit highlighting.c and add
 the following things:
 1. Write styleset_foo_init() to setup default styles and load style
-settings from the filetypes.foo configuration file. For details, see
-styleset_c_init().
+settings from the filetypes.foo configuration file. You should probably
+start by copying and adapting another filetype's initialization, such
+as styleset_asm_init().
 2. Write styleset_foo() to apply styles when a new scintilla widget
-is created. For details, see styleset_c().
+is created. Again you could copy and adapt a function like styleset_asm().
 3. Add this in highlighting_init_styles():
 init_styleset_case(GEANY_FILETYPES_FOO, foo);
 4. Add this in highlighting_set_styles():
 styleset_case(GEANY_FILETYPES_FOO, foo);
 
+Other features
+^^^^^^^^^^^^^^
 Error message parsing is done in msgwin_parse_compiler_error_line() of
 msgwindow.c. See the ParseData typedef for more information. (In future
 this may be done with a regex).
@@ -219,13 +229,13 @@ If the lexer has comment styles, you should add them in is_comment()
 in editor.c. For now, this prevents calltips and autocompletion when
 typing in a comment (but it can still be forced by the user).
 
-If the Scintilla lexer supports user type keywords (e.g. SCLEX_CPP),
-see editor_lexer_get_type_keyword_idx() in editor.c.
+If the Scintilla lexer supports user type keyword highlighting (e.g.
+SCLEX_CPP), update editor_lexer_get_type_keyword_idx() in editor.c.
 
 
 Adding a TagManager parser
 --------------------------
-This assumes the Geany filetype already exists.
+This assumes the filetype for Geany already exists.
 
 First write or find a CTags compatible parser, foo.c. Note that there
 are some language patches for CTags at:

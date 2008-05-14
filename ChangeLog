@@ -33,6 +33,8 @@
  * src/document.c:
    Fix line breaking not getting reset for new documents sometimes.
    Merge all document default settings into init_doc_struct().
+ * HACKING:
+   Update adding a filetype section, make clearer.
 
 
 2008-05-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
