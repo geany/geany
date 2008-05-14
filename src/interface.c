@@ -2657,6 +2657,7 @@ create_prefs_dialog (void)
   GtkWidget *vbox19;
   GtkWidget *check_complete_snippets;
   GtkWidget *check_xmltag;
+  GtkWidget *check_auto_multiline;
   GtkWidget *check_symbol_auto_completion;
   GtkWidget *table14;
   GtkObject *spin_symbollistheight_adj;
@@ -2679,6 +2680,8 @@ create_prefs_dialog (void)
   GtkWidget *eventbox3;
   GtkWidget *combo_open_encoding;
   GtkWidget *check_open_encoding;
+  GtkWidget *label210;
+  GtkWidget *combo_eol;
   GtkWidget *label109;
   GtkWidget *frame2;
   GtkWidget *alignment3;
@@ -3819,6 +3822,12 @@ create_prefs_dialog (void)
   gtk_tooltips_set_tip (tooltips, check_xmltag, _("Automatic completion and closing of XML tags (includes HTML tags)"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_xmltag), FALSE);
 
+  check_auto_multiline = gtk_check_button_new_with_mnemonic (_("Automatic continuation multi-line comments"));
+  gtk_widget_show (check_auto_multiline);
+  gtk_box_pack_start (GTK_BOX (vbox19), check_auto_multiline, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_auto_multiline, _("Continue automatically multi-line comments in languages like C, C++ and Java when a new line is entered inside such a comment."), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_auto_multiline), FALSE);
+
   check_symbol_auto_completion = gtk_check_button_new_with_mnemonic (_("Automatic symbol completion"));
   gtk_widget_show (check_symbol_auto_completion);
   gtk_box_pack_start (GTK_BOX (vbox19), check_symbol_auto_completion, FALSE, FALSE, 0);
@@ -3827,7 +3836,7 @@ create_prefs_dialog (void)
 
   table14 = gtk_table_new (2, 2, FALSE);
   gtk_widget_show (table14);
-  gtk_box_pack_start (GTK_BOX (vbox19), table14, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox19), table14, TRUE, TRUE, 0);
   gtk_table_set_row_spacings (GTK_TABLE (table14), 3);
   gtk_table_set_col_spacings (GTK_TABLE (table14), 12);
 
@@ -3890,7 +3899,7 @@ create_prefs_dialog (void)
   gtk_widget_show (vbox8);
   gtk_container_add (GTK_CONTAINER (alignment7), vbox8);
 
-  table5 = gtk_table_new (3, 2, FALSE);
+  table5 = gtk_table_new (4, 2, FALSE);
   gtk_widget_show (table5);
   gtk_box_pack_start (GTK_BOX (vbox8), table5, FALSE, TRUE, 0);
   gtk_table_set_row_spacings (GTK_TABLE (table5), 3);
@@ -3938,6 +3947,19 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (0), 0, 0);
   gtk_tooltips_set_tip (tooltips, check_open_encoding, _("This option disables the automatic detection of the file encoding when opening files and opens the file with the specified encoding (usually not needed)."), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_open_encoding), FALSE);
+
+  label210 = gtk_label_new (_("Default end of line characters:"));
+  gtk_widget_show (label210);
+  gtk_table_attach (GTK_TABLE (table5), label210, 0, 1, 3, 4,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label210), 0, 0.5);
+
+  combo_eol = gtk_combo_box_new_text ();
+  gtk_widget_show (combo_eol);
+  gtk_table_attach (GTK_TABLE (table5), combo_eol, 1, 2, 3, 4,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (GTK_FILL), 0, 0);
 
   label109 = gtk_label_new (_("<b>New files</b>"));
   gtk_widget_show (label109);
@@ -4688,6 +4710,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox19, "vbox19");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_complete_snippets, "check_complete_snippets");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_xmltag, "check_xmltag");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_auto_multiline, "check_auto_multiline");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_symbol_auto_completion, "check_symbol_auto_completion");
   GLADE_HOOKUP_OBJECT (prefs_dialog, table14, "table14");
   GLADE_HOOKUP_OBJECT (prefs_dialog, spin_symbollistheight, "spin_symbollistheight");
@@ -4708,6 +4731,8 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, eventbox3, "eventbox3");
   GLADE_HOOKUP_OBJECT (prefs_dialog, combo_open_encoding, "combo_open_encoding");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_open_encoding, "check_open_encoding");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label210, "label210");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, combo_eol, "combo_eol");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label109, "label109");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame2, "frame2");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment3, "alignment3");

@@ -669,6 +669,17 @@ const gchar *utils_get_eol_char(gint idx)
 }
 
 
+const gchar *utils_get_eol_name(gint eol_mode)
+{
+	switch (eol_mode)
+	{
+		case SC_EOL_CRLF: return _("Win (CRLF)"); break;
+		case SC_EOL_CR: return _("Mac (CR)"); break;
+		default: return _("Unix (LF)"); break;
+	}
+}
+
+
 gboolean utils_atob(const gchar *str)
 {
 	if (str == NULL) return FALSE;

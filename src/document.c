@@ -618,11 +618,12 @@ gint document_new_file(const gchar *filename, filetype *ft, const gchar *text)
 	else
 		sci_clear_all(doc_list[idx].sci);
 
-#ifdef G_OS_WIN32
-	sci_set_eol_mode(doc_list[idx].sci, SC_EOL_CRLF);
-#else
-	sci_set_eol_mode(doc_list[idx].sci, SC_EOL_LF);
-#endif
+	sci_set_eol_mode(doc_list[idx].sci, prefs.default_eol_character);
+	/* convert the eol chars in the template text in case they are different from
+	 * from prefs.default_eol */
+	if (text != NULL)
+		sci_convert_eols(doc_list[idx].sci, prefs.default_eol_character);
+
 	document_set_use_tabs(idx, editor_prefs.use_tabs);
 	sci_set_undo_collection(doc_list[idx].sci, TRUE);
 	sci_empty_undo_buffer(doc_list[idx].sci);

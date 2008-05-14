@@ -614,17 +614,18 @@ static void on_new_line_added(gint idx)
 			check_python_indent(idx, pos);
 	}
 
+	if (editor_prefs.auto_continue_multiline)
+	{	/* " * " auto completion in multiline C/C++/D/Java comments */
+		auto_multiline(idx, pos);
+	}
+
 	if (editor_prefs.complete_snippets)
 	{
-		/* " * " auto completion in multiline C/C++/D/Java comments */
-		auto_multiline(idx, pos);
-
 		editor_auto_latex(idx, pos);
 	}
 
 	if (editor_prefs.newline_strip)
-	{
-		/* strip the trailing spaces on the previous line */
+	{	/* strip the trailing spaces on the previous line */
 		document_strip_line_trailing_spaces(idx, line - 1);
 	}
 }
@@ -2182,10 +2183,10 @@ static void auto_multiline(gint idx, gint pos)
 	ScintillaObject *sci = doc_list[idx].sci;
 	gint style = SSM(sci, SCI_GETSTYLEAT, pos - 1 - utils_get_eol_char_len(idx), 0);
 	gint lexer = SSM(sci, SCI_GETLEXER, 0, 0);
-	gint i;
 
 	if ((lexer == SCLEX_CPP && (style == SCE_C_COMMENT || style == SCE_C_COMMENTDOC)) ||
 		(lexer == SCLEX_HTML && style == SCE_HPHP_COMMENT) ||
+		(lexer == SCLEX_CSS && style == SCE_CSS_COMMENT) ||
 		(lexer == SCLEX_D && (style == SCE_D_COMMENT ||
 							  style == SCE_D_COMMENTDOC ||
 							  style == SCE_D_COMMENTNESTED)))
@@ -2196,6 +2197,7 @@ static void auto_multiline(gint idx, gint pos)
 		gchar *whitespace = ""; /* to hold whitespace if needed */
 		gchar *result;
 		gint len = strlen(previous_line);
+		gint i;
 
 		/* find and stop at end of multi line comment */
 		i = len - 1;

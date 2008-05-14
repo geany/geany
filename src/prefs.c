@@ -338,10 +338,6 @@ void prefs_init_dialog(void)
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), file_prefs.disk_check_timeout);
 
 
-	/* Editor settings */
-	widget = lookup_widget(ui_widgets.prefs_dialog, "spin_tab_width");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), editor_prefs.tab_width);
-
 	widget = lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
 	/* luckily the index of the combo box items match the index of the encodings array */
 	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), prefs.default_new_encoding);
@@ -359,11 +355,23 @@ void prefs_init_dialog(void)
 	else
 		gtk_combo_box_set_active(GTK_COMBO_BOX(widget), GEANY_ENCODING_UTF_8);
 
+	widget = lookup_widget(ui_widgets.prefs_dialog, "combo_eol");
+	if (prefs.default_eol_character >= 0 && prefs.default_eol_character < 3)
+	{
+		gtk_combo_box_set_active(GTK_COMBO_BOX(widget), prefs.default_eol_character);
+	}
+	else
+		gtk_combo_box_set_active(GTK_COMBO_BOX(widget), GEANY_DEFAULT_EOL_CHARACTER);
+
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_trailing_spaces");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.strip_trailing_spaces);
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_new_line");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.final_new_line);
+
+	/* Editor settings */
+	widget = lookup_widget(ui_widgets.prefs_dialog, "spin_tab_width");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), editor_prefs.tab_width);
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_replace_tabs");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.replace_tabs);
@@ -417,6 +425,9 @@ void prefs_init_dialog(void)
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_indicators");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.use_indicators);
+
+	widget = lookup_widget(ui_widgets.prefs_dialog, "check_auto_multiline");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.auto_continue_multiline);
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_symbol_auto_completion");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.auto_complete_symbols);
@@ -728,11 +739,6 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_disk_check");
 		file_prefs.disk_check_timeout = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
-
-		/* Editor settings */
-		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_tab_width");
-		editor_prefs.tab_width = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
-
 		widget = lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
 		prefs.default_new_encoding = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 
@@ -745,6 +751,9 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		else
 			prefs.default_open_encoding = -1;
 
+		widget = lookup_widget(ui_widgets.prefs_dialog, "combo_eol");
+		prefs.default_eol_character = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_trailing_spaces");
 		prefs.strip_trailing_spaces = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
@@ -753,6 +762,11 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_replace_tabs");
 		prefs.replace_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+
+		/* Editor settings */
+		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_tab_width");
+		editor_prefs.tab_width = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_long_line");
 		editor_prefs.long_line_column = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
@@ -815,6 +829,9 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_detect_indent");
 		editor_prefs.detect_tab_mode = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(ui_widgets.prefs_dialog, "check_auto_multiline");
+		editor_prefs.auto_continue_multiline = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_symbol_auto_completion");
 		editor_prefs.auto_complete_symbols = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
@@ -1375,7 +1392,7 @@ void prefs_show_dialog(void)
 {
 	if (ui_widgets.prefs_dialog == NULL)
 	{
-		GtkWidget *combo_new, *combo_open;
+		GtkWidget *combo_new, *combo_open, *combo_eol;
 		GtkWidget *label;
 		guint i;
 		gchar *encoding_string;
@@ -1396,6 +1413,12 @@ void prefs_show_dialog(void)
 			gtk_combo_box_append_text(GTK_COMBO_BOX(combo_open), encoding_string);
 			g_free(encoding_string);
 		}
+
+		/* init the eol character combo box */
+		combo_eol = lookup_widget(ui_widgets.prefs_dialog, "combo_eol");
+		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_eol), utils_get_eol_name(SC_EOL_CRLF));
+		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_eol), utils_get_eol_name(SC_EOL_CR));
+		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_eol), utils_get_eol_name(SC_EOL_LF));
 
 		/* add manually GeanyWrapLabels because it can't be added with Glade
 		 * page Tools */

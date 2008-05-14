@@ -80,6 +80,7 @@ typedef struct GeanyPrefs
 	gboolean		tab_order_ltr;
 	gboolean		show_tab_cross;
 	guint			mru_length;
+	gint			default_eol_character;
 
 	/* tools */
 	gchar			*tools_browser_cmd;

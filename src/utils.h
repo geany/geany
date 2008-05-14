@@ -72,6 +72,8 @@ gint utils_get_eol_char_len(gint idx);
 
 const gchar *utils_get_eol_char(gint idx);
 
+const gchar *utils_get_eol_name(gint eol_mode);
+
 gboolean utils_atob(const gchar *str);
 
 gboolean utils_is_absolute_path(const gchar *path);

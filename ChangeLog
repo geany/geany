@@ -1,3 +1,15 @@
+2008-05-14  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * geany.glade, src/document.c, src/document.h, src/editor.c,
+   src/editor.h, src/interface.c, src/keyfile.c, src/plugindata.h,
+   src/prefs.c, src/prefs.h, src/utils.c, src/utils.h, doc/geany.txt,
+   doc/geany.html:
+   Add preferences for default end of line characters for new files
+   (closes #1895362) and to disable the automatic continuation of
+   multi-line comments in C-like languages.
+   Enable multi-line continuation also for CSS files.
+
+
 2008-05-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/templates.c:

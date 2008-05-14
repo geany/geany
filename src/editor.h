@@ -84,6 +84,7 @@ typedef struct EditorPrefs
 	gboolean	complete_snippets_whilst_editing;	/* hidden pref */
 	gboolean	detect_tab_mode;
 	gint		line_break_column;
+	gboolean	auto_continue_multiline;
 } EditorPrefs;
 
 extern EditorPrefs editor_prefs;
