@@ -15,6 +15,9 @@
    plugin.
  * plugins/vcdiff.c:
    Change an error message to be more clear about the error.
+ * src/templates.c:
+   Remove unnecessary case statement for PHP files, can be handled by
+   the default case.
 
 
 2008-05-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

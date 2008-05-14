@@ -595,14 +595,6 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 			break;
 		}
 
-		case GEANY_FILETYPES_PHP:
-		{
-			frame_start = "/*\n";
-			frame_end = " */\n";
-			line_prefix = " *";
-			break;
-		}
-
 		case GEANY_FILETYPES_CAML:
 		{
 			frame_start = "(*\n";
