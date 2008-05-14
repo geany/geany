@@ -304,7 +304,7 @@ static void show_output(const gchar *std_output, const gchar *name_prefix,
 	}
 	else
 	{
-		p_ui->set_statusbar(FALSE, _("Could not parse the output of the diff"));
+		p_ui->set_statusbar(FALSE, _("Input conversion of the diff output failed."));
 	}
 	g_free(text);
 	g_free(detect_enc);

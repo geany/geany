@@ -13,6 +13,8 @@
    Add new function document_set_indicator_on_line() for future use.
    Add some functions to the plugin API for the upcoming spell check
    plugin.
+ * plugins/vcdiff.c:
+   Change an error message to be more clear about the error.
 
 
 2008-05-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
