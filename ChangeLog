@@ -18,6 +18,8 @@
  * src/templates.c:
    Remove unnecessary case statement for PHP files, can be handled by
    the default case.
+ * src/filetypes.c:
+   Add shebang detection for Makefiles.
 
 
 2008-05-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -597,6 +597,8 @@ static filetype *find_shebang(const gchar *utf8_filename, const gchar *line)
 			ft = filetypes[GEANY_FILETYPES_RUBY];
 		else if (strncmp(basename_interpreter, "tcl", 3) == 0)
 			ft = filetypes[GEANY_FILETYPES_TCL];
+		else if (strncmp(basename_interpreter, "make", 4) == 0)
+			ft = filetypes[GEANY_FILETYPES_MAKE];
 		else if (strncmp(basename_interpreter, "zsh", 3) == 0)
 			ft = filetypes[GEANY_FILETYPES_SH];
 		else if (strncmp(basename_interpreter, "ksh", 3) == 0)
