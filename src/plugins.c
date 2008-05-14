@@ -113,7 +113,10 @@ static DocumentFuncs doc_funcs = {
 	&document_reload_file,
 	&document_set_encoding,
 	&document_set_text_changed,
-	&document_set_filetype
+	&document_set_filetype,
+	&document_set_indicator,
+	&document_set_indicator_on_line,
+	&document_clear_indicators
 };
 
 static ScintillaFuncs sci_funcs = {
@@ -150,6 +153,7 @@ static ScintillaFuncs sci_funcs = {
 	&sci_get_style_at,
 	&sci_get_char_at,
 	&sci_get_current_line,
+	&sci_can_copy
 };
 
 static TemplateFuncs template_funcs = {
@@ -193,7 +197,10 @@ static SupportFuncs support_funcs = {
 
 static MsgWinFuncs msgwin_funcs = {
 	&msgwin_status_add,
-	&msgwin_compiler_add_fmt
+	&msgwin_compiler_add_fmt,
+	&msgwin_msg_add_fmt,
+	&msgwin_clear_tab,
+	&msgwin_switch_tab
 };
 
 static EncodingFuncs encoding_funcs = {

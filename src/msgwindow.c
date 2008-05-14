@@ -213,6 +213,13 @@ static const GdkColor *get_color(gint msg_color)
 }
 
 
+/**
+ *  Adds a new message in the compiler tab treeview in the messages window.
+ *
+ *  @param msg_color A color to be used for the text. It must be an element of #MsgColors.
+ *  @param format Printf()-style format string.
+ *  @param ... Arguments for the @c format string.
+ **/
 void msgwin_compiler_add_fmt(gint msg_color, const gchar *format, ...)
 {
 	gchar string[512];
@@ -225,7 +232,6 @@ void msgwin_compiler_add_fmt(gint msg_color, const gchar *format, ...)
 }
 
 
-/* adds string to the compiler textview */
 void msgwin_compiler_add(gint msg_color, const gchar *msg)
 {
 	GtkTreeIter iter;
@@ -260,6 +266,17 @@ void msgwin_show_hide(gboolean show)
 }
 
 
+/**
+ *  Adds a new message in the messages tab treeview in the messages window.
+ *  If @c line and @c idx are set, clicking on this line jumps into the file which is specified
+ *  by @c idx into the line specified with @c line.
+ *
+ *  @param msg_color A color to be used for the text. It must be an element of #MsgColors.
+ *  @param line The document's line where the message belongs to. Set to -1 to ignore.
+ *  @param idx The document's index in the doc_array. Set to -1 to ignore.
+ *  @param format Printf()-style format string.
+ *  @param ... Arguments for the @c format string.
+ **/
 void msgwin_msg_add_fmt(gint msg_color, gint line, gint idx, const gchar *format, ...)
 {
 	gchar string[512];
@@ -299,8 +316,13 @@ void msgwin_msg_add(gint msg_color, gint line, gint idx, const gchar *string)
 }
 
 
-/* Log a status message *without* setting the status bar.
- * (Use ui_set_statusbar() to display text on the statusbar) */
+/**
+ *  Log a status message *without* setting the status bar.
+ *  (Use ui_set_statusbar() to display text on the statusbar)
+ *
+ *  @param format Printf()-style format string.
+ *  @param ... Arguments for the @c format string.
+ **/
 void msgwin_status_add(const gchar *format, ...)
 {
 	GtkTreeIter iter;
@@ -520,7 +542,7 @@ gboolean msgwin_goto_compiler_file_line()
 				if (DOC_IDX_VALID(idx))
 				{
 					if (! doc_list[idx].changed)	/* if modified, line may be wrong */
-						document_set_indicator(idx, line - 1);
+						document_set_indicator_on_line(idx, line - 1);
 
 					ret = navqueue_goto_line(old_idx, idx, line);
 				}
@@ -882,7 +904,15 @@ static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *
 }
 
 
-void msgwin_switch_tab(MessageWindowTabNum tabnum, gboolean show)
+/**
+ *  Switches to the given notebook tab of the messages window and shows the messages window
+ *  if it was previously hidden and @c show is set to @a TRUE.
+ *
+ *  @param tabnum An index of a tab in the messages window. Valid values are all elements of
+ *                #MessageWindowTabNum.
+ *  @param show Whether to show the messages window at all if it was hidden before.
+ **/
+void msgwin_switch_tab(gint tabnum, gboolean show)
 {
 	GtkWidget *widget = NULL;	/* widget to focus */
 
@@ -904,8 +934,13 @@ void msgwin_switch_tab(MessageWindowTabNum tabnum, gboolean show)
 		gtk_widget_grab_focus(widget);
 }
 
-
-void msgwin_clear_tab(MessageWindowTabNum tabnum)
+/**
+ *  Removes all messages from a tab specified by @c tabnum in the messages window.
+ *
+ *  @param tabnum An index of a tab in the messages window which should be cleared.
+ *                Valid values are @a MSG_STATUS, @a MSG_COMPILER and @a MSG_MESSAGE.
+ **/
+void msgwin_clear_tab(gint tabnum)
 {
 	GtkListStore *store = NULL;
 

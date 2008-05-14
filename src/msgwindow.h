@@ -21,26 +21,37 @@
  * $Id$
  */
 
+/**
+ *  @file msgwindow.h
+ *  Message window functions (status, compiler, messages windows).
+ *  Also compiler error message parsing and grep file and line parsing.
+ **/
+
 
 #ifndef GEANY_MSGWINDOW_H
 #define GEANY_MSGWINDOW_H 1
 
 
-enum
+/**
+ * Various colors for use in the compiler and messages treeviews when adding messages.
+ **/
+enum MsgColors
 {
-	COLOR_RED,
-	COLOR_DARK_RED,
-	COLOR_BLACK,
-	COLOR_BLUE
+	COLOR_RED,		/**< Color red */
+	COLOR_DARK_RED,	/**< Color dark red */
+	COLOR_BLACK,	/**< Color black */
+	COLOR_BLUE		/**< Color blue */
 };
 
+/** Indices of the notebooks in the messages window. */
 typedef enum
 {
-	MSG_STATUS = 0, /* force it to start at 0 to keep in sync with the notebook page numbers */
-	MSG_COMPILER,
-	MSG_MESSAGE,
-	MSG_SCRATCH,
-	MSG_VTE
+	/* force it to start at 0 to keep in sync with the notebook page numbers */
+	MSG_STATUS = 0,	/**< Index of the status message tab */
+	MSG_COMPILER,	/**< Index of the compiler tab */
+	MSG_MESSAGE,	/**< Index of the messages tab */
+	MSG_SCRATCH,	/**< Index of the scratch tab */
+	MSG_VTE			/**< Index of the VTE tab */
 } MessageWindowTabNum;
 
 
@@ -69,9 +80,9 @@ void msgwin_finalize(void);
 
 void msgwin_show_hide(gboolean show);
 
-void msgwin_switch_tab(MessageWindowTabNum tabnum, gboolean show);
+void msgwin_switch_tab(gint tabnum, gboolean show);
 
-void msgwin_clear_tab(MessageWindowTabNum tabnum);
+void msgwin_clear_tab(gint tabnum);
 
 void msgwin_msg_add_fmt(gint msg_color, gint line, gint idx, const gchar *format, ...) G_GNUC_PRINTF (4, 5);
 

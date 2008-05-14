@@ -8,6 +8,11 @@
    (closes #1895362) and to disable the automatic continuation of
    multi-line comments in C-like languages.
    Enable multi-line continuation also for CSS files.
+ * src/document.c, src/document.h, src/msgwindow.c, src/msgwindow.h,
+   src/plugins.c, src/plugindata.h:
+   Add new function document_set_indicator_on_line() for future use.
+   Add some functions to the plugin API for the upcoming spell check
+   plugin.
 
 
 2008-05-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

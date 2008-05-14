@@ -202,6 +202,9 @@ typedef struct DocumentFuncs
 	void	(*set_encoding) (gint idx, const gchar *new_encoding);
 	void	(*set_text_changed) (gint idx);
 	void	(*set_filetype) (gint idx, filetype *type);
+	void	(*set_indicator) (gint idx, gint start, gint end);
+	void	(*set_indicator_on_line) (gint idx, gint line);
+	void	(*clear_indicators) (gint idx);
 }
 DocumentFuncs;
 
@@ -246,6 +249,7 @@ typedef struct ScintillaFuncs
 	gint	(*get_style_at) (struct _ScintillaObject *sci, gint position);
 	gchar	(*get_char_at) (struct _ScintillaObject *sci, gint pos);
 	gint	(*get_current_line) (struct _ScintillaObject *sci);
+	gboolean (*can_copy) (struct _ScintillaObject *sci);
 }
 ScintillaFuncs;
 
@@ -326,6 +330,10 @@ typedef struct MsgWinFuncs
 	/* status_add() does not set the status bar - use ui->set_statusbar() instead. */
 	void		(*status_add) (const gchar *format, ...);
 	void		(*compiler_add) (gint msg_color, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
+	void		(*msg_add) (gint msg_color, gint line, gint idx, const gchar *format, ...)
+							G_GNUC_PRINTF (4, 5);
+	void		(*clear_tab) (gint tabnum);
+	void		(*switch_tab) (gint tabnum, gboolean show);
 }
 MsgWinFuncs;
 

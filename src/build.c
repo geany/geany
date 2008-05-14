@@ -855,7 +855,7 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 				{
 					gint idx = document_find_by_filename(filename, FALSE);
 
-					document_set_indicator(idx, line - 1);	/* will check valid idx */
+					document_set_indicator_on_line(idx, line - 1);	/* will check valid idx */
 					color = COLOR_RED;	/* error message parsed on the line */
 				}
 				g_free(filename);
