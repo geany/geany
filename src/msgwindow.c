@@ -42,6 +42,7 @@
 #include "main.h"
 #include "vte.h"
 #include "navqueue.h"
+#include "editor.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -542,7 +543,7 @@ gboolean msgwin_goto_compiler_file_line()
 				if (DOC_IDX_VALID(idx))
 				{
 					if (! doc_list[idx].changed)	/* if modified, line may be wrong */
-						document_set_indicator_on_line(idx, line - 1);
+						editor_set_indicator_on_line(idx, line - 1);
 
 					ret = navqueue_goto_line(old_idx, idx, line);
 				}

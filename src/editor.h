@@ -21,6 +21,15 @@
  * $Id$
  */
 
+/**
+ *  @file editor.h
+ *  Callbacks for the Scintilla widget (ScintillaObject).
+ *  Most important is the sci-notify callback, handled in on_editor_notification().
+ *  This includes auto-indentation, comments, auto-completion, calltips, etc.
+ *  Also some general Scintilla-related functions.
+ **/
+
+
 #ifndef GEANY_SCI_CB_H
 #define GEANY_SCI_CB_H 1
 
@@ -159,5 +168,11 @@ void editor_select_word(ScintillaObject *sci);
 void editor_select_lines(ScintillaObject *sci, gboolean extra_line);
 
 void editor_select_paragraph(ScintillaObject *sci);
+
+void editor_set_indicator_on_line(gint idx, gint line);
+
+void editor_set_indicator(gint idx, gint start, gint end);
+
+void editor_clear_indicators(gint idx);
 
 #endif

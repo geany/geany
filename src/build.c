@@ -377,7 +377,7 @@ static void clear_errors(gint idx)
 	{
 		case GBO_COMPILE:
 		case GBO_MAKE_OBJECT:
-			document_clear_indicators(idx);
+			editor_clear_indicators(idx);
 			break;
 
 		case GBO_BUILD:
@@ -389,7 +389,7 @@ static void clear_errors(gint idx)
 			for (i = 0; i < doc_array->len; i++)
 			{
 				if (doc_list[i].is_valid)
-					document_clear_indicators(i);
+					editor_clear_indicators(i);
 			}
 			break;
 		}
@@ -855,7 +855,7 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 				{
 					gint idx = document_find_by_filename(filename, FALSE);
 
-					document_set_indicator_on_line(idx, line - 1);	/* will check valid idx */
+					editor_set_indicator_on_line(idx, line - 1);	/* will check valid idx */
 					color = COLOR_RED;	/* error message parsed on the line */
 				}
 				g_free(filename);

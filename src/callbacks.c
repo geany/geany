@@ -1535,7 +1535,7 @@ on_menu_remove_indicators1_activate    (GtkMenuItem     *menuitem,
 
 	if (! DOC_IDX_VALID(idx))
 		return;
-	document_clear_indicators(idx);
+	editor_clear_indicators(idx);
 }
 
 

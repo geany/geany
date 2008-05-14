@@ -176,6 +176,7 @@ typedef struct GeanyData
 	struct HighlightingFuncs	*highlighting;	/**< See highlighting.h */
 	struct FiletypeFuncs		*filetype;		/**< See filetypes.h */
 	struct NavQueueFuncs        *navqueue;      /**< See navqueue.h */
+	struct EditorFuncs        	*editor;        /**< See editor.h */
 }
 GeanyData;
 
@@ -202,9 +203,6 @@ typedef struct DocumentFuncs
 	void	(*set_encoding) (gint idx, const gchar *new_encoding);
 	void	(*set_text_changed) (gint idx);
 	void	(*set_filetype) (gint idx, filetype *type);
-	void	(*set_indicator) (gint idx, gint start, gint end);
-	void	(*set_indicator_on_line) (gint idx, gint line);
-	void	(*clear_indicators) (gint idx);
 }
 DocumentFuncs;
 
@@ -401,11 +399,23 @@ typedef struct TagManagerFuncs
 }
 TagManagerFuncs;
 
+
+/* See navqueue.h */
 typedef struct NavQueueFuncs
 {
 	gboolean		(*goto_line) (gint old_idx, gint new_idx, gint line);
 }
 NavQueueFuncs;
+
+
+/* See editor.h */
+typedef struct EditorFuncs
+{
+	void	(*set_indicator) (gint idx, gint start, gint end);
+	void	(*set_indicator_on_line) (gint idx, gint line);
+	void	(*clear_indicators) (gint idx);
+}
+EditorFuncs;
 
 
 /* Deprecated aliases */

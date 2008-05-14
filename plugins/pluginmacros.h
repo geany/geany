@@ -55,6 +55,7 @@
 #define p_tm			geany_data->tm
 #define p_ui			geany_data->ui
 #define p_utils			geany_data->utils
+#define p_editor		geany_data->editor
 
 #else
 

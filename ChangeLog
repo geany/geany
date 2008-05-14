@@ -20,6 +20,10 @@
    the default case.
  * src/filetypes.c:
    Add shebang detection for Makefiles.
+ * src/build.c, src/plugindata.h, src/msgwindow.c, src/callbacks.c,
+   src/filetypes.c, src/document.c, src/plugins.c, src/document.h,
+   src/main.c, src/editor.c, src/editor.h, plugins/pluginmacros.h:
+   Move indicator functions from document.c into editor.c.
 
 
 2008-05-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

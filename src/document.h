@@ -219,12 +219,6 @@ void document_fold_all(gint idx);
 
 void document_unfold_all(gint idx);
 
-void document_set_indicator_on_line(gint idx, gint line);
-
-void document_set_indicator(gint idx, gint start, gint end);
-
-void document_clear_indicators(gint idx);
-
 void document_replace_tabs(gint idx);
 
 void document_strip_line_trailing_spaces(gint idx, gint line);

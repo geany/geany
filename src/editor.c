@@ -2860,3 +2860,92 @@ void editor_display_current_line(gint idx, gfloat percent_of_view)
 }
 
 
+/**
+ *  Deletes all currently set indicators in the %document.
+ *  Error indicators (red squiggly underlines) and usual line markers are removed.
+ *
+ *  @param idx The document index to operate on.
+ **/
+void editor_clear_indicators(gint idx)
+{
+	glong last_pos;
+
+	g_return_if_fail(DOC_IDX_VALID(idx));
+
+	last_pos = sci_get_length(doc_list[idx].sci);
+	if (last_pos > 0)
+	{
+		sci_start_styling(doc_list[idx].sci, 0, INDIC2_MASK);
+		sci_set_styling(doc_list[idx].sci, last_pos, 0);
+	}
+	sci_marker_delete_all(doc_list[idx].sci, 0);	/* remove the yellow error line marker */
+}
+
+
+/**
+ *  This is a convenience function for document_set_indicator(). It sets an error indicator
+ *  (red squiggly underline) on the whole given line.
+ *  Whitespace at the start and the end of the line is not marked.
+ *
+ *  @param idx The %document index to operate on.
+ *  @param line The line number which should be marked.
+ **/
+void editor_set_indicator_on_line(gint idx, gint line)
+{
+	gint start, end;
+	guint i = 0, len;
+	gchar *linebuf;
+
+	if (! DOC_IDX_VALID(idx))
+		return;
+
+	start = sci_get_position_from_line(doc_list[idx].sci, line);
+	end = sci_get_position_from_line(doc_list[idx].sci, line + 1);
+
+	/* skip blank lines */
+	if ((start + 1) == end ||
+		sci_get_line_length(doc_list[idx].sci, line) == utils_get_eol_char_len(idx))
+		return;
+
+	/* don't set the indicator on whitespace */
+	len = end - start;
+	linebuf = sci_get_line(doc_list[idx].sci, line);
+
+	while (isspace(linebuf[i])) i++;
+	while (len > 1 && len > i && isspace(linebuf[len-1]))
+	{
+		len--;
+		end--;
+	}
+	g_free(linebuf);
+
+	editor_set_indicator(idx, start + i, end);
+}
+
+
+/**
+ *  Sets an error indicator (red squiggly underline) on the range specified by @c start and @c end.
+ *  No error checking or whitespace removal is performed, this should be done by the calling
+ *  function if necessary.
+ *
+ *  @param idx The %document index to operate on.
+ *  @param start The starting position for the marker.
+ *  @param end The ending position for the marker.
+ **/
+void editor_set_indicator(gint idx, gint start, gint end)
+{
+	gint current_mask;
+
+	if (! DOC_IDX_VALID(idx) || start >= end)
+		return;
+
+	current_mask = sci_get_style_at(doc_list[idx].sci, start);
+	current_mask &= INDICS_MASK;
+	current_mask |= INDIC2_MASK;
+
+	sci_start_styling(doc_list[idx].sci, start, INDIC2_MASK);
+	sci_set_styling(doc_list[idx].sci, end - start, current_mask);
+}
+
+
+

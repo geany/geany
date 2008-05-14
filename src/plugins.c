@@ -113,10 +113,13 @@ static DocumentFuncs doc_funcs = {
 	&document_reload_file,
 	&document_set_encoding,
 	&document_set_text_changed,
-	&document_set_filetype,
-	&document_set_indicator,
-	&document_set_indicator_on_line,
-	&document_clear_indicators
+	&document_set_filetype
+};
+
+static EditorFuncs editor_funcs = {
+	&editor_set_indicator,
+	&editor_set_indicator_on_line,
+	&editor_clear_indicators
 };
 
 static ScintillaFuncs sci_funcs = {
@@ -264,7 +267,8 @@ static GeanyData geany_data = {
 	&search_funcs,
 	&highlighting_funcs,
 	&filetype_funcs,
-	&navqueue_funcs
+	&navqueue_funcs,
+	&editor_funcs
 };
 
 
