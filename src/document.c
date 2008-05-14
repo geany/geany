@@ -1114,6 +1114,9 @@ gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean
 	else
 	{	/* reloading */
 		document_undo_clear(idx);
+		/* Recolour the document here because the text could have changed but the
+		 * filetype hasn't */
+		sci_colourise(doc_list[idx].sci, 0, -1);
 		use_ft = ft;
 	}
 	/* update taglist, typedef keywords and build menu if necessary */
