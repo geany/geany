@@ -430,6 +430,26 @@ static void add_file_item(gpointer data, gpointer user_data)
 }
 
 
+static gint compare_filenames_by_filetype(gconstpointer a, gconstpointer b)
+{
+	filetype *ft_a = filetypes_detect_from_extension(a);
+	filetype *ft_b = filetypes_detect_from_extension(b);
+
+	/* sort by filetype name first */
+	if (ft_a != ft_b)
+	{
+		/* None filetypes should come first */
+		if (ft_a->id == GEANY_FILETYPES_NONE)
+			return -1;
+		if (ft_b->id == GEANY_FILETYPES_NONE)
+			return 1;
+
+		return g_strcasecmp(ft_a->name, ft_b->name);
+	}
+	return g_strcasecmp(a, b);
+}
+
+
 static gboolean add_custom_template_items(void)
 {
 	gchar *path = g_build_path(G_DIR_SEPARATOR_S, app->configdir, GEANY_TEMPLATES_SUBDIR,
@@ -441,6 +461,7 @@ static gboolean add_custom_template_items(void)
 		utils_mkdir(path, FALSE);
 		return FALSE;
 	}
+	list = g_slist_sort(list, compare_filenames_by_filetype);
 	g_slist_foreach(list, add_file_item, NULL);
 	g_slist_foreach(list, (GFunc) g_free, NULL);
 	g_slist_free(list);
