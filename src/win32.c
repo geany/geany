@@ -54,6 +54,7 @@
 #include "dialogs.h"
 #include "filetypes.h"
 #include "project.h"
+#include "editor.h"
 
 #define BUFSIZE 4096
 
@@ -470,7 +471,7 @@ void win32_show_color_dialog(const gchar *colour)
 	      (guint) (utils_scale_round(GetGValue(rgb_current), 255)),
 	      (guint) (utils_scale_round(GetBValue(rgb_current), 255)));
 
-		document_insert_colour(idx, hex);
+		editor_insert_color(idx, hex);
 	}
 	g_free(hex);
 }
