@@ -72,6 +72,7 @@
 #define p_tm			tagmanager
 #define p_ui			ui
 #define p_utils			utils
+#define p_editor		geany_data->editor
 
 
 /* Temporary source compatibility macros - do not use these in new code. */

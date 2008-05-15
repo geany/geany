@@ -3,6 +3,9 @@
  * src/*.c src/*.h:
    Move several editing related functions from document.c to editor.c.
    Fix two compiler warnings about non-literal format strings.
+ * plugins/pluginmacros.h:
+   Make p_editor macro also available if GEANY_DISABLE_DEPRECATED
+   is not defined.
 
 
 2008-05-14  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
