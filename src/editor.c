@@ -36,6 +36,7 @@
 #include "SciLexer.h"
 #include "geany.h"
 
+#include "support.h"
 #include "editor.h"
 #include "document.h"
 #include "filetypes.h"
@@ -240,7 +241,7 @@ static void check_line_breaking(gint idx, gint pos, gchar c)
 			gint indent_size = sci_get_line_indentation(sci, line);
 
 			/* break the line after the space */
-			sci_insert_text(sci, pos + 1, utils_get_eol_char(idx));
+			sci_insert_text(sci, pos + 1, editor_get_eol_char(idx));
 
 			if (doc->auto_indent)
 				sci_set_line_indentation(sci, line + 1, indent_size);
@@ -582,7 +583,7 @@ get_whitespace(gint width, gboolean use_tabs)
 static void check_python_indent(gint idx, gint pos)
 {
 	document *doc = &doc_list[idx];
-	gint last_char = pos - utils_get_eol_char_len(idx) - 1;
+	gint last_char = pos - editor_get_eol_char_len(idx) - 1;
 
 	/* add extra indentation for Python after colon */
 	if (sci_get_char_at(doc->sci, last_char) == ':' &&
@@ -626,7 +627,7 @@ static void on_new_line_added(gint idx)
 
 	if (editor_prefs.newline_strip)
 	{	/* strip the trailing spaces on the previous line */
-		document_strip_line_trailing_spaces(idx, line - 1);
+		editor_strip_line_trailing_spaces(idx, line - 1);
 	}
 }
 
@@ -807,7 +808,7 @@ void editor_close_block(gint idx, gint pos)
 	line_len = sci_get_line_length(sci, line);
 	/* set eol_char_len to 0 if on last line, because there is no EOL char */
 	eol_char_len = (line == (SSM(sci, SCI_GETLINECOUNT, 0, 0) - 1)) ? 0 :
-								utils_get_eol_char_len(document_find_by_sci(sci));
+								editor_get_eol_char_len(document_find_by_sci(sci));
 
 	/* check that the line is empty, to not kill text in the line */
 	line_buf = sci_get_line(sci, line);
@@ -1281,7 +1282,7 @@ void editor_auto_latex(gint idx, gint pos)
 
 			/* get the indentation */
 			if (doc_list[idx].auto_indent) get_indent(&doc_list[idx], pos, TRUE);
-			eol = g_strconcat(utils_get_eol_char(idx), indent, NULL);
+			eol = g_strconcat(editor_get_eol_char(idx), indent, NULL);
 
 			construct = g_strdup_printf("%s\\end%s{%s}", eol, full_cmd, env);
 
@@ -1368,7 +1369,7 @@ static gboolean snippets_complete_constructs(gint idx, gint pos, const gchar *wo
 	}
 
 	get_indent(&doc_list[idx], pos, TRUE);
-	lindent = g_strconcat(utils_get_eol_char(idx), indent, NULL);
+	lindent = g_strconcat(editor_get_eol_char(idx), indent, NULL);
 	whitespace = get_whitespace(editor_prefs.tab_width, doc_list[idx].use_tabs);
 
 	/* remove the typed word, it will be added again by the used auto completion
@@ -1618,7 +1619,7 @@ static void real_comment_multiline(gint idx, gint line_start, gint last_line)
 
 	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return;
 
-	eol = utils_get_eol_char(idx);
+	eol = editor_get_eol_char(idx);
 	str_begin = g_strdup_printf("%s%s", doc_list[idx].file_type->comment_open, eol);
 	str_end = g_strdup_printf("%s%s", doc_list[idx].file_type->comment_close, eol);
 
@@ -1693,7 +1694,7 @@ gint editor_do_uncomment(gint idx, gint line, gboolean toggle)
 		first_line = sci_get_line_from_position(doc_list[idx].sci, sel_start);
 		/* Find the last line with chars selected (not EOL char) */
 		last_line = sci_get_line_from_position(doc_list[idx].sci,
-			sel_end - utils_get_eol_char_len(idx));
+			sel_end - editor_get_eol_char_len(idx));
 		last_line = MAX(first_line, last_line);
 	}
 	else
@@ -1817,7 +1818,7 @@ gint editor_do_uncomment(gint idx, gint line, gboolean toggle)
 		}
 		else
 		{
-			gint eol_len = utils_get_eol_char_len(idx);
+			gint eol_len = editor_get_eol_char_len(idx);
 			sci_set_selection_start(doc_list[idx].sci, sel_start - co_len - eol_len);
 			sci_set_selection_end(doc_list[idx].sci, sel_end - co_len - eol_len);
 		}
@@ -1852,7 +1853,7 @@ void editor_do_comment_toggle(gint idx)
 		sci_get_selection_start(doc_list[idx].sci));
 	/* Find the last line with chars selected (not EOL char) */
 	last_line = sci_get_line_from_position(doc_list[idx].sci,
-		sci_get_selection_end(doc_list[idx].sci) - utils_get_eol_char_len(idx));
+		sci_get_selection_end(doc_list[idx].sci) - editor_get_eol_char_len(idx));
 	last_line = MAX(first_line, last_line);
 
 	/* detection of HTML vs PHP code, if non-PHP set filetype to XML */
@@ -1981,7 +1982,7 @@ void editor_do_comment_toggle(gint idx)
 		}
 		else
 		{
-			gint eol_len = utils_get_eol_char_len(idx);
+			gint eol_len = editor_get_eol_char_len(idx);
 			if (count_uncommented > 0)
 			{
 				sci_set_selection_start(doc_list[idx].sci, sel_start - co_len - eol_len);
@@ -2021,7 +2022,7 @@ void editor_do_comment(gint idx, gint line, gboolean allow_empty_lines, gboolean
 		first_line = sci_get_line_from_position(doc_list[idx].sci, sel_start);
 		/* Find the last line with chars selected (not EOL char) */
 		last_line = sci_get_line_from_position(doc_list[idx].sci,
-			sel_end - utils_get_eol_char_len(idx));
+			sel_end - editor_get_eol_char_len(idx));
 		last_line = MAX(first_line, last_line);
 	}
 	else
@@ -2136,7 +2137,7 @@ void editor_do_comment(gint idx, gint line, gboolean allow_empty_lines, gboolean
 		}
 		else
 		{
-			gint eol_len = utils_get_eol_char_len(idx);
+			gint eol_len = editor_get_eol_char_len(idx);
 			sci_set_selection_start(doc_list[idx].sci, sel_start + co_len + eol_len);
 			sci_set_selection_end(doc_list[idx].sci, sel_end + co_len + eol_len);
 		}
@@ -2181,7 +2182,7 @@ static gboolean is_doc_comment_char(gchar c, gint lexer)
 static void auto_multiline(gint idx, gint pos)
 {
 	ScintillaObject *sci = doc_list[idx].sci;
-	gint style = SSM(sci, SCI_GETSTYLEAT, pos - 1 - utils_get_eol_char_len(idx), 0);
+	gint style = SSM(sci, SCI_GETSTYLEAT, pos - 1 - editor_get_eol_char_len(idx), 0);
 	gint lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 
 	if ((lexer == SCLEX_CPP && (style == SCE_C_COMMENT || style == SCE_C_COMMENTDOC)) ||
@@ -2684,7 +2685,7 @@ void editor_auto_line_indentation(gint idx, gint pos)
 	first_line = sci_get_line_from_position(doc_list[idx].sci, first_sel_start);
 	/* Find the last line with chars selected (not EOL char) */
 	last_line = sci_get_line_from_position(doc_list[idx].sci,
-		first_sel_end - utils_get_eol_char_len(idx));
+		first_sel_end - editor_get_eol_char_len(idx));
 	last_line = MAX(first_line, last_line);
 
 	if (pos == -1)
@@ -2738,7 +2739,7 @@ void editor_indentation_by_one_space(gint idx, gint pos, gboolean decrease)
 	first_line = sci_get_line_from_position(doc_list[idx].sci, sel_start);
 	/* Find the last line with chars selected (not EOL char) */
 	last_line = sci_get_line_from_position(doc_list[idx].sci,
-		sel_end - utils_get_eol_char_len(idx));
+		sel_end - editor_get_eol_char_len(idx));
 	last_line = MAX(first_line, last_line);
 
 	if (pos == -1)
@@ -2904,7 +2905,7 @@ void editor_set_indicator_on_line(gint idx, gint line)
 
 	/* skip blank lines */
 	if ((start + 1) == end ||
-		sci_get_line_length(doc_list[idx].sci, line) == utils_get_eol_char_len(idx))
+		sci_get_line_length(doc_list[idx].sci, line) == editor_get_eol_char_len(idx))
 		return;
 
 	/* don't set the indicator on whitespace */
@@ -2948,4 +2949,244 @@ void editor_set_indicator(gint idx, gint start, gint end)
 }
 
 
+/* Inserts the given colour (format should be #...), if there is a selection starting with 0x...
+ * the replacement will also start with 0x... */
+void editor_insert_color(gint idx, const gchar *colour)
+{
+	g_return_if_fail(DOC_IDX_VALID(idx));
 
+	if (sci_can_copy(doc_list[idx].sci))
+	{
+		gint start = sci_get_selection_start(doc_list[idx].sci);
+		const gchar *replacement = colour;
+
+		if (sci_get_char_at(doc_list[idx].sci, start) == '0' &&
+			sci_get_char_at(doc_list[idx].sci, start + 1) == 'x')
+		{
+			sci_set_selection_start(doc_list[idx].sci, start + 2);
+			sci_set_selection_end(doc_list[idx].sci, start + 8);
+			replacement++; /* skip the leading "0x" */
+		}
+		else if (sci_get_char_at(doc_list[idx].sci, start - 1) == '#')
+		{	/* double clicking something like #00ffff may only select 00ffff because of wordchars */
+			replacement++; /* so skip the '#' to only replace the colour value */
+		}
+		sci_replace_sel(doc_list[idx].sci, replacement);
+	}
+	else
+		sci_add_text(doc_list[idx].sci, colour);
+}
+
+
+const gchar *editor_get_eol_char_name(gint idx)
+{
+	if (! DOC_IDX_VALID(idx))
+		return "";
+
+	switch (sci_get_eol_mode(doc_list[idx].sci))
+	{
+		case SC_EOL_CRLF: return _("Win (CRLF)"); break;
+		case SC_EOL_CR: return _("Mac (CR)"); break;
+		default: return _("Unix (LF)"); break;
+	}
+}
+
+
+/* returns the end-of-line character(s) length of the specified editor */
+gint editor_get_eol_char_len(gint idx)
+{
+	if (! DOC_IDX_VALID(idx))
+		return 0;
+
+	switch (sci_get_eol_mode(doc_list[idx].sci))
+	{
+		case SC_EOL_CRLF: return 2; break;
+		default: return 1; break;
+	}
+}
+
+
+/* returns the end-of-line character(s) of the specified editor */
+const gchar *editor_get_eol_char(gint idx)
+{
+	if (! DOC_IDX_VALID(idx))
+		return "";
+
+	switch (sci_get_eol_mode(doc_list[idx].sci))
+	{
+		case SC_EOL_CRLF: return "\r\n"; break;
+		case SC_EOL_CR: return "\r"; break;
+		default: return "\n"; break;
+	}
+}
+
+
+static void fold_all(gint idx, gboolean want_fold)
+{
+	gint lines, first, i;
+
+	if (! DOC_IDX_VALID(idx) || ! editor_prefs.folding) return;
+
+	lines = sci_get_line_count(doc_list[idx].sci);
+	first = sci_get_first_visible_line(doc_list[idx].sci);
+
+	for (i = 0; i < lines; i++)
+	{
+		gint level = sci_get_fold_level(doc_list[idx].sci, i);
+		if (level & SC_FOLDLEVELHEADERFLAG)
+		{
+			if (sci_get_fold_expanded(doc_list[idx].sci, i) == want_fold)
+					sci_toggle_fold(doc_list[idx].sci, i);
+		}
+	}
+	editor_scroll_to_line(doc_list[idx].sci, first, 0.0F);
+}
+
+
+void editor_unfold_all(gint idx)
+{
+	fold_all(idx, FALSE);
+}
+
+
+void editor_fold_all(gint idx)
+{
+	fold_all(idx, TRUE);
+}
+
+
+void editor_replace_tabs(gint idx)
+{
+	gint search_pos, pos_in_line, current_tab_true_length;
+	gint tab_len;
+	gchar *tab_str;
+	struct TextToFind ttf;
+
+	if (! DOC_IDX_VALID(idx)) return;
+
+	sci_start_undo_action(doc_list[idx].sci);
+	tab_len = sci_get_tab_width(doc_list[idx].sci);
+	ttf.chrg.cpMin = 0;
+	ttf.chrg.cpMax = sci_get_length(doc_list[idx].sci);
+	ttf.lpstrText = (gchar*) "\t";
+
+	while (TRUE)
+	{
+		search_pos = sci_find_text(doc_list[idx].sci, SCFIND_MATCHCASE, &ttf);
+		if (search_pos == -1)
+			break;
+
+		pos_in_line = sci_get_col_from_position(doc_list[idx].sci,search_pos);
+		current_tab_true_length = tab_len - (pos_in_line % tab_len);
+		tab_str = g_strnfill(current_tab_true_length, ' ');
+		sci_target_start(doc_list[idx].sci, search_pos);
+		sci_target_end(doc_list[idx].sci, search_pos + 1);
+		sci_target_replace(doc_list[idx].sci, tab_str, FALSE);
+		ttf.chrg.cpMin = search_pos + current_tab_true_length - 1;	/* next search starts after replacement */
+		ttf.chrg.cpMax += current_tab_true_length - 1;	/* update end of range now text has changed */
+		g_free(tab_str);
+	}
+	sci_end_undo_action(doc_list[idx].sci);
+}
+
+
+void editor_strip_line_trailing_spaces(gint idx, gint line)
+{
+	gint line_start = sci_get_position_from_line(doc_list[idx].sci, line);
+	gint line_end = sci_get_line_end_position(doc_list[idx].sci, line);
+	gint i = line_end - 1;
+	gchar ch = sci_get_char_at(doc_list[idx].sci, i);
+
+	while ((i >= line_start) && ((ch == ' ') || (ch == '\t')))
+	{
+		i--;
+		ch = sci_get_char_at(doc_list[idx].sci, i);
+	}
+	if (i < (line_end-1))
+	{
+		sci_target_start(doc_list[idx].sci, i + 1);
+		sci_target_end(doc_list[idx].sci, line_end);
+		sci_target_replace(doc_list[idx].sci, "", FALSE);
+	}
+}
+
+
+void editor_strip_trailing_spaces(gint idx)
+{
+	gint max_lines = sci_get_line_count(doc_list[idx].sci);
+	gint line;
+
+	sci_start_undo_action(doc_list[idx].sci);
+
+	for (line = 0; line < max_lines; line++)
+	{
+		editor_strip_line_trailing_spaces(idx, line);
+	}
+	sci_end_undo_action(doc_list[idx].sci);
+}
+
+
+void editor_ensure_final_newline(gint idx)
+{
+	gint max_lines = sci_get_line_count(doc_list[idx].sci);
+	gboolean append_newline = (max_lines == 1);
+	gint end_document = sci_get_position_from_line(doc_list[idx].sci, max_lines);
+
+	if (max_lines > 1)
+	{
+		append_newline = end_document > sci_get_position_from_line(doc_list[idx].sci, max_lines - 1);
+	}
+	if (append_newline)
+	{
+		const gchar *eol = "\n";
+		switch (sci_get_eol_mode(doc_list[idx].sci))
+		{
+			case SC_EOL_CRLF:
+				eol = "\r\n";
+				break;
+			case SC_EOL_CR:
+				eol = "\r";
+				break;
+		}
+		sci_insert_text(doc_list[idx].sci, end_document, eol);
+	}
+}
+
+
+void editor_set_font(gint idx, const gchar *font_name, gint size)
+{
+	gint style;
+
+	for (style = 0; style <= 127; style++)
+		sci_set_font(doc_list[idx].sci, style, font_name, size);
+	/* line number and braces */
+	sci_set_font(doc_list[idx].sci, STYLE_LINENUMBER, font_name, size);
+	sci_set_font(doc_list[idx].sci, STYLE_BRACELIGHT, font_name, size);
+	sci_set_font(doc_list[idx].sci, STYLE_BRACEBAD, font_name, size);
+	/* zoom to 100% to prevent confusion */
+	sci_zoom_off(doc_list[idx].sci);
+}
+
+
+void editor_set_line_wrapping(gint idx, gboolean wrap)
+{
+	document *doc = &doc_list[idx];
+
+	g_return_if_fail(DOC_IDX_VALID(idx));
+
+	doc->line_wrapping = wrap;
+	sci_set_lines_wrapped(doc->sci, wrap);
+}
+
+
+void editor_set_use_tabs(gint idx, gboolean use_tabs)
+{
+	document *doc = &doc_list[idx];
+
+	g_return_if_fail(DOC_IDX_VALID(idx));
+
+	doc->use_tabs = use_tabs;
+	sci_set_use_tabs(doc->sci, use_tabs);
+	/* remove indent spaces on backspace, if using spaces to indent */
+	SSM(doc->sci, SCI_SETBACKSPACEUNINDENTS, ! use_tabs, 0);
+}

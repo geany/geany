@@ -689,7 +689,7 @@ static void handle_cl_filename(gchar *const filename)
 	}
 	else
 	{
-		const gchar *msg = _("Could not find file '%s'.");
+#define msg _("Could not find file '%s'.")
 
 		g_printerr(msg, filename);	/* also print to the terminal */
 		g_printerr("\n");

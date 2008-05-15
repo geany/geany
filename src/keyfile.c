@@ -846,8 +846,8 @@ static gboolean open_session_file(gchar **tmp)
 
 		if (DOC_IDX_VALID(new_idx))
 		{
-			document_set_use_tabs(new_idx, use_tabs);
-			document_set_line_wrapping(new_idx, line_wrapping);
+			editor_set_use_tabs(new_idx, use_tabs);
+			editor_set_line_wrapping(new_idx, line_wrapping);
 			doc_list[new_idx].auto_indent = auto_indent;
 			ret = TRUE;
 		}

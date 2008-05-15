@@ -154,11 +154,9 @@ void document_init_doclist(void);
 
 void document_finalize(void);
 
-
 void document_set_text_changed(gint idx);
 
 void document_apply_update_prefs(gint idx);
-
 
 gboolean document_remove(guint page_num);
 
@@ -166,13 +164,11 @@ gboolean document_account_for_unsaved(void);
 
 gboolean document_close_all(void);
 
-
 gint document_new_file_if_non_open();
 
 gint document_new_file(const gchar *filename, filetype *ft, const gchar *text);
 
 gint document_clone(gint old_idx, const gchar *utf8_filename);
-
 
 gint document_open_file(const gchar *locale_filename, gboolean readonly,
 		filetype *ft, const gchar *forced_enc);
@@ -192,7 +188,6 @@ gboolean document_save_file_as(gint idx);
 
 gboolean document_save_file(gint idx, gboolean force);
 
-
 gboolean document_search_bar_find(gint idx, const gchar *text, gint flags, gboolean inc);
 
 gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search_backwards,
@@ -207,25 +202,9 @@ gboolean document_replace_all(gint idx, const gchar *find_text, const gchar *rep
 void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace_text, gint flags,
 						  gboolean escaped_chars);
 
-void document_set_font(gint idx, const gchar *font_name, gint size);
-
 void document_update_tag_list(gint idx, gboolean update);
 
 void document_set_filetype(gint idx, filetype *type);
-
-gchar *document_get_eol_mode(gint idx);
-
-void document_fold_all(gint idx);
-
-void document_unfold_all(gint idx);
-
-void document_replace_tabs(gint idx);
-
-void document_strip_line_trailing_spaces(gint idx, gint line);
-
-void document_strip_trailing_spaces(gint idx);
-
-void document_ensure_final_newline(gint idx);
 
 void document_set_encoding(gint idx, const gchar *new_encoding);
 
@@ -263,16 +242,10 @@ void document_redo(gint idx);
 
 void document_undo_add(gint idx, guint type, gpointer data);
 
-GdkColor *document_get_status(gint idx);
+GdkColor *document_get_status_color(gint idx);
 
 void document_delay_colourise(void);
 
 void document_colourise_new(void);
-
-void document_insert_colour(gint idx, const gchar *colour);
-
-void document_set_use_tabs(gint idx, gboolean use_tabs);
-
-void document_set_line_wrapping(gint idx, gboolean wrap);
 
 #endif

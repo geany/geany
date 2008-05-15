@@ -309,7 +309,7 @@ void treeviews_openfiles_add(gint idx)
 void treeviews_openfiles_update(gint idx)
 {
 	gchar *basename;
-	GdkColor *color = document_get_status(idx);
+	GdkColor *color = document_get_status_color(idx);
 
 	if (prefs.sidebar_openfiles_fullpath)
 		basename = DOC_FILENAME(idx);

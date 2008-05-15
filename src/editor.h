@@ -175,4 +175,30 @@ void editor_set_indicator(gint idx, gint start, gint end);
 
 void editor_clear_indicators(gint idx);
 
+void editor_set_font(gint idx, const gchar *font_name, gint size);
+
+const gchar *editor_get_eol_char_name(gint idx);
+
+gint editor_get_eol_char_len(gint idx);
+
+const gchar *editor_get_eol_char(gint idx);
+
+void editor_fold_all(gint idx);
+
+void editor_unfold_all(gint idx);
+
+void editor_replace_tabs(gint idx);
+
+void editor_strip_line_trailing_spaces(gint idx, gint line);
+
+void editor_strip_trailing_spaces(gint idx);
+
+void editor_ensure_final_newline(gint idx);
+
+void editor_insert_color(gint idx, const gchar *colour);
+
+void editor_set_use_tabs(gint idx, gboolean use_tabs);
+
+void editor_set_line_wrapping(gint idx, gboolean wrap);
+
 #endif

@@ -42,6 +42,7 @@
 #include "tools.h"
 #include "support.h"
 #include "document.h"
+#include "editor.h"
 #include "sciwrappers.h"
 #include "utils.h"
 #include "ui_utils.h"
@@ -721,7 +722,7 @@ on_color_ok_button_clicked             (GtkButton       *button,
 			GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->colorsel), &color);
 
 	hex = utils_get_hex_from_color(&color);
-	document_insert_colour(idx, hex);
+	editor_insert_color(idx, hex);
 	g_free(hex);
 }
 #endif

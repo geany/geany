@@ -68,10 +68,6 @@ gboolean utils_check_disk_status(gint idx, gboolean force);
 
 gint utils_get_current_function(gint idx, const gchar **tagname);
 
-gint utils_get_eol_char_len(gint idx);
-
-const gchar *utils_get_eol_char(gint idx);
-
 const gchar *utils_get_eol_name(gint eol_mode);
 
 gboolean utils_atob(const gchar *str);

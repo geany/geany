@@ -641,34 +641,6 @@ gint utils_get_current_function(gint idx, const gchar **tagname)
 }
 
 
-/* returns the end-of-line character(s) length of the specified editor */
-gint utils_get_eol_char_len(gint idx)
-{
-	if (idx == -1) return 0;
-
-	switch (sci_get_eol_mode(doc_list[idx].sci))
-	{
-		case SC_EOL_CRLF: return 2; break;
-		default: return 1; break;
-	}
-}
-
-
-/* returns the end-of-line character(s) of the specified editor */
-const gchar *utils_get_eol_char(gint idx)
-{
-	if (idx == -1) return '\0';
-
-	switch (sci_get_eol_mode(doc_list[idx].sci))
-	{
-		case SC_EOL_CRLF: return "\r\n"; break;
-		case SC_EOL_CR: return "\r"; break;
-		case SC_EOL_LF:
-		default: return "\n"; break;
-	}
-}
-
-
 const gchar *utils_get_eol_name(gint eol_mode)
 {
 	switch (eol_mode)

@@ -1068,14 +1068,14 @@ static void cb_func_menu_foldall(G_GNUC_UNUSED guint key_id)
 {
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	document_fold_all(idx);
+	editor_fold_all(idx);
 }
 
 static void cb_func_menu_unfoldall(G_GNUC_UNUSED guint key_id)
 {
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	document_unfold_all(idx);
+	editor_unfold_all(idx);
 }
 
 static void cb_func_build_action(guint key_id)

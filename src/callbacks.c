@@ -814,7 +814,7 @@ on_replace_tabs_activate               (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 
-	document_replace_tabs(idx);
+	editor_replace_tabs(idx);
 }
 
 
@@ -971,7 +971,7 @@ on_line_wrapping1_toggled              (GtkCheckMenuItem *checkmenuitem,
 	{
 		gint idx = document_get_cur_idx();
 		if (! DOC_IDX_VALID(idx)) return;
-		document_set_line_wrapping(idx, ! doc_list[idx].line_wrapping);
+		editor_set_line_wrapping(idx, ! doc_list[idx].line_wrapping);
 	}
 }
 
@@ -1496,7 +1496,7 @@ on_menu_fold_all1_activate             (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 
-	document_fold_all(idx);
+	editor_fold_all(idx);
 }
 
 
@@ -1506,7 +1506,7 @@ on_menu_unfold_all1_activate           (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 
-	document_unfold_all(idx);
+	editor_unfold_all(idx);
 }
 
 
@@ -2046,7 +2046,7 @@ on_tabs1_activate                      (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 
-	document_set_use_tabs(idx, TRUE);
+	editor_set_use_tabs(idx, TRUE);
 	ui_update_statusbar(idx, -1);
 }
 
@@ -2057,7 +2057,7 @@ on_spaces1_activate                    (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 
-	document_set_use_tabs(idx, FALSE);
+	editor_set_use_tabs(idx, FALSE);
 	ui_update_statusbar(idx, -1);
 }
 
@@ -2068,7 +2068,7 @@ on_strip_trailing_spaces1_activate     (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 
-	document_strip_trailing_spaces(idx);
+	editor_strip_trailing_spaces(idx);
 }
 
 

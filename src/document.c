@@ -282,30 +282,6 @@ void document_set_text_changed(gint idx)
 }
 
 
-void document_set_use_tabs(gint idx, gboolean use_tabs)
-{
-	document *doc = &doc_list[idx];
-
-	g_return_if_fail(DOC_IDX_VALID(idx));
-
-	doc->use_tabs = use_tabs;
-	sci_set_use_tabs(doc->sci, use_tabs);
-	/* remove indent spaces on backspace, if using spaces to indent */
-	SSM(doc->sci, SCI_SETBACKSPACEUNINDENTS, ! use_tabs, 0);
-}
-
-
-void document_set_line_wrapping(gint idx, gboolean wrap)
-{
-	document *doc = &doc_list[idx];
-
-	g_return_if_fail(DOC_IDX_VALID(idx));
-
-	doc->line_wrapping = wrap;
-	sci_set_lines_wrapped(doc->sci, wrap);
-}
-
-
 /* Apply just the prefs that can change in the Preferences dialog */
 void document_apply_update_prefs(gint idx)
 {
@@ -483,7 +459,7 @@ static gint document_create(const gchar *utf8_filename)
 
 	pfd = pango_font_description_from_string(prefs.editor_font);
 	fname = g_strdup_printf("!%s", pango_font_description_get_family(pfd));
-	document_set_font(new_idx, fname, pango_font_description_get_size(pfd) / PANGO_SCALE);
+	editor_set_font(new_idx, fname, pango_font_description_get_size(pfd) / PANGO_SCALE);
 	pango_font_description_free(pfd);
 	g_free(fname);
 
@@ -613,7 +589,7 @@ gint document_new_file(const gchar *filename, filetype *ft, const gchar *text)
 	if (text != NULL)
 		sci_convert_eols(doc_list[idx].sci, prefs.default_eol_character);
 
-	document_set_use_tabs(idx, editor_prefs.use_tabs);
+	editor_set_use_tabs(idx, editor_prefs.use_tabs);
 	sci_set_undo_collection(doc_list[idx].sci, TRUE);
 	sci_empty_undo_buffer(doc_list[idx].sci);
 
@@ -863,9 +839,9 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_f
 		tmp_enc_idx == GEANY_ENCODING_UTF_7 || /* filter out UTF-7/8 and None where no NULL bytes */
 		tmp_enc_idx == GEANY_ENCODING_NONE))   /* are allowed */
 	{
-		gchar *warn_msg = _("The file \"%s\" could not be opened properly and has been truncated. "
-				"This can occur if the file contains a NULL byte. "
-				"Be aware that saving it can cause data loss.\nThe file was set to read-only.");
+#define warn_msg _("The file \"%s\" could not be opened properly and has been truncated. " \
+				"This can occur if the file contains a NULL byte. " \
+				"Be aware that saving it can cause data loss.\nThe file was set to read-only.")
 
 		if (main_status.main_window_realized)
 			dialogs_show_msgbox(GTK_MESSAGE_WARNING, warn_msg, utf8_filename);
@@ -1061,10 +1037,10 @@ gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean
 	g_free(filedata.data);
 
 	if (reload)
-		document_set_use_tabs(idx, doc_list[idx].use_tabs); /* resetup sci */
+		editor_set_use_tabs(idx, doc_list[idx].use_tabs); /* resetup sci */
 	else
 	if (! editor_prefs.detect_tab_mode)
-		document_set_use_tabs(idx, editor_prefs.use_tabs);
+		editor_set_use_tabs(idx, editor_prefs.use_tabs);
 	else
 	{	/* detect & set tabs/spaces */
 		gboolean use_tabs = detect_use_tabs(doc_list[idx].sci);
@@ -1072,7 +1048,7 @@ gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean
 		if (use_tabs != editor_prefs.use_tabs)
 			ui_set_statusbar(TRUE, _("Setting %s indentation mode."),
 				(use_tabs) ? _("Tabs") : _("Spaces"));
-		document_set_use_tabs(idx, use_tabs);
+		editor_set_use_tabs(idx, use_tabs);
 	}
 
 	sci_set_undo_collection(doc_list[idx].sci, TRUE);
@@ -1437,11 +1413,11 @@ gboolean document_save_file(gint idx, gboolean force)
 	}
 
 	/* replaces tabs by spaces */
-	if (prefs.replace_tabs) document_replace_tabs(idx);
+	if (prefs.replace_tabs) editor_replace_tabs(idx);
 	/* strip trailing spaces */
-	if (prefs.strip_trailing_spaces) document_strip_trailing_spaces(idx);
+	if (prefs.strip_trailing_spaces) editor_strip_trailing_spaces(idx);
 	/* ensure the file has a newline at the end */
-	if (prefs.final_new_line) document_ensure_final_newline(idx);
+	if (prefs.final_new_line) editor_ensure_final_newline(idx);
 
 	len = sci_get_length(doc_list[idx].sci) + 1;
 	if (doc_list[idx].has_bom && encodings_is_unicode_charset(doc_list[idx].encoding))
@@ -1859,7 +1835,7 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 		first_line = sci_get_line_from_position(doc_list[idx].sci, selection_start);
 		/* Find the last line with chars selected (not EOL char) */
 		last_line = sci_get_line_from_position(doc_list[idx].sci,
-			selection_end - utils_get_eol_char_len(idx));
+			selection_end - editor_get_eol_char_len(idx));
 		last_line = MAX(first_line, last_line);
 		for (line = first_line; line < (first_line + selected_lines); line++)
 		{
@@ -1942,21 +1918,6 @@ gboolean document_replace_all(gint idx, const gchar *find_text, const gchar *rep
 
 	show_replace_summary(idx, count, find_text, replace_text, escaped_chars);
 	return (count > 0);
-}
-
-
-void document_set_font(gint idx, const gchar *font_name, gint size)
-{
-	gint style;
-
-	for (style = 0; style <= 127; style++)
-		sci_set_font(doc_list[idx].sci, style, font_name, size);
-	/* line number and braces */
-	sci_set_font(doc_list[idx].sci, STYLE_LINENUMBER, font_name, size);
-	sci_set_font(doc_list[idx].sci, STYLE_BRACELIGHT, font_name, size);
-	sci_set_font(doc_list[idx].sci, STYLE_BRACEBAD, font_name, size);
-	/* zoom to 100% to prevent confusion */
-	sci_zoom_off(doc_list[idx].sci);
 }
 
 
@@ -2140,152 +2101,6 @@ void document_set_filetype(gint idx, filetype *type)
 	{
 		utils_get_current_function(-1, NULL);
 		ui_update_statusbar(idx, -1);
-	}
-}
-
-
-gchar *document_get_eol_mode(gint idx)
-{
-	if (idx == -1) return '\0';
-
-	switch (sci_get_eol_mode(doc_list[idx].sci))
-	{
-		case SC_EOL_CRLF: return _("Win (CRLF)"); break;
-		case SC_EOL_CR: return _("Mac (CR)"); break;
-		case SC_EOL_LF:
-		default: return _("Unix (LF)"); break;
-	}
-}
-
-
-static void fold_all(gint idx, gboolean want_fold)
-{
-	gint lines, first, i;
-
-	if (! DOC_IDX_VALID(idx) || ! editor_prefs.folding) return;
-
-	lines = sci_get_line_count(doc_list[idx].sci);
-	first = sci_get_first_visible_line(doc_list[idx].sci);
-
-	for (i = 0; i < lines; i++)
-	{
-		gint level = sci_get_fold_level(doc_list[idx].sci, i);
-		if (level & SC_FOLDLEVELHEADERFLAG)
-		{
-			if (sci_get_fold_expanded(doc_list[idx].sci, i) == want_fold)
-					sci_toggle_fold(doc_list[idx].sci, i);
-		}
-	}
-	editor_scroll_to_line(doc_list[idx].sci, first, 0.0F);
-}
-
-
-void document_unfold_all(gint idx)
-{
-	fold_all(idx, FALSE);
-}
-
-
-void document_fold_all(gint idx)
-{
-	fold_all(idx, TRUE);
-}
-
-
-void document_replace_tabs(gint idx)
-{
-	gint search_pos, pos_in_line, current_tab_true_length;
-	gint tab_len;
-	gchar *tab_str;
-	struct TextToFind ttf;
-
-	if (! DOC_IDX_VALID(idx)) return;
-
-	sci_start_undo_action(doc_list[idx].sci);
-	tab_len = sci_get_tab_width(doc_list[idx].sci);
-	ttf.chrg.cpMin = 0;
-	ttf.chrg.cpMax = sci_get_length(doc_list[idx].sci);
-	ttf.lpstrText = (gchar*) "\t";
-
-	while (TRUE)
-	{
-		search_pos = sci_find_text(doc_list[idx].sci, SCFIND_MATCHCASE, &ttf);
-		if (search_pos == -1)
-			break;
-
-		pos_in_line = sci_get_col_from_position(doc_list[idx].sci,search_pos);
-		current_tab_true_length = tab_len - (pos_in_line % tab_len);
-		tab_str = g_strnfill(current_tab_true_length, ' ');
-		sci_target_start(doc_list[idx].sci, search_pos);
-		sci_target_end(doc_list[idx].sci, search_pos + 1);
-		sci_target_replace(doc_list[idx].sci, tab_str, FALSE);
-		ttf.chrg.cpMin = search_pos + current_tab_true_length - 1;	/* next search starts after replacement */
-		ttf.chrg.cpMax += current_tab_true_length - 1;	/* update end of range now text has changed */
-		g_free(tab_str);
-	}
-	sci_end_undo_action(doc_list[idx].sci);
-}
-
-
-void document_strip_line_trailing_spaces(gint idx, gint line)
-{
-	gint line_start = sci_get_position_from_line(doc_list[idx].sci, line);
-	gint line_end = sci_get_line_end_position(doc_list[idx].sci, line);
-	gint i = line_end - 1;
-	gchar ch = sci_get_char_at(doc_list[idx].sci, i);
-
-	while ((i >= line_start) && ((ch == ' ') || (ch == '\t')))
-	{
-		i--;
-		ch = sci_get_char_at(doc_list[idx].sci, i);
-	}
-	if (i < (line_end-1))
-	{
-		sci_target_start(doc_list[idx].sci, i + 1);
-		sci_target_end(doc_list[idx].sci, line_end);
-		sci_target_replace(doc_list[idx].sci, "", FALSE);
-	}
-}
-
-
-void document_strip_trailing_spaces(gint idx)
-{
-	gint max_lines = sci_get_line_count(doc_list[idx].sci);
-	gint line;
-
-	sci_start_undo_action(doc_list[idx].sci);
-
-	for (line = 0; line < max_lines; line++)
-	{
-		document_strip_line_trailing_spaces(idx, line);
-	}
-	sci_end_undo_action(doc_list[idx].sci);
-}
-
-
-void document_ensure_final_newline(gint idx)
-{
-	gint max_lines = sci_get_line_count(doc_list[idx].sci);
-	gboolean append_newline = (max_lines == 1);
-	gint end_document = sci_get_position_from_line(doc_list[idx].sci, max_lines);
-
-	if (max_lines > 1)
-	{
-		append_newline = end_document > sci_get_position_from_line(doc_list[idx].sci, max_lines - 1);
-	}
-	if (append_newline)
-	{
-		const gchar *eol = "\n";
-		switch (sci_get_eol_mode(doc_list[idx].sci))
-		{
-			case SC_EOL_CRLF:
-				eol = "\r\n";
-				break;
-			case SC_EOL_CR:
-				eol = "\r";
-				break;
-		}
-		sci_insert_text(doc_list[idx].sci, end_document, eol);
 	}
 }
 
@@ -2554,7 +2369,7 @@ static void document_redo_add(gint idx, guint type, gpointer data)
 
 /* Gets the status colour of the document, or NULL if default widget
  * colouring should be used. */
-GdkColor *document_get_status(gint idx)
+GdkColor *document_get_status_color(gint idx)
 {
 	static GdkColor red = {0, 0xFFFF, 0, 0};
 	static GdkColor green = {0, 0, 0x7FFF, 0};
@@ -2644,35 +2459,6 @@ void document_colourise_new()
 	 * so force an update of the current function/tag. */
 	utils_get_current_function(-1, NULL);
 	ui_update_statusbar(-1, -1);
-}
-
-
-/* Inserts the given colour (format should be #...), if there is a selection starting with 0x...
- * the replacement will also start with 0x... */
-void document_insert_colour(gint idx, const gchar *colour)
-{
-	g_return_if_fail(DOC_IDX_VALID(idx));
-
-	if (sci_can_copy(doc_list[idx].sci))
-	{
-		gint start = sci_get_selection_start(doc_list[idx].sci);
-		const gchar *replacement = colour;
-
-		if (sci_get_char_at(doc_list[idx].sci, start) == '0' &&
-			sci_get_char_at(doc_list[idx].sci, start + 1) == 'x')
-		{
-			sci_set_selection_start(doc_list[idx].sci, start + 2);
-			sci_set_selection_end(doc_list[idx].sci, start + 8);
-			replacement++; /* skip the leading "0x" */
-		}
-		else if (sci_get_char_at(doc_list[idx].sci, start - 1) == '#')
-		{	/* double clicking something like #00ffff may only select 00ffff because of wordchars */
-			replacement++; /* so skip the '#' to only replace the colour value */
-		}
-		sci_replace_sel(doc_list[idx].sci, replacement);
-	}
-	else
-		sci_add_text(doc_list[idx].sci, colour);
 }
 
 

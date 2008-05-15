@@ -163,7 +163,7 @@ void ui_update_statusbar(gint idx, gint pos)
 			(doc_list[idx].use_tabs) ? _("TAB") : _("SP "));	/* SP = space */
 		g_string_append(stats_str, sp);
 		g_string_append_printf(stats_str, _("mode: %s"),
-			document_get_eol_mode(idx));
+			editor_get_eol_char_name(idx));
 		g_string_append(stats_str, sp);
 		g_string_append_printf(stats_str, _("encoding: %s %s"),
 			(doc_list[idx].encoding) ? doc_list[idx].encoding : _("unknown"),
@@ -260,7 +260,7 @@ void ui_set_editor_font(const gchar *font_name)
 	{
 		if (doc_list[i].sci)
 		{
-			document_set_font(i, fname, size);
+			editor_set_font(i, fname, size);
 		}
 	}
 	pango_font_description_free(font_desc);
@@ -1195,7 +1195,7 @@ void ui_combo_box_add_to_history(GtkComboBox *combo, const gchar *text)
  * document status. */
 void ui_update_tab_status(gint idx)
 {
-	GdkColor *color = document_get_status(idx);
+	GdkColor *color = document_get_status_color(idx);
 
 	/* NULL color will reset to default */
 	gtk_widget_modify_fg(doc_list[idx].tab_label, GTK_STATE_NORMAL, color);
