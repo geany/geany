@@ -119,7 +119,7 @@ static void save_recent_files(GKeyFile *config)
 static gchar *get_session_file_string(gint idx)
 {
 	gchar *fname;
-	filetype *ft = doc_list[idx].file_type;
+	GeanyFiletype *ft = doc_list[idx].file_type;
 
 	if (ft == NULL)	/* can happen when saving a new file when quitting */
 		ft = filetypes[GEANY_FILETYPES_NONE];
@@ -839,7 +839,7 @@ static gboolean open_session_file(gchar **tmp)
 
 	if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 	{
-		filetype *ft = filetypes_lookup_by_name(ft_name);
+		GeanyFiletype *ft = filetypes_lookup_by_name(ft_name);
 		gint new_idx = document_open_file_full(
 			-1, locale_filename, pos, ro, ft,
 			(enc_idx >= 0 && enc_idx < GEANY_ENCODINGS_MAX) ?

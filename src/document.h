@@ -71,7 +71,7 @@ typedef struct FileEncoding
 /**
  *  Structure for representing an open tab with all its properties.
  **/
-typedef struct document
+typedef struct _GeanyDocument
 {
 	/** General flag to represent this document is active and all properties are set correctly. */
 	gboolean		 is_valid;
@@ -89,7 +89,7 @@ typedef struct document
 	gboolean		 has_bom;
 	/** The filetype for this %document, it's only a reference to one of the elements of the global
 	 *  filetypes array. */
-	filetype		*file_type;
+	GeanyFiletype	*file_type;
 	/** TMWorkObject object for this %document. */
 	TMWorkObject	*tm_file;
 	/** The Scintilla object for this %document. */
@@ -127,7 +127,7 @@ typedef struct document
 	/** %Document-specific tab setting. */
 	gboolean		 use_tabs;
 	gboolean		 line_breaking;	/**< Whether to split long lines as you type. */
-} document;
+} GeanyDocument;
 
 
 /* Dynamic array of document elements to hold all information of the notebook tabs. */
@@ -137,7 +137,7 @@ extern GArray *doc_array;
  *  doc_list wraps doc_array so it can be used with C array syntax.
  *  Example: doc_list[0].sci = NULL;
  **/
-#define doc_list ((document *)doc_array->data)
+#define doc_list ((GeanyDocument *)doc_array->data)
 
 /**
  *  DOC_IDX_VALID checks whether the passed index points to a valid %document object by checking
@@ -166,7 +166,7 @@ gint document_get_n_idx(guint page_num);
 
 gint document_get_cur_idx(void);
 
-document *document_get_current(void);
+GeanyDocument *document_get_current(void);
 
 void document_init_doclist(void);
 
@@ -184,19 +184,19 @@ gboolean document_close_all(void);
 
 gint document_new_file_if_non_open();
 
-gint document_new_file(const gchar *filename, filetype *ft, const gchar *text);
+gint document_new_file(const gchar *filename, GeanyFiletype *ft, const gchar *text);
 
 gint document_clone(gint old_idx, const gchar *utf8_filename);
 
 gint document_open_file(const gchar *locale_filename, gboolean readonly,
-		filetype *ft, const gchar *forced_enc);
+		GeanyFiletype *ft, const gchar *forced_enc);
 
 gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean readonly,
-		filetype *ft, const gchar *forced_enc);
+		GeanyFiletype *ft, const gchar *forced_enc);
 
 void document_open_file_list(const gchar *data, gssize length);
 
-void document_open_files(const GSList *filenames, gboolean readonly, filetype *ft,
+void document_open_files(const GSList *filenames, gboolean readonly, GeanyFiletype *ft,
 		const gchar *forced_enc);
 
 gboolean document_reload_file(gint idx, const gchar *forced_enc);
@@ -222,7 +222,7 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 
 void document_update_tag_list(gint idx, gboolean update);
 
-void document_set_filetype(gint idx, filetype *type);
+void document_set_filetype(gint idx, GeanyFiletype *type);
 
 void document_set_encoding(gint idx, const gchar *new_encoding);
 

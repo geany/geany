@@ -329,7 +329,7 @@ static void
 on_new_with_template                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	filetype *ft = user_data;
+	GeanyFiletype *ft = user_data;
 	gchar *template = templates_get_template_new_file(ft);
 
 	document_new_file(NULL, ft, template);
@@ -345,7 +345,7 @@ static void create_new_menu_items(void)
 	for (ft_id = 0; ft_id < GEANY_MAX_BUILT_IN_FILETYPES; ft_id++)
 	{
 		GtkWidget *tmp_menu, *tmp_button;
-		filetype *ft = filetypes[ft_id];
+		GeanyFiletype *ft = filetypes[ft_id];
 		const gchar *label = ft->title;
 
 		if (ft_templates[ft_id] == NULL)
@@ -366,7 +366,7 @@ static void create_new_menu_items(void)
 }
 
 
-static gchar *get_template_from_file(const gchar *locale_fname, filetype *ft)
+static gchar *get_template_from_file(const gchar *locale_fname, GeanyFiletype *ft)
 {
 	GString template = {NULL, 0, 0};
 
@@ -390,7 +390,7 @@ static void
 on_new_with_file_template(GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer user_data)
 {
 	gchar *fname = ui_menu_item_get_text(menuitem);
-	filetype *ft;
+	GeanyFiletype *ft;
 	gchar *template;
 
 	ft = filetypes_detect_from_extension(fname);
@@ -433,8 +433,8 @@ static void add_file_item(gpointer data, gpointer user_data)
 
 static gint compare_filenames_by_filetype(gconstpointer a, gconstpointer b)
 {
-	filetype *ft_a = filetypes_detect_from_extension(a);
-	filetype *ft_b = filetypes_detect_from_extension(b);
+	GeanyFiletype *ft_a = filetypes_detect_from_extension(a);
+	GeanyFiletype *ft_b = filetypes_detect_from_extension(b);
 
 	/* sort by filetype name first */
 	if (ft_a != ft_b)
@@ -661,7 +661,7 @@ gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname)
 	gchar *result;
 	gchar *date = utils_get_date_time(TEMPLATE_DATETIME_FORMAT, NULL);
 	filetype_id ft_id = filetype_idx;
-	filetype *ft = filetypes[ft_id];
+	GeanyFiletype *ft = filetypes[ft_id];
 
 	filetypes_load_config(ft_id);	/* load any user extension setting */
 
@@ -689,7 +689,7 @@ gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname)
 }
 
 
-static gchar *get_file_template(filetype *ft)
+static gchar *get_file_template(GeanyFiletype *ft)
 {
 	filetype_id ft_id = FILETYPE_ID(ft);
 
@@ -697,7 +697,7 @@ static gchar *get_file_template(filetype *ft)
 }
 
 
-gchar *templates_get_template_new_file(struct filetype *ft)
+gchar *templates_get_template_new_file(GeanyFiletype *ft)
 {
 	gchar *ft_template = NULL;
 	gchar *file_header = NULL;

@@ -152,7 +152,7 @@ gint document_find_by_filename(const gchar *filename, gboolean is_tm_filename)
 
 	for (i = 0; i < doc_array->len; i++)
 	{
-		document *doc = &doc_list[i];
+		GeanyDocument *doc = &doc_list[i];
 		gchar *docname;
 
 		if (doc->file_name == NULL) continue;
@@ -245,7 +245,7 @@ gint document_get_cur_idx()
  *
  *  @return A pointer to the current %document or @c NULL if there are no opened documents.
  **/
-document *document_get_current()
+GeanyDocument *document_get_current()
 {
 	gint idx = document_get_cur_idx();
 
@@ -255,7 +255,7 @@ document *document_get_current()
 
 void document_init_doclist()
 {
-	doc_array = g_array_new(FALSE, FALSE, sizeof(document));
+	doc_array = g_array_new(FALSE, FALSE, sizeof(GeanyDocument));
 }
 
 
@@ -311,7 +311,7 @@ void document_apply_update_prefs(gint idx)
 
 /* Sets is_valid to FALSE and initializes some members to NULL, to mark it uninitialized.
  * The flag is_valid is set to TRUE in document_create(). */
-static void init_doc_struct(document *new_doc)
+static void init_doc_struct(GeanyDocument *new_doc)
 {
 	new_doc->is_valid = FALSE;
 	new_doc->has_tags = FALSE;
@@ -432,7 +432,7 @@ static gint document_create(const gchar *utf8_filename)
 	PangoFontDescription *pfd;
 	gchar *fname;
 	gint new_idx;
-	document *this;
+	GeanyDocument *this;
 	gint tabnum;
 	gint cur_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
 
@@ -446,7 +446,7 @@ static gint document_create(const gchar *utf8_filename)
 	new_idx = document_get_new_idx();
 	if (new_idx == -1)	/* expand the array, no free places */
 	{
-		document new_doc;
+		GeanyDocument new_doc;
 		new_idx = doc_array->len;
 		g_array_append_val(doc_array, new_doc);
 	}
@@ -573,7 +573,7 @@ gint document_new_file_if_non_open()
  *
  *  @return The index of the new file in the @ref doc_list array.
  **/
-gint document_new_file(const gchar *filename, filetype *ft, const gchar *text)
+gint document_new_file(const gchar *filename, GeanyFiletype *ft, const gchar *text)
 {
 	gint idx = document_create(filename);
 
@@ -654,7 +654,7 @@ gint document_new_file(const gchar *filename, filetype *ft, const gchar *text)
  *  @return The index of the opened file or -1 if an error occurred.
  **/
 gint document_open_file(const gchar *locale_filename, gboolean readonly,
-		filetype *ft, const gchar *forced_enc)
+		GeanyFiletype *ft, const gchar *forced_enc)
 {
 	/* This is a wrapper for document_open_file_full().
 	 * Do not use this when opening multiple files (unless using document_delay_colourise()). */
@@ -960,13 +960,13 @@ static gboolean detect_use_tabs(ScintillaObject *sci)
  * This avoids unnecessary recolourising, saving significant processing when a lot of files
  * are open of a filetype that supports user typenames, e.g. C. */
 gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean readonly,
-		filetype *ft, const gchar *forced_enc)
+		GeanyFiletype *ft, const gchar *forced_enc)
 {
 	gint editor_mode;
 	gboolean reload = (idx == -1) ? FALSE : TRUE;
 	gchar *utf8_filename = NULL;
 	gchar *locale_filename = NULL;
-	filetype *use_ft;
+	GeanyFiletype *use_ft;
 	FileData filedata;
 
 	/*struct timeval tv, tv1;*/
@@ -1167,7 +1167,7 @@ void document_open_file_list(const gchar *data, gssize length)
  *
  *  @return The index of the opened file or -1 if an error occurred.
  **/
-void document_open_files(const GSList *filenames, gboolean readonly, filetype *ft,
+void document_open_files(const GSList *filenames, gboolean readonly, GeanyFiletype *ft,
 		const gchar *forced_enc)
 {
 	const GSList *item;
@@ -1270,7 +1270,7 @@ gboolean document_save_file_as(gint idx)
 	/* detect filetype */
 	if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_NONE)
 	{
-		filetype *ft = filetypes_detect_from_file(idx);
+		GeanyFiletype *ft = filetypes_detect_from_file(idx);
 
 		document_set_filetype(idx, ft);
 		if (document_get_cur_idx() == idx)
@@ -2062,7 +2062,7 @@ static gboolean update_type_keywords(ScintillaObject *sci, gint lang)
 
 
 /* sets the filetype of the document (sets syntax highlighting and tagging) */
-void document_set_filetype(gint idx, filetype *type)
+void document_set_filetype(gint idx, GeanyFiletype *type)
 {
 	gboolean colourise = FALSE;
 	gboolean ft_changed;
@@ -2388,7 +2388,7 @@ GdkColor *document_get_status_color(gint idx)
 
 /* useful debugging function (usually debug macros aren't enabled) */
 #ifdef GEANY_DEBUG
-document *doc(gint idx)
+GeanyDocument *doc(gint idx)
 {
 	return DOC_IDX_VALID(idx) ? &doc_list[idx] : NULL;
 }

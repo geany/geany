@@ -102,7 +102,7 @@ struct build_programs
 	gboolean modified;
 };
 
-struct filetype
+struct _GeanyFiletype
 {
 	filetype_id		  id;
 	langType 		  lang;				/* represents the langType of tagmanager(see the table */
@@ -123,10 +123,10 @@ extern GPtrArray *filetypes_array;
 
 /* Wrap filetypes_array so it can be used with C array syntax.
  * Example: filetypes[GEANY_FILETYPES_C]->name = ...; */
-#define filetypes	((filetype **)filetypes_array->pdata)
+#define filetypes	((GeanyFiletype **)filetypes_array->pdata)
 
 
-filetype *filetypes_lookup_by_name(const gchar *name);
+GeanyFiletype *filetypes_lookup_by_name(const gchar *name);
 
 
 /* Calls filetypes_init_types() and creates the filetype menu. */
@@ -136,13 +136,13 @@ void filetypes_init(void);
 void filetypes_init_types(void);
 
 /* Detect the filetype for document idx, checking for a shebang, then filename extension. */
-filetype *filetypes_detect_from_file(gint idx);
+GeanyFiletype *filetypes_detect_from_file(gint idx);
 
-filetype *filetypes_detect_from_extension(const gchar *utf8_filename);
+GeanyFiletype *filetypes_detect_from_extension(const gchar *utf8_filename);
 
 /* Detect filetype based on the filename extension.
  * utf8_filename can include the full path. */
-filetype *filetypes_detect_from_filename(const gchar *utf8_filename);
+GeanyFiletype *filetypes_detect_from_filename(const gchar *utf8_filename);
 
 /* frees the array and all related pointers */
 void filetypes_free_types(void);
@@ -151,14 +151,14 @@ void filetypes_load_config(gint ft_id);
 
 void filetypes_save_commands(void);
 
-void filetypes_select_radio_item(const filetype *ft);
+void filetypes_select_radio_item(const GeanyFiletype *ft);
 
-GtkFileFilter *filetypes_create_file_filter(filetype *ft);
+GtkFileFilter *filetypes_create_file_filter(const GeanyFiletype *ft);
 
 GtkFileFilter *filetypes_create_file_filter_all_source(void);
 
 gchar *filetypes_get_conf_extension(gint filetype_idx);
 
-gboolean filetype_has_tags(filetype *ft);
+gboolean filetype_has_tags(GeanyFiletype *ft);
 
 #endif

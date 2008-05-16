@@ -67,11 +67,11 @@ static gchar indent[100];
 
 static void on_new_line_added(gint idx);
 static gboolean handle_xml(gint idx, gchar ch);
-static void get_indent(document *doc, gint pos, gboolean use_this_line);
+static void get_indent(GeanyDocument *doc, gint pos, gboolean use_this_line);
 static void auto_multiline(gint idx, gint pos);
 static gboolean is_comment(gint lexer, gint prev_style, gint style);
 static void auto_close_bracket(ScintillaObject *sci, gint pos, gchar c);
-static void editor_auto_table(document *doc, gint pos);
+static void editor_auto_table(GeanyDocument *doc, gint pos);
 
 
 /* calls the edit popup menu in the editor */
@@ -211,7 +211,7 @@ static void on_update_ui(gint idx, G_GNUC_UNUSED SCNotification *nt)
 
 static void check_line_breaking(gint idx, gint pos, gchar c)
 {
-	document *doc = &doc_list[idx];
+	GeanyDocument *doc = &doc_list[idx];
 	ScintillaObject *sci = doc->sci;
 	gint line, lstart;
 
@@ -582,7 +582,7 @@ get_whitespace(gint width, gboolean use_tabs)
 
 static void check_python_indent(gint idx, gint pos)
 {
-	document *doc = &doc_list[idx];
+	GeanyDocument *doc = &doc_list[idx];
 	gint last_char = pos - editor_get_eol_char_len(idx) - 1;
 
 	/* add extra indentation for Python after colon */
@@ -674,7 +674,7 @@ static void do_indent(gchar *buf, gsize len, guint *idx, gboolean use_tabs)
 
 /* "use_this_line" to auto-indent only if it is a real new line
  * and ignore the case of editor_close_block */
-static void get_indent(document *doc, gint pos, gboolean use_this_line)
+static void get_indent(GeanyDocument *doc, gint pos, gboolean use_this_line)
 {
 	ScintillaObject *sci = doc->sci;
 	guint i, len, j = 0;
@@ -958,7 +958,7 @@ static gboolean append_calltip(GString *str, const TMTag *tag, filetype_id ft_id
 }
 
 
-static gchar *find_calltip(const gchar *word, filetype *ft)
+static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 {
 	const GPtrArray *tags;
 	const gint arg_types = tm_tag_function_t | tm_tag_prototype_t |
@@ -1163,7 +1163,7 @@ gboolean editor_start_auto_complete(gint idx, gint pos, gboolean force)
 	ScintillaObject *sci;
 	gboolean ret = FALSE;
 	gchar *wordchars;
-	filetype *ft;
+	GeanyFiletype *ft;
 
 	if ((! editor_prefs.auto_complete_symbols && ! force) ||
 		! DOC_IDX_VALID(idx) || doc_list[idx].file_type == NULL)
@@ -1578,7 +1578,7 @@ static gboolean handle_xml(gint idx, gchar ch)
 }
 
 
-static void editor_auto_table(document *doc, gint pos)
+static void editor_auto_table(GeanyDocument *doc, gint pos)
 {
 	ScintillaObject *sci = doc->sci;
 	gchar *table;
@@ -1681,7 +1681,7 @@ gint editor_do_uncomment(gint idx, gint line, gboolean toggle)
 	gsize co_len;
 	gchar sel[256], *co, *cc;
 	gboolean break_loop = FALSE, single_line = FALSE;
-	filetype *ft;
+	GeanyFiletype *ft;
 
 	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_type == NULL)
 		return 0;
@@ -1839,7 +1839,7 @@ void editor_do_comment_toggle(gint idx)
 	gboolean first_line_was_comment = FALSE;
 	gsize co_len;
 	gsize tm_len = strlen(GEANY_TOGGLE_MARK);
-	filetype *ft;
+	GeanyFiletype *ft;
 
 	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_type == NULL)
 		return;
@@ -2010,7 +2010,7 @@ void editor_do_comment(gint idx, gint line, gboolean allow_empty_lines, gboolean
 	gint sel_start, sel_end, co_len;
 	gchar sel[256], *co, *cc;
 	gboolean break_loop = FALSE, single_line = FALSE;
-	filetype *ft;
+	GeanyFiletype *ft;
 
 	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_type == NULL) return;
 
@@ -3170,7 +3170,7 @@ void editor_set_font(gint idx, const gchar *font_name, gint size)
 
 void editor_set_line_wrapping(gint idx, gboolean wrap)
 {
-	document *doc = &doc_list[idx];
+	GeanyDocument *doc = &doc_list[idx];
 
 	g_return_if_fail(DOC_IDX_VALID(idx));
 
@@ -3181,7 +3181,7 @@ void editor_set_line_wrapping(gint idx, gboolean wrap)
 
 void editor_set_use_tabs(gint idx, gboolean use_tabs)
 {
-	document *doc = &doc_list[idx];
+	GeanyDocument *doc = &doc_list[idx];
 
 	g_return_if_fail(DOC_IDX_VALID(idx));
 

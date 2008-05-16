@@ -194,21 +194,21 @@ GeanyData;
 /* See document.h */
 typedef struct DocumentFuncs
 {
-	gint	(*new_file) (const gchar *filename, struct filetype *ft, const gchar *text);
+	gint	(*new_file) (const gchar *filename, struct _GeanyFiletype *ft, const gchar *text);
 	gint	(*get_cur_idx) (void);
 	gint	(*get_n_idx) (guint i);
 	gint	(*find_by_filename) (const gchar *filename, gboolean is_tm_filename);
-	struct document* (*get_current) (void);
+	struct _GeanyDocument* (*get_current) (void);
 	gboolean (*save_file) (gint idx, gboolean force);
 	gint	(*open_file) (const gchar *locale_filename, gboolean readonly,
-			struct filetype *ft, const gchar *forced_enc);
-	void	(*open_files) (const GSList *filenames, gboolean readonly, struct filetype *ft,
+			struct _GeanyFiletype *ft, const gchar *forced_enc);
+	void	(*open_files) (const GSList *filenames, gboolean readonly, struct _GeanyFiletype *ft,
 			const gchar *forced_enc);
 	gboolean (*remove) (guint page_num);
 	gboolean (*reload_file) (gint idx, const gchar *forced_enc);
 	void	(*set_encoding) (gint idx, const gchar *new_encoding);
 	void	(*set_text_changed) (gint idx);
-	void	(*set_filetype) (gint idx, filetype *type);
+	void	(*set_filetype) (gint idx, struct _GeanyFiletype *type);
 }
 DocumentFuncs;
 
@@ -378,8 +378,8 @@ HighlightingFuncs;
 /* See filetypes.h */
 typedef struct FiletypeFuncs
 {
-	filetype*	(*detect_from_filename) (const gchar *utf8_filename);
-	filetype*	(*lookup_by_name) (const gchar *name);
+	GeanyFiletype*	(*detect_from_filename) (const gchar *utf8_filename);
+	GeanyFiletype*	(*lookup_by_name) (const gchar *name);
 }
 FiletypeFuncs;
 

@@ -319,7 +319,7 @@ gint notebook_new_tab(gint doc_idx)
 	GtkWidget *hbox, *ebox;
 	gint tabnum;
 	gchar *title;
-	document *this = &(doc_list[doc_idx]);
+	GeanyDocument *this = &(doc_list[doc_idx]);
 	GtkWidget *page;
 
 	g_return_val_if_fail(doc_idx >= 0 && this != NULL, -1);

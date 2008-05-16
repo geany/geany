@@ -55,7 +55,7 @@
 
 
 /* useful forward declarations */
-typedef struct filetype filetype;
+typedef struct _GeanyFiletype GeanyFiletype;
 typedef struct _GeanyProject GeanyProject;
 
 

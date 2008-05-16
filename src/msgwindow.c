@@ -594,7 +594,7 @@ static void parse_file_line(ParseData *data, gchar **filename, gint *line)
 	if (data->file_idx == -1)
 	{
 		/* we have no filename in the error message, so take the current one and hope it's correct */
-		document *doc = document_get_current();
+		GeanyDocument *doc = document_get_current();
 		if (doc != NULL)
 			*filename = g_strdup(doc->file_name);
 		g_strfreev(fields);

@@ -964,11 +964,11 @@ gboolean symbols_recreate_tag_list(gint idx, gint sort_mode)
 
 /* Detects a global tags filetype from the *.lang.* language extension.
  * Returns NULL if there was no matching TM language. */
-static filetype *detect_global_tags_filetype(const gchar *utf8_filename)
+static GeanyFiletype *detect_global_tags_filetype(const gchar *utf8_filename)
 {
 	gchar *tags_ext;
 	gchar *shortname = g_strdup(utf8_filename);
-	filetype *ft = NULL;
+	GeanyFiletype *ft = NULL;
 
 	tags_ext = strstr(shortname, ".tags");
 	if (tags_ext)
@@ -1002,7 +1002,7 @@ int symbols_generate_global_tags(int argc, char **argv, gboolean want_preprocess
 		char *command;
 		const char *tags_file = argv[1];
 		char *utf8_fname;
-		filetype *ft;
+		GeanyFiletype *ft;
 
 		utf8_fname = utils_get_utf8_from_locale(tags_file);
 		ft = detect_global_tags_filetype(utf8_fname);
@@ -1068,7 +1068,7 @@ void symbols_show_load_tags_dialog(void)
 		{
 			gchar *fname = item->data;
 			gchar *utf8_fname;
-			filetype *ft;
+			GeanyFiletype *ft;
 
 			utf8_fname = utils_get_utf8_from_locale(fname);
 			ft = detect_global_tags_filetype(utf8_fname);
@@ -1098,7 +1098,7 @@ static GHashTable *get_tagfile_hash(const GSList *file_list)
 		GList *fnames;
 		gchar *fname = node->data;
 		gchar *utf8_fname = utils_get_utf8_from_locale(fname);
-		filetype *ft = detect_global_tags_filetype(utf8_fname);
+		GeanyFiletype *ft = detect_global_tags_filetype(utf8_fname);
 
 		g_free(utf8_fname);
 
@@ -1142,7 +1142,7 @@ static void load_user_tags(filetype_id ft_id)
 	static GHashTable *lang_hash = NULL;
 	GList *fnames;
 	const GList *node;
-	const filetype *ft = filetypes[ft_id];
+	const GeanyFiletype *ft = filetypes[ft_id];
 
 	g_return_if_fail(ft_id < GEANY_FILETYPES_NONE);
 

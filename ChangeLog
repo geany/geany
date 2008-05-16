@@ -1,3 +1,15 @@
+2008-05-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * plugins/pluginmacros.h, plugins/vcdiff.c, src/build.c,
+   src/callbacks.c, src/dialogs.c, src/document.c, src/document.h,
+   src/editor.c, src/filetypes.c, src/filetypes.h, src/geany.h,
+   src/keybindings.c, src/keyfile.c, src/main.c, src/msgwindow.c,
+   src/notebook.c, src/plugindata.h, src/printing.c, src/symbols.c,
+   src/templates.c, src/templates.h:
+   Rename document struct to GeanyDocument.
+   Rename filetype struct to GeanyFiletype.
+
+
 2008-05-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/templates.c, src/build.c, src/utils.c, src/ui_utils.h,

@@ -90,6 +90,9 @@
 #define ui				geany_data->ui
 #define utils			geany_data->utils
 
+typedef struct _GeanyDocument document;
+typedef struct _GeanyFiletype filetype;
+
 #endif
 
 #endif

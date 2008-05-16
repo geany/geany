@@ -54,7 +54,7 @@ void templates_init(void);
 
 gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname);
 
-gchar *templates_get_template_new_file(struct filetype *ft);
+gchar *templates_get_template_new_file(GeanyFiletype *ft);
 
 gchar *templates_get_template_changelog(void);
 

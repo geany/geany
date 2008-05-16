@@ -82,7 +82,7 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 						lookup_widget(GTK_WIDGET(dialog), "filetype_combo")));
 		gint encoding_idx = gtk_combo_box_get_active(GTK_COMBO_BOX(
 						lookup_widget(GTK_WIDGET(dialog), "encoding_combo")));
-		filetype *ft = NULL;
+		GeanyFiletype *ft = NULL;
 		gchar *charset = NULL;
 		gboolean ro = (response == GEANY_RESPONSE_VIEW);	/* View clicked */
 

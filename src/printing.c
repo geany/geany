@@ -409,11 +409,23 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 {
 	DocInfo *dinfo = user_data;
 	PangoFontDescription *desc;
+	GtkPrintSettings *lsettings;
+	GtkPageRange range;
 	gint i;
 	gint style_max;
 
 	if (dinfo == NULL)
 		return;
+
+	/* printing a range of pages or only the current page is not yet supported, so force printing
+	 * of all pages */
+	lsettings = gtk_print_operation_get_print_settings(operation);
+	gtk_print_settings_set_print_pages(lsettings, GTK_PRINT_PAGES_ALL);
+	gtk_print_settings_set_page_set(lsettings, GTK_PAGE_SET_ALL);
+	range.start = 0;
+	range.end = dinfo->n_pages;
+	gtk_print_settings_set_page_ranges(lsettings, &range, 1);
+	gtk_print_operation_set_print_settings(operation, lsettings);
 
 	desc = pango_font_description_from_string(interface_prefs.editor_font);
 

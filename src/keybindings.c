@@ -1082,7 +1082,7 @@ static void cb_func_build_action(guint key_id)
 {
 	gint idx = document_get_cur_idx();
 	GtkWidget *item;
-	filetype *ft;
+	GeanyFiletype *ft;
 	BuildMenuItems *menu_items;
 
 	if (! DOC_IDX_VALID(idx)) return;

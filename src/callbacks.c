@@ -1038,7 +1038,7 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
 {
 	gboolean definition = (menuitem ==
 		GTK_MENU_ITEM(lookup_widget(app->popup_menu, "goto_tag_definition1")));
-	document *doc = document_get_current();
+	GeanyDocument *doc = document_get_current();
 
 	g_return_if_fail(doc);
 
@@ -1370,7 +1370,7 @@ on_comments_fileheader_activate        (GtkMenuItem     *menuitem,
 	gint idx = document_get_cur_idx();
 	gchar *text;
 	gchar *fname;
-	filetype *ft;
+	GeanyFiletype *ft;
 
 	g_return_if_fail(DOC_IDX_VALID(idx));
 
@@ -2111,7 +2111,7 @@ void
 on_line_breaking1_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	document *doc;
+	GeanyDocument *doc;
 
 	if (app->ignore_callback)
 		return;

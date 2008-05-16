@@ -591,7 +591,7 @@ static gchar *prepare_run_script(gint idx, gchar **vte_cmd_nonscript)
 	gchar	*locale_filename = NULL;
 	gboolean have_project;
 	GeanyProject *project = app->project;
-	filetype *ft = doc_list[idx].file_type;
+	GeanyFiletype *ft = doc_list[idx].file_type;
 	gboolean check_exists;
 	gchar	*cmd = NULL;
 	gchar	*executable = NULL;
@@ -1276,7 +1276,7 @@ on_includes_arguments_tex_dialog_response  (GtkDialog *dialog,
                                             gint response,
                                             gpointer user_data)
 {
-	filetype *ft = user_data;
+	GeanyFiletype *ft = user_data;
 	g_return_if_fail(ft != NULL);
 
 	if (response == GTK_RESPONSE_ACCEPT)
@@ -1325,7 +1325,7 @@ static void show_includes_arguments_tex(void)
 	GtkWidget *dialog, *label, *entries[4], *vbox, *table;
 	gint idx = document_get_cur_idx();
 	gint response;
-	filetype *ft = NULL;
+	GeanyFiletype *ft = NULL;
 
 	if (DOC_IDX_VALID(idx)) ft = doc_list[idx].file_type;
 	g_return_if_fail(ft != NULL);
@@ -1441,7 +1441,7 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
                                         gint response,
                                         gpointer user_data)
 {
-	filetype *ft = user_data;
+	GeanyFiletype *ft = user_data;
 
 	g_return_if_fail(ft != NULL);
 
@@ -1494,7 +1494,7 @@ static void show_includes_arguments_gen(void)
 	gint row = 0;
 	gint idx = document_get_cur_idx();
 	gint response;
-	filetype *ft = NULL;
+	GeanyFiletype *ft = NULL;
 
 	if (DOC_IDX_VALID(idx)) ft = doc_list[idx].file_type;
 	g_return_if_fail(ft != NULL);
@@ -1612,7 +1612,7 @@ static void
 on_build_arguments_activate            (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	if (user_data && FILETYPE_ID((filetype*) user_data) == GEANY_FILETYPES_LATEX)
+	if (user_data && FILETYPE_ID((GeanyFiletype*) user_data) == GEANY_FILETYPES_LATEX)
 		show_includes_arguments_tex();
 	else
 		show_includes_arguments_gen();
@@ -1635,7 +1635,7 @@ static gboolean is_c_header(const gchar *fname)
  * Uses current document (if there is one) when idx == -1 */
 void build_menu_update(gint idx)
 {
-	filetype *ft;
+	GeanyFiletype *ft;
 	gboolean have_path, can_build, can_make, can_run, can_stop, can_set_args, have_errors;
 	BuildMenuItems *menu_items;
 
@@ -1784,7 +1784,7 @@ BuildMenuItems *build_get_menu_items(gint filetype_idx)
 	if (filetype_idx == -1)
 	{
 		gint idx = document_get_cur_idx();
-		filetype *ft = NULL;
+		GeanyFiletype *ft = NULL;
 
 		if (DOC_IDX_VALID(idx))
 			ft = doc_list[idx].file_type;
@@ -1923,7 +1923,7 @@ on_build_make_activate                 (GtkMenuItem     *menuitem,
 }
 
 
-static gboolean use_html_builtin(gint idx, filetype *ft)
+static gboolean use_html_builtin(gint idx, GeanyFiletype *ft)
 {
 	gboolean use_builtin = FALSE;
 	if (ft->id == GEANY_FILETYPES_HTML)
@@ -1957,7 +1957,7 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 	filetype_id ft_id;
-	filetype *ft;
+	GeanyFiletype *ft;
 
 	if (! DOC_IDX_VALID(idx))
 		return;

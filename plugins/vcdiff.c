@@ -286,7 +286,7 @@ static void show_output(const gchar *std_output, const gchar *name_prefix,
 		idx = find_by_filename(filename);
 		if ( idx == -1)
 		{
-			filetype *ft = p_filetypes->lookup_by_name("Diff");
+			GeanyFiletype *ft = p_filetypes->lookup_by_name("Diff");
 			idx = p_document->new_file(filename, ft, text);
 		}
 		else
@@ -481,7 +481,7 @@ static GtkWidget *menu_vcdiff_project = NULL;
 
 static void update_menu_items(void)
 {
-	document	*doc;
+	GeanyDocument *doc;
 	gboolean	have_file;
 	gboolean    have_vc = FALSE;
 
