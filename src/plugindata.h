@@ -165,7 +165,7 @@ typedef struct GeanyData
 	struct GeanySearchPrefs	*search_prefs;		/**< Search-related settings */
 	struct GeanyToolPrefs	*tool_prefs;		/**< Tool settings */
 	struct GeanyTemplatePrefs *template_prefs;	/**< Template settings */
-	struct BuildInfo	*build_info;			/**< Current build information */
+	struct GeanyBuildInfo	*build_info;			/**< Current build information */
 
 	struct DocumentFuncs		*documents;		/**< See document.h */
 	struct ScintillaFuncs		*sci;			/**< See sciwrappers.h */

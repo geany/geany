@@ -58,7 +58,7 @@
 #include "win32.h"
 
 
-BuildInfo build_info = {GBO_COMPILE, 0, NULL, GEANY_FILETYPES_NONE, NULL};
+GeanyBuildInfo build_info = {GBO_COMPILE, 0, NULL, GEANY_FILETYPES_NONE, NULL};
 
 static gchar *current_dir_entered = NULL;
 

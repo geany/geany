@@ -8,6 +8,8 @@
    src/templates.c, src/templates.h:
    Rename document struct to GeanyDocument.
    Rename filetype struct to GeanyFiletype.
+ * src/build.c, src/build.h, src/plugindata.h:
+   Rename BuildInfo struct to GeanyBuildInfo.
 
 
 2008-05-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

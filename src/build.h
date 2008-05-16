@@ -32,18 +32,18 @@ typedef enum	/* Geany Build Options */
 	GBO_MAKE_ALL,
 	GBO_MAKE_CUSTOM,
 	GBO_MAKE_OBJECT
-} build_type;
+} GeanyBuildType;
 
-typedef struct BuildInfo
+typedef struct GeanyBuildInfo
 {
-	build_type	type;	/* current action(one of the above enumeration) */
-	GPid		pid;	/* process id of the spawned process */
-	gchar		*dir;
-	guint		file_type_id;
-	gchar		*custom_target;
-} BuildInfo;
+	GeanyBuildType	 type;	/* current action(one of the above enumeration) */
+	GPid			 pid;	/* process id of the spawned process */
+	gchar			*dir;
+	guint			 file_type_id;
+	gchar			*custom_target;
+} GeanyBuildInfo;
 
-extern BuildInfo build_info;
+extern GeanyBuildInfo build_info;
 
 
 typedef struct BuildMenuItems
