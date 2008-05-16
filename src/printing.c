@@ -41,6 +41,7 @@
 #include "support.h"
 #include "dialogs.h"
 #include "utils.h"
+#include "ui_utils.h"
 #include "msgwindow.h"
 
 
