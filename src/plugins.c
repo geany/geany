@@ -252,6 +252,12 @@ static GeanyData geany_data = {
 	NULL,
 	NULL,
 	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
 
 	&doc_funcs,
 	&sci_funcs,
@@ -280,7 +286,13 @@ geany_data_init(void)
 	geany_data.doc_array = doc_array;
 	geany_data.filetypes_array = filetypes_array;
 	geany_data.prefs = &prefs;
+	geany_data.interface_prefs = &interface_prefs;
+	geany_data.toolbar_prefs = &toolbar_prefs;
 	geany_data.editor_prefs = &editor_prefs;
+	geany_data.file_prefs = &file_prefs;
+	geany_data.search_prefs = &search_prefs;
+	geany_data.tool_prefs = &tool_prefs;
+	geany_data.template_prefs = &template_prefs;
 	geany_data.build_info = &build_info;
 }
 

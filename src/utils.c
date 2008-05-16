@@ -64,7 +64,7 @@ void utils_start_browser(const gchar *uri)
 #else
 	const gchar *argv[3];
 
-	argv[0] = prefs.tools_browser_cmd;
+	argv[0] = tool_prefs.browser_cmd;
 	argv[1] = uri;
 	argv[2] = NULL;
 

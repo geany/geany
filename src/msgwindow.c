@@ -117,7 +117,7 @@ static void prepare_status_tree_view(void)
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_status), FALSE);
 
-	pfd = pango_font_description_from_string(prefs.msgwin_font);
+	pfd = pango_font_description_from_string(interface_prefs.msgwin_font);
 	gtk_widget_modify_font(msgwindow.tree_status, pfd);
 	pango_font_description_free(pfd);
 
@@ -147,7 +147,7 @@ static void prepare_msg_tree_view(void)
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_msg), FALSE);
 
-	pfd = pango_font_description_from_string(prefs.msgwin_font);
+	pfd = pango_font_description_from_string(interface_prefs.msgwin_font);
 	gtk_widget_modify_font(msgwindow.tree_msg, pfd);
 	pango_font_description_free(pfd);
 
@@ -180,7 +180,7 @@ static void prepare_compiler_tree_view(void)
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_compiler), FALSE);
 
-	pfd = pango_font_description_from_string(prefs.msgwin_font);
+	pfd = pango_font_description_from_string(interface_prefs.msgwin_font);
 	gtk_widget_modify_font(msgwindow.tree_compiler, pfd);
 	pango_font_description_free(pfd);
 
@@ -353,7 +353,7 @@ void msgwin_status_add(const gchar *format, ...)
 		GtkTreePath *path = gtk_tree_model_get_path(gtk_tree_view_get_model(GTK_TREE_VIEW(msgwindow.tree_status)), &iter);
 
 		gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(msgwindow.tree_status), path, NULL, FALSE, 0.0, 0.0);
-		if (prefs.switch_msgwin_pages) gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_STATUS);
+		if (prefs.switch_to_status) gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_STATUS);
 		gtk_tree_path_free(path);
 	}
 }

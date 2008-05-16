@@ -24,6 +24,47 @@
 #ifndef GEANY_UI_UTILS_H
 #define GEANY_UI_UTILS_H 1
 
+typedef struct GeanyInterfacePrefs
+{
+	gboolean		sidebar_symbol_visible;
+	gboolean		sidebar_openfiles_visible;
+	gboolean		sidebar_openfiles_fullpath;
+	gchar			*editor_font;
+	gchar			*tagbar_font;
+	gchar			*msgwin_font;
+	gboolean		show_notebook_tabs;
+	gint			tab_pos_editor;
+	gint			tab_pos_msgwin;
+	gint			tab_pos_sidebar;
+	gboolean		statusbar_visible;
+	gboolean		show_symbol_list_expanders;
+}
+GeanyInterfacePrefs;
+
+extern GeanyInterfacePrefs interface_prefs;
+
+
+typedef struct GeanyToolbarPrefs
+{
+	gboolean		visible;
+	gboolean		show_search;
+	gboolean		show_goto;
+	gboolean		show_undo;
+	gboolean		show_navigation;
+	gboolean		show_compile;
+	gboolean		show_zoom;
+	gboolean		show_indent;
+	gboolean		show_colour;
+	gboolean		show_fileops;
+	gboolean		show_quit;
+	GtkIconSize		icon_size;
+	gint			icon_style;
+}
+GeanyToolbarPrefs;
+
+extern GeanyToolbarPrefs toolbar_prefs;
+
+
 /* User Interface settings not shown in the Prefs dialog. */
 typedef struct UIPrefs
 {

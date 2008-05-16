@@ -32,7 +32,6 @@
 #include "geany.h"
 
 #include "templates.h"
-#include "prefs.h"
 #include "support.h"
 #include "utils.h"
 #include "document.h"
@@ -43,6 +42,8 @@
 #define TEMPLATE_DATE_FORMAT "%Y-%m-%d"
 #define TEMPLATE_DATETIME_FORMAT "%d.%m.%Y %H:%M:%S %Z"
 
+
+GeanyTemplatePrefs template_prefs;
 
 static GtkWidget *new_with_template_menu = NULL;	/* File menu submenu */
 
@@ -763,11 +764,11 @@ static gchar *templates_replace_all(gchar *text, const gchar *year, const gchar 
 {
 	text = utils_str_replace(text, "{year}", year);
 	text = utils_str_replace(text, "{date}", date);
-	text = utils_str_replace(text, "{version}", prefs.template_version);
-	text = utils_str_replace(text, "{initial}", prefs.template_initial);
-	text = utils_str_replace(text, "{developer}", prefs.template_developer);
-	text = utils_str_replace(text, "{mail}", prefs.template_mail);
-	text = utils_str_replace(text, "{company}", prefs.template_company);
+	text = utils_str_replace(text, "{version}", template_prefs.version);
+	text = utils_str_replace(text, "{initial}", template_prefs.initials);
+	text = utils_str_replace(text, "{developer}", template_prefs.developer);
+	text = utils_str_replace(text, "{mail}", template_prefs.mail);
+	text = utils_str_replace(text, "{company}", template_prefs.company);
 	text = utils_str_replace(text, "{untitled}", GEANY_STRING_UNTITLED);
 	text = utils_str_replace(text, "{geanyversion}", "Geany " VERSION);
 

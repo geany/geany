@@ -50,7 +50,7 @@
 static gchar current_word[GEANY_MAX_WORD_LENGTH];
 
 /* Initialised in keyfile.c. */
-EditorPrefs editor_prefs;
+GeanyEditorPrefs editor_prefs;
 
 EditorInfo editor_info = {current_word, -1};
 

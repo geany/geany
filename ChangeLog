@@ -1,3 +1,28 @@
+2008-05-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/templates.c, src/build.c, src/utils.c, src/ui_utils.h,
+   src/templates.h, src/keybindings.c, src/printing.c, src/prefs.c,
+   src/dialogs.c, src/prefs.h, src/plugindata.h, src/treeviews.c,
+   src/msgwindow.c, src/callbacks.c, src/notebook.c, src/keyfile.c,
+   src/search.c, src/search.h, src/document.c, src/plugins.c,
+   src/document.h, src/main.c, src/editor.c, src/editor.h, src/ui_utils.c,
+   plugins/export.c, plugins/filebrowser.c:
+   Note: this commit breaks the plugin API (but is necessary so that in
+   future the ABI can stay stable when adding preferences).
+   Split up prefs into interface_prefs, toolbar_prefs, file_prefs,
+   search_prefs, tool_prefs, template_prefs, and add these to the
+   plugin API.
+   Move suppress_search_dialogs and search_use_current_word to
+   search_prefs, and rename accordingly.
+   Rename switch_msgwin_pages pref to switch_to_status.
+   Remove toolbar_ prefix for toolbar_prefs items.
+   Remove tool_ prefix for tool_prefs items.
+   Remove template_ prefix for template_prefs items.
+   Add Geany prefix for EditorPrefs.
+   Add Geany prefix for SearchPrefs.
+   Initialize search_prefs to zero in main.c.
+
+
 2008-05-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/*.c src/*.h:

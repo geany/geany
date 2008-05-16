@@ -34,6 +34,20 @@ enum
 	GEANY_MAX_TEMPLATES
 };
 
+
+typedef struct GeanyTemplatePrefs
+{
+	gchar			*developer;
+	gchar			*company;
+	gchar			*mail;
+	gchar			*initials;
+	gchar			*version;
+}
+GeanyTemplatePrefs;
+
+extern GeanyTemplatePrefs template_prefs;
+
+
 struct filetype;
 
 void templates_init(void);

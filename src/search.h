@@ -26,7 +26,7 @@
 #define GEANY_SEARCH_H 1
 
 /* the flags given in the search dialog for "find next", also used by the search bar */
-typedef struct
+typedef struct GeanySearchData
 {
 	gchar		*text;
 	gint		flags;
@@ -34,17 +34,21 @@ typedef struct
 	/* set to TRUE when text was set by a search bar callback to keep track of
 	 * search bar background colour */
 	gboolean	search_bar;
-} GeanySearchData;
+}
+GeanySearchData;
 
 extern GeanySearchData search_data;
 
 
-typedef struct
+typedef struct GeanySearchPrefs
 {
 	gchar		*fif_extra_options;
-} SearchPrefs;
+	gboolean	suppress_dialogs;
+	gboolean	use_current_word;
+}
+GeanySearchPrefs;
 
-extern SearchPrefs search_prefs;
+extern GeanySearchPrefs search_prefs;
 
 
 void search_init(void);

@@ -64,7 +64,8 @@ enum {
 
 GeanySearchData search_data;
 
-SearchPrefs search_prefs = {NULL};
+GeanySearchPrefs search_prefs;
+
 
 static struct
 {
@@ -290,7 +291,7 @@ void search_show_find_dialog(void)
 
 	g_return_if_fail(DOC_IDX_VALID(idx));
 
-	sel = editor_get_default_selection(idx, prefs.search_use_current_word, NULL);
+	sel = editor_get_default_selection(idx, search_prefs.use_current_word, NULL);
 
 	if (widgets.find_dialog == NULL)
 	{
@@ -411,7 +412,7 @@ void search_show_replace_dialog(void)
 
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
 
-	sel = editor_get_default_selection(idx, prefs.search_use_current_word, NULL);
+	sel = editor_get_default_selection(idx, search_prefs.use_current_word, NULL);
 
 	if (widgets.replace_dialog == NULL)
 	{
@@ -710,13 +711,13 @@ void search_show_find_in_files_dialog(const gchar *dir)
 				G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 
 		gtk_widget_show_all(widgets.find_in_files_dialog);
-		sel = editor_get_default_selection(idx, prefs.search_use_current_word, NULL);
+		sel = editor_get_default_selection(idx, search_prefs.use_current_word, NULL);
 	}
 
 	entry = GTK_BIN(combo)->child;
 	/* only set selection if the dialog is not already visible, or has just been created */
 	if (! sel && ! GTK_WIDGET_VISIBLE(widgets.find_in_files_dialog))
-		sel = editor_get_default_selection(idx, prefs.search_use_current_word, NULL);
+		sel = editor_get_default_selection(idx, search_prefs.use_current_word, NULL);
 	if (sel)
 		gtk_entry_set_text(GTK_ENTRY(entry), sel);
 	g_free(sel);
@@ -882,7 +883,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 				document_find_text(idx, search_data.text, search_data.flags,
 					(response == GEANY_RESPONSE_FIND_PREVIOUS), TRUE, GTK_WIDGET(widgets.find_dialog));
 				check_close = FALSE;
-				if (prefs.suppress_search_dialogs)
+				if (search_prefs.suppress_dialogs)
 					check_close = TRUE;
 				break;
 
@@ -1165,11 +1166,11 @@ search_find_in_files(const gchar *search_text, const gchar *dir, const gchar *op
 
 	if (! search_text || ! *search_text || ! dir) return TRUE;
 
-	command_grep = g_find_program_in_path(prefs.tools_grep_cmd);
+	command_grep = g_find_program_in_path(tool_prefs.grep_cmd);
 	if (command_grep == NULL)
 	{
 		ui_set_statusbar(TRUE, _("Cannot execute grep tool '%s';"
-			" check the path setting in Preferences."), prefs.tools_grep_cmd);
+			" check the path setting in Preferences."), tool_prefs.grep_cmd);
 		return FALSE;
 	}
 
@@ -1186,7 +1187,7 @@ search_find_in_files(const gchar *search_text, const gchar *dir, const gchar *op
 	}
 	g_strfreev(opts_argv);
 
-	i++;	/* correct for prefs.tools_grep_cmd */
+	i++;	/* correct for tool_prefs.grep_cmd */
 	argv_prefix[i++] = g_strdup("--");
 	argv_prefix[i++] = g_strdup(search_text);
 
@@ -1234,7 +1235,7 @@ search_find_in_files(const gchar *search_text, const gchar *dir, const gchar *op
 		g_child_watch_add(child_pid, search_close_pid, NULL);
 
 		str = g_strdup_printf(_("%s %s -- %s (in directory: %s)"),
-			prefs.tools_grep_cmd, opts, search_text, dir);
+			tool_prefs.grep_cmd, opts, search_text, dir);
 		utf8_str = utils_get_utf8_from_locale(str);
 		msgwin_msg_add(COLOR_BLUE, -1, -1, utf8_str);
 		utils_free_pointers(str, utf8_str, NULL);

@@ -485,7 +485,7 @@ on_images_and_text2_activate           (GtkMenuItem     *menuitem,
 	if (ignore_toolbar_toggle) return;
 
 	gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), GTK_TOOLBAR_BOTH);
-	prefs.toolbar_icon_style = GTK_TOOLBAR_BOTH;
+	toolbar_prefs.icon_style = GTK_TOOLBAR_BOTH;
 }
 
 
@@ -496,7 +496,7 @@ on_images_only2_activate               (GtkMenuItem     *menuitem,
 	if (ignore_toolbar_toggle) return;
 
 	gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), GTK_TOOLBAR_ICONS);
-	prefs.toolbar_icon_style = GTK_TOOLBAR_ICONS;
+	toolbar_prefs.icon_style = GTK_TOOLBAR_ICONS;
 }
 
 
@@ -507,7 +507,7 @@ on_text_only2_activate                 (GtkMenuItem     *menuitem,
 	if (ignore_toolbar_toggle) return;
 
 	gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), GTK_TOOLBAR_TEXT);
-	prefs.toolbar_icon_style = GTK_TOOLBAR_TEXT;
+	toolbar_prefs.icon_style = GTK_TOOLBAR_TEXT;
 }
 
 
@@ -623,7 +623,7 @@ on_toolbar_large_icons1_activate       (GtkMenuItem     *menuitem,
 {
 	if (ignore_toolbar_toggle) return;
 
-	prefs.toolbar_icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
+	toolbar_prefs.icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
 	ui_update_toolbar_icons(GTK_ICON_SIZE_LARGE_TOOLBAR);
 }
 
@@ -634,7 +634,7 @@ on_toolbar_small_icons1_activate       (GtkMenuItem     *menuitem,
 {
 	if (ignore_toolbar_toggle) return;
 
-	prefs.toolbar_icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR;
+	toolbar_prefs.icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR;
 	ui_update_toolbar_icons(GTK_ICON_SIZE_SMALL_TOOLBAR);
 }
 
@@ -829,7 +829,7 @@ toolbar_popup_menu                     (GtkWidget *widget,
 
 		ignore_toolbar_toggle = TRUE;
 
-		switch (prefs.toolbar_icon_style)
+		switch (toolbar_prefs.icon_style)
 		{
 			case 0: w = lookup_widget(ui_widgets.toolbar_menu, "images_only2"); break;
 			case 1: w = lookup_widget(ui_widgets.toolbar_menu, "text_only2"); break;
@@ -837,7 +837,7 @@ toolbar_popup_menu                     (GtkWidget *widget,
 		}
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(w), TRUE);
 
-		switch (prefs.toolbar_icon_size)
+		switch (toolbar_prefs.icon_size)
 		{
 			case GTK_ICON_SIZE_LARGE_TOOLBAR:
 					w = lookup_widget(ui_widgets.toolbar_menu, "large_icons1"); break;
@@ -920,8 +920,8 @@ on_show_toolbar1_toggled               (GtkCheckMenuItem *checkmenuitem,
 {
 	if (app->ignore_callback) return;
 
-	prefs.toolbar_visible = (prefs.toolbar_visible) ? FALSE : TRUE;;
-	ui_widget_show_hide(GTK_WIDGET(app->toolbar), prefs.toolbar_visible);
+	toolbar_prefs.visible = (toolbar_prefs.visible) ? FALSE : TRUE;;
+	ui_widget_show_hide(GTK_WIDGET(app->toolbar), toolbar_prefs.visible);
 }
 
 
@@ -1357,7 +1357,7 @@ on_comments_changelog_activate         (GtkMenuItem     *menuitem,
 	sci_insert_text(doc_list[idx].sci, 0, text);
 	/* sets the cursor to the right position to type the changelog text,
 	 * the template has 21 chars + length of name and email */
-	sci_goto_pos(doc_list[idx].sci, 21 + strlen(prefs.template_developer) + strlen(prefs.template_mail), TRUE);
+	sci_goto_pos(doc_list[idx].sci, 21 + strlen(template_prefs.developer) + strlen(template_prefs.mail), TRUE);
 
 	g_free(text);
 }
@@ -1600,10 +1600,10 @@ on_menu_show_sidebar1_toggled          (GtkCheckMenuItem *checkmenuitem,
 
 	ui_prefs.sidebar_visible = ! ui_prefs.sidebar_visible;
 
-	if ((! prefs.sidebar_openfiles_visible && ! prefs.sidebar_symbol_visible))
+	if ((! interface_prefs.sidebar_openfiles_visible && ! interface_prefs.sidebar_symbol_visible))
 	{
-		prefs.sidebar_openfiles_visible = TRUE;
-		prefs.sidebar_symbol_visible = TRUE;
+		interface_prefs.sidebar_openfiles_visible = TRUE;
+		interface_prefs.sidebar_symbol_visible = TRUE;
 	}
 
 	ui_sidebar_show_hide();
@@ -1940,7 +1940,7 @@ on_context_action1_activate            (GtkMenuItem     *menuitem,
 	}
 	else
 	{
-		command = g_strdup(prefs.context_action_cmd);
+		command = g_strdup(tool_prefs.context_action_cmd);
 	}
 
 	/* substitute the wildcard %s and run the command if it is non empty */
@@ -1974,7 +1974,7 @@ on_menu_toggle_all_additional_widgets1_activate
 	if (hide_all == -1)
 	{
 		if (! gtk_check_menu_item_get_active(msgw) &&
-			! prefs.show_notebook_tabs &&
+			! interface_prefs.show_notebook_tabs &&
 			! gtk_check_menu_item_get_active(toolbari))
 		{
 			hide_all = TRUE;
@@ -1990,8 +1990,8 @@ on_menu_toggle_all_additional_widgets1_activate
 		if (gtk_check_menu_item_get_active(msgw))
 			gtk_check_menu_item_set_active(msgw, ! gtk_check_menu_item_get_active(msgw));
 
-		prefs.show_notebook_tabs = FALSE;
-		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(app->notebook), prefs.show_notebook_tabs);
+		interface_prefs.show_notebook_tabs = FALSE;
+		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(app->notebook), interface_prefs.show_notebook_tabs);
 
 		ui_statusbar_showhide(FALSE);
 
@@ -2004,8 +2004,8 @@ on_menu_toggle_all_additional_widgets1_activate
 		if (! gtk_check_menu_item_get_active(msgw))
 			gtk_check_menu_item_set_active(msgw, ! gtk_check_menu_item_get_active(msgw));
 
-		prefs.show_notebook_tabs = TRUE;
-		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(app->notebook), prefs.show_notebook_tabs);
+		interface_prefs.show_notebook_tabs = TRUE;
+		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(app->notebook), interface_prefs.show_notebook_tabs);
 
 		ui_statusbar_showhide(TRUE);
 

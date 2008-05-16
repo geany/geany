@@ -33,7 +33,6 @@
 
 #include "geany.h"
 #include "printing.h"
-#include "prefs.h"
 #include "document.h"
 #include "sciwrappers.h"
 #include "editor.h"
@@ -415,7 +414,7 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 	if (dinfo == NULL)
 		return;
 
-	desc = pango_font_description_from_string(prefs.editor_font);
+	desc = pango_font_description_from_string(interface_prefs.editor_font);
 
 	/* init dinfo fields */
 	dinfo->lines = sci_get_line_count(doc_list[dinfo->idx].sci);

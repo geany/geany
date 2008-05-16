@@ -43,6 +43,24 @@
 #endif
 
 
+typedef struct GeanyFilePrefs
+{
+	gint			default_new_encoding;
+	gint			default_open_encoding;
+	gboolean		final_new_line;
+	gboolean		strip_trailing_spaces;
+	gboolean		replace_tabs;
+	gboolean		tab_order_ltr;
+	gboolean		show_tab_cross;
+	guint			mru_length;
+	gint			default_eol_character;
+	gint			disk_check_timeout;
+}
+GeanyFilePrefs;
+
+extern GeanyFilePrefs file_prefs;
+
+
 typedef struct FileEncoding
 {
 	gchar 			*encoding;

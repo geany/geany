@@ -35,12 +35,12 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 58;
+static const gint api_version = 59;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
  * are only appended, as this doesn't affect existing fields. */
-static const gint abi_version = 28;
+static const gint abi_version = 29;
 
 /** Check the plugin can be loaded by Geany.
  * This performs runtime checks that try to ensure:
@@ -153,13 +153,19 @@ PluginFields;
  *  Variables and functions will be appended when needed by plugin authors. */
 typedef struct GeanyData
 {
-	GeanyApp	*app;					/**< Geany application data fields */
-	GtkWidget	*tools_menu;			/**< Most plugins should add menu items to the Tools menu only */
-	GArray		*doc_array;				/**< Dynamic array of document structs */
-	GPtrArray	*filetypes_array;		/**< Dynamic array of filetype pointers */
-	struct GeanyPrefs	*prefs;			/* Note: this will be split up in future versions */
-	struct EditorPrefs	*editor_prefs;	/**< Editor settings */
-	struct BuildInfo	*build_info;	/**< Current build information */
+	GeanyApp	*app;							/**< Geany application data fields */
+	GtkWidget	*tools_menu;					/**< Most plugins should add menu items to the Tools menu only */
+	GArray		*doc_array;						/**< Dynamic array of document structs */
+	GPtrArray	*filetypes_array;				/**< Dynamic array of filetype pointers */
+	struct GeanyPrefs	*prefs;					/**< General settings */
+	struct GeanyInterfacePrefs *interface_prefs; /**< Interface settings */
+	struct GeanyToolbarPrefs *toolbar_prefs;	/**< Toolbar settings */
+	struct GeanyEditorPrefs	*editor_prefs;		/**< Editor settings */
+	struct GeanyFilePrefs	*file_prefs;		/**< File-related settings */
+	struct GeanySearchPrefs	*search_prefs;		/**< Search-related settings */
+	struct GeanyToolPrefs	*tool_prefs;		/**< Tool settings */
+	struct GeanyTemplatePrefs *template_prefs;	/**< Template settings */
+	struct BuildInfo	*build_info;			/**< Current build information */
 
 	struct DocumentFuncs		*documents;		/**< See document.h */
 	struct ScintillaFuncs		*sci;			/**< See sciwrappers.h */

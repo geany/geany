@@ -192,7 +192,7 @@ static GPid build_view_tex_file(gint idx, gint mode)
 	locale_cmd_string = utils_get_locale_from_utf8(cmd_string);
 
 	/* get the terminal path */
-	locale_term_cmd = utils_get_locale_from_utf8(prefs.tools_term_cmd);
+	locale_term_cmd = utils_get_locale_from_utf8(tool_prefs.term_cmd);
 	/* split the term_cmd, so arguments will work too */
 	term_argv = g_strsplit(locale_term_cmd, " ", -1);
 	term_argv_len = g_strv_length(term_argv);
@@ -209,7 +209,7 @@ static GPid build_view_tex_file(gint idx, gint mode)
 	{
 		ui_set_statusbar(TRUE,
 			_("Could not find terminal \"%s\" "
-				"(check path for Terminal tool setting in Preferences)"), prefs.tools_term_cmd);
+				"(check path for Terminal tool setting in Preferences)"), tool_prefs.term_cmd);
 
 		utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
 										locale_term_cmd, NULL);
@@ -317,7 +317,7 @@ static GPid build_make_file(gint idx, gint build_opts)
 
 	if (idx < 0 || doc_list[idx].file_name == NULL) return (GPid) 1;
 
-	cmdstr = g_string_new(prefs.tools_make_cmd);
+	cmdstr = g_string_new(tool_prefs.make_cmd);
 	g_string_append_c(cmdstr, ' ');
 
 	if (build_opts == GBO_MAKE_OBJECT)
@@ -751,7 +751,7 @@ static GPid build_run_cmd(gint idx)
 		gchar  **argv = NULL;
 
 		/* get the terminal path */
-		locale_term_cmd = utils_get_locale_from_utf8(prefs.tools_term_cmd);
+		locale_term_cmd = utils_get_locale_from_utf8(tool_prefs.term_cmd);
 		/* split the term_cmd, so arguments will work too */
 		term_argv = g_strsplit(locale_term_cmd, " ", -1);
 		term_argv_len = g_strv_length(term_argv);
@@ -768,7 +768,7 @@ static GPid build_run_cmd(gint idx)
 		{
 			ui_set_statusbar(TRUE,
 				_("Could not find terminal \"%s\" "
-					"(check path for Terminal tool setting in Preferences)"), prefs.tools_term_cmd);
+					"(check path for Terminal tool setting in Preferences)"), tool_prefs.term_cmd);
 			run_info.pid = (GPid) 1;
 			goto free_strings;
 		}

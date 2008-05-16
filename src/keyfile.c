@@ -58,6 +58,7 @@
 #include "editor.h"
 #include "printing.h"
 #include "plugins.h"
+#include "templates.h"
 
 
 /* some default settings which are used at the very first start of Geany to fill
@@ -90,10 +91,10 @@ static gint vpan_position;
 
 static void save_recent_files(GKeyFile *config)
 {
-	gchar **recent_files = g_new0(gchar*, prefs.mru_length + 1);
+	gchar **recent_files = g_new0(gchar*, file_prefs.mru_length + 1);
 	guint i;
 
-	for (i = 0; i < prefs.mru_length; i++)
+	for (i = 0; i < file_prefs.mru_length; i++)
 	{
 		if (! g_queue_is_empty(ui_prefs.recent_queue))
 		{
@@ -108,9 +109,9 @@ static void save_recent_files(GKeyFile *config)
 		}
 	}
 	/* There is a bug in GTK 2.6 g_key_file_set_string_list, we must NULL terminate. */
-	recent_files[prefs.mru_length] = NULL;
+	recent_files[file_prefs.mru_length] = NULL;
 	g_key_file_set_string_list(config, "files", "recent_files",
-				(const gchar**)recent_files, prefs.mru_length);
+				(const gchar**)recent_files, file_prefs.mru_length);
 	g_strfreev(recent_files);
 }
 
@@ -191,27 +192,27 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_project_session", project_prefs.project_session);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_save_winpos", prefs.save_winpos);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_confirm_exit", prefs.confirm_exit);
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_suppress_search_dialogs", prefs.suppress_search_dialogs);
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_search_use_current_word", prefs.search_use_current_word);
+	g_key_file_set_boolean(config, PACKAGE, "pref_main_suppress_search_dialogs", search_prefs.suppress_dialogs);
+	g_key_file_set_boolean(config, PACKAGE, "pref_main_search_use_current_word", search_prefs.use_current_word);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_suppress_status_messages", prefs.suppress_status_messages);
-	g_key_file_set_boolean(config, PACKAGE, "switch_msgwin_pages", prefs.switch_msgwin_pages);
+	g_key_file_set_boolean(config, PACKAGE, "switch_msgwin_pages", prefs.switch_to_status);
 	g_key_file_set_boolean(config, PACKAGE, "beep_on_errors", prefs.beep_on_errors);
 	g_key_file_set_boolean(config, PACKAGE, "auto_focus", prefs.auto_focus);
 	g_key_file_set_string(config, PACKAGE, "default_open_path", prefs.default_open_path);
 
 	/* interface */
-	g_key_file_set_boolean(config, PACKAGE, "sidebar_symbol_visible", prefs.sidebar_symbol_visible);
-	g_key_file_set_boolean(config, PACKAGE, "sidebar_openfiles_visible", prefs.sidebar_openfiles_visible);
-	g_key_file_set_boolean(config, PACKAGE, "sidebar_openfiles_fullpath", prefs.sidebar_openfiles_fullpath);
-	g_key_file_set_string(config, PACKAGE, "editor_font", prefs.editor_font);
-	g_key_file_set_string(config, PACKAGE, "tagbar_font", prefs.tagbar_font);
-	g_key_file_set_string(config, PACKAGE, "msgwin_font", prefs.msgwin_font);
-	g_key_file_set_boolean(config, PACKAGE, "show_notebook_tabs", prefs.show_notebook_tabs);
-	g_key_file_set_boolean(config, PACKAGE, "show_tab_cross", prefs.show_tab_cross);
-	g_key_file_set_boolean(config, PACKAGE, "tab_order_ltr", prefs.tab_order_ltr);
-	g_key_file_set_integer(config, PACKAGE, "tab_pos_editor", prefs.tab_pos_editor);
-	g_key_file_set_integer(config, PACKAGE, "tab_pos_msgwin", prefs.tab_pos_msgwin);
-	g_key_file_set_integer(config, PACKAGE, "tab_pos_sidebar", prefs.tab_pos_sidebar);
+	g_key_file_set_boolean(config, PACKAGE, "sidebar_symbol_visible", interface_prefs.sidebar_symbol_visible);
+	g_key_file_set_boolean(config, PACKAGE, "sidebar_openfiles_visible", interface_prefs.sidebar_openfiles_visible);
+	g_key_file_set_boolean(config, PACKAGE, "sidebar_openfiles_fullpath", interface_prefs.sidebar_openfiles_fullpath);
+	g_key_file_set_string(config, PACKAGE, "editor_font", interface_prefs.editor_font);
+	g_key_file_set_string(config, PACKAGE, "tagbar_font", interface_prefs.tagbar_font);
+	g_key_file_set_string(config, PACKAGE, "msgwin_font", interface_prefs.msgwin_font);
+	g_key_file_set_boolean(config, PACKAGE, "show_notebook_tabs", interface_prefs.show_notebook_tabs);
+	g_key_file_set_boolean(config, PACKAGE, "show_tab_cross", file_prefs.show_tab_cross);
+	g_key_file_set_boolean(config, PACKAGE, "tab_order_ltr", file_prefs.tab_order_ltr);
+	g_key_file_set_integer(config, PACKAGE, "tab_pos_editor", interface_prefs.tab_pos_editor);
+	g_key_file_set_integer(config, PACKAGE, "tab_pos_msgwin", interface_prefs.tab_pos_msgwin);
+	g_key_file_set_integer(config, PACKAGE, "tab_pos_sidebar", interface_prefs.tab_pos_sidebar);
 
 	/* display */
 	g_key_file_set_boolean(config, PACKAGE, "show_indent_guide", editor_prefs.show_indent_guide);
@@ -244,46 +245,46 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "auto_continue_multiline", editor_prefs.auto_continue_multiline);
 
 	/* files */
-	g_key_file_set_string(config, PACKAGE, "pref_editor_default_new_encoding", encodings[prefs.default_new_encoding].charset);
-	if (prefs.default_open_encoding == -1)
+	g_key_file_set_string(config, PACKAGE, "pref_editor_default_new_encoding", encodings[file_prefs.default_new_encoding].charset);
+	if (file_prefs.default_open_encoding == -1)
 		g_key_file_set_string(config, PACKAGE, "pref_editor_default_open_encoding", "none");
 	else
-		g_key_file_set_string(config, PACKAGE, "pref_editor_default_open_encoding", encodings[prefs.default_open_encoding].charset);
-	g_key_file_set_integer(config, PACKAGE, "default_eol_character", prefs.default_eol_character);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_new_line", prefs.final_new_line);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_replace_tabs", prefs.replace_tabs);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_trail_space", prefs.strip_trailing_spaces);
-	g_key_file_set_integer(config, PACKAGE, "mru_length", prefs.mru_length);
+		g_key_file_set_string(config, PACKAGE, "pref_editor_default_open_encoding", encodings[file_prefs.default_open_encoding].charset);
+	g_key_file_set_integer(config, PACKAGE, "default_eol_character", file_prefs.default_eol_character);
+	g_key_file_set_boolean(config, PACKAGE, "pref_editor_new_line", file_prefs.final_new_line);
+	g_key_file_set_boolean(config, PACKAGE, "pref_editor_replace_tabs", file_prefs.replace_tabs);
+	g_key_file_set_boolean(config, PACKAGE, "pref_editor_trail_space", file_prefs.strip_trailing_spaces);
+	g_key_file_set_integer(config, PACKAGE, "mru_length", file_prefs.mru_length);
 	g_key_file_set_integer(config, PACKAGE, "disk_check_timeout", file_prefs.disk_check_timeout);
 
 	/* toolbar */
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show", prefs.toolbar_visible);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_search", prefs.toolbar_show_search);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_goto", prefs.toolbar_show_goto);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_zoom", prefs.toolbar_show_zoom);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_indent", prefs.toolbar_show_indent);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_undo", prefs.toolbar_show_undo);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_navigation", prefs.toolbar_show_navigation);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_compile", prefs.toolbar_show_compile);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_colour", prefs.toolbar_show_colour);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_fileops", prefs.toolbar_show_fileops);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_quit", prefs.toolbar_show_quit);
-	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_style", prefs.toolbar_icon_style);
-	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_size", prefs.toolbar_icon_size);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show", toolbar_prefs.visible);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_search", toolbar_prefs.show_search);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_goto", toolbar_prefs.show_goto);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_zoom", toolbar_prefs.show_zoom);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_indent", toolbar_prefs.show_indent);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_undo", toolbar_prefs.show_undo);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_navigation", toolbar_prefs.show_navigation);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_compile", toolbar_prefs.show_compile);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_colour", toolbar_prefs.show_colour);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_fileops", toolbar_prefs.show_fileops);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_quit", toolbar_prefs.show_quit);
+	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_style", toolbar_prefs.icon_style);
+	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_size", toolbar_prefs.icon_size);
 
 	/* templates */
-	g_key_file_set_string(config, PACKAGE, "pref_template_developer", prefs.template_developer);
-	g_key_file_set_string(config, PACKAGE, "pref_template_company", prefs.template_company);
-	g_key_file_set_string(config, PACKAGE, "pref_template_mail", prefs.template_mail);
-	g_key_file_set_string(config, PACKAGE, "pref_template_initial", prefs.template_initial);
-	g_key_file_set_string(config, PACKAGE, "pref_template_version", prefs.template_version);
+	g_key_file_set_string(config, PACKAGE, "pref_template_developer", template_prefs.developer);
+	g_key_file_set_string(config, PACKAGE, "pref_template_company", template_prefs.company);
+	g_key_file_set_string(config, PACKAGE, "pref_template_mail", template_prefs.mail);
+	g_key_file_set_string(config, PACKAGE, "pref_template_initial", template_prefs.initials);
+	g_key_file_set_string(config, PACKAGE, "pref_template_version", template_prefs.version);
 
 	/* tools settings */
-	g_key_file_set_string(config, "tools", "make_cmd", prefs.tools_make_cmd ? prefs.tools_make_cmd : "");
-	g_key_file_set_string(config, "tools", "term_cmd", prefs.tools_term_cmd ? prefs.tools_term_cmd : "");
-	g_key_file_set_string(config, "tools", "browser_cmd", prefs.tools_browser_cmd ? prefs.tools_browser_cmd : "");
-	g_key_file_set_string(config, "tools", "grep_cmd", prefs.tools_grep_cmd ? prefs.tools_grep_cmd : "");
-	g_key_file_set_string(config, PACKAGE, "context_action_cmd", prefs.context_action_cmd);
+	g_key_file_set_string(config, "tools", "make_cmd", tool_prefs.make_cmd ? tool_prefs.make_cmd : "");
+	g_key_file_set_string(config, "tools", "term_cmd", tool_prefs.term_cmd ? tool_prefs.term_cmd : "");
+	g_key_file_set_string(config, "tools", "browser_cmd", tool_prefs.browser_cmd ? tool_prefs.browser_cmd : "");
+	g_key_file_set_string(config, "tools", "grep_cmd", tool_prefs.grep_cmd ? tool_prefs.grep_cmd : "");
+	g_key_file_set_string(config, PACKAGE, "context_action_cmd", tool_prefs.context_action_cmd);
 
 	/* printing */
 	g_key_file_set_string(config, "printing", "print_cmd", printing_prefs.external_print_cmd ? printing_prefs.external_print_cmd : "");
@@ -329,7 +330,7 @@ static void save_dialog_prefs(GKeyFile *config)
 static void save_ui_prefs(GKeyFile *config)
 {
 	g_key_file_set_boolean(config, PACKAGE, "sidebar_visible", ui_prefs.sidebar_visible);
-	g_key_file_set_boolean(config, PACKAGE, "statusbar_visible", prefs.statusbar_visible);
+	g_key_file_set_boolean(config, PACKAGE, "statusbar_visible", interface_prefs.statusbar_visible);
 	g_key_file_set_boolean(config, PACKAGE, "msgwindow_visible", ui_prefs.msgwindow_visible);
 	g_key_file_set_boolean(config, PACKAGE, "fullscreen", ui_prefs.fullscreen);
 
@@ -391,7 +392,7 @@ static void save_hidden_prefs(GKeyFile *config)
 	write_hidden_pref_boolean(config, PACKAGE, "complete_snippets_whilst_editing", editor_prefs.complete_snippets_whilst_editing);
 	write_hidden_pref_boolean(config, PACKAGE, "scroll_stop_at_last_line", editor_prefs.scroll_stop_at_last_line);
 #if GTK_CHECK_VERSION(2, 12, 0)
-	write_hidden_pref_boolean(config, PACKAGE, "show_symbol_list_expanders", prefs.show_symbol_list_expanders);
+	write_hidden_pref_boolean(config, PACKAGE, "show_symbol_list_expanders", interface_prefs.show_symbol_list_expanders);
 #endif
 }
 
@@ -443,7 +444,7 @@ void configuration_load_session_files(GKeyFile *config)
 	recent_files = g_key_file_get_string_list(config, "files", "recent_files", &len, NULL);
 	if (recent_files != NULL)
 	{
-		for (i = 0; (i < len) && (i < prefs.mru_length); i++)
+		for (i = 0; (i < len) && (i < file_prefs.mru_length); i++)
 		{
 			gchar *filename = g_strdup(recent_files[i]);
 			g_queue_push_tail(ui_prefs.recent_queue, filename);
@@ -489,33 +490,33 @@ static void load_dialog_prefs(GKeyFile *config)
 
 	/* general */
 	prefs.confirm_exit = utils_get_setting_boolean(config, PACKAGE, "pref_main_confirm_exit", FALSE);
-	prefs.suppress_search_dialogs = utils_get_setting_boolean(config, PACKAGE, "pref_main_suppress_search_dialogs", FALSE);
-	prefs.search_use_current_word = utils_get_setting_boolean(config, PACKAGE, "pref_main_search_use_current_word", TRUE);
+	search_prefs.suppress_dialogs = utils_get_setting_boolean(config, PACKAGE, "pref_main_suppress_search_dialogs", FALSE);
+	search_prefs.use_current_word = utils_get_setting_boolean(config, PACKAGE, "pref_main_search_use_current_word", TRUE);
 	prefs.suppress_status_messages = utils_get_setting_boolean(config, PACKAGE, "pref_main_suppress_status_messages", FALSE);
 	prefs.load_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_load_session", TRUE);
 	project_prefs.project_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_project_session", TRUE);
 	prefs.save_winpos = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_winpos", TRUE);
 	prefs.beep_on_errors = utils_get_setting_boolean(config, PACKAGE, "beep_on_errors", TRUE);
-	prefs.switch_msgwin_pages = utils_get_setting_boolean(config, PACKAGE, "switch_msgwin_pages", FALSE);
+	prefs.switch_to_status = utils_get_setting_boolean(config, PACKAGE, "switch_msgwin_pages", FALSE);
 	prefs.auto_focus = utils_get_setting_boolean(config, PACKAGE, "auto_focus", FALSE);
 	prefs.default_open_path = utils_get_setting_string(config, PACKAGE, "default_open_path", "");
 
 	/* interface */
-	prefs.tab_pos_editor = utils_get_setting_integer(config, PACKAGE, "tab_pos_editor", GTK_POS_TOP);
-	prefs.tab_pos_msgwin = utils_get_setting_integer(config, PACKAGE, "tab_pos_msgwin",GTK_POS_LEFT);
-	prefs.tab_pos_sidebar = utils_get_setting_integer(config, PACKAGE, "tab_pos_sidebar", GTK_POS_TOP);
-	prefs.sidebar_symbol_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_symbol_visible", TRUE);
-	prefs.sidebar_openfiles_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_openfiles_visible", TRUE);
-	prefs.sidebar_openfiles_fullpath = utils_get_setting_boolean(config, PACKAGE, "sidebar_openfiles_fullpath", FALSE);
-	prefs.statusbar_visible = utils_get_setting_boolean(config, PACKAGE, "statusbar_visible", TRUE);
-	prefs.tab_order_ltr = utils_get_setting_boolean(config, PACKAGE, "tab_order_ltr", TRUE);
-	prefs.show_notebook_tabs = utils_get_setting_boolean(config, PACKAGE, "show_notebook_tabs", TRUE);
-	prefs.show_tab_cross = utils_get_setting_boolean(config, PACKAGE, "show_tab_cross", TRUE);
-	prefs.editor_font = utils_get_setting_string(config, PACKAGE, "editor_font", GEANY_DEFAULT_FONT_EDITOR);
-	prefs.tagbar_font = utils_get_setting_string(config, PACKAGE, "tagbar_font", GEANY_DEFAULT_FONT_SYMBOL_LIST);
-	prefs.msgwin_font = utils_get_setting_string(config, PACKAGE, "msgwin_font", GEANY_DEFAULT_FONT_MSG_WINDOW);
+	interface_prefs.tab_pos_editor = utils_get_setting_integer(config, PACKAGE, "tab_pos_editor", GTK_POS_TOP);
+	interface_prefs.tab_pos_msgwin = utils_get_setting_integer(config, PACKAGE, "tab_pos_msgwin",GTK_POS_LEFT);
+	interface_prefs.tab_pos_sidebar = utils_get_setting_integer(config, PACKAGE, "tab_pos_sidebar", GTK_POS_TOP);
+	interface_prefs.sidebar_symbol_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_symbol_visible", TRUE);
+	interface_prefs.sidebar_openfiles_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_openfiles_visible", TRUE);
+	interface_prefs.sidebar_openfiles_fullpath = utils_get_setting_boolean(config, PACKAGE, "sidebar_openfiles_fullpath", FALSE);
+	interface_prefs.statusbar_visible = utils_get_setting_boolean(config, PACKAGE, "statusbar_visible", TRUE);
+	file_prefs.tab_order_ltr = utils_get_setting_boolean(config, PACKAGE, "tab_order_ltr", TRUE);
+	interface_prefs.show_notebook_tabs = utils_get_setting_boolean(config, PACKAGE, "show_notebook_tabs", TRUE);
+	file_prefs.show_tab_cross = utils_get_setting_boolean(config, PACKAGE, "show_tab_cross", TRUE);
+	interface_prefs.editor_font = utils_get_setting_string(config, PACKAGE, "editor_font", GEANY_DEFAULT_FONT_EDITOR);
+	interface_prefs.tagbar_font = utils_get_setting_string(config, PACKAGE, "tagbar_font", GEANY_DEFAULT_FONT_SYMBOL_LIST);
+	interface_prefs.msgwin_font = utils_get_setting_string(config, PACKAGE, "msgwin_font", GEANY_DEFAULT_FONT_MSG_WINDOW);
 #if GTK_CHECK_VERSION(2, 12, 0)
-	prefs.show_symbol_list_expanders = utils_get_setting_boolean(config, PACKAGE, "show_symbol_list_expanders", TRUE);
+	interface_prefs.show_symbol_list_expanders = utils_get_setting_boolean(config, PACKAGE, "show_symbol_list_expanders", TRUE);
 #endif
 
 	/* display, editor */
@@ -561,9 +562,9 @@ static void load_dialog_prefs(GKeyFile *config)
 	{
 		const GeanyEncoding *enc = encodings_get_from_charset(tmp_string);
 		if (enc != NULL)
-			prefs.default_new_encoding = enc->idx;
+			file_prefs.default_new_encoding = enc->idx;
 		else
-			prefs.default_new_encoding = GEANY_ENCODING_UTF_8;
+			file_prefs.default_new_encoding = GEANY_ENCODING_UTF_8;
 
 		g_free(tmp_string);
 	}
@@ -573,39 +574,39 @@ static void load_dialog_prefs(GKeyFile *config)
 	{
 		const GeanyEncoding *enc = encodings_get_from_charset(tmp_string);
 		if (enc != NULL)
-			prefs.default_open_encoding = enc->idx;
+			file_prefs.default_open_encoding = enc->idx;
 		else
-			prefs.default_open_encoding = -1;
+			file_prefs.default_open_encoding = -1;
 
 		g_free(tmp_string);
 	}
-	prefs.default_eol_character = utils_get_setting_integer(config, PACKAGE, "default_eol_character", GEANY_DEFAULT_EOL_CHARACTER);
-	prefs.replace_tabs = utils_get_setting_boolean(config, PACKAGE, "pref_editor_replace_tabs", FALSE);
-	prefs.final_new_line = utils_get_setting_boolean(config, PACKAGE, "pref_editor_new_line", TRUE);
-	prefs.strip_trailing_spaces = utils_get_setting_boolean(config, PACKAGE, "pref_editor_trail_space", FALSE);
-	prefs.mru_length = utils_get_setting_integer(config, PACKAGE, "mru_length", GEANY_DEFAULT_MRU_LENGTH);
+	file_prefs.default_eol_character = utils_get_setting_integer(config, PACKAGE, "default_eol_character", GEANY_DEFAULT_EOL_CHARACTER);
+	file_prefs.replace_tabs = utils_get_setting_boolean(config, PACKAGE, "pref_editor_replace_tabs", FALSE);
+	file_prefs.final_new_line = utils_get_setting_boolean(config, PACKAGE, "pref_editor_new_line", TRUE);
+	file_prefs.strip_trailing_spaces = utils_get_setting_boolean(config, PACKAGE, "pref_editor_trail_space", FALSE);
+	file_prefs.mru_length = utils_get_setting_integer(config, PACKAGE, "mru_length", GEANY_DEFAULT_MRU_LENGTH);
 	file_prefs.disk_check_timeout = utils_get_setting_integer(config, PACKAGE,
 		"disk_check_timeout", GEANY_DISK_CHECK_TIMEOUT);
 
 	/* toolbar */
-	prefs.toolbar_visible = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show", TRUE);
-	prefs.toolbar_show_search = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_search", TRUE);
-	prefs.toolbar_show_goto = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_goto", TRUE);
-	prefs.toolbar_show_zoom = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_zoom", FALSE);
-	prefs.toolbar_show_indent = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_indent", FALSE);
-	prefs.toolbar_show_compile = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_compile", TRUE);
-	prefs.toolbar_show_undo = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_undo", FALSE);
-	prefs.toolbar_show_navigation = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_navigation", TRUE);
-	prefs.toolbar_show_colour = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_colour", TRUE);
-	prefs.toolbar_show_fileops = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_fileops", TRUE);
-	prefs.toolbar_show_quit = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_quit", TRUE);
+	toolbar_prefs.visible = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show", TRUE);
+	toolbar_prefs.show_search = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_search", TRUE);
+	toolbar_prefs.show_goto = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_goto", TRUE);
+	toolbar_prefs.show_zoom = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_zoom", FALSE);
+	toolbar_prefs.show_indent = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_indent", FALSE);
+	toolbar_prefs.show_compile = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_compile", TRUE);
+	toolbar_prefs.show_undo = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_undo", FALSE);
+	toolbar_prefs.show_navigation = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_navigation", TRUE);
+	toolbar_prefs.show_colour = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_colour", TRUE);
+	toolbar_prefs.show_fileops = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_fileops", TRUE);
+	toolbar_prefs.show_quit = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_quit", TRUE);
 	{
 		GtkIconSize tb_iconsize;
 		GtkToolbarStyle tb_style;
 		GEANY_GET_SETTING("gtk-toolbar-style", tb_style, GTK_TOOLBAR_ICONS);
 		GEANY_GET_SETTING("gtk-toolbar-icon-size", tb_iconsize, GTK_ICON_SIZE_LARGE_TOOLBAR);
-		prefs.toolbar_icon_style = utils_get_setting_integer(config, PACKAGE, "pref_toolbar_icon_style", tb_style);
-		prefs.toolbar_icon_size = utils_get_setting_integer(config, PACKAGE, "pref_toolbar_icon_size", tb_iconsize);
+		toolbar_prefs.icon_style = utils_get_setting_integer(config, PACKAGE, "pref_toolbar_icon_style", tb_style);
+		toolbar_prefs.icon_size = utils_get_setting_integer(config, PACKAGE, "pref_toolbar_icon_size", tb_iconsize);
 	}
 
 	/* VTE */
@@ -647,27 +648,27 @@ static void load_dialog_prefs(GKeyFile *config)
 	}
 #endif
 	/* templates */
-	prefs.template_developer = utils_get_setting_string(config, PACKAGE, "pref_template_developer", g_get_real_name());
-	prefs.template_company = utils_get_setting_string(config, PACKAGE, "pref_template_company", "");
-	tmp_string = utils_get_initials(prefs.template_developer);
-	prefs.template_initial = utils_get_setting_string(config, PACKAGE, "pref_template_initial", tmp_string);
+	template_prefs.developer = utils_get_setting_string(config, PACKAGE, "pref_template_developer", g_get_real_name());
+	template_prefs.company = utils_get_setting_string(config, PACKAGE, "pref_template_company", "");
+	tmp_string = utils_get_initials(template_prefs.developer);
+	template_prefs.initials = utils_get_setting_string(config, PACKAGE, "pref_template_initial", tmp_string);
 	g_free(tmp_string);
 
-	prefs.template_version = utils_get_setting_string(config, PACKAGE, "pref_template_version", "1.0");
+	template_prefs.version = utils_get_setting_string(config, PACKAGE, "pref_template_version", "1.0");
 
 	tmp_string2 = utils_get_hostname();
 	tmp_string = g_strdup_printf("%s@%s", g_get_user_name(), tmp_string2);
-	prefs.template_mail = utils_get_setting_string(config, PACKAGE, "pref_template_mail", tmp_string);
+	template_prefs.mail = utils_get_setting_string(config, PACKAGE, "pref_template_mail", tmp_string);
 	g_free(tmp_string);
 	g_free(tmp_string2);
 
 	/* tools */
-	prefs.tools_make_cmd = utils_get_setting_string(config, "tools", "make_cmd", GEANY_DEFAULT_TOOLS_MAKE);
-	prefs.tools_term_cmd = utils_get_setting_string(config, "tools", "term_cmd", GEANY_DEFAULT_TOOLS_TERMINAL);
-	prefs.tools_browser_cmd = utils_get_setting_string(config, "tools", "browser_cmd", GEANY_DEFAULT_TOOLS_BROWSER);
-	prefs.tools_grep_cmd = utils_get_setting_string(config, "tools", "grep_cmd", GEANY_DEFAULT_TOOLS_GREP);
+	tool_prefs.make_cmd = utils_get_setting_string(config, "tools", "make_cmd", GEANY_DEFAULT_TOOLS_MAKE);
+	tool_prefs.term_cmd = utils_get_setting_string(config, "tools", "term_cmd", GEANY_DEFAULT_TOOLS_TERMINAL);
+	tool_prefs.browser_cmd = utils_get_setting_string(config, "tools", "browser_cmd", GEANY_DEFAULT_TOOLS_BROWSER);
+	tool_prefs.grep_cmd = utils_get_setting_string(config, "tools", "grep_cmd", GEANY_DEFAULT_TOOLS_GREP);
 
-	prefs.context_action_cmd = utils_get_setting_string(config, PACKAGE, "context_action_cmd", "");
+	tool_prefs.context_action_cmd = utils_get_setting_string(config, PACKAGE, "context_action_cmd", "");
 
 	/* printing */
 	tmp_string2 = g_find_program_in_path(GEANY_DEFAULT_TOOLS_PRINTCMD);
@@ -875,7 +876,7 @@ void configuration_open_files(void)
 
 	document_delay_colourise();
 
-	i = prefs.tab_order_ltr ? 0 : (session_files->len - 1);
+	i = file_prefs.tab_order_ltr ? 0 : (session_files->len - 1);
 	while (TRUE)
 	{
 		gchar **tmp = g_ptr_array_index(session_files, i);
@@ -887,7 +888,7 @@ void configuration_open_files(void)
 		}
 		g_strfreev(tmp);
 
-		if (prefs.tab_order_ltr)
+		if (file_prefs.tab_order_ltr)
 		{
 			i++;
 			if (i >= (gint)session_files->len) break;

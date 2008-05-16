@@ -34,6 +34,7 @@
 #include "utils.h"
 #include "keybindings.h"
 #include "project.h"
+#include "ui_utils.h"
 
 #include "plugindata.h"
 #include "pluginmacros.h"
@@ -712,7 +713,7 @@ static void prepare_file_view(void)
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(file_view), TRUE);
 	gtk_tree_view_set_search_column(GTK_TREE_VIEW(file_view), FILEVIEW_COLUMN_NAME);
 
-	pfd = pango_font_description_from_string(prefs->tagbar_font);
+	pfd = pango_font_description_from_string(geany_data->interface_prefs->tagbar_font);
 	gtk_widget_modify_font(file_view, pfd);
 	pango_font_description_free(pfd);
 

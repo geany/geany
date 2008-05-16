@@ -34,6 +34,7 @@
 #include "document.h"
 #include "prefs.h"
 #include "utils.h"
+#include "ui_utils.h"
 #include "pluginmacros.h"
 
 
@@ -575,7 +576,7 @@ static void write_html_file(gint idx, const gchar *filename, gboolean use_zoom)
 	}
 
 	/* read Geany's font and font size */
-	font_desc = pango_font_description_from_string(prefs->editor_font);
+	font_desc = pango_font_description_from_string(geany_data->interface_prefs->editor_font);
 	font_name = pango_font_description_get_family(font_desc);
 	/*font_size = pango_font_description_get_size(font_desc) / PANGO_SCALE;*/
 	/* take the zoom level also into account */

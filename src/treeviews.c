@@ -28,7 +28,6 @@
 #include <string.h>
 
 #include "geany.h"
-#include "prefs.h"
 #include "support.h"
 #include "callbacks.h"
 #include "treeviews.h"
@@ -113,7 +112,7 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree), FALSE);
 
-	pfd = pango_font_description_from_string(prefs.tagbar_font);
+	pfd = pango_font_description_from_string(interface_prefs.tagbar_font);
 	gtk_widget_modify_font(tree, pfd);
 	pango_font_description_free(pfd);
 
@@ -126,8 +125,8 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(tree), FALSE);
 
 #if GTK_CHECK_VERSION(2, 12, 0)
-	gtk_tree_view_set_show_expanders(GTK_TREE_VIEW(tree), prefs.show_symbol_list_expanders);
-	if (! prefs.show_symbol_list_expanders)
+	gtk_tree_view_set_show_expanders(GTK_TREE_VIEW(tree), interface_prefs.show_symbol_list_expanders);
+	if (! interface_prefs.show_symbol_list_expanders)
 		gtk_tree_view_set_level_indentation(GTK_TREE_VIEW(tree), 10);
 #endif
 
@@ -274,7 +273,7 @@ static void prepare_openfiles(void)
 	sortable = GTK_TREE_SORTABLE(GTK_TREE_MODEL(store_openfiles));
 	gtk_tree_sortable_set_sort_column_id(sortable, 0, GTK_SORT_ASCENDING);
 
-	pfd = pango_font_description_from_string(prefs.tagbar_font);
+	pfd = pango_font_description_from_string(interface_prefs.tagbar_font);
 	gtk_widget_modify_font(tv.tree_openfiles, pfd);
 	pango_font_description_free(pfd);
 
@@ -311,7 +310,7 @@ void treeviews_openfiles_update(gint idx)
 	gchar *basename;
 	GdkColor *color = document_get_status_color(idx);
 
-	if (prefs.sidebar_openfiles_fullpath)
+	if (interface_prefs.sidebar_openfiles_fullpath)
 		basename = DOC_FILENAME(idx);
 	else
 		basename = g_path_get_basename(DOC_FILENAME(idx));
@@ -321,7 +320,7 @@ void treeviews_openfiles_update(gint idx)
 #else
 		0, basename, 1, idx, 2, color, -1);
 #endif
-	if (! prefs.sidebar_openfiles_fullpath)
+	if (! interface_prefs.sidebar_openfiles_fullpath)
 		g_free(basename);
 }
 
@@ -409,21 +408,21 @@ static void create_taglist_popup_menu(void)
 
 static void on_openfiles_fullpath_activate(GtkCheckMenuItem *item, gpointer user_data)
 {
-	prefs.sidebar_openfiles_fullpath = gtk_check_menu_item_get_active(item);
+	interface_prefs.sidebar_openfiles_fullpath = gtk_check_menu_item_get_active(item);
 	treeviews_openfiles_update_all();
 }
 
 
 static void on_list_document_activate(GtkCheckMenuItem *item, gpointer user_data)
 {
-	prefs.sidebar_openfiles_visible = gtk_check_menu_item_get_active(item);
+	interface_prefs.sidebar_openfiles_visible = gtk_check_menu_item_get_active(item);
 	ui_sidebar_show_hide();
 }
 
 
 static void on_list_symbol_activate(GtkCheckMenuItem *item, gpointer user_data)
 {
-	prefs.sidebar_symbol_visible = gtk_check_menu_item_get_active(item);
+	interface_prefs.sidebar_symbol_visible = gtk_check_menu_item_get_active(item);
 	ui_sidebar_show_hide();
 }
 
@@ -619,7 +618,7 @@ static void on_taglist_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user_d
 		}
 		case SYMBOL_ACTION_HIDE:
 		{
-			prefs.sidebar_symbol_visible = FALSE;
+			interface_prefs.sidebar_symbol_visible = FALSE;
 			ui_sidebar_show_hide();
 			break;
 		}
@@ -708,20 +707,20 @@ static gboolean on_treeviews_button_press_event(GtkWidget *widget, GdkEventButto
 		if (GPOINTER_TO_INT(user_data) == TREEVIEW_OPENFILES)
 		{
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(mi.documents_show_documents),
-				prefs.sidebar_openfiles_visible);
+				interface_prefs.sidebar_openfiles_visible);
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(mi.documents_show_symbols),
-				prefs.sidebar_symbol_visible);
+				interface_prefs.sidebar_symbol_visible);
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(mi.documents_fullpath),
-				prefs.sidebar_openfiles_fullpath);
+				interface_prefs.sidebar_openfiles_fullpath);
 			gtk_menu_popup(GTK_MENU(tv.popup_openfiles), NULL, NULL, NULL, NULL,
 																event->button, event->time);
 		}
 		else if (GPOINTER_TO_INT(user_data) == TREEVIEW_SYMBOL)
 		{
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(mi.symbols_show_documents),
-				prefs.sidebar_openfiles_visible);
+				interface_prefs.sidebar_openfiles_visible);
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(mi.symbols_show_symbols),
-				prefs.sidebar_symbol_visible);
+				interface_prefs.sidebar_symbol_visible);
 			gtk_menu_popup(GTK_MENU(tv.popup_taglist), NULL, NULL, NULL, NULL,
 																event->button, event->time);
 			return TRUE;	/* prevent selection changed signal for symbol tags */

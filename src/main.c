@@ -169,7 +169,7 @@ static void apply_settings(void)
 	ui_update_fold_items();
 
 	/* toolbar, message window and sidebar are by default visible, so don't change it if it is true */
-	if (! prefs.toolbar_visible)
+	if (! toolbar_prefs.visible)
 	{
 		app->ignore_callback = TRUE;
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_toolbar1")), FALSE);
@@ -191,7 +191,7 @@ static void apply_settings(void)
 	}
 	ui_sidebar_show_hide();
 	/* sets the icon style of the toolbar */
-	switch (prefs.toolbar_icon_style)
+	switch (toolbar_prefs.icon_style)
 	{
 		case GTK_TOOLBAR_BOTH:
 		{
@@ -212,15 +212,15 @@ static void apply_settings(void)
 			break;
 		}
 	}
-	gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), prefs.toolbar_icon_style);
+	gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), toolbar_prefs.icon_style);
 
 	/* sets the icon size of the toolbar, use user preferences (.gtkrc) if not set */
-	if (prefs.toolbar_icon_size == GTK_ICON_SIZE_SMALL_TOOLBAR ||
-		prefs.toolbar_icon_size == GTK_ICON_SIZE_LARGE_TOOLBAR)
+	if (toolbar_prefs.icon_size == GTK_ICON_SIZE_SMALL_TOOLBAR ||
+		toolbar_prefs.icon_size == GTK_ICON_SIZE_LARGE_TOOLBAR)
 	{
-		gtk_toolbar_set_icon_size(GTK_TOOLBAR(app->toolbar), prefs.toolbar_icon_size);
+		gtk_toolbar_set_icon_size(GTK_TOOLBAR(app->toolbar), toolbar_prefs.icon_size);
 	}
-	ui_update_toolbar_icons(prefs.toolbar_icon_size);
+	ui_update_toolbar_icons(toolbar_prefs.icon_size);
 
 	/* line number and markers margin are by default enabled */
 	if (! editor_prefs.show_markers_margin)
@@ -244,7 +244,7 @@ static void apply_settings(void)
 	}
 
 	/* hide statusbar if desired */
-	if (! prefs.statusbar_visible)
+	if (! interface_prefs.statusbar_visible)
 	{
 		gtk_widget_hide(app->statusbar);
 	}
@@ -262,14 +262,14 @@ static void apply_settings(void)
 			lookup_widget(app->window, "menutoolbutton1")), ui_widgets.new_file_menu);
 
 	/* set the tab placements of the notebooks */
-	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->notebook), prefs.tab_pos_editor);
-	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), prefs.tab_pos_msgwin);
-	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->treeview_notebook), prefs.tab_pos_sidebar);
+	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->notebook), interface_prefs.tab_pos_editor);
+	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), interface_prefs.tab_pos_msgwin);
+	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->treeview_notebook), interface_prefs.tab_pos_sidebar);
 
 	ui_update_toolbar_items();
 
 	/* whether to show notebook tabs or not */
-	gtk_notebook_set_show_tabs(GTK_NOTEBOOK(app->notebook), prefs.show_notebook_tabs);
+	gtk_notebook_set_show_tabs(GTK_NOTEBOOK(app->notebook), interface_prefs.show_notebook_tabs);
 }
 
 
@@ -285,7 +285,7 @@ static void main_init(void)
 	ui_widgets.prefs_dialog		= NULL;
 	tv.default_tag_tree	= NULL;
 	main_status.main_window_realized= FALSE;
-	prefs.tab_order_ltr		= FALSE;
+	file_prefs.tab_order_ltr		= FALSE;
 	main_status.quitting			= FALSE;
 	app->ignore_callback	= FALSE;
 	app->tm_workspace		= tm_get_workspace();
@@ -758,6 +758,13 @@ gint main(gint argc, gchar **argv)
 	app = g_new0(GeanyApp, 1);
 	memset(&main_status, 0, sizeof(GeanyStatus));
 	memset(&prefs, 0, sizeof(GeanyPrefs));
+	memset(&interface_prefs, 0, sizeof(GeanyInterfacePrefs));
+	memset(&toolbar_prefs, 0, sizeof(GeanyToolbarPrefs));
+	memset(&editor_prefs, 0, sizeof(GeanyEditorPrefs));
+	memset(&file_prefs, 0, sizeof(GeanyFilePrefs));
+	memset(&search_prefs, 0, sizeof(GeanySearchPrefs));
+	memset(&tool_prefs, 0, sizeof(GeanyToolPrefs));
+	memset(&template_prefs, 0, sizeof(GeanyTemplatePrefs));
 	memset(&ui_prefs, 0, sizeof(UIPrefs));
 	memset(&ui_widgets, 0, sizeof(UIWidgets));
 
@@ -957,20 +964,20 @@ void main_quit()
 	g_free(app->docdir);
 	g_free(prefs.default_open_path);
 	g_free(ui_prefs.custom_date_format);
-	g_free(prefs.editor_font);
-	g_free(prefs.tagbar_font);
-	g_free(prefs.msgwin_font);
+	g_free(interface_prefs.editor_font);
+	g_free(interface_prefs.tagbar_font);
+	g_free(interface_prefs.msgwin_font);
 	g_free(editor_prefs.long_line_color);
-	g_free(prefs.context_action_cmd);
-	g_free(prefs.template_developer);
-	g_free(prefs.template_company);
-	g_free(prefs.template_mail);
-	g_free(prefs.template_initial);
-	g_free(prefs.template_version);
-	g_free(prefs.tools_make_cmd);
-	g_free(prefs.tools_term_cmd);
-	g_free(prefs.tools_browser_cmd);
-	g_free(prefs.tools_grep_cmd);
+	g_free(tool_prefs.context_action_cmd);
+	g_free(template_prefs.developer);
+	g_free(template_prefs.company);
+	g_free(template_prefs.mail);
+	g_free(template_prefs.initials);
+	g_free(template_prefs.version);
+	g_free(tool_prefs.make_cmd);
+	g_free(tool_prefs.term_cmd);
+	g_free(tool_prefs.browser_cmd);
+	g_free(tool_prefs.grep_cmd);
 	g_free(printing_prefs.external_print_cmd);
 	g_free(printing_prefs.page_header_datefmt);
 	g_strfreev(ui_prefs.custom_commands);

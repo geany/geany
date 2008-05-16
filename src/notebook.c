@@ -27,7 +27,6 @@
 
 #include "geany.h"
 #include "notebook.h"
-#include "prefs.h"
 #include "document.h"
 #include "ui_utils.h"
 #include "treeviews.h"
@@ -339,7 +338,7 @@ gint notebook_new_tab(gint doc_idx)
 	gtk_container_add(GTK_CONTAINER(ebox), this->tab_label);
 	gtk_box_pack_start(GTK_BOX(hbox), ebox, FALSE, FALSE, 0);
 
-	if (prefs.show_tab_cross)
+	if (file_prefs.show_tab_cross)
 	{
 		GtkWidget *image, *btn, *align;
 		GtkRcStyle *rcstyle;
@@ -376,7 +375,7 @@ gint notebook_new_tab(gint doc_idx)
 	this->tabmenu_label = gtk_label_new(title);
 	gtk_misc_set_alignment(GTK_MISC(this->tabmenu_label), 0.0, 0);
 
-	if (prefs.tab_order_ltr)
+	if (file_prefs.tab_order_ltr)
 		tabnum = gtk_notebook_append_page_menu(GTK_NOTEBOOK(app->notebook), page,
 			hbox, this->tabmenu_label);
 	else
@@ -412,7 +411,7 @@ void notebook_remove_page(gint page_num)
 	gint curpage = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->notebook));
 
 	/* Focus the next page, not the previous */
-	if (curpage == page_num && prefs.tab_order_ltr)
+	if (curpage == page_num && file_prefs.tab_order_ltr)
 	{
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), curpage + 1);
 	}

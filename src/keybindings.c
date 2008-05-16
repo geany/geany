@@ -751,7 +751,7 @@ static gboolean check_fixed_kb(guint keyval, guint state)
 		if (keyval == GDK_0)
 			page = npages - 1;
 		/* invert the order if tabs are added on the other side */
-		if (swap_alt_tab_order && ! prefs.tab_order_ltr)
+		if (swap_alt_tab_order && ! file_prefs.tab_order_ltr)
 			page = (npages - 1) - page;
 
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), page);
@@ -1174,7 +1174,7 @@ static void cb_func_switch_scribble(G_GNUC_UNUSED guint key_id)
 
 static void cb_func_switch_search_bar(G_GNUC_UNUSED guint key_id)
 {
-	if (prefs.toolbar_visible && prefs.toolbar_show_search)
+	if (toolbar_prefs.visible && toolbar_prefs.show_search)
 		gtk_widget_grab_focus(lookup_widget(app->window, "entry1"));
 }
 
@@ -1239,10 +1239,10 @@ static void cb_func_move_tab(guint key_id)
 			break;
 		}
 		case GEANY_KEYS_NOTEBOOK_MOVETABFIRST:
-			gtk_notebook_reorder_child(nb, sci, (prefs.tab_order_ltr) ? 0 : -1);
+			gtk_notebook_reorder_child(nb, sci, (file_prefs.tab_order_ltr) ? 0 : -1);
 			break;
 		case GEANY_KEYS_NOTEBOOK_MOVETABLAST:
-			gtk_notebook_reorder_child(nb, sci, (prefs.tab_order_ltr) ? -1 : 0);
+			gtk_notebook_reorder_child(nb, sci, (file_prefs.tab_order_ltr) ? -1 : 0);
 			break;
 	}
 	return;

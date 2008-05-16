@@ -56,7 +56,7 @@ typedef enum
 /* These are the default prefs when creating a new editor window.
  * Some of these can be overridden per document.
  * Remember to increment abi_version in plugindata.h when changing items. */
-typedef struct EditorPrefs
+typedef struct GeanyEditorPrefs
 {
 	/* display */
 	gboolean	show_white_space;
@@ -94,9 +94,9 @@ typedef struct EditorPrefs
 	gboolean	detect_tab_mode;
 	gint		line_break_column;
 	gboolean	auto_continue_multiline;
-} EditorPrefs;
+} GeanyEditorPrefs;
 
-extern EditorPrefs editor_prefs;
+extern GeanyEditorPrefs editor_prefs;
 
 
 typedef struct

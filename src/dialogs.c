@@ -43,7 +43,6 @@
 
 #include "dialogs.h"
 
-#include "prefs.h"
 #include "callbacks.h"
 #include "document.h"
 #include "filetypes.h"
@@ -789,7 +788,7 @@ void dialogs_show_open_font()
 					"clicked", G_CALLBACK(on_font_apply_button_clicked), NULL);
 
 		gtk_font_selection_dialog_set_font_name(
-			GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel), prefs.editor_font);
+			GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel), interface_prefs.editor_font);
 		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_fontsel), GTK_WINDOW(app->window));
 	}
 	/* We make sure the dialog is visible. */

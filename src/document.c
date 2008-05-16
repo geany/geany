@@ -51,7 +51,6 @@
 #include <glib/gstdio.h>
 
 #include "document.h"
-#include "prefs.h"
 #include "filetypes.h"
 #include "support.h"
 #include "sciwrappers.h"
@@ -73,7 +72,10 @@
 #include "highlighting.h"
 #include "navqueue.h"
 #include "win32.h"
+#include "search.h"
 
+
+GeanyFilePrefs file_prefs;
 
 /* dynamic array of document elements to hold all information of the notebook tabs */
 GArray *doc_array;
@@ -457,7 +459,7 @@ static gint document_create(const gchar *utf8_filename)
 
 	document_apply_update_prefs(new_idx);
 
-	pfd = pango_font_description_from_string(prefs.editor_font);
+	pfd = pango_font_description_from_string(interface_prefs.editor_font);
 	fname = g_strdup_printf("!%s", pango_font_description_get_family(pfd));
 	editor_set_font(new_idx, fname, pango_font_description_get_size(pfd) / PANGO_SCALE);
 	pango_font_description_free(pfd);
@@ -583,11 +585,11 @@ gint document_new_file(const gchar *filename, filetype *ft, const gchar *text)
 	else
 		sci_clear_all(doc_list[idx].sci);
 
-	sci_set_eol_mode(doc_list[idx].sci, prefs.default_eol_character);
+	sci_set_eol_mode(doc_list[idx].sci, file_prefs.default_eol_character);
 	/* convert the eol chars in the template text in case they are different from
-	 * from prefs.default_eol */
+	 * from file_prefs.default_eol */
 	if (text != NULL)
-		sci_convert_eols(doc_list[idx].sci, prefs.default_eol_character);
+		sci_convert_eols(doc_list[idx].sci, file_prefs.default_eol_character);
 
 	editor_set_use_tabs(idx, editor_prefs.use_tabs);
 	sci_set_undo_collection(doc_list[idx].sci, TRUE);
@@ -596,7 +598,7 @@ gint document_new_file(const gchar *filename, filetype *ft, const gchar *text)
 	doc_list[idx].mtime = time(NULL);
 	doc_list[idx].changed = FALSE;
 
-	doc_list[idx].encoding = g_strdup(encodings[prefs.default_new_encoding].charset);
+	doc_list[idx].encoding = g_strdup(encodings[file_prefs.default_new_encoding].charset);
 	/* store the opened encoding for undo/redo */
 	store_saved_encoding(idx);
 
@@ -1011,8 +1013,8 @@ gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean
 	}
 
 	/* if default encoding for opening files is set, use it if no forced encoding is set */
-	if (prefs.default_open_encoding >= 0 && forced_enc == NULL)
-		forced_enc = encodings[prefs.default_open_encoding].charset;
+	if (file_prefs.default_open_encoding >= 0 && forced_enc == NULL)
+		forced_enc = encodings[file_prefs.default_open_encoding].charset;
 
 	if (! load_text_file(locale_filename, utf8_filename, &filedata, forced_enc))
 	{
@@ -1413,11 +1415,11 @@ gboolean document_save_file(gint idx, gboolean force)
 	}
 
 	/* replaces tabs by spaces */
-	if (prefs.replace_tabs) editor_replace_tabs(idx);
+	if (file_prefs.replace_tabs) editor_replace_tabs(idx);
 	/* strip trailing spaces */
-	if (prefs.strip_trailing_spaces) editor_strip_trailing_spaces(idx);
+	if (file_prefs.strip_trailing_spaces) editor_strip_trailing_spaces(idx);
 	/* ensure the file has a newline at the end */
-	if (prefs.final_new_line) editor_ensure_final_newline(idx);
+	if (file_prefs.final_new_line) editor_ensure_final_newline(idx);
 
 	len = sci_get_length(doc_list[idx].sci) + 1;
 	if (doc_list[idx].has_bom && encodings_is_unicode_charset(doc_list[idx].encoding))
@@ -1616,7 +1618,7 @@ gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 		}
 
 		/* we searched only part of the document, so ask whether to wraparound. */
-		if (prefs.suppress_search_dialogs ||
+		if (search_prefs.suppress_dialogs ||
 			dialogs_show_question_full(parent, GTK_STOCK_FIND, GTK_STOCK_CANCEL,
 				_("Wrap search and find again?"), _("\"%s\" was not found."), text))
 		{

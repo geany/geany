@@ -47,6 +47,8 @@
 #include "plugins.h"
 
 
+GeanyInterfacePrefs	interface_prefs;
+GeanyToolbarPrefs	toolbar_prefs;
 UIPrefs			ui_prefs;
 UIWidgets		ui_widgets;
 
@@ -73,7 +75,7 @@ static void set_statusbar(const gchar *text, gboolean allow_override)
 	GTimeVal timeval;
 	const gint GEANY_STATUS_TIMEOUT = 1;
 
-	if (! prefs.statusbar_visible)
+	if (! interface_prefs.statusbar_visible)
 		return; /* just do nothing if statusbar is not visible */
 
 	g_get_current_time(&timeval);
@@ -115,7 +117,7 @@ void ui_set_statusbar(gboolean log, const gchar *format, ...)
 /* updates the status bar document statistics */
 void ui_update_statusbar(gint idx, gint pos)
 {
-	if (! prefs.statusbar_visible)
+	if (! interface_prefs.statusbar_visible)
 		return; /* just do nothing if statusbar is not visible */
 
 	if (idx == -1) idx = document_get_cur_idx();
@@ -244,13 +246,13 @@ void ui_set_editor_font(const gchar *font_name)
 
 	g_return_if_fail(font_name != NULL);
 	/* do nothing if font has not changed */
-	if (prefs.editor_font != NULL)
-		if (strcmp(font_name, prefs.editor_font) == 0) return;
+	if (interface_prefs.editor_font != NULL)
+		if (strcmp(font_name, interface_prefs.editor_font) == 0) return;
 
-	g_free(prefs.editor_font);
-	prefs.editor_font = g_strdup(font_name);
+	g_free(interface_prefs.editor_font);
+	interface_prefs.editor_font = g_strdup(font_name);
 
-	font_desc = pango_font_description_from_string(prefs.editor_font);
+	font_desc = pango_font_description_from_string(interface_prefs.editor_font);
 
 	fname = g_strdup_printf("!%s", pango_font_description_get_family(font_desc));
 	size = pango_font_description_get_size(font_desc) / PANGO_SCALE;
@@ -265,7 +267,7 @@ void ui_set_editor_font(const gchar *font_name)
 	}
 	pango_font_description_free(font_desc);
 
-	ui_set_statusbar(TRUE, _("Font updated (%s)."), prefs.editor_font);
+	ui_set_statusbar(TRUE, _("Font updated (%s)."), interface_prefs.editor_font);
 	g_free(fname);
 }
 
@@ -638,7 +640,7 @@ void ui_sidebar_show_hide(void)
 
 	/* check that there are no other notebook pages before hiding the sidebar completely
 	 * other pages could be e.g. the file browser plugin */
-	if (! prefs.sidebar_openfiles_visible && ! prefs.sidebar_symbol_visible &&
+	if (! interface_prefs.sidebar_openfiles_visible && ! interface_prefs.sidebar_symbol_visible &&
 		gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->treeview_notebook)) <= 2)
 	{
 		ui_prefs.sidebar_visible = FALSE;
@@ -655,9 +657,9 @@ void ui_sidebar_show_hide(void)
 	ui_widget_show_hide(app->treeview_notebook, ui_prefs.sidebar_visible);
 
 	ui_widget_show_hide(gtk_notebook_get_nth_page(
-					GTK_NOTEBOOK(app->treeview_notebook), 0), prefs.sidebar_symbol_visible);
+					GTK_NOTEBOOK(app->treeview_notebook), 0), interface_prefs.sidebar_symbol_visible);
 	ui_widget_show_hide(gtk_notebook_get_nth_page(
-					GTK_NOTEBOOK(app->treeview_notebook), 1), prefs.sidebar_openfiles_visible);
+					GTK_NOTEBOOK(app->treeview_notebook), 1), interface_prefs.sidebar_openfiles_visible);
 }
 
 
@@ -739,60 +741,60 @@ void ui_update_toolbar_items(void)
 {
 	/* show toolbar */
 	GtkWidget *widget = lookup_widget(app->window, "menu_show_toolbar1");
-	if (prefs.toolbar_visible && ! gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget)))
+	if (toolbar_prefs.visible && ! gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget)))
 	{	/* will be changed by the toggled callback */
-		prefs.toolbar_visible = ! prefs.toolbar_visible;
+		toolbar_prefs.visible = ! toolbar_prefs.visible;
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), TRUE);
 	}
-	else if (! prefs.toolbar_visible && gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget)))
+	else if (! toolbar_prefs.visible && gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget)))
 	{	/* will be changed by the toggled callback */
-		prefs.toolbar_visible = ! prefs.toolbar_visible;
+		toolbar_prefs.visible = ! toolbar_prefs.visible;
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), FALSE);
 	}
 
 	/* fileops */
-	ui_widget_show_hide(lookup_widget(app->window, "menutoolbutton1"), prefs.toolbar_show_fileops);
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton9"), prefs.toolbar_show_fileops);
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton10"), prefs.toolbar_show_fileops);
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton22"), prefs.toolbar_show_fileops);
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton23"), prefs.toolbar_show_fileops);
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton15"), prefs.toolbar_show_fileops);
-	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem7"), prefs.toolbar_show_fileops);
-	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem2"), prefs.toolbar_show_fileops);
+	ui_widget_show_hide(lookup_widget(app->window, "menutoolbutton1"), toolbar_prefs.show_fileops);
+	ui_widget_show_hide(lookup_widget(app->window, "toolbutton9"), toolbar_prefs.show_fileops);
+	ui_widget_show_hide(lookup_widget(app->window, "toolbutton10"), toolbar_prefs.show_fileops);
+	ui_widget_show_hide(lookup_widget(app->window, "toolbutton22"), toolbar_prefs.show_fileops);
+	ui_widget_show_hide(lookup_widget(app->window, "toolbutton23"), toolbar_prefs.show_fileops);
+	ui_widget_show_hide(lookup_widget(app->window, "toolbutton15"), toolbar_prefs.show_fileops);
+	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem7"), toolbar_prefs.show_fileops);
+	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem2"), toolbar_prefs.show_fileops);
 	/* search */
-	ui_widget_show_hide(lookup_widget(app->window, "entry1"), prefs.toolbar_show_search);
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton18"), prefs.toolbar_show_search);
-	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem5"), prefs.toolbar_show_search);
+	ui_widget_show_hide(lookup_widget(app->window, "entry1"), toolbar_prefs.show_search);
+	ui_widget_show_hide(lookup_widget(app->window, "toolbutton18"), toolbar_prefs.show_search);
+	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem5"), toolbar_prefs.show_search);
 	/* goto line */
-	ui_widget_show_hide(lookup_widget(app->window, "entry_goto_line"), prefs.toolbar_show_goto);
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton25"), prefs.toolbar_show_goto);
-	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem8"), prefs.toolbar_show_goto);
+	ui_widget_show_hide(lookup_widget(app->window, "entry_goto_line"), toolbar_prefs.show_goto);
+	ui_widget_show_hide(lookup_widget(app->window, "toolbutton25"), toolbar_prefs.show_goto);
+	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem8"), toolbar_prefs.show_goto);
 	/* compile */
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton13"), prefs.toolbar_show_compile);
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton26"), prefs.toolbar_show_compile);
-	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem6"), prefs.toolbar_show_compile);
+	ui_widget_show_hide(lookup_widget(app->window, "toolbutton13"), toolbar_prefs.show_compile);
+	ui_widget_show_hide(lookup_widget(app->window, "toolbutton26"), toolbar_prefs.show_compile);
+	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem6"), toolbar_prefs.show_compile);
 	/* colour */
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton24"), prefs.toolbar_show_colour);
-	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem3"), prefs.toolbar_show_colour);
+	ui_widget_show_hide(lookup_widget(app->window, "toolbutton24"), toolbar_prefs.show_colour);
+	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem3"), toolbar_prefs.show_colour);
 	/* zoom */
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton20"), prefs.toolbar_show_zoom);
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton21"), prefs.toolbar_show_zoom);
-	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem4"), prefs.toolbar_show_zoom);
+	ui_widget_show_hide(lookup_widget(app->window, "toolbutton20"), toolbar_prefs.show_zoom);
+	ui_widget_show_hide(lookup_widget(app->window, "toolbutton21"), toolbar_prefs.show_zoom);
+	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem4"), toolbar_prefs.show_zoom);
 	/* indent */
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_indent_dec"), prefs.toolbar_show_indent);
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_indent_inc"), prefs.toolbar_show_indent);
-	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem11"), prefs.toolbar_show_indent);
+	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_indent_dec"), toolbar_prefs.show_indent);
+	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_indent_inc"), toolbar_prefs.show_indent);
+	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem11"), toolbar_prefs.show_indent);
 	/* undo */
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_undo"), prefs.toolbar_show_undo);
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_redo"), prefs.toolbar_show_undo);
-	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem9"), prefs.toolbar_show_undo);
+	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_undo"), toolbar_prefs.show_undo);
+	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_redo"), toolbar_prefs.show_undo);
+	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem9"), toolbar_prefs.show_undo);
 	/* navigation */
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_back"), prefs.toolbar_show_navigation);
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_forward"), prefs.toolbar_show_navigation);
-	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem10"), prefs.toolbar_show_navigation);
+	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_back"), toolbar_prefs.show_navigation);
+	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_forward"), toolbar_prefs.show_navigation);
+	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem10"), toolbar_prefs.show_navigation);
 	/* quit */
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton19"), prefs.toolbar_show_quit);
-	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem8"), prefs.toolbar_show_quit);
+	ui_widget_show_hide(lookup_widget(app->window, "toolbutton19"), toolbar_prefs.show_quit);
+	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem8"), toolbar_prefs.show_quit);
 }
 
 
@@ -805,7 +807,7 @@ GdkPixbuf *ui_new_pixbuf_from_inline(gint img, gboolean small_img)
 		case GEANY_IMAGE_LOGO: return gdk_pixbuf_new_from_inline(-1, aladin_inline, FALSE, NULL); break;
 		case GEANY_IMAGE_SAVE_ALL:
 		{
-			if ((prefs.toolbar_icon_size == GTK_ICON_SIZE_SMALL_TOOLBAR) || small_img)
+			if ((toolbar_prefs.icon_size == GTK_ICON_SIZE_SMALL_TOOLBAR) || small_img)
 			{
 				return gdk_pixbuf_scale_simple(gdk_pixbuf_new_from_inline(-1, save_all_inline, FALSE, NULL),
                                              16, 16, GDK_INTERP_HYPER);
@@ -818,7 +820,7 @@ GdkPixbuf *ui_new_pixbuf_from_inline(gint img, gboolean small_img)
 		}
 		case GEANY_IMAGE_NEW_ARROW:
 		{
-			if ((prefs.toolbar_icon_size == GTK_ICON_SIZE_SMALL_TOOLBAR) || small_img)
+			if ((toolbar_prefs.icon_size == GTK_ICON_SIZE_SMALL_TOOLBAR) || small_img)
 			{
 				return gdk_pixbuf_scale_simple(gdk_pixbuf_new_from_inline(-1, newfile_inline, FALSE, NULL),
                                              16, 16, GDK_INTERP_HYPER);
@@ -860,7 +862,7 @@ void ui_create_recent_menu(void)
 				lookup_widget(app->window, "toolbutton9")), ui_widgets.recent_files_toolbar);
 	}
 
-	for (i = 0; i < MIN(prefs.mru_length, g_queue_get_length(ui_prefs.recent_queue)); i++)
+	for (i = 0; i < MIN(file_prefs.mru_length, g_queue_get_length(ui_prefs.recent_queue)); i++)
 	{
 		filename = g_queue_peek_nth(ui_prefs.recent_queue, i);
 		/* create menu item for the recent files menu in the menu bar */
@@ -908,7 +910,7 @@ void ui_add_recent_file(const gchar *utf8_filename)
 		}
 #endif
 		g_queue_push_head(ui_prefs.recent_queue, g_strdup(utf8_filename));
-		if (g_queue_get_length(ui_prefs.recent_queue) > prefs.mru_length)
+		if (g_queue_get_length(ui_prefs.recent_queue) > file_prefs.mru_length)
 		{
 			g_free(g_queue_pop_tail(ui_prefs.recent_queue));
 		}
@@ -1006,9 +1008,9 @@ static void update_recent_menu(void)
 
 	/* clean the MRU list before adding an item (menubar) */
 	children = gtk_container_get_children(GTK_CONTAINER(ui_widgets.recent_files_menubar));
-	if (g_list_length(children) > prefs.mru_length - 1)
+	if (g_list_length(children) > file_prefs.mru_length - 1)
 	{
-		item = g_list_nth(children, prefs.mru_length - 1);
+		item = g_list_nth(children, file_prefs.mru_length - 1);
 		while (item != NULL)
 		{
 			if (GTK_IS_MENU_ITEM(item->data)) gtk_widget_destroy(GTK_WIDGET(item->data));
@@ -1018,9 +1020,9 @@ static void update_recent_menu(void)
 
 	/* clean the MRU list before adding an item (toolbar) */
 	children = gtk_container_get_children(GTK_CONTAINER(ui_widgets.recent_files_toolbar));
-	if (g_list_length(children) > prefs.mru_length - 1)
+	if (g_list_length(children) > file_prefs.mru_length - 1)
 	{
-		item = g_list_nth(children, prefs.mru_length - 1);
+		item = g_list_nth(children, file_prefs.mru_length - 1);
 		while (item != NULL)
 		{
 			if (GTK_IS_MENU_ITEM(item->data)) gtk_widget_destroy(GTK_WIDGET(item->data));
