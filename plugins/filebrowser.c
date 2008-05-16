@@ -593,6 +593,8 @@ static gboolean on_button_press(GtkWidget *widget, GdkEventButton *event, gpoint
 {
 	if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)
 		on_open_clicked(NULL, NULL);
+	else if (event->button == 3)
+		return TRUE;
 	return FALSE;
 }
 
@@ -763,6 +765,9 @@ static GtkWidget *make_toolbar(void)
 	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(wid), tooltips,
 		_("Set path from document"), NULL);
 	g_signal_connect(G_OBJECT(wid), "clicked", G_CALLBACK(on_current_path), NULL);
+	gtk_container_add(GTK_CONTAINER(toolbar), wid);
+
+	wid = (GtkWidget *) gtk_separator_tool_item_new();
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
 	wid = (GtkWidget *) gtk_tool_button_new_from_stock(GTK_STOCK_CLEAR);

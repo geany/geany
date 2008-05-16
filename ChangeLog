@@ -21,6 +21,10 @@
    Add Geany prefix for EditorPrefs.
    Add Geany prefix for SearchPrefs.
    Initialize search_prefs to zero in main.c.
+ * plugins/filebrowser.c:
+   Make right clicking on items not lose the current selection, like
+   the standard GtkFileChooser.
+   Add separator before the Clear filter toolbar button.
 
 
 2008-05-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
