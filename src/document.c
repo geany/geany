@@ -946,6 +946,25 @@ static gboolean detect_use_tabs(ScintillaObject *sci)
 }
 
 
+static void set_indentation(gint idx)
+{
+	/* force using tabs for indentation for Makefiles */
+	if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_MAKE)
+		editor_set_use_tabs(idx, TRUE);
+	else if (! editor_prefs.detect_tab_mode)
+		editor_set_use_tabs(idx, editor_prefs.use_tabs);
+	else
+	{	/* detect & set tabs/spaces */
+		gboolean use_tabs = detect_use_tabs(doc_list[idx].sci);
+
+		if (use_tabs != editor_prefs.use_tabs)
+			ui_set_statusbar(TRUE, _("Setting %s indentation mode."),
+				(use_tabs) ? _("Tabs") : _("Spaces"));
+		editor_set_use_tabs(idx, use_tabs);
+	}
+}
+
+
 /* To open a new file, set idx to -1; filename should be locale encoded.
  * To reload a file, set the idx for the document to be reloaded; filename should be NULL.
  * pos is the cursor position, which can be overridden by --line and --column.
@@ -1038,21 +1057,6 @@ gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean
 	sci_set_eol_mode(doc_list[idx].sci, editor_mode);
 	g_free(filedata.data);
 
-	if (reload)
-		editor_set_use_tabs(idx, doc_list[idx].use_tabs); /* resetup sci */
-	else
-	if (! editor_prefs.detect_tab_mode)
-		editor_set_use_tabs(idx, editor_prefs.use_tabs);
-	else
-	{	/* detect & set tabs/spaces */
-		gboolean use_tabs = detect_use_tabs(doc_list[idx].sci);
-
-		if (use_tabs != editor_prefs.use_tabs)
-			ui_set_statusbar(TRUE, _("Setting %s indentation mode."),
-				(use_tabs) ? _("Tabs") : _("Spaces"));
-		editor_set_use_tabs(idx, use_tabs);
-	}
-
 	sci_set_undo_collection(doc_list[idx].sci, TRUE);
 
 	doc_list[idx].mtime = filedata.mtime; /* get the modification time from file and keep it */
@@ -1091,6 +1095,12 @@ gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean
 	}
 	/* update taglist, typedef keywords and build menu if necessary */
 	document_set_filetype(idx, use_ft);
+
+	/* set indentation settings after setting the filetype */
+	if (reload)
+		editor_set_use_tabs(idx, doc_list[idx].use_tabs); /* resetup sci */
+	else
+		set_indentation(idx);
 
 	document_set_text_changed(idx);	/* also updates tab state */
 	ui_document_show_hide(idx);	/* update the document menu */
@@ -1414,8 +1424,9 @@ gboolean document_save_file(gint idx, gboolean force)
 		return FALSE;
 	}
 
-	/* replaces tabs by spaces */
-	if (file_prefs.replace_tabs) editor_replace_tabs(idx);
+	/* replaces tabs by spaces but only if the current file is not a Makefile */
+	if (file_prefs.replace_tabs && FILETYPE_ID(doc_list[idx].file_type) != GEANY_FILETYPES_MAKE)
+		editor_replace_tabs(idx);
 	/* strip trailing spaces */
 	if (file_prefs.strip_trailing_spaces) editor_strip_trailing_spaces(idx);
 	/* ensure the file has a newline at the end */
