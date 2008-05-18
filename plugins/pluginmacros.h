@@ -39,6 +39,7 @@
  * Example: document_open_file() -> p_document->open_file() */
 #define p_filetypes		geany_data->filetype
 #define p_navqueue		geany_data->navqueue
+#define p_editor		geany_data->editor
 
 #ifdef GEANY_DISABLE_DEPRECATED
 
@@ -55,7 +56,6 @@
 #define p_tm			geany_data->tm
 #define p_ui			geany_data->ui
 #define p_utils			geany_data->utils
-#define p_editor		geany_data->editor
 
 #else
 
@@ -72,7 +72,6 @@
 #define p_tm			tagmanager
 #define p_ui			ui
 #define p_utils			utils
-#define p_editor		geany_data->editor
 
 
 /* Temporary source compatibility macros - do not use these in new code. */

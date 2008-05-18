@@ -2,6 +2,8 @@
 
  * src/document.c:
    Force using tabs for indentation when opening Makefiles.
+ * plugins/pluginmacros.h:
+   Define p_editor in the right way, oops.
 
 
 2008-05-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
