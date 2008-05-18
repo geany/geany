@@ -17,6 +17,9 @@ Homepage: http://geany.uvena.de
 A space-separated list of filenames. Absolute and relative filenames can be used. Geany also
 recognises line and column information when appended to the filename with colons, e.g.
 "geany foo.bar:10:5" will open the file foo.bar and place the cursor in line 10 at column 5.
+.IP "\fB\fP    \fB\fP         " 10
+Projects can also be opened but a project file (*.geany) must be the first non-option argument.
+All additionally given files are ignored.
 .IP "\fB\fP    \fB\+number\fP         " 10
 Set initial line
 .I number

@@ -4,6 +4,8 @@
    Force using tabs for indentation when opening Makefiles.
  * plugins/pluginmacros.h:
    Define p_editor in the right way, oops.
+ * doc/geany.1.in, doc/geany.html, doc/geany.txt, src/main.c:
+   Allow loading projects from command line (closes #1961083).
 
 
 2008-05-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

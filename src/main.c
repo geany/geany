@@ -754,6 +754,7 @@ gint main(gint argc, gchar **argv)
 {
 	gint idx;
 	gint config_dir_result;
+	gboolean load_project_from_cl = FALSE;
 
 	app = g_new0(GeanyApp, 1);
 	memset(&main_status, 0, sizeof(GeanyStatus));
@@ -877,13 +878,18 @@ gint main(gint argc, gchar **argv)
 	/* load keybinding settings after plugins have added their groups */
 	keybindings_load_keyfile();
 
+	load_project_from_cl = (argc > 1) && g_str_has_suffix(argv[1], ".geany");
+
 	/* load any command line files or session files */
 	main_status.opening_session_files = TRUE;
-	if (! open_cl_files(argc, argv))
+	if (load_project_from_cl || ! open_cl_files(argc, argv))
 	{
 		if (prefs.load_session && cl_options.load_session)
 		{
-			load_project_file();
+			if (load_project_from_cl)
+				project_load_file(argv[1]);
+			else
+				load_project_file();
 
 			/* load session files into tabs, as they are found in the session_files variable */
 			configuration_open_files();
