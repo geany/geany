@@ -91,6 +91,7 @@
 #define tagmanager		geany_functions->p_tm
 #define ui				geany_functions->p_ui
 #define utils			geany_functions->p_utils
+#define p_encoding		p_encodings
 
 #endif
 

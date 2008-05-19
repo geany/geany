@@ -24,6 +24,8 @@
  * src/msgwindow.c, src/editor.c:
    Fix doxygen-1.4.6 warnings about undocumented function parameters
    when using documentation comments e.g. for TODO.
+ * plugins/pluginmacros.h:
+   Add deprecated p_encoding alias for p_encodings.
 
 
 2008-05-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
