@@ -39,6 +39,7 @@
 
 PluginFields	*plugin_fields;
 GeanyData		*geany_data;
+GeanyFunctions	*geany_functions;
 
 
 PLUGIN_VERSION_CHECK(27)
@@ -274,12 +275,12 @@ static void show_output(const gchar *std_output, const gchar *name_prefix,
 	 * UTF-8 because internally Geany always needs UTF-8 */
 	if (force_encoding)
 	{
-		text = p_encoding->convert_to_utf8_from_charset(
+		text = p_encodings->convert_to_utf8_from_charset(
 			std_output, (gsize)-1, force_encoding, TRUE);
 	}
 	else
 	{
-		text = p_encoding->convert_to_utf8(std_output, (gsize)-1, &detect_enc);
+		text = p_encodings->convert_to_utf8(std_output, (gsize)-1, &detect_enc);
 	}
 	if (text)
 	{

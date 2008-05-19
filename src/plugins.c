@@ -244,21 +244,7 @@ static NavQueueFuncs navqueue_funcs = {
 	&navqueue_goto_line
 };
 
-static GeanyData geany_data = {
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-
+static GeanyFunctions geany_functions = {
 	&doc_funcs,
 	&sci_funcs,
 	&template_funcs,
@@ -277,23 +263,28 @@ static GeanyData geany_data = {
 	&editor_funcs
 };
 
+static GeanyData geany_data;
+
 
 static void
 geany_data_init(void)
 {
-	geany_data.app = app;
-	geany_data.tools_menu = lookup_widget(app->window, "tools1_menu");
-	geany_data.doc_array = doc_array;
-	geany_data.filetypes_array = filetypes_array;
-	geany_data.prefs = &prefs;
-	geany_data.interface_prefs = &interface_prefs;
-	geany_data.toolbar_prefs = &toolbar_prefs;
-	geany_data.editor_prefs = &editor_prefs;
-	geany_data.file_prefs = &file_prefs;
-	geany_data.search_prefs = &search_prefs;
-	geany_data.tool_prefs = &tool_prefs;
-	geany_data.template_prefs = &template_prefs;
-	geany_data.build_info = &build_info;
+	GeanyData gd = {
+		app,
+		lookup_widget(app->window, "tools1_menu"),
+		doc_array,
+		filetypes_array,
+		&prefs,
+		&interface_prefs,
+		&toolbar_prefs,
+		&editor_prefs,
+		&file_prefs,
+		&search_prefs,
+		&tool_prefs,
+		&template_prefs,
+		&build_info
+	};
+	memcpy(&geany_data, &gd, sizeof(GeanyData));
 }
 
 
@@ -477,6 +468,7 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 	PluginInfo* (*info)(void);
 	PluginFields **plugin_fields;
 	GeanyData **p_geany_data;
+	GeanyFunctions **p_geany_functions;
 
 	g_return_val_if_fail(fname, NULL);
 	g_return_val_if_fail(g_module_supported(), NULL);
@@ -539,6 +531,9 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 	g_module_symbol(module, "geany_data", (void *) &p_geany_data);
 	if (p_geany_data)
 		*p_geany_data = &geany_data;
+	g_module_symbol(module, "geany_functions", (void *) &p_geany_functions);
+	if (p_geany_functions)
+		*p_geany_functions = &geany_functions;
 	g_module_symbol(module, "plugin_fields", (void *) &plugin_fields);
 	if (plugin_fields)
 		*plugin_fields = &plugin->fields;

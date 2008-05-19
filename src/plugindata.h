@@ -35,12 +35,12 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 59;
+static const gint api_version = 60;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
  * are only appended, as this doesn't affect existing fields. */
-static const gint abi_version = 29;
+static const gint abi_version = 30;
 
 /** Check the plugin can be loaded by Geany.
  * This performs runtime checks that try to ensure:
@@ -149,46 +149,54 @@ typedef struct PluginFields
 PluginFields;
 
 
-/** This contains pointers to global variables and functions owned by Geany for plugins to use.
- *  Variables and functions will be appended when needed by plugin authors. */
+/** This contains pointers to global variables owned by Geany for plugins to use.
+ * Core variable pointers can be appended when needed by plugin authors, if appropriate. */
 typedef struct GeanyData
 {
-	GeanyApp	*app;							/**< Geany application data fields */
-	GtkWidget	*tools_menu;					/**< Most plugins should add menu items to the Tools menu only */
-	GArray		*doc_array;						/**< Dynamic array of document structs */
-	GPtrArray	*filetypes_array;				/**< Dynamic array of filetype pointers */
-	struct GeanyPrefs	*prefs;					/**< General settings */
-	struct GeanyInterfacePrefs *interface_prefs; /**< Interface settings */
-	struct GeanyToolbarPrefs *toolbar_prefs;	/**< Toolbar settings */
-	struct GeanyEditorPrefs	*editor_prefs;		/**< Editor settings */
-	struct GeanyFilePrefs	*file_prefs;		/**< File-related settings */
-	struct GeanySearchPrefs	*search_prefs;		/**< Search-related settings */
-	struct GeanyToolPrefs	*tool_prefs;		/**< Tool settings */
-	struct GeanyTemplatePrefs *template_prefs;	/**< Template settings */
-	struct GeanyBuildInfo	*build_info;			/**< Current build information */
-
-	struct DocumentFuncs		*documents;		/**< See document.h */
-	struct ScintillaFuncs		*sci;			/**< See sciwrappers.h */
-	struct TemplateFuncs		*templates;		/**< See templates.h */
-	struct UtilsFuncs			*utils;			/**< See utils.h */
-	struct UIUtilsFuncs			*ui;			/**< See ui_utils.h */
-	struct SupportFuncs			*support;		/**< See support.h */
-	struct DialogFuncs			*dialogs;		/**< See dialogs.h */
-	struct MsgWinFuncs			*msgwindow;		/**< See msgwindow.h */
-	struct EncodingFuncs		*encoding;		/**< See encodings.h */
-	struct KeybindingFuncs		*keybindings;	/**< See keybindings.h */
-	struct TagManagerFuncs		*tm;			/**< See tagmanager/include */
-	struct SearchFuncs			*search;		/**< See search.h */
-	struct HighlightingFuncs	*highlighting;	/**< See highlighting.h */
-	struct FiletypeFuncs		*filetype;		/**< See filetypes.h */
-	struct NavQueueFuncs        *navqueue;      /**< See navqueue.h */
-	struct EditorFuncs        	*editor;        /**< See editor.h */
+	GeanyApp					*app;				/**< Geany application data fields */
+	GtkWidget					*tools_menu;		/**< Most plugins should add menu items to the Tools menu only */
+	GArray						*doc_array;			/**< Dynamic array of document structs */
+	GPtrArray					*filetypes_array;	/**< Dynamic array of filetype pointers */
+	struct GeanyPrefs			*prefs;				/**< General settings */
+	struct GeanyInterfacePrefs	*interface_prefs;	/**< Interface settings */
+	struct GeanyToolbarPrefs	*toolbar_prefs;		/**< Toolbar settings */
+	struct GeanyEditorPrefs		*editor_prefs;		/**< Editor settings */
+	struct GeanyFilePrefs		*file_prefs;		/**< File-related settings */
+	struct GeanySearchPrefs		*search_prefs;		/**< Search-related settings */
+	struct GeanyToolPrefs		*tool_prefs;		/**< Tool settings */
+	struct GeanyTemplatePrefs	*template_prefs;	/**< Template settings */
+	struct GeanyBuildInfo		*build_info;		/**< Current build information */
 }
 GeanyData;
 
 
-/* For more info about these functions, see the main source code.
- * E.g. for GeanyData::documents->new_file(), see document_new_file() in document.c. */
+/** This contains pointers to functions owned by Geany for plugins to use.
+ * Functions from the core can be appended when needed by plugin authors, but may
+ * require some changes. */
+typedef struct GeanyFunctions
+{
+	struct DocumentFuncs		*p_document;		/**< See document.h */
+	struct ScintillaFuncs		*p_sci;				/**< See sciwrappers.h */
+	struct TemplateFuncs		*p_templates;		/**< See templates.h */
+	struct UtilsFuncs			*p_utils;			/**< See utils.h */
+	struct UIUtilsFuncs			*p_ui;				/**< See ui_utils.h */
+	struct SupportFuncs			*p_support;			/**< See support.h */
+	struct DialogFuncs			*p_dialogs;			/**< See dialogs.h */
+	struct MsgWinFuncs			*p_msgwindow;		/**< See msgwindow.h */
+	struct EncodingFuncs		*p_encodings;		/**< See encodings.h */
+	struct KeybindingFuncs		*p_keybindings;		/**< See keybindings.h */
+	struct TagManagerFuncs		*p_tm;				/**< See tagmanager/include */
+	struct SearchFuncs			*p_search;			/**< See search.h */
+	struct HighlightingFuncs	*p_highlighting;	/**< See highlighting.h */
+	struct FiletypeFuncs		*p_filetypes;		/**< See filetypes.h */
+	struct NavQueueFuncs        *p_navqueue;		/**< See navqueue.h */
+	struct EditorFuncs        	*p_editor;			/**< See editor.h */
+}
+GeanyFunctions;
+
+
+/* For more information about these functions, see the main source code.
+ * E.g. for p_document->new_file(), see document_new_file() in document.c. */
 
 
 /* See document.h */
@@ -437,6 +445,9 @@ typedef GeanyData PluginData;	/* for compatibility with API < 7 */
 
 #define GEANY_FILETYPES_ALL \
 	GEANY_FILETYPES_NONE
+
+typedef struct _GeanyDocument document;
+typedef struct _GeanyFiletype filetype;
 
 #endif	/* GEANY_DISABLE_DEPRECATED */
 

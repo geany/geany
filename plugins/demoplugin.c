@@ -45,6 +45,7 @@
 /* These items are set by Geany before init() is called. */
 PluginFields	*plugin_fields;
 GeanyData		*geany_data;
+GeanyFunctions	*geany_functions;
 
 
 /* Check that Geany supports plugin API version 7 or later, and check

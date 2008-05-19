@@ -22,11 +22,12 @@
  * $Id$
  */
 
-/* Useful macros to avoid typing geany_data so often. */
+/* Useful macros to avoid typing geany_data-> or geany_functions-> so often. */
 
 #ifndef PLUGINMACROS_H
 #define PLUGINMACROS_H
 
+/* common data structs */
 #define app				geany_data->app
 #define doc_array		geany_data->doc_array			/* Allows use of doc_list[] macro */
 #define filetypes_array	geany_data->filetypes_array		/* Allows use of filetypes[] macro */
@@ -37,31 +38,33 @@
 /* These macros are named the same as the first word in the core function name,
  * but with a 'p_' prefix to prevent conflicts with other tag names.
  * Example: document_open_file() -> p_document->open_file() */
-#define p_filetypes		geany_data->filetype
-#define p_navqueue		geany_data->navqueue
-#define p_editor		geany_data->editor
+/* New macros should be added here */
+#define p_filetypes		geany_functions->p_filetypes
+#define p_navqueue		geany_functions->p_navqueue
+#define p_editor		geany_functions->p_editor
+
 
 #ifdef GEANY_DISABLE_DEPRECATED
 
-#define p_dialogs		geany_data->dialogs
-#define p_document		geany_data->documents
-#define p_encoding		geany_data->encoding
-#define p_highlighting	geany_data->highlighting
-#define p_keybindings	geany_data->keybindings
-#define p_msgwindow		geany_data->msgwindow
-#define p_sci			geany_data->sci
-#define p_search		geany_data->search
-#define p_support		geany_data->support
-#define p_templates		geany_data->templates
-#define p_tm			geany_data->tm
-#define p_ui			geany_data->ui
-#define p_utils			geany_data->utils
+#define p_dialogs		geany_functions->p_dialogs
+#define p_document		geany_functions->p_document
+#define p_encodings		geany_functions->p_encodings
+#define p_highlighting	geany_functions->p_highlighting
+#define p_keybindings	geany_functions->p_keybindings
+#define p_msgwindow		geany_functions->p_msgwindow
+#define p_sci			geany_functions->p_sci
+#define p_search		geany_functions->p_search
+#define p_support		geany_functions->p_support
+#define p_templates		geany_functions->p_templates
+#define p_tm			geany_functions->p_tm
+#define p_ui			geany_functions->p_ui
+#define p_utils			geany_functions->p_utils
 
 #else
 
 #define p_dialogs		dialogs
 #define p_document		documents
-#define p_encoding		encodings
+#define p_encodings		encodings
 #define p_highlighting	highlighting
 #define p_keybindings	keybindings
 #define p_msgwindow		msgwindow
@@ -74,23 +77,20 @@
 #define p_utils			utils
 
 
-/* Temporary source compatibility macros - do not use these in new code. */
-#define dialogs			geany_data->dialogs
-#define documents		geany_data->documents	/* avoids conflict with document typedef */
-#define encodings		geany_data->encoding	/* avoids conflict with document::encoding */
-#define highlighting	geany_data->highlighting
-#define keybindings		geany_data->keybindings
-#define msgwindow		geany_data->msgwindow
-#define scintilla		geany_data->sci
-#define search			geany_data->search
-#define support			geany_data->support
-#define templates		geany_data->templates
-#define tagmanager		geany_data->tm			/* avoids conflict with "struct tm *t" */
-#define ui				geany_data->ui
-#define utils			geany_data->utils
-
-typedef struct _GeanyDocument document;
-typedef struct _GeanyFiletype filetype;
+/* Temporary source compatibility macros - do not use these in new code, they may get removed. */
+#define dialogs			geany_functions->p_dialogs
+#define documents		geany_functions->p_document
+#define encodings		geany_functions->p_encodings
+#define highlighting	geany_functions->p_highlighting
+#define keybindings		geany_functions->p_keybindings
+#define msgwindow		geany_functions->p_msgwindow
+#define scintilla		geany_functions->p_sci
+#define search			geany_functions->p_search
+#define support			geany_functions->p_support
+#define templates		geany_functions->p_templates
+#define tagmanager		geany_functions->p_tm
+#define ui				geany_functions->p_ui
+#define utils			geany_functions->p_utils
 
 #endif
 

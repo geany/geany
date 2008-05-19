@@ -40,8 +40,13 @@ gint version_check(gint);
 /** Use the PLUGIN_INFO() macro to define it. Required by Geany. */
 PluginInfo* info();
 
-/** Geany owned fields and functions. */
+/** Geany owned data pointers.
+ * Example: @c assert(geany_data->app->configdir != NULL); */
 GeanyData* geany_data;
+
+/** Geany owned function pointers, split into groups.
+ * Example: @c geany_functions->p_document->new_file(NULL, NULL, NULL); */
+GeanyFunctions* geany_functions;
 
 /** Plugin owned fields, including flags. */
 PluginFields* plugin_fields;

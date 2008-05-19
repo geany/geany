@@ -40,6 +40,7 @@
 
 PluginFields	*plugin_fields;
 GeanyData		*geany_data;
+GeanyFunctions	*geany_functions;
 
 PLUGIN_VERSION_CHECK(20)
 PLUGIN_INFO(_("Export"), _("Exports the current file into different formats."), VERSION,
