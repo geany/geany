@@ -41,8 +41,10 @@
  *  To get started, see the @link howto Plugin Howto @endlink.
  *
  *  Other pages:
- *  - @link signals Plugin Signals @endlink
+ *  - @link plugindata.h Main Datatypes and Macros @endlink
  *  - @link plugin-symbols.c Plugin Symbols @endlink
+ *  - @link pluginmacros.h Optional Macros @endlink
+ *  - @link signals Plugin Signals @endlink
  *
  *  @note Some of these pages are also listed in Related Pages.
  */

@@ -32,6 +32,8 @@
  * doc/Doxyfile.in, plugins/pluginmacros.h:
    Add API documentation for pluginmacros.h.
    Make Doxygen define GEANY_DISABLE_DEPRECATED.
+ * doc/plugins.dox:
+   Add Main Page links to plugindata.h and pluginmacros.h.
 
 
 2008-05-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
