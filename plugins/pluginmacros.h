@@ -22,43 +22,48 @@
  * $Id$
  */
 
-/* Useful macros to avoid typing geany_data-> or geany_functions-> so often. */
+/** @file pluginmacros.h
+ * Useful macros to avoid typing @c geany_data-> or @c geany_functions-> so often.
+ *
+ * @section function_macros Function Macros
+ * These macros are named the same as the first word in the core function name,
+ * but with a 'p_' prefix to prevent conflicts with other tag names.
+ *
+ * Example for @c document_open_file(): @c p_document->open_file(); */
+
 
 #ifndef PLUGINMACROS_H
 #define PLUGINMACROS_H
 
 /* common data structs */
 #define app				geany_data->app
-#define doc_array		geany_data->doc_array			/* Allows use of doc_list[] macro */
-#define filetypes_array	geany_data->filetypes_array		/* Allows use of filetypes[] macro */
+#define doc_array		geany_data->doc_array			/**< Allows use of @c doc_list[] macro */
+#define filetypes_array	geany_data->filetypes_array		/**< Allows use of @c filetypes[] macro */
 #define prefs			geany_data->prefs
 #define project			app->project
 
 
-/* These macros are named the same as the first word in the core function name,
- * but with a 'p_' prefix to prevent conflicts with other tag names.
- * Example: document_open_file() -> p_document->open_file() */
-/* New macros should be added here */
-#define p_filetypes		geany_functions->p_filetypes
-#define p_navqueue		geany_functions->p_navqueue
-#define p_editor		geany_functions->p_editor
+/* New function macros should be added here */
+#define p_filetypes		geany_functions->p_filetypes	/**< See filetypes.h */
+#define p_navqueue		geany_functions->p_navqueue		/**< See navqueue.h */
+#define p_editor		geany_functions->p_editor		/**< See editor.h */
 
 
 #ifdef GEANY_DISABLE_DEPRECATED
 
-#define p_dialogs		geany_functions->p_dialogs
-#define p_document		geany_functions->p_document
-#define p_encodings		geany_functions->p_encodings
-#define p_highlighting	geany_functions->p_highlighting
-#define p_keybindings	geany_functions->p_keybindings
-#define p_msgwindow		geany_functions->p_msgwindow
-#define p_sci			geany_functions->p_sci
-#define p_search		geany_functions->p_search
-#define p_support		geany_functions->p_support
-#define p_templates		geany_functions->p_templates
-#define p_tm			geany_functions->p_tm
-#define p_ui			geany_functions->p_ui
-#define p_utils			geany_functions->p_utils
+#define p_dialogs		geany_functions->p_dialogs		/**< See dialogs.h */
+#define p_document		geany_functions->p_document		/**< See document.h */
+#define p_encodings		geany_functions->p_encodings	/**< See encodings.h */
+#define p_highlighting	geany_functions->p_highlighting	/**< See highlighting.h */
+#define p_keybindings	geany_functions->p_keybindings	/**< See keybindings.h */
+#define p_msgwindow		geany_functions->p_msgwindow	/**< See msgwindow.h */
+#define p_sci			geany_functions->p_sci			/**< See sciwrappers.h */
+#define p_search		geany_functions->p_search		/**< See search.h */
+#define p_support		geany_functions->p_support		/**< See support.h */
+#define p_templates		geany_functions->p_templates	/**< See templates.h */
+#define p_tm			geany_functions->p_tm			/**< See the TagManager headers. */
+#define p_ui			geany_functions->p_ui			/**< See ui_utils.h */
+#define p_utils			geany_functions->p_utils		/**< See utils.h */
 
 #else
 

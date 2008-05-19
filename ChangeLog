@@ -29,6 +29,9 @@
  * src/keybindings.c:
    Fix Switch to Sidebar shortcut so that it works for whichever widget
    is in the current sidebar notebook page (fixes #1967104).
+ * doc/Doxyfile.in, plugins/pluginmacros.h:
+   Add API documentation for pluginmacros.h.
+   Make Doxygen define GEANY_DISABLE_DEPRECATED.
 
 
 2008-05-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
