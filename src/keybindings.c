@@ -1183,9 +1183,10 @@ static void cb_func_switch_sidebar(G_GNUC_UNUSED guint key_id)
 	if (ui_prefs.sidebar_visible)
 	{
 		gint page_num = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->treeview_notebook));
-		GtkWidget *swin = gtk_notebook_get_nth_page(GTK_NOTEBOOK(app->treeview_notebook), page_num);
+		GtkWidget *page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(app->treeview_notebook), page_num);
 
-		gtk_widget_grab_focus(gtk_bin_get_child(GTK_BIN(swin)));
+		/* gtk_widget_grab_focus() won't work because of the scrolled window containers */
+		gtk_widget_child_focus(page, GTK_DIR_TAB_FORWARD);
 	}
 }
 
