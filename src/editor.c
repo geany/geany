@@ -2716,7 +2716,7 @@ void editor_auto_line_indentation(gint idx, gint pos)
 	}
 
 	/* set cursor position if there was no selection */
-	/** TODO implement selection handling if there was a selection */
+	/* TODO: implement selection handling if there was a selection */
 	if (first_sel_start == first_sel_end)
 		sci_set_current_position(doc_list[idx].sci,
 			pos - (sel_end - sel_start) + strlen(indent), FALSE);

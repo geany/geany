@@ -302,7 +302,7 @@ void msgwin_msg_add(gint msg_color, gint line, gint idx, const gchar *string)
 
 	/* work around a strange problem when adding very long lines(greater than 4000 bytes)
 	 * cut the string to a maximum of 1024 bytes and discard the rest */
-	/** TODO find the real cause for the display problem / if it is GtkTreeView file a bug report */
+	/* TODO: find the real cause for the display problem / if it is GtkTreeView file a bug report */
 	if (strlen(string) > 1024)
 		tmp = g_strndup(string, 1024);
 	else

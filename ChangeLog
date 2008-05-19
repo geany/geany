@@ -21,6 +21,9 @@
    check for any missing field initializers.
    Rename plugin macro p_encoding to p_encodings to follow the core
    function encodings_ prefix.
+ * src/msgwindow.c, src/editor.c:
+   Fix doxygen-1.4.6 warnings about undocumented function parameters
+   when using documentation comments e.g. for TODO.
 
 
 2008-05-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
