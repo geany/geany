@@ -2,10 +2,13 @@
 
  * src/editor.c:
    Refactor editor_auto_line_indentation().
-   Make auto-line indentation set the cursor to the beginning of
+   Make Smart Line Indentation set the cursor to the beginning of
    indentation for single line selections, so the user can fine-tune
    indentation if necessary. For multiple line selections, select all
    the lines after indenting.
+ * src/keybindings.c, src/editor.c, src/editor.h:
+   Rename editor_auto_line_indentation() to
+   editor_smart_line_indentation().
 
 
 2008-05-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -143,7 +143,7 @@ void editor_insert_multiline_comment(gint idx);
 
 void editor_insert_alternative_whitespace(gint idx);
 
-void editor_auto_line_indentation(gint idx, gint pos);
+void editor_smart_line_indentation(gint idx, gint pos);
 
 void editor_indentation_by_one_space(gint idx, gint pos, gboolean decrease);
 

@@ -2672,7 +2672,7 @@ void editor_select_paragraph(ScintillaObject *sci)
 
 
 /* simple indentation to indent the current line with the same indent as the previous one */
-static void auto_line_indentation(gint idx, gint first_line, gint last_line)
+static void smart_line_indentation(gint idx, gint first_line, gint last_line)
 {
 	gint i, sel_start = 0, sel_end = 0;
 
@@ -2697,7 +2697,7 @@ static void auto_line_indentation(gint idx, gint first_line, gint last_line)
 
 
 /* simple indentation to indent the current line with the same indent as the previous one */
-void editor_auto_line_indentation(gint idx, gint pos)
+void editor_smart_line_indentation(gint idx, gint pos)
 {
 	gint first_line, last_line;
 	gint first_sel_start, first_sel_end;
@@ -2723,7 +2723,7 @@ void editor_auto_line_indentation(gint idx, gint pos)
 	get_indent(&doc_list[idx],
 		sci_get_position_from_line(doc_list[idx].sci, first_line - 1), TRUE);
 
-	auto_line_indentation(idx, first_line, last_line);
+	smart_line_indentation(idx, first_line, last_line);
 
 	/* set cursor position if there was no selection */
 	if (first_sel_start == first_sel_end)
