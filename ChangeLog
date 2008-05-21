@@ -1,3 +1,13 @@
+2008-05-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/editor.c:
+   Refactor editor_auto_line_indentation().
+   Make auto-line indentation set the cursor to the beginning of
+   indentation for single line selections, so the user can fine-tune
+   indentation if necessary. For multiple line selections, select all
+   the lines after indenting.
+
+
 2008-05-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/plugindata.h, src/plugins.c, doc/plugin-symbols.c,

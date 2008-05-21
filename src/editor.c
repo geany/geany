@@ -2671,31 +2671,10 @@ void editor_select_paragraph(ScintillaObject *sci)
 }
 
 
-/* simple auto indentation to indent the current line with the same indent as the previous one */
-void editor_auto_line_indentation(gint idx, gint pos)
+/* simple indentation to indent the current line with the same indent as the previous one */
+static void auto_line_indentation(gint idx, gint first_line, gint last_line)
 {
-	gint i, first_line, last_line;
-	gint first_sel_start, first_sel_end, sel_start = 0, sel_end = 0;
-
-	g_return_if_fail(DOC_IDX_VALID(idx));
-
-	first_sel_start = sci_get_selection_start(doc_list[idx].sci);
-	first_sel_end = sci_get_selection_end(doc_list[idx].sci);
-
-	first_line = sci_get_line_from_position(doc_list[idx].sci, first_sel_start);
-	/* Find the last line with chars selected (not EOL char) */
-	last_line = sci_get_line_from_position(doc_list[idx].sci,
-		first_sel_end - editor_get_eol_char_len(idx));
-	last_line = MAX(first_line, last_line);
-
-	if (pos == -1)
-		pos = first_sel_start;
-
-	/* get previous line and use it for get_indent to use that line
-	 * (otherwise it would fail on a line only containing "{" in advanced indentation mode) */
-	get_indent(&doc_list[idx],
-		sci_get_position_from_line(doc_list[idx].sci, first_line - 1), TRUE);
-	SSM(doc_list[idx].sci, SCI_BEGINUNDOACTION, 0, 0);
+	gint i, sel_start = 0, sel_end = 0;
 
 	for (i = first_line; i <= last_line; i++)
 	{
@@ -2714,12 +2693,54 @@ void editor_auto_line_indentation(gint idx, gint pos)
 		}
 		sci_insert_text(doc_list[idx].sci, sel_start, indent);
 	}
+}
+
+
+/* simple indentation to indent the current line with the same indent as the previous one */
+void editor_auto_line_indentation(gint idx, gint pos)
+{
+	gint first_line, last_line;
+	gint first_sel_start, first_sel_end;
+
+	g_return_if_fail(DOC_IDX_VALID(idx));
+
+	first_sel_start = sci_get_selection_start(doc_list[idx].sci);
+	first_sel_end = sci_get_selection_end(doc_list[idx].sci);
+
+	first_line = sci_get_line_from_position(doc_list[idx].sci, first_sel_start);
+	/* Find the last line with chars selected (not EOL char) */
+	last_line = sci_get_line_from_position(doc_list[idx].sci,
+		first_sel_end - editor_get_eol_char_len(idx));
+	last_line = MAX(first_line, last_line);
+
+	if (pos == -1)
+		pos = first_sel_start;
+
+	SSM(doc_list[idx].sci, SCI_BEGINUNDOACTION, 0, 0);
+
+	/* get previous line and use it for get_indent to use that line
+	 * (otherwise it would fail on a line only containing "{" in advanced indentation mode) */
+	get_indent(&doc_list[idx],
+		sci_get_position_from_line(doc_list[idx].sci, first_line - 1), TRUE);
+
+	auto_line_indentation(idx, first_line, last_line);
 
 	/* set cursor position if there was no selection */
-	/* TODO: implement selection handling if there was a selection */
 	if (first_sel_start == first_sel_end)
-		sci_set_current_position(doc_list[idx].sci,
-			pos - (sel_end - sel_start) + strlen(indent), FALSE);
+	{
+		gint indent_pos = SSM(doc_list[idx].sci, SCI_GETLINEINDENTPOSITION, first_line, 0);
+
+		/* use indent position as user may wish to change indentation afterwards */
+		sci_set_current_position(doc_list[idx].sci, indent_pos, FALSE);
+	}
+	else
+	{
+		ScintillaObject *sci = doc_list[idx].sci;
+
+		/* fully select all the lines affected */
+		sci_set_selection_start(sci, sci_get_position_from_line(sci, first_line));
+		sci_set_selection_end(sci, sci_get_position_from_line(sci, last_line + 1));
+	}
 
 	SSM(doc_list[idx].sci, SCI_ENDUNDOACTION, 0, 0);
 }
