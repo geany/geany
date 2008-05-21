@@ -38,12 +38,6 @@
    */
 /* #undef HAVE_DECL_GETENV */
 
-/* Define that you found /dev/random */
-//#define HAVE_DEVRANDOM 1
-
-/* Define that you found /dev/urandom */
-//#define HAVE_DEVURANDOM 1
-
 /* Define to 1 if you have the <dirent.h> header file, and it defines `DIR'.
    */
 #define HAVE_DIRENT_H 1

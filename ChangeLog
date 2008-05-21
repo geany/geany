@@ -2,6 +2,10 @@
 
  * plugins/Makefile.am:
    Specify the necessary libraries of each plugin to link against.
+ * configure.in, win32-config.h, src/gb.c:
+   Fix some quotations to not screw up the bash lexer.
+   Don't use /dev/random or /dev/urandom in gb.c, instead of GLib's
+   random functions.
 
 
 2008-05-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

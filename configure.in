@@ -139,22 +139,16 @@ AC_ARG_ENABLE(gnu-regex, [AC_HELP_STRING([--enable-gnu-regex], [compile with inc
 
 if test "x$enable_gnu_regex" = "xyes" ; then
 	AC_DEFINE(USE_INCLUDED_REGEX, 1, [Define if included GNU regex code should be used.])
-	AC_DEFINE(HAVE_REGCOMP, 1, [Define if you have the `regcomp' function.])
+	AC_DEFINE(HAVE_REGCOMP, 1, [Define if you have the 'regcomp' function.])
 	AM_CONDITIONAL(USE_INCLUDED_REGEX, true)
 else
 	AM_CONDITIONAL(USE_INCLUDED_REGEX, false)
 fi
 
-# Check for random number paths (skip when cross compiling)
-if test "x$build" = "x$host"; then
-	AC_CHECK_FILE([/dev/urandom], AC_DEFINE([HAVE_DEVURANDOM], [1], [Define that you found /dev/urandom]))
-	AC_CHECK_FILE([/dev/random], AC_DEFINE([HAVE_DEVRANDOM], [1], [Define that you found /dev/random]))
-fi
-
 case "${host}" in
     *mingw*)
 	AC_CHECK_LIB(iberty, fnmatch, [], [
-		AC_MSG_ERROR([fnmatch dosn't present in libiberty. You need to update it, read http://geany.uvena.de/Support/CrossCompile for details.])
+		AC_MSG_ERROR([fnmatch does not present in libiberty. You need to update it, read http://geany.uvena.de/Support/CrossCompile for details.])
 		])
 	AC_DEFINE_UNQUOTED([WIN32], 1, [we are cross compiling for WIN32])
 	want_vte="no"

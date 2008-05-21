@@ -49,7 +49,6 @@ unsigned short iconset;
 GtkWidget *image1, *image2, *image3, *image4, *label1, *label2, *label3, *okbutton1, *textview1;
 gchar info_texts[4][50];
 gchar *help_text;
-gint random_fd;
 gboolean is_running;
 static GdkPixbuf **icons;
 
@@ -208,39 +207,6 @@ static gint destroydialog(GtkWidget *widget, gpointer data)
 }
 
 
-static void initialise_random_numbers(void)
-{
-#if defined(HAVE_FCNTL_H) && (defined(HAVE_DEVURANDOM) || defined(HAVE_DEVRANDOM))
-# ifdef HAVE_DEVURANDOM
-	random_fd = open("/dev/urandom", O_NONBLOCK | O_RDONLY);
-# elif HAVE_DEVRANDOM
-	random_fd = open("/dev/random", O_NONBLOCK | O_RDONLY);
-# endif
-#else
-    srand(time(NULL) * getpid());
-#endif
-}
-
-
-static gint random_number(gint max)
-{
-#if defined(HAVE_FCNTL_H) && (defined(HAVE_DEVURANDOM) || defined(HAVE_DEVRANDOM))
-    if (max <= 255)
-	{
-		unsigned char byte;
-		while (read(random_fd, &byte, 1) == 1)
-		{
-	    	if (byte < max)
-				return (byte % max);
-		}
-    }
-    return 0;
-#else
-	return (((unsigned short) rand()) % max);
-#endif
-}
-
-
 static void on_button5_clicked(GtkButton *button, gpointer user_data)
 {
     gb_destroyapp(GTK_WIDGET(button), user_data);
@@ -279,12 +245,12 @@ static void on_button1_clicked(GtkButton *button, gpointer user_data)
 	lap++;
 	update_labels(gb_window, FALSE, 3);
 
-	l = random_number(MAX_PICS);
-	m = random_number(MAX_PICS);
-	n = random_number(MAX_PICS);
-	erg_a = random_number(MAX_PICS);
-	erg_b = random_number(MAX_PICS);
-	erg_c = random_number(MAX_PICS);
+	l = g_random_int_range(0, MAX_PICS);
+	m = g_random_int_range(0, MAX_PICS);
+	n = g_random_int_range(0, MAX_PICS);
+	erg_a = g_random_int_range(0, MAX_PICS);
+	erg_b = g_random_int_range(0, MAX_PICS);
+	erg_c = g_random_int_range(0, MAX_PICS);
 
 	/* assign icons */
 	loops = 30;
@@ -1250,14 +1216,12 @@ static void init_images(void)
 {
 	gint i;
 
-	initialise_random_numbers();
-
 	/* define start images */
-	i = random_number(MAX_PICS) + 1;
+	i = g_random_int_range(0, MAX_PICS);
 	gtk_image_set_from_pixbuf(GTK_IMAGE(image1), icons[i]);
-	i = random_number(MAX_PICS) + 1;
+	i = g_random_int_range(0, MAX_PICS);
 	gtk_image_set_from_pixbuf(GTK_IMAGE(image2), icons[i]);
-	i = random_number(MAX_PICS) + 1;
+	i = g_random_int_range(0, MAX_PICS);
 	gtk_image_set_from_pixbuf(GTK_IMAGE(image3), icons[i]);
 }
 
@@ -1267,7 +1231,6 @@ gint gb_destroyapp(GtkWidget *widget, gpointer gdata)
 {
 	if (is_running) return TRUE;
 	if (GTK_IS_WINDOW(gb_window)) gtk_widget_destroy(gb_window);
-	if (random_fd != -1) close(random_fd);
 	gb_window = NULL;
 	return FALSE;
 }
@@ -1275,7 +1238,6 @@ gint gb_destroyapp(GtkWidget *widget, gpointer gdata)
 
 void gb_start_easteregg(void)
 {
-	random_fd = -1;
 	load_images();
 	create_window();
 	g_signal_connect(G_OBJECT(gb_window), "delete_event", G_CALLBACK(gb_destroyapp), NULL);
