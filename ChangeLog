@@ -1,3 +1,9 @@
+2008-05-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * plugins/Makefile.am:
+   Specify the necessary libraries of each plugin to link against.
+
+
 2008-05-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/editor.c:

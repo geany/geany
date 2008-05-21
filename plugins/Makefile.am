@@ -40,15 +40,14 @@ vcdiff_la_SOURCES        = vcdiff.c
 autosave_la_SOURCES      = autosave.c
 filebrowser_la_SOURCES   = filebrowser.c
 
-# we don't need to link against GTK libraries (or do we?)
+# instead of linking against all in $(GTK_LIBS), we link only against needed libs
 #~ demoplugin_la_LIBADD    = $(GTK_LIBS)
-#~ classbuilder_la_LIBADD  = $(GTK_LIBS)
-#~ htmlchars_la_LIBADD     = $(GTK_LIBS)
-#~ export_la_LIBADD        = $(GTK_LIBS)
-#~ vcdiff_la_LIBADD        = $(GTK_LIBS)
-#~ autosave_la_LIBADD      = $(GTK_LIBS)
-#~ filebrowser_la_LIBADD   = $(GTK_LIBS)
-
+classbuilder_la_LIBADD  = -lgtk-x11-2.0 -lgobject-2.0 -lglib-2.0
+htmlchars_la_LIBADD     = -lgtk-x11-2.0 -lgobject-2.0 -lglib-2.0
+export_la_LIBADD        = -lgtk-x11-2.0 -lm -lpango-1.0 -lgobject-2.0 -lglib-2.0
+vcdiff_la_LIBADD        = -lgtk-x11-2.0 -lgobject-2.0 -lglib-2.0
+autosave_la_LIBADD      = -lgtk-x11-2.0 -lgobject-2.0 -lglib-2.0
+filebrowser_la_LIBADD   = -lgtk-x11-2.0 -lpango-1.0 -lgobject-2.0 -lglib-2.0
 endif # PLUGINS
 
 AM_CPPFLAGS = \
