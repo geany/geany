@@ -1048,7 +1048,7 @@ void symbols_show_load_tags_dialog(void)
 	GtkWidget *dialog;
 	GtkFileFilter *filter;
 
-	dialog = gtk_file_chooser_dialog_new(_("Load Tags"), GTK_WINDOW(app->window),
+	dialog = gtk_file_chooser_dialog_new(_("Load Tags"), GTK_WINDOW(main_widgets.window),
 		GTK_FILE_CHOOSER_ACTION_OPEN,
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 		GTK_STOCK_OPEN, GTK_RESPONSE_OK,

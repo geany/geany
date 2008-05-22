@@ -244,7 +244,7 @@ static void prepare_openfiles(void)
 	PangoFontDescription *pfd;
 	GtkTreeSortable *sortable;
 
-	tv.tree_openfiles = lookup_widget(app->window, "treeview6");
+	tv.tree_openfiles = lookup_widget(main_widgets.window, "treeview6");
 
 	/* store the short filename to show, and the index as reference,
 	 * the colour (black/red/green) and the full name for the tooltip */
@@ -258,7 +258,7 @@ static void prepare_openfiles(void)
 	/* set policy settings for the scolledwindow around the treeview again, because glade
 	 * doesn't keep the settings */
 	gtk_scrolled_window_set_policy(
-			GTK_SCROLLED_WINDOW(lookup_widget(app->window, "scrolledwindow7")),
+			GTK_SCROLLED_WINDOW(lookup_widget(main_widgets.window, "scrolledwindow7")),
 			GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
 	renderer = gtk_cell_renderer_text_new();
@@ -331,7 +331,7 @@ void treeviews_openfiles_update_all()
 	gint idx;
 
 	gtk_list_store_clear(store_openfiles);
-	for (i = 0; i < (guint) gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)); i++)
+	for (i = 0; i < (guint) gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)); i++)
 	{
 		idx = document_get_n_idx(i);
 		if (! doc_list[idx].is_valid) continue;
@@ -537,7 +537,7 @@ static void on_openfiles_document_action(GtkMenuItem *menuitem, gpointer user_da
 			{
 				case OPENFILES_ACTION_REMOVE:
 				{
-					document_remove(gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(doc_list[idx].sci)));
+					document_remove(gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook), GTK_WIDGET(doc_list[idx].sci)));
 					break;
 				}
 				case OPENFILES_ACTION_SAVE:
@@ -570,7 +570,7 @@ static gboolean change_focus(gpointer data)
 	/* idx might not be valid e.g. if user closed a tab whilst Geany is opening files */
 	if (DOC_IDX_VALID(idx))
 	{
-		GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(app->window));
+		GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 		GtkWidget *sci = GTK_WIDGET(doc_list[idx].sci);
 
 		if (focusw == tv.tree_openfiles)
@@ -587,11 +587,11 @@ static void on_openfiles_tree_selection_changed(GtkTreeSelection *selection, gpo
 	gint idx = 0;
 
 	/* use switch_notebook_page to ignore changing the notebook page because it is already done */
-	if (gtk_tree_selection_get_selected(selection, &model, &iter) && ! app->ignore_callback)
+	if (gtk_tree_selection_get_selected(selection, &model, &iter) && ! ignore_callback)
 	{
 		gtk_tree_model_get(model, &iter, 1, &idx, -1);
-		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
-					gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook),
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
+					gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
 					(GtkWidget*) doc_list[idx].sci));
 		g_idle_add((GSourceFunc) change_focus, GINT_TO_POINTER(idx));
 	}
@@ -733,7 +733,7 @@ static gboolean on_treeviews_button_press_event(GtkWidget *widget, GdkEventButto
 void treeviews_init()
 {
 	tv.default_tag_tree = NULL;
-	tag_window = lookup_widget(app->window, "scrolledwindow2");
+	tag_window = lookup_widget(main_widgets.window, "scrolledwindow2");
 
 	prepare_openfiles();
 	create_taglist_popup_menu();

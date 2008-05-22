@@ -163,14 +163,14 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 		return;
 
 	idx = p_document->get_cur_idx();
-	tooltips = GTK_TOOLTIPS(p_support->lookup_widget(app->window, "tooltips"));
+	tooltips = GTK_TOOLTIPS(p_support->lookup_widget(main_widgets->window, "tooltips"));
 
 	exi = g_new(ExportInfo, 1);
 	exi->idx = idx;
 	exi->export_func = func;
 	exi->have_zoom_level_checkbox = FALSE;
 
-	dialog = gtk_file_chooser_dialog_new(_("Export File"), GTK_WINDOW(app->window),
+	dialog = gtk_file_chooser_dialog_new(_("Export File"), GTK_WINDOW(main_widgets->window),
 				GTK_FILE_CHOOSER_ACTION_SAVE, NULL, NULL);
 	gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
 	gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
@@ -205,7 +205,7 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 	g_signal_connect((gpointer) dialog, "response",
 		G_CALLBACK(on_file_save_dialog_response), exi);
 
-	gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(app->window));
+	gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(main_widgets->window));
 
 	/* if the current document has a filename we use it as the default. */
 	gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(dialog));
@@ -712,7 +712,7 @@ void init(GeanyData *data)
 	GtkWidget *menu_create_latex;
 
 	menu_export = gtk_image_menu_item_new_with_mnemonic(_("_Export"));
-	gtk_container_add(GTK_CONTAINER(data->tools_menu), menu_export);
+	gtk_container_add(GTK_CONTAINER(main_widgets->tools_menu), menu_export);
 
 	menu_export_menu = gtk_menu_new ();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_export), menu_export_menu);

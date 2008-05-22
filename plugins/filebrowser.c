@@ -738,7 +738,7 @@ static GtkWidget *make_toolbar(void)
 {
 	GtkWidget *wid, *toolbar;
 	GtkTooltips *tooltips = GTK_TOOLTIPS(p_support->lookup_widget(
-		app->window, "tooltips"));
+		main_widgets->window, "tooltips"));
 
 	toolbar = gtk_toolbar_new();
 	gtk_toolbar_set_icon_size(GTK_TOOLBAR(toolbar), GTK_ICON_SIZE_MENU);
@@ -938,7 +938,7 @@ void init(GeanyData *data)
 	gtk_container_add(GTK_CONTAINER(file_view_vbox), scrollwin);
 
 	gtk_widget_show_all(file_view_vbox);
-	gtk_notebook_append_page(GTK_NOTEBOOK(app->treeview_notebook), file_view_vbox,
+	gtk_notebook_append_page(GTK_NOTEBOOK(main_widgets->sidebar_notebook), file_view_vbox,
 		gtk_label_new(_("Files")));
 
 	load_settings();

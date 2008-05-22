@@ -1027,7 +1027,7 @@ static void create_build_menu_gen(BuildMenuItems *menu_items)
 {
 	GtkWidget *menu, *item = NULL, *image, *separator;
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
-	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
+	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
 	KeyBindingGroup *group = g_ptr_array_index(keybinding_groups, GEANY_KEY_GROUP_BUILD);
 
 	menu = gtk_menu_new();
@@ -1144,7 +1144,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 {
 	GtkWidget *menu, *item, *image, *separator;
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
-	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
+	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
 	KeyBindingGroup *group = g_ptr_array_index(keybinding_groups, GEANY_KEY_GROUP_BUILD);
 
 	menu = gtk_menu_new();
@@ -1264,7 +1264,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 		G_CALLBACK(on_build_arguments_activate), filetypes[GEANY_FILETYPES_LATEX]);
 	menu_items->item_set_args = item;
 
-	gtk_window_add_accel_group(GTK_WINDOW(app->window), accel_group);
+	gtk_window_add_accel_group(GTK_WINDOW(main_widgets.window), accel_group);
 
 	menu_items->menu = menu;
 	g_object_ref((gpointer)menu_items->menu);	/* to hold it after removing */
@@ -1330,7 +1330,7 @@ static void show_includes_arguments_tex(void)
 	if (DOC_IDX_VALID(idx)) ft = doc_list[idx].file_type;
 	g_return_if_fail(ft != NULL);
 
-	dialog = gtk_dialog_new_with_buttons(_("Set Arguments"), GTK_WINDOW(app->window),
+	dialog = gtk_dialog_new_with_buttons(_("Set Arguments"), GTK_WINDOW(main_widgets.window),
 										GTK_DIALOG_DESTROY_WITH_PARENT,
 										GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 										GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
@@ -1499,7 +1499,7 @@ static void show_includes_arguments_gen(void)
 	if (DOC_IDX_VALID(idx)) ft = doc_list[idx].file_type;
 	g_return_if_fail(ft != NULL);
 
-	dialog = gtk_dialog_new_with_buttons(_("Set Includes and Arguments"), GTK_WINDOW(app->window),
+	dialog = gtk_dialog_new_with_buttons(_("Set Includes and Arguments"), GTK_WINDOW(main_widgets.window),
 										GTK_DIALOG_DESTROY_WITH_PARENT,
 										GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 										GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
@@ -1645,14 +1645,14 @@ void build_menu_update(gint idx)
 		(FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_NONE &&
 			doc_list[idx].file_name == NULL))
 	{
-		gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), FALSE);
-		gtk_menu_item_remove_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")));
+		gtk_widget_set_sensitive(lookup_widget(main_widgets.window, "menu_build1"), FALSE);
+		gtk_menu_item_remove_submenu(GTK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_build1")));
 		gtk_widget_set_sensitive(widgets.compile_button, FALSE);
 		gtk_widget_set_sensitive(widgets.run_button, FALSE);
 		return;
 	}
 	else
-		gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), TRUE);
+		gtk_widget_set_sensitive(lookup_widget(main_widgets.window, "menu_build1"), TRUE);
 
 	ft = doc_list[idx].file_type;
 	g_return_if_fail(ft != NULL);
@@ -1660,7 +1660,7 @@ void build_menu_update(gint idx)
 	menu_items = build_get_menu_items(ft->id);
 	/* Note: don't remove the submenu first because it can now cause an X hang if
 	 * the menu is already open when called from build_exit_cb(). */
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_build1")),
 		menu_items->menu);
 
 	have_path = (doc_list[idx].file_name != NULL);
@@ -2041,6 +2041,6 @@ on_build_next_error                    (GtkMenuItem     *menuitem,
 
 void build_init()
 {
-	widgets.compile_button = lookup_widget(app->window, "toolbutton13");
-	widgets.run_button = lookup_widget(app->window, "toolbutton26");
+	widgets.compile_button = lookup_widget(main_widgets.window, "toolbutton13");
+	widgets.run_button = lookup_widget(main_widgets.window, "toolbutton26");
 }

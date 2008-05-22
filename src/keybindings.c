@@ -137,7 +137,7 @@ static KeyBindingGroup *add_kb_group(KeyBindingGroup *group,
 
 /* Lookup a widget in the main window */
 #define LW(widget_name) \
-	lookup_widget(app->window, G_STRINGIFY(widget_name))
+	lookup_widget(main_widgets.window, G_STRINGIFY(widget_name))
 
 /* Expansion for group_id = FILE:
  * static KeyBinding FILE_keys[GEANY_KEYS_FILE_COUNT]; */
@@ -456,7 +456,7 @@ void keybindings_init(void)
 
 	init_default_kb();
 
-	gtk_window_add_accel_group(GTK_WINDOW(app->window), kb_accel_group);
+	gtk_window_add_accel_group(GTK_WINDOW(main_widgets.window), kb_accel_group);
 }
 
 
@@ -542,7 +542,7 @@ static void add_menu_accel(KeyBindingGroup *group, guint kb_id,
 
 
 #define GEANY_ADD_POPUP_ACCEL(kb_id, wid) \
-	add_menu_accel(group, kb_id, accel_group, lookup_widget(app->popup_menu, G_STRINGIFY(wid)))
+	add_menu_accel(group, kb_id, accel_group, lookup_widget(main_widgets.editor_menu, G_STRINGIFY(wid)))
 
 /* set the menu item accelerator shortcuts (just for visibility, they are handled anyway) */
 static void add_popup_menu_accels(void)
@@ -583,7 +583,7 @@ static void add_popup_menu_accels(void)
 
 	/* the build menu items are set if the build menus are created */
 
-	gtk_window_add_accel_group(GTK_WINDOW(app->window), accel_group);
+	gtk_window_add_accel_group(GTK_WINDOW(main_widgets.window), accel_group);
 }
 
 
@@ -676,7 +676,7 @@ void keybindings_show_shortcuts(void)
 	GString *text_keys;
 	gint height, response;
 
-	dialog = gtk_dialog_new_with_buttons(_("Keyboard Shortcuts"), GTK_WINDOW(app->window),
+	dialog = gtk_dialog_new_with_buttons(_("Keyboard Shortcuts"), GTK_WINDOW(main_widgets.window),
 				GTK_DIALOG_DESTROY_WITH_PARENT,
 				GTK_STOCK_EDIT, GTK_RESPONSE_APPLY,
 				GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
@@ -745,7 +745,7 @@ static gboolean check_fixed_kb(guint keyval, guint state)
 	if (state & GDK_MOD1_MASK && keyval >= GDK_0 && keyval <= GDK_9)
 	{
 		gint page = keyval - GDK_0 - 1;
-		gint npages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
+		gint npages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 
 		/* alt-0 is for the rightmost tab */
 		if (keyval == GDK_0)
@@ -754,7 +754,7 @@ static gboolean check_fixed_kb(guint keyval, guint state)
 		if (swap_alt_tab_order && ! file_prefs.tab_order_ltr)
 			page = (npages - 1) - page;
 
-		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), page);
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), page);
 		return TRUE;
 	}
 	if (keyval == GDK_Page_Up || keyval == GDK_Page_Down)
@@ -763,10 +763,10 @@ static gboolean check_fixed_kb(guint keyval, guint state)
 		if (state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK))
 		{
 			if (keyval == GDK_Page_Up)
-				gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), 0);
+				gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), 0);
 			if (keyval == GDK_Page_Down)
-				gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
-					gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) - 1);
+				gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
+					gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) - 1);
 			return TRUE;
 		}
 	}
@@ -784,7 +784,7 @@ static gboolean check_snippet_completion(guint keyval, guint state)
 	if (kb->key == keyval && kb->mods == state)
 	{
 		gint idx = document_get_cur_idx();
-		GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(app->window));
+		GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 		/* keybinding only valid when scintilla widget has focus */
 		if (DOC_IDX_VALID(idx) && focusw == GTK_WIDGET(doc_list[idx].sci))
@@ -815,7 +815,7 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 
 	if (! vc->enable_bash_keys)
 		return FALSE;
-	if (gtk_window_get_focus(GTK_WINDOW(app->window)) != vc->vte)
+	if (gtk_window_get_focus(GTK_WINDOW(main_widgets.window)) != vc->vte)
 		return FALSE;
 	/* prevent menubar flickering: */
 	if (state == GDK_SHIFT_MASK && (keyval >= GDK_a && keyval <= GDK_z))
@@ -836,10 +836,10 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 	 * from overriding the VTE bash shortcuts.
 	 * Ideally we would just somehow disable the menubar without redrawing it,
 	 * but maybe that's not possible. */
-	widget = lookup_widget(app->window, "menubar1");
+	widget = lookup_widget(main_widgets.window, "menubar1");
 	gtk_widget_set_sensitive(widget, FALSE);
 	g_idle_add(&set_sensitive, (gpointer) widget);
-	widget = app->popup_menu;
+	widget = main_widgets.editor_menu;
 	gtk_widget_set_sensitive(widget, FALSE);
 	g_idle_add(&set_sensitive, (gpointer) widget);
 	return TRUE;
@@ -1042,14 +1042,14 @@ static void cb_func_menu_opencolorchooser(G_GNUC_UNUSED guint key_id)
 
 static void cb_func_menu_fullscreen(G_GNUC_UNUSED guint key_id)
 {
-	GtkCheckMenuItem *c = GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_fullscreen1"));
+	GtkCheckMenuItem *c = GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_fullscreen1"));
 
 	gtk_check_menu_item_set_active(c, ! gtk_check_menu_item_get_active(c));
 }
 
 static void cb_func_menu_messagewindow(G_GNUC_UNUSED guint key_id)
 {
-	GtkCheckMenuItem *c = GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_messages_window1"));
+	GtkCheckMenuItem *c = GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_show_messages_window1"));
 
 	gtk_check_menu_item_set_active(c, ! gtk_check_menu_item_get_active(c));
 }
@@ -1175,15 +1175,15 @@ static void cb_func_switch_scribble(G_GNUC_UNUSED guint key_id)
 static void cb_func_switch_search_bar(G_GNUC_UNUSED guint key_id)
 {
 	if (toolbar_prefs.visible && toolbar_prefs.show_search)
-		gtk_widget_grab_focus(lookup_widget(app->window, "entry1"));
+		gtk_widget_grab_focus(lookup_widget(main_widgets.window, "entry1"));
 }
 
 static void cb_func_switch_sidebar(G_GNUC_UNUSED guint key_id)
 {
 	if (ui_prefs.sidebar_visible)
 	{
-		gint page_num = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->treeview_notebook));
-		GtkWidget *page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(app->treeview_notebook), page_num);
+		gint page_num = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook));
+		GtkWidget *page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook), page_num);
 
 		/* gtk_widget_grab_focus() won't work because of the scrolled window containers */
 		gtk_widget_child_focus(page, GTK_DIR_TAB_FORWARD);
@@ -1195,14 +1195,37 @@ static void cb_func_switch_vte(G_GNUC_UNUSED guint key_id)
 	msgwin_switch_tab(MSG_VTE, TRUE);
 }
 
+
+static void switch_document(gint direction)
+{
+	gint page_count = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
+
+	if (direction == LEFT)
+	{
+		if (cur_page > 0)
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), cur_page - 1);
+		else
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), page_count - 1);
+	}
+	else if (direction == RIGHT)
+	{
+		if (cur_page < page_count - 1)
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), cur_page + 1);
+		else
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), 0);
+	}
+}
+
+
 static void cb_func_switch_tableft(G_GNUC_UNUSED guint key_id)
 {
-	utils_switch_document(LEFT);
+	switch_document(LEFT);
 }
 
 static void cb_func_switch_tabright(G_GNUC_UNUSED guint key_id)
 {
-	utils_switch_document(RIGHT);
+	switch_document(RIGHT);
 }
 
 static void cb_func_switch_tablastused(G_GNUC_UNUSED guint key_id)
@@ -1210,7 +1233,7 @@ static void cb_func_switch_tablastused(G_GNUC_UNUSED guint key_id)
 	gint last_doc_idx = callbacks_data.last_doc_idx;
 
 	if (DOC_IDX_VALID(last_doc_idx))
-		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
 			document_get_notebook_page(last_doc_idx));
 }
 
@@ -1219,7 +1242,7 @@ static void cb_func_move_tab(guint key_id)
 {
 	gint idx = document_get_cur_idx();
 	GtkWidget *sci = GTK_WIDGET(doc_list[idx].sci);
-	GtkNotebook *nb = GTK_NOTEBOOK(app->notebook);
+	GtkNotebook *nb = GTK_NOTEBOOK(main_widgets.notebook);
 	gint cur_page = gtk_notebook_get_current_page(nb);
 
 	if (! DOC_IDX_VALID(idx))
@@ -1397,7 +1420,7 @@ static void delete_lines(ScintillaObject *sci)
 static void cb_func_editor_action(guint key_id)
 {
 	gint idx = document_get_cur_idx();
-	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(app->window));
+	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	/* edit keybindings only valid when scintilla widget has focus */
 	if (! DOC_IDX_VALID(idx) || focusw != GTK_WIDGET(doc_list[idx].sci)) return;
@@ -1439,7 +1462,7 @@ static void cb_func_editor_action(guint key_id)
 			break;
 		case GEANY_KEYS_EDITOR_CONTEXTACTION:
 			if (check_current_word())
-				on_context_action1_activate(GTK_MENU_ITEM(lookup_widget(app->popup_menu,
+				on_context_action1_activate(GTK_MENU_ITEM(lookup_widget(main_widgets.editor_menu,
 					"context_action1")), NULL);
 			break;
 		case GEANY_KEYS_EDITOR_SUPPRESSSNIPPETCOMPLETION:
@@ -1468,7 +1491,7 @@ static void cb_func_editor_action(guint key_id)
 static void cb_func_format_action(guint key_id)
 {
 	gint idx = document_get_cur_idx();
-	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(app->window));
+	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	/* keybindings only valid when scintilla widget has focus */
 	if (! DOC_IDX_VALID(idx) || focusw != GTK_WIDGET(doc_list[idx].sci)) return;
@@ -1522,12 +1545,12 @@ static void cb_func_format_action(guint key_id)
 static void cb_func_select_action(guint key_id)
 {
 	gint idx = document_get_cur_idx();
-	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(app->window));
+	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 	static GtkWidget *scribble_widget = NULL;
 
 	/* special case for Select All in the scribble widget */
 	if (scribble_widget == NULL) /* lookup the scribble widget only once */
-		scribble_widget = lookup_widget(app->window, "textview_scribble");
+		scribble_widget = lookup_widget(main_widgets.window, "textview_scribble");
 	if (key_id == GEANY_KEYS_SELECT_ALL && focusw == scribble_widget)
 	{
 		g_signal_emit_by_name(scribble_widget, "select-all", TRUE);
@@ -1565,7 +1588,7 @@ static void cb_func_menu_replacetabs(G_GNUC_UNUSED guint key_id)
 static void cb_func_insert_action(guint key_id)
 {
 	gint idx = document_get_cur_idx();
-	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(app->window));
+	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	/* keybindings only valid when scintilla widget has focus */
 	if (! DOC_IDX_VALID(idx) || focusw != GTK_WIDGET(doc_list[idx].sci)) return;
@@ -1576,7 +1599,7 @@ static void cb_func_insert_action(guint key_id)
 			editor_insert_alternative_whitespace(idx);
 			break;
 		case GEANY_KEYS_INSERT_DATE:
-			gtk_menu_item_activate(GTK_MENU_ITEM(lookup_widget(app->window, "insert_date_custom1")));
+			gtk_menu_item_activate(GTK_MENU_ITEM(lookup_widget(main_widgets.window, "insert_date_custom1")));
 			break;
 	}
 }

@@ -443,7 +443,7 @@ void filetypes_init_types()
 static void create_set_filetype_menu()
 {
 	filetype_id ft_id;
-	GtkWidget *filetype_menu = lookup_widget(app->window, "set_filetype1_menu");
+	GtkWidget *filetype_menu = lookup_widget(main_widgets.window, "set_filetype1_menu");
 	GtkWidget *sub_menu = filetype_menu;
 	GtkWidget *sub_menu_programming, *sub_menu_scripts, *sub_menu_markup, *sub_menu_misc;
 	GtkWidget *sub_item_programming, *sub_item_scripts, *sub_item_markup, *sub_item_misc;
@@ -700,8 +700,8 @@ void filetypes_select_radio_item(const GeanyFiletype *ft)
 {
 	FullFileType *fft;
 
-	/* app->ignore_callback has to be set by the caller */
-	g_return_if_fail(app->ignore_callback);
+	/* ignore_callback has to be set by the caller */
+	g_return_if_fail(ignore_callback);
 
 	if (ft == NULL)
 		ft = filetypes[GEANY_FILETYPES_NONE];
@@ -716,7 +716,7 @@ on_filetype_change                     (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	if (app->ignore_callback || idx < 0 || ! doc_list[idx].is_valid) return;
+	if (ignore_callback || idx < 0 || ! doc_list[idx].is_valid) return;
 
 	document_set_filetype(idx, (GeanyFiletype*)user_data);
 }

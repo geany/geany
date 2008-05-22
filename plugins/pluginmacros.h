@@ -37,6 +37,7 @@
 
 /* common data structs */
 #define app				geany_data->app
+#define main_widgets	geany_data->main_widgets
 #define doc_array		geany_data->doc_array			/**< Allows use of @c doc_list[] macro */
 #define filetypes_array	geany_data->filetypes_array		/**< Allows use of @c filetypes[] macro */
 #define prefs			geany_data->prefs

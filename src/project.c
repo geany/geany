@@ -97,7 +97,7 @@ void project_new()
 	GtkWidget *button;
 	GtkWidget *bbox;
 	GtkWidget *label;
-	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
+	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
 	PropertyDialogElements *e;
 	gint response;
 
@@ -106,7 +106,7 @@ void project_new()
 	g_return_if_fail(app->project == NULL);
 
 	e = g_new0(PropertyDialogElements, 1);
-	e->dialog = gtk_dialog_new_with_buttons(_("New Project"), GTK_WINDOW(app->window),
+	e->dialog = gtk_dialog_new_with_buttons(_("New Project"), GTK_WINDOW(main_widgets.window),
 										 GTK_DIALOG_DESTROY_WITH_PARENT,
 										 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 
@@ -236,7 +236,7 @@ void project_open()
 	if (! close_open_project()) return;
 
 #ifdef G_OS_WIN32
-	file = win32_show_project_open_dialog(app->window, _("Open Project"), dir, FALSE, TRUE);
+	file = win32_show_project_open_dialog(main_widgets.window, _("Open Project"), dir, FALSE, TRUE);
 	if (file != NULL)
 	{
 		/* try to load the config */
@@ -254,7 +254,7 @@ void project_open()
 	}
 #else
 
-	dialog = gtk_file_chooser_dialog_new(_("Open Project"), GTK_WINDOW(app->window),
+	dialog = gtk_file_chooser_dialog_new(_("Open Project"), GTK_WINDOW(main_widgets.window),
 			GTK_FILE_CHOOSER_ACTION_OPEN,
 			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
@@ -265,7 +265,7 @@ void project_open()
 	gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
 	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), TRUE);
 	gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
-	gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(app->window));
+	gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(main_widgets.window));
 	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(dialog), TRUE);
 
 	/* add FileFilters */
@@ -353,9 +353,9 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	GtkWidget *bbox;
 	GtkWidget *label;
 	GtkWidget *swin;
-	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
+	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
 
-	e->dialog = gtk_dialog_new_with_buttons(_("Project Properties"), GTK_WINDOW(app->window),
+	e->dialog = gtk_dialog_new_with_buttons(_("Project Properties"), GTK_WINDOW(main_widgets.window),
 										 GTK_DIALOG_DESTROY_WITH_PARENT,
 										 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 	gtk_dialog_add_buttons(GTK_DIALOG(e->dialog), GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);

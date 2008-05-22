@@ -101,7 +101,7 @@ on_editor_button_press_event           (GtkWidget *widget,
 		ui_update_popup_goto_items((current_word[0] != '\0') ? TRUE : FALSE);
 		ui_update_popup_copy_items(idx);
 		ui_update_insert_include_item(idx, 0);
-		gtk_menu_popup(GTK_MENU(app->popup_menu), NULL, NULL, NULL, NULL, event->button, event->time);
+		gtk_menu_popup(GTK_MENU(main_widgets.editor_menu), NULL, NULL, NULL, NULL, event->button, event->time);
 
 		return TRUE;
 	}
@@ -460,7 +460,7 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 
  		case SCN_MODIFIED:
 		{
-			if (nt->modificationType & SC_STARTACTION && ! app->ignore_callback)
+			if (nt->modificationType & SC_STARTACTION && ! ignore_callback)
 			{
 				/* get notified about undo changes */
 				document_undo_add(idx, UNDO_SCINTILLA, NULL);
@@ -3211,3 +3211,34 @@ void editor_set_use_tabs(gint idx, gboolean use_tabs)
 	/* remove indent spaces on backspace, if using spaces to indent */
 	SSM(doc->sci, SCI_SETBACKSPACEUNINDENTS, ! use_tabs, 0);
 }
+
+
+/* Move to position @a pos, switching to the document at @a idx if necessary,
+ * setting a marker if @a mark is set. */
+gboolean editor_goto_pos(gint idx, gint pos, gboolean mark)
+{
+	gint page_num;
+
+	if (! DOC_IDX_VALID(idx) || pos < 0)
+		return FALSE;
+
+	if (mark)
+	{
+		gint line = sci_get_line_from_position(doc_list[idx].sci, pos);
+
+		/* mark the tag with the yellow arrow */
+		sci_marker_delete_all(doc_list[idx].sci, 0);
+		sci_set_marker_at_line(doc_list[idx].sci, line, TRUE, 0);
+	}
+
+	sci_goto_pos(doc_list[idx].sci, pos, TRUE);
+	doc_list[idx].scroll_percent = 0.25F;
+
+	/* finally switch to the page */
+	page_num = gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook), GTK_WIDGET(doc_list[idx].sci));
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), page_num);
+
+	return TRUE;
+}
+
+

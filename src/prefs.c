@@ -965,13 +965,13 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		treeviews_openfiles_update_all(); /* to update if full path setting has changed */
 		ui_update_toolbar_items();
 		ui_update_toolbar_icons(toolbar_prefs.icon_size);
-		gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), toolbar_prefs.icon_style);
+		gtk_toolbar_set_style(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_style);
 		ui_sidebar_show_hide();
-		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(app->notebook), interface_prefs.show_notebook_tabs);
+		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
 
-		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->notebook), interface_prefs.tab_pos_editor);
+		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.tab_pos_editor);
 		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), interface_prefs.tab_pos_msgwin);
-		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->treeview_notebook), interface_prefs.tab_pos_sidebar);
+		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.sidebar_notebook), interface_prefs.tab_pos_sidebar);
 
 		/* re-colourise all open documents, if tab width or long line settings have changed */
 		for (i = 0; i < doc_array->len; i++)
@@ -1049,7 +1049,7 @@ void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 			}
 			if (GTK_IS_WIDGET(tv.default_tag_tree))
 				ui_widget_modify_font_from_string(tv.default_tag_tree, interface_prefs.tagbar_font);
-			ui_widget_modify_font_from_string(lookup_widget(app->window, "entry1"),
+			ui_widget_modify_font_from_string(lookup_widget(main_widgets.window, "entry1"),
 				interface_prefs.tagbar_font);
 			break;
 		}
@@ -1310,7 +1310,7 @@ static gboolean find_duplicate(KeyBinding *search_kb,
 			if (kb->key == key && kb->mods == mods
 				&& ! (kb->key == search_kb->key && kb->mods == search_kb->mods))
 			{
-				if (dialogs_show_question_full(app->window, _("_Override"), GTK_STOCK_CANCEL,
+				if (dialogs_show_question_full(main_widgets.window, _("_Override"), GTK_STOCK_CANCEL,
 					_("Override that keybinding?"),
 					_("The combination '%s' is already used for \"%s\"."),
 					action, kb->label))
@@ -1401,7 +1401,7 @@ void prefs_show_dialog(void)
 
 		ui_widgets.prefs_dialog = create_prefs_dialog();
 		gtk_widget_set_name(ui_widgets.prefs_dialog, "GeanyPrefsDialog");
-		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.prefs_dialog), GTK_WINDOW(app->window));
+		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.prefs_dialog), GTK_WINDOW(main_widgets.window));
 
 		/* init the default file encoding combo box */
 		combo_new = lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");

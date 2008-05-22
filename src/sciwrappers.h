@@ -129,7 +129,7 @@ gint				sci_search_next				(ScintillaObject * sci, gint flags, const gchar *text
 gint				sci_search_prev				(ScintillaObject * sci, gint flags, const gchar *text);
 gint				sci_find_text				(ScintillaObject * sci, gint flags, struct TextToFind *ttf);
 void				sci_set_font				(ScintillaObject * sci, gint style, const gchar* font, gint size);
-void				sci_goto_line				(ScintillaObject * sci, gint line, gboolean ensure_visibility);
+void				sci_goto_line				(ScintillaObject * sci, gint line, gboolean unfold);
 void				sci_marker_delete_all		(ScintillaObject * sci, gint marker);
 gint				sci_get_style_at			(ScintillaObject * sci, gint position);
 void				sci_set_symbol_margin		(ScintillaObject * sci, gboolean set);

@@ -777,7 +777,7 @@ static void printing_print_gtk(gint idx)
 		gtk_print_operation_set_default_page_setup(op, page_setup);
 
 	res = gtk_print_operation_run(
-		op, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, GTK_WINDOW(app->window), &error);
+		op, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, GTK_WINDOW(main_widgets.window), &error);
 
 	if (res == GTK_PRINT_OPERATION_RESULT_APPLY)
 	{
@@ -807,7 +807,7 @@ void printing_page_setup_gtk(void)
 		settings = gtk_print_settings_new();
 
 	new_page_setup = gtk_print_run_page_setup_dialog(
-		GTK_WINDOW(app->window), page_setup, settings);
+		GTK_WINDOW(main_widgets.window), page_setup, settings);
 
 	if (page_setup != NULL)
 		g_object_unref(page_setup);

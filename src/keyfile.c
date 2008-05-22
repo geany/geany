@@ -144,11 +144,11 @@ void configuration_save_session_files(GKeyFile *config)
 	gchar entry[14];
 	guint i = 0, j = 0, max;
 
-	npage = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->notebook));
+	npage = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
 	g_key_file_set_integer(config, "files", "current_page", npage);
 
 	/* store the filenames to reopen them the next time */
-	max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
+	max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 	for (i = 0; i < max; i++)
 	{
 		idx = document_get_n_idx(i);
@@ -339,7 +339,7 @@ static void save_ui_prefs(GKeyFile *config)
 		GtkTextBuffer *buffer;
 		GtkTextIter start, end;
 
-		buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(lookup_widget(app->window, "textview_scribble")));
+		buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(lookup_widget(main_widgets.window, "textview_scribble")));
 		gtk_text_buffer_get_bounds(buffer, &start, &end);
 		scribble_text = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
 		g_key_file_set_string(config, PACKAGE, "scribble_text", scribble_text);
@@ -349,16 +349,16 @@ static void save_ui_prefs(GKeyFile *config)
 	if (prefs.save_winpos)
 	{
 		g_key_file_set_integer(config, PACKAGE, "treeview_position",
-				gtk_paned_get_position(GTK_PANED(lookup_widget(app->window, "hpaned1"))));
+				gtk_paned_get_position(GTK_PANED(lookup_widget(main_widgets.window, "hpaned1"))));
 		g_key_file_set_integer(config, PACKAGE, "msgwindow_position",
-				gtk_paned_get_position(GTK_PANED(lookup_widget(app->window, "vpaned1"))));
+				gtk_paned_get_position(GTK_PANED(lookup_widget(main_widgets.window, "vpaned1"))));
 	}
 
 	if (prefs.save_winpos)
 	{
-		gtk_window_get_position(GTK_WINDOW(app->window), &ui_prefs.geometry[0], &ui_prefs.geometry[1]);
-		gtk_window_get_size(GTK_WINDOW(app->window), &ui_prefs.geometry[2], &ui_prefs.geometry[3]);
-		if (gdk_window_get_state(app->window->window) & GDK_WINDOW_STATE_MAXIMIZED)
+		gtk_window_get_position(GTK_WINDOW(main_widgets.window), &ui_prefs.geometry[0], &ui_prefs.geometry[1]);
+		gtk_window_get_size(GTK_WINDOW(main_widgets.window), &ui_prefs.geometry[2], &ui_prefs.geometry[3]);
+		if (gdk_window_get_state(main_widgets.window->window) & GDK_WINDOW_STATE_MAXIMIZED)
 			ui_prefs.geometry[4] = 1;
 		else
 			ui_prefs.geometry[4] = 0;
@@ -913,7 +913,7 @@ void configuration_open_files(void)
 		main_status.opening_session_files = FALSE;
 		/** TODO if session_notebook_page is equal to the current notebook tab(the last opened)
 		 ** the notebook switch page callback isn't triggered and e.g. menu items are not updated */
-		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), session_notebook_page);
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), session_notebook_page);
 	}
 	main_status.opening_session_files = FALSE;
 }
@@ -926,7 +926,7 @@ void configuration_apply_settings(void)
 	if (scribble_text)
 	{	/* update the scribble widget, because now it's realized */
 		gtk_text_buffer_set_text(
-				gtk_text_view_get_buffer(GTK_TEXT_VIEW(lookup_widget(app->window, "textview_scribble"))),
+				gtk_text_view_get_buffer(GTK_TEXT_VIEW(lookup_widget(main_widgets.window, "textview_scribble"))),
 				scribble_text, -1);
 	}
 	g_free(scribble_text);
@@ -934,15 +934,15 @@ void configuration_apply_settings(void)
 	/* set the position of the hpaned and vpaned */
 	if (prefs.save_winpos)
 	{
-		gtk_paned_set_position(GTK_PANED(lookup_widget(app->window, "hpaned1")), hpan_position);
-		gtk_paned_set_position(GTK_PANED(lookup_widget(app->window, "vpaned1")), vpan_position);
+		gtk_paned_set_position(GTK_PANED(lookup_widget(main_widgets.window, "hpaned1")), hpan_position);
+		gtk_paned_set_position(GTK_PANED(lookup_widget(main_widgets.window, "vpaned1")), vpan_position);
 	}
 
 	/* set fullscreen after initial draw so that returning to normal view is the right size.
 	 * fullscreen mode is disabled by default, so act only if it is true */
 	if (ui_prefs.fullscreen)
 	{
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_fullscreen1")), TRUE);
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_fullscreen1")), TRUE);
 		ui_prefs.fullscreen = TRUE;
 		ui_set_fullscreen();
 	}

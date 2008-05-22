@@ -37,6 +37,7 @@
 
 #include "geany.h"		/* for the GeanyApp data type */
 #include "support.h"	/* for the _() translation macro (see also po/POTFILES.in) */
+#include "ui_utils.h"
 
 #include "plugindata.h"		/* this defines the plugin API */
 #include "pluginmacros.h"	/* some useful macros to avoid typing geany_data so often */
@@ -67,7 +68,7 @@ item_activate(GtkMenuItem *menuitem, gpointer gdata)
 	GtkWidget *dialog;
 
 	dialog = gtk_message_dialog_new(
-		GTK_WINDOW(app->window),
+		GTK_WINDOW(main_widgets->window),
 		GTK_DIALOG_DESTROY_WITH_PARENT,
 		GTK_MESSAGE_INFO,
 		GTK_BUTTONS_OK,
@@ -89,7 +90,7 @@ void init(GeanyData *data)
 	/* Add an item to the Tools menu */
 	demo_item = gtk_menu_item_new_with_mnemonic(_("_Demo Plugin"));
 	gtk_widget_show(demo_item);
-	gtk_container_add(GTK_CONTAINER(geany_data->tools_menu), demo_item);
+	gtk_container_add(GTK_CONTAINER(main_widgets->tools_menu), demo_item);
 	g_signal_connect(G_OBJECT(demo_item), "activate", G_CALLBACK(item_activate), NULL);
 
 	welcome_text = g_strdup(_("Hello World!"));

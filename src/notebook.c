@@ -89,10 +89,10 @@ static void focus_sci(GtkWidget *widget, gpointer user_data)
 void notebook_init()
 {
 	/* focus the current document after clicking on a tab */
-	g_signal_connect_after(G_OBJECT(app->notebook), "button-release-event",
+	g_signal_connect_after(G_OBJECT(main_widgets.notebook), "button-release-event",
 		G_CALLBACK(focus_sci), NULL);
 
-	g_signal_connect(G_OBJECT(app->notebook), "drag-data-received",
+	g_signal_connect(G_OBJECT(main_widgets.notebook), "drag-data-received",
 		G_CALLBACK(on_window_drag_data_received), NULL);
 
 	setup_tab_dnd();
@@ -101,7 +101,7 @@ void notebook_init()
 
 static void setup_tab_dnd()
 {
-	GtkWidget *notebook = app->notebook;
+	GtkWidget *notebook = main_widgets.notebook;
 
 	/* Due to a segfault with manual tab DnD setup on GTK 2.10, we must
 	*  use the built in gtk_notebook_set_tab_reorderable from GTK 2.10.
@@ -157,8 +157,8 @@ notebook_motion_notify_event_cb(GtkWidget *widget, GdkEventMotion *event,
 	gpointer user_data)
 {
 	static gboolean drag_enabled = TRUE; /* stores current state */
-	GtkWidget *page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(app->notebook),
-			gtk_notebook_get_current_page(GTK_NOTEBOOK(app->notebook)));
+	GtkWidget *page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook),
+			gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook)));
 
 	if (page == NULL || event->x < 0 || event->y < 0) return FALSE;
 
@@ -278,14 +278,14 @@ notebook_find_tab_num_at_pos(GtkNotebook *notebook, gint x, gint y)
 }
 
 
-/* call this after the number of tabs in app->notebook changes. */
+/* call this after the number of tabs in main_widgets.notebook changes. */
 static void tab_count_changed(void)
 {
-	switch (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)))
+	switch (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)))
 	{
 		case 0:
 		/* Enables DnD for dropping files into the empty notebook widget */
-		gtk_drag_dest_set(app->notebook, GTK_DEST_DEFAULT_ALL,
+		gtk_drag_dest_set(main_widgets.notebook, GTK_DEST_DEFAULT_ALL,
 			files_drop_targets,	G_N_ELEMENTS(files_drop_targets),
 			GDK_ACTION_COPY | GDK_ACTION_MOVE | GDK_ACTION_LINK | GDK_ACTION_ASK);
 		break;
@@ -294,7 +294,7 @@ static void tab_count_changed(void)
 		/* Disables DnD for dropping files into the notebook widget and enables the DnD for moving file
 		 * tabs. Files can still be dropped into the notebook widget because it will be handled by the
 		 * active Scintilla Widget (only dropping to the tab bar is not possible but it should be ok) */
-		gtk_drag_dest_set(app->notebook, GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
+		gtk_drag_dest_set(main_widgets.notebook, GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
 			drag_targets, G_N_ELEMENTS(drag_targets), GDK_ACTION_MOVE);
 		break;
 	}
@@ -307,7 +307,7 @@ gboolean notebook_tab_label_cb(GtkWidget *widget, GdkEventButton *event, gpointe
 		on_menu_toggle_all_additional_widgets1_activate(NULL, NULL);
 	/* close tab on middle click */
 	if (event->button == 2)
-		document_remove(gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(user_data)));
+		document_remove(gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook), GTK_WIDGET(user_data)));
 
 	return FALSE;
 }
@@ -376,10 +376,10 @@ gint notebook_new_tab(gint doc_idx)
 	gtk_misc_set_alignment(GTK_MISC(this->tabmenu_label), 0.0, 0);
 
 	if (file_prefs.tab_order_ltr)
-		tabnum = gtk_notebook_append_page_menu(GTK_NOTEBOOK(app->notebook), page,
+		tabnum = gtk_notebook_append_page_menu(GTK_NOTEBOOK(main_widgets.notebook), page,
 			hbox, this->tabmenu_label);
 	else
-		tabnum = gtk_notebook_insert_page_menu(GTK_NOTEBOOK(app->notebook), page,
+		tabnum = gtk_notebook_insert_page_menu(GTK_NOTEBOOK(main_widgets.notebook), page,
 			hbox, this->tabmenu_label, 0);
 
 	tab_count_changed();
@@ -388,7 +388,7 @@ gint notebook_new_tab(gint doc_idx)
 #if GTK_CHECK_VERSION(2, 10, 0)
 	if (gtk_check_version(2, 10, 0) == NULL) /* null means version ok */
 	{
-		gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(app->notebook), page, TRUE);
+		gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(main_widgets.notebook), page, TRUE);
 	}
 #endif
 	g_free(title);
@@ -399,7 +399,7 @@ gint notebook_new_tab(gint doc_idx)
 static void
 notebook_tab_close_clicked_cb(GtkButton *button, gpointer user_data)
 {
-	gint cur_page = gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook),
+	gint cur_page = gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
 		GTK_WIDGET(user_data));
 	document_remove(cur_page);
 }
@@ -408,16 +408,16 @@ notebook_tab_close_clicked_cb(GtkButton *button, gpointer user_data)
 /* Always use this instead of gtk_notebook_remove_page(). */
 void notebook_remove_page(gint page_num)
 {
-	gint curpage = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->notebook));
+	gint curpage = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
 
 	/* Focus the next page, not the previous */
 	if (curpage == page_num && file_prefs.tab_order_ltr)
 	{
-		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), curpage + 1);
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), curpage + 1);
 	}
 
 	/* now remove the page (so we don't temporarily switch to the previous page) */
-	gtk_notebook_remove_page(GTK_NOTEBOOK(app->notebook), page_num);
+	gtk_notebook_remove_page(GTK_NOTEBOOK(main_widgets.notebook), page_num);
 
 	tab_count_changed();
 }

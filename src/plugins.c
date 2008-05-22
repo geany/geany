@@ -88,7 +88,7 @@ static GList *active_plugin_list = NULL; /* list of only actually loaded plugins
 static gchar **active_plugins_pref = NULL; 	/* list of plugin filenames to load at startup */
 static GList *failed_plugins_list = NULL;	/* plugins the user wants active but can't be used */
 
-static GtkWidget *separator = NULL;
+static GtkWidget *menu_separator = NULL;
 
 static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data);
 
@@ -271,7 +271,7 @@ geany_data_init(void)
 {
 	GeanyData gd = {
 		app,
-		lookup_widget(app->window, "tools1_menu"),
+		&main_widgets,
 		doc_array,
 		filetypes_array,
 		&prefs,
@@ -435,7 +435,7 @@ plugin_init(Plugin *plugin)
 
 	if (plugin->fields.flags & PLUGIN_IS_DOCUMENT_SENSITIVE)
 	{
-		gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) ? TRUE : FALSE;
+		gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) ? TRUE : FALSE;
 		gtk_widget_set_sensitive(plugin->fields.menu_item, enable);
 	}
 
@@ -705,15 +705,15 @@ void plugins_init()
 
 	widget = gtk_separator_menu_item_new();
 	gtk_widget_show(widget);
-	gtk_container_add(GTK_CONTAINER(geany_data.tools_menu), widget);
+	gtk_container_add(GTK_CONTAINER(main_widgets.tools_menu), widget);
 
 	widget = gtk_menu_item_new_with_mnemonic(_("_Plugin Manager"));
-	gtk_container_add(GTK_CONTAINER (geany_data.tools_menu), widget);
+	gtk_container_add(GTK_CONTAINER(main_widgets.tools_menu), widget);
 	gtk_widget_show(widget);
 	g_signal_connect((gpointer) widget, "activate", G_CALLBACK(pm_show_dialog), NULL);
 
-	separator = gtk_separator_menu_item_new();
-	gtk_container_add(GTK_CONTAINER(geany_data.tools_menu), separator);
+	menu_separator = gtk_separator_menu_item_new();
+	gtk_container_add(GTK_CONTAINER(main_widgets.tools_menu), menu_separator);
 
 	load_active_plugins();
 
@@ -826,11 +826,11 @@ void plugins_update_tools_menu()
 {
 	gboolean found;
 
-	if (separator == NULL)
+	if (menu_separator == NULL)
 		return;
 
 	found = (g_list_find_custom(active_plugin_list, NULL, (GCompareFunc) plugin_has_menu) != NULL);
-	ui_widget_show_hide(separator, found);
+	ui_widget_show_hide(menu_separator, found);
 }
 
 
@@ -1029,7 +1029,7 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	/* before showing the dialog, we need to create the list of available plugins */
 	load_all_plugins();
 
-	pm_widgets.dialog = gtk_dialog_new_with_buttons(_("Plugins"), GTK_WINDOW(app->window),
+	pm_widgets.dialog = gtk_dialog_new_with_buttons(_("Plugins"), GTK_WINDOW(main_widgets.window),
 						GTK_DIALOG_DESTROY_WITH_PARENT,
 						GTK_STOCK_OK, GTK_RESPONSE_CANCEL, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(pm_widgets.dialog));

@@ -26,6 +26,7 @@
 #include "geany.h"
 #include "support.h"
 #include "document.h"
+#include "ui_utils.h"
 
 #include "plugindata.h"
 #include "pluginmacros.h"
@@ -52,7 +53,7 @@ static gchar *config_file;
 gboolean auto_save(gpointer data)
 {
 	gint cur_idx = p_document->get_cur_idx();
-	gint i, idx, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
+	gint i, idx, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets->notebook));
 	gint saved_files = 0;
 
 	if (save_all)

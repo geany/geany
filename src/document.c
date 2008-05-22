@@ -193,7 +193,7 @@ gint document_get_notebook_page(gint doc_idx)
 {
 	if (! DOC_IDX_VALID(doc_idx)) return -1;
 
-	return gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook),
+	return gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
 		GTK_WIDGET(doc_list[doc_idx].sci));
 }
 
@@ -212,7 +212,7 @@ gint document_get_n_idx(guint page_num)
 	if (page_num >= doc_array->len) return -1;
 
 	sci = (ScintillaObject*)gtk_notebook_get_nth_page(
-				GTK_NOTEBOOK(app->notebook), page_num);
+				GTK_NOTEBOOK(main_widgets.notebook), page_num);
 
 	return document_find_by_sci(sci);
 }
@@ -226,14 +226,14 @@ gint document_get_n_idx(guint page_num)
  **/
 gint document_get_cur_idx()
 {
-	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->notebook));
+	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
 
 	if (cur_page == -1)
 		return -1;
 	else
 	{
 		ScintillaObject *sci = (ScintillaObject*)
-			gtk_notebook_get_nth_page(GTK_NOTEBOOK(app->notebook), cur_page);
+			gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook), cur_page);
 
 		return document_find_by_sci(sci);
 	}
@@ -434,7 +434,7 @@ static gint document_create(const gchar *utf8_filename)
 	gint new_idx;
 	GeanyDocument *this;
 	gint tabnum;
-	gint cur_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
+	gint cur_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 
 	if (cur_pages == 1)
 	{
@@ -524,10 +524,10 @@ gboolean document_remove(guint page_num)
 		doc_list[idx].tm_file = NULL;
 		doc_list[idx].scroll_percent = -1.0F;
 		document_undo_clear(idx);
-		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
+		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0)
 		{
 			treeviews_update_tag_list(-1, FALSE);
-			/*on_notebook1_switch_page(GTK_NOTEBOOK(app->notebook), NULL, 0, NULL);*/
+			/*on_notebook1_switch_page(GTK_NOTEBOOK(main_widgets.notebook), NULL, 0, NULL);*/
 			ui_set_window_title(-1);
 			ui_save_buttons_toggle(FALSE);
 			ui_document_buttons_update();
@@ -556,7 +556,7 @@ static void store_saved_encoding(gint idx)
 /* Opens a new empty document only if there are no other documents open */
 gint document_new_file_if_non_open()
 {
-	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
+	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0)
 		return document_new_file(NULL, NULL, NULL);
 
 	return -1;
@@ -1020,8 +1020,8 @@ gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean
 		if (idx >= 0)
 		{
 			ui_add_recent_file(utf8_filename);	/* either add or reorder recent item */
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
-					gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook),
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
+					gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
 					(GtkWidget*) doc_list[idx].sci));
 			g_free(utf8_filename);
 			g_free(locale_filename);
@@ -1116,7 +1116,7 @@ gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean
 		ui_set_statusbar(TRUE, _("File %s reloaded."), utf8_filename);
 	else
 		msgwin_status_add(_("File %s opened(%d%s)."),
-				utf8_filename, gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)),
+				utf8_filename, gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)),
 				(readonly) ? _(", read-only") : "");
 
 	g_free(utf8_filename);
@@ -1285,9 +1285,9 @@ gboolean document_save_file_as(gint idx)
 		document_set_filetype(idx, ft);
 		if (document_get_cur_idx() == idx)
 		{
-			app->ignore_callback = TRUE;
+			ignore_callback = TRUE;
 			filetypes_select_radio_item(doc_list[idx].file_type);
-			app->ignore_callback = FALSE;
+			ignore_callback = FALSE;
 		}
 	}
 	utils_replace_filename(idx);
@@ -2135,7 +2135,7 @@ void document_set_encoding(gint idx, const gchar *new_encoding)
 	doc_list[idx].encoding = g_strdup(new_encoding);
 
 	ui_update_statusbar(idx, -1);
-	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_write_unicode_bom1"),
+	gtk_widget_set_sensitive(lookup_widget(main_widgets.window, "menu_write_unicode_bom1"),
 			encodings_is_unicode_charset(doc_list[idx].encoding));
 }
 
@@ -2272,9 +2272,9 @@ void document_undo(gint idx)
 
 				document_set_encoding(idx, (const gchar*)action->data);
 
-				app->ignore_callback = TRUE;
+				ignore_callback = TRUE;
 				encodings_select_radio_item((const gchar*)action->data);
-				app->ignore_callback = FALSE;
+				ignore_callback = FALSE;
 
 				g_free(action->data);
 				break;
@@ -2341,9 +2341,9 @@ void document_redo(gint idx)
 
 				document_set_encoding(idx, (const gchar*)action->data);
 
-				app->ignore_callback = TRUE;
+				ignore_callback = TRUE;
 				encodings_select_radio_item((const gchar*)action->data);
-				app->ignore_callback = FALSE;
+				ignore_callback = FALSE;
 
 				g_free(action->data);
 				break;
@@ -2509,7 +2509,7 @@ gboolean document_account_for_unsaved(void)
 	gint p;
 	guint i, len = doc_array->len;
 
-	for (p = 0; p < gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)); p++)
+	for (p = 0; p < gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)); p++)
 	{
 		gint idx = document_get_n_idx(p);
 
@@ -2545,7 +2545,7 @@ static void force_close_all(void)
 	}
 	main_status.closing_all = TRUE;
 
-	while (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) > 0)
+	while (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) > 0)
 	{
 		document_remove(0);
 	}

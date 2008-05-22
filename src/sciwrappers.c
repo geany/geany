@@ -710,9 +710,9 @@ void sci_set_font(ScintillaObject *sci, gint style, const gchar* font, gint size
 }
 
 
-void sci_goto_line(ScintillaObject *sci, gint line, gboolean ensure_visibility)
+void sci_goto_line(ScintillaObject *sci, gint line, gboolean unfold)
 {
-	if (ensure_visibility) SSM(sci,SCI_ENSUREVISIBLE,line,0);
+	if (unfold) SSM(sci, SCI_ENSUREVISIBLE, line, 0);
 	SSM(sci, SCI_GOTOLINE, line, 0);
 }
 

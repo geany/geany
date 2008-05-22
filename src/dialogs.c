@@ -169,11 +169,11 @@ static void create_open_file_dialog(void)
 {
 	GtkWidget *filetype_combo, *encoding_combo;
 	GtkWidget *viewbtn;
-	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
+	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
 	guint i;
 	gchar *encoding_string;
 
-	ui_widgets.open_filesel = gtk_file_chooser_dialog_new(_("Open File"), GTK_WINDOW(app->window),
+	ui_widgets.open_filesel = gtk_file_chooser_dialog_new(_("Open File"), GTK_WINDOW(main_widgets.window),
 			GTK_FILE_CHOOSER_ACTION_OPEN, NULL, NULL);
 	gtk_widget_set_name(ui_widgets.open_filesel, "GeanyDialog");
 
@@ -192,7 +192,7 @@ static void create_open_file_dialog(void)
 	gtk_window_set_destroy_with_parent(GTK_WINDOW(ui_widgets.open_filesel), TRUE);
 	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(ui_widgets.open_filesel), FALSE);
 	gtk_window_set_type_hint(GTK_WINDOW(ui_widgets.open_filesel), GDK_WINDOW_TYPE_HINT_DIALOG);
-	gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_filesel), GTK_WINDOW(app->window));
+	gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_filesel), GTK_WINDOW(main_widgets.window));
 	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(ui_widgets.open_filesel), TRUE);
 
 	/* add checkboxes and filename entry */
@@ -283,7 +283,7 @@ static GtkWidget *add_file_open_extra_widget()
 	GtkWidget *vbox, *table, *file_entry, *check_hidden;
 	GtkWidget *filetype_ebox, *filetype_label, *filetype_combo;
 	GtkWidget *encoding_ebox, *encoding_label, *encoding_combo;
-	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
+	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
 
 	vbox = gtk_vbox_new(FALSE, 6);
 
@@ -472,9 +472,9 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 static void create_save_file_dialog(void)
 {
 	GtkWidget *vbox, *check_open_new_tab, *rename_btn;
-	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
+	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
 
-	ui_widgets.save_filesel = gtk_file_chooser_dialog_new(_("Save File"), GTK_WINDOW(app->window),
+	ui_widgets.save_filesel = gtk_file_chooser_dialog_new(_("Save File"), GTK_WINDOW(main_widgets.window),
 				GTK_FILE_CHOOSER_ACTION_SAVE, NULL, NULL);
 	gtk_window_set_modal(GTK_WINDOW(ui_widgets.save_filesel), TRUE);
 	gtk_window_set_destroy_with_parent(GTK_WINDOW(ui_widgets.save_filesel), TRUE);
@@ -512,7 +512,7 @@ static void create_save_file_dialog(void)
 	g_signal_connect((gpointer) ui_widgets.save_filesel, "response",
 		G_CALLBACK(on_file_save_dialog_response), NULL);
 
-	gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.save_filesel), GTK_WINDOW(app->window));
+	gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.save_filesel), GTK_WINDOW(main_widgets.window));
 }
 #endif
 
@@ -631,7 +631,7 @@ void dialogs_show_msgbox(gint type, const gchar *text, ...)
 #ifdef G_OS_WIN32
 	win32_message_dialog(NULL, type, string);
 #else
-	dialog = gtk_message_dialog_new(GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
+	dialog = gtk_message_dialog_new(GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
                                   type, GTK_BUTTONS_OK, "%s", string);
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_dialog_run(GTK_DIALOG(dialog));
@@ -650,7 +650,7 @@ void dialogs_show_msgbox_with_secondary(gint type, const gchar *text, const gcha
 	g_free(string);
 #else
 	GtkWidget *dialog;
-	dialog = gtk_message_dialog_new(GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
+	dialog = gtk_message_dialog_new(GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
                                   type, GTK_BUTTONS_OK, "%s", text);
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", secondary);
@@ -669,7 +669,7 @@ gboolean dialogs_show_unsaved_file(gint idx)
 	gint ret;
 
 	/* display the file tab to remind the user of the document */
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
 		document_get_notebook_page(idx));
 
 	if (doc_list[idx].file_name != NULL)
@@ -686,7 +686,7 @@ gboolean dialogs_show_unsaved_file(gint idx)
 	setptr(msg, g_strconcat(msg, "\n", msg2, NULL));
 	ret = win32_message_dialog_unsaved(msg);
 #else
-	dialog = gtk_message_dialog_new(GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
+	dialog = gtk_message_dialog_new(GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
                                   GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, "%s", msg);
 	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", msg2);
 	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
@@ -789,7 +789,7 @@ void dialogs_show_open_font()
 
 		gtk_font_selection_dialog_set_font_name(
 			GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel), interface_prefs.editor_font);
-		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_fontsel), GTK_WINDOW(app->window));
+		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_fontsel), GTK_WINDOW(main_widgets.window));
 	}
 	/* We make sure the dialog is visible. */
 	gtk_window_present(GTK_WINDOW(ui_widgets.open_fontsel));
@@ -890,7 +890,7 @@ dialogs_show_input(const gchar *title, const gchar *label_text, const gchar *def
 {
 	GtkWidget *dialog, *vbox;
 
-	dialog = gtk_dialog_new_with_buttons(title, GTK_WINDOW(app->window),
+	dialog = gtk_dialog_new_with_buttons(title, GTK_WINDOW(main_widgets.window),
 		GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 		GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
@@ -918,7 +918,7 @@ void dialogs_show_goto_line()
 {
 	GtkWidget *dialog, *label, *entry, *vbox;
 
-	dialog = gtk_dialog_new_with_buttons(_("Go to Line"), GTK_WINDOW(app->window),
+	dialog = gtk_dialog_new_with_buttons(_("Go to Line"), GTK_WINDOW(main_widgets.window),
 										GTK_DIALOG_DESTROY_WITH_PARENT,
 										GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 										GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
@@ -1006,7 +1006,7 @@ void dialogs_show_file_properties(gint idx)
 
 	base_name = g_path_get_basename(doc_list[idx].file_name);
 	title = g_strconcat(base_name, " ", _("Properties"), NULL);
-	dialog = gtk_dialog_new_with_buttons(title, GTK_WINDOW(app->window),
+	dialog = gtk_dialog_new_with_buttons(title, GTK_WINDOW(main_widgets.window),
 										 GTK_DIALOG_DESTROY_WITH_PARENT,
 										 GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
 	g_free(title);
@@ -1319,7 +1319,7 @@ static gboolean show_question(GtkWidget *parent, const gchar *yes_btn, const gch
 	GtkWidget *dialog;
 
 	if (parent == NULL)
-		parent = app->window;
+		parent = main_widgets.window;
 
 	dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
 		GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_QUESTION,
@@ -1362,14 +1362,14 @@ gboolean dialogs_show_question(const gchar *text, ...)
 	va_start(args, text);
 	g_vsnprintf(string, 511, text, args);
 	va_end(args);
-	ret = show_question(app->window, GTK_STOCK_YES, GTK_STOCK_NO, string, NULL);
+	ret = show_question(main_widgets.window, GTK_STOCK_YES, GTK_STOCK_NO, string, NULL);
 	g_free(string);
 	return ret;
 }
 
 
 /* extra_text can be NULL; otherwise it is displayed below main_text.
- * if parent is NULL, app->window will be used */
+ * if parent is NULL, main_widgets.window will be used */
 gboolean dialogs_show_question_full(GtkWidget *parent, const gchar *yes_btn, const gchar *no_btn,
 	const gchar *extra_text, const gchar *main_text, ...)
 {

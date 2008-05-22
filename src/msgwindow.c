@@ -75,13 +75,13 @@ static void on_scribble_populate(GtkTextView *textview, GtkMenu *arg1, gpointer 
 
 void msgwin_init()
 {
-	msgwindow.notebook = lookup_widget(app->window, "notebook_info");
-	msgwindow.tree_status = lookup_widget(app->window, "treeview3");
-	msgwindow.tree_msg = lookup_widget(app->window, "treeview4");
-	msgwindow.tree_compiler = lookup_widget(app->window, "treeview5");
+	msgwindow.notebook = lookup_widget(main_widgets.window, "notebook_info");
+	msgwindow.tree_status = lookup_widget(main_widgets.window, "treeview3");
+	msgwindow.tree_msg = lookup_widget(main_widgets.window, "treeview4");
+	msgwindow.tree_compiler = lookup_widget(main_widgets.window, "treeview5");
 	msgwindow.find_in_files_dir = NULL;
 
-	gtk_widget_set_sensitive(lookup_widget(app->window, "next_message1"), FALSE);
+	gtk_widget_set_sensitive(lookup_widget(main_widgets.window, "next_message1"), FALSE);
 
 	prepare_status_tree_view();
 	prepare_msg_tree_view();
@@ -90,7 +90,7 @@ void msgwin_init()
 	msgwindow.popup_msg_menu = create_message_popup_menu(MSG_MESSAGE);
 	msgwindow.popup_compiler_menu = create_message_popup_menu(MSG_COMPILER);
 
-	g_signal_connect(G_OBJECT(lookup_widget(app->window, "textview_scribble")),
+	g_signal_connect(G_OBJECT(lookup_widget(main_widgets.window, "textview_scribble")),
 		"populate-popup", G_CALLBACK(on_scribble_populate), NULL);
 }
 
@@ -258,12 +258,12 @@ void msgwin_compiler_add(gint msg_color, const gchar *msg)
 void msgwin_show_hide(gboolean show)
 {
 	ui_prefs.msgwindow_visible = show;
-	app->ignore_callback = TRUE;
+	ignore_callback = TRUE;
 	gtk_check_menu_item_set_active(
-		GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_messages_window1")),
+		GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_show_messages_window1")),
 		show);
-	app->ignore_callback = FALSE;
-	ui_widget_show_hide(lookup_widget(app->window, "scrolledwindow1"), show);
+	ignore_callback = FALSE;
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "scrolledwindow1"), show);
 }
 
 
@@ -311,7 +311,7 @@ void msgwin_msg_add(gint msg_color, gint line, gint idx, const gchar *string)
 	gtk_list_store_append(msgwindow.store_msg, &iter);
 	gtk_list_store_set(msgwindow.store_msg, &iter, 0, line, 1, idx, 2, color, 3, tmp, -1);
 
-	gtk_widget_set_sensitive(lookup_widget(app->window, "next_message1"), TRUE);
+	gtk_widget_set_sensitive(lookup_widget(main_widgets.window, "next_message1"), TRUE);
 
 	g_free(tmp);
 }
@@ -919,7 +919,7 @@ void msgwin_switch_tab(gint tabnum, gboolean show)
 
 	switch (tabnum)
 	{
-		case MSG_SCRATCH: widget = lookup_widget(app->window, "textview_scribble"); break;
+		case MSG_SCRATCH: widget = lookup_widget(main_widgets.window, "textview_scribble"); break;
 #ifdef HAVE_VTE
 		case MSG_VTE: widget = (vte_info.have_vte) ? vc->vte : NULL; break;
 #endif
@@ -948,7 +948,7 @@ void msgwin_clear_tab(gint tabnum)
 	switch (tabnum)
 	{
 		case MSG_MESSAGE:
-			gtk_widget_set_sensitive(lookup_widget(app->window, "next_message1"), FALSE);
+			gtk_widget_set_sensitive(lookup_widget(main_widgets.window, "next_message1"), FALSE);
 			store = msgwindow.store_msg;
 			break;
 

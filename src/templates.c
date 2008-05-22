@@ -475,7 +475,7 @@ static void create_file_template_menus(void)
 {
 	GtkWidget *sep1, *sep2;
 
-	new_with_template_menu = lookup_widget(app->window, "menu_new_with_template1_menu");
+	new_with_template_menu = lookup_widget(main_widgets.window, "menu_new_with_template1_menu");
 	create_new_menu_items();
 
 	sep1 = gtk_separator_menu_item_new();

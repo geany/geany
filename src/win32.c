@@ -211,7 +211,7 @@ gchar *win32_show_project_folder_dialog(GtkWidget *parent, const gchar *title,
 	gchar *result = NULL;
 
 	if (parent == NULL)
-		parent = app->window;
+		parent = main_widgets.window;
 
 	memset(&bi, 0, sizeof bi);
 	bi.hwndOwner = GDK_WINDOW_HWND(parent->window);
@@ -264,7 +264,7 @@ gchar *win32_show_project_open_dialog(GtkWidget *parent, const gchar *title,
 	fname[0] = '\0';
 
 	if (parent == NULL)
-		parent = app->window;
+		parent = main_widgets.window;
 
 	/* initialise file dialog info struct */
 	memset(&of, 0, sizeof of);
@@ -329,7 +329,7 @@ gboolean win32_show_file_dialog(gboolean file_open, const gchar *initial_dir)
 #else
 	of.lStructSize = sizeof of;
 #endif
-	of.hwndOwner = GDK_WINDOW_HWND(app->window->window);
+	of.hwndOwner = GDK_WINDOW_HWND(main_widgets.window->window);
 	of.lpstrFilter = filters;
 
 	of.lpstrCustomFilter = NULL;
@@ -422,7 +422,7 @@ void win32_show_font_dialog(void)
 
 	memset(&cf, 0, sizeof cf);
 	cf.lStructSize = sizeof cf;
-	cf.hwndOwner = GDK_WINDOW_HWND(app->window->window);
+	cf.hwndOwner = GDK_WINDOW_HWND(main_widgets.window->window);
 	cf.lpLogFont = &lf;
 	cf.Flags = CF_APPLY | CF_NOSCRIPTSEL | CF_FORCEFONTEXIST | CF_INITTOLOGFONTSTRUCT | CF_SCREENFONTS;
 
@@ -458,7 +458,7 @@ void win32_show_color_dialog(const gchar *colour)
 	/* Initialize CHOOSECOLOR */
 	memset(&cc, 0, sizeof cc);
 	cc.lStructSize = sizeof(cc);
-	cc.hwndOwner = GDK_WINDOW_HWND(app->window->window);
+	cc.hwndOwner = GDK_WINDOW_HWND(main_widgets.window->window);
 	cc.lpCustColors = (LPDWORD) acr_cust_clr;
 	cc.rgbResult = (colour != NULL) ? utils_strtod(colour, NULL, colour[0] == '#') : 0;
 	cc.Flags = CC_FULLOPEN | CC_RGBINIT;
@@ -603,8 +603,8 @@ gboolean win32_message_dialog(GtkWidget *parent, GtkMessageType type, const gcha
 
 	if (parent != NULL)
 		parent_hwnd = GDK_WINDOW_HWND(parent->window);
-	else if (app->window != NULL)
-		parent_hwnd = GDK_WINDOW_HWND(app->window->window);
+	else if (main_widgets.window != NULL)
+		parent_hwnd = GDK_WINDOW_HWND(main_widgets.window->window);
 
 	/* display the message box */
 	rc = MessageBoxW(parent_hwnd, w_msg, w_title, t);
@@ -640,8 +640,8 @@ gint win32_message_dialog_unsaved(const gchar *msg)
 	MultiByteToWideChar(CP_UTF8, 0, msg, -1, w_msg, G_N_ELEMENTS(w_msg));
 	MultiByteToWideChar(CP_UTF8, 0, _("Question"), -1, w_title, G_N_ELEMENTS(w_title));
 
-	if (app->window != NULL)
-		parent_hwnd = GDK_WINDOW_HWND(app->window->window);
+	if (main_widgets.window != NULL)
+		parent_hwnd = GDK_WINDOW_HWND(main_widgets.window->window);
 
 	ret = MessageBoxW(parent_hwnd, w_msg, w_title, MB_YESNOCANCEL | MB_ICONQUESTION);
 	switch(ret)
@@ -1214,7 +1214,7 @@ gchar *win32_get_shortcut_target(const gchar *file_name)
 	gchar *path = NULL;
 	wchar_t *wfilename = g_utf8_to_utf16(file_name, -1, NULL, NULL, NULL);
 
-	resolve_link(GDK_WINDOW_HWND(app->window->window), wfilename, &path);
+	resolve_link(GDK_WINDOW_HWND(main_widgets.window->window), wfilename, &path);
 	g_free(wfilename);
 
 	if (path == NULL)

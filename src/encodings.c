@@ -40,6 +40,7 @@
 #include "msgwindow.h"
 #include "encodings.h"
 #include "callbacks.h"
+#include "ui_utils.h"
 
 
 #ifdef HAVE_REGCOMP
@@ -239,7 +240,7 @@ void encodings_select_radio_item(const gchar *charset)
 	}
 	if (i == GEANY_ENCODINGS_MAX) i = GEANY_ENCODING_UTF_8; /* fallback to UTF-8 */
 
-	/* app->ignore_callback has to be set by the caller */
+	/* ignore_callback has to be set by the caller */
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(radio_items[i]), TRUE);
 }
 
@@ -329,8 +330,8 @@ void encodings_init(void)
 #endif
 
 	/* create encodings submenu in document menu */
-	menu[0] = lookup_widget(app->window, "set_encoding1_menu");
-	menu[1] = lookup_widget(app->window, "menu_reload_as1_menu");
+	menu[0] = lookup_widget(main_widgets.window, "set_encoding1_menu");
+	menu[1] = lookup_widget(main_widgets.window, "menu_reload_as1_menu");
 	cb_func[0] = G_CALLBACK(on_encoding_change);
 	cb_func[1] = G_CALLBACK(on_reload_as_activate);
 

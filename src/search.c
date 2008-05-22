@@ -134,7 +134,7 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 {
 	GtkWidget *checkbox1, *checkbox2, *check_regexp, *check_back, *checkbox5,
 			  *checkbox7, *hbox, *fbox, *mbox;
-	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
+	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
 
 	check_regexp = gtk_check_button_new_with_mnemonic(_("_Use regular expressions"));
 	g_object_set_data_full(G_OBJECT(dialog), "check_regexp",
@@ -297,12 +297,12 @@ void search_show_find_dialog(void)
 	{
 		GtkWidget *label, *entry, *sbox, *vbox;
 		GtkWidget *exp, *bbox, *button, *check_close;
-		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
+		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
 
 		load_monospace_style();
 
 		widgets.find_dialog = gtk_dialog_new_with_buttons(_("Find"),
-			GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
+			GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
 			GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
 		vbox = ui_dialog_vbox_new(GTK_DIALOG(widgets.find_dialog));
 		gtk_widget_set_name(widgets.find_dialog, "GeanyDialogSearch");
@@ -419,12 +419,12 @@ void search_show_replace_dialog(void)
 		GtkWidget *label_find, *label_replace, *entry_find, *entry_replace,
 			*check_close, *button, *rbox, *fbox, *vbox, *exp, *bbox;
 		GtkSizeGroup *label_size;
-		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
+		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
 
 		load_monospace_style();
 
 		widgets.replace_dialog = gtk_dialog_new_with_buttons(_("Replace"),
-			GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
+			GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
 			GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
 		vbox = ui_dialog_vbox_new(GTK_DIALOG(widgets.replace_dialog));
 		gtk_box_set_spacing(GTK_BOX(vbox), 9);
@@ -569,12 +569,12 @@ void search_show_find_in_files_dialog(const gchar *dir)
 			*check_recursive, *check_extra, *entry_extra;
 		GtkWidget *dbox, *sbox, *cbox, *rbox, *rbtn, *hbox, *vbox;
 		GtkSizeGroup *size_group;
-		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
+		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
 
 		load_monospace_style();
 
 		widgets.find_in_files_dialog = gtk_dialog_new_with_buttons(
-			_("Find in Files"), GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
+			_("Find in Files"), GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
 			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 		vbox = ui_dialog_vbox_new(GTK_DIALOG(widgets.find_in_files_dialog));
 		gtk_box_set_spacing(GTK_BOX(vbox), 9);
@@ -1007,7 +1007,7 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			guint n, count = 0;
 
 			/* replace in all documents following notebook tab order */
-			for (n = 0; (gint) n < gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)); n++)
+			for (n = 0; (gint) n < gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)); n++)
 			{
 				gint ix = document_get_n_idx(n);
 

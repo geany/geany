@@ -54,12 +54,6 @@ gboolean utils_isbrace(gchar c, gboolean include_angles);
 
 gboolean utils_is_opening_brace(gchar c, gboolean include_angles);
 
-gboolean utils_goto_file_pos(const gchar *file, gboolean is_tm_filename, gint pos);
-
-gboolean utils_goto_line(gint idx, gint line);
-
-gboolean utils_goto_pos(gint idx, gint pos);
-
 gint utils_write_file(const gchar *filename, const gchar *text);
 
 gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag);
@@ -101,8 +95,6 @@ gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const
 gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gchar *key, const gint default_value);
 
 gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gchar *key, const gchar *default_value);
-
-void utils_switch_document(gint direction);
 
 void utils_replace_filename(gint idx);
 

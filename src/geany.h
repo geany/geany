@@ -59,8 +59,7 @@ typedef struct _GeanyFiletype GeanyFiletype;
 typedef struct _GeanyProject GeanyProject;
 
 
-/* Commonly used items.
- * Remember to increment abi_version in plugindata.h when changing items. */
+/* Important commonly-used items. */
 typedef struct GeanyApp
 {
 	gboolean			debug_mode;
@@ -69,20 +68,13 @@ typedef struct GeanyApp
 	gchar				*docdir;
 	const TMWorkspace	*tm_workspace;
 	GeanyProject		*project;			/* currently active project or NULL if none is open */
-	gboolean			ignore_callback;	/* should not be used in new code
-	                                           (use clicked instead of toggled signal) */
-
-	/* Important widgets */
-	GtkWidget			*window;
-	GtkWidget			*toolbar;
-	GtkWidget			*treeview_notebook;
-	GtkWidget			*notebook;
-	GtkWidget			*statusbar;			/* use ui_set_statusbar() to set */
-	GtkWidget			*popup_menu;
 }
 GeanyApp;
 
 extern GeanyApp *app;
+
+
+extern gboolean	ignore_callback;
 
 
 enum

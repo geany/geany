@@ -300,7 +300,7 @@ static void cc_show_dialog_custom_commands(void)
 	guint i;
 	struct cc_dialog cc;
 
-	dialog = gtk_dialog_new_with_buttons(_("Set Custom Commands"), GTK_WINDOW(app->window),
+	dialog = gtk_dialog_new_with_buttons(_("Set Custom Commands"), GTK_WINDOW(main_widgets.window),
 						GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 						GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
@@ -480,8 +480,8 @@ static void cc_insert_custom_command_items(GtkMenu *me, GtkMenu *mp, gchar *labe
 
 void tools_create_insert_custom_command_menu_items(void)
 {
-	GtkMenu *menu_edit = GTK_MENU(lookup_widget(app->window, "send_selection_to2_menu"));
-	GtkMenu *menu_popup = GTK_MENU(lookup_widget(app->popup_menu, "send_selection_to1_menu"));
+	GtkMenu *menu_edit = GTK_MENU(lookup_widget(main_widgets.window, "send_selection_to2_menu"));
+	GtkMenu *menu_popup = GTK_MENU(lookup_widget(main_widgets.editor_menu, "send_selection_to1_menu"));
 	GtkWidget *item;
 	GList *me_children;
 	GList *mp_children;
@@ -537,9 +537,9 @@ void tools_create_insert_custom_command_menu_items(void)
 
 	if (! signal_set)
 	{
-		g_signal_connect((gpointer) lookup_widget(app->popup_menu, "send_selection_to1"),
+		g_signal_connect((gpointer) lookup_widget(main_widgets.editor_menu, "send_selection_to1"),
 					"activate", G_CALLBACK(cc_on_custom_command_menu_activate), menu_popup);
-		g_signal_connect((gpointer) lookup_widget(app->window, "send_selection_to2"),
+		g_signal_connect((gpointer) lookup_widget(main_widgets.window, "send_selection_to2"),
 					"activate", G_CALLBACK(cc_on_custom_command_menu_activate), menu_edit);
 		signal_set = TRUE;
 	}
@@ -607,7 +607,7 @@ void tools_word_count(void)
 	idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
 
-	dialog = gtk_dialog_new_with_buttons(_("Word Count"), GTK_WINDOW(app->window),
+	dialog = gtk_dialog_new_with_buttons(_("Word Count"), GTK_WINDOW(main_widgets.window),
 										 GTK_DIALOG_DESTROY_WITH_PARENT,
 										 GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
@@ -739,7 +739,7 @@ void tools_color_chooser(gchar *color)
 	{
 		ui_widgets.open_colorsel = gtk_color_selection_dialog_new(_("Color Chooser"));
 		gtk_widget_set_name(ui_widgets.open_colorsel, "GeanyDialog");
-		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_colorsel), GTK_WINDOW(app->window));
+		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_colorsel), GTK_WINDOW(main_widgets.window));
 		gtk_color_selection_set_has_palette(
 			GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->colorsel), TRUE);
 

@@ -35,12 +35,12 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 60;
+static const gint api_version = 61;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
  * are only appended, as this doesn't affect existing fields. */
-static const gint abi_version = 30;
+static const gint abi_version = 31;
 
 /** Check the plugin can be loaded by Geany.
  * This performs runtime checks that try to ensure:
@@ -153,8 +153,8 @@ PluginFields;
  * Core variable pointers can be appended when needed by plugin authors, if appropriate. */
 typedef struct GeanyData
 {
-	GeanyApp					*app;				/**< Geany application data fields */
-	GtkWidget					*tools_menu;		/**< Most plugins should add menu items to the Tools menu only */
+	struct GeanyApp				*app;				/**< Geany application data fields */
+	struct GeanyMainWidgets		*main_widgets;		/**< Important widgets in the main window. */
 	GArray						*doc_array;			/**< Dynamic array of document structs */
 	GPtrArray					*filetypes_array;	/**< Dynamic array of filetype pointers */
 	struct GeanyPrefs			*prefs;				/**< General settings */

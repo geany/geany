@@ -185,67 +185,6 @@ gboolean utils_is_opening_brace(gchar c, gboolean include_angles)
 }
 
 
-/* line is counted with 1 as the first line, not 0 */
-gboolean utils_goto_file_pos(const gchar *file, gboolean is_tm_filename, gint pos)
-{
-	gint file_idx = document_find_by_filename(file, is_tm_filename);
-
-	if (file_idx < 0) return FALSE;
-
-	return utils_goto_pos(file_idx, pos);
-}
-
-
-/* line is counted with 1 as the first line, not 0 */
-gboolean utils_goto_line(gint idx, gint line)
-{
-	gint page_num;
-
-	line--;	/* the user counts lines from 1, we begin at 0 so bring the user line to our one */
-
-	if (! DOC_IDX_VALID(idx) || line < 0)
-		return FALSE;
-
-	/* mark the tag */
-	sci_marker_delete_all(doc_list[idx].sci, 0);
-	sci_set_marker_at_line(doc_list[idx].sci, line, TRUE, 0);
-
-	sci_goto_line(doc_list[idx].sci, line, TRUE);
-	doc_list[idx].scroll_percent = 0.25F;
-
-	/* finally switch to the page */
-	page_num = gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(doc_list[idx].sci));
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), page_num);
-
-	return TRUE;
-}
-
-
-gboolean utils_goto_pos(gint idx, gint pos)
-{
-	gint page_num;
-	gint line;
-
-	if (! DOC_IDX_VALID(idx) || pos < 0)
-		return FALSE;
-
-	line = sci_get_line_from_position(doc_list[idx].sci, pos);
-
-	/* mark the tag */
-	sci_marker_delete_all(doc_list[idx].sci, 0);
-	sci_set_marker_at_line(doc_list[idx].sci, line, TRUE, 0);
-
-	sci_goto_pos(doc_list[idx].sci, pos, TRUE);
-	doc_list[idx].scroll_percent = 0.25F;
-
-	/* finally switch to the page */
-	page_num = gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(doc_list[idx].sci));
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), page_num);
-
-	return TRUE;
-}
-
-
 /**
  *  Write the given @c text into a file with @c filename.
  *  If the file doesn't exist, it will be created.
@@ -1079,28 +1018,6 @@ gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gc
 		return (gchar*) g_strdup(default_value);
 	}
 	return tmp;
-}
-
-
-void utils_switch_document(gint direction)
-{
-	gint page_count = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
-	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->notebook));
-
-	if (direction == LEFT)
-	{
-		if (cur_page > 0)
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), cur_page - 1);
-		else
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), page_count - 1);
-	}
-	else if (direction == RIGHT)
-	{
-		if (cur_page < page_count - 1)
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), cur_page + 1);
-		else
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), 0);
-	}
 }
 
 

@@ -49,6 +49,8 @@
 
 GeanyInterfacePrefs	interface_prefs;
 GeanyToolbarPrefs	toolbar_prefs;
+GeanyMainWidgets	main_widgets;
+
 UIPrefs			ui_prefs;
 UIWidgets		ui_widgets;
 
@@ -82,15 +84,15 @@ static void set_statusbar(const gchar *text, gboolean allow_override)
 
 	if (! allow_override)
 	{
-		gtk_statusbar_pop(GTK_STATUSBAR(app->statusbar), 1);
-		gtk_statusbar_push(GTK_STATUSBAR(app->statusbar), 1, text);
+		gtk_statusbar_pop(GTK_STATUSBAR(ui_widgets.statusbar), 1);
+		gtk_statusbar_push(GTK_STATUSBAR(ui_widgets.statusbar), 1, text);
 		last_time = timeval.tv_sec;
 	}
 	else
 	if (timeval.tv_sec > last_time + GEANY_STATUS_TIMEOUT)
 	{
-		gtk_statusbar_pop(GTK_STATUSBAR(app->statusbar), 1);
-		gtk_statusbar_push(GTK_STATUSBAR(app->statusbar), 1, text);
+		gtk_statusbar_pop(GTK_STATUSBAR(ui_widgets.statusbar), 1);
+		gtk_statusbar_push(GTK_STATUSBAR(ui_widgets.statusbar), 1, text);
 	}
 }
 
@@ -232,7 +234,7 @@ void ui_set_window_title(gint idx)
 		g_string_append(str, "] - ");
 	}
 	g_string_append(str, "Geany");
-	gtk_window_set_title(GTK_WINDOW(app->window), str->str);
+	gtk_window_set_title(GTK_WINDOW(main_widgets.window), str->str);
 	g_string_free(str, TRUE);
 }
 
@@ -276,11 +278,11 @@ void ui_set_fullscreen(void)
 {
 	if (ui_prefs.fullscreen)
 	{
-		gtk_window_fullscreen(GTK_WINDOW(app->window));
+		gtk_window_fullscreen(GTK_WINDOW(main_widgets.window));
 	}
 	else
 	{
-		gtk_window_unfullscreen(GTK_WINDOW(app->window));
+		gtk_window_unfullscreen(GTK_WINDOW(main_widgets.window));
 	}
 }
 
@@ -337,7 +339,7 @@ void ui_update_menu_copy_items(gint idx)
 {
 	gboolean enable = FALSE;
 	guint i;
-	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(app->window));
+	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	if (IS_SCINTILLA(focusw))
 		enable = (idx == -1) ? FALSE : sci_can_copy(doc_list[idx].sci);
@@ -373,9 +375,9 @@ void ui_update_insert_include_item(gint idx, gint item)
 
 void ui_update_fold_items(void)
 {
-	ui_widget_show_hide(lookup_widget(app->window, "menu_fold_all1"), editor_prefs.folding);
-	ui_widget_show_hide(lookup_widget(app->window, "menu_unfold_all1"), editor_prefs.folding);
-	ui_widget_show_hide(lookup_widget(app->window, "separator22"), editor_prefs.folding);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "menu_fold_all1"), editor_prefs.folding);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "menu_unfold_all1"), editor_prefs.folding);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "separator22"), editor_prefs.folding);
 }
 
 
@@ -415,8 +417,8 @@ static void insert_include_items(GtkMenu *me, GtkMenu *mp, gchar **includes, gch
 
 void ui_create_insert_menu_items(void)
 {
-	GtkMenu *menu_edit = GTK_MENU(lookup_widget(app->window, "insert_include2_menu"));
-	GtkMenu *menu_popup = GTK_MENU(lookup_widget(app->popup_menu, "insert_include1_menu"));
+	GtkMenu *menu_edit = GTK_MENU(lookup_widget(main_widgets.window, "insert_include2_menu"));
+	GtkMenu *menu_popup = GTK_MENU(lookup_widget(main_widgets.editor_menu, "insert_include1_menu"));
 	GtkWidget *blank;
 	const gchar *c_includes_stdlib[] = {
 		"assert.h", "ctype.h", "errno.h", "float.h", "limits.h", "locale.h", "math.h", "setjmp.h",
@@ -482,8 +484,8 @@ static void insert_date_items(GtkMenu *me, GtkMenu *mp, gchar *label)
 
 void ui_create_insert_date_menu_items(void)
 {
-	GtkMenu *menu_edit = GTK_MENU(lookup_widget(app->window, "insert_date1_menu"));
-	GtkMenu *menu_popup = GTK_MENU(lookup_widget(app->popup_menu, "insert_date2_menu"));
+	GtkMenu *menu_edit = GTK_MENU(lookup_widget(main_widgets.window, "insert_date1_menu"));
+	GtkMenu *menu_popup = GTK_MENU(lookup_widget(main_widgets.editor_menu, "insert_date2_menu"));
 	GtkWidget *item;
 	gchar *str;
 
@@ -515,7 +517,7 @@ void ui_create_insert_date_menu_items(void)
 	gtk_widget_show(item);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_menu_insert_date_activate),
 		str);
-	g_object_set_data_full(G_OBJECT(app->window), "insert_date_custom1", gtk_widget_ref(item),
+	g_object_set_data_full(G_OBJECT(main_widgets.window), "insert_date_custom1", gtk_widget_ref(item),
 													(GDestroyNotify)gtk_widget_unref);
 
 	item = gtk_menu_item_new_with_mnemonic(str);
@@ -523,7 +525,7 @@ void ui_create_insert_date_menu_items(void)
 	gtk_widget_show(item);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_insert_date_activate),
 		str);
-	g_object_set_data_full(G_OBJECT(app->popup_menu), "insert_date_custom2", gtk_widget_ref(item),
+	g_object_set_data_full(G_OBJECT(main_widgets.editor_menu), "insert_date_custom2", gtk_widget_ref(item),
 													(GDestroyNotify)gtk_widget_unref);
 
 	insert_date_items(menu_edit, menu_popup, _("_Set Custom Date Format"));
@@ -559,58 +561,58 @@ static void init_document_widgets(void)
 {
 	/* Cache the document-sensitive widgets so we don't have to keep looking them up
 	 * when using ui_document_buttons_update(). */
-	widgets.document_buttons[0] = lookup_widget(app->window, "menu_close1");
-	widgets.document_buttons[1] = lookup_widget(app->window, "toolbutton15");
-	widgets.document_buttons[2] = lookup_widget(app->window, "menu_change_font1");
-	widgets.document_buttons[3] = lookup_widget(app->window, "entry1");
-	widgets.document_buttons[4] = lookup_widget(app->window, "toolbutton18");
-	widgets.document_buttons[5] = lookup_widget(app->window, "toolbutton20");
-	widgets.document_buttons[6] = lookup_widget(app->window, "toolbutton21");
-	widgets.document_buttons[7] = lookup_widget(app->window, "menu_close_all1");
-	widgets.document_buttons[8] = lookup_widget(app->window, "menu_save_all1");
-	widgets.document_buttons[9] = lookup_widget(app->window, "toolbutton22");
-	widgets.document_buttons[10] = lookup_widget(app->window, "toolbutton13"); /* compile_button */
-	widgets.document_buttons[11] = lookup_widget(app->window, "menu_save_as1");
-	widgets.document_buttons[12] = lookup_widget(app->window, "toolbutton23");
-	widgets.document_buttons[13] = lookup_widget(app->window, "menu_count_words1");
-	widgets.document_buttons[14] = lookup_widget(app->window, "menu_build1");
-	widgets.document_buttons[15] = lookup_widget(app->window, "add_comments1");
-	widgets.document_buttons[16] = lookup_widget(app->window, "menu_paste1");
-	widgets.document_buttons[17] = lookup_widget(app->window, "menu_undo2");
-	widgets.document_buttons[18] = lookup_widget(app->window, "preferences2");
-	widgets.document_buttons[19] = lookup_widget(app->window, "menu_reload1");
-	widgets.document_buttons[20] = lookup_widget(app->window, "menu_document1");
-	widgets.document_buttons[21] = lookup_widget(app->window, "menu_markers_margin1");
-	widgets.document_buttons[22] = lookup_widget(app->window, "menu_linenumber_margin1");
-	widgets.document_buttons[23] = lookup_widget(app->window, "menu_choose_color1");
-	widgets.document_buttons[24] = lookup_widget(app->window, "menu_zoom_in1");
-	widgets.document_buttons[25] = lookup_widget(app->window, "menu_zoom_out1");
-	widgets.document_buttons[26] = lookup_widget(app->window, "normal_size1");
-	widgets.document_buttons[27] = lookup_widget(app->window, "toolbutton24");
-	widgets.document_buttons[28] = lookup_widget(app->window, "toolbutton25");
-	widgets.document_buttons[29] = lookup_widget(app->window, "entry_goto_line");
-	widgets.document_buttons[30] = lookup_widget(app->window, "treeview6");
-	widgets.document_buttons[31] = lookup_widget(app->window, "print1");
-	widgets.document_buttons[32] = lookup_widget(app->window, "menu_reload_as1");
-	widgets.document_buttons[33] = lookup_widget(app->window, "menu_select_all1");
-	widgets.document_buttons[34] = lookup_widget(app->window, "insert_date1");
-	widgets.document_buttons[35] = lookup_widget(app->window, "menu_format1");
-	widgets.document_buttons[36] = lookup_widget(app->window, "menu_open_selected_file1");
-	widgets.document_buttons[37] = lookup_widget(app->window, "page_setup1");
-	widgets.document_buttons[38] = lookup_widget(app->window, "find1");
-	widgets.document_buttons[39] = lookup_widget(app->window, "find_next1");
-	widgets.document_buttons[40] = lookup_widget(app->window, "find_previous1");
-	widgets.document_buttons[41] = lookup_widget(app->window, "replace1");
-	widgets.document_buttons[42] = lookup_widget(app->window, "find_nextsel1");
-	widgets.document_buttons[43] = lookup_widget(app->window, "find_prevsel1");
-	widgets.document_buttons[44] = lookup_widget(app->window, "go_to_line1");
+	widgets.document_buttons[0] = lookup_widget(main_widgets.window, "menu_close1");
+	widgets.document_buttons[1] = lookup_widget(main_widgets.window, "toolbutton15");
+	widgets.document_buttons[2] = lookup_widget(main_widgets.window, "menu_change_font1");
+	widgets.document_buttons[3] = lookup_widget(main_widgets.window, "entry1");
+	widgets.document_buttons[4] = lookup_widget(main_widgets.window, "toolbutton18");
+	widgets.document_buttons[5] = lookup_widget(main_widgets.window, "toolbutton20");
+	widgets.document_buttons[6] = lookup_widget(main_widgets.window, "toolbutton21");
+	widgets.document_buttons[7] = lookup_widget(main_widgets.window, "menu_close_all1");
+	widgets.document_buttons[8] = lookup_widget(main_widgets.window, "menu_save_all1");
+	widgets.document_buttons[9] = lookup_widget(main_widgets.window, "toolbutton22");
+	widgets.document_buttons[10] = lookup_widget(main_widgets.window, "toolbutton13"); /* compile_button */
+	widgets.document_buttons[11] = lookup_widget(main_widgets.window, "menu_save_as1");
+	widgets.document_buttons[12] = lookup_widget(main_widgets.window, "toolbutton23");
+	widgets.document_buttons[13] = lookup_widget(main_widgets.window, "menu_count_words1");
+	widgets.document_buttons[14] = lookup_widget(main_widgets.window, "menu_build1");
+	widgets.document_buttons[15] = lookup_widget(main_widgets.window, "add_comments1");
+	widgets.document_buttons[16] = lookup_widget(main_widgets.window, "menu_paste1");
+	widgets.document_buttons[17] = lookup_widget(main_widgets.window, "menu_undo2");
+	widgets.document_buttons[18] = lookup_widget(main_widgets.window, "preferences2");
+	widgets.document_buttons[19] = lookup_widget(main_widgets.window, "menu_reload1");
+	widgets.document_buttons[20] = lookup_widget(main_widgets.window, "menu_document1");
+	widgets.document_buttons[21] = lookup_widget(main_widgets.window, "menu_markers_margin1");
+	widgets.document_buttons[22] = lookup_widget(main_widgets.window, "menu_linenumber_margin1");
+	widgets.document_buttons[23] = lookup_widget(main_widgets.window, "menu_choose_color1");
+	widgets.document_buttons[24] = lookup_widget(main_widgets.window, "menu_zoom_in1");
+	widgets.document_buttons[25] = lookup_widget(main_widgets.window, "menu_zoom_out1");
+	widgets.document_buttons[26] = lookup_widget(main_widgets.window, "normal_size1");
+	widgets.document_buttons[27] = lookup_widget(main_widgets.window, "toolbutton24");
+	widgets.document_buttons[28] = lookup_widget(main_widgets.window, "toolbutton25");
+	widgets.document_buttons[29] = lookup_widget(main_widgets.window, "entry_goto_line");
+	widgets.document_buttons[30] = lookup_widget(main_widgets.window, "treeview6");
+	widgets.document_buttons[31] = lookup_widget(main_widgets.window, "print1");
+	widgets.document_buttons[32] = lookup_widget(main_widgets.window, "menu_reload_as1");
+	widgets.document_buttons[33] = lookup_widget(main_widgets.window, "menu_select_all1");
+	widgets.document_buttons[34] = lookup_widget(main_widgets.window, "insert_date1");
+	widgets.document_buttons[35] = lookup_widget(main_widgets.window, "menu_format1");
+	widgets.document_buttons[36] = lookup_widget(main_widgets.window, "menu_open_selected_file1");
+	widgets.document_buttons[37] = lookup_widget(main_widgets.window, "page_setup1");
+	widgets.document_buttons[38] = lookup_widget(main_widgets.window, "find1");
+	widgets.document_buttons[39] = lookup_widget(main_widgets.window, "find_next1");
+	widgets.document_buttons[40] = lookup_widget(main_widgets.window, "find_previous1");
+	widgets.document_buttons[41] = lookup_widget(main_widgets.window, "replace1");
+	widgets.document_buttons[42] = lookup_widget(main_widgets.window, "find_nextsel1");
+	widgets.document_buttons[43] = lookup_widget(main_widgets.window, "find_prevsel1");
+	widgets.document_buttons[44] = lookup_widget(main_widgets.window, "go_to_line1");
 }
 
 
 void ui_document_buttons_update(void)
 {
 	guint i;
-	gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) ? TRUE : FALSE;
+	gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) ? TRUE : FALSE;
 
 	for (i = 0; i < G_N_ELEMENTS(widgets.document_buttons); i++)
 		gtk_widget_set_sensitive(widgets.document_buttons[i], enable);
@@ -641,25 +643,25 @@ void ui_sidebar_show_hide(void)
 	/* check that there are no other notebook pages before hiding the sidebar completely
 	 * other pages could be e.g. the file browser plugin */
 	if (! interface_prefs.sidebar_openfiles_visible && ! interface_prefs.sidebar_symbol_visible &&
-		gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->treeview_notebook)) <= 2)
+		gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.sidebar_notebook)) <= 2)
 	{
 		ui_prefs.sidebar_visible = FALSE;
 	}
 
-	widget = lookup_widget(app->window, "menu_show_sidebar1");
+	widget = lookup_widget(main_widgets.window, "menu_show_sidebar1");
 	if (ui_prefs.sidebar_visible != gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget)))
 	{
-		app->ignore_callback = TRUE;
+		ignore_callback = TRUE;
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), ui_prefs.sidebar_visible);
-		app->ignore_callback = FALSE;
+		ignore_callback = FALSE;
 	}
 
-	ui_widget_show_hide(app->treeview_notebook, ui_prefs.sidebar_visible);
+	ui_widget_show_hide(main_widgets.sidebar_notebook, ui_prefs.sidebar_visible);
 
 	ui_widget_show_hide(gtk_notebook_get_nth_page(
-					GTK_NOTEBOOK(app->treeview_notebook), 0), interface_prefs.sidebar_symbol_visible);
+					GTK_NOTEBOOK(main_widgets.sidebar_notebook), 0), interface_prefs.sidebar_symbol_visible);
 	ui_widget_show_hide(gtk_notebook_get_nth_page(
-					GTK_NOTEBOOK(app->treeview_notebook), 1), interface_prefs.sidebar_openfiles_visible);
+					GTK_NOTEBOOK(main_widgets.sidebar_notebook), 1), interface_prefs.sidebar_openfiles_visible);
 }
 
 
@@ -674,30 +676,30 @@ void ui_document_show_hide(gint idx)
 	if (! DOC_IDX_VALID(idx))
 		return;
 
-	app->ignore_callback = TRUE;
+	ignore_callback = TRUE;
 
 	gtk_check_menu_item_set_active(
-			GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_line_wrapping1")),
+			GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_line_wrapping1")),
 			doc_list[idx].line_wrapping);
 
 	gtk_check_menu_item_set_active(
-			GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "line_breaking1")),
+			GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "line_breaking1")),
 			doc_list[idx].line_breaking);
 
-	item = lookup_widget(app->window, "menu_use_auto_indentation1");
+	item = lookup_widget(main_widgets.window, "menu_use_auto_indentation1");
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),
 		doc_list[idx].auto_indent);
 	gtk_widget_set_sensitive(item, editor_prefs.indent_mode != INDENT_NONE);
 
-	item = lookup_widget(app->window,
+	item = lookup_widget(main_widgets.window,
 		doc_list[idx].use_tabs ? "tabs1" : "spaces1");
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), TRUE);
 
 	gtk_check_menu_item_set_active(
-			GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "set_file_readonly1")),
+			GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "set_file_readonly1")),
 			doc_list[idx].readonly);
 
-	item = lookup_widget(app->window, "menu_write_unicode_bom1");
+	item = lookup_widget(main_widgets.window, "menu_write_unicode_bom1");
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),
 		doc_list[idx].has_bom);
 	gtk_widget_set_sensitive(item, encodings_is_unicode_charset(doc_list[idx].encoding));
@@ -709,12 +711,12 @@ void ui_document_show_hide(gint idx)
 		default: widget_name = "crlf"; break;
 	}
 	gtk_check_menu_item_set_active(
-		GTK_CHECK_MENU_ITEM(lookup_widget(app->window, widget_name)), TRUE);
+		GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, widget_name)), TRUE);
 
 	encodings_select_radio_item(doc_list[idx].encoding);
 	filetypes_select_radio_item(doc_list[idx].file_type);
 
-	app->ignore_callback = FALSE;
+	ignore_callback = FALSE;
 }
 
 
@@ -725,7 +727,7 @@ void ui_update_toolbar_icons(GtkIconSize size)
 	GtkWidget *oldwidget = NULL;
 
 	/* destroy old widget */
-	widget = lookup_widget(app->window, "toolbutton22");
+	widget = lookup_widget(main_widgets.window, "toolbutton22");
 	oldwidget = gtk_tool_button_get_icon_widget(GTK_TOOL_BUTTON(widget));
 	if (oldwidget && GTK_IS_WIDGET(oldwidget)) gtk_widget_destroy(oldwidget);
 	/* create new widget */
@@ -733,14 +735,14 @@ void ui_update_toolbar_icons(GtkIconSize size)
 	gtk_widget_show(button_image);
 	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(widget), button_image);
 
-	gtk_toolbar_set_icon_size(GTK_TOOLBAR(app->toolbar), size);
+	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), size);
 }
 
 
 void ui_update_toolbar_items(void)
 {
 	/* show toolbar */
-	GtkWidget *widget = lookup_widget(app->window, "menu_show_toolbar1");
+	GtkWidget *widget = lookup_widget(main_widgets.window, "menu_show_toolbar1");
 	if (toolbar_prefs.visible && ! gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget)))
 	{	/* will be changed by the toggled callback */
 		toolbar_prefs.visible = ! toolbar_prefs.visible;
@@ -753,48 +755,48 @@ void ui_update_toolbar_items(void)
 	}
 
 	/* fileops */
-	ui_widget_show_hide(lookup_widget(app->window, "menutoolbutton1"), toolbar_prefs.show_fileops);
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton9"), toolbar_prefs.show_fileops);
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton10"), toolbar_prefs.show_fileops);
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton22"), toolbar_prefs.show_fileops);
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton23"), toolbar_prefs.show_fileops);
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton15"), toolbar_prefs.show_fileops);
-	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem7"), toolbar_prefs.show_fileops);
-	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem2"), toolbar_prefs.show_fileops);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "menutoolbutton1"), toolbar_prefs.show_fileops);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton9"), toolbar_prefs.show_fileops);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton10"), toolbar_prefs.show_fileops);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton22"), toolbar_prefs.show_fileops);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton23"), toolbar_prefs.show_fileops);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton15"), toolbar_prefs.show_fileops);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem7"), toolbar_prefs.show_fileops);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem2"), toolbar_prefs.show_fileops);
 	/* search */
-	ui_widget_show_hide(lookup_widget(app->window, "entry1"), toolbar_prefs.show_search);
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton18"), toolbar_prefs.show_search);
-	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem5"), toolbar_prefs.show_search);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "entry1"), toolbar_prefs.show_search);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton18"), toolbar_prefs.show_search);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem5"), toolbar_prefs.show_search);
 	/* goto line */
-	ui_widget_show_hide(lookup_widget(app->window, "entry_goto_line"), toolbar_prefs.show_goto);
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton25"), toolbar_prefs.show_goto);
-	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem8"), toolbar_prefs.show_goto);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "entry_goto_line"), toolbar_prefs.show_goto);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton25"), toolbar_prefs.show_goto);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem8"), toolbar_prefs.show_goto);
 	/* compile */
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton13"), toolbar_prefs.show_compile);
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton26"), toolbar_prefs.show_compile);
-	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem6"), toolbar_prefs.show_compile);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton13"), toolbar_prefs.show_compile);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton26"), toolbar_prefs.show_compile);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem6"), toolbar_prefs.show_compile);
 	/* colour */
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton24"), toolbar_prefs.show_colour);
-	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem3"), toolbar_prefs.show_colour);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton24"), toolbar_prefs.show_colour);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem3"), toolbar_prefs.show_colour);
 	/* zoom */
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton20"), toolbar_prefs.show_zoom);
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton21"), toolbar_prefs.show_zoom);
-	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem4"), toolbar_prefs.show_zoom);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton20"), toolbar_prefs.show_zoom);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton21"), toolbar_prefs.show_zoom);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem4"), toolbar_prefs.show_zoom);
 	/* indent */
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_indent_dec"), toolbar_prefs.show_indent);
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_indent_inc"), toolbar_prefs.show_indent);
-	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem11"), toolbar_prefs.show_indent);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_indent_dec"), toolbar_prefs.show_indent);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_indent_inc"), toolbar_prefs.show_indent);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem11"), toolbar_prefs.show_indent);
 	/* undo */
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_undo"), toolbar_prefs.show_undo);
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_redo"), toolbar_prefs.show_undo);
-	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem9"), toolbar_prefs.show_undo);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_undo"), toolbar_prefs.show_undo);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_redo"), toolbar_prefs.show_undo);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem9"), toolbar_prefs.show_undo);
 	/* navigation */
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_back"), toolbar_prefs.show_navigation);
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_forward"), toolbar_prefs.show_navigation);
-	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem10"), toolbar_prefs.show_navigation);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_back"), toolbar_prefs.show_navigation);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_forward"), toolbar_prefs.show_navigation);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem10"), toolbar_prefs.show_navigation);
 	/* quit */
-	ui_widget_show_hide(lookup_widget(app->window, "toolbutton19"), toolbar_prefs.show_quit);
-	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem8"), toolbar_prefs.show_quit);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton19"), toolbar_prefs.show_quit);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem8"), toolbar_prefs.show_quit);
 }
 
 
@@ -859,7 +861,7 @@ void ui_create_recent_menu(void)
 	if (g_queue_get_length(ui_prefs.recent_queue) > 0)
 	{
 		gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(
-				lookup_widget(app->window, "toolbutton9")), ui_widgets.recent_files_toolbar);
+				lookup_widget(main_widgets.window, "toolbutton9")), ui_widgets.recent_files_toolbar);
 	}
 
 	for (i = 0; i < MIN(file_prefs.mru_length, g_queue_get_length(ui_prefs.recent_queue)); i++)
@@ -999,7 +1001,7 @@ static void update_recent_menu(void)
 	GList *children, *item;
 
 	if (menu == NULL)
-		menu = GTK_MENU_TOOL_BUTTON(lookup_widget(app->window, "toolbutton9"));
+		menu = GTK_MENU_TOOL_BUTTON(lookup_widget(main_widgets.window, "toolbutton9"));
 
 	if (gtk_menu_tool_button_get_menu(menu) == NULL)
 	{
@@ -1048,7 +1050,7 @@ static void update_recent_menu(void)
 
 void ui_show_markers_margin(void)
 {
-	gint i, idx, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
+	gint i, idx, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 
 	for(i = 0; i < max; i++)
 	{
@@ -1060,7 +1062,7 @@ void ui_show_markers_margin(void)
 
 void ui_show_linenumber_margin(void)
 {
-	gint i, idx, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
+	gint i, idx, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 
 	for(i = 0; i < max; i++)
 	{
@@ -1320,7 +1322,7 @@ static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
 		const gchar *utf8_path)
 {
 	GtkWidget *dialog = gtk_file_chooser_dialog_new(title,
-		GTK_WINDOW(app->window), action,
+		GTK_WINDOW(main_widgets.window), action,
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 		GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL);
 	gchar *locale_path;
@@ -1386,11 +1388,11 @@ void ui_statusbar_showhide(gboolean state)
 	/* handle statusbar visibility */
 	if (state)
 	{
-		gtk_widget_show(app->statusbar);
+		gtk_widget_show(ui_widgets.statusbar);
 		ui_update_statusbar(-1, -1);
 	}
 	else
-		gtk_widget_hide(app->statusbar);
+		gtk_widget_hide(ui_widgets.statusbar);
 }
 
 

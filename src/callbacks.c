@@ -175,7 +175,7 @@ void
 on_save1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->notebook));
+	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
 	gint idx = document_get_cur_idx();
 
 	if (cur_page >= 0)
@@ -200,7 +200,7 @@ void
 on_save_all1_activate                  (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint i, idx, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
+	gint i, idx, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 	gint cur_idx = document_get_cur_idx();
 
 	document_delay_colourise();	/* avoid recolourising all C files after each save */
@@ -212,7 +212,7 @@ on_save_all1_activate                  (GtkMenuItem     *menuitem,
 		if (doc_list[idx].file_name == NULL)
 		{
 			/* display unnamed document */
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
 				document_get_notebook_page(idx));
 			dialogs_show_save_as();
 		}
@@ -237,7 +237,7 @@ void
 on_close1_activate                     (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	guint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->notebook));
+	guint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
 	document_remove(cur_page);
 }
 
@@ -301,7 +301,7 @@ on_cut1_activate                       (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(app->window));
+	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	if (GTK_IS_EDITABLE(focusw))
 		gtk_editable_cut_clipboard(GTK_EDITABLE(focusw));
@@ -323,7 +323,7 @@ on_copy1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(app->window));
+	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	if (GTK_IS_EDITABLE(focusw))
 		gtk_editable_copy_clipboard(GTK_EDITABLE(focusw));
@@ -345,7 +345,7 @@ on_paste1_activate                     (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(app->window));
+	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	if (GTK_IS_EDITABLE(focusw))
 		gtk_editable_paste_clipboard(GTK_EDITABLE(focusw));
@@ -386,7 +386,7 @@ on_delete1_activate                    (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(app->window));
+	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	if (GTK_IS_EDITABLE(focusw))
 		gtk_editable_delete_selection(GTK_EDITABLE(focusw));
@@ -484,7 +484,7 @@ on_images_and_text2_activate           (GtkMenuItem     *menuitem,
 {
 	if (ignore_toolbar_toggle) return;
 
-	gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), GTK_TOOLBAR_BOTH);
+	gtk_toolbar_set_style(GTK_TOOLBAR(main_widgets.toolbar), GTK_TOOLBAR_BOTH);
 	toolbar_prefs.icon_style = GTK_TOOLBAR_BOTH;
 }
 
@@ -495,7 +495,7 @@ on_images_only2_activate               (GtkMenuItem     *menuitem,
 {
 	if (ignore_toolbar_toggle) return;
 
-	gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), GTK_TOOLBAR_ICONS);
+	gtk_toolbar_set_style(GTK_TOOLBAR(main_widgets.toolbar), GTK_TOOLBAR_ICONS);
 	toolbar_prefs.icon_style = GTK_TOOLBAR_ICONS;
 }
 
@@ -506,7 +506,7 @@ on_text_only2_activate                 (GtkMenuItem     *menuitem,
 {
 	if (ignore_toolbar_toggle) return;
 
-	gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), GTK_TOOLBAR_TEXT);
+	gtk_toolbar_set_style(GTK_TOOLBAR(main_widgets.toolbar), GTK_TOOLBAR_TEXT);
 	toolbar_prefs.icon_style = GTK_TOOLBAR_TEXT;
 }
 
@@ -550,7 +550,7 @@ static void set_search_bar_background(gboolean success)
 	const GdkColor red   = {0, 0xffff, 0x6666, 0x6666};
 	const GdkColor white = {0, 0xffff, 0xffff, 0xffff};
 	static gboolean old_value = TRUE;
-	GtkWidget *widget = lookup_widget(app->window, "entry1");
+	GtkWidget *widget = lookup_widget(main_widgets.window, "entry1");
 
 	/* only update if really needed */
 	if (search_data.search_bar && old_value != success)
@@ -609,7 +609,7 @@ on_toolbutton18_clicked                (GtkToolButton   *toolbutton,
 {
 	gint idx = document_get_cur_idx();
 	gboolean result;
-	GtkWidget *entry = lookup_widget(GTK_WIDGET(app->window), "entry1");
+	GtkWidget *entry = lookup_widget(GTK_WIDGET(main_widgets.window), "entry1");
 
 	setup_find_next(GTK_EDITABLE(entry));
 	result = document_search_bar_find(idx, search_data.text, 0, FALSE);
@@ -644,7 +644,7 @@ void
 on_hide_toolbar1_activate              (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	GtkWidget *tool_item = lookup_widget(GTK_WIDGET(app->window), "menu_show_toolbar1");
+	GtkWidget *tool_item = lookup_widget(GTK_WIDGET(main_widgets.window), "menu_show_toolbar1");
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(tool_item), FALSE);
 }
 
@@ -698,7 +698,7 @@ void
 on_toolbutton15_clicked                (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
 {
-	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->notebook));
+	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
 	document_remove(cur_page);
 }
 
@@ -761,7 +761,7 @@ on_tv_notebook_switch_page             (GtkNotebook     *notebook,
                                         gpointer         user_data)
 {
 	/* suppress selection changed signal when switching to the open files list */
-	app->ignore_callback = TRUE;
+	ignore_callback = TRUE;
 }
 
 
@@ -771,7 +771,7 @@ on_tv_notebook_switch_page_after       (GtkNotebook     *notebook,
                                         guint            page_num,
                                         gpointer         user_data)
 {
-	app->ignore_callback = FALSE;
+	ignore_callback = FALSE;
 }
 
 
@@ -780,7 +780,7 @@ on_crlf_activate                       (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	if (app->ignore_callback || idx == -1 || ! doc_list[idx].is_valid) return;
+	if (ignore_callback || idx == -1 || ! doc_list[idx].is_valid) return;
 	sci_convert_eols(doc_list[idx].sci, SC_EOL_CRLF);
 	sci_set_eol_mode(doc_list[idx].sci, SC_EOL_CRLF);
 }
@@ -791,7 +791,7 @@ on_lf_activate                         (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	if (app->ignore_callback || idx == -1 || ! doc_list[idx].is_valid) return;
+	if (ignore_callback || idx == -1 || ! doc_list[idx].is_valid) return;
 	sci_convert_eols(doc_list[idx].sci, SC_EOL_LF);
 	sci_set_eol_mode(doc_list[idx].sci, SC_EOL_LF);
 }
@@ -802,7 +802,7 @@ on_cr_activate                         (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	if (app->ignore_callback || idx == -1 || ! doc_list[idx].is_valid) return;
+	if (ignore_callback || idx == -1 || ! doc_list[idx].is_valid) return;
 	sci_convert_eols(doc_list[idx].sci, SC_EOL_CR);
 	sci_set_eol_mode(doc_list[idx].sci, SC_EOL_CR);
 }
@@ -918,10 +918,10 @@ void
 on_show_toolbar1_toggled               (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data)
 {
-	if (app->ignore_callback) return;
+	if (ignore_callback) return;
 
 	toolbar_prefs.visible = (toolbar_prefs.visible) ? FALSE : TRUE;;
-	ui_widget_show_hide(GTK_WIDGET(app->toolbar), toolbar_prefs.visible);
+	ui_widget_show_hide(GTK_WIDGET(main_widgets.toolbar), toolbar_prefs.visible);
 }
 
 
@@ -938,10 +938,10 @@ void
 on_show_messages_window1_toggled       (GtkCheckMenuItem *checkmenuitem,
                                         gpointer          user_data)
 {
-	if (app->ignore_callback) return;
+	if (ignore_callback) return;
 
 	ui_prefs.msgwindow_visible = (ui_prefs.msgwindow_visible) ? FALSE : TRUE;
-	ui_widget_show_hide(lookup_widget(app->window, "scrolledwindow1"), ui_prefs.msgwindow_visible);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "scrolledwindow1"), ui_prefs.msgwindow_visible);
 }
 
 
@@ -967,7 +967,7 @@ void
 on_line_wrapping1_toggled              (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data)
 {
-	if (! app->ignore_callback)
+	if (! ignore_callback)
 	{
 		gint idx = document_get_cur_idx();
 		if (! DOC_IDX_VALID(idx)) return;
@@ -980,7 +980,7 @@ void
 on_set_file_readonly1_toggled          (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data)
 {
-	if (! app->ignore_callback)
+	if (! ignore_callback)
 	{
 		gint idx = document_get_cur_idx();
 		if (! DOC_IDX_VALID(idx)) return;
@@ -996,7 +996,7 @@ void
 on_use_auto_indentation1_toggled       (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data)
 {
-	if (! app->ignore_callback)
+	if (! ignore_callback)
 	{
 		gint idx = document_get_cur_idx();
 		if (! DOC_IDX_VALID(idx)) return;
@@ -1037,7 +1037,7 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gboolean definition = (menuitem ==
-		GTK_MENU_ITEM(lookup_widget(app->popup_menu, "goto_tag_definition1")));
+		GTK_MENU_ITEM(lookup_widget(main_widgets.editor_menu, "goto_tag_definition1")));
 	GeanyDocument *doc = document_get_current();
 
 	g_return_if_fail(doc);
@@ -1187,15 +1187,19 @@ on_goto_line_dialog_response         (GtkDialog *dialog,
 
 		if (line > 0 && line <= sci_get_line_count(doc_list[idx].sci))
 		{
-			utils_goto_line(idx, line);
+			gint pos;
+
+			line--;	/* the user counts lines from 1, we begin at 0 so bring the user line to our one */
+			pos = sci_get_position_from_line(doc_list[idx].sci, line);
+			editor_goto_pos(idx, pos, TRUE);
 		}
 		else
 		{
 			utils_beep();
 		}
-
 	}
-	if (dialog) gtk_widget_destroy(GTK_WIDGET(dialog));
+	if (dialog)
+		gtk_widget_destroy(GTK_WIDGET(dialog));
 }
 
 
@@ -1220,7 +1224,7 @@ on_toolbutton_goto_clicked             (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
 {
 	on_goto_line_dialog_response(NULL, GTK_RESPONSE_ACCEPT,
-			lookup_widget(app->window, "entry_goto_line"));
+			lookup_widget(main_widgets.window, "entry_goto_line"));
 }
 
 
@@ -1546,7 +1550,7 @@ on_encoding_change                     (GtkMenuItem     *menuitem,
 	gint idx = document_get_cur_idx();
 	guint i = GPOINTER_TO_INT(user_data);
 
-	if (app->ignore_callback || ! DOC_IDX_VALID(idx) || encodings[i].charset == NULL ||
+	if (ignore_callback || ! DOC_IDX_VALID(idx) || encodings[i].charset == NULL ||
 		utils_str_equal(encodings[i].charset, doc_list[idx].encoding)) return;
 
 	if (doc_list[idx].readonly)
@@ -1589,13 +1593,13 @@ on_menu_show_sidebar1_toggled          (GtkCheckMenuItem *checkmenuitem,
 {
 	static gint active_page = -1;
 
-	if (app->ignore_callback) return;
+	if (ignore_callback) return;
 
 	if (ui_prefs.sidebar_visible)
 	{
 		/* to remember the active page because GTK (e.g. 2.8.18) doesn't do it and shows always
 		 * the last page (for unknown reason, with GTK 2.6.4 it works) */
-		active_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->treeview_notebook));
+		active_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook));
 	}
 
 	ui_prefs.sidebar_visible = ! ui_prefs.sidebar_visible;
@@ -1607,7 +1611,7 @@ on_menu_show_sidebar1_toggled          (GtkCheckMenuItem *checkmenuitem,
 	}
 
 	ui_sidebar_show_hide();
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->treeview_notebook), active_page);
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook), active_page);
 }
 
 
@@ -1615,7 +1619,7 @@ void
 on_menu_write_unicode_bom1_toggled     (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data)
 {
-	if (! app->ignore_callback)
+	if (! ignore_callback)
 	{
 		gint idx = document_get_cur_idx();
 
@@ -1835,8 +1839,8 @@ on_menu_project1_activate              (GtkMenuItem     *menuitem,
 
 	if (item_close == NULL)
 	{
-		item_close = lookup_widget(app->window, "project_close1");
-		item_properties = lookup_widget(app->window, "project_properties1");
+		item_close = lookup_widget(main_widgets.window, "project_close1");
+		item_properties = lookup_widget(main_widgets.window, "project_properties1");
 	}
 
 	gtk_widget_set_sensitive(item_close, (app->project != NULL));
@@ -1966,9 +1970,9 @@ on_menu_toggle_all_additional_widgets1_activate
 {
 	static gint hide_all = -1;
 	GtkCheckMenuItem *msgw = GTK_CHECK_MENU_ITEM(
-		lookup_widget(app->window, "menu_show_messages_window1"));
+		lookup_widget(main_widgets.window, "menu_show_messages_window1"));
 	GtkCheckMenuItem *toolbari = GTK_CHECK_MENU_ITEM(
-		lookup_widget(app->window, "menu_show_toolbar1"));
+		lookup_widget(main_widgets.window, "menu_show_toolbar1"));
 
 	/* get the initial state (necessary if Geany was closed with hide_all = TRUE) */
 	if (hide_all == -1)
@@ -1991,7 +1995,7 @@ on_menu_toggle_all_additional_widgets1_activate
 			gtk_check_menu_item_set_active(msgw, ! gtk_check_menu_item_get_active(msgw));
 
 		interface_prefs.show_notebook_tabs = FALSE;
-		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(app->notebook), interface_prefs.show_notebook_tabs);
+		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
 
 		ui_statusbar_showhide(FALSE);
 
@@ -2005,7 +2009,7 @@ on_menu_toggle_all_additional_widgets1_activate
 			gtk_check_menu_item_set_active(msgw, ! gtk_check_menu_item_get_active(msgw));
 
 		interface_prefs.show_notebook_tabs = TRUE;
-		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(app->notebook), interface_prefs.show_notebook_tabs);
+		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
 
 		ui_statusbar_showhide(TRUE);
 
@@ -2113,7 +2117,7 @@ on_line_breaking1_activate             (GtkMenuItem     *menuitem,
 {
 	GeanyDocument *doc;
 
-	if (app->ignore_callback)
+	if (ignore_callback)
 		return;
 
 	doc = document_get_current();

@@ -514,10 +514,10 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 			/* we need to bring the main window up with gtk_window_present() but this is not
 			 * enough, instead we need to iconify it so that gtk_window_deiconify() will
 			 * bring it in the foreground */
-			gtk_window_present(GTK_WINDOW(app->window));
-			gtk_window_iconify(GTK_WINDOW(app->window));
+			gtk_window_present(GTK_WINDOW(main_widgets.window));
+			gtk_window_iconify(GTK_WINDOW(main_widgets.window));
 #endif
-			gtk_window_deiconify(GTK_WINDOW(app->window));
+			gtk_window_deiconify(GTK_WINDOW(main_widgets.window));
 		}
 		else if (strncmp(buf, "line", 4) == 0)
 		{

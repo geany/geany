@@ -33,6 +33,8 @@
 #include "document.h"
 #include "utils.h"
 #include "support.h"
+#include "ui_utils.h"
+#include "editor.h"
 
 
 /* for the navigation history queue */
@@ -54,8 +56,8 @@ void navqueue_init()
 	navigation_queue = g_queue_new();
 	nav_queue_pos = 0;
 
-	navigation_buttons[0] = lookup_widget(app->window, "toolbutton_back");
-	navigation_buttons[1] = lookup_widget(app->window, "toolbutton_forward");
+	navigation_buttons[0] = lookup_widget(main_widgets.window, "toolbutton_back");
+	navigation_buttons[1] = lookup_widget(main_widgets.window, "toolbutton_forward");
 }
 
 
@@ -165,7 +167,17 @@ gboolean navqueue_goto_line(gint old_idx, gint new_idx, gint line)
 		add_new_position(doc_list[new_idx].file_name, pos);
 	}
 
-	return utils_goto_pos(new_idx, pos);
+	return editor_goto_pos(new_idx, pos, TRUE);
+}
+
+
+static gboolean goto_file_pos(const gchar *file, gboolean is_tm_filename, gint pos)
+{
+	gint file_idx = document_find_by_filename(file, is_tm_filename);
+
+	if (file_idx < 0) return FALSE;
+
+	return editor_goto_pos(file_idx, pos, TRUE);
 }
 
 
@@ -180,7 +192,7 @@ void navqueue_go_back()
 
 	/* jump back */
 	fprev = g_queue_peek_nth(navigation_queue, nav_queue_pos + 1);
-	if (utils_goto_file_pos(fprev->file, FALSE, fprev->pos))
+	if (goto_file_pos(fprev->file, FALSE, fprev->pos))
 	{
 		nav_queue_pos++;
 	}
@@ -203,7 +215,7 @@ void navqueue_go_forward()
 
 	/* jump forward */
 	fnext = g_queue_peek_nth(navigation_queue, nav_queue_pos - 1);
-	if (utils_goto_file_pos(fnext->file, FALSE, fnext->pos))
+	if (goto_file_pos(fnext->file, FALSE, fnext->pos))
 	{
 		nav_queue_pos--;
 	}

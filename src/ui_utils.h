@@ -65,6 +65,21 @@ GeanyToolbarPrefs;
 extern GeanyToolbarPrefs toolbar_prefs;
 
 
+/** Important widgets in the main window. */
+typedef struct GeanyMainWidgets
+{
+	GtkWidget			*window;			/**< Main window. */
+	GtkWidget			*toolbar;			/**< Main toolbar. */
+	GtkWidget			*sidebar_notebook;	/**< Sidebar notebook. */
+	GtkWidget			*notebook;			/**< Document notebook. */
+	GtkWidget			*editor_menu;		/**< Popup editor menu. */
+	GtkWidget			*tools_menu;		/**< Most plugins add menu items to the Tools menu. */
+}
+GeanyMainWidgets;
+
+extern GeanyMainWidgets main_widgets;
+
+
 /* User Interface settings not shown in the Prefs dialog. */
 typedef struct UIPrefs
 {
@@ -108,6 +123,9 @@ typedef struct UIWidgets
 	GtkWidget	*open_filesel;
 	GtkWidget	*save_filesel;
 	GtkWidget	*prefs_dialog;
+
+	/* other widgets not needed in GeanyMainWidgets */
+	GtkWidget	*statusbar;			/* use ui_set_statusbar() to set */
 }
 UIWidgets;
 

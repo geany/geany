@@ -201,4 +201,6 @@ void editor_set_use_tabs(gint idx, gboolean use_tabs);
 
 void editor_set_line_wrapping(gint idx, gboolean wrap);
 
+gboolean editor_goto_pos(gint idx, gint pos, gboolean mark);
+
 #endif
