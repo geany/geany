@@ -44,6 +44,7 @@
 
 
 /* These items are set by Geany before init() is called. */
+PluginInfo		*plugin_info;
 PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
@@ -54,7 +55,7 @@ GeanyFunctions	*geany_functions;
 PLUGIN_VERSION_CHECK(7)
 
 /* All plugins must set name, description, version and author. */
-PLUGIN_INFO(_("Demo"), _("Example plugin."), VERSION, _("The Geany developer team"))
+PLUGIN_SET_INFO(_("Demo"), _("Example plugin."), VERSION, _("The Geany developer team"))
 
 
 /* text to be shown in the plugin dialog */
@@ -74,7 +75,7 @@ item_activate(GtkMenuItem *menuitem, gpointer gdata)
 		GTK_BUTTONS_OK,
 		"%s", welcome_text);
 	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-		_("(From the %s plugin)"), info()->name);
+		_("(From the %s plugin)"), plugin_info->name);
 
 	gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);

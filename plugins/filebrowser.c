@@ -25,6 +25,7 @@
 /* Sidebar file browser plugin. */
 
 #include "geany.h"
+#include <string.h>
 
 #include <gdk/gdkkeysyms.h>
 
@@ -47,7 +48,7 @@ GeanyFunctions	*geany_functions;
 
 PLUGIN_VERSION_CHECK(26)
 
-PLUGIN_INFO(_("File Browser"), _("Adds a file browser tab to the sidebar."), VERSION,
+PLUGIN_SET_INFO(_("File Browser"), _("Adds a file browser tab to the sidebar."), VERSION,
 	_("The Geany developer team"))
 
 

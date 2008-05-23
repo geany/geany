@@ -39,7 +39,7 @@ GeanyFunctions	*geany_functions;
 
 PLUGIN_VERSION_CHECK(32)
 
-PLUGIN_INFO(_("Auto Save"), _("Save automatically all open files in a given time interval."),
+PLUGIN_SET_INFO(_("Auto Save"), _("Save automatically all open files in a given time interval."),
 	VERSION, _("The Geany developer team"))
 
 

@@ -40,7 +40,7 @@ GeanyFunctions	*geany_functions;
 
 PLUGIN_VERSION_CHECK(48)
 
-PLUGIN_INFO(_("HTML Characters"), _("Inserts HTML character entities like '&amp;'."), VERSION,
+PLUGIN_SET_INFO(_("HTML Characters"), _("Inserts HTML character entities like '&amp;'."), VERSION,
 	_("The Geany developer team"))
 
 

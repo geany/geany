@@ -28,6 +28,7 @@
  * For detailed documentation of the plugin system please read the plugin
  * API documentation.
  **/
+/* Note: Remember to increment api_version (and abi_version if necessary) when making changes. */
 
 
 #ifndef PLUGINDATA_H
@@ -35,12 +36,12 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 62;
+static const gint api_version = 63;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
  * are only appended, as this doesn't affect existing fields. */
-static const gint abi_version = 32;
+static const gint abi_version = 33;
 
 /** Check the plugin can be loaded by Geany.
  * This performs runtime checks that try to ensure:
@@ -58,7 +59,7 @@ static const gint abi_version = 32;
 
 
 /** Plugin info structure to hold basic information about a plugin.
- *  Should only be set with PLUGIN_INFO. */
+ * Should usually be set with PLUGIN_SET_INFO(). */
 typedef struct PluginInfo
 {
 	/** The name of the plugin. */
@@ -69,25 +70,24 @@ typedef struct PluginInfo
 	gchar	*version;
 	/** The author of the plugin. */
 	gchar	*author;
-	/** Reserved for later use. */
-	gpointer reserved2;
 }
 PluginInfo;
 
-#include <string.h>
-
-/** Set the plugin name and some other basic information about a plugin. */
-#define PLUGIN_INFO(p_name, p_description, p_version, p_author) \
-	PluginInfo *info(void) \
+/** Set the plugin name and some other basic information about a plugin.
+ * This declares a function, so you can use the _() translation macro for arguments.
+ *
+ * Example:
+ * @code PLUGIN_SET_INFO(_("Cool Feature"), _("Adds cool feature support."), "0.1", "Joe Author") @endcode */
+/* plugin_set_info() could be written manually for plugins if we want to add any
+ * extra PluginInfo features (such as an icon), so we don't need to break API
+ * compatibility. Alternatively just add a new macro, PLUGIN_SET_INFO_FULL(). -ntrel */
+#define PLUGIN_SET_INFO(p_name, p_description, p_version, p_author) \
+	void plugin_set_info(PluginInfo* info) \
 	{ \
-		static PluginInfo p_info; \
-		\
-		memset(&p_info, 0, sizeof(PluginInfo)); \
-		p_info.name = (p_name); \
-		p_info.description = (p_description); \
-		p_info.version = (p_version); \
-		p_info.author = (p_author); \
-		return &p_info; \
+		info->name = (p_name); \
+		info->description = (p_description); \
+		info->version = (p_version); \
+		info->author = (p_author); \
 	}
 
 
@@ -136,7 +136,6 @@ typedef enum
 PluginFlags;
 
 /** Fields set and owned by the plugin. */
-/* Note: Remember to increment api_version (and abi_version if necessary) when making changes. */
 typedef struct PluginFields
 {
 	/** Bitmask of PluginFlags. */
@@ -450,6 +449,8 @@ typedef struct _GeanyFiletype filetype;
 
 typedef PluginCallback GeanyCallback;
 #define geany_callbacks plugin_callbacks
+
+#define PLUGIN_INFO PLUGIN_SET_INFO
 
 #endif	/* GEANY_DISABLE_DEPRECATED */
 

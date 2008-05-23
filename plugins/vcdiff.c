@@ -28,6 +28,8 @@
  * e.g. ".svn". */
 
 #include "geany.h"
+#include <string.h>
+
 #include "support.h"
 #include "plugindata.h"
 #include "document.h"
@@ -45,7 +47,7 @@ GeanyFunctions	*geany_functions;
 
 PLUGIN_VERSION_CHECK(27)
 
-PLUGIN_INFO(_("Version Diff"), _("Creates a patch of a file against version control."), VERSION,
+PLUGIN_SET_INFO(_("Version Diff"), _("Creates a patch of a file against version control."), VERSION,
 	_("The Geany developer team"))
 
 
@@ -120,7 +122,7 @@ static gboolean find_subdir(const gchar* filename, const gchar *subdir)
 	else
 	    base = g_path_get_dirname(filename);
 
-	while(strcmp(base, base_prev) != 0)
+	while (strcmp(base, base_prev) != 0)
 	{
 	    gitdir = g_build_path("/", base, subdir, NULL);
 	    ret = g_file_test(gitdir, G_FILE_TEST_IS_DIR);

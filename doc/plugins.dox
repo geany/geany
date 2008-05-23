@@ -180,9 +180,9 @@ PluginCallback plugin_callbacks[] =
  *  Every plugin should include "geany.h" and "plugindata.h" which provide necessary
  *  preprocessor macros and other basic information.
  *  There are two important preprocessor macros which need to be used at the beginning:
- *  PLUGIN_INFO() and PLUGIN_VERSION_CHECK().
+ *  PLUGIN_SET_INFO() and PLUGIN_VERSION_CHECK().
  *
- *  PLUGIN_INFO() tells Geany about basic plugin information like name, description,
+ *  PLUGIN_SET_INFO() tells Geany about basic plugin information like name, description,
  *  version and author of the plugin.
  *
  *  PLUGIN_VERSION_CHECK() checks for compatibility of the API version which

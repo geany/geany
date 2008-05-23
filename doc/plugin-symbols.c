@@ -37,16 +37,25 @@
 /** Use the PLUGIN_VERSION_CHECK() macro instead. Required by Geany. */
 gint version_check(gint);
 
-/** Use the PLUGIN_INFO() macro to define it. Required by Geany. */
-PluginInfo* info();
+/** Use the PLUGIN_SET_INFO() macro to define it. Required by Geany.
+ * This function is called before the plugin is initialized, so Geany
+ * can read the plugin's name.
+ * @param info The data struct which should be initialized by this function. */
+void plugin_set_info(PluginInfo *info);
+
+/** Basic information about a plugin, which is set in plugin_set_info(). */
+const PluginInfo* plugin_info;
 
 /** Geany owned data pointers.
  * Example: @c assert(geany_data->app->configdir != NULL); */
-GeanyData* geany_data;
+const GeanyData* geany_data;
 
 /** Geany owned function pointers, split into groups.
- * Example: @c geany_functions->p_document->new_file(NULL, NULL, NULL); */
-GeanyFunctions* geany_functions;
+ * Example: @c geany_functions->p_document->new_file(NULL, NULL, NULL);
+ *
+ * Note: Usually plugins would use the pluginmacros.h file and just call:
+ * @c p_document->new_file(NULL, NULL, NULL); */
+const GeanyFunctions* geany_functions;
 
 /** Plugin owned fields, including flags. */
 PluginFields* plugin_fields;
@@ -78,5 +87,5 @@ void init(GeanyData *data);
 
 /** Called before unloading the plugin. Required for normal plugins - it should undo
  * everything done in init() - e.g. destroy menu items, free memory. */
-void cleanup(); */
+void cleanup();
 

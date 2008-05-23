@@ -7,6 +7,17 @@
    by the plugin, not Geany.
  * src/plugindata.h:
    Increment plugin ABI, API versions for plugin_callbacks change.
+ * src/plugindata.h, src/plugins.c, doc/plugin-symbols.c,
+   doc/plugins.dox, plugins/export.c, plugins/vcdiff.c,
+   plugins/demoplugin.c, plugins/filebrowser.c, plugins/htmlchars.c,
+   plugins/autosave.c, plugins/classbuilder.c:
+   Deprecate PLUGIN_INFO() in favour of PLUGIN_SET_INFO().
+   Remove plugin symbol info(), which is replaced by plugin_set_info()
+   and a new symbol plugin_info. This is so the PluginInfo struct is
+   zero'd first by Geany, so plugins are still ABI compatible if we
+   want to add any more fields in the future.
+   Fail to load a plugin if plugin_info->name is not set.
+   Remove now unused string.h include from plugindata.h.
 
 
 2008-05-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

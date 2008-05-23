@@ -68,12 +68,12 @@ typedef struct Plugin
 {
 	GModule 	*module;
 	gchar		*filename;				/* plugin filename (/path/libname.so) */
+	PluginInfo		info;				/* plugin name, description, etc */
 	PluginFields	fields;
 	gulong		*signal_ids;			/* signal IDs to disconnect when unloading */
 	gsize		signal_ids_len;
 	KeyBindingGroup	*key_group;
 
-	PluginInfo*	(*info) (void);			/* Returns plugin name, description */
 	void	(*init) (GeanyData *data);	/* Called when the plugin is enabled */
 	void	(*configure) (GtkWidget *parent);	/* plugin configure dialog, optionally */
 	void	(*cleanup) (void);			/* Called when the plugin is disabled or when Geany exits */
@@ -419,7 +419,7 @@ add_kb_group(Plugin *plugin)
 		return;
 	}
 
-	plugin->key_group->label = plugin->info()->name;
+	plugin->key_group->label = plugin->info.name;
 
 	g_ptr_array_add(keybinding_groups, plugin->key_group);
 }
@@ -429,6 +429,7 @@ static void
 plugin_init(Plugin *plugin)
 {
 	PluginCallback *callbacks;
+	PluginInfo **p_info;
 
 	if (plugin->init)
 		plugin->init(&geany_data);
@@ -438,6 +439,10 @@ plugin_init(Plugin *plugin)
 		gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) ? TRUE : FALSE;
 		gtk_widget_set_sensitive(plugin->fields.menu_item, enable);
 	}
+
+	g_module_symbol(plugin->module, "plugin_info", (void *) &p_info);
+	if (p_info)
+		*p_info = &plugin->info;
 
 	g_module_symbol(plugin->module, "plugin_callbacks", (void *) &callbacks);
 	if (callbacks)
@@ -451,7 +456,7 @@ plugin_init(Plugin *plugin)
 	active_plugin_list = g_list_append(active_plugin_list, plugin);
 
 	geany_debug("Loaded:   %s (%s)", plugin->filename,
-		NVL(plugin->info()->name, "<Unknown>"));
+		NVL(plugin->info.name, "<Unknown>"));
 }
 
 
@@ -465,7 +470,7 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 {
 	Plugin *plugin;
 	GModule *module;
-	PluginInfo* (*info)(void);
+	void (*plugin_set_info)(PluginInfo*);
 	PluginFields **plugin_fields;
 	GeanyData **p_geany_data;
 	GeanyFunctions **p_geany_functions;
@@ -488,7 +493,8 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 	 * causing a segfault. Without that flag the module will safely fail to load.
 	 * G_MODULE_BIND_LOCAL also helps find undefined symbols e.g. app when it would
 	 * otherwise not be detected due to the shadowing of Geany's app variable.
-	 * Also without G_MODULE_BIND_LOCAL calling info() in a plugin will be shadowed. */
+	 * Also without G_MODULE_BIND_LOCAL calling public functions e.g. the old info()
+	 * function from a plugin will be shadowed. */
 	module = g_module_open(fname, G_MODULE_BIND_LOCAL);
 	if (! module)
 	{
@@ -512,19 +518,31 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 		return NULL;
 	}
 
-	g_module_symbol(module, "info", (void *) &info);
-	if (info == NULL)
+	g_module_symbol(module, "plugin_set_info", (void *) &plugin_set_info);
+	if (plugin_set_info == NULL)
 	{
-		geany_debug("Unknown plugin info for \"%s\"!", fname);
+		geany_debug("No plugin_set_info() defined for \"%s\"!", fname);
 
 		if (! g_module_close(module))
 			g_warning("%s: %s", fname, g_module_error());
 		return NULL;
 	}
-	geany_debug("Initializing plugin '%s'", info()->name);
 
 	plugin = g_new0(Plugin, 1);
-	plugin->info = info;
+
+	/* read plugin name, etc. */
+	plugin_set_info(&plugin->info);
+	if (!NZV(plugin->info.name))
+	{
+		geany_debug("No plugin name set in plugin_set_info() for \"%s\"!", fname);
+
+		if (! g_module_close(module))
+			g_warning("%s: %s", fname, g_module_error());
+		g_free(plugin);
+		return NULL;
+	}
+	geany_debug("Initializing plugin '%s'", plugin->info.name);
+
 	plugin->filename = g_strdup(fname);
 	plugin->module = module;
 
@@ -545,7 +563,7 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 	{
 		if (app->debug_mode)
 			g_warning("Plugin '%s' has no cleanup() function - there may be memory leaks!",
-				info()->name);
+				plugin->info.name);
 	}
 
 	if (init_plugin)
@@ -871,7 +889,7 @@ void pm_selection_changed(GtkTreeSelection *selection, gpointer user_data)
 			gchar *text;
 			PluginInfo *pi;
 
-			pi = p->info();
+			pi = &p->info;
 			text = g_strdup_printf(
 				_("Plugin: %s %s\nDescription: %s\nAuthor(s): %s"),
 				pi->name, pi->version, pi->description, pi->author);
@@ -976,12 +994,14 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
 	{
 		for (; list != NULL; list = list->next)
 		{
+			Plugin *p = list->data;
+
 			gtk_list_store_append(store, &iter);
 			gtk_list_store_set(store, &iter,
-				PLUGIN_COLUMN_CHECK, is_active_plugin(list->data),
-				PLUGIN_COLUMN_NAME, ((Plugin*)list->data)->info()->name,
-				PLUGIN_COLUMN_FILE, ((Plugin*)list->data)->filename,
-				PLUGIN_COLUMN_PLUGIN, list->data,
+				PLUGIN_COLUMN_CHECK, is_active_plugin(p),
+				PLUGIN_COLUMN_NAME, p->info.name,
+				PLUGIN_COLUMN_FILE, p->filename,
+				PLUGIN_COLUMN_PLUGIN, p,
 				-1);
 		}
 	}

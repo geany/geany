@@ -41,7 +41,7 @@ GeanyFunctions	*geany_functions;
 
 PLUGIN_VERSION_CHECK(7)
 
-PLUGIN_INFO(_("Class Builder"), _("Creates source files for new class types."), VERSION,
+PLUGIN_SET_INFO(_("Class Builder"), _("Creates source files for new class types."), VERSION,
 	"Alexander Rodin")
 
 
