@@ -111,7 +111,7 @@ PluginInfo;
 
 
 /** callback array entry */
-typedef struct GeanyCallback
+typedef struct PluginCallback
 {
 	/** The name of signal, must be an existing signal. For a list of available signals,
 	 *  please see the @link signals Signal documentation @endlink. */
@@ -123,7 +123,7 @@ typedef struct GeanyCallback
 	/** The user data passed to the signal handler. */
 	gpointer	user_data;
 }
-GeanyCallback;
+PluginCallback;
 
 
 
@@ -442,12 +442,14 @@ typedef GeanyData PluginData;	/* for compatibility with API < 7 */
 
 #define GEANY_MAX_FILE_TYPES \
 	filetypes_array->len
-
 #define GEANY_FILETYPES_ALL \
 	GEANY_FILETYPES_NONE
 
 typedef struct _GeanyDocument document;
 typedef struct _GeanyFiletype filetype;
+
+typedef PluginCallback GeanyCallback;
+#define geany_callbacks plugin_callbacks
 
 #endif	/* GEANY_DISABLE_DEPRECATED */
 

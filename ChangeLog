@@ -1,3 +1,12 @@
+2008-05-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/plugindata.h, src/plugins.c, doc/plugin-symbols.c,
+   doc/plugins.dox:
+   Make GeanyCallback, geany_callbacks deprecated, and replace with
+   PluginCallback, plugin_callbacks. This is because the array is owned
+   by the plugin, not Geany.
+
+
 2008-05-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/templates.c, src/build.c, src/utils.c, src/ui_utils.h,

@@ -55,9 +55,9 @@
  *
  *  @section Usage
  *
- *  To use plugin signals in Geany, you simply create a GeanyCallback array, list the signals
+ *  To use plugin signals in Geany, you simply create a PluginCallback array, list the signals
  *  you want to listen to and create the appropiate signal callbacks for each signal.
- *  @note The GeanyCallback array has to be ended with a final NULL entry.
+ *  @note The PluginCallback array has to be ended with a final NULL entry.
  *
  *  The following code demonstrates how to use signals in Geany plugins. The code can be inserted
  *  in your plugin code at any desired position.
@@ -68,7 +68,7 @@ static void on_document_open(GObject *obj, gint idx, gpointer user_data)
 	printf("Example: %s was opened\n", DOC_FILENAME(idx));
 }
 
-GeanyCallback geany_callbacks[] =
+PluginCallback plugin_callbacks[] =
 {
 	{ "document-open", (GCallback) &on_document_open, FALSE, NULL },
 	{ NULL, NULL, FALSE, NULL }

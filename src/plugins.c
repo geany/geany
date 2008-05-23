@@ -378,9 +378,9 @@ plugin_check_version(GModule *module)
 }
 
 
-static void add_callbacks(Plugin *plugin, GeanyCallback *callbacks)
+static void add_callbacks(Plugin *plugin, PluginCallback *callbacks)
 {
-	GeanyCallback *cb;
+	PluginCallback *cb;
 	guint i, len = 0;
 
 	while (TRUE)
@@ -428,7 +428,7 @@ add_kb_group(Plugin *plugin)
 static void
 plugin_init(Plugin *plugin)
 {
-	GeanyCallback *callbacks;
+	PluginCallback *callbacks;
 
 	if (plugin->init)
 		plugin->init(&geany_data);
@@ -439,7 +439,7 @@ plugin_init(Plugin *plugin)
 		gtk_widget_set_sensitive(plugin->fields.menu_item, enable);
 	}
 
-	g_module_symbol(plugin->module, "geany_callbacks", (void *) &callbacks);
+	g_module_symbol(plugin->module, "plugin_callbacks", (void *) &callbacks);
 	if (callbacks)
 		add_callbacks(plugin, callbacks);
 
