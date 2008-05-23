@@ -5,6 +5,8 @@
    Make GeanyCallback, geany_callbacks deprecated, and replace with
    PluginCallback, plugin_callbacks. This is because the array is owned
    by the plugin, not Geany.
+ * src/plugindata.h:
+   Increment plugin ABI, API versions for plugin_callbacks change.
 
 
 2008-05-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
