@@ -3,6 +3,8 @@
 # This file is distributed under the same license as the geany package.
 # brahmann <brahmann@lifec0re.org.ru>, 2006,2007.
 # Sm@cker <smacker@mail.ru>, 2008.
+# stat.c <Static-Const@yandex.ru>, 2008
+
 msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.14\n"
@@ -149,7 +151,7 @@ msgstr "Сборка прошла успешно."
 #. compile the code
 #: ../src/build.c:1043
 msgid "_Compile"
-msgstr "_Собрать"
+msgstr "_Скомпилировать"
 
 #: ../src/build.c:1046
 msgid "Compiles the current file"
@@ -176,7 +178,7 @@ msgstr "Сборка данного файлы используя make и объ
 #. build the code with make custom
 #: ../src/build.c:1080 ../src/build.c:1201
 msgid "Make Custom _Target"
-msgstr "Построить свою цель"
+msgstr "Сборка свою цель"
 
 #: ../src/build.c:1084 ../src/build.c:1205
 msgid "Builds the current file with the make tool and the specified target"
@@ -185,7 +187,7 @@ msgstr "Строит текущий файл используя make и указ
 #. build the code with make object
 #: ../src/build.c:1091
 msgid "Make _Object"
-msgstr "Построить объект"
+msgstr "Сборка объект"
 
 #: ../src/build.c:1095
 msgid "Compiles the current file using the make tool"
@@ -203,7 +205,7 @@ msgstr "Запустить или посмотреть текущий файл"
 #. arguments
 #: ../src/build.c:1132
 msgid "_Set Includes and Arguments"
-msgstr "Установить Включения и Аргументы"
+msgstr "Команды сборки Включения и Аргументы"
 
 #: ../src/build.c:1137
 msgid ""
@@ -308,11 +310,11 @@ msgstr "%s команд"
 
 #: ../src/build.c:1539
 msgid "Compile:"
-msgstr "Собрать:"
+msgstr "Скомпилировать:"
 
 #: ../src/build.c:1560
 msgid "Build:"
-msgstr "Построить:"
+msgstr "Сборка:"
 
 #: ../src/build.c:1581 ../src/dialogs.c:1179
 msgid "Execute:"
@@ -320,7 +322,7 @@ msgstr "Выполнить:"
 
 #: ../src/build.c:1894
 msgid "Make Custom Target"
-msgstr "Построить свою цель"
+msgstr "Сборка свою цель"
 
 #: ../src/build.c:1895
 msgid ""
@@ -1035,7 +1037,7 @@ msgstr "Выйти из Geany"
 
 #: ../src/interface.c:429
 msgid "_Edit"
-msgstr "_Редактировать"
+msgstr "_Правка"
 
 #: ../src/interface.c:470 ../src/interface.c:2120
 msgid "Select _All"
@@ -1468,11 +1470,11 @@ msgstr "Перейти на шаг вперёд"
 
 #: ../src/interface.c:1097 ../src/keybindings.c:420
 msgid "Compile"
-msgstr "Собрать"
+msgstr "Скомпилировать"
 
 #: ../src/interface.c:1100
 msgid "Compile the current file"
-msgstr "Собрать текущий файл"
+msgstr "Скомпилировать текущий файл"
 
 #: ../src/interface.c:1113
 msgid "Color"
@@ -1917,7 +1919,7 @@ msgstr ""
 
 #: ../src/interface.c:3341
 msgid "Show Compile and Run buttons"
-msgstr "Показывать кнопки \"Собрать\" и \"Запустить\""
+msgstr "Показывать кнопки \"Скомпилировать\" и \"Запустить\""
 
 #: ../src/interface.c:3345
 msgid "Display the Compile and Run buttons in the toolbar"
@@ -2935,19 +2937,19 @@ msgstr "Перечитать список тегов"
 
 #: ../src/keybindings.c:417 ../src/keybindings.c:422
 msgid "Build"
-msgstr "Построить"
+msgstr "Сборка"
 
 #: ../src/keybindings.c:424
 msgid "Make all"
-msgstr "Построить все"
+msgstr "Сборка все"
 
 #: ../src/keybindings.c:427
 msgid "Make custom target"
-msgstr "Построить свою цель"
+msgstr "Сборка свою цель"
 
 #: ../src/keybindings.c:429
 msgid "Make object"
-msgstr "Построить объект"
+msgstr "Сборка объект"
 
 #: ../src/keybindings.c:431
 msgid "Next error"
@@ -3338,7 +3340,7 @@ msgstr "Описание:"
 
 #: ../src/project.c:442
 msgid "Make in base path"
-msgstr "Собрать в каталоге проекта"
+msgstr "Скомпилировать в каталоге проекта"
 
 #: ../src/project.c:447
 msgid "Run command:"
@@ -4649,7 +4651,7 @@ msgstr "Сохранить тольк текущий открытый файл"
 #~ msgstr "Меню \"Документ\""
 
 #~ msgid "Build menu"
-#~ msgstr "Меню \"Собрать\""
+#~ msgstr "Меню \"Скомпилировать\""
 
 #~ msgid "Tools menu"
 #~ msgstr "Меню \"Инструменты\""
@@ -4959,10 +4961,10 @@ msgstr "Сохранить тольк текущий открытый файл"
 #~ "Символов:\t%d\n"
 
 #~ msgid "Build with \"make\""
-#~ msgstr "Построить используя \"make\""
+#~ msgstr "Сборка используя \"make\""
 
 #~ msgid "Build with make (custom target)"
-#~ msgstr "Построить используя make (другая цель)"
+#~ msgstr "Сборка используя make (другая цель)"
 
 #~ msgid "Enter custom options for the make tool"
 #~ msgstr "Введите свои опции для make"
@@ -5036,10 +5038,10 @@ msgstr "Сохранить тольк текущий открытый файл"
 #~ msgstr "Начало"
 
 #~ msgid "Build with \"_make\" (custom _target)"
-#~ msgstr "Собрать с  \"_make\" (своя цель)"
+#~ msgstr "Скомпилировать с  \"_make\" (своя цель)"
 
 #~ msgid "Error while converting file (%s)."
 #~ msgstr "Ошибка при конвертации файла (%s)."
 
 #~ msgid "Build with \"make\" (custom target)"
-#~ msgstr "Построить с \"make\" (своя цель)"
+#~ msgstr "Сборка с \"make\" (своя цель)"
