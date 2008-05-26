@@ -430,31 +430,34 @@ plugin_init(Plugin *plugin)
 {
 	PluginCallback *callbacks;
 	PluginInfo **p_info;
+	PluginFields **plugin_fields;
+	GeanyData **p_geany_data;
+	GeanyFunctions **p_geany_functions;
 
 	/* set these symbols before init() is called */
 	g_module_symbol(plugin->module, "plugin_info", (void *) &p_info);
 	if (p_info)
 		*p_info = &plugin->info;
-	g_module_symbol(module, "geany_data", (void *) &p_geany_data);
+	g_module_symbol(plugin->module, "geany_data", (void *) &p_geany_data);
 	if (p_geany_data)
 		*p_geany_data = &geany_data;
-	g_module_symbol(module, "geany_functions", (void *) &p_geany_functions);
+	g_module_symbol(plugin->module, "geany_functions", (void *) &p_geany_functions);
 	if (p_geany_functions)
 		*p_geany_functions = &geany_functions;
-	g_module_symbol(module, "plugin_fields", (void *) &plugin_fields);
+	g_module_symbol(plugin->module, "plugin_fields", (void *) &plugin_fields);
 	if (plugin_fields)
 		*plugin_fields = &plugin->fields;
 
 	/* start the plugin */
-	g_module_symbol(module, "init", (void *) &plugin->init);
+	g_module_symbol(plugin->module, "init", (void *) &plugin->init);
 	if (plugin->init != NULL)
 		plugin->init(&geany_data);
 	else
 		geany_debug("Plugin '%s' has no init() function!", plugin->info.name);
 
 	/* store some function pointers for later use */
-	g_module_symbol(module, "configure", (void *) &plugin->configure);
-	g_module_symbol(module, "cleanup", (void *) &plugin->cleanup);
+	g_module_symbol(plugin->module, "configure", (void *) &plugin->configure);
+	g_module_symbol(plugin->module, "cleanup", (void *) &plugin->cleanup);
 	if (plugin->init != NULL && plugin->cleanup == NULL)
 	{
 		if (app->debug_mode)
@@ -498,9 +501,6 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 	Plugin *plugin;
 	GModule *module;
 	void (*plugin_set_info)(PluginInfo*);
-	PluginFields **plugin_fields;
-	GeanyData **p_geany_data;
-	GeanyFunctions **p_geany_functions;
 
 	g_return_val_if_fail(fname, NULL);
 	g_return_val_if_fail(g_module_supported(), NULL);
