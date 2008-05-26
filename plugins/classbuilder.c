@@ -39,7 +39,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(7)
+PLUGIN_VERSION_CHECK(64)
 
 PLUGIN_SET_INFO(_("Class Builder"), _("Creates source files for new class types."), VERSION,
 	"Alexander Rodin")
@@ -769,7 +769,7 @@ on_menu_create_gtk_class_activate      (GtkMenuItem     *menuitem,
 }
 
 
-void init(GeanyData *data)
+void plugin_init(GeanyData *data)
 {
 	GtkWidget *menu_create_class1;
 	GtkWidget *image1861;
@@ -805,7 +805,7 @@ void init(GeanyData *data)
 }
 
 
-void cleanup(void)
+void plugin_cleanup(void)
 {
 	gtk_widget_destroy(plugin_fields->menu_item);
 }

@@ -37,7 +37,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(32)
+PLUGIN_VERSION_CHECK(64)
 
 PLUGIN_SET_INFO(_("Auto Save"), _("Save automatically all open files in a given time interval."),
 	VERSION, _("The Geany developer team"))
@@ -93,7 +93,7 @@ void set_timeout(void)
 }
 
 
-void init(GeanyData *data)
+void plugin_init(GeanyData *data)
 {
 	GKeyFile *config = g_key_file_new();
 	GError *error = NULL;
@@ -200,7 +200,7 @@ void configure(GtkWidget *parent)
 }
 
 
-void cleanup(void)
+void plugin_cleanup(void)
 {
 	g_source_remove(src_id);
 	g_free(config_file);

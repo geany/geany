@@ -52,7 +52,7 @@ GeanyFunctions	*geany_functions;
 
 /* Check that Geany supports plugin API version 7 or later, and check
  * for binary compatibility. */
-PLUGIN_VERSION_CHECK(7)
+PLUGIN_VERSION_CHECK(64)
 
 /* All plugins must set name, description, version and author. */
 PLUGIN_SET_INFO(_("Demo"), _("Example plugin."), VERSION, _("The Geany developer team"))
@@ -84,7 +84,7 @@ item_activate(GtkMenuItem *menuitem, gpointer gdata)
 
 /* Called by Geany to initialize the plugin.
  * Note: data is the same as geany_data. */
-void init(GeanyData *data)
+void plugin_init(GeanyData *data)
 {
 	GtkWidget *demo_item;
 
@@ -149,7 +149,7 @@ void configure(GtkWidget *parent)
 /* Called by Geany before unloading the plugin.
  * Here any UI changes should be removed, memory freed and any other finalization done.
  * Be sure to leave Geany as it was before init(). */
-void cleanup(void)
+void plugin_cleanup(void)
 {
 	/* remove the menu item added in init() */
 	gtk_widget_destroy(plugin_fields->menu_item);

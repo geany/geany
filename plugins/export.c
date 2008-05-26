@@ -42,7 +42,7 @@ PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
-PLUGIN_VERSION_CHECK(20)
+PLUGIN_VERSION_CHECK(64)
 PLUGIN_SET_INFO(_("Export"), _("Exports the current file into different formats."), VERSION,
 	_("The Geany developer team"))
 
@@ -704,7 +704,7 @@ static void write_html_file(gint idx, const gchar *filename, gboolean use_zoom)
 }
 
 
-void init(GeanyData *data)
+void plugin_init(GeanyData *data)
 {
 	GtkWidget *menu_export;
 	GtkWidget *menu_export_menu;
@@ -739,7 +739,7 @@ void init(GeanyData *data)
 }
 
 
-void cleanup(void)
+void plugin_cleanup(void)
 {
 	gtk_widget_destroy(plugin_fields->menu_item);
 }

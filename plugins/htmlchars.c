@@ -38,7 +38,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(48)
+PLUGIN_VERSION_CHECK(64)
 
 PLUGIN_SET_INFO(_("HTML Characters"), _("Inserts HTML character entities like '&amp;'."), VERSION,
 	_("The Geany developer team"))
@@ -523,7 +523,7 @@ static void kb_activate(G_GNUC_UNUSED guint key_id)
 
 
 /* Called by Geany to initialize the plugin */
-void init(GeanyData *data)
+void plugin_init(GeanyData *data)
 {
 	GtkWidget *demo_item;
 	const gchar *menu_text = _("_Insert Special HTML Characters");
@@ -546,7 +546,7 @@ void init(GeanyData *data)
 
 
 /* Destroy widgets */
-void cleanup(void)
+void plugin_cleanup(void)
 {
 	gtk_widget_destroy(plugin_fields->menu_item);
 

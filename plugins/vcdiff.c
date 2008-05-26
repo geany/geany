@@ -45,7 +45,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(27)
+PLUGIN_VERSION_CHECK(64)
 
 PLUGIN_SET_INFO(_("Version Diff"), _("Creates a patch of a file against version control."), VERSION,
 	_("The Geany developer team"))
@@ -502,7 +502,7 @@ static void update_menu_items(void)
 
 
 /* Called by Geany to initialize the plugin */
-void init(GeanyData *data)
+void plugin_init(GeanyData *data)
 {
 	GtkWidget	*menu_vcdiff = NULL;
 	GtkWidget	*menu_vcdiff_menu = NULL;
@@ -554,7 +554,7 @@ void init(GeanyData *data)
 
 
 /* Called by Geany before unloading the plugin. */
-void cleanup(void)
+void plugin_cleanup(void)
 {
 	/* remove the menu item added in init() */
 	gtk_widget_destroy(plugin_fields->menu_item);

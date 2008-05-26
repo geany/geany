@@ -12,6 +12,10 @@
    plugin_version_check() function.
    Check that plugin keybinding names have been set in plugin_init(),
    otherwise print a debug message and ignore all of them.
+ * plugins/export.c, plugins/vcdiff.c, plugins/demoplugin.c,
+   plugins/filebrowser.c, plugins/htmlchars.c, plugins/autosave.c,
+   plugins/classbuilder.c:
+   Fix plugins to compile with GEANY_DISABLE_DEPRECATED.
 
 
 2008-05-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -46,7 +46,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(26)
+PLUGIN_VERSION_CHECK(64)
 
 PLUGIN_SET_INFO(_("File Browser"), _("Adds a file browser tab to the sidebar."), VERSION,
 	_("The Geany developer team"))
@@ -910,7 +910,7 @@ static void kb_activate(guint key_id)
 }
 
 
-void init(GeanyData *data)
+void plugin_init(GeanyData *data)
 {
 	GtkWidget *scrollwin, *toolbar, *filterbar;
 
@@ -1037,7 +1037,7 @@ void configure(GtkWidget *parent)
 }
 
 
-void cleanup(void)
+void plugin_cleanup(void)
 {
 	g_free(config_file);
 	g_free(open_cmd);
