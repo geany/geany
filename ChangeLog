@@ -1,3 +1,10 @@
+2008-05-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/plugins.c:
+   Move all symbol lookups except plugin_set_info() into plugin_init().
+   Add debug message for missing init() function in a plugin.
+
+
 2008-05-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/plugindata.h, src/plugins.c, doc/plugin-symbols.c,

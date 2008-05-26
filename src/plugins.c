@@ -431,18 +431,44 @@ plugin_init(Plugin *plugin)
 	PluginCallback *callbacks;
 	PluginInfo **p_info;
 
-	if (plugin->init)
+	/* set these symbols before init() is called */
+	g_module_symbol(plugin->module, "plugin_info", (void *) &p_info);
+	if (p_info)
+		*p_info = &plugin->info;
+	g_module_symbol(module, "geany_data", (void *) &p_geany_data);
+	if (p_geany_data)
+		*p_geany_data = &geany_data;
+	g_module_symbol(module, "geany_functions", (void *) &p_geany_functions);
+	if (p_geany_functions)
+		*p_geany_functions = &geany_functions;
+	g_module_symbol(module, "plugin_fields", (void *) &plugin_fields);
+	if (plugin_fields)
+		*plugin_fields = &plugin->fields;
+
+	/* start the plugin */
+	g_module_symbol(module, "init", (void *) &plugin->init);
+	if (plugin->init != NULL)
 		plugin->init(&geany_data);
+	else
+		geany_debug("Plugin '%s' has no init() function!", plugin->info.name);
+
+	/* store some function pointers for later use */
+	g_module_symbol(module, "configure", (void *) &plugin->configure);
+	g_module_symbol(module, "cleanup", (void *) &plugin->cleanup);
+	if (plugin->init != NULL && plugin->cleanup == NULL)
+	{
+		if (app->debug_mode)
+			g_warning("Plugin '%s' has no cleanup() function - there may be memory leaks!",
+				plugin->info.name);
+	}
+
+	/* now read any plugin-owned data that might have been set in init() */
 
 	if (plugin->fields.flags & PLUGIN_IS_DOCUMENT_SENSITIVE)
 	{
 		gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) ? TRUE : FALSE;
 		gtk_widget_set_sensitive(plugin->fields.menu_item, enable);
 	}
-
-	g_module_symbol(plugin->module, "plugin_info", (void *) &p_info);
-	if (p_info)
-		*p_info = &plugin->info;
 
 	g_module_symbol(plugin->module, "plugin_callbacks", (void *) &callbacks);
 	if (callbacks)
@@ -453,6 +479,7 @@ plugin_init(Plugin *plugin)
 	if (plugin->key_group)
 		add_kb_group(plugin);
 
+	/* remember which plugins are active */
 	active_plugin_list = g_list_append(active_plugin_list, plugin);
 
 	geany_debug("Loaded:   %s (%s)", plugin->filename,
@@ -545,26 +572,6 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 
 	plugin->filename = g_strdup(fname);
 	plugin->module = module;
-
-	g_module_symbol(module, "geany_data", (void *) &p_geany_data);
-	if (p_geany_data)
-		*p_geany_data = &geany_data;
-	g_module_symbol(module, "geany_functions", (void *) &p_geany_functions);
-	if (p_geany_functions)
-		*p_geany_functions = &geany_functions;
-	g_module_symbol(module, "plugin_fields", (void *) &plugin_fields);
-	if (plugin_fields)
-		*plugin_fields = &plugin->fields;
-
-	g_module_symbol(module, "init", (void *) &plugin->init);
-	g_module_symbol(module, "configure", (void *) &plugin->configure);
-	g_module_symbol(module, "cleanup", (void *) &plugin->cleanup);
-	if (plugin->init != NULL && plugin->cleanup == NULL)
-	{
-		if (app->debug_mode)
-			g_warning("Plugin '%s' has no cleanup() function - there may be memory leaks!",
-				plugin->info.name);
-	}
 
 	if (init_plugin)
 		plugin_init(plugin);
