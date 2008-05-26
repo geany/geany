@@ -35,7 +35,7 @@
  */
 
 /** Use the PLUGIN_VERSION_CHECK() macro instead. Required by Geany. */
-gint version_check(gint);
+gint plugin_version_check(gint);
 
 /** Use the PLUGIN_SET_INFO() macro to define it. Required by Geany.
  * This function is called before the plugin is initialized, so Geany
@@ -65,11 +65,11 @@ PluginFields* plugin_fields;
 PluginCallback plugin_callbacks[];
 
 /** Most plugins should use the PLUGIN_KEY_GROUP() macro to define it. However,
- * its fields are not read until after init() is called for the plugin, so it
+ * its fields are not read until after plugin_init() is called for the plugin, so it
  * is possible to setup a variable number of keybindings, e.g. based on the
  * plugin's configuration file settings.
  * - The @c name field must not be empty or match Geany's default group name.
- * - The @c label field is set by Geany after init() is called to the name of the
+ * - The @c label field is set by Geany after plugin_init() is called to the name of the
  * plugin.
  * @note This is a single element array for implementation reasons,
  * but you can treat it like a pointer. */
@@ -83,9 +83,9 @@ void configure(GtkWidget *parent);
 
 /** Called after loading the plugin.
  * @param data The same as #geany_data. */
-void init(GeanyData *data);
+void plugin_init(GeanyData *data);
 
 /** Called before unloading the plugin. Required for normal plugins - it should undo
- * everything done in init() - e.g. destroy menu items, free memory. */
-void cleanup();
+ * everything done in plugin_init() - e.g. destroy menu items, free memory. */
+void plugin_cleanup();
 

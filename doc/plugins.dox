@@ -189,8 +189,8 @@ PluginCallback plugin_callbacks[] =
  *  the plugin uses with the used Geany sources. Furthermore, it also checks
  *  the binary compatiblity of the plugin with Geany.
  *
- *  A few functions are necessary to let Geany work with the plugin, at least init() must
- *  exist in the plugin. cleanup() should also be used to free allocated memory or destroy
+ *  A few functions are necessary to let Geany work with the plugin, at least plugin_init() must
+ *  exist in the plugin. plugin_cleanup() should also be used to free allocated memory or destroy
  *  created widgets.
  *
  *  @subsection buildenv Build environment

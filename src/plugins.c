@@ -352,13 +352,19 @@ static gboolean
 plugin_check_version(GModule *module)
 {
 	gint (*version_check)(gint) = NULL;
-	gint result;
 
-	g_module_symbol(module, "version_check", (void *) &version_check);
+	g_module_symbol(module, "plugin_version_check", (void *) &version_check);
 
-	if (version_check)
+	if (! version_check)
 	{
-		result = version_check(abi_version);
+		geany_debug("Plugin \"%s\" has no plugin_version_check() function - ignoring plugin!",
+				g_module_name(module));
+		return FALSE;
+	}
+	else
+	{
+		gint result = version_check(abi_version);
+
 		if (result < 0)
 		{
 			ui_set_statusbar(TRUE, _("The plugin \"%s\" is not binary compatible with this "
@@ -410,12 +416,27 @@ static void add_callbacks(Plugin *plugin, PluginCallback *callbacks)
 static void
 add_kb_group(Plugin *plugin)
 {
+	guint i;
+
 	g_return_if_fail(NZV(plugin->key_group->name));
 	g_return_if_fail(! g_str_equal(plugin->key_group->name, keybindings_keyfile_group_name));
 
+	for (i = 0; i < plugin->key_group->count; i++)
+	{
+		KeyBinding *kb = &plugin->key_group->keys[i];
+
+		if (!NZV(kb->name))
+		{
+			geany_debug("Plugin \"%s\" has not set a name for keybinding %d"
+				" - ignoring all keybindings!",
+				plugin->info.name, i);
+			plugin->key_group->count = 0;
+			break;
+		}
+	}
 	if (plugin->key_group->count == 0)
 	{
-		plugin->key_group = NULL;	/* Ignore the group */
+		plugin->key_group = NULL;	/* Ignore the group (maybe the plugin has optional KB) */
 		return;
 	}
 
@@ -434,7 +455,7 @@ plugin_init(Plugin *plugin)
 	GeanyData **p_geany_data;
 	GeanyFunctions **p_geany_functions;
 
-	/* set these symbols before init() is called */
+	/* set these symbols before plugin_init() is called */
 	g_module_symbol(plugin->module, "plugin_info", (void *) &p_info);
 	if (p_info)
 		*p_info = &plugin->info;
@@ -449,23 +470,23 @@ plugin_init(Plugin *plugin)
 		*plugin_fields = &plugin->fields;
 
 	/* start the plugin */
-	g_module_symbol(plugin->module, "init", (void *) &plugin->init);
+	g_module_symbol(plugin->module, "plugin_init", (void *) &plugin->init);
 	if (plugin->init != NULL)
 		plugin->init(&geany_data);
 	else
-		geany_debug("Plugin '%s' has no init() function!", plugin->info.name);
+		geany_debug("Plugin '%s' has no plugin_init() function!", plugin->info.name);
 
 	/* store some function pointers for later use */
 	g_module_symbol(plugin->module, "configure", (void *) &plugin->configure);
-	g_module_symbol(plugin->module, "cleanup", (void *) &plugin->cleanup);
+	g_module_symbol(plugin->module, "plugin_cleanup", (void *) &plugin->cleanup);
 	if (plugin->init != NULL && plugin->cleanup == NULL)
 	{
 		if (app->debug_mode)
-			g_warning("Plugin '%s' has no cleanup() function - there may be memory leaks!",
+			g_warning("Plugin '%s' has no plugin_cleanup() function - there may be memory leaks!",
 				plugin->info.name);
 	}
 
-	/* now read any plugin-owned data that might have been set in init() */
+	/* now read any plugin-owned data that might have been set in plugin_init() */
 
 	if (plugin->fields.flags & PLUGIN_IS_DOCUMENT_SENSITIVE)
 	{
@@ -491,7 +512,7 @@ plugin_init(Plugin *plugin)
 
 
 /* Load and init a plugin.
- * init_plugin decides whether the plugin's init() function should be called or not. If it is
+ * init_plugin decides whether the plugin's plugin_init() function should be called or not. If it is
  * called, the plugin will be started, if not the plugin will be read only (for the list of
  * available plugins in the plugin manager).
  * When add_to_list is set, the plugin will be added to the plugin manager's plugin_list. */
@@ -548,7 +569,7 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 	g_module_symbol(module, "plugin_set_info", (void *) &plugin_set_info);
 	if (plugin_set_info == NULL)
 	{
-		geany_debug("No plugin_set_info() defined for \"%s\"!", fname);
+		geany_debug("No plugin_set_info() defined for \"%s\" - ignoring plugin!", fname);
 
 		if (! g_module_close(module))
 			g_warning("%s: %s", fname, g_module_error());
@@ -561,7 +582,8 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 	plugin_set_info(&plugin->info);
 	if (!NZV(plugin->info.name))
 	{
-		geany_debug("No plugin name set in plugin_set_info() for \"%s\"!", fname);
+		geany_debug("No plugin name set in plugin_set_info() for \"%s\" - ignoring plugin!",
+			fname);
 
 		if (! g_module_close(module))
 			g_warning("%s: %s", fname, g_module_error());

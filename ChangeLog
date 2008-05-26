@@ -3,6 +3,15 @@
  * src/plugins.c:
    Move all symbol lookups except plugin_set_info() into plugin_init().
    Add debug message for missing init() function in a plugin.
+ * src/plugindata.h, src/plugins.c, doc/plugin-symbols.c,
+   doc/plugins.dox:
+   Add plugin_ prefix for plugin symbols version_check, init and
+   cleanup. Deprecate init and cleanup; update PLUGIN_VERSION_CHECK
+   macro.
+   Add a debug message and fail to load a plugin if it has no
+   plugin_version_check() function.
+   Check that plugin keybinding names have been set in plugin_init(),
+   otherwise print a debug message and ignore all of them.
 
 
 2008-05-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -36,19 +36,19 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 63;
+static const gint api_version = 64;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
  * are only appended, as this doesn't affect existing fields. */
-static const gint abi_version = 33;
+static const gint abi_version = 34;
 
 /** Check the plugin can be loaded by Geany.
  * This performs runtime checks that try to ensure:
  * - Geany ABI data types are compatible with this plugin.
  * - Geany sources provide the required API for this plugin. */
 #define PLUGIN_VERSION_CHECK(api_required) \
-	gint version_check(gint abi_ver) \
+	gint plugin_version_check(gint abi_ver) \
 	{ \
 		if (abi_ver != abi_version) \
 			return -1; \
@@ -93,8 +93,8 @@ PluginInfo;
 
 /** Declare and initialise a keybinding group.
  * @code KeyBindingGroup plugin_key_group[1]; @endcode
- * You must then set the @c plugin_key_group::keys[] entries for the group in init().
- * The @c plugin_key_group::label field is set by Geany after @c init()
+ * You must then set the @c plugin_key_group::keys[] entries for the group in plugin_init().
+ * The @c plugin_key_group::label field is set by Geany after @c plugin_init()
  * is called, to the name of the plugin.
  * @param group_name A unique group name (without quotes) to be used in the
  * configuration file, such as @c html_chars.
@@ -451,6 +451,9 @@ typedef PluginCallback GeanyCallback;
 #define geany_callbacks plugin_callbacks
 
 #define PLUGIN_INFO PLUGIN_SET_INFO
+
+#define init plugin_init
+#define cleanup plugin_cleanup
 
 #endif	/* GEANY_DISABLE_DEPRECATED */
 
