@@ -1,3 +1,9 @@
+2008-05-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/plugins.c:
+   Fail to load a plugin if it has no plugin_init() function.
+
+
 2008-05-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/plugins.c:

@@ -470,11 +470,8 @@ plugin_init(Plugin *plugin)
 		*plugin_fields = &plugin->fields;
 
 	/* start the plugin */
-	g_module_symbol(plugin->module, "plugin_init", (void *) &plugin->init);
-	if (plugin->init != NULL)
-		plugin->init(&geany_data);
-	else
-		geany_debug("Plugin '%s' has no plugin_init() function!", plugin->info.name);
+	g_return_if_fail(plugin->init);
+	plugin->init(&geany_data);
 
 	/* store some function pointers for later use */
 	g_module_symbol(plugin->module, "configure", (void *) &plugin->configure);
@@ -511,7 +508,7 @@ plugin_init(Plugin *plugin)
 }
 
 
-/* Load and init a plugin.
+/* Load and optionally init a plugin.
  * init_plugin decides whether the plugin's plugin_init() function should be called or not. If it is
  * called, the plugin will be started, if not the plugin will be read only (for the list of
  * available plugins in the plugin manager).
@@ -584,6 +581,18 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 	{
 		geany_debug("No plugin name set in plugin_set_info() for \"%s\" - ignoring plugin!",
 			fname);
+
+		if (! g_module_close(module))
+			g_warning("%s: %s", fname, g_module_error());
+		g_free(plugin);
+		return NULL;
+	}
+
+	g_module_symbol(module, "plugin_init", (void *) &plugin->init);
+	if (plugin->init == NULL)
+	{
+		geany_debug("Plugin '%s' has no plugin_init() function - ignoring plugin!",
+			plugin->info.name);
 
 		if (! g_module_close(module))
 			g_warning("%s: %s", fname, g_module_error());
