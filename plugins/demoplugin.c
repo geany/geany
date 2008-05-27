@@ -43,7 +43,7 @@
 #include "pluginmacros.h"	/* some useful macros to avoid typing geany_data so often */
 
 
-/* These items are set by Geany before init() is called. */
+/* These items are set by Geany before plugin_init() is called. */
 PluginInfo		*plugin_info;
 PluginFields	*plugin_fields;
 GeanyData		*geany_data;
@@ -102,7 +102,7 @@ void plugin_init(GeanyData *data)
 
 
 /* Called by Geany to show the plugin's configure dialog. This function is always called after
- * init() was called.
+ * plugin_init() was called.
  * You can omit this function if the plugin doesn't need to be configured.
  * Note: parent is the parent window which can be used as the transient window for the created
  *       dialog. */
@@ -148,10 +148,10 @@ void configure(GtkWidget *parent)
 
 /* Called by Geany before unloading the plugin.
  * Here any UI changes should be removed, memory freed and any other finalization done.
- * Be sure to leave Geany as it was before init(). */
+ * Be sure to leave Geany as it was before plugin_init(). */
 void plugin_cleanup(void)
 {
-	/* remove the menu item added in init() */
+	/* remove the menu item added in plugin_init() */
 	gtk_widget_destroy(plugin_fields->menu_item);
 	/* release other allocated strings and objects */
 	g_free(welcome_text);

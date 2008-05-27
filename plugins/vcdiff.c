@@ -556,6 +556,6 @@ void plugin_init(GeanyData *data)
 /* Called by Geany before unloading the plugin. */
 void plugin_cleanup(void)
 {
-	/* remove the menu item added in init() */
+	/* remove the menu item added in plugin_init() */
 	gtk_widget_destroy(plugin_fields->menu_item);
 }
