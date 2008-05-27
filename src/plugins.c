@@ -93,13 +93,6 @@ static GtkWidget *menu_separator = NULL;
 static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data);
 
 
-enum
-{
-	PLUGIN_FREE_NON_ACTIVE,
-	PLUGIN_FREE_ALL
-};
-
-
 static DocumentFuncs doc_funcs = {
 	&document_new_file,
 	&document_get_cur_idx,
@@ -651,14 +644,10 @@ plugin_unload(Plugin *plugin)
 
 
 static void
-plugin_free(Plugin *plugin, gpointer data)
+plugin_free(Plugin *plugin)
 {
 	g_return_if_fail(plugin);
 	g_return_if_fail(plugin->module);
-
-	/* don't do anything when closing the plugin manager and it is an active plugin */
-	if (GPOINTER_TO_INT(data) == PLUGIN_FREE_NON_ACTIVE && is_active_plugin(plugin))
-		return;
 
 	plugin_unload(plugin);
 
@@ -844,7 +833,7 @@ void plugins_free(void)
 	}
 	if (active_plugin_list != NULL)
 	{
-		g_list_foreach(active_plugin_list, (GFunc) plugin_free,	GINT_TO_POINTER(PLUGIN_FREE_ALL));
+		g_list_foreach(active_plugin_list, (GFunc) plugin_free,	NULL);
 		g_list_free(active_plugin_list);
 	}
 	g_strfreev(active_plugins_pref);
@@ -965,7 +954,7 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 	/* unload plugin module */
 	if (!state)
 		keybindings_write_to_file();	/* save shortcuts (only need this group, but it doesn't take long) */
-	plugin_free(p, GINT_TO_POINTER(PLUGIN_FREE_ALL));
+	plugin_free(p);
 
 	/* reload plugin module and initialize it if item is checked */
 	p = plugin_new(file_name, state, TRUE);
@@ -1067,12 +1056,25 @@ void pm_on_configure_button_clicked(GtkButton *button, gpointer user_data)
 }
 
 
+static void
+free_non_active_plugin(gpointer data, gpointer user_data)
+{
+	Plugin *plugin = data;
+
+	/* don't do anything when closing the plugin manager and it is an active plugin */
+	if (is_active_plugin(plugin))
+		return;
+
+	plugin_free(plugin);
+}
+
+
 static void pm_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
 	if (plugin_list != NULL)
 	{
 		/* remove all non-active plugins from the list */
-		g_list_foreach(plugin_list, (GFunc) plugin_free, GINT_TO_POINTER(PLUGIN_FREE_NON_ACTIVE));
+		g_list_foreach(plugin_list, free_non_active_plugin, NULL);
 		g_list_free(plugin_list);
 		plugin_list = NULL;
 	}
