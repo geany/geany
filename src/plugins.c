@@ -74,9 +74,9 @@ typedef struct Plugin
 	gsize		signal_ids_len;
 	KeyBindingGroup	*key_group;
 
-	void	(*init) (GeanyData *data);	/* Called when the plugin is enabled */
-	void	(*configure) (GtkWidget *parent);	/* plugin configure dialog, optionally */
-	void	(*cleanup) (void);			/* Called when the plugin is disabled or when Geany exits */
+	void		(*init) (GeanyData *data);			/* Called when the plugin is enabled */
+	GtkWidget*	(*configure) (GtkDialog *dialog);	/* plugin configure dialog, optional */
+	void		(*cleanup) (void);					/* Called when the plugin is disabled or when Geany exits */
 }
 Plugin;
 
@@ -467,9 +467,9 @@ plugin_init(Plugin *plugin)
 	plugin->init(&geany_data);
 
 	/* store some function pointers for later use */
-	g_module_symbol(plugin->module, "configure", (void *) &plugin->configure);
+	g_module_symbol(plugin->module, "plugin_configure", (void *) &plugin->configure);
 	g_module_symbol(plugin->module, "plugin_cleanup", (void *) &plugin->cleanup);
-	if (plugin->init != NULL && plugin->cleanup == NULL)
+	if (plugin->cleanup == NULL)
 	{
 		if (app->debug_mode)
 			g_warning("Plugin '%s' has no plugin_cleanup() function - there may be memory leaks!",
@@ -898,6 +898,7 @@ typedef struct
 	GtkWidget *description_label;
 	GtkWidget *configure_button;
 } PluginManagerWidgets;
+
 static PluginManagerWidgets pm_widgets;
 
 
@@ -1036,6 +1037,39 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
 }
 
 
+static void configure_plugin(Plugin *p)
+{
+	GtkWidget *parent = pm_widgets.dialog;
+	GtkWidget *prefs_page, *dialog, *vbox;
+
+	dialog = gtk_dialog_new_with_buttons(p->info.name,
+		GTK_WINDOW(parent), GTK_DIALOG_DESTROY_WITH_PARENT,
+		GTK_STOCK_APPLY, GTK_RESPONSE_APPLY,
+		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+		GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
+	gtk_widget_set_name(dialog, "GeanyDialog");
+
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
+	gtk_widget_show(vbox);
+
+	prefs_page = p->configure(GTK_DIALOG(dialog));
+
+	if (! GTK_IS_WIDGET(prefs_page))
+	{
+		geany_debug("Invalid widget returned from plugin_configure() in plugin \"%s\"!",
+			p->info.name);
+	}
+	else
+	{
+		gtk_container_add(GTK_CONTAINER(vbox), prefs_page);
+
+		/* run the dialog */
+		while (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_APPLY);
+	}
+	gtk_widget_destroy(dialog);
+}
+
+
 void pm_on_configure_button_clicked(GtkButton *button, gpointer user_data)
 {
 	GtkTreeModel *model;
@@ -1050,7 +1084,7 @@ void pm_on_configure_button_clicked(GtkButton *button, gpointer user_data)
 
 		if (p != NULL)
 		{
-			p->configure(pm_widgets.dialog);
+			configure_plugin(p);
 		}
 	}
 }

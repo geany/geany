@@ -1,3 +1,19 @@
+2008-05-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/plugindata.h, src/plugins.c, doc/plugin-symbols.c,
+   plugins/demoplugin.c, plugins/filebrowser.c, plugins/autosave.c:
+   Note: this breaks the plugin API.
+   Remove plugin symbol configure().
+   Add plugin symbol plugin_configure() which is used to tell Geany a
+   widget to pack into the plugin preferences dialog, and connect a
+   response callback for when the dialog receives a user decision.
+   This allows Geany to in future implement a common preferences dialog
+   for all plugins, without breaking the plugin API/ABI.
+   Add Apply button for plugin preference dialogs (to indicate plugins
+   should handle the apply response as well as OK, as a multiple plugin
+   configuration dialog would want an apply button).
+
+
 2008-05-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/plugins.c:

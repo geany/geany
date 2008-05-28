@@ -101,39 +101,16 @@ void plugin_init(GeanyData *data)
 }
 
 
-/* Called by Geany to show the plugin's configure dialog. This function is always called after
- * plugin_init() was called.
- * You can omit this function if the plugin doesn't need to be configured.
- * Note: parent is the parent window which can be used as the transient window for the created
- *       dialog. */
-void configure(GtkWidget *parent)
+/* Callback connected in plugin_configure(). */
+static void
+on_configure_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
-	GtkWidget *dialog, *label, *entry, *vbox;
-
-	/* example configuration dialog */
-	dialog = gtk_dialog_new_with_buttons(_("Demo"),
-		GTK_WINDOW(parent), GTK_DIALOG_DESTROY_WITH_PARENT,
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
-	vbox = p_ui->dialog_vbox_new(GTK_DIALOG(dialog));
-	gtk_widget_set_name(dialog, "GeanyDialog");
-	gtk_box_set_spacing(GTK_BOX(vbox), 6);
-
-	/* add a label and a text entry to the dialog */
-	label = gtk_label_new(_("Welcome text to show:"));
-	gtk_widget_show(label);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
-	entry = gtk_entry_new();
-	gtk_widget_show(entry);
-	if (welcome_text != NULL)
-		gtk_entry_set_text(GTK_ENTRY(entry), welcome_text);
-
-	gtk_container_add(GTK_CONTAINER(vbox), label);
-	gtk_container_add(GTK_CONTAINER(vbox), entry);
-	gtk_widget_show(vbox);
-
-	/* run the dialog and check for the response code */
-	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+	/* catch OK or Apply clicked */
+	if (response == GTK_RESPONSE_OK || response == GTK_RESPONSE_APPLY)
 	{
+		/* We only have one pref here, but for more you would use a struct for user_data */
+		GtkWidget *entry = GTK_WIDGET(user_data);
+
 		g_free(welcome_text);
 		welcome_text = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry)));
 		/* maybe the plugin should write here the settings into a file
@@ -142,7 +119,36 @@ void configure(GtkWidget *parent)
 		 * app->configdir G_DIR_SEPARATOR_S plugins G_DIR_SEPARATOR_S pluginname G_DIR_SEPARATOR_S
 		 * e.g. this could be: ~/.geany/plugins/Demo/, please use app->configdir */
 	}
-	gtk_widget_destroy(dialog);
+}
+
+
+/* Called by Geany to show the plugin's configure dialog. This function is always called after
+ * plugin_init() was called.
+ * You can omit this function if the plugin doesn't need to be configured.
+ * Note: parent is the parent window which can be used as the transient window for the created
+ *       dialog. */
+GtkWidget *plugin_configure(GtkDialog *dialog)
+{
+	GtkWidget *label, *entry, *vbox;
+
+	/* example configuration dialog */
+	vbox = gtk_vbox_new(FALSE, 6);
+
+	/* add a label and a text entry to the dialog */
+	label = gtk_label_new(_("Welcome text to show:"));
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	entry = gtk_entry_new();
+	if (welcome_text != NULL)
+		gtk_entry_set_text(GTK_ENTRY(entry), welcome_text);
+
+	gtk_container_add(GTK_CONTAINER(vbox), label);
+	gtk_container_add(GTK_CONTAINER(vbox), entry);
+
+	gtk_widget_show_all(vbox);
+
+	/* Connect a callback for when the user clicks a dialog button */
+	g_signal_connect(dialog, "response", G_CALLBACK(on_configure_response), entry);
+	return vbox;
 }
 
 

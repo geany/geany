@@ -76,10 +76,13 @@ PluginCallback plugin_callbacks[];
 KeyBindingGroup plugin_key_group[1];
 
 
-/** Called when the plugin should show a configure dialog to let the user set some basic
- * plugin configuration. Optionally, can be omitted when not needed.
- * @param parent The Plugin Manager dialog widget. */
-void configure(GtkWidget *parent);
+/** Called before showing the plugin preferences dialog to let the user set some basic
+ * plugin configuration options. Can be omitted when not needed.
+ * @param dialog The plugin preferences dialog widget - this should only be used to
+ * connect the @c "response" signal. If settings should be read from the dialog, the
+ * reponse will be either @c GTK_RESPONSE_OK or @c GTK_RESPONSE_APPLY.
+ * @return A container widget holding preference widgets. */
+GtkWidget* plugin_configure(GtkDialog *dialog);
 
 /** Called after loading the plugin.
  * @param data The same as #geany_data. */

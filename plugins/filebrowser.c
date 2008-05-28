@@ -952,61 +952,27 @@ void plugin_init(GeanyData *data)
 }
 
 
-void configure(GtkWidget *parent)
+static struct
 {
-	GtkWidget *dialog, *label, *entry, *checkbox_of, *checkbox_hf, *vbox;
-	GtkTooltips *tooltips = gtk_tooltips_new();
+	GtkWidget *open_cmd_entry;
+	GtkWidget *show_hidden_checkbox;
+	GtkWidget *hide_objects_checkbox;
+}
+pref_widgets;
 
-	dialog = gtk_dialog_new_with_buttons(_("File Browser"),
-		GTK_WINDOW(parent), GTK_DIALOG_DESTROY_WITH_PARENT,
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
-	vbox = p_ui->dialog_vbox_new(GTK_DIALOG(dialog));
-	gtk_widget_set_name(dialog, "GeanyDialog");
-	gtk_box_set_spacing(GTK_BOX(vbox), 6);
-
-	label = gtk_label_new(_("External open command:"));
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
-	gtk_container_add(GTK_CONTAINER(vbox), label);
-
-	entry = gtk_entry_new();
-	gtk_widget_show(entry);
-	if (open_cmd != NULL)
-		gtk_entry_set_text(GTK_ENTRY(entry), open_cmd);
-	gtk_tooltips_set_tip(tooltips, entry,
-		_("The command to execute when using \"Open with\". You can use %f and %d wildcards.\n"
-		  "%f will be replaced with the filename including full path\n"
-		  "%d will be replaced with the path name of the selected file without the filename"),
-		  NULL);
-	gtk_container_add(GTK_CONTAINER(vbox), entry);
-
-	checkbox_hf = gtk_check_button_new_with_label(_("Show hidden files"));
-	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_hf), FALSE);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_hf), show_hidden_files);
-	gtk_box_pack_start(GTK_BOX(vbox), checkbox_hf, FALSE, FALSE, 5);
-
-	checkbox_of = gtk_check_button_new_with_label(_("Hide object files"));
-	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_of), FALSE);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_of), hide_object_files);
-	gtk_tooltips_set_tip(tooltips, checkbox_of,
-		_("Don't show generated object files in the file browser, this includes "
-		  "*.o, *.obj. *.so, *.dll, *.a, *.lib"),
-		  NULL);
-	gtk_box_pack_start(GTK_BOX(vbox), checkbox_of, FALSE, FALSE, 5);
-
-
-	gtk_widget_show_all(vbox);
-
-	/* run the dialog and check for the response code */
-	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+static void
+on_configure_response(GtkDialog *dialog, gint response, gpointer user_data)
+{
+	if (response == GTK_RESPONSE_OK || response == GTK_RESPONSE_APPLY)
 	{
 		GKeyFile *config = g_key_file_new();
 		gchar *data;
 		gchar *config_dir = g_path_get_dirname(config_file);
 
 		g_free(open_cmd);
-		open_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry)));
-		show_hidden_files = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_hf));
-		hide_object_files = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_of));
+		open_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(pref_widgets.open_cmd_entry)));
+		show_hidden_files = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pref_widgets.show_hidden_checkbox));
+		hide_object_files = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pref_widgets.hide_objects_checkbox));
 
 		g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
 
@@ -1033,7 +999,52 @@ void configure(GtkWidget *parent)
 		g_free(config_dir);
 		g_key_file_free(config);
 	}
-	gtk_widget_destroy(dialog);
+}
+
+
+GtkWidget *plugin_configure(GtkDialog *dialog)
+{
+	GtkWidget *label, *entry, *checkbox_of, *checkbox_hf, *vbox;
+	GtkTooltips *tooltips = gtk_tooltips_new();
+
+	vbox = gtk_vbox_new(FALSE, 6);
+
+	label = gtk_label_new(_("External open command:"));
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	gtk_container_add(GTK_CONTAINER(vbox), label);
+
+	entry = gtk_entry_new();
+	gtk_widget_show(entry);
+	if (open_cmd != NULL)
+		gtk_entry_set_text(GTK_ENTRY(entry), open_cmd);
+	gtk_tooltips_set_tip(tooltips, entry,
+		_("The command to execute when using \"Open with\". You can use %f and %d wildcards.\n"
+		  "%f will be replaced with the filename including full path\n"
+		  "%d will be replaced with the path name of the selected file without the filename"),
+		  NULL);
+	gtk_container_add(GTK_CONTAINER(vbox), entry);
+	pref_widgets.open_cmd_entry = entry;
+
+	checkbox_hf = gtk_check_button_new_with_label(_("Show hidden files"));
+	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_hf), FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_hf), show_hidden_files);
+	gtk_box_pack_start(GTK_BOX(vbox), checkbox_hf, FALSE, FALSE, 5);
+	pref_widgets.show_hidden_checkbox = checkbox_hf;
+
+	checkbox_of = gtk_check_button_new_with_label(_("Hide object files"));
+	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_of), FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_of), hide_object_files);
+	gtk_tooltips_set_tip(tooltips, checkbox_of,
+		_("Don't show generated object files in the file browser, this includes "
+		  "*.o, *.obj. *.so, *.dll, *.a, *.lib"),
+		  NULL);
+	gtk_box_pack_start(GTK_BOX(vbox), checkbox_of, FALSE, FALSE, 5);
+	pref_widgets.hide_objects_checkbox = checkbox_of;
+
+	gtk_widget_show_all(vbox);
+
+	g_signal_connect(dialog, "response", G_CALLBACK(on_configure_response), NULL);
+	return vbox;
 }
 
 

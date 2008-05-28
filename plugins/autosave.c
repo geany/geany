@@ -116,61 +116,26 @@ void plugin_init(GeanyData *data)
 }
 
 
-void configure(GtkWidget *parent)
+static struct
 {
-	GtkWidget *dialog, *label, *spin, *vbox, *hbox, *checkbox, *radio1, *radio2;
+	GtkWidget *interval_spin;
+	GtkWidget *print_msg_checkbox;
+	GtkWidget *save_all_radio;
+}
+pref_widgets;
 
-	dialog = gtk_dialog_new_with_buttons(_("Auto Save"),
-		GTK_WINDOW(parent), GTK_DIALOG_DESTROY_WITH_PARENT,
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
-	vbox = p_ui->dialog_vbox_new(GTK_DIALOG(dialog));
-	gtk_widget_set_name(dialog, "GeanyDialog");
-	gtk_box_set_spacing(GTK_BOX(vbox), 6);
-
-	label = gtk_label_new(_("Auto save interval:"));
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
-	gtk_container_add(GTK_CONTAINER(vbox), label);
-
-	spin = gtk_spin_button_new_with_range(1, 1800, 1);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin), interval);
-
-	label = gtk_label_new(_("seconds"));
-
-	hbox = gtk_hbox_new(FALSE, 5);
-	gtk_box_pack_start(GTK_BOX(hbox), spin, TRUE, TRUE, 0);
-	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-
-	gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 5);
-
-	checkbox = gtk_check_button_new_with_label(
-		_("Print status message if files have been automatically saved"));
-	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox), FALSE);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox), print_msg);
-	gtk_box_pack_start(GTK_BOX(vbox), checkbox, FALSE, FALSE, 5);
-
-	radio1 = gtk_radio_button_new_with_label(NULL,
-		_("Save only current open file"));
-	gtk_button_set_focus_on_click(GTK_BUTTON(radio1), FALSE);
-	gtk_container_add(GTK_CONTAINER(vbox), radio1);
-
-	radio2 = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(radio1),
-		_("Save all open files"));
-	gtk_button_set_focus_on_click(GTK_BUTTON(radio2), FALSE);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio2), save_all);
-	gtk_container_add(GTK_CONTAINER(vbox), radio2);
-
-	gtk_widget_show_all(vbox);
-
-	/* run the dialog and check for the response code */
-	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+static void
+on_configure_response(GtkDialog *dialog, gint response, G_GNUC_UNUSED gpointer user_data)
+{
+	if (response == GTK_RESPONSE_OK || response == GTK_RESPONSE_APPLY)
 	{
 		GKeyFile *config = g_key_file_new();
 		gchar *data;
 		gchar *config_dir = g_path_get_dirname(config_file);
 
-		interval = gtk_spin_button_get_value_as_int((GTK_SPIN_BUTTON(spin)));
-		print_msg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox));
-		save_all = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio2));
+		interval = gtk_spin_button_get_value_as_int((GTK_SPIN_BUTTON(pref_widgets.interval_spin)));
+		print_msg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pref_widgets.print_msg_checkbox));
+		save_all = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pref_widgets.save_all_radio));
 
 		g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
 
@@ -196,7 +161,54 @@ void configure(GtkWidget *parent)
 		g_free(config_dir);
 		g_key_file_free(config);
 	}
-	gtk_widget_destroy(dialog);
+}
+
+
+GtkWidget *plugin_configure(GtkDialog *dialog)
+{
+	GtkWidget *vbox, *label, *spin, *hbox, *checkbox, *radio1, *radio2;
+
+	vbox = gtk_vbox_new(FALSE, 6);
+
+	label = gtk_label_new(_("Auto save interval:"));
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	gtk_container_add(GTK_CONTAINER(vbox), label);
+
+	spin = gtk_spin_button_new_with_range(1, 1800, 1);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin), interval);
+	pref_widgets.interval_spin = spin;
+
+	label = gtk_label_new(_("seconds"));
+
+	hbox = gtk_hbox_new(FALSE, 5);
+	gtk_box_pack_start(GTK_BOX(hbox), spin, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+
+	gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 5);
+
+	checkbox = gtk_check_button_new_with_label(
+		_("Print status message if files have been automatically saved"));
+	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox), FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox), print_msg);
+	gtk_box_pack_start(GTK_BOX(vbox), checkbox, FALSE, FALSE, 5);
+	pref_widgets.print_msg_checkbox = checkbox;
+
+	radio1 = gtk_radio_button_new_with_label(NULL,
+		_("Save only current open file"));
+	gtk_button_set_focus_on_click(GTK_BUTTON(radio1), FALSE);
+	gtk_container_add(GTK_CONTAINER(vbox), radio1);
+
+	radio2 = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(radio1),
+		_("Save all open files"));
+	gtk_button_set_focus_on_click(GTK_BUTTON(radio2), FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio2), save_all);
+	gtk_container_add(GTK_CONTAINER(vbox), radio2);
+	pref_widgets.save_all_radio = radio2;
+
+	gtk_widget_show_all(vbox);
+
+	g_signal_connect(dialog, "response", G_CALLBACK(on_configure_response), NULL);
+	return vbox;
 }
 
 
