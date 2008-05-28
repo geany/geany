@@ -3,6 +3,8 @@
  * doc/geany.css, doc/geany.html:
    Add media types for screen and print to have a clean version
    of the manual for printing.
+ * plugins/Makefile.am:
+   Add again all GTK libraries to linker flags for each plugin.
 
 
 2008-05-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
