@@ -1,3 +1,10 @@
+2008-05-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * doc/geany.css, doc/geany.html:
+   Add media types for screen and print to have a clean version
+   of the manual for printing.
+
+
 2008-05-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/plugindata.h, src/plugins.c, doc/plugin-symbols.c,
