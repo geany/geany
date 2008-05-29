@@ -82,7 +82,7 @@ static void focus_sci(GtkWidget *widget, gpointer user_data)
 
 	if (! DOC_IDX_VALID(idx)) return;
 
-	gtk_widget_grab_focus(GTK_WIDGET(doc_list[idx].sci));
+	gtk_widget_grab_focus(GTK_WIDGET(documents[idx]->sci));
 }
 
 
@@ -319,7 +319,7 @@ gint notebook_new_tab(gint doc_idx)
 	GtkWidget *hbox, *ebox;
 	gint tabnum;
 	gchar *title;
-	GeanyDocument *this = &(doc_list[doc_idx]);
+	GeanyDocument *this = documents[doc_idx];
 	GtkWidget *page;
 
 	g_return_val_if_fail(doc_idx >= 0 && this != NULL, -1);
@@ -401,6 +401,7 @@ notebook_tab_close_clicked_cb(GtkButton *button, gpointer user_data)
 {
 	gint cur_page = gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
 		GTK_WIDGET(user_data));
+
 	document_remove(cur_page);
 }
 

@@ -1,3 +1,24 @@
+2008-05-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/build.c, src/utils.c, src/win32.c, src/keybindings.c,
+   src/printing.c, src/tools.c, src/prefs.c, src/dialogs.c,
+   src/navqueue.c, src/plugindata.h, src/treeviews.c, src/msgwindow.c,
+   src/callbacks.c, src/notebook.c, src/keyfile.c, src/vte.c,
+   src/filetypes.c, src/search.c, src/document.c, src/plugins.c,
+   src/document.h, src/main.c, src/editor.c, src/symbols.c,
+   src/socket.c, src/ui_utils.c, plugins/export.c, plugins/vcdiff.c,
+   plugins/filebrowser.c, plugins/htmlchars.c, plugins/autosave.c,
+   plugins/pluginmacros.h, plugins/classbuilder.c:
+   Note: this breaks the plugin API.
+   Replace doc_array with documents_array, a pointer array. This is
+   necessary to avoid breaking the ABI every time a field is added to
+   GeanyDocument.
+   Remove deprecated pluginmacros.h documents macro, to avoid a
+   conflict.
+   Replace doc_list[] macro with documents[] macro, which returns a
+   GeanyDocument pointer.
+
+
 2008-05-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * doc/geany.css, doc/geany.html:

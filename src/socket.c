@@ -503,7 +503,7 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 
 					idx = document_new_file(buf, NULL, NULL);
 					if (DOC_IDX_VALID(idx))
-						ui_add_recent_file(doc_list[idx].file_name);
+						ui_add_recent_file(documents[idx]->file_name);
 					else
 						geany_debug("got data from socket, but it does not look like a filename");
 				}

@@ -119,20 +119,20 @@ static void save_recent_files(GKeyFile *config)
 static gchar *get_session_file_string(gint idx)
 {
 	gchar *fname;
-	GeanyFiletype *ft = doc_list[idx].file_type;
+	GeanyFiletype *ft = documents[idx]->file_type;
 
 	if (ft == NULL)	/* can happen when saving a new file when quitting */
 		ft = filetypes[GEANY_FILETYPES_NONE];
 
 	fname = g_strdup_printf("%d;%s;%d;%d;%d;%d;%d;%s;",
-		sci_get_current_position(doc_list[idx].sci),
+		sci_get_current_position(documents[idx]->sci),
 		ft->name,
-		doc_list[idx].readonly,
-		encodings_get_idx_from_charset(doc_list[idx].encoding),
-		doc_list[idx].use_tabs,
-		doc_list[idx].auto_indent,
-		doc_list[idx].line_wrapping,
-		doc_list[idx].file_name);
+		documents[idx]->readonly,
+		encodings_get_idx_from_charset(documents[idx]->encoding),
+		documents[idx]->use_tabs,
+		documents[idx]->auto_indent,
+		documents[idx]->line_wrapping,
+		documents[idx]->file_name);
 	return fname;
 }
 
@@ -849,7 +849,7 @@ static gboolean open_session_file(gchar **tmp)
 		{
 			editor_set_use_tabs(new_idx, use_tabs);
 			editor_set_line_wrapping(new_idx, line_wrapping);
-			doc_list[new_idx].auto_indent = auto_indent;
+			documents[new_idx]->auto_indent = auto_indent;
 			ret = TRUE;
 		}
 	}

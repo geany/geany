@@ -130,14 +130,14 @@ typedef struct _GeanyDocument
 } GeanyDocument;
 
 
-/* Dynamic array of document elements to hold all information of the notebook tabs. */
-extern GArray *doc_array;
+/** Dynamic array of GeanyDocument pointers holding information about the notebook tabs. */
+extern GPtrArray *documents_array;
 
 /**
- *  doc_list wraps doc_array so it can be used with C array syntax.
- *  Example: doc_list[0].sci = NULL;
+ *  This wraps documents_array so it can be used with C array syntax.
+ *  Example: documents[0]->sci = NULL;
  **/
-#define doc_list ((GeanyDocument *)doc_array->data)
+#define documents ((GeanyDocument **)documents_array->pdata)
 
 /**
  *  DOC_IDX_VALID checks whether the passed index points to a valid %document object by checking
@@ -145,7 +145,7 @@ extern GArray *doc_array;
  *  must not be used.
  **/
 #define DOC_IDX_VALID(doc_idx) \
-	((doc_idx) >= 0 && (guint)(doc_idx) < doc_array->len && doc_list[doc_idx].is_valid)
+	((doc_idx) >= 0 && (guint)(doc_idx) < documents_array->len && documents[doc_idx]->is_valid)
 
 /**
  *  DOC_FILENAME) returns the filename of the %document corresponding to the passed index or
@@ -153,7 +153,8 @@ extern GArray *doc_array;
  *  This macro never returns NULL.
  **/
 #define DOC_FILENAME(doc_idx) \
-	((doc_list[doc_idx].file_name != NULL) ? (doc_list[doc_idx].file_name) : GEANY_STRING_UNTITLED)
+	((documents[doc_idx]->file_name != NULL) ? (documents[doc_idx]->file_name) : \
+		GEANY_STRING_UNTITLED)
 
 
 gint document_find_by_filename(const gchar *filename, gboolean is_tm_filename);

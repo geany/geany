@@ -277,14 +277,14 @@ static void on_current_path(void)
 	gchar *dir;
 	gint idx = p_document->get_cur_idx();
 
-	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_name == NULL ||
-		! g_path_is_absolute(doc_list[idx].file_name))
+	if (! DOC_IDX_VALID(idx) || documents[idx]->file_name == NULL ||
+		! g_path_is_absolute(documents[idx]->file_name))
 	{
 		setptr(current_dir, get_default_dir());
 		refresh();
 		return;
 	}
-	fname = doc_list[idx].file_name;
+	fname = documents[idx]->file_name;
 	fname = p_utils->get_locale_from_utf8(fname);
 	dir = g_path_get_dirname(fname);
 	g_free(fname);

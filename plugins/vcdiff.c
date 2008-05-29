@@ -252,10 +252,10 @@ static int find_by_filename(const gchar* filename)
 {
 	guint i;
 
-	for (i = 0; i < doc_array->len; i++)
+	for (i = 0; i < documents_array->len; i++)
 	{
-		if (doc_list[i].is_valid && doc_list[i].file_name &&
-			strcmp(doc_list[i].file_name, filename) == 0)
+		if (documents[i]->is_valid && documents[i]->file_name &&
+			strcmp(documents[i]->file_name, filename) == 0)
 			return i;
 	}
 	return -1;
@@ -295,11 +295,11 @@ static void show_output(const gchar *std_output, const gchar *name_prefix,
 		}
 		else
 		{
-			p_sci->set_text(doc_list[idx].sci, text);
+			p_sci->set_text(documents[idx]->sci, text);
 			book = GTK_NOTEBOOK(main_widgets->notebook);
-			page = gtk_notebook_page_num(book, GTK_WIDGET(doc_list[idx].sci));
+			page = gtk_notebook_page_num(book, GTK_WIDGET(documents[idx]->sci));
 			gtk_notebook_set_current_page(book, page);
-			doc_list[idx].changed = FALSE;
+			documents[idx]->changed = FALSE;
 			p_document->set_text_changed(idx);
 		}
 
@@ -403,14 +403,14 @@ static void vcdirectory_activated(GtkMenuItem *menuitem, gpointer gdata)
 
 	idx = p_document->get_cur_idx();
 
-	g_return_if_fail(DOC_IDX_VALID(idx) && doc_list[idx].file_name != NULL);
+	g_return_if_fail(DOC_IDX_VALID(idx) && documents[idx]->file_name != NULL);
 
-	if (doc_list[idx].changed)
+	if (documents[idx]->changed)
 	{
 		p_document->save_file(idx, FALSE);
 	}
 
-	locale_filename = p_utils->get_locale_from_utf8(doc_list[idx].file_name);
+	locale_filename = p_utils->get_locale_from_utf8(documents[idx]->file_name);
 	base_name = g_path_get_dirname(locale_filename);
 
 	text = make_diff(base_name, VC_COMMAND_DIFF_DIR);
@@ -436,7 +436,7 @@ static void vcproject_activated(GtkMenuItem *menuitem, gpointer gdata)
 
 	g_return_if_fail(project != NULL && NZV(project->base_path));
 
-	if (DOC_IDX_VALID(idx) && doc_list[idx].changed && doc_list[idx].file_name != NULL)
+	if (DOC_IDX_VALID(idx) && documents[idx]->changed && documents[idx]->file_name != NULL)
 	{
 		p_document->save_file(idx, FALSE);
 	}
@@ -460,19 +460,19 @@ static void vcfile_activated(GtkMenuItem *menuitem, gpointer gdata)
 
 	idx = p_document->get_cur_idx();
 
-	g_return_if_fail(DOC_IDX_VALID(idx) && doc_list[idx].file_name != NULL);
+	g_return_if_fail(DOC_IDX_VALID(idx) && documents[idx]->file_name != NULL);
 
-	if (doc_list[idx].changed)
+	if (documents[idx]->changed)
 	{
 		p_document->save_file(idx, FALSE);
 	}
 
-	locale_filename = p_utils->get_locale_from_utf8(doc_list[idx].file_name);
+	locale_filename = p_utils->get_locale_from_utf8(documents[idx]->file_name);
 
 	text = make_diff(locale_filename, VC_COMMAND_DIFF_FILE);
 	if (text)
 	{
-		show_output(text, doc_list[idx].file_name, doc_list[idx].encoding);
+		show_output(text, documents[idx]->file_name, documents[idx]->encoding);
 		g_free(text);
 	}
 	g_free(locale_filename);

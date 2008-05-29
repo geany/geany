@@ -265,7 +265,7 @@ geany_data_init(void)
 	GeanyData gd = {
 		app,
 		&main_widgets,
-		doc_array,
+		documents_array,
 		filetypes_array,
 		&prefs,
 		&interface_prefs,

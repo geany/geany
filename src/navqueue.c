@@ -151,20 +151,20 @@ gboolean navqueue_goto_line(gint old_idx, gint new_idx, gint line)
 	g_return_val_if_fail(DOC_IDX_VALID(new_idx), FALSE);
 	g_return_val_if_fail(line >= 1, FALSE);
 
-	pos = sci_get_position_from_line(doc_list[new_idx].sci, line - 1);
+	pos = sci_get_position_from_line(documents[new_idx]->sci, line - 1);
 
 	/* first add old file position */
-	if (DOC_IDX_VALID(old_idx) && doc_list[old_idx].file_name)
+	if (DOC_IDX_VALID(old_idx) && documents[old_idx]->file_name)
 	{
-		gint cur_pos = sci_get_current_position(doc_list[old_idx].sci);
+		gint cur_pos = sci_get_current_position(documents[old_idx]->sci);
 
-		add_new_position(doc_list[old_idx].file_name, cur_pos);
+		add_new_position(documents[old_idx]->file_name, cur_pos);
 	}
 
 	/* now add new file position */
-	if (doc_list[new_idx].file_name)
+	if (documents[new_idx]->file_name)
 	{
-		add_new_position(doc_list[new_idx].file_name, pos);
+		add_new_position(documents[new_idx]->file_name, pos);
 	}
 
 	return editor_goto_pos(new_idx, pos, TRUE);

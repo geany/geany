@@ -787,9 +787,9 @@ static gboolean check_snippet_completion(guint keyval, guint state)
 		GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 		/* keybinding only valid when scintilla widget has focus */
-		if (DOC_IDX_VALID(idx) && focusw == GTK_WIDGET(doc_list[idx].sci))
+		if (DOC_IDX_VALID(idx) && focusw == GTK_WIDGET(documents[idx]->sci))
 		{
-			ScintillaObject *sci = doc_list[idx].sci;
+			ScintillaObject *sci = documents[idx]->sci;
 			gint pos = sci_get_current_position(sci);
 
 			if (editor_prefs.complete_snippets)
@@ -1067,14 +1067,14 @@ static void cb_func_menu_zoomout(G_GNUC_UNUSED guint key_id)
 static void cb_func_menu_foldall(G_GNUC_UNUSED guint key_id)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	if (idx == -1 || ! documents[idx]->is_valid) return;
 	editor_fold_all(idx);
 }
 
 static void cb_func_menu_unfoldall(G_GNUC_UNUSED guint key_id)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	if (idx == -1 || ! documents[idx]->is_valid) return;
 	editor_unfold_all(idx);
 }
 
@@ -1087,7 +1087,7 @@ static void cb_func_build_action(guint key_id)
 
 	if (! DOC_IDX_VALID(idx)) return;
 
-	ft = doc_list[idx].file_type;
+	ft = documents[idx]->file_type;
 	if (! ft) return;
 	menu_items = build_get_menu_items(ft->id);
 
@@ -1133,7 +1133,7 @@ static void cb_func_build_action(guint key_id)
 static void cb_func_reloadtaglist(G_GNUC_UNUSED guint key_id)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	if (idx == -1 || ! documents[idx]->is_valid) return;
 	document_update_tag_list(idx, TRUE);
 }
 
@@ -1146,9 +1146,9 @@ static gboolean check_current_word(void)
 	if (! DOC_IDX_VALID(idx))
 		return FALSE;
 
-	pos = sci_get_current_position(doc_list[idx].sci);
+	pos = sci_get_current_position(documents[idx]->sci);
 
-	editor_find_current_word(doc_list[idx].sci, pos,
+	editor_find_current_word(documents[idx]->sci, pos,
 		editor_info.current_word, GEANY_MAX_WORD_LENGTH, NULL);
 
 	if (*editor_info.current_word == 0)
@@ -1163,8 +1163,8 @@ static gboolean check_current_word(void)
 static void cb_func_switch_editor(G_GNUC_UNUSED guint key_id)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	gtk_widget_grab_focus(GTK_WIDGET(doc_list[idx].sci));
+	if (idx == -1 || ! documents[idx]->is_valid) return;
+	gtk_widget_grab_focus(GTK_WIDGET(documents[idx]->sci));
 }
 
 static void cb_func_switch_scribble(G_GNUC_UNUSED guint key_id)
@@ -1241,7 +1241,7 @@ static void cb_func_switch_tablastused(G_GNUC_UNUSED guint key_id)
 static void cb_func_move_tab(guint key_id)
 {
 	gint idx = document_get_cur_idx();
-	GtkWidget *sci = GTK_WIDGET(doc_list[idx].sci);
+	GtkWidget *sci = GTK_WIDGET(documents[idx]->sci);
 	GtkNotebook *nb = GTK_NOTEBOOK(main_widgets.notebook);
 	gint cur_page = gtk_notebook_get_current_page(nb);
 
@@ -1290,14 +1290,14 @@ static void goto_matching_brace(gint idx)
 
 	if (! DOC_IDX_VALID(idx)) return;
 
-	pos = sci_get_current_position(doc_list[idx].sci);
-	if (! utils_isbrace(sci_get_char_at(doc_list[idx].sci, pos), TRUE))
+	pos = sci_get_current_position(documents[idx]->sci);
+	if (! utils_isbrace(sci_get_char_at(documents[idx]->sci, pos), TRUE))
 		pos--; /* set pos to the brace */
 
-	new_pos = sci_find_bracematch(doc_list[idx].sci, pos);
+	new_pos = sci_find_bracematch(documents[idx]->sci, pos);
 	if (new_pos != -1)
 	{	/* set the cursor at the brace */
-		sci_set_current_position(doc_list[idx].sci, new_pos, FALSE);
+		sci_set_current_position(documents[idx]->sci, new_pos, FALSE);
 		editor_display_current_line(idx, 0.5F);
 	}
 }
@@ -1321,10 +1321,10 @@ static void cb_func_clipboard(guint key_id)
 			on_paste1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_CLIPBOARD_COPYLINE:
-			sci_cmd(doc_list[idx].sci, SCI_LINECOPY);
+			sci_cmd(documents[idx]->sci, SCI_LINECOPY);
 			break;
 		case GEANY_KEYS_CLIPBOARD_CUTLINE:
-			sci_cmd(doc_list[idx].sci, SCI_LINECUT);
+			sci_cmd(documents[idx]->sci, SCI_LINECUT);
 			break;
 	}
 }
@@ -1338,7 +1338,7 @@ static void cb_func_goto_action(guint key_id)
 
 	if (! DOC_IDX_VALID(idx)) return;
 
-	cur_line = sci_get_current_line(doc_list[idx].sci);
+	cur_line = sci_get_current_line(documents[idx]->sci);
 
 	switch (key_id)
 	{
@@ -1356,29 +1356,29 @@ static void cb_func_goto_action(guint key_id)
 			break;
 		case GEANY_KEYS_GOTO_TOGGLEMARKER:
 		{
-			gboolean set = sci_is_marker_set_at_line(doc_list[idx].sci, cur_line, 1);
+			gboolean set = sci_is_marker_set_at_line(documents[idx]->sci, cur_line, 1);
 
-			sci_set_marker_at_line(doc_list[idx].sci, cur_line, ! set, 1);
+			sci_set_marker_at_line(documents[idx]->sci, cur_line, ! set, 1);
 			break;
 		}
 		case GEANY_KEYS_GOTO_NEXTMARKER:
 		{
-			gint mline = sci_marker_next(doc_list[idx].sci, cur_line + 1, 1 << 1, TRUE);
+			gint mline = sci_marker_next(documents[idx]->sci, cur_line + 1, 1 << 1, TRUE);
 
 			if (mline != -1)
 			{
-				sci_set_current_line(doc_list[idx].sci, mline);
+				sci_set_current_line(documents[idx]->sci, mline);
 				editor_display_current_line(idx, 0.5F);
 			}
 			break;
 		}
 		case GEANY_KEYS_GOTO_PREVIOUSMARKER:
 		{
-			gint mline = sci_marker_previous(doc_list[idx].sci, cur_line - 1, 1 << 1, TRUE);
+			gint mline = sci_marker_previous(documents[idx]->sci, cur_line - 1, 1 << 1, TRUE);
 
 			if (mline != -1)
 			{
-				sci_set_current_line(doc_list[idx].sci, mline);
+				sci_set_current_line(documents[idx]->sci, mline);
 				editor_display_current_line(idx, 0.5F);
 			}
 			break;
@@ -1423,7 +1423,7 @@ static void cb_func_editor_action(guint key_id)
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	/* edit keybindings only valid when scintilla widget has focus */
-	if (! DOC_IDX_VALID(idx) || focusw != GTK_WIDGET(doc_list[idx].sci)) return;
+	if (! DOC_IDX_VALID(idx) || focusw != GTK_WIDGET(documents[idx]->sci)) return;
 
 	switch (key_id)
 	{
@@ -1434,31 +1434,31 @@ static void cb_func_editor_action(guint key_id)
 			on_redo1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_EDITOR_SCROLLTOLINE:
-			editor_scroll_to_line(doc_list[idx].sci, -1, 0.5F);
+			editor_scroll_to_line(documents[idx]->sci, -1, 0.5F);
 			break;
 		case GEANY_KEYS_EDITOR_SCROLLLINEUP:
-			sci_cmd(doc_list[idx].sci, SCI_LINESCROLLUP);
+			sci_cmd(documents[idx]->sci, SCI_LINESCROLLUP);
 			break;
 		case GEANY_KEYS_EDITOR_SCROLLLINEDOWN:
-			sci_cmd(doc_list[idx].sci, SCI_LINESCROLLDOWN);
+			sci_cmd(documents[idx]->sci, SCI_LINESCROLLDOWN);
 			break;
 		case GEANY_KEYS_EDITOR_DUPLICATELINE:
-			duplicate_lines(doc_list[idx].sci);
+			duplicate_lines(documents[idx]->sci);
 			break;
 		case GEANY_KEYS_EDITOR_DELETELINE:
-			delete_lines(doc_list[idx].sci);
+			delete_lines(documents[idx]->sci);
 			break;
 		case GEANY_KEYS_EDITOR_TRANSPOSELINE:
-			sci_cmd(doc_list[idx].sci, SCI_LINETRANSPOSE);
+			sci_cmd(documents[idx]->sci, SCI_LINETRANSPOSE);
 			break;
 		case GEANY_KEYS_EDITOR_AUTOCOMPLETE:
-			editor_start_auto_complete(idx, sci_get_current_position(doc_list[idx].sci), TRUE);
+			editor_start_auto_complete(idx, sci_get_current_position(documents[idx]->sci), TRUE);
 			break;
 		case GEANY_KEYS_EDITOR_CALLTIP:
 			editor_show_calltip(idx, -1);
 			break;
 		case GEANY_KEYS_EDITOR_MACROLIST:
-			editor_show_macro_list(doc_list[idx].sci);
+			editor_show_macro_list(documents[idx]->sci);
 			break;
 		case GEANY_KEYS_EDITOR_CONTEXTACTION:
 			if (check_current_word())
@@ -1473,10 +1473,10 @@ static void cb_func_editor_action(guint key_id)
 			switch (kb->key)
 			{
 				case GDK_space:
-					sci_add_text(doc_list[idx].sci, " ");
+					sci_add_text(documents[idx]->sci, " ");
 					break;
 				case GDK_Tab:
-					sci_cmd(doc_list[idx].sci, SCI_TAB);
+					sci_cmd(documents[idx]->sci, SCI_TAB);
 					break;
 				default:
 					break;
@@ -1494,7 +1494,7 @@ static void cb_func_format_action(guint key_id)
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	/* keybindings only valid when scintilla widget has focus */
-	if (! DOC_IDX_VALID(idx) || focusw != GTK_WIDGET(doc_list[idx].sci)) return;
+	if (! DOC_IDX_VALID(idx) || focusw != GTK_WIDGET(documents[idx]->sci)) return;
 
 	switch (key_id)
 	{
@@ -1558,7 +1558,7 @@ static void cb_func_select_action(guint key_id)
 	}
 
 	/* keybindings only valid when scintilla widget has focus */
-	if (! DOC_IDX_VALID(idx) || focusw != GTK_WIDGET(doc_list[idx].sci)) return;
+	if (! DOC_IDX_VALID(idx) || focusw != GTK_WIDGET(documents[idx]->sci)) return;
 
 	switch (key_id)
 	{
@@ -1566,13 +1566,13 @@ static void cb_func_select_action(guint key_id)
 			on_menu_select_all1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_SELECT_WORD:
-			editor_select_word(doc_list[idx].sci);
+			editor_select_word(documents[idx]->sci);
 			break;
 		case GEANY_KEYS_SELECT_LINE:
-			editor_select_lines(doc_list[idx].sci, FALSE);
+			editor_select_lines(documents[idx]->sci, FALSE);
 			break;
 		case GEANY_KEYS_SELECT_PARAGRAPH:
-			editor_select_paragraph(doc_list[idx].sci);
+			editor_select_paragraph(documents[idx]->sci);
 			break;
 	}
 }
@@ -1591,7 +1591,7 @@ static void cb_func_insert_action(guint key_id)
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	/* keybindings only valid when scintilla widget has focus */
-	if (! DOC_IDX_VALID(idx) || focusw != GTK_WIDGET(doc_list[idx].sci)) return;
+	if (! DOC_IDX_VALID(idx) || focusw != GTK_WIDGET(documents[idx]->sci)) return;
 
 	switch (key_id)
 	{

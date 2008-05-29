@@ -174,8 +174,8 @@ void treeviews_update_tag_list(gint idx, gboolean update)
 	}
 
 	/* show default empty tag tree if there are no tags */
-	if (idx == -1 || doc_list[idx].file_type == NULL ||
-		! filetype_has_tags(doc_list[idx].file_type))
+	if (idx == -1 || documents[idx]->file_type == NULL ||
+		! filetype_has_tags(documents[idx]->file_type))
 	{
 		gtk_container_add(GTK_CONTAINER(tag_window), tv.default_tag_tree);
 		return;
@@ -183,22 +183,22 @@ void treeviews_update_tag_list(gint idx, gboolean update)
 
 	if (update)
 	{	/* updating the tag list in the left tag window */
-		if (doc_list[idx].tag_tree == NULL)
+		if (documents[idx]->tag_tree == NULL)
 		{
-			doc_list[idx].tag_store = gtk_tree_store_new(
+			documents[idx]->tag_store = gtk_tree_store_new(
 				SYMBOLS_N_COLUMNS, GDK_TYPE_PIXBUF, G_TYPE_STRING, G_TYPE_INT);
-			doc_list[idx].tag_tree = gtk_tree_view_new();
-			prepare_taglist(doc_list[idx].tag_tree, doc_list[idx].tag_store);
-			gtk_widget_show(doc_list[idx].tag_tree);
-			g_object_ref((gpointer)doc_list[idx].tag_tree);	/* to hold it after removing */
+			documents[idx]->tag_tree = gtk_tree_view_new();
+			prepare_taglist(documents[idx]->tag_tree, documents[idx]->tag_store);
+			gtk_widget_show(documents[idx]->tag_tree);
+			g_object_ref((gpointer)documents[idx]->tag_tree);	/* to hold it after removing */
 		}
 
-		doc_list[idx].has_tags = symbols_recreate_tag_list(idx, SYMBOLS_SORT_USE_PREVIOUS);
+		documents[idx]->has_tags = symbols_recreate_tag_list(idx, SYMBOLS_SORT_USE_PREVIOUS);
 	}
 
-	if (doc_list[idx].has_tags)
+	if (documents[idx]->has_tags)
 	{
-		gtk_container_add(GTK_CONTAINER(tag_window), doc_list[idx].tag_tree);
+		gtk_container_add(GTK_CONTAINER(tag_window), documents[idx]->tag_tree);
 	}
 	else
 	{
@@ -294,11 +294,11 @@ static void prepare_openfiles(void)
 }
 
 
-/* Also sets doc_list[idx].iter.
+/* Also sets documents[idx]->iter.
  * This is called recursively in treeviews_openfiles_update_all(). */
 void treeviews_openfiles_add(gint idx)
 {
-	GtkTreeIter *iter = &doc_list[idx].iter;
+	GtkTreeIter *iter = &documents[idx]->iter;
 
 	gtk_list_store_append(store_openfiles, iter);
 	treeviews_openfiles_update(idx);
@@ -314,7 +314,7 @@ void treeviews_openfiles_update(gint idx)
 		basename = DOC_FILENAME(idx);
 	else
 		basename = g_path_get_basename(DOC_FILENAME(idx));
-	gtk_list_store_set(store_openfiles, &doc_list[idx].iter,
+	gtk_list_store_set(store_openfiles, &documents[idx]->iter,
 #if GTK_CHECK_VERSION(2, 12, 0)
 		0, basename, 1, idx, 2, color, 3, DOC_FILENAME(idx), -1);
 #else
@@ -334,7 +334,7 @@ void treeviews_openfiles_update_all()
 	for (i = 0; i < (guint) gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)); i++)
 	{
 		idx = document_get_n_idx(i);
-		if (! doc_list[idx].is_valid) continue;
+		if (! documents[idx]->is_valid) continue;
 
 		treeviews_openfiles_add(idx);
 	}
@@ -343,19 +343,19 @@ void treeviews_openfiles_update_all()
 
 void treeviews_remove_document(gint idx)
 {
-	GtkTreeIter *iter = &doc_list[idx].iter;
+	GtkTreeIter *iter = &documents[idx]->iter;
 
 	gtk_list_store_remove(store_openfiles, iter);
 
-	if (GTK_IS_WIDGET(doc_list[idx].tag_tree))
+	if (GTK_IS_WIDGET(documents[idx]->tag_tree))
 	{
-		gtk_widget_destroy(doc_list[idx].tag_tree);
-		if (GTK_IS_TREE_VIEW(doc_list[idx].tag_tree))
+		gtk_widget_destroy(documents[idx]->tag_tree);
+		if (GTK_IS_TREE_VIEW(documents[idx]->tag_tree))
 		{
 			/* Because it was ref'd in treeviews_update_tag_list, it needs unref'ing */
-			g_object_unref((gpointer)doc_list[idx].tag_tree);
+			g_object_unref((gpointer)documents[idx]->tag_tree);
 		}
-		doc_list[idx].tag_tree = NULL;
+		documents[idx]->tag_tree = NULL;
 	}
 }
 
@@ -537,12 +537,12 @@ static void on_openfiles_document_action(GtkMenuItem *menuitem, gpointer user_da
 			{
 				case OPENFILES_ACTION_REMOVE:
 				{
-					document_remove(gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook), GTK_WIDGET(doc_list[idx].sci)));
+					document_remove(gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook), GTK_WIDGET(documents[idx]->sci)));
 					break;
 				}
 				case OPENFILES_ACTION_SAVE:
 				{
-					if (doc_list[idx].changed) document_save_file(idx, FALSE);
+					if (documents[idx]->changed) document_save_file(idx, FALSE);
 					break;
 				}
 				case OPENFILES_ACTION_RELOAD:
@@ -571,7 +571,7 @@ static gboolean change_focus(gpointer data)
 	if (DOC_IDX_VALID(idx))
 	{
 		GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
-		GtkWidget *sci = GTK_WIDGET(doc_list[idx].sci);
+		GtkWidget *sci = GTK_WIDGET(documents[idx]->sci);
 
 		if (focusw == tv.tree_openfiles)
 			gtk_widget_grab_focus(sci);
@@ -592,7 +592,7 @@ static void on_openfiles_tree_selection_changed(GtkTreeSelection *selection, gpo
 		gtk_tree_model_get(model, &iter, 1, &idx, -1);
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
 					gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
-					(GtkWidget*) doc_list[idx].sci));
+					(GtkWidget*) documents[idx]->sci));
 		g_idle_add((GSourceFunc) change_focus, GINT_TO_POINTER(idx));
 	}
 }
@@ -606,14 +606,14 @@ static void on_taglist_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user_d
 		{
 			gint idx = document_get_cur_idx();
 			if (DOC_IDX_VALID(idx))
-				doc_list[idx].has_tags = symbols_recreate_tag_list(idx, SYMBOLS_SORT_BY_NAME);
+				documents[idx]->has_tags = symbols_recreate_tag_list(idx, SYMBOLS_SORT_BY_NAME);
 			break;
 		}
 		case SYMBOL_ACTION_SORT_BY_APPEARANCE:
 		{
 			gint idx = document_get_cur_idx();
 			if (DOC_IDX_VALID(idx))
-				doc_list[idx].has_tags = symbols_recreate_tag_list(idx, SYMBOLS_SORT_BY_APPEARANCE);
+				documents[idx]->has_tags = symbols_recreate_tag_list(idx, SYMBOLS_SORT_BY_APPEARANCE);
 			break;
 		}
 		case SYMBOL_ACTION_HIDE:

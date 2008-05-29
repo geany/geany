@@ -437,7 +437,7 @@ static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data)
 		{
 			gint idx = document_get_cur_idx();
 			if (DOC_IDX_VALID(idx))
-				vte_cwd(doc_list[idx].file_name, TRUE);
+				vte_cwd(documents[idx]->file_name, TRUE);
 			break;
 		}
 		case POPUP_RESTARTTERMINAL:

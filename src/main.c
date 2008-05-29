@@ -680,14 +680,14 @@ static void handle_cl_filename(gchar *const filename)
 		idx = document_open_file(filename, FALSE, NULL, NULL);
 		/* add recent file manually because opening_session_files is set */
 		if (DOC_IDX_VALID(idx))
-			ui_add_recent_file(doc_list[idx].file_name);
+			ui_add_recent_file(documents[idx]->file_name);
 	}
 	else if (filename != NULL)
 	{	/* create new file if it doesn't exist */
 		idx = document_new_file(filename, NULL, NULL);
 		if (DOC_IDX_VALID(idx))
 		{
-			ui_add_recent_file(doc_list[idx].file_name);
+			ui_add_recent_file(documents[idx]->file_name);
 		}
 	}
 	else
@@ -913,7 +913,7 @@ gint main(gint argc, gchar **argv)
 	ui_save_buttons_toggle(FALSE);
 
 	idx = document_get_cur_idx();
-	gtk_widget_grab_focus(GTK_WIDGET(doc_list[idx].sci));
+	gtk_widget_grab_focus(GTK_WIDGET(documents[idx]->sci));
 	treeviews_select_openfiles_item(idx);
 	build_menu_update(idx);
 	treeviews_update_tag_list(idx, FALSE);

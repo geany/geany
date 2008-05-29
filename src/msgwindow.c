@@ -274,7 +274,7 @@ void msgwin_show_hide(gboolean show)
  *
  *  @param msg_color A color to be used for the text. It must be an element of #MsgColors.
  *  @param line The document's line where the message belongs to. Set to -1 to ignore.
- *  @param idx The document's index in the doc_array. Set to -1 to ignore.
+ *  @param idx The document's index in the documents_array. Set to -1 to ignore.
  *  @param format Printf()-style format string.
  *  @param ... Arguments for the @c format string.
  **/
@@ -542,7 +542,7 @@ gboolean msgwin_goto_compiler_file_line()
 
 				if (DOC_IDX_VALID(idx))
 				{
-					if (! doc_list[idx].changed)	/* if modified, line may be wrong */
+					if (! documents[idx]->changed)	/* if modified, line may be wrong */
 						editor_set_indicator_on_line(idx, line - 1);
 
 					ret = navqueue_goto_line(old_idx, idx, line);

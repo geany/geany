@@ -400,8 +400,8 @@ static const GList *get_tag_list(gint idx, guint tag_types, gint sort_mode)
 {
 	static GList *tag_names = NULL;
 
-	if (DOC_IDX_VALID(idx) && doc_list[idx].tm_file &&
-		doc_list[idx].tm_file->tags_array)
+	if (DOC_IDX_VALID(idx) && documents[idx]->tm_file &&
+		documents[idx]->tm_file->tags_array)
 	{
 		TMTag *tag;
 		guint i;
@@ -409,7 +409,7 @@ static const GList *get_tag_list(gint idx, guint tag_types, gint sort_mode)
 		gboolean doc_is_utf8 = FALSE;
 		gchar *utf8_name;
 		const gchar *cosep =
-			symbols_get_context_separator(FILETYPE_ID(doc_list[idx].file_type));
+			symbols_get_context_separator(FILETYPE_ID(documents[idx]->file_type));
 
 		if (tag_names)
 		{
@@ -425,20 +425,20 @@ static const GList *get_tag_list(gint idx, guint tag_types, gint sort_mode)
 
 		/* encodings_convert_to_utf8_from_charset() fails with charset "None", so skip conversion
 		 * for None at this point completely */
-		if (utils_str_equal(doc_list[idx].encoding, "UTF-8") ||
-			utils_str_equal(doc_list[idx].encoding, "None"))
+		if (utils_str_equal(documents[idx]->encoding, "UTF-8") ||
+			utils_str_equal(documents[idx]->encoding, "None"))
 			doc_is_utf8 = TRUE;
 
-		for (i = 0; i < (doc_list[idx].tm_file)->tags_array->len; ++i)
+		for (i = 0; i < (documents[idx]->tm_file)->tags_array->len; ++i)
 		{
-			tag = TM_TAG((doc_list[idx].tm_file)->tags_array->pdata[i]);
+			tag = TM_TAG((documents[idx]->tm_file)->tags_array->pdata[i]);
 			if (tag == NULL)
 				return NULL;
 
 			if (tag->type & tag_types)
 			{
 				if (! doc_is_utf8) utf8_name = encodings_convert_to_utf8_from_charset(tag->name,
-															(gsize)-1, doc_list[idx].encoding, TRUE);
+															(gsize)-1, documents[idx]->encoding, TRUE);
 				else utf8_name = tag->name;
 
 				if (utf8_name == NULL)
@@ -560,8 +560,8 @@ tag_list_add_groups(GtkTreeStore *tree_store, ...)
 
 static void init_tag_list(gint idx)
 {
-	filetype_id ft_id = doc_list[idx].file_type->id;
-	GtkTreeStore *tag_store = doc_list[idx].tag_store;
+	filetype_id ft_id = documents[idx]->file_type->id;
+	GtkTreeStore *tag_store = documents[idx]->tag_store;
 
 	init_tag_iters();
 
@@ -838,7 +838,7 @@ gboolean symbols_recreate_tag_list(gint idx, gint sort_mode)
 	const GList *tags;
 	GtkTreeIter iter;
 	static gint prev_sort_mode = SYMBOLS_SORT_BY_NAME;
-	filetype_id ft_id = FILETYPE_ID(doc_list[idx].file_type);
+	filetype_id ft_id = FILETYPE_ID(documents[idx]->file_type);
 
 	g_return_val_if_fail(DOC_IDX_VALID(idx), FALSE);
 
@@ -848,15 +848,15 @@ gboolean symbols_recreate_tag_list(gint idx, gint sort_mode)
 		prev_sort_mode = sort_mode;
 
 	tags = get_tag_list(idx, tm_tag_max_t, sort_mode);
-	if (doc_list[idx].tm_file == NULL || tags == NULL)
+	if (documents[idx]->tm_file == NULL || tags == NULL)
 		return FALSE;
 
 	/* Make sure the model stays with us after the tree view unrefs it */
-	g_object_ref(GTK_TREE_MODEL(doc_list[idx].tag_store));
+	g_object_ref(GTK_TREE_MODEL(documents[idx]->tag_store));
 	/* Detach model from view */
-	gtk_tree_view_set_model(GTK_TREE_VIEW(doc_list[idx].tag_tree), NULL);
+	gtk_tree_view_set_model(GTK_TREE_VIEW(documents[idx]->tag_tree), NULL);
 	/* Clear all contents */
-	gtk_tree_store_clear(doc_list[idx].tag_store);
+	gtk_tree_store_clear(documents[idx]->tag_store);
 
 	init_tag_list(idx);
 	for (tmp = (GList*)tags; tmp; tmp = g_list_next(tmp))
@@ -939,10 +939,10 @@ gboolean symbols_recreate_tag_list(gint idx, gint sort_mode)
 
 		if (parent)
 		{
-			gtk_tree_model_get(GTK_TREE_MODEL(doc_list[idx].tag_store), parent,
+			gtk_tree_model_get(GTK_TREE_MODEL(documents[idx]->tag_store), parent,
 		 	                   SYMBOLS_COLUMN_ICON, &icon, -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &iter, parent);
-			gtk_tree_store_set(doc_list[idx].tag_store, &iter,
+			gtk_tree_store_append(documents[idx]->tag_store, &iter, parent);
+			gtk_tree_store_set(documents[idx]->tag_store, &iter,
 		 	                  SYMBOLS_COLUMN_ICON, icon,
                               SYMBOLS_COLUMN_NAME, buf,
                               SYMBOLS_COLUMN_LINE, symbol->line, -1);
@@ -951,12 +951,12 @@ gboolean symbols_recreate_tag_list(gint idx, gint sort_mode)
 				g_object_unref(icon);
 		}
 	}
-	hide_empty_rows(doc_list[idx].tag_store);
+	hide_empty_rows(documents[idx]->tag_store);
 	/* Re-attach model to view */
-	gtk_tree_view_set_model(GTK_TREE_VIEW(doc_list[idx].tag_tree),
-		GTK_TREE_MODEL(doc_list[idx].tag_store));
-	g_object_unref(GTK_TREE_MODEL(doc_list[idx].tag_store));
-	gtk_tree_view_expand_all(GTK_TREE_VIEW(doc_list[idx].tag_tree));
+	gtk_tree_view_set_model(GTK_TREE_VIEW(documents[idx]->tag_tree),
+		GTK_TREE_MODEL(documents[idx]->tag_store));
+	g_object_unref(GTK_TREE_MODEL(documents[idx]->tag_store));
+	gtk_tree_view_expand_all(GTK_TREE_VIEW(documents[idx]->tag_tree));
 
 	return TRUE;
 }
@@ -1182,8 +1182,8 @@ gboolean symbols_goto_tag(const gchar *name, gboolean definition)
 	type = (definition) ? tm_tag_max_t - forward_types : forward_types;
 
 	/* first look in the current document */
-	if (doc_list[old_idx].tm_file)
-		tmtag = find_work_object_tag(doc_list[old_idx].tm_file, name, type);
+	if (documents[old_idx]->tm_file)
+		tmtag = find_work_object_tag(documents[old_idx]->tm_file, name, type);
 
 	/* if not found, look in the workspace */
 	if (tmtag == NULL)

@@ -410,7 +410,7 @@ void search_show_replace_dialog(void)
 	gint idx = document_get_cur_idx();
 	gchar *sel = NULL;
 
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	if (idx == -1 || ! documents[idx]->is_valid) return;
 
 	sel = editor_get_default_selection(idx, search_prefs.use_current_word, NULL);
 
@@ -798,15 +798,15 @@ static gint search_mark(gint idx, const gchar *search_text, gint flags)
 	g_return_val_if_fail(DOC_IDX_VALID(idx), 0);
 
 	ttf.chrg.cpMin = 0;
-	ttf.chrg.cpMax = sci_get_length(doc_list[idx].sci);
+	ttf.chrg.cpMax = sci_get_length(documents[idx]->sci);
 	ttf.lpstrText = (gchar *)search_text;
 	while (1)
 	{
-		pos = sci_find_text(doc_list[idx].sci, flags, &ttf);
+		pos = sci_find_text(documents[idx]->sci, flags, &ttf);
 		if (pos == -1) break;
 
-		line = sci_get_line_from_position(doc_list[idx].sci, pos);
-		sci_set_marker_at_line(doc_list[idx].sci, line, TRUE, 1);
+		line = sci_get_line_from_position(documents[idx]->sci, pos);
+		sci_set_marker_at_line(documents[idx]->sci, line, TRUE, 1);
 
 		ttf.chrg.cpMin = ttf.chrgText.cpMax + 1;
 		count++;
@@ -1011,7 +1011,7 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			{
 				gint ix = document_get_n_idx(n);
 
-				if (! doc_list[ix].is_valid) continue;
+				if (! documents[ix]->is_valid) continue;
 
 				if (document_replace_all(ix, find, replace, search_flags_re,
 					search_replace_escape_re)) count++;
@@ -1025,7 +1025,7 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			/* show which docs had replacements: */
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_STATUS);
 
-			ui_save_buttons_toggle(doc_list[idx].changed);	/* update save all */
+			ui_save_buttons_toggle(documents[idx]->changed);	/* update save all */
 			break;
 		}
 		case GEANY_RESPONSE_REPLACE_IN_SEL:
@@ -1359,13 +1359,13 @@ static gint find_document_usage(gint idx, const gchar *search_text, gint flags)
 	short_file_name = g_path_get_basename(DOC_FILENAME(idx));
 
 	ttf.chrg.cpMin = 0;
-	ttf.chrg.cpMax = sci_get_length(doc_list[idx].sci);
+	ttf.chrg.cpMax = sci_get_length(documents[idx]->sci);
 	ttf.lpstrText = (gchar *)search_text;
 	while (1)
 	{
 		gint pos, line, start, find_len;
 
-		pos = sci_find_text(doc_list[idx].sci, flags, &ttf);
+		pos = sci_find_text(documents[idx]->sci, flags, &ttf);
 		if (pos == -1)
 			break;	/* no more matches */
 		find_len = ttf.chrgText.cpMax - ttf.chrgText.cpMin;
@@ -1373,8 +1373,8 @@ static gint find_document_usage(gint idx, const gchar *search_text, gint flags)
 			break;	/* Ignore regex ^ or $ */
 
 		count++;
-		line = sci_get_line_from_position(doc_list[idx].sci, pos);
-		buffer = sci_get_line(doc_list[idx].sci, line);
+		line = sci_get_line_from_position(documents[idx]->sci, pos);
+		buffer = sci_get_line(documents[idx]->sci, line);
 		msgwin_msg_add_fmt(COLOR_BLACK, line + 1, idx,
 			"%s:%d : %s", short_file_name, line + 1, g_strstrip(buffer));
 		g_free(buffer);
@@ -1405,9 +1405,9 @@ void search_find_usage(const gchar *search_text, gint flags, gboolean in_session
 	else
 	{
 		guint i;
-		for (i = 0; i < doc_array->len; i++)
+		for (i = 0; i < documents_array->len; i++)
 		{
-			if (doc_list[i].is_valid)
+			if (documents[i]->is_valid)
 				if (find_document_usage(i, search_text, flags) > 0) found = TRUE;
 		}
 	}

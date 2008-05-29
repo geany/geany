@@ -666,8 +666,8 @@ GeanyFiletype *filetypes_detect_from_file(gint idx)
 	if (! DOC_IDX_VALID(idx))
 		return filetypes[GEANY_FILETYPES_NONE];
 
-	line = sci_get_line(doc_list[idx].sci, 0);
-	ft = filetypes_detect_from_file_internal(doc_list[idx].file_name, line);
+	line = sci_get_line(documents[idx]->sci, 0);
+	ft = filetypes_detect_from_file_internal(documents[idx]->file_name, line);
 	g_free(line);
 	return ft;
 }
@@ -716,7 +716,7 @@ on_filetype_change                     (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	if (ignore_callback || idx < 0 || ! doc_list[idx].is_valid) return;
+	if (ignore_callback || idx < 0 || ! documents[idx]->is_valid) return;
 
 	document_set_filetype(idx, (GeanyFiletype*)user_data);
 }

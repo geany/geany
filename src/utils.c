@@ -293,7 +293,7 @@ static gboolean reload_idx(gpointer data)
 
 static gboolean check_reload(gint idx)
 {
-	gchar *base_name = g_path_get_basename(doc_list[idx].file_name);
+	gchar *base_name = g_path_get_basename(documents[idx]->file_name);
 	gboolean want_reload;
 
 	want_reload = dialogs_show_question_full(NULL, _("_Reload"), GTK_STOCK_CANCEL,
@@ -323,31 +323,31 @@ gboolean utils_check_disk_status(gint idx, gboolean force)
 	gboolean ret = FALSE;
 
 	if (file_prefs.disk_check_timeout == 0) return FALSE;
-	if (idx == -1 || doc_list[idx].file_name == NULL) return FALSE;
+	if (idx == -1 || documents[idx]->file_name == NULL) return FALSE;
 
 	t = time(NULL);
 
-	if (! force && doc_list[idx].last_check > (t - file_prefs.disk_check_timeout))
+	if (! force && documents[idx]->last_check > (t - file_prefs.disk_check_timeout))
 		return FALSE;
 
-	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
+	locale_filename = utils_get_locale_from_utf8(documents[idx]->file_name);
 	if (g_stat(locale_filename, &st) != 0)
 	{
 		/* TODO: warn user file on disk is missing */
 	}
-	else if (doc_list[idx].mtime > t || st.st_mtime > t)
+	else if (documents[idx]->mtime > t || st.st_mtime > t)
 	{
 		geany_debug("Strange: Something is wrong with the time stamps.");
 	}
-	else if (doc_list[idx].mtime < st.st_mtime)
+	else if (documents[idx]->mtime < st.st_mtime)
 	{
 		if (check_reload(idx))
 		{
 			/* Disable checking until after reload, so ignore this change for now */
-			doc_list[idx].mtime = st.st_mtime;
+			documents[idx]->mtime = st.st_mtime;
 		}
 		else
-			doc_list[idx].mtime = st.st_mtime;	/* Ignore this change on disk completely */
+			documents[idx]->mtime = st.st_mtime;	/* Ignore this change on disk completely */
 
 		ret = TRUE; /* file has changed */
 	}
@@ -360,7 +360,7 @@ gboolean utils_check_disk_status(gint idx, gboolean force)
 static gint get_function_fold_number(gint idx)
 {
 	/* for Java the functions are always one fold level above the class scope */
-	if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_JAVA)
+	if (FILETYPE_ID(documents[idx]->file_type) == GEANY_FILETYPES_JAVA)
 		return SC_FOLDLEVELBASE + 1;
 	else
 		return SC_FOLDLEVELBASE;
@@ -506,8 +506,8 @@ gint utils_get_current_function(gint idx, const gchar **tagname)
 		return tag_line;
 	}
 
-	line = sci_get_current_line(doc_list[idx].sci);
-	fold_level = sci_get_fold_level(doc_list[idx].sci, line);
+	line = sci_get_current_line(documents[idx]->sci);
+	fold_level = sci_get_fold_level(documents[idx]->sci, line);
 	/* check if the cached line and file index have changed since last time: */
 	if (! current_function_changed(idx, line, fold_level))
 	{
@@ -525,10 +525,10 @@ gint utils_get_current_function(gint idx, const gchar **tagname)
 		tag_line = -1;
 		return tag_line;
 	}
-	tm_file = doc_list[idx].tm_file;
+	tm_file = documents[idx]->tm_file;
 
 	/* if the document has no changes, get the previous function name from TM */
-	if(! doc_list[idx].changed && tm_file != NULL && tm_file->tags_array != NULL)
+	if(! documents[idx]->changed && tm_file != NULL && tm_file->tags_array != NULL)
 	{
 		const TMTag *tag = (const TMTag*) tm_get_current_function(tm_file->tags_array, line);
 
@@ -545,25 +545,25 @@ gint utils_get_current_function(gint idx, const gchar **tagname)
 
 	/* parse the current function name here because TM line numbers may have changed,
 	 * and it would take too long to reparse the whole file. */
-	if (doc_list[idx].file_type != NULL &&
-		doc_list[idx].file_type->id != GEANY_FILETYPES_NONE)
+	if (documents[idx]->file_type != NULL &&
+		documents[idx]->file_type->id != GEANY_FILETYPES_NONE)
 	{
 		const gint fn_fold = get_function_fold_number(idx);
 
 		tag_line = line;
 		do	/* find the top level fold point */
 		{
-			tag_line = sci_get_fold_parent(doc_list[idx].sci, tag_line);
-			fold_level = sci_get_fold_level(doc_list[idx].sci, tag_line);
+			tag_line = sci_get_fold_parent(documents[idx]->sci, tag_line);
+			fold_level = sci_get_fold_level(documents[idx]->sci, tag_line);
 		} while (tag_line >= 0 &&
 			(fold_level & SC_FOLDLEVELNUMBERMASK) != fn_fold);
 
 		if (tag_line >= 0)
 		{
-			if (sci_get_lexer(doc_list[idx].sci) == SCLEX_CPP)
-				cur_tag = parse_cpp_function_at_line(doc_list[idx].sci, tag_line);
+			if (sci_get_lexer(documents[idx]->sci) == SCLEX_CPP)
+				cur_tag = parse_cpp_function_at_line(documents[idx]->sci, tag_line);
 			else
-				cur_tag = parse_function_at_line(doc_list[idx].sci, tag_line);
+				cur_tag = parse_function_at_line(documents[idx]->sci, tag_line);
 
 			if (cur_tag != NULL)
 			{
@@ -1027,21 +1027,21 @@ void utils_replace_filename(gint idx)
 	gchar *filename;
 	struct TextToFind ttf;
 
-	if (idx == -1 || doc_list[idx].file_type == NULL) return;
+	if (idx == -1 || documents[idx]->file_type == NULL) return;
 
-	filebase = g_strconcat(GEANY_STRING_UNTITLED, ".", (doc_list[idx].file_type)->extension, NULL);
-	filename = g_path_get_basename(doc_list[idx].file_name);
+	filebase = g_strconcat(GEANY_STRING_UNTITLED, ".", (documents[idx]->file_type)->extension, NULL);
+	filename = g_path_get_basename(documents[idx]->file_name);
 
 	/* only search the first 3 lines */
 	ttf.chrg.cpMin = 0;
-	ttf.chrg.cpMax = sci_get_position_from_line(doc_list[idx].sci, 3);
+	ttf.chrg.cpMax = sci_get_position_from_line(documents[idx]->sci, 3);
 	ttf.lpstrText = (gchar*)filebase;
 
-	if (sci_find_text(doc_list[idx].sci, SCFIND_MATCHCASE, &ttf) != -1)
+	if (sci_find_text(documents[idx]->sci, SCFIND_MATCHCASE, &ttf) != -1)
 	{
-		sci_target_start(doc_list[idx].sci, ttf.chrgText.cpMin);
-		sci_target_end(doc_list[idx].sci, ttf.chrgText.cpMax);
-		sci_target_replace(doc_list[idx].sci, filename, FALSE);
+		sci_target_start(documents[idx]->sci, ttf.chrgText.cpMin);
+		sci_target_end(documents[idx]->sci, ttf.chrgText.cpMax);
+		sci_target_replace(documents[idx]->sci, filename, FALSE);
 	}
 
 	g_free(filebase);
@@ -1074,7 +1074,7 @@ gchar *utils_get_current_file_dir_utf8(void)
 	if (DOC_IDX_VALID(cur_idx)) /* if valid page found */
 	{
 		/* get current filename */
-		const gchar *cur_fname = doc_list[cur_idx].file_name;
+		const gchar *cur_fname = documents[cur_idx]->file_name;
 
 		if (cur_fname != NULL)
 		{

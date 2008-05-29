@@ -732,7 +732,7 @@ static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg)
 	{
 		text = get_template_class_source(class_info);
 		idx = p_document->new_file(class_info->source, NULL, NULL);
-		p_sci->set_text(doc_list[idx].sci, text);
+		p_sci->set_text(documents[idx]->sci, text);
 		g_free(text);
 	}
 
@@ -740,7 +740,7 @@ static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg)
 	{
 		text = get_template_class_header(class_info);
 		idx = p_document->new_file(class_info->header, NULL, NULL);
-		p_sci->set_text(doc_list[idx].sci, text);
+		p_sci->set_text(documents[idx]->sci, text);
 		g_free(text);
 	}
 

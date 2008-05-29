@@ -173,7 +173,7 @@ static gboolean cc_replace_sel_cb(gpointer user_data)
 
 	if (! cc_error_occurred && cc_buffer != NULL)
 	{	/* Command completed successfully */
-		sci_replace_sel(doc_list[idx].sci, cc_buffer->str);
+		sci_replace_sel(documents[idx]->sci, cc_buffer->str);
 		g_string_free(cc_buffer, TRUE);
 		cc_buffer = NULL;
 	}
@@ -238,7 +238,7 @@ void tools_execute_custom_command(gint idx, const gchar *command)
 
 	g_return_if_fail(DOC_IDX_VALID(idx) && command != NULL);
 
-	if (! sci_can_copy(doc_list[idx].sci))
+	if (! sci_can_copy(documents[idx]->sci))
 		return;
 
 	argv = g_strsplit(command, " ", -1);
@@ -263,9 +263,9 @@ void tools_execute_custom_command(gint idx, const gchar *command)
 				FALSE, cc_iofunc_err, (gpointer)command);
 
 		/* get selection */
-		len = sci_get_selected_text_length(doc_list[idx].sci);
+		len = sci_get_selected_text_length(documents[idx]->sci);
 		sel = g_malloc0(len + 1);
-		sci_get_selected_text(doc_list[idx].sci, sel);
+		sci_get_selected_text(documents[idx]->sci, sel);
 
 		/* write data to the command */
 		remaining = len - 1;
@@ -403,7 +403,7 @@ static void cc_on_custom_command_menu_activate(GtkMenuItem *menuitem, gpointer u
 
 	if (! DOC_IDX_VALID(idx)) return;
 
-	enable = sci_can_copy(doc_list[idx].sci) && (ui_prefs.custom_commands != NULL);
+	enable = sci_can_copy(documents[idx]->sci) && (ui_prefs.custom_commands != NULL);
 
 	children = gtk_container_get_children(GTK_CONTAINER(user_data));
 	len = g_list_length(children);
@@ -605,7 +605,7 @@ void tools_word_count(void)
 	gchar *text, *range;
 
 	idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	if (idx == -1 || ! documents[idx]->is_valid) return;
 
 	dialog = gtk_dialog_new_with_buttons(_("Word Count"), GTK_WINDOW(main_widgets.window),
 										 GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -613,16 +613,16 @@ void tools_word_count(void)
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_widget_set_name(dialog, "GeanyDialog");
 
-	if (sci_can_copy(doc_list[idx].sci))
+	if (sci_can_copy(documents[idx]->sci))
 	{
-		text = g_malloc0(sci_get_selected_text_length(doc_list[idx].sci) + 1);
-		sci_get_selected_text(doc_list[idx].sci, text);
+		text = g_malloc0(sci_get_selected_text_length(documents[idx]->sci) + 1);
+		sci_get_selected_text(documents[idx]->sci, text);
 		range = _("selection");
 	}
 	else
 	{
-		text = g_malloc(sci_get_length(doc_list[idx].sci) + 1);
-		sci_get_text(doc_list[idx].sci, sci_get_length(doc_list[idx].sci) + 1 , text);
+		text = g_malloc(sci_get_length(documents[idx]->sci) + 1);
+		sci_get_text(documents[idx]->sci, sci_get_length(documents[idx]->sci) + 1 , text);
 		range = _("whole document");
 	}
 	word_count(text, &chars, &lines, &words);
@@ -716,7 +716,7 @@ on_color_ok_button_clicked             (GtkButton       *button,
 	gchar *hex;
 
 	gtk_widget_hide(ui_widgets.open_colorsel);
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	if (idx == -1 || ! documents[idx]->is_valid) return;
 
 	gtk_color_selection_get_current_color(
 			GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->colorsel), &color);

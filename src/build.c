@@ -129,16 +129,16 @@ static GPid build_compile_tex_file(gint idx, gint mode)
 {
 	const gchar *cmd = NULL;
 
-	if (idx < 0 || doc_list[idx].file_name == NULL) return (GPid) 1;
+	if (idx < 0 || documents[idx]->file_name == NULL) return (GPid) 1;
 
 	if (mode == LATEX_CMD_TO_DVI)
 	{
-		cmd = doc_list[idx].file_type->programs->compiler;
+		cmd = documents[idx]->file_type->programs->compiler;
 		build_info.type = GBO_COMPILE;
 	}
 	else
 	{
-		cmd = doc_list[idx].file_type->programs->linker;
+		cmd = documents[idx]->file_type->programs->linker;
 		build_info.type = GBO_BUILD;
 	}
 
@@ -161,12 +161,12 @@ static GPid build_view_tex_file(gint idx, gint mode)
 	GError *error = NULL;
 	struct stat st;
 
-	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_name == NULL)
+	if (! DOC_IDX_VALID(idx) || documents[idx]->file_name == NULL)
 		return (GPid) 1;
 
 	run_info.file_type_id = GEANY_FILETYPES_LATEX;
 
-	executable = utils_remove_ext_from_filename(doc_list[idx].file_name);
+	executable = utils_remove_ext_from_filename(documents[idx]->file_name);
 	view_file = g_strconcat(executable, (mode == LATEX_CMD_VIEW_DVI) ? ".dvi" : ".pdf", NULL);
 
 	/* try convert in locale for stat() */
@@ -183,8 +183,8 @@ static GPid build_view_tex_file(gint idx, gint mode)
 
 	/* replace %f and %e in the run_cmd string */
 	cmd_string = g_strdup((mode == LATEX_CMD_VIEW_DVI) ?
-										g_strdup(doc_list[idx].file_type->programs->run_cmd) :
-										g_strdup(doc_list[idx].file_type->programs->run_cmd2));
+										g_strdup(documents[idx]->file_type->programs->run_cmd) :
+										g_strdup(documents[idx]->file_type->programs->run_cmd2));
 	cmd_string = utils_str_replace(cmd_string, "%f", view_file);
 	cmd_string = utils_str_replace(cmd_string, "%e", executable);
 
@@ -292,9 +292,9 @@ static gchar *get_object_filename(gint idx)
 {
 	gchar *locale_filename, *short_file, *noext, *object_file;
 
-	if (doc_list[idx].file_name == NULL) return NULL;
+	if (documents[idx]->file_name == NULL) return NULL;
 
-	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
+	locale_filename = utils_get_locale_from_utf8(documents[idx]->file_name);
 
 	short_file = g_path_get_basename(locale_filename);
 	g_free(locale_filename);
@@ -315,7 +315,7 @@ static GPid build_make_file(gint idx, gint build_opts)
 	gchar *dir = NULL;
 	GPid pid;
 
-	if (idx < 0 || doc_list[idx].file_name == NULL) return (GPid) 1;
+	if (idx < 0 || documents[idx]->file_name == NULL) return (GPid) 1;
 
 	cmdstr = g_string_new(tool_prefs.make_cmd);
 	g_string_append_c(cmdstr, ' ');
@@ -351,21 +351,21 @@ static GPid build_make_file(gint idx, gint build_opts)
 
 static GPid build_compile_file(gint idx)
 {
-	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_name == NULL)
+	if (! DOC_IDX_VALID(idx) || documents[idx]->file_name == NULL)
 		return (GPid) 1;
 
 	build_info.type = GBO_COMPILE;
-	return build_spawn_cmd(idx, doc_list[idx].file_type->programs->compiler, NULL);
+	return build_spawn_cmd(idx, documents[idx]->file_type->programs->compiler, NULL);
 }
 
 
 static GPid build_link_file(gint idx)
 {
-	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_name == NULL)
+	if (! DOC_IDX_VALID(idx) || documents[idx]->file_name == NULL)
 		return (GPid) 1;
 
 	build_info.type = GBO_BUILD;
-	return build_spawn_cmd(idx, doc_list[idx].file_type->programs->linker, NULL);
+	return build_spawn_cmd(idx, documents[idx]->file_type->programs->linker, NULL);
 }
 
 
@@ -386,9 +386,9 @@ static void clear_errors(gint idx)
 		{
 			guint i;
 
-			for (i = 0; i < doc_array->len; i++)
+			for (i = 0; i < documents_array->len; i++)
 			{
-				if (doc_list[i].is_valid)
+				if (documents[i]->is_valid)
 					editor_clear_indicators(i);
 			}
 			break;
@@ -441,7 +441,7 @@ static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir)
 	clear_errors(idx);
 	setptr(current_dir_entered, NULL);
 
-	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
+	locale_filename = utils_get_locale_from_utf8(documents[idx]->file_name);
 	executable = utils_remove_ext_from_filename(locale_filename);
 
 	cmd_string = g_strdup(cmd);
@@ -472,7 +472,7 @@ static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir)
 
 	utf8_cmd_string = utils_get_utf8_from_locale(cmd_string);
 	utf8_working_dir = (dir != NULL) ? g_strdup(dir) :
-		g_path_get_dirname(doc_list[idx].file_name);
+		g_path_get_dirname(documents[idx]->file_name);
 	working_dir = utils_get_locale_from_utf8(utf8_working_dir);
 
 	gtk_list_store_clear(msgwindow.store_compiler);
@@ -484,7 +484,7 @@ static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir)
 	/* set the build info for the message window */
 	g_free(build_info.dir);
 	build_info.dir = g_strdup(working_dir);
-	build_info.file_type_id = FILETYPE_ID(doc_list[idx].file_type);
+	build_info.file_type_id = FILETYPE_ID(documents[idx]->file_type);
 
 	if (! g_spawn_async_with_pipes(working_dir, argv, NULL, G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD,
 						NULL, NULL, &(build_info.pid), NULL, &stdout_fd, &stderr_fd, &error))
@@ -591,7 +591,7 @@ static gchar *prepare_run_script(gint idx, gchar **vte_cmd_nonscript)
 	gchar	*locale_filename = NULL;
 	gboolean have_project;
 	GeanyProject *project = app->project;
-	GeanyFiletype *ft = doc_list[idx].file_type;
+	GeanyFiletype *ft = documents[idx]->file_type;
 	gboolean check_exists;
 	gchar	*cmd = NULL;
 	gchar	*executable = NULL;
@@ -603,7 +603,7 @@ static gchar *prepare_run_script(gint idx, gchar **vte_cmd_nonscript)
 	if (vte_cmd_nonscript != NULL)
 		*vte_cmd_nonscript = NULL;
 
-	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
+	locale_filename = utils_get_locale_from_utf8(documents[idx]->file_name);
 
 	have_project = (project != NULL && NZV(project->run_cmd));
 	cmd = (have_project) ?
@@ -694,7 +694,7 @@ static GPid build_run_cmd(gint idx)
 	gchar	*vte_cmd_nonscript = NULL;
 	GError	*error = NULL;
 
-	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_name == NULL)
+	if (! DOC_IDX_VALID(idx) || documents[idx]->file_name == NULL)
 		return (GPid) 0;
 
 	working_dir = prepare_run_script(idx, &vte_cmd_nonscript);
@@ -703,7 +703,7 @@ static GPid build_run_cmd(gint idx)
 		return (GPid) 0;
 	}
 
-	run_info.file_type_id = FILETYPE_ID(doc_list[idx].file_type);
+	run_info.file_type_id = FILETYPE_ID(documents[idx]->file_type);
 
 #ifdef HAVE_VTE
 	if (vte_info.load_vte && vc != NULL && vc->run_in_vte)
@@ -1327,7 +1327,7 @@ static void show_includes_arguments_tex(void)
 	gint response;
 	GeanyFiletype *ft = NULL;
 
-	if (DOC_IDX_VALID(idx)) ft = doc_list[idx].file_type;
+	if (DOC_IDX_VALID(idx)) ft = documents[idx]->file_type;
 	g_return_if_fail(ft != NULL);
 
 	dialog = gtk_dialog_new_with_buttons(_("Set Arguments"), GTK_WINDOW(main_widgets.window),
@@ -1496,7 +1496,7 @@ static void show_includes_arguments_gen(void)
 	gint response;
 	GeanyFiletype *ft = NULL;
 
-	if (DOC_IDX_VALID(idx)) ft = doc_list[idx].file_type;
+	if (DOC_IDX_VALID(idx)) ft = documents[idx]->file_type;
 	g_return_if_fail(ft != NULL);
 
 	dialog = gtk_dialog_new_with_buttons(_("Set Includes and Arguments"), GTK_WINDOW(main_widgets.window),
@@ -1642,8 +1642,8 @@ void build_menu_update(gint idx)
 	if (idx == -1)
 		idx = document_get_cur_idx();
 	if (idx == -1 ||
-		(FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_NONE &&
-			doc_list[idx].file_name == NULL))
+		(FILETYPE_ID(documents[idx]->file_type) == GEANY_FILETYPES_NONE &&
+			documents[idx]->file_name == NULL))
 	{
 		gtk_widget_set_sensitive(lookup_widget(main_widgets.window, "menu_build1"), FALSE);
 		gtk_menu_item_remove_submenu(GTK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_build1")));
@@ -1654,7 +1654,7 @@ void build_menu_update(gint idx)
 	else
 		gtk_widget_set_sensitive(lookup_widget(main_widgets.window, "menu_build1"), TRUE);
 
-	ft = doc_list[idx].file_type;
+	ft = documents[idx]->file_type;
 	g_return_if_fail(ft != NULL);
 
 	menu_items = build_get_menu_items(ft->id);
@@ -1663,13 +1663,13 @@ void build_menu_update(gint idx)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_build1")),
 		menu_items->menu);
 
-	have_path = (doc_list[idx].file_name != NULL);
+	have_path = (documents[idx]->file_name != NULL);
 
 	can_make = have_path && build_info.pid <= (GPid) 1;
 
 	/* disable compile and link for C/C++ header files */
 	if (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP)
-		can_build = can_make && ! is_c_header(doc_list[idx].file_name);
+		can_build = can_make && ! is_c_header(documents[idx]->file_name);
 	else
 		can_build = can_make;
 
@@ -1787,7 +1787,7 @@ BuildMenuItems *build_get_menu_items(gint filetype_idx)
 		GeanyFiletype *ft = NULL;
 
 		if (DOC_IDX_VALID(idx))
-			ft = doc_list[idx].file_type;
+			ft = documents[idx]->file_type;
 		filetype_idx = FILETYPE_ID(ft);
 	}
 
@@ -1815,9 +1815,9 @@ on_build_compile_activate              (GtkMenuItem     *menuitem,
 
 	if (! DOC_IDX_VALID(idx)) return;
 
-	if (doc_list[idx].changed) document_save_file(idx, FALSE);
+	if (documents[idx]->changed) document_save_file(idx, FALSE);
 
-	if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_LATEX)
+	if (FILETYPE_ID(documents[idx]->file_type) == GEANY_FILETYPES_LATEX)
 		build_compile_tex_file(idx, 0);
 	else
 		build_compile_file(idx);
@@ -1833,7 +1833,7 @@ on_build_tex_activate                  (GtkMenuItem     *menuitem,
 	if (! DOC_IDX_VALID(idx))
 		return;
 
-	if (doc_list[idx].changed) document_save_file(idx, FALSE);
+	if (documents[idx]->changed) document_save_file(idx, FALSE);
 
 	switch (GPOINTER_TO_INT(user_data))
 	{
@@ -1855,9 +1855,9 @@ on_build_build_activate                (GtkMenuItem     *menuitem,
 
 	if (! DOC_IDX_VALID(idx)) return;
 
-	if (doc_list[idx].changed) document_save_file(idx, FALSE);
+	if (documents[idx]->changed) document_save_file(idx, FALSE);
 
-	if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_LATEX)
+	if (FILETYPE_ID(documents[idx]->file_type) == GEANY_FILETYPES_LATEX)
 		build_compile_tex_file(idx, 1);
 	else
 		build_link_file(idx);
@@ -1869,7 +1869,7 @@ on_make_custom_input_response(const gchar *input)
 {
 	gint idx = document_get_cur_idx();
 
-	if (doc_list[idx].changed)
+	if (documents[idx]->changed)
 		document_save_file(idx, FALSE);
 
 	setptr(build_info.custom_target, g_strdup(input));
@@ -1901,7 +1901,7 @@ on_build_make_activate                 (GtkMenuItem     *menuitem,
 	gint idx = document_get_cur_idx();
 	gint build_opts = GPOINTER_TO_INT(user_data);
 
-	g_return_if_fail(DOC_IDX_VALID(idx) && doc_list[idx].file_name != NULL);
+	g_return_if_fail(DOC_IDX_VALID(idx) && documents[idx]->file_name != NULL);
 
 	switch (build_opts)
 	{
@@ -1915,7 +1915,7 @@ on_build_make_activate                 (GtkMenuItem     *menuitem,
 		/* fall through */
 		case GBO_MAKE_ALL:
 		{
-			if (doc_list[idx].changed) document_save_file(idx, FALSE);
+			if (documents[idx]->changed) document_save_file(idx, FALSE);
 
 			build_make_file(idx, build_opts);
 		}
@@ -1941,7 +1941,7 @@ static gboolean use_html_builtin(gint idx, GeanyFiletype *ft)
 
 	if (use_builtin)
 	{
-		gchar *uri = g_strconcat("file:///", g_path_skip_root(doc_list[idx].file_name), NULL);
+		gchar *uri = g_strconcat("file:///", g_path_skip_root(documents[idx]->file_name), NULL);
 		utils_start_browser(uri);
 		g_free(uri);
 
@@ -1969,7 +1969,7 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 		return;
 	}
 
-	ft_id = FILETYPE_ID(doc_list[idx].file_type);
+	ft_id = FILETYPE_ID(documents[idx]->file_type);
 	ft = filetypes[ft_id];
 	if (ft_id == GEANY_FILETYPES_LATEX)
 	{	/* run LaTeX file */
@@ -1983,7 +1983,7 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 	{	/* run everything else */
 
 		/* save the file only if the run command uses it */
-		if (doc_list[idx].changed &&
+		if (documents[idx]->changed &&
 			NZV(ft->programs->run_cmd) &&	/* can happen when project is open */
 			strstr(ft->programs->run_cmd, "%f") != NULL)
 				document_save_file(idx, FALSE);

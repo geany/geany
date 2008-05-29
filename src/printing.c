@@ -767,7 +767,7 @@ static void printing_print_gtk(gint idx)
 	g_signal_connect(op, "begin-print", G_CALLBACK(begin_print), dinfo);
 	g_signal_connect(op, "end-print", G_CALLBACK(end_print), dinfo);
 	g_signal_connect(op, "draw-page", G_CALLBACK(draw_page), dinfo);
-	g_signal_connect(op, "status-changed", G_CALLBACK(status_changed), doc_list[idx].file_name);
+	g_signal_connect(op, "status-changed", G_CALLBACK(status_changed), documents[idx]->file_name);
 	g_signal_connect(op, "create-custom-widget", G_CALLBACK(create_custom_widget), widgets);
 	g_signal_connect(op, "custom-widget-apply", G_CALLBACK(custom_widget_apply), widgets);
 
@@ -789,7 +789,7 @@ static void printing_print_gtk(gint idx)
 	else if (res == GTK_PRINT_OPERATION_RESULT_ERROR)
 	{
 		dialogs_show_msgbox(GTK_MESSAGE_ERROR, _("Printing of %s failed (%s)."),
-							doc_list[idx].file_name, error->message);
+							documents[idx]->file_name, error->message);
 		g_error_free(error);
 	}
 
@@ -822,7 +822,7 @@ static void print_external(gint idx)
 {
 	gchar *cmdline;
 
-	if (doc_list[idx].file_name == NULL)
+	if (documents[idx]->file_name == NULL)
 		return;
 
 	if (! NZV(printing_prefs.external_print_cmd))
@@ -833,11 +833,11 @@ static void print_external(gint idx)
 	}
 
 	cmdline = g_strdup(printing_prefs.external_print_cmd);
-	cmdline = utils_str_replace(cmdline, "%f", doc_list[idx].file_name);
+	cmdline = utils_str_replace(cmdline, "%f", documents[idx]->file_name);
 
 	if (dialogs_show_question(
 			_("The file \"%s\" will be printed with the following command:\n\n%s"),
-			doc_list[idx].file_name, cmdline))
+			documents[idx]->file_name, cmdline))
 	{
 		GError *error = NULL;
 
@@ -853,12 +853,12 @@ static void print_external(gint idx)
 		{
 			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
 				_("Printing of \"%s\" failed (return code: %s)."),
-				doc_list[idx].file_name, error->message);
+				documents[idx]->file_name, error->message);
 			g_error_free(error);
 		}
 		else
 		{
-			msgwin_status_add(_("File %s printed."), doc_list[idx].file_name);
+			msgwin_status_add(_("File %s printed."), documents[idx]->file_name);
 		}
 		g_free(tmp_cmdline);
 	}

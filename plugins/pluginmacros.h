@@ -38,13 +38,14 @@
 /* common data structs */
 #define app				geany_data->app
 #define main_widgets	geany_data->main_widgets
-#define doc_array		geany_data->doc_array			/**< Allows use of @c doc_list[] macro */
+#define documents_array	geany_data->documents_array		/**< Allows use of @c documents[] macro */
 #define filetypes_array	geany_data->filetypes_array		/**< Allows use of @c filetypes[] macro */
 #define prefs			geany_data->prefs
 #define project			app->project
 
 
 /* New function macros should be added here */
+#define p_document		geany_functions->p_document		/**< See document.h */
 #define p_filetypes		geany_functions->p_filetypes	/**< See filetypes.h */
 #define p_navqueue		geany_functions->p_navqueue		/**< See navqueue.h */
 #define p_editor		geany_functions->p_editor		/**< See editor.h */
@@ -53,7 +54,6 @@
 #ifdef GEANY_DISABLE_DEPRECATED
 
 #define p_dialogs		geany_functions->p_dialogs		/**< See dialogs.h */
-#define p_document		geany_functions->p_document		/**< See document.h */
 #define p_encodings		geany_functions->p_encodings	/**< See encodings.h */
 #define p_highlighting	geany_functions->p_highlighting	/**< See highlighting.h */
 #define p_keybindings	geany_functions->p_keybindings	/**< See keybindings.h */
@@ -69,7 +69,6 @@
 #else
 
 #define p_dialogs		dialogs
-#define p_document		documents
 #define p_encodings		encodings
 #define p_highlighting	highlighting
 #define p_keybindings	keybindings
@@ -85,7 +84,6 @@
 
 /* Temporary source compatibility macros - do not use these in new code, they may get removed. */
 #define dialogs			geany_functions->p_dialogs
-#define documents		geany_functions->p_document
 #define encodings		geany_functions->p_encodings
 #define highlighting	geany_functions->p_highlighting
 #define keybindings		geany_functions->p_keybindings

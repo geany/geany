@@ -133,51 +133,51 @@ void ui_update_statusbar(gint idx, gint pos)
 		gchar *filetype_name;
 
 		/* workaround to make the name of filetype GEANY_FILETYPES_NONE translatable */
-		if (doc_list[idx].file_type == NULL || doc_list[idx].file_type->id == GEANY_FILETYPES_NONE)
+		if (documents[idx]->file_type == NULL || documents[idx]->file_type->id == GEANY_FILETYPES_NONE)
 			filetype_name = _("None");
 		else
-			filetype_name = doc_list[idx].file_type->name;
+			filetype_name = documents[idx]->file_type->name;
 
 		if (stats_str == NULL)
 			stats_str = g_string_sized_new(120);
 
-		if (pos == -1) pos = sci_get_current_position(doc_list[idx].sci);
-		line = sci_get_line_from_position(doc_list[idx].sci, pos);
+		if (pos == -1) pos = sci_get_current_position(documents[idx]->sci);
+		line = sci_get_line_from_position(documents[idx]->sci, pos);
 
 		/* Add temporary fix for sci infinite loop in Document::GetColumn(int)
 		 * when current pos is beyond document end (can occur when removing
 		 * blocks of selected lines especially esp. brace sections near end of file). */
-		if (pos <= sci_get_length(doc_list[idx].sci))
-			col = sci_get_col_from_position(doc_list[idx].sci, pos);
+		if (pos <= sci_get_length(documents[idx]->sci))
+			col = sci_get_col_from_position(documents[idx]->sci, pos);
 		else
 			col = 0;
 
 		/* Status bar statistics: col = column, sel = selection. */
 		g_string_printf(stats_str, _("line: %d\t col: %d\t sel: %d\t "),
 			(line + 1), col,
-			sci_get_selected_text_length(doc_list[idx].sci) - 1);
+			sci_get_selected_text_length(documents[idx]->sci) - 1);
 
 		g_string_append(stats_str,
 			/* RO = read-only */
-			(doc_list[idx].readonly) ? _("RO ") :
+			(documents[idx]->readonly) ? _("RO ") :
 				/* OVR = overwrite/overtype, INS = insert */
-				(sci_get_overtype(doc_list[idx].sci) ? _("OVR") : _("INS")));
+				(sci_get_overtype(documents[idx]->sci) ? _("OVR") : _("INS")));
 		g_string_append(stats_str, sp);
 		g_string_append(stats_str,
-			(doc_list[idx].use_tabs) ? _("TAB") : _("SP "));	/* SP = space */
+			(documents[idx]->use_tabs) ? _("TAB") : _("SP "));	/* SP = space */
 		g_string_append(stats_str, sp);
 		g_string_append_printf(stats_str, _("mode: %s"),
 			editor_get_eol_char_name(idx));
 		g_string_append(stats_str, sp);
 		g_string_append_printf(stats_str, _("encoding: %s %s"),
-			(doc_list[idx].encoding) ? doc_list[idx].encoding : _("unknown"),
-			(encodings_is_unicode_charset(doc_list[idx].encoding)) ?
+			(documents[idx]->encoding) ? documents[idx]->encoding : _("unknown"),
+			(encodings_is_unicode_charset(documents[idx]->encoding)) ?
 				/* BOM = byte order mark */
-				((doc_list[idx].has_bom) ? _("(with BOM)") : "") : "");
+				((documents[idx]->has_bom) ? _("(with BOM)") : "") : "");
 		g_string_append(stats_str, sp);
 		g_string_append_printf(stats_str, _("filetype: %s"), filetype_name);
 		g_string_append(stats_str, sp);
-		if (doc_list[idx].changed)
+		if (documents[idx]->changed)
 		{
 			g_string_append(stats_str, _("MOD"));	/* MOD = modified */
 			g_string_append(stats_str, sp);
@@ -210,9 +210,9 @@ void ui_set_window_title(gint idx)
 
 	if (idx >= 0)
 	{
-		g_string_append(str, doc_list[idx].changed ? "*" : "");
+		g_string_append(str, documents[idx]->changed ? "*" : "");
 
-		if (doc_list[idx].file_name == NULL)
+		if (documents[idx]->file_name == NULL)
 			g_string_append(str, DOC_FILENAME(idx));
 		else
 		{
@@ -260,9 +260,9 @@ void ui_set_editor_font(const gchar *font_name)
 	size = pango_font_description_get_size(font_desc) / PANGO_SCALE;
 
 	/* We copy the current style, and update the font in all open tabs. */
-	for(i = 0; i < doc_array->len; i++)
+	for(i = 0; i < documents_array->len; i++)
 	{
-		if (doc_list[i].sci)
+		if (documents[i]->sci)
 		{
 			editor_set_font(i, fname, size);
 		}
@@ -320,7 +320,7 @@ void ui_update_popup_copy_items(gint idx)
 	guint i;
 
 	if (idx == -1) enable = FALSE;
-	else enable = sci_can_copy(doc_list[idx].sci);
+	else enable = sci_can_copy(documents[idx]->sci);
 
 	for (i = 0; i < G_N_ELEMENTS(ui_widgets.popup_copy_items); i++)
 		gtk_widget_set_sensitive(ui_widgets.popup_copy_items[i], enable);
@@ -342,7 +342,7 @@ void ui_update_menu_copy_items(gint idx)
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	if (IS_SCINTILLA(focusw))
-		enable = (idx == -1) ? FALSE : sci_can_copy(doc_list[idx].sci);
+		enable = (idx == -1) ? FALSE : sci_can_copy(documents[idx]->sci);
 	else
 	if (GTK_IS_EDITABLE(focusw))
 		enable = gtk_editable_get_selection_bounds(GTK_EDITABLE(focusw), NULL, NULL);
@@ -363,9 +363,9 @@ void ui_update_insert_include_item(gint idx, gint item)
 {
 	gboolean enable = FALSE;
 
-	if (idx == -1 || doc_list[idx].file_type == NULL) enable = FALSE;
-	else if (doc_list[idx].file_type->id == GEANY_FILETYPES_C ||
-			 doc_list[idx].file_type->id == GEANY_FILETYPES_CPP)
+	if (idx == -1 || documents[idx]->file_type == NULL) enable = FALSE;
+	else if (documents[idx]->file_type->id == GEANY_FILETYPES_C ||
+			 documents[idx]->file_type->id == GEANY_FILETYPES_CPP)
 	{
 		enable = TRUE;
 	}
@@ -541,11 +541,11 @@ void ui_save_buttons_toggle(gboolean enable)
 	gtk_widget_set_sensitive(ui_widgets.save_buttons[1], enable);
 
 	/* save all menu item and tool button */
-	for (i = 0; i < doc_array->len; i++)
+	for (i = 0; i < documents_array->len; i++)
 	{
 		/* check whether there are files where changes were made and if there are some,
 		 * we need the save all button / item */
-		if (doc_list[i].is_valid && doc_list[i].changed)
+		if (documents[i]->is_valid && documents[i]->changed)
 		{
 			dirty_tabs = TRUE;
 			break;
@@ -680,31 +680,31 @@ void ui_document_show_hide(gint idx)
 
 	gtk_check_menu_item_set_active(
 			GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_line_wrapping1")),
-			doc_list[idx].line_wrapping);
+			documents[idx]->line_wrapping);
 
 	gtk_check_menu_item_set_active(
 			GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "line_breaking1")),
-			doc_list[idx].line_breaking);
+			documents[idx]->line_breaking);
 
 	item = lookup_widget(main_widgets.window, "menu_use_auto_indentation1");
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),
-		doc_list[idx].auto_indent);
+		documents[idx]->auto_indent);
 	gtk_widget_set_sensitive(item, editor_prefs.indent_mode != INDENT_NONE);
 
 	item = lookup_widget(main_widgets.window,
-		doc_list[idx].use_tabs ? "tabs1" : "spaces1");
+		documents[idx]->use_tabs ? "tabs1" : "spaces1");
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), TRUE);
 
 	gtk_check_menu_item_set_active(
 			GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "set_file_readonly1")),
-			doc_list[idx].readonly);
+			documents[idx]->readonly);
 
 	item = lookup_widget(main_widgets.window, "menu_write_unicode_bom1");
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),
-		doc_list[idx].has_bom);
-	gtk_widget_set_sensitive(item, encodings_is_unicode_charset(doc_list[idx].encoding));
+		documents[idx]->has_bom);
+	gtk_widget_set_sensitive(item, encodings_is_unicode_charset(documents[idx]->encoding));
 
-	switch (sci_get_eol_mode(doc_list[idx].sci))
+	switch (sci_get_eol_mode(documents[idx]->sci))
 	{
 		case SC_EOL_CR: widget_name = "cr"; break;
 		case SC_EOL_LF: widget_name = "lf"; break;
@@ -713,8 +713,8 @@ void ui_document_show_hide(gint idx)
 	gtk_check_menu_item_set_active(
 		GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, widget_name)), TRUE);
 
-	encodings_select_radio_item(doc_list[idx].encoding);
-	filetypes_select_radio_item(doc_list[idx].file_type);
+	encodings_select_radio_item(documents[idx]->encoding);
+	filetypes_select_radio_item(documents[idx]->file_type);
 
 	ignore_callback = FALSE;
 }
@@ -1055,7 +1055,7 @@ void ui_show_markers_margin(void)
 	for(i = 0; i < max; i++)
 	{
 		idx = document_get_n_idx(i);
-		sci_set_symbol_margin(doc_list[idx].sci, editor_prefs.show_markers_margin);
+		sci_set_symbol_margin(documents[idx]->sci, editor_prefs.show_markers_margin);
 	}
 }
 
@@ -1067,7 +1067,7 @@ void ui_show_linenumber_margin(void)
 	for(i = 0; i < max; i++)
 	{
 		idx = document_get_n_idx(i);
-		sci_set_line_numbers(doc_list[idx].sci, editor_prefs.show_linenumber_margin, 0);
+		sci_set_line_numbers(documents[idx]->sci, editor_prefs.show_linenumber_margin, 0);
 	}
 }
 
@@ -1202,10 +1202,10 @@ void ui_update_tab_status(gint idx)
 	GdkColor *color = document_get_status_color(idx);
 
 	/* NULL color will reset to default */
-	gtk_widget_modify_fg(doc_list[idx].tab_label, GTK_STATE_NORMAL, color);
-	gtk_widget_modify_fg(doc_list[idx].tab_label, GTK_STATE_ACTIVE, color);
-	gtk_widget_modify_fg(doc_list[idx].tabmenu_label, GTK_STATE_NORMAL, color);
-	gtk_widget_modify_fg(doc_list[idx].tabmenu_label, GTK_STATE_ACTIVE, color);
+	gtk_widget_modify_fg(documents[idx]->tab_label, GTK_STATE_NORMAL, color);
+	gtk_widget_modify_fg(documents[idx]->tab_label, GTK_STATE_ACTIVE, color);
+	gtk_widget_modify_fg(documents[idx]->tabmenu_label, GTK_STATE_NORMAL, color);
+	gtk_widget_modify_fg(documents[idx]->tabmenu_label, GTK_STATE_ACTIVE, color);
 
 	treeviews_openfiles_update(idx);
 }

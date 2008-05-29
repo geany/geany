@@ -444,12 +444,12 @@ static gboolean sc_insert(GtkTreeModel *model, GtkTreeIter *iter)
 	if (DOC_IDX_VALID(idx))
 	{
 		gchar *str;
-		gint pos = p_sci->get_current_position(doc_list[idx].sci);
+		gint pos = p_sci->get_current_position(documents[idx]->sci);
 
 		gtk_tree_model_get(model, iter, COLUMN_HTML_NAME, &str, -1);
 		if (str && *str)
 		{
-			p_sci->insert_text(doc_list[idx].sci, pos, str);
+			p_sci->insert_text(documents[idx]->sci, pos, str);
 			g_free(str);
 			result = TRUE;
 		}
@@ -510,7 +510,7 @@ item_activate(GtkMenuItem *menuitem, gpointer gdata)
 	/* refuse opening the dialog if we don't have an active tab */
 	gint idx = p_document->get_cur_idx();
 
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	if (idx == -1 || ! documents[idx]->is_valid) return;
 
 	tools_show_dialog_insert_special_chars();
 }

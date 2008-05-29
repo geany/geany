@@ -63,14 +63,14 @@ gboolean auto_save(gpointer data)
 			idx = p_document->get_n_idx(i);
 
 			/* skip current file to save it lastly, skip files without name */
-			if (idx != cur_idx && doc_list[idx].file_name != NULL)
+			if (idx != cur_idx && documents[idx]->file_name != NULL)
 				if (p_document->save_file(idx, FALSE))
 					saved_files++;
 		}
 	}
 	/* finally save current file, do it after all other files to get correct window title and
 	 * symbol list */
-	if (doc_list[cur_idx].file_name != NULL)
+	if (documents[cur_idx]->file_name != NULL)
 		if (p_document->save_file(cur_idx, FALSE))
 			saved_files++;
 
