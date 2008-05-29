@@ -29,7 +29,7 @@
 
 
 /* structure for representing a project. */
-struct _GeanyProject
+struct GeanyProject
 {
 	gchar *name; 			/* the name of the project */
 	gchar *description; 	/* short description of the project */

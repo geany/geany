@@ -201,21 +201,21 @@ GeanyFunctions;
 /* See document.h */
 typedef struct DocumentFuncs
 {
-	gint	(*new_file) (const gchar *filename, struct _GeanyFiletype *ft, const gchar *text);
+	gint	(*new_file) (const gchar *filename, struct GeanyFiletype *ft, const gchar *text);
 	gint	(*get_cur_idx) (void);
 	gint	(*get_n_idx) (guint i);
 	gint	(*find_by_filename) (const gchar *filename, gboolean is_tm_filename);
-	struct _GeanyDocument* (*get_current) (void);
+	struct GeanyDocument* (*get_current) (void);
 	gboolean (*save_file) (gint idx, gboolean force);
 	gint	(*open_file) (const gchar *locale_filename, gboolean readonly,
-			struct _GeanyFiletype *ft, const gchar *forced_enc);
-	void	(*open_files) (const GSList *filenames, gboolean readonly, struct _GeanyFiletype *ft,
+			struct GeanyFiletype *ft, const gchar *forced_enc);
+	void	(*open_files) (const GSList *filenames, gboolean readonly, struct GeanyFiletype *ft,
 			const gchar *forced_enc);
 	gboolean (*remove) (guint page_num);
 	gboolean (*reload_file) (gint idx, const gchar *forced_enc);
 	void	(*set_encoding) (gint idx, const gchar *new_encoding);
 	void	(*set_text_changed) (gint idx);
-	void	(*set_filetype) (gint idx, struct _GeanyFiletype *type);
+	void	(*set_filetype) (gint idx, struct GeanyFiletype *type);
 }
 DocumentFuncs;
 
@@ -444,8 +444,8 @@ typedef GeanyData PluginData;	/* for compatibility with API < 7 */
 #define GEANY_FILETYPES_ALL \
 	GEANY_FILETYPES_NONE
 
-typedef struct _GeanyDocument document;
-typedef struct _GeanyFiletype filetype;
+typedef struct GeanyDocument document;
+typedef struct GeanyFiletype filetype;
 
 typedef PluginCallback GeanyCallback;
 #define geany_callbacks plugin_callbacks

@@ -102,7 +102,7 @@ struct build_programs
 	gboolean modified;
 };
 
-struct _GeanyFiletype
+struct GeanyFiletype
 {
 	filetype_id		  id;
 	langType 		  lang;				/* represents the langType of tagmanager(see the table */

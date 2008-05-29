@@ -71,7 +71,7 @@ typedef struct FileEncoding
 /**
  *  Structure for representing an open tab with all its properties.
  **/
-typedef struct _GeanyDocument
+typedef struct GeanyDocument
 {
 	/** General flag to represent this document is active and all properties are set correctly. */
 	gboolean		 is_valid;
