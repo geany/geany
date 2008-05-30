@@ -2,6 +2,8 @@
 
  * src/plugindata.h:
    Add deprecated macro for doc_array.
+ * src/editor.c:
+   Allow line breaking after typing any character, not just wordchars.
 
 
 2008-05-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

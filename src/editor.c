@@ -219,10 +219,7 @@ static void check_line_breaking(gint idx, gint pos, gchar c)
 		return;
 
 	if (c == GDK_space)
-		pos--;	/* Use previous space, not new one */
-	else
-	if (strchr(GEANY_WORDCHARS, c) == NULL)
-		return;
+		pos--;	/* Look for previous space, not the new one */
 
 	line = sci_get_current_line(sci);
 	lstart = sci_get_position_from_line(sci, line);
@@ -230,7 +227,7 @@ static void check_line_breaking(gint idx, gint pos, gchar c)
 	if (pos - lstart < editor_prefs.line_break_column)
 		return;
 
-	/* look for the last space before editor_prefs.line_break_column */
+	/* look for the last space before line_break_column */
 	pos = MIN(pos, lstart + editor_prefs.line_break_column);
 
 	while (pos > lstart)
