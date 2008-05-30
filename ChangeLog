@@ -4,6 +4,9 @@
    Add deprecated macro for doc_array.
  * src/editor.c:
    Allow line breaking after typing any character, not just wordchars.
+ * src/editor.c:
+   Handle non-Scintilla GUI updates after SCN_PAINTED instead of
+   SCN_UPDATEUI to hopefully appear more responsive to typing.
 
 
 2008-05-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
