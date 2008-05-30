@@ -455,6 +455,8 @@ typedef PluginCallback GeanyCallback;
 #define init plugin_init
 #define cleanup plugin_cleanup
 
+#define doc_array documents_array
+
 #endif	/* GEANY_DISABLE_DEPRECATED */
 
 #endif
