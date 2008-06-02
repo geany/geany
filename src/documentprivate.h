@@ -1,6 +1,7 @@
 /*
- *      document-private.h
+ *      document-private.h - this file is part of Geany, a fast and lightweight IDE
  *
+ *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
  *      Copyright 2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
@@ -17,6 +18,8 @@
  *      along with this program; if not, write to the Free Software
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
+ *
+ *  $Id$
  */
 
 
