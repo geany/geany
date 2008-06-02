@@ -278,19 +278,6 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag)
 }
 
 
-static gboolean reload_idx(gpointer data)
-{
-	gint idx = GPOINTER_TO_INT(data);
-
-	/* check idx is still valid now we're idle, in case it was closed */
-	if (DOC_IDX_VALID(idx))
-	{
-		document_reload_file(idx, NULL);
-	}
-	return FALSE;
-}
-
-
 static gboolean check_reload(gint idx)
 {
 	gchar *base_name = g_path_get_basename(documents[idx]->file_name);
@@ -302,10 +289,7 @@ static gboolean check_reload(gint idx)
 			"the current buffer."), base_name);
 	if (want_reload)
 	{
-		/* delay reloading because we need to wait for any pending scintilla messages
-		 * to be processed, otherwise the reloaded document might not be colourised
-		 * properly */
-		g_idle_add(reload_idx, GINT_TO_POINTER(idx));
+		document_reload_file(idx, NULL);
 	}
 	g_free(base_name);
 	return want_reload;
@@ -343,7 +327,7 @@ gboolean utils_check_disk_status(gint idx, gboolean force)
 	{
 		if (check_reload(idx))
 		{
-			/* Disable checking until after reload, so ignore this change for now */
+			/* Update the modification time */
 			documents[idx]->mtime = st.st_mtime;
 		}
 		else
