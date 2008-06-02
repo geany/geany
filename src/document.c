@@ -1107,11 +1107,10 @@ gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean
 	else
 	{	/* reloading */
 		document_undo_clear(idx);
-		/* Recolour the document after reloading because the text could have changed
-		 * without typenames changing.
-		 * Note: This could cause double colourising of the current document if typenames have
-		 * also changed, but it shouldn't be that noticeable. */
-		sci_colourise(documents[idx]->sci, 0, -1);
+
+		/* Unset the filetype so the document gets colourised by document_set_filetype().
+		 * (The text could have changed without typenames changing.) */
+		documents[idx]->file_type = NULL;
 		use_ft = ft;
 	}
 	/* update taglist, typedef keywords and build menu if necessary */

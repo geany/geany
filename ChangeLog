@@ -11,6 +11,11 @@
    Add DOCUMENT() macro to convert a GeanyDocument* to a Document*.
    Also move UNDO_*, FileEncoding to documentprivate.h.
    Move undo_action struct to document.c.
+ * src/utils.c:
+   Reload a changed document immediately on user clicking reload
+   (waiting was not related to the now fixed reload-colourise problem).
+ * src/document.c:
+   Fix possible document double-colourise after reloading a file.
 
 
 2008-05-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
