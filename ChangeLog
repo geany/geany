@@ -16,6 +16,8 @@
    (waiting was not related to the now fixed reload-colourise problem).
  * src/document.c:
    Fix possible document double-colourise after reloading a file.
+ * src/editor.c:
+   Cancel any autocompletion list when completing a snippet.
 
 
 2008-05-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

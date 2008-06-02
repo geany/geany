@@ -1474,6 +1474,8 @@ gboolean editor_complete_snippet(gint idx, gint pos)
 		sci_start_undo_action(sci);	/* needed because we insert a space separately from construct */
 		result = snippets_complete_constructs(idx, pos, current_word);
 		sci_end_undo_action(sci);
+		if (result)
+			SSM(sci, SCI_CANCEL, 0, 0);	/* cancel any autocompletion list, etc */
 	}
 
 	g_free(wc);
