@@ -39,6 +39,7 @@
 #include "support.h"
 #include "editor.h"
 #include "document.h"
+#include "documentprivate.h"
 #include "filetypes.h"
 #include "sciwrappers.h"
 #include "ui_utils.h"
@@ -170,7 +171,8 @@ static void on_margin_click(ScintillaObject *sci, SCNotification *nt)
 }
 
 
-/* Note: Any GUI updates that don't affect scintilla should be done in on_painted(). */
+/* Called before Scintilla repaints.
+ * Note: Any GUI updates that don't affect scintilla should be done in on_painted(). */
 static void on_update_ui(gint idx, G_GNUC_UNUSED SCNotification *nt)
 {
 	ScintillaObject *sci = documents[idx]->sci;

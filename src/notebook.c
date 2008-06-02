@@ -28,6 +28,7 @@
 #include "geany.h"
 #include "notebook.h"
 #include "document.h"
+#include "documentprivate.h"
 #include "ui_utils.h"
 #include "treeviews.h"
 #include "support.h"
@@ -320,6 +321,7 @@ gint notebook_new_tab(gint doc_idx)
 	gint tabnum;
 	gchar *title;
 	GeanyDocument *this = documents[doc_idx];
+	Document *fdoc = DOCUMENT(this);
 	GtkWidget *page;
 
 	g_return_val_if_fail(doc_idx >= 0 && this != NULL, -1);
@@ -327,7 +329,7 @@ gint notebook_new_tab(gint doc_idx)
 	page = GTK_WIDGET(this->sci);
 	title = g_path_get_basename(DOC_FILENAME(doc_idx));
 
-	this->tab_label = gtk_label_new(title);
+	fdoc->tab_label = gtk_label_new(title);
 
 	ebox = gtk_event_box_new();
 	GTK_WIDGET_SET_FLAGS(ebox, GTK_NO_WINDOW);
@@ -335,7 +337,7 @@ gint notebook_new_tab(gint doc_idx)
 		G_CALLBACK(notebook_tab_label_cb), page);
 
 	hbox = gtk_hbox_new(FALSE, 2);
-	gtk_container_add(GTK_CONTAINER(ebox), this->tab_label);
+	gtk_container_add(GTK_CONTAINER(ebox), fdoc->tab_label);
 	gtk_box_pack_start(GTK_BOX(hbox), ebox, FALSE, FALSE, 0);
 
 	if (file_prefs.show_tab_cross)
@@ -372,15 +374,15 @@ gint notebook_new_tab(gint doc_idx)
 
 	gtk_widget_show_all(hbox);
 
-	this->tabmenu_label = gtk_label_new(title);
-	gtk_misc_set_alignment(GTK_MISC(this->tabmenu_label), 0.0, 0);
+	fdoc->tabmenu_label = gtk_label_new(title);
+	gtk_misc_set_alignment(GTK_MISC(fdoc->tabmenu_label), 0.0, 0);
 
 	if (file_prefs.tab_order_ltr)
 		tabnum = gtk_notebook_append_page_menu(GTK_NOTEBOOK(main_widgets.notebook), page,
-			hbox, this->tabmenu_label);
+			hbox, fdoc->tabmenu_label);
 	else
 		tabnum = gtk_notebook_insert_page_menu(GTK_NOTEBOOK(main_widgets.notebook), page,
-			hbox, this->tabmenu_label, 0);
+			hbox, fdoc->tabmenu_label, 0);
 
 	tab_count_changed();
 

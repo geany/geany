@@ -61,13 +61,6 @@ GeanyFilePrefs;
 extern GeanyFilePrefs file_prefs;
 
 
-typedef struct FileEncoding
-{
-	gchar 			*encoding;
-	gboolean		 has_bom;
-} FileEncoding;
-
-
 /**
  *  Structure for representing an open tab with all its properties.
  **/
@@ -94,16 +87,6 @@ typedef struct GeanyDocument
 	TMWorkObject	*tm_file;
 	/** The Scintilla object for this %document. */
 	ScintillaObject	*sci;
-	/** GtkLabel shown in the notebook header. */
-	GtkWidget		*tab_label;
-	/** GtkLabel shown in the notebook right-click menu. */
-	GtkWidget		*tabmenu_label;
-	/** GtkTreeView object for this %document within the Open Files treeview of the sidebar. */
-	GtkWidget		*tag_tree;
-	/** GtkTreeStore object for this %document within the Open Files treeview of the sidebar. */
-	GtkTreeStore	*tag_store;
-	/** Iter for this %document within the Open Files treeview of the sidebar. */
-	GtkTreeIter		 iter;
 	/** Whether this %document is read-only. */
 	gboolean		 readonly;
 	/** Whether this %document has been changed since it was last saved. */
@@ -118,16 +101,11 @@ typedef struct GeanyDocument
 	time_t			 last_check;
 	/** Modification time of this %document on disk. */
 	time_t			 mtime;
-	/** Internally used by the Undo/Redo management code. */
-	GTrashStack		*undo_actions;
-	/** Internally used by the Undo/Redo management code. */
-	GTrashStack		*redo_actions;
-	/** Internally used. */
-	FileEncoding	 saved_encoding;
-	/** %Document-specific tab setting. */
+	/** %Document-specific indentation setting. */
 	gboolean		 use_tabs;
 	gboolean		 line_breaking;	/**< Whether to split long lines as you type. */
-} GeanyDocument;
+}
+GeanyDocument;
 
 
 /** Dynamic array of GeanyDocument pointers holding information about the notebook tabs. */
@@ -229,27 +207,8 @@ void document_set_encoding(gint idx, const gchar *new_encoding);
 
 
 /* own Undo / Redo implementation to be able to undo / redo changes
- * to the encoding or the Unicode BOM (which are Scintilla independet).
+ * to the encoding or the Unicode BOM (which are Scintilla independent).
  * All Scintilla events are stored in the undo / redo buffer and are passed through. */
-
-/* available UNDO actions, UNDO_SCINTILLA is a pseudo action to trigger Scintilla's
- * undo management */
-enum
-{
-	UNDO_SCINTILLA = 0,
-	UNDO_ENCODING,
-	UNDO_BOM,
-	UNDO_ACTIONS_MAX
-};
-
-/* an undo action, also used for redo actions */
-typedef struct
-{
-	GTrashStack *next;	/* pointer to the next stack element(required for the GTrashStack) */
-	guint type;			/* to identify the action */
-	gpointer *data; 	/* the old value (before the change), in case of a redo action
-						 * it contains the new value */
-} undo_action;
 
 gboolean document_can_undo(gint idx);
 
@@ -260,6 +219,7 @@ void document_undo(gint idx);
 void document_redo(gint idx);
 
 void document_undo_add(gint idx, guint type, gpointer data);
+
 
 GdkColor *document_get_status_color(gint idx);
 

@@ -40,6 +40,7 @@
 #include "filetypes.h"
 #include "encodings.h"
 #include "document.h"
+#include "documentprivate.h"
 #include "support.h"
 #include "msgwindow.h"
 #include "treeviews.h"
@@ -561,7 +562,8 @@ tag_list_add_groups(GtkTreeStore *tree_store, ...)
 static void init_tag_list(gint idx)
 {
 	filetype_id ft_id = documents[idx]->file_type->id;
-	GtkTreeStore *tag_store = documents[idx]->tag_store;
+	Document *fdoc = DOCUMENT(documents[idx]);
+	GtkTreeStore *tag_store = fdoc->tag_store;
 
 	init_tag_iters();
 
@@ -839,6 +841,7 @@ gboolean symbols_recreate_tag_list(gint idx, gint sort_mode)
 	GtkTreeIter iter;
 	static gint prev_sort_mode = SYMBOLS_SORT_BY_NAME;
 	filetype_id ft_id = FILETYPE_ID(documents[idx]->file_type);
+	Document *fdoc = DOCUMENT(documents[idx]);
 
 	g_return_val_if_fail(DOC_IDX_VALID(idx), FALSE);
 
@@ -852,11 +855,11 @@ gboolean symbols_recreate_tag_list(gint idx, gint sort_mode)
 		return FALSE;
 
 	/* Make sure the model stays with us after the tree view unrefs it */
-	g_object_ref(GTK_TREE_MODEL(documents[idx]->tag_store));
+	g_object_ref(GTK_TREE_MODEL(fdoc->tag_store));
 	/* Detach model from view */
-	gtk_tree_view_set_model(GTK_TREE_VIEW(documents[idx]->tag_tree), NULL);
+	gtk_tree_view_set_model(GTK_TREE_VIEW(fdoc->tag_tree), NULL);
 	/* Clear all contents */
-	gtk_tree_store_clear(documents[idx]->tag_store);
+	gtk_tree_store_clear(fdoc->tag_store);
 
 	init_tag_list(idx);
 	for (tmp = (GList*)tags; tmp; tmp = g_list_next(tmp))
@@ -939,10 +942,10 @@ gboolean symbols_recreate_tag_list(gint idx, gint sort_mode)
 
 		if (parent)
 		{
-			gtk_tree_model_get(GTK_TREE_MODEL(documents[idx]->tag_store), parent,
+			gtk_tree_model_get(GTK_TREE_MODEL(fdoc->tag_store), parent,
 		 	                   SYMBOLS_COLUMN_ICON, &icon, -1);
-			gtk_tree_store_append(documents[idx]->tag_store, &iter, parent);
-			gtk_tree_store_set(documents[idx]->tag_store, &iter,
+			gtk_tree_store_append(fdoc->tag_store, &iter, parent);
+			gtk_tree_store_set(fdoc->tag_store, &iter,
 		 	                  SYMBOLS_COLUMN_ICON, icon,
                               SYMBOLS_COLUMN_NAME, buf,
                               SYMBOLS_COLUMN_LINE, symbol->line, -1);
@@ -951,12 +954,12 @@ gboolean symbols_recreate_tag_list(gint idx, gint sort_mode)
 				g_object_unref(icon);
 		}
 	}
-	hide_empty_rows(documents[idx]->tag_store);
+	hide_empty_rows(fdoc->tag_store);
 	/* Re-attach model to view */
-	gtk_tree_view_set_model(GTK_TREE_VIEW(documents[idx]->tag_tree),
-		GTK_TREE_MODEL(documents[idx]->tag_store));
-	g_object_unref(GTK_TREE_MODEL(documents[idx]->tag_store));
-	gtk_tree_view_expand_all(GTK_TREE_VIEW(documents[idx]->tag_tree));
+	gtk_tree_view_set_model(GTK_TREE_VIEW(fdoc->tag_tree),
+		GTK_TREE_MODEL(fdoc->tag_store));
+	g_object_unref(GTK_TREE_MODEL(fdoc->tag_store));
+	gtk_tree_view_expand_all(GTK_TREE_VIEW(fdoc->tag_tree));
 
 	return TRUE;
 }

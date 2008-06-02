@@ -32,6 +32,7 @@
 #include "callbacks.h"
 #include "treeviews.h"
 #include "document.h"
+#include "documentprivate.h"
 #include "filetypes.h"
 #include "utils.h"
 #include "ui_utils.h"
@@ -152,6 +153,8 @@ on_default_tag_tree_button_press_event(GtkWidget *widget, GdkEventButton *event,
 /* update = rescan the tags for document[idx].filename */
 void treeviews_update_tag_list(gint idx, gboolean update)
 {
+	Document *fdoc = DOCUMENT(documents[idx]);
+
 	if (gtk_bin_get_child(GTK_BIN(tag_window)))
 		gtk_container_remove(GTK_CONTAINER(tag_window), gtk_bin_get_child(GTK_BIN(tag_window)));
 
@@ -183,14 +186,14 @@ void treeviews_update_tag_list(gint idx, gboolean update)
 
 	if (update)
 	{	/* updating the tag list in the left tag window */
-		if (documents[idx]->tag_tree == NULL)
+		if (fdoc->tag_tree == NULL)
 		{
-			documents[idx]->tag_store = gtk_tree_store_new(
+			fdoc->tag_store = gtk_tree_store_new(
 				SYMBOLS_N_COLUMNS, GDK_TYPE_PIXBUF, G_TYPE_STRING, G_TYPE_INT);
-			documents[idx]->tag_tree = gtk_tree_view_new();
-			prepare_taglist(documents[idx]->tag_tree, documents[idx]->tag_store);
-			gtk_widget_show(documents[idx]->tag_tree);
-			g_object_ref((gpointer)documents[idx]->tag_tree);	/* to hold it after removing */
+			fdoc->tag_tree = gtk_tree_view_new();
+			prepare_taglist(fdoc->tag_tree, fdoc->tag_store);
+			gtk_widget_show(fdoc->tag_tree);
+			g_object_ref((gpointer)fdoc->tag_tree);	/* to hold it after removing */
 		}
 
 		documents[idx]->has_tags = symbols_recreate_tag_list(idx, SYMBOLS_SORT_USE_PREVIOUS);
@@ -198,7 +201,7 @@ void treeviews_update_tag_list(gint idx, gboolean update)
 
 	if (documents[idx]->has_tags)
 	{
-		gtk_container_add(GTK_CONTAINER(tag_window), documents[idx]->tag_tree);
+		gtk_container_add(GTK_CONTAINER(tag_window), fdoc->tag_tree);
 	}
 	else
 	{
@@ -298,7 +301,8 @@ static void prepare_openfiles(void)
  * This is called recursively in treeviews_openfiles_update_all(). */
 void treeviews_openfiles_add(gint idx)
 {
-	GtkTreeIter *iter = &documents[idx]->iter;
+	Document *fdoc = DOCUMENT(documents[idx]);
+	GtkTreeIter *iter = &fdoc->iter;
 
 	gtk_list_store_append(store_openfiles, iter);
 	treeviews_openfiles_update(idx);
@@ -307,6 +311,7 @@ void treeviews_openfiles_add(gint idx)
 
 void treeviews_openfiles_update(gint idx)
 {
+	Document *fdoc = DOCUMENT(documents[idx]);
 	gchar *basename;
 	GdkColor *color = document_get_status_color(idx);
 
@@ -314,7 +319,7 @@ void treeviews_openfiles_update(gint idx)
 		basename = DOC_FILENAME(idx);
 	else
 		basename = g_path_get_basename(DOC_FILENAME(idx));
-	gtk_list_store_set(store_openfiles, &documents[idx]->iter,
+	gtk_list_store_set(store_openfiles, &fdoc->iter,
 #if GTK_CHECK_VERSION(2, 12, 0)
 		0, basename, 1, idx, 2, color, 3, DOC_FILENAME(idx), -1);
 #else
@@ -343,19 +348,20 @@ void treeviews_openfiles_update_all()
 
 void treeviews_remove_document(gint idx)
 {
-	GtkTreeIter *iter = &documents[idx]->iter;
+	Document *fdoc = DOCUMENT(documents[idx]);
+	GtkTreeIter *iter = &fdoc->iter;
 
 	gtk_list_store_remove(store_openfiles, iter);
 
-	if (GTK_IS_WIDGET(documents[idx]->tag_tree))
+	if (GTK_IS_WIDGET(fdoc->tag_tree))
 	{
-		gtk_widget_destroy(documents[idx]->tag_tree);
-		if (GTK_IS_TREE_VIEW(documents[idx]->tag_tree))
+		gtk_widget_destroy(fdoc->tag_tree);
+		if (GTK_IS_TREE_VIEW(fdoc->tag_tree))
 		{
 			/* Because it was ref'd in treeviews_update_tag_list, it needs unref'ing */
-			g_object_unref((gpointer)documents[idx]->tag_tree);
+			g_object_unref((gpointer)fdoc->tag_tree);
 		}
-		documents[idx]->tag_tree = NULL;
+		fdoc->tag_tree = NULL;
 	}
 }
 

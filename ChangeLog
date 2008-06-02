@@ -1,3 +1,18 @@
+2008-06-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/documentprivate.h, src/prefs.c, src/plugindata.h,
+   src/treeviews.c, src/callbacks.c, src/notebook.c, src/document.c,
+   src/document.h, src/editor.c, src/symbols.c, src/Makefile.am,
+   src/ui_utils.c:
+   Move GeanyDocument GUI elements and saved_encoding to private
+   Document struct which inherits from GeanyDocument. This is to hide
+   implementation fields from the plugin API, so that we can change
+   them if necessary.
+   Add DOCUMENT() macro to convert a GeanyDocument* to a Document*.
+   Also move UNDO_*, FileEncoding to documentprivate.h.
+   Move undo_action struct to document.c.
+
+
 2008-05-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/plugindata.h:

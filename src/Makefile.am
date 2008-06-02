@@ -2,7 +2,8 @@
 # $Id$
 
 
-EXTRA_DIST = images.c gb.c win32.c win32.h plugindata.h
+EXTRA_DIST = images.c gb.c win32.c win32.h plugindata.h \
+	documentprivate.h
 
 bin_PROGRAMS = geany
 

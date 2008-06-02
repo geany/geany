@@ -51,6 +51,7 @@
 #include <glib/gstdio.h>
 
 #include "document.h"
+#include "documentprivate.h"
 #include "filetypes.h"
 #include "support.h"
 #include "sciwrappers.h"
@@ -78,6 +79,17 @@
 GeanyFilePrefs file_prefs;
 
 GPtrArray *documents_array;
+
+
+/* an undo action, also used for redo actions */
+typedef struct
+{
+	GTrashStack *next;	/* pointer to the next stack element(required for the GTrashStack) */
+	guint type;			/* to identify the action */
+	gpointer *data; 	/* the old value (before the change), in case of a redo action
+						 * it contains the new value */
+} undo_action;
+
 
 /* Whether to colourise the document straight after styling settings are changed.
  * (e.g. when filetype is set or typenames are updated) */
@@ -312,30 +324,33 @@ void document_apply_update_prefs(gint idx)
  * The flag is_valid is set to TRUE in document_create(). */
 static void init_doc_struct(GeanyDocument *new_doc)
 {
-	memset(new_doc, 0, sizeof(GeanyDocument));
+	Document *full_doc = DOCUMENT(new_doc);
+
+	memset(full_doc, 0, sizeof(Document));
 
 	new_doc->is_valid = FALSE;
 	new_doc->has_tags = FALSE;
 	new_doc->auto_indent = (editor_prefs.indent_mode != INDENT_NONE);
 	new_doc->line_wrapping = editor_prefs.line_wrapping;
 	new_doc->readonly = FALSE;
-	new_doc->tag_store = NULL;
-	new_doc->tag_tree = NULL;
 	new_doc->file_name = NULL;
 	new_doc->file_type = NULL;
 	new_doc->tm_file = NULL;
 	new_doc->encoding = NULL;
 	new_doc->has_bom = FALSE;
-	new_doc->saved_encoding.encoding = NULL;
-	new_doc->saved_encoding.has_bom = FALSE;
 	new_doc->sci = NULL;
-	new_doc->undo_actions = NULL;
-	new_doc->redo_actions = NULL;
 	new_doc->scroll_percent = -1.0F;
 	new_doc->line_breaking = FALSE;
 	new_doc->mtime = 0;
 	new_doc->changed = FALSE;
 	new_doc->last_check = time(NULL);
+
+	full_doc->tag_store = NULL;
+	full_doc->tag_tree = NULL;
+	full_doc->saved_encoding.encoding = NULL;
+	full_doc->saved_encoding.has_bom = FALSE;
+	full_doc->undo_actions = NULL;
+	full_doc->redo_actions = NULL;
 }
 
 
@@ -447,7 +462,7 @@ static gint document_create(const gchar *utf8_filename)
 	new_idx = document_get_new_idx();
 	if (new_idx == -1)	/* expand the array, no free places */
 	{
-		GeanyDocument *new_doc = g_new0(GeanyDocument, 1);
+		Document *new_doc = g_new0(Document, 1);
 
 		new_idx = documents_array->len;
 		g_ptr_array_add(documents_array, new_doc);
@@ -476,7 +491,7 @@ static gint document_create(const gchar *utf8_filename)
 		GtkTreeSelection *sel;
 
 		sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));
-		gtk_tree_selection_select_iter(sel, &this->iter);
+		gtk_tree_selection_select_iter(sel, &DOCUMENT(this)->iter);
 	}
 
 	ui_document_buttons_update();
@@ -500,6 +515,8 @@ gboolean document_remove(guint page_num)
 
 	if (DOC_IDX_VALID(idx))
 	{
+		Document *fdoc = DOCUMENT(documents[idx]);
+
 		if (documents[idx]->changed && ! dialogs_show_unsaved_file(idx))
 		{
 			return FALSE;
@@ -513,7 +530,7 @@ gboolean document_remove(guint page_num)
 		navqueue_remove_file(documents[idx]->file_name);
 		msgwin_status_add(_("File %s closed."), DOC_FILENAME(idx));
 		g_free(documents[idx]->encoding);
-		g_free(documents[idx]->saved_encoding.encoding);
+		g_free(fdoc->saved_encoding.encoding);
 		g_free(documents[idx]->file_name);
 		tm_workspace_remove_object(documents[idx]->tm_file, TRUE, TRUE);
 
@@ -549,9 +566,11 @@ gboolean document_remove(guint page_num)
 /* used to keep a record of the unchanged document state encoding */
 static void store_saved_encoding(gint idx)
 {
-	g_free(documents[idx]->saved_encoding.encoding);
-	documents[idx]->saved_encoding.encoding = g_strdup(documents[idx]->encoding);
-	documents[idx]->saved_encoding.has_bom = documents[idx]->has_bom;
+	Document *fdoc = DOCUMENT(documents[idx]);
+
+	g_free(fdoc->saved_encoding.encoding);
+	fdoc->saved_encoding.encoding = g_strdup(documents[idx]->encoding);
+	fdoc->saved_encoding.has_bom = documents[idx]->has_bom;
 }
 
 
@@ -1501,8 +1520,11 @@ gboolean document_save_file(gint idx, gboolean force)
 		document_set_filetype(idx, documents[idx]->file_type);
 
 		tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
-		gtk_label_set_text(GTK_LABEL(documents[idx]->tab_label), base_name);
-		gtk_label_set_text(GTK_LABEL(documents[idx]->tabmenu_label), base_name);
+		{
+			Document *fdoc = DOCUMENT(documents[idx]);
+			gtk_label_set_text(GTK_LABEL(fdoc->tab_label), base_name);
+			gtk_label_set_text(GTK_LABEL(fdoc->tabmenu_label), base_name);
+		}
 		msgwin_status_add(_("File %s saved."), documents[idx]->file_name);
 		ui_update_statusbar(idx, -1);
 		g_free(base_name);
@@ -2149,11 +2171,12 @@ void document_set_encoding(gint idx, const gchar *new_encoding)
 /* Clears the Undo and Redo buffer (to be called when reloading or closing the document) */
 void document_undo_clear(gint idx)
 {
+	Document *fdoc = DOCUMENT(documents[idx]);
 	undo_action *a;
 
-	while (g_trash_stack_height(&documents[idx]->undo_actions) > 0)
+	while (g_trash_stack_height(&fdoc->undo_actions) > 0)
 	{
-		a = g_trash_stack_pop(&documents[idx]->undo_actions);
+		a = g_trash_stack_pop(&fdoc->undo_actions);
 		if (a != NULL)
 		{
 			switch (a->type)
@@ -2165,11 +2188,11 @@ void document_undo_clear(gint idx)
 			g_free(a);
 		}
 	}
-	documents[idx]->undo_actions = NULL;
+	fdoc->undo_actions = NULL;
 
-	while (g_trash_stack_height(&documents[idx]->redo_actions) > 0)
+	while (g_trash_stack_height(&fdoc->redo_actions) > 0)
 	{
-		a = g_trash_stack_pop(&documents[idx]->redo_actions);
+		a = g_trash_stack_pop(&fdoc->redo_actions);
 		if (a != NULL)
 		{
 			switch (a->type)
@@ -2181,7 +2204,7 @@ void document_undo_clear(gint idx)
 			g_free(a);
 		}
 	}
-	documents[idx]->redo_actions = NULL;
+	fdoc->redo_actions = NULL;
 
 	documents[idx]->changed = FALSE;
 	if (! main_status.quitting) document_set_text_changed(idx);
@@ -2193,6 +2216,7 @@ void document_undo_clear(gint idx)
 
 void document_undo_add(gint idx, guint type, gpointer data)
 {
+	Document *fdoc = DOCUMENT(documents[idx]);
 	undo_action *action;
 
 	if (! DOC_IDX_VALID(idx)) return;
@@ -2201,7 +2225,7 @@ void document_undo_add(gint idx, guint type, gpointer data)
 	action->type = type;
 	action->data = data;
 
-	g_trash_stack_push(&documents[idx]->undo_actions, action);
+	g_trash_stack_push(&fdoc->undo_actions, action);
 
 	documents[idx]->changed = TRUE;
 	document_set_text_changed(idx);
@@ -2214,9 +2238,11 @@ void document_undo_add(gint idx, guint type, gpointer data)
 
 gboolean document_can_undo(gint idx)
 {
+	Document *fdoc = DOCUMENT(documents[idx]);
+
 	if (! DOC_IDX_VALID(idx)) return FALSE;
 
-	if (g_trash_stack_height(&documents[idx]->undo_actions) > 0 || sci_can_undo(documents[idx]->sci))
+	if (g_trash_stack_height(&fdoc->undo_actions) > 0 || sci_can_undo(documents[idx]->sci))
 		return TRUE;
 	else
 		return FALSE;
@@ -2225,21 +2251,24 @@ gboolean document_can_undo(gint idx)
 
 static void update_changed_state(gint idx)
 {
+	Document *fdoc = DOCUMENT(documents[idx]);
+
 	documents[idx]->changed =
 		(sci_is_modified(documents[idx]->sci) ||
-		documents[idx]->has_bom != documents[idx]->saved_encoding.has_bom ||
-		! utils_str_equal(documents[idx]->encoding, documents[idx]->saved_encoding.encoding));
+		documents[idx]->has_bom != fdoc->saved_encoding.has_bom ||
+		! utils_str_equal(documents[idx]->encoding, fdoc->saved_encoding.encoding));
 	document_set_text_changed(idx);
 }
 
 
 void document_undo(gint idx)
 {
+	Document *fdoc = DOCUMENT(documents[idx]);
 	undo_action *action;
 
 	if (! DOC_IDX_VALID(idx)) return;
 
-	action = g_trash_stack_pop(&documents[idx]->undo_actions);
+	action = g_trash_stack_pop(&fdoc->undo_actions);
 
 	if (action == NULL)
 	{
@@ -2294,9 +2323,11 @@ void document_undo(gint idx)
 
 gboolean document_can_redo(gint idx)
 {
+	Document *fdoc = DOCUMENT(documents[idx]);
+
 	if (! DOC_IDX_VALID(idx)) return FALSE;
 
-	if (g_trash_stack_height(&documents[idx]->redo_actions) > 0 || sci_can_redo(documents[idx]->sci))
+	if (g_trash_stack_height(&fdoc->redo_actions) > 0 || sci_can_redo(documents[idx]->sci))
 		return TRUE;
 	else
 		return FALSE;
@@ -2305,11 +2336,12 @@ gboolean document_can_redo(gint idx)
 
 void document_redo(gint idx)
 {
+	Document *fdoc = DOCUMENT(documents[idx]);
 	undo_action *action;
 
 	if (! DOC_IDX_VALID(idx)) return;
 
-	action = g_trash_stack_pop(&documents[idx]->redo_actions);
+	action = g_trash_stack_pop(&fdoc->redo_actions);
 
 	if (action == NULL)
 	{
@@ -2363,6 +2395,7 @@ void document_redo(gint idx)
 
 static void document_redo_add(gint idx, guint type, gpointer data)
 {
+	Document *fdoc = DOCUMENT(documents[idx]);
 	undo_action *action;
 
 	if (! DOC_IDX_VALID(idx)) return;
@@ -2371,7 +2404,7 @@ static void document_redo_add(gint idx, guint type, gpointer data)
 	action->type = type;
 	action->data = data;
 
-	g_trash_stack_push(&documents[idx]->redo_actions, action);
+	g_trash_stack_push(&fdoc->redo_actions, action);
 
 	documents[idx]->changed = TRUE;
 	document_set_text_changed(idx);

@@ -39,6 +39,7 @@
 #include "msgwindow.h"
 #include "sciwrappers.h"
 #include "document.h"
+#include "documentprivate.h"
 #include "keyfile.h"
 #include "keybindings.h"
 #include "interface.h"
@@ -1043,8 +1044,10 @@ void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 			interface_prefs.tagbar_font = g_strdup(fontbtn);
 			for (i = 0; i < documents_array->len; i++)
 			{
-				if (documents[i]->is_valid && GTK_IS_WIDGET(documents[i]->tag_tree))
-					ui_widget_modify_font_from_string(documents[i]->tag_tree,
+				Document *fdoc = DOCUMENT(documents[i]);
+
+				if (documents[i]->is_valid && GTK_IS_WIDGET(fdoc->tag_tree))
+					ui_widget_modify_font_from_string(fdoc->tag_tree,
 						interface_prefs.tagbar_font);
 			}
 			if (GTK_IS_WIDGET(tv.default_tag_tree))
