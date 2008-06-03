@@ -23,6 +23,9 @@
 
  * src/main.c:
    Fix slightly wrong preprocessor checks.
+ * src/dialogs.c:
+   When quitting, prevent inconsistent GUI elements when cancelling on
+   an unsaved file.
 
 
 2008-06-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

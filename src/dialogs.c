@@ -54,6 +54,7 @@
 #include "keybindings.h"
 #include "encodings.h"
 #include "build.h"
+#include "main.h"
 
 
 enum
@@ -668,8 +669,10 @@ gboolean dialogs_show_unsaved_file(gint idx)
 	gint ret;
 
 	/* display the file tab to remind the user of the document */
+	main_status.quitting = FALSE;
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
 		document_get_notebook_page(idx));
+	main_status.quitting = TRUE;
 
 	if (documents[idx]->file_name != NULL)
 	{
