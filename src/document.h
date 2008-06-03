@@ -71,9 +71,10 @@ typedef struct GeanyDocument
 	/** Whether this %document support source code symbols(tags) to show in the sidebar. */
 	gboolean		 has_tags;
 	/** The UTF-8 encoded file name. Be careful glibc and GLib functions expect the locale
-	    representation of the file name which can be different from this.
-	    For conversion into locale encoding for use with file functions of GLib, you can use
-	    @ref utils_get_locale_from_utf8. */
+	 * representation of the file name which can be different from this.
+	 * For conversion into locale encoding for use with file functions of GLib, you can use
+	 * @ref utils_get_locale_from_utf8.
+	 * @see real_path. */
 	gchar 			*file_name;
 	/** The encoding of the %document, must be a valid string representation of an encoding, can
 	 *  be retrieved with @ref encodings_get_charset_from_index. */
@@ -104,6 +105,12 @@ typedef struct GeanyDocument
 	/** %Document-specific indentation setting. */
 	gboolean		 use_tabs;
 	gboolean		 line_breaking;	/**< Whether to split long lines as you type. */
+	/** The link-dereferenced, locale-encoded file name.
+	 * If non-NULL, this indicates the file once existed on disk (not just as an
+	 * unsaved document with a filename set).
+	 *
+	 * @note This is the same as: @c tm_get_real_path(doc->file_name); */
+	gchar 			*real_path;
 }
 GeanyDocument;
 
@@ -135,7 +142,9 @@ extern GPtrArray *documents_array;
 		GEANY_STRING_UNTITLED)
 
 
-gint document_find_by_filename(const gchar *filename, gboolean is_tm_filename);
+gint document_find_by_filename(const gchar *utf8_filename);
+
+gint document_find_by_realpath(const gchar *realname);
 
 gint document_find_by_sci(ScintillaObject *sci);
 
@@ -181,7 +190,7 @@ void document_open_files(const GSList *filenames, gboolean readonly, GeanyFilety
 gboolean document_reload_file(gint idx, const gchar *forced_enc);
 
 
-gboolean document_save_file_as(gint idx);
+gboolean document_save_file_as(gint idx, const gchar *utf8_fname);
 
 gboolean document_save_file(gint idx, gboolean force);
 

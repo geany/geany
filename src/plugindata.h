@@ -36,12 +36,12 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 67;
+static const gint api_version = 68;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
  * are only appended, as this doesn't affect existing fields. */
-static const gint abi_version = 36;
+static const gint abi_version = 37;
 
 /** Check the plugin can be loaded by Geany.
  * This performs runtime checks that try to ensure:
@@ -204,7 +204,8 @@ typedef struct DocumentFuncs
 	gint	(*new_file) (const gchar *filename, struct GeanyFiletype *ft, const gchar *text);
 	gint	(*get_cur_idx) (void);
 	gint	(*get_n_idx) (guint i);
-	gint	(*find_by_filename) (const gchar *filename, gboolean is_tm_filename);
+	gint	(*find_by_filename) (const gchar *utf8_filename);
+	gint	(*find_by_realpath) (const gchar *realname);
 	struct GeanyDocument* (*get_current) (void);
 	gboolean (*save_file) (gint idx, gboolean force);
 	gint	(*open_file) (const gchar *locale_filename, gboolean readonly,

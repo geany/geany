@@ -390,6 +390,7 @@ static void handle_save_as(const gchar *utf8_filename, gboolean open_new_tab,
 	if (open_new_tab)
 	{	/* "open" the saved file in a new tab and switch to it */
 		idx = document_clone(idx, utf8_filename);
+		document_save_file_as(idx, NULL);
 	}
 	else
 	{
@@ -409,10 +410,8 @@ static void handle_save_as(const gchar *utf8_filename, gboolean open_new_tab,
 			documents[idx]->tm_file = NULL;
 			g_free(documents[idx]->file_name);
 		}
-		documents[idx]->file_name = g_strdup(utf8_filename);
+		document_save_file_as(idx, utf8_filename);
 	}
-
-	document_save_file_as(idx);
 
 	if (! open_new_tab)
 		build_menu_update(idx);

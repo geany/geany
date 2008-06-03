@@ -853,7 +853,7 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 					&filename, &line);
 				if (line != -1 && filename != NULL)
 				{
-					gint idx = document_find_by_filename(filename, FALSE);
+					gint idx = document_find_by_filename(filename);
 
 					editor_set_indicator_on_line(idx, line - 1);	/* will check valid idx */
 					color = COLOR_RED;	/* error message parsed on the line */

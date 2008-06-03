@@ -171,9 +171,9 @@ gboolean navqueue_goto_line(gint old_idx, gint new_idx, gint line)
 }
 
 
-static gboolean goto_file_pos(const gchar *file, gboolean is_tm_filename, gint pos)
+static gboolean goto_file_pos(const gchar *file, gint pos)
 {
-	gint file_idx = document_find_by_filename(file, is_tm_filename);
+	gint file_idx = document_find_by_filename(file);
 
 	if (file_idx < 0) return FALSE;
 
@@ -192,7 +192,7 @@ void navqueue_go_back()
 
 	/* jump back */
 	fprev = g_queue_peek_nth(navigation_queue, nav_queue_pos + 1);
-	if (goto_file_pos(fprev->file, FALSE, fprev->pos))
+	if (goto_file_pos(fprev->file, fprev->pos))
 	{
 		nav_queue_pos++;
 	}
@@ -215,7 +215,7 @@ void navqueue_go_forward()
 
 	/* jump forward */
 	fnext = g_queue_peek_nth(navigation_queue, nav_queue_pos - 1);
-	if (goto_file_pos(fnext->file, FALSE, fnext->pos))
+	if (goto_file_pos(fnext->file, fnext->pos))
 	{
 		nav_queue_pos--;
 	}

@@ -109,23 +109,42 @@ static gboolean update_type_keywords(ScintillaObject *sci, gint lang);
 #define filenamecmp(a,b)	strcmp((a), (b))
 #endif
 
-static gint find_by_tm_filename(const gchar *filename)
+/**
+ * Find and retrieve the index of the given filename in the %document list.
+ *
+ * @param realname The filename to search, which should be identical to the
+ * string returned by @c tm_get_real_path().
+ *
+ * @return The %document index which has the given filename or @c -1
+ *  if no document was found.
+ * @note This is only really useful when passing a @c TMWorkObject::file_name.
+ * @see document_find_by_filename().
+ **/
+gint document_find_by_realpath(const gchar *realname)
 {
 	guint i;
+	gint ret = -1;
+
+	if (! realname)
+		return -1;	/* file doesn't exist on disk */
 
 	for (i = 0; i < documents_array->len; i++)
 	{
-		TMWorkObject *tm_file = documents[i]->tm_file;
+		GeanyDocument *doc = documents[i];
 
-		if (tm_file == NULL || tm_file->file_name == NULL) continue;
+		if (! documents[i]->is_valid || ! doc->real_path) continue;
 
-		if (filenamecmp(filename, tm_file->file_name) == 0)
-			return i;
+		if (filenamecmp(realname, doc->real_path) == 0)
+		{
+			ret = i;
+			break;
+		}
 	}
-	return -1;
+	return ret;
 }
 
 
+/* dereference symlinks, /../ junk in path and return locale encoding */
 static gchar *get_real_path_from_utf8(const gchar *utf8_filename)
 {
 	gchar *locale_name = utils_get_locale_from_utf8(utf8_filename);
@@ -137,49 +156,47 @@ static gchar *get_real_path_from_utf8(const gchar *utf8_filename)
 
 
 /**
- *  Find and retrieve the index of the given filename @a filename in the %document list.
+ *  Find and retrieve the index of the given filename in the %document list.
+ *  This matches either an exact GeanyDocument::file_name string, or variant
+ *  filenames with relative elements in the path (e.g. @c "/dir/..//name" will
+ *  match @c "/name").
  *
- *  @param filename The filename to search (in UTF-8 encoding for non-TagManager filenames,
- *         else in locale encoding).
- *  @param is_tm_filename Whether the passed @a filename is a TagManager filename and therefore
- *         locale-encoded and already a realpath().
+ *  @param utf8_filename The filename to search (in UTF-8 encoding).
  *
- *  @return The %document index which has the given filename @a filename or @c -1
- *   if @a filename is not open.
+ *  @return The %document index which has the given filename or @c -1
+ *   if no document was found.
+ *  @see document_find_by_realpath().
  **/
-gint document_find_by_filename(const gchar *filename, gboolean is_tm_filename)
+gint document_find_by_filename(const gchar *utf8_filename)
 {
 	guint i;
 	gint ret = -1;
-	gchar *realname;
 
-	if (! filename) return -1;
+	if (! utf8_filename)
+		return -1;
 
-	if (is_tm_filename)
-		return find_by_tm_filename(filename);	/* more efficient */
-
-	realname = get_real_path_from_utf8(filename);	/* dereference symlinks, /../ junk in path */
-	if (! realname) return -1;
-
+	/* First search GeanyDocument::file_name, so we can find documents with a
+	 * filename set but not saved on disk, like vcdiff produces */
 	for (i = 0; i < documents_array->len; i++)
 	{
 		GeanyDocument *doc = documents[i];
-		gchar *docname;
 
-		if (doc->file_name == NULL) continue;
+		if (! documents[i]->is_valid || doc->file_name == NULL) continue;
 
-		docname = get_real_path_from_utf8(doc->file_name);
-		if (! docname) continue;
-
-		if (filenamecmp(realname, docname) == 0)
+		if (filenamecmp(utf8_filename, doc->file_name) == 0)
 		{
 			ret = i;
-			g_free(docname);
 			break;
 		}
-		g_free(docname);
 	}
-	g_free(realname);
+	if (ret == -1)
+	{
+		/* Now try matching based on the realpath(), which is unique per file on disk */
+		gchar *realname = get_real_path_from_utf8(utf8_filename);
+
+		ret = document_find_by_realpath(realname);
+		g_free(realname);
+	}
 	return ret;
 }
 
@@ -344,6 +361,7 @@ static void init_doc_struct(GeanyDocument *new_doc)
 	new_doc->mtime = 0;
 	new_doc->changed = FALSE;
 	new_doc->last_check = time(NULL);
+	new_doc->real_path = NULL;
 
 	full_doc->tag_store = NULL;
 	full_doc->tag_tree = NULL;
@@ -441,6 +459,17 @@ static ScintillaObject *create_new_sci(gint new_idx)
 }
 
 
+static void set_filename(GeanyDocument *this, const gchar *utf8_filename)
+{
+	g_free(this->file_name);
+	this->file_name = g_strdup(utf8_filename);
+
+	g_free(this->real_path);
+	this->real_path = utils_get_locale_from_utf8(utf8_filename);
+	setptr(this->real_path, tm_get_real_path(this->real_path));
+}
+
+
 /* Creates a new document and editor, adding a tab in the notebook.
  * @return The index of the created document */
 static gint document_create(const gchar *utf8_filename)
@@ -470,7 +499,7 @@ static gint document_create(const gchar *utf8_filename)
 	this = documents[new_idx];
 	init_doc_struct(this);	/* initialize default document settings */
 
-	this->file_name = (utf8_filename) ? g_strdup(utf8_filename) : NULL;
+	set_filename(this, utf8_filename);
 
 	this->sci = create_new_sci(new_idx);
 
@@ -531,12 +560,11 @@ gboolean document_remove(guint page_num)
 		msgwin_status_add(_("File %s closed."), DOC_FILENAME(idx));
 		g_free(documents[idx]->encoding);
 		g_free(fdoc->saved_encoding.encoding);
-		g_free(documents[idx]->file_name);
+		set_filename(documents[idx], NULL);	/* free and NULL file_name, real_path */
 		tm_workspace_remove_object(documents[idx]->tm_file, TRUE, TRUE);
 
 		documents[idx]->is_valid = FALSE;
 		documents[idx]->sci = NULL;
-		documents[idx]->file_name = NULL;
 		documents[idx]->file_type = NULL;
 		documents[idx]->encoding = NULL;
 		documents[idx]->has_bom = FALSE;
@@ -1037,7 +1065,7 @@ gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean
 		utf8_filename = utils_get_utf8_from_locale(locale_filename);
 
 		/* if file is already open, switch to it and go */
-		idx = document_find_by_filename(utf8_filename, FALSE);
+		idx = document_find_by_filename(utf8_filename);
 		if (idx >= 0)
 		{
 			ui_add_recent_file(utf8_filename);	/* either add or reorder recent item */
@@ -1288,14 +1316,18 @@ static void get_line_column_from_pos(gint idx, guint byte_pos, gint *line, gint 
  * Save the %document specified by @a idx, detecting the filetype.
  *
  * @param idx The %document index for the file to save.
+ * @param utf8_fname The new name for the document, in UTF-8, or NULL.
  * @return @c TRUE if the file was saved or @c FALSE if the file could not be saved.
  * @see document_save_file().
  */
-gboolean document_save_file_as(gint idx)
+gboolean document_save_file_as(gint idx, const gchar *utf8_fname)
 {
 	gboolean ret;
 
 	if (! DOC_IDX_VALID(idx)) return FALSE;
+
+	if (utf8_fname)
+		set_filename(documents[idx], utf8_fname);
 
 	/* detect filetype */
 	if (FILETYPE_ID(documents[idx]->file_type) == GEANY_FILETYPES_NONE)

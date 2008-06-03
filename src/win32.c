@@ -406,8 +406,10 @@ gboolean win32_show_file_dialog(gboolean file_open, const gchar *initial_dir)
 	{
 		gint idx = document_get_cur_idx();
 		/* convert the resulting filename into UTF-8 */
-		documents[idx]->file_name = g_locale_to_utf8(fname, -1, NULL, NULL, NULL);
-		document_save_file_as(idx);
+		gchar *utf8 = g_locale_to_utf8(fname, -1, NULL, NULL, NULL);
+
+		document_save_file_as(idx, utf8);
+		g_free(utf8);
 	}
 	g_free(fname);
 	return (retval != 0);

@@ -534,7 +534,7 @@ gboolean msgwin_goto_compiler_file_line()
 			if (filename != NULL && line > -1)
 			{
 				gchar *utf8_filename = utils_get_utf8_from_locale(filename);
-				idx = document_find_by_filename(utf8_filename, FALSE);
+				idx = document_find_by_filename(utf8_filename);
 				g_free(utf8_filename);
 
 				if (idx < 0)	/* file not already open */
