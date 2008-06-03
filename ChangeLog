@@ -2,7 +2,7 @@
 
  * src/build.c, src/dialogs.c, src/document.c, src/document.h,
    src/msgwindow.c, src/navqueue.c, src/plugindata.h, src/plugins.c,
-   src/symbols.c, src/win32.c, plugins/vcdiff.c:
+   src/symbols.c, src/win32.c:
    Note: this breaks the plugin API for plugins using
    document_find_by_filename().
    Make document_find_by_filename() take only a utf8_filename argument,
@@ -12,6 +12,11 @@
    Add filename argument for document_save_file_as().
    Add GeanyDocument::real_path field, which if non-NULL indicates the
    file once existed on disk (not just as an unsaved document filename).
+ * plugins/vcdiff.c:
+   Fix using wrong encoding for document filename when doing a
+   directory diff.
+   Replace find_by_filename() with p_document->find_by_filename() (now
+   it does the same job).
 
 
 2008-06-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

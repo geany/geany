@@ -248,22 +248,8 @@ static void* get_cmd_env(gint cmd_type, gboolean cmd, const gchar* filename, int
 }
 
 
-static int find_by_filename(const gchar* filename)
-{
-	guint i;
-
-	for (i = 0; i < documents_array->len; i++)
-	{
-		if (documents[i]->is_valid && documents[i]->file_name &&
-			strcmp(documents[i]->file_name, filename) == 0)
-			return i;
-	}
-	return -1;
-}
-
-
-/* name_prefix should be in UTF-8, and can have a path. */
-static void show_output(const gchar *std_output, const gchar *name_prefix,
+/* utf8_name_prefix can have a path. */
+static void show_output(const gchar *std_output, const gchar *utf8_name_prefix,
 		const gchar *force_encoding)
 {
 	gchar	*text, *detect_enc = NULL;
@@ -271,7 +257,7 @@ static void show_output(const gchar *std_output, const gchar *name_prefix,
 	GtkNotebook *book;
 	gchar	*filename;
 
-	filename = g_path_get_basename(name_prefix);
+	filename = g_path_get_basename(utf8_name_prefix);
 	setptr(filename, g_strconcat(filename, ".vc.diff", NULL));
 
 	/* need to convert input text from the encoding of the original file into
@@ -287,7 +273,7 @@ static void show_output(const gchar *std_output, const gchar *name_prefix,
 	}
 	if (text)
 	{
-		idx = find_by_filename(filename);
+		idx = p_document->find_by_filename(filename);
 		if ( idx == -1)
 		{
 			GeanyFiletype *ft = p_filetypes->lookup_by_name("Diff");
@@ -416,6 +402,7 @@ static void vcdirectory_activated(GtkMenuItem *menuitem, gpointer gdata)
 	text = make_diff(base_name, VC_COMMAND_DIFF_DIR);
 	if (text)
 	{
+		setptr(base_name, p_utils->get_utf8_from_locale(base_name));
 		show_output(text, base_name, NULL);
 		g_free(text);
 	}
