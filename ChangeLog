@@ -1,3 +1,9 @@
+2008-06-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/main.c:
+   Fix slightly wrong preprocessor checks.
+
+
 2008-06-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/documentprivate.h, src/prefs.c, src/plugindata.h,

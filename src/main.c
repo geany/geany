@@ -35,7 +35,7 @@
 
 #include "geany.h"
 
-#if HAVE_LOCALE_H
+#ifdef HAVE_LOCALE_H
 # include <locale.h>
 #endif
 
@@ -455,7 +455,7 @@ static void locale_init(void)
 #ifdef ENABLE_NLS
 	gchar *locale_dir = NULL;
 
-#if HAVE_LOCALE_H
+#ifdef HAVE_LOCALE_H
 	setlocale(LC_ALL, "");
 #endif
 
