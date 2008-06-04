@@ -33,16 +33,15 @@ LIBTOOL="$LIBTOOL --silent"
 # autoscan start
 
 # Checks for header files.
-AC_CHECK_HEADERS([fcntl.h fnmatch.h glob.h libintl.h limits.h regex.h stddef.h stdlib.h string.h sys/time.h unistd.h])
+AC_CHECK_HEADERS([fcntl.h fnmatch.h glob.h regex.h stdlib.h sys/time.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_OFF_T
 AC_TYPE_SIZE_T
-AC_HEADER_TIME
 AC_STRUCT_TM
 
 # Checks for library functions.
-AC_CHECK_FUNCS([gethostname ftruncate fgetpos getcwd isascii mblen memset mkstemp realpath regcomp strcasecmp strchr strdup strerror strrchr strstr strtol])
+AC_CHECK_FUNCS([gethostname ftruncate fgetpos mkstemp regcomp strerror strstr])
 
 # autoscan end
 

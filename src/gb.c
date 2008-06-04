@@ -30,9 +30,6 @@
 #include <time.h>
 #include <signal.h>
 #include <unistd.h>
-#ifdef HAVE_FCNTL_H
-	#include <fcntl.h>
-#endif
 #include <gdk-pixbuf/gdk-pixdata.h>
 
 #define MAX_PICS 10

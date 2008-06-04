@@ -40,5 +40,6 @@ install-data-local:
 	$(INSTALL_DATA) $(top_srcdir)/COPYING $(DOCDIR)
 	$(INSTALL_DATA) $(top_srcdir)/AUTHORS $(DOCDIR)
 	$(INSTALL_DATA) $(top_srcdir)/TODO $(DOCDIR)
+	$(INSTALL_DATA) $(top_srcdir)/THANKS $(DOCDIR)
 	$(INSTALL_DATA) $(top_srcdir)/scintilla/License.txt $(DOCDIR)/ScintillaLicense.txt
 

@@ -29,16 +29,17 @@
 
 #include <gdk/gdkkeysyms.h>
 #include <string.h>
-#ifdef HAVE_SYS_STAT_H
-# include <sys/stat.h>
-#endif
-#ifdef TIME_WITH_SYS_TIME
+
+#ifdef HAVE_SYS_TIME_H
 # include <sys/time.h>
-#include <time.h>
 #endif
+#include <time.h>
+
 #ifdef HAVE_SYS_TYPES_H
 # include <sys/types.h>
 #endif
+
+/* gstdio.h also includes sys/stat.h */
 #include <glib/gstdio.h>
 
 #include "dialogs.h"
@@ -947,7 +948,7 @@ void dialogs_show_file_properties(gint idx)
 {
 	GtkWidget *dialog, *label, *table, *hbox, *image, *perm_table, *check, *vbox;
 	gchar *file_size, *title, *base_name, *time_changed, *time_modified, *time_accessed, *enctext;
-#if defined(HAVE_SYS_STAT_H) && defined(HAVE_SYS_TYPES_H)
+#ifdef HAVE_SYS_TYPES_H
 	struct stat st;
 	off_t filesize;
 	mode_t mode;
@@ -980,7 +981,7 @@ void dialogs_show_file_properties(gint idx)
 	}
 
 
-#if defined(HAVE_SYS_STAT_H) && defined(TIME_WITH_SYS_TIME) && defined(HAVE_SYS_TYPES_H)
+#ifdef HAVE_SYS_TYPES_H
 	locale_filename = utils_get_locale_from_utf8(documents[idx]->file_name);
 	if (g_stat(locale_filename, &st) == 0)
 	{

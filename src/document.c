@@ -28,26 +28,23 @@
 
 #include "geany.h"
 
-#ifdef TIME_WITH_SYS_TIME
-# include <time.h>
+#ifdef HAVE_SYS_TIME_H
 # include <sys/time.h>
 #endif
+#include <time.h>
+
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>
 
-#ifdef HAVE_SYS_STAT_H
-# include <sys/stat.h>
-#endif
 #ifdef HAVE_SYS_TYPES_H
 # include <sys/types.h>
 #endif
-#ifdef HAVE_FCNTL_H
-# include <fcntl.h>
-#endif
+
 #include <ctype.h>
 #include <stdlib.h>
 
+/* gstdio.h also includes sys/stat.h */
 #include <glib/gstdio.h>
 
 #include "document.h"

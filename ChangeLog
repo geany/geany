@@ -3,6 +3,13 @@
  * src/dialogs.c:
    Restore the previous state of main_status.quitting status when asking
    for reload a changed file instead of setting it to true.
+ * src/dialogs.c, src/document.c:
+   Change preprocessor checks for sys/time.h and remove unnecessary
+   sys/stat.h check.
+ * configure.in, src/gb.c:
+   Remove useless or unused configure checks.
+ * doc/Makefile.am:
+   Install THANKS file by default.
 
 
 2008-06-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
