@@ -536,8 +536,8 @@ gboolean document_remove(guint page_num)
 		{
 			return FALSE;
 		}
-		/* TODO: check g_file_test(documents[idx]->real_name, G_FILE_TEST_EXISTS) */
-		if (! main_status.closing_all && g_path_is_absolute(DOC_FILENAME(idx)))
+		/* Checking real_path makes it likely the file exists on disk */
+		if (! main_status.closing_all && documents[idx]->real_path != NULL)
 			ui_add_recent_file(documents[idx]->file_name);
 
 		notebook_remove_page(page_num);
