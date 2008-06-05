@@ -410,7 +410,6 @@ static void handle_save_as(const gchar *utf8_filename, gboolean open_new_tab,
 			/* create a new tm_source_file object otherwise tagmanager won't work correctly */
 			tm_workspace_remove_object(documents[idx]->tm_file, TRUE, TRUE);
 			documents[idx]->tm_file = NULL;
-			g_free(documents[idx]->file_name);
 		}
 		document_save_file_as(idx, utf8_filename);
 	}
