@@ -70,10 +70,10 @@ typedef struct GeanyDocument
 	gboolean		 is_valid;
 	/** Whether this %document support source code symbols(tags) to show in the sidebar. */
 	gboolean		 has_tags;
-	/** The UTF-8 encoded file name. Be careful glibc and GLib functions expect the locale
-	 * representation of the file name which can be different from this.
-	 * For conversion into locale encoding for use with file functions of GLib, you can use
-	 * @ref utils_get_locale_from_utf8.
+	/** The UTF-8 encoded file name.
+	 * Be careful; glibc and GLib file functions expect the locale representation of the
+	 * file name which can be different from this.
+	 * For conversion into locale encoding, you can use @ref utils_get_locale_from_utf8().
 	 * @see real_path. */
 	gchar 			*file_name;
 	/** The encoding of the %document, must be a valid string representation of an encoding, can
@@ -109,7 +109,9 @@ typedef struct GeanyDocument
 	 * If non-NULL, this indicates the file once existed on disk (not just as an
 	 * unsaved document with a filename set).
 	 *
-	 * @note This is the same as: @c tm_get_real_path(doc->file_name); */
+	 * @note This is only assigned after a successful save or open - it should
+	 * not be set elsewhere.
+	 * @see file_name. */
 	gchar 			*real_path;
 }
 GeanyDocument;
