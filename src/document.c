@@ -879,9 +879,10 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_f
 		tmp_enc_idx == GEANY_ENCODING_UTF_7 || /* filter out UTF-7/8 and None where no NULL bytes */
 		tmp_enc_idx == GEANY_ENCODING_NONE))   /* are allowed */
 	{
-#define warn_msg _("The file \"%s\" could not be opened properly and has been truncated. " \
-				"This can occur if the file contains a NULL byte. " \
-				"Be aware that saving it can cause data loss.\nThe file was set to read-only.")
+		const gchar *warn_msg = _(
+			"The file \"%s\" could not be opened properly and has been truncated. " \
+			"This can occur if the file contains a NULL byte. " \
+			"Be aware that saving it can cause data loss.\nThe file was set to read-only.");
 
 		if (main_status.main_window_realized)
 			dialogs_show_msgbox(GTK_MESSAGE_WARNING, warn_msg, utf8_filename);
