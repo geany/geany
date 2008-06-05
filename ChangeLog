@@ -1,3 +1,10 @@
+2008-06-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/document.c:
+   Only set GeanyDocument::real_path when the file exists on disk -
+   after a successful save or open.
+
+
 2008-06-04  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/dialogs.c:

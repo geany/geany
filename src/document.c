@@ -456,17 +456,6 @@ static ScintillaObject *create_new_sci(gint new_idx)
 }
 
 
-static void set_filename(GeanyDocument *this, const gchar *utf8_filename)
-{
-	g_free(this->file_name);
-	this->file_name = g_strdup(utf8_filename);
-
-	g_free(this->real_path);
-	this->real_path = utils_get_locale_from_utf8(utf8_filename);
-	setptr(this->real_path, tm_get_real_path(this->real_path));
-}
-
-
 /* Creates a new document and editor, adding a tab in the notebook.
  * @return The index of the created document */
 static gint document_create(const gchar *utf8_filename)
@@ -496,7 +485,7 @@ static gint document_create(const gchar *utf8_filename)
 	this = documents[new_idx];
 	init_doc_struct(this);	/* initialize default document settings */
 
-	set_filename(this, utf8_filename);
+	this->file_name = g_strdup(utf8_filename);
 
 	this->sci = create_new_sci(new_idx);
 
@@ -557,11 +546,14 @@ gboolean document_remove(guint page_num)
 		msgwin_status_add(_("File %s closed."), DOC_FILENAME(idx));
 		g_free(documents[idx]->encoding);
 		g_free(fdoc->saved_encoding.encoding);
-		set_filename(documents[idx], NULL);	/* free and NULL file_name, real_path */
+		g_free(documents[idx]->file_name);
+		g_free(documents[idx]->real_path);
 		tm_workspace_remove_object(documents[idx]->tm_file, TRUE, TRUE);
 
 		documents[idx]->is_valid = FALSE;
 		documents[idx]->sci = NULL;
+		documents[idx]->file_name = NULL;
+		documents[idx]->real_path = NULL;
 		documents[idx]->file_type = NULL;
 		documents[idx]->encoding = NULL;
 		documents[idx]->has_bom = FALSE;
@@ -1123,6 +1115,10 @@ gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean
 
 	if (! reload)
 	{
+		/* file exists on disk, set real_path */
+		g_free(documents[idx]->real_path);
+		documents[idx]->real_path = get_real_path_from_utf8(documents[idx]->file_name);
+
 		/* "the" SCI signal (connect after initial setup(i.e. adding text)) */
 		g_signal_connect((GtkWidget*) documents[idx]->sci, "sci-notify",
 					G_CALLBACK(on_editor_notification), GINT_TO_POINTER(idx));
@@ -1324,7 +1320,10 @@ gboolean document_save_file_as(gint idx, const gchar *utf8_fname)
 	if (! DOC_IDX_VALID(idx)) return FALSE;
 
 	if (utf8_fname)
-		set_filename(documents[idx], utf8_fname);
+	{
+		g_free(documents[idx]->file_name);
+		documents[idx]->file_name = g_strdup(utf8_fname);
+	}
 
 	/* detect filetype */
 	if (FILETYPE_ID(documents[idx]->file_type) == GEANY_FILETYPES_NONE)
@@ -1526,6 +1525,10 @@ gboolean document_save_file(gint idx, gboolean force)
 		utils_beep();
 		return FALSE;
 	}
+
+	/* now the file is on disk, set real_path */
+	g_free(documents[idx]->real_path);
+	documents[idx]->real_path = get_real_path_from_utf8(documents[idx]->file_name);
 
 	/* store the opened encoding for undo/redo */
 	store_saved_encoding(idx);
