@@ -25,9 +25,7 @@
 #if defined (HAVE_TYPES_H)
 # include <types.h>	    /* to declare off_t on some hosts */
 #endif
-#if defined (HAVE_UNISTD_H)
-# include <unistd.h>	/* to declare close (), ftruncate (), truncate () */
-#endif
+
 
 /*  These header files provide for the functions necessary to do file
  *  truncation.

@@ -109,8 +109,7 @@ def configure(conf):
     conf_check_header('sys/time.h')
     conf_check_header('sys/types.h')
     conf_check_header('sys/stat.h')
-    conf_check_header('unistd.h')
-    conf.define('HAVE_STDLIB', 1) # are there systems without stdlib.h?
+    conf.define('HAVE_STDLIB_H', 1) # are there systems without stdlib.h?
     conf.define('STDC_HEADERS', 1) # an optimistic guess ;-)
 
     if Params.g_options.gnu_regex:

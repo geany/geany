@@ -3,6 +3,9 @@
  * Makefile.am, waf, wscript, scripts/wafinit.sh:
    Add alternative build system: Waf.
    Use wafinit.sh to create a Makefile and configure files.
+ * configure.in, wscript, tagmanager/entry.c:
+   Remove check for unistd.h, assume it is available (already often
+   used without checking).
 
 
 2008-06-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

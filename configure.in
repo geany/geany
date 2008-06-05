@@ -33,7 +33,7 @@ LIBTOOL="$LIBTOOL --silent"
 # autoscan start
 
 # Checks for header files.
-AC_CHECK_HEADERS([fcntl.h fnmatch.h glob.h regex.h stdlib.h sys/time.h unistd.h])
+AC_CHECK_HEADERS([fcntl.h fnmatch.h glob.h regex.h stdlib.h sys/time.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_OFF_T
