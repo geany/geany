@@ -3,6 +3,9 @@
  * src/document.c:
    Only set GeanyDocument::real_path when the file exists on disk -
    after a successful save or open.
+ * src/keyfile.c:
+   Only save session documents that have existed on disk (don't save
+   documents with a filename set but have never been saved).
 
 
 2008-06-04  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
