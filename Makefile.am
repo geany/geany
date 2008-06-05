@@ -22,6 +22,7 @@ SYS_DATA_FILES = \
 
 EXTRA_DIST = \
 	autogen.sh \
+	wscript \
 	geany.desktop.in \
 	geany.pc.in \
 	geany.spec \
