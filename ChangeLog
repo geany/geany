@@ -3,6 +3,9 @@
  * src/ui_utils.c:
    Display current file position in the status bar when compiled
    with GEANY_DEBUG.
+ * configure.in, Makefile.am, geany.desktop.in.in, geany.desktop.in:
+   Rename geany.desktop.in.in in geany.desktop.in as we need to
+   process it only once.
 
 
 2008-06-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
