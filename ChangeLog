@@ -1,3 +1,10 @@
+2008-06-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/ui_utils.c:
+   Display current file position in the status bar when compiled
+   with GEANY_DEBUG.
+
+
 2008-06-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/utils.c:

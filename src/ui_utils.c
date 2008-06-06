@@ -188,6 +188,11 @@ void ui_update_statusbar(gint idx, gint pos)
 		g_string_append_printf(stats_str, _("scope: %s"),
 			cur_tag);
 
+#ifdef GEANY_DEBUG
+		g_string_append(stats_str, sp);
+		g_string_append_printf(stats_str, _("pos: %d"), pos);
+#endif
+
 		/* can be overridden by status messages */
 		set_statusbar(stats_str->str, TRUE);
 	}
