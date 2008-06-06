@@ -307,17 +307,30 @@ gboolean utils_check_disk_status(gint idx, gboolean force)
 	gboolean ret = FALSE;
 
 	if (file_prefs.disk_check_timeout == 0) return FALSE;
-	if (idx == -1 || documents[idx]->file_name == NULL) return FALSE;
+	if (! DOC_IDX_VALID(idx)) return FALSE;
+	/* ignore documents that have never been saved to disk */
+	if (documents[idx]->real_path == NULL) return FALSE;
 
 	t = time(NULL);
 
 	if (! force && documents[idx]->last_check > (t - file_prefs.disk_check_timeout))
 		return FALSE;
 
+	documents[idx]->last_check = t;
+
 	locale_filename = utils_get_locale_from_utf8(documents[idx]->file_name);
 	if (g_stat(locale_filename, &st) != 0)
 	{
-		/* TODO: warn user file on disk is missing */
+		/* file is missing - set unsaved state */
+		documents[idx]->changed = TRUE;
+		document_set_text_changed(idx);
+
+		if (dialogs_show_question_full(NULL, GTK_STOCK_SAVE, GTK_STOCK_CANCEL,
+			_("Try to resave the file?"),
+			_("File \"%s\" was not found on disk!"), documents[idx]->file_name))
+		{
+			dialogs_show_save_as();
+		}
 	}
 	else if (documents[idx]->mtime > t || st.st_mtime > t)
 	{
