@@ -78,9 +78,9 @@ static const gchar* CVS_CMD_DIFF_PROJECT[] = {"cvs", "diff", "-u", NULL};
 static void* CVS_COMMANDS[] = { CVS_CMD_DIFF_FILE, CVS_CMD_DIFF_DIR, CVS_CMD_DIFF_PROJECT };
 
 
-static const gchar* GIT_CMD_DIFF_FILE[] = {"git", "diff", BASE_FILENAME,  NULL};
-static const gchar* GIT_CMD_DIFF_DIR[]  = {"git", "diff", NULL};
-static const gchar* GIT_CMD_DIFF_PROJECT[] = {"git", "diff", NULL};
+static const gchar* GIT_CMD_DIFF_FILE[] = {"git", "diff", "HEAD", "--", BASE_FILENAME,  NULL};
+static const gchar* GIT_CMD_DIFF_DIR[]  = {"git", "diff", "HEAD", NULL};
+static const gchar* GIT_CMD_DIFF_PROJECT[] = {"git", "diff", "HEAD", NULL};
 
 static const gchar* GIT_ENV_DIFF_FILE[] = {"PAGER=cat", NULL};
 static const gchar* GIT_ENV_DIFF_DIR[]  = {"PAGER=cat", NULL};

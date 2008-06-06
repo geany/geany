@@ -6,6 +6,9 @@
  * configure.in, Makefile.am, geany.desktop.in.in, geany.desktop.in:
    Rename geany.desktop.in.in in geany.desktop.in as we need to
    process it only once.
+ * plugins/vcdiff.c:
+   Fix diff output when files were manually added with 'git add'
+   in GIT repositories (patch by Yura Siamashka).
 
 
 2008-06-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
