@@ -3,6 +3,9 @@
  * src/utils.c:
    Check that the current file is still on disk as well as checking the
    modification time.
+   Also fix the document last_check assignment so that the disk is only
+   polled every file_prefs.disk_check_timeout seconds (not sure how
+   this got missing - maybe it was my fault?).
 
 
 2008-06-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
