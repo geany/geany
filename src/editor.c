@@ -171,15 +171,18 @@ static void on_margin_click(ScintillaObject *sci, SCNotification *nt)
 }
 
 
-/* Called before Scintilla repaints.
- * Note: Any GUI updates that don't affect scintilla should be done in on_painted(). */
 static void on_update_ui(gint idx, G_GNUC_UNUSED SCNotification *nt)
 {
 	ScintillaObject *sci = documents[idx]->sci;
 	gint pos = sci_get_current_position(sci);
 
+	/* undo / redo menu update */
+	ui_update_popup_reundo_items(idx);
+
 	/* brace highlighting */
 	editor_highlight_braces(sci, pos);
+
+	ui_update_statusbar(idx, pos);
 
 	/* Visible lines are only laid out accurately once [SCN_UPDATEUI] is sent,
 	 * so we need to only call sci_scroll_to_line here, because the document
@@ -204,20 +207,6 @@ static void on_update_ui(gint idx, G_GNUC_UNUSED SCNotification *nt)
 	sci_get_style_at(sci, pos);
 	}
 #endif
-}
-
-
-/* Any GUI updates that don't affect scintilla should be done here to
- * appear more responsive to typing. */
-static void on_painted(gint idx, G_GNUC_UNUSED SCNotification *nt)
-{
-	ScintillaObject *sci = documents[idx]->sci;
-	gint pos = sci_get_current_position(sci);
-
-	/* undo / redo menu update */
-	ui_update_popup_reundo_items(idx);
-
-	ui_update_statusbar(idx, pos);
 }
 
 
@@ -465,10 +454,6 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 
 		case SCN_UPDATEUI:
 			on_update_ui(idx, nt);
-			break;
-
-		case SCN_PAINTED:
-			on_painted(idx, nt);
 			break;
 
  		case SCN_MODIFIED:

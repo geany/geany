@@ -23,6 +23,9 @@
    Also fix the document last_check assignment so that the disk is only
    polled every file_prefs.disk_check_timeout seconds (not sure how
    this got missing - maybe it was my fault?).
+ * src/editor.c:
+   Revert use of SCN_PAINTED - this is called much more often than
+   SCN_UPDATEUI and slows down Geany.
 
 
 2008-06-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
