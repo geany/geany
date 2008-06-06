@@ -38,8 +38,8 @@ Requires WAF SVN r3530 (or later) and Python (>= 2.4).
 """
 
 
-import Params, Configure, Common, Runner, misc, Options
-import sys, os, subprocess
+import Params, Configure, Common, Runner, misc
+import sys, os, subprocess, shutil
 
 
 APPNAME = 'geany'
@@ -199,6 +199,7 @@ def set_options(opt):
 
 def build(bld):
     def build_update_po(bld):
+        # TODO: rework this code to not alter .po files on normal build
         # the following code was taken from midori's WAF script, thanks
         os.chdir('./po')
         try:
@@ -282,11 +283,6 @@ def build(bld):
         build_plugin('filebrowser')
         build_plugin('htmlchars')
         build_plugin('vcdiff')
-
-    # little hack'ish: hard link geany.desktop.in.in to geany.desktop.in as intltool_in doesn't
-    # like a .desktop.in.in but we want to keep it for autotools compatibility
-    if not os.path.exists('geany.desktop.in'):
-        os.link('geany.desktop.in.in', 'geany.desktop.in')
 
     # geany.desktop
     obj         = bld.create_obj('intltool_in')
@@ -383,23 +379,16 @@ def shutdown():
             print 'Icon cache not updated. After install, run this:'
             print 'gtk-update-icon-cache -q -f -t %s' % dir
 
-
-def init():
     if Params.g_options.apidoc:
-        # FIXME remove this very ugly hack and find a way to generate the
-        # Doxyfile in doc/ and not in build/doc/
-        if not os.path.exists('doc/Doxyfile'):
-            os.symlink(os.path.abspath(blddir) + '/default/doc/Doxyfile',  'doc/Doxyfile')
-
+        doxyfile = os.path.join(Params.g_build.m_srcnode.abspath( \
+            Params.g_build.env()), 'doc', 'Doxyfile')
         os.chdir('doc')
-        ret = launch('doxygen', 'Generating API reference documentation')
-        sys.exit(ret)
+        launch('doxygen ' + doxyfile, 'Generating API reference documentation')
 
     if Params.g_options.htmldoc:
         os.chdir('doc')
-        ret = launch('rst2html -stg --stylesheet=geany.css geany.txt geany.html',
+        launch('rst2html -stg --stylesheet=geany.css geany.txt geany.html',
             'Generating HTML documentation')
-        sys.exit(ret)
 
 
 # Simple function to execute a command and print its exit status

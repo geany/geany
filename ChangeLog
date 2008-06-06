@@ -8,7 +8,11 @@
    process it only once.
  * plugins/vcdiff.c:
    Fix diff output when files were manually added with 'git add'
-   in GIT repositories (patch by Yura Siamashka).
+   in GIT repositories (patch by Yura Siamashka, thanks).
+ * wscript:
+   Remove unused imports.
+   Remove hacks for Doxyfile.in and geany.desktop.in.
+   Move htmldoc and apidoc targets into shutdown().
 
 
 2008-06-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
