@@ -1126,7 +1126,7 @@ static gboolean on_tree_view_button_press_event(
 					GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
 
 			str = g_strdup_printf(
-					_("Type the combination of the keys you want to use for \"%s\""), name);
+					_("Type the combination of the keys you want to use for \"%s\"."), name);
 			label = gtk_label_new(str);
 			gtk_misc_set_padding(GTK_MISC(label), 5, 10);
 			gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);

@@ -1,3 +1,8 @@
+2008-06-07  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * src/prefs.c: Update of a string for adding a missing full stop.
+
+
 2008-06-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/ui_utils.c:
