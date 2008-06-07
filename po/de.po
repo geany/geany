@@ -6,7 +6,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: geany 0.14\n"
+"Project-Id-Version: geany 0.15svn\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-04-10 22:57+0200\n"
 "PO-Revision-Date: 2008-04-09 23:06+0100\n"
@@ -3153,7 +3153,7 @@ msgstr "Tasten festlegen"
 #: ../src/prefs.c:1093
 #, c-format
 msgid "Type the combination of the keys you want to use for \"%s\""
-msgstr "Welche Tastenkombination soll für \"%s\" benutzt werden?"
+msgstr "Drücken Sie die gewünschte Tastenkombination für \"%s\"."
 
 #: ../src/prefs.c:1280
 msgid "_Override"
