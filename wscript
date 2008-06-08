@@ -49,6 +49,50 @@ srcdir = '.'
 blddir = 'build'
 
 
+tagmanager_sources = [
+    'tagmanager/args.c', 'tagmanager/asm.c', 'tagmanager/basic.c', 'tagmanager/c.c',
+    'tagmanager/conf.c', 'tagmanager/css.c', 'tagmanager/ctags.c', 'tagmanager/diff.c',
+    'tagmanager/docbook.c', 'tagmanager/entry.c', 'tagmanager/fortran.c', 'tagmanager/get.c',
+    'tagmanager/haskell.c', 'tagmanager/haxe.c', 'tagmanager/html.c', 'tagmanager/js.c',
+    'tagmanager/keyword.c', 'tagmanager/latex.c', 'tagmanager/lregex.c', 'tagmanager/lua.c',
+    'tagmanager/make.c', 'tagmanager/options.c', 'tagmanager/parse.c', 'tagmanager/pascal.c',
+    'tagmanager/perl.c', 'tagmanager/php.c', 'tagmanager/python.c', 'tagmanager/read.c',
+    'tagmanager/rest.c', 'tagmanager/ruby.c', 'tagmanager/sh.c', 'tagmanager/sort.c',
+    'tagmanager/sql.c', 'tagmanager/strlist.c', 'tagmanager/tcl.c', 'tagmanager/tm_file_entry.c',
+    'tagmanager/tm_project.c', 'tagmanager/tm_source_file.c', 'tagmanager/tm_symbol.c',
+    'tagmanager/tm_tag.c', 'tagmanager/tm_tagmanager.c', 'tagmanager/tm_work_object.c',
+    'tagmanager/tm_workspace.c', 'tagmanager/vhdl.c', 'tagmanager/vstring.c' ]
+
+scintilla_sources = [
+    'scintilla/AutoComplete.cxx', 'scintilla/CallTip.cxx', 'scintilla/CellBuffer.cxx',
+    'scintilla/CharClassify.cxx', 'scintilla/ContractionState.cxx', 'scintilla/Decoration.cxx',
+    'scintilla/DocumentAccessor.cxx', 'scintilla/Document.cxx', 'scintilla/Editor.cxx',
+    'scintilla/ExternalLexer.cxx',  'scintilla/Indicator.cxx',  'scintilla/KeyMap.cxx',
+    'scintilla/KeyWords.cxx', 'scintilla/LexAsm.cxx', 'scintilla/LexBash.cxx',
+    'scintilla/LexBasic.cxx', 'scintilla/LexCaml.cxx', 'scintilla/LexCPP.cxx',
+    'scintilla/LexCrontab.cxx', 'scintilla/LexCSS.cxx', 'scintilla/LexD.cxx',
+    'scintilla/LexFortran.cxx', 'scintilla/LexHaskell.cxx', 'scintilla/LexHTML.cxx',
+    'scintilla/LexLua.cxx', 'scintilla/LexOMS.cxx', 'scintilla/LexOthers.cxx',
+    'scintilla/LexPascal.cxx', 'scintilla/LexPerl.cxx', 'scintilla/LexPython.cxx',
+    'scintilla/LexRuby.cxx', 'scintilla/LexSQL.cxx', 'scintilla/LexTCL.cxx',
+    'scintilla/LexVHDL.cxx', 'scintilla/LineMarker.cxx', 'scintilla/PlatGTK.cxx',
+    'scintilla/PositionCache.cxx', 'scintilla/PropSet.cxx', 'scintilla/RESearch.cxx',
+    'scintilla/RunStyles.cxx', 'scintilla/ScintillaBase.cxx', 'scintilla/ScintillaGTK.cxx',
+    'scintilla/scintilla-marshal.c', 'scintilla/StyleContext.cxx', 'scintilla/Style.cxx',
+    'scintilla/UniConversion.cxx', 'scintilla/ViewStyle.cxx', 'scintilla/WindowAccessor.cxx',
+    'scintilla/XPM.cxx' ]
+
+geany_sources = [
+    'src/about.c', 'src/build.c', 'src/callbacks.c', 'src/dialogs.c', 'src/document.c',
+    'src/editor.c', 'src/encodings.c', 'src/filetypes.c', 'src/geanyobject.c',
+    'src/geanywraplabel.c', 'src/highlighting.c', 'src/interface.c', 'src/keybindings.c',
+    'src/keyfile.c', 'src/main.c', 'src/msgwindow.c', 'src/navqueue.c', 'src/notebook.c',
+    'src/plugins.c', 'src/prefix.c', 'src/prefs.c', 'src/printing.c', 'src/project.c',
+    'src/sciwrappers.c', 'src/search.c', 'src/socket.c', 'src/support.c', 'src/symbols.c',
+    'src/templates.c', 'src/tools.c', 'src/treeviews.c', 'src/ui_utils.c', 'src/utils.c' ]
+
+
+
 def configure(conf):
     def conf_get_svn_rev():
         try:
@@ -174,8 +218,8 @@ def configure(conf):
         print_message('Compiling Subversion revision', svn_rev)
         conf.env.append_value('CCFLAGS', '-g -DGEANY_DEBUG')
 
-	conf.env.append_value('CCFLAGS', '-DHAVE_CONFIG_H')
-    conf.env.append_value('CXXFLAGS', ' -DNDEBUG -Os -DGTK -DGTK2 -DSCI_LEXER -DG_THREADS_IMPL_NONE')
+    conf.env.append_value('CCFLAGS', '-DHAVE_CONFIG_H')
+    conf.env.append_value('CXXFLAGS', '-DNDEBUG -Os -DGTK -DGTK2 -DSCI_LEXER -DG_THREADS_IMPL_NONE')
 
 
 def set_options(opt):
@@ -222,39 +266,38 @@ def build(bld):
 
     # Tagmanager
     if bld.env['USE_INCLUDED_REGEX'] == 1:
-        excludes = ''
-    else:
-        excludes = ['regex.c']
+        tagmanager_sources.append('tagmanager/regex.c')
     obj = bld.new_task_gen('cc', 'staticlib')
-    obj.find_sources_in_dirs('tagmanager/', excludes)
-    obj.name        = 'tagmanager'
-    obj.target      = 'tagmanager'
-    obj.includes    = '. tagmanager/ tagmanager/include/'
-    obj.uselib      = 'GTK'
-    obj.inst_var    = 0 # do not install this library
+    obj.name     = 'tagmanager'
+    obj.target   = 'tagmanager'
+    obj.source   = tagmanager_sources
+    obj.includes = '. tagmanager/ tagmanager/include/'
+    obj.uselib   = 'GTK'
+    obj.inst_var = 0 # do not install this library
 
     # Scintilla
     obj = bld.new_task_gen('cxx', 'staticlib')
     obj.features.append('cc')
-    obj.find_sources_in_dirs('scintilla/')
-    obj.name            = 'scintilla'
-    obj.target          = 'scintilla'
-    obj.includes        = 'scintilla/ scintilla/include/'
-    obj.uselib          = 'GTK'
-    obj.inst_var        = 0 # do not install this library
+    obj.name     = 'scintilla'
+    obj.target   = 'scintilla'
+    obj.source   = scintilla_sources
+    obj.includes = 'scintilla/ scintilla/include/'
+    obj.uselib   = 'GTK'
+    obj.inst_var = 0 # do not install this library
 
     # Geany
-    excludes = ['win32.c', 'gb.c', 'images.c']
-    if bld.env['HAVE_VTE'] != 1:
-        excludes.append('vte.c')
+    if bld.env['HAVE_VTE'] == 1:
+        geany_sources.append('src/vte.c')
+    if sys.platform == "win32":
+        geany_sources.append('src/win32.c')
     obj = bld.new_task_gen('cxx', 'program')
     obj.features.append('cc')
-    obj.find_sources_in_dirs('src/', excludes)
-    obj.name            = 'geany'
-    obj.target          = 'geany'
-    obj.includes        = '. src/ scintilla/include/ tagmanager/include/'
-    obj.uselib          = 'GTK'
-    obj.uselib_local    = 'scintilla tagmanager'
+    obj.name         = 'geany'
+    obj.target       = 'geany'
+    obj.source       = geany_sources
+    obj.includes     = '. src/ scintilla/include/ tagmanager/include/'
+    obj.uselib       = 'GTK'
+    obj.uselib_local = 'scintilla tagmanager'
 
     # Plugins
     if bld.env['HAVE_PLUGINS'] == 1:

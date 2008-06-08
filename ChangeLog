@@ -19,6 +19,8 @@
    Don't make checks for header files and functions mandatory.
    Update some method names to latest API changes in Waf.
    Various other small fixes.
+   Fix indentation of two lines.
+   List source files explicitly to avoid compiling foreign source files.
  * scintilla/include/Scintilla.h, scintilla/include/Scintilla.iface,
    scintilla/ScintillaBase.cxx:
    Backport AutoCCancelled event implementation from Scintilla CVS.
