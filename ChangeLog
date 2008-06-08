@@ -1,3 +1,9 @@
+2008-06-07  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * THANKS, src/about.c: Added Anna Talianova to list of contributers for 
+   Czech translation. 
+   
+
 2008-06-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * doc/geany.html, doc/geany.html, src/encodings.c:
