@@ -9,6 +9,16 @@
    Use Python from CTags SVN.
    Adapt variable parsing code from the old parser code.
    Fix three bugs (see CTags bugs #1988026, 1988027 and 1988130).
+ * waf:
+   Update Waf to its latest SVN version.
+ * wscript:
+   Don't update po files on normal build, add target --update-po for
+   this task.
+   Fix wrong handling of CCFlags and CXXFlags which caused the build
+   to hang if CFLAGS were not already set.
+   Don't make checks for header files and functions mandatory.
+   Update some method names to latest API changes in Waf.
+   Various other small fixes.
 
 
 2008-06-07  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
