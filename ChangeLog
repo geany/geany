@@ -5,6 +5,10 @@
    libiconv (closes #1986134).
    Improve the regular expression for detecting encoding cookies to
    allow more variants (e.g. "encoding: utf-8").
+ * tagmanager/python.c:
+   Use Python from CTags SVN.
+   Adapt variable parsing code from the old parser code.
+   Fix three bugs (see CTags bugs #1988026, 1988027 and 1988130).
 
 
 2008-06-07  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

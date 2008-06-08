@@ -1,6 +1,7 @@
 /*
+*   $Id$
 *
-*   Copyright (c) 2000-2001, Darren Hiebert
+*   Copyright (c) 2000-2003, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
 *   GNU General Public License.
@@ -8,40 +9,58 @@
 *   This module contains functions for generating tags for Python language
 *   files.
 */
-
 /*
 *   INCLUDE FILES
 */
-#include "general.h"	/* must always come first */
-#include <glib.h>
+#include "general.h"  /* must always come first */
+
 #include <string.h>
 
-#include "parse.h"
+#include "entry.h"
+#include "options.h"
 #include "read.h"
+#include "main.h"
 #include "vstring.h"
 
 /*
 *   DATA DEFINITIONS
 */
 typedef enum {
-    K_CLASS, K_FUNCTION, K_METHOD, K_VARIABLE
+	K_CLASS, K_FUNCTION, K_MEMBER, K_VARIABLE
 } pythonKind;
 
-static kindOption PythonKinds [] = {
-    { TRUE, 'c', "class",    "classes" },
-    { TRUE, 'f', "function", "functions" },
-    { TRUE, 'm', "member", "methods" },
-    { TRUE, 'v', "variable", "variables" }
+static kindOption PythonKinds[] = {
+	{TRUE, 'c', "class",    "classes"},
+	{TRUE, 'f', "function", "functions"},
+	{TRUE, 'm', "member",   "class members"},
+    {TRUE, 'v', "variable", "variables"}
 };
 
-typedef struct _lastClass {
-	gchar *name;
-	gint indent;
-} lastClass;
+typedef struct NestingLevel NestingLevel;
+typedef struct NestingLevels NestingLevels;
+
+struct NestingLevel
+{
+	int indentation;
+	vString *name;
+	boolean is_class;
+};
+
+struct NestingLevels
+{
+	NestingLevel *levels;
+	int n;
+	int allocated;
+};
+
+static char const * const singletriple = "'''";
+static char const * const doubletriple = "\"\"\"";
 
 /*
 *   FUNCTION DEFINITIONS
 */
+
+#define vStringLast(vs) ((vs)->buffer[(vs)->length - 1])
 
 static boolean isIdentifierFirstCharacter (int c)
 {
@@ -53,181 +72,478 @@ static boolean isIdentifierCharacter (int c)
 	return (boolean) (isalnum (c) || c == '_');
 }
 
-
-/* remove all previous classes with more indent than the current one */
-static GList *clean_class_list(GList *list, gint indent)
+/* Given a string with the contents of a line directly after the "def" keyword,
+ * extract all relevant information and create a tag.
+ */
+static void makeFunctionTag (vString *const function,
+	vString *const parent, int is_class_parent)
 {
-	GList *tmp, *tmp2;
+	tagEntryInfo tag;
+	initTagEntry (&tag, vStringValue (function));
 
-	tmp = g_list_first(list);
-	while (tmp != NULL)
+	tag.kindName = "function";
+	tag.kind = 'f';
+
+	if (vStringLength (parent) > 0)
 	{
-		if (((lastClass*)tmp->data)->indent >= indent)
+		if (is_class_parent)
 		{
-			g_free(((lastClass*)tmp->data)->name);
-			g_free(tmp->data);
-			tmp2 = tmp->next;
-
-			list = g_list_remove(list, tmp->data);
-			tmp = tmp2;
+			tag.kindName = "member";
+			tag.kind = 'm';
+			tag.extensionFields.scope [0] = "class";
+			tag.extensionFields.scope [1] = vStringValue (parent);
 		}
 		else
 		{
-			tmp = tmp->next;
+			tag.extensionFields.scope [0] = "function";
+			tag.extensionFields.scope [1] = vStringValue (parent);
 		}
 	}
 
-	return list;
+	/* If a function starts with __, we mark it as file scope.
+	 * FIXME: What is the proper way to signal such attributes?
+	 * TODO: What does functions/classes starting with _ and __ mean in python?
+	 */
+	if (strncmp (vStringValue (function), "__", 2) == 0 &&
+		strcmp (vStringValue (function), "__init__") != 0)
+	{
+		tag.extensionFields.access = "private";
+		tag.isFileScope = TRUE;
+	}
+	else
+	{
+		tag.extensionFields.access = "public";
+	}
+	makeTagEntry (&tag);
 }
 
+/* Given a string with the contents of the line directly after the "class"
+ * keyword, extract all necessary information and create a tag.
+ */
+static void makeClassTag (vString *const class, vString *const inheritance,
+	vString *const parent, int is_class_parent)
+{
+	tagEntryInfo tag;
+	initTagEntry (&tag, vStringValue (class));
+	tag.kindName = "class";
+	tag.kind = 'c';
+	if (vStringLength (parent) > 0)
+	{
+		if (is_class_parent)
+		{
+			tag.extensionFields.scope [0] = "class";
+			tag.extensionFields.scope [1] = vStringValue (parent);
+		}
+		else
+		{
+			tag.extensionFields.scope [0] = "function";
+			tag.extensionFields.scope [1] = vStringValue (parent);
+		}
+	}
+	tag.extensionFields.inheritance = vStringValue (inheritance);
+	makeTagEntry (&tag);
+}
+
+static void makeVariableTag (vString *const var, vString *const parent)
+{
+	tagEntryInfo tag;
+	initTagEntry (&tag, vStringValue (var));
+	tag.kindName = "variable";
+	tag.kind = 'v';
+	if (vStringLength (parent) > 0)
+	{
+		tag.extensionFields.scope [0] = "class";
+		tag.extensionFields.scope [1] = vStringValue (parent);
+	}
+	makeTagEntry (&tag);
+}
+
+/* Skip a single or double quoted string. */
+static const char *skipString (const char *cp)
+{
+	const char *start = cp;
+	int escaped = 0;
+	for (cp++; *cp; cp++)
+	{
+		if (escaped)
+			escaped--;
+		else if (*cp == '\\')
+			escaped++;
+		else if (*cp == *start)
+			return cp + 1;
+	}
+	return cp;
+}
+
+/* Skip everything up to an identifier start. */
+static const char *skipEverything (const char *cp)
+{
+	for (; *cp; cp++)
+	{
+	    if (*cp == '"' || *cp == '\'')
+		{
+			cp = skipString(cp);
+			if (!*cp) break;
+		}
+		if (isIdentifierFirstCharacter ((int) *cp))
+			return cp;
+    }
+    return cp;
+}
+
+/* Skip an identifier. */
+static const char *skipIdentifier (const char *cp)
+{
+	while (isIdentifierCharacter ((int) *cp))
+		cp++;
+    return cp;
+}
+
+static const char *findDefinitionOrClass (const char *cp)
+{
+	while (*cp)
+	{
+		cp = skipEverything (cp);
+		if (!strncmp(cp, "def", 3) || !strncmp(cp, "class", 5))
+		{
+			return cp;
+		}
+		cp = skipIdentifier (cp);
+	}
+	return NULL;
+}
+
+static const char *skipSpace (const char *cp)
+{
+	while (isspace ((int) *cp))
+		++cp;
+	return cp;
+}
+
+/* Starting at ''cp'', parse an identifier into ''identifier''. */
+static const char *parseIdentifier (const char *cp, vString *const identifier)
+{
+	vStringClear (identifier);
+	while (isIdentifierCharacter ((int) *cp))
+	{
+		vStringPut (identifier, (int) *cp);
+		++cp;
+	}
+	vStringTerminate (identifier);
+	return cp;
+}
+
+static void parseClass (const char *cp, vString *const class,
+	vString *const parent, int is_class_parent)
+{
+	vString *const inheritance = vStringNew ();
+	vStringClear (inheritance);
+	cp = parseIdentifier (cp, class);
+	cp = skipSpace (cp);
+	if (*cp == '(')
+	{
+		++cp;
+		while (*cp != ')')
+		{
+			if (*cp == '\0')
+			{
+				/* Closing parenthesis can be in follow up line. */
+				cp = (const char *) fileReadLine ();
+				if (!cp) break;
+				vStringPut (inheritance, ' ');
+				continue;
+			}
+			vStringPut (inheritance, *cp);
+			++cp;
+		}
+		vStringTerminate (inheritance);
+	}
+	makeClassTag (class, inheritance, parent, is_class_parent);
+	vStringDelete (inheritance);
+}
+
+static void parseFunction (const char *cp, vString *const def,
+	vString *const parent, int is_class_parent)
+{
+	cp = parseIdentifier (cp, def);
+	makeFunctionTag (def, parent, is_class_parent);
+}
+
+/* Get the combined name of a nested symbol. Classes are separated with ".",
+ * functions with "/". For example this code:
+ * class MyClass:
+ *     def myFunction:
+ *         def SubFunction:
+ *             class SubClass:
+ *                 def Method:
+ *                     pass
+ * Would produce this string:
+ * MyClass.MyFunction/SubFunction/SubClass.Method
+ */
+static boolean constructParentString(NestingLevels *nls, int indent,
+	vString *result)
+{
+	int i;
+	NestingLevel *prev = NULL;
+	int is_class = FALSE;
+	vStringClear (result);
+	for (i = 0; i < nls->n; i++)
+	{
+		NestingLevel *nl = nls->levels + i;
+		if (indent <= nl->indentation)
+			break;
+		if (prev)
+		{
+			if (prev->is_class)
+				vStringCatS(result, ".");
+			else
+				vStringCatS(result, "/");
+		}
+		vStringCat(result, nl->name);
+		is_class = nl->is_class;
+		prev = nl;
+	}
+	return is_class;
+}
+
+/* check whether parent's indentation level is higher than the current level and if so, remove it */
+static void checkParent(NestingLevels *nls, int indent, vString *parent)
+{
+	int i;
+	NestingLevel *n;
+
+	for (i = 0; i < nls->n; i++)
+	{
+		n = nls->levels + i;
+		/* is there a better way to compare two vStrings? */
+		if (strcmp(vStringValue(parent), vStringValue(n->name)) == 0)
+		{
+			if (n && indent <= n->indentation)
+			{
+				/* invalidate this level by clearing its name */
+				vStringClear(n->name);
+			}
+			break;
+		}
+	}
+}
+
+static NestingLevels *newNestingLevels(void)
+{
+	NestingLevels *nls = xCalloc (1, NestingLevels);
+	return nls;
+}
+
+static void freeNestingLevels(NestingLevels *nls)
+{
+	int i;
+	for (i = 0; i < nls->allocated; i++)
+		vStringDelete(nls->levels[i].name);
+	if (nls->levels) eFree(nls->levels);
+	eFree(nls);
+}
+
+/* TODO: This is totally out of place in python.c, but strlist.h is not usable.
+ * Maybe should just move these three functions to a separate file, even if no
+ * other parser uses them.
+ */
+static void addNestingLevel(NestingLevels *nls, int indentation,
+	vString *name, boolean is_class)
+{
+	int i;
+	NestingLevel *nl = NULL;
+
+	for (i = 0; i < nls->n; i++)
+	{
+		nl = nls->levels + i;
+		if (indentation <= nl->indentation) break;
+	}
+	if (i == nls->n)
+	{
+		if (i >= nls->allocated)
+		{
+			nls->allocated++;
+			nls->levels = xRealloc(nls->levels,
+				nls->allocated, NestingLevel);
+			nls->levels[i].name = vStringNew();
+		}
+		nl = nls->levels + i;
+	}
+	nls->n = i + 1;
+
+	vStringCopy(nl->name, name);
+	nl->indentation = indentation;
+	nl->is_class = is_class;
+}
+
+/* Checks whether a triple string was quoted before.
+ */
+static boolean isTripleQuoted(char const *start, char const *end, char quote_char)
+{
+    char const *cp = start;
+
+	while (cp < end && *cp != quote_char)
+		cp++;
+
+	return (cp < end);
+}
+
+/* Return a pointer to the start of the next triple string, or NULL. Store
+ * the kind of triple string in "which" if the return is not NULL.
+ */
+static char *find_triple_start(char const *string, char const **which)
+{
+    char *s;
+    *which = NULL;
+    if ((s = strstr (string, doubletriple)))
+    {
+		/* prevent parsing quoted triple strings */
+        if (isTripleQuoted (string, s, '\''))
+			return NULL;
+
+		*which = doubletriple;
+    }
+    else if ((s = strstr (string, singletriple)))
+    {
+		/* prevent parsing quoted triple strings */
+        if (isTripleQuoted (string, s, '"'))
+			return NULL;
+
+        *which = singletriple;
+    }
+    return s;
+}
+
+/* Find the end of a triple string as pointed to by "which", and update "which"
+ * with any other triple strings following in the given string.
+ */
+static void find_triple_end(char const *string, char const **which)
+{
+    char const *s = string;
+    while (1)
+	{
+	    /* Check if the sting ends in the same line. */
+	    s = strstr (string, *which);
+		if (!s) break;
+		s += 3;
+		*which = NULL;
+		/* If yes, check if another one starts in the same line. */
+		s = find_triple_start(s, which);
+		if (!s) break;
+		s += 3;
+	}
+}
 
 static void findPythonTags (void)
 {
-    GList *parents = NULL, *tmp; /* list of classes which are around the token */
-    vString *name = vStringNew ();
-    gint indent;
-    const unsigned char *line;
-    boolean inMultilineString = FALSE;
-    boolean wasInMultilineString = FALSE;
-	lastClass *lastclass = NULL;
-    boolean inFunction = FALSE;
-    gint fn_indent = 0;
+	vString *const continuation = vStringNew ();
+	vString *const name = vStringNew ();
+	vString *const parent = vStringNew();
 
-    while ((line = fileReadLine ()) != NULL)
-    {
-	const unsigned char *cp = line;
-	indent = 0;
-	while (*cp != '\0')
+	NestingLevels *const nesting_levels = newNestingLevels();
+
+	const char *line;
+	int line_skip = 0;
+	char const *longStringLiteral = NULL;
+
+	while ((line = (const char *) fileReadLine ()) != NULL)
 	{
-	    if (*cp=='"' &&
-		strncmp ((const char*) cp, "\"\"\"", (size_t) 3) == 0)
-	    {
-		inMultilineString = (boolean) !inMultilineString;
-		if (! inMultilineString)
-			wasInMultilineString = TRUE;
-		cp += 3;
-	    }
-	    if (*cp=='\'' &&
-		strncmp ((const char*) cp, "'''", (size_t) 3) == 0)
-	    {
-		inMultilineString = (boolean) !inMultilineString;
-		if (! inMultilineString)
-			wasInMultilineString = TRUE;
-		cp += 3;
-	    }
+		const char *cp = line;
+		char *longstring;
+		const char *keyword;
+		int indent;
 
-		if (*cp == '\0' || wasInMultilineString)
+		cp = skipSpace (cp);
+
+		if (*cp == '\0')  /* skip blank line */
+			continue;
+
+		/* skip comment if we are not inside a triple string */
+		if (*cp == '#' && ! longStringLiteral)
+			continue;
+
+		/* Deal with line continuation. */
+		if (!line_skip) vStringClear(continuation);
+		vStringCatS(continuation, line);
+		vStringStripTrailing(continuation);
+		if (vStringLast(continuation) == '\\')
 		{
-			wasInMultilineString = FALSE;
-			break;	/* at end of multiline string */
+			vStringChop(continuation);
+			vStringCatS(continuation, " ");
+			line_skip = 1;
+			continue;
+		}
+		cp = line = vStringValue(continuation);
+		cp = skipSpace (cp);
+		indent = cp - line;
+		line_skip = 0;
+
+		checkParent(nesting_levels, indent, parent);
+
+		/* Deal with multiline string ending. */
+		if (longStringLiteral)
+		{
+		    find_triple_end(cp, &longStringLiteral);
+			continue;
 		}
 
-		/* update indent-sensitive things */
-		if (!inMultilineString && !isspace(*cp))
+		/* Deal with multiline string start. */
+		longstring = find_triple_start(cp, &longStringLiteral);
+		if (longstring)
 		{
-			if (inFunction)
+			/* Note: For our purposes, the line just ends at the first long
+			 * string. I.e. we don't parse for any tags in the rest of the
+			 * line, but we do look for the string ending of course.
+			 */
+			*longstring = '\0';
+
+			longstring += 3;
+			find_triple_end(longstring, &longStringLiteral);
+		}
+
+		/* Deal with def and class keywords. */
+		keyword = findDefinitionOrClass (cp);
+		if (keyword)
+		{
+			boolean found = FALSE;
+			boolean is_class = FALSE;
+			if (!strncmp (keyword, "def ", 4))
 			{
-				if (indent < fn_indent)
-					inFunction = FALSE;
+				cp = skipSpace (keyword + 3);
+				found = TRUE;
 			}
-		    if (lastclass != NULL)
-		    {
-				if (indent <= lastclass->indent)
-				{
-					GList *last;
-
-					parents = clean_class_list(parents, indent);
-					last = g_list_last(parents);
-					if (last != NULL)
-						lastclass = last->data;
-					else
-						lastclass = NULL;
-				}
-		    }
-		}
-
-	    if (inMultilineString)
-		++cp;
-		else if (isspace ((int) *cp))
-		{
-			/* count indentation amount of current line
-			 * the indentation has to be made with tabs only _or_ spaces only, if they are mixed
-			 * the code below gets confused */
-			if (cp == line)
+			else if (!strncmp (keyword, "class ", 6))
 			{
-				do
-				{
-					indent++;
-					cp++;
-				} while (isspace(*cp));
+				cp = skipSpace (keyword + 5);
+				found = TRUE;
+				is_class = TRUE;
 			}
-			else
-				cp++;	/* non-indent whitespace */
-		}
-	    else if (*cp == '#')
-		break;
-	    else if (strncmp ((const char*) cp, "class", (size_t) 5) == 0)
-	    {
-			cp += 5;
-			if (isspace ((int) *cp))
+
+			if (found)
 			{
-				lastClass *newclass = g_new(lastClass, 1);
+				boolean is_parent_class;
 
-				while (isspace ((int) *cp))
-				++cp;
-				while (isalnum ((int) *cp)  ||  *cp == '_')
-				{
-				vStringPut (name, (int) *cp);
-				++cp;
-				}
-				vStringTerminate (name);
+				is_parent_class =
+					constructParentString(nesting_levels, indent, parent);
 
-				newclass->name = g_strdup(vStringValue(name));
-				newclass->indent = indent;
-				parents = g_list_append(parents, newclass);
-				if (lastclass == NULL)
-					makeSimpleTag (name, PythonKinds, K_CLASS);
+				if (is_class)
+					parseClass (cp, name, parent, is_parent_class);
 				else
-					makeSimpleScopedTag (name, PythonKinds, K_CLASS,
-						PythonKinds[K_CLASS].name, lastclass->name, "public");
-				vStringClear (name);
+					parseFunction(cp, name, parent, is_parent_class);
 
-				lastclass = newclass;
-				break;	/* ignore rest of line so that lastclass is not reset immediately */
+				addNestingLevel(nesting_levels, indent, name, is_class);
+				vStringClear(name);
 			}
-	    }
-	    else if (strncmp ((const char*) cp, "def", (size_t) 3) == 0)
-	    {
-		cp += 3;
-		if (isspace ((int) *cp))
-		{
-		    while (isspace ((int) *cp))
-			++cp;
-		    while (isalnum ((int) *cp)  ||  *cp == '_')
-		    {
-			vStringPut (name, (int) *cp);
-			++cp;
-		    }
-		    vStringTerminate (name);
-		    if (!isspace(*line) || lastclass == NULL || strlen(lastclass->name) <= 0)
-			makeSimpleTag (name, PythonKinds, K_FUNCTION);
-		    else
-			makeSimpleScopedTag (name, PythonKinds, K_METHOD,
-					     PythonKinds[K_CLASS].name, lastclass->name, "public");
-		    vStringClear (name);
-
-		    inFunction = TRUE;
-		    fn_indent = indent + 1;
-		    break;	/* ignore rest of line so inFunction is not cancelled immediately */
 		}
-	    }
-		else if (!inFunction && *(const char*)cp == '=')
+		/* Find global and class variables */
+		if ((cp = strstr(line, "=")))
 		{
 			/* Parse global and class variable names (C.x) from assignment statements.
 			 * Object attributes (obj.x) are ignored.
 			 * Assignment to a tuple 'x, y = 2, 3' not supported.
 			 * TODO: ignore duplicate tags from reassignment statements. */
-			const guchar *sp, *eq, *start;
+			const char *sp, *eq, *start;
+			boolean parent_is_class;
 
 			eq = cp + 1;
 			while (*eq)
@@ -238,6 +554,8 @@ static void findPythonTags (void)
 					break;	/* allow 'x = func(b=2,y=2,' lines */
 				eq++;
 			}
+			if (*eq == '=')
+				continue;
 			/* go backwards to the start of the line, checking we have valid chars */
 			start = cp - 1;
 			while (start >= line && isspace ((int) *start))
@@ -260,50 +578,34 @@ static void findPythonTags (void)
 			}
 			vStringTerminate (name);
 
-			if (lastclass == NULL)
-				makeSimpleTag (name, PythonKinds, K_VARIABLE);
-			else
-				makeSimpleScopedTag (name, PythonKinds, K_VARIABLE,
-					PythonKinds[K_CLASS].name, lastclass->name, "public");	/* class member variables */
+			parent_is_class = constructParentString(nesting_levels, indent, parent);
+			/* skip variables in methods */
+			if (! parent_is_class && vStringLength(parent) > 0)
+				continue;
+
+			makeVariableTag (name, parent);
 
 			vStringClear (name);
-
 			skipvar:
-			++cp;
+			; /* dummy */
 		}
-	    else if (*cp != '\0')
-	    {
-		do
-		    ++cp;
-		while (isalnum ((int) *cp)  ||  *cp == '_');
-	    }
 	}
-    }
-    vStringDelete (name);
-
-    /* clear the remaining elements in the list */
-    tmp = g_list_first(parents);
-    while (tmp != NULL)
-    {
-    	if (tmp->data)
-    	{
-			g_free(((lastClass*)tmp->data)->name);
-			g_free(tmp->data);
-    	}
-    	tmp = tmp->next;
-    }
-    g_list_free(parents);
+	/* Clean up all memory we allocated. */
+	vStringDelete (parent);
+	vStringDelete (name);
+	vStringDelete (continuation);
+	freeNestingLevels (nesting_levels);
 }
 
-extern parserDefinition* PythonParser (void)
+extern parserDefinition *PythonParser (void)
 {
-    static const char *const extensions [] = { "py", "python", NULL };
-    parserDefinition* def = parserNew ("Python");
-    def->kinds      = PythonKinds;
-    def->kindCount  = KIND_COUNT (PythonKinds);
-    def->extensions = extensions;
-    def->parser     = findPythonTags;
-    return def;
+	static const char *const extensions[] = { "py", "pyx", "pxd", "scons", "python", NULL };
+	parserDefinition *def = parserNew ("Python");
+	def->kinds = PythonKinds;
+	def->kindCount = KIND_COUNT (PythonKinds);
+	def->extensions = extensions;
+	def->parser = findPythonTags;
+	return def;
 }
 
-/* vi:set tabstop=8 shiftwidth=4: */
+/* vi:set tabstop=4 shiftwidth=4: */
