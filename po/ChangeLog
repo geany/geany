@@ -1,16 +1,16 @@
-2008-06-08  Frank Lanitz  <frank@frank.uvena.de>
+2008-06-08  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
- * cs.po: Update of Czech translation. thanks to Anna Talianova for 
+ * cs.po: Update of Czech translation. Thanks to Anna Talianova for 
    reviewing it. 
+ * ru.po: Update of Russian translation (Thanks to Nikita E. Shalaev)
 
-
-2008-06-07  Frank Lanitz  <frank@frank.uvena.de>
+2008-06-07  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Little update of German translation to improve understanding 
    a string. Thanks to Enrico Tröger and Dominic Hopf. 
 
 
-2008-05-24  Frank Lanitz  <frank@frank.uvena.de>
+2008-05-24  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * ru.po: Update of Russian translation. Thanks to stat.c for input.
 
