@@ -469,13 +469,21 @@ for filetype-specific comment characters. It doesn't matter which
 characters are around the string " geany_encoding=ISO-8859-15 " as long
 as there is at least one whitespace character before and after this
 string. Whitespace characters are in this case a space or tab character.
-"geany_encoding" must be in lower-case, the charset string is
-case-independent. There must **not** be any whitespace between
-"geany_encoding", the "=" sign and the charset.
 An example to use this could be you have a file with ISO-8859-15
 encoding but Geany constantly detects the file encoding as ISO-8859-1.
 Then you simply add such a line to the file and Geany will open it
 correctly the next time.
+
+Since Geany 0.15 you can also use lines like::
+
+    # encoding = ISO-8859-15
+
+or::
+
+    # coding: ISO-8859-15
+
+The used regular expression to find the encoding string is:
+``coding[\t ]*[:=][\t ]*([a-z0-9-]+)[\t ]*``
 
 .. note::
     These specifications must be in the first 512 bytes of the file.

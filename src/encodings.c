@@ -51,8 +51,8 @@
 # endif
 /* <meta http-equiv="content-type" content="text/html; charset=UTF-8" /> */
 # define PATTERN_HTMLMETA "<meta[ \t\n\r\f]http-equiv[ \t\n\r\f]*=[ \t\n\r\f]*\"content-type\"[ \t\n\r\f]+content[ \t\n\r\f]*=[ \t\n\r\f]*\"text/x?html;[ \t\n\r\f]*charset=([a-z0-9_-]+)\"[ \t\n\r\f]*/?>"
-/* " geany_encoding=utf-8 " */
-# define PATTERN_GEANY "[\t ]geany_encoding=([a-z0-9-]+)[\t ]"
+/* " geany_encoding=utf-8 " or " coding: utf-8 " */
+# define PATTERN_CODING "coding[\t ]*[:=][\t ]*([a-z0-9-]+)[\t ]*"
 /* precompiled regexps */
 static regex_t pregs[2];
 static gboolean pregs_loaded = FALSE;
@@ -89,17 +89,19 @@ static void init_encodings(void)
 	fill(5, EASTEUROPEAN, GEANY_ENCODING_WINDOWS_1250, "WINDOWS-1250", _("Central European"));
 	fill(6, EASTEUROPEAN, GEANY_ENCODING_IBM_855, "IBM855", _("Cyrillic"));
 	fill(7, EASTEUROPEAN, GEANY_ENCODING_ISO_8859_5, "ISO-8859-5", _("Cyrillic"));
+	/* ISO-IR-111 not available on Windows */
 	fill(8, EASTEUROPEAN, GEANY_ENCODING_ISO_IR_111, "ISO-IR-111", _("Cyrillic"));
-	fill(9, EASTEUROPEAN, GEANY_ENCODING_KOI8_R, "KOI8R", _("Cyrillic"));
+	fill(9, EASTEUROPEAN, GEANY_ENCODING_KOI8_R, "KOI8-R", _("Cyrillic"));
 	fill(10, EASTEUROPEAN, GEANY_ENCODING_WINDOWS_1251, "WINDOWS-1251", _("Cyrillic"));
 	fill(11, EASTEUROPEAN, GEANY_ENCODING_CP_866, "CP866", _("Cyrillic/Russian"));
-	fill(12, EASTEUROPEAN, GEANY_ENCODING_KOI8_U, "KOI8U", _("Cyrillic/Ukrainian"));
+	fill(12, EASTEUROPEAN, GEANY_ENCODING_KOI8_U, "KOI8-U", _("Cyrillic/Ukrainian"));
 	fill(13, EASTEUROPEAN, GEANY_ENCODING_ISO_8859_16, "ISO-8859-16", _("Romanian"));
 
 	fill(0, MIDDLEEASTERN, GEANY_ENCODING_IBM_864, "IBM864", _("Arabic"));
 	fill(1, MIDDLEEASTERN, GEANY_ENCODING_ISO_8859_6, "ISO-8859-6", _("Arabic"));
 	fill(2, MIDDLEEASTERN, GEANY_ENCODING_WINDOWS_1256, "WINDOWS-1256", _("Arabic"));
 	fill(3, MIDDLEEASTERN, GEANY_ENCODING_IBM_862, "IBM862", _("Hebrew"));
+	/* not available at all, ? */
 	fill(4, MIDDLEEASTERN, GEANY_ENCODING_ISO_8859_8_I, "ISO-8859-8-I", _("Hebrew"));
 	fill(5, MIDDLEEASTERN, GEANY_ENCODING_WINDOWS_1255, "WINDOWS-1255", _("Hebrew"));
 	fill(6, MIDDLEEASTERN, GEANY_ENCODING_ISO_8859_8, "ISO-8859-8", _("Hebrew Visual"));
@@ -126,6 +128,7 @@ static void init_encodings(void)
 	fill(0, EASTASIAN, GEANY_ENCODING_GB18030, "GB18030", _("Chinese Simplified"));
 	fill(1, EASTASIAN, GEANY_ENCODING_GB2312, "GB2312", _("Chinese Simplified"));
 	fill(2, EASTASIAN, GEANY_ENCODING_GBK, "GBK", _("Chinese Simplified"));
+	/* maybe not available on Linux */
 	fill(3, EASTASIAN, GEANY_ENCODING_HZ, "HZ", _("Chinese Simplified"));
 	fill(4, EASTASIAN, GEANY_ENCODING_BIG5, "BIG5", _("Chinese Traditional"));
 	fill(5, EASTASIAN, GEANY_ENCODING_BIG5_HKSCS, "BIG5-HKSCS", _("Chinese Traditional"));
@@ -324,7 +327,7 @@ void encodings_init(void)
 	if (! pregs_loaded)
 	{
 		regex_compile(&pregs[0], PATTERN_HTMLMETA);
-		regex_compile(&pregs[1], PATTERN_GEANY);
+		regex_compile(&pregs[1], PATTERN_CODING);
 		pregs_loaded = TRUE;
 	}
 #endif
