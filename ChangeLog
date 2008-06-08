@@ -19,6 +19,12 @@
    Don't make checks for header files and functions mandatory.
    Update some method names to latest API changes in Waf.
    Various other small fixes.
+ * scintilla/include/Scintilla.h, scintilla/include/Scintilla.iface,
+   scintilla/ScintillaBase.cxx:
+   Backport AutoCCancelled event implementation from Scintilla CVS.
+ * src/editor.c:
+   Reshow a previously shown calltip if an auto completion list was
+   cancelled.
 
 
 2008-06-07  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

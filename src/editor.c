@@ -61,7 +61,9 @@ static struct
 	gboolean set;
 	gchar *last_word;
 	guint tag_index;
-} calltip = {NULL, FALSE, NULL, 0};
+	gint pos;
+	ScintillaObject *sci;
+} calltip = {NULL, FALSE, NULL, 0, 0, NULL};
 
 static gchar indent[100];
 
@@ -286,6 +288,8 @@ static void on_char_added(gint idx, SCNotification *nt)
 			}
 			g_free(calltip.text);
 			calltip.text = NULL;
+			calltip.pos = 0;
+			calltip.sci = NULL;
 			calltip.set = FALSE;
 			break;
 		}
@@ -418,6 +422,31 @@ static void ensure_range_visible(ScintillaObject *sci, gint posStart, gint posEn
 }
 
 
+static gboolean reshow_calltip(gpointer data)
+{
+	SCNotification *nt = data;
+
+	g_return_val_if_fail(calltip.sci != NULL, FALSE);
+
+	SSM(calltip.sci, SCI_CALLTIPCANCEL, 0, 0);
+	/* we use the position where the calltip was previously started as SCI_GETCURRENTPOS
+	 * may be completely wrong in case the user cancelled the auto completion with the mouse */
+	SSM(calltip.sci, SCI_CALLTIPSHOW, calltip.pos, (sptr_t) calltip.text);
+
+	/* now autocompletion has been cancelled by SCI_CALLTIPSHOW, so do it manually */
+	if (nt->nmhdr.code == SCN_AUTOCSELECTION)
+	{
+		gint pos = SSM(calltip.sci, SCI_GETCURRENTPOS, 0, 0);
+		sci_set_selection_start(calltip.sci, nt->lParam);
+		sci_set_selection_end(calltip.sci, pos);
+		sci_replace_sel(calltip.sci, "");	/* clear root of word */
+		SSM(calltip.sci, SCI_INSERTTEXT, nt->lParam, (sptr_t) nt->text);
+		sci_goto_pos(calltip.sci, nt->lParam + strlen(nt->text), FALSE);
+	}
+	return FALSE;
+}
+
+
 /* callback func called by all editors when a signal arises */
 void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer user_data)
 {
@@ -491,19 +520,17 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 			}
 			break;
 		}
+		case SCN_AUTOCCANCELLED:
 		case SCN_AUTOCSELECTION:
 		{
-			/* now that autocomplete is finishing, reshow calltips if they were showing */
+			/* now that autocomplete is finishing or was cancelled, reshow calltips
+			 * if they were showing */
 			if (calltip.set)
 			{
-				gint pos = sci_get_current_position(sci);
-				SSM(sci, SCI_CALLTIPSHOW, pos, (sptr_t) calltip.text);
-				/* now autocompletion has been cancelled, so do it manually */
-				sci_set_selection_start(sci, nt->lParam);
-				sci_set_selection_end(sci, pos);
-				sci_replace_sel(sci, "");	/* clear root of word */
-				SSM(sci, SCI_INSERTTEXT, nt->lParam, (sptr_t) nt->text);
-				sci_goto_pos(sci, nt->lParam + strlen(nt->text), FALSE);
+				/* delay the reshow of the calltip window to make sure it is actually displayed,
+				 * without it might be not visible on SCN_AUTOCCANCEL */
+				/* TODO g_idle_add() seems to be not enough, only with a timeout it works stable */
+				g_timeout_add(50, reshow_calltip, nt);
 			}
 			break;
 		}
@@ -1081,6 +1108,8 @@ gboolean editor_show_calltip(gint idx, gint pos)
 	{
 		g_free(calltip.text);	/* free the old calltip */
 		calltip.text = str;
+		calltip.pos = orig_pos;
+		calltip.sci = sci;
 		calltip.set = TRUE;
 		utils_wrap_string(calltip.text, -1);
 		SSM(sci, SCI_CALLTIPSHOW, orig_pos, (sptr_t) calltip.text);
