@@ -3322,6 +3322,7 @@ evt void CallTipClick=2021(int position)
 evt void AutoCSelection=2022(string text)
 evt void IndicatorClick=2023(int modifiers, int position)
 evt void IndicatorRelease=2024(int modifiers, int position)
+evt void AutoCCancelled=2025(void)
 
 cat Deprecated
 
