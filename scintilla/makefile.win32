@@ -37,10 +37,10 @@ vpath %.cxx .
 INCLUDEDIRS=-I include -I . $(GTK_INCLUDES)
 CXXBASEFLAGS=-Wall -Wno-missing-braces -Wno-char-subscripts -DGTK -DGTK2 -DSCI_LEXER $(INCLUDEDIRS) -mms-bitfields
 
-ifdef NOTHREADS
-THREADFLAGS=-DG_THREADS_IMPL_NONE
-else
+ifdef THREADS
 THREADFLAGS=
+else
+THREADFLAGS=-DG_THREADS_IMPL_NONE
 endif
 
 ifdef DEBUG

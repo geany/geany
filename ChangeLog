@@ -1,3 +1,10 @@
+2008-06-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * scintilla/makefile.win32:
+   Compile Scintilla without threading support to fix freezes with
+   GLib >= 2.16 on Windows.
+
+
 2008-06-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * tagmanager/python.c:
