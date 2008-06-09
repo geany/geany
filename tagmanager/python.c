@@ -571,6 +571,7 @@ static void findPythonTags (void)
 				goto skipvar;
 			/* the line is valid, parse the variable name */
 			++start;
+			vStringClear (name);
 			while (isIdentifierCharacter ((int) *start))
 			{
 				vStringPut (name, (int) *start);
