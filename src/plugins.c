@@ -715,7 +715,7 @@ static gchar *get_plugin_path()
 	gchar *install_dir = g_win32_get_package_installation_directory("geany", NULL);
 	gchar *path;
 
-	path = g_strconcat(install_dir, "\\plugins", NULL);
+	path = g_strconcat(install_dir, "\\lib", NULL);
 
 	return path;
 }

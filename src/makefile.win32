@@ -2,7 +2,7 @@
 
 DEFINES = -DHAVE_CONFIG_H \
 	-DGEANY_DATADIR=\"data\" \
-	-DGEANY_LOCALEDIR=\"data\" \
+	-DGEANY_LOCALEDIR=\"share\" \
 	-DGEANY_LIBDIR=\"\" \
 	-DGEANY_PREFIX=\"\"
 
@@ -36,7 +36,7 @@ INCLUDEDIRS=  -I.. \
 ALL_GTK_LIBS= \
 	-L"$(PREFIX)/lib" \
 	-lgtk-win32-2.0 -lgdk-win32-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 \
-	-lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lglib-2.0 -lintl -liconv
+	-lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lglib-2.0 -lintl 
 	# these things are for GTK >= 2.8
 	# (should be same as with MSYS: pkg-config --libs gtk+-2.0 gthread-2.0)
 	#"$(PREFIX)/lib/libcairo.dll.a" \
@@ -44,9 +44,9 @@ ALL_GTK_LIBS= \
 	#"$(PREFIX)/lib/charset.lib" \
 
 ifdef GTK210
-PRINTING_LIBS=-lcairo -lpangocairo-1.0
+ALL_GTK_LIBS +=-lcairo -lpangocairo-1.0
 else
-PRINTING_LIBS=
+ALL_GTK_LIBS +=-liconv
 endif
 
 WIN_LIBS=-mwindows -lkernel32 -limm32 -lshfolder -lshell32 \
@@ -55,6 +55,7 @@ WIN_LIBS=-mwindows -lkernel32 -limm32 -lshfolder -lshell32 \
 CBASEFLAGS=-Wall -pipe -mms-bitfields $(DEFINES) $(INCLUDEDIRS)
 ifdef DEBUG
 CFLAGS=-O0 -g $(CBASEFLAGS)
+DEFINES += -DGEANY_DEBUG
 else
 CFLAGS=-O2 $(CBASEFLAGS)
 endif
@@ -87,7 +88,7 @@ binclean:
 
 $(TARGET): $(OBJS) $(RES) ../scintilla/scintilla.a ../tagmanager/tagmanager.a
 	$(CXX) $(OBJS) $(RES) -o $(TARGET) \
-	../scintilla/scintilla.a ../tagmanager/tagmanager.a $(ALL_GTK_LIBS) $(PRINTING_LIBS) \
+	../scintilla/scintilla.a ../tagmanager/tagmanager.a $(ALL_GTK_LIBS) \
 	 $(WIN_LIBS)
 
 deps.mak:

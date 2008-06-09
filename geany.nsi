@@ -131,8 +131,8 @@ Section "!Program Files" SEC01
   File "${RESOURCEDIR}\data\GPL-2"
   File "${RESOURCEDIR}\data\file*"
 
-  SetOutPath "$INSTDIR\share"
-  File /r "${RESOURCEDIR}\share\*"
+  SetOutPath "$INSTDIR\share\icons"
+  File /r "${RESOURCEDIR}\share\icons\*"
 
   SetOutPath "$INSTDIR"
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
@@ -146,14 +146,14 @@ SectionEnd
 Section "Plugins" SEC02
   SectionIn 1
   SetOverwrite ifnewer
-  SetOutPath "$INSTDIR"
-  File /r "${RESOURCEDIR}\plugins"
+  SetOutPath "$INSTDIR\lib"
+  File "${RESOURCEDIR}\lib\*.dll"
 SectionEnd
 
 Section "Language Files" SEC03
   SectionIn 1
-  SetOutPath "$INSTDIR"
-  File /r "${RESOURCEDIR}\lib"
+  SetOutPath "$INSTDIR\share\locale"
+  File /r "${RESOURCEDIR}\share\locale\*"
 SectionEnd
 
 Section "Documentation" SEC04
@@ -191,6 +191,8 @@ Section "GTK 2.12 Runtime Environment" SEC06
   File /r "gtk\etc\*"
   SetOutPath "$INSTDIR\lib"
   File /r "gtk\lib\*"
+  SetOutPath "$INSTDIR\share"
+  File /r "gtk\share\*"
 /* code to embed GTK+ installer executable
   File ${GTK_INSTALLER}
   ExecWait ${GTK_INSTALLER}
@@ -289,7 +291,6 @@ Section Uninstall
   Delete "$INSTDIR\charset.dll"
   Delete "$INSTDIR\gspawn-win32-helper.exe"
   Delete "$INSTDIR\gspawn-win32-helper-console.exe"
-  Delete "$INSTDIR\iconv.dll"
   Delete "$INSTDIR\intl.dll"
   Delete "$INSTDIR\jpeg62.dll"
   Delete "$INSTDIR\libgthread-2.0-0.dll"
@@ -299,7 +300,6 @@ Section Uninstall
   Delete "$INSTDIR\libgobject-2.0-0.dll"
   Delete "$INSTDIR\libpango-1.0-0.dll"
   Delete "$INSTDIR\libpangoft2-1.0-0.dll"
-  Delete "$INSTDIR\libpng13.dll"
   Delete "$INSTDIR\libatk-1.0-0.dll"
   Delete "$INSTDIR\libcairo-2.dll"
   Delete "$INSTDIR\libgdk_pixbuf-2.0-0.dll"
@@ -307,7 +307,10 @@ Section Uninstall
   Delete "$INSTDIR\libglib-2.0-0.dll"
   Delete "$INSTDIR\libgmodule-2.0-0.dll"
   Delete "$INSTDIR\libtiff3.dll"
+  Delete "$INSTDIR\libpng12-0.dll"
+  Delete "$INSTDIR\libgio-2.0-0.dll"
   Delete "$INSTDIR\zlib1.dll"
+
 
   Delete "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk"
   Delete "$SMPROGRAMS\$ICONS_GROUP\Website.lnk"
@@ -318,7 +321,6 @@ Section Uninstall
 
   RMDir "$SMPROGRAMS\$ICONS_GROUP"
   RMDir /r "$INSTDIR\doc"
-  RMDir /r "$INSTDIR\plugins"
   RMDir /r "$INSTDIR\data"
   RMDir /r "$INSTDIR\etc"
   RMDir /r "$INSTDIR\lib"

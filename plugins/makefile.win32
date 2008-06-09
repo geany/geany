@@ -28,7 +28,7 @@ INCLUDEDIRS=  -I.. \
 ALL_GTK_LIBS= \
 	-L"$(PREFIX)/lib" \
 	-lgtk-win32-2.0 -lgdk-win32-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 \
-	-lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lglib-2.0 -lintl -liconv
+	-lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lglib-2.0 -lintl
 
 CBASEFLAGS=-Wall -pipe -mms-bitfields -DHAVE_CONFIG_H
 ifdef DEBUG
@@ -37,6 +37,9 @@ else
 CFLAGS=-O2 $(CBASEFLAGS)
 endif
 
+ifndef GTK210
+ALL_GTK_LIBS += -liconv
+endif
 
 .PHONY: all clean plugins
 

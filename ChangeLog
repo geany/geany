@@ -7,7 +7,15 @@
    Remove useless path separator.
  * configure.in:
    Set $(docdir) if it is not set automatically.
-
+ * geany.nsi, plugins/makefile.win32, src/makefile.win32, src/main.c,
+   src/plugins.c:
+   Windows changes:
+   Install plugins into lib/ not into plugins/.
+   Don't link against libiconv when compiling against GLib 2.14 and
+   above (it's statically linked into GLib).
+   Install Geany's message catalogs into share/locale rather than
+   lib/locale as GTK does since 2.12.2.
+   
 
 2008-06-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
