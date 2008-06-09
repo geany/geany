@@ -2,6 +2,8 @@
 
  * tagmanager/python.c:
    Fix variable names sometimes having leading junk characters.
+ * tagmanager/python.c:
+   Refactor using findVariable().
 
 
 2008-06-07  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

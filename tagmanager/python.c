@@ -434,6 +434,47 @@ static void find_triple_end(char const *string, char const **which)
 	}
 }
 
+static const char *findVariable(const char *line)
+{
+	/* Parse global and class variable names (C.x) from assignment statements.
+	 * Object attributes (obj.x) are ignored.
+	 * Assignment to a tuple 'x, y = 2, 3' not supported.
+	 * TODO: ignore duplicate tags from reassignment statements. */
+	const char *cp, *sp, *eq, *start;
+
+	cp = strstr(line, "=");
+	if (! cp)
+		return NULL;
+	eq = cp + 1;
+	while (*eq)
+	{
+		if (*eq == '=')
+			return NULL;	/* ignore '==' operator and 'x=5,y=6)' function lines */
+		if (*eq == '(')
+			break;	/* allow 'x = func(b=2,y=2,' lines */
+		eq++;
+	}
+	if (*eq == '=')
+		return NULL;	/* can this happen? */
+
+	/* go backwards to the start of the line, checking we have valid chars */
+	start = cp - 1;
+	while (start >= line && isspace ((int) *start))
+		--start;
+	while (start >= line && isIdentifierCharacter ((int) *start))
+		--start;
+	if (!isIdentifierFirstCharacter(*(start + 1)))
+		return NULL;
+	sp = start;
+	while (sp >= line && isspace ((int) *sp))
+		--sp;
+	if ((sp + 1) != line)	/* the line isn't a simple variable assignment */
+		return NULL;
+	/* the line is valid, parse the variable name */
+	++start;
+	return start;
+}
+
 static void findPythonTags (void)
 {
 	vString *const continuation = vStringNew ();
@@ -450,7 +491,7 @@ static void findPythonTags (void)
 	{
 		const char *cp = line;
 		char *longstring;
-		const char *keyword;
+		const char *keyword, *variable;
 		int indent;
 
 		cp = skipSpace (cp);
@@ -536,41 +577,12 @@ static void findPythonTags (void)
 			}
 		}
 		/* Find global and class variables */
-		if ((cp = strstr(line, "=")))
+		variable = findVariable(line);
+		if (variable)
 		{
-			/* Parse global and class variable names (C.x) from assignment statements.
-			 * Object attributes (obj.x) are ignored.
-			 * Assignment to a tuple 'x, y = 2, 3' not supported.
-			 * TODO: ignore duplicate tags from reassignment statements. */
-			const char *sp, *eq, *start;
+			const char *start = variable;
 			boolean parent_is_class;
 
-			eq = cp + 1;
-			while (*eq)
-			{
-				if (*eq == '=')
-					goto skipvar;	/* ignore '==' operator and 'x=5,y=6)' function lines */
-				if (*eq == '(')
-					break;	/* allow 'x = func(b=2,y=2,' lines */
-				eq++;
-			}
-			if (*eq == '=')
-				continue;
-			/* go backwards to the start of the line, checking we have valid chars */
-			start = cp - 1;
-			while (start >= line && isspace ((int) *start))
-				--start;
-			while (start >= line && isIdentifierCharacter ((int) *start))
-				--start;
-			if (!isIdentifierFirstCharacter(*(start + 1)))
-				goto skipvar;
-			sp = start;
-			while (sp >= line && isspace ((int) *sp))
-				--sp;
-			if ((sp + 1) != line)	/* the line isn't a simple variable assignment */
-				goto skipvar;
-			/* the line is valid, parse the variable name */
-			++start;
 			vStringClear (name);
 			while (isIdentifierCharacter ((int) *start))
 			{
@@ -587,8 +599,6 @@ static void findPythonTags (void)
 			makeVariableTag (name, parent);
 
 			vStringClear (name);
-			skipvar:
-			; /* dummy */
 		}
 	}
 	/* Clean up all memory we allocated. */
