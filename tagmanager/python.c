@@ -454,8 +454,6 @@ static const char *findVariable(const char *line)
 			break;	/* allow 'x = func(b=2,y=2,' lines */
 		eq++;
 	}
-	if (*eq == '=')
-		return NULL;	/* can this happen? */
 
 	/* go backwards to the start of the line, checking we have valid chars */
 	start = cp - 1;
