@@ -230,6 +230,12 @@ if test "x${datadir}" = 'x${prefix}/share' -o "x${datarootdir}" = 'x${prefix}/sh
 	fi
 fi
 
+# Set ${docdir} if it is empty
+if test -z "${docdir}"; then
+	docdir='${datadir}/doc/${PACKAGE}'
+	AC_SUBST(docdir)
+fi
+
 GEANY_PIXMAPS_DIR=`eval echo ${datarootdir}/pixmaps`
 AC_SUBST(GEANY_PIXMAPS_DIR)
 GEANY_DATA_DIR=`eval echo ${datarootdir}/geany`
