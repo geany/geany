@@ -13,13 +13,20 @@
 //
 // (the script should be run in the top source directory)
 
+# (from tagmanager/tm_tag.c:32)
+define("TA_NAME", 200);
+define("TA_TYPE", 204);
+define("TA_ARGLIST", 205);
+define("TA_VARTYPE", 207);
+
+# TMTagType (tagmanager/tm_tag.h:47)
+define("TYPE_FUNCTION", 128);
 
 // Create an array of the lines in the file
 $file = file('funcsummary.txt');
 
-// Create template for a tag
-// *Function name*|*Return type*|*Parameters*|*Description*
-$tagTpl = "%s|%s|%s|%s";
+// Create template for a tag (tagmanager format)
+$tagTpl = "%s%c%d%c%s%c%s";
 
 // String to store the output
 $tagsOutput = array();
@@ -48,10 +55,12 @@ for($line = 0, $lineCount = count($file); $line < $lineCount; ++$line) {
 
     // $funcDefMatch['funcName'] = str_replace('::', '->', $funcDefMatch['funcName']);
 
-    $tagsOutput[] = sprintf($tagTpl, $funcDefMatch['funcName'],
-        $funcDefMatch['retType'], $funcDefMatch['params'], $funcDesc);
+    $tagsOutput[] = sprintf($tagTpl, $funcDefMatch['funcName'], TA_TYPE, TYPE_FUNCTION,
+        TA_ARGLIST, $funcDefMatch['params'], TA_VARTYPE, $funcDefMatch['retType']);
 }
 
+$tagsOutput[] = sprintf('# Automatically generated file - do not edit (created on %s)',
+                    date('r'));
 // Sort the output
 sort($tagsOutput);
 

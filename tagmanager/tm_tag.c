@@ -303,7 +303,7 @@ gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 	return TRUE;
 }
 
-/* alternative parser for PHP and LaTeX global tags files with the following format
+/* alternative parser for Pascal and LaTeX global tags files with the following format
  * tagname|return value|arglist|description\n */
 gboolean tm_tag_init_from_file_alt(TMTag *tag, TMSourceFile *file, FILE *fp)
 {
@@ -357,7 +357,6 @@ TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, gint mode)
 	switch (mode)
 	{
 		case 4:	/* pascal */
-		case 6:	/* php */
 		case 8:	/* latex */
 			result = tm_tag_init_from_file_alt(tag, file, fp);
 			break;

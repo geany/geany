@@ -11,6 +11,10 @@
    Add create_py_tags.py to create a global tags file for Python
    (thanks to Dominic Hopf).
    Add generated Python tags file (Python 2.5).
+ * data/php.tags, scripts/create_php_tags.php, tagmanager/tm_tag.c:
+   Change format of PHP tags file to internal tagmanager format since
+   it is auto-generated and is read maybe a little bit faster.
+   Add auto-generated notice and timestamp at the beginning of the file.
 
 
 2008-06-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
