@@ -6,6 +6,11 @@
  * tagmanager/python.c:
    Fix endless loop when there are two triple strings on one line
    inside a multiline string.
+ * Makefile.am, data/python.tags, scripts/create_py_tags.py,
+   src/symbols.c:
+   Add create_py_tags.py to create a global tags file for Python
+   (thanks to Dominic Hopf).
+   Add generated Python tags file (Python 2.5).
 
 
 2008-06-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

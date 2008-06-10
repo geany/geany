@@ -70,6 +70,7 @@ enum	/* Geany tag files */
 	GTF_PHP,
 	GTF_HTML_ENTITIES,
 	GTF_LATEX,
+	GTF_PYTHON,
 	GTF_MAX
 };
 
@@ -79,7 +80,8 @@ static TagFileInfo tag_file_info[GTF_MAX] =
 	{FALSE, "pascal.tags"},
 	{FALSE, "php.tags"},
 	{FALSE, "html_entities.tags"},
-	{FALSE, "latex.tags"}
+	{FALSE, "latex.tags"},
+	{FALSE, "python.tags"}
 };
 
 static gchar *user_tags_dir;
@@ -140,6 +142,7 @@ void symbols_global_tags_loaded(gint file_type_idx)
 		case GEANY_FILETYPES_PASCAL:tag_type = GTF_PASCAL; break;
 		case GEANY_FILETYPES_PHP:	tag_type = GTF_PHP; break;
 		case GEANY_FILETYPES_LATEX:	tag_type = GTF_LATEX; break;
+		case GEANY_FILETYPES_PYTHON:tag_type = GTF_PYTHON; break;
 		default:
 			return;
 	}
