@@ -1,3 +1,10 @@
+2008-06-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/utils.c:
+   Allow and use arguments to the browser command (closes #1989575).
+   Add 'xdg-open' as first browser fallback.
+
+
 2008-06-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * tagmanager/python.c:
