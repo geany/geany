@@ -571,7 +571,6 @@ static void findPythonTags (void)
 					parseFunction(cp, name, parent, is_parent_class);
 
 				addNestingLevel(nesting_levels, indent, name, is_class);
-				vStringClear(name);
 			}
 		}
 		/* Find global and class variables */
@@ -595,8 +594,6 @@ static void findPythonTags (void)
 				continue;
 
 			makeVariableTag (name, parent);
-
-			vStringClear (name);
 		}
 	}
 	/* Clean up all memory we allocated. */
