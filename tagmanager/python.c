@@ -423,7 +423,7 @@ static void find_triple_end(char const *string, char const **which)
     while (1)
 	{
 	    /* Check if the sting ends in the same line. */
-	    s = strstr (string, *which);
+	    s = strstr (s, *which);
 		if (!s) break;
 		s += 3;
 		*which = NULL;

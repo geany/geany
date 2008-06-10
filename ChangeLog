@@ -3,6 +3,9 @@
  * src/utils.c:
    Allow and use arguments to the browser command (closes #1989575).
    Add 'xdg-open' as first browser fallback.
+ * tagmanager/python.c:
+   Fix endless loop when there are two triple strings on one line
+   inside a multiline string.
 
 
 2008-06-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
