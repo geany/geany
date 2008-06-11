@@ -306,7 +306,9 @@ static boolean constructParentString(NestingLevels *nls, int indent,
 	return is_class;
 }
 
-/* check whether parent's indentation level is higher than the current level and if so, remove it */
+/* Check whether parent's indentation level is higher than the current level and
+ * if so, remove it.
+ */
 static void checkParent(NestingLevels *nls, int indent, vString *parent)
 {
 	int i;
@@ -320,7 +322,7 @@ static void checkParent(NestingLevels *nls, int indent, vString *parent)
 		{
 			if (n && indent <= n->indentation)
 			{
-				/* invalidate this level by clearing its name */
+				/* remove this level by clearing its name */
 				vStringClear(n->name);
 			}
 			break;
@@ -376,42 +378,32 @@ static void addNestingLevel(NestingLevels *nls, int indentation,
 	nl->is_class = is_class;
 }
 
-/* Checks whether a triple string was quoted before.
- */
-static boolean isTripleQuoted(char const *start, char const *end, char quote_char)
-{
-    char const *cp = start;
-
-	while (cp < end && *cp != quote_char)
-		cp++;
-
-	return (cp < end);
-}
-
 /* Return a pointer to the start of the next triple string, or NULL. Store
  * the kind of triple string in "which" if the return is not NULL.
  */
-static char *find_triple_start(char const *string, char const **which)
+static char const *find_triple_start(char const *string, char const **which)
 {
-    char *s;
-    *which = NULL;
-    if ((s = strstr (string, doubletriple)))
-    {
-		/* prevent parsing quoted triple strings */
-        if (isTripleQuoted (string, s, '\''))
-			return NULL;
+    char const *cp = string;
 
-		*which = doubletriple;
-    }
-    else if ((s = strstr (string, singletriple)))
-    {
-		/* prevent parsing quoted triple strings */
-        if (isTripleQuoted (string, s, '"'))
-			return NULL;
-
-        *which = singletriple;
-    }
-    return s;
+    for (; *cp; cp++)
+	{
+	    if (*cp == '"' || *cp == '\'')
+		{
+		    if (strcmp(cp, doubletriple) == 0)
+		    {
+		        *which = doubletriple;
+		        return cp;
+		    }
+		    if (strcmp(cp, singletriple) == 0)
+		    {
+		        *which = singletriple;
+		        return cp;
+		    }
+			cp = skipString(cp);
+			if (!*cp) break;
+		}
+	}
+    return NULL;
 }
 
 /* Find the end of a triple string as pointed to by "which", and update "which"
@@ -422,7 +414,7 @@ static void find_triple_end(char const *string, char const **which)
     char const *s = string;
     while (1)
 	{
-	    /* Check if the sting ends in the same line. */
+	    /* Check if the string ends in the same line. */
 	    s = strstr (s, *which);
 		if (!s) break;
 		s += 3;
@@ -497,8 +489,8 @@ static void findPythonTags (void)
 		if (*cp == '\0')  /* skip blank line */
 			continue;
 
-		/* skip comment if we are not inside a triple string */
-		if (*cp == '#' && ! longStringLiteral)
+		/* Skip comment if we are not inside a multi-line string */
+		if (*cp == '#' && !longStringLiteral)
 			continue;
 
 		/* Deal with line continuation. */
