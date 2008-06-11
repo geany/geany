@@ -4,6 +4,9 @@
    Use proper quoted multi-line string check from CTags SVN.
  * src/geanyobject.c:
    Fix wrong marshal type (pointer != int).
+ * scripts/wafinit.sh:
+   Create Makefiles for src, tagmanager and scintilla sub directories
+   to be able to run make from within Geany.
 
 
 2008-06-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

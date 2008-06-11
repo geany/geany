@@ -9,7 +9,7 @@ then
     WAF="./waf"
 fi
 
-
+# Makefile
 cat > Makefile << EOF
 
 .PHONY: build configure
@@ -43,6 +43,37 @@ configure:
 
 EOF
 
+# src/Makefile
+cat > src/Makefile << EOF
+
+all: build
+
+build:
+	cd .. && $WAF build --targets=geany \$@
+
+EOF
+
+# tagmanager/Makefile
+cat > tagmanager/Makefile << EOF
+
+all: build
+
+build:
+	cd .. && $WAF build --targets=tagmanager \$@
+
+EOF
+
+# scintilla/Makefile
+cat > scintilla/Makefile << EOF
+
+all: build
+
+build:
+	cd .. && $WAF build --targets=scintilla \$@
+
+EOF
+
+# configure
 cat > configure << EOF
 #!/bin/sh
 
