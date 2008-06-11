@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: geany 0.15svn\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-06-10 12:08+0200\n"
-"PO-Revision-Date: 2008-06-10 12:24+0100\n"
+"PO-Revision-Date: 2008-06-10 12:39+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
@@ -651,7 +651,7 @@ msgstr "Die Datei \"%s\" ist kein gültiges %s."
 #: ../src/document.c:916
 #, c-format
 msgid "The file \"%s\" does not look like a text file or the file encoding is not supported."
-msgstr "Die Datei \"%s\" scheint keine Textdatei zu sein, oder die Zeichenkodierung wird nicht unterstützt."
+msgstr "Die Datei \"%s\" scheint keine Textdatei zu sein oder die Zeichenkodierung wird nicht unterstützt."
 
 #: ../src/document.c:1000
 #, c-format
