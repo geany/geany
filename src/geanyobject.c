@@ -113,7 +113,7 @@ static void create_signals(GObjectClass *g_object_class)
 		G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GeanyObjectClass, document_activate),
 		NULL, NULL,
-		gtk_marshal_NONE__INT,
+		gtk_marshal_NONE__POINTER,
 		G_TYPE_NONE, 1,
 		G_TYPE_INT);
 
@@ -123,7 +123,7 @@ static void create_signals(GObjectClass *g_object_class)
 		G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GeanyObjectClass, project_open),
 		NULL, NULL,
-		gtk_marshal_NONE__INT,
+		gtk_marshal_NONE__POINTER,
 		G_TYPE_NONE, 1,
 		G_TYPE_POINTER);
 	geany_object_signals[GCB_PROJECT_SAVE] = g_signal_new (
