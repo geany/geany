@@ -7,6 +7,8 @@
  * scripts/wafinit.sh:
    Create Makefiles for src, tagmanager and scintilla sub directories
    to be able to run make from within Geany.
+ * scintilla/scintilla-marshal.c:
+   Updated generated marschal code for Scintilla.
 
 
 2008-06-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
