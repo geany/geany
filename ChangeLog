@@ -1,3 +1,27 @@
+2008-06-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/plugindata.h, src/document.c, src/plugins.c, src/document.h,
+   src/symbols.c:
+   Note: this breaks the plugin API for document functions.
+   Make all DocumentFuncs use a GeanyDocument* instead of an integer
+   index, so there's no need to access the documents array or (in most
+   cases) use DOC_IDX_VALID() - just check for non-NULL.
+   Add GeanyDocument::index field for use with the documents array.
+   Add DOC_IDX() macro to get the document index from a possibly NULL
+   pointer.
+   Note: the new functions in the core have a documents_ prefix where
+   they would conflict with the old names, which are still present and
+   used in the core (but will be removed soon).
+   Remove DocumentFuncs::get_cur_idx() - use get_current() instead.
+   Replace DocumentFuncs::get_n_idx() with get_from_page().
+   Rename DocumentFuncs::find_by_realpath() to find_by_real_path().
+   Replace DocumentFuncs::remove() with remove_page().
+   Add 'changed' argument for DocumentFuncs::set_text_changed().
+   Add dox for document_set_filetype().
+   Rename debugging function doc() doc_at() to avoid conflicts.
+   Rename document_find_by_realpath() in the core also.
+
+
 2008-06-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * tagmanager/python.c:

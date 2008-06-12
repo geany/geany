@@ -1197,7 +1197,7 @@ gboolean symbols_goto_tag(const gchar *name, gboolean definition)
 
 	if (tmtag != NULL)
 	{
-		gint new_idx = document_find_by_realpath(
+		gint new_idx = document_find_by_real_path(
 			tmtag->atts.entry.file->work_object.file_name);
 
 		/* not found in opened document, should open */

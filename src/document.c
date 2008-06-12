@@ -112,18 +112,16 @@ static gboolean update_type_keywords(ScintillaObject *sci, gint lang);
  * @param realname The filename to search, which should be identical to the
  * string returned by @c tm_get_real_path().
  *
- * @return The %document index which has the given filename or @c -1
- *  if no document was found.
+ * @return The matching document, or NULL.
  * @note This is only really useful when passing a @c TMWorkObject::file_name.
  * @see document_find_by_filename().
  **/
-gint document_find_by_realpath(const gchar *realname)
+GeanyDocument* documents_find_by_real_path(const gchar *realname)
 {
 	guint i;
-	gint ret = -1;
 
 	if (! realname)
-		return -1;	/* file doesn't exist on disk */
+		return NULL;	/* file doesn't exist on disk */
 
 	for (i = 0; i < documents_array->len; i++)
 	{
@@ -133,11 +131,10 @@ gint document_find_by_realpath(const gchar *realname)
 
 		if (filenamecmp(realname, doc->real_path) == 0)
 		{
-			ret = i;
-			break;
+			return doc;
 		}
 	}
-	return ret;
+	return NULL;
 }
 
 
@@ -160,56 +157,52 @@ static gchar *get_real_path_from_utf8(const gchar *utf8_filename)
  *
  *  @param utf8_filename The filename to search (in UTF-8 encoding).
  *
- *  @return The %document index which has the given filename or @c -1
- *   if no document was found.
- *  @see document_find_by_realpath().
+ *  @return The matching document, or NULL.
+ *  @see document_find_by_real_path().
  **/
-gint document_find_by_filename(const gchar *utf8_filename)
+GeanyDocument *documents_find_by_filename(const gchar *utf8_filename)
 {
 	guint i;
-	gint ret = -1;
+	GeanyDocument *doc;
+	gchar *realname;
 
 	if (! utf8_filename)
-		return -1;
+		return NULL;
 
 	/* First search GeanyDocument::file_name, so we can find documents with a
 	 * filename set but not saved on disk, like vcdiff produces */
 	for (i = 0; i < documents_array->len; i++)
 	{
-		GeanyDocument *doc = documents[i];
+		doc = documents[i];
 
 		if (! documents[i]->is_valid || doc->file_name == NULL) continue;
 
 		if (filenamecmp(utf8_filename, doc->file_name) == 0)
 		{
-			ret = i;
-			break;
+			return doc;
 		}
 	}
-	if (ret == -1)
-	{
-		/* Now try matching based on the realpath(), which is unique per file on disk */
-		gchar *realname = get_real_path_from_utf8(utf8_filename);
-
-		ret = document_find_by_realpath(realname);
-		g_free(realname);
-	}
-	return ret;
+	/* Now try matching based on the realpath(), which is unique per file on disk */
+	realname = get_real_path_from_utf8(utf8_filename);
+	doc = documents_find_by_real_path(realname);
+	g_free(realname);
+	return doc;
 }
 
 
-/* returns the document index which has sci */
-gint document_find_by_sci(ScintillaObject *sci)
+/* returns the document which has sci, or NULL. */
+GeanyDocument *documents_find_by_sci(ScintillaObject *sci)
 {
 	guint i;
 
-	if (! sci) return -1;
+	if (! sci) return NULL;
 
-	for(i = 0; i < documents_array->len; i++)
+	for (i = 0; i < documents_array->len; i++)
 	{
-		if (documents[i]->is_valid && documents[i]->sci == sci) return i;
+		if (documents[i]->is_valid && documents[i]->sci == sci)
+			return documents[i];
 	}
-	return -1;
+	return NULL;
 }
 
 
@@ -228,40 +221,19 @@ gint document_get_notebook_page(gint doc_idx)
  *
  *  @param page_num The notebook page number to search.
  *
- *  @return The index of the given notebook page @a page_num in the %document list or @c -1
- *   if no documents are opened.
+ *  @return The corresponding document for the given notebook page, or NULL.
  **/
-gint document_get_n_idx(guint page_num)
+GeanyDocument *document_get_from_page(guint page_num)
 {
 	ScintillaObject *sci;
-	if (page_num >= documents_array->len) return -1;
+
+	if (page_num >= documents_array->len)
+		return NULL;
 
 	sci = (ScintillaObject*)gtk_notebook_get_nth_page(
 				GTK_NOTEBOOK(main_widgets.notebook), page_num);
 
-	return document_find_by_sci(sci);
-}
-
-
-/**
- *  Find and retrieve the index of the current %document.
- *
- *  @return The index of the current notebook page in the %document list or @c -1
- *   if no documents are opened.
- **/
-gint document_get_cur_idx()
-{
-	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
-
-	if (cur_page == -1)
-		return -1;
-	else
-	{
-		ScintillaObject *sci = (ScintillaObject*)
-			gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook), cur_page);
-
-		return document_find_by_sci(sci);
-	}
+	return documents_find_by_sci(sci);
 }
 
 
@@ -270,11 +242,19 @@ gint document_get_cur_idx()
  *
  *  @return A pointer to the current %document or @c NULL if there are no opened documents.
  **/
-GeanyDocument *document_get_current()
+GeanyDocument *document_get_current(void)
 {
-	gint idx = document_get_cur_idx();
+	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
 
-	return DOC_IDX_VALID(idx) ? documents[idx] : NULL;
+	if (cur_page == -1)
+		return NULL;
+	else
+	{
+		ScintillaObject *sci = (ScintillaObject*)
+			gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook), cur_page);
+
+		return documents_find_by_sci(sci);
+	}
 }
 
 
@@ -295,11 +275,19 @@ void document_finalize()
  *  according to the document's save state.
  *  This is called by Geany mostly when opening or saving files.
  *
- *  @param idx The %document index to operate on.
+ * @param doc The document to use.
+ * @param changed Whether the document state should indicate changes have been made.
  **/
-void document_set_text_changed(gint idx)
+void documents_set_text_changed(GeanyDocument *doc, gboolean changed)
 {
-	if (DOC_IDX_VALID(idx) && ! main_status.quitting)
+	gint idx = DOC_IDX(doc);
+
+	if (! DOC_IDX_VALID(idx))
+		return;
+
+	documents[idx]->changed = changed;
+
+	if (! main_status.quitting)
 	{
 		ui_update_tab_status(idx);
 		ui_save_buttons_toggle(documents[idx]->changed);
@@ -484,6 +472,7 @@ static gint document_create(const gchar *utf8_filename)
 	}
 	this = documents[new_idx];
 	init_doc_struct(this);	/* initialize default document settings */
+	this->index = new_idx;
 
 	this->file_name = g_strdup(utf8_filename);
 
@@ -524,7 +513,7 @@ static gint document_create(const gchar *utf8_filename)
  *
  *  @return @a TRUE if the document was actually removed or @a FALSE otherwise.
  **/
-gboolean document_remove(guint page_num)
+gboolean document_remove_page(guint page_num)
 {
 	gint idx = document_get_n_idx(page_num);
 
@@ -609,9 +598,9 @@ gint document_new_file_if_non_open()
  *  @param ft The filetype to set or @c NULL to detect it from @a filename if not @c NULL.
  *  @param text The initial content of the file (in UTF-8 encoding), or @c NULL.
  *
- *  @return The index of the new file in @ref documents_array.
+ *  @return The new document.
  **/
-gint document_new_file(const gchar *filename, GeanyFiletype *ft, const gchar *text)
+GeanyDocument *documents_new_file(const gchar *filename, GeanyFiletype *ft, const gchar *text)
 {
 	gint idx = document_create(filename);
 
@@ -668,7 +657,7 @@ gint document_new_file(const gchar *filename, GeanyFiletype *ft, const gchar *te
 	msgwin_status_add(_("New file \"%s\" opened."),
 		(documents[idx]->file_name != NULL) ? documents[idx]->file_name : GEANY_STRING_UNTITLED);
 
-	return idx;
+	return documents[idx];
 }
 
 
@@ -689,14 +678,14 @@ gint document_new_file(const gchar *filename, GeanyFiletype *ft, const gchar *te
  *  @param ft The %filetype for the %document or @c NULL to auto-detect the %filetype.
  *  @param forced_enc The file encoding to use or @c NULL to auto-detect the file encoding.
  *
- *  @return The index of the opened file or -1 if an error occurred.
+ *  @return The document opened or NULL.
  **/
-gint document_open_file(const gchar *locale_filename, gboolean readonly,
+GeanyDocument *documents_open_file(const gchar *locale_filename, gboolean readonly,
 		GeanyFiletype *ft, const gchar *forced_enc)
 {
-	/* This is a wrapper for document_open_file_full().
-	 * Do not use this when opening multiple files (unless using document_delay_colourise()). */
-	return document_open_file_full(-1, locale_filename, 0, readonly, ft, forced_enc);
+	gint idx = document_open_file_full(-1, locale_filename, 0, readonly, ft, forced_enc);
+
+	return DOC_IDX_VALID(idx) ? documents[idx] : NULL;
 }
 
 
@@ -1216,8 +1205,6 @@ void document_open_file_list(const gchar *data, gssize length)
  *  @param readonly Whether to open the %document in read-only mode.
  *  @param ft The %filetype for the %document or @c NULL to auto-detect the %filetype.
  *  @param forced_enc The file encoding to use or @c NULL to auto-detect the file encoding.
- *
- *  @return The index of the opened file or -1 if an error occurred.
  **/
 void document_open_files(const GSList *filenames, gboolean readonly, GeanyFiletype *ft,
 		const gchar *forced_enc)
@@ -1238,14 +1225,15 @@ void document_open_files(const GSList *filenames, gboolean readonly, GeanyFilety
  *  Reloads the %document with the given index @a idx with the specified file encoding
  *  @a forced_enc or @c NULL to auto-detect the file encoding.
  *
- *  @param idx The %document index for the file to reload.
+ *  @param doc The document to reload.
  *  @param forced_enc The file encoding to use or @c NULL to auto-detect the file encoding.
  *
  *  @return @a TRUE if the %document was actually reloaded or @a FALSE otherwise.
  **/
-gboolean document_reload_file(gint idx, const gchar *forced_enc)
+gboolean documents_reload_file(GeanyDocument *doc, const gchar *forced_enc)
 {
 	gint pos = 0;
+	gint idx = DOC_IDX(doc);
 
 	if (! DOC_IDX_VALID(idx))
 		return FALSE;
@@ -1448,16 +1436,17 @@ static gint write_data_to_disk(gint idx, const gchar *data, gint len)
  *
  *  If the file is not modified, this functions does nothing unless force is set to @c TRUE.
  *
- *  @param idx The %document index for the file to save.
+ *  @param doc The %document to save.
  *  @param force Whether to save the file even if it is not modified (e.g. for Save As).
  *
  *  @return @c TRUE if the file was saved or @c FALSE if the file could not or should not be saved.
  **/
-gboolean document_save_file(gint idx, gboolean force)
+gboolean documents_save_file(GeanyDocument *doc, gboolean force)
 {
 	gchar *data;
 	gsize len;
 	gint err;
+	gint idx = DOC_IDX(doc);
 
 	if (! DOC_IDX_VALID(idx))
 		return FALSE;
@@ -2128,11 +2117,14 @@ static gboolean update_type_keywords(ScintillaObject *sci, gint lang)
 }
 
 
-/* sets the filetype of the document (sets syntax highlighting and tagging) */
-void document_set_filetype(gint idx, GeanyFiletype *type)
+/** Sets the filetype of the document (which controls syntax highlighting and tags)
+ * @param doc The document to use.
+ * @param type The filetype. */
+void documents_set_filetype(GeanyDocument *doc, GeanyFiletype *type)
 {
 	gboolean colourise = FALSE;
 	gboolean ft_changed;
+	gint idx = DOC_IDX(doc);
 
 	if (type == NULL || ! DOC_IDX_VALID(idx))
 		return;
@@ -2179,11 +2171,13 @@ void document_set_filetype(gint idx, GeanyFiletype *type)
  *  This function only set the encoding of the %document, it does not any conversions. The new
  *  encoding is used when e.g. saving the file.
  *
- *  @param idx The index of the %document.
+ *  @param doc The %document to use.
  *  @param new_encoding The encoding to be set for the %document.
  **/
-void document_set_encoding(gint idx, const gchar *new_encoding)
+void documents_set_encoding(GeanyDocument *doc, const gchar *new_encoding)
 {
+	gint idx = DOC_IDX(doc);
+
 	if (! DOC_IDX_VALID(idx) || new_encoding == NULL ||
 		utils_str_equal(new_encoding, documents[idx]->encoding)) return;
 
@@ -2464,9 +2458,10 @@ GdkColor *document_get_status_color(gint idx)
 }
 
 
-/* useful debugging function (usually debug macros aren't enabled) */
+/* useful debugging function (usually debug macros aren't enabled so can't use
+ * documents[idx]) */
 #ifdef GEANY_DEBUG
-GeanyDocument *doc(gint idx)
+GeanyDocument *doc_at(gint idx)
 {
 	return DOC_IDX_VALID(idx) ? documents[idx] : NULL;
 }
@@ -2633,3 +2628,103 @@ gboolean document_close_all(void)
 }
 
 
+/* temporary compatibility functions */
+
+gint document_new_file(const gchar *filename, GeanyFiletype *ft, const gchar *text)
+{
+	GeanyDocument *doc = documents_new_file(filename, ft, text);
+
+	return DOC_IDX(doc);
+}
+
+
+gint document_get_cur_idx()
+{
+	GeanyDocument *doc = document_get_current();
+
+	return DOC_IDX(doc);
+}
+
+
+gint document_find_by_sci(ScintillaObject *sci)
+{
+	GeanyDocument *doc = documents_find_by_sci(sci);
+
+	return DOC_IDX(doc);
+}
+
+
+gint document_get_n_idx(guint page_num)
+{
+	GeanyDocument *doc = document_get_from_page(page_num);
+
+	return DOC_IDX(doc);
+}
+
+
+gint document_find_by_filename(const gchar *utf8_filename)
+{
+	GeanyDocument *doc = documents_find_by_filename(utf8_filename);
+
+	return DOC_IDX(doc);
+}
+
+
+gint document_find_by_real_path(const gchar *realname)
+{
+	GeanyDocument *doc = documents_find_by_real_path(realname);
+
+	return DOC_IDX(doc);
+}
+
+
+gboolean document_save_file(gint idx, gboolean force)
+{
+	if (DOC_IDX_VALID(idx))
+		return documents_save_file(documents[idx], force);
+	return FALSE;
+}
+
+
+gint document_open_file(const gchar *locale_filename, gboolean readonly,
+		GeanyFiletype *ft, const gchar *forced_enc)
+{
+	GeanyDocument *doc = documents_open_file(locale_filename, readonly, ft, forced_enc);
+
+	return DOC_IDX(doc);
+}
+
+
+gboolean document_remove(guint page_num)
+{
+	return document_remove_page(page_num);
+}
+
+
+gboolean document_reload_file(gint idx, const gchar *forced_enc)
+{
+	if (DOC_IDX_VALID(idx))
+		return documents_reload_file(documents[idx], forced_enc);
+	return FALSE;
+}
+
+
+void document_set_encoding(gint idx, const gchar *new_encoding)
+{
+	if (DOC_IDX_VALID(idx))
+		documents_set_encoding(documents[idx], new_encoding);
+}
+
+
+void document_set_filetype(gint idx, GeanyFiletype *type)
+{
+	if (DOC_IDX_VALID(idx))
+		documents_set_filetype(documents[idx], type);
+}
+
+
+void document_set_text_changed(gint idx)
+{
+	if (DOC_IDX_VALID(idx))
+		documents_set_text_changed(documents[idx], documents[idx]->changed);
+}

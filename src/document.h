@@ -24,8 +24,11 @@
 /**
  *  @file document.h
  *  Document related actions: new, save, open, etc.
- *  Also Scintilla search actions.
+ *
+ * @note Currently some functions have a @c documents_ prefix instead of @c document_.
+ * This is temporary - plugins should still use the p_document-> syntax for those functions.
  **/
+/* Also Scintilla search actions - but these should probably be moved to search.c. */
 
 
 #ifndef GEANY_DOCUMENT_H
@@ -68,6 +71,7 @@ typedef struct GeanyDocument
 {
 	/** General flag to represent this document is active and all properties are set correctly. */
 	gboolean		 is_valid;
+	gint			 index;		/**< Index in the documents array. */
 	/** Whether this %document support source code symbols(tags) to show in the sidebar. */
 	gboolean		 has_tags;
 	/** The UTF-8 encoded file name.
@@ -126,6 +130,10 @@ extern GPtrArray *documents_array;
  **/
 #define documents ((GeanyDocument **)documents_array->pdata)
 
+/** NULL-safe way to get the index of @a doc_ptr in the documents array. */
+#define DOC_IDX(doc_ptr) \
+	(doc_ptr ? doc_ptr->index : -1)
+
 /**
  *  DOC_IDX_VALID checks whether the passed index points to a valid %document object by checking
  *  important properties. It returns FALSE if the index is not valid and then this index
@@ -135,7 +143,7 @@ extern GPtrArray *documents_array;
 	((doc_idx) >= 0 && (guint)(doc_idx) < documents_array->len && documents[doc_idx]->is_valid)
 
 /**
- *  DOC_FILENAME) returns the filename of the %document corresponding to the passed index or
+ *  DOC_FILENAME returns the filename of the %document corresponding to the passed index or
  *  GEANY_STRING_UNTITLED (e.g. _("untitled")) if the %document's filename was not yet set.
  *  This macro never returns NULL.
  **/
@@ -144,19 +152,45 @@ extern GPtrArray *documents_array;
 		GEANY_STRING_UNTITLED)
 
 
+/* These functions will replace the older functions. For now they have a documents_ prefix. */
+
+GeanyDocument* documents_new_file(const gchar *filename, GeanyFiletype *ft,
+		const gchar *text);
+
+GeanyDocument* documents_find_by_filename(const gchar *utf8_filename);
+
+GeanyDocument* documents_find_by_real_path(const gchar *realname);
+
+gboolean documents_save_file(GeanyDocument *doc, gboolean force);
+
+GeanyDocument* documents_open_file(const gchar *locale_filename, gboolean readonly,
+		GeanyFiletype *ft, const gchar *forced_enc);
+
+gboolean documents_reload_file(GeanyDocument *doc, const gchar *forced_enc);
+
+void documents_set_encoding(GeanyDocument *doc, const gchar *new_encoding);
+
+void documents_set_text_changed(GeanyDocument *doc, gboolean changed);
+
+void documents_set_filetype(GeanyDocument *doc, GeanyFiletype *type);
+
+
+
 gint document_find_by_filename(const gchar *utf8_filename);
 
-gint document_find_by_realpath(const gchar *realname);
+gint document_find_by_real_path(const gchar *realname);
 
 gint document_find_by_sci(ScintillaObject *sci);
 
 gint document_get_notebook_page(gint doc_idx);
 
+GeanyDocument* document_get_from_page(guint page_num);
+
 gint document_get_n_idx(guint page_num);
 
-gint document_get_cur_idx(void);
-
 GeanyDocument *document_get_current(void);
+
+gint document_get_cur_idx(void);
 
 void document_init_doclist(void);
 
@@ -165,6 +199,8 @@ void document_finalize(void);
 void document_set_text_changed(gint idx);
 
 void document_apply_update_prefs(gint idx);
+
+gboolean document_remove_page(guint page_num);
 
 gboolean document_remove(guint page_num);
 
