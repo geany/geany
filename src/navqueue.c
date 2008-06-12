@@ -144,7 +144,7 @@ static void add_new_position(const gchar *utf8_filename, gint pos)
  *
  *  @return @a TRUE if the cursor has changed the position to @a line or @a FALSE otherwise.
  **/
-gboolean navqueues_goto_line(GeanyDocument *old_doc, GeanyDocument *new_doc, gint line)
+gboolean navqueue_goto_line(GeanyDocument *old_doc, GeanyDocument *new_doc, gint line)
 {
 	gint pos;
 
@@ -168,13 +168,6 @@ gboolean navqueues_goto_line(GeanyDocument *old_doc, GeanyDocument *new_doc, gin
 	}
 
 	return editor_goto_pos(DOC_IDX(new_doc), pos, TRUE);
-}
-
-
-/* temporary compatibility function */
-gboolean navqueue_goto_line(gint old_idx, gint new_idx, gint line)
-{
-	return navqueues_goto_line(documents[old_idx], documents[new_idx],	line);
 }
 
 

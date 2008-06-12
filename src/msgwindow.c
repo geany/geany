@@ -278,7 +278,7 @@ void msgwin_show_hide(gboolean show)
  *  @param format Printf()-style format string.
  *  @param ... Arguments for the @c format string.
  **/
-void msgwins_msg_add_fmt(gint msg_color, gint line, GeanyDocument *doc, const gchar *format, ...)
+void msgwin_msg_add_fmt(gint msg_color, gint line, GeanyDocument *doc, const gchar *format, ...)
 {
 	gchar string[512];
 	va_list args;
@@ -287,12 +287,12 @@ void msgwins_msg_add_fmt(gint msg_color, gint line, GeanyDocument *doc, const gc
 	g_vsnprintf(string, 512, format, args);
 	va_end(args);
 
-	msgwins_msg_add(msg_color, line, doc, string);
+	msgwin_msg_add(msg_color, line, doc, string);
 }
 
 
 /* adds string to the msg treeview */
-void msgwins_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *string)
+void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *string)
 {
 	GtkTreeIter iter;
 	const GdkColor *color = get_color(msg_color);
@@ -314,28 +314,6 @@ void msgwins_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar 
 	gtk_widget_set_sensitive(lookup_widget(main_widgets.window, "next_message1"), TRUE);
 
 	g_free(tmp);
-}
-
-
-/* temporary compatibility functions */
-void msgwin_msg_add_fmt(gint msg_color, gint line, gint idx, const gchar *format, ...)
-{
-	gchar string[512];
-	va_list args;
-
-	va_start(args, format);
-	g_vsnprintf(string, 512, format, args);
-	va_end(args);
-
-	msgwins_msg_add(msg_color, line, documents[idx], string);
-}
-
-
-void msgwin_msg_add(gint msg_color, gint line, gint idx, const gchar *string)
-{
-	if (! DOC_IDX_VALID(idx))
-		return;
-	msgwins_msg_add(msg_color, line, documents[idx], string);
 }
 
 
@@ -523,7 +501,6 @@ gboolean msgwin_goto_compiler_file_line()
 	gchar *string;
 	gboolean ret = FALSE;
 	GdkColor *color;
-	gint old_idx = document_get_cur_idx();
 
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_compiler));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter))
@@ -541,7 +518,6 @@ gboolean msgwin_goto_compiler_file_line()
 		if (string != NULL)
 		{
 			gint line;
-			gint idx;
 			gchar *filename, *dir;
 			GtkTreePath *path;
 
@@ -556,18 +532,20 @@ gboolean msgwin_goto_compiler_file_line()
 			if (filename != NULL && line > -1)
 			{
 				gchar *utf8_filename = utils_get_utf8_from_locale(filename);
-				idx = document_find_by_filename(utf8_filename);
+				GeanyDocument *doc = documents_find_by_filename(utf8_filename);
+				GeanyDocument *old_doc = document_get_current();
+
 				g_free(utf8_filename);
 
-				if (idx < 0)	/* file not already open */
-					idx = document_open_file(filename, FALSE, NULL, NULL);
+				if (doc == NULL)	/* file not already open */
+					doc = documents_open_file(filename, FALSE, NULL, NULL);
 
-				if (DOC_IDX_VALID(idx))
+				if (doc != NULL)
 				{
-					if (! documents[idx]->changed)	/* if modified, line may be wrong */
-						editor_set_indicator_on_line(idx, line - 1);
+					if (! doc->changed)	/* if modified, line may be wrong */
+						editor_set_indicator_on_line(DOC_IDX(doc), line - 1);
 
-					ret = navqueue_goto_line(old_idx, idx, line);
+					ret = navqueue_goto_line(old_doc, doc, line);
 				}
 			}
 			g_free(filename);
@@ -823,14 +801,15 @@ gboolean msgwin_goto_messages_file_line()
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_msg));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter))
 	{
-		gint idx, line, old_idx = document_get_cur_idx();
+		gint line;
 		gchar *string;
+		GeanyDocument *doc;
+		GeanyDocument *old_doc = document_get_current();
 
-		gtk_tree_model_get(model, &iter, 0, &line, 1, &idx, 3, &string, -1);
-		if (line >= 0 && idx >= 0)
+		gtk_tree_model_get(model, &iter, 0, &line, 1, &doc, 3, &string, -1);
+		if (line >= 0 && doc != NULL)
 		{
-			if (DOC_IDX_VALID(idx))
-				ret = navqueue_goto_line(old_idx, idx, line);
+			ret = navqueue_goto_line(old_doc, doc, line);
 		}
 		else if (line < 0 && string != NULL)
 		{
@@ -839,9 +818,9 @@ gboolean msgwin_goto_messages_file_line()
 			if (filename != NULL && line > -1)
 			{
 				/* use document_open_file to find an already open file, or open it in place */
-				idx = document_open_file(filename, FALSE, NULL, NULL);
-				if (DOC_IDX_VALID(idx))
-					ret = navqueue_goto_line(old_idx, idx, line);
+				doc = documents_open_file(filename, FALSE, NULL, NULL);
+				if (doc != NULL)
+					ret = navqueue_goto_line(old_doc, doc, line);
 			}
 			g_free(filename);
 		}

@@ -649,9 +649,9 @@ static gboolean on_taglist_tree_selection_changed(GtkTreeSelection *selection)
 		gtk_tree_model_get(model, &iter, SYMBOLS_COLUMN_LINE, &line, -1);
 		if (line > 0)
 		{
-			gint idx = document_get_cur_idx();
+			GeanyDocument *doc = document_get_current();
 
-			navqueue_goto_line(idx, idx, line);
+			navqueue_goto_line(doc, doc, line);
 		}
 	}
 	return FALSE;

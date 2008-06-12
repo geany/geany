@@ -10,6 +10,10 @@
    Make NavQueueFuncs and MsgWinFuncs use a GeanyDocument* instead of an
    integer index.
    Adjust plugins to work with these changes.
+ * src/navqueue.c, src/navqueue.h, src/treeviews.c, src/msgwindow.c,
+   src/msgwindow.h, src/search.c, src/plugins.c, src/symbols.c:
+   Remove temporary navqueues_ and msgwins_ functions and adjust
+   depending code.
 
 
 2008-06-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

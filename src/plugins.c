@@ -194,7 +194,7 @@ static SupportFuncs support_funcs = {
 static MsgWinFuncs msgwin_funcs = {
 	&msgwin_status_add,
 	&msgwin_compiler_add_fmt,
-	&msgwins_msg_add_fmt,
+	&msgwin_msg_add_fmt,
 	&msgwin_clear_tab,
 	&msgwin_switch_tab
 };
@@ -234,7 +234,7 @@ static FiletypeFuncs filetype_funcs = {
 };
 
 static NavQueueFuncs navqueue_funcs = {
-	&navqueues_goto_line
+	&navqueue_goto_line
 };
 
 static GeanyFunctions geany_functions = {
