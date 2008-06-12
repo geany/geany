@@ -35,6 +35,7 @@
 #include "support.h"
 #include "utils.h"
 #include "ui_utils.h"
+#include "document.h"
 #include "msgwindow.h"
 #include "main.h"
 #include "keyfile.h"
@@ -42,7 +43,6 @@
 # include "win32.h"
 #endif
 #include "build.h"
-#include "document.h"
 #include "geanyobject.h"
 
 

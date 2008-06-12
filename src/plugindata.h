@@ -237,7 +237,8 @@ typedef struct ScintillaFuncs
 	void	(*get_text) (struct _ScintillaObject *sci, gint len, gchar* text);
 	gint	(*get_length) (struct _ScintillaObject *sci);
 	gint	(*get_current_position) (struct _ScintillaObject *sci);
-	void	(*set_current_position) (struct _ScintillaObject* sci, gint position, gboolean scroll_to_caret);
+	void	(*set_current_position) (struct _ScintillaObject* sci, gint position,
+			 gboolean scroll_to_caret);
 	gint	(*get_col_from_position) (struct _ScintillaObject* sci, gint position);
 	gint	(*get_line_from_position) (struct _ScintillaObject* sci, gint position);
 	gint	(*get_position_from_line) (struct _ScintillaObject* sci, gint line);
@@ -342,8 +343,8 @@ typedef struct MsgWinFuncs
 	/* status_add() does not set the status bar - use ui->set_statusbar() instead. */
 	void		(*status_add) (const gchar *format, ...);
 	void		(*compiler_add) (gint msg_color, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
-	void		(*msg_add) (gint msg_color, gint line, gint idx, const gchar *format, ...)
-							G_GNUC_PRINTF (4, 5);
+	void		(*msg_add) (gint msg_color, gint line, struct GeanyDocument *doc,
+				 const gchar *format, ...) G_GNUC_PRINTF (4, 5);
 	void		(*clear_tab) (gint tabnum);
 	void		(*switch_tab) (gint tabnum, gboolean show);
 }
@@ -417,7 +418,8 @@ TagManagerFuncs;
 /* See navqueue.h */
 typedef struct NavQueueFuncs
 {
-	gboolean		(*goto_line) (gint old_idx, gint new_idx, gint line);
+	gboolean		(*goto_line) (struct GeanyDocument *old_doc, struct GeanyDocument *new_doc,
+					 gint line);
 }
 NavQueueFuncs;
 

@@ -33,9 +33,9 @@
 #include "highlighting.h"
 #include "support.h"
 #include "templates.h"
+#include "document.h"
 #include "msgwindow.h"
 #include "utils.h"
-#include "document.h"
 #include "sciwrappers.h"
 #include "ui_utils.h"
 

@@ -37,6 +37,7 @@
 #include "geany.h"
 #include "utils.h"
 #include "support.h"
+#include "document.h"
 #include "msgwindow.h"
 #include "encodings.h"
 #include "callbacks.h"

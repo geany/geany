@@ -1,3 +1,17 @@
+2008-06-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/build.c, src/project.c, src/encodings.c, src/prefs.c,
+   src/navqueue.c, src/plugindata.h, src/navqueue.h, src/msgwindow.c,
+   src/msgwindow.h, src/vte.c, src/filetypes.c, src/search.c,
+   src/plugins.c, plugins/export.c, plugins/vcdiff.c,
+   plugins/filebrowser.c, plugins/htmlchars.c, plugins/autosave.c,
+   plugins/classbuilder.c:
+   Note: this breaks the plugin API for msgwin and navqueue functions.
+   Make NavQueueFuncs and MsgWinFuncs use a GeanyDocument* instead of an
+   integer index.
+   Adjust plugins to work with these changes.
+
+
 2008-06-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/plugindata.h, src/document.c, src/plugins.c, src/document.h,

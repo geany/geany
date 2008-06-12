@@ -30,6 +30,7 @@
 #include "document.h"
 #include "keybindings.h"
 #include "ui_utils.h"
+#include "utils.h"
 #include "pluginmacros.h"
 
 
@@ -38,7 +39,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(64)
+PLUGIN_VERSION_CHECK(69)
 
 PLUGIN_SET_INFO(_("HTML Characters"), _("Inserts HTML character entities like '&amp;'."), VERSION,
 	_("The Geany developer team"))
@@ -438,18 +439,18 @@ static void sc_fill_store(GtkTreeStore *store)
  * returns only TRUE if a valid selection(i.e. no category) could be found */
 static gboolean sc_insert(GtkTreeModel *model, GtkTreeIter *iter)
 {
-	gint idx = p_document->get_cur_idx();
+	GeanyDocument *doc = p_document->get_current();
 	gboolean result = FALSE;
 
-	if (DOC_IDX_VALID(idx))
+	if (doc != NULL)
 	{
 		gchar *str;
-		gint pos = p_sci->get_current_position(documents[idx]->sci);
+		gint pos = p_sci->get_current_position(doc->sci);
 
 		gtk_tree_model_get(model, iter, COLUMN_HTML_NAME, &str, -1);
-		if (str && *str)
+		if (NZV(str))
 		{
-			p_sci->insert_text(documents[idx]->sci, pos, str);
+			p_sci->insert_text(doc->sci, pos, str);
 			g_free(str);
 			result = TRUE;
 		}
@@ -507,11 +508,6 @@ static void sc_on_tree_row_activated(GtkTreeView *treeview, GtkTreePath *path,
 static void
 item_activate(GtkMenuItem *menuitem, gpointer gdata)
 {
-	/* refuse opening the dialog if we don't have an active tab */
-	gint idx = p_document->get_cur_idx();
-
-	if (idx == -1 || ! documents[idx]->is_valid) return;
-
 	tools_show_dialog_insert_special_chars();
 }
 

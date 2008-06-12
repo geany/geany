@@ -33,7 +33,6 @@
 #include "support.h"
 #include "prefs.h"
 #include "callbacks.h"
-#include "msgwindow.h"
 #include "ui_utils.h"
 #include "utils.h"
 #include "document.h"
@@ -43,6 +42,7 @@
 #include "vte.h"
 #include "navqueue.h"
 #include "editor.h"
+#include "msgwindow.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -135,8 +135,8 @@ static void prepare_msg_tree_view(void)
 	GtkTreeSelection *selection;
 	PangoFontDescription *pfd;
 
-	/* doc idx, line, fg, str */
-	msgwindow.store_msg = gtk_list_store_new(4, G_TYPE_INT, G_TYPE_INT,
+	/* line, doc, fg, str */
+	msgwindow.store_msg = gtk_list_store_new(4, G_TYPE_INT, G_TYPE_POINTER,
 		GDK_TYPE_COLOR, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(msgwindow.tree_msg), GTK_TREE_MODEL(msgwindow.store_msg));
 
@@ -269,16 +269,16 @@ void msgwin_show_hide(gboolean show)
 
 /**
  *  Adds a new message in the messages tab treeview in the messages window.
- *  If @c line and @c idx are set, clicking on this line jumps into the file which is specified
- *  by @c idx into the line specified with @c line.
+ *  If @c line and @c doc are set, clicking on this line jumps into the file which is specified
+ *  by @c doc into the line specified with @c line.
  *
  *  @param msg_color A color to be used for the text. It must be an element of #MsgColors.
  *  @param line The document's line where the message belongs to. Set to -1 to ignore.
- *  @param idx The document's index in the documents_array. Set to -1 to ignore.
+ *  @param doc The document. Set to @c NULL to ignore.
  *  @param format Printf()-style format string.
  *  @param ... Arguments for the @c format string.
  **/
-void msgwin_msg_add_fmt(gint msg_color, gint line, gint idx, const gchar *format, ...)
+void msgwins_msg_add_fmt(gint msg_color, gint line, GeanyDocument *doc, const gchar *format, ...)
 {
 	gchar string[512];
 	va_list args;
@@ -287,12 +287,12 @@ void msgwin_msg_add_fmt(gint msg_color, gint line, gint idx, const gchar *format
 	g_vsnprintf(string, 512, format, args);
 	va_end(args);
 
-	msgwin_msg_add(msg_color, line, idx, string);
+	msgwins_msg_add(msg_color, line, doc, string);
 }
 
 
 /* adds string to the msg treeview */
-void msgwin_msg_add(gint msg_color, gint line, gint idx, const gchar *string)
+void msgwins_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *string)
 {
 	GtkTreeIter iter;
 	const GdkColor *color = get_color(msg_color);
@@ -309,11 +309,33 @@ void msgwin_msg_add(gint msg_color, gint line, gint idx, const gchar *string)
 		tmp = g_strdup(string);
 
 	gtk_list_store_append(msgwindow.store_msg, &iter);
-	gtk_list_store_set(msgwindow.store_msg, &iter, 0, line, 1, idx, 2, color, 3, tmp, -1);
+	gtk_list_store_set(msgwindow.store_msg, &iter, 0, line, 1, doc, 2, color, 3, tmp, -1);
 
 	gtk_widget_set_sensitive(lookup_widget(main_widgets.window, "next_message1"), TRUE);
 
 	g_free(tmp);
+}
+
+
+/* temporary compatibility functions */
+void msgwin_msg_add_fmt(gint msg_color, gint line, gint idx, const gchar *format, ...)
+{
+	gchar string[512];
+	va_list args;
+
+	va_start(args, format);
+	g_vsnprintf(string, 512, format, args);
+	va_end(args);
+
+	msgwins_msg_add(msg_color, line, documents[idx], string);
+}
+
+
+void msgwin_msg_add(gint msg_color, gint line, gint idx, const gchar *string)
+{
+	if (! DOC_IDX_VALID(idx))
+		return;
+	msgwins_msg_add(msg_color, line, documents[idx], string);
 }
 
 

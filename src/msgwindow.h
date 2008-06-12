@@ -84,6 +84,12 @@ void msgwin_switch_tab(gint tabnum, gboolean show);
 
 void msgwin_clear_tab(gint tabnum);
 
+void msgwins_msg_add_fmt(gint msg_color, gint line, GeanyDocument *doc, const gchar *format, ...)
+			G_GNUC_PRINTF (4, 5);
+
+void msgwins_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *string);
+
+/* temporary compatibility functions */
 void msgwin_msg_add_fmt(gint msg_color, gint line, gint idx, const gchar *format, ...) G_GNUC_PRINTF (4, 5);
 
 void msgwin_msg_add(gint msg_color, gint line, gint idx, const gchar *string);
