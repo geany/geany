@@ -791,9 +791,6 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir, gch
 }
 
 
-#define DOC_VALID(doc_ptr) \
-	((doc_ptr) != NULL && (doc_ptr)->is_valid)
-
 gboolean msgwin_goto_messages_file_line()
 {
 	GtkTreeIter iter;

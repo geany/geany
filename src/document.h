@@ -130,6 +130,14 @@ extern GPtrArray *documents_array;
  **/
 #define documents ((GeanyDocument **)documents_array->pdata)
 
+/** Check that the @a doc_ptr document still exists (has not been closed).
+ * This is useful when @a doc_ptr was stored some time earlier and documents may have been
+ * closed since then.
+ * @note This should not be used to check the result of the main API functions,
+ * these only need a NULL-pointer check - @c p_document->get_current() != @c NULL. */
+#define DOC_VALID(doc_ptr) \
+	((doc_ptr) != NULL && (doc_ptr)->is_valid)
+
 /** NULL-safe way to get the index of @a doc_ptr in the documents array. */
 #define DOC_IDX(doc_ptr) \
 	(doc_ptr ? doc_ptr->index : -1)

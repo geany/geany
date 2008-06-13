@@ -3,6 +3,8 @@
  * src/msgwindow.c:
    Fix a segfault after clicking on a messages window Find Usage item
    after the relevant document has been closed.
+ * src/msgwindow.c, src/document.h:
+   Move DOC_VALID() macro to document.h, add dox.
 
 
 2008-06-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
