@@ -791,6 +791,9 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir, gch
 }
 
 
+#define DOC_VALID(doc_ptr) \
+	((doc_ptr) != NULL && (doc_ptr)->is_valid)
+
 gboolean msgwin_goto_messages_file_line()
 {
 	GtkTreeIter iter;
@@ -807,7 +810,8 @@ gboolean msgwin_goto_messages_file_line()
 		GeanyDocument *old_doc = document_get_current();
 
 		gtk_tree_model_get(model, &iter, 0, &line, 1, &doc, 3, &string, -1);
-		if (line >= 0 && doc != NULL)
+		/* doc may have been closed, so check doc->is_valid: */
+		if (line >= 0 && DOC_VALID(doc))
 		{
 			ret = navqueue_goto_line(old_doc, doc, line);
 		}
