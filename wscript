@@ -219,7 +219,8 @@ def configure(conf):
         conf.env.append_value('CCFLAGS', '-g -DGEANY_DEBUG')
 
     conf.env.append_value('CCFLAGS', '-DHAVE_CONFIG_H')
-    conf.env.append_value('CXXFLAGS', '-DNDEBUG -Os -DGTK -DGTK2 -DSCI_LEXER -DG_THREADS_IMPL_NONE')
+    conf.env.append_value('CXXFLAGS', '-DNDEBUG -Os -DGTK -DGTK2 -DSCI_LEXER -DG_THREADS_IMPL_NONE \
+            -Wno-missing-braces -Wno-char-subscripts') # Scintilla flags
 
 
 def set_options(opt):
@@ -227,22 +228,23 @@ def set_options(opt):
     opt.tool_options('compiler_cxx')
     opt.tool_options('intltool')
 
-    # Features
-    opt.add_option('--disable-plugins', action='store_true', default=False,
-        help='compile without plugin support [default: No]', dest='no_plugins')
-    opt.add_option('--disable-socket', action='store_true', default=False,
-        help='compile without support to detect a running instance [[default: No]', dest='no_socket')
-    opt.add_option('--disable-vte', action='store_true', default=False,
-        help='compile without support for an embedded virtual terminal [[default: No]', dest='no_vte')
-    opt.add_option('--enable-gnu-regex', action='store_true', default=False,
-        help='compile with included GNU regex library [default: No]', dest='gnu_regex')
-    # Paths
-    opt.add_option('--mandir', type='string', default='',
-        help='man documentation', dest='mandir')
-    opt.add_option('--docdir', type='string', default='',
-        help='documentation root', dest='docdir')
-    opt.add_option('--libdir', type='string', default='',
-        help='object code libraries', dest='libdir')
+    if 'configure' in sys.argv:
+        # Features
+        opt.add_option('--disable-plugins', action='store_true', default=False,
+            help='compile without plugin support [default: No]', dest='no_plugins')
+        opt.add_option('--disable-socket', action='store_true', default=False,
+            help='compile without support to detect a running instance [[default: No]', dest='no_socket')
+        opt.add_option('--disable-vte', action='store_true', default=False,
+            help='compile without support for an embedded virtual terminal [[default: No]', dest='no_vte')
+        opt.add_option('--enable-gnu-regex', action='store_true', default=False,
+            help='compile with included GNU regex library [default: No]', dest='gnu_regex')
+        # Paths
+        opt.add_option('--mandir', type='string', default='',
+            help='man documentation', dest='mandir')
+        opt.add_option('--docdir', type='string', default='',
+            help='documentation root', dest='docdir')
+        opt.add_option('--libdir', type='string', default='',
+            help='object code libraries', dest='libdir')
     # Actions
     opt.add_option('--htmldoc', action='store_true', default=False,
         help='generate HTML documentation', dest='htmldoc')
@@ -408,7 +410,7 @@ def shutdown():
 
     if Params.g_options.apidoc:
         doxyfile = os.path.join(Params.g_build.m_srcnode.abspath( \
-            Params.g_build.env()), 'doc', 'Doxyfile')
+            Params.g_build.env), 'doc', 'Doxyfile')
         os.chdir('doc')
         launch('doxygen ' + doxyfile, 'Generating API reference documentation')
 

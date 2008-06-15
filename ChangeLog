@@ -3,6 +3,11 @@
  * tagmanager/python.c:
    Fix a regression introduced in latest bug fixes and fix some
    indentation and comments.
+ * wscript:
+   Add compiler flags to supress Scintilla warnings.
+   Fix old usage of build.env.
+   Make configure-only options only available when actually configure
+   is used.
 
 
 2008-06-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
