@@ -824,7 +824,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 				editor_prefs.use_tabs = use_tabs;
 				for (i = 0; i < documents_array->len; i++)
 				{
-					if (documents[i]->is_valid)
+					if (DOC_VALID(documents[i]))
 						editor_set_use_tabs(documents[i], editor_prefs.use_tabs);
 				}
 			}
@@ -977,7 +977,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		/* re-colourise all open documents, if tab width or long line settings have changed */
 		for (i = 0; i < documents_array->len; i++)
 		{
-			if (documents[i]->is_valid)
+			if (DOC_VALID(documents[i]))
 			{
 				document_apply_update_prefs(documents[i]);
 				if (! editor_prefs.folding)
@@ -1046,7 +1046,7 @@ void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 			{
 				Document *fdoc = DOCUMENT(documents[i]);
 
-				if (documents[i]->is_valid && GTK_IS_WIDGET(fdoc->tag_tree))
+				if (DOC_VALID(documents[i]) && GTK_IS_WIDGET(fdoc->tag_tree))
 					ui_widget_modify_font_from_string(fdoc->tag_tree,
 						interface_prefs.tagbar_font);
 			}

@@ -807,7 +807,7 @@ gboolean msgwin_goto_messages_file_line()
 		GeanyDocument *old_doc = document_get_current();
 
 		gtk_tree_model_get(model, &iter, 0, &line, 1, &doc, 3, &string, -1);
-		/* doc may have been closed, so check doc->is_valid: */
+		/* doc may have been closed, so check doc->index: */
 		if (line >= 0 && DOC_VALID(doc))
 		{
 			ret = navqueue_goto_line(old_doc, doc, line);

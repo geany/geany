@@ -4,6 +4,10 @@
    Use document pointer instead of an index to the documents array
    everywhere in the core code.
    Pass a document pointer to the callbacks of all "document-*" signals.
+   Rename utils_check_disk_status() in document_check_disk_status() and
+   move it into document.c.
+   Get rid of GeanyDocument::is_valid, use the index value instead.
+   Remove DOC_IDX_* macros.
 
 
 2008-06-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

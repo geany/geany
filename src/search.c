@@ -856,13 +856,13 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		gboolean check_close = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 						lookup_widget(GTK_WIDGET(widgets.find_dialog), "check_close")));
 
+		if (doc == NULL)
+			return;
+
 		search_replace_escape = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 						lookup_widget(GTK_WIDGET(widgets.find_dialog), "check_escape")));
 		search_data.backwards = FALSE;
 		search_data.search_bar = FALSE;
-
-		if (DOC_VALID(doc))
-			return;
 
 		g_free(search_data.text);
 		search_data.text = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(user_data)))));
@@ -1011,8 +1011,6 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			for (n = 0; (gint) n < gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)); n++)
 			{
 				GeanyDocument *tmp_doc = document_get_from_page(n);
-
-				if (! tmp_doc->is_valid) continue;
 
 				if (document_replace_all(tmp_doc, find, replace, search_flags_re,
 					search_replace_escape_re)) count++;
@@ -1409,7 +1407,7 @@ void search_find_usage(const gchar *search_text, gint flags, gboolean in_session
 		guint i;
 		for (i = 0; i < documents_array->len; i++)
 		{
-			if (documents[i]->is_valid)
+			if (DOC_VALID(documents[i]))
 				if (find_document_usage(documents[i], search_text, flags) > 0) found = TRUE;
 		}
 	}

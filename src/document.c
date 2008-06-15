@@ -127,7 +127,7 @@ GeanyDocument* document_find_by_real_path(const gchar *realname)
 	{
 		GeanyDocument *doc = documents[i];
 
-		if (! documents[i]->is_valid || ! doc->real_path) continue;
+		if (documents[i]->index == -1 || ! doc->real_path) continue;
 
 		if (filenamecmp(realname, doc->real_path) == 0)
 		{
@@ -175,7 +175,7 @@ GeanyDocument *document_find_by_filename(const gchar *utf8_filename)
 	{
 		doc = documents[i];
 
-		if (! documents[i]->is_valid || doc->file_name == NULL) continue;
+		if (documents[i]->index == -1 || doc->file_name == NULL) continue;
 
 		if (filenamecmp(utf8_filename, doc->file_name) == 0)
 		{
@@ -199,7 +199,7 @@ GeanyDocument *document_find_by_sci(ScintillaObject *sci)
 
 	for (i = 0; i < documents_array->len; i++)
 	{
-		if (documents[i]->is_valid && documents[i]->sci == sci)
+		if (documents[i]->index == -1 && documents[i]->sci == sci)
 			return documents[i];
 	}
 	return NULL;
@@ -325,15 +325,15 @@ void document_apply_update_prefs(GeanyDocument *doc)
 }
 
 
-/* Sets is_valid to FALSE and initializes some members to NULL, to mark it uninitialized.
- * The flag is_valid is set to TRUE in document_create(). */
+/* Sets index to -1 and initializes some members to NULL, to mark it uninitialized.
+ * The document index is set in document_create() to mark it as valid. */
 static void init_doc_struct(GeanyDocument *new_doc)
 {
 	Document *full_doc = DOCUMENT(new_doc);
 
 	memset(full_doc, 0, sizeof(Document));
 
-	new_doc->is_valid = FALSE;
+	new_doc->index = -1;
 	new_doc->has_tags = FALSE;
 	new_doc->auto_indent = (editor_prefs.indent_mode != INDENT_NONE);
 	new_doc->line_wrapping = editor_prefs.line_wrapping;
@@ -476,7 +476,6 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 	}
 	this = documents[new_idx];
 	init_doc_struct(this);	/* initialize default document settings */
-	this->index = new_idx;
 
 	this->file_name = g_strdup(utf8_filename);
 
@@ -504,7 +503,7 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 
 	ui_document_buttons_update();
 
-	this->is_valid = TRUE;	/* do this last to prevent UI updating with NULL items. */
+	this->index = new_idx; /* do this last to prevent UI updating with NULL items. */
 	return this;
 }
 
@@ -521,7 +520,7 @@ gboolean document_remove_page(guint page_num)
 {
 	GeanyDocument *doc = document_get_from_page(page_num);
 
-	if (DOC_VALID(doc))
+	if (doc != NULL)
 	{
 		Document *fdoc = DOCUMENT(doc);
 
@@ -543,7 +542,7 @@ gboolean document_remove_page(guint page_num)
 		g_free(doc->real_path);
 		tm_workspace_remove_object(doc->tm_file, TRUE, TRUE);
 
-		doc->is_valid = FALSE;
+		doc->index = -1;
 		doc->sci = NULL;
 		doc->file_name = NULL;
 		doc->real_path = NULL;
@@ -2128,7 +2127,7 @@ void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type)
 	gboolean colourise = FALSE;
 	gboolean ft_changed;
 
-	if (type == NULL || ! DOC_VALID(doc))
+	if (type == NULL || doc == NULL)
 		return;
 
 	geany_debug("%s : %s (%s)",
@@ -2462,7 +2461,7 @@ GdkColor *document_get_status_color(GeanyDocument *doc)
 #ifdef GEANY_DEBUG
 GeanyDocument *doc_at(gint idx)
 {
-	return DOC_IDX_VALID(idx) ? documents[idx] : NULL;
+	return (idx >= 0) ? documents[idx] : NULL;
 }
 #endif
 
@@ -2482,7 +2481,7 @@ void document_delay_colourise()
 	doc_indexes = g_array_new(FALSE, FALSE, sizeof(gint));
 	for (n = 0; n < (gint) documents_array->len; n++)
 	{
-		if (DOC_IDX_VALID(n))
+		if (DOC_VALID(documents[n]))
 			g_array_append_val(doc_indexes, n);
 	}
 	delay_colourise = TRUE;
@@ -2522,7 +2521,7 @@ void document_colourise_new()
 	/* colourise all in the doc_set */
 	for (n = 0; n < documents_array->len; n++)
 	{
-		if (doc_set[n] && documents[n]->is_valid)
+		if (doc_set[n] && documents[n]->index != -1)
 			sci_colourise(documents[n]->sci, 0, -1);
 	}
 	delay_colourise = FALSE;
@@ -2584,7 +2583,7 @@ gboolean document_account_for_unsaved(void)
 	/* all documents should now be accounted for, so ignore any changes */
 	for (i = 0; i < len; i++)
 	{
-		if (documents[i]->is_valid && documents[i]->changed)
+		if (documents[i]->index != -1 && documents[i]->changed)
 		{
 			documents[i]->changed = FALSE;
 		}
@@ -2600,7 +2599,7 @@ static void force_close_all(void)
 	/* check all documents have been accounted for */
 	for (i = 0; i < len; i++)
 	{
-		if (documents[i]->is_valid)
+		if (documents[i]->index != -1)
 		{
 			g_return_if_fail(!documents[i]->changed);
 		}

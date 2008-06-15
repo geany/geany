@@ -846,7 +846,7 @@ gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 	filetype_id ft_id;
 	Document *fdoc;
 
-	g_return_val_if_fail(DOC_VALID(doc), FALSE);
+	g_return_val_if_fail(doc != NULL, FALSE);
 
 	ft_id = FILETYPE_ID(doc->file_type);
 	fdoc = DOCUMENT(doc);

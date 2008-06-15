@@ -555,7 +555,7 @@ void ui_save_buttons_toggle(gboolean enable)
 	{
 		/* check whether there are files where changes were made and if there are some,
 		 * we need the save all button / item */
-		if (documents[i]->is_valid && documents[i]->changed)
+		if (DOC_VALID(documents[i]) && documents[i]->changed)
 		{
 			dirty_tabs = TRUE;
 			break;

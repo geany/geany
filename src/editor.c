@@ -85,7 +85,7 @@ on_editor_button_press_event           (GtkWidget *widget,
 {
 	GeanyDocument *doc = user_data;
 
-	if (! DOC_VALID(doc))
+	if (doc == NULL)
 		return FALSE;
 
 	editor_info.click_pos = sci_get_position_from_xy(doc->sci, (gint)event->x, (gint)event->y, FALSE);

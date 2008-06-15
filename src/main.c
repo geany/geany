@@ -679,13 +679,13 @@ static void handle_cl_filename(gchar *const filename)
 	{
 		doc = document_open_file(filename, FALSE, NULL, NULL);
 		/* add recent file manually because opening_session_files is set */
-		if (DOC_VALID(doc))
+		if (doc != NULL)
 			ui_add_recent_file(doc->file_name);
 	}
 	else if (filename != NULL)
 	{	/* create new file if it doesn't exist */
 		doc = document_new_file(filename, NULL, NULL);
-		if (DOC_VALID(doc))
+		if (doc != NULL)
 		{
 			ui_add_recent_file(doc->file_name);
 		}
