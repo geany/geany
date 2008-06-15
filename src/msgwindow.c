@@ -532,18 +532,18 @@ gboolean msgwin_goto_compiler_file_line()
 			if (filename != NULL && line > -1)
 			{
 				gchar *utf8_filename = utils_get_utf8_from_locale(filename);
-				GeanyDocument *doc = documents_find_by_filename(utf8_filename);
+				GeanyDocument *doc = document_find_by_filename(utf8_filename);
 				GeanyDocument *old_doc = document_get_current();
 
 				g_free(utf8_filename);
 
 				if (doc == NULL)	/* file not already open */
-					doc = documents_open_file(filename, FALSE, NULL, NULL);
+					doc = document_open_file(filename, FALSE, NULL, NULL);
 
 				if (doc != NULL)
 				{
 					if (! doc->changed)	/* if modified, line may be wrong */
-						editor_set_indicator_on_line(DOC_IDX(doc), line - 1);
+						editor_set_indicator_on_line(doc, line - 1);
 
 					ret = navqueue_goto_line(old_doc, doc, line);
 				}
@@ -819,7 +819,7 @@ gboolean msgwin_goto_messages_file_line()
 			if (filename != NULL && line > -1)
 			{
 				/* use document_open_file to find an already open file, or open it in place */
-				doc = documents_open_file(filename, FALSE, NULL, NULL);
+				doc = document_open_file(filename, FALSE, NULL, NULL);
 				if (doc != NULL)
 					ret = navqueue_goto_line(old_doc, doc, line);
 			}

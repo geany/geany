@@ -69,7 +69,7 @@ void build_finalize(void);
 
 gboolean build_parse_make_dir(const gchar *string, gchar **prefix);
 
-void build_menu_update(gint idx);
+void build_menu_update(GeanyDocument *doc);
 
 BuildMenuItems *build_get_menu_items(gint filetype_idx);
 

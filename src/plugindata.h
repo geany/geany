@@ -427,9 +427,9 @@ NavQueueFuncs;
 /* See editor.h */
 typedef struct EditorFuncs
 {
-	void	(*set_indicator) (gint idx, gint start, gint end);
-	void	(*set_indicator_on_line) (gint idx, gint line);
-	void	(*clear_indicators) (gint idx);
+	void	(*set_indicator) (struct GeanyDocument *doc, gint start, gint end);
+	void	(*set_indicator_on_line) (struct GeanyDocument *doc, gint line);
+	void	(*clear_indicators) (struct GeanyDocument *doc);
 }
 EditorFuncs;
 

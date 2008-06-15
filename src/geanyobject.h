@@ -70,10 +70,10 @@ struct _GeanyObjectClass
 {
 	GObjectClass parent_class;
 
-	void (*document_new)(gint idx);
-	void (*document_open)(gint idx);
-	void (*document_save)(gint idx);
-	void (*document_activate)(gint idx);
+	void (*document_new)(GeanyDocument *doc);
+	void (*document_open)(GeanyDocument *doc);
+	void (*document_save)(GeanyDocument *doc);
+	void (*document_activate)(GeanyDocument *doc);
 	void (*project_open)(GKeyFile *keyfile);
 	void (*project_save)(GKeyFile *keyfile);
 	void (*project_close)(void);

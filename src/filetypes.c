@@ -658,16 +658,16 @@ static GeanyFiletype *filetypes_detect_from_file_internal(const gchar *utf8_file
 
 
 /* Detect the filetype for document idx. */
-GeanyFiletype *filetypes_detect_from_file(gint idx)
+GeanyFiletype *filetypes_detect_from_file(GeanyDocument *doc)
 {
 	GeanyFiletype *ft;
 	gchar *line;
 
-	if (! DOC_IDX_VALID(idx))
+	if (doc == NULL)
 		return filetypes[GEANY_FILETYPES_NONE];
 
-	line = sci_get_line(documents[idx]->sci, 0);
-	ft = filetypes_detect_from_file_internal(documents[idx]->file_name, line);
+	line = sci_get_line(doc->sci, 0);
+	ft = filetypes_detect_from_file_internal(doc->file_name, line);
 	g_free(line);
 	return ft;
 }
@@ -715,10 +715,11 @@ static void
 on_filetype_change                     (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
-	if (ignore_callback || idx < 0 || ! documents[idx]->is_valid) return;
+	GeanyDocument *doc = document_get_current();
+	if (ignore_callback || doc == NULL)
+		return;
 
-	document_set_filetype(idx, (GeanyFiletype*)user_data);
+	document_set_filetype(doc, (GeanyFiletype*)user_data);
 }
 
 

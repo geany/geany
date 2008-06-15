@@ -164,7 +164,7 @@ static gboolean cc_iofunc_err(GIOChannel *ioc, GIOCondition cond, gpointer data)
 
 static gboolean cc_replace_sel_cb(gpointer user_data)
 {
-	gint idx = GPOINTER_TO_INT(user_data);
+	GeanyDocument *doc = user_data;
 
 	if (! cc_reading_finished)
 	{	/* keep this function in the main loop until cc_iofunc_err() has finished */
@@ -173,7 +173,7 @@ static gboolean cc_replace_sel_cb(gpointer user_data)
 
 	if (! cc_error_occurred && cc_buffer != NULL)
 	{	/* Command completed successfully */
-		sci_replace_sel(documents[idx]->sci, cc_buffer->str);
+		sci_replace_sel(doc->sci, cc_buffer->str);
 		g_string_free(cc_buffer, TRUE);
 		cc_buffer = NULL;
 	}
@@ -227,7 +227,7 @@ static void cc_exit_cb(GPid child_pid, gint status, gpointer user_data)
 /* Executes command (which should include all necessary command line args) and passes the current
  * selection through the standard input of command. The whole output of command replaces the
  * current selection. */
-void tools_execute_custom_command(gint idx, const gchar *command)
+void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 {
 	GError *error = NULL;
 	GPid pid;
@@ -236,9 +236,9 @@ void tools_execute_custom_command(gint idx, const gchar *command)
 	gint stdout_fd;
 	gint stderr_fd;
 
-	g_return_if_fail(DOC_IDX_VALID(idx) && command != NULL);
+	g_return_if_fail(doc != NULL && command != NULL);
 
-	if (! sci_can_copy(documents[idx]->sci))
+	if (! sci_can_copy(doc->sci))
 		return;
 
 	argv = g_strsplit(command, " ", -1);
@@ -253,7 +253,7 @@ void tools_execute_custom_command(gint idx, const gchar *command)
 		gint len, remaining, wrote;
 
 		if (pid > 0)
-			g_child_watch_add(pid, (GChildWatchFunc) cc_exit_cb, GINT_TO_POINTER(idx));
+			g_child_watch_add(pid, (GChildWatchFunc) cc_exit_cb, doc);
 
 		/* use GIOChannel to monitor stdout */
 		utils_set_up_io_channel(stdout_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
@@ -263,9 +263,9 @@ void tools_execute_custom_command(gint idx, const gchar *command)
 				FALSE, cc_iofunc_err, (gpointer)command);
 
 		/* get selection */
-		len = sci_get_selected_text_length(documents[idx]->sci);
+		len = sci_get_selected_text_length(doc->sci);
 		sel = g_malloc0(len + 1);
-		sci_get_selected_text(documents[idx]->sci, sel);
+		sci_get_selected_text(doc->sci, sel);
 
 		/* write data to the command */
 		remaining = len - 1;
@@ -396,14 +396,15 @@ static void cc_show_dialog_custom_commands(void)
 /* enable or disable all custom command menu items when the sub menu is opened */
 static void cc_on_custom_command_menu_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	gint i, len;
 	gboolean enable;
 	GList *children;
 
-	if (! DOC_IDX_VALID(idx)) return;
+	if (doc == NULL)
+		return;
 
-	enable = sci_can_copy(documents[idx]->sci) && (ui_prefs.custom_commands != NULL);
+	enable = sci_can_copy(doc->sci) && (ui_prefs.custom_commands != NULL);
 
 	children = gtk_container_get_children(GTK_CONTAINER(user_data));
 	len = g_list_length(children);
@@ -422,10 +423,11 @@ static void cc_on_custom_command_menu_activate(GtkMenuItem *menuitem, gpointer u
 
 static void cc_on_custom_command_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	gint command_idx;
 
-	if (! DOC_IDX_VALID(idx)) return;
+	if (doc == NULL)
+		return;
 
 	command_idx = GPOINTER_TO_INT(user_data);
 
@@ -438,7 +440,7 @@ static void cc_on_custom_command_activate(GtkMenuItem *menuitem, gpointer user_d
 
 	/* send it through the command and when the command returned the output the current selection
 	 * will be replaced */
-	tools_execute_custom_command(idx, ui_prefs.custom_commands[command_idx]);
+	tools_execute_custom_command(doc, ui_prefs.custom_commands[command_idx]);
 }
 
 
@@ -600,12 +602,13 @@ static void word_count(gchar *text, guint *chars, guint *lines, guint *words)
 void tools_word_count(void)
 {
 	GtkWidget *dialog, *label, *vbox, *table;
-	gint idx;
+	GeanyDocument *doc;
 	guint chars = 0, lines = 0, words = 0;
 	gchar *text, *range;
 
-	idx = document_get_cur_idx();
-	if (idx == -1 || ! documents[idx]->is_valid) return;
+	doc = document_get_current();
+	if (doc == NULL)
+		return;
 
 	dialog = gtk_dialog_new_with_buttons(_("Word Count"), GTK_WINDOW(main_widgets.window),
 										 GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -613,16 +616,16 @@ void tools_word_count(void)
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_widget_set_name(dialog, "GeanyDialog");
 
-	if (sci_can_copy(documents[idx]->sci))
+	if (sci_can_copy(doc->sci))
 	{
-		text = g_malloc0(sci_get_selected_text_length(documents[idx]->sci) + 1);
-		sci_get_selected_text(documents[idx]->sci, text);
+		text = g_malloc0(sci_get_selected_text_length(doc->sci) + 1);
+		sci_get_selected_text(doc->sci, text);
 		range = _("selection");
 	}
 	else
 	{
-		text = g_malloc(sci_get_length(documents[idx]->sci) + 1);
-		sci_get_text(documents[idx]->sci, sci_get_length(documents[idx]->sci) + 1 , text);
+		text = g_malloc(sci_get_length(doc->sci) + 1);
+		sci_get_text(doc->sci, sci_get_length(doc->sci) + 1 , text);
 		range = _("whole document");
 	}
 	word_count(text, &chars, &lines, &words);
@@ -712,17 +715,18 @@ on_color_ok_button_clicked             (GtkButton       *button,
                                         gpointer         user_data)
 {
 	GdkColor color;
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	gchar *hex;
 
 	gtk_widget_hide(ui_widgets.open_colorsel);
-	if (idx == -1 || ! documents[idx]->is_valid) return;
+	if (doc == NULL)
+		return;
 
 	gtk_color_selection_get_current_color(
 			GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->colorsel), &color);
 
 	hex = utils_get_hex_from_color(&color);
-	editor_insert_color(idx, hex);
+	editor_insert_color(doc, hex);
 	g_free(hex);
 }
 #endif

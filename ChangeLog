@@ -1,3 +1,11 @@
+2008-06-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/*:
+   Use document pointer instead of an index to the documents array
+   everywhere in the core code.
+   Pass a document pointer to the callbacks of all "document-*" signals.
+
+
 2008-06-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/msgwindow.c:

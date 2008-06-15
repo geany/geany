@@ -58,9 +58,7 @@ gint utils_write_file(const gchar *filename, const gchar *text);
 
 gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag);
 
-gboolean utils_check_disk_status(gint idx, gboolean force);
-
-gint utils_get_current_function(gint idx, const gchar **tagname);
+gint utils_get_current_function(GeanyDocument *doc, const gchar **tagname);
 
 const gchar *utils_get_eol_name(gint eol_mode);
 
@@ -96,7 +94,7 @@ gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gch
 
 gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gchar *key, const gchar *default_value);
 
-void utils_replace_filename(gint idx);
+void utils_replace_filename(GeanyDocument *doc);
 
 gchar *utils_get_hex_from_color(GdkColor *color);
 

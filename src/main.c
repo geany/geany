@@ -661,7 +661,7 @@ static void signal_cb(gint sig)
 
 static void handle_cl_filename(gchar *const filename)
 {
-	gint idx;
+	GeanyDocument *doc;
 
 	if (filename != NULL)
 	{
@@ -677,17 +677,17 @@ static void handle_cl_filename(gchar *const filename)
 	if (filename != NULL &&
 		g_file_test(filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 	{
-		idx = document_open_file(filename, FALSE, NULL, NULL);
+		doc = document_open_file(filename, FALSE, NULL, NULL);
 		/* add recent file manually because opening_session_files is set */
-		if (DOC_IDX_VALID(idx))
-			ui_add_recent_file(documents[idx]->file_name);
+		if (DOC_VALID(doc))
+			ui_add_recent_file(doc->file_name);
 	}
 	else if (filename != NULL)
 	{	/* create new file if it doesn't exist */
-		idx = document_new_file(filename, NULL, NULL);
-		if (DOC_IDX_VALID(idx))
+		doc = document_new_file(filename, NULL, NULL);
+		if (DOC_VALID(doc))
 		{
-			ui_add_recent_file(documents[idx]->file_name);
+			ui_add_recent_file(doc->file_name);
 		}
 	}
 	else
@@ -755,7 +755,7 @@ static void load_settings(void)
 
 gint main(gint argc, gchar **argv)
 {
-	gint idx;
+	GeanyDocument *doc;
 	gint config_dir_result;
 	gboolean load_project_from_cl = FALSE;
 
@@ -899,8 +899,8 @@ gint main(gint argc, gchar **argv)
 
 			if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0)
 			{
-				ui_update_popup_copy_items(-1);
-				ui_update_popup_reundo_items(-1);
+				ui_update_popup_copy_items(NULL);
+				ui_update_popup_reundo_items(NULL);
 			}
 		}
 	}
@@ -912,11 +912,11 @@ gint main(gint argc, gchar **argv)
 	ui_document_buttons_update();
 	ui_save_buttons_toggle(FALSE);
 
-	idx = document_get_cur_idx();
-	gtk_widget_grab_focus(GTK_WIDGET(documents[idx]->sci));
-	treeviews_select_openfiles_item(idx);
-	build_menu_update(idx);
-	treeviews_update_tag_list(idx, FALSE);
+	doc = document_get_current();
+	gtk_widget_grab_focus(GTK_WIDGET(doc->sci));
+	treeviews_select_openfiles_item(doc);
+	build_menu_update(doc);
+	treeviews_update_tag_list(doc, FALSE);
 
 	/* finally realize the window to show the user what we have done */
 	gtk_widget_show(main_widgets.window);

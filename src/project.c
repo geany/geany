@@ -297,8 +297,8 @@ void project_open()
 /* Called when opening, closing and updating projects. */
 static void update_ui(void)
 {
-	ui_set_window_title(-1);
-	build_menu_update(-1);
+	ui_set_window_title(NULL);
+	build_menu_update(NULL);
 }
 
 

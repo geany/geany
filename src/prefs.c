@@ -825,7 +825,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 				for (i = 0; i < documents_array->len; i++)
 				{
 					if (documents[i]->is_valid)
-						editor_set_use_tabs(i, editor_prefs.use_tabs);
+						editor_set_use_tabs(documents[i], editor_prefs.use_tabs);
 				}
 			}
 		}
@@ -979,12 +979,12 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		{
 			if (documents[i]->is_valid)
 			{
-				document_apply_update_prefs(i);
+				document_apply_update_prefs(documents[i]);
 				if (! editor_prefs.folding)
-					editor_unfold_all(i);
+					editor_unfold_all(documents[i]);
 			}
 		}
-		ui_document_show_hide(-1);
+		ui_document_show_hide(NULL);
 
 		/* store all settings */
 		configuration_save();

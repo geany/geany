@@ -116,33 +116,34 @@ static void save_recent_files(GKeyFile *config)
 }
 
 
-static gchar *get_session_file_string(gint idx)
+static gchar *get_session_file_string(GeanyDocument *doc)
 {
 	gchar *fname;
-	GeanyFiletype *ft = documents[idx]->file_type;
+	GeanyFiletype *ft = doc->file_type;
 
 	if (ft == NULL)	/* can happen when saving a new file when quitting */
 		ft = filetypes[GEANY_FILETYPES_NONE];
 
 	fname = g_strdup_printf("%d;%s;%d;%d;%d;%d;%d;%s;",
-		sci_get_current_position(documents[idx]->sci),
+		sci_get_current_position(doc->sci),
 		ft->name,
-		documents[idx]->readonly,
-		encodings_get_idx_from_charset(documents[idx]->encoding),
-		documents[idx]->use_tabs,
-		documents[idx]->auto_indent,
-		documents[idx]->line_wrapping,
-		documents[idx]->file_name);
+		doc->readonly,
+		encodings_get_idx_from_charset(doc->encoding),
+		doc->use_tabs,
+		doc->auto_indent,
+		doc->line_wrapping,
+		doc->file_name);
 	return fname;
 }
 
 
 void configuration_save_session_files(GKeyFile *config)
 {
-	gint idx, npage;
+	gint npage;
 	gchar *tmp;
 	gchar entry[14];
 	guint i = 0, j = 0, max;
+	GeanyDocument *doc;
 
 	npage = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
 	g_key_file_set_integer(config, "files", "current_page", npage);
@@ -151,13 +152,13 @@ void configuration_save_session_files(GKeyFile *config)
 	max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 	for (i = 0; i < max; i++)
 	{
-		idx = document_get_n_idx(i);
-		if (idx >= 0 && documents[idx]->real_path != NULL)
+		doc = document_get_from_page(i);
+		if (doc != NULL && doc->real_path != NULL)
 		{
 			gchar *fname;
 
 			g_snprintf(entry, 13, "FILE_NAME_%d", j);
-			fname = get_session_file_string(idx);
+			fname = get_session_file_string(doc);
 			g_key_file_set_string(config, "files", entry, fname);
 			g_free(fname);
 			j++;
@@ -840,16 +841,16 @@ static gboolean open_session_file(gchar **tmp)
 	if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 	{
 		GeanyFiletype *ft = filetypes_lookup_by_name(ft_name);
-		gint new_idx = document_open_file_full(
-			-1, locale_filename, pos, ro, ft,
+		GeanyDocument *doc = document_open_file_full(
+			NULL, locale_filename, pos, ro, ft,
 			(enc_idx >= 0 && enc_idx < GEANY_ENCODINGS_MAX) ?
 				encodings[enc_idx].charset : NULL);
 
-		if (DOC_IDX_VALID(new_idx))
+		if (DOC_VALID(doc))
 		{
-			editor_set_use_tabs(new_idx, use_tabs);
-			editor_set_line_wrapping(new_idx, line_wrapping);
-			documents[new_idx]->auto_indent = auto_indent;
+			editor_set_use_tabs(doc, use_tabs);
+			editor_set_line_wrapping(doc, line_wrapping);
+			doc->auto_indent = auto_indent;
 			ret = TRUE;
 		}
 	}

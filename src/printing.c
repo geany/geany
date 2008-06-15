@@ -72,7 +72,7 @@ enum
 /* document-related variables */
 typedef struct
 {
-	gint idx;
+	GeanyDocument *doc;
 	gint font_width;
 	gint lines;
 	gint n_pages;
@@ -213,7 +213,7 @@ static gint get_page_count(GtkPrintContext *context, DocInfo *dinfo)
 		gint lines = 1;
 		gint line_width;
 
-		line_buf = sci_get_line(documents[dinfo->idx]->sci, j);
+		line_buf = sci_get_line(dinfo->doc->sci, j);
 		line_width = (g_utf8_strlen(line_buf, -1) + 1) * dinfo->font_width;
 		if (line_width > width)
 			lines = ceil(line_width / width);
@@ -240,8 +240,8 @@ static void add_page_header(PangoLayout *layout, cairo_t *cr, DocInfo *dinfo, gi
 	gint ph_height = dinfo->line_height * 3;
 	gchar *data;
 	gchar *datetime;
-	gchar *tmp_file_name = (documents[dinfo->idx]->file_name != NULL) ?
-		documents[dinfo->idx]->file_name : GEANY_STRING_UNTITLED;
+	gchar *tmp_file_name = (dinfo->doc->file_name != NULL) ?
+		dinfo->doc->file_name : GEANY_STRING_UNTITLED;
 	gchar *file_name = (printing_prefs.page_header_basename) ?
 		g_path_get_basename(tmp_file_name) : g_strdup(tmp_file_name);
 
@@ -418,7 +418,7 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 	desc = pango_font_description_from_string(interface_prefs.editor_font);
 
 	/* init dinfo fields */
-	dinfo->lines = sci_get_line_count(documents[dinfo->idx]->sci);
+	dinfo->lines = sci_get_line_count(dinfo->doc->sci);
 	dinfo->lines_per_page = 0;
 	dinfo->cur_line = 0;
 	dinfo->cur_pos = 0;
@@ -434,7 +434,7 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 	dinfo->n_pages = get_page_count(context, dinfo);
 
 	/* read all styles from Scintilla */
-	style_max = pow(2, scintilla_send_message(documents[dinfo->idx]->sci, SCI_GETSTYLEBITS, 0, 0));
+	style_max = pow(2, scintilla_send_message(dinfo->doc->sci, SCI_GETSTYLEBITS, 0, 0));
 	/* if the lexer uses only the first 32 styles(style bits = 5),
 	 * we need to add the pre-defined styles */
 	if (style_max == 32)
@@ -442,21 +442,21 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 	for (i = 0; i < style_max; i++)
 	{
 		dinfo->styles[i][FORE] = ROTATE_RGB(scintilla_send_message(
-			documents[dinfo->idx]->sci, SCI_STYLEGETFORE, i, 0));
+			dinfo->doc->sci, SCI_STYLEGETFORE, i, 0));
 		if (i == STYLE_LINENUMBER)
 		{	/* ignore background colour for line number margin to avoid trouble with wrapped lines */
 			dinfo->styles[STYLE_LINENUMBER][BACK] = ROTATE_RGB(scintilla_send_message(
-				documents[dinfo->idx]->sci, SCI_STYLEGETBACK, STYLE_DEFAULT, 0));
+				dinfo->doc->sci, SCI_STYLEGETBACK, STYLE_DEFAULT, 0));
 		}
 		else
 		{
 			dinfo->styles[i][BACK] = ROTATE_RGB(scintilla_send_message(
-				documents[dinfo->idx]->sci, SCI_STYLEGETBACK, i, 0));
+				dinfo->doc->sci, SCI_STYLEGETBACK, i, 0));
 		}
 		dinfo->styles[i][BOLD] =
-			scintilla_send_message(documents[dinfo->idx]->sci, SCI_STYLEGETBOLD, i, 0);
+			scintilla_send_message(dinfo->doc->sci, SCI_STYLEGETBOLD, i, 0);
 		dinfo->styles[i][ITALIC] =
-			scintilla_send_message(documents[dinfo->idx]->sci, SCI_STYLEGETITALIC, i, 0);
+			scintilla_send_message(dinfo->doc->sci, SCI_STYLEGETITALIC, i, 0);
 	}
 
 	if (dinfo->n_pages >= 0)
@@ -550,8 +550,8 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 			/* data */
 			else
 			{
-				style = sci_get_style_at(documents[dinfo->idx]->sci, dinfo->cur_pos);
-				c = sci_get_char_at(documents[dinfo->idx]->sci, dinfo->cur_pos);
+				style = sci_get_style_at(dinfo->doc->sci, dinfo->cur_pos);
+				c = sci_get_char_at(dinfo->doc->sci, dinfo->cur_pos);
 				if (c == '\0' || style == -1)
 				{	/* if c gets 0, we are probably out of document boundaries,
 					 * so stop to break out of outer loop */
@@ -559,7 +559,6 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 					break;
 				}
 				dinfo->cur_pos++;
-
 
 				/* convert tabs to spaces which seems to be better than using Pango tabs */
 				if (c == '\t')
@@ -571,7 +570,7 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 				/* don't add line breaks, they are handled manually below */
 				else if (c == '\r' || c == '\n')
 				{
-					gchar c_next = sci_get_char_at(documents[dinfo->idx]->sci, dinfo->cur_pos);
+					gchar c_next = sci_get_char_at(dinfo->doc->sci, dinfo->cur_pos);
 					at_eol = TRUE;
 					if (c == '\r' && c_next == '\n')
 						dinfo->cur_pos++; /* skip LF part of CR/LF */
@@ -587,7 +586,7 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 					 * style doesn't change since it is only one character with multiple bytes. */
 					while (c < 0)
 					{
-						c = sci_get_char_at(documents[dinfo->idx]->sci, dinfo->cur_pos);
+						c = sci_get_char_at(dinfo->doc->sci, dinfo->cur_pos);
 						if (c < 0)
 						{	/* only add the byte when it is part of the UTF-8 character
 							 * otherwise we could add e.g. a '\n' and it won't be visible in the
@@ -731,7 +730,7 @@ static void status_changed(GtkPrintOperation *op, gpointer data)
 }
 
 
-static void printing_print_gtk(gint idx)
+static void printing_print_gtk(GeanyDocument *doc)
 {
 	GtkPrintOperation *op;
 	GtkPrintOperationResult res = GTK_PRINT_OPERATION_RESULT_ERROR;
@@ -745,7 +744,7 @@ static void printing_print_gtk(gint idx)
 	widgets = g_new0(PrintWidgets, 1);
 	dinfo = g_new0(DocInfo, 1);
 	/* all other fields are initialised in begin_print() */
-	dinfo->idx = idx;
+	dinfo->doc = doc;
 
 	op = gtk_print_operation_new();
 
@@ -755,7 +754,7 @@ static void printing_print_gtk(gint idx)
 	g_signal_connect(op, "begin-print", G_CALLBACK(begin_print), dinfo);
 	g_signal_connect(op, "end-print", G_CALLBACK(end_print), dinfo);
 	g_signal_connect(op, "draw-page", G_CALLBACK(draw_page), dinfo);
-	g_signal_connect(op, "status-changed", G_CALLBACK(status_changed), documents[idx]->file_name);
+	g_signal_connect(op, "status-changed", G_CALLBACK(status_changed), doc->file_name);
 	g_signal_connect(op, "create-custom-widget", G_CALLBACK(create_custom_widget), widgets);
 	g_signal_connect(op, "custom-widget-apply", G_CALLBACK(custom_widget_apply), widgets);
 
@@ -777,7 +776,7 @@ static void printing_print_gtk(gint idx)
 	else if (res == GTK_PRINT_OPERATION_RESULT_ERROR)
 	{
 		dialogs_show_msgbox(GTK_MESSAGE_ERROR, _("Printing of %s failed (%s)."),
-							documents[idx]->file_name, error->message);
+							doc->file_name, error->message);
 		g_error_free(error);
 	}
 
@@ -806,11 +805,11 @@ void printing_page_setup_gtk(void)
 
 
 /* simple file print using an external tool */
-static void print_external(gint idx)
+static void print_external(GeanyDocument *doc)
 {
 	gchar *cmdline;
 
-	if (documents[idx]->file_name == NULL)
+	if (doc->file_name == NULL)
 		return;
 
 	if (! NZV(printing_prefs.external_print_cmd))
@@ -821,11 +820,11 @@ static void print_external(gint idx)
 	}
 
 	cmdline = g_strdup(printing_prefs.external_print_cmd);
-	cmdline = utils_str_replace(cmdline, "%f", documents[idx]->file_name);
+	cmdline = utils_str_replace(cmdline, "%f", doc->file_name);
 
 	if (dialogs_show_question(
 			_("The file \"%s\" will be printed with the following command:\n\n%s"),
-			documents[idx]->file_name, cmdline))
+			doc->file_name, cmdline))
 	{
 		GError *error = NULL;
 
@@ -841,12 +840,12 @@ static void print_external(gint idx)
 		{
 			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
 				_("Printing of \"%s\" failed (return code: %s)."),
-				documents[idx]->file_name, error->message);
+				doc->file_name, error->message);
 			g_error_free(error);
 		}
 		else
 		{
-			msgwin_status_add(_("File %s printed."), documents[idx]->file_name);
+			msgwin_status_add(_("File %s printed."), doc->file_name);
 		}
 		g_free(tmp_cmdline);
 	}
@@ -854,16 +853,16 @@ static void print_external(gint idx)
 }
 
 
-void printing_print_doc(gint idx)
+void printing_print_doc(GeanyDocument *doc)
 {
-	if (! DOC_IDX_VALID(idx))
+	if (doc == NULL)
 		return;
 
 #if GTK_CHECK_VERSION(2, 10, 0)
 	if (gtk_check_version(2, 10, 0) == NULL && printing_prefs.use_gtk_printing)
-		printing_print_gtk(idx);
+		printing_print_gtk(doc);
 	else
 #endif
-		print_external(idx);
+		print_external(doc);
 }
 

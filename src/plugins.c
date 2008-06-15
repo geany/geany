@@ -94,19 +94,19 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data);
 
 
 static DocumentFuncs doc_funcs = {
-	&documents_new_file,
+	&document_new_file,
 	&document_get_current,
 	&document_get_from_page,
-	&documents_find_by_filename,
-	&documents_find_by_real_path,
-	&documents_save_file,
-	&documents_open_file,
+	&document_find_by_filename,
+	&document_find_by_real_path,
+	&document_save_file,
+	&document_open_file,
 	&document_open_files,
 	&document_remove_page,
-	&documents_reload_file,
-	&documents_set_encoding,
-	&documents_set_text_changed,
-	&documents_set_filetype
+	&document_reload_file,
+	&document_set_encoding,
+	&document_set_text_changed,
+	&document_set_filetype
 };
 
 static EditorFuncs editor_funcs = {

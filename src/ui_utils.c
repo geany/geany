@@ -118,14 +118,15 @@ void ui_set_statusbar(gboolean log, const gchar *format, ...)
 
 
 /* updates the status bar document statistics */
-void ui_update_statusbar(gint idx, gint pos)
+void ui_update_statusbar(GeanyDocument *doc, gint pos)
 {
 	if (! interface_prefs.statusbar_visible)
 		return; /* just do nothing if statusbar is not visible */
 
-	if (idx == -1) idx = document_get_cur_idx();
+	if (doc == NULL)
+		doc = document_get_current();
 
-	if (DOC_IDX_VALID(idx))
+	if (doc != NULL)
 	{
 		static GString *stats_str = NULL;
 		const gchar sp[] = "      ";
@@ -134,57 +135,57 @@ void ui_update_statusbar(gint idx, gint pos)
 		gchar *filetype_name;
 
 		/* workaround to make the name of filetype GEANY_FILETYPES_NONE translatable */
-		if (documents[idx]->file_type == NULL || documents[idx]->file_type->id == GEANY_FILETYPES_NONE)
+		if (doc->file_type == NULL || doc->file_type->id == GEANY_FILETYPES_NONE)
 			filetype_name = _("None");
 		else
-			filetype_name = documents[idx]->file_type->name;
+			filetype_name = doc->file_type->name;
 
 		if (stats_str == NULL)
 			stats_str = g_string_sized_new(120);
 
-		if (pos == -1) pos = sci_get_current_position(documents[idx]->sci);
-		line = sci_get_line_from_position(documents[idx]->sci, pos);
+		if (pos == -1) pos = sci_get_current_position(doc->sci);
+		line = sci_get_line_from_position(doc->sci, pos);
 
 		/* Add temporary fix for sci infinite loop in Document::GetColumn(int)
 		 * when current pos is beyond document end (can occur when removing
 		 * blocks of selected lines especially esp. brace sections near end of file). */
-		if (pos <= sci_get_length(documents[idx]->sci))
-			col = sci_get_col_from_position(documents[idx]->sci, pos);
+		if (pos <= sci_get_length(doc->sci))
+			col = sci_get_col_from_position(doc->sci, pos);
 		else
 			col = 0;
 
 		/* Status bar statistics: col = column, sel = selection. */
 		g_string_printf(stats_str, _("line: %d\t col: %d\t sel: %d\t "),
 			(line + 1), col,
-			sci_get_selected_text_length(documents[idx]->sci) - 1);
+			sci_get_selected_text_length(doc->sci) - 1);
 
 		g_string_append(stats_str,
 			/* RO = read-only */
-			(documents[idx]->readonly) ? _("RO ") :
+			(doc->readonly) ? _("RO ") :
 				/* OVR = overwrite/overtype, INS = insert */
-				(sci_get_overtype(documents[idx]->sci) ? _("OVR") : _("INS")));
+				(sci_get_overtype(doc->sci) ? _("OVR") : _("INS")));
 		g_string_append(stats_str, sp);
 		g_string_append(stats_str,
-			(documents[idx]->use_tabs) ? _("TAB") : _("SP "));	/* SP = space */
+			(doc->use_tabs) ? _("TAB") : _("SP "));	/* SP = space */
 		g_string_append(stats_str, sp);
 		g_string_append_printf(stats_str, _("mode: %s"),
-			editor_get_eol_char_name(idx));
+			editor_get_eol_char_name(doc));
 		g_string_append(stats_str, sp);
 		g_string_append_printf(stats_str, _("encoding: %s %s"),
-			(documents[idx]->encoding) ? documents[idx]->encoding : _("unknown"),
-			(encodings_is_unicode_charset(documents[idx]->encoding)) ?
+			(doc->encoding) ? doc->encoding : _("unknown"),
+			(encodings_is_unicode_charset(doc->encoding)) ?
 				/* BOM = byte order mark */
-				((documents[idx]->has_bom) ? _("(with BOM)") : "") : "");
+				((doc->has_bom) ? _("(with BOM)") : "") : "");
 		g_string_append(stats_str, sp);
 		g_string_append_printf(stats_str, _("filetype: %s"), filetype_name);
 		g_string_append(stats_str, sp);
-		if (documents[idx]->changed)
+		if (doc->changed)
 		{
 			g_string_append(stats_str, _("MOD"));	/* MOD = modified */
 			g_string_append(stats_str, sp);
 		}
 
-		utils_get_current_function(idx, &cur_tag);
+		utils_get_current_function(doc, &cur_tag);
 		g_string_append_printf(stats_str, _("scope: %s"),
 			cur_tag);
 
@@ -204,26 +205,26 @@ void ui_update_statusbar(gint idx, gint pos)
 
 
 /* This sets the window title according to the current filename. */
-void ui_set_window_title(gint idx)
+void ui_set_window_title(GeanyDocument *doc)
 {
 	GString *str;
 	GeanyProject *project = app->project;
 
-	if (idx < 0)
-		idx = document_get_cur_idx();
+	if (doc == NULL)
+		doc = document_get_current();
 
 	str = g_string_new(NULL);
 
-	if (idx >= 0)
+	if (doc != NULL)
 	{
-		g_string_append(str, documents[idx]->changed ? "*" : "");
+		g_string_append(str, doc->changed ? "*" : "");
 
-		if (documents[idx]->file_name == NULL)
-			g_string_append(str, DOC_FILENAME(idx));
+		if (doc->file_name == NULL)
+			g_string_append(str, DOC_FILENAME(doc));
 		else
 		{
-			gchar *base_name = g_path_get_basename(DOC_FILENAME(idx));
-			gchar *dirname = g_path_get_dirname(DOC_FILENAME(idx));
+			gchar *base_name = g_path_get_basename(DOC_FILENAME(doc));
+			gchar *dirname = g_path_get_dirname(DOC_FILENAME(doc));
 
 			g_string_append(str, base_name);
 			g_string_append(str, " - ");
@@ -270,7 +271,7 @@ void ui_set_editor_font(const gchar *font_name)
 	{
 		if (documents[i]->sci)
 		{
-			editor_set_font(i, fname, size);
+			editor_set_font(documents[i], fname, size);
 		}
 	}
 	pango_font_description_free(font_desc);
@@ -293,20 +294,20 @@ void ui_set_fullscreen(void)
 }
 
 
-void ui_update_popup_reundo_items(gint idx)
+void ui_update_popup_reundo_items(GeanyDocument *doc)
 {
 	gboolean enable_undo;
 	gboolean enable_redo;
 
-	if (idx == -1)
+	if (doc == NULL)
 	{
 		enable_undo = FALSE;
 		enable_redo = FALSE;
 	}
 	else
 	{
-		enable_undo = document_can_undo(idx);
-		enable_redo = document_can_redo(idx);
+		enable_undo = document_can_undo(doc);
+		enable_redo = document_can_redo(doc);
 	}
 
 	/* index 0 is the popup menu, 1 is the menubar, 2 is the toolbar */
@@ -320,13 +321,15 @@ void ui_update_popup_reundo_items(gint idx)
 }
 
 
-void ui_update_popup_copy_items(gint idx)
+void ui_update_popup_copy_items(GeanyDocument *doc)
 {
 	gboolean enable;
 	guint i;
 
-	if (idx == -1) enable = FALSE;
-	else enable = sci_can_copy(documents[idx]->sci);
+	if (doc == NULL)
+		enable = FALSE;
+	else
+		enable = sci_can_copy(doc->sci);
 
 	for (i = 0; i < G_N_ELEMENTS(ui_widgets.popup_copy_items); i++)
 		gtk_widget_set_sensitive(ui_widgets.popup_copy_items[i], enable);
@@ -341,14 +344,14 @@ void ui_update_popup_goto_items(gboolean enable)
 }
 
 
-void ui_update_menu_copy_items(gint idx)
+void ui_update_menu_copy_items(GeanyDocument *doc)
 {
 	gboolean enable = FALSE;
 	guint i;
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	if (IS_SCINTILLA(focusw))
-		enable = (idx == -1) ? FALSE : sci_can_copy(documents[idx]->sci);
+		enable = (doc == NULL) ? FALSE : sci_can_copy(doc->sci);
 	else
 	if (GTK_IS_EDITABLE(focusw))
 		enable = gtk_editable_get_selection_bounds(GTK_EDITABLE(focusw), NULL, NULL);
@@ -365,13 +368,14 @@ void ui_update_menu_copy_items(gint idx)
 }
 
 
-void ui_update_insert_include_item(gint idx, gint item)
+void ui_update_insert_include_item(GeanyDocument *doc, gint item)
 {
 	gboolean enable = FALSE;
 
-	if (idx == -1 || documents[idx]->file_type == NULL) enable = FALSE;
-	else if (documents[idx]->file_type->id == GEANY_FILETYPES_C ||
-			 documents[idx]->file_type->id == GEANY_FILETYPES_CPP)
+	if (doc == NULL || doc->file_type == NULL)
+		enable = FALSE;
+	else if (doc->file_type->id == GEANY_FILETYPES_C ||
+			 doc->file_type->id == GEANY_FILETYPES_CPP)
 	{
 		enable = TRUE;
 	}
@@ -671,46 +675,43 @@ void ui_sidebar_show_hide(void)
 }
 
 
-void ui_document_show_hide(gint idx)
+void ui_document_show_hide(GeanyDocument *doc)
 {
 	gchar *widget_name;
 	GtkWidget *item;
 
-	if (idx == -1)
-		idx = document_get_cur_idx();
+	if (doc == NULL)
+		doc = document_get_current();
 
-	if (! DOC_IDX_VALID(idx))
+	if (doc == NULL)
 		return;
 
 	ignore_callback = TRUE;
 
 	gtk_check_menu_item_set_active(
 			GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_line_wrapping1")),
-			documents[idx]->line_wrapping);
+			doc->line_wrapping);
 
 	gtk_check_menu_item_set_active(
 			GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "line_breaking1")),
-			documents[idx]->line_breaking);
+			doc->line_breaking);
 
 	item = lookup_widget(main_widgets.window, "menu_use_auto_indentation1");
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),
-		documents[idx]->auto_indent);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), doc->auto_indent);
 	gtk_widget_set_sensitive(item, editor_prefs.indent_mode != INDENT_NONE);
 
-	item = lookup_widget(main_widgets.window,
-		documents[idx]->use_tabs ? "tabs1" : "spaces1");
+	item = lookup_widget(main_widgets.window, doc->use_tabs ? "tabs1" : "spaces1");
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), TRUE);
 
 	gtk_check_menu_item_set_active(
 			GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "set_file_readonly1")),
-			documents[idx]->readonly);
+			doc->readonly);
 
 	item = lookup_widget(main_widgets.window, "menu_write_unicode_bom1");
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),
-		documents[idx]->has_bom);
-	gtk_widget_set_sensitive(item, encodings_is_unicode_charset(documents[idx]->encoding));
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), doc->has_bom);
+	gtk_widget_set_sensitive(item, encodings_is_unicode_charset(doc->encoding));
 
-	switch (sci_get_eol_mode(documents[idx]->sci))
+	switch (sci_get_eol_mode(doc->sci))
 	{
 		case SC_EOL_CR: widget_name = "cr"; break;
 		case SC_EOL_LF: widget_name = "lf"; break;
@@ -719,8 +720,8 @@ void ui_document_show_hide(gint idx)
 	gtk_check_menu_item_set_active(
 		GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, widget_name)), TRUE);
 
-	encodings_select_radio_item(documents[idx]->encoding);
-	filetypes_select_radio_item(documents[idx]->file_type);
+	encodings_select_radio_item(doc->encoding);
+	filetypes_select_radio_item(doc->file_type);
 
 	ignore_callback = FALSE;
 }
@@ -896,7 +897,7 @@ recent_file_activate_cb                (GtkMenuItem     *menuitem,
 	gchar *utf8_filename = ui_menu_item_get_text(menuitem);
 	gchar *locale_filename = utils_get_locale_from_utf8(utf8_filename);
 
-	if (document_open_file(locale_filename, FALSE, NULL, NULL) > -1)
+	if (document_open_file(locale_filename, FALSE, NULL, NULL) != NULL)
 		recent_file_loaded(utf8_filename);
 
 	g_free(locale_filename);
@@ -1056,24 +1057,26 @@ static void update_recent_menu(void)
 
 void ui_show_markers_margin(void)
 {
-	gint i, idx, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+	gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+	GeanyDocument *doc;
 
 	for(i = 0; i < max; i++)
 	{
-		idx = document_get_n_idx(i);
-		sci_set_symbol_margin(documents[idx]->sci, editor_prefs.show_markers_margin);
+		doc = document_get_from_page(i);
+		sci_set_symbol_margin(doc->sci, editor_prefs.show_markers_margin);
 	}
 }
 
 
 void ui_show_linenumber_margin(void)
 {
-	gint i, idx, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+	gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+	GeanyDocument *doc;
 
 	for(i = 0; i < max; i++)
 	{
-		idx = document_get_n_idx(i);
-		sci_set_line_numbers(documents[idx]->sci, editor_prefs.show_linenumber_margin, 0);
+		doc = document_get_from_page(i);
+		sci_set_line_numbers(doc->sci, editor_prefs.show_linenumber_margin, 0);
 	}
 }
 
@@ -1203,10 +1206,10 @@ void ui_combo_box_add_to_history(GtkComboBox *combo, const gchar *text)
 
 /* Changes the color of the notebook tab text and open files items according to
  * document status. */
-void ui_update_tab_status(gint idx)
+void ui_update_tab_status(GeanyDocument *doc)
 {
-	GdkColor *color = document_get_status_color(idx);
-	Document *fdoc = DOCUMENT(documents[idx]);
+	GdkColor *color = document_get_status_color(doc);
+	Document *fdoc = DOCUMENT(doc);
 
 	/* NULL color will reset to default */
 	gtk_widget_modify_fg(fdoc->tab_label, GTK_STATE_NORMAL, color);
@@ -1214,7 +1217,7 @@ void ui_update_tab_status(gint idx)
 	gtk_widget_modify_fg(fdoc->tabmenu_label, GTK_STATE_NORMAL, color);
 	gtk_widget_modify_fg(fdoc->tabmenu_label, GTK_STATE_ACTIVE, color);
 
-	treeviews_openfiles_update(idx);
+	treeviews_openfiles_update(doc);
 }
 
 
@@ -1396,7 +1399,7 @@ void ui_statusbar_showhide(gboolean state)
 	if (state)
 	{
 		gtk_widget_show(ui_widgets.statusbar);
-		ui_update_statusbar(-1, -1);
+		ui_update_statusbar(NULL, -1);
 	}
 	else
 		gtk_widget_hide(ui_widgets.statusbar);

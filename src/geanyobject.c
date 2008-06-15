@@ -86,27 +86,27 @@ static void create_signals(GObjectClass *g_object_class)
 		G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GeanyObjectClass, document_new),
 		NULL, NULL,
-		gtk_marshal_NONE__INT,
+		gtk_marshal_NONE__POINTER,
 		G_TYPE_NONE, 1,
-		G_TYPE_INT);
+		G_TYPE_POINTER);
 	geany_object_signals[GCB_DOCUMENT_OPEN] = g_signal_new (
 		"document-open",
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GeanyObjectClass, document_open),
 		NULL, NULL,
-		gtk_marshal_NONE__INT,
+		gtk_marshal_NONE__POINTER,
 		G_TYPE_NONE, 1,
-		G_TYPE_INT);
+		G_TYPE_POINTER);
 	geany_object_signals[GCB_DOCUMENT_SAVE] = g_signal_new (
 		"document-save",
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GeanyObjectClass, document_save),
 		NULL, NULL,
-		gtk_marshal_NONE__INT,
+		gtk_marshal_NONE__POINTER,
 		G_TYPE_NONE, 1,
-		G_TYPE_INT);
+		G_TYPE_POINTER);
 	geany_object_signals[GCB_DOCUMENT_ACTIVATE] = g_signal_new (
 		"document-activate",
 		G_OBJECT_CLASS_TYPE (g_object_class),
@@ -115,7 +115,7 @@ static void create_signals(GObjectClass *g_object_class)
 		NULL, NULL,
 		gtk_marshal_NONE__POINTER,
 		G_TYPE_NONE, 1,
-		G_TYPE_INT);
+		G_TYPE_POINTER);
 
 	geany_object_signals[GCB_PROJECT_OPEN] = g_signal_new (
 		"project-open",

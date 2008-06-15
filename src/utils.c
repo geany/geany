@@ -289,86 +289,11 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag)
 }
 
 
-static gboolean check_reload(gint idx)
-{
-	gchar *base_name = g_path_get_basename(documents[idx]->file_name);
-	gboolean want_reload;
-
-	want_reload = dialogs_show_question_full(NULL, _("_Reload"), GTK_STOCK_CANCEL,
-		_("Do you want to reload it?"),
-		_("The file '%s' on the disk is more recent than\n"
-			"the current buffer."), base_name);
-	if (want_reload)
-	{
-		document_reload_file(idx, NULL);
-	}
-	g_free(base_name);
-	return want_reload;
-}
-
-
-/* Set force to force a disk check, otherwise it is ignored if there was a check
- * in the last file_prefs.disk_check_timeout seconds.
- * @return @c TRUE if the file has changed. */
-gboolean utils_check_disk_status(gint idx, gboolean force)
-{
-	struct stat st;
-	time_t t;
-	gchar *locale_filename;
-	gboolean ret = FALSE;
-
-	if (file_prefs.disk_check_timeout == 0) return FALSE;
-	if (! DOC_IDX_VALID(idx)) return FALSE;
-	/* ignore documents that have never been saved to disk */
-	if (documents[idx]->real_path == NULL) return FALSE;
-
-	t = time(NULL);
-
-	if (! force && documents[idx]->last_check > (t - file_prefs.disk_check_timeout))
-		return FALSE;
-
-	documents[idx]->last_check = t;
-
-	locale_filename = utils_get_locale_from_utf8(documents[idx]->file_name);
-	if (g_stat(locale_filename, &st) != 0)
-	{
-		/* file is missing - set unsaved state */
-		documents[idx]->changed = TRUE;
-		document_set_text_changed(idx);
-
-		if (dialogs_show_question_full(NULL, GTK_STOCK_SAVE, GTK_STOCK_CANCEL,
-			_("Try to resave the file?"),
-			_("File \"%s\" was not found on disk!"), documents[idx]->file_name))
-		{
-			dialogs_show_save_as();
-		}
-	}
-	else if (documents[idx]->mtime > t || st.st_mtime > t)
-	{
-		geany_debug("Strange: Something is wrong with the time stamps.");
-	}
-	else if (documents[idx]->mtime < st.st_mtime)
-	{
-		if (check_reload(idx))
-		{
-			/* Update the modification time */
-			documents[idx]->mtime = st.st_mtime;
-		}
-		else
-			documents[idx]->mtime = st.st_mtime;	/* Ignore this change on disk completely */
-
-		ret = TRUE; /* file has changed */
-	}
-	g_free(locale_filename);
-	return ret;
-}
-
-
 /* This could perhaps be improved to check for #if, class etc. */
-static gint get_function_fold_number(gint idx)
+static gint get_function_fold_number(GeanyDocument *doc)
 {
 	/* for Java the functions are always one fold level above the class scope */
-	if (FILETYPE_ID(documents[idx]->file_type) == GEANY_FILETYPES_JAVA)
+	if (FILETYPE_ID(doc->file_type) == GEANY_FILETYPES_JAVA)
 		return SC_FOLDLEVELBASE + 1;
 	else
 		return SC_FOLDLEVELBASE;
@@ -376,16 +301,16 @@ static gint get_function_fold_number(gint idx)
 
 
 /* Should be used only with utils_get_current_function. */
-static gboolean current_function_changed(gint cur_idx, gint cur_line, gint fold_level)
+static gboolean current_function_changed(GeanyDocument *doc, gint cur_line, gint fold_level)
 {
 	static gint old_line = -2;
-	static gint old_idx = -1;
+	static GeanyDocument *old_doc = NULL;
 	static gint old_fold_num = -1;
 	const gint fold_num = fold_level & SC_FOLDLEVELNUMBERMASK;
 	gboolean ret;
 
 	/* check if the cached line and file index have changed since last time: */
-	if (cur_idx < 0 || cur_idx != old_idx)
+	if (doc == NULL || doc != old_doc)
 		ret = TRUE;
 	else
 	if (cur_line == old_line)
@@ -396,7 +321,7 @@ static gboolean current_function_changed(gint cur_idx, gint cur_line, gint fold_
 		if (abs(cur_line - old_line) == 1)
 		{
 			const gint fn_fold =
-				get_function_fold_number(cur_idx);
+				get_function_fold_number(doc);
 			/* It's the same function if the fold number hasn't changed, or both the new
 			 * and old fold numbers are above the function fold number. */
 			gboolean same =
@@ -410,7 +335,7 @@ static gboolean current_function_changed(gint cur_idx, gint cur_line, gint fold_
 
 	/* record current line and file index for next time */
 	old_line = cur_line;
-	old_idx = cur_idx;
+	old_doc = doc;
 	old_fold_num = fold_num;
 	return ret;
 }
@@ -492,10 +417,10 @@ static gchar *parse_cpp_function_at_line(ScintillaObject *sci, gint tag_line)
 
 
 /* Sets *tagname to point at the current function or tag name.
- * If idx is -1, reset the cached current tag data to ensure it will be reparsed on the next
+ * If doc is NULL, reset the cached current tag data to ensure it will be reparsed on the next
  * call to this function.
  * Returns: line number of the current tag, or -1 if unknown. */
-gint utils_get_current_function(gint idx, const gchar **tagname)
+gint utils_get_current_function(GeanyDocument *doc, const gchar **tagname)
 {
 	static gint tag_line = -1;
 	static gchar *cur_tag = NULL;
@@ -503,9 +428,9 @@ gint utils_get_current_function(gint idx, const gchar **tagname)
 	gint fold_level;
 	TMWorkObject *tm_file;
 
-	if (! DOC_IDX_VALID(idx))	/* reset current function */
+	if (doc == NULL)	/* reset current function */
 	{
-		current_function_changed(-1, -1, -1);
+		current_function_changed(NULL, -1, -1);
 		g_free(cur_tag);
 		cur_tag = g_strdup(_("unknown"));
 		if (tagname != NULL)
@@ -514,10 +439,10 @@ gint utils_get_current_function(gint idx, const gchar **tagname)
 		return tag_line;
 	}
 
-	line = sci_get_current_line(documents[idx]->sci);
-	fold_level = sci_get_fold_level(documents[idx]->sci, line);
+	line = sci_get_current_line(doc->sci);
+	fold_level = sci_get_fold_level(doc->sci, line);
 	/* check if the cached line and file index have changed since last time: */
-	if (! current_function_changed(idx, line, fold_level))
+	if (! current_function_changed(doc, line, fold_level))
 	{
 		/* we can assume same current function as before */
 		*tagname = cur_tag;
@@ -533,10 +458,10 @@ gint utils_get_current_function(gint idx, const gchar **tagname)
 		tag_line = -1;
 		return tag_line;
 	}
-	tm_file = documents[idx]->tm_file;
+	tm_file = doc->tm_file;
 
 	/* if the document has no changes, get the previous function name from TM */
-	if(! documents[idx]->changed && tm_file != NULL && tm_file->tags_array != NULL)
+	if(! doc->changed && tm_file != NULL && tm_file->tags_array != NULL)
 	{
 		const TMTag *tag = (const TMTag*) tm_get_current_function(tm_file->tags_array, line);
 
@@ -553,25 +478,24 @@ gint utils_get_current_function(gint idx, const gchar **tagname)
 
 	/* parse the current function name here because TM line numbers may have changed,
 	 * and it would take too long to reparse the whole file. */
-	if (documents[idx]->file_type != NULL &&
-		documents[idx]->file_type->id != GEANY_FILETYPES_NONE)
+	if (doc->file_type != NULL && doc->file_type->id != GEANY_FILETYPES_NONE)
 	{
-		const gint fn_fold = get_function_fold_number(idx);
+		const gint fn_fold = get_function_fold_number(doc);
 
 		tag_line = line;
 		do	/* find the top level fold point */
 		{
-			tag_line = sci_get_fold_parent(documents[idx]->sci, tag_line);
-			fold_level = sci_get_fold_level(documents[idx]->sci, tag_line);
+			tag_line = sci_get_fold_parent(doc->sci, tag_line);
+			fold_level = sci_get_fold_level(doc->sci, tag_line);
 		} while (tag_line >= 0 &&
 			(fold_level & SC_FOLDLEVELNUMBERMASK) != fn_fold);
 
 		if (tag_line >= 0)
 		{
-			if (sci_get_lexer(documents[idx]->sci) == SCLEX_CPP)
-				cur_tag = parse_cpp_function_at_line(documents[idx]->sci, tag_line);
+			if (sci_get_lexer(doc->sci) == SCLEX_CPP)
+				cur_tag = parse_cpp_function_at_line(doc->sci, tag_line);
 			else
-				cur_tag = parse_function_at_line(documents[idx]->sci, tag_line);
+				cur_tag = parse_function_at_line(doc->sci, tag_line);
 
 			if (cur_tag != NULL)
 			{
@@ -1029,27 +953,27 @@ gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gc
 }
 
 
-void utils_replace_filename(gint idx)
+void utils_replace_filename(GeanyDocument *doc)
 {
 	gchar *filebase;
 	gchar *filename;
 	struct TextToFind ttf;
 
-	if (idx == -1 || documents[idx]->file_type == NULL) return;
+	if (doc == NULL || doc->file_type == NULL) return;
 
-	filebase = g_strconcat(GEANY_STRING_UNTITLED, ".", (documents[idx]->file_type)->extension, NULL);
-	filename = g_path_get_basename(documents[idx]->file_name);
+	filebase = g_strconcat(GEANY_STRING_UNTITLED, ".", (doc->file_type)->extension, NULL);
+	filename = g_path_get_basename(doc->file_name);
 
 	/* only search the first 3 lines */
 	ttf.chrg.cpMin = 0;
-	ttf.chrg.cpMax = sci_get_position_from_line(documents[idx]->sci, 3);
+	ttf.chrg.cpMax = sci_get_position_from_line(doc->sci, 3);
 	ttf.lpstrText = (gchar*)filebase;
 
-	if (sci_find_text(documents[idx]->sci, SCFIND_MATCHCASE, &ttf) != -1)
+	if (sci_find_text(doc->sci, SCFIND_MATCHCASE, &ttf) != -1)
 	{
-		sci_target_start(documents[idx]->sci, ttf.chrgText.cpMin);
-		sci_target_end(documents[idx]->sci, ttf.chrgText.cpMax);
-		sci_target_replace(documents[idx]->sci, filename, FALSE);
+		sci_target_start(doc->sci, ttf.chrgText.cpMin);
+		sci_target_end(doc->sci, ttf.chrgText.cpMax);
+		sci_target_replace(doc->sci, filename, FALSE);
 	}
 
 	g_free(filebase);
@@ -1077,12 +1001,12 @@ gchar *utils_get_hex_from_color(GdkColor *color)
  * Returned string is in UTF-8 encoding */
 gchar *utils_get_current_file_dir_utf8(void)
 {
-	gint cur_idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 
-	if (DOC_IDX_VALID(cur_idx)) /* if valid page found */
+	if (doc != NULL)
 	{
 		/* get current filename */
-		const gchar *cur_fname = documents[cur_idx]->file_name;
+		const gchar *cur_fname = doc->file_name;
 
 		if (cur_fname != NULL)
 		{

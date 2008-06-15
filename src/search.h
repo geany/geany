@@ -63,6 +63,6 @@ void search_show_find_in_files_dialog(const gchar *dir);
 
 void search_find_usage(const gchar *search_text, gint flags, gboolean in_session);
 
-void search_find_selection(gint idx, gboolean search_backwards);
+void search_find_selection(GeanyDocument *doc, gboolean search_backwards);
 
 #endif
