@@ -180,15 +180,15 @@ static const char *skipEverything (const char *cp)
 {
 	for (; *cp; cp++)
 	{
-	    if (*cp == '"' || *cp == '\'')
+		if (*cp == '"' || *cp == '\'')
 		{
 			cp = skipString(cp);
 			if (!*cp) break;
 		}
 		if (isIdentifierFirstCharacter ((int) *cp))
 			return cp;
-    }
-    return cp;
+	}
+	return cp;
 }
 
 /* Skip an identifier. */
@@ -196,7 +196,7 @@ static const char *skipIdentifier (const char *cp)
 {
 	while (isIdentifierCharacter ((int) *cp))
 		cp++;
-    return cp;
+	return cp;
 }
 
 static const char *findDefinitionOrClass (const char *cp)
@@ -383,27 +383,27 @@ static void addNestingLevel(NestingLevels *nls, int indentation,
  */
 static char const *find_triple_start(char const *string, char const **which)
 {
-    char const *cp = string;
+	char const *cp = string;
 
-    for (; *cp; cp++)
+	for (; *cp; cp++)
 	{
-	    if (*cp == '"' || *cp == '\'')
+		if (*cp == '"' || *cp == '\'')
 		{
-		    if (strcmp(cp, doubletriple) == 0)
-		    {
-		        *which = doubletriple;
-		        return cp;
-		    }
-		    if (strcmp(cp, singletriple) == 0)
-		    {
-		        *which = singletriple;
-		        return cp;
-		    }
+			if (strncmp(cp, doubletriple, 3) == 0)
+			{
+				*which = doubletriple;
+				return cp;
+			}
+			if (strncmp(cp, singletriple, 3) == 0)
+			{
+				*which = singletriple;
+				return cp;
+			}
 			cp = skipString(cp);
 			if (!*cp) break;
 		}
 	}
-    return NULL;
+	return NULL;
 }
 
 /* Find the end of a triple string as pointed to by "which", and update "which"
@@ -411,11 +411,11 @@ static char const *find_triple_start(char const *string, char const **which)
  */
 static void find_triple_end(char const *string, char const **which)
 {
-    char const *s = string;
-    while (1)
+	char const *s = string;
+	while (1)
 	{
-	    /* Check if the string ends in the same line. */
-	    s = strstr (s, *which);
+		/* Check if the string ends in the same line. */
+		s = strstr (s, *which);
 		if (!s) break;
 		s += 3;
 		*which = NULL;
@@ -435,7 +435,7 @@ static const char *findVariable(const char *line)
 	const char *cp, *sp, *eq, *start;
 
 	cp = strstr(line, "=");
-	if (! cp)
+	if (!cp)
 		return NULL;
 	eq = cp + 1;
 	while (*eq)
@@ -480,8 +480,8 @@ static void findPythonTags (void)
 	while ((line = (const char *) fileReadLine ()) != NULL)
 	{
 		const char *cp = line;
-		char *longstring;
-		const char *keyword, *variable;
+		char const *longstring;
+		char const *keyword, *variable;
 		int indent;
 
 		cp = skipSpace (cp);
@@ -489,7 +489,7 @@ static void findPythonTags (void)
 		if (*cp == '\0')  /* skip blank line */
 			continue;
 
-		/* Skip comment if we are not inside a multi-line string */
+		/* Skip comment if we are not inside a multi-line string. */
 		if (*cp == '#' && !longStringLiteral)
 			continue;
 
@@ -514,7 +514,7 @@ static void findPythonTags (void)
 		/* Deal with multiline string ending. */
 		if (longStringLiteral)
 		{
-		    find_triple_end(cp, &longStringLiteral);
+			find_triple_end(cp, &longStringLiteral);
 			continue;
 		}
 
@@ -522,14 +522,10 @@ static void findPythonTags (void)
 		longstring = find_triple_start(cp, &longStringLiteral);
 		if (longstring)
 		{
-			/* Note: For our purposes, the line just ends at the first long
-			 * string. I.e. we don't parse for any tags in the rest of the
-			 * line, but we do look for the string ending of course.
-			 */
-			*longstring = '\0';
-
 			longstring += 3;
 			find_triple_end(longstring, &longStringLiteral);
+			/* We don't parse for any tags in the rest of the line. */
+			continue;
 		}
 
 		/* Deal with def and class keywords. */

@@ -1,3 +1,10 @@
+2008-06-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * tagmanager/python.c:
+   Fix a regression introduced in latest bug fixes and fix some
+   indentation and comments.
+
+
 2008-06-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * tagmanager/python.c:
@@ -8,7 +15,7 @@
    Create Makefiles for src, tagmanager and scintilla sub directories
    to be able to run make from within Geany.
  * scintilla/scintilla-marshal.c:
-   Updated generated marschal code for Scintilla.
+   Updated generated marshal code for Scintilla.
 
 
 2008-06-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
