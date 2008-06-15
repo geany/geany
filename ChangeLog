@@ -8,6 +8,8 @@
    Fix old usage of build.env.
    Make configure-only options only available when actually configure
    is used.
+ * scintilla/ScintillaGTK.cxx:
+   Backport string casts from Scintilla CVS to avoid compiler warnings.
 
 
 2008-06-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

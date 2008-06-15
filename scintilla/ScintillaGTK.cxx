@@ -314,15 +314,15 @@ GdkAtom ScintillaGTK::atomUriList = 0;
 GdkAtom ScintillaGTK::atomDROPFILES_DND = 0;
 
 static const GtkTargetEntry clipboardCopyTargets[] = {
-	{ "UTF8_STRING", 0, TARGET_UTF8_STRING },
-	{ "STRING", 0, TARGET_STRING },
+	{ (gchar *) "UTF8_STRING", 0, TARGET_UTF8_STRING },
+	{ (gchar *) "STRING", 0, TARGET_STRING },
 };
 static const gint nClipboardCopyTargets = sizeof(clipboardCopyTargets) / sizeof(clipboardCopyTargets[0]);
 
 static const GtkTargetEntry clipboardPasteTargets[] = {
-	{ "text/uri-list", 0, TARGET_URI },
-	{ "UTF8_STRING", 0, TARGET_UTF8_STRING },
-	{ "STRING", 0, TARGET_STRING },
+	{ (gchar *) "text/uri-list", 0, TARGET_URI },
+	{ (gchar *) "UTF8_STRING", 0, TARGET_UTF8_STRING },
+	{ (gchar *) "STRING", 0, TARGET_STRING },
 };
 static const gint nClipboardPasteTargets = sizeof(clipboardPasteTargets) / sizeof(clipboardPasteTargets[0]);
 
