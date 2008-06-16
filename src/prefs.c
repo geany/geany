@@ -1058,7 +1058,8 @@ void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 		}
 		case 2:
 		{
-			if (strcmp(fontbtn, interface_prefs.msgwin_font) == 0) break;
+			if (strcmp(fontbtn, interface_prefs.msgwin_font) == 0)
+				break;
 			g_free(interface_prefs.msgwin_font);
 			interface_prefs.msgwin_font = g_strdup(fontbtn);
 			ui_widget_modify_font_from_string(msgwindow.tree_compiler, interface_prefs.msgwin_font);

@@ -971,8 +971,8 @@ on_line_wrapping1_toggled              (GtkCheckMenuItem *checkmenuitem,
 	if (! ignore_callback)
 	{
 		GeanyDocument *doc = document_get_current();
-		if (doc == NULL) return;
-		editor_set_line_wrapping(doc, ! doc->line_wrapping);
+		if (doc != NULL)
+			editor_set_line_wrapping(doc, ! doc->line_wrapping);
 	}
 }
 
@@ -984,7 +984,8 @@ on_set_file_readonly1_toggled          (GtkCheckMenuItem *checkmenuitem,
 	if (! ignore_callback)
 	{
 		GeanyDocument *doc = document_get_current();
-		if (doc == NULL) return;
+		if (doc == NULL)
+			return;
 		doc->readonly = ! doc->readonly;
 		sci_set_readonly(doc->sci, doc->readonly);
 		ui_update_tab_status(doc);
@@ -1000,8 +1001,8 @@ on_use_auto_indentation1_toggled       (GtkCheckMenuItem *checkmenuitem,
 	if (! ignore_callback)
 	{
 		GeanyDocument *doc = document_get_current();
-		if (doc == NULL) return;
-		doc->auto_indent = ! doc->auto_indent;
+		if (doc != NULL)
+			doc->auto_indent = ! doc->auto_indent;
 	}
 }
 
@@ -1014,7 +1015,8 @@ on_find_usage1_activate                (GtkMenuItem     *menuitem,
 	gchar *search_text;
 	GeanyDocument *doc = document_get_current();
 
-	if (doc == NULL) return;
+	if (doc == NULL)
+		return;
 
 	if (sci_can_copy(doc->sci))
 	{	/* take selected text if there is a selection */
@@ -1041,7 +1043,7 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
 		GTK_MENU_ITEM(lookup_widget(main_widgets.editor_menu, "goto_tag_definition1")));
 	GeanyDocument *doc = document_get_current();
 
-	g_return_if_fail(doc);
+	g_return_if_fail(doc != NULL);
 
 	sci_set_current_position(doc->sci, editor_info.click_pos, FALSE);
 	symbols_goto_tag(editor_info.current_word, definition);
@@ -1632,7 +1634,8 @@ on_menu_write_unicode_bom1_toggled     (GtkCheckMenuItem *checkmenuitem,
 	{
 		GeanyDocument *doc = document_get_current();
 
-		if (doc == NULL) return;
+		if (doc == NULL)
+			return;
 		if (doc->readonly)
 		{
 			utils_beep();
@@ -2062,6 +2065,9 @@ on_tabs1_activate                      (GtkMenuItem     *menuitem,
 {
 	GeanyDocument *doc = document_get_current();
 
+	if (doc == NULL || ignore_callback)
+		return;
+
 	editor_set_use_tabs(doc, TRUE);
 	ui_update_statusbar(doc, -1);
 }
@@ -2073,6 +2079,9 @@ on_spaces1_activate                    (GtkMenuItem     *menuitem,
 {
 	GeanyDocument *doc = document_get_current();
 
+	if (doc == NULL || ignore_callback)
+		return;
+
 	editor_set_use_tabs(doc, FALSE);
 	ui_update_statusbar(doc, -1);
 }
@@ -2083,6 +2092,9 @@ on_strip_trailing_spaces1_activate     (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	GeanyDocument *doc = document_get_current();
+
+	if (doc == NULL || ignore_callback)
+		return;
 
 	editor_strip_trailing_spaces(doc);
 }
@@ -2133,7 +2145,7 @@ on_line_breaking1_activate             (GtkMenuItem     *menuitem,
 		return;
 
 	doc = document_get_current();
-	g_return_if_fail(doc);
+	g_return_if_fail(doc != NULL);
 
 	doc->line_breaking = !doc->line_breaking;
 }

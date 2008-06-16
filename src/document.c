@@ -195,11 +195,12 @@ GeanyDocument *document_find_by_sci(ScintillaObject *sci)
 {
 	guint i;
 
-	if (! sci) return NULL;
+	if (sci == NULL)
+		return NULL;
 
 	for (i = 0; i < documents_array->len; i++)
 	{
-		if (documents[i]->index == -1 && documents[i]->sci == sci)
+		if (documents[i]->index != -1 && documents[i]->sci == sci)
 			return documents[i];
 	}
 	return NULL;
@@ -209,7 +210,8 @@ GeanyDocument *document_find_by_sci(ScintillaObject *sci)
 /* returns the index of the notebook page from the document index */
 gint document_get_notebook_page(GeanyDocument *doc)
 {
-	if (doc == NULL) return -1;
+	if (doc == NULL)
+		return -1;
 
 	return gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
 		GTK_WIDGET(doc->sci));
@@ -455,14 +457,13 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 	gchar *fname;
 	GeanyDocument *this;
 	gint new_idx;
-	gint tabnum;
 	gint cur_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 
 	if (cur_pages == 1)
 	{
 		GeanyDocument *doc = document_get_current();
 		/* remove the empty document and open a new one */
-		if (doc->file_name == NULL && ! doc->changed)
+		if (doc != NULL && doc->file_name == NULL && ! doc->changed)
 			document_remove_page(0);
 	}
 
@@ -491,7 +492,7 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 
 	treeviews_openfiles_add(this);	/* sets this->iter */
 
-	tabnum = notebook_new_tab(this);
+	notebook_new_tab(this);
 
 	/* select document in sidebar */
 	{
@@ -2244,7 +2245,8 @@ void document_undo_add(GeanyDocument *doc, guint type, gpointer data)
 	Document *fdoc = DOCUMENT(doc);
 	undo_action *action;
 
-	if (doc == NULL) return;
+	if (doc == NULL)
+		return;
 
 	action = g_new0(undo_action, 1);
 	action->type = type;
@@ -2264,7 +2266,8 @@ gboolean document_can_undo(GeanyDocument *doc)
 {
 	Document *fdoc = DOCUMENT(doc);
 
-	if (doc == NULL) return FALSE;
+	if (doc == NULL)
+		return FALSE;
 
 	if (g_trash_stack_height(&fdoc->undo_actions) > 0 || sci_can_undo(doc->sci))
 		return TRUE;
@@ -2290,7 +2293,8 @@ void document_undo(GeanyDocument *doc)
 	Document *fdoc = DOCUMENT(doc);
 	undo_action *action;
 
-	if (doc == NULL) return;
+	if (doc == NULL)
+		return;
 
 	action = g_trash_stack_pop(&fdoc->undo_actions);
 
@@ -2349,7 +2353,8 @@ gboolean document_can_redo(GeanyDocument *doc)
 {
 	Document *fdoc = DOCUMENT(doc);
 
-	if (doc == NULL) return FALSE;
+	if (doc == NULL)
+		return FALSE;
 
 	if (g_trash_stack_height(&fdoc->redo_actions) > 0 || sci_can_redo(doc->sci))
 		return TRUE;
@@ -2363,7 +2368,8 @@ void document_redo(GeanyDocument *doc)
 	Document *fdoc = DOCUMENT(doc);
 	undo_action *action;
 
-	if (doc == NULL) return;
+	if (doc == NULL)
+		return;
 
 	action = g_trash_stack_pop(&fdoc->redo_actions);
 
@@ -2655,8 +2661,10 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 	gchar *locale_filename;
 	gboolean ret = FALSE;
 
-	if (file_prefs.disk_check_timeout == 0) return FALSE;
-	if (doc == NULL) return FALSE;
+	if (file_prefs.disk_check_timeout == 0)
+		return FALSE;
+	if (doc == NULL)
+		return FALSE;
 	/* ignore documents that have never been saved to disk */
 	if (doc->real_path == NULL) return FALSE;
 

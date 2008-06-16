@@ -234,15 +234,21 @@ static GtkWidget *radio_items[GEANY_ENCODINGS_MAX];
 void encodings_select_radio_item(const gchar *charset)
 {
 	gint i;
+
+	if (ignore_callback)
+		return;
+
 	g_return_if_fail(charset != NULL);
 
 	i = 0;
 	while (i < GEANY_ENCODINGS_MAX)
 	{
-		if (utils_str_equal(charset, encodings[i].charset)) break;
+		if (utils_str_equal(charset, encodings[i].charset))
+			break;
 		i++;
 	}
-	if (i == GEANY_ENCODINGS_MAX) i = GEANY_ENCODING_UTF_8; /* fallback to UTF-8 */
+	if (i == GEANY_ENCODINGS_MAX)
+		i = GEANY_ENCODING_UTF_8; /* fallback to UTF-8 */
 
 	/* ignore_callback has to be set by the caller */
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(radio_items[i]), TRUE);

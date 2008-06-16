@@ -234,7 +234,7 @@ void search_find_selection(GeanyDocument *doc, gboolean search_backwards)
 	GtkClipboard *clipboard = gtk_clipboard_get(GDK_SELECTION_PRIMARY);
 #endif
 
-	g_return_if_fail(doc == NULL);
+	g_return_if_fail(doc != NULL);
 
 #ifdef G_OS_UNIX
 	s=gtk_clipboard_wait_for_text(clipboard);
@@ -1408,7 +1408,8 @@ void search_find_usage(const gchar *search_text, gint flags, gboolean in_session
 		for (i = 0; i < documents_array->len; i++)
 		{
 			if (DOC_VALID(documents[i]))
-				if (find_document_usage(documents[i], search_text, flags) > 0) found = TRUE;
+				if (find_document_usage(documents[i], search_text, flags) > 0)
+					found = TRUE;
 		}
 	}
 

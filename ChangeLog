@@ -1,3 +1,10 @@
+2008-06-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/encodings.c, src/prefs.c, src/callbacks.c, src/search.c,
+   src/document.c:
+   Fix wrong and add missing checks.
+
+
 2008-06-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/*:
