@@ -718,7 +718,7 @@ static GPid build_run_cmd(gint idx)
 			g_free(vte_cmd_nonscript);
 		}
 		else
-			vte_cmd = g_strconcat(RUN_SCRIPT_CMD, "\n", NULL);
+			vte_cmd = g_strconcat("\n/bin/sh ", RUN_SCRIPT_CMD, "\n", NULL);
 
 		/* change into current directory if it is not done by default or we have a project and
 		 * project run command(working_dir is already set accordingly) */

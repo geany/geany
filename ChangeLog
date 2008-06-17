@@ -2,6 +2,8 @@
 
  * geany.glade, src/interface.c, src/keybindings.c:
    Fix spelling of a few strings (mostly BE -> AE).
+ * src/build.c:
+   Fix executing commands in the VTE.
 
 
 2008-06-17  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
