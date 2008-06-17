@@ -1,6 +1,12 @@
+2008-06-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * geany.glade, src/interface.c, src/keybindings.c:
+   Fix spelling of a few strings (mostly BE -> AE).
+
+
 2008-06-17  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
- * THANKS: Small update of Polish translation provided by Krzysztof 
+ * THANKS: Small update of Polish translation provided by Krzysztof
    Troska. Thanks for it.
 
 

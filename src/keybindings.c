@@ -300,7 +300,7 @@ static void init_default_kb(void)
 		GDK_d, GDK_SHIFT_MASK | GDK_MOD1_MASK, "menu_insert_date", _("Insert date"),
 		LW(insert_date_custom1));
 	keybindings_set_item(group, GEANY_KEYS_INSERT_ALTWHITESPACE, cb_func_insert_action,
-		0, 0, "edit_insertwhitespace", _("Insert alternative whitespace"), NULL);
+		0, 0, "edit_insertwhitespace", _("Insert alternative white space"), NULL);
 
 	group = ADD_KB_GROUP(SETTINGS, _("Settings"));
 

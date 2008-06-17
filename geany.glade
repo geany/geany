@@ -58,7 +58,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2350">
+			<widget class="GtkImage" id="image2367">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -148,7 +148,7 @@
 		      <signal name="activate" handler="on_save_all1_activate" last_modification_time="Thu, 02 Jun 2005 14:15:30 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2351">
+			<widget class="GtkImage" id="image2368">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-save</property>
 			  <property name="icon_size">1</property>
@@ -169,7 +169,7 @@
 		      <signal name="activate" handler="on_toolbutton23_clicked" last_modification_time="Mon, 24 Jul 2006 19:26:04 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2352">
+			<widget class="GtkImage" id="image2369">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-revert-to-saved</property>
 			  <property name="icon_size">1</property>
@@ -189,7 +189,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2353">
+			<widget class="GtkImage" id="image2370">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-revert-to-saved</property>
 			  <property name="icon_size">1</property>
@@ -278,7 +278,7 @@
 		      <signal name="activate" handler="on_close_all1_activate" last_modification_time="Thu, 02 Jun 2005 14:15:30 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2354">
+			<widget class="GtkImage" id="image2371">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-close</property>
 			  <property name="icon_size">1</property>
@@ -477,7 +477,7 @@
 			      <signal name="activate" handler="on_menu_increase_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:28:54 GMT"/>
 
 			      <child internal-child="image">
-				<widget class="GtkImage" id="image2355">
+				<widget class="GtkImage" id="image2372">
 				  <property name="visible">True</property>
 				  <property name="stock">gtk-indent</property>
 				  <property name="icon_size">1</property>
@@ -498,7 +498,7 @@
 			      <signal name="activate" handler="on_menu_decrease_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:28:54 GMT"/>
 
 			      <child internal-child="image">
-				<widget class="GtkImage" id="image2356">
+				<widget class="GtkImage" id="image2373">
 				  <property name="visible">True</property>
 				  <property name="stock">gtk-unindent</property>
 				  <property name="icon_size">1</property>
@@ -554,7 +554,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2357">
+			<widget class="GtkImage" id="image2374">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -621,7 +621,7 @@
 			  <child>
 			    <widget class="GtkMenuItem" id="insert_bsd_license_notice2">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Inserts a BSD licence notice (should be done at the beginning of the file)</property>
+			      <property name="tooltip" translatable="yes">Inserts a BSD license notice (should be done at the beginning of the file)</property>
 			      <property name="label" translatable="yes">Insert _BSD License Notice</property>
 			      <property name="use_underline">True</property>
 			      <signal name="activate" handler="on_menu_comments_bsd_activate" last_modification_time="Fri, 05 Jan 2007 13:29:27 GMT"/>
@@ -639,7 +639,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2358">
+			<widget class="GtkImage" id="image2375">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -671,7 +671,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2359">
+			<widget class="GtkImage" id="image2376">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -768,7 +768,7 @@
 		      <signal name="activate" handler="on_replace1_activate" last_modification_time="Sun, 23 Oct 2005 13:22:36 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2360">
+			<widget class="GtkImage" id="image2377">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-find-and-replace</property>
 			  <property name="icon_size">1</property>
@@ -834,7 +834,7 @@
 		      <signal name="activate" handler="on_go_to_line1_activate" last_modification_time="Tue, 23 May 2006 17:10:49 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2361">
+			<widget class="GtkImage" id="image2378">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-jump-to</property>
 			  <property name="icon_size">1</property>
@@ -869,7 +869,7 @@
 		      <signal name="activate" handler="on_change_font1_activate" last_modification_time="Fri, 22 Apr 2005 18:58:45 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2362">
+			<widget class="GtkImage" id="image2379">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-font</property>
 			  <property name="icon_size">1</property>
@@ -1288,7 +1288,7 @@
 		      <signal name="activate" handler="on_project_new1_activate" last_modification_time="Thu, 18 Jan 2007 22:16:24 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2363">
+			<widget class="GtkImage" id="image2380">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -1309,7 +1309,7 @@
 		      <signal name="activate" handler="on_project_open1_activate" last_modification_time="Mon, 15 Jan 2007 17:34:17 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2364">
+			<widget class="GtkImage" id="image2381">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-open</property>
 			  <property name="icon_size">1</property>
@@ -1330,7 +1330,7 @@
 		      <signal name="activate" handler="on_project_close1_activate" last_modification_time="Mon, 15 Jan 2007 17:34:17 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2365">
+			<widget class="GtkImage" id="image2382">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-close</property>
 			  <property name="icon_size">1</property>
@@ -1389,7 +1389,7 @@
 		      <signal name="activate" handler="on_show_color_chooser1_activate" last_modification_time="Wed, 22 Jun 2005 18:10:21 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2366">
+			<widget class="GtkImage" id="image2383">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-color</property>
 			  <property name="icon_size">1</property>
@@ -1443,7 +1443,7 @@
 		      <signal name="activate" handler="on_help1_activate" last_modification_time="Sun, 24 Jul 2005 15:23:11 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2367">
+			<widget class="GtkImage" id="image2384">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-help</property>
 			  <property name="icon_size">1</property>
@@ -2751,7 +2751,7 @@
 	      <signal name="activate" handler="on_menu_increase_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:31:38 GMT"/>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image1969">
+		<widget class="GtkImage" id="image2385">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-indent</property>
 		  <property name="icon_size">1</property>
@@ -2772,7 +2772,7 @@
 	      <signal name="activate" handler="on_menu_decrease_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:31:38 GMT"/>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image1970">
+		<widget class="GtkImage" id="image2386">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-unindent</property>
 		  <property name="icon_size">1</property>
@@ -2828,7 +2828,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1971">
+	<widget class="GtkImage" id="image2387">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -2895,7 +2895,7 @@
 	  <child>
 	    <widget class="GtkMenuItem" id="insert_bsd_license_notice1">
 	      <property name="visible">True</property>
-	      <property name="tooltip" translatable="yes">Inserts a BSD licence notice (should be done at the beginning of the file)</property>
+	      <property name="tooltip" translatable="yes">Inserts a BSD license notice (should be done at the beginning of the file)</property>
 	      <property name="label" translatable="yes">Insert _BSD License Notice</property>
 	      <property name="use_underline">True</property>
 	      <signal name="activate" handler="on_comments_bsd_activate" last_modification_time="Fri, 05 Jan 2007 13:32:16 GMT"/>
@@ -2913,7 +2913,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1972">
+	<widget class="GtkImage" id="image2388">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -2945,7 +2945,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1973">
+	<widget class="GtkImage" id="image2389">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -2984,7 +2984,7 @@
       <signal name="activate" handler="on_find_usage1_activate" last_modification_time="Fri, 27 May 2005 21:55:12 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1974">
+	<widget class="GtkImage" id="image2390">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-find</property>
 	  <property name="icon_size">1</property>
@@ -3039,7 +3039,7 @@
       <signal name="activate" handler="on_go_to_line_activate" last_modification_time="Sat, 16 Jul 2005 11:20:32 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1975">
+	<widget class="GtkImage" id="image2391">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-jump-to</property>
 	  <property name="icon_size">1</property>
@@ -6097,7 +6097,7 @@ Match braces</property>
 			  <child>
 			    <widget class="GtkCheckButton" id="check_unfold_children">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Fold or unfold all children of a fold point. By pressing the Shift key while clicking on a fold symbol the contrary behaviour is used.</property>
+			      <property name="tooltip" translatable="yes">Fold or unfold all children of a fold point. By pressing the Shift key while clicking on a fold symbol the contrary behavior is used.</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Fold/Unfold all children of a fold point</property>
 			      <property name="use_underline">True</property>
@@ -6295,7 +6295,7 @@ Match braces</property>
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Automatic completion and closing of XML tags (includes HTML tags)</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">XML tag autocompletion</property>
+			      <property name="label" translatable="yes">XML tag auto completion</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">False</property>
@@ -6362,7 +6362,7 @@ Match braces</property>
 			      <child>
 				<widget class="GtkSpinButton" id="spin_symbollistheight">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Number of rows to display in the autocompletion list.</property>
+				  <property name="tooltip" translatable="yes">Number of rows to display in the auto completion list.</property>
 				  <property name="can_focus">True</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">0</property>
@@ -6830,7 +6830,7 @@ Match braces</property>
 			    <widget class="GtkCheckButton" id="check_trailing_spaces">
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Removes trailing spaces and tabs and the end of lines</property>
-			      <property name="label" translatable="yes">Strip trailing spaces</property>
+			      <property name="label" translatable="yes">Strip trailing spaces and tabs</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">False</property>
