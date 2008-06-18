@@ -1,3 +1,14 @@
+2008-06-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/callbacks.c, src/notebook.c, src/document.c:
+   Fix redo, reload commands.
+   Fix focusing editor on notebook tab click.
+   Minor formatting and use NZV, DOC_FILENAME macros.
+   Make doc_at() debug function check idx is within range.
+ * src/build.c, src/search.c:
+   Minor formatting.
+
+
 2008-06-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/encodings.c, src/prefs.c, src/callbacks.c, src/search.c,

@@ -1643,7 +1643,7 @@ void build_menu_update(GeanyDocument *doc)
 	gboolean have_path, can_build, can_make, can_run, can_stop, can_set_args, have_errors;
 	BuildMenuItems *menu_items;
 
-	if (doc ==  NULL)
+	if (doc == NULL)
 		doc = document_get_current();
 	if (doc == NULL ||
 		(FILETYPE_ID(doc->file_type) == GEANY_FILETYPES_NONE &&	doc->file_name == NULL))

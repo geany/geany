@@ -237,19 +237,19 @@ void search_find_selection(GeanyDocument *doc, gboolean search_backwards)
 	g_return_if_fail(doc != NULL);
 
 #ifdef G_OS_UNIX
-	s=gtk_clipboard_wait_for_text(clipboard);
+	s = gtk_clipboard_wait_for_text(clipboard);
 	if (s)
 	{
 		if (strchr(s,'\n') || strchr(s, '\r'))
 		{
 			g_free(s);
-			s=NULL;
+			s = NULL;
 		};
 	}
 #endif
 
 	if (!s)
-		s=editor_get_default_selection(doc, TRUE, NULL);
+		s = editor_get_default_selection(doc, TRUE, NULL);
 
 	if (s)
 	{
