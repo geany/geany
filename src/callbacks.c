@@ -292,7 +292,7 @@ on_redo1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	if (doc == NULL && (document_can_redo(doc)))
+	if (doc != NULL && document_can_redo(doc))
 		document_redo(doc);
 }
 
@@ -329,7 +329,7 @@ on_copy1_activate                      (GtkMenuItem     *menuitem,
 	if (GTK_IS_EDITABLE(focusw))
 		gtk_editable_copy_clipboard(GTK_EDITABLE(focusw));
 	else
-	if (IS_SCINTILLA(focusw) && doc!= NULL)
+	if (IS_SCINTILLA(focusw) && doc != NULL)
 		sci_copy(doc->sci);
 	else
 	if (GTK_IS_TEXT_VIEW(focusw))
@@ -1952,8 +1952,7 @@ on_context_action1_activate            (GtkMenuItem     *menuitem,
 
 	/* use the filetype specific command if available, fallback to global command otherwise */
 	if (doc->file_type != NULL &&
-		doc->file_type->context_action_cmd != NULL &&
-		*doc->file_type->context_action_cmd != '\0')
+		NZV(doc->file_type->context_action_cmd))
 	{
 		command = g_strdup(doc->file_type->context_action_cmd);
 	}

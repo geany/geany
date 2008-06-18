@@ -657,7 +657,7 @@ GeanyDocument *document_new_file(const gchar *filename, GeanyFiletype *ft, const
 	}
 
 	msgwin_status_add(_("New file \"%s\" opened."),
-		(doc->file_name != NULL) ? doc->file_name : GEANY_STRING_UNTITLED);
+		DOC_FILENAME(doc));
 
 	return doc;
 }
@@ -1234,7 +1234,7 @@ gboolean document_reload_file(GeanyDocument *doc, const gchar *forced_enc)
 	gint pos = 0;
 	GeanyDocument *new_doc;
 
-	if (doc != NULL)
+	if (doc == NULL)
 		return FALSE;
 
 	/* try to set the cursor to the position before reloading */
@@ -2467,7 +2467,7 @@ GdkColor *document_get_status_color(GeanyDocument *doc)
 #ifdef GEANY_DEBUG
 GeanyDocument *doc_at(gint idx)
 {
-	return (idx >= 0) ? documents[idx] : NULL;
+	return (idx >= 0 && idx < (gint) documents_array->len) ? documents[idx] : NULL;
 }
 #endif
 

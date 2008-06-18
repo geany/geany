@@ -81,7 +81,7 @@ static void focus_sci(GtkWidget *widget, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
 
-	if (doc != NULL)
+	if (doc == NULL)
 		return;
 
 	gtk_widget_grab_focus(GTK_WIDGET(doc->sci));
