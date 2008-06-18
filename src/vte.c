@@ -35,12 +35,12 @@
 #include <errno.h>
 
 #include "vte.h"
-#include "msgwindow.h"
 #include "support.h"
 #include "prefs.h"
 #include "ui_utils.h"
 #include "utils.h"
 #include "document.h"
+#include "msgwindow.h"
 #include "callbacks.h"
 #include "geanywraplabel.h"
 
@@ -435,9 +435,9 @@ static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data)
 		}
 		case POPUP_CHANGEPATH:
 		{
-			gint idx = document_get_cur_idx();
-			if (DOC_IDX_VALID(idx))
-				vte_cwd(documents[idx]->file_name, TRUE);
+			GeanyDocument *doc = document_get_current();
+			if (doc != NULL)
+				vte_cwd(doc->file_name, TRUE);
 			break;
 		}
 		case POPUP_RESTARTTERMINAL:

@@ -33,8 +33,8 @@
 #include "prefs.h"
 #include "support.h"
 #include "utils.h"
-#include "msgwindow.h"
 #include "document.h"
+#include "msgwindow.h"
 #include "sciwrappers.h"
 #include "ui_utils.h"
 #include "editor.h"
@@ -227,36 +227,36 @@ static void setup_find_next(const gchar *text)
  * the scintilla selection or current token instead.
  * Search flags are always zero.
  */
-void search_find_selection(gint idx, gboolean search_backwards)
+void search_find_selection(GeanyDocument *doc, gboolean search_backwards)
 {
 	gchar *s = NULL;
 #ifdef G_OS_UNIX
 	GtkClipboard *clipboard = gtk_clipboard_get(GDK_SELECTION_PRIMARY);
 #endif
 
-	g_return_if_fail(DOC_IDX_VALID(idx));
+	g_return_if_fail(doc != NULL);
 
 #ifdef G_OS_UNIX
-	s=gtk_clipboard_wait_for_text(clipboard);
+	s = gtk_clipboard_wait_for_text(clipboard);
 	if (s)
 	{
 		if (strchr(s,'\n') || strchr(s, '\r'))
 		{
 			g_free(s);
-			s=NULL;
+			s = NULL;
 		};
 	}
 #endif
 
 	if (!s)
-		s=editor_get_default_selection(idx, TRUE, NULL);
+		s = editor_get_default_selection(doc, TRUE, NULL);
 
 	if (s)
 	{
 		setup_find_next(s);	/* allow find next/prev */
 
-		if (document_find_text(idx, s, 0, search_backwards, FALSE, NULL) > -1)
-			editor_display_current_line(idx, 0.3F);
+		if (document_find_text(doc, s, 0, search_backwards, FALSE, NULL) > -1)
+			editor_display_current_line(doc, 0.3F);
 		g_free(s);
 	}
 }
@@ -286,12 +286,12 @@ static void load_monospace_style()
 
 void search_show_find_dialog(void)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	gchar *sel = NULL;
 
-	g_return_if_fail(DOC_IDX_VALID(idx));
+	g_return_if_fail(doc != NULL);
 
-	sel = editor_get_default_selection(idx, search_prefs.use_current_word, NULL);
+	sel = editor_get_default_selection(doc, search_prefs.use_current_word, NULL);
 
 	if (widgets.find_dialog == NULL)
 	{
@@ -407,12 +407,13 @@ static void send_replace_dialog_response(GtkButton *button, gpointer user_data)
 
 void search_show_replace_dialog(void)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	gchar *sel = NULL;
 
-	if (idx == -1 || ! documents[idx]->is_valid) return;
+	if (doc == NULL)
+		return;
 
-	sel = editor_get_default_selection(idx, search_prefs.use_current_word, NULL);
+	sel = editor_get_default_selection(doc, search_prefs.use_current_word, NULL);
 
 	if (widgets.replace_dialog == NULL)
 	{
@@ -559,7 +560,7 @@ void search_show_find_in_files_dialog(const gchar *dir)
 	static GtkWidget *combo = NULL;
 	static GtkWidget *dir_combo;
 	GtkWidget *entry; /* the child GtkEntry of combo (or dir_combo) */
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	gchar *sel = NULL;
 	gchar *cur_dir;
 
@@ -711,13 +712,13 @@ void search_show_find_in_files_dialog(const gchar *dir)
 				G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 
 		gtk_widget_show_all(widgets.find_in_files_dialog);
-		sel = editor_get_default_selection(idx, search_prefs.use_current_word, NULL);
+		sel = editor_get_default_selection(doc, search_prefs.use_current_word, NULL);
 	}
 
 	entry = GTK_BIN(combo)->child;
 	/* only set selection if the dialog is not already visible, or has just been created */
 	if (! sel && ! GTK_WIDGET_VISIBLE(widgets.find_in_files_dialog))
-		sel = editor_get_default_selection(idx, search_prefs.use_current_word, NULL);
+		sel = editor_get_default_selection(doc, search_prefs.use_current_word, NULL);
 	if (sel)
 		gtk_entry_set_text(GTK_ENTRY(entry), sel);
 	g_free(sel);
@@ -790,23 +791,23 @@ on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user
 }
 
 
-static gint search_mark(gint idx, const gchar *search_text, gint flags)
+static gint search_mark(GeanyDocument *doc, const gchar *search_text, gint flags)
 {
 	gint pos, line, count = 0;
 	struct TextToFind ttf;
 
-	g_return_val_if_fail(DOC_IDX_VALID(idx), 0);
+	g_return_val_if_fail(doc != NULL, 0);
 
 	ttf.chrg.cpMin = 0;
-	ttf.chrg.cpMax = sci_get_length(documents[idx]->sci);
+	ttf.chrg.cpMax = sci_get_length(doc->sci);
 	ttf.lpstrText = (gchar *)search_text;
 	while (1)
 	{
-		pos = sci_find_text(documents[idx]->sci, flags, &ttf);
+		pos = sci_find_text(doc->sci, flags, &ttf);
 		if (pos == -1) break;
 
-		line = sci_get_line_from_position(documents[idx]->sci, pos);
-		sci_set_marker_at_line(documents[idx]->sci, line, TRUE, 1);
+		line = sci_get_line_from_position(doc->sci, pos);
+		sci_set_marker_at_line(doc->sci, line, TRUE, 1);
 
 		ttf.chrg.cpMin = ttf.chrgText.cpMax + 1;
 		count++;
@@ -850,17 +851,18 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		gtk_widget_hide(widgets.find_dialog);
 	else
 	{
-		gint idx = document_get_cur_idx();
+		GeanyDocument *doc = document_get_current();
 		gboolean search_replace_escape;
 		gboolean check_close = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 						lookup_widget(GTK_WIDGET(widgets.find_dialog), "check_close")));
+
+		if (doc == NULL)
+			return;
 
 		search_replace_escape = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 						lookup_widget(GTK_WIDGET(widgets.find_dialog), "check_escape")));
 		search_data.backwards = FALSE;
 		search_data.search_bar = FALSE;
-
-		if (! DOC_IDX_VALID(idx)) return;
 
 		g_free(search_data.text);
 		search_data.text = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(user_data)))));
@@ -880,7 +882,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		{
 			case GEANY_RESPONSE_FIND:
 			case GEANY_RESPONSE_FIND_PREVIOUS:
-				document_find_text(idx, search_data.text, search_data.flags,
+				document_find_text(doc, search_data.text, search_data.flags,
 					(response == GEANY_RESPONSE_FIND_PREVIOUS), TRUE, GTK_WIDGET(widgets.find_dialog));
 				check_close = FALSE;
 				if (search_prefs.suppress_dialogs)
@@ -896,19 +898,18 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 				break;
 
 			case GEANY_RESPONSE_MARK:
-				if (DOC_IDX_VALID(idx))
-				{
-					gint count = search_mark(idx, search_data.text, search_data.flags);
+			{
+				gint count = search_mark(doc, search_data.text, search_data.flags);
 
-					if (count == 0)
-						ui_set_statusbar(FALSE, _("No matches found for \"%s\"."), search_data.text);
-					else
-						ui_set_statusbar(FALSE,
-							ngettext("Found %d match for \"%s\".",
-									 "Found %d matches for \"%s\".", count),
-							count, search_data.text);
-				}
-				break;
+				if (count == 0)
+					ui_set_statusbar(FALSE, _("No matches found for \"%s\"."), search_data.text);
+				else
+					ui_set_statusbar(FALSE,
+						ngettext("Found %d match for \"%s\".",
+								 "Found %d matches for \"%s\".", count),
+						count, search_data.text);
+			}
+			break;
 		}
 		if (check_close)
 			gtk_widget_hide(widgets.find_dialog);
@@ -926,7 +927,7 @@ on_replace_entry_activate(GtkEntry *entry, gpointer user_data)
 static void
 on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	GtkWidget *entry_find = lookup_widget(GTK_WIDGET(widgets.replace_dialog), "entry_find");
 	GtkWidget *entry_replace = lookup_widget(GTK_WIDGET(widgets.replace_dialog), "entry_replace");
 	gint search_flags_re;
@@ -974,28 +975,28 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	{
 		case GEANY_RESPONSE_REPLACE_AND_FIND:
 		{
-			gint rep = document_replace_text(idx, find, replace, search_flags_re,
+			gint rep = document_replace_text(doc, find, replace, search_flags_re,
 				search_backwards_re);
 			if (rep != -1)
-				document_find_text(idx, find, search_flags_re, search_backwards_re,
+				document_find_text(doc, find, search_flags_re, search_backwards_re,
 					TRUE, NULL);
 			break;
 		}
 		case GEANY_RESPONSE_REPLACE:
 		{
-			document_replace_text(idx, find, replace, search_flags_re,
+			document_replace_text(doc, find, replace, search_flags_re,
 				search_backwards_re);
 			break;
 		}
 		case GEANY_RESPONSE_FIND:
 		{
-			document_find_text(idx, find, search_flags_re, search_backwards_re, TRUE,
+			document_find_text(doc, find, search_flags_re, search_backwards_re, TRUE,
 							   GTK_WIDGET(dialog));
 			break;
 		}
 		case GEANY_RESPONSE_REPLACE_IN_FILE:
 		{
-			if (! document_replace_all(idx, find, replace, search_flags_re,
+			if (! document_replace_all(doc, find, replace, search_flags_re,
 				search_replace_escape_re))
 			{
 				utils_beep();
@@ -1009,11 +1010,9 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			/* replace in all documents following notebook tab order */
 			for (n = 0; (gint) n < gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)); n++)
 			{
-				gint ix = document_get_n_idx(n);
+				GeanyDocument *tmp_doc = document_get_from_page(n);
 
-				if (! documents[ix]->is_valid) continue;
-
-				if (document_replace_all(ix, find, replace, search_flags_re,
+				if (document_replace_all(tmp_doc, find, replace, search_flags_re,
 					search_replace_escape_re)) count++;
 			}
 			if (count == 0)
@@ -1025,12 +1024,12 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			/* show which docs had replacements: */
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_STATUS);
 
-			ui_save_buttons_toggle(documents[idx]->changed);	/* update save all */
+			ui_save_buttons_toggle(doc->changed);	/* update save all */
 			break;
 		}
 		case GEANY_RESPONSE_REPLACE_IN_SEL:
 		{
-			document_replace_sel(idx, find, replace, search_flags_re, search_replace_escape_re);
+			document_replace_sel(doc, find, replace, search_flags_re, search_replace_escape_re);
 			break;
 		}
 	}
@@ -1237,7 +1236,7 @@ search_find_in_files(const gchar *search_text, const gchar *dir, const gchar *op
 		str = g_strdup_printf(_("%s %s -- %s (in directory: %s)"),
 			tool_prefs.grep_cmd, opts, search_text, dir);
 		utf8_str = utils_get_utf8_from_locale(str);
-		msgwin_msg_add(COLOR_BLUE, -1, -1, utf8_str);
+		msgwin_msg_add(COLOR_BLUE, -1, NULL, utf8_str);
 		utils_free_pointers(str, utf8_str, NULL);
 		ret = TRUE;
 	}
@@ -1296,7 +1295,7 @@ static gboolean search_read_io              (GIOChannel *source,
 
 		while (g_io_channel_read_line(source, &msg, NULL, NULL, NULL) && msg)
 		{
-			msgwin_msg_add(COLOR_BLACK, -1, -1, g_strstrip(msg));
+			msgwin_msg_add(COLOR_BLACK, -1, NULL, g_strstrip(msg));
 			g_free(msg);
 		}
 	}
@@ -1309,6 +1308,7 @@ static gboolean search_read_io              (GIOChannel *source,
 
 static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 {
+	/* TODO: port this also to Windows API */
 #ifdef G_OS_UNIX
 	const gchar *msg = _("Search failed.");
 	gint color = COLOR_DARK_RED;
@@ -1322,7 +1322,7 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 				gint count = gtk_tree_model_iter_n_children(
 					GTK_TREE_MODEL(msgwindow.store_msg), NULL) - 1;
 
-				msgwin_msg_add_fmt(COLOR_BLUE, -1, -1,
+				msgwin_msg_add_fmt(COLOR_BLUE, -1, NULL,
 					ngettext("Search completed with %d matches.",
 							 "Search completed with %d matches.", count),
 					count);
@@ -1336,7 +1336,7 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 				msg = _("No matches found.");
 				color = COLOR_BLUE;
 			default:
-				msgwin_msg_add(color, -1, -1, msg);
+				msgwin_msg_add(color, -1, NULL, msg);
 				ui_set_statusbar(FALSE, "%s", msg);
 				break;
 		}
@@ -1348,24 +1348,24 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 }
 
 
-static gint find_document_usage(gint idx, const gchar *search_text, gint flags)
+static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gint flags)
 {
 	gchar *buffer, *short_file_name;
 	struct TextToFind ttf;
 	gint count = 0;
 
-	g_return_val_if_fail(DOC_IDX_VALID(idx), 0);
+	g_return_val_if_fail(doc != NULL, 0);
 
-	short_file_name = g_path_get_basename(DOC_FILENAME(idx));
+	short_file_name = g_path_get_basename(DOC_FILENAME(doc));
 
 	ttf.chrg.cpMin = 0;
-	ttf.chrg.cpMax = sci_get_length(documents[idx]->sci);
+	ttf.chrg.cpMax = sci_get_length(doc->sci);
 	ttf.lpstrText = (gchar *)search_text;
 	while (1)
 	{
 		gint pos, line, start, find_len;
 
-		pos = sci_find_text(documents[idx]->sci, flags, &ttf);
+		pos = sci_find_text(doc->sci, flags, &ttf);
 		if (pos == -1)
 			break;	/* no more matches */
 		find_len = ttf.chrgText.cpMax - ttf.chrgText.cpMin;
@@ -1373,9 +1373,9 @@ static gint find_document_usage(gint idx, const gchar *search_text, gint flags)
 			break;	/* Ignore regex ^ or $ */
 
 		count++;
-		line = sci_get_line_from_position(documents[idx]->sci, pos);
-		buffer = sci_get_line(documents[idx]->sci, line);
-		msgwin_msg_add_fmt(COLOR_BLACK, line + 1, idx,
+		line = sci_get_line_from_position(doc->sci, pos);
+		buffer = sci_get_line(doc->sci, line);
+		msgwin_msg_add_fmt(COLOR_BLACK, line + 1, doc,
 			"%s:%d : %s", short_file_name, line + 1, g_strstrip(buffer));
 		g_free(buffer);
 
@@ -1389,18 +1389,18 @@ static gint find_document_usage(gint idx, const gchar *search_text, gint flags)
 
 void search_find_usage(const gchar *search_text, gint flags, gboolean in_session)
 {
-	gint idx;
+	GeanyDocument *doc;
 	gboolean found = FALSE;
 
-	idx = document_get_cur_idx();
-	g_return_if_fail(DOC_IDX_VALID(idx));
+	doc = document_get_current();
+	g_return_if_fail(doc != NULL);
 
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_MESSAGE);
 	gtk_list_store_clear(msgwindow.store_msg);
 
 	if (! in_session)
 	{	/* use current document */
-		found = (find_document_usage(idx, search_text, flags) > 0);
+		found = (find_document_usage(doc, search_text, flags) > 0);
 	}
 	else
 	{
@@ -1408,14 +1408,15 @@ void search_find_usage(const gchar *search_text, gint flags, gboolean in_session
 		for (i = 0; i < documents_array->len; i++)
 		{
 			if (documents[i]->is_valid)
-				if (find_document_usage(i, search_text, flags) > 0) found = TRUE;
+				if (find_document_usage(documents[i], search_text, flags) > 0)
+					found = TRUE;
 		}
 	}
 
 	if (! found) /* no matches were found */
 	{
 		ui_set_statusbar(FALSE, _("No matches found for \"%s\"."), search_text);
-		msgwin_msg_add_fmt(COLOR_BLUE, -1, -1, _("No matches found for \"%s\"."), search_text);
+		msgwin_msg_add_fmt(COLOR_BLUE, -1, NULL, _("No matches found for \"%s\"."), search_text);
 	}
 	else
 	{
@@ -1424,7 +1425,7 @@ void search_find_usage(const gchar *search_text, gint flags, gboolean in_session
 		ui_set_statusbar(FALSE, ngettext(
 			"Found %d matches for \"%s\".", "Found %d matches for \"%s\".", count),
 			count, search_text);
-		msgwin_msg_add_fmt(COLOR_BLUE, -1, -1, ngettext(
+		msgwin_msg_add_fmt(COLOR_BLUE, -1, NULL, ngettext(
 			"Found %d matches for \"%s\".", "Found %d matches for \"%s\".", count),
 			count, search_text);
 	}

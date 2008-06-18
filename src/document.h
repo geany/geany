@@ -24,8 +24,8 @@
 /**
  *  @file document.h
  *  Document related actions: new, save, open, etc.
- *  Also Scintilla search actions.
  **/
+/* Also Scintilla search actions - but these should probably be moved to search.c. */
 
 
 #ifndef GEANY_DOCUMENT_H
@@ -64,10 +64,11 @@ extern GeanyFilePrefs file_prefs;
 /**
  *  Structure for representing an open tab with all its properties.
  **/
-typedef struct GeanyDocument
+struct GeanyDocument
 {
 	/** General flag to represent this document is active and all properties are set correctly. */
 	gboolean		 is_valid;
+	gint			 index;		/**< Index in the documents array. */
 	/** Whether this %document support source code symbols(tags) to show in the sidebar. */
 	gboolean		 has_tags;
 	/** The UTF-8 encoded file name.
@@ -113,8 +114,7 @@ typedef struct GeanyDocument
 	 * not be set elsewhere.
 	 * @see file_name. */
 	gchar 			*real_path;
-}
-GeanyDocument;
+};
 
 
 /** Dynamic array of GeanyDocument pointers holding information about the notebook tabs. */
@@ -126,35 +126,53 @@ extern GPtrArray *documents_array;
  **/
 #define documents ((GeanyDocument **)documents_array->pdata)
 
-/**
- *  DOC_IDX_VALID checks whether the passed index points to a valid %document object by checking
- *  important properties. It returns FALSE if the index is not valid and then this index
- *  must not be used.
- **/
-#define DOC_IDX_VALID(doc_idx) \
-	((doc_idx) >= 0 && (guint)(doc_idx) < documents_array->len && documents[doc_idx]->is_valid)
+/** Check that the @a doc_ptr document still exists (has not been closed).
+ * This is useful when @a doc_ptr was stored some time earlier and documents may have been
+ * closed since then.
+ * @note This should not be used to check the result of the main API functions,
+ * these only need a NULL-pointer check - @c p_document->get_current() != @c NULL. */
+#define DOC_VALID(doc_ptr) \
+	((doc_ptr) != NULL && (doc_ptr)->is_valid)
 
 /**
- *  DOC_FILENAME) returns the filename of the %document corresponding to the passed index or
+ *  DOC_FILENAME returns the filename of the document passed or
  *  GEANY_STRING_UNTITLED (e.g. _("untitled")) if the %document's filename was not yet set.
  *  This macro never returns NULL.
  **/
-#define DOC_FILENAME(doc_idx) \
-	((documents[doc_idx]->file_name != NULL) ? (documents[doc_idx]->file_name) : \
-		GEANY_STRING_UNTITLED)
+#define DOC_FILENAME(doc) \
+	((doc->file_name != NULL) ? (doc->file_name) : GEANY_STRING_UNTITLED)
 
 
-gint document_find_by_filename(const gchar *utf8_filename);
 
-gint document_find_by_realpath(const gchar *realname);
+/* These functions will replace the older functions. For now they have a documents_ prefix. */
 
-gint document_find_by_sci(ScintillaObject *sci);
+GeanyDocument* document_new_file(const gchar *filename, GeanyFiletype *ft, const gchar *text);
 
-gint document_get_notebook_page(gint doc_idx);
+GeanyDocument* document_new_file_if_non_open();
 
-gint document_get_n_idx(guint page_num);
+GeanyDocument* document_find_by_filename(const gchar *utf8_filename);
 
-gint document_get_cur_idx(void);
+GeanyDocument* document_find_by_real_path(const gchar *realname);
+
+gboolean document_save_file(GeanyDocument *doc, gboolean force);
+
+gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname);
+
+GeanyDocument* document_open_file(const gchar *locale_filename, gboolean readonly,
+		GeanyFiletype *ft, const gchar *forced_enc);
+
+gboolean document_reload_file(GeanyDocument *doc, const gchar *forced_enc);
+
+void document_set_text_changed(GeanyDocument *doc, gboolean changed);
+
+void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type);
+
+
+GeanyDocument *document_find_by_sci(ScintillaObject *sci);
+
+gint document_get_notebook_page(GeanyDocument *doc);
+
+GeanyDocument* document_get_from_page(guint page_num);
 
 GeanyDocument *document_get_current(void);
 
@@ -162,77 +180,60 @@ void document_init_doclist(void);
 
 void document_finalize(void);
 
-void document_set_text_changed(gint idx);
+void document_apply_update_prefs(GeanyDocument *doc);
 
-void document_apply_update_prefs(gint idx);
-
-gboolean document_remove(guint page_num);
+gboolean document_remove_page(guint page_num);
 
 gboolean document_account_for_unsaved(void);
 
 gboolean document_close_all(void);
 
-gint document_new_file_if_non_open();
+GeanyDocument *document_clone(GeanyDocument *old_doc, const gchar *utf8_filename);
 
-gint document_new_file(const gchar *filename, GeanyFiletype *ft, const gchar *text);
-
-gint document_clone(gint old_idx, const gchar *utf8_filename);
-
-gint document_open_file(const gchar *locale_filename, gboolean readonly,
-		GeanyFiletype *ft, const gchar *forced_enc);
-
-gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean readonly,
-		GeanyFiletype *ft, const gchar *forced_enc);
+GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename, gint pos,
+		gboolean readonly, GeanyFiletype *ft, const gchar *forced_enc);
 
 void document_open_file_list(const gchar *data, gssize length);
 
 void document_open_files(const GSList *filenames, gboolean readonly, GeanyFiletype *ft,
 		const gchar *forced_enc);
 
-gboolean document_reload_file(gint idx, const gchar *forced_enc);
+gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gint flags, gboolean inc);
 
-
-gboolean document_save_file_as(gint idx, const gchar *utf8_fname);
-
-gboolean document_save_file(gint idx, gboolean force);
-
-gboolean document_search_bar_find(gint idx, const gchar *text, gint flags, gboolean inc);
-
-gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search_backwards,
+gint document_find_text(GeanyDocument *doc, const gchar *text, gint flags, gboolean search_backwards,
 		gboolean scroll, GtkWidget *parent);
 
-gint document_replace_text(gint idx, const gchar *find_text, const gchar *replace_text,
+gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gchar *replace_text,
 		gint flags, gboolean search_backwards);
 
-gboolean document_replace_all(gint idx, const gchar *find_text, const gchar *replace_text,
+gboolean document_replace_all(GeanyDocument *doc, const gchar *find_text, const gchar *replace_text,
 		gint flags, gboolean escaped_chars);
 
-void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace_text, gint flags,
+void document_replace_sel(GeanyDocument *doc, const gchar *find_text, const gchar *replace_text, gint flags,
 						  gboolean escaped_chars);
 
-void document_update_tag_list(gint idx, gboolean update);
+void document_update_tag_list(GeanyDocument *doc, gboolean update);
 
-void document_set_filetype(gint idx, GeanyFiletype *type);
+void document_set_encoding(GeanyDocument *doc, const gchar *new_encoding);
 
-void document_set_encoding(gint idx, const gchar *new_encoding);
-
+gboolean document_check_disk_status(GeanyDocument *doc, gboolean force);
 
 /* own Undo / Redo implementation to be able to undo / redo changes
  * to the encoding or the Unicode BOM (which are Scintilla independent).
  * All Scintilla events are stored in the undo / redo buffer and are passed through. */
 
-gboolean document_can_undo(gint idx);
+gboolean document_can_undo(GeanyDocument *doc);
 
-gboolean document_can_redo(gint idx);
+gboolean document_can_redo(GeanyDocument *doc);
 
-void document_undo(gint idx);
+void document_undo(GeanyDocument *doc);
 
-void document_redo(gint idx);
+void document_redo(GeanyDocument *doc);
 
-void document_undo_add(gint idx, guint type, gpointer data);
+void document_undo_add(GeanyDocument *doc, guint type, gpointer data);
 
 
-GdkColor *document_get_status_color(gint idx);
+GdkColor *document_get_status_color(GeanyDocument *doc);
 
 void document_delay_colourise(void);
 

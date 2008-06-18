@@ -21,9 +21,13 @@
  * $Id$
  */
 
+
+#include "geany.h" /* necessary for interface.c */
+
+
 typedef struct
 {
-	gint last_doc_idx;
+	GeanyDocument *last_doc;
 } CallbacksData;
 
 extern CallbacksData callbacks_data;

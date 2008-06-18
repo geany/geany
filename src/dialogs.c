@@ -385,22 +385,22 @@ static void on_save_as_new_tab_toggled(GtkToggleButton *togglebutton, gpointer u
 static void handle_save_as(const gchar *utf8_filename, gboolean open_new_tab,
 		gboolean rename_file)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 
 	g_return_if_fail(NZV(utf8_filename));
 
 	if (open_new_tab)
 	{	/* "open" the saved file in a new tab and switch to it */
-		idx = document_clone(idx, utf8_filename);
-		document_save_file_as(idx, NULL);
+		doc = document_clone(doc, utf8_filename);
+		document_save_file_as(doc, NULL);
 	}
 	else
 	{
-		if (documents[idx]->file_name != NULL)
+		if (doc->file_name != NULL)
 		{
 			if (rename_file)
 			{
-				gchar *old_filename = utils_get_locale_from_utf8(documents[idx]->file_name);
+				gchar *old_filename = utils_get_locale_from_utf8(doc->file_name);
 				gchar *new_filename = utils_get_locale_from_utf8(utf8_filename);
 
 				g_rename(old_filename, new_filename);
@@ -408,14 +408,14 @@ static void handle_save_as(const gchar *utf8_filename, gboolean open_new_tab,
 				g_free(new_filename);
 			}
 			/* create a new tm_source_file object otherwise tagmanager won't work correctly */
-			tm_workspace_remove_object(documents[idx]->tm_file, TRUE, TRUE);
-			documents[idx]->tm_file = NULL;
+			tm_workspace_remove_object(doc->tm_file, TRUE, TRUE);
+			doc->tm_file = NULL;
 		}
-		document_save_file_as(idx, utf8_filename);
+		document_save_file_as(doc, utf8_filename);
 	}
 
 	if (! open_new_tab)
-		build_menu_update(idx);
+		build_menu_update(doc);
 }
 
 
@@ -520,7 +520,8 @@ static void create_save_file_dialog(void)
 #if ! GEANY_USE_WIN32_DIALOG
 static gboolean gtk_show_save_as(const gchar *initdir)
 {
-	gint idx = document_get_cur_idx(), resp;
+	GeanyDocument *doc = document_get_current();
+	gint resp;
 	gboolean folder_set = FALSE;
 
 	if (ui_widgets.save_filesel == NULL)
@@ -528,11 +529,11 @@ static gboolean gtk_show_save_as(const gchar *initdir)
 
 	gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(ui_widgets.save_filesel));
 
-	if (documents[idx]->file_name != NULL)
+	if (doc->file_name != NULL)
 	{
-		if (g_path_is_absolute(documents[idx]->file_name))
+		if (g_path_is_absolute(doc->file_name))
 		{
-			gchar *locale_filename = utils_get_locale_from_utf8(documents[idx]->file_name);
+			gchar *locale_filename = utils_get_locale_from_utf8(doc->file_name);
 			gchar *locale_basename = g_path_get_basename(locale_filename);
 			gchar *locale_dirname = g_path_get_dirname(locale_filename);
 
@@ -548,16 +549,16 @@ static gboolean gtk_show_save_as(const gchar *initdir)
 		}
 		else
 			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(ui_widgets.save_filesel),
-				documents[idx]->file_name);
+				doc->file_name);
 	}
 	else
 	{
 		gchar *fname = NULL;
 
-		if (documents[idx]->file_type != NULL && documents[idx]->file_type->id != GEANY_FILETYPES_NONE &&
-			documents[idx]->file_type->extension != NULL)
+		if (doc->file_type != NULL && doc->file_type->id != GEANY_FILETYPES_NONE &&
+			doc->file_type->extension != NULL)
 			fname = g_strconcat(GEANY_STRING_UNTITLED, ".",
-								documents[idx]->file_type->extension, NULL);
+								doc->file_type->extension, NULL);
 		else
 			fname = g_strdup(GEANY_STRING_UNTITLED);
 
@@ -660,7 +661,7 @@ void dialogs_show_msgbox_with_secondary(gint type, const gchar *text, const gcha
 }
 
 
-gboolean dialogs_show_unsaved_file(gint idx)
+gboolean dialogs_show_unsaved_file(GeanyDocument *doc)
 {
 #ifndef G_OS_WIN32
 	GtkWidget *dialog, *button;
@@ -672,12 +673,12 @@ gboolean dialogs_show_unsaved_file(gint idx)
 	/* display the file tab to remind the user of the document */
 	main_status.quitting = FALSE;
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
-		document_get_notebook_page(idx));
+		document_get_notebook_page(doc));
 	main_status.quitting = old_quitting_state;
 
-	if (documents[idx]->file_name != NULL)
+	if (doc->file_name != NULL)
 	{
-		short_fn = g_path_get_basename(documents[idx]->file_name);
+		short_fn = g_path_get_basename(doc->file_name);
 	}
 
 	msg = g_strdup_printf(_("The file '%s' is not saved."),
@@ -711,13 +712,13 @@ gboolean dialogs_show_unsaved_file(gint idx)
 	{
 		case GTK_RESPONSE_YES:
 		{
-			if (documents[idx]->file_name == NULL)
+			if (doc->file_name == NULL)
 			{
 				ret = dialogs_show_save_as();
 			}
 			else
 				/* document_save_file() returns the status if the file could be saved */
-				ret = document_save_file(idx, FALSE);
+				ret = document_save_file(doc, FALSE);
 			break;
 		}
 		case GTK_RESPONSE_NO: ret = TRUE; break;
@@ -943,7 +944,7 @@ void dialogs_show_goto_line()
 }
 
 
-void dialogs_show_file_properties(gint idx)
+void dialogs_show_file_properties(GeanyDocument *doc)
 {
 	GtkWidget *dialog, *label, *table, *hbox, *image, *perm_table, *check, *vbox;
 	gchar *file_size, *title, *base_name, *time_changed, *time_modified, *time_accessed, *enctext;
@@ -972,7 +973,7 @@ void dialogs_show_file_properties(gint idx)
 # define S_IXOTH 0
 #endif
 
-	if (idx == -1 || ! documents[idx]->is_valid || documents[idx]->file_name == NULL)
+	if (doc == NULL || doc->file_name == NULL)
 	{
 		dialogs_show_msgbox(GTK_MESSAGE_ERROR,
 		_("An error occurred or file information could not be retrieved (e.g. from a new file)."));
@@ -981,7 +982,7 @@ void dialogs_show_file_properties(gint idx)
 
 
 #ifdef HAVE_SYS_TYPES_H
-	locale_filename = utils_get_locale_from_utf8(documents[idx]->file_name);
+	locale_filename = utils_get_locale_from_utf8(doc->file_name);
 	if (g_stat(locale_filename, &st) == 0)
 	{
 		/* first copy the returned string and the trim it, to not modify the static glibc string
@@ -1007,7 +1008,7 @@ void dialogs_show_file_properties(gint idx)
 	time_accessed = g_strdup(_("unknown"));
 #endif
 
-	base_name = g_path_get_basename(documents[idx]->file_name);
+	base_name = g_path_get_basename(doc->file_name);
 	title = g_strconcat(base_name, " ", _("Properties"), NULL);
 	dialog = gtk_dialog_new_with_buttons(title, GTK_WINDOW(main_widgets.window),
 										 GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -1044,7 +1045,7 @@ void dialogs_show_file_properties(gint idx)
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
-	label = gtk_label_new(documents[idx]->file_type->title);
+	label = gtk_label_new(doc->file_type->title);
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
@@ -1072,7 +1073,7 @@ void dialogs_show_file_properties(gint idx)
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
-	label = gtk_label_new(documents[idx]->file_name);
+	label = gtk_label_new(doc->file_name);
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 2, 3,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
@@ -1088,7 +1089,7 @@ void dialogs_show_file_properties(gint idx)
 	check = gtk_check_button_new_with_label(_("(only inside Geany)"));
 	gtk_widget_set_sensitive(check, FALSE);
 	gtk_button_set_focus_on_click(GTK_BUTTON(check), FALSE);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), documents[idx]->readonly);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), doc->readonly);
 	gtk_table_attach(GTK_TABLE(table), check, 1, 2, 3, 4,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
@@ -1102,9 +1103,9 @@ void dialogs_show_file_properties(gint idx)
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	enctext = g_strdup_printf("%s %s",
-		documents[idx]->encoding,
-		(encodings_is_unicode_charset(documents[idx]->encoding)) ?
-			((documents[idx]->has_bom) ? _("(with BOM)") : _("(without BOM)")) : "");
+		doc->encoding,
+		(encodings_is_unicode_charset(doc->encoding)) ?
+			((doc->has_bom) ? _("(with BOM)") : _("(without BOM)")) : "");
 
 	label = gtk_label_new(enctext);
 	g_free(enctext);

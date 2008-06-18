@@ -45,7 +45,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(64)
+PLUGIN_VERSION_CHECK(69)
 
 PLUGIN_SET_INFO(_("Version Diff"), _("Creates a patch of a file against version control."), VERSION,
 	_("The Geany developer team"))
@@ -253,7 +253,8 @@ static void show_output(const gchar *std_output, const gchar *utf8_name_prefix,
 		const gchar *force_encoding)
 {
 	gchar	*text, *detect_enc = NULL;
-	gint 	idx, page;
+	gint 	page;
+	GeanyDocument *doc;
 	GtkNotebook *book;
 	gchar	*filename;
 
@@ -273,23 +274,22 @@ static void show_output(const gchar *std_output, const gchar *utf8_name_prefix,
 	}
 	if (text)
 	{
-		idx = p_document->find_by_filename(filename);
-		if ( idx == -1)
+		doc = p_document->find_by_filename(filename);
+		if (doc == NULL)
 		{
 			GeanyFiletype *ft = p_filetypes->lookup_by_name("Diff");
-			idx = p_document->new_file(filename, ft, text);
+			doc = p_document->new_file(filename, ft, text);
 		}
 		else
 		{
-			p_sci->set_text(documents[idx]->sci, text);
+			p_sci->set_text(doc->sci, text);
 			book = GTK_NOTEBOOK(main_widgets->notebook);
-			page = gtk_notebook_page_num(book, GTK_WIDGET(documents[idx]->sci));
+			page = gtk_notebook_page_num(book, GTK_WIDGET(doc->sci));
 			gtk_notebook_set_current_page(book, page);
-			documents[idx]->changed = FALSE;
-			p_document->set_text_changed(idx);
+			p_document->set_text_changed(doc, FALSE);
 		}
 
-		p_document->set_encoding(idx,
+		p_document->set_encoding(doc,
 			force_encoding ? force_encoding : detect_enc);
 	}
 	else
@@ -382,21 +382,21 @@ static gchar *make_diff(const gchar *filename, gint cmd)
 /* Make a diff from the current directory */
 static void vcdirectory_activated(GtkMenuItem *menuitem, gpointer gdata)
 {
-	gint	idx;
+	GeanyDocument *doc;
 	gchar	*base_name = NULL;
 	gchar	*locale_filename = NULL;
 	gchar	*text;
 
-	idx = p_document->get_cur_idx();
+	doc = p_document->get_current();
 
-	g_return_if_fail(DOC_IDX_VALID(idx) && documents[idx]->file_name != NULL);
+	g_return_if_fail(doc != NULL && doc->file_name != NULL);
 
-	if (documents[idx]->changed)
+	if (doc->changed)
 	{
-		p_document->save_file(idx, FALSE);
+		p_document->save_file(doc, FALSE);
 	}
 
-	locale_filename = p_utils->get_locale_from_utf8(documents[idx]->file_name);
+	locale_filename = p_utils->get_locale_from_utf8(doc->file_name);
 	base_name = g_path_get_dirname(locale_filename);
 
 	text = make_diff(base_name, VC_COMMAND_DIFF_DIR);
@@ -415,17 +415,17 @@ static void vcdirectory_activated(GtkMenuItem *menuitem, gpointer gdata)
 /* Callback if menu item for the current project was activated */
 static void vcproject_activated(GtkMenuItem *menuitem, gpointer gdata)
 {
-	gint	idx;
+	GeanyDocument *doc;
 	gchar	*locale_filename = NULL;
 	gchar	*text;
 
-	idx = p_document->get_cur_idx();
+	doc = p_document->get_current();
 
 	g_return_if_fail(project != NULL && NZV(project->base_path));
 
-	if (DOC_IDX_VALID(idx) && documents[idx]->changed && documents[idx]->file_name != NULL)
+	if (doc != NULL && doc->changed && doc->file_name != NULL)
 	{
-		p_document->save_file(idx, FALSE);
+		p_document->save_file(doc, FALSE);
 	}
 
 	locale_filename = p_utils->get_locale_from_utf8(project->base_path);
@@ -442,24 +442,24 @@ static void vcproject_activated(GtkMenuItem *menuitem, gpointer gdata)
 /* Callback if menu item for a single file was activated */
 static void vcfile_activated(GtkMenuItem *menuitem, gpointer gdata)
 {
-	gint	idx;
-	gchar	*locale_filename, *text;
+	GeanyDocument *doc;
+	gchar *locale_filename, *text;
 
-	idx = p_document->get_cur_idx();
+	doc = p_document->get_current();
 
-	g_return_if_fail(DOC_IDX_VALID(idx) && documents[idx]->file_name != NULL);
+	g_return_if_fail(doc != NULL && doc->file_name != NULL);
 
-	if (documents[idx]->changed)
+	if (doc->changed)
 	{
-		p_document->save_file(idx, FALSE);
+		p_document->save_file(doc, FALSE);
 	}
 
-	locale_filename = p_utils->get_locale_from_utf8(documents[idx]->file_name);
+	locale_filename = p_utils->get_locale_from_utf8(doc->file_name);
 
 	text = make_diff(locale_filename, VC_COMMAND_DIFF_FILE);
 	if (text)
 	{
-		show_output(text, documents[idx]->file_name, documents[idx]->encoding);
+		show_output(text, doc->file_name, doc->encoding);
 		g_free(text);
 	}
 	g_free(locale_filename);

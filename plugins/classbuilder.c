@@ -39,7 +39,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(64)
+PLUGIN_VERSION_CHECK(69)
 
 PLUGIN_SET_INFO(_("Class Builder"), _("Creates source files for new class types."), VERSION,
 	"Alexander Rodin")
@@ -593,7 +593,7 @@ static void cc_dlg_on_base_name_entry_changed(GtkWidget *entry, CreateClassDialo
 static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg)
 {
 	ClassInfo *class_info;
-	gint idx;
+	GeanyDocument *doc;
 	gchar *text;
 	gchar *tmp;
 
@@ -731,16 +731,16 @@ static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg)
 	if (! p_utils->str_equal(class_info->source, ""))
 	{
 		text = get_template_class_source(class_info);
-		idx = p_document->new_file(class_info->source, NULL, NULL);
-		p_sci->set_text(documents[idx]->sci, text);
+		doc = p_document->new_file(class_info->source, NULL, NULL);
+		p_sci->set_text(doc->sci, text);
 		g_free(text);
 	}
 
 	if (! p_utils->str_equal(class_info->header, ""))
 	{
 		text = get_template_class_header(class_info);
-		idx = p_document->new_file(class_info->header, NULL, NULL);
-		p_sci->set_text(documents[idx]->sci, text);
+		doc = p_document->new_file(class_info->header, NULL, NULL);
+		p_sci->set_text(doc->sci, text);
 		g_free(text);
 	}
 

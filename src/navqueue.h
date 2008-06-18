@@ -39,7 +39,7 @@ void navqueue_free(void);
 void navqueue_remove_file(const gchar *filename);
 
 
-gboolean navqueue_goto_line(gint old_idx, gint new_idx, gint line);
+gboolean navqueue_goto_line(GeanyDocument *old_doc, GeanyDocument *new_doc, gint line);
 
 void navqueue_go_back(void);
 

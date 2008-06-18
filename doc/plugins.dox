@@ -63,9 +63,9 @@
  *  in your plugin code at any desired position.
  *
  *  @code
-static void on_document_open(GObject *obj, gint idx, gpointer user_data)
+static void on_document_open(GObject *obj, GeanyDocument *doc, gpointer user_data)
 {
-	printf("Example: %s was opened\n", DOC_FILENAME(idx));
+	printf("Example: %s was opened\n", DOC_FILENAME(doc));
 }
 
 PluginCallback plugin_callbacks[] =
@@ -79,45 +79,45 @@ PluginCallback plugin_callbacks[] =
  *
  *  @signaldef document-new
  *  @signalproto
- *  void user_function(GObject *obj, gint idx, gpointer user_data);
+ *  void user_function(GObject *obj, GeanyDocument *doc, gpointer user_data);
  *  @endsignalproto
  *  @signaldesc
  *  Sent when a new %document is created.
  *  @param obj a GeanyObject instance, should be ignored.
- *  @param idx the index of the new %document.
+ *  @param doc the new document.
  *  @param user_data user data.
  *  @endsignaldef
  *
  *  @signaldef document-open
  *  @signalproto
- *  void user_function(GObject *obj, gint idx, gpointer user_data);
+ *  void user_function(GObject *obj, GeanyDocument *doc, gpointer user_data);
  *  @endsignalproto
  *  @signaldesc
  *  Sent when a new %document is opened.
  *  @param obj a GeanyObject instance, should be ignored.
- *  @param idx the index of the opened %document.
+ *  @param doc the opened document.
  *  @param user_data user data.
  *  @endsignaldef
  *
  *  @signaldef document-save
  *  @signalproto
- *  void user_function(GObject *obj, gint idx, gpointer user_data);
+ *  void user_function(GObject *obj, GeanyDocument *doc, gpointer user_data);
  *  @endsignalproto
  *  @signaldesc
  *  Sent when a new %document is saved.
  *  @param obj a GeanyObject instance, should be ignored.
- *  @param idx the index of the saved %document.
+ *  @param doc the saved document.
  *  @param user_data user data.
  *  @endsignaldef
  *
  *  @signaldef document-activate
  *  @signalproto
- *  void user_function(GObject *obj, gint idx, gpointer user_data);
+ *  void user_function(GObject *obj, GeanyDocument *doc, gpointer user_data);
  *  @endsignalproto
  *  @signaldesc
  *  Sent when switching notebook pages.
  *  @param obj a GeanyObject instance, should be ignored.
- *  @param idx the index of the new %document.
+ *  @param doc the current document.
  *  @param user_data user data.
  *  @endsignaldef
  *

@@ -79,11 +79,12 @@ static void setup_tab_dnd(void);
 
 static void focus_sci(GtkWidget *widget, gpointer user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 
-	if (! DOC_IDX_VALID(idx)) return;
+	if (doc == NULL)
+		return;
 
-	gtk_widget_grab_focus(GTK_WIDGET(documents[idx]->sci));
+	gtk_widget_grab_focus(GTK_WIDGET(doc->sci));
 }
 
 
@@ -308,26 +309,26 @@ gboolean notebook_tab_label_cb(GtkWidget *widget, GdkEventButton *event, gpointe
 		on_menu_toggle_all_additional_widgets1_activate(NULL, NULL);
 	/* close tab on middle click */
 	if (event->button == 2)
-		document_remove(gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook), GTK_WIDGET(user_data)));
+		document_remove_page(gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
+			GTK_WIDGET(user_data)));
 
 	return FALSE;
 }
 
 
 /* Returns page number of notebook page, or -1 on error */
-gint notebook_new_tab(gint doc_idx)
+gint notebook_new_tab(GeanyDocument *this)
 {
 	GtkWidget *hbox, *ebox;
 	gint tabnum;
 	gchar *title;
-	GeanyDocument *this = documents[doc_idx];
 	Document *fdoc = DOCUMENT(this);
 	GtkWidget *page;
 
-	g_return_val_if_fail(doc_idx >= 0 && this != NULL, -1);
+	g_return_val_if_fail(this != NULL, -1);
 
 	page = GTK_WIDGET(this->sci);
-	title = g_path_get_basename(DOC_FILENAME(doc_idx));
+	title = g_path_get_basename(DOC_FILENAME(this));
 
 	fdoc->tab_label = gtk_label_new(title);
 
@@ -404,7 +405,7 @@ notebook_tab_close_clicked_cb(GtkButton *button, gpointer user_data)
 	gint cur_page = gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
 		GTK_WIDGET(user_data));
 
-	document_remove(cur_page);
+	document_remove_page(cur_page);
 }
 
 

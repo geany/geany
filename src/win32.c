@@ -404,11 +404,11 @@ gboolean win32_show_file_dialog(gboolean file_open, const gchar *initial_dir)
 	}
 	else
 	{
-		gint idx = document_get_cur_idx();
+		GeanyDocument *doc = document_get_current();
 		/* convert the resulting filename into UTF-8 */
 		gchar *utf8 = g_locale_to_utf8(fname, -1, NULL, NULL, NULL);
 
-		document_save_file_as(idx, utf8);
+		document_save_file_as(doc, utf8);
 		g_free(utf8);
 	}
 	g_free(fname);
@@ -455,7 +455,7 @@ void win32_show_color_dialog(const gchar *colour)
 	static COLORREF acr_cust_clr[16];
 	static DWORD rgb_current;
 	gchar *hex = g_malloc0(12);
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 
 	/* Initialize CHOOSECOLOR */
 	memset(&cc, 0, sizeof cc);
@@ -473,7 +473,7 @@ void win32_show_color_dialog(const gchar *colour)
 	      (guint) (utils_scale_round(GetGValue(rgb_current), 255)),
 	      (guint) (utils_scale_round(GetBValue(rgb_current), 255)));
 
-		editor_insert_color(idx, hex);
+		editor_insert_color(doc, hex);
 	}
 	g_free(hex);
 }

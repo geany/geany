@@ -1,3 +1,49 @@
+2008-06-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/build.c, src/utils.c, src/win32.c, src/ui_utils.h, src/build.h,
+   src/utils.h, src/keybindings.c, src/printing.c, src/printing.h,
+   src/tools.c, src/tools.h, src/project.c, src/encodings.c,
+   src/prefs.c, src/dialogs.c, src/dialogs.h, src/navqueue.c,
+   src/geanyobject.c, src/plugindata.h, src/navqueue.h,
+   src/geanyobject.h, src/geany.h, src/treeviews.c, src/msgwindow.c,
+   src/callbacks.c, src/notebook.c, src/treeviews.h, src/msgwindow.h,
+   src/callbacks.h, src/notebook.h, src/keyfile.c, src/vte.c,
+   src/filetypes.c, src/search.c, src/filetypes.h, src/search.h,
+   src/document.c, src/plugins.c, src/document.h, src/main.c,
+   src/editor.c, src/symbols.c, src/socket.c, src/editor.h,
+   src/symbols.h, src/ui_utils.c, doc/plugins.dox, plugins/export.c,
+   plugins/vcdiff.c, plugins/filebrowser.c, plugins/htmlchars.c,
+   plugins/autosave.c, plugins/classbuilder.c:
+   Merge the document-pointer branch.
+   Note: this breaks the plugin API for document functions,
+   document signal callbacks, msgwin_msg_add() and navqueue_goto_line().
+   Make all DocumentFuncs use a GeanyDocument* instead of an integer
+   index, so there's no need to access the documents array or use
+   DOC_IDX_VALID() - usually just check for non-NULL.
+   Pass a document pointer to the callbacks of all "document-*" signals.
+   Add GeanyDocument::index field for use with the documents array.
+   Remove DocumentFuncs::get_cur_idx() - use get_current() instead.
+   Replace DocumentFuncs::get_n_idx() with get_from_page().
+   Rename DocumentFuncs::find_by_realpath() to find_by_real_path().
+   Replace DocumentFuncs::remove() with remove_page().
+   Add 'changed' argument for DocumentFuncs::set_text_changed().
+   Make NavQueueFuncs and MsgWinFuncs use a GeanyDocument* instead of an
+   integer index.
+   Add DOC_VALID() macro.
+   Add deprecated DOC_IDX() macro to get the document index from a
+   possibly NULL pointer; deprecate macro DOC_IDX_VALID. These macros
+   can make porting outside plugins easier; of course, it is better to
+   rewrite the code to use document pointers.
+   Use document pointer instead of an index to the documents array
+   everywhere in the core code.
+   Rename utils_check_disk_status() in document_check_disk_status() and
+   move it into document.c.
+   Adjust plugins to work with these changes.
+   Add dox for document_set_filetype().
+   Rename debugging function doc() doc_at() to avoid conflicts.
+   Update plugin signals dox.
+
+
 2008-06-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * geany.glade, src/interface.c, src/keybindings.c:

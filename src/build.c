@@ -45,11 +45,11 @@
 
 #include "prefs.h"
 #include "support.h"
+#include "document.h"
 #include "utils.h"
 #include "ui_utils.h"
 #include "dialogs.h"
 #include "msgwindow.h"
-#include "document.h"
 #include "filetypes.h"
 #include "keybindings.h"
 #include "vte.h"
@@ -98,7 +98,7 @@ widgets;
 
 static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data);
 static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, gboolean autoclose);
-static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir);
+static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *dir);
 static void set_stop_button(gboolean stop);
 static void build_exit_cb(GPid child_pid, gint status, gpointer user_data);
 static void run_exit_cb(GPid child_pid, gint status, gpointer user_data);
@@ -125,28 +125,29 @@ void build_finalize()
 }
 
 
-static GPid build_compile_tex_file(gint idx, gint mode)
+static GPid build_compile_tex_file(GeanyDocument *doc, gint mode)
 {
 	const gchar *cmd = NULL;
 
-	if (idx < 0 || documents[idx]->file_name == NULL) return (GPid) 1;
+	if (doc == NULL || doc->file_name == NULL)
+		return (GPid) 1;
 
 	if (mode == LATEX_CMD_TO_DVI)
 	{
-		cmd = documents[idx]->file_type->programs->compiler;
+		cmd = doc->file_type->programs->compiler;
 		build_info.type = GBO_COMPILE;
 	}
 	else
 	{
-		cmd = documents[idx]->file_type->programs->linker;
+		cmd = doc->file_type->programs->linker;
 		build_info.type = GBO_BUILD;
 	}
 
-	return build_spawn_cmd(idx, cmd, NULL);
+	return build_spawn_cmd(doc, cmd, NULL);
 }
 
 
-static GPid build_view_tex_file(gint idx, gint mode)
+static GPid build_view_tex_file(GeanyDocument *doc, gint mode)
 {
 	gchar **argv, **term_argv;
 	gchar  *executable = NULL;
@@ -161,12 +162,12 @@ static GPid build_view_tex_file(gint idx, gint mode)
 	GError *error = NULL;
 	struct stat st;
 
-	if (! DOC_IDX_VALID(idx) || documents[idx]->file_name == NULL)
+	if (doc == NULL || doc->file_name == NULL)
 		return (GPid) 1;
 
 	run_info.file_type_id = GEANY_FILETYPES_LATEX;
 
-	executable = utils_remove_ext_from_filename(documents[idx]->file_name);
+	executable = utils_remove_ext_from_filename(doc->file_name);
 	view_file = g_strconcat(executable, (mode == LATEX_CMD_VIEW_DVI) ? ".dvi" : ".pdf", NULL);
 
 	/* try convert in locale for stat() */
@@ -183,8 +184,8 @@ static GPid build_view_tex_file(gint idx, gint mode)
 
 	/* replace %f and %e in the run_cmd string */
 	cmd_string = g_strdup((mode == LATEX_CMD_VIEW_DVI) ?
-										g_strdup(documents[idx]->file_type->programs->run_cmd) :
-										g_strdup(documents[idx]->file_type->programs->run_cmd2));
+										g_strdup(doc->file_type->programs->run_cmd) :
+										g_strdup(doc->file_type->programs->run_cmd2));
 	cmd_string = utils_str_replace(cmd_string, "%f", view_file);
 	cmd_string = utils_str_replace(cmd_string, "%e", executable);
 
@@ -275,7 +276,7 @@ static GPid build_view_tex_file(gint idx, gint mode)
 	{
 		/*setpgid(0, getppid());*/
 		g_child_watch_add(run_info.pid, (GChildWatchFunc) run_exit_cb, NULL);
-		build_menu_update(idx);
+		build_menu_update(doc);
 	}
 
 	utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
@@ -288,13 +289,13 @@ static GPid build_view_tex_file(gint idx, gint mode)
 
 
 /* get curfile.o in locale encoding from document::file_name */
-static gchar *get_object_filename(gint idx)
+static gchar *get_object_filename(GeanyDocument *doc)
 {
 	gchar *locale_filename, *short_file, *noext, *object_file;
 
-	if (documents[idx]->file_name == NULL) return NULL;
+	if (doc->file_name == NULL) return NULL;
 
-	locale_filename = utils_get_locale_from_utf8(documents[idx]->file_name);
+	locale_filename = utils_get_locale_from_utf8(doc->file_name);
 
 	short_file = g_path_get_basename(locale_filename);
 	g_free(locale_filename);
@@ -309,13 +310,14 @@ static gchar *get_object_filename(gint idx)
 }
 
 
-static GPid build_make_file(gint idx, gint build_opts)
+static GPid build_make_file(GeanyDocument *doc, gint build_opts)
 {
 	GString *cmdstr;
 	gchar *dir = NULL;
 	GPid pid;
 
-	if (idx < 0 || documents[idx]->file_name == NULL) return (GPid) 1;
+	if (doc == NULL || doc->file_name == NULL)
+		return (GPid) 1;
 
 	cmdstr = g_string_new(tool_prefs.make_cmd);
 	g_string_append_c(cmdstr, ' ');
@@ -325,7 +327,7 @@ static GPid build_make_file(gint idx, gint build_opts)
 		gchar *tmp;
 
 		build_info.type = build_opts;
-		tmp = get_object_filename(idx);
+		tmp = get_object_filename(doc);
 		g_string_append(cmdstr, tmp);
 		g_free(tmp);
 	}
@@ -342,42 +344,42 @@ static GPid build_make_file(gint idx, gint build_opts)
 		dir = project_get_make_dir();
 	}
 
-	pid = build_spawn_cmd(idx, cmdstr->str, dir);	/* if dir is NULL, idx filename is used */
+	pid = build_spawn_cmd(doc, cmdstr->str, dir); /* if dir is NULL, idx filename is used */
 	g_free(dir);
 	g_string_free(cmdstr, TRUE);
 	return pid;
 }
 
 
-static GPid build_compile_file(gint idx)
+static GPid build_compile_file(GeanyDocument *doc)
 {
-	if (! DOC_IDX_VALID(idx) || documents[idx]->file_name == NULL)
+	if (doc == NULL || doc->file_name == NULL)
 		return (GPid) 1;
 
 	build_info.type = GBO_COMPILE;
-	return build_spawn_cmd(idx, documents[idx]->file_type->programs->compiler, NULL);
+	return build_spawn_cmd(doc, doc->file_type->programs->compiler, NULL);
 }
 
 
-static GPid build_link_file(gint idx)
+static GPid build_link_file(GeanyDocument *doc)
 {
-	if (! DOC_IDX_VALID(idx) || documents[idx]->file_name == NULL)
+	if (doc == NULL || doc->file_name == NULL)
 		return (GPid) 1;
 
 	build_info.type = GBO_BUILD;
-	return build_spawn_cmd(idx, documents[idx]->file_type->programs->linker, NULL);
+	return build_spawn_cmd(doc, doc->file_type->programs->linker, NULL);
 }
 
 
 /* If linking, clear all error indicators in all documents.
  * Otherwise, just clear error indicators in document idx. */
-static void clear_errors(gint idx)
+static void clear_errors(GeanyDocument *doc)
 {
 	switch (build_info.type)
 	{
 		case GBO_COMPILE:
 		case GBO_MAKE_OBJECT:
-			editor_clear_indicators(idx);
+			editor_clear_indicators(doc);
 			break;
 
 		case GBO_BUILD:
@@ -389,7 +391,7 @@ static void clear_errors(gint idx)
 			for (i = 0; i < documents_array->len; i++)
 			{
 				if (documents[i]->is_valid)
-					editor_clear_indicators(i);
+					editor_clear_indicators(documents[i]);
 			}
 			break;
 		}
@@ -422,7 +424,7 @@ static gchar *quote_executable(const gchar *cmd)
 
 /* dir is the UTF-8 working directory to run cmd in. It can be NULL to use the
  * idx document directory */
-static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir)
+static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *dir)
 {
 	GError  *error = NULL;
 	gchar  **argv;
@@ -436,12 +438,12 @@ static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir)
 	gint     stdout_fd;
 	gint     stderr_fd;
 
-	g_return_val_if_fail(DOC_IDX_VALID(idx), (GPid) 1);
+	g_return_val_if_fail(doc != NULL, (GPid) 1);
 
-	clear_errors(idx);
+	clear_errors(doc);
 	setptr(current_dir_entered, NULL);
 
-	locale_filename = utils_get_locale_from_utf8(documents[idx]->file_name);
+	locale_filename = utils_get_locale_from_utf8(doc->file_name);
 	executable = utils_remove_ext_from_filename(locale_filename);
 
 	cmd_string = g_strdup(cmd);
@@ -472,7 +474,7 @@ static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir)
 
 	utf8_cmd_string = utils_get_utf8_from_locale(cmd_string);
 	utf8_working_dir = (dir != NULL) ? g_strdup(dir) :
-		g_path_get_dirname(documents[idx]->file_name);
+		g_path_get_dirname(doc->file_name);
 	working_dir = utils_get_locale_from_utf8(utf8_working_dir);
 
 	gtk_list_store_clear(msgwindow.store_compiler);
@@ -484,7 +486,7 @@ static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir)
 	/* set the build info for the message window */
 	g_free(build_info.dir);
 	build_info.dir = g_strdup(working_dir);
-	build_info.file_type_id = FILETYPE_ID(documents[idx]->file_type);
+	build_info.file_type_id = FILETYPE_ID(doc->file_type);
 
 	if (! g_spawn_async_with_pipes(working_dir, argv, NULL, G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD,
 						NULL, NULL, &(build_info.pid), NULL, &stdout_fd, &stderr_fd, &error))
@@ -502,7 +504,7 @@ static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir)
 	if (build_info.pid > 0)
 	{
 		g_child_watch_add(build_info.pid, (GChildWatchFunc) build_exit_cb, NULL);
-		build_menu_update(idx);
+		build_menu_update(doc);
 	}
 
 	/* use GIOChannels to monitor stdout and stderr */
@@ -586,12 +588,12 @@ static gchar *get_build_executable(const gchar *locale_filename, gboolean check_
 /* Returns: NULL if there was an error, or the working directory the script was created in.
  * vte_cmd_nonscript is the location of a string which is filled with the command to be used
  * when vc->skip_run_script is set, otherwise it will be set to NULL */
-static gchar *prepare_run_script(gint idx, gchar **vte_cmd_nonscript)
+static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript)
 {
 	gchar	*locale_filename = NULL;
 	gboolean have_project;
 	GeanyProject *project = app->project;
-	GeanyFiletype *ft = documents[idx]->file_type;
+	GeanyFiletype *ft = doc->file_type;
 	gboolean check_exists;
 	gchar	*cmd = NULL;
 	gchar	*executable = NULL;
@@ -603,7 +605,7 @@ static gchar *prepare_run_script(gint idx, gchar **vte_cmd_nonscript)
 	if (vte_cmd_nonscript != NULL)
 		*vte_cmd_nonscript = NULL;
 
-	locale_filename = utils_get_locale_from_utf8(documents[idx]->file_name);
+	locale_filename = utils_get_locale_from_utf8(doc->file_name);
 
 	have_project = (project != NULL && NZV(project->run_cmd));
 	cmd = (have_project) ?
@@ -688,22 +690,22 @@ static gchar *prepare_run_script(gint idx, gchar **vte_cmd_nonscript)
 }
 
 
-static GPid build_run_cmd(gint idx)
+static GPid build_run_cmd(GeanyDocument *doc)
 {
 	gchar	*working_dir;
 	gchar	*vte_cmd_nonscript = NULL;
 	GError	*error = NULL;
 
-	if (! DOC_IDX_VALID(idx) || documents[idx]->file_name == NULL)
+	if (doc == NULL || doc->file_name == NULL)
 		return (GPid) 0;
 
-	working_dir = prepare_run_script(idx, &vte_cmd_nonscript);
+	working_dir = prepare_run_script(doc, &vte_cmd_nonscript);
 	if (working_dir == NULL)
 	{
 		return (GPid) 0;
 	}
 
-	run_info.file_type_id = FILETYPE_ID(documents[idx]->file_type);
+	run_info.file_type_id = FILETYPE_ID(doc->file_type);
 
 #ifdef HAVE_VTE
 	if (vte_info.load_vte && vc != NULL && vc->run_in_vte)
@@ -810,7 +812,7 @@ static GPid build_run_cmd(gint idx)
 		if (run_info.pid > 0)
 		{
 			g_child_watch_add(run_info.pid, (GChildWatchFunc) run_exit_cb, NULL);
-			build_menu_update(idx);
+			build_menu_update(doc);
 		}
 		free_strings:
 		g_strfreev(argv);
@@ -853,9 +855,9 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 					&filename, &line);
 				if (line != -1 && filename != NULL)
 				{
-					gint idx = document_find_by_filename(filename);
+					GeanyDocument *doc = document_find_by_filename(filename);
 
-					editor_set_indicator_on_line(idx, line - 1);	/* will check valid idx */
+					editor_set_indicator_on_line(doc, line - 1);	/* will check valid idx */
 					color = COLOR_RED;	/* error message parsed on the line */
 				}
 				g_free(filename);
@@ -965,7 +967,7 @@ static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 
 	build_info.pid = 0;
 	/* enable build items again */
-	build_menu_update(-1);
+	build_menu_update(NULL);
 }
 
 
@@ -975,7 +977,7 @@ static void run_exit_cb(GPid child_pid, gint status, gpointer user_data)
 
 	run_info.pid = 0;
 	/* reset the stop button and menu item to the original meaning */
-	build_menu_update(-1);
+	build_menu_update(NULL);
 }
 
 
@@ -1323,11 +1325,12 @@ on_includes_arguments_tex_dialog_response  (GtkDialog *dialog,
 static void show_includes_arguments_tex(void)
 {
 	GtkWidget *dialog, *label, *entries[4], *vbox, *table;
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	gint response;
 	GeanyFiletype *ft = NULL;
 
-	if (DOC_IDX_VALID(idx)) ft = documents[idx]->file_type;
+	if (doc != NULL)
+		ft = doc->file_type;
 	g_return_if_fail(ft != NULL);
 
 	dialog = gtk_dialog_new_with_buttons(_("Set Arguments"), GTK_WINDOW(main_widgets.window),
@@ -1492,11 +1495,12 @@ static void show_includes_arguments_gen(void)
 	GtkWidget *dialog, *label, *entries[3], *vbox;
 	GtkWidget *ft_table = NULL;
 	gint row = 0;
-	gint idx = document_get_cur_idx();
 	gint response;
+	GeanyDocument *doc = document_get_current();
 	GeanyFiletype *ft = NULL;
 
-	if (DOC_IDX_VALID(idx)) ft = documents[idx]->file_type;
+	if (doc != NULL)
+		ft = doc->file_type;
 	g_return_if_fail(ft != NULL);
 
 	dialog = gtk_dialog_new_with_buttons(_("Set Includes and Arguments"), GTK_WINDOW(main_widgets.window),
@@ -1633,17 +1637,16 @@ static gboolean is_c_header(const gchar *fname)
 
 /* Call this whenever build menu items need to be enabled/disabled.
  * Uses current document (if there is one) when idx == -1 */
-void build_menu_update(gint idx)
+void build_menu_update(GeanyDocument *doc)
 {
 	GeanyFiletype *ft;
 	gboolean have_path, can_build, can_make, can_run, can_stop, can_set_args, have_errors;
 	BuildMenuItems *menu_items;
 
-	if (idx == -1)
-		idx = document_get_cur_idx();
-	if (idx == -1 ||
-		(FILETYPE_ID(documents[idx]->file_type) == GEANY_FILETYPES_NONE &&
-			documents[idx]->file_name == NULL))
+	if (doc == NULL)
+		doc = document_get_current();
+	if (doc == NULL ||
+		(FILETYPE_ID(doc->file_type) == GEANY_FILETYPES_NONE &&	doc->file_name == NULL))
 	{
 		gtk_widget_set_sensitive(lookup_widget(main_widgets.window, "menu_build1"), FALSE);
 		gtk_menu_item_remove_submenu(GTK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_build1")));
@@ -1654,7 +1657,7 @@ void build_menu_update(gint idx)
 	else
 		gtk_widget_set_sensitive(lookup_widget(main_widgets.window, "menu_build1"), TRUE);
 
-	ft = documents[idx]->file_type;
+	ft = doc->file_type;
 	g_return_if_fail(ft != NULL);
 
 	menu_items = build_get_menu_items(ft->id);
@@ -1663,13 +1666,13 @@ void build_menu_update(gint idx)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_build1")),
 		menu_items->menu);
 
-	have_path = (documents[idx]->file_name != NULL);
+	have_path = (doc->file_name != NULL);
 
 	can_make = have_path && build_info.pid <= (GPid) 1;
 
 	/* disable compile and link for C/C++ header files */
 	if (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP)
-		can_build = can_make && ! is_c_header(documents[idx]->file_name);
+		can_build = can_make && ! is_c_header(doc->file_name);
 	else
 		can_build = can_make;
 
@@ -1783,11 +1786,11 @@ BuildMenuItems *build_get_menu_items(gint filetype_idx)
 
 	if (filetype_idx == -1)
 	{
-		gint idx = document_get_cur_idx();
+		GeanyDocument *doc = document_get_current();
 		GeanyFiletype *ft = NULL;
 
-		if (DOC_IDX_VALID(idx))
-			ft = documents[idx]->file_type;
+		if (doc != NULL)
+			ft = doc->file_type;
 		filetype_idx = FILETYPE_ID(ft);
 	}
 
@@ -1811,16 +1814,18 @@ static void
 on_build_compile_activate              (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 
-	if (! DOC_IDX_VALID(idx)) return;
+	if (doc == NULL)
+		return;
 
-	if (documents[idx]->changed) document_save_file(idx, FALSE);
+	if (doc->changed)
+		document_save_file(doc, FALSE);
 
-	if (FILETYPE_ID(documents[idx]->file_type) == GEANY_FILETYPES_LATEX)
-		build_compile_tex_file(idx, 0);
+	if (FILETYPE_ID(doc->file_type) == GEANY_FILETYPES_LATEX)
+		build_compile_tex_file(doc, 0);
 	else
-		build_compile_file(idx);
+		build_compile_file(doc);
 }
 
 
@@ -1828,21 +1833,22 @@ static void
 on_build_tex_activate                  (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 
-	if (! DOC_IDX_VALID(idx))
+	if (doc == NULL)
 		return;
 
-	if (documents[idx]->changed) document_save_file(idx, FALSE);
+	if (doc->changed)
+		document_save_file(doc, FALSE);
 
 	switch (GPOINTER_TO_INT(user_data))
 	{
 		case LATEX_CMD_TO_DVI:
 		case LATEX_CMD_TO_PDF:
-			build_compile_tex_file(idx, GPOINTER_TO_INT(user_data)); break;
+			build_compile_tex_file(doc, GPOINTER_TO_INT(user_data)); break;
 		case LATEX_CMD_VIEW_DVI:
 		case LATEX_CMD_VIEW_PDF:
-			build_view_tex_file(idx, GPOINTER_TO_INT(user_data)); break;
+			build_view_tex_file(doc, GPOINTER_TO_INT(user_data)); break;
 	}
 }
 
@@ -1851,30 +1857,32 @@ static void
 on_build_build_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 
-	if (! DOC_IDX_VALID(idx)) return;
+	if (doc == NULL)
+		return;
 
-	if (documents[idx]->changed) document_save_file(idx, FALSE);
+	if (doc->changed)
+		document_save_file(doc, FALSE);
 
-	if (FILETYPE_ID(documents[idx]->file_type) == GEANY_FILETYPES_LATEX)
-		build_compile_tex_file(idx, 1);
+	if (FILETYPE_ID(doc->file_type) == GEANY_FILETYPES_LATEX)
+		build_compile_tex_file(doc, 1);
 	else
-		build_link_file(idx);
+		build_link_file(doc);
 }
 
 
 static void
 on_make_custom_input_response(const gchar *input)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 
-	if (documents[idx]->changed)
-		document_save_file(idx, FALSE);
+	if (doc->changed)
+		document_save_file(doc, FALSE);
 
 	setptr(build_info.custom_target, g_strdup(input));
 
-	build_make_file(idx, GBO_MAKE_CUSTOM);
+	build_make_file(doc, GBO_MAKE_CUSTOM);
 }
 
 
@@ -1898,10 +1906,10 @@ static void
 on_build_make_activate                 (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	gint build_opts = GPOINTER_TO_INT(user_data);
 
-	g_return_if_fail(DOC_IDX_VALID(idx) && documents[idx]->file_name != NULL);
+	g_return_if_fail(doc != NULL && doc->file_name != NULL);
 
 	switch (build_opts)
 	{
@@ -1915,15 +1923,16 @@ on_build_make_activate                 (GtkMenuItem     *menuitem,
 		/* fall through */
 		case GBO_MAKE_ALL:
 		{
-			if (documents[idx]->changed) document_save_file(idx, FALSE);
+			if (doc->changed)
+				document_save_file(doc, FALSE);
 
-			build_make_file(idx, build_opts);
+			build_make_file(doc, build_opts);
 		}
 	}
 }
 
 
-static gboolean use_html_builtin(gint idx, GeanyFiletype *ft)
+static gboolean use_html_builtin(GeanyDocument *doc, GeanyFiletype *ft)
 {
 	gboolean use_builtin = FALSE;
 	if (ft->id == GEANY_FILETYPES_HTML)
@@ -1941,7 +1950,7 @@ static gboolean use_html_builtin(gint idx, GeanyFiletype *ft)
 
 	if (use_builtin)
 	{
-		gchar *uri = g_strconcat("file:///", g_path_skip_root(documents[idx]->file_name), NULL);
+		gchar *uri = g_strconcat("file:///", g_path_skip_root(doc->file_name), NULL);
 		utils_start_browser(uri);
 		g_free(uri);
 
@@ -1955,11 +1964,11 @@ static void
 on_build_execute_activate              (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	filetype_id ft_id;
 	GeanyFiletype *ft;
 
-	if (! DOC_IDX_VALID(idx))
+	if (doc == NULL)
 		return;
 
 	/* make the process "stopable" */
@@ -1969,26 +1978,26 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 		return;
 	}
 
-	ft_id = FILETYPE_ID(documents[idx]->file_type);
+	ft_id = FILETYPE_ID(doc->file_type);
 	ft = filetypes[ft_id];
 	if (ft_id == GEANY_FILETYPES_LATEX)
 	{	/* run LaTeX file */
-		if (build_view_tex_file(idx, GPOINTER_TO_INT(user_data)) == (GPid) 0)
+		if (build_view_tex_file(doc, GPOINTER_TO_INT(user_data)) == (GPid) 0)
 		{
 			ui_set_statusbar(TRUE, _("Failed to execute the view program"));
 		}
 	}
 	/* use_html_builtin() checks for HTML builtin request and returns FALSE if not */
-	else if (! use_html_builtin(idx, ft))
+	else if (! use_html_builtin(doc, ft))
 	{	/* run everything else */
 
 		/* save the file only if the run command uses it */
-		if (documents[idx]->changed &&
+		if (doc->changed &&
 			NZV(ft->programs->run_cmd) &&	/* can happen when project is open */
 			strstr(ft->programs->run_cmd, "%f") != NULL)
-				document_save_file(idx, FALSE);
+				document_save_file(doc, FALSE);
 
-		if (build_run_cmd(idx) == (GPid) 0)
+		if (build_run_cmd(doc) == (GPid) 0)
 		{
 			ui_set_statusbar(TRUE, _("Failed to execute the terminal program"));
 		}
@@ -2020,7 +2029,7 @@ static void kill_process(GPid *pid)
 	else
 	{
 		*pid = 0;
-		build_menu_update(-1);
+		build_menu_update(NULL);
 	}
 }
 

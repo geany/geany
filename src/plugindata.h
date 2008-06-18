@@ -36,12 +36,12 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 68;
+static const gint api_version = 70;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
  * are only appended, as this doesn't affect existing fields. */
-static const gint abi_version = 37;
+static const gint abi_version = 39;
 
 /** Check the plugin can be loaded by Geany.
  * This performs runtime checks that try to ensure:
@@ -201,22 +201,22 @@ GeanyFunctions;
 /* See document.h */
 typedef struct DocumentFuncs
 {
-	gint	(*new_file) (const gchar *filename, struct GeanyFiletype *ft, const gchar *text);
-	gint	(*get_cur_idx) (void);
-	gint	(*get_n_idx) (guint i);
-	gint	(*find_by_filename) (const gchar *utf8_filename);
-	gint	(*find_by_realpath) (const gchar *realname);
-	struct GeanyDocument* (*get_current) (void);
-	gboolean (*save_file) (gint idx, gboolean force);
-	gint	(*open_file) (const gchar *locale_filename, gboolean readonly,
+	struct GeanyDocument*	(*new_file) (const gchar *filename, struct GeanyFiletype *ft,
+			const gchar *text);
+	struct GeanyDocument*	(*get_current) (void);
+	struct GeanyDocument*	(*get_from_page) (guint page_num);
+	struct GeanyDocument*	(*find_by_filename) (const gchar *utf8_filename);
+	struct GeanyDocument*	(*find_by_real_path) (const gchar *realname);
+	gboolean				(*save_file) (struct GeanyDocument *doc, gboolean force);
+	struct GeanyDocument*	(*open_file) (const gchar *locale_filename, gboolean readonly,
 			struct GeanyFiletype *ft, const gchar *forced_enc);
-	void	(*open_files) (const GSList *filenames, gboolean readonly, struct GeanyFiletype *ft,
-			const gchar *forced_enc);
-	gboolean (*remove) (guint page_num);
-	gboolean (*reload_file) (gint idx, const gchar *forced_enc);
-	void	(*set_encoding) (gint idx, const gchar *new_encoding);
-	void	(*set_text_changed) (gint idx);
-	void	(*set_filetype) (gint idx, struct GeanyFiletype *type);
+	void		(*open_files) (const GSList *filenames, gboolean readonly,
+			struct GeanyFiletype *ft, const gchar *forced_enc);
+	gboolean	(*remove_page) (guint page_num);
+	gboolean	(*reload_file) (struct GeanyDocument *doc, const gchar *forced_enc);
+	void		(*set_encoding) (struct GeanyDocument *doc, const gchar *new_encoding);
+	void		(*set_text_changed) (struct GeanyDocument *doc, gboolean changed);
+	void		(*set_filetype) (struct GeanyDocument *doc, struct GeanyFiletype *type);
 }
 DocumentFuncs;
 
@@ -237,7 +237,8 @@ typedef struct ScintillaFuncs
 	void	(*get_text) (struct _ScintillaObject *sci, gint len, gchar* text);
 	gint	(*get_length) (struct _ScintillaObject *sci);
 	gint	(*get_current_position) (struct _ScintillaObject *sci);
-	void	(*set_current_position) (struct _ScintillaObject* sci, gint position, gboolean scroll_to_caret);
+	void	(*set_current_position) (struct _ScintillaObject* sci, gint position,
+			 gboolean scroll_to_caret);
 	gint	(*get_col_from_position) (struct _ScintillaObject* sci, gint position);
 	gint	(*get_line_from_position) (struct _ScintillaObject* sci, gint position);
 	gint	(*get_position_from_line) (struct _ScintillaObject* sci, gint line);
@@ -342,8 +343,8 @@ typedef struct MsgWinFuncs
 	/* status_add() does not set the status bar - use ui->set_statusbar() instead. */
 	void		(*status_add) (const gchar *format, ...);
 	void		(*compiler_add) (gint msg_color, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
-	void		(*msg_add) (gint msg_color, gint line, gint idx, const gchar *format, ...)
-							G_GNUC_PRINTF (4, 5);
+	void		(*msg_add) (gint msg_color, gint line, struct GeanyDocument *doc,
+				 const gchar *format, ...) G_GNUC_PRINTF (4, 5);
 	void		(*clear_tab) (gint tabnum);
 	void		(*switch_tab) (gint tabnum, gboolean show);
 }
@@ -417,7 +418,8 @@ TagManagerFuncs;
 /* See navqueue.h */
 typedef struct NavQueueFuncs
 {
-	gboolean		(*goto_line) (gint old_idx, gint new_idx, gint line);
+	gboolean		(*goto_line) (struct GeanyDocument *old_doc, struct GeanyDocument *new_doc,
+					 gint line);
 }
 NavQueueFuncs;
 
@@ -425,9 +427,9 @@ NavQueueFuncs;
 /* See editor.h */
 typedef struct EditorFuncs
 {
-	void	(*set_indicator) (gint idx, gint start, gint end);
-	void	(*set_indicator_on_line) (gint idx, gint line);
-	void	(*clear_indicators) (gint idx);
+	void	(*set_indicator) (struct GeanyDocument *doc, gint start, gint end);
+	void	(*set_indicator_on_line) (struct GeanyDocument *doc, gint line);
+	void	(*clear_indicators) (struct GeanyDocument *doc);
 }
 EditorFuncs;
 
@@ -457,6 +459,12 @@ typedef PluginCallback GeanyCallback;
 #define cleanup plugin_cleanup
 
 #define doc_array documents_array
+
+/** NULL-safe way to get the index of @a doc_ptr in the documents array. */
+#define DOC_IDX(doc_ptr) \
+	(doc_ptr ? doc_ptr->index : -1)
+#define DOC_IDX_VALID(doc_idx) \
+	((doc_idx) >= 0 && (guint)(doc_idx) < documents_array->len && documents[doc_idx]->is_valid)
 
 #endif	/* GEANY_DISABLE_DEPRECATED */
 

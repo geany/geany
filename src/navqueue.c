@@ -28,13 +28,13 @@
 
 #include "geany.h"
 
-#include "navqueue.h"
 #include "sciwrappers.h"
 #include "document.h"
 #include "utils.h"
 #include "support.h"
 #include "ui_utils.h"
 #include "editor.h"
+#include "navqueue.h"
 
 
 /* for the navigation history queue */
@@ -137,47 +137,48 @@ static void add_new_position(const gchar *utf8_filename, gint pos)
 /**
  *  Add old file position and new file position to the navqueue, then goes to the new position.
  *
- *  @param old_idx the %document index of the previous position, if set as invalid (-1) then no old
+ *  @param old_doc The document of the previous position, if set as invalid (@c NULL) then no old
  *         position is set
- *  @param new_idx the %document index of the new position, must be valid.
+ *  @param new_doc The document of the new position, must be valid.
  *  @param line the line number of the new position. It is counted with 1 as the first line, not 0.
  *
  *  @return @a TRUE if the cursor has changed the position to @a line or @a FALSE otherwise.
  **/
-gboolean navqueue_goto_line(gint old_idx, gint new_idx, gint line)
+gboolean navqueue_goto_line(GeanyDocument *old_doc, GeanyDocument *new_doc, gint line)
 {
 	gint pos;
 
-	g_return_val_if_fail(DOC_IDX_VALID(new_idx), FALSE);
+	g_return_val_if_fail(new_doc != NULL, FALSE);
 	g_return_val_if_fail(line >= 1, FALSE);
 
-	pos = sci_get_position_from_line(documents[new_idx]->sci, line - 1);
+	pos = sci_get_position_from_line(new_doc->sci, line - 1);
 
 	/* first add old file position */
-	if (DOC_IDX_VALID(old_idx) && documents[old_idx]->file_name)
+	if (old_doc != NULL && old_doc->file_name)
 	{
-		gint cur_pos = sci_get_current_position(documents[old_idx]->sci);
+		gint cur_pos = sci_get_current_position(old_doc->sci);
 
-		add_new_position(documents[old_idx]->file_name, cur_pos);
+		add_new_position(old_doc->file_name, cur_pos);
 	}
 
 	/* now add new file position */
-	if (documents[new_idx]->file_name)
+	if (new_doc->file_name)
 	{
-		add_new_position(documents[new_idx]->file_name, pos);
+		add_new_position(new_doc->file_name, pos);
 	}
 
-	return editor_goto_pos(new_idx, pos, TRUE);
+	return editor_goto_pos(new_doc, pos, TRUE);
 }
 
 
 static gboolean goto_file_pos(const gchar *file, gint pos)
 {
-	gint file_idx = document_find_by_filename(file);
+	GeanyDocument *doc = document_find_by_filename(file);
 
-	if (file_idx < 0) return FALSE;
+	if (doc == NULL)
+		return FALSE;
 
-	return editor_goto_pos(file_idx, pos, TRUE);
+	return editor_goto_pos(doc, pos, TRUE);
 }
 
 

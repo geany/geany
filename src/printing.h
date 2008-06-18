@@ -45,6 +45,6 @@ extern PrintingPrefs printing_prefs;
 void printing_page_setup_gtk(void);
 #endif
 
-void printing_print_doc(gint idx);
+void printing_print_doc(GeanyDocument *doc);
 
 #endif

@@ -35,6 +35,7 @@
 #include "support.h"
 #include "utils.h"
 #include "ui_utils.h"
+#include "document.h"
 #include "msgwindow.h"
 #include "main.h"
 #include "keyfile.h"
@@ -42,7 +43,6 @@
 # include "win32.h"
 #endif
 #include "build.h"
-#include "document.h"
 #include "geanyobject.h"
 
 
@@ -297,8 +297,8 @@ void project_open()
 /* Called when opening, closing and updating projects. */
 static void update_ui(void)
 {
-	ui_set_window_title(-1);
-	build_menu_update(-1);
+	ui_set_window_title(NULL);
+	build_menu_update(NULL);
 }
 
 

@@ -42,7 +42,7 @@ PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
-PLUGIN_VERSION_CHECK(64)
+PLUGIN_VERSION_CHECK(69)
 PLUGIN_SET_INFO(_("Export"), _("Exports the current file into different formats."), VERSION,
 	_("The Geany developer team"))
 
@@ -105,17 +105,17 @@ enum
 	DATE_TYPE_HTML
 };
 
-typedef void (*ExportFunc) (gint idx, const gchar *filename, gboolean use_zoom);
+typedef void (*ExportFunc) (GeanyDocument *doc, const gchar *filename, gboolean use_zoom);
 typedef struct
 {
-	gint idx;
+	GeanyDocument *doc;
 	gboolean have_zoom_level_checkbox;
 	ExportFunc export_func;
 } ExportInfo;
 
 static void on_file_save_dialog_response(GtkDialog *dialog, gint response, gpointer user_data);
-static void write_html_file(gint idx, const gchar *filename, gboolean use_zoom);
-static void write_latex_file(gint idx, const gchar *filename, gboolean use_zoom);
+static void write_html_file(GeanyDocument *doc, const gchar *filename, gboolean use_zoom);
+static void write_latex_file(GeanyDocument *doc, const gchar *filename, gboolean use_zoom);
 
 
 /* converts a RGB colour into a LaTeX compatible representation, taken from SciTE */
@@ -154,19 +154,19 @@ static gchar *get_tex_style(gint style)
 static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 									   gboolean show_zoom_level_checkbox)
 {
-	gint idx;
 	GtkWidget *dialog;
 	GtkTooltips *tooltips;
+	GeanyDocument *doc;
 	ExportInfo *exi;
 
 	if (extension == NULL)
 		return;
 
-	idx = p_document->get_cur_idx();
+	doc = p_document->get_current();
 	tooltips = GTK_TOOLTIPS(p_support->lookup_widget(main_widgets->window, "tooltips"));
 
 	exi = g_new(ExportInfo, 1);
-	exi->idx = idx;
+	exi->doc = doc;
 	exi->export_func = func;
 	exi->have_zoom_level_checkbox = FALSE;
 
@@ -209,20 +209,20 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 
 	/* if the current document has a filename we use it as the default. */
 	gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(dialog));
-	if (documents[idx]->file_name != NULL)
+	if (doc->file_name != NULL)
 	{
-		gchar *base_name = g_path_get_basename(documents[idx]->file_name);
+		gchar *base_name = g_path_get_basename(doc->file_name);
 		gchar *short_name = p_utils->remove_ext_from_filename(base_name);
 		gchar *file_name;
 		gchar *locale_filename;
 		gchar *locale_dirname;
 		gchar *suffix = "";
 
-		if (g_str_has_suffix(documents[idx]->file_name, extension))
+		if (g_str_has_suffix(doc->file_name, extension))
 			suffix = "_export";
 
 		file_name = g_strconcat(short_name, suffix, extension, NULL);
-		locale_filename = p_utils->get_locale_from_utf8(documents[idx]->file_name);
+		locale_filename = p_utils->get_locale_from_utf8(doc->file_name);
 		locale_dirname = g_path_get_dirname(locale_filename);
 		/* set the current name to base_name.html which probably doesn't exist yet so
 		 * gtk_file_chooser_set_filename() can't be used and we need
@@ -337,7 +337,7 @@ static void on_file_save_dialog_response(GtkDialog *dialog, gint response, gpoin
 				return;
 		}
 
-		exi->export_func(exi->idx, new_filename, use_zoom_level);
+		exi->export_func(exi->doc, new_filename, use_zoom_level);
 
 		g_free(utf8_filename);
 		g_free(new_filename);
@@ -347,7 +347,7 @@ static void on_file_save_dialog_response(GtkDialog *dialog, gint response, gpoin
 }
 
 
-static void write_latex_file(gint idx, const gchar *filename, gboolean use_zoom)
+static void write_latex_file(GeanyDocument *doc, const gchar *filename, gboolean use_zoom)
 {
 	gint i, style = -1, old_style = 0, column = 0;
 	gchar c, c_next, *tmp;
@@ -357,25 +357,25 @@ static void write_latex_file(gint idx, const gchar *filename, gboolean use_zoom)
 	GString *body;
 	GString *cmds;
 	GString *latex;
-	gint style_max = pow(2, p_sci->send_message(documents[idx]->sci, SCI_GETSTYLEBITS, 0, 0));
+	gint style_max = pow(2, p_sci->send_message(doc->sci, SCI_GETSTYLEBITS, 0, 0));
 
 	/* first read all styles from Scintilla */
 	for (i = 0; i < style_max; i++)
 	{
-		styles[i][FORE] = p_sci->send_message(documents[idx]->sci, SCI_STYLEGETFORE, i, 0);
-		styles[i][BACK] = p_sci->send_message(documents[idx]->sci, SCI_STYLEGETBACK, i, 0);
-		styles[i][BOLD] = p_sci->send_message(documents[idx]->sci, SCI_STYLEGETBOLD, i, 0);
-		styles[i][ITALIC] = p_sci->send_message(documents[idx]->sci, SCI_STYLEGETITALIC, i, 0);
+		styles[i][FORE] = p_sci->send_message(doc->sci, SCI_STYLEGETFORE, i, 0);
+		styles[i][BACK] = p_sci->send_message(doc->sci, SCI_STYLEGETBACK, i, 0);
+		styles[i][BOLD] = p_sci->send_message(doc->sci, SCI_STYLEGETBOLD, i, 0);
+		styles[i][ITALIC] = p_sci->send_message(doc->sci, SCI_STYLEGETITALIC, i, 0);
 		styles[i][USED] = 0;
 	}
 
 	/* read the document and write the LaTeX code */
 	body = g_string_new("");
-	for (i = 0; i < p_sci->get_length(documents[idx]->sci); i++)
+	for (i = 0; i < p_sci->get_length(doc->sci); i++)
 	{
-		style = p_sci->get_style_at(documents[idx]->sci, i);
-		c = p_sci->get_char_at(documents[idx]->sci, i);
-		c_next = p_sci->get_char_at(documents[idx]->sci, i + 1);
+		style = p_sci->get_style_at(doc->sci, i);
+		c = p_sci->get_char_at(doc->sci, i);
+		c_next = p_sci->get_char_at(doc->sci, i + 1);
 
 		if (style != old_style || ! block_open)
 		{
@@ -538,10 +538,10 @@ static void write_latex_file(gint idx, const gchar *filename, gboolean use_zoom)
 	p_utils->string_replace_all(latex, "{export_content}", body->str);
 	p_utils->string_replace_all(latex, "{export_styles}", cmds->str);
 	p_utils->string_replace_all(latex, "{export_date}", get_date(DATE_TYPE_DEFAULT));
-	if (documents[idx]->file_name == NULL)
+	if (doc->file_name == NULL)
 		p_utils->string_replace_all(latex, "{export_filename}", GEANY_STRING_UNTITLED);
 	else
-		p_utils->string_replace_all(latex, "{export_filename}", documents[idx]->file_name);
+		p_utils->string_replace_all(latex, "{export_filename}", doc->file_name);
 
 	write_data(filename, latex->str);
 
@@ -551,7 +551,7 @@ static void write_latex_file(gint idx, const gchar *filename, gboolean use_zoom)
 }
 
 
-static void write_html_file(gint idx, const gchar *filename, gboolean use_zoom)
+static void write_html_file(GeanyDocument *doc, const gchar *filename, gboolean use_zoom)
 {
 	gint i, style = -1, old_style = 0, column = 0;
 	gchar c, c_next;
@@ -564,15 +564,15 @@ static void write_html_file(gint idx, const gchar *filename, gboolean use_zoom)
 	GString *body;
 	GString *css;
 	GString *html;
-	gint style_max = pow(2, p_sci->send_message(documents[idx]->sci, SCI_GETSTYLEBITS, 0, 0));
+	gint style_max = pow(2, p_sci->send_message(doc->sci, SCI_GETSTYLEBITS, 0, 0));
 
 	/* first read all styles from Scintilla */
 	for (i = 0; i < style_max; i++)
 	{
-		styles[i][FORE] = ROTATE_RGB(p_sci->send_message(documents[idx]->sci, SCI_STYLEGETFORE, i, 0));
-		styles[i][BACK] = ROTATE_RGB(p_sci->send_message(documents[idx]->sci, SCI_STYLEGETBACK, i, 0));
-		styles[i][BOLD] = p_sci->send_message(documents[idx]->sci, SCI_STYLEGETBOLD, i, 0);
-		styles[i][ITALIC] = p_sci->send_message(documents[idx]->sci, SCI_STYLEGETITALIC, i, 0);
+		styles[i][FORE] = ROTATE_RGB(p_sci->send_message(doc->sci, SCI_STYLEGETFORE, i, 0));
+		styles[i][BACK] = ROTATE_RGB(p_sci->send_message(doc->sci, SCI_STYLEGETBACK, i, 0));
+		styles[i][BOLD] = p_sci->send_message(doc->sci, SCI_STYLEGETBOLD, i, 0);
+		styles[i][ITALIC] = p_sci->send_message(doc->sci, SCI_STYLEGETITALIC, i, 0);
 		styles[i][USED] = 0;
 	}
 
@@ -581,18 +581,18 @@ static void write_html_file(gint idx, const gchar *filename, gboolean use_zoom)
 	font_name = pango_font_description_get_family(font_desc);
 	/*font_size = pango_font_description_get_size(font_desc) / PANGO_SCALE;*/
 	/* take the zoom level also into account */
-	font_size = p_sci->send_message(documents[idx]->sci, SCI_STYLEGETSIZE, 0, 0);
+	font_size = p_sci->send_message(doc->sci, SCI_STYLEGETSIZE, 0, 0);
 	if (use_zoom)
-		font_size += p_sci->send_message(documents[idx]->sci, SCI_GETZOOM, 0, 0);
+		font_size += p_sci->send_message(doc->sci, SCI_GETZOOM, 0, 0);
 
 	/* read the document and write the HTML body */
 	body = g_string_new("");
-	for (i = 0; i < p_sci->get_length(documents[idx]->sci); i++)
+	for (i = 0; i < p_sci->get_length(doc->sci); i++)
 	{
-		style = p_sci->get_style_at(documents[idx]->sci, i);
-		c = p_sci->get_char_at(documents[idx]->sci, i);
+		style = p_sci->get_style_at(doc->sci, i);
+		c = p_sci->get_char_at(doc->sci, i);
 		/* p_sci->get_char_at() takes care of index boundaries and return 0 if i is too high */
-		c_next = p_sci->get_char_at(documents[idx]->sci, i + 1);
+		c_next = p_sci->get_char_at(doc->sci, i + 1);
 
 		if ((style != old_style || ! span_open) && ! isspace(c))
 		{
@@ -690,10 +690,10 @@ static void write_html_file(gint idx, const gchar *filename, gboolean use_zoom)
 	p_utils->string_replace_all(html, "{export_date}", get_date(DATE_TYPE_HTML));
 	p_utils->string_replace_all(html, "{export_content}", body->str);
 	p_utils->string_replace_all(html, "{export_styles}", css->str);
-	if (documents[idx]->file_name == NULL)
+	if (doc->file_name == NULL)
 		p_utils->string_replace_all(html, "{export_filename}", GEANY_STRING_UNTITLED);
 	else
-		p_utils->string_replace_all(html, "{export_filename}", documents[idx]->file_name);
+		p_utils->string_replace_all(html, "{export_filename}", doc->file_name);
 
 	write_data(filename, html->str);
 

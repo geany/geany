@@ -400,12 +400,12 @@ static gint compare_symbol_lines(const GeanySymbol *a, const GeanySymbol *b)
 }
 
 
-static const GList *get_tag_list(gint idx, guint tag_types, gint sort_mode)
+static const GList *get_tag_list(GeanyDocument *doc, guint tag_types, gint sort_mode)
 {
 	static GList *tag_names = NULL;
 
-	if (DOC_IDX_VALID(idx) && documents[idx]->tm_file &&
-		documents[idx]->tm_file->tags_array)
+	if (doc != NULL && doc->tm_file &&
+		doc->tm_file->tags_array)
 	{
 		TMTag *tag;
 		guint i;
@@ -413,7 +413,7 @@ static const GList *get_tag_list(gint idx, guint tag_types, gint sort_mode)
 		gboolean doc_is_utf8 = FALSE;
 		gchar *utf8_name;
 		const gchar *cosep =
-			symbols_get_context_separator(FILETYPE_ID(documents[idx]->file_type));
+			symbols_get_context_separator(FILETYPE_ID(doc->file_type));
 
 		if (tag_names)
 		{
@@ -429,20 +429,20 @@ static const GList *get_tag_list(gint idx, guint tag_types, gint sort_mode)
 
 		/* encodings_convert_to_utf8_from_charset() fails with charset "None", so skip conversion
 		 * for None at this point completely */
-		if (utils_str_equal(documents[idx]->encoding, "UTF-8") ||
-			utils_str_equal(documents[idx]->encoding, "None"))
+		if (utils_str_equal(doc->encoding, "UTF-8") ||
+			utils_str_equal(doc->encoding, "None"))
 			doc_is_utf8 = TRUE;
 
-		for (i = 0; i < (documents[idx]->tm_file)->tags_array->len; ++i)
+		for (i = 0; i < (doc->tm_file)->tags_array->len; ++i)
 		{
-			tag = TM_TAG((documents[idx]->tm_file)->tags_array->pdata[i]);
+			tag = TM_TAG((doc->tm_file)->tags_array->pdata[i]);
 			if (tag == NULL)
 				return NULL;
 
 			if (tag->type & tag_types)
 			{
 				if (! doc_is_utf8) utf8_name = encodings_convert_to_utf8_from_charset(tag->name,
-															(gsize)-1, documents[idx]->encoding, TRUE);
+															(gsize)-1, doc->encoding, TRUE);
 				else utf8_name = tag->name;
 
 				if (utf8_name == NULL)
@@ -562,10 +562,10 @@ tag_list_add_groups(GtkTreeStore *tree_store, ...)
 }
 
 
-static void init_tag_list(gint idx)
+static void init_tag_list(GeanyDocument *doc)
 {
-	filetype_id ft_id = documents[idx]->file_type->id;
-	Document *fdoc = DOCUMENT(documents[idx]);
+	filetype_id ft_id = doc->file_type->id;
+	Document *fdoc = DOCUMENT(doc);
 	GtkTreeStore *tag_store = fdoc->tag_store;
 
 	init_tag_iters();
@@ -837,24 +837,27 @@ static void hide_empty_rows(GtkTreeStore *store)
 }
 
 
-gboolean symbols_recreate_tag_list(gint idx, gint sort_mode)
+gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 {
 	GList *tmp;
 	const GList *tags;
 	GtkTreeIter iter;
 	static gint prev_sort_mode = SYMBOLS_SORT_BY_NAME;
-	filetype_id ft_id = FILETYPE_ID(documents[idx]->file_type);
-	Document *fdoc = DOCUMENT(documents[idx]);
+	filetype_id ft_id;
+	Document *fdoc;
 
-	g_return_val_if_fail(DOC_IDX_VALID(idx), FALSE);
+	g_return_val_if_fail(doc != NULL, FALSE);
+
+	ft_id = FILETYPE_ID(doc->file_type);
+	fdoc = DOCUMENT(doc);
 
 	if (sort_mode == SYMBOLS_SORT_USE_PREVIOUS)
 		sort_mode = prev_sort_mode;
 	else
 		prev_sort_mode = sort_mode;
 
-	tags = get_tag_list(idx, tm_tag_max_t, sort_mode);
-	if (documents[idx]->tm_file == NULL || tags == NULL)
+	tags = get_tag_list(doc, tm_tag_max_t, sort_mode);
+	if (doc->tm_file == NULL || tags == NULL)
 		return FALSE;
 
 	/* Make sure the model stays with us after the tree view unrefs it */
@@ -864,7 +867,7 @@ gboolean symbols_recreate_tag_list(gint idx, gint sort_mode)
 	/* Clear all contents */
 	gtk_tree_store_clear(fdoc->tag_store);
 
-	init_tag_list(idx);
+	init_tag_list(doc);
 	for (tmp = (GList*)tags; tmp; tmp = g_list_next(tmp))
 	{
 		gchar buf[100];
@@ -1182,14 +1185,14 @@ gboolean symbols_goto_tag(const gchar *name, gboolean definition)
 	const gint forward_types = tm_tag_prototype_t | tm_tag_externvar_t;
 	gint type;
 	TMTag *tmtag = NULL;
-	gint old_idx = document_get_cur_idx();
+	GeanyDocument *old_doc = document_get_current();
 
 	/* goto tag definition: all except prototypes / forward declarations / externs */
 	type = (definition) ? tm_tag_max_t - forward_types : forward_types;
 
 	/* first look in the current document */
-	if (documents[old_idx]->tm_file)
-		tmtag = find_work_object_tag(documents[old_idx]->tm_file, name, type);
+	if (old_doc != NULL && old_doc->tm_file)
+		tmtag = find_work_object_tag(old_doc->tm_file, name, type);
 
 	/* if not found, look in the workspace */
 	if (tmtag == NULL)
@@ -1197,16 +1200,16 @@ gboolean symbols_goto_tag(const gchar *name, gboolean definition)
 
 	if (tmtag != NULL)
 	{
-		gint new_idx = document_find_by_realpath(
+		GeanyDocument *new_doc = document_find_by_real_path(
 			tmtag->atts.entry.file->work_object.file_name);
 
 		/* not found in opened document, should open */
-		if (new_idx == -1)
+		if (new_doc == NULL)
 		{
-			new_idx = document_open_file(tmtag->atts.entry.file->work_object.file_name, FALSE, NULL, NULL);
+			new_doc = document_open_file(tmtag->atts.entry.file->work_object.file_name, FALSE, NULL, NULL);
 		}
 
-		if (navqueue_goto_line(old_idx, new_idx, tmtag->atts.entry.line))
+		if (navqueue_goto_line(old_doc, new_doc, tmtag->atts.entry.line))
 			return TRUE;
 	}
 	/* if we are here, there was no match and we are beeping ;-) */

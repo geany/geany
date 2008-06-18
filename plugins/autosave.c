@@ -37,7 +37,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(64)
+PLUGIN_VERSION_CHECK(69)
 
 PLUGIN_SET_INFO(_("Auto Save"), _("Save automatically all open files in a given time interval."),
 	VERSION, _("The Geany developer team"))
@@ -52,26 +52,27 @@ static gchar *config_file;
 
 gboolean auto_save(gpointer data)
 {
-	gint cur_idx = p_document->get_cur_idx();
-	gint i, idx, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets->notebook));
+	GeanyDocument *doc;
+	GeanyDocument *cur_doc = p_document->get_current();
+	gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets->notebook));
 	gint saved_files = 0;
 
 	if (save_all)
 	{
 		for (i = 0; i < max; i++)
 		{
-			idx = p_document->get_n_idx(i);
+			doc = p_document->get_from_page(i);
 
 			/* skip current file to save it lastly, skip files without name */
-			if (idx != cur_idx && documents[idx]->file_name != NULL)
-				if (p_document->save_file(idx, FALSE))
+			if (doc != cur_doc && cur_doc->file_name != NULL)
+				if (p_document->save_file(doc, FALSE))
 					saved_files++;
 		}
 	}
 	/* finally save current file, do it after all other files to get correct window title and
 	 * symbol list */
-	if (documents[cur_idx]->file_name != NULL)
-		if (p_document->save_file(cur_idx, FALSE))
+	if (cur_doc->file_name != NULL)
+		if (p_document->save_file(cur_doc, FALSE))
 			saved_files++;
 
 	if (saved_files > 0 && print_msg)

@@ -36,10 +36,10 @@
 #include "dialogs.h"
 #include "ui_utils.h"
 #include "utils.h"
-#include "msgwindow.h"
 #include "sciwrappers.h"
 #include "document.h"
 #include "documentprivate.h"
+#include "msgwindow.h"
 #include "keyfile.h"
 #include "keybindings.h"
 #include "interface.h"
@@ -825,7 +825,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 				for (i = 0; i < documents_array->len; i++)
 				{
 					if (documents[i]->is_valid)
-						editor_set_use_tabs(i, editor_prefs.use_tabs);
+						editor_set_use_tabs(documents[i], editor_prefs.use_tabs);
 				}
 			}
 		}
@@ -979,12 +979,12 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		{
 			if (documents[i]->is_valid)
 			{
-				document_apply_update_prefs(i);
+				document_apply_update_prefs(documents[i]);
 				if (! editor_prefs.folding)
-					editor_unfold_all(i);
+					editor_unfold_all(documents[i]);
 			}
 		}
-		ui_document_show_hide(-1);
+		ui_document_show_hide(NULL);
 
 		/* store all settings */
 		configuration_save();
@@ -1058,7 +1058,8 @@ void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 		}
 		case 2:
 		{
-			if (strcmp(fontbtn, interface_prefs.msgwin_font) == 0) break;
+			if (strcmp(fontbtn, interface_prefs.msgwin_font) == 0)
+				break;
 			g_free(interface_prefs.msgwin_font);
 			interface_prefs.msgwin_font = g_strdup(fontbtn);
 			ui_widget_modify_font_from_string(msgwindow.tree_compiler, interface_prefs.msgwin_font);

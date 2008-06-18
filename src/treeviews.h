@@ -47,16 +47,16 @@ enum
 
 void treeviews_init(void);
 
-void treeviews_update_tag_list(gint idx, gboolean update);
+void treeviews_update_tag_list(GeanyDocument *doc, gboolean update);
 
-void treeviews_openfiles_add(gint idx);
+void treeviews_openfiles_add(GeanyDocument *doc);
 
-void treeviews_openfiles_update(gint idx);
+void treeviews_openfiles_update(GeanyDocument *doc);
 
 void treeviews_openfiles_update_all(void);
 
-void treeviews_select_openfiles_item(gint idx);
+void treeviews_select_openfiles_item(GeanyDocument *doc);
 
-void treeviews_remove_document(gint idx);
+void treeviews_remove_document(GeanyDocument *doc);
 
 #endif

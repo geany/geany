@@ -33,7 +33,6 @@
 #include "support.h"
 #include "prefs.h"
 #include "callbacks.h"
-#include "msgwindow.h"
 #include "ui_utils.h"
 #include "utils.h"
 #include "document.h"
@@ -43,6 +42,7 @@
 #include "vte.h"
 #include "navqueue.h"
 #include "editor.h"
+#include "msgwindow.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -135,8 +135,8 @@ static void prepare_msg_tree_view(void)
 	GtkTreeSelection *selection;
 	PangoFontDescription *pfd;
 
-	/* doc idx, line, fg, str */
-	msgwindow.store_msg = gtk_list_store_new(4, G_TYPE_INT, G_TYPE_INT,
+	/* line, doc, fg, str */
+	msgwindow.store_msg = gtk_list_store_new(4, G_TYPE_INT, G_TYPE_POINTER,
 		GDK_TYPE_COLOR, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(msgwindow.tree_msg), GTK_TREE_MODEL(msgwindow.store_msg));
 
@@ -269,16 +269,16 @@ void msgwin_show_hide(gboolean show)
 
 /**
  *  Adds a new message in the messages tab treeview in the messages window.
- *  If @c line and @c idx are set, clicking on this line jumps into the file which is specified
- *  by @c idx into the line specified with @c line.
+ *  If @c line and @c doc are set, clicking on this line jumps into the file which is specified
+ *  by @c doc into the line specified with @c line.
  *
  *  @param msg_color A color to be used for the text. It must be an element of #MsgColors.
  *  @param line The document's line where the message belongs to. Set to -1 to ignore.
- *  @param idx The document's index in the documents_array. Set to -1 to ignore.
+ *  @param doc The document. Set to @c NULL to ignore.
  *  @param format Printf()-style format string.
  *  @param ... Arguments for the @c format string.
  **/
-void msgwin_msg_add_fmt(gint msg_color, gint line, gint idx, const gchar *format, ...)
+void msgwin_msg_add_fmt(gint msg_color, gint line, GeanyDocument *doc, const gchar *format, ...)
 {
 	gchar string[512];
 	va_list args;
@@ -287,12 +287,12 @@ void msgwin_msg_add_fmt(gint msg_color, gint line, gint idx, const gchar *format
 	g_vsnprintf(string, 512, format, args);
 	va_end(args);
 
-	msgwin_msg_add(msg_color, line, idx, string);
+	msgwin_msg_add(msg_color, line, doc, string);
 }
 
 
 /* adds string to the msg treeview */
-void msgwin_msg_add(gint msg_color, gint line, gint idx, const gchar *string)
+void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *string)
 {
 	GtkTreeIter iter;
 	const GdkColor *color = get_color(msg_color);
@@ -309,7 +309,7 @@ void msgwin_msg_add(gint msg_color, gint line, gint idx, const gchar *string)
 		tmp = g_strdup(string);
 
 	gtk_list_store_append(msgwindow.store_msg, &iter);
-	gtk_list_store_set(msgwindow.store_msg, &iter, 0, line, 1, idx, 2, color, 3, tmp, -1);
+	gtk_list_store_set(msgwindow.store_msg, &iter, 0, line, 1, doc, 2, color, 3, tmp, -1);
 
 	gtk_widget_set_sensitive(lookup_widget(main_widgets.window, "next_message1"), TRUE);
 
@@ -501,7 +501,6 @@ gboolean msgwin_goto_compiler_file_line()
 	gchar *string;
 	gboolean ret = FALSE;
 	GdkColor *color;
-	gint old_idx = document_get_cur_idx();
 
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_compiler));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter))
@@ -519,7 +518,6 @@ gboolean msgwin_goto_compiler_file_line()
 		if (string != NULL)
 		{
 			gint line;
-			gint idx;
 			gchar *filename, *dir;
 			GtkTreePath *path;
 
@@ -534,18 +532,20 @@ gboolean msgwin_goto_compiler_file_line()
 			if (filename != NULL && line > -1)
 			{
 				gchar *utf8_filename = utils_get_utf8_from_locale(filename);
-				idx = document_find_by_filename(utf8_filename);
+				GeanyDocument *doc = document_find_by_filename(utf8_filename);
+				GeanyDocument *old_doc = document_get_current();
+
 				g_free(utf8_filename);
 
-				if (idx < 0)	/* file not already open */
-					idx = document_open_file(filename, FALSE, NULL, NULL);
+				if (doc == NULL)	/* file not already open */
+					doc = document_open_file(filename, FALSE, NULL, NULL);
 
-				if (DOC_IDX_VALID(idx))
+				if (doc != NULL)
 				{
-					if (! documents[idx]->changed)	/* if modified, line may be wrong */
-						editor_set_indicator_on_line(idx, line - 1);
+					if (! doc->changed)	/* if modified, line may be wrong */
+						editor_set_indicator_on_line(doc, line - 1);
 
-					ret = navqueue_goto_line(old_idx, idx, line);
+					ret = navqueue_goto_line(old_doc, doc, line);
 				}
 			}
 			g_free(filename);
@@ -801,14 +801,16 @@ gboolean msgwin_goto_messages_file_line()
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_msg));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter))
 	{
-		gint idx, line, old_idx = document_get_cur_idx();
+		gint line;
 		gchar *string;
+		GeanyDocument *doc;
+		GeanyDocument *old_doc = document_get_current();
 
-		gtk_tree_model_get(model, &iter, 0, &line, 1, &idx, 3, &string, -1);
-		if (line >= 0 && idx >= 0)
+		gtk_tree_model_get(model, &iter, 0, &line, 1, &doc, 3, &string, -1);
+		/* doc may have been closed, so check doc->index: */
+		if (line >= 0 && DOC_VALID(doc))
 		{
-			if (DOC_IDX_VALID(idx))
-				ret = navqueue_goto_line(old_idx, idx, line);
+			ret = navqueue_goto_line(old_doc, doc, line);
 		}
 		else if (line < 0 && string != NULL)
 		{
@@ -817,9 +819,9 @@ gboolean msgwin_goto_messages_file_line()
 			if (filename != NULL && line > -1)
 			{
 				/* use document_open_file to find an already open file, or open it in place */
-				idx = document_open_file(filename, FALSE, NULL, NULL);
-				if (DOC_IDX_VALID(idx))
-					ret = navqueue_goto_line(old_idx, idx, line);
+				doc = document_open_file(filename, FALSE, NULL, NULL);
+				if (doc != NULL)
+					ret = navqueue_goto_line(old_doc, doc, line);
 			}
 			g_free(filename);
 		}

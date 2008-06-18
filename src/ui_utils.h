@@ -166,27 +166,27 @@ void ui_init(void);
 
 void ui_set_statusbar(gboolean log, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
 
-void ui_update_statusbar(gint idx, gint pos);
+void ui_update_statusbar(GeanyDocument *doc, gint pos);
 
 
 /* This sets the window title according to the current filename. */
-void ui_set_window_title(gint index);
+void ui_set_window_title(GeanyDocument *doc);
 
 void ui_set_editor_font(const gchar *font_name);
 
 void ui_set_fullscreen(void);
 
 
-void ui_update_popup_reundo_items(gint idx);
+void ui_update_popup_reundo_items(GeanyDocument *doc);
 
-void ui_update_popup_copy_items(gint idx);
+void ui_update_popup_copy_items(GeanyDocument *doc);
 
 void ui_update_popup_goto_items(gboolean enable);
 
 
-void ui_update_menu_copy_items(gint idx);
+void ui_update_menu_copy_items(GeanyDocument *doc);
 
-void ui_update_insert_include_item(gint idx, gint item);
+void ui_update_insert_include_item(GeanyDocument *doc, gint item);
 
 void ui_update_fold_items(void);
 
@@ -203,7 +203,7 @@ void ui_document_buttons_update(void);
 
 void ui_sidebar_show_hide(void);
 
-void ui_document_show_hide(gint idx);
+void ui_document_show_hide(GeanyDocument *doc);
 
 
 void ui_update_toolbar_icons(GtkIconSize size);
@@ -226,7 +226,7 @@ void ui_show_markers_margin(void);
 void ui_show_linenumber_margin(void);
 
 
-void ui_update_tab_status(gint idx);
+void ui_update_tab_status(GeanyDocument *doc);
 
 
 typedef gboolean TVMatchCallback(void);

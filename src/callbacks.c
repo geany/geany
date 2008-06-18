@@ -88,7 +88,7 @@ static gboolean insert_callback_from_menu = FALSE;
  * the selection-changed signal from tv.tree_openfiles */
 /*static gboolean switch_tv_notebook_page = FALSE; */
 
-CallbacksData callbacks_data = {-1};
+CallbacksData callbacks_data = { NULL };
 
 
 static gboolean check_no_unsaved(void)
@@ -108,11 +108,11 @@ static gboolean check_no_unsaved(void)
 
 /* set editor_info.click_pos to the current cursor position if insert_callback_from_menu is TRUE
  * to prevent invalid cursor positions which can cause segfaults */
-static void verify_click_pos(gint idx)
+static void verify_click_pos(GeanyDocument *doc)
 {
 	if (insert_callback_from_menu)
 	{
-		editor_info.click_pos = sci_get_current_position(documents[idx]->sci);
+		editor_info.click_pos = sci_get_current_position(doc->sci);
 		insert_callback_from_menu = FALSE;
 	}
 }
@@ -177,14 +177,14 @@ on_save1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 
-	if (cur_page >= 0)
+	if (doc != NULL && cur_page >= 0)
 	{
-		if (documents[idx]->file_name == NULL)
+		if (doc->file_name == NULL)
 			dialogs_show_save_as();
 		else
-			document_save_file(idx, FALSE);
+			document_save_file(doc, FALSE);
 	}
 }
 
@@ -201,28 +201,28 @@ void
 on_save_all1_activate                  (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint i, idx, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
-	gint cur_idx = document_get_cur_idx();
+	gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+	GeanyDocument *doc, *cur_doc = document_get_current();
 
 	document_delay_colourise();	/* avoid recolourising all C files after each save */
 
 	for (i = 0; i < max; i++)
 	{
-		idx = document_get_n_idx(i);
-		if (! documents[idx]->changed) continue;
-		if (documents[idx]->file_name == NULL)
+		doc = document_get_from_page(i);
+		if (! doc->changed) continue;
+		if (doc->file_name == NULL)
 		{
 			/* display unnamed document */
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
-				document_get_notebook_page(idx));
+				document_get_notebook_page(doc));
 			dialogs_show_save_as();
 		}
 		else
-			document_save_file(idx, FALSE);
+			document_save_file(doc, FALSE);
 	}
 	document_colourise_new();
-	treeviews_update_tag_list(cur_idx, TRUE);
-	ui_set_window_title(cur_idx);
+	treeviews_update_tag_list(cur_doc, TRUE);
+	ui_set_window_title(cur_doc);
 }
 
 
@@ -239,7 +239,7 @@ on_close1_activate                     (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	guint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
-	document_remove(cur_page);
+	document_remove_page(cur_page);
 }
 
 
@@ -271,9 +271,9 @@ void
 on_edit1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
-	ui_update_menu_copy_items(idx);
-	ui_update_insert_include_item(idx, 1);
+	GeanyDocument *doc = document_get_current();
+	ui_update_menu_copy_items(doc);
+	ui_update_insert_include_item(doc, 1);
 }
 
 
@@ -281,9 +281,9 @@ void
 on_undo1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! documents[idx]->is_valid) return;
-	if (document_can_undo(idx)) document_undo(idx);
+	GeanyDocument *doc = document_get_current();
+	if (doc != NULL && document_can_undo(doc))
+		document_undo(doc);
 }
 
 
@@ -291,9 +291,9 @@ void
 on_redo1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! documents[idx]->is_valid) return;
-	if (document_can_redo(idx)) document_redo(idx);
+	GeanyDocument *doc = document_get_current();
+	if (doc != NULL && document_can_redo(doc))
+		document_redo(doc);
 }
 
 
@@ -301,14 +301,14 @@ void
 on_cut1_activate                       (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	if (GTK_IS_EDITABLE(focusw))
 		gtk_editable_cut_clipboard(GTK_EDITABLE(focusw));
 	else
-	if (IS_SCINTILLA(focusw) && idx >= 0)
-		sci_cut(documents[idx]->sci);
+	if (IS_SCINTILLA(focusw) && doc != NULL)
+		sci_cut(doc->sci);
 	else
 	if (GTK_IS_TEXT_VIEW(focusw))
 	{
@@ -323,14 +323,14 @@ void
 on_copy1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	if (GTK_IS_EDITABLE(focusw))
 		gtk_editable_copy_clipboard(GTK_EDITABLE(focusw));
 	else
-	if (IS_SCINTILLA(focusw) && idx >= 0)
-		sci_copy(documents[idx]->sci);
+	if (IS_SCINTILLA(focusw) && doc != NULL)
+		sci_copy(doc->sci);
 	else
 	if (GTK_IS_TEXT_VIEW(focusw))
 	{
@@ -345,13 +345,13 @@ void
 on_paste1_activate                     (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	if (GTK_IS_EDITABLE(focusw))
 		gtk_editable_paste_clipboard(GTK_EDITABLE(focusw));
 	else
-	if (IS_SCINTILLA(focusw) && idx >= 0)
+	if (IS_SCINTILLA(focusw) && doc != NULL)
 	{
 #if 0
 //#ifdef G_OS_WIN32
@@ -363,12 +363,12 @@ on_paste1_activate                     (GtkMenuItem     *menuitem,
 			gchar *content = gtk_clipboard_wait_for_text(gtk_clipboard_get(GDK_NONE));
 			if (content != NULL)
 			{
-				sci_replace_sel(documents[idx]->sci, content);
+				sci_replace_sel(doc->sci, content);
 				g_free(content);
 			}
 		}
 #else
-		sci_paste(documents[idx]->sci);
+		sci_paste(doc->sci);
 #endif
 	}
 	else
@@ -386,14 +386,14 @@ void
 on_delete1_activate                    (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	if (GTK_IS_EDITABLE(focusw))
 		gtk_editable_delete_selection(GTK_EDITABLE(focusw));
 	else
-	if (IS_SCINTILLA(focusw) && idx >= 0)
-		sci_clear(documents[idx]->sci);
+	if (IS_SCINTILLA(focusw) && doc != NULL)
+		sci_clear(doc->sci);
 	else
 	if (GTK_IS_TEXT_VIEW(focusw))
 	{
@@ -453,12 +453,12 @@ void
 on_reload_as_activate                  (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	gchar *base_name;
 	gint i = GPOINTER_TO_INT(user_data);
 	gchar *charset = NULL;
 
-	if (idx < 0 || ! documents[idx]->is_valid || documents[idx]->file_name == NULL)
+	if (doc == NULL || doc->file_name == NULL)
 		return;
 	if (i >= 0)
 	{
@@ -466,14 +466,14 @@ on_reload_as_activate                  (GtkMenuItem     *menuitem,
 		charset = encodings[i].charset;
 	}
 
-	base_name = g_path_get_basename(documents[idx]->file_name);
+	base_name = g_path_get_basename(doc->file_name);
 	if (dialogs_show_question_full(NULL, _("_Reload"), GTK_STOCK_CANCEL,
 		_("Any unsaved changes will be lost."),
 		_("Are you sure you want to reload '%s'?"), base_name))
 	{
-		document_reload_file(idx, charset);
+		document_reload_file(doc, charset);
 		if (charset != NULL)
-			ui_update_statusbar(idx, -1);
+			ui_update_statusbar(doc, -1);
 	}
 	g_free(base_name);
 }
@@ -580,11 +580,11 @@ void
 on_entry1_activate                     (GtkEntry        *entry,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	gboolean result;
 
 	setup_find_next(GTK_EDITABLE(entry));
-	result = document_search_bar_find(idx, search_data.text, 0, FALSE);
+	result = document_search_bar_find(doc, search_data.text, 0, FALSE);
 	set_search_bar_background(result);
 }
 
@@ -594,11 +594,11 @@ void
 on_entry1_changed                      (GtkEditable     *editable,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	gboolean result;
 
 	setup_find_next(editable);
-	result = document_search_bar_find(idx, search_data.text, 0, TRUE);
+	result = document_search_bar_find(doc, search_data.text, 0, TRUE);
 	set_search_bar_background(result);
 }
 
@@ -608,12 +608,12 @@ void
 on_toolbutton18_clicked                (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	gboolean result;
 	GtkWidget *entry = lookup_widget(GTK_WIDGET(main_widgets.window), "entry1");
 
 	setup_find_next(GTK_EDITABLE(entry));
-	result = document_search_bar_find(idx, search_data.text, 0, FALSE);
+	result = document_search_bar_find(doc, search_data.text, 0, FALSE);
 	set_search_bar_background(result);
 }
 
@@ -655,14 +655,15 @@ void
 on_zoom_in1_activate                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	static gboolean done = 1;
 
-	if (idx >= 0 && documents[idx]->is_valid)
+	if (doc != NULL)
 	{
-		if (done++ % 3 == 0) sci_set_line_numbers(documents[idx]->sci, editor_prefs.show_linenumber_margin,
-				(sci_get_zoom(documents[idx]->sci) / 2));
-		sci_zoom_in(documents[idx]->sci);
+		if (done++ % 3 == 0)
+			sci_set_line_numbers(doc->sci, editor_prefs.show_linenumber_margin,
+				(sci_get_zoom(doc->sci) / 2));
+		sci_zoom_in(doc->sci);
 	}
 }
 
@@ -671,12 +672,12 @@ void
 on_zoom_out1_activate                   (GtkMenuItem     *menuitem,
                                          gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
-	if (idx >= 0 && documents[idx]->is_valid)
+	GeanyDocument *doc = document_get_current();
+	if (doc != NULL)
 	{
-		if (sci_get_zoom(documents[idx]->sci) == 0)
-			sci_set_line_numbers(documents[idx]->sci, editor_prefs.show_linenumber_margin, 0);
-		sci_zoom_out(documents[idx]->sci);
+		if (sci_get_zoom(doc->sci) == 0)
+			sci_set_line_numbers(doc->sci, editor_prefs.show_linenumber_margin, 0);
+		sci_zoom_out(doc->sci);
 	}
 }
 
@@ -685,11 +686,11 @@ void
 on_normal_size1_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
-	if (idx >= 0 && documents[idx]->is_valid)
+	GeanyDocument *doc = document_get_current();
+	if (doc != NULL)
 	{
-		sci_zoom_off(documents[idx]->sci);
-		sci_set_line_numbers(documents[idx]->sci, editor_prefs.show_linenumber_margin, 0);
+		sci_zoom_off(doc->sci);
+		sci_set_line_numbers(doc->sci, editor_prefs.show_linenumber_margin, 0);
 	}
 }
 
@@ -700,7 +701,7 @@ on_toolbutton15_clicked                (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
 {
 	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
-	document_remove(cur_page);
+	document_remove_page(cur_page);
 }
 
 
@@ -710,7 +711,7 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
                                         guint            page_num,
                                         gpointer         user_data)
 {
-	callbacks_data.last_doc_idx = document_get_cur_idx();
+	callbacks_data.last_doc = document_get_current();
 }
 
 
@@ -721,35 +722,34 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
                                         guint            page_num,
                                         gpointer         user_data)
 {
-	gint idx;
+	GeanyDocument *doc;
 
 	if (main_status.opening_session_files || main_status.closing_all)
 		return;
 
-	/* guint == -1 seems useless, but it isn't! */
 	if (page_num == (guint) -1 && page != NULL)
-		idx = document_find_by_sci(SCINTILLA(page));
+		doc = document_find_by_sci(SCINTILLA(page));
 	else
-		idx = document_get_n_idx(page_num);
+		doc = document_get_from_page(page_num);
 
-	if (idx >= 0)
+	if (doc != NULL)
 	{
-		treeviews_select_openfiles_item(idx);
-		document_set_text_changed(idx);	/* also sets window title and status bar */
-		ui_update_popup_reundo_items(idx);
-		ui_document_show_hide(idx); /* update the document menu */
-		build_menu_update(idx);
-		treeviews_update_tag_list(idx, FALSE);
+		treeviews_select_openfiles_item(doc);
+		document_set_text_changed(doc, doc->changed);	/* also sets window title and status bar */
+		ui_update_popup_reundo_items(doc);
+		ui_document_show_hide(doc); /* update the document menu */
+		build_menu_update(doc);
+		treeviews_update_tag_list(doc, FALSE);
 
-		utils_check_disk_status(idx, FALSE);
+		document_check_disk_status(doc, FALSE);
 
 #ifdef HAVE_VTE
-		vte_cwd(documents[idx]->file_name, FALSE);
+		vte_cwd(DOC_FILENAME(doc), FALSE);
 #endif
 
 		if (geany_object)
 		{
-			g_signal_emit_by_name(geany_object, "document-activate", idx);
+			g_signal_emit_by_name(geany_object, "document-activate", doc);
 		}
 	}
 }
@@ -780,10 +780,10 @@ void
 on_crlf_activate                       (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
-	if (ignore_callback || idx == -1 || ! documents[idx]->is_valid) return;
-	sci_convert_eols(documents[idx]->sci, SC_EOL_CRLF);
-	sci_set_eol_mode(documents[idx]->sci, SC_EOL_CRLF);
+	GeanyDocument *doc = document_get_current();
+	if (ignore_callback || doc == NULL) return;
+	sci_convert_eols(doc->sci, SC_EOL_CRLF);
+	sci_set_eol_mode(doc->sci, SC_EOL_CRLF);
 }
 
 
@@ -791,10 +791,10 @@ void
 on_lf_activate                         (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
-	if (ignore_callback || idx == -1 || ! documents[idx]->is_valid) return;
-	sci_convert_eols(documents[idx]->sci, SC_EOL_LF);
-	sci_set_eol_mode(documents[idx]->sci, SC_EOL_LF);
+	GeanyDocument *doc = document_get_current();
+	if (ignore_callback || doc == NULL) return;
+	sci_convert_eols(doc->sci, SC_EOL_LF);
+	sci_set_eol_mode(doc->sci, SC_EOL_LF);
 }
 
 
@@ -802,10 +802,10 @@ void
 on_cr_activate                         (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
-	if (ignore_callback || idx == -1 || ! documents[idx]->is_valid) return;
-	sci_convert_eols(documents[idx]->sci, SC_EOL_CR);
-	sci_set_eol_mode(documents[idx]->sci, SC_EOL_CR);
+	GeanyDocument *doc = document_get_current();
+	if (ignore_callback || doc == NULL) return;
+	sci_convert_eols(doc->sci, SC_EOL_CR);
+	sci_set_eol_mode(doc->sci, SC_EOL_CR);
 }
 
 
@@ -813,9 +813,9 @@ void
 on_replace_tabs_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 
-	editor_replace_tabs(idx);
+	editor_replace_tabs(doc);
 }
 
 
@@ -858,21 +858,21 @@ toolbar_popup_menu                     (GtkWidget *widget,
 
 void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	gint idx = document_get_cur_idx();
-	ScintillaObject *sci = documents[idx]->sci;
+	GeanyDocument *doc = document_get_current();
+	ScintillaObject *sci;
 	gchar *text;
 	gboolean keep_sel = TRUE;
 
-	if (! DOC_IDX_VALID(idx))
+	if (doc == NULL)
 		return;
 
+	sci = doc->sci;
 	if (! sci_can_copy(sci))
 	{
 		keybindings_send_command(GEANY_KEY_GROUP_SELECT, GEANY_KEYS_SELECT_WORD);
 		keep_sel = FALSE;
 	}
-
-	if (sci_can_copy(sci))
+	else
 	{
 		gchar *result = NULL;
 		gint cmd = SCI_LOWERCASE;
@@ -970,9 +970,9 @@ on_line_wrapping1_toggled              (GtkCheckMenuItem *checkmenuitem,
 {
 	if (! ignore_callback)
 	{
-		gint idx = document_get_cur_idx();
-		if (! DOC_IDX_VALID(idx)) return;
-		editor_set_line_wrapping(idx, ! documents[idx]->line_wrapping);
+		GeanyDocument *doc = document_get_current();
+		if (doc != NULL)
+			editor_set_line_wrapping(doc, ! doc->line_wrapping);
 	}
 }
 
@@ -983,12 +983,13 @@ on_set_file_readonly1_toggled          (GtkCheckMenuItem *checkmenuitem,
 {
 	if (! ignore_callback)
 	{
-		gint idx = document_get_cur_idx();
-		if (! DOC_IDX_VALID(idx)) return;
-		documents[idx]->readonly = ! documents[idx]->readonly;
-		sci_set_readonly(documents[idx]->sci, documents[idx]->readonly);
-		ui_update_tab_status(idx);
-		ui_update_statusbar(idx, -1);
+		GeanyDocument *doc = document_get_current();
+		if (doc == NULL)
+			return;
+		doc->readonly = ! doc->readonly;
+		sci_set_readonly(doc->sci, doc->readonly);
+		ui_update_tab_status(doc);
+		ui_update_statusbar(doc, -1);
 	}
 }
 
@@ -999,9 +1000,9 @@ on_use_auto_indentation1_toggled       (GtkCheckMenuItem *checkmenuitem,
 {
 	if (! ignore_callback)
 	{
-		gint idx = document_get_cur_idx();
-		if (! DOC_IDX_VALID(idx)) return;
-		documents[idx]->auto_indent = ! documents[idx]->auto_indent;
+		GeanyDocument *doc = document_get_current();
+		if (doc != NULL)
+			doc->auto_indent = ! doc->auto_indent;
 	}
 }
 
@@ -1010,16 +1011,17 @@ void
 on_find_usage1_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint flags, idx;
+	gint flags;
 	gchar *search_text;
+	GeanyDocument *doc = document_get_current();
 
-	idx = document_get_cur_idx();
-	if (! DOC_IDX_VALID(idx)) return;
+	if (doc == NULL)
+		return;
 
-	if (sci_can_copy(documents[idx]->sci))
+	if (sci_can_copy(doc->sci))
 	{	/* take selected text if there is a selection */
-		search_text = g_malloc(sci_get_selected_text_length(documents[idx]->sci) + 1);
-		sci_get_selected_text(documents[idx]->sci, search_text);
+		search_text = g_malloc(sci_get_selected_text_length(doc->sci) + 1);
+		sci_get_selected_text(doc->sci, search_text);
 		flags = SCFIND_MATCHCASE;
 	}
 	else
@@ -1041,7 +1043,7 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
 		GTK_MENU_ITEM(lookup_widget(main_widgets.editor_menu, "goto_tag_definition1")));
 	GeanyDocument *doc = document_get_current();
 
-	g_return_if_fail(doc);
+	g_return_if_fail(doc != NULL);
 
 	sci_set_current_position(doc->sci, editor_info.click_pos, FALSE);
 	symbols_goto_tag(editor_info.current_word, definition);
@@ -1061,13 +1063,14 @@ on_show_color_chooser1_activate        (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gchar colour[9];
-	gint idx = document_get_cur_idx();
-	gint pos = sci_get_current_position(documents[idx]->sci);
+	GeanyDocument *doc = document_get_current();
+	gint pos;
 
-	if (idx == -1 || ! documents[idx]->is_valid)
+	if (doc == NULL)
 		return;
 
-	editor_find_current_word(documents[idx]->sci, pos, colour, sizeof colour, GEANY_WORDCHARS"#");
+	pos = sci_get_current_position(doc->sci);
+	editor_find_current_word(doc->sci, pos, colour, sizeof colour, GEANY_WORDCHARS"#");
 	tools_color_chooser(colour);
 }
 
@@ -1090,18 +1093,18 @@ on_find1_activate                      (GtkMenuItem     *menuitem,
 
 static void find_again(gboolean change_direction)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 
-	g_return_if_fail(DOC_IDX_VALID(idx));
+	g_return_if_fail(doc != NULL);
 
 	if (search_data.text)
 	{
 		gboolean forward = ! search_data.backwards;
-		gint result = document_find_text(idx, search_data.text, search_data.flags,
+		gint result = document_find_text(doc, search_data.text, search_data.flags,
 			change_direction ? forward : !forward, FALSE, NULL);
 
 		if (result > -1)
-			editor_display_current_line(idx, 0.3F);
+			editor_display_current_line(doc, 0.3F);
 
 		set_search_bar_background((result > -1) ? TRUE : FALSE);
 	}
@@ -1132,7 +1135,7 @@ void
 on_find_nextsel1_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	search_find_selection(document_get_cur_idx(), FALSE);
+	search_find_selection(document_get_current(), FALSE);
 }
 
 
@@ -1140,7 +1143,7 @@ void
 on_find_prevsel1_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	search_find_selection(document_get_cur_idx(), TRUE);
+	search_find_selection(document_get_current(), TRUE);
 }
 
 
@@ -1183,16 +1186,16 @@ on_goto_line_dialog_response         (GtkDialog *dialog,
 {
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
-		gint idx = document_get_cur_idx();
+		GeanyDocument *doc = document_get_current();
 		gint line = strtol(gtk_entry_get_text(GTK_ENTRY(user_data)), NULL, 10);
 
-		if (line > 0 && line <= sci_get_line_count(documents[idx]->sci))
+		if (doc != NULL && line > 0 && line <= sci_get_line_count(doc->sci))
 		{
 			gint pos;
 
 			line--;	/* the user counts lines from 1, we begin at 0 so bring the user line to our one */
-			pos = sci_get_position_from_line(documents[idx]->sci, line);
-			editor_goto_pos(idx, pos, TRUE);
+			pos = sci_get_position_from_line(doc->sci, line);
+			editor_goto_pos(doc, pos, TRUE);
 		}
 		else
 		{
@@ -1276,25 +1279,26 @@ void
 on_comments_function_activate          (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	gchar *text;
 	const gchar *cur_tag = NULL;
 	gint line = -1, pos = 0;
 
-	if (documents[idx]->file_type == NULL)
+	if (doc == NULL || doc->file_type == NULL)
 	{
-		ui_set_statusbar(FALSE, _("Please set the filetype for the current file before using this function."));
+		ui_set_statusbar(FALSE,
+			_("Please set the filetype for the current file before using this function."));
 		return;
 	}
 
 	/* utils_get_current_function returns -1 on failure, so sci_get_position_from_line
 	 * returns the current position, so it should be safe */
-	line = utils_get_current_function(idx, &cur_tag);
-	pos = sci_get_position_from_line(documents[idx]->sci, line - 1);
+	line = utils_get_current_function(doc, &cur_tag);
+	pos = sci_get_position_from_line(doc->sci, line - 1);
 
-	text = templates_get_template_function(documents[idx]->file_type->id, cur_tag);
+	text = templates_get_template_function(doc->file_type->id, cur_tag);
 
-	sci_insert_text(documents[idx]->sci, pos, text);
+	sci_insert_text(doc->sci, pos, text);
 	g_free(text);
 }
 
@@ -1303,17 +1307,18 @@ void
 on_comments_multiline_activate         (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 
-	if (! DOC_IDX_VALID(idx) || documents[idx]->file_type == NULL)
+	if (doc == NULL || doc->file_type == NULL)
 	{
-		ui_set_statusbar(FALSE, _("Please set the filetype for the current file before using this function."));
+		ui_set_statusbar(FALSE,
+			_("Please set the filetype for the current file before using this function."));
 		return;
 	}
 
-	verify_click_pos(idx); /* make sure that the click_pos is valid */
+	verify_click_pos(doc); /* make sure that the click_pos is valid */
 
-	editor_insert_multiline_comment(idx);
+	editor_insert_multiline_comment(doc);
 }
 
 
@@ -1321,14 +1326,17 @@ void
 on_comments_gpl_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	gchar *text;
 
-	text = templates_get_template_licence(FILETYPE_ID(documents[idx]->file_type), GEANY_TEMPLATE_GPL);
+	if (doc == NULL)
+		return;
 
-	verify_click_pos(idx); /* make sure that the click_pos is valid */
+	text = templates_get_template_licence(FILETYPE_ID(doc->file_type), GEANY_TEMPLATE_GPL);
 
-	sci_insert_text(documents[idx]->sci, editor_info.click_pos, text);
+	verify_click_pos(doc); /* make sure that the click_pos is valid */
+
+	sci_insert_text(doc->sci, editor_info.click_pos, text);
 	g_free(text);
 }
 
@@ -1338,14 +1346,17 @@ on_comments_bsd_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	gchar *text;
 
-	text = templates_get_template_licence(FILETYPE_ID(documents[idx]->file_type), GEANY_TEMPLATE_BSD);
+	if (doc == NULL)
+		return;
 
-	verify_click_pos(idx); /* make sure that the click_pos is valid */
+	text = templates_get_template_licence(FILETYPE_ID(doc->file_type), GEANY_TEMPLATE_BSD);
 
-	sci_insert_text(documents[idx]->sci, editor_info.click_pos, text);
+	verify_click_pos(doc); /* make sure that the click_pos is valid */
+
+	sci_insert_text(doc->sci, editor_info.click_pos, text);
 	g_free(text);
 
 }
@@ -1355,14 +1366,17 @@ void
 on_comments_changelog_activate         (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	gchar *text;
 
+	if (doc == NULL)
+		return;
+
 	text = templates_get_template_changelog();
-	sci_insert_text(documents[idx]->sci, 0, text);
+	sci_insert_text(doc->sci, 0, text);
 	/* sets the cursor to the right position to type the changelog text,
 	 * the template has 21 chars + length of name and email */
-	sci_goto_pos(documents[idx]->sci, 21 + strlen(template_prefs.developer) + strlen(template_prefs.mail), TRUE);
+	sci_goto_pos(doc->sci, 21 + strlen(template_prefs.developer) + strlen(template_prefs.mail), TRUE);
 
 	g_free(text);
 }
@@ -1372,19 +1386,19 @@ void
 on_comments_fileheader_activate        (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	gchar *text;
 	gchar *fname;
 	GeanyFiletype *ft;
 
-	g_return_if_fail(DOC_IDX_VALID(idx));
+	g_return_if_fail(doc != NULL);
 
-	ft = documents[idx]->file_type;
-	fname = documents[idx]->file_name;
+	ft = doc->file_type;
+	fname = doc->file_name;
 	text = templates_get_template_fileheader(FILETYPE_ID(ft), fname);
 
-	sci_insert_text(documents[idx]->sci, 0, text);
-	sci_goto_pos(documents[idx]->sci, 0, FALSE);
+	sci_insert_text(doc->sci, 0, text);
+	sci_goto_pos(doc->sci, 0, FALSE);
 	g_free(text);
 }
 
@@ -1400,14 +1414,14 @@ void
 on_insert_date_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	gchar *format;
 	gchar time_str[300]; /* the entered format string can be maximal 256 chars long, so we have
 						  * 44 additional characters for strtime's conversion */
 	time_t t;
 	struct tm *tm;
 
-	if (idx < 0 || ! documents[idx]->is_valid) return;
+	if (doc == NULL) return;
 
 	if (utils_str_equal(_("dd.mm.yyyy"), (gchar*) user_data))
 		format = "%d.%m.%Y";
@@ -1443,10 +1457,10 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
 	tm = localtime(&t);
 	if (strftime(time_str, sizeof time_str, format, tm) != 0)
 	{
-		verify_click_pos(idx); /* make sure that the click_pos is valid */
+		verify_click_pos(doc); /* make sure that the click_pos is valid */
 
-		sci_insert_text(documents[idx]->sci, editor_info.click_pos, time_str);
-		sci_goto_pos(documents[idx]->sci, editor_info.click_pos + strlen(time_str), FALSE);
+		sci_insert_text(doc->sci, editor_info.click_pos, time_str);
+		sci_goto_pos(doc->sci, editor_info.click_pos + strlen(time_str), FALSE);
 	}
 	else
 	{
@@ -1461,13 +1475,13 @@ void
 on_insert_include_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	gint pos = -1;
 	gchar *text;
 
-	if (! DOC_IDX_VALID(idx) || user_data == NULL) return;
+	if (doc == NULL || user_data == NULL) return;
 
-	verify_click_pos(idx); /* make sure that the click_pos is valid */
+	verify_click_pos(doc); /* make sure that the click_pos is valid */
 
 	if (utils_str_equal(user_data, "blank"))
 	{
@@ -1479,10 +1493,10 @@ on_insert_include_activate             (GtkMenuItem     *menuitem,
 		text = g_strconcat("#include <", user_data, ">\n", NULL);
 	}
 
-	sci_insert_text(documents[idx]->sci, editor_info.click_pos, text);
+	sci_insert_text(doc->sci, editor_info.click_pos, text);
 	g_free(text);
 	if (pos >= 0)
-		sci_goto_pos(documents[idx]->sci, pos, FALSE);
+		sci_goto_pos(doc->sci, pos, FALSE);
 }
 
 
@@ -1490,8 +1504,8 @@ void
 on_file_properties_activate            (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
-	dialogs_show_file_properties(idx);
+	GeanyDocument *doc = document_get_current();
+	dialogs_show_file_properties(doc);
 }
 
 
@@ -1499,9 +1513,8 @@ void
 on_menu_fold_all1_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
-
-	editor_fold_all(idx);
+	GeanyDocument *doc = document_get_current();
+	editor_fold_all(doc);
 }
 
 
@@ -1509,9 +1522,8 @@ void
 on_menu_unfold_all1_activate           (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
-
-	editor_unfold_all(idx);
+	GeanyDocument *doc = document_get_current();
+	editor_unfold_all(doc);
 }
 
 
@@ -1536,11 +1548,10 @@ void
 on_menu_remove_indicators1_activate    (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 
-	if (! DOC_IDX_VALID(idx))
-		return;
-	editor_clear_indicators(idx);
+	if (doc != NULL)
+		editor_clear_indicators(doc);
 }
 
 
@@ -1548,20 +1559,21 @@ void
 on_encoding_change                     (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	guint i = GPOINTER_TO_INT(user_data);
 
-	if (ignore_callback || ! DOC_IDX_VALID(idx) || encodings[i].charset == NULL ||
-		utils_str_equal(encodings[i].charset, documents[idx]->encoding)) return;
+	if (ignore_callback || doc == NULL || encodings[i].charset == NULL ||
+		utils_str_equal(encodings[i].charset, doc->encoding))
+		return;
 
-	if (documents[idx]->readonly)
+	if (doc->readonly)
 	{
 		utils_beep();
 		return;
 	}
-	document_undo_add(idx, UNDO_ENCODING, g_strdup(documents[idx]->encoding));
+	document_undo_add(doc, UNDO_ENCODING, g_strdup(doc->encoding));
 
-	document_set_encoding(idx, encodings[i].charset);
+	document_set_encoding(doc, encodings[i].charset);
 }
 
 
@@ -1569,10 +1581,9 @@ void
 on_print1_activate                     (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
-	if (! DOC_IDX_VALID(idx))
-		return;
-	printing_print_doc(idx);
+	GeanyDocument *doc = document_get_current();
+	if (doc != NULL)
+		printing_print_doc(doc);
 }
 
 
@@ -1580,11 +1591,10 @@ void
 on_menu_select_all1_activate           (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 
-	if (idx < 0 || ! documents[idx]->is_valid) return;
-
-	sci_select_all(documents[idx]->sci);
+	if (doc != NULL)
+		sci_select_all(doc->sci);
 }
 
 
@@ -1622,20 +1632,21 @@ on_menu_write_unicode_bom1_toggled     (GtkCheckMenuItem *checkmenuitem,
 {
 	if (! ignore_callback)
 	{
-		gint idx = document_get_cur_idx();
+		GeanyDocument *doc = document_get_current();
 
-		if (idx == -1 || ! documents[idx]->is_valid) return;
-		if (documents[idx]->readonly)
+		if (doc == NULL)
+			return;
+		if (doc->readonly)
 		{
 			utils_beep();
 			return;
 		}
 
-		document_undo_add(idx, UNDO_BOM, GINT_TO_POINTER(documents[idx]->has_bom));
+		document_undo_add(doc, UNDO_BOM, GINT_TO_POINTER(doc->has_bom));
 
-		documents[idx]->has_bom = ! documents[idx]->has_bom;
+		doc->has_bom = ! doc->has_bom;
 
-		ui_update_statusbar(idx, -1);
+		ui_update_statusbar(doc, -1);
 	}
 }
 
@@ -1644,9 +1655,9 @@ void
 on_menu_comment_line1_activate         (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! documents[idx]->is_valid) return;
-	editor_do_comment(idx, -1, FALSE, FALSE);
+	GeanyDocument *doc = document_get_current();
+	if (doc != NULL)
+		editor_do_comment(doc, -1, FALSE, FALSE);
 }
 
 
@@ -1654,9 +1665,9 @@ void
 on_menu_uncomment_line1_activate       (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! documents[idx]->is_valid) return;
-	editor_do_uncomment(idx, -1, FALSE);
+	GeanyDocument *doc = document_get_current();
+	if (doc != NULL)
+		editor_do_uncomment(doc, -1, FALSE);
 }
 
 
@@ -1665,9 +1676,9 @@ on_menu_toggle_line_commentation1_activate
                                        (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! documents[idx]->is_valid) return;
-	editor_do_comment_toggle(idx);
+	GeanyDocument *doc = document_get_current();
+	if (doc != NULL)
+		editor_do_comment_toggle(doc);
 }
 
 
@@ -1683,27 +1694,28 @@ void
 on_menu_increase_indent1_activate      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
-	if (! DOC_IDX_VALID(idx)) return;
+	GeanyDocument *doc = document_get_current();
+	if (doc == NULL)
+		return;
 
-	if (sci_get_lines_selected(documents[idx]->sci) > 1)
+	if (sci_get_lines_selected(doc->sci) > 1)
 	{
-		sci_cmd(documents[idx]->sci, SCI_TAB);
+		sci_cmd(doc->sci, SCI_TAB);
 	}
 	else
 	{
 		gint line, ind_pos, old_pos, new_pos, step;
 
-		old_pos = sci_get_current_position(documents[idx]->sci);
-		line = sci_get_line_from_position(documents[idx]->sci, old_pos);
-		ind_pos = sci_get_line_indent_position(documents[idx]->sci, line);
+		old_pos = sci_get_current_position(doc->sci);
+		line = sci_get_line_from_position(doc->sci, old_pos);
+		ind_pos = sci_get_line_indent_position(doc->sci, line);
 		/* when using tabs increase cur pos by 1, when using space increase it by tab_width */
-		step = (documents[idx]->use_tabs) ? 1 : editor_prefs.tab_width;
+		step = (doc->use_tabs) ? 1 : editor_prefs.tab_width;
 		new_pos = (old_pos > ind_pos) ? old_pos + step : old_pos;
 
-		sci_set_current_position(documents[idx]->sci, ind_pos, TRUE);
-		sci_cmd(documents[idx]->sci, SCI_TAB);
-		sci_set_current_position(documents[idx]->sci, new_pos, TRUE);
+		sci_set_current_position(doc->sci, ind_pos, TRUE);
+		sci_cmd(doc->sci, SCI_TAB);
+		sci_set_current_position(doc->sci, new_pos, TRUE);
 	}
 }
 
@@ -1712,34 +1724,35 @@ void
 on_menu_decrease_indent1_activate      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
-	if (! DOC_IDX_VALID(idx)) return;
+	GeanyDocument *doc = document_get_current();
+	if (doc == NULL)
+		return;
 
-	if (sci_get_lines_selected(documents[idx]->sci) > 1)
+	if (sci_get_lines_selected(doc->sci) > 1)
 	{
-		sci_cmd(documents[idx]->sci, SCI_BACKTAB);
+		sci_cmd(doc->sci, SCI_BACKTAB);
 	}
 	else
 	{
 		gint line, ind_pos, old_pos, new_pos, step, indent;
 
-		old_pos = sci_get_current_position(documents[idx]->sci);
-		line = sci_get_line_from_position(documents[idx]->sci, old_pos);
-		ind_pos = sci_get_line_indent_position(documents[idx]->sci, line);
-		step = (documents[idx]->use_tabs) ? 1 : editor_prefs.tab_width;
+		old_pos = sci_get_current_position(doc->sci);
+		line = sci_get_line_from_position(doc->sci, old_pos);
+		ind_pos = sci_get_line_indent_position(doc->sci, line);
+		step = (doc->use_tabs) ? 1 : editor_prefs.tab_width;
 		new_pos = (old_pos >= ind_pos) ? old_pos - step : old_pos;
 
-		if (ind_pos == sci_get_position_from_line(documents[idx]->sci, line))
+		if (ind_pos == sci_get_position_from_line(doc->sci, line))
 			return;
 
-		sci_set_current_position(documents[idx]->sci, ind_pos, TRUE);
-		indent = sci_get_line_indentation(documents[idx]->sci, line);
+		sci_set_current_position(doc->sci, ind_pos, TRUE);
+		indent = sci_get_line_indentation(doc->sci, line);
 		indent -= editor_prefs.tab_width;
 		if (indent < 0)
 			indent = 0;
-		sci_set_line_indentation(documents[idx]->sci, line, indent);
+		sci_set_line_indentation(doc->sci, line, indent);
 
-		sci_set_current_position(documents[idx]->sci, new_pos, TRUE);
+		sci_set_current_position(doc->sci, new_pos, TRUE);
 	}
 }
 
@@ -1853,12 +1866,13 @@ void
 on_menu_open_selected_file1_activate   (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 	gchar *sel = NULL;
 
-	if (! DOC_IDX_VALID(idx)) return;
+	if (doc == NULL)
+		return;
 
-	sel = editor_get_default_selection(idx, TRUE, GEANY_WORDCHARS"./");
+	sel = editor_get_default_selection(doc, TRUE, GEANY_WORDCHARS"./");
 
 	if (sel != NULL)
 	{
@@ -1870,7 +1884,7 @@ on_menu_open_selected_file1_activate   (GtkMenuItem     *menuitem,
 		{	/* relative filename, add the path of the current file */
 			gchar *path;
 
-			path = g_path_get_dirname(documents[idx]->file_name);
+			path = g_path_get_dirname(doc->file_name);
 			filename = g_build_path(G_DIR_SEPARATOR_S, path, sel, NULL);
 
 			if (! g_file_test(filename, G_FILE_TEST_EXISTS) &&
@@ -1897,13 +1911,13 @@ void
 on_remove_markers1_activate            (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 
-	if (! DOC_IDX_VALID(idx))
+	if (doc == NULL)
 		return;
 
-	sci_marker_delete_all(documents[idx]->sci, 0);	/* delete the yellow tag marker */
-	sci_marker_delete_all(documents[idx]->sci, 1);	/* delete user markers */
+	sci_marker_delete_all(doc->sci, 0);	/* delete the yellow tag marker */
+	sci_marker_delete_all(doc->sci, 1);	/* delete user markers */
 }
 
 
@@ -1919,17 +1933,17 @@ void
 on_context_action1_activate            (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx;
 	gchar *word, *command;
 	GError *error = NULL;
+	GeanyDocument *doc = document_get_current();
 
-	idx = document_get_cur_idx();
-	if (! DOC_IDX_VALID(idx)) return;
+	if (doc == NULL)
+		return;
 
-	if (sci_can_copy(documents[idx]->sci))
+	if (sci_can_copy(doc->sci))
 	{	/* take selected text if there is a selection */
-		word = g_malloc(sci_get_selected_text_length(documents[idx]->sci) + 1);
-		sci_get_selected_text(documents[idx]->sci, word);
+		word = g_malloc(sci_get_selected_text_length(doc->sci) + 1);
+		sci_get_selected_text(doc->sci, word);
 	}
 	else
 	{
@@ -1937,11 +1951,10 @@ on_context_action1_activate            (GtkMenuItem     *menuitem,
 	}
 
 	/* use the filetype specific command if available, fallback to global command otherwise */
-	if (documents[idx]->file_type != NULL &&
-		documents[idx]->file_type->context_action_cmd != NULL &&
-		*documents[idx]->file_type->context_action_cmd != '\0')
+	if (doc->file_type != NULL &&
+		NZV(doc->file_type->context_action_cmd))
 	{
-		command = g_strdup(documents[idx]->file_type->context_action_cmd);
+		command = g_strdup(doc->file_type->context_action_cmd);
 	}
 	else
 	{
@@ -2049,10 +2062,13 @@ void
 on_tabs1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 
-	editor_set_use_tabs(idx, TRUE);
-	ui_update_statusbar(idx, -1);
+	if (doc == NULL || ignore_callback)
+		return;
+
+	editor_set_use_tabs(doc, TRUE);
+	ui_update_statusbar(doc, -1);
 }
 
 
@@ -2060,10 +2076,13 @@ void
 on_spaces1_activate                    (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 
-	editor_set_use_tabs(idx, FALSE);
-	ui_update_statusbar(idx, -1);
+	if (doc == NULL || ignore_callback)
+		return;
+
+	editor_set_use_tabs(doc, FALSE);
+	ui_update_statusbar(doc, -1);
 }
 
 
@@ -2071,9 +2090,12 @@ void
 on_strip_trailing_spaces1_activate     (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	GeanyDocument *doc = document_get_current();
 
-	editor_strip_trailing_spaces(idx);
+	if (doc == NULL || ignore_callback)
+		return;
+
+	editor_strip_trailing_spaces(doc);
 }
 
 
@@ -2122,7 +2144,7 @@ on_line_breaking1_activate             (GtkMenuItem     *menuitem,
 		return;
 
 	doc = document_get_current();
-	g_return_if_fail(doc);
+	g_return_if_fail(doc != NULL);
 
 	doc->line_breaking = !doc->line_breaking;
 }

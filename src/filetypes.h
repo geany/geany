@@ -136,7 +136,7 @@ void filetypes_init(void);
 void filetypes_init_types(void);
 
 /* Detect the filetype for document idx, checking for a shebang, then filename extension. */
-GeanyFiletype *filetypes_detect_from_file(gint idx);
+GeanyFiletype *filetypes_detect_from_file(GeanyDocument *doc);
 
 GeanyFiletype *filetypes_detect_from_extension(const gchar *utf8_filename);
 

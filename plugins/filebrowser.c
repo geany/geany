@@ -46,7 +46,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(64)
+PLUGIN_VERSION_CHECK(69)
 
 PLUGIN_SET_INFO(_("File Browser"), _("Adds a file browser tab to the sidebar."), VERSION,
 	_("The Geany developer team"))
@@ -275,16 +275,15 @@ static void on_current_path(void)
 {
 	gchar *fname;
 	gchar *dir;
-	gint idx = p_document->get_cur_idx();
+	GeanyDocument *doc = p_document->get_current();
 
-	if (! DOC_IDX_VALID(idx) || documents[idx]->file_name == NULL ||
-		! g_path_is_absolute(documents[idx]->file_name))
+	if (doc == NULL || doc->file_name == NULL || ! g_path_is_absolute(doc->file_name))
 	{
 		setptr(current_dir, get_default_dir());
 		refresh();
 		return;
 	}
-	fname = documents[idx]->file_name;
+	fname = doc->file_name;
 	fname = p_utils->get_locale_from_utf8(fname);
 	dir = g_path_get_dirname(fname);
 	g_free(fname);
