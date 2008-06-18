@@ -390,7 +390,7 @@ static void clear_errors(GeanyDocument *doc)
 
 			for (i = 0; i < documents_array->len; i++)
 			{
-				if (DOC_VALID(documents[i]))
+				if (documents[i]->is_valid)
 					editor_clear_indicators(documents[i]);
 			}
 			break;

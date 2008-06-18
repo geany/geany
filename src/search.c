@@ -1407,7 +1407,7 @@ void search_find_usage(const gchar *search_text, gint flags, gboolean in_session
 		guint i;
 		for (i = 0; i < documents_array->len; i++)
 		{
-			if (DOC_VALID(documents[i]))
+			if (documents[i]->is_valid)
 				if (find_document_usage(documents[i], search_text, flags) > 0)
 					found = TRUE;
 		}

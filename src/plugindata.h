@@ -36,12 +36,12 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 69;
+static const gint api_version = 70;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
  * are only appended, as this doesn't affect existing fields. */
-static const gint abi_version = 38;
+static const gint abi_version = 39;
 
 /** Check the plugin can be loaded by Geany.
  * This performs runtime checks that try to ensure:
@@ -459,6 +459,12 @@ typedef PluginCallback GeanyCallback;
 #define cleanup plugin_cleanup
 
 #define doc_array documents_array
+
+/** NULL-safe way to get the index of @a doc_ptr in the documents array. */
+#define DOC_IDX(doc_ptr) \
+	(doc_ptr ? doc_ptr->index : -1)
+#define DOC_IDX_VALID(doc_idx) \
+	((doc_idx) >= 0 && (guint)(doc_idx) < documents_array->len && documents[doc_idx]->is_valid)
 
 #endif	/* GEANY_DISABLE_DEPRECATED */
 

@@ -69,6 +69,8 @@ extern GeanyFilePrefs file_prefs;
  **/
 struct GeanyDocument
 {
+	/** General flag to represent this document is active and all properties are set correctly. */
+	gboolean		 is_valid;
 	gint			 index;		/**< Index in the documents array. */
 	/** Whether this %document support source code symbols(tags) to show in the sidebar. */
 	gboolean		 has_tags;
@@ -131,15 +133,9 @@ extern GPtrArray *documents_array;
  * This is useful when @a doc_ptr was stored some time earlier and documents may have been
  * closed since then.
  * @note This should not be used to check the result of the main API functions,
- * these only need a NULL-pointer check - @c p_document->get_current() != @c NULL.
- * This is only useful when iterating over the documents array or when using stored document
- * pointers like in msgwindow treeviews. */
+ * these only need a NULL-pointer check - @c p_document->get_current() != @c NULL. */
 #define DOC_VALID(doc_ptr) \
-	((doc_ptr) != NULL && (doc_ptr)->index != -1)
-
-/** NULL-safe way to get the index of @a doc_ptr in the documents array. */
-#define DOC_IDX(doc_ptr) \
-	(doc_ptr ? doc_ptr->index : -1)
+	((doc_ptr) != NULL && (doc_ptr)->is_valid)
 
 /**
  *  DOC_FILENAME returns the filename of the %document corresponding to the passed index or

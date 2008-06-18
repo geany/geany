@@ -97,7 +97,7 @@ static gboolean check_no_unsaved(void)
 
 	for (i = 0; i < documents_array->len; i++)
 	{
-		if (DOC_VALID(documents[i]) && documents[i]->changed)
+		if (documents[i]->is_valid && documents[i]->changed)
 		{
 			return FALSE;
 		}
