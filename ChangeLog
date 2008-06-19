@@ -5,6 +5,12 @@
  * geany.glade, src/callbacks.c, src/callbacks.h, src/editor.c,
    src/editor.h, src/interface.c:
    Add "Replace spaces by tabs".
+ * doc/geany.txt, doc/geany.html, src/keybindings.c, src/keybindings.h,
+   src/plugindata.h:
+   Add keybindings for Line wrapping, Line breaking, Toggle fold and
+   Replace Spaces by tabs.
+   Refactor different document keybindings callback functions into
+   cb_func_document_action().
 
 
 2008-06-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

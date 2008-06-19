@@ -67,6 +67,7 @@ static void cb_func_search_action(guint key_id);
 static void cb_func_goto_action(guint key_id);
 static void cb_func_clipboard(guint key_id);
 static void cb_func_build_action(guint key_id);
+static void cb_func_document_action(guint key_id);
 
 /* TODO: refactor individual callbacks per group */
 static void cb_func_menu_help(guint key_id);
@@ -77,11 +78,6 @@ static void cb_func_menu_fullscreen(guint key_id);
 static void cb_func_menu_messagewindow(guint key_id);
 static void cb_func_menu_zoomin(guint key_id);
 static void cb_func_menu_zoomout(guint key_id);
-
-static void cb_func_menu_replacetabs(guint key_id);
-static void cb_func_menu_foldall(guint key_id);
-static void cb_func_menu_unfoldall(guint key_id);
-static void cb_func_reloadtaglist(guint key_id);
 
 static void cb_func_menu_opencolorchooser(guint key_id);
 
@@ -405,13 +401,21 @@ static void init_default_kb(void)
 
 	group = ADD_KB_GROUP(DOCUMENT, _("Document"));
 
-	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_REPLACETABS, cb_func_menu_replacetabs,
+	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_LINEWRAP, cb_func_document_action,
+		0, 0, "menu_linewrap", _("Toggle Line wrapping"), LW(menu_line_wrapping1));
+	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_LINEBREAK, cb_func_document_action,
+		0, 0, "menu_linebreak", _("Toggle Line breaking"), LW(line_breaking1));
+	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_REPLACETABS, cb_func_document_action,
 		0, 0, "menu_replacetabs", _("Replace tabs by space"), LW(menu_replace_tabs));
-	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_FOLDALL, cb_func_menu_foldall,
+	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_REPLACESPACES, cb_func_document_action,
+		0, 0, "menu_replacespaces", _("Replace spaces by tabs"), LW(menu_replace_spaces));
+	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_TOGGLEFOLD, cb_func_document_action,
+		0, 0, "menu_togglefold", _("Toggle current fold"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_FOLDALL, cb_func_document_action,
 		0, 0, "menu_foldall", _("Fold all"), LW(menu_fold_all1));
-	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_UNFOLDALL, cb_func_menu_unfoldall,
+	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_UNFOLDALL, cb_func_document_action,
 		0, 0, "menu_unfoldall", _("Unfold all"), LW(menu_unfold_all1));
-	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_RELOADTAGLIST, cb_func_reloadtaglist,
+	keybindings_set_item(group, GEANY_KEYS_DOCUMENT_RELOADTAGLIST, cb_func_document_action,
 		GDK_r, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "reloadtaglist", _("Reload symbol list"), NULL);
 
 	group = ADD_KB_GROUP(BUILD, _("Build"));
@@ -1064,20 +1068,6 @@ static void cb_func_menu_zoomout(G_GNUC_UNUSED guint key_id)
 	on_zoom_out1_activate(NULL, NULL);
 }
 
-static void cb_func_menu_foldall(G_GNUC_UNUSED guint key_id)
-{
-	GeanyDocument *doc = document_get_current();
-	if (doc != NULL)
-		editor_fold_all(doc);
-}
-
-static void cb_func_menu_unfoldall(G_GNUC_UNUSED guint key_id)
-{
-	GeanyDocument *doc = document_get_current();
-	if (doc != NULL)
-		editor_unfold_all(doc);
-}
-
 static void cb_func_build_action(guint key_id)
 {
 	GtkWidget *item;
@@ -1131,14 +1121,6 @@ static void cb_func_build_action(guint key_id)
 		gtk_menu_item_activate(GTK_MENU_ITEM(item));
 }
 
-static void cb_func_reloadtaglist(G_GNUC_UNUSED guint key_id)
-{
-	GeanyDocument *doc = document_get_current();
-	if (doc != NULL)
-		document_update_tag_list(doc, TRUE);
-}
-
-
 static gboolean check_current_word(void)
 {
 	gint pos;
@@ -1159,7 +1141,6 @@ static gboolean check_current_word(void)
 	}
 	return TRUE;
 }
-
 
 static void cb_func_switch_editor(G_GNUC_UNUSED guint key_id)
 {
@@ -1587,9 +1568,43 @@ static void cb_func_select_action(guint key_id)
 }
 
 
-static void cb_func_menu_replacetabs(G_GNUC_UNUSED guint key_id)
+static void cb_func_document_action(guint key_id)
 {
-	on_replace_tabs_activate(NULL, NULL);
+	GeanyDocument *doc = document_get_current();
+	if (doc == NULL)
+		return;
+
+	switch (key_id)
+	{
+		case GEANY_KEYS_DOCUMENT_REPLACETABS:
+			on_replace_tabs_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_DOCUMENT_REPLACESPACES:
+			on_replace_spaces_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_DOCUMENT_LINEBREAK:
+			on_line_breaking1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_DOCUMENT_LINEWRAP:
+			on_line_wrapping1_toggled(NULL, NULL);
+			break;
+		case GEANY_KEYS_DOCUMENT_RELOADTAGLIST:
+			document_update_tag_list(doc, TRUE);
+			break;
+		case GEANY_KEYS_DOCUMENT_FOLDALL:
+			editor_fold_all(doc);
+			break;
+		case GEANY_KEYS_DOCUMENT_UNFOLDALL:
+			editor_unfold_all(doc);
+			break;
+		case GEANY_KEYS_DOCUMENT_TOGGLEFOLD:
+			if (editor_prefs.folding)
+			{
+				gint line = sci_get_current_line(doc->sci);
+				sci_toggle_fold(doc->sci, line);
+				break;
+			}
+	}
 }
 
 

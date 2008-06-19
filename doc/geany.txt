@@ -2417,11 +2417,20 @@ Move document last                                        Moves the current docu
 
 Replace tabs by space                                     Replaces all tabs with the right amount of spaces.
 
+Replace spaces by tabs                                    Replaces all spaces with tab characters.
+
+Toggle current fold                                       Toggles the folding state of the current code block.
+
 Fold all                                                  Folds all contractible code blocks.
 
 Unfold all                                                Unfolds all contracted code blocks.
 
 Reload symbol list              Ctrl-Shift-R              Reloads the tag/symbol list.
+
+Toggle Line wrapping                                      Enables or disables wrapping of long lines.
+
+Toggle Line breaking                                      Enables or disables automatic breaking of long
+                                                          lines at a configurable column.
 
 **Build**
 
