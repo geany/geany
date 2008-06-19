@@ -14,6 +14,9 @@
  * src/editor.c:
    Improve scrolling on wrapped lines to avoid having search results on
    wrapped lines but outside of visible lines.
+ * src/editor.c:
+   Allow symbol auto completion in embedded JavaScript in HTML files
+   (closes #1997409).
 
 
 2008-06-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

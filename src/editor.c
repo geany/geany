@@ -1231,9 +1231,9 @@ gboolean editor_start_auto_complete(GeanyDocument *doc, gint pos, gboolean force
 	root = linebuf + startword;
 	rootlen = current - startword;
 
-	/* entity autocompletion always in a HTML file, in a PHP file only
-	 * when we are outside of <? ?> */
-	if (ft->id == GEANY_FILETYPES_HTML ||
+	/* entity autocompletion always in a HTML file except when inside embedded JavaScript,
+	 * in a PHP file only when we are outside of <? ?> */
+	if ((ft->id == GEANY_FILETYPES_HTML && (style < SCE_HJ_START || style > SCE_HJ_REGEX)) ||
 		(ft->id == GEANY_FILETYPES_PHP && (style < SCE_HPHP_DEFAULT || style > SCE_HPHP_OPERATOR) &&
 		 line != (sci_get_line_count(sci) - 1))) /* this check is a workaround for a Scintilla bug:
 												  * the last line in a PHP gets wrong styling */
