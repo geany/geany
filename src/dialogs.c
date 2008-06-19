@@ -816,6 +816,13 @@ on_input_entry_activate(GtkEntry *entry, GtkDialog *dialog)
 
 
 static void
+on_input_numeric_activate(GtkEntry *entry, GtkDialog *dialog)
+{
+	gtk_dialog_response(dialog, GTK_RESPONSE_ACCEPT);
+}
+
+
+static void
 on_input_dialog_response(GtkDialog *dialog,
                          gint response,
                          GtkWidget *entry)
@@ -915,6 +922,42 @@ dialogs_show_input(const gchar *title, const gchar *label_text, const gchar *def
 
 	gtk_widget_show_all(dialog);
 	return dialog;
+}
+
+
+gboolean dialogs_show_input_numeric(const gchar *title, const gchar *label_text,
+									gdouble *value, gdouble min, gdouble max, gdouble step)
+{
+	GtkWidget *dialog, *label, *spin, *vbox;
+	gboolean res = FALSE;
+
+	dialog = gtk_dialog_new_with_buttons(title, GTK_WINDOW(main_widgets.window),
+										GTK_DIALOG_DESTROY_WITH_PARENT,
+										GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+										GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
+	gtk_widget_set_name(dialog, "GeanyDialog");
+
+	label = gtk_label_new(label_text);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+
+	spin = gtk_spin_button_new_with_range(min, max, step);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin), *value);
+	g_signal_connect(spin, "activate", G_CALLBACK(on_input_numeric_activate), dialog);
+
+	gtk_container_add(GTK_CONTAINER(vbox), label);
+	gtk_container_add(GTK_CONTAINER(vbox), spin);
+	gtk_widget_show_all(vbox);
+
+	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+	{
+		*value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin));
+		res = TRUE;
+	}
+	gtk_widget_destroy(dialog);
+
+	return res;
 }
 
 
