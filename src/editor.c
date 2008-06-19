@@ -3329,7 +3329,7 @@ gboolean on_editor_scroll_event(GtkWidget *widget, GdkEventScroll *event, gpoint
 {
 	/* Handle scroll events if Shift or Alt is pressed and scroll whole pages instead of a
 	 * few lines only, maybe this could/should be done in Scintilla directly */
-	if (event->state & (GDK_MOD1_MASK | GDK_SHIFT_MASK))
+	if (event->state & GDK_MOD1_MASK)
 	{
 		GeanyDocument *doc = user_data;
 		sci_cmd(doc->sci, (event->direction == GDK_SCROLL_DOWN) ? SCI_PAGEDOWN : SCI_PAGEUP);

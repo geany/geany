@@ -23,6 +23,8 @@
  * src/msgwindow.c:
    Add "Copy All" to the popup menu of the Status, Compiler and Messages
    treeviews to copy all items to the clipboard.
+ * src/editor.c:
+   Scroll by page only when Alt key is held to avoid possible conflicts.
 
 
 2008-06-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
