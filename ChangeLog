@@ -11,6 +11,9 @@
    Replace Spaces by tabs.
    Refactor different document keybindings callback functions into
    cb_func_document_action().
+ * src/editor.c:
+   Improve scrolling on wrapped lines to avoid having search results on
+   wrapped lines but outside of visible lines.
 
 
 2008-06-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

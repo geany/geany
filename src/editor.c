@@ -2891,6 +2891,11 @@ gboolean editor_line_in_view(ScintillaObject *sci, gint line)
 {
 	gint vis1, los;
 
+	/* If line is wrapped the result may occur on another virtual line than the first and may be
+	 * still hidden, so increase the line number to check for the next document line */
+	if (SSM(sci, SCI_WRAPCOUNT, line, 0) > 1)
+		line++;
+
 	line = SSM(sci, SCI_VISIBLEFROMDOCLINE, line, 0);	/* convert to visible line number */
 	vis1 = SSM(sci, SCI_GETFIRSTVISIBLELINE, 0, 0);
 	los = SSM(sci, SCI_LINESONSCREEN, 0, 0);
