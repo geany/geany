@@ -602,3 +602,7 @@ void
 on_line_breaking1_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
+
+void
+on_replace_spaces_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);

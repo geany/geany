@@ -2148,3 +2148,13 @@ on_line_breaking1_activate             (GtkMenuItem     *menuitem,
 
 	doc->line_breaking = !doc->line_breaking;
 }
+
+void
+on_replace_spaces_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	GeanyDocument *doc = document_get_current();
+
+	editor_replace_spaces(doc);
+}
+

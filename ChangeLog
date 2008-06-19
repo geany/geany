@@ -2,6 +2,9 @@
 
  * src/dialogs.c, src/dialogs.c:
    Add dialogs_show_input_numeric().
+ * geany.glade, src/callbacks.c, src/callbacks.h, src/editor.c,
+   src/editor.h, src/interface.c:
+   Add "Replace spaces by tabs".
 
 
 2008-06-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

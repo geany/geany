@@ -189,6 +189,8 @@ void editor_unfold_all(GeanyDocument *doc);
 
 void editor_replace_tabs(GeanyDocument *doc);
 
+void editor_replace_spaces(GeanyDocument *doc);
+
 void editor_strip_line_trailing_spaces(GeanyDocument *doc, gint line);
 
 void editor_strip_trailing_spaces(GeanyDocument *doc);

@@ -44,6 +44,7 @@
 #include "sciwrappers.h"
 #include "ui_utils.h"
 #include "utils.h"
+#include "dialogs.h"
 #include "symbols.h"
 
 
@@ -3136,11 +3137,59 @@ void editor_replace_tabs(GeanyDocument *doc)
 		sci_target_start(doc->sci, search_pos);
 		sci_target_end(doc->sci, search_pos + 1);
 		sci_target_replace(doc->sci, tab_str, FALSE);
-		ttf.chrg.cpMin = search_pos + current_tab_true_length - 1;	/* next search starts after replacement */
-		ttf.chrg.cpMax += current_tab_true_length - 1;	/* update end of range now text has changed */
+		/* next search starts after replacement */
+		ttf.chrg.cpMin = search_pos + current_tab_true_length - 1;
+		/* update end of range now text has changed */
+		ttf.chrg.cpMax += current_tab_true_length - 1;
 		g_free(tab_str);
 	}
 	sci_end_undo_action(doc->sci);
+}
+
+
+/* Replaces all occurrences all spaces of the length of a given tab_width. */
+void editor_replace_spaces(GeanyDocument *doc)
+{
+	gint search_pos;
+	static gdouble tab_len_f = -1.0; /* keep the last used value */
+	gint tab_len;
+	struct TextToFind ttf;
+
+	if (doc == NULL)
+		return;
+
+	if (tab_len_f < 0.0)
+		tab_len_f = sci_get_tab_width(doc->sci);
+
+	if (! dialogs_show_input_numeric(
+		_("Enter Tab Width"),
+		_("Enter the amount of spaces which should be replaced by a tab character."),
+		&tab_len_f, 1, 100, 1))
+	{
+		return;
+	}
+	tab_len = (gint) tab_len_f;
+
+	sci_start_undo_action(doc->sci);
+	ttf.chrg.cpMin = 0;
+	ttf.chrg.cpMax = sci_get_length(doc->sci);
+	ttf.lpstrText = g_strnfill(tab_len, ' ');
+
+	while (TRUE)
+	{
+		search_pos = sci_find_text(doc->sci, SCFIND_MATCHCASE, &ttf);
+		if (search_pos == -1)
+			break;
+
+		sci_target_start(doc->sci, search_pos);
+		sci_target_end(doc->sci, search_pos + tab_len);
+		sci_target_replace(doc->sci, "\t", FALSE);
+		ttf.chrg.cpMin = search_pos;
+		/* update end of range now text has changed */
+		ttf.chrg.cpMax -= tab_len - 1;
+	}
+	sci_end_undo_action(doc->sci);
+	g_free(ttf.lpstrText);
 }
 
 
