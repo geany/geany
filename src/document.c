@@ -443,6 +443,8 @@ static ScintillaObject *create_new_sci(GeanyDocument *doc)
 	/* signal for the popup menu */
 	g_signal_connect(G_OBJECT(sci), "button-press-event",
 					G_CALLBACK(on_editor_button_press_event), doc);
+	g_signal_connect(G_OBJECT(sci), "scroll-event",
+					G_CALLBACK(on_editor_scroll_event), doc);
 	g_signal_connect(G_OBJECT(sci), "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
 
 	return sci;

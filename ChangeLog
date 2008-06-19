@@ -17,6 +17,9 @@
  * src/editor.c:
    Allow symbol auto completion in embedded JavaScript in HTML files
    (closes #1997409).
+ * src/document.c, src/editor.c, src/editor.h:
+   Allow scrolling page by page by holding down the Shift or Alt key
+   (closes #1995405).
 
 
 2008-06-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

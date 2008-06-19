@@ -205,4 +205,6 @@ void editor_set_line_wrapping(GeanyDocument *doc, gboolean wrap);
 
 gboolean editor_goto_pos(GeanyDocument *doc, gint pos, gboolean mark);
 
+gboolean on_editor_scroll_event(GtkWidget *widget, GdkEventScroll *event, gpointer user_data);
+
 #endif
