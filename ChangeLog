@@ -20,6 +20,9 @@
  * src/document.c, src/editor.c, src/editor.h:
    Allow scrolling page by page by holding down the Shift or Alt key
    (closes #1995405).
+ * src/msgwindow.c:
+   Add "Copy All" to the popup menu of the Status, Compiler and Messages
+   treeviews to copy all items to the clipboard.
 
 
 2008-06-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

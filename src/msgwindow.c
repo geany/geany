@@ -412,6 +412,60 @@ on_compiler_treeview_copy_activate     (GtkMenuItem     *menuitem,
 }
 
 
+static void on_compiler_treeview_copy_all_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	GtkListStore *store = msgwindow.store_compiler;
+	GtkTreeIter iter;
+	GString *str = g_string_new("");
+	gint str_idx = 1;
+	gboolean valid;
+
+	switch (GPOINTER_TO_INT(user_data))
+	{
+		case MSG_STATUS:
+		store = msgwindow.store_status;
+		str_idx = 0;
+		break;
+
+		case MSG_COMPILER:
+		/* default values */
+		break;
+
+		case MSG_MESSAGE:
+		store = msgwindow.store_msg;
+		str_idx = 3;
+		break;
+	}
+
+	/* walk through the list and copy every line into a string */
+	valid = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(store), &iter);
+	while (valid)
+	{
+		gchar *line;
+
+		gtk_tree_model_get(GTK_TREE_MODEL(store), &iter, str_idx, &line, -1);
+		if (NZV(line))
+		{
+			g_string_append(str, line);
+			g_string_append_c(str, '\n');
+		}
+		g_free(line);
+
+		valid = gtk_tree_model_iter_next(GTK_TREE_MODEL(store), &iter);
+	}
+
+	/* copy the string into the clipboard */
+	if (str->len > 0)
+	{
+		gtk_clipboard_set_text(
+			gtk_clipboard_get(gdk_atom_intern("CLIPBOARD", FALSE)),
+			str->str,
+			str->len);
+	}
+	g_string_free(str, TRUE);
+}
+
+
 static void
 on_hide_message_window                 (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
@@ -422,7 +476,7 @@ on_hide_message_window                 (GtkMenuItem     *menuitem,
 
 static GtkWidget *create_message_popup_menu(gint type)
 {
-	GtkWidget *message_popup_menu, *clear, *copy;
+	GtkWidget *message_popup_menu, *clear, *copy, *image;
 
 	message_popup_menu = gtk_menu_new();
 
@@ -437,6 +491,15 @@ static GtkWidget *create_message_popup_menu(gint type)
 	gtk_container_add(GTK_CONTAINER(message_popup_menu), copy);
 	g_signal_connect((gpointer)copy, "activate",
 		G_CALLBACK(on_compiler_treeview_copy_activate), GINT_TO_POINTER(type));
+
+	copy = gtk_image_menu_item_new_with_mnemonic(_("Copy _All"));
+	gtk_widget_show(copy);
+	gtk_container_add(GTK_CONTAINER(message_popup_menu), copy);
+	image = gtk_image_new_from_stock("gtk-copy", GTK_ICON_SIZE_MENU);
+	gtk_widget_show(image);
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(copy), image);
+	g_signal_connect((gpointer)copy, "activate",
+		G_CALLBACK(on_compiler_treeview_copy_all_activate), GINT_TO_POINTER(type));
 
 	msgwin_menu_add_common_items(GTK_MENU(message_popup_menu));
 
