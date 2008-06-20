@@ -88,15 +88,8 @@ typedef struct
 } undo_action;
 
 
-/* Whether to colourise the document straight after styling settings are changed.
- * (e.g. when filetype is set or typenames are updated) */
-static gboolean delay_colourise = FALSE;
-
-
 static void document_undo_clear(GeanyDocument *doc);
 static void document_redo_add(GeanyDocument *doc, guint type, gpointer data);
-
-static gboolean update_type_keywords(ScintillaObject *sci, gint lang);
 
 
 /* ignore the case of filenames and paths under WIN32, causes errors if not */
@@ -409,6 +402,44 @@ static void setup_sci_keys(ScintillaObject *sci)
 }
 
 
+static void queue_colourise(GeanyDocument *doc)
+{
+	/* Colourise the editor before it is next drawn */
+	DOCUMENT(doc)->colourise_needed = TRUE;
+
+	/* If the editor doesn't need drawing (e.g. after saving the current
+	 * document), we need to force a redraw, so the expose event is triggered.
+	 * This ensures we don't start colourising before all documents are opened/saved,
+	 * only once the editor is drawn. */
+	gtk_widget_queue_draw(GTK_WIDGET(doc->sci));
+}
+
+
+static void editor_colourise(ScintillaObject *sci)
+{
+	sci_colourise(sci, 0, -1);
+
+	/* now that the current document is colourised, fold points are now accurate,
+	 * so force an update of the current function/tag. */
+	utils_get_current_function(NULL, NULL);
+	ui_update_statusbar(NULL, -1);
+}
+
+
+static gboolean on_editor_expose_event(GtkWidget *widget, GdkEventExpose *event,
+		gpointer user_data)
+{
+	GeanyDocument *doc = user_data;
+
+	if (DOCUMENT(doc)->colourise_needed)
+	{
+		editor_colourise(doc->sci);
+		DOCUMENT(doc)->colourise_needed = FALSE;
+	}
+	return FALSE;	/* propagate event */
+}
+
+
 /* Create new editor (the scintilla widget) */
 static ScintillaObject *create_new_sci(GeanyDocument *doc)
 {
@@ -446,6 +477,8 @@ static ScintillaObject *create_new_sci(GeanyDocument *doc)
 	g_signal_connect(G_OBJECT(sci), "scroll-event",
 					G_CALLBACK(on_editor_scroll_event), doc);
 	g_signal_connect(G_OBJECT(sci), "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
+	g_signal_connect(G_OBJECT(sci), "expose-event",
+					G_CALLBACK(on_editor_expose_event), doc);
 
 	return sci;
 }
@@ -1113,7 +1146,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 
 		/* "the" SCI signal (connect after initial setup(i.e. adding text)) */
 		g_signal_connect((GtkWidget*) doc->sci, "sci-notify",
-					G_CALLBACK(on_editor_notification), doc);
+			G_CALLBACK(on_editor_notification), doc);
 
 		use_ft = (ft != NULL) ? ft : filetypes_detect_from_file(doc);
 	}
@@ -1121,9 +1154,9 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 	{	/* reloading */
 		document_undo_clear(doc);
 
-		/* Unset the filetype so the document gets colourised by document_set_filetype().
+		/* Ensure the document gets colourised.
 		 * (The text could have changed without typenames changing.) */
-		doc->file_type = NULL;
+		queue_colourise(doc);
 		use_ft = ft;
 	}
 	/* update taglist, typedef keywords and build menu if necessary */
@@ -2075,11 +2108,12 @@ static gboolean get_project_typenames(const GString **types, gint lang)
  * If sci is not NULL, then if sci supports typenames, project typenames are updated
  * if necessary, and typename keywords are set for sci.
  * Returns: TRUE if any scintilla type keywords were updated. */
-static gboolean update_type_keywords(ScintillaObject *sci, gint lang)
+static gboolean update_type_keywords(GeanyDocument *doc, gint lang)
 {
 	gboolean ret = FALSE;
 	guint n;
 	const GString *s;
+	ScintillaObject *sci = doc ? doc->sci : NULL;
 
 	if (sci != NULL && editor_lexer_get_type_keyword_idx(sci_get_lexer(sci)) == -1)
 		return FALSE;
@@ -2091,10 +2125,7 @@ static gboolean update_type_keywords(ScintillaObject *sci, gint lang)
 			gint keyword_idx = editor_lexer_get_type_keyword_idx(sci_get_lexer(sci));
 
 			sci_set_keywords(sci, keyword_idx, s->str);
-			if (! delay_colourise)
-			{
-				sci_colourise(sci, 0, -1);
-			}
+			queue_colourise(doc);
 		}
 		return FALSE;
 	}
@@ -2111,10 +2142,7 @@ static gboolean update_type_keywords(ScintillaObject *sci, gint lang)
 			if (keyword_idx > 0)
 			{
 				sci_set_keywords(wid, keyword_idx, s->str);
-				if (! delay_colourise)
-				{
-					sci_colourise(wid, 0, -1);
-				}
+				queue_colourise(documents[n]);
 				ret = TRUE;
 			}
 		}
@@ -2128,7 +2156,6 @@ static gboolean update_type_keywords(ScintillaObject *sci, gint lang)
  * @param type The filetype. */
 void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type)
 {
-	gboolean colourise = FALSE;
 	gboolean ft_changed;
 
 	if (type == NULL || doc == NULL)
@@ -2152,22 +2179,13 @@ void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type)
 		}
 		highlighting_set_styles(doc->sci, type->id);
 		build_menu_update(doc);
-		colourise = TRUE;
+		queue_colourise(doc);
 	}
 
 	document_update_tag_list(doc, TRUE);
-	if (! delay_colourise)
-	{
-		/* Check if project typename keywords have changed.
-		 * If they haven't, we may need to colourise the document. */
-		if (! update_type_keywords(doc->sci, type->lang) && colourise)
-			sci_colourise(doc->sci, 0, -1);
-	}
-	if (ft_changed)
-	{
-		utils_get_current_function(NULL, NULL);
-		ui_update_statusbar(doc, -1);
-	}
+
+	/* Update session typename keywords. */
+	update_type_keywords(doc, type->lang);
 }
 
 
@@ -2475,72 +2493,15 @@ GeanyDocument *doc_at(gint idx)
 #endif
 
 
-static GArray *doc_indexes = NULL;
-
-/* Cache the current document indexes and prevent any colourising until
- * document_colourise_new() is called. */
 void document_delay_colourise()
 {
-	gint n;
-
-	g_return_if_fail(delay_colourise == FALSE);
-	g_return_if_fail(doc_indexes == NULL);
-
-	/* make an array containing all the current document indexes */
-	doc_indexes = g_array_new(FALSE, FALSE, sizeof(gint));
-	for (n = 0; n < (gint) documents_array->len; n++)
-	{
-		if (documents[n]->is_valid)
-			g_array_append_val(doc_indexes, n);
-	}
-	delay_colourise = TRUE;
+	/* TODO: remove */
 }
 
 
-/* Colourise only newly opened documents and existing documents whose project typenames
- * keywords have changed.
- * document_delay_colourise() should already have been called. */
 void document_colourise_new()
 {
-	guint n, i;
-	/* A bitset representing which docs need [re]colourising.
-	 * (use gint8 to save memory because gboolean = gint) */
-	gint8 *doc_set = g_newa(gint8, documents_array->len);
-	gboolean recolour = FALSE;	/* whether to recolourise existing typenames */
-
-	g_return_if_fail(delay_colourise == TRUE);
-	g_return_if_fail(doc_indexes != NULL);
-
-	/* first assume recolourising all docs */
-	memset(doc_set, TRUE, documents_array->len * sizeof(gint8));
-
-	/* remove existing docs from the set if they don't use typenames or typenames haven't changed */
-	recolour = update_type_keywords(NULL, -2);
-	for (i = 0; i < doc_indexes->len; i++)
-	{
-		ScintillaObject *sci;
-
-		n = g_array_index(doc_indexes, gint, i);
-		sci = documents[n]->sci;
-		if (! recolour || (sci && editor_lexer_get_type_keyword_idx(sci_get_lexer(sci)) == -1))
-		{
-			doc_set[n] = FALSE;
-		}
-	}
-	/* colourise all in the doc_set */
-	for (n = 0; n < documents_array->len; n++)
-	{
-		if (doc_set[n] && documents[n]->is_valid)
-			sci_colourise(documents[n]->sci, 0, -1);
-	}
-	delay_colourise = FALSE;
-	g_array_free(doc_indexes, TRUE);
-	doc_indexes = NULL;
-
-	/* now that the current document is colourised, fold points are now accurate,
-	 * so force an update of the current function/tag. */
-	utils_get_current_function(NULL, NULL);
-	ui_update_statusbar(NULL, -1);
+	/* TODO: remove */
 }
 
 

@@ -67,6 +67,7 @@ typedef struct Document
 	GTrashStack		*redo_actions;
 	/* Used so Undo/Redo works for encoding changes. */
 	FileEncoding	 saved_encoding;
+	gboolean		colourise_needed;
 }
 Document;
 
