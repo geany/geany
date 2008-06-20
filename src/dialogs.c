@@ -622,7 +622,7 @@ void dialogs_show_msgbox(gint type, const gchar *text, ...)
 #ifndef G_OS_WIN32
 	GtkWidget *dialog;
 #endif
-	gchar *string = g_malloc(512);
+	gchar string[512];
 	va_list args;
 
 	va_start(args, text);
@@ -638,7 +638,6 @@ void dialogs_show_msgbox(gint type, const gchar *text, ...)
 	gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
 #endif
-	g_free(string);
 }
 
 
@@ -1403,14 +1402,13 @@ static gboolean show_question(GtkWidget *parent, const gchar *yes_btn, const gch
 gboolean dialogs_show_question(const gchar *text, ...)
 {
 	gboolean ret = FALSE;
-	gchar *string = g_malloc(512);
+	gchar string[512];
 	va_list args;
 
 	va_start(args, text);
 	g_vsnprintf(string, 511, text, args);
 	va_end(args);
 	ret = show_question(main_widgets.window, GTK_STOCK_YES, GTK_STOCK_NO, string, NULL);
-	g_free(string);
 	return ret;
 }
 
@@ -1421,14 +1419,13 @@ gboolean dialogs_show_question_full(GtkWidget *parent, const gchar *yes_btn, con
 	const gchar *extra_text, const gchar *main_text, ...)
 {
 	gboolean ret = FALSE;
-	gchar *string = g_malloc(512);
+	gchar string[512];
 	va_list args;
 
 	va_start(args, main_text);
 	g_vsnprintf(string, 511, main_text, args);
 	va_end(args);
 	ret = show_question(parent, yes_btn, no_btn, string, extra_text);
-	g_free(string);
 	return ret;
 }
 
