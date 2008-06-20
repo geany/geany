@@ -235,8 +235,4 @@ void document_undo_add(GeanyDocument *doc, guint type, gpointer data);
 
 GdkColor *document_get_status_color(GeanyDocument *doc);
 
-void document_delay_colourise(void);
-
-void document_colourise_new(void);
-
 #endif

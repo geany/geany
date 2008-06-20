@@ -703,14 +703,6 @@ GeanyDocument *document_new_file(const gchar *filename, GeanyFiletype *ft, const
  *  Open a %document specified by @a locale_filename.
  *  After all, the "document-open" signal is emitted for plugins.
  *
- *  When opening more than one file, either:
- *  -# Use document_open_files().
- *  -# Call document_delay_colourise() before document_open_file() and
- *     document_colourise_new() after opening all files.
- *
- *  This avoids unnecessary recolourising, saving significant processing when a lot of files
- *  are open of a %filetype that supports user typenames, e.g. C.
- *
  *  @param locale_filename The filename of the %document to load, in locale encoding.
  *  @param readonly Whether to open the %document in read-only mode.
  *  @param ft The %filetype for the %document or @c NULL to auto-detect the %filetype.
@@ -1033,15 +1025,7 @@ static void set_indentation(GeanyDocument *doc)
  * To reload a file, set the doc for the document to be reloaded; filename should be NULL.
  * pos is the cursor position, which can be overridden by --line and --column.
  * forced_enc can be NULL to detect the file encoding.
- * Returns: doc of the opened file or NULL if an error occurred.
- *
- * When opening more than one file, either:
- * 1. Use document_open_files().
- * 2. Call document_delay_colourise() before document_open_file() and
- *    document_colourise_new() after opening all files.
- *
- * This avoids unnecessary recolourising, saving significant processing when a lot of files
- * are open of a filetype that supports user typenames, e.g. C. */
+ * Returns: doc of the opened file or NULL if an error occurred. */
 GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename, gint pos,
 		gboolean readonly, GeanyFiletype *ft, const gchar *forced_enc)
 {
@@ -1215,8 +1199,6 @@ void document_open_file_list(const gchar *data, gssize length)
 		default: list = g_strsplit(data, "\n", 0);
 	}
 
-	document_delay_colourise();
-
 	for (i = 0; ; i++)
 	{
 		if (list[i] == NULL) break;
@@ -1225,15 +1207,13 @@ void document_open_file_list(const gchar *data, gssize length)
 		document_open_file(filename, FALSE, NULL, NULL);
 		g_free(filename);
 	}
-	document_colourise_new();
 
 	g_strfreev(list);
 }
 
 
 /**
- *  Opens each file in the list @a filenames, ensuring the newly opened documents and
- *  existing documents (if necessary) are only colourised once.
+ *  Opens each file in the list @a filenames.
  *  Internally, document_open_file() is called for every list item.
  *
  *  @param filenames A list of filenames to load, in locale encoding.
@@ -1246,13 +1226,10 @@ void document_open_files(const GSList *filenames, gboolean readonly, GeanyFilety
 {
 	const GSList *item;
 
-	document_delay_colourise();
-
 	for (item = filenames; item != NULL; item = g_slist_next(item))
 	{
 		document_open_file(item->data, readonly, ft, forced_enc);
 	}
-	document_colourise_new();
 }
 
 
@@ -2493,21 +2470,9 @@ GeanyDocument *doc_at(gint idx)
 #endif
 
 
-void document_delay_colourise()
-{
-	/* TODO: remove */
-}
-
-
-void document_colourise_new()
-{
-	/* TODO: remove */
-}
-
-
+/* create a new file and copy file content and properties */
 GeanyDocument *document_clone(GeanyDocument *old_doc, const gchar *utf8_filename)
 {
-	/* create a new file and copy file content and properties */
 	gint len;
 	gchar *text;
 	GeanyDocument *doc;

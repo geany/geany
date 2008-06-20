@@ -489,8 +489,6 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 	{
 		if (strncmp(buf, "open", 4) == 0)
 		{
-			document_delay_colourise();
-
 			while (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && *buf != '.')
 			{
 				g_strstrip(buf); /* remove \n char */
@@ -508,7 +506,6 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 						geany_debug("got data from socket, but it does not look like a filename");
 				}
 			}
-			document_colourise_new();
 
 #ifdef G_OS_WIN32
 			/* we need to bring the main window up with gtk_window_present() but this is not

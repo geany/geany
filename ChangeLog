@@ -7,6 +7,11 @@
    document_colourise_all() functions redundant (they'll be removed in
    the next commit).
    Note: I'll move on_editor_expose_event() to editor.c.
+ * src/dialogs.c:
+   Use stack buffers for g_vsnprintf() instead of heap allocation.
+ * src/callbacks.c, src/keyfile.c, src/document.c, src/document.h,
+   src/main.c, src/socket.c:
+   Remove document_delay_colourise(), document_colourise_all().
 
 
 2008-06-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

@@ -875,8 +875,6 @@ void configuration_open_files(void)
 	/* necessary to set it to TRUE for project session support */
 	main_status.opening_session_files = TRUE;
 
-	document_delay_colourise();
-
 	i = file_prefs.tab_order_ltr ? 0 : (session_files->len - 1);
 	while (TRUE)
 	{
@@ -900,7 +898,6 @@ void configuration_open_files(void)
 			if (i < 0) break;
 		}
 	}
-	document_colourise_new();
 
 	g_ptr_array_free(session_files, TRUE);
 	session_files = NULL;

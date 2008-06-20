@@ -204,8 +204,6 @@ on_save_all1_activate                  (GtkMenuItem     *menuitem,
 	gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 	GeanyDocument *doc, *cur_doc = document_get_current();
 
-	document_delay_colourise();	/* avoid recolourising all C files after each save */
-
 	for (i = 0; i < max; i++)
 	{
 		doc = document_get_from_page(i);
@@ -220,7 +218,6 @@ on_save_all1_activate                  (GtkMenuItem     *menuitem,
 		else
 			document_save_file(doc, FALSE);
 	}
-	document_colourise_new();
 	treeviews_update_tag_list(cur_doc, TRUE);
 	ui_set_window_title(cur_doc);
 }
