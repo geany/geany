@@ -110,8 +110,7 @@ extern EditorInfo editor_info;
 
 
 
-gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *event,
-	gpointer user_data);
+ScintillaObject *editor_create_new_sci(GeanyDocument *doc);
 
 void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer user_data);
 
@@ -204,7 +203,5 @@ void editor_set_use_tabs(GeanyDocument *doc, gboolean use_tabs);
 void editor_set_line_wrapping(GeanyDocument *doc, gboolean wrap);
 
 gboolean editor_goto_pos(GeanyDocument *doc, gint pos, gboolean mark);
-
-gboolean on_editor_scroll_event(GtkWidget *widget, GdkEventScroll *event, gpointer user_data);
 
 #endif

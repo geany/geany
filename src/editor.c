@@ -46,6 +46,7 @@
 #include "utils.h"
 #include "dialogs.h"
 #include "symbols.h"
+#include "callbacks.h"
 
 
 /* holds word under the mouse or keyboard cursor */
@@ -79,7 +80,7 @@ static void editor_auto_table(GeanyDocument *doc, gint pos);
 
 
 /* calls the edit popup menu in the editor */
-gboolean
+static gboolean
 on_editor_button_press_event           (GtkWidget *widget,
                                         GdkEventButton *event,
                                         gpointer user_data)
@@ -3325,7 +3326,8 @@ gboolean editor_goto_pos(GeanyDocument *doc, gint pos, gboolean mark)
 }
 
 
-gboolean on_editor_scroll_event(GtkWidget *widget, GdkEventScroll *event, gpointer user_data)
+static gboolean
+on_editor_scroll_event(GtkWidget *widget, GdkEventScroll *event, gpointer user_data)
 {
 	/* Handle scroll events if Shift or Alt is pressed and scroll whole pages instead of a
 	 * few lines only, maybe this could/should be done in Scintilla directly */
@@ -3337,6 +3339,106 @@ gboolean on_editor_scroll_event(GtkWidget *widget, GdkEventScroll *event, gpoint
 	}
 
 	return FALSE; /* let Scintilla handle all other cases */
+}
+
+
+static void editor_colourise(ScintillaObject *sci)
+{
+	sci_colourise(sci, 0, -1);
+
+	/* now that the current document is colourised, fold points are now accurate,
+	 * so force an update of the current function/tag. */
+	utils_get_current_function(NULL, NULL);
+	ui_update_statusbar(NULL, -1);
+}
+
+
+static gboolean on_editor_expose_event(GtkWidget *widget, GdkEventExpose *event,
+		gpointer user_data)
+{
+	GeanyDocument *doc = user_data;
+
+	if (DOCUMENT(doc)->colourise_needed)
+	{
+		editor_colourise(doc->sci);
+		DOCUMENT(doc)->colourise_needed = FALSE;
+	}
+	return FALSE;	/* propagate event */
+}
+
+
+static void setup_sci_keys(ScintillaObject *sci)
+{
+	/* disable some Scintilla keybindings to be able to redefine them cleanly */
+	sci_clear_cmdkey(sci, 'A' | (SCMOD_CTRL << 16)); /* select all */
+	sci_clear_cmdkey(sci, 'D' | (SCMOD_CTRL << 16)); /* duplicate */
+	sci_clear_cmdkey(sci, 'T' | (SCMOD_CTRL << 16)); /* line transpose */
+	sci_clear_cmdkey(sci, 'T' | (SCMOD_CTRL << 16) | (SCMOD_SHIFT << 16)); /* line copy */
+	sci_clear_cmdkey(sci, 'L' | (SCMOD_CTRL << 16)); /* line cut */
+	sci_clear_cmdkey(sci, 'L' | (SCMOD_CTRL << 16) | (SCMOD_SHIFT << 16)); /* line delete */
+	sci_clear_cmdkey(sci, SCK_UP | (SCMOD_CTRL << 16)); /* scroll line up */
+	sci_clear_cmdkey(sci, SCK_DOWN | (SCMOD_CTRL << 16)); /* scroll line down */
+
+	if (editor_prefs.use_gtk_word_boundaries)
+	{
+		/* use GtkEntry-like word boundaries */
+		sci_assign_cmdkey(sci, SCK_RIGHT | (SCMOD_CTRL << 16), SCI_WORDRIGHTEND);
+		sci_assign_cmdkey(sci, SCK_RIGHT | (SCMOD_CTRL << 16) | (SCMOD_SHIFT << 16), SCI_WORDRIGHTENDEXTEND);
+		sci_assign_cmdkey(sci, SCK_DELETE | (SCMOD_CTRL << 16), SCI_DELWORDRIGHTEND);
+	}
+	sci_assign_cmdkey(sci, SCK_UP | (SCMOD_ALT << 16), SCI_LINESCROLLUP);
+	sci_assign_cmdkey(sci, SCK_DOWN | (SCMOD_ALT << 16), SCI_LINESCROLLDOWN);
+	sci_assign_cmdkey(sci, SCK_UP | (SCMOD_CTRL << 16), SCI_PARAUP);
+	sci_assign_cmdkey(sci, SCK_UP | (SCMOD_CTRL << 16) | (SCMOD_SHIFT << 16), SCI_PARAUPEXTEND);
+	sci_assign_cmdkey(sci, SCK_DOWN | (SCMOD_CTRL << 16), SCI_PARADOWN);
+	sci_assign_cmdkey(sci, SCK_DOWN | (SCMOD_CTRL << 16) | (SCMOD_SHIFT << 16), SCI_PARADOWNEXTEND);
+
+	sci_clear_cmdkey(sci, SCK_BACK | (SCMOD_ALT << 16)); /* clear Alt-Backspace (Undo) */
+}
+
+
+/* Create new editor widget (scintilla).
+ * @note The @c "sci-notify" signal is connected separately. */
+ScintillaObject *editor_create_new_sci(GeanyDocument *doc)
+{
+	ScintillaObject	*sci;
+
+	sci = SCINTILLA(scintilla_new());
+	scintilla_set_id(sci, doc->index);
+
+	gtk_widget_show(GTK_WIDGET(sci));
+
+	sci_set_codepage(sci, SC_CP_UTF8);
+	/*SSM(sci, SCI_SETWRAPSTARTINDENT, 4, 0);*/
+	/* disable scintilla provided popup menu */
+	sci_use_popup(sci, FALSE);
+
+	setup_sci_keys(sci);
+
+	sci_set_tab_indents(sci, editor_prefs.use_tab_to_indent);
+	sci_set_symbol_margin(sci, editor_prefs.show_markers_margin);
+	sci_set_lines_wrapped(sci, editor_prefs.line_wrapping);
+	sci_set_scrollbar_mode(sci, editor_prefs.show_scrollbars);
+	sci_set_caret_policy_x(sci, CARET_JUMPS | CARET_EVEN, 0);
+	/*sci_set_caret_policy_y(sci, CARET_JUMPS | CARET_EVEN, 0);*/
+	SSM(sci, SCI_AUTOCSETSEPARATOR, '\n', 0);
+	/* (dis)allow scrolling past end of document */
+	SSM(sci, SCI_SETENDATLASTLINE, editor_prefs.scroll_stop_at_last_line, 0);
+	SSM(sci, SCI_SETSCROLLWIDTHTRACKING, 1, 0);
+
+	/* signal for insert-key(works without too, but to update the right status bar) */
+	/*g_signal_connect((GtkWidget*) sci, "key-press-event",
+					 G_CALLBACK(keybindings_got_event), GINT_TO_POINTER(new_idx));*/
+	/* signal for the popup menu */
+	g_signal_connect(G_OBJECT(sci), "button-press-event",
+					G_CALLBACK(on_editor_button_press_event), doc);
+	g_signal_connect(G_OBJECT(sci), "scroll-event",
+					G_CALLBACK(on_editor_scroll_event), doc);
+	g_signal_connect(G_OBJECT(sci), "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
+	g_signal_connect(G_OBJECT(sci), "expose-event",
+					G_CALLBACK(on_editor_expose_event), doc);
+
+	return sci;
 }
 
 
