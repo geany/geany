@@ -381,8 +381,6 @@ gboolean win32_show_file_dialog(gboolean file_open, const gchar *initial_dir)
 		}
 		else
 		{	/* open multiple files */
-			document_delay_colourise();
-
 			for (; ;)
 			{
 				if (! fname[x])
@@ -399,7 +397,6 @@ gboolean win32_show_file_dialog(gboolean file_open, const gchar *initial_dir)
 				}
 				x++;
 			}
-			document_colourise_new();
 		}
 	}
 	else
