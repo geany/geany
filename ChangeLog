@@ -2,6 +2,10 @@
 
  * src/keybindings.c:
    Make keyboard shortcuts dialog non-modal (#1999384).
+ * src/interface.c, doc/geany.txt, doc/geany.html, geany.glade:
+   Split Preferences dialog Editor tab into a sub-notebook, with
+   Features, Completions and Display pages. This also reduces the
+   minimum height of the Preferences dialog.
 
 
 2008-06-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -583,7 +583,7 @@ Indentation
 ^^^^^^^^^^^
 
 Geany allows each document to indent either with a tab character
-or multiple spaces. The default indent mode is set in the `Editor
+or multiple spaces. The default indent mode is set in the `Editor Features
 tab in preferences dialog`_. But this can be overridden using either
 the *Document->Indent Type* menu, or by using the *Detect from file*
 indentation preference. When enabled, this scans each file that is opened
@@ -1425,55 +1425,8 @@ Icon size
     Select the size of the icons you see (large or small).
 
 
-Display tab in preferences dialog
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This is for visual elements displayed in the editor window.
-
-.. image:: ./images/pref_dialog_display.png
-
-
-Display
-```````
-
-Show indendation guides
-    Show vertical lines to help show how much leading indentation there
-    is on each line.
-
-Show whitespaces
-    Mark all tabs with an arrow "-->" symbol and spaces with dots to
-    show which kinds of whitespace are used.
-
-Show line endings
-    Displays a symbol everywhere that a carriage return or line feed
-    is present.
-
-Long line marker
-````````````````
-
-The long line marker helps to indicate overly-long lines, or as a hint
-to the user for when to break the line.
-
-Type
-    Line
-        Show a thin vertical line in the editor window at the given column
-        position.
-    Background
-        Change the background color of characters after the given column
-        position to the color set below. (This is recommended over the
-        *Line* setting if you use proportional fonts).
-    Disabled
-        Don't mark long lines at all.
-
-Long line marker
-    Set this value to a value greater than zero to specify the column
-    where it should appear.
-
-Long line marker color
-    Set the color of the long line marker.
-
-Editor tab in preferences dialog
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Editor Features tab in preferences dialog
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. image:: ./images/pref_dialog_edit.png
 
@@ -1536,8 +1489,9 @@ Line breaking column
     The editor column number to insert a newline at when Line Breaking
     is enabled for the current document.
 
-Completions
-```````````
+
+Editor Completions tab in preferences dialog
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Snippet Completion
     Whether to replace special keywords after typing Tab into a
@@ -1574,6 +1528,54 @@ Characters to type for completion
 
 Rows of symbol completion list
     The maximum number of symbols to show in the autocompletion window.
+
+
+Editor Display tab in preferences dialog
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This is for visual elements displayed in the editor window.
+
+.. image:: ./images/pref_dialog_display.png
+
+
+Display
+```````
+
+Show indendation guides
+    Show vertical lines to help show how much leading indentation there
+    is on each line.
+
+Show whitespaces
+    Mark all tabs with an arrow "-->" symbol and spaces with dots to
+    show which kinds of whitespace are used.
+
+Show line endings
+    Displays a symbol everywhere that a carriage return or line feed
+    is present.
+
+Long line marker
+````````````````
+
+The long line marker helps to indicate overly-long lines, or as a hint
+to the user for when to break the line.
+
+Type
+    Line
+        Show a thin vertical line in the editor window at the given column
+        position.
+    Background
+        Change the background color of characters after the given column
+        position to the color set below. (This is recommended over the
+        *Line* setting if you use proportional fonts).
+    Disabled
+        Don't mark long lines at all.
+
+Long line marker
+    Set this value to a value greater than zero to specify the column
+    where it should appear.
+
+Long line marker color
+    Set the color of the long line marker.
 
 
 Files tab in preferences dialog

@@ -3,10 +3,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.4.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.4: http://docutils.sourceforge.net/" />
 <title>Geany</title>
 <meta name="authors" content="Enrico Tröger  Nick Treleaven  Frank Lanitz" />
-<meta name="date" content="2008-06-08" />
+<meta name="date" content="2008-06-19" />
 <style type="text/css">
 
 /*
@@ -139,7 +139,7 @@ Stylesheet for Geany's documentation based on a version of John Gabriele.
 <br />Nick Treleaven
 <br />Frank Lanitz</td></tr>
 <tr><th class="docinfo-name">Date:</th>
-<td>2008-06-08</td></tr>
+<td>2008-06-19</td></tr>
 <tr><th class="docinfo-name">Version:</th>
 <td>0.15</td></tr>
 </tbody>
@@ -258,15 +258,15 @@ of this program, and also in the chapter <a class="reference" href="#gnu-general
 <li><a class="reference" href="#appearance" id="id77" name="id77">Appearance</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#display-tab-in-preferences-dialog" id="id78" name="id78">Display tab in preferences dialog</a><ul>
-<li><a class="reference" href="#display" id="id79" name="id79">Display</a></li>
-<li><a class="reference" href="#long-line-marker" id="id80" name="id80">Long line marker</a></li>
+<li><a class="reference" href="#editor-features-tab-in-preferences-dialog" id="id78" name="id78">Editor Features tab in preferences dialog</a><ul>
+<li><a class="reference" href="#indentation-group" id="id79" name="id79">Indentation group</a></li>
+<li><a class="reference" href="#features" id="id80" name="id80">Features</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#editor-tab-in-preferences-dialog" id="id81" name="id81">Editor tab in preferences dialog</a><ul>
-<li><a class="reference" href="#indentation-group" id="id82" name="id82">Indentation group</a></li>
-<li><a class="reference" href="#features" id="id83" name="id83">Features</a></li>
-<li><a class="reference" href="#completions" id="id84" name="id84">Completions</a></li>
+<li><a class="reference" href="#editor-completions-tab-in-preferences-dialog" id="id81" name="id81">Editor Completions tab in preferences dialog</a></li>
+<li><a class="reference" href="#editor-display-tab-in-preferences-dialog" id="id82" name="id82">Editor Display tab in preferences dialog</a><ul>
+<li><a class="reference" href="#display" id="id83" name="id83">Display</a></li>
+<li><a class="reference" href="#long-line-marker" id="id84" name="id84">Long line marker</a></li>
 </ul>
 </li>
 <li><a class="reference" href="#files-tab-in-preferences-dialog" id="id85" name="id85">Files tab in preferences dialog</a><ul>
@@ -902,7 +902,7 @@ before the selected text was copied to the new position.</p>
 <div class="section">
 <h3><a class="toc-backref" href="#id33" id="indentation" name="indentation">Indentation</a></h3>
 <p>Geany allows each document to indent either with a tab character
-or multiple spaces. The default indent mode is set in the <a class="reference" href="#editor-tab-in-preferences-dialog">Editor
+or multiple spaces. The default indent mode is set in the <a class="reference" href="#editor-features-tab-in-preferences-dialog">Editor Features
 tab in preferences dialog</a>. But this can be overridden using either
 the <em>Document-&gt;Indent Type</em> menu, or by using the <em>Detect from file</em>
 indentation preference. When enabled, this scans each file that is opened
@@ -1656,54 +1656,10 @@ icons or just text.</dd>
 </div>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id78" id="display-tab-in-preferences-dialog" name="display-tab-in-preferences-dialog">Display tab in preferences dialog</a></h3>
-<p>This is for visual elements displayed in the editor window.</p>
-<img alt="./images/pref_dialog_display.png" src="./images/pref_dialog_display.png" />
-<div class="section">
-<h4><a class="toc-backref" href="#id79" id="display" name="display">Display</a></h4>
-<dl class="docutils">
-<dt>Show indendation guides</dt>
-<dd>Show vertical lines to help show how much leading indentation there
-is on each line.</dd>
-<dt>Show whitespaces</dt>
-<dd>Mark all tabs with an arrow &quot;--&gt;&quot; symbol and spaces with dots to
-show which kinds of whitespace are used.</dd>
-<dt>Show line endings</dt>
-<dd>Displays a symbol everywhere that a carriage return or line feed
-is present.</dd>
-</dl>
-</div>
-<div class="section">
-<h4><a class="toc-backref" href="#id80" id="long-line-marker" name="long-line-marker">Long line marker</a></h4>
-<p>The long line marker helps to indicate overly-long lines, or as a hint
-to the user for when to break the line.</p>
-<dl class="docutils">
-<dt>Type</dt>
-<dd><dl class="first last docutils">
-<dt>Line</dt>
-<dd>Show a thin vertical line in the editor window at the given column
-position.</dd>
-<dt>Background</dt>
-<dd>Change the background color of characters after the given column
-position to the color set below. (This is recommended over the
-<em>Line</em> setting if you use proportional fonts).</dd>
-<dt>Disabled</dt>
-<dd>Don't mark long lines at all.</dd>
-</dl>
-</dd>
-<dt>Long line marker</dt>
-<dd>Set this value to a value greater than zero to specify the column
-where it should appear.</dd>
-<dt>Long line marker color</dt>
-<dd>Set the color of the long line marker.</dd>
-</dl>
-</div>
-</div>
-<div class="section">
-<h3><a class="toc-backref" href="#id81" id="editor-tab-in-preferences-dialog" name="editor-tab-in-preferences-dialog">Editor tab in preferences dialog</a></h3>
+<h3><a class="toc-backref" href="#id78" id="editor-features-tab-in-preferences-dialog" name="editor-features-tab-in-preferences-dialog">Editor Features tab in preferences dialog</a></h3>
 <img alt="./images/pref_dialog_edit.png" src="./images/pref_dialog_edit.png" />
 <div class="section">
-<h4><a class="toc-backref" href="#id82" id="indentation-group" name="indentation-group">Indentation group</a></h4>
+<h4><a class="toc-backref" href="#id79" id="indentation-group" name="indentation-group">Indentation group</a></h4>
 <p>See <a class="reference" href="#indentation">Indentation</a> for more information.</p>
 <dl class="docutils">
 <dt>Type</dt>
@@ -1728,7 +1684,7 @@ the end of the line such as <tt class="docutils literal"><span class="pre">{</sp
 </dl>
 </div>
 <div class="section">
-<h4><a class="toc-backref" href="#id83" id="features" name="features">Features</a></h4>
+<h4><a class="toc-backref" href="#id80" id="features" name="features">Features</a></h4>
 <dl class="docutils">
 <dt>Line wrapping</dt>
 <dd>Show long lines wrapped around to new display lines.</dd>
@@ -1755,8 +1711,9 @@ Enter/Return key.</dd>
 is enabled for the current document.</dd>
 </dl>
 </div>
+</div>
 <div class="section">
-<h4><a class="toc-backref" href="#id84" id="completions" name="completions">Completions</a></h4>
+<h3><a class="toc-backref" href="#id81" id="editor-completions-tab-in-preferences-dialog" name="editor-completions-tab-in-preferences-dialog">Editor Completions tab in preferences dialog</a></h3>
 <dl class="docutils">
 <dt>Snippet Completion</dt>
 <dd>Whether to replace special keywords after typing Tab into a
@@ -1789,6 +1746,49 @@ allow it to be completed for you.</dd>
 displayed.</dd>
 <dt>Rows of symbol completion list</dt>
 <dd>The maximum number of symbols to show in the autocompletion window.</dd>
+</dl>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id82" id="editor-display-tab-in-preferences-dialog" name="editor-display-tab-in-preferences-dialog">Editor Display tab in preferences dialog</a></h3>
+<p>This is for visual elements displayed in the editor window.</p>
+<img alt="./images/pref_dialog_display.png" src="./images/pref_dialog_display.png" />
+<div class="section">
+<h4><a class="toc-backref" href="#id83" id="display" name="display">Display</a></h4>
+<dl class="docutils">
+<dt>Show indendation guides</dt>
+<dd>Show vertical lines to help show how much leading indentation there
+is on each line.</dd>
+<dt>Show whitespaces</dt>
+<dd>Mark all tabs with an arrow &quot;--&gt;&quot; symbol and spaces with dots to
+show which kinds of whitespace are used.</dd>
+<dt>Show line endings</dt>
+<dd>Displays a symbol everywhere that a carriage return or line feed
+is present.</dd>
+</dl>
+</div>
+<div class="section">
+<h4><a class="toc-backref" href="#id84" id="long-line-marker" name="long-line-marker">Long line marker</a></h4>
+<p>The long line marker helps to indicate overly-long lines, or as a hint
+to the user for when to break the line.</p>
+<dl class="docutils">
+<dt>Type</dt>
+<dd><dl class="first last docutils">
+<dt>Line</dt>
+<dd>Show a thin vertical line in the editor window at the given column
+position.</dd>
+<dt>Background</dt>
+<dd>Change the background color of characters after the given column
+position to the color set below. (This is recommended over the
+<em>Line</em> setting if you use proportional fonts).</dd>
+<dt>Disabled</dt>
+<dd>Don't mark long lines at all.</dd>
+</dl>
+</dd>
+<dt>Long line marker</dt>
+<dd>Set this value to a value greater than zero to specify the column
+where it should appear.</dd>
+<dt>Long line marker color</dt>
+<dd>Set the color of the long line marker.</dd>
 </dl>
 </div>
 </div>
@@ -4141,7 +4141,7 @@ USE OR PERFORMANCE OF THIS SOFTWARE.</p>
 <div class="footer">
 <hr class="footer" />
 <a class="reference" href="geany.txt">View document source</a>.
-Generated on: 2008-06-19 15:57 UTC.
+Generated on: 2008-06-24 14:28 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 
 </div>
