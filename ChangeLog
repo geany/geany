@@ -1,3 +1,9 @@
+2008-06-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c:
+   Make keyboard shortcuts dialog non-modal (#1999384).
+
+
 2008-06-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/win32.c:

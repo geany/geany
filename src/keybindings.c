@@ -673,12 +673,12 @@ static void get_shortcut_labels_text(GString **text_names_str, GString **text_ke
 }
 
 
-void keybindings_show_shortcuts(void)
+static GtkWidget *create_dialog(void)
 {
 	GtkWidget *dialog, *hbox, *label1, *label2, *label3, *swin, *vbox;
 	GString *text_names;
 	GString *text_keys;
-	gint height, response;
+	gint height;
 
 	dialog = gtk_dialog_new_with_buttons(_("Keyboard Shortcuts"), GTK_WINDOW(main_widgets.window),
 				GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -720,9 +720,15 @@ void keybindings_show_shortcuts(void)
 
 	gtk_box_pack_start(GTK_BOX(vbox), label3, FALSE, FALSE, 6);
 	gtk_box_pack_start(GTK_BOX(vbox), swin, TRUE, TRUE, 0);
+	return dialog;
+}
 
-	gtk_widget_show_all(dialog);
-	response = gtk_dialog_run(GTK_DIALOG(dialog));
+
+/* non-modal keyboard shortcuts dialog, so user can edit whilst seeing the shortcuts */
+static GtkWidget *key_dialog = NULL;
+
+static void on_dialog_response(GtkWidget *dialog, gint response, gpointer user_data)
+{
 	if (response == GTK_RESPONSE_APPLY)
 	{
 		GtkWidget *wid;
@@ -738,8 +744,19 @@ void keybindings_show_shortcuts(void)
 				gtk_notebook_set_current_page(nb, gtk_notebook_page_num(nb, wid));
 		}
 	}
-
 	gtk_widget_destroy(dialog);
+	key_dialog = NULL;
+}
+
+
+void keybindings_show_shortcuts(void)
+{
+	if (key_dialog)
+		gtk_widget_destroy(key_dialog);	/* in case the key_dialog is still visible */
+
+	key_dialog = create_dialog();
+	g_signal_connect(key_dialog, "response", G_CALLBACK(on_dialog_response), NULL);
+	gtk_widget_show_all(key_dialog);
 }
 
 
