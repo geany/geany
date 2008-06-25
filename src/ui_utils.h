@@ -233,6 +233,8 @@ typedef gboolean TVMatchCallback(void);
 
 gboolean ui_tree_view_find_next(GtkTreeView *treeview, TVMatchCallback cb);
 
+gboolean ui_tree_view_find_previous(GtkTreeView *treeview, TVMatchCallback cb);
+
 
 void ui_statusbar_showhide(gboolean state);
 

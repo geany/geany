@@ -1765,6 +1765,16 @@ on_next_message1_activate              (GtkMenuItem     *menuitem,
 
 
 void
+on_previous_message1_activate          (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	if (! ui_tree_view_find_previous(GTK_TREE_VIEW(msgwindow.tree_msg),
+		msgwin_goto_messages_file_line))
+		ui_set_statusbar(FALSE, _("No more message items."));
+}
+
+
+void
 on_menu_comments_multiline_activate    (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
@@ -2153,5 +2163,22 @@ on_replace_spaces_activate             (GtkMenuItem     *menuitem,
 	GeanyDocument *doc = document_get_current();
 
 	editor_replace_spaces(doc);
+}
+
+
+void
+on_search1_activate                    (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	GtkWidget *next_message = lookup_widget(main_widgets.window, "next_message1");
+	GtkWidget *previous_message = lookup_widget(main_widgets.window, "previous_message1");
+	gboolean have_messages;
+
+	/* enable commands if the messages window has any items */
+	have_messages = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(msgwindow.store_msg),
+		NULL) > 0;
+
+	gtk_widget_set_sensitive(next_message, have_messages);
+	gtk_widget_set_sensitive(previous_message, have_messages);
 }
 

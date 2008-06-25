@@ -81,8 +81,6 @@ void msgwin_init()
 	msgwindow.tree_compiler = lookup_widget(main_widgets.window, "treeview5");
 	msgwindow.find_in_files_dir = NULL;
 
-	gtk_widget_set_sensitive(lookup_widget(main_widgets.window, "next_message1"), FALSE);
-
 	prepare_status_tree_view();
 	prepare_msg_tree_view();
 	prepare_compiler_tree_view();
@@ -310,8 +308,6 @@ void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *
 
 	gtk_list_store_append(msgwindow.store_msg, &iter);
 	gtk_list_store_set(msgwindow.store_msg, &iter, 0, line, 1, doc, 2, color, 3, tmp, -1);
-
-	gtk_widget_set_sensitive(lookup_widget(main_widgets.window, "next_message1"), TRUE);
 
 	g_free(tmp);
 }
@@ -1013,7 +1009,6 @@ void msgwin_clear_tab(gint tabnum)
 	switch (tabnum)
 	{
 		case MSG_MESSAGE:
-			gtk_widget_set_sensitive(lookup_widget(main_widgets.window, "next_message1"), FALSE);
 			store = msgwindow.store_msg;
 			break;
 

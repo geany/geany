@@ -606,3 +606,11 @@ on_line_breaking1_activate             (GtkMenuItem     *menuitem,
 void
 on_replace_spaces_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
+
+void
+on_previous_message1_activate          (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_search1_activate                    (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);

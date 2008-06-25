@@ -11,6 +11,14 @@
    Add SettingEntry struct which is used for an array containing keyfile
    key and group information; currently only used for 3 search-related
    gboolean settings.
+ * src/interface.c, src/ui_utils.h, src/msgwindow.c, src/callbacks.c,
+   src/callbacks.h, src/ui_utils.c, geany.glade:
+   Add Previous Message menu item.
+   Don't abbreviate Find Prev Selected.
+   Add ui_tree_view_find_previous().
+   Set Next Message menu item sensitivity when clicking on Search menu.
+   Thanks to Beau Barker (skip76) for an initial version of
+   ui_tree_view_find_previous() (see #1931125).
 
 
 2008-06-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
