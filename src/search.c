@@ -562,7 +562,7 @@ void search_show_find_in_files_dialog(const gchar *dir)
 	GtkWidget *entry; /* the child GtkEntry of combo (or dir_combo) */
 	GeanyDocument *doc = document_get_current();
 	gchar *sel = NULL;
-	gchar *cur_dir;
+	gchar *cur_dir = NULL;
 
 	if (widgets.find_in_files_dialog == NULL)
 	{
@@ -725,17 +725,25 @@ void search_show_find_in_files_dialog(const gchar *dir)
 
 	entry = GTK_BIN(dir_combo)->child;
 	if (NZV(dir))
-		cur_dir = g_strdup(dir);
+		cur_dir = g_strdup(dir);	/* custom directory argument passed */
 	else
-		cur_dir = utils_get_current_file_dir_utf8();
+	{
+		gboolean entry_empty = ! NZV(gtk_entry_get_text(GTK_ENTRY(entry)));
+
+		if (search_prefs.use_current_file_dir || entry_empty)
+		{
+			cur_dir = utils_get_current_file_dir_utf8();
+
+			/* use default_open_path if no directory could be determined
+			 * (e.g. when no files are open) */
+			if (!cur_dir)
+				cur_dir = g_strdup(prefs.default_open_path);
+		}
+	}
 	if (cur_dir)
 	{
 		gtk_entry_set_text(GTK_ENTRY(entry), cur_dir);
 		g_free(cur_dir);
-	}
-	else
-	{	/* use default_open_path if no directory could be determined (e.g. when no files are open) */
-		gtk_entry_set_text(GTK_ENTRY(entry), prefs.default_open_path);
 	}
 
 	/* put the focus to the directory entry if it is empty */

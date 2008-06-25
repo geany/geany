@@ -1,3 +1,18 @@
+2008-06-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, src/prefs.c, src/keyfile.c, src/search.c,
+   src/search.h, geany.glade:
+   Move 2 search prefs to new Search tab of Preferences dialog.
+   Add new search pref: 'Use the current file's directory for Find in
+   Files' (#1930435).
+   Add PrefEntry struct which is used for an array containing widget
+   names to lookup; currently only used for 3 search-related
+   GtkToggleButton prefs.
+   Add SettingEntry struct which is used for an array containing keyfile
+   key and group information; currently only used for 3 search-related
+   gboolean settings.
+
+
 2008-06-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keybindings.c:

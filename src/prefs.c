@@ -89,6 +89,23 @@ static void on_prefs_print_radio_button_toggled(GtkToggleButton *togglebutton, g
 static void on_prefs_print_page_header_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 
 
+/* used in e.g. init_toggle_button_prefs(). */
+typedef struct PrefEntry
+{
+	const gchar *widget_name;
+	gpointer setting;
+}
+PrefEntry;
+
+static PrefEntry toggle_prefs[] =
+{
+	{"check_ask_suppress_search_dialogs", &search_prefs.suppress_dialogs},
+	{"check_search_use_current_word", &search_prefs.use_current_word},
+	{"check_fif_current_dir", &search_prefs.use_current_file_dir},
+	{NULL, NULL}	/* must be terminated */
+};
+
+
 enum
 {
 	KB_TREE_ACTION,
@@ -162,10 +179,25 @@ static void init_keybindings(void)
 }
 
 
+static void init_toggle_button_prefs()
+{
+	PrefEntry *pe;
+
+	for (pe = toggle_prefs; pe->widget_name != NULL; pe++)
+	{
+		GtkWidget *widget = lookup_widget(ui_widgets.prefs_dialog, pe->widget_name);
+
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), *(gboolean*)pe->setting);
+	}
+}
+
+
 void prefs_init_dialog(void)
 {
 	GtkWidget *widget;
 	GdkColor *color;
+
+	init_toggle_button_prefs();
 
 	/* General settings */
 	/* startup */
@@ -196,12 +228,6 @@ void prefs_init_dialog(void)
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_auto_focus");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.auto_focus);
-
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_ask_suppress_search_dialogs");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), search_prefs.suppress_dialogs);
-
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_search_use_current_word");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), search_prefs.use_current_word);
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction");
 	gtk_entry_set_text(GTK_ENTRY(widget), tool_prefs.context_action_cmd);
@@ -578,6 +604,19 @@ void prefs_init_dialog(void)
 }
 
 
+static void update_toggle_button_prefs()
+{
+	PrefEntry *pe;
+
+	for (pe = toggle_prefs; pe->widget_name != NULL; pe++)
+	{
+		GtkWidget *widget = lookup_widget(ui_widgets.prefs_dialog, pe->widget_name);
+
+		*(gboolean*)pe->setting = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+	}
+}
+
+
 /*
  * callbacks
  */
@@ -588,6 +627,8 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 	{
 		GtkWidget *widget;
 		guint i;
+
+		update_toggle_button_prefs();
 
 		/* General settings */
 		/* startup */
@@ -610,17 +651,11 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_beep");
 		prefs.beep_on_errors = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_ask_suppress_search_dialogs");
-		search_prefs.suppress_dialogs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_switch_pages");
 		prefs.switch_to_status = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_suppress_status_msgs");
 		prefs.suppress_status_messages = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_search_use_current_word");
-		search_prefs.use_current_word = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_auto_focus");
 		prefs.auto_focus = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));

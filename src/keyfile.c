@@ -89,6 +89,25 @@ static gint hpan_position;
 static gint vpan_position;
 
 
+/* Used in e.g. save_bool_prefs(). */
+typedef struct SettingEntry
+{
+	const gchar *group;
+	const gchar *key_name;
+	gpointer setting;
+	gpointer default_value;
+}
+SettingEntry;
+
+static SettingEntry bool_prefs[] =
+{
+	{PACKAGE, "pref_main_suppress_search_dialogs", &search_prefs.suppress_dialogs, GINT_TO_POINTER(FALSE)},
+	{PACKAGE, "pref_main_search_use_current_word", &search_prefs.use_current_word, GINT_TO_POINTER(TRUE)},
+	{"search", "pref_search_current_file_dir", &search_prefs.use_current_file_dir, GINT_TO_POINTER(TRUE)},
+	{NULL, NULL, NULL, NULL}	/* must be terminated */
+};
+
+
 static void save_recent_files(GKeyFile *config)
 {
 	gchar **recent_files = g_new0(gchar*, file_prefs.mru_length + 1);
@@ -184,8 +203,21 @@ void configuration_save_session_files(GKeyFile *config)
 }
 
 
+static void save_bool_prefs(GKeyFile *config)
+{
+	SettingEntry *pe;
+
+	for (pe = bool_prefs; pe->group != NULL; pe++)
+	{
+		g_key_file_set_boolean(config, pe->group, pe->key_name, *(gboolean*)pe->setting);
+	}
+}
+
+
 static void save_dialog_prefs(GKeyFile *config)
 {
+	save_bool_prefs(config);
+
 	/* Some of the key names are not consistent, but this is for backwards compatibility */
 
 	/* general */
@@ -193,8 +225,6 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_project_session", project_prefs.project_session);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_save_winpos", prefs.save_winpos);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_confirm_exit", prefs.confirm_exit);
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_suppress_search_dialogs", search_prefs.suppress_dialogs);
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_search_use_current_word", search_prefs.use_current_word);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_suppress_status_messages", prefs.suppress_status_messages);
 	g_key_file_set_boolean(config, PACKAGE, "switch_msgwin_pages", prefs.switch_to_status);
 	g_key_file_set_boolean(config, PACKAGE, "beep_on_errors", prefs.beep_on_errors);
@@ -476,6 +506,18 @@ void configuration_load_session_files(GKeyFile *config)
 }
 
 
+static void load_bool_prefs(GKeyFile *config)
+{
+	SettingEntry *pe;
+
+	for (pe = bool_prefs; pe->group != NULL; pe++)
+	{
+		*(gboolean*)pe->setting = utils_get_setting_boolean(config, pe->group, pe->key_name,
+			GPOINTER_TO_INT(pe->default_value));
+	}
+}
+
+
 #define GEANY_GET_SETTING(propertyname, value, default_value) \
 	if (g_object_class_find_property( \
 		G_OBJECT_GET_CLASS(G_OBJECT(gtk_settings_get_default())), propertyname)) \
@@ -489,10 +531,10 @@ static void load_dialog_prefs(GKeyFile *config)
 	gchar *tmp_string, *tmp_string2;
 	const gchar *default_charset = NULL;
 
+	load_bool_prefs(config);
+
 	/* general */
 	prefs.confirm_exit = utils_get_setting_boolean(config, PACKAGE, "pref_main_confirm_exit", FALSE);
-	search_prefs.suppress_dialogs = utils_get_setting_boolean(config, PACKAGE, "pref_main_suppress_search_dialogs", FALSE);
-	search_prefs.use_current_word = utils_get_setting_boolean(config, PACKAGE, "pref_main_search_use_current_word", TRUE);
 	prefs.suppress_status_messages = utils_get_setting_boolean(config, PACKAGE, "pref_main_suppress_status_messages", FALSE);
 	prefs.load_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_load_session", TRUE);
 	project_prefs.project_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_project_session", TRUE);
