@@ -324,6 +324,8 @@ static void init_default_kb(void)
 		LW(find_in_files1));
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_NEXTMESSAGE, cb_func_search_action,
 		0, 0, "menu_nextmessage", _("Next Message"), LW(next_message1));
+	keybindings_set_item(group, GEANY_KEYS_SEARCH_PREVIOUSMESSAGE, cb_func_search_action,
+		0, 0, "menu_previousmessage", _("Previous Message"), LW(previous_message1));
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_FINDUSAGE, cb_func_search_action,
 		0, 0, "popup_findusage", _("Find Usage"), NULL);
 
@@ -433,6 +435,8 @@ static void init_default_kb(void)
 		0, 0, "build_makeobject", _("Make object"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_BUILD_NEXTERROR, cb_func_build_action,
 		0, 0, "build_nexterror", _("Next error"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_BUILD_PREVIOUSERROR, cb_func_build_action,
+		0, 0, "build_previouserror", _("Previous error"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_BUILD_RUN, cb_func_build_action,
 		GDK_F5, 0, "build_run", _("Run"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_BUILD_RUN2, cb_func_build_action,
@@ -1049,6 +1053,8 @@ static void cb_func_search_action(guint key_id)
 			on_find_in_files1_activate(NULL, NULL); break;
 		case GEANY_KEYS_SEARCH_NEXTMESSAGE:
 			on_next_message1_activate(NULL, NULL); break;
+		case GEANY_KEYS_SEARCH_PREVIOUSMESSAGE:
+			on_previous_message1_activate(NULL, NULL); break;
 		case GEANY_KEYS_SEARCH_FINDUSAGE:
 			if (check_current_word())
 				on_find_usage1_activate(NULL, NULL);
@@ -1118,6 +1124,9 @@ static void cb_func_build_action(guint key_id)
 			break;
 		case GEANY_KEYS_BUILD_NEXTERROR:
 			item = menu_items->item_next_error;
+			break;
+		case GEANY_KEYS_BUILD_PREVIOUSERROR:
+			item = menu_items->item_previous_error;
 			break;
 		case GEANY_KEYS_BUILD_RUN:
 			item = menu_items->item_exec;

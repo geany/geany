@@ -71,8 +71,10 @@ extern GPtrArray *keybinding_groups;	/* array of KeyBindingGroup pointers */
 extern const gchar keybindings_keyfile_group_name[];
 
 
-/* Note: keybinding_groups is not in the API, so we don't need to increment the ABI when
- * appending keybindings or keygroups, as the _COUNT item shouldn't be used by plugins. */
+/* Note: we don't need to increment the plugin ABI when appending keybindings or keygroups,
+ * just make sure to only insert keybindings/groups immediately before the _COUNT item, so
+ * the existing enum values stay the same.
+ * The _COUNT item should not be used by plugins, as it may well change. */
 
 /** Keybinding group IDs */
 enum
@@ -207,6 +209,7 @@ enum
 	GEANY_KEYS_SEARCH_FINDPREVSEL,
 	GEANY_KEYS_SEARCH_NEXTMESSAGE,
 	GEANY_KEYS_SEARCH_FINDUSAGE,
+	GEANY_KEYS_SEARCH_PREVIOUSMESSAGE,
 	GEANY_KEYS_SEARCH_COUNT
 };
 
@@ -287,6 +290,7 @@ enum
 	GEANY_KEYS_BUILD_RUN,
 	GEANY_KEYS_BUILD_RUN2,
 	GEANY_KEYS_BUILD_OPTIONS,
+	GEANY_KEYS_BUILD_PREVIOUSERROR,
 	GEANY_KEYS_BUILD_COUNT
 };
 

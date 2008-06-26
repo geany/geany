@@ -5,6 +5,9 @@
    Call vte_restart() in vte_keypress() as the code is the same.
  * src/build.c, src/build.h, src/msgwindow.c:
    Add Previous Error menu item.
+ * src/build.c, src/keybindings.c, src/keybindings.h:
+   Add keybindings for Previous Message, Previous Error commands
+   (#1931125).
 
 
 2008-06-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

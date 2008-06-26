@@ -1108,7 +1108,7 @@ static void create_build_menu_gen(BuildMenuItems *menu_items)
 
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Previous Error"));
 	gtk_widget_show(item);
-	/*GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_, item);*/
+	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_PREVIOUSERROR, item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_previous_error), NULL);
 	menu_items->item_previous_error = item;
