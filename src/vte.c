@@ -61,11 +61,58 @@ static gint vte_prefs_tab_num = -1;
 static const gchar VTE_WORDCHARS[] = "-A-Za-z0-9,./?%&#:_";
 
 
+/* taken from original vte.h to make my life easier ;-) */
+
+typedef struct _VteTerminalPrivate VteTerminalPrivate;
+
+typedef struct _VteTerminal VteTerminal;
+struct _VteTerminal
+{
+	GtkWidget widget;
+	GtkAdjustment *adjustment;
+	glong char_width, char_height;
+	glong char_ascent, char_descent;
+	glong row_count, column_count;
+	gchar *window_title;
+	gchar *icon_title;
+	VteTerminalPrivate *pvt;
+};
+
 #define VTE_TERMINAL(obj) (GTK_CHECK_CAST((obj), VTE_TYPE_TERMINAL, VteTerminal))
 #define VTE_TYPE_TERMINAL (vf->vte_terminal_get_type())
 
+
+/* store function pointers in a struct to avoid a strange segfault if they are stored directly
+ * if accessed directly, gdb says the segfault arrives at old_tab_width(prefs.c), don't ask me */
+struct VteFunctions
+{
+	GtkWidget* (*vte_terminal_new) (void);
+	pid_t (*vte_terminal_fork_command) (VteTerminal *terminal, const char *command, char **argv,
+										char **envv, const char *directory, gboolean lastlog,
+										gboolean utmp, gboolean wtmp);
+	void (*vte_terminal_set_size) (VteTerminal *terminal, glong columns, glong rows);
+	void (*vte_terminal_set_word_chars) (VteTerminal *terminal, const char *spec);
+	void (*vte_terminal_set_mouse_autohide) (VteTerminal *terminal, gboolean setting);
+	void (*vte_terminal_reset) (VteTerminal *terminal, gboolean full, gboolean clear_history);
+	GtkType (*vte_terminal_get_type) (void);
+	void (*vte_terminal_set_scroll_on_output) (VteTerminal *terminal, gboolean scroll);
+	void (*vte_terminal_set_scroll_on_keystroke) (VteTerminal *terminal, gboolean scroll);
+	void (*vte_terminal_set_font_from_string) (VteTerminal *terminal, const char *name);
+	void (*vte_terminal_set_scrollback_lines) (VteTerminal *terminal, glong lines);
+	gboolean (*vte_terminal_get_has_selection) (VteTerminal *terminal);
+	void (*vte_terminal_copy_clipboard) (VteTerminal *terminal);
+	void (*vte_terminal_paste_clipboard) (VteTerminal *terminal);
+	void (*vte_terminal_set_emulation) (VteTerminal *terminal, const gchar *emulation);
+	void (*vte_terminal_set_color_foreground) (VteTerminal *terminal, const GdkColor *foreground);
+	void (*vte_terminal_set_color_background) (VteTerminal *terminal, const GdkColor *background);
+	void (*vte_terminal_feed_child) (VteTerminal *terminal, const char *data, glong length);
+	void (*vte_terminal_im_append_menuitems) (VteTerminal *terminal, GtkMenuShell *menushell);
+};
+
+
 static void create_vte(void);
 static void vte_start(GtkWidget *widget);
+static void vte_restart(GtkWidget *widget);
 static gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpointer user_data);
 static gboolean vte_keyrelease(GtkWidget *widget, GdkEventKey *event, gpointer data);
 static gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data);
@@ -300,16 +347,7 @@ static gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer dat
 		event->state & GDK_CONTROL_MASK &&
 		! (event->state & GDK_SHIFT_MASK) && ! (event->state & GDK_MOD1_MASK))
 	{
-		vte_get_working_directory(); /* try to keep the working directory when restarting the VTE */
-
-		if (pid > 0)
-		{
-			kill(pid, SIGINT);
-			pid = 0;
-		}
-		vf->vte_terminal_reset(VTE_TERMINAL(widget), TRUE, TRUE);
-		vte_start(widget);
-
+		vte_restart(widget);
 		return TRUE;
 	}
 	return FALSE;
@@ -348,14 +386,14 @@ static void vte_start(GtkWidget *widget)
 
 static void vte_restart(GtkWidget *widget)
 {
-		vte_get_working_directory(); /* try to keep the working directory when restarting the VTE */
-	 	if (pid > 0)
-		{
-			kill(pid, SIGINT);
-			pid = 0;
-		}
-		vf->vte_terminal_reset(VTE_TERMINAL(widget), TRUE, TRUE);
-		vte_start(widget);
+	vte_get_working_directory(); /* try to keep the working directory when restarting the VTE */
+	if (pid > 0)
+	{
+		kill(pid, SIGINT);
+		pid = 0;
+	}
+	vf->vte_terminal_reset(VTE_TERMINAL(widget), TRUE, TRUE);
+	vte_start(widget);
 }
 
 

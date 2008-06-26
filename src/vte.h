@@ -89,51 +89,6 @@ gboolean vte_drag_drop(GtkWidget *widget, GdkDragContext *drag_context, gint x, 
 					   gpointer user_data);
 */
 
-/* taken from original vte.h to make my life easier ;-) */
-
-typedef struct _VteTerminalPrivate VteTerminalPrivate;
-
-typedef struct _VteTerminal VteTerminal;
-struct _VteTerminal
-{
-	GtkWidget widget;
-	GtkAdjustment *adjustment;
-	glong char_width, char_height;
-	glong char_ascent, char_descent;
-	glong row_count, column_count;
-	gchar *window_title;
-	gchar *icon_title;
-	VteTerminalPrivate *pvt;
-};
-
-
-/* store function pointers in a struct to avoid a strange segfault if they are stored directly
- * if accessed directly, gdb says the segfault arrives at old_tab_width(prefs.c), don't ask me */
-struct VteFunctions
-{
-	GtkWidget* (*vte_terminal_new) (void);
-	pid_t (*vte_terminal_fork_command) (VteTerminal *terminal, const char *command, char **argv,
-										char **envv, const char *directory, gboolean lastlog,
-										gboolean utmp, gboolean wtmp);
-	void (*vte_terminal_set_size) (VteTerminal *terminal, glong columns, glong rows);
-	void (*vte_terminal_set_word_chars) (VteTerminal *terminal, const char *spec);
-	void (*vte_terminal_set_mouse_autohide) (VteTerminal *terminal, gboolean setting);
-	void (*vte_terminal_reset) (VteTerminal *terminal, gboolean full, gboolean clear_history);
-	GtkType (*vte_terminal_get_type) (void);
-	void (*vte_terminal_set_scroll_on_output) (VteTerminal *terminal, gboolean scroll);
-	void (*vte_terminal_set_scroll_on_keystroke) (VteTerminal *terminal, gboolean scroll);
-	void (*vte_terminal_set_font_from_string) (VteTerminal *terminal, const char *name);
-	void (*vte_terminal_set_scrollback_lines) (VteTerminal *terminal, glong lines);
-	gboolean (*vte_terminal_get_has_selection) (VteTerminal *terminal);
-	void (*vte_terminal_copy_clipboard) (VteTerminal *terminal);
-	void (*vte_terminal_paste_clipboard) (VteTerminal *terminal);
-	void (*vte_terminal_set_emulation) (VteTerminal *terminal, const gchar *emulation);
-	void (*vte_terminal_set_color_foreground) (VteTerminal *terminal, const GdkColor *foreground);
-	void (*vte_terminal_set_color_background) (VteTerminal *terminal, const GdkColor *background);
-	void (*vte_terminal_feed_child) (VteTerminal *terminal, const char *data, glong length);
-	void (*vte_terminal_im_append_menuitems) (VteTerminal *terminal, GtkMenuShell *menushell);
-};
-
 #endif
 
 #endif

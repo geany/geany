@@ -1,3 +1,10 @@
+2008-06-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/vte.c, src/vte.h:
+   Move struct _VteTerminal, VteFunctions from vte.h to vte.c.
+   Call vte_restart() in vte_keypress() as the code is the same.
+
+
 2008-06-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/interface.c, src/prefs.c, src/keyfile.c, src/search.c,
