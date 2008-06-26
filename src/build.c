@@ -83,9 +83,9 @@ enum
 };
 
 static BuildMenuItems default_menu_items =
-	{NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+	{NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 static BuildMenuItems latex_menu_items =
-	{NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+	{NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 
 
 static struct
@@ -110,6 +110,7 @@ static void on_build_build_activate(GtkMenuItem *menuitem, gpointer user_data);
 static void on_build_make_activate(GtkMenuItem *menuitem, gpointer user_data);
 static void on_build_execute_activate(GtkMenuItem *menuitem, gpointer user_data);
 static void on_build_next_error(GtkMenuItem *menuitem, gpointer user_data);
+static void on_build_previous_error(GtkMenuItem *menuitem, gpointer user_data);
 static void kill_process(GPid *pid);
 
 
@@ -1105,6 +1106,13 @@ static void create_build_menu_gen(BuildMenuItems *menu_items)
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_next_error), NULL);
 	menu_items->item_next_error = item;
 
+	item = gtk_image_menu_item_new_with_mnemonic(_("_Previous Error"));
+	gtk_widget_show(item);
+	/*GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_, item);*/
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_previous_error), NULL);
+	menu_items->item_previous_error = item;
+
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
@@ -1214,6 +1222,13 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_next_error), NULL);
 	menu_items->item_next_error = item;
+
+	item = gtk_image_menu_item_new_with_mnemonic(_("_Previous Error"));
+	gtk_widget_show(item);
+	/*GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_, item);*/
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_previous_error), NULL);
+	menu_items->item_previous_error = item;
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
@@ -1721,6 +1736,8 @@ void build_menu_update(GeanyDocument *doc)
 		NULL) > 0;
 	if (menu_items->item_next_error)
 		gtk_widget_set_sensitive(menu_items->item_next_error, have_errors);
+	if (menu_items->item_previous_error)
+		gtk_widget_set_sensitive(menu_items->item_previous_error, have_errors);
 }
 
 
@@ -2039,6 +2056,20 @@ on_build_next_error                    (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	if (ui_tree_view_find_next(GTK_TREE_VIEW(msgwindow.tree_compiler),
+		msgwin_goto_compiler_file_line))
+	{
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER);
+	}
+	else
+		ui_set_statusbar(FALSE, _("No more build errors."));
+}
+
+
+static void
+on_build_previous_error                (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	if (ui_tree_view_find_previous(GTK_TREE_VIEW(msgwindow.tree_compiler),
 		msgwin_goto_compiler_file_line))
 	{
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER);

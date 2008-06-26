@@ -250,6 +250,7 @@ void msgwin_compiler_add(gint msg_color, const gchar *msg)
 
 	/* calling build_menu_update for every build message would be overkill */
 	gtk_widget_set_sensitive(build_get_menu_items(-1)->item_next_error, TRUE);
+	gtk_widget_set_sensitive(build_get_menu_items(-1)->item_previous_error, TRUE);
 }
 
 
@@ -1013,9 +1014,9 @@ void msgwin_clear_tab(gint tabnum)
 			break;
 
 		case MSG_COMPILER:
-			gtk_widget_set_sensitive(build_get_menu_items(-1)->item_next_error, FALSE);
-			store = msgwindow.store_compiler;
-			break;
+			gtk_list_store_clear(msgwindow.store_compiler);
+			build_menu_update(NULL);	/* update next error items */
+			return;
 
 		case MSG_STATUS: store = msgwindow.store_status; break;
 		default: return;

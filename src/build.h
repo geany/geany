@@ -55,6 +55,7 @@ typedef struct BuildMenuItems
 	GtkWidget		*item_make_custom;
 	GtkWidget		*item_make_object;
 	GtkWidget		*item_next_error;
+	GtkWidget		*item_previous_error;
 	GtkWidget		*item_exec;
 	GtkWidget		*item_exec2;
 	GtkWidget		*item_set_args;
