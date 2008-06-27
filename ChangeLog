@@ -1,3 +1,9 @@
+2008-06-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, src/callbacks.c, src/callbacks.h, geany.glade:
+   Add 'Close Other Documents' File menu command (#1976724).
+
+
 2008-06-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/vte.c, src/vte.h:

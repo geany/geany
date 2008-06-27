@@ -2182,3 +2182,26 @@ on_search1_activate                    (GtkMenuItem     *menuitem,
 	gtk_widget_set_sensitive(previous_message, have_messages);
 }
 
+
+/* simple implementation (vs. close all which doesn't close documents if cancelled) */
+void
+on_close_other_documents1_activate     (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	guint i;
+	GeanyDocument *cur_doc = document_get_current();
+
+	for (i = 0; i < documents_array->len; i++)
+	{
+		GeanyDocument *doc = documents[i];
+		gint page;
+
+		if (doc == cur_doc || ! doc->is_valid)
+			continue;
+
+		page = document_get_notebook_page(doc);
+		if (! document_remove_page(page))
+			break;
+	}
+}
+
