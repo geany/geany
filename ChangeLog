@@ -2,6 +2,8 @@
 
  * src/interface.c, src/callbacks.c, src/callbacks.h, geany.glade:
    Add 'Close Other Documents' File menu command (#1976724).
+ * src/keybindings.c, src/keybindings.h, src/editor.c:
+   Add Go to Start/End of Line keybindings (#1996175).
 
 
 2008-06-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

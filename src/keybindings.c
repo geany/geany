@@ -353,6 +353,10 @@ static void init_default_kb(void)
 		0, 0, "popup_gototagdefinition", _("Go to Tag Definition"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_GOTO_TAGDECLARATION, cb_func_goto_action,
 		0, 0, "popup_gototagdeclaration", _("Go to Tag Declaration"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_GOTO_LINESTART, cb_func_goto_action,
+		GDK_Home, 0, "edit_gotolinestart", _("Go to Start of Line"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_GOTO_LINEEND, cb_func_goto_action,
+		GDK_End, 0, "edit_gotolineend", _("Go to End of Line"), NULL);
 
 	group = ADD_KB_GROUP(VIEW, _("View"));
 
@@ -1403,6 +1407,12 @@ static void cb_func_goto_action(guint key_id)
 		case GEANY_KEYS_GOTO_TAGDECLARATION:
 			if (check_current_word())
 				symbols_goto_tag(editor_info.current_word, FALSE);
+			break;
+		case GEANY_KEYS_GOTO_LINESTART:
+			sci_cmd(doc->sci, editor_prefs.smart_home_key ? SCI_VCHOME : SCI_HOME);
+			break;
+		case GEANY_KEYS_GOTO_LINEEND:
+			sci_cmd(doc->sci, SCI_LINEEND);
 			break;
 	}
 }
