@@ -1,3 +1,11 @@
+2008-06-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/socket.c:
+   When opening files remotely using the socket, handle filename
+   encoding better and try to auto-detect the used encoding as it
+   might be different each time (hopefully closes #2003980).
+
+
 2008-06-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/interface.c, src/callbacks.c, src/callbacks.h, geany.glade:

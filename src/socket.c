@@ -77,6 +77,7 @@
 #include "support.h"
 #include "ui_utils.h"
 #include "utils.h"
+#include "encodings.h"
 
 
 
@@ -472,6 +473,35 @@ static void socket_init_win32(void)
 #endif
 
 
+static void handle_input_filename(const gchar *buf)
+{
+	gchar *utf8_filename, *locale_filename;
+
+	/* we never know how the input is encoded, so do the best auto detection we can */
+	if (! g_utf8_validate(buf, -1, NULL))
+		utf8_filename = encodings_convert_to_utf8(buf, -1, NULL);
+	else
+		utf8_filename = g_strdup(buf);
+
+	locale_filename = utils_get_locale_from_utf8(utf8_filename);
+
+	if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+		document_open_file(locale_filename, FALSE, NULL, NULL);
+	else
+	{	/* create new file if it doesn't exist */
+		GeanyDocument *doc;
+
+		doc = document_new_file(utf8_filename, NULL, NULL);
+		if (doc != NULL)
+			ui_add_recent_file(doc->file_name);
+		else
+			geany_debug("got data from socket, but it does not look like a filename");
+	}
+	g_free(utf8_filename);
+	g_free(locale_filename);
+}
+
+
 gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpointer data)
 {
 	gint fd, sock;
@@ -491,20 +521,7 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 		{
 			while (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && *buf != '.')
 			{
-				g_strstrip(buf); /* remove \n char */
-
-				if (g_file_test(buf, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
-					document_open_file(buf, FALSE, NULL, NULL);
-				else
-				{	/* create new file if it doesn't exist */
-					GeanyDocument *doc;
-
-					doc = document_new_file(buf, NULL, NULL);
-					if (doc != NULL)
-						ui_add_recent_file(doc->file_name);
-					else
-						geany_debug("got data from socket, but it does not look like a filename");
-				}
+				handle_input_filename(g_strstrip(buf));
 			}
 
 #ifdef G_OS_WIN32
