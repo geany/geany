@@ -905,9 +905,12 @@ void editor_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_
 	if (wc == NULL)
 		wc = GEANY_WORDCHARS;
 
-	while (startword > 0 && strchr(wc, chunk[startword - 1]))
+	/* the checks for "c < 0" are to allow any Unicode character which should make the code
+	 * a little bit more Unicode safe, anyway, this allows also any Unicode punctuation,
+	 * TODO: improve this code */
+	while (startword > 0 && (strchr(wc, chunk[startword - 1]) || chunk[startword - 1] < 0))
 		startword--;
-	while (chunk[endword] && strchr(wc, chunk[endword]))
+	while (chunk[endword] != 0 && (strchr(wc, chunk[endword]) || chunk[endword] < 0))
 		endword++;
 	if(startword == endword)
 		return;

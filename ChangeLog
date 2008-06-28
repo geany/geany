@@ -4,6 +4,9 @@
    When opening files remotely using the socket, handle filename
    encoding better and try to auto-detect the used encoding as it
    might be different each time (hopefully closes #2003980).
+ * src/editor.c:
+   Attempt to make editor_find_current_word() Unicode-safe. Note: this
+   can be done better.
 
 
 2008-06-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
