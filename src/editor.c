@@ -47,6 +47,7 @@
 #include "dialogs.h"
 #include "symbols.h"
 #include "callbacks.h"
+#include "geanyobject.h"
 
 
 /* holds word under the mouse or keyboard cursor */
@@ -109,6 +110,12 @@ on_editor_button_press_event           (GtkWidget *widget,
 		ui_update_popup_goto_items((current_word[0] != '\0') ? TRUE : FALSE);
 		ui_update_popup_copy_items(doc);
 		ui_update_insert_include_item(doc, 0);
+
+		if (geany_object)
+		{
+			g_signal_emit_by_name(geany_object, "populate-edit-menu",
+				current_word, editor_info.click_pos, doc);
+		}
 		gtk_menu_popup(GTK_MENU(main_widgets.editor_menu),
 			NULL, NULL, NULL, NULL, event->button, event->time);
 

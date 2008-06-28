@@ -7,6 +7,10 @@
  * src/editor.c:
    Attempt to make editor_find_current_word() Unicode-safe. Note: this
    can be done better.
+ * doc/plugins.dox, src/editor.c, src/geanyobject.c, src/geanyobject.h,
+   src/plugindata.h:
+   Add plugin signal "populate-edit-menu" to notify plugins when the
+   editing menu is shown.
 
 
 2008-06-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

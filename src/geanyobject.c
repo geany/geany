@@ -143,6 +143,15 @@ static void create_signals(GObjectClass *g_object_class)
 		NULL, NULL,
 		gtk_marshal_NONE__NONE,
 		G_TYPE_NONE, 0);
+	geany_object_signals[GCB_POPULATE_EDIT_MENU] = g_signal_new (
+		"populate-edit-menu",
+		G_OBJECT_CLASS_TYPE (g_object_class),
+		G_SIGNAL_RUN_FIRST,
+		G_STRUCT_OFFSET (GeanyObjectClass, populate_edit_menu),
+		NULL, NULL,
+		gtk_marshal_NONE__STRING_INT_POINTER,
+		G_TYPE_NONE, 3,
+		G_TYPE_STRING, G_TYPE_INT, G_TYPE_POINTER);
 }
 
 

@@ -159,6 +159,22 @@ PluginCallback plugin_callbacks[] =
  *  @param user_data user data.
  *  @endsignaldef
  *
+ *  @signaldef populate-edit-menu
+ *  @signalproto
+ *  void user_function(GObject *obj, const gchar *word, gint pos, GeanyDocument *doc,
+ *  		gpointer user_data);
+ *  @endsignalproto
+ *  @signaldesc
+ *  Sent before the popup menu of the editing widget is shown. This can be used to modify or extend
+ *  the popup menu. You can access the menu pointer using @a main_widgets->editor_menu.
+ *  @param obj a GeanyObject instance, should be ignored.
+ *  @param word the current word (in UTF-8 encoding) below the cursor position
+		   where the popup menu will be opened.
+ *  @param click_pos the cursor position where the popup will be opened.
+ *  @param doc the current document.
+ *  @param user_data user data.
+ *  @endsignaldef
+ *
  *
  *
  *  @page howto Plugin Howto
