@@ -154,6 +154,9 @@ void editor_display_current_line(GeanyDocument *doc, gfloat percent_of_view);
 
 void editor_finalize(void);
 
+void editor_snippets_init(void);
+
+void editor_snippets_free(void);
 
 /* General editing functions */
 

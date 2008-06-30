@@ -834,7 +834,7 @@ gint main(gint argc, gchar **argv)
 	document_init_doclist();
 	treeviews_init();
 	configuration_read_filetype_extensions();
-	configuration_read_snippets();
+	editor_snippets_init();
 
 	/* set window icon */
 	{
@@ -962,6 +962,7 @@ void main_quit()
 	document_finalize();
 	symbols_finalize();
 	editor_finalize();
+	editor_snippets_free();
 	encodings_finalize();
 
 	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));
