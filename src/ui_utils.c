@@ -572,9 +572,7 @@ void ui_save_buttons_toggle(gboolean enable)
 
 static void init_document_widgets(void)
 {
-	static GPtrArray document_buttons = {NULL, 0};
-
-	widgets.document_buttons = &document_buttons;
+	widgets.document_buttons = g_ptr_array_new();
 
 	/* Cache the document-sensitive widgets so we don't have to keep looking them up
 	 * when using ui_document_buttons_update(). */

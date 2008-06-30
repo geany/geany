@@ -4,6 +4,9 @@
    Use a dynamic pointer array for document sensitive widgets, so it's
    easy to group widget names together in the source.
    Make 'Close other documents' menu item document-sensitive.
+ * src/ui_utils.c:
+   Fix stack corruption (cannot use stack GPtrArray as this is just a
+   base-class for private GRealPtrArray).
 
 
 2008-06-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
