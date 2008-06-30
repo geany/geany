@@ -3,6 +3,11 @@
  * waf, wscript:
    Update waf to its latest SVN rev which makes it 20 KB smaller.
    Update waf script to reflect waf API changes.
+ * src/filetypes.c, src/filetypes.h, src/highlighting.c,
+   src/templates.c:
+   In templates_free_templates() destroy also file template menu items.
+   Add reload argument to filetypes_load_config() to allow re-reading
+   of the settings.
 
 
 2008-06-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

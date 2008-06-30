@@ -663,7 +663,7 @@ gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname)
 	filetype_id ft_id = filetype_idx;
 	GeanyFiletype *ft = filetypes[ft_id];
 
-	filetypes_load_config(ft_id);	/* load any user extension setting */
+	filetypes_load_config(ft_id, FALSE);	/* load any user extension setting */
 
 	if (fname == NULL)
 	{
@@ -753,9 +753,26 @@ gchar *templates_get_template_changelog(void)
 void templates_free_templates(void)
 {
 	gint i;
+	GList *children, *item;
+
 	for (i = 0; i < GEANY_MAX_TEMPLATES; i++)
 	{
 		g_free(templates[i]);
+	}
+	for (i = 0; i < GEANY_MAX_BUILT_IN_FILETYPES; i++)
+	{
+		g_free(ft_templates[i]);
+	}
+	/* destroy "New with template" sub menu items (in case we want to reload the templates) */
+	children = gtk_container_get_children(GTK_CONTAINER(ui_widgets.new_file_menu));
+	for (item = children; item != NULL; item = g_list_next(item))
+	{
+		gtk_widget_destroy(GTK_WIDGET(item->data));
+	}
+	children = gtk_container_get_children(GTK_CONTAINER(new_with_template_menu));
+	for (item = children; item != NULL; item = g_list_next(item))
+	{
+		gtk_widget_destroy(GTK_WIDGET(item->data));
 	}
 }
 

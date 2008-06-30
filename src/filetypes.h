@@ -147,7 +147,7 @@ GeanyFiletype *filetypes_detect_from_filename(const gchar *utf8_filename);
 /* frees the array and all related pointers */
 void filetypes_free_types(void);
 
-void filetypes_load_config(gint ft_id);
+void filetypes_load_config(gint ft_id, gboolean reload);
 
 void filetypes_save_commands(void);
 

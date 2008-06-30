@@ -1112,10 +1112,10 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords)
 {
 	/* Used by several filetypes */
 	if (style_sets[GEANY_FILETYPES_XML].styling == NULL)
-		filetypes_load_config(GEANY_FILETYPES_XML);
+		filetypes_load_config(GEANY_FILETYPES_XML, FALSE);
 
 	/* manually initialise filetype Python for use with embedded Python */
-	filetypes_load_config(GEANY_FILETYPES_PYTHON);
+	filetypes_load_config(GEANY_FILETYPES_PYTHON, FALSE);
 
 	/* don't set keywords for plain XML */
 	if (set_keywords)
@@ -2873,7 +2873,7 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 {
 	/* All stylesets depend on filetypes.common */
 	if (filetype_idx != GEANY_FILETYPES_NONE)
-		filetypes_load_config(GEANY_FILETYPES_NONE);
+		filetypes_load_config(GEANY_FILETYPES_NONE, FALSE);
 
 	switch (filetype_idx)
 	{
@@ -2922,7 +2922,7 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 
 void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 {
-	filetypes_load_config(filetype_idx);	/* load filetypes.ext */
+	filetypes_load_config(filetype_idx, FALSE);	/* load filetypes.ext */
 
 	/* load tags files (some lexers highlight global typenames) */
 	if (filetype_idx < GEANY_FILETYPES_NONE)
@@ -2978,7 +2978,7 @@ const HighlightingStyle *highlighting_get_style(gint ft_id, gint style_id)
 		return NULL;
 
 	if (style_sets[ft_id].styling == NULL)
-		filetypes_load_config(ft_id);
+		filetypes_load_config(ft_id, FALSE);
 
 	/** TODO style_id might not be the real array index (Scintilla styles are not always synced
 	  * with array indices) */

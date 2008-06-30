@@ -891,14 +891,19 @@ static void load_system_keyfile(GKeyFile *key_file, const gchar *file, GKeyFileF
 /* Load the configuration file for the associated filetype id.
  * This should only be called when the filetype is needed, to save loading
  * 20+ configuration files all at once. */
-void filetypes_load_config(gint ft_id)
+void filetypes_load_config(gint ft_id, gboolean reload)
 {
 	GKeyFile *config, *config_home;
 	FullFileType *fft = (FullFileType*)filetypes[ft_id];
 
 	g_return_if_fail(ft_id >= 0 && ft_id < (gint) filetypes_array->len);
 
-	if (fft->keyfile_loaded)
+	/* when reloading, proceed only if the settings were already loaded */
+	if (reload && ! fft->keyfile_loaded)
+		return;
+
+	/* when not reloading, load the settings only once */
+	if (! reload && fft->keyfile_loaded)
 		return;
 	fft->keyfile_loaded = TRUE;
 
@@ -921,7 +926,9 @@ void filetypes_load_config(gint ft_id)
 	}
 
 	load_settings(ft_id, config, config_home);
-	highlighting_init_styles(ft_id, config, config_home);
+	if (! reload)
+		/* reloading highlighting settings not yet supported */
+		highlighting_init_styles(ft_id, config, config_home);
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
