@@ -618,3 +618,7 @@ on_search1_activate                    (GtkMenuItem     *menuitem,
 void
 on_close_other_documents1_activate     (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
+
+void
+on_menu_reload_configuration1_activate (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);

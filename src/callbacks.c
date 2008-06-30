@@ -2205,3 +2205,34 @@ on_close_other_documents1_activate     (GtkMenuItem     *menuitem,
 	}
 }
 
+
+void
+on_menu_reload_configuration1_activate (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	guint i;
+
+	/* reload templates */
+	templates_free_templates();
+	templates_init();
+
+	/* reload snippets */
+	editor_snippets_free();
+	editor_snippets_init();
+
+	/* reload filetype extensions */
+	configuration_read_filetype_extensions();
+
+	/* save possibly changed commands before re-reading them */
+	filetypes_save_commands();
+
+	/* reload filetype configs */
+	for (i = 0; i < filetypes_array->len; i++)
+	{
+		/* filetypes_load_config() will skip not loaded filetypes */
+		filetypes_load_config(i, TRUE);
+	}
+
+	ui_set_statusbar(TRUE, _("Configuration files reloaded."));
+}
+

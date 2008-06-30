@@ -11,6 +11,9 @@
  * src/editor.c, src/editor.h, src/keyfile.c, src/keyfile.h, src/main.c:
    Move code to read snippets configuration to editor.c.
    Split editor_snippets_free() from editor_finalize().
+ * src/interface.c, src/callbacks.c, src/callbacks.h, geany.glade:
+   Add Tools menu item to reload configuration data (at the moment:
+   templates, filetype extensions/configs and snippets).
 
 
 2008-06-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
