@@ -1,3 +1,11 @@
+2008-06-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/ui_utils.c:
+   Use a dynamic pointer array for document sensitive widgets, so it's
+   easy to group widget names together in the source.
+   Make 'Close other documents' menu item document-sensitive.
+
+
 2008-06-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/socket.c:

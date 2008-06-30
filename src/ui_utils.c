@@ -57,8 +57,8 @@ UIWidgets		ui_widgets;
 
 static struct
 {
-	/* widgets only sensitive when there is at least one document */
-	GtkWidget *document_buttons[45];
+	/* pointers to widgets only sensitive when there is at least one document */
+	GPtrArray *document_buttons;
 }
 widgets;
 
@@ -567,55 +567,63 @@ void ui_save_buttons_toggle(gboolean enable)
 }
 
 
+#define add_doc_widget(widget_name) \
+	g_ptr_array_add(widgets.document_buttons, lookup_widget(main_widgets.window, widget_name))
+
 static void init_document_widgets(void)
 {
+	static GPtrArray document_buttons = {NULL, 0};
+
+	widgets.document_buttons = &document_buttons;
+
 	/* Cache the document-sensitive widgets so we don't have to keep looking them up
 	 * when using ui_document_buttons_update(). */
-	widgets.document_buttons[0] = lookup_widget(main_widgets.window, "menu_close1");
-	widgets.document_buttons[1] = lookup_widget(main_widgets.window, "toolbutton15");
-	widgets.document_buttons[2] = lookup_widget(main_widgets.window, "menu_change_font1");
-	widgets.document_buttons[3] = lookup_widget(main_widgets.window, "entry1");
-	widgets.document_buttons[4] = lookup_widget(main_widgets.window, "toolbutton18");
-	widgets.document_buttons[5] = lookup_widget(main_widgets.window, "toolbutton20");
-	widgets.document_buttons[6] = lookup_widget(main_widgets.window, "toolbutton21");
-	widgets.document_buttons[7] = lookup_widget(main_widgets.window, "menu_close_all1");
-	widgets.document_buttons[8] = lookup_widget(main_widgets.window, "menu_save_all1");
-	widgets.document_buttons[9] = lookup_widget(main_widgets.window, "toolbutton22");
-	widgets.document_buttons[10] = lookup_widget(main_widgets.window, "toolbutton13"); /* compile_button */
-	widgets.document_buttons[11] = lookup_widget(main_widgets.window, "menu_save_as1");
-	widgets.document_buttons[12] = lookup_widget(main_widgets.window, "toolbutton23");
-	widgets.document_buttons[13] = lookup_widget(main_widgets.window, "menu_count_words1");
-	widgets.document_buttons[14] = lookup_widget(main_widgets.window, "menu_build1");
-	widgets.document_buttons[15] = lookup_widget(main_widgets.window, "add_comments1");
-	widgets.document_buttons[16] = lookup_widget(main_widgets.window, "menu_paste1");
-	widgets.document_buttons[17] = lookup_widget(main_widgets.window, "menu_undo2");
-	widgets.document_buttons[18] = lookup_widget(main_widgets.window, "preferences2");
-	widgets.document_buttons[19] = lookup_widget(main_widgets.window, "menu_reload1");
-	widgets.document_buttons[20] = lookup_widget(main_widgets.window, "menu_document1");
-	widgets.document_buttons[21] = lookup_widget(main_widgets.window, "menu_markers_margin1");
-	widgets.document_buttons[22] = lookup_widget(main_widgets.window, "menu_linenumber_margin1");
-	widgets.document_buttons[23] = lookup_widget(main_widgets.window, "menu_choose_color1");
-	widgets.document_buttons[24] = lookup_widget(main_widgets.window, "menu_zoom_in1");
-	widgets.document_buttons[25] = lookup_widget(main_widgets.window, "menu_zoom_out1");
-	widgets.document_buttons[26] = lookup_widget(main_widgets.window, "normal_size1");
-	widgets.document_buttons[27] = lookup_widget(main_widgets.window, "toolbutton24");
-	widgets.document_buttons[28] = lookup_widget(main_widgets.window, "toolbutton25");
-	widgets.document_buttons[29] = lookup_widget(main_widgets.window, "entry_goto_line");
-	widgets.document_buttons[30] = lookup_widget(main_widgets.window, "treeview6");
-	widgets.document_buttons[31] = lookup_widget(main_widgets.window, "print1");
-	widgets.document_buttons[32] = lookup_widget(main_widgets.window, "menu_reload_as1");
-	widgets.document_buttons[33] = lookup_widget(main_widgets.window, "menu_select_all1");
-	widgets.document_buttons[34] = lookup_widget(main_widgets.window, "insert_date1");
-	widgets.document_buttons[35] = lookup_widget(main_widgets.window, "menu_format1");
-	widgets.document_buttons[36] = lookup_widget(main_widgets.window, "menu_open_selected_file1");
-	widgets.document_buttons[37] = lookup_widget(main_widgets.window, "page_setup1");
-	widgets.document_buttons[38] = lookup_widget(main_widgets.window, "find1");
-	widgets.document_buttons[39] = lookup_widget(main_widgets.window, "find_next1");
-	widgets.document_buttons[40] = lookup_widget(main_widgets.window, "find_previous1");
-	widgets.document_buttons[41] = lookup_widget(main_widgets.window, "replace1");
-	widgets.document_buttons[42] = lookup_widget(main_widgets.window, "find_nextsel1");
-	widgets.document_buttons[43] = lookup_widget(main_widgets.window, "find_prevsel1");
-	widgets.document_buttons[44] = lookup_widget(main_widgets.window, "go_to_line1");
+	add_doc_widget("menu_close1");
+	add_doc_widget("close_other_documents1");
+	add_doc_widget("toolbutton15");	/* close */
+	add_doc_widget("menu_change_font1");
+	add_doc_widget("entry1");
+	add_doc_widget("toolbutton18");
+	add_doc_widget("toolbutton20");
+	add_doc_widget("toolbutton21");
+	add_doc_widget("menu_close_all1");
+	add_doc_widget("menu_save_all1");
+	add_doc_widget("toolbutton22");
+	add_doc_widget("toolbutton13"); /* compile_button */
+	add_doc_widget("menu_save_as1");
+	add_doc_widget("toolbutton23");
+	add_doc_widget("menu_count_words1");
+	add_doc_widget("menu_build1");
+	add_doc_widget("add_comments1");
+	add_doc_widget("menu_paste1");
+	add_doc_widget("menu_undo2");
+	add_doc_widget("preferences2");
+	add_doc_widget("menu_reload1");
+	add_doc_widget("menu_document1");
+	add_doc_widget("menu_markers_margin1");
+	add_doc_widget("menu_linenumber_margin1");
+	add_doc_widget("menu_choose_color1");
+	add_doc_widget("menu_zoom_in1");
+	add_doc_widget("menu_zoom_out1");
+	add_doc_widget("normal_size1");
+	add_doc_widget("toolbutton24");
+	add_doc_widget("toolbutton25");
+	add_doc_widget("entry_goto_line");
+	add_doc_widget("treeview6");
+	add_doc_widget("print1");
+	add_doc_widget("menu_reload_as1");
+	add_doc_widget("menu_select_all1");
+	add_doc_widget("insert_date1");
+	add_doc_widget("menu_format1");
+	add_doc_widget("menu_open_selected_file1");
+	add_doc_widget("page_setup1");
+	add_doc_widget("find1");
+	add_doc_widget("find_next1");
+	add_doc_widget("find_previous1");
+	add_doc_widget("replace1");
+	add_doc_widget("find_nextsel1");
+	add_doc_widget("find_prevsel1");
+	add_doc_widget("go_to_line1");
 }
 
 
@@ -624,8 +632,11 @@ void ui_document_buttons_update(void)
 	guint i;
 	gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) ? TRUE : FALSE;
 
-	for (i = 0; i < G_N_ELEMENTS(widgets.document_buttons); i++)
-		gtk_widget_set_sensitive(widgets.document_buttons[i], enable);
+	for (i = 0; i < widgets.document_buttons->len; i++)
+	{
+		GtkWidget *widget = g_ptr_array_index(widgets.document_buttons, i);
+		gtk_widget_set_sensitive(widget, enable);
+	}
 
 #ifdef HAVE_PLUGINS
 	plugins_update_document_sensitive(enable);
