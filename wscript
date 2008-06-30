@@ -34,11 +34,11 @@ Missing features: --enable-binreloc, make targets: dist, pdf (in doc/)
 Known issues: Dependency handling is buggy, e.g. if src/document.h is
               changed, depending source files are not rebuilt (maybe Waf bug).
 
-Requires WAF SVN r3624 (or later) and Python 2.4 (or later).
+Requires WAF SVN r3976 (or later) and Python 2.4 (or later).
 """
 
 
-import Params, Configure, Runner, Task, Utils, Install
+import Build, Configure, Install, Options, Runner, Task, Utils
 import sys, os, subprocess, shutil
 
 
@@ -152,7 +152,7 @@ def configure(conf):
     conf.define('HAVE_STDLIB_H', 1) # are there systems without stdlib.h?
     conf.define('STDC_HEADERS', 1) # an optimistic guess ;-)
 
-    if Params.g_options.gnu_regex:
+    if Options.options.gnu_regex:
         conf.define('HAVE_REGCOMP', 1, 0)
         conf.define('USE_INCLUDED_REGEX', 1, 0)
     else:
@@ -163,7 +163,7 @@ def configure(conf):
         if conf.env['HAVE_REGCOMP'] != 1 or conf.env['HAVE_REGEX_H'] != 1:
             conf.define('HAVE_REGCOMP', 1, 0)
             conf.define('USE_INCLUDED_REGEX', 1, 0)
-            Params.pprint('YELLOW', 'Using included GNU regex library.')
+            Utils.pprint('YELLOW', 'Using included GNU regex library.')
 
     conf_check_function('fgetpos', ['stdio.h'], 0)
     conf_check_function('ftruncate', ['unistd.h'], 0)
@@ -185,9 +185,9 @@ def configure(conf):
         conf.check_pkg('gtk+-2.0', destvar='GTK', vnum='2.6.0', mandatory=True)
         have_gtk_210 = False
 
-    conf_define_from_opt('LIBDIR', Params.g_options.libdir, conf.env['PREFIX'] + '/lib')
-    conf_define_from_opt('DOCDIR', Params.g_options.docdir, conf.env['DATADIR'] + '/doc/geany')
-    conf_define_from_opt('MANDIR', Params.g_options.mandir, conf.env['DATADIR'] + '/man')
+    conf_define_from_opt('LIBDIR', Options.options.libdir, conf.env['PREFIX'] + '/lib')
+    conf_define_from_opt('DOCDIR', Options.options.docdir, conf.env['DATADIR'] + '/doc/geany')
+    conf_define_from_opt('MANDIR', Options.options.mandir, conf.env['DATADIR'] + '/man')
 
     svn_rev = conf_get_svn_rev()
     conf.define('ENABLE_NLS', 1)
@@ -202,18 +202,18 @@ def configure(conf):
 
     conf.define('GETTEXT_PACKAGE', APPNAME, 1)
 
-    conf_define_from_opt('HAVE_PLUGINS', not Params.g_options.no_plugins, None, 0)
-    conf_define_from_opt('HAVE_SOCKET', not Params.g_options.no_socket, None, 0)
-    conf_define_from_opt('HAVE_VTE', not Params.g_options.no_vte, None, 0)
+    conf_define_from_opt('HAVE_PLUGINS', not Options.options.no_plugins, None, 0)
+    conf_define_from_opt('HAVE_SOCKET', not Options.options.no_socket, None, 0)
+    conf_define_from_opt('HAVE_VTE', not Options.options.no_vte, None, 0)
 
     conf.write_config_header('config.h')
 
-    Params.pprint('BLUE', 'Summary:')
+    Utils.pprint('BLUE', 'Summary:')
     print_message('Install Geany ' + VERSION + ' in', conf.env['PREFIX'])
     print_message('Using GTK version', conf_get_pkg_ver('gtk+-2.0'))
     print_message('Build with GTK printing support', have_gtk_210 and 'yes' or 'no')
-    print_message('Build with plugin support', Params.g_options.no_plugins and 'no' or 'yes')
-    print_message('Use virtual terminal support', Params.g_options.no_vte and 'no' or 'yes')
+    print_message('Build with plugin support', Options.options.no_plugins and 'no' or 'yes')
+    print_message('Use virtual terminal support', Options.options.no_vte and 'no' or 'yes')
     if svn_rev != '-1':
         print_message('Compiling Subversion revision', svn_rev)
         conf.env.append_value('CCFLAGS', '-g -DGEANY_DEBUG')
@@ -394,32 +394,32 @@ def build(bld):
 
 def shutdown():
     # the following code was taken from midori's WAF script, thanks
-    if Params.g_commands['install'] or Params.g_commands['uninstall']:
+    if Options.commands['install'] or Options.commands['uninstall']:
         dir = Install.path_install('DATADIR', 'icons/hicolor')
         icon_cache_updated = False
-        if not Params.g_options.destdir:
+        if not Options.options.destdir:
             try:
                 subprocess.call(['gtk-update-icon-cache', '-q', '-f', '-t', dir])
-                Params.pprint('GREEN', 'Updated GTK icon cache.')
+                Utils.pprint('GREEN', 'GTK icon cache updated.')
                 icon_cache_updated = True
             except:
-                Params.pprint('YELLOW', 'Failed to update icon cache for ' + dir + '.')
-        if not icon_cache_updated and not Params.g_options.destdir:
+                Utils.pprint('YELLOW', 'Failed to update icon cache for ' + dir + '.')
+        if not icon_cache_updated and not Options.options.destdir:
             print 'Icon cache not updated. After install, run this:'
             print 'gtk-update-icon-cache -q -f -t %s' % dir
 
-    if Params.g_options.apidoc:
-        doxyfile = os.path.join(Params.g_build.m_srcnode.abspath( \
-            Params.g_build.env), 'doc', 'Doxyfile')
+    if Options.options.apidoc:
+        doxyfile = os.path.join(Build.bld.m_srcnode.abspath( \
+            Build.bld.env), 'doc', 'Doxyfile')
         os.chdir('doc')
         launch('doxygen ' + doxyfile, 'Generating API reference documentation')
 
-    if Params.g_options.htmldoc:
+    if Options.options.htmldoc:
         os.chdir('doc')
         launch('rst2html -stg --stylesheet=geany.css geany.txt geany.html',
             'Generating HTML documentation')
 
-    if Params.g_options.update_po:
+    if Options.options.update_po:
         # the following code was taken from midori's WAF script, thanks
         os.chdir('./po')
         try:
@@ -430,33 +430,33 @@ def shutdown():
             subprocess.call(['intltool-update', '--pot'])
             size_new = os.stat('geany.pot').st_size
             if size_new != size_old:
-                Params.pprint('CYAN', 'Updated POT file.')
+                Utils.pprint('CYAN', 'Updated POT file.')
                 launch('intltool-update -r', 'Updating translations', 'CYAN')
             else:
-                Params.pprint('CYAN', 'POT file is up to date.')
+                Utils.pprint('CYAN', 'POT file is up to date.')
         except:
-            Params.pprint('RED', 'Failed to generate pot file.')
+            Utils.pprint('RED', 'Failed to generate pot file.')
         os.chdir('..')
 
 
 # Simple function to execute a command and print its exit status
 def launch(command, status, success_color='GREEN'):
     ret = 0
-    Params.pprint(success_color, status)
+    Utils.pprint(success_color, status)
     try:
         ret = subprocess.call(command.split())
     except:
         ret = 1
 
     if ret != 0:
-        Params.pprint('RED', status + ' failed')
+        Utils.pprint('RED', status + ' failed')
 
     return ret
 
 
 def print_message(msg, result, color = 'GREEN'):
-    Configure.g_maxlen = max(Configure.g_maxlen, len(msg))
-    print "%s :" % msg.ljust(Configure.g_maxlen),
-    Params.pprint(color, result)
+    Configure.line_just = max(Configure.line_just, len(msg))
+    print "%s :" % msg.ljust(Configure.line_just),
+    Utils.pprint(color, result)
     Runner.print_log(msg, '\n\n')
 

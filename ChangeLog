@@ -1,3 +1,10 @@
+2008-06-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * waf, wscript:
+   Update waf to its latest SVN rev which makes it 20 KB smaller.
+   Update waf script to reflect waf API changes.
+
+
 2008-06-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/ui_utils.c:
