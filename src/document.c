@@ -446,6 +446,21 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 
 
 /**
+ *  Close the given document.
+ *
+ *  @param doc The document to remove.
+ *
+ *  @return @a TRUE if the document was actually removed or @a FALSE otherwise.
+ **/
+gboolean document_close(GeanyDocument *doc)
+{
+	g_return_val_if_fail(doc, FALSE);
+
+	return document_remove_page(document_get_notebook_page(doc));
+}
+
+
+/**
  *  Remove the given notebook tab at @a page_num and clear all related information
  *  in the document list.
  *
@@ -498,14 +513,10 @@ gboolean document_remove_page(guint page_num)
 			ui_document_buttons_update();
 			build_menu_update(NULL);
 		}
+		return TRUE;
 	}
-	else
-	{
-		geany_debug("Error: page_num: %d", page_num);
-		return FALSE;
-	}
-
-	return TRUE;
+	geany_debug("Error: page_num: %d", page_num);
+	return FALSE;
 }
 
 

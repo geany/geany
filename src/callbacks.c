@@ -2194,13 +2194,11 @@ on_close_other_documents1_activate     (GtkMenuItem     *menuitem,
 	for (i = 0; i < documents_array->len; i++)
 	{
 		GeanyDocument *doc = documents[i];
-		gint page;
 
 		if (doc == cur_doc || ! doc->is_valid)
 			continue;
 
-		page = document_get_notebook_page(doc);
-		if (! document_remove_page(page))
+		if (! document_close(doc))
 			break;
 	}
 }

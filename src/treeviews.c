@@ -543,8 +543,7 @@ static void on_openfiles_document_action(GtkMenuItem *menuitem, gpointer user_da
 			{
 				case OPENFILES_ACTION_REMOVE:
 				{
-					document_remove_page(gtk_notebook_page_num(
-						GTK_NOTEBOOK(main_widgets.notebook), GTK_WIDGET(doc->sci)));
+					document_close(doc);
 					break;
 				}
 				case OPENFILES_ACTION_SAVE:

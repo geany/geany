@@ -1,3 +1,9 @@
+2008-07-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/treeviews.c, src/callbacks.c, src/document.c, src/document.h:
+   Add function document_close().
+
+
 2008-06-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * waf, wscript:
