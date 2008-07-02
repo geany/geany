@@ -36,7 +36,7 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 72;
+static const gint api_version = 73;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
@@ -217,6 +217,7 @@ typedef struct DocumentFuncs
 	void		(*set_encoding) (struct GeanyDocument *doc, const gchar *new_encoding);
 	void		(*set_text_changed) (struct GeanyDocument *doc, gboolean changed);
 	void		(*set_filetype) (struct GeanyDocument *doc, struct GeanyFiletype *type);
+	gboolean	(*close) (GeanyDocument *doc);
 }
 DocumentFuncs;
 

@@ -5,6 +5,8 @@
    are set as keybindings for Go to Line Start/End.
    This uses a new ignore_keybinding variable because changing
    KeyCallback to return gboolean would break plugin keybindings.
+ * src/plugindata.h, src/plugins.c:
+   Add document_close() to the plugin API.
 
 
 2008-07-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

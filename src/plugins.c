@@ -106,7 +106,8 @@ static DocumentFuncs doc_funcs = {
 	&document_reload_file,
 	&document_set_encoding,
 	&document_set_text_changed,
-	&document_set_filetype
+	&document_set_filetype,
+	&document_close
 };
 
 static EditorFuncs editor_funcs = {
