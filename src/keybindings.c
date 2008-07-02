@@ -51,6 +51,8 @@ GPtrArray *keybinding_groups;	/* array of KeyBindingGroup pointers */
 /* keyfile group name for non-plugin KB groups */
 const gchar keybindings_keyfile_group_name[] = "Bindings";
 
+static gboolean ignore_keybinding = FALSE;
+
 static GtkAccelGroup *kb_accel_group = NULL;
 static const gboolean swap_alt_tab_order = FALSE;
 
@@ -916,6 +918,7 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *ev, gpointer user
 	if (check_snippet_completion(keyval, state))
 		return TRUE;
 
+	ignore_keybinding = FALSE;
 	for (g = 0; g < keybinding_groups->len; g++)
 	{
 		KeyBindingGroup *group = g_ptr_array_index(keybinding_groups, g);
@@ -931,7 +934,7 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *ev, gpointer user
 
 				/* call the corresponding callback function for this shortcut */
 				kb->callback(i);
-				return TRUE;
+				return !ignore_keybinding;
 			}
 		}
 	}
@@ -1361,22 +1364,22 @@ static void cb_func_goto_action(guint key_id)
 	{
 		case GEANY_KEYS_GOTO_BACK:
 			navqueue_go_back();
-			break;
+			return;
 		case GEANY_KEYS_GOTO_FORWARD:
 			navqueue_go_forward();
-			break;
+			return;
 		case GEANY_KEYS_GOTO_LINE:
 			on_go_to_line1_activate(NULL, NULL);
-			break;
+			return;
 		case GEANY_KEYS_GOTO_MATCHINGBRACE:
 			goto_matching_brace(doc);
-			break;
+			return;
 		case GEANY_KEYS_GOTO_TOGGLEMARKER:
 		{
 			gboolean set = sci_is_marker_set_at_line(doc->sci, cur_line, 1);
 
 			sci_set_marker_at_line(doc->sci, cur_line, ! set, 1);
-			break;
+			return;
 		}
 		case GEANY_KEYS_GOTO_NEXTMARKER:
 		{
@@ -1387,7 +1390,7 @@ static void cb_func_goto_action(guint key_id)
 				sci_set_current_line(doc->sci, mline);
 				editor_display_current_line(doc, 0.5F);
 			}
-			break;
+			return;
 		}
 		case GEANY_KEYS_GOTO_PREVIOUSMARKER:
 		{
@@ -1398,16 +1401,25 @@ static void cb_func_goto_action(guint key_id)
 				sci_set_current_line(doc->sci, mline);
 				editor_display_current_line(doc, 0.5F);
 			}
-			break;
+			return;
 		}
 		case GEANY_KEYS_GOTO_TAGDEFINITION:
 			if (check_current_word())
 				symbols_goto_tag(editor_info.current_word, TRUE);
-			break;
+			return;
 		case GEANY_KEYS_GOTO_TAGDECLARATION:
 			if (check_current_word())
 				symbols_goto_tag(editor_info.current_word, FALSE);
-			break;
+			return;
+	}
+	/* only check editor-sensitive keybindings when editor has focus */
+	if (gtk_window_get_focus(GTK_WINDOW(main_widgets.window)) != GTK_WIDGET(doc->sci))
+	{
+		ignore_keybinding = TRUE;
+		return;
+	}
+	switch (key_id)
+	{
 		case GEANY_KEYS_GOTO_LINESTART:
 			sci_cmd(doc->sci, editor_prefs.smart_home_key ? SCI_VCHOME : SCI_HOME);
 			break;
