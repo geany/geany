@@ -1022,6 +1022,10 @@ int symbols_generate_global_tags(int argc, char **argv, gboolean want_preprocess
 			g_printerr(_("Unknown filetype extension for \"%s\".\n"), tags_file);
 			return 1;
 		}
+		/* load ignore list for C/C++ parser */
+		if (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP)
+			load_c_ignore_tags();
+
 		if (want_preprocess && (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP))
 			command = g_strdup_printf("%s %s", pre_process, NVL(getenv("CFLAGS"), ""));
 		else
@@ -1033,6 +1037,7 @@ int symbols_generate_global_tags(int argc, char **argv, gboolean want_preprocess
 												 (const char **) (argv + 2),
 												 argc - 2, tags_file, ft->lang);
 		g_free(command);
+		symbols_finalize(); /* free c_tags_ignore data */
 		if (! status)
 		{
 			g_printerr(_("Failed to create tags file, perhaps because no tags "

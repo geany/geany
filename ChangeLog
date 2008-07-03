@@ -6,6 +6,8 @@
  * src/keyfile.c:
    Fix broken session file support with more than 99 files
    (closes #2007288).
+ * src/symbols.c:
+   Load "ignore_tags" file before generating global tags file.
 
 
 2008-07-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
