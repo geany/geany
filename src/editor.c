@@ -1257,7 +1257,7 @@ autocomplete_html(ScintillaObject *sci, const gchar *root, gsize rootlen)
 
 
 static gboolean
-autocomplete_tags(GeanyDocument *doc, gchar *root, gsize rootlen)
+autocomplete_tags(GeanyDocument *doc, const gchar *root, gsize rootlen)
 {	/* PHP, LaTeX, C, C++, D and Java tag autocompletion */
 	TMTagAttrType attrs[] = { tm_tag_attr_name_t, 0 };
 	const GPtrArray *tags;
@@ -1285,6 +1285,27 @@ autocomplete_tags(GeanyDocument *doc, gchar *root, gsize rootlen)
 }
 
 
+/* Check whether to use entity autocompletion:
+ * - always in a HTML file except when inside embedded JavaScript, Python, ASP, ...
+ * - in a PHP file only when we are outside of <? ?> */
+static gboolean autocomplete_check_for_html(gint ft_id, gint style)
+{
+	/* use entity completion when style is not JavaScript, ASP, Python, PHP, ...
+	 * (everything after SCE_HJ_START is for embedded scripting languages) */
+	if (ft_id == GEANY_FILETYPES_HTML && style < SCE_HJ_START)
+		return TRUE;
+
+	if (ft_id == GEANY_FILETYPES_PHP)
+	{
+		/* use entity completion when style is outside of PHP styles */
+		if (style < SCE_HPHP_DEFAULT || style > SCE_HPHP_OPERATOR)
+			return TRUE;
+	}
+
+	return FALSE;
+}
+
+
 gboolean editor_start_auto_complete(GeanyDocument *doc, gint pos, gboolean force)
 {
 	gint line, line_start, line_len, line_pos, current, rootlen, startword, lexer, style, prev_style;
@@ -1309,7 +1330,14 @@ gboolean editor_start_auto_complete(GeanyDocument *doc, gint pos, gboolean force
 	startword = current;
 	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 	prev_style = SSM(sci, SCI_GETSTYLEAT, pos - 2, 0);
-	style = SSM(sci, SCI_GETSTYLEAT, pos, 0);
+
+	/* If we are at the last character of the document, style is always 0 because it has not yet
+	 * been styled (styling is first done in SCN_UPDATEUI, not yet in SCN_CHARADDED),
+	 * so we use the style of the last character. */
+	if (pos >= SSM(sci, SCI_GETLENGTH, 0, 0))
+		style = prev_style;
+	else
+		style = SSM(sci, SCI_GETSTYLEAT, pos, 0);
 
 	 /* don't autocomplete in comments and strings */
 	 if (!force && is_comment(lexer, prev_style, style))
@@ -1331,12 +1359,7 @@ gboolean editor_start_auto_complete(GeanyDocument *doc, gint pos, gboolean force
 	root = linebuf + startword;
 	rootlen = current - startword;
 
-	/* entity autocompletion always in a HTML file except when inside embedded JavaScript,
-	 * in a PHP file only when we are outside of <? ?> */
-	if ((ft->id == GEANY_FILETYPES_HTML && (style < SCE_HJ_START || style > SCE_HJ_REGEX)) ||
-		(ft->id == GEANY_FILETYPES_PHP && (style < SCE_HPHP_DEFAULT || style > SCE_HPHP_OPERATOR) &&
-		 line != (sci_get_line_count(sci) - 1))) /* this check is a workaround for a Scintilla bug:
-												  * the last line in a PHP gets wrong styling */
+	if (autocomplete_check_for_html(ft->id, style))
 		ret = autocomplete_html(sci, root, rootlen);
 	else
 	{

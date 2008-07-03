@@ -17,6 +17,11 @@
    (closes #2007288).
  * src/symbols.c:
    Load "ignore_tags" file before generating global tags file.
+ * src/editor.c:
+   Move the checks for HTML entity completion into an own function
+   to increase readability.
+   Remove workaround for a wrong styling on last character and replace
+   it with proper style reading (patch by Jason Oster, thanks).
 
 
 2008-07-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
