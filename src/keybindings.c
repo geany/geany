@@ -832,6 +832,15 @@ static gboolean check_snippet_completion(guint keyval, guint state)
 
 
 #ifdef HAVE_VTE
+static gboolean on_menu_expose_event(GtkWidget *widget, GdkEventExpose *event,
+		gpointer user_data)
+{
+	if (!GTK_WIDGET_SENSITIVE(widget))
+		gtk_widget_set_sensitive(GTK_WIDGET(widget), TRUE);
+	return FALSE;
+}
+
+
 static gboolean set_sensitive(gpointer widget)
 {
 	gtk_widget_set_sensitive(GTK_WIDGET(widget), TRUE);
@@ -865,14 +874,19 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 
 	/* Temporarily disable the menus to prevent conflicting menu accelerators
 	 * from overriding the VTE bash shortcuts.
-	 * Ideally we would just somehow disable the menubar without redrawing it,
-	 * but maybe that's not possible. */
+	 * Note: maybe there's a better way of doing this ;-) */
 	widget = lookup_widget(main_widgets.window, "menubar1");
 	gtk_widget_set_sensitive(widget, FALSE);
-	g_idle_add(&set_sensitive, (gpointer) widget);
+	{
+		/* make the menubar sensitive before it is redrawn */
+		static gboolean connected = FALSE;
+		if (!connected)
+			g_signal_connect(widget, "expose-event", G_CALLBACK(on_menu_expose_event), NULL);
+	}
+
 	widget = main_widgets.editor_menu;
 	gtk_widget_set_sensitive(widget, FALSE);
-	g_idle_add(&set_sensitive, (gpointer) widget);
+	g_idle_add(set_sensitive, widget);
 	return TRUE;
 }
 #endif

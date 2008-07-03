@@ -5,6 +5,9 @@
    allocate string when '<' found.
    Factor insert_closing_tag() from handle_xml(), fixing a memory leak
    when ignoring tags like <br>.
+ * src/keybindings.c:
+   Avoid flickering the menu bar when 'Override Geany keybindings'
+   Terminal pref is set.
 
 
 2008-07-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
