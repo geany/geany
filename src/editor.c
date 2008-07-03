@@ -1731,7 +1731,7 @@ static gboolean handle_xml(GeanyDocument *doc, gchar ch)
 	{
 		/* ignore tag */
 	}
-	else if (*str_found != '\0')
+	else if (NZV(str_found))
 	{
 		insert_closing_tag(doc, pos, ch, str_found);
 		result = TRUE;

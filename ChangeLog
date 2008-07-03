@@ -8,6 +8,9 @@
  * src/keybindings.c:
    Avoid flickering the menu bar when 'Override Geany keybindings'
    Terminal pref is set.
+ * src/editor.c:
+   Fix possible segfault for XML tag completion when no '<' brace could
+   be found.
 
 
 2008-07-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
