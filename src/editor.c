@@ -1615,6 +1615,36 @@ void editor_show_macro_list(ScintillaObject *sci)
 }
 
 
+static void insert_closing_tag(GeanyDocument *doc, gint pos, gchar ch, const gchar *tag_name)
+{
+	ScintillaObject *sci = doc->sci;
+	gchar *to_insert = NULL;
+
+	if (ch == '/')
+	{
+		const gchar *gt = ">";
+		/* if there is already a '>' behind the cursor, don't add it */
+		if (sci_get_char_at(sci, pos) == '>')
+			gt = "";
+
+		to_insert = g_strconcat(tag_name, gt, NULL);
+	}
+	else
+		to_insert = g_strconcat("</", tag_name, ">", NULL);
+
+	sci_start_undo_action(sci);
+	sci_replace_sel(sci, to_insert);
+	if (ch == '>')
+	{
+		SSM(sci, SCI_SETSEL, pos, pos);
+		if (utils_str_equal(tag_name, "table"))
+			editor_auto_table(doc, pos);
+	}
+	sci_end_undo_action(sci);
+	g_free(to_insert);
+}
+
+
 /*
  * (stolen from anjuta and heavily modified)
  * This routine will auto complete XML or HTML tags that are still open by closing them
@@ -1627,6 +1657,7 @@ static gboolean handle_xml(GeanyDocument *doc, gchar ch)
 	gint lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 	gint pos, min;
 	gchar *str_found, sel[512];
+	gboolean result = FALSE;
 
 	/* If the user has turned us off, quit now.
 	 * This may make sense only in certain languages */
@@ -1675,39 +1706,15 @@ static gboolean handle_xml(GeanyDocument *doc, gchar ch)
 	 || utils_str_equal(str_found, "area")
 	 || utils_str_equal(str_found, "meta"))
 	{
-		return FALSE;
+		/* ignore tag */
 	}
-
-	if (*str_found != '\0')
+	else if (*str_found != '\0')
 	{
-		gchar *to_insert;
-		if (ch == '/')
-		{
-			gchar *gt = ">";
-			/* if there is already a '>' behind the cursor, don't add it */
-			if (sci_get_char_at(sci, pos) == '>')
-				gt = "";
-
-			to_insert = g_strconcat(str_found, gt, NULL);
-		}
-		else
-			to_insert = g_strconcat("</", str_found, ">", NULL);
-		sci_start_undo_action(sci);
-		sci_replace_sel(sci, to_insert);
-		if (ch == '>')
-		{
-			SSM(sci, SCI_SETSEL, pos, pos);
-			if (utils_str_equal(str_found, "table"))
-				editor_auto_table(doc, pos);
-		}
-		sci_end_undo_action(sci);
-		g_free(to_insert);
-		g_free(str_found);
-		return TRUE;
+		insert_closing_tag(doc, pos, ch, str_found);
+		result = TRUE;
 	}
-
 	g_free(str_found);
-	return FALSE;
+	return result;
 }
 
 

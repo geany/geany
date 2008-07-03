@@ -244,12 +244,11 @@ gint utils_write_file(const gchar *filename, const gchar *text)
 
 /*
  * (stolen from anjuta and modified)
- * Search backward through size bytes looking for a '<', then return the tag if any
+ * Search backward through size bytes looking for a '<', then return the tag, if any.
  * @return The tag name
  */
 gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag)
 {
-	GString *result = g_string_sized_new(64);
 	const gchar *begin, *cur;
 
 	if (size < 3)
@@ -272,16 +271,18 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag)
 
 	if (*cur == '<')
 	{
+		GString *result = g_string_sized_new(64);
+
 		cur++;
-		while((strchr(":_-.", *cur) || isalnum(*cur)))
+		while (strchr(":_-.", *cur) || isalnum(*cur))
 		{
 			g_string_append_c(result, *cur);
 			cur++;
 		}
+		return g_string_free(result, FALSE);
 	}
 
-	/* Return the tag name or "" */
-	return g_string_free(result, FALSE);
+	return NULL;
 }
 
 

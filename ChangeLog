@@ -1,3 +1,12 @@
+2008-07-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/utils.c, src/editor.c:
+   Fix memory leak in utils_find_open_xml_tag() when size < 3, and only
+   allocate string when '<' found.
+   Factor insert_closing_tag() from handle_xml(), fixing a memory leak
+   when ignoring tags like <br>.
+
+
 2008-07-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/utils.c:
