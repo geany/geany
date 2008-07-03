@@ -1,3 +1,10 @@
+2008-07-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/utils.c:
+   Fix unnecessary 40 character limit for auto-closing XML tags
+   (closes #2007278).
+
+
 2008-07-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keybindings.c:

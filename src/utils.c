@@ -249,15 +249,12 @@ gint utils_write_file(const gchar *filename, const gchar *text)
  */
 gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag)
 {
-	/* 40 chars per tag should be enough, or not? */
-	gint i = 0, max_tag_size = 40;
-	gchar *result = g_malloc(max_tag_size);
+	GString *result = g_string_sized_new(64);
 	const gchar *begin, *cur;
 
 	if (size < 3)
-	{
-		/* Smallest tag is "<p>" which is 3 characters */
-		return result;
+	{	/* Smallest tag is "<p>" which is 3 characters */
+		return NULL;
 	}
 	begin = &sel[0];
 	if (check_tag)
@@ -276,16 +273,15 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag)
 	if (*cur == '<')
 	{
 		cur++;
-		while((strchr(":_-.", *cur) || isalnum(*cur)) && i < (max_tag_size - 1))
+		while((strchr(":_-.", *cur) || isalnum(*cur)))
 		{
-			result[i++] = *cur;
+			g_string_append_c(result, *cur);
 			cur++;
 		}
 	}
 
-	result[i] = '\0';
 	/* Return the tag name or "" */
-	return result;
+	return g_string_free(result, FALSE);
 }
 
 
