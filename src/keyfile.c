@@ -160,7 +160,7 @@ void configuration_save_session_files(GKeyFile *config)
 {
 	gint npage;
 	gchar *tmp;
-	gchar entry[14];
+	gchar entry[16];
 	guint i = 0, j = 0, max;
 	GeanyDocument *doc;
 
@@ -176,7 +176,7 @@ void configuration_save_session_files(GKeyFile *config)
 		{
 			gchar *fname;
 
-			g_snprintf(entry, 13, "FILE_NAME_%d", j);
+			g_snprintf(entry, sizeof(entry), "FILE_NAME_%d", j);
 			fname = get_session_file_string(doc);
 			g_key_file_set_string(config, "files", entry, fname);
 			g_free(fname);
@@ -187,7 +187,7 @@ void configuration_save_session_files(GKeyFile *config)
 	i = j;
 	while (TRUE)
 	{
-		g_snprintf(entry, 13, "FILE_NAME_%d", i);
+		g_snprintf(entry, sizeof(entry), "FILE_NAME_%d", i);
 		tmp = g_key_file_get_string(config, "files", entry, NULL);
 		if (tmp == NULL)
 		{
@@ -466,7 +466,7 @@ void configuration_load_session_files(GKeyFile *config)
 	guint i;
 	gsize len = 0;
 	gboolean have_session_files;
-	gchar entry[14];
+	gchar entry[16];
 	gchar **tmp_array;
 	GError *error = NULL;
 
@@ -492,7 +492,7 @@ void configuration_load_session_files(GKeyFile *config)
 	i = 0;
 	while (have_session_files)
 	{
-		g_snprintf(entry, 13, "FILE_NAME_%d", i);
+		g_snprintf(entry, sizeof(entry), "FILE_NAME_%d", i);
 		tmp_array = g_key_file_get_string_list(config, "files", entry, NULL, &error);
 		if (! tmp_array || error)
 		{

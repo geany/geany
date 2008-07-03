@@ -3,6 +3,9 @@
  * src/utils.c:
    Fix unnecessary 40 character limit for auto-closing XML tags
    (closes #2007278).
+ * src/keyfile.c:
+   Fix broken session file support with more than 99 files
+   (closes #2007288).
 
 
 2008-07-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
