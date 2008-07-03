@@ -1010,6 +1010,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 	/* add the text to the ScintillaObject */
 	sci_set_readonly(doc->sci, FALSE);	/* to allow replacing text */
 	sci_set_text(doc->sci, filedata.data);	/* NULL terminated data */
+	queue_colourise(doc);	/* Ensure the document gets colourised. */
 
 	/* detect & set line endings */
 	editor_mode = utils_get_line_endings(filedata.data, filedata.len);
@@ -1049,9 +1050,6 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 	{	/* reloading */
 		document_undo_clear(doc);
 
-		/* Ensure the document gets colourised.
-		 * (The text could have changed without typenames changing.) */
-		queue_colourise(doc);
 		use_ft = ft;
 	}
 	/* update taglist, typedef keywords and build menu if necessary */

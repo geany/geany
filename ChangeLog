@@ -11,6 +11,9 @@
  * src/editor.c:
    Fix possible segfault for XML tag completion when no '<' brace could
    be found.
+ * src/document.c:
+   Ensure all opened documents are colourised before being drawn
+   (should happen anyway in document_set_filetype(), but just in case).
 
 
 2008-07-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
