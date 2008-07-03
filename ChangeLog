@@ -14,6 +14,9 @@
  * src/document.c:
    Ensure all opened documents are colourised before being drawn
    (should happen anyway in document_set_filetype(), but just in case).
+ * src/keybindings.c, src/keybindings.h:
+   Add 'Switch to Compiler' keybinding (useful when checking build
+   progress).
 
 
 2008-07-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

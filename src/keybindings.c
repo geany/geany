@@ -67,6 +67,7 @@ static void cb_func_format_action(guint key_id);
 static void cb_func_insert_action(guint key_id);
 static void cb_func_search_action(guint key_id);
 static void cb_func_goto_action(guint key_id);
+static void cb_func_switch_action(guint key_id);
 static void cb_func_clipboard(guint key_id);
 static void cb_func_build_action(guint key_id);
 static void cb_func_document_action(guint key_id);
@@ -389,6 +390,8 @@ static void init_default_kb(void)
 		GDK_F7, 0, "switch_search_bar", _("Switch to Search Bar"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_FOCUS_SIDEBAR, cb_func_switch_sidebar,
 		0, 0, "switch_sidebar", _("Switch to Sidebar"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_FOCUS_COMPILER, cb_func_switch_action,
+		0, 0, "switch_compiler", _("Switch to Compiler"), NULL);
 
 	group = ADD_KB_GROUP(NOTEBOOK, _("Notebook tab"));
 
@@ -1188,6 +1191,17 @@ static gboolean check_current_word(void)
 	}
 	return TRUE;
 }
+
+static void cb_func_switch_action(guint key_id)
+{
+	switch (key_id)
+	{
+		case GEANY_KEYS_FOCUS_COMPILER:
+			msgwin_switch_tab(MSG_COMPILER, TRUE);
+			break;
+	}
+}
+
 
 static void cb_func_switch_editor(G_GNUC_UNUSED guint key_id)
 {
