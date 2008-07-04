@@ -84,11 +84,6 @@ static void cb_func_menu_zoomout(guint key_id);
 
 static void cb_func_menu_opencolorchooser(guint key_id);
 
-static void cb_func_switch_editor(guint key_id);
-static void cb_func_switch_scribble(guint key_id);
-static void cb_func_switch_vte(guint key_id);
-static void cb_func_switch_search_bar(guint key_id);
-static void cb_func_switch_sidebar(guint key_id);
 static void cb_func_switch_tableft(guint key_id);
 static void cb_func_switch_tabright(guint key_id);
 static void cb_func_switch_tablastused(guint key_id);
@@ -380,15 +375,15 @@ static void init_default_kb(void)
 
 	group = ADD_KB_GROUP(FOCUS, _("Focus"));
 
-	keybindings_set_item(group, GEANY_KEYS_FOCUS_EDITOR, cb_func_switch_editor,
+	keybindings_set_item(group, GEANY_KEYS_FOCUS_EDITOR, cb_func_switch_action,
 		GDK_F2, 0, "switch_editor", _("Switch to Editor"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_FOCUS_SCRIBBLE, cb_func_switch_scribble,
+	keybindings_set_item(group, GEANY_KEYS_FOCUS_SCRIBBLE, cb_func_switch_action,
 		GDK_F6, 0, "switch_scribble", _("Switch to Scribble"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_FOCUS_VTE, cb_func_switch_vte,
+	keybindings_set_item(group, GEANY_KEYS_FOCUS_VTE, cb_func_switch_action,
 		GDK_F4, 0, "switch_vte", _("Switch to VTE"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_FOCUS_SEARCHBAR, cb_func_switch_search_bar,
+	keybindings_set_item(group, GEANY_KEYS_FOCUS_SEARCHBAR, cb_func_switch_action,
 		GDK_F7, 0, "switch_search_bar", _("Switch to Search Bar"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_FOCUS_SIDEBAR, cb_func_switch_sidebar,
+	keybindings_set_item(group, GEANY_KEYS_FOCUS_SIDEBAR, cb_func_switch_action,
 		0, 0, "switch_sidebar", _("Switch to Sidebar"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_FOCUS_COMPILER, cb_func_switch_action,
 		0, 0, "switch_compiler", _("Switch to Compiler"), NULL);
@@ -1192,36 +1187,8 @@ static gboolean check_current_word(void)
 	return TRUE;
 }
 
-static void cb_func_switch_action(guint key_id)
-{
-	switch (key_id)
-	{
-		case GEANY_KEYS_FOCUS_COMPILER:
-			msgwin_switch_tab(MSG_COMPILER, TRUE);
-			break;
-	}
-}
 
-
-static void cb_func_switch_editor(G_GNUC_UNUSED guint key_id)
-{
-	GeanyDocument *doc = document_get_current();
-	if (doc != NULL)
-		gtk_widget_grab_focus(GTK_WIDGET(doc->sci));
-}
-
-static void cb_func_switch_scribble(G_GNUC_UNUSED guint key_id)
-{
-	msgwin_switch_tab(MSG_SCRATCH, TRUE);
-}
-
-static void cb_func_switch_search_bar(G_GNUC_UNUSED guint key_id)
-{
-	if (toolbar_prefs.visible && toolbar_prefs.show_search)
-		gtk_widget_grab_focus(lookup_widget(main_widgets.window, "entry1"));
-}
-
-static void cb_func_switch_sidebar(G_GNUC_UNUSED guint key_id)
+static void focus_sidebar(void)
 {
 	if (ui_prefs.sidebar_visible)
 	{
@@ -1233,9 +1200,35 @@ static void cb_func_switch_sidebar(G_GNUC_UNUSED guint key_id)
 	}
 }
 
-static void cb_func_switch_vte(G_GNUC_UNUSED guint key_id)
+
+static void cb_func_switch_action(guint key_id)
 {
-	msgwin_switch_tab(MSG_VTE, TRUE);
+	switch (key_id)
+	{
+		case GEANY_KEYS_FOCUS_EDITOR:
+		{
+			GeanyDocument *doc = document_get_current();
+			if (doc != NULL)
+				gtk_widget_grab_focus(GTK_WIDGET(doc->sci));
+			break;
+		}
+		case GEANY_KEYS_FOCUS_SCRIBBLE:
+			msgwin_switch_tab(MSG_SCRATCH, TRUE);
+			break;
+		case GEANY_KEYS_FOCUS_SEARCHBAR:
+			if (toolbar_prefs.visible && toolbar_prefs.show_search)
+				gtk_widget_grab_focus(lookup_widget(main_widgets.window, "entry1"));
+			break;
+		case GEANY_KEYS_FOCUS_SIDEBAR:
+			focus_sidebar();
+			break;
+		case GEANY_KEYS_FOCUS_VTE:
+			msgwin_switch_tab(MSG_VTE, TRUE);
+			break;
+		case GEANY_KEYS_FOCUS_COMPILER:
+			msgwin_switch_tab(MSG_COMPILER, TRUE);
+			break;
+	}
 }
 
 
