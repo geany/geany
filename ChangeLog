@@ -3,6 +3,9 @@
  * doc/plugins.dox, src/editor.c, src/geanyobject.c, src/geanyobject.h,
    src/plugindata.h:
    Rename signal "populate-edit-menu" into "update-editor-menu".
+ * scintilla/LexHTML.cxx:
+   Revert the change of rev2072: Fix syntax colouring bug when using
+   '?>' in a PHP comment (closes #1838854 and #1848518).
 
 
 2008-07-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
