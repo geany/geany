@@ -202,7 +202,7 @@ on_editor_button_press_event           (GtkWidget *widget,
 
 		if (geany_object)
 		{
-			g_signal_emit_by_name(geany_object, "populate-edit-menu",
+			g_signal_emit_by_name(geany_object, "update-editor-menu",
 				current_word, editor_info.click_pos, doc);
 		}
 		gtk_menu_popup(GTK_MENU(main_widgets.editor_menu),

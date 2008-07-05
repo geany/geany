@@ -159,7 +159,7 @@ PluginCallback plugin_callbacks[] =
  *  @param user_data user data.
  *  @endsignaldef
  *
- *  @signaldef populate-edit-menu
+ *  @signaldef update-editor-menu
  *  @signalproto
  *  void user_function(GObject *obj, const gchar *word, gint pos, GeanyDocument *doc,
  *  		gpointer user_data);
