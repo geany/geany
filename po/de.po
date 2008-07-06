@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.15svn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-03 22:25+0200\n"
+"POT-Creation-Date: 2008-07-06 19:50+0200\n"
 "PO-Revision-Date: 2008-06-12 00:03+0100\n"
 "Last-Translator: Dominic Hopf <dh@dmaphy.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
@@ -541,7 +541,7 @@ msgstr "_Nicht speichern"
 msgid "Choose font"
 msgstr "Schriftart auswählen"
 
-#: ../src/dialogs.c:967 ../src/keybindings.c:342
+#: ../src/dialogs.c:967 ../src/keybindings.c:337
 msgid "Go to Line"
 msgstr "Gehe zu Zeile"
 
@@ -1253,7 +1253,7 @@ msgstr "Ändert die Standardschriftart für das Editor-Fenster"
 
 #: ../src/interface.c:737
 msgid "To_ggle All Additional Widgets"
-msgstr "Zusätzliche _Infofenster ausblenden"
+msgstr "Zusätzliche _Infofenster ein-/ausblenden"
 
 #: ../src/interface.c:741
 msgid "Full_screen"
@@ -1306,6 +1306,7 @@ msgid "_Document"
 msgstr "D_okument"
 
 #: ../src/interface.c:798
+#, fuzzy
 msgid "_Line Wrapping"
 msgstr "_Zeilenumbruch"
 
@@ -1320,6 +1321,7 @@ msgstr ""
 "Rechenleistung und sollte daher auf langsameren Rechnern deaktiviert werden."
 
 #: ../src/interface.c:804
+#, fuzzy
 msgid "Line _Breaking"
 msgstr "Zeilen_umbruch"
 
@@ -1513,7 +1515,7 @@ msgstr "Öffnet eine existierende Datei."
 msgid "Save the current file"
 msgstr "Speichert die aktuelle Datei."
 
-#: ../src/interface.c:1079 ../src/keybindings.c:192
+#: ../src/interface.c:1079 ../src/keybindings.c:187
 msgid "Save all"
 msgstr "Alle speichern"
 
@@ -1537,15 +1539,15 @@ msgstr "Macht die letzte Änderung rückgängig."
 msgid "Redo the last modification"
 msgstr "Wiederholt die letzte Änderung."
 
-#: ../src/interface.c:1120 ../src/keybindings.c:338
+#: ../src/interface.c:1120 ../src/keybindings.c:333
 msgid "Navigate back a location"
 msgstr "Navigiert eine Position nach hinten."
 
-#: ../src/interface.c:1126 ../src/keybindings.c:340
+#: ../src/interface.c:1126 ../src/keybindings.c:335
 msgid "Navigate forward a location"
 msgstr "Navigiert eine Position nach vorne."
 
-#: ../src/interface.c:1134 ../src/keybindings.c:435
+#: ../src/interface.c:1134 ../src/keybindings.c:430
 msgid "Compile"
 msgstr "Kompilieren"
 
@@ -1653,7 +1655,7 @@ msgstr "_Kontextaktion"
 msgid "Go to the entered line"
 msgstr "Springe zu angegebener Zeile"
 
-#: ../src/interface.c:2859 ../src/keybindings.c:307
+#: ../src/interface.c:2859 ../src/keybindings.c:302
 msgid "Preferences"
 msgstr "Einstellungen"
 
@@ -2096,6 +2098,7 @@ msgid "<b>Indentation</b>"
 msgstr "<b>Einrückung</b>"
 
 #: ../src/interface.c:3656
+#, fuzzy
 msgid "Line wrapping"
 msgstr "Zeilenumbruch"
 
@@ -2300,10 +2303,12 @@ msgid "<b>Display</b>"
 msgstr "<b>Anzeige</b>"
 
 #: ../src/interface.c:3866
+#, fuzzy
 msgid "Long line marker:"
 msgstr "Markierung für statischen Zeilenumbruch:"
 
 #: ../src/interface.c:3873
+#, fuzzy
 msgid "Long line marker color:"
 msgstr "Farbe der Markierung für statischen Zeilenumbruch:"
 
@@ -2358,6 +2363,7 @@ msgid "Disabled"
 msgstr "Deaktiviert"
 
 #: ../src/interface.c:3931
+#, fuzzy
 msgid "<b>Long line marker</b>"
 msgstr "<b>Markierung für statischen Zeilenumbruch</b>"
 
@@ -2365,7 +2371,7 @@ msgstr "<b>Markierung für statischen Zeilenumbruch</b>"
 msgid "Display"
 msgstr "Anzeigen"
 
-#: ../src/interface.c:3940 ../src/keybindings.c:209
+#: ../src/interface.c:3940 ../src/keybindings.c:204
 msgid "Editor"
 msgstr "Editor"
 
@@ -2423,7 +2429,7 @@ msgstr "Leerzeichen am Zeilenende entfernen"
 msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Entfernt Leerzeichen am Ende einer Zeile."
 
-#: ../src/interface.c:4057 ../src/keybindings.c:420
+#: ../src/interface.c:4057 ../src/keybindings.c:415
 msgid "Replace tabs by space"
 msgstr "Tabulatoren durch Leerzeichen ersetzen"
 
@@ -2442,7 +2448,7 @@ msgstr "Gibt die Länge der Liste von Dateien an, die zuletzt geöffnet wurden."
 
 #: ../src/interface.c:4103
 msgid "Disk check timeout:"
-msgstr "Zeitinterval für den Datenträgercheck:"
+msgstr "Zeitinterval zum Prüfen auf Dateiänderungen:"
 
 #: ../src/interface.c:4116
 msgid ""
@@ -2489,7 +2495,7 @@ msgstr "Aktuelle Cursorposition zur Suche heranziehen."
 msgid "<b>Search</b>"
 msgstr "<b>Seitenleiste</b>"
 
-#: ../src/interface.c:4166 ../src/keybindings.c:310
+#: ../src/interface.c:4166 ../src/keybindings.c:305
 msgid "Search"
 msgstr "Suchen"
 
@@ -2547,7 +2553,7 @@ msgstr ""
 msgid "<b>Commands</b>"
 msgstr "<b>Befehle</b>"
 
-#: ../src/interface.c:4343 ../src/keybindings.c:456
+#: ../src/interface.c:4343 ../src/keybindings.c:451
 msgid "Tools"
 msgstr "Werkzeuge"
 
@@ -2685,478 +2691,478 @@ msgstr "GTK-Druckunterstützung benutzen"
 msgid "Printing"
 msgstr "Drucken"
 
-#: ../src/keybindings.c:178 ../src/plugins.c:1001
+#: ../src/keybindings.c:173 ../src/plugins.c:1001
 msgid "File"
 msgstr "Datei"
 
-#: ../src/keybindings.c:181
+#: ../src/keybindings.c:176
 msgid "New"
 msgstr "Neu"
 
-#: ../src/keybindings.c:183
+#: ../src/keybindings.c:178
 msgid "Open"
 msgstr "Öffnen"
 
-#: ../src/keybindings.c:186
+#: ../src/keybindings.c:181
 msgid "Open selected file"
 msgstr "Markierte Datei öffnen"
 
-#: ../src/keybindings.c:188
+#: ../src/keybindings.c:183
 msgid "Save"
 msgstr "Speichern"
 
-#: ../src/keybindings.c:190
+#: ../src/keybindings.c:185
 msgid "Save as"
 msgstr "Speichern unter"
 
-#: ../src/keybindings.c:195
+#: ../src/keybindings.c:190
 msgid "Print"
 msgstr "Drucken"
 
-#: ../src/keybindings.c:197
+#: ../src/keybindings.c:192
 msgid "Close"
 msgstr "Schließen"
 
-#: ../src/keybindings.c:199
+#: ../src/keybindings.c:194
 msgid "Close all"
 msgstr "Alle Schließen"
 
-#: ../src/keybindings.c:202
+#: ../src/keybindings.c:197
 msgid "Reload file"
 msgstr "Neu laden"
 
-#: ../src/keybindings.c:204
+#: ../src/keybindings.c:199
 msgid "Project"
 msgstr "Projekt"
 
-#: ../src/keybindings.c:207
+#: ../src/keybindings.c:202
 msgid "Project properties"
 msgstr "Projekt-Eigenschaften"
 
-#: ../src/keybindings.c:212
+#: ../src/keybindings.c:207
 msgid "Undo"
 msgstr "Zurück"
 
-#: ../src/keybindings.c:214
+#: ../src/keybindings.c:209
 msgid "Redo"
 msgstr "Wiederholen"
 
-#: ../src/keybindings.c:216
+#: ../src/keybindings.c:211
 msgid "Duplicate line or selection"
 msgstr "Zeile oder Auswahl kopieren"
 
-#: ../src/keybindings.c:219
+#: ../src/keybindings.c:214
 msgid "Delete current line(s)"
 msgstr "Aktuelle Zeile(n) löschen"
 
-#: ../src/keybindings.c:221
+#: ../src/keybindings.c:216
 msgid "Transpose current line"
 msgstr "Aktuelle Zeile tauschen"
 
-#: ../src/keybindings.c:223
+#: ../src/keybindings.c:218
 msgid "Scroll to current line"
 msgstr "Zu aktuellen Zeile scrollen"
 
-#: ../src/keybindings.c:225
+#: ../src/keybindings.c:220
 msgid "Scroll up the view by one line"
 msgstr "Scrollt um eine Zeile nach oben"
 
-#: ../src/keybindings.c:227
+#: ../src/keybindings.c:222
 msgid "Scroll down the view by one line"
 msgstr "Scrollt um eine Zeile nach unten"
 
 #. handled specially in check_snippet_completion()
-#: ../src/keybindings.c:229
+#: ../src/keybindings.c:224
 msgid "Complete snippet"
 msgstr "Vervollständige (Code-)Schnipsel"
 
-#: ../src/keybindings.c:231
+#: ../src/keybindings.c:226
 msgid "Suppress snippet completion"
 msgstr "Vervollständigung von (Code-)Schnipseln unterdrücken"
 
-#: ../src/keybindings.c:233
+#: ../src/keybindings.c:228
 msgid "Context Action"
 msgstr "Kontextaktion"
 
-#: ../src/keybindings.c:235
+#: ../src/keybindings.c:230
 msgid "Complete word"
 msgstr "Vervollständige Wort"
 
-#: ../src/keybindings.c:237
+#: ../src/keybindings.c:232
 msgid "Show calltip"
 msgstr "Calltip anzeigen"
 
-#: ../src/keybindings.c:239
+#: ../src/keybindings.c:234
 msgid "Show macro list"
 msgstr "Zeige Makroliste"
 
-#: ../src/keybindings.c:241
+#: ../src/keybindings.c:236
 msgid "Clipboard"
 msgstr "Zwischenablage"
 
-#: ../src/keybindings.c:244
+#: ../src/keybindings.c:239
 msgid "Cut"
 msgstr "Ausschneiden"
 
-#: ../src/keybindings.c:246
+#: ../src/keybindings.c:241
 msgid "Copy"
 msgstr "Kopieren"
 
-#: ../src/keybindings.c:248
+#: ../src/keybindings.c:243
 msgid "Paste"
 msgstr "Einfügen"
 
-#: ../src/keybindings.c:250
+#: ../src/keybindings.c:245
 msgid "Copy current line(s)"
 msgstr "Aktuelle Zeile(n) kopieren"
 
-#: ../src/keybindings.c:252
+#: ../src/keybindings.c:247
 msgid "Cut current line(s)"
 msgstr "Aktuelle Zeile(n) ausschneiden"
 
-#: ../src/keybindings.c:254
+#: ../src/keybindings.c:249
 msgid "Select"
 msgstr "Auswahl"
 
-#: ../src/keybindings.c:257
+#: ../src/keybindings.c:252
 msgid "Select All"
 msgstr "Alles ersetzen"
 
-#: ../src/keybindings.c:259
+#: ../src/keybindings.c:254
 msgid "Select current word"
 msgstr "Aktuelles Wort auswählen"
 
-#: ../src/keybindings.c:261
+#: ../src/keybindings.c:256
 msgid "Select current line(s)"
 msgstr "Aktuelle Zeile(n) auswählen"
 
-#: ../src/keybindings.c:263
+#: ../src/keybindings.c:258
 msgid "Select current paragraph"
 msgstr "Aktuellen Absatz auswählen"
 
-#: ../src/keybindings.c:265
+#: ../src/keybindings.c:260
 msgid "Format"
 msgstr "Formatierung"
 
-#: ../src/keybindings.c:269
+#: ../src/keybindings.c:264
 msgid "Toggle Case of Selection"
 msgstr "Groß- und Kleinschreibung bei Auswahl vertauschen"
 
-#: ../src/keybindings.c:271
+#: ../src/keybindings.c:266
 msgid "Toggle line commentation"
 msgstr "Kommentierung umschalten"
 
-#: ../src/keybindings.c:274
+#: ../src/keybindings.c:269
 msgid "Comment line(s)"
 msgstr "Zeile(n) kommentieren"
 
-#: ../src/keybindings.c:276
+#: ../src/keybindings.c:271
 msgid "Uncomment line(s)"
 msgstr "Kommentarzeichen entfernen"
 
-#: ../src/keybindings.c:278
+#: ../src/keybindings.c:273
 msgid "Increase indent"
 msgstr "Einzug erhöhen"
 
-#: ../src/keybindings.c:281
+#: ../src/keybindings.c:276
 msgid "Decrease indent"
 msgstr "Einzug verringern"
 
-#: ../src/keybindings.c:284
+#: ../src/keybindings.c:279
 msgid "Increase indent by one space"
 msgstr "Einzug um ein Leerzeichen erhöhen"
 
-#: ../src/keybindings.c:286
+#: ../src/keybindings.c:281
 msgid "Decrease indent by one space"
 msgstr "Einzug um ein Leerzeichen verringern"
 
-#: ../src/keybindings.c:288
+#: ../src/keybindings.c:283
 msgid "Smart line indent"
 msgstr "Intelligentes Einrücken"
 
-#: ../src/keybindings.c:290
+#: ../src/keybindings.c:285
 msgid "Send to Custom Command 1"
 msgstr "Zum 1. benutzerdefinierten Kommando senden"
 
-#: ../src/keybindings.c:292
+#: ../src/keybindings.c:287
 msgid "Send to Custom Command 2"
 msgstr "Zum 2. benutzerdefinierten Kommando senden"
 
-#: ../src/keybindings.c:294
+#: ../src/keybindings.c:289
 msgid "Send to Custom Command 3"
 msgstr "Zum 3. benutzerdefinierten Kommando senden"
 
-#: ../src/keybindings.c:296
+#: ../src/keybindings.c:291
 msgid "Insert"
 msgstr "Einfügen"
 
-#: ../src/keybindings.c:299
+#: ../src/keybindings.c:294
 msgid "Insert date"
 msgstr "Datum einfügen"
 
-#: ../src/keybindings.c:302
+#: ../src/keybindings.c:297
 #, fuzzy
 msgid "Insert alternative white space"
 msgstr "Alternative Leerzeichen einfügen"
 
-#: ../src/keybindings.c:304
+#: ../src/keybindings.c:299
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: ../src/keybindings.c:313 ../src/search.c:304
+#: ../src/keybindings.c:308 ../src/search.c:304
 msgid "Find"
 msgstr "Suchen"
 
-#: ../src/keybindings.c:315
+#: ../src/keybindings.c:310
 msgid "Find Next"
 msgstr "Weitersuchen"
 
-#: ../src/keybindings.c:317
+#: ../src/keybindings.c:312
 msgid "Find Previous"
 msgstr "Vorheriges"
 
-#: ../src/keybindings.c:320
+#: ../src/keybindings.c:315
 msgid "Find Next Selection"
 msgstr "Auswahl vorwärts im Dokument finden "
 
-#: ../src/keybindings.c:322
+#: ../src/keybindings.c:317
 msgid "Find Previous Selection"
 msgstr "Auswahl rückwärts im Dokument finden"
 
-#: ../src/keybindings.c:324 ../src/search.c:427
+#: ../src/keybindings.c:319 ../src/search.c:427
 msgid "Replace"
 msgstr "Ersetzen"
 
-#: ../src/keybindings.c:326 ../src/search.c:578
+#: ../src/keybindings.c:321 ../src/search.c:578
 msgid "Find in Files"
 msgstr "In Dateien suchen"
 
-#: ../src/keybindings.c:329
+#: ../src/keybindings.c:324
 msgid "Next Message"
 msgstr "Nächste Nachricht"
 
-#: ../src/keybindings.c:331
+#: ../src/keybindings.c:326
 #, fuzzy
 msgid "Previous Message"
 msgstr "Nächste Nachricht"
 
-#: ../src/keybindings.c:333
+#: ../src/keybindings.c:328
 msgid "Find Usage"
 msgstr "Auftreten finden"
 
-#: ../src/keybindings.c:335
+#: ../src/keybindings.c:330
 msgid "Go to"
 msgstr "Gehe zu"
 
-#: ../src/keybindings.c:345
+#: ../src/keybindings.c:340
 msgid "Go to matching brace"
 msgstr "Springe zur passenden Klammer"
 
-#: ../src/keybindings.c:348
+#: ../src/keybindings.c:343
 msgid "Toggle marker"
 msgstr "Markierung setzen"
 
-#: ../src/keybindings.c:351
+#: ../src/keybindings.c:346
 msgid "Go to next marker"
 msgstr "Zur nächsten Markierung springen"
 
-#: ../src/keybindings.c:354
+#: ../src/keybindings.c:349
 msgid "Go to previous marker"
 msgstr "Zur vorherigen Markierung springen"
 
-#: ../src/keybindings.c:356
+#: ../src/keybindings.c:351
 msgid "Go to Tag Definition"
 msgstr "Gehe zu Tag Definition"
 
-#: ../src/keybindings.c:358
+#: ../src/keybindings.c:353
 msgid "Go to Tag Declaration"
 msgstr "Gehe zu Tag Deklaration"
 
-#: ../src/keybindings.c:360
+#: ../src/keybindings.c:355
 #, fuzzy
 msgid "Go to Start of Line"
 msgstr "Gehe zu Zeile"
 
-#: ../src/keybindings.c:362
+#: ../src/keybindings.c:357
 #, fuzzy
 msgid "Go to End of Line"
 msgstr "Gehe zu Zeile"
 
-#: ../src/keybindings.c:364
+#: ../src/keybindings.c:359
 msgid "View"
 msgstr "Ansicht"
 
-#: ../src/keybindings.c:367
+#: ../src/keybindings.c:362
 msgid "Toggle All Additional Widgets"
 msgstr "Zusätzliche Infofenster ein-/ausblenden"
 
-#: ../src/keybindings.c:370
+#: ../src/keybindings.c:365
 msgid "Fullscreen"
 msgstr "Vollbild"
 
-#: ../src/keybindings.c:372
+#: ../src/keybindings.c:367
 msgid "Toggle Messages Window"
 msgstr "Meldungsfenster verstecken"
 
-#: ../src/keybindings.c:375
+#: ../src/keybindings.c:370
 msgid "Toggle Sidebar"
 msgstr "Seitenleiste ausblenden"
 
-#: ../src/keybindings.c:377
+#: ../src/keybindings.c:372
 msgid "Zoom In"
 msgstr "Hineinzoomen"
 
-#: ../src/keybindings.c:379
+#: ../src/keybindings.c:374
 msgid "Zoom Out"
 msgstr "Herauszoomen"
 
-#: ../src/keybindings.c:381
+#: ../src/keybindings.c:376
 msgid "Focus"
 msgstr "Fokus"
 
-#: ../src/keybindings.c:384
+#: ../src/keybindings.c:379
 msgid "Switch to Editor"
 msgstr "Zum Editor wechseln"
 
-#: ../src/keybindings.c:386
+#: ../src/keybindings.c:381
 msgid "Switch to Scribble"
 msgstr "Zu den Notizen wechseln "
 
-#: ../src/keybindings.c:388
+#: ../src/keybindings.c:383
 msgid "Switch to VTE"
 msgstr "Zur VTE wechseln"
 
-#: ../src/keybindings.c:390
+#: ../src/keybindings.c:385
 msgid "Switch to Search Bar"
 msgstr "Zu dem Suchfenster wechseln "
 
-#: ../src/keybindings.c:392
+#: ../src/keybindings.c:387
 msgid "Switch to Sidebar"
 msgstr "Zur Seitenleiste wechseln"
 
-#: ../src/keybindings.c:394
+#: ../src/keybindings.c:389
 #, fuzzy
 msgid "Switch to Compiler"
 msgstr "Zur Seitenleiste wechseln"
 
-#: ../src/keybindings.c:396
+#: ../src/keybindings.c:391
 msgid "Notebook tab"
 msgstr "Dateireiter"
 
-#: ../src/keybindings.c:399
+#: ../src/keybindings.c:394
 msgid "Switch to left document"
 msgstr "Zum linken Dokument wechseln"
 
-#: ../src/keybindings.c:401
+#: ../src/keybindings.c:396
 msgid "Switch to right document"
 msgstr "Zum rechten Dokument wechseln"
 
-#: ../src/keybindings.c:403
+#: ../src/keybindings.c:398
 msgid "Switch to last used document"
 msgstr "Zum letzten Dokument wechseln"
 
-#: ../src/keybindings.c:405
+#: ../src/keybindings.c:400
 msgid "Move document left"
 msgstr "Dateireiter nach links verschieben"
 
-#: ../src/keybindings.c:407
+#: ../src/keybindings.c:402
 msgid "Move document right"
 msgstr "Dateireiter nach rechts verschieben"
 
-#: ../src/keybindings.c:409
+#: ../src/keybindings.c:404
 msgid "Move document first"
 msgstr "Dateireiter an den Anfang verschieben"
 
-#: ../src/keybindings.c:411
+#: ../src/keybindings.c:406
 msgid "Move document last"
 msgstr "Dateireiter ans Ende verschieben"
 
-#: ../src/keybindings.c:413
+#: ../src/keybindings.c:408
 msgid "Document"
 msgstr "Dokument"
 
-#: ../src/keybindings.c:416
+#: ../src/keybindings.c:411
 #, fuzzy
 msgid "Toggle Line wrapping"
 msgstr "Zeilenumbruch"
 
-#: ../src/keybindings.c:418
+#: ../src/keybindings.c:413
 #, fuzzy
 msgid "Toggle Line breaking"
 msgstr "Kommentierung _umschalten"
 
-#: ../src/keybindings.c:422
+#: ../src/keybindings.c:417
 #, fuzzy
 msgid "Replace spaces by tabs"
 msgstr "_Tabulatoren durch Leerzeichen ersetzen"
 
-#: ../src/keybindings.c:424
+#: ../src/keybindings.c:419
 #, fuzzy
 msgid "Toggle current fold"
 msgstr "Aktuelles Wort auswählen"
 
-#: ../src/keybindings.c:426
+#: ../src/keybindings.c:421
 msgid "Fold all"
 msgstr "Alle einblenden"
 
-#: ../src/keybindings.c:428
+#: ../src/keybindings.c:423
 msgid "Unfold all"
 msgstr "Alle ausblenden"
 
-#: ../src/keybindings.c:430
+#: ../src/keybindings.c:425
 msgid "Reload symbol list"
 msgstr "Symbol-Ansicht neuladen"
 
-#: ../src/keybindings.c:432 ../src/keybindings.c:437
+#: ../src/keybindings.c:427 ../src/keybindings.c:432
 msgid "Build"
 msgstr "Erstellen"
 
-#: ../src/keybindings.c:439
+#: ../src/keybindings.c:434
 msgid "Make all"
 msgstr "Make all"
 
-#: ../src/keybindings.c:442
+#: ../src/keybindings.c:437
 msgid "Make custom target"
 msgstr "Make mit eigenem Target"
 
-#: ../src/keybindings.c:444
+#: ../src/keybindings.c:439
 msgid "Make object"
 msgstr "Make Objekt-Datei"
 
-#: ../src/keybindings.c:446
+#: ../src/keybindings.c:441
 msgid "Next error"
 msgstr "Nächster Fehler"
 
-#: ../src/keybindings.c:448
+#: ../src/keybindings.c:443
 #, fuzzy
 msgid "Previous error"
 msgstr "Ehemalige Übersetzer"
 
-#: ../src/keybindings.c:450
+#: ../src/keybindings.c:445
 msgid "Run"
 msgstr "Ausführen"
 
-#: ../src/keybindings.c:452
+#: ../src/keybindings.c:447
 msgid "Run (alternative command)"
 msgstr "Ausführen (alternativer Befehl)"
 
-#: ../src/keybindings.c:454
+#: ../src/keybindings.c:449
 msgid "Build options"
 msgstr "Optionen bei der Erzeugung"
 
-#: ../src/keybindings.c:459
+#: ../src/keybindings.c:454
 msgid "Show Color Chooser"
 msgstr "Farbwähler öffnen"
 
-#: ../src/keybindings.c:461 ../src/keybindings.c:464
+#: ../src/keybindings.c:456 ../src/keybindings.c:459
 msgid "Help"
 msgstr "Hilfe"
 
-#: ../src/keybindings.c:696
+#: ../src/keybindings.c:691
 msgid "Keyboard Shortcuts"
 msgstr "Tastenkürzel"
 
-#: ../src/keybindings.c:709
+#: ../src/keybindings.c:704
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Die folgende Tastenkürzel sind frei definierbar: "
 
