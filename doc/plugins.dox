@@ -42,7 +42,7 @@
  *
  *  Other pages:
  *  - @link plugindata.h Main Datatypes and Macros @endlink
- *  - @link plugin-symbols.c Plugin Symbols @endlink
+ *  - @link pluginsymbols.c Plugin Symbols @endlink
  *  - @link pluginmacros.h Optional Macros @endlink
  *  - @link signals Plugin Signals @endlink
  *
@@ -192,7 +192,7 @@ PluginCallback plugin_callbacks[] =
  *
  *  Every plugin must contain some essential symbols unless it won't work. A complete
  *  list of all necessary and optional symbols can be found in
- *  @link plugin-symbols.c Plugin Symbols @endlink.
+ *  @link pluginsymbols.c Plugin Symbols @endlink.
  *  Every plugin should include "geany.h" and "plugindata.h" which provide necessary
  *  preprocessor macros and other basic information.
  *  There are two important preprocessor macros which need to be used at the beginning:

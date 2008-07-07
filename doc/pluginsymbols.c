@@ -1,5 +1,5 @@
 /*
- *      plugin-symbols.c - this file is part of Geany, a fast and lightweight IDE
+ *      pluginsymbols.c - this file is part of Geany, a fast and lightweight IDE
  *
  *      Copyright 2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
  *      Copyright 2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
@@ -25,7 +25,7 @@
 /* Note: this file is for Doxygen only. */
 
 /**
- * @file plugin-symbols.c
+ * @file pluginsymbols.c
  * Symbols declared from within plugins.
  *
  * Geany looks for these symbols (arrays, pointers and functions) when initializing
