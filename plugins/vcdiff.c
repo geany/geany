@@ -39,6 +39,8 @@
 #include "ui_utils.h"
 #include "pluginmacros.h"
 
+#define project	geany->app->project
+
 
 PluginFields	*plugin_fields;
 GeanyData		*geany_data;
@@ -283,7 +285,7 @@ static void show_output(const gchar *std_output, const gchar *utf8_name_prefix,
 		else
 		{
 			p_sci->set_text(doc->sci, text);
-			book = GTK_NOTEBOOK(main_widgets->notebook);
+			book = GTK_NOTEBOOK(geany->main_widgets->notebook);
 			page = gtk_notebook_page_num(book, GTK_WIDGET(doc->sci));
 			gtk_notebook_set_current_page(book, page);
 			p_document->set_text_changed(doc, FALSE);
@@ -498,7 +500,7 @@ void plugin_init(GeanyData *data)
 	tooltips = gtk_tooltips_new();
 
 	menu_vcdiff = gtk_image_menu_item_new_with_mnemonic(_("_Version Diff"));
-	gtk_container_add(GTK_CONTAINER(main_widgets->tools_menu), menu_vcdiff);
+	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), menu_vcdiff);
 
 	g_signal_connect((gpointer) menu_vcdiff, "activate",
 		G_CALLBACK(update_menu_items), NULL);

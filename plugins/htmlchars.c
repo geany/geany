@@ -85,7 +85,7 @@ static void tools_show_dialog_insert_special_chars(void)
 		GtkWidget *swin, *vbox, *label;
 
 		sc_dialog = gtk_dialog_new_with_buttons(
-					_("Special Characters"), GTK_WINDOW(main_widgets->window),
+					_("Special Characters"), GTK_WINDOW(geany->main_widgets->window),
 					GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					_("_Insert"), GTK_RESPONSE_OK, NULL);
 		vbox = p_ui->dialog_vbox_new(GTK_DIALOG(sc_dialog));
@@ -528,7 +528,7 @@ void plugin_init(GeanyData *data)
 	/* Add an item to the Tools menu */
 	demo_item = gtk_menu_item_new_with_mnemonic(menu_text);
 	gtk_widget_show(demo_item);
-	gtk_container_add(GTK_CONTAINER(main_widgets->tools_menu), demo_item);
+	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), demo_item);
 	g_signal_connect(G_OBJECT(demo_item), "activate", G_CALLBACK(item_activate), NULL);
 
 	/* disable menu_item when there are no documents open */

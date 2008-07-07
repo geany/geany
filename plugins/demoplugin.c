@@ -40,7 +40,7 @@
 #include "ui_utils.h"
 
 #include "plugindata.h"		/* this defines the plugin API */
-#include "pluginmacros.h"	/* some useful macros to avoid typing geany_data so often */
+#include "pluginmacros.h"	/* some useful macros to save typing */
 
 
 /* These items are set by Geany before plugin_init() is called. */
@@ -69,7 +69,7 @@ item_activate(GtkMenuItem *menuitem, gpointer gdata)
 	GtkWidget *dialog;
 
 	dialog = gtk_message_dialog_new(
-		GTK_WINDOW(main_widgets->window),
+		GTK_WINDOW(geany->main_widgets->window),
 		GTK_DIALOG_DESTROY_WITH_PARENT,
 		GTK_MESSAGE_INFO,
 		GTK_BUTTONS_OK,
@@ -91,7 +91,7 @@ void plugin_init(GeanyData *data)
 	/* Add an item to the Tools menu */
 	demo_item = gtk_menu_item_new_with_mnemonic(_("_Demo Plugin"));
 	gtk_widget_show(demo_item);
-	gtk_container_add(GTK_CONTAINER(main_widgets->tools_menu), demo_item);
+	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), demo_item);
 	g_signal_connect(G_OBJECT(demo_item), "activate", G_CALLBACK(item_activate), NULL);
 
 	welcome_text = g_strdup(_("Hello World!"));
@@ -116,8 +116,8 @@ on_configure_response(GtkDialog *dialog, gint response, gpointer user_data)
 		/* maybe the plugin should write here the settings into a file
 		 * (e.g. using GLib's GKeyFile API)
 		 * all plugin specific files should be created in:
-		 * app->configdir G_DIR_SEPARATOR_S plugins G_DIR_SEPARATOR_S pluginname G_DIR_SEPARATOR_S
-		 * e.g. this could be: ~/.geany/plugins/Demo/, please use app->configdir */
+		 * geany->app->configdir G_DIR_SEPARATOR_S plugins G_DIR_SEPARATOR_S pluginname G_DIR_SEPARATOR_S
+		 * e.g. this could be: ~/.geany/plugins/Demo/, please use geany->app->configdir */
 	}
 }
 

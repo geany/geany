@@ -261,6 +261,7 @@ static void on_go_home(void)
 static gchar *get_default_dir(void)
 {
 	const gchar *dir = NULL;
+	GeanyProject *project = geany->app->project;
 
 	if (project)
 		dir = project->base_path;
@@ -716,7 +717,7 @@ static void prepare_file_view(void)
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(file_view), TRUE);
 	gtk_tree_view_set_search_column(GTK_TREE_VIEW(file_view), FILEVIEW_COLUMN_NAME);
 
-	pfd = pango_font_description_from_string(geany_data->interface_prefs->tagbar_font);
+	pfd = pango_font_description_from_string(geany->interface_prefs->tagbar_font);
 	gtk_widget_modify_font(file_view, pfd);
 	pango_font_description_free(pfd);
 
@@ -738,7 +739,7 @@ static GtkWidget *make_toolbar(void)
 {
 	GtkWidget *wid, *toolbar;
 	GtkTooltips *tooltips = GTK_TOOLTIPS(p_support->lookup_widget(
-		main_widgets->window, "tooltips"));
+		geany->main_widgets->window, "tooltips"));
 
 	toolbar = gtk_toolbar_new();
 	gtk_toolbar_set_icon_size(GTK_TOOLBAR(toolbar), GTK_ICON_SIZE_MENU);
@@ -876,7 +877,7 @@ static void load_settings(void)
 	GError *error = NULL;
 	gboolean tmp;
 
-	config_file = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
+	config_file = g_strconcat(geany->app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
 		"filebrowser", G_DIR_SEPARATOR_S, "filebrowser.conf", NULL);
 	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
 	open_cmd = g_key_file_get_string(config, "filebrowser", "open_command", &error);
@@ -938,7 +939,7 @@ void plugin_init(GeanyData *data)
 	gtk_container_add(GTK_CONTAINER(file_view_vbox), scrollwin);
 
 	gtk_widget_show_all(file_view_vbox);
-	gtk_notebook_append_page(GTK_NOTEBOOK(main_widgets->sidebar_notebook), file_view_vbox,
+	gtk_notebook_append_page(GTK_NOTEBOOK(geany->main_widgets->sidebar_notebook), file_view_vbox,
 		gtk_label_new(_("Files")));
 
 	load_settings();

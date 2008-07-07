@@ -166,7 +166,9 @@ PluginCallback plugin_callbacks[] =
  *  @endsignalproto
  *  @signaldesc
  *  Sent before the popup menu of the editing widget is shown. This can be used to modify or extend
- *  the popup menu. You can access the menu pointer using @a main_widgets->editor_menu.
+ *  the popup menu.
+ *  @note You can add menu items from @c plugin_init() using @c geany->main_widgets->editor_menu,
+ *  remembering to destroy them in @c plugin_cleanup().
  *  @param obj a GeanyObject instance, should be ignored.
  *  @param word the current word (in UTF-8 encoding) below the cursor position
 		   where the popup menu will be opened.

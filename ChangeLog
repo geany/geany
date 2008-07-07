@@ -7,6 +7,16 @@
    'Newline strips trailing spaces' pref.
  * doc/plugin-symbols.c, doc/Makefile.am, doc/plugins.dox:
    Rename plugin-symbols.c pluginsymbols.c.
+ * src/plugindata.h, doc/plugins.dox, plugins/export.c,
+   plugins/vcdiff.c, plugins/demoplugin.c, plugins/filebrowser.c,
+   plugins/htmlchars.c, plugins/autosave.c, plugins/pluginmacros.h,
+   plugins/classbuilder.c:
+   Remove deprecated macros and typedefs (except DOC_IDX_*), as some of
+   them are likely to cause naming conflicts and all plugins will need
+   updating since 0.14 anyway.
+   Add geany macro that simply expands to geany_data.
+   Deprecate app, main_widgets, prefs, project macros, as the geany
+   macro can be used instead.
 
 
 2008-07-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

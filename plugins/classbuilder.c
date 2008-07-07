@@ -355,7 +355,7 @@ void show_dialog_create_class(gint type)
 	cc_dlg->class_type = type;
 
 	cc_dlg->dialog = gtk_dialog_new_with_buttons(_("Create Class"),
-			GTK_WINDOW(main_widgets->window),
+			GTK_WINDOW(geany->main_widgets->window),
 			GTK_DIALOG_MODAL,
 			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 			GTK_STOCK_OK, GTK_RESPONSE_OK,
@@ -778,7 +778,7 @@ void plugin_init(GeanyData *data)
 	GtkWidget *menu_create_gtk_class;
 
 	menu_create_class1 = gtk_image_menu_item_new_with_mnemonic (_("Create Cla_ss"));
-	gtk_container_add (GTK_CONTAINER (main_widgets->tools_menu), menu_create_class1);
+	gtk_container_add (GTK_CONTAINER (geany->main_widgets->tools_menu), menu_create_class1);
 
 	image1861 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_create_class1), image1861);

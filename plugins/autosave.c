@@ -54,7 +54,7 @@ gboolean auto_save(gpointer data)
 {
 	GeanyDocument *doc;
 	GeanyDocument *cur_doc = p_document->get_current();
-	gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets->notebook));
+	gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(geany->main_widgets->notebook));
 	gint saved_files = 0;
 
 	if (save_all)
@@ -98,7 +98,7 @@ void plugin_init(GeanyData *data)
 {
 	GKeyFile *config = g_key_file_new();
 	GError *error = NULL;
-	config_file = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
+	config_file = g_strconcat(geany->app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
 		"autosave", G_DIR_SEPARATOR_S, "autosave.conf", NULL);
 
 	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);

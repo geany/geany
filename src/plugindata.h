@@ -36,7 +36,7 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 74;
+static const gint api_version = 75;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
@@ -437,29 +437,6 @@ EditorFuncs;
 
 /* Deprecated aliases */
 #ifndef GEANY_DISABLE_DEPRECATED
-
-typedef GeanyData PluginData;	/* for compatibility with API < 7 */
-
-#define VERSION_CHECK(api_required) \
-	PLUGIN_VERSION_CHECK(api_required)
-
-#define GEANY_MAX_FILE_TYPES \
-	filetypes_array->len
-#define GEANY_FILETYPES_ALL \
-	GEANY_FILETYPES_NONE
-
-typedef struct GeanyDocument document;
-typedef struct GeanyFiletype filetype;
-
-typedef PluginCallback GeanyCallback;
-#define geany_callbacks plugin_callbacks
-
-#define PLUGIN_INFO PLUGIN_SET_INFO
-
-#define init plugin_init
-#define cleanup plugin_cleanup
-
-#define doc_array documents_array
 
 /** NULL-safe way to get the index of @a doc_ptr in the documents array. */
 #define DOC_IDX(doc_ptr) \

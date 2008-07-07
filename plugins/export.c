@@ -163,14 +163,14 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 		return;
 
 	doc = p_document->get_current();
-	tooltips = GTK_TOOLTIPS(p_support->lookup_widget(main_widgets->window, "tooltips"));
+	tooltips = GTK_TOOLTIPS(p_support->lookup_widget(geany->main_widgets->window, "tooltips"));
 
 	exi = g_new(ExportInfo, 1);
 	exi->doc = doc;
 	exi->export_func = func;
 	exi->have_zoom_level_checkbox = FALSE;
 
-	dialog = gtk_file_chooser_dialog_new(_("Export File"), GTK_WINDOW(main_widgets->window),
+	dialog = gtk_file_chooser_dialog_new(_("Export File"), GTK_WINDOW(geany->main_widgets->window),
 				GTK_FILE_CHOOSER_ACTION_SAVE, NULL, NULL);
 	gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
 	gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
@@ -205,7 +205,7 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 	g_signal_connect((gpointer) dialog, "response",
 		G_CALLBACK(on_file_save_dialog_response), exi);
 
-	gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(main_widgets->window));
+	gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(geany->main_widgets->window));
 
 	/* if the current document has a filename we use it as the default. */
 	gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(dialog));
@@ -236,7 +236,7 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 	}
 	else
 	{
-		const gchar *default_open_path = prefs->default_open_path;
+		const gchar *default_open_path = geany->prefs->default_open_path;
 		gchar *fname = g_strconcat(GEANY_STRING_UNTITLED, extension, NULL);
 
 		gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(dialog));
@@ -410,8 +410,8 @@ static void write_latex_file(GeanyDocument *doc, const gchar *filename, gboolean
 			}
 			case '\t':
 			{
-				gint tab_stop = geany_data->editor_prefs->tab_width -
-					(column % geany_data->editor_prefs->tab_width);
+				gint tab_stop = geany->editor_prefs->tab_width -
+					(column % geany->editor_prefs->tab_width);
 
 				column += tab_stop - 1; /* -1 because we add 1 at the end of the loop */
 				g_string_append_printf(body, "\\hspace*{%dem}", tab_stop);
@@ -577,7 +577,7 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename, gboolean 
 	}
 
 	/* read Geany's font and font size */
-	font_desc = pango_font_description_from_string(geany_data->interface_prefs->editor_font);
+	font_desc = pango_font_description_from_string(geany->interface_prefs->editor_font);
 	font_name = pango_font_description_get_family(font_desc);
 	/*font_size = pango_font_description_get_size(font_desc) / PANGO_SCALE;*/
 	/* take the zoom level also into account */
@@ -627,8 +627,8 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename, gboolean 
 			case '\t':
 			{
 				gint j;
-				gint tab_stop = geany_data->editor_prefs->tab_width -
-					(column % geany_data->editor_prefs->tab_width);
+				gint tab_stop = geany->editor_prefs->tab_width -
+					(column % geany->editor_prefs->tab_width);
 
 				column += tab_stop - 1; /* -1 because we add 1 at the end of the loop */
 				for (j = 0; j < tab_stop; j++)
@@ -712,7 +712,7 @@ void plugin_init(GeanyData *data)
 	GtkWidget *menu_create_latex;
 
 	menu_export = gtk_image_menu_item_new_with_mnemonic(_("_Export"));
-	gtk_container_add(GTK_CONTAINER(main_widgets->tools_menu), menu_export);
+	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), menu_export);
 
 	menu_export_menu = gtk_menu_new ();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_export), menu_export_menu);
