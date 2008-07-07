@@ -339,13 +339,30 @@ static void check_line_breaking(GeanyDocument *doc, gint pos, gchar c)
 		c = sci_get_char_at(sci, --pos);
 		if (c == GDK_space)
 		{
-			gint indent_size = sci_get_line_indentation(sci, line);
+			gint col, len, diff;
+			const gchar *eol = editor_get_eol_char(doc);
 
 			/* break the line after the space */
-			sci_insert_text(sci, pos + 1, editor_get_eol_char(doc));
+			sci_insert_text(sci, pos + 1, eol);
+			line++;
 
-			if (doc->auto_indent)
-				sci_set_line_indentation(sci, line + 1, indent_size);
+			/* remember distance from end of line (we use column position in case
+			 * the previous line gets altered, such as removing trailing spaces). */
+			pos = sci_get_current_position(sci);
+			len = sci_get_line_length(sci, line);
+			col = sci_get_col_from_position(sci, pos);
+			diff = len - col;
+
+			/* set position as if user had pressed return */
+			pos = sci_get_position_from_line(sci, line);
+			sci_set_current_position(sci, pos, FALSE);
+			/* add indentation, comment multilines, etc */
+			on_new_line_added(doc);
+
+			/* correct cursor position (might not be at line end) */
+			pos = sci_get_position_from_line(sci, line);
+			pos += sci_get_line_length(sci, line) - diff;
+			sci_set_current_position(sci, pos, FALSE);
 			return;
 		}
 	}
