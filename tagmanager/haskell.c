@@ -152,7 +152,7 @@ static int inside_datatype(vString *name)
 			return c;
 		    }
 		}
-	    } while (c != '=');
+	    } while (c != EOF && c != '=');
 	    st = Find_Constr;
 	}
 	else if (st == Find_Constr)
@@ -202,7 +202,7 @@ static int inside_datatype(vString *name)
 		    st = Find_Bar;
 		    break;
 		}
-	    } while (c != ',');
+	    } while (c != EOF && c != ',');
 	}
 	else if (st == Find_Bar)
 	{
