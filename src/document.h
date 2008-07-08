@@ -82,30 +82,20 @@ struct GeanyDocument
 	gchar 			*encoding;
 	/** Internally used flag to indicate whether the file of this %document has a byte-order-mark. */
 	gboolean		 has_bom;
+	struct GeanyEditor *editor;	/**< The editor widget associated with the document. */
 	/** The filetype for this %document, it's only a reference to one of the elements of the global
 	 *  filetypes array. */
 	GeanyFiletype	*file_type;
 	/** TMWorkObject object for this %document. */
 	TMWorkObject	*tm_file;
-	/** The Scintilla object for this %document. */
-	ScintillaObject	*sci;
 	/** Whether this %document is read-only. */
 	gboolean		 readonly;
 	/** Whether this %document has been changed since it was last saved. */
 	gboolean		 changed;
-	/** %Document-specific line wrapping setting. */
-	gboolean		 line_wrapping;
-	/** %Document-specific indentation setting. */
-	gboolean		 auto_indent;
-	/** Percentage to scroll view by on paint, if positive. */
-	gfloat			 scroll_percent;
 	/** Time of the last disk check. */
 	time_t			 last_check;
 	/** Modification time of this %document on disk. */
 	time_t			 mtime;
-	/** %Document-specific indentation setting. */
-	gboolean		 use_tabs;
-	gboolean		 line_breaking;	/**< Whether to split long lines as you type. */
 	/** The link-dereferenced, locale-encoded file name.
 	 * If non-NULL, this indicates the file once existed on disk (not just as an
 	 * unsaved document with a filename set).

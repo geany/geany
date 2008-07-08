@@ -1,3 +1,13 @@
+2008-07-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/document.h, src/editor.h, src/plugindata.h:
+   Note: this breaks the plugin API for editor-related document fields.
+   Split new GeanyEditor struct type from GeanyDocument fields.
+   Add GeanyDocument::editor field.
+   GeanyEditor::document allows access back to document fields.
+   GeanyEditor::scintilla replaces GeanyDocument::sci.
+
+
 2008-07-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * tagmanager/haskell.c:

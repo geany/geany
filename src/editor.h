@@ -99,6 +99,21 @@ typedef struct GeanyEditorPrefs
 extern GeanyEditorPrefs editor_prefs;
 
 
+/** Editor-owned fields for each document. */
+typedef struct GeanyEditor
+{
+	GeanyDocument	*document;	/**< The document associated with the editor. */
+	ScintillaObject	*scintilla;	/**< The Scintilla editor @c GtkWidget. */
+	gboolean		 line_wrapping;	/**< @c TRUE if line wrapping is enabled. */
+	gboolean		 auto_indent;	/**< @c TRUE if auto-indentation is enabled. */
+	/** Percentage to scroll view by on paint, if positive. */
+	gfloat			 scroll_percent;
+	gboolean		 use_tabs;	/**< @c TRUE if tabs are used for indentation. */
+	gboolean		 line_breaking;	/**< Whether to split long lines as you type. */
+}
+GeanyEditor;
+
+
 typedef struct
 {
 	gchar	*current_word;	/* holds word under the mouse or keyboard cursor */
