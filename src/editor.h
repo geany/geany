@@ -155,7 +155,7 @@ gint editor_lexer_get_type_keyword_idx(gint lexer);
 
 void editor_insert_multiline_comment(GeanyDocument *doc);
 
-void editor_insert_alternative_whitespace(GeanyDocument *doc);
+void editor_insert_alternative_whitespace(GeanyEditor *editor);
 
 void editor_smart_line_indentation(GeanyDocument *doc, gint pos);
 
@@ -165,7 +165,7 @@ gboolean editor_line_in_view(ScintillaObject *sci, gint line);
 
 void editor_scroll_to_line(ScintillaObject *sci, gint line, gfloat percent_of_view);
 
-void editor_display_current_line(GeanyDocument *doc, gfloat percent_of_view);
+void editor_display_current_line(GeanyEditor *editor, gfloat percent_of_view);
 
 void editor_finalize(void);
 
@@ -216,10 +216,10 @@ void editor_ensure_final_newline(GeanyDocument *doc);
 
 void editor_insert_color(GeanyDocument *doc, const gchar *colour);
 
-void editor_set_use_tabs(GeanyDocument *doc, gboolean use_tabs);
+void editor_set_use_tabs(GeanyEditor *editor, gboolean use_tabs);
 
-void editor_set_line_wrapping(GeanyDocument *doc, gboolean wrap);
+void editor_set_line_wrapping(GeanyEditor *editor, gboolean wrap);
 
-gboolean editor_goto_pos(GeanyDocument *doc, gint pos, gboolean mark);
+gboolean editor_goto_pos(GeanyEditor *editor, gint pos, gboolean mark);
 
 #endif

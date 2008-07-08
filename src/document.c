@@ -569,7 +569,7 @@ GeanyDocument *document_new_file(const gchar *filename, GeanyFiletype *ft, const
 	if (text != NULL)
 		sci_convert_eols(doc->editor->scintilla, file_prefs.default_eol_character);
 
-	editor_set_use_tabs(doc, editor_prefs.use_tabs);
+	editor_set_use_tabs(doc->editor, editor_prefs.use_tabs);
 	sci_set_undo_collection(doc->editor->scintilla, TRUE);
 	sci_empty_undo_buffer(doc->editor->scintilla);
 
@@ -917,9 +917,9 @@ static void set_indentation(GeanyDocument *doc)
 {
 	/* force using tabs for indentation for Makefiles */
 	if (FILETYPE_ID(doc->file_type) == GEANY_FILETYPES_MAKE)
-		editor_set_use_tabs(doc, TRUE);
+		editor_set_use_tabs(doc->editor, TRUE);
 	else if (! editor_prefs.detect_tab_mode)
-		editor_set_use_tabs(doc, editor_prefs.use_tabs);
+		editor_set_use_tabs(doc->editor, editor_prefs.use_tabs);
 	else
 	{	/* detect & set tabs/spaces */
 		gboolean use_tabs = detect_use_tabs(doc->editor->scintilla);
@@ -927,7 +927,7 @@ static void set_indentation(GeanyDocument *doc)
 		if (use_tabs != editor_prefs.use_tabs)
 			ui_set_statusbar(TRUE, _("Setting %s indentation mode."),
 				(use_tabs) ? _("Tabs") : _("Spaces"));
-		editor_set_use_tabs(doc, use_tabs);
+		editor_set_use_tabs(doc->editor, use_tabs);
 	}
 }
 
@@ -1057,7 +1057,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 
 	/* set indentation settings after setting the filetype */
 	if (reload)
-		editor_set_use_tabs(doc, doc->use_tabs); /* resetup sci */
+		editor_set_use_tabs(doc->editor, doc->use_tabs); /* resetup sci */
 	else
 		set_indentation(doc);
 

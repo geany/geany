@@ -256,7 +256,7 @@ void search_find_selection(GeanyDocument *doc, gboolean search_backwards)
 		setup_find_next(s);	/* allow find next/prev */
 
 		if (document_find_text(doc, s, 0, search_backwards, FALSE, NULL) > -1)
-			editor_display_current_line(doc, 0.3F);
+			editor_display_current_line(doc->editor, 0.3F);
 		g_free(s);
 	}
 }

@@ -12,6 +12,11 @@
    src/main.c, src/editor.c, src/ui_utils.c, plugins/export.c,
    plugins/vcdiff.c, plugins/htmlchars.c, plugins/classbuilder.c:
    Update for doc->editor->scintilla.
+ * src/keybindings.c, src/prefs.c, src/navqueue.c, src/callbacks.c,
+   src/keyfile.c, src/search.c, src/document.c, src/editor.c,
+   src/editor.h:
+   Fix building editor.c, using GeanyEditor* instead of GeanyDocument*
+   (most global editor functions still need conversion though).
 
 
 2008-07-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

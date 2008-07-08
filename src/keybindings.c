@@ -1337,7 +1337,7 @@ static void goto_matching_brace(GeanyDocument *doc)
 	if (new_pos != -1)
 	{	/* set the cursor at the brace */
 		sci_set_current_position(doc->editor->scintilla, new_pos, FALSE);
-		editor_display_current_line(doc, 0.5F);
+		editor_display_current_line(doc->editor, 0.5F);
 	}
 }
 
@@ -1409,7 +1409,7 @@ static void cb_func_goto_action(guint key_id)
 			if (mline != -1)
 			{
 				sci_set_current_line(doc->editor->scintilla, mline);
-				editor_display_current_line(doc, 0.5F);
+				editor_display_current_line(doc->editor, 0.5F);
 			}
 			return;
 		}
@@ -1420,7 +1420,7 @@ static void cb_func_goto_action(guint key_id)
 			if (mline != -1)
 			{
 				sci_set_current_line(doc->editor->scintilla, mline);
-				editor_display_current_line(doc, 0.5F);
+				editor_display_current_line(doc->editor, 0.5F);
 			}
 			return;
 		}
@@ -1689,7 +1689,7 @@ static void cb_func_insert_action(guint key_id)
 	switch (key_id)
 	{
 		case GEANY_KEYS_INSERT_ALTWHITESPACE:
-			editor_insert_alternative_whitespace(doc);
+			editor_insert_alternative_whitespace(doc->editor);
 			break;
 		case GEANY_KEYS_INSERT_DATE:
 			gtk_menu_item_activate(GTK_MENU_ITEM(lookup_widget(main_widgets.window, "insert_date_custom1")));

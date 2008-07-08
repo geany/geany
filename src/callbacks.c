@@ -969,7 +969,7 @@ on_line_wrapping1_toggled              (GtkCheckMenuItem *checkmenuitem,
 	{
 		GeanyDocument *doc = document_get_current();
 		if (doc != NULL)
-			editor_set_line_wrapping(doc, ! doc->line_wrapping);
+			editor_set_line_wrapping(doc->editor, ! doc->editor->line_wrapping);
 	}
 }
 
@@ -1101,7 +1101,7 @@ static void find_again(gboolean change_direction)
 			change_direction ? forward : !forward, FALSE, NULL);
 
 		if (result > -1)
-			editor_display_current_line(doc, 0.3F);
+			editor_display_current_line(doc->editor, 0.3F);
 
 		set_search_bar_background((result > -1) ? TRUE : FALSE);
 	}
@@ -1192,7 +1192,7 @@ on_goto_line_dialog_response         (GtkDialog *dialog,
 
 			line--;	/* the user counts lines from 1, we begin at 0 so bring the user line to our one */
 			pos = sci_get_position_from_line(doc->editor->scintilla, line);
-			editor_goto_pos(doc, pos, TRUE);
+			editor_goto_pos(doc->editor, pos, TRUE);
 		}
 		else
 		{
@@ -2074,7 +2074,7 @@ on_tabs1_activate                      (GtkMenuItem     *menuitem,
 	if (doc == NULL || ignore_callback)
 		return;
 
-	editor_set_use_tabs(doc, TRUE);
+	editor_set_use_tabs(doc->editor, TRUE);
 	ui_update_statusbar(doc, -1);
 }
 
@@ -2088,7 +2088,7 @@ on_spaces1_activate                    (GtkMenuItem     *menuitem,
 	if (doc == NULL || ignore_callback)
 		return;
 
-	editor_set_use_tabs(doc, FALSE);
+	editor_set_use_tabs(doc->editor, FALSE);
 	ui_update_statusbar(doc, -1);
 }
 

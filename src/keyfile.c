@@ -890,8 +890,8 @@ static gboolean open_session_file(gchar **tmp)
 
 		if (DOC_VALID(doc))
 		{
-			editor_set_use_tabs(doc, use_tabs);
-			editor_set_line_wrapping(doc, line_wrapping);
+			editor_set_use_tabs(doc->editor, use_tabs);
+			editor_set_line_wrapping(doc->editor, line_wrapping);
 			doc->auto_indent = auto_indent;
 			ret = TRUE;
 		}

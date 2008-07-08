@@ -167,7 +167,7 @@ gboolean navqueue_goto_line(GeanyDocument *old_doc, GeanyDocument *new_doc, gint
 		add_new_position(new_doc->file_name, pos);
 	}
 
-	return editor_goto_pos(new_doc, pos, TRUE);
+	return editor_goto_pos(new_doc->editor, pos, TRUE);
 }
 
 
@@ -178,7 +178,7 @@ static gboolean goto_file_pos(const gchar *file, gint pos)
 	if (doc == NULL)
 		return FALSE;
 
-	return editor_goto_pos(doc, pos, TRUE);
+	return editor_goto_pos(doc->editor, pos, TRUE);
 }
 
 
