@@ -144,7 +144,7 @@ static gchar *get_session_file_string(GeanyDocument *doc)
 		ft = filetypes[GEANY_FILETYPES_NONE];
 
 	fname = g_strdup_printf("%d;%s;%d;%d;%d;%d;%d;%s;",
-		sci_get_current_position(doc->sci),
+		sci_get_current_position(doc->editor->scintilla),
 		ft->name,
 		doc->readonly,
 		encodings_get_idx_from_charset(doc->encoding),

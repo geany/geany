@@ -6,6 +6,12 @@
    Add GeanyDocument::editor field.
    GeanyEditor::document allows access back to document fields.
    GeanyEditor::scintilla replaces GeanyDocument::sci.
+ * src/utils.c, src/keybindings.c, src/printing.c, src/tools.c,
+   src/navqueue.c, src/treeviews.c, src/callbacks.c, src/notebook.c,
+   src/keyfile.c, src/filetypes.c, src/search.c, src/document.c,
+   src/main.c, src/editor.c, src/ui_utils.c, plugins/export.c,
+   plugins/vcdiff.c, plugins/htmlchars.c, plugins/classbuilder.c:
+   Update for doc->editor->scintilla.
 
 
 2008-07-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

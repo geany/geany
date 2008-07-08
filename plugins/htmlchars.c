@@ -445,12 +445,12 @@ static gboolean sc_insert(GtkTreeModel *model, GtkTreeIter *iter)
 	if (doc != NULL)
 	{
 		gchar *str;
-		gint pos = p_sci->get_current_position(doc->sci);
+		gint pos = p_sci->get_current_position(doc->editor->scintilla);
 
 		gtk_tree_model_get(model, iter, COLUMN_HTML_NAME, &str, -1);
 		if (NZV(str))
 		{
-			p_sci->insert_text(doc->sci, pos, str);
+			p_sci->insert_text(doc->editor->scintilla, pos, str);
 			g_free(str);
 			result = TRUE;
 		}

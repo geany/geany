@@ -436,8 +436,8 @@ gint utils_get_current_function(GeanyDocument *doc, const gchar **tagname)
 		return tag_line;
 	}
 
-	line = sci_get_current_line(doc->sci);
-	fold_level = sci_get_fold_level(doc->sci, line);
+	line = sci_get_current_line(doc->editor->scintilla);
+	fold_level = sci_get_fold_level(doc->editor->scintilla, line);
 	/* check if the cached line and file index have changed since last time: */
 	if (! current_function_changed(doc, line, fold_level))
 	{
@@ -482,17 +482,17 @@ gint utils_get_current_function(GeanyDocument *doc, const gchar **tagname)
 		tag_line = line;
 		do	/* find the top level fold point */
 		{
-			tag_line = sci_get_fold_parent(doc->sci, tag_line);
-			fold_level = sci_get_fold_level(doc->sci, tag_line);
+			tag_line = sci_get_fold_parent(doc->editor->scintilla, tag_line);
+			fold_level = sci_get_fold_level(doc->editor->scintilla, tag_line);
 		} while (tag_line >= 0 &&
 			(fold_level & SC_FOLDLEVELNUMBERMASK) != fn_fold);
 
 		if (tag_line >= 0)
 		{
-			if (sci_get_lexer(doc->sci) == SCLEX_CPP)
-				cur_tag = parse_cpp_function_at_line(doc->sci, tag_line);
+			if (sci_get_lexer(doc->editor->scintilla) == SCLEX_CPP)
+				cur_tag = parse_cpp_function_at_line(doc->editor->scintilla, tag_line);
 			else
-				cur_tag = parse_function_at_line(doc->sci, tag_line);
+				cur_tag = parse_function_at_line(doc->editor->scintilla, tag_line);
 
 			if (cur_tag != NULL)
 			{
@@ -963,14 +963,14 @@ void utils_replace_filename(GeanyDocument *doc)
 
 	/* only search the first 3 lines */
 	ttf.chrg.cpMin = 0;
-	ttf.chrg.cpMax = sci_get_position_from_line(doc->sci, 3);
+	ttf.chrg.cpMax = sci_get_position_from_line(doc->editor->scintilla, 3);
 	ttf.lpstrText = (gchar*)filebase;
 
-	if (sci_find_text(doc->sci, SCFIND_MATCHCASE, &ttf) != -1)
+	if (sci_find_text(doc->editor->scintilla, SCFIND_MATCHCASE, &ttf) != -1)
 	{
-		sci_target_start(doc->sci, ttf.chrgText.cpMin);
-		sci_target_end(doc->sci, ttf.chrgText.cpMax);
-		sci_target_replace(doc->sci, filename, FALSE);
+		sci_target_start(doc->editor->scintilla, ttf.chrgText.cpMin);
+		sci_target_end(doc->editor->scintilla, ttf.chrgText.cpMax);
+		sci_target_replace(doc->editor->scintilla, filename, FALSE);
 	}
 
 	g_free(filebase);

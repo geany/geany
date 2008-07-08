@@ -173,7 +173,7 @@ static gboolean cc_replace_sel_cb(gpointer user_data)
 
 	if (! cc_error_occurred && cc_buffer != NULL)
 	{	/* Command completed successfully */
-		sci_replace_sel(doc->sci, cc_buffer->str);
+		sci_replace_sel(doc->editor->scintilla, cc_buffer->str);
 		g_string_free(cc_buffer, TRUE);
 		cc_buffer = NULL;
 	}
@@ -238,7 +238,7 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 
 	g_return_if_fail(doc != NULL && command != NULL);
 
-	if (! sci_can_copy(doc->sci))
+	if (! sci_can_copy(doc->editor->scintilla))
 		return;
 
 	argv = g_strsplit(command, " ", -1);
@@ -263,9 +263,9 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 				FALSE, cc_iofunc_err, (gpointer)command);
 
 		/* get selection */
-		len = sci_get_selected_text_length(doc->sci);
+		len = sci_get_selected_text_length(doc->editor->scintilla);
 		sel = g_malloc0(len + 1);
-		sci_get_selected_text(doc->sci, sel);
+		sci_get_selected_text(doc->editor->scintilla, sel);
 
 		/* write data to the command */
 		remaining = len - 1;
@@ -404,7 +404,7 @@ static void cc_on_custom_command_menu_activate(GtkMenuItem *menuitem, gpointer u
 	if (doc == NULL)
 		return;
 
-	enable = sci_can_copy(doc->sci) && (ui_prefs.custom_commands != NULL);
+	enable = sci_can_copy(doc->editor->scintilla) && (ui_prefs.custom_commands != NULL);
 
 	children = gtk_container_get_children(GTK_CONTAINER(user_data));
 	len = g_list_length(children);
@@ -616,16 +616,16 @@ void tools_word_count(void)
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_widget_set_name(dialog, "GeanyDialog");
 
-	if (sci_can_copy(doc->sci))
+	if (sci_can_copy(doc->editor->scintilla))
 	{
-		text = g_malloc0(sci_get_selected_text_length(doc->sci) + 1);
-		sci_get_selected_text(doc->sci, text);
+		text = g_malloc0(sci_get_selected_text_length(doc->editor->scintilla) + 1);
+		sci_get_selected_text(doc->editor->scintilla, text);
 		range = _("selection");
 	}
 	else
 	{
-		text = g_malloc(sci_get_length(doc->sci) + 1);
-		sci_get_text(doc->sci, sci_get_length(doc->sci) + 1 , text);
+		text = g_malloc(sci_get_length(doc->editor->scintilla) + 1);
+		sci_get_text(doc->editor->scintilla, sci_get_length(doc->editor->scintilla) + 1 , text);
 		range = _("whole document");
 	}
 	word_count(text, &chars, &lines, &words);

@@ -151,12 +151,12 @@ gboolean navqueue_goto_line(GeanyDocument *old_doc, GeanyDocument *new_doc, gint
 	g_return_val_if_fail(new_doc != NULL, FALSE);
 	g_return_val_if_fail(line >= 1, FALSE);
 
-	pos = sci_get_position_from_line(new_doc->sci, line - 1);
+	pos = sci_get_position_from_line(new_doc->editor->scintilla, line - 1);
 
 	/* first add old file position */
 	if (old_doc != NULL && old_doc->file_name)
 	{
-		gint cur_pos = sci_get_current_position(old_doc->sci);
+		gint cur_pos = sci_get_current_position(old_doc->editor->scintilla);
 
 		add_new_position(old_doc->file_name, cur_pos);
 	}
