@@ -148,9 +148,9 @@ static gchar *get_session_file_string(GeanyDocument *doc)
 		ft->name,
 		doc->readonly,
 		encodings_get_idx_from_charset(doc->encoding),
-		doc->use_tabs,
-		doc->auto_indent,
-		doc->line_wrapping,
+		doc->editor->use_tabs,
+		doc->editor->auto_indent,
+		doc->editor->line_wrapping,
 		doc->file_name);
 	return fname;
 }
@@ -888,11 +888,11 @@ static gboolean open_session_file(gchar **tmp)
 			(enc_idx >= 0 && enc_idx < GEANY_ENCODINGS_MAX) ?
 				encodings[enc_idx].charset : NULL);
 
-		if (DOC_VALID(doc))
+		if (doc)
 		{
 			editor_set_use_tabs(doc->editor, use_tabs);
 			editor_set_line_wrapping(doc->editor, line_wrapping);
-			doc->auto_indent = auto_indent;
+			doc->editor->auto_indent = auto_indent;
 			ret = TRUE;
 		}
 	}

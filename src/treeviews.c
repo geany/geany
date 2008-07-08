@@ -32,6 +32,7 @@
 #include "callbacks.h"
 #include "treeviews.h"
 #include "document.h"
+#include "editor.h"
 #include "documentprivate.h"
 #include "filetypes.h"
 #include "utils.h"

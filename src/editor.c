@@ -3501,7 +3501,7 @@ static void editor_colourise(ScintillaObject *sci)
 
 	/* now that the current document is colourised, fold points are now accurate,
 	 * so force an update of the current function/tag. */
-	utils_get_current_function(NULL, NULL);
+	symbols_get_current_function(NULL, NULL);
 	ui_update_statusbar(NULL, -1);
 }
 

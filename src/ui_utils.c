@@ -46,6 +46,7 @@
 #include "project.h"
 #include "editor.h"
 #include "plugins.h"
+#include "symbols.h"
 
 
 GeanyInterfacePrefs	interface_prefs;
@@ -166,7 +167,7 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 				(sci_get_overtype(doc->editor->scintilla) ? _("OVR") : _("INS")));
 		g_string_append(stats_str, sp);
 		g_string_append(stats_str,
-			(doc->use_tabs) ? _("TAB") : _("SP "));	/* SP = space */
+			(doc->editor->use_tabs) ? _("TAB") : _("SP "));	/* SP = space */
 		g_string_append(stats_str, sp);
 		g_string_append_printf(stats_str, _("mode: %s"),
 			editor_get_eol_char_name(doc));
@@ -185,7 +186,7 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 			g_string_append(stats_str, sp);
 		}
 
-		utils_get_current_function(doc, &cur_tag);
+		symbols_get_current_function(doc, &cur_tag);
 		g_string_append_printf(stats_str, _("scope: %s"),
 			cur_tag);
 
@@ -699,17 +700,17 @@ void ui_document_show_hide(GeanyDocument *doc)
 
 	gtk_check_menu_item_set_active(
 			GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_line_wrapping1")),
-			doc->line_wrapping);
+			doc->editor->line_wrapping);
 
 	gtk_check_menu_item_set_active(
 			GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "line_breaking1")),
-			doc->line_breaking);
+			doc->editor->line_breaking);
 
 	item = lookup_widget(main_widgets.window, "menu_use_auto_indentation1");
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), doc->auto_indent);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), doc->editor->auto_indent);
 	gtk_widget_set_sensitive(item, editor_prefs.indent_mode != INDENT_NONE);
 
-	item = lookup_widget(main_widgets.window, doc->use_tabs ? "tabs1" : "spaces1");
+	item = lookup_widget(main_widgets.window, doc->editor->use_tabs ? "tabs1" : "spaces1");
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), TRUE);
 
 	gtk_check_menu_item_set_active(

@@ -28,6 +28,7 @@
 #include "support.h"
 #include "plugindata.h"
 #include "document.h"
+#include "editor.h"
 #include "keybindings.h"
 #include "ui_utils.h"
 #include "utils.h"

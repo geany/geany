@@ -33,6 +33,7 @@
 #include "support.h"
 #include "plugindata.h"
 #include "document.h"
+#include "editor.h"
 #include "filetypes.h"
 #include "utils.h"
 #include "project.h"

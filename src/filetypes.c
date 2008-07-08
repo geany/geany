@@ -34,6 +34,7 @@
 #include "support.h"
 #include "templates.h"
 #include "document.h"
+#include "editor.h"
 #include "msgwindow.h"
 #include "utils.h"
 #include "sciwrappers.h"

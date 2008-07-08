@@ -28,6 +28,7 @@
 #include "geany.h"
 #include "notebook.h"
 #include "document.h"
+#include "editor.h"
 #include "documentprivate.h"
 #include "ui_utils.h"
 #include "treeviews.h"

@@ -311,7 +311,7 @@ void document_apply_update_prefs(GeanyDocument *doc)
 
 	sci_set_folding_margin_visible(sci, editor_prefs.folding);
 
-	doc->auto_indent = (editor_prefs.indent_mode != INDENT_NONE);
+	doc->editor->auto_indent = (editor_prefs.indent_mode != INDENT_NONE);
 
 	sci_assign_cmdkey(sci, SCK_HOME,
 		editor_prefs.smart_home_key ? SCI_VCHOMEWRAP : SCI_HOMEWRAP);
@@ -324,13 +324,14 @@ void document_apply_update_prefs(GeanyDocument *doc)
 static void init_doc_struct(GeanyDocument *new_doc)
 {
 	Document *full_doc = DOCUMENT(new_doc);
+	GeanyEditor *editor = new_doc->editor;
 
 	memset(full_doc, 0, sizeof(Document));
 
 	new_doc->is_valid = FALSE;
 	new_doc->has_tags = FALSE;
-	new_doc->auto_indent = (editor_prefs.indent_mode != INDENT_NONE);
-	new_doc->line_wrapping = editor_prefs.line_wrapping;
+	editor->auto_indent = (editor_prefs.indent_mode != INDENT_NONE);
+	editor->line_wrapping = editor_prefs.line_wrapping;
 	new_doc->readonly = FALSE;
 	new_doc->file_name = NULL;
 	new_doc->file_type = NULL;
@@ -338,8 +339,8 @@ static void init_doc_struct(GeanyDocument *new_doc)
 	new_doc->encoding = NULL;
 	new_doc->has_bom = FALSE;
 	new_doc->editor->scintilla = NULL;
-	new_doc->scroll_percent = -1.0F;
-	new_doc->line_breaking = FALSE;
+	editor->scroll_percent = -1.0F;
+	editor->line_breaking = FALSE;
 	new_doc->mtime = 0;
 	new_doc->changed = FALSE;
 	new_doc->last_check = time(NULL);
@@ -502,7 +503,7 @@ gboolean document_remove_page(guint page_num)
 		doc->encoding = NULL;
 		doc->has_bom = FALSE;
 		doc->tm_file = NULL;
-		doc->scroll_percent = -1.0F;
+		doc->editor->scroll_percent = -1.0F;
 		document_undo_clear(doc);
 		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0)
 		{
@@ -857,25 +858,25 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_f
 /* Sets the cursor position on opening a file. First it sets the line when cl_options.goto_line
  * is set, otherwise it sets the line when pos is greater than zero and finally it sets the column
  * if cl_options.goto_column is set. */
-static void set_cursor_position(GeanyDocument *doc, gint pos)
+static void set_cursor_position(GeanyEditor *editor, gint pos)
 {
 	if (cl_options.goto_line >= 0)
 	{	/* goto line which was specified on command line and then undefine the line */
-		sci_goto_line(doc->editor->scintilla, cl_options.goto_line - 1, TRUE);
-		doc->scroll_percent = 0.5F;
+		sci_goto_line(editor->scintilla, cl_options.goto_line - 1, TRUE);
+		editor->scroll_percent = 0.5F;
 		cl_options.goto_line = -1;
 	}
 	else if (pos > 0)
 	{
-		sci_set_current_position(doc->editor->scintilla, pos, FALSE);
-		doc->scroll_percent = 0.5F;
+		sci_set_current_position(editor->scintilla, pos, FALSE);
+		editor->scroll_percent = 0.5F;
 	}
 
 	if (cl_options.goto_column >= 0)
 	{	/* goto column which was specified on command line and then undefine the column */
-		gint cur_pos = sci_get_current_position(doc->editor->scintilla);
-		sci_set_current_position(doc->editor->scintilla, cur_pos + cl_options.goto_column, FALSE);
-		doc->scroll_percent = 0.5F;
+		gint cur_pos = sci_get_current_position(editor->scintilla);
+		sci_set_current_position(editor->scintilla, cur_pos + cl_options.goto_column, FALSE);
+		editor->scroll_percent = 0.5F;
 		cl_options.goto_column = -1;
 	}
 }
@@ -985,7 +986,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 			g_free(utf8_filename);
 			g_free(locale_filename);
 			document_check_disk_status(doc, TRUE);	/* force a file changed check */
-			set_cursor_position(doc, pos);
+			set_cursor_position(doc->editor, pos);
 			return doc;
 		}
 	}
@@ -1032,7 +1033,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 	sci_set_line_numbers(doc->editor->scintilla, editor_prefs.show_linenumber_margin, 0);
 
 	/* set the cursor position according to pos, cl_options.goto_line and cl_options.goto_column */
-	set_cursor_position(doc, pos);
+	set_cursor_position(doc->editor, pos);
 
 	if (! reload)
 	{
@@ -1057,7 +1058,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 
 	/* set indentation settings after setting the filetype */
 	if (reload)
-		editor_set_use_tabs(doc->editor, doc->use_tabs); /* resetup sci */
+		editor_set_use_tabs(doc->editor, doc->editor->use_tabs); /* resetup sci */
 	else
 		set_indentation(doc);
 
@@ -1215,6 +1216,34 @@ static void get_line_column_from_pos(GeanyDocument *doc, guint byte_pos, gint *l
 }
 
 
+static void replace_header_filename(GeanyDocument *doc)
+{
+	gchar *filebase;
+	gchar *filename;
+	struct TextToFind ttf;
+
+	if (doc == NULL || doc->file_type == NULL) return;
+
+	filebase = g_strconcat(GEANY_STRING_UNTITLED, ".", (doc->file_type)->extension, NULL);
+	filename = g_path_get_basename(doc->file_name);
+
+	/* only search the first 3 lines */
+	ttf.chrg.cpMin = 0;
+	ttf.chrg.cpMax = sci_get_position_from_line(doc->editor->scintilla, 3);
+	ttf.lpstrText = (gchar*)filebase;
+
+	if (sci_find_text(doc->editor->scintilla, SCFIND_MATCHCASE, &ttf) != -1)
+	{
+		sci_target_start(doc->editor->scintilla, ttf.chrgText.cpMin);
+		sci_target_end(doc->editor->scintilla, ttf.chrgText.cpMax);
+		sci_target_replace(doc->editor->scintilla, filename, FALSE);
+	}
+
+	g_free(filebase);
+	g_free(filename);
+}
+
+
 /*
  * Save the %document, detecting the filetype.
  *
@@ -1249,7 +1278,7 @@ gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 			ignore_callback = FALSE;
 		}
 	}
-	utils_replace_filename(doc);
+	replace_header_filename(doc);
 
 	ret = document_save_file(doc, TRUE);
 	if (ret)
@@ -1582,7 +1611,7 @@ gint document_find_text(GeanyDocument *doc, const gchar *text, gint flags, gbool
 		sci_ensure_line_is_visible(doc->editor->scintilla,
 			sci_get_line_from_position(doc->editor->scintilla, search_pos));
 		if (scroll)
-			doc->scroll_percent = 0.3F;
+			doc->editor->scroll_percent = 0.3F;
 	}
 	else
 	{
@@ -2394,11 +2423,11 @@ GeanyDocument *document_clone(GeanyDocument *old_doc, const gchar *utf8_filename
 	g_free(text);
 
 	/* copy file properties */
-	doc->line_wrapping = old_doc->line_wrapping;
+	doc->editor->line_wrapping = old_doc->editor->line_wrapping;
 	doc->readonly = old_doc->readonly;
 	doc->has_bom = old_doc->has_bom;
 	document_set_encoding(doc, old_doc->encoding);
-	sci_set_lines_wrapped(doc->editor->scintilla, doc->line_wrapping);
+	sci_set_lines_wrapped(doc->editor->scintilla, doc->editor->line_wrapping);
 	sci_set_readonly(doc->editor->scintilla, doc->readonly);
 
 	ui_document_show_hide(doc);

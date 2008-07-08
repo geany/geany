@@ -30,6 +30,7 @@
 #include "support.h"
 #include "filetypes.h"
 #include "document.h"
+#include "editor.h"
 #include "ui_utils.h"
 #include "pluginmacros.h"
 

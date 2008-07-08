@@ -17,6 +17,13 @@
    src/editor.h:
    Fix building editor.c, using GeanyEditor* instead of GeanyDocument*
    (most global editor functions still need conversion though).
+ * src/utils.c, src/utils.h, src/treeviews.c, src/callbacks.c,
+   src/notebook.c, src/keyfile.c, src/filetypes.c, src/document.c,
+   src/editor.c, src/symbols.c, src/symbols.h, src/ui_utils.c,
+   plugins/vcdiff.c, plugins/htmlchars.c, plugins/classbuilder.c:
+   Fix compilation.
+   Move utils_get_current_function() to symbols.c.
+   Move utils_replace_filename() to document.c.
 
 
 2008-07-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -999,7 +999,7 @@ on_use_auto_indentation1_toggled       (GtkCheckMenuItem *checkmenuitem,
 	{
 		GeanyDocument *doc = document_get_current();
 		if (doc != NULL)
-			doc->auto_indent = ! doc->auto_indent;
+			doc->editor->auto_indent = ! doc->editor->auto_indent;
 	}
 }
 
@@ -1288,9 +1288,9 @@ on_comments_function_activate          (GtkMenuItem     *menuitem,
 		return;
 	}
 
-	/* utils_get_current_function returns -1 on failure, so sci_get_position_from_line
+	/* symbols_get_current_function returns -1 on failure, so sci_get_position_from_line
 	 * returns the current position, so it should be safe */
-	line = utils_get_current_function(doc, &cur_tag);
+	line = symbols_get_current_function(doc, &cur_tag);
 	pos = sci_get_position_from_line(doc->editor->scintilla, line - 1);
 
 	text = templates_get_template_function(doc->file_type->id, cur_tag);
@@ -1707,7 +1707,7 @@ on_menu_increase_indent1_activate      (GtkMenuItem     *menuitem,
 		line = sci_get_line_from_position(doc->editor->scintilla, old_pos);
 		ind_pos = sci_get_line_indent_position(doc->editor->scintilla, line);
 		/* when using tabs increase cur pos by 1, when using space increase it by tab_width */
-		step = (doc->use_tabs) ? 1 : editor_prefs.tab_width;
+		step = (doc->editor->use_tabs) ? 1 : editor_prefs.tab_width;
 		new_pos = (old_pos > ind_pos) ? old_pos + step : old_pos;
 
 		sci_set_current_position(doc->editor->scintilla, ind_pos, TRUE);
@@ -1736,7 +1736,7 @@ on_menu_decrease_indent1_activate      (GtkMenuItem     *menuitem,
 		old_pos = sci_get_current_position(doc->editor->scintilla);
 		line = sci_get_line_from_position(doc->editor->scintilla, old_pos);
 		ind_pos = sci_get_line_indent_position(doc->editor->scintilla, line);
-		step = (doc->use_tabs) ? 1 : editor_prefs.tab_width;
+		step = (doc->editor->use_tabs) ? 1 : editor_prefs.tab_width;
 		new_pos = (old_pos >= ind_pos) ? old_pos - step : old_pos;
 
 		if (ind_pos == sci_get_position_from_line(doc->editor->scintilla, line))
@@ -2153,7 +2153,7 @@ on_line_breaking1_activate             (GtkMenuItem     *menuitem,
 	doc = document_get_current();
 	g_return_if_fail(doc != NULL);
 
-	doc->line_breaking = !doc->line_breaking;
+	doc->editor->line_breaking = !doc->editor->line_breaking;
 }
 
 void
