@@ -40,15 +40,6 @@
 #define documents_array	geany_data->documents_array		/**< Allows use of @c documents[] macro */
 #define filetypes_array	geany_data->filetypes_array		/**< Allows use of @c filetypes[] macro */
 
-#ifndef GEANY_DISABLE_DEPRECATED
-
-#define app				geany_data->app
-#define main_widgets	geany_data->main_widgets
-#define prefs			geany_data->prefs
-#define project			app->project
-
-#endif
-
 
 /* function group macros */
 #define p_editor		geany_functions->p_editor		/**< See editor.h */

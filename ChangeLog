@@ -1,3 +1,10 @@
+2008-07-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * plugins/pluginmacros.h:
+   Remove deprecated struct field macros (this fixes building Geany
+   when GEANY_DISABLE_DEPRECATED is not set, fixes #2014586).
+
+
 2008-07-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * tagmanager/haskell.c:
