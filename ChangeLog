@@ -7,6 +7,9 @@
    instead.
  * src/document.c:
    Fix segfault in update_type_keywords().
+ * src/build.c, src/plugindata.h, src/msgwindow.c, src/callbacks.c,
+   src/editor.c, src/editor.h:
+   Change plugin API EditorFuncs to use GeanyEditor pointers.
 
 
 2008-07-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

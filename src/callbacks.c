@@ -1548,7 +1548,7 @@ on_menu_remove_indicators1_activate    (GtkMenuItem     *menuitem,
 	GeanyDocument *doc = document_get_current();
 
 	if (doc != NULL)
-		editor_clear_indicators(doc);
+		editor_clear_indicators(doc->editor);
 }
 
 

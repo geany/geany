@@ -603,7 +603,7 @@ gboolean msgwin_goto_compiler_file_line()
 				if (doc != NULL)
 				{
 					if (! doc->changed)	/* if modified, line may be wrong */
-						editor_set_indicator_on_line(doc, line - 1);
+						editor_set_indicator_on_line(doc->editor, line - 1);
 
 					ret = navqueue_goto_line(old_doc, doc, line);
 				}

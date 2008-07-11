@@ -186,11 +186,11 @@ void editor_select_lines(ScintillaObject *sci, gboolean extra_line);
 
 void editor_select_paragraph(ScintillaObject *sci);
 
-void editor_set_indicator_on_line(GeanyDocument *doc, gint line);
+void editor_set_indicator_on_line(GeanyEditor *editor, gint line);
 
-void editor_set_indicator(GeanyDocument *doc, gint start, gint end);
+void editor_set_indicator(GeanyEditor *editor, gint start, gint end);
 
-void editor_clear_indicators(GeanyDocument *doc);
+void editor_clear_indicators(GeanyEditor *editor);
 
 void editor_set_font(GeanyDocument *doc, const gchar *font_name, gint size);
 

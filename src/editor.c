@@ -3074,55 +3074,55 @@ void editor_display_current_line(GeanyEditor *editor, gfloat percent_of_view)
 
 
 /**
- *  Deletes all currently set indicators in the @a document.
+ *  Deletes all currently set indicators in the @a editor window.
  *  Error indicators (red squiggly underlines) and usual line markers are removed.
  *
- *  @param doc The document to operate on.
+ *  @param editor The editor to operate on.
  **/
-void editor_clear_indicators(GeanyDocument *doc)
+void editor_clear_indicators(GeanyEditor *editor)
 {
 	glong last_pos;
 
-	g_return_if_fail(doc != NULL);
+	g_return_if_fail(editor != NULL);
 
-	last_pos = sci_get_length(doc->editor->scintilla);
+	last_pos = sci_get_length(editor->scintilla);
 	if (last_pos > 0)
 	{
-		sci_start_styling(doc->editor->scintilla, 0, INDIC2_MASK);
-		sci_set_styling(doc->editor->scintilla, last_pos, 0);
+		sci_start_styling(editor->scintilla, 0, INDIC2_MASK);
+		sci_set_styling(editor->scintilla, last_pos, 0);
 	}
-	sci_marker_delete_all(doc->editor->scintilla, 0);	/* remove the yellow error line marker */
+	sci_marker_delete_all(editor->scintilla, 0);	/* remove the yellow error line marker */
 }
 
 
 /**
- *  This is a convenience function for document_set_indicator(). It sets an error indicator
+ *  This is a convenience function for editor_set_indicator(). It sets an error indicator
  *  (red squiggly underline) on the whole given line.
  *  Whitespace at the start and the end of the line is not marked.
  *
- *  @param doc The document to operate on.
+ *  @param editor The editor to operate on.
  *  @param line The line number which should be marked.
  **/
-void editor_set_indicator_on_line(GeanyDocument *doc, gint line)
+void editor_set_indicator_on_line(GeanyEditor *editor, gint line)
 {
 	gint start, end;
 	guint i = 0, len;
 	gchar *linebuf;
 
-	if (doc == NULL)
+	if (editor == NULL)
 		return;
 
-	start = sci_get_position_from_line(doc->editor->scintilla, line);
-	end = sci_get_position_from_line(doc->editor->scintilla, line + 1);
+	start = sci_get_position_from_line(editor->scintilla, line);
+	end = sci_get_position_from_line(editor->scintilla, line + 1);
 
 	/* skip blank lines */
 	if ((start + 1) == end ||
-		sci_get_line_length(doc->editor->scintilla, line) == editor_get_eol_char_len(doc))
+		sci_get_line_length(editor->scintilla, line) == editor_get_eol_char_len(editor->document))
 		return;
 
 	/* don't set the indicator on whitespace */
 	len = end - start;
-	linebuf = sci_get_line(doc->editor->scintilla, line);
+	linebuf = sci_get_line(editor->scintilla, line);
 
 	while (isspace(linebuf[i])) i++;
 	while (len > 1 && len > i && isspace(linebuf[len-1]))
@@ -3132,7 +3132,7 @@ void editor_set_indicator_on_line(GeanyDocument *doc, gint line)
 	}
 	g_free(linebuf);
 
-	editor_set_indicator(doc, start + i, end);
+	editor_set_indicator(editor, start + i, end);
 }
 
 
@@ -3141,23 +3141,23 @@ void editor_set_indicator_on_line(GeanyDocument *doc, gint line)
  *  No error checking or whitespace removal is performed, this should be done by the calling
  *  function if necessary.
  *
- *  @param doc The document to operate on.
+ *  @param editor The editor to operate on.
  *  @param start The starting position for the marker.
  *  @param end The ending position for the marker.
  **/
-void editor_set_indicator(GeanyDocument *doc, gint start, gint end)
+void editor_set_indicator(GeanyEditor *editor, gint start, gint end)
 {
 	gint current_mask;
 
-	if (doc == NULL || start >= end)
+	if (editor == NULL || start >= end)
 		return;
 
-	current_mask = sci_get_style_at(doc->editor->scintilla, start);
+	current_mask = sci_get_style_at(editor->scintilla, start);
 	current_mask &= INDICS_MASK;
 	current_mask |= INDIC2_MASK;
 
-	sci_start_styling(doc->editor->scintilla, start, INDIC2_MASK);
-	sci_set_styling(doc->editor->scintilla, end - start, current_mask);
+	sci_start_styling(editor->scintilla, start, INDIC2_MASK);
+	sci_set_styling(editor->scintilla, end - start, current_mask);
 }
 
 
