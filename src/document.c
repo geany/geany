@@ -2044,10 +2044,9 @@ static gboolean update_type_keywords(GeanyDocument *doc, gint lang)
 
 	for (n = 0; n < documents_array->len; n++)
 	{
-		ScintillaObject *wid = documents[n]->editor->scintilla;
-
-		if (wid)
+		if (documents[n]->is_valid)
 		{
+			ScintillaObject *wid = documents[n]->editor->scintilla;
 			gint keyword_idx = editor_lexer_get_type_keyword_idx(sci_get_lexer(wid));
 
 			if (keyword_idx > 0)

@@ -5,6 +5,8 @@
    checks for doc->editor->scintilla != NULL will segfault for invalid
    documents - check against doc->is_valid or doc->editor != NULL
    instead.
+ * src/document.c:
+   Fix segfault in update_type_keywords().
 
 
 2008-07-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
