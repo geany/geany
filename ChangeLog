@@ -10,6 +10,9 @@
  * src/build.c, src/plugindata.h, src/msgwindow.c, src/callbacks.c,
    src/editor.c, src/editor.h:
    Change plugin API EditorFuncs to use GeanyEditor pointers.
+ * src/document.c, src/editor.c, src/editor.h, src/ui_utils.c:
+   Make editor_set_font() take a pango-style font string, and use a
+   GeanyEditor pointer.
 
 
 2008-07-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

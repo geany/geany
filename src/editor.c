@@ -3414,18 +3414,30 @@ void editor_ensure_final_newline(GeanyDocument *doc)
 }
 
 
-void editor_set_font(GeanyDocument *doc, const gchar *font_name, gint size)
+void editor_set_font(GeanyEditor *editor, const gchar *font)
 {
-	gint style;
+	gint style, size;
+	gchar *font_name;
+	PangoFontDescription *pfd;
+
+	g_return_if_fail(editor);
+
+	pfd = pango_font_description_from_string(font);
+	size = pango_font_description_get_size(pfd) / PANGO_SCALE;
+	font_name = g_strdup_printf("!%s", pango_font_description_get_family(pfd));
+	pango_font_description_free(pfd);
 
 	for (style = 0; style <= 127; style++)
-		sci_set_font(doc->editor->scintilla, style, font_name, size);
+		sci_set_font(editor->scintilla, style, font_name, size);
+
 	/* line number and braces */
-	sci_set_font(doc->editor->scintilla, STYLE_LINENUMBER, font_name, size);
-	sci_set_font(doc->editor->scintilla, STYLE_BRACELIGHT, font_name, size);
-	sci_set_font(doc->editor->scintilla, STYLE_BRACEBAD, font_name, size);
+	sci_set_font(editor->scintilla, STYLE_LINENUMBER, font_name, size);
+	sci_set_font(editor->scintilla, STYLE_BRACELIGHT, font_name, size);
+	sci_set_font(editor->scintilla, STYLE_BRACEBAD, font_name, size);
+	g_free(font_name);
+
 	/* zoom to 100% to prevent confusion */
-	sci_zoom_off(doc->editor->scintilla);
+	sci_zoom_off(editor->scintilla);
 }
 
 
@@ -3609,6 +3621,7 @@ GeanyEditor *editor_create(GeanyDocument *doc)
 	editor->line_breaking = FALSE;
 
 	editor->scintilla = create_new_sci(doc);
+	editor_set_font(editor, interface_prefs.editor_font);
 	return editor;
 }
 

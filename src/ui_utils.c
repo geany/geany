@@ -250,11 +250,9 @@ void ui_set_window_title(GeanyDocument *doc)
 void ui_set_editor_font(const gchar *font_name)
 {
 	guint i;
-	gint size;
-	gchar *fname;
-	PangoFontDescription *font_desc;
 
 	g_return_if_fail(font_name != NULL);
+
 	/* do nothing if font has not changed */
 	if (interface_prefs.editor_font != NULL)
 		if (strcmp(font_name, interface_prefs.editor_font) == 0) return;
@@ -262,23 +260,16 @@ void ui_set_editor_font(const gchar *font_name)
 	g_free(interface_prefs.editor_font);
 	interface_prefs.editor_font = g_strdup(font_name);
 
-	font_desc = pango_font_description_from_string(interface_prefs.editor_font);
-
-	fname = g_strdup_printf("!%s", pango_font_description_get_family(font_desc));
-	size = pango_font_description_get_size(font_desc) / PANGO_SCALE;
-
 	/* We copy the current style, and update the font in all open tabs. */
-	for(i = 0; i < documents_array->len; i++)
+	for (i = 0; i < documents_array->len; i++)
 	{
 		if (documents[i]->editor)
 		{
-			editor_set_font(documents[i], fname, size);
+			editor_set_font(documents[i]->editor, interface_prefs.editor_font);
 		}
 	}
-	pango_font_description_free(font_desc);
 
 	ui_set_statusbar(TRUE, _("Font updated (%s)."), interface_prefs.editor_font);
-	g_free(fname);
 }
 
 

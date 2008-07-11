@@ -384,8 +384,6 @@ static void queue_colourise(GeanyDocument *doc)
  * @return The index of the created document */
 static GeanyDocument *document_create(const gchar *utf8_filename)
 {
-	PangoFontDescription *pfd;
-	gchar *fname;
 	GeanyDocument *this;
 	gint new_idx;
 	gint cur_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
@@ -415,12 +413,6 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 	this->editor = editor_create(this);
 
 	document_apply_update_prefs(this);
-
-	pfd = pango_font_description_from_string(interface_prefs.editor_font);
-	fname = g_strdup_printf("!%s", pango_font_description_get_family(pfd));
-	editor_set_font(this, fname, pango_font_description_get_size(pfd) / PANGO_SCALE);
-	pango_font_description_free(pfd);
-	g_free(fname);
 
 	treeviews_openfiles_add(this);	/* sets this->iter */
 

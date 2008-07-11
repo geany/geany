@@ -192,7 +192,7 @@ void editor_set_indicator(GeanyEditor *editor, gint start, gint end);
 
 void editor_clear_indicators(GeanyEditor *editor);
 
-void editor_set_font(GeanyDocument *doc, const gchar *font_name, gint size);
+void editor_set_font(GeanyEditor *editor, const gchar *font);
 
 const gchar *editor_get_eol_char_name(GeanyDocument *doc);
 
