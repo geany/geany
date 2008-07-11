@@ -1,3 +1,12 @@
+2008-07-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/document.c, src/editor.c, src/editor.h, src/ui_utils.c:
+   Create the doc->editor field in editor_create(). This means any
+   checks for doc->editor->scintilla != NULL will segfault for invalid
+   documents - check against doc->is_valid or doc->editor != NULL
+   instead.
+
+
 2008-07-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/document.h, src/editor.h, src/plugindata.h:

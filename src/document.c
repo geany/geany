@@ -324,23 +324,18 @@ void document_apply_update_prefs(GeanyDocument *doc)
 static void init_doc_struct(GeanyDocument *new_doc)
 {
 	Document *full_doc = DOCUMENT(new_doc);
-	GeanyEditor *editor = new_doc->editor;
 
 	memset(full_doc, 0, sizeof(Document));
 
 	new_doc->is_valid = FALSE;
 	new_doc->has_tags = FALSE;
-	editor->auto_indent = (editor_prefs.indent_mode != INDENT_NONE);
-	editor->line_wrapping = editor_prefs.line_wrapping;
 	new_doc->readonly = FALSE;
 	new_doc->file_name = NULL;
 	new_doc->file_type = NULL;
 	new_doc->tm_file = NULL;
 	new_doc->encoding = NULL;
 	new_doc->has_bom = FALSE;
-	new_doc->editor->scintilla = NULL;
-	editor->scroll_percent = -1.0F;
-	editor->line_breaking = FALSE;
+	new_doc->editor = NULL;
 	new_doc->mtime = 0;
 	new_doc->changed = FALSE;
 	new_doc->last_check = time(NULL);
@@ -363,7 +358,7 @@ static gint document_get_new_idx(void)
 
 	for (i = 0; i < documents_array->len; i++)
 	{
-		if (documents[i]->editor->scintilla == NULL)
+		if (documents[i]->editor == NULL)
 		{
 			return (gint) i;
 		}
@@ -417,7 +412,7 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 
 	this->file_name = g_strdup(utf8_filename);
 
-	this->editor->scintilla = editor_create_new_sci(this);
+	this->editor = editor_create(this);
 
 	document_apply_update_prefs(this);
 
@@ -495,15 +490,16 @@ gboolean document_remove_page(guint page_num)
 		g_free(doc->real_path);
 		tm_workspace_remove_object(doc->tm_file, TRUE, TRUE);
 
+		g_free(doc->editor);
+		doc->editor = NULL;
+
 		doc->is_valid = FALSE;
-		doc->editor->scintilla = NULL;
 		doc->file_name = NULL;
 		doc->real_path = NULL;
 		doc->file_type = NULL;
 		doc->encoding = NULL;
 		doc->has_bom = FALSE;
 		doc->tm_file = NULL;
-		doc->editor->scroll_percent = -1.0F;
 		document_undo_clear(doc);
 		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0)
 		{
@@ -2168,7 +2164,7 @@ void document_undo_clear(GeanyDocument *doc)
 	}
 	fdoc->redo_actions = NULL;
 
-	if (! main_status.quitting && doc->editor->scintilla != NULL)
+	if (! main_status.quitting && doc->editor != NULL)
 		document_set_text_changed(doc, FALSE);
 
 	/*geany_debug("%s: new undo stack height: %d, new redo stack height: %d", __func__,

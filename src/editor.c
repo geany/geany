@@ -3554,7 +3554,7 @@ static void setup_sci_keys(ScintillaObject *sci)
 
 /* Create new editor widget (scintilla).
  * @note The @c "sci-notify" signal is connected separately. */
-ScintillaObject *editor_create_new_sci(GeanyDocument *doc)
+static ScintillaObject *create_new_sci(GeanyDocument *doc)
 {
 	ScintillaObject	*sci;
 
@@ -3596,4 +3596,19 @@ ScintillaObject *editor_create_new_sci(GeanyDocument *doc)
 	return sci;
 }
 
+
+GeanyEditor *editor_create(GeanyDocument *doc)
+{
+	GeanyEditor *editor = g_new0(GeanyEditor, 1);
+
+	editor->document = doc;
+
+	editor->auto_indent = (editor_prefs.indent_mode != INDENT_NONE);
+	editor->line_wrapping = editor_prefs.line_wrapping;
+	editor->scroll_percent = -1.0F;
+	editor->line_breaking = FALSE;
+
+	editor->scintilla = create_new_sci(doc);
+	return editor;
+}
 

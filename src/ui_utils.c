@@ -270,7 +270,7 @@ void ui_set_editor_font(const gchar *font_name)
 	/* We copy the current style, and update the font in all open tabs. */
 	for(i = 0; i < documents_array->len; i++)
 	{
-		if (documents[i]->editor->scintilla)
+		if (documents[i]->editor)
 		{
 			editor_set_font(documents[i], fname, size);
 		}

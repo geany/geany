@@ -125,7 +125,7 @@ extern EditorInfo editor_info;
 
 
 
-ScintillaObject *editor_create_new_sci(GeanyDocument *doc);
+GeanyEditor *editor_create(GeanyDocument *doc);
 
 void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer user_data);
 
