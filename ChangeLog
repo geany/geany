@@ -1,3 +1,10 @@
+2008-07-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * plugins/classbuilder.c:
+   Fix some formatting issues.
+   Add 'static' keyword to generated finalize() function in GTK classes.
+
+
 2008-07-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * plugins/pluginmacros.h:

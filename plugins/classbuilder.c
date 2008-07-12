@@ -122,16 +122,16 @@ G_BEGIN_DECLS\n\
 \n\
 #define {class_name_up}_TYPE				({class_name_low}_get_type())\n\
 #define {class_name_up}(obj)				(G_TYPE_CHECK_INSTANCE_CAST((obj),\\\n\
-		{class_name_up}_TYPE, {class_name}))\n\
+			{class_name_up}_TYPE, {class_name}))\n\
 #define {class_name_up}_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST((klass),\\\n\
-		{class_name_up}_TYPE, {class_name}Class))\n\
-#define IS_{class_name_up}(obj)				(G_TYPE_CHECK_INSTANCE_TYPE((obj),\\\n\
-		{class_name_up}_TYPE))\n\
-#define IS_{class_name_up}_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE((klass),\\\n\
-		{class_name_up}_TYPE))\n\
+			{class_name_up}_TYPE, {class_name}Class))\n\
+#define IS_{class_name_up}(obj)			(G_TYPE_CHECK_INSTANCE_TYPE((obj),\\\n\
+			{class_name_up}_TYPE))\n\
+#define IS_{class_name_up}_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE((klass),\\\n\
+			{class_name_up}_TYPE))\n\
 \n\
-typedef struct _{class_name}				{class_name};\n\
-typedef struct _{class_name}Class			{class_name}Class;\n\
+typedef struct _{class_name}			{class_name};\n\
+typedef struct _{class_name}Class		{class_name}Class;\n\
 \n\
 struct _{class_name}\n\
 {\n\
@@ -144,7 +144,7 @@ struct _{class_name}Class\n\
 	{base_name}Class parent_class;\n\
 };\n\
 \n\
-GType		{class_name_low}_get_type	(void);\n\
+GType		{class_name_low}_get_type		(void);\n\
 {constructor_decl}\
 \n\
 G_END_DECLS\n\
@@ -155,10 +155,10 @@ G_END_DECLS\n\
 static const gchar templates_gtk_class_source[] = "{fileheader}\n\
 #include \"{header}\"\n\
 \n\
-typedef struct _{class_name}Private				{class_name}Private;\n\
+typedef struct _{class_name}Private			{class_name}Private;\n\
 \n\
 #define {class_name_up}_GET_PRIVATE(obj)		(G_TYPE_INSTANCE_GET_PRIVATE((obj),\\\n\
-		{class_name_up}_TYPE, {class_name}Private))\n\
+			{class_name_up}_TYPE, {class_name}Private))\n\
 \n\
 struct _{class_name}Private\n\
 {\n\
@@ -166,7 +166,7 @@ struct _{class_name}Private\n\
 };\n\
 \n\
 static void {class_name_low}_class_init			({class_name}Class *klass);\n\
-static void {class_name_low}_init				({class_name} *self);\n\
+static void {class_name_low}_init      			({class_name} *self);\n\
 {destructor_decl}\
 \n\
 /* Local data */\n\
@@ -191,19 +191,19 @@ GType {class_name_low}_get_type(void)\n\
 			NULL /* value_table */\n\
 		};\n\
 		\n\
-		self_type = g_type_register_static({base_gtype}, \"{class_name}\", &self_info, 0);\
+		self_type = g_type_register_static({base_gtype}, \"{class_name}\", &self_info, 0);\n\
 	}\n\
 	\n\
 	return self_type;\n\
 }\n\
-\n\
+\n\n\
 static void {class_name_low}_class_init({class_name}Class *klass)\n\
 {\n\
 	{gtk_destructor_registration}\n\
 	parent_class = ({base_name}Class*)g_type_class_peek({base_gtype});\n\
 	g_type_class_add_private((gpointer)klass, sizeof({class_name}Private));\n\
 }\n\
-\n\
+\n\n\
 static void {class_name_low}_init({class_name} *self)\n\
 {\n\
 	\n\
@@ -443,7 +443,7 @@ void show_dialog_create_class(gint type)
 		gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
 		cc_dlg->base_gtype_entry = gtk_entry_new();
-		gtk_entry_set_text(GTK_ENTRY(cc_dlg->base_gtype_entry), "GTK_TYPE_OBJECT");
+		gtk_entry_set_text(GTK_ENTRY(cc_dlg->base_gtype_entry), "G_TYPE_OBJECT");
 		gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->base_gtype_entry);
 	}
 
@@ -700,10 +700,10 @@ static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg)
 						"\tg_object_class->finalize = %s_finalize;\n",
 						class_info->class_name_low);
 				class_info->destructor_decl =
-						g_strdup_printf("static void %s_finalize\t\t\t(GObject *object);\n",
+						g_strdup_printf("static void %s_finalize  \t\t\t(GObject *object);\n",
 						class_info->class_name_low);
 				class_info->destructor_impl = g_strdup_printf("\n"
-						"void %s_finalize(GObject *object)\n"
+						"static void %s_finalize(GObject *object)\n"
 						"{\n"
 						"\t%s *self;\n\n"
 						"\tg_return_if_fail(object != NULL);\n"
