@@ -48,6 +48,7 @@
 #include "symbols.h"
 #include "callbacks.h"
 #include "geanyobject.h"
+#include "templates.h"
 
 
 /* holds word under the mouse or keyboard cursor */
@@ -1518,6 +1519,34 @@ void snippets_replace_specials(gpointer key, gpointer value, gpointer user_data)
 }
 
 
+static gchar *snippets_replace_wildcards(GeanyDocument *doc, gchar *text)
+{
+	gchar *year = utils_get_date_time("%Y", NULL);
+	gchar *date = utils_get_date_time("%Y-%m-%d", NULL);
+	gchar *datetime = utils_get_date_time("%d.%m.%Y %H:%M:%S %Z", NULL);
+	gchar *basename = g_path_get_basename(DOC_FILENAME(doc));
+
+	text = utils_str_replace(text, "{year}", year);
+	text = utils_str_replace(text, "{date}", date);
+	text = utils_str_replace(text, "{datetime}", datetime);
+	text = utils_str_replace(text, "{version}", template_prefs.version);
+	text = utils_str_replace(text, "{initial}", template_prefs.initials);
+	text = utils_str_replace(text, "{developer}", template_prefs.developer);
+	text = utils_str_replace(text, "{mail}", template_prefs.mail);
+	text = utils_str_replace(text, "{company}", template_prefs.company);
+	text = utils_str_replace(text, "{untitled}", GEANY_STRING_UNTITLED);
+	text = utils_str_replace(text, "{geanyversion}", "Geany " VERSION);
+	text = utils_str_replace(text, "{filename}", basename);
+
+	g_free(year);
+	g_free(date);
+	g_free(datetime);
+	g_free(basename);
+
+	return text;
+}
+
+
 static gboolean snippets_complete_constructs(GeanyDocument *doc, gint pos, const gchar *word)
 {
 	gchar *str;
@@ -1568,6 +1597,9 @@ static gboolean snippets_complete_constructs(GeanyDocument *doc, gint pos, const
 
 	pattern = utils_str_replace(pattern, "\t", "%ws%"); /* to avoid endless replacing of \t */
 	pattern = utils_str_replace(pattern, "%ws%", whitespace);
+
+	/* replace any %template% wildcards */
+	pattern = snippets_replace_wildcards(doc, pattern);
 
 	/* find the %cursor% pos (has to be done after all other operations) */
 	step = utils_strpos(pattern, "%cursor%");

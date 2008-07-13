@@ -794,6 +794,16 @@ Everytime you write ``myname`` <TAB> in Geany, it will replace "myname"
 with "Enrico Tröger". The key to start auto completion can be changed
 in the preferences dialog, by default it is TAB.
 
+Since Geany 0.15 you can also use most of the available templates wildcards
+listed in `Template wildcards`_. All wildcards which are listed as
+`available in snippets` can be used. For instance to improve the above example::
+
+    [Default]
+    myname=My name is {developer}
+
+this will replace ``myname`` with "My name is " and the value of the template
+preference ``developer``.
+
 You may change the behaviour Geany recognizes the word to complete,
 i.e. where define the start and end of a word. The section "Special" may
 contain a key "wordchars" which lists all characters a string may contain
@@ -2994,43 +3004,43 @@ Wildcard       Description                                   Available in
 ============== ============================================= ==============
 developer      The name of the developer.                    filetypes, file header, function
                                                              description, ChangeLog entry, bsd,
-                                                             gpl
+                                                             gpl, snippets
 
 initial        The developer's initials, e.g. "ET" for       filetypes, file header, function
                Enrico Tröger or "JFD" for John Foobar Doe.   description, ChangeLog entry, bsd,
-                                                             gpl
+                                                             gpl, snippets
 
 mail           The email address of the developer.           file header, function description,
-                                                             ChangeLog entry, bsd, gpl
+                                                             ChangeLog entry, bsd, gpl, snippets
 
 company        The company the developer is working for.     filetypes, file header, function
                                                              description, ChangeLog entry, bsd,
-                                                             gpl
+                                                             gpl, snippets
 
 year           The current year in the format: YYYY.         filetypes, file header, function
                                                              description, ChangeLog entry, bsd,
-                                                             gpl
+                                                             gpl, snippets
 
 version        The initial version of a new file.            filetypes, file header, function
                                                              description, ChangeLog entry, bsd,
-                                                             gpl
+                                                             gpl, snippets
 
 date           The current date in the format: YYYY-MM-DD.   filetypes, file header, function
                                                              description, ChangeLog entry, bsd,
-                                                             gpl
+                                                             gpl, snippets
 
 untitled       The string "untitled" (this will be           filetypes, file header, function
                translated to your locale), used in           description, ChangeLog entry, bsd,
-               filetype templates.                           gpl
+               filetype templates.                           gpl, snippets
 
 geanyversion   The actual Geany version, e.g.                filetypes, file header, function
                "Geany |(version)|".                          description, ChangeLog entry, bsd,
-                                                             gpl
+                                                             gpl, snippets
 
-datetime       The current date and time in the format:      file header, function description
-               DD.MM.YYYY HH:mm:ss ZZZZ.
+datetime       The current date and time in the format:      file header, function description,
+               DD.MM.YYYY HH:mm:ss ZZZZ.                     snippets
 
-filename       The filename of the current file.             file header
+filename       The filename of the current file.             file header, snippets
 
 gpl            This wildcard inserts a short GPL notice.     file header
 
