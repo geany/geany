@@ -42,6 +42,9 @@ typedef struct GeanyTemplatePrefs
 	gchar			*mail;
 	gchar			*initials;
 	gchar			*version;
+	gchar			*year_format;
+	gchar			*date_format;
+	gchar			*datetime_format;
 }
 GeanyTemplatePrefs;
 

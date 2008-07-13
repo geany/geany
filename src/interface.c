@@ -2810,6 +2810,12 @@ create_prefs_dialog (void)
   GtkWidget *label130;
   GtkWidget *label131;
   GtkWidget *entry_template_developer;
+  GtkWidget *label216;
+  GtkWidget *label217;
+  GtkWidget *label218;
+  GtkWidget *entry_template_datetime;
+  GtkWidget *entry_template_year;
+  GtkWidget *entry_template_date;
   GtkWidget *label180;
   GtkWidget *label119;
   GtkWidget *frame22;
@@ -4362,7 +4368,7 @@ create_prefs_dialog (void)
   gtk_widget_show (vbox31);
   gtk_box_pack_start (GTK_BOX (vbox9), vbox31, FALSE, FALSE, 0);
 
-  table6 = gtk_table_new (5, 2, FALSE);
+  table6 = gtk_table_new (8, 2, FALSE);
   gtk_widget_show (table6);
   gtk_box_pack_start (GTK_BOX (vbox9), table6, FALSE, TRUE, 0);
   gtk_table_set_row_spacings (GTK_TABLE (table6), 6);
@@ -4437,6 +4443,48 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
   gtk_tooltips_set_tip (tooltips, entry_template_developer, _("The name of the developer"), NULL);
+
+  label216 = gtk_label_new (_("Year:"));
+  gtk_widget_show (label216);
+  gtk_table_attach (GTK_TABLE (table6), label216, 0, 1, 5, 6,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label216), 0, 0.5);
+
+  label217 = gtk_label_new (_("Date:"));
+  gtk_widget_show (label217);
+  gtk_table_attach (GTK_TABLE (table6), label217, 0, 1, 6, 7,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label217), 0, 0.5);
+
+  label218 = gtk_label_new (_("Date & Time:"));
+  gtk_widget_show (label218);
+  gtk_table_attach (GTK_TABLE (table6), label218, 0, 1, 7, 8,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label218), 0, 0.5);
+
+  entry_template_datetime = gtk_entry_new ();
+  gtk_widget_show (entry_template_datetime);
+  gtk_table_attach (GTK_TABLE (table6), entry_template_datetime, 1, 2, 7, 8,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, entry_template_datetime, _("Specify a format for the the {datetime} wildcard. You can use any conversion specifiers which can be used with the ANSI C strftime function."), NULL);
+
+  entry_template_year = gtk_entry_new ();
+  gtk_widget_show (entry_template_year);
+  gtk_table_attach (GTK_TABLE (table6), entry_template_year, 1, 2, 5, 6,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, entry_template_year, _("Specify a format for the the {year} wildcard. You can use any conversion specifiers which can be used with the ANSI C strftime function."), NULL);
+
+  entry_template_date = gtk_entry_new ();
+  gtk_widget_show (entry_template_date);
+  gtk_table_attach (GTK_TABLE (table6), entry_template_date, 1, 2, 6, 7,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, entry_template_date, _("Specify a format for the the {date} wildcard. You can use any conversion specifiers which can be used with the ANSI C strftime function."), NULL);
 
   label180 = gtk_label_new (_("<b>Template data</b>"));
   gtk_widget_show (label180);
@@ -4907,6 +4955,12 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, label130, "label130");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label131, "label131");
   GLADE_HOOKUP_OBJECT (prefs_dialog, entry_template_developer, "entry_template_developer");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label216, "label216");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label217, "label217");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label218, "label218");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, entry_template_datetime, "entry_template_datetime");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, entry_template_year, "entry_template_year");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, entry_template_date, "entry_template_date");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label180, "label180");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label119, "label119");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame22, "frame22");

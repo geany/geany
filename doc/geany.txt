@@ -1708,6 +1708,21 @@ Company
 Initial version
     The initial version of files you will be creating.
 
+Year
+    Specify a format for the the {year} wildcard. You can use any conversion specifiers
+    which can be used with the ANSI C strftime function.  For details please see
+    http://man.cx/strftime.
+
+Date
+    Specify a format for the the {date} wildcard. You can use any conversion specifiers
+    which can be used with the ANSI C strftime function.  For details please see
+    http://man.cx/strftime.
+
+Date & Time
+    Specify a format for the the {datetime} wildcard. You can use any conversion specifiers
+    which can be used with the ANSI C strftime function.  For details please see
+    http://man.cx/strftime.
+
 
 Keybinding tab in preferences dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3017,7 +3032,7 @@ company        The company the developer is working for.     filetypes, file hea
                                                              description, ChangeLog entry, bsd,
                                                              gpl, snippets
 
-year           The current year in the format: YYYY.         filetypes, file header, function
+year [1]_      The current year. Default format is: YYYY     filetypes, file header, function
                                                              description, ChangeLog entry, bsd,
                                                              gpl, snippets
 
@@ -3025,7 +3040,7 @@ version        The initial version of a new file.            filetypes, file hea
                                                              description, ChangeLog entry, bsd,
                                                              gpl, snippets
 
-date           The current date in the format: YYYY-MM-DD.   filetypes, file header, function
+date [1]_      The current date. Default format: YYYY-MM-DD. filetypes, file header, function
                                                              description, ChangeLog entry, bsd,
                                                              gpl, snippets
 
@@ -3037,7 +3052,7 @@ geanyversion   The actual Geany version, e.g.                filetypes, file hea
                "Geany |(version)|".                          description, ChangeLog entry, bsd,
                                                              gpl, snippets
 
-datetime       The current date and time in the format:      file header, function description,
+datetime [1]_  The current date and time. Default format:    file header, function description,
                DD.MM.YYYY HH:mm:ss ZZZZ.                     snippets
 
 filename       The filename of the current file.             file header, snippets
@@ -3057,6 +3072,10 @@ fileheader     The file header template. This wildcard       filetypes
 ============== ============================================= ==============
 
 
+.. [1] The format for the ``year``, ``date`` and ``datetime`` wildcards can be changed
+       in the preferences dialog, see `Template tab in preferences dialog`_. You can
+       use any conversion specifiers which can be used with the ANSI C strftime function.
+       For details please see http://man.cx/strftime.
 
 
 Contributing to this document

@@ -39,10 +39,6 @@
 #include "ui_utils.h"
 
 
-#define TEMPLATE_DATE_FORMAT "%Y-%m-%d"
-#define TEMPLATE_DATETIME_FORMAT "%d.%m.%Y %H:%M:%S %Z"
-
-
 GeanyTemplatePrefs template_prefs;
 
 static GtkWidget *new_with_template_menu = NULL;	/* File menu submenu */
@@ -490,8 +486,8 @@ static void create_file_template_menus(void)
 
 void templates_init(void)
 {
-	gchar *year = utils_get_date_time("%Y", NULL);
-	gchar *date = utils_get_date_time(TEMPLATE_DATE_FORMAT, NULL);
+	gchar *year = utils_get_date_time(template_prefs.year_format, NULL);
+	gchar *date = utils_get_date_time(template_prefs.date_format, NULL);
 
 	init_general_templates(year, date);
 	init_ft_templates(year, date);
@@ -656,7 +652,7 @@ gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname)
 	gchar *template = g_strdup(templates[GEANY_TEMPLATE_FILEHEADER]);
 	gchar *shortname;
 	gchar *result;
-	gchar *date = utils_get_date_time(TEMPLATE_DATETIME_FORMAT, NULL);
+	gchar *date = utils_get_date_time(template_prefs.datetime_format, NULL);
 	filetype_id ft_id = filetype_idx;
 	GeanyFiletype *ft = filetypes[ft_id];
 
@@ -719,8 +715,8 @@ gchar *templates_get_template_generic(gint template)
 gchar *templates_get_template_function(gint filetype_idx, const gchar *func_name)
 {
 	gchar *template = g_strdup(templates[GEANY_TEMPLATE_FUNCTION]);
-	gchar *date = utils_get_date_time(TEMPLATE_DATE_FORMAT, NULL);
-	gchar *datetime = utils_get_date_time(TEMPLATE_DATETIME_FORMAT, NULL);
+	gchar *date = utils_get_date_time(template_prefs.date_format, NULL);
+	gchar *datetime = utils_get_date_time(template_prefs.datetime_format, NULL);
 	gchar *result;
 
 	template = utils_str_replace(template, "{date}", date);
@@ -738,7 +734,7 @@ gchar *templates_get_template_function(gint filetype_idx, const gchar *func_name
 
 gchar *templates_get_template_changelog(void)
 {
-	gchar *date = utils_get_date_time(TEMPLATE_DATETIME_FORMAT, NULL);
+	gchar *date = utils_get_date_time(template_prefs.datetime_format, NULL);
 	gchar *result = g_strdup(templates[GEANY_TEMPLATE_CHANGELOG]);
 	result = utils_str_replace(result, "{date}", date);
 

@@ -4,6 +4,11 @@
    Add support to use template wildcards in snippets.
  * src/editor.c, src/templates.c, src/templates.h:
    Use templates_replace_all() also for snippet completion.
+ * geany.glade, doc/geany.html, doc/geany.txt, src/editor.c,
+   src/interface.c, src/keyfile.c, src/plugindata.h, src/prefs.c,
+   src/templates.c, src/templates.h:
+   Add preferences for year, date and datetime format of the
+   corresponding template wildcards to make them more flexible.
 
 
 2008-07-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

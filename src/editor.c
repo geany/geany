@@ -1521,9 +1521,9 @@ void snippets_replace_specials(gpointer key, gpointer value, gpointer user_data)
 
 static gchar *snippets_replace_wildcards(GeanyDocument *doc, gchar *text)
 {
-	gchar *year = utils_get_date_time("%Y", NULL);
-	gchar *date = utils_get_date_time("%Y-%m-%d", NULL);
-	gchar *datetime = utils_get_date_time("%d.%m.%Y %H:%M:%S %Z", NULL);
+	gchar *year = utils_get_date_time(template_prefs.year_format, NULL);
+	gchar *date = utils_get_date_time(template_prefs.date_format, NULL);
+	gchar *datetime = utils_get_date_time(template_prefs.datetime_format, NULL);
 	gchar *basename = g_path_get_basename(DOC_FILENAME(doc));
 
 	text = templates_replace_all(text, year, date);

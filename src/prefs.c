@@ -501,6 +501,15 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(ui_widgets.prefs_dialog, "entry_template_version");
 	gtk_entry_set_text(GTK_ENTRY(widget), template_prefs.version);
 
+	widget = lookup_widget(ui_widgets.prefs_dialog, "entry_template_year");
+	gtk_entry_set_text(GTK_ENTRY(widget), template_prefs.year_format);
+
+	widget = lookup_widget(ui_widgets.prefs_dialog, "entry_template_date");
+	gtk_entry_set_text(GTK_ENTRY(widget), template_prefs.date_format);
+
+	widget = lookup_widget(ui_widgets.prefs_dialog, "entry_template_datetime");
+	gtk_entry_set_text(GTK_ENTRY(widget), template_prefs.datetime_format);
+
 
 	/* Keybindings */
 	init_keybindings();
@@ -922,6 +931,18 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_template_version");
 		g_free(template_prefs.version);
 		template_prefs.version = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
+
+		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_template_year");
+		g_free(template_prefs.year_format);
+		template_prefs.year_format = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
+
+		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_template_date");
+		g_free(template_prefs.date_format);
+		template_prefs.date_format = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
+
+		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_template_datetime");
+		g_free(template_prefs.datetime_format);
+		template_prefs.datetime_format = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
 
 		/* Keybindings */
@@ -1472,7 +1493,7 @@ void prefs_show_dialog(void)
 		gtk_widget_show(label);
 		gtk_box_pack_start(GTK_BOX(lookup_widget(ui_widgets.prefs_dialog, "vbox31")),
 			label, FALSE, TRUE, 5);
-		label = geany_wrap_label_new(_("<i>Notice: For all changes you make here to take effect, you need to restart Geany.</i>"));
+		label = geany_wrap_label_new(_("<i>Notice: For all changes you make here to take effect, you need to restart Geany or force the reload of the settings using Tools->Reload Configuration.</i>"));
 		gtk_widget_show(label);
 		gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
 		gtk_box_pack_start(GTK_BOX(lookup_widget(ui_widgets.prefs_dialog, "vbox9")),
