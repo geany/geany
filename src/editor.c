@@ -1526,16 +1526,8 @@ static gchar *snippets_replace_wildcards(GeanyDocument *doc, gchar *text)
 	gchar *datetime = utils_get_date_time("%d.%m.%Y %H:%M:%S %Z", NULL);
 	gchar *basename = g_path_get_basename(DOC_FILENAME(doc));
 
-	text = utils_str_replace(text, "{year}", year);
-	text = utils_str_replace(text, "{date}", date);
+	text = templates_replace_all(text, year, date);
 	text = utils_str_replace(text, "{datetime}", datetime);
-	text = utils_str_replace(text, "{version}", template_prefs.version);
-	text = utils_str_replace(text, "{initial}", template_prefs.initials);
-	text = utils_str_replace(text, "{developer}", template_prefs.developer);
-	text = utils_str_replace(text, "{mail}", template_prefs.mail);
-	text = utils_str_replace(text, "{company}", template_prefs.company);
-	text = utils_str_replace(text, "{untitled}", GEANY_STRING_UNTITLED);
-	text = utils_str_replace(text, "{geanyversion}", "Geany " VERSION);
 	text = utils_str_replace(text, "{filename}", basename);
 
 	g_free(year);

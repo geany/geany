@@ -247,9 +247,6 @@ static gchar *ft_templates[GEANY_MAX_BUILT_IN_FILETYPES] = {NULL};
 	g_file_get_contents(fname, contents_ptr, NULL, NULL);
 
 
-/* prototype, because this function should never be used outside of templates.c */
-static gchar *templates_replace_all(gchar *source, const gchar *year, const gchar *date);
-
 
 static void init_general_templates(const gchar *year, const gchar *date)
 {
@@ -777,7 +774,7 @@ void templates_free_templates(void)
 }
 
 
-static gchar *templates_replace_all(gchar *text, const gchar *year, const gchar *date)
+gchar *templates_replace_all(gchar *text, const gchar *year, const gchar *date)
 {
 	text = utils_str_replace(text, "{year}", year);
 	text = utils_str_replace(text, "{date}", date);

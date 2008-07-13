@@ -2,6 +2,8 @@
 
  * data/snippets.conf, doc/geany.html, doc/geany.txt, src/editor.c:
    Add support to use template wildcards in snippets.
+ * src/editor.c, src/templates.c, src/templates.h:
+   Use templates_replace_all() also for snippet completion.
 
 
 2008-07-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
