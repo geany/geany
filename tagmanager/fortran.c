@@ -162,6 +162,7 @@ typedef struct sTokenInfo {
 */
 
 static langType Lang_fortran;
+static langType Lang_f77;
 static jmp_buf Exception;
 static int Ungetc = '\0';
 static unsigned int Column = 0;
@@ -304,7 +305,7 @@ static void ancestorClear (void)
     Ancestors.max = 0;
 }
 
-static void buildFortranKeywordHash (void)
+static void buildFortranKeywordHash (const langType language)
 {
     const size_t count = sizeof (FortranKeywordTable) /
 			 sizeof (FortranKeywordTable [0]);
@@ -312,7 +313,7 @@ static void buildFortranKeywordHash (void)
     for (i = 0  ;  i < count  ;  ++i)
     {
 	const keywordDesc* const p = &FortranKeywordTable [i];
-	addKeyword (p->name, Lang_fortran, (int) p->id);
+	addKeyword (p->name, language, (int) p->id);
     }
 }
 
@@ -750,7 +751,7 @@ static keywordId analyzeToken (vString *const name)
     if (keyword == NULL)
 	keyword = vStringNew ();
     vStringCopyToLower (keyword, name);
-    id = (keywordId) lookupKeyword (vStringValue (keyword), Lang_fortran);
+    id = (keywordId) lookupKeyword (vStringValue (keyword), getSourceLanguage());
 
     return id;
 }
@@ -1655,18 +1656,24 @@ static boolean findFortranTags (const unsigned int passCount)
     return retry;
 }
 
-static void initialize (const langType language)
+static void initializeFortran (const langType language)
 {
     Lang_fortran = language;
-    buildFortranKeywordHash ();
+    buildFortranKeywordHash (language);
+}
+
+static void initializeF77 (const langType language)
+{
+    Lang_f77 = language;
+    buildFortranKeywordHash (language);
 }
 
 extern parserDefinition* FortranParser (void)
 {
     static const char *const extensions [] = {
-	"f", "for", "ftn", "f77", "f90", "f95",
+	"f90", "f95", "f03",
 #ifndef CASE_INSENSITIVE_FILENAMES
-	"F", "FOR", "FTN", "F77", "F90", "F95",
+	"F90", "F95", "F03",
 #endif
 	NULL
     };
@@ -1675,7 +1682,25 @@ extern parserDefinition* FortranParser (void)
     def->kindCount  = KIND_COUNT (FortranKinds);
     def->extensions = extensions;
     def->parser2    = findFortranTags;
-    def->initialize = initialize;
+    def->initialize = initializeFortran;
+    return def;
+}
+
+extern parserDefinition* F77Parser (void)
+{
+    static const char *const extensions [] = {
+	"f", "for", "ftn", "f77",
+#ifndef CASE_INSENSITIVE_FILENAMES
+	"F", "FOR", "FTN", "F77",
+#endif
+	NULL
+    };
+    parserDefinition* def = parserNew ("F77");
+    def->kinds      = FortranKinds;
+    def->kindCount  = KIND_COUNT (FortranKinds);
+    def->extensions = extensions;
+    def->parser2    = findFortranTags;
+    def->initialize = initializeF77;
     return def;
 }
 

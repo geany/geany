@@ -816,6 +816,7 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir, gch
 			 * empty.h:4: Warnung: type defaults to `int' in declaration of `foo'
 			 * empty.c:21: error: conflicting types for `foo'
 			 * Only parse file and line, so that linker errors will also work (with -g) */
+		case GEANY_FILETYPES_F77:
 		case GEANY_FILETYPES_FORTRAN:
 		case GEANY_FILETYPES_LATEX:
 			/* ./kommtechnik_2b.tex:18: Emergency stop. */

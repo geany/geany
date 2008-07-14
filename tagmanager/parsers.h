@@ -44,7 +44,8 @@
     FreeBasicParser,\
     HaxeParser,\
     RestParser, \
-    HtmlParser
+    HtmlParser, \
+    F77Parser
 
 /*
 langType of each parser
@@ -78,6 +79,7 @@ langType of each parser
 27  HaxeParser
 28  RestParser
 29  HtmlParser
+30  F77Parser
 */
 #endif	/* _PARSERS_H */
 

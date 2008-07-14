@@ -749,10 +749,11 @@ static void init_tag_list(GeanyDocument *doc)
 				NULL);
 			break;
 		}
+		case GEANY_FILETYPES_F77:
 		case GEANY_FILETYPES_FORTRAN:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Module"), NULL,
+				&(tv_iters.tag_namespace), _("Module"), "classviewer-class",
 				&(tv_iters.tag_struct), _("Interfaces"), "classviewer-struct",
 				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
 				&(tv_iters.tag_member), _("Subroutines"), "classviewer-method",

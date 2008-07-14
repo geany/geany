@@ -153,6 +153,7 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmD);
 	LINK_LEXER(lmDiff);
 	LINK_LEXER(lmErrorList);
+	LINK_LEXER(lmF77);
 	LINK_LEXER(lmFortran);
 	LINK_LEXER(lmHaskell);
 	LINK_LEXER(lmHTML);

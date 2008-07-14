@@ -2495,6 +2495,7 @@ static gboolean is_comment(gint lexer, gint prev_style, gint style)
 			break;
 		}
 		case SCLEX_F77:
+		case SCLEX_FORTRAN:
 		{
 			if (style == SCE_F_COMMENT ||
 				style == SCE_F_STRING1 ||

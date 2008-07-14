@@ -1,3 +1,13 @@
+2008-07-14  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+* data/filetype_extensions.conf, data/filetypes.f77,
+  data/filetypes.fortran, scintilla/KeyWords.cxx, src/document.c,
+  src/editor.c, src/filetypes.c, src/filetypes.h, src/highlighting.c,
+  src/msgwindow.c, src/plugindata.h, src/symbols.c, src/templates.c,
+  tagmanager/fortran.c, tagmanager/parsers.h:
+  Split filetype Fortran into Fortran 77 and Fortran 90.
+
+
 2008-07-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * data/snippets.conf, doc/geany.html, doc/geany.txt, src/editor.c:

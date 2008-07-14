@@ -138,12 +138,20 @@ static void init_builtin_filetypes(void)
 #define FORTRAN
 	filetypes[GEANY_FILETYPES_FORTRAN]->lang = 18;
 	filetypes[GEANY_FILETYPES_FORTRAN]->name = g_strdup("Fortran");
-	filetypes[GEANY_FILETYPES_FORTRAN]->title = g_strdup_printf(_("%s source file"), "Fortran (F77)");
-	filetypes[GEANY_FILETYPES_FORTRAN]->extension = g_strdup("f");
-	filetypes[GEANY_FILETYPES_FORTRAN]->pattern = utils_strv_new("*.f", "*.for", "*.ftn", "*.f77",
-		"*.f90", "*.f95", NULL);
+	filetypes[GEANY_FILETYPES_FORTRAN]->title = g_strdup_printf(_("%s source file"), "Fortran (F90)");
+	filetypes[GEANY_FILETYPES_FORTRAN]->extension = g_strdup("f90");
+	filetypes[GEANY_FILETYPES_FORTRAN]->pattern = utils_strv_new("*.f90", "*.f95", "*.f03", NULL);
 	filetypes[GEANY_FILETYPES_FORTRAN]->comment_open = g_strdup("c");
 	filetypes[GEANY_FILETYPES_FORTRAN]->comment_close = NULL;
+
+#define F77
+	filetypes[GEANY_FILETYPES_F77]->lang = 30;
+	filetypes[GEANY_FILETYPES_F77]->name = g_strdup("F77");
+	filetypes[GEANY_FILETYPES_F77]->title = g_strdup_printf(_("%s source file"), "Fortran (F77)");
+	filetypes[GEANY_FILETYPES_F77]->extension = g_strdup("f");
+	filetypes[GEANY_FILETYPES_F77]->pattern = utils_strv_new("*.f", "*.for", "*.ftn", "*.f77", NULL);
+	filetypes[GEANY_FILETYPES_F77]->comment_open = g_strdup("c");
+	filetypes[GEANY_FILETYPES_F77]->comment_close = NULL;
 
 #define CAML
 	filetypes[GEANY_FILETYPES_CAML]->lang = -2;

@@ -563,6 +563,7 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 			break;
 		}
 
+		case GEANY_FILETYPES_F77:
 		case GEANY_FILETYPES_FORTRAN:
 		{
 			line_prefix = "c";

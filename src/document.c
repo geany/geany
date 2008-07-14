@@ -918,6 +918,9 @@ static void set_indentation(GeanyDocument *doc)
 	/* force using tabs for indentation for Makefiles */
 	if (FILETYPE_ID(doc->file_type) == GEANY_FILETYPES_MAKE)
 		editor_set_use_tabs(doc, TRUE);
+	/* force using spaces for indentation for Fortran 77 */
+	else if (FILETYPE_ID(doc->file_type) == GEANY_FILETYPES_F77)
+		editor_set_use_tabs(doc, FALSE);
 	else if (! editor_prefs.detect_tab_mode)
 		editor_set_use_tabs(doc, editor_prefs.use_tabs);
 	else
