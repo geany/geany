@@ -144,27 +144,27 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 		if (stats_str == NULL)
 			stats_str = g_string_sized_new(120);
 
-		if (pos == -1) pos = sci_get_current_position(doc->editor->scintilla);
-		line = sci_get_line_from_position(doc->editor->scintilla, pos);
+		if (pos == -1) pos = sci_get_current_position(doc->editor->sci);
+		line = sci_get_line_from_position(doc->editor->sci, pos);
 
 		/* Add temporary fix for sci infinite loop in Document::GetColumn(int)
 		 * when current pos is beyond document end (can occur when removing
 		 * blocks of selected lines especially esp. brace sections near end of file). */
-		if (pos <= sci_get_length(doc->editor->scintilla))
-			col = sci_get_col_from_position(doc->editor->scintilla, pos);
+		if (pos <= sci_get_length(doc->editor->sci))
+			col = sci_get_col_from_position(doc->editor->sci, pos);
 		else
 			col = 0;
 
 		/* Status bar statistics: col = column, sel = selection. */
 		g_string_printf(stats_str, _("line: %d\t col: %d\t sel: %d\t "),
 			(line + 1), col,
-			sci_get_selected_text_length(doc->editor->scintilla) - 1);
+			sci_get_selected_text_length(doc->editor->sci) - 1);
 
 		g_string_append(stats_str,
 			/* RO = read-only */
 			(doc->readonly) ? _("RO ") :
 				/* OVR = overwrite/overtype, INS = insert */
-				(sci_get_overtype(doc->editor->scintilla) ? _("OVR") : _("INS")));
+				(sci_get_overtype(doc->editor->sci) ? _("OVR") : _("INS")));
 		g_string_append(stats_str, sp);
 		g_string_append(stats_str,
 			(doc->editor->use_tabs) ? _("TAB") : _("SP "));	/* SP = space */
@@ -321,7 +321,7 @@ void ui_update_popup_copy_items(GeanyDocument *doc)
 	if (doc == NULL)
 		enable = FALSE;
 	else
-		enable = sci_can_copy(doc->editor->scintilla);
+		enable = sci_can_copy(doc->editor->sci);
 
 	for (i = 0; i < G_N_ELEMENTS(ui_widgets.popup_copy_items); i++)
 		gtk_widget_set_sensitive(ui_widgets.popup_copy_items[i], enable);
@@ -343,7 +343,7 @@ void ui_update_menu_copy_items(GeanyDocument *doc)
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	if (IS_SCINTILLA(focusw))
-		enable = (doc == NULL) ? FALSE : sci_can_copy(doc->editor->scintilla);
+		enable = (doc == NULL) ? FALSE : sci_can_copy(doc->editor->sci);
 	else
 	if (GTK_IS_EDITABLE(focusw))
 		enable = gtk_editable_get_selection_bounds(GTK_EDITABLE(focusw), NULL, NULL);
@@ -712,7 +712,7 @@ void ui_document_show_hide(GeanyDocument *doc)
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), doc->has_bom);
 	gtk_widget_set_sensitive(item, encodings_is_unicode_charset(doc->encoding));
 
-	switch (sci_get_eol_mode(doc->editor->scintilla))
+	switch (sci_get_eol_mode(doc->editor->sci))
 	{
 		case SC_EOL_CR: widget_name = "cr"; break;
 		case SC_EOL_LF: widget_name = "lf"; break;
@@ -1064,7 +1064,7 @@ void ui_show_markers_margin(void)
 	for(i = 0; i < max; i++)
 	{
 		doc = document_get_from_page(i);
-		sci_set_symbol_margin(doc->editor->scintilla, editor_prefs.show_markers_margin);
+		sci_set_symbol_margin(doc->editor->sci, editor_prefs.show_markers_margin);
 	}
 }
 
@@ -1077,7 +1077,7 @@ void ui_show_linenumber_margin(void)
 	for(i = 0; i < max; i++)
 	{
 		doc = document_get_from_page(i);
-		sci_set_line_numbers(doc->editor->scintilla, editor_prefs.show_linenumber_margin, 0);
+		sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
 	}
 }
 

@@ -1379,8 +1379,8 @@ gint symbols_get_current_function(GeanyDocument *doc, const gchar **tagname)
 		return tag_line;
 	}
 
-	line = sci_get_current_line(doc->editor->scintilla);
-	fold_level = sci_get_fold_level(doc->editor->scintilla, line);
+	line = sci_get_current_line(doc->editor->sci);
+	fold_level = sci_get_fold_level(doc->editor->sci, line);
 	/* check if the cached line and file index have changed since last time: */
 	if (! current_function_changed(doc, line, fold_level))
 	{
@@ -1425,17 +1425,17 @@ gint symbols_get_current_function(GeanyDocument *doc, const gchar **tagname)
 		tag_line = line;
 		do	/* find the top level fold point */
 		{
-			tag_line = sci_get_fold_parent(doc->editor->scintilla, tag_line);
-			fold_level = sci_get_fold_level(doc->editor->scintilla, tag_line);
+			tag_line = sci_get_fold_parent(doc->editor->sci, tag_line);
+			fold_level = sci_get_fold_level(doc->editor->sci, tag_line);
 		} while (tag_line >= 0 &&
 			(fold_level & SC_FOLDLEVELNUMBERMASK) != fn_fold);
 
 		if (tag_line >= 0)
 		{
-			if (sci_get_lexer(doc->editor->scintilla) == SCLEX_CPP)
-				cur_tag = parse_cpp_function_at_line(doc->editor->scintilla, tag_line);
+			if (sci_get_lexer(doc->editor->sci) == SCLEX_CPP)
+				cur_tag = parse_cpp_function_at_line(doc->editor->sci, tag_line);
 			else
-				cur_tag = parse_function_at_line(doc->editor->scintilla, tag_line);
+				cur_tag = parse_function_at_line(doc->editor->sci, tag_line);
 
 			if (cur_tag != NULL)
 			{

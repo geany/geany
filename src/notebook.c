@@ -85,7 +85,7 @@ static void focus_sci(GtkWidget *widget, gpointer user_data)
 	if (doc == NULL)
 		return;
 
-	gtk_widget_grab_focus(GTK_WIDGET(doc->editor->scintilla));
+	gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
 }
 
 
@@ -328,7 +328,7 @@ gint notebook_new_tab(GeanyDocument *this)
 
 	g_return_val_if_fail(this != NULL, -1);
 
-	page = GTK_WIDGET(this->editor->scintilla);
+	page = GTK_WIDGET(this->editor->sci);
 	title = g_path_get_basename(DOC_FILENAME(this));
 
 	fdoc->tab_label = gtk_label_new(title);

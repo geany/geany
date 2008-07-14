@@ -910,7 +910,7 @@ gint main(gint argc, gchar **argv)
 	ui_save_buttons_toggle(FALSE);
 
 	doc = document_get_current();
-	gtk_widget_grab_focus(GTK_WIDGET(doc->editor->scintilla));
+	gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
 	treeviews_select_openfiles_item(doc);
 	build_menu_update(doc);
 	treeviews_update_tag_list(doc, FALSE);

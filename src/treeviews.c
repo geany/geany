@@ -578,7 +578,7 @@ static gboolean change_focus(gpointer data)
 	if (DOC_VALID(doc))
 	{
 		GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
-		GtkWidget *sci = GTK_WIDGET(doc->editor->scintilla);
+		GtkWidget *sci = GTK_WIDGET(doc->editor->sci);
 
 		if (focusw == tv.tree_openfiles)
 			gtk_widget_grab_focus(sci);
@@ -599,7 +599,7 @@ static void on_openfiles_tree_selection_changed(GtkTreeSelection *selection, gpo
 		gtk_tree_model_get(model, &iter, 1, &doc, -1);
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
 					gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
-					(GtkWidget*) doc->editor->scintilla));
+					(GtkWidget*) doc->editor->sci));
 		g_idle_add((GSourceFunc) change_focus, doc);
 	}
 }

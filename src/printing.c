@@ -213,7 +213,7 @@ static gint get_page_count(GtkPrintContext *context, DocInfo *dinfo)
 		gint lines = 1;
 		gint line_width;
 
-		line_buf = sci_get_line(dinfo->doc->editor->scintilla, j);
+		line_buf = sci_get_line(dinfo->doc->editor->sci, j);
 		line_width = (g_utf8_strlen(line_buf, -1) + 1) * dinfo->font_width;
 		if (line_width > width)
 			lines = ceil(line_width / width);
@@ -418,7 +418,7 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 	desc = pango_font_description_from_string(interface_prefs.editor_font);
 
 	/* init dinfo fields */
-	dinfo->lines = sci_get_line_count(dinfo->doc->editor->scintilla);
+	dinfo->lines = sci_get_line_count(dinfo->doc->editor->sci);
 	dinfo->lines_per_page = 0;
 	dinfo->cur_line = 0;
 	dinfo->cur_pos = 0;
@@ -434,7 +434,7 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 	dinfo->n_pages = get_page_count(context, dinfo);
 
 	/* read all styles from Scintilla */
-	style_max = pow(2, scintilla_send_message(dinfo->doc->editor->scintilla, SCI_GETSTYLEBITS, 0, 0));
+	style_max = pow(2, scintilla_send_message(dinfo->doc->editor->sci, SCI_GETSTYLEBITS, 0, 0));
 	/* if the lexer uses only the first 32 styles(style bits = 5),
 	 * we need to add the pre-defined styles */
 	if (style_max == 32)
@@ -442,21 +442,21 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 	for (i = 0; i < style_max; i++)
 	{
 		dinfo->styles[i][FORE] = ROTATE_RGB(scintilla_send_message(
-			dinfo->doc->editor->scintilla, SCI_STYLEGETFORE, i, 0));
+			dinfo->doc->editor->sci, SCI_STYLEGETFORE, i, 0));
 		if (i == STYLE_LINENUMBER)
 		{	/* ignore background colour for line number margin to avoid trouble with wrapped lines */
 			dinfo->styles[STYLE_LINENUMBER][BACK] = ROTATE_RGB(scintilla_send_message(
-				dinfo->doc->editor->scintilla, SCI_STYLEGETBACK, STYLE_DEFAULT, 0));
+				dinfo->doc->editor->sci, SCI_STYLEGETBACK, STYLE_DEFAULT, 0));
 		}
 		else
 		{
 			dinfo->styles[i][BACK] = ROTATE_RGB(scintilla_send_message(
-				dinfo->doc->editor->scintilla, SCI_STYLEGETBACK, i, 0));
+				dinfo->doc->editor->sci, SCI_STYLEGETBACK, i, 0));
 		}
 		dinfo->styles[i][BOLD] =
-			scintilla_send_message(dinfo->doc->editor->scintilla, SCI_STYLEGETBOLD, i, 0);
+			scintilla_send_message(dinfo->doc->editor->sci, SCI_STYLEGETBOLD, i, 0);
 		dinfo->styles[i][ITALIC] =
-			scintilla_send_message(dinfo->doc->editor->scintilla, SCI_STYLEGETITALIC, i, 0);
+			scintilla_send_message(dinfo->doc->editor->sci, SCI_STYLEGETITALIC, i, 0);
 	}
 
 	if (dinfo->n_pages >= 0)
@@ -550,8 +550,8 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 			/* data */
 			else
 			{
-				style = sci_get_style_at(dinfo->doc->editor->scintilla, dinfo->cur_pos);
-				c = sci_get_char_at(dinfo->doc->editor->scintilla, dinfo->cur_pos);
+				style = sci_get_style_at(dinfo->doc->editor->sci, dinfo->cur_pos);
+				c = sci_get_char_at(dinfo->doc->editor->sci, dinfo->cur_pos);
 				if (c == '\0' || style == -1)
 				{	/* if c gets 0, we are probably out of document boundaries,
 					 * so stop to break out of outer loop */
@@ -570,7 +570,7 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 				/* don't add line breaks, they are handled manually below */
 				else if (c == '\r' || c == '\n')
 				{
-					gchar c_next = sci_get_char_at(dinfo->doc->editor->scintilla, dinfo->cur_pos);
+					gchar c_next = sci_get_char_at(dinfo->doc->editor->sci, dinfo->cur_pos);
 					at_eol = TRUE;
 					if (c == '\r' && c_next == '\n')
 						dinfo->cur_pos++; /* skip LF part of CR/LF */
@@ -586,7 +586,7 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 					 * style doesn't change since it is only one character with multiple bytes. */
 					while (c < 0)
 					{
-						c = sci_get_char_at(dinfo->doc->editor->scintilla, dinfo->cur_pos);
+						c = sci_get_char_at(dinfo->doc->editor->sci, dinfo->cur_pos);
 						if (c < 0)
 						{	/* only add the byte when it is part of the UTF-8 character
 							 * otherwise we could add e.g. a '\n' and it won't be visible in the

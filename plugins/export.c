@@ -357,25 +357,25 @@ static void write_latex_file(GeanyDocument *doc, const gchar *filename, gboolean
 	GString *body;
 	GString *cmds;
 	GString *latex;
-	gint style_max = pow(2, p_sci->send_message(doc->editor->scintilla, SCI_GETSTYLEBITS, 0, 0));
+	gint style_max = pow(2, p_sci->send_message(doc->editor->sci, SCI_GETSTYLEBITS, 0, 0));
 
 	/* first read all styles from Scintilla */
 	for (i = 0; i < style_max; i++)
 	{
-		styles[i][FORE] = p_sci->send_message(doc->editor->scintilla, SCI_STYLEGETFORE, i, 0);
-		styles[i][BACK] = p_sci->send_message(doc->editor->scintilla, SCI_STYLEGETBACK, i, 0);
-		styles[i][BOLD] = p_sci->send_message(doc->editor->scintilla, SCI_STYLEGETBOLD, i, 0);
-		styles[i][ITALIC] = p_sci->send_message(doc->editor->scintilla, SCI_STYLEGETITALIC, i, 0);
+		styles[i][FORE] = p_sci->send_message(doc->editor->sci, SCI_STYLEGETFORE, i, 0);
+		styles[i][BACK] = p_sci->send_message(doc->editor->sci, SCI_STYLEGETBACK, i, 0);
+		styles[i][BOLD] = p_sci->send_message(doc->editor->sci, SCI_STYLEGETBOLD, i, 0);
+		styles[i][ITALIC] = p_sci->send_message(doc->editor->sci, SCI_STYLEGETITALIC, i, 0);
 		styles[i][USED] = 0;
 	}
 
 	/* read the document and write the LaTeX code */
 	body = g_string_new("");
-	for (i = 0; i < p_sci->get_length(doc->editor->scintilla); i++)
+	for (i = 0; i < p_sci->get_length(doc->editor->sci); i++)
 	{
-		style = p_sci->get_style_at(doc->editor->scintilla, i);
-		c = p_sci->get_char_at(doc->editor->scintilla, i);
-		c_next = p_sci->get_char_at(doc->editor->scintilla, i + 1);
+		style = p_sci->get_style_at(doc->editor->sci, i);
+		c = p_sci->get_char_at(doc->editor->sci, i);
+		c_next = p_sci->get_char_at(doc->editor->sci, i + 1);
 
 		if (style != old_style || ! block_open)
 		{
@@ -564,15 +564,15 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename, gboolean 
 	GString *body;
 	GString *css;
 	GString *html;
-	gint style_max = pow(2, p_sci->send_message(doc->editor->scintilla, SCI_GETSTYLEBITS, 0, 0));
+	gint style_max = pow(2, p_sci->send_message(doc->editor->sci, SCI_GETSTYLEBITS, 0, 0));
 
 	/* first read all styles from Scintilla */
 	for (i = 0; i < style_max; i++)
 	{
-		styles[i][FORE] = ROTATE_RGB(p_sci->send_message(doc->editor->scintilla, SCI_STYLEGETFORE, i, 0));
-		styles[i][BACK] = ROTATE_RGB(p_sci->send_message(doc->editor->scintilla, SCI_STYLEGETBACK, i, 0));
-		styles[i][BOLD] = p_sci->send_message(doc->editor->scintilla, SCI_STYLEGETBOLD, i, 0);
-		styles[i][ITALIC] = p_sci->send_message(doc->editor->scintilla, SCI_STYLEGETITALIC, i, 0);
+		styles[i][FORE] = ROTATE_RGB(p_sci->send_message(doc->editor->sci, SCI_STYLEGETFORE, i, 0));
+		styles[i][BACK] = ROTATE_RGB(p_sci->send_message(doc->editor->sci, SCI_STYLEGETBACK, i, 0));
+		styles[i][BOLD] = p_sci->send_message(doc->editor->sci, SCI_STYLEGETBOLD, i, 0);
+		styles[i][ITALIC] = p_sci->send_message(doc->editor->sci, SCI_STYLEGETITALIC, i, 0);
 		styles[i][USED] = 0;
 	}
 
@@ -581,18 +581,18 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename, gboolean 
 	font_name = pango_font_description_get_family(font_desc);
 	/*font_size = pango_font_description_get_size(font_desc) / PANGO_SCALE;*/
 	/* take the zoom level also into account */
-	font_size = p_sci->send_message(doc->editor->scintilla, SCI_STYLEGETSIZE, 0, 0);
+	font_size = p_sci->send_message(doc->editor->sci, SCI_STYLEGETSIZE, 0, 0);
 	if (use_zoom)
-		font_size += p_sci->send_message(doc->editor->scintilla, SCI_GETZOOM, 0, 0);
+		font_size += p_sci->send_message(doc->editor->sci, SCI_GETZOOM, 0, 0);
 
 	/* read the document and write the HTML body */
 	body = g_string_new("");
-	for (i = 0; i < p_sci->get_length(doc->editor->scintilla); i++)
+	for (i = 0; i < p_sci->get_length(doc->editor->sci); i++)
 	{
-		style = p_sci->get_style_at(doc->editor->scintilla, i);
-		c = p_sci->get_char_at(doc->editor->scintilla, i);
+		style = p_sci->get_style_at(doc->editor->sci, i);
+		c = p_sci->get_char_at(doc->editor->sci, i);
 		/* p_sci->get_char_at() takes care of index boundaries and return 0 if i is too high */
-		c_next = p_sci->get_char_at(doc->editor->scintilla, i + 1);
+		c_next = p_sci->get_char_at(doc->editor->sci, i + 1);
 
 		if ((style != old_style || ! span_open) && ! isspace(c))
 		{
