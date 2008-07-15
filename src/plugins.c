@@ -676,7 +676,7 @@ load_active_plugins()
 	{
 		const gchar *fname = active_plugins_pref[i];
 
-		if (NZV(fname))
+		if (NZV(fname) && g_file_test(fname, G_FILE_TEST_EXISTS))
 		{
 			if (plugin_new(fname, TRUE, FALSE) == NULL)
 				failed_plugins_list = g_list_append(failed_plugins_list, g_strdup(fname));
