@@ -3,6 +3,8 @@
  * data/filetypes.fortran:
    Add missing keywords: 'elemental', 'pure' and 'procedure' which also
    fix broken folding (patch by Henrik Holst, thanks).
+ * src/document.c:
+   Enforce focus grabbing when creating new documents (closes #2018427).
 
 
 2008-07-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
