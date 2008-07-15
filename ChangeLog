@@ -27,6 +27,9 @@
    gradually or as required).
    Move utils_get_current_function() to symbols.c.
    Move utils_replace_filename() to document.c.
+ * plugins/filebrowser.c:
+   Show '..' item when the current folder is empty (fixes #2015121).
+   Replace is_top_level_directory() code by checking g_path_skip_root().
 
 
 2008-07-14  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

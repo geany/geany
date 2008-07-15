@@ -63,13 +63,6 @@ enum
 PLUGIN_KEY_GROUP(file_browser, KB_COUNT)
 
 
-/* number of characters to skip the root of an absolute path("c:" or "d:" on Windows) */
-#ifdef G_OS_WIN32
-# define ROOT_OFFSET 2
-#else
-# define ROOT_OFFSET 0
-#endif
-
 enum
 {
 	FILEVIEW_COLUMN_ICON = 0,
@@ -188,21 +181,13 @@ static void add_item(const gchar *name)
 }
 
 
-static gboolean is_top_level_directory(const gchar *dir)
-{
-	g_return_val_if_fail(dir && strlen(dir) > ROOT_OFFSET, FALSE);
-
-	return (p_utils->str_equal(dir + ROOT_OFFSET, G_DIR_SEPARATOR_S));
-}
-
-
 /* adds ".." to the start of the file list */
 static void add_top_level_entry(void)
 {
 	GtkTreeIter iter;
 
-	if (is_top_level_directory(current_dir))
-		return;
+	if (! NZV(g_path_skip_root(current_dir)))
+		return;	/* ignore 'C:\' or '/' */
 
 	gtk_list_store_prepend(file_store, &iter);
 	last_dir_iter = gtk_tree_iter_copy(&iter);
@@ -239,10 +224,11 @@ static void refresh(void)
 	gtk_entry_set_text(GTK_ENTRY(path_entry), utf8_dir);
 	g_free(utf8_dir);
 
+	add_top_level_entry();	/* ".." item */
+
 	list = p_utils->get_file_list(current_dir, NULL, NULL);
 	if (list != NULL)
 	{
-		add_top_level_entry();
 		g_slist_foreach(list, (GFunc) add_item, NULL);
 		g_slist_foreach(list, (GFunc) g_free, NULL);
 		g_slist_free(list);
