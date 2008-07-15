@@ -33,6 +33,7 @@
 #include "support.h"
 #include "plugindata.h"
 #include "document.h"
+#include "editor.h"
 #include "filetypes.h"
 #include "utils.h"
 #include "project.h"
@@ -284,9 +285,9 @@ static void show_output(const gchar *std_output, const gchar *utf8_name_prefix,
 		}
 		else
 		{
-			p_sci->set_text(doc->sci, text);
+			p_sci->set_text(doc->editor->sci, text);
 			book = GTK_NOTEBOOK(geany->main_widgets->notebook);
-			page = gtk_notebook_page_num(book, GTK_WIDGET(doc->sci));
+			page = gtk_notebook_page_num(book, GTK_WIDGET(doc->editor->sci));
 			gtk_notebook_set_current_page(book, page);
 			p_document->set_text_changed(doc, FALSE);
 		}

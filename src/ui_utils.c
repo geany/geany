@@ -46,6 +46,7 @@
 #include "project.h"
 #include "editor.h"
 #include "plugins.h"
+#include "symbols.h"
 
 
 GeanyInterfacePrefs	interface_prefs;
@@ -143,30 +144,30 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 		if (stats_str == NULL)
 			stats_str = g_string_sized_new(120);
 
-		if (pos == -1) pos = sci_get_current_position(doc->sci);
-		line = sci_get_line_from_position(doc->sci, pos);
+		if (pos == -1) pos = sci_get_current_position(doc->editor->sci);
+		line = sci_get_line_from_position(doc->editor->sci, pos);
 
 		/* Add temporary fix for sci infinite loop in Document::GetColumn(int)
 		 * when current pos is beyond document end (can occur when removing
 		 * blocks of selected lines especially esp. brace sections near end of file). */
-		if (pos <= sci_get_length(doc->sci))
-			col = sci_get_col_from_position(doc->sci, pos);
+		if (pos <= sci_get_length(doc->editor->sci))
+			col = sci_get_col_from_position(doc->editor->sci, pos);
 		else
 			col = 0;
 
 		/* Status bar statistics: col = column, sel = selection. */
 		g_string_printf(stats_str, _("line: %d\t col: %d\t sel: %d\t "),
 			(line + 1), col,
-			sci_get_selected_text_length(doc->sci) - 1);
+			sci_get_selected_text_length(doc->editor->sci) - 1);
 
 		g_string_append(stats_str,
 			/* RO = read-only */
 			(doc->readonly) ? _("RO ") :
 				/* OVR = overwrite/overtype, INS = insert */
-				(sci_get_overtype(doc->sci) ? _("OVR") : _("INS")));
+				(sci_get_overtype(doc->editor->sci) ? _("OVR") : _("INS")));
 		g_string_append(stats_str, sp);
 		g_string_append(stats_str,
-			(doc->use_tabs) ? _("TAB") : _("SP "));	/* SP = space */
+			(doc->editor->use_tabs) ? _("TAB") : _("SP "));	/* SP = space */
 		g_string_append(stats_str, sp);
 		g_string_append_printf(stats_str, _("mode: %s"),
 			editor_get_eol_char_name(doc));
@@ -185,7 +186,7 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 			g_string_append(stats_str, sp);
 		}
 
-		utils_get_current_function(doc, &cur_tag);
+		symbols_get_current_function(doc, &cur_tag);
 		g_string_append_printf(stats_str, _("scope: %s"),
 			cur_tag);
 
@@ -249,11 +250,9 @@ void ui_set_window_title(GeanyDocument *doc)
 void ui_set_editor_font(const gchar *font_name)
 {
 	guint i;
-	gint size;
-	gchar *fname;
-	PangoFontDescription *font_desc;
 
 	g_return_if_fail(font_name != NULL);
+
 	/* do nothing if font has not changed */
 	if (interface_prefs.editor_font != NULL)
 		if (strcmp(font_name, interface_prefs.editor_font) == 0) return;
@@ -261,23 +260,16 @@ void ui_set_editor_font(const gchar *font_name)
 	g_free(interface_prefs.editor_font);
 	interface_prefs.editor_font = g_strdup(font_name);
 
-	font_desc = pango_font_description_from_string(interface_prefs.editor_font);
-
-	fname = g_strdup_printf("!%s", pango_font_description_get_family(font_desc));
-	size = pango_font_description_get_size(font_desc) / PANGO_SCALE;
-
 	/* We copy the current style, and update the font in all open tabs. */
-	for(i = 0; i < documents_array->len; i++)
+	for (i = 0; i < documents_array->len; i++)
 	{
-		if (documents[i]->sci)
+		if (documents[i]->editor)
 		{
-			editor_set_font(documents[i], fname, size);
+			editor_set_font(documents[i]->editor, interface_prefs.editor_font);
 		}
 	}
-	pango_font_description_free(font_desc);
 
 	ui_set_statusbar(TRUE, _("Font updated (%s)."), interface_prefs.editor_font);
-	g_free(fname);
 }
 
 
@@ -329,7 +321,7 @@ void ui_update_popup_copy_items(GeanyDocument *doc)
 	if (doc == NULL)
 		enable = FALSE;
 	else
-		enable = sci_can_copy(doc->sci);
+		enable = sci_can_copy(doc->editor->sci);
 
 	for (i = 0; i < G_N_ELEMENTS(ui_widgets.popup_copy_items); i++)
 		gtk_widget_set_sensitive(ui_widgets.popup_copy_items[i], enable);
@@ -351,7 +343,7 @@ void ui_update_menu_copy_items(GeanyDocument *doc)
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	if (IS_SCINTILLA(focusw))
-		enable = (doc == NULL) ? FALSE : sci_can_copy(doc->sci);
+		enable = (doc == NULL) ? FALSE : sci_can_copy(doc->editor->sci);
 	else
 	if (GTK_IS_EDITABLE(focusw))
 		enable = gtk_editable_get_selection_bounds(GTK_EDITABLE(focusw), NULL, NULL);
@@ -699,17 +691,17 @@ void ui_document_show_hide(GeanyDocument *doc)
 
 	gtk_check_menu_item_set_active(
 			GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_line_wrapping1")),
-			doc->line_wrapping);
+			doc->editor->line_wrapping);
 
 	gtk_check_menu_item_set_active(
 			GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "line_breaking1")),
-			doc->line_breaking);
+			doc->editor->line_breaking);
 
 	item = lookup_widget(main_widgets.window, "menu_use_auto_indentation1");
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), doc->auto_indent);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), doc->editor->auto_indent);
 	gtk_widget_set_sensitive(item, editor_prefs.indent_mode != INDENT_NONE);
 
-	item = lookup_widget(main_widgets.window, doc->use_tabs ? "tabs1" : "spaces1");
+	item = lookup_widget(main_widgets.window, doc->editor->use_tabs ? "tabs1" : "spaces1");
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), TRUE);
 
 	gtk_check_menu_item_set_active(
@@ -720,7 +712,7 @@ void ui_document_show_hide(GeanyDocument *doc)
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), doc->has_bom);
 	gtk_widget_set_sensitive(item, encodings_is_unicode_charset(doc->encoding));
 
-	switch (sci_get_eol_mode(doc->sci))
+	switch (sci_get_eol_mode(doc->editor->sci))
 	{
 		case SC_EOL_CR: widget_name = "cr"; break;
 		case SC_EOL_LF: widget_name = "lf"; break;
@@ -1072,7 +1064,7 @@ void ui_show_markers_margin(void)
 	for(i = 0; i < max; i++)
 	{
 		doc = document_get_from_page(i);
-		sci_set_symbol_margin(doc->sci, editor_prefs.show_markers_margin);
+		sci_set_symbol_margin(doc->editor->sci, editor_prefs.show_markers_margin);
 	}
 }
 
@@ -1085,7 +1077,7 @@ void ui_show_linenumber_margin(void)
 	for(i = 0; i < max; i++)
 	{
 		doc = document_get_from_page(i);
-		sci_set_line_numbers(doc->sci, editor_prefs.show_linenumber_margin, 0);
+		sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
 	}
 }
 

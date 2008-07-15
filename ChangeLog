@@ -1,3 +1,34 @@
+2008-07-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/build.c, src/utils.c, src/utils.h, src/keybindings.c,
+   src/printing.c, src/tools.c, src/prefs.c, src/navqueue.c,
+   src/plugindata.h, src/treeviews.c, src/msgwindow.c, src/callbacks.c,
+   src/notebook.c, src/keyfile.c, src/filetypes.c, src/search.c,
+   src/document.c, src/document.h, src/main.c, src/editor.c,
+   src/symbols.c, src/editor.h, src/symbols.h, src/ui_utils.c,
+   plugins/export.c, plugins/vcdiff.c, plugins/htmlchars.c,
+   plugins/classbuilder.c:
+   Merge the editor-struct branch:
+   Note: this breaks the plugin API for editor-related document fields
+   and functions.
+   Split new GeanyEditor struct type from GeanyDocument fields sci,
+   line_wrapping, auto_indent, scroll_percent, use_tabs, line_breaking.
+   GeanyEditor::document allows access back to document fields.
+   Add GeanyDocument::editor field; this is only valid when the
+   document is valid, and NULL otherwise. This means any checks for
+   doc->editor->scintilla != NULL will segfault for invalid
+   documents - check against doc->is_valid or doc->editor != NULL
+   instead.
+   Change plugin API EditorFuncs to use GeanyEditor pointers.
+   Make editor_set_font() take a pango-style font string, and use a
+   GeanyEditor pointer.
+   Use GeanyEditor* instead of GeanyDocument* in editor.c (most global
+   editor functions still need conversion though, but this may be done
+   gradually or as required).
+   Move utils_get_current_function() to symbols.c.
+   Move utils_replace_filename() to document.c.
+
+
 2008-07-14  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
 * data/filetype_extensions.conf, data/filetypes.f77,

@@ -869,7 +869,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 				for (i = 0; i < documents_array->len; i++)
 				{
 					if (documents[i]->is_valid)
-						editor_set_use_tabs(documents[i], editor_prefs.use_tabs);
+						editor_set_use_tabs(documents[i]->editor, editor_prefs.use_tabs);
 				}
 			}
 		}

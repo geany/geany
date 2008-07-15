@@ -192,7 +192,7 @@ GeanyDocument *document_find_by_sci(ScintillaObject *sci)
 
 	for (i = 0; i < documents_array->len; i++)
 	{
-		if (documents[i]->is_valid && documents[i]->sci == sci)
+		if (documents[i]->is_valid && documents[i]->editor->sci == sci)
 			return documents[i];
 	}
 	return NULL;
@@ -206,7 +206,7 @@ gint document_get_notebook_page(GeanyDocument *doc)
 		return -1;
 
 	return gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
-		GTK_WIDGET(doc->sci));
+		GTK_WIDGET(doc->editor->sci));
 }
 
 
@@ -296,7 +296,7 @@ void document_apply_update_prefs(GeanyDocument *doc)
 
 	g_return_if_fail(doc != NULL);
 
-	sci = doc->sci;
+	sci = doc->editor->sci;
 
 	sci_set_mark_long_lines(sci, editor_prefs.long_line_type,
 		editor_prefs.long_line_column, editor_prefs.long_line_color);
@@ -311,7 +311,7 @@ void document_apply_update_prefs(GeanyDocument *doc)
 
 	sci_set_folding_margin_visible(sci, editor_prefs.folding);
 
-	doc->auto_indent = (editor_prefs.indent_mode != INDENT_NONE);
+	doc->editor->auto_indent = (editor_prefs.indent_mode != INDENT_NONE);
 
 	sci_assign_cmdkey(sci, SCK_HOME,
 		editor_prefs.smart_home_key ? SCI_VCHOMEWRAP : SCI_HOMEWRAP);
@@ -329,17 +329,13 @@ static void init_doc_struct(GeanyDocument *new_doc)
 
 	new_doc->is_valid = FALSE;
 	new_doc->has_tags = FALSE;
-	new_doc->auto_indent = (editor_prefs.indent_mode != INDENT_NONE);
-	new_doc->line_wrapping = editor_prefs.line_wrapping;
 	new_doc->readonly = FALSE;
 	new_doc->file_name = NULL;
 	new_doc->file_type = NULL;
 	new_doc->tm_file = NULL;
 	new_doc->encoding = NULL;
 	new_doc->has_bom = FALSE;
-	new_doc->sci = NULL;
-	new_doc->scroll_percent = -1.0F;
-	new_doc->line_breaking = FALSE;
+	new_doc->editor = NULL;
 	new_doc->mtime = 0;
 	new_doc->changed = FALSE;
 	new_doc->last_check = time(NULL);
@@ -362,7 +358,7 @@ static gint document_get_new_idx(void)
 
 	for (i = 0; i < documents_array->len; i++)
 	{
-		if (documents[i]->sci == NULL)
+		if (documents[i]->editor == NULL)
 		{
 			return (gint) i;
 		}
@@ -380,7 +376,7 @@ static void queue_colourise(GeanyDocument *doc)
 	 * document), we need to force a redraw, so the expose event is triggered.
 	 * This ensures we don't start colourising before all documents are opened/saved,
 	 * only once the editor is drawn. */
-	gtk_widget_queue_draw(GTK_WIDGET(doc->sci));
+	gtk_widget_queue_draw(GTK_WIDGET(doc->editor->sci));
 }
 
 
@@ -388,8 +384,6 @@ static void queue_colourise(GeanyDocument *doc)
  * @return The index of the created document */
 static GeanyDocument *document_create(const gchar *utf8_filename)
 {
-	PangoFontDescription *pfd;
-	gchar *fname;
 	GeanyDocument *this;
 	gint new_idx;
 	gint cur_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
@@ -416,15 +410,9 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 
 	this->file_name = g_strdup(utf8_filename);
 
-	this->sci = editor_create_new_sci(this);
+	this->editor = editor_create(this);
 
 	document_apply_update_prefs(this);
-
-	pfd = pango_font_description_from_string(interface_prefs.editor_font);
-	fname = g_strdup_printf("!%s", pango_font_description_get_family(pfd));
-	editor_set_font(this, fname, pango_font_description_get_size(pfd) / PANGO_SCALE);
-	pango_font_description_free(pfd);
-	g_free(fname);
 
 	treeviews_openfiles_add(this);	/* sets this->iter */
 
@@ -494,15 +482,16 @@ gboolean document_remove_page(guint page_num)
 		g_free(doc->real_path);
 		tm_workspace_remove_object(doc->tm_file, TRUE, TRUE);
 
+		g_free(doc->editor);
+		doc->editor = NULL;
+
 		doc->is_valid = FALSE;
-		doc->sci = NULL;
 		doc->file_name = NULL;
 		doc->real_path = NULL;
 		doc->file_type = NULL;
 		doc->encoding = NULL;
 		doc->has_bom = FALSE;
 		doc->tm_file = NULL;
-		doc->scroll_percent = -1.0F;
 		document_undo_clear(doc);
 		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0)
 		{
@@ -557,21 +546,21 @@ GeanyDocument *document_new_file(const gchar *filename, GeanyFiletype *ft, const
 
 	g_assert(doc != NULL);
 
-	sci_set_undo_collection(doc->sci, FALSE); /* avoid creation of an undo action */
+	sci_set_undo_collection(doc->editor->sci, FALSE); /* avoid creation of an undo action */
 	if (text)
-		sci_set_text(doc->sci, text);
+		sci_set_text(doc->editor->sci, text);
 	else
-		sci_clear_all(doc->sci);
+		sci_clear_all(doc->editor->sci);
 
-	sci_set_eol_mode(doc->sci, file_prefs.default_eol_character);
+	sci_set_eol_mode(doc->editor->sci, file_prefs.default_eol_character);
 	/* convert the eol chars in the template text in case they are different from
 	 * from file_prefs.default_eol */
 	if (text != NULL)
-		sci_convert_eols(doc->sci, file_prefs.default_eol_character);
+		sci_convert_eols(doc->editor->sci, file_prefs.default_eol_character);
 
-	editor_set_use_tabs(doc, editor_prefs.use_tabs);
-	sci_set_undo_collection(doc->sci, TRUE);
-	sci_empty_undo_buffer(doc->sci);
+	editor_set_use_tabs(doc->editor, editor_prefs.use_tabs);
+	sci_set_undo_collection(doc->editor->sci, TRUE);
+	sci_empty_undo_buffer(doc->editor->sci);
 
 	doc->mtime = time(NULL);
 
@@ -585,18 +574,18 @@ GeanyDocument *document_new_file(const gchar *filename, GeanyFiletype *ft, const
 
 	document_set_filetype(doc, ft);	/* also clears taglist */
 	if (ft == NULL)
-		highlighting_set_styles(doc->sci, GEANY_FILETYPES_NONE);
+		highlighting_set_styles(doc->editor->sci, GEANY_FILETYPES_NONE);
 	ui_set_window_title(doc);
 	build_menu_update(doc);
 	document_update_tag_list(doc, FALSE);
 	document_set_text_changed(doc, FALSE);
 	ui_document_show_hide(doc); /* update the document menu */
 
-	sci_set_line_numbers(doc->sci, editor_prefs.show_linenumber_margin, 0);
-	sci_goto_pos(doc->sci, 0, TRUE);
+	sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
+	sci_goto_pos(doc->editor->sci, 0, TRUE);
 
 	/* "the" SCI signal (connect after initial setup(i.e. adding text)) */
-	g_signal_connect((GtkWidget*) doc->sci, "sci-notify", G_CALLBACK(on_editor_notification), doc);
+	g_signal_connect((GtkWidget*) doc->editor->sci, "sci-notify", G_CALLBACK(on_editor_notification), doc);
 
 	if (geany_object)
 	{
@@ -857,25 +846,25 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_f
 /* Sets the cursor position on opening a file. First it sets the line when cl_options.goto_line
  * is set, otherwise it sets the line when pos is greater than zero and finally it sets the column
  * if cl_options.goto_column is set. */
-static void set_cursor_position(GeanyDocument *doc, gint pos)
+static void set_cursor_position(GeanyEditor *editor, gint pos)
 {
 	if (cl_options.goto_line >= 0)
 	{	/* goto line which was specified on command line and then undefine the line */
-		sci_goto_line(doc->sci, cl_options.goto_line - 1, TRUE);
-		doc->scroll_percent = 0.5F;
+		sci_goto_line(editor->sci, cl_options.goto_line - 1, TRUE);
+		editor->scroll_percent = 0.5F;
 		cl_options.goto_line = -1;
 	}
 	else if (pos > 0)
 	{
-		sci_set_current_position(doc->sci, pos, FALSE);
-		doc->scroll_percent = 0.5F;
+		sci_set_current_position(editor->sci, pos, FALSE);
+		editor->scroll_percent = 0.5F;
 	}
 
 	if (cl_options.goto_column >= 0)
 	{	/* goto column which was specified on command line and then undefine the column */
-		gint cur_pos = sci_get_current_position(doc->sci);
-		sci_set_current_position(doc->sci, cur_pos + cl_options.goto_column, FALSE);
-		doc->scroll_percent = 0.5F;
+		gint cur_pos = sci_get_current_position(editor->sci);
+		sci_set_current_position(editor->sci, cur_pos + cl_options.goto_column, FALSE);
+		editor->scroll_percent = 0.5F;
 		cl_options.goto_column = -1;
 	}
 }
@@ -917,20 +906,20 @@ static void set_indentation(GeanyDocument *doc)
 {
 	/* force using tabs for indentation for Makefiles */
 	if (FILETYPE_ID(doc->file_type) == GEANY_FILETYPES_MAKE)
-		editor_set_use_tabs(doc, TRUE);
+		editor_set_use_tabs(doc->editor, TRUE);
 	/* force using spaces for indentation for Fortran 77 */
 	else if (FILETYPE_ID(doc->file_type) == GEANY_FILETYPES_F77)
-		editor_set_use_tabs(doc, FALSE);
+		editor_set_use_tabs(doc->editor, FALSE);
 	else if (! editor_prefs.detect_tab_mode)
-		editor_set_use_tabs(doc, editor_prefs.use_tabs);
+		editor_set_use_tabs(doc->editor, editor_prefs.use_tabs);
 	else
 	{	/* detect & set tabs/spaces */
-		gboolean use_tabs = detect_use_tabs(doc->sci);
+		gboolean use_tabs = detect_use_tabs(doc->editor->sci);
 
 		if (use_tabs != editor_prefs.use_tabs)
 			ui_set_statusbar(TRUE, _("Setting %s indentation mode."),
 				(use_tabs) ? _("Tabs") : _("Spaces"));
-		editor_set_use_tabs(doc, use_tabs);
+		editor_set_use_tabs(doc->editor, use_tabs);
 	}
 }
 
@@ -984,11 +973,11 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 			ui_add_recent_file(utf8_filename);	/* either add or reorder recent item */
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
 					gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
-					(GtkWidget*) doc->sci));
+					(GtkWidget*) doc->editor->sci));
 			g_free(utf8_filename);
 			g_free(locale_filename);
 			document_check_disk_status(doc, TRUE);	/* force a file changed check */
-			set_cursor_position(doc, pos);
+			set_cursor_position(doc->editor, pos);
 			return doc;
 		}
 	}
@@ -1007,20 +996,20 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 	if (! reload) doc = document_create(utf8_filename);
 	g_return_val_if_fail(doc != NULL, NULL);	/* really should not happen */
 
-	sci_set_undo_collection(doc->sci, FALSE); /* avoid creation of an undo action */
-	sci_empty_undo_buffer(doc->sci);
+	sci_set_undo_collection(doc->editor->sci, FALSE); /* avoid creation of an undo action */
+	sci_empty_undo_buffer(doc->editor->sci);
 
 	/* add the text to the ScintillaObject */
-	sci_set_readonly(doc->sci, FALSE);	/* to allow replacing text */
-	sci_set_text(doc->sci, filedata.data);	/* NULL terminated data */
+	sci_set_readonly(doc->editor->sci, FALSE);	/* to allow replacing text */
+	sci_set_text(doc->editor->sci, filedata.data);	/* NULL terminated data */
 	queue_colourise(doc);	/* Ensure the document gets colourised. */
 
 	/* detect & set line endings */
 	editor_mode = utils_get_line_endings(filedata.data, filedata.len);
-	sci_set_eol_mode(doc->sci, editor_mode);
+	sci_set_eol_mode(doc->editor->sci, editor_mode);
 	g_free(filedata.data);
 
-	sci_set_undo_collection(doc->sci, TRUE);
+	sci_set_undo_collection(doc->editor->sci, TRUE);
 
 	doc->mtime = filedata.mtime; /* get the modification time from file and keep it */
 	g_free(doc->encoding);	/* if reloading, free old encoding */
@@ -1029,13 +1018,13 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 	store_saved_encoding(doc);	/* store the opened encoding for undo/redo */
 
 	doc->readonly = readonly || filedata.readonly;
-	sci_set_readonly(doc->sci, doc->readonly);
+	sci_set_readonly(doc->editor->sci, doc->readonly);
 
 	/* update line number margin width */
-	sci_set_line_numbers(doc->sci, editor_prefs.show_linenumber_margin, 0);
+	sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
 
 	/* set the cursor position according to pos, cl_options.goto_line and cl_options.goto_column */
-	set_cursor_position(doc, pos);
+	set_cursor_position(doc->editor, pos);
 
 	if (! reload)
 	{
@@ -1044,7 +1033,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		doc->real_path = get_real_path_from_utf8(doc->file_name);
 
 		/* "the" SCI signal (connect after initial setup(i.e. adding text)) */
-		g_signal_connect((GtkWidget*) doc->sci, "sci-notify",
+		g_signal_connect((GtkWidget*) doc->editor->sci, "sci-notify",
 			G_CALLBACK(on_editor_notification), doc);
 
 		use_ft = (ft != NULL) ? ft : filetypes_detect_from_file(doc);
@@ -1060,7 +1049,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 
 	/* set indentation settings after setting the filetype */
 	if (reload)
-		editor_set_use_tabs(doc, doc->use_tabs); /* resetup sci */
+		editor_set_use_tabs(doc->editor, doc->editor->use_tabs); /* resetup sci */
 	else
 		set_indentation(doc);
 
@@ -1163,7 +1152,7 @@ gboolean document_reload_file(GeanyDocument *doc, const gchar *forced_enc)
 		return FALSE;
 
 	/* try to set the cursor to the position before reloading */
-	pos = sci_get_current_position(doc->sci);
+	pos = sci_get_current_position(doc->editor->sci);
 	new_doc = document_open_file_full(doc, NULL, pos, doc->readonly,
 					doc->file_type, forced_enc);
 	return (new_doc != NULL);
@@ -1200,8 +1189,8 @@ static void get_line_column_from_pos(GeanyDocument *doc, guint byte_pos, gint *l
 	gint line_start;
 
 	/* for some reason we can use byte count instead of character count here */
-	*line = sci_get_line_from_position(doc->sci, byte_pos);
-	line_start = sci_get_position_from_line(doc->sci, *line);
+	*line = sci_get_line_from_position(doc->editor->sci, byte_pos);
+	line_start = sci_get_position_from_line(doc->editor->sci, *line);
 	/* get the column in the line */
 	*column = byte_pos - line_start;
 
@@ -1209,12 +1198,40 @@ static void get_line_column_from_pos(GeanyDocument *doc, guint byte_pos, gint *l
 	 * skip one byte(i++) and decrease the column number which is based on byte count */
 	for (i = line_start; i < (line_start + *column); i++)
 	{
-		if (sci_get_char_at(doc->sci, i) < 0)
+		if (sci_get_char_at(doc->editor->sci, i) < 0)
 		{
 			(*column)--;
 			i++;
 		}
 	}
+}
+
+
+static void replace_header_filename(GeanyDocument *doc)
+{
+	gchar *filebase;
+	gchar *filename;
+	struct TextToFind ttf;
+
+	if (doc == NULL || doc->file_type == NULL) return;
+
+	filebase = g_strconcat(GEANY_STRING_UNTITLED, ".", (doc->file_type)->extension, NULL);
+	filename = g_path_get_basename(doc->file_name);
+
+	/* only search the first 3 lines */
+	ttf.chrg.cpMin = 0;
+	ttf.chrg.cpMax = sci_get_position_from_line(doc->editor->sci, 3);
+	ttf.lpstrText = (gchar*)filebase;
+
+	if (sci_find_text(doc->editor->sci, SCFIND_MATCHCASE, &ttf) != -1)
+	{
+		sci_target_start(doc->editor->sci, ttf.chrgText.cpMin);
+		sci_target_end(doc->editor->sci, ttf.chrgText.cpMax);
+		sci_target_replace(doc->editor->sci, filename, FALSE);
+	}
+
+	g_free(filebase);
+	g_free(filename);
 }
 
 
@@ -1252,7 +1269,7 @@ gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 			ignore_callback = FALSE;
 		}
 	}
-	utils_replace_filename(doc);
+	replace_header_filename(doc);
 
 	ret = document_save_file(doc, TRUE);
 	if (ret)
@@ -1291,7 +1308,7 @@ _("An error occurred while converting the file from UTF-8 in \"%s\". The file re
 			/* don't read over the doc length */
 			gint max_len = MIN((gint)bytes_read + 6, (gint)*len - 1);
 			context = g_malloc(7); /* read 6 bytes from Sci + '\0' */
-			sci_get_text_range(doc->sci, bytes_read, max_len, context);
+			sci_get_text_range(doc->editor->sci, bytes_read, max_len, context);
 
 			/* take only one valid Unicode character from the context and discard the leftover */
 			unic = g_utf8_get_char_validated(context, -1);
@@ -1396,7 +1413,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	if (file_prefs.final_new_line)
 		editor_ensure_final_newline(doc);
 
-	len = sci_get_length(doc->sci) + 1;
+	len = sci_get_length(doc->editor->sci) + 1;
 	if (doc->has_bom && encodings_is_unicode_charset(doc->encoding))
 	{	/* always write a UTF-8 BOM because in this moment the text itself is still in UTF-8
 		 * encoding, it will be converted to doc->encoding below and this conversion
@@ -1405,13 +1422,13 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 		data[0] = (gchar) 0xef;
 		data[1] = (gchar) 0xbb;
 		data[2] = (gchar) 0xbf;
-		sci_get_text(doc->sci, len, data + 3);
+		sci_get_text(doc->editor->sci, len, data + 3);
 		len += 3;
 	}
 	else
 	{
 		data = (gchar*) g_malloc(len);
-		sci_get_text(doc->sci, len, data);
+		sci_get_text(doc->editor->sci, len, data);
 	}
 
 	/* save in original encoding, skip when it is already UTF-8 or has the encoding "None" */
@@ -1456,8 +1473,8 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 
 		/* set line numbers again, to reset the margin width, if
 		 * there are more lines than before */
-		sci_set_line_numbers(doc->sci, editor_prefs.show_linenumber_margin, 0);
-		sci_set_savepoint(doc->sci);
+		sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
+		sci_set_savepoint(doc->editor->sci);
 
 		/* stat the file to get the timestamp, otherwise on Windows the actual
 		 * timestamp can be ahead of time(NULL) */
@@ -1501,38 +1518,38 @@ gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gint fl
 	if (! *text)
 		return TRUE;
 
-	start_pos = (inc) ? sci_get_selection_start(doc->sci) :
-		sci_get_selection_end(doc->sci);	/* equal if no selection */
+	start_pos = (inc) ? sci_get_selection_start(doc->editor->sci) :
+		sci_get_selection_end(doc->editor->sci);	/* equal if no selection */
 
 	/* search cursor to end */
 	ttf.chrg.cpMin = start_pos;
-	ttf.chrg.cpMax = sci_get_length(doc->sci);
+	ttf.chrg.cpMax = sci_get_length(doc->editor->sci);
 	ttf.lpstrText = (gchar *)text;
-	search_pos = sci_find_text(doc->sci, flags, &ttf);
+	search_pos = sci_find_text(doc->editor->sci, flags, &ttf);
 
 	/* if no match, search start to cursor */
 	if (search_pos == -1)
 	{
 		ttf.chrg.cpMin = 0;
 		ttf.chrg.cpMax = start_pos + strlen(text);
-		search_pos = sci_find_text(doc->sci, flags, &ttf);
+		search_pos = sci_find_text(doc->editor->sci, flags, &ttf);
 	}
 
 	if (search_pos != -1)
 	{
-		gint line = sci_get_line_from_position(doc->sci, ttf.chrgText.cpMin);
+		gint line = sci_get_line_from_position(doc->editor->sci, ttf.chrgText.cpMin);
 
 		/* unfold maybe folded results */
-		sci_ensure_line_is_visible(doc->sci, line);
+		sci_ensure_line_is_visible(doc->editor->sci, line);
 
-		sci_set_selection_start(doc->sci, ttf.chrgText.cpMin);
-		sci_set_selection_end(doc->sci, ttf.chrgText.cpMax);
+		sci_set_selection_start(doc->editor->sci, ttf.chrgText.cpMin);
+		sci_set_selection_end(doc->editor->sci, ttf.chrgText.cpMax);
 
-		if (! editor_line_in_view(doc->sci, line))
+		if (! editor_line_in_view(doc->editor->sci, line))
 		{	/* we need to force scrolling in case the cursor is outside of the current visible area
 			 * GeanyDocument::scroll_percent doesn't work because sci isn't always updated
 			 * while searching */
-			editor_scroll_to_line(doc->sci, -1, 0.3F);
+			editor_scroll_to_line(doc->editor->sci, -1, 0.3F);
 		}
 		return TRUE;
 	}
@@ -1543,7 +1560,7 @@ gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gint fl
 			ui_set_statusbar(FALSE, _("\"%s\" was not found."), text);
 		}
 		utils_beep();
-		sci_goto_pos(doc->sci, start_pos, FALSE);	/* clear selection */
+		sci_goto_pos(doc->editor->sci, start_pos, FALSE);	/* clear selection */
 		return FALSE;
 	}
 }
@@ -1563,33 +1580,33 @@ gint document_find_text(GeanyDocument *doc, const gchar *text, gint flags, gbool
 	if (flags & SCFIND_REGEXP)
 		search_backwards = FALSE;
 
-	selection_start = sci_get_selection_start(doc->sci);
-	selection_end = sci_get_selection_end(doc->sci);
+	selection_start = sci_get_selection_start(doc->editor->sci);
+	selection_end = sci_get_selection_end(doc->editor->sci);
 	if ((selection_end - selection_start) > 0)
 	{ /* there's a selection so go to the end */
 		if (search_backwards)
-			sci_goto_pos(doc->sci, selection_start, TRUE);
+			sci_goto_pos(doc->editor->sci, selection_start, TRUE);
 		else
-			sci_goto_pos(doc->sci, selection_end, TRUE);
+			sci_goto_pos(doc->editor->sci, selection_end, TRUE);
 	}
 
-	sci_set_search_anchor(doc->sci);
+	sci_set_search_anchor(doc->editor->sci);
 	if (search_backwards)
-		search_pos = sci_search_prev(doc->sci, flags, text);
+		search_pos = sci_search_prev(doc->editor->sci, flags, text);
 	else
-		search_pos = sci_search_next(doc->sci, flags, text);
+		search_pos = sci_search_next(doc->editor->sci, flags, text);
 
 	if (search_pos != -1)
 	{
 		/* unfold maybe folded results */
-		sci_ensure_line_is_visible(doc->sci,
-			sci_get_line_from_position(doc->sci, search_pos));
+		sci_ensure_line_is_visible(doc->editor->sci,
+			sci_get_line_from_position(doc->editor->sci, search_pos));
 		if (scroll)
-			doc->scroll_percent = 0.3F;
+			doc->editor->scroll_percent = 0.3F;
 	}
 	else
 	{
-		gint sci_len = sci_get_length(doc->sci);
+		gint sci_len = sci_get_length(doc->editor->sci);
 
 		/* if we just searched the whole text, give up searching. */
 		if ((selection_end == 0 && ! search_backwards) ||
@@ -1607,11 +1624,11 @@ gint document_find_text(GeanyDocument *doc, const gchar *text, gint flags, gbool
 		{
 			gint ret;
 
-			sci_set_current_position(doc->sci, (search_backwards) ? sci_len : 0, FALSE);
+			sci_set_current_position(doc->editor->sci, (search_backwards) ? sci_len : 0, FALSE);
 			ret = document_find_text(doc, text, flags, search_backwards, scroll, parent);
 			if (ret == -1)
 			{	/* return to original cursor position if not found */
-				sci_set_current_position(doc->sci, selection_start, FALSE);
+				sci_set_current_position(doc->editor->sci, selection_start, FALSE);
 			}
 			return ret;
 		}
@@ -1634,8 +1651,8 @@ gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gch
 	if (flags & SCFIND_REGEXP)
 		search_backwards = FALSE;
 
-	selection_start = sci_get_selection_start(doc->sci);
-	selection_end = sci_get_selection_end(doc->sci);
+	selection_start = sci_get_selection_start(doc->editor->sci);
+	selection_end = sci_get_selection_end(doc->editor->sci);
 	if (selection_end == selection_start)
 	{
 		/* no selection so just find the next match */
@@ -1645,9 +1662,9 @@ gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gch
 	/* there's a selection so go to the start before finding to search through it
 	 * this ensures there is a match */
 	if (search_backwards)
-		sci_goto_pos(doc->sci, selection_end, TRUE);
+		sci_goto_pos(doc->editor->sci, selection_end, TRUE);
 	else
-		sci_goto_pos(doc->sci, selection_start, TRUE);
+		sci_goto_pos(doc->editor->sci, selection_start, TRUE);
 
 	search_pos = document_find_text(doc, find_text, flags, search_backwards, TRUE, NULL);
 	/* return if the original selected text did not match (at the start of the selection) */
@@ -1658,11 +1675,11 @@ gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gch
 	{
 		gint replace_len;
 		/* search next/prev will select matching text, which we use to set the replace target */
-		sci_target_from_selection(doc->sci);
-		replace_len = sci_target_replace(doc->sci, replace_text, flags & SCFIND_REGEXP);
+		sci_target_from_selection(doc->editor->sci);
+		replace_len = sci_target_replace(doc->editor->sci, replace_text, flags & SCFIND_REGEXP);
 		/* select the replacement - find text will skip past the selected text */
-		sci_set_selection_start(doc->sci, search_pos);
-		sci_set_selection_end(doc->sci, search_pos + replace_len);
+		sci_set_selection_start(doc->editor->sci, search_pos);
+		sci_set_selection_end(doc->editor->sci, search_pos + replace_len);
 	}
 	else
 	{
@@ -1727,7 +1744,7 @@ document_replace_range(GeanyDocument *doc, const gchar *find_text, const gchar *
 	g_return_val_if_fail(doc != NULL && find_text != NULL && replace_text != NULL, 0);
 	if (! *find_text || doc->readonly) return 0;
 
-	sci = doc->sci;
+	sci = doc->editor->sci;
 
 	sci_start_undo_action(sci);
 	ttf.chrg.cpMin = start;
@@ -1801,8 +1818,8 @@ void document_replace_sel(GeanyDocument *doc, const gchar *find_text, const gcha
 	g_return_if_fail(doc != NULL && find_text != NULL && replace_text != NULL);
 	if (! *find_text) return;
 
-	selection_start = sci_get_selection_start(doc->sci);
-	selection_end = sci_get_selection_end(doc->sci);
+	selection_start = sci_get_selection_start(doc->editor->sci);
+	selection_end = sci_get_selection_end(doc->editor->sci);
 	/* do we have a selection? */
 	if ((selection_end - selection_start) == 0)
 	{
@@ -1810,24 +1827,24 @@ void document_replace_sel(GeanyDocument *doc, const gchar *find_text, const gcha
 		return;
 	}
 
-	selection_mode = sci_get_selection_mode(doc->sci);
-	selected_lines = sci_get_lines_selected(doc->sci);
+	selection_mode = sci_get_selection_mode(doc->editor->sci);
+	selected_lines = sci_get_lines_selected(doc->editor->sci);
 	/* handle rectangle, multi line selections (it doesn't matter on a single line) */
 	if (selection_mode == SC_SEL_RECTANGLE && selected_lines > 1)
 	{
 		gint first_line, line;
 
-		sci_start_undo_action(doc->sci);
+		sci_start_undo_action(doc->editor->sci);
 
-		first_line = sci_get_line_from_position(doc->sci, selection_start);
+		first_line = sci_get_line_from_position(doc->editor->sci, selection_start);
 		/* Find the last line with chars selected (not EOL char) */
-		last_line = sci_get_line_from_position(doc->sci,
+		last_line = sci_get_line_from_position(doc->editor->sci,
 			selection_end - editor_get_eol_char_len(doc));
 		last_line = MAX(first_line, last_line);
 		for (line = first_line; line < (first_line + selected_lines); line++)
 		{
-			gint line_start = sci_get_pos_at_line_sel_start(doc->sci, line);
-			gint line_end = sci_get_pos_at_line_sel_end(doc->sci, line);
+			gint line_start = sci_get_pos_at_line_sel_start(doc->editor->sci, line);
+			gint line_end = sci_get_pos_at_line_sel_end(doc->editor->sci, line);
 
 			/* skip line if there is no selection */
 			if (line_start != INVALID_POSITION)
@@ -1842,11 +1859,11 @@ void document_replace_sel(GeanyDocument *doc, const gchar *find_text, const gcha
 					replaced = TRUE;
 					/* this gets the greatest column within the selection after replacing */
 					max_column = MAX(max_column,
-						new_sel_end - sci_get_position_from_line(doc->sci, line));
+						new_sel_end - sci_get_position_from_line(doc->editor->sci, line));
 				}
 			}
 		}
-		sci_end_undo_action(doc->sci);
+		sci_end_undo_action(doc->editor->sci);
 	}
 	else	/* handle normal line selection */
 	{
@@ -1862,26 +1879,26 @@ void document_replace_sel(GeanyDocument *doc, const gchar *find_text, const gcha
 		if (selection_mode == SC_SEL_RECTANGLE && selected_lines > 1)
 		{
 			/* now we can scroll to the selection and destroy it because we rebuild it later */
-			/*sci_goto_pos(doc->sci, selection_start, FALSE);*/
+			/*sci_goto_pos(doc->editor->sci, selection_start, FALSE);*/
 
 			/* Note: the selection will be wrapped to last_line + 1 if max_column is greater than
 			 * the highest column on the last line. The wrapped selection is completely different
 			 * from the original one, so skip the selection at all */
 			/* TODO is there a better way to handle the wrapped selection? */
-			if ((sci_get_line_length(doc->sci, last_line) - 1) >= max_column)
+			if ((sci_get_line_length(doc->editor->sci, last_line) - 1) >= max_column)
 			{	/* for keeping and adjusting the selection in multi line rectangle selection we
 				 * need the last line of the original selection and the greatest column number after
 				 * replacing and set the selection end to the last line at the greatest column */
-				sci_set_selection_start(doc->sci, selection_start);
-				sci_set_selection_end(doc->sci,
-					sci_get_position_from_line(doc->sci, last_line) + max_column);
-				sci_set_selection_mode(doc->sci, selection_mode);
+				sci_set_selection_start(doc->editor->sci, selection_start);
+				sci_set_selection_end(doc->editor->sci,
+					sci_get_position_from_line(doc->editor->sci, last_line) + max_column);
+				sci_set_selection_mode(doc->editor->sci, selection_mode);
 			}
 		}
 		else
 		{
-			sci_set_selection_start(doc->sci, selection_start);
-			sci_set_selection_end(doc->sci, selection_end);
+			sci_set_selection_start(doc->editor->sci, selection_start);
+			sci_set_selection_end(doc->editor->sci, selection_end);
 		}
 	}
 	else /* no replacements */
@@ -1899,7 +1916,7 @@ gboolean document_replace_all(GeanyDocument *doc, const gchar *find_text, const 
 	g_return_val_if_fail(doc != NULL && find_text != NULL && replace_text != NULL, FALSE);
 	if (! *find_text) return FALSE;
 
-	len = sci_get_length(doc->sci);
+	len = sci_get_length(doc->editor->sci);
 	count = document_replace_range(
 			doc, find_text, replace_text, flags, 0, len, TRUE, NULL);
 
@@ -2002,7 +2019,7 @@ static gboolean update_type_keywords(GeanyDocument *doc, gint lang)
 	gboolean ret = FALSE;
 	guint n;
 	const GString *s;
-	ScintillaObject *sci = doc ? doc->sci : NULL;
+	ScintillaObject *sci = doc ? doc->editor->sci : NULL;
 
 	if (sci != NULL && editor_lexer_get_type_keyword_idx(sci_get_lexer(sci)) == -1)
 		return FALSE;
@@ -2022,10 +2039,9 @@ static gboolean update_type_keywords(GeanyDocument *doc, gint lang)
 
 	for (n = 0; n < documents_array->len; n++)
 	{
-		ScintillaObject *wid = documents[n]->sci;
-
-		if (wid)
+		if (documents[n]->is_valid)
 		{
+			ScintillaObject *wid = documents[n]->editor->sci;
 			gint keyword_idx = editor_lexer_get_type_keyword_idx(sci_get_lexer(wid));
 
 			if (keyword_idx > 0)
@@ -2066,7 +2082,7 @@ void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type)
 			tm_workspace_remove_object(doc->tm_file, TRUE, TRUE);
 			doc->tm_file = NULL;
 		}
-		highlighting_set_styles(doc->sci, type->id);
+		highlighting_set_styles(doc->editor->sci, type->id);
 		build_menu_update(doc);
 		queue_colourise(doc);
 	}
@@ -2142,7 +2158,7 @@ void document_undo_clear(GeanyDocument *doc)
 	}
 	fdoc->redo_actions = NULL;
 
-	if (! main_status.quitting && doc->sci != NULL)
+	if (! main_status.quitting && doc->editor != NULL)
 		document_set_text_changed(doc, FALSE);
 
 	/*geany_debug("%s: new undo stack height: %d, new redo stack height: %d", __func__,
@@ -2179,7 +2195,7 @@ gboolean document_can_undo(GeanyDocument *doc)
 	if (doc == NULL)
 		return FALSE;
 
-	if (g_trash_stack_height(&fdoc->undo_actions) > 0 || sci_can_undo(doc->sci))
+	if (g_trash_stack_height(&fdoc->undo_actions) > 0 || sci_can_undo(doc->editor->sci))
 		return TRUE;
 	else
 		return FALSE;
@@ -2191,7 +2207,7 @@ static void update_changed_state(GeanyDocument *doc)
 	Document *fdoc = DOCUMENT(doc);
 
 	doc->changed =
-		(sci_is_modified(doc->sci) ||
+		(sci_is_modified(doc->editor->sci) ||
 		doc->has_bom != fdoc->saved_encoding.has_bom ||
 		! utils_str_equal(doc->encoding, fdoc->saved_encoding.encoding));
 	document_set_text_changed(doc, doc->changed);
@@ -2212,7 +2228,7 @@ void document_undo(GeanyDocument *doc)
 	{
 		/* fallback, should not be necessary */
 		geany_debug("%s: fallback used", __func__);
-		sci_undo(doc->sci);
+		sci_undo(doc->editor->sci);
 	}
 	else
 	{
@@ -2222,7 +2238,7 @@ void document_undo(GeanyDocument *doc)
 			{
 				document_redo_add(doc, UNDO_SCINTILLA, NULL);
 
-				sci_undo(doc->sci);
+				sci_undo(doc->editor->sci);
 				break;
 			}
 			case UNDO_BOM:
@@ -2266,7 +2282,7 @@ gboolean document_can_redo(GeanyDocument *doc)
 	if (doc == NULL)
 		return FALSE;
 
-	if (g_trash_stack_height(&fdoc->redo_actions) > 0 || sci_can_redo(doc->sci))
+	if (g_trash_stack_height(&fdoc->redo_actions) > 0 || sci_can_redo(doc->editor->sci))
 		return TRUE;
 	else
 		return FALSE;
@@ -2287,7 +2303,7 @@ void document_redo(GeanyDocument *doc)
 	{
 		/* fallback, should not be necessary */
 		geany_debug("%s: fallback used", __func__);
-		sci_redo(doc->sci);
+		sci_redo(doc->editor->sci);
 	}
 	else
 	{
@@ -2297,7 +2313,7 @@ void document_redo(GeanyDocument *doc)
 			{
 				document_undo_add(doc, UNDO_SCINTILLA, NULL);
 
-				sci_redo(doc->sci);
+				sci_redo(doc->editor->sci);
 				break;
 			}
 			case UNDO_BOM:
@@ -2389,20 +2405,20 @@ GeanyDocument *document_clone(GeanyDocument *old_doc, const gchar *utf8_filename
 	gchar *text;
 	GeanyDocument *doc;
 
-	len = sci_get_length(old_doc->sci) + 1;
+	len = sci_get_length(old_doc->editor->sci) + 1;
 	text = (gchar*) g_malloc(len);
-	sci_get_text(old_doc->sci, len, text);
+	sci_get_text(old_doc->editor->sci, len, text);
 	/* use old file type (or maybe NULL for auto detect would be better?) */
 	doc = document_new_file(utf8_filename, old_doc->file_type, text);
 	g_free(text);
 
 	/* copy file properties */
-	doc->line_wrapping = old_doc->line_wrapping;
+	doc->editor->line_wrapping = old_doc->editor->line_wrapping;
 	doc->readonly = old_doc->readonly;
 	doc->has_bom = old_doc->has_bom;
 	document_set_encoding(doc, old_doc->encoding);
-	sci_set_lines_wrapped(doc->sci, doc->line_wrapping);
-	sci_set_readonly(doc->sci, doc->readonly);
+	sci_set_lines_wrapped(doc->editor->sci, doc->editor->line_wrapping);
+	sci_set_readonly(doc->editor->sci, doc->readonly);
 
 	ui_document_show_hide(doc);
 	return doc;

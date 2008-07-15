@@ -28,6 +28,7 @@
 #include "support.h"
 #include "plugindata.h"
 #include "document.h"
+#include "editor.h"
 #include "keybindings.h"
 #include "ui_utils.h"
 #include "utils.h"
@@ -445,12 +446,12 @@ static gboolean sc_insert(GtkTreeModel *model, GtkTreeIter *iter)
 	if (doc != NULL)
 	{
 		gchar *str;
-		gint pos = p_sci->get_current_position(doc->sci);
+		gint pos = p_sci->get_current_position(doc->editor->sci);
 
 		gtk_tree_model_get(model, iter, COLUMN_HTML_NAME, &str, -1);
 		if (NZV(str))
 		{
-			p_sci->insert_text(doc->sci, pos, str);
+			p_sci->insert_text(doc->editor->sci, pos, str);
 			g_free(str);
 			result = TRUE;
 		}

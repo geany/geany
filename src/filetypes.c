@@ -34,6 +34,7 @@
 #include "support.h"
 #include "templates.h"
 #include "document.h"
+#include "editor.h"
 #include "msgwindow.h"
 #include "utils.h"
 #include "sciwrappers.h"
@@ -674,7 +675,7 @@ GeanyFiletype *filetypes_detect_from_file(GeanyDocument *doc)
 	if (doc == NULL)
 		return filetypes[GEANY_FILETYPES_NONE];
 
-	line = sci_get_line(doc->sci, 0);
+	line = sci_get_line(doc->editor->sci, 0);
 	ft = filetypes_detect_from_file_internal(doc->file_name, line);
 	g_free(line);
 	return ft;

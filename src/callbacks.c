@@ -112,7 +112,7 @@ static void verify_click_pos(GeanyDocument *doc)
 {
 	if (insert_callback_from_menu)
 	{
-		editor_info.click_pos = sci_get_current_position(doc->sci);
+		editor_info.click_pos = sci_get_current_position(doc->editor->sci);
 		insert_callback_from_menu = FALSE;
 	}
 }
@@ -305,7 +305,7 @@ on_cut1_activate                       (GtkMenuItem     *menuitem,
 		gtk_editable_cut_clipboard(GTK_EDITABLE(focusw));
 	else
 	if (IS_SCINTILLA(focusw) && doc != NULL)
-		sci_cut(doc->sci);
+		sci_cut(doc->editor->sci);
 	else
 	if (GTK_IS_TEXT_VIEW(focusw))
 	{
@@ -327,7 +327,7 @@ on_copy1_activate                      (GtkMenuItem     *menuitem,
 		gtk_editable_copy_clipboard(GTK_EDITABLE(focusw));
 	else
 	if (IS_SCINTILLA(focusw) && doc != NULL)
-		sci_copy(doc->sci);
+		sci_copy(doc->editor->sci);
 	else
 	if (GTK_IS_TEXT_VIEW(focusw))
 	{
@@ -360,12 +360,12 @@ on_paste1_activate                     (GtkMenuItem     *menuitem,
 			gchar *content = gtk_clipboard_wait_for_text(gtk_clipboard_get(GDK_NONE));
 			if (content != NULL)
 			{
-				sci_replace_sel(doc->sci, content);
+				sci_replace_sel(doc->editor->sci, content);
 				g_free(content);
 			}
 		}
 #else
-		sci_paste(doc->sci);
+		sci_paste(doc->editor->sci);
 #endif
 	}
 	else
@@ -390,7 +390,7 @@ on_delete1_activate                    (GtkMenuItem     *menuitem,
 		gtk_editable_delete_selection(GTK_EDITABLE(focusw));
 	else
 	if (IS_SCINTILLA(focusw) && doc != NULL)
-		sci_clear(doc->sci);
+		sci_clear(doc->editor->sci);
 	else
 	if (GTK_IS_TEXT_VIEW(focusw))
 	{
@@ -658,9 +658,9 @@ on_zoom_in1_activate                   (GtkMenuItem     *menuitem,
 	if (doc != NULL)
 	{
 		if (done++ % 3 == 0)
-			sci_set_line_numbers(doc->sci, editor_prefs.show_linenumber_margin,
-				(sci_get_zoom(doc->sci) / 2));
-		sci_zoom_in(doc->sci);
+			sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin,
+				(sci_get_zoom(doc->editor->sci) / 2));
+		sci_zoom_in(doc->editor->sci);
 	}
 }
 
@@ -672,9 +672,9 @@ on_zoom_out1_activate                   (GtkMenuItem     *menuitem,
 	GeanyDocument *doc = document_get_current();
 	if (doc != NULL)
 	{
-		if (sci_get_zoom(doc->sci) == 0)
-			sci_set_line_numbers(doc->sci, editor_prefs.show_linenumber_margin, 0);
-		sci_zoom_out(doc->sci);
+		if (sci_get_zoom(doc->editor->sci) == 0)
+			sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
+		sci_zoom_out(doc->editor->sci);
 	}
 }
 
@@ -686,8 +686,8 @@ on_normal_size1_activate               (GtkMenuItem     *menuitem,
 	GeanyDocument *doc = document_get_current();
 	if (doc != NULL)
 	{
-		sci_zoom_off(doc->sci);
-		sci_set_line_numbers(doc->sci, editor_prefs.show_linenumber_margin, 0);
+		sci_zoom_off(doc->editor->sci);
+		sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
 	}
 }
 
@@ -779,8 +779,8 @@ on_crlf_activate                       (GtkMenuItem     *menuitem,
 {
 	GeanyDocument *doc = document_get_current();
 	if (ignore_callback || doc == NULL) return;
-	sci_convert_eols(doc->sci, SC_EOL_CRLF);
-	sci_set_eol_mode(doc->sci, SC_EOL_CRLF);
+	sci_convert_eols(doc->editor->sci, SC_EOL_CRLF);
+	sci_set_eol_mode(doc->editor->sci, SC_EOL_CRLF);
 }
 
 
@@ -790,8 +790,8 @@ on_lf_activate                         (GtkMenuItem     *menuitem,
 {
 	GeanyDocument *doc = document_get_current();
 	if (ignore_callback || doc == NULL) return;
-	sci_convert_eols(doc->sci, SC_EOL_LF);
-	sci_set_eol_mode(doc->sci, SC_EOL_LF);
+	sci_convert_eols(doc->editor->sci, SC_EOL_LF);
+	sci_set_eol_mode(doc->editor->sci, SC_EOL_LF);
 }
 
 
@@ -801,8 +801,8 @@ on_cr_activate                         (GtkMenuItem     *menuitem,
 {
 	GeanyDocument *doc = document_get_current();
 	if (ignore_callback || doc == NULL) return;
-	sci_convert_eols(doc->sci, SC_EOL_CR);
-	sci_set_eol_mode(doc->sci, SC_EOL_CR);
+	sci_convert_eols(doc->editor->sci, SC_EOL_CR);
+	sci_set_eol_mode(doc->editor->sci, SC_EOL_CR);
 }
 
 
@@ -863,7 +863,7 @@ void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer user_data)
 	if (doc == NULL)
 		return;
 
-	sci = doc->sci;
+	sci = doc->editor->sci;
 	if (! sci_can_copy(sci))
 	{
 		keybindings_send_command(GEANY_KEY_GROUP_SELECT, GEANY_KEYS_SELECT_WORD);
@@ -969,7 +969,7 @@ on_line_wrapping1_toggled              (GtkCheckMenuItem *checkmenuitem,
 	{
 		GeanyDocument *doc = document_get_current();
 		if (doc != NULL)
-			editor_set_line_wrapping(doc, ! doc->line_wrapping);
+			editor_set_line_wrapping(doc->editor, ! doc->editor->line_wrapping);
 	}
 }
 
@@ -984,7 +984,7 @@ on_set_file_readonly1_toggled          (GtkCheckMenuItem *checkmenuitem,
 		if (doc == NULL)
 			return;
 		doc->readonly = ! doc->readonly;
-		sci_set_readonly(doc->sci, doc->readonly);
+		sci_set_readonly(doc->editor->sci, doc->readonly);
 		ui_update_tab_status(doc);
 		ui_update_statusbar(doc, -1);
 	}
@@ -999,7 +999,7 @@ on_use_auto_indentation1_toggled       (GtkCheckMenuItem *checkmenuitem,
 	{
 		GeanyDocument *doc = document_get_current();
 		if (doc != NULL)
-			doc->auto_indent = ! doc->auto_indent;
+			doc->editor->auto_indent = ! doc->editor->auto_indent;
 	}
 }
 
@@ -1015,10 +1015,10 @@ on_find_usage1_activate                (GtkMenuItem     *menuitem,
 	if (doc == NULL)
 		return;
 
-	if (sci_can_copy(doc->sci))
+	if (sci_can_copy(doc->editor->sci))
 	{	/* take selected text if there is a selection */
-		search_text = g_malloc(sci_get_selected_text_length(doc->sci) + 1);
-		sci_get_selected_text(doc->sci, search_text);
+		search_text = g_malloc(sci_get_selected_text_length(doc->editor->sci) + 1);
+		sci_get_selected_text(doc->editor->sci, search_text);
 		flags = SCFIND_MATCHCASE;
 	}
 	else
@@ -1042,7 +1042,7 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
 
 	g_return_if_fail(doc != NULL);
 
-	sci_set_current_position(doc->sci, editor_info.click_pos, FALSE);
+	sci_set_current_position(doc->editor->sci, editor_info.click_pos, FALSE);
 	symbols_goto_tag(editor_info.current_word, definition);
 }
 
@@ -1066,8 +1066,8 @@ on_show_color_chooser1_activate        (GtkMenuItem     *menuitem,
 	if (doc == NULL)
 		return;
 
-	pos = sci_get_current_position(doc->sci);
-	editor_find_current_word(doc->sci, pos, colour, sizeof colour, GEANY_WORDCHARS"#");
+	pos = sci_get_current_position(doc->editor->sci);
+	editor_find_current_word(doc->editor->sci, pos, colour, sizeof colour, GEANY_WORDCHARS"#");
 	tools_color_chooser(colour);
 }
 
@@ -1101,7 +1101,7 @@ static void find_again(gboolean change_direction)
 			change_direction ? forward : !forward, FALSE, NULL);
 
 		if (result > -1)
-			editor_display_current_line(doc, 0.3F);
+			editor_display_current_line(doc->editor, 0.3F);
 
 		set_search_bar_background((result > -1) ? TRUE : FALSE);
 	}
@@ -1186,13 +1186,13 @@ on_goto_line_dialog_response         (GtkDialog *dialog,
 		GeanyDocument *doc = document_get_current();
 		gint line = strtol(gtk_entry_get_text(GTK_ENTRY(user_data)), NULL, 10);
 
-		if (doc != NULL && line > 0 && line <= sci_get_line_count(doc->sci))
+		if (doc != NULL && line > 0 && line <= sci_get_line_count(doc->editor->sci))
 		{
 			gint pos;
 
 			line--;	/* the user counts lines from 1, we begin at 0 so bring the user line to our one */
-			pos = sci_get_position_from_line(doc->sci, line);
-			editor_goto_pos(doc, pos, TRUE);
+			pos = sci_get_position_from_line(doc->editor->sci, line);
+			editor_goto_pos(doc->editor, pos, TRUE);
 		}
 		else
 		{
@@ -1288,14 +1288,14 @@ on_comments_function_activate          (GtkMenuItem     *menuitem,
 		return;
 	}
 
-	/* utils_get_current_function returns -1 on failure, so sci_get_position_from_line
+	/* symbols_get_current_function returns -1 on failure, so sci_get_position_from_line
 	 * returns the current position, so it should be safe */
-	line = utils_get_current_function(doc, &cur_tag);
-	pos = sci_get_position_from_line(doc->sci, line - 1);
+	line = symbols_get_current_function(doc, &cur_tag);
+	pos = sci_get_position_from_line(doc->editor->sci, line - 1);
 
 	text = templates_get_template_function(doc->file_type->id, cur_tag);
 
-	sci_insert_text(doc->sci, pos, text);
+	sci_insert_text(doc->editor->sci, pos, text);
 	g_free(text);
 }
 
@@ -1333,7 +1333,7 @@ on_comments_gpl_activate               (GtkMenuItem     *menuitem,
 
 	verify_click_pos(doc); /* make sure that the click_pos is valid */
 
-	sci_insert_text(doc->sci, editor_info.click_pos, text);
+	sci_insert_text(doc->editor->sci, editor_info.click_pos, text);
 	g_free(text);
 }
 
@@ -1353,7 +1353,7 @@ on_comments_bsd_activate               (GtkMenuItem     *menuitem,
 
 	verify_click_pos(doc); /* make sure that the click_pos is valid */
 
-	sci_insert_text(doc->sci, editor_info.click_pos, text);
+	sci_insert_text(doc->editor->sci, editor_info.click_pos, text);
 	g_free(text);
 
 }
@@ -1370,10 +1370,10 @@ on_comments_changelog_activate         (GtkMenuItem     *menuitem,
 		return;
 
 	text = templates_get_template_changelog();
-	sci_insert_text(doc->sci, 0, text);
+	sci_insert_text(doc->editor->sci, 0, text);
 	/* sets the cursor to the right position to type the changelog text,
 	 * the template has 21 chars + length of name and email */
-	sci_goto_pos(doc->sci, 21 + strlen(template_prefs.developer) + strlen(template_prefs.mail), TRUE);
+	sci_goto_pos(doc->editor->sci, 21 + strlen(template_prefs.developer) + strlen(template_prefs.mail), TRUE);
 
 	g_free(text);
 }
@@ -1394,8 +1394,8 @@ on_comments_fileheader_activate        (GtkMenuItem     *menuitem,
 	fname = doc->file_name;
 	text = templates_get_template_fileheader(FILETYPE_ID(ft), fname);
 
-	sci_insert_text(doc->sci, 0, text);
-	sci_goto_pos(doc->sci, 0, FALSE);
+	sci_insert_text(doc->editor->sci, 0, text);
+	sci_goto_pos(doc->editor->sci, 0, FALSE);
 	g_free(text);
 }
 
@@ -1456,8 +1456,8 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
 	{
 		verify_click_pos(doc); /* make sure that the click_pos is valid */
 
-		sci_insert_text(doc->sci, editor_info.click_pos, time_str);
-		sci_goto_pos(doc->sci, editor_info.click_pos + strlen(time_str), FALSE);
+		sci_insert_text(doc->editor->sci, editor_info.click_pos, time_str);
+		sci_goto_pos(doc->editor->sci, editor_info.click_pos + strlen(time_str), FALSE);
 	}
 	else
 	{
@@ -1490,10 +1490,10 @@ on_insert_include_activate             (GtkMenuItem     *menuitem,
 		text = g_strconcat("#include <", user_data, ">\n", NULL);
 	}
 
-	sci_insert_text(doc->sci, editor_info.click_pos, text);
+	sci_insert_text(doc->editor->sci, editor_info.click_pos, text);
 	g_free(text);
 	if (pos >= 0)
-		sci_goto_pos(doc->sci, pos, FALSE);
+		sci_goto_pos(doc->editor->sci, pos, FALSE);
 }
 
 
@@ -1548,7 +1548,7 @@ on_menu_remove_indicators1_activate    (GtkMenuItem     *menuitem,
 	GeanyDocument *doc = document_get_current();
 
 	if (doc != NULL)
-		editor_clear_indicators(doc);
+		editor_clear_indicators(doc->editor);
 }
 
 
@@ -1591,7 +1591,7 @@ on_menu_select_all1_activate           (GtkMenuItem     *menuitem,
 	GeanyDocument *doc = document_get_current();
 
 	if (doc != NULL)
-		sci_select_all(doc->sci);
+		sci_select_all(doc->editor->sci);
 }
 
 
@@ -1695,24 +1695,24 @@ on_menu_increase_indent1_activate      (GtkMenuItem     *menuitem,
 	if (doc == NULL)
 		return;
 
-	if (sci_get_lines_selected(doc->sci) > 1)
+	if (sci_get_lines_selected(doc->editor->sci) > 1)
 	{
-		sci_cmd(doc->sci, SCI_TAB);
+		sci_cmd(doc->editor->sci, SCI_TAB);
 	}
 	else
 	{
 		gint line, ind_pos, old_pos, new_pos, step;
 
-		old_pos = sci_get_current_position(doc->sci);
-		line = sci_get_line_from_position(doc->sci, old_pos);
-		ind_pos = sci_get_line_indent_position(doc->sci, line);
+		old_pos = sci_get_current_position(doc->editor->sci);
+		line = sci_get_line_from_position(doc->editor->sci, old_pos);
+		ind_pos = sci_get_line_indent_position(doc->editor->sci, line);
 		/* when using tabs increase cur pos by 1, when using space increase it by tab_width */
-		step = (doc->use_tabs) ? 1 : editor_prefs.tab_width;
+		step = (doc->editor->use_tabs) ? 1 : editor_prefs.tab_width;
 		new_pos = (old_pos > ind_pos) ? old_pos + step : old_pos;
 
-		sci_set_current_position(doc->sci, ind_pos, TRUE);
-		sci_cmd(doc->sci, SCI_TAB);
-		sci_set_current_position(doc->sci, new_pos, TRUE);
+		sci_set_current_position(doc->editor->sci, ind_pos, TRUE);
+		sci_cmd(doc->editor->sci, SCI_TAB);
+		sci_set_current_position(doc->editor->sci, new_pos, TRUE);
 	}
 }
 
@@ -1725,31 +1725,31 @@ on_menu_decrease_indent1_activate      (GtkMenuItem     *menuitem,
 	if (doc == NULL)
 		return;
 
-	if (sci_get_lines_selected(doc->sci) > 1)
+	if (sci_get_lines_selected(doc->editor->sci) > 1)
 	{
-		sci_cmd(doc->sci, SCI_BACKTAB);
+		sci_cmd(doc->editor->sci, SCI_BACKTAB);
 	}
 	else
 	{
 		gint line, ind_pos, old_pos, new_pos, step, indent;
 
-		old_pos = sci_get_current_position(doc->sci);
-		line = sci_get_line_from_position(doc->sci, old_pos);
-		ind_pos = sci_get_line_indent_position(doc->sci, line);
-		step = (doc->use_tabs) ? 1 : editor_prefs.tab_width;
+		old_pos = sci_get_current_position(doc->editor->sci);
+		line = sci_get_line_from_position(doc->editor->sci, old_pos);
+		ind_pos = sci_get_line_indent_position(doc->editor->sci, line);
+		step = (doc->editor->use_tabs) ? 1 : editor_prefs.tab_width;
 		new_pos = (old_pos >= ind_pos) ? old_pos - step : old_pos;
 
-		if (ind_pos == sci_get_position_from_line(doc->sci, line))
+		if (ind_pos == sci_get_position_from_line(doc->editor->sci, line))
 			return;
 
-		sci_set_current_position(doc->sci, ind_pos, TRUE);
-		indent = sci_get_line_indentation(doc->sci, line);
+		sci_set_current_position(doc->editor->sci, ind_pos, TRUE);
+		indent = sci_get_line_indentation(doc->editor->sci, line);
 		indent -= editor_prefs.tab_width;
 		if (indent < 0)
 			indent = 0;
-		sci_set_line_indentation(doc->sci, line, indent);
+		sci_set_line_indentation(doc->editor->sci, line, indent);
 
-		sci_set_current_position(doc->sci, new_pos, TRUE);
+		sci_set_current_position(doc->editor->sci, new_pos, TRUE);
 	}
 }
 
@@ -1923,8 +1923,8 @@ on_remove_markers1_activate            (GtkMenuItem     *menuitem,
 	if (doc == NULL)
 		return;
 
-	sci_marker_delete_all(doc->sci, 0);	/* delete the yellow tag marker */
-	sci_marker_delete_all(doc->sci, 1);	/* delete user markers */
+	sci_marker_delete_all(doc->editor->sci, 0);	/* delete the yellow tag marker */
+	sci_marker_delete_all(doc->editor->sci, 1);	/* delete user markers */
 }
 
 
@@ -1947,10 +1947,10 @@ on_context_action1_activate            (GtkMenuItem     *menuitem,
 	if (doc == NULL)
 		return;
 
-	if (sci_can_copy(doc->sci))
+	if (sci_can_copy(doc->editor->sci))
 	{	/* take selected text if there is a selection */
-		word = g_malloc(sci_get_selected_text_length(doc->sci) + 1);
-		sci_get_selected_text(doc->sci, word);
+		word = g_malloc(sci_get_selected_text_length(doc->editor->sci) + 1);
+		sci_get_selected_text(doc->editor->sci, word);
 	}
 	else
 	{
@@ -2074,7 +2074,7 @@ on_tabs1_activate                      (GtkMenuItem     *menuitem,
 	if (doc == NULL || ignore_callback)
 		return;
 
-	editor_set_use_tabs(doc, TRUE);
+	editor_set_use_tabs(doc->editor, TRUE);
 	ui_update_statusbar(doc, -1);
 }
 
@@ -2088,7 +2088,7 @@ on_spaces1_activate                    (GtkMenuItem     *menuitem,
 	if (doc == NULL || ignore_callback)
 		return;
 
-	editor_set_use_tabs(doc, FALSE);
+	editor_set_use_tabs(doc->editor, FALSE);
 	ui_update_statusbar(doc, -1);
 }
 
@@ -2153,7 +2153,7 @@ on_line_breaking1_activate             (GtkMenuItem     *menuitem,
 	doc = document_get_current();
 	g_return_if_fail(doc != NULL);
 
-	doc->line_breaking = !doc->line_breaking;
+	doc->editor->line_breaking = !doc->editor->line_breaking;
 }
 
 void

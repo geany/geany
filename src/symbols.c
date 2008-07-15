@@ -28,6 +28,7 @@
  * matching filetype is first loaded.
  */
 
+#include "SciLexer.h"
 #include "geany.h"
 
 #include <ctype.h>
@@ -48,6 +49,7 @@
 #include "navqueue.h"
 #include "ui_utils.h"
 #include "editor.h"
+#include "sciwrappers.h"
 
 
 const guint TM_GLOBAL_TYPE_MASK =
@@ -1225,6 +1227,229 @@ gboolean symbols_goto_tag(const gchar *name, gboolean definition)
 	else
 		ui_set_statusbar(FALSE, _("Definition of \"%s\" not found."), name);
 	return FALSE;
+}
+
+
+/* This could perhaps be improved to check for #if, class etc. */
+static gint get_function_fold_number(GeanyDocument *doc)
+{
+	/* for Java the functions are always one fold level above the class scope */
+	if (FILETYPE_ID(doc->file_type) == GEANY_FILETYPES_JAVA)
+		return SC_FOLDLEVELBASE + 1;
+	else
+		return SC_FOLDLEVELBASE;
+}
+
+
+/* Should be used only with symbols_get_current_function. */
+static gboolean current_function_changed(GeanyDocument *doc, gint cur_line, gint fold_level)
+{
+	static gint old_line = -2;
+	static GeanyDocument *old_doc = NULL;
+	static gint old_fold_num = -1;
+	const gint fold_num = fold_level & SC_FOLDLEVELNUMBERMASK;
+	gboolean ret;
+
+	/* check if the cached line and file index have changed since last time: */
+	if (doc == NULL || doc != old_doc)
+		ret = TRUE;
+	else
+	if (cur_line == old_line)
+		ret = FALSE;
+	else
+	{
+		/* if the line has only changed by 1 */
+		if (abs(cur_line - old_line) == 1)
+		{
+			const gint fn_fold =
+				get_function_fold_number(doc);
+			/* It's the same function if the fold number hasn't changed, or both the new
+			 * and old fold numbers are above the function fold number. */
+			gboolean same =
+				fold_num == old_fold_num ||
+				(old_fold_num > fn_fold && fold_num > fn_fold);
+
+			ret = ! same;
+		}
+		else ret = TRUE;
+	}
+
+	/* record current line and file index for next time */
+	old_line = cur_line;
+	old_doc = doc;
+	old_fold_num = fold_num;
+	return ret;
+}
+
+
+/* Parse the function name up to 2 lines before tag_line.
+ * C++ like syntax should be parsed by parse_cpp_function_at_line, otherwise the return
+ * type or argument names can be confused with the function name. */
+static gchar *parse_function_at_line(ScintillaObject *sci, gint tag_line)
+{
+	gint start, end, max_pos;
+	gchar *cur_tag;
+	gint fn_style;
+
+	switch (sci_get_lexer(sci))
+	{
+		case SCLEX_RUBY:	fn_style = SCE_RB_DEFNAME; break;
+		case SCLEX_PYTHON:	fn_style = SCE_P_DEFNAME; break;
+		default: fn_style = SCE_C_IDENTIFIER;	/* several lexers use SCE_C_IDENTIFIER */
+	}
+	start = sci_get_position_from_line(sci, tag_line - 2);
+	max_pos = sci_get_position_from_line(sci, tag_line + 1);
+	while (sci_get_style_at(sci, start) != fn_style
+		&& start < max_pos) start++;
+
+	end = start;
+	while (sci_get_style_at(sci, end) == fn_style
+		&& end < max_pos) end++;
+
+	if (start == end) return NULL;
+	cur_tag = g_malloc(end - start + 1);
+	sci_get_text_range(sci, start, end, cur_tag);
+	return cur_tag;
+}
+
+
+/* Parse the function name */
+static gchar *parse_cpp_function_at_line(ScintillaObject *sci, gint tag_line)
+{
+	gint start, end, first_pos, max_pos;
+	gint tmp;
+	gchar c;
+	gchar *cur_tag;
+
+	first_pos = end = sci_get_position_from_line(sci, tag_line);
+	max_pos = sci_get_position_from_line(sci, tag_line + 1);
+	tmp = 0;
+	/* goto the begin of function body */
+	while (end < max_pos &&
+		(tmp = sci_get_char_at(sci, end)) != '{' &&
+		tmp != 0) end++;
+	if (tmp == 0) end --;
+
+	/* go back to the end of function identifier */
+	while (end > 0 && end > first_pos - 500 &&
+		(tmp = sci_get_char_at(sci, end)) != '(' &&
+		tmp != 0) end--;
+	end--;
+	if (end < 0) end = 0;
+
+	/* skip whitespaces between identifier and ( */
+	while (end > 0 && isspace(sci_get_char_at(sci, end))) end--;
+
+	start = end;
+	c = 0;
+	/* Use tmp to find SCE_C_IDENTIFIER or SCE_C_GLOBALCLASS chars */
+	while (start >= 0 && ((tmp = sci_get_style_at(sci, start)) == SCE_C_IDENTIFIER
+		 ||  tmp == SCE_C_GLOBALCLASS
+		 || (c = sci_get_char_at(sci, start)) == '~'
+		 ||  c == ':'))
+		start--;
+	if (start != 0 && start < end) start++;	/* correct for last non-matching char */
+
+	if (start == end) return NULL;
+	cur_tag = g_malloc(end - start + 2);
+	sci_get_text_range(sci, start, end + 1, cur_tag);
+	return cur_tag;
+}
+
+
+/* Sets *tagname to point at the current function or tag name.
+ * If doc is NULL, reset the cached current tag data to ensure it will be reparsed on the next
+ * call to this function.
+ * Returns: line number of the current tag, or -1 if unknown. */
+gint symbols_get_current_function(GeanyDocument *doc, const gchar **tagname)
+{
+	static gint tag_line = -1;
+	static gchar *cur_tag = NULL;
+	gint line;
+	gint fold_level;
+	TMWorkObject *tm_file;
+
+	if (doc == NULL)	/* reset current function */
+	{
+		current_function_changed(NULL, -1, -1);
+		g_free(cur_tag);
+		cur_tag = g_strdup(_("unknown"));
+		if (tagname != NULL)
+			*tagname = cur_tag;
+		tag_line = -1;
+		return tag_line;
+	}
+
+	line = sci_get_current_line(doc->editor->sci);
+	fold_level = sci_get_fold_level(doc->editor->sci, line);
+	/* check if the cached line and file index have changed since last time: */
+	if (! current_function_changed(doc, line, fold_level))
+	{
+		/* we can assume same current function as before */
+		*tagname = cur_tag;
+		return tag_line;
+	}
+	g_free(cur_tag); /* free the old tag, it will be replaced. */
+
+	/* if line is at base fold level, we're not in a function */
+	if ((fold_level & SC_FOLDLEVELNUMBERMASK) == SC_FOLDLEVELBASE)
+	{
+		cur_tag = g_strdup(_("unknown"));
+		*tagname = cur_tag;
+		tag_line = -1;
+		return tag_line;
+	}
+	tm_file = doc->tm_file;
+
+	/* if the document has no changes, get the previous function name from TM */
+	if(! doc->changed && tm_file != NULL && tm_file->tags_array != NULL)
+	{
+		const TMTag *tag = (const TMTag*) tm_get_current_function(tm_file->tags_array, line);
+
+		if (tag != NULL)
+		{
+			gchar *tmp;
+			tmp = tag->atts.entry.scope;
+			cur_tag = tmp ? g_strconcat(tmp, "::", tag->name, NULL) : g_strdup(tag->name);
+			*tagname = cur_tag;
+			tag_line = tag->atts.entry.line;
+			return tag_line;
+		}
+	}
+
+	/* parse the current function name here because TM line numbers may have changed,
+	 * and it would take too long to reparse the whole file. */
+	if (doc->file_type != NULL && doc->file_type->id != GEANY_FILETYPES_NONE)
+	{
+		const gint fn_fold = get_function_fold_number(doc);
+
+		tag_line = line;
+		do	/* find the top level fold point */
+		{
+			tag_line = sci_get_fold_parent(doc->editor->sci, tag_line);
+			fold_level = sci_get_fold_level(doc->editor->sci, tag_line);
+		} while (tag_line >= 0 &&
+			(fold_level & SC_FOLDLEVELNUMBERMASK) != fn_fold);
+
+		if (tag_line >= 0)
+		{
+			if (sci_get_lexer(doc->editor->sci) == SCLEX_CPP)
+				cur_tag = parse_cpp_function_at_line(doc->editor->sci, tag_line);
+			else
+				cur_tag = parse_function_at_line(doc->editor->sci, tag_line);
+
+			if (cur_tag != NULL)
+			{
+				*tagname = cur_tag;
+				return tag_line;
+			}
+		}
+	}
+
+	cur_tag = g_strdup(_("unknown"));
+	*tagname = cur_tag;
+	tag_line = -1;
+	return tag_line;
 }
 
 

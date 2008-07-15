@@ -256,7 +256,7 @@ void search_find_selection(GeanyDocument *doc, gboolean search_backwards)
 		setup_find_next(s);	/* allow find next/prev */
 
 		if (document_find_text(doc, s, 0, search_backwards, FALSE, NULL) > -1)
-			editor_display_current_line(doc, 0.3F);
+			editor_display_current_line(doc->editor, 0.3F);
 		g_free(s);
 	}
 }
@@ -807,15 +807,15 @@ static gint search_mark(GeanyDocument *doc, const gchar *search_text, gint flags
 	g_return_val_if_fail(doc != NULL, 0);
 
 	ttf.chrg.cpMin = 0;
-	ttf.chrg.cpMax = sci_get_length(doc->sci);
+	ttf.chrg.cpMax = sci_get_length(doc->editor->sci);
 	ttf.lpstrText = (gchar *)search_text;
 	while (1)
 	{
-		pos = sci_find_text(doc->sci, flags, &ttf);
+		pos = sci_find_text(doc->editor->sci, flags, &ttf);
 		if (pos == -1) break;
 
-		line = sci_get_line_from_position(doc->sci, pos);
-		sci_set_marker_at_line(doc->sci, line, TRUE, 1);
+		line = sci_get_line_from_position(doc->editor->sci, pos);
+		sci_set_marker_at_line(doc->editor->sci, line, TRUE, 1);
 
 		ttf.chrg.cpMin = ttf.chrgText.cpMax + 1;
 		count++;
@@ -1367,13 +1367,13 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 	short_file_name = g_path_get_basename(DOC_FILENAME(doc));
 
 	ttf.chrg.cpMin = 0;
-	ttf.chrg.cpMax = sci_get_length(doc->sci);
+	ttf.chrg.cpMax = sci_get_length(doc->editor->sci);
 	ttf.lpstrText = (gchar *)search_text;
 	while (1)
 	{
 		gint pos, line, start, find_len;
 
-		pos = sci_find_text(doc->sci, flags, &ttf);
+		pos = sci_find_text(doc->editor->sci, flags, &ttf);
 		if (pos == -1)
 			break;	/* no more matches */
 		find_len = ttf.chrgText.cpMax - ttf.chrgText.cpMin;
@@ -1381,8 +1381,8 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 			break;	/* Ignore regex ^ or $ */
 
 		count++;
-		line = sci_get_line_from_position(doc->sci, pos);
-		buffer = sci_get_line(doc->sci, line);
+		line = sci_get_line_from_position(doc->editor->sci, pos);
+		buffer = sci_get_line(doc->editor->sci, line);
 		msgwin_msg_add_fmt(COLOR_BLACK, line + 1, doc,
 			"%s:%d : %s", short_file_name, line + 1, g_strstrip(buffer));
 		g_free(buffer);

@@ -816,9 +816,9 @@ static gboolean check_snippet_completion(guint keyval, guint state)
 		GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 		/* keybinding only valid when scintilla widget has focus */
-		if (doc != NULL && focusw == GTK_WIDGET(doc->sci))
+		if (doc != NULL && focusw == GTK_WIDGET(doc->editor->sci))
 		{
-			ScintillaObject *sci = doc->sci;
+			ScintillaObject *sci = doc->editor->sci;
 			gint pos = sci_get_current_position(sci);
 
 			if (editor_prefs.complete_snippets)
@@ -1174,9 +1174,9 @@ static gboolean check_current_word(void)
 	if (doc == NULL)
 		return FALSE;
 
-	pos = sci_get_current_position(doc->sci);
+	pos = sci_get_current_position(doc->editor->sci);
 
-	editor_find_current_word(doc->sci, pos,
+	editor_find_current_word(doc->editor->sci, pos,
 		editor_info.current_word, GEANY_MAX_WORD_LENGTH, NULL);
 
 	if (*editor_info.current_word == 0)
@@ -1209,7 +1209,7 @@ static void cb_func_switch_action(guint key_id)
 		{
 			GeanyDocument *doc = document_get_current();
 			if (doc != NULL)
-				gtk_widget_grab_focus(GTK_WIDGET(doc->sci));
+				gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
 			break;
 		}
 		case GEANY_KEYS_FOCUS_SCRIBBLE:
@@ -1284,7 +1284,7 @@ static void cb_func_move_tab(guint key_id)
 	if (doc == NULL)
 		return;
 
-	sci = GTK_WIDGET(doc->sci);
+	sci = GTK_WIDGET(doc->editor->sci);
 
 	switch (key_id)
 	{
@@ -1329,15 +1329,15 @@ static void goto_matching_brace(GeanyDocument *doc)
 	if (doc == NULL)
 		return;
 
-	pos = sci_get_current_position(doc->sci);
-	if (! utils_isbrace(sci_get_char_at(doc->sci, pos), TRUE))
+	pos = sci_get_current_position(doc->editor->sci);
+	if (! utils_isbrace(sci_get_char_at(doc->editor->sci, pos), TRUE))
 		pos--; /* set pos to the brace */
 
-	new_pos = sci_find_bracematch(doc->sci, pos);
+	new_pos = sci_find_bracematch(doc->editor->sci, pos);
 	if (new_pos != -1)
 	{	/* set the cursor at the brace */
-		sci_set_current_position(doc->sci, new_pos, FALSE);
-		editor_display_current_line(doc, 0.5F);
+		sci_set_current_position(doc->editor->sci, new_pos, FALSE);
+		editor_display_current_line(doc->editor, 0.5F);
 	}
 }
 
@@ -1361,10 +1361,10 @@ static void cb_func_clipboard(guint key_id)
 			on_paste1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_CLIPBOARD_COPYLINE:
-			sci_cmd(doc->sci, SCI_LINECOPY);
+			sci_cmd(doc->editor->sci, SCI_LINECOPY);
 			break;
 		case GEANY_KEYS_CLIPBOARD_CUTLINE:
-			sci_cmd(doc->sci, SCI_LINECUT);
+			sci_cmd(doc->editor->sci, SCI_LINECUT);
 			break;
 	}
 }
@@ -1379,7 +1379,7 @@ static void cb_func_goto_action(guint key_id)
 	if (doc == NULL)
 		return;
 
-	cur_line = sci_get_current_line(doc->sci);
+	cur_line = sci_get_current_line(doc->editor->sci);
 
 	switch (key_id)
 	{
@@ -1397,30 +1397,30 @@ static void cb_func_goto_action(guint key_id)
 			return;
 		case GEANY_KEYS_GOTO_TOGGLEMARKER:
 		{
-			gboolean set = sci_is_marker_set_at_line(doc->sci, cur_line, 1);
+			gboolean set = sci_is_marker_set_at_line(doc->editor->sci, cur_line, 1);
 
-			sci_set_marker_at_line(doc->sci, cur_line, ! set, 1);
+			sci_set_marker_at_line(doc->editor->sci, cur_line, ! set, 1);
 			return;
 		}
 		case GEANY_KEYS_GOTO_NEXTMARKER:
 		{
-			gint mline = sci_marker_next(doc->sci, cur_line + 1, 1 << 1, TRUE);
+			gint mline = sci_marker_next(doc->editor->sci, cur_line + 1, 1 << 1, TRUE);
 
 			if (mline != -1)
 			{
-				sci_set_current_line(doc->sci, mline);
-				editor_display_current_line(doc, 0.5F);
+				sci_set_current_line(doc->editor->sci, mline);
+				editor_display_current_line(doc->editor, 0.5F);
 			}
 			return;
 		}
 		case GEANY_KEYS_GOTO_PREVIOUSMARKER:
 		{
-			gint mline = sci_marker_previous(doc->sci, cur_line - 1, 1 << 1, TRUE);
+			gint mline = sci_marker_previous(doc->editor->sci, cur_line - 1, 1 << 1, TRUE);
 
 			if (mline != -1)
 			{
-				sci_set_current_line(doc->sci, mline);
-				editor_display_current_line(doc, 0.5F);
+				sci_set_current_line(doc->editor->sci, mline);
+				editor_display_current_line(doc->editor, 0.5F);
 			}
 			return;
 		}
@@ -1434,7 +1434,7 @@ static void cb_func_goto_action(guint key_id)
 			return;
 	}
 	/* only check editor-sensitive keybindings when editor has focus */
-	if (gtk_window_get_focus(GTK_WINDOW(main_widgets.window)) != GTK_WIDGET(doc->sci))
+	if (gtk_window_get_focus(GTK_WINDOW(main_widgets.window)) != GTK_WIDGET(doc->editor->sci))
 	{
 		ignore_keybinding = TRUE;
 		return;
@@ -1442,10 +1442,10 @@ static void cb_func_goto_action(guint key_id)
 	switch (key_id)
 	{
 		case GEANY_KEYS_GOTO_LINESTART:
-			sci_cmd(doc->sci, editor_prefs.smart_home_key ? SCI_VCHOME : SCI_HOME);
+			sci_cmd(doc->editor->sci, editor_prefs.smart_home_key ? SCI_VCHOME : SCI_HOME);
 			break;
 		case GEANY_KEYS_GOTO_LINEEND:
-			sci_cmd(doc->sci, SCI_LINEEND);
+			sci_cmd(doc->editor->sci, SCI_LINEEND);
 			break;
 	}
 }
@@ -1479,7 +1479,7 @@ static void cb_func_editor_action(guint key_id)
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	/* edit keybindings only valid when scintilla widget has focus */
-	if (doc == NULL || focusw != GTK_WIDGET(doc->sci))
+	if (doc == NULL || focusw != GTK_WIDGET(doc->editor->sci))
 		return;
 
 	switch (key_id)
@@ -1491,31 +1491,31 @@ static void cb_func_editor_action(guint key_id)
 			on_redo1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_EDITOR_SCROLLTOLINE:
-			editor_scroll_to_line(doc->sci, -1, 0.5F);
+			editor_scroll_to_line(doc->editor->sci, -1, 0.5F);
 			break;
 		case GEANY_KEYS_EDITOR_SCROLLLINEUP:
-			sci_cmd(doc->sci, SCI_LINESCROLLUP);
+			sci_cmd(doc->editor->sci, SCI_LINESCROLLUP);
 			break;
 		case GEANY_KEYS_EDITOR_SCROLLLINEDOWN:
-			sci_cmd(doc->sci, SCI_LINESCROLLDOWN);
+			sci_cmd(doc->editor->sci, SCI_LINESCROLLDOWN);
 			break;
 		case GEANY_KEYS_EDITOR_DUPLICATELINE:
-			duplicate_lines(doc->sci);
+			duplicate_lines(doc->editor->sci);
 			break;
 		case GEANY_KEYS_EDITOR_DELETELINE:
-			delete_lines(doc->sci);
+			delete_lines(doc->editor->sci);
 			break;
 		case GEANY_KEYS_EDITOR_TRANSPOSELINE:
-			sci_cmd(doc->sci, SCI_LINETRANSPOSE);
+			sci_cmd(doc->editor->sci, SCI_LINETRANSPOSE);
 			break;
 		case GEANY_KEYS_EDITOR_AUTOCOMPLETE:
-			editor_start_auto_complete(doc, sci_get_current_position(doc->sci), TRUE);
+			editor_start_auto_complete(doc, sci_get_current_position(doc->editor->sci), TRUE);
 			break;
 		case GEANY_KEYS_EDITOR_CALLTIP:
 			editor_show_calltip(doc, -1);
 			break;
 		case GEANY_KEYS_EDITOR_MACROLIST:
-			editor_show_macro_list(doc->sci);
+			editor_show_macro_list(doc->editor->sci);
 			break;
 		case GEANY_KEYS_EDITOR_CONTEXTACTION:
 			if (check_current_word())
@@ -1530,10 +1530,10 @@ static void cb_func_editor_action(guint key_id)
 			switch (kb->key)
 			{
 				case GDK_space:
-					sci_add_text(doc->sci, " ");
+					sci_add_text(doc->editor->sci, " ");
 					break;
 				case GDK_Tab:
-					sci_cmd(doc->sci, SCI_TAB);
+					sci_cmd(doc->editor->sci, SCI_TAB);
 					break;
 				default:
 					break;
@@ -1551,7 +1551,7 @@ static void cb_func_format_action(guint key_id)
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	/* keybindings only valid when scintilla widget has focus */
-	if (doc == NULL || focusw != GTK_WIDGET(doc->sci))
+	if (doc == NULL || focusw != GTK_WIDGET(doc->editor->sci))
 		return;
 
 	switch (key_id)
@@ -1616,7 +1616,7 @@ static void cb_func_select_action(guint key_id)
 	}
 
 	/* keybindings only valid when scintilla widget has focus */
-	if (doc == NULL || focusw != GTK_WIDGET(doc->sci))
+	if (doc == NULL || focusw != GTK_WIDGET(doc->editor->sci))
 		return;
 
 	switch (key_id)
@@ -1625,13 +1625,13 @@ static void cb_func_select_action(guint key_id)
 			on_menu_select_all1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_SELECT_WORD:
-			editor_select_word(doc->sci);
+			editor_select_word(doc->editor->sci);
 			break;
 		case GEANY_KEYS_SELECT_LINE:
-			editor_select_lines(doc->sci, FALSE);
+			editor_select_lines(doc->editor->sci, FALSE);
 			break;
 		case GEANY_KEYS_SELECT_PARAGRAPH:
-			editor_select_paragraph(doc->sci);
+			editor_select_paragraph(doc->editor->sci);
 			break;
 	}
 }
@@ -1669,8 +1669,8 @@ static void cb_func_document_action(guint key_id)
 		case GEANY_KEYS_DOCUMENT_TOGGLEFOLD:
 			if (editor_prefs.folding)
 			{
-				gint line = sci_get_current_line(doc->sci);
-				sci_toggle_fold(doc->sci, line);
+				gint line = sci_get_current_line(doc->editor->sci);
+				sci_toggle_fold(doc->editor->sci, line);
 				break;
 			}
 	}
@@ -1684,12 +1684,12 @@ static void cb_func_insert_action(guint key_id)
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	/* keybindings only valid when scintilla widget has focus */
-	if (doc == NULL || focusw != GTK_WIDGET(doc->sci)) return;
+	if (doc == NULL || focusw != GTK_WIDGET(doc->editor->sci)) return;
 
 	switch (key_id)
 	{
 		case GEANY_KEYS_INSERT_ALTWHITESPACE:
-			editor_insert_alternative_whitespace(doc);
+			editor_insert_alternative_whitespace(doc->editor);
 			break;
 		case GEANY_KEYS_INSERT_DATE:
 			gtk_menu_item_activate(GTK_MENU_ITEM(lookup_widget(main_widgets.window, "insert_date_custom1")));

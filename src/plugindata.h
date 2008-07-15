@@ -36,12 +36,12 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 77;
+static const gint api_version = 78;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
  * are only appended, as this doesn't affect existing fields. */
-static const gint abi_version = 41;
+static const gint abi_version = 42;
 
 /** Check the plugin can be loaded by Geany.
  * This performs runtime checks that try to ensure:
@@ -425,12 +425,16 @@ typedef struct NavQueueFuncs
 NavQueueFuncs;
 
 
+struct GeanyEditor;
+
 /* See editor.h */
 typedef struct EditorFuncs
 {
-	void	(*set_indicator) (struct GeanyDocument *doc, gint start, gint end);
-	void	(*set_indicator_on_line) (struct GeanyDocument *doc, gint line);
-	void	(*clear_indicators) (struct GeanyDocument *doc);
+	void	(*set_indicator) (struct GeanyEditor *editor, gint start, gint end);
+	void	(*set_indicator_on_line) (struct GeanyEditor *editor, gint line);
+	void	(*clear_indicators) (struct GeanyEditor *editor);
+	/* Remember to convert any GeanyDocument or ScintillaObject pointers in any
+	 * appended functions to GeanyEditor pointers. */
 }
 EditorFuncs;
 

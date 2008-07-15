@@ -99,6 +99,21 @@ typedef struct GeanyEditorPrefs
 extern GeanyEditorPrefs editor_prefs;
 
 
+/** Editor-owned fields for each document. */
+typedef struct GeanyEditor
+{
+	GeanyDocument	*document;		/**< The document associated with the editor. */
+	ScintillaObject	*sci;			/**< The Scintilla editor @c GtkWidget. */
+	gboolean		 line_wrapping;	/**< @c TRUE if line wrapping is enabled. */
+	gboolean		 auto_indent;	/**< @c TRUE if auto-indentation is enabled. */
+	/** Percentage to scroll view by on paint, if positive. */
+	gfloat			 scroll_percent;
+	gboolean		 use_tabs;		/**< @c TRUE if tabs are used for indentation. */
+	gboolean		 line_breaking;	/**< Whether to split long lines as you type. */
+}
+GeanyEditor;
+
+
 typedef struct
 {
 	gchar	*current_word;	/* holds word under the mouse or keyboard cursor */
@@ -110,7 +125,7 @@ extern EditorInfo editor_info;
 
 
 
-ScintillaObject *editor_create_new_sci(GeanyDocument *doc);
+GeanyEditor *editor_create(GeanyDocument *doc);
 
 void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer user_data);
 
@@ -140,7 +155,7 @@ gint editor_lexer_get_type_keyword_idx(gint lexer);
 
 void editor_insert_multiline_comment(GeanyDocument *doc);
 
-void editor_insert_alternative_whitespace(GeanyDocument *doc);
+void editor_insert_alternative_whitespace(GeanyEditor *editor);
 
 void editor_smart_line_indentation(GeanyDocument *doc, gint pos);
 
@@ -150,7 +165,7 @@ gboolean editor_line_in_view(ScintillaObject *sci, gint line);
 
 void editor_scroll_to_line(ScintillaObject *sci, gint line, gfloat percent_of_view);
 
-void editor_display_current_line(GeanyDocument *doc, gfloat percent_of_view);
+void editor_display_current_line(GeanyEditor *editor, gfloat percent_of_view);
 
 void editor_finalize(void);
 
@@ -171,13 +186,13 @@ void editor_select_lines(ScintillaObject *sci, gboolean extra_line);
 
 void editor_select_paragraph(ScintillaObject *sci);
 
-void editor_set_indicator_on_line(GeanyDocument *doc, gint line);
+void editor_set_indicator_on_line(GeanyEditor *editor, gint line);
 
-void editor_set_indicator(GeanyDocument *doc, gint start, gint end);
+void editor_set_indicator(GeanyEditor *editor, gint start, gint end);
 
-void editor_clear_indicators(GeanyDocument *doc);
+void editor_clear_indicators(GeanyEditor *editor);
 
-void editor_set_font(GeanyDocument *doc, const gchar *font_name, gint size);
+void editor_set_font(GeanyEditor *editor, const gchar *font);
 
 const gchar *editor_get_eol_char_name(GeanyDocument *doc);
 
@@ -201,10 +216,10 @@ void editor_ensure_final_newline(GeanyDocument *doc);
 
 void editor_insert_color(GeanyDocument *doc, const gchar *colour);
 
-void editor_set_use_tabs(GeanyDocument *doc, gboolean use_tabs);
+void editor_set_use_tabs(GeanyEditor *editor, gboolean use_tabs);
 
-void editor_set_line_wrapping(GeanyDocument *doc, gboolean wrap);
+void editor_set_line_wrapping(GeanyEditor *editor, gboolean wrap);
 
-gboolean editor_goto_pos(GeanyDocument *doc, gint pos, gboolean mark);
+gboolean editor_goto_pos(GeanyEditor *editor, gint pos, gboolean mark);
 
 #endif
