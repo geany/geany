@@ -428,7 +428,7 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 
 	ui_document_buttons_update();
 
-	gtk_widget_grab_focus(this->editor->sci);
+	gtk_widget_grab_focus(GTK_WIDGET(this->editor->sci));
 
 	this->is_valid = TRUE;	/* do this last to prevent UI updating with NULL items. */
 	return this;
