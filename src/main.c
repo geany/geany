@@ -308,31 +308,7 @@ static void main_init(void)
 	main_widgets.editor_menu = create_edit_menu1();
 	main_widgets.tools_menu = lookup_widget(main_widgets.window, "tools1_menu");
 
-	ui_widgets.statusbar = lookup_widget(main_widgets.window, "statusbar");
 	ui_widgets.toolbar_menu = create_toolbar_popup_menu1();
-	ui_widgets.print_page_setup = lookup_widget(main_widgets.window, "page_setup1");
-	ui_widgets.popup_goto_items[0] = lookup_widget(main_widgets.editor_menu, "goto_tag_definition1");
-	ui_widgets.popup_goto_items[1] = lookup_widget(main_widgets.editor_menu, "goto_tag_declaration1");
-	ui_widgets.popup_goto_items[2] = lookup_widget(main_widgets.editor_menu, "find_usage1");
-	ui_widgets.popup_copy_items[0] = lookup_widget(main_widgets.editor_menu, "cut1");
-	ui_widgets.popup_copy_items[1] = lookup_widget(main_widgets.editor_menu, "copy1");
-	ui_widgets.popup_copy_items[2] = lookup_widget(main_widgets.editor_menu, "delete1");
-	ui_widgets.menu_copy_items[0] = lookup_widget(main_widgets.window, "menu_cut1");
-	ui_widgets.menu_copy_items[1] = lookup_widget(main_widgets.window, "menu_copy1");
-	ui_widgets.menu_copy_items[2] = lookup_widget(main_widgets.window, "menu_delete1");
-	ui_widgets.menu_insert_include_items[0] = lookup_widget(main_widgets.editor_menu, "insert_include1");
-	ui_widgets.menu_insert_include_items[1] = lookup_widget(main_widgets.window, "insert_include2");
-	ui_widgets.save_buttons[0] = lookup_widget(main_widgets.window, "menu_save1");
-	ui_widgets.save_buttons[1] = lookup_widget(main_widgets.window, "toolbutton10");
-	ui_widgets.save_buttons[2] = lookup_widget(main_widgets.window, "menu_save_all1");
-	ui_widgets.save_buttons[3] = lookup_widget(main_widgets.window, "toolbutton22");
-	ui_widgets.redo_items[0] = lookup_widget(main_widgets.editor_menu, "redo1");
-	ui_widgets.redo_items[1] = lookup_widget(main_widgets.window, "menu_redo2");
-	ui_widgets.redo_items[2] = lookup_widget(main_widgets.window, "toolbutton_redo");
-	ui_widgets.undo_items[0] = lookup_widget(main_widgets.editor_menu, "undo1");
-	ui_widgets.undo_items[1] = lookup_widget(main_widgets.window, "menu_undo2");
-	ui_widgets.undo_items[2] = lookup_widget(main_widgets.window, "toolbutton_undo");
-
 	ui_init();
 
 	/* set widget names for matching with .gtkrc-2.0 */
@@ -344,7 +320,6 @@ static void main_init(void)
 	/* hide Page setup menu item, it isn't supported with non-GTK printing */
 	gtk_widget_hide(ui_widgets.print_page_setup);
 #endif
-
 }
 
 

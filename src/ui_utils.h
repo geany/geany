@@ -109,13 +109,6 @@ typedef struct UIWidgets
 	GtkWidget	*recent_files_menubar;
 	GtkWidget	*recent_files_toolbar;
 	GtkWidget	*print_page_setup;
-	GtkWidget	*menu_insert_include_items[2];
-	GtkWidget	*popup_goto_items[3];
-	GtkWidget	*popup_copy_items[3];
-	GtkWidget	*menu_copy_items[3];
-	GtkWidget	*redo_items[3];
-	GtkWidget	*undo_items[3];
-	GtkWidget	*save_buttons[4];
 
 	/* dialogs */
 	GtkWidget	*open_colorsel;

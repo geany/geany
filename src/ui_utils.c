@@ -59,7 +59,14 @@ UIWidgets		ui_widgets;
 static struct
 {
 	/* pointers to widgets only sensitive when there is at least one document */
-	GPtrArray *document_buttons;
+	GPtrArray	*document_buttons;
+	GtkWidget	*menu_insert_include_items[2];
+	GtkWidget	*popup_goto_items[3];
+	GtkWidget	*popup_copy_items[3];
+	GtkWidget	*menu_copy_items[3];
+	GtkWidget	*redo_items[3];
+	GtkWidget	*undo_items[3];
+	GtkWidget	*save_buttons[4];
 }
 widgets;
 
@@ -303,13 +310,13 @@ void ui_update_popup_reundo_items(GeanyDocument *doc)
 	}
 
 	/* index 0 is the popup menu, 1 is the menubar, 2 is the toolbar */
-	gtk_widget_set_sensitive(ui_widgets.undo_items[0], enable_undo);
-	gtk_widget_set_sensitive(ui_widgets.undo_items[1], enable_undo);
-	gtk_widget_set_sensitive(ui_widgets.undo_items[2], enable_undo);
+	gtk_widget_set_sensitive(widgets.undo_items[0], enable_undo);
+	gtk_widget_set_sensitive(widgets.undo_items[1], enable_undo);
+	gtk_widget_set_sensitive(widgets.undo_items[2], enable_undo);
 
-	gtk_widget_set_sensitive(ui_widgets.redo_items[0], enable_redo);
-	gtk_widget_set_sensitive(ui_widgets.redo_items[1], enable_redo);
-	gtk_widget_set_sensitive(ui_widgets.redo_items[2], enable_redo);
+	gtk_widget_set_sensitive(widgets.redo_items[0], enable_redo);
+	gtk_widget_set_sensitive(widgets.redo_items[1], enable_redo);
+	gtk_widget_set_sensitive(widgets.redo_items[2], enable_redo);
 }
 
 
@@ -323,16 +330,16 @@ void ui_update_popup_copy_items(GeanyDocument *doc)
 	else
 		enable = sci_can_copy(doc->editor->sci);
 
-	for (i = 0; i < G_N_ELEMENTS(ui_widgets.popup_copy_items); i++)
-		gtk_widget_set_sensitive(ui_widgets.popup_copy_items[i], enable);
+	for (i = 0; i < G_N_ELEMENTS(widgets.popup_copy_items); i++)
+		gtk_widget_set_sensitive(widgets.popup_copy_items[i], enable);
 }
 
 
 void ui_update_popup_goto_items(gboolean enable)
 {
-	gtk_widget_set_sensitive(ui_widgets.popup_goto_items[0], enable);
-	gtk_widget_set_sensitive(ui_widgets.popup_goto_items[1], enable);
-	gtk_widget_set_sensitive(ui_widgets.popup_goto_items[2], enable);
+	gtk_widget_set_sensitive(widgets.popup_goto_items[0], enable);
+	gtk_widget_set_sensitive(widgets.popup_goto_items[1], enable);
+	gtk_widget_set_sensitive(widgets.popup_goto_items[2], enable);
 }
 
 
@@ -355,8 +362,8 @@ void ui_update_menu_copy_items(GeanyDocument *doc)
 		enable = gtk_text_buffer_get_selection_bounds(buffer, NULL, NULL);
 	}
 
-	for (i = 0; i < G_N_ELEMENTS(ui_widgets.menu_copy_items); i++)
-		gtk_widget_set_sensitive(ui_widgets.menu_copy_items[i], enable);
+	for (i = 0; i < G_N_ELEMENTS(widgets.menu_copy_items); i++)
+		gtk_widget_set_sensitive(widgets.menu_copy_items[i], enable);
 }
 
 
@@ -371,7 +378,7 @@ void ui_update_insert_include_item(GeanyDocument *doc, gint item)
 	{
 		enable = TRUE;
 	}
-	gtk_widget_set_sensitive(ui_widgets.menu_insert_include_items[item], enable);
+	gtk_widget_set_sensitive(widgets.menu_insert_include_items[item], enable);
 }
 
 
@@ -539,8 +546,8 @@ void ui_save_buttons_toggle(gboolean enable)
 	guint i;
 	gboolean dirty_tabs = FALSE;
 
-	gtk_widget_set_sensitive(ui_widgets.save_buttons[0], enable);
-	gtk_widget_set_sensitive(ui_widgets.save_buttons[1], enable);
+	gtk_widget_set_sensitive(widgets.save_buttons[0], enable);
+	gtk_widget_set_sensitive(widgets.save_buttons[1], enable);
 
 	/* save all menu item and tool button */
 	for (i = 0; i < documents_array->len; i++)
@@ -554,8 +561,8 @@ void ui_save_buttons_toggle(gboolean enable)
 		}
 	}
 
-	gtk_widget_set_sensitive(ui_widgets.save_buttons[2], dirty_tabs);
-	gtk_widget_set_sensitive(ui_widgets.save_buttons[3], dirty_tabs);
+	gtk_widget_set_sensitive(widgets.save_buttons[2], dirty_tabs);
+	gtk_widget_set_sensitive(widgets.save_buttons[3], dirty_tabs);
 }
 
 
@@ -1461,5 +1468,30 @@ void ui_table_add_row(GtkTable *table, gint row, ...)
 
 void ui_init(void)
 {
+	ui_widgets.statusbar = lookup_widget(main_widgets.window, "statusbar");
+	ui_widgets.print_page_setup = lookup_widget(main_widgets.window, "page_setup1");
+
+	widgets.popup_goto_items[0] = lookup_widget(main_widgets.editor_menu, "goto_tag_definition1");
+	widgets.popup_goto_items[1] = lookup_widget(main_widgets.editor_menu, "goto_tag_declaration1");
+	widgets.popup_goto_items[2] = lookup_widget(main_widgets.editor_menu, "find_usage1");
+	widgets.popup_copy_items[0] = lookup_widget(main_widgets.editor_menu, "cut1");
+	widgets.popup_copy_items[1] = lookup_widget(main_widgets.editor_menu, "copy1");
+	widgets.popup_copy_items[2] = lookup_widget(main_widgets.editor_menu, "delete1");
+	widgets.menu_copy_items[0] = lookup_widget(main_widgets.window, "menu_cut1");
+	widgets.menu_copy_items[1] = lookup_widget(main_widgets.window, "menu_copy1");
+	widgets.menu_copy_items[2] = lookup_widget(main_widgets.window, "menu_delete1");
+	widgets.menu_insert_include_items[0] = lookup_widget(main_widgets.editor_menu, "insert_include1");
+	widgets.menu_insert_include_items[1] = lookup_widget(main_widgets.window, "insert_include2");
+	widgets.save_buttons[0] = lookup_widget(main_widgets.window, "menu_save1");
+	widgets.save_buttons[1] = lookup_widget(main_widgets.window, "toolbutton10");
+	widgets.save_buttons[2] = lookup_widget(main_widgets.window, "menu_save_all1");
+	widgets.save_buttons[3] = lookup_widget(main_widgets.window, "toolbutton22");
+	widgets.redo_items[0] = lookup_widget(main_widgets.editor_menu, "redo1");
+	widgets.redo_items[1] = lookup_widget(main_widgets.window, "menu_redo2");
+	widgets.redo_items[2] = lookup_widget(main_widgets.window, "toolbutton_redo");
+	widgets.undo_items[0] = lookup_widget(main_widgets.editor_menu, "undo1");
+	widgets.undo_items[1] = lookup_widget(main_widgets.window, "menu_undo2");
+	widgets.undo_items[2] = lookup_widget(main_widgets.window, "toolbutton_undo");
+
 	init_document_widgets();
 }
