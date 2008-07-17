@@ -1,3 +1,12 @@
+2008-07-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/ui_utils.c, src/ui_utils.h, src/main.c:
+   Move widget array lookups from main.c to ui_utils.c.
+ * src/interface.c, src/keybindings.c, src/keybindings.h,
+   src/callbacks.c, src/callbacks.h, geany.glade:
+   Add Find Document Usage popup menu command & keybinding.
+
+
 2008-07-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * data/filetypes.fortran:

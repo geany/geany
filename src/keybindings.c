@@ -326,6 +326,8 @@ static void init_default_kb(void)
 		0, 0, "menu_previousmessage", _("Previous Message"), LW(previous_message1));
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_FINDUSAGE, cb_func_search_action,
 		0, 0, "popup_findusage", _("Find Usage"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE, cb_func_search_action,
+		0, 0, "popup_finddocumentusage", _("Find Document Usage"), NULL);
 
 	group = ADD_KB_GROUP(GOTO, _("Go to"));
 
@@ -579,6 +581,7 @@ static void add_popup_menu_accels(void)
 
 	group = g_ptr_array_index(keybinding_groups, GEANY_KEY_GROUP_SEARCH);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_SEARCH_FINDUSAGE, find_usage1);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE, find_document_usage1);
 
 	group = g_ptr_array_index(keybinding_groups, GEANY_KEY_GROUP_GOTO);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_GOTO_LINE, go_to_line);
@@ -1077,6 +1080,10 @@ static void cb_func_search_action(guint key_id)
 		case GEANY_KEYS_SEARCH_FINDUSAGE:
 			if (check_current_word())
 				on_find_usage1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE:
+			if (check_current_word())
+				on_find_document_usage1_activate(NULL, NULL);
 			break;
 	}
 }

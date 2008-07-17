@@ -1004,9 +1004,7 @@ on_use_auto_indentation1_toggled       (GtkCheckMenuItem *checkmenuitem,
 }
 
 
-void
-on_find_usage1_activate                (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+static void find_usage(gboolean in_session)
 {
 	gint flags;
 	gchar *search_text;
@@ -1027,8 +1025,24 @@ on_find_usage1_activate                (GtkMenuItem     *menuitem,
 		flags = SCFIND_MATCHCASE | SCFIND_WHOLEWORD;
 	}
 
-	search_find_usage(search_text, flags, TRUE);
+	search_find_usage(search_text, flags, in_session);
 	g_free(search_text);
+}
+
+
+void
+on_find_document_usage1_activate       (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	find_usage(FALSE);
+}
+
+
+void
+on_find_usage1_activate                (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	find_usage(TRUE);
 }
 
 
