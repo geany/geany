@@ -2814,7 +2814,7 @@
 	      <signal name="activate" handler="on_menu_increase_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:31:38 GMT"/>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image2568">
+		<widget class="GtkImage" id="image2589">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-indent</property>
 		  <property name="icon_size">1</property>
@@ -2835,7 +2835,7 @@
 	      <signal name="activate" handler="on_menu_decrease_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:31:38 GMT"/>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image2569">
+		<widget class="GtkImage" id="image2590">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-unindent</property>
 		  <property name="icon_size">1</property>
@@ -2891,7 +2891,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image2570">
+	<widget class="GtkImage" id="image2591">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -2976,7 +2976,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image2571">
+	<widget class="GtkImage" id="image2592">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -3008,7 +3008,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image2572">
+	<widget class="GtkImage" id="image2593">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -3040,71 +3040,96 @@
   </child>
 
   <child>
-    <widget class="GtkImageMenuItem" id="find_usage1">
+    <widget class="GtkMenuItem" id="current_word1">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">Find _Usage</property>
+      <property name="label" translatable="yes">Current _Word</property>
       <property name="use_underline">True</property>
-      <signal name="activate" handler="on_find_usage1_activate" last_modification_time="Fri, 27 May 2005 21:55:12 GMT"/>
 
-      <child internal-child="image">
-	<widget class="GtkImage" id="image2573">
-	  <property name="visible">True</property>
-	  <property name="stock">gtk-find</property>
-	  <property name="icon_size">1</property>
-	  <property name="xalign">0.5</property>
-	  <property name="yalign">0.5</property>
-	  <property name="xpad">0</property>
-	  <property name="ypad">0</property>
+      <child>
+	<widget class="GtkMenu" id="current_word1_menu">
+
+	  <child>
+	    <widget class="GtkImageMenuItem" id="find_usage1">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">Find _Usage</property>
+	      <property name="use_underline">True</property>
+	      <signal name="activate" handler="on_find_usage1_activate" last_modification_time="Fri, 27 May 2005 21:55:12 GMT"/>
+
+	      <child internal-child="image">
+		<widget class="GtkImage" id="image2594">
+		  <property name="visible">True</property>
+		  <property name="stock">gtk-find</property>
+		  <property name="icon_size">1</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+	      </child>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkImageMenuItem" id="find_document_usage1">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">Find _Document Usage</property>
+	      <property name="use_underline">True</property>
+	      <signal name="activate" handler="on_find_document_usage1_activate" last_modification_time="Thu, 17 Jul 2008 13:42:25 GMT"/>
+
+	      <child internal-child="image">
+		<widget class="GtkImage" id="image2595">
+		  <property name="visible">True</property>
+		  <property name="stock">gtk-find</property>
+		  <property name="icon_size">1</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+	      </child>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkSeparatorMenuItem" id="separator47">
+	      <property name="visible">True</property>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkMenuItem" id="goto_tag_definition1">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">Go to _Tag Definition</property>
+	      <property name="use_underline">True</property>
+	      <signal name="activate" handler="on_goto_tag_activate" last_modification_time="Sun, 29 May 2005 22:08:28 GMT"/>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkMenuItem" id="goto_tag_declaration1">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">Go to T_ag Declaration</property>
+	      <property name="use_underline">True</property>
+	      <signal name="activate" handler="on_goto_tag_activate" last_modification_time="Sun, 29 May 2005 22:08:28 GMT"/>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkSeparatorMenuItem" id="separator48">
+	      <property name="visible">True</property>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkMenuItem" id="context_action1">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">Conte_xt Action</property>
+	      <property name="use_underline">True</property>
+	      <signal name="activate" handler="on_context_action1_activate" last_modification_time="Fri, 13 Apr 2007 18:37:55 GMT"/>
+	    </widget>
+	  </child>
 	</widget>
       </child>
-    </widget>
-  </child>
-
-  <child>
-    <widget class="GtkImageMenuItem" id="find_document_usage1">
-      <property name="visible">True</property>
-      <property name="label" translatable="yes">Find _Document Usage</property>
-      <property name="use_underline">True</property>
-      <signal name="activate" handler="on_find_document_usage1_activate" last_modification_time="Thu, 17 Jul 2008 13:42:25 GMT"/>
-
-      <child internal-child="image">
-	<widget class="GtkImage" id="image2574">
-	  <property name="visible">True</property>
-	  <property name="stock">gtk-find</property>
-	  <property name="icon_size">1</property>
-	  <property name="xalign">0.5</property>
-	  <property name="yalign">0.5</property>
-	  <property name="xpad">0</property>
-	  <property name="ypad">0</property>
-	</widget>
-      </child>
-    </widget>
-  </child>
-
-  <child>
-    <widget class="GtkMenuItem" id="goto_tag_definition1">
-      <property name="visible">True</property>
-      <property name="label" translatable="yes">Go to _Tag Definition</property>
-      <property name="use_underline">True</property>
-      <signal name="activate" handler="on_goto_tag_activate" last_modification_time="Sun, 29 May 2005 22:08:28 GMT"/>
-    </widget>
-  </child>
-
-  <child>
-    <widget class="GtkMenuItem" id="goto_tag_declaration1">
-      <property name="visible">True</property>
-      <property name="label" translatable="yes">Go to T_ag Declaration</property>
-      <property name="use_underline">True</property>
-      <signal name="activate" handler="on_goto_tag_activate" last_modification_time="Sun, 29 May 2005 22:08:28 GMT"/>
-    </widget>
-  </child>
-
-  <child>
-    <widget class="GtkMenuItem" id="context_action1">
-      <property name="visible">True</property>
-      <property name="label" translatable="yes">Conte_xt Action</property>
-      <property name="use_underline">True</property>
-      <signal name="activate" handler="on_context_action1_activate" last_modification_time="Fri, 13 Apr 2007 18:37:55 GMT"/>
     </widget>
   </child>
 
@@ -3123,7 +3148,7 @@
       <signal name="activate" handler="on_go_to_line_activate" last_modification_time="Sat, 16 Jul 2005 11:20:32 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image2575">
+	<widget class="GtkImage" id="image2596">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-jump-to</property>
 	  <property name="icon_size">1</property>
