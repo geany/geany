@@ -557,7 +557,9 @@ static void cc_dlg_on_base_name_entry_changed(GtkWidget *entry, CreateClassDialo
 
 	base_name_splitted = str_case_split(gtk_entry_get_text(GTK_ENTRY(entry)), '_');
 	if (! g_ascii_strncasecmp(gtk_entry_get_text(GTK_ENTRY(entry)), "gtk", 3))
-		tmp = g_strconcat("gtk/", gtk_entry_get_text(GTK_ENTRY(entry)), ".h", NULL);
+		/*tmp = g_strconcat("gtk/", gtk_entry_get_text(GTK_ENTRY(entry)), ".h", NULL);*/
+		/* With GTK 2.14 (and later GTK 3), single header includes are encouraged */
+		tmp = g_strdup("gtk/gtk.h");
 	else if (p_utils->str_equal(gtk_entry_get_text(GTK_ENTRY(entry)), "GObject"))
 		tmp = g_strdup("glib-object.h");
 	else

@@ -9,6 +9,10 @@
    src/tools.c, src/treeviews.c, src/ui_utils.c, src/vte.c:
    Rename "delete_event" to "delete-event".
    Remove some unnecessary GObject casts in g_signal_connect() calls.
+ * src/geanywraplabel.c:
+   Remove unnecessary finalize() function.
+ * plugins/classbuilder.c:
+   Encourage single header includes as it is necessary with GTK 2.14+.
 
 
 2008-07-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
