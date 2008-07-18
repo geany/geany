@@ -281,13 +281,13 @@ static void create_vte(void)
     gtk_drag_dest_set(vte, GTK_DEST_DEFAULT_ALL,
 		dnd_targets, G_N_ELEMENTS(dnd_targets), GDK_ACTION_COPY);
 
-	g_signal_connect(G_OBJECT(vte), "child-exited", G_CALLBACK(vte_start), NULL);
-	g_signal_connect(G_OBJECT(vte), "button-press-event", G_CALLBACK(vte_button_pressed), NULL);
-	g_signal_connect(G_OBJECT(vte), "event", G_CALLBACK(vte_keypress), NULL);
-	g_signal_connect(G_OBJECT(vte), "key-release-event", G_CALLBACK(vte_keyrelease), NULL);
-	g_signal_connect(G_OBJECT(vte), "commit", G_CALLBACK(vte_commit), NULL);
-	g_signal_connect(G_OBJECT(vte), "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
-	g_signal_connect(G_OBJECT(vte), "drag-data-received", G_CALLBACK(vte_drag_data_received), NULL);
+	g_signal_connect(vte, "child-exited", G_CALLBACK(vte_start), NULL);
+	g_signal_connect(vte, "button-press-event", G_CALLBACK(vte_button_pressed), NULL);
+	g_signal_connect(vte, "event", G_CALLBACK(vte_keypress), NULL);
+	g_signal_connect(vte, "key-release-event", G_CALLBACK(vte_keyrelease), NULL);
+	g_signal_connect(vte, "commit", G_CALLBACK(vte_commit), NULL);
+	g_signal_connect(vte, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
+	g_signal_connect(vte, "drag-data-received", G_CALLBACK(vte_drag_data_received), NULL);
 
 	vte_start(vte);
 
@@ -295,7 +295,7 @@ static void create_vte(void)
 	gtk_notebook_insert_page(GTK_NOTEBOOK(msgwindow.notebook), frame, gtk_label_new(_("Terminal")), MSG_VTE);
 
 	/* the vte widget has to be realised before color changes take effect */
-	g_signal_connect(G_OBJECT(vte), "realize", G_CALLBACK(vte_apply_user_settings), NULL);
+	g_signal_connect(vte, "realize", G_CALLBACK(vte_apply_user_settings), NULL);
 }
 
 
@@ -507,12 +507,12 @@ static GtkWidget *vte_create_popup_menu(void)
 	item = gtk_image_menu_item_new_from_stock("gtk-copy", NULL);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect((gpointer)item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_COPY));
+	g_signal_connect(item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_COPY));
 
 	item = gtk_image_menu_item_new_from_stock("gtk-paste", NULL);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect((gpointer)item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_PASTE));
+	g_signal_connect(item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_PASTE));
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
@@ -521,12 +521,12 @@ static GtkWidget *vte_create_popup_menu(void)
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Set Path From Document"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect((gpointer)item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_CHANGEPATH));
+	g_signal_connect(item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_CHANGEPATH));
 
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Restart Terminal"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect((gpointer)item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_RESTARTTERMINAL));
+	g_signal_connect(item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_RESTARTTERMINAL));
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
@@ -547,7 +547,7 @@ static GtkWidget *vte_create_popup_menu(void)
 	item = gtk_image_menu_item_new_from_stock("gtk-preferences", NULL);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect((gpointer)item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_PREFERENCES));
+	g_signal_connect(item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_PREFERENCES));
 
 	msgwin_menu_add_common_items(GTK_MENU(menu));
 
@@ -830,7 +830,7 @@ void vte_append_preferences_tab(void)
 		gtk_tooltips_set_tip(tooltips, check_run_in_vte, _("Run programs in VTE instead of opening a terminal emulation window. Please note, programs executed in VTE cannot be stopped."), NULL);
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_run_in_vte), FALSE);
 		gtk_container_add(GTK_CONTAINER(box), check_run_in_vte);
-		g_signal_connect((gpointer) check_run_in_vte, "toggled",
+		g_signal_connect(check_run_in_vte, "toggled",
 			G_CALLBACK(check_run_in_vte_toggled), check_skip_script);
 
 		/* now add the check_skip_script checkbox after the check_run_in_vte checkbox */
@@ -867,13 +867,13 @@ void vte_append_preferences_tab(void)
 
 		gtk_widget_show_all(frame);
 
-		g_signal_connect((gpointer) font_term, "font-set", G_CALLBACK(on_prefs_font_choosed),
-														   GINT_TO_POINTER(4));
-		g_signal_connect((gpointer) color_fore, "color-set", G_CALLBACK(on_prefs_color_choosed),
-															 GINT_TO_POINTER(2));
-		g_signal_connect((gpointer) color_back, "color-set", G_CALLBACK(on_prefs_color_choosed),
-															 GINT_TO_POINTER(3));
-		g_signal_connect((gpointer) button_shell, "clicked",
+		g_signal_connect(font_term, "font-set", G_CALLBACK(on_prefs_font_choosed),
+															GINT_TO_POINTER(4));
+		g_signal_connect(color_fore, "color-set", G_CALLBACK(on_prefs_color_choosed),
+															GINT_TO_POINTER(2));
+		g_signal_connect(color_back, "color-set", G_CALLBACK(on_prefs_color_choosed),
+															GINT_TO_POINTER(3));
+		g_signal_connect(button_shell, "clicked",
 				G_CALLBACK(on_prefs_tools_button_clicked), entry_shell);
 	}
 }

@@ -332,8 +332,7 @@ static void cc_show_dialog_custom_commands(void)
 	}
 
 	button = gtk_button_new_from_stock("gtk-add");
-	g_signal_connect((gpointer) button, "clicked",
-			G_CALLBACK(cc_on_custom_commands_dlg_add_clicked), &cc);
+	g_signal_connect(button, "clicked", G_CALLBACK(cc_on_custom_commands_dlg_add_clicked), &cc);
 	gtk_box_pack_start(GTK_BOX(vbox), button, FALSE, FALSE, 0);
 
 	gtk_widget_show_all(vbox);
@@ -466,7 +465,7 @@ static void cc_insert_custom_command_items(GtkMenu *me, GtkMenu *mp, gchar *labe
 			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
 	gtk_container_add(GTK_CONTAINER(me), item);
 	gtk_widget_show(item);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(cc_on_custom_command_activate),
+	g_signal_connect(item, "activate", G_CALLBACK(cc_on_custom_command_activate),
 		GINT_TO_POINTER(idx));
 
 	item = gtk_menu_item_new_with_label(label);
@@ -475,7 +474,7 @@ static void cc_insert_custom_command_items(GtkMenu *me, GtkMenu *mp, gchar *labe
 			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
 	gtk_container_add(GTK_CONTAINER(mp), item);
 	gtk_widget_show(item);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(cc_on_custom_command_activate),
+	g_signal_connect(item, "activate", G_CALLBACK(cc_on_custom_command_activate),
 		GINT_TO_POINTER(idx));
 }
 
@@ -539,9 +538,9 @@ void tools_create_insert_custom_command_menu_items(void)
 
 	if (! signal_set)
 	{
-		g_signal_connect((gpointer) lookup_widget(main_widgets.editor_menu, "send_selection_to1"),
+		g_signal_connect(lookup_widget(main_widgets.editor_menu, "send_selection_to1"),
 					"activate", G_CALLBACK(cc_on_custom_command_menu_activate), menu_popup);
-		g_signal_connect((gpointer) lookup_widget(main_widgets.window, "send_selection_to2"),
+		g_signal_connect(lookup_widget(main_widgets.window, "send_selection_to2"),
 					"activate", G_CALLBACK(cc_on_custom_command_menu_activate), menu_edit);
 		signal_set = TRUE;
 	}
@@ -751,7 +750,7 @@ void tools_color_chooser(gchar *color)
 						G_CALLBACK(on_color_cancel_button_clicked), NULL);
 		g_signal_connect(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->ok_button, "clicked",
 						G_CALLBACK(on_color_ok_button_clicked), NULL);
-		g_signal_connect(ui_widgets.open_colorsel, "delete_event",
+		g_signal_connect(ui_widgets.open_colorsel, "delete-event",
 						G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 	}
 	/* if color is non-NULL set it in the dialog as preselected color */

@@ -503,8 +503,7 @@ void plugin_init(GeanyData *data)
 	menu_vcdiff = gtk_image_menu_item_new_with_mnemonic(_("_Version Diff"));
 	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), menu_vcdiff);
 
-	g_signal_connect((gpointer) menu_vcdiff, "activate",
-		G_CALLBACK(update_menu_items), NULL);
+	g_signal_connect(menu_vcdiff, "activate", G_CALLBACK(update_menu_items), NULL);
 
 	menu_vcdiff_menu = gtk_menu_new ();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_vcdiff), menu_vcdiff_menu);
@@ -515,8 +514,7 @@ void plugin_init(GeanyData *data)
 	gtk_tooltips_set_tip (tooltips, menu_vcdiff_file,
 		_("Make a diff from the current active file"), NULL);
 
-	g_signal_connect((gpointer) menu_vcdiff_file, "activate",
-		G_CALLBACK(vcfile_activated), NULL);
+	g_signal_connect(menu_vcdiff_file, "activate", G_CALLBACK(vcfile_activated), NULL);
 
 	/* Directory */
 	menu_vcdiff_dir = gtk_menu_item_new_with_mnemonic(_("From Current _Directory"));
@@ -524,8 +522,7 @@ void plugin_init(GeanyData *data)
 	gtk_tooltips_set_tip (tooltips, menu_vcdiff_dir,
 		_("Make a diff from the directory of the current active file"), NULL);
 
-	g_signal_connect((gpointer) menu_vcdiff_dir, "activate",
-		G_CALLBACK(vcdirectory_activated), NULL);
+	g_signal_connect(menu_vcdiff_dir, "activate", G_CALLBACK(vcdirectory_activated), NULL);
 
 	/* Project */
 	menu_vcdiff_project = gtk_menu_item_new_with_mnemonic(_("From Current _Project"));
@@ -533,8 +530,7 @@ void plugin_init(GeanyData *data)
 	gtk_tooltips_set_tip (tooltips, menu_vcdiff_project,
 		_("Make a diff from the current project's base path"), NULL);
 
-	g_signal_connect((gpointer) menu_vcdiff_project, "activate",
-		G_CALLBACK(vcproject_activated), NULL);
+	g_signal_connect(menu_vcdiff_project, "activate", G_CALLBACK(vcproject_activated), NULL);
 
 	gtk_widget_show_all(menu_vcdiff);
 

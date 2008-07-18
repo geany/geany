@@ -1,3 +1,16 @@
+2008-07-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * plugins/classbuilder.c, plugins/demoplugin.c, plugins/export.c,
+   plugins/filebrowser.c, plugins/htmlchars.c, plugins/vcdiff.c,
+   src/about.c, src/build.c, src/dialogs.c, src/document.c,
+   src/editor.c, src/encodings.c, src/filetypes.c, src/gb.c, src/main.c,
+   src/msgwindow.c, src/notebook.c, src/plugins.c, src/prefs.c,
+   src/printing.c, src/project.c, src/search.c, src/templates.c,
+   src/tools.c, src/treeviews.c, src/ui_utils.c, src/vte.c:
+   Rename "delete_event" to "delete-event".
+   Remove some unnecessary GObject casts in g_signal_connect() calls.
+
+
 2008-07-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/ui_utils.c, src/ui_utils.h, src/main.c:

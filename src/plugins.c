@@ -756,7 +756,7 @@ void plugins_init()
 	widget = gtk_menu_item_new_with_mnemonic(_("_Plugin Manager"));
 	gtk_container_add(GTK_CONTAINER(main_widgets.tools_menu), widget);
 	gtk_widget_show(widget);
-	g_signal_connect((gpointer) widget, "activate", G_CALLBACK(pm_show_dialog), NULL);
+	g_signal_connect(widget, "activate", G_CALLBACK(pm_show_dialog), NULL);
 
 	menu_separator = gtk_separator_menu_item_new();
 	gtk_container_add(GTK_CONTAINER(main_widgets.tools_menu), menu_separator);
@@ -988,7 +988,7 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
     column = gtk_tree_view_column_new_with_attributes(
 		_("Active"), checkbox_renderer, "active", PLUGIN_COLUMN_CHECK, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
-	g_signal_connect((gpointer) checkbox_renderer, "toggled", G_CALLBACK(pm_plugin_toggled), NULL);
+	g_signal_connect(checkbox_renderer, "toggled", G_CALLBACK(pm_plugin_toggled), NULL);
 
 	text_renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(
@@ -1009,7 +1009,7 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
 	/* selection handling */
 	sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
 	gtk_tree_selection_set_mode(sel, GTK_SELECTION_SINGLE);
-	g_signal_connect((gpointer) sel, "changed", G_CALLBACK(pm_selection_changed), NULL);
+	g_signal_connect(sel, "changed", G_CALLBACK(pm_selection_changed), NULL);
 
 	list = g_list_first(plugin_list);
 	if (list == NULL)
@@ -1149,7 +1149,7 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 
 	pm_widgets.configure_button = gtk_button_new_from_stock(GTK_STOCK_PREFERENCES);
 	gtk_widget_set_sensitive(pm_widgets.configure_button, FALSE);
-	g_signal_connect((gpointer) pm_widgets.configure_button, "clicked",
+	g_signal_connect(pm_widgets.configure_button, "clicked",
 		G_CALLBACK(pm_on_configure_button_clicked), NULL);
 
 	label2 = gtk_label_new(_("<b>Plugin details:</b>"));
@@ -1170,8 +1170,7 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	gtk_box_pack_start(GTK_BOX(vbox2), swin, TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox2), label_vbox, FALSE, FALSE, 0);
 
-	g_signal_connect((gpointer) pm_widgets.dialog, "response",
-		G_CALLBACK(pm_dialog_response), NULL);
+	g_signal_connect(pm_widgets.dialog, "response", G_CALLBACK(pm_dialog_response), NULL);
 
 	gtk_container_add(GTK_CONTAINER(vbox), vbox2);
 	gtk_widget_show_all(pm_widgets.dialog);

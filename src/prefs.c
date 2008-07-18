@@ -139,10 +139,9 @@ static void init_kb_tree(void)
 			GTK_SCROLLED_WINDOW(lookup_widget(ui_widgets.prefs_dialog, "scrolledwindow8")),
 			GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
-	g_signal_connect(G_OBJECT(renderer), "edited", G_CALLBACK(on_cell_edited), NULL);
-	g_signal_connect(G_OBJECT(tree), "button-press-event",
-				G_CALLBACK(on_tree_view_button_press_event), NULL);
-	g_signal_connect(G_OBJECT(lookup_widget(ui_widgets.prefs_dialog, "button2")), "clicked",
+	g_signal_connect(renderer, "edited", G_CALLBACK(on_cell_edited), NULL);
+	g_signal_connect(tree, "button-press-event", G_CALLBACK(on_tree_view_button_press_event), NULL);
+	g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "button2"), "clicked",
 				G_CALLBACK(on_tree_view_button_press_event), NULL);
 }
 
@@ -1192,9 +1191,9 @@ static gboolean on_tree_view_button_press_event(
 			gtk_misc_set_padding(GTK_MISC(dialog_label), 5, 10);
 			gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), dialog_label);
 
-			g_signal_connect(G_OBJECT(dialog), "key-press-event",
+			g_signal_connect(dialog, "key-press-event",
 								G_CALLBACK(on_keytype_dialog_response), NULL);
-			g_signal_connect(G_OBJECT(dialog), "response", G_CALLBACK(on_dialog_response), NULL);
+			g_signal_connect(dialog, "response", G_CALLBACK(on_dialog_response), NULL);
 
 			/* copy name to global variable to hold it, will be freed in on_dialog_response() */
 			dialog_key_name = g_strdup(name);
@@ -1518,52 +1517,52 @@ void prefs_show_dialog(void)
 		ui_setup_open_button_callback(lookup_widget(ui_widgets.prefs_dialog, "startup_path_button"), NULL,
 			GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(lookup_widget(ui_widgets.prefs_dialog, "startup_path_entry")));
 
-		g_signal_connect((gpointer) ui_widgets.prefs_dialog, "response",
+		g_signal_connect(ui_widgets.prefs_dialog, "response",
 			G_CALLBACK(on_prefs_button_clicked), NULL);
-		g_signal_connect((gpointer) ui_widgets.prefs_dialog, "delete_event",
+		g_signal_connect(ui_widgets.prefs_dialog, "delete-event",
 			G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 
-		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "tagbar_font"),
+		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "tagbar_font"),
 				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(1));
-		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "msgwin_font"),
+		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "msgwin_font"),
 				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(2));
-		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "editor_font"),
+		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "editor_font"),
 				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(3));
-		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "long_line_color"),
+		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "long_line_color"),
 				"color-set", G_CALLBACK(on_prefs_color_choosed), GINT_TO_POINTER(1));
 		/* file chooser buttons in the tools tab */
-		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "button_make"),
+		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "button_make"),
 				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(ui_widgets.prefs_dialog, "entry_com_make"));
-		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "button_term"),
+		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "button_term"),
 				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(ui_widgets.prefs_dialog, "entry_com_term"));
-		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "button_browser"),
+		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "button_browser"),
 				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(ui_widgets.prefs_dialog, "entry_browser"));
-		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "button_grep"),
+		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "button_grep"),
 				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(ui_widgets.prefs_dialog, "entry_grep"));
 
 		/* tools commands */
-		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "button_contextaction"),
+		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "button_contextaction"),
 			"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction"));
-		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "button_contextaction"),
+		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "button_contextaction"),
 			"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction"));
 
 		/* printing */
-		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "button_print_external_cmd"),
+		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "button_print_external_cmd"),
 			"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(ui_widgets.prefs_dialog, "entry_print_external_cmd"));
-		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "radio_print_gtk"),
+		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "radio_print_gtk"),
 			"toggled", G_CALLBACK(on_prefs_print_radio_button_toggled), NULL);
-		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "check_print_pageheader"),
+		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "check_print_pageheader"),
 			"toggled", G_CALLBACK(on_prefs_print_page_header_toggled), NULL);
 
-		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show"),
+		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show"),
 				"toggled", G_CALLBACK(on_toolbar_show_toggled), NULL);
-		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs"),
+		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs"),
 				"toggled", G_CALLBACK(on_show_notebook_tabs_toggled), NULL);
-		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "check_folding"),
+		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "check_folding"),
 				"toggled", G_CALLBACK(on_use_folding_toggled), NULL);
-		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "check_open_encoding"),
+		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "check_open_encoding"),
 				"toggled", G_CALLBACK(on_open_encoding_toggled), NULL);
-		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "check_list_openfiles"),
+		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "check_list_openfiles"),
 				"toggled", G_CALLBACK(on_openfiles_visible_toggled), NULL);
 	}
 

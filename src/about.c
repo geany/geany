@@ -125,7 +125,7 @@ static GtkWidget *create_dialog(void)
 	button = gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);
 	gtk_dialog_set_has_separator(GTK_DIALOG(dialog), FALSE);
-	g_signal_connect(G_OBJECT(dialog), "key-press-event", G_CALLBACK(gb_on_key_pressed), NULL);
+	g_signal_connect(dialog, "key-press-event", G_CALLBACK(gb_on_key_pressed), NULL);
 
 	/* create header */
 	header_eventbox = gtk_event_box_new();
@@ -146,8 +146,8 @@ static GtkWidget *create_dialog(void)
 	gtk_box_pack_start(GTK_BOX(header_hbox), header_label, FALSE,FALSE,0);
 	header_eventbox_style_set(header_eventbox);
 	header_label_style_set(header_label);
-	g_signal_connect_after(G_OBJECT(header_eventbox), "style_set", G_CALLBACK(header_eventbox_style_set), NULL);
-	g_signal_connect_after(G_OBJECT(header_label), "style_set", G_CALLBACK(header_label_style_set), NULL);
+	g_signal_connect_after(header_eventbox, "style-set", G_CALLBACK(header_eventbox_style_set), NULL);
+	g_signal_connect_after(header_label, "style-set", G_CALLBACK(header_label_style_set), NULL);
 	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), header_eventbox, FALSE, FALSE, 0);
 
 	/* set image */
@@ -202,7 +202,7 @@ static GtkWidget *create_dialog(void)
 	box = gtk_hbutton_box_new();
 	url_button = gtk_button_new();
 	gtk_button_set_relief(GTK_BUTTON(url_button), GTK_RELIEF_NONE);
-	g_signal_connect(G_OBJECT(url_button), "clicked", G_CALLBACK(homepage_clicked), GEANY_HOMEPAGE);
+	g_signal_connect(url_button, "clicked", G_CALLBACK(homepage_clicked), GEANY_HOMEPAGE);
 	label = gtk_label_new(NULL);
 	gtk_label_set_text(GTK_LABEL(label), GEANY_HOMEPAGE);
 	gtk_widget_show(label);

@@ -200,10 +200,8 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 		exi->have_zoom_level_checkbox = TRUE;
 	}
 
-	g_signal_connect((gpointer) dialog, "delete_event",
-		G_CALLBACK(gtk_widget_hide_on_delete), NULL);
-	g_signal_connect((gpointer) dialog, "response",
-		G_CALLBACK(on_file_save_dialog_response), exi);
+	g_signal_connect(dialog, "delete-event", G_CALLBACK(gtk_widget_hide_on_delete), NULL);
+	g_signal_connect(dialog, "response", G_CALLBACK(on_file_save_dialog_response), exi);
 
 	gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(geany->main_widgets->window));
 
@@ -721,14 +719,13 @@ void plugin_init(GeanyData *data)
 	menu_create_html = gtk_menu_item_new_with_mnemonic(_("As _HTML"));
 	gtk_container_add(GTK_CONTAINER (menu_export_menu), menu_create_html);
 
-	g_signal_connect((gpointer) menu_create_html, "activate",
-		G_CALLBACK(on_menu_create_html_activate), NULL);
+	g_signal_connect(menu_create_html, "activate", G_CALLBACK(on_menu_create_html_activate), NULL);
 
 	/* LaTeX */
 	menu_create_latex = gtk_menu_item_new_with_mnemonic(_("As _LaTeX"));
 	gtk_container_add(GTK_CONTAINER (menu_export_menu), menu_create_latex);
 
-	g_signal_connect((gpointer) menu_create_latex, "activate",
+	g_signal_connect(menu_create_latex, "activate",
 		G_CALLBACK(on_menu_create_latex_activate), NULL);
 
 	/* disable menu_item when there are no documents open */

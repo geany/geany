@@ -351,10 +351,8 @@ static void create_new_menu_items(void)
 		gtk_widget_show(tmp_button);
 		gtk_container_add(GTK_CONTAINER(new_with_template_menu), tmp_menu);
 		gtk_container_add(GTK_CONTAINER(ui_widgets.new_file_menu), tmp_button);
-		g_signal_connect((gpointer) tmp_menu, "activate",
-			G_CALLBACK(on_new_with_template), (gpointer) ft);
-		g_signal_connect((gpointer) tmp_button, "activate",
-			G_CALLBACK(on_new_with_template), (gpointer) ft);
+		g_signal_connect(tmp_menu, "activate", G_CALLBACK(on_new_with_template), (gpointer) ft);
+		g_signal_connect(tmp_button, "activate", G_CALLBACK(on_new_with_template), (gpointer) ft);
 	}
 }
 
@@ -417,10 +415,8 @@ static void add_file_item(gpointer data, gpointer user_data)
 	gtk_widget_show(tmp_button);
 	gtk_container_add(GTK_CONTAINER(new_with_template_menu), tmp_menu);
 	gtk_container_add(GTK_CONTAINER(ui_widgets.new_file_menu), tmp_button);
-	g_signal_connect((gpointer) tmp_menu, "activate",
-		G_CALLBACK(on_new_with_file_template), NULL);
-	g_signal_connect((gpointer) tmp_button, "activate",
-		G_CALLBACK(on_new_with_file_template), NULL);
+	g_signal_connect(tmp_menu, "activate", G_CALLBACK(on_new_with_file_template), NULL);
+	g_signal_connect(tmp_button, "activate", G_CALLBACK(on_new_with_file_template), NULL);
 }
 
 

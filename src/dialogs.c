@@ -231,11 +231,11 @@ static void create_open_file_dialog(void)
 	gtk_combo_box_append_text(GTK_COMBO_BOX(encoding_combo), _("Detect from file"));
 	gtk_combo_box_set_active(GTK_COMBO_BOX(encoding_combo), GEANY_ENCODINGS_MAX);
 
-	g_signal_connect((gpointer) ui_widgets.open_filesel, "selection-changed",
+	g_signal_connect(ui_widgets.open_filesel, "selection-changed",
 				G_CALLBACK(on_file_open_selection_changed), NULL);
-	g_signal_connect ((gpointer) ui_widgets.open_filesel, "delete_event",
+	g_signal_connect(ui_widgets.open_filesel, "delete-event",
 				G_CALLBACK(gtk_widget_hide_on_delete), NULL);
-	g_signal_connect((gpointer) ui_widgets.open_filesel, "response",
+	g_signal_connect(ui_widgets.open_filesel, "response",
 				G_CALLBACK(on_file_open_dialog_response), NULL);
 }
 #endif
@@ -353,9 +353,9 @@ static GtkWidget *add_file_open_extra_widget()
 	gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 0);
 	gtk_widget_show_all(vbox);
 
-	g_signal_connect((gpointer) file_entry, "activate",
+	g_signal_connect(file_entry, "activate",
 				G_CALLBACK(on_file_open_entry_activate), NULL);
-	g_signal_connect((gpointer) check_hidden, "toggled",
+	g_signal_connect(check_hidden, "toggled",
 				G_CALLBACK(on_file_open_check_hidden_toggled), NULL);
 
 	g_object_set_data_full(G_OBJECT(ui_widgets.open_filesel), "file_entry",
@@ -507,9 +507,9 @@ static void create_save_file_dialog(void)
 	g_object_set_data_full(G_OBJECT(ui_widgets.save_filesel), "check_open_new_tab",
 				gtk_widget_ref(check_open_new_tab), (GDestroyNotify) gtk_widget_unref);
 
-	g_signal_connect((gpointer) ui_widgets.save_filesel, "delete_event",
+	g_signal_connect(ui_widgets.save_filesel, "delete-event",
 		G_CALLBACK(gtk_widget_hide_on_delete), NULL);
-	g_signal_connect((gpointer) ui_widgets.save_filesel, "response",
+	g_signal_connect(ui_widgets.save_filesel, "response",
 		G_CALLBACK(on_file_save_dialog_response), NULL);
 
 	gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.save_filesel), GTK_WINDOW(main_widgets.window));
@@ -781,13 +781,13 @@ void dialogs_show_open_font()
 
 		gtk_widget_show(GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel)->apply_button);
 
-		g_signal_connect((gpointer) ui_widgets.open_fontsel,
-					"delete_event", G_CALLBACK(gtk_widget_hide_on_delete), NULL);
-		g_signal_connect((gpointer) GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel)->ok_button,
+		g_signal_connect(ui_widgets.open_fontsel,
+					"delete-event", G_CALLBACK(gtk_widget_hide_on_delete), NULL);
+		g_signal_connect(GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel)->ok_button,
 					"clicked", G_CALLBACK(on_font_ok_button_clicked), NULL);
-		g_signal_connect((gpointer) GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel)->cancel_button,
+		g_signal_connect(GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel)->cancel_button,
 					"clicked", G_CALLBACK(on_font_cancel_button_clicked), NULL);
-		g_signal_connect((gpointer) GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel)->apply_button,
+		g_signal_connect(GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel)->apply_button,
 					"clicked", G_CALLBACK(on_font_apply_button_clicked), NULL);
 
 		gtk_font_selection_dialog_set_font_name(
@@ -880,12 +880,9 @@ static void add_input_widgets(GtkWidget *dialog, GtkWidget *vbox,
 	gtk_entry_set_max_length(GTK_ENTRY(entry), 255);
 	gtk_entry_set_width_chars(GTK_ENTRY(entry), 30);
 
-	g_signal_connect((gpointer) entry, "activate",
-		G_CALLBACK(on_input_entry_activate), dialog);
-	g_signal_connect((gpointer) dialog, "show",
-		G_CALLBACK(on_input_dialog_show), entry);
-	g_signal_connect((gpointer) dialog, "response",
-		G_CALLBACK(on_input_dialog_response), entry);
+	g_signal_connect(entry, "activate", G_CALLBACK(on_input_entry_activate), dialog);
+	g_signal_connect(dialog, "show", G_CALLBACK(on_input_dialog_show), entry);
+	g_signal_connect(dialog, "response", G_CALLBACK(on_input_dialog_response), entry);
 }
 
 
@@ -913,11 +910,9 @@ dialogs_show_input(const gchar *title, const gchar *label_text, const gchar *def
 	add_input_widgets(dialog, vbox, label_text, default_text, persistent);
 
 	if (persistent)
-		g_signal_connect((gpointer) dialog, "delete_event",
-			G_CALLBACK(gtk_widget_hide_on_delete), NULL);
+		g_signal_connect(dialog, "delete-event", G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 	else
-		g_signal_connect((gpointer) dialog, "delete_event",
-			G_CALLBACK(gtk_widget_destroy), NULL);
+		g_signal_connect(dialog, "delete-event", G_CALLBACK(gtk_widget_destroy), NULL);
 
 	gtk_widget_show_all(dialog);
 	return dialog;
@@ -977,8 +972,8 @@ void dialogs_show_goto_line()
 	gtk_entry_set_max_length(GTK_ENTRY(entry), 6);
 	gtk_entry_set_width_chars(GTK_ENTRY(entry), 30);
 
-	g_signal_connect((gpointer) entry, "activate", G_CALLBACK(on_goto_line_entry_activate), dialog);
-	g_signal_connect((gpointer) dialog, "response", G_CALLBACK(on_goto_line_dialog_response), entry);
+	g_signal_connect(entry, "activate", G_CALLBACK(on_goto_line_entry_activate), dialog);
+	g_signal_connect(dialog, "response", G_CALLBACK(on_goto_line_dialog_response), entry);
 
 	gtk_container_add(GTK_CONTAINER(vbox), label);
 	gtk_container_add(GTK_CONTAINER(vbox), entry);
@@ -1060,7 +1055,7 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 
 	g_signal_connect(dialog, "response", G_CALLBACK(gtk_widget_destroy), NULL);
-	g_signal_connect(dialog, "delete_event", G_CALLBACK(gtk_widget_destroy), NULL);
+	g_signal_connect(dialog, "delete-event", G_CALLBACK(gtk_widget_destroy), NULL);
 
 	gtk_window_set_default_size(GTK_WINDOW(dialog), 300, -1);
 

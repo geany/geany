@@ -361,8 +361,7 @@ void show_dialog_create_class(gint type)
 			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 			GTK_STOCK_OK, GTK_RESPONSE_OK,
 			NULL);
-	g_signal_connect_swapped(G_OBJECT(cc_dlg->dialog), "destroy",
-			G_CALLBACK(g_free), (gpointer)cc_dlg);
+	g_signal_connect_swapped(cc_dlg->dialog, "destroy", G_CALLBACK(g_free), (gpointer)cc_dlg);
 
 	main_box = p_ui->dialog_vbox_new(GTK_DIALOG(cc_dlg->dialog));
 
@@ -380,7 +379,7 @@ void show_dialog_create_class(gint type)
 
 	cc_dlg->class_name_entry = gtk_entry_new();
 	gtk_box_pack_start(GTK_BOX(hbox), cc_dlg->class_name_entry, TRUE, TRUE, 0);
-	g_signal_connect(G_OBJECT(cc_dlg->class_name_entry), "changed",
+	g_signal_connect(cc_dlg->class_name_entry, "changed",
 			G_CALLBACK(cc_dlg_on_class_name_entry_changed), cc_dlg);
 
 	hbox = gtk_hbox_new(FALSE, 10);
@@ -417,7 +416,7 @@ void show_dialog_create_class(gint type)
 	if (type == GEANY_CLASS_TYPE_GTK)
 		gtk_entry_set_text(GTK_ENTRY(cc_dlg->base_name_entry), "GObject");
 	gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->base_name_entry);
-	g_signal_connect(G_OBJECT(cc_dlg->base_name_entry), "changed",
+	g_signal_connect(cc_dlg->base_name_entry, "changed",
 			G_CALLBACK(cc_dlg_on_base_name_entry_changed), (gpointer)cc_dlg);
 
 	hbox = gtk_hbox_new(FALSE, 10);
@@ -468,7 +467,7 @@ void show_dialog_create_class(gint type)
 	{
 		hbox = gtk_hbox_new(FALSE, 10);
 		gtk_container_add(GTK_CONTAINER(vbox), hbox);
-		g_signal_connect(G_OBJECT(cc_dlg->create_constructor_box), "toggled",
+		g_signal_connect(cc_dlg->create_constructor_box, "toggled",
 				G_CALLBACK(cc_dlg_on_set_sensitive_toggled), (gpointer)hbox);
 
 		label = gtk_label_new(_("GTK+ constructor type"));
@@ -793,10 +792,10 @@ void plugin_init(GeanyData *data)
 	menu_create_gtk_class = gtk_menu_item_new_with_mnemonic (_("_GTK+ Class"));
 	gtk_container_add (GTK_CONTAINER (menu_create_class1_menu), menu_create_gtk_class);
 
-	g_signal_connect ((gpointer) menu_create_cpp_class, "activate",
+	g_signal_connect(menu_create_cpp_class, "activate",
 		G_CALLBACK (on_menu_create_cpp_class_activate),
 		NULL);
-	g_signal_connect ((gpointer) menu_create_gtk_class, "activate",
+	g_signal_connect(menu_create_gtk_class, "activate",
 		G_CALLBACK (on_menu_create_gtk_class_activate),
 		NULL);
 

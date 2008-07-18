@@ -357,7 +357,7 @@ static GtkWidget *create_custom_widget(GtkPrintOperation *operation, gpointer us
 	gtk_tooltips_set_tip(tooltips, w->check_print_pageheader, _("Adds a little header to every page containing the page number, the filename and the current date(see below). It takes 3 lines of the page."), NULL);
 	gtk_button_set_focus_on_click(GTK_BUTTON(w->check_print_pageheader), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w->check_print_pageheader), printing_prefs.print_page_header);
-	g_signal_connect((gpointer) w->check_print_pageheader, "toggled", G_CALLBACK(on_page_header_toggled), w);
+	g_signal_connect(w->check_print_pageheader, "toggled", G_CALLBACK(on_page_header_toggled), w);
 
 	frame33 = gtk_frame_new(NULL);
 	gtk_box_pack_start(GTK_BOX(page), frame33, FALSE, FALSE, 0);

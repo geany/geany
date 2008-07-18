@@ -92,10 +92,10 @@ static void focus_sci(GtkWidget *widget, gpointer user_data)
 void notebook_init()
 {
 	/* focus the current document after clicking on a tab */
-	g_signal_connect_after(G_OBJECT(main_widgets.notebook), "button-release-event",
+	g_signal_connect_after(main_widgets.notebook, "button-release-event",
 		G_CALLBACK(focus_sci), NULL);
 
-	g_signal_connect(G_OBJECT(main_widgets.notebook), "drag-data-received",
+	g_signal_connect(main_widgets.notebook, "drag-data-received",
 		G_CALLBACK(on_window_drag_data_received), NULL);
 
 	setup_tab_dnd();
@@ -114,15 +114,13 @@ static void setup_tab_dnd()
 	if (gtk_check_version(2, 10, 0) == NULL) /* null means version ok */
 	{
 #if GTK_CHECK_VERSION(2, 10, 0)
-		g_signal_connect(G_OBJECT(notebook), "page-reordered",
-			G_CALLBACK(notebook_page_reordered_cb), NULL);
+		g_signal_connect(notebook, "page-reordered", G_CALLBACK(notebook_page_reordered_cb), NULL);
 #endif
 		return;
 	}
 
 	/* Set up drag movement callback */
-	g_signal_connect(G_OBJECT(notebook), "drag-motion",
-		G_CALLBACK(notebook_drag_motion_cb), NULL);
+	g_signal_connect(notebook, "drag-motion", G_CALLBACK(notebook_drag_motion_cb), NULL);
 
 	/* There is a bug on GTK 2.6 with drag reordering of notebook tabs.
 	 * Clicking (not dragging) on a notebook tab, then making a selection in the
@@ -137,7 +135,7 @@ static void setup_tab_dnd()
 	{
 		/* workaround GTK+2.6 drag start bug when over sci widget: */
 		gtk_widget_add_events(notebook, GDK_POINTER_MOTION_MASK);
-		g_signal_connect(G_OBJECT(notebook), "motion-notify-event",
+		g_signal_connect(notebook, "motion-notify-event",
 			G_CALLBACK(notebook_motion_notify_event_cb), NULL);
 	}
 #endif
@@ -335,8 +333,7 @@ gint notebook_new_tab(GeanyDocument *this)
 
 	ebox = gtk_event_box_new();
 	GTK_WIDGET_SET_FLAGS(ebox, GTK_NO_WINDOW);
-	g_signal_connect(G_OBJECT(ebox), "button-press-event",
-		G_CALLBACK(notebook_tab_label_cb), page);
+	g_signal_connect(ebox, "button-press-event", G_CALLBACK(notebook_tab_label_cb), page);
 
 	hbox = gtk_hbox_new(FALSE, 2);
 	gtk_container_add(GTK_CONTAINER(ebox), fdoc->tab_label);
@@ -370,8 +367,7 @@ gint notebook_new_tab(GeanyDocument *this)
 
 		gtk_box_pack_start(GTK_BOX(hbox), align, TRUE, TRUE, 0);
 
-		g_signal_connect(G_OBJECT(btn), "clicked",
-			G_CALLBACK(notebook_tab_close_clicked_cb), page);
+		g_signal_connect(btn, "clicked", G_CALLBACK(notebook_tab_close_clicked_cb), page);
 	}
 
 	gtk_widget_show_all(hbox);

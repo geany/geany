@@ -409,9 +409,9 @@ static void insert_include_items(GtkMenu *me, GtkMenu *mp, gchar **includes, gch
 		tmp_popup = gtk_menu_item_new_with_label(includes[i]);
 		gtk_container_add(GTK_CONTAINER(edit_menu), tmp_menu);
 		gtk_container_add(GTK_CONTAINER(popup_menu), tmp_popup);
-		g_signal_connect((gpointer) tmp_menu, "activate",
+		g_signal_connect(tmp_menu, "activate",
 					G_CALLBACK(on_menu_insert_include_activate), (gpointer) includes[i]);
-		g_signal_connect((gpointer) tmp_popup, "activate",
+		g_signal_connect(tmp_popup, "activate",
 					G_CALLBACK(on_insert_include_activate), (gpointer) includes[i]);
 		i++;
 	}
@@ -450,7 +450,7 @@ void ui_create_insert_menu_items(void)
 	blank = gtk_menu_item_new_with_label("#include \"...\"");
 	gtk_container_add(GTK_CONTAINER(menu_edit), blank);
 	gtk_widget_show(blank);
-	g_signal_connect((gpointer) blank, "activate", G_CALLBACK(on_menu_insert_include_activate),
+	g_signal_connect(blank, "activate", G_CALLBACK(on_menu_insert_include_activate),
 																	(gpointer) "blank");
 	blank = gtk_separator_menu_item_new ();
 	gtk_container_add(GTK_CONTAINER(menu_edit), blank);
@@ -459,7 +459,7 @@ void ui_create_insert_menu_items(void)
 	blank = gtk_menu_item_new_with_label("#include \"...\"");
 	gtk_container_add(GTK_CONTAINER(menu_popup), blank);
 	gtk_widget_show(blank);
-	g_signal_connect((gpointer) blank, "activate", G_CALLBACK(on_insert_include_activate),
+	g_signal_connect(blank, "activate", G_CALLBACK(on_insert_include_activate),
 																	(gpointer) "blank");
 	blank = gtk_separator_menu_item_new();
 	gtk_container_add(GTK_CONTAINER(menu_popup), blank);
@@ -480,12 +480,12 @@ static void insert_date_items(GtkMenu *me, GtkMenu *mp, gchar *label)
 	item = gtk_menu_item_new_with_mnemonic(label);
 	gtk_container_add(GTK_CONTAINER(me), item);
 	gtk_widget_show(item);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_menu_insert_date_activate), label);
+	g_signal_connect(item, "activate", G_CALLBACK(on_menu_insert_date_activate), label);
 
 	item = gtk_menu_item_new_with_mnemonic(label);
 	gtk_container_add(GTK_CONTAINER(mp), item);
 	gtk_widget_show(item);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_insert_date_activate), label);
+	g_signal_connect(item, "activate", G_CALLBACK(on_insert_date_activate), label);
 }
 
 
@@ -522,18 +522,16 @@ void ui_create_insert_date_menu_items(void)
 	item = gtk_menu_item_new_with_mnemonic(str);
 	gtk_container_add(GTK_CONTAINER(menu_edit), item);
 	gtk_widget_show(item);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_menu_insert_date_activate),
-		str);
-	g_object_set_data_full(G_OBJECT(main_widgets.window), "insert_date_custom1", gtk_widget_ref(item),
-													(GDestroyNotify)gtk_widget_unref);
+	g_signal_connect(item, "activate", G_CALLBACK(on_menu_insert_date_activate), str);
+	g_object_set_data_full(G_OBJECT(main_widgets.window),
+		"insert_date_custom1", gtk_widget_ref(item), (GDestroyNotify)gtk_widget_unref);
 
 	item = gtk_menu_item_new_with_mnemonic(str);
 	gtk_container_add(GTK_CONTAINER(menu_popup), item);
 	gtk_widget_show(item);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_insert_date_activate),
-		str);
-	g_object_set_data_full(G_OBJECT(main_widgets.editor_menu), "insert_date_custom2", gtk_widget_ref(item),
-													(GDestroyNotify)gtk_widget_unref);
+	g_signal_connect(item, "activate", G_CALLBACK(on_insert_date_activate), str);
+	g_object_set_data_full(G_OBJECT(main_widgets.editor_menu),
+		"insert_date_custom2", gtk_widget_ref(item), (GDestroyNotify)gtk_widget_unref);
 
 	insert_date_items(menu_edit, menu_popup, _("_Set Custom Date Format"));
 }
@@ -884,14 +882,12 @@ void ui_create_recent_menu(void)
 		tmp = gtk_menu_item_new_with_label(filename);
 		gtk_widget_show(tmp);
 		gtk_menu_shell_append(GTK_MENU_SHELL(ui_widgets.recent_files_menubar), tmp);
-		g_signal_connect((gpointer) tmp, "activate",
-					G_CALLBACK(recent_file_activate_cb), NULL);
+		g_signal_connect(tmp, "activate", G_CALLBACK(recent_file_activate_cb), NULL);
 		/* create menu item for the recent files menu in the toolbar bar */
 		tmp = gtk_menu_item_new_with_label(filename);
 		gtk_widget_show(tmp);
 		gtk_menu_shell_append(GTK_MENU_SHELL(ui_widgets.recent_files_toolbar), tmp);
-		g_signal_connect((gpointer) tmp, "activate",
-					G_CALLBACK(recent_file_activate_cb), NULL);
+		g_signal_connect(tmp, "activate", G_CALLBACK(recent_file_activate_cb), NULL);
 	}
 }
 
@@ -995,14 +991,12 @@ static void recent_file_loaded(const gchar *utf8_filename)
 	tmp = gtk_menu_item_new_with_label(utf8_filename);
 	gtk_widget_show(tmp);
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(ui_widgets.recent_files_menubar), tmp);
-	g_signal_connect((gpointer) tmp, "activate",
-				G_CALLBACK(recent_file_activate_cb), NULL);
+	g_signal_connect(tmp, "activate", G_CALLBACK(recent_file_activate_cb), NULL);
 	/* then for the recent files menu in the tool bar */
 	tmp = gtk_menu_item_new_with_label(utf8_filename);
 	gtk_widget_show(tmp);
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(ui_widgets.recent_files_toolbar), tmp);
-	g_signal_connect((gpointer) tmp, "activate",
-				G_CALLBACK(recent_file_activate_cb), NULL);
+	g_signal_connect(tmp, "activate", G_CALLBACK(recent_file_activate_cb), NULL);
 }
 
 
@@ -1050,14 +1044,12 @@ static void update_recent_menu(void)
 	tmp = gtk_menu_item_new_with_label(filename);
 	gtk_widget_show(tmp);
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(ui_widgets.recent_files_menubar), tmp);
-	g_signal_connect((gpointer) tmp, "activate",
-				G_CALLBACK(recent_file_activate_cb), NULL);
+	g_signal_connect(tmp, "activate", G_CALLBACK(recent_file_activate_cb), NULL);
 	/* create item for the tool bar menu */
 	tmp = gtk_menu_item_new_with_label(filename);
 	gtk_widget_show(tmp);
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(ui_widgets.recent_files_toolbar), tmp);
-	g_signal_connect((gpointer) tmp, "activate",
-				G_CALLBACK(recent_file_activate_cb), NULL);
+	g_signal_connect(tmp, "activate", G_CALLBACK(recent_file_activate_cb), NULL);
 }
 
 
@@ -1354,13 +1346,12 @@ void ui_setup_open_button_callback(GtkWidget *open_btn, const gchar *title,
 	GtkWidget *path_entry = GTK_WIDGET(entry);
 
 	if (title)
-		g_object_set_data_full(G_OBJECT(open_btn), "title",
-			g_strdup(title), (GDestroyNotify) g_free);
+		g_object_set_data_full(G_OBJECT(open_btn), "title", g_strdup(title),
+				(GDestroyNotify) g_free);
 	g_object_set_data(G_OBJECT(open_btn), "action", (gpointer) action);
 	g_object_set_data_full(G_OBJECT(open_btn), "entry",
 		gtk_widget_ref(path_entry), (GDestroyNotify) gtk_widget_unref);
-	g_signal_connect(G_OBJECT(open_btn), "clicked",
-		G_CALLBACK(ui_path_box_open_clicked), open_btn);
+	g_signal_connect(open_btn, "clicked", G_CALLBACK(ui_path_box_open_clicked), open_btn);
 }
 
 

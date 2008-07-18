@@ -92,7 +92,7 @@ void plugin_init(GeanyData *data)
 	demo_item = gtk_menu_item_new_with_mnemonic(_("_Demo Plugin"));
 	gtk_widget_show(demo_item);
 	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), demo_item);
-	g_signal_connect(G_OBJECT(demo_item), "activate", G_CALLBACK(item_activate), NULL);
+	g_signal_connect(demo_item, "activate", G_CALLBACK(item_activate), NULL);
 
 	welcome_text = g_strdup(_("Hello World!"));
 

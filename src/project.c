@@ -142,8 +142,7 @@ void project_new()
 	e->file_name = gtk_entry_new();
 	gtk_entry_set_width_chars(GTK_ENTRY(e->file_name), 30);
 	button = gtk_button_new();
-	g_signal_connect((gpointer) button, "clicked",
-				G_CALLBACK(on_file_save_button_clicked), e);
+	g_signal_connect(button, "clicked", G_CALLBACK(on_file_save_button_clicked), e);
 	image = gtk_image_new_from_stock("gtk-open", GTK_ICON_SIZE_BUTTON);
 	gtk_container_add(GTK_CONTAINER(button), image);
 	bbox = gtk_hbox_new(FALSE, 6);
@@ -168,12 +167,12 @@ void project_new()
 	gtk_container_add(GTK_CONTAINER(vbox), table);
 
 	/* signals */
-	g_signal_connect((gpointer) e->name, "changed", G_CALLBACK(on_name_entry_changed), e);
+	g_signal_connect(e->name, "changed", G_CALLBACK(on_name_entry_changed), e);
 	/* run the callback manually to initialise the base_path and file_name fields */
 	on_name_entry_changed(GTK_EDITABLE(e->name), e);
 
-	g_signal_connect((gpointer) e->file_name, "changed", G_CALLBACK(on_entries_changed), e);
-	g_signal_connect((gpointer) e->base_path, "changed", G_CALLBACK(on_entries_changed), e);
+	g_signal_connect(e->file_name, "changed", G_CALLBACK(on_entries_changed), e);
+	g_signal_connect(e->base_path, "changed", G_CALLBACK(on_entries_changed), e);
 
 	gtk_widget_show_all(e->dialog);
 
@@ -442,8 +441,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 		"Options can be appended to the command. "
 		"Leave blank to use the default run command."), NULL);
 	button = gtk_button_new();
-	g_signal_connect((gpointer) button, "clicked",
-				G_CALLBACK(on_file_open_button_clicked), e->run_cmd);
+	g_signal_connect(button, "clicked", G_CALLBACK(on_file_open_button_clicked), e->run_cmd);
 	image = gtk_image_new_from_stock("gtk-open", GTK_ICON_SIZE_BUTTON);
 	gtk_container_add(GTK_CONTAINER(button), image);
 	bbox = gtk_hbox_new(FALSE, 6);

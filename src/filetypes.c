@@ -743,7 +743,7 @@ static void create_radio_menu_item(GtkWidget *menu, const gchar *label, GeanyFil
 	fft->menu_item = tmp;
 	gtk_widget_show(tmp);
 	gtk_container_add(GTK_CONTAINER(menu), tmp);
-	g_signal_connect((gpointer) tmp, "activate", G_CALLBACK(on_filetype_change), (gpointer) ftype);
+	g_signal_connect(tmp, "activate", G_CALLBACK(on_filetype_change), (gpointer) ftype);
 }
 
 

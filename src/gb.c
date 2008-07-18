@@ -139,9 +139,9 @@ static void create_window(void)
 	gtk_box_pack_start(GTK_BOX(hbox2), button5, FALSE, FALSE, 0);
 	gtk_container_set_border_width(GTK_CONTAINER(button5), 5);
 
-	g_signal_connect((gpointer) button1, "clicked", G_CALLBACK(on_button1_clicked), NULL);
-	g_signal_connect((gpointer) button4, "clicked", G_CALLBACK(on_button4_clicked), NULL);
-	g_signal_connect((gpointer) button5, "clicked", G_CALLBACK(on_button5_clicked), NULL);
+	g_signal_connect(button1, "clicked", G_CALLBACK(on_button1_clicked), NULL);
+	g_signal_connect(button4, "clicked", G_CALLBACK(on_button4_clicked), NULL);
+	g_signal_connect(button5, "clicked", G_CALLBACK(on_button5_clicked), NULL);
 
 	gtk_widget_grab_focus(button4);
 }
@@ -293,8 +293,8 @@ static void on_button4_clicked(GtkButton *button, gpointer user_data)
 	GtkWidget *dialog = create_help_dialog();
 	GtkTextBuffer *buffer;
 
-	g_signal_connect(G_OBJECT(dialog), "delete_event", G_CALLBACK(destroydialog), G_OBJECT(dialog));
-	g_signal_connect(G_OBJECT(okbutton1), "clicked", G_CALLBACK(destroydialog), G_OBJECT(dialog));
+	g_signal_connect(dialog, "delete-event", G_CALLBACK(destroydialog), G_OBJECT(dialog));
+	g_signal_connect(okbutton1, "clicked", G_CALLBACK(destroydialog), G_OBJECT(dialog));
 
 	buffer = gtk_text_buffer_new(NULL);
 	gtk_text_buffer_set_text(buffer, help_text, strlen(help_text));
@@ -1237,7 +1237,7 @@ void gb_start_easteregg(void)
 {
 	load_images();
 	create_window();
-	g_signal_connect(G_OBJECT(gb_window), "delete_event", G_CALLBACK(gb_destroyapp), NULL);
+	g_signal_connect(gb_window, "delete-event", G_CALLBACK(gb_destroyapp), NULL);
 
 	points = 0;
 	lap = 0;

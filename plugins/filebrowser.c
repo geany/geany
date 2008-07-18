@@ -530,8 +530,7 @@ static GtkWidget *create_popup_menu(void)
 	item = gtk_image_menu_item_new_from_stock(GTK_STOCK_OPEN, NULL);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect((gpointer) item, "activate",
-		G_CALLBACK(on_open_clicked), NULL);
+	g_signal_connect(item, "activate", G_CALLBACK(on_open_clicked), NULL);
 	popup_items.open = item;
 
 	image = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_MENU);
@@ -540,8 +539,7 @@ static GtkWidget *create_popup_menu(void)
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect((gpointer) item, "activate",
-		G_CALLBACK(on_external_open), NULL);
+	g_signal_connect(item, "activate", G_CALLBACK(on_external_open), NULL);
 	popup_items.open_external = item;
 
 	image = gtk_image_new_from_stock(GTK_STOCK_FIND, GTK_ICON_SIZE_MENU);
@@ -550,7 +548,7 @@ static GtkWidget *create_popup_menu(void)
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_find_in_files), NULL);
+	g_signal_connect(item, "activate", G_CALLBACK(on_find_in_files), NULL);
 	popup_items.find_in_files = item;
 
 	item = gtk_separator_menu_item_new();
@@ -560,7 +558,7 @@ static GtkWidget *create_popup_menu(void)
 	item = gtk_check_menu_item_new_with_mnemonic(_("Show _Hidden Files"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_hidden_files_clicked), NULL);
+	g_signal_connect(item, "activate", G_CALLBACK(on_hidden_files_clicked), NULL);
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
@@ -571,7 +569,7 @@ static GtkWidget *create_popup_menu(void)
 		gtk_image_new_from_stock("gtk-close", GTK_ICON_SIZE_MENU));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_hide_sidebar), NULL);
+	g_signal_connect(item, "activate", G_CALLBACK(on_hide_sidebar), NULL);
 
 	return menu;
 }
@@ -712,12 +710,9 @@ static void prepare_file_view(void)
 	gtk_tree_selection_set_mode(select, GTK_SELECTION_MULTIPLE);
 
 	g_signal_connect(G_OBJECT(file_view), "realize", G_CALLBACK(on_current_path), NULL);
-	g_signal_connect(G_OBJECT(file_view), "button-press-event",
-		G_CALLBACK(on_button_press), NULL);
-	g_signal_connect(G_OBJECT(file_view), "button-release-event",
-		G_CALLBACK(on_button_release), NULL);
-	g_signal_connect(G_OBJECT(file_view), "key-press-event",
-		G_CALLBACK(on_key_press), NULL);
+	g_signal_connect(file_view, "button-press-event", G_CALLBACK(on_button_press), NULL);
+	g_signal_connect(file_view, "button-release-event", G_CALLBACK(on_button_release), NULL);
+	g_signal_connect(file_view, "key-press-event", G_CALLBACK(on_key_press), NULL);
 }
 
 
@@ -734,25 +729,25 @@ static GtkWidget *make_toolbar(void)
 	wid = (GtkWidget *) gtk_tool_button_new_from_stock(GTK_STOCK_GO_UP);
 	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(wid), tooltips,
 		_("Up"), NULL);
-	g_signal_connect(G_OBJECT(wid), "clicked", G_CALLBACK(on_go_up), NULL);
+	g_signal_connect(wid, "clicked", G_CALLBACK(on_go_up), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
 	wid = (GtkWidget *) gtk_tool_button_new_from_stock(GTK_STOCK_REFRESH);
 	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(wid), tooltips,
 		_("Refresh"), NULL);
-	g_signal_connect(G_OBJECT(wid), "clicked", G_CALLBACK(refresh), NULL);
+	g_signal_connect(wid, "clicked", G_CALLBACK(refresh), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
 	wid = (GtkWidget *) gtk_tool_button_new_from_stock(GTK_STOCK_HOME);
 	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(wid), tooltips,
 		_("Home"), NULL);
-	g_signal_connect(G_OBJECT(wid), "clicked", G_CALLBACK(on_go_home), NULL);
+	g_signal_connect(wid, "clicked", G_CALLBACK(on_go_home), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
 	wid = (GtkWidget *) gtk_tool_button_new_from_stock(GTK_STOCK_JUMP_TO);
 	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(wid), tooltips,
 		_("Set path from document"), NULL);
-	g_signal_connect(G_OBJECT(wid), "clicked", G_CALLBACK(on_current_path), NULL);
+	g_signal_connect(wid, "clicked", G_CALLBACK(on_current_path), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
 	wid = (GtkWidget *) gtk_separator_tool_item_new();
@@ -760,7 +755,7 @@ static GtkWidget *make_toolbar(void)
 
 	wid = (GtkWidget *) gtk_tool_button_new_from_stock(GTK_STOCK_CLEAR);
 	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(wid), tooltips, _("Clear the filter"), NULL);
-	g_signal_connect(G_OBJECT(wid), "clicked", G_CALLBACK(on_clear_filter), NULL);
+	g_signal_connect(wid, "clicked", G_CALLBACK(on_clear_filter), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
 	return toolbar;
@@ -776,7 +771,7 @@ static GtkWidget *make_filterbar(void)
 	label = gtk_label_new(_("Filter:"));
 
 	filter_entry = gtk_entry_new();
-	g_signal_connect(G_OBJECT(filter_entry), "activate", G_CALLBACK(on_filter_activate), NULL);
+	g_signal_connect(filter_entry, "activate", G_CALLBACK(on_filter_activate), NULL);
 
 	gtk_box_pack_start(GTK_BOX(filterbar), label, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(filterbar), filter_entry, TRUE, TRUE, 0);
@@ -911,7 +906,7 @@ void plugin_init(GeanyData *data)
 
 	path_entry = gtk_entry_new();
 	gtk_box_pack_start(GTK_BOX(file_view_vbox), path_entry, FALSE, FALSE, 2);
-	g_signal_connect(G_OBJECT(path_entry), "activate", G_CALLBACK(on_path_entry_activate), NULL);
+	g_signal_connect(path_entry, "activate", G_CALLBACK(on_path_entry_activate), NULL);
 
 	file_view = gtk_tree_view_new();
 	prepare_file_view();

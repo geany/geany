@@ -415,7 +415,7 @@ void encodings_init(void)
 							item = gtk_menu_item_new_with_label(label);
 						gtk_widget_show(item);
 						gtk_container_add(GTK_CONTAINER(submenu), item);
-						g_signal_connect((gpointer) item, "activate",
+						g_signal_connect(item, "activate",
 										cb_func[k], GINT_TO_POINTER(encodings[j].idx));
 						g_free(label);
 						break;

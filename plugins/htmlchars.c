@@ -128,14 +128,12 @@ static void tools_show_dialog_insert_special_chars(void)
 
 		gtk_box_pack_start(GTK_BOX(vbox), swin, TRUE, TRUE, 0);
 
-		g_signal_connect((gpointer) sc_tree, "row-activated",
-					G_CALLBACK(sc_on_tree_row_activated), NULL);
+		g_signal_connect(sc_tree, "row-activated", G_CALLBACK(sc_on_tree_row_activated), NULL);
 
-		g_signal_connect((gpointer) sc_dialog, "response",
+		g_signal_connect(sc_dialog, "response",
 					G_CALLBACK(sc_on_tools_show_dialog_insert_special_chars_response), NULL);
 
-		g_signal_connect((gpointer) sc_dialog, "delete_event",
-					G_CALLBACK(gtk_widget_hide_on_delete), NULL);
+		g_signal_connect(sc_dialog, "delete-event", G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 
 		sc_fill_store(sc_store);
 
@@ -530,7 +528,7 @@ void plugin_init(GeanyData *data)
 	demo_item = gtk_menu_item_new_with_mnemonic(menu_text);
 	gtk_widget_show(demo_item);
 	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), demo_item);
-	g_signal_connect(G_OBJECT(demo_item), "activate", G_CALLBACK(item_activate), NULL);
+	g_signal_connect(demo_item, "activate", G_CALLBACK(item_activate), NULL);
 
 	/* disable menu_item when there are no documents open */
 	plugin_fields->menu_item = demo_item;

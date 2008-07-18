@@ -88,7 +88,7 @@ void msgwin_init()
 	msgwindow.popup_msg_menu = create_message_popup_menu(MSG_MESSAGE);
 	msgwindow.popup_compiler_menu = create_message_popup_menu(MSG_COMPILER);
 
-	g_signal_connect(G_OBJECT(lookup_widget(main_widgets.window, "textview_scribble")),
+	g_signal_connect(lookup_widget(main_widgets.window, "textview_scribble"),
 		"populate-popup", G_CALLBACK(on_scribble_populate), NULL);
 }
 
@@ -119,7 +119,7 @@ static void prepare_status_tree_view(void)
 	gtk_widget_modify_font(msgwindow.tree_status, pfd);
 	pango_font_description_free(pfd);
 
-	g_signal_connect(G_OBJECT(msgwindow.tree_status), "button-press-event",
+	g_signal_connect(msgwindow.tree_status, "button-press-event",
 				G_CALLBACK(on_msgwin_button_press_event), GINT_TO_POINTER(MSG_STATUS));
 }
 
@@ -151,13 +151,13 @@ static void prepare_msg_tree_view(void)
 
 	/* use button-release-event so the selection has changed
 	 * (connect_after button-press-event doesn't work) */
-	g_signal_connect(G_OBJECT(msgwindow.tree_msg), "button-release-event",
+	g_signal_connect(msgwindow.tree_msg, "button-release-event",
 					G_CALLBACK(on_msgwin_button_press_event), GINT_TO_POINTER(MSG_MESSAGE));
 
 	/* selection handling */
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_msg));
 	gtk_tree_selection_set_mode(selection, GTK_SELECTION_SINGLE);
-	/*g_signal_connect(G_OBJECT(selection), "changed",G_CALLBACK(on_msg_tree_selection_changed), NULL);*/
+	/*g_signal_connect(selection, "changed",G_CALLBACK(on_msg_tree_selection_changed), NULL);*/
 }
 
 
@@ -184,13 +184,13 @@ static void prepare_compiler_tree_view(void)
 
 	/* use button-release-event so the selection has changed
 	 * (connect_after button-press-event doesn't work) */
-	g_signal_connect(G_OBJECT(msgwindow.tree_compiler), "button-release-event",
+	g_signal_connect(msgwindow.tree_compiler, "button-release-event",
 					G_CALLBACK(on_msgwin_button_press_event), GINT_TO_POINTER(MSG_COMPILER));
 
 	/* selection handling */
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_compiler));
 	gtk_tree_selection_set_mode(selection, GTK_SELECTION_SINGLE);
-	/*g_signal_connect(G_OBJECT(selection), "changed", G_CALLBACK(on_msg_tree_selection_changed), NULL);*/
+	/*g_signal_connect(selection, "changed", G_CALLBACK(on_msg_tree_selection_changed), NULL);*/
 }
 
 
@@ -480,13 +480,13 @@ static GtkWidget *create_message_popup_menu(gint type)
 	clear = gtk_image_menu_item_new_from_stock("gtk-clear", NULL);
 	gtk_widget_show(clear);
 	gtk_container_add(GTK_CONTAINER(message_popup_menu), clear);
-	g_signal_connect((gpointer)clear, "activate",
+	g_signal_connect(clear, "activate",
 		G_CALLBACK(on_message_treeview_clear_activate), GINT_TO_POINTER(type));
 
 	copy = gtk_image_menu_item_new_from_stock("gtk-copy", NULL);
 	gtk_widget_show(copy);
 	gtk_container_add(GTK_CONTAINER(message_popup_menu), copy);
-	g_signal_connect((gpointer)copy, "activate",
+	g_signal_connect(copy, "activate",
 		G_CALLBACK(on_compiler_treeview_copy_activate), GINT_TO_POINTER(type));
 
 	copy = gtk_image_menu_item_new_with_mnemonic(_("Copy _All"));
@@ -495,7 +495,7 @@ static GtkWidget *create_message_popup_menu(gint type)
 	image = gtk_image_new_from_stock("gtk-copy", GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(copy), image);
-	g_signal_connect((gpointer)copy, "activate",
+	g_signal_connect(copy, "activate",
 		G_CALLBACK(on_compiler_treeview_copy_all_activate), GINT_TO_POINTER(type));
 
 	msgwin_menu_add_common_items(GTK_MENU(message_popup_menu));
@@ -522,8 +522,7 @@ void msgwin_menu_add_common_items(GtkMenu *menu)
 	item = gtk_menu_item_new_with_mnemonic(_("_Hide Message Window"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect((gpointer)item, "activate",
-		G_CALLBACK(on_hide_message_window), NULL);
+	g_signal_connect(item, "activate", G_CALLBACK(on_hide_message_window), NULL);
 }
 
 

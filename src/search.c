@@ -142,7 +142,7 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 	gtk_button_set_focus_on_click(GTK_BUTTON(check_regexp), FALSE);
 	gtk_tooltips_set_tip(tooltips, check_regexp, _("Use POSIX-like regular expressions. "
 		"For detailed information about using regular expressions, please read the documentation."), NULL);
-	g_signal_connect(G_OBJECT(check_regexp), "toggled",
+	g_signal_connect(check_regexp, "toggled",
 		G_CALLBACK(on_find_replace_checkbutton_toggled), GTK_WIDGET(dialog));
 
 	if (dialog != GTK_DIALOG(widgets.find_dialog))
@@ -329,11 +329,11 @@ void search_show_find_dialog(void)
 		g_object_set_data_full(G_OBJECT(widgets.find_dialog), "entry",
 						gtk_widget_ref(entry), (GDestroyNotify)gtk_widget_unref);
 
-		g_signal_connect((gpointer) gtk_bin_get_child(GTK_BIN(entry)), "activate",
+		g_signal_connect(gtk_bin_get_child(GTK_BIN(entry)), "activate",
 				G_CALLBACK(on_find_entry_activate), NULL);
-		g_signal_connect((gpointer) widgets.find_dialog, "response",
+		g_signal_connect(widgets.find_dialog, "response",
 				G_CALLBACK(on_find_dialog_response), entry);
-		g_signal_connect((gpointer) widgets.find_dialog, "delete_event",
+		g_signal_connect(widgets.find_dialog, "delete-event",
 				G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 
 		sbox = gtk_hbox_new(FALSE, 6);
@@ -352,17 +352,17 @@ void search_show_find_dialog(void)
 		gtk_tooltips_set_tip(tooltips, button,
 				_("Mark all matches in the current document."), NULL);
 		gtk_container_add(GTK_CONTAINER(bbox), button);
-		g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(send_find_dialog_response),
+		g_signal_connect(button, "clicked", G_CALLBACK(send_find_dialog_response),
 			GINT_TO_POINTER(GEANY_RESPONSE_MARK));
 
 		button = gtk_button_new_with_mnemonic(_("In Sessi_on"));
 		gtk_container_add(GTK_CONTAINER(bbox), button);
-		g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(send_find_dialog_response),
+		g_signal_connect(button, "clicked", G_CALLBACK(send_find_dialog_response),
 			GINT_TO_POINTER(GEANY_RESPONSE_FIND_IN_SESSION));
 
 		button = gtk_button_new_with_mnemonic(_("_In Document"));
 		gtk_container_add(GTK_CONTAINER(bbox), button);
-		g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(send_find_dialog_response),
+		g_signal_connect(button, "clicked", G_CALLBACK(send_find_dialog_response),
 			GINT_TO_POINTER(GEANY_RESPONSE_FIND_IN_FILE));
 
 		/* close window checkbox */
@@ -462,14 +462,14 @@ void search_show_replace_dialog(void)
 		g_object_set_data_full(G_OBJECT(widgets.replace_dialog), "entry_replace",
 						gtk_widget_ref(entry_replace), (GDestroyNotify)gtk_widget_unref);
 
-		g_signal_connect((gpointer) gtk_bin_get_child(GTK_BIN(entry_find)),
+		g_signal_connect(gtk_bin_get_child(GTK_BIN(entry_find)),
 				"key-press-event", G_CALLBACK(on_widget_key_pressed_set_focus),
 				gtk_bin_get_child(GTK_BIN(entry_replace)));
-		g_signal_connect((gpointer) gtk_bin_get_child(GTK_BIN(entry_replace)), "activate",
+		g_signal_connect(gtk_bin_get_child(GTK_BIN(entry_replace)), "activate",
 				G_CALLBACK(on_replace_entry_activate), NULL);
-		g_signal_connect((gpointer) widgets.replace_dialog, "response",
+		g_signal_connect(widgets.replace_dialog, "response",
 				G_CALLBACK(on_replace_dialog_response), entry_replace);
-		g_signal_connect((gpointer) widgets.replace_dialog, "delete_event",
+		g_signal_connect(widgets.replace_dialog, "delete-event",
 				G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 
 		fbox = gtk_hbox_new(FALSE, 6);
@@ -498,17 +498,17 @@ void search_show_replace_dialog(void)
 		gtk_tooltips_set_tip(tooltips, button,
 			_("Replace all matches found in the currently selected text"), NULL);
 		gtk_container_add(GTK_CONTAINER(bbox), button);
-		g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(send_replace_dialog_response),
+		g_signal_connect(button, "clicked", G_CALLBACK(send_replace_dialog_response),
 			GINT_TO_POINTER(GEANY_RESPONSE_REPLACE_IN_SEL));
 
 		button = gtk_button_new_with_mnemonic(_("In Sessi_on"));
 		gtk_container_add(GTK_CONTAINER(bbox), button);
-		g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(send_replace_dialog_response),
+		g_signal_connect(button, "clicked", G_CALLBACK(send_replace_dialog_response),
 			GINT_TO_POINTER(GEANY_RESPONSE_REPLACE_IN_SESSION));
 
 		button = gtk_button_new_with_mnemonic(_("_In Document"));
 		gtk_container_add(GTK_CONTAINER(bbox), button);
-		g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(send_replace_dialog_response),
+		g_signal_connect(button, "clicked", G_CALLBACK(send_replace_dialog_response),
 			GINT_TO_POINTER(GEANY_RESPONSE_REPLACE_IN_FILE));
 
 		/* close window checkbox */
@@ -696,7 +696,7 @@ void search_show_find_in_files_dialog(const gchar *dir)
 				_("Other options to pass to Grep"), NULL);
 
 		/* enable entry_extra when check_extra is checked */
-		g_signal_connect(G_OBJECT(check_extra), "toggled",
+		g_signal_connect(check_extra, "toggled",
 			G_CALLBACK(on_extra_options_toggled), entry_extra);
 
 		hbox = gtk_hbox_new(FALSE, 6);
@@ -704,11 +704,11 @@ void search_show_find_in_files_dialog(const gchar *dir)
 		gtk_box_pack_start(GTK_BOX(hbox), entry_extra, TRUE, TRUE, 0);
 		gtk_container_add(GTK_CONTAINER(vbox), hbox);
 
-		g_signal_connect((gpointer) dir_combo, "key-press-event",
+		g_signal_connect(dir_combo, "key-press-event",
 				G_CALLBACK(on_widget_key_pressed_set_focus), combo);
-		g_signal_connect((gpointer) widgets.find_in_files_dialog, "response",
+		g_signal_connect(widgets.find_in_files_dialog, "response",
 				G_CALLBACK(on_find_in_files_dialog_response), combo);
-		g_signal_connect((gpointer) widgets.find_in_files_dialog, "delete_event",
+		g_signal_connect(widgets.find_in_files_dialog, "delete-event",
 				G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 
 		gtk_widget_show_all(widgets.find_in_files_dialog);

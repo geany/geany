@@ -821,14 +821,14 @@ gint main(gint argc, gchar **argv)
 	}
 
 	/* registering some basic events */
-	g_signal_connect(G_OBJECT(main_widgets.window), "delete_event", G_CALLBACK(on_exit_clicked), NULL);
-	g_signal_connect(G_OBJECT(main_widgets.window), "key-press-event", G_CALLBACK(keybindings_got_event), NULL);
-	g_signal_connect(G_OBJECT(main_widgets.toolbar), "button-press-event", G_CALLBACK(toolbar_popup_menu), NULL);
-	g_signal_connect(G_OBJECT(lookup_widget(main_widgets.window, "textview_scribble")),
+	g_signal_connect(main_widgets.window, "delete-event", G_CALLBACK(on_exit_clicked), NULL);
+	g_signal_connect(main_widgets.window, "key-press-event", G_CALLBACK(keybindings_got_event), NULL);
+	g_signal_connect(main_widgets.toolbar, "button-press-event", G_CALLBACK(toolbar_popup_menu), NULL);
+	g_signal_connect(lookup_widget(main_widgets.window, "textview_scribble"),
 							"motion-notify-event", G_CALLBACK(on_motion_event), NULL);
-	g_signal_connect(G_OBJECT(lookup_widget(main_widgets.window, "entry1")),
+	g_signal_connect(lookup_widget(main_widgets.window, "entry1"),
 							"motion-notify-event", G_CALLBACK(on_motion_event), NULL);
-	g_signal_connect(G_OBJECT(lookup_widget(main_widgets.window, "entry_goto_line")),
+	g_signal_connect(lookup_widget(main_widgets.window, "entry_goto_line"),
 							"motion-notify-event", G_CALLBACK(on_motion_event), NULL);
 
 #ifdef HAVE_VTE
