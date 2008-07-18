@@ -58,7 +58,6 @@ typedef struct
 
 static void geany_wrap_label_class_init		(GeanyWrapLabelClass *klass);
 static void geany_wrap_label_init			(GeanyWrapLabel *self);
-static void geany_wrap_label_finalize		(GObject *object);
 static void geany_wrap_label_size_request	(GtkWidget *widget, GtkRequisition *req);
 static void geany_wrap_label_size_allocate	(GtkWidget *widget, GtkAllocation *alloc);
 static void geany_wrap_label_set_wrap_width	(GtkWidget *widget, gsize width);
@@ -92,10 +91,7 @@ GType geany_wrap_label_get_type()
 
 static void geany_wrap_label_class_init(GeanyWrapLabelClass *klass)
 {
-	GObjectClass *g_object_class = G_OBJECT_CLASS(klass);
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
-
-	g_object_class->finalize = geany_wrap_label_finalize;
 
 	parent_class = g_type_class_peek_parent(klass);
 	widget_class->size_request = geany_wrap_label_size_request;
@@ -110,20 +106,6 @@ static void geany_wrap_label_init(GeanyWrapLabel *self)
 	GeanyWrapLabelPrivate *priv = GEANY_WRAP_LABEL_GET_PRIVATE(self);
 
 	priv->wrap_width = 0;
-}
-
-
-static void geany_wrap_label_finalize(GObject *object)
-{
-	GeanyWrapLabel *self;
-
-	g_return_if_fail(object != NULL);
-	g_return_if_fail(IS_GEANY_WRAP_LABEL(object));
-
-	self = GEANY_WRAP_LABEL(object);
-
-	if (G_OBJECT_CLASS(parent_class)->finalize)
-		(* G_OBJECT_CLASS(parent_class)->finalize)(object);
 }
 
 
