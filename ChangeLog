@@ -13,6 +13,9 @@
    Remove unnecessary finalize() function.
  * plugins/classbuilder.c:
    Encourage single header includes as it is necessary with GTK 2.14+.
+ * src/treeviews.c:
+   Handle tooltip requests for items in the open files tree view
+   properly by using gtk_tree_view_get_tooltip_context().
 
 
 2008-07-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

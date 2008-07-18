@@ -215,16 +215,14 @@ void treeviews_update_tag_list(GeanyDocument *doc, gboolean update)
 gboolean on_treeviews_tooltip_queried(GtkWidget *widget, gint x, gint y, gboolean keyboard_mode,
 									  GtkTooltip *tooltip, gpointer user_data)
 {
-	GtkTreePath *path;
+	GtkTreeModel *model;
+	GtkTreeIter iter;
 
-	if (gtk_tree_view_get_path_at_pos(
-			GTK_TREE_VIEW(tv.tree_openfiles), x, y, &path, NULL, NULL, NULL))
+	if (gtk_tree_view_get_tooltip_context(
+			GTK_TREE_VIEW(widget), &x, &y, keyboard_mode, &model, NULL, &iter))
 	{
-		GtkTreeIter iter;
 		gchar *file_name = NULL;
 
-		gtk_tree_model_get_iter(GTK_TREE_MODEL(store_openfiles), &iter, path);
-		gtk_tree_path_free(path);
 		gtk_tree_model_get(GTK_TREE_MODEL(store_openfiles), &iter, 3, &file_name, -1);
 		if (file_name != NULL)
 		{
