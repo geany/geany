@@ -1,3 +1,11 @@
+2008-07-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/keybindings.c:
+   Add menu item accelerators first after default and user keybindings
+   have been read to avoid that menu item accelerators of user
+   keybindings can't be overridden anymore (closes #2021703).
+
+
 2008-07-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * plugins/classbuilder.c, plugins/demoplugin.c, plugins/export.c,
