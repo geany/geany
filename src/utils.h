@@ -141,4 +141,6 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 						   GSpawnChildSetupFunc child_setup, gpointer user_data, GPid *child_pid,
 						   GError **error);
 
+void utils_reload_configuration(void);
+
 #endif

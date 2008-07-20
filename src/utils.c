@@ -1523,3 +1523,42 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 #endif
 	return result;
 }
+
+
+/**
+ *  Reloads most of Geany's configuration files without restarting. Currently the following
+ *  files are reloaded: all template files, also new file templates and the 'New (with template)'
+ *  menus will be updated, Snippets (snippets.conf), filetype extensions (filetype_extensions.conf),
+ *  and 'settings' and 'build_settings' sections of the filetype definition files.
+ *
+ *  Plugins may call this function if they changed any of these files (e.g. a configuration file
+ *  editor plugin).
+ *
+ **/
+void utils_reload_configuration(void)
+{
+	guint i;
+
+	/* reload templates */
+	templates_free_templates();
+	templates_init();
+
+	/* reload snippets */
+	editor_snippets_free();
+	editor_snippets_init();
+
+	/* reload filetype extensions */
+	configuration_read_filetype_extensions();
+
+	/* save possibly changed commands before re-reading them */
+	filetypes_save_commands();
+
+	/* reload filetype configs */
+	for (i = 0; i < filetypes_array->len; i++)
+	{
+		/* filetypes_load_config() will skip not loaded filetypes */
+		filetypes_load_config(i, TRUE);
+	}
+
+	ui_set_statusbar(TRUE, _("Configuration files reloaded."));
+}

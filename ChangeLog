@@ -4,7 +4,9 @@
    Add menu item accelerators first after default and user keybindings
    have been read to avoid that menu item accelerators of user
    keybindings can't be overridden anymore (closes #2021703).
-
+ * src/callbacks.c, src/plugindata.h, src/plugins.c, src/utils.c, src/utils.h:
+   Move code to reload configuration files into utils_reload_configuration()
+   and add it to the plugin API.
 
 2008-07-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 

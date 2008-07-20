@@ -170,7 +170,8 @@ static UtilsFuncs utils_funcs = {
 	&utils_get_setting_integer,
 	&utils_get_setting_string,
 	&utils_spawn_sync,
-	&utils_spawn_async
+	&utils_spawn_async,
+	&utils_reload_configuration
 };
 
 static UIUtilsFuncs uiutils_funcs = {

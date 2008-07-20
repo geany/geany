@@ -36,7 +36,7 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 78;
+static const gint api_version = 79;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
@@ -300,6 +300,7 @@ typedef struct UtilsFuncs
 	gboolean	(*spawn_async) (const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
 				 GSpawnChildSetupFunc child_setup, gpointer user_data, GPid *child_pid,
 				 GError **error);
+	void		(*reload_configuration) (void);
 }
 UtilsFuncs;
 
