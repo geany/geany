@@ -2766,6 +2766,8 @@ create_prefs_dialog (void)
   GtkWidget *frame6;
   GtkWidget *alignment7;
   GtkWidget *vbox8;
+  GtkWidget *vbox38;
+  GtkWidget *check_cmdline_new_files;
   GtkWidget *table5;
   GtkWidget *eventbox1;
   GtkWidget *combo_new_encoding;
@@ -2786,6 +2788,7 @@ create_prefs_dialog (void)
   GtkWidget *label19;
   GtkWidget *frame17;
   GtkWidget *alignment20;
+  GtkWidget *vbox37;
   GtkWidget *table10;
   GtkWidget *label147;
   GtkObject *spin_mru_adj;
@@ -4005,9 +4008,18 @@ create_prefs_dialog (void)
   gtk_widget_show (vbox8);
   gtk_container_add (GTK_CONTAINER (alignment7), vbox8);
 
+  vbox38 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (vbox38);
+  gtk_box_pack_start (GTK_BOX (vbox8), vbox38, FALSE, TRUE, 0);
+
+  check_cmdline_new_files = gtk_check_button_new_with_mnemonic (_("Allow new documents from the command-line"));
+  gtk_widget_show (check_cmdline_new_files);
+  gtk_box_pack_start (GTK_BOX (vbox38), check_cmdline_new_files, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_cmdline_new_files, _("Start a new file for each command-line filename that doesn't exist"), NULL);
+
   table5 = gtk_table_new (4, 2, FALSE);
   gtk_widget_show (table5);
-  gtk_box_pack_start (GTK_BOX (vbox8), table5, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox38), table5, TRUE, TRUE, 0);
   gtk_table_set_row_spacings (GTK_TABLE (table5), 3);
 
   eventbox1 = gtk_event_box_new ();
@@ -4122,9 +4134,13 @@ create_prefs_dialog (void)
   gtk_container_add (GTK_CONTAINER (frame17), alignment20);
   gtk_alignment_set_padding (GTK_ALIGNMENT (alignment20), 0, 0, 12, 0);
 
+  vbox37 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (vbox37);
+  gtk_container_add (GTK_CONTAINER (alignment20), vbox37);
+
   table10 = gtk_table_new (2, 2, FALSE);
   gtk_widget_show (table10);
-  gtk_container_add (GTK_CONTAINER (alignment20), table10);
+  gtk_box_pack_start (GTK_BOX (vbox37), table10, TRUE, TRUE, 0);
   gtk_table_set_row_spacings (GTK_TABLE (table10), 3);
   gtk_table_set_col_spacings (GTK_TABLE (table10), 24);
 
@@ -4913,6 +4929,8 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame6, "frame6");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment7, "alignment7");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox8, "vbox8");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox38, "vbox38");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_cmdline_new_files, "check_cmdline_new_files");
   GLADE_HOOKUP_OBJECT (prefs_dialog, table5, "table5");
   GLADE_HOOKUP_OBJECT (prefs_dialog, eventbox1, "eventbox1");
   GLADE_HOOKUP_OBJECT (prefs_dialog, combo_new_encoding, "combo_new_encoding");
@@ -4933,6 +4951,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, label19, "label19");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame17, "frame17");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment20, "alignment20");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox37, "vbox37");
   GLADE_HOOKUP_OBJECT (prefs_dialog, table10, "table10");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label147, "label147");
   GLADE_HOOKUP_OBJECT (prefs_dialog, spin_mru, "spin_mru");

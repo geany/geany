@@ -55,6 +55,7 @@ typedef struct GeanyFilePrefs
 	guint			mru_length;
 	gint			default_eol_character;
 	gint			disk_check_timeout;
+	gboolean		cmdline_new_files;	/* New file if command-line filename doesn't exist */
 }
 GeanyFilePrefs;
 

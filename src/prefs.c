@@ -99,6 +99,8 @@ PrefEntry;
 
 static PrefEntry toggle_prefs[] =
 {
+	{"check_cmdline_new_files", &file_prefs.cmdline_new_files},
+
 	{"check_ask_suppress_search_dialogs", &search_prefs.suppress_dialogs},
 	{"check_search_use_current_word", &search_prefs.use_current_word},
 	{"check_fif_current_dir", &search_prefs.use_current_file_dir},

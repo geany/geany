@@ -657,7 +657,7 @@ gboolean main_handle_filename(gchar *locale_filename)
 			ui_add_recent_file(doc->file_name);
 		return TRUE;
 	}
-	else
+	else if (file_prefs.cmdline_new_files)
 	{	/* create new file with the given filename */
 		gchar *utf8_filename = utils_get_utf8_from_locale(locale_filename);
 

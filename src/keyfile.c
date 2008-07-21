@@ -101,6 +101,8 @@ SettingEntry;
 
 static SettingEntry bool_prefs[] =
 {
+	{PACKAGE, "cmdline_new_files", &file_prefs.cmdline_new_files, GINT_TO_POINTER(TRUE)},
+
 	{PACKAGE, "pref_main_suppress_search_dialogs", &search_prefs.suppress_dialogs, GINT_TO_POINTER(FALSE)},
 	{PACKAGE, "pref_main_search_use_current_word", &search_prefs.use_current_word, GINT_TO_POINTER(TRUE)},
 	{"search", "pref_search_current_file_dir", &search_prefs.use_current_file_dir, GINT_TO_POINTER(TRUE)},

@@ -3,6 +3,9 @@
  * src/main.c, src/socket.c, src/main.h:
    Fix filename encoding for new files at startup from the command-line.
    Make socket open command support filename:line:column syntax.
+ * src/interface.c, src/prefs.c, src/keyfile.c, src/document.h,
+   src/main.c, geany.glade:
+   Add new Files pref 'Allow new documents from the command-line'.
 
 
 2008-07-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
