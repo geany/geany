@@ -533,7 +533,7 @@ static void load_kb(KeyBindingGroup *group, KeyBinding *kb, gpointer user_data)
 		kb->key = key;
 		kb->mods = mods;
 
-		//~ apply_kb_accel(kb);
+		/* apply_kb_accel(kb); */
 	}
 	g_free(val);
 }
