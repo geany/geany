@@ -53,4 +53,6 @@ gchar *get_argv_filename(const gchar *filename);
 
 void main_quit(void);
 
+gboolean main_handle_filename(gchar *locale_filename);
+
 #endif

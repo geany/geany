@@ -634,45 +634,40 @@ static void signal_cb(gint sig)
 }
 
 
-static void handle_cl_filename(gchar *const filename)
+/* Used for command-line arguments at startup or from socket.
+ * this will strip any :line:col filename suffix from locale_filename */
+gboolean main_handle_filename(gchar *locale_filename)
 {
 	GeanyDocument *doc;
+	gint line = -1, column = -1;
 
-	if (filename != NULL)
+	g_return_val_if_fail(locale_filename, FALSE);
+
+	get_line_and_column_from_filename(locale_filename, &line, &column);
+	if (line >= 0)
+		cl_options.goto_line = line;
+	if (column >= 0)
+		cl_options.goto_column = column;
+
+	if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 	{
-		gint line = -1, column = -1;
-
-		get_line_and_column_from_filename(filename, &line, &column);
-		if (line >= 0)
-			cl_options.goto_line = line;
-		if (column >= 0)
-			cl_options.goto_column = column;
-	}
-
-	if (filename != NULL &&
-		g_file_test(filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
-	{
-		doc = document_open_file(filename, FALSE, NULL, NULL);
-		/* add recent file manually because opening_session_files is set */
-		if (doc != NULL)
+		doc = document_open_file(locale_filename, FALSE, NULL, NULL);
+		/* add recent file manually if opening_session_files is set */
+		if (doc != NULL && main_status.opening_session_files)
 			ui_add_recent_file(doc->file_name);
-	}
-	else if (filename != NULL)
-	{	/* create new file if it doesn't exist */
-		doc = document_new_file(filename, NULL, NULL);
-		if (doc != NULL)
-		{
-			ui_add_recent_file(doc->file_name);
-		}
+		return TRUE;
 	}
 	else
-	{
-		const gchar *msg = _("Could not find file '%s'.");
+	{	/* create new file with the given filename */
+		gchar *utf8_filename = utils_get_utf8_from_locale(locale_filename);
 
-		g_printerr(msg, filename);	/* also print to the terminal */
-		g_printerr("\n");
-		ui_set_statusbar(TRUE, msg, filename);
+		doc = document_new_file(utf8_filename, NULL, NULL);
+		if (doc != NULL)
+			ui_add_recent_file(doc->file_name);
+		g_free(utf8_filename);
+		return TRUE;
 	}
+	return FALSE;
 }
 
 
@@ -687,7 +682,14 @@ static gboolean open_cl_files(gint argc, gchar **argv)
 	{
 		gchar *filename = get_argv_filename(argv[i]);
 
-		handle_cl_filename(filename);
+		if (filename && !main_handle_filename(filename))
+		{
+			const gchar *msg = _("Could not find file '%s'.");
+
+			g_printerr(msg, filename);	/* also print to the terminal */
+			g_printerr("\n");
+			ui_set_statusbar(TRUE, msg, filename);
+		}
 		g_free(filename);
 	}
 	return TRUE;

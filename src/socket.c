@@ -142,7 +142,7 @@ void send_open_command(gint sock, gint argc, gchar **argv)
 
 	socket_fd_write_all(sock, "open\n", 5);
 
-	for(i = 1; i < argc && argv[i] != NULL; i++)
+	for (i = 1; i < argc && argv[i] != NULL; i++)
 	{
 		filename = get_argv_filename(argv[i]);
 
@@ -484,20 +484,9 @@ static void handle_input_filename(const gchar *buf)
 		utf8_filename = g_strdup(buf);
 
 	locale_filename = utils_get_locale_from_utf8(utf8_filename);
-
-	if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
-		document_open_file(locale_filename, FALSE, NULL, NULL);
-	else
-	{	/* create new file if it doesn't exist */
-		GeanyDocument *doc;
-
-		doc = document_new_file(utf8_filename, NULL, NULL);
-		if (doc != NULL)
-			ui_add_recent_file(doc->file_name);
-		else
-			geany_debug("got data from socket, but it does not look like a filename");
-	}
 	g_free(utf8_filename);
+	if (locale_filename)
+		main_handle_filename(locale_filename);
 	g_free(locale_filename);
 }
 
