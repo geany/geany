@@ -6,6 +6,9 @@
  * src/interface.c, src/prefs.c, src/keyfile.c, src/document.h,
    src/main.c, geany.glade:
    Add new Files pref 'Allow new documents from the command-line'.
+ * src/interface.c, geany.glade:
+   Rename above pref 'Open new documents...'.
+   Group encodings prefs together in the Files tab.
 
 
 2008-07-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

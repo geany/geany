@@ -2768,6 +2768,12 @@ create_prefs_dialog (void)
   GtkWidget *vbox8;
   GtkWidget *vbox38;
   GtkWidget *check_cmdline_new_files;
+  GtkWidget *table15;
+  GtkWidget *combo_eol;
+  GtkWidget *label210;
+  GtkWidget *label109;
+  GtkWidget *frame37;
+  GtkWidget *alignment40;
   GtkWidget *table5;
   GtkWidget *eventbox1;
   GtkWidget *combo_new_encoding;
@@ -2776,9 +2782,7 @@ create_prefs_dialog (void)
   GtkWidget *eventbox3;
   GtkWidget *combo_open_encoding;
   GtkWidget *check_open_encoding;
-  GtkWidget *label210;
-  GtkWidget *combo_eol;
-  GtkWidget *label109;
+  GtkWidget *label219;
   GtkWidget *frame2;
   GtkWidget *alignment3;
   GtkWidget *vbox6;
@@ -4012,15 +4016,50 @@ create_prefs_dialog (void)
   gtk_widget_show (vbox38);
   gtk_box_pack_start (GTK_BOX (vbox8), vbox38, FALSE, TRUE, 0);
 
-  check_cmdline_new_files = gtk_check_button_new_with_mnemonic (_("Allow new documents from the command-line"));
+  check_cmdline_new_files = gtk_check_button_new_with_mnemonic (_("Open new documents from the command-line"));
   gtk_widget_show (check_cmdline_new_files);
   gtk_box_pack_start (GTK_BOX (vbox38), check_cmdline_new_files, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_cmdline_new_files, _("Start a new file for each command-line filename that doesn't exist"), NULL);
 
-  table5 = gtk_table_new (4, 2, FALSE);
+  table15 = gtk_table_new (1, 2, FALSE);
+  gtk_widget_show (table15);
+  gtk_box_pack_start (GTK_BOX (vbox38), table15, TRUE, TRUE, 0);
+  gtk_table_set_row_spacings (GTK_TABLE (table15), 3);
+  gtk_table_set_col_spacings (GTK_TABLE (table15), 24);
+
+  combo_eol = gtk_combo_box_new_text ();
+  gtk_widget_show (combo_eol);
+  gtk_table_attach (GTK_TABLE (table15), combo_eol, 1, 2, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (GTK_FILL), 0, 0);
+
+  label210 = gtk_label_new (_("Default end of line characters:"));
+  gtk_widget_show (label210);
+  gtk_table_attach (GTK_TABLE (table15), label210, 0, 1, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label210), 0, 0.5);
+
+  label109 = gtk_label_new (_("<b>New files</b>"));
+  gtk_widget_show (label109);
+  gtk_frame_set_label_widget (GTK_FRAME (frame6), label109);
+  gtk_label_set_use_markup (GTK_LABEL (label109), TRUE);
+
+  frame37 = gtk_frame_new (NULL);
+  gtk_widget_show (frame37);
+  gtk_box_pack_start (GTK_BOX (vbox18), frame37, FALSE, TRUE, 0);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame37), GTK_SHADOW_NONE);
+
+  alignment40 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment40);
+  gtk_container_add (GTK_CONTAINER (frame37), alignment40);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment40), 0, 0, 12, 0);
+
+  table5 = gtk_table_new (3, 2, FALSE);
   gtk_widget_show (table5);
-  gtk_box_pack_start (GTK_BOX (vbox38), table5, TRUE, TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (alignment40), table5);
   gtk_table_set_row_spacings (GTK_TABLE (table5), 3);
+  gtk_table_set_col_spacings (GTK_TABLE (table5), 24);
 
   eventbox1 = gtk_event_box_new ();
   gtk_widget_show (eventbox1);
@@ -4066,23 +4105,10 @@ create_prefs_dialog (void)
   gtk_tooltips_set_tip (tooltips, check_open_encoding, _("This option disables the automatic detection of the file encoding when opening files and opens the file with the specified encoding (usually not needed)."), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_open_encoding), FALSE);
 
-  label210 = gtk_label_new (_("Default end of line characters:"));
-  gtk_widget_show (label210);
-  gtk_table_attach (GTK_TABLE (table5), label210, 0, 1, 3, 4,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label210), 0, 0.5);
-
-  combo_eol = gtk_combo_box_new_text ();
-  gtk_widget_show (combo_eol);
-  gtk_table_attach (GTK_TABLE (table5), combo_eol, 1, 2, 3, 4,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (GTK_FILL), 0, 0);
-
-  label109 = gtk_label_new (_("<b>New files</b>"));
-  gtk_widget_show (label109);
-  gtk_frame_set_label_widget (GTK_FRAME (frame6), label109);
-  gtk_label_set_use_markup (GTK_LABEL (label109), TRUE);
+  label219 = gtk_label_new (_("<b>Encodings</b>"));
+  gtk_widget_show (label219);
+  gtk_frame_set_label_widget (GTK_FRAME (frame37), label219);
+  gtk_label_set_use_markup (GTK_LABEL (label219), TRUE);
 
   frame2 = gtk_frame_new (NULL);
   gtk_widget_show (frame2);
@@ -4931,6 +4957,12 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox8, "vbox8");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox38, "vbox38");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_cmdline_new_files, "check_cmdline_new_files");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, table15, "table15");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, combo_eol, "combo_eol");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label210, "label210");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label109, "label109");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame37, "frame37");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment40, "alignment40");
   GLADE_HOOKUP_OBJECT (prefs_dialog, table5, "table5");
   GLADE_HOOKUP_OBJECT (prefs_dialog, eventbox1, "eventbox1");
   GLADE_HOOKUP_OBJECT (prefs_dialog, combo_new_encoding, "combo_new_encoding");
@@ -4939,9 +4971,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, eventbox3, "eventbox3");
   GLADE_HOOKUP_OBJECT (prefs_dialog, combo_open_encoding, "combo_open_encoding");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_open_encoding, "check_open_encoding");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label210, "label210");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, combo_eol, "combo_eol");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label109, "label109");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label219, "label219");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame2, "frame2");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment3, "alignment3");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox6, "vbox6");
