@@ -2,6 +2,9 @@
 
  * scintilla/LexHTML.cxx:
    Backport latest HTML/PHP lexer fixes from Scintilla CVS (#2024387).
+ * src/editor.c:
+   Fix space-only indentation when auto-generating HTML tables
+   (patch by Colomban Wendling, thanks, closes #2023160).
 
 
 2008-07-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

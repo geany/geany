@@ -1791,6 +1791,7 @@ static void auto_table(GeanyEditor *editor, gint pos)
 	ScintillaObject *sci = editor->sci;
 	gchar *table;
 	gint indent_pos;
+	gchar *indent_str;
 
 	if (SSM(sci, SCI_GETLEXER, 0, 0) != SCLEX_HTML) return;
 
@@ -1812,9 +1813,19 @@ static void auto_table(GeanyEditor *editor, gint pos)
 		indent[x] = '\0';
 	}
 
-	table = g_strconcat("\n", indent, "    <tr>\n", indent, "        <td>\n", indent, "        </td>\n",
-						indent, "    </tr>\n", indent, NULL);
+	/* get indent string for generated code */
+	if (editor_prefs.indent_mode == INDENT_NONE)
+		indent_str = g_strdup("");
+	else
+		indent_str = get_whitespace(editor_prefs.tab_width, editor->use_tabs);
+
+	table = g_strconcat("\n", indent, indent_str, "<tr>\n",
+						indent, indent_str, indent_str, "<td>\n",
+						indent, indent_str, indent_str, "</td>\n",
+						indent, indent_str, "</tr>\n",
+						indent, NULL);
 	sci_insert_text(sci, pos, table);
+	g_free(indent_str);
 	g_free(table);
 }
 
