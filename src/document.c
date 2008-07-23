@@ -572,7 +572,7 @@ GeanyDocument *document_new_file(const gchar *filename, GeanyFiletype *ft, const
 
 	/*document_set_filetype(idx, (ft == NULL) ? filetypes[GEANY_FILETYPES_NONE] : ft);*/
 	if (ft == NULL && filename != NULL) /* guess the filetype from the filename if one is given */
-		ft = filetypes_detect_from_file(doc);
+		ft = filetypes_detect_from_document(doc);
 
 	document_set_filetype(doc, ft);	/* also clears taglist */
 	if (ft == NULL)
@@ -1037,7 +1037,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		/* "the" SCI signal (connect after initial setup(i.e. adding text)) */
 		g_signal_connect(doc->editor->sci, "sci-notify", G_CALLBACK(on_editor_notification), doc);
 
-		use_ft = (ft != NULL) ? ft : filetypes_detect_from_file(doc);
+		use_ft = (ft != NULL) ? ft : filetypes_detect_from_document(doc);
 	}
 	else
 	{	/* reloading */
@@ -1260,7 +1260,7 @@ gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 	/* detect filetype */
 	if (FILETYPE_ID(doc->file_type) == GEANY_FILETYPES_NONE)
 	{
-		GeanyFiletype *ft = filetypes_detect_from_file(doc);
+		GeanyFiletype *ft = filetypes_detect_from_document(doc);
 
 		document_set_filetype(doc, ft);
 		if (document_get_current() == doc)

@@ -21,7 +21,8 @@
  * $Id$
  */
 
-/*
+/**
+ * @file filetypes.h
  * Filetype detection, file extensions and filetype menu items.
  */
 
@@ -666,8 +667,8 @@ static GeanyFiletype *filetypes_detect_from_file_internal(const gchar *utf8_file
 }
 
 
-/* Detect the filetype for document idx. */
-GeanyFiletype *filetypes_detect_from_file(GeanyDocument *doc)
+/* Detect the filetype for the document, checking for a shebang, then filename extension. */
+GeanyFiletype *filetypes_detect_from_document(GeanyDocument *doc)
 {
 	GeanyFiletype *ft;
 	gchar *line;
@@ -682,9 +683,9 @@ GeanyFiletype *filetypes_detect_from_file(GeanyDocument *doc)
 }
 
 
-/* Detect filetype based on the filename extension.
- * utf8_filename can include the full path. */
-GeanyFiletype *filetypes_detect_from_filename(const gchar *utf8_filename)
+/** Detect filetype based on a shebang line in the file, or the filename extension. */
+/* Currently only used by external plugins. */
+GeanyFiletype *filetypes_detect_from_file(const gchar *utf8_filename)
 {
 	gchar line[1024];
 	FILE *f;

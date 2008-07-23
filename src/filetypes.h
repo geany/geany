@@ -29,7 +29,9 @@
 #include "ScintillaWidget.h"
 
 
-/* each group should be alpha-sorted, based on filetype::name (not enum name) */
+/* Each group should be alpha-sorted, based on filetype::name (not enum name).
+ * Warning: remember to break the plugin ABI when adding items (this enum needs to be changed
+ * to work with an ABI-stable filetype::group_name field. */
 typedef enum
 {
 	/* normally compiled languages */
@@ -103,15 +105,17 @@ struct build_programs
 	gboolean modified;
 };
 
+/** Represents a filetype. */
 struct GeanyFiletype
 {
-	filetype_id		  id;
-	langType 		  lang;				/* represents the langType of tagmanager(see the table */
-										/* in tagmanager/parsers.h), -1 represents all, -2 none */
-	gchar	 		 *name;				/* will be used as name for tagmanager */
-	gchar	 		 *title;			/* will be shown in the file open dialog */
-	gchar	 		 *extension;
-	gchar			**pattern;
+	filetype_id		  id;				/**< Index in @c filetypes_array. */
+	/** Represents the langType of tagmanager (see the table
+	 * in tagmanager/parsers.h), -1 represents all, -2 none. */
+	langType 		  lang;
+	gchar	 		 *name;				/**< Used as name for tagmanager. E.g. "C". */
+	gchar	 		 *title;			/**< Shown in the file open dialog. E.g. "C source file". */
+	gchar	 		 *extension;		/**< Default file extension for new files. */
+	gchar			**pattern;			/**< Array of filename-matching wildcard strings. */
 	gchar	 		 *context_action_cmd;
 	gchar	 		 *comment_open;
 	gchar	 		 *comment_close;
@@ -130,22 +134,16 @@ extern GPtrArray *filetypes_array;
 GeanyFiletype *filetypes_lookup_by_name(const gchar *name);
 
 
-/* Calls filetypes_init_types() and creates the filetype menu. */
 void filetypes_init(void);
 
-/* Create the filetype array and fill it with the known filetypes. */
 void filetypes_init_types(void);
 
-/* Detect the filetype for document idx, checking for a shebang, then filename extension. */
-GeanyFiletype *filetypes_detect_from_file(GeanyDocument *doc);
+GeanyFiletype *filetypes_detect_from_document(GeanyDocument *doc);
 
 GeanyFiletype *filetypes_detect_from_extension(const gchar *utf8_filename);
 
-/* Detect filetype based on the filename extension.
- * utf8_filename can include the full path. */
-GeanyFiletype *filetypes_detect_from_filename(const gchar *utf8_filename);
+GeanyFiletype *filetypes_detect_from_file(const gchar *utf8_filename);
 
-/* frees the array and all related pointers */
 void filetypes_free_types(void);
 
 void filetypes_load_config(gint ft_id, gboolean reload);

@@ -231,7 +231,7 @@ static HighlightingFuncs highlighting_funcs = {
 
 
 static FiletypeFuncs filetype_funcs = {
-	&filetypes_detect_from_filename,
+	&filetypes_detect_from_file,
 	&filetypes_lookup_by_name
 };
 
