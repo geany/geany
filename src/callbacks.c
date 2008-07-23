@@ -2222,6 +2222,6 @@ void
 on_menu_reload_configuration1_activate (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	utils_reload_configuration();
+	main_reload_configuration();
 }
 

@@ -55,4 +55,6 @@ void main_quit(void);
 
 gboolean main_handle_filename(gchar *locale_filename);
 
+void main_reload_configuration(void);
+
 #endif

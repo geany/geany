@@ -36,12 +36,12 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 79;
+static const gint api_version = 80;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
  * are only appended, as this doesn't affect existing fields. */
-static const gint abi_version = 42;
+static const gint abi_version = 43;
 
 /** Check the plugin can be loaded by Geany.
  * This performs runtime checks that try to ensure:
@@ -190,6 +190,7 @@ typedef struct GeanyFunctions
 	struct FiletypeFuncs		*p_filetypes;		/**< See filetypes.h */
 	struct NavQueueFuncs        *p_navqueue;		/**< See navqueue.h */
 	struct EditorFuncs        	*p_editor;			/**< See editor.h */
+	struct MainFuncs        	*p_main;			/**< See main.h */
 }
 GeanyFunctions;
 
@@ -300,9 +301,16 @@ typedef struct UtilsFuncs
 	gboolean	(*spawn_async) (const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
 				 GSpawnChildSetupFunc child_setup, gpointer user_data, GPid *child_pid,
 				 GError **error);
-	void		(*reload_configuration) (void);
 }
 UtilsFuncs;
+
+
+/* See main.h */
+typedef struct MainFuncs
+{
+	void		(*reload_configuration) (void);
+}
+MainFuncs;
 
 
 /* See ui_utils.h */

@@ -49,6 +49,7 @@
 #define p_filetypes		geany_functions->p_filetypes	/**< See filetypes.h */
 #define p_highlighting	geany_functions->p_highlighting	/**< See highlighting.h */
 #define p_keybindings	geany_functions->p_keybindings	/**< See keybindings.h */
+#define p_main			geany_functions->p_main			/**< See main.h */
 #define p_msgwindow		geany_functions->p_msgwindow	/**< See msgwindow.h */
 #define p_navqueue		geany_functions->p_navqueue		/**< See navqueue.h */
 #define p_sci			geany_functions->p_sci			/**< See sciwrappers.h */

@@ -55,6 +55,7 @@
 #include "highlighting.h"
 #include "keybindings.h"
 #include "navqueue.h"
+#include "main.h"
 
 
 #ifdef G_OS_WIN32
@@ -171,7 +172,6 @@ static UtilsFuncs utils_funcs = {
 	&utils_get_setting_string,
 	&utils_spawn_sync,
 	&utils_spawn_async,
-	&utils_reload_configuration
 };
 
 static UIUtilsFuncs uiutils_funcs = {
@@ -239,6 +239,10 @@ static NavQueueFuncs navqueue_funcs = {
 	&navqueue_goto_line
 };
 
+static MainFuncs main_funcs = {
+	&main_reload_configuration
+};
+
 static GeanyFunctions geany_functions = {
 	&doc_funcs,
 	&sci_funcs,
@@ -255,7 +259,8 @@ static GeanyFunctions geany_functions = {
 	&highlighting_funcs,
 	&filetype_funcs,
 	&navqueue_funcs,
-	&editor_funcs
+	&editor_funcs,
+	&main_funcs
 };
 
 static GeanyData geany_data;
