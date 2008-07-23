@@ -21,8 +21,10 @@
  * $Id$
  */
 
-/*
- * Program initialization and cleanup.
+/**
+ * @file: main.h
+ * Main program-related commands.
+ * Handles program initialization and cleanup.
  */
 
 #include <signal.h>
