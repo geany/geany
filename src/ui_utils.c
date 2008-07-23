@@ -21,7 +21,7 @@
  * $Id$
  */
 
-/*
+/** @file ui_utils.h
  * User Interface general utility functions.
  */
 

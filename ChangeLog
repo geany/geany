@@ -14,6 +14,8 @@
    filetypes_detect_from_file() because it also detects shebang lines.
    Remove function prototype comments for filetypes.h (see filetypes.c
    or API dox instead).
+ * src/ui_utils.c:
+   Add dox for GeanyMainWidgets.
 
 
 2008-07-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
