@@ -9,6 +9,10 @@
    Add dox for all UIUtilsFuncs.
  * src/plugindata.h, src/document.c:
    Rename document_new_file() argument to utf8_filename.
+ * src/project.c, src/project.h, src/geany.h:
+   Add dox for GeanyApp, GeanyProject.
+   Move GeanyProject typedef to project.h, as it is rarely used without
+   including project.h.
 
 
 2008-07-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

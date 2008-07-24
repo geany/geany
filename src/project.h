@@ -28,27 +28,24 @@
 #define GEANY_PROJECT_EXT				"geany"
 
 
-/* structure for representing a project. */
-struct GeanyProject
+/** Structure for representing a project. */
+typedef struct GeanyProject
 {
-	gchar *name; 			/* the name of the project */
-	gchar *description; 	/* short description of the project */
-
-	gchar *file_name; 		/* where the project file is stored (in UTF-8) */
-
-	gchar *base_path;		/* base path of the project directory (in UTF-8, maybe relative) */
-	gchar *run_cmd; 		/* project run command (in UTF-8) */
-	/* ...	*/				/* fields for build process(run arguments and so on) should be added */
-
-	gint type;				/* identifier whether it is a pure Geany project or modified/extended */
-							/* by a plugin */
-
-	gchar **file_patterns;	/* array of filename extension patterns */
-
+	gchar *name; 			/**< The name of the project. */
+	gchar *description; 	/**< Short description of the project. */
+	gchar *file_name; 		/**< Where the project file is stored (in UTF-8). */
+	gchar *base_path;		/**< Base path of the project directory (in UTF-8, maybe relative). */
+	gchar *run_cmd; 		/**< Project run command (in UTF-8). */
+	/** Identifier whether it is a pure Geany project or modified/extended
+	 * by a plugin. */
+	gint type;
+	gchar **file_patterns;	/**< Array of filename extension patterns. */
 	gboolean make_in_base_path;
-};
+}
+GeanyProject;
 
-typedef struct
+
+typedef struct ProjectPrefs
 {
 	gchar *session_file;
 	gboolean project_session;

@@ -54,21 +54,24 @@
 #define GEANY_WINDOW_DEFAULT_HEIGHT		600
 
 
-/* useful forward declarations */
+/* Common forward declarations */
 typedef struct GeanyDocument GeanyDocument;
 typedef struct GeanyFiletype GeanyFiletype;
-typedef struct GeanyProject GeanyProject;
 
 
-/* Important commonly-used items. */
+/** Important application fields. */
 typedef struct GeanyApp
 {
-	gboolean			debug_mode;
+	gboolean			debug_mode;		/**< @c TRUE if debug messages should be printed. */
+	/** User configuration directory, usually @c ~/.geany.
+	 * @note Plugin configuration files should be saved as:
+	 * @code g_build_path(G_DIR_SEPARATOR_S, geany->app->configdir, "plugins", "pluginname",
+	 * 	"file.conf"); @endcode */
 	gchar				*configdir;
 	gchar				*datadir;
 	gchar				*docdir;
-	const TMWorkspace	*tm_workspace;
-	GeanyProject		*project;			/* currently active project or NULL if none is open */
+	const TMWorkspace	*tm_workspace;	/**< TagManager workspace/session tags. */
+	struct GeanyProject	*project;		/**< Currently active project or @c NULL if none is open. */
 }
 GeanyApp;
 

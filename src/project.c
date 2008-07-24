@@ -21,7 +21,7 @@
  * $Id$
  */
 
-/*
+/** @file project.h
  * Project Management.
  */
 
