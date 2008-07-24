@@ -2,6 +2,9 @@
 
  * src/filetypes.c:
    Only compile filetypes_detect_from_file() if HAVE_PLUGINS is defined.
+ * src/plugindata.h:
+   Rename p_filetypes->detect_from_filename() to detect_from_file() in
+   the plugin API.
 
 
 2008-07-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
