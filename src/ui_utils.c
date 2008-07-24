@@ -106,8 +106,9 @@ static void set_statusbar(const gchar *text, gboolean allow_override)
 }
 
 
-/* Display text on the statusbar.
- * log is whether the message should be recorded in the Status window. */
+/** Display text on the statusbar.
+ * @param log Whether the message should be recorded in the Status window.
+ * @param format A @c printf -style string. */
 void ui_set_statusbar(gboolean log, const gchar *format, ...)
 {
 	gchar string[512];
@@ -1079,8 +1080,10 @@ void ui_show_linenumber_margin(void)
 }
 
 
-/* Creates a GNOME HIG style frame (with no border and indented child alignment).
- * Returns the frame widget, setting the alignment container for packing child widgets */
+/** Creates a GNOME HIG-style frame (with no border and indented child alignment).
+ * @param label_text The label text.
+ * @param alignment An address to store the alignment widget pointer.
+ * @return The frame widget, setting the alignment container for packing child widgets. */
 GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alignment)
 {
 	GtkWidget *label, *align;
@@ -1106,10 +1109,10 @@ GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alig
 
 const gint BUTTON_BOX_BORDER = 5;
 
-/* Convenience function for getting a fixed border for dialogs that doesn't
+/** Convenience function for getting a fixed border for dialogs that doesn't
  * increase the button box border.
- * dialog is the parent container for the vbox.
- * Returns: the vbox. */
+ * @param dialog The parent container for the @c GtkVBox.
+ * @return The packed @c GtkVBox. */
 GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog)
 {
 	GtkWidget *vbox = gtk_vbox_new(FALSE, 12);	/* need child vbox to set a separate border. */
@@ -1120,8 +1123,12 @@ GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog)
 }
 
 
-/* Create a GtkButton with custom text and a stock image, aligned like
- * gtk_button_new_from_stock */
+/** Create a @c GtkButton with custom text and a stock image, aligned like
+ * @c gtk_button_new_from_stock().
+ * @param stock_id A @c GTK_STOCK_NAME string.
+ * @param text Button label text, can include mnemonics.
+ * @return The new @c GtkButton.
+ */
 GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text)
 {
 	GtkWidget *image, *label, *align, *hbox, *button;
@@ -1301,10 +1308,17 @@ void ui_widget_modify_font_from_string(GtkWidget *wid, const gchar *str)
 }
 
 
-/* Creates a GtkHBox with entry packed into it and an open button which runs a
- * file chooser, replacing entry text if successful.
- * entry can be the child of an unparented widget, such as GtkComboBoxEntry.
- * See ui_setup_open_button_callback() for details. */
+/** Creates a @c GtkHBox with @a entry packed into it and an open button which runs a
+ * file chooser, replacing entry text (if successful) with the path returned from the
+ * @c GtkFileChooser.
+ * @note @a entry can be the child of an unparented widget, such as @c GtkComboBoxEntry.
+ * @param title The file chooser dialog title, or @c NULL.
+ * @param action The mode of the file chooser.
+ * @param entry Can be an unpacked @c GtkEntry, or the child of an unpacked widget,
+ * such as @c GtkComboBoxEntry.
+ * @return The @c GtkHBox.
+ */
+/* @see ui_setup_open_button_callback(). */
 GtkWidget *ui_path_box_new(const gchar *title, GtkFileChooserAction action, GtkEntry *entry)
 {
 	GtkWidget *vbox, *dirbtn, *openimg, *hbox, *path_entry;
@@ -1434,9 +1448,12 @@ void ui_statusbar_showhide(gboolean state)
 }
 
 
-/* Pack all GtkWidgets passed after the row argument into a table, using
- * one widget per cell. The first widget is not expanded, as this is usually
- * a label. */
+/** Pack all @c GtkWidgets passed after the row argument into a table, using
+ * one widget per cell. The first widget is not expanded as the table grows,
+ * as this is usually a label.
+ * @param table
+ * @param row The row number of the table.
+ */
 void ui_table_add_row(GtkTable *table, gint row, ...)
 {
 	va_list args;

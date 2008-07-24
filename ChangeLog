@@ -5,6 +5,8 @@
  * src/plugindata.h:
    Rename p_filetypes->detect_from_filename() to detect_from_file() in
    the plugin API.
+ * src/ui_utils.c:
+   Add dox for all UIUtilsFuncs.
 
 
 2008-07-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
