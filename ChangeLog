@@ -13,6 +13,10 @@
    Add dox for GeanyApp, GeanyProject.
    Move GeanyProject typedef to project.h, as it is rarely used without
    including project.h.
+ * src/plugindata.h, src/document.c, src/document.h:
+   Add more dox explaining how to use documents_array (moved from
+   document.h, to minimise rebuilding after adding dox).
+   Remove some mentions of document indexes in document.c comments.
 
 
 2008-07-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

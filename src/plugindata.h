@@ -154,7 +154,7 @@ typedef struct GeanyData
 {
 	struct GeanyApp				*app;				/**< Geany application data fields */
 	struct GeanyMainWidgets		*main_widgets;		/**< Important widgets in the main window */
-	GPtrArray					*documents_array;	/**< Dynamic array of GeanyDocument pointers */
+	GPtrArray					*documents_array;	/**< See document.h#documents_array. */
 	GPtrArray					*filetypes_array;	/**< Dynamic array of GeanyFiletype pointers */
 	struct GeanyPrefs			*prefs;				/**< General settings */
 	struct GeanyInterfacePrefs	*interface_prefs;	/**< Interface settings */

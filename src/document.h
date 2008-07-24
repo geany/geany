@@ -107,9 +107,8 @@ struct GeanyDocument
 	gchar 			*real_path;
 };
 
-
-/** Dynamic array of GeanyDocument pointers holding information about the notebook tabs. */
 extern GPtrArray *documents_array;
+
 
 /**
  *  This wraps documents_array so it can be used with C array syntax.

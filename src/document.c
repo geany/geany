@@ -74,6 +74,16 @@
 
 GeanyFilePrefs file_prefs;
 
+/** Dynamic array of GeanyDocument pointers holding information about the notebook tabs.
+ * Once a pointer is added to this, it is never freed. This means you can keep a pointer
+ * to a document over time, but it might no longer represent a notebook tab. To check this,
+ * check @c doc_ptr->is_valid. Of course, the pointer may represent a different
+ * file by then.
+ *
+ * You also need to check @c GeanyDocument::is_valid when iterating over this array.
+ *
+ * Never assume that the order of document pointers is the same as the order of notebook tabs.
+ * Notebook tabs can be reordered. Use @c document_get_from_page(). */
 GPtrArray *documents_array;
 
 
@@ -99,7 +109,7 @@ static void document_redo_add(GeanyDocument *doc, guint type, gpointer data);
 #endif
 
 /**
- * Find and retrieve the index of the given filename in the %document list.
+ * Find and retrieve a document with the given filename from the document list.
  *
  * @param realname The filename to search, which should be identical to the
  * string returned by @c tm_get_real_path().
@@ -142,7 +152,7 @@ static gchar *get_real_path_from_utf8(const gchar *utf8_filename)
 
 
 /**
- *  Find and retrieve the index of the given filename in the %document list.
+ *  Find and retrieve a document with the given filename from the document list.
  *  This matches either an exact GeanyDocument::file_name string, or variant
  *  filenames with relative elements in the path (e.g. @c "/dir/..//name" will
  *  match @c "/name").
@@ -199,7 +209,7 @@ GeanyDocument *document_find_by_sci(ScintillaObject *sci)
 }
 
 
-/* returns the index of the notebook page from the document index */
+/* returns the index of the notebook page for the document. */
 gint document_get_notebook_page(GeanyDocument *doc)
 {
 	if (doc == NULL)
@@ -211,7 +221,7 @@ gint document_get_notebook_page(GeanyDocument *doc)
 
 
 /**
- *  Find and retrieve the index of the given notebook page @a page_num in the %document list.
+ *  Find and retrieve the document for the given notebook page @a page_num.
  *
  *  @param page_num The notebook page number to search.
  *
@@ -381,7 +391,7 @@ static void queue_colourise(GeanyDocument *doc)
 
 
 /* Creates a new document and editor, adding a tab in the notebook.
- * @return The index of the created document */
+ * @return The created document */
 static GeanyDocument *document_create(const gchar *utf8_filename)
 {
 	GeanyDocument *this;
