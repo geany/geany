@@ -533,18 +533,19 @@ GeanyDocument *document_new_file_if_non_open()
 
 
 /**
- *  Creates a new %document.
+ *  Creates a new document.
  *  After all, the "document-new" signal is emitted for plugins.
  *
- *  @param filename The file name in UTF-8 encoding, or @c NULL to open a file as "untitled".
+ *  @param utf8_filename The file name in UTF-8 encoding, or @c NULL to open a file as "untitled".
  *  @param ft The filetype to set or @c NULL to detect it from @a filename if not @c NULL.
  *  @param text The initial content of the file (in UTF-8 encoding), or @c NULL.
  *
  *  @return The new document.
  **/
-GeanyDocument *document_new_file(const gchar *filename, GeanyFiletype *ft, const gchar *text)
+GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft,
+		const gchar *text)
 {
-	GeanyDocument *doc = document_create(filename);
+	GeanyDocument *doc = document_create(utf8_filename);
 
 	g_assert(doc != NULL);
 
@@ -571,7 +572,7 @@ GeanyDocument *document_new_file(const gchar *filename, GeanyFiletype *ft, const
 	store_saved_encoding(doc);
 
 	/*document_set_filetype(idx, (ft == NULL) ? filetypes[GEANY_FILETYPES_NONE] : ft);*/
-	if (ft == NULL && filename != NULL) /* guess the filetype from the filename if one is given */
+	if (ft == NULL && utf8_filename != NULL) /* guess the filetype from the filename if one is given */
 		ft = filetypes_detect_from_document(doc);
 
 	document_set_filetype(doc, ft);	/* also clears taglist */

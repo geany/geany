@@ -202,7 +202,7 @@ GeanyFunctions;
 /* See document.h */
 typedef struct DocumentFuncs
 {
-	struct GeanyDocument*	(*new_file) (const gchar *filename, struct GeanyFiletype *ft,
+	struct GeanyDocument*	(*new_file) (const gchar *utf8_filename, struct GeanyFiletype *ft,
 			const gchar *text);
 	struct GeanyDocument*	(*get_current) (void);
 	struct GeanyDocument*	(*get_from_page) (guint page_num);
