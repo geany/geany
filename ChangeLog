@@ -17,6 +17,11 @@
    Add more dox explaining how to use documents_array (moved from
    document.h, to minimise rebuilding after adding dox).
    Remove some mentions of document indexes in document.c comments.
+ * src/vte.c:
+   Change VTE restart command to not call vte_terminal_fork_command() -
+   this should prevent the hang reported in #1990323 with VTE 0.16.14.
+   Note that with VTE 0.16.14 the reset sometimes leaves a blank
+   terminal, but pressing enter makes it then behave as normal.
 
 
 2008-07-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

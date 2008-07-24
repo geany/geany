@@ -393,7 +393,6 @@ static void vte_restart(GtkWidget *widget)
 		pid = 0;
 	}
 	vf->vte_terminal_reset(VTE_TERMINAL(widget), TRUE, TRUE);
-	vte_start(widget);
 }
 
 
