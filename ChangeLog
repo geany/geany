@@ -1,3 +1,9 @@
+2008-07-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/filetypes.c:
+   Only compile filetypes_detect_from_file() if HAVE_PLUGINS is defined.
+
+
 2008-07-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/utils.c, src/utils.h, src/plugindata.h, src/callbacks.c,
