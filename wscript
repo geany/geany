@@ -38,7 +38,7 @@ Requires WAF SVN r3976 (or later) and Python 2.4 (or later).
 """
 
 
-import Build, Configure, Install, Options, Runner, Task, Utils
+import Build, Configure, Options, Runner, Task, Utils
 import sys, os, subprocess, shutil
 
 
@@ -395,7 +395,7 @@ def build(bld):
 def shutdown():
     # the following code was taken from midori's WAF script, thanks
     if Options.commands['install'] or Options.commands['uninstall']:
-        dir = Install.path_install('DATADIR', 'icons/hicolor')
+        dir = Build.bld.path_install('DATADIR', 'icons/hicolor')
         icon_cache_updated = False
         if not Options.options.destdir:
             try:
