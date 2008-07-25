@@ -225,9 +225,11 @@ DocumentFuncs;
 
 struct _ScintillaObject;
 
-/* See sciwrappers.h */
+/** See sciwrappers.h. */
 typedef struct ScintillaFuncs
 {
+	/** Send Scintilla a message.
+	 * @see http://scintilla.org for the documentation. */
 	long int (*send_message) (struct _ScintillaObject* sci, unsigned int iMessage,
 			long unsigned int wParam, long int lParam);
 	void	(*send_command) (struct _ScintillaObject* sci, gint cmd);
