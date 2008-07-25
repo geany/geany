@@ -5,6 +5,9 @@
    Add GeanyIndentPrefs struct from some GeanyEditorPrefs fields (maybe
    this struct will get used elsewhere too).
    Add editor_init().
+ * src/interface.c, geany.glade:
+   Add separate Width indent pref.
+   Add 'Custom tab width' checkbox pref.
 
 
 2008-07-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

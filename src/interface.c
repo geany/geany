@@ -2669,15 +2669,18 @@ create_prefs_dialog (void)
   GtkWidget *table13;
   GtkWidget *label183;
   GtkWidget *combo_auto_indent_mode;
-  GtkObject *spin_tab_width_adj;
-  GtkWidget *spin_tab_width;
-  GtkWidget *label116;
   GtkWidget *hbox8;
   GtkWidget *radio_indent_tabs;
   GSList *radio_indent_tabs_group = NULL;
   GtkWidget *radio_indent_spaces;
   GtkWidget *label200;
   GtkWidget *check_detect_indent;
+  GtkWidget *label220;
+  GtkObject *spin_indent_width_adj;
+  GtkWidget *spin_indent_width;
+  GtkWidget *check_custom_tab_width;
+  GtkObject *spin_tab_width_adj;
+  GtkWidget *spin_tab_width;
   GtkWidget *label195;
   GtkWidget *frame14;
   GtkWidget *alignment17;
@@ -3588,7 +3591,7 @@ create_prefs_dialog (void)
   gtk_widget_show (vbox25);
   gtk_container_add (GTK_CONTAINER (alignment30), vbox25);
 
-  table13 = gtk_table_new (4, 2, FALSE);
+  table13 = gtk_table_new (5, 2, FALSE);
   gtk_widget_show (table13);
   gtk_box_pack_start (GTK_BOX (vbox25), table13, FALSE, TRUE, 0);
   gtk_table_set_row_spacings (GTK_TABLE (table13), 3);
@@ -3596,37 +3599,19 @@ create_prefs_dialog (void)
 
   label183 = gtk_label_new (_("Auto-indent mode:"));
   gtk_widget_show (label183);
-  gtk_table_attach (GTK_TABLE (table13), label183, 0, 1, 3, 4,
+  gtk_table_attach (GTK_TABLE (table13), label183, 0, 1, 4, 5,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
 
   combo_auto_indent_mode = gtk_combo_box_new_text ();
   gtk_widget_show (combo_auto_indent_mode);
-  gtk_table_attach (GTK_TABLE (table13), combo_auto_indent_mode, 1, 2, 3, 4,
+  gtk_table_attach (GTK_TABLE (table13), combo_auto_indent_mode, 1, 2, 4, 5,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("None"));
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Basic"));
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Current chars"));
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Match braces"));
-
-  spin_tab_width_adj = gtk_adjustment_new (1, 1, 99, 1, 10, 10);
-  spin_tab_width = gtk_spin_button_new (GTK_ADJUSTMENT (spin_tab_width_adj), 1, 0);
-  gtk_widget_show (spin_tab_width);
-  gtk_table_attach (GTK_TABLE (table13), spin_tab_width, 1, 2, 2, 3,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_tooltips_set_tip (tooltips, spin_tab_width, _("The width in chars, which one tab character will take"), NULL);
-  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_tab_width), TRUE);
-  gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (spin_tab_width), GTK_UPDATE_IF_VALID);
-  gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spin_tab_width), TRUE);
-
-  label116 = gtk_label_new (_("Tab width:"));
-  gtk_widget_show (label116);
-  gtk_table_attach (GTK_TABLE (table13), label116, 0, 1, 2, 3,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label116), 0, 0.5);
 
   hbox8 = gtk_hbox_new (FALSE, 12);
   gtk_widget_show (hbox8);
@@ -3661,6 +3646,42 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
   gtk_tooltips_set_tip (tooltips, check_detect_indent, _("Whether to detect the indentation type from file contents when a file is opened."), NULL);
+
+  label220 = gtk_label_new (_("Width:"));
+  gtk_widget_show (label220);
+  gtk_table_attach (GTK_TABLE (table13), label220, 0, 1, 2, 3,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label220), 0, 0.5);
+
+  spin_indent_width_adj = gtk_adjustment_new (1, 1, 99, 1, 10, 10);
+  spin_indent_width = gtk_spin_button_new (GTK_ADJUSTMENT (spin_indent_width_adj), 1, 0);
+  gtk_widget_show (spin_indent_width);
+  gtk_table_attach (GTK_TABLE (table13), spin_indent_width, 1, 2, 2, 3,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, spin_indent_width, _("The width in chars of a single indent"), NULL);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_indent_width), TRUE);
+  gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (spin_indent_width), GTK_UPDATE_IF_VALID);
+  gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spin_indent_width), TRUE);
+
+  check_custom_tab_width = gtk_check_button_new_with_mnemonic (_("Custom tab width:"));
+  gtk_widget_show (check_custom_tab_width);
+  gtk_table_attach (GTK_TABLE (table13), check_custom_tab_width, 0, 1, 3, 4,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, check_custom_tab_width, _("Make tabs have a different size from the indent width"), NULL);
+
+  spin_tab_width_adj = gtk_adjustment_new (1, 1, 99, 1, 10, 10);
+  spin_tab_width = gtk_spin_button_new (GTK_ADJUSTMENT (spin_tab_width_adj), 1, 0);
+  gtk_widget_show (spin_tab_width);
+  gtk_table_attach (GTK_TABLE (table13), spin_tab_width, 1, 2, 3, 4,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, spin_tab_width, _("The width in chars, which one tab character will take"), NULL);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_tab_width), TRUE);
+  gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (spin_tab_width), GTK_UPDATE_IF_VALID);
+  gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spin_tab_width), TRUE);
 
   label195 = gtk_label_new (_("<b>Indentation</b>"));
   gtk_widget_show (label195);
@@ -4865,13 +4886,15 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, table13, "table13");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label183, "label183");
   GLADE_HOOKUP_OBJECT (prefs_dialog, combo_auto_indent_mode, "combo_auto_indent_mode");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, spin_tab_width, "spin_tab_width");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label116, "label116");
   GLADE_HOOKUP_OBJECT (prefs_dialog, hbox8, "hbox8");
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_indent_tabs, "radio_indent_tabs");
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_indent_spaces, "radio_indent_spaces");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label200, "label200");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_detect_indent, "check_detect_indent");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label220, "label220");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, spin_indent_width, "spin_indent_width");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_custom_tab_width, "check_custom_tab_width");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, spin_tab_width, "spin_tab_width");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label195, "label195");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame14, "frame14");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment17, "alignment17");
