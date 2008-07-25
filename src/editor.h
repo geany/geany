@@ -51,14 +51,25 @@ typedef enum
 	INDENT_BASIC,
 	INDENT_CURRENTCHARS,
 	INDENT_MATCHBRACES
-} IndentMode;
+} GeanyIndentMode;
 
-/* These are the default prefs when creating a new editor window.
- * Some of these can be overridden per document.
- * Remember to increment abi_version in plugindata.h when changing items. */
+typedef struct GeanyIndentPrefs
+{
+	gint		width;				/**< Indent width. */
+	gint		tab_width;			/**< Width of a tab, if @c custom_tab_width is set. */
+	gboolean	custom_tab_width;	/**< Whether a tab is a different size from an indent. */
+	gboolean	use_tabs;			/**< Whether to (mainly) use tabs or spaces to indent. */
+	gboolean	use_tab_to_indent;	/* hidden pref */
+	GeanyIndentMode	mode;
+}
+GeanyIndentPrefs;
+
+
+/** Default prefs when creating a new editor window.
+ * Some of these can be overridden per document. */
 typedef struct GeanyEditorPrefs
 {
-	/* display */
+	GeanyIndentPrefs *indentation;	/**< Indentation prefs. */
 	gboolean	show_white_space;
 	gboolean	show_indent_guide;
 	gboolean	show_line_endings;
@@ -69,16 +80,10 @@ typedef struct GeanyEditorPrefs
 	gboolean	show_linenumber_margin;		/* view menu */
 	gboolean	show_scrollbars;			/* hidden pref */
 	gboolean	scroll_stop_at_last_line;	/* hidden pref */
-
-	/* behaviour */
 	gboolean	line_wrapping;
 	gboolean	use_indicators;
 	gboolean	folding;
 	gboolean	unfold_all_children;
-	gint		tab_width;
-	gboolean	use_tabs;
-	gboolean	use_tab_to_indent;	/* hidden pref */
-	IndentMode	indent_mode;
 	gboolean	disable_dnd;
 	gboolean	smart_home_key;
 	gboolean	newline_strip;
@@ -124,6 +129,8 @@ extern EditorInfo editor_info;
 
 
 
+
+void editor_init(void);
 
 GeanyEditor *editor_create(GeanyDocument *doc);
 

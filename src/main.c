@@ -740,7 +740,6 @@ gint main(gint argc, gchar **argv)
 	memset(&prefs, 0, sizeof(GeanyPrefs));
 	memset(&interface_prefs, 0, sizeof(GeanyInterfacePrefs));
 	memset(&toolbar_prefs, 0, sizeof(GeanyToolbarPrefs));
-	memset(&editor_prefs, 0, sizeof(GeanyEditorPrefs));
 	memset(&file_prefs, 0, sizeof(GeanyFilePrefs));
 	memset(&search_prefs, 0, sizeof(GeanySearchPrefs));
 	memset(&tool_prefs, 0, sizeof(GeanyToolPrefs));
@@ -800,6 +799,7 @@ gint main(gint argc, gchar **argv)
 	load_settings();
 
 	msgwin_init();
+	editor_init();
 	build_init();
 	search_init();
 	ui_create_insert_menu_items();

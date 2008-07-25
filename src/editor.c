@@ -3662,3 +3662,13 @@ GeanyEditor *editor_create(GeanyDocument *doc)
 	return editor;
 }
 
+
+void editor_init(void)
+{
+	static GeanyIndentPrefs indent_prefs;
+
+	memset(&editor_prefs, 0, sizeof(GeanyEditorPrefs));
+	memset(&indent_prefs, 0, sizeof GeanyIndentPrefs);
+	editor_prefs->indentation = &indent_prefs;
+}
+

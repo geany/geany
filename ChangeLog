@@ -1,5 +1,14 @@
 2008-07-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
+ * src/plugindata.h, src/main.c, src/editor.c, src/editor.h:
+   Note: this breaks the plugin API for indentation editor_prefs.
+   Add GeanyIndentPrefs struct from some GeanyEditorPrefs fields (maybe
+   this struct will get used elsewhere too).
+   Add editor_init().
+
+
+2008-07-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
  * src/interface.c, src/ui_utils.c, geany.glade:
    Revert editor popup menu Current Word submenu changes. See
    http://lists.uvena.de/geany-devel/2008-July/000101.html.
