@@ -1581,7 +1581,7 @@ static void styleset_ruby(ScintillaObject *sci)
 
 static void styleset_sh_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_style_array(GEANY_FILETYPES_SH, 11);
+	new_style_array(GEANY_FILETYPES_SH, 14);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_SH].styling[0]);
 	get_keyfile_style(config, config_home, "commentline", &gsd_comment, &style_sets[GEANY_FILETYPES_SH].styling[1]);
 	get_keyfile_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_SH].styling[2]);
@@ -1593,6 +1593,9 @@ static void styleset_sh_init(gint ft_id, GKeyFile *config, GKeyFile *config_home
 	get_keyfile_hex(config, config_home, "styling", "backticks", "0x000000", "0xe0c0e0", "false", &style_sets[GEANY_FILETYPES_SH].styling[8]);
 	get_keyfile_hex(config, config_home, "styling", "param", "0x9f0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_SH].styling[9]);
 	get_keyfile_hex(config, config_home, "styling", "scalar", "0x105090", "0xffffff", "false", &style_sets[GEANY_FILETYPES_SH].styling[10]);
+	get_keyfile_hex(config, config_home, "styling", "error", "0xff0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_SH].styling[11]);
+	get_keyfile_hex(config, config_home, "styling", "here_delim", "0x000000", "0xddd0dd", "false", &style_sets[GEANY_FILETYPES_SH].styling[12]);
+	get_keyfile_hex(config, config_home, "styling", "here_q", "0x7f007f", "0xddd0dd", "false", &style_sets[GEANY_FILETYPES_SH].styling[13]);
 
 	style_sets[GEANY_FILETYPES_SH].keywords = g_new(gchar*, 2);
 	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_SH, 0, "break case continue do done elif else esac eval exit export fi for goto if in integer return set shift then until while");
@@ -1625,6 +1628,9 @@ static void styleset_sh(ScintillaObject *sci)
 	set_sci_style(sci, SCE_SH_BACKTICKS, GEANY_FILETYPES_SH, 8);
 	set_sci_style(sci, SCE_SH_PARAM, GEANY_FILETYPES_SH, 9);
 	set_sci_style(sci, SCE_SH_SCALAR, GEANY_FILETYPES_SH, 10);
+	set_sci_style(sci, SCE_SH_ERROR, GEANY_FILETYPES_SH, 11);
+	set_sci_style(sci, SCE_SH_HERE_DELIM, GEANY_FILETYPES_SH, 12);
+	set_sci_style(sci, SCE_SH_HERE_Q, GEANY_FILETYPES_SH, 13);
 }
 
 

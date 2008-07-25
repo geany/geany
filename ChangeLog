@@ -1,3 +1,10 @@
+2008-07-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * data/filetypes.sh, src/highlighting.c:
+   Add missing "error" and heredoc styles to filetype Shellscript
+   (related to #2026853).
+
+
 2008-07-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/filetypes.c:

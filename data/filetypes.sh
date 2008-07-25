@@ -12,6 +12,9 @@ identifier=0x000000;0xffffff;false;false
 backticks=0x000000;0xd0d0d0;false;false
 param=0x009f00;0xffffff;false;false
 scalar=0x105090;0xffffff;false;false
+error=0xff0000;0xffffff;false;false
+here_delim=0x000000;0xddd0dd;false;false
+here_q=0x7f007f;0xddd0dd;false;false
 
 [keywords]
 primary=break case continue do done elif else esac eval exit export fi for function goto if in integer return set shift then until while
