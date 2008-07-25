@@ -61,7 +61,7 @@ static struct
 	/* pointers to widgets only sensitive when there is at least one document */
 	GPtrArray	*document_buttons;
 	GtkWidget	*menu_insert_include_items[2];
-	GtkWidget	*current_word_item;
+	GtkWidget	*popup_goto_items[4];
 	GtkWidget	*popup_copy_items[3];
 	GtkWidget	*menu_copy_items[3];
 	GtkWidget	*redo_items[3];
@@ -338,7 +338,10 @@ void ui_update_popup_copy_items(GeanyDocument *doc)
 
 void ui_update_popup_goto_items(gboolean enable)
 {
-	gtk_widget_set_sensitive(widgets.current_word_item, enable);
+	gtk_widget_set_sensitive(widgets.popup_goto_items[0], enable);
+	gtk_widget_set_sensitive(widgets.popup_goto_items[1], enable);
+	gtk_widget_set_sensitive(widgets.popup_goto_items[2], enable);
+	gtk_widget_set_sensitive(widgets.popup_goto_items[3], enable);
 }
 
 
@@ -1477,7 +1480,10 @@ void ui_init(void)
 	ui_widgets.statusbar = lookup_widget(main_widgets.window, "statusbar");
 	ui_widgets.print_page_setup = lookup_widget(main_widgets.window, "page_setup1");
 
-	widgets.current_word_item = lookup_widget(main_widgets.editor_menu, "current_word1");
+	widgets.popup_goto_items[0] = lookup_widget(main_widgets.editor_menu, "goto_tag_definition1");
+	widgets.popup_goto_items[1] = lookup_widget(main_widgets.editor_menu, "goto_tag_declaration1");
+	widgets.popup_goto_items[2] = lookup_widget(main_widgets.editor_menu, "find_usage1");
+	widgets.popup_goto_items[3] = lookup_widget(main_widgets.editor_menu, "find_document_usage1");
 	widgets.popup_copy_items[0] = lookup_widget(main_widgets.editor_menu, "cut1");
 	widgets.popup_copy_items[1] = lookup_widget(main_widgets.editor_menu, "copy1");
 	widgets.popup_copy_items[2] = lookup_widget(main_widgets.editor_menu, "delete1");
