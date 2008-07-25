@@ -7,6 +7,9 @@
    Update waf to its latest SVN rev and exclude some unused modules
    which makes it another 20 KB smaller.
    Update waf script to reflect waf API changes(module Install removed).
+ * src/editor.c:
+   Fix wrong checks when determining whether a style is a PHP style
+   (style SCE_HPHP_COMPLEX_VARIABLE was ignored, closes #2027235).
 
 
 2008-07-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -215,6 +215,18 @@ on_editor_button_press_event           (GtkWidget *widget,
 }
 
 
+static gboolean is_style_php(gint style)
+{
+	if ((style >= SCE_HPHP_DEFAULT && style <= SCE_HPHP_OPERATOR) ||
+		style == SCE_HPHP_COMPLEX_VARIABLE)
+	{
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+
 typedef struct SCNotification SCNotification;
 
 static void fold_symbol_click(ScintillaObject *sci, SCNotification *nt)
@@ -1319,7 +1331,7 @@ static gboolean autocomplete_check_for_html(gint ft_id, gint style)
 	if (ft_id == GEANY_FILETYPES_PHP)
 	{
 		/* use entity completion when style is outside of PHP styles */
-		if (style < SCE_HPHP_DEFAULT || style > SCE_HPHP_OPERATOR)
+		if (! is_style_php(style))
 			return TRUE;
 	}
 
@@ -1738,8 +1750,7 @@ static gboolean handle_xml(GeanyEditor *editor, gchar ch)
 	if (editor->document->file_type->id == GEANY_FILETYPES_PHP)
 	{
 		gint style = sci_get_style_at(sci, pos);
-		if (style != SCE_HPHP_SIMPLESTRING && style != SCE_HPHP_HSTRING &&
-			style <= SCE_HPHP_OPERATOR && style >= SCE_HPHP_DEFAULT)
+		if (is_style_php(style) && style != SCE_HPHP_SIMPLESTRING && style != SCE_HPHP_HSTRING)
 			return FALSE;
 	}
 
@@ -1889,7 +1900,6 @@ static void real_uncomment_multiline(GeanyDocument *doc)
 	g_free(linebuf);
 }
 
-
 /* set toggle to TRUE if the caller is the toggle function, FALSE otherwise
  * returns the amount of uncommented single comment lines, in case of multi line uncomment
  * it returns just 1 */
@@ -1930,8 +1940,7 @@ gint editor_do_uncomment(GeanyDocument *doc, gint line, gboolean toggle)
 	line_start = sci_get_position_from_line(doc->editor->sci, first_line);
 	if (ft->id == GEANY_FILETYPES_PHP)
 	{
-		if (sci_get_style_at(doc->editor->sci, line_start) < 118 ||
-			sci_get_style_at(doc->editor->sci, line_start) > 127)
+		if (! is_style_php(sci_get_style_at(doc->editor->sci, line_start)))
 			ft = filetypes[GEANY_FILETYPES_XML];
 	}
 
@@ -2002,8 +2011,7 @@ gint editor_do_uncomment(GeanyDocument *doc, gint line, gboolean toggle)
 					case SCLEX_XML:
 					case SCLEX_HTML:
 					{
-						if (sci_get_style_at(doc->editor->sci, line_start) >= 118 &&
-							sci_get_style_at(doc->editor->sci, line_start) <= 127)
+						if (is_style_php(sci_get_style_at(doc->editor->sci, line_start)))
 							style_comment = SCE_HPHP_COMMENT;
 						else style_comment = SCE_H_COMMENT;
 						break;
@@ -2081,8 +2089,7 @@ void editor_do_comment_toggle(GeanyDocument *doc)
 	first_line_start = sci_get_position_from_line(doc->editor->sci, first_line);
 	if (ft->id == GEANY_FILETYPES_PHP)
 	{
-		if (sci_get_style_at(doc->editor->sci, first_line_start) < 118 ||
-			sci_get_style_at(doc->editor->sci, first_line_start) > 127)
+		if (! is_style_php(sci_get_style_at(doc->editor->sci, first_line_start)))
 			ft = filetypes[GEANY_FILETYPES_XML];
 	}
 
@@ -2150,8 +2157,7 @@ void editor_do_comment_toggle(GeanyDocument *doc)
 				case SCLEX_XML:
 				case SCLEX_HTML:
 				{
-					if (sci_get_style_at(doc->editor->sci, line_start) >= 118 &&
-						sci_get_style_at(doc->editor->sci, line_start) <= 127)
+					if (is_style_php(sci_get_style_at(doc->editor->sci, line_start)))
 						style_comment = SCE_HPHP_COMMENT;
 					else style_comment = SCE_H_COMMENT;
 					break;
@@ -2259,8 +2265,7 @@ void editor_do_comment(GeanyDocument *doc, gint line, gboolean allow_empty_lines
 	line_start = sci_get_position_from_line(doc->editor->sci, first_line);
 	if (ft->id == GEANY_FILETYPES_PHP)
 	{
-		if (sci_get_style_at(doc->editor->sci, line_start) < 118 ||
-			sci_get_style_at(doc->editor->sci, line_start) > 127)
+		if (! is_style_php(sci_get_style_at(doc->editor->sci, line_start)))
 			ft = filetypes[GEANY_FILETYPES_XML];
 	}
 
@@ -2324,8 +2329,7 @@ void editor_do_comment(GeanyDocument *doc, gint line, gboolean allow_empty_lines
 					case SCLEX_XML:
 					case SCLEX_HTML:
 					{
-						if (sci_get_style_at(doc->editor->sci, line_start) >= 118 &&
-							sci_get_style_at(doc->editor->sci, line_start) <= 127)
+						if (is_style_php(sci_get_style_at(doc->editor->sci, line_start)))
 							style_comment = SCE_HPHP_COMMENT;
 						else style_comment = SCE_H_COMMENT;
 						break;
