@@ -46,11 +46,25 @@ AC_CHECK_FUNCS([gethostname ftruncate fgetpos mkstemp regcomp strerror strstr])
 # autoscan end
 
 
-# get svn revision
-SVN=`which svn 2>/dev/null`
-if test -d ".svn" -a "x${SVN}" != "x" -a -x "${SVN}"
+# get svn revision (try GIT first, then check for SVN)
+REVISION="r0"
+GIT=`which git 2>/dev/null`
+if test -d ".git" -a "x${GIT}" != "x" -a -x "${GIT}"
 then
-	REVISION=r`$SVN info|grep 'Last Changed Rev'|cut -d' ' -f4`
+	REVISION=r`git svn find-rev origin/trunk 2>/dev/null ||
+				git svn find-rev trunk 2>/dev/null || git svn find-rev HEAD 2>/dev/null ||
+				git svn find-rev master 2>/dev/null || echo 0`
+fi
+if test "x${REVISION}" = "xr0"
+then
+	SVN=`which svn 2>/dev/null`
+	if test -d ".svn" -a "x${SVN}" != "x" -a -x "${SVN}"
+	then
+		REVISION=r`$SVN info|grep 'Last Changed Rev'|cut -d' ' -f4`
+	fi
+fi
+if test "x${REVISION}" != "xr0"
+then
 	# force debug mode for a SVN working copy
 	CFLAGS="-g -DGEANY_DEBUG $CFLAGS"
 else

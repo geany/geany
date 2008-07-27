@@ -95,20 +95,33 @@ geany_sources = [
 
 def configure(conf):
     def conf_get_svn_rev():
-        try:
-            p = subprocess.Popen(['svn', 'info', '--non-interactive'], stdout=subprocess.PIPE, \
-                    stderr=subprocess.STDOUT, close_fds=False, env={'LANG' : 'C'})
-            stdout = p.communicate()[0]
-
-            if p.returncode == 0:
+        # try GIT
+        if os.path.exists('.git'):
+            cmds = [ 'git svn find-rev HEAD 2>/dev/null',
+                     'git svn find-rev origin/trunk 2>/dev/null',
+                     'git svn find-rev trunk 2>/dev/null',
+                     'git svn find-rev master 2>/dev/null' ]
+            for c in cmds:
+                try:
+                    stdout = Utils.cmd_output(c)
+                    if stdout:
+                        return stdout.strip()
+                except:
+                    pass
+        # try SVN
+        elif os.path.exists('.svn'):
+            try:
+                stdout = Utils.cmd_output('svn info --non-interactive', {'LANG' : 'C'})
                 lines = stdout.splitlines(True)
                 for line in lines:
                     if line.startswith('Last Changed Rev'):
                         key, value = line.split(': ', 1)
                         return value.strip()
-            return '-1'
-        except:
-            return '-1'
+            except:
+                pass
+        else
+            pass
+        return '-1'
 
     def conf_get_pkg_ver(pkgname):
         ret = os.popen('PKG_CONFIG_PATH=$PKG_CONFIG_PATH pkg-config --modversion %s' % pkgname).read().strip()
