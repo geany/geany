@@ -119,7 +119,7 @@ def configure(conf):
                         return value.strip()
             except:
                 pass
-        else
+        else:
             pass
         return '-1'
 
