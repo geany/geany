@@ -2693,6 +2693,9 @@ create_prefs_dialog (void)
   GtkWidget *label209;
   GtkObject *spin_line_break_adj;
   GtkWidget *spin_line_break;
+  GtkWidget *hbox12;
+  GtkWidget *label220;
+  GtkWidget *entry_toggle_mark;
   GtkWidget *label172;
   GtkWidget *label211;
   GtkWidget *frame18;
@@ -3735,6 +3738,19 @@ create_prefs_dialog (void)
   gtk_widget_show (spin_line_break);
   gtk_box_pack_start (GTK_BOX (hbox11), spin_line_break, FALSE, TRUE, 0);
   gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_line_break), TRUE);
+
+  hbox12 = gtk_hbox_new (FALSE, 12);
+  gtk_widget_show (hbox12);
+  gtk_box_pack_start (GTK_BOX (vbox17), hbox12, TRUE, TRUE, 0);
+
+  label220 = gtk_label_new (_("Comment toggle marker:"));
+  gtk_widget_show (label220);
+  gtk_box_pack_start (GTK_BOX (hbox12), label220, FALSE, FALSE, 0);
+
+  entry_toggle_mark = gtk_entry_new ();
+  gtk_widget_show (entry_toggle_mark);
+  gtk_box_pack_start (GTK_BOX (hbox12), entry_toggle_mark, FALSE, TRUE, 0);
+  gtk_tooltips_set_tip (tooltips, entry_toggle_mark, _("A string which is added when toggling a line comment in a source file. It is used to mark the comment as toggled."), NULL);
 
   label172 = gtk_label_new (_("<b>Features</b>"));
   gtk_widget_show (label172);
@@ -4886,6 +4902,9 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, hbox11, "hbox11");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label209, "label209");
   GLADE_HOOKUP_OBJECT (prefs_dialog, spin_line_break, "spin_line_break");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox12, "hbox12");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label220, "label220");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, entry_toggle_mark, "entry_toggle_mark");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label172, "label172");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label211, "label211");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame18, "frame18");

@@ -3,6 +3,9 @@
  * configure.in, wscript:
    Add support for retrieving the SVN revision number also
    when using a git-svn.
+ * geany.glade, doc/geany.html, doc/geany.txt, src/editor.c,
+   src/interface.c, src/keyfile.c, src/plugindata.h, src/prefs.c:
+   Add a preference for the comment toggle mark string("~ " by default).
 
 
 2008-07-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

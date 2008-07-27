@@ -403,6 +403,9 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(ui_widgets.prefs_dialog, "spin_tab_width");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), editor_prefs.tab_width);
 
+	widget = lookup_widget(ui_widgets.prefs_dialog, "entry_toggle_mark");
+	gtk_entry_set_text(GTK_ENTRY(widget), editor_prefs.comment_toggle_mark);
+
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_replace_tabs");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.replace_tabs);
 
@@ -813,6 +816,10 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 
 
 		/* Editor settings */
+		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_toggle_mark");
+		setptr(editor_prefs.comment_toggle_mark,
+			gtk_editable_get_chars(GTK_EDITABLE(widget), 0, -1));
+
 		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_tab_width");
 		editor_prefs.tab_width = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 

@@ -1977,14 +1977,13 @@ gint editor_do_uncomment(GeanyDocument *doc, gint line, gboolean toggle)
 			/* use single line comment */
 			if (cc == NULL || strlen(cc) == 0)
 			{
-				gsize tm_len = strlen(GEANY_TOGGLE_MARK);
-
 				single_line = TRUE;
 
 				if (toggle)
 				{
+					gsize tm_len = strlen(editor_prefs.comment_toggle_mark);
 					if (strncmp(sel + x, co, co_len) != 0 ||
-						strncmp(sel + x + co_len, GEANY_TOGGLE_MARK, tm_len) != 0)
+						strncmp(sel + x + co_len, editor_prefs.comment_toggle_mark, tm_len) != 0)
 						continue;
 
 					co_len += tm_len;
@@ -2067,7 +2066,7 @@ void editor_do_comment_toggle(GeanyDocument *doc)
 	gboolean break_loop = FALSE, single_line = FALSE;
 	gboolean first_line_was_comment = FALSE;
 	gsize co_len;
-	gsize tm_len = strlen(GEANY_TOGGLE_MARK);
+	gsize tm_len = strlen(editor_prefs.comment_toggle_mark);
 	GeanyFiletype *ft;
 
 	if (doc == NULL || doc->file_type == NULL)
@@ -2127,7 +2126,7 @@ void editor_do_comment_toggle(GeanyDocument *doc)
 			single_line = TRUE;
 
 			if (strncmp(sel + x, co, co_len) == 0 &&
-				strncmp(sel + x + co_len, GEANY_TOGGLE_MARK, tm_len) == 0)
+				strncmp(sel + x + co_len, editor_prefs.comment_toggle_mark, tm_len) == 0)
 			{
 				do_continue = TRUE;
 			}
@@ -2310,7 +2309,7 @@ void editor_do_comment(GeanyDocument *doc, gint line, gboolean allow_empty_lines
 
 				if (toggle)
 				{
-					gchar *text = g_strconcat(co, GEANY_TOGGLE_MARK, NULL);
+					gchar *text = g_strconcat(co, editor_prefs.comment_toggle_mark, NULL);
 					sci_insert_text(doc->editor->sci, start, text);
 					g_free(text);
 				}

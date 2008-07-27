@@ -1499,6 +1499,10 @@ Line breaking column
     The editor column number to insert a newline at when Line Breaking
     is enabled for the current document.
 
+Comment toggle marker
+    A string which is added when toggling a line comment in a source file.
+    It is used to mark the comment as toggled.
+
 
 Editor Completions tab in preferences dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

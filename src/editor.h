@@ -94,6 +94,7 @@ typedef struct GeanyEditorPrefs
 	gboolean	detect_tab_mode;
 	gint		line_break_column;
 	gboolean	auto_continue_multiline;
+	gchar		*comment_toggle_mark;
 } GeanyEditorPrefs;
 
 extern GeanyEditorPrefs editor_prefs;
