@@ -3223,6 +3223,7 @@
 
 	  <child>
 	    <widget class="GtkVBox" id="vbox20">
+	      <property name="border_width">5</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">10</property>
@@ -3908,6 +3909,7 @@
 
 	  <child>
 	    <widget class="GtkVBox" id="vbox14">
+	      <property name="border_width">5</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">10</property>
@@ -4733,6 +4735,7 @@ Bottom
 
 	  <child>
 	    <widget class="GtkVBox" id="vbox15">
+	      <property name="border_width">5</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">10</property>
@@ -5322,6 +5325,7 @@ Bottom
 
 	      <child>
 		<widget class="GtkVBox" id="vbox5">
+		  <property name="border_width">5</property>
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
 		  <property name="spacing">10</property>
@@ -5956,6 +5960,7 @@ Match braces</property>
 
 	      <child>
 		<widget class="GtkFrame" id="frame18">
+		  <property name="border_width">5</property>
 		  <property name="visible">True</property>
 		  <property name="label_xalign">0</property>
 		  <property name="label_yalign">0.5</property>
@@ -6233,6 +6238,7 @@ Match braces</property>
 
 	      <child>
 		<widget class="GtkVBox" id="vbox24">
+		  <property name="border_width">5</property>
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
 		  <property name="spacing">10</property>
@@ -6700,6 +6706,7 @@ Match braces</property>
 
 	  <child>
 	    <widget class="GtkVBox" id="vbox18">
+	      <property name="border_width">5</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">10</property>
@@ -7370,6 +7377,7 @@ Match braces</property>
 
 	  <child>
 	    <widget class="GtkFrame" id="frame36">
+	      <property name="border_width">5</property>
 	      <property name="visible">True</property>
 	      <property name="label_xalign">0</property>
 	      <property name="label_yalign">0.5</property>
@@ -7508,6 +7516,7 @@ Match braces</property>
 
 	  <child>
 	    <widget class="GtkVBox" id="vbox23">
+	      <property name="border_width">5</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">10</property>
@@ -8091,6 +8100,7 @@ Match braces</property>
 
 	  <child>
 	    <widget class="GtkFrame" id="frame21">
+	      <property name="border_width">5</property>
 	      <property name="visible">True</property>
 	      <property name="label_xalign">0</property>
 	      <property name="label_yalign">0.5</property>
@@ -8605,6 +8615,7 @@ Match braces</property>
 
 	  <child>
 	    <widget class="GtkFrame" id="frame22">
+	      <property name="border_width">5</property>
 	      <property name="visible">True</property>
 	      <property name="label_xalign">0</property>
 	      <property name="label_yalign">0.5</property>
@@ -8763,6 +8774,7 @@ Match braces</property>
 
 	  <child>
 	    <widget class="GtkVBox" id="vbox27">
+	      <property name="border_width">5</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">0</property>

@@ -2904,6 +2904,7 @@ create_prefs_dialog (void)
   vbox20 = gtk_vbox_new (FALSE, 10);
   gtk_widget_show (vbox20);
   gtk_container_add (GTK_CONTAINER (notebook2), vbox20);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox20), 5);
 
   frame10 = gtk_frame_new (NULL);
   gtk_widget_show (frame10);
@@ -3120,6 +3121,7 @@ create_prefs_dialog (void)
   vbox14 = gtk_vbox_new (FALSE, 10);
   gtk_widget_show (vbox14);
   gtk_container_add (GTK_CONTAINER (notebook2), vbox14);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox14), 5);
 
   frame7 = gtk_frame_new (NULL);
   gtk_widget_show (frame7);
@@ -3379,6 +3381,7 @@ create_prefs_dialog (void)
   vbox15 = gtk_vbox_new (FALSE, 10);
   gtk_widget_show (vbox15);
   gtk_container_add (GTK_CONTAINER (notebook2), vbox15);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox15), 5);
 
   frame28 = gtk_frame_new (NULL);
   gtk_widget_show (frame28);
@@ -3576,6 +3579,7 @@ create_prefs_dialog (void)
   vbox5 = gtk_vbox_new (FALSE, 10);
   gtk_widget_show (vbox5);
   gtk_container_add (GTK_CONTAINER (notebook4), vbox5);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox5), 5);
 
   frame27 = gtk_frame_new (NULL);
   gtk_widget_show (frame27);
@@ -3764,6 +3768,7 @@ create_prefs_dialog (void)
   frame18 = gtk_frame_new (NULL);
   gtk_widget_show (frame18);
   gtk_container_add (GTK_CONTAINER (notebook4), frame18);
+  gtk_container_set_border_width (GTK_CONTAINER (frame18), 5);
   gtk_frame_set_shadow_type (GTK_FRAME (frame18), GTK_SHADOW_NONE);
 
   alignment21 = gtk_alignment_new (0.5, 0.5, 1, 1);
@@ -3849,6 +3854,7 @@ create_prefs_dialog (void)
   vbox24 = gtk_vbox_new (FALSE, 10);
   gtk_widget_show (vbox24);
   gtk_container_add (GTK_CONTAINER (notebook4), vbox24);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox24), 5);
 
   frame5 = gtk_frame_new (NULL);
   gtk_widget_show (frame5);
@@ -3988,6 +3994,7 @@ create_prefs_dialog (void)
   vbox18 = gtk_vbox_new (FALSE, 10);
   gtk_widget_show (vbox18);
   gtk_container_add (GTK_CONTAINER (notebook2), vbox18);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox18), 5);
 
   frame6 = gtk_frame_new (NULL);
   gtk_widget_show (frame6);
@@ -4208,6 +4215,7 @@ create_prefs_dialog (void)
   frame36 = gtk_frame_new (NULL);
   gtk_widget_show (frame36);
   gtk_container_add (GTK_CONTAINER (notebook2), frame36);
+  gtk_container_set_border_width (GTK_CONTAINER (frame36), 5);
   gtk_frame_set_shadow_type (GTK_FRAME (frame36), GTK_SHADOW_NONE);
 
   alignment39 = gtk_alignment_new (0.5, 0.5, 1, 1);
@@ -4249,6 +4257,7 @@ create_prefs_dialog (void)
   vbox23 = gtk_vbox_new (FALSE, 10);
   gtk_widget_show (vbox23);
   gtk_container_add (GTK_CONTAINER (notebook2), vbox23);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox23), 5);
 
   frame20 = gtk_frame_new (NULL);
   gtk_widget_show (frame20);
@@ -4426,6 +4435,7 @@ create_prefs_dialog (void)
   frame21 = gtk_frame_new (NULL);
   gtk_widget_show (frame21);
   gtk_container_add (GTK_CONTAINER (notebook2), frame21);
+  gtk_container_set_border_width (GTK_CONTAINER (frame21), 5);
   gtk_frame_set_shadow_type (GTK_FRAME (frame21), GTK_SHADOW_NONE);
 
   alignment24 = gtk_alignment_new (0.5, 0.5, 1, 1);
@@ -4571,6 +4581,7 @@ create_prefs_dialog (void)
   frame22 = gtk_frame_new (NULL);
   gtk_widget_show (frame22);
   gtk_container_add (GTK_CONTAINER (notebook2), frame22);
+  gtk_container_set_border_width (GTK_CONTAINER (frame22), 5);
   gtk_frame_set_shadow_type (GTK_FRAME (frame22), GTK_SHADOW_NONE);
 
   alignment25 = gtk_alignment_new (0.5, 0.5, 1, 1);
@@ -4618,6 +4629,7 @@ create_prefs_dialog (void)
   vbox27 = gtk_vbox_new (FALSE, 0);
   gtk_widget_show (vbox27);
   gtk_container_add (GTK_CONTAINER (notebook2), vbox27);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox27), 5);
 
   frame32 = gtk_frame_new (NULL);
   gtk_widget_show (frame32);
