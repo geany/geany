@@ -151,6 +151,10 @@ void ui_setup_open_button_callback(GtkWidget *open_btn, const gchar *title,
 
 void ui_table_add_row(GtkTable *table, gint row, ...) G_GNUC_NULL_TERMINATED;
 
+void ui_radio_menu_item_set_active_index(GtkRadioMenuItem *widget, guint index);
+
+guint ui_radio_menu_item_get_active_index(GtkRadioMenuItem *widget);
+
 /* End of 'generic' functions */
 
 

@@ -14,6 +14,9 @@
  * src/prefs.c:
    Add spin_items_foreach().
    Bind spin_indent_width, spin_tab_width widgets to settings.
+ * src/ui_utils.c, src/ui_utils.h:
+   Add ui_radio_menu_item_set_active_index(),
+   ui_radio_menu_item_get_active_index().
 
 
 2008-07-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

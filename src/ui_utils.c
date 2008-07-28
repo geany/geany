@@ -706,7 +706,8 @@ void ui_document_show_hide(GeanyDocument *doc)
 
 	item = lookup_widget(main_widgets.window, "menu_use_auto_indentation1");
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), doc->editor->auto_indent);
-	gtk_widget_set_sensitive(item, editor_prefs.indent_mode != INDENT_NONE);
+	gtk_widget_set_sensitive(item,
+		editor_prefs.indentation->auto_indent_mode != GEANY_AUTOINDENT_NONE);
 
 	item = lookup_widget(main_widgets.window, doc->editor->use_tabs ? "tabs1" : "spaces1");
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), TRUE);
@@ -1505,3 +1506,43 @@ void ui_init(void)
 
 	init_document_widgets();
 }
+
+
+void ui_radio_menu_item_set_active_index(GtkRadioMenuItem *widget, guint idx)
+{
+	GSList *item = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(widget));
+	guint i;
+
+	for (i = 0; item != NULL; item = g_slist_next(item), i++)
+	{
+		if (i == idx)
+		{
+			GtkCheckMenuItem *radio = item->data;
+
+			gtk_check_menu_item_set_active(radio, TRUE);
+			return;
+		}
+	}
+	g_warning("Index %u is out of range for group of widget %s",
+		idx, gtk_widget_get_name(GTK_WIDGET(widget)));
+}
+
+
+guint ui_radio_menu_item_get_active_index(GtkRadioMenuItem *widget)
+{
+	GSList *item = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(widget));
+	guint i;
+
+	for (i = 0; item != NULL; item = g_slist_next(item), i++)
+	{
+		GtkCheckMenuItem *radio = item->data;
+
+		if (gtk_check_menu_item_get_active(radio))
+			return i;
+	}
+	g_warning("No active group item for widget %s",
+		gtk_widget_get_name(GTK_WIDGET(widget)));
+	return 0;
+}
+
+
