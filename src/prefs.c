@@ -164,13 +164,70 @@ static void spin_items_foreach(PrefCallbackAction action)
 }
 
 
+static void radio_items_foreach(PrefCallbackAction action)
+{
+	guint i;
+	/* Only add one widget per radio-group */
+	PrefEntry items[] =
+	{
+		{"radio_indent_spaces", &editor_prefs.indentation->type},
+	};
+
+	for (i = 0; i < G_N_ELEMENTS(items); i++)
+	{
+		PrefEntry *pe = &items[i];
+		GtkWidget *widget = lookup_widget(ui_widgets.prefs_dialog, pe->widget_name);
+		gint *setting = pe->setting;
+
+		switch (action)
+		{
+			case PREF_DISPLAY:
+				ui_radio_menu_item_set_active_index(GTK_RADIO_MENU_ITEM(widget), *setting);
+				break;
+			case PREF_UPDATE:
+				*setting = ui_radio_menu_item_get_active_index(GTK_RADIO_MENU_ITEM(widget));
+				break;
+		}
+	}
+}
+
+
+static void combo_items_foreach(PrefCallbackAction action)
+{
+	guint i;
+	PrefEntry items[] =
+	{
+		{"combo_auto_indent_mode", &editor_prefs.indentation->type},
+	};
+
+	for (i = 0; i < G_N_ELEMENTS(items); i++)
+	{
+		PrefEntry *pe = &items[i];
+		GtkWidget *widget = lookup_widget(ui_widgets.prefs_dialog, pe->widget_name);
+		gint *setting = pe->setting;
+
+		switch (action)
+		{
+			case PREF_DISPLAY:
+				gtk_combo_box_set_active(GTK_COMBO_BOX(widget), *setting);
+				break;
+			case PREF_UPDATE:
+				*setting = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+				break;
+		}
+	}
+}
+
+
 typedef void (*PrefItemsCallback)(PrefCallbackAction action);
 
 /* List of functions which hold the PrefEntry arrays. This allows access to
  * runtime setting fields like EditorPrefs::indentation->width. */
 PrefItemsCallback pref_item_callbacks[] = {
 	toggle_items_foreach,
-	spin_items_foreach
+	spin_items_foreach,
+	radio_items_foreach,
+	combo_items_foreach
 };
 
 
@@ -474,9 +531,6 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_line_end");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_line_endings);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "combo_auto_indent_mode");
-	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), editor_prefs.indent_mode);
-
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_detect_indent");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.detect_tab_mode);
 
@@ -505,12 +559,6 @@ void prefs_init_dialog(void)
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_newline_strip");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.newline_strip);
-
-	if (editor_prefs.use_tabs)
-		widget = lookup_widget(ui_widgets.prefs_dialog, "radio_indent_tabs");
-	else
-		widget = lookup_widget(ui_widgets.prefs_dialog, "radio_indent_spaces");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_indicators");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.use_indicators);
@@ -887,9 +935,6 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_line_end");
 		editor_prefs.show_line_endings = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "combo_auto_indent_mode");
-		editor_prefs.indent_mode = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
-
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_line_wrapping");
 		editor_prefs.line_wrapping = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
@@ -910,22 +955,6 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_newline_strip");
 		editor_prefs.newline_strip = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = lookup_widget(ui_widgets.prefs_dialog, "radio_indent_tabs");
-		{
-			gboolean use_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-			/* override each document setting only if the default has changed */
-			if (editor_prefs.use_tabs != use_tabs)
-			{
-				editor_prefs.use_tabs = use_tabs;
-				for (i = 0; i < documents_array->len; i++)
-				{
-					if (documents[i]->is_valid)
-						editor_set_use_tabs(documents[i]->editor, editor_prefs.use_tabs);
-				}
-			}
-		}
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_detect_indent");
 		editor_prefs.detect_tab_mode = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));

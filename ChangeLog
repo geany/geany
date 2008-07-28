@@ -17,6 +17,8 @@
  * src/ui_utils.c, src/ui_utils.h:
    Add ui_radio_menu_item_set_active_index(),
    ui_radio_menu_item_get_active_index().
+ * src/prefs.c:
+   Add radio_items_foreach(), combo_items_foreach().
 
 
 2008-07-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
