@@ -89,7 +89,14 @@ static void on_prefs_print_radio_button_toggled(GtkToggleButton *togglebutton, g
 static void on_prefs_print_page_header_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 
 
-/* used in e.g. init_toggle_button_prefs(). */
+typedef enum PrefCallbackAction
+{
+	PREF_DISPLAY,
+	PREF_UPDATE
+}
+PrefCallbackAction;
+
+
 typedef struct PrefEntry
 {
 	const gchar *widget_name;
@@ -97,14 +104,44 @@ typedef struct PrefEntry
 }
 PrefEntry;
 
-static PrefEntry toggle_prefs[] =
-{
-	{"check_cmdline_new_files", &file_prefs.cmdline_new_files},
 
-	{"check_ask_suppress_search_dialogs", &search_prefs.suppress_dialogs},
-	{"check_search_use_current_word", &search_prefs.use_current_word},
-	{"check_fif_current_dir", &search_prefs.use_current_file_dir},
-	{NULL, NULL}	/* must be terminated */
+static void toggle_items_foreach(PrefCallbackAction action)
+{
+	guint i;
+	PrefEntry items[] =
+	{
+		{"check_cmdline_new_files", &file_prefs.cmdline_new_files},
+
+		{"check_ask_suppress_search_dialogs", &search_prefs.suppress_dialogs},
+		{"check_search_use_current_word", &search_prefs.use_current_word},
+		{"check_fif_current_dir", &search_prefs.use_current_file_dir},
+	};
+
+	for (i = 0; i < G_N_ELEMENTS(items); i++)
+	{
+		PrefEntry *pe = &items[i];
+		GtkWidget *widget = lookup_widget(ui_widgets.prefs_dialog, pe->widget_name);
+		gboolean *setting = pe->setting;
+
+		switch (action)
+		{
+			case PREF_DISPLAY:
+				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), *setting);
+				break;
+			case PREF_UPDATE:
+				*setting = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+				break;
+		}
+	}
+}
+
+
+typedef void (*PrefItemsCallback)(PrefCallbackAction action);
+
+/* List of functions which hold the PrefEntry arrays. This allows access to
+ * runtime setting fields like EditorPrefs::indentation->width. */
+PrefItemsCallback pref_item_callbacks[] = {
+	toggle_items_foreach
 };
 
 
@@ -180,16 +217,12 @@ static void init_keybindings(void)
 }
 
 
-static void init_toggle_button_prefs()
+static void init_prefs(void)
 {
-	PrefEntry *pe;
+	guint i;
 
-	for (pe = toggle_prefs; pe->widget_name != NULL; pe++)
-	{
-		GtkWidget *widget = lookup_widget(ui_widgets.prefs_dialog, pe->widget_name);
-
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), *(gboolean*)pe->setting);
-	}
+	for (i = 0; i < G_N_ELEMENTS(pref_item_callbacks); i++)
+		pref_item_callbacks[i](PREF_DISPLAY);
 }
 
 
@@ -198,7 +231,7 @@ void prefs_init_dialog(void)
 	GtkWidget *widget;
 	GdkColor *color;
 
-	init_toggle_button_prefs();
+	init_prefs();
 
 	/* General settings */
 	/* startup */
@@ -614,16 +647,12 @@ void prefs_init_dialog(void)
 }
 
 
-static void update_toggle_button_prefs()
+static void update_prefs(void)
 {
-	PrefEntry *pe;
+	guint i;
 
-	for (pe = toggle_prefs; pe->widget_name != NULL; pe++)
-	{
-		GtkWidget *widget = lookup_widget(ui_widgets.prefs_dialog, pe->widget_name);
-
-		*(gboolean*)pe->setting = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-	}
+	for (i = 0; i < G_N_ELEMENTS(pref_item_callbacks); i++)
+		pref_item_callbacks[i](PREF_UPDATE);
 }
 
 
@@ -638,7 +667,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		GtkWidget *widget;
 		guint i;
 
-		update_toggle_button_prefs();
+		update_prefs();
 
 		/* General settings */
 		/* startup */

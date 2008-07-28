@@ -5,6 +5,12 @@
    radio option, and a Tab Width spin entry.
    Replace GeanyIndentPrefs::use_tabs with GeanyIndentType field 'type'.
    (Still won't compile ;-)).
+ * src/prefs.c:
+   Move toggle_prefs to a function toggle_items_foreach(), which takes
+   a PREF_DISPLAY or PREF_UPDATE argument. This means the PrefEntry
+   array can contain runtime fields, so can read pointer contents.
+   Add pref_item_callbacks array of functions to call like
+   toggle_items_foreach().
 
 
 2008-07-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
