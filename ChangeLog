@@ -1,3 +1,12 @@
+2008-07-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, src/editor.h, geany.glade:
+   Replace 'Custom tab width' option with a 'Tabs & Spaces' Indent Type
+   radio option, and a Tab Width spin entry.
+   Replace GeanyIndentPrefs::use_tabs with GeanyIndentType field 'type'.
+   (Still won't compile ;-)).
+
+
 2008-07-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/plugindata.h, src/main.c, src/editor.c, src/editor.h:

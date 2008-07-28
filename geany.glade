@@ -5354,7 +5354,7 @@ Bottom
 			      <child>
 				<widget class="GtkTable" id="table13">
 				  <property name="visible">True</property>
-				  <property name="n_rows">5</property>
+				  <property name="n_rows">7</property>
 				  <property name="n_columns">2</property>
 				  <property name="homogeneous">False</property>
 				  <property name="row_spacing">3</property>
@@ -5369,7 +5369,7 @@ Bottom
 				      <property name="justify">GTK_JUSTIFY_LEFT</property>
 				      <property name="wrap">False</property>
 				      <property name="selectable">False</property>
-				      <property name="xalign">0.5</property>
+				      <property name="xalign">0</property>
 				      <property name="yalign">0.5</property>
 				      <property name="xpad">0</property>
 				      <property name="ypad">0</property>
@@ -5381,8 +5381,8 @@ Bottom
 				    <packing>
 				      <property name="left_attach">0</property>
 				      <property name="right_attach">1</property>
-				      <property name="top_attach">4</property>
-				      <property name="bottom_attach">5</property>
+				      <property name="top_attach">6</property>
+				      <property name="bottom_attach">7</property>
 				      <property name="x_options">fill</property>
 				      <property name="y_options"></property>
 				    </packing>
@@ -5401,66 +5401,10 @@ Match braces</property>
 				    <packing>
 				      <property name="left_attach">1</property>
 				      <property name="right_attach">2</property>
-				      <property name="top_attach">4</property>
-				      <property name="bottom_attach">5</property>
+				      <property name="top_attach">6</property>
+				      <property name="bottom_attach">7</property>
 				      <property name="x_options">fill</property>
 				      <property name="y_options">fill</property>
-				    </packing>
-				  </child>
-
-				  <child>
-				    <widget class="GtkHBox" id="hbox8">
-				      <property name="visible">True</property>
-				      <property name="homogeneous">False</property>
-				      <property name="spacing">12</property>
-
-				      <child>
-					<widget class="GtkRadioButton" id="radio_indent_tabs">
-					  <property name="visible">True</property>
-					  <property name="tooltip" translatable="yes">Whether to use tabs or spaces when indentation is inserted.</property>
-					  <property name="can_focus">True</property>
-					  <property name="label" translatable="yes">_Tabs</property>
-					  <property name="use_underline">True</property>
-					  <property name="relief">GTK_RELIEF_NORMAL</property>
-					  <property name="focus_on_click">True</property>
-					  <property name="active">False</property>
-					  <property name="inconsistent">False</property>
-					  <property name="draw_indicator">True</property>
-					</widget>
-					<packing>
-					  <property name="padding">0</property>
-					  <property name="expand">False</property>
-					  <property name="fill">False</property>
-					</packing>
-				      </child>
-
-				      <child>
-					<widget class="GtkRadioButton" id="radio_indent_spaces">
-					  <property name="visible">True</property>
-					  <property name="tooltip" translatable="yes">Whether to use tabs or spaces when indentation is inserted.</property>
-					  <property name="can_focus">True</property>
-					  <property name="label" translatable="yes">_Spaces</property>
-					  <property name="use_underline">True</property>
-					  <property name="relief">GTK_RELIEF_NORMAL</property>
-					  <property name="focus_on_click">True</property>
-					  <property name="active">False</property>
-					  <property name="inconsistent">False</property>
-					  <property name="draw_indicator">True</property>
-					  <property name="group">radio_indent_tabs</property>
-					</widget>
-					<packing>
-					  <property name="padding">0</property>
-					  <property name="expand">False</property>
-					  <property name="fill">False</property>
-					</packing>
-				      </child>
-				    </widget>
-				    <packing>
-				      <property name="left_attach">1</property>
-				      <property name="right_attach">2</property>
-				      <property name="top_attach">0</property>
-				      <property name="bottom_attach">1</property>
-				      <property name="x_options">fill</property>
 				    </packing>
 				  </child>
 
@@ -5485,29 +5429,6 @@ Match braces</property>
 				    <packing>
 				      <property name="left_attach">0</property>
 				      <property name="right_attach">1</property>
-				      <property name="top_attach">0</property>
-				      <property name="bottom_attach">1</property>
-				      <property name="x_options">fill</property>
-				      <property name="y_options"></property>
-				    </packing>
-				  </child>
-
-				  <child>
-				    <widget class="GtkCheckButton" id="check_detect_indent">
-				      <property name="visible">True</property>
-				      <property name="tooltip" translatable="yes">Whether to detect the indentation type from file contents when a file is opened.</property>
-				      <property name="can_focus">True</property>
-				      <property name="label" translatable="yes">Detect from file</property>
-				      <property name="use_underline">True</property>
-				      <property name="relief">GTK_RELIEF_NORMAL</property>
-				      <property name="focus_on_click">True</property>
-				      <property name="active">False</property>
-				      <property name="inconsistent">False</property>
-				      <property name="draw_indicator">True</property>
-				    </widget>
-				    <packing>
-				      <property name="left_attach">1</property>
-				      <property name="right_attach">2</property>
 				      <property name="top_attach">1</property>
 				      <property name="bottom_attach">2</property>
 				      <property name="x_options">fill</property>
@@ -5536,8 +5457,8 @@ Match braces</property>
 				    <packing>
 				      <property name="left_attach">0</property>
 				      <property name="right_attach">1</property>
-				      <property name="top_attach">2</property>
-				      <property name="bottom_attach">3</property>
+				      <property name="top_attach">0</property>
+				      <property name="bottom_attach">1</property>
 				      <property name="x_options">fill</property>
 				      <property name="y_options"></property>
 				    </packing>
@@ -5559,18 +5480,18 @@ Match braces</property>
 				    <packing>
 				      <property name="left_attach">1</property>
 				      <property name="right_attach">2</property>
-				      <property name="top_attach">2</property>
-				      <property name="bottom_attach">3</property>
+				      <property name="top_attach">0</property>
+				      <property name="bottom_attach">1</property>
 				      <property name="y_options"></property>
 				    </packing>
 				  </child>
 
 				  <child>
-				    <widget class="GtkCheckButton" id="check_custom_tab_width">
+				    <widget class="GtkRadioButton" id="radio_indent_spaces">
 				      <property name="visible">True</property>
-				      <property name="tooltip" translatable="yes">Make tabs have a different size from the indent width</property>
+				      <property name="tooltip" translatable="yes">Use spaces when inserting indentation</property>
 				      <property name="can_focus">True</property>
-				      <property name="label" translatable="yes">Custom tab width:</property>
+				      <property name="label" translatable="yes">_Spaces</property>
 				      <property name="use_underline">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
@@ -5579,8 +5500,56 @@ Match braces</property>
 				      <property name="draw_indicator">True</property>
 				    </widget>
 				    <packing>
-				      <property name="left_attach">0</property>
-				      <property name="right_attach">1</property>
+				      <property name="left_attach">1</property>
+				      <property name="right_attach">2</property>
+				      <property name="top_attach">2</property>
+				      <property name="bottom_attach">3</property>
+				      <property name="x_options">fill</property>
+				      <property name="y_options"></property>
+				    </packing>
+				  </child>
+
+				  <child>
+				    <widget class="GtkRadioButton" id="radio_indent_tabs">
+				      <property name="visible">True</property>
+				      <property name="tooltip" translatable="yes">Use one tab per indent</property>
+				      <property name="can_focus">True</property>
+				      <property name="label" translatable="yes">_Tabs</property>
+				      <property name="use_underline">True</property>
+				      <property name="relief">GTK_RELIEF_NORMAL</property>
+				      <property name="focus_on_click">True</property>
+				      <property name="active">False</property>
+				      <property name="inconsistent">False</property>
+				      <property name="draw_indicator">True</property>
+				      <property name="group">radio_indent_spaces</property>
+				    </widget>
+				    <packing>
+				      <property name="left_attach">1</property>
+				      <property name="right_attach">2</property>
+				      <property name="top_attach">1</property>
+				      <property name="bottom_attach">2</property>
+				      <property name="x_options">fill</property>
+				      <property name="y_options"></property>
+				    </packing>
+				  </child>
+
+				  <child>
+				    <widget class="GtkRadioButton" id="radio_indent_both">
+				      <property name="visible">True</property>
+				      <property name="tooltip" translatable="yes">Use spaces if the total indent is less than the tab width, otherwise use both</property>
+				      <property name="can_focus">True</property>
+				      <property name="label" translatable="yes">T_abs &amp; Spaces</property>
+				      <property name="use_underline">True</property>
+				      <property name="relief">GTK_RELIEF_NORMAL</property>
+				      <property name="focus_on_click">True</property>
+				      <property name="active">False</property>
+				      <property name="inconsistent">False</property>
+				      <property name="draw_indicator">True</property>
+				      <property name="group">radio_indent_spaces</property>
+				    </widget>
+				    <packing>
+				      <property name="left_attach">1</property>
+				      <property name="right_attach">2</property>
 				      <property name="top_attach">3</property>
 				      <property name="bottom_attach">4</property>
 				      <property name="x_options">fill</property>
@@ -5589,23 +5558,98 @@ Match braces</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkSpinButton" id="spin_tab_width">
+				    <widget class="GtkAlignment" id="alignment41">
 				      <property name="visible">True</property>
-				      <property name="tooltip" translatable="yes">The width in chars, which one tab character will take</property>
-				      <property name="can_focus">True</property>
-				      <property name="climb_rate">1</property>
-				      <property name="digits">0</property>
-				      <property name="numeric">True</property>
-				      <property name="update_policy">GTK_UPDATE_IF_VALID</property>
-				      <property name="snap_to_ticks">False</property>
-				      <property name="wrap">True</property>
-				      <property name="adjustment">1 1 99 1 10 10</property>
+				      <property name="xalign">0.5</property>
+				      <property name="yalign">0.5</property>
+				      <property name="xscale">1</property>
+				      <property name="yscale">1</property>
+				      <property name="top_padding">0</property>
+				      <property name="bottom_padding">0</property>
+				      <property name="left_padding">24</property>
+				      <property name="right_padding">0</property>
+
+				      <child>
+					<widget class="GtkHBox" id="hbox12">
+					  <property name="visible">True</property>
+					  <property name="homogeneous">False</property>
+					  <property name="spacing">12</property>
+
+					  <child>
+					    <widget class="GtkLabel" id="label221">
+					      <property name="visible">True</property>
+					      <property name="label" translatable="yes">Tab Width:</property>
+					      <property name="use_underline">False</property>
+					      <property name="use_markup">False</property>
+					      <property name="justify">GTK_JUSTIFY_LEFT</property>
+					      <property name="wrap">False</property>
+					      <property name="selectable">False</property>
+					      <property name="xalign">0.5</property>
+					      <property name="yalign">0.5</property>
+					      <property name="xpad">0</property>
+					      <property name="ypad">0</property>
+					      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+					      <property name="width_chars">-1</property>
+					      <property name="single_line_mode">False</property>
+					      <property name="angle">0</property>
+					    </widget>
+					    <packing>
+					      <property name="padding">0</property>
+					      <property name="expand">False</property>
+					      <property name="fill">False</property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkSpinButton" id="spin_tab_width">
+					      <property name="visible">True</property>
+					      <property name="tooltip" translatable="yes">The width of a tab when Tabs &amp; Spaces is set for a document</property>
+					      <property name="can_focus">True</property>
+					      <property name="climb_rate">1</property>
+					      <property name="digits">0</property>
+					      <property name="numeric">True</property>
+					      <property name="update_policy">GTK_UPDATE_IF_VALID</property>
+					      <property name="snap_to_ticks">False</property>
+					      <property name="wrap">True</property>
+					      <property name="adjustment">8 1 99 1 10 10</property>
+					    </widget>
+					    <packing>
+					      <property name="padding">0</property>
+					      <property name="expand">True</property>
+					      <property name="fill">True</property>
+					    </packing>
+					  </child>
+					</widget>
+				      </child>
 				    </widget>
 				    <packing>
 				      <property name="left_attach">1</property>
 				      <property name="right_attach">2</property>
-				      <property name="top_attach">3</property>
-				      <property name="bottom_attach">4</property>
+				      <property name="top_attach">4</property>
+				      <property name="bottom_attach">5</property>
+				      <property name="x_options">fill</property>
+				    </packing>
+				  </child>
+
+				  <child>
+				    <widget class="GtkCheckButton" id="check_detect_indent">
+				      <property name="visible">True</property>
+				      <property name="tooltip" translatable="yes">Whether to detect the indentation type from file contents when a file is opened.</property>
+				      <property name="can_focus">True</property>
+				      <property name="label" translatable="yes">Detect from file</property>
+				      <property name="use_underline">True</property>
+				      <property name="relief">GTK_RELIEF_NORMAL</property>
+				      <property name="focus_on_click">True</property>
+				      <property name="active">False</property>
+				      <property name="inconsistent">False</property>
+				      <property name="draw_indicator">True</property>
+				    </widget>
+				    <packing>
+				      <property name="left_attach">1</property>
+				      <property name="right_attach">2</property>
+				      <property name="top_attach">5</property>
+				      <property name="bottom_attach">6</property>
+				      <property name="x_options">fill</property>
 				      <property name="y_options"></property>
 				    </packing>
 				  </child>

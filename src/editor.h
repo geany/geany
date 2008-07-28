@@ -45,22 +45,32 @@
 #define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
 
 
+/** Whether to use tabs, spaces or both to indent. */
 typedef enum
 {
-	INDENT_NONE = 0,
-	INDENT_BASIC,
-	INDENT_CURRENTCHARS,
-	INDENT_MATCHBRACES
-} GeanyIndentMode;
+	GEANY_INDENT_TYPE_TABS		/**< Tabs. */
+	GEANY_INDENT_TYPE_SPACES	/**< Spaces. */
+	GEANY_INDENT_TYPE_BOTH		/**< Both. */
+}
+GeanyIndentType;
+
+typedef enum
+{
+	GEANY_AUTOINDENT_NONE = 0,
+	GEANY_AUTOINDENT_BASIC,
+	GEANY_AUTOINDENT_CURRENTCHARS,
+	GEANY_AUTOINDENT_MATCHBRACES
+}
+GeanyAutoIndent;
+
 
 typedef struct GeanyIndentPrefs
 {
-	gint		width;				/**< Indent width. */
-	gint		tab_width;			/**< Width of a tab, if @c custom_tab_width is set. */
-	gboolean	custom_tab_width;	/**< Whether a tab is a different size from an indent. */
-	gboolean	use_tabs;			/**< Whether to (mainly) use tabs or spaces to indent. */
-	gboolean	use_tab_to_indent;	/* hidden pref */
-	GeanyIndentMode	mode;
+	gint			width;				/**< Indent width. */
+	GeanyIndentType	type;				/**< Whether to use tabs, spaces or both to indent. */
+	gint			tab_width;			/**< Width of a tab, when using GEANY_INDENT_TYPE_BOTH. */
+	gboolean		use_tab_to_indent;	/* hidden pref makes pressing Tab key like Ctrl-I */
+	GeanyAutoIndent	auto_indent_mode;
 }
 GeanyIndentPrefs;
 
