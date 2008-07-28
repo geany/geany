@@ -11,6 +11,9 @@
    array can contain runtime fields, so can read pointer contents.
    Add pref_item_callbacks array of functions to call like
    toggle_items_foreach().
+ * src/prefs.c:
+   Add spin_items_foreach().
+   Bind spin_indent_width, spin_tab_width widgets to settings.
 
 
 2008-07-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

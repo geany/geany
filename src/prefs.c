@@ -136,12 +136,41 @@ static void toggle_items_foreach(PrefCallbackAction action)
 }
 
 
+static void spin_items_foreach(PrefCallbackAction action)
+{
+	guint i;
+	PrefEntry items[] =
+	{
+		{"spin_indent_width", &editor_prefs.indentation->width},
+		{"spin_tab_width", &editor_prefs.indentation->tab_width},
+	};
+
+	for (i = 0; i < G_N_ELEMENTS(items); i++)
+	{
+		PrefEntry *pe = &items[i];
+		GtkWidget *widget = lookup_widget(ui_widgets.prefs_dialog, pe->widget_name);
+		gint *setting = pe->setting;
+
+		switch (action)
+		{
+			case PREF_DISPLAY:
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), *setting);
+				break;
+			case PREF_UPDATE:
+				*setting = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+				break;
+		}
+	}
+}
+
+
 typedef void (*PrefItemsCallback)(PrefCallbackAction action);
 
 /* List of functions which hold the PrefEntry arrays. This allows access to
  * runtime setting fields like EditorPrefs::indentation->width. */
 PrefItemsCallback pref_item_callbacks[] = {
-	toggle_items_foreach
+	toggle_items_foreach,
+	spin_items_foreach
 };
 
 
@@ -433,9 +462,6 @@ void prefs_init_dialog(void)
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.final_new_line);
 
 	/* Editor settings */
-	widget = lookup_widget(ui_widgets.prefs_dialog, "spin_tab_width");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), editor_prefs.tab_width);
-
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_replace_tabs");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.replace_tabs);
 
@@ -842,9 +868,6 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 
 
 		/* Editor settings */
-		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_tab_width");
-		editor_prefs.tab_width = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
-
 		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_long_line");
 		editor_prefs.long_line_column = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
