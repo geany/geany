@@ -2,6 +2,9 @@
 
  * src/prefs.c, src/editor.h:
    Move detect_tab_mode editor pref to indentation pref 'detect_type'.
+ * src/prefs.c:
+   Replace init_prefs(), update_prefs() with common prefs_action()
+   function.
 
 
 2008-07-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

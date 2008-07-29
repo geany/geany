@@ -224,7 +224,7 @@ static void combo_items_foreach(PrefCallbackAction action)
 
 typedef void (*PrefItemsCallback)(PrefCallbackAction action);
 
-/* List of functions which hold the PrefEntry arrays. This allows access to
+/* List of functions which hold the PrefEntry arrays. These allow access to
  * runtime setting fields like EditorPrefs::indentation->width. */
 PrefItemsCallback pref_item_callbacks[] = {
 	toggle_items_foreach,
@@ -232,6 +232,15 @@ PrefItemsCallback pref_item_callbacks[] = {
 	radio_items_foreach,
 	combo_items_foreach
 };
+
+
+static void prefs_action(PrefCallbackAction action)
+{
+	guint i;
+
+	for (i = 0; i < G_N_ELEMENTS(pref_item_callbacks); i++)
+		pref_item_callbacks[i](action);
+}
 
 
 enum
@@ -306,21 +315,12 @@ static void init_keybindings(void)
 }
 
 
-static void init_prefs(void)
-{
-	guint i;
-
-	for (i = 0; i < G_N_ELEMENTS(pref_item_callbacks); i++)
-		pref_item_callbacks[i](PREF_DISPLAY);
-}
-
-
 void prefs_init_dialog(void)
 {
 	GtkWidget *widget;
 	GdkColor *color;
 
-	init_prefs();
+	prefs_action(PREF_DISPLAY);
 
 	/* General settings */
 	/* startup */
@@ -721,15 +721,6 @@ void prefs_init_dialog(void)
 }
 
 
-static void update_prefs(void)
-{
-	guint i;
-
-	for (i = 0; i < G_N_ELEMENTS(pref_item_callbacks); i++)
-		pref_item_callbacks[i](PREF_UPDATE);
-}
-
-
 /*
  * callbacks
  */
@@ -741,7 +732,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		GtkWidget *widget;
 		guint i;
 
-		update_prefs();
+		prefs_action(PREF_UPDATE);
 
 		/* General settings */
 		/* startup */
