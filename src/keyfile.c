@@ -89,25 +89,105 @@ static gint hpan_position;
 static gint vpan_position;
 
 
-/* Used in e.g. save_bool_prefs(). */
+typedef enum SettingCallbackAction
+{
+	SETTING_READ,
+	SETTING_WRITE
+}
+SettingCallbackAction;
+
+
 typedef struct SettingEntry
 {
+	gpointer setting;
 	const gchar *group;
 	const gchar *key_name;
-	gpointer setting;
 	gpointer default_value;
 }
 SettingEntry;
 
-static SettingEntry bool_prefs[] =
-{
-	{PACKAGE, "cmdline_new_files", &file_prefs.cmdline_new_files, GINT_TO_POINTER(TRUE)},
 
-	{PACKAGE, "pref_main_suppress_search_dialogs", &search_prefs.suppress_dialogs, GINT_TO_POINTER(FALSE)},
-	{PACKAGE, "pref_main_search_use_current_word", &search_prefs.use_current_word, GINT_TO_POINTER(TRUE)},
-	{"search", "pref_search_current_file_dir", &search_prefs.use_current_file_dir, GINT_TO_POINTER(TRUE)},
-	{NULL, NULL, NULL, NULL}	/* must be terminated */
+static void bool_settings_foreach(GKeyFile *config, SettingCallbackAction action)
+{
+	guint i;
+	SettingEntry items[] =
+	{
+		{&file_prefs.cmdline_new_files, PACKAGE, "cmdline_new_files", (gpointer)TRUE},
+
+		{&search_prefs.suppress_dialogs, PACKAGE, "pref_main_suppress_search_dialogs", (gpointer)FALSE},
+		{&search_prefs.use_current_word, PACKAGE, "pref_main_search_use_current_word", (gpointer)TRUE},
+		{&search_prefs.use_current_file_dir, "search", "pref_search_current_file_dir", (gpointer)TRUE},
+
+		{&editor_prefs.indentation->detect_type, PACKAGE, "check_detect_indent", (gpointer)FALSE},
+	};
+
+	for (i = 0; i < G_N_ELEMENTS(items); i++)
+	{
+		SettingEntry *se = &items[i];
+		gboolean *setting = se->setting;
+
+		switch (action)
+		{
+			case SETTING_READ:
+				*setting = utils_get_setting_boolean(config, se->group, se->key_name,
+					GPOINTER_TO_INT(se->default_value));
+				break;
+			case SETTING_WRITE:
+				g_key_file_set_boolean(config, se->group, se->key_name, *setting);
+				break;
+		}
+	}
+}
+
+
+static void int_settings_foreach(GKeyFile *config, SettingCallbackAction action)
+{
+	guint i;
+	SettingEntry items[] =
+	{
+		{&editor_prefs.indentation->width, PACKAGE, "pref_editor_tab_width", (gpointer)4},
+		{&editor_prefs.indentation->tab_width, PACKAGE, "indent_tab_width", (gpointer)8},
+		{&editor_prefs.indentation->auto_indent_mode, PACKAGE, "indent_mode",
+			(gpointer)GEANY_AUTOINDENT_CURRENTCHARS},
+		{&editor_prefs.indentation->type, PACKAGE, "indent_type", (gpointer)GEANY_INDENT_TYPE_TABS},
+	};
+
+	for (i = 0; i < G_N_ELEMENTS(items); i++)
+	{
+		SettingEntry *se = &items[i];
+		gboolean *setting = se->setting;
+
+		switch (action)
+		{
+			case SETTING_READ:
+				*setting = utils_get_setting_integer(config, se->group, se->key_name,
+					GPOINTER_TO_INT(se->default_value));
+				break;
+			case SETTING_WRITE:
+				g_key_file_set_integer(config, se->group, se->key_name, *setting);
+				break;
+		}
+	}
+}
+
+
+typedef void (*SettingItemsCallback)(GKeyFile *config, SettingCallbackAction action);
+
+/* List of functions which hold the SettingEntry arrays. These allow access to
+ * runtime setting fields like EditorPrefs::indentation->width. */
+SettingItemsCallback setting_item_callbacks[] = {
+	bool_settings_foreach,
+	int_settings_foreach
 };
+
+
+static void settings_action(GKeyFile *config, SettingCallbackAction action)
+{
+	guint i;
+
+	for (i = 0; i < G_N_ELEMENTS(setting_item_callbacks); i++)
+		setting_item_callbacks[i](config, action);
+}
 
 
 static void save_recent_files(GKeyFile *config)
@@ -205,20 +285,9 @@ void configuration_save_session_files(GKeyFile *config)
 }
 
 
-static void save_bool_prefs(GKeyFile *config)
-{
-	SettingEntry *pe;
-
-	for (pe = bool_prefs; pe->group != NULL; pe++)
-	{
-		g_key_file_set_boolean(config, pe->group, pe->key_name, *(gboolean*)pe->setting);
-	}
-}
-
-
 static void save_dialog_prefs(GKeyFile *config)
 {
-	save_bool_prefs(config);
+	settings_action(config, SETTING_WRITE);
 
 	/* Some of the key names are not consistent, but this is for backwards compatibility */
 
@@ -262,15 +331,11 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_integer(config, PACKAGE, "symbolcompletion_min_chars", editor_prefs.symbolcompletion_min_chars);
 	g_key_file_set_boolean(config, PACKAGE, "use_folding", editor_prefs.folding);
 	g_key_file_set_boolean(config, PACKAGE, "unfold_all_children", editor_prefs.unfold_all_children);
-	g_key_file_set_integer(config, PACKAGE, "indent_mode", editor_prefs.indent_mode);
-	g_key_file_set_integer(config, PACKAGE, "check_detect_indent", editor_prefs.detect_tab_mode);
 	g_key_file_set_boolean(config, PACKAGE, "use_indicators", editor_prefs.use_indicators);
 	g_key_file_set_boolean(config, PACKAGE, "line_wrapping", editor_prefs.line_wrapping);
 	g_key_file_set_boolean(config, PACKAGE, "auto_close_xml_tags", editor_prefs.auto_close_xml_tags);
 	g_key_file_set_boolean(config, PACKAGE, "complete_snippets", editor_prefs.complete_snippets);
 	g_key_file_set_boolean(config, PACKAGE, "auto_complete_symbols", editor_prefs.auto_complete_symbols);
-	g_key_file_set_integer(config, PACKAGE, "pref_editor_tab_width", editor_prefs.tab_width);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_use_tabs", editor_prefs.use_tabs);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_disable_dnd", editor_prefs.disable_dnd);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_smart_home_key", editor_prefs.smart_home_key);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_newline_strip", editor_prefs.newline_strip);
@@ -422,7 +487,7 @@ static void save_ui_prefs(GKeyFile *config)
 static void save_hidden_prefs(GKeyFile *config)
 {
 	write_hidden_pref_boolean(config, PACKAGE, "show_editor_scrollbars", editor_prefs.show_scrollbars);
-	write_hidden_pref_boolean(config, PACKAGE, "use_tab_to_indent", editor_prefs.use_tab_to_indent);
+	write_hidden_pref_boolean(config, PACKAGE, "use_tab_to_indent", editor_prefs.indentation->use_tab_to_indent);
 	write_hidden_pref_boolean(config, PACKAGE, "brace_match_ltgt", editor_prefs.brace_match_ltgt);
 	write_hidden_pref_boolean(config, PACKAGE, "use_gtk_word_boundaries", editor_prefs.use_gtk_word_boundaries);
 	write_hidden_pref_boolean(config, PACKAGE, "complete_snippets_whilst_editing", editor_prefs.complete_snippets_whilst_editing);
@@ -511,18 +576,6 @@ void configuration_load_session_files(GKeyFile *config)
 }
 
 
-static void load_bool_prefs(GKeyFile *config)
-{
-	SettingEntry *pe;
-
-	for (pe = bool_prefs; pe->group != NULL; pe++)
-	{
-		*(gboolean*)pe->setting = utils_get_setting_boolean(config, pe->group, pe->key_name,
-			GPOINTER_TO_INT(pe->default_value));
-	}
-}
-
-
 #define GEANY_GET_SETTING(propertyname, value, default_value) \
 	if (g_object_class_find_property( \
 		G_OBJECT_GET_CLASS(G_OBJECT(gtk_settings_get_default())), propertyname)) \
@@ -536,7 +589,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	gchar *tmp_string, *tmp_string2;
 	const gchar *default_charset = NULL;
 
-	load_bool_prefs(config);
+	settings_action(config, SETTING_READ);
 
 	/* general */
 	prefs.confirm_exit = utils_get_setting_boolean(config, PACKAGE, "pref_main_confirm_exit", FALSE);
@@ -574,9 +627,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	editor_prefs.symbolcompletion_min_chars = utils_get_setting_integer(config, PACKAGE, "symbolcompletion_min_chars", GEANY_MIN_SYMBOLLIST_CHARS);
 	editor_prefs.symbolcompletion_max_height = utils_get_setting_integer(config, PACKAGE, "symbolcompletion_max_height", GEANY_MAX_SYMBOLLIST_HEIGHT);
 	editor_prefs.line_wrapping = utils_get_setting_boolean(config, PACKAGE, "line_wrapping", FALSE); /* default is off for better performance */
-	editor_prefs.indent_mode = utils_get_setting_integer(config, PACKAGE, "indent_mode", INDENT_CURRENTCHARS);
-	editor_prefs.detect_tab_mode = utils_get_setting_integer(config, PACKAGE, "check_detect_indent", FALSE);
-	editor_prefs.use_tab_to_indent = utils_get_setting_boolean(config, PACKAGE, "use_tab_to_indent", FALSE);
+	editor_prefs.indentation->use_tab_to_indent = utils_get_setting_boolean(config, PACKAGE, "use_tab_to_indent", FALSE);
 	editor_prefs.use_indicators = utils_get_setting_boolean(config, PACKAGE, "use_indicators", TRUE);
 	editor_prefs.show_indent_guide = utils_get_setting_boolean(config, PACKAGE, "show_indent_guide", FALSE);
 	editor_prefs.show_white_space = utils_get_setting_boolean(config, PACKAGE, "show_white_space", FALSE);
@@ -590,8 +641,6 @@ static void load_dialog_prefs(GKeyFile *config)
 	editor_prefs.show_markers_margin = utils_get_setting_boolean(config, PACKAGE, "show_markers_margin", TRUE);
 	editor_prefs.show_linenumber_margin = utils_get_setting_boolean(config, PACKAGE, "show_linenumber_margin", TRUE);
 	editor_prefs.brace_match_ltgt = utils_get_setting_boolean(config, PACKAGE, "brace_match_ltgt", FALSE);
-	editor_prefs.tab_width = utils_get_setting_integer(config, PACKAGE, "pref_editor_tab_width", 4);
-	editor_prefs.use_tabs = utils_get_setting_boolean(config, PACKAGE, "pref_editor_use_tabs", TRUE);
 	editor_prefs.disable_dnd = utils_get_setting_boolean(config, PACKAGE, "pref_editor_disable_dnd", FALSE);
 	editor_prefs.smart_home_key = utils_get_setting_boolean(config, PACKAGE, "pref_editor_smart_home_key", TRUE);
 	editor_prefs.newline_strip = utils_get_setting_boolean(config, PACKAGE, "pref_editor_newline_strip", FALSE);

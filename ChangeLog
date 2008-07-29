@@ -5,6 +5,10 @@
  * src/prefs.c:
    Replace init_prefs(), update_prefs() with common prefs_action()
    function.
+ * src/keyfile.c:
+   Update to use foreach-style functions for SettingEntry arrays, like
+   the PrefEntry code in prefs.c.
+   Update for new indentation setting names.
 
 
 2008-07-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
