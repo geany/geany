@@ -105,7 +105,7 @@ typedef struct PrefEntry
 PrefEntry;
 
 
-static void toggle_items_foreach(PrefCallbackAction action)
+static void toggle_prefs_foreach(PrefCallbackAction action)
 {
 	guint i;
 	PrefEntry items[] =
@@ -138,7 +138,7 @@ static void toggle_items_foreach(PrefCallbackAction action)
 }
 
 
-static void spin_items_foreach(PrefCallbackAction action)
+static void spin_prefs_foreach(PrefCallbackAction action)
 {
 	guint i;
 	PrefEntry items[] =
@@ -166,7 +166,7 @@ static void spin_items_foreach(PrefCallbackAction action)
 }
 
 
-static void radio_items_foreach(PrefCallbackAction action)
+static void radio_prefs_foreach(PrefCallbackAction action)
 {
 	guint i;
 	/* Only add one widget per radio-group; the setting is the index of the selected radio item
@@ -195,7 +195,7 @@ static void radio_items_foreach(PrefCallbackAction action)
 }
 
 
-static void combo_items_foreach(PrefCallbackAction action)
+static void combo_prefs_foreach(PrefCallbackAction action)
 {
 	guint i;
 	PrefEntry items[] =
@@ -227,10 +227,10 @@ typedef void (*PrefItemsCallback)(PrefCallbackAction action);
 /* List of functions which hold the PrefEntry arrays. These allow access to
  * runtime setting fields like EditorPrefs::indentation->width. */
 PrefItemsCallback pref_item_callbacks[] = {
-	toggle_items_foreach,
-	spin_items_foreach,
-	radio_items_foreach,
-	combo_items_foreach
+	toggle_prefs_foreach,
+	spin_prefs_foreach,
+	radio_prefs_foreach,
+	combo_prefs_foreach
 };
 
 
