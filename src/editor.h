@@ -71,6 +71,7 @@ typedef struct GeanyIndentPrefs
 	gint			tab_width;			/**< Width of a tab, when using GEANY_INDENT_TYPE_BOTH. */
 	gboolean		use_tab_to_indent;	/* hidden pref makes pressing Tab key like Ctrl-I */
 	GeanyAutoIndent	auto_indent_mode;
+	gboolean		detect_type;
 }
 GeanyIndentPrefs;
 
@@ -106,7 +107,6 @@ typedef struct GeanyEditorPrefs
 	gboolean	brace_match_ltgt;	/* whether to highlight < and > chars (hidden pref) */
 	gboolean	use_gtk_word_boundaries;	/* hidden pref */
 	gboolean	complete_snippets_whilst_editing;	/* hidden pref */
-	gboolean	detect_tab_mode;
 	gint		line_break_column;
 	gboolean	auto_continue_multiline;
 } GeanyEditorPrefs;

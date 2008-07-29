@@ -115,6 +115,8 @@ static void toggle_items_foreach(PrefCallbackAction action)
 		{"check_ask_suppress_search_dialogs", &search_prefs.suppress_dialogs},
 		{"check_search_use_current_word", &search_prefs.use_current_word},
 		{"check_fif_current_dir", &search_prefs.use_current_file_dir},
+
+		{"check_detect_indent", &editor_prefs.indentation->detect_type}
 	};
 
 	for (i = 0; i < G_N_ELEMENTS(items); i++)
@@ -167,7 +169,8 @@ static void spin_items_foreach(PrefCallbackAction action)
 static void radio_items_foreach(PrefCallbackAction action)
 {
 	guint i;
-	/* Only add one widget per radio-group */
+	/* Only add one widget per radio-group; the setting is the index of the selected radio item
+	 * in the group. */
 	PrefEntry items[] =
 	{
 		{"radio_indent_spaces", &editor_prefs.indentation->type},
@@ -530,9 +533,6 @@ void prefs_init_dialog(void)
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_line_end");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_line_endings);
-
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_detect_indent");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.detect_tab_mode);
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_line_wrapping");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.line_wrapping);
@@ -955,9 +955,6 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_newline_strip");
 		editor_prefs.newline_strip = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_detect_indent");
-		editor_prefs.detect_tab_mode = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_auto_multiline");
 		editor_prefs.auto_continue_multiline = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));

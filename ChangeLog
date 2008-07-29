@@ -1,3 +1,9 @@
+2008-07-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/prefs.c, src/editor.h:
+   Move detect_tab_mode editor pref to indentation pref 'detect_type'.
+
+
 2008-07-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/interface.c, src/editor.h, geany.glade:
