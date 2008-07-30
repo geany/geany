@@ -367,7 +367,7 @@ static gboolean notebook_tab_label_cb(GtkWidget *widget, GdkEventButton *event, 
 	if (event->button == 2)
 	{
 		document_remove_page(gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
-			GTK_WIDGET(user_data)));
+			GTK_WIDGET(data)));
 		return TRUE; /* stop other handlers like notebook_tab_bar_click_cb() */
 	}
 
