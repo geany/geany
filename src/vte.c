@@ -450,7 +450,8 @@ void vte_apply_user_settings(void)
 
 	override_menu_key();
 
-	vte_start(vc->vte);
+	if (pid == 0)
+		vte_start(vc->vte);
 }
 
 
