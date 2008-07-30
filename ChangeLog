@@ -7,6 +7,9 @@
  * src/vte.c:
    Start the shell in the VTE first when the VTE is actually realized
    to avoid strange display bugs on some systems (closes #1844985).
+ * src/callbacks.c, src/vte.c, src/vte.h:
+   Make Copy & Paste clipboard keybindings also work for the VTE
+   (closes #2029675).
 
 
 2008-07-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

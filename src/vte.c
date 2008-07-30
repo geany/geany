@@ -203,6 +203,18 @@ static void override_menu_key(void)
 }
 
 
+void vte_copy_clipboard(void)
+{
+	vf->vte_terminal_copy_clipboard(VTE_TERMINAL(vc->vte));
+}
+
+
+void vte_paste_clipboard(void)
+{
+	vf->vte_terminal_paste_clipboard(VTE_TERMINAL(vc->vte));
+}
+
+
 void vte_init(void)
 {
 	if (vte_info.have_vte == FALSE)
@@ -323,7 +335,8 @@ static gboolean vte_keyrelease(GtkWidget *widget, GdkEventKey *event, gpointer d
 			 event->keyval == GDK_KP_Enter ||
 			 ((event->keyval == GDK_c) && (event->state & GDK_CONTROL_MASK)))
 	{
-		clean = TRUE; /* assume any text on the prompt has been executed when pressing Enter/Return */
+		/* assume any text on the prompt has been executed when pressing Enter/Return */
+		clean = TRUE;
 	}
 	return FALSE;
 }

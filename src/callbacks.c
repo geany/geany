@@ -328,6 +328,11 @@ on_copy1_activate                      (GtkMenuItem     *menuitem,
 	else
 	if (IS_SCINTILLA(focusw) && doc != NULL)
 		sci_copy(doc->editor->sci);
+#ifdef HAVE_VTE
+	else
+	if (vte_info.load_vte && vc != NULL && vc->vte == focusw)
+		vte_copy_clipboard();
+#endif
 	else
 	if (GTK_IS_TEXT_VIEW(focusw))
 	{
@@ -350,24 +355,13 @@ on_paste1_activate                     (GtkMenuItem     *menuitem,
 	else
 	if (IS_SCINTILLA(focusw) && doc != NULL)
 	{
-#if 0
-//#ifdef G_OS_WIN32
-		/* insert the text manually for now, because the auto conversion of EOL characters by
-		 * by Scintilla seems to make problems */
-		/** TODO this is probably obsolete now since we fixed PLAT_GTK_WIN32 in Scintilla */
-		if (gtk_clipboard_wait_is_text_available(gtk_clipboard_get(GDK_NONE)))
-		{
-			gchar *content = gtk_clipboard_wait_for_text(gtk_clipboard_get(GDK_NONE));
-			if (content != NULL)
-			{
-				sci_replace_sel(doc->editor->sci, content);
-				g_free(content);
-			}
-		}
-#else
 		sci_paste(doc->editor->sci);
-#endif
 	}
+#ifdef HAVE_VTE
+	else
+	if (vte_info.load_vte && vc != NULL && vc->vte == focusw)
+		vte_paste_clipboard();
+#endif
 	else
 	if (GTK_IS_TEXT_VIEW(focusw))
 	{
