@@ -78,19 +78,76 @@ notebook_tab_close_clicked_cb(GtkButton *button, gpointer user_data);
 static void setup_tab_dnd(void);
 
 
-static void focus_sci(GtkWidget *widget, gpointer user_data)
+static gboolean focus_sci(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
 
-	if (doc == NULL)
-		return;
+	if (doc != NULL)
+		gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
 
-	gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
+	return FALSE;
+}
+
+
+static gboolean is_position_on_tab_bar(GtkNotebook *notebook, GdkEventButton *event)
+{
+	GtkWidget *page;
+	GtkWidget *tab;
+	GtkPositionType tab_pos;
+
+	page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook), 0);
+	g_return_val_if_fail(page != NULL, FALSE);
+
+	tab = gtk_notebook_get_tab_label(GTK_NOTEBOOK(main_widgets.notebook), page);
+	g_return_val_if_fail(tab != NULL, FALSE);
+
+	tab_pos = gtk_notebook_get_tab_pos(GTK_NOTEBOOK(main_widgets.notebook));
+
+	switch (tab_pos)
+	{
+		case GTK_POS_TOP:
+		case GTK_POS_BOTTOM:
+		{
+			if (event->y >= 0 && event->y <= tab->allocation.height)
+				return TRUE;
+		}
+		case GTK_POS_LEFT:
+		case GTK_POS_RIGHT:
+		{
+			if (event->x >= 0 && event->x <= tab->allocation.width)
+				return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+
+static gboolean notebook_tab_bar_click_cb(GtkWidget *widget, GdkEventButton *event,
+										  gpointer user_data)
+{
+	if (event->type == GDK_2BUTTON_PRESS)
+	{
+		/* accessing ::event_window is a little hacky but we need to make sure the click
+		 * was in the tab bar and not inside the child */
+		if (event->window != GTK_NOTEBOOK(main_widgets.notebook)->event_window)
+			return FALSE;
+
+		if (! is_position_on_tab_bar(GTK_NOTEBOOK(widget), event))
+			return FALSE;
+
+		document_new_file(NULL, NULL, NULL);
+		return TRUE;
+	}
+	return FALSE;
 }
 
 
 void notebook_init()
 {
+	g_signal_connect_after(main_widgets.notebook, "button-press-event",
+		G_CALLBACK(notebook_tab_bar_click_cb), NULL);
+
 	/* focus the current document after clicking on a tab */
 	g_signal_connect_after(main_widgets.notebook, "button-release-event",
 		G_CALLBACK(focus_sci), NULL);
@@ -261,17 +318,13 @@ notebook_find_tab_num_at_pos(GtkNotebook *notebook, gint x, gint y)
 		}
 
 		/* subtract notebook pos to remove possible border padding */
-		max_x = tab->allocation.x + tab->allocation.width -
-			GTK_WIDGET(notebook)->allocation.x;
-		max_y = tab->allocation.y + tab->allocation.height -
-			GTK_WIDGET(notebook)->allocation.y;
+		max_x = tab->allocation.x + tab->allocation.width - GTK_WIDGET(notebook)->allocation.x;
+		max_y = tab->allocation.y + tab->allocation.height - GTK_WIDGET(notebook)->allocation.y;
 
-		if (((tab_pos == GTK_POS_TOP)
-			|| (tab_pos == GTK_POS_BOTTOM))
-			&&(x<=max_x)) return page_num;
-		else if (((tab_pos == GTK_POS_LEFT)
-			|| (tab_pos == GTK_POS_RIGHT))
-			&& (y<=max_y)) return page_num;
+		if (((tab_pos == GTK_POS_TOP) || (tab_pos == GTK_POS_BOTTOM)) && (x<=max_x))
+			return page_num;
+		else if (((tab_pos == GTK_POS_LEFT) || (tab_pos == GTK_POS_RIGHT)) && (y<=max_y))
+			return page_num;
 
 		page_num++;
 	}
@@ -301,15 +354,22 @@ static void tab_count_changed(void)
 	}
 }
 
-gboolean notebook_tab_label_cb(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
+
+static gboolean notebook_tab_label_cb(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	/* toggle additional widgets on double click */
 	if (event->type == GDK_2BUTTON_PRESS)
+	{
 		on_menu_toggle_all_additional_widgets1_activate(NULL, NULL);
+		return TRUE; /* stop other handlers like notebook_tab_bar_click_cb() */
+	}
 	/* close tab on middle click */
 	if (event->button == 2)
+	{
 		document_remove_page(gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
 			GTK_WIDGET(user_data)));
+		return TRUE; /* stop other handlers like notebook_tab_bar_click_cb() */
+	}
 
 	return FALSE;
 }
