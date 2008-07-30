@@ -64,23 +64,24 @@ typedef enum
 GeanyAutoIndent;
 
 
+/** Indentation prefs that might be different according to project or filetype.
+ * Use @c editor_get_indent_prefs() to lookup the prefs for a particular document. */
 typedef struct GeanyIndentPrefs
 {
 	gint			width;				/**< Indent width. */
 	GeanyIndentType	type;				/**< Whether to use tabs, spaces or both to indent. */
 	gint			tab_width;			/**< Width of a tab, when using GEANY_INDENT_TYPE_BOTH. */
-	gboolean		use_tab_to_indent;	/* hidden pref makes pressing Tab key like Ctrl-I */
 	GeanyAutoIndent	auto_indent_mode;
 	gboolean		detect_type;
 }
 GeanyIndentPrefs;
 
 
-/** Default prefs when creating a new editor window.
+/* Default prefs when creating a new editor window.
  * Some of these can be overridden per document. */
 typedef struct GeanyEditorPrefs
 {
-	GeanyIndentPrefs *indentation;	/**< Indentation prefs. */
+	GeanyIndentPrefs *indentation;	/*< Default indentation prefs. @see editor_get_indent_prefs(). */
 	gboolean	show_white_space;
 	gboolean	show_indent_guide;
 	gboolean	show_line_endings;
@@ -96,6 +97,7 @@ typedef struct GeanyEditorPrefs
 	gboolean	folding;
 	gboolean	unfold_all_children;
 	gboolean	disable_dnd;
+	gboolean	use_tab_to_indent;	/* hidden pref makes pressing Tab key like Ctrl-I */
 	gboolean	smart_home_key;
 	gboolean	newline_strip;
 	gboolean	auto_complete_symbols;
