@@ -1,9 +1,12 @@
-2008-07-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+2008-07-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/notebook.c:
    Fix signature of focus_sci().
    Double clicking on free space in the tab bar opens a new file
    (#2003291).
+ * src/vte.c:
+   Start the shell in the VTE first when the VTE is actually realized
+   to avoid strange display bugs on some systems (closes #1844985).
 
 
 2008-07-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
