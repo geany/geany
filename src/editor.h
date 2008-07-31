@@ -125,7 +125,7 @@ typedef struct GeanyEditor
 	gboolean		 auto_indent;	/**< @c TRUE if auto-indentation is enabled. */
 	/** Percentage to scroll view by on paint, if positive. */
 	gfloat			 scroll_percent;
-	gboolean		 use_tabs;		/**< @c TRUE if tabs are used for indentation. */
+	GeanyIndentType	 indent_type;	/* Use editor_get_indent_prefs() instead. */
 	gboolean		 line_breaking;	/**< Whether to split long lines as you type. */
 }
 GeanyEditor;
@@ -235,7 +235,9 @@ void editor_ensure_final_newline(GeanyDocument *doc);
 
 void editor_insert_color(GeanyDocument *doc, const gchar *colour);
 
-void editor_set_use_tabs(GeanyEditor *editor, gboolean use_tabs);
+const GeanyIndentPrefs *editor_get_indent_prefs(GeanyEditor *editor);
+
+void editor_set_indent_type(GeanyEditor *editor, GeanyIndentType type);
 
 void editor_set_line_wrapping(GeanyEditor *editor, gboolean wrap);
 

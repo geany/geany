@@ -1,3 +1,9 @@
+2008-07-31  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, src/editor.h, geany.glade:
+   Add 'Tabs and Spaces' Document menu indent option.
+
+
 2008-07-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keyfile.c, src/editor.h:
