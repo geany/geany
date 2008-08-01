@@ -13,6 +13,8 @@
  * src/about.c, THANKS:
    Add a list of contributors to the About dialog.
    Update the THANKS file.
+ * src/highlighting.c, data/filetypes.php:
+   Add four new PHP 5.3 keywords (patch by Felipe Pena, thanks).
 
 
 2008-07-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
