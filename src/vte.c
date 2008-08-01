@@ -203,18 +203,6 @@ static void override_menu_key(void)
 }
 
 
-void vte_copy_clipboard(void)
-{
-	vf->vte_terminal_copy_clipboard(VTE_TERMINAL(vc->vte));
-}
-
-
-void vte_paste_clipboard(void)
-{
-	vf->vte_terminal_paste_clipboard(VTE_TERMINAL(vc->vte));
-}
-
-
 void vte_init(void)
 {
 	if (vte_info.have_vte == FALSE)

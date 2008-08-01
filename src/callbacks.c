@@ -328,11 +328,6 @@ on_copy1_activate                      (GtkMenuItem     *menuitem,
 	else
 	if (IS_SCINTILLA(focusw) && doc != NULL)
 		sci_copy(doc->editor->sci);
-#ifdef HAVE_VTE
-	else
-	if (vte_info.load_vte && vc != NULL && vc->vte == focusw)
-		vte_copy_clipboard();
-#endif
 	else
 	if (GTK_IS_TEXT_VIEW(focusw))
 	{
@@ -357,11 +352,6 @@ on_paste1_activate                     (GtkMenuItem     *menuitem,
 	{
 		sci_paste(doc->editor->sci);
 	}
-#ifdef HAVE_VTE
-	else
-	if (vte_info.load_vte && vc != NULL && vc->vte == focusw)
-		vte_paste_clipboard();
-#endif
 	else
 	if (GTK_IS_TEXT_VIEW(focusw))
 	{

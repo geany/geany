@@ -1,3 +1,9 @@
+2008-08-01  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/callbacks.c, src/vte.c, src/vte.h:
+   Revert r2843 because it messed it Ctrl-C/SIGINT in the VTE.
+
+
 2008-07-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/notebook.c:
