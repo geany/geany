@@ -14,7 +14,7 @@ Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com> - many patches
 Saleem Abdulrasool <compnerd(at)gentoo(dot)org> - vte autoconf patch
 Marko Peric <cragwolf(at)gmail(dot)com>
 S Jagannathan <poojyum(at)gmail(dot)com>
-Colossus <colossus73(at)gmail(dot)com>
+Giuseppe Torelli <colossus73(at)gmail(dot)com>
 Kristoffer A. Tjernås <kt(at)nupi(dot)no>
 Tamim <amitamim(at)gmail(dot)com>
 Kevin Ellwood <kellwood(at)ameritech(dot)net>
@@ -44,6 +44,7 @@ Daniel Richard G. <skunk(at)iskunk(dot)org> - some patches
 Pierre Joye <pierre(dot)php(at)gmail(dot)com> - Win32 process spawning patch
 Matti Mårds <mamaar(at)gmail(dot)com> - create PHP tags script
 Robert McGinley <mcginleyr1(at)gmail(dot)com> - Documentation improvements
+Felipe Pena <felipensp(at)gmail(dot)com> - Missing PHP keywords
 
 Translators:
 ------------

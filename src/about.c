@@ -30,6 +30,7 @@
 #include "utils.h"
 #include "ui_utils.h"
 #include "support.h"
+#include "geanywraplabel.h"
 
 static GtkWidget *gb_window = NULL;
 #include "gb.c"
@@ -72,6 +73,14 @@ const gchar *prev_translators[][2] = {
 	{ "pl_PL", "Jacek Wolszczak &lt;shutdownrunner@o2.pl&gt;" },
 };
 static const gint prev_translators_len = G_N_ELEMENTS(prev_translators);
+
+static const gchar *contributors =
+"Alexander Rodin, Anh Phạm, blackdog, Bo Lorentsen, Bob Doan, Catalin Marinas, "
+"Christoph Berg, Daniel Richard G., Dave Moore, Dirk Weber, Felipe Pena, François Cami, "
+"Giuseppe Torelli, Guillaume Hoffmann, Jean-François Wauthy, Jeff Pohlmeyer, John Gabriele, "
+"Josef Whiter, Kevin Ellwood, Kristoffer A. Tjernås, Marko Peric, Matti Mårds, Peter Strand, "
+"Pierre Joye, Rob van der Linde, Robert McGinley, S Jagannathan, Saleem Abdulrasool, "
+"Sebastian Kraft, Shiv, Slava Semushin, Stefan Oltmanns, Tamim, Tomás Vírseda, Yura Siamashka";
 
 
 static void header_eventbox_style_set(GtkWidget *widget);
@@ -234,7 +243,7 @@ static GtkWidget *create_dialog(void)
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(credits_scrollwin),
 		GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
-	table = gtk_table_new(14 + translators_len + prev_translators_len, 3, FALSE);
+	table = gtk_table_new(18 + translators_len + prev_translators_len, 3, FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table), 10);
 
 	row = 0;
@@ -308,6 +317,44 @@ static GtkWidget *create_dialog(void)
 		ROW(prev_translators[i][1], row, 1, 0, 4, 0);
 		row++;
 	}
+
+
+	ROW("", row, 0, 0, 0, 0);
+	row++;
+
+	g_snprintf(buffer, sizeof(buffer),
+		"<span size=\"larger\" weight=\"bold\">%s</span>", _("Contributors"));
+	label = gtk_label_new(buffer);
+	gtk_table_attach(GTK_TABLE(table), label, 0, 2, row, row + 1,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 5);
+	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	row++;
+
+	g_snprintf(buffer, sizeof(buffer),
+		_("Some of the many contributors (for a more detailed list, see the file %s):"),
+#ifdef G_OS_WIN32
+			"Thanks.txt"
+#else
+			"THANKS"
+#endif
+		);
+	label = gtk_label_new(buffer);
+	gtk_table_attach(GTK_TABLE(table), label, 0, 2, row, row + 1,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 5);
+	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	row++;
+
+	label = geany_wrap_label_new(contributors);
+	gtk_table_attach(GTK_TABLE(table), label, 0, 2, row, row + 1,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 5);
+	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	row++;
 
 	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(credits_scrollwin), table);
 	gtk_viewport_set_shadow_type(GTK_VIEWPORT(gtk_widget_get_parent(table)), GTK_SHADOW_NONE);

@@ -10,6 +10,9 @@
  * src/callbacks.c, src/vte.c, src/vte.h:
    Make Copy & Paste clipboard keybindings also work for the VTE
    (closes #2029675).
+ * src/about.c, THANKS:
+   Add a list of contributors to the About dialog.
+   Update the THANKS file.
 
 
 2008-07-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
