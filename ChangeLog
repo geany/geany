@@ -4,6 +4,8 @@
    Revert r2843 because it messed it Ctrl-C/SIGINT in the VTE.
  * src/vte.c:
    Initialise the VTE pid var with 0 just for safety.
+ * src/highlighting.c, data/filetypes.sql:
+   Add some keywords for filetype SQL (patch by Felipe Pena, thanks).
 
 
 2008-07-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
