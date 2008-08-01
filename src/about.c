@@ -350,7 +350,7 @@ static GtkWidget *create_dialog(void)
 
 	label = geany_wrap_label_new(contributors);
 	gtk_table_attach(GTK_TABLE(table), label, 0, 2, row, row + 1,
-					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (GTK_FILL | GTK_EXPAND),
 					(GtkAttachOptions) (0), 0, 5);
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
