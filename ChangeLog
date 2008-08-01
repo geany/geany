@@ -2,6 +2,8 @@
 
  * src/callbacks.c, src/vte.c, src/vte.h:
    Revert r2843 because it messed it Ctrl-C/SIGINT in the VTE.
+ * src/vte.c:
+   Initialise the VTE pid var with 0 just for safety.
 
 
 2008-07-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

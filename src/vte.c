@@ -49,7 +49,7 @@ VteInfo vte_info;
 VteConfig *vc;
 
 extern gchar **environ;
-static pid_t pid;
+static pid_t pid = 0;
 static gboolean clean = TRUE;
 static GModule *module = NULL;
 static struct VteFunctions *vf;
@@ -440,6 +440,8 @@ void vte_apply_user_settings(void)
 {
 	if (! ui_prefs.msgwindow_visible)
 		return;
+
+	geany_debug("VTE widget realized"); /* temporary :) */
 
 	vf->vte_terminal_set_scrollback_lines(VTE_TERMINAL(vc->vte), vc->scrollback_lines);
 	vf->vte_terminal_set_scroll_on_keystroke(VTE_TERMINAL(vc->vte), vc->scroll_on_key);
