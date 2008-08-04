@@ -293,6 +293,7 @@ static void create_vte(void)
 
 	/* the vte widget has to be realised before color changes take effect */
 	g_signal_connect_after(vte, "realize", G_CALLBACK(vte_apply_user_settings), NULL);
+	gtk_widget_realize(vte);
 }
 
 
