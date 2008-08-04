@@ -89,19 +89,66 @@ static gboolean focus_sci(GtkWidget *widget, GdkEventButton *event, gpointer use
 }
 
 
+static gboolean gtk_notebook_show_arrows(GtkNotebook *notebook)
+{
+	return notebook->scrollable;
+#if 0
+	/* To get this working we would need to define at least the first two fields of
+	 * GtkNotebookPage since it is a private field. The better way would be to
+	 * subclass GtkNotebook.
+struct _FakeGtkNotebookPage
+{
+	GtkWidget *child;
+	GtkWidget *tab_label;
+};
+ */
+	gboolean show_arrow = FALSE;
+	GList *children;
+
+	if (! notebook->scrollable)
+		return FALSE;
+
+	children = notebook->children;
+	while (children)
+	{
+		struct _FakeGtkNotebookPage *page = children->data;
+
+		if (page->tab_label && ! gtk_widget_get_child_visible(page->tab_label))
+			show_arrow = TRUE;
+
+		children = children->next;
+	}
+	return show_arrow;
+#endif
+}
+
+
 static gboolean is_position_on_tab_bar(GtkNotebook *notebook, GdkEventButton *event)
 {
 	GtkWidget *page;
 	GtkWidget *tab;
+	GtkWidget *nb;
 	GtkPositionType tab_pos;
+	gint scroll_arrow_hlength, scroll_arrow_vlength;
+	gdouble x, y;
 
-	page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook), 0);
+	page = gtk_notebook_get_nth_page(notebook, 0);
 	g_return_val_if_fail(page != NULL, FALSE);
 
-	tab = gtk_notebook_get_tab_label(GTK_NOTEBOOK(main_widgets.notebook), page);
+	tab = gtk_notebook_get_tab_label(notebook, page);
 	g_return_val_if_fail(tab != NULL, FALSE);
 
-	tab_pos = gtk_notebook_get_tab_pos(GTK_NOTEBOOK(main_widgets.notebook));
+	tab_pos = gtk_notebook_get_tab_pos(notebook);
+	nb = GTK_WIDGET(notebook);
+
+	gtk_widget_style_get(GTK_WIDGET(notebook), "scroll-arrow-hlength", &scroll_arrow_hlength,
+		"scroll-arrow-vlength", &scroll_arrow_vlength, NULL);
+
+	if (! gdk_event_get_coords((GdkEvent*) event, &x, &y))
+	{
+		x = event->x;
+		y = event->y;
+	}
 
 	switch (tab_pos)
 	{
@@ -109,13 +156,24 @@ static gboolean is_position_on_tab_bar(GtkNotebook *notebook, GdkEventButton *ev
 		case GTK_POS_BOTTOM:
 		{
 			if (event->y >= 0 && event->y <= tab->allocation.height)
-				return TRUE;
+			{
+				if (! gtk_notebook_show_arrows(notebook) || (
+					x > scroll_arrow_hlength &&
+					x < nb->allocation.width - scroll_arrow_hlength))
+					return TRUE;
+			}
+			break;
 		}
 		case GTK_POS_LEFT:
 		case GTK_POS_RIGHT:
 		{
 			if (event->x >= 0 && event->x <= tab->allocation.width)
-				return TRUE;
+			{
+				if (! gtk_notebook_show_arrows(notebook) || (
+					y > scroll_arrow_vlength &&
+					y < nb->allocation.height - scroll_arrow_vlength))
+					return TRUE;
+			}
 		}
 	}
 
@@ -133,11 +191,11 @@ static gboolean notebook_tab_bar_click_cb(GtkWidget *widget, GdkEventButton *eve
 		if (event->window != GTK_NOTEBOOK(main_widgets.notebook)->event_window)
 			return FALSE;
 
-		if (! is_position_on_tab_bar(GTK_NOTEBOOK(widget), event))
-			return FALSE;
-
-		document_new_file(NULL, NULL, NULL);
-		return TRUE;
+		if (is_position_on_tab_bar(GTK_NOTEBOOK(widget), event))
+		{
+			document_new_file(NULL, NULL, NULL);
+			return TRUE;
+		}
 	}
 	return FALSE;
 }

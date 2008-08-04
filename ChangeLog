@@ -2,6 +2,9 @@
 
  * src/vte.c:
    Realize the VTE widget manually (still for #1844985).
+ * src/notebook.c:
+   Ignore the scroll arrows when checking for a double click in
+   the notebook tab bar (closes #2033059).
 
 
 2008-08-01  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
