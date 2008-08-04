@@ -48,8 +48,8 @@
 /** Whether to use tabs, spaces or both to indent. */
 typedef enum
 {
-	GEANY_INDENT_TYPE_TABS,		/**< Tabs. */
 	GEANY_INDENT_TYPE_SPACES,	/**< Spaces. */
+	GEANY_INDENT_TYPE_TABS,		/**< Tabs. */
 	GEANY_INDENT_TYPE_BOTH		/**< Both. */
 }
 GeanyIndentType;

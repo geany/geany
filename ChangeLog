@@ -1,3 +1,22 @@
+2008-08-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/ui_utils.h, src/prefs.c, src/callbacks.c, src/callbacks.h,
+   src/keyfile.c, src/document.c, src/main.c, src/editor.c,
+   src/editor.h, src/ui_utils.c:
+   Fix build; currently auto-indentation doesn't support inserting tabs
+   and spaces, only spaces. Also Tabs & Spaces cannot be detected yet
+   when opening files. Default file templates still only use tabs.
+   Add editor_get_indent_prefs() which should be used to get the right
+   settings for a document/editor instead of reading any default prefs.
+   This could also support project/filetype indentation prefs quite
+   easily.
+   Don't change per-document auto-indent setting after changing default
+   auto-indentation type.
+   Remove ui_radio_menu_item_*(), not good to use as they depended on
+   the order of widget creation, so don't work well with Glade. Use
+   RadioPrefEntry array instead.
+
+
 2008-07-31  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/interface.c, src/editor.h, geany.glade:

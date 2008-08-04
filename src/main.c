@@ -252,14 +252,6 @@ static void apply_settings(void)
 		gtk_widget_hide(ui_widgets.statusbar);
 	}
 
-	ignore_callback = TRUE;
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(
-				lookup_widget(main_widgets.window, "menu_line_wrapping1")), editor_prefs.line_wrapping);
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(
-				lookup_widget(main_widgets.window, "menu_use_auto_indentation1")),
-				(editor_prefs.indent_mode != INDENT_NONE));
-	ignore_callback = FALSE;
-
 	/* connect the toolbar dropdown menu for the new button */
 	gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(
 			lookup_widget(main_widgets.window, "menutoolbutton1")), ui_widgets.new_file_menu);
@@ -794,12 +786,13 @@ gint main(gint argc, gchar **argv)
 	main_init();
 	gtk_widget_set_size_request(main_widgets.window, GEANY_WINDOW_MINIMAL_WIDTH, GEANY_WINDOW_MINIMAL_HEIGHT);
 	gtk_window_set_default_size(GTK_WINDOW(main_widgets.window), GEANY_WINDOW_DEFAULT_WIDTH, GEANY_WINDOW_DEFAULT_HEIGHT);
+
 	encodings_init();
+	editor_init();
 
 	load_settings();
 
 	msgwin_init();
-	editor_init();
 	build_init();
 	search_init();
 	ui_create_insert_menu_items();

@@ -706,33 +706,79 @@ void on_editor_notification(GtkWidget *widget, gint scn, gpointer lscn, gpointer
 }
 
 
+static gint get_tab_width(const GeanyIndentPrefs *indent_prefs)
+{
+	if (indent_prefs->type == GEANY_INDENT_TYPE_BOTH)
+		return indent_prefs->tab_width;
+
+	return indent_prefs->width;	/* tab width = indent width */
+}
+
+
 /* Returns a string containing width chars of whitespace, filled with simple space
- * characters or with the right number of tab characters, according to the
- * use_tabs setting. (Result is filled with tabs *and* spaces if width isn't a multiple of
+ * characters or with the right number of tab characters, according to the indent prefs.
+ * (Result is filled with tabs *and* spaces if width isn't a multiple of
  * editor_prefs.tab_width). */
 static gchar *
-get_whitespace(gint width, gboolean use_tabs)
+get_whitespace(const GeanyIndentPrefs *iprefs, gint width)
 {
-	gchar *str;
-
 	g_return_val_if_fail(width > 0, NULL);
 
-	if (use_tabs)
+	if (iprefs->type == GEANY_INDENT_TYPE_SPACES)
+	{
+		return g_strnfill(width, ' ');
+	}
+	else
 	{	/* first fill text with tabs and fill the rest with spaces */
-		gint tabs = width / editor_prefs.tab_width;
-		gint spaces = width % editor_prefs.tab_width;
+		const gint tab_width = get_tab_width(iprefs);
+		gint tabs = width / tab_width;
+		gint spaces = width % tab_width;
 		gint len = tabs + spaces;
+		gchar *str;
 
 		str = g_malloc(len + 1);
 
 		memset(str, '\t', tabs);
 		memset(str + tabs, ' ', spaces);
 		str[len] = '\0';
+		return str;
  	}
-	else
-		str = g_strnfill(width, ' ');
+}
 
-	return str;
+
+static const GeanyIndentPrefs *
+get_default_indent_prefs(void)
+{
+	/* In future this might depend on project or filetype. */
+	return editor_prefs.indentation;
+}
+
+
+/** Get the indentation prefs for the editor.
+ * In future, the prefs might be different according to project or filetype.
+ * @warning Always get a fresh result instead of keeping a pointer to it if the editor
+ * settings may have changed, or if this function has been called for a different @a editor. */
+const GeanyIndentPrefs *
+editor_get_indent_prefs(GeanyEditor *editor)
+{
+	static GeanyIndentPrefs iprefs;
+
+	g_return_val_if_fail(editor != NULL, NULL);
+
+	iprefs = *get_default_indent_prefs();
+
+	iprefs.type = editor->indent_type;
+	if (!editor->auto_indent)
+		iprefs.auto_indent_mode = GEANY_AUTOINDENT_NONE;
+	return &iprefs;
+}
+
+
+static gchar *get_single_indent(GeanyEditor *editor)
+{
+	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
+
+	return get_whitespace(iprefs, iprefs->width);
 }
 
 
@@ -745,9 +791,9 @@ static void check_python_indent(GeanyEditor *editor, gint pos)
 	if (sci_get_char_at(sci, last_char) == ':' &&
 		sci_get_style_at(sci, last_char) == SCE_P_OPERATOR)
 	{
-		/* creates and inserts one tabulator sign or
+		/* creates and inserts one tab char or
 		 * whitespace of the amount of the tab width */
-		gchar *text = get_whitespace(editor_prefs.tab_width, editor->use_tabs);
+		gchar *text = get_single_indent(editor);
 		sci_add_text(sci, text);
 		g_free(text);
 	}
@@ -763,10 +809,12 @@ static void on_new_line_added(GeanyEditor *editor)
 	/* simple indentation */
 	if (editor->auto_indent)
 	{
+		gint auto_indent_mode = editor_get_indent_prefs(editor)->auto_indent_mode;
+
 		get_indent(editor, pos, FALSE);
 		sci_add_text(sci, indent);
 
-		if (editor_prefs.indent_mode > INDENT_BASIC &&
+		if (auto_indent_mode > GEANY_AUTOINDENT_BASIC &&
 			FILETYPE_ID(editor->document->file_type) == GEANY_FILETYPES_PYTHON)
 			check_python_indent(editor, pos);
 	}
@@ -808,20 +856,23 @@ static gboolean lexer_has_braces(ScintillaObject *sci)
 }
 
 
-/* in place indentation of one tab or equivalent spaces */
-static void do_indent(gchar *buf, gsize len, guint *idx, gboolean use_tabs)
+/* in place indentation of one tab or equivalent spaces.
+ * idx is the index into buf. */
+static void do_indent(const GeanyIndentPrefs *iprefs, gchar *buf, gsize len, guint *idx)
 {
 	guint j = *idx;
 
-	if (use_tabs)
+	if (iprefs->type == GEANY_INDENT_TYPE_TABS)
 	{
 		if (j < len - 1)	/* leave room for a \0 terminator. */
 			buf[j++] = '\t';
 	}
 	else
-	{	/* insert as many spaces as a tab would take */
+	{
+		/* insert as many spaces as an indent takes.
+		 * TODO: insert tabs for GEANY_INDENT_TYPE_BOTH */
 		guint k;
-		for (k = 0; k < (guint) editor_prefs.tab_width && k < len - 1; k++)
+		for (k = 0; k < (guint) iprefs->width && k < len - 1; k++)
 			buf[j++] = ' ';
 	}
 	*idx = j;
@@ -836,6 +887,7 @@ static void get_indent(GeanyEditor *editor, gint pos, gboolean use_this_line)
 	guint i, len, j = 0;
 	gint prev_line;
 	gchar *linebuf;
+	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
 
 	prev_line = sci_get_line_from_position(sci, pos);
 
@@ -848,7 +900,7 @@ static void get_indent(GeanyEditor *editor, gint pos, gboolean use_this_line)
 	{
 		if (linebuf[i] == ' ' || linebuf[i] == '\t')	/* simple indentation */
 			indent[j++] = linebuf[i];
-		else if (editor_prefs.indent_mode <= INDENT_BASIC)
+		else if (iprefs->auto_indent_mode <= GEANY_AUTOINDENT_BASIC)
 			break;
 		else if (use_this_line)
 			break;
@@ -861,7 +913,7 @@ static void get_indent(GeanyEditor *editor, gint pos, gboolean use_this_line)
 			 * "	{ return bless({}, shift); }" (Perl) */
 			if (linebuf[i] == '{' && i == (len - 1))
 			{
-				do_indent(indent, sizeof(indent), &j, editor->use_tabs);
+				do_indent(iprefs, indent, sizeof(indent), &j);
 				break;
 			}
 			else
@@ -874,7 +926,7 @@ static void get_indent(GeanyEditor *editor, gint pos, gboolean use_this_line)
 				 * e.g. for (...) { */
 				if (linebuf[k] == '{')
 				{
-					do_indent(indent, sizeof(indent), &j, editor->use_tabs);
+					do_indent(iprefs, indent, sizeof(indent), &j);
 				}
 				break;
 			}
@@ -944,13 +996,14 @@ static gint brace_match(ScintillaObject *sci, gint pos)
 /* Called after typing '}'. */
 void editor_close_block(GeanyDocument *doc, gint pos)
 {
+	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(doc->editor);
 	gint x = 0, cnt = 0;
 	gint line, line_len, eol_char_len;
 	gchar *text, *line_buf;
 	ScintillaObject *sci;
 	gint line_indent, last_indent;
 
-	if (editor_prefs.indent_mode < INDENT_CURRENTCHARS)
+	if (iprefs->auto_indent_mode < GEANY_AUTOINDENT_CURRENTCHARS)
 		return;
 	if (doc == NULL || doc->file_type == NULL)
 		return;
@@ -979,7 +1032,7 @@ void editor_close_block(GeanyDocument *doc, gint pos)
 	if ((line_len - eol_char_len - 1) != cnt)
 		return;
 
-	if (editor_prefs.indent_mode == INDENT_MATCHBRACES)
+	if (iprefs->auto_indent_mode == GEANY_AUTOINDENT_MATCHBRACES)
 	{
 		gint start_brace = brace_match(sci, pos);
 
@@ -998,13 +1051,13 @@ void editor_close_block(GeanyDocument *doc, gint pos)
 		/* fall through - unmatched brace (possibly because of TCL, PHP lexer bugs) */
 	}
 
-	/* INDENT_CURRENTCHARS */
+	/* GEANY_AUTOINDENT_CURRENTCHARS */
 	line_indent = sci_get_line_indentation(sci, line);
 	last_indent = sci_get_line_indentation(sci, line - 1);
 
 	if (line_indent < last_indent)
 		return;
-	line_indent -= editor_prefs.tab_width;
+	line_indent -= iprefs->width;
 	line_indent = MAX(0, line_indent);
 	sci_set_line_indentation(sci, line, line_indent);
 }
@@ -1578,7 +1631,7 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 
 	get_indent(editor, pos, TRUE);
 	lindent = g_strconcat(editor_get_eol_char(editor->document), indent, NULL);
-	whitespace = get_whitespace(editor_prefs.tab_width, editor->use_tabs);
+	whitespace = get_single_indent(editor);
 
 	/* remove the typed word, it will be added again by the used auto completion
 	 * (not really necessary but this makes the auto completion more flexible,
@@ -1825,10 +1878,10 @@ static void auto_table(GeanyEditor *editor, gint pos)
 	}
 
 	/* get indent string for generated code */
-	if (editor_prefs.indent_mode == INDENT_NONE)
+	if (editor->auto_indent)
 		indent_str = g_strdup("");
 	else
-		indent_str = get_whitespace(editor_prefs.tab_width, editor->use_tabs);
+		indent_str = get_single_indent(editor);
 
 	table = g_strconcat("\n", indent, indent_str, "<tr>\n",
 						indent, indent_str, indent_str, "<td>\n",
@@ -2435,10 +2488,11 @@ static void auto_multiline(GeanyEditor *editor, gint pos)
 			gint cur_line = sci_get_current_line(sci);
 			gint indent_pos = sci_get_line_indent_position(sci, cur_line);
 			gint indent_len = sci_get_col_from_position(sci, indent_pos);
+			gint indent_width = editor_get_indent_prefs(editor)->width;
 
 			/* if there is one too many spaces, delete the last space,
 			 * to return to the indent used before the multiline comment was started. */
-			if (indent_len % editor_prefs.tab_width == 1)
+			if (indent_len % indent_width == 1)
 				SSM(sci, SCI_DELETEBACKNOTLINE, 0, 0);	/* remove whitespace indent */
 			g_free(previous_line);
 			return;
@@ -2765,10 +2819,23 @@ void editor_scroll_to_line(ScintillaObject *sci, gint line, gfloat percent_of_vi
 }
 
 
+/* creates and inserts one tab or whitespace of the amount of the tab width */
 void editor_insert_alternative_whitespace(GeanyEditor *editor)
 {
-	/* creates and inserts one tab or whitespace of the amount of the tab width */
-	gchar *text = get_whitespace(editor_prefs.tab_width, ! editor->use_tabs);
+	gchar *text;
+	GeanyIndentPrefs iprefs = *editor_get_indent_prefs(editor);
+
+	switch (iprefs.type)
+	{
+		case GEANY_INDENT_TYPE_TABS:
+			iprefs.type = GEANY_INDENT_TYPE_SPACES;
+			break;
+		case GEANY_INDENT_TYPE_SPACES:
+		case GEANY_INDENT_TYPE_BOTH:	/* most likely we want a tab */
+			iprefs.type = GEANY_INDENT_TYPE_TABS;
+			break;
+	}
+	text = get_whitespace(&iprefs, iprefs.width);
 	sci_add_text(editor->sci, text);
 	g_free(text);
 }
@@ -3490,14 +3557,24 @@ void editor_set_line_wrapping(GeanyEditor *editor, gboolean wrap)
 }
 
 
-void editor_set_use_tabs(GeanyEditor *editor, gboolean use_tabs)
+/* Also sets indent width, tab width. */
+void editor_set_indent_type(GeanyEditor *editor, GeanyIndentType type)
 {
-	g_return_if_fail(editor != NULL);
+	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
+	ScintillaObject *sci = editor->sci;
+	gboolean use_tabs = type != GEANY_INDENT_TYPE_SPACES;
 
-	editor->use_tabs = use_tabs;
-	sci_set_use_tabs(editor->sci, use_tabs);
-	/* remove indent spaces on backspace, if using spaces to indent */
-	SSM(editor->sci, SCI_SETBACKSPACEUNINDENTS, ! use_tabs, 0);
+	editor->indent_type = type;
+	sci_set_use_tabs(sci, use_tabs);
+
+	if (type == GEANY_INDENT_TYPE_BOTH)
+		sci_set_tab_width(sci, iprefs->tab_width);
+	else
+		sci_set_tab_width(sci, iprefs->width);
+	SSM(sci, SCI_SETINDENT, iprefs->width, 0);
+
+	/* remove indent spaces on backspace, if using any spaces to indent */
+	SSM(sci, SCI_SETBACKSPACEUNINDENTS, type != GEANY_INDENT_TYPE_TABS, 0);
 }
 
 
@@ -3648,17 +3725,19 @@ static ScintillaObject *create_new_sci(GeanyDocument *doc)
 
 GeanyEditor *editor_create(GeanyDocument *doc)
 {
+	const GeanyIndentPrefs *iprefs = get_default_indent_prefs();
 	GeanyEditor *editor = g_new0(GeanyEditor, 1);
 
 	editor->document = doc;
 
-	editor->auto_indent = (editor_prefs.indent_mode != INDENT_NONE);
+	editor->sci = create_new_sci(doc);
+	editor_set_indent_type(editor, iprefs->type);
+	editor_set_font(editor, interface_prefs.editor_font);
+
+	editor->auto_indent = (iprefs->auto_indent_mode != GEANY_AUTOINDENT_NONE);
 	editor->line_wrapping = editor_prefs.line_wrapping;
 	editor->scroll_percent = -1.0F;
 	editor->line_breaking = FALSE;
-
-	editor->sci = create_new_sci(doc);
-	editor_set_font(editor, interface_prefs.editor_font);
 	return editor;
 }
 
@@ -3668,7 +3747,7 @@ void editor_init(void)
 	static GeanyIndentPrefs indent_prefs;
 
 	memset(&editor_prefs, 0, sizeof(GeanyEditorPrefs));
-	memset(&indent_prefs, 0, sizeof GeanyIndentPrefs);
-	editor_prefs->indentation = &indent_prefs;
+	memset(&indent_prefs, 0, sizeof(GeanyIndentPrefs));
+	editor_prefs.indentation = &indent_prefs;
 }
 

@@ -303,15 +303,18 @@ void document_set_text_changed(GeanyDocument *doc, gboolean changed)
 void document_apply_update_prefs(GeanyDocument *doc)
 {
 	ScintillaObject *sci;
+	GeanyEditor *editor;
 
 	g_return_if_fail(doc != NULL);
 
-	sci = doc->editor->sci;
+	editor = doc->editor;
+	sci = editor->sci;
 
 	sci_set_mark_long_lines(sci, editor_prefs.long_line_type,
 		editor_prefs.long_line_column, editor_prefs.long_line_color);
 
-	sci_set_tab_width(sci, editor_prefs.tab_width);
+	/* update indent width, tab width */
+	editor_set_indent_type(editor, editor->indent_type);
 
 	sci_set_autoc_max_height(sci, editor_prefs.symbolcompletion_max_height);
 
@@ -320,8 +323,6 @@ void document_apply_update_prefs(GeanyDocument *doc)
 	sci_set_visible_eols(sci, editor_prefs.show_line_endings);
 
 	sci_set_folding_margin_visible(sci, editor_prefs.folding);
-
-	doc->editor->auto_indent = (editor_prefs.indent_mode != INDENT_NONE);
 
 	sci_assign_cmdkey(sci, SCK_HOME,
 		editor_prefs.smart_home_key ? SCI_VCHOMEWRAP : SCI_HOMEWRAP);
@@ -571,7 +572,6 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft,
 	if (text != NULL)
 		sci_convert_eols(doc->editor->sci, file_prefs.default_eol_character);
 
-	editor_set_use_tabs(doc->editor, editor_prefs.use_tabs);
 	sci_set_undo_collection(doc->editor->sci, TRUE);
 	sci_empty_undo_buffer(doc->editor->sci);
 
@@ -883,10 +883,17 @@ static void set_cursor_position(GeanyEditor *editor, gint pos)
 }
 
 
-static gboolean detect_use_tabs(ScintillaObject *sci)
+static GeanyIndentType detect_indent_type(GeanyEditor *editor)
 {
+	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
+	ScintillaObject *sci = editor->sci;
 	gint line;
+	gboolean use_tabs;
 	gsize tabs = 0, spaces = 0;
+
+	/* TODO: tabs & spaces detection */
+	if (iprefs->type == GEANY_INDENT_TYPE_BOTH)
+		return GEANY_INDENT_TYPE_BOTH;
 
 	for (line = 0; line < sci_get_line_count(sci); line++)
 	{
@@ -905,34 +912,42 @@ static gboolean detect_use_tabs(ScintillaObject *sci)
 		}
 	}
 	if (spaces == 0 && tabs == 0)
-		return editor_prefs.use_tabs;
+		return iprefs->type;
 
 	/* Skew comparison by a factor of 2 in favour of default editor pref */
-	if (editor_prefs.use_tabs)
-		return ! (spaces > tabs * 2);
+	if (iprefs->type == GEANY_INDENT_TYPE_TABS)
+		use_tabs = ! (spaces > tabs * 2);
 	else
-		return (tabs > spaces * 2);
+		use_tabs = (tabs > spaces * 2);
+
+	return use_tabs ? GEANY_INDENT_TYPE_TABS : GEANY_INDENT_TYPE_SPACES;
 }
 
 
-static void set_indentation(GeanyDocument *doc)
+static void set_indentation(GeanyEditor *editor)
 {
-	/* force using tabs for indentation for Makefiles */
-	if (FILETYPE_ID(doc->file_type) == GEANY_FILETYPES_MAKE)
-		editor_set_use_tabs(doc->editor, TRUE);
-	/* force using spaces for indentation for Fortran 77 */
-	else if (FILETYPE_ID(doc->file_type) == GEANY_FILETYPES_F77)
-		editor_set_use_tabs(doc->editor, FALSE);
-	else if (! editor_prefs.detect_tab_mode)
-		editor_set_use_tabs(doc->editor, editor_prefs.use_tabs);
-	else
-	{	/* detect & set tabs/spaces */
-		gboolean use_tabs = detect_use_tabs(doc->editor->sci);
+	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
 
-		if (use_tabs != editor_prefs.use_tabs)
-			ui_set_statusbar(TRUE, _("Setting %s indentation mode."),
-				(use_tabs) ? _("Tabs") : _("Spaces"));
-		editor_set_use_tabs(doc->editor, use_tabs);
+	switch (FILETYPE_ID(editor->document->file_type))
+	{
+		case GEANY_FILETYPES_MAKE:
+			/* force using tabs for indentation for Makefiles */
+			editor_set_indent_type(editor, GEANY_INDENT_TYPE_TABS);
+			break;
+		case GEANY_FILETYPES_F77:
+			/* force using spaces for indentation for Fortran 77 */
+			editor_set_indent_type(editor, GEANY_INDENT_TYPE_SPACES);
+			break;
+		default:
+			if (iprefs->detect_type)
+			{	/* detect & set tabs/spaces */
+				GeanyIndentType type = detect_indent_type(editor);
+
+				if (type != iprefs->type)
+					ui_set_statusbar(TRUE, _("Setting %s indentation mode."),
+						(type == GEANY_INDENT_TYPE_TABS) ? _("Tabs") : _("Spaces"));
+				editor_set_indent_type(editor, type);
+			}
 	}
 }
 
@@ -1061,9 +1076,9 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 
 	/* set indentation settings after setting the filetype */
 	if (reload)
-		editor_set_use_tabs(doc->editor, doc->editor->use_tabs); /* resetup sci */
+		editor_set_indent_type(doc->editor, doc->editor->indent_type); /* resetup sci */
 	else
-		set_indentation(doc);
+		set_indentation(doc->editor);
 
 	document_set_text_changed(doc, FALSE);	/* also updates tab state */
 	ui_document_show_hide(doc);	/* update the document menu */

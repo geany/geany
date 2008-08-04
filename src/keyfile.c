@@ -230,7 +230,7 @@ static gchar *get_session_file_string(GeanyDocument *doc)
 		ft->name,
 		doc->readonly,
 		encodings_get_idx_from_charset(doc->encoding),
-		doc->editor->use_tabs,
+		doc->editor->indent_type,
 		doc->editor->auto_indent,
 		doc->editor->line_wrapping,
 		doc->file_name);
@@ -923,15 +923,15 @@ static gboolean open_session_file(gchar **tmp)
 	guint pos;
 	const gchar *ft_name;
 	gchar *locale_filename;
-	gint enc_idx;
-	gboolean ro, use_tabs, auto_indent, line_wrapping;
+	gint enc_idx, indent_type;
+	gboolean ro, auto_indent, line_wrapping;
 	gboolean ret = FALSE;
 
 	pos = atoi(tmp[0]);
 	ft_name = tmp[1];
 	ro = atoi(tmp[2]);
 	enc_idx = atoi(tmp[3]);
-	use_tabs = atoi(tmp[4]);
+	indent_type = atoi(tmp[4]);
 	auto_indent = atoi(tmp[5]);
 	line_wrapping = atoi(tmp[6]);
 	/* try to get the locale equivalent for the filename */
@@ -947,7 +947,7 @@ static gboolean open_session_file(gchar **tmp)
 
 		if (doc)
 		{
-			editor_set_use_tabs(doc->editor, use_tabs);
+			editor_set_indent_type(doc->editor, indent_type);
 			editor_set_line_wrapping(doc->editor, line_wrapping);
 			doc->editor->auto_indent = auto_indent;
 			ret = TRUE;

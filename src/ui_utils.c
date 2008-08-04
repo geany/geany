@@ -174,8 +174,19 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 				/* OVR = overwrite/overtype, INS = insert */
 				(sci_get_overtype(doc->editor->sci) ? _("OVR") : _("INS")));
 		g_string_append(stats_str, sp);
-		g_string_append(stats_str,
-			(doc->editor->use_tabs) ? _("TAB") : _("SP "));	/* SP = space */
+
+		switch (editor_get_indent_prefs(doc->editor)->type)
+		{
+			case GEANY_INDENT_TYPE_TABS:
+				g_string_append(stats_str, _("TAB"));
+				break;
+			case GEANY_INDENT_TYPE_SPACES:
+				g_string_append(stats_str, _("SP"));	/* SP = space */
+				break;
+			case GEANY_INDENT_TYPE_BOTH:
+				g_string_append(stats_str, _("T/S"));	/* T/S = tabs and spaces */
+				break;
+		}
 		g_string_append(stats_str, sp);
 		g_string_append_printf(stats_str, _("mode: %s"),
 			editor_get_eol_char_name(doc));
@@ -687,6 +698,7 @@ void ui_document_show_hide(GeanyDocument *doc)
 {
 	gchar *widget_name;
 	GtkWidget *item;
+	const GeanyIndentPrefs *iprefs;
 
 	if (doc == NULL)
 		doc = document_get_current();
@@ -704,12 +716,23 @@ void ui_document_show_hide(GeanyDocument *doc)
 			GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "line_breaking1")),
 			doc->editor->line_breaking);
 
+	iprefs = editor_get_indent_prefs(doc->editor);
+
 	item = lookup_widget(main_widgets.window, "menu_use_auto_indentation1");
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), doc->editor->auto_indent);
 	gtk_widget_set_sensitive(item,
-		editor_prefs.indentation->auto_indent_mode != GEANY_AUTOINDENT_NONE);
+		iprefs->auto_indent_mode != GEANY_AUTOINDENT_NONE);
 
-	item = lookup_widget(main_widgets.window, doc->editor->use_tabs ? "tabs1" : "spaces1");
+	switch (iprefs->type)
+	{
+		case GEANY_INDENT_TYPE_SPACES:
+			widget_name = "spaces1"; break;
+		case GEANY_INDENT_TYPE_TABS:
+			widget_name = "tabs1"; break;
+		case GEANY_INDENT_TYPE_BOTH:
+			widget_name = "tabs_and_spaces1"; break;
+	}
+	item = lookup_widget(main_widgets.window, widget_name);
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), TRUE);
 
 	gtk_check_menu_item_set_active(
@@ -1505,44 +1528,6 @@ void ui_init(void)
 	widgets.undo_items[2] = lookup_widget(main_widgets.window, "toolbutton_undo");
 
 	init_document_widgets();
-}
-
-
-void ui_radio_menu_item_set_active_index(GtkRadioMenuItem *widget, guint idx)
-{
-	GSList *item = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(widget));
-	guint i;
-
-	for (i = 0; item != NULL; item = g_slist_next(item), i++)
-	{
-		if (i == idx)
-		{
-			GtkCheckMenuItem *radio = item->data;
-
-			gtk_check_menu_item_set_active(radio, TRUE);
-			return;
-		}
-	}
-	g_warning("Index %u is out of range for group of widget %s",
-		idx, gtk_widget_get_name(GTK_WIDGET(widget)));
-}
-
-
-guint ui_radio_menu_item_get_active_index(GtkRadioMenuItem *widget)
-{
-	GSList *item = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(widget));
-	guint i;
-
-	for (i = 0; item != NULL; item = g_slist_next(item), i++)
-	{
-		GtkCheckMenuItem *radio = item->data;
-
-		if (gtk_check_menu_item_get_active(radio))
-			return i;
-	}
-	g_warning("No active group item for widget %s",
-		gtk_widget_get_name(GTK_WIDGET(widget)));
-	return 0;
 }
 
 
