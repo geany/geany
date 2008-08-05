@@ -150,8 +150,6 @@ void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer
 
 gboolean editor_start_auto_complete(GeanyDocument *doc, gint pos, gboolean force);
 
-void editor_close_block(GeanyDocument *doc, gint pos);
-
 gboolean editor_complete_snippet(GeanyDocument *doc, gint pos);
 
 void editor_auto_latex(GeanyDocument *doc, gint pos);

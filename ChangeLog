@@ -1,3 +1,13 @@
+2008-08-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/editor.c, src/editor.h:
+   Add get_indent_size_after_line() to replace get_indent() for
+   clarity, and to fix Tabs & Spaces auto-indentation > basic.
+   Change editor_close_block() to use sci_get_line_indentation() for
+   clarity.
+   Make editor_close_block() static.
+
+
 2008-08-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/ui_utils.h, src/prefs.c, src/callbacks.c, src/callbacks.h,

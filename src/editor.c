@@ -75,11 +75,12 @@ static gchar indent[100];
 static void on_new_line_added(GeanyEditor *editor);
 static gboolean handle_xml(GeanyEditor *editor, gchar ch);
 static void get_indent(GeanyEditor *editor, gint pos, gboolean use_this_line);
+static void insert_indent_after_line(GeanyEditor *editor, gint line);
 static void auto_multiline(GeanyEditor *editor, gint pos);
 static gboolean is_comment(gint lexer, gint prev_style, gint style);
 static void auto_close_bracket(ScintillaObject *sci, gint pos, gchar c);
 static void auto_table(GeanyEditor *editor, gint pos);
-
+static void close_block(GeanyEditor *editor, gint pos);
 
 
 void editor_snippets_free()
@@ -437,7 +438,7 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 		case '}':
 		{	/* closing bracket handling */
 			if (editor->auto_indent)
-				editor_close_block(editor->document, pos - 1);
+				close_block(editor, pos - 1);
 			break;
 		}
 		default:
@@ -722,7 +723,10 @@ static gint get_tab_width(const GeanyIndentPrefs *indent_prefs)
 static gchar *
 get_whitespace(const GeanyIndentPrefs *iprefs, gint width)
 {
-	g_return_val_if_fail(width > 0, NULL);
+	g_return_val_if_fail(width >= 0, NULL);
+
+	if (width == 0)
+		return g_strdup("");
 
 	if (iprefs->type == GEANY_INDENT_TYPE_SPACES)
 	{
@@ -782,24 +786,6 @@ static gchar *get_single_indent(GeanyEditor *editor)
 }
 
 
-static void check_python_indent(GeanyEditor *editor, gint pos)
-{
-	ScintillaObject *sci = editor->sci;
-	gint last_char = pos - editor_get_eol_char_len(editor->document) - 1;
-
-	/* add extra indentation for Python after colon */
-	if (sci_get_char_at(sci, last_char) == ':' &&
-		sci_get_style_at(sci, last_char) == SCE_P_OPERATOR)
-	{
-		/* creates and inserts one tab char or
-		 * whitespace of the amount of the tab width */
-		gchar *text = get_single_indent(editor);
-		sci_add_text(sci, text);
-		g_free(text);
-	}
-}
-
-
 static void on_new_line_added(GeanyEditor *editor)
 {
 	ScintillaObject *sci = editor->sci;
@@ -809,14 +795,7 @@ static void on_new_line_added(GeanyEditor *editor)
 	/* simple indentation */
 	if (editor->auto_indent)
 	{
-		gint auto_indent_mode = editor_get_indent_prefs(editor)->auto_indent_mode;
-
-		get_indent(editor, pos, FALSE);
-		sci_add_text(sci, indent);
-
-		if (auto_indent_mode > GEANY_AUTOINDENT_BASIC &&
-			FILETYPE_ID(editor->document->file_type) == GEANY_FILETYPES_PYTHON)
-			check_python_indent(editor, pos);
+		insert_indent_after_line(editor, line - 1);
 	}
 
 	if (editor_prefs.auto_continue_multiline)
@@ -880,7 +859,7 @@ static void do_indent(const GeanyIndentPrefs *iprefs, gchar *buf, gsize len, gui
 
 
 /* "use_this_line" to auto-indent only if it is a real new line
- * and ignore the case of editor_close_block */
+ * and ignore the case of close_block */
 static void get_indent(GeanyEditor *editor, gint pos, gboolean use_this_line)
 {
 	ScintillaObject *sci = editor->sci;
@@ -904,7 +883,7 @@ static void get_indent(GeanyEditor *editor, gint pos, gboolean use_this_line)
 			break;
 		else if (use_this_line)
 			break;
-		else	/* editor_close_block */
+		else	/* close_block */
 		{
 			if (! lexer_has_braces(sci))
 				break;
@@ -937,6 +916,97 @@ static void get_indent(GeanyEditor *editor, gint pos, gboolean use_this_line)
 }
 
 
+static gint get_brace_indent(ScintillaObject *sci, gint line)
+{
+	guint i, len;
+	gint ret = 0;
+	gchar *linebuf;
+
+	len = sci_get_line_length(sci, line);
+	linebuf = sci_get_line(sci, line);
+
+	for (i = 0; i < len; i++)
+	{
+		/* i == (len - 1) prevents wrong indentation after lines like
+		 * "	{ return bless({}, shift); }" (Perl) */
+		if (linebuf[i] == '{' && i == (len - 1))
+		{
+			ret++;
+			break;
+		}
+		else
+		{
+			gint k = len - 1;
+
+			while (k > 0 && isspace(linebuf[k])) k--;
+
+			/* if last non-whitespace character is a { increase indentation by a tab
+			 * e.g. for (...) { */
+			if (linebuf[k] == '{')
+			{
+				ret++;
+			}
+			break;
+		}
+	}
+	g_free(linebuf);
+	return ret;
+}
+
+
+static gint get_python_indent(ScintillaObject *sci, gint line)
+{
+	gint last_char = sci_get_line_end_position(sci, line) - 1;
+
+	/* add extra indentation for Python after colon */
+	if (sci_get_char_at(sci, last_char) == ':' &&
+		sci_get_style_at(sci, last_char) == SCE_P_OPERATOR)
+	{
+		return 1;
+	}
+	return 0;
+}
+
+
+static gint get_indent_size_after_line(GeanyEditor *editor, gint line)
+{
+	ScintillaObject *sci = editor->sci;
+	gint size;
+	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
+
+	g_return_val_if_fail(line >= 0, 0);
+
+	size = sci_get_line_indentation(sci, line);
+
+	if (iprefs->auto_indent_mode > GEANY_AUTOINDENT_BASIC)
+	{
+		if (lexer_has_braces(sci))
+			size += iprefs->width * get_brace_indent(sci, line);
+		else
+		if (FILETYPE_ID(editor->document->file_type) == GEANY_FILETYPES_PYTHON)
+			size += iprefs->width * get_python_indent(sci, line);
+	}
+	return size;
+}
+
+
+static void insert_indent_after_line(GeanyEditor *editor, gint line)
+{
+	ScintillaObject *sci = editor->sci;
+	gint size = get_indent_size_after_line(editor, line);
+	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
+
+	if (size > 0)
+	{
+		gchar *text;
+
+		text = get_whitespace(iprefs, size);
+		sci_add_text(sci, text);
+		g_free(text);
+	}
+}
+
+
 static void auto_close_bracket(ScintillaObject *sci, gint pos, gchar c)
 {
 	if (! editor_prefs.complete_snippets || SSM(sci, SCI_GETLEXER, 0, 0) != SCLEX_LATEX)
@@ -956,7 +1026,7 @@ static void auto_close_bracket(ScintillaObject *sci, gint pos, gchar c)
 
 /* Finds a corresponding matching brace to the given pos
  * (this is taken from Scintilla Editor.cxx,
- * fit to work with editor_close_block) */
+ * fit to work with close_block) */
 static gint brace_match(ScintillaObject *sci, gint pos)
 {
 	gchar chBrace = sci_get_char_at(sci, pos);
@@ -994,9 +1064,10 @@ static gint brace_match(ScintillaObject *sci, gint pos)
 
 
 /* Called after typing '}'. */
-void editor_close_block(GeanyDocument *doc, gint pos)
+static void close_block(GeanyEditor *editor, gint pos)
 {
-	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(doc->editor);
+	GeanyDocument *doc = editor->document;
+	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
 	gint x = 0, cnt = 0;
 	gint line, line_len, eol_char_len;
 	gchar *text, *line_buf;
@@ -1039,13 +1110,16 @@ void editor_close_block(GeanyDocument *doc, gint pos)
 		if (start_brace >= 0)
 		{
 			gint line_start;
+			gint brace_line = sci_get_line_from_position(sci, start_brace);
+			gint size = sci_get_line_indentation(sci, brace_line);
+			gchar *ind = get_whitespace(iprefs, size);
 
-			get_indent(doc->editor, start_brace, TRUE);
-			text = g_strconcat(indent, "}", NULL);
+			text = g_strconcat(ind, "}", NULL);
 			line_start = sci_get_position_from_line(sci, line);
 			sci_set_anchor(sci, line_start);
 			SSM(sci, SCI_REPLACESEL, 0, (sptr_t) text);
 			g_free(text);
+			g_free(ind);
 			return;
 		}
 		/* fall through - unmatched brace (possibly because of TCL, PHP lexer bugs) */
