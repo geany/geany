@@ -288,12 +288,13 @@ static void create_vte(void)
 	g_signal_connect(vte, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
 	g_signal_connect(vte, "drag-data-received", G_CALLBACK(vte_drag_data_received), NULL);
 
+	vte_start(vte);
+
 	gtk_widget_show_all(frame);
 	gtk_notebook_insert_page(GTK_NOTEBOOK(msgwindow.notebook), frame, gtk_label_new(_("Terminal")), MSG_VTE);
 
 	/* the vte widget has to be realised before color changes take effect */
 	g_signal_connect_after(vte, "realize", G_CALLBACK(vte_apply_user_settings), NULL);
-	gtk_widget_realize(vte);
 }
 
 
@@ -442,8 +443,6 @@ void vte_apply_user_settings(void)
 	if (! ui_prefs.msgwindow_visible)
 		return;
 
-	geany_debug("VTE widget realized"); /* temporary :) */
-
 	vf->vte_terminal_set_scrollback_lines(VTE_TERMINAL(vc->vte), vc->scrollback_lines);
 	vf->vte_terminal_set_scroll_on_keystroke(VTE_TERMINAL(vc->vte), vc->scroll_on_key);
 	vf->vte_terminal_set_scroll_on_output(VTE_TERMINAL(vc->vte), vc->scroll_on_out);
@@ -453,9 +452,6 @@ void vte_apply_user_settings(void)
 	vf->vte_terminal_set_color_background(VTE_TERMINAL(vc->vte), vc->colour_back);
 
 	override_menu_key();
-
-	if (pid == 0)
-		vte_start(vc->vte);
 }
 
 
@@ -558,37 +554,12 @@ static GtkWidget *vte_create_popup_menu(void)
 }
 
 
-static gboolean vte_send_cmd_cb(gpointer data)
-{
-	gchar *cmd = data;
-	if (! vte_send_cmd(cmd))
-	{
-		ui_set_statusbar(FALSE,
-	_("Could not execute the command \"%s\" in the VTE because it probably contains a command."),
-		cmd);
-	}
-	g_free(data);
-
-	return FALSE;
-}
-
 /* if the command could be executed, TRUE is returned, FALSE otherwise (i.e. there was some text
  * on the prompt). */
 gboolean vte_send_cmd(const gchar *cmd)
 {
 	if (clean)
 	{
-		/* the shell is started once the widget is realized but it might happen we send commands
-		 * before this happened, so start it manually */
-		if (! GTK_WIDGET_REALIZED(vc->vte))
-		{
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_VTE);
-			/* wait until the notebook page has been switched which will realize the widget
-			 * implicitly, after this has been done the idle function willsend the command */
-			g_idle_add(vte_send_cmd_cb, g_strdup(cmd));
-			return TRUE;
-		}
-
 		vf->vte_terminal_feed_child(VTE_TERMINAL(vc->vte), cmd, strlen(cmd));
 		clean = TRUE; /* vte_terminal_feed_child() also marks the vte as not clean */
 		return TRUE;

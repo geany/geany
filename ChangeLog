@@ -1,3 +1,10 @@
+2008-08-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/vte.c:
+   Revert the recent VTE realisation changes as they don't make things
+   better.
+
+
 2008-08-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/vte.c:
