@@ -3,6 +3,9 @@
  * src/vte.c:
    Revert the recent VTE realisation changes as they don't make things
    better.
+ * tagmanager/tcl.c:
+   Fix wrong parsing of keywords if they are not followed by a space
+   (closes #2037728).
 
 
 2008-08-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

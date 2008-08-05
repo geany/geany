@@ -55,7 +55,16 @@ static const unsigned char *makeTclTag (
 
 static boolean match (const unsigned char *line, const char *word)
 {
-	return (boolean) (strncmp ((const char*) line, word, strlen (word)) == 0);
+	size_t len = strlen (word);
+	boolean matched = (strncmp ((const char*) line, word, len) == 0);
+
+	if (matched)
+	{
+		/* check that the word is followed by a space to avoid detecting something
+		 * like "proc_new ..." */
+		matched = isspace (*(line + len));
+	}
+	return matched;
 }
 
 static void findTclTags (void)
