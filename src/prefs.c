@@ -89,7 +89,14 @@ static void on_prefs_print_radio_button_toggled(GtkToggleButton *togglebutton, g
 static void on_prefs_print_page_header_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 
 
-/* used in e.g. init_toggle_button_prefs(). */
+typedef enum PrefCallbackAction
+{
+	PREF_DISPLAY,
+	PREF_UPDATE
+}
+PrefCallbackAction;
+
+
 typedef struct PrefEntry
 {
 	const gchar *widget_name;
@@ -97,15 +104,153 @@ typedef struct PrefEntry
 }
 PrefEntry;
 
-static PrefEntry toggle_prefs[] =
-{
-	{"check_cmdline_new_files", &file_prefs.cmdline_new_files},
 
-	{"check_ask_suppress_search_dialogs", &search_prefs.suppress_dialogs},
-	{"check_search_use_current_word", &search_prefs.use_current_word},
-	{"check_fif_current_dir", &search_prefs.use_current_file_dir},
-	{NULL, NULL}	/* must be terminated */
+static void toggle_prefs_foreach(PrefCallbackAction action)
+{
+	guint i;
+	PrefEntry items[] =
+	{
+		{"check_cmdline_new_files", &file_prefs.cmdline_new_files},
+
+		{"check_ask_suppress_search_dialogs", &search_prefs.suppress_dialogs},
+		{"check_search_use_current_word", &search_prefs.use_current_word},
+		{"check_fif_current_dir", &search_prefs.use_current_file_dir},
+
+		{"check_detect_indent", &editor_prefs.indentation->detect_type}
+	};
+
+	for (i = 0; i < G_N_ELEMENTS(items); i++)
+	{
+		PrefEntry *pe = &items[i];
+		GtkWidget *widget = lookup_widget(ui_widgets.prefs_dialog, pe->widget_name);
+		gboolean *setting = pe->setting;
+
+		switch (action)
+		{
+			case PREF_DISPLAY:
+				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), *setting);
+				break;
+			case PREF_UPDATE:
+				*setting = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+				break;
+		}
+	}
+}
+
+
+static void spin_prefs_foreach(PrefCallbackAction action)
+{
+	guint i;
+	PrefEntry items[] =
+	{
+		{"spin_indent_width", &editor_prefs.indentation->width},
+		{"spin_tab_width", &editor_prefs.indentation->tab_width},
+	};
+
+	for (i = 0; i < G_N_ELEMENTS(items); i++)
+	{
+		PrefEntry *pe = &items[i];
+		GtkWidget *widget = lookup_widget(ui_widgets.prefs_dialog, pe->widget_name);
+		gint *setting = pe->setting;
+
+		switch (action)
+		{
+			case PREF_DISPLAY:
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), *setting);
+				break;
+			case PREF_UPDATE:
+				*setting = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+				break;
+		}
+	}
+}
+
+
+typedef struct RadioPrefEntry
+{
+	const gchar *widget_name;
+	gpointer setting;
+	gint value;
+}
+RadioPrefEntry;
+
+static void radio_prefs_foreach(PrefCallbackAction action)
+{
+	guint i;
+	RadioPrefEntry items[] =
+	{
+		{"radio_indent_spaces", &editor_prefs.indentation->type, GEANY_INDENT_TYPE_SPACES},
+		{"radio_indent_tabs", &editor_prefs.indentation->type, GEANY_INDENT_TYPE_TABS},
+		{"radio_indent_both", &editor_prefs.indentation->type, GEANY_INDENT_TYPE_BOTH},
+	};
+
+	for (i = 0; i < G_N_ELEMENTS(items); i++)
+	{
+		RadioPrefEntry *pe = &items[i];
+		GtkWidget *widget = lookup_widget(ui_widgets.prefs_dialog, pe->widget_name);
+		gint *setting = pe->setting;
+
+		switch (action)
+		{
+			case PREF_DISPLAY:
+				if (*setting == pe->value)
+					gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
+				break;
+			case PREF_UPDATE:
+				if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
+					*setting = pe->value;
+				break;
+		}
+	}
+}
+
+
+static void combo_prefs_foreach(PrefCallbackAction action)
+{
+	guint i;
+	PrefEntry items[] =
+	{
+		{"combo_auto_indent_mode", &editor_prefs.indentation->auto_indent_mode},
+	};
+
+	for (i = 0; i < G_N_ELEMENTS(items); i++)
+	{
+		PrefEntry *pe = &items[i];
+		GtkWidget *widget = lookup_widget(ui_widgets.prefs_dialog, pe->widget_name);
+		gint *setting = pe->setting;
+
+		switch (action)
+		{
+			case PREF_DISPLAY:
+				gtk_combo_box_set_active(GTK_COMBO_BOX(widget), *setting);
+				break;
+			case PREF_UPDATE:
+				*setting = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+				break;
+		}
+	}
+}
+
+
+typedef void (*PrefItemsCallback)(PrefCallbackAction action);
+
+/* List of functions which hold the PrefEntry arrays. These allow access to
+ * runtime setting fields like EditorPrefs::indentation->width. */
+PrefItemsCallback pref_item_callbacks[] = {
+	toggle_prefs_foreach,
+	spin_prefs_foreach,
+	radio_prefs_foreach,
+	combo_prefs_foreach
 };
+
+
+static void prefs_action(PrefCallbackAction action)
+{
+	guint i;
+
+	for (i = 0; i < G_N_ELEMENTS(pref_item_callbacks); i++)
+		pref_item_callbacks[i](action);
+}
 
 
 enum
@@ -180,25 +325,12 @@ static void init_keybindings(void)
 }
 
 
-static void init_toggle_button_prefs()
-{
-	PrefEntry *pe;
-
-	for (pe = toggle_prefs; pe->widget_name != NULL; pe++)
-	{
-		GtkWidget *widget = lookup_widget(ui_widgets.prefs_dialog, pe->widget_name);
-
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), *(gboolean*)pe->setting);
-	}
-}
-
-
 void prefs_init_dialog(void)
 {
 	GtkWidget *widget;
 	GdkColor *color;
 
-	init_toggle_button_prefs();
+	prefs_action(PREF_DISPLAY);
 
 	/* General settings */
 	/* startup */
@@ -400,9 +532,6 @@ void prefs_init_dialog(void)
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.final_new_line);
 
 	/* Editor settings */
-	widget = lookup_widget(ui_widgets.prefs_dialog, "spin_tab_width");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), editor_prefs.tab_width);
-
 	widget = lookup_widget(ui_widgets.prefs_dialog, "entry_toggle_mark");
 	gtk_entry_set_text(GTK_ENTRY(widget), editor_prefs.comment_toggle_mark);
 
@@ -417,12 +546,6 @@ void prefs_init_dialog(void)
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_line_end");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_line_endings);
-
-	widget = lookup_widget(ui_widgets.prefs_dialog, "combo_auto_indent_mode");
-	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), editor_prefs.indent_mode);
-
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_detect_indent");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.detect_tab_mode);
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_line_wrapping");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.line_wrapping);
@@ -449,12 +572,6 @@ void prefs_init_dialog(void)
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_newline_strip");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.newline_strip);
-
-	if (editor_prefs.use_tabs)
-		widget = lookup_widget(ui_widgets.prefs_dialog, "radio_indent_tabs");
-	else
-		widget = lookup_widget(ui_widgets.prefs_dialog, "radio_indent_spaces");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_indicators");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.use_indicators);
@@ -617,19 +734,6 @@ void prefs_init_dialog(void)
 }
 
 
-static void update_toggle_button_prefs()
-{
-	PrefEntry *pe;
-
-	for (pe = toggle_prefs; pe->widget_name != NULL; pe++)
-	{
-		GtkWidget *widget = lookup_widget(ui_widgets.prefs_dialog, pe->widget_name);
-
-		*(gboolean*)pe->setting = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-	}
-}
-
-
 /*
  * callbacks
  */
@@ -641,7 +745,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		GtkWidget *widget;
 		guint i;
 
-		update_toggle_button_prefs();
+		prefs_action(PREF_UPDATE);
 
 		/* General settings */
 		/* startup */
@@ -820,9 +924,6 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		setptr(editor_prefs.comment_toggle_mark,
 			gtk_editable_get_chars(GTK_EDITABLE(widget), 0, -1));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_tab_width");
-		editor_prefs.tab_width = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
-
 		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_long_line");
 		editor_prefs.long_line_column = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
@@ -841,9 +942,6 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_line_end");
 		editor_prefs.show_line_endings = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = lookup_widget(ui_widgets.prefs_dialog, "combo_auto_indent_mode");
-		editor_prefs.indent_mode = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_line_wrapping");
 		editor_prefs.line_wrapping = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
@@ -865,25 +963,6 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_newline_strip");
 		editor_prefs.newline_strip = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = lookup_widget(ui_widgets.prefs_dialog, "radio_indent_tabs");
-		{
-			gboolean use_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-			/* override each document setting only if the default has changed */
-			if (editor_prefs.use_tabs != use_tabs)
-			{
-				editor_prefs.use_tabs = use_tabs;
-				for (i = 0; i < documents_array->len; i++)
-				{
-					if (documents[i]->is_valid)
-						editor_set_use_tabs(documents[i]->editor, editor_prefs.use_tabs);
-				}
-			}
-		}
-
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_detect_indent");
-		editor_prefs.detect_tab_mode = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_auto_multiline");
 		editor_prefs.auto_continue_multiline = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));

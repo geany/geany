@@ -626,3 +626,11 @@ on_menu_reload_configuration1_activate (GtkMenuItem     *menuitem,
 void
 on_find_document_usage1_activate       (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
+
+void
+on_tabs_and_spaces1_activate           (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_radio_indent_both_toggled           (GtkToggleButton *togglebutton,
+                                        gpointer         user_data);

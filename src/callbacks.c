@@ -1685,6 +1685,18 @@ on_menu_duplicate_line1_activate       (GtkMenuItem     *menuitem,
 }
 
 
+static void change_line_indent(GeanyEditor *editor, gboolean increase)
+{
+	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
+	ScintillaObject	*sci = editor->sci;
+	gint line = sci_get_current_line(sci);
+	gint width = sci_get_line_indentation(sci, line);
+
+	width += increase ? iprefs->width : -iprefs->width;
+	sci_set_line_indentation(sci, line, width);
+}
+
+
 void
 on_menu_increase_indent1_activate      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
@@ -1699,18 +1711,7 @@ on_menu_increase_indent1_activate      (GtkMenuItem     *menuitem,
 	}
 	else
 	{
-		gint line, ind_pos, old_pos, new_pos, step;
-
-		old_pos = sci_get_current_position(doc->editor->sci);
-		line = sci_get_line_from_position(doc->editor->sci, old_pos);
-		ind_pos = sci_get_line_indent_position(doc->editor->sci, line);
-		/* when using tabs increase cur pos by 1, when using space increase it by tab_width */
-		step = (doc->editor->use_tabs) ? 1 : editor_prefs.tab_width;
-		new_pos = (old_pos > ind_pos) ? old_pos + step : old_pos;
-
-		sci_set_current_position(doc->editor->sci, ind_pos, TRUE);
-		sci_cmd(doc->editor->sci, SCI_TAB);
-		sci_set_current_position(doc->editor->sci, new_pos, TRUE);
+		change_line_indent(doc->editor, TRUE);
 	}
 }
 
@@ -1729,25 +1730,7 @@ on_menu_decrease_indent1_activate      (GtkMenuItem     *menuitem,
 	}
 	else
 	{
-		gint line, ind_pos, old_pos, new_pos, step, indent;
-
-		old_pos = sci_get_current_position(doc->editor->sci);
-		line = sci_get_line_from_position(doc->editor->sci, old_pos);
-		ind_pos = sci_get_line_indent_position(doc->editor->sci, line);
-		step = (doc->editor->use_tabs) ? 1 : editor_prefs.tab_width;
-		new_pos = (old_pos >= ind_pos) ? old_pos - step : old_pos;
-
-		if (ind_pos == sci_get_position_from_line(doc->editor->sci, line))
-			return;
-
-		sci_set_current_position(doc->editor->sci, ind_pos, TRUE);
-		indent = sci_get_line_indentation(doc->editor->sci, line);
-		indent -= editor_prefs.tab_width;
-		if (indent < 0)
-			indent = 0;
-		sci_set_line_indentation(doc->editor->sci, line, indent);
-
-		sci_set_current_position(doc->editor->sci, new_pos, TRUE);
+		change_line_indent(doc->editor, FALSE);
 	}
 }
 
@@ -2063,17 +2046,23 @@ gboolean on_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer user
 }
 
 
-void
-on_tabs1_activate                      (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+static void set_indent_type(GeanyIndentType type)
 {
 	GeanyDocument *doc = document_get_current();
 
 	if (doc == NULL || ignore_callback)
 		return;
 
-	editor_set_use_tabs(doc->editor, TRUE);
+	editor_set_indent_type(doc->editor, type);
 	ui_update_statusbar(doc, -1);
+}
+
+
+void
+on_tabs1_activate                      (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	set_indent_type(GEANY_INDENT_TYPE_TABS);
 }
 
 
@@ -2081,13 +2070,15 @@ void
 on_spaces1_activate                    (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	GeanyDocument *doc = document_get_current();
+	set_indent_type(GEANY_INDENT_TYPE_SPACES);
+}
 
-	if (doc == NULL || ignore_callback)
-		return;
 
-	editor_set_use_tabs(doc->editor, FALSE);
-	ui_update_statusbar(doc, -1);
+void
+on_tabs_and_spaces1_activate           (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	set_indent_type(GEANY_INDENT_TYPE_BOTH);
 }
 
 
@@ -2207,5 +2198,17 @@ on_menu_reload_configuration1_activate (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	main_reload_configuration();
+}
+
+
+void
+on_radio_indent_both_toggled           (GtkToggleButton *togglebutton,
+                                        gpointer         user_data)
+{
+	GtkWidget *check = lookup_widget(ui_widgets.prefs_dialog, "check_detect_indent");
+	gboolean active;
+
+	active = gtk_toggle_button_get_active(togglebutton);
+	gtk_widget_set_sensitive(check, !active);
 }
 

@@ -45,20 +45,43 @@
 #define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
 
 
+/** Whether to use tabs, spaces or both to indent. */
 typedef enum
 {
-	INDENT_NONE = 0,
-	INDENT_BASIC,
-	INDENT_CURRENTCHARS,
-	INDENT_MATCHBRACES
-} IndentMode;
+	GEANY_INDENT_TYPE_SPACES,	/**< Spaces. */
+	GEANY_INDENT_TYPE_TABS,		/**< Tabs. */
+	GEANY_INDENT_TYPE_BOTH		/**< Both. */
+}
+GeanyIndentType;
 
-/* These are the default prefs when creating a new editor window.
- * Some of these can be overridden per document.
- * Remember to increment abi_version in plugindata.h when changing items. */
+typedef enum
+{
+	GEANY_AUTOINDENT_NONE = 0,
+	GEANY_AUTOINDENT_BASIC,
+	GEANY_AUTOINDENT_CURRENTCHARS,
+	GEANY_AUTOINDENT_MATCHBRACES
+}
+GeanyAutoIndent;
+
+
+/** Indentation prefs that might be different according to project or filetype.
+ * Use @c editor_get_indent_prefs() to lookup the prefs for a particular document. */
+typedef struct GeanyIndentPrefs
+{
+	gint			width;				/**< Indent width. */
+	GeanyIndentType	type;				/**< Whether to use tabs, spaces or both to indent. */
+	gint			tab_width;			/**< Width of a tab, when using GEANY_INDENT_TYPE_BOTH. */
+	GeanyAutoIndent	auto_indent_mode;
+	gboolean		detect_type;
+}
+GeanyIndentPrefs;
+
+
+/* Default prefs when creating a new editor window.
+ * Some of these can be overridden per document. */
 typedef struct GeanyEditorPrefs
 {
-	/* display */
+	GeanyIndentPrefs *indentation;	/*< Default indentation prefs. @see editor_get_indent_prefs(). */
 	gboolean	show_white_space;
 	gboolean	show_indent_guide;
 	gboolean	show_line_endings;
@@ -69,17 +92,12 @@ typedef struct GeanyEditorPrefs
 	gboolean	show_linenumber_margin;		/* view menu */
 	gboolean	show_scrollbars;			/* hidden pref */
 	gboolean	scroll_stop_at_last_line;	/* hidden pref */
-
-	/* behaviour */
 	gboolean	line_wrapping;
 	gboolean	use_indicators;
 	gboolean	folding;
 	gboolean	unfold_all_children;
-	gint		tab_width;
-	gboolean	use_tabs;
-	gboolean	use_tab_to_indent;	/* hidden pref */
-	IndentMode	indent_mode;
 	gboolean	disable_dnd;
+	gboolean	use_tab_to_indent;	/* hidden pref makes pressing Tab key like Ctrl-I */
 	gboolean	smart_home_key;
 	gboolean	newline_strip;
 	gboolean	auto_complete_symbols;
@@ -91,7 +109,6 @@ typedef struct GeanyEditorPrefs
 	gboolean	brace_match_ltgt;	/* whether to highlight < and > chars (hidden pref) */
 	gboolean	use_gtk_word_boundaries;	/* hidden pref */
 	gboolean	complete_snippets_whilst_editing;	/* hidden pref */
-	gboolean	detect_tab_mode;
 	gint		line_break_column;
 	gboolean	auto_continue_multiline;
 	gchar		*comment_toggle_mark;
@@ -109,7 +126,7 @@ typedef struct GeanyEditor
 	gboolean		 auto_indent;	/**< @c TRUE if auto-indentation is enabled. */
 	/** Percentage to scroll view by on paint, if positive. */
 	gfloat			 scroll_percent;
-	gboolean		 use_tabs;		/**< @c TRUE if tabs are used for indentation. */
+	GeanyIndentType	 indent_type;	/* Use editor_get_indent_prefs() instead. */
 	gboolean		 line_breaking;	/**< Whether to split long lines as you type. */
 }
 GeanyEditor;
@@ -126,13 +143,13 @@ extern EditorInfo editor_info;
 
 
 
+void editor_init(void);
+
 GeanyEditor *editor_create(GeanyDocument *doc);
 
 void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer user_data);
 
 gboolean editor_start_auto_complete(GeanyDocument *doc, gint pos, gboolean force);
-
-void editor_close_block(GeanyDocument *doc, gint pos);
 
 gboolean editor_complete_snippet(GeanyDocument *doc, gint pos);
 
@@ -217,7 +234,9 @@ void editor_ensure_final_newline(GeanyDocument *doc);
 
 void editor_insert_color(GeanyDocument *doc, const gchar *colour);
 
-void editor_set_use_tabs(GeanyEditor *editor, gboolean use_tabs);
+const GeanyIndentPrefs *editor_get_indent_prefs(GeanyEditor *editor);
+
+void editor_set_indent_type(GeanyEditor *editor, GeanyIndentType type);
 
 void editor_set_line_wrapping(GeanyEditor *editor, gboolean wrap);
 

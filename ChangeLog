@@ -1,3 +1,47 @@
+2008-08-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, src/prefs.c, src/plugindata.h, src/callbacks.c,
+   src/callbacks.h, src/keyfile.c, src/document.c, src/plugins.c,
+   src/main.c, src/editor.c, src/editor.h, src/ui_utils.c, geany.glade,
+   plugins/export.c, TODO:
+   Merge changes from the custom-tab-width branch (closes #1662173).
+   Thanks to Joerg Desch for explaining how it needs to work.
+   Note: this breaks the plugin API for indentation editor_prefs.
+   Add separate Width indent pref (as well as the Tab Width pref).
+   Add 'Tabs & Spaces' Indent Type radio option pref.
+   Add 'Tabs and Spaces' Document menu indent option.
+   Note: Tabs & Spaces cannot be detected (yet) when opening files;
+   default file templates still only use tabs.
+   Set 'Detect from file' indent type setting insensitive when Tabs &
+   Spaces is set.
+   Don't change per-document auto-indent setting after changing default
+   auto-indentation type.
+ - API changes:
+   Add GeanyIndentPrefs struct from some GeanyEditorPrefs fields.
+   Replace GeanyIndentPrefs::use_tabs with GeanyIndentType field 'type'.
+   Add editor_get_indent_prefs() to the API, which should be used to
+   get the right settings for a document/editor instead of reading
+   any struct fields. This could also support project/filetype
+   indentation prefs quite easily.
+ - Core code changes:
+   Move toggle_prefs to a function toggle_items_foreach(), which takes
+   a PREF_DISPLAY or PREF_UPDATE argument. This means the PrefEntry
+   array can contain runtime fields, so can read pointer contents.
+   Add pref_item_callbacks array of functions to call;
+   toggle_items_foreach(), spin_items_foreach(), radio_items_foreach(),
+   combo_items_foreach().
+   Update keyfile.c to use foreach-style functions for SettingEntry
+   arrays, like the new PrefEntry code in prefs.c.
+   Add get_indent_size_after_line() to replace get_indent() for
+   clarity, and to fix Tabs & Spaces auto-indentation > basic.
+   Remove opening-brace indent code from get_indent() as it's now in
+   get_brace_indent().
+   Change editor_close_block() to use sci_get_line_indentation() for
+   clarity.
+   Make editor_close_block() static.
+   Add editor_init().
+
+
 2008-08-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/vte.c:

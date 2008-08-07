@@ -18,9 +18,6 @@ Note: features included in brackets have lower priority.
 	o recent projects menu
 	o project indentation settings support
 	o improve Compile toolbar button for Make (drop down radio list?)
-	o (for spaces indentation, distinguish between tab width vs. indent
-	  width, e.g. GTK code uses indent width of 2 spaces, and any tabs are
-	  worth 8 spaces.)
 	o (selectable menu of arguments to use for Make, from Make Custom)
 	o (DBUS)
 	o (indent wrapped lines  - Scintilla issue)
