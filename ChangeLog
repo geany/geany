@@ -3,6 +3,9 @@
  * src/interface.c, src/callbacks.c, src/callbacks.h, geany.glade:
    Set 'Detect from file' indent type setting insensitive when Tabs &
    Spaces is set.
+ * src/editor.c:
+   Remove opening-brace indent code from get_indent() as it's now in
+   get_brace_indent().
 
 
 2008-08-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
