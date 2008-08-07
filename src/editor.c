@@ -753,7 +753,7 @@ get_whitespace(const GeanyIndentPrefs *iprefs, gint width)
 static const GeanyIndentPrefs *
 get_default_indent_prefs(void)
 {
-	/* In future this might depend on project or filetype. */
+	/* In future this might depend on the current project. */
 	return editor_prefs.indentation;
 }
 
@@ -761,15 +761,18 @@ get_default_indent_prefs(void)
 /** Get the indentation prefs for the editor.
  * In future, the prefs might be different according to project or filetype.
  * @warning Always get a fresh result instead of keeping a pointer to it if the editor
- * settings may have changed, or if this function has been called for a different @a editor. */
+ * settings may have changed, or if this function has been called for a different @a editor.
+ * @param editor The editor, or @c NULL to get the default indent prefs.
+ * @return The indent prefs. */
 const GeanyIndentPrefs *
 editor_get_indent_prefs(GeanyEditor *editor)
 {
 	static GeanyIndentPrefs iprefs;
 
-	g_return_val_if_fail(editor != NULL, NULL);
-
 	iprefs = *get_default_indent_prefs();
+
+	if (!editor)
+		return &iprefs;
 
 	iprefs.type = editor->indent_type;
 	if (!editor->auto_indent)

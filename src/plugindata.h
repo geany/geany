@@ -444,6 +444,8 @@ typedef struct EditorFuncs
 	void	(*set_indicator) (struct GeanyEditor *editor, gint start, gint end);
 	void	(*set_indicator_on_line) (struct GeanyEditor *editor, gint line);
 	void	(*clear_indicators) (struct GeanyEditor *editor);
+
+	const struct GeanyIndentPrefs* (*get_indent_prefs)(struct GeanyEditor *editor);
 	/* Remember to convert any GeanyDocument or ScintillaObject pointers in any
 	 * appended functions to GeanyEditor pointers. */
 }

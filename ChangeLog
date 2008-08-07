@@ -6,6 +6,10 @@
  * src/editor.c:
    Remove opening-brace indent code from get_indent() as it's now in
    get_brace_indent().
+ * src/plugindata.h, src/plugins.c, src/editor.c:
+   Add editor_get_indent_prefs() to the API.
+   Make editor_get_indent_prefs() return default prefs if editor is
+   NULL.
 
 
 2008-08-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
