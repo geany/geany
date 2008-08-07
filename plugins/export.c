@@ -347,6 +347,7 @@ static void on_file_save_dialog_response(GtkDialog *dialog, gint response, gpoin
 
 static void write_latex_file(GeanyDocument *doc, const gchar *filename, gboolean use_zoom)
 {
+	GeanyEditor *editor = doc->editor;
 	gint i, style = -1, old_style = 0, column = 0;
 	gchar c, c_next, *tmp;
 	/* 0 - fore, 1 - back, 2 - bold, 3 - italic, 4 - font size, 5 - used(0/1) */
@@ -408,8 +409,8 @@ static void write_latex_file(GeanyDocument *doc, const gchar *filename, gboolean
 			}
 			case '\t':
 			{
-				gint tab_stop = geany->editor_prefs->tab_width -
-					(column % geany->editor_prefs->tab_width);
+				gint tab_width = p_editor->get_indent_prefs(editor)->tab_width;
+				gint tab_stop = tab_width - (column % tab_width);
 
 				column += tab_stop - 1; /* -1 because we add 1 at the end of the loop */
 				g_string_append_printf(body, "\\hspace*{%dem}", tab_stop);
@@ -551,6 +552,7 @@ static void write_latex_file(GeanyDocument *doc, const gchar *filename, gboolean
 
 static void write_html_file(GeanyDocument *doc, const gchar *filename, gboolean use_zoom)
 {
+	GeanyEditor *editor = doc->editor;
 	gint i, style = -1, old_style = 0, column = 0;
 	gchar c, c_next;
 	/* 0 - fore, 1 - back, 2 - bold, 3 - italic, 4 - font size, 5 - used(0/1) */
@@ -625,8 +627,8 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename, gboolean 
 			case '\t':
 			{
 				gint j;
-				gint tab_stop = geany->editor_prefs->tab_width -
-					(column % geany->editor_prefs->tab_width);
+				gint tab_width = p_editor->get_indent_prefs(editor)->tab_width;
+				gint tab_stop = tab_width - (column % tab_width);
 
 				column += tab_stop - 1; /* -1 because we add 1 at the end of the loop */
 				for (j = 0; j < tab_stop; j++)

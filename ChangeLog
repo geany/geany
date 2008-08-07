@@ -10,6 +10,8 @@
    Add editor_get_indent_prefs() to the API.
    Make editor_get_indent_prefs() return default prefs if editor is
    NULL.
+ * plugins/export.c:
+   Fix using editor_get_indent_prefs().
 
 
 2008-08-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
