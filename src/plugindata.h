@@ -36,7 +36,7 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 85;
+static const gint api_version = 86;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
@@ -92,7 +92,7 @@ PluginInfo;
 
 
 /** Declare and initialise a keybinding group.
- * @code KeyBindingGroup plugin_key_group[1]; @endcode
+ * @code GeanyKeyGroup plugin_key_group[1]; @endcode
  * You must then set the @c plugin_key_group::keys[] entries for the group in plugin_init().
  * The @c plugin_key_group::label field is set by Geany after @c plugin_init()
  * is called, to the name of the plugin.
@@ -100,11 +100,11 @@ PluginInfo;
  * configuration file, such as @c html_chars.
  * @param key_count	The number of keybindings the group will hold. */
 #define PLUGIN_KEY_GROUP(group_name, key_count) \
-	static KeyBinding plugin_keys[key_count]; \
+	static GeanyKeyBinding plugin_keys[key_count]; \
 	\
 	/* We have to declare plugin_key_group as a single element array.
 	 * Declaring as a pointer to a struct doesn't work with g_module_symbol(). */ \
-	KeyBindingGroup plugin_key_group[1] = \
+	GeanyKeyGroup plugin_key_group[1] = \
 	{ \
 		{G_STRINGIFY(group_name), NULL, key_count, plugin_keys} \
 	};
@@ -375,14 +375,14 @@ typedef struct EncodingFuncs
 EncodingFuncs;
 
 
-struct KeyBindingGroup;
+struct GeanyKeyGroup;
 typedef void (*_KeyCallback) (guint key_id);
 
 /* See keybindings.h */
 typedef struct KeybindingFuncs
 {
 	void		(*send_command) (guint group_id, guint key_id);
-	void		(*set_item) (struct KeyBindingGroup *group, gsize key_id,
+	void		(*set_item) (struct GeanyKeyGroup *group, gsize key_id,
 					_KeyCallback callback, guint key, GdkModifierType mod,
 					gchar *name, gchar *label, GtkWidget *menu_item);
 }

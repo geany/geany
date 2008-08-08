@@ -46,7 +46,7 @@
 #include "vte.h"
 
 
-GPtrArray *keybinding_groups;	/* array of KeyBindingGroup pointers */
+GPtrArray *keybinding_groups;	/* array of GeanyKeyGroup pointers */
 
 /* keyfile group name for non-plugin KB groups */
 const gchar keybindings_keyfile_group_name[] = "Bindings";
@@ -91,18 +91,18 @@ static void cb_func_move_tab(guint key_id);
 static void cb_func_toggle_sidebar(guint key_id);
 
 static void add_popup_menu_accels(void);
-static void apply_kb_accel(KeyBindingGroup *group, KeyBinding *kb, gpointer user_data);
+static void apply_kb_accel(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_data);
 
 
 /* This is used to set default keybindings on startup but at this point we don't want to
  * assign the keybinding to the menu_item (apply_kb_accel) otherwise it can't be overridden
  * by user keybindings anymore */
-/** Simple convenience function to fill a KeyBinding struct item. */
-void keybindings_set_item(KeyBindingGroup *group, gsize key_id,
-		KeyCallback callback, guint key, GdkModifierType mod,
+/** Simple convenience function to fill a GeanyKeyBinding struct item. */
+void keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
+		GeanyKeyCallback callback, guint key, GdkModifierType mod,
 		gchar *name, gchar *label, GtkWidget *menu_item)
 {
-	KeyBinding *kb;
+	GeanyKeyBinding *kb;
 
 	g_assert(key_id < group->count);
 
@@ -117,8 +117,8 @@ void keybindings_set_item(KeyBindingGroup *group, gsize key_id,
 }
 
 
-static KeyBindingGroup *add_kb_group(KeyBindingGroup *group,
-		const gchar *name, const gchar *label, gsize count, KeyBinding *keys)
+static GeanyKeyGroup *add_kb_group(GeanyKeyGroup *group,
+		const gchar *name, const gchar *label, gsize count, GeanyKeyBinding *keys)
 {
 	g_ptr_array_add(keybinding_groups, group);
 
@@ -135,9 +135,9 @@ static KeyBindingGroup *add_kb_group(KeyBindingGroup *group,
 	lookup_widget(main_widgets.window, G_STRINGIFY(widget_name))
 
 /* Expansion for group_id = FILE:
- * static KeyBinding FILE_keys[GEANY_KEYS_FILE_COUNT]; */
+ * static GeanyKeyBinding FILE_keys[GEANY_KEYS_FILE_COUNT]; */
 #define DECLARE_KEYS(group_id) \
-	static KeyBinding group_id ## _keys[GEANY_KEYS_ ## group_id ## _COUNT]
+	static GeanyKeyBinding group_id ## _keys[GEANY_KEYS_ ## group_id ## _COUNT]
 
 /* Expansion for group_id = FILE:
  * add_kb_group(&groups[GEANY_KEY_GROUP_FILE], NULL, _("File menu"),
@@ -151,8 +151,8 @@ static KeyBindingGroup *add_kb_group(KeyBindingGroup *group,
  * set in add_popup_menu_accels(). */
 static void init_default_kb(void)
 {
-	static KeyBindingGroup groups[GEANY_KEY_GROUP_COUNT];
-	KeyBindingGroup *group;
+	static GeanyKeyGroup groups[GEANY_KEY_GROUP_COUNT];
+	GeanyKeyGroup *group;
 	DECLARE_KEYS(FILE);
 	DECLARE_KEYS(PROJECT);
 	DECLARE_KEYS(EDITOR);
@@ -475,7 +475,7 @@ void keybindings_init(void)
 }
 
 
-static void apply_kb_accel(KeyBindingGroup *group, KeyBinding *kb, gpointer user_data)
+static void apply_kb_accel(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_data)
 {
 	if (kb->key != 0 && kb->menu_item)
 	{
@@ -485,7 +485,7 @@ static void apply_kb_accel(KeyBindingGroup *group, KeyBinding *kb, gpointer user
 }
 
 
-typedef void (*KBItemCallback) (KeyBindingGroup *group, KeyBinding *kb, gpointer user_data);
+typedef void (*KBItemCallback) (GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_data);
 
 static void keybindings_foreach(KBItemCallback cb, gpointer user_data)
 {
@@ -493,11 +493,11 @@ static void keybindings_foreach(KBItemCallback cb, gpointer user_data)
 
 	for (g = 0; g < keybinding_groups->len; g++)
 	{
-		KeyBindingGroup *group = g_ptr_array_index(keybinding_groups, g);
+		GeanyKeyGroup *group = g_ptr_array_index(keybinding_groups, g);
 
 		for (i = 0; i < group->count; i++)
 		{
-			KeyBinding *kb = &group->keys[i];
+			GeanyKeyBinding *kb = &group->keys[i];
 
 			cb(group, kb, user_data);
 		}
@@ -505,7 +505,7 @@ static void keybindings_foreach(KBItemCallback cb, gpointer user_data)
 }
 
 
-static void load_kb(KeyBindingGroup *group, KeyBinding *kb, gpointer user_data)
+static void load_kb(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_data)
 {
 	GKeyFile *config = user_data;
 	gchar *val;
@@ -550,10 +550,10 @@ void keybindings_load_keyfile(void)
 }
 
 
-static void add_menu_accel(KeyBindingGroup *group, guint kb_id,
+static void add_menu_accel(GeanyKeyGroup *group, guint kb_id,
 	GtkAccelGroup *accel_group, GtkWidget *menuitem)
 {
-	KeyBinding *kb = &group->keys[kb_id];
+	GeanyKeyBinding *kb = &group->keys[kb_id];
 
 	if (kb->key != 0)
 		gtk_widget_add_accelerator(menuitem, "activate", accel_group,
@@ -568,7 +568,7 @@ static void add_menu_accel(KeyBindingGroup *group, guint kb_id,
 static void add_popup_menu_accels(void)
 {
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
-	KeyBindingGroup *group;
+	GeanyKeyGroup *group;
 
 	group = g_ptr_array_index(keybinding_groups, GEANY_KEY_GROUP_EDITOR);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDITOR_UNDO, undo1);
@@ -608,7 +608,7 @@ static void add_popup_menu_accels(void)
 }
 
 
-static void set_keyfile_kb(KeyBindingGroup *group, KeyBinding *kb, gpointer user_data)
+static void set_keyfile_kb(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_data)
 {
 	GKeyFile *config = user_data;
 	gchar *val;
@@ -661,7 +661,7 @@ static void get_shortcut_labels_text(GString **text_names_str, GString **text_ke
 
 	for (g = 0; g < keybinding_groups->len; g++)
 	{
-		KeyBindingGroup *group = g_ptr_array_index(keybinding_groups, g);
+		GeanyKeyGroup *group = g_ptr_array_index(keybinding_groups, g);
 
 		if (g == 0)
 		{
@@ -676,7 +676,7 @@ static void get_shortcut_labels_text(GString **text_names_str, GString **text_ke
 
 		for (i = 0; i < group->count; i++)
 		{
-			KeyBinding *kb = &group->keys[i];
+			GeanyKeyBinding *kb = &group->keys[i];
 			gchar *shortcut;
 
 			shortcut = gtk_accelerator_get_label(kb->key, kb->mods);
@@ -816,7 +816,7 @@ static gboolean check_fixed_kb(guint keyval, guint state)
  * return FALSE if no completion occurs, so the tab or space is handled normally. */
 static gboolean check_snippet_completion(guint keyval, guint state)
 {
-	KeyBinding *kb = keybindings_lookup_item(GEANY_KEY_GROUP_EDITOR,
+	GeanyKeyBinding *kb = keybindings_lookup_item(GEANY_KEY_GROUP_EDITOR,
 		GEANY_KEYS_EDITOR_COMPLETESNIPPET);
 
 	if (kb->key == keyval && kb->mods == state)
@@ -873,7 +873,7 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 	/* make focus commands override any bash commands */
 	for (i = 0; i < GEANY_KEYS_FOCUS_COUNT; i++)
 	{
-		KeyBinding *kb = keybindings_lookup_item(GEANY_KEY_GROUP_FOCUS, i);
+		GeanyKeyBinding *kb = keybindings_lookup_item(GEANY_KEY_GROUP_FOCUS, i);
 
 		if (state == kb->mods && keyval == kb->key)
 			return FALSE;
@@ -942,11 +942,11 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *ev, gpointer user
 	ignore_keybinding = FALSE;
 	for (g = 0; g < keybinding_groups->len; g++)
 	{
-		KeyBindingGroup *group = g_ptr_array_index(keybinding_groups, g);
+		GeanyKeyGroup *group = g_ptr_array_index(keybinding_groups, g);
 
 		for (i = 0; i < group->count; i++)
 		{
-			KeyBinding *kb = &group->keys[i];
+			GeanyKeyBinding *kb = &group->keys[i];
 
 			if (keyval == kb->key && state == kb->mods)
 			{
@@ -966,9 +966,9 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *ev, gpointer user
 }
 
 
-KeyBinding *keybindings_lookup_item(guint group_id, guint key_id)
+GeanyKeyBinding *keybindings_lookup_item(guint group_id, guint key_id)
 {
-	KeyBindingGroup *group;
+	GeanyKeyGroup *group;
 
 	g_return_val_if_fail(group_id < keybinding_groups->len, NULL);
 
@@ -987,7 +987,7 @@ KeyBinding *keybindings_lookup_item(guint group_id, guint key_id)
  * 	@param key_id The keybinding command index. */
 void keybindings_send_command(guint group_id, guint key_id)
 {
-	KeyBinding *kb;
+	GeanyKeyBinding *kb;
 
 	g_return_if_fail(group_id < GEANY_KEY_GROUP_COUNT);	/* can't use this for plugin groups */
 
@@ -1537,7 +1537,7 @@ static void cb_func_editor_action(guint key_id)
 			break;
 		case GEANY_KEYS_EDITOR_SUPPRESSSNIPPETCOMPLETION:
 		{
-			KeyBinding *kb = keybindings_lookup_item(GEANY_KEY_GROUP_EDITOR,
+			GeanyKeyBinding *kb = keybindings_lookup_item(GEANY_KEY_GROUP_EDITOR,
 				GEANY_KEYS_EDITOR_COMPLETESNIPPET);
 
 			switch (kb->key)

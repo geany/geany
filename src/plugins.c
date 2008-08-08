@@ -73,7 +73,7 @@ typedef struct Plugin
 	PluginFields	fields;
 	gulong		*signal_ids;			/* signal IDs to disconnect when unloading */
 	gsize		signal_ids_len;
-	KeyBindingGroup	*key_group;
+	GeanyKeyGroup	*key_group;
 
 	void		(*init) (GeanyData *data);			/* Called when the plugin is enabled */
 	GtkWidget*	(*configure) (GtkDialog *dialog);	/* plugin configure dialog, optional */
@@ -425,7 +425,7 @@ add_kb_group(Plugin *plugin)
 
 	for (i = 0; i < plugin->key_group->count; i++)
 	{
-		KeyBinding *kb = &plugin->key_group->keys[i];
+		GeanyKeyBinding *kb = &plugin->key_group->keys[i];
 
 		if (!NZV(kb->name))
 		{

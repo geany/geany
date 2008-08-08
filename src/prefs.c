@@ -78,7 +78,7 @@ static gboolean on_tree_view_button_press_event(
 static void on_cell_edited(GtkCellRendererText *cellrenderertext, gchar *path, gchar *new_text, gpointer user_data);
 static gboolean on_keytype_dialog_response(GtkWidget *dialog, GdkEventKey *event, gpointer user_data);
 static void on_dialog_response(GtkWidget *dialog, gint response, gpointer user_data);
-static gboolean find_duplicate(KeyBinding *search_kb,
+static gboolean find_duplicate(GeanyKeyBinding *search_kb,
 		guint key, GdkModifierType mods, const gchar *action);
 static void on_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gpointer user_data);
@@ -303,7 +303,7 @@ static void init_keybindings(void)
 
 	for (g = 0; g < keybinding_groups->len; g++)
 	{
-		KeyBindingGroup *group = g_ptr_array_index(keybinding_groups, g);
+		GeanyKeyGroup *group = g_ptr_array_index(keybinding_groups, g);
 
 		gtk_tree_store_append(store, &parent, NULL);
 		gtk_tree_store_set(store, &parent, KB_TREE_ACTION, group->label,
@@ -311,7 +311,7 @@ static void init_keybindings(void)
 
 		for (i = 0; i < group->count; i++)
 		{
-			KeyBinding *kb = &group->keys[i];
+			GeanyKeyBinding *kb = &group->keys[i];
 			gchar *key_string;
 
 			key_string = gtk_accelerator_name(kb->key, kb->mods);
@@ -1295,7 +1295,7 @@ static gboolean on_tree_view_button_press_event(
 }
 
 
-static KeyBinding *lookup_kb_from_iter(G_GNUC_UNUSED GtkTreeModel *model, GtkTreeIter *iter)
+static GeanyKeyBinding *lookup_kb_from_iter(G_GNUC_UNUSED GtkTreeModel *model, GtkTreeIter *iter)
 {
 	guint group_idx, keybinding_idx;
 	GtkTreeIter parent;
@@ -1318,7 +1318,7 @@ static void on_cell_edited(GtkCellRendererText *cellrenderertext, gchar *path, g
 		GtkTreeIter iter;
 		guint lkey;
 		GdkModifierType lmods;
-		KeyBinding *kb;
+		GeanyKeyBinding *kb;
 
 		gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(store), &iter, path);
 		if (gtk_tree_model_iter_has_child(GTK_TREE_MODEL(store), &iter))
@@ -1368,7 +1368,7 @@ static void on_dialog_response(GtkWidget *dialog, gint response, G_GNUC_UNUSED g
 	{
 		guint lkey;
 		GdkModifierType lmods;
-		KeyBinding *kb;
+		GeanyKeyBinding *kb;
 
 		kb = lookup_kb_from_iter(GTK_TREE_MODEL(store), &g_iter);
 
@@ -1435,7 +1435,7 @@ static void clear_tree_shortcut(gsize group_id, gsize keybinding_id)
 
 
 /* test if the entered key combination is already used */
-static gboolean find_duplicate(KeyBinding *search_kb,
+static gboolean find_duplicate(GeanyKeyBinding *search_kb,
 		guint key, GdkModifierType mods, const gchar *action)
 {
 	gsize g, i;
@@ -1445,12 +1445,12 @@ static gboolean find_duplicate(KeyBinding *search_kb,
 
 	for (g = 0; g < keybinding_groups->len; g++)
 	{
-		KeyBindingGroup *group = g_ptr_array_index(keybinding_groups, g);
+		GeanyKeyGroup *group = g_ptr_array_index(keybinding_groups, g);
 
 		for (i = 0; i < group->count; i++)
 		{
-			KeyBinding *keys = group->keys;
-			KeyBinding *kb = &keys[i];
+			GeanyKeyBinding *keys = group->keys;
+			GeanyKeyBinding *kb = &keys[i];
 
 			/* search another item with the same key,
 			 * but don't search the key we're looking for keys[idx] */

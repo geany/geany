@@ -447,7 +447,7 @@ static void cc_insert_custom_command_items(GtkMenu *me, GtkMenu *mp, gchar *labe
 {
 	GtkWidget *item;
 	gint key_idx = -1;
-	KeyBinding *kb = NULL;
+	GeanyKeyBinding *kb = NULL;
 
 	switch (idx)
 	{

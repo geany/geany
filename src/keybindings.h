@@ -40,33 +40,33 @@
 
 
 /** Function pointer type used for keybinding callbacks */
-typedef void (*KeyCallback) (guint key_id);
+typedef void (*GeanyKeyCallback) (guint key_id);
 
 /** Represents a single keybinding action */
 /* Note: name and label are not const strings so plugins can set them to malloc'd strings
  * and free them in cleanup(). */
-typedef struct KeyBinding
+typedef struct GeanyKeyBinding
 {
 	guint key;				/**< Key value in lower-case, such as @c GDK_a */
 	GdkModifierType mods;	/**< Modifier keys, such as @c GDK_CONTROL_MASK */
 	gchar *name;			/**< Key name for the configuration file, such as @c "menu_new" */
 	gchar *label;			/**< Label used in the preferences dialog keybindings tab */
-	KeyCallback callback;	/**< Callback function called when the key combination is pressed */
+	GeanyKeyCallback callback;	/**< Callback function called when the key combination is pressed */
 	GtkWidget *menu_item;	/**< Menu item widget for setting the menu accelerator */
-} KeyBinding;
+} GeanyKeyBinding;
 
 
 /** A collection of keybindings grouped together. */
-typedef struct KeyBindingGroup
+typedef struct GeanyKeyGroup
 {
 	const gchar *name;		/**< Group name used in the configuration file, such as @c "html_chars" */
 	const gchar *label;		/**< Group label used in the preferences dialog keybindings tab */
-	gsize count;			/**< Count of KeyBinding structs in @a keys */
-	KeyBinding *keys;		/**< Fixed array of KeyBinding structs */
+	gsize count;			/**< Count of GeanyKeyBinding structs in @a keys */
+	GeanyKeyBinding *keys;	/**< Fixed array of GeanyKeyBinding structs */
 }
-KeyBindingGroup;
+GeanyKeyGroup;
 
-extern GPtrArray *keybinding_groups;	/* array of KeyBindingGroup pointers */
+extern GPtrArray *keybinding_groups;	/* array of GeanyKeyGroup pointers */
 
 extern const gchar keybindings_keyfile_group_name[];
 
@@ -319,13 +319,13 @@ void keybindings_load_keyfile(void);
 
 void keybindings_free(void);
 
-void keybindings_set_item(KeyBindingGroup *group, gsize key_id,
-		KeyCallback callback, guint key, GdkModifierType mod,
+void keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
+		GeanyKeyCallback callback, guint key, GdkModifierType mod,
 		gchar *name, gchar *label, GtkWidget *menu_item);
 
 void keybindings_send_command(guint group_id, guint key_id);
 
-KeyBinding *keybindings_lookup_item(guint group_id, guint key_id);
+GeanyKeyBinding *keybindings_lookup_item(guint group_id, guint key_id);
 
 /* just write the content of the keys array to the config file */
 void keybindings_write_to_file(void);

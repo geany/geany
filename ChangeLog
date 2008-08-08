@@ -10,6 +10,11 @@
  * src/keybindings.c:
    Don't set plugin keybinding accels for menu items in
    keybindings_set_item(), so user keycombos can override them.
+ * src/build.c, src/keybindings.c, src/keybindings.h, src/tools.c,
+   src/prefs.c, src/plugindata.h, src/plugins.c:
+   Rename KeyCallback GeanyKeyCallback.
+   Rename KeyBinding GeanyKeyBinding.
+   Rename KeyBindingGroup GeanyKeyGroup.
 
 
 2008-08-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
