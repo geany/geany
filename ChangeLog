@@ -1,3 +1,9 @@
+2008-08-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/printing.c:
+   Fix compilation with GTK >= 2.10.
+
+
 2008-08-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/interface.c, src/prefs.c, src/plugindata.h, src/callbacks.c,

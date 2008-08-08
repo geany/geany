@@ -563,7 +563,8 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 				/* convert tabs to spaces which seems to be better than using Pango tabs */
 				if (c == '\t')
 				{
-					gchar *s = g_strnfill(editor_prefs.tab_width, ' ');
+					const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(dinfo->doc->editor);
+					gchar *s = g_strnfill(iprefs->width, ' ');
 					g_string_append(str, s);
 					g_free(s);
 				}
