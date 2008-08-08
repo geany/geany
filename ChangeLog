@@ -7,6 +7,9 @@
    src/editor.h, plugins/export.c:
    Add sci_get_tab_width() to the API, and use it to get the correct
    display tab width in the Export plugin.
+ * src/keybindings.c:
+   Don't set plugin keybinding accels for menu items in
+   keybindings_set_item(), so user keycombos can override them.
 
 
 2008-08-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
