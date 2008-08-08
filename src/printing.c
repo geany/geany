@@ -470,6 +470,7 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 					  gint page_nr, gpointer user_data)
 {
 	DocInfo *dinfo = user_data;
+	GeanyEditor *editor;
 	cairo_t *cr;
 	gdouble width, height;
 	gdouble x, y;
@@ -479,6 +480,8 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 
 	if (dinfo == NULL || page_nr >= dinfo->n_pages)
 		return;
+
+	editor = dinfo->doc->editor;
 
 #ifdef GEANY_PRINT_DEBUG
 	geany_debug("draw_page = %d, pages = %d, (real) lines_per_page = %d",
@@ -563,8 +566,8 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 				/* convert tabs to spaces which seems to be better than using Pango tabs */
 				if (c == '\t')
 				{
-					const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(dinfo->doc->editor);
-					gchar *s = g_strnfill(iprefs->width, ' ');
+					gint tab_width = sci_get_tab_width(editor->sci);
+					gchar *s = g_strnfill(tab_width, ' ');
 					g_string_append(str, s);
 					g_free(s);
 				}

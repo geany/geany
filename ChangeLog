@@ -1,3 +1,10 @@
+2008-08-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/printing.c:
+   Fix using correct display tab width when the Tabs & Spaces indent
+   type is set.
+
+
 2008-08-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/printing.c:
