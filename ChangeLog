@@ -3,6 +3,10 @@
  * src/printing.c:
    Fix using correct display tab width when the Tabs & Spaces indent
    type is set.
+ * src/sciwrappers.c, src/plugindata.h, src/plugins.c, src/editor.c,
+   src/editor.h, plugins/export.c:
+   Add sci_get_tab_width() to the API, and use it to get the correct
+   display tab width in the Export plugin.
 
 
 2008-08-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

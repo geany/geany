@@ -707,6 +707,8 @@ void on_editor_notification(GtkWidget *widget, gint scn, gpointer lscn, gpointer
 }
 
 
+/* Note: this is the same as sci_get_tab_width(), but is still useful when you don't have
+ * a scintilla pointer. */
 static gint get_tab_width(const GeanyIndentPrefs *indent_prefs)
 {
 	if (indent_prefs->type == GEANY_INDENT_TYPE_BOTH)

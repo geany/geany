@@ -36,7 +36,7 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 84;
+static const gint api_version = 85;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
@@ -267,6 +267,7 @@ typedef struct ScintillaFuncs
 	gchar	(*get_char_at) (struct _ScintillaObject *sci, gint pos);
 	gint	(*get_current_line) (struct _ScintillaObject *sci);
 	gboolean (*can_copy) (struct _ScintillaObject *sci);
+	gint	(*get_tab_width) (struct _ScintillaObject *sci);
 }
 ScintillaFuncs;
 

@@ -70,7 +70,9 @@ typedef struct GeanyIndentPrefs
 {
 	gint			width;				/**< Indent width. */
 	GeanyIndentType	type;				/**< Whether to use tabs, spaces or both to indent. */
-	gint			tab_width;			/**< Width of a tab, when using GEANY_INDENT_TYPE_BOTH. */
+	/** Width of a tab, but only when using GEANY_INDENT_TYPE_BOTH.
+	 * To get the display tab width, use sci_get_tab_width(). */
+	gint			tab_width;
 	GeanyAutoIndent	auto_indent_mode;
 	gboolean		detect_type;
 }

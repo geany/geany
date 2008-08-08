@@ -152,7 +152,8 @@ static ScintillaFuncs sci_funcs = {
 	&sci_get_style_at,
 	&sci_get_char_at,
 	&sci_get_current_line,
-	&sci_can_copy
+	&sci_can_copy,
+	&sci_get_tab_width
 };
 
 static TemplateFuncs template_funcs = {

@@ -637,6 +637,7 @@ void sci_set_tab_width(ScintillaObject * sci, gint width)
 }
 
 
+/** Get display tab width. */
 gint sci_get_tab_width(ScintillaObject * sci)
 {
 	return SSM(sci, SCI_GETTABWIDTH, 0, 0);
