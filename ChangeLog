@@ -9,6 +9,8 @@
    Add a debug messages window, accessable through the help menu to
    easily view debug messages/warnings.
    This might replace the extra console window on Windows.
+ * src/prefs.c:
+   Fix bad wording (closes #2038807).
 
 
 2008-08-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
