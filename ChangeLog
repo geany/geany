@@ -12,6 +12,10 @@
    is_code_style().
  * plugins/export.c:
    Fix using correct hard tab width for HTML export, not just LaTeX.
+ * src/prefs.c, src/plugindata.h, src/keyfile.c, src/editor.c,
+   src/editor.h:
+   Rename GeanyIndentPrefs::tab_width to hard_tab_width, and update
+   keyfile key name.
 
 
 2008-08-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

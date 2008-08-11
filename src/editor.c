@@ -712,7 +712,7 @@ void on_editor_notification(GtkWidget *widget, gint scn, gpointer lscn, gpointer
 static gint get_tab_width(const GeanyIndentPrefs *indent_prefs)
 {
 	if (indent_prefs->type == GEANY_INDENT_TYPE_BOTH)
-		return indent_prefs->tab_width;
+		return indent_prefs->hard_tab_width;
 
 	return indent_prefs->width;	/* tab width = indent width */
 }
@@ -721,7 +721,7 @@ static gint get_tab_width(const GeanyIndentPrefs *indent_prefs)
 /* Returns a string containing width chars of whitespace, filled with simple space
  * characters or with the right number of tab characters, according to the indent prefs.
  * (Result is filled with tabs *and* spaces if width isn't a multiple of
- * editor_prefs.tab_width). */
+ * the tab width). */
 static gchar *
 get_whitespace(const GeanyIndentPrefs *iprefs, gint width)
 {
@@ -3626,7 +3626,7 @@ void editor_set_indent_type(GeanyEditor *editor, GeanyIndentType type)
 	sci_set_use_tabs(sci, use_tabs);
 
 	if (type == GEANY_INDENT_TYPE_BOTH)
-		sci_set_tab_width(sci, iprefs->tab_width);
+		sci_set_tab_width(sci, iprefs->hard_tab_width);
 	else
 		sci_set_tab_width(sci, iprefs->width);
 	SSM(sci, SCI_SETINDENT, iprefs->width, 0);

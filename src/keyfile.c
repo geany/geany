@@ -146,7 +146,7 @@ static void int_settings_foreach(GKeyFile *config, SettingCallbackAction action)
 	SettingEntry items[] =
 	{
 		{&editor_prefs.indentation->width, PACKAGE, "pref_editor_tab_width", (gpointer)4},
-		{&editor_prefs.indentation->tab_width, PACKAGE, "indent_tab_width", (gpointer)8},
+		{&editor_prefs.indentation->hard_tab_width, PACKAGE, "indent_hard_tab_width", (gpointer)8},
 		{&editor_prefs.indentation->auto_indent_mode, PACKAGE, "indent_mode",
 			(gpointer)GEANY_AUTOINDENT_CURRENTCHARS},
 		{&editor_prefs.indentation->type, PACKAGE, "indent_type", (gpointer)GEANY_INDENT_TYPE_TABS},

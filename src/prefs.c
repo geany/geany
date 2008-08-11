@@ -144,7 +144,7 @@ static void spin_prefs_foreach(PrefCallbackAction action)
 	PrefEntry items[] =
 	{
 		{"spin_indent_width", &editor_prefs.indentation->width},
-		{"spin_tab_width", &editor_prefs.indentation->tab_width},
+		{"spin_tab_width", &editor_prefs.indentation->hard_tab_width},
 	};
 
 	for (i = 0; i < G_N_ELEMENTS(items); i++)
