@@ -11,6 +11,8 @@
    This might replace the extra console window on Windows.
  * src/prefs.c:
    Fix bad wording (closes #2038807).
+ * src/log.c, src/main.c, src/makefile.win32:
+   Remove trailing spaces.
 
 
 2008-08-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

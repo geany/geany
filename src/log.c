@@ -93,7 +93,7 @@ static const gchar *get_log_prefix(GLogLevelFlags log_level)
 static void handler_log(const gchar *domain, GLogLevelFlags level, const gchar *msg, gpointer data)
 {
 	gchar *time_str;
-	
+
 #ifndef GEANY_DEBUG
 	if (app != NULL && app->debug_mode)
 #endif
@@ -112,7 +112,7 @@ static void handler_log(const gchar *domain, GLogLevelFlags level, const gchar *
 void log_handlers_init(void)
 {
 	log_buffer = g_string_sized_new(2048);
-	
+
 	g_set_print_handler(handler_print);
 	g_set_printerr_handler(handler_printerr);
 	g_log_set_default_handler(handler_log, NULL);
@@ -157,7 +157,7 @@ void log_show_debug_messages_dialog(void)
 	gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(textview), FALSE);
 	gtk_text_buffer_set_text(gtk_text_view_get_buffer(
 		GTK_TEXT_VIEW(textview)), log_buffer->str, log_buffer->len);
-		
+
 	swin = gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
 		GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);

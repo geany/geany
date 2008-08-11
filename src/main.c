@@ -713,7 +713,7 @@ gint main(gint argc, gchar **argv)
 	gboolean load_project_from_cl = FALSE;
 
 	log_handlers_init();
-	
+
 	app = g_new0(GeanyApp, 1);
 	memset(&main_status, 0, sizeof(GeanyStatus));
 	memset(&prefs, 0, sizeof(GeanyPrefs));
