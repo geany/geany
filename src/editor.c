@@ -805,7 +805,7 @@ static void on_new_line_added(GeanyEditor *editor)
 
 	if (editor_prefs.auto_continue_multiline)
 	{	/* " * " auto completion in multiline C/C++/D/Java comments */
-		auto_multiline(editor, pos);
+		auto_multiline(editor, line);
 	}
 
 	if (editor_prefs.complete_snippets)
@@ -2471,32 +2471,56 @@ void editor_highlight_braces(ScintillaObject *sci, gint cur_pos)
 }
 
 
-static gboolean is_doc_comment_char(gchar c, gint lexer)
+static gboolean in_block_comment(gint lexer, gint style)
 {
-	if (c == '*' && (lexer == SCLEX_HTML || lexer == SCLEX_CPP))
-		return TRUE;
-	else if ((c == '*' || c == '+') && lexer == SCLEX_D)
-		return TRUE;
-	else
-		return FALSE;
+	switch (lexer)
+	{
+		case SCLEX_CPP:
+			return (style == SCE_C_COMMENT ||
+				style == SCE_C_COMMENTDOC);
+
+		case SCLEX_D:
+			return (style == SCE_D_COMMENT ||
+				style == SCE_D_COMMENTDOC ||
+				style == SCE_D_COMMENTNESTED);
+
+		case SCLEX_HTML:
+			return (style == SCE_HPHP_COMMENT);
+
+		case SCLEX_CSS:
+			return (style == SCE_CSS_COMMENT);
+
+		default:
+			return FALSE;
+	}
 }
 
 
-static void auto_multiline(GeanyEditor *editor, gint pos)
+static gboolean is_comment_char(gchar c, gint lexer)
+{
+	if ((c == '*' || c == '+') && lexer == SCLEX_D)
+		return TRUE;
+	else
+	if (c == '*')
+		return TRUE;
+
+	return FALSE;
+}
+
+
+static void auto_multiline(GeanyEditor *editor, gint cur_line)
 {
 	ScintillaObject *sci = editor->sci;
-	gint eol_len = editor_get_eol_char_len(editor->document);
-	gint style = SSM(sci, SCI_GETSTYLEAT, pos - 1 - eol_len, 0);
-	gint lexer = SSM(sci, SCI_GETLEXER, 0, 0);
+	gint indent_pos, style;
+	gint lexer = sci_get_lexer(sci);
 
-	if ((lexer == SCLEX_CPP && (style == SCE_C_COMMENT || style == SCE_C_COMMENTDOC)) ||
-		(lexer == SCLEX_HTML && style == SCE_HPHP_COMMENT) ||
-		(lexer == SCLEX_CSS && style == SCE_CSS_COMMENT) ||
-		(lexer == SCLEX_D && (style == SCE_D_COMMENT ||
-							  style == SCE_D_COMMENTDOC ||
-							  style == SCE_D_COMMENTNESTED)))
+	/* Use the start of the line enter was pressed on, to avoid any doc keyword styles */
+	indent_pos = sci_get_line_indent_position(sci, cur_line - 1);
+	style = sci_get_style_at(sci, indent_pos);
+
+	if (in_block_comment(lexer, style))
 	{
-		gchar *previous_line = sci_get_line(sci, sci_get_line_from_position(sci, pos - 2));
+		gchar *previous_line = sci_get_line(sci, cur_line - 1);
 		/* the type of comment, '*' (C/C++/Java), '+' and the others (D) */
 		gchar *continuation = "*";
 		gchar *whitespace = ""; /* to hold whitespace if needed */
@@ -2507,12 +2531,13 @@ static void auto_multiline(GeanyEditor *editor, gint pos)
 		/* find and stop at end of multi line comment */
 		i = len - 1;
 		while (i >= 0 && isspace(previous_line[i])) i--;
-		if (i >= 1 && is_doc_comment_char(previous_line[i - 1], lexer) && previous_line[i] == '/')
+		if (i >= 1 && is_comment_char(previous_line[i - 1], lexer) && previous_line[i] == '/')
 		{
-			gint cur_line = sci_get_current_line(sci);
-			gint indent_pos = sci_get_line_indent_position(sci, cur_line);
-			gint indent_len = sci_get_col_from_position(sci, indent_pos);
-			gint indent_width = editor_get_indent_prefs(editor)->width;
+			gint indent_len, indent_width;
+
+			indent_pos = sci_get_line_indent_position(sci, cur_line);
+			indent_len = sci_get_col_from_position(sci, indent_pos);
+			indent_width = editor_get_indent_prefs(editor)->width;
 
 			/* if there is one too many spaces, delete the last space,
 			 * to return to the indent used before the multiline comment was started. */
@@ -2526,7 +2551,7 @@ static void auto_multiline(GeanyEditor *editor, gint pos)
 		while (i < len && isspace(previous_line[i])) i++; /* get to start of the line */
 
 		if (i + 1 < len &&
-			previous_line[i] == '/' && is_doc_comment_char(previous_line[i + 1], lexer))
+			previous_line[i] == '/' && is_comment_char(previous_line[i + 1], lexer))
 		{ /* we are on the second line of a multi line comment, so we have to insert white space */
 			whitespace = " ";
 		}

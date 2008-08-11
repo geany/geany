@@ -3,6 +3,10 @@
  * src/editor.c:
    Add SCE_[CD]_COMMENTDOCKEYWORD(ERROR) comment detection to
    is_comment().
+ * src/editor.c:
+   Fix auto-multiline comment completion for CSS.
+   Fix doc-comment keyword styles confusing auto-multiline comment
+   completion.
 
 
 2008-08-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
