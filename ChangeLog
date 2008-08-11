@@ -10,6 +10,8 @@
  * src/editor.c:
    Break is_comment() into comment and string detection, each called in
    is_code_style().
+ * plugins/export.c:
+   Fix using correct hard tab width for HTML export, not just LaTeX.
 
 
 2008-08-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

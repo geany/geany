@@ -627,7 +627,7 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename, gboolean 
 			case '\t':
 			{
 				gint j;
-				gint tab_width = p_editor->get_indent_prefs(editor)->tab_width;
+				gint tab_width = p_sci->get_tab_width(editor->sci);
 				gint tab_stop = tab_width - (column % tab_width);
 
 				column += tab_stop - 1; /* -1 because we add 1 at the end of the loop */
