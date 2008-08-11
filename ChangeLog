@@ -7,6 +7,9 @@
    Fix auto-multiline comment completion for CSS.
    Fix doc-comment keyword styles confusing auto-multiline comment
    completion.
+ * src/editor.c:
+   Break is_comment() into comment and string detection, each called in
+   is_code_style().
 
 
 2008-08-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

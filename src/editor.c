@@ -77,7 +77,7 @@ static gboolean handle_xml(GeanyEditor *editor, gchar ch);
 static void get_indent(GeanyEditor *editor, gint pos);
 static void insert_indent_after_line(GeanyEditor *editor, gint line);
 static void auto_multiline(GeanyEditor *editor, gint pos);
-static gboolean is_comment(gint lexer, gint prev_style, gint style);
+static gboolean is_code_style(gint lexer, gint prev_style, gint style);
 static void auto_close_bracket(ScintillaObject *sci, gint pos, gchar c);
 static void auto_table(GeanyEditor *editor, gint pos);
 static void close_block(GeanyEditor *editor, gint pos);
@@ -1309,7 +1309,7 @@ gboolean editor_show_calltip(GeanyDocument *doc, gint pos)
 
 	/* the style 1 before the brace (which may be highlighted) */
 	style = SSM(sci, SCI_GETSTYLEAT, pos - 1, 0);
-	if (is_comment(lexer, style, style))
+	if (! is_code_style(lexer, style, style))
 		return FALSE;
 
 	word[0] = '\0';
@@ -1451,7 +1451,7 @@ gboolean editor_start_auto_complete(GeanyDocument *doc, gint pos, gboolean force
 		style = SSM(sci, SCI_GETSTYLEAT, pos, 0);
 
 	 /* don't autocomplete in comments and strings */
-	 if (!force && is_comment(lexer, prev_style, style))
+	 if (!force && !is_code_style(lexer, prev_style, style))
 		return FALSE;
 
 	linebuf = sci_get_line(sci, line);
@@ -2568,190 +2568,195 @@ static void auto_multiline(GeanyEditor *editor, gint cur_line)
 }
 
 
-/* Checks whether the given style is a comment or string for the given lexer.
+/* Checks whether the given style is a string for the given lexer.
  * It doesn't handle LEX_HTML, this should be done by the caller.
  * prev_style is used for some lexers where the style of two positions before is needed.
- * Returns true if the style is a comment, FALSE otherwise.
+ * Returns true if the style is a string, FALSE otherwise.
  */
-static gboolean is_comment(gint lexer, gint prev_style, gint style)
+static gboolean is_string_style(gint lexer, gint prev_style, gint style)
 {
-	gboolean result = FALSE;
-
 	switch (lexer)
 	{
 		case SCLEX_CPP:
 		case SCLEX_PASCAL:
-		{
-			if (style == SCE_C_COMMENT ||
-				style == SCE_C_COMMENTLINE ||
-				style == SCE_C_COMMENTDOC ||
-				style == SCE_C_COMMENTLINEDOC ||
-				style == SCE_C_COMMENTDOCKEYWORD ||
-				style == SCE_C_COMMENTDOCKEYWORDERROR ||
-				style == SCE_C_CHARACTER ||
-				style == SCE_C_PREPROCESSOR ||
-				style == SCE_C_STRING)
-				result = TRUE;
-			break;
-		}
+			return (style == SCE_C_CHARACTER ||
+				style == SCE_C_STRING);
+
 		case SCLEX_D:
-		{
-			if (style == SCE_D_COMMENT ||
-				style == SCE_D_COMMENTLINE ||
-				style == SCE_D_COMMENTDOC ||
-				style == SCE_D_COMMENTNESTED ||
-				style == SCE_D_COMMENTLINEDOC ||
-				style == SCE_D_COMMENTDOCKEYWORD ||
-				style == SCE_D_COMMENTDOCKEYWORDERROR ||
-				style == SCE_D_CHARACTER ||
-				style == SCE_D_STRING)
-				result = TRUE;
-			break;
-		}
+			return (style == SCE_D_CHARACTER ||
+				style == SCE_D_STRING);
+
 		case SCLEX_PYTHON:
-		{
-			if (style == SCE_P_COMMENTLINE ||
-				style == SCE_P_COMMENTBLOCK ||
-				prev_style == SCE_P_COMMENTLINE ||
-				prev_style == SCE_P_COMMENTBLOCK ||
-				style == SCE_P_STRING ||
+			return (style == SCE_P_STRING ||
 				style == SCE_P_TRIPLE ||
 				style == SCE_P_TRIPLEDOUBLE ||
-				style == SCE_P_CHARACTER)
-				result = TRUE;
-			break;
-		}
+				style == SCE_P_CHARACTER);
+
 		case SCLEX_F77:
 		case SCLEX_FORTRAN:
-		{
-			if (style == SCE_F_COMMENT ||
-				style == SCE_F_STRING1 ||
-				style == SCE_F_STRING2)
-				result = TRUE;
-			break;
-		}
+			return (style == SCE_F_STRING1 ||
+				style == SCE_F_STRING2);
+
 		case SCLEX_PERL:
-		{
-			if (prev_style == SCE_PL_COMMENTLINE ||
-				prev_style == SCE_PL_STRING ||
-				style == SCE_PL_COMMENTLINE ||
+			return (prev_style == SCE_PL_STRING ||
 				style == SCE_PL_STRING ||
 				style == SCE_PL_HERE_DELIM ||
 				style == SCE_PL_HERE_Q ||
 				style == SCE_PL_HERE_QQ ||
 				style == SCE_PL_HERE_QX ||
 				style == SCE_PL_POD ||
-				style == SCE_PL_POD_VERB)
-				result = TRUE;
-			break;
-		}
-		case SCLEX_PROPERTIES:
-		{
-			if (style == SCE_PROPS_COMMENT)
-				result = TRUE;
-			break;
-		}
-		case SCLEX_LATEX:
-		{
-			if (style == SCE_L_COMMENT)
-				result = TRUE;
-			break;
-		}
-		case SCLEX_MAKEFILE:
-		{
-			if (style == SCE_MAKE_COMMENT)
-				result = TRUE;
-			break;
-		}
+				style == SCE_PL_POD_VERB);
+
 		case SCLEX_RUBY:
-		{
-			if (prev_style == SCE_RB_COMMENTLINE ||
-				style == SCE_RB_CHARACTER ||
+			return (style == SCE_RB_CHARACTER ||
 				style == SCE_RB_STRING ||
 				style == SCE_RB_HERE_DELIM ||
 				style == SCE_RB_HERE_Q ||
 				style == SCE_RB_HERE_QQ ||
 				style == SCE_RB_HERE_QX ||
-				style == SCE_RB_POD)
-				result = TRUE;
-			break;
-		}
+				style == SCE_RB_POD);
+
 		case SCLEX_BASH:
-		{
-			if (prev_style == SCE_SH_COMMENTLINE ||
-				style == SCE_SH_STRING)
-				result = TRUE;
-			break;
-		}
+			return (style == SCE_SH_STRING);
+
 		case SCLEX_SQL:
-		{
-			if (style == SCE_SQL_COMMENT ||
-				style == SCE_SQL_COMMENTLINE ||
-				style == SCE_SQL_COMMENTDOC ||
-				style == SCE_SQL_STRING)
-				result = TRUE;
-			break;
-		}
+			return (style == SCE_SQL_STRING);
+
 		case SCLEX_TCL:
-		{
-			if (style == SCE_TCL_COMMENT ||
-				style == SCE_TCL_COMMENTLINE ||
-				style == SCE_TCL_COMMENT_BOX ||
-				style == SCE_TCL_BLOCK_COMMENT ||
-				style == SCE_TCL_IN_QUOTE)
-				result = TRUE;
-			break;
-		}
+			return (style == SCE_TCL_IN_QUOTE);
+
 		case SCLEX_LUA:
-		{
-			if (style == SCE_LUA_COMMENT ||
-				style == SCE_LUA_COMMENTLINE ||
-				style == SCE_LUA_COMMENTDOC ||
-				style == SCE_LUA_LITERALSTRING ||
+			return (style == SCE_LUA_LITERALSTRING ||
 				style == SCE_LUA_CHARACTER ||
-				style == SCE_LUA_STRING)
-				result = TRUE;
-			break;
-		}
+				style == SCE_LUA_STRING);
+
 		case SCLEX_HASKELL:
-		{
-			if (prev_style == SCE_HA_COMMENTLINE ||
-				style == SCE_HA_COMMENTBLOCK ||
-				style == SCE_HA_COMMENTBLOCK2 ||
-				style == SCE_HA_COMMENTBLOCK3 ||
-				style == SCE_HA_CHARACTER ||
-				style == SCE_HA_STRING)
-				result = TRUE;
-			break;
-		}
+			return (style == SCE_HA_CHARACTER ||
+				style == SCE_HA_STRING);
+
 		case SCLEX_FREEBASIC:
-		{
-			if (style == SCE_B_COMMENT ||
-				style == SCE_B_STRING)
-				result = TRUE;
-			break;
-		}
+			return (style == SCE_B_STRING);
+
 		case SCLEX_HTML:
-		{
-			if (prev_style == SCE_HPHP_SIMPLESTRING ||
-				prev_style == SCE_HPHP_HSTRING ||
-				prev_style == SCE_HPHP_COMMENTLINE ||
-				prev_style == SCE_HPHP_COMMENT ||
+			return (prev_style == SCE_HPHP_SIMPLESTRING ||
 				prev_style == SCE_HPHP_HSTRING ||  /* HSTRING is a heredoc */
 				prev_style == SCE_HPHP_HSTRING_VARIABLE ||
 				prev_style == SCE_H_DOUBLESTRING ||
 				prev_style == SCE_H_SINGLESTRING ||
 				prev_style == SCE_H_CDATA ||
-				prev_style == SCE_H_COMMENT ||
 				prev_style == SCE_H_SGML_DOUBLESTRING ||
-				prev_style == SCE_H_SGML_SIMPLESTRING ||
-				prev_style == SCE_H_SGML_COMMENT)
-				result = TRUE;
-			break;
-		}
+				prev_style == SCE_H_SGML_SIMPLESTRING);
 	}
+	return FALSE;
+}
 
-	return result;
+
+/* Checks whether the given style is a comment for the given lexer.
+ * It doesn't handle LEX_HTML, this should be done by the caller.
+ * prev_style is used for some lexers where the style of two positions before is needed.
+ * Returns true if the style is a comment, FALSE otherwise.
+ */
+static gboolean is_comment_style(gint lexer, gint prev_style, gint style)
+{
+	switch (lexer)
+	{
+		case SCLEX_CPP:
+		case SCLEX_PASCAL:
+			return (style == SCE_C_COMMENT ||
+				style == SCE_C_COMMENTLINE ||
+				style == SCE_C_COMMENTDOC ||
+				style == SCE_C_COMMENTLINEDOC ||
+				style == SCE_C_COMMENTDOCKEYWORD ||
+				style == SCE_C_COMMENTDOCKEYWORDERROR);
+
+		case SCLEX_D:
+			return (style == SCE_D_COMMENT ||
+				style == SCE_D_COMMENTLINE ||
+				style == SCE_D_COMMENTDOC ||
+				style == SCE_D_COMMENTNESTED ||
+				style == SCE_D_COMMENTLINEDOC ||
+				style == SCE_D_COMMENTDOCKEYWORD ||
+				style == SCE_D_COMMENTDOCKEYWORDERROR);
+
+		case SCLEX_PYTHON:
+			return (style == SCE_P_COMMENTLINE ||
+				style == SCE_P_COMMENTBLOCK ||
+				prev_style == SCE_P_COMMENTLINE ||
+				prev_style == SCE_P_COMMENTBLOCK);
+
+		case SCLEX_F77:
+		case SCLEX_FORTRAN:
+			return (style == SCE_F_COMMENT);
+
+		case SCLEX_PERL:
+			return (prev_style == SCE_PL_COMMENTLINE ||
+				style == SCE_PL_COMMENTLINE);
+
+		case SCLEX_PROPERTIES:
+			return (style == SCE_PROPS_COMMENT);
+
+		case SCLEX_LATEX:
+			return (style == SCE_L_COMMENT);
+
+		case SCLEX_MAKEFILE:
+			return (style == SCE_MAKE_COMMENT);
+
+		case SCLEX_RUBY:
+			return (prev_style == SCE_RB_COMMENTLINE);
+
+		case SCLEX_BASH:
+			return (prev_style == SCE_SH_COMMENTLINE);
+
+		case SCLEX_SQL:
+			return (style == SCE_SQL_COMMENT ||
+				style == SCE_SQL_COMMENTLINE ||
+				style == SCE_SQL_COMMENTDOC);
+
+		case SCLEX_TCL:
+			return (style == SCE_TCL_COMMENT ||
+				style == SCE_TCL_COMMENTLINE ||
+				style == SCE_TCL_COMMENT_BOX ||
+				style == SCE_TCL_BLOCK_COMMENT);
+
+		case SCLEX_LUA:
+			return (style == SCE_LUA_COMMENT ||
+				style == SCE_LUA_COMMENTLINE ||
+				style == SCE_LUA_COMMENTDOC);
+
+		case SCLEX_HASKELL:
+			return (prev_style == SCE_HA_COMMENTLINE ||
+				style == SCE_HA_COMMENTBLOCK ||
+				style == SCE_HA_COMMENTBLOCK2 ||
+				style == SCE_HA_COMMENTBLOCK3);
+
+		case SCLEX_FREEBASIC:
+			return (style == SCE_B_COMMENT);
+
+		case SCLEX_HTML:
+			return (prev_style == SCE_HPHP_COMMENTLINE ||
+				prev_style == SCE_HPHP_COMMENT ||
+				prev_style == SCE_H_COMMENT ||
+				prev_style == SCE_H_SGML_COMMENT);
+	}
+	return FALSE;
+}
+
+
+/* Checks whether the given style is normal code (not string, comment, preprocessor, etc).
+ * It doesn't handle LEX_HTML, this should be done by the caller.
+ * prev_style is used for some lexers where the style of two positions before is needed.
+ */
+static gboolean is_code_style(gint lexer, gint prev_style, gint style)
+{
+	switch (lexer)
+	{
+		case SCLEX_CPP:
+			if (style == SCE_C_PREPROCESSOR)
+				return FALSE;
+			break;
+	}
+	return !(is_comment_style(lexer, prev_style, style) &&
+		is_string_style(lexer, prev_style, style));
 }
 
 
