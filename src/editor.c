@@ -2561,6 +2561,8 @@ static gboolean is_comment(gint lexer, gint prev_style, gint style)
 				style == SCE_C_COMMENTLINE ||
 				style == SCE_C_COMMENTDOC ||
 				style == SCE_C_COMMENTLINEDOC ||
+				style == SCE_C_COMMENTDOCKEYWORD ||
+				style == SCE_C_COMMENTDOCKEYWORDERROR ||
 				style == SCE_C_CHARACTER ||
 				style == SCE_C_PREPROCESSOR ||
 				style == SCE_C_STRING)
@@ -2572,8 +2574,10 @@ static gboolean is_comment(gint lexer, gint prev_style, gint style)
 			if (style == SCE_D_COMMENT ||
 				style == SCE_D_COMMENTLINE ||
 				style == SCE_D_COMMENTDOC ||
-				style == SCE_D_COMMENTLINEDOC ||
 				style == SCE_D_COMMENTNESTED ||
+				style == SCE_D_COMMENTLINEDOC ||
+				style == SCE_D_COMMENTDOCKEYWORD ||
+				style == SCE_D_COMMENTDOCKEYWORDERROR ||
 				style == SCE_D_CHARACTER ||
 				style == SCE_D_STRING)
 				result = TRUE;
