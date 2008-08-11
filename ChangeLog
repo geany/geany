@@ -16,6 +16,8 @@
    src/editor.h:
    Rename GeanyIndentPrefs::tab_width to hard_tab_width, and update
    keyfile key name.
+ * src/interface.c, geany.glade:
+   Change 'Tab width' label to 'Hard tab width' for clarity.
 
 
 2008-08-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

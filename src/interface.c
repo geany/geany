@@ -3696,7 +3696,7 @@ create_prefs_dialog (void)
   gtk_widget_show (hbox13);
   gtk_container_add (GTK_CONTAINER (alignment41), hbox13);
 
-  label221 = gtk_label_new (_("Tab Width:"));
+  label221 = gtk_label_new (_("Hard tab width:"));
   gtk_widget_show (label221);
   gtk_box_pack_start (GTK_BOX (hbox13), label221, FALSE, FALSE, 0);
 
