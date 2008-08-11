@@ -64,6 +64,7 @@
 #include "navqueue.h"
 #include "printing.h"
 #include "plugins.h"
+#include "log.h"
 
 #include "geanyobject.h"
 
@@ -2210,5 +2211,13 @@ on_radio_indent_both_toggled           (GtkToggleButton *togglebutton,
 
 	active = gtk_toggle_button_get_active(togglebutton);
 	gtk_widget_set_sensitive(check, !active);
+}
+
+
+void
+on_debug_messages1_activate            (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	log_show_debug_messages_dialog();
 }
 

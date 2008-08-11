@@ -634,3 +634,7 @@ on_tabs_and_spaces1_activate           (GtkMenuItem     *menuitem,
 void
 on_radio_indent_both_toggled           (GtkToggleButton *togglebutton,
                                         gpointer         user_data);
+
+void
+on_debug_messages1_activate            (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);

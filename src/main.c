@@ -47,7 +47,7 @@
 #include "interface.h"
 #include "support.h"
 #include "callbacks.h"
-
+#include "log.h"
 #include "ui_utils.h"
 #include "utils.h"
 #include "document.h"
@@ -147,21 +147,6 @@ static GOptionEntry entries[] =
 	{ NULL, 0, 0, 0, NULL, NULL, NULL }
 };
 
-
-
-/* Geany main debug function */
-void geany_debug(gchar const *format, ...)
-{
-#ifndef GEANY_DEBUG
-	if (app != NULL && app->debug_mode)
-#endif
-	{
-		va_list args;
-		va_start(args, format);
-		g_logv(G_LOG_DOMAIN, G_LOG_LEVEL_INFO, format, args);
-		va_end(args);
-	}
-}
 
 
 /* special things for the initial setup of the checkboxes and related stuff
@@ -727,6 +712,8 @@ gint main(gint argc, gchar **argv)
 	gint config_dir_result;
 	gboolean load_project_from_cl = FALSE;
 
+	log_handlers_init();
+	
 	app = g_new0(GeanyApp, 1);
 	memset(&main_status, 0, sizeof(GeanyStatus));
 	memset(&prefs, 0, sizeof(GeanyPrefs));
@@ -936,6 +923,7 @@ void main_quit()
 	editor_finalize();
 	editor_snippets_free();
 	encodings_finalize();
+	log_finalize();
 
 	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));
 	g_free(app->configdir);

@@ -1,3 +1,16 @@
+2008-08-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * geany.glade, wscript, src/Makefile.am, src/makefile.win32,
+   src/callbacks.c, src/callbacks.h, src/interface.c, src/log.c,
+   src/log.h, src/main.c:
+   Move geany_debug() into log.c.
+   Use GLib log/print handlers to log messages/warnings into a
+   string for later usage.
+   Add a debug messages window, accessable through the help menu to
+   easily view debug messages/warnings.
+   This might replace the extra console window on Windows.
+
+
 2008-08-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/editor.c:

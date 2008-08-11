@@ -22,6 +22,7 @@ SRCS = \
 	interface.c interface.h \
 	keybindings.c keybindings.h \
 	keyfile.c keyfile.h \
+	log.c log.h \
 	main.c main.h geany.h \
 	msgwindow.c msgwindow.h \
 	navqueue.c navqueue.h \
