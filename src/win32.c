@@ -703,27 +703,15 @@ static void debug_setup_console()
 }
 
 
-static void debug_log_handler(const gchar *log_domain, GLogLevelFlags log_level, const gchar *message,
-					   gpointer user_data)
-{
-	if (log_domain != NULL)
-		fprintf(stderr, "%s: %s\n", log_domain, message);
-	else
-		fprintf(stderr, "%s\n", message);
-}
-
-
 void win32_init_debug_code()
 {
-#ifndef GEANY_DEBUG
 	if (app->debug_mode)
-#endif
-	{	/* create a console window to get log messages on Windows */
+	{
+		/* create a console window to get log messages on Windows */
+		/** TODO remove me? */
 		debug_setup_console();
-		/* change the log handlers to output log messages in ther created console window */
-		g_log_set_handler("GLib",
-			G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION, debug_log_handler, NULL);
-		g_log_set_default_handler(debug_log_handler, NULL);
+		/* Enable GLib process spawn debug mode when Geany was started with the debug flag */
+		g_setenv("G_SPAWN_WIN32_DEBUG", "1", FALSE);
 	}
 }
 

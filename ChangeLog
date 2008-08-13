@@ -8,6 +8,10 @@
    use 'make GTK280=1'.
  * src/support.c:
    Replace fprintf() with g_critical().
+ * src/log.c, src/win32.c:
+   Fix logging of messages in the debug window on Windows.
+   When '--debug' option is given on Windows, set the
+   G_SPAWN_WIN32_DEBUG flag for more debug info for spawned processes.
 
 
 2008-08-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
