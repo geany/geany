@@ -3174,7 +3174,8 @@ Tips and tricks
 * Double-click on empty space in the notebook tab bar to open a
   new document.
 * Double-click on a document's notebook tab to toggle all additional
-  widgets (to show them again use the View menu).
+  widgets (to show them again use the View menu or the keyboard shortcut).
+* Middle-click on a document's notebook tab to close the document.
 * Double-click on a symbol-list group to expand or compact it.
 
 GTK-related
