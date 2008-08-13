@@ -3168,6 +3168,29 @@ Next word part.                                 Ctrl+\\
 
 
 
+Tips and tricks
+===============
+
+* Double-click on empty space in the notebook tab bar to open a
+  new document.
+* Double-click on a document's notebook tab to toggle all additional
+  widgets (to show them again use the View menu).
+* Double-click on a symbol-list group to expand or compact it.
+
+GTK-related
+-----------
+
+* Scrolling the mouse wheel over a notebook tab bar will switch
+  notebook pages.
+
+The following are derived from X-Windows features (but GTK still supports
+them on Windows):
+
+* Middle-click pastes the last selected text.
+* Middle-click on a scrollbar moves the scrollbar to that
+  position without having to drag it.
+
+
 Hidden preferences
 ==================
 
