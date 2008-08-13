@@ -6,6 +6,8 @@
    Expect GTK 2.10 libs to link against by default and remove GTK210
    flag. If anyone wants to build on Windows against GTK 2.6 or 2.8
    use 'make GTK280=1'.
+ * src/support.c:
+   Replace fprintf() with g_critical().
 
 
 2008-08-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
