@@ -94,9 +94,7 @@ static void handler_log(const gchar *domain, GLogLevelFlags level, const gchar *
 {
 	gchar *time_str;
 
-#ifndef GEANY_DEBUG
 	if (app != NULL && app->debug_mode)
-#endif
 	{
 #ifdef G_OS_WIN32
 		/* On Windows g_log_default_handler() is not enough, we need to print it

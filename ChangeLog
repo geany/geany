@@ -12,6 +12,10 @@
    Fix logging of messages in the debug window on Windows.
    When '--debug' option is given on Windows, set the
    G_SPAWN_WIN32_DEBUG flag for more debug info for spawned processes.
+ * src/log.c, src/main.c:
+   Don't force debug mode when compiling with GEANY_DEBUG (this affects
+   only the messages on stdout and stderr). Messages are logged always
+   in the debug window.
 
 
 2008-08-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
