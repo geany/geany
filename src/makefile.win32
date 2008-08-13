@@ -43,10 +43,10 @@ ALL_GTK_LIBS= \
 	#"$(PREFIX)/lib/asprintf.lib" \
 	#"$(PREFIX)/lib/charset.lib" \
 
-ifdef GTK210
-ALL_GTK_LIBS +=-lcairo -lpangocairo-1.0
-else
+ifdef GTK280
 ALL_GTK_LIBS +=-liconv
+else
+ALL_GTK_LIBS +=-lcairo -lpangocairo-1.0
 endif
 
 WIN_LIBS=-mwindows -lkernel32 -limm32 -lshfolder -lshell32 \

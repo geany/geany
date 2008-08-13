@@ -2,6 +2,10 @@
 
  * doc/geany.txt, doc/geany.html:
    Add middle-click document closing to the Tips and Tricks appendix.
+ * src/makefile.win32:
+   Expect GTK 2.10 libs to link against by default and remove GTK210
+   flag. If anyone wants to build on Windows against GTK 2.6 or 2.8
+   use 'make GTK280=1'.
 
 
 2008-08-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
