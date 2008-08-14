@@ -28,20 +28,27 @@
  * For detailed documentation of the plugin system please read the plugin
  * API documentation.
  **/
-/* Note: Remember to increment api_version (and abi_version if necessary) when making changes. */
+/* Note: Remember to increment GEANY_API_VERSION (and GEANY_ABI_VERSION if necessary)
+ * when making changes (see 'Keeping the plugin ABI stable' in the HACKING file). */
 
 
 #ifndef PLUGINDATA_H
 #define PLUGINDATA_H
 
-/* The API version should be incremented whenever any plugin data types below are
- * modified or appended to. */
-static const gint api_version = 87;
+/* Note: We use enum instead of 'static const gint' to allow its use in global variable
+ * initializing, otherwise we get errors like:
+ * error: initializer element is not constant */
+enum {
+	/** The Application Programming Interface (API) version, incremented
+	 * whenever any plugin data types are modified or appended to. */
+	GEANY_API_VERSION = 88,
 
-/* The ABI version should be incremented whenever existing fields in the plugin
- * data types below have to be changed or reordered. It should stay the same if fields
- * are only appended, as this doesn't affect existing fields. */
-static const gint abi_version = 44;
+	/** The Application Binary Interface (ABI) version, incremented whenever
+	 * existing fields in the plugin data types have to be changed or reordered. */
+	/* This should usually stay the same if fields are only appended, assuming only pointers to
+	 * structs and not structs themselves are declared by plugins. */
+	GEANY_ABI_VERSION = 44
+};
 
 /** Check the plugin can be loaded by Geany.
  * This performs runtime checks that try to ensure:
@@ -50,9 +57,9 @@ static const gint abi_version = 44;
 #define PLUGIN_VERSION_CHECK(api_required) \
 	gint plugin_version_check(gint abi_ver) \
 	{ \
-		if (abi_ver != abi_version) \
+		if (abi_ver != GEANY_ABI_VERSION) \
 			return -1; \
-		if (api_version < (api_required)) \
+		if (GEANY_API_VERSION < (api_required)) \
 			return (api_required); \
 		else return 0; \
 	}
@@ -376,14 +383,15 @@ EncodingFuncs;
 
 
 struct GeanyKeyGroup;
-typedef void (*_KeyCallback) (guint key_id);
+/* avoid including keybindings.h */
+typedef void (*_GeanyKeyCallback) (guint key_id);
 
 /* See keybindings.h */
 typedef struct KeybindingFuncs
 {
 	void		(*send_command) (guint group_id, guint key_id);
 	void		(*set_item) (struct GeanyKeyGroup *group, gsize key_id,
-					_KeyCallback callback, guint key, GdkModifierType mod,
+					_GeanyKeyCallback callback, guint key, GdkModifierType mod,
 					gchar *name, gchar *label, GtkWidget *menu_item);
 }
 KeybindingFuncs;

@@ -365,7 +365,7 @@ plugin_check_version(GModule *module)
 	}
 	else
 	{
-		gint result = version_check(abi_version);
+		gint result = version_check(GEANY_ABI_VERSION);
 
 		if (result < 0)
 		{

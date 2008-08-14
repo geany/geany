@@ -24,8 +24,7 @@
 #ifndef GEANY_PREFS_H
 #define GEANY_PREFS_H 1
 
-/* General Preferences dialog settings.
- * Remember to increment abi_version in plugindata.h if you have to change an item. */
+/* General Preferences dialog settings. */
 typedef struct GeanyPrefs
 {
 	gboolean		load_session;

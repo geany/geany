@@ -1,3 +1,15 @@
+2008-08-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/notebook.c:
+   Don't look up "scroll_arrow_hlength" and "scroll_arrow_vlength"
+   GtkWidget properties on GTK < 2.10.
+ * src/prefs.h, src/plugindata.h, src/plugins.c:
+   Rename api_version GEANY_API_VERSION.
+   Rename abi_version GEANY_ABI_VERSION.
+   Use enums for each of these so they can be used to initialize a
+   global variable, and add dox.
+
+
 2008-08-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * doc/geany.txt, doc/geany.html:
