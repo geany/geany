@@ -141,8 +141,12 @@ static gboolean is_position_on_tab_bar(GtkNotebook *notebook, GdkEventButton *ev
 	tab_pos = gtk_notebook_get_tab_pos(notebook);
 	nb = GTK_WIDGET(notebook);
 
+#if GTK_CHECK_VERSION(2, 10, 0)
 	gtk_widget_style_get(GTK_WIDGET(notebook), "scroll-arrow-hlength", &scroll_arrow_hlength,
 		"scroll-arrow-vlength", &scroll_arrow_vlength, NULL);
+#else
+	scroll_arrow_hlength = scroll_arrow_vlength = 16;
+#endif
 
 	if (! gdk_event_get_coords((GdkEvent*) event, &x, &y))
 	{
