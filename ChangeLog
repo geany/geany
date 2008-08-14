@@ -8,6 +8,10 @@
    Rename abi_version GEANY_ABI_VERSION.
    Use enums for each of these so they can be used to initialize a
    global variable, and add dox.
+ * src/editor.c, doc/geany.txt, doc/geany.html:
+   Make Ctrl-click on a word perform Go to Tag Definition (this
+   shouldn't conflict with column editing as this uses
+   Ctrl-Shift-click).
 
 
 2008-08-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

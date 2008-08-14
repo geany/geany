@@ -49,6 +49,7 @@
 #include "callbacks.h"
 #include "geanyobject.h"
 #include "templates.h"
+#include "keybindings.h"
 
 
 /* holds word under the mouse or keyboard cursor */
@@ -171,28 +172,32 @@ void editor_snippets_init(void)
 }
 
 
-/* calls the edit popup menu in the editor */
 static gboolean
 on_editor_button_press_event           (GtkWidget *widget,
                                         GdkEventButton *event,
                                         gpointer user_data)
 {
 	GeanyDocument *doc = user_data;
-
-	if (doc == NULL)
-		return FALSE;
+	ScintillaObject *sci = doc->editor->sci;
 
 	editor_info.click_pos = sci_get_position_from_xy(doc->editor->sci, (gint)event->x, (gint)event->y, FALSE);
 	if (event->button == 1)
 	{
-		if (GDK_BUTTON_PRESS == event->type && editor_prefs.disable_dnd)
+		if (event->type == GDK_BUTTON_PRESS && editor_prefs.disable_dnd)
 		{
 			gint ss = sci_get_selection_start(doc->editor->sci);
 			sci_set_selection_end(doc->editor->sci, ss);
 		}
+		if (event->type == GDK_BUTTON_PRESS && event->state == GDK_CONTROL_MASK)
+		{
+			sci_set_current_position(sci, editor_info.click_pos, FALSE);
+			keybindings_send_command(GEANY_KEY_GROUP_GOTO, GEANY_KEYS_GOTO_TAGDEFINITION);
+			return TRUE;
+		}
 		return document_check_disk_status(doc, FALSE);
 	}
 
+	/* calls the edit popup menu in the editor */
 	if (event->button == 3)
 	{
 		editor_find_current_word(doc->editor->sci, editor_info.click_pos,

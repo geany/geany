@@ -6,7 +6,7 @@
 <meta name="generator" content="Docutils 0.4: http://docutils.sourceforge.net/" />
 <title>Geany</title>
 <meta name="authors" content="Enrico Tröger  Nick Treleaven  Frank Lanitz" />
-<meta name="date" content="$Date$" />
+<meta name="date" content="2008-08-13" />
 <style type="text/css">
 
 /*
@@ -139,7 +139,7 @@ Stylesheet for Geany's documentation based on a version of John Gabriele.
 <br />Nick Treleaven
 <br />Frank Lanitz</td></tr>
 <tr><th class="docinfo-name">Date:</th>
-<td>$Date$</td></tr>
+<td>2008-08-13</td></tr>
 <tr><th class="docinfo-name">Version:</th>
 <td>0.15</td></tr>
 </tbody>
@@ -365,19 +365,21 @@ of this program, and also in the chapter <a class="reference" href="#gnu-general
 </ul>
 </li>
 <li><a class="reference" href="#tips-and-tricks" id="id146" name="id146">Tips and tricks</a><ul>
-<li><a class="reference" href="#gtk-related" id="id147" name="id147">GTK-related</a></li>
+<li><a class="reference" href="#document-notebook" id="id147" name="id147">Document notebook</a></li>
+<li><a class="reference" href="#symbols" id="id148" name="id148">Symbols</a></li>
+<li><a class="reference" href="#gtk-related" id="id149" name="id149">GTK-related</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#hidden-preferences" id="id148" name="id148">Hidden preferences</a></li>
-<li><a class="reference" href="#compile-time-options" id="id149" name="id149">Compile-time options</a><ul>
-<li><a class="reference" href="#src-geany-h" id="id150" name="id150">src/geany.h</a></li>
-<li><a class="reference" href="#project-h" id="id151" name="id151">project.h</a></li>
-<li><a class="reference" href="#editor-h" id="id152" name="id152">editor.h</a></li>
-<li><a class="reference" href="#keyfile-c" id="id153" name="id153">keyfile.c</a></li>
+<li><a class="reference" href="#hidden-preferences" id="id150" name="id150">Hidden preferences</a></li>
+<li><a class="reference" href="#compile-time-options" id="id151" name="id151">Compile-time options</a><ul>
+<li><a class="reference" href="#src-geany-h" id="id152" name="id152">src/geany.h</a></li>
+<li><a class="reference" href="#project-h" id="id153" name="id153">project.h</a></li>
+<li><a class="reference" href="#editor-h" id="id154" name="id154">editor.h</a></li>
+<li><a class="reference" href="#keyfile-c" id="id155" name="id155">keyfile.c</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#gnu-general-public-license" id="id154" name="id154">GNU General Public License</a></li>
-<li><a class="reference" href="#license-for-scintilla-and-scite" id="id155" name="id155">License for Scintilla and SciTE</a></li>
+<li><a class="reference" href="#gnu-general-public-license" id="id156" name="id156">GNU General Public License</a></li>
+<li><a class="reference" href="#license-for-scintilla-and-scite" id="id157" name="id157">License for Scintilla and SciTE</a></li>
 </ul>
 </div>
 <div class="section">
@@ -3540,16 +3542,25 @@ menus. Some less common commands with no menu equivalent are:</p>
 </div>
 <div class="section">
 <h1><a class="toc-backref" href="#id146" id="tips-and-tricks" name="tips-and-tricks">Tips and tricks</a></h1>
+<div class="section">
+<h2><a class="toc-backref" href="#id147" id="document-notebook" name="document-notebook">Document notebook</a></h2>
 <ul class="simple">
 <li>Double-click on empty space in the notebook tab bar to open a
 new document.</li>
 <li>Double-click on a document's notebook tab to toggle all additional
 widgets (to show them again use the View menu or the keyboard shortcut).</li>
 <li>Middle-click on a document's notebook tab to close the document.</li>
+</ul>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id148" id="symbols" name="symbols">Symbols</a></h2>
+<ul class="simple">
+<li>Ctrl-click on a word in a document to perform <em>Go to Tag Definition</em>.</li>
 <li>Double-click on a symbol-list group to expand or compact it.</li>
 </ul>
+</div>
 <div class="section">
-<h2><a class="toc-backref" href="#id147" id="gtk-related" name="gtk-related">GTK-related</a></h2>
+<h2><a class="toc-backref" href="#id149" id="gtk-related" name="gtk-related">GTK-related</a></h2>
 <ul class="simple">
 <li>Scrolling the mouse wheel over a notebook tab bar will switch
 notebook pages.</li>
@@ -3564,7 +3575,7 @@ position without having to drag it.</li>
 </div>
 </div>
 <div class="section">
-<h1><a class="toc-backref" href="#id148" id="hidden-preferences" name="hidden-preferences">Hidden preferences</a></h1>
+<h1><a class="toc-backref" href="#id150" id="hidden-preferences" name="hidden-preferences">Hidden preferences</a></h1>
 <p>There are some uncommon preferences that are not shown in the Preferences
 dialog. These can be set by editing <tt class="docutils literal"><span class="pre">~/.geany/geany.conf</span></tt>, then
 restarting Geany. Search for the key name, then edit the value. Example:</p>
@@ -3636,7 +3647,7 @@ available with GTK 2.12 or above).</td>
 </table>
 </div>
 <div class="section">
-<h1><a class="toc-backref" href="#id149" id="compile-time-options" name="compile-time-options">Compile-time options</a></h1>
+<h1><a class="toc-backref" href="#id151" id="compile-time-options" name="compile-time-options">Compile-time options</a></h1>
 <p>There are some options which can only be changed at compile time,
 and some options which are used as the default for configurable
 options. To change these options, edit the appropriate source file
@@ -3648,7 +3659,7 @@ not be changed.</p>
 <p class="last">Most users should not need to change these options.</p>
 </div>
 <div class="section">
-<h2><a class="toc-backref" href="#id150" id="src-geany-h" name="src-geany-h">src/geany.h</a></h2>
+<h2><a class="toc-backref" href="#id152" id="src-geany-h" name="src-geany-h">src/geany.h</a></h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="33%" />
@@ -3705,7 +3716,7 @@ when building on a non-Win32 system.</em></td>
 </table>
 </div>
 <div class="section">
-<h2><a class="toc-backref" href="#id151" id="project-h" name="project-h">project.h</a></h2>
+<h2><a class="toc-backref" href="#id153" id="project-h" name="project-h">project.h</a></h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="33%" />
@@ -3730,7 +3741,7 @@ open dialog.</td>
 </table>
 </div>
 <div class="section">
-<h2><a class="toc-backref" href="#id152" id="editor-h" name="editor-h">editor.h</a></h2>
+<h2><a class="toc-backref" href="#id154" id="editor-h" name="editor-h">editor.h</a></h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="33%" />
@@ -3767,7 +3778,7 @@ Geany provide.</td>
 </table>
 </div>
 <div class="section">
-<h2><a class="toc-backref" href="#id153" id="keyfile-c" name="keyfile-c">keyfile.c</a></h2>
+<h2><a class="toc-backref" href="#id155" id="keyfile-c" name="keyfile-c">keyfile.c</a></h2>
 <p>These are default settings that can be overridden in the <a class="reference" href="#preferences">Preferences</a> dialog.</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -3839,7 +3850,7 @@ open files.</td>
 </div>
 </div>
 <div class="section">
-<h1><a class="toc-backref" href="#id154" id="gnu-general-public-license" name="gnu-general-public-license">GNU General Public License</a></h1>
+<h1><a class="toc-backref" href="#id156" id="gnu-general-public-license" name="gnu-general-public-license">GNU General Public License</a></h1>
 <pre class="literal-block">
             GNU GENERAL PUBLIC LICENSE
                Version 2, June 1991
@@ -4184,7 +4195,7 @@ Public License instead of this License.
 </pre>
 </div>
 <div class="section">
-<h1><a class="toc-backref" href="#id155" id="license-for-scintilla-and-scite" name="license-for-scintilla-and-scite">License for Scintilla and SciTE</a></h1>
+<h1><a class="toc-backref" href="#id157" id="license-for-scintilla-and-scite" name="license-for-scintilla-and-scite">License for Scintilla and SciTE</a></h1>
 <p>Copyright 1998-2003 by Neil Hodgson &lt;neilh(at)scintilla(dot)org&gt;</p>
 <p>All Rights Reserved</p>
 <p>Permission to use, copy, modify, and distribute this software and
@@ -4204,7 +4215,7 @@ USE OR PERFORMANCE OF THIS SOFTWARE.</p>
 <div class="footer">
 <hr class="footer" />
 <a class="reference" href="geany.txt">View document source</a>.
-Generated on: 2008-08-13 17:24 UTC.
+Generated on: 2008-08-14 16:36 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 
 </div>
