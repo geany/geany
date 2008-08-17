@@ -730,6 +730,7 @@ void ui_document_show_hide(GeanyDocument *doc)
 		case GEANY_INDENT_TYPE_TABS:
 			widget_name = "tabs1"; break;
 		case GEANY_INDENT_TYPE_BOTH:
+		default:
 			widget_name = "tabs_and_spaces1"; break;
 	}
 	item = lookup_widget(main_widgets.window, widget_name);
