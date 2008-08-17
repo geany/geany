@@ -103,7 +103,7 @@ var ICONS_GROUP
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
 ; Finish page
-!define MUI_FINISHPAGE_RUN "$INSTDIR\Geany.exe"
+!define MUI_FINISHPAGE_RUN "$INSTDIR\bin\Geany.exe"
 !insertmacro MUI_PAGE_FINISH
 ; Uninstaller pages
 !insertmacro MUI_UNPAGE_INSTFILES
@@ -122,14 +122,18 @@ InstType "Minimal"
 
 Section "!Program Files" SEC01
   SectionIn RO 1 2
-  SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
-  File "${RESOURCEDIR}\Geany.exe"
+
+  SetOutPath "$INSTDIR"
   File "${RESOURCEDIR}\*.txt"
+
+  SetOutPath "$INSTDIR\bin"
+  File "${RESOURCEDIR}\bin\Geany.exe"
 
   SetOutPath "$INSTDIR\data"
   File "${RESOURCEDIR}\data\GPL-2"
   File "${RESOURCEDIR}\data\file*"
+  File "${RESOURCEDIR}\data\snippets.conf"
 
   SetOutPath "$INSTDIR\share\icons"
   File /r "${RESOURCEDIR}\share\icons\*"
@@ -137,9 +141,10 @@ Section "!Program Files" SEC01
   SetOutPath "$INSTDIR"
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
-  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Geany.lnk" "$INSTDIR\Geany.exe"
-  CreateShortCut "$DESKTOP\Geany.lnk" "$INSTDIR\Geany.exe"
-  CreateShortCut "$QUICKLAUNCH\Geany.lnk" "$INSTDIR\Geany.exe"
+  CreateShortCut "$INSTDIR\Geany.lnk" "$INSTDIR\bin\Geany.exe"
+  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Geany.lnk" "$INSTDIR\bin\Geany.exe"
+  CreateShortCut "$DESKTOP\Geany.lnk" "$INSTDIR\bin\Geany.exe"
+  CreateShortCut "$QUICKLAUNCH\Geany.lnk" "$INSTDIR\bin\Geany.exe"
   !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
@@ -176,6 +181,7 @@ Section "Autocompletion Tags" SEC05
   File "${RESOURCEDIR}\data\php.tags"
   File "${RESOURCEDIR}\data\pascal.tags"
   File "${RESOURCEDIR}\data\latex.tags"
+  File "${RESOURCEDIR}\data\python.tags"
   File "${RESOURCEDIR}\data\html_entities.tags"
   File "${RESOURCEDIR}\data\global.tags"
 SectionEnd
@@ -184,9 +190,9 @@ SectionEnd
 !ifdef INCLUDE_GTK
 Section "GTK 2.12 Runtime Environment" SEC06
   SectionIn 1
-  SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
-  File "gtk\*"
+  SetOutPath "$INSTDIR\bin"
+  File /r "gtk\bin\*"
   SetOutPath "$INSTDIR\etc"
   File /r "gtk\etc\*"
   SetOutPath "$INSTDIR\lib"
@@ -203,24 +209,24 @@ SectionEnd
 Section "Context menus" SEC07
   SectionIn 1
   WriteRegStr HKCR "*\shell\OpenWithGeany" "" "Open with Geany"
-  WriteRegStr HKCR "*\shell\OpenWithGeany\command" "" '$INSTDIR\geany.exe "%1"'
+  WriteRegStr HKCR "*\shell\OpenWithGeany\command" "" '$INSTDIR\bin\geany.exe "%1"'
 SectionEnd
 
 Section -AdditionalIcons
   SetOutPath $INSTDIR
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
-  WriteIniStr "$INSTDIR\${PRODUCT_NAME}.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
-  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Website.lnk" "$INSTDIR\${PRODUCT_NAME}.url"
+  WriteIniStr "$INSTDIR\Website.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
+  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Website.lnk" "$INSTDIR\Website.url"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk" "$INSTDIR\uninst.exe"
   !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
 Section -Post
   WriteUninstaller "$INSTDIR\uninst.exe"
-  WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\Geany.exe"
+  WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\bin\Geany.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\Geany.exe"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\bin\Geany.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLUpdateInfo" "${PRODUCT_WEB_SITE}"
@@ -233,7 +239,7 @@ SectionEnd
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC01} "Required program files. You cannot skip these files."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} "Available plugins like 'Class Builder' and 'Insert Special Characters'."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} "Available plugins like 'Version Diff', 'Class Builder' and 'Insert Special Characters'."
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} "Various translations of Geany's interface."
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC04} "Manual in Text and HTML format."
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC05} "Symbol lists necessary for auto completion of symbols."
@@ -276,7 +282,7 @@ FunctionEnd
 
 Section Uninstall
   !insertmacro MUI_STARTMENU_GETFOLDER "Application" $ICONS_GROUP
-  Delete "$INSTDIR\${PRODUCT_NAME}.url"
+  Delete "$INSTDIR\Website.url"
   Delete "$INSTDIR\Documentation.url"
   Delete "$INSTDIR\uninst.exe"
   Delete "$INSTDIR\News.txt"
@@ -286,31 +292,7 @@ Section Uninstall
   Delete "$INSTDIR\Authors.txt"
   Delete "$INSTDIR\ChangeLog.txt"
   Delete "$INSTDIR\Copying.txt"
-  Delete "$INSTDIR\Geany.exe"
-  ; GTK files
-  Delete "$INSTDIR\charset.dll"
-  Delete "$INSTDIR\gspawn-win32-helper.exe"
-  Delete "$INSTDIR\gspawn-win32-helper-console.exe"
-  Delete "$INSTDIR\intl.dll"
-  Delete "$INSTDIR\jpeg62.dll"
-  Delete "$INSTDIR\libgthread-2.0-0.dll"
-  Delete "$INSTDIR\libgtk-win32-2.0-0.dll"
-  Delete "$INSTDIR\libpangocairo-1.0-0.dll"
-  Delete "$INSTDIR\libpangowin32-1.0-0.dll"
-  Delete "$INSTDIR\libgobject-2.0-0.dll"
-  Delete "$INSTDIR\libpango-1.0-0.dll"
-  Delete "$INSTDIR\libpangoft2-1.0-0.dll"
-  Delete "$INSTDIR\libatk-1.0-0.dll"
-  Delete "$INSTDIR\libcairo-2.dll"
-  Delete "$INSTDIR\libgdk_pixbuf-2.0-0.dll"
-  Delete "$INSTDIR\libgdk-win32-2.0-0.dll"
-  Delete "$INSTDIR\libglib-2.0-0.dll"
-  Delete "$INSTDIR\libgmodule-2.0-0.dll"
-  Delete "$INSTDIR\libtiff3.dll"
-  Delete "$INSTDIR\libpng12-0.dll"
-  Delete "$INSTDIR\libgio-2.0-0.dll"
-  Delete "$INSTDIR\zlib1.dll"
-
+  Delete "$INSTDIR\Geany.lnk"
 
   Delete "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk"
   Delete "$SMPROGRAMS\$ICONS_GROUP\Website.lnk"
@@ -320,6 +302,7 @@ Section Uninstall
   Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation.lnk"
 
   RMDir "$SMPROGRAMS\$ICONS_GROUP"
+  RMDir /r "$INSTDIR\bin"
   RMDir /r "$INSTDIR\doc"
   RMDir /r "$INSTDIR\data"
   RMDir /r "$INSTDIR\etc"

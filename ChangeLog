@@ -1,3 +1,13 @@
+2008-08-17  Enrico Tröger  <Enrico Tröger@localhost>
+
+ * geany.nsi:
+   Put geany.exe into a 'bin' subdirectory as well as the included
+   GTK runtime environment to fix current hardcoded 'bin' values
+   in GTK (see http://bugzilla.gnome.org/show_bug.cgi?id=542803).
+   Fix missing snippets.conf in the Windows installers.
+   Fix missing python.tags in the Windows installers.
+
+
 2008-08-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/notebook.c:
