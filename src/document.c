@@ -883,6 +883,36 @@ static void set_cursor_position(GeanyEditor *editor, gint pos)
 }
 
 
+/* Count lines that start with a hard tab then a soft tab. */
+static gboolean detect_tabs_and_spaces(GeanyEditor *editor)
+{
+	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
+	ScintillaObject *sci = editor->sci;
+	gsize count = 0;
+	struct TextToFind ttf;
+	gchar *soft_tab = g_strnfill(iprefs->width, ' ');
+	gchar *regex = g_strconcat("^\t", soft_tab, NULL);
+
+	g_free(soft_tab);
+
+	ttf.chrg.cpMin = 0;
+	ttf.chrg.cpMax = sci_get_length(sci);
+	ttf.lpstrText = regex;
+	while (1)
+	{
+		gint pos;
+
+		pos = sci_find_text(sci, SCFIND_REGEXP, &ttf);
+		if (pos == -1)
+			break;	/* no more matches */
+		count++;
+		ttf.chrg.cpMin = ttf.chrgText.cpMax + 1;	/* search after this match */
+	}
+	g_free(regex);
+	return count > sci_get_line_count(sci) * 0.02;
+}
+
+
 static GeanyIndentType detect_indent_type(GeanyEditor *editor)
 {
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
@@ -891,8 +921,7 @@ static GeanyIndentType detect_indent_type(GeanyEditor *editor)
 	gboolean use_tabs;
 	gsize tabs = 0, spaces = 0;
 
-	/* TODO: tabs & spaces detection */
-	if (iprefs->type == GEANY_INDENT_TYPE_BOTH)
+	if (detect_tabs_and_spaces(editor))
 		return GEANY_INDENT_TYPE_BOTH;
 
 	for (line = 0; line < sci_get_line_count(sci); line++)
@@ -933,21 +962,36 @@ static void set_indentation(GeanyEditor *editor)
 		case GEANY_FILETYPES_MAKE:
 			/* force using tabs for indentation for Makefiles */
 			editor_set_indent_type(editor, GEANY_INDENT_TYPE_TABS);
-			break;
+			return;
 		case GEANY_FILETYPES_F77:
 			/* force using spaces for indentation for Fortran 77 */
 			editor_set_indent_type(editor, GEANY_INDENT_TYPE_SPACES);
-			break;
-		default:
-			if (iprefs->detect_type)
-			{	/* detect & set tabs/spaces */
-				GeanyIndentType type = detect_indent_type(editor);
+			return;
+	}
+	if (iprefs->detect_type)
+	{
+		GeanyIndentType type = detect_indent_type(editor);
 
-				if (type != iprefs->type)
-					ui_set_statusbar(TRUE, _("Setting %s indentation mode."),
-						(type == GEANY_INDENT_TYPE_TABS) ? _("Tabs") : _("Spaces"));
-				editor_set_indent_type(editor, type);
+		if (type != iprefs->type)
+		{
+			const gchar *name = NULL;
+
+			switch (type)
+			{
+				case GEANY_INDENT_TYPE_SPACES:
+					name = _("Spaces");
+					break;
+				case GEANY_INDENT_TYPE_TABS:
+					name = _("Tabs");
+					break;
+				case GEANY_INDENT_TYPE_BOTH:
+					name = _("Tabs and Spaces");
+					break;
 			}
+			ui_set_statusbar(TRUE, _("Setting %s indentation mode for %s."), name,
+				DOC_FILENAME(editor->document));
+		}
+		editor_set_indent_type(editor, type);
 	}
 }
 

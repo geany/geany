@@ -1,3 +1,9 @@
+2008-08-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/document.c:
+   Support detecting 'Tabs and Spaces' indent mode when opening a file.
+
+
 2008-08-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * scintilla/Makefile.am:
