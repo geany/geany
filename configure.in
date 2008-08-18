@@ -15,8 +15,8 @@ AC_PROG_CC
 AC_PROG_CXX
 # check for C++ compiler explicitly and fail if none is found, do this check
 # after AC_PROG_CXX has set the CXX environment variable
-AC_CHECK_PROG([have_cxx], [$CXX], [yes], [no])
-if test "x$have_cxx" = "xno"; then
+which $CXX >/dev/null 2>&1
+if test "x$?" != "x0"; then
 	AC_MSG_ERROR([No C++ compiler not found. Please install a C++ compiler.])
 fi
 

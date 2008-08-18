@@ -2,6 +2,9 @@
 
  * scintilla/Makefile.am:
    Remove non-portable compiler optimisation '-Os'.
+ * configure.in:
+   Don't use AC_CHECK_PROG() to check for a C++ compiler as it
+   breaks compatibility with suncc (reported by Andras Barna, thanks).
 
 
 2008-08-17  Enrico Tröger  <Enrico Tröger@localhost>
