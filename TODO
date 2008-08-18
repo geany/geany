@@ -18,6 +18,7 @@ Note: features included in brackets have lower priority.
 	o recent projects menu
 	o project indentation settings support
 	o improve Compile toolbar button for Make (drop down radio list?)
+	o MRU documents switching
 	o (selectable menu of arguments to use for Make, from Make Custom)
 	o (DBUS)
 	o (indent wrapped lines  - Scintilla issue)
