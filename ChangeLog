@@ -3,6 +3,9 @@
  * src/editor.c:
    Fix not using auto-completion in strings and comments (patch by
    Jason Oster, thanks; fixes #2057979).
+ * src/interface.c, src/callbacks.c, src/callbacks.h, geany.glade:
+   Don't disable 'Detect from file' indent type pref when 'Tabs and
+   Spaces' is selected.
 
 
 2008-08-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

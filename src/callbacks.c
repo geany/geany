@@ -2203,21 +2203,10 @@ on_menu_reload_configuration1_activate (GtkMenuItem     *menuitem,
 
 
 void
-on_radio_indent_both_toggled           (GtkToggleButton *togglebutton,
-                                        gpointer         user_data)
-{
-	GtkWidget *check = lookup_widget(ui_widgets.prefs_dialog, "check_detect_indent");
-	gboolean active;
-
-	active = gtk_toggle_button_get_active(togglebutton);
-	gtk_widget_set_sensitive(check, !active);
-}
-
-
-void
 on_debug_messages1_activate            (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	log_show_debug_messages_dialog();
 }
+
 

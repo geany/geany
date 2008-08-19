@@ -5570,7 +5570,6 @@ Match braces</property>
 				      <property name="inconsistent">False</property>
 				      <property name="draw_indicator">True</property>
 				      <property name="group">radio_indent_spaces</property>
-				      <signal name="toggled" handler="on_radio_indent_both_toggled" last_modification_time="Tue, 05 Aug 2008 15:14:37 GMT"/>
 				    </widget>
 				    <packing>
 				      <property name="left_attach">1</property>

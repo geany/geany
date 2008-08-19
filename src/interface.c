@@ -4823,10 +4823,6 @@ create_prefs_dialog (void)
   gtk_dialog_add_action_widget (GTK_DIALOG (prefs_dialog), button5, GTK_RESPONSE_OK);
   GTK_WIDGET_SET_FLAGS (button5, GTK_CAN_DEFAULT);
 
-  g_signal_connect ((gpointer) radio_indent_both, "toggled",
-                    G_CALLBACK (on_radio_indent_both_toggled),
-                    NULL);
-
   /* Store pointers to all widgets, for use by lookup_widget(). */
   GLADE_HOOKUP_OBJECT_NO_REF (prefs_dialog, prefs_dialog, "prefs_dialog");
   GLADE_HOOKUP_OBJECT_NO_REF (prefs_dialog, dialog_vbox3, "dialog_vbox3");
