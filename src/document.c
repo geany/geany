@@ -2608,6 +2608,8 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 	{
 		/* file is missing - set unsaved state */
 		document_set_text_changed(doc, TRUE);
+		/* don't prompt more than once */
+		setptr(doc->real_path, NULL);
 
 		if (dialogs_show_question_full(NULL, GTK_STOCK_SAVE, GTK_STOCK_CANCEL,
 			_("Try to resave the file?"),

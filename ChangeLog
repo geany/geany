@@ -6,6 +6,10 @@
  * src/interface.c, src/callbacks.c, src/callbacks.h, geany.glade:
    Don't disable 'Detect from file' indent type pref when 'Tabs and
    Spaces' is selected.
+ * src/document.c:
+   Don't warn about a missing file on disk more than once (otherwise
+   somtimes it's too difficult to close the file before getting the
+   prompt).
 
 
 2008-08-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
