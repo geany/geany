@@ -883,7 +883,7 @@ static void set_cursor_position(GeanyEditor *editor, gint pos)
 }
 
 
-/* Count lines that start with a hard tab then a soft tab. */
+/* Count lines that start with some hard tabs then a soft tab. */
 static gboolean detect_tabs_and_spaces(GeanyEditor *editor)
 {
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
@@ -891,7 +891,7 @@ static gboolean detect_tabs_and_spaces(GeanyEditor *editor)
 	gsize count = 0;
 	struct TextToFind ttf;
 	gchar *soft_tab = g_strnfill(iprefs->width, ' ');
-	gchar *regex = g_strconcat("^\t", soft_tab, NULL);
+	gchar *regex = g_strconcat("^\t+", soft_tab, "[^ ]", NULL);
 
 	g_free(soft_tab);
 
@@ -909,16 +909,17 @@ static gboolean detect_tabs_and_spaces(GeanyEditor *editor)
 		ttf.chrg.cpMin = ttf.chrgText.cpMax + 1;	/* search after this match */
 	}
 	g_free(regex);
+	/* The 0.02 is a low weighting to ignore a few possibly accidental occurrences */
 	return count > sci_get_line_count(sci) * 0.02;
 }
 
 
+/* Detect the indent type based on counting the leading indent characters for each line. */
 static GeanyIndentType detect_indent_type(GeanyEditor *editor)
 {
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
 	ScintillaObject *sci = editor->sci;
 	gint line;
-	gboolean use_tabs;
 	gsize tabs = 0, spaces = 0;
 
 	if (detect_tabs_and_spaces(editor))
@@ -935,7 +936,7 @@ static GeanyIndentType detect_indent_type(GeanyEditor *editor)
 		else
 		if (c == ' ')
 		{
-			/* check at least 2 spaces */
+			/* check for at least 2 spaces */
 			if (sci_get_char_at(sci, pos + 1) == ' ')
 				spaces++;
 		}
@@ -943,13 +944,13 @@ static GeanyIndentType detect_indent_type(GeanyEditor *editor)
 	if (spaces == 0 && tabs == 0)
 		return iprefs->type;
 
-	/* Skew comparison by a factor of 2 in favour of default editor pref */
-	if (iprefs->type == GEANY_INDENT_TYPE_TABS)
-		use_tabs = ! (spaces > tabs * 2);
+	/* the factors may need to be tweaked */
+	if (spaces > tabs * 4)
+		return GEANY_INDENT_TYPE_SPACES;
+	else if (tabs > spaces * 4)
+		return GEANY_INDENT_TYPE_TABS;
 	else
-		use_tabs = (tabs > spaces * 2);
-
-	return use_tabs ? GEANY_INDENT_TYPE_TABS : GEANY_INDENT_TYPE_SPACES;
+		return GEANY_INDENT_TYPE_BOTH;
 }
 
 

@@ -8,8 +8,12 @@
    Spaces' is selected.
  * src/document.c:
    Don't warn about a missing file on disk more than once (otherwise
-   somtimes it's too difficult to close the file before getting the
+   sometimes it's too difficult to close the file before getting the
    prompt).
+ * src/document.c:
+   Detect 'Tabs and Spaces' indent mode on finding one or more hard
+   tabs before a soft tab at the start of several lines, and also when
+   the first indent symbol count is not mainly tabs or mainly spaces.
 
 
 2008-08-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
