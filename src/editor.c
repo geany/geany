@@ -2760,7 +2760,7 @@ static gboolean is_code_style(gint lexer, gint prev_style, gint style)
 				return FALSE;
 			break;
 	}
-	return !(is_comment_style(lexer, prev_style, style) &&
+	return !(is_comment_style(lexer, prev_style, style) ||
 		is_string_style(lexer, prev_style, style));
 }
 

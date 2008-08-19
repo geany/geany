@@ -1,3 +1,10 @@
+2008-08-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/editor.c:
+   Fix not using auto-completion in strings and comments (patch by
+   Jason Oster, thanks; fixes #2057979).
+
+
 2008-08-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/document.c:
