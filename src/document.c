@@ -495,7 +495,7 @@ gboolean document_remove_page(guint page_num)
 		g_free(doc->real_path);
 		tm_workspace_remove_object(doc->tm_file, TRUE, TRUE);
 
-		g_free(doc->editor);
+		editor_destroy(doc->editor);
 		doc->editor = NULL;
 
 		doc->is_valid = FALSE;

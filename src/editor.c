@@ -21,12 +21,19 @@
  * $Id$
  */
 
-/*
- * Callbacks for the Scintilla widget (ScintillaObject).
+/**
+ * @file editor.h
+ * Editor-related functions for @ref GeanyEditor.
+ * Geany uses the Scintilla editing widget, and this file is mostly built around
+ * Scintilla's functionality.
+ * @see sciwrappers.h.
+ */
+/* Callbacks for the Scintilla widget (ScintillaObject).
  * Most important is the sci-notify callback, handled in on_editor_notification().
  * This includes auto-indentation, comments, auto-completion, calltips, etc.
  * Also some general Scintilla-related functions.
  */
+
 
 #include <ctype.h>
 #include <string.h>
@@ -3802,6 +3809,13 @@ GeanyEditor *editor_create(GeanyDocument *doc)
 	editor->scroll_percent = -1.0F;
 	editor->line_breaking = FALSE;
 	return editor;
+}
+
+
+/* in case we need to free some fields in future */
+void editor_destroy(GeanyEditor *editor)
+{
+	g_free(editor);
 }
 
 

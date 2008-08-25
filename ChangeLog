@@ -1,3 +1,12 @@
+2008-08-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/document.c, src/editor.c, src/editor.h:
+   Add editor_destroy() to dispose of a GeanyEditor struct (in future
+   we may want to do more than just free it).
+   Fix editor.h dox description to be more informative for the API
+   (and move dox from editor.h to editor.c).
+
+
 2008-08-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/editor.c:

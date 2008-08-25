@@ -21,14 +21,6 @@
  * $Id$
  */
 
-/**
- *  @file editor.h
- *  Callbacks for the Scintilla widget (ScintillaObject).
- *  Most important is the sci-notify callback, handled in on_editor_notification().
- *  This includes auto-indentation, comments, auto-completion, calltips, etc.
- *  Also some general Scintilla-related functions.
- **/
-
 
 #ifndef GEANY_SCI_CB_H
 #define GEANY_SCI_CB_H 1
@@ -148,6 +140,8 @@ extern EditorInfo editor_info;
 void editor_init(void);
 
 GeanyEditor *editor_create(GeanyDocument *doc);
+
+void editor_destroy(GeanyEditor *editor);
 
 void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer user_data);
 
