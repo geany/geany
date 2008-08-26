@@ -1,3 +1,13 @@
+2008-08-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/highlighting.c:
+   Add assert statements to check that the StyleSet styling arrays are
+   not exceeded.
+   (Also make highlighting_get_style() work with all filetypes, but
+   probably we should remove this from the API; plugins could just use
+   the SCI_STYLEGET* functions instead).
+
+
 2008-08-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/document.c, src/editor.c, src/editor.h:

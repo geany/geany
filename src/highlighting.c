@@ -46,13 +46,14 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords);
 
 typedef struct
 {
-	HighlightingStyle	 *styling;		/* array of styles, NULL if not used or uninitialised */
+	gsize				count;		/* number of styles */
+	HighlightingStyle	*styling;		/* array of styles, NULL if not used or uninitialised */
 	gchar				**keywords;
-	gchar				 *wordchars;	/* NULL used for style sets with no styles */
+	gchar				*wordchars;	/* NULL used for style sets with no styles */
 } StyleSet;
 
-/* each filetype has a styleset except GEANY_FILETYPE_ALL */
-static StyleSet style_sets[GEANY_MAX_BUILT_IN_FILETYPES - 1] = {{NULL, NULL, NULL}};
+/* each filetype has a styleset except GEANY_FILETYPES_NONE, which uses common_style_set */
+static StyleSet style_sets[GEANY_MAX_BUILT_IN_FILETYPES - 1] = {{0, NULL, NULL, NULL}};
 
 
 enum	/* Geany common styling */
@@ -103,7 +104,10 @@ typedef struct
 
 static void new_style_array(gint file_type_id, gint styling_count)
 {
-	style_sets[file_type_id].styling = g_new0(HighlightingStyle, styling_count);
+	StyleSet *set = &style_sets[file_type_id];
+
+	set->count = styling_count;
+	set->styling = g_new0(HighlightingStyle, styling_count);
 }
 
 
@@ -269,14 +273,28 @@ static guint invert(guint icolour)
 }
 
 
-static void set_sci_style(ScintillaObject *sci, gint style, gint ft, gint styling_index)
+static HighlightingStyle *get_style(guint ft_id, guint styling_index)
 {
-	HighlightingStyle *style_ptr;
+	g_assert(ft_id < GEANY_MAX_BUILT_IN_FILETYPES);
 
-	if (ft == GEANY_FILETYPES_NONE)
-		style_ptr = &common_style_set.styling[styling_index];
+	if (ft_id == GEANY_FILETYPES_NONE)
+	{
+		g_assert(styling_index < GCS_MAX);
+		return &common_style_set.styling[styling_index];
+	}
 	else
-		style_ptr = &style_sets[ft].styling[styling_index];
+	{
+		StyleSet *set = &style_sets[ft_id];
+
+		g_assert(styling_index < set->count);
+		return &set->styling[styling_index];
+	}
+}
+
+
+static void set_sci_style(ScintillaObject *sci, gint style, guint ft_id, guint styling_index)
+{
+	HighlightingStyle *style_ptr = get_style(ft_id, styling_index);
 
 	SSM(sci, SCI_STYLESETFORE, style,	invert(style_ptr->foreground));
 	SSM(sci, SCI_STYLESETBACK, style,	invert(style_ptr->background));
@@ -294,6 +312,7 @@ void highlighting_free_styles()
 		StyleSet *style_ptr;
 		style_ptr = &style_sets[i];
 
+		style_ptr->count = 0;
 		g_free(style_ptr->styling);
 		g_strfreev(style_ptr->keywords);
 		g_free(style_ptr->wordchars);
@@ -3046,10 +3065,10 @@ const HighlightingStyle *highlighting_get_style(gint ft_id, gint style_id)
 	if (ft_id < 0 || ft_id > GEANY_MAX_BUILT_IN_FILETYPES)
 		return NULL;
 
-	if (style_sets[ft_id].styling == NULL)
-		filetypes_load_config(ft_id, FALSE);
+	/* ensure filetype loaded */
+	filetypes_load_config(ft_id, FALSE);
 
-	/** TODO style_id might not be the real array index (Scintilla styles are not always synced
-	  * with array indices) */
-	return (const HighlightingStyle*) &style_sets[ft_id].styling[style_id];
+	/* TODO: style_id might not be the real array index (Scintilla styles are not always synced
+	 * with array indices) */
+	return get_style(ft_id, style_id);
 }
