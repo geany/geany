@@ -21,7 +21,8 @@
  * $Id$
  */
 
-/*
+/**
+ * @file highlighting.h
  * Syntax highlighting for the different filetypes, using the Scintilla lexers.
  */
 
@@ -47,7 +48,7 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords);
 typedef struct
 {
 	gsize				count;		/* number of styles */
-	HighlightingStyle	*styling;		/* array of styles, NULL if not used or uninitialised */
+	GeanyLexerStyle	*styling;		/* array of styles, NULL if not used or uninitialised */
 	gchar				**keywords;
 	gchar				*wordchars;	/* NULL used for style sets with no styles */
 } StyleSet;
@@ -87,7 +88,7 @@ typedef struct
 
 static struct
 {
-	HighlightingStyle	 styling[GCS_MAX];
+	GeanyLexerStyle	 styling[GCS_MAX];
 	FoldingStyle		 folding_style;
 	gboolean			 invert_all;
 	gchar				*wordchars;
@@ -98,7 +99,7 @@ static struct
 typedef struct
 {
 	gchar				*name;
-	HighlightingStyle	*style;
+	GeanyLexerStyle	*style;
 } StyleEntry;
 
 
@@ -107,7 +108,7 @@ static void new_style_array(gint file_type_id, gint styling_count)
 	StyleSet *set = &style_sets[file_type_id];
 
 	set->count = styling_count;
-	set->styling = g_new0(HighlightingStyle, styling_count);
+	set->styling = g_new0(GeanyLexerStyle, styling_count);
 }
 
 
@@ -168,7 +169,7 @@ static gint rotate_rgb(gint color)
 
 
 static void get_keyfile_style(GKeyFile *config, GKeyFile *configh,
-		const gchar *key_name, const HighlightingStyle *default_style, HighlightingStyle *style)
+		const gchar *key_name, const GeanyLexerStyle *default_style, GeanyLexerStyle *style)
 {
 	gchar **list;
 	gsize len;
@@ -202,7 +203,7 @@ static void get_keyfile_style(GKeyFile *config, GKeyFile *configh,
 static void get_keyfile_hex(GKeyFile *config, GKeyFile *configh,
 				const gchar *section, const gchar *key,
 				const gchar *foreground, const gchar *background, const gchar *bold,
-				HighlightingStyle *style)
+				GeanyLexerStyle *style)
 {
 	gchar **list;
 	gsize len;
@@ -234,7 +235,7 @@ static void get_keyfile_hex(GKeyFile *config, GKeyFile *configh,
 
 static void get_keyfile_int(GKeyFile *config, GKeyFile *configh, const gchar *section,
 							const gchar *key, gint fdefault_val, gint sdefault_val,
-							HighlightingStyle *style)
+							GeanyLexerStyle *style)
 {
 	gchar **list;
 	gchar *end1, *end2;
@@ -273,7 +274,7 @@ static guint invert(guint icolour)
 }
 
 
-static HighlightingStyle *get_style(guint ft_id, guint styling_index)
+static GeanyLexerStyle *get_style(guint ft_id, guint styling_index)
 {
 	g_assert(ft_id < GEANY_MAX_BUILT_IN_FILETYPES);
 
@@ -294,7 +295,7 @@ static HighlightingStyle *get_style(guint ft_id, guint styling_index)
 
 static void set_sci_style(ScintillaObject *sci, gint style, guint ft_id, guint styling_index)
 {
-	HighlightingStyle *style_ptr = get_style(ft_id, styling_index);
+	GeanyLexerStyle *style_ptr = get_style(ft_id, styling_index);
 
 	SSM(sci, SCI_STYLESETFORE, style,	invert(style_ptr->foreground));
 	SSM(sci, SCI_STYLESETBACK, style,	invert(style_ptr->background));
@@ -392,7 +393,7 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 		"0x000000", "0xB8F4B8", "false", &common_style_set.styling[GCS_MARKER_SEARCH]);
 	{
 		/* hack because get_keyfile_int uses a Style struct */
-		HighlightingStyle tmp_style;
+		GeanyLexerStyle tmp_style;
 		get_keyfile_int(config, config_home, "styling", "folding_style",
 			1, 1, &tmp_style);
 		common_style_set.folding_style.marker = tmp_style.foreground;
@@ -624,26 +625,26 @@ apply_filetype_properties(ScintillaObject *sci, gint lexer, filetype_id ft_id)
  * Ideally these would be used as common styling for all compilable programming
  * languages (and perhaps partially used for scripting languages too).
  * Currently only used as default styling for C-like languages. */
-HighlightingStyle gsd_default =		{0x000000, 0xffffff, FALSE, FALSE};
-HighlightingStyle gsd_comment =		{0xd00000, 0xffffff, FALSE, FALSE};
-HighlightingStyle gsd_comment_doc =	{0x3f5fbf, 0xffffff, TRUE, FALSE};
-HighlightingStyle gsd_number =		{0x007f00, 0xffffff, FALSE, FALSE};
-HighlightingStyle gsd_reserved_word =	{0x00007f, 0xffffff, TRUE, FALSE};
-HighlightingStyle gsd_system_word =	{0x991111, 0xffffff, TRUE, FALSE};
-HighlightingStyle gsd_user_word =	{0x0000d0, 0xffffff, TRUE, FALSE};
-HighlightingStyle gsd_string =		{0xff901e, 0xffffff, FALSE, FALSE};
-HighlightingStyle gsd_pragma =		{0x007f7f, 0xffffff, FALSE, FALSE};
-HighlightingStyle gsd_string_eol =	{0x000000, 0xe0c0e0, FALSE, FALSE};
+GeanyLexerStyle gsd_default =		{0x000000, 0xffffff, FALSE, FALSE};
+GeanyLexerStyle gsd_comment =		{0xd00000, 0xffffff, FALSE, FALSE};
+GeanyLexerStyle gsd_comment_doc =	{0x3f5fbf, 0xffffff, TRUE, FALSE};
+GeanyLexerStyle gsd_number =		{0x007f00, 0xffffff, FALSE, FALSE};
+GeanyLexerStyle gsd_reserved_word =	{0x00007f, 0xffffff, TRUE, FALSE};
+GeanyLexerStyle gsd_system_word =	{0x991111, 0xffffff, TRUE, FALSE};
+GeanyLexerStyle gsd_user_word =	{0x0000d0, 0xffffff, TRUE, FALSE};
+GeanyLexerStyle gsd_string =		{0xff901e, 0xffffff, FALSE, FALSE};
+GeanyLexerStyle gsd_pragma =		{0x007f7f, 0xffffff, FALSE, FALSE};
+GeanyLexerStyle gsd_string_eol =	{0x000000, 0xe0c0e0, FALSE, FALSE};
 
 
 /* call new_style_array(filetype_idx, >= 20) before using this. */
 static void
 styleset_c_like_init(GKeyFile *config, GKeyFile *config_home, gint filetype_idx)
 {
-	static HighlightingStyle uuid = {0x404080, 0xffffff, FALSE, FALSE};
-	static HighlightingStyle operator = {0x301010, 0xffffff, FALSE, FALSE};
-	static HighlightingStyle verbatim = {0x301010, 0xffffff, FALSE, FALSE};
-	static HighlightingStyle regex = {0x105090, 0xffffff, FALSE, FALSE};
+	static GeanyLexerStyle uuid = {0x404080, 0xffffff, FALSE, FALSE};
+	static GeanyLexerStyle operator = {0x301010, 0xffffff, FALSE, FALSE};
+	static GeanyLexerStyle verbatim = {0x301010, 0xffffff, FALSE, FALSE};
+	static GeanyLexerStyle regex = {0x105090, 0xffffff, FALSE, FALSE};
 
 	StyleEntry entries[] =
 	{
@@ -3056,11 +3057,15 @@ void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 }
 
 
-/* Retrieve a style style_id for the filetype ft_id. If the style was not already initialised
+/** Retrieve a style @a style_id for the filetype @a ft_id.
+ * If the style was not already initialised
  * (e.g. by by opening a file of this type), it will be initialised. The returned pointer is
  * owned by Geany and must not be freed.
- * style_id is a Scintilla lexer style, see scintilla/SciLexer.h */
-const HighlightingStyle *highlighting_get_style(gint ft_id, gint style_id)
+ * @param ft_id Filetype ID, e.g. @c GEANY_FILETYPES_DIFF.
+ * @param style_id A Scintilla lexer style, e.g. @c SCE_DIFF_ADDED. See scintilla/include/SciLexer.h.
+ * @return A pointer to the style struct.
+ * @see Scintilla messages @c SCI_STYLEGETFORE, etc, for use with ScintillaFuncs::send_message(). */
+const GeanyLexerStyle *highlighting_get_style(gint ft_id, gint style_id)
 {
 	if (ft_id < 0 || ft_id > GEANY_MAX_BUILT_IN_FILETYPES)
 		return NULL;

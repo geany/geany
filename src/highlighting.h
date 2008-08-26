@@ -29,20 +29,23 @@
 #include "ScintillaWidget.h"
 
 
-typedef struct HighlightingStyle
+/** Fields representing the different attributes of a Scintilla lexer style.
+ * @see Scintilla messages @c SCI_STYLEGETFORE, etc, for use with ScintillaFuncs::send_message(). */
+typedef struct GeanyLexerStyle
 {
-	gint	foreground;
-	gint	background;
-	gboolean bold;
-	gboolean italic;
-} HighlightingStyle;
+	gint	foreground;	/**< Foreground text colour, in @c 0xBBGGRR format. */
+	gint	background;	/**< Background text colour, in @c 0xBBGGRR format. */
+	gboolean bold;		/**< Bold. */
+	gboolean italic;	/**< Italic. */
+}
+GeanyLexerStyle;
 
 
 void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *configh);
 
 void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx);
 
-const HighlightingStyle *highlighting_get_style(gint ft_id, gint style_id);
+const GeanyLexerStyle *highlighting_get_style(gint ft_id, gint style_id);
 
 void highlighting_free_styles(void);
 
