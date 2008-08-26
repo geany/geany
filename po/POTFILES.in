@@ -42,3 +42,4 @@ plugins/export.c
 plugins/vcdiff.c
 plugins/filebrowser.c
 plugins/autosave.c
+plugins/splitwindow.c

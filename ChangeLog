@@ -1,5 +1,12 @@
 2008-08-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
+ * src/plugindata.h, src/plugins.c, po/POTFILES.in,
+   plugins/splitwindow.c, plugins/Makefile.am, plugins/makefile.win32:
+   Add Split Window plugin (work-in-progress).
+
+
+2008-08-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
  * src/highlighting.c:
    Add assert statements to check that the StyleSet styling arrays are
    not exceeded.

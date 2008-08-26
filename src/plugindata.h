@@ -41,7 +41,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 89,
+	GEANY_API_VERSION = 90,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -455,6 +455,8 @@ typedef struct EditorFuncs
 	void	(*clear_indicators) (struct GeanyEditor *editor);
 
 	const struct GeanyIndentPrefs* (*get_indent_prefs)(struct GeanyEditor *editor);
+	struct GeanyEditor* (*create)(struct GeanyDocument *doc);
+	void	(*destroy)(struct GeanyEditor *editor);
 	/* Remember to convert any GeanyDocument or ScintillaObject pointers in any
 	 * appended functions to GeanyEditor pointers. */
 }
