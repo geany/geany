@@ -63,330 +63,367 @@ static void create_radio_menu_item(GtkWidget *menu, const gchar *label, GeanyFil
 
 static void init_builtin_filetypes(void)
 {
+	GeanyFiletype *ft;
+
 #define C	/* these macros are only to ease navigation */
-	filetypes[GEANY_FILETYPES_C]->lang = 0;
-	filetypes[GEANY_FILETYPES_C]->name = g_strdup("C");
-	filetypes[GEANY_FILETYPES_C]->title = g_strdup_printf(_("%s source file"), "C");
-	filetypes[GEANY_FILETYPES_C]->extension = g_strdup("c");
-	filetypes[GEANY_FILETYPES_C]->pattern = utils_strv_new("*.c", "*.h", NULL);
-	filetypes[GEANY_FILETYPES_C]->comment_open = g_strdup("/*");
-	filetypes[GEANY_FILETYPES_C]->comment_close = g_strdup("*/");
+	ft = filetypes[GEANY_FILETYPES_C];
+	ft->lang = 0;
+	ft->name = g_strdup("C");
+	ft->title = g_strdup_printf(_("%s source file"), "C");
+	ft->extension = g_strdup("c");
+	ft->pattern = utils_strv_new("*.c", "*.h", NULL);
+	ft->comment_open = g_strdup("/*");
+	ft->comment_close = g_strdup("*/");
 
 #define CPP
-	filetypes[GEANY_FILETYPES_CPP]->lang = 1;
-	filetypes[GEANY_FILETYPES_CPP]->name = g_strdup("C++");
-	filetypes[GEANY_FILETYPES_CPP]->title = g_strdup_printf(_("%s source file"), "C++");
-	filetypes[GEANY_FILETYPES_CPP]->extension = g_strdup("cpp");
-	filetypes[GEANY_FILETYPES_CPP]->pattern = utils_strv_new("*.cpp", "*.cxx", "*.c++", "*.cc",
+	ft = filetypes[GEANY_FILETYPES_CPP];
+	ft->lang = 1;
+	ft->name = g_strdup("C++");
+	ft->title = g_strdup_printf(_("%s source file"), "C++");
+	ft->extension = g_strdup("cpp");
+	ft->pattern = utils_strv_new("*.cpp", "*.cxx", "*.c++", "*.cc",
 		"*.h", "*.hpp", "*.hxx", "*.h++", "*.hh", "*.C", NULL);
-	filetypes[GEANY_FILETYPES_CPP]->comment_open = g_strdup("//");
-	filetypes[GEANY_FILETYPES_CPP]->comment_close = NULL;
+	ft->comment_open = g_strdup("//");
+	ft->comment_close = NULL;
 
 #define CS
-	filetypes[GEANY_FILETYPES_CS]->lang = 25;
-	filetypes[GEANY_FILETYPES_CS]->name = g_strdup("C#");
-	filetypes[GEANY_FILETYPES_CS]->title = g_strdup_printf(_("%s source file"), "C#");
-	filetypes[GEANY_FILETYPES_CS]->extension = g_strdup("cs");
-	filetypes[GEANY_FILETYPES_CS]->pattern = utils_strv_new("*.cs", "*.vala", NULL);
-	filetypes[GEANY_FILETYPES_CS]->comment_open = g_strdup("//");
-	filetypes[GEANY_FILETYPES_CS]->comment_close = NULL;
+	ft = filetypes[GEANY_FILETYPES_CS];
+	ft->lang = 25;
+	ft->name = g_strdup("C#");
+	ft->title = g_strdup_printf(_("%s source file"), "C#");
+	ft->extension = g_strdup("cs");
+	ft->pattern = utils_strv_new("*.cs", "*.vala", NULL);
+	ft->comment_open = g_strdup("//");
+	ft->comment_close = NULL;
 
 #define D
-	filetypes[GEANY_FILETYPES_D]->lang = 17;
-	filetypes[GEANY_FILETYPES_D]->name = g_strdup("D");
-	filetypes[GEANY_FILETYPES_D]->title = g_strdup_printf(_("%s source file"), "D");
-	filetypes[GEANY_FILETYPES_D]->extension = g_strdup("d");
-	filetypes[GEANY_FILETYPES_D]->pattern = utils_strv_new("*.d", "*.di", NULL);
-	filetypes[GEANY_FILETYPES_D]->comment_open = g_strdup("//");
-	filetypes[GEANY_FILETYPES_D]->comment_close = NULL;
+	ft = filetypes[GEANY_FILETYPES_D];
+	ft->lang = 17;
+	ft->name = g_strdup("D");
+	ft->title = g_strdup_printf(_("%s source file"), "D");
+	ft->extension = g_strdup("d");
+	ft->pattern = utils_strv_new("*.d", "*.di", NULL);
+	ft->comment_open = g_strdup("//");
+	ft->comment_close = NULL;
 
 #define JAVA
-	filetypes[GEANY_FILETYPES_JAVA]->name = g_strdup("Java");
-	filetypes[GEANY_FILETYPES_JAVA]->lang = 2;
-	filetypes[GEANY_FILETYPES_JAVA]->title = g_strdup_printf(_("%s source file"), "Java");
-	filetypes[GEANY_FILETYPES_JAVA]->extension = g_strdup("java");
-	filetypes[GEANY_FILETYPES_JAVA]->pattern = utils_strv_new("*.java", "*.jsp", NULL);
-	filetypes[GEANY_FILETYPES_JAVA]->comment_open = g_strdup("/*");
-	filetypes[GEANY_FILETYPES_JAVA]->comment_close = g_strdup("*/");
+	ft = filetypes[GEANY_FILETYPES_JAVA];
+	ft->lang = 2;
+	ft->name = g_strdup("Java");
+	ft->title = g_strdup_printf(_("%s source file"), "Java");
+	ft->extension = g_strdup("java");
+	ft->pattern = utils_strv_new("*.java", "*.jsp", NULL);
+	ft->comment_open = g_strdup("/*");
+	ft->comment_close = g_strdup("*/");
 
 #define PAS /* to avoid warnings when building under Windows, the symbol PASCAL is there defined */
-	filetypes[GEANY_FILETYPES_PASCAL]->lang = 4;
-	filetypes[GEANY_FILETYPES_PASCAL]->name = g_strdup("Pascal");
-	filetypes[GEANY_FILETYPES_PASCAL]->title = g_strdup_printf(_("%s source file"), "Pascal");
-	filetypes[GEANY_FILETYPES_PASCAL]->extension = g_strdup("pas");
-	filetypes[GEANY_FILETYPES_PASCAL]->pattern = utils_strv_new("*.pas", "*.pp", "*.inc", "*.dpr",
+	ft = filetypes[GEANY_FILETYPES_PASCAL];
+	ft->lang = 4;
+	ft->name = g_strdup("Pascal");
+	ft->title = g_strdup_printf(_("%s source file"), "Pascal");
+	ft->extension = g_strdup("pas");
+	ft->pattern = utils_strv_new("*.pas", "*.pp", "*.inc", "*.dpr",
 		"*.dpk", NULL);
-	filetypes[GEANY_FILETYPES_PASCAL]->comment_open = g_strdup("{");
-	filetypes[GEANY_FILETYPES_PASCAL]->comment_close = g_strdup("}");
+	ft->comment_open = g_strdup("{");
+	ft->comment_close = g_strdup("}");
 
 #define ASM
-	filetypes[GEANY_FILETYPES_ASM]->lang = 9;
-	filetypes[GEANY_FILETYPES_ASM]->name = g_strdup("ASM");
-	filetypes[GEANY_FILETYPES_ASM]->title = g_strdup_printf(_("%s source file"), "Assembler");
-	filetypes[GEANY_FILETYPES_ASM]->extension = g_strdup("asm");
-	filetypes[GEANY_FILETYPES_ASM]->pattern = utils_strv_new("*.asm", NULL);
-	filetypes[GEANY_FILETYPES_ASM]->comment_open = g_strdup(";");
-	filetypes[GEANY_FILETYPES_ASM]->comment_close = NULL;
+	ft = filetypes[GEANY_FILETYPES_ASM];
+	ft->lang = 9;
+	ft->name = g_strdup("ASM");
+	ft->title = g_strdup_printf(_("%s source file"), "Assembler");
+	ft->extension = g_strdup("asm");
+	ft->pattern = utils_strv_new("*.asm", NULL);
+	ft->comment_open = g_strdup(";");
+	ft->comment_close = NULL;
 
 #define BASIC
-	filetypes[GEANY_FILETYPES_BASIC]->lang = 26;
-	filetypes[GEANY_FILETYPES_BASIC]->name = g_strdup("FreeBasic");
-	filetypes[GEANY_FILETYPES_BASIC]->title = g_strdup_printf(_("%s source file"), "FreeBasic");
-	filetypes[GEANY_FILETYPES_BASIC]->extension = g_strdup("bas");
-	filetypes[GEANY_FILETYPES_BASIC]->pattern = utils_strv_new("*.bas", "*.bi", NULL);
-	filetypes[GEANY_FILETYPES_BASIC]->comment_open = g_strdup("'");
-	filetypes[GEANY_FILETYPES_BASIC]->comment_close = NULL;
+	ft = filetypes[GEANY_FILETYPES_BASIC];
+	ft->lang = 26;
+	ft->name = g_strdup("FreeBasic");
+	ft->title = g_strdup_printf(_("%s source file"), "FreeBasic");
+	ft->extension = g_strdup("bas");
+	ft->pattern = utils_strv_new("*.bas", "*.bi", NULL);
+	ft->comment_open = g_strdup("'");
+	ft->comment_close = NULL;
 
 #define FORTRAN
-	filetypes[GEANY_FILETYPES_FORTRAN]->lang = 18;
-	filetypes[GEANY_FILETYPES_FORTRAN]->name = g_strdup("Fortran");
-	filetypes[GEANY_FILETYPES_FORTRAN]->title = g_strdup_printf(_("%s source file"), "Fortran (F90)");
-	filetypes[GEANY_FILETYPES_FORTRAN]->extension = g_strdup("f90");
-	filetypes[GEANY_FILETYPES_FORTRAN]->pattern = utils_strv_new("*.f90", "*.f95", "*.f03", NULL);
-	filetypes[GEANY_FILETYPES_FORTRAN]->comment_open = g_strdup("c");
-	filetypes[GEANY_FILETYPES_FORTRAN]->comment_close = NULL;
+	ft = filetypes[GEANY_FILETYPES_FORTRAN];
+	ft->lang = 18;
+	ft->name = g_strdup("Fortran");
+	ft->title = g_strdup_printf(_("%s source file"), "Fortran (F90)");
+	ft->extension = g_strdup("f90");
+	ft->pattern = utils_strv_new("*.f90", "*.f95", "*.f03", NULL);
+	ft->comment_open = g_strdup("c");
+	ft->comment_close = NULL;
 
 #define F77
-	filetypes[GEANY_FILETYPES_F77]->lang = 30;
-	filetypes[GEANY_FILETYPES_F77]->name = g_strdup("F77");
-	filetypes[GEANY_FILETYPES_F77]->title = g_strdup_printf(_("%s source file"), "Fortran (F77)");
-	filetypes[GEANY_FILETYPES_F77]->extension = g_strdup("f");
-	filetypes[GEANY_FILETYPES_F77]->pattern = utils_strv_new("*.f", "*.for", "*.ftn", "*.f77", NULL);
-	filetypes[GEANY_FILETYPES_F77]->comment_open = g_strdup("c");
-	filetypes[GEANY_FILETYPES_F77]->comment_close = NULL;
+	ft = filetypes[GEANY_FILETYPES_F77];
+	ft->lang = 30;
+	ft->name = g_strdup("F77");
+	ft->title = g_strdup_printf(_("%s source file"), "Fortran (F77)");
+	ft->extension = g_strdup("f");
+	ft->pattern = utils_strv_new("*.f", "*.for", "*.ftn", "*.f77", NULL);
+	ft->comment_open = g_strdup("c");
+	ft->comment_close = NULL;
 
 #define CAML
-	filetypes[GEANY_FILETYPES_CAML]->lang = -2;
-	filetypes[GEANY_FILETYPES_CAML]->name = g_strdup("CAML");
-	filetypes[GEANY_FILETYPES_CAML]->title = g_strdup_printf(_("%s source file"), "(O)Caml");
-	filetypes[GEANY_FILETYPES_CAML]->extension = g_strdup("ml");
-	filetypes[GEANY_FILETYPES_CAML]->pattern = utils_strv_new("*.ml", "*.mli", NULL);
-	filetypes[GEANY_FILETYPES_CAML]->comment_open = g_strdup("(*");
-	filetypes[GEANY_FILETYPES_CAML]->comment_close = g_strdup("*)");
+	ft = filetypes[GEANY_FILETYPES_CAML];
+	ft->lang = -2;
+	ft->name = g_strdup("CAML");
+	ft->title = g_strdup_printf(_("%s source file"), "(O)Caml");
+	ft->extension = g_strdup("ml");
+	ft->pattern = utils_strv_new("*.ml", "*.mli", NULL);
+	ft->comment_open = g_strdup("(*");
+	ft->comment_close = g_strdup("*)");
 
 #define PERL
-	filetypes[GEANY_FILETYPES_PERL]->lang = 5;
-	filetypes[GEANY_FILETYPES_PERL]->name = g_strdup("Perl");
-	filetypes[GEANY_FILETYPES_PERL]->title = g_strdup_printf(_("%s source file"), "Perl");
-	filetypes[GEANY_FILETYPES_PERL]->extension = g_strdup("pl");
-	filetypes[GEANY_FILETYPES_PERL]->pattern = utils_strv_new("*.pl", "*.perl", "*.pm", "*.agi",
+	ft = filetypes[GEANY_FILETYPES_PERL];
+	ft->lang = 5;
+	ft->name = g_strdup("Perl");
+	ft->title = g_strdup_printf(_("%s source file"), "Perl");
+	ft->extension = g_strdup("pl");
+	ft->pattern = utils_strv_new("*.pl", "*.perl", "*.pm", "*.agi",
 		"*.pod", NULL);
-	filetypes[GEANY_FILETYPES_PERL]->comment_open = g_strdup("#");
-	filetypes[GEANY_FILETYPES_PERL]->comment_close = NULL;
+	ft->comment_open = g_strdup("#");
+	ft->comment_close = NULL;
 
 #define PHP
-	filetypes[GEANY_FILETYPES_PHP]->lang = 6;
-	filetypes[GEANY_FILETYPES_PHP]->name = g_strdup("PHP");
-	filetypes[GEANY_FILETYPES_PHP]->title = g_strdup_printf(_("%s source file"), "PHP");
-	filetypes[GEANY_FILETYPES_PHP]->extension = g_strdup("php");
-	filetypes[GEANY_FILETYPES_PHP]->pattern = utils_strv_new("*.php", "*.php3", "*.php4", "*.php5",
+	ft = filetypes[GEANY_FILETYPES_PHP];
+	ft->lang = 6;
+	ft->name = g_strdup("PHP");
+	ft->title = g_strdup_printf(_("%s source file"), "PHP");
+	ft->extension = g_strdup("php");
+	ft->pattern = utils_strv_new("*.php", "*.php3", "*.php4", "*.php5",
 		"*.phtml", NULL);
-	filetypes[GEANY_FILETYPES_PHP]->comment_open = g_strdup("//");
-	filetypes[GEANY_FILETYPES_PHP]->comment_close = NULL;
+	ft->comment_open = g_strdup("//");
+	ft->comment_close = NULL;
 
 #define JAVASCRIPT
-	filetypes[GEANY_FILETYPES_JS]->lang = 23;
-	filetypes[GEANY_FILETYPES_JS]->name = g_strdup("Javascript");
-	filetypes[GEANY_FILETYPES_JS]->title = g_strdup_printf(_("%s source file"), "Javascript");
-	filetypes[GEANY_FILETYPES_JS]->extension = g_strdup("js");
-	filetypes[GEANY_FILETYPES_JS]->pattern = utils_strv_new("*.js", NULL);
-	filetypes[GEANY_FILETYPES_JS]->comment_open = g_strdup("//");
-	filetypes[GEANY_FILETYPES_JS]->comment_close = NULL;
+	ft = filetypes[GEANY_FILETYPES_JS];
+	ft->lang = 23;
+	ft->name = g_strdup("Javascript");
+	ft->title = g_strdup_printf(_("%s source file"), "Javascript");
+	ft->extension = g_strdup("js");
+	ft->pattern = utils_strv_new("*.js", NULL);
+	ft->comment_open = g_strdup("//");
+	ft->comment_close = NULL;
 
 #define PYTHON
-	filetypes[GEANY_FILETYPES_PYTHON]->lang = 7;
-	filetypes[GEANY_FILETYPES_PYTHON]->name = g_strdup("Python");
-	filetypes[GEANY_FILETYPES_PYTHON]->title = g_strdup_printf(_("%s source file"), "Python");
-	filetypes[GEANY_FILETYPES_PYTHON]->extension = g_strdup("py");
-	filetypes[GEANY_FILETYPES_PYTHON]->pattern = utils_strv_new("*.py", "*.pyw", NULL);
-	filetypes[GEANY_FILETYPES_PYTHON]->comment_open = g_strdup("#");
-	filetypes[GEANY_FILETYPES_PYTHON]->comment_close = NULL;
+	ft = filetypes[GEANY_FILETYPES_PYTHON];
+	ft->lang = 7;
+	ft->name = g_strdup("Python");
+	ft->title = g_strdup_printf(_("%s source file"), "Python");
+	ft->extension = g_strdup("py");
+	ft->pattern = utils_strv_new("*.py", "*.pyw", NULL);
+	ft->comment_open = g_strdup("#");
+	ft->comment_close = NULL;
 
 #define RUBY
-	filetypes[GEANY_FILETYPES_RUBY]->lang = 14;
-	filetypes[GEANY_FILETYPES_RUBY]->name = g_strdup("Ruby");
-	filetypes[GEANY_FILETYPES_RUBY]->title = g_strdup_printf(_("%s source file"), "Ruby");
-	filetypes[GEANY_FILETYPES_RUBY]->extension = g_strdup("rb");
-	filetypes[GEANY_FILETYPES_RUBY]->pattern = utils_strv_new("*.rb", "*.rhtml", "*.ruby", NULL);
-	filetypes[GEANY_FILETYPES_RUBY]->comment_open = g_strdup("#");
-	filetypes[GEANY_FILETYPES_RUBY]->comment_close = NULL;
+	ft = filetypes[GEANY_FILETYPES_RUBY];
+	ft->lang = 14;
+	ft->name = g_strdup("Ruby");
+	ft->title = g_strdup_printf(_("%s source file"), "Ruby");
+	ft->extension = g_strdup("rb");
+	ft->pattern = utils_strv_new("*.rb", "*.rhtml", "*.ruby", NULL);
+	ft->comment_open = g_strdup("#");
+	ft->comment_close = NULL;
 
 #define TCL
-	filetypes[GEANY_FILETYPES_TCL]->lang = 15;
-	filetypes[GEANY_FILETYPES_TCL]->name = g_strdup("Tcl");
-	filetypes[GEANY_FILETYPES_TCL]->title = g_strdup_printf(_("%s source file"), "Tcl");
-	filetypes[GEANY_FILETYPES_TCL]->extension = g_strdup("tcl");
-	filetypes[GEANY_FILETYPES_TCL]->pattern = utils_strv_new("*.tcl", "*.tk", "*.wish", NULL);
-	filetypes[GEANY_FILETYPES_TCL]->comment_open = g_strdup("#");
-	filetypes[GEANY_FILETYPES_TCL]->comment_close = NULL;
+	ft = filetypes[GEANY_FILETYPES_TCL];
+	ft->lang = 15;
+	ft->name = g_strdup("Tcl");
+	ft->title = g_strdup_printf(_("%s source file"), "Tcl");
+	ft->extension = g_strdup("tcl");
+	ft->pattern = utils_strv_new("*.tcl", "*.tk", "*.wish", NULL);
+	ft->comment_open = g_strdup("#");
+	ft->comment_close = NULL;
 
 #define LUA
-	filetypes[GEANY_FILETYPES_LUA]->lang = 22;
-	filetypes[GEANY_FILETYPES_LUA]->name = g_strdup("Lua");
-	filetypes[GEANY_FILETYPES_LUA]->title = g_strdup_printf(_("%s source file"), "Lua");
-	filetypes[GEANY_FILETYPES_LUA]->extension = g_strdup("lua");
-	filetypes[GEANY_FILETYPES_LUA]->pattern = utils_strv_new("*.lua", NULL);
-	filetypes[GEANY_FILETYPES_LUA]->comment_open = g_strdup("--");
-	filetypes[GEANY_FILETYPES_LUA]->comment_close = NULL;
+	ft = filetypes[GEANY_FILETYPES_LUA];
+	ft->lang = 22;
+	ft->name = g_strdup("Lua");
+	ft->title = g_strdup_printf(_("%s source file"), "Lua");
+	ft->extension = g_strdup("lua");
+	ft->pattern = utils_strv_new("*.lua", NULL);
+	ft->comment_open = g_strdup("--");
+	ft->comment_close = NULL;
 
 #define FERITE
-	filetypes[GEANY_FILETYPES_FERITE]->lang = 19;
-	filetypes[GEANY_FILETYPES_FERITE]->name = g_strdup("Ferite");
-	filetypes[GEANY_FILETYPES_FERITE]->title = g_strdup_printf(_("%s source file"), "Ferite");
-	filetypes[GEANY_FILETYPES_FERITE]->extension = g_strdup("fe");
-	filetypes[GEANY_FILETYPES_FERITE]->pattern = utils_strv_new("*.fe", NULL);
-	filetypes[GEANY_FILETYPES_FERITE]->comment_open = g_strdup("/*");
-	filetypes[GEANY_FILETYPES_FERITE]->comment_close = g_strdup("*/");
+	ft = filetypes[GEANY_FILETYPES_FERITE];
+	ft->lang = 19;
+	ft->name = g_strdup("Ferite");
+	ft->title = g_strdup_printf(_("%s source file"), "Ferite");
+	ft->extension = g_strdup("fe");
+	ft->pattern = utils_strv_new("*.fe", NULL);
+	ft->comment_open = g_strdup("/*");
+	ft->comment_close = g_strdup("*/");
 
 #define HASKELL
-	filetypes[GEANY_FILETYPES_HASKELL]->lang = 24;
-	filetypes[GEANY_FILETYPES_HASKELL]->name = g_strdup("Haskell");
-	filetypes[GEANY_FILETYPES_HASKELL]->title = g_strdup_printf(_("%s source file"), "Haskell");
-	filetypes[GEANY_FILETYPES_HASKELL]->extension = g_strdup("hs");
-	filetypes[GEANY_FILETYPES_HASKELL]->pattern = utils_strv_new("*.hs", "*.lhs", NULL);
-	filetypes[GEANY_FILETYPES_HASKELL]->comment_open = g_strdup("--");
-	filetypes[GEANY_FILETYPES_HASKELL]->comment_close = NULL;
+	ft = filetypes[GEANY_FILETYPES_HASKELL];
+	ft->lang = 24;
+	ft->name = g_strdup("Haskell");
+	ft->title = g_strdup_printf(_("%s source file"), "Haskell");
+	ft->extension = g_strdup("hs");
+	ft->pattern = utils_strv_new("*.hs", "*.lhs", NULL);
+	ft->comment_open = g_strdup("--");
+	ft->comment_close = NULL;
 
 #define SH
-	filetypes[GEANY_FILETYPES_SH]->lang = 16;
-	filetypes[GEANY_FILETYPES_SH]->name = g_strdup("Sh");
-	filetypes[GEANY_FILETYPES_SH]->title = g_strdup(_("Shell script file"));
-	filetypes[GEANY_FILETYPES_SH]->extension = g_strdup("sh");
-	filetypes[GEANY_FILETYPES_SH]->pattern = utils_strv_new("*.sh", "configure", "configure.in",
+	ft = filetypes[GEANY_FILETYPES_SH];
+	ft->lang = 16;
+	ft->name = g_strdup("Sh");
+	ft->title = g_strdup(_("Shell script file"));
+	ft->extension = g_strdup("sh");
+	ft->pattern = utils_strv_new("*.sh", "configure", "configure.in",
 		"configure.in.in", "configure.ac", "*.ksh", "*.zsh", "*.ash", "*.bash", NULL);
-	filetypes[GEANY_FILETYPES_SH]->comment_open = g_strdup("#");
-	filetypes[GEANY_FILETYPES_SH]->comment_close = NULL;
+	ft->comment_open = g_strdup("#");
+	ft->comment_close = NULL;
 
 #define MAKE
-	filetypes[GEANY_FILETYPES_MAKE]->lang = 3;
-	filetypes[GEANY_FILETYPES_MAKE]->name = g_strdup("Make");
-	filetypes[GEANY_FILETYPES_MAKE]->title = g_strdup(_("Makefile"));
-	filetypes[GEANY_FILETYPES_MAKE]->extension = g_strdup("mak");
-	filetypes[GEANY_FILETYPES_MAKE]->pattern = utils_strv_new(
+	ft = filetypes[GEANY_FILETYPES_MAKE];
+	ft->lang = 3;
+	ft->name = g_strdup("Make");
+	ft->title = g_strdup(_("Makefile"));
+	ft->extension = g_strdup("mak");
+	ft->pattern = utils_strv_new(
 		"*.mak", "*.mk", "GNUmakefile", "makefile", "Makefile", "makefile.*", "Makefile.*", NULL);
-	filetypes[GEANY_FILETYPES_MAKE]->comment_open = g_strdup("#");
-	filetypes[GEANY_FILETYPES_MAKE]->comment_close = NULL;
+	ft->comment_open = g_strdup("#");
+	ft->comment_close = NULL;
 
 #define XML
-	filetypes[GEANY_FILETYPES_XML]->lang = -2;
-	filetypes[GEANY_FILETYPES_XML]->name = g_strdup("XML");
-	filetypes[GEANY_FILETYPES_XML]->title = g_strdup(_("XML document"));
-	filetypes[GEANY_FILETYPES_XML]->extension = g_strdup("xml");
-	filetypes[GEANY_FILETYPES_XML]->pattern = utils_strv_new(
+	ft = filetypes[GEANY_FILETYPES_XML];
+	ft->lang = -2;
+	ft->name = g_strdup("XML");
+	ft->title = g_strdup(_("XML document"));
+	ft->extension = g_strdup("xml");
+	ft->pattern = utils_strv_new(
 		"*.xml", "*.sgml", "*.xsl", "*.xslt", "*.xsd", "*.xhtml", NULL);
-	filetypes[GEANY_FILETYPES_XML]->comment_open = g_strdup("<!--");
-	filetypes[GEANY_FILETYPES_XML]->comment_close = g_strdup("-->");
+	ft->comment_open = g_strdup("<!--");
+	ft->comment_close = g_strdup("-->");
 
 #define DOCBOOK
-	filetypes[GEANY_FILETYPES_DOCBOOK]->lang = 12;
-	filetypes[GEANY_FILETYPES_DOCBOOK]->name = g_strdup("Docbook");
-	filetypes[GEANY_FILETYPES_DOCBOOK]->title = g_strdup_printf(_("%s source file"), "Docbook");
-	filetypes[GEANY_FILETYPES_DOCBOOK]->extension = g_strdup("docbook");
-	filetypes[GEANY_FILETYPES_DOCBOOK]->pattern = utils_strv_new("*.docbook", NULL);
-	filetypes[GEANY_FILETYPES_DOCBOOK]->comment_open = g_strdup("<!--");
-	filetypes[GEANY_FILETYPES_DOCBOOK]->comment_close = g_strdup("-->");
+	ft = filetypes[GEANY_FILETYPES_DOCBOOK];
+	ft->lang = 12;
+	ft->name = g_strdup("Docbook");
+	ft->title = g_strdup_printf(_("%s source file"), "Docbook");
+	ft->extension = g_strdup("docbook");
+	ft->pattern = utils_strv_new("*.docbook", NULL);
+	ft->comment_open = g_strdup("<!--");
+	ft->comment_close = g_strdup("-->");
 
 #define HTML
-	filetypes[GEANY_FILETYPES_HTML]->lang = 29;
-	filetypes[GEANY_FILETYPES_HTML]->name = g_strdup("HTML");
-	filetypes[GEANY_FILETYPES_HTML]->title = g_strdup_printf(_("%s source file"), "HTML");
-	filetypes[GEANY_FILETYPES_HTML]->extension = g_strdup("html");
-	filetypes[GEANY_FILETYPES_HTML]->pattern = utils_strv_new(
+	ft = filetypes[GEANY_FILETYPES_HTML];
+	ft->lang = 29;
+	ft->name = g_strdup("HTML");
+	ft->title = g_strdup_printf(_("%s source file"), "HTML");
+	ft->extension = g_strdup("html");
+	ft->pattern = utils_strv_new(
 		"*.htm", "*.html", "*.shtml", "*.hta", "*.htd", "*.htt", "*.cfm", NULL);
-	filetypes[GEANY_FILETYPES_HTML]->comment_open = g_strdup("<!--");
-	filetypes[GEANY_FILETYPES_HTML]->comment_close = g_strdup("-->");
+	ft->comment_open = g_strdup("<!--");
+	ft->comment_close = g_strdup("-->");
 
 #define CSS
-	filetypes[GEANY_FILETYPES_CSS]->lang = 13;
-	filetypes[GEANY_FILETYPES_CSS]->name = g_strdup("CSS");
-	filetypes[GEANY_FILETYPES_CSS]->title = g_strdup(_("Cascading StyleSheet"));
-	filetypes[GEANY_FILETYPES_CSS]->extension = g_strdup("css");
-	filetypes[GEANY_FILETYPES_CSS]->pattern = utils_strv_new("*.css", NULL);
-	filetypes[GEANY_FILETYPES_CSS]->comment_open = g_strdup("/*");
-	filetypes[GEANY_FILETYPES_CSS]->comment_close = g_strdup("*/");
+	ft = filetypes[GEANY_FILETYPES_CSS];
+	ft->lang = 13;
+	ft->name = g_strdup("CSS");
+	ft->title = g_strdup(_("Cascading StyleSheet"));
+	ft->extension = g_strdup("css");
+	ft->pattern = utils_strv_new("*.css", NULL);
+	ft->comment_open = g_strdup("/*");
+	ft->comment_close = g_strdup("*/");
 
 #define SQL
-	filetypes[GEANY_FILETYPES_SQL]->lang = 11;
-	filetypes[GEANY_FILETYPES_SQL]->name = g_strdup("SQL");
-	filetypes[GEANY_FILETYPES_SQL]->title = g_strdup(_("SQL Dump file"));
-	filetypes[GEANY_FILETYPES_SQL]->extension = g_strdup("sql");
-	filetypes[GEANY_FILETYPES_SQL]->pattern = utils_strv_new("*.sql", NULL);
-	filetypes[GEANY_FILETYPES_SQL]->comment_open = g_strdup("/*");
-	filetypes[GEANY_FILETYPES_SQL]->comment_close = g_strdup("*/");
+	ft = filetypes[GEANY_FILETYPES_SQL];
+	ft->lang = 11;
+	ft->name = g_strdup("SQL");
+	ft->title = g_strdup(_("SQL Dump file"));
+	ft->extension = g_strdup("sql");
+	ft->pattern = utils_strv_new("*.sql", NULL);
+	ft->comment_open = g_strdup("/*");
+	ft->comment_close = g_strdup("*/");
 
 #define LATEX
-	filetypes[GEANY_FILETYPES_LATEX]->lang = 8;
-	filetypes[GEANY_FILETYPES_LATEX]->name = g_strdup("LaTeX");
-	filetypes[GEANY_FILETYPES_LATEX]->title = g_strdup_printf(_("%s source file"), "LaTeX");
-	filetypes[GEANY_FILETYPES_LATEX]->extension = g_strdup("tex");
-	filetypes[GEANY_FILETYPES_LATEX]->pattern = utils_strv_new("*.tex", "*.sty", "*.idx", "*.ltx", NULL);
-	filetypes[GEANY_FILETYPES_LATEX]->comment_open = g_strdup("%");
-	filetypes[GEANY_FILETYPES_LATEX]->comment_close = NULL;
+	ft = filetypes[GEANY_FILETYPES_LATEX];
+	ft->lang = 8;
+	ft->name = g_strdup("LaTeX");
+	ft->title = g_strdup_printf(_("%s source file"), "LaTeX");
+	ft->extension = g_strdup("tex");
+	ft->pattern = utils_strv_new("*.tex", "*.sty", "*.idx", "*.ltx", NULL);
+	ft->comment_open = g_strdup("%");
+	ft->comment_close = NULL;
 
 #define OMS
-	filetypes[GEANY_FILETYPES_OMS]->lang = -2;
-	filetypes[GEANY_FILETYPES_OMS]->name = g_strdup("O-Matrix");
-	filetypes[GEANY_FILETYPES_OMS]->title = g_strdup_printf(_("%s source file"), "O-Matrix");
-	filetypes[GEANY_FILETYPES_OMS]->extension = g_strdup("oms");
-	filetypes[GEANY_FILETYPES_OMS]->pattern = utils_strv_new("*.oms", NULL);
-	filetypes[GEANY_FILETYPES_OMS]->comment_open = g_strdup("#");
-	filetypes[GEANY_FILETYPES_OMS]->comment_close = NULL;
+	ft = filetypes[GEANY_FILETYPES_OMS];
+	ft->lang = -2;
+	ft->name = g_strdup("O-Matrix");
+	ft->title = g_strdup_printf(_("%s source file"), "O-Matrix");
+	ft->extension = g_strdup("oms");
+	ft->pattern = utils_strv_new("*.oms", NULL);
+	ft->comment_open = g_strdup("#");
+	ft->comment_close = NULL;
 
 #define VHDL
-	filetypes[GEANY_FILETYPES_VHDL]->lang = 21;
-	filetypes[GEANY_FILETYPES_VHDL]->name = g_strdup("VHDL");
-	filetypes[GEANY_FILETYPES_VHDL]->title = g_strdup_printf(_("%s source file"), "VHDL");
-	filetypes[GEANY_FILETYPES_VHDL]->extension = g_strdup("vhd");
-	filetypes[GEANY_FILETYPES_VHDL]->pattern = utils_strv_new("*.vhd", "*.vhdl", NULL);
-	filetypes[GEANY_FILETYPES_VHDL]->comment_open = g_strdup("--");
-	filetypes[GEANY_FILETYPES_VHDL]->comment_close = NULL;
+	ft = filetypes[GEANY_FILETYPES_VHDL];
+	ft->lang = 21;
+	ft->name = g_strdup("VHDL");
+	ft->title = g_strdup_printf(_("%s source file"), "VHDL");
+	ft->extension = g_strdup("vhd");
+	ft->pattern = utils_strv_new("*.vhd", "*.vhdl", NULL);
+	ft->comment_open = g_strdup("--");
+	ft->comment_close = NULL;
 
 #define DIFF
-	filetypes[GEANY_FILETYPES_DIFF]->lang = 20;
-	filetypes[GEANY_FILETYPES_DIFF]->name = g_strdup("Diff");
-	filetypes[GEANY_FILETYPES_DIFF]->title = g_strdup(_("Diff file"));
-	filetypes[GEANY_FILETYPES_DIFF]->extension = g_strdup("diff");
-	filetypes[GEANY_FILETYPES_DIFF]->pattern = utils_strv_new("*.diff", "*.patch", "*.rej", NULL);
-	filetypes[GEANY_FILETYPES_DIFF]->comment_open = g_strdup("#");
-	filetypes[GEANY_FILETYPES_DIFF]->comment_close = NULL;
+	ft = filetypes[GEANY_FILETYPES_DIFF];
+	ft->lang = 20;
+	ft->name = g_strdup("Diff");
+	ft->title = g_strdup(_("Diff file"));
+	ft->extension = g_strdup("diff");
+	ft->pattern = utils_strv_new("*.diff", "*.patch", "*.rej", NULL);
+	ft->comment_open = g_strdup("#");
+	ft->comment_close = NULL;
 
 #define CONF
-	filetypes[GEANY_FILETYPES_CONF]->lang = 10;
-	filetypes[GEANY_FILETYPES_CONF]->name = g_strdup("Conf");
-	filetypes[GEANY_FILETYPES_CONF]->title = g_strdup(_("Config file"));
-	filetypes[GEANY_FILETYPES_CONF]->extension = g_strdup("conf");
-	filetypes[GEANY_FILETYPES_CONF]->pattern = utils_strv_new("*.conf", "*.ini", "config", "*rc",
+	ft = filetypes[GEANY_FILETYPES_CONF];
+	ft->lang = 10;
+	ft->name = g_strdup("Conf");
+	ft->title = g_strdup(_("Config file"));
+	ft->extension = g_strdup("conf");
+	ft->pattern = utils_strv_new("*.conf", "*.ini", "config", "*rc",
 		"*.cfg", NULL);
-	filetypes[GEANY_FILETYPES_CONF]->comment_open = g_strdup("#");
-	filetypes[GEANY_FILETYPES_CONF]->comment_close = NULL;
+	ft->comment_open = g_strdup("#");
+	ft->comment_close = NULL;
 
 #define HAXE
-	filetypes[GEANY_FILETYPES_HAXE]->lang = 27;
-	filetypes[GEANY_FILETYPES_HAXE]->name = g_strdup("Haxe");
-	filetypes[GEANY_FILETYPES_HAXE]->title = g_strdup_printf(_("%s source file"), "Haxe");
-	filetypes[GEANY_FILETYPES_HAXE]->extension = g_strdup("hx");
-	filetypes[GEANY_FILETYPES_HAXE]->pattern = utils_strv_new("*.hx", NULL);
-	filetypes[GEANY_FILETYPES_HAXE]->comment_open = g_strdup("//");
-	filetypes[GEANY_FILETYPES_HAXE]->comment_close = NULL;
+	ft = filetypes[GEANY_FILETYPES_HAXE];
+	ft->lang = 27;
+	ft->name = g_strdup("Haxe");
+	ft->title = g_strdup_printf(_("%s source file"), "Haxe");
+	ft->extension = g_strdup("hx");
+	ft->pattern = utils_strv_new("*.hx", NULL);
+	ft->comment_open = g_strdup("//");
+	ft->comment_close = NULL;
 
 #define REST
-	filetypes[GEANY_FILETYPES_REST]->lang = 28;
-	filetypes[GEANY_FILETYPES_REST]->name = g_strdup("reStructuredText");
-	filetypes[GEANY_FILETYPES_REST]->title = g_strdup(_("reStructuredText file"));
-	filetypes[GEANY_FILETYPES_REST]->extension = g_strdup("rst");
-	filetypes[GEANY_FILETYPES_REST]->pattern = utils_strv_new(
+	ft = filetypes[GEANY_FILETYPES_REST];
+	ft->lang = 28;
+	ft->name = g_strdup("reStructuredText");
+	ft->title = g_strdup(_("reStructuredText file"));
+	ft->extension = g_strdup("rst");
+	ft->pattern = utils_strv_new(
 		"*.rest", "*.reST", "*.rst", NULL);
-	filetypes[GEANY_FILETYPES_REST]->comment_open = NULL;
-	filetypes[GEANY_FILETYPES_REST]->comment_close = NULL;
+	ft->comment_open = NULL;
+	ft->comment_close = NULL;
 
 #define ALL
-	filetypes[GEANY_FILETYPES_NONE]->name = g_strdup("None");
-	filetypes[GEANY_FILETYPES_NONE]->lang = -2;
-	filetypes[GEANY_FILETYPES_NONE]->title = g_strdup(_("All files"));
-	filetypes[GEANY_FILETYPES_NONE]->extension = g_strdup("*");
-	filetypes[GEANY_FILETYPES_NONE]->pattern = utils_strv_new("*", NULL);
-	filetypes[GEANY_FILETYPES_NONE]->comment_open = NULL;
-	filetypes[GEANY_FILETYPES_NONE]->comment_close = NULL;
+	ft = filetypes[GEANY_FILETYPES_NONE];
+	ft->lang = -2;
+	ft->name = g_strdup("None");
+	ft->title = g_strdup(_("All files"));
+	ft->extension = g_strdup("*");
+	ft->pattern = utils_strv_new("*", NULL);
+	ft->comment_open = NULL;
+	ft->comment_close = NULL;
 }
 
 

@@ -8,6 +8,9 @@
    Rename HighlightingStyle to GeanyLexerStyle.
    Add dox for highlighting_get_style(), GeanyLexerStyle, mentioning
    SCI_STYLEGETFORE.
+ * src/filetypes.c:
+   Use pointer in init_builtin_filetypes() instead of repeating
+   filetypes[GEANY_FILETYPES_X]->... on each line.
 
 
 2008-08-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
