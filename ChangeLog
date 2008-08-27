@@ -7,6 +7,8 @@
    Wendling, thanks; closes #2060961).
  * src/filetypes.c, src/filetypes.h:
    Add GeanyFiletypeGroupID enum and GeanyFiletype::group field.
+ * src/keyfile.c, doc/geany.txt, doc/geany.html:
+   Change hidden pref scroll_stop_at_last_line to TRUE (#2030914).
 
 
 2008-08-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

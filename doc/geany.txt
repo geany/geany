@@ -3230,7 +3230,7 @@ complete_snippets_whilst_editing  Whether to allow completion of snippets      f
                                   when editing an existing line (i.e. there
                                   is some text after the current cursor
                                   position on the line).
-scroll_stop_at_last_line          Disable scrolling past end of document       false
+scroll_stop_at_last_line          Disable scrolling past end of document       true
 **[interface]**
 show_symbol_list_expanders        Whether to show or hide the small expander   true
                                   icons on the symbol list treeview (only

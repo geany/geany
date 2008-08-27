@@ -647,7 +647,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	editor_prefs.newline_strip = utils_get_setting_boolean(config, PACKAGE, "pref_editor_newline_strip", FALSE);
 	editor_prefs.use_gtk_word_boundaries = utils_get_setting_boolean(config, PACKAGE, "use_gtk_word_boundaries", TRUE);
 	editor_prefs.complete_snippets_whilst_editing = utils_get_setting_boolean(config, PACKAGE, "complete_snippets_whilst_editing", FALSE);
-	editor_prefs.scroll_stop_at_last_line = utils_get_setting_boolean(config, PACKAGE, "scroll_stop_at_last_line", FALSE);
+	editor_prefs.scroll_stop_at_last_line = utils_get_setting_boolean(config, PACKAGE, "scroll_stop_at_last_line", TRUE);
 	editor_prefs.line_break_column = utils_get_setting_integer(config, PACKAGE, "line_break_column", 72);
 	editor_prefs.auto_continue_multiline = utils_get_setting_boolean(config, PACKAGE, "auto_continue_multiline", TRUE);
 	editor_prefs.comment_toggle_mark = utils_get_setting_string(config, PACKAGE, "comment_toggle_mark", GEANY_TOGGLE_MARK);
