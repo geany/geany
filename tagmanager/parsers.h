@@ -45,7 +45,8 @@
     HaxeParser,\
     RestParser, \
     HtmlParser, \
-    F77Parser
+    F77Parser, \
+    GLSLParser
 
 /*
 langType of each parser
@@ -80,6 +81,7 @@ langType of each parser
 28  RestParser
 29  HtmlParser
 30  F77Parser
+31  GLSLParser
 */
 #endif	/* _PARSERS_H */
 

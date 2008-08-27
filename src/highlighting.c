@@ -793,6 +793,61 @@ static void styleset_cpp(ScintillaObject *sci)
 }
 
 
+static void styleset_glsl_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
+{
+	new_style_array(GEANY_FILETYPES_GLSL, 21);
+	styleset_c_like_init(config, config_home, GEANY_FILETYPES_GLSL);
+	get_keyfile_int(config, config_home, "styling", "styling_within_preprocessor",
+		1, 0, &style_sets[GEANY_FILETYPES_GLSL].styling[20]);
+
+	style_sets[GEANY_FILETYPES_GLSL].keywords = g_new(gchar*, 4);
+	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_GLSL, 0,
+			"if else switch case default for while do discard return break"
+			"continue true false struct void bool int uint float vec2 vec3"
+			"vec4 ivec2 ivec3 ivec4 bvec2 bvec3 bvec4 uvec2 uvec3 uvec4 mat2"
+			"mat3 mat4 mat2x2 mat2x3 mat2x4 mat3x2 mat3x3 mat3x4 mat4x2 mat4x3"
+			"mat4x4 sampler1D sampler2D sampler3D samplerCube sampler1DShadow"
+			"sampler2DShadow sampler1DArray sampler2DArray sampler1DArrayShadow"
+			"sampler2DArrayShadow isampler1D isampler2D isampler3D isamplerCube"
+			"isampler1DArray isampler2DArray usampler1D usampler2D usampler3D"
+			"usamplerCube usampler1DArray usampler2DArray const invariant"
+			"centroid in out inout attribute uniform varying smooth flat"
+			"noperspective highp mediump lowp");
+	get_keyfile_keywords(config, config_home, "keywords", "secondary", GEANY_FILETYPES_GLSL, 1, "");
+	get_keyfile_keywords(config, config_home, "keywords", "docComment", GEANY_FILETYPES_GLSL, 2, "TODO FIXME");
+	style_sets[GEANY_FILETYPES_GLSL].keywords[3] = NULL;
+
+	get_keyfile_wordchars(config, config_home,
+		&style_sets[GEANY_FILETYPES_GLSL].wordchars);
+}
+
+
+static void styleset_glsl(ScintillaObject *sci)
+{
+	const filetype_id ft_id = GEANY_FILETYPES_GLSL;
+
+	styleset_common(sci, 5, ft_id);
+
+	apply_filetype_properties(sci, SCLEX_CPP, ft_id);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_GLSL].keywords[0]);
+	/* for SCI_SETKEYWORDS = 1, see below*/
+	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_GLSL].keywords[2]);
+
+	/* assign global types, merge them with user defined keywords and set them */
+	assign_global_and_user_keywords(sci, style_sets[GEANY_FILETYPES_GLSL].keywords[1],
+		filetypes[ft_id]->lang);
+
+	styleset_c_like(sci, GEANY_FILETYPES_GLSL);
+
+	if (style_sets[GEANY_FILETYPES_GLSL].styling[20].foreground == 1)
+		SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.symbol.$(file.patterns.cpp)", (sptr_t) "#");
+	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.start.$(file.patterns.cpp)", (sptr_t) "if ifdef ifndef");
+	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.middle.$(file.patterns.cpp)", (sptr_t) "else elif");
+	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.end.$(file.patterns.cpp)", (sptr_t) "endif");
+}
+
 static void styleset_cs_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_style_array(GEANY_FILETYPES_CS, 21);
@@ -2979,6 +3034,7 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 		init_styleset_case(GEANY_FILETYPES_FERITE,	ferite);
 		init_styleset_case(GEANY_FILETYPES_F77,		f77);
 		init_styleset_case(GEANY_FILETYPES_FORTRAN,	fortran);
+		init_styleset_case(GEANY_FILETYPES_GLSL,	glsl);
 		init_styleset_case(GEANY_FILETYPES_HASKELL,	haskell);
 		init_styleset_case(GEANY_FILETYPES_HAXE,	haxe);
 		init_styleset_case(GEANY_FILETYPES_HTML,	html);
@@ -3032,6 +3088,7 @@ void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 		styleset_case(GEANY_FILETYPES_FERITE,	ferite);
 		styleset_case(GEANY_FILETYPES_F77,		f77);
 		styleset_case(GEANY_FILETYPES_FORTRAN,	fortran);
+		styleset_case(GEANY_FILETYPES_GLSL,		glsl);
 		styleset_case(GEANY_FILETYPES_HASKELL,	haskell);
 		styleset_case(GEANY_FILETYPES_HAXE,		haxe);
 		styleset_case(GEANY_FILETYPES_HTML,		html);

@@ -167,6 +167,16 @@ static void init_builtin_filetypes(void)
 	ft->comment_open = g_strdup("c");
 	ft->comment_close = NULL;
 
+#define GLSL
+	ft = filetypes[GEANY_FILETYPES_GLSL];
+	ft->lang = 31;
+	ft->name = g_strdup("GLSL");
+	ft->title = g_strdup_printf(_("%s source file"), "GLSL");
+	ft->extension = g_strdup("glsl");
+	ft->pattern = utils_strv_new("*.glsl", "*.frag", "*.vert", NULL);
+	ft->comment_open = g_strdup("/*");
+	ft->comment_close = g_strdup("*/");
+
 #define CAML
 	ft = filetypes[GEANY_FILETYPES_CAML];
 	ft->lang = -2;

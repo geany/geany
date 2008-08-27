@@ -45,6 +45,7 @@ Pierre Joye <pierre(dot)php(at)gmail(dot)com> - Win32 process spawning patch
 Matti Mårds <mamaar(at)gmail(dot)com> - create PHP tags script
 Robert McGinley <mcginleyr1(at)gmail(dot)com> - Documentation improvements
 Felipe Pena <felipensp(at)gmail(dot)com> - Missing PHP keywords
+Colomban Wendling <colombanw(at)users(dot)sourceforge(dot)net> - GLSL filetype patch
 
 Translators:
 ------------

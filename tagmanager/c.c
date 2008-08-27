@@ -247,6 +247,7 @@ static langType Lang_cpp;
 static langType Lang_csharp;
 static langType Lang_java;
 static langType Lang_d;
+static langType Lang_glsl;
 static langType Lang_ferite;
 
 /* Used to index into the CKinds table. */
@@ -2772,6 +2773,13 @@ static void initializeDParser (const langType language)
     buildKeywordHash (language, 1);	/* C++ keywords */
 }
 
+static void initializeGLSLParser (const langType language)
+{
+    contextual_fake_count = 0;
+    Lang_glsl = language;
+    buildKeywordHash (language, 0);
+}
+
 static void initializeFeriteParser (const langType language)
 {
     contextual_fake_count = 0;
@@ -2838,6 +2846,18 @@ extern parserDefinition* DParser (void)
     def->extensions = extensions;
     def->parser2    = findCTags;
     def->initialize = initializeDParser;
+    return def;
+}
+
+extern parserDefinition* GLSLParser (void)
+{
+    static const char *const extensions [] = { "glsl", "frag", "vert", NULL };
+    parserDefinition* def = parserNew ("GLSL");
+    def->kinds      = CKinds;
+    def->kindCount  = KIND_COUNT (CKinds);
+    def->extensions = extensions;
+    def->parser2    = findCTags;
+    def->initialize = initializeGLSLParser;
     return def;
 }
 

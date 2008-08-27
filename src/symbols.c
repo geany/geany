@@ -232,6 +232,7 @@ const gchar *symbols_get_context_separator(gint ft_id)
 	{
 		case GEANY_FILETYPES_C:	/* for C++ .h headers or C structs */
 		case GEANY_FILETYPES_CPP:
+		case GEANY_FILETYPES_GLSL:	/* for structs */
 		/*case GEANY_FILETYPES_RUBY:*/ /* not sure what to use atm*/
 		{
 			static gchar cc[] = "::";
