@@ -30,13 +30,13 @@
 
 
 /* Each group should be alpha-sorted, based on filetype::name (not enum name).
- * Warning: remember to break the plugin ABI when adding items (this enum needs to be changed
- * to work with an ABI-stable filetype::group_name field. */
+ * Warning: remember to break the plugin ABI when adding items. */
+/* TODO: for a stable ABI put GEANY_FILETYPES_NONE first, and use a sorted duplicate
+ * filetypes array for GUI elements. */
 typedef enum
 {
 	/* normally compiled languages */
-	GEANY_FILETYPES_GROUP_COMPILED = 0,
-	GEANY_FILETYPES_ASM = GEANY_FILETYPES_GROUP_COMPILED,
+	GEANY_FILETYPES_ASM = 0,
 	GEANY_FILETYPES_C,
 	GEANY_FILETYPES_CPP,
 	GEANY_FILETYPES_CS,
@@ -53,8 +53,7 @@ typedef enum
 	GEANY_FILETYPES_VHDL,
 
 	/* script languages */
-	GEANY_FILETYPES_GROUP_SCRIPT,
-	GEANY_FILETYPES_FERITE = GEANY_FILETYPES_GROUP_SCRIPT,
+	GEANY_FILETYPES_FERITE,
 	GEANY_FILETYPES_JS,
 	GEANY_FILETYPES_LUA,
 	GEANY_FILETYPES_MAKE,
@@ -66,16 +65,14 @@ typedef enum
 	GEANY_FILETYPES_SH,
 	GEANY_FILETYPES_TCL,
 
- 	/* markup langauges */
-	GEANY_FILETYPES_GROUP_MARKUP,
-	GEANY_FILETYPES_CSS = GEANY_FILETYPES_GROUP_MARKUP,
+	/* markup langauges */
+	GEANY_FILETYPES_CSS,
 	GEANY_FILETYPES_DOCBOOK,
 	GEANY_FILETYPES_HTML,
  	GEANY_FILETYPES_XML,
 
 	/* miscellaneous languages */
-	GEANY_FILETYPES_GROUP_MISC,
-	GEANY_FILETYPES_CONF = GEANY_FILETYPES_GROUP_MISC,
+	GEANY_FILETYPES_CONF,
 	GEANY_FILETYPES_DIFF,
 	GEANY_FILETYPES_LATEX,
 	GEANY_FILETYPES_REST,
@@ -84,6 +81,17 @@ typedef enum
 	GEANY_FILETYPES_NONE,	/* must be last filetype */
 	GEANY_MAX_BUILT_IN_FILETYPES	/* Use filetypes_array->len instead */
 } filetype_id;
+
+typedef enum
+{
+	GEANY_FILETYPE_GROUP_NONE,
+	GEANY_FILETYPE_GROUP_COMPILED,
+	GEANY_FILETYPE_GROUP_SCRIPT,
+	GEANY_FILETYPE_GROUP_MARKUP,
+	GEANY_FILETYPE_GROUP_MISC
+}
+GeanyFiletypeGroupID;
+
 
 /* Safe wrapper to get the id field of a possibly NULL filetype pointer. */
 #define FILETYPE_ID(filetype_ptr) \
@@ -123,6 +131,7 @@ struct GeanyFiletype
 	gboolean  		  comment_use_indent;
 	struct build_programs	*programs;
 	struct build_actions	*actions;
+	GeanyFiletypeGroupID	group;
 };
 
 extern GPtrArray *filetypes_array;

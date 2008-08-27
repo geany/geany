@@ -1,10 +1,12 @@
 2008-08-27  Nick Treleaven  <nick.treleaven<at>btinternet.com>
 
- * src/highlighting.c, src/plugindata.h, src/filetypes.c, 
-   src/filetypes.h, src/symbols.c, THANKS, tagmanager/parsers.h, 
+ * src/highlighting.c, src/plugindata.h, src/filetypes.c,
+   src/filetypes.h, src/symbols.c, THANKS, tagmanager/parsers.h,
    tagmanager/c.c, data/filetypes.glsl, data/filetype_extensions.conf:
-   Add OpenGL Shader Language (GLSL) filetype (patch from Colomban 
+   Add OpenGL Shader Language (GLSL) filetype (patch from Colomban
    Wendling, thanks; closes #2060961).
+ * src/filetypes.c, src/filetypes.h:
+   Add GeanyFiletypeGroupID enum and GeanyFiletype::group field.
 
 
 2008-08-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
