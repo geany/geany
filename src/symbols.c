@@ -65,6 +65,7 @@ typedef struct
 	const gchar	*tag_file;
 } TagFileInfo;
 
+/* Check before adding any more tags files, usually they should be downloaded separately. */
 enum	/* Geany tag files */
 {
 	GTF_C,
@@ -1179,8 +1180,11 @@ static void load_user_tags(filetype_id ft_id)
 		gchar *fname;
 
 		fname = g_strconcat(user_tags_dir, G_DIR_SEPARATOR_S, node->data, NULL);
-		tm_workspace_load_global_tags(fname, tm_lang);
-		geany_debug("Loaded %s (%s).", fname, ft->name);
+		if (tm_workspace_load_global_tags(fname, tm_lang))
+		{
+			geany_debug("Loaded %s (%s), total tags: %u.", fname, ft->name,
+				tm_get_workspace()->global_tags->len);
+		}
 		g_free(fname);
 	}
 	g_list_foreach(fnames, (GFunc) g_free, NULL);

@@ -1,3 +1,11 @@
+2008-08-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/symbols.c:
+   Fix global tags loaded debug message, display total tags count.
+   Add comment to warn about adding tags files vs. downloading
+   separately.
+
+
 2008-08-27  Nick Treleaven  <nick.treleaven<at>btinternet.com>
 
  * src/highlighting.c, src/plugindata.h, src/filetypes.c,
