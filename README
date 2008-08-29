@@ -43,13 +43,17 @@ Installation
 Installing Geany is done by the following three commands:
 $ ./configure
 $ make
-$ make install
+(as root)
+% make install
 
 For more configuration details run
 $ ./configure --help
 
 If there are any errors during compilation, check your build environment
-and try to find the error, otherwise contact one of the authors.
+and try to find the error, otherwise contact the mailing list or one of
+the authors.
+
+See the manual for details (geany.txt/geany.html).
 
 
 Usage
