@@ -2731,12 +2731,15 @@ create_prefs_dialog (void)
   GtkWidget *check_auto_multiline;
   GtkWidget *check_symbol_auto_completion;
   GtkWidget *table14;
-  GtkObject *spin_symbollistheight_adj;
-  GtkWidget *spin_symbollistheight;
-  GtkWidget *label205;
+  GtkWidget *label223;
   GtkWidget *label173;
+  GtkWidget *label205;
   GtkObject *spin_symbol_complete_chars_adj;
   GtkWidget *spin_symbol_complete_chars;
+  GtkObject *spin_symbollistheight_adj;
+  GtkWidget *spin_symbollistheight;
+  GtkObject *spin_autocompletion_max_entries_adj;
+  GtkWidget *spin_autocompletion_max_entries;
   GtkWidget *label177;
   GtkWidget *label212;
   GtkWidget *vbox24;
@@ -3849,7 +3852,7 @@ create_prefs_dialog (void)
   gtk_tooltips_set_tip (tooltips, check_xmltag, _("Automatic completion and closing of XML tags (includes HTML tags)"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_xmltag), FALSE);
 
-  check_auto_multiline = gtk_check_button_new_with_mnemonic (_("Automatic continuation multi-line comments"));
+  check_auto_multiline = gtk_check_button_new_with_mnemonic (_("Automatic continuation of multi-line comments"));
   gtk_widget_show (check_auto_multiline);
   gtk_box_pack_start (GTK_BOX (vbox19), check_auto_multiline, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_auto_multiline, _("Continue automatically multi-line comments in languages like C, C++ and Java when a new line is entered inside such a comment."), NULL);
@@ -3861,20 +3864,25 @@ create_prefs_dialog (void)
   gtk_tooltips_set_tip (tooltips, check_symbol_auto_completion, _("Automatic completion of known symbols in open files (function names, global variables, ...)"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_symbol_auto_completion), FALSE);
 
-  table14 = gtk_table_new (2, 2, FALSE);
+  table14 = gtk_table_new (3, 2, FALSE);
   gtk_widget_show (table14);
-  gtk_box_pack_start (GTK_BOX (vbox19), table14, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox19), table14, FALSE, FALSE, 0);
   gtk_table_set_row_spacings (GTK_TABLE (table14), 3);
   gtk_table_set_col_spacings (GTK_TABLE (table14), 12);
 
-  spin_symbollistheight_adj = gtk_adjustment_new (9, 1, 99, 1, 10, 10);
-  spin_symbollistheight = gtk_spin_button_new (GTK_ADJUSTMENT (spin_symbollistheight_adj), 1, 0);
-  gtk_widget_show (spin_symbollistheight);
-  gtk_table_attach (GTK_TABLE (table14), spin_symbollistheight, 1, 2, 1, 2,
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+  label223 = gtk_label_new (_("Max. symbol name suggestions:"));
+  gtk_widget_show (label223);
+  gtk_table_attach (GTK_TABLE (table14), label223, 0, 1, 2, 3,
+                    (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
-  gtk_tooltips_set_tip (tooltips, spin_symbollistheight, _("Number of rows to display in the auto completion list."), NULL);
-  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_symbollistheight), TRUE);
+  gtk_misc_set_alignment (GTK_MISC (label223), 0, 0.5);
+
+  label173 = gtk_label_new (_("Completion list height:"));
+  gtk_widget_show (label173);
+  gtk_table_attach (GTK_TABLE (table14), label173, 0, 1, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label173), 0, 0.5);
 
   label205 = gtk_label_new (_("Characters to type for completion:"));
   gtk_widget_show (label205);
@@ -3882,13 +3890,6 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label205), 0, 0.5);
-
-  label173 = gtk_label_new (_("Rows of symbol completion list:"));
-  gtk_widget_show (label173);
-  gtk_table_attach (GTK_TABLE (table14), label173, 0, 1, 1, 2,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label173), 0, 0.5);
 
   spin_symbol_complete_chars_adj = gtk_adjustment_new (9, 1, 99, 1, 10, 10);
   spin_symbol_complete_chars = gtk_spin_button_new (GTK_ADJUSTMENT (spin_symbol_complete_chars_adj), 1, 0);
@@ -3898,6 +3899,24 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (0), 0, 0);
   gtk_tooltips_set_tip (tooltips, spin_symbol_complete_chars, _("The amount of characters which are necessary to show the symbol auto completion list."), NULL);
   gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_symbol_complete_chars), TRUE);
+
+  spin_symbollistheight_adj = gtk_adjustment_new (9, 1, 99, 1, 10, 10);
+  spin_symbollistheight = gtk_spin_button_new (GTK_ADJUSTMENT (spin_symbollistheight_adj), 1, 0);
+  gtk_widget_show (spin_symbollistheight);
+  gtk_table_attach (GTK_TABLE (table14), spin_symbollistheight, 1, 2, 1, 2,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, spin_symbollistheight, _("Display height in rows for the auto completion list."), NULL);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_symbollistheight), TRUE);
+
+  spin_autocompletion_max_entries_adj = gtk_adjustment_new (9, 1, 10000, 1, 10, 10);
+  spin_autocompletion_max_entries = gtk_spin_button_new (GTK_ADJUSTMENT (spin_autocompletion_max_entries_adj), 1, 0);
+  gtk_widget_show (spin_autocompletion_max_entries);
+  gtk_table_attach (GTK_TABLE (table14), spin_autocompletion_max_entries, 1, 2, 2, 3,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, spin_autocompletion_max_entries, _("Maximum number of entries to display in the auto completion list."), NULL);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_autocompletion_max_entries), TRUE);
 
   label177 = gtk_label_new (_("<b>Completions</b>"));
   gtk_widget_show (label177);
@@ -4988,10 +5007,12 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_auto_multiline, "check_auto_multiline");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_symbol_auto_completion, "check_symbol_auto_completion");
   GLADE_HOOKUP_OBJECT (prefs_dialog, table14, "table14");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, spin_symbollistheight, "spin_symbollistheight");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label205, "label205");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label223, "label223");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label173, "label173");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label205, "label205");
   GLADE_HOOKUP_OBJECT (prefs_dialog, spin_symbol_complete_chars, "spin_symbol_complete_chars");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, spin_symbollistheight, "spin_symbollistheight");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, spin_autocompletion_max_entries, "spin_autocompletion_max_entries");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label177, "label177");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label212, "label212");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox24, "vbox24");

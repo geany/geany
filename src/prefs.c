@@ -145,6 +145,7 @@ static void spin_prefs_foreach(PrefCallbackAction action)
 	{
 		{"spin_indent_width", &editor_prefs.indentation->width},
 		{"spin_tab_width", &editor_prefs.indentation->hard_tab_width},
+		{"spin_autocompletion_max_entries", &editor_prefs.autocompletion_max_entries}
 	};
 
 	for (i = 0; i < G_N_ELEMENTS(items); i++)
@@ -181,7 +182,7 @@ static void radio_prefs_foreach(PrefCallbackAction action)
 	{
 		{"radio_indent_spaces", &editor_prefs.indentation->type, GEANY_INDENT_TYPE_SPACES},
 		{"radio_indent_tabs", &editor_prefs.indentation->type, GEANY_INDENT_TYPE_TABS},
-		{"radio_indent_both", &editor_prefs.indentation->type, GEANY_INDENT_TYPE_BOTH},
+		{"radio_indent_both", &editor_prefs.indentation->type, GEANY_INDENT_TYPE_BOTH}
 	};
 
 	for (i = 0; i < G_N_ELEMENTS(items); i++)
@@ -210,7 +211,7 @@ static void combo_prefs_foreach(PrefCallbackAction action)
 	guint i;
 	PrefEntry items[] =
 	{
-		{"combo_auto_indent_mode", &editor_prefs.indentation->auto_indent_mode},
+		{"combo_auto_indent_mode", &editor_prefs.indentation->auto_indent_mode}
 	};
 
 	for (i = 0; i < G_N_ELEMENTS(items); i++)

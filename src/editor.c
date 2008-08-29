@@ -1379,9 +1379,10 @@ autocomplete_html(ScintillaObject *sci, const gchar *root, gsize rootlen)
 }
 
 
+/* Current document & global tags autocompletion */
 static gboolean
 autocomplete_tags(GeanyDocument *doc, const gchar *root, gsize rootlen)
-{	/* PHP, LaTeX, C, C++, D and Java tag autocompletion */
+{
 	TMTagAttrType attrs[] = { tm_tag_attr_name_t, 0 };
 	const GPtrArray *tags;
 	ScintillaObject *sci;
@@ -1396,7 +1397,7 @@ autocomplete_tags(GeanyDocument *doc, const gchar *root, gsize rootlen)
 		GString *words = g_string_sized_new(150);
 		guint j;
 
-		for (j = 0; ((j < tags->len) && (j < GEANY_MAX_AUTOCOMPLETE_WORDS)); ++j)
+		for (j = 0; ((j < tags->len) && (j < editor_prefs.autocompletion_max_entries)); ++j)
 		{
 			if (j > 0) g_string_append_c(words, '\n');
 			g_string_append(words, ((TMTag *) tags->pdata[j])->name);

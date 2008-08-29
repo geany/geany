@@ -80,6 +80,8 @@
 #define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Sans 9"
 #define GEANY_DEFAULT_FONT_MSG_WINDOW	"Sans 9"
 #define GEANY_DEFAULT_FONT_EDITOR		"Monospace 10"
+#define GEANY_TOGGLE_MARK				"~ "
+#define GEANY_MAX_AUTOCOMPLETE_WORDS	30
 
 
 static gchar *scribble_text = NULL;
@@ -118,7 +120,7 @@ static void bool_settings_foreach(GKeyFile *config, SettingCallbackAction action
 		{&search_prefs.use_current_word, PACKAGE, "pref_main_search_use_current_word", (gpointer)TRUE},
 		{&search_prefs.use_current_file_dir, "search", "pref_search_current_file_dir", (gpointer)TRUE},
 
-		{&editor_prefs.indentation->detect_type, PACKAGE, "check_detect_indent", (gpointer)FALSE},
+		{&editor_prefs.indentation->detect_type, PACKAGE, "check_detect_indent", (gpointer)FALSE}
 	};
 
 	for (i = 0; i < G_N_ELEMENTS(items); i++)
@@ -150,6 +152,8 @@ static void int_settings_foreach(GKeyFile *config, SettingCallbackAction action)
 		{&editor_prefs.indentation->auto_indent_mode, PACKAGE, "indent_mode",
 			(gpointer)GEANY_AUTOINDENT_CURRENTCHARS},
 		{&editor_prefs.indentation->type, PACKAGE, "indent_type", (gpointer)GEANY_INDENT_TYPE_TABS},
+		{&editor_prefs.autocompletion_max_entries, PACKAGE, "autocompletion_max_entries",
+			(gpointer)GEANY_MAX_AUTOCOMPLETE_WORDS}
 	};
 
 	for (i = 0; i < G_N_ELEMENTS(items); i++)

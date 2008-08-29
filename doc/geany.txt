@@ -140,9 +140,7 @@ list, type::
 You may also want to read the INSTALL file for advanced installation
 options.
 
-There also some compile time options which can be found in
-``src/geany.h``. Please see `Compile-time options`_ for more
-information.
+* See also `Compile-time options`_.
 
 Dynamic linking loader support
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3318,11 +3316,6 @@ Option                          Description                                   De
 GEANY_WORDCHARS                 These characters define word boundaries when  a string with:
                                 making selections and searching using word    a-z, A-Z, 0-9 and
                                 matching options.                             underscore.
-GEANY_TOGGLE_MARK               A string which is used to mark a toggled      "~ "
-                                comment.
-                                external changes.
-GEANY_MAX_AUTOCOMPLETE_WORDS    How many auto completion suggestions should   30
-                                Geany provide.
 ==============================  ============================================  ==================
 
 keyfile.c
@@ -3352,6 +3345,10 @@ GEANY_DEFAULT_FONT_SYMBOL_LIST  The font used in sidebar to show symbols and  "S
                                 open files.
 GEANY_DEFAULT_FONT_MSG_WINDOW   The font used in the messages window.         "Sans 9"
 GEANY_DEFAULT_FONT_EDITOR       The font used in the editor window.           "Monospace 10"
+GEANY_TOGGLE_MARK               A string which is used to mark a toggled      "~ "
+                                comment.
+GEANY_MAX_AUTOCOMPLETE_WORDS    How many auto completion suggestions should   30
+                                Geany provide.
 ==============================  ============================================  ==================
 
 

@@ -273,7 +273,7 @@ GString *symbols_get_macro_list(void)
 			tm_tag_enum_t | tm_tag_variable_t | tm_tag_macro_t | tm_tag_macro_with_arg_t);
 		if (NULL != tags)
 		{
-			for (i = 0; ((i < tags->len) && (i < GEANY_MAX_AUTOCOMPLETE_WORDS)); ++i)
+			for (i = 0; ((i < tags->len) && (i < editor_prefs.autocompletion_max_entries)); ++i)
 			{
 				g_ptr_array_add(ftags, (gpointer) tags->pdata[i]);
 			}

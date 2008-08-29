@@ -5,6 +5,13 @@
    Mention that usually building GTK manually is not necessary.
    Run 'make install' as root.
    Add some subsection titles.
+ * src/interface.c, src/prefs.c, src/keyfile.c, src/editor.c,
+   src/symbols.c, src/editor.h, doc/geany.txt, doc/geany.html,
+   geany.glade:
+   Add 'Max. symbol name suggestions' autocompletion pref.
+   Edit some autocompletion pref strings.
+   Remove some trailing commas in array initializers (oops).
+   Move GEANY_TOGGLE_MARK, GEANY_MAX_AUTOCOMPLETE_WORDS to keyfile.c.
 
 
 2008-08-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
