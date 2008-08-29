@@ -1,3 +1,12 @@
+2008-08-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * doc/geany.txt, doc/geany.html:
+   Separate runtime requirements and build requirements subsections.
+   Mention that usually building GTK manually is not necessary.
+   Run 'make install' as root.
+   Add some subsection titles.
+
+
 2008-08-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/symbols.c:

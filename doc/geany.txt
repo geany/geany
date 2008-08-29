@@ -95,55 +95,75 @@ Installation
 Requirements
 ------------
 
-For compiling Geany yourself, you will need the GTK (>= 2.6.0)
-libraries and header files. You will also need the Pango, Glib and
-ATK libraries and header files. All these files are available at
-http://www.gtk.org.
-
-Furthermore you need, of course, a C compiler and the Make tool; a
-C++ compiler is also required for the included Scintilla library. The
-GNU versions of these tools are recommended.
-
-
-
-Source compilation
-------------------
-
-Compiling Geany is quite easy. The following should do it::
-
-    % ./configure
-    % make
-    % make install
-
-The configure script supports several common options, for a detailed
-list, type::
-
-    % ./configure --help
-
-There also some compile time options which can be found in
-``src/geany.h``. Please see `Compile-time options`_ for more
-information.
-
-In the case that your system lacks dynamic linking loader support, you
-probably want to pass the option ``--disable-vte`` to the ``configure``
-script. This prevents compiling Geany with dynamic linking loader
-support to automatically load ``libvte.so.4`` if available.
-
-Geany has been successfully compiled and tested under Debian 3.1
-Sarge, Debian 4.0 Etch, Fedora Core 3/4/5, LinuxFromScratch and
-FreeBSD 6.0. It also compiles under Microsoft Windows™.
-
-If there are any errors during compilation, check your build
-environment and try to find the error, otherwise contact the author
-at <enrico(dot)troeger(at)uvena(dot)de>.
-
+You will need the GTK (>= 2.6.0) libraries and their dependencies
+(Pango, GLib and ATK). Your distro should provide packages for these,
+usually installed by default. For Windows, you can download an installer
+which bundles these libraries from the website.
 
 
 Binary packages
 ---------------
 
-There are many binary packages available. For an up to date but maybe
+There are many binary packages available. For an up-to-date but maybe
 incomplete list see http://geany.uvena.de/Download/Releases.
+
+
+Source compilation
+------------------
+
+For compiling Geany yourself, you will need the GTK (>= 2.6.0)
+libraries and header files. You will also need the Pango, GLib and
+ATK libraries and header files. All these files are available at
+http://www.gtk.org, but very often your distro will provide development
+packages to save the trouble of building these yourself.
+
+Furthermore you need, of course, a C compiler and the Make tool; a
+C++ compiler is also required (for the included Scintilla library). The
+GNU versions of these tools are recommended.
+
+Compiling Geany is quite easy. The following should do it::
+
+    $ ./configure
+    $ make
+
+Then as root::
+
+    % make install
+
+Custom installation
+^^^^^^^^^^^^^^^^^^^
+The configure script supports several common options, for a detailed
+list, type::
+
+    $ ./configure --help
+
+You may also want to read the INSTALL file for advanced installation
+options.
+
+There also some compile time options which can be found in
+``src/geany.h``. Please see `Compile-time options`_ for more
+information.
+
+Dynamic linking loader support
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+In the case that your system lacks dynamic linking loader support, you
+probably want to pass the option ``--disable-vte`` to the ``configure``
+script. This prevents compiling Geany with dynamic linking loader
+support to automatically load ``libvte.so.4`` if available.
+
+Supported systems
+^^^^^^^^^^^^^^^^^
+Geany has been successfully compiled and tested under Debian 3.1
+Sarge, Debian 4.0 Etch, Fedora Core 3/4/5, LinuxFromScratch and
+FreeBSD 6.0. It also compiles under Microsoft Windows™ (using the
+Windows makefiles - see the website for details).
+
+Build problems
+^^^^^^^^^^^^^^
+If there are any errors during compilation, check your build
+environment and try to find the error, otherwise contact the mailing
+list or the author - <enrico(dot)troeger(at)uvena(dot)de>. Sometimes
+you might need to ask for specific help from your distro.
 
 
 
