@@ -987,3 +987,7 @@ void sci_set_caret_policy_y(ScintillaObject *sci, gint policy, gint slop)
 	SSM(sci, SCI_SETYCARETPOLICY, policy, slop);
 }
 
+void sci_set_scroll_stop_at_last_line(ScintillaObject* sci, gboolean set)
+{
+	SSM(sci, SCI_SETENDATLASTLINE, set, 0);
+}

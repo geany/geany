@@ -14,6 +14,12 @@
    geany.spec.in, src/geany.h:
    New website address: www.geany.org.
    Merge README.I18N with latest from the wiki.
+ * doc/geany.html, doc/geany.txt, geany.glade, src/document.c,
+   src/editor.c, src/interface.c, src/keyfile.c, src/prefs.c,
+   src/sciwrappers.c, src/sciwrappers.h:
+   Add 'Stop scroll at last line' editor pref
+   (patch by Timothy Boronczyk, thanks).
+
 
 
 2008-08-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

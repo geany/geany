@@ -2750,6 +2750,7 @@ create_prefs_dialog (void)
   GtkWidget *check_indent;
   GtkWidget *check_white_space;
   GtkWidget *check_line_end;
+  GtkWidget *check_scroll_stop_at_last_line;
   GtkWidget *label102;
   GtkWidget *frame8;
   GtkWidget *alignment11;
@@ -3566,6 +3567,7 @@ create_prefs_dialog (void)
   notebook4 = gtk_notebook_new ();
   gtk_widget_show (notebook4);
   gtk_container_add (GTK_CONTAINER (notebook2), notebook4);
+  GTK_WIDGET_UNSET_FLAGS (notebook4, GTK_CAN_FOCUS);
 
   vbox5 = gtk_vbox_new (FALSE, 10);
   gtk_widget_show (vbox5);
@@ -3916,7 +3918,12 @@ create_prefs_dialog (void)
   check_line_end = gtk_check_button_new_with_mnemonic (_("Show line endings"));
   gtk_widget_show (check_line_end);
   gtk_box_pack_start (GTK_BOX (vbox12), check_line_end, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_line_end, _("Show the line ending character"), NULL);
+  gtk_tooltips_set_tip (tooltips, check_line_end, _("Show the line ending character."), NULL);
+
+  check_scroll_stop_at_last_line = gtk_check_button_new_with_mnemonic (_("Stop scrolling at last line"));
+  gtk_widget_show (check_scroll_stop_at_last_line);
+  gtk_box_pack_start (GTK_BOX (vbox12), check_scroll_stop_at_last_line, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_scroll_stop_at_last_line, _("Whether to allow scrolling one page past the last line of a document."), NULL);
 
   label102 = gtk_label_new (_("<b>Display</b>"));
   gtk_widget_show (label102);
@@ -4956,6 +4963,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_indent, "check_indent");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_white_space, "check_white_space");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_line_end, "check_line_end");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_scroll_stop_at_last_line, "check_scroll_stop_at_last_line");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label102, "label102");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame8, "frame8");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment11, "alignment11");

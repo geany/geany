@@ -324,6 +324,9 @@ void document_apply_update_prefs(GeanyDocument *doc)
 
 	sci_set_folding_margin_visible(sci, editor_prefs.folding);
 
+	/* (dis)allow scrolling past end of document */
+	sci_set_scroll_stop_at_last_line(sci, editor_prefs.scroll_stop_at_last_line);
+
 	sci_assign_cmdkey(sci, SCK_HOME,
 		editor_prefs.smart_home_key ? SCI_VCHOMEWRAP : SCI_HOMEWRAP);
 	sci_assign_cmdkey(sci, SCK_END,  SCI_LINEENDWRAP);

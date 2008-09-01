@@ -46,6 +46,7 @@ Matti Mårds <mamaar(at)gmail(dot)com> - create PHP tags script
 Robert McGinley <mcginleyr1(at)gmail(dot)com> - Documentation improvements
 Felipe Pena <felipensp(at)gmail(dot)com> - Missing PHP keywords
 Colomban Wendling <colombanw(at)users(dot)sourceforge(dot)net> - GLSL filetype patch
+Timothy Boronczyk <tboronczyk(at)gmail(dot)com> - scroll_stop_at_last_line GUI pref patch
 
 Translators:
 ------------

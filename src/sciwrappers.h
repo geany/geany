@@ -176,4 +176,5 @@ void				sci_set_scrollbar_mode		(ScintillaObject * sci, gboolean visible);
 void				sci_set_caret_policy_x		(ScintillaObject * sci, gint policy, gint slop);
 void				sci_set_caret_policy_y		(ScintillaObject * sci, gint policy, gint slop);
 
+void				sci_set_scroll_stop_at_last_line	(ScintillaObject* sci, gboolean set);
 #endif
