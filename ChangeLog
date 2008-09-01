@@ -13,12 +13,15 @@
    doc/geany.txt, doc/geany.html, doc/plugins.dox, geany.nsi,
    geany.spec.in, src/geany.h:
    New website address: www.geany.org.
-   Merge README.I18N with latest from the wiki.
+   Merge README.I18N with latest changes from the wiki.
  * doc/geany.html, doc/geany.txt, geany.glade, src/document.c,
    src/editor.c, src/interface.c, src/keyfile.c, src/prefs.c,
    src/sciwrappers.c, src/sciwrappers.h:
    Add 'Stop scroll at last line' editor pref
    (patch by Timothy Boronczyk, thanks).
+ * src/vte.c:
+   Mark the VTE as clean when restarting it to make Geany able to
+   execute commands in it.
 
 
 2008-08-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
