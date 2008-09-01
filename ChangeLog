@@ -22,6 +22,8 @@
  * src/vte.c:
    Mark the VTE as clean when restarting it to make Geany able to
    execute commands in it.
+ * geany.glade, src/interface:
+   Fix ambiguous tooltip of new 'Stop scroll at last line' editor pref.
 
 
 2008-08-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

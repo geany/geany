@@ -3923,7 +3923,7 @@ create_prefs_dialog (void)
   check_scroll_stop_at_last_line = gtk_check_button_new_with_mnemonic (_("Stop scrolling at last line"));
   gtk_widget_show (check_scroll_stop_at_last_line);
   gtk_box_pack_start (GTK_BOX (vbox12), check_scroll_stop_at_last_line, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_scroll_stop_at_last_line, _("Whether to allow scrolling one page past the last line of a document."), NULL);
+  gtk_tooltips_set_tip (tooltips, check_scroll_stop_at_last_line, _("Whether to stop scrolling one page past the last line of a document."), NULL);
 
   label102 = gtk_label_new (_("<b>Display</b>"));
   gtk_widget_show (label102);
@@ -4050,7 +4050,7 @@ create_prefs_dialog (void)
   check_cmdline_new_files = gtk_check_button_new_with_mnemonic (_("Open new documents from the command-line"));
   gtk_widget_show (check_cmdline_new_files);
   gtk_box_pack_start (GTK_BOX (vbox38), check_cmdline_new_files, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_cmdline_new_files, _("Start a new file for each command-line filename that doesn't exist"), NULL);
+  gtk_tooltips_set_tip (tooltips, check_cmdline_new_files, _("Start a new file for each command-line filename that doesn't exist."), NULL);
 
   table15 = gtk_table_new (1, 2, FALSE);
   gtk_widget_show (table15);

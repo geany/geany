@@ -6526,7 +6526,7 @@ Match braces</property>
 			      <child>
 				<widget class="GtkCheckButton" id="check_scroll_stop_at_last_line">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Whether to allow scrolling one page past the last line of a document.</property>
+				  <property name="tooltip" translatable="yes">Whether to stop scrolling one page past the last line of a document.</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Stop scrolling at last line</property>
 				  <property name="use_underline">True</property>
@@ -6941,7 +6941,7 @@ Match braces</property>
 			      <child>
 				<widget class="GtkCheckButton" id="check_cmdline_new_files">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Start a new file for each command-line filename that doesn't exist</property>
+				  <property name="tooltip" translatable="yes">Start a new file for each command-line filename that doesn't exist.</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Open new documents from the command-line</property>
 				  <property name="use_underline">True</property>
