@@ -9,6 +9,11 @@
  * waf, wscript:
    Update waf to its latest SVN version (1.5.0 preview).
    Adjust wscript to latest Waf API changes.
+ * HACKING, README, README.I18N, configure.in, doc/geany.1.in,
+   doc/geany.txt, doc/geany.html, doc/plugins.dox, geany.nsi,
+   geany.spec.in, src/geany.h:
+   New website address: www.geany.org.
+   Merge README.I18N with latest from the wiki.
 
 
 2008-08-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

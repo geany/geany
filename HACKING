@@ -82,7 +82,7 @@ installed on the system.
 GTK API documentation
 ---------------------
 The official GTK 2.6 API documentation is not available online anymore,
-so we put them on http://geany.uvena.de/manual/gtk/.
+so we put them on http://www.geany.org/manual/gtk/.
 There is also a tarball with all available files for download and use
 with devhelp.
 

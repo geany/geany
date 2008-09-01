@@ -220,7 +220,7 @@ PluginCallback plugin_callbacks[] =
  *  following.
  *
  *  First you need to get the source code of Geany from the website at
- *  http://geany.uvena.de/Download/Releases [2]. Then install the development files for GTK
+ *  http://www.geany.org/Download/Releases [2]. Then install the development files for GTK
  *  and its dependencies. The easiest way to do this is to use your distribution's package
  *  management system, e.g. on Debian and Ubuntu systems you can use
  *  @code apt-get install libgtk2.0-dev intltool @endcode
@@ -240,10 +240,10 @@ PluginCallback plugin_callbacks[] =
  *
  *  [1] For Windows, it is basically the same but you might have some more work on setting up
  *  the general build environment(compiler, GTK development files, ...). This is described on
- *  Geany's website at http://geany.uvena.de/Support/BuildingOnWin32.
+ *  Geany's website at http://www.geany.org/Support/BuildingOnWin32.
  *
  *  [2] You can also use the bleedging edge source code from our Subversion repository.
- *  More information about this can be found at http://geany.uvena.de/Download/SVN.
+ *  More information about this can be found at http://www.geany.org/Download/SVN.
  *
  * @section helloworld "Hello World"
  *

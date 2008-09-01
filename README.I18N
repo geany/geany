@@ -3,35 +3,45 @@ Quick Guide for new translations
 
 If you want to translate Geany into another language, please go to the
 language statistics page (see below) to see whether your desired
-language already exists. If it already exists, please read the next
-section. Otherwise, get the SVN version of Geany, change to the po
-directory and start the new translation with: 
-msginit -l ll_CC -o ll.po -i geany.pot
+language already exists. If it already exists, please read the
+"Notes for updating translations" section. Otherwise, get the SVN
+version of Geany, change to the po directory and start the new
+translation with:
 
-Fill in ll with the language code and CC with the country code. For
-example, to translate Geany into Italian you would type: 
-msginit -l it_IT -o it.po -i geany.pot
+$ msginit -l ll_CC -o ll.po -i geany.pot
 
-This will create a file it.po. This file can be opened with a text
-editor (like Geany ;-)) or you can also use a graphical interface. I
-can suggest PoEdit(http://www.poedit.org/), but there are several
-other GUIs.
+Fill in ll with the language code and CC with the country code.
+For example, to translate Geany into Italian you would type:
 
-When you have finished editing the file, check the file with: 
-msgfmt -c --check-accelerators=_ it.po
-or by using the intl_stats.sh script inside the po-directory with
-./intl_stats.sh -a it
+$ msginit -l it_IT -o it.po -i geany.pot
 
-Please take care of menu accelerators(strings containing a "_").  The
-"_" character should also be in your translation. Additionally, it
-would be nice if these accelerators are not twice for two strings
+This will create a file it.po. This file can be opened with a
+text editor (like Geany ;-)) or you can also use a graphical
+interface. I can suggest PoEdit (http://www.poedit.net/), but
+there are several other GUIs.
+
+When you have finished editing the file, check the file with:
+
+$ msgfmt -c --check-accelerators=_ it.po
+
+Please take care of menu accelerators(strings containing a "_").
+The "_" character should also be in your translation. Additionally,
+it would be nice if these accelerators are not twice for two strings
 inside on dialog or sub menu.
+
+You can also use intl_stats.sh, e.g. by running the following command
+in the top source directory of Geany:
+
+$ po/intl_stats.sh -a it
+
+This will print some information about the Italian translation
+and checks for menu accelerators.
 
 Then send the file to Frank Lanitz and he will add the translation.
 
-It is a good idea to write to Frank before you start or while
-translating, because he can give you some hints on translating and
-ensure that the translation is not already in progress.
+It is a good idea to write to Frank before you start or while translating,
+because he can give you some hints on translating and ensure that the
+translation is not already in progress.
 
 
 Notes for updating translations
@@ -39,18 +49,18 @@ Notes for updating translations
 
 If you want to update an existing translation, please contact Frank
 Lanitz. He is supervising all translation issues and will contact the
-maintainer of the translation you want to update to avoid any 
+maintainer of the translation you want to update to avoid any
 conflicts.
 
 Some translation statistics can be found at:
-http://geany.uvena.de/i18n/
+http://i18n.geany.org/
 
 
 I18n mailing list
 -----------------
 
 There is also a mailing list dedicated to translation issues. Please
-visit http://geany.uvena.de/Support/MailingList for more information.
+visit http://www.geany.org/Support/MailingList for more information.
 
 
 Contact: Frank Lanitz <frank(at)frank(dot)uvena(dot)de>

@@ -45,7 +45,7 @@
 #define GEANY_FILEDEFS_SUBDIR			"filedefs"
 #define GEANY_TEMPLATES_SUBDIR			"templates"
 #define GEANY_CODENAME					"Quillan"
-#define GEANY_HOMEPAGE					"http://geany.uvena.de/"
+#define GEANY_HOMEPAGE					"http://www.geany.org/"
 #define GEANY_USE_WIN32_DIALOG			0
 #define GEANY_STRING_UNTITLED			_("untitled")
 #define GEANY_WINDOW_MINIMAL_WIDTH		550

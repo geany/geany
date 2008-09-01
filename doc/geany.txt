@@ -57,7 +57,7 @@ Some basic features of Geany are:
 Where to get it
 ---------------
 
-You can obtain Geany from http://geany.uvena.de or perhaps also from
+You can obtain Geany from http://www.geany.org/ or perhaps also from
 your distributor.
 
 
@@ -80,8 +80,8 @@ The included Scintilla library (found in the subdirectory
 About this document
 -------------------
 
-This documentation is available in various formats like HTML, text and
-PDF. The latest version is always available at http://geany.uvena.de.
+This documentation is available in HTML and text formats.
+The latest version can always be found at http://www.geany.org/.
 
 If you want to contribute to it, see `Contributing to this document`_.
 
@@ -105,7 +105,7 @@ Binary packages
 ---------------
 
 There are many binary packages available. For an up-to-date but maybe
-incomplete list see http://geany.uvena.de/Download/Releases.
+incomplete list see http://www.geany.org/Download/Releases.
 
 
 Source compilation
