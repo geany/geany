@@ -293,7 +293,6 @@ static GtkWidget *add_file_open_extra_widget()
 
 	/* line 1 with checkbox and encoding combo */
 	check_hidden = gtk_check_button_new_with_mnemonic(_("Show _hidden files"));
-	gtk_button_set_focus_on_click(GTK_BUTTON(check_hidden), FALSE);
 	gtk_widget_show(check_hidden);
 	gtk_table_attach(GTK_TABLE(table), check_hidden, 0, 1, 0, 1,
 					(GtkAttachOptions) (GTK_FILL | GTK_EXPAND),

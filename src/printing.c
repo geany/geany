@@ -343,19 +343,16 @@ static GtkWidget *create_custom_widget(GtkPrintOperation *operation, gpointer us
 	w->check_print_linenumbers = gtk_check_button_new_with_mnemonic(_("Print line numbers"));
 	gtk_box_pack_start(GTK_BOX(page), w->check_print_linenumbers, FALSE, FALSE, 0);
 	gtk_tooltips_set_tip(tooltips, w->check_print_linenumbers, _("Add line numbers to the printed page."), NULL);
-	gtk_button_set_focus_on_click(GTK_BUTTON(w->check_print_linenumbers), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w->check_print_linenumbers), printing_prefs.print_line_numbers);
 
 	w->check_print_pagenumbers = gtk_check_button_new_with_mnemonic(_("Print page numbers"));
 	gtk_box_pack_start(GTK_BOX(page), w->check_print_pagenumbers, FALSE, FALSE, 0);
 	gtk_tooltips_set_tip(tooltips, w->check_print_pagenumbers, _("Add page numbers at the bottom of each page. It takes 2 lines of the page."), NULL);
-	gtk_button_set_focus_on_click(GTK_BUTTON(w->check_print_pagenumbers), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w->check_print_pagenumbers), printing_prefs.print_page_numbers);
 
 	w->check_print_pageheader = gtk_check_button_new_with_mnemonic(_("Print page header"));
 	gtk_box_pack_start(GTK_BOX(page), w->check_print_pageheader, FALSE, FALSE, 0);
 	gtk_tooltips_set_tip(tooltips, w->check_print_pageheader, _("Adds a little header to every page containing the page number, the filename and the current date(see below). It takes 3 lines of the page."), NULL);
-	gtk_button_set_focus_on_click(GTK_BUTTON(w->check_print_pageheader), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w->check_print_pageheader), printing_prefs.print_page_header);
 	g_signal_connect(w->check_print_pageheader, "toggled", G_CALLBACK(on_page_header_toggled), w);
 
@@ -374,7 +371,6 @@ static GtkWidget *create_custom_widget(GtkPrintOperation *operation, gpointer us
 	w->check_print_basename = gtk_check_button_new_with_mnemonic(_("Use the basename of the printed file"));
 	gtk_box_pack_start(GTK_BOX(vbox30), w->check_print_basename, FALSE, FALSE, 0);
 	gtk_tooltips_set_tip(tooltips, w->check_print_basename, _("Print only the basename(without the path) of the printed file."), NULL);
-	gtk_button_set_focus_on_click(GTK_BUTTON(w->check_print_basename), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w->check_print_basename), printing_prefs.page_header_basename);
 
 	hbox10 = gtk_hbox_new(FALSE, 5);

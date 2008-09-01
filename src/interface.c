@@ -2951,14 +2951,11 @@ create_prefs_dialog (void)
   check_load_session = gtk_check_button_new_with_mnemonic (_("Load files from the last session"));
   gtk_widget_show (check_load_session);
   gtk_box_pack_start (GTK_BOX (vbox4), check_load_session, FALSE, FALSE, 0);
-  GTK_WIDGET_UNSET_FLAGS (check_load_session, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_load_session, _("Opens at startup the files from the last session"), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_load_session), FALSE);
 
   check_vte = gtk_check_button_new_with_mnemonic (_("Load virtual terminal support"));
   gtk_box_pack_start (GTK_BOX (vbox4), check_vte, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_vte, _("Whether the virtual terminal emulation (VTE) should be loaded at startup. Disable it if you do not need it."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_vte), FALSE);
 
   check_plugins = gtk_check_button_new_with_mnemonic (_("Enable plugin support"));
   gtk_widget_show (check_plugins);
@@ -2986,16 +2983,12 @@ create_prefs_dialog (void)
   check_save_win_pos = gtk_check_button_new_with_mnemonic (_("Save window position and geometry"));
   gtk_widget_show (check_save_win_pos);
   gtk_box_pack_start (GTK_BOX (vbox34), check_save_win_pos, FALSE, FALSE, 0);
-  GTK_WIDGET_UNSET_FLAGS (check_save_win_pos, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_save_win_pos, _("Saves the window position and geometry and restores it at the start"), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_save_win_pos), FALSE);
 
   check_ask_for_quit = gtk_check_button_new_with_mnemonic (_("Confirm exit"));
   gtk_widget_show (check_ask_for_quit);
   gtk_box_pack_start (GTK_BOX (vbox34), check_ask_for_quit, FALSE, FALSE, 0);
-  GTK_WIDGET_UNSET_FLAGS (check_ask_for_quit, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_ask_for_quit, _("Shows a confirmation dialog on exit."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_ask_for_quit), FALSE);
 
   label206 = gtk_label_new (_("<b>Shutdown</b>"));
   gtk_widget_show (label206);
@@ -3019,9 +3012,7 @@ create_prefs_dialog (void)
   check_project_session = gtk_check_button_new_with_mnemonic (_("Use project-based session files"));
   gtk_widget_show (check_project_session);
   gtk_box_pack_start (GTK_BOX (vbox35), check_project_session, FALSE, FALSE, 0);
-  GTK_WIDGET_UNSET_FLAGS (check_project_session, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_project_session, _("Whether to store a project's session files and open them when re-opening the project."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_project_session), FALSE);
 
   label207 = gtk_label_new (_("<b>Projects</b>"));
   gtk_widget_show (label207);
@@ -3046,25 +3037,21 @@ create_prefs_dialog (void)
   gtk_widget_show (check_beep);
   gtk_box_pack_start (GTK_BOX (vbox21), check_beep, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_beep, _("Whether to beep if an error occurred or when the compilation process has finished."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_beep), FALSE);
 
   check_switch_pages = gtk_check_button_new_with_mnemonic (_("Switch to status message list at new message"));
   gtk_widget_show (check_switch_pages);
   gtk_box_pack_start (GTK_BOX (vbox21), check_switch_pages, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_switch_pages, _("Switch to the status message tab (in the notebook window at the bottom) if a new status message arrives."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_switch_pages), FALSE);
 
   check_suppress_status_msgs = gtk_check_button_new_with_mnemonic (_("Suppress status messages in the status bar"));
   gtk_widget_show (check_suppress_status_msgs);
   gtk_box_pack_start (GTK_BOX (vbox21), check_suppress_status_msgs, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_suppress_status_msgs, _("Removes all messages from the status bar. The messages are still displayed in the status messages window."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_suppress_status_msgs), FALSE);
 
   check_auto_focus = gtk_check_button_new_with_mnemonic (_("Auto focus widgets (focus follows mouse)"));
   gtk_widget_show (check_auto_focus);
   gtk_box_pack_start (GTK_BOX (vbox21), check_auto_focus, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_auto_focus, _("Gives the focus automatically to widgets below the mouse cursor. Works for the main editor widget, the scribble, the toolbar search and goto line fields and the VTE."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_auto_focus), FALSE);
 
   label199 = gtk_label_new (_("<b>Miscellaneous</b>"));
   gtk_widget_show (label199);
@@ -3169,18 +3156,15 @@ create_prefs_dialog (void)
   gtk_widget_show (check_list_symbol);
   gtk_box_pack_start (GTK_BOX (vbox11), check_list_symbol, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_list_symbol, _("Toggle the symbol list on and off"), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_list_symbol), FALSE);
 
   check_list_openfiles = gtk_check_button_new_with_mnemonic (_("Show documents list"));
   gtk_widget_show (check_list_openfiles);
   gtk_box_pack_start (GTK_BOX (vbox11), check_list_openfiles, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_list_openfiles, _("Toggle the documents list on and off"), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_list_openfiles), FALSE);
 
   check_list_openfiles_fullpath = gtk_check_button_new_with_mnemonic (_("Show full path name in documents list"));
   gtk_widget_show (check_list_openfiles_fullpath);
   gtk_box_pack_start (GTK_BOX (vbox11), check_list_openfiles_fullpath, FALSE, FALSE, 0);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_list_openfiles_fullpath), FALSE);
 
   label146 = gtk_label_new (_("<b>Sidebar</b>"));
   gtk_widget_show (label146);
@@ -3273,9 +3257,7 @@ create_prefs_dialog (void)
   check_show_tab_cross = gtk_check_button_new_with_mnemonic (_("Show close buttons"));
   gtk_widget_show (check_show_tab_cross);
   gtk_box_pack_start (GTK_BOX (vbox26), check_show_tab_cross, FALSE, FALSE, 0);
-  GTK_WIDGET_UNSET_FLAGS (check_show_tab_cross, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_show_tab_cross, _("Shows a small cross button in the file tabs to easily close files when clicking on it (requires restart of Geany)."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_show_tab_cross), FALSE);
 
   hbox7 = gtk_hbox_new (FALSE, 12);
   gtk_widget_show (hbox7);
@@ -3334,6 +3316,7 @@ create_prefs_dialog (void)
   gtk_table_attach (GTK_TABLE (table8), combo_tab_msgwin, 1, 2, 2, 3,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
+  GTK_WIDGET_SET_FLAGS (combo_tab_msgwin, GTK_CAN_FOCUS);
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo_tab_msgwin), _("Left"));
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo_tab_msgwin), _("Right"));
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo_tab_msgwin), _("Top"));
@@ -3351,6 +3334,7 @@ create_prefs_dialog (void)
   gtk_table_attach (GTK_TABLE (table8), combo_tab_sidebar, 1, 2, 1, 2,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
+  GTK_WIDGET_SET_FLAGS (combo_tab_sidebar, GTK_CAN_FOCUS);
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo_tab_sidebar), _("Left"));
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo_tab_sidebar), _("Right"));
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo_tab_sidebar), _("Top"));
@@ -3368,6 +3352,7 @@ create_prefs_dialog (void)
   gtk_table_attach (GTK_TABLE (table8), combo_tab_editor, 1, 2, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
+  GTK_WIDGET_SET_FLAGS (combo_tab_editor, GTK_CAN_FOCUS);
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo_tab_editor), _("Left"));
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo_tab_editor), _("Right"));
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo_tab_editor), _("Top"));
@@ -3424,8 +3409,6 @@ create_prefs_dialog (void)
   check_toolbar_show = gtk_check_button_new_with_mnemonic (_("Show Toolbar"));
   gtk_widget_show (check_toolbar_show);
   gtk_container_add (GTK_CONTAINER (alignment31), check_toolbar_show);
-  GTK_WIDGET_UNSET_FLAGS (check_toolbar_show, GTK_CAN_FOCUS);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_toolbar_show), FALSE);
 
   label196 = gtk_label_new (_("<b>Toolbar</b>"));
   gtk_widget_show (label196);
@@ -3449,72 +3432,52 @@ create_prefs_dialog (void)
   check_toolbar_fileops = gtk_check_button_new_with_mnemonic (_("Show file operation buttons"));
   gtk_widget_show (check_toolbar_fileops);
   gtk_box_pack_start (GTK_BOX (vbox16), check_toolbar_fileops, FALSE, FALSE, 0);
-  GTK_WIDGET_UNSET_FLAGS (check_toolbar_fileops, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_toolbar_fileops, _("Display the New, Open, Close, Save and Reload buttons in the toolbar"), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_toolbar_fileops), FALSE);
 
   check_toolbar_undo = gtk_check_button_new_with_mnemonic (_("Show Redo and Undo buttons"));
   gtk_widget_show (check_toolbar_undo);
   gtk_box_pack_start (GTK_BOX (vbox16), check_toolbar_undo, FALSE, FALSE, 0);
-  GTK_WIDGET_UNSET_FLAGS (check_toolbar_undo, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_toolbar_undo, _("Display the Redo and Undo buttons in the toolbar"), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_toolbar_undo), FALSE);
 
   check_toolbar_navigation = gtk_check_button_new_with_mnemonic (_("Show Back and Forward buttons"));
   gtk_widget_show (check_toolbar_navigation);
   gtk_box_pack_start (GTK_BOX (vbox16), check_toolbar_navigation, FALSE, FALSE, 0);
-  GTK_WIDGET_UNSET_FLAGS (check_toolbar_navigation, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_toolbar_navigation, _("Display the Back and Forward buttons in the toolbar used for code navigation"), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_toolbar_navigation), FALSE);
 
   check_toolbar_compile = gtk_check_button_new_with_mnemonic (_("Show Compile and Run buttons"));
   gtk_widget_show (check_toolbar_compile);
   gtk_box_pack_start (GTK_BOX (vbox16), check_toolbar_compile, FALSE, FALSE, 0);
-  GTK_WIDGET_UNSET_FLAGS (check_toolbar_compile, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_toolbar_compile, _("Display the Compile and Run buttons in the toolbar"), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_toolbar_compile), FALSE);
 
   check_toolbar_colour = gtk_check_button_new_with_mnemonic (_("Show Color Chooser button"));
   gtk_widget_show (check_toolbar_colour);
   gtk_box_pack_start (GTK_BOX (vbox16), check_toolbar_colour, FALSE, FALSE, 0);
-  GTK_WIDGET_UNSET_FLAGS (check_toolbar_colour, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_toolbar_colour, _("Display the Color Chooser button in the toolbar"), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_toolbar_colour), FALSE);
 
   check_toolbar_zoom = gtk_check_button_new_with_mnemonic (_("Show Zoom In and Zoom Out buttons"));
   gtk_widget_show (check_toolbar_zoom);
   gtk_box_pack_start (GTK_BOX (vbox16), check_toolbar_zoom, FALSE, FALSE, 0);
-  GTK_WIDGET_UNSET_FLAGS (check_toolbar_zoom, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_toolbar_zoom, _("Display the Zoom In and Zoom Out buttons in the toolbar"), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_toolbar_zoom), FALSE);
 
   check_toolbar_indent = gtk_check_button_new_with_mnemonic (_("Show Increase and Decrease Indentation buttons"));
   gtk_widget_show (check_toolbar_indent);
   gtk_box_pack_start (GTK_BOX (vbox16), check_toolbar_indent, FALSE, FALSE, 0);
-  GTK_WIDGET_UNSET_FLAGS (check_toolbar_indent, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_toolbar_indent, _("Display the Increase and Decrease Indentation buttons in the toolbar"), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_toolbar_indent), FALSE);
 
   check_toolbar_search = gtk_check_button_new_with_mnemonic (_("Show Search field"));
   gtk_widget_show (check_toolbar_search);
   gtk_box_pack_start (GTK_BOX (vbox16), check_toolbar_search, FALSE, FALSE, 0);
-  GTK_WIDGET_UNSET_FLAGS (check_toolbar_search, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_toolbar_search, _("Display the search field and button in the toolbar"), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_toolbar_search), FALSE);
 
   check_toolbar_goto = gtk_check_button_new_with_mnemonic (_("Show Go to Line field"));
   gtk_widget_show (check_toolbar_goto);
   gtk_box_pack_start (GTK_BOX (vbox16), check_toolbar_goto, FALSE, FALSE, 0);
-  GTK_WIDGET_UNSET_FLAGS (check_toolbar_goto, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_toolbar_goto, _("Display the line number field and button in the toolbar"), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_toolbar_goto), FALSE);
 
   check_toolbar_quit = gtk_check_button_new_with_mnemonic (_("Show Quit button"));
   gtk_widget_show (check_toolbar_quit);
   gtk_box_pack_start (GTK_BOX (vbox16), check_toolbar_quit, FALSE, FALSE, 0);
-  GTK_WIDGET_UNSET_FLAGS (check_toolbar_quit, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_toolbar_quit, _("Display the quit button in the toolbar"), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_toolbar_quit), FALSE);
 
   label165 = gtk_label_new (_("<b>Items</b>"));
   gtk_widget_show (label165);
@@ -3757,37 +3720,31 @@ create_prefs_dialog (void)
   gtk_widget_show (check_smart_home);
   gtk_box_pack_start (GTK_BOX (vbox17), check_smart_home, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_smart_home, _("When \"smart\" home is enabled, the HOME key will move the caret to the first non-blank character of the line, unless it is already there, it moves to the very beginning of the line. When this feature is disabled, the HOME key always moves the caret to the start of the current line, regardless of its current position."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_smart_home), FALSE);
 
   check_disable_dnd = gtk_check_button_new_with_mnemonic (_("Disable Drag and Drop"));
   gtk_widget_show (check_disable_dnd);
   gtk_box_pack_start (GTK_BOX (vbox17), check_disable_dnd, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_disable_dnd, _("Disable drag and drop completely in the editor window so you can't drag and drop any selections within or outside of the editor window."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_disable_dnd), FALSE);
 
   check_folding = gtk_check_button_new_with_mnemonic (_("Enable folding"));
   gtk_widget_show (check_folding);
   gtk_box_pack_start (GTK_BOX (vbox17), check_folding, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_folding, _("Whether to enable folding the code"), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_folding), FALSE);
 
   check_unfold_children = gtk_check_button_new_with_mnemonic (_("Fold/Unfold all children of a fold point"));
   gtk_widget_show (check_unfold_children);
   gtk_box_pack_start (GTK_BOX (vbox17), check_unfold_children, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_unfold_children, _("Fold or unfold all children of a fold point. By pressing the Shift key while clicking on a fold symbol the contrary behavior is used."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_unfold_children), FALSE);
 
   check_indicators = gtk_check_button_new_with_mnemonic (_("Use indicators to show compile errors"));
   gtk_widget_show (check_indicators);
   gtk_box_pack_start (GTK_BOX (vbox17), check_indicators, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_indicators, _("Whether to use indicators (a squiggly underline) to highlight the lines where the compiler found a warning or an error."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_indicators), FALSE);
 
   check_newline_strip = gtk_check_button_new_with_mnemonic (_("Newline strips trailing spaces"));
   gtk_widget_show (check_newline_strip);
   gtk_box_pack_start (GTK_BOX (vbox17), check_newline_strip, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_newline_strip, _("Enable newline to strip the trailing spaces on the previous line."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_newline_strip), FALSE);
 
   hbox11 = gtk_hbox_new (FALSE, 12);
   gtk_widget_show (hbox11);
@@ -3844,25 +3801,21 @@ create_prefs_dialog (void)
   gtk_widget_show (check_complete_snippets);
   gtk_box_pack_start (GTK_BOX (vbox19), check_complete_snippets, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_complete_snippets, _("Type a defined short character sequence and complete it to a more complex string using a single keypress."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_complete_snippets), FALSE);
 
   check_xmltag = gtk_check_button_new_with_mnemonic (_("XML tag auto completion"));
   gtk_widget_show (check_xmltag);
   gtk_box_pack_start (GTK_BOX (vbox19), check_xmltag, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_xmltag, _("Automatic completion and closing of XML tags (includes HTML tags)"), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_xmltag), FALSE);
 
   check_auto_multiline = gtk_check_button_new_with_mnemonic (_("Automatic continuation of multi-line comments"));
   gtk_widget_show (check_auto_multiline);
   gtk_box_pack_start (GTK_BOX (vbox19), check_auto_multiline, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_auto_multiline, _("Continue automatically multi-line comments in languages like C, C++ and Java when a new line is entered inside such a comment."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_auto_multiline), FALSE);
 
   check_symbol_auto_completion = gtk_check_button_new_with_mnemonic (_("Automatic symbol completion"));
   gtk_widget_show (check_symbol_auto_completion);
   gtk_box_pack_start (GTK_BOX (vbox19), check_symbol_auto_completion, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_symbol_auto_completion, _("Automatic completion of known symbols in open files (function names, global variables, ...)"), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_symbol_auto_completion), FALSE);
 
   table14 = gtk_table_new (3, 2, FALSE);
   gtk_widget_show (table14);
@@ -3954,19 +3907,16 @@ create_prefs_dialog (void)
   gtk_widget_show (check_indent);
   gtk_box_pack_start (GTK_BOX (vbox12), check_indent, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_indent, _("Shows small dotted lines to help you to use the right indentation."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_indent), FALSE);
 
   check_white_space = gtk_check_button_new_with_mnemonic (_("Show white space"));
   gtk_widget_show (check_white_space);
   gtk_box_pack_start (GTK_BOX (vbox12), check_white_space, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_white_space, _("Marks spaces with dots and tabs with arrows."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_white_space), FALSE);
 
   check_line_end = gtk_check_button_new_with_mnemonic (_("Show line endings"));
   gtk_widget_show (check_line_end);
   gtk_box_pack_start (GTK_BOX (vbox12), check_line_end, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_line_end, _("Show the line ending character"), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_line_end), FALSE);
 
   label102 = gtk_label_new (_("<b>Display</b>"));
   gtk_widget_show (label102);
@@ -4177,7 +4127,6 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
   gtk_tooltips_set_tip (tooltips, check_open_encoding, _("This option disables the automatic detection of the file encoding when opening files and opens the file with the specified encoding (usually not needed)."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_open_encoding), FALSE);
 
   label219 = gtk_label_new (_("<b>Encodings</b>"));
   gtk_widget_show (label219);
@@ -4201,23 +4150,17 @@ create_prefs_dialog (void)
   check_new_line = gtk_check_button_new_with_mnemonic (_("Ensure new line at file end"));
   gtk_widget_show (check_new_line);
   gtk_box_pack_start (GTK_BOX (vbox6), check_new_line, FALSE, FALSE, 0);
-  GTK_WIDGET_UNSET_FLAGS (check_new_line, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_new_line, _("Ensures that at the end of the file is a new line"), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_new_line), FALSE);
 
   check_trailing_spaces = gtk_check_button_new_with_mnemonic (_("Strip trailing spaces and tabs"));
   gtk_widget_show (check_trailing_spaces);
   gtk_box_pack_start (GTK_BOX (vbox6), check_trailing_spaces, FALSE, FALSE, 0);
-  GTK_WIDGET_UNSET_FLAGS (check_trailing_spaces, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_trailing_spaces, _("Removes trailing spaces and tabs and the end of lines"), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_trailing_spaces), FALSE);
 
   check_replace_tabs = gtk_check_button_new_with_mnemonic (_("Replace tabs by space"));
   gtk_widget_show (check_replace_tabs);
   gtk_box_pack_start (GTK_BOX (vbox6), check_replace_tabs, FALSE, FALSE, 0);
-  GTK_WIDGET_UNSET_FLAGS (check_replace_tabs, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_replace_tabs, _("Replaces all tabs in document by spaces."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_replace_tabs), FALSE);
 
   label19 = gtk_label_new (_("<b>Saving files</b>"));
   gtk_widget_show (label19);
@@ -4306,16 +4249,12 @@ create_prefs_dialog (void)
   check_ask_suppress_search_dialogs = gtk_check_button_new_with_mnemonic (_("Always wrap search and hide the Find dialog"));
   gtk_widget_show (check_ask_suppress_search_dialogs);
   gtk_box_pack_start (GTK_BOX (vbox36), check_ask_suppress_search_dialogs, FALSE, FALSE, 0);
-  GTK_WIDGET_UNSET_FLAGS (check_ask_suppress_search_dialogs, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_ask_suppress_search_dialogs, _("Always wrap search around the document and hide the Find dialog after clicking Find Next/Previous"), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_ask_suppress_search_dialogs), FALSE);
 
   check_search_use_current_word = gtk_check_button_new_with_mnemonic (_("Use the current word under the cursor for Find dialogs"));
   gtk_widget_show (check_search_use_current_word);
   gtk_box_pack_start (GTK_BOX (vbox36), check_search_use_current_word, FALSE, FALSE, 0);
-  GTK_WIDGET_UNSET_FLAGS (check_search_use_current_word, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_search_use_current_word, _("Use current word under the cursor when opening the Find, Find in Files or Replace dialog and there is no selection."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_search_use_current_word), FALSE);
 
   check_fif_current_dir = gtk_check_button_new_with_mnemonic (_("Use the current file's directory for Find in Files"));
   gtk_widget_show (check_fif_current_dir);
@@ -4741,7 +4680,6 @@ create_prefs_dialog (void)
   radio_print_external = gtk_radio_button_new_with_mnemonic (NULL, _("Use an external command for printing"));
   gtk_widget_show (radio_print_external);
   gtk_frame_set_label_widget (GTK_FRAME (frame32), radio_print_external);
-  gtk_button_set_focus_on_click (GTK_BUTTON (radio_print_external), FALSE);
   gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_print_external), radio_print_external_group);
   radio_print_external_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_print_external));
 
@@ -4763,19 +4701,16 @@ create_prefs_dialog (void)
   gtk_widget_show (check_print_linenumbers);
   gtk_box_pack_start (GTK_BOX (vbox29), check_print_linenumbers, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_print_linenumbers, _("Add line numbers to the printed page."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_print_linenumbers), FALSE);
 
   check_print_pagenumbers = gtk_check_button_new_with_mnemonic (_("Print page numbers"));
   gtk_widget_show (check_print_pagenumbers);
   gtk_box_pack_start (GTK_BOX (vbox29), check_print_pagenumbers, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_print_pagenumbers, _("Add page numbers at the bottom of each page. It takes 2 lines of the page."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_print_pagenumbers), FALSE);
 
   check_print_pageheader = gtk_check_button_new_with_mnemonic (_("Print page header"));
   gtk_widget_show (check_print_pageheader);
   gtk_box_pack_start (GTK_BOX (vbox29), check_print_pageheader, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_print_pageheader, _("Adds a little header to every page containing the page number, the filename and the current date(see below). It takes 3 lines of the page."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_print_pageheader), FALSE);
 
   frame33 = gtk_frame_new (NULL);
   gtk_widget_show (frame33);
@@ -4796,7 +4731,6 @@ create_prefs_dialog (void)
   gtk_widget_show (check_print_basename);
   gtk_box_pack_start (GTK_BOX (vbox30), check_print_basename, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_print_basename, _("Print only the basename(without the path) of the printed file."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_print_basename), FALSE);
 
   hbox10 = gtk_hbox_new (FALSE, 5);
   gtk_widget_show (hbox10);
@@ -4815,7 +4749,6 @@ create_prefs_dialog (void)
   radio_print_gtk = gtk_radio_button_new_with_mnemonic (NULL, _("Use native GTK printing"));
   gtk_widget_show (radio_print_gtk);
   gtk_frame_set_label_widget (GTK_FRAME (frame31), radio_print_gtk);
-  gtk_button_set_focus_on_click (GTK_BUTTON (radio_print_gtk), FALSE);
   gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_print_gtk), radio_print_external_group);
   radio_print_external_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_print_gtk));
 

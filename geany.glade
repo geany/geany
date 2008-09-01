@@ -3277,10 +3277,11 @@
 			    <widget class="GtkCheckButton" id="check_load_session">
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Opens at startup the files from the last session</property>
+			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Load files from the last session</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -3299,7 +3300,7 @@
 			      <property name="label" translatable="yes">Load virtual terminal support</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -3393,10 +3394,11 @@
 			    <widget class="GtkCheckButton" id="check_save_win_pos">
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Saves the window position and geometry and restores it at the start</property>
+			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Save window position and geometry</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -3412,10 +3414,11 @@
 			    <widget class="GtkCheckButton" id="check_ask_for_quit">
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Shows a confirmation dialog on exit.</property>
+			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Confirm exit</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -3490,10 +3493,11 @@
 			    <widget class="GtkCheckButton" id="check_project_session">
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Whether to store a project's session files and open them when re-opening the project.</property>
+			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Use project-based session files</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -3572,7 +3576,7 @@
 			      <property name="label" translatable="yes">Beep on errors or when compilation has finished</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -3592,7 +3596,7 @@
 			      <property name="label" translatable="yes">Switch to status message list at new message</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -3612,7 +3616,7 @@
 			      <property name="label" translatable="yes">Suppress status messages in the status bar</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -3632,7 +3636,7 @@
 			      <property name="label" translatable="yes">Auto focus widgets (focus follows mouse)</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -3967,7 +3971,7 @@
 			      <property name="label" translatable="yes">Show symbol list</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -3987,7 +3991,7 @@
 			      <property name="label" translatable="yes">Show documents list</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -4006,7 +4010,7 @@
 			      <property name="label" translatable="yes">Show full path name in documents list</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -4308,10 +4312,11 @@
 			    <widget class="GtkCheckButton" id="check_show_tab_cross">
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Shows a small cross button in the file tabs to easily close files when clicking on it (requires restart of Geany).</property>
+			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Show close buttons</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -4495,6 +4500,7 @@
 			  <child>
 			    <widget class="GtkComboBox" id="combo_tab_msgwin">
 			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
 			      <property name="items" translatable="yes">Left
 Right
 Top
@@ -4544,6 +4550,7 @@ Bottom
 			  <child>
 			    <widget class="GtkComboBox" id="combo_tab_sidebar">
 			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
 			      <property name="items" translatable="yes">Left
 Right
 Top
@@ -4593,6 +4600,7 @@ Bottom
 			  <child>
 			    <widget class="GtkComboBox" id="combo_tab_editor">
 			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
 			      <property name="items" translatable="yes">Left
 Right
 Top
@@ -4782,10 +4790,11 @@ Bottom
 		      <child>
 			<widget class="GtkCheckButton" id="check_toolbar_show">
 			  <property name="visible">True</property>
+			  <property name="can_focus">True</property>
 			  <property name="label" translatable="yes">Show Toolbar</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
-			  <property name="focus_on_click">False</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
@@ -4853,10 +4862,11 @@ Bottom
 			    <widget class="GtkCheckButton" id="check_toolbar_fileops">
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Display the New, Open, Close, Save and Reload buttons in the toolbar</property>
+			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Show file operation buttons</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -4872,10 +4882,11 @@ Bottom
 			    <widget class="GtkCheckButton" id="check_toolbar_undo">
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Display the Redo and Undo buttons in the toolbar</property>
+			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Show Redo and Undo buttons</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -4891,10 +4902,11 @@ Bottom
 			    <widget class="GtkCheckButton" id="check_toolbar_navigation">
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Display the Back and Forward buttons in the toolbar used for code navigation</property>
+			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Show Back and Forward buttons</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -4910,10 +4922,11 @@ Bottom
 			    <widget class="GtkCheckButton" id="check_toolbar_compile">
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Display the Compile and Run buttons in the toolbar</property>
+			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Show Compile and Run buttons</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -4929,10 +4942,11 @@ Bottom
 			    <widget class="GtkCheckButton" id="check_toolbar_colour">
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Display the Color Chooser button in the toolbar</property>
+			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Show Color Chooser button</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -4948,10 +4962,11 @@ Bottom
 			    <widget class="GtkCheckButton" id="check_toolbar_zoom">
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Display the Zoom In and Zoom Out buttons in the toolbar</property>
+			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Show Zoom In and Zoom Out buttons</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -4967,10 +4982,11 @@ Bottom
 			    <widget class="GtkCheckButton" id="check_toolbar_indent">
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Display the Increase and Decrease Indentation buttons in the toolbar</property>
+			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Show Increase and Decrease Indentation buttons</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -4986,10 +5002,11 @@ Bottom
 			    <widget class="GtkCheckButton" id="check_toolbar_search">
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Display the search field and button in the toolbar</property>
+			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Show Search field</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -5005,10 +5022,11 @@ Bottom
 			    <widget class="GtkCheckButton" id="check_toolbar_goto">
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Display the line number field and button in the toolbar</property>
+			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Show Go to Line field</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -5024,10 +5042,11 @@ Bottom
 			    <widget class="GtkCheckButton" id="check_toolbar_quit">
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Display the quit button in the toolbar</property>
+			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Show Quit button</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -5772,7 +5791,7 @@ Match braces</property>
 				  <property name="label" translatable="yes">Enable &quot;smart&quot; home key</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">False</property>
+				  <property name="focus_on_click">True</property>
 				  <property name="active">False</property>
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
@@ -5792,7 +5811,7 @@ Match braces</property>
 				  <property name="label" translatable="yes">Disable Drag and Drop</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">False</property>
+				  <property name="focus_on_click">True</property>
 				  <property name="active">False</property>
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
@@ -5812,7 +5831,7 @@ Match braces</property>
 				  <property name="label" translatable="yes">Enable folding</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">False</property>
+				  <property name="focus_on_click">True</property>
 				  <property name="active">False</property>
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
@@ -5832,7 +5851,7 @@ Match braces</property>
 				  <property name="label" translatable="yes">Fold/Unfold all children of a fold point</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">False</property>
+				  <property name="focus_on_click">True</property>
 				  <property name="active">False</property>
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
@@ -5852,7 +5871,7 @@ Match braces</property>
 				  <property name="label" translatable="yes">Use indicators to show compile errors</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">False</property>
+				  <property name="focus_on_click">True</property>
 				  <property name="active">False</property>
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
@@ -5872,7 +5891,7 @@ Match braces</property>
 				  <property name="label" translatable="yes">Newline strips trailing spaces</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">False</property>
+				  <property name="focus_on_click">True</property>
 				  <property name="active">False</property>
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
@@ -6100,7 +6119,7 @@ Match braces</property>
 			      <property name="label" translatable="yes">Snippet completion</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -6120,7 +6139,7 @@ Match braces</property>
 			      <property name="label" translatable="yes">XML tag auto completion</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -6140,7 +6159,7 @@ Match braces</property>
 			      <property name="label" translatable="yes">Automatic continuation of multi-line comments</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -6160,7 +6179,7 @@ Match braces</property>
 			      <property name="label" translatable="yes">Automatic symbol completion</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -6453,7 +6472,7 @@ Match braces</property>
 				  <property name="label" translatable="yes">Show indentation guides</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">False</property>
+				  <property name="focus_on_click">True</property>
 				  <property name="active">False</property>
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
@@ -6473,7 +6492,7 @@ Match braces</property>
 				  <property name="label" translatable="yes">Show white space</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">False</property>
+				  <property name="focus_on_click">True</property>
 				  <property name="active">False</property>
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
@@ -6493,7 +6512,7 @@ Match braces</property>
 				  <property name="label" translatable="yes">Show line endings</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">False</property>
+				  <property name="focus_on_click">True</property>
 				  <property name="active">False</property>
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
@@ -7163,7 +7182,7 @@ Match braces</property>
 			      <property name="label" translatable="yes">Use fixed encoding when opening files</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -7240,10 +7259,11 @@ Match braces</property>
 			    <widget class="GtkCheckButton" id="check_new_line">
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Ensures that at the end of the file is a new line</property>
+			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Ensure new line at file end</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -7259,10 +7279,11 @@ Match braces</property>
 			    <widget class="GtkCheckButton" id="check_trailing_spaces">
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Removes trailing spaces and tabs and the end of lines</property>
+			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Strip trailing spaces and tabs</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -7278,10 +7299,11 @@ Match braces</property>
 			    <widget class="GtkCheckButton" id="check_replace_tabs">
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Replaces all tabs in document by spaces.</property>
+			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Replace tabs by space</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -7563,10 +7585,11 @@ Match braces</property>
 			<widget class="GtkCheckButton" id="check_ask_suppress_search_dialogs">
 			  <property name="visible">True</property>
 			  <property name="tooltip" translatable="yes">Always wrap search around the document and hide the Find dialog after clicking Find Next/Previous</property>
+			  <property name="can_focus">True</property>
 			  <property name="label" translatable="yes">Always wrap search and hide the Find dialog</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
-			  <property name="focus_on_click">False</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
@@ -7582,10 +7605,11 @@ Match braces</property>
 			<widget class="GtkCheckButton" id="check_search_use_current_word">
 			  <property name="visible">True</property>
 			  <property name="tooltip" translatable="yes">Use current word under the cursor when opening the Find, Find in Files or Replace dialog and there is no selection.</property>
+			  <property name="can_focus">True</property>
 			  <property name="label" translatable="yes">Use the current word under the cursor for Find dialogs</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
-			  <property name="focus_on_click">False</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
@@ -9044,7 +9068,7 @@ Match braces</property>
 		      <property name="label" translatable="yes">Use an external command for printing</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
-		      <property name="focus_on_click">False</property>
+		      <property name="focus_on_click">True</property>
 		      <property name="active">False</property>
 		      <property name="inconsistent">False</property>
 		      <property name="draw_indicator">True</property>
@@ -9094,7 +9118,7 @@ Match braces</property>
 			      <property name="label" translatable="yes">Print line numbers</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -9114,7 +9138,7 @@ Match braces</property>
 			      <property name="label" translatable="yes">Print page numbers</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -9134,7 +9158,7 @@ Match braces</property>
 			      <property name="label" translatable="yes">Print page header</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">False</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -9179,7 +9203,7 @@ Match braces</property>
 					  <property name="label" translatable="yes">Use the basename of the printed file</property>
 					  <property name="use_underline">True</property>
 					  <property name="relief">GTK_RELIEF_NORMAL</property>
-					  <property name="focus_on_click">False</property>
+					  <property name="focus_on_click">True</property>
 					  <property name="active">False</property>
 					  <property name="inconsistent">False</property>
 					  <property name="draw_indicator">True</property>
@@ -9271,7 +9295,7 @@ Match braces</property>
 		      <property name="label" translatable="yes">Use native GTK printing</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
-		      <property name="focus_on_click">False</property>
+		      <property name="focus_on_click">True</property>
 		      <property name="active">False</property>
 		      <property name="inconsistent">False</property>
 		      <property name="draw_indicator">True</property>

@@ -795,40 +795,33 @@ void vte_append_preferences_tab(void)
 		box = gtk_vbox_new(FALSE, 3);
 		check_scroll_key = gtk_check_button_new_with_mnemonic(_("Scroll on keystroke"));
 		gtk_tooltips_set_tip(tooltips, check_scroll_key, _("Whether to scroll to the bottom if a key was pressed."), NULL);
-		gtk_button_set_focus_on_click(GTK_BUTTON(check_scroll_key), FALSE);
 		gtk_container_add(GTK_CONTAINER(box), check_scroll_key);
 
 		check_scroll_out = gtk_check_button_new_with_mnemonic(_("Scroll on output"));
 		gtk_tooltips_set_tip(tooltips, check_scroll_out, _("Whether to scroll to the bottom when output is generated."), NULL);
-		gtk_button_set_focus_on_click(GTK_BUTTON(check_scroll_out), FALSE);
 		gtk_container_add(GTK_CONTAINER(box), check_scroll_out);
 
 		check_enable_bash_keys = gtk_check_button_new_with_mnemonic(_("Override Geany keybindings"));
 		gtk_tooltips_set_tip(tooltips, check_enable_bash_keys,
 			_("Allows the VTE to receive keyboard shortcuts (apart from focus commands)."), NULL);
-		gtk_button_set_focus_on_click(GTK_BUTTON(check_enable_bash_keys), FALSE);
 		gtk_container_add(GTK_CONTAINER(box), check_enable_bash_keys);
 
 		check_ignore_menu_key = gtk_check_button_new_with_mnemonic(_("Disable menu shortcut key (F10 by default)"));
 		gtk_tooltips_set_tip(tooltips, check_ignore_menu_key, _("This option disables the keybinding to popup the menu bar (default is F10). Disabling it can be useful if you use, for example, Midnight Commander within the VTE."), NULL);
-		gtk_button_set_focus_on_click(GTK_BUTTON(check_ignore_menu_key), FALSE);
 		gtk_container_add(GTK_CONTAINER(box), check_ignore_menu_key);
 
 		check_follow_path = gtk_check_button_new_with_mnemonic(_("Follow the path of the current file"));
 		gtk_tooltips_set_tip(tooltips, check_follow_path, _("Whether to execute \"cd $path\" when you switch between opened files."), NULL);
-		gtk_button_set_focus_on_click(GTK_BUTTON(check_follow_path), FALSE);
 		gtk_container_add(GTK_CONTAINER(box), check_follow_path);
 
 		/* create check_skip_script checkbox before the check_skip_script checkbox to be able to
 		 * use the object for the toggled handler of check_skip_script checkbox */
 		check_skip_script = gtk_check_button_new_with_mnemonic(_("Don't use run script"));
 		gtk_tooltips_set_tip(tooltips, check_skip_script, _("Don't use the simple run script which is usually used to display the exit status of the executed program."), NULL);
-		gtk_button_set_focus_on_click(GTK_BUTTON(check_skip_script), FALSE);
 		gtk_widget_set_sensitive(check_skip_script, vc->run_in_vte);
 
 		check_run_in_vte = gtk_check_button_new_with_mnemonic(_("Execute programs in VTE"));
 		gtk_tooltips_set_tip(tooltips, check_run_in_vte, _("Run programs in VTE instead of opening a terminal emulation window. Please note, programs executed in VTE cannot be stopped."), NULL);
-		gtk_button_set_focus_on_click(GTK_BUTTON(check_run_in_vte), FALSE);
 		gtk_container_add(GTK_CONTAINER(box), check_run_in_vte);
 		g_signal_connect(check_run_in_vte, "toggled",
 			G_CALLBACK(check_run_in_vte_toggled), check_skip_script);
