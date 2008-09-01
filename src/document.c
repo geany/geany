@@ -992,6 +992,8 @@ static void set_indentation(GeanyEditor *editor)
 					name = _("Tabs and Spaces");
 					break;
 			}
+			/* For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
+			 * and Spaces), the second one is the filename */
 			ui_set_statusbar(TRUE, _("Setting %s indentation mode for %s."), name,
 				DOC_FILENAME(editor->document));
 		}
