@@ -268,37 +268,39 @@ def set_options(opt):
 
 
 def build(bld):
-    def build_plugin(plugin_name, local_inst_var = 'LIBDIR'):
+    def build_plugin(plugin_name, install = True):
         obj                         = bld.new_task_gen('cc', 'shlib')
         obj.source                  = 'plugins/' + plugin_name + '.c'
         obj.includes                = '. plugins/ src/ scintilla/include tagmanager/include'
         obj.env['shlib_PATTERN']    = '%s.so'
         obj.target                  = plugin_name
         obj.uselib                  = 'GTK'
-        obj.inst_var                = local_inst_var
-        obj.inst_dir                = '/geany/'
+        if install:
+            obj.install_path        = '${LIBDIR}/geany/'
+        else:
+            obj.install_path        = 0
         #~ obj.want_libtool         = 1
 
     # Tagmanager
     if bld.env['USE_INCLUDED_REGEX'] == 1:
         tagmanager_sources.append('tagmanager/regex.c')
     obj = bld.new_task_gen('cc', 'staticlib')
-    obj.name     = 'tagmanager'
-    obj.target   = 'tagmanager'
-    obj.source   = tagmanager_sources
-    obj.includes = '. tagmanager/ tagmanager/include/'
-    obj.uselib   = 'GTK'
-    obj.inst_var = 0 # do not install this library
+    obj.name         = 'tagmanager'
+    obj.target       = 'tagmanager'
+    obj.source       = tagmanager_sources
+    obj.includes     = '. tagmanager/ tagmanager/include/'
+    obj.uselib       = 'GTK'
+    obj.install_path = 0 # do not install this library
 
     # Scintilla
     obj = bld.new_task_gen('cxx', 'staticlib')
     obj.features.append('cc')
-    obj.name     = 'scintilla'
-    obj.target   = 'scintilla'
-    obj.source   = scintilla_sources
-    obj.includes = 'scintilla/ scintilla/include/'
-    obj.uselib   = 'GTK'
-    obj.inst_var = 0 # do not install this library
+    obj.name         = 'scintilla'
+    obj.target       = 'scintilla'
+    obj.source       = scintilla_sources
+    obj.includes     = 'scintilla/ scintilla/include/'
+    obj.uselib       = 'GTK'
+    obj.install_path = 0 # do not install this library
 
     # Geany
     if bld.env['HAVE_VTE'] == 1:
@@ -318,23 +320,22 @@ def build(bld):
     if bld.env['HAVE_PLUGINS'] == 1:
         build_plugin('autosave')
         build_plugin('classbuilder')
-        build_plugin('demoplugin', 0)
+        build_plugin('demoplugin', False)
         build_plugin('export')
         build_plugin('filebrowser')
         build_plugin('htmlchars')
         build_plugin('vcdiff')
 
     # Translations
-    obj         = bld.new_task_gen('intltool_po')
-    obj.podir   = 'po'
-    obj.appname = 'geany'
+    obj              = bld.new_task_gen('intltool_po')
+    obj.podir        = 'po'
+    obj.appname      = 'geany'
 
     # geany.desktop
-    obj         = bld.new_task_gen('intltool_in')
-    obj.source  = 'geany.desktop.in'
-    obj.inst_var = 'DATADIR'
-    obj.inst_dir  = 'applications'
-    obj.flags   = '-d'
+    obj              = bld.new_task_gen('intltool_in')
+    obj.source       = 'geany.desktop.in'
+    obj.flags        = '-d'
+    obj.install_path = '${DATADIR}/applications'
 
     # geany.pc
     obj         = bld.new_task_gen('subst')
@@ -348,67 +349,73 @@ def build(bld):
                     'datarootdir': '${prefix}/share',
                     'datadir': '${datarootdir}',
                     'localedir': '${datarootdir}/locale' }
+    # seems currently broken in Waf
+    #~ obj.install_path = '${LIBDIR}/pkgconfig'
+    obj.install_path = 0
+    bld.install_files('${LIBDIR}/pkgconfig', 'geany.pc')
 
     # geany.1
-    obj         = bld.new_task_gen('subst')
-    obj.source  = 'doc/geany.1.in'
-    obj.target  = 'geany.1'
-    obj.dict    = { 'VERSION' : VERSION,
+    obj              = bld.new_task_gen('subst')
+    obj.source       = 'doc/geany.1.in'
+    obj.target       = 'geany.1'
+    obj.dict         = { 'VERSION' : VERSION,
                     'GEANY_DATA_DIR': bld.env['DATADIR'] + '/geany' }
+    # seems currently broken in Waf
+    #~ obj.install_path = '${MANDIR}/man1'
+    obj.install_path = 0
+    bld.install_files('${MANDIR}/man1', 'doc/geany.1')
 
     # geany.spec
-    obj          = bld.new_task_gen('subst')
-    obj.source   = 'geany.spec.in'
-    obj.target   = 'geany.spec'
-    obj.inst_var = 0
-    obj.dict     = { 'VERSION' : VERSION }
+    obj              = bld.new_task_gen('subst')
+    obj.source       = 'geany.spec.in'
+    obj.target       = 'geany.spec'
+    obj.install_path = 0
+    obj.dict         = { 'VERSION' : VERSION }
 
     # Doxyfile
-    obj          = bld.new_task_gen('subst')
-    obj.source   = 'doc/Doxyfile.in'
-    obj.target   = 'Doxyfile'
-    obj.inst_var = 0
-    obj.dict     = { 'VERSION' : VERSION }
+    obj              = bld.new_task_gen('subst')
+    obj.source       = 'doc/Doxyfile.in'
+    obj.target       = 'Doxyfile'
+    obj.install_path = 0
+    obj.dict         = { 'VERSION' : VERSION }
 
     ###
     # Install files
     ###
-    bld.install_files('LIBDIR', 'pkgconfig', 'geany.pc')
     # Headers
-    bld.install_files('PREFIX', 'include/geany', '''
+    bld.install_files('${PREFIX}/include/geany', '''
         src/dialogs.h src/document.h src/editor.h src/encodings.h src/filetypes.h src/geany.h
         src/highlighting.h src/keybindings.h src/msgwindow.h src/plugindata.h src/plugins.h
         src/prefs.h src/project.h src/sciwrappers.h src/search.h src/support.h src/templates.h
         src/ui_utils.h src/utils.h
         plugins/pluginmacros.h ''')
-    bld.install_files('PREFIX', 'include/geany/scintilla', '''
+    bld.install_files('${PREFIX}/include/geany/scintilla', '''
         scintilla/include/SciLexer.h scintilla/include/Scintilla.h scintilla/include/Scintilla.iface
         scintilla/include/ScintillaWidget.h ''')
-    bld.install_files('PREFIX', 'include/geany/tagmanager', '''
+    bld.install_files('${PREFIX}/include/geany/tagmanager', '''
         tagmanager/include/tm_file_entry.h tagmanager/include/tm_project.h tagmanager/include/tm_source_file.h
         tagmanager/include/tm_symbol.h tagmanager/include/tm_tag.h tagmanager/include/tm_tagmanager.h
         tagmanager/include/tm_work_object.h tagmanager/include/tm_workspace.h ''')
     # Docs
-    bld.install_files('MANDIR', 'man1', 'doc/geany.1')
-    bld.install_files('DOCDIR', '', 'AUTHORS ChangeLog COPYING README NEWS THANKS TODO')
-    bld.install_files('DOCDIR', 'html/images', 'doc/images/*.png')
-    bld.install_as('DOCDIR', 'manual.txt', 'doc/geany.txt')
-    bld.install_as('DOCDIR', 'html/index.html', 'doc/geany.html')
-    bld.install_as('DOCDIR', 'ScintillaLicense.txt', 'scintilla/License.txt')
+    bld.install_files('${DOCDIR}', 'AUTHORS ChangeLog COPYING README NEWS THANKS TODO')
+    bld.install_files('${DOCDIR}/html/images', 'doc/images/*.png')
+    bld.install_as('${DOCDIR}/manual.txt', 'doc/geany.txt')
+    bld.install_as('${DOCDIR}/html/index.html', 'doc/geany.html')
+    bld.install_as('${DOCDIR}/ScintillaLicense.txt', 'scintilla/License.txt')
     # Data
-    bld.install_files('DATADIR', 'geany', 'data/filetype*')
-    bld.install_files('DATADIR', 'geany', 'data/*.tags')
-    bld.install_files('DATADIR', 'geany', 'data/snippets.conf')
-    bld.install_as('DATADIR', 'geany/GPL-2', 'COPYING')
+    bld.install_files('${DATADIR}/geany', 'data/filetype*')
+    bld.install_files('${DATADIR}/geany', 'data/*.tags')
+    bld.install_files('${DATADIR}/geany', 'data/snippets.conf')
+    bld.install_as('${DATADIR}/geany/GPL-2', 'COPYING')
     # Icons
-    bld.install_files('DATADIR', 'pixmaps', 'pixmaps/geany.png')
-    bld.install_files('DATADIR', 'icons/hicolor/16x16/apps', 'icons/16x16/*.png')
+    bld.install_files('${DATADIR}/pixmaps', 'pixmaps/geany.png')
+    bld.install_files('${DATADIR}/icons/hicolor/16x16/apps', 'icons/16x16/*.png')
 
 
 def shutdown():
     # the following code was taken from midori's WAF script, thanks
     if Options.commands['install'] or Options.commands['uninstall']:
-        dir = Build.bld.path_install('DATADIR', 'icons/hicolor')
+        dir = Build.bld.get_install_path('${DATADIR}/icons/hicolor')
         icon_cache_updated = False
         if not Options.options.destdir:
             try:
@@ -466,10 +473,15 @@ def launch(command, status, success_color='GREEN'):
 
     return ret
 
+line_len = 0
 
 def print_message(msg, result, color = 'GREEN'):
-    Configure.line_just = max(Configure.line_just, len(msg))
-    print "%s :" % msg.ljust(Configure.line_just),
+    global line_len
+    if line_len == 0:
+        line_len = Configure.ConfigurationContext().line_just
+
+    line_len = max(line_len, len(msg))
+    print "%s :" % msg.ljust(line_len),
     Utils.pprint(color, result)
     Runner.print_log(msg, '\n\n')
 

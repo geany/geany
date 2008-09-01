@@ -6,6 +6,9 @@
    which were missing it.
    Enable 'focus_on_click' property on most checkboxes in the prefs
    dialog to ease keyboard navigation.
+ * waf, wscript:
+   Update waf to its latest SVN version (1.5.0 preview).
+   Adjust wscript to latest Waf API changes.
 
 
 2008-08-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
