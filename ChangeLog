@@ -1,3 +1,9 @@
+2008-09-07  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * doc/geany.1.in: Little typgraphic update to use minus insted of
+   hyphen inside of thee man page.
+
+
 2008-09-01  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * geany.glade, src/interface.c, src/dialogs.c, src/printing.c,

@@ -23,11 +23,11 @@ All additionally given files are ignored.
 .IP "\fB\fP    \fB\+number\fP         " 10
 Set initial line
 .I number
-for the first opened file (same as --line, do not put a space
+for the first opened file (same as \-\-line, do not put a space
 between the + sign and the number). E.g. "geany +7 foo.bar" will open the file foo.bar and
 place the cursor in line 7.
 .IP "\fB\fP    \fB\-\-column\fP         " 10
-Set initial column number for the first opened file (useful in conjunction with --line).
+Set initial column number for the first opened file (useful in conjunction with \-\-line).
 .IP "\fB-c\fP, \fB\-\-config\fP         " 10
 Use an alternate configuration directory. Default configuration directory is
 ~/.geany/ and there resides geany.conf and some template files.
