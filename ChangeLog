@@ -1,3 +1,10 @@
+2008-09-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * scripts/missing-mnemonics.sh, scripts/svn-add.sh:
+   Remove bashisms.
+   Add support for passing asterisk wildcards to missing-mnemonics.sh.
+
+
 2008-09-07  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * doc/geany.1.in:
