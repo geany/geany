@@ -429,7 +429,7 @@ def shutdown():
             print 'gtk-update-icon-cache -q -f -t %s' % dir
 
     if Options.options.apidoc:
-        doxyfile = os.path.join(Build.bld.m_srcnode.abspath( \
+        doxyfile = os.path.join(Build.bld.srcnode.abspath( \
             Build.bld.env), 'doc', 'Doxyfile')
         os.chdir('doc')
         launch('doxygen ' + doxyfile, 'Generating API reference documentation')
