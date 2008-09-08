@@ -5,6 +5,14 @@
    in the manpage.
 
 
+2008-09-07  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * doc/geany.html, doc/geany.txt:
+   Update feature list.
+   Small updates of outdated information.
+   Remove 'Supported Systems' sub section.
+
+
 2008-09-04  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * geany.glade, src/build.c, src/callbacks.c, src/callbacks.h,

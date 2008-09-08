@@ -51,6 +51,10 @@ Some basic features of Geany are:
 * Many supported filetypes including C, Java, PHP, HTML, Python, Perl,
   Pascal, and others
 * Tag/Symbol lists
+* Plugin interface
+* Code navigation
+* Build system to compile and execute your code
+* Simple project management
 
 
 
@@ -58,7 +62,8 @@ Where to get it
 ---------------
 
 You can obtain Geany from http://www.geany.org/ or perhaps also from
-your distributor.
+your distributor. For a list of available packages, please see
+http://www.geany.org/Download/ThirdPartyPackages.
 
 
 
@@ -69,7 +74,7 @@ Geany is distributed under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2 of
 the License, or (at your option) any later version. A copy of this
 license can be found in the file COPYING included with the source
-code of this program or in the chapter, `GNU General Public License`_.
+code of this program and in the chapter, `GNU General Public License`_.
 
 The included Scintilla library (found in the subdirectory
 ``scintilla/``) has its own license, which can be found in the chapter,
@@ -105,7 +110,7 @@ Binary packages
 ---------------
 
 There are many binary packages available. For an up-to-date but maybe
-incomplete list see http://www.geany.org/Download/Releases.
+incomplete list see http://www.geany.org/Download/ThirdPartyPackages.
 
 
 Source compilation
@@ -149,19 +154,12 @@ probably want to pass the option ``--disable-vte`` to the ``configure``
 script. This prevents compiling Geany with dynamic linking loader
 support to automatically load ``libvte.so.4`` if available.
 
-Supported systems
-^^^^^^^^^^^^^^^^^
-Geany has been successfully compiled and tested under Debian 3.1
-Sarge, Debian 4.0 Etch, Fedora Core 3/4/5, LinuxFromScratch and
-FreeBSD 6.0. It also compiles under Microsoft Windows™ (using the
-Windows makefiles - see the website for details).
-
 Build problems
 ^^^^^^^^^^^^^^
 If there are any errors during compilation, check your build
 environment and try to find the error, otherwise contact the mailing
-list or the author - <enrico(dot)troeger(at)uvena(dot)de>. Sometimes
-you might need to ask for specific help from your distro.
+list or one the authors. Sometimes you might need to ask for specific
+help from your distro.
 
 
 
