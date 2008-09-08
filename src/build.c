@@ -2083,6 +2083,6 @@ on_build_previous_error                (GtkMenuItem     *menuitem,
 
 void build_init()
 {
-	widgets.compile_button = lookup_widget(main_widgets.window, "toolbutton13");
-	widgets.run_button = lookup_widget(main_widgets.window, "toolbutton26");
+	widgets.compile_button = lookup_widget(main_widgets.window, "toolbutton_compile");
+	widgets.run_button = lookup_widget(main_widgets.window, "toolbutton_run");
 }

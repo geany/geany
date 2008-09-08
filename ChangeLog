@@ -1,7 +1,16 @@
 2008-09-07  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
- * doc/geany.1.in: Little typgraphic update to use minus insted of
-   hyphen inside of thee man page.
+ * doc/geany.1.in:
+   Little typographic update to use minus sign instead of a hyphen
+   in the manpage.
+
+
+2008-09-04  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * geany.glade, src/build.c, src/callbacks.c, src/callbacks.h,
+   src/interface.c, src/keybindings.c, src/main.c, src/prefs.c,
+   src/treeviews.c, src/ui_utils.c, src/plugindata.h:
+   Rename all toolbar widgets for consistent names.
 
 
 2008-09-01  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

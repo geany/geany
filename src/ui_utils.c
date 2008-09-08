@@ -588,18 +588,18 @@ static void init_document_widgets(void)
 	 * when using ui_document_buttons_update(). */
 	add_doc_widget("menu_close1");
 	add_doc_widget("close_other_documents1");
-	add_doc_widget("toolbutton15");	/* close */
+	add_doc_widget("toolbutton_close");
 	add_doc_widget("menu_change_font1");
-	add_doc_widget("entry1");
-	add_doc_widget("toolbutton18");
-	add_doc_widget("toolbutton20");
-	add_doc_widget("toolbutton21");
+	add_doc_widget("toolbutton_search_entry");
+	add_doc_widget("toolbutton_search");
+	add_doc_widget("toolbutton_zoomin");
+	add_doc_widget("toolbutton_zoomout");
 	add_doc_widget("menu_close_all1");
 	add_doc_widget("menu_save_all1");
-	add_doc_widget("toolbutton22");
-	add_doc_widget("toolbutton13"); /* compile_button */
+	add_doc_widget("toolbutton_saveall");
+	add_doc_widget("toolbutton_compile"); /* compile_button */
 	add_doc_widget("menu_save_as1");
-	add_doc_widget("toolbutton23");
+	add_doc_widget("toolbutton_reload");
 	add_doc_widget("menu_count_words1");
 	add_doc_widget("menu_build1");
 	add_doc_widget("add_comments1");
@@ -614,9 +614,9 @@ static void init_document_widgets(void)
 	add_doc_widget("menu_zoom_in1");
 	add_doc_widget("menu_zoom_out1");
 	add_doc_widget("normal_size1");
-	add_doc_widget("toolbutton24");
-	add_doc_widget("toolbutton25");
-	add_doc_widget("entry_goto_line");
+	add_doc_widget("toolbutton_colour");
+	add_doc_widget("toolbutton_goto");
+	add_doc_widget("toolbutton_goto_entry");
 	add_doc_widget("treeview6");
 	add_doc_widget("print1");
 	add_doc_widget("menu_reload_as1");
@@ -767,7 +767,7 @@ void ui_update_toolbar_icons(GtkIconSize size)
 	GtkWidget *oldwidget = NULL;
 
 	/* destroy old widget */
-	widget = lookup_widget(main_widgets.window, "toolbutton22");
+	widget = lookup_widget(main_widgets.window, "toolbutton_saveall");
 	oldwidget = gtk_tool_button_get_icon_widget(GTK_TOOL_BUTTON(widget));
 	if (oldwidget && GTK_IS_WIDGET(oldwidget)) gtk_widget_destroy(oldwidget);
 	/* create new widget */
@@ -795,32 +795,32 @@ void ui_update_toolbar_items(void)
 	}
 
 	/* fileops */
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "menutoolbutton1"), toolbar_prefs.show_fileops);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton9"), toolbar_prefs.show_fileops);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton10"), toolbar_prefs.show_fileops);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton22"), toolbar_prefs.show_fileops);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton23"), toolbar_prefs.show_fileops);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton15"), toolbar_prefs.show_fileops);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_new"), toolbar_prefs.show_fileops);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_open"), toolbar_prefs.show_fileops);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_save"), toolbar_prefs.show_fileops);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_saveall"), toolbar_prefs.show_fileops);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_reload"), toolbar_prefs.show_fileops);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_close"), toolbar_prefs.show_fileops);
 	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem7"), toolbar_prefs.show_fileops);
 	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem2"), toolbar_prefs.show_fileops);
 	/* search */
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "entry1"), toolbar_prefs.show_search);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton18"), toolbar_prefs.show_search);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_search_entry"), toolbar_prefs.show_search);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_search"), toolbar_prefs.show_search);
 	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem5"), toolbar_prefs.show_search);
 	/* goto line */
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "entry_goto_line"), toolbar_prefs.show_goto);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton25"), toolbar_prefs.show_goto);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_goto_entry"), toolbar_prefs.show_goto);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_goto"), toolbar_prefs.show_goto);
 	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem8"), toolbar_prefs.show_goto);
 	/* compile */
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton13"), toolbar_prefs.show_compile);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton26"), toolbar_prefs.show_compile);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_compile"), toolbar_prefs.show_compile);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_run"), toolbar_prefs.show_compile);
 	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem6"), toolbar_prefs.show_compile);
 	/* colour */
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton24"), toolbar_prefs.show_colour);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_colour"), toolbar_prefs.show_colour);
 	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem3"), toolbar_prefs.show_colour);
 	/* zoom */
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton20"), toolbar_prefs.show_zoom);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton21"), toolbar_prefs.show_zoom);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_zoomin"), toolbar_prefs.show_zoom);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_zoomout"), toolbar_prefs.show_zoom);
 	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem4"), toolbar_prefs.show_zoom);
 	/* indent */
 	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_indent_dec"), toolbar_prefs.show_indent);
@@ -835,7 +835,7 @@ void ui_update_toolbar_items(void)
 	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_forward"), toolbar_prefs.show_navigation);
 	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem10"), toolbar_prefs.show_navigation);
 	/* quit */
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton19"), toolbar_prefs.show_quit);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_quit"), toolbar_prefs.show_quit);
 	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem8"), toolbar_prefs.show_quit);
 }
 
@@ -901,7 +901,7 @@ void ui_create_recent_menu(void)
 	if (g_queue_get_length(ui_prefs.recent_queue) > 0)
 	{
 		gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(
-				lookup_widget(main_widgets.window, "toolbutton9")), ui_widgets.recent_files_toolbar);
+				lookup_widget(main_widgets.window, "toolbutton_open")), ui_widgets.recent_files_toolbar);
 	}
 
 	for (i = 0; i < MIN(file_prefs.mru_length, g_queue_get_length(ui_prefs.recent_queue)); i++)
@@ -1037,7 +1037,7 @@ static void update_recent_menu(void)
 	GList *children, *item;
 
 	if (menu == NULL)
-		menu = GTK_MENU_TOOL_BUTTON(lookup_widget(main_widgets.window, "toolbutton9"));
+		menu = GTK_MENU_TOOL_BUTTON(lookup_widget(main_widgets.window, "toolbutton_open"));
 
 	if (gtk_menu_tool_button_get_menu(menu) == NULL)
 	{
@@ -1518,9 +1518,9 @@ void ui_init(void)
 	widgets.menu_insert_include_items[0] = lookup_widget(main_widgets.editor_menu, "insert_include1");
 	widgets.menu_insert_include_items[1] = lookup_widget(main_widgets.window, "insert_include2");
 	widgets.save_buttons[0] = lookup_widget(main_widgets.window, "menu_save1");
-	widgets.save_buttons[1] = lookup_widget(main_widgets.window, "toolbutton10");
+	widgets.save_buttons[1] = lookup_widget(main_widgets.window, "toolbutton_save");
 	widgets.save_buttons[2] = lookup_widget(main_widgets.window, "menu_save_all1");
-	widgets.save_buttons[3] = lookup_widget(main_widgets.window, "toolbutton22");
+	widgets.save_buttons[3] = lookup_widget(main_widgets.window, "toolbutton_saveall");
 	widgets.redo_items[0] = lookup_widget(main_widgets.editor_menu, "redo1");
 	widgets.redo_items[1] = lookup_widget(main_widgets.window, "menu_redo2");
 	widgets.redo_items[2] = lookup_widget(main_widgets.window, "toolbutton_redo");

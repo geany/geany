@@ -61,35 +61,11 @@ on_open1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_toolbutton19_clicked                (GtkToolButton   *toolbutton,
-                                        gpointer         user_data);
-
-void
-on_toolbutton6_clicked                 (GtkToolButton   *toolbutton,
-                                        gpointer         user_data);
-
-void
 on_change_font1_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_toolbutton8_clicked                 (GtkToolButton   *toolbutton,
-                                        gpointer         user_data);
-
-void
-on_toolbutton9_clicked                 (GtkToolButton   *toolbutton,
-                                        gpointer         user_data);
-
-void
-on_toolbutton10_clicked                (GtkToolButton   *toolbutton,
-                                        gpointer         user_data);
-
-void
-on_toolbutton15_clicked                (GtkToolButton   *toolbutton,
-                                        gpointer         user_data);
-
-void
-on_toolbutton23_clicked                (GtkToolButton   *toolbutton,
+on_toolbutton_close_clicked            (GtkToolButton   *toolbutton,
                                         gpointer         user_data);
 
 void
@@ -127,11 +103,11 @@ on_replace_tabs_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_toolbutton18_clicked                (GtkToolButton   *toolbutton,
+on_toolbutton_search_clicked           (GtkToolButton   *toolbutton,
                                         gpointer         user_data);
 
 void
-on_entry1_activate                     (GtkEntry        *entry,
+on_toolbar_search_entry_activate       (GtkEntry        *entry,
                                         gpointer         user_data);
 
 gboolean
@@ -180,14 +156,6 @@ on_delete1_activate                    (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_toolbutton20_clicked                (GtkToolButton   *toolbutton,
-                                        gpointer         user_data);
-
-void
-on_toolbutton21_clicked                (GtkToolButton   *toolbutton,
-                                        gpointer         user_data);
-
-void
 on_zoom_in1_activate                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
@@ -196,7 +164,7 @@ on_zoom_out1_activate                  (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_entry1_changed                      (GtkEditable     *editable,
+on_toolbar_search_entry_changed        (GtkEditable     *editable,
                                         gpointer         user_data);
 
 void
@@ -221,10 +189,6 @@ on_markers_margin1_toggled             (GtkCheckMenuItem *checkmenuitem,
 
 void
 on_invisible1_activate                 (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
-on_toolbutton13_clicked                (GtkToolButton   *toolbutton,
                                         gpointer         user_data);
 
 void
@@ -275,10 +239,10 @@ void
 on_find_previous1_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 void
-on_find_nextsel1_activate             (GtkMenuItem     *menuitem,
+on_find_nextsel1_activate              (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 void
-on_find_prevsel1_activate             (GtkMenuItem     *menuitem,
+on_find_prevsel1_activate              (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
@@ -291,6 +255,22 @@ on_find_in_files1_activate             (GtkMenuItem     *menuitem,
 
 void
 on_toolbutton_new_clicked              (GtkToolButton   *toolbutton,
+                                        gpointer         user_data);
+
+void
+on_toolbutton_open_clicked             (GtkToolButton   *toolbutton,
+                                        gpointer         user_data);
+
+void
+on_toolbutton_save_clicked             (GtkToolButton   *toolbutton,
+                                        gpointer         user_data);
+
+void
+on_toolbutton_quit_clicked             (GtkToolButton   *toolbutton,
+                                        gpointer         user_data);
+
+void
+on_toolbutton_reload_clicked           (GtkToolButton   *toolbutton,
                                         gpointer         user_data);
 
 void
@@ -406,7 +386,7 @@ on_menu_unfold_all1_activate           (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_entry_goto_line_activate            (GtkEntry        *entry,
+on_toolbutton_goto_entry_activate      (GtkEntry        *entry,
                                         gpointer         user_data);
 
 void

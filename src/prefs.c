@@ -1202,7 +1202,8 @@ void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 			}
 			if (GTK_IS_WIDGET(tv.default_tag_tree))
 				ui_widget_modify_font_from_string(tv.default_tag_tree, interface_prefs.tagbar_font);
-			ui_widget_modify_font_from_string(lookup_widget(main_widgets.window, "entry1"),
+			ui_widget_modify_font_from_string(
+				lookup_widget(main_widgets.window, "toolbutton_search_entry"),
 				interface_prefs.tagbar_font);
 			break;
 		}

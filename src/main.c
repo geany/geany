@@ -239,7 +239,7 @@ static void apply_settings(void)
 
 	/* connect the toolbar dropdown menu for the new button */
 	gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(
-			lookup_widget(main_widgets.window, "menutoolbutton1")), ui_widgets.new_file_menu);
+			lookup_widget(main_widgets.window, "toolbutton_new")), ui_widgets.new_file_menu);
 
 	/* set the tab placements of the notebooks */
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.tab_pos_editor);
@@ -805,9 +805,9 @@ gint main(gint argc, gchar **argv)
 	g_signal_connect(main_widgets.toolbar, "button-press-event", G_CALLBACK(toolbar_popup_menu), NULL);
 	g_signal_connect(lookup_widget(main_widgets.window, "textview_scribble"),
 							"motion-notify-event", G_CALLBACK(on_motion_event), NULL);
-	g_signal_connect(lookup_widget(main_widgets.window, "entry1"),
+	g_signal_connect(lookup_widget(main_widgets.window, "toolbutton_search_entry"),
 							"motion-notify-event", G_CALLBACK(on_motion_event), NULL);
-	g_signal_connect(lookup_widget(main_widgets.window, "entry_goto_line"),
+	g_signal_connect(lookup_widget(main_widgets.window, "toolbutton_goto_entry"),
 							"motion-notify-event", G_CALLBACK(on_motion_event), NULL);
 
 #ifdef HAVE_VTE

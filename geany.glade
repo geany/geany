@@ -58,7 +58,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2595">
+			<widget class="GtkImage" id="image2614">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -148,7 +148,7 @@
 		      <signal name="activate" handler="on_save_all1_activate" last_modification_time="Thu, 02 Jun 2005 14:15:30 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2596">
+			<widget class="GtkImage" id="image2615">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-save</property>
 			  <property name="icon_size">1</property>
@@ -166,10 +166,10 @@
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">_Reload</property>
 		      <property name="use_underline">True</property>
-		      <signal name="activate" handler="on_toolbutton23_clicked" last_modification_time="Mon, 24 Jul 2006 19:26:04 GMT"/>
+		      <signal name="activate" handler="on_toolbutton_reload_clicked" last_modification_time="Mon, 01 Sep 2008 16:57:06 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2597">
+			<widget class="GtkImage" id="image2616">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-revert-to-saved</property>
 			  <property name="icon_size">1</property>
@@ -189,7 +189,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2598">
+			<widget class="GtkImage" id="image2617">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-revert-to-saved</property>
 			  <property name="icon_size">1</property>
@@ -277,7 +277,7 @@
 		      <signal name="activate" handler="on_close_other_documents1_activate" last_modification_time="Fri, 27 Jun 2008 15:19:28 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2599">
+			<widget class="GtkImage" id="image2618">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-close</property>
 			  <property name="icon_size">1</property>
@@ -299,7 +299,7 @@
 		      <signal name="activate" handler="on_close_all1_activate" last_modification_time="Thu, 02 Jun 2005 14:15:30 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2600">
+			<widget class="GtkImage" id="image2619">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-close</property>
 			  <property name="icon_size">1</property>
@@ -498,7 +498,7 @@
 			      <signal name="activate" handler="on_menu_increase_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:28:54 GMT"/>
 
 			      <child internal-child="image">
-				<widget class="GtkImage" id="image2601">
+				<widget class="GtkImage" id="image2620">
 				  <property name="visible">True</property>
 				  <property name="stock">gtk-indent</property>
 				  <property name="icon_size">1</property>
@@ -519,7 +519,7 @@
 			      <signal name="activate" handler="on_menu_decrease_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:28:54 GMT"/>
 
 			      <child internal-child="image">
-				<widget class="GtkImage" id="image2602">
+				<widget class="GtkImage" id="image2621">
 				  <property name="visible">True</property>
 				  <property name="stock">gtk-unindent</property>
 				  <property name="icon_size">1</property>
@@ -575,7 +575,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2603">
+			<widget class="GtkImage" id="image2622">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -660,7 +660,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2604">
+			<widget class="GtkImage" id="image2623">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -692,7 +692,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2605">
+			<widget class="GtkImage" id="image2624">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -790,7 +790,7 @@
 		      <signal name="activate" handler="on_replace1_activate" last_modification_time="Sun, 23 Oct 2005 13:22:36 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2606">
+			<widget class="GtkImage" id="image2625">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-find-and-replace</property>
 			  <property name="icon_size">1</property>
@@ -865,7 +865,7 @@
 		      <signal name="activate" handler="on_go_to_line1_activate" last_modification_time="Tue, 23 May 2006 17:10:49 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2607">
+			<widget class="GtkImage" id="image2626">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-jump-to</property>
 			  <property name="icon_size">1</property>
@@ -900,7 +900,7 @@
 		      <signal name="activate" handler="on_change_font1_activate" last_modification_time="Fri, 22 Apr 2005 18:58:45 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2608">
+			<widget class="GtkImage" id="image2627">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-font</property>
 			  <property name="icon_size">1</property>
@@ -1340,7 +1340,7 @@
 		      <signal name="activate" handler="on_project_new1_activate" last_modification_time="Thu, 18 Jan 2007 22:16:24 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2609">
+			<widget class="GtkImage" id="image2628">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -1361,7 +1361,7 @@
 		      <signal name="activate" handler="on_project_open1_activate" last_modification_time="Mon, 15 Jan 2007 17:34:17 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2610">
+			<widget class="GtkImage" id="image2629">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-open</property>
 			  <property name="icon_size">1</property>
@@ -1382,7 +1382,7 @@
 		      <signal name="activate" handler="on_project_close1_activate" last_modification_time="Mon, 15 Jan 2007 17:34:17 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2611">
+			<widget class="GtkImage" id="image2630">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-close</property>
 			  <property name="icon_size">1</property>
@@ -1441,7 +1441,7 @@
 		      <signal name="activate" handler="on_show_color_chooser1_activate" last_modification_time="Wed, 22 Jun 2005 18:10:21 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2612">
+			<widget class="GtkImage" id="image2631">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-color</property>
 			  <property name="icon_size">1</property>
@@ -1483,7 +1483,7 @@
 		      <signal name="activate" handler="on_menu_reload_configuration1_activate" last_modification_time="Mon, 30 Jun 2008 16:19:40 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2613">
+			<widget class="GtkImage" id="image2632">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-refresh</property>
 			  <property name="icon_size">1</property>
@@ -1517,7 +1517,7 @@
 		      <signal name="activate" handler="on_help1_activate" last_modification_time="Sun, 24 Jul 2005 15:23:11 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2614">
+			<widget class="GtkImage" id="image2633">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-help</property>
 			  <property name="icon_size">1</property>
@@ -1594,7 +1594,7 @@
 	  <signal name="key_press_event" handler="on_escape_key_press_event" last_modification_time="Thu, 03 Apr 2008 16:47:57 GMT"/>
 
 	  <child>
-	    <widget class="GtkMenuToolButton" id="menutoolbutton1">
+	    <widget class="GtkMenuToolButton" id="toolbutton_new">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Create a new file</property>
 	      <property name="stock_id">gtk-new</property>
@@ -1610,14 +1610,14 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkMenuToolButton" id="toolbutton9">
+	    <widget class="GtkMenuToolButton" id="toolbutton_open">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Open an existing file</property>
 	      <property name="stock_id">gtk-open</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
-	      <signal name="clicked" handler="on_toolbutton9_clicked" last_modification_time="Wed, 20 Sep 2006 14:17:34 GMT"/>
+	      <signal name="clicked" handler="on_toolbutton_open_clicked" last_modification_time="Mon, 01 Sep 2008 15:51:20 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="expand">False</property>
@@ -1626,14 +1626,14 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkToolButton" id="toolbutton10">
+	    <widget class="GtkToolButton" id="toolbutton_save">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Save the current file</property>
 	      <property name="stock_id">gtk-save</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
-	      <signal name="clicked" handler="on_toolbutton10_clicked" last_modification_time="Fri, 22 Apr 2005 21:27:45 GMT"/>
+	      <signal name="clicked" handler="on_toolbutton_save_clicked" last_modification_time="Mon, 01 Sep 2008 15:54:10 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="expand">False</property>
@@ -1642,7 +1642,7 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkToolButton" id="toolbutton22">
+	    <widget class="GtkToolButton" id="toolbutton_saveall">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Save all open files</property>
 	      <property name="label" translatable="yes">Save all</property>
@@ -1672,14 +1672,14 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkToolButton" id="toolbutton23">
+	    <widget class="GtkToolButton" id="toolbutton_reload">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Reload the current file from disk</property>
 	      <property name="stock_id">gtk-revert-to-saved</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
-	      <signal name="clicked" handler="on_toolbutton23_clicked" last_modification_time="Sun, 05 Jun 2005 19:01:28 GMT"/>
+	      <signal name="clicked" handler="on_toolbutton_reload_clicked" last_modification_time="Mon, 01 Sep 2008 15:56:00 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="expand">False</property>
@@ -1688,14 +1688,14 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkToolButton" id="toolbutton15">
+	    <widget class="GtkToolButton" id="toolbutton_close">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Close the current file</property>
 	      <property name="stock_id">gtk-close</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
-	      <signal name="clicked" handler="on_toolbutton15_clicked" last_modification_time="Sat, 23 Apr 2005 11:34:26 GMT"/>
+	      <signal name="clicked" handler="on_toolbutton_close_clicked" last_modification_time="Mon, 01 Sep 2008 15:56:49 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="expand">False</property>
@@ -1809,7 +1809,7 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkToolButton" id="toolbutton13">
+	    <widget class="GtkToolButton" id="toolbutton_compile">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Compile the current file</property>
 	      <property name="label" translatable="yes">Compile</property>
@@ -1827,7 +1827,7 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkToolButton" id="toolbutton26">
+	    <widget class="GtkToolButton" id="toolbutton_run">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Run or view the current file</property>
 	      <property name="stock_id">gtk-execute</property>
@@ -1856,7 +1856,7 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkToolButton" id="toolbutton24">
+	    <widget class="GtkToolButton" id="toolbutton_colour">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Open a color chooser dialog, to interactively pick colors from a palette.</property>
 	      <property name="label" translatable="yes">Color</property>
@@ -1887,7 +1887,7 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkToolButton" id="toolbutton20">
+	    <widget class="GtkToolButton" id="toolbutton_zoomin">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Zoom in the text</property>
 	      <property name="stock_id">gtk-zoom-in</property>
@@ -1903,7 +1903,7 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkToolButton" id="toolbutton21">
+	    <widget class="GtkToolButton" id="toolbutton_zoomout">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Zoom out the text</property>
 	      <property name="stock_id">gtk-zoom-out</property>
@@ -1977,14 +1977,14 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkToolItem" id="toolitem19">
+	    <widget class="GtkToolItem" id="toolbutton_search_item">
 	      <property name="visible">True</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
 
 	      <child>
-		<widget class="GtkEntry" id="entry1">
+		<widget class="GtkEntry" id="toolbutton_search_entry">
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Find the entered text in the current file</property>
 		  <property name="can_focus">True</property>
@@ -1995,8 +1995,8 @@
 		  <property name="has_frame">True</property>
 		  <property name="invisible_char">*</property>
 		  <property name="activates_default">False</property>
-		  <signal name="activate" handler="on_entry1_activate" last_modification_time="Sat, 30 Apr 2005 23:58:03 GMT"/>
-		  <signal name="changed" handler="on_entry1_changed" last_modification_time="Tue, 03 May 2005 09:18:59 GMT"/>
+		  <signal name="activate" handler="on_toolbar_search_entry_activate" last_modification_time="Mon, 01 Sep 2008 16:02:44 GMT"/>
+		  <signal name="changed" handler="on_toolbar_search_entry_changed" last_modification_time="Mon, 01 Sep 2008 16:02:49 GMT"/>
 		</widget>
 	      </child>
 	    </widget>
@@ -2007,14 +2007,14 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkToolButton" id="toolbutton18">
+	    <widget class="GtkToolButton" id="toolbutton_search">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Find the entered text in the current file</property>
 	      <property name="stock_id">gtk-find</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
-	      <signal name="clicked" handler="on_toolbutton18_clicked" last_modification_time="Sat, 30 Apr 2005 18:38:53 GMT"/>
+	      <signal name="clicked" handler="on_toolbutton_search_clicked" last_modification_time="Mon, 01 Sep 2008 16:05:06 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="expand">False</property>
@@ -2036,14 +2036,14 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkToolItem" id="toolitem17">
+	    <widget class="GtkToolItem" id="toolbutton_goto_item">
 	      <property name="visible">True</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
 
 	      <child>
-		<widget class="GtkEntry" id="entry_goto_line">
+		<widget class="GtkEntry" id="toolbutton_goto_entry">
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Enter a line number and jump to it.</property>
 		  <property name="can_focus">True</property>
@@ -2055,7 +2055,7 @@
 		  <property name="invisible_char">*</property>
 		  <property name="activates_default">False</property>
 		  <property name="width_chars">8</property>
-		  <signal name="activate" handler="on_entry_goto_line_activate" last_modification_time="Sun, 26 Feb 2006 17:07:52 GMT"/>
+		  <signal name="activate" handler="on_toolbutton_goto_entry_activate" last_modification_time="Mon, 01 Sep 2008 16:06:59 GMT"/>
 		</widget>
 	      </child>
 	    </widget>
@@ -2066,7 +2066,7 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkToolButton" id="toolbutton25">
+	    <widget class="GtkToolButton" id="toolbutton_goto">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Jump to the entered line number.</property>
 	      <property name="stock_id">gtk-jump-to</property>
@@ -2108,14 +2108,14 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkToolButton" id="toolbutton19">
+	    <widget class="GtkToolButton" id="toolbutton_quit">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Quit Geany</property>
 	      <property name="stock_id">gtk-quit</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
-	      <signal name="clicked" handler="on_toolbutton19_clicked" last_modification_time="Sat, 30 Apr 2005 18:42:07 GMT"/>
+	      <signal name="clicked" handler="on_toolbutton_quit_clicked" last_modification_time="Mon, 01 Sep 2008 15:50:30 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="expand">False</property>

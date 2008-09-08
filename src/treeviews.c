@@ -549,7 +549,7 @@ static void on_openfiles_document_action(GtkMenuItem *menuitem, gpointer user_da
 				}
 				case OPENFILES_ACTION_RELOAD:
 				{
-					on_toolbutton23_clicked(NULL, NULL);
+					on_toolbutton_reload_clicked(NULL, NULL);
 					break;
 				}
 			}

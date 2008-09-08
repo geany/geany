@@ -1030,7 +1030,7 @@ static void cb_func_file_action(guint key_id)
 			on_close_all1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_FILE_RELOAD:
-			on_toolbutton23_clicked(NULL, NULL);
+			on_toolbutton_reload_clicked(NULL, NULL);
 			break;
 		case GEANY_KEYS_FILE_PRINT:
 			on_print1_activate(NULL, NULL);
@@ -1230,7 +1230,8 @@ static void cb_func_switch_action(guint key_id)
 			break;
 		case GEANY_KEYS_FOCUS_SEARCHBAR:
 			if (toolbar_prefs.visible && toolbar_prefs.show_search)
-				gtk_widget_grab_focus(lookup_widget(main_widgets.window, "entry1"));
+				gtk_widget_grab_focus(
+					lookup_widget(main_widgets.window, "toolbutton_search_entry"));
 			break;
 		case GEANY_KEYS_FOCUS_SIDEBAR:
 			focus_sidebar();
