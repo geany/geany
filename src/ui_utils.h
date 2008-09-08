@@ -231,4 +231,6 @@ gboolean ui_tree_view_find_previous(GtkTreeView *treeview, TVMatchCallback cb);
 
 void ui_statusbar_showhide(gboolean state);
 
+gint ui_get_toolbar_insert_position(void);
+
 #endif

@@ -1532,3 +1532,22 @@ void ui_init(void)
 }
 
 
+/** Returns the position for adding new toolbar items. The returned position can be used
+ *  to add new toolbar items with @c gtk_toolbar_insert(). The toolbar object can be accessed
+ *  with @a geany->main_widgets->toolbar.
+ *  The position is always the last one before the Quit button (if it is shown).
+ *
+ *  @return The position for new toolbar items or @c -1 if an error occurred.
+ */
+gint ui_get_toolbar_insert_position(void)
+{
+	GtkWidget *quit = lookup_widget(main_widgets.window, "toolbutton_quit");
+	gint pos = gtk_toolbar_get_item_index(GTK_TOOLBAR(main_widgets.toolbar), GTK_TOOL_ITEM(quit));
+
+	if (pos > 0)
+		pos--; /* use one position before the real position of the quit button to place new
+				* items between the last separator and the quit button */
+
+	return pos;
+}
+

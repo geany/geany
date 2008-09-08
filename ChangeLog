@@ -3,6 +3,9 @@
  * scripts/missing-mnemonics.sh, scripts/svn-add.sh:
    Remove bashisms.
    Add support for passing asterisk wildcards to missing-mnemonics.sh.
+ * src/plugindata.h, src/plugins.c, src/ui_utils.c, src/ui_utils.h:
+   Add ui_get_toolbar_insert_position() for plugins to get a position to
+   insert new toolbar items.
 
 
 2008-09-07  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

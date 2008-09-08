@@ -173,7 +173,7 @@ static UtilsFuncs utils_funcs = {
 	&utils_get_setting_integer,
 	&utils_get_setting_string,
 	&utils_spawn_sync,
-	&utils_spawn_async,
+	&utils_spawn_async
 };
 
 static UIUtilsFuncs uiutils_funcs = {
@@ -183,6 +183,7 @@ static UIUtilsFuncs uiutils_funcs = {
 	&ui_table_add_row,
 	&ui_path_box_new,
 	&ui_button_new_with_image,
+	&ui_get_toolbar_insert_position
 };
 
 static DialogFuncs dialog_funcs = {

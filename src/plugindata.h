@@ -335,6 +335,7 @@ typedef struct UIUtilsFuncs
 	void		(*table_add_row) (GtkTable *table, gint row, ...) G_GNUC_NULL_TERMINATED;
 	GtkWidget*	(*path_box_new) (const gchar *title, GtkFileChooserAction action, GtkEntry *entry);
 	GtkWidget*	(*button_new_with_image) (const gchar *stock_id, const gchar *text);
+	gint		(*get_toolbar_insert_position) (void);
 }
 UIUtilsFuncs;
 
