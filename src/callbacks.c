@@ -1853,7 +1853,7 @@ on_menu_open_selected_file1_activate   (GtkMenuItem     *menuitem,
 	if (doc == NULL)
 		return;
 
-	sel = editor_get_default_selection(doc, TRUE, GEANY_WORDCHARS"./");
+	sel = editor_get_default_selection(doc, TRUE, GEANY_WORDCHARS"./-");
 
 	if (sel != NULL)
 	{

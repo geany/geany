@@ -13,6 +13,9 @@
    Rename all toolbar widgets for consistent names.
  * doc/geany.html, doc/geany.txt:
    Fix typo.
+ * src/callbacks.c:
+   Add '-' (dash) to the wordchars when using 'open selected filename'.
+   Please open a bug report if this will break any filenames.
 
 
 2008-09-01  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
