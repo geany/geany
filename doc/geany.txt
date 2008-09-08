@@ -3157,7 +3157,7 @@ allows to extend or reduce the stream selection when holding the
 Shift key, and the rectangular selection when holding the Shift and
 Ctrl keys. Some keys may not be available with some national keyboards
 or because they are taken by the system such as by a window manager
-on GTK+. Keyboard equivalents of menu commands are listed in the
+or GTK. Keyboard equivalents of menu commands are listed in the
 menus. Some less common commands with no menu equivalent are:
 
 =============================================   ======================
