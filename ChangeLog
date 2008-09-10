@@ -1,3 +1,9 @@
+2008-09-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * data/filetypes.xml, src/highlighting.c:
+   Add missing HTML attribute 'xml:lang'.
+
+
 2008-09-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * scripts/missing-mnemonics.sh, scripts/svn-add.sh:
