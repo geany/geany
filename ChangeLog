@@ -6,6 +6,9 @@
  * src/plugindata.h, src/plugins.c, src/ui_utils.c, src/ui_utils.h:
    Add ui_get_toolbar_insert_position() for plugins to get a position to
    insert new toolbar items.
+ * src/log.c:
+   Update the debug messages automatically in the debug messages window
+   if it is open.
 
 
 2008-09-07  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

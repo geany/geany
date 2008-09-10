@@ -38,11 +38,21 @@
 
 
 static GString *log_buffer = NULL;
+static GtkTextBuffer *dialog_textbuffer = NULL;
 
 enum
 {
 	DIALOG_RESPONSE_CLEAR = 1
 };
+
+
+static void update_dialog(void)
+{
+	if (dialog_textbuffer != NULL)
+	{
+		gtk_text_buffer_set_text(dialog_textbuffer, log_buffer->str, log_buffer->len);
+	}
+}
 
 
 /* Geany's main debug/log function, declared in geany.h */
@@ -59,6 +69,8 @@ static void handler_print(const gchar *msg)
 {
 	printf("%s\n", msg);
 	g_string_append_printf(log_buffer, "%s\n", msg);
+
+	update_dialog();
 }
 
 
@@ -66,6 +78,8 @@ static void handler_printerr(const gchar *msg)
 {
 	fprintf(stderr, "%s\n", msg);
 	g_string_append_printf(log_buffer, "%s\n", msg);
+
+	update_dialog();
 }
 
 
@@ -115,6 +129,8 @@ static void handler_log(const gchar *domain, GLogLevelFlags level, const gchar *
 	g_string_append_printf(log_buffer, "%s: %s: %s\n", time_str, get_log_prefix(level), msg);
 
 	g_free(time_str);
+
+	update_dialog();
 }
 
 
@@ -133,16 +149,18 @@ static void on_dialog_response(GtkWidget *dialog, gint response, gpointer user_d
 	if (response == DIALOG_RESPONSE_CLEAR)
 	{
 		GtkTextIter start_iter, end_iter;
-		GtkTextBuffer *tb = gtk_text_view_get_buffer(GTK_TEXT_VIEW(user_data));
 
-		gtk_text_buffer_get_start_iter(tb, &start_iter);
-		gtk_text_buffer_get_end_iter(tb, &end_iter);
-		gtk_text_buffer_delete(tb, &start_iter, &end_iter);
+		gtk_text_buffer_get_start_iter(dialog_textbuffer, &start_iter);
+		gtk_text_buffer_get_end_iter(dialog_textbuffer, &end_iter);
+		gtk_text_buffer_delete(dialog_textbuffer, &start_iter, &end_iter);
 
 		g_string_erase(log_buffer, 0, -1);
 	}
 	else
+	{
 		gtk_widget_destroy(dialog);
+		dialog_textbuffer = NULL;
+	}
 }
 
 
@@ -162,10 +180,10 @@ void log_show_debug_messages_dialog(void)
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
 
 	textview = gtk_text_view_new();
+	dialog_textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview));
 	gtk_text_view_set_editable(GTK_TEXT_VIEW(textview), FALSE);
 	gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(textview), FALSE);
-	gtk_text_buffer_set_text(gtk_text_view_get_buffer(
-		GTK_TEXT_VIEW(textview)), log_buffer->str, log_buffer->len);
+	gtk_text_buffer_set_text(dialog_textbuffer, log_buffer->str, log_buffer->len);
 
 	swin = gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
