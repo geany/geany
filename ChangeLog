@@ -1,3 +1,10 @@
+2008-09-10  Nick Treleaven  <nmt@localhost.localdomain>
+
+ * plugins/splitwindow.c:
+   Add Unsplit command.
+   Clean up menus and split window when unloading plugin.
+
+
 2008-08-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/plugindata.h, src/plugins.c, po/POTFILES.in,

@@ -40,6 +40,17 @@ PLUGIN_SET_INFO(_("Split Window"), _("Splits the editor view into two windows.")
 GeanyData *geany_data;
 GeanyFunctions *geany_functions;
 
+enum Command
+{
+	ITEM_SPLIT_HORIZONTAL,
+	/* ITEM_SPLIT_VERTICAL, */
+	ITEM_UNSPLIT,
+	ITEM_COUNT
+};
+
+static GtkWidget *menu_items_array[ITEM_COUNT];
+static GtkWidget **menu_items = menu_items_array;	/* avoid gcc warning when casting to (gpointer*) */
+static enum Command plugin_state;
 static GeanyEditor *our_editor = NULL;
 
 
@@ -90,6 +101,7 @@ static void set_font(ScintillaObject *sci, const gchar *font_name, gint size)
 }
 
 
+/* TODO: maybe use SCI_STYLEGET(FONT|SIZE) instead */
 static void update_font(ScintillaObject *sci, const gchar *font_name, gint size)
 {
 	gchar *fname;
@@ -145,15 +157,28 @@ static void update_view(ScintillaObject *sci)
 }
 
 
-static void on_split_view(GtkMenuItem *menuitem, GeanyData *data)
+static void set_state(enum Command id)
 {
-	GtkWidget *notebook = data->main_widgets->notebook;
+	gtk_widget_set_sensitive(menu_items[ITEM_SPLIT_HORIZONTAL],
+		id != ITEM_SPLIT_HORIZONTAL);
+	gtk_widget_set_sensitive(menu_items[ITEM_UNSPLIT],
+		id != ITEM_UNSPLIT);
+		
+	plugin_state = id;
+}
+
+
+static void on_split_view(GtkMenuItem *menuitem, gpointer user_data)
+{
+	GtkWidget *notebook = geany_data->main_widgets->notebook;
 	GtkWidget *parent = gtk_widget_get_parent(notebook);
 	GtkWidget *pane;
 	GeanyDocument *doc = p_document->get_current();
 	ScintillaObject *sci;
 	gpointer sdoc;
 
+	set_state(ITEM_SPLIT_HORIZONTAL);
+	
 	g_return_if_fail(doc);
 	g_return_if_fail(our_editor == NULL);
 
@@ -176,19 +201,69 @@ static void on_split_view(GtkMenuItem *menuitem, GeanyData *data)
 }
 
 
+static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data)
+{
+	GtkWidget *notebook = geany_data->main_widgets->notebook;
+	GtkWidget *pane = gtk_widget_get_parent(notebook);
+	GtkWidget *parent = gtk_widget_get_parent(pane);
+
+	set_state(ITEM_UNSPLIT);
+	
+	g_return_if_fail(our_editor);
+
+	/* reparent document notebook */
+	g_object_ref(notebook);
+	gtk_container_remove(GTK_CONTAINER(pane), notebook);
+	gtk_widget_destroy(pane);
+	p_editor->destroy(our_editor);
+	our_editor = NULL;
+	gtk_container_add(GTK_CONTAINER(parent), notebook);
+	g_object_unref(notebook);
+}
+
+
+static void foreach_pointer(gpointer *items, gsize count, GFunc func, gpointer user_data)
+{
+	gsize i;
+	
+	for (i = 0; i < count; i++)
+	{
+		func(items[i], user_data);
+	}
+}
+
+
+static void add_menu_item(gpointer data, gpointer user_data)
+{
+	GtkWidget *item = data;
+	
+	gtk_widget_show(item);
+	gtk_menu_append(geany_data->main_widgets->tools_menu, item);
+}
+
+
 void plugin_init(GeanyData *data)
 {
-	GtkWidget *item = gtk_menu_item_new_with_mnemonic(_("_Split Horizontally"));
+	GtkWidget *item;
+	
+	menu_items[ITEM_SPLIT_HORIZONTAL] = item =
+		gtk_menu_item_new_with_mnemonic(_("Split _Horizontally"));
+	g_signal_connect(item, "activate", G_CALLBACK(on_split_view), NULL);
+	
+	menu_items[ITEM_UNSPLIT] = item =
+		gtk_menu_item_new_with_mnemonic(_("_Unsplit"));
+	g_signal_connect(item, "activate", G_CALLBACK(on_unsplit), NULL);
+	
+	foreach_pointer((gpointer*)menu_items, ITEM_COUNT, add_menu_item, NULL);
 
-	gtk_widget_show(item);
-	gtk_menu_append(data->main_widgets->tools_menu, item);
-	g_signal_connect(item, "activate", G_CALLBACK(on_split_view), data);
+	set_state(ITEM_UNSPLIT);
 }
 
 
 void plugin_cleanup()
 {
-	if (our_editor)
-		p_editor->destroy(our_editor);
-	/* TODO: reparent doc notebook etc */
+	if (plugin_state != ITEM_UNSPLIT)
+		on_unsplit(NULL, NULL);
+	
+	foreach_pointer((gpointer*)menu_items, ITEM_COUNT, (GFunc)gtk_widget_destroy, NULL);
 }
