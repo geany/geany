@@ -1,8 +1,10 @@
-2008-09-10  Nick Treleaven  <nmt@localhost.localdomain>
+2008-09-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * plugins/splitwindow.c:
    Add Unsplit command.
    Clean up menus and split window when unloading plugin.
+ * plugins/splitwindow.c:
+   Move menu items to a submenu.
 
 
 2008-08-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

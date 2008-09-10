@@ -40,17 +40,23 @@ PLUGIN_SET_INFO(_("Split Window"), _("Splits the editor view into two windows.")
 GeanyData *geany_data;
 GeanyFunctions *geany_functions;
 
-enum Command
+enum State
 {
-	ITEM_SPLIT_HORIZONTAL,
-	/* ITEM_SPLIT_VERTICAL, */
-	ITEM_UNSPLIT,
-	ITEM_COUNT
+	STATE_SPLIT_HORIZONTAL,
+	/* STATE_SPLIT_VERTICAL, */
+	STATE_UNSPLIT,
+	STATE_COUNT
 };
 
-static GtkWidget *menu_items_array[ITEM_COUNT];
-static GtkWidget **menu_items = menu_items_array;	/* avoid gcc warning when casting to (gpointer*) */
-static enum Command plugin_state;
+static struct
+{
+	GtkWidget *main;
+	GtkWidget *horizontal;
+	GtkWidget *unsplit;
+}
+menu_items;
+
+static enum State plugin_state;
 static GeanyEditor *our_editor = NULL;
 
 
@@ -157,12 +163,12 @@ static void update_view(ScintillaObject *sci)
 }
 
 
-static void set_state(enum Command id)
+static void set_state(enum State id)
 {
-	gtk_widget_set_sensitive(menu_items[ITEM_SPLIT_HORIZONTAL],
-		id != ITEM_SPLIT_HORIZONTAL);
-	gtk_widget_set_sensitive(menu_items[ITEM_UNSPLIT],
-		id != ITEM_UNSPLIT);
+	gtk_widget_set_sensitive(menu_items.horizontal,
+		id != STATE_SPLIT_HORIZONTAL);
+	gtk_widget_set_sensitive(menu_items.unsplit,
+		id != STATE_UNSPLIT);
 		
 	plugin_state = id;
 }
@@ -177,7 +183,7 @@ static void on_split_view(GtkMenuItem *menuitem, gpointer user_data)
 	ScintillaObject *sci;
 	gpointer sdoc;
 
-	set_state(ITEM_SPLIT_HORIZONTAL);
+	set_state(STATE_SPLIT_HORIZONTAL);
 	
 	g_return_if_fail(doc);
 	g_return_if_fail(our_editor == NULL);
@@ -207,7 +213,7 @@ static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data)
 	GtkWidget *pane = gtk_widget_get_parent(notebook);
 	GtkWidget *parent = gtk_widget_get_parent(pane);
 
-	set_state(ITEM_UNSPLIT);
+	set_state(STATE_UNSPLIT);
 	
 	g_return_if_fail(our_editor);
 
@@ -222,48 +228,36 @@ static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
-static void foreach_pointer(gpointer *items, gsize count, GFunc func, gpointer user_data)
-{
-	gsize i;
-	
-	for (i = 0; i < count; i++)
-	{
-		func(items[i], user_data);
-	}
-}
-
-
-static void add_menu_item(gpointer data, gpointer user_data)
-{
-	GtkWidget *item = data;
-	
-	gtk_widget_show(item);
-	gtk_menu_append(geany_data->main_widgets->tools_menu, item);
-}
-
-
 void plugin_init(GeanyData *data)
 {
-	GtkWidget *item;
+	GtkWidget *item, *menu;
 	
-	menu_items[ITEM_SPLIT_HORIZONTAL] = item =
-		gtk_menu_item_new_with_mnemonic(_("Split _Horizontally"));
+	menu_items.main = gtk_menu_item_new_with_mnemonic(_("_Split Window"));
+	gtk_menu_append(geany_data->main_widgets->tools_menu, menu_items.main);
+	
+	menu = gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_items.main), menu);
+	
+	menu_items.horizontal = item =
+		gtk_menu_item_new_with_mnemonic(_("_Horizontally"));
 	g_signal_connect(item, "activate", G_CALLBACK(on_split_view), NULL);
+	gtk_menu_append(menu, item);
 	
-	menu_items[ITEM_UNSPLIT] = item =
+	menu_items.unsplit = item =
 		gtk_menu_item_new_with_mnemonic(_("_Unsplit"));
 	g_signal_connect(item, "activate", G_CALLBACK(on_unsplit), NULL);
+	gtk_menu_append(menu, item);
 	
-	foreach_pointer((gpointer*)menu_items, ITEM_COUNT, add_menu_item, NULL);
+	gtk_widget_show_all(menu_items.main);
 
-	set_state(ITEM_UNSPLIT);
+	set_state(STATE_UNSPLIT);
 }
 
 
 void plugin_cleanup()
 {
-	if (plugin_state != ITEM_UNSPLIT)
+	if (plugin_state != STATE_UNSPLIT)
 		on_unsplit(NULL, NULL);
 	
-	foreach_pointer((gpointer*)menu_items, ITEM_COUNT, (GFunc)gtk_widget_destroy, NULL);
+	gtk_widget_destroy(menu_items.main);
 }
