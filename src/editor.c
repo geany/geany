@@ -85,7 +85,7 @@ static gboolean handle_xml(GeanyEditor *editor, gchar ch);
 static void get_indent(GeanyEditor *editor, gint pos);
 static void insert_indent_after_line(GeanyEditor *editor, gint line);
 static void auto_multiline(GeanyEditor *editor, gint pos);
-static gboolean is_code_style(gint lexer, gint prev_style, gint style);
+static gboolean is_code_style(gint lexer, gint style);
 static void auto_close_bracket(ScintillaObject *sci, gint pos, gchar c);
 static void auto_table(GeanyEditor *editor, gint pos);
 static void close_block(GeanyEditor *editor, gint pos);
@@ -1321,7 +1321,7 @@ gboolean editor_show_calltip(GeanyDocument *doc, gint pos)
 
 	/* the style 1 before the brace (which may be highlighted) */
 	style = SSM(sci, SCI_GETSTYLEAT, pos - 1, 0);
-	if (! is_code_style(lexer, style, style))
+	if (! is_code_style(lexer, style))
 		return FALSE;
 
 	word[0] = '\0';
@@ -1432,7 +1432,7 @@ static gboolean autocomplete_check_for_html(gint ft_id, gint style)
 
 gboolean editor_start_auto_complete(GeanyDocument *doc, gint pos, gboolean force)
 {
-	gint line, line_start, line_len, line_pos, current, rootlen, startword, lexer, style, prev_style;
+	gint line, line_start, line_len, line_pos, current, rootlen, startword, lexer, style;
 	gchar *linebuf, *root;
 	ScintillaObject *sci;
 	gboolean ret = FALSE;
@@ -1441,6 +1441,11 @@ gboolean editor_start_auto_complete(GeanyDocument *doc, gint pos, gboolean force
 
 	if ((! editor_prefs.auto_complete_symbols && ! force) ||
 		doc == NULL || doc->file_type == NULL)
+		return FALSE;
+
+	/* If we are at the beginning of the document, we skip autocompletion as we can't determine the
+	 * necessary styling information */
+	if (pos < 2)
 		return FALSE;
 
 	sci = doc->editor->sci;
@@ -1453,18 +1458,17 @@ gboolean editor_start_auto_complete(GeanyDocument *doc, gint pos, gboolean force
 	current = pos - line_start;
 	startword = current;
 	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
-	prev_style = SSM(sci, SCI_GETSTYLEAT, pos - 2, 0);
+	style = SSM(sci, SCI_GETSTYLEAT, pos - 2, 0);
 
-	/* If we are at the last character of the document, style is always 0 because it has not yet
-	 * been styled (styling is first done in SCN_UPDATEUI, not yet in SCN_CHARADDED),
-	 * so we use the style of the last character. */
-	if (pos >= SSM(sci, SCI_GETLENGTH, 0, 0))
-		style = prev_style;
-	else
-		style = SSM(sci, SCI_GETSTYLEAT, pos, 0);
+	/** TODO if we use other indicators in the future, we should adjust this code, currently
+	 *  it works only for the third indicator (INDIC2_MASK) */
+	if (style & INDIC2_MASK)
+	{	/* remove the indicator bit from the style */
+		style &= 0x0000000f;
+	}
 
-	 /* don't autocomplete in comments and strings */
-	 if (!force && !is_code_style(lexer, prev_style, style))
+	/* don't autocomplete in comments and strings */
+	if (!force && !is_code_style(lexer, style))
 		return FALSE;
 
 	linebuf = sci_get_line(sci, line);
@@ -2583,10 +2587,9 @@ static void auto_multiline(GeanyEditor *editor, gint cur_line)
 
 /* Checks whether the given style is a string for the given lexer.
  * It doesn't handle LEX_HTML, this should be done by the caller.
- * prev_style is used for some lexers where the style of two positions before is needed.
  * Returns true if the style is a string, FALSE otherwise.
  */
-static gboolean is_string_style(gint lexer, gint prev_style, gint style)
+static gboolean is_string_style(gint lexer, gint style)
 {
 	switch (lexer)
 	{
@@ -2611,8 +2614,7 @@ static gboolean is_string_style(gint lexer, gint prev_style, gint style)
 				style == SCE_F_STRING2);
 
 		case SCLEX_PERL:
-			return (prev_style == SCE_PL_STRING ||
-				style == SCE_PL_STRING ||
+			return (style == SCE_PL_STRING ||
 				style == SCE_PL_HERE_DELIM ||
 				style == SCE_PL_HERE_Q ||
 				style == SCE_PL_HERE_QQ ||
@@ -2651,14 +2653,14 @@ static gboolean is_string_style(gint lexer, gint prev_style, gint style)
 			return (style == SCE_B_STRING);
 
 		case SCLEX_HTML:
-			return (prev_style == SCE_HPHP_SIMPLESTRING ||
-				prev_style == SCE_HPHP_HSTRING ||  /* HSTRING is a heredoc */
-				prev_style == SCE_HPHP_HSTRING_VARIABLE ||
-				prev_style == SCE_H_DOUBLESTRING ||
-				prev_style == SCE_H_SINGLESTRING ||
-				prev_style == SCE_H_CDATA ||
-				prev_style == SCE_H_SGML_DOUBLESTRING ||
-				prev_style == SCE_H_SGML_SIMPLESTRING);
+			return (style == SCE_HPHP_SIMPLESTRING ||
+				style == SCE_HPHP_HSTRING ||  /* HSTRING is a heredoc */
+				style == SCE_HPHP_HSTRING_VARIABLE ||
+				style == SCE_H_DOUBLESTRING ||
+				style == SCE_H_SINGLESTRING ||
+				style == SCE_H_CDATA ||
+				style == SCE_H_SGML_DOUBLESTRING ||
+				style == SCE_H_SGML_SIMPLESTRING);
 	}
 	return FALSE;
 }
@@ -2666,10 +2668,9 @@ static gboolean is_string_style(gint lexer, gint prev_style, gint style)
 
 /* Checks whether the given style is a comment for the given lexer.
  * It doesn't handle LEX_HTML, this should be done by the caller.
- * prev_style is used for some lexers where the style of two positions before is needed.
  * Returns true if the style is a comment, FALSE otherwise.
  */
-static gboolean is_comment_style(gint lexer, gint prev_style, gint style)
+static gboolean is_comment_style(gint lexer, gint style)
 {
 	switch (lexer)
 	{
@@ -2693,17 +2694,14 @@ static gboolean is_comment_style(gint lexer, gint prev_style, gint style)
 
 		case SCLEX_PYTHON:
 			return (style == SCE_P_COMMENTLINE ||
-				style == SCE_P_COMMENTBLOCK ||
-				prev_style == SCE_P_COMMENTLINE ||
-				prev_style == SCE_P_COMMENTBLOCK);
+				style == SCE_P_COMMENTBLOCK);
 
 		case SCLEX_F77:
 		case SCLEX_FORTRAN:
 			return (style == SCE_F_COMMENT);
 
 		case SCLEX_PERL:
-			return (prev_style == SCE_PL_COMMENTLINE ||
-				style == SCE_PL_COMMENTLINE);
+			return (style == SCE_PL_COMMENTLINE);
 
 		case SCLEX_PROPERTIES:
 			return (style == SCE_PROPS_COMMENT);
@@ -2715,10 +2713,10 @@ static gboolean is_comment_style(gint lexer, gint prev_style, gint style)
 			return (style == SCE_MAKE_COMMENT);
 
 		case SCLEX_RUBY:
-			return (prev_style == SCE_RB_COMMENTLINE);
+			return (style == SCE_RB_COMMENTLINE);
 
 		case SCLEX_BASH:
-			return (prev_style == SCE_SH_COMMENTLINE);
+			return (style == SCE_SH_COMMENTLINE);
 
 		case SCLEX_SQL:
 			return (style == SCE_SQL_COMMENT ||
@@ -2737,7 +2735,7 @@ static gboolean is_comment_style(gint lexer, gint prev_style, gint style)
 				style == SCE_LUA_COMMENTDOC);
 
 		case SCLEX_HASKELL:
-			return (prev_style == SCE_HA_COMMENTLINE ||
+			return (style == SCE_HA_COMMENTLINE ||
 				style == SCE_HA_COMMENTBLOCK ||
 				style == SCE_HA_COMMENTBLOCK2 ||
 				style == SCE_HA_COMMENTBLOCK3);
@@ -2746,10 +2744,10 @@ static gboolean is_comment_style(gint lexer, gint prev_style, gint style)
 			return (style == SCE_B_COMMENT);
 
 		case SCLEX_HTML:
-			return (prev_style == SCE_HPHP_COMMENTLINE ||
-				prev_style == SCE_HPHP_COMMENT ||
-				prev_style == SCE_H_COMMENT ||
-				prev_style == SCE_H_SGML_COMMENT);
+			return (style == SCE_HPHP_COMMENTLINE ||
+				style == SCE_HPHP_COMMENT ||
+				style == SCE_H_COMMENT ||
+				style == SCE_H_SGML_COMMENT);
 	}
 	return FALSE;
 }
@@ -2757,9 +2755,8 @@ static gboolean is_comment_style(gint lexer, gint prev_style, gint style)
 
 /* Checks whether the given style is normal code (not string, comment, preprocessor, etc).
  * It doesn't handle LEX_HTML, this should be done by the caller.
- * prev_style is used for some lexers where the style of two positions before is needed.
  */
-static gboolean is_code_style(gint lexer, gint prev_style, gint style)
+static gboolean is_code_style(gint lexer, gint style)
 {
 	switch (lexer)
 	{
@@ -2768,8 +2765,8 @@ static gboolean is_code_style(gint lexer, gint prev_style, gint style)
 				return FALSE;
 			break;
 	}
-	return !(is_comment_style(lexer, prev_style, style) ||
-		is_string_style(lexer, prev_style, style));
+	return !(is_comment_style(lexer, style) ||
+		is_string_style(lexer, style));
 }
 
 
