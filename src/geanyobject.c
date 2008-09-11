@@ -116,6 +116,15 @@ static void create_signals(GObjectClass *g_object_class)
 		gtk_marshal_NONE__POINTER,
 		G_TYPE_NONE, 1,
 		G_TYPE_POINTER);
+	geany_object_signals[GCB_DOCUMENT_CLOSE] = g_signal_new (
+		"document-close",
+		G_OBJECT_CLASS_TYPE (g_object_class),
+		G_SIGNAL_RUN_FIRST,
+		G_STRUCT_OFFSET (GeanyObjectClass, document_close),
+		NULL, NULL,
+		gtk_marshal_NONE__POINTER,
+		G_TYPE_NONE, 1,
+		G_TYPE_POINTER);
 
 	geany_object_signals[GCB_PROJECT_OPEN] = g_signal_new (
 		"project-open",
@@ -143,6 +152,7 @@ static void create_signals(GObjectClass *g_object_class)
 		NULL, NULL,
 		gtk_marshal_NONE__NONE,
 		G_TYPE_NONE, 0);
+
 	geany_object_signals[GCB_UPDATE_EDITOR_MENU] = g_signal_new (
 		"update-editor-menu",
 		G_OBJECT_CLASS_TYPE (g_object_class),

@@ -121,6 +121,17 @@ PluginCallback plugin_callbacks[] =
  *  @param user_data user data.
  *  @endsignaldef
  *
+ *  @signaldef document-close
+ *  @signalproto
+ *  void user_function(GObject *obj, GeanyDocument *doc, gpointer user_data);
+ *  @endsignalproto
+ *  @signaldesc
+ *  Sent before closing a document.
+ *  @param obj a GeanyObject instance, should be ignored.
+ *  @param doc the document about to be closed.
+ *  @param user_data user data.
+ *  @endsignaldef
+ *
  *  @signaldef project-open
  *  @signalproto
  *  void user_function(GObject *obj, GKeyFile *config, gpointer user_data);
