@@ -8,6 +8,9 @@
    Unsplit when the source document is closed.
  * doc/plugins.dox:
    Fix wrong parameter for "project-close" signal.
+ * plugins/splitwindow.c:
+   Set pane splitter halfway.
+   Copy cursor position from original editor.
 
 
 2008-09-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

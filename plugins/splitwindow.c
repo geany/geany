@@ -147,10 +147,15 @@ static void set_line_numbers(ScintillaObject * sci, gboolean set, gint extra_wid
 }
 
 
-static void update_view(ScintillaObject *sci)
+static void sync_to_current(ScintillaObject *current, ScintillaObject *sci)
 {
-	ScintillaObject *current = p_document->get_current()->editor->sci;
+	gpointer sdoc;
 	gint lexer;
+	gint pos;
+	
+	/* set the new sci widget to view the existing Scintilla document */
+	sdoc = (gpointer) p_sci->send_message(current, SCI_GETDOCPOINTER, 0, 0);
+	p_sci->send_message(sci, SCI_SETDOCPOINTER, 0, GPOINTER_TO_INT(sdoc));
 
 	update_font(sci, geany->interface_prefs->editor_font, 0);
 
@@ -158,6 +163,9 @@ static void update_view(ScintillaObject *sci)
 	p_sci->send_message(sci, SCI_SETLEXER, lexer, 0);
 	set_styles(current, sci);
 
+	pos = p_sci->get_current_position(current);
+	p_sci->set_current_position(sci, pos, TRUE);
+	
 	set_line_numbers(sci, TRUE, 0);
 	p_sci->send_message(sci, SCI_SETMARGINWIDTHN, 1, 0 ); /* hide marker margin */
 }
@@ -181,7 +189,7 @@ static void on_split_view(GtkMenuItem *menuitem, gpointer user_data)
 	GtkWidget *pane;
 	GeanyDocument *doc = p_document->get_current();
 	ScintillaObject *sci;
-	gpointer sdoc;
+	gint width = notebook->allocation.width / 2;
 
 	set_state(STATE_SPLIT_HORIZONTAL);
 	
@@ -196,13 +204,12 @@ static void on_split_view(GtkMenuItem *menuitem, gpointer user_data)
 	gtk_paned_add1(GTK_PANED(pane), notebook);
 	g_object_unref(notebook);
 
-	sci = doc->editor->sci;
-	sdoc = (gpointer) p_sci->send_message(sci, SCI_GETDOCPOINTER, 0, 0);
 	our_editor = p_editor->create(doc);
 	sci = our_editor->sci;
-	p_sci->send_message(sci, SCI_SETDOCPOINTER, 0, GPOINTER_TO_INT(sdoc));
-	update_view(sci);
+	sync_to_current(doc->editor->sci, sci);
 	gtk_paned_add2(GTK_PANED(pane), GTK_WIDGET(sci));
+
+	gtk_paned_set_position(GTK_PANED(pane), width);
 	gtk_widget_show_all(pane);
 }
 
