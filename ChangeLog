@@ -6,6 +6,8 @@
    closed.
  * plugins/splitwindow.c:
    Unsplit when the source document is closed.
+ * doc/plugins.dox:
+   Fix wrong parameter for "project-close" signal.
 
 
 2008-09-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

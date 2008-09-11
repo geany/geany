@@ -160,13 +160,11 @@ PluginCallback plugin_callbacks[] =
  *
  *  @signaldef project-close
  *  @signalproto
- *  void user_function(GObject *obj, GKeyFile *config, gpointer user_data);
+ *  void user_function(GObject *obj, gpointer user_data);
  *  @endsignalproto
  *  @signaldesc
  *  Sent after a project is closed.
  *  @param obj a GeanyObject instance, should be ignored.
- *  @param config an exising GKeyFile object which can be used to read and write data.
- *    It must not be closed or freed.
  *  @param user_data user data.
  *  @endsignaldef
  *
