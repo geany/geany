@@ -254,6 +254,20 @@ void plugin_init(GeanyData *data)
 }
 
 
+static void on_document_close(GObject *obj, GeanyDocument *doc, gpointer user_data)
+{
+    /* remove the split window because the document won't exist anymore */
+	if (our_editor && doc == our_editor->document)
+		on_unsplit(NULL, NULL);
+}
+
+PluginCallback plugin_callbacks[] =
+{
+    { "document-close", (GCallback) &on_document_close, FALSE, NULL },
+    { NULL, NULL, FALSE, NULL }
+};
+
+
 void plugin_cleanup()
 {
 	if (plugin_state != STATE_UNSPLIT)

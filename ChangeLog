@@ -4,6 +4,8 @@
    doc/plugins.dox:
    Add plugin signal "document-close", sent just before a document is
    closed.
+ * plugins/splitwindow.c:
+   Unsplit when the source document is closed.
 
 
 2008-09-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
