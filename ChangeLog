@@ -1,3 +1,9 @@
+2008-09-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * plugins/splitwindow.c:
+   Make menu document-sensitive.
+
+
 2008-09-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/geanyobject.c, src/geanyobject.h, src/document.c,
