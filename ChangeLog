@@ -1,6 +1,8 @@
 2008-09-14 Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * COPYING: Fixing a little encoding issue in GPL text.
+ * po/tr.po, po/LINGUAS, src/about.c, THANKS: Adding Turkish translation 
+   provided by Gürkan Gür. Thanks for it.
 
 
 2008-09-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
