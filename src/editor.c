@@ -2482,6 +2482,7 @@ void editor_highlight_braces(ScintillaObject *sci, gint cur_pos)
 		brace_pos++;
 		if (! utils_isbrace(sci_get_char_at(sci, brace_pos), editor_prefs.brace_match_ltgt))
 		{
+			SSM(sci, SCI_SETHIGHLIGHTGUIDE, 0, 0);
 			SSM(sci, SCI_BRACEBADLIGHT, (uptr_t)-1, 0);
 			return;
 		}
@@ -2489,9 +2490,16 @@ void editor_highlight_braces(ScintillaObject *sci, gint cur_pos)
 	end_pos = SSM(sci, SCI_BRACEMATCH, brace_pos, 0);
 
 	if (end_pos >= 0)
+	{
+		gint col = MIN(sci_get_col_from_position(sci, brace_pos), sci_get_col_from_position(sci, end_pos));
+		SSM(sci, SCI_SETHIGHLIGHTGUIDE, col, 0);
 		SSM(sci, SCI_BRACEHIGHLIGHT, brace_pos, end_pos);
+	}
 	else
+	{
+		SSM(sci, SCI_SETHIGHLIGHTGUIDE, 0, 0);
 		SSM(sci, SCI_BRACEBADLIGHT, brace_pos, 0);
+	}
 }
 
 

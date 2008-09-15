@@ -3,6 +3,9 @@
  * src/editor.c:
    Show ellipsis (...) item when there are too many symbol names for
    autocompletion.
+ * src/editor.c:
+   Apply patch from Jason Oster to highlight matching brace indent
+   guides (thanks, #2104099).
 
 
 2008-09-14 Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
