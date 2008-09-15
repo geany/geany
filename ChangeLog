@@ -1,3 +1,9 @@
+2008-09-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * plugins/splitwindow.c:
+   Use SCI_STYLEGET(FONT|SIZE) instead of parsing editor_font.
+
+
 2008-09-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * plugins/splitwindow.c:

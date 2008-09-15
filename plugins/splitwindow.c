@@ -88,43 +88,31 @@ static void set_styles(ScintillaObject *oldsci, ScintillaObject *newsci)
 
 
 static void sci_set_font(ScintillaObject *sci, gint style, const gchar *font,
-	G_GNUC_UNUSED gint size)
+	gint size)
 {
 	p_sci->send_message(sci, SCI_STYLESETFONT, style, (sptr_t) font);
 	p_sci->send_message(sci, SCI_STYLESETSIZE, style, size);
 }
 
 
-static void set_font(ScintillaObject *sci, const gchar *font_name, gint size)
+static void update_font(ScintillaObject *current, ScintillaObject *sci)
 {
-	gint style;
+	gint style_id;
+	gint size;
+	gchar font_name[1024]; /* should be big enough */
 
-	for (style = 0; style <= 127; style++)
-		sci_set_font(sci, style, font_name, size);
+	p_sci->send_message(current, SCI_STYLEGETFONT, 0, (sptr_t)font_name);
+	size = sci_get_value(current, SCI_STYLEGETSIZE, 0);
+
+	for (style_id = 0; style_id <= 127; style_id++)
+	{
+		sci_set_font(sci, style_id, font_name, size);
+	}
+
 	/* line number and braces */
 	sci_set_font(sci, STYLE_LINENUMBER, font_name, size);
 	sci_set_font(sci, STYLE_BRACELIGHT, font_name, size);
 	sci_set_font(sci, STYLE_BRACEBAD, font_name, size);
-}
-
-
-/* TODO: maybe use SCI_STYLEGET(FONT|SIZE) instead */
-static void update_font(ScintillaObject *sci, const gchar *font_name, gint size)
-{
-	gchar *fname;
-	PangoFontDescription *font_desc;
-
-	g_return_if_fail(font_name != NULL);
-
-	font_desc = pango_font_description_from_string(font_name);
-
-	fname = g_strdup_printf("!%s", pango_font_description_get_family(font_desc));
-	size = pango_font_description_get_size(font_desc) / PANGO_SCALE;
-
-	set_font(sci, fname, size);
-
-	g_free(fname);
-	pango_font_description_free(font_desc);
 }
 
 
@@ -158,8 +146,7 @@ static void sync_to_current(ScintillaObject *current, ScintillaObject *sci)
 	sdoc = (gpointer) p_sci->send_message(current, SCI_GETDOCPOINTER, 0, 0);
 	p_sci->send_message(sci, SCI_SETDOCPOINTER, 0, GPOINTER_TO_INT(sdoc));
 
-	update_font(sci, geany->interface_prefs->editor_font, 0);
-
+	update_font(current, sci);
 	lexer = p_sci->send_message(current, SCI_GETLEXER, 0, 0);
 	p_sci->send_message(sci, SCI_SETLEXER, lexer, 0);
 	set_styles(current, sci);
@@ -167,6 +154,7 @@ static void sync_to_current(ScintillaObject *current, ScintillaObject *sci)
 	pos = p_sci->get_current_position(current);
 	p_sci->set_current_position(sci, pos, TRUE);
 	
+	/* override some defaults */
 	set_line_numbers(sci, TRUE, 0);
 	p_sci->send_message(sci, SCI_SETMARGINWIDTHN, 1, 0 ); /* hide marker margin */
 }
