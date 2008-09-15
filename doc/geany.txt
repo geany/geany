@@ -429,8 +429,8 @@ might be that the encoding of a file cannot be detected correctly so
 you have to set manually the encoding of the file in order to display
 it correctly. You can this in the file open dialog by selecting
 an encoding in the drop down box or by reloading the file with the
-file menu item "Reload as". The auto detection works well for most
-encodings but there are also some encodings known where auto detection
+file menu item "Reload as". The auto-detection works well for most
+encodings but there are also some encodings known where auto-detection
 has its problems. Auto detecting the encoding of a file is not easy
 and sometimes an encoding might be detected not correctly.
 
@@ -439,10 +439,10 @@ There are different ways to use different encodings in Geany:
 * Using the file open dialog
 
   This opens the file with the encoding specified in the encoding drop
-  down box. If the encoding is set to "Detect from file" auto detection
+  down box. If the encoding is set to "Detect from file" auto-detection
   will be used. If the encoding is set to "Without encoding (None)" the
   file will be opened without any character conversion and Geany will
-  not try to auto detect the encoding(see below for more information).
+  not try to auto-detect the encoding (see below for more information).
 
 * Using the "Reload as" menu item
 
@@ -456,7 +456,8 @@ There are different ways to use different encodings in Geany:
   change the encoding of the file.
 
 * Specifying the encoding in the file itself
-  As mentioned above, auto detecting the encoding of a file may fail on
+
+  As mentioned above, auto-detecting the encoding of a file may fail on
   some encodings. If you know that Geany doesn't open a certain file,
   you can add a special line to the beginning of the file to force an
   encoding when opening the file (for details see below).
@@ -510,7 +511,7 @@ Special encoding "None"
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 There is a special encoding "None" which is actually no real
-encoding. It is useful when you know that Geany cannot auto detect
+encoding. It is useful when you know that Geany cannot auto-detect
 the encoding of a file and it is not displayed correctly. Especially
 when the file contains NUL-bytes this can be useful to skip auto
 detection and open the file properly at least until the occurrence
