@@ -1397,9 +1397,16 @@ autocomplete_tags(GeanyDocument *doc, const gchar *root, gsize rootlen)
 		GString *words = g_string_sized_new(150);
 		guint j;
 
-		for (j = 0; ((j < tags->len) && (j < editor_prefs.autocompletion_max_entries)); ++j)
+		for (j = 0; j < tags->len; ++j)
 		{
-			if (j > 0) g_string_append_c(words, '\n');
+			if (j > 0)
+				g_string_append_c(words, '\n');
+
+			if (j == editor_prefs.autocompletion_max_entries)
+			{
+				g_string_append(words, "...");
+				break;
+			}
 			g_string_append(words, ((TMTag *) tags->pdata[j])->name);
 		}
 		show_autocomplete(sci, rootlen, words->str);

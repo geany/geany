@@ -1,7 +1,14 @@
+2008-09-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/editor.c:
+   Show ellipsis (...) item when there are too many symbol names for
+   autocompletion.
+
+
 2008-09-14 Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * COPYING: Fixing a little encoding issue in GPL text.
- * po/tr.po, po/LINGUAS, src/about.c, THANKS: Adding Turkish translation 
+ * po/tr.po, po/LINGUAS, src/about.c, THANKS: Adding Turkish translation
    provided by Gürkan Gür. Thanks for it.
 
 
