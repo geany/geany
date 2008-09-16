@@ -58,7 +58,7 @@ static struct
 menu_items;
 
 static enum State plugin_state;
-static GeanyEditor *our_editor = NULL;
+static GeanyEditor *our_editor = NULL;	/* original editor for split view */
 
 
 static gint sci_get_value(ScintillaObject *sci, gint message_id, gint param)
@@ -193,9 +193,9 @@ static void on_split_view(GtkMenuItem *menuitem, gpointer user_data)
 	gtk_paned_add1(GTK_PANED(pane), notebook);
 	g_object_unref(notebook);
 
-	our_editor = p_editor->create(doc);
-	sci = our_editor->sci;
-	sync_to_current(doc->editor->sci, sci);
+	our_editor = doc->editor;
+	sci = p_editor->create_widget(our_editor);
+	sync_to_current(our_editor->sci, sci);
 	gtk_paned_add2(GTK_PANED(pane), GTK_WIDGET(sci));
 
 	gtk_paned_set_position(GTK_PANED(pane), width);
@@ -217,7 +217,6 @@ static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data)
 	g_object_ref(notebook);
 	gtk_container_remove(GTK_CONTAINER(pane), notebook);
 	gtk_widget_destroy(pane);
-	p_editor->destroy(our_editor);
 	our_editor = NULL;
 	gtk_container_add(GTK_CONTAINER(parent), notebook);
 	g_object_unref(notebook);

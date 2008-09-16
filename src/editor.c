@@ -3753,6 +3753,7 @@ static void setup_sci_keys(ScintillaObject *sci)
 
 /* Create new editor widget (scintilla).
  * @note The @c "sci-notify" signal is connected separately. */
+/* TODO: change to use GeanyEditor */
 static ScintillaObject *create_new_sci(GeanyDocument *doc)
 {
 	ScintillaObject	*sci;
@@ -3793,6 +3794,29 @@ static ScintillaObject *create_new_sci(GeanyDocument *doc)
 }
 
 
+/** Create a new Scintilla @c GtkWidget based on the settings for @a editor.
+ * @param editor Editor settings.
+ * @return The new widget. */
+ScintillaObject *editor_create_widget(GeanyEditor *editor)
+{
+	const GeanyIndentPrefs *iprefs = get_default_indent_prefs();
+	ScintillaObject *old, *sci;
+
+	/* temporarily change editor to use the new sci widget */
+	old = editor->sci;
+	sci = create_new_sci(editor->document);
+	editor->sci = sci;
+
+	editor_set_indent_type(editor, iprefs->type);
+	editor_set_font(editor, interface_prefs.editor_font);
+
+	/* if editor already had a widget, restore it */
+	if (old)
+		editor->sci = old;
+	return sci;
+}
+
+
 GeanyEditor *editor_create(GeanyDocument *doc)
 {
 	const GeanyIndentPrefs *iprefs = get_default_indent_prefs();
@@ -3800,14 +3824,12 @@ GeanyEditor *editor_create(GeanyDocument *doc)
 
 	editor->document = doc;
 
-	editor->sci = create_new_sci(doc);
-	editor_set_indent_type(editor, iprefs->type);
-	editor_set_font(editor, interface_prefs.editor_font);
-
 	editor->auto_indent = (iprefs->auto_indent_mode != GEANY_AUTOINDENT_NONE);
 	editor->line_wrapping = editor_prefs.line_wrapping;
 	editor->scroll_percent = -1.0F;
 	editor->line_breaking = FALSE;
+
+	editor->sci = editor_create_widget(editor);
 	return editor;
 }
 

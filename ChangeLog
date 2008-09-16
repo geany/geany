@@ -5,6 +5,10 @@
    Fix Doxygen 1.5.4 undocumented parameter warnings.
    Improve dox for sciwrappers.c.
    Correct sci_grap_focus() misspelling.
+ * src/plugindata.h, src/plugins.c, src/editor.c, src/editor.h,
+   plugins/splitwindow.c:
+   Add editor_create_widget() to the API; remove editor_create(),
+   editor_destroy().
 
 
 2008-09-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
