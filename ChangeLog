@@ -6,6 +6,9 @@
    Improve dox for sciwrappers.c.
    Correct sci_grap_focus() misspelling.
    (Merged from split-window-plugin branch).
+ * doc/plugins.dox:
+   Fix wrong parameter for "project-close" signal.
+   (Merged from split-window-plugin branch).
 
 
 2008-09-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
