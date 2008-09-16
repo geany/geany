@@ -1055,7 +1055,9 @@ gboolean filetype_has_tags(GeanyFiletype *ft)
 }
 
 
-/** Find a filetype pointer from its @c name field. */
+/** Find a filetype pointer from its @c name field.
+ * @param name Filetype name.
+ * @return The filetype found, or @c NULL. */
 GeanyFiletype *filetypes_lookup_by_name(const gchar *name)
 {
 	GeanyFiletype *ft;

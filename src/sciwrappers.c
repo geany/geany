@@ -196,7 +196,9 @@ void sci_add_text(ScintillaObject* sci, const gchar* text)
 	}
 }
 
-/** Set all text. */
+/** Set all text.
+ * @param sci Scintilla widget.
+ * @param text Text. */
 void sci_set_text(ScintillaObject* sci, const gchar* text)
 {
 	if( text != NULL ){ /* if null text is passed to scintilla will segfault */
@@ -369,35 +371,47 @@ gint sci_marker_previous(ScintillaObject* sci, gint line, gint marker_mask, gboo
 }
 
 
-/** Get line number from character index. */
+/** Get line number from position.
+ * @param sci Scintilla widget.
+ * @param position Position. */ 
 gint sci_get_line_from_position(ScintillaObject* sci, gint position )
 {
 	return SSM(sci, SCI_LINEFROMPOSITION, position, 0);
 }
 
 
-/** Get column number relative to the start of the line that @a position is on. */
+/** Get column number relative to the start of the line that @a position is on.
+ * @param sci Scintilla widget.
+ * @param position Position. */ 
 gint sci_get_col_from_position(ScintillaObject* sci, gint position )
 {
 	return SSM(sci, SCI_GETCOLUMN, position, 0);
 }
 
 
-/** Get character index for the start of @a line. */
+/** Get position for the start of @a line.
+ * @param sci Scintilla widget.
+ * @param line Line.
+ * @return Position. */
 gint sci_get_position_from_line(ScintillaObject* sci, gint line )
 {
 	return SSM(sci, SCI_POSITIONFROMLINE, line, 0);
 }
 
 
-/** Get cursor position. */
+/** Get cursor position.
+ * @param sci Scintilla widget.
+ * @return Position. */
 gint sci_get_current_position(ScintillaObject* sci )
 {
 	return SSM(sci, SCI_GETCURRENTPOS, 0, 0);
 }
 
 
-/** Set the cursor position. */
+/** Set the cursor position.
+ * @param sci Scintilla widget.
+ * @param position Position.
+ * @param scroll_to_caret Whether to scroll the cursor in view. */
 void sci_set_current_position(ScintillaObject* sci, gint position, gboolean scroll_to_caret)
 {
 	if (scroll_to_caret)
@@ -420,21 +434,26 @@ void sci_set_current_line(ScintillaObject* sci, gint line)
 }
 
 
-/** Get total number of lines. */
+/** Get total number of lines.
+ * @param sci Scintilla widget. */
 gint sci_get_line_count( ScintillaObject* sci )
 {
 	return SSM(sci, SCI_GETLINECOUNT, 0, 0);
 }
 
 
-/** Set selection start position. */
+/** Set selection start position.
+ * @param sci Scintilla widget.
+ * @param position Position. */
 void sci_set_selection_start(ScintillaObject* sci, gint position)
 {
 	SSM(sci, SCI_SETSELECTIONSTART, position, 0);
 }
 
 
-/** Set selection end position. */
+/** Set selection end position.
+ * @param sci Scintilla widget.
+ * @param position Position. */
 void sci_set_selection_end(ScintillaObject* sci, gint position)
 {
 	SSM(sci, SCI_SETSELECTIONEND, position, 0);
@@ -471,28 +490,36 @@ void sci_clear(ScintillaObject* sci)
 }
 
 
-/** Get position of selection start. */
+/** Get position of selection start.
+ * @param sci Scintilla widget.
+ * @return Position. */
 gint sci_get_selection_start(ScintillaObject* sci)
 {
 	return SSM(sci, SCI_GETSELECTIONSTART,0,0);
 }
 
 
-/** Get position of selection end. */
+/** Get position of selection end.
+ * @param sci Scintilla widget.
+ * @return Position. */
 gint sci_get_selection_end(ScintillaObject* sci)
 {
 	return SSM(sci, SCI_GETSELECTIONEND,0,0);
 }
 
 
-/** Replace selection. */
+/** Replace selection.
+ * @param sci Scintilla widget.
+ * @param text Text. */
 void sci_replace_sel(ScintillaObject* sci, const gchar* text)
 {
 	SSM(sci, SCI_REPLACESEL,0, (sptr_t) text);
 }
 
 
-/** Get length of all text. */
+/** Get length of all text.
+ * @param sci Scintilla widget.
+ * @return Length. */
 gint sci_get_length(ScintillaObject* sci)
 {
 	return SSM(sci,SCI_GETLENGTH,0,0);
@@ -505,14 +532,21 @@ gint sci_get_lexer(ScintillaObject* sci)
 }
 
 
-/** Get line length. */
+/** Get line length.
+ * @param sci Scintilla widget.
+ * @param line Line number.
+ * @return Length. */
 gint sci_get_line_length(ScintillaObject* sci,gint line)
 {
 	return SSM(sci,SCI_LINELENGTH, line,0);
 }
 
 
-/** Returns: a NULL-terminated copy of the line text. */
+/* TODO: rename/change to use buffer? Otherwise inconsistent with sci_get_text*(). */
+/** Get line contents.
+ * @param sci Scintilla widget.
+ * @param line_num Line number.
+ * @return A @c NULL-terminated copy of the line text. */
 gchar *sci_get_line(ScintillaObject* sci, gint line_num)
 {
 	gint len = sci_get_line_length(sci, line_num);
@@ -524,23 +558,29 @@ gchar *sci_get_line(ScintillaObject* sci, gint line_num)
 }
 
 
-/** The last char will be null terminated, so ensure @a text has been allocated @a len + 1
- * bytes. */
+/** Get all text.
+ * @param sci Scintilla widget.
+ * @param len Length of @a text buffer, usually sci_get_length() + 1.
+ * @param text Text buffer; must be allocated @a len + 1 bytes for null-termination. */
 void sci_get_text(ScintillaObject* sci, gint len, gchar* text)
 {
 	SSM( sci, SCI_GETTEXT, len, (sptr_t) text );
 }
 
 
-/** Text must be allocated sci_get_selected_text_length() + 1, because
- * the selection will be NULL-terminated. */
+/** Get selected text.
+ * @param sci Scintilla widget.
+ * @param text Text buffer; must be allocated sci_get_selected_text_length() + 1 bytes
+ * for null-termination. */
 void sci_get_selected_text(ScintillaObject* sci, gchar* text)
 {
 	SSM( sci, SCI_GETSELTEXT, 0, (sptr_t) text);
 }
 
 
-/** Get selected text length. */
+/** Get selected text length.
+ * @param sci Scintilla widget.
+ * @return Length. */
 gint sci_get_selected_text_length(ScintillaObject* sci)
 {
 	return SSM( sci, SCI_GETSELTEXT, 0, 0);
@@ -561,14 +601,19 @@ void sci_get_xy_from_position(ScintillaObject* sci,gint pos, gint* x, gint* y)
 }
 
 
-/** Returns: whether @a line should be drawn on the screen (folding may have hidden it). */
+/** Check if a line is visible (folding may have hidden it).
+ * @param sci Scintilla widget.
+ * @param line Line number.
+ * @return Whether @a line will be drawn on the screen. */
 gboolean sci_get_line_is_visible(ScintillaObject* sci, gint line)
 {
 	return SSM(sci,SCI_GETLINEVISIBLE, line,0);
 }
 
 
-/** Make the @a line visible (folding may have hidden it). */
+/** Make the @a line visible (folding may have hidden it).
+ * @param sci Scintilla widget.
+ * @param line Line number. */
 void sci_ensure_line_is_visible(ScintillaObject* sci, gint line)
 {
 	SSM(sci,SCI_ENSUREVISIBLE,line,0);
@@ -637,14 +682,19 @@ void sci_set_tab_width(ScintillaObject * sci, gint width)
 }
 
 
-/** Get display tab width. */
+/** Get display tab width (this is not indent width, see GeanyIndentPrefs).
+ * @param sci Scintilla widget.
+ * @return Width. */
 gint sci_get_tab_width(ScintillaObject * sci)
 {
 	return SSM(sci, SCI_GETTABWIDTH, 0, 0);
 }
 
 
-/** Get character. */
+/** Get character.
+ * @param sci Scintilla widget.
+ * @param pos Position.
+ * @return Char. */
 gchar sci_get_char_at(ScintillaObject *sci, gint pos)
 {
 	return (gchar) SSM(sci, SCI_GETCHARAT, pos, 0);
@@ -669,7 +719,10 @@ void sci_use_popup(ScintillaObject *sci, gboolean enable)
 }
 
 
-/** You can also call this has_selection. */
+/* TODO: rename to has_selection. */
+/** Check if there's a selection.
+ * @param sci Scintilla widget.
+ * @return Whether a selection is present. */
 gboolean sci_can_copy(ScintillaObject *sci)
 {
 	if (SSM(sci, SCI_GETSELECTIONEND,0,0) - SSM(sci, SCI_GETSELECTIONSTART,0,0))
@@ -698,7 +751,8 @@ void sci_set_anchor(ScintillaObject *sci, gint pos)
 }
 
 
-/** Scroll the cursor in view. */
+/** Scroll the cursor in view.
+ * @param sci Scintilla widget. */
 void sci_scroll_caret(ScintillaObject *sci)
 {
 	SSM(sci, SCI_SCROLLCARET, 0, 0);
@@ -749,7 +803,10 @@ void sci_marker_delete_all(ScintillaObject *sci, gint marker)
 }
 
 
-/** Get style number for @a position. */
+/** Get style ID for @a position.
+ * @param sci Scintilla widget.
+ * @param position Position.
+ * @return Style ID. */
 gint sci_get_style_at(ScintillaObject *sci, gint position)
 {
 	return SSM(sci, SCI_GETSTYLEAT, position, 0);
@@ -774,7 +831,11 @@ void sci_clear_cmdkey(ScintillaObject *sci, gint key)
 }
 
 
-/** Text will be zero terminated and must be allocated (end - start + 1) bytes. */
+/** Get text between @a start and @a end.
+ * @param sci Scintilla widget.
+ * @param start Start.
+ * @param end End.
+ * @param text Text will be zero terminated and must be allocated (end - start + 1) bytes. */
 void sci_get_text_range(ScintillaObject *sci, gint start, gint end, gchar *text)
 {
 	struct TextRange tr;
@@ -797,14 +858,17 @@ void sci_selection_duplicate(ScintillaObject *sci)
 }
 
 
-/** Insert text. */
+/** Insert text.
+ * @param sci Scintilla widget.
+ * @param pos Position.
+ * @param text Text. */
 void sci_insert_text(ScintillaObject *sci, gint pos, const gchar *text)
 {
 	SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) text);
 }
 
 
-void sci_grap_focus(ScintillaObject *sci)
+void sci_grab_focus(ScintillaObject *sci)
 {
 	SSM(sci, SCI_GRABFOCUS, 0, 0);
 }
@@ -865,7 +929,9 @@ void sci_cmd(ScintillaObject * sci, gint cmd)
 }
 
 
-/** Get current line number. */
+/** Get current line number.
+ * @param sci Scintilla widget.
+ * @return Line number. */
 gint sci_get_current_line(ScintillaObject *sci)
 {
 	return SSM(sci, SCI_LINEFROMPOSITION, SSM(sci, SCI_GETCURRENTPOS, 0, 0), 0);
@@ -918,7 +984,11 @@ void sci_set_autoc_max_height(ScintillaObject *sci, gint val)
 	SSM(sci, SCI_AUTOCSETMAXHEIGHT, val, 0);
 }
 
-/** Find a matching brace at @a pos. */
+/** Find a matching brace at @a pos.
+ * @param sci Scintilla widget.
+ * @param pos Position.
+ * @return Matching brace position. */
+/* TODO: rename _matching_brace */
 gint sci_find_bracematch(ScintillaObject *sci, gint pos)
 {
 	return SSM(sci, SCI_BRACEMATCH, pos, 0);
@@ -949,13 +1019,17 @@ gint sci_get_pos_at_line_sel_end(ScintillaObject *sci, gint line)
 	return SSM(sci, SCI_GETLINESELENDPOSITION, line, 0);
 }
 
-/** Get selection mode. */
+/** Get selection mode.
+ * @param sci Scintilla widget.
+ * @return Selection mode. */
 gint sci_get_selection_mode(ScintillaObject *sci)
 {
 	return SSM(sci, SCI_GETSELECTIONMODE, 0, 0);
 }
 
-/** Set selection mode. */
+/** Set selection mode.
+ * @param sci Scintilla widget.
+ * @param mode Mode. */
 void sci_set_selection_mode(ScintillaObject *sci, gint mode)
 {
 	SSM(sci, SCI_SETSELECTIONMODE, mode, 0);
