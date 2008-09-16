@@ -38,6 +38,7 @@ typedef enum
 	GCB_DOCUMENT_OPEN,
 	GCB_DOCUMENT_SAVE,
 	GCB_DOCUMENT_ACTIVATE,
+	GCB_DOCUMENT_CLOSE,
 	GCB_PROJECT_OPEN,
 	GCB_PROJECT_SAVE,
 	GCB_PROJECT_CLOSE,
@@ -75,6 +76,7 @@ struct _GeanyObjectClass
 	void (*document_open)(GeanyDocument *doc);
 	void (*document_save)(GeanyDocument *doc);
 	void (*document_activate)(GeanyDocument *doc);
+	void (*document_close)(GeanyDocument *doc);
 	void (*project_open)(GKeyFile *keyfile);
 	void (*project_save)(GKeyFile *keyfile);
 	void (*project_close)(void);

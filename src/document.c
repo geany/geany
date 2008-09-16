@@ -475,53 +475,60 @@ gboolean document_close(GeanyDocument *doc)
 gboolean document_remove_page(guint page_num)
 {
 	GeanyDocument *doc = document_get_from_page(page_num);
+	Document *fdoc = DOCUMENT(doc);
 
-	if (doc != NULL)
+	if (doc == NULL)
 	{
-		Document *fdoc = DOCUMENT(doc);
-
-		if (doc->changed && ! dialogs_show_unsaved_file(doc))
-		{
-			return FALSE;
-		}
-		/* Checking real_path makes it likely the file exists on disk */
-		if (! main_status.closing_all && doc->real_path != NULL)
-			ui_add_recent_file(doc->file_name);
-
-		notebook_remove_page(page_num);
-		treeviews_remove_document(doc);
-		navqueue_remove_file(doc->file_name);
-		msgwin_status_add(_("File %s closed."), DOC_FILENAME(doc));
-		g_free(doc->encoding);
-		g_free(fdoc->saved_encoding.encoding);
-		g_free(doc->file_name);
-		g_free(doc->real_path);
-		tm_workspace_remove_object(doc->tm_file, TRUE, TRUE);
-
-		editor_destroy(doc->editor);
-		doc->editor = NULL;
-
-		doc->is_valid = FALSE;
-		doc->file_name = NULL;
-		doc->real_path = NULL;
-		doc->file_type = NULL;
-		doc->encoding = NULL;
-		doc->has_bom = FALSE;
-		doc->tm_file = NULL;
-		document_undo_clear(doc);
-		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0)
-		{
-			treeviews_update_tag_list(NULL, FALSE);
-			/*on_notebook1_switch_page(GTK_NOTEBOOK(main_widgets.notebook), NULL, 0, NULL);*/
-			ui_set_window_title(NULL);
-			ui_save_buttons_toggle(FALSE);
-			ui_document_buttons_update();
-			build_menu_update(NULL);
-		}
-		return TRUE;
+		geany_debug("Error: page_num: %d", page_num);
+		return FALSE;
 	}
-	geany_debug("Error: page_num: %d", page_num);
-	return FALSE;
+	
+	if (doc->changed && ! dialogs_show_unsaved_file(doc))
+	{
+		return FALSE;
+	}
+	
+	/* tell any plugins that the document is about to be closed */
+	if (geany_object)
+	{
+		g_signal_emit_by_name(geany_object, "document-close", doc);
+	}
+
+	/* Checking real_path makes it likely the file exists on disk */
+	if (! main_status.closing_all && doc->real_path != NULL)
+		ui_add_recent_file(doc->file_name);
+
+	notebook_remove_page(page_num);
+	treeviews_remove_document(doc);
+	navqueue_remove_file(doc->file_name);
+	msgwin_status_add(_("File %s closed."), DOC_FILENAME(doc));
+	g_free(doc->encoding);
+	g_free(fdoc->saved_encoding.encoding);
+	g_free(doc->file_name);
+	g_free(doc->real_path);
+	tm_workspace_remove_object(doc->tm_file, TRUE, TRUE);
+
+	editor_destroy(doc->editor);
+	doc->editor = NULL;
+
+	doc->is_valid = FALSE;
+	doc->file_name = NULL;
+	doc->real_path = NULL;
+	doc->file_type = NULL;
+	doc->encoding = NULL;
+	doc->has_bom = FALSE;
+	doc->tm_file = NULL;
+	document_undo_clear(doc);
+	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0)
+	{
+		treeviews_update_tag_list(NULL, FALSE);
+		/*on_notebook1_switch_page(GTK_NOTEBOOK(main_widgets.notebook), NULL, 0, NULL);*/
+		ui_set_window_title(NULL);
+		ui_save_buttons_toggle(FALSE);
+		ui_document_buttons_update();
+		build_menu_update(NULL);
+	}
+	return TRUE;
 }
 
 

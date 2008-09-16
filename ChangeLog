@@ -9,6 +9,11 @@
  * doc/plugins.dox:
    Fix wrong parameter for "project-close" signal.
    (Merged from split-window-plugin branch).
+ * src/geanyobject.c, src/geanyobject.h, src/document.c,
+   doc/plugins.dox:
+   Add plugin signal "document-close", sent just before a document is
+   closed.
+   (Merged from split-window-plugin branch).
 
 
 2008-09-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
