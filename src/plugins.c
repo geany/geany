@@ -115,7 +115,8 @@ static EditorFuncs editor_funcs = {
 	&editor_set_indicator,
 	&editor_set_indicator_on_line,
 	&editor_clear_indicators,
-	&editor_get_indent_prefs
+	&editor_get_indent_prefs,
+	&editor_create_widget
 };
 
 static ScintillaFuncs sci_funcs = {

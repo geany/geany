@@ -16,6 +16,7 @@ export_la_LDFLAGS        = -module -avoid-version
 vcdiff_la_LDFLAGS        = -module -avoid-version
 autosave_la_LDFLAGS      = -module -avoid-version
 filebrowser_la_LDFLAGS   = -module -avoid-version
+splitwindow_la_LDFLAGS   = -module -avoid-version
 
 if PLUGINS
 
@@ -26,7 +27,8 @@ plugin_LTLIBRARIES = \
 	export.la \
 	vcdiff.la \
 	autosave.la \
-	filebrowser.la
+	filebrowser.la \
+	splitwindow.la
 
 # Plugins not to be installed
 noinst_LTLIBRARIES = \
@@ -39,6 +41,7 @@ export_la_SOURCES        = export.c
 vcdiff_la_SOURCES        = vcdiff.c
 autosave_la_SOURCES      = autosave.c
 filebrowser_la_SOURCES   = filebrowser.c
+splitwindow_la_SOURCES   = splitwindow.c
 
 # instead of linking against all in $(GTK_LIBS), we link only against needed libs
 demoplugin_la_LIBADD    = $(GTK_LIBS)
@@ -48,6 +51,7 @@ export_la_LIBADD        = $(GTK_LIBS)
 vcdiff_la_LIBADD        = $(GTK_LIBS)
 autosave_la_LIBADD      = $(GTK_LIBS)
 filebrowser_la_LIBADD   = $(GTK_LIBS)
+splitwindow_la_LIBADD   = $(GTK_LIBS)
 
 endif # PLUGINS
 

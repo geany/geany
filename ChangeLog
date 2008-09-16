@@ -14,6 +14,13 @@
    Add plugin signal "document-close", sent just before a document is
    closed.
    (Merged from split-window-plugin branch).
+ * src/plugindata.h, src/plugins.c, src/editor.c, src/editor.h,
+   po/POTFILES.in, plugins/splitwindow.c, plugins/Makefile.am,
+   plugins/makefile.win32:
+   Merge split-window-plugin branch.
+   Add Split Window plugin (should work OK for viewing and basic text
+   editing; most other features are not implemented yet).
+   Add editor_create_widget() to the API.
 
 
 2008-09-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

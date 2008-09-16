@@ -142,6 +142,8 @@ GeanyEditor *editor_create(GeanyDocument *doc);
 
 void editor_destroy(GeanyEditor *editor);
 
+ScintillaObject *editor_create_widget(GeanyEditor *editor);
+
 void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer user_data);
 
 gboolean editor_start_auto_complete(GeanyDocument *doc, gint pos, gboolean force);
