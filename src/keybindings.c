@@ -97,7 +97,15 @@ static void apply_kb_accel(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer u
 /* This is used to set default keybindings on startup but at this point we don't want to
  * assign the keybinding to the menu_item (apply_kb_accel) otherwise it can't be overridden
  * by user keybindings anymore */
-/** Simple convenience function to fill a GeanyKeyBinding struct item. */
+/** Simple convenience function to fill a GeanyKeyBinding struct item.
+ * @param group
+ * @param key_id
+ * @param callback
+ * @param key
+ * @param mod
+ * @param name
+ * @param label
+ * @param menu_item */
 void keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 		GeanyKeyCallback callback, guint key, GdkModifierType mod,
 		gchar *name, gchar *label, GtkWidget *menu_item)
