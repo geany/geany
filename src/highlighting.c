@@ -459,10 +459,8 @@ static void styleset_common(ScintillaObject *sci, gint style_bits, filetype_id f
 	SSM(sci, SCI_SETWRAPSTARTINDENT, common_style_set.styling[GCS_LINE_WRAP_INDENT].foreground, 0);
 
 	/* indicator settings */
-	SSM(sci, SCI_INDICSETSTYLE, 2, INDIC_SQUIGGLE);
-	/* why? if I let this out, the indicator remains green with PHP */
+	SSM(sci, SCI_INDICSETSTYLE, 0, INDIC_SQUIGGLE);
 	SSM(sci, SCI_INDICSETFORE, 0, invert(0x0000ff));
-	SSM(sci, SCI_INDICSETFORE, 2, invert(0x0000ff));
 
 	/* define marker symbols
 	 * 0 -> line marker */

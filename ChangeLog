@@ -11,6 +11,11 @@
    Rename sci_find_bracematch() into sci_find_matching_brace().
  * src/main.c:
    Display SVN revision number in version information if available.
+ * src/editor.c, src/highlighting.c, src/plugindata.h, src/plugins.c,
+   src/sciwrappers.c, src/sciwrappers.h:
+   Replace the usage of the old Scintilla indicator API by the new
+   modern API and remove old hacks (patch by Jason Oster, thanks).
+   Add new sci_indic_clear() function to the plugin API.
 
 
 2008-09-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

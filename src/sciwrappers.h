@@ -161,6 +161,12 @@ gint				sci_get_first_visible_line	(ScintillaObject * sci);
 
 void				sci_set_styling				(ScintillaObject * sci, gint len, gint style);
 void				sci_start_styling			(ScintillaObject * sci, gint pos, gint mask);
+
+gint				sci_get_indic				(ScintillaObject * sci);
+void				sci_set_indic				(ScintillaObject * sci, gint indic);
+void				sci_indic_fill				(ScintillaObject * sci, gint pos, gint len);
+void				sci_indic_clear				(ScintillaObject * sci, gint pos, gint len);
+
 void				sci_select_all				(ScintillaObject * sci);
 gint				sci_get_line_indent_position(ScintillaObject * sci, gint line);
 void				sci_set_line_indentation	(ScintillaObject * sci, gint line, gint indent);

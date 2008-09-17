@@ -1467,13 +1467,6 @@ gboolean editor_start_auto_complete(GeanyDocument *doc, gint pos, gboolean force
 	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 	style = SSM(sci, SCI_GETSTYLEAT, pos - 2, 0);
 
-	/** TODO if we use other indicators in the future, we should adjust this code, currently
-	 *  it works only for the third indicator (INDIC2_MASK) */
-	if (style & INDIC2_MASK)
-	{	/* remove the indicator bit from the style */
-		style &= 0x0000000f;
-	}
-
 	/* don't autocomplete in comments and strings */
 	if (!force && !is_code_style(lexer, style))
 		return FALSE;
@@ -3277,10 +3270,8 @@ void editor_clear_indicators(GeanyEditor *editor)
 
 	last_pos = sci_get_length(editor->sci);
 	if (last_pos > 0)
-	{
-		sci_start_styling(editor->sci, 0, INDIC2_MASK);
-		sci_set_styling(editor->sci, last_pos, 0);
-	}
+		sci_indic_clear(editor->sci, 0, last_pos);
+
 	sci_marker_delete_all(editor->sci, 0);	/* remove the yellow error line marker */
 }
 
@@ -3337,17 +3328,11 @@ void editor_set_indicator_on_line(GeanyEditor *editor, gint line)
  **/
 void editor_set_indicator(GeanyEditor *editor, gint start, gint end)
 {
-	gint current_mask;
-
 	if (editor == NULL || start >= end)
 		return;
 
-	current_mask = sci_get_style_at(editor->sci, start);
-	current_mask &= INDICS_MASK;
-	current_mask |= INDIC2_MASK;
-
-	sci_start_styling(editor->sci, start, INDIC2_MASK);
-	sci_set_styling(editor->sci, end - start, current_mask);
+	sci_set_indic(editor->sci, 0);
+	sci_indic_fill(editor->sci, start, end - start);
 }
 
 
