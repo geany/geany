@@ -7,6 +7,8 @@
    Apply patch (with minor changes) from Jason Oster to improve showing
    brace indent guides on empty lines when appropriate (thanks,
    #2105982).
+ * doc/geany.txt, doc/geany.html:
+   Update feature list in About Geany section.
 
 
 2008-09-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

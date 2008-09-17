@@ -44,17 +44,18 @@ the GTK2 runtime libraries installed to run it.
 Some basic features of Geany are:
 
 * Syntax highlighting
-* Code completion
-* Auto completion of often-used constructs like "if", "for" and "while"
-* Auto completion of XML and HTML tags
+* Code folding
+* Symbol name auto-completion
+* Construct completion/snippets
+* Auto-closing of XML and HTML tags
 * Call tips
 * Many supported filetypes including C, Java, PHP, HTML, Python, Perl,
   Pascal, and others
-* Tag/Symbol lists
-* Plugin interface
+* Symbol lists
 * Code navigation
 * Build system to compile and execute your code
 * Simple project management
+* Plugin interface
 
 
 
