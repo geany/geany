@@ -37,11 +37,10 @@ About Geany
 Geany is a small and lightweight Integrated Development Environment. It
 was developed to provide a small and fast IDE, which has only a few
 dependencies from other packages. Another goal was to be as independent
-as possible from a special Desktop Environment like KDE or GNOME,
-so Geany only requires the GTK2 toolkit and therefore you only need
-the GTK2 runtime libraries installed to run it.
+as possible from a special Desktop Environment like KDE or GNOME -
+Geany only requires the GTK2 runtime libraries.
 
-Some basic features of Geany are:
+Some basic features of Geany:
 
 * Syntax highlighting
 * Code folding
@@ -2360,7 +2359,7 @@ Decrease indent by one space                              Deindents the current 
                                                           space.
 
 Smart line indent                                         Indents the current line or all selected lines
-                                                          with the same intentation as the previous line.
+                                                          with the same indentation as the previous line.
 
 **Settings**
 

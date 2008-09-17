@@ -9,6 +9,9 @@
    #2105982).
  * doc/geany.txt, doc/geany.html:
    Update feature list in About Geany section.
+ * doc/geany.txt, doc/geany.html:
+   Edit 'About Geany' text to be more concise.
+   A few minor fixes.
 
 
 2008-09-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
