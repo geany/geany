@@ -324,6 +324,7 @@ def build(bld):
         build_plugin('export')
         build_plugin('filebrowser')
         build_plugin('htmlchars')
+        build_plugin('splitwindow')
         build_plugin('vcdiff')
 
     # Translations
