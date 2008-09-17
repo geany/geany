@@ -62,7 +62,7 @@ const gchar *translators[][2] = {
 	{ "ro", "Alex Eftimie &lt;alex@rosedu.org&gt;" },
 	{ "ru_RU", "brahmann_ &lt;brahmann@pisem.net&gt;,\nNikita E. Shalaev &lt;nshalaev@eu.spb.ru&gt;" },
 	{ "sv", "Tony Mattsson &lt;superxorn@gmail.com&gt;" },
-	{ "tr", "Türkan Gür &lt;seqizz@gmail.com&gt;"},
+	{ "tr", "Gürkan Gür &lt;seqizz@gmail.com&gt;"},
 	{ "uk", "Boris Dibrov &lt;dibrov.bor@gmail.com&gt;" },
 	{ "vi_VN", "Clytie Siddall &lt;clytie@riverland.net.au&gt;" },
 	{ "zh_CN", "Dormouse Young &lt;mouselinux@163.com&gt;" },
