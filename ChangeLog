@@ -9,6 +9,8 @@
    API changes:
    Rename sci_can_copy() into sci_has_selection().
    Rename sci_find_bracematch() into sci_find_matching_brace().
+ * src/main.c:
+   Display SVN revision number in version information if available.
 
 
 2008-09-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
