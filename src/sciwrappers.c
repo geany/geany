@@ -712,7 +712,8 @@ static gint get_indent_guides_from_lexer(gint lexer)
 {
 	switch (lexer)
 	{
-		/* These languages use indentation for control blocks; the "look forward" method works best here */
+		/* These languages use indentation for control blocks; the "look forward" method works
+		 * best here */
 		case SCLEX_PYTHON:
 		case SCLEX_HASKELL:
 		case SCLEX_MAKEFILE:
@@ -749,7 +750,8 @@ static gint get_indent_guides_from_lexer(gint lexer)
 void sci_set_indentation_guides(ScintillaObject *sci, gboolean enable)
 {
 	gint lexer = sci_get_lexer(sci);
-	SSM(sci, SCI_SETINDENTATIONGUIDES, (enable ? get_indent_guides_from_lexer(lexer) : SC_IV_NONE), 0);
+	SSM(sci, SCI_SETINDENTATIONGUIDES,
+		(enable ? get_indent_guides_from_lexer(lexer) : SC_IV_NONE), 0);
 }
 
 
