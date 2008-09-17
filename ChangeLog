@@ -1,3 +1,10 @@
+2008-09-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * data/filetypes.css, src/highlighting.c:
+   Add missing 'directive' style to filetype CSS
+   (patch from Jason Oster, #2114697, thanks).
+
+
 2008-09-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/callbacks.c, THANKS:

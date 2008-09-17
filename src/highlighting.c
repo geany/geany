@@ -1888,7 +1888,7 @@ static void styleset_none(ScintillaObject *sci)
 
 static void styleset_css_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_style_array(GEANY_FILETYPES_CSS, 16);
+	new_style_array(GEANY_FILETYPES_CSS, 17);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x003399", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[0]);
 	get_keyfile_hex(config, config_home, "styling", "comment", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[1]);
 	get_keyfile_hex(config, config_home, "styling", "tag", "0x2166a4", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[2]);
@@ -1905,6 +1905,7 @@ static void styleset_css_init(gint ft_id, GKeyFile *config, GKeyFile *config_hom
 	get_keyfile_hex(config, config_home, "styling", "id", "0x7f0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[13]);
 	get_keyfile_hex(config, config_home, "styling", "identifier2", "0x6b6bff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[14]);
 	get_keyfile_hex(config, config_home, "styling", "important", "0xff0000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[15]);
+	get_keyfile_hex(config, config_home, "styling", "directive", "0x006bff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[16]);
 
 	style_sets[GEANY_FILETYPES_CSS].keywords = g_new(gchar*, 4);
 	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_CSS, 0,
@@ -1969,6 +1970,7 @@ static void styleset_css(ScintillaObject *sci)
 	set_sci_style(sci, SCE_CSS_ID, GEANY_FILETYPES_CSS, 13);
 	set_sci_style(sci, SCE_CSS_IDENTIFIER2, GEANY_FILETYPES_CSS, 14);
 	set_sci_style(sci, SCE_CSS_IMPORTANT, GEANY_FILETYPES_CSS, 15);
+	set_sci_style(sci, SCE_CSS_DIRECTIVE, GEANY_FILETYPES_CSS, 16);
 }
 
 
