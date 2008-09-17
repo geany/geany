@@ -1355,7 +1355,7 @@ static void goto_matching_brace(GeanyDocument *doc)
 	if (! utils_isbrace(sci_get_char_at(doc->editor->sci, pos), TRUE))
 		pos--; /* set pos to the brace */
 
-	new_pos = sci_find_bracematch(doc->editor->sci, pos);
+	new_pos = sci_find_matching_brace(doc->editor->sci, pos);
 	if (new_pos != -1)
 	{	/* set the cursor at the brace */
 		sci_set_current_position(doc->editor->sci, new_pos, FALSE);
@@ -1480,7 +1480,7 @@ static void duplicate_lines(ScintillaObject *sci)
 		editor_select_lines(sci, FALSE);
 		sci_selection_duplicate(sci);
 	}
-	else if (sci_can_copy(sci))
+	else if (sci_has_selection(sci))
 		sci_selection_duplicate(sci);
 	else
 		sci_line_duplicate(sci);

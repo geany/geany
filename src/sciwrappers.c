@@ -761,11 +761,10 @@ void sci_use_popup(ScintillaObject *sci, gboolean enable)
 }
 
 
-/* TODO: rename to has_selection. */
 /** Check if there's a selection.
  * @param sci Scintilla widget.
  * @return Whether a selection is present. */
-gboolean sci_can_copy(ScintillaObject *sci)
+gboolean sci_has_selection(ScintillaObject *sci)
 {
 	if (SSM(sci, SCI_GETSELECTIONEND,0,0) - SSM(sci, SCI_GETSELECTIONSTART,0,0))
 		return TRUE;
@@ -1030,8 +1029,7 @@ void sci_set_autoc_max_height(ScintillaObject *sci, gint val)
  * @param sci Scintilla widget.
  * @param pos Position.
  * @return Matching brace position. */
-/* TODO: rename _matching_brace */
-gint sci_find_bracematch(ScintillaObject *sci, gint pos)
+gint sci_find_matching_brace(ScintillaObject *sci, gint pos)
 {
 	return SSM(sci, SCI_BRACEMATCH, pos, 0);
 }

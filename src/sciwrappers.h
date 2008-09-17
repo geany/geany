@@ -37,7 +37,7 @@ void 				sci_add_text				(ScintillaObject* sci,  const gchar* text);
 void				sci_add_text_buffer			(ScintillaObject* sci,  const gchar* text, gint	len);
 gboolean			sci_can_redo				(ScintillaObject* sci);
 gboolean			sci_can_undo				(ScintillaObject* sci);
-gboolean			sci_can_copy				(ScintillaObject* sci);
+gboolean			sci_has_selection			(ScintillaObject* sci);
 void 				sci_undo					(ScintillaObject* sci);
 void 				sci_redo					(ScintillaObject* sci);
 void 				sci_empty_undo_buffer		(ScintillaObject* sci);
@@ -166,7 +166,7 @@ gint				sci_get_line_indent_position(ScintillaObject * sci, gint line);
 void				sci_set_line_indentation	(ScintillaObject * sci, gint line, gint indent);
 int					sci_get_line_indentation	(ScintillaObject * sci, gint line);
 void				sci_set_autoc_max_height	(ScintillaObject * sci, gint val);
-gint				sci_find_bracematch			(ScintillaObject * sci, gint pos);
+gint				sci_find_matching_brace		(ScintillaObject * sci, gint pos);
 
 gint				sci_get_overtype			(ScintillaObject * sci);
 void				sci_set_tab_indents			(ScintillaObject * sci, gboolean set);

@@ -149,11 +149,11 @@ static ScintillaFuncs sci_funcs = {
 	&sci_get_line_is_visible,
 	&sci_ensure_line_is_visible,
 	&sci_scroll_caret,
-	&sci_find_bracematch,
+	&sci_find_matching_brace,
 	&sci_get_style_at,
 	&sci_get_char_at,
 	&sci_get_current_line,
-	&sci_can_copy,
+	&sci_has_selection,
 	&sci_get_tab_width
 };
 

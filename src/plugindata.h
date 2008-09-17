@@ -41,7 +41,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 92,
+	GEANY_API_VERSION = 93,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -269,11 +269,11 @@ typedef struct ScintillaFuncs
 	gboolean (*get_line_is_visible) (struct _ScintillaObject* sci, gint line);
 	void	(*ensure_line_is_visible) (struct _ScintillaObject* sci, gint line);
 	void	(*scroll_caret) (struct _ScintillaObject* sci);
-	gint	(*find_bracematch) (struct _ScintillaObject* sci, gint pos);
+	gint	(*find_matching_brace) (struct _ScintillaObject* sci, gint pos);
 	gint	(*get_style_at) (struct _ScintillaObject *sci, gint position);
 	gchar	(*get_char_at) (struct _ScintillaObject *sci, gint pos);
 	gint	(*get_current_line) (struct _ScintillaObject *sci);
-	gboolean (*can_copy) (struct _ScintillaObject *sci);
+	gboolean (*has_selection) (struct _ScintillaObject *sci);
 	gint	(*get_tab_width) (struct _ScintillaObject *sci);
 }
 ScintillaFuncs;
@@ -471,6 +471,10 @@ EditorFuncs;
 	(doc_ptr ? doc_ptr->index : -1)
 #define DOC_IDX_VALID(doc_idx) \
 	((doc_idx) >= 0 && (guint)(doc_idx) < documents_array->len && documents[doc_idx]->is_valid)
+
+
+#define find_bracematch(x, y) find_matching_brace((x), (y))
+#define can_copy(x) has_selection((x))
 
 #endif	/* GEANY_DISABLE_DEPRECATED */
 

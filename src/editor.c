@@ -3357,7 +3357,7 @@ void editor_insert_color(GeanyDocument *doc, const gchar *colour)
 {
 	g_return_if_fail(doc != NULL);
 
-	if (sci_can_copy(doc->editor->sci))
+	if (sci_has_selection(doc->editor->sci))
 	{
 		gint start = sci_get_selection_start(doc->editor->sci);
 		const gchar *replacement = colour;

@@ -238,7 +238,7 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 
 	g_return_if_fail(doc != NULL && command != NULL);
 
-	if (! sci_can_copy(doc->editor->sci))
+	if (! sci_has_selection(doc->editor->sci))
 		return;
 
 	argv = g_strsplit(command, " ", -1);
@@ -403,7 +403,7 @@ static void cc_on_custom_command_menu_activate(GtkMenuItem *menuitem, gpointer u
 	if (doc == NULL)
 		return;
 
-	enable = sci_can_copy(doc->editor->sci) && (ui_prefs.custom_commands != NULL);
+	enable = sci_has_selection(doc->editor->sci) && (ui_prefs.custom_commands != NULL);
 
 	children = gtk_container_get_children(GTK_CONTAINER(user_data));
 	len = g_list_length(children);
@@ -615,7 +615,7 @@ void tools_word_count(void)
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_widget_set_name(dialog, "GeanyDialog");
 
-	if (sci_can_copy(doc->editor->sci))
+	if (sci_has_selection(doc->editor->sci))
 	{
 		text = g_malloc0(sci_get_selected_text_length(doc->editor->sci) + 1);
 		sci_get_selected_text(doc->editor->sci, text);

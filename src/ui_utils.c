@@ -340,7 +340,7 @@ void ui_update_popup_copy_items(GeanyDocument *doc)
 	if (doc == NULL)
 		enable = FALSE;
 	else
-		enable = sci_can_copy(doc->editor->sci);
+		enable = sci_has_selection(doc->editor->sci);
 
 	for (i = 0; i < G_N_ELEMENTS(widgets.popup_copy_items); i++)
 		gtk_widget_set_sensitive(widgets.popup_copy_items[i], enable);
@@ -363,7 +363,7 @@ void ui_update_menu_copy_items(GeanyDocument *doc)
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	if (IS_SCINTILLA(focusw))
-		enable = (doc == NULL) ? FALSE : sci_can_copy(doc->editor->sci);
+		enable = (doc == NULL) ? FALSE : sci_has_selection(doc->editor->sci);
 	else
 	if (GTK_IS_EDITABLE(focusw))
 		enable = gtk_editable_get_selection_bounds(GTK_EDITABLE(focusw), NULL, NULL);

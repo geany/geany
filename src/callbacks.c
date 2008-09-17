@@ -857,7 +857,7 @@ void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer user_data)
 		return;
 
 	sci = doc->editor->sci;
-	if (! sci_can_copy(sci))
+	if (! sci_has_selection(sci))
 	{
 		keybindings_send_command(GEANY_KEY_GROUP_SELECT, GEANY_KEYS_SELECT_WORD);
 		keep_sel = FALSE;
@@ -1006,7 +1006,7 @@ static void find_usage(gboolean in_session)
 	if (doc == NULL)
 		return;
 
-	if (sci_can_copy(doc->editor->sci))
+	if (sci_has_selection(doc->editor->sci))
 	{	/* take selected text if there is a selection */
 		search_text = g_malloc(sci_get_selected_text_length(doc->editor->sci) + 1);
 		sci_get_selected_text(doc->editor->sci, search_text);
@@ -1929,7 +1929,7 @@ on_context_action1_activate            (GtkMenuItem     *menuitem,
 	if (doc == NULL)
 		return;
 
-	if (sci_can_copy(doc->editor->sci))
+	if (sci_has_selection(doc->editor->sci))
 	{	/* take selected text if there is a selection */
 		word = g_malloc(sci_get_selected_text_length(doc->editor->sci) + 1);
 		sci_get_selected_text(doc->editor->sci, word);
