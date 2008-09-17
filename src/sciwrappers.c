@@ -32,6 +32,7 @@
 
 #include "geany.h"
 
+#include "SciLexer.h"
 #include "sciwrappers.h"
 #include "utils.h"
 
@@ -373,7 +374,7 @@ gint sci_marker_previous(ScintillaObject* sci, gint line, gint marker_mask, gboo
 
 /** Get line number from position.
  * @param sci Scintilla widget.
- * @param position Position. */ 
+ * @param position Position. */
 gint sci_get_line_from_position(ScintillaObject* sci, gint position )
 {
 	return SSM(sci, SCI_LINEFROMPOSITION, position, 0);
@@ -382,7 +383,7 @@ gint sci_get_line_from_position(ScintillaObject* sci, gint position )
 
 /** Get column number relative to the start of the line that @a position is on.
  * @param sci Scintilla widget.
- * @param position Position. */ 
+ * @param position Position. */
 gint sci_get_col_from_position(ScintillaObject* sci, gint position )
 {
 	return SSM(sci, SCI_GETCOLUMN, position, 0);
@@ -706,10 +707,49 @@ void sci_set_savepoint(ScintillaObject *sci)
 	SSM(sci, SCI_SETSAVEPOINT, 0, 0);
 }
 
+/* Should these be user-defined instead of hard-coded? */
+static gint get_indent_guides_from_lexer(gint lexer)
+{
+	switch (lexer)
+	{
+		/* These languages use indentation for control blocks; the "look forward" method works best here */
+		case SCLEX_PYTHON:
+		case SCLEX_HASKELL:
+		case SCLEX_MAKEFILE:
+		case SCLEX_ASM:
+		case SCLEX_SQL:
+		case SCLEX_PROPERTIES:
+		case SCLEX_FORTRAN: /* Is this the best option for Fortran? */
+		case SCLEX_CAML:
+			return SC_IV_LOOKFORWARD;
+
+		/* C-like (structured) languages benefit from the "look both" method */
+		case SCLEX_CPP:
+		case SCLEX_HTML:
+		case SCLEX_XML:
+		case SCLEX_PERL:
+		case SCLEX_LATEX:
+		case SCLEX_LUA:
+		case SCLEX_PASCAL:
+		case SCLEX_RUBY:
+		case SCLEX_TCL:
+		case SCLEX_F77:
+		case SCLEX_CSS:
+		case SCLEX_BASH:
+		case SCLEX_VHDL:
+		case SCLEX_FREEBASIC:
+		case SCLEX_D:
+		case SCLEX_OMS:
+			return SC_IV_LOOKBOTH;
+	}
+
+	return SC_IV_REAL;
+}
 
 void sci_set_indentation_guides(ScintillaObject *sci, gboolean enable)
 {
-	SSM(sci, SCI_SETINDENTATIONGUIDES, enable, 0);
+	gint lexer = sci_get_lexer(sci);
+	SSM(sci, SCI_SETINDENTATIONGUIDES, (enable ? get_indent_guides_from_lexer(lexer) : SC_IV_NONE), 0);
 }
 
 

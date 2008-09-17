@@ -2167,6 +2167,7 @@ void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type)
 			doc->tm_file = NULL;
 		}
 		highlighting_set_styles(doc->editor->sci, type->id);
+		sci_set_indentation_guides(doc->editor->sci, editor_prefs.show_indent_guide);
 		build_menu_update(doc);
 		queue_colourise(doc);
 	}

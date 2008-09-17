@@ -3,6 +3,10 @@
  * src/callbacks.c, THANKS:
    Cancel autocompletion on Undo/Redo (based on a patch by Jason Oster,
    thanks; #2102715).
+ * src/sciwrappers.c, src/document.c:
+   Apply patch (with minor changes) from Jason Oster to improve showing
+   brace indent guides on empty lines when appropriate (thanks,
+   #2105982).
 
 
 2008-09-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
