@@ -28,6 +28,7 @@ Note: features included in brackets have lower priority.
 	o (parsing tags from a memory buffer instead of a file on disk)
 	o (calltip support for non-C-like languages that use
 	  function_name(arguments) syntax)
+	o (custom pipe-separated tags files support)
 	o (better tags support for popular languages? - this is a moving
 	  target...)
 	o (tango-like icons for the symbol list)
@@ -50,8 +51,8 @@ Wishlist
 --------
 Note: these items might not get worked on.
 
-	o Some kind of support for ctags files
+	o Some kind of support for CTags tags files
 	o Scope resolution for object members
-	o Multiline regex support (requires work on Scintilla)
-	o Split window editing
-	o Python plugin interface
+	o Multiline regex support (may require work on Scintilla, or
+	  alternatively could perhaps use SCI_GETCHARACTERPOINTER)
+	o Python plugin interface (different concept from Lua scripting).
