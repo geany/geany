@@ -155,7 +155,7 @@ static ScintillaFuncs sci_funcs = {
 	&sci_get_current_line,
 	&sci_has_selection,
 	&sci_get_tab_width,
-	&sci_indic_clear
+	&sci_indicator_clear
 };
 
 static TemplateFuncs template_funcs = {

@@ -1010,22 +1010,26 @@ void sci_start_styling(ScintillaObject *sci, gint pos, gint mask)
 	SSM(sci, SCI_STARTSTYLING, pos, mask);
 }
 
-gint sci_get_indic(ScintillaObject *sci)
+gint sci_get_indicator(ScintillaObject *sci)
 {
 	return SSM(sci, SCI_GETINDICATORCURRENT, 0, 0);
 }
 
-void sci_set_indic(ScintillaObject *sci, gint indic)
+void sci_set_indicator(ScintillaObject *sci, gint indic)
 {
 	SSM(sci, SCI_SETINDICATORCURRENT, indic, 0);
 }
 
-void sci_indic_fill(ScintillaObject *sci, gint pos, gint len)
+void sci_indicator_fill(ScintillaObject *sci, gint pos, gint len)
 {
 	SSM(sci, SCI_INDICATORFILLRANGE, pos, len);
 }
 
-void sci_indic_clear(ScintillaObject *sci, gint pos, gint len)
+/** Clear a range of text from any set indicators. Starting at @a pos, @a len characters long.
+ * @param sci Scintilla widget.
+ * @param pos Starting position.
+ * @param len Length. */
+void sci_indicator_clear(ScintillaObject *sci, gint pos, gint len)
 {
 	SSM(sci, SCI_INDICATORCLEARRANGE, pos, len);
 }

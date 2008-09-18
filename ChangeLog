@@ -4,6 +4,8 @@
    Display also the style of the current position in the status bar
    when debug mode is enabled.
    No need to make the debugging strings translatable in the status bar.
+ * src/editor.c, src/plugins.c, src/sciwrappers.c, src/sciwrappers.h:
+   Rename the new indicator functions and add documentation comment.
 
 
 2008-09-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -3270,7 +3270,7 @@ void editor_clear_indicators(GeanyEditor *editor)
 
 	last_pos = sci_get_length(editor->sci);
 	if (last_pos > 0)
-		sci_indic_clear(editor->sci, 0, last_pos);
+		sci_indicator_clear(editor->sci, 0, last_pos);
 
 	sci_marker_delete_all(editor->sci, 0);	/* remove the yellow error line marker */
 }
@@ -3331,8 +3331,8 @@ void editor_set_indicator(GeanyEditor *editor, gint start, gint end)
 	if (editor == NULL || start >= end)
 		return;
 
-	sci_set_indic(editor->sci, 0);
-	sci_indic_fill(editor->sci, start, end - start);
+	sci_set_indicator(editor->sci, 0);
+	sci_indicator_fill(editor->sci, start, end - start);
 }
 
 
