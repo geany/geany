@@ -6,6 +6,9 @@
    No need to make the debugging strings translatable in the status bar.
  * src/editor.c, src/plugins.c, src/sciwrappers.c, src/sciwrappers.h:
    Rename the new indicator functions and add documentation comment.
+ * src/msgwindow.c:
+   Handle error messages and warnings from the mcs (Mono) compiler like
+   those from Pascal or Basic compilers.
 
 
 2008-09-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
