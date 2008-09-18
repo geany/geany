@@ -3768,7 +3768,6 @@ static ScintillaObject *create_new_sci(GeanyDocument *doc)
 
 	setup_sci_keys(sci);
 
-	sci_set_tab_indents(sci, editor_prefs.use_tab_to_indent);
 	sci_set_symbol_margin(sci, editor_prefs.show_markers_margin);
 	sci_set_lines_wrapped(sci, editor_prefs.line_wrapping);
 	sci_set_scrollbar_mode(sci, editor_prefs.show_scrollbars);

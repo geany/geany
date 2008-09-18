@@ -5702,6 +5702,26 @@ Match braces</property>
 				  <property name="fill">True</property>
 				</packing>
 			      </child>
+
+			      <child>
+				<widget class="GtkCheckButton" id="check_tab_key_indents">
+				  <property name="visible">True</property>
+				  <property name="tooltip" translatable="yes">Pressing tab/shift-tab indents/unindents instead of inserting a tab character.</property>
+				  <property name="can_focus">True</property>
+				  <property name="label" translatable="yes">Tab key indents</property>
+				  <property name="use_underline">True</property>
+				  <property name="relief">GTK_RELIEF_NORMAL</property>
+				  <property name="focus_on_click">True</property>
+				  <property name="active">False</property>
+				  <property name="inconsistent">False</property>
+				  <property name="draw_indicator">True</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">False</property>
+				</packing>
+			      </child>
 			    </widget>
 			  </child>
 			</widget>
@@ -5847,7 +5867,7 @@ Match braces</property>
 				  <property name="visible">True</property>
 				  <property name="tooltip" translatable="yes">Fold or unfold all children of a fold point. By pressing the Shift key while clicking on a fold symbol the contrary behavior is used.</property>
 				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">Fold/Unfold all children of a fold point</property>
+				  <property name="label" translatable="yes">Fold/unfold all children of a fold point</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
 				  <property name="focus_on_click">True</property>
@@ -6049,10 +6069,6 @@ Match braces</property>
 		      <property name="expand">False</property>
 		      <property name="fill">True</property>
 		    </packing>
-		  </child>
-
-		  <child>
-		    <placeholder/>
 		  </child>
 		</widget>
 		<packing>

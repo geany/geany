@@ -120,7 +120,8 @@ static void bool_settings_foreach(GKeyFile *config, SettingCallbackAction action
 		{&search_prefs.use_current_word, PACKAGE, "pref_main_search_use_current_word", (gpointer)TRUE},
 		{&search_prefs.use_current_file_dir, "search", "pref_search_current_file_dir", (gpointer)TRUE},
 
-		{&editor_prefs.indentation->detect_type, PACKAGE, "check_detect_indent", (gpointer)FALSE}
+		{&editor_prefs.indentation->detect_type, PACKAGE, "check_detect_indent", (gpointer)FALSE},
+		{&editor_prefs.use_tab_to_indent, PACKAGE, "use_tab_to_indent", (gpointer)TRUE}
 	};
 
 	for (i = 0; i < G_N_ELEMENTS(items); i++)
@@ -493,7 +494,6 @@ static void save_ui_prefs(GKeyFile *config)
 static void save_hidden_prefs(GKeyFile *config)
 {
 	write_hidden_pref_boolean(config, PACKAGE, "show_editor_scrollbars", editor_prefs.show_scrollbars);
-	write_hidden_pref_boolean(config, PACKAGE, "use_tab_to_indent", editor_prefs.use_tab_to_indent);
 	write_hidden_pref_boolean(config, PACKAGE, "brace_match_ltgt", editor_prefs.brace_match_ltgt);
 	write_hidden_pref_boolean(config, PACKAGE, "use_gtk_word_boundaries", editor_prefs.use_gtk_word_boundaries);
 	write_hidden_pref_boolean(config, PACKAGE, "complete_snippets_whilst_editing", editor_prefs.complete_snippets_whilst_editing);
@@ -632,7 +632,6 @@ static void load_dialog_prefs(GKeyFile *config)
 	editor_prefs.symbolcompletion_min_chars = utils_get_setting_integer(config, PACKAGE, "symbolcompletion_min_chars", GEANY_MIN_SYMBOLLIST_CHARS);
 	editor_prefs.symbolcompletion_max_height = utils_get_setting_integer(config, PACKAGE, "symbolcompletion_max_height", GEANY_MAX_SYMBOLLIST_HEIGHT);
 	editor_prefs.line_wrapping = utils_get_setting_boolean(config, PACKAGE, "line_wrapping", FALSE); /* default is off for better performance */
-	editor_prefs.use_tab_to_indent = utils_get_setting_boolean(config, PACKAGE, "use_tab_to_indent", FALSE);
 	editor_prefs.use_indicators = utils_get_setting_boolean(config, PACKAGE, "use_indicators", TRUE);
 	editor_prefs.show_indent_guide = utils_get_setting_boolean(config, PACKAGE, "show_indent_guide", FALSE);
 	editor_prefs.show_white_space = utils_get_setting_boolean(config, PACKAGE, "show_white_space", FALSE);

@@ -7,6 +7,11 @@
  * src/plugindata.h:
    Fix ScintillaFuncs::indic_clear() return type, and rename to
    indicator_clear().
+ * src/interface.c, src/prefs.c, src/keyfile.c, src/document.c,
+   src/editor.c, src/editor.h, doc/geany.txt, doc/geany.html,
+   geany.glade:
+   Add 'Tab key indents' pref, which replaces hidden pref
+   'use_tab_to_indent'; it's now on by default.
 
 
 2008-09-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

@@ -315,6 +315,7 @@ void document_apply_update_prefs(GeanyDocument *doc)
 
 	/* update indent width, tab width */
 	editor_set_indent_type(editor, editor->indent_type);
+	sci_set_tab_indents(sci, editor_prefs.use_tab_to_indent);
 
 	sci_set_autoc_max_height(sci, editor_prefs.symbolcompletion_max_height);
 
@@ -482,12 +483,12 @@ gboolean document_remove_page(guint page_num)
 		geany_debug("Error: page_num: %d", page_num);
 		return FALSE;
 	}
-	
+
 	if (doc->changed && ! dialogs_show_unsaved_file(doc))
 	{
 		return FALSE;
 	}
-	
+
 	/* tell any plugins that the document is about to be closed */
 	if (geany_object)
 	{

@@ -89,7 +89,7 @@ typedef struct GeanyEditorPrefs
 	gboolean	folding;
 	gboolean	unfold_all_children;
 	gboolean	disable_dnd;
-	gboolean	use_tab_to_indent;	/* hidden pref makes pressing Tab key like Ctrl-I */
+	gboolean	use_tab_to_indent;	/* makes tab key indent instead of insert a tab char */
 	gboolean	smart_home_key;
 	gboolean	newline_strip;
 	gboolean	auto_complete_symbols;

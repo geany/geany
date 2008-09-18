@@ -1482,6 +1482,17 @@ Auto-indent mode
         Like *Current chars* but for C-like languages, make a closing
         ``}`` brace line up with the matching opening brace.
 
+Tab key indents
+    If set, pressing tab will indent the current line or selection, and
+    unindent when pressing Shift-tab. Otherwise, the tab key will
+    insert a tab character into the document (which can be different
+    from indentation, depending on the indent type).
+
+    .. note::
+        There are also separate configurable keybindings for indent &
+        unindent, but this pref allows the tab key to have different
+        meanings in different contexts - e.g. for snippet completion.
+
 Features
 ````````
 
@@ -3242,8 +3253,6 @@ brace_match_ltgt                  Whether to highlight <, > angle brackets.    f
 show_editor_scrollbars            Whether to display scrollbars. If set to     true
                                   false, the horizontal and vertical
                                   scrollbars are hidden completely.
-use_tab_to_indent                 Whether pressing tab when a line is          true
-                                  selected will indent the line.
 use_gtk_word_boundaries           Whether to look for the end of a word when   true
                                   using word-boundary related Scintilla
                                   commands (see `Scintilla keyboard

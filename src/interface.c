@@ -2703,6 +2703,7 @@ create_prefs_dialog (void)
   GtkObject *spin_tab_width_adj;
   GtkWidget *spin_tab_width;
   GtkWidget *check_detect_indent;
+  GtkWidget *check_tab_key_indents;
   GtkWidget *label195;
   GtkWidget *frame14;
   GtkWidget *alignment17;
@@ -3694,6 +3695,11 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (0), 0, 0);
   gtk_tooltips_set_tip (tooltips, check_detect_indent, _("Whether to detect the indentation type from file contents when a file is opened."), NULL);
 
+  check_tab_key_indents = gtk_check_button_new_with_mnemonic (_("Tab key indents"));
+  gtk_widget_show (check_tab_key_indents);
+  gtk_box_pack_start (GTK_BOX (vbox25), check_tab_key_indents, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_tab_key_indents, _("Pressing tab/shift-tab indents/unindents instead of inserting a tab character."), NULL);
+
   label195 = gtk_label_new (_("<b>Indentation</b>"));
   gtk_widget_show (label195);
   gtk_frame_set_label_widget (GTK_FRAME (frame27), label195);
@@ -3733,7 +3739,7 @@ create_prefs_dialog (void)
   gtk_box_pack_start (GTK_BOX (vbox17), check_folding, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_folding, _("Whether to enable folding the code"), NULL);
 
-  check_unfold_children = gtk_check_button_new_with_mnemonic (_("Fold/Unfold all children of a fold point"));
+  check_unfold_children = gtk_check_button_new_with_mnemonic (_("Fold/unfold all children of a fold point"));
   gtk_widget_show (check_unfold_children);
   gtk_box_pack_start (GTK_BOX (vbox17), check_unfold_children, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_unfold_children, _("Fold or unfold all children of a fold point. By pressing the Shift key while clicking on a fold symbol the contrary behavior is used."), NULL);
@@ -4920,6 +4926,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, label221, "label221");
   GLADE_HOOKUP_OBJECT (prefs_dialog, spin_tab_width, "spin_tab_width");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_detect_indent, "check_detect_indent");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_tab_key_indents, "check_tab_key_indents");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label195, "label195");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame14, "frame14");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment17, "alignment17");

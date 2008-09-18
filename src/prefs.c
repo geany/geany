@@ -116,7 +116,8 @@ static void toggle_prefs_foreach(PrefCallbackAction action)
 		{"check_search_use_current_word", &search_prefs.use_current_word},
 		{"check_fif_current_dir", &search_prefs.use_current_file_dir},
 
-		{"check_detect_indent", &editor_prefs.indentation->detect_type}
+		{"check_detect_indent", &editor_prefs.indentation->detect_type},
+		{"check_tab_key_indents", &editor_prefs.use_tab_to_indent}
 	};
 
 	for (i = 0; i < G_N_ELEMENTS(items); i++)
