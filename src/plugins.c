@@ -1130,7 +1130,7 @@ static void pm_dialog_response(GtkDialog *dialog, gint response, gpointer user_d
 
 static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 {
-	GtkWidget *vbox, *vbox2, *label_vbox, *hbox, *swin, *label, *label2;
+	GtkWidget *vbox, *vbox2, *label_vbox, *hbox, *swin, *label, *label2, *desc_win;
 
 	/* before showing the dialog, we need to create the list of available plugins */
 	load_all_plugins();
@@ -1155,7 +1155,7 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(swin), GTK_SHADOW_IN);
 	gtk_container_add(GTK_CONTAINER(swin), pm_widgets.tree);
 
-	label = gtk_label_new(_("Below is a list of available plugins. "
+	label = geany_wrap_label_new(_("Below is a list of available plugins. "
 		"Select the plugins which should be loaded when Geany is started."));
 
 	pm_widgets.configure_button = gtk_button_new_from_stock(GTK_STOCK_PREFERENCES);
@@ -1166,7 +1166,13 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	label2 = gtk_label_new(_("<b>Plugin details:</b>"));
 	gtk_label_set_use_markup(GTK_LABEL(label2), TRUE);
 	gtk_misc_set_alignment(GTK_MISC(label2), 0, 0.5);
+
 	pm_widgets.description_label = geany_wrap_label_new("");
+	desc_win = gtk_scrolled_window_new(NULL, NULL);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(desc_win),
+		GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(desc_win),
+		pm_widgets.description_label);
 
 	hbox = gtk_hbox_new(FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), label2, TRUE, TRUE, 0);
@@ -1174,7 +1180,7 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 
 	label_vbox = gtk_vbox_new(FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(label_vbox), hbox, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(label_vbox), pm_widgets.description_label, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(label_vbox), desc_win, FALSE, FALSE, 0);
 
 	vbox2 = gtk_vbox_new(FALSE, 6);
 	gtk_box_pack_start(GTK_BOX(vbox2), label, FALSE, FALSE, 5);

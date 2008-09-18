@@ -1,3 +1,11 @@
+2008-09-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/plugins.c:
+   Use wrap label for the first label in the plugin manager dialog.
+   Use scrolled window for plugin details text area to avoid resizing
+   dialog components if a plugin has a long description.
+
+
 2008-09-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * data/filetypes.css, src/highlighting.c:
