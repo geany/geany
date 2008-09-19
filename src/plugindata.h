@@ -473,10 +473,6 @@ EditorFuncs;
 #define DOC_IDX_VALID(doc_idx) \
 	((doc_idx) >= 0 && (guint)(doc_idx) < documents_array->len && documents[doc_idx]->is_valid)
 
-
-#define find_bracematch(x, y) find_matching_brace((x), (y))
-#define can_copy(x) has_selection((x))
-
 #endif	/* GEANY_DISABLE_DEPRECATED */
 
 #endif

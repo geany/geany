@@ -3,6 +3,8 @@
  * src/sciwrappers.c:
    Disable indent guides for the Diff filetype, as they can be
    distracting as added/removed lines don't get them.
+ * src/plugindata.h:
+   Remove 2 unnecessary deprecated macros.
 
 
 2008-09-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
