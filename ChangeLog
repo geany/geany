@@ -5,6 +5,9 @@
    distracting as added/removed lines don't get them.
  * src/plugindata.h:
    Remove 2 unnecessary deprecated macros.
+ * src/filetypes.c, src/filetypes.h:
+   Add GeanyFiletypePrivate instead of using inheritance for non-public
+   fields (this was unnecessary and meant using ugly casts).
 
 
 2008-09-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

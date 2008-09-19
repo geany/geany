@@ -132,6 +132,8 @@ struct GeanyFiletype
 	struct build_programs	*programs;
 	struct build_actions	*actions;
 	GeanyFiletypeGroupID	group;
+
+	struct GeanyFiletypePrivate	*priv;	/* must be last, append fields before this item */
 };
 
 extern GPtrArray *filetypes_array;

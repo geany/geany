@@ -42,15 +42,13 @@
 #include "ui_utils.h"
 
 
-/* This type 'inherits' from filetype so FullFileType* can be cast to filetype*. */
-typedef struct FullFileType
+/* Private GeanyFiletype fields */
+typedef struct GeanyFiletypePrivate
 {
-	GeanyFiletype	public;
-	/* Private fields */
 	GtkWidget		*menu_item;			/* holds a pointer to the menu item for this filetype */
 	gboolean		keyfile_loaded;
 }
-FullFileType;
+GeanyFiletypePrivate;
 
 
 GPtrArray *filetypes_array = NULL;	/* Dynamic array of filetype pointers */
@@ -476,12 +474,13 @@ static void init_builtin_filetypes(void)
 /* initialize fields. */
 static GeanyFiletype *filetype_new(void)
 {
-	FullFileType *fft = g_new0(FullFileType, 1);
-	GeanyFiletype *ft = (GeanyFiletype*) fft;
+	GeanyFiletype *ft = g_new0(GeanyFiletype, 1);
 
 	ft->lang = -2;	/* assume no tagmanager parser */
 	ft->programs = g_new0(struct build_programs, 1);
 	ft->actions = g_new0(struct build_actions, 1);
+
+	ft->priv = g_new0(GeanyFiletypePrivate, 1);
 	return ft;
 }
 
@@ -788,16 +787,13 @@ GeanyFiletype *filetypes_detect_from_file(const gchar *utf8_filename)
 
 void filetypes_select_radio_item(const GeanyFiletype *ft)
 {
-	FullFileType *fft;
-
 	/* ignore_callback has to be set by the caller */
 	g_return_if_fail(ignore_callback);
 
 	if (ft == NULL)
 		ft = filetypes[GEANY_FILETYPES_NONE];
 
-	fft = (FullFileType*)ft;
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(fft->menu_item), TRUE);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ft->priv->menu_item), TRUE);
 }
 
 
@@ -817,11 +813,10 @@ static void create_radio_menu_item(GtkWidget *menu, const gchar *label, GeanyFil
 {
 	static GSList *group = NULL;
 	GtkWidget *tmp;
-	FullFileType *fft = (FullFileType*)ftype;
 
 	tmp = gtk_radio_menu_item_new_with_label(group, label);
 	group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(tmp));
-	fft->menu_item = tmp;
+	ftype->priv->menu_item = tmp;
 	gtk_widget_show(tmp);
 	gtk_container_add(GTK_CONTAINER(menu), tmp);
 	g_signal_connect(tmp, "activate", G_CALLBACK(on_filetype_change), (gpointer) ftype);
@@ -984,18 +979,20 @@ static void load_system_keyfile(GKeyFile *key_file, const gchar *file, GKeyFileF
 void filetypes_load_config(gint ft_id, gboolean reload)
 {
 	GKeyFile *config, *config_home;
-	FullFileType *fft = (FullFileType*)filetypes[ft_id];
+	GeanyFiletypePrivate *pft;
 
 	g_return_if_fail(ft_id >= 0 && ft_id < (gint) filetypes_array->len);
 
+	pft = filetypes[ft_id]->priv;
+
 	/* when reloading, proceed only if the settings were already loaded */
-	if (reload && ! fft->keyfile_loaded)
+	if (reload && ! pft->keyfile_loaded)
 		return;
 
 	/* when not reloading, load the settings only once */
-	if (! reload && fft->keyfile_loaded)
+	if (! reload && pft->keyfile_loaded)
 		return;
-	fft->keyfile_loaded = TRUE;
+	pft->keyfile_loaded = TRUE;
 
 	config = g_key_file_new();
 	config_home = g_key_file_new();
