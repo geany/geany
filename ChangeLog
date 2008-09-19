@@ -1,3 +1,10 @@
+2008-09-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/sciwrappers.c:
+   Disable indent guides for the Diff filetype, as they can be
+   distracting as added/removed lines don't get them.
+
+
 2008-09-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/ui_utils.c:

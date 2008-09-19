@@ -712,6 +712,13 @@ static gint get_indent_guides_from_lexer(gint lexer)
 {
 	switch (lexer)
 	{
+		/* Lines added/removed are prefixed with +/- characters, so
+		 * those lines will not be shown with any indentation guides.
+		 * It can be distracting that only a few of lines in a diff/patch
+		 * file will show the guides. */
+		case SCLEX_DIFF:
+			return SC_IV_NONE;
+
 		/* These languages use indentation for control blocks; the "look forward" method works
 		 * best here */
 		case SCLEX_PYTHON:
