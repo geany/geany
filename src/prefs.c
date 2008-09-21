@@ -1130,7 +1130,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		{
 			if (documents[i]->is_valid)
 			{
-				document_apply_update_prefs(documents[i]);
+				editor_apply_update_prefs(documents[i]->editor);
 				if (! editor_prefs.folding)
 					editor_unfold_all(documents[i]);
 			}

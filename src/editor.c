@@ -3845,3 +3845,99 @@ void editor_init(void)
 	editor_prefs.indentation = &indent_prefs;
 }
 
+
+/** TODO: Should these be user-defined instead of hard-coded? */
+void editor_set_indentation_guides(GeanyEditor *editor)
+{
+	gint mode;
+	gint lexer;
+
+	g_return_if_fail(editor != NULL);
+
+	if (! editor_prefs.show_indent_guide)
+	{
+		sci_set_indentation_guides(editor->sci, SC_IV_NONE);
+		return;
+	}
+
+	lexer = sci_get_lexer(editor->sci);
+	switch (lexer)
+	{
+		/* Lines added/removed are prefixed with +/- characters, so
+		 * those lines will not be shown with any indentation guides.
+		 * It can be distracting that only a few of lines in a diff/patch
+		 * file will show the guides. */
+		case SCLEX_DIFF:
+			mode = SC_IV_NONE;
+
+		/* These languages use indentation for control blocks; the "look forward" method works
+		 * best here */
+		case SCLEX_PYTHON:
+		case SCLEX_HASKELL:
+		case SCLEX_MAKEFILE:
+		case SCLEX_ASM:
+		case SCLEX_SQL:
+		case SCLEX_PROPERTIES:
+		case SCLEX_FORTRAN: /* Is this the best option for Fortran? */
+		case SCLEX_CAML:
+			mode = SC_IV_LOOKFORWARD;
+
+		/* C-like (structured) languages benefit from the "look both" method */
+		case SCLEX_CPP:
+		case SCLEX_HTML:
+		case SCLEX_XML:
+		case SCLEX_PERL:
+		case SCLEX_LATEX:
+		case SCLEX_LUA:
+		case SCLEX_PASCAL:
+		case SCLEX_RUBY:
+		case SCLEX_TCL:
+		case SCLEX_F77:
+		case SCLEX_CSS:
+		case SCLEX_BASH:
+		case SCLEX_VHDL:
+		case SCLEX_FREEBASIC:
+		case SCLEX_D:
+		case SCLEX_OMS:
+			mode = SC_IV_LOOKBOTH;
+		default:
+			mode = SC_IV_REAL;
+	}
+
+	sci_set_indentation_guides(editor->sci, mode);
+}
+
+
+/* Apply just the prefs that can change in the Preferences dialog */
+void editor_apply_update_prefs(GeanyEditor *editor)
+{
+	ScintillaObject *sci;
+
+	g_return_if_fail(editor != NULL);
+
+	sci = editor->sci;
+
+	sci_set_mark_long_lines(sci, editor_prefs.long_line_type,
+		editor_prefs.long_line_column, editor_prefs.long_line_color);
+
+	/* update indent width, tab width */
+	editor_set_indent_type(editor, editor->indent_type);
+	sci_set_tab_indents(sci, editor_prefs.use_tab_to_indent);
+
+	sci_set_autoc_max_height(sci, editor_prefs.symbolcompletion_max_height);
+
+	editor_set_indentation_guides(editor);
+
+	sci_set_visible_white_spaces(sci, editor_prefs.show_white_space);
+	sci_set_visible_eols(sci, editor_prefs.show_line_endings);
+
+	sci_set_folding_margin_visible(sci, editor_prefs.folding);
+
+	/* (dis)allow scrolling past end of document */
+	sci_set_scroll_stop_at_last_line(sci, editor_prefs.scroll_stop_at_last_line);
+
+	sci_assign_cmdkey(sci, SCK_HOME,
+		editor_prefs.smart_home_key ? SCI_VCHOMEWRAP : SCI_HOMEWRAP);
+	sci_assign_cmdkey(sci, SCK_END,  SCI_LINEENDWRAP);
+}
+

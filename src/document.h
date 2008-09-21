@@ -170,8 +170,6 @@ void document_init_doclist(void);
 
 void document_finalize(void);
 
-void document_apply_update_prefs(GeanyDocument *doc);
-
 gboolean document_remove_page(guint page_num);
 
 gboolean document_close(GeanyDocument *doc);

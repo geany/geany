@@ -299,41 +299,6 @@ void document_set_text_changed(GeanyDocument *doc, gboolean changed)
 }
 
 
-/* Apply just the prefs that can change in the Preferences dialog */
-void document_apply_update_prefs(GeanyDocument *doc)
-{
-	ScintillaObject *sci;
-	GeanyEditor *editor;
-
-	g_return_if_fail(doc != NULL);
-
-	editor = doc->editor;
-	sci = editor->sci;
-
-	sci_set_mark_long_lines(sci, editor_prefs.long_line_type,
-		editor_prefs.long_line_column, editor_prefs.long_line_color);
-
-	/* update indent width, tab width */
-	editor_set_indent_type(editor, editor->indent_type);
-	sci_set_tab_indents(sci, editor_prefs.use_tab_to_indent);
-
-	sci_set_autoc_max_height(sci, editor_prefs.symbolcompletion_max_height);
-
-	sci_set_indentation_guides(sci, editor_prefs.show_indent_guide);
-	sci_set_visible_white_spaces(sci, editor_prefs.show_white_space);
-	sci_set_visible_eols(sci, editor_prefs.show_line_endings);
-
-	sci_set_folding_margin_visible(sci, editor_prefs.folding);
-
-	/* (dis)allow scrolling past end of document */
-	sci_set_scroll_stop_at_last_line(sci, editor_prefs.scroll_stop_at_last_line);
-
-	sci_assign_cmdkey(sci, SCK_HOME,
-		editor_prefs.smart_home_key ? SCI_VCHOMEWRAP : SCI_HOMEWRAP);
-	sci_assign_cmdkey(sci, SCK_END,  SCI_LINEENDWRAP);
-}
-
-
 /* Sets is_valid to FALSE and initializes some members to NULL, to mark it uninitialized.
  * The flag is_valid is set to TRUE in document_create(). */
 static void init_doc_struct(GeanyDocument *new_doc)
@@ -427,7 +392,7 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 
 	this->editor = editor_create(this);
 
-	document_apply_update_prefs(this);
+	editor_apply_update_prefs(this->editor);
 
 	treeviews_openfiles_add(this);	/* sets this->iter */
 
@@ -2168,7 +2133,7 @@ void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type)
 			doc->tm_file = NULL;
 		}
 		highlighting_set_styles(doc->editor->sci, type->id);
-		sci_set_indentation_guides(doc->editor->sci, editor_prefs.show_indent_guide);
+		editor_set_indentation_guides(doc->editor);
 		build_menu_update(doc);
 		queue_colourise(doc);
 	}

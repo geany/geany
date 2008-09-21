@@ -1,3 +1,12 @@
+2008-09-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * document.c, document.h, editor.c, editor.h, prefs.c, sciwrappers.c,
+   sciwrappers.h:
+   Move document_apply_update_prefs() in editor.c.
+   Refactor get_indent_guides_from_lexer() from sciwrappers.c in
+   editor_set_indentation_guides().
+
+
 2008-09-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/sciwrappers.c:

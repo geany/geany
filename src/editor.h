@@ -239,4 +239,8 @@ void editor_set_line_wrapping(GeanyEditor *editor, gboolean wrap);
 
 gboolean editor_goto_pos(GeanyEditor *editor, gint pos, gboolean mark);
 
+void editor_set_indentation_guides(GeanyEditor *editor);
+
+void editor_apply_update_prefs(GeanyEditor *editor);
+
 #endif

@@ -707,58 +707,9 @@ void sci_set_savepoint(ScintillaObject *sci)
 	SSM(sci, SCI_SETSAVEPOINT, 0, 0);
 }
 
-/* Should these be user-defined instead of hard-coded? */
-static gint get_indent_guides_from_lexer(gint lexer)
+void sci_set_indentation_guides(ScintillaObject *sci, gint mode)
 {
-	switch (lexer)
-	{
-		/* Lines added/removed are prefixed with +/- characters, so
-		 * those lines will not be shown with any indentation guides.
-		 * It can be distracting that only a few of lines in a diff/patch
-		 * file will show the guides. */
-		case SCLEX_DIFF:
-			return SC_IV_NONE;
-
-		/* These languages use indentation for control blocks; the "look forward" method works
-		 * best here */
-		case SCLEX_PYTHON:
-		case SCLEX_HASKELL:
-		case SCLEX_MAKEFILE:
-		case SCLEX_ASM:
-		case SCLEX_SQL:
-		case SCLEX_PROPERTIES:
-		case SCLEX_FORTRAN: /* Is this the best option for Fortran? */
-		case SCLEX_CAML:
-			return SC_IV_LOOKFORWARD;
-
-		/* C-like (structured) languages benefit from the "look both" method */
-		case SCLEX_CPP:
-		case SCLEX_HTML:
-		case SCLEX_XML:
-		case SCLEX_PERL:
-		case SCLEX_LATEX:
-		case SCLEX_LUA:
-		case SCLEX_PASCAL:
-		case SCLEX_RUBY:
-		case SCLEX_TCL:
-		case SCLEX_F77:
-		case SCLEX_CSS:
-		case SCLEX_BASH:
-		case SCLEX_VHDL:
-		case SCLEX_FREEBASIC:
-		case SCLEX_D:
-		case SCLEX_OMS:
-			return SC_IV_LOOKBOTH;
-	}
-
-	return SC_IV_REAL;
-}
-
-void sci_set_indentation_guides(ScintillaObject *sci, gboolean enable)
-{
-	gint lexer = sci_get_lexer(sci);
-	SSM(sci, SCI_SETINDENTATIONGUIDES,
-		(enable ? get_indent_guides_from_lexer(lexer) : SC_IV_NONE), 0);
+	SSM(sci, SCI_SETINDENTATIONGUIDES, mode, 0);
 }
 
 
