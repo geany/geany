@@ -5,6 +5,9 @@
    Move document_apply_update_prefs() in editor.c.
    Refactor get_indent_guides_from_lexer() from sciwrappers.c in
    editor_set_indentation_guides().
+ * src/editor.c:
+   Fix broken indentation of automatic HTML table tag completion
+   (part of #2118289).
 
 
 2008-09-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

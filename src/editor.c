@@ -1920,7 +1920,7 @@ static void auto_table(GeanyEditor *editor, gint pos)
 	}
 
 	/* get indent string for generated code */
-	if (editor->auto_indent)
+	if (! editor->auto_indent)
 		indent_str = g_strdup("");
 	else
 		indent_str = get_single_indent(editor);
