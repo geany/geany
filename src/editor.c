@@ -82,7 +82,6 @@ static gchar indent[100];
 
 static void on_new_line_added(GeanyEditor *editor);
 static gboolean handle_xml(GeanyEditor *editor, gchar ch);
-static void get_indent(GeanyEditor *editor, gint pos);
 static void insert_indent_after_line(GeanyEditor *editor, gint line);
 static void auto_multiline(GeanyEditor *editor, gint pos);
 static gboolean is_code_style(gint lexer, gint style);
@@ -859,7 +858,7 @@ static gboolean lexer_has_braces(ScintillaObject *sci)
 
 /* Read indent chars for the line that pos is on into indent global variable.
  * Note: Use sci_get_line_indentation() and get_whitespace() instead in any new code.  */
-static void get_indent(GeanyEditor *editor, gint pos)
+static void read_indent(GeanyEditor *editor, gint pos)
 {
 	ScintillaObject *sci = editor->sci;
 	guint i, len, j = 0;
@@ -1569,7 +1568,7 @@ void editor_auto_latex(GeanyDocument *doc, gint pos)
 
 			/* get the indentation */
 			if (editor->auto_indent)
-				get_indent(editor, pos);
+				read_indent(editor, pos);
 			eol = g_strconcat(editor_get_eol_char(doc), indent, NULL);
 
 			construct = g_strdup_printf("%s\\end%s{%s}", eol, full_cmd, env);
@@ -1676,7 +1675,7 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 		return FALSE;
 	}
 
-	get_indent(editor, pos);
+	read_indent(editor, pos);
 	lindent = g_strconcat(editor_get_eol_char(editor->document), indent, NULL);
 	whitespace = get_single_indent(editor);
 
@@ -1963,17 +1962,19 @@ static void auto_table(GeanyEditor *editor, gint pos)
 
 	if (SSM(sci, SCI_GETLEXER, 0, 0) != SCLEX_HTML) return;
 
-	get_indent(editor, pos);
+	read_indent(editor, pos);
 	indent_pos = sci_get_line_indent_position(sci, sci_get_line_from_position(sci, pos));
 	if ((pos - 7) != indent_pos) /* 7 == strlen("<table>") */
 	{
-		gint i, x;
+		gint i;
+		guint x;
+
 		x = strlen(indent);
 		/* find the start of the <table tag */
 		i = 1;
 		while (i <= pos && sci_get_char_at(sci, pos - i) != '<') i++;
 		/* add all non whitespace before the tag to the indent string */
-		while ((pos - i) != indent_pos)
+		while ((pos - i) != indent_pos && x < sizeof(indent) - 1)
 		{
 			indent[x++] = ' ';
 			i++;
@@ -2345,7 +2346,7 @@ void editor_do_comment_toggle(GeanyDocument *doc)
 			gint a = (first_line_was_comment) ? - co_len : co_len;
 
 			/* don't modify sel_start when the selection starts within indentation */
-			get_indent(doc->editor, sel_start);
+			read_indent(doc->editor, sel_start);
 			if ((sel_start - first_line_start) <= (gint) strlen(indent))
 				a = 0;
 
@@ -2887,7 +2888,7 @@ void editor_insert_multiline_comment(GeanyDocument *doc)
 	if (editor->auto_indent &&
 		! have_multiline_comment &&	doc->file_type->comment_use_indent)
 	{
-		get_indent(editor, editor_info.click_pos);
+		read_indent(editor, editor_info.click_pos);
 		text = g_strdup_printf("%s\n%s\n%s\n", indent, indent, indent);
 		text_len = strlen(text);
 	}
@@ -3099,7 +3100,12 @@ void editor_select_paragraph(ScintillaObject *sci)
 /* simple indentation to indent the current line with the same indent as the previous one */
 static void smart_line_indentation(GeanyDocument *doc, gint first_line, gint last_line)
 {
+	GeanyEditor *editor = doc->editor;
 	gint i, sel_start = 0, sel_end = 0;
+
+	/* get previous line and use it for read_indent to use that line
+	 * (otherwise it would fail on a line only containing "{" in advanced indentation mode) */
+	read_indent(editor, sci_get_position_from_line(editor->sci, first_line - 1));
 
 	for (i = first_line; i <= last_line; i++)
 	{
@@ -3144,10 +3150,6 @@ void editor_smart_line_indentation(GeanyDocument *doc, gint pos)
 		pos = first_sel_start;
 
 	SSM(sci, SCI_BEGINUNDOACTION, 0, 0);
-
-	/* get previous line and use it for get_indent to use that line
-	 * (otherwise it would fail on a line only containing "{" in advanced indentation mode) */
-	get_indent(doc->editor, sci_get_position_from_line(sci, first_line - 1));
 
 	smart_line_indentation(doc, first_line, last_line);
 

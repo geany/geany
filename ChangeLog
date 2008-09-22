@@ -8,8 +8,10 @@
  * src/editor.c:
    Fix HTML table autocompletion when the indent type is 'Tabs &
    Spaces' (#2118289).
-   Add some useful functions count_indent_size(),
-   string_append_indent_width().
+   Add functions count_indent_size(), string_append_indent_width().
+ * src/editor.c:
+   Rename get_indent() read_indent().
+   Fix possible overflow in auto_table().
 
 
 2008-09-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
