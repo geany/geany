@@ -722,8 +722,6 @@ void ui_document_show_hide(GeanyDocument *doc)
 
 	item = lookup_widget(main_widgets.window, "menu_use_auto_indentation1");
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), doc->editor->auto_indent);
-	gtk_widget_set_sensitive(item,
-		iprefs->auto_indent_mode != GEANY_AUTOINDENT_NONE);
 
 	switch (iprefs->type)
 	{

@@ -789,8 +789,13 @@ editor_get_indent_prefs(GeanyEditor *editor)
 		return &iprefs;
 
 	iprefs.type = editor->indent_type;
+
 	if (!editor->auto_indent)
 		iprefs.auto_indent_mode = GEANY_AUTOINDENT_NONE;
+	else
+	if (iprefs.auto_indent_mode == GEANY_AUTOINDENT_NONE)
+		editor->auto_indent = FALSE;	/* no global autoindent style to use */
+
 	return &iprefs;
 }
 
@@ -3912,6 +3917,7 @@ void editor_set_indentation_guides(GeanyEditor *editor)
 void editor_apply_update_prefs(GeanyEditor *editor)
 {
 	ScintillaObject *sci;
+	GtkWidget *item;
 
 	g_return_if_fail(editor != NULL);
 
@@ -3939,5 +3945,10 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 	sci_assign_cmdkey(sci, SCK_HOME,
 		editor_prefs.smart_home_key ? SCI_VCHOMEWRAP : SCI_HOMEWRAP);
 	sci_assign_cmdkey(sci, SCK_END,  SCI_LINEENDWRAP);
+
+	/* update some editor-related UI elements  */
+	item = lookup_widget(main_widgets.window, "menu_use_auto_indentation1");
+	gtk_widget_set_sensitive(item,
+		editor_prefs.indentation->auto_indent_mode != GEANY_AUTOINDENT_NONE);
 }
 
