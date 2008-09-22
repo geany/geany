@@ -5,6 +5,11 @@
    auto-indentation for all editors.
    Don't disable the auto-indent document pref when switching back to a
    document with auto-indent turned off.
+ * src/editor.c:
+   Fix HTML table autocompletion when the indent type is 'Tabs &
+   Spaces' (#2118289).
+   Add some useful functions count_indent_size(),
+   string_append_indent_width().
 
 
 2008-09-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
