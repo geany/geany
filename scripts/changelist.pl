@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 # Author:	Nick Treleaven
-# License:	GPL V2 or later
+# License:	GNU GPL V2 or later
 
 # Searches a ChangeLog file for a line matching 'matchstring', then matches
 # all lines until two consecutive empty lines are found. The process then
