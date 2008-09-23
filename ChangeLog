@@ -1,3 +1,11 @@
+2008-09-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * HACKING:
+   Move adding a lexer notes to 'Syntax highlighting' section; mention
+   adding the LINK_LEXER command manually.
+   Some minor edits (reST section grouping).
+
+
 2008-09-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/editor.c, src/ui_utils.c:

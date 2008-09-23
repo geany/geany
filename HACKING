@@ -2,7 +2,7 @@ About this file
 ---------------
 This file contains information for anyone wanting to work on the Geany
 codebase. You should be aware of the open source licenses used - see
-the README file or the documentation.
+the README file or the documentation. It is pseudo-reStructuredText.
 
 Writing plugins
 ---------------
@@ -154,8 +154,8 @@ might not be static strings when Geany is configured with
 printf("Prefix: " GEANY_PREFIX); but instead use
 printf("Prefix: %s", GEANY_PREFIX);
 
-Adding a file foo.[hc] in src/ or plugins/
-------------------------------------------
+Adding a source file foo.[hc] in src/ or plugins/
+-------------------------------------------------
 Add foo.c, foo.h to SRCS in path/Makefile.am.
 Add foo.o to OBJS in path/makefile.win32.
 Add path/foo.c to po/POTFILES.in (for string translation).
@@ -164,14 +164,6 @@ Adding a filetype
 -----------------
 You can add a filetype without syntax highlighting or tag parsing, but
 check to see if those features have been written in other projects first.
-
-For syntax highlighting, it may be possible to use an existing Scintilla
-lexer in the scintilla/ subdirectory - if not, you will need to find
-(or write) one, LexFoo.cxx. Try the Scintilla project first. Remember
-to update scintilla/Makefile.am and scintilla/makefile.win32.
-
-For tag parsing (e.g. for the symbol list), see 'Adding a TagManager
-parser' below.
 
 Add GEANY_FILETYPES_FOO to filetypes.h.
 Initialize GEANY_FILETYPES_FOO in init_builtin_filetypes() of
@@ -203,8 +195,17 @@ see below.
 
 Syntax highlighting
 ^^^^^^^^^^^^^^^^^^^
+It may be possible to use an existing Scintilla lexer in the scintilla/
+subdirectory - if not, you will need to find (or write) one,
+LexFoo.cxx. Try the Scintilla project first. When adding a lexer, update:
+
+ * scintilla/Makefile.am
+ * scintilla/makefile.win32
+ * scintilla/KeyWords.cxx - add a LINK_LEXER command *manually*
+
 For syntax highlighting, you will need to edit highlighting.c and add
 the following things:
+
 1. Write styleset_foo_init() to setup default styles and load style
 settings from the filetypes.foo configuration file. You should probably
 start by copying and adapting another filetype's initialization, such
@@ -232,9 +233,8 @@ typing in a comment (but it can still be forced by the user).
 If the Scintilla lexer supports user type keyword highlighting (e.g.
 SCLEX_CPP), update editor_lexer_get_type_keyword_idx() in editor.c.
 
-
 Adding a TagManager parser
---------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 This assumes the filetype for Geany already exists.
 
 First write or find a CTags compatible parser, foo.c. Note that there
