@@ -14,7 +14,6 @@ Note: features included in brackets have lower priority.
 	o basic support for adding custom filetypes?
 	o configurable filetype and project make commands (e.g. using
 	  bud for D)
-	o configurable filetype regex for build errors
 	o recent projects menu
 	o project indentation settings support
 	o improve Compile toolbar button for Make (drop down radio list?)

@@ -217,12 +217,18 @@ init_styleset_case(GEANY_FILETYPES_FOO, foo);
 4. Add this in highlighting_set_styles():
 styleset_case(GEANY_FILETYPES_FOO, foo);
 
+Error message parsing
+^^^^^^^^^^^^^^^^^^^^^
+New-style error message parsing is done with an extended GNU-style regex
+stored in the filetypes.foo file - see the [build_settings] information
+in the manual for details.
+
+Old-style error message parsing is done in
+msgwin_parse_compiler_error_line() of msgwindow.c - see the ParseData
+typedef for more information.
+
 Other features
 ^^^^^^^^^^^^^^
-Error message parsing is done in msgwin_parse_compiler_error_line() of
-msgwindow.c. See the ParseData typedef for more information. (In future
-this may be done with a regex).
-
 For brace indentation, update lexer_has_braces() in editor.c;
 indentation after ':' is done from on_new_line_added().
 
@@ -250,7 +256,7 @@ Add Foo to parsers.h & fill in comment with parser number for foo.
 In foo.c:
 Edit FooKinds 3rd column to match a s_tag_type_names string in tm_tag.c.
 
-In filetypes.c, filetypes_init_types():
+In filetypes.c, init_builtin_filetypes():
 Set filetypes[GEANY_FILETYPES_FOO].lang = foo's parser number.
 
 In symbols.c:

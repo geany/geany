@@ -130,8 +130,9 @@ struct GeanyFiletype
 	gchar	 		 *comment_close;
 	gboolean  		  comment_use_indent;
 	struct build_programs	*programs;
-	struct build_actions	*actions;
+	struct build_actions	*actions;	/* TODO: make private */
 	GeanyFiletypeGroupID	group;
+	gchar			 *error_regex_string;
 
 	struct GeanyFiletypePrivate	*priv;	/* must be last, append fields before this item */
 };
@@ -171,5 +172,8 @@ GtkFileFilter *filetypes_create_file_filter_all_source(void);
 gchar *filetypes_get_conf_extension(gint filetype_idx);
 
 gboolean filetype_has_tags(GeanyFiletype *ft);
+
+gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
+		gchar **filename, gint *line);
 
 #endif

@@ -41,12 +41,22 @@
 #include "sciwrappers.h"
 #include "ui_utils.h"
 
+#ifdef HAVE_REGCOMP
+# ifdef HAVE_REGEX_H
+#  include <regex.h>
+# else
+#  include "gnuregex.h"
+# endif
+#endif
+
 
 /* Private GeanyFiletype fields */
 typedef struct GeanyFiletypePrivate
 {
-	GtkWidget		*menu_item;			/* holds a pointer to the menu item for this filetype */
-	gboolean		keyfile_loaded;
+	GtkWidget	*menu_item;			/* holds a pointer to the menu item for this filetype */
+	gboolean	keyfile_loaded;
+	regex_t		error_regex;
+	gboolean	error_regex_compiled;
 }
 GeanyFiletypePrivate;
 
@@ -59,6 +69,7 @@ GHashTable *filetypes_hash = NULL;	/* Hash of filetype pointers based on name ke
 static void create_radio_menu_item(GtkWidget *menu, const gchar *label, GeanyFiletype *ftype);
 
 
+/* Note: remember to update HACKING if this function is renamed. */
 static void init_builtin_filetypes(void)
 {
 	GeanyFiletype *ft;
@@ -837,6 +848,18 @@ static void filetype_remove(GeanyFiletype *ft)
 #endif
 
 
+static void set_error_regex(GeanyFiletype *ft, gchar *string)
+{
+	setptr(ft->error_regex_string, string);
+
+	if (ft->priv->error_regex_compiled)
+		regfree(&ft->priv->error_regex);
+
+	ft->priv->error_regex_compiled = FALSE;
+	/* regex will be compiled when needed */
+}
+
+
 static void filetype_free(gpointer data, G_GNUC_UNUSED gpointer user_data)
 {
 	GeanyFiletype *ft = data;
@@ -855,6 +878,7 @@ static void filetype_free(gpointer data, G_GNUC_UNUSED gpointer user_data)
 	g_free(ft->programs->run_cmd2);
 	g_free(ft->programs);
 	g_free(ft->actions);
+	set_error_regex(ft, NULL);
 
 	g_strfreev(ft->pattern);
 	g_free(ft);
@@ -875,6 +899,7 @@ void filetypes_free_types()
 
 static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
 {
+	GeanyFiletype *ft = filetypes[ft_id];
 	gchar *result;
 	GError *error = NULL;
 	gboolean tmp;
@@ -954,6 +979,13 @@ static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
 	{
 		filetypes[ft_id]->programs->run_cmd2 = result;
 		filetypes[ft_id]->actions->can_exec = TRUE;
+	}
+
+	result = g_key_file_get_string(configh, "build_settings", "error_regex", NULL);
+	if (result == NULL) result = g_key_file_get_string(config, "build_settings", "error_regex", NULL);
+	if (result != NULL)
+	{
+		set_error_regex(ft, result);
 	}
 }
 
@@ -1145,4 +1177,69 @@ GeanyFiletype *filetypes_lookup_by_name(const gchar *name)
 	return ft;
 }
 
+
+#ifdef HAVE_REGCOMP
+static gchar *get_regex_match_string(const gchar *message, regmatch_t *pmatch, gint match_idx)
+{
+	return g_strndup(&message[pmatch[match_idx].rm_so],
+		pmatch[match_idx].rm_eo - pmatch[match_idx].rm_so);
+}
+
+
+static void compile_regex(GeanyFiletype *ft, regex_t *regex)
+{
+	gint retval = regcomp(regex, ft->error_regex_string, REG_EXTENDED);
+
+	ft->priv->error_regex_compiled = (retval == 0);	/* prevent recompilation */
+
+	if (retval != 0)
+	{
+		gchar buf[256];
+		regerror(retval, regex, buf, sizeof buf);
+		ui_set_statusbar(TRUE, _("Bad regex for filetype %s: %s"),
+			ft->name, buf);
+	}
+	/* regex will be freed in set_error_regex(). */
+}
+#endif
+
+
+gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
+		gchar **filename, gint *line)
+{
+#ifndef HAVE_REGCOMP
+	return FALSE;
+#else
+	regex_t *regex = &ft->priv->error_regex;
+	regmatch_t pmatch[3];
+
+	*filename = NULL;
+	*line = -1;
+
+	if (!NZV(ft->error_regex_string))
+		return FALSE;
+
+	if (!ft->priv->error_regex_compiled)
+		compile_regex(ft, regex);
+	if (!ft->priv->error_regex_compiled)	/* regex error */
+		return FALSE;
+
+	if (regexec(regex, message, G_N_ELEMENTS(pmatch), pmatch, 0) != 0)
+		return FALSE;
+
+	if (pmatch[0].rm_so != -1 && pmatch[1].rm_so != -1 && pmatch[2].rm_so != -1)
+	{
+		gchar *line_str;
+		glong l;
+
+		*filename = get_regex_match_string(message, pmatch, 1);
+		line_str = get_regex_match_string(message, pmatch, 2);
+		l = g_ascii_strtod(line_str, NULL);
+		g_free(line_str);
+		*line = l;
+		/* TODO: detect swapped line, file match order */
+	}
+	return *filename != NULL;
+#endif
+}
 

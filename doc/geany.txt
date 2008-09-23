@@ -2693,6 +2693,19 @@ context_action_cmd
 
 [build_settings] Section
 ````````````````````````
+error_regex
+    This is a GNU-style extended regular expression to parse a filename
+    and line number from build output. If undefined, Geany will fall
+    back to its default error message parsing.
+
+    *Example:* ``error_regex=^(.+?):([0-9]+)``
+
+    This will parse a message of the form ``filename.c:123``. (It uses
+    non-greedy matching for the filename using the string ``+?``).
+
+.. note::
+    The build commands are all configurable using *Build->Set Includes
+    and Arguments*.
 
 compiler
     This item specifies the command to compile source code files. But

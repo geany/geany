@@ -8,6 +8,10 @@
    Remove ParseData::dir argument as it's not necessary for parsing;
    instead, use function make_absolute().
    Refactor msgwin_parse_compiler_error_line().
+ * src/msgwindow.c, src/filetypes.c, src/filetypes.h, doc/geany.txt,
+   doc/geany.html, HACKING, TODO:
+   Add filetypes.* [build_settings] key 'error_regex' to support custom
+   error message parsing using an extended regular expression.
 
 
 2008-09-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

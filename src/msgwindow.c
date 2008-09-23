@@ -854,6 +854,8 @@ void parse_compiler_error_line(const gchar *string,
 void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
 		gchar **filename, gint *line)
 {
+	GeanyFiletype *ft;
+
 	*filename = NULL;
 	*line = -1;
 
@@ -864,7 +866,14 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
 		dir = build_info.dir;
 	g_return_if_fail(dir != NULL);
 
-	parse_compiler_error_line(string, filename, line);
+	ft = filetypes[build_info.file_type_id];
+
+	/* try parsing with a custom regex */
+	if (!filetypes_parse_error_message(ft, string, filename, line))
+	{
+		/* fallback to default old-style parsing */
+		parse_compiler_error_line(string, filename, line);
+	}
 	make_absolute(filename, dir);
 }
 
