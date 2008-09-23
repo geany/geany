@@ -4,6 +4,10 @@
    Move adding a lexer notes to 'Syntax highlighting' section; mention
    adding the LINK_LEXER command manually.
    Some minor edits (reST section grouping).
+ * src/msgwindow.c:
+   Remove ParseData::dir argument as it's not necessary for parsing;
+   instead, use function make_absolute().
+   Refactor msgwin_parse_compiler_error_line().
 
 
 2008-09-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -53,12 +53,12 @@
 typedef struct
 {
 	const gchar *string;	/* line data */
-	const gchar *dir;		/* working directory when string was generated */
 	const gchar *pattern;	/* pattern to split the error message into some fields */
 	guint min_fields;		/* used to detect errors after parsing */
 	guint line_idx;			/* idx of the field where the line is */
 	gint file_idx;			/* idx of the field where the filename is or -1 */
-} ParseData;
+}
+ParseData;
 
 MessageWindow msgwindow;
 
@@ -615,6 +615,25 @@ gboolean msgwin_goto_compiler_file_line()
 }
 
 
+static void make_absolute(gchar **filename, const gchar *dir)
+{
+	guint skip_dot_slash = 0;	/* number of characters to skip at the beginning of the filename */
+
+	if (*filename == NULL)
+		return;
+
+	/* skip some characters at the beginning of the filename, at the moment only "./"
+	 * can be extended if other "trash" is known */
+	if (strncmp(*filename, "./", 2) == 0)
+		skip_dot_slash = 2;
+
+	/* add directory */
+	if (! utils_is_absolute_path(*filename))
+		setptr(*filename, g_strconcat(dir, G_DIR_SEPARATOR_S,
+			*filename + skip_dot_slash, NULL));
+}
+
+
 /* try to parse the file and line number where the error occured described in line
  * and when something useful is found, it stores the line number in *line and the
  * relevant file with the error in *filename.
@@ -624,12 +643,11 @@ static void parse_file_line(ParseData *data, gchar **filename, gint *line)
 {
 	gchar *end = NULL;
 	gchar **fields;
-	guint skip_dot_slash = 0;	/* number of characters to skip at the beginning of the filename */
 
 	*filename = NULL;
 	*line = -1;
 
-	g_return_if_fail(data->dir != NULL && data->string != NULL);
+	g_return_if_fail(data->string != NULL);
 
 	fields = g_strsplit_set(data->string, data->pattern, data->min_fields);
 
@@ -660,41 +678,17 @@ static void parse_file_line(ParseData *data, gchar **filename, gint *line)
 		return;
 	}
 
-	/* skip some characters at the beginning of the filename, at the moment only "./"
-	 * can be extended if other "trash" is known */
-	if (strncmp(fields[data->file_idx], "./", 2) == 0) skip_dot_slash = 2;
-
-	/* get the build directory to get the path to look for other files */
-	if (! utils_is_absolute_path(fields[data->file_idx]))
-		*filename = g_strconcat(data->dir, G_DIR_SEPARATOR_S,
-			fields[data->file_idx] + skip_dot_slash, NULL);
-	else
-		*filename = g_strdup(fields[data->file_idx]);
-
+	*filename = g_strdup(fields[data->file_idx]);
 	g_strfreev(fields);
 }
 
 
-/* try to parse the file and line number where the error occured described in string
- * and when something useful is found, it stores the line number in *line and the
- * relevant file with the error in *filename.
- * *line will be -1 if no error was found in string.
- * *filename must be freed unless it is NULL. */
-void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir, gchar **filename, gint *line)
+void parse_compiler_error_line(const gchar *string,
+		gchar **filename, gint *line)
 {
-	ParseData data = {NULL, NULL, NULL, 0, 0, 0};
+	ParseData data = {NULL, NULL, 0, 0, 0};
 
 	data.string = string;
-	data.dir = build_info.dir;
-
-	*filename = NULL;
-	*line = -1;
-
-	if (dir != NULL)
-		data.dir = dir;
-
-	g_return_if_fail(build_info.dir != NULL || dir != NULL);
-	if (string == NULL) return;
 
 	switch (build_info.file_type_id)
 	{
@@ -852,6 +846,29 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir, gch
 }
 
 
+/* try to parse the file and line number where the error occured described in string
+ * and when something useful is found, it stores the line number in *line and the
+ * relevant file with the error in *filename.
+ * *line will be -1 if no error was found in string.
+ * *filename must be freed unless it is NULL. */
+void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
+		gchar **filename, gint *line)
+{
+	*filename = NULL;
+	*line = -1;
+
+	if (string == NULL)
+		return;
+
+	if (dir == NULL)
+		dir = build_info.dir;
+	g_return_if_fail(dir != NULL);
+
+	parse_compiler_error_line(string, filename, line);
+	make_absolute(filename, dir);
+}
+
+
 gboolean msgwin_goto_messages_file_line()
 {
 	GtkTreeIter iter;
@@ -904,17 +921,18 @@ static void msgwin_parse_grep_line(const gchar *string, gchar **filename, gint *
 	*filename = NULL;
 	*line = -1;
 
-	if (string == NULL || msgwindow.find_in_files_dir == NULL) return;
+	if (string == NULL || msgwindow.find_in_files_dir == NULL)
+		return;
 
 	/* conflict:3:conflicting types for `foo' */
 	data.string = string;
-	data.dir = msgwindow.find_in_files_dir;
 	data.pattern = ":";
 	data.min_fields = 3;
 	data.line_idx = 1;
 	data.file_idx = 0;
 
 	parse_file_line(&data, filename, line);
+	make_absolute(filename, msgwindow.find_in_files_dir);
 }
 
 
