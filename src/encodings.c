@@ -256,7 +256,7 @@ void encodings_select_radio_item(const gchar *charset)
 
 
 #ifdef HAVE_REGCOMP
-/* Regexp detection of file enconding declared in the file itself.
+/* Regexp detection of file encoding declared in the file itself.
  * Idea and parts of code taken from Bluefish, thanks.
  * regex_compile() is used to compile regular expressions on program init and keep it in memory
  * for faster access when opening a file. Pre-compiled regexps will be freed on program exit.
@@ -291,7 +291,7 @@ static gchar *regex_match(regex_t *preg, const gchar *buffer, gsize size)
 	retval = regexec(preg, (tmp_buf != NULL) ? tmp_buf : buffer, 10, pmatch, 0);
 	if (retval == 0 && pmatch[0].rm_so != -1 && pmatch[1].rm_so != -1)
 	{
-		encoding = g_strndup(&buffer[pmatch[1].rm_so], pmatch[1].rm_eo-pmatch[1].rm_so);
+		encoding = g_strndup(&buffer[pmatch[1].rm_so], pmatch[1].rm_eo - pmatch[1].rm_so);
 		geany_debug("Detected encoding by regex search: %s", encoding);
 
 		setptr(encoding, g_utf8_strup(encoding, -1));
