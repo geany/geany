@@ -1,3 +1,11 @@
+2008-09-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/main.h, src/about.c, src/main.c, src/socket.c:
+   Show SVN revision also for geany -v and first status message.
+   Add main_get_version_string().
+   Rename get_argv_filename() main_get_argv_filename().
+
+
 2008-09-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * HACKING:

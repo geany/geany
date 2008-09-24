@@ -302,9 +302,20 @@ static void main_init(void)
 }
 
 
+const gchar *main_get_version_string(void)
+{
+	static gchar full[] = VERSION " (svn >= " REVISION ")";
+
+	if (utils_str_equal(REVISION, "-1"))
+		return VERSION;
+	else
+		return full;
+}
+
+
 /* get the full file path of a command-line argument
  * N.B. the result should be freed and may contain '/../' or '/./ ' */
-gchar *get_argv_filename(const gchar *filename)
+gchar *main_get_argv_filename(const gchar *filename)
 {
 	gchar *result;
 
@@ -483,7 +494,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 
 	if (show_version)
 	{
-		printf(PACKAGE " " VERSION " ");
+		printf(PACKAGE " %s ", main_get_version_string());
 		printf(_("(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"),
 				__DATE__, GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION,
 				GLIB_MAJOR_VERSION, GLIB_MINOR_VERSION, GLIB_MICRO_VERSION);
@@ -654,7 +665,7 @@ static gboolean open_cl_files(gint argc, gchar **argv)
 
 	for (i = 1; i < argc; i++)
 	{
-		gchar *filename = get_argv_filename(argv[i]);
+		gchar *filename = main_get_argv_filename(argv[i]);
 
 		if (filename && !main_handle_filename(filename))
 		{
@@ -759,9 +770,8 @@ gint main(gint argc, gchar **argv)
 	}
 #endif
 
-	geany_debug("Geany %s%s, GTK+ %u.%u.%u, GLib %u.%u.%u",
-		VERSION,
-		(utils_str_equal(REVISION, "-1")) ? "" : " svn >= " REVISION,
+	geany_debug("Geany %s, GTK+ %u.%u.%u, GLib %u.%u.%u",
+		main_get_version_string(),
 		gtk_major_version, gtk_minor_version, gtk_micro_version,
 		glib_major_version, glib_minor_version, glib_micro_version);
 
@@ -816,7 +826,7 @@ gint main(gint argc, gchar **argv)
 #endif
 	ui_create_recent_menu();
 
-	ui_set_statusbar(TRUE, _("This is Geany %s."), VERSION);
+	ui_set_statusbar(TRUE, _("This is Geany %s."), main_get_version_string());
 	if (config_dir_result != 0)
 		ui_set_statusbar(TRUE, _("Configuration directory could not be created (%s)."),
 			g_strerror(config_dir_result));
