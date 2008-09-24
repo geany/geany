@@ -32,7 +32,6 @@
 
 #include "geany.h"
 
-#include "SciLexer.h"
 #include "sciwrappers.h"
 #include "utils.h"
 
