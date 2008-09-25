@@ -31,9 +31,6 @@
 #define GEANY_WORDCHARS					"_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 #define GEANY_MAX_WORD_LENGTH			192
 
-/* Note: Avoid using SSM in files not related to scintilla, use sciwrappers.h instead. */
-#define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
-
 
 /** Whether to use tabs, spaces or both to indent. */
 typedef enum

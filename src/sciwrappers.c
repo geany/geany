@@ -1086,3 +1086,20 @@ void sci_set_scroll_stop_at_last_line(ScintillaObject* sci, gboolean set)
 {
 	SSM(sci, SCI_SETENDATLASTLINE, set, 0);
 }
+
+void sci_cancel(ScintillaObject *sci)
+{
+	SSM( sci, SCI_CANCEL, 0, 0);
+}
+
+gint sci_get_target_end(ScintillaObject *sci)
+{
+	return SSM( sci, SCI_GETTARGETEND, 0, 0);
+}
+
+gint sci_get_position_after(ScintillaObject *sci, gint start)
+{
+	return SSM(sci, SCI_POSITIONAFTER, start, 0);
+}
+
+

@@ -1824,7 +1824,7 @@ document_replace_range(GeanyDocument *doc, const gchar *find_text, const gchar *
 
 			if (find_len <= 0)
 			{
-				gchar chNext = sci_get_char_at(sci, SSM(sci, SCI_GETTARGETEND, 0, 0));
+				gchar chNext = sci_get_char_at(sci, sci_get_target_end(sci));
 
 				if (chNext == '\r' || chNext == '\n')
 					movepastEOL = 1;
@@ -1838,7 +1838,7 @@ document_replace_range(GeanyDocument *doc, const gchar *find_text, const gchar *
 			/* make the next search start after the replaced text */
 			start = search_pos + replace_len + movepastEOL;
 			if (find_len == 0)
-				start = SSM(sci, SCI_POSITIONAFTER, start, 0);	/* prevent '[ ]*' regex rematching part of replaced text */
+				start = sci_get_position_after(sci, start);	/* prevent '[ ]*' regex rematching part of replaced text */
 			ttf.chrg.cpMin = start;
 			end += replace_len - find_len;	/* update end of range now text has changed */
 			ttf.chrg.cpMax = end;

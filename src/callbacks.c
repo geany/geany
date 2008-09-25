@@ -283,7 +283,7 @@ on_undo1_activate                      (GtkMenuItem     *menuitem,
 
 	if (doc != NULL && document_can_undo(doc))
 	{
-		SSM(doc->editor->sci, SCI_CANCEL, 0, 0);
+		sci_cancel(doc->editor->sci);
 		document_undo(doc);
 	}
 }
@@ -297,7 +297,7 @@ on_redo1_activate                      (GtkMenuItem     *menuitem,
 
 	if (doc != NULL && document_can_redo(doc))
 	{
-		SSM(doc->editor->sci, SCI_CANCEL, 0, 0);
+		sci_cancel(doc->editor->sci);
 		document_redo(doc);
 	}
 }

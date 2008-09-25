@@ -13,6 +13,10 @@
    When using editor_get_eol_char_* functions with an invalid editor
    object, return the appropriate value according to the eol character
    preference (just in case).
+ * src/callbacks.c, src/document.c, src/editor.c, src/editor.h,
+   src/highlighting.c, src/sciwrappers.c, src/sciwrappers.h:
+   Fix using direct Scintilla access in document.c and callbacks.
+   Add wrapper functions instead.
 
 
 2008-09-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -37,6 +37,9 @@
 #include "symbols.h"
 
 
+/* Note: Avoid using SSM in files not related to scintilla, use sciwrappers.h instead. */
+#define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
+
 /* Whitespace has to be set after setting wordchars. */
 #define GEANY_WHITESPACE_CHARS " \t" "!\"#$%&'()*+,-./:;<=>?@[\\]^`{|}~"
 

@@ -59,6 +59,10 @@
 #include "keybindings.h"
 
 
+/* Note: Avoid using SSM in files not related to scintilla, use sciwrappers.h instead. */
+#define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
+
+
 /* holds word under the mouse or keyboard cursor */
 static gchar current_word[GEANY_MAX_WORD_LENGTH];
 

@@ -183,4 +183,10 @@ void				sci_set_caret_policy_x		(ScintillaObject * sci, gint policy, gint slop);
 void				sci_set_caret_policy_y		(ScintillaObject * sci, gint policy, gint slop);
 
 void				sci_set_scroll_stop_at_last_line	(ScintillaObject* sci, gboolean set);
+
+void				sci_cancel					(ScintillaObject *sci);
+
+gint				sci_get_target_end			(ScintillaObject *sci);
+gint				sci_get_position_after		(ScintillaObject *sci, gint start);
+
 #endif
