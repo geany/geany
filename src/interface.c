@@ -3626,7 +3626,7 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (0), 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label222), 0, 0.5);
 
-  spin_indent_width_adj = gtk_adjustment_new (1, 1, 99, 1, 10, 10);
+  spin_indent_width_adj = gtk_adjustment_new (1, 1, 99, 1, 10, 0);
   spin_indent_width = gtk_spin_button_new (GTK_ADJUSTMENT (spin_indent_width_adj), 1, 0);
   gtk_widget_show (spin_indent_width);
   gtk_table_attach (GTK_TABLE (table13), spin_indent_width, 1, 2, 0, 1,
@@ -3679,7 +3679,7 @@ create_prefs_dialog (void)
   gtk_widget_show (label221);
   gtk_box_pack_start (GTK_BOX (hbox13), label221, FALSE, FALSE, 0);
 
-  spin_tab_width_adj = gtk_adjustment_new (8, 1, 99, 1, 10, 10);
+  spin_tab_width_adj = gtk_adjustment_new (8, 1, 99, 1, 10, 0);
   spin_tab_width = gtk_spin_button_new (GTK_ADJUSTMENT (spin_tab_width_adj), 1, 0);
   gtk_widget_show (spin_tab_width);
   gtk_box_pack_start (GTK_BOX (hbox13), spin_tab_width, TRUE, TRUE, 0);
@@ -3762,7 +3762,7 @@ create_prefs_dialog (void)
   gtk_widget_show (label209);
   gtk_box_pack_start (GTK_BOX (hbox11), label209, FALSE, FALSE, 0);
 
-  spin_line_break_adj = gtk_adjustment_new (72, 3, 1000, 1, 10, 10);
+  spin_line_break_adj = gtk_adjustment_new (72, 3, 1000, 1, 10, 0);
   spin_line_break = gtk_spin_button_new (GTK_ADJUSTMENT (spin_line_break_adj), 1, 0);
   gtk_widget_show (spin_line_break);
   gtk_box_pack_start (GTK_BOX (hbox11), spin_line_break, FALSE, TRUE, 0);
@@ -3852,7 +3852,7 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (0), 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label205), 0, 0.5);
 
-  spin_symbol_complete_chars_adj = gtk_adjustment_new (9, 1, 99, 1, 10, 10);
+  spin_symbol_complete_chars_adj = gtk_adjustment_new (9, 1, 99, 1, 10, 0);
   spin_symbol_complete_chars = gtk_spin_button_new (GTK_ADJUSTMENT (spin_symbol_complete_chars_adj), 1, 0);
   gtk_widget_show (spin_symbol_complete_chars);
   gtk_table_attach (GTK_TABLE (table14), spin_symbol_complete_chars, 1, 2, 0, 1,
@@ -3861,7 +3861,7 @@ create_prefs_dialog (void)
   gtk_tooltips_set_tip (tooltips, spin_symbol_complete_chars, _("The amount of characters which are necessary to show the symbol auto completion list."), NULL);
   gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_symbol_complete_chars), TRUE);
 
-  spin_symbollistheight_adj = gtk_adjustment_new (9, 1, 99, 1, 10, 10);
+  spin_symbollistheight_adj = gtk_adjustment_new (9, 1, 99, 1, 10, 0);
   spin_symbollistheight = gtk_spin_button_new (GTK_ADJUSTMENT (spin_symbollistheight_adj), 1, 0);
   gtk_widget_show (spin_symbollistheight);
   gtk_table_attach (GTK_TABLE (table14), spin_symbollistheight, 1, 2, 1, 2,
@@ -3870,7 +3870,7 @@ create_prefs_dialog (void)
   gtk_tooltips_set_tip (tooltips, spin_symbollistheight, _("Display height in rows for the auto completion list."), NULL);
   gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_symbollistheight), TRUE);
 
-  spin_autocompletion_max_entries_adj = gtk_adjustment_new (9, 1, 10000, 1, 10, 10);
+  spin_autocompletion_max_entries_adj = gtk_adjustment_new (9, 1, 10000, 1, 10, 0);
   spin_autocompletion_max_entries = gtk_spin_button_new (GTK_ADJUSTMENT (spin_autocompletion_max_entries_adj), 1, 0);
   gtk_widget_show (spin_autocompletion_max_entries);
   gtk_table_attach (GTK_TABLE (table14), spin_autocompletion_max_entries, 1, 2, 2, 3,
@@ -3981,7 +3981,7 @@ create_prefs_dialog (void)
   gtk_tooltips_set_tip (tooltips, long_line_color, _("Sets the color of the long line marker"), NULL);
   gtk_color_button_set_title (GTK_COLOR_BUTTON (long_line_color), _("Color Chooser"));
 
-  spin_long_line_adj = gtk_adjustment_new (72, 0, 1000, 1, 10, 10);
+  spin_long_line_adj = gtk_adjustment_new (72, 0, 1000, 1, 10, 0);
   spin_long_line = gtk_spin_button_new (GTK_ADJUSTMENT (spin_long_line_adj), 1, 0);
   gtk_widget_show (spin_long_line);
   gtk_table_attach (GTK_TABLE (table7), spin_long_line, 1, 2, 1, 2,
@@ -4208,7 +4208,7 @@ create_prefs_dialog (void)
   gtk_misc_set_alignment (GTK_MISC (label147), 0, 0.5);
   gtk_misc_set_padding (GTK_MISC (label147), 0, 7);
 
-  spin_mru_adj = gtk_adjustment_new (4, 1, 50, 1, 10, 10);
+  spin_mru_adj = gtk_adjustment_new (4, 1, 50, 1, 10, 0);
   spin_mru = gtk_spin_button_new (GTK_ADJUSTMENT (spin_mru_adj), 1, 0);
   gtk_widget_show (spin_mru);
   gtk_table_attach (GTK_TABLE (table10), spin_mru, 1, 2, 0, 1,
@@ -4225,7 +4225,7 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (0), 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label208), 0, 0.5);
 
-  spin_disk_check_adj = gtk_adjustment_new (30, 0, 10000, 1, 10, 10);
+  spin_disk_check_adj = gtk_adjustment_new (30, 0, 10000, 1, 10, 0);
   spin_disk_check = gtk_spin_button_new (GTK_ADJUSTMENT (spin_disk_check_adj), 1, 0);
   gtk_widget_show (spin_disk_check);
   gtk_table_attach (GTK_TABLE (table10), spin_disk_check, 1, 2, 1, 2,

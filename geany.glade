@@ -5517,7 +5517,7 @@ Match braces</property>
 				      <property name="update_policy">GTK_UPDATE_IF_VALID</property>
 				      <property name="snap_to_ticks">False</property>
 				      <property name="wrap">True</property>
-				      <property name="adjustment">1 1 99 1 10 10</property>
+				      <property name="adjustment">1 1 99 1 10 0</property>
 				    </widget>
 				    <packing>
 				      <property name="left_attach">1</property>
@@ -5653,7 +5653,7 @@ Match braces</property>
 					      <property name="update_policy">GTK_UPDATE_IF_VALID</property>
 					      <property name="snap_to_ticks">False</property>
 					      <property name="wrap">True</property>
-					      <property name="adjustment">8 1 99 1 10 10</property>
+					      <property name="adjustment">8 1 99 1 10 0</property>
 					    </widget>
 					    <packing>
 					      <property name="padding">0</property>
@@ -5963,7 +5963,7 @@ Match braces</property>
 				      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				      <property name="snap_to_ticks">False</property>
 				      <property name="wrap">False</property>
-				      <property name="adjustment">72 3 1000 1 10 10</property>
+				      <property name="adjustment">72 3 1000 1 10 0</property>
 				    </widget>
 				    <packing>
 				      <property name="padding">0</property>
@@ -6310,7 +6310,7 @@ Match braces</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">9 1 99 1 10 10</property>
+				  <property name="adjustment">9 1 99 1 10 0</property>
 				</widget>
 				<packing>
 				  <property name="left_attach">1</property>
@@ -6332,7 +6332,7 @@ Match braces</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">9 1 99 1 10 10</property>
+				  <property name="adjustment">9 1 99 1 10 0</property>
 				</widget>
 				<packing>
 				  <property name="left_attach">1</property>
@@ -6354,7 +6354,7 @@ Match braces</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">9 1 10000 1 10 10</property>
+				  <property name="adjustment">9 1 10000 1 10 0</property>
 				</widget>
 				<packing>
 				  <property name="left_attach">1</property>
@@ -6735,7 +6735,7 @@ Match braces</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">True</property>
-				  <property name="adjustment">72 0 1000 1 10 10</property>
+				  <property name="adjustment">72 0 1000 1 10 0</property>
 				</widget>
 				<packing>
 				  <property name="left_attach">1</property>
@@ -7457,7 +7457,7 @@ Match braces</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">True</property>
-				  <property name="adjustment">4 1 50 1 10 10</property>
+				  <property name="adjustment">4 1 50 1 10 0</property>
 				</widget>
 				<packing>
 				  <property name="left_attach">1</property>
@@ -7508,7 +7508,7 @@ Match braces</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">True</property>
-				  <property name="adjustment">30 0 10000 1 10 10</property>
+				  <property name="adjustment">30 0 10000 1 10 0</property>
 				</widget>
 				<packing>
 				  <property name="left_attach">1</property>

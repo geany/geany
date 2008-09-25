@@ -749,7 +749,7 @@ void vte_append_preferences_tab(void)
 					(GtkAttachOptions) (0), 0, 0);
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 
-		spin_scrollback_adj = gtk_adjustment_new(500, 0, 5000, 1, 10, 10);
+		spin_scrollback_adj = gtk_adjustment_new(500, 0, 5000, 1, 10, 0);
 		spin_scrollback = gtk_spin_button_new(GTK_ADJUSTMENT(spin_scrollback_adj), 1, 0);
 		gtk_table_attach(GTK_TABLE(table), spin_scrollback, 1, 2, 3, 4,
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
