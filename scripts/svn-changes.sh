@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Copyright:	2008, Nick Treleaven
 # License:		GNU GPL V2 or later
 # Warranty:		NONE
@@ -7,7 +7,7 @@
 # format, plus warnings about any unknown files.
 
 # -s for spaces instead of comma separation
-if [[ $1 == -s ]]; then
+if [ "$1" = -s ]; then
 	SPACES="set"
 	shift
 fi
@@ -20,12 +20,12 @@ files=`echo "$status" |egrep '^[A-Z]'`
 # get filenames on one line
 files=`echo "$files" |egrep -o '[^A-Z].[ ]+(.+)' |xargs`
 # add commas if -s argument is not given
-if [[ -z $SPACES ]]; then
+if [ -z "$SPACES" ]; then
 	files=`echo "$files" |sed "s/ /, /g"`
 fi
 
 # show modifications
-if [[ -n $files ]]; then
+if [ -n "$files" ]; then
 	echo 'Changes:'
 	if [[ -z $SPACES ]]; then
 		files+=':'
@@ -41,7 +41,7 @@ fi
 
 # warn about anything that isn't a modification or addition
 warn=`echo "$status" |egrep '^[^MA]'`
-if [[ -n $warn ]]; then
+if [ -n "$warn" ]; then
 	echo 'Warnings:'
 	echo $warn
 else

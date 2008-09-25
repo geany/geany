@@ -17,6 +17,8 @@
    src/highlighting.c, src/sciwrappers.c, src/sciwrappers.h:
    Fix using direct Scintilla access in document.c and callbacks.
    Add wrapper functions instead.
+ * scripts/svn-add.sh, scripts/svn-changes.sh:
+   Remove bashisms.
 
 
 2008-09-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
