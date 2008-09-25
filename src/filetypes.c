@@ -55,8 +55,10 @@ typedef struct GeanyFiletypePrivate
 {
 	GtkWidget	*menu_item;			/* holds a pointer to the menu item for this filetype */
 	gboolean	keyfile_loaded;
+#ifdef HAVE_REGCOMP
 	regex_t		error_regex;
 	gboolean	error_regex_compiled;
+#endif
 }
 GeanyFiletypePrivate;
 
@@ -852,11 +854,13 @@ static void set_error_regex(GeanyFiletype *ft, gchar *string)
 {
 	setptr(ft->error_regex_string, string);
 
+#ifdef HAVE_REGCOMP
 	if (ft->priv->error_regex_compiled)
 		regfree(&ft->priv->error_regex);
 
 	ft->priv->error_regex_compiled = FALSE;
 	/* regex will be compiled when needed */
+#endif
 }
 
 
@@ -1208,6 +1212,8 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 		gchar **filename, gint *line)
 {
 #ifndef HAVE_REGCOMP
+	if (!NZV(ft->error_regex_string))
+		geany_debug("No regex support - maybe you should configure with --enable-gnu-regex!");
 	return FALSE;
 #else
 	regex_t *regex = &ft->priv->error_regex;

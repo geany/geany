@@ -1,3 +1,11 @@
+2008-09-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/filetypes.c:
+   Hopefully fix building when HAVE_REGCOMP is not defined.
+   Add debug message when trying to parse an error regex when
+   HAVE_REGCOMP is undefined.
+
+
 2008-09-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/main.h, src/about.c, src/main.c, src/socket.c:
