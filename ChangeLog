@@ -11,6 +11,11 @@
  * doc/geany.txt, doc/geany.html:
    Minor formatting changes - make the using a Makefile paragraph a
    note.
+ * src/editor.c:
+   Don't disable the per-document auto-indent pref when the global
+   auto-indent mode is set to none (undoes part of r2981). In this
+   case, the per-document pref just behaves like
+   GEANY_AUTOINDENT_BASIC.
 
 
 2008-09-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
