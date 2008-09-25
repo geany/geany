@@ -1961,13 +1961,18 @@ current source file will be saved before it is processed. This is
 for convenience so that you don't need to keep saving small changes
 to the current file before building.
 
-Secondly the output for Compile, Build and Make actions will be
-captured in the Compiler notebook tab of the messages window (assuming
-you have it visible). If there are any warnings or errors with line
-numbers shown in the Compiler output tab, you can double click on
-them and Geany will switch to the relevant source file (if it is open)
-and mark the line number so the problem can be corrected. Geany will
-also set indicators for warnings or errors with line numbers.
+Secondly the output for Compile, Build and Make actions will be captured
+in the Compiler notebook tab of the messages window. If there are
+any warnings or errors with line numbers shown in red in the Compiler
+output tab, you can click on them and Geany will switch to the relevant
+source file (or open it) and mark the line number so the problem can be
+corrected. Geany will also set indicators for warnings or errors with
+line numbers.
+
+.. tip::
+    If Geany's default error message parsing does not parse errors for
+    the tool you're using, you can set a custom regex. See `Filetype
+    definition files`_ and the `[build_settings] Section`_.
 
 Depending on the current file's filetype, the Build menu will contain
 the following items:
@@ -2698,14 +2703,19 @@ error_regex
     and line number from build output. If undefined, Geany will fall
     back to its default error message parsing.
 
+    Only the first two matches will be read by Geany. Geany will look for
+    a match that is purely digits, and use this for the line number. The
+    remaining match will be used as the filename.
+
     *Example:* ``error_regex=^(.+?):([0-9]+)``
 
     This will parse a message of the form ``filename.c:123``. (It uses
     non-greedy matching for the filename using the string ``+?``).
 
-.. note::
-    The build commands are all configurable using *Build->Set Includes
-    and Arguments*.
+**Build commands**
+
+The build commands are all configurable using the `Set Includes and
+Arguments`_ dialog.
 
 compiler
     This item specifies the command to compile source code files. But

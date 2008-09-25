@@ -41,6 +41,8 @@
 #include "sciwrappers.h"
 #include "ui_utils.h"
 
+#include <stdlib.h>
+
 #ifdef HAVE_REGCOMP
 # ifdef HAVE_REGEX_H
 #  include <regex.h>
@@ -1235,15 +1237,33 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 
 	if (pmatch[0].rm_so != -1 && pmatch[1].rm_so != -1 && pmatch[2].rm_so != -1)
 	{
-		gchar *line_str;
+		gchar *first, *second, *end;
 		glong l;
 
-		*filename = get_regex_match_string(message, pmatch, 1);
-		line_str = get_regex_match_string(message, pmatch, 2);
-		l = g_ascii_strtod(line_str, NULL);
-		g_free(line_str);
-		*line = l;
-		/* TODO: detect swapped line, file match order */
+		first = get_regex_match_string(message, pmatch, 1);
+		second = get_regex_match_string(message, pmatch, 2);
+		l = strtol(first, &end, 10);
+		if (*end == '\0')	/* first is purely decimals */
+		{
+			*line = l;
+			g_free(first);
+			*filename = second;
+		}
+		else
+		{
+			l = strtol(second, &end, 10);
+			if (*end == '\0')
+			{
+				*line = l;
+				g_free(second);
+				*filename = first;
+			}
+			else
+			{
+				g_free(first);
+				g_free(second);
+			}
+		}
 	}
 	return *filename != NULL;
 #endif

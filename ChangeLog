@@ -4,6 +4,10 @@
    Hopefully fix building when HAVE_REGCOMP is not defined.
    Add debug message when trying to parse an error regex when
    HAVE_REGCOMP is undefined.
+ * src/filetypes.c, doc/geany.txt, doc/geany.html:
+   Detect which error regex match contains the line number, and use the
+   other match for the filename.
+   Update 'Build system' docs for custom error regexes.
 
 
 2008-09-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
