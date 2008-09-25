@@ -1132,7 +1132,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 			{
 				editor_apply_update_prefs(documents[i]->editor);
 				if (! editor_prefs.folding)
-					editor_unfold_all(documents[i]);
+					editor_unfold_all(documents[i]->editor);
 			}
 		}
 		ui_document_show_hide(NULL);

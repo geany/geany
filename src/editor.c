@@ -206,7 +206,7 @@ on_editor_button_press_event           (GtkWidget *widget,
 	/* calls the edit popup menu in the editor */
 	if (event->button == 3)
 	{
-		editor_find_current_word(doc->editor->sci, editor_info.click_pos,
+		editor_find_current_word(doc->editor, editor_info.click_pos,
 			current_word, sizeof current_word, NULL);
 
 		ui_update_popup_goto_items((current_word[0] != '\0') ? TRUE : FALSE);
@@ -309,7 +309,7 @@ static void on_update_ui(GeanyEditor *editor, G_GNUC_UNUSED SCNotification *nt)
 	ui_update_popup_reundo_items(editor->document);
 
 	/* brace highlighting */
-	editor_highlight_braces(sci, pos);
+	editor_highlight_braces(editor, pos);
 
 	ui_update_statusbar(editor->document, pos);
 
@@ -319,7 +319,7 @@ static void on_update_ui(GeanyEditor *editor, G_GNUC_UNUSED SCNotification *nt)
 	 * http://scintilla.sourceforge.net/ScintillaDoc.html#LineWrapping */
 	if (editor->scroll_percent > 0.0F)
 	{
-		editor_scroll_to_line(sci, -1, editor->scroll_percent);
+		editor_scroll_to_line(editor, -1, editor->scroll_percent);
 		editor->scroll_percent = -1.0F;	/* disable further scrolling */
 	}
 #if 0
@@ -365,7 +365,7 @@ static void check_line_breaking(GeanyEditor *editor, gint pos, gchar c)
 		if (c == GDK_space)
 		{
 			gint col, len, diff;
-			const gchar *eol = editor_get_eol_char(editor->document);
+			const gchar *eol = editor_get_eol_char(editor);
 
 			/* break the line after the space */
 			sci_insert_text(sci, pos + 1, eol);
@@ -420,7 +420,7 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 		}
 		case '(':
 		{	/* show calltips */
-			editor_show_calltip(editor->document, --pos);
+			editor_show_calltip(editor, --pos);
 			break;
 		}
 		case ')':
@@ -442,7 +442,7 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 			if (sci_get_lexer(sci) == SCLEX_LATEX)
 			{
 				auto_close_bracket(sci, pos, nt->ch);	/* Tex auto-closing */
-				editor_show_calltip(editor->document, --pos);
+				editor_show_calltip(editor, --pos);
 			}
 			break;
 		}
@@ -453,7 +453,7 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 			break;
 		}
 		default:
-			editor_start_auto_complete(editor->document, pos, FALSE);
+			editor_start_auto_complete(editor, pos, FALSE);
 	}
 	check_line_breaking(editor, pos, nt->ch);
 }
@@ -710,7 +710,7 @@ void on_editor_notification(GtkWidget *widget, gint scn, gpointer lscn, gpointer
 
 					case 2: calltip.tag_index++; break;	/* down arrow */
 				}
-				editor_show_calltip(doc, -1);
+				editor_show_calltip(editor, -1);
 			}
 			break;
 		}
@@ -823,12 +823,12 @@ static void on_new_line_added(GeanyEditor *editor)
 
 	if (editor_prefs.complete_snippets)
 	{
-		editor_auto_latex(editor->document, pos);
+		editor_auto_latex(editor, pos);
 	}
 
 	if (editor_prefs.newline_strip)
 	{	/* strip the trailing spaces on the previous line */
-		editor_strip_line_trailing_spaces(editor->document, line - 1);
+		editor_strip_line_trailing_spaces(editor, line - 1);
 	}
 }
 
@@ -1030,7 +1030,7 @@ static gint brace_match(ScintillaObject *sci, gint pos)
 /* Called after typing '}'. */
 static void close_block(GeanyEditor *editor, gint pos)
 {
-	GeanyDocument *doc = editor->document;
+	GeanyDocument *doc;
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
 	gint x = 0, cnt = 0;
 	gint line, line_len, eol_char_len;
@@ -1040,10 +1040,11 @@ static void close_block(GeanyEditor *editor, gint pos)
 
 	if (iprefs->auto_indent_mode < GEANY_AUTOINDENT_CURRENTCHARS)
 		return;
-	if (doc == NULL || doc->file_type == NULL)
+	if (editor == NULL || editor->document->file_type == NULL)
 		return;
 
 	sci = doc->editor->sci;
+	doc = editor->document;
 
 	if (! lexer_has_braces(sci))
 		return;
@@ -1052,7 +1053,7 @@ static void close_block(GeanyEditor *editor, gint pos)
 	line_len = sci_get_line_length(sci, line);
 	/* set eol_char_len to 0 if on last line, because there is no EOL char */
 	eol_char_len = (line == (SSM(sci, SCI_GETLINECOUNT, 0, 0) - 1)) ? 0 :
-								editor_get_eol_char_len(document_find_by_sci(sci));
+								editor_get_eol_char_len(editor);
 
 	/* check that the line is empty, to not kill text in the line */
 	line_buf = sci_get_line(sci, line);
@@ -1105,11 +1106,16 @@ static void close_block(GeanyEditor *editor, gint pos)
  * NULL terminated in any case, even when the word is truncated because wordlen is too small.
  * position can be -1, then the current position is used.
  * wc are the wordchars to use, if NULL, GEANY_WORDCHARS will be used */
-void editor_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_t wordlen,
+void editor_find_current_word(GeanyEditor *editor, gint pos, gchar *word, size_t wordlen,
 							  const gchar *wc)
 {
 	gint line, line_start, startword, endword;
 	gchar *chunk;
+	ScintillaObject *sci;
+
+	if (editor == NULL)
+		return;
+	sci = editor->sci;
 
 	if (pos == -1)
 		pos = sci_get_current_position(sci);
@@ -1294,7 +1300,7 @@ static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 
 
 /* use pos = -1 to search for the previous unmatched open bracket. */
-gboolean editor_show_calltip(GeanyDocument *doc, gint pos)
+gboolean editor_show_calltip(GeanyEditor *editor, gint pos)
 {
 	gint orig_pos = pos; /* the position for the calltip */
 	gint lexer;
@@ -1303,9 +1309,9 @@ gboolean editor_show_calltip(GeanyDocument *doc, gint pos)
 	gchar *str;
 	ScintillaObject *sci;
 
-	if (doc == NULL || doc->file_type == NULL)
+	if (editor == NULL || editor->document->file_type == NULL)
 		return FALSE;
-	sci = doc->editor->sci;
+	sci = editor->sci;
 
 	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 
@@ -1326,10 +1332,10 @@ gboolean editor_show_calltip(GeanyDocument *doc, gint pos)
 		return FALSE;
 
 	word[0] = '\0';
-	editor_find_current_word(sci, pos - 1, word, sizeof word, NULL);
+	editor_find_current_word(editor, pos - 1, word, sizeof word, NULL);
 	if (word[0] == '\0') return FALSE;
 
-	str = find_calltip(word, doc->file_type);
+	str = find_calltip(word, editor->document->file_type);
 	if (str)
 	{
 		g_free(calltip.text);	/* free the old calltip */
@@ -1382,15 +1388,17 @@ autocomplete_html(ScintillaObject *sci, const gchar *root, gsize rootlen)
 
 /* Current document & global tags autocompletion */
 static gboolean
-autocomplete_tags(GeanyDocument *doc, const gchar *root, gsize rootlen)
+autocomplete_tags(GeanyEditor *editor, const gchar *root, gsize rootlen)
 {
 	TMTagAttrType attrs[] = { tm_tag_attr_name_t, 0 };
 	const GPtrArray *tags;
 	ScintillaObject *sci;
+	GeanyDocument *doc;
 
-	if (doc == NULL || doc->file_type == NULL)
+	if (editor == NULL || editor->document->file_type == NULL)
 		return FALSE;
-	sci = doc->editor->sci;
+	sci = editor->sci;
+	doc = editor->document;
 
 	tags = tm_workspace_find(root, tm_tag_max_t, attrs, TRUE, doc->file_type->lang);
 	if (NULL != tags && tags->len > 0)
@@ -1438,7 +1446,7 @@ static gboolean autocomplete_check_for_html(gint ft_id, gint style)
 }
 
 
-gboolean editor_start_auto_complete(GeanyDocument *doc, gint pos, gboolean force)
+gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean force)
 {
 	gint line, line_start, line_len, line_pos, current, rootlen, startword, lexer, style;
 	gchar *linebuf, *root;
@@ -1448,7 +1456,7 @@ gboolean editor_start_auto_complete(GeanyDocument *doc, gint pos, gboolean force
 	GeanyFiletype *ft;
 
 	if ((! editor_prefs.auto_complete_symbols && ! force) ||
-		doc == NULL || doc->file_type == NULL)
+		editor == NULL || editor->document->file_type == NULL)
 		return FALSE;
 
 	/* If we are at the beginning of the document, we skip autocompletion as we can't determine the
@@ -1456,8 +1464,8 @@ gboolean editor_start_auto_complete(GeanyDocument *doc, gint pos, gboolean force
 	if (pos < 2)
 		return FALSE;
 
-	sci = doc->editor->sci;
-	ft = doc->file_type;
+	sci = editor->sci;
+	ft = editor->document->file_type;
 
 	line = sci_get_line_from_position(sci, pos);
 	line_start = sci_get_position_from_line(sci, line);
@@ -1495,7 +1503,7 @@ gboolean editor_start_auto_complete(GeanyDocument *doc, gint pos, gboolean force
 		/* force is set when called by keyboard shortcut, otherwise start at the
 		 * editor_prefs.symbolcompletion_min_chars'th char */
 		if (force || rootlen >= editor_prefs.symbolcompletion_min_chars)
-			ret = autocomplete_tags(doc, root, rootlen);
+			ret = autocomplete_tags(editor, root, rootlen);
 	}
 
 	g_free(linebuf);
@@ -1503,17 +1511,16 @@ gboolean editor_start_auto_complete(GeanyDocument *doc, gint pos, gboolean force
 }
 
 
-void editor_auto_latex(GeanyDocument *doc, gint pos)
+void editor_auto_latex(GeanyEditor *editor, gint pos)
 {
 	ScintillaObject *sci;
 
-	if (doc == NULL || doc->file_type == NULL)
+	if (editor == NULL || editor->document->file_type == NULL)
 		return;
-	sci = doc->editor->sci;
+	sci = editor->sci;
 
 	if (sci_get_char_at(sci, pos - 2) == '}')
 	{
-		GeanyEditor *editor = doc->editor;
 		gchar *eol, *buf, *construct;
 		gchar env[50];
 		gint line = sci_get_line_from_position(sci, pos - 2);
@@ -1566,7 +1573,7 @@ void editor_auto_latex(GeanyDocument *doc, gint pos)
 			/* get the indentation */
 			if (editor->auto_indent)
 				read_indent(editor, pos);
-			eol = g_strconcat(editor_get_eol_char(doc), indent, NULL);
+			eol = g_strconcat(editor_get_eol_char(editor), indent, NULL);
 
 			construct = g_strdup_printf("%s\\end%s{%s}", eol, full_cmd, env);
 
@@ -1631,12 +1638,12 @@ void snippets_replace_specials(gpointer key, gpointer value, gpointer user_data)
 }
 
 
-static gchar *snippets_replace_wildcards(GeanyDocument *doc, gchar *text)
+static gchar *snippets_replace_wildcards(GeanyEditor *editor, gchar *text)
 {
 	gchar *year = utils_get_date_time(template_prefs.year_format, NULL);
 	gchar *date = utils_get_date_time(template_prefs.date_format, NULL);
 	gchar *datetime = utils_get_date_time(template_prefs.datetime_format, NULL);
-	gchar *basename = g_path_get_basename(DOC_FILENAME(doc));
+	gchar *basename = g_path_get_basename(DOC_FILENAME(editor->document));
 
 	text = templates_replace_all(text, year, date);
 	text = utils_str_replace(text, "{datetime}", datetime);
@@ -1673,7 +1680,7 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 	}
 
 	read_indent(editor, pos);
-	lindent = g_strconcat(editor_get_eol_char(editor->document), indent, NULL);
+	lindent = g_strconcat(editor_get_eol_char(editor), indent, NULL);
 	whitespace = get_single_indent(editor);
 
 	/* remove the typed word, it will be added again by the used auto completion
@@ -1703,7 +1710,7 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 	pattern = utils_str_replace(pattern, "%ws%", whitespace);
 
 	/* replace any %template% wildcards */
-	pattern = snippets_replace_wildcards(editor->document, pattern);
+	pattern = snippets_replace_wildcards(editor, pattern);
 
 	/* find the %cursor% pos (has to be done after all other operations) */
 	step = utils_strpos(pattern, "%cursor%");
@@ -1741,17 +1748,17 @@ static gboolean at_eol(ScintillaObject *sci, gint pos)
 }
 
 
-gboolean editor_complete_snippet(GeanyDocument *doc, gint pos)
+gboolean editor_complete_snippet(GeanyEditor *editor, gint pos)
 {
 	gboolean result = FALSE;
 	gint lexer, style;
 	gchar *wc;
 	ScintillaObject *sci;
 
-	if (doc == NULL)
+	if (editor == NULL)
 		return FALSE;
 
-	sci = doc->editor->sci;
+	sci = editor->sci;
 	/* return if we are editing an existing line (chars on right of cursor) */
 	if (! editor_prefs.complete_snippets_whilst_editing && ! at_eol(sci, pos))
 		return FALSE;
@@ -1760,13 +1767,13 @@ gboolean editor_complete_snippet(GeanyDocument *doc, gint pos)
 	style = SSM(sci, SCI_GETSTYLEAT, pos - 2, 0);
 
 	wc = snippets_find_completion_by_name("Special", "wordchars");
-	editor_find_current_word(sci, pos, current_word, sizeof current_word, wc);
+	editor_find_current_word(editor, pos, current_word, sizeof current_word, wc);
 
 	/* prevent completion of "for " */
 	if (! isspace(sci_get_char_at(sci, pos - 1))) /* pos points to the line end char so use pos -1 */
 	{
 		sci_start_undo_action(sci);	/* needed because we insert a space separately from construct */
-		result = snippets_complete_constructs(doc->editor, pos, current_word);
+		result = snippets_complete_constructs(editor, pos, current_word);
 		sci_end_undo_action(sci);
 		if (result)
 			SSM(sci, SCI_CANCEL, 0, 0);	/* cancel any autocompletion list, etc */
@@ -1777,16 +1784,16 @@ gboolean editor_complete_snippet(GeanyDocument *doc, gint pos)
 }
 
 
-void editor_show_macro_list(ScintillaObject *sci)
+void editor_show_macro_list(GeanyEditor *editor)
 {
 	GString *words;
 
-	if (sci == NULL) return;
+	if (editor == NULL) return;
 
 	words = symbols_get_macro_list();
 	if (words == NULL) return;
 
-	SSM(sci, SCI_USERLISTSHOW, 1, (sptr_t) words->str);
+	SSM(editor->sci, SCI_USERLISTSHOW, 1, (sptr_t) words->str);
 	g_string_free(words, TRUE);
 }
 
@@ -1986,69 +1993,72 @@ static void auto_table(GeanyEditor *editor, gint pos)
 }
 
 
-static void real_comment_multiline(GeanyDocument *doc, gint line_start, gint last_line)
+static void real_comment_multiline(GeanyEditor *editor, gint line_start, gint last_line)
 {
 	const gchar *eol;
 	gchar *str_begin, *str_end;
 	gint line_len;
 
-	if (doc == NULL || doc->file_type == NULL)
+	if (editor == NULL || editor->document->file_type == NULL)
 		return;
 
-	eol = editor_get_eol_char(doc);
-	str_begin = g_strdup_printf("%s%s", doc->file_type->comment_open, eol);
-	str_end = g_strdup_printf("%s%s", doc->file_type->comment_close, eol);
+	eol = editor_get_eol_char(editor);
+	str_begin = g_strdup_printf("%s%s", editor->document->file_type->comment_open, eol);
+	str_end = g_strdup_printf("%s%s", editor->document->file_type->comment_close, eol);
 
 	/* insert the comment strings */
-	sci_insert_text(doc->editor->sci, line_start, str_begin);
-	line_len = sci_get_position_from_line(doc->editor->sci, last_line + 2);
-	sci_insert_text(doc->editor->sci, line_len, str_end);
+	sci_insert_text(editor->sci, line_start, str_begin);
+	line_len = sci_get_position_from_line(editor->sci, last_line + 2);
+	sci_insert_text(editor->sci, line_len, str_end);
 
 	g_free(str_begin);
 	g_free(str_end);
 }
 
 
-static void real_uncomment_multiline(GeanyDocument *doc)
+static void real_uncomment_multiline(GeanyEditor *editor)
 {
 	/* find the beginning of the multi line comment */
 	gint pos, line, len, x;
 	gchar *linebuf;
+	GeanyDocument *doc;
 
-	if (doc == NULL || doc->file_type == NULL)
+	if (editor == NULL || editor->document->file_type == NULL)
 		return;
+	doc = editor->document;
 
 	/* remove comment open chars */
 	pos = document_find_text(doc, doc->file_type->comment_open, 0, TRUE, FALSE, NULL);
 	SSM(doc->editor->sci, SCI_DELETEBACK, 0, 0);
 
 	/* check whether the line is empty and can be deleted */
-	line = sci_get_line_from_position(doc->editor->sci, pos);
-	len = sci_get_line_length(doc->editor->sci, line);
-	linebuf = sci_get_line(doc->editor->sci, line);
+	line = sci_get_line_from_position(editor->sci, pos);
+	len = sci_get_line_length(editor->sci, line);
+	linebuf = sci_get_line(editor->sci, line);
 	x = 0;
 	while (linebuf[x] != '\0' && isspace(linebuf[x])) x++;
-	if (x == len) SSM(doc->editor->sci, SCI_LINEDELETE, 0, 0);
+	if (x == len) SSM(editor->sci, SCI_LINEDELETE, 0, 0);
 	g_free(linebuf);
 
 	/* remove comment close chars */
 	pos = document_find_text(doc, doc->file_type->comment_close, 0, FALSE, FALSE, NULL);
-	SSM(doc->editor->sci, SCI_DELETEBACK, 0, 0);
+	SSM(editor->sci, SCI_DELETEBACK, 0, 0);
 
 	/* check whether the line is empty and can be deleted */
-	line = sci_get_line_from_position(doc->editor->sci, pos);
-	len = sci_get_line_length(doc->editor->sci, line);
-	linebuf = sci_get_line(doc->editor->sci, line);
+	line = sci_get_line_from_position(editor->sci, pos);
+	len = sci_get_line_length(editor->sci, line);
+	linebuf = sci_get_line(editor->sci, line);
 	x = 0;
 	while (linebuf[x] != '\0' && isspace(linebuf[x])) x++;
-	if (x == len) SSM(doc->editor->sci, SCI_LINEDELETE, 0, 0);
+	if (x == len) SSM(editor->sci, SCI_LINEDELETE, 0, 0);
 	g_free(linebuf);
 }
+
 
 /* set toggle to TRUE if the caller is the toggle function, FALSE otherwise
  * returns the amount of uncommented single comment lines, in case of multi line uncomment
  * it returns just 1 */
-gint editor_do_uncomment(GeanyDocument *doc, gint line, gboolean toggle)
+gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 {
 	gint first_line, last_line;
 	gint x, i, line_start, line_len;
@@ -2059,33 +2069,33 @@ gint editor_do_uncomment(GeanyDocument *doc, gint line, gboolean toggle)
 	gboolean break_loop = FALSE, single_line = FALSE;
 	GeanyFiletype *ft;
 
-	if (doc == NULL || doc->file_type == NULL)
+	if (editor == NULL || editor->document->file_type == NULL)
 		return 0;
 
 	if (line < 0)
 	{	/* use selection or current line */
-		sel_start = sci_get_selection_start(doc->editor->sci);
-		sel_end = sci_get_selection_end(doc->editor->sci);
+		sel_start = sci_get_selection_start(editor->sci);
+		sel_end = sci_get_selection_end(editor->sci);
 
-		first_line = sci_get_line_from_position(doc->editor->sci, sel_start);
+		first_line = sci_get_line_from_position(editor->sci, sel_start);
 		/* Find the last line with chars selected (not EOL char) */
-		last_line = sci_get_line_from_position(doc->editor->sci,
-			sel_end - editor_get_eol_char_len(doc));
+		last_line = sci_get_line_from_position(editor->sci,
+			sel_end - editor_get_eol_char_len(editor));
 		last_line = MAX(first_line, last_line);
 	}
 	else
 	{
 		first_line = last_line = line;
-		sel_start = sel_end = sci_get_position_from_line(doc->editor->sci, line);
+		sel_start = sel_end = sci_get_position_from_line(editor->sci, line);
 	}
 
-	ft = doc->file_type;
+	ft = editor->document->file_type;
 
 	/* detection of HTML vs PHP code, if non-PHP set filetype to XML */
-	line_start = sci_get_position_from_line(doc->editor->sci, first_line);
+	line_start = sci_get_position_from_line(editor->sci, first_line);
 	if (ft->id == GEANY_FILETYPES_PHP)
 	{
-		if (! is_style_php(sci_get_style_at(doc->editor->sci, line_start)))
+		if (! is_style_php(sci_get_style_at(editor->sci, line_start)))
 			ft = filetypes[GEANY_FILETYPES_XML];
 	}
 
@@ -2098,20 +2108,20 @@ gint editor_do_uncomment(GeanyDocument *doc, gint line, gboolean toggle)
 	if (co_len == 0)
 		return 0;
 
-	SSM(doc->editor->sci, SCI_BEGINUNDOACTION, 0, 0);
+	SSM(editor->sci, SCI_BEGINUNDOACTION, 0, 0);
 
 	for (i = first_line; (i <= last_line) && (! break_loop); i++)
 	{
 		gint buf_len;
 
-		line_start = sci_get_position_from_line(doc->editor->sci, i);
-		line_len = sci_get_line_length(doc->editor->sci, i);
+		line_start = sci_get_position_from_line(editor->sci, i);
+		line_len = sci_get_line_length(editor->sci, i);
 		x = 0;
 
 		buf_len = MIN((gint)sizeof(sel) - 1, line_len - 1);
 		if (buf_len <= 0)
 			continue;
-		sci_get_text_range(doc->editor->sci, line_start, line_start + buf_len, sel);
+		sci_get_text_range(editor->sci, line_start, line_start + buf_len, sel);
 		sel[buf_len] = '\0';
 
 		while (isspace(sel[x])) x++;
@@ -2139,15 +2149,15 @@ gint editor_do_uncomment(GeanyDocument *doc, gint line, gboolean toggle)
 						continue;
 				}
 
-				SSM(doc->editor->sci, SCI_SETSEL, line_start + x, line_start + x + co_len);
-				sci_replace_sel(doc->editor->sci, "");
+				SSM(editor->sci, SCI_SETSEL, line_start + x, line_start + x + co_len);
+				sci_replace_sel(editor->sci, "");
 				count++;
 			}
 			/* use multi line comment */
 			else
 			{
 				gint style_comment;
-				gint lexer = SSM(doc->editor->sci, SCI_GETLEXER, 0, 0);
+				gint lexer = SSM(editor->sci, SCI_GETLEXER, 0, 0);
 
 				/* process only lines which are already comments */
 				switch (lexer)
@@ -2155,7 +2165,7 @@ gint editor_do_uncomment(GeanyDocument *doc, gint line, gboolean toggle)
 					case SCLEX_XML:
 					case SCLEX_HTML:
 					{
-						if (is_style_php(sci_get_style_at(doc->editor->sci, line_start)))
+						if (is_style_php(sci_get_style_at(editor->sci, line_start)))
 							style_comment = SCE_HPHP_COMMENT;
 						else style_comment = SCE_H_COMMENT;
 						break;
@@ -2166,9 +2176,9 @@ gint editor_do_uncomment(GeanyDocument *doc, gint line, gboolean toggle)
 					case SCLEX_D: style_comment = SCE_D_COMMENT; break;
 					default: style_comment = SCE_C_COMMENT;
 				}
-				if (sci_get_style_at(doc->editor->sci, line_start + x) == style_comment)
+				if (sci_get_style_at(editor->sci, line_start + x) == style_comment)
 				{
-					real_uncomment_multiline(doc);
+					real_uncomment_multiline(editor);
 					count = 1;
 				}
 
@@ -2178,7 +2188,7 @@ gint editor_do_uncomment(GeanyDocument *doc, gint line, gboolean toggle)
 			}
 		}
 	}
-	SSM(doc->editor->sci, SCI_ENDUNDOACTION, 0, 0);
+	SSM(editor->sci, SCI_ENDUNDOACTION, 0, 0);
 
 	/* restore selection if there is one
 	 * but don't touch the selection if caller is editor_do_comment_toggle */
@@ -2186,14 +2196,14 @@ gint editor_do_uncomment(GeanyDocument *doc, gint line, gboolean toggle)
 	{
 		if (single_line)
 		{
-			sci_set_selection_start(doc->editor->sci, sel_start - co_len);
-			sci_set_selection_end(doc->editor->sci, sel_end - (count * co_len));
+			sci_set_selection_start(editor->sci, sel_start - co_len);
+			sci_set_selection_end(editor->sci, sel_end - (count * co_len));
 		}
 		else
 		{
-			gint eol_len = editor_get_eol_char_len(doc);
-			sci_set_selection_start(doc->editor->sci, sel_start - co_len - eol_len);
-			sci_set_selection_end(doc->editor->sci, sel_end - co_len - eol_len);
+			gint eol_len = editor_get_eol_char_len(editor);
+			sci_set_selection_start(editor->sci, sel_start - co_len - eol_len);
+			sci_set_selection_end(editor->sci, sel_end - co_len - eol_len);
 		}
 	}
 
@@ -2201,7 +2211,7 @@ gint editor_do_uncomment(GeanyDocument *doc, gint line, gboolean toggle)
 }
 
 
-void editor_do_comment_toggle(GeanyDocument *doc)
+void editor_do_comment_toggle(GeanyEditor *editor)
 {
 	gint first_line, last_line;
 	gint x, i, line_start, line_len, first_line_start;
@@ -2214,26 +2224,26 @@ void editor_do_comment_toggle(GeanyDocument *doc)
 	gsize tm_len = strlen(editor_prefs.comment_toggle_mark);
 	GeanyFiletype *ft;
 
-	if (doc == NULL || doc->file_type == NULL)
+	if (editor == NULL || editor->document->file_type == NULL)
 		return;
 
-	sel_start = sci_get_selection_start(doc->editor->sci);
-	sel_end = sci_get_selection_end(doc->editor->sci);
+	sel_start = sci_get_selection_start(editor->sci);
+	sel_end = sci_get_selection_end(editor->sci);
 
-	ft = doc->file_type;
+	ft = editor->document->file_type;
 
-	first_line = sci_get_line_from_position(doc->editor->sci,
-		sci_get_selection_start(doc->editor->sci));
+	first_line = sci_get_line_from_position(editor->sci,
+		sci_get_selection_start(editor->sci));
 	/* Find the last line with chars selected (not EOL char) */
-	last_line = sci_get_line_from_position(doc->editor->sci,
-		sci_get_selection_end(doc->editor->sci) - editor_get_eol_char_len(doc));
+	last_line = sci_get_line_from_position(editor->sci,
+		sci_get_selection_end(editor->sci) - editor_get_eol_char_len(editor));
 	last_line = MAX(first_line, last_line);
 
 	/* detection of HTML vs PHP code, if non-PHP set filetype to XML */
-	first_line_start = sci_get_position_from_line(doc->editor->sci, first_line);
+	first_line_start = sci_get_position_from_line(editor->sci, first_line);
 	if (ft->id == GEANY_FILETYPES_PHP)
 	{
-		if (! is_style_php(sci_get_style_at(doc->editor->sci, first_line_start)))
+		if (! is_style_php(sci_get_style_at(editor->sci, first_line_start)))
 			ft = filetypes[GEANY_FILETYPES_XML];
 	}
 
@@ -2246,20 +2256,20 @@ void editor_do_comment_toggle(GeanyDocument *doc)
 	if (co_len == 0)
 		return;
 
-	SSM(doc->editor->sci, SCI_BEGINUNDOACTION, 0, 0);
+	SSM(editor->sci, SCI_BEGINUNDOACTION, 0, 0);
 
 	for (i = first_line; (i <= last_line) && (! break_loop); i++)
 	{
 		gint buf_len;
 
-		line_start = sci_get_position_from_line(doc->editor->sci, i);
-		line_len = sci_get_line_length(doc->editor->sci, i);
+		line_start = sci_get_position_from_line(editor->sci, i);
+		line_len = sci_get_line_length(editor->sci, i);
 		x = 0;
 
 		buf_len = MIN((gint)sizeof(sel) - 1, line_len - 1);
 		if (buf_len < 0)
 			continue;
-		sci_get_text_range(doc->editor->sci, line_start, line_start + buf_len, sel);
+		sci_get_text_range(editor->sci, line_start, line_start + buf_len, sel);
 		sel[buf_len] = '\0';
 
 		while (isspace(sel[x])) x++;
@@ -2281,19 +2291,19 @@ void editor_do_comment_toggle(GeanyDocument *doc)
 
 			if (do_continue)
 			{
-				count_uncommented += editor_do_uncomment(doc, i, TRUE);
+				count_uncommented += editor_do_uncomment(editor, i, TRUE);
 				continue;
 			}
 
 			/* we are still here, so the above lines were not already comments, so comment it */
-			editor_do_comment(doc, i, TRUE, TRUE);
+			editor_do_comment(editor, i, TRUE, TRUE);
 			count_commented++;
 		}
 		/* use multi line comment */
 		else
 		{
 			gint style_comment;
-			gint lexer = SSM(doc->editor->sci, SCI_GETLEXER, 0, 0);
+			gint lexer = SSM(editor->sci, SCI_GETLEXER, 0, 0);
 
 			/* skip lines which are already comments */
 			switch (lexer)
@@ -2301,7 +2311,7 @@ void editor_do_comment_toggle(GeanyDocument *doc)
 				case SCLEX_XML:
 				case SCLEX_HTML:
 				{
-					if (is_style_php(sci_get_style_at(doc->editor->sci, line_start)))
+					if (is_style_php(sci_get_style_at(editor->sci, line_start)))
 						style_comment = SCE_HPHP_COMMENT;
 					else style_comment = SCE_H_COMMENT;
 					break;
@@ -2314,14 +2324,14 @@ void editor_do_comment_toggle(GeanyDocument *doc)
 				case SCLEX_PERL: style_comment = SCE_PL_POD; break;
 				default: style_comment = SCE_C_COMMENT;
 			}
-			if (sci_get_style_at(doc->editor->sci, line_start + x) == style_comment)
+			if (sci_get_style_at(editor->sci, line_start + x) == style_comment)
 			{
-				real_uncomment_multiline(doc);
+				real_uncomment_multiline(editor);
 				count_uncommented++;
 			}
 			else
 			{
-				real_comment_multiline(doc, line_start, last_line);
+				real_comment_multiline(editor, line_start, last_line);
 				count_commented++;
 			}
 
@@ -2331,7 +2341,7 @@ void editor_do_comment_toggle(GeanyDocument *doc)
 		}
 	}
 
-	SSM(doc->editor->sci, SCI_ENDUNDOACTION, 0, 0);
+	SSM(editor->sci, SCI_ENDUNDOACTION, 0, 0);
 
 	co_len += tm_len;
 
@@ -2343,38 +2353,38 @@ void editor_do_comment_toggle(GeanyDocument *doc)
 			gint a = (first_line_was_comment) ? - co_len : co_len;
 
 			/* don't modify sel_start when the selection starts within indentation */
-			read_indent(doc->editor, sel_start);
+			read_indent(editor, sel_start);
 			if ((sel_start - first_line_start) <= (gint) strlen(indent))
 				a = 0;
 
-			sci_set_selection_start(doc->editor->sci, sel_start + a);
-			sci_set_selection_end(doc->editor->sci, sel_end +
+			sci_set_selection_start(editor->sci, sel_start + a);
+			sci_set_selection_end(editor->sci, sel_end +
 								(count_commented * co_len) - (count_uncommented * co_len));
 		}
 		else
 		{
-			gint eol_len = editor_get_eol_char_len(doc);
+			gint eol_len = editor_get_eol_char_len(editor);
 			if (count_uncommented > 0)
 			{
-				sci_set_selection_start(doc->editor->sci, sel_start - co_len - eol_len);
-				sci_set_selection_end(doc->editor->sci, sel_end - co_len - eol_len);
+				sci_set_selection_start(editor->sci, sel_start - co_len - eol_len);
+				sci_set_selection_end(editor->sci, sel_end - co_len - eol_len);
 			}
 			else
 			{
-				sci_set_selection_start(doc->editor->sci, sel_start + co_len + eol_len);
-				sci_set_selection_end(doc->editor->sci, sel_end + co_len + eol_len);
+				sci_set_selection_start(editor->sci, sel_start + co_len + eol_len);
+				sci_set_selection_end(editor->sci, sel_end + co_len + eol_len);
 			}
 		}
 	}
 	else if (count_uncommented > 0)
 	{
-		sci_set_current_position(doc->editor->sci, sel_start - co_len, TRUE);
+		sci_set_current_position(editor->sci, sel_start - co_len, TRUE);
 	}
 }
 
 
 /* set toggle to TRUE if the caller is the toggle function, FALSE otherwise */
-void editor_do_comment(GeanyDocument *doc, gint line, gboolean allow_empty_lines, gboolean toggle)
+void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_lines, gboolean toggle)
 {
 	gint first_line, last_line;
 	gint x, i, line_start, line_len;
@@ -2383,33 +2393,33 @@ void editor_do_comment(GeanyDocument *doc, gint line, gboolean allow_empty_lines
 	gboolean break_loop = FALSE, single_line = FALSE;
 	GeanyFiletype *ft;
 
-	if (doc == NULL || doc->file_type == NULL)
+	if (editor == NULL || editor->document->file_type == NULL)
 		return;
 
 	if (line < 0)
 	{	/* use selection or current line */
-		sel_start = sci_get_selection_start(doc->editor->sci);
-		sel_end = sci_get_selection_end(doc->editor->sci);
+		sel_start = sci_get_selection_start(editor->sci);
+		sel_end = sci_get_selection_end(editor->sci);
 
-		first_line = sci_get_line_from_position(doc->editor->sci, sel_start);
+		first_line = sci_get_line_from_position(editor->sci, sel_start);
 		/* Find the last line with chars selected (not EOL char) */
-		last_line = sci_get_line_from_position(doc->editor->sci,
-			sel_end - editor_get_eol_char_len(doc));
+		last_line = sci_get_line_from_position(editor->sci,
+			sel_end - editor_get_eol_char_len(editor));
 		last_line = MAX(first_line, last_line);
 	}
 	else
 	{
 		first_line = last_line = line;
-		sel_start = sel_end = sci_get_position_from_line(doc->editor->sci, line);
+		sel_start = sel_end = sci_get_position_from_line(editor->sci, line);
 	}
 
-	ft = doc->file_type;
+	ft = editor->document->file_type;
 
 	/* detection of HTML vs PHP code, if non-PHP set filetype to XML */
-	line_start = sci_get_position_from_line(doc->editor->sci, first_line);
+	line_start = sci_get_position_from_line(editor->sci, first_line);
 	if (ft->id == GEANY_FILETYPES_PHP)
 	{
-		if (! is_style_php(sci_get_style_at(doc->editor->sci, line_start)))
+		if (! is_style_php(sci_get_style_at(editor->sci, line_start)))
 			ft = filetypes[GEANY_FILETYPES_XML];
 	}
 
@@ -2422,20 +2432,20 @@ void editor_do_comment(GeanyDocument *doc, gint line, gboolean allow_empty_lines
 	if (co_len == 0)
 		return;
 
-	SSM(doc->editor->sci, SCI_BEGINUNDOACTION, 0, 0);
+	SSM(editor->sci, SCI_BEGINUNDOACTION, 0, 0);
 
 	for (i = first_line; (i <= last_line) && (! break_loop); i++)
 	{
 		gint buf_len;
 
-		line_start = sci_get_position_from_line(doc->editor->sci, i);
-		line_len = sci_get_line_length(doc->editor->sci, i);
+		line_start = sci_get_position_from_line(editor->sci, i);
+		line_len = sci_get_line_length(editor->sci, i);
 		x = 0;
 
 		buf_len = MIN((gint)sizeof(sel) - 1, line_len - 1);
 		if (buf_len < 0)
 			continue;
-		sci_get_text_range(doc->editor->sci, line_start, line_start + buf_len, sel);
+		sci_get_text_range(editor->sci, line_start, line_start + buf_len, sel);
 		sel[buf_len] = '\0';
 
 		while (isspace(sel[x])) x++;
@@ -2455,17 +2465,17 @@ void editor_do_comment(GeanyDocument *doc, gint line, gboolean allow_empty_lines
 				if (toggle)
 				{
 					gchar *text = g_strconcat(co, editor_prefs.comment_toggle_mark, NULL);
-					sci_insert_text(doc->editor->sci, start, text);
+					sci_insert_text(editor->sci, start, text);
 					g_free(text);
 				}
 				else
-					sci_insert_text(doc->editor->sci, start, co);
+					sci_insert_text(editor->sci, start, co);
 			}
 			/* use multi line comment */
 			else
 			{
 				gint style_comment;
-				gint lexer = SSM(doc->editor->sci, SCI_GETLEXER, 0, 0);
+				gint lexer = SSM(editor->sci, SCI_GETLEXER, 0, 0);
 
 				/* skip lines which are already comments */
 				switch (lexer)
@@ -2473,7 +2483,7 @@ void editor_do_comment(GeanyDocument *doc, gint line, gboolean allow_empty_lines
 					case SCLEX_XML:
 					case SCLEX_HTML:
 					{
-						if (is_style_php(sci_get_style_at(doc->editor->sci, line_start)))
+						if (is_style_php(sci_get_style_at(editor->sci, line_start)))
 							style_comment = SCE_HPHP_COMMENT;
 						else style_comment = SCE_H_COMMENT;
 						break;
@@ -2484,9 +2494,9 @@ void editor_do_comment(GeanyDocument *doc, gint line, gboolean allow_empty_lines
 					case SCLEX_D: style_comment = SCE_D_COMMENT; break;
 					default: style_comment = SCE_C_COMMENT;
 				}
-				if (sci_get_style_at(doc->editor->sci, line_start + x) == style_comment) continue;
+				if (sci_get_style_at(editor->sci, line_start + x) == style_comment) continue;
 
-				real_comment_multiline(doc, line_start, last_line);
+				real_comment_multiline(editor, line_start, last_line);
 
 				/* break because we are already on the last line */
 				break_loop = TRUE;
@@ -2494,7 +2504,7 @@ void editor_do_comment(GeanyDocument *doc, gint line, gboolean allow_empty_lines
 			}
 		}
 	}
-	SSM(doc->editor->sci, SCI_ENDUNDOACTION, 0, 0);
+	SSM(editor->sci, SCI_ENDUNDOACTION, 0, 0);
 
 	/* restore selection if there is one
 	 * but don't touch the selection if caller is editor_do_comment_toggle */
@@ -2502,46 +2512,47 @@ void editor_do_comment(GeanyDocument *doc, gint line, gboolean allow_empty_lines
 	{
 		if (single_line)
 		{
-			sci_set_selection_start(doc->editor->sci, sel_start + co_len);
-			sci_set_selection_end(doc->editor->sci, sel_end + ((i - first_line) * co_len));
+			sci_set_selection_start(editor->sci, sel_start + co_len);
+			sci_set_selection_end(editor->sci, sel_end + ((i - first_line) * co_len));
 		}
 		else
 		{
-			gint eol_len = editor_get_eol_char_len(doc);
-			sci_set_selection_start(doc->editor->sci, sel_start + co_len + eol_len);
-			sci_set_selection_end(doc->editor->sci, sel_end + co_len + eol_len);
+			gint eol_len = editor_get_eol_char_len(editor);
+			sci_set_selection_start(editor->sci, sel_start + co_len + eol_len);
+			sci_set_selection_end(editor->sci, sel_end + co_len + eol_len);
 		}
 	}
 }
 
 
-void editor_highlight_braces(ScintillaObject *sci, gint cur_pos)
+void editor_highlight_braces(GeanyEditor *editor, gint cur_pos)
 {
 	gint brace_pos = cur_pos - 1;
 	gint end_pos;
 
-	if (! utils_isbrace(sci_get_char_at(sci, brace_pos), editor_prefs.brace_match_ltgt))
+	if (! utils_isbrace(sci_get_char_at(editor->sci, brace_pos), editor_prefs.brace_match_ltgt))
 	{
 		brace_pos++;
-		if (! utils_isbrace(sci_get_char_at(sci, brace_pos), editor_prefs.brace_match_ltgt))
+		if (! utils_isbrace(sci_get_char_at(editor->sci, brace_pos), editor_prefs.brace_match_ltgt))
 		{
-			SSM(sci, SCI_SETHIGHLIGHTGUIDE, 0, 0);
-			SSM(sci, SCI_BRACEBADLIGHT, (uptr_t)-1, 0);
+			SSM(editor->sci, SCI_SETHIGHLIGHTGUIDE, 0, 0);
+			SSM(editor->sci, SCI_BRACEBADLIGHT, (uptr_t)-1, 0);
 			return;
 		}
 	}
-	end_pos = SSM(sci, SCI_BRACEMATCH, brace_pos, 0);
+	end_pos = SSM(editor->sci, SCI_BRACEMATCH, brace_pos, 0);
 
 	if (end_pos >= 0)
 	{
-		gint col = MIN(sci_get_col_from_position(sci, brace_pos), sci_get_col_from_position(sci, end_pos));
-		SSM(sci, SCI_SETHIGHLIGHTGUIDE, col, 0);
-		SSM(sci, SCI_BRACEHIGHLIGHT, brace_pos, end_pos);
+		gint col = MIN(sci_get_col_from_position(editor->sci, brace_pos),
+			sci_get_col_from_position(editor->sci, end_pos));
+		SSM(editor->sci, SCI_SETHIGHLIGHTGUIDE, col, 0);
+		SSM(editor->sci, SCI_BRACEHIGHLIGHT, brace_pos, end_pos);
 	}
 	else
 	{
-		SSM(sci, SCI_SETHIGHLIGHTGUIDE, 0, 0);
-		SSM(sci, SCI_BRACEBADLIGHT, brace_pos, 0);
+		SSM(editor->sci, SCI_SETHIGHLIGHTGUIDE, 0, 0);
+		SSM(editor->sci, SCI_BRACEBADLIGHT, brace_pos, 0);
 	}
 }
 
@@ -2860,18 +2871,21 @@ gint editor_lexer_get_type_keyword_idx(gint lexer)
 
 
 /* inserts a three-line comment at one line above current cursor position */
-void editor_insert_multiline_comment(GeanyDocument *doc)
+void editor_insert_multiline_comment(GeanyEditor *editor)
 {
 	gchar *text;
 	gint text_len;
 	gint line;
 	gint pos;
 	gboolean have_multiline_comment = FALSE;
-	GeanyEditor *editor;
+	GeanyDocument *doc;
 
-	if (doc == NULL || doc->file_type == NULL || doc->file_type->comment_open == NULL)
+	if (editor == NULL || editor->document->file_type == NULL ||
+		editor->document->file_type->comment_open == NULL)
+	{
 		return;
-	editor = doc->editor;
+	}
+	doc = editor->document;
 
 	if (doc->file_type->comment_close != NULL && strlen(doc->file_type->comment_close) > 0)
 		have_multiline_comment = TRUE;
@@ -2902,7 +2916,7 @@ void editor_insert_multiline_comment(GeanyDocument *doc)
 	sci_set_selection_start(editor->sci, pos);
 	sci_set_selection_end(editor->sci, pos + text_len);
 
-	editor_do_comment(doc, -1, TRUE, FALSE);
+	editor_do_comment(editor, -1, TRUE, FALSE);
 
 	/* set the current position to the start of the first inserted line */
 	pos += strlen(doc->file_type->comment_open);
@@ -2922,26 +2936,31 @@ void editor_insert_multiline_comment(GeanyDocument *doc)
 /* Note: If the editor is pending a redraw, set document::scroll_percent instead.
  * Scroll the view to make line appear at percent_of_view.
  * line can be -1 to use the current position. */
-void editor_scroll_to_line(ScintillaObject *sci, gint line, gfloat percent_of_view)
+void editor_scroll_to_line(GeanyEditor *editor, gint line, gfloat percent_of_view)
 {
 	gint vis1, los, delta;
-	GtkWidget *wid = GTK_WIDGET(sci);
+	GtkWidget *wid;
+
+	if (editor == NULL)
+		return;
+
+	wid = GTK_WIDGET(editor->sci);
 
 	if (! wid->window || ! gdk_window_is_viewable(wid->window))
 		return;	/* prevent gdk_window_scroll warning */
 
 	if (line == -1)
-		line = sci_get_current_line(sci);
+		line = sci_get_current_line(editor->sci);
 
 	/* sci 'visible line' != doc line number because of folding and line wrapping */
 	/* calling SCI_VISIBLEFROMDOCLINE for line is more accurate than calling
 	 * SCI_DOCLINEFROMVISIBLE for vis1. */
-	line = SSM(sci, SCI_VISIBLEFROMDOCLINE, line, 0);
-	vis1 = SSM(sci, SCI_GETFIRSTVISIBLELINE, 0, 0);
-	los = SSM(sci, SCI_LINESONSCREEN, 0, 0);
+	line = SSM(editor->sci, SCI_VISIBLEFROMDOCLINE, line, 0);
+	vis1 = SSM(editor->sci, SCI_GETFIRSTVISIBLELINE, 0, 0);
+	los = SSM(editor->sci, SCI_LINESONSCREEN, 0, 0);
 	delta = (line - vis1) - los * percent_of_view;
-	sci_scroll_lines(sci, delta);
-	sci_scroll_caret(sci); /* needed for horizontal scrolling */
+	sci_scroll_lines(editor->sci, delta);
+	sci_scroll_caret(editor->sci); /* needed for horizontal scrolling */
 }
 
 
@@ -2967,66 +2986,67 @@ void editor_insert_alternative_whitespace(GeanyEditor *editor)
 }
 
 
-void editor_select_word(ScintillaObject *sci)
+void editor_select_word(GeanyEditor *editor)
 {
 	gint pos;
 	gint start;
 	gint end;
 
-	g_return_if_fail(sci != NULL);
+	g_return_if_fail(editor != NULL);
 
-	pos = SSM(sci, SCI_GETCURRENTPOS, 0, 0);
-	start = SSM(sci, SCI_WORDSTARTPOSITION, pos, TRUE);
-	end = SSM(sci, SCI_WORDENDPOSITION, pos, TRUE);
+	pos = SSM(editor->sci, SCI_GETCURRENTPOS, 0, 0);
+	start = SSM(editor->sci, SCI_WORDSTARTPOSITION, pos, TRUE);
+	end = SSM(editor->sci, SCI_WORDENDPOSITION, pos, TRUE);
 
 	if (start == end) /* caret in whitespaces sequence */
 	{
 		/* look forward but reverse the selection direction,
 		 * so the caret end up stay as near as the original position. */
-		end = SSM(sci, SCI_WORDENDPOSITION, pos, FALSE);
-		start = SSM(sci, SCI_WORDENDPOSITION, end, TRUE);
+		end = SSM(editor->sci, SCI_WORDENDPOSITION, pos, FALSE);
+		start = SSM(editor->sci, SCI_WORDENDPOSITION, end, TRUE);
 		if (start == end)
 			return;
 	}
 
-	SSM(sci, SCI_SETSEL, start, end);
+	SSM(editor->sci, SCI_SETSEL, start, end);
 }
 
 
 /* extra_line is for selecting the cursor line or anchor line at the bottom of a selection,
  * when those lines have no selection. */
-void editor_select_lines(ScintillaObject *sci, gboolean extra_line)
+void editor_select_lines(GeanyEditor *editor, gboolean extra_line)
 {
 	gint start, end, line;
 
-	g_return_if_fail(sci != NULL);
+	g_return_if_fail(editor != NULL);
 
-	start = sci_get_selection_start(sci);
-	end = sci_get_selection_end(sci);
+	start = sci_get_selection_start(editor->sci);
+	end = sci_get_selection_end(editor->sci);
 
 	/* check if whole lines are already selected */
 	if (! extra_line && start != end &&
-		sci_get_col_from_position(sci, start) == 0 &&
-		sci_get_col_from_position(sci, end) == 0)
+		sci_get_col_from_position(editor->sci, start) == 0 &&
+		sci_get_col_from_position(editor->sci, end) == 0)
 			return;
 
-	line = sci_get_line_from_position(sci, start);
-	start = sci_get_position_from_line(sci, line);
+	line = sci_get_line_from_position(editor->sci, start);
+	start = sci_get_position_from_line(editor->sci, line);
 
-	line = sci_get_line_from_position(sci, end);
-	end = sci_get_position_from_line(sci, line + 1);
+	line = sci_get_line_from_position(editor->sci, end);
+	end = sci_get_position_from_line(editor->sci, line + 1);
 
-	SSM(sci, SCI_SETSEL, start, end);
+	SSM(editor->sci, SCI_SETSEL, start, end);
 }
 
 
 /* find the start or end of a paragraph by searching all lines in direction (UP or DOWN)
  * starting at the given line and return the found line or return -1 if called on an empty line */
-static gint find_paragraph_stop(ScintillaObject *sci, gint line, gint direction)
+static gint find_paragraph_stop(GeanyEditor *editor, gint line, gint direction)
 {
 	gboolean found_end = FALSE;
 	gint step;
 	gchar *line_buf, *x;
+	ScintillaObject *sci = editor->sci;
 
 	/* first check current line and return -1 if it is empty to skip creating of a selection */
 	line_buf = x = sci_get_line(sci, line);
@@ -3068,15 +3088,16 @@ static gint find_paragraph_stop(ScintillaObject *sci, gint line, gint direction)
 }
 
 
-void editor_select_paragraph(ScintillaObject *sci)
+void editor_select_paragraph(GeanyEditor *editor)
 {
 	gint pos_start, pos_end, line_start, line_found;
 
-	g_return_if_fail(sci != NULL);
+	g_return_if_fail(editor != NULL);
 
-	line_start = SSM(sci, SCI_LINEFROMPOSITION, SSM(sci, SCI_GETCURRENTPOS, 0, 0), 0);
+	line_start = SSM(editor->sci, SCI_LINEFROMPOSITION,
+						SSM(editor->sci, SCI_GETCURRENTPOS, 0, 0), 0);
 
-	line_found = find_paragraph_stop(sci, line_start, UP);
+	line_found = find_paragraph_stop(editor, line_start, UP);
 	if (line_found == -1)
 		return;
 
@@ -3085,19 +3106,18 @@ void editor_select_paragraph(ScintillaObject *sci)
 	if (line_found > 0)
 		line_found++;
 
-	pos_start = SSM(sci, SCI_POSITIONFROMLINE, line_found, 0);
+	pos_start = SSM(editor->sci, SCI_POSITIONFROMLINE, line_found, 0);
 
-	line_found = find_paragraph_stop(sci, line_start, DOWN);
-	pos_end = SSM(sci, SCI_POSITIONFROMLINE, line_found, 0);
+	line_found = find_paragraph_stop(editor, line_start, DOWN);
+	pos_end = SSM(editor->sci, SCI_POSITIONFROMLINE, line_found, 0);
 
-	SSM(sci, SCI_SETSEL, pos_start, pos_end);
+	SSM(editor->sci, SCI_SETSEL, pos_start, pos_end);
 }
 
 
 /* simple indentation to indent the current line with the same indent as the previous one */
-static void smart_line_indentation(GeanyDocument *doc, gint first_line, gint last_line)
+static void smart_line_indentation(GeanyEditor *editor, gint first_line, gint last_line)
 {
-	GeanyEditor *editor = doc->editor;
 	gint i, sel_start = 0, sel_end = 0;
 
 	/* get previous line and use it for read_indent to use that line
@@ -3108,39 +3128,39 @@ static void smart_line_indentation(GeanyDocument *doc, gint first_line, gint las
 	{
 		/* skip the first line or if the indentation of the previous and current line are equal */
 		if (i == 0 ||
-			SSM(doc->editor->sci, SCI_GETLINEINDENTATION, i - 1, 0) ==
-			SSM(doc->editor->sci, SCI_GETLINEINDENTATION, i, 0))
+			SSM(editor->sci, SCI_GETLINEINDENTATION, i - 1, 0) ==
+			SSM(editor->sci, SCI_GETLINEINDENTATION, i, 0))
 			continue;
 
-		sel_start = SSM(doc->editor->sci, SCI_POSITIONFROMLINE, i, 0);
-		sel_end = SSM(doc->editor->sci, SCI_GETLINEINDENTPOSITION, i, 0);
+		sel_start = SSM(editor->sci, SCI_POSITIONFROMLINE, i, 0);
+		sel_end = SSM(editor->sci, SCI_GETLINEINDENTPOSITION, i, 0);
 		if (sel_start < sel_end)
 		{
-			SSM(doc->editor->sci, SCI_SETSEL, sel_start, sel_end);
-			sci_replace_sel(doc->editor->sci, "");
+			SSM(editor->sci, SCI_SETSEL, sel_start, sel_end);
+			sci_replace_sel(editor->sci, "");
 		}
-		sci_insert_text(doc->editor->sci, sel_start, indent);
+		sci_insert_text(editor->sci, sel_start, indent);
 	}
 }
 
 
 /* simple indentation to indent the current line with the same indent as the previous one */
-void editor_smart_line_indentation(GeanyDocument *doc, gint pos)
+void editor_smart_line_indentation(GeanyEditor *editor, gint pos)
 {
 	gint first_line, last_line;
 	gint first_sel_start, first_sel_end;
 	ScintillaObject *sci;
 
-	g_return_if_fail(doc != NULL);
+	g_return_if_fail(editor != NULL);
 
-	sci = doc->editor->sci;
+	sci = editor->sci;
 
 	first_sel_start = sci_get_selection_start(sci);
 	first_sel_end = sci_get_selection_end(sci);
 
 	first_line = sci_get_line_from_position(sci, first_sel_start);
 	/* Find the last line with chars selected (not EOL char) */
-	last_line = sci_get_line_from_position(sci, first_sel_end - editor_get_eol_char_len(doc));
+	last_line = sci_get_line_from_position(sci, first_sel_end - editor_get_eol_char_len(editor));
 	last_line = MAX(first_line, last_line);
 
 	if (pos == -1)
@@ -3148,7 +3168,7 @@ void editor_smart_line_indentation(GeanyDocument *doc, gint pos)
 
 	SSM(sci, SCI_BEGINUNDOACTION, 0, 0);
 
-	smart_line_indentation(doc, first_line, last_line);
+	smart_line_indentation(editor, first_line, last_line);
 
 	/* set cursor position if there was no selection */
 	if (first_sel_start == first_sel_end)
@@ -3170,40 +3190,40 @@ void editor_smart_line_indentation(GeanyDocument *doc, gint pos)
 
 
 /* increase / decrease current line or selection by one space */
-void editor_indentation_by_one_space(GeanyDocument *doc, gint pos, gboolean decrease)
+void editor_indentation_by_one_space(GeanyEditor *editor, gint pos, gboolean decrease)
 {
 	gint i, first_line, last_line, line_start, indentation_end, count = 0;
 	gint sel_start, sel_end, first_line_offset = 0;
 
-	g_return_if_fail(doc != NULL);
+	g_return_if_fail(editor != NULL);
 
-	sel_start = sci_get_selection_start(doc->editor->sci);
-	sel_end = sci_get_selection_end(doc->editor->sci);
+	sel_start = sci_get_selection_start(editor->sci);
+	sel_end = sci_get_selection_end(editor->sci);
 
-	first_line = sci_get_line_from_position(doc->editor->sci, sel_start);
+	first_line = sci_get_line_from_position(editor->sci, sel_start);
 	/* Find the last line with chars selected (not EOL char) */
-	last_line = sci_get_line_from_position(doc->editor->sci, sel_end - editor_get_eol_char_len(doc));
+	last_line = sci_get_line_from_position(editor->sci, sel_end - editor_get_eol_char_len(editor));
 	last_line = MAX(first_line, last_line);
 
 	if (pos == -1)
 		pos = sel_start;
 
-	SSM(doc->editor->sci, SCI_BEGINUNDOACTION, 0, 0);
+	SSM(editor->sci, SCI_BEGINUNDOACTION, 0, 0);
 
 	for (i = first_line; i <= last_line; i++)
 	{
-		indentation_end = SSM(doc->editor->sci, SCI_GETLINEINDENTPOSITION, i, 0);
+		indentation_end = SSM(editor->sci, SCI_GETLINEINDENTPOSITION, i, 0);
 		if (decrease)
 		{
-			line_start = SSM(doc->editor->sci, SCI_POSITIONFROMLINE, i, 0);
+			line_start = SSM(editor->sci, SCI_POSITIONFROMLINE, i, 0);
 			/* searching backwards for a space to remove */
-			while (sci_get_char_at(doc->editor->sci, indentation_end) != ' ' && indentation_end > line_start)
+			while (sci_get_char_at(editor->sci, indentation_end) != ' ' && indentation_end > line_start)
 				indentation_end--;
 
-			if (sci_get_char_at(doc->editor->sci, indentation_end) == ' ')
+			if (sci_get_char_at(editor->sci, indentation_end) == ' ')
 			{
-				SSM(doc->editor->sci, SCI_SETSEL, indentation_end, indentation_end + 1);
-				sci_replace_sel(doc->editor->sci, "");
+				SSM(editor->sci, SCI_SETSEL, indentation_end, indentation_end + 1);
+				sci_replace_sel(editor->sci, "");
 				count--;
 				if (i == first_line)
 					first_line_offset = -1;
@@ -3211,7 +3231,7 @@ void editor_indentation_by_one_space(GeanyDocument *doc, gint pos, gboolean decr
 		}
 		else
 		{
-			sci_insert_text(doc->editor->sci, indentation_end, " ");
+			sci_insert_text(editor->sci, indentation_end, " ");
 			count++;
 			if (i == first_line)
 				first_line_offset = 1;
@@ -3224,15 +3244,15 @@ void editor_indentation_by_one_space(GeanyDocument *doc, gint pos, gboolean decr
 		gint start = sel_start + first_line_offset;
 		if (first_line_offset < 0)
 			start = MAX(sel_start + first_line_offset,
-						SSM(doc->editor->sci, SCI_POSITIONFROMLINE, first_line, 0));
+						SSM(editor->sci, SCI_POSITIONFROMLINE, first_line, 0));
 
-		sci_set_selection_start(doc->editor->sci, start);
-		sci_set_selection_end(doc->editor->sci, sel_end + count);
+		sci_set_selection_start(editor->sci, start);
+		sci_set_selection_end(editor->sci, sel_end + count);
 	}
 	else
-		sci_set_current_position(doc->editor->sci, pos + count, FALSE);
+		sci_set_current_position(editor->sci, pos + count, FALSE);
 
-	SSM(doc->editor->sci, SCI_ENDUNDOACTION, 0, 0);
+	SSM(editor->sci, SCI_ENDUNDOACTION, 0, 0);
 }
 
 
@@ -3244,26 +3264,26 @@ void editor_finalize()
 
 /* wordchars: NULL or a string containing characters to match a word.
  * Returns: the current selection or the current word. */
-gchar *editor_get_default_selection(GeanyDocument *doc, gboolean use_current_word,
+gchar *editor_get_default_selection(GeanyEditor *editor, gboolean use_current_word,
 									const gchar *wordchars)
 {
 	gchar *s = NULL;
 
-	if (doc == NULL)
+	if (editor == NULL)
 		return NULL;
 
-	if (sci_get_lines_selected(doc->editor->sci) == 1)
+	if (sci_get_lines_selected(editor->sci) == 1)
 	{
-		gint len = sci_get_selected_text_length(doc->editor->sci);
+		gint len = sci_get_selected_text_length(editor->sci);
 
 		s = g_malloc(len + 1);
-		sci_get_selected_text(doc->editor->sci, s);
+		sci_get_selected_text(editor->sci, s);
 	}
-	else if (sci_get_lines_selected(doc->editor->sci) == 0 && use_current_word)
+	else if (sci_get_lines_selected(editor->sci) == 0 && use_current_word)
 	{	/* use the word at current cursor position */
 		gchar word[GEANY_MAX_WORD_LENGTH];
 
-		editor_find_current_word(doc->editor->sci, -1, word, sizeof(word), wordchars);
+		editor_find_current_word(editor, -1, word, sizeof(word), wordchars);
 		if (word[0] != '\0')
 			s = g_strdup(word);
 	}
@@ -3274,18 +3294,21 @@ gchar *editor_get_default_selection(GeanyDocument *doc, gboolean use_current_wor
 /* Note: Usually the line should be made visible (not folded) before calling this.
  * Returns: TRUE if line is/will be displayed to the user, or FALSE if it is
  * outside the view. */
-gboolean editor_line_in_view(ScintillaObject *sci, gint line)
+gboolean editor_line_in_view(GeanyEditor *editor, gint line)
 {
 	gint vis1, los;
 
+	if (editor == NULL)
+		return FALSE;
+
 	/* If line is wrapped the result may occur on another virtual line than the first and may be
 	 * still hidden, so increase the line number to check for the next document line */
-	if (SSM(sci, SCI_WRAPCOUNT, line, 0) > 1)
+	if (SSM(editor->sci, SCI_WRAPCOUNT, line, 0) > 1)
 		line++;
 
-	line = SSM(sci, SCI_VISIBLEFROMDOCLINE, line, 0);	/* convert to visible line number */
-	vis1 = SSM(sci, SCI_GETFIRSTVISIBLELINE, 0, 0);
-	los = SSM(sci, SCI_LINESONSCREEN, 0, 0);
+	line = SSM(editor->sci, SCI_VISIBLEFROMDOCLINE, line, 0);	/* convert to visible line number */
+	vis1 = SSM(editor->sci, SCI_GETFIRSTVISIBLELINE, 0, 0);
+	los = SSM(editor->sci, SCI_LINESONSCREEN, 0, 0);
 
 	return (line >= vis1 && line < vis1 + los);
 }
@@ -3295,14 +3318,18 @@ gboolean editor_line_in_view(ScintillaObject *sci, gint line)
  * so it appears at percent_of_view. */
 void editor_display_current_line(GeanyEditor *editor, gfloat percent_of_view)
 {
-	ScintillaObject *sci = editor->sci;
-	gint line = sci_get_current_line(sci);
+	gint line;
+
+	if (editor == NULL)
+		return;
+
+	line = sci_get_current_line(editor->sci);
 
 	/* unfold maybe folded results */
 	sci_ensure_line_is_visible(editor->sci, line);
 
 	/* scroll the line if it's off screen */
-	if (! editor_line_in_view(sci, line))
+	if (! editor_line_in_view(editor, line))
 		editor->scroll_percent = percent_of_view;
 }
 
@@ -3349,7 +3376,7 @@ void editor_set_indicator_on_line(GeanyEditor *editor, gint line)
 
 	/* skip blank lines */
 	if ((start + 1) == end ||
-		sci_get_line_length(editor->sci, line) == editor_get_eol_char_len(editor->document))
+		sci_get_line_length(editor->sci, line) == editor_get_eol_char_len(editor))
 		return;
 
 	/* don't set the indicator on whitespace */
@@ -3389,39 +3416,39 @@ void editor_set_indicator(GeanyEditor *editor, gint start, gint end)
 
 /* Inserts the given colour (format should be #...), if there is a selection starting with 0x...
  * the replacement will also start with 0x... */
-void editor_insert_color(GeanyDocument *doc, const gchar *colour)
+void editor_insert_color(GeanyEditor *editor, const gchar *colour)
 {
-	g_return_if_fail(doc != NULL);
+	g_return_if_fail(editor != NULL);
 
-	if (sci_has_selection(doc->editor->sci))
+	if (sci_has_selection(editor->sci))
 	{
-		gint start = sci_get_selection_start(doc->editor->sci);
+		gint start = sci_get_selection_start(editor->sci);
 		const gchar *replacement = colour;
 
-		if (sci_get_char_at(doc->editor->sci, start) == '0' &&
-			sci_get_char_at(doc->editor->sci, start + 1) == 'x')
+		if (sci_get_char_at(editor->sci, start) == '0' &&
+			sci_get_char_at(editor->sci, start + 1) == 'x')
 		{
-			sci_set_selection_start(doc->editor->sci, start + 2);
-			sci_set_selection_end(doc->editor->sci, start + 8);
+			sci_set_selection_start(editor->sci, start + 2);
+			sci_set_selection_end(editor->sci, start + 8);
 			replacement++; /* skip the leading "0x" */
 		}
-		else if (sci_get_char_at(doc->editor->sci, start - 1) == '#')
+		else if (sci_get_char_at(editor->sci, start - 1) == '#')
 		{	/* double clicking something like #00ffff may only select 00ffff because of wordchars */
 			replacement++; /* so skip the '#' to only replace the colour value */
 		}
-		sci_replace_sel(doc->editor->sci, replacement);
+		sci_replace_sel(editor->sci, replacement);
 	}
 	else
-		sci_add_text(doc->editor->sci, colour);
+		sci_add_text(editor->sci, colour);
 }
 
 
-const gchar *editor_get_eol_char_name(GeanyDocument *doc)
+const gchar *editor_get_eol_char_name(GeanyEditor *editor)
 {
-	if (doc == NULL)
+	if (editor == NULL)
 		return "";
 
-	switch (sci_get_eol_mode(doc->editor->sci))
+	switch (sci_get_eol_mode(editor->sci))
 	{
 		case SC_EOL_CRLF: return _("Win (CRLF)"); break;
 		case SC_EOL_CR: return _("Mac (CR)"); break;
@@ -3431,12 +3458,12 @@ const gchar *editor_get_eol_char_name(GeanyDocument *doc)
 
 
 /* returns the end-of-line character(s) length of the specified editor */
-gint editor_get_eol_char_len(GeanyDocument *doc)
+gint editor_get_eol_char_len(GeanyEditor *editor)
 {
-	if (doc == NULL)
+	if (editor == NULL)
 		return 0;
 
-	switch (sci_get_eol_mode(doc->editor->sci))
+	switch (sci_get_eol_mode(editor->sci))
 	{
 		case SC_EOL_CRLF: return 2; break;
 		default: return 1; break;
@@ -3445,12 +3472,12 @@ gint editor_get_eol_char_len(GeanyDocument *doc)
 
 
 /* returns the end-of-line character(s) of the specified editor */
-const gchar *editor_get_eol_char(GeanyDocument *doc)
+const gchar *editor_get_eol_char(GeanyEditor *editor)
 {
-	if (doc == NULL)
+	if (editor == NULL)
 		return "";
 
-	switch (sci_get_eol_mode(doc->editor->sci))
+	switch (sci_get_eol_mode(editor->sci))
 	{
 		case SC_EOL_CRLF: return "\r\n"; break;
 		case SC_EOL_CR: return "\r"; break;
@@ -3459,91 +3486,92 @@ const gchar *editor_get_eol_char(GeanyDocument *doc)
 }
 
 
-static void fold_all(GeanyDocument *doc, gboolean want_fold)
+static void fold_all(GeanyEditor *editor, gboolean want_fold)
 {
 	gint lines, first, i;
 
-	if (doc == NULL || ! editor_prefs.folding) return;
+	if (editor == NULL || ! editor_prefs.folding)
+		return;
 
-	lines = sci_get_line_count(doc->editor->sci);
-	first = sci_get_first_visible_line(doc->editor->sci);
+	lines = sci_get_line_count(editor->sci);
+	first = sci_get_first_visible_line(editor->sci);
 
 	for (i = 0; i < lines; i++)
 	{
-		gint level = sci_get_fold_level(doc->editor->sci, i);
+		gint level = sci_get_fold_level(editor->sci, i);
 		if (level & SC_FOLDLEVELHEADERFLAG)
 		{
-			if (sci_get_fold_expanded(doc->editor->sci, i) == want_fold)
-					sci_toggle_fold(doc->editor->sci, i);
+			if (sci_get_fold_expanded(editor->sci, i) == want_fold)
+					sci_toggle_fold(editor->sci, i);
 		}
 	}
-	editor_scroll_to_line(doc->editor->sci, first, 0.0F);
+	editor_scroll_to_line(editor, first, 0.0F);
 }
 
 
-void editor_unfold_all(GeanyDocument *doc)
+void editor_unfold_all(GeanyEditor *editor)
 {
-	fold_all(doc, FALSE);
+	fold_all(editor, FALSE);
 }
 
 
-void editor_fold_all(GeanyDocument *doc)
+void editor_fold_all(GeanyEditor *editor)
 {
-	fold_all(doc, TRUE);
+	fold_all(editor, TRUE);
 }
 
 
-void editor_replace_tabs(GeanyDocument *doc)
+void editor_replace_tabs(GeanyEditor *editor)
 {
 	gint search_pos, pos_in_line, current_tab_true_length;
 	gint tab_len;
 	gchar *tab_str;
 	struct TextToFind ttf;
 
-	if (doc == NULL)
+	if (editor == NULL)
 		return;
 
-	sci_start_undo_action(doc->editor->sci);
-	tab_len = sci_get_tab_width(doc->editor->sci);
+	sci_start_undo_action(editor->sci);
+	tab_len = sci_get_tab_width(editor->sci);
 	ttf.chrg.cpMin = 0;
-	ttf.chrg.cpMax = sci_get_length(doc->editor->sci);
+	ttf.chrg.cpMax = sci_get_length(editor->sci);
 	ttf.lpstrText = (gchar*) "\t";
 
 	while (TRUE)
 	{
-		search_pos = sci_find_text(doc->editor->sci, SCFIND_MATCHCASE, &ttf);
+		search_pos = sci_find_text(editor->sci, SCFIND_MATCHCASE, &ttf);
 		if (search_pos == -1)
 			break;
 
-		pos_in_line = sci_get_col_from_position(doc->editor->sci,search_pos);
+		pos_in_line = sci_get_col_from_position(editor->sci,search_pos);
 		current_tab_true_length = tab_len - (pos_in_line % tab_len);
 		tab_str = g_strnfill(current_tab_true_length, ' ');
-		sci_target_start(doc->editor->sci, search_pos);
-		sci_target_end(doc->editor->sci, search_pos + 1);
-		sci_target_replace(doc->editor->sci, tab_str, FALSE);
+		sci_target_start(editor->sci, search_pos);
+		sci_target_end(editor->sci, search_pos + 1);
+		sci_target_replace(editor->sci, tab_str, FALSE);
 		/* next search starts after replacement */
 		ttf.chrg.cpMin = search_pos + current_tab_true_length - 1;
 		/* update end of range now text has changed */
 		ttf.chrg.cpMax += current_tab_true_length - 1;
 		g_free(tab_str);
 	}
-	sci_end_undo_action(doc->editor->sci);
+	sci_end_undo_action(editor->sci);
 }
 
 
 /* Replaces all occurrences all spaces of the length of a given tab_width. */
-void editor_replace_spaces(GeanyDocument *doc)
+void editor_replace_spaces(GeanyEditor *editor)
 {
 	gint search_pos;
 	static gdouble tab_len_f = -1.0; /* keep the last used value */
 	gint tab_len;
 	struct TextToFind ttf;
 
-	if (doc == NULL)
+	if (editor == NULL)
 		return;
 
 	if (tab_len_f < 0.0)
-		tab_len_f = sci_get_tab_width(doc->editor->sci);
+		tab_len_f = sci_get_tab_width(editor->sci);
 
 	if (! dialogs_show_input_numeric(
 		_("Enter Tab Width"),
@@ -3554,79 +3582,79 @@ void editor_replace_spaces(GeanyDocument *doc)
 	}
 	tab_len = (gint) tab_len_f;
 
-	sci_start_undo_action(doc->editor->sci);
+	sci_start_undo_action(editor->sci);
 	ttf.chrg.cpMin = 0;
-	ttf.chrg.cpMax = sci_get_length(doc->editor->sci);
+	ttf.chrg.cpMax = sci_get_length(editor->sci);
 	ttf.lpstrText = g_strnfill(tab_len, ' ');
 
 	while (TRUE)
 	{
-		search_pos = sci_find_text(doc->editor->sci, SCFIND_MATCHCASE, &ttf);
+		search_pos = sci_find_text(editor->sci, SCFIND_MATCHCASE, &ttf);
 		if (search_pos == -1)
 			break;
 
-		sci_target_start(doc->editor->sci, search_pos);
-		sci_target_end(doc->editor->sci, search_pos + tab_len);
-		sci_target_replace(doc->editor->sci, "\t", FALSE);
+		sci_target_start(editor->sci, search_pos);
+		sci_target_end(editor->sci, search_pos + tab_len);
+		sci_target_replace(editor->sci, "\t", FALSE);
 		ttf.chrg.cpMin = search_pos;
 		/* update end of range now text has changed */
 		ttf.chrg.cpMax -= tab_len - 1;
 	}
-	sci_end_undo_action(doc->editor->sci);
+	sci_end_undo_action(editor->sci);
 	g_free(ttf.lpstrText);
 }
 
 
-void editor_strip_line_trailing_spaces(GeanyDocument *doc, gint line)
+void editor_strip_line_trailing_spaces(GeanyEditor *editor, gint line)
 {
-	gint line_start = sci_get_position_from_line(doc->editor->sci, line);
-	gint line_end = sci_get_line_end_position(doc->editor->sci, line);
+	gint line_start = sci_get_position_from_line(editor->sci, line);
+	gint line_end = sci_get_line_end_position(editor->sci, line);
 	gint i = line_end - 1;
-	gchar ch = sci_get_char_at(doc->editor->sci, i);
+	gchar ch = sci_get_char_at(editor->sci, i);
 
 	while ((i >= line_start) && ((ch == ' ') || (ch == '\t')))
 	{
 		i--;
-		ch = sci_get_char_at(doc->editor->sci, i);
+		ch = sci_get_char_at(editor->sci, i);
 	}
 	if (i < (line_end-1))
 	{
-		sci_target_start(doc->editor->sci, i + 1);
-		sci_target_end(doc->editor->sci, line_end);
-		sci_target_replace(doc->editor->sci, "", FALSE);
+		sci_target_start(editor->sci, i + 1);
+		sci_target_end(editor->sci, line_end);
+		sci_target_replace(editor->sci, "", FALSE);
 	}
 }
 
 
-void editor_strip_trailing_spaces(GeanyDocument *doc)
+void editor_strip_trailing_spaces(GeanyEditor *editor)
 {
-	gint max_lines = sci_get_line_count(doc->editor->sci);
+	gint max_lines = sci_get_line_count(editor->sci);
 	gint line;
 
-	sci_start_undo_action(doc->editor->sci);
+	sci_start_undo_action(editor->sci);
 
 	for (line = 0; line < max_lines; line++)
 	{
-		editor_strip_line_trailing_spaces(doc, line);
+		editor_strip_line_trailing_spaces(editor, line);
 	}
-	sci_end_undo_action(doc->editor->sci);
+	sci_end_undo_action(editor->sci);
 }
 
 
-void editor_ensure_final_newline(GeanyDocument *doc)
+void editor_ensure_final_newline(GeanyEditor *editor)
 {
-	gint max_lines = sci_get_line_count(doc->editor->sci);
+	gint max_lines = sci_get_line_count(editor->sci);
 	gboolean append_newline = (max_lines == 1);
-	gint end_document = sci_get_position_from_line(doc->editor->sci, max_lines);
+	gint end_document = sci_get_position_from_line(editor->sci, max_lines);
 
 	if (max_lines > 1)
 	{
-		append_newline = end_document > sci_get_position_from_line(doc->editor->sci, max_lines - 1);
+		append_newline = end_document > sci_get_position_from_line(editor->sci, max_lines - 1);
 	}
 	if (append_newline)
 	{
 		const gchar *eol = "\n";
-		switch (sci_get_eol_mode(doc->editor->sci))
+		switch (sci_get_eol_mode(editor->sci))
 		{
 			case SC_EOL_CRLF:
 				eol = "\r\n";
@@ -3635,7 +3663,7 @@ void editor_ensure_final_newline(GeanyDocument *doc)
 				eol = "\r";
 				break;
 		}
-		sci_insert_text(doc->editor->sci, end_document, eol);
+		sci_insert_text(editor->sci, end_document, eol);
 	}
 }
 
@@ -3734,8 +3762,8 @@ on_editor_scroll_event(GtkWidget *widget, GdkEventScroll *event, gpointer user_d
 	 * few lines only, maybe this could/should be done in Scintilla directly */
 	if (event->state & GDK_MOD1_MASK)
 	{
-		GeanyDocument *doc = user_data;
-		sci_cmd(doc->editor->sci, (event->direction == GDK_SCROLL_DOWN) ? SCI_PAGEDOWN : SCI_PAGEUP);
+		GeanyEditor *editor = user_data;
+		sci_cmd(editor->sci, (event->direction == GDK_SCROLL_DOWN) ? SCI_PAGEDOWN : SCI_PAGEUP);
 		return TRUE;
 	}
 
@@ -3832,7 +3860,7 @@ static ScintillaObject *create_new_sci(GeanyDocument *doc)
 					 G_CALLBACK(keybindings_got_event), GINT_TO_POINTER(new_idx));*/
 	/* signal for the popup menu */
 	g_signal_connect(sci, "button-press-event", G_CALLBACK(on_editor_button_press_event), doc);
-	g_signal_connect(sci, "scroll-event", G_CALLBACK(on_editor_scroll_event), doc);
+	g_signal_connect(sci, "scroll-event", G_CALLBACK(on_editor_scroll_event), doc->editor);
 	g_signal_connect(sci, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
 	g_signal_connect(sci, "expose-event", G_CALLBACK(on_editor_expose_event), doc);
 

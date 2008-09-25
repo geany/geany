@@ -839,7 +839,7 @@ static gboolean check_snippet_completion(guint keyval, guint state)
 			gint pos = sci_get_current_position(sci);
 
 			if (editor_prefs.complete_snippets)
-				return editor_complete_snippet(doc, pos);
+				return editor_complete_snippet(doc->editor, pos);
 		}
 	}
 	return FALSE;
@@ -1197,7 +1197,7 @@ static gboolean check_current_word(void)
 
 	pos = sci_get_current_position(doc->editor->sci);
 
-	editor_find_current_word(doc->editor->sci, pos,
+	editor_find_current_word(doc->editor, pos,
 		editor_info.current_word, GEANY_MAX_WORD_LENGTH, NULL);
 
 	if (*editor_info.current_word == 0)
@@ -1473,24 +1473,24 @@ static void cb_func_goto_action(guint key_id)
 }
 
 
-static void duplicate_lines(ScintillaObject *sci)
+static void duplicate_lines(GeanyEditor *editor)
 {
-	if (sci_get_lines_selected(sci) > 1)
+	if (sci_get_lines_selected(editor->sci) > 1)
 	{	/* ignore extra_line because of selecting lines from the line number column */
-		editor_select_lines(sci, FALSE);
-		sci_selection_duplicate(sci);
+		editor_select_lines(editor, FALSE);
+		sci_selection_duplicate(editor->sci);
 	}
-	else if (sci_has_selection(sci))
-		sci_selection_duplicate(sci);
+	else if (sci_has_selection(editor->sci))
+		sci_selection_duplicate(editor->sci);
 	else
-		sci_line_duplicate(sci);
+		sci_line_duplicate(editor->sci);
 }
 
 
-static void delete_lines(ScintillaObject *sci)
+static void delete_lines(GeanyEditor *editor)
 {
-	editor_select_lines(sci, TRUE); /* include last line (like cut lines, copy lines do) */
-	sci_clear(sci);	/* (SCI_LINEDELETE only does 1 line) */
+	editor_select_lines(editor, TRUE); /* include last line (like cut lines, copy lines do) */
+	sci_clear(editor->sci);	/* (SCI_LINEDELETE only does 1 line) */
 }
 
 
@@ -1513,7 +1513,7 @@ static void cb_func_editor_action(guint key_id)
 			on_redo1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_EDITOR_SCROLLTOLINE:
-			editor_scroll_to_line(doc->editor->sci, -1, 0.5F);
+			editor_scroll_to_line(doc->editor, -1, 0.5F);
 			break;
 		case GEANY_KEYS_EDITOR_SCROLLLINEUP:
 			sci_cmd(doc->editor->sci, SCI_LINESCROLLUP);
@@ -1522,22 +1522,22 @@ static void cb_func_editor_action(guint key_id)
 			sci_cmd(doc->editor->sci, SCI_LINESCROLLDOWN);
 			break;
 		case GEANY_KEYS_EDITOR_DUPLICATELINE:
-			duplicate_lines(doc->editor->sci);
+			duplicate_lines(doc->editor);
 			break;
 		case GEANY_KEYS_EDITOR_DELETELINE:
-			delete_lines(doc->editor->sci);
+			delete_lines(doc->editor);
 			break;
 		case GEANY_KEYS_EDITOR_TRANSPOSELINE:
 			sci_cmd(doc->editor->sci, SCI_LINETRANSPOSE);
 			break;
 		case GEANY_KEYS_EDITOR_AUTOCOMPLETE:
-			editor_start_auto_complete(doc, sci_get_current_position(doc->editor->sci), TRUE);
+			editor_start_auto_complete(doc->editor, sci_get_current_position(doc->editor->sci), TRUE);
 			break;
 		case GEANY_KEYS_EDITOR_CALLTIP:
-			editor_show_calltip(doc, -1);
+			editor_show_calltip(doc->editor, -1);
 			break;
 		case GEANY_KEYS_EDITOR_MACROLIST:
-			editor_show_macro_list(doc->editor->sci);
+			editor_show_macro_list(doc->editor);
 			break;
 		case GEANY_KEYS_EDITOR_CONTEXTACTION:
 			if (check_current_word())
@@ -1594,13 +1594,13 @@ static void cb_func_format_action(guint key_id)
 			on_menu_decrease_indent1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_FORMAT_INCREASEINDENTBYSPACE:
-			editor_indentation_by_one_space(doc, -1, FALSE);
+			editor_indentation_by_one_space(doc->editor, -1, FALSE);
 			break;
 		case GEANY_KEYS_FORMAT_DECREASEINDENTBYSPACE:
-			editor_indentation_by_one_space(doc, -1, TRUE);
+			editor_indentation_by_one_space(doc->editor, -1, TRUE);
 			break;
 		case GEANY_KEYS_FORMAT_AUTOINDENT:
-			editor_smart_line_indentation(doc, -1);
+			editor_smart_line_indentation(doc->editor, -1);
 			break;
 		case GEANY_KEYS_FORMAT_TOGGLECASE:
 			on_toggle_case1_activate(NULL, NULL);
@@ -1647,13 +1647,13 @@ static void cb_func_select_action(guint key_id)
 			on_menu_select_all1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_SELECT_WORD:
-			editor_select_word(doc->editor->sci);
+			editor_select_word(doc->editor);
 			break;
 		case GEANY_KEYS_SELECT_LINE:
-			editor_select_lines(doc->editor->sci, FALSE);
+			editor_select_lines(doc->editor, FALSE);
 			break;
 		case GEANY_KEYS_SELECT_PARAGRAPH:
-			editor_select_paragraph(doc->editor->sci);
+			editor_select_paragraph(doc->editor);
 			break;
 	}
 }
@@ -1683,10 +1683,10 @@ static void cb_func_document_action(guint key_id)
 			document_update_tag_list(doc, TRUE);
 			break;
 		case GEANY_KEYS_DOCUMENT_FOLDALL:
-			editor_fold_all(doc);
+			editor_fold_all(doc->editor);
 			break;
 		case GEANY_KEYS_DOCUMENT_UNFOLDALL:
-			editor_unfold_all(doc);
+			editor_unfold_all(doc->editor);
 			break;
 		case GEANY_KEYS_DOCUMENT_TOGGLEFOLD:
 			if (editor_prefs.folding)

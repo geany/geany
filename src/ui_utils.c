@@ -189,7 +189,7 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 		}
 		g_string_append(stats_str, sp);
 		g_string_append_printf(stats_str, _("mode: %s"),
-			editor_get_eol_char_name(doc));
+			editor_get_eol_char_name(doc->editor));
 		g_string_append(stats_str, sp);
 		g_string_append_printf(stats_str, _("encoding: %s %s"),
 			(doc->encoding) ? doc->encoding : _("unknown"),

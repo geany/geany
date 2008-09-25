@@ -805,7 +805,8 @@ on_replace_tabs_activate               (GtkMenuItem     *menuitem,
 {
 	GeanyDocument *doc = document_get_current();
 
-	editor_replace_tabs(doc);
+	if (doc != NULL)
+		editor_replace_tabs(doc->editor);
 }
 
 
@@ -1074,7 +1075,7 @@ on_show_color_chooser1_activate        (GtkMenuItem     *menuitem,
 		return;
 
 	pos = sci_get_current_position(doc->editor->sci);
-	editor_find_current_word(doc->editor->sci, pos, colour, sizeof colour, GEANY_WORDCHARS"#");
+	editor_find_current_word(doc->editor, pos, colour, sizeof colour, GEANY_WORDCHARS"#");
 	tools_color_chooser(colour);
 }
 
@@ -1314,7 +1315,7 @@ on_comments_multiline_activate         (GtkMenuItem     *menuitem,
 
 	verify_click_pos(doc); /* make sure that the click_pos is valid */
 
-	editor_insert_multiline_comment(doc);
+	editor_insert_multiline_comment(doc->editor);
 }
 
 
@@ -1510,7 +1511,8 @@ on_menu_fold_all1_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	editor_fold_all(doc);
+	if (doc != NULL)
+		editor_fold_all(doc->editor);
 }
 
 
@@ -1519,7 +1521,8 @@ on_menu_unfold_all1_activate           (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	editor_unfold_all(doc);
+	if (doc != NULL)
+		editor_unfold_all(doc->editor);
 }
 
 
@@ -1653,7 +1656,7 @@ on_menu_comment_line1_activate         (GtkMenuItem     *menuitem,
 {
 	GeanyDocument *doc = document_get_current();
 	if (doc != NULL)
-		editor_do_comment(doc, -1, FALSE, FALSE);
+		editor_do_comment(doc->editor, -1, FALSE, FALSE);
 }
 
 
@@ -1663,7 +1666,7 @@ on_menu_uncomment_line1_activate       (GtkMenuItem     *menuitem,
 {
 	GeanyDocument *doc = document_get_current();
 	if (doc != NULL)
-		editor_do_uncomment(doc, -1, FALSE);
+		editor_do_uncomment(doc->editor, -1, FALSE);
 }
 
 
@@ -1674,7 +1677,7 @@ on_menu_toggle_line_commentation1_activate
 {
 	GeanyDocument *doc = document_get_current();
 	if (doc != NULL)
-		editor_do_comment_toggle(doc);
+		editor_do_comment_toggle(doc->editor);
 }
 
 
@@ -1861,7 +1864,7 @@ on_menu_open_selected_file1_activate   (GtkMenuItem     *menuitem,
 	if (doc == NULL)
 		return;
 
-	sel = editor_get_default_selection(doc, TRUE, GEANY_WORDCHARS"./-");
+	sel = editor_get_default_selection(doc->editor, TRUE, GEANY_WORDCHARS"./-");
 
 	if (sel != NULL)
 	{
@@ -2087,12 +2090,15 @@ void
 on_strip_trailing_spaces1_activate     (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	GeanyDocument *doc = document_get_current();
+	GeanyDocument *doc;
 
-	if (doc == NULL || ignore_callback)
+	if (ignore_callback)
 		return;
 
-	editor_strip_trailing_spaces(doc);
+	doc = document_get_current();
+	g_return_if_fail(doc != NULL);
+
+	editor_strip_trailing_spaces(doc->editor);
 }
 
 
@@ -2152,7 +2158,8 @@ on_replace_spaces_activate             (GtkMenuItem     *menuitem,
 {
 	GeanyDocument *doc = document_get_current();
 
-	editor_replace_spaces(doc);
+	if (doc != NULL)
+		editor_replace_spaces(doc->editor);
 }
 
 

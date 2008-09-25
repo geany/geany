@@ -146,39 +146,39 @@ ScintillaObject *editor_create_widget(GeanyEditor *editor);
 
 void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer user_data);
 
-gboolean editor_start_auto_complete(GeanyDocument *doc, gint pos, gboolean force);
+gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean force);
 
-gboolean editor_complete_snippet(GeanyDocument *doc, gint pos);
+gboolean editor_complete_snippet(GeanyEditor *editor, gint pos);
 
-void editor_auto_latex(GeanyDocument *doc, gint pos);
+void editor_auto_latex(GeanyEditor *editor, gint pos);
 
-void editor_show_macro_list(ScintillaObject *sci);
+void editor_show_macro_list(GeanyEditor *editor);
 
-gboolean editor_show_calltip(GeanyDocument *doc, gint pos);
+gboolean editor_show_calltip(GeanyEditor *editor, gint pos);
 
-void editor_do_comment_toggle(GeanyDocument *doc);
+void editor_do_comment_toggle(GeanyEditor *editor);
 
-void editor_do_comment(GeanyDocument *doc, gint line, gboolean allow_empty_lines, gboolean toggle);
+void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_lines, gboolean toggle);
 
-gint editor_do_uncomment(GeanyDocument *doc, gint line, gboolean toggle);
+gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle);
 
-void editor_highlight_braces(ScintillaObject *sci, gint cur_pos);
+void editor_highlight_braces(GeanyEditor *editor, gint cur_pos);
 
 gboolean editor_lexer_is_c_like(gint lexer);
 
 gint editor_lexer_get_type_keyword_idx(gint lexer);
 
-void editor_insert_multiline_comment(GeanyDocument *doc);
+void editor_insert_multiline_comment(GeanyEditor *editor);
 
 void editor_insert_alternative_whitespace(GeanyEditor *editor);
 
-void editor_smart_line_indentation(GeanyDocument *doc, gint pos);
+void editor_smart_line_indentation(GeanyEditor *editor, gint pos);
 
-void editor_indentation_by_one_space(GeanyDocument *doc, gint pos, gboolean decrease);
+void editor_indentation_by_one_space(GeanyEditor *editor, gint pos, gboolean decrease);
 
-gboolean editor_line_in_view(ScintillaObject *sci, gint line);
+gboolean editor_line_in_view(GeanyEditor *editor, gint line);
 
-void editor_scroll_to_line(ScintillaObject *sci, gint line, gfloat percent_of_view);
+void editor_scroll_to_line(GeanyEditor *editor, gint line, gfloat percent_of_view);
 
 void editor_display_current_line(GeanyEditor *editor, gfloat percent_of_view);
 
@@ -190,16 +190,16 @@ void editor_snippets_free(void);
 
 /* General editing functions */
 
-void editor_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_t wordlen,
+void editor_find_current_word(GeanyEditor *editor, gint pos, gchar *word, size_t wordlen,
 	const gchar *wc);
 
-gchar *editor_get_default_selection(GeanyDocument *doc, gboolean use_current_word, const gchar *wordchars);
+gchar *editor_get_default_selection(GeanyEditor *editor, gboolean use_current_word, const gchar *wordchars);
 
-void editor_select_word(ScintillaObject *sci);
+void editor_select_word(GeanyEditor *editor);
 
-void editor_select_lines(ScintillaObject *sci, gboolean extra_line);
+void editor_select_lines(GeanyEditor *editor, gboolean extra_line);
 
-void editor_select_paragraph(ScintillaObject *sci);
+void editor_select_paragraph(GeanyEditor *editor);
 
 void editor_set_indicator_on_line(GeanyEditor *editor, gint line);
 
@@ -209,27 +209,27 @@ void editor_clear_indicators(GeanyEditor *editor);
 
 void editor_set_font(GeanyEditor *editor, const gchar *font);
 
-const gchar *editor_get_eol_char_name(GeanyDocument *doc);
+const gchar *editor_get_eol_char_name(GeanyEditor *editor);
 
-gint editor_get_eol_char_len(GeanyDocument *doc);
+gint editor_get_eol_char_len(GeanyEditor *editor);
 
-const gchar *editor_get_eol_char(GeanyDocument *doc);
+const gchar *editor_get_eol_char(GeanyEditor *editor);
 
-void editor_fold_all(GeanyDocument *doc);
+void editor_fold_all(GeanyEditor *editor);
 
-void editor_unfold_all(GeanyDocument *doc);
+void editor_unfold_all(GeanyEditor *editor);
 
-void editor_replace_tabs(GeanyDocument *doc);
+void editor_replace_tabs(GeanyEditor *editor);
 
-void editor_replace_spaces(GeanyDocument *doc);
+void editor_replace_spaces(GeanyEditor *editor);
 
-void editor_strip_line_trailing_spaces(GeanyDocument *doc, gint line);
+void editor_strip_line_trailing_spaces(GeanyEditor *editor, gint line);
 
-void editor_strip_trailing_spaces(GeanyDocument *doc);
+void editor_strip_trailing_spaces(GeanyEditor *editor);
 
-void editor_ensure_final_newline(GeanyDocument *doc);
+void editor_ensure_final_newline(GeanyEditor *editor);
 
-void editor_insert_color(GeanyDocument *doc, const gchar *colour);
+void editor_insert_color(GeanyEditor *editor, const gchar *colour);
 
 const GeanyIndentPrefs *editor_get_indent_prefs(GeanyEditor *editor);
 

@@ -725,7 +725,7 @@ on_color_ok_button_clicked             (GtkButton       *button,
 			GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->colorsel), &color);
 
 	hex = utils_get_hex_from_color(&color);
-	editor_insert_color(doc, hex);
+	editor_insert_color(doc->editor, hex);
 	g_free(hex);
 }
 #endif

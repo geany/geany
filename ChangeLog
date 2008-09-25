@@ -4,6 +4,11 @@
    Set the page_size parameter of GtkAdjustments to 0 instead
    of 10 which is set by default by Glade. This prevents breakage of
    spin buttons with early versions of GTK 2.14.
+ * src/callbacks.c, src/document.c, src/editor.c, src/editor.h,
+   src/ui_utils.c, src/keybindings.c, src/prefs.c, src/search.c,
+   src/tools.c:
+   Unify the API in editor.c, all public functions now take a
+   GeanyEditor* object.
 
 
 2008-09-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

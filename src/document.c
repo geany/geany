@@ -1455,13 +1455,13 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 
 	/* replaces tabs by spaces but only if the current file is not a Makefile */
 	if (file_prefs.replace_tabs && FILETYPE_ID(doc->file_type) != GEANY_FILETYPES_MAKE)
-		editor_replace_tabs(doc);
+		editor_replace_tabs(doc->editor);
 	/* strip trailing spaces */
 	if (file_prefs.strip_trailing_spaces)
-		editor_strip_trailing_spaces(doc);
+		editor_strip_trailing_spaces(doc->editor);
 	/* ensure the file has a newline at the end */
 	if (file_prefs.final_new_line)
-		editor_ensure_final_newline(doc);
+		editor_ensure_final_newline(doc->editor);
 
 	len = sci_get_length(doc->editor->sci) + 1;
 	if (doc->has_bom && encodings_is_unicode_charset(doc->encoding))
@@ -1595,11 +1595,11 @@ gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gint fl
 		sci_set_selection_start(doc->editor->sci, ttf.chrgText.cpMin);
 		sci_set_selection_end(doc->editor->sci, ttf.chrgText.cpMax);
 
-		if (! editor_line_in_view(doc->editor->sci, line))
+		if (! editor_line_in_view(doc->editor, line))
 		{	/* we need to force scrolling in case the cursor is outside of the current visible area
 			 * GeanyDocument::scroll_percent doesn't work because sci isn't always updated
 			 * while searching */
-			editor_scroll_to_line(doc->editor->sci, -1, 0.3F);
+			editor_scroll_to_line(doc->editor, -1, 0.3F);
 		}
 		return TRUE;
 	}
@@ -1889,7 +1889,7 @@ void document_replace_sel(GeanyDocument *doc, const gchar *find_text, const gcha
 		first_line = sci_get_line_from_position(doc->editor->sci, selection_start);
 		/* Find the last line with chars selected (not EOL char) */
 		last_line = sci_get_line_from_position(doc->editor->sci,
-			selection_end - editor_get_eol_char_len(doc));
+			selection_end - editor_get_eol_char_len(doc->editor));
 		last_line = MAX(first_line, last_line);
 		for (line = first_line; line < (first_line + selected_lines); line++)
 		{
