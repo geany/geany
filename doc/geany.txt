@@ -1979,9 +1979,9 @@ the following items:
 
 * Compile
 * Build
-* Make all
-* Make custom target
-* Make object
+* Make All
+* Make Custom Target
+* Make Object
 * Execute
 * Set Includes and Arguments
 
@@ -2084,6 +2084,12 @@ Set Includes and Arguments you can add any include paths and compile
 flags for the compiler, any library names and paths for the linker,
 and any arguments you want to use when running Execute.
 
+.. note::
+    If you need complex settings for your build system, or several
+    different settings, then writing a Makefile and using the Make
+    commands is recommended; this will also make it easier for users to
+    build your software.
+
 These settings are saved automatically when Geany is shut down.
 
 The following variables can be used:
@@ -2093,9 +2099,6 @@ The following variables can be used:
 
 See `[build_settings] Section`_ for details.
 
-If you need complex settings for your build system, or several
-different settings, then writing a Makefile and using the Make commands
-is recommended.
 
 
 One step compilation

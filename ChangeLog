@@ -8,6 +8,9 @@
    Detect which error regex match contains the line number, and use the
    other match for the filename.
    Update 'Build system' docs for custom error regexes.
+ * doc/geany.txt, doc/geany.html:
+   Minor formatting changes - make the using a Makefile paragraph a
+   note.
 
 
 2008-09-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
