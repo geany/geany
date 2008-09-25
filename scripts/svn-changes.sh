@@ -1,6 +1,7 @@
 #!/bin/bash
-# Author:	Nick Treleaven
-# License:	GNU GPL V2 or later
+# Copyright:	2008, Nick Treleaven
+# License:		GNU GPL V2 or later
+# Warranty:		NONE
 
 # Displays a summary of Subversion working copy changes in ChangeLog
 # format, plus warnings about any unknown files.

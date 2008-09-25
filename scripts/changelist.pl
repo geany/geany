@@ -1,6 +1,7 @@
-#!/usr/bin/perl -w
-# Author:	Nick Treleaven
-# License:	GNU GPL V2 or later
+#!/usr/bin/env perl
+# Copyright:	2008, Nick Treleaven
+# License:		GNU GPL V2 or later
+# Warranty:		NONE
 
 # Searches a ChangeLog file for a line matching 'matchstring', then matches
 # all lines until two consecutive empty lines are found. The process then
@@ -9,6 +10,7 @@
 # are usually written in reverse date order).
 
 use strict;
+use warnings;
 
 my $scriptname = "changelist.pl";
 my $argc = $#ARGV + 1;
