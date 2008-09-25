@@ -9,6 +9,10 @@
    src/tools.c:
    Unify the API in editor.c, all public functions now take a
    GeanyEditor* object.
+ * src/editor.c:
+   When using editor_get_eol_char_* functions with an invalid editor
+   object, return the appropriate value according to the eol character
+   preference (just in case).
 
 
 2008-09-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

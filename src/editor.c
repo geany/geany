@@ -3445,10 +3445,12 @@ void editor_insert_color(GeanyEditor *editor, const gchar *colour)
 
 const gchar *editor_get_eol_char_name(GeanyEditor *editor)
 {
-	if (editor == NULL)
-		return "";
+	gint mode = file_prefs.default_eol_character;
 
-	switch (sci_get_eol_mode(editor->sci))
+	if (editor != NULL)
+		mode = sci_get_eol_mode(editor->sci);
+
+	switch (mode)
 	{
 		case SC_EOL_CRLF: return _("Win (CRLF)"); break;
 		case SC_EOL_CR: return _("Mac (CR)"); break;
@@ -3460,10 +3462,12 @@ const gchar *editor_get_eol_char_name(GeanyEditor *editor)
 /* returns the end-of-line character(s) length of the specified editor */
 gint editor_get_eol_char_len(GeanyEditor *editor)
 {
-	if (editor == NULL)
-		return 0;
+	gint mode = file_prefs.default_eol_character;
 
-	switch (sci_get_eol_mode(editor->sci))
+	if (editor != NULL)
+		mode = sci_get_eol_mode(editor->sci);
+
+	switch (mode)
 	{
 		case SC_EOL_CRLF: return 2; break;
 		default: return 1; break;
@@ -3474,10 +3478,12 @@ gint editor_get_eol_char_len(GeanyEditor *editor)
 /* returns the end-of-line character(s) of the specified editor */
 const gchar *editor_get_eol_char(GeanyEditor *editor)
 {
-	if (editor == NULL)
-		return "";
+	gint mode = file_prefs.default_eol_character;
 
-	switch (sci_get_eol_mode(editor->sci))
+	if (editor != NULL)
+		mode = sci_get_eol_mode(editor->sci);
+
+	switch (mode)
 	{
 		case SC_EOL_CRLF: return "\r\n"; break;
 		case SC_EOL_CR: return "\r"; break;
