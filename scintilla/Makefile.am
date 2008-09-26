@@ -9,24 +9,25 @@ LEXER_SRCS= \
 LexAsm.cxx \
 LexBasic.cxx \
 LexBash.cxx \
-LexOMS.cxx \
 LexCPP.cxx \
 LexCaml.cxx \
 LexCrontab.cxx \
 LexCSS.cxx \
 LexD.cxx \
 LexFortran.cxx \
+LexHaskell.cxx \
 LexHTML.cxx \
 LexLua.cxx \
+LexOMS.cxx \
 LexOthers.cxx \
 LexPascal.cxx \
 LexPerl.cxx \
 LexPython.cxx \
+LexR.cxx \
 LexRuby.cxx \
 LexSQL.cxx \
 LexTCL.cxx \
-LexVHDL.cxx \
-LexHaskell.cxx
+LexVHDL.cxx
 
 SRCS= \
 CallTip.cxx \

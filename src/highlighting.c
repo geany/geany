@@ -1558,6 +1558,58 @@ static void styleset_python(ScintillaObject *sci)
 }
 
 
+static void styleset_r_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
+{
+	new_style_array(GEANY_FILETYPES_R, 12);
+
+	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[0]);
+	get_keyfile_hex(config, config_home, "styling", "comment", "0x0066ff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[1]);
+	get_keyfile_hex(config, config_home, "styling", "kword", "0x66ff33", "0xffffff", "true", &style_sets[GEANY_FILETYPES_R].styling[2]);
+	get_keyfile_hex(config, config_home, "styling", "operator", "0x660000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[3]);
+	get_keyfile_hex(config, config_home, "styling", "basekword", "0x66ff33", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[4]);
+	get_keyfile_hex(config, config_home, "styling", "otherkword", "0x66ff33", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[5]);
+	get_keyfile_hex(config, config_home, "styling", "number", "0xcc00ff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[6]);
+	get_keyfile_hex(config, config_home, "styling", "string", "0xcc00ff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[7]);
+	get_keyfile_hex(config, config_home, "styling", "string2", "0xcc00ff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[8]);
+	get_keyfile_hex(config, config_home, "styling", "identifier", "0x6600ff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[9]);
+	get_keyfile_hex(config, config_home, "styling", "infix", "0xcc00ff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[10]);
+	get_keyfile_hex(config, config_home, "styling", "infixeol", "0xcc00ff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[11]);
+
+	style_sets[GEANY_FILETYPES_R].keywords = g_new(gchar*, 2);
+	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_R, 0, "require if source array matrix diag solve for data.frame read.table NROW NCOL abs sqrt sum print while function");
+	style_sets[GEANY_FILETYPES_R].keywords[1] = NULL;
+
+	get_keyfile_wordchars(config, config_home,
+		&style_sets[GEANY_FILETYPES_R].wordchars);
+}
+
+
+static void styleset_r(ScintillaObject *sci)
+{
+	const filetype_id ft_id = GEANY_FILETYPES_R;
+
+	styleset_common(sci, 5, ft_id);
+
+	apply_filetype_properties(sci, SCLEX_R, ft_id);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_R].keywords[0]);
+
+	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_R, 0);
+	set_sci_style(sci, SCE_R_DEFAULT, GEANY_FILETYPES_R, 0);
+	set_sci_style(sci, SCE_R_COMMENT, GEANY_FILETYPES_R, 1);
+	set_sci_style(sci, SCE_R_KWORD, GEANY_FILETYPES_R, 2);
+	set_sci_style(sci, SCE_R_OPERATOR, GEANY_FILETYPES_R, 3);
+	set_sci_style(sci, SCE_R_BASEKWORD, GEANY_FILETYPES_R, 4);
+	set_sci_style(sci, SCE_R_OTHERKWORD, GEANY_FILETYPES_R, 5);
+	set_sci_style(sci, SCE_R_NUMBER, GEANY_FILETYPES_R, 6);
+	set_sci_style(sci, SCE_R_STRING, GEANY_FILETYPES_R, 7);
+	set_sci_style(sci, SCE_R_STRING2, GEANY_FILETYPES_R, 8);
+	set_sci_style(sci, SCE_R_IDENTIFIER, GEANY_FILETYPES_R, 9);
+	set_sci_style(sci, SCE_R_INFIX, GEANY_FILETYPES_R, 10);
+	set_sci_style(sci, SCE_R_INFIXEOL, GEANY_FILETYPES_R, 11);
+}
+
+
 static void styleset_ruby_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_style_array(GEANY_FILETYPES_RUBY, 35);
@@ -3051,6 +3103,7 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 		init_styleset_case(GEANY_FILETYPES_PERL,	perl);
 		init_styleset_case(GEANY_FILETYPES_PHP,		php);
 		init_styleset_case(GEANY_FILETYPES_PYTHON,	python);
+		init_styleset_case(GEANY_FILETYPES_R,		r);
 		init_styleset_case(GEANY_FILETYPES_RUBY,	ruby);
 		init_styleset_case(GEANY_FILETYPES_SH,		sh);
 		init_styleset_case(GEANY_FILETYPES_SQL,		sql);
@@ -3105,6 +3158,7 @@ void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 		styleset_case(GEANY_FILETYPES_PERL,		perl);
 		styleset_case(GEANY_FILETYPES_PHP,		php);
 		styleset_case(GEANY_FILETYPES_PYTHON,	python);
+		styleset_case(GEANY_FILETYPES_R,		r);
 		styleset_case(GEANY_FILETYPES_RUBY,		ruby);
 		styleset_case(GEANY_FILETYPES_SH,		sh);
 		styleset_case(GEANY_FILETYPES_SQL,		sql);

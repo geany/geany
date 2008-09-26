@@ -510,8 +510,8 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 	gchar **lines;
 	guint i;
 
-	/** TODO the following switch could be replaced by some intelligent code which reads
-	 ** frame_start, frame_end and line_prefix from the filetype definition files */
+	/* TODO the following switch could be replaced by some intelligent code which reads
+	 * frame_start, frame_end and line_prefix from the filetype definition files */
 	switch (filetype_idx)
 	{
 		case GEANY_FILETYPES_HTML:
@@ -525,6 +525,7 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 		}
 
 		case GEANY_FILETYPES_PYTHON:
+		case GEANY_FILETYPES_R:
 		case GEANY_FILETYPES_RUBY:
 		case GEANY_FILETYPES_SH:
 		case GEANY_FILETYPES_MAKE:

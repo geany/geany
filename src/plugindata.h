@@ -41,13 +41,13 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 95,
+	GEANY_API_VERSION = 96,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
 	/* This should usually stay the same if fields are only appended, assuming only pointers to
 	 * structs and not structs themselves are declared by plugins. */
-	GEANY_ABI_VERSION = 45
+	GEANY_ABI_VERSION = 46
 };
 
 /** Check the plugin can be loaded by Geany.
@@ -412,6 +412,8 @@ typedef struct FiletypeFuncs
 {
 	GeanyFiletype*	(*detect_from_file) (const gchar *utf8_filename);
 	GeanyFiletype*	(*lookup_by_name) (const gchar *name);
+	/* Remember to convert any filetype_id arguments to GeanyFiletype pointers in any
+	 * appended functions */
 }
 FiletypeFuncs;
 

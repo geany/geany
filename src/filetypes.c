@@ -461,6 +461,17 @@ static void init_builtin_filetypes(void)
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
+#define R
+	ft = filetypes[GEANY_FILETYPES_R];
+	ft->lang = 34;
+	ft->name = g_strdup("R");
+	ft->title = g_strdup_printf(_("%s script file"), "R");
+	ft->extension = g_strdup("R");
+	ft->pattern = utils_strv_new("*.R", "*.r", NULL);
+	ft->comment_open = g_strdup("#");
+	ft->comment_close = NULL;
+	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
+
 #define REST
 	ft = filetypes[GEANY_FILETYPES_REST];
 	ft->lang = 28;

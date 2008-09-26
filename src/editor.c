@@ -2700,6 +2700,9 @@ static gboolean is_string_style(gint lexer, gint style)
 				style == SCE_PL_POD ||
 				style == SCE_PL_POD_VERB);
 
+		case SCLEX_R:
+			return (style == SCE_R_STRING);
+
 		case SCLEX_RUBY:
 			return (style == SCE_RB_CHARACTER ||
 				style == SCE_RB_STRING ||
@@ -2795,6 +2798,9 @@ static gboolean is_comment_style(gint lexer, gint style)
 
 		case SCLEX_BASH:
 			return (style == SCE_SH_COMMENTLINE);
+
+		case SCLEX_R:
+			return (style == SCE_R_COMMENT);
 
 		case SCLEX_SQL:
 			return (style == SCE_SQL_COMMENT ||
