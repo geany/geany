@@ -793,6 +793,11 @@ editor_get_indent_prefs(GeanyEditor *editor)
 
 	iprefs.type = editor->indent_type;
 
+	/* if per-document auto-indent is enabled, but we don't have a global mode set,
+	 * just use basic auto-indenting */
+	if (editor->auto_indent && iprefs.auto_indent_mode == GEANY_AUTOINDENT_NONE)
+		iprefs.auto_indent_mode = GEANY_AUTOINDENT_BASIC;
+
 	if (!editor->auto_indent)
 		iprefs.auto_indent_mode = GEANY_AUTOINDENT_NONE;
 
