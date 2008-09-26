@@ -1,8 +1,8 @@
 #!/bin/sh
-FILE=$1
-if [ -n "$FILE" ]; then
-	svn add $FILE
-	svn propset svn:keywords 'Author Date Id Revision' $FILE
-	svn propset svn:eol-style native $FILE
+FILES=$*
+if [ -n "$FILES" ]; then
+	svn add $FILES
+	svn propset svn:keywords 'Author Date Id Revision' $FILES
+	svn propset svn:eol-style native $FILES
 fi
 echo '>>> Remember to update po/POTFILES.in (if necessary) <<<'
