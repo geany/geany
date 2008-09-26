@@ -22,8 +22,8 @@
  */
 
 
-#ifndef GEANY_SCI_CB_H
-#define GEANY_SCI_CB_H 1
+#ifndef GEANY_EDITOR_H
+#define GEANY_EDITOR_H 1
 
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
