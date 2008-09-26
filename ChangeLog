@@ -6,6 +6,9 @@
  * doc/geany.txt, doc/geany.html, src/editor.c, src/keybindings.c,
    src/keybindngs.h, src/plugindata.h:
    Make 'Previous/Next word part' keybindings configurable.
+ * src/editor.c:
+   Fix unintentional switch fall-through (patch from Jason Oster,
+   thanks).
 
 
 2008-09-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

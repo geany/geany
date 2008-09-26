@@ -3971,6 +3971,7 @@ void editor_set_indentation_guides(GeanyEditor *editor)
 		 * file will show the guides. */
 		case SCLEX_DIFF:
 			mode = SC_IV_NONE;
+			break;
 
 		/* These languages use indentation for control blocks; the "look forward" method works
 		 * best here */
@@ -3983,6 +3984,7 @@ void editor_set_indentation_guides(GeanyEditor *editor)
 		case SCLEX_FORTRAN: /* Is this the best option for Fortran? */
 		case SCLEX_CAML:
 			mode = SC_IV_LOOKFORWARD;
+			break;
 
 		/* C-like (structured) languages benefit from the "look both" method */
 		case SCLEX_CPP:
@@ -4002,8 +4004,11 @@ void editor_set_indentation_guides(GeanyEditor *editor)
 		case SCLEX_D:
 		case SCLEX_OMS:
 			mode = SC_IV_LOOKBOTH;
+			break;
+
 		default:
 			mode = SC_IV_REAL;
+			break;
 	}
 
 	sci_set_indentation_guides(editor->sci, mode);
