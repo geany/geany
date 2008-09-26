@@ -2439,6 +2439,16 @@ Go to tag declaration                                     Jump to the declaratio
                                                           will beep and do nothing. See the section called
                                                           `Go to tag declaration`_.
 
+Go to Start of Line             Home                      Move the caret to the end of the line indentation
+                                                          unless it is already there, in which case it moves
+                                                          it to the start of the line.
+
+Go to End of Line               End                       Move the caret to the end of the line.
+
+Go to Previous Word Part        Ctrl-/                    Goto the previous part of the current word.
+
+Go to Next Word Part            Ctrl-\                    Goto the next part of the current word.
+
 **View**
 
 Fullscreen                      F11                       Switches to fullscreen mode.
@@ -3220,8 +3230,6 @@ Previous paragraph. Shift extends selection.    Ctrl+Up
 Next paragraph. Shift extends selection.        Ctrl+Down
 Previous word. Shift extends selection.         Ctrl+Left
 Next word. Shift extends selection.             Ctrl+Right
-Previous word part.                             Ctrl+/
-Next word part.                                 Ctrl+\\
 =============================================   ======================
 
 

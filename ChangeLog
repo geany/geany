@@ -3,6 +3,9 @@
  * geany.glade, src/interface.c, src/notebook.c:
    Remove can_focus flag from notebook widgets to avoid focused tab
    labels.
+ * doc/geany.txt, doc/geany.html, src/editor.c, src/keybindings.c,
+   src/keybindngs.h, src/plugindata.h:
+   Make 'Previous/Next word part' keybindings configurable.
 
 
 2008-09-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

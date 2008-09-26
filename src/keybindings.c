@@ -366,6 +366,10 @@ static void init_default_kb(void)
 		GDK_Home, 0, "edit_gotolinestart", _("Go to Start of Line"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_GOTO_LINEEND, cb_func_goto_action,
 		GDK_End, 0, "edit_gotolineend", _("Go to End of Line"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_GOTO_PREVWORDSTART, cb_func_goto_action,
+		GDK_slash, GDK_CONTROL_MASK, "edit_prevwordstart", _("Go to Previous Word Part"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_GOTO_NEXTWORDSTART, cb_func_goto_action,
+		GDK_backslash, GDK_CONTROL_MASK, "edit_nextwordstart", _("Go to Next Word Part"), NULL);
 
 	group = ADD_KB_GROUP(VIEW, _("View"));
 
@@ -1468,6 +1472,12 @@ static void cb_func_goto_action(guint key_id)
 			break;
 		case GEANY_KEYS_GOTO_LINEEND:
 			sci_cmd(doc->editor->sci, SCI_LINEEND);
+			break;
+		case GEANY_KEYS_GOTO_PREVWORDSTART:
+			sci_cmd(doc->editor->sci, SCI_WORDPARTLEFT);
+			break;
+		case GEANY_KEYS_GOTO_NEXTWORDSTART:
+			sci_cmd(doc->editor->sci, SCI_WORDPARTRIGHT);
 			break;
 	}
 }

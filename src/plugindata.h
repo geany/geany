@@ -41,7 +41,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 96,
+	GEANY_API_VERSION = 97,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */

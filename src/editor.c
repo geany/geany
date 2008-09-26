@@ -3826,6 +3826,8 @@ static void setup_sci_keys(ScintillaObject *sci)
 	sci_clear_cmdkey(sci, 'T' | (SCMOD_CTRL << 16) | (SCMOD_SHIFT << 16)); /* line copy */
 	sci_clear_cmdkey(sci, 'L' | (SCMOD_CTRL << 16)); /* line cut */
 	sci_clear_cmdkey(sci, 'L' | (SCMOD_CTRL << 16) | (SCMOD_SHIFT << 16)); /* line delete */
+	sci_clear_cmdkey(sci, '/' | (SCMOD_CTRL << 16)); /* Previous word part */
+	sci_clear_cmdkey(sci, '\\' | (SCMOD_CTRL << 16)); /* Next word part */
 	sci_clear_cmdkey(sci, SCK_UP | (SCMOD_CTRL << 16)); /* scroll line up */
 	sci_clear_cmdkey(sci, SCK_DOWN | (SCMOD_CTRL << 16)); /* scroll line down */
 	sci_clear_cmdkey(sci, SCK_HOME);	/* line start */
