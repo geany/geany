@@ -1052,7 +1052,7 @@ static void close_block(GeanyEditor *editor, gint pos)
 	if (editor == NULL || editor->document->file_type == NULL)
 		return;
 
-	sci = doc->editor->sci;
+	sci = editor->sci;
 	doc = editor->document;
 
 	if (! lexer_has_braces(sci))
