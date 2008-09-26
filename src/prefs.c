@@ -1195,10 +1195,10 @@ void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 			interface_prefs.tagbar_font = g_strdup(fontbtn);
 			for (i = 0; i < documents_array->len; i++)
 			{
-				Document *fdoc = DOCUMENT(documents[i]);
+				GeanyDocument *doc = documents[i];
 
-				if (documents[i]->is_valid && GTK_IS_WIDGET(fdoc->tag_tree))
-					ui_widget_modify_font_from_string(fdoc->tag_tree,
+				if (documents[i]->is_valid && GTK_IS_WIDGET(doc->priv->tag_tree))
+					ui_widget_modify_font_from_string(doc->priv->tag_tree,
 						interface_prefs.tagbar_font);
 			}
 			if (GTK_IS_WIDGET(tv.default_tag_tree))

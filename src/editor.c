@@ -3808,10 +3808,10 @@ static gboolean on_editor_expose_event(GtkWidget *widget, GdkEventExpose *event,
 {
 	GeanyDocument *doc = user_data;
 
-	if (DOCUMENT(doc)->colourise_needed)
+	if (doc->priv->colourise_needed)
 	{
 		editor_colourise(doc->editor->sci);
-		DOCUMENT(doc)->colourise_needed = FALSE;
+		doc->priv->colourise_needed = FALSE;
 	}
 	return FALSE;	/* propagate event */
 }

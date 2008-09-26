@@ -105,6 +105,8 @@ struct GeanyDocument
 	 * not be set elsewhere.
 	 * @see file_name. */
 	gchar 			*real_path;
+
+	struct GeanyDocumentPrivate *priv;	/* should be last, append fields before this item */
 };
 
 extern GPtrArray *documents_array;

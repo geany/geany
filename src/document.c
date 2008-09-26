@@ -303,9 +303,9 @@ void document_set_text_changed(GeanyDocument *doc, gboolean changed)
  * The flag is_valid is set to TRUE in document_create(). */
 static void init_doc_struct(GeanyDocument *new_doc)
 {
-	Document *full_doc = DOCUMENT(new_doc);
+	GeanyDocumentPrivate *priv;
 
-	memset(full_doc, 0, sizeof(Document));
+	memset(new_doc, 0, sizeof(GeanyDocument));
 
 	new_doc->is_valid = FALSE;
 	new_doc->has_tags = FALSE;
@@ -321,12 +321,14 @@ static void init_doc_struct(GeanyDocument *new_doc)
 	new_doc->last_check = time(NULL);
 	new_doc->real_path = NULL;
 
-	full_doc->tag_store = NULL;
-	full_doc->tag_tree = NULL;
-	full_doc->saved_encoding.encoding = NULL;
-	full_doc->saved_encoding.has_bom = FALSE;
-	full_doc->undo_actions = NULL;
-	full_doc->redo_actions = NULL;
+	new_doc->priv = g_new0(GeanyDocumentPrivate, 1);
+	priv = new_doc->priv;
+	priv->tag_store = NULL;
+	priv->tag_tree = NULL;
+	priv->saved_encoding.encoding = NULL;
+	priv->saved_encoding.has_bom = FALSE;
+	priv->undo_actions = NULL;
+	priv->redo_actions = NULL;
 }
 
 
@@ -350,7 +352,7 @@ static gint document_get_new_idx(void)
 static void queue_colourise(GeanyDocument *doc)
 {
 	/* Colourise the editor before it is next drawn */
-	DOCUMENT(doc)->colourise_needed = TRUE;
+	doc->priv->colourise_needed = TRUE;
 
 	/* If the editor doesn't need drawing (e.g. after saving the current
 	 * document), we need to force a redraw, so the expose event is triggered.
@@ -379,7 +381,7 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 	new_idx = document_get_new_idx();
 	if (new_idx == -1)	/* expand the array, no free places */
 	{
-		Document *new_doc = g_new0(Document, 1);
+		GeanyDocument *new_doc = g_new0(GeanyDocument, 1);
 
 		new_idx = documents_array->len;
 		g_ptr_array_add(documents_array, new_doc);
@@ -403,7 +405,7 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 		GtkTreeSelection *sel;
 
 		sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));
-		gtk_tree_selection_select_iter(sel, &DOCUMENT(this)->iter);
+		gtk_tree_selection_select_iter(sel, &this->priv->iter);
 	}
 
 	ui_document_buttons_update();
@@ -441,7 +443,6 @@ gboolean document_close(GeanyDocument *doc)
 gboolean document_remove_page(guint page_num)
 {
 	GeanyDocument *doc = document_get_from_page(page_num);
-	Document *fdoc = DOCUMENT(doc);
 
 	if (doc == NULL)
 	{
@@ -469,7 +470,7 @@ gboolean document_remove_page(guint page_num)
 	navqueue_remove_file(doc->file_name);
 	msgwin_status_add(_("File %s closed."), DOC_FILENAME(doc));
 	g_free(doc->encoding);
-	g_free(fdoc->saved_encoding.encoding);
+	g_free(doc->priv->saved_encoding.encoding);
 	g_free(doc->file_name);
 	g_free(doc->real_path);
 	tm_workspace_remove_object(doc->tm_file, TRUE, TRUE);
@@ -485,6 +486,8 @@ gboolean document_remove_page(guint page_num)
 	doc->has_bom = FALSE;
 	doc->tm_file = NULL;
 	document_undo_clear(doc);
+	g_free(doc->priv);
+
 	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0)
 	{
 		treeviews_update_tag_list(NULL, FALSE);
@@ -501,11 +504,9 @@ gboolean document_remove_page(guint page_num)
 /* used to keep a record of the unchanged document state encoding */
 static void store_saved_encoding(GeanyDocument *doc)
 {
-	Document *fdoc = DOCUMENT(doc);
-
-	g_free(fdoc->saved_encoding.encoding);
-	fdoc->saved_encoding.encoding = g_strdup(doc->encoding);
-	fdoc->saved_encoding.has_bom = doc->has_bom;
+	g_free(doc->priv->saved_encoding.encoding);
+	doc->priv->saved_encoding.encoding = g_strdup(doc->encoding);
+	doc->priv->saved_encoding.has_bom = doc->has_bom;
 }
 
 
@@ -1535,9 +1536,8 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 
 		tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
 		{
-			Document *fdoc = DOCUMENT(doc);
-			gtk_label_set_text(GTK_LABEL(fdoc->tab_label), base_name);
-			gtk_label_set_text(GTK_LABEL(fdoc->tabmenu_label), base_name);
+			gtk_label_set_text(GTK_LABEL(doc->priv->tab_label), base_name);
+			gtk_label_set_text(GTK_LABEL(doc->priv->tabmenu_label), base_name);
 		}
 		msgwin_status_add(_("File %s saved."), doc->file_name);
 		ui_update_statusbar(doc, -1);
@@ -2174,12 +2174,11 @@ void document_set_encoding(GeanyDocument *doc, const gchar *new_encoding)
 /* Clears the Undo and Redo buffer (to be called when reloading or closing the document) */
 void document_undo_clear(GeanyDocument *doc)
 {
-	Document *fdoc = DOCUMENT(doc);
 	undo_action *a;
 
-	while (g_trash_stack_height(&fdoc->undo_actions) > 0)
+	while (g_trash_stack_height(&doc->priv->undo_actions) > 0)
 	{
-		a = g_trash_stack_pop(&fdoc->undo_actions);
+		a = g_trash_stack_pop(&doc->priv->undo_actions);
 		if (a != NULL)
 		{
 			switch (a->type)
@@ -2191,11 +2190,11 @@ void document_undo_clear(GeanyDocument *doc)
 			g_free(a);
 		}
 	}
-	fdoc->undo_actions = NULL;
+	doc->priv->undo_actions = NULL;
 
-	while (g_trash_stack_height(&fdoc->redo_actions) > 0)
+	while (g_trash_stack_height(&doc->priv->redo_actions) > 0)
 	{
-		a = g_trash_stack_pop(&fdoc->redo_actions);
+		a = g_trash_stack_pop(&doc->priv->redo_actions);
 		if (a != NULL)
 		{
 			switch (a->type)
@@ -2207,7 +2206,7 @@ void document_undo_clear(GeanyDocument *doc)
 			g_free(a);
 		}
 	}
-	fdoc->redo_actions = NULL;
+	doc->priv->redo_actions = NULL;
 
 	if (! main_status.quitting && doc->editor != NULL)
 		document_set_text_changed(doc, FALSE);
@@ -2219,7 +2218,6 @@ void document_undo_clear(GeanyDocument *doc)
 
 void document_undo_add(GeanyDocument *doc, guint type, gpointer data)
 {
-	Document *fdoc = DOCUMENT(doc);
 	undo_action *action;
 
 	if (doc == NULL)
@@ -2229,7 +2227,7 @@ void document_undo_add(GeanyDocument *doc, guint type, gpointer data)
 	action->type = type;
 	action->data = data;
 
-	g_trash_stack_push(&fdoc->undo_actions, action);
+	g_trash_stack_push(&doc->priv->undo_actions, action);
 
 	document_set_text_changed(doc, TRUE);
 	ui_update_popup_reundo_items(doc);
@@ -2241,12 +2239,10 @@ void document_undo_add(GeanyDocument *doc, guint type, gpointer data)
 
 gboolean document_can_undo(GeanyDocument *doc)
 {
-	Document *fdoc = DOCUMENT(doc);
-
 	if (doc == NULL)
 		return FALSE;
 
-	if (g_trash_stack_height(&fdoc->undo_actions) > 0 || sci_can_undo(doc->editor->sci))
+	if (g_trash_stack_height(&doc->priv->undo_actions) > 0 || sci_can_undo(doc->editor->sci))
 		return TRUE;
 	else
 		return FALSE;
@@ -2255,25 +2251,22 @@ gboolean document_can_undo(GeanyDocument *doc)
 
 static void update_changed_state(GeanyDocument *doc)
 {
-	Document *fdoc = DOCUMENT(doc);
-
 	doc->changed =
 		(sci_is_modified(doc->editor->sci) ||
-		doc->has_bom != fdoc->saved_encoding.has_bom ||
-		! utils_str_equal(doc->encoding, fdoc->saved_encoding.encoding));
+		doc->has_bom != doc->priv->saved_encoding.has_bom ||
+		! utils_str_equal(doc->encoding, doc->priv->saved_encoding.encoding));
 	document_set_text_changed(doc, doc->changed);
 }
 
 
 void document_undo(GeanyDocument *doc)
 {
-	Document *fdoc = DOCUMENT(doc);
 	undo_action *action;
 
 	if (doc == NULL)
 		return;
 
-	action = g_trash_stack_pop(&fdoc->undo_actions);
+	action = g_trash_stack_pop(&doc->priv->undo_actions);
 
 	if (action == NULL)
 	{
@@ -2328,12 +2321,10 @@ void document_undo(GeanyDocument *doc)
 
 gboolean document_can_redo(GeanyDocument *doc)
 {
-	Document *fdoc = DOCUMENT(doc);
-
 	if (doc == NULL)
 		return FALSE;
 
-	if (g_trash_stack_height(&fdoc->redo_actions) > 0 || sci_can_redo(doc->editor->sci))
+	if (g_trash_stack_height(&doc->priv->redo_actions) > 0 || sci_can_redo(doc->editor->sci))
 		return TRUE;
 	else
 		return FALSE;
@@ -2342,13 +2333,12 @@ gboolean document_can_redo(GeanyDocument *doc)
 
 void document_redo(GeanyDocument *doc)
 {
-	Document *fdoc = DOCUMENT(doc);
 	undo_action *action;
 
 	if (doc == NULL)
 		return;
 
-	action = g_trash_stack_pop(&fdoc->redo_actions);
+	action = g_trash_stack_pop(&doc->priv->redo_actions);
 
 	if (action == NULL)
 	{
@@ -2402,7 +2392,6 @@ void document_redo(GeanyDocument *doc)
 
 static void document_redo_add(GeanyDocument *doc, guint type, gpointer data)
 {
-	Document *fdoc = DOCUMENT(doc);
 	undo_action *action;
 
 	if (doc == NULL)
@@ -2412,7 +2401,7 @@ static void document_redo_add(GeanyDocument *doc, guint type, gpointer data)
 	action->type = type;
 	action->data = data;
 
-	g_trash_stack_push(&fdoc->redo_actions, action);
+	g_trash_stack_push(&doc->priv->redo_actions, action);
 
 	document_set_text_changed(doc, TRUE);
 	ui_update_popup_reundo_items(doc);

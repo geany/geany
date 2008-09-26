@@ -1242,13 +1242,12 @@ void ui_combo_box_add_to_history(GtkComboBox *combo, const gchar *text)
 void ui_update_tab_status(GeanyDocument *doc)
 {
 	GdkColor *color = document_get_status_color(doc);
-	Document *fdoc = DOCUMENT(doc);
 
 	/* NULL color will reset to default */
-	gtk_widget_modify_fg(fdoc->tab_label, GTK_STATE_NORMAL, color);
-	gtk_widget_modify_fg(fdoc->tab_label, GTK_STATE_ACTIVE, color);
-	gtk_widget_modify_fg(fdoc->tabmenu_label, GTK_STATE_NORMAL, color);
-	gtk_widget_modify_fg(fdoc->tabmenu_label, GTK_STATE_ACTIVE, color);
+	gtk_widget_modify_fg(doc->priv->tab_label, GTK_STATE_NORMAL, color);
+	gtk_widget_modify_fg(doc->priv->tab_label, GTK_STATE_ACTIVE, color);
+	gtk_widget_modify_fg(doc->priv->tabmenu_label, GTK_STATE_NORMAL, color);
+	gtk_widget_modify_fg(doc->priv->tabmenu_label, GTK_STATE_ACTIVE, color);
 
 	treeviews_openfiles_update(doc);
 }

@@ -443,7 +443,6 @@ gint notebook_new_tab(GeanyDocument *this)
 	GtkWidget *hbox, *ebox;
 	gint tabnum;
 	gchar *title;
-	Document *fdoc = DOCUMENT(this);
 	GtkWidget *page;
 
 	g_return_val_if_fail(this != NULL, -1);
@@ -451,7 +450,7 @@ gint notebook_new_tab(GeanyDocument *this)
 	page = GTK_WIDGET(this->editor->sci);
 	title = g_path_get_basename(DOC_FILENAME(this));
 
-	fdoc->tab_label = gtk_label_new(title);
+	this->priv->tab_label = gtk_label_new(title);
 
 	ebox = gtk_event_box_new();
 	GTK_WIDGET_SET_FLAGS(ebox, GTK_NO_WINDOW);
@@ -459,7 +458,7 @@ gint notebook_new_tab(GeanyDocument *this)
 
 	hbox = gtk_hbox_new(FALSE, 2);
 	GTK_WIDGET_UNSET_FLAGS(hbox, GTK_CAN_FOCUS);
-	gtk_container_add(GTK_CONTAINER(ebox), fdoc->tab_label);
+	gtk_container_add(GTK_CONTAINER(ebox), this->priv->tab_label);
 	gtk_box_pack_start(GTK_BOX(hbox), ebox, FALSE, FALSE, 0);
 
 	if (file_prefs.show_tab_cross)
@@ -495,15 +494,15 @@ gint notebook_new_tab(GeanyDocument *this)
 
 	gtk_widget_show_all(hbox);
 
-	fdoc->tabmenu_label = gtk_label_new(title);
-	gtk_misc_set_alignment(GTK_MISC(fdoc->tabmenu_label), 0.0, 0);
+	this->priv->tabmenu_label = gtk_label_new(title);
+	gtk_misc_set_alignment(GTK_MISC(this->priv->tabmenu_label), 0.0, 0);
 
 	if (file_prefs.tab_order_ltr)
 		tabnum = gtk_notebook_append_page_menu(GTK_NOTEBOOK(main_widgets.notebook), page,
-			hbox, fdoc->tabmenu_label);
+			hbox, this->priv->tabmenu_label);
 	else
 		tabnum = gtk_notebook_insert_page_menu(GTK_NOTEBOOK(main_widgets.notebook), page,
-			hbox, fdoc->tabmenu_label, 0);
+			hbox, this->priv->tabmenu_label, 0);
 
 	tab_count_changed();
 

@@ -41,16 +41,13 @@ typedef struct FileEncoding
 {
 	gchar 			*encoding;
 	gboolean		 has_bom;
-} FileEncoding;
+}
+FileEncoding;
 
 
-#define DOCUMENT(doc_ptr) ((Document*)doc_ptr)
-
-/* This type 'inherits' from GeanyDocument so Document* can be cast to GeanyDocument*. */
-typedef struct Document
+/* Private GeanyDocument fields */
+typedef struct GeanyDocumentPrivate
 {
-	struct GeanyDocument public;	/* must come first */
-
 	/* GtkLabel shown in the notebook header. */
 	GtkWidget		*tab_label;
 	/* GtkLabel shown in the notebook right-click menu. */
@@ -69,6 +66,6 @@ typedef struct Document
 	FileEncoding	 saved_encoding;
 	gboolean		colourise_needed;
 }
-Document;
+GeanyDocumentPrivate;
 
 #endif
