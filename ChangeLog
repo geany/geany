@@ -1,3 +1,10 @@
+2008-09-26  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * geany.glade, src/interface.c, src/notebook.c:
+   Remove can_focus flag from notebook widgets to avoid focused tab
+   labels.
+
+
 2008-09-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/editor.c:

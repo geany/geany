@@ -1258,6 +1258,7 @@ create_window1 (void)
   notebook3 = gtk_notebook_new ();
   gtk_widget_show (notebook3);
   gtk_paned_pack1 (GTK_PANED (hpaned1), notebook3, FALSE, TRUE);
+  GTK_WIDGET_UNSET_FLAGS (notebook3, GTK_CAN_FOCUS);
   gtk_notebook_set_scrollable (GTK_NOTEBOOK (notebook3), TRUE);
 
   scrolledwindow2 = gtk_scrolled_window_new (NULL, NULL);
@@ -1292,6 +1293,7 @@ create_window1 (void)
   notebook1 = gtk_notebook_new ();
   gtk_widget_show (notebook1);
   gtk_paned_pack2 (GTK_PANED (hpaned1), notebook1, TRUE, TRUE);
+  GTK_WIDGET_UNSET_FLAGS (notebook1, GTK_CAN_FOCUS);
   gtk_notebook_set_scrollable (GTK_NOTEBOOK (notebook1), TRUE);
   gtk_notebook_popup_enable (GTK_NOTEBOOK (notebook1));
 
@@ -1308,6 +1310,7 @@ create_window1 (void)
   notebook_info = gtk_notebook_new ();
   gtk_widget_show (notebook_info);
   gtk_container_add (GTK_CONTAINER (viewport1), notebook_info);
+  GTK_WIDGET_UNSET_FLAGS (notebook_info, GTK_CAN_FOCUS);
   gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook_info), GTK_POS_LEFT);
   gtk_notebook_set_scrollable (GTK_NOTEBOOK (notebook_info), TRUE);
 
