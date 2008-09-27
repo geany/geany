@@ -50,7 +50,13 @@ static void update_dialog(void)
 {
 	if (dialog_textbuffer != NULL)
 	{
+		GtkTextMark *mark;
+		GtkTextView *textview = g_object_get_data(G_OBJECT(dialog_textbuffer), "textview");
+
 		gtk_text_buffer_set_text(dialog_textbuffer, log_buffer->str, log_buffer->len);
+		/* scroll to the end of the messages as this might be most interesting */
+		mark = gtk_text_buffer_get_insert(dialog_textbuffer);
+		gtk_text_view_scroll_to_mark(textview, mark, 0.0, FALSE, 0.0, 0.0);
 	}
 }
 
@@ -144,7 +150,7 @@ void log_handlers_init(void)
 }
 
 
-static void on_dialog_response(GtkWidget *dialog, gint response, gpointer user_data)
+static void on_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
 	if (response == DIALOG_RESPONSE_CLEAR)
 	{
@@ -158,7 +164,7 @@ static void on_dialog_response(GtkWidget *dialog, gint response, gpointer user_d
 	}
 	else
 	{
-		gtk_widget_destroy(dialog);
+		gtk_widget_destroy(GTK_WIDGET(dialog));
 		dialog_textbuffer = NULL;
 	}
 }
@@ -176,24 +182,27 @@ void log_show_debug_messages_dialog(void)
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
 	gtk_widget_set_name(dialog, "GeanyDialog");
 
-	gtk_window_set_default_size(GTK_WINDOW(dialog), 450, 250);
+	gtk_window_set_default_size(GTK_WINDOW(dialog), 550, 300);
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
 
 	textview = gtk_text_view_new();
 	dialog_textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview));
+	g_object_set_data(G_OBJECT(dialog_textbuffer), "textview", textview);
 	gtk_text_view_set_editable(GTK_TEXT_VIEW(textview), FALSE);
 	gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(textview), FALSE);
-	gtk_text_buffer_set_text(dialog_textbuffer, log_buffer->str, log_buffer->len);
+	gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(textview), GTK_WRAP_WORD_CHAR);
 
 	swin = gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
 		GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(swin), textview);
+	gtk_container_add(GTK_CONTAINER(swin), textview);
 
 	gtk_box_pack_start(GTK_BOX(vbox), swin, TRUE, TRUE, 0);
 
 	g_signal_connect(dialog, "response", G_CALLBACK(on_dialog_response), textview);
 	gtk_widget_show_all(dialog);
+
+	update_dialog(); /* set text after showing the window, to not scroll an unrealized textview */
 }
 
 
