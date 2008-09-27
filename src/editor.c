@@ -346,7 +346,7 @@ static void on_update_ui(GeanyEditor *editor, G_GNUC_UNUSED SCNotification *nt)
 static void check_line_breaking(GeanyEditor *editor, gint pos, gchar c)
 {
 	ScintillaObject *sci = editor->sci;
-	gint line, lstart;
+	gint line, lstart, col;
 
 	if (!editor->line_breaking)
 		return;
@@ -355,9 +355,12 @@ static void check_line_breaking(GeanyEditor *editor, gint pos, gchar c)
 		pos--;	/* Look for previous space, not the new one */
 
 	line = sci_get_current_line(sci);
+
 	lstart = sci_get_position_from_line(sci, line);
 
-	if (pos - lstart < editor_prefs.line_break_column)
+	/* use column instead of position which might be different with multibyte characters */
+	col = sci_get_col_from_position(sci, pos);
+	if (col < editor_prefs.line_break_column)
 		return;
 
 	/* look for the last space before line_break_column */
@@ -368,19 +371,19 @@ static void check_line_breaking(GeanyEditor *editor, gint pos, gchar c)
 		c = sci_get_char_at(sci, --pos);
 		if (c == GDK_space)
 		{
-			gint col, len, diff;
+			gint diff, last_pos, last_col;
 			const gchar *eol = editor_get_eol_char(editor);
+
+			/* remember the distance between the current column and the last column on the line
+			 * (we use column position in case the previous line gets altered, such as removing
+			 * trailing spaces or in case it contains multibyte characters) */
+			last_pos = sci_get_line_end_position(sci, line);
+			last_col = sci_get_col_from_position(sci, last_pos);
+			diff = last_col - col;
 
 			/* break the line after the space */
 			sci_insert_text(sci, pos + 1, eol);
 			line++;
-
-			/* remember distance from end of line (we use column position in case
-			 * the previous line gets altered, such as removing trailing spaces). */
-			pos = sci_get_current_position(sci);
-			len = sci_get_line_length(sci, line);
-			col = sci_get_col_from_position(sci, pos);
-			diff = len - col;
 
 			/* set position as if user had pressed return */
 			pos = sci_get_position_from_line(sci, line);
@@ -389,9 +392,12 @@ static void check_line_breaking(GeanyEditor *editor, gint pos, gchar c)
 			on_new_line_added(editor);
 
 			/* correct cursor position (might not be at line end) */
-			pos = sci_get_position_from_line(sci, line);
-			pos += sci_get_line_length(sci, line) - diff;
+			last_pos = sci_get_line_end_position(sci, line);
+			last_col = sci_get_col_from_position(sci, last_pos); /* get last column on line */
+			/* last column - distance is the desired column, then retrieve its document position */
+			pos = SSM(sci, SCI_FINDCOLUMN, line, last_col - diff);
 			sci_set_current_position(sci, pos, FALSE);
+
 			return;
 		}
 	}
