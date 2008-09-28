@@ -433,7 +433,7 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 }
 
 
-static void styleset_common(ScintillaObject *sci, gint style_bits, filetype_id ft_id)
+static void styleset_common(ScintillaObject *sci, filetype_id ft_id)
 {
 	SSM(sci, SCI_STYLECLEARALL, 0, 0);
 
@@ -571,8 +571,7 @@ static void styleset_common(ScintillaObject *sci, gint style_bits, filetype_id f
 	if (common_style_set.styling[GCS_SELECTION].italic)
 		SSM(sci, SCI_SETSELBACK, 1, invert(common_style_set.styling[GCS_SELECTION].background));
 
-	SSM(sci, SCI_SETSTYLEBITS, style_bits, 0);
-
+	SSM(sci, SCI_SETSTYLEBITS, SSM(sci, SCI_GETSTYLEBITSNEEDED, 0, 0), 0);
 
 	SSM(sci, SCI_SETFOLDMARGINCOLOUR, 1, invert(common_style_set.styling[GCS_MARGIN_FOLDING].background));
 	/*SSM(sci, SCI_SETFOLDMARGINHICOLOUR, 1, invert(common_style_set.styling[GCS_MARGIN_FOLDING].background));*/
@@ -619,6 +618,8 @@ apply_filetype_properties(ScintillaObject *sci, gint lexer, filetype_id ft_id)
 	SSM(sci, SCI_SETWHITESPACECHARS, 0, (sptr_t) whitespace_chars);
 
 	SSM(sci, SCI_AUTOCSETMAXHEIGHT, editor_prefs.symbolcompletion_max_height, 0);
+
+	styleset_common(sci, ft_id);
 }
 
 
@@ -727,8 +728,6 @@ static void styleset_c(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_C;
 
-	styleset_common(sci, 5, ft_id);
-
 	apply_filetype_properties(sci, SCLEX_CPP, ft_id);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_C].keywords[0]);
@@ -770,8 +769,6 @@ static void styleset_cpp_init(gint ft_id, GKeyFile *config, GKeyFile *config_hom
 static void styleset_cpp(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_CPP;
-
-	styleset_common(sci, 5, ft_id);
 
 	apply_filetype_properties(sci, SCLEX_CPP, ft_id);
 
@@ -827,8 +824,6 @@ static void styleset_glsl(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_GLSL;
 
-	styleset_common(sci, 5, ft_id);
-
 	apply_filetype_properties(sci, SCLEX_CPP, ft_id);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_GLSL].keywords[0]);
@@ -879,8 +874,6 @@ static void styleset_cs(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_CS;
 
-	styleset_common(sci, 5, ft_id);
-
 	apply_filetype_properties(sci, SCLEX_CPP, ft_id);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[ft_id].keywords[0]);
@@ -927,8 +920,6 @@ static void styleset_pascal(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_PASCAL;
 
-	styleset_common(sci, 5, ft_id);
-
 	apply_filetype_properties(sci, SCLEX_PASCAL, ft_id);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_PASCAL].keywords[0]);
@@ -971,8 +962,6 @@ static void styleset_makefile(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_MAKE;
 
-	styleset_common(sci, 5, ft_id);
-
 	apply_filetype_properties(sci, SCLEX_MAKEFILE, ft_id);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_MAKE, 0);
@@ -1007,8 +996,6 @@ static void styleset_diff_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 static void styleset_diff(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_DIFF;
-
-	styleset_common(sci, 5, ft_id);
 
 	apply_filetype_properties(sci, SCLEX_DIFF, ft_id);
 
@@ -1045,8 +1032,6 @@ static void styleset_latex(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_LATEX;
 
-	styleset_common(sci, 5, ft_id);
-
 	apply_filetype_properties(sci, SCLEX_LATEX, ft_id);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_LATEX].keywords[0]);
@@ -1074,8 +1059,6 @@ static void styleset_php(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_PHP;
 
-	styleset_common(sci, 7, ft_id);
-
 	apply_filetype_properties(sci, SCLEX_HTML, ft_id);
 
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "phpscript.mode", (sptr_t) "1");
@@ -1098,8 +1081,6 @@ static void styleset_html_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 static void styleset_html(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_HTML;
-
-	styleset_common(sci, 7, ft_id);
 
 	apply_filetype_properties(sci, SCLEX_HTML, ft_id);
 
@@ -1365,8 +1346,6 @@ static void styleset_java(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_JAVA;
 
-	styleset_common(sci, 5, ft_id);
-
 	apply_filetype_properties(sci, SCLEX_CPP, ft_id);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_JAVA].keywords[0]);
@@ -1380,7 +1359,7 @@ static void styleset_java(ScintillaObject *sci)
 
 static void styleset_perl_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_style_array(GEANY_FILETYPES_PERL, 30);
+	new_style_array(GEANY_FILETYPES_PERL, 35);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PERL].styling[0]);
 	get_keyfile_hex(config, config_home, "styling", "error", "0xff0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PERL].styling[1]);
 	get_keyfile_style(config, config_home, "commentline", &gsd_comment, &style_sets[GEANY_FILETYPES_PERL].styling[2]);
@@ -1411,6 +1390,12 @@ static void styleset_perl_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 	get_keyfile_hex(config, config_home, "styling", "string_qr", "0x105090", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PERL].styling[27]);
 	get_keyfile_hex(config, config_home, "styling", "string_qw", "0x105090", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PERL].styling[28]);
 	get_keyfile_hex(config, config_home, "styling", "variable_indexer", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PERL].styling[29]);
+	get_keyfile_hex(config, config_home, "styling", "punctuation", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PERL].styling[30]);
+	get_keyfile_hex(config, config_home, "styling", "longquote", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PERL].styling[31]);
+	get_keyfile_hex(config, config_home, "styling", "sub_prototype", "0x301010", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PERL].styling[32]);
+	get_keyfile_hex(config, config_home, "styling", "format_ident", "0xc000c0", "0xffffff", "true", &style_sets[GEANY_FILETYPES_PERL].styling[33]);
+	get_keyfile_hex(config, config_home, "styling", "format", "0xc000c0", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PERL].styling[34]);
+
 
 	style_sets[GEANY_FILETYPES_PERL].keywords = g_new(gchar*, 2);
 	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_PERL, 0, "\
@@ -1452,8 +1437,6 @@ static void styleset_perl(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_PERL;
 
-	styleset_common(sci, 5, ft_id);
-
 	apply_filetype_properties(sci, SCLEX_PERL, ft_id);
 
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
@@ -1491,6 +1474,11 @@ static void styleset_perl(ScintillaObject *sci)
 	set_sci_style(sci, SCE_PL_STRING_QR, GEANY_FILETYPES_PERL, 27);
 	set_sci_style(sci, SCE_PL_STRING_QW, GEANY_FILETYPES_PERL, 28);
 	set_sci_style(sci, SCE_PL_VARIABLE_INDEXER, GEANY_FILETYPES_PERL, 29);
+	set_sci_style(sci, SCE_PL_PUNCTUATION, GEANY_FILETYPES_PERL, 30);
+	set_sci_style(sci, SCE_PL_LONGQUOTE, GEANY_FILETYPES_PERL, 31);
+	set_sci_style(sci, SCE_PL_SUB_PROTOTYPE, GEANY_FILETYPES_PERL, 32);
+	set_sci_style(sci, SCE_PL_FORMAT_IDENT, GEANY_FILETYPES_PERL, 33);
+	set_sci_style(sci, SCE_PL_FORMAT, GEANY_FILETYPES_PERL, 34);
 }
 
 
@@ -1527,8 +1515,6 @@ static void styleset_python_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 static void styleset_python(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_PYTHON;
-
-	styleset_common(sci, 5, ft_id);
 
 	apply_filetype_properties(sci, SCLEX_PYTHON, ft_id);
 
@@ -1587,8 +1573,6 @@ static void styleset_r_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 static void styleset_r(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_R;
-
-	styleset_common(sci, 5, ft_id);
 
 	apply_filetype_properties(sci, SCLEX_R, ft_id);
 
@@ -1661,8 +1645,6 @@ static void styleset_ruby_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 static void styleset_ruby(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_RUBY;
-
-	styleset_common(sci, 5, ft_id);
 
 	apply_filetype_properties(sci, SCLEX_RUBY, ft_id);
 
@@ -1738,8 +1720,6 @@ static void styleset_sh(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_SH;
 
-	styleset_common(sci, 5, ft_id);
-
 	apply_filetype_properties(sci, SCLEX_BASH, ft_id);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_SH].keywords[0]);
@@ -1765,8 +1745,6 @@ static void styleset_sh(ScintillaObject *sci)
 static void styleset_xml(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_XML;
-
-	styleset_common(sci, 7, ft_id);
 
 	apply_filetype_properties(sci, SCLEX_XML, ft_id);
 
@@ -1877,8 +1855,6 @@ static void styleset_docbook(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_DOCBOOK;
 
-	styleset_common(sci, 7, ft_id);
-
 	apply_filetype_properties(sci, SCLEX_XML, ft_id);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_DOCBOOK].keywords[0]);
@@ -1926,13 +1902,9 @@ static void styleset_docbook(ScintillaObject *sci)
 
 static void styleset_none(ScintillaObject *sci)
 {
-	const filetype_id ft_id = GEANY_FILETYPES_NONE;
-
 	SSM(sci, SCI_SETLEXER, SCLEX_NULL, 0);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_NONE, GCS_DEFAULT);
-
-	styleset_common(sci, 5, ft_id);
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) common_style_set.wordchars);
 	SSM(sci, SCI_SETWHITESPACECHARS, 0, (sptr_t) whitespace_chars);
@@ -1998,8 +1970,6 @@ static void styleset_css(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_CSS;
 
-	styleset_common(sci, 5, ft_id);
-
 	apply_filetype_properties(sci, SCLEX_CSS, ft_id);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_CSS].keywords[0]);
@@ -2051,8 +2021,6 @@ static void styleset_po(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_PO;
 
-	styleset_common(sci, 5, ft_id);
-
 	apply_filetype_properties(sci, SCLEX_PO, ft_id);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_PO, 0);
@@ -2088,8 +2056,6 @@ static void styleset_conf_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 static void styleset_conf(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_CONF;
-
-	styleset_common(sci, 5, ft_id);
 
 	apply_filetype_properties(sci, SCLEX_PROPERTIES, ft_id);
 
@@ -2136,8 +2102,6 @@ static void styleset_asm_init(gint ft_id, GKeyFile *config, GKeyFile *config_hom
 static void styleset_asm(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_ASM;
-
-	styleset_common(sci, 5, ft_id);
 
 	apply_filetype_properties(sci, SCLEX_ASM, ft_id);
 
@@ -2200,8 +2164,6 @@ static void styleset_f77(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_F77;
 
-	styleset_common(sci, 5, ft_id);
-
 	apply_filetype_properties(sci, SCLEX_F77, ft_id);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_F77].keywords[0]);
@@ -2260,8 +2222,6 @@ static void styleset_fortran_init(gint ft_id, GKeyFile *config, GKeyFile *config
 static void styleset_fortran(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_FORTRAN;
-
-	styleset_common(sci, 5, ft_id);
 
 	apply_filetype_properties(sci, SCLEX_FORTRAN, ft_id);
 
@@ -2347,8 +2307,6 @@ static void styleset_sql(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_SQL;
 
-	styleset_common(sci, 5, ft_id);
-
 	apply_filetype_properties(sci, SCLEX_SQL, ft_id);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_SQL].keywords[0]);
@@ -2406,8 +2364,6 @@ static void styleset_haskell_init(gint ft_id, GKeyFile *config, GKeyFile *config
 static void styleset_haskell(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_HASKELL;
-
-	styleset_common(sci, 5, ft_id);
 
 	apply_filetype_properties(sci, SCLEX_HASKELL, ft_id);
 
@@ -2471,8 +2427,6 @@ static void styleset_caml(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_CAML;
 
-	styleset_common(sci, 5, ft_id);
-
 	apply_filetype_properties(sci, SCLEX_CAML, ft_id);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_CAML].keywords[0]);
@@ -2530,8 +2484,6 @@ static void styleset_oms(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_OMS;
 
-	styleset_common(sci, 5, ft_id);
-
 	apply_filetype_properties(sci, SCLEX_OMS, ft_id);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_OMS].keywords[0]);
@@ -2587,8 +2539,6 @@ static void styleset_tcl_init(gint ft_id, GKeyFile *config, GKeyFile *config_hom
 static void styleset_tcl(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_TCL;
-
-	styleset_common(sci, 5, ft_id);
 
 	apply_filetype_properties(sci, SCLEX_TCL, ft_id);
 
@@ -2667,8 +2617,6 @@ static void styleset_d(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_D;
 
-	styleset_common(sci, 5, ft_id);
-
 	apply_filetype_properties(sci, SCLEX_D, ft_id);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_D].keywords[0]);
@@ -2717,8 +2665,6 @@ static void styleset_ferite_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 static void styleset_ferite(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_FERITE;
-
-	styleset_common(sci, 5, ft_id);
 
 	apply_filetype_properties(sci, SCLEX_CPP, ft_id);
 
@@ -2790,8 +2736,6 @@ static void styleset_vhdl(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_VHDL;
 
-	styleset_common(sci, 5, ft_id);
-
 	apply_filetype_properties(sci, SCLEX_VHDL, ft_id);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_VHDL].keywords[0]);
@@ -2850,8 +2794,6 @@ static void styleset_js_init(gint ft_id, GKeyFile *config, GKeyFile *config_home
 static void styleset_js(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_JS;
-
-	styleset_common(sci, 5, ft_id);
 
 	apply_filetype_properties(sci, SCLEX_CPP, ft_id);
 
@@ -2932,8 +2874,6 @@ static void styleset_lua_init(gint ft_id, GKeyFile *config, GKeyFile *config_hom
 static void styleset_lua(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_LUA;
-
-	styleset_common(sci, 5, ft_id);
 
 	apply_filetype_properties(sci, SCLEX_LUA, ft_id);
 
@@ -3022,8 +2962,6 @@ static void styleset_basic(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_BASIC;
 
-	styleset_common(sci, 5, ft_id);
-
 	apply_filetype_properties(sci, SCLEX_FREEBASIC, ft_id);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_BASIC].keywords[0]);
@@ -3087,8 +3025,6 @@ static void styleset_haxe_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 static void styleset_haxe(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_HAXE;
-
-	styleset_common(sci, 5,ft_id);
 
 	apply_filetype_properties(sci, SCLEX_CPP, ft_id);
 
