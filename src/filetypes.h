@@ -78,6 +78,7 @@ typedef enum
 	GEANY_FILETYPES_LATEX,
 	GEANY_FILETYPES_REST,
 	GEANY_FILETYPES_SQL,
+	GEANY_FILETYPES_PO,
 
 	GEANY_FILETYPES_NONE,	/* must be last filetype */
 	GEANY_MAX_BUILT_IN_FILETYPES	/* Use filetypes_array->len instead */

@@ -2793,6 +2793,9 @@ static gboolean is_comment_style(gint lexer, gint style)
 		case SCLEX_PROPERTIES:
 			return (style == SCE_PROPS_COMMENT);
 
+		case SCLEX_PO:
+			return (style == SCE_PO_COMMENT);
+
 		case SCLEX_LATEX:
 			return (style == SCE_L_COMMENT);
 

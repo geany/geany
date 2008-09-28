@@ -450,6 +450,17 @@ static void init_builtin_filetypes(void)
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
+#define PO
+	ft = filetypes[GEANY_FILETYPES_PO];
+	ft->lang = -2;
+	ft->name = g_strdup("Po");
+	ft->title = g_strdup(_("Gettext translation file"));
+	ft->extension = g_strdup("po");
+	ft->pattern = utils_strv_new("*.po", "*.pot", NULL);
+	ft->comment_open = g_strdup("#");
+	ft->comment_close = NULL;
+	ft->group = GEANY_FILETYPE_GROUP_MISC;
+
 #define HAXE
 	ft = filetypes[GEANY_FILETYPES_HAXE];
 	ft->lang = 27;

@@ -534,6 +534,7 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 		case GEANY_FILETYPES_TCL:
 		case GEANY_FILETYPES_OMS:
 		case GEANY_FILETYPES_CONF:
+		case GEANY_FILETYPES_PO:
 		{
 			line_prefix = "#";
 			break;

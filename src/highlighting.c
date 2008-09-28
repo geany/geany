@@ -2027,6 +2027,47 @@ static void styleset_css(ScintillaObject *sci)
 }
 
 
+static void styleset_po_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
+{
+	new_style_array(GEANY_FILETYPES_PO, 9);
+	get_keyfile_hex(config, config_home, "styling", "default", "0x7f0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PO].styling[0]);
+	get_keyfile_hex(config, config_home, "styling", "comment", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PO].styling[1]);
+	get_keyfile_hex(config, config_home, "styling", "msgid", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_PO].styling[2]);
+	get_keyfile_hex(config, config_home, "styling", "msgid_text", "0x00007f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PO].styling[3]);
+	get_keyfile_hex(config, config_home, "styling", "msgstr", "0x7f0000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_PO].styling[4]);
+	get_keyfile_hex(config, config_home, "styling", "msgstr_text", "0x7f0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PO].styling[5]);
+	get_keyfile_hex(config, config_home, "styling", "msgctxt", "0x007f00", "0xffffff", "true", &style_sets[GEANY_FILETYPES_PO].styling[6]);
+	get_keyfile_hex(config, config_home, "styling", "msgctxt_text", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PO].styling[7]);
+	get_keyfile_hex(config, config_home, "styling", "fuzzy", "0xffa500", "0xffffff", "true", &style_sets[GEANY_FILETYPES_PO].styling[8]);
+
+	style_sets[GEANY_FILETYPES_PO].keywords = NULL;
+
+	get_keyfile_wordchars(config, config_home,
+		&style_sets[GEANY_FILETYPES_PO].wordchars);
+}
+
+
+static void styleset_po(ScintillaObject *sci)
+{
+	const filetype_id ft_id = GEANY_FILETYPES_PO;
+
+	styleset_common(sci, 5, ft_id);
+
+	apply_filetype_properties(sci, SCLEX_PO, ft_id);
+
+	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_PO, 0);
+	set_sci_style(sci, SCE_PO_DEFAULT, GEANY_FILETYPES_PO, 0);
+	set_sci_style(sci, SCE_PO_COMMENT, GEANY_FILETYPES_PO, 1);
+	set_sci_style(sci, SCE_PO_MSGID, GEANY_FILETYPES_PO, 2);
+	set_sci_style(sci, SCE_PO_MSGID_TEXT, GEANY_FILETYPES_PO, 3);
+	set_sci_style(sci, SCE_PO_MSGSTR, GEANY_FILETYPES_PO, 4);
+	set_sci_style(sci, SCE_PO_MSGSTR_TEXT, GEANY_FILETYPES_PO, 5);
+	set_sci_style(sci, SCE_PO_MSGCTXT, GEANY_FILETYPES_PO, 6);
+	set_sci_style(sci, SCE_PO_MSGCTXT_TEXT, GEANY_FILETYPES_PO, 7);
+	set_sci_style(sci, SCE_PO_FUZZY, GEANY_FILETYPES_PO, 8);
+}
+
+
 static void styleset_conf_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_style_array(GEANY_FILETYPES_CONF, 6);
@@ -3102,6 +3143,7 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 		init_styleset_case(GEANY_FILETYPES_PASCAL,	pascal);
 		init_styleset_case(GEANY_FILETYPES_PERL,	perl);
 		init_styleset_case(GEANY_FILETYPES_PHP,		php);
+		init_styleset_case(GEANY_FILETYPES_PO,		po);
 		init_styleset_case(GEANY_FILETYPES_PYTHON,	python);
 		init_styleset_case(GEANY_FILETYPES_R,		r);
 		init_styleset_case(GEANY_FILETYPES_RUBY,	ruby);
@@ -3157,6 +3199,7 @@ void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 		styleset_case(GEANY_FILETYPES_PASCAL,	pascal);
 		styleset_case(GEANY_FILETYPES_PERL,		perl);
 		styleset_case(GEANY_FILETYPES_PHP,		php);
+		styleset_case(GEANY_FILETYPES_PO,		po);
 		styleset_case(GEANY_FILETYPES_PYTHON,	python);
 		styleset_case(GEANY_FILETYPES_R,		r);
 		styleset_case(GEANY_FILETYPES_RUBY,		ruby);
