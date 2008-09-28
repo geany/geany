@@ -1,3 +1,10 @@
+2008-09-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * geany.glade, src/interface.c, src/notebook.c:
+   Revert previous notebook focus changes as this disables the tab
+   scroll arrows.
+
+
 2008-09-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/log.c:

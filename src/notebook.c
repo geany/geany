@@ -457,7 +457,6 @@ gint notebook_new_tab(GeanyDocument *this)
 	g_signal_connect(ebox, "button-press-event", G_CALLBACK(notebook_tab_label_cb), page);
 
 	hbox = gtk_hbox_new(FALSE, 2);
-	GTK_WIDGET_UNSET_FLAGS(hbox, GTK_CAN_FOCUS);
 	gtk_container_add(GTK_CONTAINER(ebox), this->priv->tab_label);
 	gtk_box_pack_start(GTK_BOX(hbox), ebox, FALSE, FALSE, 0);
 
