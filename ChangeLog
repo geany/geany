@@ -4,6 +4,9 @@
    Remove use of non-greedy matching in error_regex - this doesn't seem
    to be supported by common versions of glibc (thanks to AC for
    reporting).
+ * src/documentprivate.h, src/document.c, src/editor.c:
+   Apply patch from Jason Oster to auto-update the line margin width as
+   lines are added (thanks; #2129157).
 
 
 2008-09-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

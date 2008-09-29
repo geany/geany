@@ -601,6 +601,22 @@ static gboolean reshow_calltip(gpointer data)
 }
 
 
+static void auto_update_margin_width(GeanyDocument *doc)
+{
+	gint next_linecount = 1;
+	gint linecount = sci_get_line_count(doc->editor->sci);
+
+	while (next_linecount <= linecount)
+		next_linecount *= 10;
+
+	if (doc->priv->line_count != next_linecount)
+	{
+		doc->priv->line_count = next_linecount;
+		sci_set_line_numbers(doc->editor->sci, TRUE, 0);
+	}
+}
+
+
 /* callback func called by all editors when a signal arises */
 void on_editor_notification(GtkWidget *widget, gint scn, gpointer lscn, gpointer user_data)
 {
@@ -640,6 +656,12 @@ void on_editor_notification(GtkWidget *widget, gint scn, gpointer lscn, gpointer
 
  		case SCN_MODIFIED:
 		{
+			if (editor_prefs.show_linenumber_margin && (nt->modificationType & (SC_MOD_INSERTTEXT | SC_MOD_DELETETEXT)) && nt->linesAdded)
+			{
+				/* automatically adjust Scintilla's line numbers margin width */
+				auto_update_margin_width(doc);
+			}
+
 			if (nt->modificationType & SC_STARTACTION && ! ignore_callback)
 			{
 				/* get notified about undo changes */

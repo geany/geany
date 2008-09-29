@@ -64,7 +64,8 @@ typedef struct GeanyDocumentPrivate
 	GTrashStack		*redo_actions;
 	/* Used so Undo/Redo works for encoding changes. */
 	FileEncoding	 saved_encoding;
-	gboolean		colourise_needed;
+	gboolean		colourise_needed;	/* use document.c:queue_colourise() instead */
+	gint			line_count;			/* Number of lines in the document. */
 }
 GeanyDocumentPrivate;
 

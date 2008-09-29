@@ -329,6 +329,7 @@ static void init_doc_struct(GeanyDocument *new_doc)
 	priv->saved_encoding.has_bom = FALSE;
 	priv->undo_actions = NULL;
 	priv->redo_actions = NULL;
+	priv->line_count = 0;
 }
 
 
@@ -1073,6 +1074,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 	sci_set_readonly(doc->editor->sci, doc->readonly);
 
 	/* update line number margin width */
+	doc->priv->line_count = sci_get_line_count(doc->editor->sci);
 	sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
 
 	/* set the cursor position according to pos, cl_options.goto_line and cl_options.goto_column */
@@ -1522,9 +1524,6 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	{
 		gchar *base_name = g_path_get_basename(doc->file_name);
 
-		/* set line numbers again, to reset the margin width, if
-		 * there are more lines than before */
-		sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
 		sci_set_savepoint(doc->editor->sci);
 
 		/* stat the file to get the timestamp, otherwise on Windows the actual
