@@ -438,8 +438,12 @@ def shutdown():
 
     if Options.options.htmldoc:
         os.chdir('doc')
-        launch('rst2html -stg --stylesheet=geany.css geany.txt geany.html',
+        # first try rst2html.py as it is the upstream default
+        ret = launch('rst2html.py -stg --stylesheet=geany.css geany.txt geany.html',
             'Generating HTML documentation')
+        if not ret == 0:
+            launch('rst2html -stg --stylesheet=geany.css geany.txt geany.html',
+                    'Generating HTML documentation (using fallback "rst2html")')
 
     if Options.options.update_po:
         # the following code was taken from midori's WAF script, thanks
@@ -467,6 +471,9 @@ def launch(command, status, success_color='GREEN'):
     Utils.pprint(success_color, status)
     try:
         ret = subprocess.call(command.split())
+    except OSError, e:
+        ret = 1
+        print str(e), ":", command
     except:
         ret = 1
 

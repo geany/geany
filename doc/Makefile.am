@@ -13,7 +13,9 @@ pdf: geany.txt
 api-doc: Doxyfile
 	doxygen
 
+# when generating documentation, first try rst2html.py as it is the upstream default
 doc: geany.txt
+	rst2html.py -stg --stylesheet=geany.css $(srcdir)/geany.txt geany.html || \
 	rst2html -stg --stylesheet=geany.css $(srcdir)/geany.txt geany.html
 
 doc-clean:

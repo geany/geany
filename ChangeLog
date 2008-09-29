@@ -25,6 +25,9 @@
    the correct value from Scintilla and use it (this fixes a display
    problem with Perl code like 'sub test()').
    Add missing styles for filetype Perl.
+ * doc/Makefile.am, wscript:
+   When generating documentation, first try rst2html.py as it is
+   the upstream default.
 
 
 2008-09-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
