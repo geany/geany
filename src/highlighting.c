@@ -1549,21 +1549,23 @@ static void styleset_r_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 	new_style_array(GEANY_FILETYPES_R, 12);
 
 	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[0]);
-	get_keyfile_hex(config, config_home, "styling", "comment", "0x0066ff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[1]);
-	get_keyfile_hex(config, config_home, "styling", "kword", "0x66ff33", "0xffffff", "true", &style_sets[GEANY_FILETYPES_R].styling[2]);
-	get_keyfile_hex(config, config_home, "styling", "operator", "0x660000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[3]);
-	get_keyfile_hex(config, config_home, "styling", "basekword", "0x66ff33", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[4]);
-	get_keyfile_hex(config, config_home, "styling", "otherkword", "0x66ff33", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[5]);
-	get_keyfile_hex(config, config_home, "styling", "number", "0xcc00ff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[6]);
-	get_keyfile_hex(config, config_home, "styling", "string", "0xcc00ff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[7]);
-	get_keyfile_hex(config, config_home, "styling", "string2", "0xcc00ff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[8]);
-	get_keyfile_hex(config, config_home, "styling", "identifier", "0x6600ff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[9]);
-	get_keyfile_hex(config, config_home, "styling", "infix", "0xcc00ff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[10]);
-	get_keyfile_hex(config, config_home, "styling", "infixeol", "0xcc00ff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[11]);
+	get_keyfile_hex(config, config_home, "styling", "comment", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[1]);
+	get_keyfile_hex(config, config_home, "styling", "kword", "0x00007f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[2]);
+	get_keyfile_hex(config, config_home, "styling", "operator", "0x301010", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[3]);
+	get_keyfile_hex(config, config_home, "styling", "basekword", "0x991111", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[4]);
+	get_keyfile_hex(config, config_home, "styling", "otherkword", "0x991111", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[5]);
+	get_keyfile_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[6]);
+	get_keyfile_hex(config, config_home, "styling", "string", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[7]);
+	get_keyfile_hex(config, config_home, "styling", "string2", "0x008000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[8]);
+	get_keyfile_hex(config, config_home, "styling", "identifier", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[9]);
+	get_keyfile_hex(config, config_home, "styling", "infix", "0x008000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_R].styling[10]);
+	get_keyfile_hex(config, config_home, "styling", "infixeol", "0x000000", "0xe0c0e0", "false", &style_sets[GEANY_FILETYPES_R].styling[11]);
 
-	style_sets[GEANY_FILETYPES_R].keywords = g_new(gchar*, 2);
-	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_R, 0, "require if source array matrix diag solve for data.frame read.table NROW NCOL abs sqrt sum print while function");
-	style_sets[GEANY_FILETYPES_R].keywords[1] = NULL;
+	style_sets[GEANY_FILETYPES_R].keywords = g_new(gchar*, 4);
+	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_R, 0, "abs array data.frame diag for function if matrix NCOL NROW print read.table require return solve source sqrt sum while");
+	get_keyfile_keywords(config, config_home, "keywords", "package", GEANY_FILETYPES_R, 1, NULL);
+	get_keyfile_keywords(config, config_home, "keywords", "package_other", GEANY_FILETYPES_R, 2, NULL);
+	style_sets[GEANY_FILETYPES_R].keywords[3] = NULL;
 
 	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_R].wordchars);
@@ -1577,6 +1579,8 @@ static void styleset_r(ScintillaObject *sci)
 	apply_filetype_properties(sci, SCLEX_R, ft_id);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_R].keywords[0]);
+	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_R].keywords[1]);
+	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_R].keywords[2]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_R, 0);
 	set_sci_style(sci, SCE_R_DEFAULT, GEANY_FILETYPES_R, 0);

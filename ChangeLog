@@ -1,3 +1,11 @@
+2008-09-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * data/filetypes.r, src/highlighting.c:
+   Fix syntax highlighting for filetype R, synchronise the colours with
+   those other filetypes.
+   Add two more keyword types and add many many more keywords.
+
+
 2008-09-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * doc/geany.txt, doc/geany.html:
