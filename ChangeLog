@@ -4,6 +4,8 @@
    Fix a few memleaks.
    Handle errors when creation of the project base directory fails.
    Update the window title also when creating new projects.
+ * src/build.c:
+   Remove inexact and unnecessary warning if a Run command has failed.
 
 
 2008-09-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

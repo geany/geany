@@ -703,9 +703,7 @@ static GPid build_run_cmd(GeanyDocument *doc)
 
 	working_dir = prepare_run_script(doc, &vte_cmd_nonscript);
 	if (working_dir == NULL)
-	{
 		return (GPid) 0;
-	}
 
 	run_info.file_type_id = FILETYPE_ID(doc->file_type);
 
@@ -2016,10 +2014,7 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 			strstr(ft->programs->run_cmd, "%f") != NULL)
 				document_save_file(doc, FALSE);
 
-		if (build_run_cmd(doc) == (GPid) 0)
-		{
-			ui_set_statusbar(TRUE, _("Failed to execute the terminal program"));
-		}
+		build_run_cmd(doc);
 	}
 }
 
