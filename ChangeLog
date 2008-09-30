@@ -1,3 +1,10 @@
+2008-09-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/project.c:
+   Fix a few memleaks.
+   Handle errors when creation of the project base directory fails.
+
+
 2008-09-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * data/filetypes.r, src/highlighting.c:

@@ -604,6 +604,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 	{
 		SHOW_ERR1(_("Project file could not be written (%s)."), g_strerror(err_code));
 		gtk_widget_grab_focus(e->file_name);
+		g_free(locale_filename);
 		return FALSE;
 	}
 
@@ -621,17 +622,23 @@ static gboolean update_config(const PropertyDialogElements *e)
 
 		if (! g_file_test(locale_path, G_FILE_TEST_IS_DIR))
 		{
-			if (dialogs_show_question_full(NULL, GTK_STOCK_OK, GTK_STOCK_CANCEL,
+			gboolean create_dir;
+
+			create_dir = dialogs_show_question_full(NULL, GTK_STOCK_OK, GTK_STOCK_CANCEL,
 				_("Create the project's base path directory?"),
 				_("The path \"%s\" does not exist."),
-				base_path))
+				base_path);
+
+			if (create_dir)
+				err_code = utils_mkdir(locale_path, TRUE);
+
+			if (! create_dir || err_code != 0)
 			{
-				utils_mkdir(locale_path, TRUE);
-			}
-			else
-			{
-				g_free(locale_path);
+				if (err_code != 0)
+					SHOW_ERR1(_("Project base dir could not be created (%s)."),
+						g_strerror(err_code));
 				gtk_widget_grab_focus(e->base_path);
+				utils_free_pointers(locale_path, locale_filename, NULL);
 				return FALSE;
 			}
 		}
@@ -646,14 +653,10 @@ static gboolean update_config(const PropertyDialogElements *e)
 	}
 	p = app->project;
 
-	if (p->name != NULL) g_free(p->name);
-	p->name = g_strdup(name);
-
-	if (p->file_name != NULL) g_free(p->file_name);
-	p->file_name = g_strdup(file_name);
-
-	if (p->base_path != NULL) g_free(p->base_path);
-	p->base_path = g_strdup(NZV(base_path) ? base_path : "./"); /* use "." if base_path is empty */
+	setptr(p->name, g_strdup(name));
+	setptr(p->file_name, g_strdup(file_name));
+	/* use "." if base_path is empty */
+	setptr(p->base_path, g_strdup(NZV(base_path) ? base_path : "./"));
 
 	if (! new_project)	/* save properties specific fields */
 	{
