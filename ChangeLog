@@ -3,6 +3,7 @@
  * src/project.c:
    Fix a few memleaks.
    Handle errors when creation of the project base directory fails.
+   Update the window title also when creating new projects.
 
 
 2008-09-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

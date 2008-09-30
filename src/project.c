@@ -293,7 +293,7 @@ void project_open()
 }
 
 
-/* Called when opening, closing and updating projects. */
+/* Called when creating, opening, closing and updating projects. */
 static void update_ui(void)
 {
 	ui_set_window_title(NULL);
@@ -531,8 +531,6 @@ void project_properties()
 	{
 		if (! update_config(e))
 			goto retry;
-		/* successfully updated properties */
-		update_ui();
 	}
 
 	gtk_widget_destroy(e->dialog);
@@ -666,15 +664,13 @@ static gboolean update_config(const PropertyDialogElements *e)
 
 		p->make_in_base_path = gtk_toggle_button_get_active(
 			GTK_TOGGLE_BUTTON(e->make_in_base_path));
-		if (p->run_cmd != NULL) g_free(p->run_cmd);
-		p->run_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(e->run_cmd)));
+		setptr(p->run_cmd, g_strdup(gtk_entry_get_text(GTK_ENTRY(e->run_cmd))));
 
 		/* get and set the project description */
 		buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e->description));
 		gtk_text_buffer_get_start_iter(buffer, &start);
 		gtk_text_buffer_get_end_iter(buffer, &end);
-		g_free(p->description);
-		p->description = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
+		setptr(p->description, g_strdup(gtk_text_buffer_get_text(buffer, &start, &end, FALSE)));
 
 #if 0
 		/* get and set the project file patterns */
@@ -692,6 +688,8 @@ static gboolean update_config(const PropertyDialogElements *e)
 		ui_set_statusbar(TRUE, _("Project \"%s\" created."), p->name);
 	else
 		ui_set_statusbar(TRUE, _("Project \"%s\" saved."), p->name);
+
+	update_ui();
 
 	return TRUE;
 }
