@@ -433,7 +433,7 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 }
 
 
-static void styleset_common(ScintillaObject *sci, filetype_id ft_id)
+static void styleset_common(ScintillaObject *sci)
 {
 	SSM(sci, SCI_STYLECLEARALL, 0, 0);
 
@@ -621,7 +621,7 @@ apply_filetype_properties(ScintillaObject *sci, gint lexer, filetype_id ft_id)
 
 	SSM(sci, SCI_AUTOCSETMAXHEIGHT, editor_prefs.symbolcompletion_max_height, 0);
 
-	styleset_common(sci, ft_id);
+	styleset_common(sci);
 }
 
 
@@ -1908,11 +1908,9 @@ static void styleset_docbook(ScintillaObject *sci)
 
 static void styleset_none(ScintillaObject *sci)
 {
-	const filetype_id ft_id = GEANY_FILETYPES_NONE;
-
 	SSM(sci, SCI_SETLEXER, SCLEX_NULL, 0);
 
-	styleset_common(sci, ft_id);
+	styleset_common(sci);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_NONE, GCS_DEFAULT);
 

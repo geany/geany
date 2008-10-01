@@ -5,6 +5,8 @@
    Add 'make hacking-doc' target to generate hacking.html.
  * src/highlighting.c:
    Fix using common styleset for filetype None.
+ * src/highlighting.c:
+   Remove unused argument ft_id from styleset_common().
 
 
 2008-09-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
