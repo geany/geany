@@ -13,6 +13,9 @@ pdf: geany.txt
 api-doc: Doxyfile
 	doxygen
 
+hacking-doc: ../HACKING
+	rst2html -stg --stylesheet=geany.css $^ hacking.html
+
 # when generating documentation, first try rst2html.py as it is the upstream default
 doc: geany.txt
 	rst2html.py -stg --stylesheet=geany.css $(srcdir)/geany.txt geany.html || \

@@ -1,3 +1,10 @@
+2008-10-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * HACKING, doc/Makefile.am:
+   Reformat HACKING as true reStructuredText.
+   Add 'make hacking-doc' target to generate hacking.html.
+
+
 2008-09-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/project.c:
