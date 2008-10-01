@@ -217,6 +217,9 @@ init_styleset_case(GEANY_FILETYPES_FOO, foo);
 4. Add this in highlighting_set_styles():
 styleset_case(GEANY_FILETYPES_FOO, foo);
 
+Please try to make your styles fit in with the other filetypes' default
+colors.
+
 Error message parsing
 ^^^^^^^^^^^^^^^^^^^^^
 New-style error message parsing is done with an extended GNU-style regex
