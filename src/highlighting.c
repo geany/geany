@@ -611,6 +611,8 @@ static void assign_global_and_user_keywords(ScintillaObject *sci,
 static void
 apply_filetype_properties(ScintillaObject *sci, gint lexer, filetype_id ft_id)
 {
+	g_assert(ft_id != GEANY_FILETYPES_NONE);
+
 	SSM(sci, SCI_SETLEXER, lexer, 0);
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[ft_id].wordchars);
@@ -1906,7 +1908,11 @@ static void styleset_docbook(ScintillaObject *sci)
 
 static void styleset_none(ScintillaObject *sci)
 {
+	const filetype_id ft_id = GEANY_FILETYPES_NONE;
+
 	SSM(sci, SCI_SETLEXER, SCLEX_NULL, 0);
+
+	styleset_common(sci, ft_id);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_NONE, GCS_DEFAULT);
 
