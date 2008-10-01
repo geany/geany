@@ -32,6 +32,9 @@ $ svn diff > fix-some-bug.patch
 If you're not using SVN, you can use the diff command:
 $ diff -u originalpath modifiedpath > new-feature.patch
 
+Please make sure patches follow the style of existing code - In
+particular, use tabs for indentation. See `Style`_ and `Coding`_.
+
 For Windows:
 Subversion (SVN): http://subversion.tigris.org/
 diff, grep, etc: http://mingw.org/ or http://unxutils.sourceforge.net/.
