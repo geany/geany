@@ -1,3 +1,9 @@
+2008-10-03  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * *.po, geany.pot: Update for string freeze in preparing of Geany
+   0.15 release.
+
+
 2008-09-21  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * tr.po: Update of Turkish translation. Thanks to Gürkan Gür.
@@ -10,7 +16,7 @@
 
 2008-09-14  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
- * tr.po, LINGUAS: Adding Turkish translation provided by Gürkan Gür. 
+ * tr.po, LINGUAS: Adding Turkish translation provided by Gürkan Gür.
    Thanks for it.
 
 
