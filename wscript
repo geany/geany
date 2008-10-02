@@ -319,12 +319,12 @@ def build(bld):
 
     # Plugins
     if bld.env['HAVE_PLUGINS'] == 1:
-        build_plugin('autosave')
         build_plugin('classbuilder')
         build_plugin('demoplugin', False)
         build_plugin('export')
         build_plugin('filebrowser')
         build_plugin('htmlchars')
+        build_plugin('saveactions')
         build_plugin('splitwindow')
         build_plugin('vcdiff')
 
