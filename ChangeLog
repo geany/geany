@@ -11,6 +11,9 @@
    Add an option to store the project file of new projects inside the
    project base directory.
    Doc: Add descriptions for the Search tab in the preferences dialog.
+*  scripts/svn-changes.sh, scripts/wafinit.sh:
+   Remove more bashisms and avoid using 'which' which is not
+   LSB-compliant.
 
 
 2008-10-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

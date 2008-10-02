@@ -27,8 +27,8 @@ fi
 # show modifications
 if [ -n "$files" ]; then
 	echo 'Changes:'
-	if [[ -z $SPACES ]]; then
-		files+=':'
+	if [ -z $SPACES ]; then
+		files="${files}:"
 	fi
 	# indent and wrap
 	OUTFILE=/tmp/fmt
