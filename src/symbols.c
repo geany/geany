@@ -841,42 +841,17 @@ static void hide_empty_rows(GtkTreeStore *store)
 }
 
 
-gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
+static void add_tree_tags(GtkTreeStore *tree_store, const GList *tags, filetype_id ft_id)
 {
 	GList *tmp, *skipped = NULL;
-	const GList *tags;
 	GtkTreeIter iter;
-	static gint prev_sort_mode = SYMBOLS_SORT_BY_NAME;
-	filetype_id ft_id;
 	gint num_parents = 0, do_skipped = FALSE, num_skipped = 0;
 	GHashTable *parent_hash;
-	const gchar *separator;
+	const gchar *separator = symbols_get_context_separator(ft_id);
 
-	g_return_val_if_fail(doc != NULL, FALSE);
-
-	ft_id = FILETYPE_ID(doc->file_type);
-	separator = symbols_get_context_separator(ft_id);
-
-	if (sort_mode == SYMBOLS_SORT_USE_PREVIOUS)
-		sort_mode = prev_sort_mode;
-	else
-		prev_sort_mode = sort_mode;
-
-	tags = get_tag_list(doc, tm_tag_max_t, sort_mode);
-	if (doc->tm_file == NULL || tags == NULL)
-		return FALSE;
-
-	/* Make sure the model stays with us after the tree view unrefs it */
-	g_object_ref(GTK_TREE_MODEL(doc->priv->tag_store));
-	/* Detach model from view */
-	gtk_tree_view_set_model(GTK_TREE_VIEW(doc->priv->tag_tree), NULL);
-	/* Clear all contents */
-	gtk_tree_store_clear(doc->priv->tag_store);
 	/* Create a hash table to keep track of parents */
 	parent_hash = g_hash_table_new_full(g_str_hash, g_str_equal, NULL,
 		g_free);
-
-	init_tag_list(doc);
 
 	for (tmp = (GList*)tags; tmp && num_skipped < 20;)
 	{
@@ -1003,7 +978,7 @@ gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 			if (!parent_icon)
 				parent_icon = parent;
 
-			gtk_tree_model_get(GTK_TREE_MODEL(doc->priv->tag_store), parent_icon,
+			gtk_tree_model_get(GTK_TREE_MODEL(tree_store), parent_icon,
 				SYMBOLS_COLUMN_ICON, &icon, -1);
 			if (add_child)
 			{
@@ -1043,8 +1018,8 @@ gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 				}
 
 				g_snprintf(buf, sizeof(buf), "%s [%d]", final_name, symbol->line);
-				gtk_tree_store_append(doc->priv->tag_store, child, parent);
-				gtk_tree_store_set(doc->priv->tag_store, child,
+				gtk_tree_store_append(tree_store, child, parent);
+				gtk_tree_store_set(tree_store, child,
 					SYMBOLS_COLUMN_ICON, icon,
 					SYMBOLS_COLUMN_NAME, buf,
 					SYMBOLS_COLUMN_LINE, symbol->line, -1);
@@ -1069,9 +1044,39 @@ gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 		else
 			tmp = g_list_next(tmp);
 	}
+	g_hash_table_destroy(parent_hash);
+}
+
+
+gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
+{
+	const GList *tags;
+	static gint prev_sort_mode = SYMBOLS_SORT_BY_NAME;
+
+	g_return_val_if_fail(doc != NULL, FALSE);
+
+	if (sort_mode == SYMBOLS_SORT_USE_PREVIOUS)
+		sort_mode = prev_sort_mode;
+	else
+		prev_sort_mode = sort_mode;
+
+	tags = get_tag_list(doc, tm_tag_max_t, sort_mode);
+	if (doc->tm_file == NULL || tags == NULL)
+		return FALSE;
+
+	/* Make sure the model stays with us after the tree view unrefs it */
+	g_object_ref(GTK_TREE_MODEL(doc->priv->tag_store));
+	/* Detach model from view */
+	gtk_tree_view_set_model(GTK_TREE_VIEW(doc->priv->tag_tree), NULL);
+	/* Clear all contents */
+	gtk_tree_store_clear(doc->priv->tag_store);
+
+	/* add grandparent type iters */
+	init_tag_list(doc);
+
+	add_tree_tags(doc->priv->tag_store, tags, FILETYPE_ID(doc->file_type));
 
 	hide_empty_rows(doc->priv->tag_store);
-	g_hash_table_destroy(parent_hash);
 
 	/* Re-attach model to view */
 	gtk_tree_view_set_model(GTK_TREE_VIEW(doc->priv->tag_tree),

@@ -6,6 +6,8 @@
    (gnocci-man) to show methods as children of classes in the symbol
    list, and for other tag types to group children by their parents
    (thanks; 2083110).
+ * src/symbols.c:
+   Refactor add_tree_tags() from symbols_recreate_tag_list().
 
 
 2008-10-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
