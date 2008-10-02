@@ -843,15 +843,19 @@ static void hide_empty_rows(GtkTreeStore *store)
 
 gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 {
-	GList *tmp;
+	GList *tmp, *skipped = NULL;
 	const GList *tags;
 	GtkTreeIter iter;
 	static gint prev_sort_mode = SYMBOLS_SORT_BY_NAME;
 	filetype_id ft_id;
+	gint num_parents = 0, do_skipped = FALSE, num_skipped = 0;
+	GHashTable *parent_hash;
+	const gchar *separator;
 
 	g_return_val_if_fail(doc != NULL, FALSE);
 
 	ft_id = FILETYPE_ID(doc->file_type);
+	separator = symbols_get_context_separator(ft_id);
 
 	if (sort_mode == SYMBOLS_SORT_USE_PREVIOUS)
 		sort_mode = prev_sort_mode;
@@ -868,16 +872,21 @@ gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 	gtk_tree_view_set_model(GTK_TREE_VIEW(doc->priv->tag_tree), NULL);
 	/* Clear all contents */
 	gtk_tree_store_clear(doc->priv->tag_store);
+	/* Create a hash table to keep track of parents */
+	parent_hash = g_hash_table_new_full(g_str_hash, g_str_equal, NULL,
+		g_free);
 
 	init_tag_list(doc);
-	for (tmp = (GList*)tags; tmp; tmp = g_list_next(tmp))
-	{
-		gchar buf[100];
-		const GeanySymbol *symbol = (GeanySymbol*)tmp->data;
-		GtkTreeIter *parent = NULL;
-		GdkPixbuf *icon = NULL;
 
-		g_snprintf(buf, sizeof(buf), "%s [%d]", symbol->str, symbol->line);
+	for (tmp = (GList*)tags; tmp && num_skipped < 20;)
+	{
+		gchar buf[100] = "", buf2[100] = "";
+		const GeanySymbol *symbol = (GeanySymbol*)tmp->data;
+		GtkTreeIter *parent = NULL, *parent_search = NULL, *parent_search_short = NULL;
+		GtkTreeIter *parent_icon = NULL, *child = NULL;
+		GdkPixbuf *icon = NULL;
+		gint add_parent = FALSE, add_child = FALSE, skip = FALSE;
+		const gchar *final_name = symbol->str;
 
 		switch (symbol->type)
 		{
@@ -887,6 +896,9 @@ gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 			{
 				if (tv_iters.tag_function.stamp == -1) break;
 				parent = &(tv_iters.tag_function);
+				parent_icon = &(tv_iters.tag_function);
+				if (ft_id != GEANY_FILETYPES_DIFF)
+					add_child = TRUE;
 				break;
 			}
 			case tm_tag_macro_t:
@@ -900,6 +912,9 @@ gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 			{
 				if (tv_iters.tag_class.stamp == -1) break;
 				parent = &(tv_iters.tag_class);
+				parent_icon = &(tv_iters.tag_class);
+				add_parent = TRUE;
+				add_child = TRUE;
 				break;
 			}
 			case tm_tag_member_t:
@@ -907,12 +922,15 @@ gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 			{
 				if (tv_iters.tag_member.stamp == -1) break;
 				parent = &(tv_iters.tag_member);
+				parent_icon = &(tv_iters.tag_member);
+				add_parent = TRUE;
+				add_child = TRUE;
 				break;
 			}
 			case tm_tag_typedef_t:
 			case tm_tag_enum_t:
 			{
-				/** TODO separate C-like types here also */
+				/* TODO separate C-like types here also */
 				if (ft_id == GEANY_FILETYPES_HAXE)
 				{
 					if (tv_iters.tag_type.stamp == -1) break;
@@ -926,12 +944,17 @@ gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 			{
 				if (tv_iters.tag_struct.stamp == -1) break;
 				parent = &(tv_iters.tag_struct);
+				parent_icon = &(tv_iters.tag_struct);
+				add_parent = TRUE;
+				add_child = TRUE;
 				break;
 			}
 			case tm_tag_variable_t:
 			{
 				if (tv_iters.tag_variable.stamp == -1) break;
 				parent = &(tv_iters.tag_variable);
+				parent_icon = &(tv_iters.tag_variable);
+				add_child = TRUE;
 				break;
 			}
 			case tm_tag_namespace_t:
@@ -939,30 +962,117 @@ gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 			{
 				if (tv_iters.tag_namespace.stamp == -1) break;
 				parent = &(tv_iters.tag_namespace);
+				parent_icon = &(tv_iters.tag_namespace);
+				add_child = TRUE;
+				add_parent = TRUE;
 				break;
 			}
 			default:
 			{
 				if (tv_iters.tag_other.stamp == -1) break;
 				parent = &(tv_iters.tag_other);
+				parent_icon = &(tv_iters.tag_variable);
+				add_child = TRUE;
 			}
 		}
 
 		if (parent)
-		{
-			gtk_tree_model_get(GTK_TREE_MODEL(doc->priv->tag_store), parent,
-		 	                   SYMBOLS_COLUMN_ICON, &icon, -1);
-			gtk_tree_store_append(doc->priv->tag_store, &iter, parent);
-			gtk_tree_store_set(doc->priv->tag_store, &iter,
-		 	                  SYMBOLS_COLUMN_ICON, icon,
-                              SYMBOLS_COLUMN_NAME, buf,
-                              SYMBOLS_COLUMN_LINE, symbol->line, -1);
+		{	/* Split the string to obtain parent child names */
+			gchar **name_elems = g_strsplit(symbol->str, separator, 10);
+			const gchar *child_name = NULL;
+			gchar *parent_name = buf2;
+			gchar *end_ptr = parent_name;
+			gint ne; /* number of name_elements */
+
+			buf2[0]='\0';
+			parent_search_short = NULL;
+			for (ne = 0; name_elems[ne]; ne++)
+			{
+				child_name = name_elems[ne];
+				if (name_elems[ne+1])
+				{
+					if (ne > 0)
+						end_ptr = g_stpcpy(end_ptr, separator);
+					end_ptr = g_stpcpy(end_ptr, name_elems[ne]);
+					parent_search_short =
+						(GtkTreeIter *)g_hash_table_lookup(parent_hash, (gpointer)name_elems[ne]);
+				}
+			}
+
+			child = &iter;
+			if (!parent_icon)
+				parent_icon = parent;
+
+			gtk_tree_model_get(GTK_TREE_MODEL(doc->priv->tag_store), parent_icon,
+				SYMBOLS_COLUMN_ICON, &icon, -1);
+			if (add_child)
+			{
+				if (parent_name)
+				{
+					parent_search = (GtkTreeIter *)g_hash_table_lookup(parent_hash, (gpointer)parent_name);
+					if (parent_search)
+						parent = parent_search;
+					else if (parent_search_short)
+						parent = parent_search_short;
+
+					if (child_name)
+						final_name = child_name;
+					else
+						final_name = symbol->str;
+				}
+				if (ne > 1 && !parent_search && !parent_search_short)
+				{ /* Want to add child but parent not found */
+					GList *newstart;
+					tmp = g_list_previous(tmp);
+					newstart = g_list_remove(tmp, (gconstpointer) symbol);
+					newstart = g_list_append(tmp, (gpointer) symbol);
+					skip = TRUE;
+					num_skipped++;
+				}
+			}
+
+			if (!skip || do_skipped)
+			{
+				num_skipped = 0;
+				if (add_parent)
+				{
+					GtkTreeIter *new_iter = g_new0(GtkTreeIter, 1);
+					g_hash_table_insert(parent_hash, symbol->str, new_iter);
+					child = new_iter;
+					num_parents++;
+				}
+
+				g_snprintf(buf, sizeof(buf), "%s [%d]", final_name, symbol->line);
+				gtk_tree_store_append(doc->priv->tag_store, child, parent);
+				gtk_tree_store_set(doc->priv->tag_store, child,
+					SYMBOLS_COLUMN_ICON, icon,
+					SYMBOLS_COLUMN_NAME, buf,
+					SYMBOLS_COLUMN_LINE, symbol->line, -1);
+			}
+			else
+			{ /* Put in skipped list */
+/*
+				skipped = g_list_append(skipped, (gpointer)symbol);
+*/
+			}
 
 			if (G_LIKELY(G_IS_OBJECT(icon)))
 				g_object_unref(icon);
+			g_strfreev(name_elems);
 		}
+
+		if (! do_skipped && !g_list_next(tmp))
+		{ /* Start adding skipped items */
+			do_skipped = TRUE;
+			tmp = g_list_first(skipped);
+		}
+		else
+			tmp = g_list_next(tmp);
 	}
+
 	hide_empty_rows(doc->priv->tag_store);
+	g_hash_table_destroy(parent_hash);
+
 	/* Re-attach model to view */
 	gtk_tree_view_set_model(GTK_TREE_VIEW(doc->priv->tag_tree),
 		GTK_TREE_MODEL(doc->priv->tag_store));

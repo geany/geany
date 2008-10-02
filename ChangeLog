@@ -1,3 +1,13 @@
+2008-10-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * Create symbol-tree branch.
+ * src/about.c, src/symbols.c, THANKS:
+   Apply patch (with minor formatting fixes) from Conrad Steenberg
+   (gnocci-man) to show methods as children of classes in the symbol
+   list, and for other tag types to group children by their parents
+   (thanks; 2083110).
+
+
 2008-10-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * HACKING, doc/Makefile.am:
