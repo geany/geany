@@ -46,7 +46,7 @@
 #include "geanyobject.h"
 
 
-ProjectPrefs project_prefs = { NULL, 0 };
+ProjectPrefs project_prefs = { NULL, FALSE, FALSE };
 
 static struct
 {
@@ -567,7 +567,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 	const gchar *name, *file_name, *base_path;
 	gchar *locale_filename;
 	gint name_len;
-	gint err_code;
+	gint err_code = 0;
 	gboolean new_project = FALSE;
 	GeanyProject *p;
 
@@ -589,23 +589,14 @@ static gboolean update_config(const PropertyDialogElements *e)
 	}
 
 	file_name = gtk_entry_get_text(GTK_ENTRY(e->file_name));
-	if (strlen(file_name) == 0)
+	if (! NZV(file_name))
 	{
 		SHOW_ERR(_("You have specified an invalid project filename."));
 		gtk_widget_grab_focus(e->file_name);
 		return FALSE;
 	}
 
-	/* finally test whether the given project file can be written */
 	locale_filename = utils_get_locale_from_utf8(file_name);
-	if ((err_code = utils_is_file_writeable(locale_filename)) != 0)
-	{
-		SHOW_ERR1(_("Project file could not be written (%s)."), g_strerror(err_code));
-		gtk_widget_grab_focus(e->file_name);
-		g_free(locale_filename);
-		return FALSE;
-	}
-
 	base_path = gtk_entry_get_text(GTK_ENTRY(e->base_path));
 	if (NZV(base_path))
 	{	/* check whether the given directory actually exists */
@@ -633,7 +624,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 			if (! create_dir || err_code != 0)
 			{
 				if (err_code != 0)
-					SHOW_ERR1(_("Project base dir could not be created (%s)."),
+					SHOW_ERR1(_("Project base directory could not be created (%s)."),
 						g_strerror(err_code));
 				gtk_widget_grab_focus(e->base_path);
 				utils_free_pointers(locale_path, locale_filename, NULL);
@@ -641,6 +632,14 @@ static gboolean update_config(const PropertyDialogElements *e)
 			}
 		}
 		g_free(locale_path);
+	}
+	/* finally test whether the given project file can be written */
+	if ((err_code = utils_is_file_writeable(locale_filename)) != 0)
+	{
+		SHOW_ERR1(_("Project file could not be written (%s)."), g_strerror(err_code));
+		gtk_widget_grab_focus(e->file_name);
+		g_free(locale_filename);
+		return FALSE;
 	}
 	g_free(locale_filename);
 
@@ -824,8 +823,12 @@ static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements 
 	{
 		base_path = g_strconcat(project_dir, G_DIR_SEPARATOR_S,
 			name, G_DIR_SEPARATOR_S, NULL);
-		file_name = g_strconcat(project_dir, G_DIR_SEPARATOR_S,
-			name, "." GEANY_PROJECT_EXT, NULL);
+		if (project_prefs.project_file_in_basedir)
+			file_name = g_strconcat(project_dir, G_DIR_SEPARATOR_S, name, G_DIR_SEPARATOR_S,
+				name, "." GEANY_PROJECT_EXT, NULL);
+		else
+			file_name = g_strconcat(project_dir, G_DIR_SEPARATOR_S,
+				name, "." GEANY_PROJECT_EXT, NULL);
 	}
 	else
 	{

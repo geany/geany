@@ -2581,6 +2581,7 @@ create_prefs_dialog (void)
   GtkWidget *alignment38;
   GtkWidget *vbox35;
   GtkWidget *check_project_session;
+  GtkWidget *check_project_file_in_basedir;
   GtkWidget *label207;
   GtkWidget *frame19;
   GtkWidget *alignment22;
@@ -3015,6 +3016,11 @@ create_prefs_dialog (void)
   gtk_widget_show (check_project_session);
   gtk_box_pack_start (GTK_BOX (vbox35), check_project_session, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_project_session, _("Whether to store a project's session files and open them when re-opening the project."), NULL);
+
+  check_project_file_in_basedir = gtk_check_button_new_with_mnemonic (_("Store project file inside the project base directory"));
+  gtk_widget_show (check_project_file_in_basedir);
+  gtk_box_pack_start (GTK_BOX (vbox35), check_project_file_in_basedir, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_project_file_in_basedir, _("When enabled, a project file is stored by default inside the project base directory when creating new projects instead of one directory above the base directory. You can still change the path of the project file in the New Project dialog."), NULL);
 
   label207 = gtk_label_new (_("<b>Projects</b>"));
   gtk_widget_show (label207);
@@ -4262,7 +4268,7 @@ create_prefs_dialog (void)
   check_ask_suppress_search_dialogs = gtk_check_button_new_with_mnemonic (_("Always wrap search and hide the Find dialog"));
   gtk_widget_show (check_ask_suppress_search_dialogs);
   gtk_box_pack_start (GTK_BOX (vbox36), check_ask_suppress_search_dialogs, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_ask_suppress_search_dialogs, _("Always wrap search around the document and hide the Find dialog after clicking Find Next/Previous"), NULL);
+  gtk_tooltips_set_tip (tooltips, check_ask_suppress_search_dialogs, _("Always wrap search around the document and hide the Find dialog after clicking Find Next/Previous."), NULL);
 
   check_search_use_current_word = gtk_check_button_new_with_mnemonic (_("Use the current word under the cursor for Find dialogs"));
   gtk_widget_show (check_search_use_current_word);
@@ -4810,6 +4816,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment38, "alignment38");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox35, "vbox35");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_project_session, "check_project_session");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_project_file_in_basedir, "check_project_file_in_basedir");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label207, "label207");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame19, "frame19");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment22, "alignment22");

@@ -49,6 +49,7 @@ typedef struct ProjectPrefs
 {
 	gchar *session_file;
 	gboolean project_session;
+	gboolean project_file_in_basedir;
 } ProjectPrefs;
 
 extern ProjectPrefs project_prefs;

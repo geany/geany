@@ -6,6 +6,11 @@
    plugin 'Save Actions'.
    Add a section for documentation of internal plugins in the
    documentation.
+ * doc/geany.html, doc/geany.txt, geany.glade, src/interface.c,
+   src/keyfile.c, src/prefs.c, src/project.c, src/project.h:
+   Add an option to store the project file of new projects inside the
+   project base directory.
+   Doc: Add descriptions for the Search tab in the preferences dialog.
 
 
 2008-10-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

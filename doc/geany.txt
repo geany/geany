@@ -1298,6 +1298,13 @@ Use project-based session files
     resume different project sessions, automatically opening the files
     you had open previously.
 
+Store project file inside the project base directory
+    When creating new projects, the default path for the project file contains
+    the project base path. Without this option enabled, the default project file
+    path is one level above the project base path.
+    In any case, you can easily the final project file path in the New Project,
+    dialog. This option is just for your convenience to get a proper default path.
+
 Miscellaneous
 `````````````
 
@@ -1565,11 +1572,14 @@ Automatic symbol completion
     allow it to be completed for you.
 
 Characters to type for completion
-    Number of characters of a word to type before autocompletion is
+    Number of characters of a word to type before auto completion is
     displayed.
 
 Rows of symbol completion list
-    The maximum number of symbols to show in the autocompletion window.
+    The maximum number of symbols to show in the auto completion window.
+
+Max. symbol name suggestions
+    The maximum number of entries to display in the auto completion list.
 
 
 Editor Display tab in preferences dialog
@@ -1676,6 +1686,27 @@ Recent files list length
 Disk check timeout
     The number of seconds to periodically check the current document's
     file on disk in case it has changed.
+
+
+Search tab in preferences dialog
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: ./images/pref_dialog_search.png
+
+
+Always wrap search and hide the Find dialog
+    Always wrap search around the document and hide the Find dialog after clicking
+    Find Next/Previous.
+
+Use the current word under the cursor for Find dialogs
+    Use current word under the cursor when opening the Find, Find in Files or Replace dialog and
+    there is no selection. When this option is disabled, the search term of the last use of the
+    appropriate Find dialog is used.
+
+Use the current file's directory for Find in Files
+    When opening the Find in Files dialog, set the directory to search to the directory of the current
+    active file. When this option is disabled, the directory of the last use of the Find in Files
+    dialog is used.
 
 
 Tools tab in preferences dialog
