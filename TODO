@@ -11,25 +11,26 @@ Note: features included in brackets have lower priority.
 	o documentation: list and explain filetype modes
 	o common default highlighting styles configurable for all
 	  programming languages
-	o basic support for adding custom filetypes?
 	o configurable filetype and project make commands (e.g. using
 	  bud for D)
 	o recent projects menu
 	o project indentation settings support
 	o improve Compile toolbar button for Make (drop down radio list?)
 	o MRU documents switching
+	o (support for adding plugin filetypes - SCI_LOADLEXERLIBRARY?)
 	o (selectable menu of arguments to use for Make, from Make Custom)
 	o (DBUS)
 	o (indent wrapped lines  - Scintilla issue)
 	o (folder tree in the sidebar)
 	o (macro support)
-	o (better search & replace regex support)
+	o (better search & replace regex support - use
+	   SCI_GETCHARACTERPOINTER and GNU regex?)
 	o (parsing tags from a memory buffer instead of a file on disk)
 	o (calltip support for non-C-like languages that use
-	  function_name(arguments) syntax)
+	   function_name(arguments) syntax)
 	o (custom pipe-separated tags files support)
 	o (better tags support for popular languages? - this is a moving
-	  target...)
+	   target...)
 	o (tango-like icons for the symbol list)
 	o (show autocompletion symbol icons - see SCI_REGISTERIMAGE)
 	o (GFileMonitor support, if/when GIO gets merged with GLib)
@@ -52,6 +53,4 @@ Note: these items might not get worked on.
 
 	o Some kind of support for CTags tags files
 	o Scope resolution for object members
-	o Multiline regex support (may require work on Scintilla, or
-	  alternatively could perhaps use SCI_GETCHARACTERPOINTER)
 	o Python plugin interface (different concept from Lua scripting).
