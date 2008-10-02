@@ -2197,6 +2197,8 @@ By default, no plugins are loaded at startup until you select some.
 You can also configure some plugin specific options when the plugin
 provides some.
 
+See also `Plugin documentation`_ for information about single plugins
+which are included in Geany.
 
 
 Keybindings
@@ -3149,6 +3151,34 @@ fileheader     The file header template. This wildcard       filetypes
        in the preferences dialog, see `Template tab in preferences dialog`_. You can
        use any conversion specifiers which can be used with the ANSI C strftime function.
        For details please see http://man.cx/strftime.
+
+
+Plugin documentation
+====================
+
+
+Instant Save
+------------
+This plugin sets on every new file (File->New or File-> New (with template))
+a randomly chosen filename and set its filetype appropriate to the used template
+or when no template was used, to a configurable default filetype.
+This enables you to quickly compile, build and/or run the new file without the
+need to give it an explicit filename using the Save As dialog. This might be
+useful when you often create new files just for testing some code or something
+similar.
+
+
+Backup Copy
+-----------
+
+This plugin creates a backup copy of the current file in Geany when it is
+saved. You can specify the directory where the backup copy is saved and
+you can configure the automatically added extension in the configure dialog
+in Geany's plugin manager.
+
+After the plugin was loaded in Geany's plugin manager, every file is
+copied into the configured backup directory when the file is saved in Geany.
+
 
 
 Contributing to this document

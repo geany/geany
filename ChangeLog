@@ -1,3 +1,13 @@
+2008-10-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * doc/geany.txt, doc/geany.html, po/POTFILES.in, plugins/saveactions.c,
+   plugins/autosave.c, plugins/Makefile.am, plugins/makefile.win32:
+   Merge InstantSave, AutoSave and BackupCopy plugins into the
+   plugin 'Save Actions'.
+   Add a section for documentation of internal plugins in the
+   documentation.
+
+
 2008-10-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * HACKING, doc/Makefile.am:

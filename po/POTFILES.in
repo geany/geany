@@ -41,5 +41,5 @@ plugins/htmlchars.c
 plugins/export.c
 plugins/vcdiff.c
 plugins/filebrowser.c
-plugins/autosave.c
+plugins/saveactions.c
 plugins/splitwindow.c

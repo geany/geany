@@ -56,7 +56,7 @@ plugins: \
 		export.dll \
 		splitwindow.dll \
 		vcdiff.dll \
-		autosave.dll \
+		saveactions.dll \
 		filebrowser.dll
 
 clean:
