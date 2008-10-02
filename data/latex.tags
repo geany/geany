@@ -237,6 +237,11 @@
 \csname|||
 \cup|||
 \CurrentOption|||
+\cvcomputer||{param1}{param2}{param3}{param4}|
+\cventry||{param1}{param2}{param3}{param4}{param5}{param6}|
+\cvitem||{param1}{param2}|
+\cvline||{param1}{param2}|
+\cvlanguage||{param1}{param2}{param3}|
 \dagger|||
 \danger|||
 \dash|||
@@ -397,6 +402,7 @@
 \fill|||
 \finalhypendemerits|||
 \firstmark|||
+\firstname||{firstname}|
 \flat|||
 \floatingpenalty|||
 \floatpagefraction|||
@@ -606,6 +612,7 @@
 \lastkern|||
 \lastpenalty|||
 \lastskip|||
+\lastname||{lastname}|
 \LaTeX|||
 \LaTeXe|||
 \lbrace|||

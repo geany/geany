@@ -1,3 +1,8 @@
+2008-10-03  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * data/latex.tags: Added some more keywords for moderncv to tag list.
+
+
 2008-10-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * doc/geany.txt, doc/geany.html, po/POTFILES.in, plugins/saveactions.c,
