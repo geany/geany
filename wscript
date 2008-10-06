@@ -34,12 +34,13 @@ Missing features: --enable-binreloc, make targets: dist, pdf (in doc/)
 Known issues: Dependency handling is buggy, e.g. if src/document.h is
               changed, depending source files are not rebuilt (maybe Waf bug).
 
-Requires WAF SVN r3976 (or later) and Python 2.4 (or later).
+Requires WAF 1.5 (SVN r4661 or later) and Python 2.4 (or later).
 """
 
 
 import Build, Configure, Options, Runner, Task, Utils
 import sys, os, subprocess, shutil
+from distutils import version
 
 
 APPNAME = 'geany'
@@ -124,29 +125,6 @@ def configure(conf):
             pass
         return '-1'
 
-    def conf_get_pkg_ver(pkgname):
-        ret = os.popen('PKG_CONFIG_PATH=$PKG_CONFIG_PATH pkg-config --modversion %s' % pkgname).read().strip()
-        if ret:
-            return ret
-        else:
-            return '(unknown)'
-
-    def conf_check_header(header_name, mand = 0):
-        headerconf              = conf.create_header_configurator()
-        headerconf.name         = header_name
-        headerconf.mandatory    = mand
-        headerconf.message      = header_name + ' is necessary.'
-        headerconf.run()
-
-    # TODO this only checks in header files, not in libraries (fix this in Waf)
-    def conf_check_function(func_name, header_files = '', mand = 1):
-        functest            = conf.create_function_enumerator()
-        functest.headers    = header_files
-        functest.mandatory  = mand
-        functest.function   = func_name
-        functest.define     = 'HAVE_' + func_name.upper()
-        functest.run()
-
     def conf_define_from_opt(define_name, opt_name, default_value, quote=1):
         if opt_name:
             if isinstance(opt_name, bool):
@@ -157,12 +135,12 @@ def configure(conf):
 
     conf.check_tool('compiler_cc')
 
-    conf_check_header('fcntl.h', 0)
-    conf_check_header('fnmatch.h', 0)
-    conf_check_header('glob.h', 0)
-    conf_check_header('sys/time.h', 0)
-    conf_check_header('sys/types.h', 0)
-    conf_check_header('sys/stat.h', 0)
+    conf.check(header_name='fcntl.h')
+    conf.check(header_name='fnmatch.h')
+    conf.check(header_name='glob.h')
+    conf.check(header_name='sys/time.h')
+    conf.check(header_name='sys/types.h')
+    conf.check(header_name='sys/stat.h')
     conf.define('HAVE_STDLIB_H', 1) # are there systems without stdlib.h?
     conf.define('STDC_HEADERS', 1) # an optimistic guess ;-)
 
@@ -170,34 +148,37 @@ def configure(conf):
         conf.define('HAVE_REGCOMP', 1, 0)
         conf.define('USE_INCLUDED_REGEX', 1, 0)
     else:
-        conf_check_header('regex.h', 0)
+        conf.check(header_name='regex.h')
         if conf.env['HAVE_REGEX_H'] == 1:
-            conf_check_function('regcomp', ['regex.h'], 0)
+            conf.check(function_name='regcomp', header_name='regex.h')
         # fallback to included regex lib
         if conf.env['HAVE_REGCOMP'] != 1 or conf.env['HAVE_REGEX_H'] != 1:
             conf.define('HAVE_REGCOMP', 1, 0)
             conf.define('USE_INCLUDED_REGEX', 1, 0)
             Utils.pprint('YELLOW', 'Using included GNU regex library.')
 
-    conf_check_function('fgetpos', ['stdio.h'], 0)
-    conf_check_function('ftruncate', ['unistd.h'], 0)
-    conf_check_function('gethostname', ['unistd.h'], 0)
-    conf_check_function('mkstemp', ['stdlib.h'], 0)
-    conf_check_function('strerror', ['string.h'], 0)
-    conf_check_function('strstr', ['string.h'], 1)
+    conf.check(function_name='fgetpos', header_name='stdio.h')
+    conf.check(function_name='ftruncate', header_name='unistd.h')
+    conf.check(function_name='gethostname', header_name='unistd.h')
+    conf.check(function_name='mkstemp', header_name='stdlib.h')
+    conf.check(function_name='strerror', header_name='string.h')
+    conf.check(function_name='strstr', header_name='string.h', mandatory=True)
 
     # check for cxx after the header and function checks have been done to ensure they are
     # checked with cc not cxx
     conf.check_tool('compiler_cxx intltool misc')
 
-    # first check for GTK 2.10 for GTK printing message
-    conf.check_pkg('gtk+-2.0', destvar='GTK', vnum='2.10.0')
-    if conf.env['HAVE_GTK'] == 1:
-        have_gtk_210 = True
+    conf.check_cfg(package='gtk+-2.0', atleast_version='2.6.0', uselib_store='GTK')
+    conf.check_cfg(package='gtk+-2.0', args='--cflags --libs', uselib_store='GTK')
+
+    # GTK version check
+    have_gtk_210 = False
+    gtk_version = conf.check_cfg(modversion='gtk+-2.0', uselib_store='GTK')
+    if gtk_version:
+        if version.LooseVersion(gtk_version) >= version.LooseVersion('2.10.0'):
+            have_gtk_210 = True
     else:
-        # we don't have GTK >= 2.10, so check for at least 2.6 and fail if not found
-        conf.check_pkg('gtk+-2.0', destvar='GTK', vnum='2.6.0', mandatory=True)
-        have_gtk_210 = False
+        gtk_version = 'Unknown'
 
     conf_define_from_opt('LIBDIR', Options.options.libdir, conf.env['PREFIX'] + '/lib')
     conf_define_from_opt('DOCDIR', Options.options.docdir, conf.env['DATADIR'] + '/doc/geany')
@@ -224,7 +205,7 @@ def configure(conf):
 
     Utils.pprint('BLUE', 'Summary:')
     print_message('Install Geany ' + VERSION + ' in', conf.env['PREFIX'])
-    print_message('Using GTK version', conf_get_pkg_ver('gtk+-2.0'))
+    print_message('Using GTK version', gtk_version)
     print_message('Build with GTK printing support', have_gtk_210 and 'yes' or 'no')
     print_message('Build with plugin support', Options.options.no_plugins and 'no' or 'yes')
     print_message('Use virtual terminal support', Options.options.no_vte and 'no' or 'yes')
@@ -233,7 +214,7 @@ def configure(conf):
         conf.env.append_value('CCFLAGS', '-g -DGEANY_DEBUG')
 
     conf.env.append_value('CCFLAGS', '-DHAVE_CONFIG_H')
-    conf.env.append_value('CXXFLAGS', '-DNDEBUG -Os -DGTK -DGTK2 -DSCI_LEXER -DG_THREADS_IMPL_NONE \
+    conf.env.append_value('CXXFLAGS', '-DNDEBUG -DGTK -DGTK2 -DSCI_LEXER -DG_THREADS_IMPL_NONE \
             -Wno-missing-braces -Wno-char-subscripts') # Scintilla flags
 
 

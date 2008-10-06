@@ -13,6 +13,9 @@
  * geany.glade, src/interface.c:
    Enable interactive search for the keybindings tree view in the
    prefs dialog.
+ * wscript, waf:
+   Update waf to its latest SVN version (nearly 1.5.0).
+   Adjust wscript to latest Waf API changes.
 
 
 2008-10-03  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
