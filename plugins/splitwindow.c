@@ -141,7 +141,7 @@ static void sync_to_current(ScintillaObject *current, ScintillaObject *sci)
 	gpointer sdoc;
 	gint lexer;
 	gint pos;
-	
+
 	/* set the new sci widget to view the existing Scintilla document */
 	sdoc = (gpointer) p_sci->send_message(current, SCI_GETDOCPOINTER, 0, 0);
 	p_sci->send_message(sci, SCI_SETDOCPOINTER, 0, GPOINTER_TO_INT(sdoc));
@@ -153,7 +153,7 @@ static void sync_to_current(ScintillaObject *current, ScintillaObject *sci)
 
 	pos = p_sci->get_current_position(current);
 	p_sci->set_current_position(sci, pos, TRUE);
-	
+
 	/* override some defaults */
 	set_line_numbers(sci, TRUE, 0);
 	p_sci->send_message(sci, SCI_SETMARGINWIDTHN, 1, 0 ); /* hide marker margin */
@@ -166,7 +166,7 @@ static void set_state(enum State id)
 		id != STATE_SPLIT_HORIZONTAL);
 	gtk_widget_set_sensitive(menu_items.unsplit,
 		id != STATE_UNSPLIT);
-		
+
 	plugin_state = id;
 }
 
@@ -181,7 +181,7 @@ static void on_split_view(GtkMenuItem *menuitem, gpointer user_data)
 	gint width = notebook->allocation.width / 2;
 
 	set_state(STATE_SPLIT_HORIZONTAL);
-	
+
 	g_return_if_fail(doc);
 	g_return_if_fail(our_editor == NULL);
 
@@ -210,7 +210,7 @@ static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data)
 	GtkWidget *parent = gtk_widget_get_parent(pane);
 
 	set_state(STATE_UNSPLIT);
-	
+
 	g_return_if_fail(our_editor);
 
 	/* reparent document notebook */
@@ -226,25 +226,25 @@ static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data)
 void plugin_init(GeanyData *data)
 {
 	GtkWidget *item, *menu;
-	
+
 	menu_items.main = item = gtk_menu_item_new_with_mnemonic(_("_Split Window"));
 	gtk_menu_append(geany_data->main_widgets->tools_menu, menu_items.main);
 	plugin_fields->menu_item = item;
 	plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
-	
+
 	menu = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_items.main), menu);
-	
+
 	menu_items.horizontal = item =
 		gtk_menu_item_new_with_mnemonic(_("_Horizontally"));
 	g_signal_connect(item, "activate", G_CALLBACK(on_split_view), NULL);
 	gtk_menu_append(menu, item);
-	
+
 	menu_items.unsplit = item =
 		gtk_menu_item_new_with_mnemonic(_("_Unsplit"));
 	g_signal_connect(item, "activate", G_CALLBACK(on_unsplit), NULL);
 	gtk_menu_append(menu, item);
-	
+
 	gtk_widget_show_all(menu_items.main);
 
 	set_state(STATE_UNSPLIT);
@@ -269,6 +269,6 @@ void plugin_cleanup()
 {
 	if (plugin_state != STATE_UNSPLIT)
 		on_unsplit(NULL, NULL);
-	
+
 	gtk_widget_destroy(menu_items.main);
 }
