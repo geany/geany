@@ -4640,7 +4640,6 @@ create_prefs_dialog (void)
   gtk_widget_show (treeview7);
   gtk_container_add (GTK_CONTAINER (scrolledwindow8), treeview7);
   gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (treeview7), TRUE);
-  gtk_tree_view_set_enable_search (GTK_TREE_VIEW (treeview7), FALSE);
 
   alignment10 = gtk_alignment_new (0.5, 0.5, 0.3, 1);
   gtk_widget_show (alignment10);
