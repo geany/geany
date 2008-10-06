@@ -1,3 +1,13 @@
+2008-10-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * plugins/splitwindow.c:
+   Fix wrong editor scrollbar mouse cursor and broken middle-click
+   paste after splitting or unsplitting (fixes #2142186).
+   Note: this is a workaround for an issue with Scintilla where the
+   widget (or its parents) can't be removed or reparented to a
+   non-visible widget.
+
+
 2008-10-03  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * data/latex.tags: Added some more keywords for moderncv to tag list.

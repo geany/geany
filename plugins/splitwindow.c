@@ -185,13 +185,14 @@ static void on_split_view(GtkMenuItem *menuitem, gpointer user_data)
 	g_return_if_fail(doc);
 	g_return_if_fail(our_editor == NULL);
 
-	/* reparent document notebook */
-	g_object_ref(notebook);
-	gtk_container_remove(GTK_CONTAINER(parent), notebook);
+	/* temporarily put document notebook in main vbox (scintilla widgets must stay
+	 * in a visible parent window, otherwise there are X selection and scrollbar issues) */
+	gtk_widget_reparent(notebook,
+		p_support->lookup_widget(geany->main_widgets->window, "vbox1"));
+
 	pane = gtk_hpaned_new();
 	gtk_container_add(GTK_CONTAINER(parent), pane);
-	gtk_paned_add1(GTK_PANED(pane), notebook);
-	g_object_unref(notebook);
+	gtk_widget_reparent(notebook, pane);
 
 	our_editor = doc->editor;
 	sci = p_editor->create_widget(our_editor);
@@ -213,13 +214,14 @@ static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data)
 
 	g_return_if_fail(our_editor);
 
-	/* reparent document notebook */
-	g_object_ref(notebook);
-	gtk_container_remove(GTK_CONTAINER(pane), notebook);
+	/* temporarily put document notebook in main vbox (scintilla widgets must stay
+	 * in a visible parent window, otherwise there are X selection and scrollbar issues) */
+	gtk_widget_reparent(notebook,
+		p_support->lookup_widget(geany->main_widgets->window, "vbox1"));
+
 	gtk_widget_destroy(pane);
 	our_editor = NULL;
-	gtk_container_add(GTK_CONTAINER(parent), notebook);
-	g_object_unref(notebook);
+	gtk_widget_reparent(notebook, parent);
 }
 
 
