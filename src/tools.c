@@ -275,7 +275,7 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 			if (wrote < 0)
 			{
 				g_warning("%s: %s: %s\n", __func__, "Failed sending data to command",
-										strerror(errno));
+										g_strerror(errno));
 				break;
 			}
 			remaining -= wrote;

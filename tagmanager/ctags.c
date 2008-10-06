@@ -285,11 +285,7 @@ extern void error (const errorSelection selection,
 	    selected (selection, WARNING) ? "Warning: " : "");
     vfprintf (errout, format, ap);
     if (selected (selection, PERROR))
-#ifdef HAVE_STRERROR
-	fprintf (errout, " : %s", strerror (errno));
-#else
-	perror (" ");
-#endif
+	fprintf (errout, " : %s", g_strerror (errno));
     fputs ("\n", errout);
     va_end (ap);
     if (selected (selection, FATAL))

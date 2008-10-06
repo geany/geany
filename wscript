@@ -161,7 +161,6 @@ def configure(conf):
     conf.check(function_name='ftruncate', header_name='unistd.h')
     conf.check(function_name='gethostname', header_name='unistd.h')
     conf.check(function_name='mkstemp', header_name='stdlib.h')
-    conf.check(function_name='strerror', header_name='string.h')
     conf.check(function_name='strstr', header_name='string.h', mandatory=True)
 
     # check for cxx after the header and function checks have been done to ensure they are

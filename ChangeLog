@@ -16,6 +16,9 @@
  * wscript, waf:
    Update waf to its latest SVN version (nearly 1.5.0).
    Adjust wscript to latest Waf API changes.
+ * configure.in, wscript, tagmanager/ctags.c, src/tools.c:
+   Use g_strerror() instead of strerror().
+   Remove build system checks for strerror().
 
 
 2008-10-03  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
