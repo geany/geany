@@ -7,6 +7,10 @@
    Fix segfault when holding Alt and scrolling editor window.
  * plugins/splitwindow.c:
    Use EditWindow structure instead of separate global variables.
+ * plugins/splitwindow.c:
+   Fix segfault when clicking on split window after the original
+   document has been closed and the view has been refreshed to another
+   document.
 
 
 2008-10-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

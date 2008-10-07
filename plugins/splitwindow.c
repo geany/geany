@@ -153,8 +153,10 @@ static void set_line_numbers(ScintillaObject * sci, gboolean set, gint extra_wid
 }
 
 
-static void sync_to_current(ScintillaObject *current, ScintillaObject *sci)
+static void sync_to_current(EditWindow *editwin, GeanyEditor *editor)
 {
+	ScintillaObject *sci = editwin->sci;
+	ScintillaObject *current = editor->sci;
 	gpointer sdoc;
 	gint lexer;
 	gint pos;
@@ -174,6 +176,8 @@ static void sync_to_current(ScintillaObject *current, ScintillaObject *sci)
 	/* override some defaults */
 	set_line_numbers(sci, TRUE, 0);
 	p_sci->send_message(sci, SCI_SETMARGINWIDTHN, 1, 0 ); /* hide marker margin */
+
+	editwin->editor = editor;
 }
 
 
@@ -204,12 +208,22 @@ static GtkWidget *create_tool_button(const gchar *label, const gchar *stock_id)
 
 static void on_refresh(void)
 {
+	GtkWidget *parent;
 	GeanyDocument *doc = p_document->get_current();
 
 	g_return_if_fail(doc);
 	g_return_if_fail(edit_window.sci);
 
-	sync_to_current(doc->editor->sci, edit_window.sci);
+	/* before reassigning edit_window.editor, we must destroy the old widget,
+	 * otherwise its signals will have an invalid document as user_data */
+	parent = gtk_widget_get_parent(GTK_WIDGET(edit_window.sci));
+	gtk_widget_destroy(GTK_WIDGET(edit_window.sci));
+
+	edit_window.sci = p_editor->create_widget(doc->editor);
+	gtk_widget_show(GTK_WIDGET(edit_window.sci));
+	gtk_container_add(GTK_CONTAINER(parent), GTK_WIDGET(edit_window.sci));
+
+	sync_to_current(&edit_window, doc->editor);
 }
 
 
@@ -277,9 +291,8 @@ static void on_split_view(GtkMenuItem *menuitem, gpointer user_data)
 	gtk_box_pack_start(GTK_BOX(box), toolbar, FALSE, FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(pane), box);
 
-	edit_window.editor = doc->editor;
-	edit_window.sci = p_editor->create_widget(edit_window.editor);
-	sync_to_current(edit_window.editor->sci, edit_window.sci);
+	edit_window.sci = p_editor->create_widget(doc->editor);
+	sync_to_current(&edit_window, doc->editor);
 	gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(edit_window.sci), TRUE, TRUE, 0);
 
 	gtk_paned_set_position(GTK_PANED(pane), width);
