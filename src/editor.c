@@ -351,6 +351,8 @@ static void check_line_breaking(GeanyEditor *editor, gint pos, gchar c)
 	if (!editor->line_breaking)
 		return;
 
+	col = sci_get_col_from_position(sci, pos);
+
 	if (c == GDK_space)
 		pos--;	/* Look for previous space, not the new one */
 
@@ -359,7 +361,6 @@ static void check_line_breaking(GeanyEditor *editor, gint pos, gchar c)
 	lstart = sci_get_position_from_line(sci, line);
 
 	/* use column instead of position which might be different with multibyte characters */
-	col = sci_get_col_from_position(sci, pos);
 	if (col < editor_prefs.line_break_column)
 		return;
 
