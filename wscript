@@ -47,7 +47,7 @@ APPNAME = 'geany'
 VERSION = '0.15'
 
 srcdir = '.'
-blddir = 'build'
+blddir = '_build_'
 
 
 tagmanager_sources = [
@@ -167,7 +167,7 @@ def configure(conf):
 	# checked with cc not cxx
 	conf.check_tool('compiler_cxx intltool misc')
 
-	conf.check_cfg(package='gtk+-2.0', atleast_version='2.6.0', uselib_store='GTK')
+	conf.check_cfg(package='gtk+-2.0', atleast_version='2.6.0', uselib_store='GTK', mandatory=True)
 	conf.check_cfg(package='gtk+-2.0', args='--cflags --libs', uselib_store='GTK')
 
 	# GTK version check

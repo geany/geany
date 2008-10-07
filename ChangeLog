@@ -6,6 +6,9 @@
  * src/editor.c:
    Fix wrong cursor positioning while line breaking when the last
    character on the line was a space.
+ * src/wscript:
+   Add missing 'mandatory' attribute for the GTK check.
+   Change build directory to '_build_'.
 
 
 2008-10-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
