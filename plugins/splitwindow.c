@@ -1,7 +1,8 @@
 /*
- *      splitview.c
+ *      splitwindow.c - this file is part of Geany, a fast and lightweight IDE
  *
  *      Copyright 2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -17,7 +18,11 @@
  *      along with this program; if not, write to the Free Software
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
+ *
+ * $Id$
  */
+
+/* Split Window plugin. */
 
 #include "geany.h"
 #include <glib/gi18n.h>
