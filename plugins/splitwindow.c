@@ -59,6 +59,9 @@ menu_items;
 
 static enum State plugin_state;
 static GeanyEditor *our_editor = NULL;	/* original editor for split view */
+static ScintillaObject *our_sci = NULL;	/* new editor widget */
+
+static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data);
 
 
 static gint sci_get_value(ScintillaObject *sci, gint message_id, gint param)
@@ -171,13 +174,74 @@ static void set_state(enum State id)
 }
 
 
+static GtkWidget *create_tool_button(const gchar *label, const gchar *stock_id)
+{
+	GtkToolItem *item;
+	GtkTooltips *tooltips = GTK_TOOLTIPS(p_support->lookup_widget(
+		geany->main_widgets->window, "tooltips"));
+
+	item = gtk_tool_button_new(NULL, label);
+	gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(item), stock_id);
+	gtk_tool_item_set_tooltip(item, tooltips, label, NULL);
+
+	return GTK_WIDGET(item);
+}
+
+
+static void on_refresh(void)
+{
+	GeanyDocument *doc = p_document->get_current();
+
+	g_return_if_fail(doc);
+	g_return_if_fail(our_sci);
+
+	sync_to_current(doc->editor->sci, our_sci);
+}
+
+
+/* avoid adding new strings which are the same but without a leading underscore */
+static const gchar *after_underscore(const gchar *str)
+{
+	const gchar *u = g_strstr_len(str, -1, "_");
+
+	if (u)
+		return ++u;
+	else
+		return str;
+}
+
+
+static GtkWidget *create_toolbar(void)
+{
+	GtkWidget *toolbar, *item;
+	GtkToolItem *tool_item;
+
+	toolbar = gtk_toolbar_new();
+	gtk_toolbar_set_icon_size(GTK_TOOLBAR(toolbar), GTK_ICON_SIZE_MENU);
+	gtk_toolbar_set_style(GTK_TOOLBAR(toolbar), GTK_TOOLBAR_ICONS);
+
+	item = (GtkWidget*)gtk_tool_button_new_from_stock(GTK_STOCK_REFRESH);
+	gtk_container_add(GTK_CONTAINER(toolbar), item);
+	g_signal_connect(item, "clicked", G_CALLBACK(on_refresh), NULL);
+
+	tool_item = gtk_tool_item_new();
+	gtk_tool_item_set_expand(tool_item, TRUE);
+	gtk_container_add(GTK_CONTAINER(toolbar), GTK_WIDGET(tool_item));
+
+	item = create_tool_button(after_underscore(_("_Unsplit")), GTK_STOCK_CLOSE);
+	gtk_container_add(GTK_CONTAINER(toolbar), item);
+	g_signal_connect(item, "clicked", G_CALLBACK(on_unsplit), NULL);
+
+	return toolbar;
+}
+
+
 static void on_split_view(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GtkWidget *notebook = geany_data->main_widgets->notebook;
 	GtkWidget *parent = gtk_widget_get_parent(notebook);
-	GtkWidget *pane;
+	GtkWidget *pane, *toolbar, *box;
 	GeanyDocument *doc = p_document->get_current();
-	ScintillaObject *sci;
 	gint width = notebook->allocation.width / 2;
 
 	set_state(STATE_SPLIT_HORIZONTAL);
@@ -194,10 +258,15 @@ static void on_split_view(GtkMenuItem *menuitem, gpointer user_data)
 	gtk_container_add(GTK_CONTAINER(parent), pane);
 	gtk_widget_reparent(notebook, pane);
 
+	box = gtk_vbox_new(FALSE, 0);
+	toolbar = create_toolbar();
+	gtk_box_pack_start(GTK_BOX(box), toolbar, FALSE, FALSE, 0);
+	gtk_container_add(GTK_CONTAINER(pane), box);
+
 	our_editor = doc->editor;
-	sci = p_editor->create_widget(our_editor);
-	sync_to_current(our_editor->sci, sci);
-	gtk_paned_add2(GTK_PANED(pane), GTK_WIDGET(sci));
+	our_sci = p_editor->create_widget(our_editor);
+	sync_to_current(our_editor->sci, our_sci);
+	gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(our_sci), TRUE, TRUE, 0);
 
 	gtk_paned_set_position(GTK_PANED(pane), width);
 	gtk_widget_show_all(pane);
