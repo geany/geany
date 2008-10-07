@@ -13,6 +13,9 @@
    document.
  * plugins/splitwindow.c:
    Refactor with set_editor().
+ * plugins/splitwindow.c:
+   Add filename label.
+   Fix Gtk warning when resplitting.
 
 
 2008-10-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

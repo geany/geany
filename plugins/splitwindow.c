@@ -185,14 +185,16 @@ static void set_editor(EditWindow *editwin, GeanyEditor *editor)
 
 	/* first destroy any widget, otherwise its signals will have an
 	 * invalid document as user_data */
-	if (edit_window.sci != NULL)
-		gtk_widget_destroy(GTK_WIDGET(edit_window.sci));
+	if (editwin->sci != NULL)
+		gtk_widget_destroy(GTK_WIDGET(editwin->sci));
 
 	editwin->sci = p_editor->create_widget(editor);
 	gtk_widget_show(GTK_WIDGET(editwin->sci));
 	gtk_container_add(GTK_CONTAINER(editwin->vbox), GTK_WIDGET(editwin->sci));
 
 	sync_to_current(editwin->sci, editor->sci);
+
+	gtk_label_set_text(GTK_LABEL(editwin->name_label), DOC_FILENAME(editor->document));
 }
 
 
@@ -262,6 +264,7 @@ static GtkWidget *create_toolbar(void)
 	gtk_container_add(GTK_CONTAINER(toolbar), GTK_WIDGET(tool_item));
 
 	item = gtk_label_new(NULL);
+	gtk_label_set_ellipsize(GTK_LABEL(item), PANGO_ELLIPSIZE_START);
 	gtk_container_add(GTK_CONTAINER(tool_item), item);
 	edit_window.name_label = item;
 
@@ -325,6 +328,7 @@ static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data)
 
 	gtk_widget_destroy(pane);
 	edit_window.editor = NULL;
+	edit_window.sci = NULL;
 	gtk_widget_reparent(notebook, parent);
 }
 
@@ -364,9 +368,18 @@ static void on_document_close(GObject *obj, GeanyDocument *doc, gpointer user_da
 		on_unsplit(NULL, NULL);
 }
 
+
+static void on_document_save(GObject *obj, GeanyDocument *doc, gpointer user_data)
+{
+	/* update filename */
+	gtk_label_set_text(GTK_LABEL(edit_window.name_label), DOC_FILENAME(doc));
+}
+
+
 PluginCallback plugin_callbacks[] =
 {
     { "document-close", (GCallback) &on_document_close, FALSE, NULL },
+    { "document-save", (GCallback) &on_document_save, FALSE, NULL },
     { NULL, NULL, FALSE, NULL }
 };
 
