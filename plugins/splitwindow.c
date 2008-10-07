@@ -63,8 +63,17 @@ static struct
 menu_items;
 
 static enum State plugin_state;
-static GeanyEditor *our_editor = NULL;	/* original editor for split view */
-static ScintillaObject *our_sci = NULL;	/* new editor widget */
+
+
+typedef struct EditWindow
+{
+	GeanyEditor		*editor;	/* original editor for split view */
+	ScintillaObject	*sci;		/* new editor widget */
+}
+EditWindow;
+
+static EditWindow edit_window = {NULL, NULL};
+
 
 static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data);
 
@@ -198,9 +207,9 @@ static void on_refresh(void)
 	GeanyDocument *doc = p_document->get_current();
 
 	g_return_if_fail(doc);
-	g_return_if_fail(our_sci);
+	g_return_if_fail(edit_window.sci);
 
-	sync_to_current(doc->editor->sci, our_sci);
+	sync_to_current(doc->editor->sci, edit_window.sci);
 }
 
 
@@ -252,7 +261,7 @@ static void on_split_view(GtkMenuItem *menuitem, gpointer user_data)
 	set_state(STATE_SPLIT_HORIZONTAL);
 
 	g_return_if_fail(doc);
-	g_return_if_fail(our_editor == NULL);
+	g_return_if_fail(edit_window.editor == NULL);
 
 	/* temporarily put document notebook in main vbox (scintilla widgets must stay
 	 * in a visible parent window, otherwise there are X selection and scrollbar issues) */
@@ -268,10 +277,10 @@ static void on_split_view(GtkMenuItem *menuitem, gpointer user_data)
 	gtk_box_pack_start(GTK_BOX(box), toolbar, FALSE, FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(pane), box);
 
-	our_editor = doc->editor;
-	our_sci = p_editor->create_widget(our_editor);
-	sync_to_current(our_editor->sci, our_sci);
-	gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(our_sci), TRUE, TRUE, 0);
+	edit_window.editor = doc->editor;
+	edit_window.sci = p_editor->create_widget(edit_window.editor);
+	sync_to_current(edit_window.editor->sci, edit_window.sci);
+	gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(edit_window.sci), TRUE, TRUE, 0);
 
 	gtk_paned_set_position(GTK_PANED(pane), width);
 	gtk_widget_show_all(pane);
@@ -286,7 +295,7 @@ static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data)
 
 	set_state(STATE_UNSPLIT);
 
-	g_return_if_fail(our_editor);
+	g_return_if_fail(edit_window.editor);
 
 	/* temporarily put document notebook in main vbox (scintilla widgets must stay
 	 * in a visible parent window, otherwise there are X selection and scrollbar issues) */
@@ -294,7 +303,7 @@ static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data)
 		p_support->lookup_widget(geany->main_widgets->window, "vbox1"));
 
 	gtk_widget_destroy(pane);
-	our_editor = NULL;
+	edit_window.editor = NULL;
 	gtk_widget_reparent(notebook, parent);
 }
 
@@ -330,7 +339,7 @@ void plugin_init(GeanyData *data)
 static void on_document_close(GObject *obj, GeanyDocument *doc, gpointer user_data)
 {
     /* remove the split window because the document won't exist anymore */
-	if (our_editor && doc == our_editor->document)
+	if (doc->editor == edit_window.editor)
 		on_unsplit(NULL, NULL);
 }
 

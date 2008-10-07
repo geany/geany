@@ -5,6 +5,8 @@
    an Unsplit button (reuses existing string).
  * src/editor.c:
    Fix segfault when holding Alt and scrolling editor window.
+ * plugins/splitwindow.c:
+   Use EditWindow structure instead of separate global variables.
 
 
 2008-10-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
