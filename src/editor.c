@@ -3810,7 +3810,7 @@ gboolean editor_goto_pos(GeanyEditor *editor, gint pos, gboolean mark)
 static gboolean
 on_editor_scroll_event(GtkWidget *widget, GdkEventScroll *event, gpointer user_data)
 {
-	/* Handle scroll events if Shift or Alt is pressed and scroll whole pages instead of a
+	/* Handle scroll events if Alt is pressed and scroll whole pages instead of a
 	 * few lines only, maybe this could/should be done in Scintilla directly */
 	if (event->state & GDK_MOD1_MASK)
 	{
@@ -3951,6 +3951,7 @@ GeanyEditor *editor_create(GeanyDocument *doc)
 	GeanyEditor *editor = g_new0(GeanyEditor, 1);
 
 	editor->document = doc;
+	doc->editor = editor;	/* needed in case some editor functions/callbacks expect it */
 
 	editor->auto_indent = (iprefs->auto_indent_mode != GEANY_AUTOINDENT_NONE);
 	editor->line_wrapping = editor_prefs.line_wrapping;

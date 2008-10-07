@@ -3,6 +3,8 @@
  * plugins/splitwindow.c:
    Add toolbar with Refresh button to sync to the current document, and
    an Unsplit button (reuses existing string).
+ * src/editor.c:
+   Fix segfault when holding Alt and scrolling editor window.
 
 
 2008-10-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
