@@ -69,10 +69,12 @@ typedef struct EditWindow
 {
 	GeanyEditor		*editor;	/* original editor for split view */
 	ScintillaObject	*sci;		/* new editor widget */
+	GtkWidget		*vbox;
+	GtkWidget		*name_label;
 }
 EditWindow;
 
-static EditWindow edit_window = {NULL, NULL};
+static EditWindow edit_window = {NULL, NULL, NULL, NULL};
 
 
 static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data);
@@ -153,10 +155,8 @@ static void set_line_numbers(ScintillaObject * sci, gboolean set, gint extra_wid
 }
 
 
-static void sync_to_current(EditWindow *editwin, GeanyEditor *editor)
+static void sync_to_current(ScintillaObject *sci, ScintillaObject *current)
 {
-	ScintillaObject *sci = editwin->sci;
-	ScintillaObject *current = editor->sci;
 	gpointer sdoc;
 	gint lexer;
 	gint pos;
@@ -176,8 +176,23 @@ static void sync_to_current(EditWindow *editwin, GeanyEditor *editor)
 	/* override some defaults */
 	set_line_numbers(sci, TRUE, 0);
 	p_sci->send_message(sci, SCI_SETMARGINWIDTHN, 1, 0 ); /* hide marker margin */
+}
 
+
+static void set_editor(EditWindow *editwin, GeanyEditor *editor)
+{
 	editwin->editor = editor;
+
+	/* first destroy any widget, otherwise its signals will have an
+	 * invalid document as user_data */
+	if (edit_window.sci != NULL)
+		gtk_widget_destroy(GTK_WIDGET(edit_window.sci));
+
+	editwin->sci = p_editor->create_widget(editor);
+	gtk_widget_show(GTK_WIDGET(editwin->sci));
+	gtk_container_add(GTK_CONTAINER(editwin->vbox), GTK_WIDGET(editwin->sci));
+
+	sync_to_current(editwin->sci, editor->sci);
 }
 
 
@@ -208,22 +223,12 @@ static GtkWidget *create_tool_button(const gchar *label, const gchar *stock_id)
 
 static void on_refresh(void)
 {
-	GtkWidget *parent;
 	GeanyDocument *doc = p_document->get_current();
 
 	g_return_if_fail(doc);
 	g_return_if_fail(edit_window.sci);
 
-	/* before reassigning edit_window.editor, we must destroy the old widget,
-	 * otherwise its signals will have an invalid document as user_data */
-	parent = gtk_widget_get_parent(GTK_WIDGET(edit_window.sci));
-	gtk_widget_destroy(GTK_WIDGET(edit_window.sci));
-
-	edit_window.sci = p_editor->create_widget(doc->editor);
-	gtk_widget_show(GTK_WIDGET(edit_window.sci));
-	gtk_container_add(GTK_CONTAINER(parent), GTK_WIDGET(edit_window.sci));
-
-	sync_to_current(&edit_window, doc->editor);
+	set_editor(&edit_window, doc->editor);
 }
 
 
@@ -255,6 +260,10 @@ static GtkWidget *create_toolbar(void)
 	tool_item = gtk_tool_item_new();
 	gtk_tool_item_set_expand(tool_item, TRUE);
 	gtk_container_add(GTK_CONTAINER(toolbar), GTK_WIDGET(tool_item));
+
+	item = gtk_label_new(NULL);
+	gtk_container_add(GTK_CONTAINER(tool_item), item);
+	edit_window.name_label = item;
 
 	item = create_tool_button(after_underscore(_("_Unsplit")), GTK_STOCK_CLOSE);
 	gtk_container_add(GTK_CONTAINER(toolbar), item);
@@ -290,10 +299,9 @@ static void on_split_view(GtkMenuItem *menuitem, gpointer user_data)
 	toolbar = create_toolbar();
 	gtk_box_pack_start(GTK_BOX(box), toolbar, FALSE, FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(pane), box);
+	edit_window.vbox = box;
 
-	edit_window.sci = p_editor->create_widget(doc->editor);
-	sync_to_current(&edit_window, doc->editor);
-	gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(edit_window.sci), TRUE, TRUE, 0);
+	set_editor(&edit_window, doc->editor);
 
 	gtk_paned_set_position(GTK_PANED(pane), width);
 	gtk_widget_show_all(pane);

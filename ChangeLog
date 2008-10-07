@@ -11,6 +11,8 @@
    Fix segfault when clicking on split window after the original
    document has been closed and the view has been refreshed to another
    document.
+ * plugins/splitwindow.c:
+   Refactor with set_editor().
 
 
 2008-10-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
