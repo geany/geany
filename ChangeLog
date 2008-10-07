@@ -1,3 +1,10 @@
+2008-10-07  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * plugins/filebrowser.c, plugins/htmlchars.c, src/editor.c,
+   src/msgwindow.c, src/plugins.c, src/prefs.c, src/treeviews.c:
+   Plug some memory leaks due to some missing g_object_unref's.
+
+
 2008-10-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * plugins/splitwindow.c:

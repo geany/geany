@@ -687,6 +687,7 @@ static void prepare_file_view(void)
 	file_store = gtk_list_store_new(FILEVIEW_N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING);
 
 	gtk_tree_view_set_model(GTK_TREE_VIEW(file_view), GTK_TREE_MODEL(file_store));
+	g_object_unref(file_store);
 
 	icon_renderer = gtk_cell_renderer_pixbuf_new();
 	text_renderer = gtk_cell_renderer_text_new();

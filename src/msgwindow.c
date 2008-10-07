@@ -108,6 +108,7 @@ static void prepare_status_tree_view(void)
 
 	msgwindow.store_status = gtk_list_store_new(1, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(msgwindow.tree_status), GTK_TREE_MODEL(msgwindow.store_status));
+	g_object_unref(msgwindow.store_status);
 
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(_("Status messages"), renderer, "text", 0, NULL);
@@ -137,6 +138,7 @@ static void prepare_msg_tree_view(void)
 	msgwindow.store_msg = gtk_list_store_new(4, G_TYPE_INT, G_TYPE_POINTER,
 		GDK_TYPE_COLOR, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(msgwindow.tree_msg), GTK_TREE_MODEL(msgwindow.store_msg));
+	g_object_unref(msgwindow.store_msg);
 
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(NULL, renderer,
@@ -171,6 +173,7 @@ static void prepare_compiler_tree_view(void)
 
 	msgwindow.store_compiler = gtk_list_store_new(2, GDK_TYPE_COLOR, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(msgwindow.tree_compiler), GTK_TREE_MODEL(msgwindow.store_compiler));
+	g_object_unref(msgwindow.store_compiler);
 
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(NULL, renderer, "foreground-gdk", 0, "text", 1, NULL);

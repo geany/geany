@@ -272,6 +272,7 @@ static void init_kb_tree(void)
 
 	store = gtk_tree_store_new(3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
+	g_object_unref(store);
 
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(_("Action"), renderer, "text", KB_TREE_ACTION, NULL);

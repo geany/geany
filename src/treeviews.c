@@ -119,6 +119,8 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 	pango_font_description_free(pfd);
 
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
+	g_object_unref(store);
+
 	g_signal_connect(tree, "button-press-event",
 					G_CALLBACK(on_treeviews_button_press_event), GINT_TO_POINTER(TREEVIEW_SYMBOL));
 	g_signal_connect(tree, "key-press-event",
@@ -254,6 +256,7 @@ static void prepare_openfiles(void)
 	store_openfiles = gtk_list_store_new(3, G_TYPE_STRING, G_TYPE_POINTER, GDK_TYPE_COLOR);
 #endif
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tv.tree_openfiles), GTK_TREE_MODEL(store_openfiles));
+	g_object_unref(store_openfiles);
 
 	/* set policy settings for the scolledwindow around the treeview again, because glade
 	 * doesn't keep the settings */

@@ -107,6 +107,7 @@ static void tools_show_dialog_insert_special_chars(void)
 		sc_store = gtk_tree_store_new(N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING);
 		gtk_tree_view_set_model(GTK_TREE_VIEW(sc_tree),
 								GTK_TREE_MODEL(sc_store));
+		g_object_unref(sc_store);
 
 		renderer = gtk_cell_renderer_text_new();
 		column = gtk_tree_view_column_new_with_attributes(

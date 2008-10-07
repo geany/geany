@@ -1046,6 +1046,7 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
 		}
 	}
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
+	g_object_unref(store);
 }
 
 
