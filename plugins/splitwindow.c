@@ -372,7 +372,8 @@ static void on_document_close(GObject *obj, GeanyDocument *doc, gpointer user_da
 static void on_document_save(GObject *obj, GeanyDocument *doc, gpointer user_data)
 {
 	/* update filename */
-	gtk_label_set_text(GTK_LABEL(edit_window.name_label), DOC_FILENAME(doc));
+	if (doc->editor == edit_window.editor)
+		gtk_label_set_text(GTK_LABEL(edit_window.name_label), DOC_FILENAME(doc));
 }
 
 
