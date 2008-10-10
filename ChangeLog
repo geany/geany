@@ -2,6 +2,8 @@
 
  * src/editor.c:
    Fix Ctrl-click on a word when Numpad is enabled.
+ * src/dialog.c:
+   Make a some labels in the File Properties dialog selectable.
 
 
 2008-10-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

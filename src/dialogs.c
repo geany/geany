@@ -1060,6 +1060,7 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 
 	title = g_strdup_printf("<b>%s</b>", base_name);
 	label = gtk_label_new(title);
+	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
 	image = gtk_image_new_from_stock("gtk-file", GTK_ICON_SIZE_BUTTON);
 	gtk_misc_set_alignment(GTK_MISC(image), 1.0, 0.5);
@@ -1082,6 +1083,7 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	label = gtk_label_new(doc->file_type->title);
+	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
@@ -1096,6 +1098,7 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 
 	file_size = utils_make_human_readable_str(filesize, 1, 0);
 	label = gtk_label_new(file_size);
+	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 1, 2,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
@@ -1110,6 +1113,7 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	label = gtk_label_new(doc->file_name);
+	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 2, 3,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
@@ -1144,6 +1148,7 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 			((doc->has_bom) ? _("(with BOM)") : _("(without BOM)")) : "");
 
 	label = gtk_label_new(enctext);
+	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
 	g_free(enctext);
 
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 4, 5,
@@ -1159,6 +1164,7 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	label = gtk_label_new(time_modified);
+	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 5, 6,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
@@ -1172,6 +1178,7 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	label = gtk_label_new(time_changed);
+	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 6, 7,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
@@ -1185,6 +1192,7 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	label = gtk_label_new(time_accessed);
+	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 7, 8,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
