@@ -198,7 +198,7 @@ on_editor_button_press_event           (GtkWidget *widget,
 			gint ss = sci_get_selection_start(doc->editor->sci);
 			sci_set_selection_end(doc->editor->sci, ss);
 		}
-		if (event->type == GDK_BUTTON_PRESS && event->state == GDK_CONTROL_MASK)
+		if (event->type == GDK_BUTTON_PRESS && event->state & GDK_CONTROL_MASK)
 		{
 			sci_set_current_position(sci, editor_info.click_pos, FALSE);
 			keybindings_send_command(GEANY_KEY_GROUP_GOTO, GEANY_KEYS_GOTO_TAGDEFINITION);
