@@ -80,7 +80,7 @@ static const gchar *contributors =
 "Alexander Rodin, Andrew Rowland, Anh Phạm, blackdog, Bo Lorentsen, Bob Doan, Catalin Marinas, "
 "Christoph Berg, Daniel Richard G., Dave Moore, Dirk Weber, Felipe Pena, François Cami, "
 "Giuseppe Torelli, Guillaume Hoffmann, Jason Oster, Jean-François Wauthy, Jeff Pohlmeyer, "
-"John Gabriele, Josef Whiter, Kevin Ellwood, Kristoffer A. Tjernås, Marko Peric, Matti Mårds, "
+"John Gabriele, Josef Whiter, Kevin Ellwood, Kristoffer A. Tjernås, Lex Trotman, Marko Peric, Matti Mårds, "
 "Peter Strand, Pierre Joye, Rob van der Linde, Robert McGinley, S Jagannathan, Saleem Abdulrasool, "
 "Sebastian Kraft, Shiv, Slava Semushin, Stefan Oltmanns, Tamim, Tomás Vírseda, Yura Siamashka";
 

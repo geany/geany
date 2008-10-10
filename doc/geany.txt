@@ -1572,11 +1572,11 @@ Automatic symbol completion
     allow it to be completed for you.
 
 Characters to type for completion
-    Number of characters of a word to type before auto completion is
+    Number of characters of a word to type before autocompletion is
     displayed.
 
 Rows of symbol completion list
-    The maximum number of symbols to show in the auto completion window.
+    The maximum number of symbols to show in the autocompletion window.
 
 Max. symbol name suggestions
     The maximum number of entries to display in the auto completion list.
@@ -1718,7 +1718,12 @@ Tool paths
 ``````````
 
 Make
-    The location of the make executable.
+    The location of the make command executables.
+
+.. note::
+    The make commands are set in the *Build->Configure Commands* dialog.
+    This directory is used so that the builder command need not be in
+    the default path.
 
 Terminal
     The location of your terminal executable.
@@ -1897,6 +1902,7 @@ Project Management
 Project Management is optional in Geany. Currently it can be used for:
 
 * Storing and opening session files on a project basis.
+* Setting custom Make commands
 * Running *Make* from the project's base directory.
 * Setting a custom *Run* command specific to the project.
 
@@ -1944,7 +1950,7 @@ file name.
 Make in base path
 `````````````````
 
-This setting makes the *Build->Make* command use the project's base
+This setting makes the *Build->Make* commands use the project's base
 path. Uncheck this if you want to use the current file's directory
 instead.
 
@@ -1987,12 +1993,20 @@ session files and open any previously closed default session files.
 Build system
 ------------
 
-Geany has an integrated build system. Firstly this means that the
-current source file will be saved before it is processed. This is
-for convenience so that you don't need to keep saving small changes
+Geany does not have it's own integrated build system, instead it provides
+a fast flexible means of invoking customisable build/execute commands
+appropriate to the type of source file, or, to invoke your favourite
+make/build tool.  This system allows Geany to default to sane actions for
+simple single file programs whilst still being configurable to support
+multiple target/multiple programming language projects.
+
+Two actions are performed for all the build menu items.
+
+First the current source file will be saved before it is processed. This
+is for convenience so that you don't need to keep saving small changes
 to the current file before building.
 
-Secondly the output for Compile, Build and Make actions will be captured
+Second the output for Compile, Build and Make actions will be captured
 in the Compiler notebook tab of the messages window. If there are
 any warnings or errors with line numbers shown in red in the Compiler
 output tab, you can click on them and Geany will switch to the relevant
@@ -2005,8 +2019,8 @@ line numbers.
     the tool you're using, you can set a custom regex. See `Filetype
     definition files`_ and the `[build_settings] Section`_.
 
-Depending on the current file's filetype, the Build menu will contain
-the following items:
+Depending on the current file's filetype and project settings, the
+default Build menu will contain the following items:
 
 * Compile
 * Build
@@ -2014,15 +2028,40 @@ the following items:
 * Make Custom Target
 * Make Object
 * Execute
-* Set Includes and Arguments
+* Configure Commands
 
+The Compile, Build and Execute actions depend on the filetype of the
+currently open document, whereas the Make series of actions do not.
+The intention is that the Compile, Build and Execute actions support
+simple single-file actions whilst the Make actions support larger systems
+which use builder tools.  The Make commands and menu item names are set
+from the first of the following places where the commands are defined:
+
+* From the project file if a project is open and the project file has
+  make commands defined.
+* From the user preferences if the user has make commands defined.
+* From the global preferences/defaults.
+
+The Execute command can also be customised from the project file.
+
+The menu item names for the Make commands can be changed, for example
+if you change the commands to invoke a builder other than Make then you
+can change the menu labels to reflect that.
+
+.. note::
+    Some support for building for different targets on different machines
+    can be provided by having several project files for the same software,
+    e.g. if supporting windows and Linux from the same source you could
+    have 'my_proj_win.geany' with Make Object defined as 'nmake %e.obj'
+    and 'my_proj_lin.geany' with Make Object defined as 'make %e.o'
+    and so on for the other commands.
 
 Compile
 ^^^^^^^
 
 The Compile command has different uses for different kinds of files.
 
-For compilable languages such as C and C++, the Compile command is
+For compilable languages such as C and C++, the default Compile command is
 setup to compile the current source file into a binary object file.
 
 Java source files will be compiled to class file bytecode. Interpreted
@@ -2030,6 +2069,20 @@ languages such as Perl, Python, Ruby will compile to bytecode if the
 language supports it, or will run a syntax check, or failing that
 will run the file in its language interpreter.
 
+The following table summarises the default commands for each filetype:
+
++----------+-----------+------------------------------+------------------------+
+| Language | Menu Item | Action                       | Command                |
++==========+===========+==============================+========================+
+| C        | Compile   | Compile the current file     | gcc -Wall -c "%f"      |
+|          +-----------+------------------------------+------------------------+
+|          | Build     | Compile the current file to  | gcc -Wall -o "%e" "%f" |
+|          |           | an executable                |                        |
+|          +-----------+------------------------------+------------------------+
+|          | Run       | Run a pre-compiled program   | "./%e"                 |
++----------+-----------+------------------------------+------------------------+
+| C++      |                        ETC                                        |
++----------+-------------------------------------------------------------------+
 
 Build
 ^^^^^
@@ -2045,7 +2098,7 @@ Interpreted languages do not use the Build command.
 Make all
 ^^^^^^^^
 
-This effectively runs "make all" in the same directory as the
+By default this effectively runs "make all" in the same directory as the
 current file.
 
 .. note::
@@ -2056,15 +2109,19 @@ current file.
 Make custom target
 ^^^^^^^^^^^^^^^^^^
 
-This is similar to running 'Make all' but you will be prompted for
-the make target name to be passed to the Make tool. For example,
+The default use is similar to running 'Make all' but you will be prompted
+for the make target name to be passed to the Make tool. For example,
 typing 'clean' in the dialog prompt will run "make clean".
 
+.. note::
+    Even if you have re-configured the command this menu item will still pop up
+    the dialog asking for extra targets/options and will add them to your
+    re-configured command.
 
 Make object
 ^^^^^^^^^^^
 
-Make object will run "make current_file.o" in the same directory as
+By default Make Object will run "make current_file.o" in the same directory as
 the current file, using its prefix for 'current_file'. It is useful
 for compiling just the current file without building the whole project.
 
@@ -2106,20 +2163,14 @@ stopped. Just add this option in the preferences dialog on the Tools
 tab in the terminal field.
 
 
-Set Includes and Arguments
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+Configure Commands
+^^^^^^^^^^^^^^^^^^
 
 By default the Compile and Build commands invoke the compiler and
 linker with only the basic arguments needed by all programs. Using
-Set Includes and Arguments you can add any include paths and compile
+*Configure Commands* you can add any include paths and compile
 flags for the compiler, any library names and paths for the linker,
 and any arguments you want to use when running Execute.
-
-.. note::
-    If you need complex settings for your build system, or several
-    different settings, then writing a Makefile and using the Make
-    commands is recommended; this will also make it easier for users to
-    build your software.
 
 These settings are saved automatically when Geany is shut down.
 
@@ -2130,7 +2181,24 @@ The following variables can be used:
 
 See `[build_settings] Section`_ for details.
 
+.. note::
+    If you need complex settings for your build system, or several
+    different settings, using an external build system such as make is
+    recommended; this will also make it easier for users to
+    build your software.
 
+The commands are listed under two varying headings:
+
+* 'For Filetype X' where X is the type of the current file.
+* 'Make' or 'Project Make' depending on whether a project file is open.
+
+For Filetype X
+``````````````
+
+These settings are specific to the particular filetype.
+Although they traditionally support the actions described above, you
+can change the commands to perform any file specific action you want,
+e.g. to run Lint or other tools.
 
 One step compilation
 ````````````````````
@@ -2138,6 +2206,20 @@ One step compilation
 If you are using the Build command to compile and link in one step,
 you will need to set both the compiler arguments and the linker
 arguments in the linker command setting.
+
+[Project] Make
+``````````````
+
+These commands allow you to set the 'Make' series of commands.
+The variable heading indicates whether the commands you are changing
+will be saved in the project file or preferences file.  The current
+project file is displayed in the Geany title bar in [] so you can
+check that you will be saving to the correct one.
+
+Remember that menu item two (default the 'Make Custom Target' item)
+will pop up a dialog to ask for additional targets/options when invoked
+allowing you to add to the command you define here.
+
 
 
 Indicators
@@ -2760,8 +2842,7 @@ error_regex
 
 **Build commands**
 
-The build commands are all configurable using the `Set Includes and
-Arguments`_ dialog.
+The build commands are all configurable using the `Configure Commands`_ dialog.
 
 compiler
     This item specifies the command to compile source code files. But

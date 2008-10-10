@@ -1,3 +1,10 @@
+2008-10-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * doc/geany.txt, doc/geany.html, src/about.c, THANKS:
+   Update manual for Lex Trotman's proposed build system changes (under
+   discussion).
+
+
 2008-10-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * plugins/splitwindow.c:
