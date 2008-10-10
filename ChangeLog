@@ -21,6 +21,8 @@
  * src/wscript:
    Add missing 'mandatory' attribute for the GTK check.
    Change build directory to '_build_'.
+ * geany.glade, src/interface.c:
+   Reorder Help menu items (swap 'Keyboard Shortcuts' and 'Website').
 
 
 2008-10-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
