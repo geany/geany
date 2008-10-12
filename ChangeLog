@@ -1,3 +1,10 @@
+2008-10-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/highlighting.c:
+   Fix regression: clear all styles for filetype None to not break
+   the 'invert_all' option.
+
+
 2008-10-12  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * src/search.c:
