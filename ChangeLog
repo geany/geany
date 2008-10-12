@@ -6,6 +6,9 @@
  * src/saveactions.c:
    InstantSave: when opening new files from template, use the template's
    filetype, otherwise fall back to configured default filetype.
+ * THANKS, src/about.c, src/symbols.c, tagmanager/css.c:
+   Upate of the CSS parser to detect also ID and Type selectors
+   (patch by Bronisław Białek, thanks).
 
 
 2008-10-12  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

@@ -2,6 +2,7 @@
  * css.c
  * Character-based parser for Css definitions
  * Author - Iago Rubio <iagorubio(at)users.sourceforge.net>
+ *        - Bronisław Białek <after89(at)gmail.com>
  **************************************************************************/
 #include "general.h"
 
@@ -13,13 +14,13 @@
 
 
 typedef enum eCssKinds {
-    K_NONE = -1, K_CLASS, K_SELECTOR, K_ID
+    K_NONE = -1, K_SELECTOR, K_ID, K_CLASS
 } cssKind;
 
 static kindOption CssKinds [] = {
-    { TRUE, 'c', "class", "classes" },
-    { TRUE, 's', "selector",  "selectors"  },
-    { TRUE, 'v', "variable",  "identities"  }
+    { TRUE, 's', "struct",  "selectors"  },
+    { TRUE, 'v', "variable",  "identities"  },
+    { TRUE, 'c', "class", "classes" }
 };
 
 typedef enum _CssParserState {	/* state of parsing */
@@ -61,10 +62,11 @@ static boolean isCssDeclarationAllowedChar( const unsigned char *cp )
 			*cp == '#';		/* allow ids */
 }
 
-static CssParserState parseCssDeclaration( const unsigned char **position, cssKind kind )
+static CssParserState parseCssDeclaration( const unsigned char **position, cssKind kind, const char *aname)
 {
-	vString *name = vStringNew ();
 	const unsigned char *cp = *position;
+	vString *name = vStringNew ();
+	vStringCopyS(name, aname);
 
 	/* pick to the end of line including children and sibling
 	 * if declaration is multiline go for the next line */
@@ -83,13 +85,13 @@ static CssParserState parseCssDeclaration( const unsigned char **position, cssKi
 		else if( *cp == ',' )
 		{
 			makeCssSimpleTag(name, kind, TRUE);
-			*position = ++cp;
+			*position = cp;
 			return P_STATE_NONE;
 		}
 		else if( *cp == '{' )
 		{
 			makeCssSimpleTag(name, kind, TRUE);
-			*position = ++cp;
+			*position = cp;
 			return P_STATE_IN_DEFINITION;
 		}
 
@@ -106,21 +108,28 @@ static CssParserState parseCssDeclaration( const unsigned char **position, cssKi
 static CssParserState parseCssLine( const unsigned char *line, CssParserState state )
 {
 	vString *aux;
+	vString *stack = vStringNew ();
 
 	while( *line != '\0' ) /* fileReadLine returns NULL terminated strings */
 	{
-		while (isspace ((int) *line))
+		vStringClear (stack);
+		while (state == P_STATE_NONE && isspace ((int) *line) || isalnum ((int) *line) || ( *line == '*' && *(line-1) != '/' ))
+		{
+			if ((stack->length > 0 && isspace((int) *line)) || isalnum ((int) *line) || *line == '*') {
+				vStringPut(stack, (int) *line);
+			}
+
 			++line;
+		}
+		vStringTerminate (stack);
+
 		switch( state )
 		{
 			case P_STATE_NONE:
-				/* pick first char if alphanumeric is a selector */
-				if( isalnum ((int) *line) )
-					state = parseCssDeclaration( &line, K_SELECTOR );
-				else if( *line == '.' ) /* a class */
-					state = parseCssDeclaration( &line, K_CLASS );
+				if( *line == '.' ) /* a class */
+					state = parseCssDeclaration( &line, K_CLASS, vStringValue(stack) );
 				else if( *line == '#' ) /* an id */
-					state = parseCssDeclaration( &line, K_ID );
+					state = parseCssDeclaration( &line, K_ID, vStringValue(stack) );
 				else if( *line == '@' ) /* at-rules, we'll ignore them */
 				{
 					++line;
@@ -145,6 +154,9 @@ static CssParserState parseCssLine( const unsigned char *line, CssParserState st
 				}
 				else if( *line == '*' && *(line-1) == '/' ) /* multi-line comment */
 					state = P_STATE_IN_COMMENT;
+				else if ( stack->length > 0 )
+					state = parseCssDeclaration( &line, K_SELECTOR, vStringValue(stack) );
+
 			break;
 			case P_STATE_IN_COMMENT:
 				if( *line == '/' && *(line-1) == '*')
@@ -198,6 +210,8 @@ static CssParserState parseCssLine( const unsigned char *line, CssParserState st
 		if (line == NULL) return P_STATE_AT_END;
 		line++;
 	}
+	vStringDelete (stack);
+
 	return state;
 }
 
