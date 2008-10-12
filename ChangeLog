@@ -1,3 +1,10 @@
+2008-10-12  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * src/search.c:
+   Change of a typo in singular form of some status messages. Thanks to
+   Jeff Bailes for reporting.
+
+
 2008-10-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/editor.c:

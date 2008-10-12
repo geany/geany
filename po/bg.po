@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 0.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-03 00:11+0200\n"
+"POT-Creation-Date: 2008-10-12 15:00+0200\n"
 "PO-Revision-Date: 2008-02-05 18:53+0200\n"
 "Last-Translator: Dilyan Rusev <dilyanrusev@gmail.com>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
@@ -332,7 +332,7 @@ msgstr "Компилирай:"
 msgid "Build:"
 msgstr "Построй:"
 
-#: ../src/build.c:1593 ../src/dialogs.c:1223
+#: ../src/build.c:1593 ../src/dialogs.c:1231
 msgid "Execute:"
 msgstr "Изпълни:"
 
@@ -365,7 +365,7 @@ msgid "Do you really want to quit?"
 msgstr "Наистина ли искате да излезете от програмата?"
 
 #: ../src/callbacks.c:460 ../src/document.c:2537 ../src/interface.c:365
-#: ../src/treeviews.c:451
+#: ../src/treeviews.c:454
 msgid "_Reload"
 msgstr "_Презареди"
 
@@ -436,7 +436,7 @@ msgid "No more message items."
 msgstr "Няма повече съобщения."
 
 #. initialize the dialog
-#: ../src/dialogs.c:178 ../src/prefs.c:1688
+#: ../src/dialogs.c:178 ../src/prefs.c:1689
 msgid "Open File"
 msgstr "Отвори файл"
 
@@ -568,76 +568,76 @@ msgstr "неизвестен"
 msgid "Properties"
 msgstr "Свойства"
 
-#: ../src/dialogs.c:1077
+#: ../src/dialogs.c:1078
 msgid "<b>Type:</b>"
 msgstr "<b>Вид:</b>"
 
-#: ../src/dialogs.c:1090
+#: ../src/dialogs.c:1092
 msgid "<b>Size:</b>"
 msgstr "<b>Размер:</b>"
 
-#: ../src/dialogs.c:1105
+#: ../src/dialogs.c:1108
 msgid "<b>Location:</b>"
 msgstr "<b>Местоположение:</b>"
 
-#: ../src/dialogs.c:1118
+#: ../src/dialogs.c:1122
 msgid "<b>Read-only:</b>"
 msgstr "<b>Само за четене:</b>"
 
-#: ../src/dialogs.c:1125
+#: ../src/dialogs.c:1129
 msgid "(only inside Geany)"
 msgstr "(само в Geany)"
 
-#: ../src/dialogs.c:1134
+#: ../src/dialogs.c:1138
 msgid "<b>Encoding:</b>"
 msgstr "<b>Кодировка:</b>"
 
 #. BOM = byte order mark
-#: ../src/dialogs.c:1144 ../src/ui_utils.c:198
+#: ../src/dialogs.c:1148 ../src/ui_utils.c:198
 msgid "(with BOM)"
 msgstr "(с BOM)"
 
-#: ../src/dialogs.c:1144
+#: ../src/dialogs.c:1148
 msgid "(without BOM)"
 msgstr "(без BOM)"
 
-#: ../src/dialogs.c:1154
+#: ../src/dialogs.c:1159
 msgid "<b>Modified:</b>"
 msgstr "<b>Променен:</b>"
 
-#: ../src/dialogs.c:1167
+#: ../src/dialogs.c:1173
 msgid "<b>Changed:</b>"
 msgstr "<b>Променен:</b>"
 
-#: ../src/dialogs.c:1180
+#: ../src/dialogs.c:1187
 msgid "<b>Accessed:</b>"
 msgstr "<b>Последно променян:</b>"
 
-#: ../src/dialogs.c:1201
+#: ../src/dialogs.c:1209
 msgid "<b>Permissions:</b>"
 msgstr "<b>Разрешения:</b>"
 
 #. Header
-#: ../src/dialogs.c:1209
+#: ../src/dialogs.c:1217
 msgid "Read:"
 msgstr "Четене:"
 
-#: ../src/dialogs.c:1216
+#: ../src/dialogs.c:1224
 msgid "Write:"
 msgstr "Писане:"
 
 #. Owner
-#: ../src/dialogs.c:1231
+#: ../src/dialogs.c:1239
 msgid "Owner:"
 msgstr "Собственик:"
 
 #. Group
-#: ../src/dialogs.c:1267
+#: ../src/dialogs.c:1275
 msgid "Group:"
 msgstr "Група:"
 
 #. Other
-#: ../src/dialogs.c:1303
+#: ../src/dialogs.c:1311
 msgid "Other:"
 msgstr "Други:"
 
@@ -803,24 +803,24 @@ msgstr ""
 msgid "File \"%s\" was not found on disk!"
 msgstr "Не успях да намеря %s."
 
-#: ../src/editor.c:3501 ../src/utils.c:291
+#: ../src/editor.c:3504 ../src/utils.c:291
 msgid "Win (CRLF)"
 msgstr "Win·(CRLF)"
 
-#: ../src/editor.c:3502 ../src/utils.c:292
+#: ../src/editor.c:3505 ../src/utils.c:292
 msgid "Mac (CR)"
 msgstr "Mac·(CR)"
 
-#: ../src/editor.c:3503 ../src/utils.c:293
+#: ../src/editor.c:3506 ../src/utils.c:293
 msgid "Unix (LF)"
 msgstr "Unix·(LF)"
 
-#: ../src/editor.c:3629
+#: ../src/editor.c:3632
 #, fuzzy
 msgid "Enter Tab Width"
 msgstr "Широчина на табулацията"
 
-#: ../src/editor.c:3630
+#: ../src/editor.c:3633
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr ""
 
@@ -1531,16 +1531,16 @@ msgid "_Help"
 msgstr "_Помощ"
 
 #: ../src/interface.c:1046
+msgid "_Website"
+msgstr "И_нтернет сайт"
+
+#: ../src/interface.c:1050
 msgid "_Keyboard Shortcuts"
 msgstr "Кл_авишни комбинации"
 
-#: ../src/interface.c:1049
+#: ../src/interface.c:1053
 msgid "Shows a list of all keyboard shortcuts for Geany."
 msgstr "Показва списък със всички клавишни комбинации в Geany."
-
-#: ../src/interface.c:1051
-msgid "_Website"
-msgstr "И_нтернет сайт"
 
 #: ../src/interface.c:1055
 #, fuzzy
@@ -1639,7 +1639,7 @@ msgstr "Прескача до въведения ред."
 msgid "Symbols"
 msgstr "Символи"
 
-#: ../src/interface.c:1288 ../src/treeviews.c:265
+#: ../src/interface.c:1288 ../src/treeviews.c:268
 #, fuzzy
 msgid "Documents"
 msgstr "_Документ"
@@ -2632,7 +2632,7 @@ msgid ""
 "disables checking."
 msgstr ""
 
-#: ../src/interface.c:4249 ../src/symbols.c:581 ../plugins/filebrowser.c:924
+#: ../src/interface.c:4249 ../src/symbols.c:581 ../plugins/filebrowser.c:925
 msgid "Files"
 msgstr "Файлове"
 
@@ -2829,60 +2829,60 @@ msgstr "<b>Информация за шаблона</b>"
 msgid "Templates"
 msgstr "Шаблони"
 
-#: ../src/interface.c:4650
+#: ../src/interface.c:4649
 #, fuzzy
 msgid "C_hange"
 msgstr "Промени"
 
-#: ../src/interface.c:4654
+#: ../src/interface.c:4653
 msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>Клавишни комбинации</b>"
 
-#: ../src/interface.c:4659
+#: ../src/interface.c:4658
 msgid "Keybindings"
 msgstr "Комбинации"
 
-#: ../src/interface.c:4682
+#: ../src/interface.c:4681
 #, fuzzy
 msgid "Command:"
 msgstr "Команда"
 
-#: ../src/interface.c:4689
+#: ../src/interface.c:4688
 #, c-format
 msgid "Path to the command for printing files (use %f for the filename)."
 msgstr ""
 "Път до командата за принтиране на файлове (използвайте %f за името на файла)."
 
-#: ../src/interface.c:4699
+#: ../src/interface.c:4698
 msgid "Use an external command for printing"
 msgstr "Използвай външна програма за принтиране"
 
-#: ../src/interface.c:4719 ../src/printing.c:343
+#: ../src/interface.c:4718 ../src/printing.c:343
 #, fuzzy
 msgid "Print line numbers"
 msgstr "Покажи _номерата на редовете"
 
-#: ../src/interface.c:4722 ../src/printing.c:345
+#: ../src/interface.c:4721 ../src/printing.c:345
 #, fuzzy
 msgid "Add line numbers to the printed page."
 msgstr "Следвай пътя до текущия файл"
 
-#: ../src/interface.c:4724 ../src/printing.c:348
+#: ../src/interface.c:4723 ../src/printing.c:348
 #, fuzzy
 msgid "Print page numbers"
 msgstr "Покажи _номерата на редовете"
 
-#: ../src/interface.c:4727 ../src/printing.c:350
+#: ../src/interface.c:4726 ../src/printing.c:350
 msgid ""
 "Add page numbers at the bottom of each page. It takes 2 lines of the page."
 msgstr "Номерирай страниците в дъното. Отнема 2 реда."
 
-#: ../src/interface.c:4729 ../src/printing.c:353
+#: ../src/interface.c:4728 ../src/printing.c:353
 #, fuzzy
 msgid "Print page header"
 msgstr "Основен път:"
 
-#: ../src/interface.c:4732 ../src/printing.c:355
+#: ../src/interface.c:4731 ../src/printing.c:355
 msgid ""
 "Adds a little header to every page containing the page number, the filename "
 "and the current date(see below). It takes 3 lines of the page."
@@ -2890,22 +2890,22 @@ msgstr ""
 "Добавя текст към началото на страницата, съдържащ номера на страницата, "
 "името на файла и отнема 3 реда (виж долу)."
 
-#: ../src/interface.c:4749 ../src/printing.c:371
+#: ../src/interface.c:4748 ../src/printing.c:371
 #, fuzzy
 msgid "Use the basename of the printed file"
 msgstr "Следвай пътя до текущия файл"
 
-#: ../src/interface.c:4752 ../src/printing.c:373
+#: ../src/interface.c:4751 ../src/printing.c:373
 #, fuzzy
 msgid "Print only the basename(without the path) of the printed file."
 msgstr "Следвай пътя до текущия файл"
 
-#: ../src/interface.c:4758 ../src/printing.c:379
+#: ../src/interface.c:4757 ../src/printing.c:379
 #, fuzzy
 msgid "Date format:"
 msgstr "Потребителски формат за дата"
 
-#: ../src/interface.c:4765 ../src/printing.c:384
+#: ../src/interface.c:4764 ../src/printing.c:384
 #, fuzzy
 msgid ""
 "Specify a format for the date and time stamp which is added to the page "
@@ -2916,11 +2916,11 @@ msgstr ""
 "всякакви общоприети начини на изписване, които могат да бъдат използвани с "
 "ANSI·C функцията strftime . За повече подробности, вижте \"man·strftime\""
 
-#: ../src/interface.c:4768
+#: ../src/interface.c:4767
 msgid "Use native GTK printing"
 msgstr "Използвай отпечатването на GTK"
 
-#: ../src/interface.c:4774
+#: ../src/interface.c:4773
 #, fuzzy
 msgid "Printing"
 msgstr "Разпечатай (принтирай)"
@@ -3583,16 +3583,16 @@ msgstr "Не можах да създам конфигурационната д�
 msgid "Configuration files reloaded."
 msgstr "Не успях да компилирам."
 
-#: ../src/msgwindow.c:113
+#: ../src/msgwindow.c:114
 msgid "Status messages"
 msgstr "Съобщения за състоянието"
 
-#: ../src/msgwindow.c:492
+#: ../src/msgwindow.c:495
 #, fuzzy
 msgid "Copy _All"
 msgstr "_Затвори Всички"
 
-#: ../src/msgwindow.c:522
+#: ../src/msgwindow.c:525
 msgid "_Hide Message Window"
 msgstr "_Скрий прозореца за съобщенията"
 
@@ -3632,11 +3632,11 @@ msgstr "Приставка"
 msgid "No plugins available."
 msgstr "Няма налични приставки."
 
-#: ../src/plugins.c:1138
+#: ../src/plugins.c:1139
 msgid "Plugins"
 msgstr "Приставки"
 
-#: ../src/plugins.c:1158
+#: ../src/plugins.c:1159
 msgid ""
 "Below is a list of available plugins. Select the plugins which should be "
 "loaded when Geany is started."
@@ -3644,53 +3644,53 @@ msgstr ""
 "Наличните приставки са изброени в списъка долу. Изберете тези, които искате "
 "да се заредят със стартирането на Geany."
 
-#: ../src/plugins.c:1166
+#: ../src/plugins.c:1167
 #, fuzzy
 msgid "<b>Plugin details:</b>"
 msgstr "<b>Контекстна команда</b>"
 
-#: ../src/prefs.c:277
+#: ../src/prefs.c:278
 msgid "Action"
 msgstr "Действие"
 
-#: ../src/prefs.c:282
+#: ../src/prefs.c:283
 msgid "Shortcut"
 msgstr "Комбинация"
 
-#: ../src/prefs.c:1282
+#: ../src/prefs.c:1283
 #, fuzzy
 msgid "Grab Key"
 msgstr "Клавиш за улавяне"
 
-#: ../src/prefs.c:1288
+#: ../src/prefs.c:1289
 #, fuzzy, c-format
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr ""
 "Въведете комбинацията от клавиши, която желаете да използвате за \"%s\""
 
-#: ../src/prefs.c:1475
+#: ../src/prefs.c:1476
 msgid "_Override"
 msgstr "_Предефиниране"
 
-#: ../src/prefs.c:1476
+#: ../src/prefs.c:1477
 msgid "Override that keybinding?"
 msgstr "Да предефинирам ли тази клавишна комбинация?"
 
-#: ../src/prefs.c:1477
+#: ../src/prefs.c:1478
 #, fuzzy, c-format
 msgid "The combination '%s' is already used for \"%s\"."
 msgstr "Комбинацията '%s' е вече заето от \"%s\". Моля изберете друга."
 
 #. add manually GeanyWrapLabels because it can't be added with Glade
 #. * page Tools
-#: ../src/prefs.c:1589
+#: ../src/prefs.c:1590
 msgid "Enter tool paths below. Tools you do not need can be left blank."
 msgstr ""
 "Въведето пътеките до инструментите отдилу. Тези, от които не се нуждаете, "
 "можете да оставите празни."
 
 #. page Templates
-#: ../src/prefs.c:1594
+#: ../src/prefs.c:1595
 msgid ""
 "Set the information to be used in templates. See the documentation for "
 "details."
@@ -3698,7 +3698,7 @@ msgstr ""
 "Въведете информацията, която да бъде използвана в шаблоните. Вижте "
 "документацията за подробности."
 
-#: ../src/prefs.c:1598
+#: ../src/prefs.c:1599
 #, fuzzy
 msgid ""
 "<i>Notice: For all changes you make here to take effect, you need to restart "
@@ -3709,7 +3709,7 @@ msgstr ""
 "рестартирате Geany.</i>"
 
 #. page Keybindings
-#: ../src/prefs.c:1604
+#: ../src/prefs.c:1605
 msgid ""
 "Here you can change keyboard shortcuts for various actions. Select one and "
 "press the Change button to enter a new shortcut, or double click on an "
@@ -3721,7 +3721,7 @@ msgstr ""
 "кобинацията направо."
 
 #. page Printing
-#: ../src/prefs.c:1609
+#: ../src/prefs.c:1610
 msgid ""
 "<i>Notice: Native GTK printing is only available if Geany was built against "
 "GTK 2.10 (or above) <b>and</b> Geany is running with GTK 2.10 (or above).</i>"
@@ -4086,7 +4086,7 @@ msgstr "Д_опълнителни настройки:"
 msgid "Other options to pass to Grep"
 msgstr "Други опции, които да се предадат на Grep"
 
-#: ../src/search.c:916
+#: ../src/search.c:916 ../src/search.c:1434 ../src/search.c:1437
 #, fuzzy, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
@@ -4131,7 +4131,7 @@ msgstr "Търсенето се провали."
 
 #: ../src/search.c:1334 ../src/search.c:1338
 #, fuzzy, c-format
-msgid "Search completed with %d matches."
+msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
 msgstr[0] "Търсенето завърши с %d съвпадения"
 msgstr[1] "Търсенето завърши с %d съвпадения"
@@ -4139,13 +4139,6 @@ msgstr[1] "Търсенето завърши с %d съвпадения"
 #: ../src/search.c:1344
 msgid "No matches found."
 msgstr "Не открих съвпадения."
-
-#: ../src/search.c:1434 ../src/search.c:1437
-#, fuzzy, c-format
-msgid "Found %d matches for \"%s\"."
-msgid_plural "Found %d matches for \"%s\"."
-msgstr[0] "Намерих %d съвпадения за '%s'."
-msgstr[1] "Намерих %d съвпадения за '%s'."
 
 #: ../src/support.c:90 ../src/support.c:114
 #, c-format
@@ -4468,36 +4461,36 @@ msgstr "Думи:"
 msgid "Characters:"
 msgstr "Символи:"
 
-#: ../src/treeviews.c:169
+#: ../src/treeviews.c:171
 msgid "No tags found"
 msgstr "Не намерих тагове."
 
-#: ../src/treeviews.c:370
+#: ../src/treeviews.c:373
 #, fuzzy
 msgid "Sort by _Name"
 msgstr "<b>Външен вид</b>"
 
-#: ../src/treeviews.c:376
+#: ../src/treeviews.c:379
 #, fuzzy
 msgid "Sort by _Appearance"
 msgstr "<b>Външен вид</b>"
 
-#: ../src/treeviews.c:386 ../src/treeviews.c:473
+#: ../src/treeviews.c:389 ../src/treeviews.c:476
 #, fuzzy
 msgid "Show S_ymbol List"
 msgstr "Покажи списъка със символите"
 
-#: ../src/treeviews.c:392 ../src/treeviews.c:479
+#: ../src/treeviews.c:395 ../src/treeviews.c:482
 #, fuzzy
 msgid "Show _Document List"
 msgstr "Показвай списък с отворените файлове"
 
-#: ../src/treeviews.c:398 ../src/treeviews.c:485 ../plugins/filebrowser.c:567
+#: ../src/treeviews.c:401 ../src/treeviews.c:488 ../plugins/filebrowser.c:567
 #, fuzzy
 msgid "H_ide Sidebar"
 msgstr "Скрий страничната лента"
 
-#: ../src/treeviews.c:463
+#: ../src/treeviews.c:466
 msgid "Show _Full Path Name"
 msgstr "Покажи _целия път"
 
@@ -4895,7 +4888,7 @@ msgstr "Вмъква HTML символи като  '&amp;'."
 
 #: ../plugins/htmlchars.c:46 ../plugins/export.c:47 ../plugins/vcdiff.c:54
 #: ../plugins/filebrowser.c:52 ../plugins/saveactions.c:49
-#: ../plugins/splitwindow.c:37
+#: ../plugins/splitwindow.c:42
 #, fuzzy
 msgid "The Geany developer team"
 msgstr "Име на разработчика"
@@ -4917,51 +4910,51 @@ msgstr ""
 "Избери специален символ от списъка долу и щракнете два пъти върху него или "
 "използвайтебутона за да го въведете в текущата позиция на курсора."
 
-#: ../plugins/htmlchars.c:113
+#: ../plugins/htmlchars.c:114
 msgid "Character"
 msgstr "Символ"
 
-#: ../plugins/htmlchars.c:119
+#: ../plugins/htmlchars.c:120
 msgid "HTML (name)"
 msgstr "HTML·(име)"
 
-#: ../plugins/htmlchars.c:157
+#: ../plugins/htmlchars.c:158
 msgid "HTML characters"
 msgstr "HTML·символи"
 
-#: ../plugins/htmlchars.c:163
+#: ../plugins/htmlchars.c:164
 msgid "ISO 8859-1 characters"
 msgstr "ISO·8859-1·символи"
 
-#: ../plugins/htmlchars.c:261
+#: ../plugins/htmlchars.c:262
 msgid "Greek characters"
 msgstr "Гръцки букви"
 
-#: ../plugins/htmlchars.c:316
+#: ../plugins/htmlchars.c:317
 msgid "Mathematical characters"
 msgstr "Математически знаци"
 
-#: ../plugins/htmlchars.c:357
+#: ../plugins/htmlchars.c:358
 msgid "Technical characters"
 msgstr "Технически символи"
 
-#: ../plugins/htmlchars.c:365
+#: ../plugins/htmlchars.c:366
 msgid "Arrow characters"
 msgstr "Знаци за стрелки"
 
-#: ../plugins/htmlchars.c:378
+#: ../plugins/htmlchars.c:379
 msgid "Punctuation characters"
 msgstr "Пунктуационни знаци"
 
-#: ../plugins/htmlchars.c:394
+#: ../plugins/htmlchars.c:395
 msgid "Miscellaneous characters"
 msgstr "Други символи"
 
-#: ../plugins/htmlchars.c:524
+#: ../plugins/htmlchars.c:525
 msgid "_Insert Special HTML Characters"
 msgstr "_Вмъкни специални HTML символи"
 
-#: ../plugins/htmlchars.c:525
+#: ../plugins/htmlchars.c:526
 msgid "Insert Special HTML Characters"
 msgstr "Вмъкни специални HTML символи"
 
@@ -5123,53 +5116,53 @@ msgstr "Намери въф _файлове"
 msgid "Show _Hidden Files"
 msgstr "Покажи _скритите файлове"
 
-#: ../plugins/filebrowser.c:731
+#: ../plugins/filebrowser.c:732
 msgid "Up"
 msgstr "Нагоре"
 
-#: ../plugins/filebrowser.c:737
+#: ../plugins/filebrowser.c:738
 msgid "Refresh"
 msgstr "Презареди"
 
-#: ../plugins/filebrowser.c:743
+#: ../plugins/filebrowser.c:744
 #, fuzzy
 msgid "Home"
 msgstr "Домашна страница"
 
-#: ../plugins/filebrowser.c:749
+#: ../plugins/filebrowser.c:750
 #, fuzzy
 msgid "Set path from document"
 msgstr "Превключи към левия документ"
 
-#: ../plugins/filebrowser.c:757
+#: ../plugins/filebrowser.c:758
 #, fuzzy
 msgid "Clear the filter"
 msgstr "Затвори текущия файл"
 
-#: ../plugins/filebrowser.c:771
+#: ../plugins/filebrowser.c:772
 #, fuzzy
 msgid "Filter:"
 msgstr "_Файл"
 
-#: ../plugins/filebrowser.c:930
+#: ../plugins/filebrowser.c:931
 msgid "Focus File List"
 msgstr ""
 
-#: ../plugins/filebrowser.c:932
+#: ../plugins/filebrowser.c:933
 msgid "Focus Path Entry"
 msgstr ""
 
-#: ../plugins/filebrowser.c:967 ../plugins/saveactions.c:474
+#: ../plugins/filebrowser.c:968 ../plugins/saveactions.c:474
 #, fuzzy
 msgid "Plugin configuration directory could not be created."
 msgstr "Не можах да създам конфигурационната директория (%s)."
 
-#: ../plugins/filebrowser.c:993
+#: ../plugins/filebrowser.c:994
 #, fuzzy
 msgid "External open command:"
 msgstr " команди"
 
-#: ../plugins/filebrowser.c:1002
+#: ../plugins/filebrowser.c:1003
 #, fuzzy, c-format
 msgid ""
 "The command to execute when using \"Open with\". You can use %f and %d "
@@ -5183,17 +5176,17 @@ msgstr ""
 "%f ще се замени с името и пълния път\n"
 "%d ще се замени с целия път без името\n"
 
-#: ../plugins/filebrowser.c:1009
+#: ../plugins/filebrowser.c:1010
 #, fuzzy
 msgid "Show hidden files"
 msgstr "Покажи _скритите файлове"
 
-#: ../plugins/filebrowser.c:1015
+#: ../plugins/filebrowser.c:1016
 #, fuzzy
 msgid "Hide object files"
 msgstr "Файлове на проекта"
 
-#: ../plugins/filebrowser.c:1019
+#: ../plugins/filebrowser.c:1020
 msgid ""
 "Don't show generated object files in the file browser, this includes *.o, *."
 "obj. *.so, *.dll, *.a, *.lib"
@@ -5304,25 +5297,31 @@ msgstr ""
 msgid "Directory _levels to include in the backup destination:"
 msgstr ""
 
-#: ../plugins/splitwindow.c:36
+#: ../plugins/splitwindow.c:41
 msgid "Split Window"
 msgstr ""
 
-#: ../plugins/splitwindow.c:36
+#: ../plugins/splitwindow.c:41
 msgid "Splits the editor view into two windows."
 msgstr ""
 
-#: ../plugins/splitwindow.c:230
+#: ../plugins/splitwindow.c:271 ../plugins/splitwindow.c:354
+msgid "_Unsplit"
+msgstr ""
+
+#: ../plugins/splitwindow.c:340
 msgid "_Split Window"
 msgstr ""
 
-#: ../plugins/splitwindow.c:239
+#: ../plugins/splitwindow.c:349
 msgid "_Horizontally"
 msgstr ""
 
-#: ../plugins/splitwindow.c:244
-msgid "_Unsplit"
-msgstr ""
+#, fuzzy
+#~ msgid "Found %d matches for \"%s\"."
+#~ msgid_plural "Found %d matches for \"%s\"."
+#~ msgstr[0] "Намерих %d съвпадения за '%s'."
+#~ msgstr[1] "Намерих %d съвпадения за '%s'."
 
 #~ msgid "Failed to execute the terminal program"
 #~ msgstr "Не успях да изпълня терминалната програма"

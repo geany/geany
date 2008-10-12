@@ -1331,11 +1331,11 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 					GTK_TREE_MODEL(msgwindow.store_msg), NULL) - 1;
 
 				msgwin_msg_add_fmt(COLOR_BLUE, -1, NULL,
-					ngettext("Search completed with %d matches.",
+					ngettext("Search completed with %d match.",
 							 "Search completed with %d matches.", count),
 					count);
 				ui_set_statusbar(FALSE,
-						ngettext("Search completed with %d matches.",
+						ngettext("Search completed with %d match.",
 								 "Search completed with %d matches.", count),
 						count);
 				break;
@@ -1431,10 +1431,10 @@ void search_find_usage(const gchar *search_text, gint flags, gboolean in_session
 		gint count = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(msgwindow.store_msg), NULL);
 
 		ui_set_statusbar(FALSE, ngettext(
-			"Found %d matches for \"%s\".", "Found %d matches for \"%s\".", count),
+			"Found %d match for \"%s\".", "Found %d matches for \"%s\".", count),
 			count, search_text);
 		msgwin_msg_add_fmt(COLOR_BLUE, -1, NULL, ngettext(
-			"Found %d matches for \"%s\".", "Found %d matches for \"%s\".", count),
+			"Found %d match for \"%s\".", "Found %d matches for \"%s\".", count),
 			count, search_text);
 	}
 }

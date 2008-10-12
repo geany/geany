@@ -1,6 +1,8 @@
 2008-10-12  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * en_GB.po: Update British English translation (Thanks to Jeff Bailes)
+ * *.po: Update of all po files to add missed string for singular form
+   of some terms.
 
 
 2008-10-09  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
