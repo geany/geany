@@ -3,6 +3,9 @@
  * src/highlighting.c:
    Fix regression: clear all styles for filetype None to not break
    the 'invert_all' option.
+ * src/saveactions.c:
+   InstantSave: when opening new files from template, use the template's
+   filetype, otherwise fall back to configured default filetype.
 
 
 2008-10-12  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

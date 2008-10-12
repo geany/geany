@@ -254,11 +254,16 @@ static void instantsave_document_new_cb(GObject *obj, GeanyDocument *doc, gpoint
     {
 		gchar *new_filename;
 		gint fd;
-		GeanyFiletype *ft = p_filetypes->lookup_by_name(instantsave_default_ft);
+		GeanyFiletype *ft = doc->file_type;
 
 		fd = g_file_open_tmp("gis_XXXXXX", &new_filename, NULL);
 		if (fd != -1)
 			close(fd); /* close the returned file descriptor as we only need the filename */
+
+		if (ft == NULL)
+			/* ft is NULL when a new file without template was opened, so use the
+			 * configured default file type */
+			ft = p_filetypes->lookup_by_name(instantsave_default_ft);
 
 		if (ft != NULL)
 			/* add the filetype's default extension to the new filename */
