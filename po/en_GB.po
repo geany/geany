@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-12 15:00+0200\n"
-"PO-Revision-Date: 2008-10-12 14:41+1000\n"
-"Last-Translator: Jeff Bailes <thepizzaking@gmail.com>\n"
+"POT-Creation-Date: 2008-10-12 15:11+0200\n"
+"PO-Revision-Date: 2008-10-12 15:10+0100\n"
+"Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: British English <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3904,7 +3904,7 @@ msgid "Search failed."
 msgstr "Search failed."
 
 #: ../src/search.c:1334 ../src/search.c:1338
-#, fuzzy, c-format
+#, c-format
 msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
 msgstr[0] "Search completed with %d match."
