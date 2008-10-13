@@ -570,7 +570,7 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 	module = g_module_open(fname, G_MODULE_BIND_LOCAL);
 	if (! module)
 	{
-		g_warning("%s", g_module_error());
+		geany_debug("Can't load plugin: %s", g_module_error());
 		return NULL;
 	}
 
