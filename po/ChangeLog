@@ -1,3 +1,10 @@
+2008-10-13  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * tr.po: Update of Turkish translation. Removed a fuzzy string since
+   there is no different plural form. Thanks to Gürkan Gür for sending
+   the hint.
+
+
 2008-10-12  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * en_GB.po: Update British English translation (Thanks to Jeff Bailes)

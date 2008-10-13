@@ -3886,7 +3886,6 @@ msgid "Search failed."
 msgstr "Arama hatalı."
 
 #: ../src/search.c:1334 ../src/search.c:1338
-#, fuzzy, c-format
 msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
 msgstr[0] "Arama %d eşleşme ile tamamlandı."
