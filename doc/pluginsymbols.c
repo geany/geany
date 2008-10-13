@@ -43,22 +43,26 @@ gint plugin_version_check(gint);
  * @param info The data struct which should be initialized by this function. */
 void plugin_set_info(PluginInfo *info);
 
-/** Basic information about a plugin, which is set in plugin_set_info(). */
-const PluginInfo* plugin_info;
+/** @deprecated Use geany_plugin->info instead.
+ * Basic information about a plugin, which is set in plugin_set_info(). */
+const PluginInfo *plugin_info;
+
+/** Basic information for the plugin and identification. */
+const GeanyPlugin *geany_plugin;
 
 /** Geany owned data pointers.
  * Example: @c assert(geany_data->app->configdir != NULL); */
-const GeanyData* geany_data;
+const GeanyData *geany_data;
 
 /** Geany owned function pointers, split into groups.
  * Example: @c geany_functions->p_document->new_file(NULL, NULL, NULL);
  *
  * Note: Usually plugins would use the pluginmacros.h file and just call:
  * @c p_document->new_file(NULL, NULL, NULL); */
-const GeanyFunctions* geany_functions;
+const GeanyFunctions *geany_functions;
 
 /** Plugin owned fields, including flags. */
-PluginFields* plugin_fields;
+PluginFields *plugin_fields;
 
 /** An array for connecting GeanyObject events, which should be terminated with
  * @c {NULL, NULL, FALSE, NULL}. See @link signals Signal documentation @endlink. */

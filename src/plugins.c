@@ -23,6 +23,8 @@
  */
 
 /* Code to manage, load and unload plugins. */
+/** @file plugins.c
+ * Plugin utility functions. */
 
 #include "geany.h"
 
@@ -65,12 +67,22 @@
 #endif
 
 
+typedef struct GeanyPluginPrivate
+{
+	GeanyAutoSeparator	toolbar_separator;
+}
+GeanyPluginPrivate;
+
+
 typedef struct Plugin
 {
 	GModule 	*module;
 	gchar		*filename;				/* plugin filename (/path/libname.so) */
 	PluginInfo		info;				/* plugin name, description, etc */
 	PluginFields	fields;
+	GeanyPlugin		public;				/* fields the plugin can read */
+	GeanyPluginPrivate	priv;			/* GeanyPlugin type private data */
+
 	gulong		*signal_ids;			/* signal IDs to disconnect when unloading */
 	gsize		signal_ids_len;
 	GeanyKeyGroup	*key_group;
@@ -93,6 +105,12 @@ static GtkWidget *menu_separator = NULL;
 
 static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data);
 
+void plugin_add_toolbar_item(GeanyPlugin *plugin, GtkToolItem *item);
+
+
+static PluginFuncs plugin_funcs = {
+	&plugin_add_toolbar_item
+};
 
 static DocumentFuncs doc_funcs = {
 	&document_new_file,
@@ -185,7 +203,6 @@ static UIUtilsFuncs uiutils_funcs = {
 	&ui_table_add_row,
 	&ui_path_box_new,
 	&ui_button_new_with_image,
-	&ui_get_toolbar_insert_position
 };
 
 static DialogFuncs dialog_funcs = {
@@ -265,7 +282,8 @@ static GeanyFunctions geany_functions = {
 	&filetype_funcs,
 	&navqueue_funcs,
 	&editor_funcs,
-	&main_funcs
+	&main_funcs,
+	&plugin_funcs
 };
 
 static GeanyData geany_data;
@@ -454,6 +472,7 @@ add_kb_group(Plugin *plugin)
 static void
 plugin_init(Plugin *plugin)
 {
+	GeanyPlugin **p_geany_plugin;
 	PluginCallback *callbacks;
 	PluginInfo **p_info;
 	PluginFields **plugin_fields;
@@ -461,6 +480,9 @@ plugin_init(Plugin *plugin)
 	GeanyFunctions **p_geany_functions;
 
 	/* set these symbols before plugin_init() is called */
+	g_module_symbol(plugin->module, "geany_plugin", (void *) &p_geany_plugin);
+	if (p_geany_plugin)
+		*p_geany_plugin = &plugin->public;
 	g_module_symbol(plugin->module, "plugin_info", (void *) &p_info);
 	if (p_info)
 		*p_info = &plugin->info;
@@ -608,6 +630,8 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 
 	plugin->filename = g_strdup(fname);
 	plugin->module = module;
+	plugin->public.info = &plugin->info;
+	plugin->public.priv = &plugin->priv;
 
 	if (init_plugin)
 		plugin_init(plugin);
@@ -641,6 +665,7 @@ static gboolean is_active_plugin(Plugin *plugin)
 static void
 plugin_unload(Plugin *plugin)
 {
+	GtkWidget *widget;
 
 	if (is_active_plugin(plugin) && plugin->cleanup)
 		plugin->cleanup();
@@ -649,6 +674,10 @@ plugin_unload(Plugin *plugin)
 
 	if (plugin->key_group)
 		g_ptr_array_remove_fast(keybinding_groups, plugin->key_group);
+
+	widget = plugin->priv.toolbar_separator.widget;
+	if (widget)
+		gtk_widget_destroy(widget);
 
 	active_plugin_list = g_list_remove(active_plugin_list, plugin);
 	geany_debug("Unloaded: %s", plugin->filename);
@@ -1193,5 +1222,45 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	gtk_container_add(GTK_CONTAINER(vbox), vbox2);
 	gtk_widget_show_all(pm_widgets.dialog);
 }
+
+
+/** Insert a toolbar item before the Quit button, or after the previous plugin toolbar item.
+ * A separator is added on the first call to this function, and will be shown when @a item is
+ * shown; hidden when @a item is hidden.
+ * @note You should still destroy @a item yourself, usually in @ref plugin_cleanup().
+ * @param plugin Must be @ref geany_plugin.
+ * @param item The item to add. */
+void plugin_add_toolbar_item(GeanyPlugin *plugin, GtkToolItem *item)
+{
+	GtkToolbar *toolbar = GTK_TOOLBAR(main_widgets.toolbar);
+	gint pos;
+	GeanyAutoSeparator *autosep;
+
+	g_return_if_fail(plugin);
+	autosep = &plugin->priv->toolbar_separator;
+
+	if (!autosep->widget)
+	{
+		GtkToolItem *sep;
+
+		pos = ui_get_toolbar_insert_position();
+		/* pos should be valid even if the quit btn is hidden */
+		g_return_if_fail(pos >= 0);
+		gtk_toolbar_insert(toolbar, item, pos);
+
+		sep = gtk_separator_tool_item_new();
+		gtk_toolbar_insert(toolbar, sep, pos + 1);
+		autosep->widget = GTK_WIDGET(sep);
+	}
+	else
+	{
+		pos = gtk_toolbar_get_item_index(toolbar, GTK_TOOL_ITEM(autosep->widget));
+		g_return_if_fail(pos >= 0);
+		gtk_toolbar_insert(toolbar, item, pos);
+	}
+	/* hide the separator widget if there are no toolbar items showing for the plugin */
+	ui_auto_separator_add_ref(autosep, GTK_WIDGET(item));
+}
+
 
 #endif

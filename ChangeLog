@@ -1,3 +1,21 @@
+2008-10-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/ui_utils.h, src/plugindata.h, src/plugins.c, src/ui_utils.c,
+   doc/Doxyfile.in, doc/pluginsymbols.c, plugins/demoplugin.c,
+   plugins/pluginmacros.h:
+ - API changes:
+   Replace p_ui->get_toolbar_insert_position() with
+   p_plugin->add_toolbar_item(), which also adds a separator when the
+   first item is added.
+   Add 'GeanyPlugin *geany_plugin' plugin symbol, partly to replace
+   plugin_info (now deprecated), mainly to identify a plugin and hold
+   private implementation fields for plugin utility functions.
+   (plugin_info will be removed after the 0.15 release.)
+ - Code changes:
+   Add ui_auto_separator_add_ref() to hide separator-like widgets when
+   their visible group elements are hidden or destroyed.
+
+
 2008-10-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/highlighting.c:

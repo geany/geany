@@ -52,6 +52,7 @@
 #define p_main			geany_functions->p_main			/**< See main.h */
 #define p_msgwindow		geany_functions->p_msgwindow	/**< See msgwindow.h */
 #define p_navqueue		geany_functions->p_navqueue		/**< See navqueue.h */
+#define p_plugin		geany_functions->p_plugin		/**< See plugins.c */
 #define p_sci			geany_functions->p_sci			/**< See sciwrappers.h */
 #define p_search		geany_functions->p_search		/**< See search.h */
 #define p_support		geany_functions->p_support		/**< See support.h */

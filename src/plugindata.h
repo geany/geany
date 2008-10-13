@@ -41,13 +41,13 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 98,
+	GEANY_API_VERSION = 99,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
 	/* This should usually stay the same if fields are only appended, assuming only pointers to
 	 * structs and not structs themselves are declared by plugins. */
-	GEANY_ABI_VERSION = 46
+	GEANY_ABI_VERSION = 47
 };
 
 /** Check the plugin can be loaded by Geany.
@@ -65,8 +65,8 @@ enum {
 	}
 
 
-/** Plugin info structure to hold basic information about a plugin.
- * Should usually be set with PLUGIN_SET_INFO(). */
+/** Basic information about a plugin available to Geany without loading the plugin.
+ * The fields are set in plugin_set_info(), usually with the PLUGIN_SET_INFO() macro. */
 typedef struct PluginInfo
 {
 	/** The name of the plugin. */
@@ -79,6 +79,17 @@ typedef struct PluginInfo
 	gchar	*author;
 }
 PluginInfo;
+
+
+/** Basic information for the plugin and identification. */
+typedef struct GeanyPlugin
+{
+	PluginInfo	*info;	/**< Fields set in plugin_set_info(). */
+
+	struct GeanyPluginPrivate *priv;	/* private */
+}
+GeanyPlugin;
+
 
 /** Set the plugin name and some other basic information about a plugin.
  * This declares a function, so you can use the _() translation macro for arguments.
@@ -198,6 +209,7 @@ typedef struct GeanyFunctions
 	struct NavQueueFuncs        *p_navqueue;		/**< See navqueue.h */
 	struct EditorFuncs        	*p_editor;			/**< See editor.h */
 	struct MainFuncs        	*p_main;			/**< See main.h */
+	struct PluginFuncs        	*p_plugin;			/**< See plugins.c */
 }
 GeanyFunctions;
 
@@ -336,7 +348,6 @@ typedef struct UIUtilsFuncs
 	void		(*table_add_row) (GtkTable *table, gint row, ...) G_GNUC_NULL_TERMINATED;
 	GtkWidget*	(*path_box_new) (const gchar *title, GtkFileChooserAction action, GtkEntry *entry);
 	GtkWidget*	(*button_new_with_image) (const gchar *stock_id, const gchar *text);
-	gint		(*get_toolbar_insert_position) (void);
 }
 UIUtilsFuncs;
 
@@ -464,6 +475,14 @@ typedef struct EditorFuncs
 	 * appended functions to GeanyEditor pointers. */
 }
 EditorFuncs;
+
+
+/* See plugins.c */
+typedef struct PluginFuncs
+{
+	void	(*add_toolbar_item)(GeanyPlugin *plugin, GtkToolItem *item);
+}
+PluginFuncs;
 
 
 /* Deprecated aliases */

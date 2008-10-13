@@ -125,8 +125,16 @@ UIWidgets;
 extern UIWidgets ui_widgets;
 
 
-/* The following block of functions are more generic functions and closely related to
+/* The following block of types & functions are more generic and closely related to
  * certain GTK+ widgets. */
+
+typedef struct GeanyAutoSeparator
+{
+	GtkWidget	*widget;	/* e.g. GtkSeparatorToolItem, GtkSeparatorMenuItem */
+	gint		ref_count;	/* set to zero initially */
+}
+GeanyAutoSeparator;
+
 
 void ui_widget_show_hide(GtkWidget *widget, gboolean show);
 
@@ -150,6 +158,8 @@ void ui_setup_open_button_callback(GtkWidget *open_btn, const gchar *title,
 		GtkFileChooserAction action, GtkEntry *entry);
 
 void ui_table_add_row(GtkTable *table, gint row, ...) G_GNUC_NULL_TERMINATED;
+
+void ui_auto_separator_add_ref(GeanyAutoSeparator *autosep, GtkWidget *item);
 
 /* End of 'generic' functions */
 
