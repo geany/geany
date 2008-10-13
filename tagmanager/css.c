@@ -113,7 +113,8 @@ static CssParserState parseCssLine( const unsigned char *line, CssParserState st
 	while( *line != '\0' ) /* fileReadLine returns NULL terminated strings */
 	{
 		vStringClear (stack);
-		while (state == P_STATE_NONE && isspace ((int) *line) || isalnum ((int) *line) || ( *line == '*' && *(line-1) != '/' ))
+		while (state == P_STATE_NONE &&
+			(isspace ((int) *line) || isalnum ((int) *line) || ( *line == '*' && *(line-1) != '/' )))
 		{
 			if ((stack->length > 0 && isspace((int) *line)) || isalnum ((int) *line) || *line == '*') {
 				vStringPut(stack, (int) *line);

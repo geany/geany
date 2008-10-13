@@ -14,6 +14,8 @@
  - Code changes:
    Add ui_auto_separator_add_ref() to hide separator-like widgets when
    their visible group elements are hidden or destroyed.
+ * tagmanager/css.c:
+   Fix gcc warning, wrap line.
 
 
 2008-10-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
