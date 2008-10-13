@@ -662,12 +662,13 @@ static gboolean is_active_plugin(Plugin *plugin)
 }
 
 
+/* Clean up anything used by an active plugin  */
 static void
-plugin_unload(Plugin *plugin)
+plugin_cleanup(Plugin *plugin)
 {
 	GtkWidget *widget;
 
-	if (is_active_plugin(plugin) && plugin->cleanup)
+	if (plugin->cleanup)
 		plugin->cleanup();
 
 	remove_callbacks(plugin);
@@ -679,7 +680,6 @@ plugin_unload(Plugin *plugin)
 	if (widget)
 		gtk_widget_destroy(widget);
 
-	active_plugin_list = g_list_remove(active_plugin_list, plugin);
 	geany_debug("Unloaded: %s", plugin->filename);
 }
 
@@ -690,7 +690,10 @@ plugin_free(Plugin *plugin)
 	g_return_if_fail(plugin);
 	g_return_if_fail(plugin->module);
 
-	plugin_unload(plugin);
+	if (is_active_plugin(plugin))
+		plugin_cleanup(plugin);
+
+	active_plugin_list = g_list_remove(active_plugin_list, plugin);
 
 	if (plugin->module != NULL && ! g_module_close(plugin->module))
 		g_warning("%s: %s", plugin->filename, g_module_error());

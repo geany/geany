@@ -16,6 +16,8 @@
    their visible group elements are hidden or destroyed.
  * tagmanager/css.c:
    Fix gcc warning, wrap line.
+ * src/plugins.c:
+   Tidy up plugin cleanup code.
 
 
 2008-10-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
