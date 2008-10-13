@@ -659,12 +659,37 @@ void dialogs_show_msgbox_with_secondary(gint type, const gchar *text, const gcha
 }
 
 
+#ifndef G_OS_WIN32
+static gint run_unsaved_dialog(const gchar *msg, const gchar *msg2)
+{
+	GtkWidget *dialog, *button;
+	gint ret;
+
+	dialog = gtk_message_dialog_new(GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
+                                  GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, "%s", msg);
+	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", msg2);
+	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+
+	button = ui_button_new_with_image(GTK_STOCK_CLEAR, _("_Don't save"));
+	gtk_dialog_add_action_widget(GTK_DIALOG(dialog), button, GTK_RESPONSE_NO);
+	gtk_widget_show(button);
+
+	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_SAVE, GTK_RESPONSE_YES);
+
+	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_YES);
+	ret = gtk_dialog_run(GTK_DIALOG(dialog));
+
+	gtk_widget_destroy(dialog);
+
+	return ret;
+}
+#endif
+
+
 gboolean dialogs_show_unsaved_file(GeanyDocument *doc)
 {
-#ifndef G_OS_WIN32
-	GtkWidget *dialog, *button;
-#endif
-	gchar *msg, *msg2, *short_fn = NULL;
+	gchar *msg, *short_fn = NULL;
+	const gchar *msg2;
 	gint ret;
 	gboolean old_quitting_state = main_status.quitting;
 
@@ -688,21 +713,7 @@ gboolean dialogs_show_unsaved_file(GeanyDocument *doc)
 	setptr(msg, g_strconcat(msg, "\n", msg2, NULL));
 	ret = win32_message_dialog_unsaved(msg);
 #else
-	dialog = gtk_message_dialog_new(GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
-                                  GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, "%s", msg);
-	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", msg2);
-	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-
-	button = ui_button_new_with_image(GTK_STOCK_CLEAR, _("_Don't save"));
-	gtk_dialog_add_action_widget(GTK_DIALOG(dialog), button, GTK_RESPONSE_NO);
-	gtk_widget_show(button);
-
-	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_SAVE, GTK_RESPONSE_YES);
-
-	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_YES);
-	ret = gtk_dialog_run(GTK_DIALOG(dialog));
-
-	gtk_widget_destroy(dialog);
+	ret = run_unsaved_dialog(msg, msg2);
 #endif
 	g_free(msg);
 
