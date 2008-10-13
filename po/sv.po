@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 0.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-13 23:27+0200\n"
-"PO-Revision-Date: 2008-10-13 23:53+0100\n"
-"Last-Translator: Tony Mattsson <superxorn@gmail.com>\n"
+"POT-Creation-Date: 2008-10-14 00:33+0200\n"
+"PO-Revision-Date: 2008-10-14 00:34+0100\n"
+"Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: Swedish <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -28,68 +28,68 @@ msgstr "Geany"
 msgid "Integrated Development Environment"
 msgstr "Integrerad utvecklingsmiljö"
 
-#: ../src/about.c:134
+#: ../src/about.c:135
 msgid "About Geany"
 msgstr "Om Geany"
 
-#: ../src/about.c:184
+#: ../src/about.c:185
 msgid "A fast and lightweight IDE"
 msgstr "Ett snabbt och lättviktigt IDE"
 
-#: ../src/about.c:205
+#: ../src/about.c:206
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(byggd på eller efter %s)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:236
+#: ../src/about.c:237
 msgid "Info"
 msgstr "Info"
 
-#: ../src/about.c:252
+#: ../src/about.c:253
 msgid "Developers"
 msgstr "Utvecklare"
 
-#: ../src/about.c:261
+#: ../src/about.c:262
 msgid "maintainer"
 msgstr "ansvarig"
 
-#: ../src/about.c:269
+#: ../src/about.c:270
 msgid "developer"
 msgstr "utvecklare"
 
-#: ../src/about.c:277
+#: ../src/about.c:278
 msgid "translation maintainer"
 msgstr "ansvarig för översättningar"
 
-#: ../src/about.c:286
+#: ../src/about.c:287
 msgid "Translators"
 msgstr "Översättare"
 
-#: ../src/about.c:306
+#: ../src/about.c:307
 msgid "Previous Translators"
 msgstr "Tidigare översättare"
 
-#: ../src/about.c:327
+#: ../src/about.c:328
 msgid "Contributors"
 msgstr "Medarbetare "
 
-#: ../src/about.c:337
+#: ../src/about.c:338
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
 msgstr ""
 "Några av de många bidragsgivarna (för en komplett lista, läs filen %s):"
 
-#: ../src/about.c:363
+#: ../src/about.c:364
 msgid "Credits"
 msgstr "Tack till ..."
 
-#: ../src/about.c:377
+#: ../src/about.c:378
 msgid "License"
 msgstr "Licens"
 
-#: ../src/about.c:386
+#: ../src/about.c:387
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -3863,8 +3863,8 @@ msgstr[1] "Hittat %d träffar för \"%s\""
 #, c-format
 msgid "Replaced text in %u file."
 msgid_plural "Replaced text in %u files."
-msgstr[0] "Ersatt text i %d fil."
-msgstr[1] "Ersatt text i %d filer."
+msgstr[0] "Ersatt text i %u fil."
+msgstr[1] "Ersatt text i %u filer."
 
 #: ../src/search.c:1138
 msgid "Invalid directory for find in files."
