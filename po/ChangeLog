@@ -1,6 +1,7 @@
 2008-10-13  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Little update of German translation.
+ * sv.po: Update of Swedish translation (Thanks to Tony Mattsson).
  * tr.po: Update of Turkish translation. Removed a fuzzy string since
    there is no different plural form. Thanks to Gürkan Gür for sending
    the hint.
