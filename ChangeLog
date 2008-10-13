@@ -1,3 +1,9 @@
+2008-10-13  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * ko.po, LINGUAS, src/about.c, THANKS:
+   Added Korean translation. Thanks to netkiss for translation.
+
+
 2008-10-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/ui_utils.h, src/plugindata.h, src/plugins.c, src/ui_utils.c,
