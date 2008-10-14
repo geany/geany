@@ -11,6 +11,8 @@
    Use ui_add_document_sensitive().
    Use PLUGIN_VERSION_CHECK(GEANY_API_VERSION) for internal plugins,
    except the Demo plugin (as an example).
+ * doc/Doxyfile.in, doc/pluginsymbols.c:
+   Generate API documentation for deprecated symbols.
 
 
 2008-10-13  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
