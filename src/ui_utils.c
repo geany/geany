@@ -1560,9 +1560,12 @@ gint ui_get_toolbar_insert_position(void)
 	GtkWidget *quit = lookup_widget(main_widgets.window, "toolbutton_quit");
 	gint pos = gtk_toolbar_get_item_index(GTK_TOOLBAR(main_widgets.toolbar), GTK_TOOL_ITEM(quit));
 
+	/* use one position before the real position of the quit button to place new
+	 * items between the last 2 separators and the quit button */
 	if (pos > 0)
-		pos--; /* use one position before the real position of the quit button to place new
-				* items between the last separator and the quit button */
+		pos--;
+	if (pos > 0)
+		pos--;
 
 	return pos;
 }

@@ -1,7 +1,7 @@
 2008-10-14  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * THANKS, src/about.c: Update of name of Korean translator. Thanks
-   Park Jang-heon
+   Park Jang-heon.
 
 
 2008-10-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
@@ -19,6 +19,8 @@
    except the Demo plugin (as an example).
  * doc/Doxyfile.in, doc/pluginsymbols.c:
    Generate API documentation for deprecated symbols.
+ * src/ui_utils.c:
+   Fix having a small gap before plugin toolbar items.
 
 
 2008-10-13  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
