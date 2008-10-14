@@ -1,5 +1,5 @@
 # Korean translations for Geany package
-# Genany íŒ¨í‚¤ì§€ì— ëŒ€í•œ í•œêµ­ì–´ ë²ˆì—­ë¬¸.
+# Genany ÆĞÅ°Áö¿¡ ´ëÇÑ ÇÑ±¹¾î ¹ø¿ª¹®.
 # Copyright (C) 2008 THE Genany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the Genany package.
 # netkiss <dotkabi@gmail.com>, 2008.
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Genany 0.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-14 19:06+0200\n"
+"POT-Creation-Date: 2008-10-14 00:11+0200\n"
 "PO-Revision-Date: 2008-10-11 04:08+0900\n"
 "Last-Translator: netkiss <dotkabi@gmail.com>\n"
 "Language-Team: Korean\n"
@@ -19,88 +19,88 @@ msgstr ""
 
 #: ../geany.desktop.in.h:1
 msgid "A fast and lightweight IDE using GTK2"
-msgstr "ë¹ ë¥´ê³  ê°€ë²¼ìš´ GTK2 ê¸°ë°˜ì˜ í†µí•©ê°œë°œí™˜ê²½"
+msgstr "ºü¸£°í °¡º­¿î GTK2 ±â¹İÀÇ ÅëÇÕ°³¹ßÈ¯°æ"
 
 #: ../geany.desktop.in.h:2 ../src/interface.c:291 ../src/interface.c:1744
 msgid "Geany"
-msgstr "ì§€ë‹ˆ"
+msgstr "Áö´Ï"
 
 #: ../geany.desktop.in.h:3
 msgid "Integrated Development Environment"
-msgstr "í†µí•© ê°œë°œ í™˜ê²½"
+msgstr "ÅëÇÕ °³¹ß È¯°æ"
 
 #: ../src/about.c:135
 msgid "About Geany"
-msgstr "ì§€ë‹ˆ í”„ë¡œê·¸ë¨ì •ë³´"
+msgstr "Áö´Ï ÇÁ·Î±×·¥Á¤º¸"
 
 #: ../src/about.c:185
 msgid "A fast and lightweight IDE"
-msgstr "ë¹ ë¥´ê³  ê°€ë²¼ìš´ í†µí•©ê°œë°œí™˜ê²½"
+msgstr "ºü¸£°í °¡º­¿î ÅëÇÕ°³¹ßÈ¯°æ"
 
 #: ../src/about.c:206
 #, c-format
 msgid "(built on or after %s)"
-msgstr "(ì œì‘ì¼: %s)"
+msgstr "(Á¦ÀÛÀÏ: %s)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
 #: ../src/about.c:237
 msgid "Info"
-msgstr "í”„ë¡œê·¸ë¨ì •ë³´"
+msgstr "ÇÁ·Î±×·¥Á¤º¸"
 
 #: ../src/about.c:253
 msgid "Developers"
-msgstr "ê°œë°œ"
+msgstr "°³¹ß"
 
 #: ../src/about.c:262
 msgid "maintainer"
-msgstr "ê´€ë¦¬"
+msgstr "°ü¸®"
 
 #: ../src/about.c:270
 msgid "developer"
-msgstr "ê°œë°œ"
+msgstr "°³¹ß"
 
 #: ../src/about.c:278
 msgid "translation maintainer"
-msgstr "ë²ˆì—­ ê´€ë¦¬"
+msgstr "¹ø¿ª °ü¸®"
 
 #: ../src/about.c:287
 msgid "Translators"
-msgstr "ë²ˆì—­"
+msgstr "¹ø¿ª"
 
 #: ../src/about.c:307
 msgid "Previous Translators"
-msgstr "ì´ì „ ë²ˆì—­"
+msgstr "ÀÌÀü ¹ø¿ª"
 
 #: ../src/about.c:328
 msgid "Contributors"
-msgstr "ê³µí—Œ"
+msgstr "°øÇå"
 
 #: ../src/about.c:338
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
-msgstr "ë§ì€ ê°œë°œì (ìƒì„¸ëª©ë¡íŒŒì¼ %s ì°¸ê³ ) ì¤‘ ëª‡ì‚¬ëŒ:"
+msgstr "¸¹Àº °³¹ßÀÚ (»ó¼¼¸ñ·ÏÆÄÀÏ %s Âü°í) Áß ¸î»ç¶÷:"
 
 #: ../src/about.c:364
 msgid "Credits"
-msgstr "ê³µí—Œ"
+msgstr "°øÇå"
 
 #: ../src/about.c:378
 msgid "License"
-msgstr "ì‚¬ìš©ê¶Œ"
+msgstr "»ç¿ë±Ç"
 
 #: ../src/about.c:387
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
 msgstr ""
-"ì‚¬ìš©ê¶Œ ë¬¸ì„œë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤. http://www.gnu.org/licenses/gpl-2.0.txtë¥¼ ë³´"
-"ì‹­ì‹œì˜¤."
+"»ç¿ë±Ç ¹®¼­¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù. http://www.gnu.org/licenses/gpl-2.0.txt¸¦ º¸"
+"½Ê½Ã¿À."
 
 #: ../src/build.c:180
 #, c-format
 msgid "Failed to view %s (make sure it is already compiled)"
-msgstr "%s ë³´ê¸° ì‹¤íŒ¨: ì´ë¯¸ ì»´íŒŒì¼ë˜ì§€ ì•Šì•˜ëŠ”ì§€ í™•ì¸ìš”ë§"
+msgstr "%s º¸±â ½ÇÆĞ: ÀÌ¹Ì ÄÄÆÄÀÏµÇÁö ¾Ê¾Ò´ÂÁö È®ÀÎ¿ä¸Á"
 
 #: ../src/build.c:213 ../src/build.c:772
 #, c-format
@@ -108,68 +108,68 @@ msgid ""
 "Could not find terminal \"%s\" (check path for Terminal tool setting in "
 "Preferences)"
 msgstr ""
-"í„°ë¯¸ë„(\"%s\") ì˜¤ë¥˜: ê¸°ë³¸ ì„¤ì • ë©”ë‰´ì˜ í„°ë¯¸ë„ì—ì„œ ê²½ë¡œê°€ ì •í™•í•œì§€ í™•ì¸ìš”ë§"
+"ÅÍ¹Ì³Î(\"%s\") ¿À·ù: ±âº» ¼³Á¤ ¸Ş´ºÀÇ ÅÍ¹Ì³Î¿¡¼­ °æ·Î°¡ Á¤È®ÇÑÁö È®ÀÎ¿ä¸Á"
 
 #: ../src/build.c:228 ../src/build.c:680
 #, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created)"
-msgstr "\"%s\" ì‹¤í–‰ì‹¤íŒ¨: start-script ë§Œë“¤ ìˆ˜ ì—†ìŒ"
+msgstr "\"%s\" ½ÇÇà½ÇÆĞ: start-script ¸¸µé ¼ö ¾øÀ½"
 
 #: ../src/build.c:265 ../src/build.c:497 ../src/build.c:805
 #: ../src/search.c:1230
 #, c-format
 msgid "Process failed (%s)"
-msgstr "í”„ë¡œì„¸ìŠ¤ ì‹¤íŒ¨: (%s)"
+msgstr "ÇÁ·Î¼¼½º ½ÇÆĞ: (%s)"
 
 #: ../src/build.c:484
 #, c-format
 msgid "%s (in directory: %s)"
-msgstr "%s (í´ë”: %s)"
+msgstr "%s (Æú´õ: %s)"
 
 #: ../src/build.c:564
 msgid "Command stopped because the current file has no extension."
-msgstr "í˜„ì¬ íŒŒì¼ì˜ í™•ì¥ìê°€ ì—†ì–´ì„œ ëª…ë ¹ì´ ì¤‘ì§€ë¨."
+msgstr "ÇöÀç ÆÄÀÏÀÇ È®ÀåÀÚ°¡ ¾ø¾î¼­ ¸í·ÉÀÌ ÁßÁöµÊ."
 
 #: ../src/build.c:575
 #, c-format
 msgid "Failed to execute \"%s\" (make sure it is already built)"
-msgstr "\"%s\" ì‹¤í–‰ì‹¤íŒ¨: ì´ë¯¸ ì œì‘ë˜ì–´ìˆì§€ ì•Šì€ì§€ í™•ì¸ìš”ë§"
+msgstr "\"%s\" ½ÇÇà½ÇÆĞ: ÀÌ¹Ì Á¦ÀÛµÇ¾îÀÖÁö ¾ÊÀºÁö È®ÀÎ¿ä¸Á"
 
 #: ../src/build.c:643
 #, c-format
 msgid "Failed to change the working directory to \"%s\""
-msgstr "ì‘ì—… í´ë”ë¥¼ \"%s\"(ìœ¼)ë¡œ ë°”ê¾¸ê¸° ì‹¤íŒ¨"
+msgstr "ÀÛ¾÷ Æú´õ¸¦ \"%s\"(À¸)·Î ¹Ù²Ù±â ½ÇÆĞ"
 
 #: ../src/build.c:736
 msgid ""
 "Could not execute the file in the VTE because it probably contains a command."
-msgstr "VTEì˜ íŒŒì¼ì´ ëª…ë ¹ì„ í¬í•¨í•˜ê³  ìˆê¸°ë•Œë¬¸ì— ì‹¤í–‰í•  ìˆ˜ ì—†ìŒ."
+msgstr "VTEÀÇ ÆÄÀÏÀÌ ¸í·ÉÀ» Æ÷ÇÔÇÏ°í ÀÖ±â¶§¹®¿¡ ½ÇÇàÇÒ ¼ö ¾øÀ½."
 
 #: ../src/build.c:919
 msgid "Compilation failed."
-msgstr "ì»´íŒŒì¼ ì‹¤íŒ¨í•¨."
+msgstr "ÄÄÆÄÀÏ ½ÇÆĞÇÔ."
 
 #: ../src/build.c:933
 msgid "Compilation finished successfully."
-msgstr "ì„±ê³µì ìœ¼ë¡œ ì»´íŒŒì¼ ì™„ë£Œí•¨."
+msgstr "¼º°øÀûÀ¸·Î ÄÄÆÄÀÏ ¿Ï·áÇÔ."
 
 #. compile the code
 #: ../src/build.c:1039
 msgid "_Compile"
-msgstr "ì»´íŒŒì¼(_C)"
+msgstr "ÄÄÆÄÀÏ(_C)"
 
 #: ../src/build.c:1042
 msgid "Compiles the current file"
-msgstr "í˜„ì¬ íŒŒì¼ ì»´íŒŒì¼"
+msgstr "ÇöÀç ÆÄÀÏ ÄÄÆÄÀÏ"
 
 #. build the code
 #: ../src/build.c:1051 ../src/interface.c:992
 msgid "_Build"
-msgstr "ì œì‘(_B)"
+msgstr "Á¦ÀÛ(_B)"
 
 #: ../src/build.c:1055
 msgid "Builds the current file (generate an executable file)"
-msgstr "í˜„ì¬ íŒŒì¼ ì œì‘(ì‹¤í–‰íŒŒì¼ ìƒì„±)"
+msgstr "ÇöÀç ÆÄÀÏ Á¦ÀÛ(½ÇÇàÆÄÀÏ »ı¼º)"
 
 #. build the code with make all
 #: ../src/build.c:1065 ../src/build.c:1193
@@ -178,49 +178,49 @@ msgstr "Make All(_M)"
 
 #: ../src/build.c:1068 ../src/build.c:1196
 msgid "Builds the current file with the make tool and the default target"
-msgstr "í˜„ì¬ íŒŒì¼ì„ make ë„êµ¬ë¥¼ ì‚¬ìš©í•´ì„œ ì œì‘ (ê¸°ë³¸íƒ€ê²Ÿ)"
+msgstr "ÇöÀç ÆÄÀÏÀ» make µµ±¸¸¦ »ç¿ëÇØ¼­ Á¦ÀÛ (±âº»Å¸°Ù)"
 
 #. build the code with make custom
 #: ../src/build.c:1076 ../src/build.c:1204
 msgid "Make Custom _Target"
-msgstr "Make ë§ì¶¤íƒ€ê²Ÿ(_T)"
+msgstr "Make ¸ÂÃãÅ¸°Ù(_T)"
 
 #: ../src/build.c:1080 ../src/build.c:1208
 msgid "Builds the current file with the make tool and the specified target"
-msgstr "í˜„ì¬ íŒŒì¼ì„ make ë„êµ¬ë¥¼ ì‚¬ìš©í•´ì„œ ì œì‘ (ë§ì¶¤íƒ€ê²Ÿ)"
+msgstr "ÇöÀç ÆÄÀÏÀ» make µµ±¸¸¦ »ç¿ëÇØ¼­ Á¦ÀÛ (¸ÂÃãÅ¸°Ù)"
 
 #. build the code with make object
 #: ../src/build.c:1087
 msgid "Make _Object"
-msgstr "Make ì˜¤ë¸Œì íŠ¸(_O)"
+msgstr "Make ¿ÀºêÁ§Æ®(_O)"
 
 #: ../src/build.c:1091
 msgid "Compiles the current file using the make tool"
-msgstr "í˜„ì¬ íŒŒì¼ì„ make ë„êµ¬ë¥¼ ì‚¬ìš©í•´ì„œ ì»´íŒŒì¼í•˜ê¸°"
+msgstr "ÇöÀç ÆÄÀÏÀ» make µµ±¸¸¦ »ç¿ëÇØ¼­ ÄÄÆÄÀÏÇÏ±â"
 
 #. next error
 #: ../src/build.c:1102 ../src/build.c:1219
 msgid "_Next Error"
-msgstr "ë‹¤ìŒ ì˜¤ë¥˜(_N)"
+msgstr "´ÙÀ½ ¿À·ù(_N)"
 
 #: ../src/build.c:1109 ../src/build.c:1226
 msgid "_Previous Error"
-msgstr "ì´ì „ ì˜¤ë¥˜(_P)"
+msgstr "ÀÌÀü ¿À·ù(_P)"
 
 #: ../src/build.c:1124 ../src/interface.c:1154
 msgid "Run or view the current file"
-msgstr "í˜„ì¬ íŒŒì¼ ì‹¤í–‰ ë˜ëŠ” ë³´ê¸°"
+msgstr "ÇöÀç ÆÄÀÏ ½ÇÇà ¶Ç´Â º¸±â"
 
 #. arguments
 #: ../src/build.c:1135
 msgid "_Set Includes and Arguments"
-msgstr "ì—°ê²°íŒŒì¼ ë° ì¸ìˆ˜ ì„¤ì •(_S)"
+msgstr "¿¬°áÆÄÀÏ ¹× ÀÎ¼ö ¼³Á¤(_S)"
 
 #: ../src/build.c:1140
 msgid ""
 "Sets the includes and library paths for the compiler and the program "
 "arguments for execution"
-msgstr "ì»´íŒŒì¼ëŸ¬ì˜ í—¤ë”, ë¼ì´ë¸ŒëŸ¬ë¦¬ ê²½ë¡œ ë° í”„ë¡œê·¸ë¨ì˜ ì¸ìˆ˜ ì„¤ì •"
+msgstr "ÄÄÆÄÀÏ·¯ÀÇ Çì´õ, ¶óÀÌºê·¯¸® °æ·Î ¹× ÇÁ·Î±×·¥ÀÇ ÀÎ¼ö ¼³Á¤"
 
 #. DVI
 #: ../src/build.c:1163
@@ -229,7 +229,7 @@ msgstr "LaTeX -> DVI(_D)"
 
 #: ../src/build.c:1166
 msgid "Compiles the current file into a DVI file"
-msgstr "í˜„ì¬ íŒŒì¼ì„ DVI íŒŒì¼ë¡œ ì»´íŒŒì¼(_D)"
+msgstr "ÇöÀç ÆÄÀÏÀ» DVI ÆÄÀÏ·Î ÄÄÆÄÀÏ(_D)"
 
 #. PDF
 #: ../src/build.c:1176
@@ -238,54 +238,54 @@ msgstr "LaTeX -> PDF(_P)"
 
 #: ../src/build.c:1179
 msgid "Compiles the current file into a PDF file"
-msgstr "í˜„ì¬ íŒŒì¼ì„ PDF íŒŒì¼ë¡œ ì»´íŒŒì¼(_D)"
+msgstr "ÇöÀç ÆÄÀÏÀ» PDF ÆÄÀÏ·Î ÄÄÆÄÀÏ(_D)"
 
 #. DVI view
 #: ../src/build.c:1238
 msgid "_View DVI File"
-msgstr "DVI íŒŒì¼ ë³´ê¸°(_V)"
+msgstr "DVI ÆÄÀÏ º¸±â(_V)"
 
 #: ../src/build.c:1243 ../src/build.c:1256
 msgid "Compile and view the current file"
-msgstr "í˜„ì¬ íŒŒì¼ì„ ì»´íŒŒì¼í•œ í›„ ë³´ê¸°"
+msgstr "ÇöÀç ÆÄÀÏÀ» ÄÄÆÄÀÏÇÑ ÈÄ º¸±â"
 
 #. PDF view
 #: ../src/build.c:1252
 msgid "V_iew PDF File"
-msgstr "PDF íŒŒì¼ ë³´ê¸°(_i)"
+msgstr "PDF ÆÄÀÏ º¸±â(_i)"
 
 #. arguments
 #: ../src/build.c:1271
 msgid "_Set Arguments"
-msgstr "ì¸ìˆ˜ ì§€ì •(_S)"
+msgstr "ÀÎ¼ö ÁöÁ¤(_S)"
 
 #: ../src/build.c:1276
 msgid "Sets the program paths and arguments"
-msgstr "í”„ë¡œê·¸ë¨ ê²½ë¡œ ë° ì¸ìˆ˜ ì„¤ì •"
+msgstr "ÇÁ·Î±×·¥ °æ·Î ¹× ÀÎ¼ö ¼³Á¤"
 
 #: ../src/build.c:1351
 msgid "Set Arguments"
-msgstr "ì¸ìˆ˜ ì„¤ì •"
+msgstr "ÀÎ¼ö ¼³Á¤"
 
 #: ../src/build.c:1358
 msgid "Set programs and options for compiling and viewing (La)TeX files."
-msgstr "(La)TeX íŒŒì¼ì„ ì»´íŒŒì¼í•˜ê³  ë³´ê¸°ìœ„í•œ í”„ë¡œê·¸ë¨ ë° ì˜µì…˜ ì„¤ì •."
+msgstr "(La)TeX ÆÄÀÏÀ» ÄÄÆÄÀÏÇÏ°í º¸±âÀ§ÇÑ ÇÁ·Î±×·¥ ¹× ¿É¼Ç ¼³Á¤."
 
 #: ../src/build.c:1369
 msgid "DVI creation:"
-msgstr "DVI ë§Œë“¤ê¸°:"
+msgstr "DVI ¸¸µé±â:"
 
 #: ../src/build.c:1388
 msgid "PDF creation:"
-msgstr "PDF ë§Œë“¤ê¸°:"
+msgstr "PDF ¸¸µé±â:"
 
 #: ../src/build.c:1407
 msgid "DVI preview:"
-msgstr "DVI ë¯¸ë¦¬ë³´ê¸°:"
+msgstr "DVI ¹Ì¸®º¸±â:"
 
 #: ../src/build.c:1426
 msgid "PDF preview:"
-msgstr "PDF ë¯¸ë¦¬ë³´ê¸°:"
+msgstr "PDF ¹Ì¸®º¸±â:"
 
 #: ../src/build.c:1442 ../src/build.c:1615
 #, c-format
@@ -293,161 +293,161 @@ msgid ""
 "%f will be replaced by the current filename, e.g. test_file.c\n"
 "%e will be replaced by the filename without extension, e.g. test_file"
 msgstr ""
-"%f: í˜„ì¬ íŒŒì¼ ì´ë¦„ìœ¼ë¡œ ë°”ê¾¸ê¸°, ì˜ˆ) test_file.c\n"
-"%e: í™•ì¥ì ì—†ëŠ” í˜„ì¬ íŒŒì¼ ì´ë¦„ìœ¼ë¡œ ë°”ê¾¸ê¸°, ì˜ˆ) test_file"
+"%f: ÇöÀç ÆÄÀÏ ÀÌ¸§À¸·Î ¹Ù²Ù±â, ¿¹) test_file.c\n"
+"%e: È®ÀåÀÚ ¾ø´Â ÇöÀç ÆÄÀÏ ÀÌ¸§À¸·Î ¹Ù²Ù±â, ¿¹) test_file"
 
 #: ../src/build.c:1521
 msgid "Set Includes and Arguments"
-msgstr "ì—°ê²°íŒŒì¼ ë° ì¸ìˆ˜ ì„¤ì •"
+msgstr "¿¬°áÆÄÀÏ ¹× ÀÎ¼ö ¼³Á¤"
 
 #: ../src/build.c:1528
 msgid "Set the commands for building and running programs."
-msgstr "í”„ë¡œê·¸ë¨ ì œì‘ ë° ì‹¤í–‰ ëª…ë ¹ ì„¤ì •."
+msgstr "ÇÁ·Î±×·¥ Á¦ÀÛ ¹× ½ÇÇà ¸í·É ¼³Á¤."
 
 #. in-dialog heading for the "Set Includes and Arguments" dialog
 #: ../src/build.c:1536
 #, c-format
 msgid "%s commands"
-msgstr "%s ëª…ë ¹"
+msgstr "%s ¸í·É"
 
 #: ../src/build.c:1551
 msgid "Compile:"
-msgstr "ì»´íŒŒì¼:"
+msgstr "ÄÄÆÄÀÏ:"
 
 #: ../src/build.c:1572
 msgid "Build:"
-msgstr "ì œì‘:"
+msgstr "Á¦ÀÛ:"
 
 #: ../src/build.c:1593 ../src/dialogs.c:1242
 msgid "Execute:"
-msgstr "ì‹¤í–‰:"
+msgstr "½ÇÇà:"
 
 #: ../src/build.c:1912
 msgid "Make Custom Target"
-msgstr "Make: ë§ì¶¤íƒ€ê²Ÿ"
+msgstr "Make: ¸ÂÃãÅ¸°Ù"
 
 #: ../src/build.c:1913
 msgid ""
 "Enter custom options here, all entered text is passed to the make command."
-msgstr "ì…ë ¥í•œ ë§ì¶¤ ì˜µì…˜ì„ make ëª…ë ¹ìœ¼ë¡œ ë„˜ê²¨ì¤ë‹ˆë‹¤."
+msgstr "ÀÔ·ÂÇÑ ¸ÂÃã ¿É¼ÇÀ» make ¸í·ÉÀ¸·Î ³Ñ°ÜÁİ´Ï´Ù."
 
 #: ../src/build.c:2004
 msgid "Failed to execute the view program"
-msgstr "í”„ë¡œê·¸ë¨ ë³´ê¸° ì‹¤í–‰ ì‹¤íŒ¨"
+msgstr "ÇÁ·Î±×·¥ º¸±â ½ÇÇà ½ÇÆĞ"
 
 #: ../src/build.c:2042
 #, c-format
 msgid "Process could not be stopped (%s)."
-msgstr "í”„ë¡œì„¸ìŠ¤ ì¤‘ë‹¨ ì‹¤íŒ¨ (%s)."
+msgstr "ÇÁ·Î¼¼½º Áß´Ü ½ÇÆĞ (%s)."
 
 #: ../src/build.c:2061 ../src/build.c:2075
 msgid "No more build errors."
-msgstr "ì œì‘ì˜¤ë¥˜ ë”ì´ìƒ ì—†ìŒ."
+msgstr "Á¦ÀÛ¿À·ù ´õÀÌ»ó ¾øÀ½."
 
 #: ../src/callbacks.c:153
 msgid "Do you really want to quit?"
-msgstr "ì •ë§ë¡œ ëë‚¼ê¹Œìš”?"
+msgstr "Á¤¸»·Î ³¡³¾±î¿ä?"
 
 #: ../src/callbacks.c:460 ../src/document.c:2537 ../src/interface.c:365
 #: ../src/treeviews.c:454
 msgid "_Reload"
-msgstr "ë‹¤ì‹œ ì—´ê¸°(_R)"
+msgstr "´Ù½Ã ¿­±â(_R)"
 
 #: ../src/callbacks.c:461
 msgid "Any unsaved changes will be lost."
-msgstr "ì €ì¥ë˜ì§€ ì•Šì€ ëª¨ë“  ë³€ê²½ì‚¬í•­ ë¬´ì‹œ."
+msgstr "ÀúÀåµÇÁö ¾ÊÀº ¸ğµç º¯°æ»çÇ× ¹«½Ã."
 
 #: ../src/callbacks.c:462
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
-msgstr "ì •ë§ë¡œ '%s' íŒŒì¼ì„ ë‹¤ì‹œ ë¶ˆëŸ¬ì˜¬ê¹Œìš”"
+msgstr "Á¤¸»·Î '%s' ÆÄÀÏÀ» ´Ù½Ã ºÒ·¯¿Ã±î¿ä"
 
 #: ../src/callbacks.c:1287 ../src/callbacks.c:1312
 msgid ""
 "Please set the filetype for the current file before using this function."
-msgstr "ì´ ê¸°ëŠ¥ì„ ì‚¬ìš©í•˜ê¸° ì „ì— íŒŒì¼í˜•ì‹ì„ ì§€ì •í•˜ì‹­ì‹œì˜¤."
+msgstr "ÀÌ ±â´ÉÀ» »ç¿ëÇÏ±â Àü¿¡ ÆÄÀÏÇü½ÄÀ» ÁöÁ¤ÇÏ½Ê½Ã¿À."
 
 #: ../src/callbacks.c:1423 ../src/ui_utils.c:516
 msgid "dd.mm.yyyy"
-msgstr "ì¼ì¼.ì›”ì›”.ë…„ë…„ë…„ë…„"
+msgstr "ÀÏÀÏ.¿ù¿ù.³â³â³â³â"
 
 #: ../src/callbacks.c:1425 ../src/ui_utils.c:517
 msgid "mm.dd.yyyy"
-msgstr "ì›”ì›”.ì¼ì¼.ë…„ë…„ë…„ë…„"
+msgstr "¿ù¿ù.ÀÏÀÏ.³â³â³â³â"
 
 #: ../src/callbacks.c:1427 ../src/ui_utils.c:518
 msgid "yyyy/mm/dd"
-msgstr "ë…„ë…„ë…„ë…„/ì›”ì›”/ì¼ì¼"
+msgstr "³â³â³â³â/¿ù¿ù/ÀÏÀÏ"
 
 #: ../src/callbacks.c:1429 ../src/ui_utils.c:527
 msgid "dd.mm.yyyy hh:mm:ss"
-msgstr "ì¼ì¼.ì›”ì›”.ë…„ë…„ë…„ë…„ ì‹œì‹œ:ë¶„ë¶„:ì´ˆì´ˆ"
+msgstr "ÀÏÀÏ.¿ù¿ù.³â³â³â³â ½Ã½Ã:ºĞºĞ:ÃÊÃÊ"
 
 #: ../src/callbacks.c:1431 ../src/ui_utils.c:528
 msgid "mm.dd.yyyy hh:mm:ss"
-msgstr "ì›”ì›”.ì¼ì¼.ë…„ë…„ë…„ë…„ ì‹œì‹œ:ë¶„ë¶„:ì´ˆì´ˆ"
+msgstr "¿ù¿ù.ÀÏÀÏ.³â³â³â³â ½Ã½Ã:ºĞºĞ:ÃÊÃÊ"
 
 #: ../src/callbacks.c:1433 ../src/ui_utils.c:529
 msgid "yyyy/mm/dd hh:mm:ss"
-msgstr "ë…„ë…„ë…„ë…„/ì›”ì›”/ì¼ì¼ ì‹œì‹œ:ë¶„ë¶„:ì´ˆì´ˆ"
+msgstr "³â³â³â³â/¿ù¿ù/ÀÏÀÏ ½Ã½Ã:ºĞºĞ:ÃÊÃÊ"
 
 #: ../src/callbacks.c:1435 ../src/ui_utils.c:538
 msgid "_Use Custom Date Format"
-msgstr "ë§ì¶¤ ë‚ ì§œ í˜•ì‹ ì‚¬ìš©(_U)"
+msgstr "¸ÂÃã ³¯Â¥ Çü½Ä »ç¿ë(_U)"
 
 #: ../src/callbacks.c:1446
 msgid "Custom Date Format"
-msgstr "ë§ì¶¤ ë‚ ì§œ í˜•ì‹"
+msgstr "¸ÂÃã ³¯Â¥ Çü½Ä"
 
 #: ../src/callbacks.c:1447
 msgid ""
 "Enter here a custom date and time format. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
-"ì›í•˜ëŠ” ë‚ ì§œì™€ ì‹œê°„ í˜•ì‹ì„ ì…ë ¥í•˜ì‹­ì‹œì˜¤. ANSI C strftimeí•¨ìˆ˜ì˜ ëª¨ë“  ì‹ë³„ê¸°í˜¸ "
-"ì‚¬ìš©ê°€ëŠ¥."
+"¿øÇÏ´Â ³¯Â¥¿Í ½Ã°£ Çü½ÄÀ» ÀÔ·ÂÇÏ½Ê½Ã¿À. ANSI C strftimeÇÔ¼öÀÇ ¸ğµç ½Äº°±âÈ£ "
+"»ç¿ë°¡´É."
 
 #: ../src/callbacks.c:1466
 msgid "Date format string could not be converted (possibly too long)."
-msgstr "ë‚ ì§œí˜•ì‹ ë³€í™˜ ì‹¤íŒ¨: ë„ˆë¬´ ê¹€."
+msgstr "³¯Â¥Çü½Ä º¯È¯ ½ÇÆĞ: ³Ê¹« ±è."
 
 #: ../src/callbacks.c:1748 ../src/callbacks.c:1758
 msgid "No more message items."
-msgstr "ë©”ì‹œì§€ ì•„ì´í…œ ë”ì´ìƒ ì—†ìŒ."
+msgstr "¸Ş½ÃÁö ¾ÆÀÌÅÛ ´õÀÌ»ó ¾øÀ½."
 
 #. initialize the dialog
 #: ../src/dialogs.c:178 ../src/prefs.c:1689
 msgid "Open File"
-msgstr "íŒŒì¼ ì—´ê¸°"
+msgstr "ÆÄÀÏ ¿­±â"
 
 #: ../src/dialogs.c:182 ../src/interface.c:718
 msgid "_View"
-msgstr "ë³´ê¸°(_V)"
+msgstr "º¸±â(_V)"
 
 #: ../src/dialogs.c:185
 msgid ""
 "Opens the file in read-only mode. If you choose more than one file to open, "
 "all files will be opened read-only."
 msgstr ""
-"ì½ê¸°ì „ìš©ìœ¼ë¡œ íŒŒì¼ ì—´ê¸°. í•˜ë‚˜ ì´ìƒì˜ íŒŒì¼ì„ ì—´ìœ¼ë©´ ëª¨ë“  íŒŒì¼ì€ ì½ê¸°ì „ìš©ìœ¼ë¡œì—´"
-"ë¦½ë‹ˆë‹¤."
+"ÀĞ±âÀü¿ëÀ¸·Î ÆÄÀÏ ¿­±â. ÇÏ³ª ÀÌ»óÀÇ ÆÄÀÏÀ» ¿­À¸¸é ¸ğµç ÆÄÀÏÀº ÀĞ±âÀü¿ëÀ¸·Î¿­"
+"¸³´Ï´Ù."
 
 #: ../src/dialogs.c:220
 msgid "Detect by file extension"
-msgstr "íŒŒì¼ í™•ì¥ìë¡œ ì¶”ì •"
+msgstr "ÆÄÀÏ È®ÀåÀÚ·Î ÃßÁ¤"
 
 #: ../src/dialogs.c:231 ../src/interface.c:3697
 msgid "Detect from file"
-msgstr "íŒŒì¼ì—ì„œ ì¶”ì •"
+msgstr "ÆÄÀÏ¿¡¼­ ÃßÁ¤"
 
 #. line 1 with checkbox and encoding combo
 #: ../src/dialogs.c:295
 msgid "Show _hidden files"
-msgstr "ìˆ¨ê¹€íŒŒì¼ ë³´ê¸°(_h)"
+msgstr "¼û±èÆÄÀÏ º¸±â(_h)"
 
 #: ../src/dialogs.c:306
 msgid "Set encoding:"
-msgstr "ì¸ì½”ë”© ì„¤ì •:"
+msgstr "ÀÎÄÚµù ¼³Á¤:"
 
 #: ../src/dialogs.c:316
 msgid ""
@@ -457,15 +457,15 @@ msgid ""
 "Note if you choose multiple files, they will all be opened with the chosen "
 "encoding."
 msgstr ""
-"ì¶”ì •ì— ì‹¤íŒ¨í•˜ë©´ íŒŒì¼ì˜ ì¸ì½”ë”©ì„ ëª…í™•í•˜ê²Œ ì§€ì •í•©ë‹ˆë‹¤.\n"
-"ì§€ë‹ˆê°€ ì˜¬ë°”ë¥´ê²Œ íŒŒì¼ì˜ ì¸ì½”ë”©ì„ ì¶”ì •í•˜ì§€ ëª»í•  ë•Œ ìœ ìš©í•©ë‹ˆë‹¤.\n"
+"ÃßÁ¤¿¡ ½ÇÆĞÇÏ¸é ÆÄÀÏÀÇ ÀÎÄÚµùÀ» ¸íÈ®ÇÏ°Ô ÁöÁ¤ÇÕ´Ï´Ù.\n"
+"Áö´Ï°¡ ¿Ã¹Ù¸£°Ô ÆÄÀÏÀÇ ÀÎÄÚµùÀ» ÃßÁ¤ÇÏÁö ¸øÇÒ ¶§ À¯¿ëÇÕ´Ï´Ù.\n"
 "\n"
-"ì£¼ì˜:ë§Œì•½ ë‹¤ìˆ˜ì˜ íŒŒì¼ì„ ì„ íƒí•  ë•Œì—ëŠ” ê·¸ ëª¨ë“  íŒŒì¼ë“¤ì€ ì§€ì •í•œ ì¸ì½”ë”©ìœ¼ë¡œì—´ë¦¬"
-"ê²Œ ë©ë‹ˆë‹¤."
+"ÁÖÀÇ:¸¸¾à ´Ù¼öÀÇ ÆÄÀÏÀ» ¼±ÅÃÇÒ ¶§¿¡´Â ±× ¸ğµç ÆÄÀÏµéÀº ÁöÁ¤ÇÑ ÀÎÄÚµùÀ¸·Î¿­¸®"
+"°Ô µË´Ï´Ù."
 
 #: ../src/dialogs.c:336
 msgid "Set filetype:"
-msgstr "íŒŒì¼í˜•ì‹ ì„¤ì •:"
+msgstr "ÆÄÀÏÇü½Ä ¼³Á¤:"
 
 #: ../src/dialogs.c:346
 msgid ""
@@ -474,150 +474,150 @@ msgid ""
 "Note if you choose multiple files, they will all be opened with the chosen "
 "filetype."
 msgstr ""
-"íŒŒì¼ í™•ì¥ìë¡œ ì¶”ì •í•˜ê¸°ì— ì‹¤íŒ¨í•˜ë©´ íŒŒì¼ì˜ ì¸ì½”ë”©ì„ ëª…í™•í•˜ê²Œ ì§€ì •í•©ë‹ˆë‹¤.\n"
+"ÆÄÀÏ È®ÀåÀÚ·Î ÃßÁ¤ÇÏ±â¿¡ ½ÇÆĞÇÏ¸é ÆÄÀÏÀÇ ÀÎÄÚµùÀ» ¸íÈ®ÇÏ°Ô ÁöÁ¤ÇÕ´Ï´Ù.\n"
 "\n"
-"ì£¼ì˜:ë§Œì•½ ë‹¤ìˆ˜ì˜ íŒŒì¼ì„ ì„ íƒí•  ë•Œì—ëŠ” ê·¸ ëª¨ë“  íŒŒì¼ë“¤ì€ ì§€ì •í•œ íŒŒì¼í˜•ì‹ìœ¼ë¡œì—´"
-"ë¦¬ê²Œ ë©ë‹ˆë‹¤."
+"ÁÖÀÇ:¸¸¾à ´Ù¼öÀÇ ÆÄÀÏÀ» ¼±ÅÃÇÒ ¶§¿¡´Â ±× ¸ğµç ÆÄÀÏµéÀº ÁöÁ¤ÇÑ ÆÄÀÏÇü½ÄÀ¸·Î¿­"
+"¸®°Ô µË´Ï´Ù."
 
 #: ../src/dialogs.c:451 ../plugins/export.c:333
 #, c-format
 msgid "The file '%s' already exists. Do you want to overwrite it?"
-msgstr "ê¸°ì¡´ì˜ '%s'íŒŒì¼ì´ ìˆìŠµë‹ˆë‹¤. ë°”ê¾¸ì‹œê² ìŠµë‹ˆê¹Œ?"
+msgstr "±âÁ¸ÀÇ '%s'ÆÄÀÏÀÌ ÀÖ½À´Ï´Ù. ¹Ù²Ù½Ã°Ú½À´Ï±î?"
 
 #: ../src/dialogs.c:476
 msgid "Save File"
-msgstr "íŒŒì¼ ì €ì¥"
+msgstr "ÆÄÀÏ ÀúÀå"
 
 #: ../src/dialogs.c:484
 msgid "R_ename"
-msgstr "ì´ë¦„ ë°”ê¾¸ê¸°(_e)"
+msgstr "ÀÌ¸§ ¹Ù²Ù±â(_e)"
 
 #: ../src/dialogs.c:487
 msgid "Save the file and rename it."
-msgstr "íŒŒì¼ì„ ì €ì¥í•˜ê³  ì´ë¦„ ë°”ê¾¸ê¸°."
+msgstr "ÆÄÀÏÀ» ÀúÀåÇÏ°í ÀÌ¸§ ¹Ù²Ù±â."
 
 #: ../src/dialogs.c:495
 msgid "_Open file in a new tab"
-msgstr "ìƒˆë¡œìš´ íƒ­ì— íŒŒì¼ ì—´ê¸°(_O)"
+msgstr "»õ·Î¿î ÅÇ¿¡ ÆÄÀÏ ¿­±â(_O)"
 
 #: ../src/dialogs.c:497
 msgid ""
 "Keep the current unsaved document open and open the newly saved file in a "
 "new tab."
 msgstr ""
-"ì €ì¥ë˜ì§€ ì•Šì€ í˜„ì¬íŒŒì¼ì„ ê·¸ëŒ€ë¡œ ë‘ê³ , ìƒˆë¡œìš´ íƒ­ì— ìƒˆë¡œìš´ ì €ì¥ëœ íŒŒì¼ ì—´ê¸°."
+"ÀúÀåµÇÁö ¾ÊÀº ÇöÀçÆÄÀÏÀ» ±×´ë·Î µÎ°í, »õ·Î¿î ÅÇ¿¡ »õ·Î¿î ÀúÀåµÈ ÆÄÀÏ ¿­±â."
 
 #: ../src/dialogs.c:673
 msgid "_Don't save"
-msgstr "ì €ì¥í•˜ì§€ ì•Šê¸°(_D)"
+msgstr "ÀúÀåÇÏÁö ¾Ê±â(_D)"
 
 #: ../src/dialogs.c:707
 #, c-format
 msgid "The file '%s' is not saved."
-msgstr "'%s' íŒŒì¼ì´ ì €ì¥ë˜ì§€ ì•Šì•˜ìŒ."
+msgstr "'%s' ÆÄÀÏÀÌ ÀúÀåµÇÁö ¾Ê¾ÒÀ½."
 
 #: ../src/dialogs.c:709
 msgid "Do you want to save it before closing?"
-msgstr "ë‹«ê¸° ì „ì— ì €ì¥í•˜ì‹œê² ìŠµë‹ˆê¹Œ?"
+msgstr "´İ±â Àü¿¡ ÀúÀåÇÏ½Ã°Ú½À´Ï±î?"
 
 #: ../src/dialogs.c:784
 msgid "Choose font"
-msgstr "ê¸€ê¼´ ê³ ë¥´ê¸°"
+msgstr "±Û²Ã °í¸£±â"
 
 #: ../src/dialogs.c:972 ../src/keybindings.c:348
 msgid "Go to Line"
-msgstr "ì¤„ë²ˆí˜¸ë¡œ ì´ë™"
+msgstr "ÁÙ¹øÈ£·Î ÀÌµ¿"
 
 #: ../src/dialogs.c:979
 msgid "Enter the line you want to go to:"
-msgstr "ì´ë™í•˜ê³  ì‹¶ì€ ì¤„ë²ˆí˜¸ ì…ë ¥:"
+msgstr "ÀÌµ¿ÇÏ°í ½ÍÀº ÁÙ¹øÈ£ ÀÔ·Â:"
 
 #: ../src/dialogs.c:1026
 msgid ""
 "An error occurred or file information could not be retrieved (e.g. from a "
 "new file)."
 msgstr ""
-"ì˜¤ë¥˜ê°€ ë°œìƒí–ˆê±°ë‚˜ íŒŒì¼ ì •ë³´ë¥¼ ê°€ì ¸ì˜¬ ìˆ˜ ì—†ìŒ\n"
-"(ì˜ˆ: ì €ì¥í•˜ì§€ ì•Šì€ ìƒˆ íŒŒì¼)."
+"¿À·ù°¡ ¹ß»ıÇß°Å³ª ÆÄÀÏ Á¤º¸¸¦ °¡Á®¿Ã ¼ö ¾øÀ½\n"
+"(¿¹: ÀúÀåÇÏÁö ¾ÊÀº »õ ÆÄÀÏ)."
 
 #: ../src/dialogs.c:1045 ../src/dialogs.c:1046 ../src/dialogs.c:1047
 #: ../src/dialogs.c:1053 ../src/dialogs.c:1054 ../src/dialogs.c:1055
 #: ../src/symbols.c:1388 ../src/symbols.c:1409 ../src/symbols.c:1461
 #: ../src/ui_utils.c:195
 msgid "unknown"
-msgstr "ì•Œ ìˆ˜ ì—†ìŒ"
+msgstr "¾Ë ¼ö ¾øÀ½"
 
 #: ../src/dialogs.c:1059
 msgid "Properties"
-msgstr "ì†ì„±"
+msgstr "¼Ó¼º"
 
 #: ../src/dialogs.c:1089
 msgid "<b>Type:</b>"
-msgstr "<b>í˜•ì‹:</b>"
+msgstr "<b>Çü½Ä:</b>"
 
 #: ../src/dialogs.c:1103
 msgid "<b>Size:</b>"
-msgstr "<b>í¬ê¸°:</b>"
+msgstr "<b>Å©±â:</b>"
 
 #: ../src/dialogs.c:1119
 msgid "<b>Location:</b>"
-msgstr "<b>ìœ„ì¹˜:</b>"
+msgstr "<b>À§Ä¡:</b>"
 
 #: ../src/dialogs.c:1133
 msgid "<b>Read-only:</b>"
-msgstr "<b>ì½ê¸°ì „ìš©:</b>"
+msgstr "<b>ÀĞ±âÀü¿ë:</b>"
 
 #: ../src/dialogs.c:1140
 msgid "(only inside Geany)"
-msgstr "(ì§€ë‹ˆ ë‚´ë¶€ì—ì„œë§Œ)"
+msgstr "(Áö´Ï ³»ºÎ¿¡¼­¸¸)"
 
 #: ../src/dialogs.c:1149
 msgid "<b>Encoding:</b>"
-msgstr "<b>ì¸ì½”ë”©:</b>"
+msgstr "<b>ÀÎÄÚµù:</b>"
 
 #. BOM = byte order mark
 #: ../src/dialogs.c:1159 ../src/ui_utils.c:198
 msgid "(with BOM)"
-msgstr "(BOMê³¼ í•¨ê»˜)"
+msgstr "(BOM°ú ÇÔ²²)"
 
 #: ../src/dialogs.c:1159
 msgid "(without BOM)"
-msgstr "(BOM ì—†ì´)"
+msgstr "(BOM ¾øÀÌ)"
 
 #: ../src/dialogs.c:1170
 msgid "<b>Modified:</b>"
-msgstr "<b>ìˆ˜ì •:</b>"
+msgstr "<b>¼öÁ¤:</b>"
 
 #: ../src/dialogs.c:1184
 msgid "<b>Changed:</b>"
-msgstr "<b>ë°”ë€œ:</b>"
+msgstr "<b>¹Ù²ñ:</b>"
 
 #: ../src/dialogs.c:1198
 msgid "<b>Accessed:</b>"
-msgstr "<b>ì ‘ê·¼:</b>"
+msgstr "<b>Á¢±Ù:</b>"
 
 #: ../src/dialogs.c:1220
 msgid "<b>Permissions:</b>"
-msgstr "<b>í—ˆê°€:</b>"
+msgstr "<b>Çã°¡:</b>"
 
 #. Header
 #: ../src/dialogs.c:1228
 msgid "Read:"
-msgstr "ì½ê¸°:"
+msgstr "ÀĞ±â:"
 
 #: ../src/dialogs.c:1235
 msgid "Write:"
-msgstr "ì“°ê¸°:"
+msgstr "¾²±â:"
 
 #. Owner
 #: ../src/dialogs.c:1250
 msgid "Owner:"
-msgstr "ì†Œìœ ì:"
+msgstr "¼ÒÀ¯ÀÚ:"
 
 #. Group
 #: ../src/dialogs.c:1286
 msgid "Group:"
-msgstr "ê·¸ë£¹:"
+msgstr "±×·ì:"
 
 #. Other
 #: ../src/dialogs.c:1322
@@ -627,17 +627,17 @@ msgstr ""
 #: ../src/document.c:472
 #, c-format
 msgid "File %s closed."
-msgstr "%s íŒŒì¼ ë‹«ìŒ."
+msgstr "%s ÆÄÀÏ ´İÀ½."
 
 #: ../src/document.c:586
 #, c-format
 msgid "New file \"%s\" opened."
-msgstr "ìƒˆë¡œìš´ \"%s\" íŒŒì¼ ì—´ìŒ."
+msgstr "»õ·Î¿î \"%s\" ÆÄÀÏ ¿­À½."
 
 #: ../src/document.c:761 ../src/document.c:1225
 #, c-format
 msgid "Could not open file %s (%s)"
-msgstr "%s íŒŒì¼ ì—´ ìˆ˜ ì—†ìŒ (%s)"
+msgstr "%s ÆÄÀÏ ¿­ ¼ö ¾øÀ½ (%s)"
 
 #: ../src/document.c:791
 #, c-format
@@ -647,60 +647,60 @@ msgid ""
 "cause data loss.\n"
 "The file was set to read-only."
 msgstr ""
-"\"%s\" íŒŒì¼ì„ ì™„ì „í•˜ê²Œ ì—´ ìˆ˜ ì—†ì–´ ìƒëµë˜ì—ˆìŠµë‹ˆë‹¤.\n"
-"íŒŒì¼ì— NULL ë°”ì´íŠ¸ê°€ í¬í•¨ë˜ì–´ ìˆëŠ” ê²½ìš° ì¼ì–´ë‚  ìˆ˜ ìˆëŠ” ìƒí™©ì…ë‹ˆë‹¤.\n"
-"ì£¼ì˜: ì´ íŒŒì¼ì„ ì €ì¥í•  ê²½ìš° ë°ì´í„°ë¥¼ ë§ì‹¤í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.\n"
+"\"%s\" ÆÄÀÏÀ» ¿ÏÀüÇÏ°Ô ¿­ ¼ö ¾ø¾î »ı·«µÇ¾ú½À´Ï´Ù.\n"
+"ÆÄÀÏ¿¡ NULL ¹ÙÀÌÆ®°¡ Æ÷ÇÔµÇ¾î ÀÖ´Â °æ¿ì ÀÏ¾î³¯ ¼ö ÀÖ´Â »óÈ²ÀÔ´Ï´Ù.\n"
+"ÁÖÀÇ: ÀÌ ÆÄÀÏÀ» ÀúÀåÇÒ °æ¿ì µ¥ÀÌÅÍ¸¦ ¸Á½ÇÇÒ ¼ö ÀÖ½À´Ï´Ù.\n"
 "\n"
-"íŒŒì¼ì„ ì½ê¸°ì „ìš©ìœ¼ë¡œ ì„¤ì •í•¨"
+"ÆÄÀÏÀ» ÀĞ±âÀü¿ëÀ¸·Î ¼³Á¤ÇÔ"
 
 #: ../src/document.c:815
 #, c-format
 msgid "The file \"%s\" is not valid %s."
-msgstr "\"%s\" íŒŒì¼ì€ ì˜¬ë°”ë¥´ì§€ ì•Šì€ %s ì…ë‹ˆë‹¤."
+msgstr "\"%s\" ÆÄÀÏÀº ¿Ã¹Ù¸£Áö ¾ÊÀº %s ÀÔ´Ï´Ù."
 
 #: ../src/document.c:824
 #, c-format
 msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
 "supported."
-msgstr "\"%s\" íŒŒì¼ì€ í…ìŠ¤íŠ¸ íŒŒì¼ì´ ì•„ë‹ˆê±°ë‚˜ ì§€ì›ë˜ì§€ ì•ŠëŠ” ì¸ì½”ë”© í˜•ì‹ì…ë‹ˆë‹¤."
+msgstr "\"%s\" ÆÄÀÏÀº ÅØ½ºÆ® ÆÄÀÏÀÌ ¾Æ´Ï°Å³ª Áö¿øµÇÁö ¾Ê´Â ÀÎÄÚµù Çü½ÄÀÔ´Ï´Ù."
 
 #: ../src/document.c:961
 msgid "Spaces"
-msgstr "ìŠ¤í˜ì´ìŠ¤"
+msgstr "½ºÆäÀÌ½º"
 
 #: ../src/document.c:964
 msgid "Tabs"
-msgstr "íƒ­"
+msgstr "ÅÇ"
 
 #: ../src/document.c:967
 msgid "Tabs and Spaces"
-msgstr "íƒ­ê³¼ ìŠ¤í˜ì´ìŠ¤"
+msgstr "ÅÇ°ú ½ºÆäÀÌ½º"
 
 #. For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
 #. * and Spaces), the second one is the filename
 #: ../src/document.c:972
 #, c-format
 msgid "Setting %s indentation mode for %s."
-msgstr "%2$s íŒŒì¼ %1$s ë“¤ì—¬ì“°ê¸°ëª¨ë“œ ì„¤ì •."
+msgstr "%2$s ÆÄÀÏ %1$s µé¿©¾²±â¸ğµå ¼³Á¤."
 
 #: ../src/document.c:1009
 msgid "Invalid filename"
-msgstr "ì˜¬ë°”ë¥´ì§€ ì•Šì€ íŒŒì¼ ì´ë¦„"
+msgstr "¿Ã¹Ù¸£Áö ¾ÊÀº ÆÄÀÏ ÀÌ¸§"
 
 #: ../src/document.c:1120
 #, c-format
 msgid "File %s reloaded."
-msgstr "%s íŒŒì¼ ë‹¤ì‹œ ë¶ˆëŸ¬ì˜´."
+msgstr "%s ÆÄÀÏ ´Ù½Ã ºÒ·¯¿È."
 
 #: ../src/document.c:1122
 #, c-format
 msgid "File %s opened(%d%s)."
-msgstr "%s íŒŒì¼ ì—´ìŒ(%d%s)."
+msgstr "%s ÆÄÀÏ ¿­À½(%d%s)."
 
 #: ../src/document.c:1124
 msgid ", read-only"
-msgstr ", ì½ê¸°ì „ìš©"
+msgstr ", ÀĞ±âÀü¿ë"
 
 #: ../src/document.c:1351
 #, c-format
@@ -708,8 +708,8 @@ msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
 "remains unsaved."
 msgstr ""
-"UTF-8ë¡œë¶€í„° ë³€í™˜ì´ \"%s\"ì—ì„œ ì‹¤íŒ¨í•¨.\n"
-" íŒŒì¼ ì €ì¥ë˜ì§€ ì•ŠìŒ."
+"UTF-8·ÎºÎÅÍ º¯È¯ÀÌ \"%s\"¿¡¼­ ½ÇÆĞÇÔ.\n"
+" ÆÄÀÏ ÀúÀåµÇÁö ¾ÊÀ½."
 
 #: ../src/document.c:1373
 #, c-format
@@ -717,221 +717,221 @@ msgid ""
 "Error message: %s\n"
 "The error occurred at \"%s\" (line: %d, column: %d)."
 msgstr ""
-"ì˜¤ë¥˜ ë©”ì‹œì§€: %s\n"
-"\"%s\"ì—ì„œ ì˜¤ë¥˜ ë°œìƒ(%dí–‰, %dì—´)"
+"¿À·ù ¸Ş½ÃÁö: %s\n"
+"\"%s\"¿¡¼­ ¿À·ù ¹ß»ı(%dÇà, %d¿­)"
 
 #: ../src/document.c:1378
 #, c-format
 msgid "Error message: %s."
-msgstr "ì˜¤ë¥˜ ë©”ì‹œì§€: %s."
+msgstr "¿À·ù ¸Ş½ÃÁö: %s."
 
 #: ../src/document.c:1454 ../src/document.c:1510
 msgid "Error saving file."
-msgstr "íŒŒì¼ ì €ì¥ ì˜¤ë¥˜."
+msgstr "ÆÄÀÏ ÀúÀå ¿À·ù."
 
 #: ../src/document.c:1508
 #, c-format
 msgid "Error saving file (%s)."
-msgstr "%s íŒŒì¼ ì €ì¥ ì˜¤ë¥˜."
+msgstr "%s ÆÄÀÏ ÀúÀå ¿À·ù."
 
 #: ../src/document.c:1541
 #, c-format
 msgid "File %s saved."
-msgstr "%s íŒŒì¼ ì €ì¥ë¨."
+msgstr "%s ÆÄÀÏ ÀúÀåµÊ."
 
 #: ../src/document.c:1609 ../src/document.c:1664 ../src/document.c:1672
 #, c-format
 msgid "\"%s\" was not found."
-msgstr "\"%s\" ì—†ìŒ."
+msgstr "\"%s\" ¾øÀ½."
 
 #: ../src/document.c:1672
 msgid "Wrap search and find again?"
-msgstr "ë‹¤ì‹œ ì²˜ìŒë¶€í„° ì°¾ì„ê¹Œìš”?"
+msgstr "´Ù½Ã Ã³À½ºÎÅÍ Ã£À»±î¿ä?"
 
 #: ../src/document.c:1749 ../src/search.c:913 ../src/search.c:1426
 #: ../src/search.c:1427
 #, c-format
 msgid "No matches found for \"%s\"."
-msgstr "\"%s\" ì°¾ì„ ìˆ˜ ì—†ìŒ."
+msgstr "\"%s\" Ã£À» ¼ö ¾øÀ½."
 
 #: ../src/document.c:1760 ../src/document.c:1769
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
-msgstr[0] "%s: %dë²ˆ \"%s\" -> \"%s\" ë°”ê¿ˆ."
+msgstr[0] "%s: %d¹ø \"%s\" -> \"%s\" ¹Ù²Ş."
 
 #: ../src/document.c:2538
 msgid "Do you want to reload it?"
-msgstr "ë‹¤ì‹œ ë¶ˆëŸ¬ì˜¬ê¹Œìš”?"
+msgstr "´Ù½Ã ºÒ·¯¿Ã±î¿ä?"
 
 #: ../src/document.c:2539
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
 "the current buffer."
-msgstr "ë””ìŠ¤í¬ì— ìˆëŠ” '%s' íŒŒì¼ì´ í˜„ì¬ ë²„í¼ë³´ë‹¤ ìƒˆë¡­ìŠµë‹ˆë‹¤."
+msgstr "µğ½ºÅ©¿¡ ÀÖ´Â '%s' ÆÄÀÏÀÌ ÇöÀç ¹öÆÛº¸´Ù »õ·Ó½À´Ï´Ù."
 
 #: ../src/document.c:2583
 msgid "Try to resave the file?"
-msgstr "ë‹¤ì‹œ ì €ì¥í• ê¹Œìš”?"
+msgstr "´Ù½Ã ÀúÀåÇÒ±î¿ä?"
 
 #: ../src/document.c:2584
 #, c-format
 msgid "File \"%s\" was not found on disk!"
-msgstr "\"%s\"íŒŒì¼ ì—†ìŒ"
+msgstr "\"%s\"ÆÄÀÏ ¾øÀ½"
 
 #: ../src/editor.c:3504 ../src/utils.c:291
 msgid "Win (CRLF)"
-msgstr "ìœˆë„ìš° (CRLF)"
+msgstr "À©µµ¿ì (CRLF)"
 
 #: ../src/editor.c:3505 ../src/utils.c:292
 msgid "Mac (CR)"
-msgstr "ë§¤í‚¨í† ì‹œ (CR)"
+msgstr "¸ÅÅ²Åä½Ã (CR)"
 
 #: ../src/editor.c:3506 ../src/utils.c:293
 msgid "Unix (LF)"
-msgstr "ìœ ë‹‰ìŠ¤ (LF)"
+msgstr "À¯´Ğ½º (LF)"
 
 #: ../src/editor.c:3632
 msgid "Enter Tab Width"
-msgstr "íƒ­ ë„ˆë¹„ ì…ë ¥"
+msgstr "ÅÇ ³Êºñ ÀÔ·Â"
 
 #: ../src/editor.c:3633
 msgid "Enter the amount of spaces which should be replaced by a tab character."
-msgstr "íƒ­ì„ ëª‡ê°œì˜ ìŠ¤í˜ì´ìŠ¤ë¡œ êµ¬ì„±í• ì§€ ì…ë ¥í•˜ì‹œì˜¤."
+msgstr "ÅÇÀ» ¸î°³ÀÇ ½ºÆäÀÌ½º·Î ±¸¼ºÇÒÁö ÀÔ·ÂÇÏ½Ã¿À."
 
 #: ../src/encodings.c:75
 msgid "Celtic"
-msgstr "ì¼ˆíŠ¸ì–´"
+msgstr "ÄÌÆ®¾î"
 
 #: ../src/encodings.c:76 ../src/encodings.c:77
 msgid "Greek"
-msgstr "ê·¸ë¦¬ìŠ¤ì–´"
+msgstr "±×¸®½º¾î"
 
 #: ../src/encodings.c:78
 msgid "Nordic"
-msgstr "ê²Œë¥´ë§Œì–´"
+msgstr "°Ô¸£¸¸¾î"
 
 #: ../src/encodings.c:79
 msgid "South European"
-msgstr "ë‚¨ìœ ëŸ½ì–´"
+msgstr "³²À¯·´¾î"
 
 #: ../src/encodings.c:80 ../src/encodings.c:81 ../src/encodings.c:82
 #: ../src/encodings.c:83
 msgid "Western"
-msgstr "ì„œìœ ëŸ½ì–´"
+msgstr "¼­À¯·´¾î"
 
 #: ../src/encodings.c:85 ../src/encodings.c:86 ../src/encodings.c:87
 msgid "Baltic"
-msgstr "ë°œíŠ¸ì–´"
+msgstr "¹ßÆ®¾î"
 
 #: ../src/encodings.c:88 ../src/encodings.c:89 ../src/encodings.c:90
 msgid "Central European"
-msgstr "ì¤‘ì•™ìœ ëŸ½ì–´"
+msgstr "Áß¾ÓÀ¯·´¾î"
 
 #. ISO-IR-111 not available on Windows
 #: ../src/encodings.c:91 ../src/encodings.c:92 ../src/encodings.c:94
 #: ../src/encodings.c:95 ../src/encodings.c:96
 msgid "Cyrillic"
-msgstr "í‚¤ë¦´ìëª¨"
+msgstr "Å°¸±ÀÚ¸ğ"
 
 #: ../src/encodings.c:97
 msgid "Cyrillic/Russian"
-msgstr "í‚¤ë¦´ìëª¨/ëŸ¬ì‹œì•„ì–´"
+msgstr "Å°¸±ÀÚ¸ğ/·¯½Ã¾Æ¾î"
 
 #: ../src/encodings.c:98
 msgid "Cyrillic/Ukrainian"
-msgstr "í‚¤ë¦´ìëª¨/ìš°í¬ë¼ì´ë‚˜ì–´"
+msgstr "Å°¸±ÀÚ¸ğ/¿ìÅ©¶óÀÌ³ª¾î"
 
 #: ../src/encodings.c:99
 msgid "Romanian"
-msgstr "ë£¨ë§ˆë‹ˆì•„ì–´"
+msgstr "·ç¸¶´Ï¾Æ¾î"
 
 #: ../src/encodings.c:101 ../src/encodings.c:102 ../src/encodings.c:103
 msgid "Arabic"
-msgstr "ì•„ëì–´"
+msgstr "¾Æ¶ø¾î"
 
 #. not available at all, ?
 #: ../src/encodings.c:104 ../src/encodings.c:106 ../src/encodings.c:107
 msgid "Hebrew"
-msgstr "íˆë¸Œë¦¬ì–´"
+msgstr "È÷ºê¸®¾î"
 
 #: ../src/encodings.c:108
 msgid "Hebrew Visual"
-msgstr "íˆë¸Œë¦¬(ISO-Visual)"
+msgstr "È÷ºê¸®(ISO-Visual)"
 
 #: ../src/encodings.c:110
 msgid "Armenian"
-msgstr "ì•„ë¥´ë©”ë‹ˆì•„ì–´"
+msgstr "¾Æ¸£¸Ş´Ï¾Æ¾î"
 
 #: ../src/encodings.c:111
 msgid "Georgian"
-msgstr "ê·¸ë£¨ì§€ì•„ì–´"
+msgstr "±×·çÁö¾Æ¾î"
 
 #: ../src/encodings.c:112
 msgid "Thai"
-msgstr "íƒœêµ­ì–´"
+msgstr "ÅÂ±¹¾î"
 
 #: ../src/encodings.c:113 ../src/encodings.c:114 ../src/encodings.c:115
 msgid "Turkish"
-msgstr "í„°í‚¤ì–´"
+msgstr "ÅÍÅ°¾î"
 
 #: ../src/encodings.c:116 ../src/encodings.c:117 ../src/encodings.c:118
 msgid "Vietnamese"
-msgstr "ë² íŠ¸ë‚¨ì–´"
+msgstr "º£Æ®³²¾î"
 
 #: ../src/encodings.c:120 ../src/encodings.c:121 ../src/encodings.c:122
 #: ../src/encodings.c:123 ../src/encodings.c:124 ../src/encodings.c:125
 #: ../src/encodings.c:126 ../src/encodings.c:127
 msgid "Unicode"
-msgstr "ìœ ë‹ˆì½”ë“œ"
+msgstr "À¯´ÏÄÚµå"
 
 #. maybe not available on Linux
 #: ../src/encodings.c:129 ../src/encodings.c:130 ../src/encodings.c:131
 #: ../src/encodings.c:133
 msgid "Chinese Simplified"
-msgstr "ì¤‘êµ­ì–´ ê°„ì²´"
+msgstr "Áß±¹¾î °£Ã¼"
 
 #: ../src/encodings.c:134 ../src/encodings.c:135 ../src/encodings.c:136
 msgid "Chinese Traditional"
-msgstr "ì¤‘êµ­ì–´ ë²ˆì²´"
+msgstr "Áß±¹¾î ¹øÃ¼"
 
 #: ../src/encodings.c:137 ../src/encodings.c:138 ../src/encodings.c:139
 msgid "Japanese"
-msgstr "ì¼ë³¸ì–´"
+msgstr "ÀÏº»¾î"
 
 #: ../src/encodings.c:140 ../src/encodings.c:141 ../src/encodings.c:142
 #: ../src/encodings.c:143
 msgid "Korean"
-msgstr "í•œêµ­ì–´"
+msgstr "ÇÑ±¹¾î"
 
 #: ../src/encodings.c:145
 msgid "Without encoding"
-msgstr "ì¸ì½”ë”© ì—†ìŒ"
+msgstr "ÀÎÄÚµù ¾øÀ½"
 
 #: ../src/encodings.c:351
 msgid "_West European"
-msgstr "ì„œìœ ëŸ½(_W)"
+msgstr "¼­À¯·´(_W)"
 
 #: ../src/encodings.c:357
 msgid "_East European"
-msgstr "ë™ìœ ëŸ½(_E)"
+msgstr "µ¿À¯·´(_E)"
 
 #: ../src/encodings.c:363
 msgid "East _Asian"
-msgstr "ë™ì•„ì‹œì•„(_A)"
+msgstr "µ¿¾Æ½Ã¾Æ(_A)"
 
 #: ../src/encodings.c:369
 msgid "_SE & SW Asian"
-msgstr "ë™ë‚¨ & ì„œë‚¨ ì•„ì‹œì•„(_S)"
+msgstr "µ¿³² & ¼­³² ¾Æ½Ã¾Æ(_S)"
 
 #: ../src/encodings.c:375
 msgid "_Middle Eastern"
-msgstr "ì¤‘ë™ì•„ì‹œì•„(_M)"
+msgstr "Áßµ¿¾Æ½Ã¾Æ(_M)"
 
 #: ../src/encodings.c:381
 msgid "_Unicode"
-msgstr "ìœ ë‹ˆì½”ë“œ(_U)"
+msgstr "À¯´ÏÄÚµå(_U)"
 
 #: ../src/filetypes.c:85 ../src/filetypes.c:96 ../src/filetypes.c:108
 #: ../src/filetypes.c:119 ../src/filetypes.c:130 ../src/filetypes.c:141
@@ -944,11 +944,11 @@ msgstr "ìœ ë‹ˆì½”ë“œ(_U)"
 #: ../src/filetypes.c:412 ../src/filetypes.c:423 ../src/filetypes.c:468
 #, c-format
 msgid "%s source file"
-msgstr "%s ì†ŒìŠ¤ íŒŒì¼"
+msgstr "%s ¼Ò½º ÆÄÀÏ"
 
 #: ../src/filetypes.c:320
 msgid "Shell script file"
-msgstr "ì…¸ ìŠ¤í¬ë¦½íŠ¸ íŒŒì¼"
+msgstr "¼Ğ ½ºÅ©¸³Æ® ÆÄÀÏ"
 
 #: ../src/filetypes.c:332
 msgid "Makefile"
@@ -956,757 +956,757 @@ msgstr "Makefile"
 
 #: ../src/filetypes.c:344
 msgid "XML document"
-msgstr "XML ë¬¸ì„œ"
+msgstr "XML ¹®¼­"
 
 #: ../src/filetypes.c:379
 msgid "Cascading StyleSheet"
-msgstr "CSS ìŠ¤íƒ€ì¼ì‹œíŠ¸"
+msgstr "CSS ½ºÅ¸ÀÏ½ÃÆ®"
 
 #: ../src/filetypes.c:390
 msgid "SQL Dump file"
-msgstr "SQL ë¤í”„ íŒŒì¼"
+msgstr "SQL ´ıÇÁ ÆÄÀÏ"
 
 #: ../src/filetypes.c:434
 msgid "Diff file"
-msgstr "Diff íŒŒì¼"
+msgstr "Diff ÆÄÀÏ"
 
 #: ../src/filetypes.c:445
 msgid "Config file"
-msgstr "í™˜ê²½ì„¤ì • íŒŒì¼"
+msgstr "È¯°æ¼³Á¤ ÆÄÀÏ"
 
 #: ../src/filetypes.c:457
 msgid "Gettext translation file"
-msgstr "Gettext ë²ˆì—­ íŒŒì¼"
+msgstr "Gettext ¹ø¿ª ÆÄÀÏ"
 
 #: ../src/filetypes.c:479
 #, c-format
 msgid "%s script file"
-msgstr "%s ìŠ¤í¬ë¦½íŠ¸ íŒŒì¼"
+msgstr "%s ½ºÅ©¸³Æ® ÆÄÀÏ"
 
 #: ../src/filetypes.c:490
 msgid "reStructuredText file"
-msgstr "reStructuredText íŒŒì¼"
+msgstr "reStructuredText ÆÄÀÏ"
 
 #: ../src/filetypes.c:502 ../src/project.c:272
 msgid "All files"
-msgstr "ëª¨ë“  íŒŒì¼"
+msgstr "¸ğµç ÆÄÀÏ"
 
 #: ../src/filetypes.c:580
 msgid "_Programming Languages"
-msgstr "í”„ë¡œê·¸ë˜ë° ì–¸ì–´(_P)"
+msgstr "ÇÁ·Î±×·¡¹Ö ¾ğ¾î(_P)"
 
 #: ../src/filetypes.c:581
 msgid "_Scripting Languages"
-msgstr "ìŠ¤í¬ë¦½íŠ¸ ì–¸ì–´(_S)"
+msgstr "½ºÅ©¸³Æ® ¾ğ¾î(_S)"
 
 #: ../src/filetypes.c:582
 msgid "_Markup Languages"
-msgstr "Markup ì–¸ì–´(_M)"
+msgstr "Markup ¾ğ¾î(_M)"
 
 #: ../src/filetypes.c:583
 msgid "M_iscellaneous Languages"
-msgstr "ê¸°íƒ€ ì–¸ì–´(_i)"
+msgstr "±âÅ¸ ¾ğ¾î(_i)"
 
 #: ../src/filetypes.c:612 ../src/interface.c:3616 ../src/templates.c:347
 #: ../src/ui_utils.c:148
 msgid "None"
-msgstr "ì—†ìŒ"
+msgstr "¾øÀ½"
 
 #: ../src/filetypes.c:1149 ../src/win32.c:107
 msgid "All Source"
-msgstr "ëª¨ë“  ì†ŒìŠ¤"
+msgstr "¸ğµç ¼Ò½º"
 
 #: ../src/filetypes.c:1227
 #, c-format
 msgid "Bad regex for filetype %s: %s"
-msgstr "%s íŒŒì¼í˜•ì‹ì— ë§ì§€ ì•ŠëŠ” ì •ê·œí‘œí˜„ì‹: %s"
+msgstr "%s ÆÄÀÏÇü½Ä¿¡ ¸ÂÁö ¾Ê´Â Á¤±ÔÇ¥Çö½Ä: %s"
 
 #: ../src/geany.h:50
 msgid "untitled"
-msgstr "ë¬´ì œ"
+msgstr "¹«Á¦"
 
 #: ../src/interface.c:301
 msgid "_File"
-msgstr "íŒŒì¼(_F)"
+msgstr "ÆÄÀÏ(_F)"
 
 #: ../src/interface.c:312
 msgid "New (with _Template)"
-msgstr "í…œí”Œë¦¿ìœ¼ë¡œ ìƒˆë¡œ ë§Œë“¤ê¸°(_T)"
+msgstr "ÅÛÇÃ¸´À¸·Î »õ·Î ¸¸µé±â(_T)"
 
 #: ../src/interface.c:323 ../src/interface.c:384 ../src/interface.c:562
 #: ../src/interface.c:622 ../src/interface.c:636 ../src/interface.c:866
 #: ../src/interface.c:876 ../src/interface.c:2287 ../src/interface.c:2347
 #: ../src/interface.c:2361
 msgid "invisible"
-msgstr "ë³´ì´ì§€ ì•ŠëŠ”"
+msgstr "º¸ÀÌÁö ¾Ê´Â"
 
 #: ../src/interface.c:335 ../src/interface.c:2213
 msgid "Open Selected F_ile"
-msgstr "ì„ íƒí•œ íŒŒì¼ ì—´ê¸°(_i)"
+msgstr "¼±ÅÃÇÑ ÆÄÀÏ ¿­±â(_i)"
 
 #: ../src/interface.c:339
 msgid "Recent _Files"
-msgstr "ìµœê·¼ì— ì‚¬ìš©í•œ íŒŒì¼ë“¤(_F)"
+msgstr "ÃÖ±Ù¿¡ »ç¿ëÇÑ ÆÄÀÏµé(_F)"
 
 #: ../src/interface.c:356
 msgid "Save A_ll"
-msgstr "ëª¨ë‘ ì €ì¥(_l)"
+msgstr "¸ğµÎ ÀúÀå(_l)"
 
 #: ../src/interface.c:359
 msgid "Saves all open files"
-msgstr "ì—´ë¦° íŒŒì¼ ëª¨ë‘ ì €ì¥"
+msgstr "¿­¸° ÆÄÀÏ ¸ğµÎ ÀúÀå"
 
 #: ../src/interface.c:373
 msgid "R_eload As"
-msgstr "ë‹¤ë¥¸ ì–¸ì–´ë¡œ ë‹¤ì‹œì—´ê¸°(_e)"
+msgstr "´Ù¸¥ ¾ğ¾î·Î ´Ù½Ã¿­±â(_e)"
 
 #: ../src/interface.c:401
 msgid "Page Set_up"
-msgstr "í˜ì´ì§€ ì„¤ì •(_u)"
+msgstr "ÆäÀÌÁö ¼³Á¤(_u)"
 
 #: ../src/interface.c:408
 msgid "Prints the current file"
-msgstr "í˜„ì¬ íŒŒì¼ ì¸ì‡„"
+msgstr "ÇöÀç ÆÄÀÏ ÀÎ¼â"
 
 #: ../src/interface.c:419
 msgid "Close Ot_her Documents"
-msgstr "ë‹¤ë¥¸ ë¬¸ì„œ ë‹«ê¸°(_h)"
+msgstr "´Ù¸¥ ¹®¼­ ´İ±â(_h)"
 
 #: ../src/interface.c:427
 msgid "C_lose All"
-msgstr "ëª¨ë‘ ë‹«ê¸°(_l)"
+msgstr "¸ğµÎ ´İ±â(_l)"
 
 #: ../src/interface.c:430
 msgid "Closes all open files"
-msgstr "ì—´ë¦° íŒŒì¼ ëª¨ë‘ ë‹«ê¸°"
+msgstr "¿­¸° ÆÄÀÏ ¸ğµÎ ´İ±â"
 
 #: ../src/interface.c:444 ../src/interface.c:1246
 msgid "Quit Geany"
-msgstr "ì§€ë‹ˆ ëë‚´ê¸°"
+msgstr "Áö´Ï ³¡³»±â"
 
 #: ../src/interface.c:446
 msgid "_Edit"
-msgstr "í¸ì§‘(_E)"
+msgstr "ÆíÁı(_E)"
 
 #: ../src/interface.c:487 ../src/interface.c:2204
 msgid "Select _All"
-msgstr "ëª¨ë‘ ì„ íƒ(_A)"
+msgstr "¸ğµÎ ¼±ÅÃ(_A)"
 
 #: ../src/interface.c:496 ../src/interface.c:2222
 msgid "_Format"
-msgstr "í˜•ì‹(_F)"
+msgstr "Çü½Ä(_F)"
 
 #: ../src/interface.c:499
 msgid "Convert the case of the current selection"
-msgstr "ì„ íƒí•œ ë¶€ë¶„ í˜•ì‹ë³€í™˜"
+msgstr "¼±ÅÃÇÑ ºÎºĞ Çü½Äº¯È¯"
 
 #: ../src/interface.c:504 ../src/interface.c:2229
 msgid "T_oggle Case of Selection"
-msgstr "ì„ íƒí•œ ë¶€ë¶„ í™œìì¼€ì´ìŠ¤ì „í™˜(_o)"
+msgstr "¼±ÅÃÇÑ ºÎºĞ È°ÀÚÄÉÀÌ½ºÀüÈ¯(_o)"
 
 #: ../src/interface.c:513 ../src/interface.c:2238
 msgid "_Comment Line(s)"
-msgstr "ì£¼ì„ë§Œë“¤ê¸°(_C)"
+msgstr "ÁÖ¼®¸¸µé±â(_C)"
 
 #: ../src/interface.c:517 ../src/interface.c:2242
 msgid "U_ncomment Line(s)"
-msgstr "ì£¼ì„ í•´ì œ(_n)"
+msgstr "ÁÖ¼® ÇØÁ¦(_n)"
 
 #: ../src/interface.c:521 ../src/interface.c:2246
 msgid "_Toggle Line Commentation"
-msgstr "í•œì¤„ ì£¼ì„ ì „í™˜(_T)"
+msgstr "ÇÑÁÙ ÁÖ¼® ÀüÈ¯(_T)"
 
 #: ../src/interface.c:525 ../src/interface.c:2250
 msgid "Du_plicate Line or Selection"
-msgstr "ë³µì œ(_p)"
+msgstr "º¹Á¦(_p)"
 
 #: ../src/interface.c:534 ../src/interface.c:2259
 msgid "_Increase Indent"
-msgstr "ë“¤ì—¬ì“°ê¸° ì¦ê°€(_I)"
+msgstr "µé¿©¾²±â Áõ°¡(_I)"
 
 #: ../src/interface.c:542 ../src/interface.c:2267
 msgid "_Decrease Indent"
-msgstr "ë“¤ì—¬ì“°ê¸° ê°ì†Œ(_D)"
+msgstr "µé¿©¾²±â °¨¼Ò(_D)"
 
 #: ../src/interface.c:555 ../src/interface.c:2280
 msgid "_Send Selection to"
-msgstr "ì„ íƒí•œ ë¶€ë¶„ ë³´ë‚´ê¸°(_S)"
+msgstr "¼±ÅÃÇÑ ºÎºĞ º¸³»±â(_S)"
 
 #: ../src/interface.c:570 ../src/interface.c:2295
 msgid "I_nsert Comments"
-msgstr "ì£¼ì„ ì‚½ì…(_n)"
+msgstr "ÁÖ¼® »ğÀÔ(_n)"
 
 #: ../src/interface.c:581 ../src/interface.c:2306
 msgid "Insert _ChangeLog Entry"
-msgstr "ë³€ê²½ê¸°ë¡ í•­ëª© ì‚½ì…(_C)"
+msgstr "º¯°æ±â·Ï Ç×¸ñ »ğÀÔ(_C)"
 
 #: ../src/interface.c:584 ../src/interface.c:2309
 msgid "Inserts a typical ChangeLog entry in the current file"
-msgstr "ì „í˜•ì ì¸ ë³€ê²½ê¸°ë¡ í•­ëª© ì‚½ì…í•˜ê¸°"
+msgstr "ÀüÇüÀûÀÎ º¯°æ±â·Ï Ç×¸ñ »ğÀÔÇÏ±â"
 
 #: ../src/interface.c:586 ../src/interface.c:2311
 msgid "Insert File _Header"
-msgstr "íŒŒì¼ í—¤ë” ì‚½ì…(_H)"
+msgstr "ÆÄÀÏ Çì´õ »ğÀÔ(_H)"
 
 #: ../src/interface.c:589 ../src/interface.c:2314
 msgid "Inserts a file header at the beginning of the file"
-msgstr "íŒŒì¼ ì²˜ìŒìœ„ì¹˜ì— íŒŒì¼ í—¤ë” ì‚½ì…í•˜ê¸°"
+msgstr "ÆÄÀÏ Ã³À½À§Ä¡¿¡ ÆÄÀÏ Çì´õ »ğÀÔÇÏ±â"
 
 #: ../src/interface.c:591 ../src/interface.c:2316
 msgid "Insert _Function Description"
-msgstr "í•¨ìˆ˜ ì„¤ëª… ì‚½ì…(_F)"
+msgstr "ÇÔ¼ö ¼³¸í »ğÀÔ(_F)"
 
 #: ../src/interface.c:594 ../src/interface.c:2319
 msgid "Inserts a description before the current function"
-msgstr "í˜„ì¬ í•¨ìˆ˜ì•ì— ì„¤ëª… ì‚½ì…í•˜ê¸°"
+msgstr "ÇöÀç ÇÔ¼ö¾Õ¿¡ ¼³¸í »ğÀÔÇÏ±â"
 
 #: ../src/interface.c:596 ../src/interface.c:2321
 msgid "Insert _Multiline Comment"
-msgstr "ë‹¤ìˆ˜í–‰ ì£¼ì„ ì‚½ì…(_M)"
+msgstr "´Ù¼öÇà ÁÖ¼® »ğÀÔ(_M)"
 
 #: ../src/interface.c:599 ../src/interface.c:2324
 msgid "Inserts a multiline comment"
-msgstr "ì—¬ëŸ¬ ì¤„ì— ì£¼ì„ ì‚½ì…í•˜ê¸°"
+msgstr "¿©·¯ ÁÙ¿¡ ÁÖ¼® »ğÀÔÇÏ±â"
 
 #: ../src/interface.c:601 ../src/interface.c:2326
 msgid "Insert _GPL Notice"
-msgstr "GPL ê³µì§€ ì‚½ì…(_G)"
+msgstr "GPL °øÁö »ğÀÔ(_G)"
 
 #: ../src/interface.c:604 ../src/interface.c:2329
 msgid "Inserts a GPL notice (should be done at the beginning of the file)"
-msgstr "íŒŒì¼ ì²˜ìŒìœ„ì¹˜ì— GPL ê³µì§€ ì‚½ì…í•˜ê¸°"
+msgstr "ÆÄÀÏ Ã³À½À§Ä¡¿¡ GPL °øÁö »ğÀÔÇÏ±â"
 
 #: ../src/interface.c:606 ../src/interface.c:2331
 msgid "Insert _BSD License Notice"
-msgstr "BSD ì‚¬ìš©ê¶Œ ê³µì§€ ì‚½ì…(_B)"
+msgstr "BSD »ç¿ë±Ç °øÁö »ğÀÔ(_B)"
 
 #: ../src/interface.c:609 ../src/interface.c:2334
 msgid ""
 "Inserts a BSD license notice (should be done at the beginning of the file)"
-msgstr "íŒŒì¼ ì²˜ìŒìœ„ì¹˜ì— BSD ì‚¬ìš©ê¶Œ ê³µì§€ ì‚½ì…í•˜ê¸°"
+msgstr "ÆÄÀÏ Ã³À½À§Ä¡¿¡ BSD »ç¿ë±Ç °øÁö »ğÀÔÇÏ±â"
 
 #: ../src/interface.c:611 ../src/interface.c:2336
 msgid "Insert Dat_e"
-msgstr "ë‚ ì§œ ì‚½ì…(_e)"
+msgstr "³¯Â¥ »ğÀÔ(_e)"
 
 #: ../src/interface.c:625 ../src/interface.c:2350
 msgid "_Insert \"include <...>\""
-msgstr "\"include <...>\" í…œí”Œë¦¿ ì‚½ì…(_I)"
+msgstr "\"include <...>\" ÅÛÇÃ¸´ »ğÀÔ(_I)"
 
 #: ../src/interface.c:648
 msgid "_Search"
-msgstr "ì°¾ê¸°(_S)"
+msgstr "Ã£±â(_S)"
 
 #: ../src/interface.c:659
 msgid "Find _Next"
-msgstr "ë‹¤ìŒ ì°¾ê¸°(_N)"
+msgstr "´ÙÀ½ Ã£±â(_N)"
 
 #: ../src/interface.c:663
 msgid "Find _Previous"
-msgstr "ì´ì „ ì°¾ê¸°(_P)"
+msgstr "ÀÌÀü Ã£±â(_P)"
 
 #: ../src/interface.c:667
 msgid "Find in F_iles"
-msgstr "íŒŒì¼ ì•ˆì—ì„œ ì°¾ê¸°(_i)"
+msgstr "ÆÄÀÏ ¾È¿¡¼­ Ã£±â(_i)"
 
 #: ../src/interface.c:671 ../src/search.c:437
 msgid "_Replace"
-msgstr "ë°”ê¾¸ê¸°(_R)"
+msgstr "¹Ù²Ù±â(_R)"
 
 #: ../src/interface.c:684
 msgid "Find _Selected"
-msgstr "ì„ íƒí•œ ë¶€ë¶„ì—ì„œ ì°¾ê¸°(_S)"
+msgstr "¼±ÅÃÇÑ ºÎºĞ¿¡¼­ Ã£±â(_S)"
 
 #: ../src/interface.c:688
 msgid "Find Pre_vious Selected"
-msgstr "ì„ íƒí•œ ë¶€ë¶„ì—ì„œ ì´ì „ ì°¾ê¸°(_v)"
+msgstr "¼±ÅÃÇÑ ºÎºĞ¿¡¼­ ÀÌÀü Ã£±â(_v)"
 
 #: ../src/interface.c:697
 msgid "Next _Message"
-msgstr "ë‹¤ìŒ ë©”ì‹œì§€(_M)"
+msgstr "´ÙÀ½ ¸Ş½ÃÁö(_M)"
 
 #: ../src/interface.c:701
 msgid "Pr_evious Message"
-msgstr "ì´ì „ ë©”ì‹œì§€(_e)"
+msgstr "ÀÌÀü ¸Ş½ÃÁö(_e)"
 
 #: ../src/interface.c:710 ../src/interface.c:2402
 msgid "_Go to Line"
-msgstr "ì´ë™(_G)"
+msgstr "ÀÌµ¿(_G)"
 
 #: ../src/interface.c:725
 msgid "Change _Font"
-msgstr "ê¸€ê¼´ ë°”ê¾¸ê¸°(_F)"
+msgstr "±Û²Ã ¹Ù²Ù±â(_F)"
 
 #: ../src/interface.c:728
 msgid "Change the default font"
-msgstr "ê¸°ë³¸ ê¸€ê¼´ ë°”ê¾¸ê¸°"
+msgstr "±âº» ±Û²Ã ¹Ù²Ù±â"
 
 #: ../src/interface.c:739
 msgid "To_ggle All Additional Widgets"
-msgstr "ëª¨ë“  ë¶€ê°€ì ì¸ ìœ„ì ¯ ë³´ê¸° ì „í™˜(_g)"
+msgstr "¸ğµç ºÎ°¡ÀûÀÎ À§Á¬ º¸±â ÀüÈ¯(_g)"
 
 #: ../src/interface.c:743
 msgid "Full_screen"
-msgstr "ì „ì²´ í™”ë©´(_s)"
+msgstr "ÀüÃ¼ È­¸é(_s)"
 
 #: ../src/interface.c:747
 msgid "Show Message _Window"
-msgstr "ë©”ì‹œì§€ì°½ ë³´ê¸°(_W)"
+msgstr "¸Ş½ÃÁöÃ¢ º¸±â(_W)"
 
 #: ../src/interface.c:750
 msgid "Toggle the window with status and compiler messages on and off"
-msgstr "ìƒíƒœ, ì»´íŒŒì¼ëŸ¬, ë©”ì‹œì§€ì°½ ë³´ê¸° ì „í™˜"
+msgstr "»óÅÂ, ÄÄÆÄÀÏ·¯, ¸Ş½ÃÁöÃ¢ º¸±â ÀüÈ¯"
 
 #: ../src/interface.c:753
 msgid "Show _Toolbar"
-msgstr "ë„êµ¬ëª¨ìŒ ë³´ê¸°(_T)"
+msgstr "µµ±¸¸ğÀ½ º¸±â(_T)"
 
 #: ../src/interface.c:756
 msgid "Toggle the toolbar on and off"
-msgstr "ë„êµ¬ëª¨ìŒ ë³´ê¸° ì „í™˜"
+msgstr "µµ±¸¸ğÀ½ º¸±â ÀüÈ¯"
 
 #: ../src/interface.c:759
 msgid "Show Side_bar"
-msgstr "ê°€ì¥ìë¦¬ì°½ ë³´ê¸°(_b)"
+msgstr "°¡ÀåÀÚ¸®Ã¢ º¸±â(_b)"
 
 #: ../src/interface.c:764
 msgid "Show _Markers Margin"
-msgstr "í‘œì§€ ì—¬ë°± ë³´ê¸°(_M)"
+msgstr "Ç¥Áö ¿©¹é º¸±â(_M)"
 
 #: ../src/interface.c:767
 msgid ""
 "Shows or hides the small margin right of the line numbers, which is used to "
 "mark lines."
-msgstr "ì¤„ë²ˆí˜¸ ìš°ì¸¡ì˜ ì¤„ í‘œì§€ ì—¬ë°± ë³´ê¸° ì „í™˜."
+msgstr "ÁÙ¹øÈ£ ¿ìÃøÀÇ ÁÙ Ç¥Áö ¿©¹é º¸±â ÀüÈ¯."
 
 #: ../src/interface.c:770
 msgid "Show _Line Numbers"
-msgstr "ì¤„ë²ˆí˜¸ ë³´ê¸°(_L)"
+msgstr "ÁÙ¹øÈ£ º¸±â(_L)"
 
 #: ../src/interface.c:773
 msgid "Shows or hides the Line Number margin."
-msgstr "ì¤„ë²ˆí˜¸ ì—¬ë°± ë³´ê¸° ì „í™˜."
+msgstr "ÁÙ¹øÈ£ ¿©¹é º¸±â ÀüÈ¯."
 
 #: ../src/interface.c:793
 msgid "_Document"
-msgstr "ë¬¸ì„œ(_D)"
+msgstr "¹®¼­(_D)"
 
 #: ../src/interface.c:800
 msgid "_Line Wrapping"
-msgstr "ìë™ ì¤„ë°”ê¾¸ê¸°(_L)"
+msgstr "ÀÚµ¿ ÁÙ¹Ù²Ù±â(_L)"
 
 #: ../src/interface.c:803 ../src/interface.c:3731
 msgid ""
 "Wrap the line at the window border and continue it on the next line. Note: "
 "line wrapping has a high performance cost for large documents so should be "
 "disabled on slow machines."
-msgstr "ìë™ìœ¼ë¡œ ì¤„ë°”ê¾¸ê¸°. ì£¼ì˜:ëŠë¦° ì‹œìŠ¤í…œì—ì„œëŠ” ì‚¬ìš© ì§€ì–‘."
+msgstr "ÀÚµ¿À¸·Î ÁÙ¹Ù²Ù±â. ÁÖÀÇ:´À¸° ½Ã½ºÅÛ¿¡¼­´Â »ç¿ë Áö¾ç."
 
 #: ../src/interface.c:806
 msgid "Line _Breaking"
-msgstr "ìë™ ì¤„ë‚˜ëˆ„ê¸°(_B)"
+msgstr "ÀÚµ¿ ÁÙ³ª´©±â(_B)"
 
 #: ../src/interface.c:810
 msgid "_Auto-indentation"
-msgstr "ìë™ ë“¤ì—¬ì“°ê¸°(_A)"
+msgstr "ÀÚµ¿ µé¿©¾²±â(_A)"
 
 #: ../src/interface.c:815
 msgid "In_dent Type"
-msgstr "ë“¤ì—¬ì“°ê¸° í˜•ì‹(_d)"
+msgstr "µé¿©¾²±â Çü½Ä(_d)"
 
 #: ../src/interface.c:822 ../src/interface.c:3655
 msgid "_Tabs"
-msgstr "íƒ­(_t)"
+msgstr "ÅÇ(_t)"
 
 #: ../src/interface.c:828 ../src/interface.c:3646
 msgid "_Spaces"
-msgstr "ìŠ¤í˜ì´ìŠ¤(_S)"
+msgstr "½ºÆäÀÌ½º(_S)"
 
 #: ../src/interface.c:834 ../src/interface.c:3664
 msgid "T_abs and Spaces"
-msgstr "íƒ­ê³¼ ìŠ¤í˜ì´ìŠ¤(_a)"
+msgstr "ÅÇ°ú ½ºÆäÀÌ½º(_a)"
 
 #: ../src/interface.c:845
 msgid "Read _Only"
-msgstr "ì½ê¸° ì „ìš©(_O)"
+msgstr "ÀĞ±â Àü¿ë(_O)"
 
 #: ../src/interface.c:848
 msgid "Treat this file as read-only. No changes can be made."
-msgstr "ì´ íŒŒì¼ì„ ì½ê¸°ì „ìš©ìœ¼ë¡œ ì„¤ì •."
+msgstr "ÀÌ ÆÄÀÏÀ» ÀĞ±âÀü¿ëÀ¸·Î ¼³Á¤."
 
 #: ../src/interface.c:850
 msgid "_Write Unicode BOM"
-msgstr "ìœ ë‹ˆì½”ë“œ BOM ì‚½ì…(_W)"
+msgstr "À¯´ÏÄÚµå BOM »ğÀÔ(_W)"
 
 #: ../src/interface.c:859
 msgid "Set File_type"
-msgstr "íŒŒì¼ í˜•ì‹ ì§€ì •(_t)"
+msgstr "ÆÄÀÏ Çü½Ä ÁöÁ¤(_t)"
 
 #: ../src/interface.c:869
 msgid "Set _Encoding"
-msgstr "ì¸ì½”ë”© í˜•ì‹ ì§€ì •(_E)"
+msgstr "ÀÎÄÚµù Çü½Ä ÁöÁ¤(_E)"
 
 #: ../src/interface.c:879
 msgid "Set Line E_ndings"
-msgstr "ì¤„ë°”ê¾¸ê¸° í˜•ì‹ ì§€ì •(_n)"
+msgstr "ÁÙ¹Ù²Ù±â Çü½Ä ÁöÁ¤(_n)"
 
 #: ../src/interface.c:886
 msgid "Convert and Set to _CR/LF (Win)"
-msgstr "Windows í˜•ì‹ CR/LFë¡œ ë³€í™˜(_C)"
+msgstr "Windows Çü½Ä CR/LF·Î º¯È¯(_C)"
 
 #: ../src/interface.c:892
 msgid "Convert and Set to _LF (Unix)"
-msgstr "Unix í˜•ì‹ LFë¡œ ë³€í™˜(_L)"
+msgstr "Unix Çü½Ä LF·Î º¯È¯(_L)"
 
 #: ../src/interface.c:898
 msgid "Convert and Set to CR (_Mac)"
-msgstr "Machintosh í˜•ì‹ CRë¡œ ë³€í™˜(_M)"
+msgstr "Machintosh Çü½Ä CR·Î º¯È¯(_M)"
 
 #: ../src/interface.c:909
 msgid "_Strip Trailing Spaces"
-msgstr "ì§ˆì§ˆëŒë¦¬ëŠ” ê³µë°± ì§€ìš°ê¸°(_S)"
+msgstr "ÁúÁú²ø¸®´Â °ø¹é Áö¿ì±â(_S)"
 
 #: ../src/interface.c:913
 msgid "_Replace Tabs by Spaces"
-msgstr "íƒ­ì„ ìŠ¤í˜ì´ìŠ¤ë¡œ ë°”ê¾¸ê¸°(_R)"
+msgstr "ÅÇÀ» ½ºÆäÀÌ½º·Î ¹Ù²Ù±â(_R)"
 
 #: ../src/interface.c:916 ../src/interface.c:4182
 msgid "Replaces all tabs in document by spaces."
-msgstr "ë¬¸ì„œë‚´ì˜ ëª¨ë“  íƒ­ì„ ìŠ¤í˜ì´ìŠ¤ë¡œ ë°”ê¿ˆ."
+msgstr "¹®¼­³»ÀÇ ¸ğµç ÅÇÀ» ½ºÆäÀÌ½º·Î ¹Ù²Ş."
 
 #: ../src/interface.c:918
 msgid "Replace Spaces b_y Tabs"
-msgstr "ìŠ¤í˜ì´ìŠ¤ë¥¼ íƒ­ìœ¼ë¡œ ë°”ê¾¸ê¸°(_y)"
+msgstr "½ºÆäÀÌ½º¸¦ ÅÇÀ¸·Î ¹Ù²Ù±â(_y)"
 
 #: ../src/interface.c:921
 msgid "Replaces all spaces in the document by tab characters."
-msgstr "ë¬¸ì„œë‚´ì˜ ëª¨ë“  ìŠ¤í˜ì´ìŠ¤ë¥¼ íƒ­ìœ¼ë¡œ ë°”ê¿ˆ."
+msgstr "¹®¼­³»ÀÇ ¸ğµç ½ºÆäÀÌ½º¸¦ ÅÇÀ¸·Î ¹Ù²Ş."
 
 #: ../src/interface.c:928
 msgid "_Fold All"
-msgstr "ëª¨ë‘ ì ‘ê¸°(_F)"
+msgstr "¸ğµÎ Á¢±â(_F)"
 
 #: ../src/interface.c:931
 msgid "Folds all contractible code blocks"
-msgstr "ê°€ëŠ¥í•œ ëª¨ë“  ì½”ë“œë¸”ëŸ­ì„ ì ‘ê¸°"
+msgstr "°¡´ÉÇÑ ¸ğµç ÄÚµåºí·°À» Á¢±â"
 
 #: ../src/interface.c:933
 msgid "_Unfold All"
-msgstr "ëª¨ë‘ í´ê¸°(_U)"
+msgstr "¸ğµÎ Æì±â(_U)"
 
 #: ../src/interface.c:936
 msgid "Unfolds all contracted code blocks"
-msgstr "ê°€ëŠ¥í•œ ëª¨ë“  ì½”ë“œë¸”ëŸ­ì„ í´ê¸°"
+msgstr "°¡´ÉÇÑ ¸ğµç ÄÚµåºí·°À» Æì±â"
 
 #: ../src/interface.c:943
 msgid "Remove _Markers"
-msgstr "í‘œì§€ ì§€ìš°ê¸°(_M)"
+msgstr "Ç¥Áö Áö¿ì±â(_M)"
 
 #: ../src/interface.c:947
 msgid "Remove Error _Indicators"
-msgstr "ì˜¤ë¥˜ ì§€í‘œ ì§€ìš°ê¸°(_I)"
+msgstr "¿À·ù ÁöÇ¥ Áö¿ì±â(_I)"
 
 #: ../src/interface.c:950
 msgid "Removes all error indicators in the current document."
-msgstr "í˜„ì¬ ë¬¸ì„œì˜ ëª¨ë“  ì˜¤ë¥˜ ì§€í‘œë¥¼ ì§€ìš°ê¸°."
+msgstr "ÇöÀç ¹®¼­ÀÇ ¸ğµç ¿À·ù ÁöÇ¥¸¦ Áö¿ì±â."
 
 #: ../src/interface.c:952
 msgid "_Project"
-msgstr "í”„ë¡œì íŠ¸(_P)"
+msgstr "ÇÁ·ÎÁ§Æ®(_P)"
 
 #: ../src/interface.c:959
 msgid "_New"
-msgstr "ìƒˆë¡œ ë§Œë“¤ê¸°(_N)"
+msgstr "»õ·Î ¸¸µé±â(_N)"
 
 #: ../src/interface.c:967
 msgid "_Open"
-msgstr "ì—´ê¸°(_O)"
+msgstr "¿­±â(_O)"
 
 #: ../src/interface.c:975
 msgid "_Close"
-msgstr "ë‹«ê¸°(_C)"
+msgstr "´İ±â(_C)"
 
 #: ../src/interface.c:996
 msgid "_Tools"
-msgstr "ë„êµ¬(_T)"
+msgstr "µµ±¸(_T)"
 
 #: ../src/interface.c:1003
 msgid "_Color Chooser"
-msgstr "ìƒ‰ìƒ ì„ íƒê¸°(_C)"
+msgstr "»ö»ó ¼±ÅÃ±â(_C)"
 
 #: ../src/interface.c:1006 ../src/interface.c:1165
 msgid ""
 "Open a color chooser dialog, to interactively pick colors from a palette."
-msgstr "íŒ”ë ˆíŠ¸ì—ì„œ ìƒ‰ìƒì„ ê³ ë¥¼ ìˆ˜ ìˆë„ë¡ ìƒ‰ìƒì„ íƒê¸° ì‹¤í–‰."
+msgstr "ÆÈ·¹Æ®¿¡¼­ »ö»óÀ» °í¸¦ ¼ö ÀÖµµ·Ï »ö»ó¼±ÅÃ±â ½ÇÇà."
 
 #: ../src/interface.c:1012
 msgid "_Word Count"
-msgstr "ë‹¨ì–´ ì„¸ê¸°(_W)"
+msgstr "´Ü¾î ¼¼±â(_W)"
 
 #: ../src/interface.c:1015
 msgid ""
 "Counts the words and characters in the current selection or the whole "
 "document"
-msgstr "ì „ì²´ ë˜ëŠ” ì„ íƒí•œ ë¶€ë¶„ì˜ ë‹¨ì–´ì™€ ë¬¸ì ìˆ˜ë¥¼ ê³„ì‚°."
+msgstr "ÀüÃ¼ ¶Ç´Â ¼±ÅÃÇÑ ºÎºĞÀÇ ´Ü¾î¿Í ¹®ÀÚ ¼ö¸¦ °è»ê."
 
 #: ../src/interface.c:1017
 msgid "Load Ta_gs"
-msgstr "Tags ë¶ˆëŸ¬ì˜¤ê¸°(_g)"
+msgstr "Tags ºÒ·¯¿À±â(_g)"
 
 #: ../src/interface.c:1020
 msgid "Load global tags file"
-msgstr "ì „ì—­ì ì¸ tags íŒŒì¼ ë¶ˆëŸ¬ì˜¤ê¸°"
+msgstr "Àü¿ªÀûÀÎ tags ÆÄÀÏ ºÒ·¯¿À±â"
 
 #: ../src/interface.c:1022
 msgid "_Reload Configuration"
-msgstr "í™˜ê²½ì„¤ì • ë‹¤ì‹œ ë¶ˆëŸ¬ì˜¤ê¸°(_R)"
+msgstr "È¯°æ¼³Á¤ ´Ù½Ã ºÒ·¯¿À±â(_R)"
 
 #: ../src/interface.c:1025
 msgid ""
 "Reload configuration data like snippets, templates and filetype extensions."
-msgstr "í† ë§‰, í…œí”Œë¦¿, íŒŒì¼í˜•ì‹ í™•ì¥ë“±ì˜ í™˜ê²½ì„¤ì • ë‹¤ì‹œ ë¶ˆëŸ¬ì˜¤ê¸°."
+msgstr "Åä¸·, ÅÛÇÃ¸´, ÆÄÀÏÇü½Ä È®ÀåµîÀÇ È¯°æ¼³Á¤ ´Ù½Ã ºÒ·¯¿À±â."
 
 #: ../src/interface.c:1031 ../src/interface.c:1038
 msgid "_Help"
-msgstr "ë„ì›€ë§(_H)"
+msgstr "µµ¿ò¸»(_H)"
 
 #: ../src/interface.c:1046
 msgid "_Website"
-msgstr "ì›¹ì‚¬ì´íŠ¸(_W)"
+msgstr "À¥»çÀÌÆ®(_W)"
 
 #: ../src/interface.c:1050
 msgid "_Keyboard Shortcuts"
-msgstr "ë°”ë¡œ ê°€ê¸°(_K)"
+msgstr "¹Ù·Î °¡±â(_K)"
 
 #: ../src/interface.c:1053
 msgid "Shows a list of all keyboard shortcuts for Geany."
-msgstr "ì§€ë‹ˆ í‚¤ë³´ë“œ ë°”ë¡œ ê°€ê¸° ëª©ë¡ ë³´ê¸°."
+msgstr "Áö´Ï Å°º¸µå ¹Ù·Î °¡±â ¸ñ·Ï º¸±â."
 
 #: ../src/interface.c:1055
 msgid "_Debug Messages"
-msgstr "ë””ë²„ê·¸ ë©”ì‹œì§€(_D)"
+msgstr "µğ¹ö±× ¸Ş½ÃÁö(_D)"
 
 #: ../src/interface.c:1078
 msgid "Create a new file"
-msgstr "ìƒˆ íŒŒì¼ ë§Œë“¤ê¸°"
+msgstr "»õ ÆÄÀÏ ¸¸µé±â"
 
 #: ../src/interface.c:1084
 msgid "Open an existing file"
-msgstr "ê¸°ì¡´ íŒŒì¼ ì—´ê¸°"
+msgstr "±âÁ¸ ÆÄÀÏ ¿­±â"
 
 #: ../src/interface.c:1089
 msgid "Save the current file"
-msgstr "í˜„ì¬ íŒŒì¼ ì €ì¥"
+msgstr "ÇöÀç ÆÄÀÏ ÀúÀå"
 
 #: ../src/interface.c:1091 ../src/keybindings.c:196
 msgid "Save all"
-msgstr "ëª¨ë‘ ì €ì¥"
+msgstr "¸ğµÎ ÀúÀå"
 
 #: ../src/interface.c:1094
 msgid "Save all open files"
-msgstr "ì—´ë¦° íŒŒì¼ ëª¨ë‘ ì €ì¥"
+msgstr "¿­¸° ÆÄÀÏ ¸ğµÎ ÀúÀå"
 
 #: ../src/interface.c:1103
 msgid "Reload the current file from disk"
-msgstr "í˜„ì¬ íŒŒì¼ì„ ë””ìŠ¤í¬ë¡œë¶€í„° ë‹¤ì‹œ ë¶ˆëŸ¬ì˜¤ê¸°"
+msgstr "ÇöÀç ÆÄÀÏÀ» µğ½ºÅ©·ÎºÎÅÍ ´Ù½Ã ºÒ·¯¿À±â"
 
 #: ../src/interface.c:1108
 msgid "Close the current file"
-msgstr "í˜„ì¬ íŒŒì¼ ë‹«ê¸°"
+msgstr "ÇöÀç ÆÄÀÏ ´İ±â"
 
 #: ../src/interface.c:1117
 msgid "Undo the last modification"
-msgstr "ìµœê·¼ ìˆ˜ì •ì‚¬í•­ ì·¨ì†Œ"
+msgstr "ÃÖ±Ù ¼öÁ¤»çÇ× Ãë¼Ò"
 
 #: ../src/interface.c:1122
 msgid "Redo the last modification"
-msgstr "ìµœê·¼ ìˆ˜ì •ì‚¬í•­ ë‹¤ì‹œì‹¤í–‰"
+msgstr "ÃÖ±Ù ¼öÁ¤»çÇ× ´Ù½Ã½ÇÇà"
 
 #: ../src/interface.c:1132 ../src/keybindings.c:344
 msgid "Navigate back a location"
-msgstr "ë’¤ë¡œ"
+msgstr "µÚ·Î"
 
 #: ../src/interface.c:1138 ../src/keybindings.c:346
 msgid "Navigate forward a location"
-msgstr "ì•ìœ¼ë¡œ"
+msgstr "¾ÕÀ¸·Î"
 
 #: ../src/interface.c:1146 ../src/keybindings.c:445
 msgid "Compile"
-msgstr "ì»´íŒŒì¼"
+msgstr "ÄÄÆÄÀÏ"
 
 #: ../src/interface.c:1149
 msgid "Compile the current file"
-msgstr "í˜„ì¬ íŒŒì¼ ì»´íŒŒì¼"
+msgstr "ÇöÀç ÆÄÀÏ ÄÄÆÄÀÏ"
 
 #: ../src/interface.c:1162
 msgid "Color"
-msgstr "ìƒ‰ìƒ"
+msgstr "»ö»ó"
 
 #: ../src/interface.c:1174
 msgid "Zoom in the text"
-msgstr "ê¸€ê¼´ í™•ëŒ€"
+msgstr "±Û²Ã È®´ë"
 
 #: ../src/interface.c:1179
 msgid "Zoom out the text"
-msgstr "ê¸€ê¼´ ì¶•ì†Œ"
+msgstr "±Û²Ã Ãà¼Ò"
 
 #: ../src/interface.c:1188
 msgid "Decrease indentation"
-msgstr "ë“¤ì—¬ì“°ê¸° ê°ì†Œ"
+msgstr "µé¿©¾²±â °¨¼Ò"
 
 #: ../src/interface.c:1193
 msgid "Increase indentation"
-msgstr "ë“¤ì—¬ì“°ê¸° ì¦ê°€"
+msgstr "µé¿©¾²±â Áõ°¡"
 
 #: ../src/interface.c:1206 ../src/interface.c:1211
 msgid "Find the entered text in the current file"
-msgstr "ì…ë ¥í•œ ë¬¸ìì—´ì„ í˜„ì¬íŒŒì¼ì—ì„œ ì°¾ê¸°"
+msgstr "ÀÔ·ÂÇÑ ¹®ÀÚ¿­À» ÇöÀçÆÄÀÏ¿¡¼­ Ã£±â"
 
 #: ../src/interface.c:1224
 msgid "Enter a line number and jump to it."
-msgstr "ì…ë ¥í•œ ì¤„ë²ˆí˜¸ë¡œ ì´ë™."
+msgstr "ÀÔ·ÂÇÑ ÁÙ¹øÈ£·Î ÀÌµ¿."
 
 #: ../src/interface.c:1231
 msgid "Jump to the entered line number."
-msgstr "ì…ë ¥í•œ ì¤„ë²ˆí˜¸ë¡œ ì´ë™."
+msgstr "ÀÔ·ÂÇÑ ÁÙ¹øÈ£·Î ÀÌµ¿."
 
 #: ../src/interface.c:1274 ../src/treeviews.c:112
 msgid "Symbols"
-msgstr "ì‹¬ë³¼"
+msgstr "½Éº¼"
 
 #: ../src/interface.c:1288 ../src/treeviews.c:268
 msgid "Documents"
-msgstr "ë¬¸ì„œ"
+msgstr "¹®¼­"
 
 #: ../src/interface.c:1325
 msgid "Status"
-msgstr "ìƒíƒœ"
+msgstr "»óÅÂ"
 
 #: ../src/interface.c:1339
 msgid "Compiler"
-msgstr "ì»´íŒŒì¼ëŸ¬"
+msgstr "ÄÄÆÄÀÏ·¯"
 
 #: ../src/interface.c:1354
 msgid "Messages"
-msgstr "ë©”ì‹œì§€"
+msgstr "¸Ş½ÃÁö"
 
 #: ../src/interface.c:1367
 msgid "Scribble"
-msgstr "ë‚™ì„œ"
+msgstr "³«¼­"
 
 #: ../src/interface.c:2019 ../src/interface.c:3525
 msgid "Images _and Text"
-msgstr "ì•„ì´ì½˜ì˜†ì— í…ìŠ¤íŠ¸(_a)"
+msgstr "¾ÆÀÌÄÜ¿·¿¡ ÅØ½ºÆ®(_a)"
 
 #: ../src/interface.c:2025 ../src/interface.c:3557
 msgid "_Images Only"
-msgstr "ì•„ì´ì½˜ë§Œ(_I)"
+msgstr "¾ÆÀÌÄÜ¸¸(_I)"
 
 #: ../src/interface.c:2031 ../src/interface.c:3549
 msgid "_Text Only"
-msgstr "í…ìŠ¤íŠ¸ë§Œ(_T)"
+msgstr "ÅØ½ºÆ®¸¸(_T)"
 
 #: ../src/interface.c:2042 ../src/interface.c:3541
 msgid "_Large Icons"
-msgstr "í° ì•„ì´ì½˜(_L)"
+msgstr "Å« ¾ÆÀÌÄÜ(_L)"
 
 #: ../src/interface.c:2047 ../src/interface.c:3533
 msgid "_Small Icons"
-msgstr "ì‘ì€ ì•„ì´ì½˜(_S)"
+msgstr "ÀÛÀº ¾ÆÀÌÄÜ(_S)"
 
 #: ../src/interface.c:2057
 msgid "_Hide toolbar"
-msgstr "ë„êµ¬ëª¨ìŒ ê°ì¶”ê¸°(_H)"
+msgstr "µµ±¸¸ğÀ½ °¨Ãß±â(_H)"
 
 #: ../src/interface.c:2369
 msgid "Find _Usage"
-msgstr "ì‚¬ìš©ë²• ì°¾ê¸°(_U)"
+msgstr "»ç¿ë¹ı Ã£±â(_U)"
 
 #: ../src/interface.c:2377
 msgid "Find _Document Usage"
-msgstr "ë¬¸ì„œ ì‚¬ìš©ë²• ì°¾ê¸°(_D)"
+msgstr "¹®¼­ »ç¿ë¹ı Ã£±â(_D)"
 
 #: ../src/interface.c:2385
 msgid "Go to _Tag Definition"
-msgstr "Tag ì •ì˜ë¡œ ì´ë™(_T)"
+msgstr "Tag Á¤ÀÇ·Î ÀÌµ¿(_T)"
 
 #: ../src/interface.c:2389
 msgid "Go to T_ag Declaration"
-msgstr "Tag ì„ ì–¸ìœ¼ë¡œ ì´ë™(_a)"
+msgstr "Tag ¼±¾ğÀ¸·Î ÀÌµ¿(_a)"
 
 #: ../src/interface.c:2393
 msgid "Conte_xt Action"
-msgstr "ì»¨í…ìŠ¤íŠ¸ í–‰ë™(_x)"
+msgstr "ÄÁÅØ½ºÆ® Çàµ¿(_x)"
 
 #: ../src/interface.c:2405
 msgid "Go to the entered line"
-msgstr "ì…ë ¥í•œ ì¤„ë²ˆí˜¸ë¡œ ì´ë™"
+msgstr "ÀÔ·ÂÇÑ ÁÙ¹øÈ£·Î ÀÌµ¿"
 
 #: ../src/interface.c:2921 ../src/keybindings.c:311
 msgid "Preferences"
-msgstr "ê¸°ë³¸ ì„¤ì •"
+msgstr "±âº» ¼³Á¤"
 
 #: ../src/interface.c:2954
 msgid "Load files from the last session"
-msgstr "ì§€ë‚œ ì„¸ì…˜ì— ì‚¬ìš©í•œ íŒŒì¼ ë¶ˆëŸ¬ì˜¤ê¸°"
+msgstr "Áö³­ ¼¼¼Ç¿¡ »ç¿ëÇÑ ÆÄÀÏ ºÒ·¯¿À±â"
 
 #: ../src/interface.c:2957
 msgid "Opens at startup the files from the last session"
-msgstr "ì‹œì‘í•  ë•Œ ì§€ë‚œ ì„¸ì…˜ì— ì‚¬ìš©í•œ íŒŒì¼ì„ ì—´ê¸°"
+msgstr "½ÃÀÛÇÒ ¶§ Áö³­ ¼¼¼Ç¿¡ »ç¿ëÇÑ ÆÄÀÏÀ» ¿­±â"
 
 #: ../src/interface.c:2959
 msgid "Load virtual terminal support"
-msgstr "ê°€ìƒ í„°ë¯¸ë‚  ì§€ì›"
+msgstr "°¡»ó ÅÍ¹Ì³¯ Áö¿ø"
 
 #: ../src/interface.c:2961
 msgid ""
 "Whether the virtual terminal emulation (VTE) should be loaded at startup. "
 "Disable it if you do not need it."
 msgstr ""
-"ì‹œì‘í•  ë•Œ VTE(ê°€ìƒ í„°ë¯¸ë„ ì—ë®¬ë ˆì´í„°)ë¥¼ ì§€ì›í• ì§€ ì—¬ë¶€.í•„ìš” ì—†ìœ¼ë©´ ë¹„í™œì„±í™” í•˜"
-"ì‹­ì‹œì˜¤."
+"½ÃÀÛÇÒ ¶§ VTE(°¡»ó ÅÍ¹Ì³Î ¿¡¹Ä·¹ÀÌÅÍ)¸¦ Áö¿øÇÒÁö ¿©ºÎ.ÇÊ¿ä ¾øÀ¸¸é ºñÈ°¼ºÈ­ ÇÏ"
+"½Ê½Ã¿À."
 
 #: ../src/interface.c:2963
 msgid "Enable plugin support"
-msgstr "í”ŒëŸ¬ê·¸ì¸ ì§€ì› í™œì„±í™” í•˜ê¸°"
+msgstr "ÇÃ·¯±×ÀÎ Áö¿ø È°¼ºÈ­ ÇÏ±â"
 
 #: ../src/interface.c:2967
 msgid "<b>Startup</b>"
-msgstr "<b>ì‹œì‘</b>"
+msgstr "<b>½ÃÀÛ</b>"
 
 #: ../src/interface.c:2986
 msgid "Save window position and geometry"
-msgstr "ì°½ ìœ„ì¹˜ì™€ í¬ê¸°ë¥¼ ì €ì¥"
+msgstr "Ã¢ À§Ä¡¿Í Å©±â¸¦ ÀúÀå"
 
 #: ../src/interface.c:2989
 msgid "Saves the window position and geometry and restores it at the start"
-msgstr "ì°½ì˜ ìœ„ì¹˜ì™€ í¬ê¸°ë¥¼ ì €ì¥í•˜ê³  ì‹œì‘í•  ë•Œ ë³µì›í•˜ê¸°"
+msgstr "Ã¢ÀÇ À§Ä¡¿Í Å©±â¸¦ ÀúÀåÇÏ°í ½ÃÀÛÇÒ ¶§ º¹¿øÇÏ±â"
 
 #: ../src/interface.c:2991
 msgid "Confirm exit"
-msgstr "ëë‚¼ë•Œ í™•ì¸í•˜ê¸°"
+msgstr "³¡³¾¶§ È®ÀÎÇÏ±â"
 
 #: ../src/interface.c:2994
 msgid "Shows a confirmation dialog on exit."
-msgstr "ëë‚¼ë•Œ í™•ì¸ ëŒ€í™”ìƒì ë³´ì´ê¸°."
+msgstr "³¡³¾¶§ È®ÀÎ ´ëÈ­»óÀÚ º¸ÀÌ±â."
 
 #: ../src/interface.c:2996
 msgid "<b>Shutdown</b>"
-msgstr "<b>ë„ê¸°</b>"
+msgstr "<b>²ô±â</b>"
 
 #: ../src/interface.c:3015
 msgid "Use project-based session files"
-msgstr "í”„ë¡œì íŠ¸ ê¸°ë°˜ ì„¸ì…˜ íŒŒì¼ ì‚¬ìš©"
+msgstr "ÇÁ·ÎÁ§Æ® ±â¹İ ¼¼¼Ç ÆÄÀÏ »ç¿ë"
 
 #: ../src/interface.c:3018
 msgid ""
 "Whether to store a project's session files and open them when re-opening the "
 "project."
-msgstr "í”„ë¡œì íŠ¸ ì„¸ì…˜ íŒŒì¼ì„ ì €ì¥í•˜ê³  í”„ë¡œì íŠ¸ë¥¼ ë‹¤ì‹œ ì—´ ë•Œ ë³µì› ì—¬ë¶€."
+msgstr "ÇÁ·ÎÁ§Æ® ¼¼¼Ç ÆÄÀÏÀ» ÀúÀåÇÏ°í ÇÁ·ÎÁ§Æ®¸¦ ´Ù½Ã ¿­ ¶§ º¹¿ø ¿©ºÎ."
 
 #: ../src/interface.c:3020
 msgid "Store project file inside the project base directory"
-msgstr "í”„ë¡œì íŠ¸ ê¸°ë°˜ í´ë” ì•ˆì— í”„ë¡œì íŠ¸ íŒŒì¼ ì €ì¥í•˜ê¸°"
+msgstr "ÇÁ·ÎÁ§Æ® ±â¹İ Æú´õ ¾È¿¡ ÇÁ·ÎÁ§Æ® ÆÄÀÏ ÀúÀåÇÏ±â"
 
 #: ../src/interface.c:3023
 msgid ""
@@ -1715,52 +1715,52 @@ msgid ""
 "directory. You can still change the path of the project file in the New "
 "Project dialog."
 msgstr ""
-"í™œì„±í™”ë˜ë©´, ìƒˆ í”„ë¡œì íŠ¸ë¥¼ ë§Œë“¤ ë•Œ í”„ë¡œì íŠ¸ íŒŒì¼ì„ ê¸°ë°˜í´ë” ì•ˆì— ì €ì¥í•˜ëŠ” ê²ƒ"
-"ì´.ë””í´íŠ¸ê°’ì´ ë¨. í™œì„±í™”ë˜ì§€ ì•Šìœ¼ë©´ ê¸°ë°˜í´ë” ìƒìœ„ì— ì €ì¥ë¨.\n"
+"È°¼ºÈ­µÇ¸é, »õ ÇÁ·ÎÁ§Æ®¸¦ ¸¸µé ¶§ ÇÁ·ÎÁ§Æ® ÆÄÀÏÀ» ±â¹İÆú´õ ¾È¿¡ ÀúÀåÇÏ´Â °Í"
+"ÀÌ.µğÆúÆ®°ªÀÌ µÊ. È°¼ºÈ­µÇÁö ¾ÊÀ¸¸é ±â¹İÆú´õ »óÀ§¿¡ ÀúÀåµÊ.\n"
 "\n"
-"í”„ë¡œì íŠ¸ íŒŒì¼ì˜ ê²½ë¡œëŠ” \"ìƒˆ í”„ë¡œì íŠ¸ ëŒ€í™”ìƒì\"ì—ì„œ ë°”ê¿€ ìˆ˜ ìˆìŒ."
+"ÇÁ·ÎÁ§Æ® ÆÄÀÏÀÇ °æ·Î´Â \"»õ ÇÁ·ÎÁ§Æ® ´ëÈ­»óÀÚ\"¿¡¼­ ¹Ù²Ü ¼ö ÀÖÀ½."
 
 #: ../src/interface.c:3025
 msgid "<b>Projects</b>"
-msgstr "<b>í”„ë¡œì íŠ¸</b>"
+msgstr "<b>ÇÁ·ÎÁ§Æ®</b>"
 
 #: ../src/interface.c:3044
 msgid "Beep on errors or when compilation has finished"
-msgstr "ì˜¤ë¥˜ ë°œìƒì‹œ, ì»´íŒŒì¼ ëë‚¼ ë•Œ ì‚‘ ì†Œë¦¬ë¥¼ ëƒ„"
+msgstr "¿À·ù ¹ß»ı½Ã, ÄÄÆÄÀÏ ³¡³¾ ¶§ »à ¼Ò¸®¸¦ ³¿"
 
 #: ../src/interface.c:3047
 msgid ""
 "Whether to beep if an error occurred or when the compilation process has "
 "finished."
-msgstr "ì˜¤ë¥˜ê°€ ë°œìƒí•˜ê±°ë‚˜ ì»´íŒŒì¼ì´ ëë‚ ë•Œ ì‚‘ ì†Œë¦¬ë¥¼ ë‚¼ì§€ ì—¬ë¶€."
+msgstr "¿À·ù°¡ ¹ß»ıÇÏ°Å³ª ÄÄÆÄÀÏÀÌ ³¡³¯¶§ »à ¼Ò¸®¸¦ ³¾Áö ¿©ºÎ."
 
 #: ../src/interface.c:3049
 msgid "Switch to status message list at new message"
-msgstr "ìƒˆ ë©”ì‹œì§€ ë°œìƒì‹œ ë©”ì‹œì§€ì°½ìœ¼ë¡œ í¬ì»¤ìŠ¤ ì „í™˜"
+msgstr "»õ ¸Ş½ÃÁö ¹ß»ı½Ã ¸Ş½ÃÁöÃ¢À¸·Î Æ÷Ä¿½º ÀüÈ¯"
 
 #: ../src/interface.c:3052
 msgid ""
 "Switch to the status message tab (in the notebook window at the bottom) if a "
 "new status message arrives."
 msgstr ""
-"ìƒˆë¡œìš´ ìƒíƒœ ë©”ì‹œì§€ê°€ ë°œìƒí•˜ë©´ ì•„ë˜ìª½ ë©”ì‹œì§€ì°½ì˜ ë©”ì‹œì§€ íƒ­ìœ¼ë¡œ í¬ì»¤ìŠ¤ ì „í™˜í•˜"
-"ê¸°."
+"»õ·Î¿î »óÅÂ ¸Ş½ÃÁö°¡ ¹ß»ıÇÏ¸é ¾Æ·¡ÂÊ ¸Ş½ÃÁöÃ¢ÀÇ ¸Ş½ÃÁö ÅÇÀ¸·Î Æ÷Ä¿½º ÀüÈ¯ÇÏ"
+"±â."
 
 #: ../src/interface.c:3054
 msgid "Suppress status messages in the status bar"
-msgstr "status barì˜ ìƒíƒœ ë©”ì‹œì§€ ê°ì¶”ê¸°"
+msgstr "status barÀÇ »óÅÂ ¸Ş½ÃÁö °¨Ãß±â"
 
 #: ../src/interface.c:3057
 msgid ""
 "Removes all messages from the status bar. The messages are still displayed "
 "in the status messages window."
 msgstr ""
-"status barì˜ ëª¨ë“  ë©”ì‹œì§€ë¥¼ ì§€ìš°ê¸°.\n"
-"ëª¨ë“  ë©”ì‹œì§€ë¥¼ ìƒíƒœ ë©”ì‹œì§€ì°½ì— í‘œì‹œí•¨."
+"status barÀÇ ¸ğµç ¸Ş½ÃÁö¸¦ Áö¿ì±â.\n"
+"¸ğµç ¸Ş½ÃÁö¸¦ »óÅÂ ¸Ş½ÃÁöÃ¢¿¡ Ç¥½ÃÇÔ."
 
 #: ../src/interface.c:3059
 msgid "Auto focus widgets (focus follows mouse)"
-msgstr "ìë™ í¬ì»¤ìŠ¤ ìœ„ì ¯ (ë§ˆìš°ìŠ¤ìœ„ì¹˜ì— í¬ì»¤ìŠ¤ ë§ì¶”ê¸°)"
+msgstr "ÀÚµ¿ Æ÷Ä¿½º À§Á¬ (¸¶¿ì½ºÀ§Ä¡¿¡ Æ÷Ä¿½º ¸ÂÃß±â)"
 
 #: ../src/interface.c:3062
 msgid ""
@@ -1768,348 +1768,348 @@ msgid ""
 "the main editor widget, the scribble, the toolbar search and goto line "
 "fields and the VTE."
 msgstr ""
-"ë§ˆìš°ìŠ¤ ì»¤ì„œ ì•„ë˜ì˜ ìœ„ì ¯ì— ìë™ìœ¼ë¡œ í¬ì»¤ìŠ¤ì„ ì¤Œ.\n"
-"í¸ì§‘ì°½, ë‚™ì„œíƒ­, ì°¾ê¸°ì™€ ì´ë™ ë„êµ¬ëª¨ìŒ, VTEì— ì‘ë™í•¨."
+"¸¶¿ì½º Ä¿¼­ ¾Æ·¡ÀÇ À§Á¬¿¡ ÀÚµ¿À¸·Î Æ÷Ä¿½ºÀ» ÁÜ.\n"
+"ÆíÁıÃ¢, ³«¼­ÅÇ, Ã£±â¿Í ÀÌµ¿ µµ±¸¸ğÀ½, VTE¿¡ ÀÛµ¿ÇÔ."
 
 #: ../src/interface.c:3064 ../src/interface.c:3393 ../src/interface.c:4244
 msgid "<b>Miscellaneous</b>"
-msgstr "<b>ê¸°íƒ€</b>"
+msgstr "<b>±âÅ¸</b>"
 
 #: ../src/interface.c:3085
 msgid "Startup path:"
-msgstr "ì‹œì‘ ê²½ë¡œ:"
+msgstr "½ÃÀÛ °æ·Î:"
 
 #: ../src/interface.c:3097
 msgid ""
 "Path to start in when opening or saving files. Must be an absolute path. "
 "Leave blank to use the current working directory."
 msgstr ""
-"íŒŒì¼ ì—´ê¸°ì™€ ì €ì¥ì˜ ì‹œì‘ ê²½ë¡œ.\n"
-"ì ˆëŒ€ê²½ë¡œë¡œ ì…ë ¥í•´ì•¼í•¨. ì§€ì •í•˜ì§€ ì•Šìœ¼ë©´ í˜„ì¬ì‘ì—…í´ë”ë¥¼ ì‚¬ìš©í•¨."
+"ÆÄÀÏ ¿­±â¿Í ÀúÀåÀÇ ½ÃÀÛ °æ·Î.\n"
+"Àı´ë°æ·Î·Î ÀÔ·ÂÇØ¾ßÇÔ. ÁöÁ¤ÇÏÁö ¾ÊÀ¸¸é ÇöÀçÀÛ¾÷Æú´õ¸¦ »ç¿ëÇÔ."
 
 #: ../src/interface.c:3110
 msgid "Project files:"
-msgstr "í”„ë¡œì íŠ¸ íŒŒì¼:"
+msgstr "ÇÁ·ÎÁ§Æ® ÆÄÀÏ:"
 
 #: ../src/interface.c:3122
 msgid "Path to start in when opening project files"
-msgstr "í”„ë¡œì íŠ¸ ì—´ê¸°ì˜ ì‹œì‘ ê²½ë¡œ"
+msgstr "ÇÁ·ÎÁ§Æ® ¿­±âÀÇ ½ÃÀÛ °æ·Î"
 
 #: ../src/interface.c:3135
 msgid "<b>Paths</b>"
-msgstr "<b>ê²½ë¡œ</b>"
+msgstr "<b>°æ·Î</b>"
 
 #: ../src/interface.c:3140
 msgid "General"
-msgstr "ì¼ë°˜"
+msgstr "ÀÏ¹İ"
 
 #: ../src/interface.c:3163
 msgid "Show symbol list"
-msgstr "ì‹¬ë³¼ ëª©ë¡ ë³´ê¸°"
+msgstr "½Éº¼ ¸ñ·Ï º¸±â"
 
 #: ../src/interface.c:3166
 msgid "Toggle the symbol list on and off"
-msgstr "ì‹¬ë³¼ ëª©ë¡ ë³´ê¸°ì „í™˜"
+msgstr "½Éº¼ ¸ñ·Ï º¸±âÀüÈ¯"
 
 #: ../src/interface.c:3168
 msgid "Show documents list"
-msgstr "ë¬¸ì„œ ëª©ë¡ ë³´ê¸°"
+msgstr "¹®¼­ ¸ñ·Ï º¸±â"
 
 #: ../src/interface.c:3171
 msgid "Toggle the documents list on and off"
-msgstr "ë¬¸ì„œ ëª©ë¡ ë³´ê¸° ì „í™˜"
+msgstr "¹®¼­ ¸ñ·Ï º¸±â ÀüÈ¯"
 
 #: ../src/interface.c:3173
 msgid "Show full path name in documents list"
-msgstr "ë¬¸ì„œ ëª©ë¡ì— ì „ì²´ê²½ë¡œëª… ë³´ê¸°"
+msgstr "¹®¼­ ¸ñ·Ï¿¡ ÀüÃ¼°æ·Î¸í º¸±â"
 
 #: ../src/interface.c:3177
 msgid "<b>Sidebar</b>"
-msgstr "<b>ê°€ì¥ìë¦¬ì°½</b>"
+msgstr "<b>°¡ÀåÀÚ¸®Ã¢</b>"
 
 #: ../src/interface.c:3198
 msgid "Symbol list:"
-msgstr "ì‹¬ë³¼ ëª©ë¡:"
+msgstr "½Éº¼ ¸ñ·Ï:"
 
 #: ../src/interface.c:3205 ../src/interface.c:3315
 msgid "Message window:"
-msgstr "ë©”ì‹œì§€ì°½:"
+msgstr "¸Ş½ÃÁöÃ¢:"
 
 #: ../src/interface.c:3212 ../src/interface.c:3351
 msgid "Editor:"
-msgstr "í¸ì§‘ì°½:"
+msgstr "ÆíÁıÃ¢:"
 
 #: ../src/interface.c:3224
 msgid "Sets the font for the message window"
-msgstr "ë©”ì‹œì§€ì°½ ê¸€ê¼´ ì„¤ì •"
+msgstr "¸Ş½ÃÁöÃ¢ ±Û²Ã ¼³Á¤"
 
 #: ../src/interface.c:3232
 msgid "Sets the font for the symbol list"
-msgstr "ì‹¬ë³¼ ëª©ë¡ ê¸€ê¼´ ì„¤ì •"
+msgstr "½Éº¼ ¸ñ·Ï ±Û²Ã ¼³Á¤"
 
 #: ../src/interface.c:3240
 msgid "Sets the editor font"
-msgstr "í¸ì§‘ì°½ ê¸€ê¼´ ì„¤ì •"
+msgstr "ÆíÁıÃ¢ ±Û²Ã ¼³Á¤"
 
 #: ../src/interface.c:3242
 msgid "<b>Fonts</b>"
-msgstr "<b>ê¸€ê¼´</b>"
+msgstr "<b>±Û²Ã</b>"
 
 #: ../src/interface.c:3261
 msgid "Show editor tabs"
-msgstr "í¸ì§‘ì°½ íƒ­ë³´ê¸°"
+msgstr "ÆíÁıÃ¢ ÅÇº¸±â"
 
 #: ../src/interface.c:3265
 msgid "Show close buttons"
-msgstr "ë‹«ê¸° ë‹¨ì¶” ë³´ê¸°"
+msgstr "´İ±â ´ÜÃß º¸±â"
 
 #: ../src/interface.c:3268
 msgid ""
 "Shows a small cross button in the file tabs to easily close files when "
 "clicking on it (requires restart of Geany)."
 msgstr ""
-"íŒŒì¼ì„ ì‰½ê²Œ ë‹«ì„ ìˆ˜ ìˆê²Œ íŒŒì¼íƒ­ì— ì‘ì€ Xì ë‹¨ì¶”ë¥¼ ë³´ì—¬ì¤Œ.\n"
-"(ì§€ë‹ˆë¥¼ ë‹¤ì‹œ ì‹œì‘í•´ì•¼ í•¨)"
+"ÆÄÀÏÀ» ½±°Ô ´İÀ» ¼ö ÀÖ°Ô ÆÄÀÏÅÇ¿¡ ÀÛÀº XÀÚ ´ÜÃß¸¦ º¸¿©ÁÜ.\n"
+"(Áö´Ï¸¦ ´Ù½Ã ½ÃÀÛÇØ¾ß ÇÔ)"
 
 #: ../src/interface.c:3274
 msgid "Placement of new file tabs:"
-msgstr "ìƒˆ íŒŒì¼íƒ­ ìœ„ì¹˜:"
+msgstr "»õ ÆÄÀÏÅÇ À§Ä¡:"
 
 #: ../src/interface.c:3279 ../src/interface.c:3328 ../src/interface.c:3346
 #: ../src/interface.c:3364
 msgid "Left"
-msgstr "ì™¼ìª½"
+msgstr "¿ŞÂÊ"
 
 #: ../src/interface.c:3282
 msgid "File tabs will be placed on the left of the notebook"
-msgstr "íŒŒì¼íƒ­ì„ ë©”ì‹œì§€ì°½ ì™¼ìª½ì— ë†“ê¸°"
+msgstr "ÆÄÀÏÅÇÀ» ¸Ş½ÃÁöÃ¢ ¿ŞÂÊ¿¡ ³õ±â"
 
 #: ../src/interface.c:3287 ../src/interface.c:3329 ../src/interface.c:3347
 #: ../src/interface.c:3365
 msgid "Right"
-msgstr "ì˜¤ë¥¸ìª½"
+msgstr "¿À¸¥ÂÊ"
 
 #: ../src/interface.c:3290
 msgid "File tabs will be placed on the right of the notebook"
-msgstr "íŒŒì¼íƒ­ì„ ë©”ì‹œì§€ì°½ ì˜¤ë¥¸ìª½ì— ë†“ê¸°"
+msgstr "ÆÄÀÏÅÇÀ» ¸Ş½ÃÁöÃ¢ ¿À¸¥ÂÊ¿¡ ³õ±â"
 
 #: ../src/interface.c:3294
 msgid "<b>Editor tabs</b>"
-msgstr "<b>í¸ì§€ì°½ íƒ­</b>"
+msgstr "<b>ÆíÁöÃ¢ ÅÇ</b>"
 
 #: ../src/interface.c:3330 ../src/interface.c:3348 ../src/interface.c:3366
 msgid "Top"
-msgstr "ìœ„"
+msgstr "À§"
 
 #: ../src/interface.c:3331 ../src/interface.c:3349 ../src/interface.c:3367
 msgid "Bottom"
-msgstr "ì•„ë˜"
+msgstr "¾Æ·¡"
 
 #: ../src/interface.c:3333
 msgid "Sidebar:"
-msgstr "ê°€ì¥ìë¦¬ì°½:"
+msgstr "°¡ÀåÀÚ¸®Ã¢:"
 
 #: ../src/interface.c:3369
 msgid "<b>Tab positions</b>"
-msgstr "<b>íƒ­ ìœ„ì¹˜</b>"
+msgstr "<b>ÅÇ À§Ä¡</b>"
 
 #: ../src/interface.c:3388
 msgid "Show status bar"
-msgstr "status bar ë³´ê¸°"
+msgstr "status bar º¸±â"
 
 #: ../src/interface.c:3391
 msgid "Whether to show the status bar at the bottom of the main window."
-msgstr "í”„ë¡œê·¸ë¨ì°½ ì•„ë˜ìª½ì˜ status bar ë³´ê¸° ì—¬ë¶€."
+msgstr "ÇÁ·Î±×·¥Ã¢ ¾Æ·¡ÂÊÀÇ status bar º¸±â ¿©ºÎ."
 
 #: ../src/interface.c:3398
 msgid "Interface"
-msgstr "ì¸í„°í˜ì´ìŠ¤"
+msgstr "ÀÎÅÍÆäÀÌ½º"
 
 #: ../src/interface.c:3417
 msgid "Show Toolbar"
-msgstr "ë„êµ¬ëª¨ìŒ ë³´ê¸°"
+msgstr "µµ±¸¸ğÀ½ º¸±â"
 
 #: ../src/interface.c:3421
 msgid "<b>Toolbar</b>"
-msgstr "<b>ë„êµ¬ëª¨ìŒ</b>"
+msgstr "<b>µµ±¸¸ğÀ½</b>"
 
 #: ../src/interface.c:3440
 msgid "Show file operation buttons"
-msgstr "íŒŒì¼ ì¡°ì‘ ë‹¨ì¶” ë³´ê¸°"
+msgstr "ÆÄÀÏ Á¶ÀÛ ´ÜÃß º¸±â"
 
 #: ../src/interface.c:3443
 msgid "Display the New, Open, Close, Save and Reload buttons in the toolbar"
-msgstr "ë„êµ¬ëª¨ìŒì— ìƒˆë¡œë§Œë“¤ê¸°, ì—´ê¸°, ë‹«ê¸°, ì €ì¥, ë‹¤ì‹œ ë¶ˆëŸ¬ì˜¤ê¸° ë‹¨ì¶” í‘œì‹œ"
+msgstr "µµ±¸¸ğÀ½¿¡ »õ·Î¸¸µé±â, ¿­±â, ´İ±â, ÀúÀå, ´Ù½Ã ºÒ·¯¿À±â ´ÜÃß Ç¥½Ã"
 
 #: ../src/interface.c:3445
 msgid "Show Redo and Undo buttons"
-msgstr "ì¬ì‹¤í–‰, ì‹¤í–‰ì·¨ì†Œ ë‹¨ì¶” ë³´ê¸°"
+msgstr "Àç½ÇÇà, ½ÇÇàÃë¼Ò ´ÜÃß º¸±â"
 
 #: ../src/interface.c:3448
 msgid "Display the Redo and Undo buttons in the toolbar"
-msgstr "ë„êµ¬ëª¨ìŒì— ì¬ì‹¤í–‰, ì‹¤í–‰ì·¨ì†Œ ë‹¨ë¶€ í‘œì‹œ"
+msgstr "µµ±¸¸ğÀ½¿¡ Àç½ÇÇà, ½ÇÇàÃë¼Ò ´ÜºÎ Ç¥½Ã"
 
 #: ../src/interface.c:3450
 msgid "Show Back and Forward buttons"
-msgstr "ë’¤ë¡œ, ì•ìœ¼ë¡œ ë‹¨ì¶” ë³´ê¸°"
+msgstr "µÚ·Î, ¾ÕÀ¸·Î ´ÜÃß º¸±â"
 
 #: ../src/interface.c:3453
 msgid ""
 "Display the Back and Forward buttons in the toolbar used for code navigation"
-msgstr "ë„êµ¬ëª¨ìŒì— ë’¤ë¡œ, ì•ìœ¼ë¡œ ë‹¨ì¶” í‘œì‹œ"
+msgstr "µµ±¸¸ğÀ½¿¡ µÚ·Î, ¾ÕÀ¸·Î ´ÜÃß Ç¥½Ã"
 
 #: ../src/interface.c:3455
 msgid "Show Compile and Run buttons"
-msgstr "ì»´íŒŒì¼, ì‹¤í–‰ ë‹¨ì¶” ë³´ê¸°"
+msgstr "ÄÄÆÄÀÏ, ½ÇÇà ´ÜÃß º¸±â"
 
 #: ../src/interface.c:3458
 msgid "Display the Compile and Run buttons in the toolbar"
-msgstr "ë„êµ¬ëª¨ìŒì— ì»´íŒŒì¼, ì‹¤í–‰ ë‹¨ì¶” í‘œì‹œ"
+msgstr "µµ±¸¸ğÀ½¿¡ ÄÄÆÄÀÏ, ½ÇÇà ´ÜÃß Ç¥½Ã"
 
 #: ../src/interface.c:3460
 msgid "Show Color Chooser button"
-msgstr "ìƒìƒì„ íƒê¸° ë‹¨ì¶” ë³´ê¸°"
+msgstr "»ı»ó¼±ÅÃ±â ´ÜÃß º¸±â"
 
 #: ../src/interface.c:3463
 msgid "Display the Color Chooser button in the toolbar"
-msgstr "ë„êµ¬ëª¨ìŒì— ìƒ‰ìƒì„ íƒê¸° ë‹¨ì¶” í‘œì‹œ"
+msgstr "µµ±¸¸ğÀ½¿¡ »ö»ó¼±ÅÃ±â ´ÜÃß Ç¥½Ã"
 
 #: ../src/interface.c:3465
 msgid "Show Zoom In and Zoom Out buttons"
-msgstr "í™•ëŒ€, ì¶•ì†Œ ë‹¨ì¶” ë³´ê¸°"
+msgstr "È®´ë, Ãà¼Ò ´ÜÃß º¸±â"
 
 #: ../src/interface.c:3468
 msgid "Display the Zoom In and Zoom Out buttons in the toolbar"
-msgstr "ë„êµ¬ëª¨ìŒì— í•™ëŒ€, ì¶•ì†Œ ë‹¨ì¶” í‘œì‹œ"
+msgstr "µµ±¸¸ğÀ½¿¡ ÇĞ´ë, Ãà¼Ò ´ÜÃß Ç¥½Ã"
 
 #: ../src/interface.c:3470
 msgid "Show Increase and Decrease Indentation buttons"
-msgstr "ë“¤ì—¬ì“°ê¸° ì¦ê°€, ê°ì†Œ ë‹¨ì¶” ë³´ê¸°"
+msgstr "µé¿©¾²±â Áõ°¡, °¨¼Ò ´ÜÃß º¸±â"
 
 #: ../src/interface.c:3473
 msgid "Display the Increase and Decrease Indentation buttons in the toolbar"
-msgstr "ë„êµ¬ëª¨ìŒì— ë“¤ì—¬ì“°ê¸° ì¦ê°€, ê°ì†Œ ë‹¨ì¶” í‘œì‹œ"
+msgstr "µµ±¸¸ğÀ½¿¡ µé¿©¾²±â Áõ°¡, °¨¼Ò ´ÜÃß Ç¥½Ã"
 
 #: ../src/interface.c:3475
 msgid "Show Search field"
-msgstr "ì°¾ê¸° í•„ë“œ ë³´ê¸°"
+msgstr "Ã£±â ÇÊµå º¸±â"
 
 #: ../src/interface.c:3478
 msgid "Display the search field and button in the toolbar"
-msgstr "ë„êµ¬ëª¨ìŒì— ì°¾ê¸° í•„ë“œ, ë‹¨ì¶” í‘œì‹œ"
+msgstr "µµ±¸¸ğÀ½¿¡ Ã£±â ÇÊµå, ´ÜÃß Ç¥½Ã"
 
 #: ../src/interface.c:3480
 msgid "Show Go to Line field"
-msgstr "í–‰ìœ¼ë¡œ ì´ë™ í•„ë“œ ë³´ê¸°"
+msgstr "ÇàÀ¸·Î ÀÌµ¿ ÇÊµå º¸±â"
 
 #: ../src/interface.c:3483
 msgid "Display the line number field and button in the toolbar"
-msgstr "ë„êµ¬ëª¨ìŒì— í–‰ìœ¼ë¡œ ì´ë™ í•„ë“œ, ë‹¨ì¶” í‘œì‹œ"
+msgstr "µµ±¸¸ğÀ½¿¡ ÇàÀ¸·Î ÀÌµ¿ ÇÊµå, ´ÜÃß Ç¥½Ã"
 
 #: ../src/interface.c:3485
 msgid "Show Quit button"
-msgstr "ëë‚´ê¸° ë‹¨ì¶” ë³´ê¸°"
+msgstr "³¡³»±â ´ÜÃß º¸±â"
 
 #: ../src/interface.c:3488
 msgid "Display the quit button in the toolbar"
-msgstr "ë„êµ¬ëª¨ìŒì— ëë‚´ê¸° ë‹¨ì¶” í‘œì‹œ"
+msgstr "µµ±¸¸ğÀ½¿¡ ³¡³»±â ´ÜÃß Ç¥½Ã"
 
 #: ../src/interface.c:3490
 msgid "<b>Items</b>"
-msgstr "<b>í•­ëª©</b>"
+msgstr "<b>Ç×¸ñ</b>"
 
 #: ../src/interface.c:3511
 msgid "Icon style:"
-msgstr "ì•„ì´ì½˜ ì–‘ì‹:"
+msgstr "¾ÆÀÌÄÜ ¾ç½Ä:"
 
 #: ../src/interface.c:3518
 msgid "Icon size:"
-msgstr "ì•„ì´ì½˜ í¬ê¸°:"
+msgstr "¾ÆÀÌÄÜ Å©±â:"
 
 #: ../src/interface.c:3565
 msgid "<b>Appearance</b>"
-msgstr "<b>ëª¨ì–‘ìƒˆ</b>"
+msgstr "<b>¸ğ¾ç»õ</b>"
 
 #: ../src/interface.c:3570
 msgid "Toolbar"
-msgstr "ë„êµ¬ëª¨ìŒ"
+msgstr "µµ±¸¸ğÀ½"
 
 #: ../src/interface.c:3604
 msgid "Auto-indent mode:"
-msgstr "ìë™ë“¤ì—¬ì“°ê¸° ëª¨ë“œ:"
+msgstr "ÀÚµ¿µé¿©¾²±â ¸ğµå:"
 
 #: ../src/interface.c:3617
 msgid "Basic"
-msgstr "ê¸°ë³¸"
+msgstr "±âº»"
 
 #: ../src/interface.c:3618
 msgid "Current chars"
-msgstr "í˜„ì¬ ë¬¸ì"
+msgstr "ÇöÀç ¹®ÀÚ"
 
 #: ../src/interface.c:3619
 msgid "Match braces"
-msgstr "ê´„í˜¸ ì¼ì¹˜"
+msgstr "°ıÈ£ ÀÏÄ¡"
 
 #: ../src/interface.c:3621 ../src/interface.c:3975
 msgid "Type:"
-msgstr "í˜•ì‹:"
+msgstr "Çü½Ä:"
 
 #: ../src/interface.c:3628
 msgid "Width:"
-msgstr "ë„ˆë¹„:"
+msgstr "³Êºñ:"
 
 #: ../src/interface.c:3641
 msgid "The width in chars of a single indent"
-msgstr "í•œë‹¨ê³„ ë“¤ì—¬ì“°ê¸°ì˜ ë¬¸ì ë„ˆë¹„"
+msgstr "ÇÑ´Ü°è µé¿©¾²±âÀÇ ¹®ÀÚ ³Êºñ"
 
 #: ../src/interface.c:3651
 msgid "Use spaces when inserting indentation"
-msgstr "ë“¤ì—¬ì“°ê¸°ì— ìŠ¤í˜ì´ìŠ¤ ì‚¬ìš©"
+msgstr "µé¿©¾²±â¿¡ ½ºÆäÀÌ½º »ç¿ë"
 
 #: ../src/interface.c:3660
 msgid "Use one tab per indent"
-msgstr "ë“¤ì—¬ì“°ê¸°ì— íƒ­ ì‚¬ìš©"
+msgstr "µé¿©¾²±â¿¡ ÅÇ »ç¿ë"
 
 #: ../src/interface.c:3669
 msgid ""
 "Use spaces if the total indent is less than the tab width, otherwise use both"
-msgstr "ë“¤ì—¬ì“°ê¸°ê°€ íƒ­ ë„ˆë¹„ë³´ë‹¤ ì‘ìœ¼ë©´ ìŠ¤í˜ì´ìŠ¤ ì‚¬ìš©, ê·¸ë ‡ì§€ ì•Šìœ¼ë©´ ë‘˜ ë‹¤ ì‚¬ìš©"
+msgstr "µé¿©¾²±â°¡ ÅÇ ³Êºñº¸´Ù ÀÛÀ¸¸é ½ºÆäÀÌ½º »ç¿ë, ±×·¸Áö ¾ÊÀ¸¸é µÑ ´Ù »ç¿ë"
 
 #: ../src/interface.c:3684
 msgid "Hard tab width:"
-msgstr "í•˜ë“œ íƒ­ ë„ˆë¹„:"
+msgstr "ÇÏµå ÅÇ ³Êºñ:"
 
 #: ../src/interface.c:3692
 msgid "The width of a tab when Tabs & Spaces is set for a document"
-msgstr "í… ë° ìŠ¤í˜ì´ìŠ¤ ì„¤ì •ì‹œ íƒ­ ë„ˆë¹„"
+msgstr "ÅÜ ¹× ½ºÆäÀÌ½º ¼³Á¤½Ã ÅÇ ³Êºñ"
 
 #: ../src/interface.c:3702
 msgid ""
 "Whether to detect the indentation type from file contents when a file is "
 "opened."
-msgstr "íŒŒì¼ ì—´ê¸°ì‹œ íŒŒì¼ ë‚´ìš©ìœ¼ë¡œ ë“¤ì—¬ì“°ê¸° ì¶”ì • ì—¬ë¶€."
+msgstr "ÆÄÀÏ ¿­±â½Ã ÆÄÀÏ ³»¿ëÀ¸·Î µé¿©¾²±â ÃßÁ¤ ¿©ºÎ."
 
 #: ../src/interface.c:3704
 msgid "Tab key indents"
-msgstr "íƒ­ í‚¤ ë“¤ì—¬ì“°ê¸°"
+msgstr "ÅÇ Å° µé¿©¾²±â"
 
 #: ../src/interface.c:3707
 msgid ""
 "Pressing tab/shift-tab indents/unindents instead of inserting a tab "
 "character."
-msgstr "íƒ­ ë¬¸ì ì…ë ¥ ëŒ€ì‹  íƒ­í‚¤ ë° shift-íƒ­í‚¤ë¡œ ë“¤ì—¬ì“°ê¸° ë° ë“¤ì—¬ì“°ê¸°í•´ì œ."
+msgstr "ÅÇ ¹®ÀÚ ÀÔ·Â ´ë½Å ÅÇÅ° ¹× shift-ÅÇÅ°·Î µé¿©¾²±â ¹× µé¿©¾²±âÇØÁ¦."
 
 #: ../src/interface.c:3709
 msgid "<b>Indentation</b>"
-msgstr "<b>ë“¤ì—¬ì“°ê¸°</b>"
+msgstr "<b>µé¿©¾²±â</b>"
 
 #: ../src/interface.c:3728
 msgid "Line wrapping"
-msgstr "ì¤„ë°”ê¾¸ê¸°"
+msgstr "ÁÙ¹Ù²Ù±â"
 
 #: ../src/interface.c:3733
 msgid "Enable \"smart\" home key"
-msgstr "\"ë˜‘ë˜‘í•œ\" homeí‚¤ í™œì„±"
+msgstr "\"¶È¶ÈÇÑ\" homeÅ° È°¼º"
 
 #: ../src/interface.c:3736
 msgid ""
@@ -2119,219 +2119,219 @@ msgid ""
 "key always moves the caret to the start of the current line, regardless of "
 "its current position."
 msgstr ""
-"\"ë˜‘ë˜‘í•œ\" homeí‚¤ë¥¼ í™œì„±í™”í•˜ë©´ HOMEí‚¤ë¥¼ ëˆ„ë¥¼ë•Œ ìºëŸ¿ì„ í˜„ì¬ì¤„ì˜ ê³µë°±ì´ ì•„ë‹Œì²«"
-"ë²ˆì§¸ ê¸€ìë¡œì´ë™ì‹œí‚µë‹ˆë‹¤. ì´ë¯¸ ê³µë°±ì´ ì•„ë‹Œ ì²«ë²ˆì§¸ ê¸€ìì— ìˆë‹¤ë©´ í˜„ì¬í–‰ì˜ì œì¼ "
-"ì²˜ìŒìœ¼ë¡œ ì´ë™ì‹œí‚µë‹ˆë‹¤.\n"
-"í™œì„±í™”í•˜ì§€ ì•Šìœ¼ë©´ í˜„ì¬ ìœ„ì¹˜ì— ìƒê´€ì—†ì´ ì–¸ì œë‚˜ ìºëŸ¿ì„ í–‰ì˜ ë§¨ì²˜ìŒìœ¼ë¡œ ì´ë™ì‹œí‚µ"
-"ë‹ˆë‹¤."
+"\"¶È¶ÈÇÑ\" homeÅ°¸¦ È°¼ºÈ­ÇÏ¸é HOMEÅ°¸¦ ´©¸¦¶§ Ä³·µÀ» ÇöÀçÁÙÀÇ °ø¹éÀÌ ¾Æ´ÑÃ¹"
+"¹øÂ° ±ÛÀÚ·ÎÀÌµ¿½ÃÅµ´Ï´Ù. ÀÌ¹Ì °ø¹éÀÌ ¾Æ´Ñ Ã¹¹øÂ° ±ÛÀÚ¿¡ ÀÖ´Ù¸é ÇöÀçÇàÀÇÁ¦ÀÏ "
+"Ã³À½À¸·Î ÀÌµ¿½ÃÅµ´Ï´Ù.\n"
+"È°¼ºÈ­ÇÏÁö ¾ÊÀ¸¸é ÇöÀç À§Ä¡¿¡ »ó°ü¾øÀÌ ¾ğÁ¦³ª Ä³·µÀ» ÇàÀÇ ¸ÇÃ³À½À¸·Î ÀÌµ¿½ÃÅµ"
+"´Ï´Ù."
 
 #: ../src/interface.c:3738
 msgid "Disable Drag and Drop"
-msgstr "ë“œë˜ê·¸ ì•¤ ë“œë¡­ ë¹„í™œì„±"
+msgstr "µå·¡±× ¾Ø µå·Ó ºñÈ°¼º"
 
 #: ../src/interface.c:3741
 msgid ""
 "Disable drag and drop completely in the editor window so you can't drag and "
 "drop any selections within or outside of the editor window."
 msgstr ""
-"ë“œë˜ê·¸ ì•¤ ë“œë¡­ì„ ë¹„í™œì„±í™”í•˜ë©´ í¸ì§‘ì°½ì˜ ë‚´/ì™¸ë¶€ ì–´ë””ì—ì„œë„ ì„ íƒí•œ ë¶€ë¶„ì„ ë“œë˜"
-"ê·¸ ì•¤ ë“œë¡­ í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤."
+"µå·¡±× ¾Ø µå·ÓÀ» ºñÈ°¼ºÈ­ÇÏ¸é ÆíÁıÃ¢ÀÇ ³»/¿ÜºÎ ¾îµğ¿¡¼­µµ ¼±ÅÃÇÑ ºÎºĞÀ» µå·¡"
+"±× ¾Ø µå·Ó ÇÒ ¼ö ¾ø½À´Ï´Ù."
 
 #: ../src/interface.c:3743
 msgid "Enable folding"
-msgstr "ì ‘ê¸° í™œì„±"
+msgstr "Á¢±â È°¼º"
 
 #: ../src/interface.c:3746
 msgid "Whether to enable folding the code"
-msgstr "ì½”ë“œ ì ‘ê¸° í™œì„± ì—¬ë¶€"
+msgstr "ÄÚµå Á¢±â È°¼º ¿©ºÎ"
 
 #: ../src/interface.c:3748
 msgid "Fold/unfold all children of a fold point"
-msgstr "ì ‘ê¸° ì§€ì ì˜ ëª¨ë“  ìì‹ ì ‘ê¸°/í¼ì¹˜ê¸°"
+msgstr "Á¢±â ÁöÁ¡ÀÇ ¸ğµç ÀÚ½Ä Á¢±â/ÆîÄ¡±â"
 
 #: ../src/interface.c:3751
 msgid ""
 "Fold or unfold all children of a fold point. By pressing the Shift key while "
 "clicking on a fold symbol the contrary behavior is used."
 msgstr ""
-"ì ‘ê¸° ì§€ì ì˜ ëª¨ë“  ìì‹ì„ ì ‘ê±°ë‚˜ í¼ì¹©ë‹ˆë‹¤. ì ‘ê¸° ì‹¬ë³¼ì„ í´ë¦­í•  ë•Œ Shift í‚¤ë¥¼ ëˆ„"
-"ë¥´ë©´ë°˜ëŒ€ì˜ í–‰ë™ì„ í•©ë‹ˆë‹¤."
+"Á¢±â ÁöÁ¡ÀÇ ¸ğµç ÀÚ½ÄÀ» Á¢°Å³ª ÆîÄ¨´Ï´Ù. Á¢±â ½Éº¼À» Å¬¸¯ÇÒ ¶§ Shift Å°¸¦ ´©"
+"¸£¸é¹İ´ëÀÇ Çàµ¿À» ÇÕ´Ï´Ù."
 
 #: ../src/interface.c:3753
 msgid "Use indicators to show compile errors"
-msgstr "ì»´íŒŒì¼ ì˜¤ë¥˜ í‘œì‹œì— ì§€í‘œ ì‚¬ìš©"
+msgstr "ÄÄÆÄÀÏ ¿À·ù Ç¥½Ã¿¡ ÁöÇ¥ »ç¿ë"
 
 #: ../src/interface.c:3756
 msgid ""
 "Whether to use indicators (a squiggly underline) to highlight the lines "
 "where the compiler found a warning or an error."
-msgstr "ì»´íŒŒì¼ëŸ¬ê°€ ì°¾ì€ ê²½ê³  ë° ì˜¤ë¥˜ í‘œì‹œì— ì§€í‘œ(êµ¬ë¶ˆë¶€ë¶ˆí•œ ë°‘ì¤„) ì‚¬ìš© ì—¬ë¶€."
+msgstr "ÄÄÆÄÀÏ·¯°¡ Ã£Àº °æ°í ¹× ¿À·ù Ç¥½Ã¿¡ ÁöÇ¥(±¸ºÒºÎºÒÇÑ ¹ØÁÙ) »ç¿ë ¿©ºÎ."
 
 #: ../src/interface.c:3758
 msgid "Newline strips trailing spaces"
-msgstr "ìƒˆë¡œìš´ ì¤„ì— ì§ˆì§ˆëŒë¦¬ëŠ” ê³µë°± ì§€ìš°ê¸°"
+msgstr "»õ·Î¿î ÁÙ¿¡ ÁúÁú²ø¸®´Â °ø¹é Áö¿ì±â"
 
 #: ../src/interface.c:3761
 msgid "Enable newline to strip the trailing spaces on the previous line."
-msgstr "ìƒˆë¡œìš´ ì¤„ì— ì´ì „ ì¤„ì—ì„œë¶€í„° ì§ˆì§ˆëŒë¦¬ëŠ” ê³µë°± ì§€ìš°ê¸° í™œì„±."
+msgstr "»õ·Î¿î ÁÙ¿¡ ÀÌÀü ÁÙ¿¡¼­ºÎÅÍ ÁúÁú²ø¸®´Â °ø¹é Áö¿ì±â È°¼º."
 
 #: ../src/interface.c:3767
 msgid "Line breaking column:"
-msgstr "í–‰ ë¶„ë¦¬ ì—´:"
+msgstr "Çà ºĞ¸® ¿­:"
 
 #: ../src/interface.c:3781
 msgid "Comment toggle marker:"
-msgstr "í‘œì§€ ì „í™˜ ì£¼ì„:"
+msgstr "Ç¥Áö ÀüÈ¯ ÁÖ¼®:"
 
 #: ../src/interface.c:3788
 msgid ""
 "A string which is added when toggling a line comment in a source file. It is "
 "used to mark the comment as toggled."
 msgstr ""
-"ì†ŒìŠ¤íŒŒì¼ ë‚´ì˜ í•œì¤„ ì£¼ì„ì„ ì „í™˜í•  ë•Œ ì¶”ê°€ëœ ë¬¸ìì—´.ì£¼ì„ì´ ì „í™˜ë˜ì—ˆìŒì„ í‘œì‹œí•¨."
+"¼Ò½ºÆÄÀÏ ³»ÀÇ ÇÑÁÙ ÁÖ¼®À» ÀüÈ¯ÇÒ ¶§ Ãß°¡µÈ ¹®ÀÚ¿­.ÁÖ¼®ÀÌ ÀüÈ¯µÇ¾úÀ½À» Ç¥½ÃÇÔ."
 
 #: ../src/interface.c:3790
 msgid "<b>Features</b>"
-msgstr "<b>ê¸°ëŠ¥</b>"
+msgstr "<b>±â´É</b>"
 
 #: ../src/interface.c:3795
 msgid "Features"
-msgstr "ê¸°ëŠ¥"
+msgstr "±â´É"
 
 #: ../src/interface.c:3814
 msgid "Snippet completion"
-msgstr "í† ë§‰ ì™„ì„±"
+msgstr "Åä¸· ¿Ï¼º"
 
 #: ../src/interface.c:3817
 msgid ""
 "Type a defined short character sequence and complete it to a more complex "
 "string using a single keypress."
-msgstr "ì •ì˜ëœ ì§§ì€ ë¬¸ìì—´ì„ ì…ë ¥í•˜ë©´ ë³µì¡í•œ ë¬¸ìì—´ë¡œ ì™„ì„±í•¨."
+msgstr "Á¤ÀÇµÈ ÂªÀº ¹®ÀÚ¿­À» ÀÔ·ÂÇÏ¸é º¹ÀâÇÑ ¹®ÀÚ¿­·Î ¿Ï¼ºÇÔ."
 
 #: ../src/interface.c:3819
 msgid "XML tag auto completion"
-msgstr "XML tag ìë™ ì™„ì„±"
+msgstr "XML tag ÀÚµ¿ ¿Ï¼º"
 
 #: ../src/interface.c:3822
 msgid "Automatic completion and closing of XML tags (includes HTML tags)"
-msgstr "XMLíƒœê·¸(HTMLíƒœê·¸ í¬í•¨)ë¥¼ ìë™ì™„ì„±í•˜ê³  ë‹«ì•„ì¤Œ."
+msgstr "XMLÅÂ±×(HTMLÅÂ±× Æ÷ÇÔ)¸¦ ÀÚµ¿¿Ï¼ºÇÏ°í ´İ¾ÆÁÜ."
 
 #: ../src/interface.c:3824
 msgid "Automatic continuation of multi-line comments"
-msgstr "ì—¬ëŸ¬ì¤„ ì£¼ì„ ìë™ ì‡ê¸°"
+msgstr "¿©·¯ÁÙ ÁÖ¼® ÀÚµ¿ ÀÕ±â"
 
 #: ../src/interface.c:3827
 msgid ""
 "Continue automatically multi-line comments in languages like C, C++ and Java "
 "when a new line is entered inside such a comment."
 msgstr ""
-"C, C++, Javaë“±ì˜ ì†ŒìŠ¤íŒŒì¼ì—ì„œ ì—¬ëŸ¬ì¤„ ì£¼ì„ë‚´ì— ìƒˆì¤„ì„ ì…ë ¥í•  ë•Œ ìë™ìœ¼ë¡œê·¸ ì¤„"
-"ë„ ê¸°ì¡´ì˜ ì£¼ì„ìœ¼ë¡œ ì´ì–´ì¤Œ."
+"C, C++, JavaµîÀÇ ¼Ò½ºÆÄÀÏ¿¡¼­ ¿©·¯ÁÙ ÁÖ¼®³»¿¡ »õÁÙÀ» ÀÔ·ÂÇÒ ¶§ ÀÚµ¿À¸·Î±× ÁÙ"
+"µµ ±âÁ¸ÀÇ ÁÖ¼®À¸·Î ÀÌ¾îÁÜ."
 
 #: ../src/interface.c:3829
 msgid "Automatic symbol completion"
-msgstr "ìë™ ì‹¬ë³¼ ì™„ì„±"
+msgstr "ÀÚµ¿ ½Éº¼ ¿Ï¼º"
 
 #: ../src/interface.c:3832
 msgid ""
 "Automatic completion of known symbols in open files (function names, global "
 "variables, ...)"
-msgstr "ì—´ë¦° íŒŒì¼ë‚´ì˜ í•¨ìˆ˜ëª…, ì „ì—­ë³€ìˆ˜ë“±ë“±ì˜ ì•Œë ¤ì§„ ì‹¬ë³¼ì„ ìë™ìœ¼ë¡œ ì™„ì„±í•¨."
+msgstr "¿­¸° ÆÄÀÏ³»ÀÇ ÇÔ¼ö¸í, Àü¿ªº¯¼öµîµîÀÇ ¾Ë·ÁÁø ½Éº¼À» ÀÚµ¿À¸·Î ¿Ï¼ºÇÔ."
 
 #: ../src/interface.c:3840
 msgid "Max. symbol name suggestions:"
-msgstr "ìµœëŒ€ ì‹¬ë³¼ ì´ë¦„ ì œì•ˆ íšŸìˆ˜:"
+msgstr "ÃÖ´ë ½Éº¼ ÀÌ¸§ Á¦¾È È½¼ö:"
 
 #: ../src/interface.c:3847
 msgid "Completion list height:"
-msgstr "ìë™ì™„ì„± ëª©ë¡ ë†’ì´:"
+msgstr "ÀÚµ¿¿Ï¼º ¸ñ·Ï ³ôÀÌ:"
 
 #: ../src/interface.c:3854
 msgid "Characters to type for completion:"
-msgstr "ìë™ì™„ì„± í•„ìš”ë¬¸ì ìˆ˜:"
+msgstr "ÀÚµ¿¿Ï¼º ÇÊ¿ä¹®ÀÚ ¼ö:"
 
 #: ../src/interface.c:3867
 msgid ""
 "The amount of characters which are necessary to show the symbol auto "
 "completion list."
-msgstr "ì‹¬ë³¼ ìë™ì™„ì„± ëª©ë¡ì„ ë‚˜íƒ€ë‚´ê¸° ìœ„í•´ í•„ìš”í•œ ë¬¸ìì˜ ìˆ˜."
+msgstr "½Éº¼ ÀÚµ¿¿Ï¼º ¸ñ·ÏÀ» ³ªÅ¸³»±â À§ÇØ ÇÊ¿äÇÑ ¹®ÀÚÀÇ ¼ö."
 
 #: ../src/interface.c:3876
 msgid "Display height in rows for the auto completion list."
-msgstr "ìë™ì™„ì„± ëª©ë¡ ì¤„ ë†’ì´."
+msgstr "ÀÚµ¿¿Ï¼º ¸ñ·Ï ÁÙ ³ôÀÌ."
 
 #: ../src/interface.c:3885
 msgid "Maximum number of entries to display in the auto completion list."
-msgstr "ìë™ì™„ì„± ëª©ë¡ ìµœëŒ€ í‘œì‹œ ìˆ˜."
+msgstr "ÀÚµ¿¿Ï¼º ¸ñ·Ï ÃÖ´ë Ç¥½Ã ¼ö."
 
 #: ../src/interface.c:3888
 msgid "<b>Completions</b>"
-msgstr "<b>ìë™ì™„ì„±</b>"
+msgstr "<b>ÀÚµ¿¿Ï¼º</b>"
 
 #: ../src/interface.c:3893
 msgid "Completions"
-msgstr "ìë™ì™„ì„±"
+msgstr "ÀÚµ¿¿Ï¼º"
 
 #: ../src/interface.c:3916
 msgid "Invert syntax highlighting colors"
-msgstr "êµ¬ë¬¸ê°•ì¡° ìƒ‰ìƒ ë°˜ì „"
+msgstr "±¸¹®°­Á¶ »ö»ó ¹İÀü"
 
 #: ../src/interface.c:3918
 msgid "Use white text on a black background."
-msgstr "ê²€ì • ë°°ê²½ í°ìƒ‰ ê¸€ì."
+msgstr "°ËÁ¤ ¹è°æ Èò»ö ±ÛÀÚ."
 
 #: ../src/interface.c:3920
 msgid "Show indentation guides"
-msgstr "ë“¤ì—¬ì“°ê¸° ë³´ì¡°ì„  ë³´ê¸°"
+msgstr "µé¿©¾²±â º¸Á¶¼± º¸±â"
 
 #: ../src/interface.c:3923
 msgid "Shows small dotted lines to help you to use the right indentation."
-msgstr "ë“¤ì—¬ì“°ê¸° ë³´ì¡°ìš© ì‘ì€ ì ì„  ë³´ê¸°."
+msgstr "µé¿©¾²±â º¸Á¶¿ë ÀÛÀº Á¡¼± º¸±â."
 
 #: ../src/interface.c:3925
 msgid "Show white space"
-msgstr "ê³µë°± í‘œì‹œ ë³´ê¸°"
+msgstr "°ø¹é Ç¥½Ã º¸±â"
 
 #: ../src/interface.c:3928
 msgid "Marks spaces with dots and tabs with arrows."
-msgstr "ìŠ¤í˜ì´ìŠ¤ ëŒ€ì‹  ì , íƒ­ ëŒ€ì‹  í™”ì‚´í‘œë¥¼ í‘œì‹œí•¨."
+msgstr "½ºÆäÀÌ½º ´ë½Å Á¡, ÅÇ ´ë½Å È­»ìÇ¥¸¦ Ç¥½ÃÇÔ."
 
 #: ../src/interface.c:3930
 msgid "Show line endings"
-msgstr "ì¤„ë í‘œì‹œ ë³´ê¸°"
+msgstr "ÁÙ³¡ Ç¥½Ã º¸±â"
 
 #: ../src/interface.c:3933
 msgid "Show the line ending character."
-msgstr "ì¤„ë í‘œì‹œ ë³´ì—¬ì¤Œ."
+msgstr "ÁÙ³¡ Ç¥½Ã º¸¿©ÁÜ."
 
 #: ../src/interface.c:3935
 msgid "Stop scrolling at last line"
-msgstr "ë§ˆì§€ë§‰ ì¤„ì—ì„œ ìŠ¤í¬ë¡¤ ë©ˆì¶”ê¸°"
+msgstr "¸¶Áö¸· ÁÙ¿¡¼­ ½ºÅ©·Ñ ¸ØÃß±â"
 
 #: ../src/interface.c:3938
 msgid "Whether to stop scrolling one page past the last line of a document."
-msgstr "ë¬¸ì„œì˜ ë§ˆì§€ë§‰ ì¤„ì—ì„œ ìŠ¤í¬ë¡¤ì„ ë©ˆì¶œì§€ ì—¬ë¶€."
+msgstr "¹®¼­ÀÇ ¸¶Áö¸· ÁÙ¿¡¼­ ½ºÅ©·ÑÀ» ¸ØÃâÁö ¿©ºÎ."
 
 #: ../src/interface.c:3940
 msgid "<b>Display</b>"
-msgstr "<b>í‘œì‹œ</b>"
+msgstr "<b>Ç¥½Ã</b>"
 
 #: ../src/interface.c:3961
 msgid "Long line marker:"
-msgstr "ê¸´ì¤„ í‘œì§€:"
+msgstr "±äÁÙ Ç¥Áö:"
 
 #: ../src/interface.c:3968
 msgid "Long line marker color:"
-msgstr "ê¸´ì¤„ í‘œì§€ ìƒ‰ìƒ:"
+msgstr "±äÁÙ Ç¥Áö »ö»ó:"
 
 #: ../src/interface.c:3987
 msgid "Sets the color of the long line marker"
-msgstr "ê¸´ì¤„ í‘œì§€ ìƒ‰ìƒ ì„¤ì •"
+msgstr "±äÁÙ Ç¥Áö »ö»ó ¼³Á¤"
 
 #: ../src/interface.c:3988 ../src/tools.c:743 ../src/vte.c:737
 #: ../src/vte.c:744
 msgid "Color Chooser"
-msgstr "ìƒ‰ìƒ ì„ íƒê¸°"
+msgstr "»ö»ó ¼±ÅÃ±â"
 
 #: ../src/interface.c:3996
 msgid ""
@@ -2339,22 +2339,22 @@ msgid ""
 "long lines, or as a hint to break the line. Set this value to a value "
 "greater than 0 to specify the column where it should appear."
 msgstr ""
-"ê¸´ì¤„ í‘œì§€ëŠ” í¸ì§‘ì°½ë‚´ì˜ ê¸´ì¤„ì„ í‘œì‚¬í•´ì£¼ê±°ë‚˜ í–‰ë¶„ë¦¬ íŒíŠ¸ë¥¼ ì£¼ëŠ” ì–‡ì€ ì„¸ë¡œì„ ì…ë‹ˆ"
-"ë‹¤. 0ë³´ë‹¤ í° ìˆ˜ë¥¼ ì§€ì •í•˜ì—¬ ì–´ëŠ ì—´ì— ê¸´ì¤„ í‘œì§€ë¥¼ ë‚˜íƒ€ë‚¼ì§€ ì„¤ì •í•˜ì‹­ì‹œì˜¤."
+"±äÁÙ Ç¥Áö´Â ÆíÁıÃ¢³»ÀÇ ±äÁÙÀ» Ç¥»çÇØÁÖ°Å³ª ÇàºĞ¸® ÈùÆ®¸¦ ÁÖ´Â ¾ãÀº ¼¼·Î¼±ÀÔ´Ï"
+"´Ù. 0º¸´Ù Å« ¼ö¸¦ ÁöÁ¤ÇÏ¿© ¾î´À ¿­¿¡ ±äÁÙ Ç¥Áö¸¦ ³ªÅ¸³¾Áö ¼³Á¤ÇÏ½Ê½Ã¿À."
 
 #: ../src/interface.c:4006
 msgid "Line"
-msgstr "ì„ "
+msgstr "¼±"
 
 #: ../src/interface.c:4009
 msgid ""
 "Prints a vertical line in the editor window at the given cursor position "
 "(see below)."
-msgstr "í¸ì§‘ì°½ë‚´ì˜ ì„¤ì •ëœ ì—´ì— ì„¸ë¡œì„ ì„ í‘œì‹œí•¨."
+msgstr "ÆíÁıÃ¢³»ÀÇ ¼³Á¤µÈ ¿­¿¡ ¼¼·Î¼±À» Ç¥½ÃÇÔ."
 
 #: ../src/interface.c:4013
 msgid "Background"
-msgstr "ë°°ê²½ìƒ‰"
+msgstr "¹è°æ»ö"
 
 #: ../src/interface.c:4016
 msgid ""
@@ -2362,60 +2362,60 @@ msgid ""
 "below) changed to the color set below. (This is recommended if you use "
 "proportional fonts)"
 msgstr ""
-"ì„¤ì •ëœ ì—´ ì´í›„ì˜ ë¬¸ì ë°°ê²½ì„ ì•„ë˜ì˜ ìƒ‰ìƒìœ¼ë¡œ ë°”ê¿ˆ.\n"
-"(ê°€ë³€í­ ê¸€ê¼´ ì‚¬ìš©ì‹œ ê¶Œí•¨)"
+"¼³Á¤µÈ ¿­ ÀÌÈÄÀÇ ¹®ÀÚ ¹è°æÀ» ¾Æ·¡ÀÇ »ö»óÀ¸·Î ¹Ù²Ş.\n"
+"(°¡º¯Æø ±Û²Ã »ç¿ë½Ã ±ÇÇÔ)"
 
 #: ../src/interface.c:4020
 msgid "Disabled"
-msgstr "ì‚¬ìš©ì•ˆí•¨"
+msgstr "»ç¿ë¾ÈÇÔ"
 
 #: ../src/interface.c:4026
 msgid "<b>Long line marker</b>"
-msgstr "<b>ê¸´ì¤„ í‘œì§€</b>"
+msgstr "<b>±äÁÙ Ç¥Áö</b>"
 
 #: ../src/interface.c:4031
 msgid "Display"
-msgstr "í‘œì‹œ"
+msgstr "Ç¥½Ã"
 
 #: ../src/interface.c:4035 ../src/keybindings.c:213
 msgid "Editor"
-msgstr "í¸ì§‘ê¸°"
+msgstr "ÆíÁı±â"
 
 #: ../src/interface.c:4062
 msgid "Open new documents from the command-line"
-msgstr "ëª…ë ¹í–‰ì—ì„œ ìƒˆ ë¬¸ì„œ ì—´ê¸°"
+msgstr "¸í·ÉÇà¿¡¼­ »õ ¹®¼­ ¿­±â"
 
 #: ../src/interface.c:4065
 msgid "Start a new file for each command-line filename that doesn't exist."
-msgstr "ê° ëª…ë ¹í–‰ íŒŒì¼ ì´ë¦„ìœ¼ë¡œ ìƒˆë¡œìš´ ë¬¸ì„œ ì‹œì‘."
+msgstr "°¢ ¸í·ÉÇà ÆÄÀÏ ÀÌ¸§À¸·Î »õ·Î¿î ¹®¼­ ½ÃÀÛ."
 
 #: ../src/interface.c:4079
 msgid "Default end of line characters:"
-msgstr "ì¤„ë í‘œì‹œë¬¸ì ê¸°ë³¸ê°’:"
+msgstr "ÁÙ³¡ Ç¥½Ã¹®ÀÚ ±âº»°ª:"
 
 #: ../src/interface.c:4086
 msgid "<b>New files</b>"
-msgstr "<b>ìƒˆ íŒŒì¼</b>"
+msgstr "<b>»õ ÆÄÀÏ</b>"
 
 #: ../src/interface.c:4112
 msgid "Sets the default encoding for newly created files."
-msgstr "ìƒˆë¡œ ìƒì„±ëœ íŒŒì¼ ì¸ì½”ë”© ê¸°ë³¸ê°’ ì„¤ì •."
+msgstr "»õ·Î »ı¼ºµÈ ÆÄÀÏ ÀÎÄÚµù ±âº»°ª ¼³Á¤."
 
 #: ../src/interface.c:4118
 msgid "Default encoding (new files):"
-msgstr "ì¸ì½”ë”© ê¸°ë³¸ê°’ (ìƒˆ íŒŒì¼):"
+msgstr "ÀÎÄÚµù ±âº»°ª (»õ ÆÄÀÏ):"
 
 #: ../src/interface.c:4125
 msgid "Default encoding (existing files):"
-msgstr "ì¸ì½”ë”© ê¸°ë³¸ê°’ (ê¸°ì¡´ íŒŒì¼):"
+msgstr "ÀÎÄÚµù ±âº»°ª (±âÁ¸ ÆÄÀÏ):"
 
 #: ../src/interface.c:4137
 msgid "Sets the default encoding for opening existing files."
-msgstr "ê¸°ì¡´ íŒŒì¼ ì—´ ë•Œ ì¸ì½”ë”© ê¸°ë³¸ê°’ ì„¤ì •."
+msgstr "±âÁ¸ ÆÄÀÏ ¿­ ¶§ ÀÎÄÚµù ±âº»°ª ¼³Á¤."
 
 #: ../src/interface.c:4143
 msgid "Use fixed encoding when opening files"
-msgstr "íŒŒì¼ ì—´ ë•Œ ê³ ì •ëœ ì¸ì½”ë”© ì‚¬ìš©."
+msgstr "ÆÄÀÏ ¿­ ¶§ °íÁ¤µÈ ÀÎÄÚµù »ç¿ë."
 
 #: ../src/interface.c:4148
 msgid ""
@@ -2423,136 +2423,136 @@ msgid ""
 "opening files and opens the file with the specified encoding (usually not "
 "needed)."
 msgstr ""
-"íŒŒì¼ ì—´ ë•Œ ì¸ì½”ë”© ìë™ ì¶”ì •ì„ ë¹„í™œì„±í™”í•˜ê³  ì§€ì •í•œ ì¸ì½”ë”©ìœ¼ë¡œ íŒŒì¼ì„ ì—…ë‹ˆë‹¤.\n"
-"(ë³´í†µì˜ ê²½ìš° í•„ìš”ì—†ìŒ)"
+"ÆÄÀÏ ¿­ ¶§ ÀÎÄÚµù ÀÚµ¿ ÃßÁ¤À» ºñÈ°¼ºÈ­ÇÏ°í ÁöÁ¤ÇÑ ÀÎÄÚµùÀ¸·Î ÆÄÀÏÀ» ¾÷´Ï´Ù.\n"
+"(º¸ÅëÀÇ °æ¿ì ÇÊ¿ä¾øÀ½)"
 
 #: ../src/interface.c:4150
 msgid "<b>Encodings</b>"
-msgstr "<b>ì¸ì½”ë”©</b>"
+msgstr "<b>ÀÎÄÚµù</b>"
 
 #: ../src/interface.c:4169
 msgid "Ensure new line at file end"
-msgstr "íŒŒì¼ ë ê°œí–‰í‘œì‹œ ì¡°ì¹˜"
+msgstr "ÆÄÀÏ ³¡ °³ÇàÇ¥½Ã Á¶Ä¡"
 
 #: ../src/interface.c:4172
 msgid "Ensures that at the end of the file is a new line"
-msgstr "íŒŒì¼ ëì˜ ê°œí–‰í‘œì‹œë¥¼ ì¡°ì¹˜í•©ë‹ˆë‹¤."
+msgstr "ÆÄÀÏ ³¡ÀÇ °³ÇàÇ¥½Ã¸¦ Á¶Ä¡ÇÕ´Ï´Ù."
 
 #: ../src/interface.c:4174
 msgid "Strip trailing spaces and tabs"
-msgstr "ì§ˆì§ˆ ëŒë¦¬ëŠ” ìŠ¤í˜ì´ìŠ¤ì™€ íƒ­ ì§€ìš°ê¸°"
+msgstr "ÁúÁú ²ø¸®´Â ½ºÆäÀÌ½º¿Í ÅÇ Áö¿ì±â"
 
 #: ../src/interface.c:4177
 msgid "Removes trailing spaces and tabs and the end of lines"
-msgstr "ì§ˆì§ˆ ëŒë¦¬ëŠ” ìŠ¤í˜ì´ìŠ¤, íƒ­, ì¤„ëí‘œì‹œ ì§€ìš°ê¸°"
+msgstr "ÁúÁú ²ø¸®´Â ½ºÆäÀÌ½º, ÅÇ, ÁÙ³¡Ç¥½Ã Áö¿ì±â"
 
 #: ../src/interface.c:4179 ../src/keybindings.c:430
 msgid "Replace tabs by space"
-msgstr "íƒ­ì„ ìŠ¤í˜ì´ìŠ¤ë¡œ ë°”ê¾¸ê¸°"
+msgstr "ÅÇÀ» ½ºÆäÀÌ½º·Î ¹Ù²Ù±â"
 
 #: ../src/interface.c:4184
 msgid "<b>Saving files</b>"
-msgstr "íŒŒì¼ ì €ì¥"
+msgstr "ÆÄÀÏ ÀúÀå"
 
 #: ../src/interface.c:4209
 msgid "Recent files list length:"
-msgstr "ìµœê·¼ íŒŒì¼ëª©ë¡ ê¸¸ì´:"
+msgstr "ÃÖ±Ù ÆÄÀÏ¸ñ·Ï ±æÀÌ:"
 
 #: ../src/interface.c:4223
 msgid ""
 "Specifies the number of files which are stored in the Recent files list."
-msgstr "ìµœê·¼ íŒŒì¼ëª©ë¡ì— ì €ì¥í•  ê°¯ìˆ˜ ì§€ì •."
+msgstr "ÃÖ±Ù ÆÄÀÏ¸ñ·Ï¿¡ ÀúÀåÇÒ °¹¼ö ÁöÁ¤."
 
 #: ../src/interface.c:4227
 msgid "Disk check timeout:"
-msgstr "ë””ìŠ¤í¬ ê²€ì‚¬ ê°„ê²©:"
+msgstr "µğ½ºÅ© °Ë»ç °£°İ:"
 
 #: ../src/interface.c:4240
 msgid ""
 "How often to check for changes to document files on disk, in seconds. Zero "
 "disables checking."
 msgstr ""
-"ë””ìŠ¤í¬ì˜ ë¬¸ì„œíŒŒì¼ ë³€ê²½ ê²€ì‚¬ ê°„ê²©ì„ \"ì´ˆ\"ë‹¨ìœ„ë¡œ ì§€ì •.\n"
-"0ìœ¼ë¡œ ì§€ì •í•˜ë©´ ê²€ì‚¬í•˜ì§€ ì•ŠìŒ."
+"µğ½ºÅ©ÀÇ ¹®¼­ÆÄÀÏ º¯°æ °Ë»ç °£°İÀ» \"ÃÊ\"´ÜÀ§·Î ÁöÁ¤.\n"
+"0À¸·Î ÁöÁ¤ÇÏ¸é °Ë»çÇÏÁö ¾ÊÀ½."
 
 #: ../src/interface.c:4249 ../src/symbols.c:581 ../plugins/filebrowser.c:925
 msgid "Files"
-msgstr "íŒŒì¼"
+msgstr "ÆÄÀÏ"
 
 #: ../src/interface.c:4268
 msgid "Always wrap search and hide the Find dialog"
-msgstr "í•­ìƒ ì°¾ê¸° ë°˜ë³µí•˜ê³  ì°¾ê¸° ëŒ€í™”ìƒì ê°ì¶”ê¸°"
+msgstr "Ç×»ó Ã£±â ¹İº¹ÇÏ°í Ã£±â ´ëÈ­»óÀÚ °¨Ãß±â"
 
 #: ../src/interface.c:4271
 msgid ""
 "Always wrap search around the document and hide the Find dialog after "
 "clicking Find Next/Previous."
 msgstr ""
-"í•­ìƒ ë¬¸ì„œì „ì²´ì—ì„œ ì°¾ê¸°ë¥¼ ë°˜ë³µí•˜ê³  ì°¾ê¸°/ì´ì „ì°¾ê¸°ë¥¼ í´ë¦­í•œí›„ ì°¾ê¸°ëŒ€í™”ìƒìë¥¼ ê°"
-"ì¶”ê¸°."
+"Ç×»ó ¹®¼­ÀüÃ¼¿¡¼­ Ã£±â¸¦ ¹İº¹ÇÏ°í Ã£±â/ÀÌÀüÃ£±â¸¦ Å¬¸¯ÇÑÈÄ Ã£±â´ëÈ­»óÀÚ¸¦ °¨"
+"Ãß±â."
 
 #: ../src/interface.c:4273
 msgid "Use the current word under the cursor for Find dialogs"
-msgstr "ì°¾ê¸° ëŒ€í™”ìƒìì— ì»¤ì„œì•„ë˜ì˜ ë‹¨ì–´ ì‚¬ìš©í•˜ê¸°"
+msgstr "Ã£±â ´ëÈ­»óÀÚ¿¡ Ä¿¼­¾Æ·¡ÀÇ ´Ü¾î »ç¿ëÇÏ±â"
 
 #: ../src/interface.c:4276
 msgid ""
 "Use current word under the cursor when opening the Find, Find in Files or "
 "Replace dialog and there is no selection."
 msgstr ""
-"ì°¾ê¸°, íŒŒì¼ì—ì„œ ì°¾ê¸°, ë°”ê¾¸ê¸° ëŒ€í™”ìƒìë¥¼ ì—´ ë•Œ í˜„ì¬ ì»¤ì„œì•„ë˜ì˜ ë‹¨ì–´ë¥¼ ì„ íƒë˜ì§€ "
-"ì•Šì€ ìƒíƒœë¡œ ì‚¬ìš©í•¨."
+"Ã£±â, ÆÄÀÏ¿¡¼­ Ã£±â, ¹Ù²Ù±â ´ëÈ­»óÀÚ¸¦ ¿­ ¶§ ÇöÀç Ä¿¼­¾Æ·¡ÀÇ ´Ü¾î¸¦ ¼±ÅÃµÇÁö "
+"¾ÊÀº »óÅÂ·Î »ç¿ëÇÔ."
 
 #: ../src/interface.c:4278
 msgid "Use the current file's directory for Find in Files"
-msgstr "íŒŒì¼ì—ì„œ ì°¾ì„ ë•Œ í˜„ì¬íŒŒì¼ì´ ë“¤ì–´ìˆëŠ” í´ë”ë¥¼ ì‚¬ìš©í•¨"
+msgstr "ÆÄÀÏ¿¡¼­ Ã£À» ¶§ ÇöÀçÆÄÀÏÀÌ µé¾îÀÖ´Â Æú´õ¸¦ »ç¿ëÇÔ"
 
 #: ../src/interface.c:4282
 msgid "<b>Search</b>"
-msgstr "<b>ì°¾ê¸°</b>"
+msgstr "<b>Ã£±â</b>"
 
 #: ../src/interface.c:4287 ../src/keybindings.c:314
 msgid "Search"
-msgstr "ì°¾ê¸°"
+msgstr "Ã£±â"
 
 #: ../src/interface.c:4320
 msgid "Make:"
-msgstr "make í”„ë¡œê·¸ë¨:"
+msgstr "make ÇÁ·Î±×·¥:"
 
 #: ../src/interface.c:4327
 msgid "Terminal:"
-msgstr "í„°ë¯¸ë„ í”„ë¡œê·¸ë¨:"
+msgstr "ÅÍ¹Ì³Î ÇÁ·Î±×·¥:"
 
 #: ../src/interface.c:4334
 msgid "Browser:"
-msgstr "ì›¹ë¸Œë¼ìš°ì €:"
+msgstr "À¥ºê¶ó¿ìÀú:"
 
 #: ../src/interface.c:4346
 msgid "Path and options for the make tool"
-msgstr "make ë„êµ¬ì˜ ê²½ë¡œì™€ ì˜µì…˜"
+msgstr "make µµ±¸ÀÇ °æ·Î¿Í ¿É¼Ç"
 
 #: ../src/interface.c:4353
 msgid ""
 "A terminal emulator like xterm, gnome-terminal or konsole (should accept the "
 "-e argument)"
 msgstr ""
-"-e ì¸ìˆ˜ë¥¼ ì§€ì •í•  ìˆ˜ ìˆëŠ” xterm, gnome-terminal, konsoleë“±ì˜ í„°ë¯¸ë„ ì—ë®¬ë ˆì´í„°"
+"-e ÀÎ¼ö¸¦ ÁöÁ¤ÇÒ ¼ö ÀÖ´Â xterm, gnome-terminal, konsoleµîÀÇ ÅÍ¹Ì³Î ¿¡¹Ä·¹ÀÌÅÍ"
 
 #: ../src/interface.c:4360
 msgid "Path (and possibly additional arguments) to your favorite browser"
-msgstr "ì„ í˜¸í•˜ëŠ” ë¸Œë¼ìš°ì €ì˜ ê²½ë¡œì™€ ê°€ëŠ¥í•œ ì¶”ê°€ì ì¸ ì¸ìˆ˜"
+msgstr "¼±È£ÇÏ´Â ºê¶ó¿ìÀúÀÇ °æ·Î¿Í °¡´ÉÇÑ Ãß°¡ÀûÀÎ ÀÎ¼ö"
 
 #: ../src/interface.c:4392
 msgid "Grep:"
-msgstr "grep í”„ë¡œê·¸ë¨:"
+msgstr "grep ÇÁ·Î±×·¥:"
 
 #: ../src/interface.c:4415
 msgid "<b>Tool paths</b>"
-msgstr "<b>ë„êµ¬ ê²½ë¡œ</b>"
+msgstr "<b>µµ±¸ °æ·Î</b>"
 
 #: ../src/interface.c:4436
 msgid "Context action:"
-msgstr "ì»¨í…ìŠ¤íŠ¸ í–‰ë™:"
+msgstr "ÄÁÅØ½ºÆ® Çàµ¿:"
 
 #: ../src/interface.c:4447
 #, c-format
@@ -2561,166 +2561,166 @@ msgid ""
 "can appear anywhere in the given command and will be replaced before "
 "execution."
 msgstr ""
-"í˜„ì¬ ì„ íƒí•œ ë‹¨ì–´ë¥¼ ì¸ìˆ˜ë¡œ ì§€ì •í•œ ëª…ë ¹ì„ ì‹¤í–‰í•©ë‹ˆë‹¤.\n"
-"ì˜ˆ) \"geany %s\"ì€(ëŠ”) ì„ íƒí•œ ë‹¨ì–´ì™€ ê°™ì€ ì´ë¦„ì˜ íŒŒì¼ì„ geanyë¡œ í¸ì§‘í•©ë‹ˆë‹¤. "
+"ÇöÀç ¼±ÅÃÇÑ ´Ü¾î¸¦ ÀÎ¼ö·Î ÁöÁ¤ÇÑ ¸í·ÉÀ» ½ÇÇàÇÕ´Ï´Ù.\n"
+"¿¹) \"geany %s\"Àº(´Â) ¼±ÅÃÇÑ ´Ü¾î¿Í °°Àº ÀÌ¸§ÀÇ ÆÄÀÏÀ» geany·Î ÆíÁıÇÕ´Ï´Ù. "
 
 #: ../src/interface.c:4460
 msgid "<b>Commands</b>"
-msgstr "<b>ëª…ë ¹</b>"
+msgstr "<b>¸í·É</b>"
 
 #: ../src/interface.c:4465 ../src/keybindings.c:466
 msgid "Tools"
-msgstr "ë„êµ¬"
+msgstr "µµ±¸"
 
 #: ../src/interface.c:4499
 msgid "email address of the developer"
-msgstr "ê°œë°œìì˜ ì´ë©”ì¼ ì£¼ì†Œ"
+msgstr "°³¹ßÀÚÀÇ ÀÌ¸ŞÀÏ ÁÖ¼Ò"
 
 #: ../src/interface.c:4506
 msgid "Initials of the developer name"
-msgstr "ê°œë°œìì˜ ì´ë‹ˆì…œ"
+msgstr "°³¹ßÀÚÀÇ ÀÌ´Ï¼È"
 
 #: ../src/interface.c:4508
 msgid "Initial version:"
-msgstr "ìµœì´ˆ ë²„ì „:"
+msgstr "ÃÖÃÊ ¹öÀü:"
 
 #: ../src/interface.c:4520
 msgid "Version number, which a new file initially has"
-msgstr "ìƒˆ íŒŒì¼ì˜ ìµœì´ˆ ë²„ì „ ë²ˆí˜¸"
+msgstr "»õ ÆÄÀÏÀÇ ÃÖÃÊ ¹öÀü ¹øÈ£"
 
 #: ../src/interface.c:4527
 msgid "Company name"
-msgstr "íšŒì‚¬ëª…"
+msgstr "È¸»ç¸í"
 
 #: ../src/interface.c:4529
 msgid "Developer:"
-msgstr "ê°œë°œì:"
+msgstr "°³¹ßÀÚ:"
 
 #: ../src/interface.c:4536
 msgid "Company:"
-msgstr "íšŒì‚¬ëª…:"
+msgstr "È¸»ç¸í:"
 
 #: ../src/interface.c:4543
 msgid "Mail address:"
-msgstr "ì´ë©”ì¼ ì£¼ì†Œ:"
+msgstr "ÀÌ¸ŞÀÏ ÁÖ¼Ò:"
 
 #: ../src/interface.c:4550
 msgid "Initials:"
-msgstr "ì´ë‹ˆì…œ:"
+msgstr "ÀÌ´Ï¼È:"
 
 #: ../src/interface.c:4562
 msgid "The name of the developer"
-msgstr "ê°œë°œì ì´ë¦„"
+msgstr "°³¹ßÀÚ ÀÌ¸§"
 
 #: ../src/interface.c:4564
 msgid "Year:"
-msgstr "ë…„ë„:"
+msgstr "³âµµ:"
 
 #: ../src/interface.c:4571
 msgid "Date:"
-msgstr "ì¼ì:"
+msgstr "ÀÏÀÚ:"
 
 #: ../src/interface.c:4578
 msgid "Date & Time:"
-msgstr "ì¼ì‹œ:"
+msgstr "ÀÏ½Ã:"
 
 #: ../src/interface.c:4590
 msgid ""
 "Specify a format for the the {datetime} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
-"{ë‚ ì§œì‹œê°„} í˜•ì‹ì§€ì •.\n"
-"ANSI Cì˜ strftime í•¨ìˆ˜ì˜ ëª¨ë“  ì‹ë³„ê¸°í˜¸ ì‚¬ìš©ê°€ëŠ¥."
+"{³¯Â¥½Ã°£} Çü½ÄÁöÁ¤.\n"
+"ANSI CÀÇ strftime ÇÔ¼öÀÇ ¸ğµç ½Äº°±âÈ£ »ç¿ë°¡´É."
 
 #: ../src/interface.c:4597
 msgid ""
 "Specify a format for the the {year} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
-"{ë…„ë„} í˜•ì‹ì§€ì •.\n"
-"ANSI Cì˜ strftime í•¨ìˆ˜ì˜ ëª¨ë“  ì‹ë³„ê¸°í˜¸ ì‚¬ìš©ê°€ëŠ¥."
+"{³âµµ} Çü½ÄÁöÁ¤.\n"
+"ANSI CÀÇ strftime ÇÔ¼öÀÇ ¸ğµç ½Äº°±âÈ£ »ç¿ë°¡´É."
 
 #: ../src/interface.c:4604
 msgid ""
 "Specify a format for the the {date} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
-"{ë‚ ì§œ} í˜•ì‹ì§€ì •.\n"
-"ANSI Cì˜ strftime í•¨ìˆ˜ì˜ ëª¨ë“  ì‹ë³„ê¸°í˜¸ ì‚¬ìš©ê°€ëŠ¥."
+"{³¯Â¥} Çü½ÄÁöÁ¤.\n"
+"ANSI CÀÇ strftime ÇÔ¼öÀÇ ¸ğµç ½Äº°±âÈ£ »ç¿ë°¡´É."
 
 #: ../src/interface.c:4606
 msgid "<b>Template data</b>"
-msgstr "<b>í…œí”Œë¦¿ ë°ì´í„°</b>"
+msgstr "<b>ÅÛÇÃ¸´ µ¥ÀÌÅÍ</b>"
 
 #: ../src/interface.c:4611
 msgid "Templates"
-msgstr "í…œí”Œë¦¿"
+msgstr "ÅÛÇÃ¸´"
 
 #: ../src/interface.c:4649
 msgid "C_hange"
-msgstr "ë°”ê¾¸ê¸°(_h)"
+msgstr "¹Ù²Ù±â(_h)"
 
 #: ../src/interface.c:4653
 msgid "<b>Keyboard shortcuts</b>"
-msgstr "<b>ë°”ë¡œ ê°€ê¸°</b>"
+msgstr "<b>¹Ù·Î °¡±â</b>"
 
 #: ../src/interface.c:4658
 msgid "Keybindings"
-msgstr "ë°”ë¡œ ê°€ê¸°"
+msgstr "¹Ù·Î °¡±â"
 
 #: ../src/interface.c:4681
 msgid "Command:"
-msgstr "ëª…ë ¹:"
+msgstr "¸í·É:"
 
 #: ../src/interface.c:4688
 #, c-format
 msgid "Path to the command for printing files (use %f for the filename)."
-msgstr "ì¸ì‡„ ëª…ë ¹ì˜ ê²½ë¡œ(ì¸ìˆ˜ %fì€(ëŠ”) íŒŒì¼ ì´ë¦„)."
+msgstr "ÀÎ¼â ¸í·ÉÀÇ °æ·Î(ÀÎ¼ö %fÀº(´Â) ÆÄÀÏ ÀÌ¸§)."
 
 #: ../src/interface.c:4698
 msgid "Use an external command for printing"
-msgstr "ì™¸ë¶€ëª…ë ¹ìœ¼ë¡œ ì¸ì‡„í•˜ê¸°"
+msgstr "¿ÜºÎ¸í·ÉÀ¸·Î ÀÎ¼âÇÏ±â"
 
 #: ../src/interface.c:4718 ../src/printing.c:343
 msgid "Print line numbers"
-msgstr "ì¤„ ë²ˆí˜¸ ì¸ì‡„"
+msgstr "ÁÙ ¹øÈ£ ÀÎ¼â"
 
 #: ../src/interface.c:4721 ../src/printing.c:345
 msgid "Add line numbers to the printed page."
-msgstr "ì¤„ ë²ˆí˜¸ë¥¼ ì¶”ê°€í•´ì„œ ì¸ì‡„í•˜ê¸°."
+msgstr "ÁÙ ¹øÈ£¸¦ Ãß°¡ÇØ¼­ ÀÎ¼âÇÏ±â."
 
 #: ../src/interface.c:4723 ../src/printing.c:348
 msgid "Print page numbers"
-msgstr "ìª½ ë²ˆí˜¸ ì¸ì‡„"
+msgstr "ÂÊ ¹øÈ£ ÀÎ¼â"
 
 #: ../src/interface.c:4726 ../src/printing.c:350
 msgid ""
 "Add page numbers at the bottom of each page. It takes 2 lines of the page."
-msgstr "ê° ìª½ì˜ í•˜ë‹¨ì— ìª½ ë²ˆí˜¸ë¥¼ ì¸ì‡„í•¨. 2ì¤„ì„ ì‚¬ìš©í•¨."
+msgstr "°¢ ÂÊÀÇ ÇÏ´Ü¿¡ ÂÊ ¹øÈ£¸¦ ÀÎ¼âÇÔ. 2ÁÙÀ» »ç¿ëÇÔ."
 
 #: ../src/interface.c:4728 ../src/printing.c:353
 msgid "Print page header"
-msgstr "ë¨¸ë¦¬ë§ ì¸ì‡„"
+msgstr "¸Ó¸®¸» ÀÎ¼â"
 
 #: ../src/interface.c:4731 ../src/printing.c:355
 msgid ""
 "Adds a little header to every page containing the page number, the filename "
 "and the current date(see below). It takes 3 lines of the page."
 msgstr ""
-"ê°ìª½ì˜ ìƒë‹¨ì— ìª½ ë²ˆí˜¸, íŒŒì¼ ì´ë¦„, í˜„ì¬ë‚ ì§œë¥¼ í¬í•¨í•˜ëŠ” ì‘ì€ ë¨¸ë¦¬ë§ì„ ì¸ì‡„í•¨(ì•„"
-"ë˜ ì°¸ì¡°).3ì¤„ì„ ì‚¬ìš©í•¨."
+"°¢ÂÊÀÇ »ó´Ü¿¡ ÂÊ ¹øÈ£, ÆÄÀÏ ÀÌ¸§, ÇöÀç³¯Â¥¸¦ Æ÷ÇÔÇÏ´Â ÀÛÀº ¸Ó¸®¸»À» ÀÎ¼âÇÔ(¾Æ"
+"·¡ ÂüÁ¶).3ÁÙÀ» »ç¿ëÇÔ."
 
 #: ../src/interface.c:4748 ../src/printing.c:371
 msgid "Use the basename of the printed file"
-msgstr "ê¸°ë³¸ì´ë¦„ë§Œ ì‚¬ìš©"
+msgstr "±âº»ÀÌ¸§¸¸ »ç¿ë"
 
 #: ../src/interface.c:4751 ../src/printing.c:373
 msgid "Print only the basename(without the path) of the printed file."
-msgstr "ê²½ë¡œëª…ì´ ì—†ëŠ” ê¸°ë³¸ì´ë¦„ë§Œ ì¸ì‡„."
+msgstr "°æ·Î¸íÀÌ ¾ø´Â ±âº»ÀÌ¸§¸¸ ÀÎ¼â."
 
 #: ../src/interface.c:4757 ../src/printing.c:379
 msgid "Date format:"
-msgstr "ë‚ ì§œ í˜•ì‹:"
+msgstr "³¯Â¥ Çü½Ä:"
 
 #: ../src/interface.c:4764 ../src/printing.c:384
 msgid ""
@@ -2728,445 +2728,445 @@ msgid ""
 "header on each page. You can use any conversion specifiers which can be used "
 "with the ANSI C strftime function."
 msgstr ""
-"ê°ìª½ì˜ ë¨¸ë¦¬ë§ì— ì¶”ê°€ëœ ë‚ ì§œì™€ ì¸ì‡„ì‹œê°„ í˜•ì‹ì„ ì§€ì •í•¨.\n"
-"ANSI Cì˜ strftime í•¨ìˆ˜ì˜ ëª¨ë“  ì‹ë³„ìë¥¼ ì‚¬ìš©í•  ìˆ˜ ìˆìŒ."
+"°¢ÂÊÀÇ ¸Ó¸®¸»¿¡ Ãß°¡µÈ ³¯Â¥¿Í ÀÎ¼â½Ã°£ Çü½ÄÀ» ÁöÁ¤ÇÔ.\n"
+"ANSI CÀÇ strftime ÇÔ¼öÀÇ ¸ğµç ½Äº°ÀÚ¸¦ »ç¿ëÇÒ ¼ö ÀÖÀ½."
 
 #: ../src/interface.c:4767
 msgid "Use native GTK printing"
-msgstr "GTK ê³ ìœ  ì¸ì‡„ ì‚¬ìš©"
+msgstr "GTK °íÀ¯ ÀÎ¼â »ç¿ë"
 
 #: ../src/interface.c:4773
 msgid "Printing"
-msgstr "ì¸ì‡„"
+msgstr "ÀÎ¼â"
 
-#: ../src/keybindings.c:182 ../src/plugins.c:1045
+#: ../src/keybindings.c:182 ../src/plugins.c:1044
 msgid "File"
-msgstr "íŒŒì¼"
+msgstr "ÆÄÀÏ"
 
 #: ../src/keybindings.c:185
 msgid "New"
-msgstr "ìƒˆë¡œ ë§Œë“¤ê¸°"
+msgstr "»õ·Î ¸¸µé±â"
 
 #: ../src/keybindings.c:187
 msgid "Open"
-msgstr "ì—´ê¸°"
+msgstr "¿­±â"
 
 #: ../src/keybindings.c:190
 msgid "Open selected file"
-msgstr "ì„ íƒí•œ íŒŒì¼ ì—´ê¸°"
+msgstr "¼±ÅÃÇÑ ÆÄÀÏ ¿­±â"
 
 #: ../src/keybindings.c:192
 msgid "Save"
-msgstr "ì €ì¥"
+msgstr "ÀúÀå"
 
 #: ../src/keybindings.c:194
 msgid "Save as"
-msgstr "ë‹¤ë¥¸ ì´ë¦„ìœ¼ë¡œ ì €ì¥"
+msgstr "´Ù¸¥ ÀÌ¸§À¸·Î ÀúÀå"
 
 #: ../src/keybindings.c:199
 msgid "Print"
-msgstr "ì¸ì‡„"
+msgstr "ÀÎ¼â"
 
 #: ../src/keybindings.c:201
 msgid "Close"
-msgstr "ë‹«ê¸°"
+msgstr "´İ±â"
 
 #: ../src/keybindings.c:203
 msgid "Close all"
-msgstr "ëª¨ë‘ ë‹«ê¸°"
+msgstr "¸ğµÎ ´İ±â"
 
 #: ../src/keybindings.c:206
 msgid "Reload file"
-msgstr "ë‹¤ì‹œ ë¶ˆëŸ¬ì˜¤ê¸°"
+msgstr "´Ù½Ã ºÒ·¯¿À±â"
 
 #: ../src/keybindings.c:208
 msgid "Project"
-msgstr "í”„ë¡œì íŠ¸"
+msgstr "ÇÁ·ÎÁ§Æ®"
 
 #: ../src/keybindings.c:211
 msgid "Project properties"
-msgstr "í”„ë¡œì íŠ¸ ì†ì„±"
+msgstr "ÇÁ·ÎÁ§Æ® ¼Ó¼º"
 
 #: ../src/keybindings.c:216
 msgid "Undo"
-msgstr "ì‹¤í–‰ì·¨ì†Œ"
+msgstr "½ÇÇàÃë¼Ò"
 
 #: ../src/keybindings.c:218
 msgid "Redo"
-msgstr "ì¬ì‹¤í–‰"
+msgstr "Àç½ÇÇà"
 
 #: ../src/keybindings.c:220
 msgid "Duplicate line or selection"
-msgstr "ì¤„ ë° ì„ íƒí•œ ë¶€ë¶„ ë³µì œ"
+msgstr "ÁÙ ¹× ¼±ÅÃÇÑ ºÎºĞ º¹Á¦"
 
 #: ../src/keybindings.c:223
 msgid "Delete current line(s)"
-msgstr "í˜„ì¬ ì¤„(ë“¤) ì§€ìš°ê¸°"
+msgstr "ÇöÀç ÁÙ(µé) Áö¿ì±â"
 
 #: ../src/keybindings.c:225
 msgid "Transpose current line"
-msgstr "í˜„ì¬ ì¤„ ìë¦¬ë°”ê¾¸ê¸°"
+msgstr "ÇöÀç ÁÙ ÀÚ¸®¹Ù²Ù±â"
 
 #: ../src/keybindings.c:227
 msgid "Scroll to current line"
-msgstr "í˜„ì¬ ì¤„ë¡œ ìŠ¤í¬ë¡¤"
+msgstr "ÇöÀç ÁÙ·Î ½ºÅ©·Ñ"
 
 #: ../src/keybindings.c:229
 msgid "Scroll up the view by one line"
-msgstr "í•œì¤„ ìœ„ë¡œ ìŠ¤í¬ë¡¤"
+msgstr "ÇÑÁÙ À§·Î ½ºÅ©·Ñ"
 
 #: ../src/keybindings.c:231
 msgid "Scroll down the view by one line"
-msgstr "í•œì¤„ ì•„ë˜ë¡œ ìŠ¤í¬ë¡¤"
+msgstr "ÇÑÁÙ ¾Æ·¡·Î ½ºÅ©·Ñ"
 
 #. handled specially in check_snippet_completion()
 #: ../src/keybindings.c:233
 msgid "Complete snippet"
-msgstr "í† ë§‰ ì™„ì„±"
+msgstr "Åä¸· ¿Ï¼º"
 
 #: ../src/keybindings.c:235
 msgid "Suppress snippet completion"
-msgstr "í† ë§‰ ì™„ì„± ê°ì¶¤"
+msgstr "Åä¸· ¿Ï¼º °¨Ãã"
 
 #: ../src/keybindings.c:237
 msgid "Context Action"
-msgstr "ì»¨í…ìŠ¤íŠ¸ í–‰ë™"
+msgstr "ÄÁÅØ½ºÆ® Çàµ¿"
 
 #: ../src/keybindings.c:239
 msgid "Complete word"
-msgstr "ë‹¨ì–´ ì™„ì„±"
+msgstr "´Ü¾î ¿Ï¼º"
 
 #: ../src/keybindings.c:241
 msgid "Show calltip"
-msgstr "calltip ë³´ê¸°"
+msgstr "calltip º¸±â"
 
 #: ../src/keybindings.c:243
 msgid "Show macro list"
-msgstr "ë§¤í¬ë¡œ ëª©ë¡ ë³´ê¸°"
+msgstr "¸ÅÅ©·Î ¸ñ·Ï º¸±â"
 
 #: ../src/keybindings.c:245
 msgid "Clipboard"
-msgstr "í´ë¦½ë³´ë“œ"
+msgstr "Å¬¸³º¸µå"
 
 #: ../src/keybindings.c:248
 msgid "Cut"
-msgstr "ì˜ë¼ë‚´ê¸°"
+msgstr "Àß¶ó³»±â"
 
 #: ../src/keybindings.c:250
 msgid "Copy"
-msgstr "ë³µì‚¬"
+msgstr "º¹»ç"
 
 #: ../src/keybindings.c:252
 msgid "Paste"
-msgstr "ë¶™ì—¬ ë„£ê¸°"
+msgstr "ºÙ¿© ³Ö±â"
 
 #: ../src/keybindings.c:254
 msgid "Copy current line(s)"
-msgstr "í˜„ì¬ ì¤„(ë“¤) ë³µì‚¬"
+msgstr "ÇöÀç ÁÙ(µé) º¹»ç"
 
 #: ../src/keybindings.c:256
 msgid "Cut current line(s)"
-msgstr "í˜„ì¬ ì¤„(ë“¤) ì˜ë¼ë‚´ê¸°"
+msgstr "ÇöÀç ÁÙ(µé) Àß¶ó³»±â"
 
 #: ../src/keybindings.c:258
 msgid "Select"
-msgstr "ì„ íƒ"
+msgstr "¼±ÅÃ"
 
 #: ../src/keybindings.c:261
 msgid "Select All"
-msgstr "ëª¨ë‘ ì„ íƒ"
+msgstr "¸ğµÎ ¼±ÅÃ"
 
 #: ../src/keybindings.c:263
 msgid "Select current word"
-msgstr "í˜„ì¬ ë‹¨ì–´ ì„ íƒ"
+msgstr "ÇöÀç ´Ü¾î ¼±ÅÃ"
 
 #: ../src/keybindings.c:265
 msgid "Select current line(s)"
-msgstr "í˜„ì¬ ì¤„(ë“¤) ì„ íƒ"
+msgstr "ÇöÀç ÁÙ(µé) ¼±ÅÃ"
 
 #: ../src/keybindings.c:267
 msgid "Select current paragraph"
-msgstr "í˜„ì¬ ë¬¸ë‹¨ ì„ íƒ"
+msgstr "ÇöÀç ¹®´Ü ¼±ÅÃ"
 
 #: ../src/keybindings.c:269
 msgid "Format"
-msgstr "í˜•ì‹"
+msgstr "Çü½Ä"
 
 #: ../src/keybindings.c:273
 msgid "Toggle Case of Selection"
-msgstr "ì„ íƒí•œ ë¶€ë¶„ í™œì ì¼€ì´ìŠ¤ ì „í™˜"
+msgstr "¼±ÅÃÇÑ ºÎºĞ È°ÀÚ ÄÉÀÌ½º ÀüÈ¯"
 
 #: ../src/keybindings.c:275
 msgid "Toggle line commentation"
-msgstr "í•œì¤„ ì£¼ì„ ì „í™˜"
+msgstr "ÇÑÁÙ ÁÖ¼® ÀüÈ¯"
 
 #: ../src/keybindings.c:278
 msgid "Comment line(s)"
-msgstr "ì¤„(ë“¤) ì£¼ì„"
+msgstr "ÁÙ(µé) ÁÖ¼®"
 
 #: ../src/keybindings.c:280
 msgid "Uncomment line(s)"
-msgstr "ì¤„(ë“¤) ì£¼ì„ í•´ì œ"
+msgstr "ÁÙ(µé) ÁÖ¼® ÇØÁ¦"
 
 #: ../src/keybindings.c:282
 msgid "Increase indent"
-msgstr "ë“¤ì—¬ì“°ê¸° ì¦ê°€"
+msgstr "µé¿©¾²±â Áõ°¡"
 
 #: ../src/keybindings.c:285
 msgid "Decrease indent"
-msgstr "ë“¤ì—¬ì“°ê¸° ê°ì†Œ"
+msgstr "µé¿©¾²±â °¨¼Ò"
 
 #: ../src/keybindings.c:288
 msgid "Increase indent by one space"
-msgstr "ê³µë°± í•˜ë‚˜ë§Œí¼ ë“¤ì—¬ì“°ê¸° ì¦ê°€"
+msgstr "°ø¹é ÇÏ³ª¸¸Å­ µé¿©¾²±â Áõ°¡"
 
 #: ../src/keybindings.c:290
 msgid "Decrease indent by one space"
-msgstr "ê³µë°± í•˜ë‚˜ë§Œí¼ ë“¤ì—¬ì“°ê¸° ê°ì†Œ"
+msgstr "°ø¹é ÇÏ³ª¸¸Å­ µé¿©¾²±â °¨¼Ò"
 
 #: ../src/keybindings.c:292
 msgid "Smart line indent"
-msgstr "ë˜‘ë˜‘í•œ í•œì¤„ ì£¼ì„"
+msgstr "¶È¶ÈÇÑ ÇÑÁÙ ÁÖ¼®"
 
 #: ../src/keybindings.c:294
 msgid "Send to Custom Command 1"
-msgstr "ë§ì¶¤ ëª…ë ¹ 1ë¡œ ë³´ëƒ„"
+msgstr "¸ÂÃã ¸í·É 1·Î º¸³¿"
 
 #: ../src/keybindings.c:296
 msgid "Send to Custom Command 2"
-msgstr "ë§ì¶¤ ëª…ë ¹ 2ë¡œ ë³´ëƒ„"
+msgstr "¸ÂÃã ¸í·É 2·Î º¸³¿"
 
 #: ../src/keybindings.c:298
 msgid "Send to Custom Command 3"
-msgstr "ë§ì¶¤ ëª…ë ¹ 3ìœ¼ë¡œ ë³´ëƒ„"
+msgstr "¸ÂÃã ¸í·É 3À¸·Î º¸³¿"
 
 #: ../src/keybindings.c:300
 msgid "Insert"
-msgstr "ì‚½ì…"
+msgstr "»ğÀÔ"
 
 #: ../src/keybindings.c:303
 msgid "Insert date"
-msgstr "ë‚ ì§œ ì‚½ì…"
+msgstr "³¯Â¥ »ğÀÔ"
 
 #: ../src/keybindings.c:306
 msgid "Insert alternative white space"
-msgstr "ëŒ€ì•ˆ ê³µë°± ì‚½ì…"
+msgstr "´ë¾È °ø¹é »ğÀÔ"
 
 #: ../src/keybindings.c:308
 msgid "Settings"
-msgstr "í™˜ê²½ ì„¤ì •"
+msgstr "È¯°æ ¼³Á¤"
 
 #: ../src/keybindings.c:317 ../src/search.c:304
 msgid "Find"
-msgstr "ì°¾ê¸°"
+msgstr "Ã£±â"
 
 #: ../src/keybindings.c:319
 msgid "Find Next"
-msgstr "ë‹¤ìŒ ì°¾ê¸°"
+msgstr "´ÙÀ½ Ã£±â"
 
 #: ../src/keybindings.c:321
 msgid "Find Previous"
-msgstr "ì´ì „ ì°¾ê¸°"
+msgstr "ÀÌÀü Ã£±â"
 
 #: ../src/keybindings.c:324
 msgid "Find Next Selection"
-msgstr "ì„ íƒë¶€ë¶„ ë‹¤ìŒ ì°¾ê¸°"
+msgstr "¼±ÅÃºÎºĞ ´ÙÀ½ Ã£±â"
 
 #: ../src/keybindings.c:326
 msgid "Find Previous Selection"
-msgstr "ë‹¤ì„ íƒë¶€ë¶„ ì´ì „ ì°¾ê¸°"
+msgstr "´Ù¼±ÅÃºÎºĞ ÀÌÀü Ã£±â"
 
 #: ../src/keybindings.c:328 ../src/search.c:427
 msgid "Replace"
-msgstr "ë°”ê¾¸ê¸°"
+msgstr "¹Ù²Ù±â"
 
 #: ../src/keybindings.c:330 ../src/search.c:578
 msgid "Find in Files"
-msgstr "íŒŒì¼ ì•ˆì—ì„œ ì°¾ê¸°"
+msgstr "ÆÄÀÏ ¾È¿¡¼­ Ã£±â"
 
 #: ../src/keybindings.c:333
 msgid "Next Message"
-msgstr "ë‹¤ìŒ ë©”ì‹œì§€"
+msgstr "´ÙÀ½ ¸Ş½ÃÁö"
 
 #: ../src/keybindings.c:335
 msgid "Previous Message"
-msgstr "ì´ì „ ë©”ì‹œì§€"
+msgstr "ÀÌÀü ¸Ş½ÃÁö"
 
 #: ../src/keybindings.c:337
 msgid "Find Usage"
-msgstr "ì‚¬ìš©ë²• ì°¾ê¸°"
+msgstr "»ç¿ë¹ı Ã£±â"
 
 #: ../src/keybindings.c:339
 msgid "Find Document Usage"
-msgstr "ë¬¸ì„œ ì‚¬ìš©ë²• ì°¾ê¸°"
+msgstr "¹®¼­ »ç¿ë¹ı Ã£±â"
 
 #: ../src/keybindings.c:341
 msgid "Go to"
-msgstr "ì´ë™"
+msgstr "ÀÌµ¿"
 
 #: ../src/keybindings.c:351
 msgid "Go to matching brace"
-msgstr "ì¼ì¹˜í•˜ëŠ” ê´„í˜¸ë¡œ ì´ë™"
+msgstr "ÀÏÄ¡ÇÏ´Â °ıÈ£·Î ÀÌµ¿"
 
 #: ../src/keybindings.c:354
 msgid "Toggle marker"
-msgstr "í‘œì§€ ë³´ê¸° ì „í™˜"
+msgstr "Ç¥Áö º¸±â ÀüÈ¯"
 
 #: ../src/keybindings.c:357
 msgid "Go to next marker"
-msgstr "ë‹¤ìŒ í‘œì§€ë¡œ ì´ë™"
+msgstr "´ÙÀ½ Ç¥Áö·Î ÀÌµ¿"
 
 #: ../src/keybindings.c:360
 msgid "Go to previous marker"
-msgstr "ì´ì „ í‘œì§€ë¡œ ì´ë™"
+msgstr "ÀÌÀü Ç¥Áö·Î ÀÌµ¿"
 
 #: ../src/keybindings.c:362
 msgid "Go to Tag Definition"
-msgstr "íƒœê·¸ ì •ì˜ë¡œ ì´ë™"
+msgstr "ÅÂ±× Á¤ÀÇ·Î ÀÌµ¿"
 
 #: ../src/keybindings.c:364
 msgid "Go to Tag Declaration"
-msgstr "íƒœê·¸ ì„ ì–¸ìœ¼ë¡œ ì´ë™"
+msgstr "ÅÂ±× ¼±¾ğÀ¸·Î ÀÌµ¿"
 
 #: ../src/keybindings.c:366
 msgid "Go to Start of Line"
-msgstr "ì¤„ ì²˜ìŒìœ¼ë¡œ ì´ë™"
+msgstr "ÁÙ Ã³À½À¸·Î ÀÌµ¿"
 
 #: ../src/keybindings.c:368
 msgid "Go to End of Line"
-msgstr "ì¤„ ëìœ¼ë¡œ ì´ë™"
+msgstr "ÁÙ ³¡À¸·Î ÀÌµ¿"
 
 #: ../src/keybindings.c:370
 msgid "Go to Previous Word Part"
-msgstr "ì´ì „ ë‹¨ì–´ë¶€ë¶„ìœ¼ë¡œ ì´ë™"
+msgstr "ÀÌÀü ´Ü¾îºÎºĞÀ¸·Î ÀÌµ¿"
 
 #: ../src/keybindings.c:372
 msgid "Go to Next Word Part"
-msgstr "ë‹¤ìŒ ë‹¨ì–´ë¶€ë¶„ìœ¼ë¡œ ì´ë™"
+msgstr "´ÙÀ½ ´Ü¾îºÎºĞÀ¸·Î ÀÌµ¿"
 
 #: ../src/keybindings.c:374
 msgid "View"
-msgstr "ë³´ê¸°"
+msgstr "º¸±â"
 
 #: ../src/keybindings.c:377
 msgid "Toggle All Additional Widgets"
-msgstr "ëª¨ë“  ë¶€ê°€ì ì¸ ìœ„ì ¯ ë³´ê¸° ì „í™˜"
+msgstr "¸ğµç ºÎ°¡ÀûÀÎ À§Á¬ º¸±â ÀüÈ¯"
 
 #: ../src/keybindings.c:380
 msgid "Fullscreen"
-msgstr "ì „ì²´ í™”ë©´"
+msgstr "ÀüÃ¼ È­¸é"
 
 #: ../src/keybindings.c:382
 msgid "Toggle Messages Window"
-msgstr "ë©”ì‹œì§€ì°½ ë³´ê¸° ì „í™˜"
+msgstr "¸Ş½ÃÁöÃ¢ º¸±â ÀüÈ¯"
 
 #: ../src/keybindings.c:385
 msgid "Toggle Sidebar"
-msgstr "ê°€ì¥ìë¦¬ì°½ ë³´ê¸° ì „í™˜"
+msgstr "°¡ÀåÀÚ¸®Ã¢ º¸±â ÀüÈ¯"
 
 #: ../src/keybindings.c:387
 msgid "Zoom In"
-msgstr "í™•ëŒ€"
+msgstr "È®´ë"
 
 #: ../src/keybindings.c:389
 msgid "Zoom Out"
-msgstr "ì¶•ì†Œ"
+msgstr "Ãà¼Ò"
 
 #: ../src/keybindings.c:391
 msgid "Focus"
-msgstr "í¬ì»¤ìŠ¤"
+msgstr "Æ÷Ä¿½º"
 
 #: ../src/keybindings.c:394
 msgid "Switch to Editor"
-msgstr "í¸ì§‘ì°½ìœ¼ë¡œ í¬ì»¤ìŠ¤ ì „í™˜"
+msgstr "ÆíÁıÃ¢À¸·Î Æ÷Ä¿½º ÀüÈ¯"
 
 #: ../src/keybindings.c:396
 msgid "Switch to Scribble"
-msgstr "ë‚™ì„œì°½ìœ¼ë¡œ í¬ì»¤ìŠ¤ ì „í™˜"
+msgstr "³«¼­Ã¢À¸·Î Æ÷Ä¿½º ÀüÈ¯"
 
 #: ../src/keybindings.c:398
 msgid "Switch to VTE"
-msgstr "VTEë¡œ í¬ì»¤ìŠ¤ ì „í™˜"
+msgstr "VTE·Î Æ÷Ä¿½º ÀüÈ¯"
 
 #: ../src/keybindings.c:400
 msgid "Switch to Search Bar"
-msgstr "ì°¾ê¸° ë§‰ëŒ€ë¡œ í¬ì»¤ìŠ¤ ì „í™˜"
+msgstr "Ã£±â ¸·´ë·Î Æ÷Ä¿½º ÀüÈ¯"
 
 #: ../src/keybindings.c:402
 msgid "Switch to Sidebar"
-msgstr "ê°€ì¥ìë¦¬ì°½ìœ¼ë¡œ í¬ì»¤ìŠ¤ ì „í™˜"
+msgstr "°¡ÀåÀÚ¸®Ã¢À¸·Î Æ÷Ä¿½º ÀüÈ¯"
 
 #: ../src/keybindings.c:404
 msgid "Switch to Compiler"
-msgstr "ì»´íŒŒì¼ëŸ¬ì°½ìœ¼ë¡œ í¬ì»¤ìŠ¤ ì „í™˜"
+msgstr "ÄÄÆÄÀÏ·¯Ã¢À¸·Î Æ÷Ä¿½º ÀüÈ¯"
 
 #: ../src/keybindings.c:406
 msgid "Notebook tab"
-msgstr "ë…¸íŠ¸ë¶ íƒ­"
+msgstr "³ëÆ®ºÏ ÅÇ"
 
 #: ../src/keybindings.c:409
 msgid "Switch to left document"
-msgstr "ì™¼ìª½ ë¬¸ì„œë¡œ í¬ì»¤ìŠ¤ ì „í™˜"
+msgstr "¿ŞÂÊ ¹®¼­·Î Æ÷Ä¿½º ÀüÈ¯"
 
 #: ../src/keybindings.c:411
 msgid "Switch to right document"
-msgstr "ì˜¤ë¥¸ìª½ ë¬¸ì„œë¡œ í¬ì»¤ìŠ¤ ì „í™˜"
+msgstr "¿À¸¥ÂÊ ¹®¼­·Î Æ÷Ä¿½º ÀüÈ¯"
 
 #: ../src/keybindings.c:413
 msgid "Switch to last used document"
-msgstr "ìµœê·¼ì— ì‚¬ìš©í•œ ë¬¸ì„œë¡œ í¬ì»¤ìŠ¤ ì „í™˜"
+msgstr "ÃÖ±Ù¿¡ »ç¿ëÇÑ ¹®¼­·Î Æ÷Ä¿½º ÀüÈ¯"
 
 #: ../src/keybindings.c:415
 msgid "Move document left"
-msgstr "ë¬¸ì„œë¥¼ ì™¼ìª½ìœ¼ë¡œ ì´ë™"
+msgstr "¹®¼­¸¦ ¿ŞÂÊÀ¸·Î ÀÌµ¿"
 
 #: ../src/keybindings.c:417
 msgid "Move document right"
-msgstr "ë¬¸ì„œë¥¼ ì˜¤ë¥¸ìª½ìœ¼ë¡œ ì´ë™"
+msgstr "¹®¼­¸¦ ¿À¸¥ÂÊÀ¸·Î ÀÌµ¿"
 
 #: ../src/keybindings.c:419
 msgid "Move document first"
-msgstr "ë¬¸ì„œë¥¼ ì²˜ìŒìœ¼ë¡œ ì´ë™"
+msgstr "¹®¼­¸¦ Ã³À½À¸·Î ÀÌµ¿"
 
 #: ../src/keybindings.c:421
 msgid "Move document last"
-msgstr "ë¬¸ì„œë¥¼ ëìœ¼ë¡œ ì´ë™"
+msgstr "¹®¼­¸¦ ³¡À¸·Î ÀÌµ¿"
 
 #: ../src/keybindings.c:423
 msgid "Document"
-msgstr "ë¬¸ì„œ"
+msgstr "¹®¼­"
 
 #: ../src/keybindings.c:426
 msgid "Toggle Line wrapping"
-msgstr "ìë™ ì¤„ë°”ê¿ˆ ì „í™˜"
+msgstr "ÀÚµ¿ ÁÙ¹Ù²Ş ÀüÈ¯"
 
 #: ../src/keybindings.c:428
 msgid "Toggle Line breaking"
-msgstr "ìë™ í–‰ë¶„ë¦¬ ì „í™˜"
+msgstr "ÀÚµ¿ ÇàºĞ¸® ÀüÈ¯"
 
 #: ../src/keybindings.c:432
 msgid "Replace spaces by tabs"
-msgstr "ìŠ¤í˜ì´ìŠ¤ë¥¼ íƒ­ìœ¼ë¡œ ë°”ê¿ˆ"
+msgstr "½ºÆäÀÌ½º¸¦ ÅÇÀ¸·Î ¹Ù²Ş"
 
 #: ../src/keybindings.c:434
 msgid "Toggle current fold"
-msgstr "í˜„ì¬ ì ‘ê¸° ì „í™˜"
+msgstr "ÇöÀç Á¢±â ÀüÈ¯"
 
 #: ../src/keybindings.c:436
 msgid "Fold all"
-msgstr "ëª¨ë‘ ì ‘ê¸°"
+msgstr "¸ğµÎ Á¢±â"
 
 #: ../src/keybindings.c:438
 msgid "Unfold all"
-msgstr "ëª¨ë‘ í¼ì¹˜ê¸°"
+msgstr "¸ğµÎ ÆîÄ¡±â"
 
 #: ../src/keybindings.c:440
 msgid "Reload symbol list"
-msgstr "ì‹¬ë³¼ ëª©ë¡ ë‹¤ì‹œ ë¶ˆëŸ¬ì˜¤ê¸°"
+msgstr "½Éº¼ ¸ñ·Ï ´Ù½Ã ºÒ·¯¿À±â"
 
 #: ../src/keybindings.c:442 ../src/keybindings.c:447
 msgid "Build"
-msgstr "ì œì‘"
+msgstr "Á¦ÀÛ"
 
 #: ../src/keybindings.c:449
 msgid "Make all"
@@ -3174,130 +3174,130 @@ msgstr "Make all"
 
 #: ../src/keybindings.c:452
 msgid "Make custom target"
-msgstr "Make ë§ì¶¤íƒ€ê²Ÿ"
+msgstr "Make ¸ÂÃãÅ¸°Ù"
 
 #: ../src/keybindings.c:454
 msgid "Make object"
-msgstr "Make ì˜¤ë¸Œì íŠ¸"
+msgstr "Make ¿ÀºêÁ§Æ®"
 
 #: ../src/keybindings.c:456
 msgid "Next error"
-msgstr "ë‹¤ìŒ ì˜¤ë¥˜"
+msgstr "´ÙÀ½ ¿À·ù"
 
 #: ../src/keybindings.c:458
 msgid "Previous error"
-msgstr "ì´ì „ ì˜¤ë¥˜"
+msgstr "ÀÌÀü ¿À·ù"
 
 #: ../src/keybindings.c:460
 msgid "Run"
-msgstr "ì‹¤í–‰"
+msgstr "½ÇÇà"
 
 #: ../src/keybindings.c:462
 msgid "Run (alternative command)"
-msgstr "ì‹¤í–‰ (ëŒ€ì•ˆ ëª…ë ¹)"
+msgstr "½ÇÇà (´ë¾È ¸í·É)"
 
 #: ../src/keybindings.c:464
 msgid "Build options"
-msgstr "ì œì‘ ì˜µì…˜"
+msgstr "Á¦ÀÛ ¿É¼Ç"
 
 #: ../src/keybindings.c:469
 msgid "Show Color Chooser"
-msgstr "ìƒ‰ìƒ ì„ íƒê¸° ë³´ê¸°"
+msgstr "»ö»ó ¼±ÅÃ±â º¸±â"
 
 #: ../src/keybindings.c:471 ../src/keybindings.c:474
 msgid "Help"
-msgstr "ë„ì›€ë§"
+msgstr "µµ¿ò¸»"
 
 #: ../src/keybindings.c:712
 msgid "Keyboard Shortcuts"
-msgstr "ë°”ë¡œ ê°€ê¸°"
+msgstr "¹Ù·Î °¡±â"
 
 #: ../src/keybindings.c:725
 msgid "The following keyboard shortcuts are configurable:"
-msgstr "ë‹¤ìŒ ë°”ë¡œ ê°€ê¸°ëŠ” ë³€ê²½ ê°€ëŠ¥:"
+msgstr "´ÙÀ½ ¹Ù·Î °¡±â´Â º¯°æ °¡´É:"
 
 #: ../src/keyfile.c:817
 msgid "Type here what you want, use it as a notice/scratch board"
-msgstr "ë©”ëª¨ ë° ë‚™ì„œë¡œ ì‚¬ìš©í•  ë¬¸ìì—´ì„ ì…ë ¥í•˜ì‹­ì‹œì˜¤."
+msgstr "¸Ş¸ğ ¹× ³«¼­·Î »ç¿ëÇÒ ¹®ÀÚ¿­À» ÀÔ·ÂÇÏ½Ê½Ã¿À."
 
 #: ../src/keyfile.c:1012
 msgid "Failed to load one or more session files."
-msgstr "í•˜ë‚˜ ë˜ëŠ” ê·¸ ì´ìƒì˜ ì„¸ì…˜ íŒŒì¼ ë¶ˆëŸ¬ì˜¤ê¸° ì‹¤íŒ¨í•¨."
+msgstr "ÇÏ³ª ¶Ç´Â ±× ÀÌ»óÀÇ ¼¼¼Ç ÆÄÀÏ ºÒ·¯¿À±â ½ÇÆĞÇÔ."
 
 #: ../src/log.c:177
 msgid "Debug Messages"
-msgstr "ë””ë²„ê·¸ ë©”ì‹œì§€"
+msgstr "µğ¹ö±× ¸Ş½ÃÁö"
 
 #: ../src/main.c:123
 msgid ""
 "Set initial column number for the first opened file (useful in conjunction "
 "with --line)"
-msgstr "íŒŒì¼ì˜ ëª‡ë²ˆì§¸ ì—´ì—ì„œ ì‹œì‘í• ì§€ ì„¤ì • (--lineê³¼ ê²°í•©í•˜ì—¬ ì‚¬ìš©í•˜ë©´ ìœ ìš©í•¨)"
+msgstr "ÆÄÀÏÀÇ ¸î¹øÂ° ¿­¿¡¼­ ½ÃÀÛÇÒÁö ¼³Á¤ (--line°ú °áÇÕÇÏ¿© »ç¿ëÇÏ¸é À¯¿ëÇÔ)"
 
 #: ../src/main.c:124
 msgid "Use an alternate configuration directory"
-msgstr "ëŒ€ì•ˆ í™˜ê²½ì„¤ì • í´ë”ë¥¼ ì‚¬ìš©í•¨"
+msgstr "´ë¾È È¯°æ¼³Á¤ Æú´õ¸¦ »ç¿ëÇÔ"
 
 #: ../src/main.c:125
 msgid "Runs in debug mode (means being verbose)"
-msgstr "ë””ë²„ê·¸ ëª¨ë“œë¡œ ì‹¤í–‰í•¨ (ì¥í™©í•¨)"
+msgstr "µğ¹ö±× ¸ğµå·Î ½ÇÇàÇÔ (ÀåÈ²ÇÔ)"
 
 #: ../src/main.c:126
 msgid "Print internal filetype names"
-msgstr "ì§€ë‹ˆê°€ ì§€ì›í•˜ëŠ” ë‚´ì¥ íŒŒì¼í˜•ì‹ ì¶œë ¥"
+msgstr "Áö´Ï°¡ Áö¿øÇÏ´Â ³»Àå ÆÄÀÏÇü½Ä Ãâ·Â"
 
 #: ../src/main.c:127
 msgid "Generate global tags file (see documentation)"
-msgstr "ì „ì—­ì ì¸ íƒœê·¸ íŒŒì¼ ë§Œë“¤ê¸° (ë„ì›€ë§ ë¬¸ì„œ ì°¸ê³ )"
+msgstr "Àü¿ªÀûÀÎ ÅÂ±× ÆÄÀÏ ¸¸µé±â (µµ¿ò¸» ¹®¼­ Âü°í)"
 
 #: ../src/main.c:131
 msgid "Don't open files in a running instance, force opening a new instance"
-msgstr "ì‹¤í–‰ì¤‘ì¸ ì¸ìŠ¤í„´ìŠ¤ê°€ ì•„ë‹Œ, ìƒˆë¡œìš´ ì¸ìŠ¤í„´ìŠ¤ë¥¼ ì‚¬ìš©í•˜ì—¬ ë¬¸ì„œ ì—´ê¸°"
+msgstr "½ÇÇàÁßÀÎ ÀÎ½ºÅÏ½º°¡ ¾Æ´Ñ, »õ·Î¿î ÀÎ½ºÅÏ½º¸¦ »ç¿ëÇÏ¿© ¹®¼­ ¿­±â"
 
 #: ../src/main.c:133
 msgid "Set initial line number for the first opened file"
-msgstr "íŒŒì¼ì˜ ëª‡ë²ˆì§¸ ì¤„ì—ì„œ ì‹œì‘í• ì§€ ì„¤ì •"
+msgstr "ÆÄÀÏÀÇ ¸î¹øÂ° ÁÙ¿¡¼­ ½ÃÀÛÇÒÁö ¼³Á¤"
 
 #: ../src/main.c:134
 msgid "Don't show message window at startup"
-msgstr "ì‹œì‘í•  ë•Œ ë©”ì‹œì§€ì°½ì„ ë³´ì—¬ì£¼ì§€ ì•Šê¸°"
+msgstr "½ÃÀÛÇÒ ¶§ ¸Ş½ÃÁöÃ¢À» º¸¿©ÁÖÁö ¾Ê±â"
 
 #: ../src/main.c:135
 msgid "Don't load auto completion data (see documentation)"
-msgstr "ìë™ì™„ì„± ë°ì´í„° ë¶ˆëŸ¬ì˜¤ì§€ ì•Šê¸° (ë„ì›€ë§ ë¬¸ì„œ ì°¸ê³ )"
+msgstr "ÀÚµ¿¿Ï¼º µ¥ÀÌÅÍ ºÒ·¯¿ÀÁö ¾Ê±â (µµ¿ò¸» ¹®¼­ Âü°í)"
 
 #: ../src/main.c:137
 msgid "Don't load plugins"
-msgstr "í”ŒëŸ¬ê·¸ì¸ì„ ë¶ˆëŸ¬ì˜¤ì§€ ì•Šê¸°"
+msgstr "ÇÃ·¯±×ÀÎÀ» ºÒ·¯¿ÀÁö ¾Ê±â"
 
 #: ../src/main.c:139
 msgid "Print Geany's installation prefix"
-msgstr "ì§€ë‹ˆ ì„¤ì¹˜ í´ë” prefix ì¶œë ¥"
+msgstr "Áö´Ï ¼³Ä¡ Æú´õ prefix Ãâ·Â"
 
 #: ../src/main.c:140
 msgid "don't load the previous session's files"
-msgstr "ì´ì§„ ì„¸ì…˜ íŒŒì¼ì„ ë¶ˆëŸ¬ì˜¤ì§€ ì•Šê¸°"
+msgstr "ÀÌÁø ¼¼¼Ç ÆÄÀÏÀ» ºÒ·¯¿ÀÁö ¾Ê±â"
 
 #: ../src/main.c:142
 msgid "Don't load terminal support"
-msgstr "ë‚´ì¥ í„°ë¯¸ë„ ì—ë®¬ë ˆì´í„° ë¶ˆëŸ¬ì˜¤ì§€ ì•Šê¸°"
+msgstr "³»Àå ÅÍ¹Ì³Î ¿¡¹Ä·¹ÀÌÅÍ ºÒ·¯¿ÀÁö ¾Ê±â"
 
 #: ../src/main.c:143
 msgid "Filename of libvte.so"
-msgstr "\"libvte.so\"ì˜ ì ˆëŒ€ê²½ë¡œ íŒŒì¼ ì´ë¦„"
+msgstr "\"libvte.so\"ÀÇ Àı´ë°æ·Î ÆÄÀÏ ÀÌ¸§"
 
 #: ../src/main.c:145
 msgid "Show version and exit"
-msgstr "ë²„ì „ ì¶œë ¥"
+msgstr "¹öÀü Ãâ·Â"
 
 #: ../src/main.c:481
 msgid "[FILES...]"
-msgstr "[íŒŒì¼ë“¤...]"
+msgstr "[ÆÄÀÏµé...]"
 
 #: ../src/main.c:498
 #, c-format
 msgid "(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"
-msgstr "(%sì— GTK %d.%d.%d, GLib %d.%d.%d ì‚¬ìš©í•˜ì—¬ ì œì‘ë¨)"
+msgstr "(%s¿¡ GTK %d.%d.%d, GLib %d.%d.%d »ç¿ëÇÏ¿© Á¦ÀÛµÊ)"
 
 #: ../src/main.c:602
 #, c-format
@@ -3306,128 +3306,128 @@ msgid ""
 "There could be some problems using Geany without a configuration directory.\n"
 "Start Geany anyway?"
 msgstr ""
-"í™˜ê²½ì„¤ì • í´ë”ë¥¼ ë§Œë“¤ ìˆ˜ ì—†ìŠµë‹ˆë‹¤ (%s).\n"
-"í™˜ê²½ì„¤ì • í´ë”ì—†ì´ ì§€ë‹ˆë¥¼ ì‹¤í–‰í•˜ë©´ ë¬¸ì œê°€ ìƒê¸¸ ìˆ˜ ìˆìŠµë‹ˆë‹¤.\n"
-"ë¬´ì‹œí•˜ê³  ì§€ë‹ˆë¥¼ ì‹œì‘í• ê¹Œìš”?"
+"È¯°æ¼³Á¤ Æú´õ¸¦ ¸¸µé ¼ö ¾ø½À´Ï´Ù (%s).\n"
+"È¯°æ¼³Á¤ Æú´õ¾øÀÌ Áö´Ï¸¦ ½ÇÇàÇÏ¸é ¹®Á¦°¡ »ı±æ ¼ö ÀÖ½À´Ï´Ù.\n"
+"¹«½ÃÇÏ°í Áö´Ï¸¦ ½ÃÀÛÇÒ±î¿ä?"
 
 #: ../src/main.c:672 ../src/socket.c:157
 #, c-format
 msgid "Could not find file '%s'."
-msgstr "'%s' íŒŒì¼ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."
+msgstr "'%s' ÆÄÀÏÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù."
 
 #: ../src/main.c:829
 #, c-format
 msgid "This is Geany %s."
-msgstr "ì§€ë‹ˆ %s ì…ë‹ˆë‹¤."
+msgstr "Áö´Ï %s ÀÔ´Ï´Ù."
 
 #: ../src/main.c:831
 #, c-format
 msgid "Configuration directory could not be created (%s)."
-msgstr "í™˜ê²½ì„¤ì • í´ë”ë¥¼ ë§Œë“¤ ìˆ˜ ì—†ìŠµë‹ˆë‹¤ (%s)."
+msgstr "È¯°æ¼³Á¤ Æú´õ¸¦ ¸¸µé ¼ö ¾ø½À´Ï´Ù (%s)."
 
 #: ../src/main.c:1051
 msgid "Configuration files reloaded."
-msgstr "í™˜ê²½ì„¤ì • íŒŒì¼ ë‹¤ì‹œ ë¶ˆëŸ¬ì˜´."
+msgstr "È¯°æ¼³Á¤ ÆÄÀÏ ´Ù½Ã ºÒ·¯¿È."
 
 #: ../src/msgwindow.c:114
 msgid "Status messages"
-msgstr "ìƒíƒœ ë©”ì‹œì§€"
+msgstr "»óÅÂ ¸Ş½ÃÁö"
 
 #: ../src/msgwindow.c:495
 msgid "Copy _All"
-msgstr "ëª¨ë‘ ë³µì‚¬(_A)"
+msgstr "¸ğµÎ º¹»ç(_A)"
 
 #: ../src/msgwindow.c:525
 msgid "_Hide Message Window"
-msgstr "ë©”ì‹œì§€ì°½ ê°ì¶”ê¸°(_H)"
+msgstr "¸Ş½ÃÁöÃ¢ °¨Ãß±â(_H)"
 
-#: ../src/plugins.c:394
+#: ../src/plugins.c:393
 #, c-format
 msgid ""
 "The plugin \"%s\" is not binary compatible with this release of Geany - "
 "please recompile it."
 msgstr ""
-"\"%s\" í”ŒëŸ¬ê·¸ì¸ì€ ì§€ë‹ˆì™€ ë°”ì´ë„ˆë¦¬ í˜¸í™˜ì„±ì´ ì—†ìŠµë‹ˆë‹¤.\n"
-"ë‹¤ì‹œ ì»´íŒŒì¼í•´ì„œ ì‚¬ìš©í•˜ì‹­ì‹œì˜¤."
+"\"%s\" ÇÃ·¯±×ÀÎÀº Áö´Ï¿Í ¹ÙÀÌ³Ê¸® È£È¯¼ºÀÌ ¾ø½À´Ï´Ù.\n"
+"´Ù½Ã ÄÄÆÄÀÏÇØ¼­ »ç¿ëÇÏ½Ê½Ã¿À."
 
-#: ../src/plugins.c:800
+#: ../src/plugins.c:799
 msgid "_Plugin Manager"
-msgstr "í”ŒëŸ¬ê·¸ì¸ ê´€ë¦¬(_P)"
+msgstr "ÇÃ·¯±×ÀÎ °ü¸®(_P)"
 
-#: ../src/plugins.c:967
+#: ../src/plugins.c:966
 #, c-format
 msgid ""
 "Plugin: %s %s\n"
 "Description: %s\n"
 "Author(s): %s"
 msgstr ""
-"í”ŒëŸ¬ê·¸ì¸: %s %s\n"
-"ì„¤ëª…: %s\n"
-"ì €ì: %s"
+"ÇÃ·¯±×ÀÎ: %s %s\n"
+"¼³¸í: %s\n"
+"ÀúÀÚ: %s"
 
-#: ../src/plugins.c:1033
+#: ../src/plugins.c:1032
 msgid "Active"
-msgstr "í™œì„±"
+msgstr "È°¼º"
 
-#: ../src/plugins.c:1039
+#: ../src/plugins.c:1038
 msgid "Plugin"
-msgstr "í”ŒëŸ¬ê·¸ì¸"
+msgstr "ÇÃ·¯±×ÀÎ"
 
-#: ../src/plugins.c:1063
+#: ../src/plugins.c:1062
 msgid "No plugins available."
-msgstr "ì‚¬ìš©í•  ìˆ˜ ìˆëŠ” í”ŒëŸ¬ê·¸ì¸ì´ ì—†ìŠµë‹ˆë‹¤."
+msgstr "»ç¿ëÇÒ ¼ö ÀÖ´Â ÇÃ·¯±×ÀÎÀÌ ¾ø½À´Ï´Ù."
 
-#: ../src/plugins.c:1172
+#: ../src/plugins.c:1171
 msgid "Plugins"
-msgstr "í”ŒëŸ¬ê·¸ì¸"
+msgstr "ÇÃ·¯±×ÀÎ"
 
-#: ../src/plugins.c:1192
+#: ../src/plugins.c:1191
 msgid ""
 "Below is a list of available plugins. Select the plugins which should be "
 "loaded when Geany is started."
 msgstr ""
-"ì•„ë˜ëŠ” ì‚¬ìš©ê°€ëŠ¥í•œ í”ŒëŸ¬ê·¸ì¸ ëª©ë¡ì…ë‹ˆë‹¤.\n"
-"ì§€ë‹ˆê°€ ì‹œì‘í•  ë•Œ ë¶ˆëŸ¬ì˜¬ í”ŒëŸ¬ê·¸ì¸ë“¤ì„ ì„ íƒí•˜ì‹­ì‹œì˜¤."
+"¾Æ·¡´Â »ç¿ë°¡´ÉÇÑ ÇÃ·¯±×ÀÎ ¸ñ·ÏÀÔ´Ï´Ù.\n"
+"Áö´Ï°¡ ½ÃÀÛÇÒ ¶§ ºÒ·¯¿Ã ÇÃ·¯±×ÀÎµéÀ» ¼±ÅÃÇÏ½Ê½Ã¿À."
 
-#: ../src/plugins.c:1200
+#: ../src/plugins.c:1199
 msgid "<b>Plugin details:</b>"
-msgstr "<b>í”ŒëŸ¬ê·¸ì¸ ìƒìˆ :</b>"
+msgstr "<b>ÇÃ·¯±×ÀÎ »ó¼ú:</b>"
 
 #: ../src/prefs.c:278
 msgid "Action"
-msgstr "í–‰ë™"
+msgstr "Çàµ¿"
 
 #: ../src/prefs.c:283
 msgid "Shortcut"
-msgstr "ë°”ë¡œ ê°€ê¸°"
+msgstr "¹Ù·Î °¡±â"
 
 #: ../src/prefs.c:1283
 msgid "Grab Key"
-msgstr "í‚¤ ê°€ë¡œì±„ê¸°"
+msgstr "Å° °¡·ÎÃ¤±â"
 
 #: ../src/prefs.c:1289
 #, c-format
 msgid "Press the combination of the keys you want to use for \"%s\"."
-msgstr "\"%s\"ì— í• ë‹¹í•˜ê³ ì‹¶ì€ í‚¤ ì¡°í•©ì„ ëˆ„ë¥´ì‹­ì‹œì˜¤."
+msgstr "\"%s\"¿¡ ÇÒ´çÇÏ°í½ÍÀº Å° Á¶ÇÕÀ» ´©¸£½Ê½Ã¿À."
 
 #: ../src/prefs.c:1476
 msgid "_Override"
-msgstr "ë³€ê²½(_O)"
+msgstr "º¯°æ(_O)"
 
 #: ../src/prefs.c:1477
 msgid "Override that keybinding?"
-msgstr "ë‹¨ì¶•í‚¤ë¥¼ ë³€ê²½í•˜ì‹œê² ìŠµë‹ˆê¹Œ?"
+msgstr "´ÜÃàÅ°¸¦ º¯°æÇÏ½Ã°Ú½À´Ï±î?"
 
 #: ../src/prefs.c:1478
 #, c-format
 msgid "The combination '%s' is already used for \"%s\"."
-msgstr "'%s'ì€(ëŠ”) ì´ë¯¸ \"%s\"ì— í• ë‹¹ë˜ì–´ ìˆìŠµë‹ˆë‹¤."
+msgstr "'%s'Àº(´Â) ÀÌ¹Ì \"%s\"¿¡ ÇÒ´çµÇ¾î ÀÖ½À´Ï´Ù."
 
 #. add manually GeanyWrapLabels because it can't be added with Glade
 #. * page Tools
 #: ../src/prefs.c:1590
 msgid "Enter tool paths below. Tools you do not need can be left blank."
-msgstr "ë„êµ¬ ê²½ë¡œ ì…ë ¥."
+msgstr "µµ±¸ °æ·Î ÀÔ·Â."
 
 #. page Templates
 #: ../src/prefs.c:1595
@@ -3435,8 +3435,8 @@ msgid ""
 "Set the information to be used in templates. See the documentation for "
 "details."
 msgstr ""
-"í…œí”Œë¦¿ì— ì‚¬ìš©í•  ì •ë³´ ì„¤ì •.\n"
-"ìì„¸í•œ ë‚´ìš©ì€ ë„ì›€ ë¬¸ì„œ ì°¸ê³ ."
+"ÅÛÇÃ¸´¿¡ »ç¿ëÇÒ Á¤º¸ ¼³Á¤.\n"
+"ÀÚ¼¼ÇÑ ³»¿ëÀº µµ¿ò ¹®¼­ Âü°í."
 
 #: ../src/prefs.c:1599
 msgid ""
@@ -3444,8 +3444,8 @@ msgid ""
 "Geany or force the reload of the settings using Tools->Reload Configuration."
 "</i>"
 msgstr ""
-"<i><b>ì£¼ì˜: ì´ê³³ì˜ ëª¨ë“  ë°”ë€ ì‚¬í•­ì„ ì ìš©í•˜ë ¤ë©´, ì§€ë‹ˆë¥¼ ë‹¤ì‹œ ì‹œì‘í•˜ê±°ë‚˜ë©”ë‰´ì˜ "
-"\"ë„êµ¬->í™˜ê²½ì„¤ì •\" ë‹¤ì‹œë¶ˆëŸ¬ì˜¤ê¸°ë¥¼ ì‹¤í–‰í•´ì•¼ í•©ë‹ˆë‹¤.</b></i>"
+"<i><b>ÁÖÀÇ: ÀÌ°÷ÀÇ ¸ğµç ¹Ù²ï »çÇ×À» Àû¿ëÇÏ·Á¸é, Áö´Ï¸¦ ´Ù½Ã ½ÃÀÛÇÏ°Å³ª¸Ş´ºÀÇ "
+"\"µµ±¸->È¯°æ¼³Á¤\" ´Ù½ÃºÒ·¯¿À±â¸¦ ½ÇÇàÇØ¾ß ÇÕ´Ï´Ù.</b></i>"
 
 #. page Keybindings
 #: ../src/prefs.c:1605
@@ -3454,9 +3454,9 @@ msgid ""
 "press the Change button to enter a new shortcut, or double click on an "
 "action to edit the string representation of the shortcut directly."
 msgstr ""
-"ì—¬ê¸°ì—ì„œ ë‹¤ì–‘í•œ í–‰ë™ì— ëŒ€í•œ ë°”ë¡œ ê°€ê¸°ë¥¼ ë³€ê²½í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤. í–‰ë™ì„ ì„ íƒí•œ í›„ "
-"ë°”ê¾¸ê¸° ë‹¨ì¶”ë¥¼ ëˆ„ë¥´ê³  ìƒˆë¡œìš´ ë‹¨ì¶•í‚¤ë¥¼ ì…ë ¥í•˜ê±°ë‚˜, ë‹¨ì¶•í‚¤í‘œí˜„ì„ ë”ë¸”í´ë¦­í•œ í›„ "
-"ì§ì ‘ ë‹¨ì¶•í‚¤í‘œí˜„ì„ ì…ë ¥í•©ë‹ˆë‹¤."
+"¿©±â¿¡¼­ ´Ù¾çÇÑ Çàµ¿¿¡ ´ëÇÑ ¹Ù·Î °¡±â¸¦ º¯°æÇÒ ¼ö ÀÖ½À´Ï´Ù. Çàµ¿À» ¼±ÅÃÇÑ ÈÄ "
+"¹Ù²Ù±â ´ÜÃß¸¦ ´©¸£°í »õ·Î¿î ´ÜÃàÅ°¸¦ ÀÔ·ÂÇÏ°Å³ª, ´ÜÃàÅ°Ç¥ÇöÀ» ´õºíÅ¬¸¯ÇÑ ÈÄ "
+"Á÷Á¢ ´ÜÃàÅ°Ç¥ÇöÀ» ÀÔ·ÂÇÕ´Ï´Ù."
 
 #. page Printing
 #: ../src/prefs.c:1610
@@ -3464,36 +3464,36 @@ msgid ""
 "<i>Notice: Native GTK printing is only available if Geany was built against "
 "GTK 2.10 (or above) <b>and</b> Geany is running with GTK 2.10 (or above).</i>"
 msgstr ""
-"<i><b>ì£¼ì˜: GTK ê³ ìœ  ì¸ì‡„ëŠ” GTK ë²„ì „ 2.10 ì´ìƒì„ ì‚¬ìš©í•˜ì—¬ ì œì‘í•˜ê³ , GTK ë²„ì „"
-"2.10 ì´ìƒì˜ í™˜ê²½ì—ì„œ ì§€ë‹ˆë¥¼ ì‹¤í–‰í•´ì•¼ ê°€ëŠ¥í•©ë‹ˆë‹¤.</b></i>"
+"<i><b>ÁÖÀÇ: GTK °íÀ¯ ÀÎ¼â´Â GTK ¹öÀü 2.10 ÀÌ»óÀ» »ç¿ëÇÏ¿© Á¦ÀÛÇÏ°í, GTK ¹öÀü"
+"2.10 ÀÌ»óÀÇ È¯°æ¿¡¼­ Áö´Ï¸¦ ½ÇÇàÇØ¾ß °¡´ÉÇÕ´Ï´Ù.</b></i>"
 
 #: ../src/printing.c:270
 #, c-format
 msgid "<b>Page %d of %d</b>"
-msgstr "%2$dìª½ ì¤‘ %1$dìª½"
+msgstr "%2$dÂÊ Áß %1$dÂÊ"
 
 #: ../src/printing.c:338
 msgid "Document Setup"
-msgstr "ë¬¸ì„œ ì„¤ì •"
+msgstr "¹®¼­ ¼³Á¤"
 
 #: ../src/printing.c:727
 #, c-format
 msgid "Printing of file %s was cancelled."
-msgstr "%s íŒŒì¼ ì¸ì‡„ ì·¨ì†Œí•¨."
+msgstr "%s ÆÄÀÏ ÀÎ¼â Ãë¼ÒÇÔ."
 
 #: ../src/printing.c:729 ../src/printing.c:848
 #, c-format
 msgid "File %s printed."
-msgstr "%s íŒŒì¼ ì¸ì‡„í•¨."
+msgstr "%s ÆÄÀÏ ÀÎ¼âÇÔ."
 
 #: ../src/printing.c:778
 #, c-format
 msgid "Printing of %s failed (%s)."
-msgstr "%s íŒŒì¼ ì¸ì‡„ ì‹¤íŒ¨ (%s)."
+msgstr "%s ÆÄÀÏ ÀÎ¼â ½ÇÆĞ (%s)."
 
 #: ../src/printing.c:818
 msgid "Please set a print command in the preferences dialog first"
-msgstr "ë¨¼ì € ì†ì„± ëŒ€í™”ìƒìì—ì„œ ì¸ì‡„ ëª…ë ¹ì„ ì§€ì •í•˜ì‹­ì‹œì˜¤."
+msgstr "¸ÕÀú ¼Ó¼º ´ëÈ­»óÀÚ¿¡¼­ ÀÎ¼â ¸í·ÉÀ» ÁöÁ¤ÇÏ½Ê½Ã¿À."
 
 #: ../src/printing.c:826
 #, c-format
@@ -3502,40 +3502,40 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"%s íŒŒì¼ì„ ë‹¤ìŒ ëª…ë ¹ìœ¼ë¡œ ì¸ì‡„í•©ë‹ˆë‹¤.\n"
+"%s ÆÄÀÏÀ» ´ÙÀ½ ¸í·ÉÀ¸·Î ÀÎ¼âÇÕ´Ï´Ù.\n"
 "\n"
 "%s"
 
 #: ../src/printing.c:842
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
-msgstr "\"%s\" íŒŒì¼ ì¸ì‡„ ì‹¤íŒ¨ (ë°˜í™˜ ì½”ë“œ: %s)."
+msgstr "\"%s\" ÆÄÀÏ ÀÎ¼â ½ÇÆĞ (¹İÈ¯ ÄÚµå: %s)."
 
 #. "projects" is part of the default project base path so be careful when translating
 #. * please avoid special characters and spaces, look at the source for details or ask Frank
 #: ../src/project.c:89
 msgid "projects"
-msgstr "í”„ë¡œì íŠ¸"
+msgstr "ÇÁ·ÎÁ§Æ®"
 
 #: ../src/project.c:109
 msgid "New Project"
-msgstr "ìƒˆë¡œìš´ í”„ë¡œì íŠ¸"
+msgstr "»õ·Î¿î ÇÁ·ÎÁ§Æ®"
 
 #: ../src/project.c:117
 msgid "C_reate"
-msgstr "ë§Œë“¤ê¸°(_r)"
+msgstr "¸¸µé±â(_r)"
 
 #: ../src/project.c:131 ../src/project.c:369
 msgid "Name:"
-msgstr "ì´ë¦„:"
+msgstr "ÀÌ¸§:"
 
 #: ../src/project.c:139 ../src/project.c:381
 msgid "Filename:"
-msgstr "íŒŒì¼ ì´ë¦„:"
+msgstr "ÆÄÀÏ ÀÌ¸§:"
 
 #: ../src/project.c:154 ../src/project.c:410
 msgid "Base path:"
-msgstr "ê¸°ë°˜ ê²½ë¡œ:"
+msgstr "±â¹İ °æ·Î:"
 
 #: ../src/project.c:159 ../src/project.c:418
 msgid ""
@@ -3543,306 +3543,306 @@ msgid ""
 "path, or an existing directory tree. You can use paths relative to the "
 "project filename."
 msgstr ""
-"í”„ë¡œì íŠ¸ë¥¼ êµ¬ì„±í•˜ëŠ” ëª¨ë“  íŒŒì¼ë“¤ì˜ ê¸°ë°˜ í´ë”. ìƒˆë¡œ ë§Œë“¤ê±°ë‚˜, ê¸°ì¡´ í´ë”ë¥¼ ì‚¬ìš©"
-"í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤. í”„ë¡œì íŠ¸ íŒŒì¼ ì´ë¦„ì— ìƒëŒ€ê²½ë¡œë¥¼ ì‚¬ìš©í•  ìˆ˜ ìˆê²Œí•©ë‹ˆë‹¤."
+"ÇÁ·ÎÁ§Æ®¸¦ ±¸¼ºÇÏ´Â ¸ğµç ÆÄÀÏµéÀÇ ±â¹İ Æú´õ. »õ·Î ¸¸µé°Å³ª, ±âÁ¸ Æú´õ¸¦ »ç¿ë"
+"ÇÒ ¼ö ÀÖ½À´Ï´Ù. ÇÁ·ÎÁ§Æ® ÆÄÀÏ ÀÌ¸§¿¡ »ó´ë°æ·Î¸¦ »ç¿ëÇÒ ¼ö ÀÖ°ÔÇÕ´Ï´Ù."
 
 #: ../src/project.c:162 ../src/project.c:421
 msgid "Choose Project Base Path"
-msgstr "í”„ë¡œì íŠ¸ ê¸°ë°˜ ê²½ë¡œ ì„ íƒ"
+msgstr "ÇÁ·ÎÁ§Æ® ±â¹İ °æ·Î ¼±ÅÃ"
 
 #: ../src/project.c:207 ../src/project.c:244 ../src/project.c:869
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
-msgstr "\"%s\" í”„ë¡œì íŠ¸ íŒŒì¼ì„ ë¶ˆëŸ¬ì˜¬ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."
+msgstr "\"%s\" ÇÁ·ÎÁ§Æ® ÆÄÀÏÀ» ºÒ·¯¿Ã ¼ö ¾ø½À´Ï´Ù."
 
 #: ../src/project.c:238 ../src/project.c:256
 msgid "Open Project"
-msgstr "í”„ë¡œì íŠ¸ ì—´ê¸°"
+msgstr "ÇÁ·ÎÁ§Æ® ¿­±â"
 
 #: ../src/project.c:276
 msgid "Project files"
-msgstr "í”„ë¡œì íŠ¸ íŒŒì¼"
+msgstr "ÇÁ·ÎÁ§Æ® ÆÄÀÏ"
 
 #: ../src/project.c:309
 #, c-format
 msgid "Project \"%s\" closed."
-msgstr "\"%s\" í”„ë¡œì íŠ¸ ë‹«ìŒ."
+msgstr "\"%s\" ÇÁ·ÎÁ§Æ® ´İÀ½."
 
 #: ../src/project.c:357
 msgid "Project Properties"
-msgstr "í”„ë¡œì íŠ¸ ì†ì„±"
+msgstr "ÇÁ·ÎÁ§Æ® ¼Ó¼º"
 
 #: ../src/project.c:393
 msgid "Description:"
-msgstr "ì„¤ëª…:"
+msgstr "¼³¸í:"
 
 #: ../src/project.c:427
 msgid "Make in base path"
-msgstr "ê¸°ë°˜ ê²½ë¡œë‚´ì—ì„œ Make"
+msgstr "±â¹İ °æ·Î³»¿¡¼­ Make"
 
 #: ../src/project.c:432
 msgid "Run command:"
-msgstr "ì‹¤í–‰ ëª…ë ¹:"
+msgstr "½ÇÇà ¸í·É:"
 
 #: ../src/project.c:440
 msgid ""
 "Command-line to run in the project base directory. Options can be appended "
 "to the command. Leave blank to use the default run command."
 msgstr ""
-"í”„ë¡œì íŠ¸ ê¸°ë°˜ í´ë”ë‚´ì—ì„œ ì‹¤í–‰í•  ëª…ë ¹. ì˜µì…˜ ì¶”ê°€ ê°€ëŠ¥í•¨. ë¹„ì›Œë‘ë©´ ë””í´íŠ¸ ëª…ë ¹"
-"ì„ ì‹¤í–‰í•¨."
+"ÇÁ·ÎÁ§Æ® ±â¹İ Æú´õ³»¿¡¼­ ½ÇÇàÇÒ ¸í·É. ¿É¼Ç Ãß°¡ °¡´ÉÇÔ. ºñ¿öµÎ¸é µğÆúÆ® ¸í·É"
+"À» ½ÇÇàÇÔ."
 
 #: ../src/project.c:455
 msgid "File patterns:"
-msgstr "íŒŒì¼ íŒ¨í„´:"
+msgstr "ÆÄÀÏ ÆĞÅÏ:"
 
 #: ../src/project.c:549
 msgid "Do you want to close it before proceeding?"
-msgstr "ê³„ì†í•˜ê¸° ì „ì— ë‹«ì„ê¹Œìš”?"
+msgstr "°è¼ÓÇÏ±â Àü¿¡ ´İÀ»±î¿ä?"
 
 #: ../src/project.c:550
 #, c-format
 msgid "The '%s' project is already open."
-msgstr "'%s' í”„ë¡œì íŠ¸ëŠ” ì´ë¯¸ ì—´ë ¸ìŠµë‹ˆë‹¤."
+msgstr "'%s' ÇÁ·ÎÁ§Æ®´Â ÀÌ¹Ì ¿­·È½À´Ï´Ù."
 
 #: ../src/project.c:580
 msgid "The specified project name is too short."
-msgstr "ì§€ì •ëœ í”„ë¡œì íŠ¸ëª…ì´ ë„ˆë¬´ ì§§ìŠµë‹ˆë‹¤."
+msgstr "ÁöÁ¤µÈ ÇÁ·ÎÁ§Æ®¸íÀÌ ³Ê¹« Âª½À´Ï´Ù."
 
 #: ../src/project.c:586
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
-msgstr "ì§€ì •ëœ í”„ë¡œì íŠ¸ëª…ì´ ë„ˆë¬´ ê¹ë‹ˆë‹¤. (ìµœëŒ€ ê¸€ììˆ˜: %d)"
+msgstr "ÁöÁ¤µÈ ÇÁ·ÎÁ§Æ®¸íÀÌ ³Ê¹« ±é´Ï´Ù. (ÃÖ´ë ±ÛÀÚ¼ö: %d)"
 
 #: ../src/project.c:594
 msgid "You have specified an invalid project filename."
-msgstr "ì˜¬ë°”ë¥´ì§€ ì•Šì€ í”„ë¡œì íŠ¸ íŒŒì¼ ì´ë¦„ì„ ì§€ì •í–ˆìŠµë‹ˆë‹¤."
+msgstr "¿Ã¹Ù¸£Áö ¾ÊÀº ÇÁ·ÎÁ§Æ® ÆÄÀÏ ÀÌ¸§À» ÁöÁ¤Çß½À´Ï´Ù."
 
 #: ../src/project.c:617
 msgid "Create the project's base path directory?"
-msgstr "í”„ë¡œì íŠ¸ ê¸°ë°˜ ê²½ë¡œ í´ë”ë¥¼ ë§Œë“¤ê¹Œìš”?"
+msgstr "ÇÁ·ÎÁ§Æ® ±â¹İ °æ·Î Æú´õ¸¦ ¸¸µé±î¿ä?"
 
 #: ../src/project.c:618
 #, c-format
 msgid "The path \"%s\" does not exist."
-msgstr "\"%s\" ê²½ë¡œëŠ” ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤."
+msgstr "\"%s\" °æ·Î´Â Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù."
 
 #: ../src/project.c:627
 #, c-format
 msgid "Project base directory could not be created (%s)."
-msgstr "í”„ë¡œì íŠ¸ ê¸°ë°˜ í´ë”ë¥¼ ë§Œë“¤ ìˆ˜ ì—†ìŠµë‹ˆë‹¤ (%s)."
+msgstr "ÇÁ·ÎÁ§Æ® ±â¹İ Æú´õ¸¦ ¸¸µé ¼ö ¾ø½À´Ï´Ù (%s)."
 
 #: ../src/project.c:639
 #, c-format
 msgid "Project file could not be written (%s)."
-msgstr "í”„ë¡œì íŠ¸ íŒŒì¼ì„ ì“¸ ìˆ˜ ì—…ìŠµë‹ˆë‹¤ (%s)."
+msgstr "ÇÁ·ÎÁ§Æ® ÆÄÀÏÀ» ¾µ ¼ö ¾÷½À´Ï´Ù (%s)."
 
 #: ../src/project.c:687
 #, c-format
 msgid "Project \"%s\" created."
-msgstr "\"%s\" í”„ë¡œì íŠ¸ ë§Œë“¬."
+msgstr "\"%s\" ÇÁ·ÎÁ§Æ® ¸¸µë."
 
 #: ../src/project.c:689
 #, c-format
 msgid "Project \"%s\" saved."
-msgstr "\"%s\" í”„ë¡œì íŠ¸ ì €ì¥í•¨."
+msgstr "\"%s\" ÇÁ·ÎÁ§Æ® ÀúÀåÇÔ."
 
 #. initialise the dialog
 #: ../src/project.c:755 ../src/project.c:766
 msgid "Choose Project Filename"
-msgstr "í”„ë¡œì íŠ¸ íŒŒì¼ ì´ë¦„ ì„ íƒ"
+msgstr "ÇÁ·ÎÁ§Æ® ÆÄÀÏ ÀÌ¸§ ¼±ÅÃ"
 
 #. initialise the dialog
 #: ../src/project.c:784 ../src/project.c:795
 msgid "Choose Project Run Command"
-msgstr "í”„ë¡œì íŠ¸ ì‹¤í–‰ ëª…ë ¹ ì„ íƒ"
+msgstr "ÇÁ·ÎÁ§Æ® ½ÇÇà ¸í·É ¼±ÅÃ"
 
 #: ../src/project.c:862
 #, c-format
 msgid "Project \"%s\" opened."
-msgstr "\"%s\" í”„ë¡œì íŠ¸ ì—´ìŒ."
+msgstr "\"%s\" ÇÁ·ÎÁ§Æ® ¿­À½."
 
 #: ../src/search.c:139
 msgid "_Use regular expressions"
-msgstr "ì •ê·œ í‘œí˜„ì‹ ì‚¬ìš©(_U)"
+msgstr "Á¤±Ô Ç¥Çö½Ä »ç¿ë(_U)"
 
 #: ../src/search.c:143
 msgid ""
 "Use POSIX-like regular expressions. For detailed information about using "
 "regular expressions, please read the documentation."
 msgstr ""
-"POSIX í˜¸í™˜ ì •ê·œ í‘œí˜„ì‹ì„ ì‚¬ìš©í•©ë‹ˆë‹¤. ì •ê·œí‘œí˜„ì‹ ì‚¬ìš©ì— ê´€í•œ ìì„¸í•œ ì •ë³´ëŠ” ë„"
-"ì›€ë§ ë¬¸ì„œë¥¼ ì½ì–´ë³´ì‹­ì‹œì˜¤."
+"POSIX È£È¯ Á¤±Ô Ç¥Çö½ÄÀ» »ç¿ëÇÕ´Ï´Ù. Á¤±ÔÇ¥Çö½Ä »ç¿ë¿¡ °üÇÑ ÀÚ¼¼ÇÑ Á¤º¸´Â µµ"
+"¿ò¸» ¹®¼­¸¦ ÀĞ¾îº¸½Ê½Ã¿À."
 
 #: ../src/search.c:150
 msgid "Search _backwards"
-msgstr "ë’¤ë¡œ ì°¾ê¸°(_b)"
+msgstr "µÚ·Î Ã£±â(_b)"
 
 #: ../src/search.c:164
 msgid "Use _escape sequences"
-msgstr "ì˜ˆì™¸ì²˜ë¦¬ë¬¸ì ì‚¬ìš©(_e)"
+msgstr "¿¹¿ÜÃ³¸®¹®ÀÚ »ç¿ë(_e)"
 
 #: ../src/search.c:169
 msgid ""
 "Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
 "corresponding control characters."
 msgstr ""
-"\\\\, \\uXXXX(ìœ ë‹ˆì½”ë“œ ë¬¸ì), \\t, \\n, \\r ë“±ì„ ìƒì‘í•˜ëŠ” ì œì–´ë¬¸ìë¡œ ë°”ê¿‰ë‹ˆ"
-"ë‹¤."
+"\\\\, \\uXXXX(À¯´ÏÄÚµå ¹®ÀÚ), \\t, \\n, \\r µîÀ» »óÀÀÇÏ´Â Á¦¾î¹®ÀÚ·Î ¹Ù²ß´Ï"
+"´Ù."
 
 #: ../src/search.c:178 ../src/search.c:652
 msgid "C_ase sensitive"
-msgstr "ëŒ€ì†Œë¬¸ì êµ¬ë¶„(_a)"
+msgstr "´ë¼Ò¹®ÀÚ ±¸ºĞ(_a)"
 
 #: ../src/search.c:183 ../src/search.c:658
 msgid "Match only a _whole word"
-msgstr "ë‹¨ì–´ ì „ì²´ ì¼ì¹˜(_w)"
+msgstr "´Ü¾î ÀüÃ¼ ÀÏÄ¡(_w)"
 
 #: ../src/search.c:188
 msgid "Match from s_tart of word"
-msgstr "ë‹¨ì–´ ì‹œì‘ë¶€ë¶„ ì¼ì¹˜(_t)"
+msgstr "´Ü¾î ½ÃÀÛºÎºĞ ÀÏÄ¡(_t)"
 
 #: ../src/search.c:311
 msgid "_Previous"
-msgstr "ì´ì „(_P)"
+msgstr "ÀÌÀü(_P)"
 
 #: ../src/search.c:317
 msgid "_Next"
-msgstr "ë‹¤ìŒ(_N)"
+msgstr "´ÙÀ½(_N)"
 
 #: ../src/search.c:321 ../src/search.c:444 ../src/search.c:603
 msgid "_Search for:"
-msgstr "ì°¾ê¸°(_S):"
+msgstr "Ã£±â(_S):"
 
 #. Now add the multiple match options
 #: ../src/search.c:348
 msgid "_Find All"
-msgstr "ëª¨ë‘ ì°¾ê¸°(_F)"
+msgstr "¸ğµÎ Ã£±â(_F)"
 
 #: ../src/search.c:351
 msgid "_Mark"
-msgstr "í‘œì‹œ(_M)"
+msgstr "Ç¥½Ã(_M)"
 
 #: ../src/search.c:353
 msgid "Mark all matches in the current document."
-msgstr "í˜„ì¬ ë¬¸ì„œì˜ ëª¨ë“  ì¼ì¹˜í•˜ëŠ” ë¶€ë¶„ í‘œì‹œ."
+msgstr "ÇöÀç ¹®¼­ÀÇ ¸ğµç ÀÏÄ¡ÇÏ´Â ºÎºĞ Ç¥½Ã."
 
 #: ../src/search.c:358 ../src/search.c:504
 msgid "In Sessi_on"
-msgstr "ì„¸ì…˜(_o)"
+msgstr "¼¼¼Ç(_o)"
 
 #: ../src/search.c:363 ../src/search.c:509
 msgid "_In Document"
-msgstr "ë¬¸ì„œ(_I)"
+msgstr "¹®¼­(_I)"
 
 #. close window checkbox
 #: ../src/search.c:369 ../src/search.c:515
 msgid "Close _dialog"
-msgstr "ëŒ€í™”ìƒì ë‹«ê¸°(_d)"
+msgstr "´ëÈ­»óÀÚ ´İ±â(_d)"
 
 #: ../src/search.c:374 ../src/search.c:520
 msgid "Disable this option to keep the dialog open."
-msgstr "ì—´ë¦° ëŒ€í™”ìƒìë¥¼ ìœ ì§€í•˜ê¸° ì›í•˜ë©´ ì´ ì˜µì…˜ì„ ë¹„í™œì„±í™”."
+msgstr "¿­¸° ´ëÈ­»óÀÚ¸¦ À¯ÁöÇÏ±â ¿øÇÏ¸é ÀÌ ¿É¼ÇÀ» ºñÈ°¼ºÈ­."
 
 #: ../src/search.c:440
 msgid "Replace & Fi_nd"
-msgstr "ë°”ê¾¸ê³  ì°¾ê¸°(_n)"
+msgstr "¹Ù²Ù°í Ã£±â(_n)"
 
 #: ../src/search.c:447
 msgid "Replace wit_h:"
-msgstr "ë°”ê¿€ ë¬¸ìì—´(_h):"
+msgstr "¹Ù²Ü ¹®ÀÚ¿­(_h):"
 
 #. Now add the multiple replace options
 #: ../src/search.c:494
 msgid "Re_place All"
-msgstr "ëª¨ë‘ ë°”ê¾¸ê¸°(_p)"
+msgstr "¸ğµÎ ¹Ù²Ù±â(_p)"
 
 #: ../src/search.c:497
 msgid "In Se_lection"
-msgstr "ì„ íƒ(_l)"
+msgstr "¼±ÅÃ(_l)"
 
 #: ../src/search.c:499
 msgid "Replace all matches found in the currently selected text"
-msgstr "ì„ íƒí•œ ë¶€ë¶„ì—ì„œ ì¼ì¹˜í•˜ëŠ” ê²ƒ ëª¨ë‘ ë°”ê¾¸ê¸°"
+msgstr "¼±ÅÃÇÑ ºÎºĞ¿¡¼­ ÀÏÄ¡ÇÏ´Â °Í ¸ğµÎ ¹Ù²Ù±â"
 
 #: ../src/search.c:588
 msgid "_Directory:"
-msgstr "í´ë”(_D):"
+msgstr "Æú´õ(_D):"
 
 #: ../src/search.c:623
 msgid "Fixed s_trings"
-msgstr "ë¬¸ìì—´ ê³ ì •(_t)"
+msgstr "¹®ÀÚ¿­ °íÁ¤(_t)"
 
 #: ../src/search.c:632
 msgid "_Grep regular expressions"
-msgstr "ì •ê·œí‘œí˜„ì‹ grep(_G)"
+msgstr "Á¤±ÔÇ¥Çö½Ä grep(_G)"
 
 #: ../src/search.c:636 ../src/search.c:643
 msgid "See grep's manual page for more information."
-msgstr "ìì„¸í•œ ì •ë³´ëŠ” grep ë§¤ë‰´ì–¼ ì°¸ê³ ."
+msgstr "ÀÚ¼¼ÇÑ Á¤º¸´Â grep ¸Å´º¾ó Âü°í."
 
 #: ../src/search.c:641
 msgid "_Extended regular expressions"
-msgstr "í™•ì¥ ì •ê·œí‘œí˜„ì‹(_E)"
+msgstr "È®Àå Á¤±ÔÇ¥Çö½Ä(_E)"
 
 #: ../src/search.c:647
 msgid "_Recurse in subfolders"
-msgstr "í•˜ìœ„ í´ë” í¬í•¨(_R)"
+msgstr "ÇÏÀ§ Æú´õ Æ÷ÇÔ(_R)"
 
 #: ../src/search.c:663
 msgid "_Invert search results"
-msgstr "ì°¾ê¸° ê²°ê³¼ ë°˜ì „(_I)"
+msgstr "Ã£±â °á°ú ¹İÀü(_I)"
 
 #: ../src/search.c:668
 msgid "Invert the sense of matching, to select non-matching lines."
-msgstr "ì¼ì¹˜í•˜ëŠ” ë¶€ë¶„ ë°˜ì „."
+msgstr "ÀÏÄ¡ÇÏ´Â ºÎºĞ ¹İÀü."
 
 #: ../src/search.c:684
 msgid "E_xtra options:"
-msgstr "ì¶”ê°€ ì˜µì…˜(_x):"
+msgstr "Ãß°¡ ¿É¼Ç(_x):"
 
 #: ../src/search.c:696
 msgid "Other options to pass to Grep"
-msgstr "grepì— ì‚¬ìš©í•  ì¶”ê°€ ì˜µì…˜"
+msgstr "grep¿¡ »ç¿ëÇÒ Ãß°¡ ¿É¼Ç"
 
 #: ../src/search.c:916 ../src/search.c:1434 ../src/search.c:1437
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
-msgstr[0] "%dë²ˆì˜ \"%s\" ì¼ì¹˜ ì°¾ìŒ."
+msgstr[0] "%d¹øÀÇ \"%s\" ÀÏÄ¡ Ã£À½."
 
 #: ../src/search.c:1030
 #, c-format
 msgid "Replaced text in %u file."
 msgid_plural "Replaced text in %u files."
-msgstr[0] "%u íŒŒì¼ì˜ ë¬¸ìì—´ ë°”ê¿ˆ."
+msgstr[0] "%u ÆÄÀÏÀÇ ¹®ÀÚ¿­ ¹Ù²Ş."
 
 #: ../src/search.c:1138
 msgid "Invalid directory for find in files."
-msgstr "ì˜¬ë°”ë¥´ì§€ ì•Šì€ í´ë”."
+msgstr "¿Ã¹Ù¸£Áö ¾ÊÀº Æú´õ."
 
 #: ../src/search.c:1156
 msgid "No text to find."
-msgstr "ë¬¸ìì—´ ì°¾ì„ ìˆ˜ ì—†ìŒ."
+msgstr "¹®ÀÚ¿­ Ã£À» ¼ö ¾øÀ½."
 
 #: ../src/search.c:1179
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
-msgstr "grep ë„êµ¬ '%s' ì‹¤í–‰ ì‹¤íŒ¨; ê¸°ë³¸ ì„¤ì •ì—ì„œ ê²½ë¡œì„¤ì •ì„ ì ê²€í•˜ì‹­ì‹œì˜¤."
+msgstr "grep µµ±¸ '%s' ½ÇÇà ½ÇÆĞ; ±âº» ¼³Á¤¿¡¼­ °æ·Î¼³Á¤À» Á¡°ËÇÏ½Ê½Ã¿À."
 
 #: ../src/search.c:1244
 #, c-format
 msgid "%s %s -- %s (in directory: %s)"
-msgstr "%s %s -- %s (í´ë”: %s)"
+msgstr "%s %s -- %s (Æú´õ: %s)"
 
 #: ../src/search.c:1272
 #, c-format
 msgid "Could not open directory (%s)"
-msgstr "%s í´ë”ë¥¼ ì—´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."
+msgstr "%s Æú´õ¸¦ ¿­ ¼ö ¾ø½À´Ï´Ù."
 
 #: ../src/search.c:1321
 msgid "Search failed."
-msgstr "ì°¾ê¸° ì‹¤íŒ¨í•¨."
+msgstr "Ã£±â ½ÇÆĞÇÔ."
 
 #: ../src/search.c:1334 ../src/search.c:1338
 #, c-format
@@ -3852,12 +3852,12 @@ msgstr[0] ""
 
 #: ../src/search.c:1344
 msgid "No matches found."
-msgstr "ì¼ì¹˜ ì—†ìŒ."
+msgstr "ÀÏÄ¡ ¾øÀ½."
 
 #: ../src/support.c:90 ../src/support.c:114
 #, c-format
 msgid "Couldn't find pixmap file: %s"
-msgstr "%s pixmap íŒŒì¼ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."
+msgstr "%s pixmap ÆÄÀÏÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù."
 
 #: ../src/symbols.c:587 ../src/symbols.c:621 ../src/symbols.c:678
 msgid "Chapter"
@@ -3916,7 +3916,7 @@ msgstr ""
 
 #: ../src/symbols.c:609
 msgid "Keys"
-msgstr "í‚¤"
+msgstr "Å°"
 
 #: ../src/symbols.c:615
 msgid "Command"
@@ -4049,12 +4049,12 @@ msgstr ""
 #: ../src/symbols.c:1034
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
-msgstr "\"%s\" : ì•Œ ìˆ˜ ì—†ëŠ” íŒŒì¼í™•ì¥ì.\n"
+msgstr "\"%s\" : ¾Ë ¼ö ¾ø´Â ÆÄÀÏÈ®ÀåÀÚ.\n"
 
 #: ../src/symbols.c:1055
 #, c-format
 msgid "Failed to create tags file, perhaps because no tags were found.\n"
-msgstr "íƒœê·¸ íŒŒì¼ ë§Œë“¤ê¸° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤. íƒœê·¸ê°€ ì—†ëŠ” ê²ƒ ê°™ìŠµë‹ˆë‹¤.\n"
+msgstr "ÅÂ±× ÆÄÀÏ ¸¸µé±â ½ÇÆĞÇß½À´Ï´Ù. ÅÂ±×°¡ ¾ø´Â °Í °°½À´Ï´Ù.\n"
 
 #: ../src/symbols.c:1062
 #, c-format
@@ -4062,7 +4062,7 @@ msgid ""
 "Usage: %s -g <Tag File> <File list>\n"
 "\n"
 msgstr ""
-"ì‚¬ìš©ë²•: %s -g <íƒœê·¸íŒŒì¼> <íŒŒì¼ëª©ë¡>\n"
+"»ç¿ë¹ı: %s -g <ÅÂ±×ÆÄÀÏ> <ÆÄÀÏ¸ñ·Ï>\n"
 "\n"
 
 #: ../src/symbols.c:1063
@@ -4072,37 +4072,37 @@ msgid ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 msgstr ""
-"ì˜ˆ:\n"
+"¿¹:\n"
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
 #: ../src/symbols.c:1077
 msgid "Load Tags"
-msgstr "íƒœê·¸ ë¶ˆëŸ¬ì˜¤ê¸°"
+msgstr "ÅÂ±× ºÒ·¯¿À±â"
 
 #: ../src/symbols.c:1084
 msgid "Geany tag files (*.tags)"
-msgstr "ì§€ë‹ˆ íƒœê·¸ íŒŒì¼ (*.tags)"
+msgstr "Áö´Ï ÅÂ±× ÆÄÀÏ (*.tags)"
 
 #: ../src/symbols.c:1103
 #, c-format
 msgid "Loaded %s tags file '%s'."
-msgstr "íƒœê·¸íŒŒì¼ %s ë¶ˆëŸ¬ì˜´ '%s'."
+msgstr "ÅÂ±×ÆÄÀÏ %s ºÒ·¯¿È '%s'."
 
 #: ../src/symbols.c:1105
 #, c-format
 msgid "Could not load tags file '%s'."
-msgstr "'%s' íƒœê·¸íŒŒì¼ ë¶ˆëŸ¬ì˜¤ê¸° ì‹¤íŒ¨."
+msgstr "'%s' ÅÂ±×ÆÄÀÏ ºÒ·¯¿À±â ½ÇÆĞ."
 
 #: ../src/symbols.c:1238
 #, c-format
 msgid "Forward declaration \"%s\" not found."
-msgstr "\"%s\" ì„ ì–¸ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."
+msgstr "\"%s\" ¼±¾ğÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù."
 
 #: ../src/symbols.c:1240
 #, c-format
 msgid "Definition of \"%s\" not found."
-msgstr "\"%s\" ì •ì˜ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."
+msgstr "\"%s\" Á¤ÀÇ¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù."
 
 #: ../src/tools.c:152
 #, c-format
@@ -4110,171 +4110,171 @@ msgid ""
 "The executed custom command returned an error. Your selection was not "
 "changed. Error message: %s"
 msgstr ""
-"ë§ì¶¤ ëª…ë ¹ì— ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤. ì„ íƒí•œ ë¶€ë¶„ì€ ë³€ê²½ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.\n"
-"ì˜¤ë¥˜ ë©”ì‹œì§€: %s"
+"¸ÂÃã ¸í·É¿¡ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù. ¼±ÅÃÇÑ ºÎºĞÀº º¯°æµÇÁö ¾Ê¾Ò½À´Ï´Ù.\n"
+"¿À·ù ¸Ş½ÃÁö: %s"
 
 #: ../src/tools.c:218
 msgid "The executed custom command exited with an unsuccessful exit code."
-msgstr "ë§ì¶¤ ëª…ë ¹ì´ ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤."
+msgstr "¸ÂÃã ¸í·ÉÀÌ ½ÇÆĞÇß½À´Ï´Ù."
 
 #: ../src/tools.c:245
 #, c-format
 msgid "Passing data and executing custom command: %s"
-msgstr "ë°ì´í„° ì „ë‹¬ í›„ ë§ì¶¤ ëª…ë ¹ ì‹¤í–‰: %s"
+msgstr "µ¥ÀÌÅÍ Àü´Ş ÈÄ ¸ÂÃã ¸í·É ½ÇÇà: %s"
 
 #: ../src/tools.c:289
 #, c-format
 msgid "Custom command failed: %s"
-msgstr "ë§ì¶¤ ëª…ë ¹ ì‹¤í–‰: %s"
+msgstr "¸ÂÃã ¸í·É ½ÇÇà: %s"
 
 #: ../src/tools.c:303 ../src/tools.c:537
 msgid "Set Custom Commands"
-msgstr "ë§ì¶¤ ëª…ë ¹ ì„¤ì •"
+msgstr "¸ÂÃã ¸í·É ¼³Á¤"
 
 #: ../src/tools.c:310
 msgid ""
 "You can send the current selection to any of these commands and the output "
 "of the command replaces the current selection."
 msgstr ""
-"í˜„ì¬ ì„ íƒí•œ ë¶€ë¶„ì„ ì´ ëª…ë ¹ë“¤ì— ì¸ê³„í•˜ì—¬ ì‹¤í–‰í•˜ê³  ê·¸ ì¶œë ¥ìœ¼ë¡œ í˜„ì¬ ì„ íƒí•œ ë¶€ë¶„"
-"ì„ ë°”ê¿‰ë‹ˆë‹¤."
+"ÇöÀç ¼±ÅÃÇÑ ºÎºĞÀ» ÀÌ ¸í·Éµé¿¡ ÀÎ°èÇÏ¿© ½ÇÇàÇÏ°í ±× Ãâ·ÂÀ¸·Î ÇöÀç ¼±ÅÃÇÑ ºÎºĞ"
+"À» ¹Ù²ß´Ï´Ù."
 
 #: ../src/tools.c:506 ../src/tools.c:510
 msgid "No custom commands defined."
-msgstr "ë§ì¶¤ ëª…ë ¹ ì—†ìŒ."
+msgstr "¸ÂÃã ¸í·É ¾øÀ½."
 
 #: ../src/tools.c:612
 msgid "Word Count"
-msgstr "ë‹¨ì–´ ì„¸ê¸°"
+msgstr "´Ü¾î ¼¼±â"
 
 #: ../src/tools.c:622
 msgid "selection"
-msgstr "ì„ íƒ"
+msgstr "¼±ÅÃ"
 
 #: ../src/tools.c:628
 msgid "whole document"
-msgstr "ë¬¸ì„œ ì „ì²´"
+msgstr "¹®¼­ ÀüÃ¼"
 
 #: ../src/tools.c:637
 msgid "Range:"
-msgstr "ë²”ìœ„:"
+msgstr "¹üÀ§:"
 
 #: ../src/tools.c:649
 msgid "Lines:"
-msgstr "ì¤„:"
+msgstr "ÁÙ:"
 
 #: ../src/tools.c:663
 msgid "Words:"
-msgstr "ë‹¨ì–´:"
+msgstr "´Ü¾î:"
 
 #: ../src/tools.c:677
 msgid "Characters:"
-msgstr "ë¬¸ìì—´:"
+msgstr "¹®ÀÚ¿­:"
 
 #: ../src/treeviews.c:171
 msgid "No tags found"
-msgstr "íƒœê·¸ ì—†ìŒ"
+msgstr "ÅÂ±× ¾øÀ½"
 
 #: ../src/treeviews.c:373
 msgid "Sort by _Name"
-msgstr "ì´ë¦„ìˆœìœ¼ë¡œ ì •ë ¬(_N)"
+msgstr "ÀÌ¸§¼øÀ¸·Î Á¤·Ä(_N)"
 
 #: ../src/treeviews.c:379
 msgid "Sort by _Appearance"
-msgstr "í˜•íƒœìˆœìœ¼ë¡œ ì •ë ¬(_A)"
+msgstr "ÇüÅÂ¼øÀ¸·Î Á¤·Ä(_A)"
 
 #: ../src/treeviews.c:389 ../src/treeviews.c:476
 msgid "Show S_ymbol List"
-msgstr "ì‹¬ë³¼ ëª©ë¡ ë³´ê¸°(_y)"
+msgstr "½Éº¼ ¸ñ·Ï º¸±â(_y)"
 
 #: ../src/treeviews.c:395 ../src/treeviews.c:482
 msgid "Show _Document List"
-msgstr "ë¬¸ì„œ ëª©ë¡ ë³´ê¸°(_D)"
+msgstr "¹®¼­ ¸ñ·Ï º¸±â(_D)"
 
 #: ../src/treeviews.c:401 ../src/treeviews.c:488 ../plugins/filebrowser.c:567
 msgid "H_ide Sidebar"
-msgstr "ê°€ì¥ìë¦¬ì°½ ê°ì¶”ê¸°(_i)"
+msgstr "°¡ÀåÀÚ¸®Ã¢ °¨Ãß±â(_i)"
 
 #: ../src/treeviews.c:466
 msgid "Show _Full Path Name"
-msgstr "ì „ì²´ ê²½ë¡œëª… ë³´ê¸°(_F)"
+msgstr "ÀüÃ¼ °æ·Î¸í º¸±â(_F)"
 
 #. Status bar statistics: col = column, sel = selection.
 #: ../src/ui_utils.c:167
 #, c-format
 msgid "line: %d\t col: %d\t sel: %d\t "
-msgstr "í–‰: %d\t ì—´: %d\t ì„ íƒ: %d\t "
+msgstr "Çà: %d\t ¿­: %d\t ¼±ÅÃ: %d\t "
 
 #. RO = read-only
 #: ../src/ui_utils.c:173
 msgid "RO "
-msgstr "ì½ê¸°ì „ìš©"
+msgstr "ÀĞ±âÀü¿ë"
 
 #. OVR = overwrite/overtype, INS = insert
 #: ../src/ui_utils.c:175
 msgid "OVR"
-msgstr "ìˆ˜ì •"
+msgstr "¼öÁ¤"
 
 #: ../src/ui_utils.c:175
 msgid "INS"
-msgstr "ì‚½ì…"
+msgstr "»ğÀÔ"
 
 #: ../src/ui_utils.c:181
 msgid "TAB"
-msgstr "íƒ­"
+msgstr "ÅÇ"
 
 #: ../src/ui_utils.c:184
 msgid "SP"
-msgstr "ìŠ¤í˜ì´ìŠ¤"
+msgstr "½ºÆäÀÌ½º"
 
 #: ../src/ui_utils.c:187
 msgid "T/S"
-msgstr "íƒ­/ìŠ¤í˜ì´ìŠ¤"
+msgstr "ÅÇ/½ºÆäÀÌ½º"
 
 #: ../src/ui_utils.c:191
 #, c-format
 msgid "mode: %s"
-msgstr "ê°œí–‰: %s"
+msgstr "°³Çà: %s"
 
 #: ../src/ui_utils.c:194
 #, c-format
 msgid "encoding: %s %s"
-msgstr "ì¸ì½”ë”©: %s %s"
+msgstr "ÀÎÄÚµù: %s %s"
 
 #: ../src/ui_utils.c:200
 #, c-format
 msgid "filetype: %s"
-msgstr "íŒŒì¼í˜•ì‹: %s"
+msgstr "ÆÄÀÏÇü½Ä: %s"
 
 #: ../src/ui_utils.c:204
 msgid "MOD"
-msgstr "ìˆ˜ì •ë¨"
+msgstr "¼öÁ¤µÊ"
 
 #: ../src/ui_utils.c:209
 #, c-format
 msgid "scope: %s"
-msgstr "ìœ íš¨ë²”ìœ„: %s"
+msgstr "À¯È¿¹üÀ§: %s"
 
 #: ../src/ui_utils.c:293
 #, c-format
 msgid "Font updated (%s)."
-msgstr "ê¸€ê¼´ ë°”ê¿ˆ (%s)."
+msgstr "±Û²Ã ¹Ù²Ş (%s)."
 
 #: ../src/ui_utils.c:485
 msgid "C Standard Library"
-msgstr "C í‘œì¤€ ë¼ì´ë¸ŒëŸ¬ë¦¬"
+msgstr "C Ç¥ÁØ ¶óÀÌºê·¯¸®"
 
 #: ../src/ui_utils.c:486
 msgid "ISO C99"
-msgstr "ISO C99 í‘œì¤€"
+msgstr "ISO C99 Ç¥ÁØ"
 
 #: ../src/ui_utils.c:487
 msgid "C++ (C Standard Library)"
-msgstr "C++ (C í‘œì¤€ ë¼ì´ë¸ŒëŸ¬ë¦¬)"
+msgstr "C++ (C Ç¥ÁØ ¶óÀÌºê·¯¸®)"
 
 #: ../src/ui_utils.c:488
 msgid "C++ Standard Library"
-msgstr "C++ í‘œì¤€ ë¼ì´ë¸ŒëŸ¬ë¦¬"
+msgstr "C++ Ç¥ÁØ ¶óÀÌºê·¯¸®"
 
 #: ../src/ui_utils.c:489
 msgid "C++ STL"
@@ -4282,134 +4282,134 @@ msgstr "C++ STL"
 
 #: ../src/ui_utils.c:553
 msgid "_Set Custom Date Format"
-msgstr "ë§ì¶¤ ë‚ ì§œ í˜•ì‹ ì„¤ì •(_S)"
+msgstr "¸ÂÃã ³¯Â¥ Çü½Ä ¼³Á¤(_S)"
 
-#: ../src/ui_utils.c:1465
+#: ../src/ui_utils.c:1448
 msgid "Select Folder"
-msgstr "í´ë” ì„ íƒ"
+msgstr "Æú´õ ¼±ÅÃ"
 
-#: ../src/ui_utils.c:1465
+#: ../src/ui_utils.c:1448
 msgid "Select File"
-msgstr "íŒŒì¼ ì„ íƒ"
+msgstr "ÆÄÀÏ ¼±ÅÃ"
 
 #: ../src/vte.c:294 ../src/vte.c:694
 msgid "Terminal"
-msgstr "í„°ë¯¸ë„"
+msgstr "ÅÍ¹Ì³Î"
 
 #: ../src/vte.c:521
 msgid "_Set Path From Document"
-msgstr "ë¬¸ì„œë¡œë¶€í„° ê²½ë¡œ ì„¤ì •(_S)"
+msgstr "¹®¼­·ÎºÎÅÍ °æ·Î ¼³Á¤(_S)"
 
 #: ../src/vte.c:526
 msgid "_Restart Terminal"
-msgstr "í„°ë¯¸ë„ ë‹¤ì‹œ ì‹œì‘(_R)"
+msgstr "ÅÍ¹Ì³Î ´Ù½Ã ½ÃÀÛ(_R)"
 
 #: ../src/vte.c:537
 msgid "_Input Methods"
-msgstr "ì…ë ¥ê¸°(_I)"
+msgstr "ÀÔ·Â±â(_I)"
 
 #: ../src/vte.c:639
 msgid ""
 "Could not change the directory in the VTE because it probably contains a "
 "command."
-msgstr "VTEë‚´ì—ì„œ í´ë”ë¥¼ ë³€ê²½í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤. ì•„ë§ˆë„ ëª…ë ¹ì„ í¬í•¨í•œê²ƒ ê°™ìŠµë‹ˆë‹¤."
+msgstr "VTE³»¿¡¼­ Æú´õ¸¦ º¯°æÇÒ ¼ö ¾ø½À´Ï´Ù. ¾Æ¸¶µµ ¸í·ÉÀ» Æ÷ÇÔÇÑ°Í °°½À´Ï´Ù."
 
 #: ../src/vte.c:689
 msgid "Terminal plugin"
-msgstr "í„°ë¯¸ë„ í”ŒëŸ¬ê·¸ì¸"
+msgstr "ÅÍ¹Ì³Î ÇÃ·¯±×ÀÎ"
 
 #: ../src/vte.c:697
 msgid ""
 "These settings for the virtual terminal emulator widget (VTE) only apply if "
 "the VTE library could be loaded."
 msgstr ""
-"ê°€ìƒ í„°ë¯¸ë„ ì—ë®¬ë ˆì´í„° ìœ„ì ¯ (VTE) ì„¤ì •ì€ VTE ë¼ì´ë¸ŒëŸ¬ë¦¬ë¥¼ ë¶ˆëŸ¬ì˜¬ ìˆ˜ ìˆì„ë•Œë§Œ "
-"ì ìš©ì´ ê°€ëŠ¥í•©ë‹ˆë‹¤."
+"°¡»ó ÅÍ¹Ì³Î ¿¡¹Ä·¹ÀÌÅÍ À§Á¬ (VTE) ¼³Á¤Àº VTE ¶óÀÌºê·¯¸®¸¦ ºÒ·¯¿Ã ¼ö ÀÖÀ»¶§¸¸ "
+"Àû¿ëÀÌ °¡´ÉÇÕ´Ï´Ù."
 
 #: ../src/vte.c:708
 msgid "Terminal font:"
-msgstr "í„°ë¯¸ë„ ê¸€ê¼´:"
+msgstr "ÅÍ¹Ì³Î ±Û²Ã:"
 
 #: ../src/vte.c:718
 msgid "Sets the font for the terminal widget."
-msgstr "í„°ë¯¸ë„ ìœ„ì ¯ìš© ê¸€ê¼´ ì„¤ì •."
+msgstr "ÅÍ¹Ì³Î À§Á¬¿ë ±Û²Ã ¼³Á¤."
 
 #: ../src/vte.c:720
 msgid "Foreground color:"
-msgstr "ê¸€ììƒ‰:"
+msgstr "±ÛÀÚ»ö:"
 
 #: ../src/vte.c:726
 msgid "Background color:"
-msgstr "ë°°ê²½ìƒ‰:"
+msgstr "¹è°æ»ö:"
 
 #: ../src/vte.c:736
 msgid "Sets the foreground color of the text in the terminal widget."
-msgstr "í„°ë¯¸ë„ ìœ„ì ¯ì˜ ê¸€ììƒ‰ ì„¤ì •."
+msgstr "ÅÍ¹Ì³Î À§Á¬ÀÇ ±ÛÀÚ»ö ¼³Á¤."
 
 #: ../src/vte.c:743
 msgid "Sets the background color of the text in the terminal widget."
-msgstr "í„°ë¯¸ë„ ìœ„ì ¯ì˜ ë°°ê²½ìƒ‰ ì„¤ì •."
+msgstr "ÅÍ¹Ì³Î À§Á¬ÀÇ ¹è°æ»ö ¼³Á¤."
 
 #: ../src/vte.c:746
 msgid "Scrollback lines:"
-msgstr "ëª…ë ¹ê¸°ë¡ íšŸìˆ˜:"
+msgstr "¸í·É±â·Ï È½¼ö:"
 
 #: ../src/vte.c:757
 msgid ""
 "Specifies the history in lines, which you can scroll back in the terminal "
 "widget."
-msgstr "í„°ë¯¸ë„ ìœ„ì ¯ì—ì„œ ëª‡ê°œì˜ ëª…ë ¹ì„ ê¸°ë¡í•´ ë†“ì„ì§€ ì§€ì •."
+msgstr "ÅÍ¹Ì³Î À§Á¬¿¡¼­ ¸î°³ÀÇ ¸í·ÉÀ» ±â·ÏÇØ ³õÀ»Áö ÁöÁ¤."
 
 #: ../src/vte.c:761
 msgid "Terminal emulation:"
-msgstr "í„°ë¯¸ë„ ì—ë®¬ë ˆì´ì…˜:"
+msgstr "ÅÍ¹Ì³Î ¿¡¹Ä·¹ÀÌ¼Ç:"
 
 #: ../src/vte.c:771
 msgid ""
 "Controls how the terminal emulator should behave. Do not change this value "
 "unless you know exactly what you are doing."
 msgstr ""
-"í„°ë¯¸ë„ ì—ë®¬ë ˆì´í„° í–‰ë™ ì¡°ì ˆ.\n"
-"ë¬´ì—‡ì¸ì§€ í™•ì‹¤íˆ ì•Œê¸°ì „ì—ëŠ” ë³€ê²½í•˜ì§€ ë§ˆì‹­ì‹œì˜¤."
+"ÅÍ¹Ì³Î ¿¡¹Ä·¹ÀÌÅÍ Çàµ¿ Á¶Àı.\n"
+"¹«¾ùÀÎÁö È®½ÇÈ÷ ¾Ë±âÀü¿¡´Â º¯°æÇÏÁö ¸¶½Ê½Ã¿À."
 
 #: ../src/vte.c:773
 msgid "Shell:"
-msgstr "ì…¸:"
+msgstr "¼Ğ:"
 
 #: ../src/vte.c:780
 msgid ""
 "Sets the path to the shell which should be started inside the terminal "
 "emulation."
-msgstr "í„°ë¯¸ë„ ì—ë®¬ë ˆì´í„°ì—ì„œ ì‚¬ìš©í•  ì…¸ ì§€ì •."
+msgstr "ÅÍ¹Ì³Î ¿¡¹Ä·¹ÀÌÅÍ¿¡¼­ »ç¿ëÇÒ ¼Ğ ÁöÁ¤."
 
 #: ../src/vte.c:797
 msgid "Scroll on keystroke"
-msgstr "í‚¤ëˆ„ë¥´ë©´ ìŠ¤í¬ë¡¤"
+msgstr "Å°´©¸£¸é ½ºÅ©·Ñ"
 
 #: ../src/vte.c:798
 msgid "Whether to scroll to the bottom if a key was pressed."
-msgstr "í‚¤ë¥¼ ëˆ„ë¥´ë©´ ìŠ¤í¬ë¡¤í• ì§€ ì—¬ë¶€."
+msgstr "Å°¸¦ ´©¸£¸é ½ºÅ©·ÑÇÒÁö ¿©ºÎ."
 
 #: ../src/vte.c:801
 msgid "Scroll on output"
-msgstr "ì¶œë ¥ìˆìœ¼ë©´ ìŠ¤í¬ë¡¤"
+msgstr "Ãâ·ÂÀÖÀ¸¸é ½ºÅ©·Ñ"
 
 #: ../src/vte.c:802
 msgid "Whether to scroll to the bottom when output is generated."
-msgstr "ì¶œë ¥ì´ ìƒê¸°ë©´ ìŠ¤í¬ë¡¤í• ì§€ ì—¬ë¶€."
+msgstr "Ãâ·ÂÀÌ »ı±â¸é ½ºÅ©·ÑÇÒÁö ¿©ºÎ."
 
 #: ../src/vte.c:805
 msgid "Override Geany keybindings"
-msgstr "ì§€ë‹ˆ ë‹¨ì¶•í‚¤ ë³€ê²½"
+msgstr "Áö´Ï ´ÜÃàÅ° º¯°æ"
 
 #: ../src/vte.c:807
 msgid ""
 "Allows the VTE to receive keyboard shortcuts (apart from focus commands)."
-msgstr "VTEì—ì„œ ë°”ë¡œ ê°€ê¸° í—ˆê°€ (í¬ì»¤ìŠ¤ ëª…ë ¹ ë³„ê°œ)."
+msgstr "VTE¿¡¼­ ¹Ù·Î °¡±â Çã°¡ (Æ÷Ä¿½º ¸í·É º°°³)."
 
 #: ../src/vte.c:810
 msgid "Disable menu shortcut key (F10 by default)"
-msgstr "ë©”ë‰´ ë°”ë¡œ ê°€ê¸° (F10) ë¹„í™œì„±"
+msgstr "¸Ş´º ¹Ù·Î °¡±â (F10) ºñÈ°¼º"
 
 #: ../src/vte.c:811
 msgid ""
@@ -4417,277 +4417,277 @@ msgid ""
 "Disabling it can be useful if you use, for example, Midnight Commander "
 "within the VTE."
 msgstr ""
-"íŒì—…ë©”ë‰´ ë‹¨ì¶•í‚¤ F10ì„ ë¹„í™œì„±í™” í•©ë‹ˆë‹¤.\n"
-"Midnight Commanderë“±ì˜ í”„ë¡œê·¸ë¨ì„ VTEì•ˆì—ì„œ ì‚¬ìš©í•  ë•Œ ìœ ìš©í•©ë‹ˆë‹¤."
+"ÆË¾÷¸Ş´º ´ÜÃàÅ° F10À» ºñÈ°¼ºÈ­ ÇÕ´Ï´Ù.\n"
+"Midnight CommanderµîÀÇ ÇÁ·Î±×·¥À» VTE¾È¿¡¼­ »ç¿ëÇÒ ¶§ À¯¿ëÇÕ´Ï´Ù."
 
 #: ../src/vte.c:814
 msgid "Follow the path of the current file"
-msgstr "í˜„ì¬íŒŒì¼ ê²½ë¡œ ë”°ë¥´ê¸°"
+msgstr "ÇöÀçÆÄÀÏ °æ·Î µû¸£±â"
 
 #: ../src/vte.c:815
 msgid "Whether to execute \"cd $path\" when you switch between opened files."
-msgstr "ì—´ë¦° ë¬¸ì„œê°„ì„ ì´ë™í•  ë•Œ \"cd ê²½ë¡œëª…\"ì„ ì‹¤í–‰í• ì§€ ì—¬ë¶€."
+msgstr "¿­¸° ¹®¼­°£À» ÀÌµ¿ÇÒ ¶§ \"cd °æ·Î¸í\"À» ½ÇÇàÇÒÁö ¿©ºÎ."
 
 #. create check_skip_script checkbox before the check_skip_script checkbox to be able to
 #. * use the object for the toggled handler of check_skip_script checkbox
 #: ../src/vte.c:820
 msgid "Don't use run script"
-msgstr "ìŠ¤í¬ë¦½íŠ¸ ì‹¤í–‰ ì‚¬ìš©í•˜ì§€ ì•ŠìŒ"
+msgstr "½ºÅ©¸³Æ® ½ÇÇà »ç¿ëÇÏÁö ¾ÊÀ½"
 
 #: ../src/vte.c:821
 msgid ""
 "Don't use the simple run script which is usually used to display the exit "
 "status of the executed program."
 msgstr ""
-"ì‹¤í–‰ëœ í”„ë¡œê·¸ë¨ì˜ ëë‚´ê¸° ìƒíƒœë¥¼ ë‚˜íƒ€ë‚´ëŠ” ê°„ë‹¨í•œ ìŠ¤í¬ë¦½íŠ¸ ì‹¤í–‰ì„ ì‚¬ìš©í•˜ì§€ ì•Š"
-"ìŒ."
+"½ÇÇàµÈ ÇÁ·Î±×·¥ÀÇ ³¡³»±â »óÅÂ¸¦ ³ªÅ¸³»´Â °£´ÜÇÑ ½ºÅ©¸³Æ® ½ÇÇàÀ» »ç¿ëÇÏÁö ¾Ê"
+"À½."
 
 #: ../src/vte.c:824
 msgid "Execute programs in VTE"
-msgstr "VTEë‚´ì—ì„œ í”„ë¡œê·¸ë¨ ì‹¤í–‰"
+msgstr "VTE³»¿¡¼­ ÇÁ·Î±×·¥ ½ÇÇà"
 
 #: ../src/vte.c:825
 msgid ""
 "Run programs in VTE instead of opening a terminal emulation window. Please "
 "note, programs executed in VTE cannot be stopped."
 msgstr ""
-"ìƒˆë¡œìš´ í„°ë¯¸ë„ì°½ì„ ì—´ì§€ ì•Šê³  VTEë‚´ì—ì„œ í”„ë¡œê·¸ë¨ ì‹¤í–‰í•˜ê¸°.\n"
-"ì£¼ì˜: VTEì•ˆì—ì„œ ì‹¤í–‰í•œ í”„ë¡œê·¸ë¨ì€ ë©€ì¶œ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."
+"»õ·Î¿î ÅÍ¹Ì³ÎÃ¢À» ¿­Áö ¾Ê°í VTE³»¿¡¼­ ÇÁ·Î±×·¥ ½ÇÇàÇÏ±â.\n"
+"ÁÖÀÇ: VTE¾È¿¡¼­ ½ÇÇàÇÑ ÇÁ·Î±×·¥Àº ¸ÖÃâ ¼ö ¾ø½À´Ï´Ù."
 
 #: ../src/win32.c:131
 msgid "Geany project files"
-msgstr "ì§€ë‹ˆ í”„ë¡œì íŠ¸ íŒŒì¼"
+msgstr "Áö´Ï ÇÁ·ÎÁ§Æ® ÆÄÀÏ"
 
 #: ../src/win32.c:137
 msgid "Executables"
-msgstr "ì‹¤í–‰ê°€ëŠ¥"
+msgstr "½ÇÇà°¡´É"
 
 #: ../src/win32.c:575
 msgid "Error"
-msgstr "ì˜¤ë¥˜"
+msgstr "¿À·ù"
 
 #: ../src/win32.c:581 ../src/win32.c:640
 msgid "Question"
-msgstr "ì§ˆë¬¸"
+msgstr "Áú¹®"
 
 #: ../src/win32.c:587
 msgid "Warning"
-msgstr "ê²½ê³ "
+msgstr "°æ°í"
 
 #: ../src/win32.c:593
 msgid "Information"
-msgstr "ì •ë³´"
+msgstr "Á¤º¸"
 
 #: ../plugins/classbuilder.c:45
 msgid "Class Builder"
-msgstr "í´ë˜ìŠ¤ ë¹Œë”"
+msgstr "Å¬·¡½º ºô´õ"
 
 #: ../plugins/classbuilder.c:45
 msgid "Creates source files for new class types."
-msgstr "ìƒˆë¡œìš´ í´ë˜ìŠ¤ë¥¼ ë§Œë“¤ê¸° ìœ„í•œ ì†ŒìŠ¤íŒŒì¼ ë§Œë“¤ê¸°."
+msgstr "»õ·Î¿î Å¬·¡½º¸¦ ¸¸µé±â À§ÇÑ ¼Ò½ºÆÄÀÏ ¸¸µé±â."
 
 #: ../plugins/classbuilder.c:358
 msgid "Create Class"
-msgstr "í´ë˜ìŠ¤ ë§Œë“¤ê¸°"
+msgstr "Å¬·¡½º ¸¸µé±â"
 
 #: ../plugins/classbuilder.c:368
 msgid "Class"
-msgstr "í´ë˜ìŠ¤"
+msgstr "Å¬·¡½º"
 
 #: ../plugins/classbuilder.c:377
 msgid "Class name:"
-msgstr "í´ë˜ìŠ¤ëª…:"
+msgstr "Å¬·¡½º¸í:"
 
 #: ../plugins/classbuilder.c:388
 msgid "Header file:"
-msgstr "í—¤ë” íŒŒì¼:"
+msgstr "Çì´õ ÆÄÀÏ:"
 
 #: ../plugins/classbuilder.c:397
 msgid "Source file:"
-msgstr "ì†ŒìŠ¤ íŒŒì¼:"
+msgstr "¼Ò½º ÆÄÀÏ:"
 
 #: ../plugins/classbuilder.c:403
 msgid "Inheritance"
-msgstr "ìƒì†"
+msgstr "»ó¼Ó"
 
 #: ../plugins/classbuilder.c:412
 msgid "Base class:"
-msgstr "ê¸°ë³¸ í´ë˜ìŠ¤:"
+msgstr "±âº» Å¬·¡½º:"
 
 #: ../plugins/classbuilder.c:425
 msgid "Base header:"
-msgstr "ê¸°ë³¸ í—¤ë”:"
+msgstr "±âº» Çì´õ:"
 
 #: ../plugins/classbuilder.c:433
 msgid "Global"
-msgstr "ì „ì—­"
+msgstr "Àü¿ª"
 
 #: ../plugins/classbuilder.c:442
 msgid "Base GType:"
-msgstr "ê¸°ë³¸ GType:"
+msgstr "±âº» GType:"
 
 #: ../plugins/classbuilder.c:450
 msgid "Options"
-msgstr "ì˜µì…˜"
+msgstr "¿É¼Ç"
 
 #: ../plugins/classbuilder.c:459
 msgid "Create constructor"
-msgstr "ìƒì„±ì ë§Œë“¤ê¸°"
+msgstr "»ı¼ºÀÚ ¸¸µé±â"
 
 #: ../plugins/classbuilder.c:463
 msgid "Create destructor"
-msgstr "ì†Œë©¸ì ë§Œë“¤ê¸°"
+msgstr "¼Ò¸êÀÚ ¸¸µé±â"
 
 #: ../plugins/classbuilder.c:473
 msgid "GTK+ constructor type"
-msgstr "GTK+ ìƒì„±ì íƒ€ì…"
+msgstr "GTK+ »ı¼ºÀÚ Å¸ÀÔ"
 
 #: ../plugins/classbuilder.c:782
 msgid "Create Cla_ss"
-msgstr "í´ë˜ìŠ¤ ë§Œë“¤ê¸°(_s)"
+msgstr "Å¬·¡½º ¸¸µé±â(_s)"
 
 #: ../plugins/classbuilder.c:791
 msgid "_C++ Class"
-msgstr "C++ í´ë˜ìŠ¤(_C)"
+msgstr "C++ Å¬·¡½º(_C)"
 
 #: ../plugins/classbuilder.c:794
 msgid "_GTK+ Class"
-msgstr "GTK+ í´ë˜ìŠ¤(_G)"
+msgstr "GTK+ Å¬·¡½º(_G)"
 
 #: ../plugins/htmlchars.c:45
 msgid "HTML Characters"
-msgstr "HTML ë¬¸ì"
+msgstr "HTML ¹®ÀÚ"
 
 #: ../plugins/htmlchars.c:45
 msgid "Inserts HTML character entities like '&amp;'."
-msgstr "'&amp;' ê°™ì€ HTML ë¬¸ììš”ì†Œë¥¼ ì‚½ì…."
+msgstr "'&amp;' °°Àº HTML ¹®ÀÚ¿ä¼Ò¸¦ »ğÀÔ."
 
 #: ../plugins/htmlchars.c:46 ../plugins/export.c:47 ../plugins/vcdiff.c:54
 #: ../plugins/filebrowser.c:52 ../plugins/saveactions.c:49
 #: ../plugins/splitwindow.c:42
 msgid "The Geany developer team"
-msgstr "ì§€ë‹ˆ ê°œë°œíŒ€"
+msgstr "Áö´Ï °³¹ßÆÀ"
 
 #: ../plugins/htmlchars.c:89
 msgid "Special Characters"
-msgstr "íŠ¹ìˆ˜ë¬¸ì"
+msgstr "Æ¯¼ö¹®ÀÚ"
 
 #: ../plugins/htmlchars.c:91
 msgid "_Insert"
-msgstr "ì‚½ì…(_I)"
+msgstr "»ğÀÔ(_I)"
 
 #: ../plugins/htmlchars.c:100
 msgid ""
 "Choose a special character from the list below and double click on it or use "
 "the button to insert it at the current cursor position."
 msgstr ""
-"ì•„ë˜ ëª©ë¡ì—ì„œ ì»¤ì„œìœ„ì¹˜ì˜ íŠ¹ìˆ˜ë¬¸ìë¥¼ ë”ë¸”í´ë¦­í•˜ê±°ë‚˜ ì‚½ì… ë‹¨ì¶”ë¥¼ í´ë¦­í•˜ì—¬ íŠ¹ìˆ˜ "
-"ë¬¸ìë¥¼ ì…ë ¥í•©ë‹ˆë‹¤."
+"¾Æ·¡ ¸ñ·Ï¿¡¼­ Ä¿¼­À§Ä¡ÀÇ Æ¯¼ö¹®ÀÚ¸¦ ´õºíÅ¬¸¯ÇÏ°Å³ª »ğÀÔ ´ÜÃß¸¦ Å¬¸¯ÇÏ¿© Æ¯¼ö "
+"¹®ÀÚ¸¦ ÀÔ·ÂÇÕ´Ï´Ù."
 
 #: ../plugins/htmlchars.c:114
 msgid "Character"
-msgstr "ë¬¸ì"
+msgstr "¹®ÀÚ"
 
 #: ../plugins/htmlchars.c:120
 msgid "HTML (name)"
-msgstr "HTML (ì´ë¦„)"
+msgstr "HTML (ÀÌ¸§)"
 
 #: ../plugins/htmlchars.c:158
 msgid "HTML characters"
-msgstr "HTML ë¬¸ì"
+msgstr "HTML ¹®ÀÚ"
 
 #: ../plugins/htmlchars.c:164
 msgid "ISO 8859-1 characters"
-msgstr "ISO 8859-1 ë¬¸ì"
+msgstr "ISO 8859-1 ¹®ÀÚ"
 
 #: ../plugins/htmlchars.c:262
 msgid "Greek characters"
-msgstr "ê·¸ë¦¬ìŠ¤ì–´ ë¬¸ì"
+msgstr "±×¸®½º¾î ¹®ÀÚ"
 
 #: ../plugins/htmlchars.c:317
 msgid "Mathematical characters"
-msgstr "ìˆ˜í•™ ë¬¸ì"
+msgstr "¼öÇĞ ¹®ÀÚ"
 
 #: ../plugins/htmlchars.c:358
 msgid "Technical characters"
-msgstr "ê¸°ìˆ  ë¬¸ì"
+msgstr "±â¼ú ¹®ÀÚ"
 
 #: ../plugins/htmlchars.c:366
 msgid "Arrow characters"
-msgstr "í™”ì‚´í‘œ"
+msgstr "È­»ìÇ¥"
 
 #: ../plugins/htmlchars.c:379
 msgid "Punctuation characters"
-msgstr "ê¸°ëŠ¥ ë¬¸ì"
+msgstr "±â´É ¹®ÀÚ"
 
 #: ../plugins/htmlchars.c:395
 msgid "Miscellaneous characters"
-msgstr "ê¸°íƒ€ ë¬¸ì"
+msgstr "±âÅ¸ ¹®ÀÚ"
 
 #: ../plugins/htmlchars.c:525
 msgid "_Insert Special HTML Characters"
-msgstr "íŠ¹ìˆ˜ HTML ë¬¸ì ì‚½ì…(_I)"
+msgstr "Æ¯¼ö HTML ¹®ÀÚ »ğÀÔ(_I)"
 
 #: ../plugins/htmlchars.c:526
 msgid "Insert Special HTML Characters"
-msgstr "íŠ¹ìˆ˜ HTML ë¬¸ì ì‚½ì…"
+msgstr "Æ¯¼ö HTML ¹®ÀÚ »ğÀÔ"
 
 #: ../plugins/export.c:46
 msgid "Export"
-msgstr "ë‚´ë³´ë‚´ê¸°"
+msgstr "³»º¸³»±â"
 
 #: ../plugins/export.c:46
 msgid "Exports the current file into different formats."
-msgstr "í˜„ì¬ ë¬¸ì„œë¥¼ ë‹¤ë¥¸ í˜•ì‹ìœ¼ë¡œ ë‚´ë³´ë‚´ê¸°."
+msgstr "ÇöÀç ¹®¼­¸¦ ´Ù¸¥ Çü½ÄÀ¸·Î ³»º¸³»±â."
 
 #: ../plugins/export.c:173
 msgid "Export File"
-msgstr "íŒŒì¼ ë‚´ë³´ë‚´ê¸°"
+msgstr "ÆÄÀÏ ³»º¸³»±â"
 
 #: ../plugins/export.c:190
 msgid "_Use current zoom level"
-msgstr "í˜„ì¬ í™•ëŒ€ìˆ˜ì¤€ ì‚¬ìš©(_U)"
+msgstr "ÇöÀç È®´ë¼öÁØ »ç¿ë(_U)"
 
 #: ../plugins/export.c:192
 msgid ""
 "Renders the font size of the document together with the current zoom level."
-msgstr "í˜„ì¬ í™•ëŒ€ ìˆ˜ì¤€ì— ë§ê²Œ ë¬¸ì„œì˜ ê¸€ê¼´ í¬ê¸°ë¥¼ í‘œí˜„í•¨."
+msgstr "ÇöÀç È®´ë ¼öÁØ¿¡ ¸Â°Ô ¹®¼­ÀÇ ±Û²Ã Å©±â¸¦ Ç¥ÇöÇÔ."
 
 #: ../plugins/export.c:274
 #, c-format
 msgid "Document successfully exported as '%s'."
-msgstr "ë¬¸ì„œë¥¼ '%s' í˜•ì‹ìœ¼ë¡œ ë‚´ë³´ë‚´ê¸° ì„±ê³µ."
+msgstr "¹®¼­¸¦ '%s' Çü½ÄÀ¸·Î ³»º¸³»±â ¼º°ø."
 
 #: ../plugins/export.c:276
 #, c-format
 msgid "File '%s' could not be written (%s)."
-msgstr "'%s' íŒŒì¼ì— ì“¸ ìˆ˜ ì—†ìŒ (%s)."
+msgstr "'%s' ÆÄÀÏ¿¡ ¾µ ¼ö ¾øÀ½ (%s)."
 
 #: ../plugins/export.c:714
 msgid "_Export"
-msgstr "ë‚´ë³´ë‚´ê¸°(_E)"
+msgstr "³»º¸³»±â(_E)"
 
 #. HTML
 #: ../plugins/export.c:721
 msgid "As _HTML"
-msgstr "HTML í˜•ì‹ìœ¼ë¡œ(_H)"
+msgstr "HTML Çü½ÄÀ¸·Î(_H)"
 
 #. LaTeX
 #: ../plugins/export.c:727
 msgid "As _LaTeX"
-msgstr "LaTeX í˜•ì‹ìœ¼ë¡œ(_L)"
+msgstr "LaTeX Çü½ÄÀ¸·Î(_L)"
 
 #: ../plugins/vcdiff.c:53
 msgid "Version Diff"
-msgstr "ë²„ì „ ë¹„êµ"
+msgstr "¹öÀü ºñ±³"
 
 #: ../plugins/vcdiff.c:53
 msgid "Creates a patch of a file against version control."
-msgstr "ë²„ì „ ì¡°ì‘ìš© íŒ¨ì¹˜ íŒŒì¼ ë§Œë“¤ê¸°."
+msgstr "¹öÀü Á¶ÀÛ¿ë ÆĞÄ¡ ÆÄÀÏ ¸¸µé±â."
 
 #: ../plugins/vcdiff.c:300
 msgid "Input conversion of the diff output failed."
-msgstr "ì…ë ¥ì„ diff ì¶œë ¥ìœ¼ë¡œ ë³€í™˜í•˜ê¸° ì‹¤íŒ¨."
+msgstr "ÀÔ·ÂÀ» diff Ãâ·ÂÀ¸·Î º¯È¯ÇÏ±â ½ÇÆĞ."
 
 #: ../plugins/vcdiff.c:343
 #, c-format
@@ -4695,123 +4695,123 @@ msgid ""
 "%s exited with an error: \n"
 "%s."
 msgstr ""
-"%s ëë‚´ê¸° ì˜¤ë¥˜ ì½”ë“œ: \n"
+"%s ³¡³»±â ¿À·ù ÄÚµå: \n"
 "%s."
 
 #: ../plugins/vcdiff.c:351
 msgid "No changes were made."
-msgstr "ë³€ê²½ì‚¬í•­ ì—†ìŒ."
+msgstr "º¯°æ»çÇ× ¾øÀ½."
 
 #. if we don't have an exact error message, print at least the failing command
 #: ../plugins/vcdiff.c:370
 #, c-format
 msgid "unknown error while trying to spawn a process for %s"
-msgstr "%s í”„ë¡œì„¸ìŠ¤ ìƒì„±ì‹œ ì•Œ ìˆ˜ ì—†ëŠ” ì˜¤ë¥˜ ë°œìƒ"
+msgstr "%s ÇÁ·Î¼¼½º »ı¼º½Ã ¾Ë ¼ö ¾ø´Â ¿À·ù ¹ß»ı"
 
 #: ../plugins/vcdiff.c:373
 #, c-format
 msgid "An error occurred (%s)."
-msgstr "ì˜¤ë¥˜ ë°œìƒ: %s."
+msgstr "¿À·ù ¹ß»ı: %s."
 
 #: ../plugins/vcdiff.c:503
 msgid "_Version Diff"
-msgstr "ë²„ì „ ë¹„êµ(_V)"
+msgstr "¹öÀü ºñ±³(_V)"
 
 #. Single file
 #: ../plugins/vcdiff.c:512
 msgid "From Current _File"
-msgstr "íŒŒì¼(_F)"
+msgstr "ÆÄÀÏ(_F)"
 
 #: ../plugins/vcdiff.c:515
 msgid "Make a diff from the current active file"
-msgstr "í˜„ì¬ íŒŒì¼ë¡œ ë¶€í„° diff ë§Œë“¤ê¸°"
+msgstr "ÇöÀç ÆÄÀÏ·Î ºÎÅÍ diff ¸¸µé±â"
 
 #. Directory
 #: ../plugins/vcdiff.c:520
 msgid "From Current _Directory"
-msgstr "í´ë”(_D)"
+msgstr "Æú´õ(_D)"
 
 #: ../plugins/vcdiff.c:523
 msgid "Make a diff from the directory of the current active file"
-msgstr "í˜„ì¬ íŒŒì¼ í´ë”ë¡œ ë¶€í„° diff ë§Œë“¤ê¸°"
+msgstr "ÇöÀç ÆÄÀÏ Æú´õ·Î ºÎÅÍ diff ¸¸µé±â"
 
 #. Project
 #: ../plugins/vcdiff.c:528
 msgid "From Current _Project"
-msgstr "í”„ë¡œì íŠ¸(_P)"
+msgstr "ÇÁ·ÎÁ§Æ®(_P)"
 
 #: ../plugins/vcdiff.c:531
 msgid "Make a diff from the current project's base path"
-msgstr "í˜„ì¬ í”„ë¡œì íŠ¸ì˜ ê¸°ë°˜ ê²½ë¡œë¡œ ë¶€í„° diff ë§Œë“¤ê¸°"
+msgstr "ÇöÀç ÇÁ·ÎÁ§Æ®ÀÇ ±â¹İ °æ·Î·Î ºÎÅÍ diff ¸¸µé±â"
 
 #: ../plugins/filebrowser.c:51
 msgid "File Browser"
-msgstr "íŒŒì¼ íƒìƒ‰ê¸°"
+msgstr "ÆÄÀÏ Å½»ö±â"
 
 #: ../plugins/filebrowser.c:51
 msgid "Adds a file browser tab to the sidebar."
-msgstr "ê°€ì¥ìë¦¬ì°½ì— íŒŒì¼ íƒìƒ‰ê¸°íƒ­ì„ ì¶”ê°€í•˜ê¸°."
+msgstr "°¡ÀåÀÚ¸®Ã¢¿¡ ÆÄÀÏ Å½»ö±âÅÇÀ» Ãß°¡ÇÏ±â."
 
 #: ../plugins/filebrowser.c:296
 msgid "Too many items selected!"
-msgstr "ë„ˆë¬´ ë§ì€ í•­ëª©ì„ ì„ íƒí–ˆìŠµë‹ˆë‹¤!"
+msgstr "³Ê¹« ¸¹Àº Ç×¸ñÀ» ¼±ÅÃÇß½À´Ï´Ù!"
 
 #: ../plugins/filebrowser.c:380
 #, c-format
 msgid "Could not execute configured external command '%s' (%s)."
-msgstr "ë§ì¶¤ ì™¸ë¶€ ëª…ë ¹ '%s' ì‹¤í–‰ ì‹¤íŒ¨ (%s)."
+msgstr "¸ÂÃã ¿ÜºÎ ¸í·É '%s' ½ÇÇà ½ÇÆĞ (%s)."
 
 #: ../plugins/filebrowser.c:538
 msgid "Open _externally"
-msgstr "ì™¸ë¶€ íŒŒì¼ íƒìƒ‰ê¸° ì—´ê¸°(_e)"
+msgstr "¿ÜºÎ ÆÄÀÏ Å½»ö±â ¿­±â(_e)"
 
 #: ../plugins/filebrowser.c:547
 msgid "_Find in Files"
-msgstr "íŒŒì¼ì—ì„œ ì°¾ê¸°(_F)"
+msgstr "ÆÄÀÏ¿¡¼­ Ã£±â(_F)"
 
 #: ../plugins/filebrowser.c:558
 msgid "Show _Hidden Files"
-msgstr "ìˆ¨ê¹€íŒŒì¼ ë³´ê¸°(_H)"
+msgstr "¼û±èÆÄÀÏ º¸±â(_H)"
 
 #: ../plugins/filebrowser.c:732
 msgid "Up"
-msgstr "ìœ„ë¡œ"
+msgstr "À§·Î"
 
 #: ../plugins/filebrowser.c:738
 msgid "Refresh"
-msgstr "ìƒˆë¡œ ê³ ì¹¨"
+msgstr "»õ·Î °íÄ§"
 
 #: ../plugins/filebrowser.c:744
 msgid "Home"
-msgstr "ë‚´ í´ë”"
+msgstr "³» Æú´õ"
 
 #: ../plugins/filebrowser.c:750
 msgid "Set path from document"
-msgstr "í˜„ì¬ë¬¸ì„œ ìœ„ì¹˜ë¡œ ê²½ë¡œ ì´ë™"
+msgstr "ÇöÀç¹®¼­ À§Ä¡·Î °æ·Î ÀÌµ¿"
 
 #: ../plugins/filebrowser.c:758
 msgid "Clear the filter"
-msgstr "í•„í„° ì§€ìš°ê¸°"
+msgstr "ÇÊÅÍ Áö¿ì±â"
 
 #: ../plugins/filebrowser.c:772
 msgid "Filter:"
-msgstr "í•„í„°:"
+msgstr "ÇÊÅÍ:"
 
 #: ../plugins/filebrowser.c:931
 msgid "Focus File List"
-msgstr "íŒŒì¼ëª©ë¡ì— í¬ì»¤ìŠ¤ ì£¼ê¸°"
+msgstr "ÆÄÀÏ¸ñ·Ï¿¡ Æ÷Ä¿½º ÁÖ±â"
 
 #: ../plugins/filebrowser.c:933
 msgid "Focus Path Entry"
-msgstr "ê²½ë¡œì…ë ¥í•„ë“œì— í¬ì»¤ìŠ¤ ì£¼ê¸°"
+msgstr "°æ·ÎÀÔ·ÂÇÊµå¿¡ Æ÷Ä¿½º ÁÖ±â"
 
 #: ../plugins/filebrowser.c:968 ../plugins/saveactions.c:479
 msgid "Plugin configuration directory could not be created."
-msgstr "í”ŒëŸ¬ê·¸ì¸ í™˜ê²½ì„¤ì • í´ë”ë¥¼ ë§Œë“¤ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."
+msgstr "ÇÃ·¯±×ÀÎ È¯°æ¼³Á¤ Æú´õ¸¦ ¸¸µé ¼ö ¾ø½À´Ï´Ù."
 
 #: ../plugins/filebrowser.c:994
 msgid "External open command:"
-msgstr "ì™¸ë¶€ ëª…ë ¹:"
+msgstr "¿ÜºÎ ¸í·É:"
 
 #: ../plugins/filebrowser.c:1003
 #, c-format
@@ -4822,134 +4822,134 @@ msgid ""
 "%d will be replaced with the path name of the selected file without the "
 "filename"
 msgstr ""
-"\"ë‹¤ë¥¸í”„ë¡œê·¸ë¨ìœ¼ë¡œ ì—´ê¸°\"ì— ì‚¬ìš©í•  ëª…ë ¹. ë˜í•œ %fì™€ %dì„(ë¥¼) ì‚¬ìš©í•  ìˆ˜ ìˆìŠµë‹ˆ"
-"ë‹¤.\n"
-"%f: ì „ì²´ ê²½ë¡œë¥¼ í¬í•¨í•˜ëŠ” íŒŒì¼ ì´ë¦„.\n"
-"%d: íŒŒì¼ ì´ë¦„ì„ í¬í•¨í•˜ì§€ ì•ŠëŠ” ê²½ë¡œëª…."
+"\"´Ù¸¥ÇÁ·Î±×·¥À¸·Î ¿­±â\"¿¡ »ç¿ëÇÒ ¸í·É. ¶ÇÇÑ %f¿Í %dÀ»(¸¦) »ç¿ëÇÒ ¼ö ÀÖ½À´Ï"
+"´Ù.\n"
+"%f: ÀüÃ¼ °æ·Î¸¦ Æ÷ÇÔÇÏ´Â ÆÄÀÏ ÀÌ¸§.\n"
+"%d: ÆÄÀÏ ÀÌ¸§À» Æ÷ÇÔÇÏÁö ¾Ê´Â °æ·Î¸í."
 
 #: ../plugins/filebrowser.c:1010
 msgid "Show hidden files"
-msgstr "ìˆ¨ê¹€íŒŒì¼ ë³´ê¸°"
+msgstr "¼û±èÆÄÀÏ º¸±â"
 
 #: ../plugins/filebrowser.c:1016
 msgid "Hide object files"
-msgstr "ì˜¤ë¸Œì íŠ¸ íŒŒì¼ ê°ì¶”ê¸°"
+msgstr "¿ÀºêÁ§Æ® ÆÄÀÏ °¨Ãß±â"
 
 #: ../plugins/filebrowser.c:1020
 msgid ""
 "Don't show generated object files in the file browser, this includes *.o, *."
 "obj. *.so, *.dll, *.a, *.lib"
 msgstr ""
-"íŒŒì¼íƒìƒ‰ê¸°íƒ­ì—ì„œ ì˜¤ë¸Œì íŠ¸ íŒŒì¼ (*.o, *.obj, *.so, *.dll, *.a, *.lib) ê°ì¶”ê¸°"
+"ÆÄÀÏÅ½»ö±âÅÇ¿¡¼­ ¿ÀºêÁ§Æ® ÆÄÀÏ (*.o, *.obj, *.so, *.dll, *.a, *.lib) °¨Ãß±â"
 
 #: ../plugins/saveactions.c:48
 msgid "Save Actions"
-msgstr "ì €ì¥ í–‰ë™"
+msgstr "ÀúÀå Çàµ¿"
 
 #: ../plugins/saveactions.c:48
 msgid "This plugin provides different actions related to saving of files."
-msgstr "ì´ í”ŒëŸ¬ê·¸ì¸ì€ íŒŒì¼ ì €ì¥ì— ê´€í•œ ì—¬ëŸ¬ê°€ì§€ ë‹¤ë¥¸ í–‰ë™ë“¤ì„ ì œê³µí•©ë‹ˆë‹¤."
+msgstr "ÀÌ ÇÃ·¯±×ÀÎÀº ÆÄÀÏ ÀúÀå¿¡ °üÇÑ ¿©·¯°¡Áö ´Ù¸¥ Çàµ¿µéÀ» Á¦°øÇÕ´Ï´Ù."
 
 #: ../plugins/saveactions.c:178
 #, c-format
 msgid "Backup Copy: Directory could not be created (%s)."
-msgstr "ë³µì‚¬ë³¸ ë°±ì—…: í´ë”ë¥¼ ë§Œë“¤ ìˆ˜ ì—†ìŠµë‹ˆë‹¤ (%s)."
+msgstr "º¹»çº» ¹é¾÷: Æú´õ¸¦ ¸¸µé ¼ö ¾ø½À´Ï´Ù (%s)."
 
 #. it's unlikely that this happens
 #: ../plugins/saveactions.c:213
 #, c-format
 msgid "Backup Copy: File could not be read (%s)."
-msgstr "ë³µì‚¬ë³¸ ë°±ì—…: íŒŒì¼ì„ ì½ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤ (%s)."
+msgstr "º¹»çº» ¹é¾÷: ÆÄÀÏÀ» ÀĞÀ» ¼ö ¾ø½À´Ï´Ù (%s)."
 
 #: ../plugins/saveactions.c:231
 #, c-format
 msgid "Backup Copy: File could not be saved (%s)."
-msgstr "ë³µì‚¬ë³¸ ë°±ì—…: íŒŒì¼ì„ ì €ì¥í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤ (%s)."
+msgstr "º¹»çº» ¹é¾÷: ÆÄÀÏÀ» ÀúÀåÇÒ ¼ö ¾ø½À´Ï´Ù (%s)."
 
 #: ../plugins/saveactions.c:321
 #, c-format
 msgid "Autosave: Saved %d file automatically."
 msgid_plural "Autosave: Saved %d files automatically."
-msgstr[0] "ìë™ì €ì¥: %dê°œ íŒŒì¼ì„ ìë™ì €ì¥ í–ˆìŠµë‹ˆë‹¤."
+msgstr[0] "ÀÚµ¿ÀúÀå: %d°³ ÆÄÀÏÀ» ÀÚµ¿ÀúÀå Çß½À´Ï´Ù."
 
 #. initialize the dialog
 #: ../plugins/saveactions.c:390
 msgid "Select Directory"
-msgstr "í´ë” ì„ íƒ"
+msgstr "Æú´õ ¼±ÅÃ"
 
 #: ../plugins/saveactions.c:472
 msgid "Backup directory does not exist or is not writable."
-msgstr "ë°±ì—… í´ë”ê°€ ì¡´ì¬í•˜ì§€ ì•Šê±°ë‚˜ ì“°ê¸°ê¶Œí•œì´ ì—†ìŠµë‹ˆë‹¤."
+msgstr "¹é¾÷ Æú´õ°¡ Á¸ÀçÇÏÁö ¾Ê°Å³ª ¾²±â±ÇÇÑÀÌ ¾ø½À´Ï´Ù."
 
 #: ../plugins/saveactions.c:552
 msgid "Auto Save"
-msgstr "ìë™ì €ì¥"
+msgstr "ÀÚµ¿ÀúÀå"
 
 #: ../plugins/saveactions.c:554 ../plugins/saveactions.c:615
 #: ../plugins/saveactions.c:652
 msgid "_Enable"
-msgstr "í™œì„±(_E)"
+msgstr "È°¼º(_E)"
 
 #: ../plugins/saveactions.c:562
 msgid "Auto save _interval:"
-msgstr "ìë™ì €ì¥ ê°„ê²©(_i):"
+msgstr "ÀÚµ¿ÀúÀå °£°İ(_i):"
 
 #: ../plugins/saveactions.c:570
 msgid "seconds"
-msgstr "ì´ˆ"
+msgstr "ÃÊ"
 
 #: ../plugins/saveactions.c:579
 msgid "_Print status message if files have been automatically saved"
-msgstr "ìë™ì €ì¥ ìƒíƒœ ë©”ì‹œì§€ ì¶œë ¥(_P)"
+msgstr "ÀÚµ¿ÀúÀå »óÅÂ ¸Ş½ÃÁö Ãâ·Â(_P)"
 
 #: ../plugins/saveactions.c:587
 msgid "Save only current open _file"
-msgstr "í˜„ì¬ ì—´ë¦° íŒŒì¼ë§Œ ì €ì¥(_f)"
+msgstr "ÇöÀç ¿­¸° ÆÄÀÏ¸¸ ÀúÀå(_f)"
 
 #: ../plugins/saveactions.c:594
 msgid "Sa_ve all open files"
-msgstr "ëª¨ë“  ì—´ë¦° íŒŒì¼ ì €ì¥(_v)"
+msgstr "¸ğµç ¿­¸° ÆÄÀÏ ÀúÀå(_v)"
 
 #: ../plugins/saveactions.c:613
 msgid "Instant Save"
-msgstr "ì¦‰ì„ ì €ì¥"
+msgstr "Áï¼® ÀúÀå"
 
 #: ../plugins/saveactions.c:623
 msgid "_Filetype to use for newly opened files:"
-msgstr "ìƒˆë¡œ ì—´ë¦° íŒŒì¼ì— ì‚¬ìš©í•  íŒŒì¼í˜•ì‹(_F):"
+msgstr "»õ·Î ¿­¸° ÆÄÀÏ¿¡ »ç¿ëÇÒ ÆÄÀÏÇü½Ä(_F):"
 
 #: ../plugins/saveactions.c:650
 msgid "Backup Copy"
-msgstr "ë³µì‚¬ë³¸ ë°±ì—…"
+msgstr "º¹»çº» ¹é¾÷"
 
 #: ../plugins/saveactions.c:660
 msgid "_Directory to save backup files in:"
-msgstr "ë°±ì—… íŒŒì¼ ì €ì¥ í´ë”(_D):"
+msgstr "¹é¾÷ ÆÄÀÏ ÀúÀå Æú´õ(_D):"
 
 #: ../plugins/saveactions.c:683
 msgid "Date/_Time format for backup files (\"man strftime\" for details):"
-msgstr "ë°±ì—…íŒŒì¼ ë‚ ì§œ/ì‹œê°„ í˜•ì‹(_T) (\"man strftime\"):"
+msgstr "¹é¾÷ÆÄÀÏ ³¯Â¥/½Ã°£ Çü½Ä(_T) (\"man strftime\"):"
 
 #: ../plugins/saveactions.c:696
 msgid "Directory _levels to include in the backup destination:"
-msgstr "ë°±ì—… ëª©ì ì§€ì˜ í´ë” ë‹¨ê³„(_l):"
+msgstr "¹é¾÷ ¸ñÀûÁöÀÇ Æú´õ ´Ü°è(_l):"
 
 #: ../plugins/splitwindow.c:41
 msgid "Split Window"
-msgstr "ì°½ ë‚˜ëˆ„ê¸°"
+msgstr "Ã¢ ³ª´©±â"
 
 #: ../plugins/splitwindow.c:41
 msgid "Splits the editor view into two windows."
-msgstr "í¸ì§‘ì°½ì„ ë‘ê°œë¡œ ë‚˜ëˆ”."
+msgstr "ÆíÁıÃ¢À» µÎ°³·Î ³ª´®."
 
 #: ../plugins/splitwindow.c:271 ../plugins/splitwindow.c:354
 msgid "_Unsplit"
-msgstr "ì°½ ë‚˜ëˆ„ì§€ ì•Šê¸°(_U)"
+msgstr "Ã¢ ³ª´©Áö ¾Ê±â(_U)"
 
 #: ../plugins/splitwindow.c:340
 msgid "_Split Window"
-msgstr "ì°½ ë‚˜ëˆ„ê¸°(_S)"
+msgstr "Ã¢ ³ª´©±â(_S)"
 
 #: ../plugins/splitwindow.c:349
 msgid "_Horizontally"
-msgstr "ìˆ˜í‰(_H)"
+msgstr "¼öÆò(_H)"
