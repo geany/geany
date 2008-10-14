@@ -61,7 +61,8 @@ const GeanyData *geany_data;
  * @c p_document->new_file(NULL, NULL, NULL); */
 const GeanyFunctions *geany_functions;
 
-/** Plugin owned fields, including flags. */
+/** @deprecated Use @ref ui_add_document_sensitive() instead.
+ * Plugin owned fields, including flags. */
 PluginFields *plugin_fields;
 
 /** An array for connecting GeanyObject events, which should be terminated with

@@ -1,3 +1,12 @@
+2008-10-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/ui_utils.h, src/plugindata.h, src/plugins.c, src/ui_utils.c,
+   doc/pluginsymbols.c:
+   Add ui_add_document_sensitive() to the plugin API.
+   Deprecate plugin_fields, PluginFlags - use
+   ui_add_document_sensitive() instead.
+
+
 2008-10-13  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * ko.po, LINGUAS, src/about.c, THANKS:

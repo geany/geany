@@ -41,7 +41,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 99,
+	GEANY_API_VERSION = 100,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -144,8 +144,8 @@ typedef struct PluginCallback
 PluginCallback;
 
 
-
-/** Flags to be set by plugins in PluginFields struct. */
+/** @deprecated Use @ref ui_add_document_sensitive() instead.
+ * Flags to be set by plugins in PluginFields struct. */
 typedef enum
 {
 	/** Whether a plugin's menu item should be disabled when there are no open documents */
@@ -153,7 +153,8 @@ typedef enum
 }
 PluginFlags;
 
-/** Fields set and owned by the plugin. */
+/** @deprecated Use @ref ui_add_document_sensitive() instead.
+ * Fields set and owned by the plugin. */
 typedef struct PluginFields
 {
 	/** Bitmask of PluginFlags. */
@@ -348,6 +349,7 @@ typedef struct UIUtilsFuncs
 	void		(*table_add_row) (GtkTable *table, gint row, ...) G_GNUC_NULL_TERMINATED;
 	GtkWidget*	(*path_box_new) (const gchar *title, GtkFileChooserAction action, GtkEntry *entry);
 	GtkWidget*	(*button_new_with_image) (const gchar *stock_id, const gchar *text);
+	void		(*add_document_sensitive) (GtkWidget *widget);
 }
 UIUtilsFuncs;
 

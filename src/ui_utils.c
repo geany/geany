@@ -654,6 +654,23 @@ void ui_document_buttons_update(void)
 }
 
 
+static void on_doc_sensitive_widget_destroy(GtkWidget *widget, G_GNUC_UNUSED gpointer user_data)
+{
+	g_ptr_array_remove_fast(widgets.document_buttons, widget);
+}
+
+
+/** Add a widget to the list of widgets that should be set sensitive/insensitive
+ * when some documents are present/no documents are open.
+ * It will be removed when the widget is destroyed.
+ * @param widget The widget to add. */
+void ui_add_document_sensitive(GtkWidget *widget)
+{
+	g_ptr_array_add(widgets.document_buttons, widget);
+	g_signal_connect(widget, "destroy", G_CALLBACK(on_doc_sensitive_widget_destroy), NULL);
+}
+
+
 void ui_widget_show_hide(GtkWidget *widget, gboolean show)
 {
 	if (show)

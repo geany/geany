@@ -243,4 +243,6 @@ void ui_statusbar_showhide(gboolean state);
 
 gint ui_get_toolbar_insert_position(void);
 
+void ui_add_document_sensitive(GtkWidget *widget);
+
 #endif
