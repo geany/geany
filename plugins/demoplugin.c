@@ -45,19 +45,19 @@
 
 /* These items are set by Geany before plugin_init() is called. */
 GeanyPlugin		*geany_plugin;
-PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
 /* Check that the running Geany supports the plugin API used below, and check
  * for binary compatibility. */
-PLUGIN_VERSION_CHECK(99)
+PLUGIN_VERSION_CHECK(100)
 
 /* All plugins must set name, description, version and author. */
 PLUGIN_SET_INFO(_("Demo"), _("Example plugin."), VERSION, _("The Geany developer team"))
 
 
+static GtkWidget *main_menu_item = NULL;
 /* text to be shown in the plugin dialog */
 static gchar *welcome_text = NULL;
 
@@ -94,10 +94,12 @@ void plugin_init(GeanyData *data)
 	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), demo_item);
 	g_signal_connect(demo_item, "activate", G_CALLBACK(item_activate), NULL);
 
-	welcome_text = g_strdup(_("Hello World!"));
-
+	/* make the menu item sensitive only when documents are open */
+	p_ui->add_document_sensitive(demo_item);
 	/* keep a pointer to the menu item, so we can remove it when the plugin is unloaded */
-	plugin_fields->menu_item = demo_item;
+	main_menu_item = demo_item;
+
+	welcome_text = g_strdup(_("Hello World!"));
 }
 
 
@@ -158,7 +160,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 void plugin_cleanup(void)
 {
 	/* remove the menu item added in plugin_init() */
-	gtk_widget_destroy(plugin_fields->menu_item);
+	gtk_widget_destroy(main_menu_item);
 	/* release other allocated strings and objects */
 	g_free(welcome_text);
 }

@@ -43,15 +43,17 @@
 #define project	geany->app->project
 
 
-PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(69)
+PLUGIN_VERSION_CHECK(GEANY_API_VERSION)
 
 PLUGIN_SET_INFO(_("Version Diff"), _("Creates a patch of a file against version control."), VERSION,
 	_("The Geany developer team"))
+
+
+static GtkWidget *main_menu_item = NULL;
 
 
 enum
@@ -534,8 +536,8 @@ void plugin_init(GeanyData *data)
 
 	gtk_widget_show_all(menu_vcdiff);
 
-	plugin_fields->menu_item = menu_vcdiff;
-	plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
+	p_ui->add_document_sensitive(menu_vcdiff);
+	main_menu_item = menu_vcdiff;
 }
 
 
@@ -543,5 +545,5 @@ void plugin_init(GeanyData *data)
 void plugin_cleanup(void)
 {
 	/* remove the menu item added in plugin_init() */
-	gtk_widget_destroy(plugin_fields->menu_item);
+	gtk_widget_destroy(main_menu_item);
 }

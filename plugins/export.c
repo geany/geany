@@ -38,13 +38,16 @@
 #include "pluginmacros.h"
 
 
-PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
-PLUGIN_VERSION_CHECK(69)
+PLUGIN_VERSION_CHECK(GEANY_API_VERSION)
 PLUGIN_SET_INFO(_("Export"), _("Exports the current file into different formats."), VERSION,
 	_("The Geany developer team"))
+
+
+static GtkWidget *main_menu_item = NULL;
+
 
 #define ROTATE_RGB(color) \
 	(((color) & 0xFF0000) >> 16) + ((color) & 0x00FF00) + (((color) & 0x0000FF) << 16)
@@ -731,8 +734,8 @@ void plugin_init(GeanyData *data)
 		G_CALLBACK(on_menu_create_latex_activate), NULL);
 
 	/* disable menu_item when there are no documents open */
-	plugin_fields->menu_item = menu_export;
-	plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
+	p_ui->add_document_sensitive(menu_export);
+	main_menu_item = menu_export;
 
 	gtk_widget_show_all(menu_export);
 }
@@ -740,5 +743,5 @@ void plugin_init(GeanyData *data)
 
 void plugin_cleanup(void)
 {
-	gtk_widget_destroy(plugin_fields->menu_item);
+	gtk_widget_destroy(main_menu_item);
 }

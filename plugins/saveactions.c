@@ -38,7 +38,6 @@
 #include <glib/gstdio.h>
 
 
-PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 

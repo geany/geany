@@ -5,6 +5,12 @@
    Add ui_add_document_sensitive() to the plugin API.
    Deprecate plugin_fields, PluginFlags - use
    ui_add_document_sensitive() instead.
+ * plugins/saveactions.c, plugins/export.c, plugins/vcdiff.c,
+   plugins/demoplugin.c, plugins/filebrowser.c, plugins/splitwindow.c,
+   plugins/htmlchars.c, plugins/classbuilder.c:
+   Use ui_add_document_sensitive().
+   Use PLUGIN_VERSION_CHECK(GEANY_API_VERSION) for internal plugins,
+   except the Demo plugin (as an example).
 
 
 2008-10-13  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

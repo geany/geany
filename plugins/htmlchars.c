@@ -35,12 +35,11 @@
 #include "pluginmacros.h"
 
 
-PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(69)
+PLUGIN_VERSION_CHECK(GEANY_API_VERSION)
 
 PLUGIN_SET_INFO(_("HTML Characters"), _("Inserts HTML character entities like '&amp;'."), VERSION,
 	_("The Geany developer team"))
@@ -64,6 +63,7 @@ enum
 };
 
 
+static GtkWidget *main_menu_item = NULL;
 static GtkWidget *sc_dialog = NULL;
 static GtkTreeStore *sc_store = NULL;
 static GtkTreeView *sc_tree = NULL;
@@ -521,30 +521,30 @@ static void kb_activate(G_GNUC_UNUSED guint key_id)
 /* Called by Geany to initialize the plugin */
 void plugin_init(GeanyData *data)
 {
-	GtkWidget *demo_item;
+	GtkWidget *menu_item;
 	const gchar *menu_text = _("_Insert Special HTML Characters");
 	gchar *kb_label = _("Insert Special HTML Characters");
 
 	/* Add an item to the Tools menu */
-	demo_item = gtk_menu_item_new_with_mnemonic(menu_text);
-	gtk_widget_show(demo_item);
-	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), demo_item);
-	g_signal_connect(demo_item, "activate", G_CALLBACK(item_activate), NULL);
+	menu_item = gtk_menu_item_new_with_mnemonic(menu_text);
+	gtk_widget_show(menu_item);
+	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), menu_item);
+	g_signal_connect(menu_item, "activate", G_CALLBACK(item_activate), NULL);
 
 	/* disable menu_item when there are no documents open */
-	plugin_fields->menu_item = demo_item;
-	plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
+	p_ui->add_document_sensitive(menu_item);
+	main_menu_item = menu_item;
 
 	/* setup keybindings */
 	p_keybindings->set_item(plugin_key_group, KB_INSERT_HTML_CHARS, kb_activate,
-		0, 0, "insert_html_chars", kb_label, demo_item);
+		0, 0, "insert_html_chars", kb_label, menu_item);
 }
 
 
 /* Destroy widgets */
 void plugin_cleanup(void)
 {
-	gtk_widget_destroy(plugin_fields->menu_item);
+	gtk_widget_destroy(main_menu_item);
 
 	if (sc_dialog != NULL)
 		gtk_widget_destroy(sc_dialog);

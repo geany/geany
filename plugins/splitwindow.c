@@ -37,14 +37,14 @@
 #include "pluginmacros.h"
 
 
-PLUGIN_VERSION_CHECK(76)
+PLUGIN_VERSION_CHECK(GEANY_API_VERSION)
 PLUGIN_SET_INFO(_("Split Window"), _("Splits the editor view into two windows."),
 	"0.1", _("The Geany developer team"))
 
 
-GeanyData *geany_data;
-GeanyFunctions *geany_functions;
-PluginFields *plugin_fields;
+GeanyData		*geany_data;
+GeanyFunctions	*geany_functions;
+
 
 enum State
 {
@@ -338,9 +338,8 @@ void plugin_init(GeanyData *data)
 	GtkWidget *item, *menu;
 
 	menu_items.main = item = gtk_menu_item_new_with_mnemonic(_("_Split Window"));
-	gtk_menu_append(geany_data->main_widgets->tools_menu, menu_items.main);
-	plugin_fields->menu_item = item;
-	plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
+	gtk_menu_append(geany_data->main_widgets->tools_menu, item);
+	p_ui->add_document_sensitive(item);
 
 	menu = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_items.main), menu);

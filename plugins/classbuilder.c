@@ -35,15 +35,17 @@
 #include "pluginmacros.h"
 
 
-PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(69)
+PLUGIN_VERSION_CHECK(GEANY_API_VERSION)
 
 PLUGIN_SET_INFO(_("Class Builder"), _("Creates source files for new class types."), VERSION,
 	"Alexander Rodin")
+
+
+static GtkWidget *main_menu_item = NULL;
 
 
 enum
@@ -803,11 +805,12 @@ void plugin_init(GeanyData *data)
 
 	gtk_widget_show_all(menu_create_class1);
 
-	plugin_fields->menu_item = menu_create_class1;
+	p_ui->add_document_sensitive(menu_create_class1);
+	main_menu_item = menu_create_class1;
 }
 
 
 void plugin_cleanup(void)
 {
-	gtk_widget_destroy(plugin_fields->menu_item);
+	gtk_widget_destroy(main_menu_item);
 }
