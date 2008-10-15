@@ -470,7 +470,7 @@ void win32_show_color_dialog(const gchar *colour)
 	      (guint) (utils_scale_round(GetGValue(rgb_current), 255)),
 	      (guint) (utils_scale_round(GetBValue(rgb_current), 255)));
 
-		editor_insert_color(doc, hex);
+		editor_insert_color(doc->editor, hex);
 	}
 	g_free(hex);
 }
