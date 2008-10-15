@@ -7,6 +7,8 @@
    Fix showing desensitive widgets if no documents are open when a
    plugin is first loaded.
    Remove plugins_update_document_sensitive().
+ * plugins/vcdiff.c:
+   Fix mixed indentation (prevents vcdiff.c being detected as T/S).
 
 
 2008-10-14  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

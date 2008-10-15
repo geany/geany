@@ -123,20 +123,20 @@ static gboolean find_subdir(const gchar* filename, const gchar *subdir)
 	gchar *base_prev = g_strdup(":");
 
 	if (g_file_test(filename, G_FILE_TEST_IS_DIR))
-	    base = g_strdup(filename);
+		base = g_strdup(filename);
 	else
-	    base = g_path_get_dirname(filename);
+		base = g_path_get_dirname(filename);
 
 	while (strcmp(base, base_prev) != 0)
 	{
-	    gitdir = g_build_path("/", base, subdir, NULL);
-	    ret = g_file_test(gitdir, G_FILE_TEST_IS_DIR);
-	    g_free(gitdir);
-	    if (ret)
+		gitdir = g_build_path("/", base, subdir, NULL);
+		ret = g_file_test(gitdir, G_FILE_TEST_IS_DIR);
+		g_free(gitdir);
+		if (ret)
 			break;
-	    g_free(base_prev);
-	    base_prev = base;
-	    base = g_path_get_dirname(base);
+		g_free(base_prev);
+		base_prev = base;
+		base = g_path_get_dirname(base);
 	}
 
 	g_free(base);
@@ -164,9 +164,9 @@ static gboolean check_filename(const gchar* filename, VC_RECORD *vc)
 		return find_subdir(filename, vc->subdir);
 
 	if (g_file_test(filename, G_FILE_TEST_IS_DIR))
-	    base = g_strdup(filename);
+		base = g_strdup(filename);
 	else
-	    base = g_path_get_dirname(filename);
+		base = g_path_get_dirname(filename);
 	dir = g_build_path("/", base, vc->subdir, NULL);
 
 	ret = g_file_test(dir, G_FILE_TEST_IS_DIR);
@@ -341,7 +341,7 @@ static gchar *make_diff(const gchar *filename, gint cmd)
 		/* CVS dump stuff to stderr when diff nested dirs */
 		if (strcmp(argv[0], "cvs") != 0 && NZV(std_error))
 		{
-		    p_dialogs->show_msgbox(1,
+			p_dialogs->show_msgbox(1,
 				_("%s exited with an error: \n%s."), argv[0], g_strstrip(std_error));
 		}
 		else if (NZV(std_output))
