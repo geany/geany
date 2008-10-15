@@ -569,10 +569,6 @@ void
 on_page_setup1_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
-void
-on_tools1_activate                     (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
 gboolean
 on_escape_key_press_event              (GtkWidget       *widget,
                                         GdkEventKey     *event,

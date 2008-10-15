@@ -36,8 +36,6 @@ void plugins_save_prefs(GKeyFile *config);
 
 void plugins_load_prefs(GKeyFile *config);
 
-void plugins_update_tools_menu(void);
-
 void plugins_update_document_sensitive(gboolean enabled);
 
 #endif

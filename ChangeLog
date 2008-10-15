@@ -1,3 +1,10 @@
+2008-10-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, src/callbacks.c, src/callbacks.h, src/plugins.c,
+   src/plugins.h, geany.glade:
+   Show the tools menu separator if there are any items below it.
+
+
 2008-10-14  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * THANKS, src/about.c: Update of name of Korean translator. Thanks

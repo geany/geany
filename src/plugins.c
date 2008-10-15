@@ -786,6 +786,30 @@ static void load_all_plugins(void)
 }
 
 
+static void on_tools_menu_show(GtkWidget *menu_item, G_GNUC_UNUSED gpointer user_data)
+{
+	GList *item, *list = gtk_container_get_children(GTK_CONTAINER(menu_item));
+	guint i = 0;
+	gboolean have_plugin_menu_items = FALSE;
+
+	for (item = list; item != NULL; item = g_list_next(item))
+	{
+		if (item->data == menu_separator)
+		{
+			if (i < g_list_length(list) - 1)
+			{
+				have_plugin_menu_items = TRUE;
+				break;
+			}
+		}
+		i++;
+	}
+	g_list_free(list);
+
+	ui_widget_show_hide(menu_separator, have_plugin_menu_items);
+}
+
+
 void plugins_init()
 {
 	GtkWidget *widget;
@@ -804,10 +828,9 @@ void plugins_init()
 
 	menu_separator = gtk_separator_menu_item_new();
 	gtk_container_add(GTK_CONTAINER(main_widgets.tools_menu), menu_separator);
+	g_signal_connect(main_widgets.tools_menu, "show", G_CALLBACK(on_tools_menu_show), NULL);
 
 	load_active_plugins();
-
-	plugins_update_tools_menu();
 }
 
 
@@ -899,28 +922,6 @@ void plugins_update_document_sensitive(gboolean enabled)
 		if (plugin->fields.flags & PLUGIN_IS_DOCUMENT_SENSITIVE)
 			gtk_widget_set_sensitive(plugin->fields.menu_item, enabled);
 	}
-}
-
-
-static gint
-plugin_has_menu(Plugin *a, Plugin *b)
-{
-	if (a->fields.menu_item != NULL)
-		return 0;
-
-	return 1;
-}
-
-
-void plugins_update_tools_menu()
-{
-	gboolean found;
-
-	if (menu_separator == NULL)
-		return;
-
-	found = (g_list_find_custom(active_plugin_list, NULL, (GCompareFunc) plugin_has_menu) != NULL);
-	ui_widget_show_hide(menu_separator, found);
 }
 
 
