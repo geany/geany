@@ -3,6 +3,10 @@
  * src/interface.c, src/callbacks.c, src/callbacks.h, src/plugins.c,
    src/plugins.h, geany.glade:
    Show the tools menu separator if there are any items below it.
+ * src/plugins.c, src/plugins.h, src/ui_utils.c:
+   Fix showing desensitive widgets if no documents are open when a
+   plugin is first loaded.
+   Remove plugins_update_document_sensitive().
 
 
 2008-10-14  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

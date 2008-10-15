@@ -645,12 +645,9 @@ void ui_document_buttons_update(void)
 	for (i = 0; i < widgets.document_buttons->len; i++)
 	{
 		GtkWidget *widget = g_ptr_array_index(widgets.document_buttons, i);
+
 		gtk_widget_set_sensitive(widget, enable);
 	}
-
-#ifdef HAVE_PLUGINS
-	plugins_update_document_sensitive(enable);
-#endif
 }
 
 
@@ -666,6 +663,10 @@ static void on_doc_sensitive_widget_destroy(GtkWidget *widget, G_GNUC_UNUSED gpo
  * @param widget The widget to add. */
 void ui_add_document_sensitive(GtkWidget *widget)
 {
+	gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) ? TRUE : FALSE;
+
+	gtk_widget_set_sensitive(widget, enable);
+
 	g_ptr_array_add(widgets.document_buttons, widget);
 	g_signal_connect(widget, "destroy", G_CALLBACK(on_doc_sensitive_widget_destroy), NULL);
 }

@@ -515,8 +515,7 @@ plugin_init(Plugin *plugin)
 
 	if (plugin->fields.flags & PLUGIN_IS_DOCUMENT_SENSITIVE)
 	{
-		gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) ? TRUE : FALSE;
-		gtk_widget_set_sensitive(plugin->fields.menu_item, enable);
+		ui_add_document_sensitive(plugin->fields.menu_item);
 	}
 
 	g_module_symbol(plugin->module, "plugin_callbacks", (void *) &callbacks);
@@ -911,20 +910,6 @@ void plugins_free(void)
 }
 
 
-void plugins_update_document_sensitive(gboolean enabled)
-{
-	GList *item;
-
-	for (item = active_plugin_list; item != NULL; item = g_list_next(item))
-	{
-		Plugin *plugin = item->data;
-
-		if (plugin->fields.flags & PLUGIN_IS_DOCUMENT_SENSITIVE)
-			gtk_widget_set_sensitive(plugin->fields.menu_item, enabled);
-	}
-}
-
-
 /* Plugin Manager */
 
 enum
@@ -943,7 +928,8 @@ typedef struct
 	GtkListStore *store;
 	GtkWidget *description_label;
 	GtkWidget *configure_button;
-} PluginManagerWidgets;
+}
+PluginManagerWidgets;
 
 static PluginManagerWidgets pm_widgets;
 
