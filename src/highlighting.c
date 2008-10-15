@@ -1910,13 +1910,10 @@ static void styleset_none(ScintillaObject *sci)
 {
 	SSM(sci, SCI_SETLEXER, SCLEX_NULL, 0);
 
-	styleset_common(sci);
-
+	/* we need to set STYLE_DEFAULT before we call SCI_STYLECLEARALL in styleset_common() */
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_NONE, GCS_DEFAULT);
 
-	/* we need this to clear any other styles than STYLE_DEFAULT, otherwise the
-	 * "invert_all" option breaks */
-	SSM(sci, SCI_STYLECLEARALL, 0, 0);
+	styleset_common(sci);
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) common_style_set.wordchars);
 	SSM(sci, SCI_SETWHITESPACECHARS, 0, (sptr_t) whitespace_chars);
