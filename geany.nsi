@@ -19,9 +19,6 @@
 
 !define RESOURCEDIR "geany-${PRODUCT_VERSION}"
 
-; only used when embedding GTK+ installer
-!define GTK_INSTALLER "gtk+-2.10.6-1-setup.exe"
-
 SetCompressor /SOLID lzma
 XPStyle on
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
@@ -46,6 +43,9 @@ VIAddVersionKey "FileVersion" "${PRODUCT_VERSION}"
 VIAddVersionKey "ProductVersion" "${PRODUCT_VERSION}"
 VIAddVersionKey "LegalCopyright" "Copyright 2005-2008 by the Geany developers"
 VIAddVersionKey "FileDescription" "${PRODUCT_NAME} Installer"
+
+;Request application privileges for Windows Vista
+RequestExecutionLevel user
 
 ;;;;;;;;;;;;;;;;
 ; Init code    ;
@@ -94,7 +94,6 @@ FunctionEnd
 !insertmacro MUI_PAGE_DIRECTORY
 ; Start menu page
 var ICONS_GROUP
-!define MUI_STARTMENUPAGE_NODISABLE
 !define MUI_STARTMENUPAGE_DEFAULTFOLDER "Geany"
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT "${PRODUCT_UNINST_ROOT_KEY}"
 !define MUI_STARTMENUPAGE_REGISTRY_KEY "${PRODUCT_UNINST_KEY}"
@@ -139,12 +138,11 @@ Section "!Program Files" SEC01
   File /r "${RESOURCEDIR}\share\icons\*"
 
   SetOutPath "$INSTDIR"
+
+  CreateShortCut "$INSTDIR\Geany.lnk" "$INSTDIR\bin\Geany.exe"
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
-  CreateShortCut "$INSTDIR\Geany.lnk" "$INSTDIR\bin\Geany.exe"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Geany.lnk" "$INSTDIR\bin\Geany.exe"
-  CreateShortCut "$DESKTOP\Geany.lnk" "$INSTDIR\bin\Geany.exe"
-  CreateShortCut "$QUICKLAUNCH\Geany.lnk" "$INSTDIR\bin\Geany.exe"
   !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
@@ -166,10 +164,8 @@ Section "Documentation" SEC04
   SetOverwrite ifnewer
   SetOutPath "$INSTDIR"
   File /r "${RESOURCEDIR}\doc"
-
-; Shortcuts
-  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   WriteIniStr "$INSTDIR\Documentation.url" "InternetShortcut" "URL" "$INSTDIR\doc\Manual.html"
+  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation.lnk" "$INSTDIR\Documentation.url"
   !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
@@ -206,10 +202,16 @@ Section "GTK 2.12 Runtime Environment" SEC06
 SectionEnd
 !endif
 
-Section "Context menus" SEC07
+Section "Context Menus" SEC07
   SectionIn 1
   WriteRegStr HKCR "*\shell\OpenWithGeany" "" "Open with Geany"
   WriteRegStr HKCR "*\shell\OpenWithGeany\command" "" '$INSTDIR\bin\geany.exe "%1"'
+SectionEnd
+
+Section "Desktop Shortcuts" SEC08
+  SectionIn 1
+  CreateShortCut "$DESKTOP\Geany.lnk" "$INSTDIR\bin\Geany.exe"
+  CreateShortCut "$QUICKLAUNCH\Geany.lnk" "$INSTDIR\bin\Geany.exe"
 SectionEnd
 
 Section -AdditionalIcons
@@ -247,6 +249,7 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC06} "You need this files to run Geany. If you have already installed a GTK Runtime Environment (2.6 or higher), you can skip it."
 !endif
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC07} "Add context menu item 'Open With Geany'"
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC08} "Create shortcuts for Geany on the desktop and in the Quicklaunch Bar"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 

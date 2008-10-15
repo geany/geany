@@ -1,3 +1,10 @@
+2008-10-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * geany.nsi:
+   Add option to not create desktop and quicklaunch shortcuts.
+   Allow skipping creation of the Start Menu folder.
+
+
 2008-10-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/interface.c, src/callbacks.c, src/callbacks.h, src/plugins.c,
