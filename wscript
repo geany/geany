@@ -34,7 +34,7 @@ Missing features: --enable-binreloc, make targets: dist, pdf (in doc/)
 Known issues: Dependency handling is buggy, e.g. if src/document.h is
 			  changed, depending source files are not rebuilt (maybe Waf bug).
 
-Requires WAF 1.5 (SVN r4661 or later) and Python 2.4 (or later).
+Requires WAF 1.5 (SVN r4695 or later) and Python 2.4 (or later).
 """
 
 
@@ -203,13 +203,13 @@ def configure(conf):
 	conf.write_config_header('config.h')
 
 	Utils.pprint('BLUE', 'Summary:')
-	print_message('Install Geany ' + VERSION + ' in', conf.env['PREFIX'])
-	print_message('Using GTK version', gtk_version)
-	print_message('Build with GTK printing support', have_gtk_210 and 'yes' or 'no')
-	print_message('Build with plugin support', Options.options.no_plugins and 'no' or 'yes')
-	print_message('Use virtual terminal support', Options.options.no_vte and 'no' or 'yes')
+	print_message(conf, 'Install Geany ' + VERSION + ' in', conf.env['PREFIX'])
+	print_message(conf, 'Using GTK version', gtk_version)
+	print_message(conf, 'Build with GTK printing support', have_gtk_210 and 'yes' or 'no')
+	print_message(conf, 'Build with plugin support', Options.options.no_plugins and 'no' or 'yes')
+	print_message(conf, 'Use virtual terminal support', Options.options.no_vte and 'no' or 'yes')
 	if svn_rev != '-1':
-		print_message('Compiling Subversion revision', svn_rev)
+		print_message(conf, 'Compiling Subversion revision', svn_rev)
 		conf.env.append_value('CCFLAGS', '-g -DGEANY_DEBUG')
 
 	conf.env.append_value('CCFLAGS', '-DHAVE_CONFIG_H')
@@ -462,15 +462,8 @@ def launch(command, status, success_color='GREEN'):
 
 	return ret
 
-line_len = 0
 
-def print_message(msg, result, color = 'GREEN'):
-	global line_len
-	if line_len == 0:
-		line_len = Configure.ConfigurationContext().line_just
-
-	line_len = max(line_len, len(msg))
-	print "%s :" % msg.ljust(line_len),
-	Utils.pprint(color, result)
-	Runner.print_log(msg, '\n\n')
+def print_message(conf, msg, result, color = 'GREEN'):
+	conf.check_message_1(msg)
+	conf.check_message_2(result, color)
 
