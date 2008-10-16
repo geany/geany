@@ -2,6 +2,9 @@
 
  * wscript, waf:
    Update Waf once more.
+ * tagmanager/Makefile.am:
+   Add variable 'regex_sources' to append to libtagmanager_a_SOURCES
+   if necessary.
 
 
 2008-10-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
