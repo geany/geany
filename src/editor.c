@@ -3912,15 +3912,14 @@ static ScintillaObject *create_new_sci(GeanyDocument *doc)
 	SSM(sci, SCI_AUTOCSETSEPARATOR, '\n', 0);
 	SSM(sci, SCI_SETSCROLLWIDTHTRACKING, 1, 0);
 
-	/* signal for insert-key(works without too, but to update the right status bar) */
-	/*g_signal_connect(sci, "key-press-event",
-					 G_CALLBACK(keybindings_got_event), GINT_TO_POINTER(new_idx));*/
-	/* signal for the popup menu */
-	g_signal_connect(sci, "button-press-event", G_CALLBACK(on_editor_button_press_event), doc);
-	g_signal_connect(sci, "scroll-event", G_CALLBACK(on_editor_scroll_event), doc->editor);
-	g_signal_connect(sci, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
-	g_signal_connect(sci, "expose-event", G_CALLBACK(on_editor_expose_event), doc);
-
+	/* only connect signals if this is for the document notebook, not split window */
+	if (doc->editor->sci == NULL)
+	{
+		g_signal_connect(sci, "button-press-event", G_CALLBACK(on_editor_button_press_event), doc);
+		g_signal_connect(sci, "scroll-event", G_CALLBACK(on_editor_scroll_event), doc->editor);
+		g_signal_connect(sci, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
+		g_signal_connect(sci, "expose-event", G_CALLBACK(on_editor_expose_event), doc);
+	}
 	return sci;
 }
 
