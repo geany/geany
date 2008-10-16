@@ -265,6 +265,10 @@ Short option  Long option              Function
                                        given files are ignored.
 ============  =======================  =================================================
 
+You can also pass line number and column number information, e.g.::
+
+    geany some_file.foo:55:4
+
 Geany supports all generic GTK options, a list is available on the
 help screen.
 
@@ -298,9 +302,18 @@ Opening files from the command-line in a running instance
 Geany detects an already running instance of itself and opens files
 from the command-line in the already running instance. So, Geany can
 be used to view and edit files by opening them from other programs
-such as a file manager. If you do not like this for some reason, you
-can disable using the first instance by using the appropriate command
-line option -- see the section called `Command line options`_.
+such as a file manager.
+
+You can also pass line number and column number information, e.g.::
+
+    geany some_file.foo:55:4
+
+This would open the file ``some_file.foo`` with the cursor on line 55,
+column 4.
+
+If you do not like this for some reason, you can disable using the first
+instance by using the appropriate command line option -- see the section
+called `Command line options`_.
 
 
 Virtual terminal emulator widget (VTE)
@@ -599,13 +612,13 @@ before the selected text was copied to the new position.
 Indentation
 ^^^^^^^^^^^
 
-Geany allows each document to indent either with a tab character
-or multiple spaces. The default indent mode is set in the `Editor Features
-tab in preferences dialog`_. But this can be overridden using either
-the *Document->Indent Type* menu, or by using the *Detect from file*
-indentation preference. When enabled, this scans each file that is opened
-and sets the indent mode based on how many lines start with a tab vs. 2
-or more spaces.
+Geany allows each document to indent either with a tab character or
+multiple spaces. The default indent mode is set in the `Editor Features
+tab in preferences dialog`_ (see the link for more information). But
+this can be overridden using either the *Document->Indent Type* menu,
+or by using the *Detect from file* indentation preference. When enabled,
+this scans each file that is opened and sets the indent mode based on
+how many lines start with a tab vs. 2 or more spaces.
 
 The indent mode for the current document is shown on the status bar
 as follows:
@@ -614,6 +627,9 @@ TAB
     Indent with Tab characters.
 SP
     Indent with spaces.
+T/S
+    Indent with tabs and spaces, depending on how much indentation is
+    on a line.
 
 
 Auto-indentation
@@ -1470,11 +1486,27 @@ Indentation group
 See `Indentation`_ for more information.
 
 Type
-    Whether to use tabs or spaces for indentation.
+    When Geany inserts indentation, whether to use:
 
-Tab width
+    * Just Tabs
+    * Just Spaces
+    * Tabs and Spaces, depending on how much indentation is on a line
+
+    The *Tabs and Spaces* indent type is also known as *Soft tab
+    support* in some other editors.
+
+Width
     The width of a single indent size in spaces. By default the indent
-    size is the equivalent of 4 spaces.
+    size is equivalent to 4 spaces.
+
+Hard tab width
+    When the *Tabs and Spaces* indent type is enabled, this is the
+    display size of a tab. Otherwise this is ignored. Although
+    configurable, this should usually be set to 8.
+
+Detect from file
+    Try to detect and set the indent type based on file content, when
+    a file is opened.
 
 Auto-indent mode
     The type of auto-indentation you wish to use after pressing Enter,
@@ -1642,6 +1674,10 @@ Files tab in preferences dialog
 
 New files
 `````````
+
+Open new documents from the command-line
+    Whether to create new documents when passing filenames that don't
+    exist from the command-line.
 
 Default encoding (new files)
     The type of file encoding you wish to use when creating files.
@@ -2429,12 +2465,21 @@ Replace                         Ctrl-H                    Opens the Replace dial
 
 Find in files                   Ctrl-Shift-F              Opens the Find in files dialog.
 
-Next message                                              Jumps to the line with the next message from
-                                                          the last call to Find usage.
+Next message                                              Jumps to the line with the next message in
+                                                          the Messages window.
+
+Previous message                                          Jumps to the line with the previous message
+                                                          in the Messages window.
 
 Find Usage                                                Finds all occurrences of the current word (near
-                                                          the keyboard cursor) or selection and displays
-                                                          them in the messages window.
+                                                          the keyboard cursor) or selection in all open
+                                                          documents and displays them in the messages
+                                                          window.
+
+Find Document Usage                                       Finds all occurrences of the current word (near
+                                                          the keyboard cursor) or selection in the current
+                                                          document and displays them in the messages
+                                                          window.
 
 **Go to**
 
@@ -2510,6 +2555,10 @@ Switch to VTE                   F4                        Switches to VTE widget
 Switch to Search Bar            F7                        Switches to the search bar in the toolbar (if
                                                           visible).
 
+Switch to Sidebar                                         Focus the Sidebar.
+
+Switch to Compiler                                        Focus the Compiler message window tab.
+
 **Notebook tabs**
 
 Switch to left document         Ctrl-PageUp               Switches to the previous open document.
@@ -2563,6 +2612,9 @@ Make object                                               Compiles the current f
 
 Next error                                                Jumps to the line with the next error from the
                                                           last build process.
+
+Previous error                                            Jumps to the line with the previous error from
+                                                          the last build process.
 
 Run                             F5                        Executes the current file in a terminal emulation.
 

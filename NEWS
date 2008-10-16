@@ -46,7 +46,7 @@ Geany 0.15 (TBA)
     * Implement soft tabs support (#1662173). Thanks to Joerg Desch for
       explaining how it needed to work. There's now separate Width and Tab
       Width indent prefs, the latter for the new 'Tabs & Spaces' Indent
-      Type. Indent type per document is shown on the status bar.
+      Type.
     * Auto-update the line margin width as lines are added (thanks to Jason
       Oster; #2129157).
 
