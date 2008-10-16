@@ -1,3 +1,94 @@
+Geany 0.15 (TBA)
+
+    General:
+    * Add Previous Message, Previous Error commands (thanks also to Beau
+      Barker).
+    * Add 'Close Other Documents' File menu command (#1976724).
+    * Add Find Document Usage popup menu command & keybinding.
+    * Check that the current file is still on disk (as well as checking the
+      modification time).
+    * Add support for custom file templates (found at startup) in the
+      ~/.geany/templates/files directory, shown underneath filetype templates
+      in the New with Template menu.
+    * Make socket open command support filename:line:column syntax.
+    * Add filetypes.* [build_settings] key 'error_regex' to support custom
+      error message parsing using a GNU-style extended regular expression.
+
+    Prefs:
+    * Make disk check timeout configurable (zero disables disk checks).
+    * Add search pref: 'Use the current file's directory for Find in Files'
+      (#1930435).
+    * Add files pref 'Open new documents from the command-line'.
+
+    Interface:
+    * Add/reorder a recent file item when closing a document.
+    * Make keyboard shortcuts dialog non-modal (#1999384).
+
+    Editor:
+    * Fix documents sometimes not being colourised properly after a reload
+      (#1948857).
+    * Add basic Line Breaking option in the Document menu and 'Line breaking
+      column' editor pref (for now only works when typing characters past
+      the line breaking column number).
+    * Don't colourise any documents until they need to be drawn (this
+      should make opening a session faster for filetypes that support typename
+      highlighting).
+    * Make Ctrl-click on a word perform Go to Tag Definition.
+    * Add 'Max. symbol name suggestions' autocompletion pref.
+    * Show ellipsis (...) item when there are too many symbol names for
+      autocompletion.
+    * Highlight matching brace indent guides (thanks to Jason Oster;
+      #2104099).
+    * Cancel autocompletion on Undo/Redo (thanks to Jason Oster; #2102715).
+    * Show brace indent guides on empty lines when appropriate (thanks to
+      Jason Oster; #2105982).
+    * Add 'Tab key indents' pref, on by default.
+    * Implement soft tabs support (#1662173). Thanks to Joerg Desch for
+      explaining how it needed to work. There's now separate Width and Tab
+      Width indent prefs, the latter for the new 'Tabs & Spaces' Indent
+      Type. Indent type per document is shown on the status bar.
+    * Auto-update the line margin width as lines are added (thanks to Jason
+      Oster; #2129157).
+
+    Keybindings:
+    * Fix Switch to Sidebar shortcut so that it works for whichever widget
+      is in the current sidebar notebook page (#1967104).
+    * Add Go to Start/End of Line keybindings (#1996175).
+    * Add 'Switch to Compiler' keybinding (useful when checking build
+      progress).
+
+    Filetypes:
+    * Fix infinite loop when parsing Haskell datatypes (fixes #2011356).
+    * Add OpenGL Shader Language (GLSL) filetype (thanks to Colomban
+      Wendling; #2060961).
+    * Add R language filetype (thanks to Andrew Rowland; #2121502).
+
+    Embedded Terminal:
+    * Fix hang when restarting the VTE (#1990323) with VTE 0.16.14.
+      Note that with VTE 0.16.14 the reset sometimes leaves a blank
+      terminal, but pressing enter makes it then behave as normal.
+
+    Plugins:
+    * File Browser: Show '..' item when the current folder is empty
+      (#2015121).
+    * Add Split Window plugin (should work OK for viewing; full editing
+      support is not implemented yet).
+
+    Documentation:
+    * Add Tips and Tricks appendix.
+    * Updated Installation section.
+    * Update 'Build system' for custom error regexes.
+
+    Plugin API:
+    * Many changes, most incompatible; see the API documentation (make
+      api-doc) and the geany-devel list archives.
+    * Deprecated: plugin_fields, plugin_info symbols.
+
+    HACKING:
+    * Update for adding a filetype.
+    * Can now generate hacking.html with 'make hacking-doc'.
+
+
 Geany 0.14 (April 19, 2008)
 
     General:
