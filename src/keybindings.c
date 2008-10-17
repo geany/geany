@@ -662,51 +662,52 @@ void keybindings_free(void)
 }
 
 
-static void get_shortcut_labels_text(GString **text_names_str, GString **text_keys_str)
+static void fill_shortcut_labels_treeview(GtkWidget *tree)
 {
 	gsize g, i;
-	GString *text_names = g_string_sized_new(600);
-	GString *text_keys = g_string_sized_new(600);
+	gchar *shortcut;
+	GeanyKeyBinding *kb;
+	GeanyKeyGroup *group;
+	GtkListStore *store;
+	GtkTreeIter iter;
 
-	*text_names_str = text_names;
-	*text_keys_str = text_keys;
+	store = gtk_list_store_new(3, G_TYPE_STRING, G_TYPE_STRING, PANGO_TYPE_WEIGHT);
 
 	for (g = 0; g < keybinding_groups->len; g++)
 	{
-		GeanyKeyGroup *group = g_ptr_array_index(keybinding_groups, g);
+		group = g_ptr_array_index(keybinding_groups, g);
 
-		if (g == 0)
+		if (g > 0)
 		{
-			g_string_append_printf(text_names, "<b>%s</b>\n", group->label);
-			g_string_append(text_keys, "\n");
+			gtk_list_store_append(store, &iter);
+			gtk_list_store_set(store, &iter, -1);
 		}
-		else
-		{
-			g_string_append_printf(text_names, "\n<b>%s</b>\n", group->label);
-			g_string_append(text_keys, "\n\n");
-		}
+
+		gtk_list_store_append(store, &iter);
+		gtk_list_store_set(store, &iter, 0, group->label, 2, PANGO_WEIGHT_BOLD, -1);
 
 		for (i = 0; i < group->count; i++)
 		{
-			GeanyKeyBinding *kb = &group->keys[i];
-			gchar *shortcut;
-
+			kb = &group->keys[i];
 			shortcut = gtk_accelerator_get_label(kb->key, kb->mods);
-			g_string_append(text_names, kb->label);
-			g_string_append(text_names, "\n");
-			g_string_append(text_keys, shortcut);
-			g_string_append(text_keys, "\n");
+
+			gtk_list_store_append(store, &iter);
+			gtk_list_store_set(store, &iter, 0, kb->label, 1, shortcut, 2, PANGO_WEIGHT_NORMAL, -1);
+
 			g_free(shortcut);
 		}
 	}
+
+	gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
+	g_object_unref(store);
 }
 
 
 static GtkWidget *create_dialog(void)
 {
-	GtkWidget *dialog, *hbox, *label1, *label2, *label3, *swin, *vbox;
-	GString *text_names;
-	GString *text_keys;
+	GtkWidget *dialog, *tree, *label, *swin, *vbox;
+	GtkCellRenderer *text_renderer;
+	GtkTreeViewColumn *column;
 	gint height;
 
 	dialog = gtk_dialog_new_with_buttons(_("Keyboard Shortcuts"), GTK_WINDOW(main_widgets.window),
@@ -722,32 +723,32 @@ static GtkWidget *create_dialog(void)
 
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
 
-	label3 = gtk_label_new(_("The following keyboard shortcuts are configurable:"));
-	gtk_misc_set_alignment(GTK_MISC(label3), 0, 0.5);
+	label = gtk_label_new(_("The following keyboard shortcuts are configurable:"));
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 
-	hbox = gtk_hbox_new(FALSE, 6);
+	tree = gtk_tree_view_new();
+	gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(tree), TRUE);
+	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree), FALSE);
 
-	label1 = gtk_label_new(NULL);
+	text_renderer = gtk_cell_renderer_text_new();
+    /* we can't use "weight-set", see http://bugzilla.gnome.org/show_bug.cgi?id=355214 */
+	column = gtk_tree_view_column_new_with_attributes(
+		NULL, text_renderer, "text", 0, "weight", 2, NULL);
+	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 
-	label2 = gtk_label_new(NULL);
+	text_renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(NULL, text_renderer, "text", 1, NULL);
+	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 
-	get_shortcut_labels_text(&text_names, &text_keys);
-
-	gtk_label_set_markup(GTK_LABEL(label1), text_names->str);
-	gtk_label_set_text(GTK_LABEL(label2), text_keys->str);
-
-	g_string_free(text_names, TRUE);
-	g_string_free(text_keys, TRUE);
-
-	gtk_container_add(GTK_CONTAINER(hbox), label1);
-	gtk_container_add(GTK_CONTAINER(hbox), label2);
+	fill_shortcut_labels_treeview(tree);
 
 	swin = gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin), GTK_POLICY_NEVER,
 		GTK_POLICY_AUTOMATIC);
-	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(swin), hbox);
+	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(swin), GTK_SHADOW_ETCHED_IN);
+	gtk_container_add(GTK_CONTAINER(swin), tree);
 
-	gtk_box_pack_start(GTK_BOX(vbox), label3, FALSE, FALSE, 6);
+	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 6);
 	gtk_box_pack_start(GTK_BOX(vbox), swin, TRUE, TRUE, 0);
 	return dialog;
 }

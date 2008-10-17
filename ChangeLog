@@ -1,3 +1,10 @@
+2008-10-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/keybindings.c:
+   Make keyboard shortcuts dialog using a treeview to display
+   the shortcuts to make it scrollable with the keyboard.
+
+
 2008-10-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * wscript, waf:
