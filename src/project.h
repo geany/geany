@@ -36,6 +36,12 @@ typedef struct GeanyProject
 	gchar *file_name; 		/**< Where the project file is stored (in UTF-8). */
 	gchar *base_path;		/**< Base path of the project directory (in UTF-8, maybe relative). */
 	gchar *run_cmd; 		/**< Project run command (in UTF-8). */
+	gchar *build_1_cmd;     /**< Project build menu item 1 cmd (in UTF-8). */
+	gchar *build_2_cmd;     /**< Project build menu item 2 cmd (in UTF-8). */
+	gchar *build_3_cmd;     /**< Project build menu item 3 cmd (in UTF-8). */
+	gchar *build_1_label;   /**< Project build menu item 1 label (in UTF-8). */
+	gchar *build_2_label;   /**< Project build menu item 2 label (in UTF-8). */
+	gchar *build_3_label;   /**< Project build menu item 3 label (in UTF-8). */
 	/** Identifier whether it is a pure Geany project or modified/extended
 	 * by a plugin. */
 	gint type;

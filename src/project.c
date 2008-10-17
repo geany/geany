@@ -296,6 +296,7 @@ void project_open()
 /* Called when creating, opening, closing and updating projects. */
 static void update_ui(void)
 {
+    build_default_menu();
 	ui_set_window_title(NULL);
 	build_menu_update(NULL);
 }
@@ -901,6 +902,13 @@ static gboolean load_config(const gchar *filename)
 	p->make_in_base_path = utils_get_setting_boolean(config, "project", "make_in_base_path", TRUE);
 	p->run_cmd = utils_get_setting_string(config, "project", "run_cmd", "");
 	p->file_patterns = g_key_file_get_string_list(config, "project", "file_patterns", NULL, NULL);
+	
+	p->build_1_cmd = utils_get_setting_string(config, "build_menu", "cmd_1", NULL );
+	p->build_2_cmd = utils_get_setting_string(config, "build_menu", "cmd_2", NULL );
+	p->build_3_cmd = utils_get_setting_string(config, "build_menu", "cmd_3", NULL );
+	p->build_1_label = utils_get_setting_string(config, "build_menu", "label_1", NULL );
+	p->build_2_label = utils_get_setting_string(config, "build_menu", "label_2", NULL );
+	p->build_3_label = utils_get_setting_string(config, "build_menu", "label_3", NULL );
 
 	if (project_prefs.project_session)
 	{
@@ -951,8 +959,20 @@ static gboolean write_config(gboolean emit_signal)
 	if (p->description)
 		g_key_file_set_string(config, "project", "description", p->description);
 	g_key_file_set_boolean(config, "project", "make_in_base_path", p->make_in_base_path);
-	if (p->run_cmd)
+	if (p->run_cmd) /* left in project section for backward compatibility */
 		g_key_file_set_string(config, "project", "run_cmd", p->run_cmd);
+	if (p->build_1_cmd)
+		g_key_file_set_string(config, "build_menu", "cmd_1", p->build_1_cmd);
+	if (p->build_2_cmd)
+		g_key_file_set_string(config, "build_menu", "cmd_2", p->build_2_cmd);
+	if (p->build_3_cmd)
+		g_key_file_set_string(config, "build_menu", "cmd_3", p->build_3_cmd);
+	if (p->build_1_label)
+		g_key_file_set_string(config, "build_menu", "label_1", p->build_1_label);
+	if (p->build_2_label)
+		g_key_file_set_string(config, "build_menu", "label_2", p->build_2_label);
+	if (p->build_3_label)
+		g_key_file_set_string(config, "build_menu", "label_3", p->build_3_label);
 	if (p->file_patterns)
 		g_key_file_set_string_list(config, "project", "file_patterns",
 			(const gchar**) p->file_patterns, g_strv_length(p->file_patterns));

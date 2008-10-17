@@ -74,5 +74,6 @@ void build_menu_update(GeanyDocument *doc);
 
 BuildMenuItems *build_get_menu_items(gint filetype_idx);
 
+void build_default_menu();
 
 #endif

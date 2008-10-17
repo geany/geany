@@ -1,3 +1,25 @@
+2008-10-17 Lex Trotman <elextr(at)gmail(dot)com>
+
+ Prototype of project customisable build menu commands
+ 
+ * src/build.h:
+   added build_default_menu() to interface, used by projects
+ * src/build.c:
+   build_make_file() changed to take commands from project or default
+   create_build_menu_gen() changed to create the menu from the project 
+   settings or default & unref old menu so callable more than once
+   build_default_menu() added
+   on_includes_arguments_dialog_response() added getting the values for 
+   the project fields
+   show_includes_arguments_gen() added the extra fields for project commands
+ * src/project.h:
+   added command and label fields to the project structure
+ * src/project.c:
+   update_ui() calls build_default_menu to make menu match project status
+   load_config() added loads for build commands & labels
+   write_config() added saves for build commands and labels
+
+
 2008-10-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * doc/geany.txt, doc/geany.html, src/about.c, THANKS:
