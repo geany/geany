@@ -3,6 +3,8 @@
  * plugins/splitwindow.c:
    Include "support.h" for I18N support instead of <glib/gi18n.h>
    to get strings translated with GLib 2.18+.
+ * data/filetypers.tcl:
+   Use 'tclsh' as default Compile/Run command (part of #2037728).
 
 
 2008-10-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

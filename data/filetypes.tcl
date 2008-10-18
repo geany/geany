@@ -58,6 +58,6 @@ context_action_cmd=
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
 # (use only one of it at one time)
-compiler=tclsh8.4 "%f"
-run_cmd=tclsh8.4 "%f"
+compiler=tclsh "%f"
+run_cmd=tclsh "%f"
 
