@@ -16,7 +16,7 @@ attribute=0x007f00;0xffffff;false;false
 value=0x303030;0xffffff;false;false
 id=0x7f0000;0xffffff;false;false
 identifier2=0x6b6bff;0xffffff;false;false
-important=0xff0000;0xffffff;false;false
+important=0x990000;0xffffff;false;false
 directive=0x006bff;0xffffff;false;true
 
 [keywords]
@@ -25,6 +25,11 @@ primary=color background-color background-image background-repeat background-att
 # CSS 2 keywords
 secondary=border-top-color border-right-color border-bottom-color border-left-color border-color border-top-style border-right-style border-bottom-style border-left-style border-style top right bottom left position z-index direction unicode-bidi min-width max-width min-height max-height overflow clip visibility content quotes counter-reset counter-increment marker-offset size marks page-break-before page-break-after page-break-inside page orphans widows font-stretch font-size-adjust unicode-range units-per-em src panose-1 stemv stemh slope cap-height x-height ascent descent widths bbox definition-src baseline centerline mathline topline text-shadow caption-side table-layout border-collapse border-spacing empty-cells speak-header cursor outline outline-width outline-style outline-color volume speak pause-before pause-after pause cue-before cue-after cue play-during azimuth elevation speech-rate voice-family pitch pitch-range stress richness speak-punctuation speak-numeral
 pseudoclasses=first-letter first-line link active visited lang first-child focus hover before after left right first
+css3_properties=
+pseudo_elements=
+browser_css_properties=
+browser_pseudo_classes=
+browser_pseudo_elements=
 
 
 [settings]

@@ -1924,7 +1924,7 @@ static void styleset_none(ScintillaObject *sci)
 
 static void styleset_css_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_style_array(GEANY_FILETYPES_CSS, 17);
+	new_style_array(GEANY_FILETYPES_CSS, 22);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x003399", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[0]);
 	get_keyfile_hex(config, config_home, "styling", "comment", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[1]);
 	get_keyfile_hex(config, config_home, "styling", "tag", "0x2166a4", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[2]);
@@ -1940,37 +1940,24 @@ static void styleset_css_init(gint ft_id, GKeyFile *config, GKeyFile *config_hom
 	get_keyfile_hex(config, config_home, "styling", "value", "0x303030", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[12]);
 	get_keyfile_hex(config, config_home, "styling", "id", "0x7f0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[13]);
 	get_keyfile_hex(config, config_home, "styling", "identifier2", "0x6b6bff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[14]);
-	get_keyfile_hex(config, config_home, "styling", "important", "0xff0000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[15]);
+	get_keyfile_hex(config, config_home, "styling", "important", "0x990000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[15]);
 	get_keyfile_hex(config, config_home, "styling", "directive", "0x006bff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[16]);
+	get_keyfile_hex(config, config_home, "styling", "identifier3", "0x00c8ff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[17]);
+	get_keyfile_hex(config, config_home, "styling", "pseudoelement", "0x666610", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[18]);
+	get_keyfile_hex(config, config_home, "styling", "extended_identifier", "0x666610", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[19]);
+	get_keyfile_hex(config, config_home, "styling", "extended_pseudoclass", "0x660010", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[20]);
+	get_keyfile_hex(config, config_home, "styling", "extended_pseudoelement", "0x660010", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[21]);
 
-	style_sets[GEANY_FILETYPES_CSS].keywords = g_new(gchar*, 4);
-	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_CSS, 0,
-								"color background-color background-image background-repeat background-attachment background-position background \
-								font-family font-style font-variant font-weight font-size font \
-								word-spacing letter-spacing text-decoration vertical-align text-transform text-align text-indent line-height \
-								margin-top margin-right margin-bottom margin-left margin \
-								padding-top padding-right padding-bottom padding-left padding \
-								border-top-width border-right-width border-bottom-width border-left-width border-width \
-								border-top border-right border-bottom border-left border \
-								border-color border-style width height float clear \
-								display white-space list-style-type list-style-image list-style-position list-style");
-	get_keyfile_keywords(config, config_home, "keywords", "pseudoclasses", GEANY_FILETYPES_CSS, 1, "first-letter first-line link active visited lang first-child focus hover before after left right first");
-	get_keyfile_keywords(config, config_home, "keywords", "secondary", GEANY_FILETYPES_CSS, 2,
-								"border-top-color border-right-color border-bottom-color border-left-color border-color \
-								border-top-style border-right-style border-bottom-style border-left-style border-style \
-								top right bottom left position z-index direction unicode-bidi \
-								min-width max-width min-height max-height overflow clip visibility content quotes \
-								counter-reset counter-increment marker-offset \
-								size marks page-break-before page-break-after page-break-inside page orphans widows \
-								font-stretch font-size-adjust unicode-range units-per-em src \
-								panose-1 stemv stemh slope cap-height x-height ascent descent widths bbox definition-src \
-								baseline centerline mathline topline text-shadow \
-								caption-side table-layout border-collapse border-spacing empty-cells speak-header \
-								cursor outline outline-width outline-style outline-color \
-								volume speak pause-before pause-after pause cue-before cue-after cue \
-								play-during azimuth elevation speech-rate voice-family pitch pitch-range stress richness \
-								speak-punctuation speak-numeral");
-	style_sets[GEANY_FILETYPES_CSS].keywords[3] = NULL;
+	style_sets[GEANY_FILETYPES_CSS].keywords = g_new(gchar*, 9);
+	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_CSS, 0, "");
+	get_keyfile_keywords(config, config_home, "keywords", "pseudoclasses", GEANY_FILETYPES_CSS, 1, "");
+	get_keyfile_keywords(config, config_home, "keywords", "secondary", GEANY_FILETYPES_CSS, 2, "");
+	get_keyfile_keywords(config, config_home, "keywords", "css3_properties", GEANY_FILETYPES_CSS, 3, "");
+	get_keyfile_keywords(config, config_home, "keywords", "pseudo_elements", GEANY_FILETYPES_CSS, 4, "");
+	get_keyfile_keywords(config, config_home, "keywords", "browser_css_properties", GEANY_FILETYPES_CSS, 5, "");
+	get_keyfile_keywords(config, config_home, "keywords", "browser_pseudo_classes", GEANY_FILETYPES_CSS, 6, "");
+	get_keyfile_keywords(config, config_home, "keywords", "browser_pseudo_elements", GEANY_FILETYPES_CSS, 7, "");
+	style_sets[GEANY_FILETYPES_CSS].keywords[8] = NULL;
 
 	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_CSS].wordchars);
@@ -1980,12 +1967,14 @@ static void styleset_css_init(gint ft_id, GKeyFile *config, GKeyFile *config_hom
 static void styleset_css(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_CSS;
+	guint i;
 
 	apply_filetype_properties(sci, SCLEX_CSS, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_CSS].keywords[0]);
-	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_CSS].keywords[1]);
-	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_CSS].keywords[2]);
+	for (i = 0; i < 8; i++)
+	{
+		SSM(sci, SCI_SETKEYWORDS, i, (sptr_t) style_sets[GEANY_FILETYPES_CSS].keywords[i]);
+	}
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_CSS, 0);
 	set_sci_style(sci, SCE_CSS_DEFAULT, GEANY_FILETYPES_CSS, 0);
@@ -2005,6 +1994,11 @@ static void styleset_css(ScintillaObject *sci)
 	set_sci_style(sci, SCE_CSS_IDENTIFIER2, GEANY_FILETYPES_CSS, 14);
 	set_sci_style(sci, SCE_CSS_IMPORTANT, GEANY_FILETYPES_CSS, 15);
 	set_sci_style(sci, SCE_CSS_DIRECTIVE, GEANY_FILETYPES_CSS, 16);
+	set_sci_style(sci, SCE_CSS_IDENTIFIER3, GEANY_FILETYPES_CSS, 17);
+	set_sci_style(sci, SCE_CSS_PSEUDOELEMENT, GEANY_FILETYPES_CSS, 18);
+	set_sci_style(sci, SCE_CSS_EXTENDED_IDENTIFIER, GEANY_FILETYPES_CSS, 19);
+	set_sci_style(sci, SCE_CSS_EXTENDED_PSEUDOCLASS, GEANY_FILETYPES_CSS, 20);
+	set_sci_style(sci, SCE_CSS_EXTENDED_PSEUDOELEMENT, GEANY_FILETYPES_CSS, 21);
 }
 
 
