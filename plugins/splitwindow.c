@@ -25,7 +25,7 @@
 /* Split Window plugin. */
 
 #include "geany.h"
-#include <glib/gi18n.h>
+#include "support.h"
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
 #include "SciLexer.h"
