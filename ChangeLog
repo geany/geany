@@ -9,6 +9,8 @@
    Update Scintilla to version 1.76.
  * src/highlighting.c, data/filetypes.diff:
    Add new style 'Changed' to filetype Diff.
+ * autogen.sh, Makefile.am:
+   Require automake 1.7 or later.
 
 
 2008-10-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

@@ -36,7 +36,7 @@ DIE=0
 
 (automake --version) < /dev/null > /dev/null 2>&1 || {
 	echo
-	echo "**Error**: You must have \`automake' installed."
+	echo "**Error**: You must have \`automake' (1.7 or later) installed."
 	echo "You can get it from: ftp://ftp.gnu.org/pub/gnu/"
 	DIE=1
 	NO_AUTOMAKE=yes
