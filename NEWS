@@ -108,6 +108,11 @@ Geany 0.15 (October 19, 2008)
     * Update for adding a filetype.
     * Can now generate hacking.html with 'make hacking-doc'.
 
+    Internationalisation:
+    * New translations: ko, tr.
+    * Updated translations: be, ca, de, en_GB, fi, hu, it, ja, pl,
+      ro, ru, sv, zh_CN
+
 
 Geany 0.14 (April 19, 2008)
 
