@@ -26,14 +26,11 @@ Geany 0.15 (October 19, 2008)
     * Add files pref 'Open new documents from the command-line'.
 
     Interface:
-    * Add/reorder a recent file item when closing a document.
     * Make keyboard shortcuts dialog non-modal (#1999384).
     * Add a debug messages window to easily view debug messages/warnings.
 
     Editor:
     * Update Scintilla to version 1.77 (includes many fixes).
-    * Fix documents sometimes not being colourised properly after a reload
-      (#1948857).
     * Add basic Line Breaking option in the Document menu and 'Line breaking
       column' editor pref (for now only works when typing characters past
       the line breaking column number).
@@ -64,8 +61,6 @@ Geany 0.15 (October 19, 2008)
       lib/locale as GTK does since 2.12.2.
 
     Keybindings:
-    * Fix Switch to Sidebar shortcut so that it works for whichever widget
-      is in the current sidebar notebook page (#1967104).
     * Add Go to Start/End of Line keybindings (#1996175).
     * Add 'Switch to Compiler' keybinding (useful when checking build
       progress).
@@ -73,7 +68,6 @@ Geany 0.15 (October 19, 2008)
       Replace Spaces by tabs, Previous/Next word part.
 
     Filetypes:
-    * Fix infinite loop when parsing Haskell datatypes (fixes #2011356).
     * Add OpenGL Shader Language (GLSL) filetype (thanks to Colomban
       Wendling; #2060961).
     * Add R language filetype (thanks to Andrew Rowland; #2121502).
@@ -86,8 +80,6 @@ Geany 0.15 (October 19, 2008)
       terminal, but pressing enter makes it then behave as normal.
 
     Plugins:
-    * File Browser: Show '..' item when the current folder is empty
-      (#2015121).
     * Add Split Window plugin (should work OK for viewing; full editing
       support is not implemented yet).
     * Merge InstantSave, AutoSave and BackupCopy plugins into the new
@@ -100,13 +92,9 @@ Geany 0.15 (October 19, 2008)
     * Add a section for internal plugins.
 
     Plugin API:
-    * Many changes, most incompatible; see the API documentation (make
-      api-doc) and the geany-devel list archives.
+    * Many changes; see the API documentation (make api-doc) and the
+      geany-devel list archives.
     * Deprecated: plugin_fields, plugin_info symbols.
-
-    HACKING:
-    * Update for adding a filetype.
-    * Can now generate hacking.html with 'make hacking-doc'.
 
     Internationalisation:
     * New translations: ko, tr.
