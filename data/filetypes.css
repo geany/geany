@@ -15,18 +15,23 @@ singlestring=0x330066;0xffffff;false;false
 attribute=0x007f00;0xffffff;false;false
 value=0x303030;0xffffff;false;false
 id=0x7f0000;0xffffff;false;false
-identifier2=0x6b6bff;0xffffff;false;false
-important=0x990000;0xffffff;false;false
+identifier2=0x6b6bff;0xffffff;true;false
+important=0x990000;0xffffff;true;false
 directive=0x006bff;0xffffff;false;true
+identifier3=0x00c8ff;0xffffff;false;false
+pseudoelement=0x666610;0xffffff;false;false
+extended_identifier=0x666610;0xffffff;false;false
+extended_pseudoclass=0x660010;0xffffff;true;false
+extended_pseudoelement=0x660010;0xffffff;true;true
 
 [keywords]
-# CSS 1 keywords
-primary=color background-color background-image background-repeat background-attachment background-position background font-family font-style font-variant font-weight font-size font word-spacing letter-spacing text-decoration vertical-align text-transform text-align text-indent line-height margin-top margin-right margin-bottom margin-left margin padding-top padding-right padding-bottom padding-left padding border-top-width border-right-width border-bottom-width border-left-width border-width border-top border-right border-bottom border-left border border-color border-style width height float clear display white-space list-style-type list-style-image list-style-position list-style
-# CSS 2 keywords
-secondary=border-top-color border-right-color border-bottom-color border-left-color border-color border-top-style border-right-style border-bottom-style border-left-style border-style top right bottom left position z-index direction unicode-bidi min-width max-width min-height max-height overflow clip visibility content quotes counter-reset counter-increment marker-offset size marks page-break-before page-break-after page-break-inside page orphans widows font-stretch font-size-adjust unicode-range units-per-em src panose-1 stemv stemh slope cap-height x-height ascent descent widths bbox definition-src baseline centerline mathline topline text-shadow caption-side table-layout border-collapse border-spacing empty-cells speak-header cursor outline outline-width outline-style outline-color volume speak pause-before pause-after pause cue-before cue-after cue play-during azimuth elevation speech-rate voice-family pitch pitch-range stress richness speak-punctuation speak-numeral
-pseudoclasses=first-letter first-line link active visited lang first-child focus hover before after left right first
-css3_properties=
-pseudo_elements=
+# CSS 1 properties
+primary=background background-attachment background-color background-image background-position background-repeat border border-bottom border-bottom-width border-color border-left border-left-width border-right border-right-width border-style border-top border-top-width border-width clear color display float font font-family font-size font-style font-variant font-weight height letter-spacing line-height list-style list-style-image list-style-position list-style-type margin margin-bottom margin-left margin-right margin-top padding padding-bottom padding-left padding-right padding-top text-align text-decoration text-indent text-transform vertical-align white-space width word-spacing
+# CSS 2 properties
+secondary=azimuth border-bottom-color border-bottom-style border-collapse border-left-color border-left-style border-right-color border-right-style border-spacing border-top-color border-top-style bottom caption-side clip content counter-increment counter-reset cue cue-after cue-before cursor direction elevation empty-cells font-size-adjust font-stretch left max-height max-width min-height min-width orphans outline outline-color outline-style outline-width overflow page-break-after page-break-before page-break-inside pause pause-after pause-before pitch pitch-range play-during position quotes richness right speak speak-header speak-numeral speak-punctuation speech-rate stress table-layout top unicode-bidi visibility voice-family volume widows z-index
+css3_properties=alignment-adjust alignment-baseline appearance ascent background-break background-clip background-origin background-size baseline baseline-shift bbox bookmark-label bookmark-level bookmark-target border-bottom-left-radius border-bottom-right-radius border-break border-image border-length border-radius border-top-left-radius border-top-right-radius box-align box-direction box-flex box-flex-group box-lines box-orient box-pack box-shadow box-sizing box-sizing cap-height centerline column-break-after column-break-before column-count column-fill column-gap column-rule column-rule-color column-rule-style column-rule-width columns column-span column-width crop definition-src descent dominant-baseline drop-initial-after-adjust drop-initial-after-align drop-initial-before-adjust drop-initial-before-align drop-initial-size drop-initial-value fit fit-position float-offset font-effect font-emphasize font-emphasize-position font-emphasize-style font-size-adjust font-smooth hanging-punctuation hyphenate-after hyphenate-before hyphenate-character hyphenate-lines hyphenate-resource hyphens icon image-orientation image-resolution inline-box-align line-stacking line-stacking-ruby line-stacking-shift line-stacking-strategy mark mark-after mark-before marks marquee-direction marquee-loop marquee-speed marquee-style mathline move-to nav-down nav-index nav-left nav-right nav-up opacity outline-offset overflow-style overflow-x overflow-y page page-policy panose-1 phonemes presentation-level punctuation-trim resize rest rest-after rest-before rotation rotation-point ruby-align ruby-overhang ruby-position ruby-span size slope src stemh stemv string-set tab-side target target-name target-new target-position text-align-last text-emphasis text-height text-indent text-justify text-outline text-replace text-shadow text-wrap topline unicode-range units-per-em voice-balance voice-duration voice-pitch voice-pitch-range voice-rate voice-stress voice-volume white-space-collapse widths word-break word-wrap x-height
+pseudoclasses=active after before checked current disabled empty enabled first-child first-letter first-line first-of-type focus hover lang last-of-type link not nth-child nth-last-child nth-last-of-type nth-of-type only-child only-of-type root target visited
+pseudoelements=after before choices first-letter first-line line-marker marker outside repeat-index repeat-item selection slot value
 browser_css_properties=
 browser_pseudo_classes=
 browser_pseudo_elements=

@@ -70,6 +70,7 @@ Geany 0.15 (October 19, 2008)
     * Add R language filetype (thanks to Andrew Rowland; #2121502).
     * Split filetype Fortran into Fortran 77 and Fortran 90.
     * Add Gettext translation filetype (#2131985).
+    * CSS improvements, thanks to Jason Oster.
 
     Embedded Terminal:
     * Fix hang when restarting the VTE (#1990323) with VTE 0.16.14.

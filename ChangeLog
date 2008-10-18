@@ -14,6 +14,8 @@
  * src/highlighting.c, data/filetypes.css:
    Add new styles and keyword types for filetype CSS.
    Remove default keywords from highlighting.c.
+   Update CSS keyword lists and a few styles
+   (patch by Jason Oster, thanks).
 
 
 2008-10-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
