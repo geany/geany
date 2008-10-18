@@ -979,7 +979,7 @@ static void styleset_makefile(ScintillaObject *sci)
 
 static void styleset_diff_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_style_array(GEANY_FILETYPES_DIFF, 7);
+	new_style_array(GEANY_FILETYPES_DIFF, 8);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_DIFF].styling[0]);
 	get_keyfile_hex(config, config_home, "styling", "comment", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_DIFF].styling[1]);
 	get_keyfile_hex(config, config_home, "styling", "command", "0x7f7f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_DIFF].styling[2]);
@@ -987,6 +987,7 @@ static void styleset_diff_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 	get_keyfile_hex(config, config_home, "styling", "position", "0x00007f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_DIFF].styling[4]);
 	get_keyfile_hex(config, config_home, "styling", "deleted", "0xff2727", "0xffffff", "false", &style_sets[GEANY_FILETYPES_DIFF].styling[5]);
 	get_keyfile_hex(config, config_home, "styling", "added", "0x34b034", "0xffffff", "false", &style_sets[GEANY_FILETYPES_DIFF].styling[6]);
+	get_keyfile_hex(config, config_home, "styling", "changed", "0x7f007f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_DIFF].styling[7]);
 
 	style_sets[GEANY_FILETYPES_DIFF].keywords = NULL;
 
@@ -1009,6 +1010,7 @@ static void styleset_diff(ScintillaObject *sci)
 	set_sci_style(sci, SCE_DIFF_POSITION, GEANY_FILETYPES_DIFF, 4);
 	set_sci_style(sci, SCE_DIFF_DELETED, GEANY_FILETYPES_DIFF, 5);
 	set_sci_style(sci, SCE_DIFF_ADDED, GEANY_FILETYPES_DIFF, 6);
+	set_sci_style(sci, SCE_DIFF_CHANGED, GEANY_FILETYPES_DIFF, 7);
 }
 
 
