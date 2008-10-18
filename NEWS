@@ -31,6 +31,7 @@ Geany 0.15 (October 19, 2008)
     * Add a debug messages window to easily view debug messages/warnings.
 
     Editor:
+    * Update Scintilla to version 1.77 (includes many fixes).
     * Fix documents sometimes not being colourised properly after a reload
       (#1948857).
     * Add basic Line Breaking option in the Document menu and 'Line breaking

@@ -5,6 +5,8 @@
    to get strings translated with GLib 2.18+.
  * data/filetypers.tcl:
    Use 'tclsh' as default Compile/Run command (part of #2037728).
+ * scintilla/*, scintilla/include/, src/plugindata.h:
+   Update Scintilla to version 1.76.
 
 
 2008-10-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
