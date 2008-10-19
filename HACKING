@@ -28,6 +28,8 @@ Plugin API documentation
 You can generate documentation for the plugin API using the doxygen
 tool. Run ``make api-doc`` in the doc subdirectory. The documentation
 will be output to doc/reference/index.html.
+Alternatively you can view the API documentation online at
+http://www.geany.org/manual/reference/.
 
 Patches
 -------
