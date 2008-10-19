@@ -1,6 +1,9 @@
 2008-10-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * New release: Geany 0.15 "Quillan".
+ * configure.in, geany.nsi, geany_private.rc, win32-config.h,
+   wscript, doc/geany.txt, doc/geany.html, src/geany.h:
+   Post-release version bump.
 
 
 2008-10-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

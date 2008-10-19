@@ -8,8 +8,8 @@
 ; helper defines  ;
 ;;;;;;;;;;;;;;;;;;;
 !define PRODUCT_NAME "Geany"
-!define PRODUCT_VERSION "0.15"
-!define PRODUCT_VERSION_ID "0.15.0.0"
+!define PRODUCT_VERSION "0.16"
+!define PRODUCT_VERSION_ID "0.16.0.0"
 !define PRODUCT_PUBLISHER "Enrico Troeger"
 !define PRODUCT_WEB_SITE "http://www.geany.org/"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Geany.exe"

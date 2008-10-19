@@ -44,7 +44,7 @@ from distutils import version
 
 
 APPNAME = 'geany'
-VERSION = '0.15'
+VERSION = '0.16'
 
 srcdir = '.'
 blddir = '_build_'
