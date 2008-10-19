@@ -16,6 +16,8 @@
    Remove default keywords from highlighting.c.
    Update CSS keyword lists and a few styles
    (patch by Jason Oster, thanks).
+ * doc/images/*, doc/geany.txt, doc/geany.html:
+   Update images for documentation.
 
 
 2008-10-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

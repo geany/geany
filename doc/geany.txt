@@ -1478,7 +1478,7 @@ Icon size
 Editor Features tab in preferences dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. image:: ./images/pref_dialog_edit.png
+.. image:: ./images/pref_dialog_edit_features.png
 
 Indentation group
 `````````````````
@@ -1574,6 +1574,8 @@ Comment toggle marker
 Editor Completions tab in preferences dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+.. image:: ./images/pref_dialog_edit_completions.png
+
 Snippet Completion
     Whether to replace special keywords after typing Tab into a
     pre-defined text snippet.
@@ -1619,8 +1621,7 @@ Editor Display tab in preferences dialog
 
 This is for visual elements displayed in the editor window.
 
-.. image:: ./images/pref_dialog_display.png
-
+.. image:: ./images/pref_dialog_edit_display.png
 
 Display
 ```````
