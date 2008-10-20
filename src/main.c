@@ -104,9 +104,6 @@ static gchar *alternate_config = NULL;
 static gboolean no_vte = FALSE;
 static gchar *lib_vte = NULL;
 #endif
-#ifdef HAVE_SOCKET
-static gboolean ignore_socket = FALSE;
-#endif
 static gboolean generate_datafiles = FALSE;
 static gboolean generate_tags = FALSE;
 static gboolean no_preprocessing = FALSE;
@@ -128,7 +125,7 @@ static GOptionEntry entries[] =
 	{ "no-preprocessing", 'P', 0, G_OPTION_ARG_NONE, &no_preprocessing, NULL, NULL },
 	{ "generate-data-files", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &generate_datafiles, NULL, NULL },
 #ifdef HAVE_SOCKET
-	{ "new-instance", 'i', 0, G_OPTION_ARG_NONE, &ignore_socket, N_("Don't open files in a running instance, force opening a new instance"), NULL },
+	{ "new-instance", 'i', 0, G_OPTION_ARG_NONE, &cl_options.new_instance, N_("Don't open files in a running instance, force opening a new instance"), NULL },
 #endif
 	{ "line", 'l', 0, G_OPTION_ARG_INT, &cl_options.goto_line, N_("Set initial line number for the first opened file"), NULL },
 	{ "no-msgwin", 'm', 0, G_OPTION_ARG_NONE, &no_msgwin, N_("Don't show message window at startup"), NULL },
@@ -461,11 +458,10 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	GError *error = NULL;
 	GOptionContext *context;
 	gint i;
+	CommandLineOptions def_clo = {FALSE, TRUE, -1, -1, FALSE};
 
 	/* first initialise cl_options fields with default values */
-	cl_options.load_session = TRUE;
-	cl_options.goto_line = -1;
-	cl_options.goto_column = -1;
+	cl_options = def_clo;
 
 	/* the GLib option parser can't handle the +NNN (line number) option,
 	 * so we grab that here and replace it with a no-op */
@@ -568,9 +564,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	}
 
 #ifdef HAVE_SOCKET
-	socket_info.ignore_socket = ignore_socket;
-	if (ignore_socket)
-		cl_options.load_session = FALSE;
+	socket_info.ignore_socket = cl_options.new_instance;
 #endif
 #ifdef HAVE_VTE
 	vte_info.lib_vte = lib_vte;
@@ -681,7 +675,7 @@ static gboolean open_cl_files(gint argc, gchar **argv)
 }
 
 
-static void load_project_file(void)
+static void load_session_project_file(void)
 {
 	gchar *locale_filename;
 
@@ -712,11 +706,46 @@ static void load_settings(void)
 }
 
 
+static void load_startup_files(gint argc, gchar **argv)
+{
+	gboolean load_project_from_cl = FALSE;
+
+	/* ATM when opening a project file any other filenames are ignored */
+	load_project_from_cl = (argc > 1) && g_str_has_suffix(argv[1], ".geany");
+	g_print(_("Ignoring extra filenames after %s"), argv[1]);
+
+	if (load_project_from_cl || ! open_cl_files(argc, argv))
+	{
+		if (prefs.load_session)
+		{
+			if (load_project_from_cl)
+				project_load_file(argv[1]);
+			else
+			if (cl_options.load_session && !cl_options.new_instance)
+				load_session_project_file();
+
+			/* when we want a new instance, we still load project session files unless -s
+			 * was passed */
+			if (!cl_options.load_session || (!load_project_from_cl && cl_options.new_instance))
+				return;
+
+			/* load session files into tabs, as they are found in the session_files variable */
+			configuration_open_files();
+
+			if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0)
+			{
+				ui_update_popup_copy_items(NULL);
+				ui_update_popup_reundo_items(NULL);
+			}
+		}
+	}
+}
+
+
 gint main(gint argc, gchar **argv)
 {
 	GeanyDocument *doc;
 	gint config_dir_result;
-	gboolean load_project_from_cl = FALSE;
 
 	log_handlers_init();
 
@@ -765,7 +794,7 @@ gint main(gint argc, gchar **argv)
 			}
 			/* Start a new instance if no command line strings were passed */
 			socket_info.ignore_socket = TRUE;
-			cl_options.load_session = FALSE;
+			cl_options.new_instance = TRUE;
 		}
 	}
 #endif
@@ -843,29 +872,9 @@ gint main(gint argc, gchar **argv)
 	/* load keybinding settings after plugins have added their groups */
 	keybindings_load_keyfile();
 
-	load_project_from_cl = (argc > 1) && g_str_has_suffix(argv[1], ".geany");
-
 	/* load any command line files or session files */
 	main_status.opening_session_files = TRUE;
-	if (load_project_from_cl || ! open_cl_files(argc, argv))
-	{
-		if (prefs.load_session && cl_options.load_session)
-		{
-			if (load_project_from_cl)
-				project_load_file(argv[1]);
-			else
-				load_project_file();
-
-			/* load session files into tabs, as they are found in the session_files variable */
-			configuration_open_files();
-
-			if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0)
-			{
-				ui_update_popup_copy_items(NULL);
-				ui_update_popup_reundo_items(NULL);
-			}
-		}
-	}
+	load_startup_files(argc, argv);
 	main_status.opening_session_files = FALSE;
 
 	/* open a new file if no other file was opened */

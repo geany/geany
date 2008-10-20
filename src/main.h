@@ -27,11 +27,13 @@
 
 typedef struct
 {
+	gboolean	new_instance;
 	gboolean	load_session;
 	gint		goto_line;
 	gint		goto_column;
 	gboolean	ignore_global_tags;
-} CommandLineOptions;
+}
+CommandLineOptions;
 
 extern CommandLineOptions cl_options;
 
