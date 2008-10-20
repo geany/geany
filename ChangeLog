@@ -3,6 +3,9 @@
  * data/html_entities.tags:
    Add a few more entities for punctuation
    (patch by Walery Studennikov, thanks).
+ * src/highlighting.c, data/filetypes.css:
+   Fix typo in 'pseudo_elements' keyword type name.
+   Change style for pseudo elements to bold and italic.
 
 
 2008-10-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

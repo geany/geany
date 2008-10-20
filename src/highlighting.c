@@ -1943,7 +1943,7 @@ static void styleset_css_init(gint ft_id, GKeyFile *config, GKeyFile *config_hom
 	get_keyfile_hex(config, config_home, "styling", "important", "0x990000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[15]);
 	get_keyfile_hex(config, config_home, "styling", "directive", "0x006bff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[16]);
 	get_keyfile_hex(config, config_home, "styling", "identifier3", "0x00c8ff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[17]);
-	get_keyfile_hex(config, config_home, "styling", "pseudoelement", "0x666610", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[18]);
+	get_keyfile_hex(config, config_home, "styling", "pseudoelement", "0x666610", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[18]);
 	get_keyfile_hex(config, config_home, "styling", "extended_identifier", "0x666610", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[19]);
 	get_keyfile_hex(config, config_home, "styling", "extended_pseudoclass", "0x660010", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[20]);
 	get_keyfile_hex(config, config_home, "styling", "extended_pseudoelement", "0x660010", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[21]);
