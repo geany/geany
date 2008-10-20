@@ -662,7 +662,6 @@ static void init_tag_list(GeanyDocument *doc)
 				NULL);
 			break;
 		}
-/*
 		case GEANY_FILETYPES_CSS:
 		{
 			tag_list_add_groups(tag_store,
@@ -671,7 +670,6 @@ static void init_tag_list(GeanyDocument *doc)
 				&(tv_iters.tag_struct), _("Type Selectors"), "classviewer-struct", NULL);
 			break;
 		}
-*/
 		case GEANY_FILETYPES_REST:
 		{
 			tag_list_add_groups(tag_store,

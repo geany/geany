@@ -1938,15 +1938,15 @@ static void styleset_css_init(gint ft_id, GKeyFile *config, GKeyFile *config_hom
 	get_keyfile_hex(config, config_home, "styling", "singlestring", "0x330066", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[10]);
 	get_keyfile_hex(config, config_home, "styling", "attribute", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[11]);
 	get_keyfile_hex(config, config_home, "styling", "value", "0x303030", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[12]);
-	get_keyfile_hex(config, config_home, "styling", "id", "0x7f0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[13]);
+	get_keyfile_hex(config, config_home, "styling", "id", "0xff9000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[13]);
 	get_keyfile_hex(config, config_home, "styling", "identifier2", "0x6b6bff", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[14]);
 	get_keyfile_hex(config, config_home, "styling", "important", "0x990000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[15]);
 	get_keyfile_hex(config, config_home, "styling", "directive", "0x006bff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[16]);
 	get_keyfile_hex(config, config_home, "styling", "identifier3", "0x00c8ff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[17]);
 	get_keyfile_hex(config, config_home, "styling", "pseudoelement", "0x666610", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[18]);
-	get_keyfile_hex(config, config_home, "styling", "extended_identifier", "0x666610", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[19]);
-	get_keyfile_hex(config, config_home, "styling", "extended_pseudoclass", "0x660010", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[20]);
-	get_keyfile_hex(config, config_home, "styling", "extended_pseudoelement", "0x660010", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[21]);
+	get_keyfile_hex(config, config_home, "styling", "extended_identifier", "0x9090a0", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[19]);
+	get_keyfile_hex(config, config_home, "styling", "extended_pseudoclass", "0x907080", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[20]);
+	get_keyfile_hex(config, config_home, "styling", "extended_pseudoelement", "0x909080", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[21]);
 
 	style_sets[GEANY_FILETYPES_CSS].keywords = g_new(gchar*, 9);
 	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_CSS, 0, "");

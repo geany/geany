@@ -14,15 +14,15 @@ doublestring=0x330066;0xffffff;false;false
 singlestring=0x330066;0xffffff;false;false
 attribute=0x007f00;0xffffff;false;false
 value=0x303030;0xffffff;false;false
-id=0x7f0000;0xffffff;false;false
+id=0xff9000;0xffffff;true;false
 identifier2=0x6b6bff;0xffffff;true;false
 important=0x990000;0xffffff;true;false
 directive=0x006bff;0xffffff;false;true
 identifier3=0x00c8ff;0xffffff;false;false
 pseudoelement=0x666610;0xffffff;true;true
-extended_identifier=0x666610;0xffffff;false;false
-extended_pseudoclass=0x660010;0xffffff;true;false
-extended_pseudoelement=0x660010;0xffffff;true;true
+extended_identifier=0x9090a0;0xffffff;true;false
+extended_pseudoclass=0x907080;0xffffff;true;true
+extended_pseudoelement=0x909080;0xffffff;true;true
 
 [keywords]
 # CSS 1 properties
@@ -42,7 +42,7 @@ browser_pseudo_elements=
 #extension=css
 
 # the following characters are these which a "word" can contains, see documentation
-#wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+#wordchars=_-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
 # if only single comment char is supported like # in this file, leave comment_close blank
 comment_open=/*
