@@ -342,7 +342,7 @@ static GtkWidget *create_dialog(void)
 			"THANKS"
 #endif
 		);
-	label = gtk_label_new(buffer);
+	label = geany_wrap_label_new(buffer);
 	gtk_table_attach(GTK_TABLE(table), label, 0, 2, row, row + 1,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 5);

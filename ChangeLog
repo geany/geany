@@ -13,6 +13,9 @@
  * src/highlighting.c, data/filetypes.css:
    Fix typo in 'pseudo_elements' keyword type name.
    Change style for pseudo elements to bold and italic.
+ * src/about.c:
+   Use a GeanyWrapLabel for the label holding the "Some contributors"
+   text to fix dialog oversize problems with some localisations.
 
 
 2008-10-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
