@@ -1,3 +1,10 @@
+2008-10-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * src/about.c:
+   Added Dominic Hopf to list of German translators. Removed Enrico
+   from List.
+
+
 2008-10-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * data/html_entities.tags:
