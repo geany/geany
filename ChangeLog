@@ -7,6 +7,8 @@
    is the first argument.
  * src/main.c:
    Add description for -P option.
+ * src/main.c:
+   Fix warning about ignoring command-line files.
 
 
 2008-10-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

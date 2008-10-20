@@ -712,7 +712,8 @@ static void load_startup_files(gint argc, gchar **argv)
 
 	/* ATM when opening a project file any other filenames are ignored */
 	load_project_from_cl = (argc > 1) && g_str_has_suffix(argv[1], ".geany");
-	g_print(_("Ignoring extra filenames after %s"), argv[1]);
+	if (load_project_from_cl && argc > 2)
+		g_print(_("Ignoring extra filenames after %s"), argv[1]);
 
 	if (load_project_from_cl || ! open_cl_files(argc, argv))
 	{
