@@ -12,6 +12,7 @@
 &Atilde;
 &auml;
 &Auml;
+&bdquo;
 &bull;
 &ccedil;
 &Ccedil;
@@ -33,6 +34,7 @@
 &frac14;
 &frac34;
 &gt;
+&hellip;
 &Iacute;
 &icirc;
 &Icirc;
@@ -42,11 +44,17 @@
 &isin;
 &iuml;
 &Iuml;
+&laquo;
+&ldquo;
 &lowast;
+&lsquo;
 &lt;
+&mdash;
 &micro;
+&middot;
 &minus;
 &nbsp;
+&ndash;
 &ntilde;
 &Ntilde;
 &oacute;
@@ -72,7 +80,10 @@
 &prod;
 &prop;
 &quot;
+&raquo;
+&rdquo;
 &reg;
+&rsquo;
 &sect;
 &sum;
 &sup1;
