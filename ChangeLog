@@ -1,3 +1,9 @@
+2008-10-22  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * data/html_entities.tags:
+   Add a few more entities common in e.g. Spanish language.
+
+
 2008-10-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/highlighting.c, data/filetypes.css:

@@ -1,6 +1,7 @@
 # each of the following lines represent a html entity
 # used in HTML and PHP files when typing &...
 &Aacute;
+&aacute;
 &Acirc;
 &aelig;
 &AElig;
@@ -22,6 +23,7 @@
 &deg;
 &divide;
 &Eacute;
+&eacute;
 &ecirc;
 &Ecirc;
 &egrave;
@@ -36,6 +38,7 @@
 &gt;
 &hellip;
 &Iacute;
+&iacute;
 &icirc;
 &Icirc;
 &igrave;
