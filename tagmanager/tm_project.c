@@ -61,7 +61,7 @@ gboolean tm_project_init(TMProject *project, const char *dir
   , const char **sources, const char **ignore, gboolean force)
 {
 	struct stat s;
-	char path[PATH_MAX];
+	char *path;
 
 	g_return_val_if_fail((project && dir), FALSE);
 #ifdef TM_DEBUG
@@ -88,7 +88,7 @@ gboolean tm_project_init(TMProject *project, const char *dir
 	else
 		project->ignore = s_ignore;
 	project->file_list = NULL;
-	g_snprintf(path, PATH_MAX, "%s/%s", project->dir, TM_FILE_NAME);
+	path = g_strdup_printf("%s/%s", project->dir, TM_FILE_NAME);
 	if ((0 != g_stat(path, &s)) || (0 == s.st_size))
 		force = TRUE;
 	if (FALSE == tm_work_object_init(&(project->work_object),
@@ -96,14 +96,18 @@ gboolean tm_project_init(TMProject *project, const char *dir
 	{
 		g_warning("Unable to init project file %s", path);
 		g_free(project->dir);
+		g_free(path);
+		g_free(path);
 		return FALSE;
 	}
 	if (! tm_workspace_add_object(TM_WORK_OBJECT(project)))
 	{
 		g_warning("Unable to init project file %s", path);
 		g_free(project->dir);
+		g_free(path);
 		return FALSE;
 	}
+	g_free(path);
 	tm_project_open(project, force);
 	if (!project->file_list || (0 == project->file_list->len))
 		tm_project_autoscan(project);

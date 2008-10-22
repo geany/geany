@@ -17,6 +17,15 @@
 #define LIBCTAGS_DEFINED
 #include "tm_tag.h"
 
+
+#if GLIB_CHECK_VERSION (2, 10, 0)
+/* Use GSlices if present */
+
+#define TAG_NEW(T)	((T) = g_slice_new0(TMTag))
+#define TAG_FREE(T)	g_slice_free(TMTag, (T))
+
+#else /* GLib < 2.10 */
+
 static GMemChunk *s_tag_mem_chunk = NULL;
 
 #define TAG_NEW(T) {\
@@ -26,6 +35,9 @@ static GMemChunk *s_tag_mem_chunk = NULL;
 	(T) = g_chunk_new0(TMTag, s_tag_mem_chunk);}
 
 #define TAG_FREE(T) g_mem_chunk_free(s_tag_mem_chunk, (T))
+
+#endif /* GLib version check */
+
 
 /* Note: To preserve binary compatibility, it is very important
 	that you only *append* to this list ! */

@@ -3,6 +3,13 @@
  * src/highlighting.c, data/filetypes.css:
    Change style for 'identifier3' to bold to be in sync with the
    other identifier styles.
+ * tagmanager/general.h, tagmanager/tm_file_entry.c,
+   tagmanager/tm_project.c, tagmanager/tm_symbol.c, tagmanager/tm_tag.c,
+   tagmanager/tm_work_object.c:
+   Add get_path_max() to get a sane value if PATH_MAX is not defined.
+   Change code where PATH_MAX was used unnecessarily.
+   Use GSlice API when building against GLib >= 2.10
+   (patch by Colomban Wendling, thanks).
 
 
 2008-10-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

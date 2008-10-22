@@ -27,6 +27,15 @@
 #include "tm_work_object.h"
 #include "tm_file_entry.h"
 
+
+#if GLIB_CHECK_VERSION (2, 10, 0)
+/* Use GSlices if present */
+
+#define FILE_NEW(T)		((T) = g_slice_new0(TMFileEntry))
+#define FILE_FREE(T)	g_slice_free(TMFileEntry, (T))
+
+#else /* GLib < 2.10 */
+
 static GMemChunk *file_mem_chunk = NULL;
 
 #define FILE_NEW(T) {\
@@ -36,6 +45,9 @@ static GMemChunk *file_mem_chunk = NULL;
 	(T) = g_chunk_new0(TMFileEntry, file_mem_chunk);}
 
 #define FILE_FREE(T) g_mem_chunk_free(file_mem_chunk, (T))
+
+#endif /* GLib version check */
+
 
 void tm_file_entry_print(TMFileEntry *entry, gpointer __unused__ user_data
   , guint level)
@@ -120,7 +132,7 @@ TMFileEntry *tm_file_entry_new(const char *path, TMFileEntry *parent
 	DIR *dir;
 	struct dirent *dir_entry;
 	TMFileEntry *new_entry;
-	char file_name[PATH_MAX];
+	char *file_name;
 	struct stat s;
 	char *entries = NULL;
 
@@ -163,7 +175,7 @@ TMFileEntry *tm_file_entry_new(const char *path, TMFileEntry *parent
 				tm_file_entry_free(entry);
 				return NULL;
 			}
-			g_snprintf(file_name, PATH_MAX, "%s/CVS/Entries", entry->path);
+			file_name = g_strdup_printf("%s/CVS/Entries", entry->path);
 			if (0 == g_stat(file_name, &s))
 			{
 				if (S_ISREG(s.st_mode))
@@ -188,6 +200,7 @@ TMFileEntry *tm_file_entry_new(const char *path, TMFileEntry *parent
 					}
 				}
 			}
+			g_free(file_name);
 			if (NULL != (dir = opendir(entry->path)))
 			{
 				while (NULL != (dir_entry = readdir(dir)))
@@ -195,11 +208,11 @@ TMFileEntry *tm_file_entry_new(const char *path, TMFileEntry *parent
 					if ((0 == strcmp(dir_entry->d_name, "."))
 					  || (0 == strcmp(dir_entry->d_name, "..")))
 						continue;
-					g_snprintf(file_name, PATH_MAX, "%s/%s", entry->path
-					  , dir_entry->d_name);
+					file_name = g_strdup_printf("%s/%s", entry->path, dir_entry->d_name);
 					new_entry = tm_file_entry_new(file_name, entry, recurse
 					  , file_match, file_unmatch, dir_match, dir_unmatch
 			  		  , ignore_hidden_files, ignore_hidden_dirs);
+					g_free(file_name);
 					if (new_entry)
 					{
 						if (entries)

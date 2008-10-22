@@ -39,7 +39,6 @@
 #endif
 
 
-
 /*  MS-DOS doesn't allow manipulation of standard error, so we send it to
  *  stdout instead.
  */
