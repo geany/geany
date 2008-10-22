@@ -1,3 +1,10 @@
+2008-10-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/highlighting.c, data/filetypes.css:
+   Change style for 'identifier3' to bold to be in sync with the
+   other identifier styles.
+
+
 2008-10-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * src/about.c:
