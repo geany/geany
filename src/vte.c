@@ -833,31 +833,31 @@ void vte_append_preferences_tab(void)
 		gtk_box_pack_start(GTK_BOX(vbox), box, FALSE, FALSE, 0);
 
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "font_term",
-				gtk_widget_ref(font_term),	(GDestroyNotify) gtk_widget_unref);
+				g_object_ref(font_term),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "color_fore",
-				gtk_widget_ref(color_fore),	(GDestroyNotify) gtk_widget_unref);
+				g_object_ref(color_fore),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "color_back",
-				gtk_widget_ref(color_back),	(GDestroyNotify) gtk_widget_unref);
+				g_object_ref(color_back),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "spin_scrollback",
-				gtk_widget_ref(spin_scrollback),	(GDestroyNotify) gtk_widget_unref);
+				g_object_ref(spin_scrollback),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "entry_emulation",
-				gtk_widget_ref(entry_emulation),	(GDestroyNotify) gtk_widget_unref);
+				g_object_ref(entry_emulation),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "entry_shell",
-				gtk_widget_ref(entry_shell),	(GDestroyNotify) gtk_widget_unref);
+				g_object_ref(entry_shell),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_scroll_key",
-				gtk_widget_ref(check_scroll_key),	(GDestroyNotify) gtk_widget_unref);
+				g_object_ref(check_scroll_key),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_scroll_out",
-				gtk_widget_ref(check_scroll_out),	(GDestroyNotify) gtk_widget_unref);
+				g_object_ref(check_scroll_out),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_enable_bash_keys",
-				gtk_widget_ref(check_enable_bash_keys),	(GDestroyNotify) gtk_widget_unref);
+				g_object_ref(check_enable_bash_keys),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_ignore_menu_key",
-				gtk_widget_ref(check_ignore_menu_key),	(GDestroyNotify) gtk_widget_unref);
+				g_object_ref(check_ignore_menu_key),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_follow_path",
-				gtk_widget_ref(check_follow_path),	(GDestroyNotify) gtk_widget_unref);
+				g_object_ref(check_follow_path),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_run_in_vte",
-				gtk_widget_ref(check_run_in_vte),	(GDestroyNotify) gtk_widget_unref);
+				g_object_ref(check_run_in_vte),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_skip_script",
-				gtk_widget_ref(check_skip_script),	(GDestroyNotify) gtk_widget_unref);
+				g_object_ref(check_skip_script),	(GDestroyNotify) g_object_unref);
 
 		gtk_widget_show_all(frame);
 

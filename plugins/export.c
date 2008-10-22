@@ -198,7 +198,7 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 		gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(dialog), vbox);
 
 		g_object_set_data_full(G_OBJECT(dialog), "check_zoom_level",
-					gtk_widget_ref(check_zoom_level), (GDestroyNotify) gtk_widget_unref);
+					g_object_ref(check_zoom_level), (GDestroyNotify) g_object_unref);
 
 		exi->have_zoom_level_checkbox = TRUE;
 	}

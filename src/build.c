@@ -1379,7 +1379,7 @@ static void show_includes_arguments_tex(void)
 		}
 		gtk_table_attach_defaults(GTK_TABLE(table), entries[0], 1, 2, 0, 1);
 		g_object_set_data_full(G_OBJECT(dialog), "tex_entry1",
-					gtk_widget_ref(entries[0]), (GDestroyNotify)gtk_widget_unref);
+					g_object_ref(entries[0]), (GDestroyNotify)g_object_unref);
 	}
 
 	/* LaTeX -> PDF args */
@@ -1398,7 +1398,7 @@ static void show_includes_arguments_tex(void)
 		}
 		gtk_table_attach_defaults(GTK_TABLE(table), entries[1], 1, 2, 1, 2);
 		g_object_set_data_full(G_OBJECT(dialog), "tex_entry2",
-					gtk_widget_ref(entries[1]), (GDestroyNotify)gtk_widget_unref);
+					g_object_ref(entries[1]), (GDestroyNotify)g_object_unref);
 	}
 
 	/* View LaTeX -> DVI args */
@@ -1417,7 +1417,7 @@ static void show_includes_arguments_tex(void)
 		}
 		gtk_table_attach_defaults(GTK_TABLE(table), entries[2], 1, 2, 2, 3);
 		g_object_set_data_full(G_OBJECT(dialog), "tex_entry3",
-					gtk_widget_ref(entries[2]), (GDestroyNotify)gtk_widget_unref);
+					g_object_ref(entries[2]), (GDestroyNotify)g_object_unref);
 	}
 
 	/* View LaTeX -> PDF args */
@@ -1436,7 +1436,7 @@ static void show_includes_arguments_tex(void)
 		}
 		gtk_table_attach_defaults(GTK_TABLE(table), entries[3], 1, 2, 3, 4);
 		g_object_set_data_full(G_OBJECT(dialog), "tex_entry4",
-					gtk_widget_ref(entries[3]), (GDestroyNotify)gtk_widget_unref);
+					g_object_ref(entries[3]), (GDestroyNotify)g_object_unref);
 	}
 
 	label = gtk_label_new(_("%f will be replaced by the current filename, e.g. test_file.c\n"
@@ -1563,7 +1563,7 @@ static void show_includes_arguments_gen(void)
 		row++;
 
 		g_object_set_data_full(G_OBJECT(dialog), "includes_entry1",
-					gtk_widget_ref(entries[0]), (GDestroyNotify)gtk_widget_unref);
+							   g_object_ref(entries[0]), (GDestroyNotify)g_object_unref);
 	}
 
 	/* lib-args */
@@ -1584,7 +1584,7 @@ static void show_includes_arguments_gen(void)
 		row++;
 
 		g_object_set_data_full(G_OBJECT(dialog), "includes_entry2",
-					gtk_widget_ref(entries[1]), (GDestroyNotify)gtk_widget_unref);
+							   g_object_ref(entries[1]), (GDestroyNotify)g_object_unref);
 	}
 
 	/* program-args */
@@ -1605,7 +1605,7 @@ static void show_includes_arguments_gen(void)
 		row++;
 
 		g_object_set_data_full(G_OBJECT(dialog), "includes_entry3",
-						gtk_widget_ref(entries[2]), (GDestroyNotify)gtk_widget_unref);
+							   g_object_ref(entries[2]), (GDestroyNotify)g_object_unref);
 
 		/* disable the run command if there is a valid project run command set */
 		if (app->project && NZV(app->project->run_cmd))

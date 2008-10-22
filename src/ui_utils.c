@@ -541,14 +541,14 @@ void ui_create_insert_date_menu_items(void)
 	gtk_widget_show(item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_menu_insert_date_activate), str);
 	g_object_set_data_full(G_OBJECT(main_widgets.window),
-		"insert_date_custom1", gtk_widget_ref(item), (GDestroyNotify)gtk_widget_unref);
+		"insert_date_custom1", g_object_ref(item), (GDestroyNotify)g_object_unref);
 
 	item = gtk_menu_item_new_with_mnemonic(str);
 	gtk_container_add(GTK_CONTAINER(menu_popup), item);
 	gtk_widget_show(item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_insert_date_activate), str);
 	g_object_set_data_full(G_OBJECT(main_widgets.editor_menu),
-		"insert_date_custom2", gtk_widget_ref(item), (GDestroyNotify)gtk_widget_unref);
+		"insert_date_custom2", g_object_ref(item), (GDestroyNotify)g_object_unref);
 
 	insert_date_items(menu_edit, menu_popup, _("_Set Custom Date Format"));
 }
@@ -1208,9 +1208,7 @@ void ui_hbutton_box_copy_layout(GtkButtonBox *master, GtkButtonBox *copy)
 {
 	GtkSizeGroup *size_group;
 
-	/* set_spacing is deprecated but there seems to be no alternative,
-	* GTK 2.6 defaults to no spacing, unlike dialog button box */
-	gtk_button_box_set_spacing(copy, 10);
+	gtk_box_set_spacing(GTK_BOX(copy), 10);
 	gtk_button_box_set_layout(copy, gtk_button_box_get_layout(master));
 
 	/* now we need to put the widest widget from each button box in a size group,
@@ -1409,7 +1407,7 @@ void ui_setup_open_button_callback(GtkWidget *open_btn, const gchar *title,
 				(GDestroyNotify) g_free);
 	g_object_set_data(G_OBJECT(open_btn), "action", (gpointer) action);
 	g_object_set_data_full(G_OBJECT(open_btn), "entry",
-		gtk_widget_ref(path_entry), (GDestroyNotify) gtk_widget_unref);
+		g_object_ref(path_entry), (GDestroyNotify) g_object_unref);
 	g_signal_connect(open_btn, "clicked", G_CALLBACK(ui_path_box_open_clicked), open_btn);
 }
 

@@ -138,7 +138,7 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 
 	check_regexp = gtk_check_button_new_with_mnemonic(_("_Use regular expressions"));
 	g_object_set_data_full(G_OBJECT(dialog), "check_regexp",
-					gtk_widget_ref(check_regexp), (GDestroyNotify)gtk_widget_unref);
+					g_object_ref(check_regexp), (GDestroyNotify) g_object_unref);
 	gtk_button_set_focus_on_click(GTK_BUTTON(check_regexp), FALSE);
 	gtk_tooltips_set_tip(tooltips, check_regexp, _("Use POSIX-like regular expressions. "
 		"For detailed information about using regular expressions, please read the documentation."), NULL);
@@ -149,7 +149,7 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 	{
 		check_back = gtk_check_button_new_with_mnemonic(_("Search _backwards"));
 		g_object_set_data_full(G_OBJECT(dialog), "check_back",
-						gtk_widget_ref(check_back), (GDestroyNotify)gtk_widget_unref);
+						g_object_ref(check_back), (GDestroyNotify)g_object_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_back), FALSE);
 	}
 	else
@@ -163,7 +163,7 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 	}
 	checkbox7 = gtk_check_button_new_with_mnemonic(_("Use _escape sequences"));
 	g_object_set_data_full(G_OBJECT(dialog), "check_escape",
-					gtk_widget_ref(checkbox7), (GDestroyNotify)gtk_widget_unref);
+					g_object_ref(checkbox7), (GDestroyNotify)g_object_unref);
 	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox7), FALSE);
 	gtk_tooltips_set_tip(tooltips, checkbox7,
 		_("Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
@@ -177,17 +177,17 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 
 	checkbox1 = gtk_check_button_new_with_mnemonic(_("C_ase sensitive"));
 	g_object_set_data_full(G_OBJECT(dialog), "check_case",
-					gtk_widget_ref(checkbox1), (GDestroyNotify)gtk_widget_unref);
+					g_object_ref(checkbox1), (GDestroyNotify)g_object_unref);
 	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox1), FALSE);
 
 	checkbox2 = gtk_check_button_new_with_mnemonic(_("Match only a _whole word"));
 	g_object_set_data_full(G_OBJECT(dialog), "check_word",
-					gtk_widget_ref(checkbox2), (GDestroyNotify)gtk_widget_unref);
+					g_object_ref(checkbox2), (GDestroyNotify)g_object_unref);
 	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox2), FALSE);
 
 	checkbox5 = gtk_check_button_new_with_mnemonic(_("Match from s_tart of word"));
 	g_object_set_data_full(G_OBJECT(dialog), "check_wordstart",
-					gtk_widget_ref(checkbox5), (GDestroyNotify)gtk_widget_unref);
+					g_object_ref(checkbox5), (GDestroyNotify)g_object_unref);
 	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox5), FALSE);
 
 	/* Matching options */
@@ -312,7 +312,7 @@ void search_show_find_dialog(void)
 		gtk_dialog_add_action_widget(GTK_DIALOG(widgets.find_dialog), button,
 			GEANY_RESPONSE_FIND_PREVIOUS);
 		g_object_set_data_full(G_OBJECT(widgets.find_dialog), "btn_previous",
-						gtk_widget_ref(button), (GDestroyNotify)gtk_widget_unref);
+						g_object_ref(button), (GDestroyNotify)g_object_unref);
 
 		button = ui_button_new_with_image(GTK_STOCK_GO_FORWARD, _("_Next"));
 		gtk_dialog_add_action_widget(GTK_DIALOG(widgets.find_dialog), button,
@@ -327,7 +327,7 @@ void search_show_find_dialog(void)
 		gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))), 50);
 		if (sel) gtk_entry_set_text(GTK_ENTRY(GTK_BIN(entry)->child), sel);
 		g_object_set_data_full(G_OBJECT(widgets.find_dialog), "entry",
-						gtk_widget_ref(entry), (GDestroyNotify)gtk_widget_unref);
+						g_object_ref(entry), (GDestroyNotify)g_object_unref);
 
 		g_signal_connect(gtk_bin_get_child(GTK_BIN(entry)), "activate",
 				G_CALLBACK(on_find_entry_activate), NULL);
@@ -368,7 +368,7 @@ void search_show_find_dialog(void)
 		/* close window checkbox */
 		check_close = gtk_check_button_new_with_mnemonic(_("Close _dialog"));
 		g_object_set_data_full(G_OBJECT(widgets.find_dialog), "check_close",
-						gtk_widget_ref(check_close), (GDestroyNotify) gtk_widget_unref);
+						g_object_ref(check_close), (GDestroyNotify) g_object_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_close), FALSE);
 		gtk_tooltips_set_tip(tooltips, check_close,
 				_("Disable this option to keep the dialog open."), NULL);
@@ -453,14 +453,14 @@ void search_show_replace_dialog(void)
 		gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_find))), 50);
 		if (sel) gtk_entry_set_text(GTK_ENTRY(GTK_BIN(entry_find)->child), sel);
 		g_object_set_data_full(G_OBJECT(widgets.replace_dialog), "entry_find",
-						gtk_widget_ref(entry_find), (GDestroyNotify)gtk_widget_unref);
+						g_object_ref(entry_find), (GDestroyNotify)g_object_unref);
 
 		entry_replace = gtk_combo_box_entry_new_text();
 		gtk_label_set_mnemonic_widget(GTK_LABEL(label_replace), entry_replace);
 		gtk_entry_set_max_length(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_replace))), 248);
 		gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_replace))), 50);
 		g_object_set_data_full(G_OBJECT(widgets.replace_dialog), "entry_replace",
-						gtk_widget_ref(entry_replace), (GDestroyNotify)gtk_widget_unref);
+						g_object_ref(entry_replace), (GDestroyNotify)g_object_unref);
 
 		g_signal_connect(gtk_bin_get_child(GTK_BIN(entry_find)),
 				"key-press-event", G_CALLBACK(on_widget_key_pressed_set_focus),
@@ -514,7 +514,7 @@ void search_show_replace_dialog(void)
 		/* close window checkbox */
 		check_close = gtk_check_button_new_with_mnemonic(_("Close _dialog"));
 		g_object_set_data_full(G_OBJECT(widgets.replace_dialog), "check_close",
-						gtk_widget_ref(check_close), (GDestroyNotify) gtk_widget_unref);
+						g_object_ref(check_close), (GDestroyNotify) g_object_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_close), FALSE);
 		gtk_tooltips_set_tip(tooltips, check_close,
 				_("Disable this option to keep the dialog open."), NULL);
@@ -594,7 +594,7 @@ void search_show_find_in_files_dialog(const gchar *dir)
 		gtk_entry_set_max_length(GTK_ENTRY(entry), 248);
 		gtk_entry_set_width_chars(GTK_ENTRY(entry), 50);
 		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "dir_combo",
-						gtk_widget_ref(dir_combo), (GDestroyNotify)gtk_widget_unref);
+						g_object_ref(dir_combo), (GDestroyNotify)g_object_unref);
 
 		dbox = ui_path_box_new(NULL, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
 			GTK_ENTRY(entry));
@@ -624,14 +624,14 @@ void search_show_find_in_files_dialog(const gchar *dir)
 		/* Make fixed strings the default to speed up searching all files in directory. */
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(rbtn), TRUE);
 		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "radio_fgrep",
-						gtk_widget_ref(rbtn), (GDestroyNotify)gtk_widget_unref);
+						g_object_ref(rbtn), (GDestroyNotify)g_object_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(rbtn), FALSE);
 		gtk_container_add(GTK_CONTAINER(rbox), rbtn);
 
 		rbtn = gtk_radio_button_new_with_mnemonic_from_widget(GTK_RADIO_BUTTON(rbtn),
 					_("_Grep regular expressions"));
 		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "radio_grep",
-						gtk_widget_ref(rbtn), (GDestroyNotify)gtk_widget_unref);
+						g_object_ref(rbtn), (GDestroyNotify)g_object_unref);
 		gtk_tooltips_set_tip(tooltips, rbtn,
 					_("See grep's manual page for more information."), NULL);
 		gtk_button_set_focus_on_click(GTK_BUTTON(rbtn), FALSE);
@@ -646,23 +646,23 @@ void search_show_find_in_files_dialog(const gchar *dir)
 
 		check_recursive = gtk_check_button_new_with_mnemonic(_("_Recurse in subfolders"));
 		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "check_recursive",
-						gtk_widget_ref(check_recursive), (GDestroyNotify)gtk_widget_unref);
+						g_object_ref(check_recursive), (GDestroyNotify)g_object_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_recursive), FALSE);
 
 		checkbox1 = gtk_check_button_new_with_mnemonic(_("C_ase sensitive"));
 		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "check_case",
-						gtk_widget_ref(checkbox1), (GDestroyNotify)gtk_widget_unref);
+						g_object_ref(checkbox1), (GDestroyNotify)g_object_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox1), FALSE);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox1), TRUE);
 
 		check_wholeword = gtk_check_button_new_with_mnemonic(_("Match only a _whole word"));
 		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "check_wholeword",
-						gtk_widget_ref(check_wholeword), (GDestroyNotify)gtk_widget_unref);
+						g_object_ref(check_wholeword), (GDestroyNotify)g_object_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_wholeword), FALSE);
 
 		checkbox2 = gtk_check_button_new_with_mnemonic(_("_Invert search results"));
 		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "check_invert",
-						gtk_widget_ref(checkbox2), (GDestroyNotify)gtk_widget_unref);
+						g_object_ref(checkbox2), (GDestroyNotify)g_object_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox2), FALSE);
 		gtk_tooltips_set_tip(tooltips, checkbox2,
 				_("Invert the sense of matching, to select non-matching lines."), NULL);
@@ -683,7 +683,7 @@ void search_show_find_in_files_dialog(const gchar *dir)
 
 		check_extra = gtk_check_button_new_with_mnemonic(_("E_xtra options:"));
 		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "check_extra",
-						gtk_widget_ref(check_extra), (GDestroyNotify)gtk_widget_unref);
+						g_object_ref(check_extra), (GDestroyNotify)g_object_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_extra), FALSE);
 
 		entry_extra = gtk_entry_new();
@@ -691,7 +691,7 @@ void search_show_find_in_files_dialog(const gchar *dir)
 			gtk_entry_set_text(GTK_ENTRY(entry_extra), search_prefs.fif_extra_options);
 		gtk_widget_set_sensitive(entry_extra, FALSE);
 		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "entry_extra",
-						gtk_widget_ref(entry_extra), (GDestroyNotify)gtk_widget_unref);
+						g_object_ref(entry_extra), (GDestroyNotify)g_object_unref);
 		gtk_tooltips_set_tip(tooltips, entry_extra,
 				_("Other options to pass to Grep"), NULL);
 

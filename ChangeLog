@@ -10,6 +10,10 @@
    Change code where PATH_MAX was used unnecessarily.
    Use GSlice API when building against GLib >= 2.10
    (patch by Colomban Wendling, thanks).
+ * plugins/export.c, src/build.c, src/dialogs.c, src/search.c,
+   src/ui_utils.c, src/vte.c:
+   Replace gtk_widget_(un)ref() with g_object(un)ref(),
+   patch by Colomban Wendling, thanks.
 
 
 2008-10-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
