@@ -965,32 +965,6 @@ gboolean dialogs_show_input_numeric(const gchar *title, const gchar *label_text,
 }
 
 
-void dialogs_show_goto_line()
-{
-	GtkWidget *dialog, *label, *entry, *vbox;
-
-	dialog = gtk_dialog_new_with_buttons(_("Go to Line"), GTK_WINDOW(main_widgets.window),
-										GTK_DIALOG_DESTROY_WITH_PARENT,
-										GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-										GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
-	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
-	gtk_widget_set_name(dialog, "GeanyDialog");
-
-	label = gtk_label_new(_("Enter the line you want to go to:"));
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
-	entry = gtk_entry_new();
-	gtk_entry_set_max_length(GTK_ENTRY(entry), 6);
-	gtk_entry_set_width_chars(GTK_ENTRY(entry), 30);
-
-	g_signal_connect(entry, "activate", G_CALLBACK(on_goto_line_entry_activate), dialog);
-	g_signal_connect(dialog, "response", G_CALLBACK(on_goto_line_dialog_response), entry);
-
-	gtk_container_add(GTK_CONTAINER(vbox), label);
-	gtk_container_add(GTK_CONTAINER(vbox), entry);
-	gtk_widget_show_all(dialog);
-}
-
-
 void dialogs_show_file_properties(GeanyDocument *doc)
 {
 	GtkWidget *dialog, *label, *table, *hbox, *image, *perm_table, *check, *vbox;

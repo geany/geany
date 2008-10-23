@@ -1172,7 +1172,19 @@ void
 on_go_to_line_activate                 (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	dialogs_show_goto_line();
+	static gdouble val = 1;
+
+	if (dialogs_show_input_numeric(_("Go to Line"), _("Enter the line you want to go to:"),
+			&val, 1, 100000000, 1))
+	{
+		GeanyDocument *doc = document_get_current();
+
+		if (doc != NULL)
+		{
+			if (! editor_goto_line(doc->editor, val - 1))
+				utils_beep();
+		}
+	}
 }
 
 
@@ -1184,22 +1196,15 @@ on_goto_line_dialog_response         (GtkDialog *dialog,
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		GeanyDocument *doc = document_get_current();
-		gint line = strtol(gtk_entry_get_text(GTK_ENTRY(user_data)), NULL, 10);
+		gint line = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(user_data));
 
-		if (doc != NULL && line > 0 && line <= sci_get_line_count(doc->editor->sci))
+		if (doc != NULL)
 		{
-			gint pos;
-
-			line--;	/* the user counts lines from 1, we begin at 0 so bring the user line to our one */
-			pos = sci_get_position_from_line(doc->editor->sci, line);
-			editor_goto_pos(doc->editor, pos, TRUE);
-		}
-		else
-		{
-			utils_beep();
+			if (! editor_goto_line(doc->editor, line - 1))
+				utils_beep();
 		}
 	}
-	if (dialog)
+	if (dialog != NULL)
 		gtk_widget_destroy(GTK_WIDGET(dialog));
 }
 

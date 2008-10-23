@@ -2,6 +2,12 @@
 
  * src/filetypes.c:
    Add simple auto-detection for HTML files without proper extension.
+ * geany.glade, src/callbacks.c, src/dialogs.c, src/dialogs.h,
+   src/editor.c, src/editor.h, src/interface.c:
+   Replace Goto line text entry field in the toolbar with a spin button.
+   Remove dialogs_show_goto_line(), use the more generic
+   dialogs_show_input_numeric() instead.
+   Increase limit of the maximum line number from 99999 to 100000000.
 
 
 2008-10-22  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

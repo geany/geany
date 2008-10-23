@@ -51,8 +51,6 @@ GtkWidget *dialogs_show_input(const gchar *title, const gchar *label_text,
 gboolean dialogs_show_input_numeric(const gchar *title, const gchar *label_text,
 									gdouble *value, gdouble min, gdouble max, gdouble step);
 
-void dialogs_show_goto_line(void);
-
 void dialogs_show_file_properties(GeanyDocument *doc);
 
 gboolean dialogs_show_question(const gchar *text, ...) G_GNUC_PRINTF (1, 2);

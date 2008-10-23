@@ -3780,6 +3780,19 @@ void editor_set_indent_type(GeanyEditor *editor, GeanyIndentType type)
 }
 
 
+/* Convenience function for editor_goto_pos() to pass in a line number. */
+gboolean editor_goto_line(GeanyEditor *editor, gint line)
+{
+	gint pos;
+
+	g_return_val_if_fail(editor, FALSE);
+	g_return_val_if_fail(line >= 0 && line <= sci_get_line_count(editor->sci), FALSE);
+
+	pos = sci_get_position_from_line(editor->sci, line);
+	return editor_goto_pos(editor, pos, TRUE);
+}
+
+
 /* Move to position @a pos, switching to the document if necessary,
  * setting a marker if @a mark is set. */
 gboolean editor_goto_pos(GeanyEditor *editor, gint pos, gboolean mark)

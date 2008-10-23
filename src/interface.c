@@ -248,6 +248,7 @@ create_window1 (void)
   GtkWidget *toolbutton_search;
   GtkWidget *separatortoolitem5;
   GtkWidget *toolbutton_goto_item;
+  GtkObject *toolbutton_goto_entry_adj;
   GtkWidget *toolbutton_goto_entry;
   GtkWidget *toolbutton_goto;
   GtkWidget *separatortoolitem8;
@@ -1218,12 +1219,14 @@ create_window1 (void)
   gtk_widget_show (toolbutton_goto_item);
   gtk_container_add (GTK_CONTAINER (toolbar1), toolbutton_goto_item);
 
-  toolbutton_goto_entry = gtk_entry_new ();
+  toolbutton_goto_entry_adj = gtk_adjustment_new (0, 1, 100000000, 1, 10, 0);
+  toolbutton_goto_entry = gtk_spin_button_new (GTK_ADJUSTMENT (toolbutton_goto_entry_adj), 1, 0);
   gtk_widget_show (toolbutton_goto_entry);
   gtk_container_add (GTK_CONTAINER (toolbutton_goto_item), toolbutton_goto_entry);
   gtk_tooltips_set_tip (tooltips, toolbutton_goto_entry, _("Enter a line number and jump to it."), NULL);
-  gtk_entry_set_max_length (GTK_ENTRY (toolbutton_goto_entry), 5);
-  gtk_entry_set_width_chars (GTK_ENTRY (toolbutton_goto_entry), 8);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (toolbutton_goto_entry), TRUE);
+  gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (toolbutton_goto_entry), GTK_UPDATE_IF_VALID);
+  gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (toolbutton_goto_entry), TRUE);
 
   toolbutton_goto = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-jump-to");
   gtk_widget_show (toolbutton_goto);
