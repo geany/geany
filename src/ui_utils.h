@@ -59,6 +59,8 @@ typedef struct GeanyToolbarPrefs
 	gboolean		show_quit;
 	GtkIconSize		icon_size;
 	gint			icon_style;
+	gboolean		show_cutdelete;
+	gboolean		show_copypaste;
 }
 GeanyToolbarPrefs;
 

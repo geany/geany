@@ -382,7 +382,7 @@ on_delete1_activate                    (GtkMenuItem     *menuitem,
 	if (GTK_IS_EDITABLE(focusw))
 		gtk_editable_delete_selection(GTK_EDITABLE(focusw));
 	else
-	if (IS_SCINTILLA(focusw) && doc != NULL)
+	if (IS_SCINTILLA(focusw) && doc != NULL && sci_has_selection(doc->editor->sci))
 		sci_clear(doc->editor->sci);
 	else
 	if (GTK_IS_TEXT_VIEW(focusw))

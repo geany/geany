@@ -467,6 +467,12 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_fileops");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), toolbar_prefs.show_fileops);
 
+	widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_cutdelete");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), toolbar_prefs.show_cutdelete);
+
+	widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_copypaste");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), toolbar_prefs.show_copypaste);
+
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_quit");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), toolbar_prefs.show_quit);
 
@@ -872,6 +878,12 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_fileops");
 		toolbar_prefs.show_fileops = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_cutdelete");
+		toolbar_prefs.show_cutdelete = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_copypaste");
+		toolbar_prefs.show_copypaste = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_quit");
 		toolbar_prefs.show_quit = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));

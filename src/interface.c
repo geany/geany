@@ -225,6 +225,11 @@ create_window1 (void)
   GtkWidget *toolbutton_reload;
   GtkWidget *toolbutton_close;
   GtkWidget *separatortoolitem2;
+  GtkWidget *toolbutton_cut;
+  GtkWidget *toolbutton_copy;
+  GtkWidget *toolbutton_paste;
+  GtkWidget *toolbutton_delete;
+  GtkWidget *separatortoolitem12;
   GtkWidget *toolbutton_undo;
   GtkWidget *toolbutton_redo;
   GtkWidget *separatortoolitem9;
@@ -1112,6 +1117,30 @@ create_window1 (void)
   gtk_widget_show (separatortoolitem2);
   gtk_container_add (GTK_CONTAINER (toolbar1), separatortoolitem2);
 
+  toolbutton_cut = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-cut");
+  gtk_widget_show (toolbutton_cut);
+  gtk_container_add (GTK_CONTAINER (toolbar1), toolbutton_cut);
+  gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (toolbutton_cut), tooltips, _("Cut the current selection"), NULL);
+
+  toolbutton_copy = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-copy");
+  gtk_widget_show (toolbutton_copy);
+  gtk_container_add (GTK_CONTAINER (toolbar1), toolbutton_copy);
+  gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (toolbutton_copy), tooltips, _("Copy the current selection"), NULL);
+
+  toolbutton_paste = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-paste");
+  gtk_widget_show (toolbutton_paste);
+  gtk_container_add (GTK_CONTAINER (toolbar1), toolbutton_paste);
+  gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (toolbutton_paste), tooltips, _("Paste the contents of the clipboard"), NULL);
+
+  toolbutton_delete = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-delete");
+  gtk_widget_show (toolbutton_delete);
+  gtk_container_add (GTK_CONTAINER (toolbar1), toolbutton_delete);
+  gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (toolbutton_delete), tooltips, _("Delete the current selection"), NULL);
+
+  separatortoolitem12 = (GtkWidget*) gtk_separator_tool_item_new ();
+  gtk_widget_show (separatortoolitem12);
+  gtk_container_add (GTK_CONTAINER (toolbar1), separatortoolitem12);
+
   toolbutton_undo = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-undo");
   gtk_widget_show (toolbutton_undo);
   gtk_container_add (GTK_CONTAINER (toolbar1), toolbutton_undo);
@@ -1673,6 +1702,18 @@ create_window1 (void)
   g_signal_connect ((gpointer) toolbutton_close, "clicked",
                     G_CALLBACK (on_toolbutton_close_clicked),
                     NULL);
+  g_signal_connect ((gpointer) toolbutton_cut, "clicked",
+                    G_CALLBACK (on_cut1_activate),
+                    NULL);
+  g_signal_connect ((gpointer) toolbutton_copy, "clicked",
+                    G_CALLBACK (on_copy1_activate),
+                    NULL);
+  g_signal_connect ((gpointer) toolbutton_paste, "clicked",
+                    G_CALLBACK (on_paste1_activate),
+                    NULL);
+  g_signal_connect ((gpointer) toolbutton_delete, "clicked",
+                    G_CALLBACK (on_delete1_activate),
+                    NULL);
   g_signal_connect ((gpointer) toolbutton_undo, "clicked",
                     G_CALLBACK (on_undo1_activate),
                     NULL);
@@ -1937,6 +1978,11 @@ create_window1 (void)
   GLADE_HOOKUP_OBJECT (window1, toolbutton_reload, "toolbutton_reload");
   GLADE_HOOKUP_OBJECT (window1, toolbutton_close, "toolbutton_close");
   GLADE_HOOKUP_OBJECT (window1, separatortoolitem2, "separatortoolitem2");
+  GLADE_HOOKUP_OBJECT (window1, toolbutton_cut, "toolbutton_cut");
+  GLADE_HOOKUP_OBJECT (window1, toolbutton_copy, "toolbutton_copy");
+  GLADE_HOOKUP_OBJECT (window1, toolbutton_paste, "toolbutton_paste");
+  GLADE_HOOKUP_OBJECT (window1, toolbutton_delete, "toolbutton_delete");
+  GLADE_HOOKUP_OBJECT (window1, separatortoolitem12, "separatortoolitem12");
   GLADE_HOOKUP_OBJECT (window1, toolbutton_undo, "toolbutton_undo");
   GLADE_HOOKUP_OBJECT (window1, toolbutton_redo, "toolbutton_redo");
   GLADE_HOOKUP_OBJECT (window1, separatortoolitem9, "separatortoolitem9");
@@ -2658,6 +2704,8 @@ create_prefs_dialog (void)
   GtkWidget *alignment14;
   GtkWidget *vbox16;
   GtkWidget *check_toolbar_fileops;
+  GtkWidget *check_toolbar_cutdelete;
+  GtkWidget *check_toolbar_copypaste;
   GtkWidget *check_toolbar_undo;
   GtkWidget *check_toolbar_navigation;
   GtkWidget *check_toolbar_compile;
@@ -3437,10 +3485,20 @@ create_prefs_dialog (void)
   gtk_widget_show (vbox16);
   gtk_container_add (GTK_CONTAINER (alignment14), vbox16);
 
-  check_toolbar_fileops = gtk_check_button_new_with_mnemonic (_("Show file operation buttons"));
+  check_toolbar_fileops = gtk_check_button_new_with_mnemonic (_("Show File Operation buttons"));
   gtk_widget_show (check_toolbar_fileops);
   gtk_box_pack_start (GTK_BOX (vbox16), check_toolbar_fileops, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_toolbar_fileops, _("Display the New, Open, Close, Save and Reload buttons in the toolbar"), NULL);
+
+  check_toolbar_cutdelete = gtk_check_button_new_with_mnemonic (_("Show Cut and Delete buttons"));
+  gtk_widget_show (check_toolbar_cutdelete);
+  gtk_box_pack_start (GTK_BOX (vbox16), check_toolbar_cutdelete, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_toolbar_cutdelete, _("Display the Cut and Delete buttons in the toolbar"), NULL);
+
+  check_toolbar_copypaste = gtk_check_button_new_with_mnemonic (_("Show Copy and Paste buttons"));
+  gtk_widget_show (check_toolbar_copypaste);
+  gtk_box_pack_start (GTK_BOX (vbox16), check_toolbar_copypaste, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_toolbar_copypaste, _("Display the Copy and Paste buttons in the toolbar"), NULL);
 
   check_toolbar_undo = gtk_check_button_new_with_mnemonic (_("Show Redo and Undo buttons"));
   gtk_widget_show (check_toolbar_undo);
@@ -4891,6 +4949,8 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment14, "alignment14");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox16, "vbox16");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_fileops, "check_toolbar_fileops");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_cutdelete, "check_toolbar_cutdelete");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_copypaste, "check_toolbar_copypaste");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_undo, "check_toolbar_undo");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_navigation, "check_toolbar_navigation");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_compile, "check_toolbar_compile");

@@ -374,6 +374,8 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_compile", toolbar_prefs.show_compile);
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_colour", toolbar_prefs.show_colour);
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_fileops", toolbar_prefs.show_fileops);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_cutdelete", toolbar_prefs.show_cutdelete);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_copypaste", toolbar_prefs.show_copypaste);
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_quit", toolbar_prefs.show_quit);
 	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_style", toolbar_prefs.icon_style);
 	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_size", toolbar_prefs.icon_size);
@@ -703,6 +705,8 @@ static void load_dialog_prefs(GKeyFile *config)
 	toolbar_prefs.show_navigation = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_navigation", TRUE);
 	toolbar_prefs.show_colour = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_colour", TRUE);
 	toolbar_prefs.show_fileops = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_fileops", TRUE);
+	toolbar_prefs.show_cutdelete = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_cutdelete", FALSE);
+	toolbar_prefs.show_copypaste = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_copypaste", FALSE);
 	toolbar_prefs.show_quit = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_quit", TRUE);
 	{
 		GtkIconSize tb_iconsize;

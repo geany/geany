@@ -1429,9 +1429,15 @@ Show Toolbar
 Items
 `````
 
-Show file operation buttons
+Show File Operation buttons
     Show the buttons to open a new file, open an existing file, save a file,
     and save all files.
+
+Show Cut and Delete buttons
+    Show buttons to cut and delete the current selection.
+
+Show Copy and Paste buttons
+    Show buttons to copy the current selection and paste the contents of the clipboard.
 
 Show Redo and Undo buttons
     Show the undo/redo change buttons.

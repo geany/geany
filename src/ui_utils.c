@@ -848,6 +848,12 @@ void ui_update_toolbar_items(void)
 	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_undo"), toolbar_prefs.show_undo);
 	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_redo"), toolbar_prefs.show_undo);
 	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem9"), toolbar_prefs.show_undo);
+	/* C&P */
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_copy"), toolbar_prefs.show_copypaste);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_paste"), toolbar_prefs.show_copypaste);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_cut"), toolbar_prefs.show_cutdelete);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_delete"), toolbar_prefs.show_cutdelete);
+	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem12"), toolbar_prefs.show_cutdelete || toolbar_prefs.show_copypaste);
 	/* navigation */
 	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_back"), toolbar_prefs.show_navigation);
 	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_forward"), toolbar_prefs.show_navigation);

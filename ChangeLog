@@ -8,6 +8,10 @@
    Remove dialogs_show_goto_line(), use the more generic
    dialogs_show_input_numeric() instead.
    Increase limit of the maximum line number from 99999 to 100000000.
+ * doc/geany.html, doc/geany.txt, geany.glade, src/callbacks.c,
+   src/interface.c, src/keyfile.c, src/plugindata.h, src/prefs.c,
+   src/ui_utils.c, src/ui_utils.h:
+   Add toolbar buttons for Cut, Copy, Paste and Delete (#2161750).
 
 
 2008-10-22  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

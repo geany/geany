@@ -1716,6 +1716,83 @@
 	  </child>
 
 	  <child>
+	    <widget class="GtkToolButton" id="toolbutton_cut">
+	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Cut the current selection</property>
+	      <property name="stock_id">gtk-cut</property>
+	      <property name="visible_horizontal">True</property>
+	      <property name="visible_vertical">True</property>
+	      <property name="is_important">False</property>
+	      <signal name="clicked" handler="on_cut1_activate" last_modification_time="Mon, 10 Jul 2006 19:52:02 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="expand">False</property>
+	      <property name="homogeneous">True</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkToolButton" id="toolbutton_copy">
+	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Copy the current selection</property>
+	      <property name="stock_id">gtk-copy</property>
+	      <property name="visible_horizontal">True</property>
+	      <property name="visible_vertical">True</property>
+	      <property name="is_important">False</property>
+	      <signal name="clicked" handler="on_copy1_activate" last_modification_time="Mon, 10 Jul 2006 19:52:02 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="expand">False</property>
+	      <property name="homogeneous">True</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkToolButton" id="toolbutton_paste">
+	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Paste the contents of the clipboard</property>
+	      <property name="stock_id">gtk-paste</property>
+	      <property name="visible_horizontal">True</property>
+	      <property name="visible_vertical">True</property>
+	      <property name="is_important">False</property>
+	      <signal name="clicked" handler="on_paste1_activate" last_modification_time="Mon, 10 Jul 2006 19:52:02 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="expand">False</property>
+	      <property name="homogeneous">True</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkToolButton" id="toolbutton_delete">
+	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Delete the current selection</property>
+	      <property name="stock_id">gtk-delete</property>
+	      <property name="visible_horizontal">True</property>
+	      <property name="visible_vertical">True</property>
+	      <property name="is_important">False</property>
+	      <signal name="clicked" handler="on_delete1_activate" last_modification_time="Thu, 23 Oct 2008 20:48:07 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="expand">False</property>
+	      <property name="homogeneous">True</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkSeparatorToolItem" id="separatortoolitem12">
+	      <property name="visible">True</property>
+	      <property name="draw">True</property>
+	      <property name="visible_horizontal">True</property>
+	      <property name="visible_vertical">True</property>
+	    </widget>
+	    <packing>
+	      <property name="expand">False</property>
+	      <property name="homogeneous">False</property>
+	    </packing>
+	  </child>
+
+	  <child>
 	    <widget class="GtkToolButton" id="toolbutton_undo">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Undo the last modification</property>
@@ -4881,7 +4958,47 @@ Bottom
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Display the New, Open, Close, Save and Reload buttons in the toolbar</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Show file operation buttons</property>
+			      <property name="label" translatable="yes">Show File Operation buttons</property>
+			      <property name="use_underline">True</property>
+			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <property name="focus_on_click">True</property>
+			      <property name="active">False</property>
+			      <property name="inconsistent">False</property>
+			      <property name="draw_indicator">True</property>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">False</property>
+			      <property name="fill">False</property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkCheckButton" id="check_toolbar_cutdelete">
+			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Display the Cut and Delete buttons in the toolbar</property>
+			      <property name="can_focus">True</property>
+			      <property name="label" translatable="yes">Show Cut and Delete buttons</property>
+			      <property name="use_underline">True</property>
+			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <property name="focus_on_click">True</property>
+			      <property name="active">False</property>
+			      <property name="inconsistent">False</property>
+			      <property name="draw_indicator">True</property>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">False</property>
+			      <property name="fill">False</property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkCheckButton" id="check_toolbar_copypaste">
+			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Display the Copy and Paste buttons in the toolbar</property>
+			      <property name="can_focus">True</property>
+			      <property name="label" translatable="yes">Show Copy and Paste buttons</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">True</property>
