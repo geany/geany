@@ -738,8 +738,13 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 
 		g_free(tmp);
 	}
+	/* detect HTML files */
+	if (strncmp(line, "<!DOCTYPE html", 14) == 0 || strncmp(line, "<html", 5) == 0)
+	{
+		ft = filetypes[GEANY_FILETYPES_HTML];
+	}
 	/* detect XML files */
-	if (utf8_filename && strncmp(line, "<?xml", 5) == 0)
+	else if (utf8_filename && strncmp(line, "<?xml", 5) == 0)
 	{
 		/* HTML and DocBook files might also start with <?xml, so detect them based on filename
 		 * extension and use the detected filetype, else assume XML */
