@@ -804,7 +804,14 @@ GeanyFiletype *filetypes_detect_from_document(GeanyDocument *doc)
 
 #ifdef HAVE_PLUGINS
 /* Currently only used by external plugins (e.g. geanyprj). */
-/** Detect filetype based on a shebang line in the file, or the filename extension. */
+/**
+ *  Detect filetype based on a shebang line in the file, or the filename extension.
+ *
+ *  @param utf8_filename The filename in UTF-8 encoding.
+ *
+ *  @return The detected filetype for @c utf8_filename or @c filetypes[GEANY_FILETYPES_NONE]
+ *          if it could not be detected.
+ **/
 GeanyFiletype *filetypes_detect_from_file(const gchar *utf8_filename)
 {
 	gchar line[1024];
