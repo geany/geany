@@ -5,6 +5,8 @@
    pass NULL as package name.
  * src/main.c, src/plugins.c, src/plugindata.h:
    Add main_locale_init() to the plugin API.
+ * src/callbacks.c:
+   Fix updating of the value of the toolbar Goto line spinbutton.
 
 
 2008-10-24  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

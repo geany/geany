@@ -1213,6 +1213,7 @@ void
 on_goto_line_entry_activate          (GtkEntry        *entry,
                                       gpointer         user_data)
 {
+	gtk_spin_button_update(GTK_SPIN_BUTTON(entry));
 	on_goto_line_dialog_response(GTK_DIALOG(user_data), GTK_RESPONSE_ACCEPT, entry);
 }
 
@@ -1221,6 +1222,7 @@ void
 on_toolbutton_goto_entry_activate      (GtkEntry        *entry,
                                         gpointer         user_data)
 {
+	gtk_spin_button_update(GTK_SPIN_BUTTON(entry));
 	on_goto_line_dialog_response(NULL, GTK_RESPONSE_ACCEPT, entry);
 }
 
