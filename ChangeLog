@@ -1,3 +1,10 @@
+2008-10-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/main.c, src/plugins.c:
+   Fix deprecated usage of g_win32_get_package_installation_directory(),
+   pass NULL as package name.
+
+
 2008-10-24  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * THANKS: Added Roland Baudin to list of contributors of translations.

@@ -392,7 +392,7 @@ static void setup_paths(void)
 #ifdef G_OS_WIN32
 	/* use the installation directory(the one where geany.exe is located) as the base for the
 	 * documentation and data files */
-	gchar *install_dir = g_win32_get_package_installation_directory("geany", NULL);
+	gchar *install_dir = g_win32_get_package_installation_directory(NULL, NULL);
 
 	data_dir = g_strconcat(install_dir, "\\data", NULL); /* e.g. C:\Program Files\geany\data */
 	doc_dir = g_strconcat(install_dir, "\\doc", NULL);
@@ -422,7 +422,7 @@ static void locale_init(void)
 #endif
 
 #ifdef G_OS_WIN32
-	gchar *install_dir = g_win32_get_package_installation_directory("geany", NULL);
+	gchar *install_dir = g_win32_get_package_installation_directory(NULL, NULL);
 	/* e.g. C:\Program Files\Geany\share\locale */
 	locale_dir = g_strconcat(install_dir, "\\share\\locale", NULL);
 	g_free(install_dir);

@@ -755,7 +755,7 @@ load_plugins_from_path(const gchar *path)
 #ifdef G_OS_WIN32
 static gchar *get_plugin_path()
 {
-	gchar *install_dir = g_win32_get_package_installation_directory("geany", NULL);
+	gchar *install_dir = g_win32_get_package_installation_directory(NULL, NULL);
 	gchar *path;
 
 	path = g_strconcat(install_dir, "\\lib", NULL);
