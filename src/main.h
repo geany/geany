@@ -61,4 +61,6 @@ gboolean main_handle_filename(gchar *locale_filename);
 
 void main_reload_configuration(void);
 
+void main_locale_init(const gchar *locale_dir, const gchar *gettext_package);
+
 #endif

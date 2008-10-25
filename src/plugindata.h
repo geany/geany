@@ -41,7 +41,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 102,
+	GEANY_API_VERSION = 103,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -333,6 +333,8 @@ UtilsFuncs;
 typedef struct MainFuncs
 {
 	void		(*reload_configuration) (void);
+	void		(*locale_init) (const gchar *locale_dir, const gchar *package);
+
 }
 MainFuncs;
 

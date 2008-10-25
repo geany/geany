@@ -3,6 +3,8 @@
  * src/main.c, src/plugins.c:
    Fix deprecated usage of g_win32_get_package_installation_directory(),
    pass NULL as package name.
+ * src/main.c, src/plugins.c, src/plugindata.h:
+   Add main_locale_init() to the plugin API.
 
 
 2008-10-24  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

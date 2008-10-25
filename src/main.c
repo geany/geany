@@ -412,10 +412,30 @@ static void setup_paths(void)
 }
 
 
-static void locale_init(void)
+/**
+ *  Initialises the gettext translation system.
+ *  This is a convenience function to set up gettext for internationalisation support
+ *  in external plugins. You should call this function early in @ref plugin_init().
+ *  If the macro HAVE_LOCALE_H is defined, @a setlocale(LC_ALL, "") is called.
+ *  The codeset for the mesaage translations is set to UTF-8.
+ *
+ *  Note that this function only setup the gettext textdomain for you. You still have
+ *  to adjust the build system of your plugin to get internationalisation support
+ *  working properly.
+ *
+ *  @param locale_dir The location where the translation files should be searched. This is
+ *                    usually the @a LOCALEDIR macro, defined by the build system.
+ *                    E.g. $prefix/share/locale.
+ *                    Only used on non-Windows systems. On Windows, the directory is determined
+ *                    by @c g_win32_get_package_installation_directory().
+ *  @param package The package name, usually this is the @a GETTEXT_PACKAGE macro,
+ *                 defined by the build system.
+ *
+ *  @since 0.16
+ **/
+void main_locale_init(const gchar *locale_dir, const gchar *package)
 {
-#ifdef ENABLE_NLS
-	gchar *locale_dir = NULL;
+	gchar *l_locale_dir = NULL;
 
 #ifdef HAVE_LOCALE_H
 	setlocale(LC_ALL, "");
@@ -423,18 +443,17 @@ static void locale_init(void)
 
 #ifdef G_OS_WIN32
 	gchar *install_dir = g_win32_get_package_installation_directory(NULL, NULL);
-	/* e.g. C:\Program Files\Geany\share\locale */
-	locale_dir = g_strconcat(install_dir, "\\share\\locale", NULL);
+	/* e.g. C:\Program Files\geany\lib\locale */
+	l_locale_dir = g_strconcat(install_dir, "\\share\\locale", NULL);
 	g_free(install_dir);
 #else
-	locale_dir = g_strdup(GEANY_LOCALEDIR);
+	l_locale_dir = g_strdup(locale_dir);
 #endif
 
-	bindtextdomain(GETTEXT_PACKAGE, locale_dir);
-	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
-	textdomain(GETTEXT_PACKAGE);
-	g_free(locale_dir);
-#endif
+	bindtextdomain(package, l_locale_dir);
+	bind_textdomain_codeset(package, "UTF-8");
+	textdomain(package);
+	g_free(l_locale_dir);
 }
 
 
@@ -763,7 +782,9 @@ gint main(gint argc, gchar **argv)
 	memset(&ui_widgets, 0, sizeof(UIWidgets));
 
 	setup_paths();
-	locale_init();
+#ifdef ENABLE_NLS
+	main_locale_init(GEANY_LOCALEDIR, GETTEXT_PACKAGE);
+#endif
 	parse_command_line_options(&argc, &argv);
 
 	signal(SIGTERM, signal_cb);
@@ -1032,6 +1053,7 @@ void *rpl_malloc(size_t n)
  *  Plugins may call this function if they changed any of these files (e.g. a configuration file
  *  editor plugin).
  *
+ *  @since 0.15
  **/
 void main_reload_configuration(void)
 {
