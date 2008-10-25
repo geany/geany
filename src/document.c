@@ -447,7 +447,7 @@ gboolean document_remove_page(guint page_num)
 
 	if (doc == NULL)
 	{
-		geany_debug("Error: page_num: %d", page_num);
+		g_warning("%s: page_num: %d", __func__, page_num);
 		return FALSE;
 	}
 
