@@ -461,9 +461,16 @@ static void styleset_common(ScintillaObject *sci)
 		common_style_set.styling[GCS_LINE_WRAP_VISUALS].background, 0);
 	SSM(sci, SCI_SETWRAPSTARTINDENT, common_style_set.styling[GCS_LINE_WRAP_INDENT].foreground, 0);
 
-	/* indicator settings */
-	SSM(sci, SCI_INDICSETSTYLE, 0, INDIC_SQUIGGLE);
-	SSM(sci, SCI_INDICSETFORE, 0, invert(0x0000ff));
+	/* Error indicator */
+	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_ERROR, INDIC_SQUIGGLE);
+	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_ERROR, invert(rotate_rgb(0xff0000)));
+
+	/* Search indicator, used for 'Mark' matches */
+	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_SEARCH, INDIC_ROUNDBOX);
+	/* TODO make this configurable, but we can't really use the foreground nor the background
+	 * colours of GCS_MARKER_LINE since the drawn box is a little translucent and the default
+	 * colours for GCS_MARKER_LINE are too bright. */
+	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_SEARCH, invert(rotate_rgb(0x00ff00)));
 
 	/* define marker symbols
 	 * 0 -> line marker */

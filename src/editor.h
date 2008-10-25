@@ -50,6 +50,18 @@ typedef enum
 }
 GeanyAutoIndent;
 
+/** Geany indicator types, can be used with Editor indicator functions to highlight
+ *  text in the document. */
+typedef enum
+{
+	/** Indicator to highlight errors in the document text. This is a red squiggly underline. */
+	GEANY_INDICATOR_ERROR = 0,
+	/** Indicator used to highlight search results in the document. This is a
+	 *  rounded box around the text. */
+	/* start container indicator outside of lexer indicators (0..7), see Scintilla docs */
+	GEANY_INDICATOR_SEARCH = 8
+}
+GeanyIndicator;
 
 /** Indentation prefs that might be different according to project or filetype.
  * Use @c editor_get_indent_prefs() to lookup the prefs for a particular document. */
@@ -205,6 +217,12 @@ void editor_set_indicator(GeanyEditor *editor, gint start, gint end);
 void editor_clear_indicators(GeanyEditor *editor);
 
 void editor_set_font(GeanyEditor *editor, const gchar *font);
+
+void editor_set_indicator_on_line_full(GeanyEditor *editor, gint indic, gint line);
+
+void editor_set_indicator_full(GeanyEditor *editor, gint indic, gint start, gint end);
+
+void editor_clear_indicators_full(GeanyEditor *editor, gint indic);
 
 const gchar *editor_get_eol_char_name(GeanyEditor *editor);
 

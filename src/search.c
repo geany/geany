@@ -801,7 +801,7 @@ on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user
 
 static gint search_mark(GeanyDocument *doc, const gchar *search_text, gint flags)
 {
-	gint pos, line, count = 0;
+	gint pos, end_pos, count = 0;
 	struct TextToFind ttf;
 
 	g_return_val_if_fail(doc != NULL, 0);
@@ -809,13 +809,13 @@ static gint search_mark(GeanyDocument *doc, const gchar *search_text, gint flags
 	ttf.chrg.cpMin = 0;
 	ttf.chrg.cpMax = sci_get_length(doc->editor->sci);
 	ttf.lpstrText = (gchar *)search_text;
-	while (1)
+	while (TRUE)
 	{
 		pos = sci_find_text(doc->editor->sci, flags, &ttf);
 		if (pos == -1) break;
 
-		line = sci_get_line_from_position(doc->editor->sci, pos);
-		sci_set_marker_at_line(doc->editor->sci, line, TRUE, 1);
+		end_pos = scintilla_send_message(doc->editor->sci, SCI_WORDENDPOSITION, pos, TRUE);
+		editor_set_indicator_full(doc->editor, GEANY_INDICATOR_SEARCH, pos, end_pos);
 
 		ttf.chrg.cpMin = ttf.chrgText.cpMax + 1;
 		count++;

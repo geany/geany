@@ -917,10 +917,9 @@ Find All In Document will show a list of matching lines in the
 current document in the Messages tab of the Message Window. *Find All
 In Session* does the same for all open documents.
 
-Mark will set markers for all matching lines in the current document,
-if the Markers margin is visible. If not, the background colour of
-matching lines will be highlighted. Markers and highlighting can be
-removed by selecting the Remove Markers command from the Document menu.
+Mark will highlight all matches in the current document with a
+coloured box. These markers can be removed by selecting the
+Remove Markers command from the Document menu.
 
 
 Change font in search dialog text fields

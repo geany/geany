@@ -7,6 +7,14 @@
    Add main_locale_init() to the plugin API.
  * src/callbacks.c:
    Fix updating of the value of the toolbar Goto line spinbutton.
+ * doc/geany.html, doc/geany.txt, src/callbacks.c, src/editor.c,
+   src/editor.h, src/highlighting.c, src/plugindata.h, src/plugins.c,
+   src/sciwrappers.c, src/search.c:
+   Add *_full variants of editor indicator functions to the plugin API
+   for more control over indicators.
+   Add/Update some API docs.
+   Make the 'Mark' button for Find highlight the results with rounded
+   boxes instead of marking the whole line.
 
 
 2008-10-24  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

@@ -134,7 +134,10 @@ static EditorFuncs editor_funcs = {
 	&editor_set_indicator_on_line,
 	&editor_clear_indicators,
 	&editor_get_indent_prefs,
-	&editor_create_widget
+	&editor_create_widget,
+	&editor_set_indicator_full,
+	&editor_set_indicator_on_line_full,
+	&editor_clear_indicators_full,
 };
 
 static ScintillaFuncs sci_funcs = {
@@ -173,7 +176,8 @@ static ScintillaFuncs sci_funcs = {
 	&sci_get_current_line,
 	&sci_has_selection,
 	&sci_get_tab_width,
-	&sci_indicator_clear
+	&sci_indicator_clear,
+	&sci_set_indicator
 };
 
 static TemplateFuncs template_funcs = {

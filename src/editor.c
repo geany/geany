@@ -3388,8 +3388,9 @@ void editor_display_current_line(GeanyEditor *editor, gfloat percent_of_view)
  *  Error indicators (red squiggly underlines) and usual line markers are removed.
  *
  *  @param editor The editor to operate on.
+ *  @param indic The indicator number to clear, this is a value of @ref GeanyIndicator.
  **/
-void editor_clear_indicators(GeanyEditor *editor)
+void editor_clear_indicators_full(GeanyEditor *editor, gint indic)
 {
 	glong last_pos;
 
@@ -3397,21 +3398,36 @@ void editor_clear_indicators(GeanyEditor *editor)
 
 	last_pos = sci_get_length(editor->sci);
 	if (last_pos > 0)
+	{
+		sci_set_indicator(editor->sci, indic);
 		sci_indicator_clear(editor->sci, 0, last_pos);
+	}
+}
 
+
+/**
+ *  Deletes all currently set indicators in the @a editor window.
+ *  Error indicators (red squiggly underlines) and usual line markers are removed.
+ *
+ *  @param editor The editor to operate on.
+ **/
+void editor_clear_indicators(GeanyEditor *editor)
+{
+	editor_clear_indicators_full(editor, GEANY_INDICATOR_ERROR);
 	sci_marker_delete_all(editor->sci, 0);	/* remove the yellow error line marker */
 }
 
 
 /**
- *  This is a convenience function for editor_set_indicator(). It sets an error indicator
- *  (red squiggly underline) on the whole given line.
+ *  This is a convenience function for editor_set_indicator_full(). It sets an indicator
+ *  on the whole given line.
  *  Whitespace at the start and the end of the line is not marked.
  *
  *  @param editor The editor to operate on.
+ *  @param indic The indicator number to use, this is a value of @ref GeanyIndicator.
  *  @param line The line number which should be marked.
  **/
-void editor_set_indicator_on_line(GeanyEditor *editor, gint line)
+void editor_set_indicator_on_line_full(GeanyEditor *editor, gint indic, gint line)
 {
 	gint start, end;
 	guint i = 0, len;
@@ -3440,7 +3456,21 @@ void editor_set_indicator_on_line(GeanyEditor *editor, gint line)
 	}
 	g_free(linebuf);
 
-	editor_set_indicator(editor, start + i, end);
+	editor_set_indicator_full(editor, indic, start + i, end);
+}
+
+
+/**
+ *  This is a convenience function for editor_set_indicator(). It sets an error indicator
+ *  (red squiggly underline) on the whole given line.
+ *  Whitespace at the start and the end of the line is not marked.
+ *
+ *  @param editor The editor to operate on.
+ *  @param line The line number which should be marked.
+ **/
+void editor_set_indicator_on_line(GeanyEditor *editor, gint line)
+{
+	editor_set_indicator_on_line_full(editor, GEANY_INDICATOR_ERROR, line);
 }
 
 
@@ -3455,10 +3485,26 @@ void editor_set_indicator_on_line(GeanyEditor *editor, gint line)
  **/
 void editor_set_indicator(GeanyEditor *editor, gint start, gint end)
 {
+	editor_set_indicator_full(editor, GEANY_INDICATOR_ERROR, start, end);
+}
+
+
+/**
+ *  Sets an indicator on the range specified by @c start and @c end.
+ *  No error checking or whitespace removal is performed, this should be done by the calling
+ *  function if necessary.
+ *
+ *  @param editor The editor to operate on.
+ *  @param indic The indicator number to use, this is a value of @ref GeanyIndicator.
+ *  @param start The starting position for the marker.
+ *  @param end The ending position for the marker.
+ **/
+void editor_set_indicator_full(GeanyEditor *editor, gint indic, gint start, gint end)
+{
 	if (editor == NULL || start >= end)
 		return;
 
-	sci_set_indicator(editor->sci, 0);
+	sci_set_indicator(editor->sci, indic);
 	sci_indicator_fill(editor->sci, start, end - start);
 }
 

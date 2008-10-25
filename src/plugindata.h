@@ -41,7 +41,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 103,
+	GEANY_API_VERSION = 104,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -289,6 +289,7 @@ typedef struct ScintillaFuncs
 	gboolean (*has_selection) (struct _ScintillaObject *sci);
 	gint	(*get_tab_width) (struct _ScintillaObject *sci);
 	void	(*indicator_clear) (struct _ScintillaObject *sci, gint start, gint end);
+	void	(*set_indicator) (struct _ScintillaObject *sci, gint indic);
 }
 ScintillaFuncs;
 
@@ -477,6 +478,10 @@ typedef struct EditorFuncs
 	struct _ScintillaObject* (*create_widget)(struct GeanyEditor *editor);
 	/* Remember to convert any GeanyDocument or ScintillaObject pointers in any
 	 * appended functions to GeanyEditor pointers. */
+
+	void	(*set_indicator_full) (struct GeanyEditor *editor, gint indic, gint start, gint end);
+	void	(*set_indicator_on_line_full) (struct GeanyEditor *editor, gint indic, gint line);
+	void	(*clear_indicators_full) (struct GeanyEditor *editor, gint indic);
 }
 EditorFuncs;
 

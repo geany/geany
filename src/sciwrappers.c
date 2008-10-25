@@ -972,6 +972,15 @@ gint sci_get_indicator(ScintillaObject *sci)
 	return SSM(sci, SCI_GETINDICATORCURRENT, 0, 0);
 }
 
+/**
+ *  Set the current indicator. This is necessary to define an indicator for a range of text or
+ *  clearing indicators for a range of text.
+ *
+ *  @param sci Scintilla widget.
+ *  @param indic The indicator number to set.
+ *
+ *  @see sci_indicator_clear
+ **/
 void sci_set_indicator(ScintillaObject *sci, gint indic)
 {
 	SSM(sci, SCI_SETINDICATORCURRENT, indic, 0);
@@ -982,10 +991,16 @@ void sci_indicator_fill(ScintillaObject *sci, gint pos, gint len)
 	SSM(sci, SCI_INDICATORFILLRANGE, pos, len);
 }
 
-/** Clear a range of text from any set indicators. Starting at @a pos, @a len characters long.
- * @param sci Scintilla widget.
- * @param pos Starting position.
- * @param len Length. */
+/**
+ *  Clear a range of text from the currently set indicator.
+ *  Starting at @a pos, @a len characters long.
+ *  In order to make this function properly, you need to set the current indicator before with
+ *  @ref sci_set_indicator().
+ *
+ *  @param sci Scintilla widget.
+ *  @param pos Starting position.
+ *  @param len Length.
+ **/
 void sci_indicator_clear(ScintillaObject *sci, gint pos, gint len)
 {
 	SSM(sci, SCI_INDICATORCLEARRANGE, pos, len);
