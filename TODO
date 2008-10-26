@@ -3,7 +3,6 @@ TODO List:
 Note: features included in brackets have lower priority.
 
 	Fix bugs:
-	o fix bug that prevents UTF-16, UTF-32 files from being loaded
 	o tagmanager fails on UTF-16/32
 
 

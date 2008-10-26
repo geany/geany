@@ -636,7 +636,7 @@ handle_forced_encoding(FileData *filedata, const gchar *forced_enc)
 	else
 	{
 		gchar *converted_text = encodings_convert_to_utf8_from_charset(
-										filedata->data, filedata->len, forced_enc, FALSE);
+										filedata->data, filedata->size, forced_enc, FALSE);
 		if (converted_text == NULL)
 		{
 			return FALSE;
@@ -657,7 +657,7 @@ handle_forced_encoding(FileData *filedata, const gchar *forced_enc)
 
 /* detect encoding and convert to UTF-8 if necessary */
 static gboolean
-handle_encoding(FileData *filedata)
+handle_encoding(FileData *filedata, GeanyEncodingIndex enc_idx)
 {
 	g_return_val_if_fail(filedata->enc == NULL, FALSE);
 	g_return_val_if_fail(filedata->bom == FALSE, FALSE);
@@ -671,9 +671,6 @@ handle_encoding(FileData *filedata)
 	else
 	{
 		/* first check for a BOM */
-		GeanyEncodingIndex enc_idx =
-			encodings_scan_unicode_bom(filedata->data, filedata->size, NULL);
-
 		if (enc_idx != GEANY_ENCODING_NONE)
 		{
 			filedata->enc = g_strdup(encodings[enc_idx].charset);
@@ -702,7 +699,8 @@ handle_encoding(FileData *filedata)
 		if (filedata->enc == NULL)	/* either there was no BOM or the BOM encoding failed */
 		{
 			/* try UTF-8 first */
-			if (g_utf8_validate(filedata->data, filedata->len, NULL))
+			if ((filedata->size == filedata->len) &&
+				g_utf8_validate(filedata->data, filedata->len, NULL))
 			{
 				filedata->enc = g_strdup("UTF-8");
 			}
@@ -779,13 +777,12 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_f
 	 * if we have a BOM */
 	tmp_enc_idx = encodings_scan_unicode_bom(filedata->data, filedata->size, NULL);
 
-	/* check whether the size of the loaded data is equal to the size of the file in the filesystem */
-	/* file size may be 0 to allow opening files in /proc/ which have typically a file size
-	 * of 0 bytes */
+	/* check whether the size of the loaded data is equal to the size of the file in the
+	 * filesystem file size may be 0 to allow opening files in /proc/ which have typically a
+	 * file size of 0 bytes */
 	if (filedata->len != filedata->size && filedata->size != 0 && (
 		tmp_enc_idx == GEANY_ENCODING_UTF_8 || /* tmp_enc_idx can be UTF-7/8/16/32, UCS and None */
-		tmp_enc_idx == GEANY_ENCODING_UTF_7 || /* filter out UTF-7/8 and None where no NULL bytes */
-		tmp_enc_idx == GEANY_ENCODING_NONE))   /* are allowed */
+		tmp_enc_idx == GEANY_ENCODING_UTF_7))  /* filter UTF-7/8 where no NULL bytes are allowed */
 	{
 		const gchar *warn_msg = _(
 			"The file \"%s\" could not be opened properly and has been truncated. " \
@@ -812,16 +809,17 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_f
 		}
 		else if (! handle_forced_encoding(filedata, forced_enc))
 		{
-			ui_set_statusbar(TRUE, _("The file \"%s\" is not valid %s."), utf8_filename, forced_enc);
+			ui_set_statusbar(TRUE, _("The file \"%s\" is not valid %s."),
+				utf8_filename, forced_enc);
 			utils_beep();
 			g_free(filedata->data);
 			return FALSE;
 		}
 	}
-	else if (! handle_encoding(filedata))
+	else if (! handle_encoding(filedata, tmp_enc_idx))
 	{
 		ui_set_statusbar(TRUE,
-			_("The file \"%s\" does not look like a text file or the file encoding is not supported."),
+	_("The file \"%s\" does not look like a text file or the file encoding is not supported."),
 			utf8_filename);
 		utils_beep();
 		g_free(filedata->data);

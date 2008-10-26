@@ -1,3 +1,10 @@
+2008-10-26  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/document.c:
+   Handle UTF16/32 encoded files without a BOM better and allow
+   them to opened (#2155573, patch by Jason Oster, thanks).
+
+
 2008-10-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/main.c, src/plugins.c:
