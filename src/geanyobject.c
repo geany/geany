@@ -78,6 +78,37 @@ GType geany_object_get_type(void)
 }
 
 
+static void geany_cclosure_marshal_VOID__STRING_INT_POINTER(GClosure *closure, GValue *ret_val,
+				guint n_param_vals, const GValue *param_values, gpointer hint, gpointer mdata)
+{
+	typedef gboolean (*GMarshalFunc_VOID__STRING_INT_POINTER)
+		(gpointer data1, gconstpointer arg_1, gint arg_2, gpointer arg_3, gpointer data2);
+
+	register GMarshalFunc_VOID__STRING_INT_POINTER callback;
+	register GCClosure* cc = (GCClosure*) closure;
+	register gpointer data1, data2;
+
+	g_return_if_fail(n_param_vals == 4);
+
+	if (G_CCLOSURE_SWAP_DATA(closure))
+	{
+		data1 = closure->data;
+		data2 = g_value_peek_pointer(param_values + 0);
+	}
+	else
+	{
+		data1 = g_value_peek_pointer(param_values + 0);
+		data2 = closure->data;
+	}
+	callback = (GMarshalFunc_VOID__STRING_INT_POINTER) (mdata ? mdata : cc->callback);
+	callback(data1,
+			  g_value_get_string(param_values + 1),
+			  g_value_get_int(param_values + 2),
+			  g_value_get_pointer(param_values + 3),
+			  data2);
+}
+
+
 static void create_signals(GObjectClass *g_object_class)
 {
 	geany_object_signals[GCB_DOCUMENT_NEW] = g_signal_new (
@@ -86,7 +117,7 @@ static void create_signals(GObjectClass *g_object_class)
 		G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GeanyObjectClass, document_new),
 		NULL, NULL,
-		gtk_marshal_NONE__POINTER,
+		g_cclosure_marshal_VOID__POINTER,
 		G_TYPE_NONE, 1,
 		G_TYPE_POINTER);
 	geany_object_signals[GCB_DOCUMENT_OPEN] = g_signal_new (
@@ -95,7 +126,7 @@ static void create_signals(GObjectClass *g_object_class)
 		G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GeanyObjectClass, document_open),
 		NULL, NULL,
-		gtk_marshal_NONE__POINTER,
+		g_cclosure_marshal_VOID__POINTER,
 		G_TYPE_NONE, 1,
 		G_TYPE_POINTER);
 	geany_object_signals[GCB_DOCUMENT_SAVE] = g_signal_new (
@@ -104,7 +135,7 @@ static void create_signals(GObjectClass *g_object_class)
 		G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GeanyObjectClass, document_save),
 		NULL, NULL,
-		gtk_marshal_NONE__POINTER,
+		g_cclosure_marshal_VOID__POINTER,
 		G_TYPE_NONE, 1,
 		G_TYPE_POINTER);
 	geany_object_signals[GCB_DOCUMENT_ACTIVATE] = g_signal_new (
@@ -113,7 +144,7 @@ static void create_signals(GObjectClass *g_object_class)
 		G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GeanyObjectClass, document_activate),
 		NULL, NULL,
-		gtk_marshal_NONE__POINTER,
+		g_cclosure_marshal_VOID__POINTER,
 		G_TYPE_NONE, 1,
 		G_TYPE_POINTER);
 	geany_object_signals[GCB_DOCUMENT_CLOSE] = g_signal_new (
@@ -122,7 +153,7 @@ static void create_signals(GObjectClass *g_object_class)
 		G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GeanyObjectClass, document_close),
 		NULL, NULL,
-		gtk_marshal_NONE__POINTER,
+		g_cclosure_marshal_VOID__POINTER,
 		G_TYPE_NONE, 1,
 		G_TYPE_POINTER);
 
@@ -132,7 +163,7 @@ static void create_signals(GObjectClass *g_object_class)
 		G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GeanyObjectClass, project_open),
 		NULL, NULL,
-		gtk_marshal_NONE__POINTER,
+		g_cclosure_marshal_VOID__POINTER,
 		G_TYPE_NONE, 1,
 		G_TYPE_POINTER);
 	geany_object_signals[GCB_PROJECT_SAVE] = g_signal_new (
@@ -141,7 +172,7 @@ static void create_signals(GObjectClass *g_object_class)
 		G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GeanyObjectClass, project_save),
 		NULL, NULL,
-		gtk_marshal_NONE__INT,
+		g_cclosure_marshal_VOID__POINTER,
 		G_TYPE_NONE, 1,
 		G_TYPE_POINTER);
 	geany_object_signals[GCB_PROJECT_CLOSE] = g_signal_new (
@@ -150,7 +181,7 @@ static void create_signals(GObjectClass *g_object_class)
 		G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GeanyObjectClass, project_close),
 		NULL, NULL,
-		gtk_marshal_NONE__NONE,
+		g_cclosure_marshal_VOID__VOID,
 		G_TYPE_NONE, 0);
 
 	geany_object_signals[GCB_UPDATE_EDITOR_MENU] = g_signal_new (
@@ -159,7 +190,7 @@ static void create_signals(GObjectClass *g_object_class)
 		G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GeanyObjectClass, update_editor_menu),
 		NULL, NULL,
-		gtk_marshal_NONE__STRING_INT_POINTER,
+		geany_cclosure_marshal_VOID__STRING_INT_POINTER,
 		G_TYPE_NONE, 3,
 		G_TYPE_STRING, G_TYPE_INT, G_TYPE_POINTER);
 }
