@@ -1722,8 +1722,7 @@ Make
 
 .. note::
     The make commands are set in the *Build->Configure Commands* dialog.
-    This directory is used so that the builder command need not be in
-    the default path.
+    This directory is not used for the project based commands.
 
 Terminal
     The location of your terminal executable.
@@ -1955,21 +1954,6 @@ path. Uncheck this if you want to use the current file's directory
 instead.
 
 
-Run command
-```````````
-
-The *Run command* overrides the default run command. You can set this
-to the executable or main script file for the project, and append
-any command-line arguments.
-
-The following variables can be used:
-
-* %f -- complete filename without path
-* %e -- filename without path and without extension
-
-See `[build_settings] Section`_ for details.
-
-
 Open Project
 ^^^^^^^^^^^^
 
@@ -2000,6 +1984,42 @@ make/build tool.  This system allows Geany to default to sane actions for
 simple single file programs whilst still being configurable to support
 multiple target/multiple programming language projects.
 
+Rationale
+^^^^^^^^^
+
+If on first reading the build system sounds complicated, it may help to 
+keep in mind the rationale behind its design.  Geany supports many 
+languages which have different commands to compile/link/run their code.
+So different commands must be used for each type of source file that 
+Geany understands, therefore some commands are stored for each type of file.
+
+As software gets more complex and is divided into several source files it
+is usual to run the file containing the main program, not the one currently 
+being edited.  In this case Geany cannot generally identify the correct
+file so the user has to configure it.  To keep it separate from filetype
+information, this execute command is stored in the user preferences.
+
+For larger software projects compiling and running individual files is 
+not very effective as differing settings and flags may be needed making
+manual building complex.  Instead some form of build software such as 
+"Make" is used.  It is usefull to be able to invoke the builder from 
+Geany, and so have the output parsed for error messages allowing Geany 
+to take you straight to the source line of the error.  To do this Geany 
+needs to know some more commands which are independant of the type of 
+source.  These commands are also stored with the user preferences.
+
+When operating on several software projects it is annoying and error 
+prone to have to set the build and execute commands each time you start 
+work on a different set of software.  By using the Geany project file to
+store the commands for each different project it is possible to have them
+set automatically whenever that project is opened.
+
+Finally a set of common default values are provided if the user doesn't 
+set any specific information, making simple systems work out of the box.
+
+Operation
+^^^^^^^^^
+
 Two actions are performed for all the build menu items.
 
 First the current source file will be saved before it is processed. This
@@ -2019,45 +2039,72 @@ line numbers.
     the tool you're using, you can set a custom regex. See `Filetype
     definition files`_ and the `[build_settings] Section`_.
 
-Depending on the current file's filetype and project settings, the
-default Build menu will contain the following items:
+The build menu is very flexible and can be set up to perform the
+actions the user requires depending on the type of the current file and
+whether there is a project open.  The user can modify both the commands 
+the menu items invoke and the menu item labels themselves so that they 
+can continue to describe the action they perform.
 
-* Compile
-* Build
-* Make All
-* Make Custom Target
-* Make Object
-* Execute
-* Configure Commands
+The default menu (with the current file being a C source file) is shown 
+below with the sections of the menu labelled.
 
-The Compile, Build and Execute actions depend on the filetype of the
-currently open document, whereas the Make series of actions do not.
-The intention is that the Compile, Build and Execute actions support
-simple single-file actions whilst the Make actions support larger systems
-which use builder tools.  The Make commands and menu item names are set
-from the first of the following places where the commands are defined:
+..image:: ./images/build_menu.png
 
-* From the project file if a project is open and the project file has
-  make commands defined.
-* From the user preferences if the user has make commands defined.
-* From the global preferences/defaults.
+The sections marked on the menu are:
 
-The Execute command can also be customised from the project file.
-
-The menu item names for the Make commands can be changed, for example
-if you change the commands to invoke a builder other than Make then you
-can change the menu labels to reflect that.
+* Filetype menu items - up to three menu items which depend on the 
+  filetype of the current file.  As noted, by default a C language file
+  has only two menu items in this section.  Many interpreted languages
+  have only one by default, however users can add commands using the *Set
+  Build Menu Command* dialog. 
+  
+* Project or user preference items - four menu items which do not depend 
+  on the current filetype, instead getting their values using the 
+  following process: 
+  - If a project is open, the menu item labels and commands can be set 
+    and stored in the project file using the Set Build Menu Commands
+	dialog.  Individual menu item labels and commands can be set, 
+	any field not set in the project file will get its value from one 
+	of the following sources.
+  - If no project is open the menu item labels and commands can be 
+    set and stored in the user preference file using the *Set Build Menu
+	Commands* dialog.
+  - Any menu item labels or commands not defined will get the default
+    values shown and described below.
+	
+* Compilation Error Navigation items - help navigate errors found 
+  during compilations.  These are not user modifyable.
+  
+* Execute Menu Item - is intended to provide a flexible method of 
+  running and stopping the program.  The execute menu item obtains its 
+  value using the following process:
+  - If a project is open and defines the menu item label or command use 
+    that or,
+  - if no project is open and the menu item label or command is defined 
+    in the user preference file, use that, otherwise,
+  - the menu item label or command as defined by the current filetype
+    is used.
+  When a program is running this menu item changes to 'Stop'.  Note that 
+  the stop function does not use a command and is not user configurable.
+	
+* Set Build Menu Commands - opens the dialog to modify any of the menu
+  items associated with the build menu and the commands they run.
 
 .. note::
     Some support for building for different targets on different machines
     can be provided by having several project files for the same software,
-    e.g. if supporting windows and Linux from the same source you could
+    e.g. if supporting Windows and Linux from the same source you could
     have 'my_proj_win.geany' with Make Object defined as 'nmake %e.obj'
     and 'my_proj_lin.geany' with Make Object defined as 'make %e.o'
     and so on for the other commands.
 
+Default Menu Actions
+^^^^^^^^^^^^^^^^^^^^
+
+This section describes the default menu items and their actions.
+
 Compile
-^^^^^^^
+```````
 
 The Compile command has different uses for different kinds of files.
 
@@ -2069,45 +2116,40 @@ languages such as Perl, Python, Ruby will compile to bytecode if the
 language supports it, or will run a syntax check, or failing that
 will run the file in its language interpreter.
 
-The following table summarises the default commands for each filetype:
-
-+----------+-----------+------------------------------+------------------------+
-| Language | Menu Item | Action                       | Command                |
-+==========+===========+==============================+========================+
-| C        | Compile   | Compile the current file     | gcc -Wall -c "%f"      |
-|          +-----------+------------------------------+------------------------+
-|          | Build     | Compile the current file to  | gcc -Wall -o "%e" "%f" |
-|          |           | an executable                |                        |
-|          +-----------+------------------------------+------------------------+
-|          | Run       | Run a pre-compiled program   | "./%e"                 |
-+----------+-----------+------------------------------+------------------------+
-| C++      |                        ETC                                        |
-+----------+-------------------------------------------------------------------+
+The table at Appendix ... shows the default command values.
 
 Build
-^^^^^
+`````
 
 For compilable languages such as C and C++, the Build command will link
 the current source file's equivalent object file into an executable. If
 the object file does not exist, the source will be compiled and linked
 in one step, producing just the executable binary.
 
-Interpreted languages do not use the Build command.
+Interpreted languages do not use the Build command so the user can 
+re-define it to be any useful command.
 
+Spare
+`````
 
-Make all
-^^^^^^^^
+There is also a spare command with no default value that the user can use
+for any operation appropriate for the filetype, e.g. running lint
 
-By default this effectively runs "make all" in the same directory as the
+Make All
+````````
+
+By default this runs "make all" in the same directory as the
 current file.
 
 .. note::
     For each of the Make commands, The Make tool path must be correctly
-    set in the Tools tab of the Preferences dialog.
+    set in the Tools tab of the Preferences dialog.  This path is used
+	for commands not defined by project files.  Commands in project files 
+	have to contain the full path if required.
 
 
-Make custom target
-^^^^^^^^^^^^^^^^^^
+Make Custom Target
+``````````````````
 
 The default use is similar to running 'Make all' but you will be prompted
 for the make target name to be passed to the Make tool. For example,
@@ -2118,16 +2160,20 @@ typing 'clean' in the dialog prompt will run "make clean".
     the dialog asking for extra targets/options and will add them to your
     re-configured command.
 
-Make object
-^^^^^^^^^^^
+Make Object
+```````````
 
 By default Make Object will run "make current_file.o" in the same directory as
 the current file, using its prefix for 'current_file'. It is useful
 for compiling just the current file without building the whole project.
 
+Make
+````
+
+Make runs the default "make" command.
 
 Execute
-^^^^^^^
+```````
 
 Execute will run the corresponding executable file, shell script or
 interpreted script in a terminal window. Note that the Terminal tool
@@ -2141,7 +2187,7 @@ output from the program before the terminal window is closed.
 
 
 Stopping running processes
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+``````````````````````````
 
 When there is a running program, the Run button in the toolbar
 becomes a stop button and you can stop the current action. This
@@ -2163,14 +2209,15 @@ stopped. Just add this option in the preferences dialog on the Tools
 tab in the terminal field.
 
 
-Configure Commands
-^^^^^^^^^^^^^^^^^^
+Set Build Menu Commands
+^^^^^^^^^^^^^^^^^^^^^^^
 
 By default the Compile and Build commands invoke the compiler and
 linker with only the basic arguments needed by all programs. Using
-*Configure Commands* you can add any include paths and compile
+*Set Build Menu Commands* you can add any include paths and compile
 flags for the compiler, any library names and paths for the linker,
-and any arguments you want to use when running Execute.
+and any arguments you want to use when running Execute or you can 
+completely change the operation of these menu items.
 
 These settings are saved automatically when Geany is shut down.
 
@@ -2179,21 +2226,33 @@ The following variables can be used:
 * %f -- complete filename without path
 * %e -- filename without path and without extension
 
-See `[build_settings] Section`_ for details.
-
 .. note::
     If you need complex settings for your build system, or several
     different settings, using an external build system such as make is
     recommended; this will also make it easier for users to
     build your software.
 
-The commands are listed under two varying headings:
+A typical *Set Build Menu Commands* dialog box is shown in the following 
+figure with the various parts of the dialog labelled.  Note that if a 
+project is not open the *Project Build Menu Commands* will be replaced by 
+*User Preferred Build Menu Commands*.
 
-* 'For Filetype X' where X is the type of the current file.
-* 'Make' or 'Project Make' depending on whether a project file is open.
+.. image:: ./images/build_menu_commands.png
 
-For Filetype X
-``````````````
+The commands are labelled to show that there are two parts to the dialog.
+
+* 'Filetype commands' which depend on the type of the current file.  Do
+  check you have the correct filetype before changing them.
+* 'Build Commands' which do not depend on the type of the current file 
+  but do depend on the open project or if non is open.
+
+All commands allow both the label and the command to be changed.  The 
+right hand button clears the manu label and command to allow it to 
+return to the default value, deleting the menu label or command text sets
+the command to blank, not back to default.
+
+Filetype commands
+`````````````````
 
 These settings are specific to the particular filetype.
 Although they traditionally support the actions described above, you
@@ -2205,22 +2264,35 @@ One step compilation
 
 If you are using the Build command to compile and link in one step,
 you will need to set both the compiler arguments and the linker
-arguments in the linker command setting.
+arguments in this command setting.
 
-[Project] Make
+Build Commands
 ``````````````
 
-These commands allow you to set the 'Make' series of commands.
-The variable heading indicates whether the commands you are changing
-will be saved in the project file or preferences file.  The current
-project file is displayed in the Geany title bar in [] so you can
-check that you will be saving to the correct one.
+These commands allow you to set the commands that are independant of the
+filetype. The dialog section heading indicates whether the commands you 
+are changing will be saved in the project file or preferences file.  The 
+current project file is displayed in the Geany title bar in [] so you can
+check that you will be saving to the correct one.  Commands stored in 
+project files do not use the 'Make Command Path" preference setting so 
+that each project can use differing tools, make sure commands stored in 
+project files include paths if needed.
 
-Remember that menu item two (default the 'Make Custom Target' item)
-will pop up a dialog to ask for additional targets/options when invoked
-allowing you to add to the command you define here.
+Extendable Command
+``````````````````
 
+Remember that the second of the build menu items (default the 'Make 
+Custom Target' item) will pop up a dialog to ask for additional 
+targets/options when invoked, allowing you to add to the command which 
+you define here.
 
+Execute Command
+```````````````
+
+As noted on the dialog, if an execute command is set in user preferences 
+or the currently open project it will override the filetype dependent 
+menu item/command.  Remember to clear the saved execute command you must
+use the clear button to the right of the line.
 
 Indicators
 ^^^^^^^^^^
@@ -2874,6 +2946,8 @@ run_cmd
 
     *Example:* ``run_cmd="./%e"``
 
+spare_cmd
+	This item is used for an extra command which can be sued for anything.
 
 Special file filetypes.common
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

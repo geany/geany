@@ -1,3 +1,14 @@
+2008-10-27 Lex Trotman <elextr(at)gmail(dot)com>
+
+ Updated Manual to reflect desired full functionality of build system
+ 
+ * doc/geany.txt:
+   Build system section heavily re-written, minor changes to preferences
+   and project sections, NOT DONE file formats section until fully 
+   implemented.
+ * doc/images/build_menu.png, doc/images/build_menu_cmds.png
+   added images for document
+   
 2008-10-17 Lex Trotman <elextr(at)gmail(dot)com>
 
  Prototype of project customisable build menu commands
