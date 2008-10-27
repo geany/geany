@@ -1,3 +1,9 @@
+2008-10-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * doc/geany.txt, doc/geany.html:
+   Update docs for changed rectangular selection usage since Geany 0.15.
+
+
 2008-10-26  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/document.c:

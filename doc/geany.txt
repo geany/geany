@@ -591,9 +591,9 @@ Column mode editing
 ^^^^^^^^^^^^^^^^^^^
 
 There is basic support for column mode editing. To use it, create a
-rectangular selection by holding down the Control key while selecting
-some text. It is also possible to create a zero-column selection but
-be careful because there is no visual indication of this selection.
+rectangular selection by holding down the Control and Shift key while
+selecting some text. It is also possible to create a zero-column selection
+but be careful because there is no visual indication of this selection.
 Once a rectangular selection exists you can start editing the text within
 this selection and the modifications will be done for every line in the
 selection.
