@@ -6,6 +6,13 @@
    Replace deprecated gtk_marshal_* functions with g_cclosure_marshal_*
    functions and add geany_cclosure_marshal_VOID__STRING_INT_POINTER.
    Fix a wrong marshal type (pointer != int).
+ * doc/Doxyfile.in, tagmanager/include/tm_source_file.h,
+   tagmanager/include/tm_work_object.h,
+   tagmanager/include/tm_workspace.h, tagmanager/tm_source_file.c,
+   tagmanager/tm_work_object.c, tagmanager/tm_workspace.c:
+   Enable generation of API documentation of tagmanager functions
+   which are exposed in the plugin API, hide all others from the
+   API docs.
 
 
 2008-10-26  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

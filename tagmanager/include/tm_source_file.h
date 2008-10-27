@@ -12,14 +12,6 @@
 
 #include "tm_work_object.h"
 
-/*! \file
- The TMSourceFile structure and associated functions are used to maintain
- tags for individual files. See the test file tm_source_file_test.c included
- below for an example of how to use this structure and the related functions.
-
- \include tm_tag_print.c
-
-*/
 
 #ifndef LIBCTAGS_DEFINED
 typedef int langType;
@@ -34,19 +26,12 @@ extern "C"
 {
 #endif
 
-/*! Casts a pointer to a pointer to a TMSourceFile structure */
+/* Casts a pointer to a pointer to a TMSourceFile structure */
 #define TM_SOURCE_FILE(work_object) ((TMSourceFile *) work_object)
 
-/*! Checks whether the object is a TMSourceFile */
+/* Checks whether the object is a TMSourceFile */
 #define IS_TM_SOURCE_FILE(source_file) (((TMWorkObject *) (source_file))->type \
 			== source_file_class_id)
-
-/*!
- This example demonstrates the use of the TMSourceFile structure. When run,
- it outputs the tags encountered in the source files specified in the command line.
-
- \example tm_tag_print.c
-*/
 
 /*!
  The TMSourceFile structure is derived from TMWorkObject and contains all it's
@@ -59,20 +44,21 @@ typedef struct _TMSourceFile
 	gboolean inactive; /*!< Whether this file should be scanned for tags */
 } TMSourceFile;
 
-/*! Initializes a TMSourceFile structure from a file name. */
+
+/* Initializes a TMSourceFile structure from a file name. */
 gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name,
 							 gboolean update, const char *name);
 
-/*! Initializes a TMSourceFile structure and returns a pointer to it. */
+/* Initializes a TMSourceFile structure and returns a pointer to it. */
 TMWorkObject *tm_source_file_new(const char *file_name, gboolean update, const char *name);
 
-/*! Destroys the contents of the source file. Note that the tags are owned by the
+/* Destroys the contents of the source file. Note that the tags are owned by the
  source file and are also destroyed when the source file is destroyed. If pointers
  to these tags are used elsewhere, then those tag arrays should be rebuilt.
 */
 void tm_source_file_destroy(TMSourceFile *source_file);
 
-/*! Frees a TMSourceFile structure, including all contents */
+/* Frees a TMSourceFile structure, including all contents */
 void tm_source_file_free(gpointer source_file);
 
 /*! Updates the source file by reparsing if the modification time is greater
@@ -92,14 +78,14 @@ void tm_source_file_free(gpointer source_file);
 gboolean tm_source_file_update(TMWorkObject *source_file, gboolean force
   , gboolean recurse, gboolean update_parent);
 
-/*! Parses the source file and regenarates the tags.
+/* Parses the source file and regenarates the tags.
  \param source_file The source file to parse
  \return TRUE on success, FALSE on failure
  \sa tm_source_file_update()
 */
 gboolean tm_source_file_parse(TMSourceFile *source_file);
 
-/*!
+/*
  This function is registered into the ctags parser when a file is parsed for
  the first time. The function is then called by the ctags parser each time
  it finds a new tag. You should not have to use this function.
@@ -107,23 +93,23 @@ gboolean tm_source_file_parse(TMSourceFile *source_file);
 */
 int tm_source_file_tags(const tagEntryInfo *tag);
 
-/*!
+/*
  Writes all tags of a source file (including the file tag itself) to the passed
  file pointer.
  \param source_file The source file to write.
  \param fp The file pointer to write to.
- \attrs The attributes to write.
+ \param attrs The attributes to write.
  \return TRUE on success, FALSE on failure.
 */
 gboolean tm_source_file_write(TMWorkObject *source_file, FILE *fp, guint attrs);
 
-/*! Contains the id obtained by registering the TMSourceFile class as a child of
+/* Contains the id obtained by registering the TMSourceFile class as a child of
  TMWorkObject.
  \sa tm_work_object_register()
 */
 extern guint source_file_class_id;
 
-/*! Gets the name associated with the language index.
+/* Gets the name associated with the language index.
  \param lang The language index.
  \return The language name, or NULL.
 */

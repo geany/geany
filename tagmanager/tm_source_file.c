@@ -7,6 +7,13 @@
 *
 */
 
+/**
+ * @file tm_source_file.h
+ The TMSourceFile structure and associated functions are used to maintain
+ tags for individual files.
+*/
+
+
 #include <stdio.h>
 #include <limits.h>
 #include <stdlib.h>

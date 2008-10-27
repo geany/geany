@@ -19,10 +19,10 @@ extern "C"
 {
 #endif
 
-/*! Evaluates to X is X is defined, else evaluates to Y */
+/* Evaluates to X is X is defined, else evaluates to Y */
 #define NVL(X,Y) (X)?(X):(Y)
 
-/*! Macro to cast a pointer to (TMWorkObject *) */
+/* Macro to cast a pointer to (TMWorkObject *) */
 #define TM_WORK_OBJECT(work_object) ((TMWorkObject *) work_object)
 
 /*!
@@ -41,7 +41,7 @@ typedef struct _TMWorkObject
 	GPtrArray *tags_array; /*!< Tags obtained by parsing the object */
 } TMWorkObject;
 
-/*! Prototype of the update function required to be written by all classes
+/* Prototype of the update function required to be written by all classes
  derived from TMWorkObject. The function should take a pointer to the
  object and a flag indicating whether the cache should be ignored, and
  update the object's tag array accordingly.
@@ -51,7 +51,7 @@ typedef struct _TMWorkObject
 typedef gboolean (*TMUpdateFunc) (TMWorkObject *work_object, gboolean force
   , gboolean recurse, gboolean update_parent);
 
-/*! Prototype of the find function required to be written by all classed
+/* Prototype of the find function required to be written by all classed
  derived from TMWorkObject. The function should take a pointer to the work
  object and a file name and return a pointer to the work object corresponding
  to the file name if the file is part of the object, and NULL otherwise.
@@ -60,7 +60,7 @@ typedef gboolean (*TMUpdateFunc) (TMWorkObject *work_object, gboolean force
 typedef TMWorkObject *(*TMFindFunc) (TMWorkObject *work_object, const char *file_name
   , gboolean name_only);
 
-/*!
+/*
  Contains pointers to functions necessary to handle virtual function calls
  correctly. To create a new object derived from TMWorkObject, you
  need to write the three functions specified as the members of this class and
@@ -73,9 +73,9 @@ typedef struct _TMWorkObjectClass
 	TMFindFunc find_func; /*!< Function to locate contained work objects */
 } TMWorkObjectClass;
 
-#define TM_OBJECT_TYPE(work_object) ((TMWorkObject *) work_object)->type /*!< Type of the work object */
-#define TM_OBJECT_FILE(work_object) ((TMWorkObject *) work_object)->file_name /*!< File name of the work object */
-#define TM_OBJECT_TAGS(work_object) ((TMWorkObject *) work_object)->tags_array /*!< Tag array of the work object */
+#define TM_OBJECT_TYPE(work_object) ((TMWorkObject *) work_object)->type /*< Type of the work object */
+#define TM_OBJECT_FILE(work_object) ((TMWorkObject *) work_object)->file_name /*< File name of the work object */
+#define TM_OBJECT_TAGS(work_object) ((TMWorkObject *) work_object)->tags_array /*< Tag array of the work object */
 
 /*!
  Given a file name, returns a newly allocated string containing the realpath()
@@ -86,7 +86,7 @@ typedef struct _TMWorkObjectClass
 */
 gchar *tm_get_real_path(const gchar *file_name);
 
-/*!
+/*
  Initializes the work object structure. This function should be called by the
  initialization routine of the derived classes to ensure that the base members
  are initialized properly. The library user should not have to call this under
@@ -101,7 +101,7 @@ gchar *tm_get_real_path(const gchar *file_name);
 gboolean tm_work_object_init(TMWorkObject *work_object, guint type, const char *file_name
 	  , gboolean create);
 
-/*!
+/*
  Initializes a new TMWorkObject structure and returns a pointer to it. You shouldn't
  have to call this function.
  \return NULL on failure
@@ -109,14 +109,14 @@ gboolean tm_work_object_init(TMWorkObject *work_object, guint type, const char *
 */
 TMWorkObject *tm_work_object_new(guint type, const char *file_name, gboolean create);
 
-/*!
+/*
  Utility function - Given a file name, returns the timestamp of modification.
  \param file_name Full path to the file.
  \return Timestamp of the file's modification time. 0 on failure.
 */
 time_t tm_get_file_timestamp(const char *file_name);
 
-/*!
+/*
  Checks if the work object has been modified since the last update by comparing
  the timestamp stored in the work object structure with the modification time
  of the physical file.
@@ -125,7 +125,7 @@ time_t tm_get_file_timestamp(const char *file_name);
 */
 gboolean tm_work_object_is_changed(TMWorkObject *work_object);
 
-/*!
+/*
  Destroys a work object's data without freeing the structure itself. It should
  be called by the deallocator function of classes derived from TMWorkObject. The
  user shouldn't have to call this function.
@@ -140,7 +140,7 @@ void tm_work_object_destroy(TMWorkObject *work_object);
 */
 void tm_work_object_free(gpointer work_object);
 
-/*!
+/*
  This function should be called exactly once by all classes derived from TMWorkObject,
  since it supplies a unique ID on each call and stores the functions to call for
  updation and deallocation of objects of the type allocated. The user should not
@@ -153,7 +153,7 @@ void tm_work_object_free(gpointer work_object);
 */
 guint tm_work_object_register(GFreeFunc free_func, TMUpdateFunc update_func, TMFindFunc find_func);
 
-/*!
+/*
  Writes the tags for the work object to the file specified.
  \param work_object The work object whose tags need to be written.
  \param file The file to which the tags are to be written.
@@ -161,7 +161,7 @@ guint tm_work_object_register(GFreeFunc free_func, TMUpdateFunc update_func, TMF
 */
 void tm_work_object_write_tags(TMWorkObject *work_object, FILE *file, guint attrs);
 
-/*!
+/*
  Updates the tags array if necessary. Automatically calls the update function
  of the type to which the object belongs.
  \param work_object Pointer to a work object or an object derived from it.
@@ -175,7 +175,7 @@ void tm_work_object_write_tags(TMWorkObject *work_object, FILE *file, guint attr
 gboolean tm_work_object_update(TMWorkObject *work_object, gboolean force
   , gboolean recurse, gboolean update_parent);
 
-/*!
+/*
  Finds the work object corresponding to the file name passed and returns a pointer
  to it. If not found, returns NULL. This is a virtual function which automatically
  calls the registered find function of teh derived object.
@@ -184,7 +184,7 @@ gboolean tm_work_object_update(TMWorkObject *work_object, gboolean force
 TMWorkObject *tm_work_object_find(TMWorkObject *work_object, const char *file_name
   , gboolean name_only);
 
-/*! Dumps the contents of a work object - useful for debugging */
+/* Dumps the contents of a work object - useful for debugging */
 void tm_work_object_dump(const TMWorkObject *w);
 
 #ifdef __cplusplus

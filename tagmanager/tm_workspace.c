@@ -7,6 +7,18 @@
 *
 */
 
+/*!
+ * @file tm_workspace.h
+ The TMWorkspace structure is meant to be used as a singleton to store application
+ wide tag information.
+
+ The workspace is intended to contain a list of global tags
+ and a set of work objects (projects or individual files). You need not use the
+ workspace, though, to use tag manager, unless you need things like global tags
+ and a place to store all current open projects and individual files. TMWorkspace
+ is derived from TMWorkObject.
+*/
+
 #include "general.h"
 
 #include <stdio.h>

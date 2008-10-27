@@ -7,6 +7,11 @@
 *
 */
 
+/**
+ * @file tm_work_object.h
+ * A TMWorkObject structure is the base class for TMSourceFile and TMProject.
+*/
+
 #include "general.h"	/* must always come first */
 
 #include <stdio.h>

@@ -7,6 +7,7 @@
 *
 */
 
+
 #ifndef TM_WORKSPACE_H
 #define TM_WORKSPACE_H
 
@@ -14,28 +15,12 @@
 
 #include "tm_work_object.h"
 
-/*! \file
- The TMWorkspace structure is meant to be used as a singleton to store application
- wide tag information. The workspace is intended to contain a list of global tags
- and a set of work objects (projects or individual files). You need not use the
- workspace, though, to use tag manager, unless you need things like global tags
- and a place to store all current open projects and individual files. TMWorkspace
- is derived from TMWorkObject.
-
- The following example demonstrates the use of workspace functions to create global tags.
- \include tm_global_tags.c
-*/
-
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-/*!
- This example demonstrates the use of the global tag generation function.
 
- \example tm_global_tags.c
-*/
 
 /*! The Tag Manager Workspace. This is a singleton work object containing a list
  of work objects. These can be either individual files or project containing
@@ -50,7 +35,7 @@ typedef struct _TMWorkspace
 	GPtrArray *work_objects; /*!< An array of TMWorkObject pointers */
 } TMWorkspace;
 
-/*! Since TMWorkspace is a singleton, you should not create multiple
+/* Since TMWorkspace is a singleton, you should not create multiple
  workspaces, but get a pointer to the workspace whenever required. The first
  time a pointer is requested, or a work object is added to the workspace,
  a workspace is created. Subsequent calls to the function will return the
@@ -64,7 +49,7 @@ const TMWorkspace *tm_get_workspace(void);
 */
 gboolean tm_workspace_add_object(TMWorkObject *work_object);
 
-/*! Given a file name, returns a pointer to the object if the object's file
+/* Given a file name, returns a pointer to the object if the object's file
  name is same as the passed file name, otherwise retruns NULL. This is an
  overloaded version of tm_work_object_find().
  \param work_object Pointer to the workspace.
@@ -84,7 +69,7 @@ TMWorkObject *tm_workspace_find_object(TMWorkObject *work_object, const char *fi
 */
 gboolean tm_workspace_remove_object(TMWorkObject *work_object, gboolean free, gboolean update);
 
-/*! Loads the global tag list from the specified file. The global tag list should
+/* Loads the global tag list from the specified file. The global tag list should
  have been first created using tm_workspace_create_global_tags().
  \param tags_file The file containing global tags.
  \return TRUE on success, FALSE on failure.
@@ -93,7 +78,7 @@ gboolean tm_workspace_remove_object(TMWorkObject *work_object, gboolean free, gb
 gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode);
 /*gboolean tm_workspace_load_global_tags(const char *tags_file);*/
 
-/*! Creates a list of global tags. Ideally, this should be created once during
+/* Creates a list of global tags. Ideally, this should be created once during
  installations so that all users can use the same file. Thsi is because a full
  scale global tag list can occupy several megabytes of disk space.
  \param pre_process The pre-processing command. This is executed via system(),
@@ -107,13 +92,13 @@ gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode);
 gboolean tm_workspace_create_global_tags(const char *config_dir, const char *pre_process,
 	const char **includes, int includes_count, const char *tags_file, int lang);
 
-/*! Recreates the tag array of the workspace by collecting the tags of
+/* Recreates the tag array of the workspace by collecting the tags of
  all member work objects. You shouldn't have to call this directly since
  this is called automatically by tm_workspace_update().
 */
 void tm_workspace_recreate_tags_array(void);
 
-/*! Calls tm_work_object_update() for all workspace member work objects.
+/* Calls tm_work_object_update() for all workspace member work objects.
  Use if you want to globally refresh the workspace.
  \param workspace Pointer to the workspace.
  \param force Whether the cache should be ignored.
@@ -125,10 +110,10 @@ void tm_workspace_recreate_tags_array(void);
 gboolean tm_workspace_update(TMWorkObject *workspace, gboolean force
   , gboolean recurse, gboolean update_parent);
 
-/*! Dumps the workspace tree - useful for debugging */
+/* Dumps the workspace tree - useful for debugging */
 void tm_workspace_dump(void);
 
-/*! Returns all matching tags found in the workspace.
+/* Returns all matching tags found in the workspace.
  \param name The name of the tag to find.
  \param type The tag types to return (TMTagType). Can be a bitmask.
  \param attrs The attributes to sort and dedup on (0 terminated integer array).
@@ -140,7 +125,7 @@ void tm_workspace_dump(void);
 const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *attrs
  , gboolean partial, langType lang);
 
-/*! Returns all matching tags found in the workspace.
+/* Returns all matching tags found in the workspace.
  \param name The name of the tag to find.
  \param scope The scope name of the tag to find, or NULL.
  \param type The tag types to return (TMTagType). Can be a bitmask.
@@ -154,23 +139,23 @@ const GPtrArray *
 tm_workspace_find_scoped (const char *name, const char *scope, gint type,
 		TMTagAttrType *attrs, gboolean partial, langType lang, gboolean global_search);
 
-/*! Returns TMTag to function which "own" given line
+/* Returns TMTag to function which "own" given line
  \param line Current line in edited file.
  \param file_tags A GPtrArray of edited file TMTag pointers.
  \return TMTag pointers to owner function. */
 const TMTag *tm_get_current_function(GPtrArray *file_tags, const gulong line);
 
-/*! Returns a list of parent classes for the given class name
+/* Returns a list of parent classes for the given class name
  \param name Name of the class
  \return A GPtrArray of TMTag pointers (includes the TMTag for the class) */
 const GPtrArray *tm_workspace_get_parents(const gchar *name);
 
-/*! Frees the workspace structure and all child work objects. Use only when
+/* Frees the workspace structure and all child work objects. Use only when
  exiting from the main program.
 */
 void tm_workspace_free(gpointer workspace);
 
-/*! Contains the id obtained by registering the TMWorkspace class as a child of
+/* Contains the id obtained by registering the TMWorkspace class as a child of
  TMWorkObject.
  \sa tm_work_object_register()
 */
