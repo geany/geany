@@ -1,3 +1,11 @@
+2008-10-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * plugins/splitwindow.c:
+   Try to fix a weird bug in reparenting the notebook widget when
+   splitting on Windows.
+   It still occurs on unsplitting.
+
+
 2008-10-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * doc/geany.txt, doc/geany.html:

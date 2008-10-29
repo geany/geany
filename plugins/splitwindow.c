@@ -295,8 +295,8 @@ static void on_split_view(GtkMenuItem *menuitem, gpointer user_data)
 		p_support->lookup_widget(geany->main_widgets->window, "vbox1"));
 
 	pane = gtk_hpaned_new();
-	gtk_container_add(GTK_CONTAINER(parent), pane);
 	gtk_widget_reparent(notebook, pane);
+	gtk_container_add(GTK_CONTAINER(parent), pane);
 
 	box = gtk_vbox_new(FALSE, 0);
 	toolbar = create_toolbar();
