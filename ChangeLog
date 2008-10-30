@@ -1,3 +1,10 @@
+2008-10-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * plugins/splitwindow.c:
+   Revert last change as it breaks (again) the primary X selection as
+   well as the mouse cursor on the scrollbar.
+
+
 2008-10-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * plugins/splitwindow.c:
