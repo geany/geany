@@ -2848,7 +2848,7 @@ msgstr "Ajouter les numéros de lignes à la page imprimée."
 
 #: ../src/interface.c:4781 ../src/printing.c:348
 msgid "Print page numbers"
-msgstr "Afficher les numéros de ligne"
+msgstr "Afficher les numéros de page"
 
 #: ../src/interface.c:4784 ../src/printing.c:350
 msgid ""
