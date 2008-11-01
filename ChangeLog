@@ -1,3 +1,10 @@
+2008-111-01 Lex Trotman <elextr(at)gmail(dot)com>
+
+ Updated Manual to build geany.html
+ 
+ * doc/geany.txt:
+   Modified to make geany.html build w/o errors
+
 2008-10-27 Lex Trotman <elextr(at)gmail(dot)com>
 
  Updated Manual to reflect desired full functionality of build system

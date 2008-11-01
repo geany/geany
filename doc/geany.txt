@@ -1989,21 +1989,21 @@ Rationale
 
 If on first reading the build system sounds complicated, it may help to 
 keep in mind the rationale behind its design.  Geany supports many 
-languages which have different commands to compile/link/run their code.
-So different commands must be used for each type of source file that 
-Geany understands, therefore some commands are stored for each type of file.
+languages which have different commands to compile/link/run their code
+so different commands must be used for each type of source file that 
+Geany understands. Therefore some commands are stored for each type of file.
 
 As software gets more complex and is divided into several source files it
 is usual to run the file containing the main program, not the one currently 
 being edited.  In this case Geany cannot generally identify the correct
-file so the user has to configure it.  To keep it separate from filetype
+file, so the user has to configure it.  To keep it separate from filetype
 information, this execute command is stored in the user preferences.
 
 For larger software projects compiling and running individual files is 
-not very effective as differing settings and flags may be needed making
+not very effective as differing settings and flags may be needed, making
 manual building complex.  Instead some form of build software such as 
-"Make" is used.  It is usefull to be able to invoke the builder from 
-Geany, and so have the output parsed for error messages allowing Geany 
+"Make" is used.  It is useful to be able to invoke the builder from 
+Geany, and so have the output parsed for error messages, allowing Geany 
 to take you straight to the source line of the error.  To do this Geany 
 needs to know some more commands which are independant of the type of 
 source.  These commands are also stored with the user preferences.
@@ -2022,25 +2022,25 @@ Operation
 
 Two actions are performed for all the build menu items.
 
-First the current source file will be saved before it is processed. This
-is for convenience so that you don't need to keep saving small changes
-to the current file before building.
+* First the current source file will be saved before it is processed. This
+  is for convenience so that you don't need to keep saving small changes
+  to the current file before building.
 
-Second the output for Compile, Build and Make actions will be captured
-in the Compiler notebook tab of the messages window. If there are
-any warnings or errors with line numbers shown in red in the Compiler
-output tab, you can click on them and Geany will switch to the relevant
-source file (or open it) and mark the line number so the problem can be
-corrected. Geany will also set indicators for warnings or errors with
-line numbers.
+* Second the output for Compile, Build and Make actions will be captured
+  in the Compiler notebook tab of the messages window. If there are
+  any warnings or errors with line numbers shown in red in the Compiler
+  output tab, you can click on them and Geany will switch to the relevant
+  source file (or open it) and mark the line number so the problem can be
+  corrected. Geany will also set indicators for warnings or errors with
+  line numbers.
 
 .. tip::
     If Geany's default error message parsing does not parse errors for
     the tool you're using, you can set a custom regex. See `Filetype
     definition files`_ and the `[build_settings] Section`_.
 
-The build menu is very flexible and can be set up to perform the
-actions the user requires depending on the type of the current file and
+The build menu is very flexible and can be set up to perform any
+actions the user requires, and depend on the type of the current file and
 whether there is a project open.  The user can modify both the commands 
 the menu items invoke and the menu item labels themselves so that they 
 can continue to describe the action they perform.
@@ -2048,7 +2048,7 @@ can continue to describe the action they perform.
 The default menu (with the current file being a C source file) is shown 
 below with the sections of the menu labelled.
 
-..image:: ./images/build_menu.png
+.. image:: ./images/build_menu.png
 
 The sections marked on the menu are:
 
@@ -2061,14 +2061,17 @@ The sections marked on the menu are:
 * Project or user preference items - four menu items which do not depend 
   on the current filetype, instead getting their values using the 
   following process: 
+  
   - If a project is open, the menu item labels and commands can be set 
-    and stored in the project file using the Set Build Menu Commands
-	dialog.  Individual menu item labels and commands can be set, 
-	any field not set in the project file will get its value from one 
-	of the following sources.
+    and stored in the project file using the *Set Build Menu Commands*
+    dialog.  Individual menu item labels and commands can be set, 
+    any field not set in the project file will get its value from one 
+    of the following sources.
+	
   - If no project is open the menu item labels and commands can be 
     set and stored in the user preference file using the *Set Build Menu
-	Commands* dialog.
+    Commands* dialog.
+	
   - Any menu item labels or commands not defined will get the default
     values shown and described below.
 	
@@ -2078,12 +2081,16 @@ The sections marked on the menu are:
 * Execute Menu Item - is intended to provide a flexible method of 
   running and stopping the program.  The execute menu item obtains its 
   value using the following process:
+  
   - If a project is open and defines the menu item label or command use 
     that or,
+	
   - if no project is open and the menu item label or command is defined 
     in the user preference file, use that, otherwise,
+	
   - the menu item label or command as defined by the current filetype
     is used.
+	
   When a program is running this menu item changes to 'Stop'.  Note that 
   the stop function does not use a command and is not user configurable.
 	
@@ -2144,8 +2151,8 @@ current file.
 .. note::
     For each of the Make commands, The Make tool path must be correctly
     set in the Tools tab of the Preferences dialog.  This path is used
-	for commands not defined by project files.  Commands in project files 
-	have to contain the full path if required.
+    for commands not defined by project files.  Commands in project files 
+    have to contain the full path if required.
 
 
 Make Custom Target
@@ -2237,12 +2244,13 @@ figure with the various parts of the dialog labelled.  Note that if a
 project is not open the *Project Build Menu Commands* will be replaced by 
 *User Preferred Build Menu Commands*.
 
-.. image:: ./images/build_menu_commands.png
+.. image:: ./images/build_menu_cmds.png
 
 The commands are labelled to show that there are two parts to the dialog.
 
 * 'Filetype commands' which depend on the type of the current file.  Do
   check you have the correct filetype before changing them.
+  
 * 'Build Commands' which do not depend on the type of the current file 
   but do depend on the open project or if non is open.
 
@@ -2914,7 +2922,7 @@ error_regex
 
 **Build commands**
 
-The build commands are all configurable using the `Configure Commands`_ dialog.
+The build commands are all configurable using the `Set Build Menu Commands`_ dialog.
 
 compiler
     This item specifies the command to compile source code files. But
