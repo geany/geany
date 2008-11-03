@@ -236,8 +236,10 @@ void
 on_close1_activate                     (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	guint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
-	document_remove_page(cur_page);
+	GeanyDocument *doc = document_get_current();
+
+	if (doc)
+		document_close(doc);
 }
 
 
@@ -690,8 +692,7 @@ void
 on_toolbutton_close_clicked                (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
 {
-	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
-	document_remove_page(cur_page);
+	on_close1_activate(NULL, NULL);
 }
 
 

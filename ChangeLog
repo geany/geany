@@ -1,3 +1,10 @@
+2008-11-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/callbacks.c:
+   Fix GLib warning when pressing Close File keybinding and no
+   documents are open.
+
+
 2008-10-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * plugins/splitwindow.c:
