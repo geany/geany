@@ -188,7 +188,7 @@ void treeviews_update_tag_list(GeanyDocument *doc, gboolean update)
 		if (doc->priv->tag_tree == NULL)
 		{
 			doc->priv->tag_store = gtk_tree_store_new(
-				SYMBOLS_N_COLUMNS, GDK_TYPE_PIXBUF, G_TYPE_STRING, G_TYPE_INT);
+				SYMBOLS_N_COLUMNS, GDK_TYPE_PIXBUF, G_TYPE_STRING, G_TYPE_POINTER);
 			doc->priv->tag_tree = gtk_tree_view_new();
 			prepare_taglist(doc->priv->tag_tree, doc->priv->tag_store);
 			gtk_widget_show(doc->priv->tag_tree);
@@ -637,7 +637,13 @@ static gboolean on_taglist_tree_selection_changed(GtkTreeSelection *selection)
 
 	if (gtk_tree_selection_get_selected(selection, &model, &iter))
 	{
-		gtk_tree_model_get(model, &iter, SYMBOLS_COLUMN_LINE, &line, -1);
+		const TMTag *tag;
+
+		gtk_tree_model_get(model, &iter, SYMBOLS_COLUMN_TAG, &tag, -1);
+		if (!tag)
+			return FALSE;
+
+		line = tag->atts.entry.line;
 		if (line > 0)
 		{
 			GeanyDocument *doc = document_get_current();

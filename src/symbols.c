@@ -22,9 +22,9 @@
  */
 
 /*
- * Tagmanager related convenience functions.
- * Tagmanager parses tags in the current documents, known as the workspace, plus global tags,
- * which are lists of tags for each filetype. Global tags are loaded when a document with a
+ * Symbol Tree and TagManager-related convenience functions.
+ * TagManager parses tags for each document, and also adds them to the workspace (session).
+ * Global tags are lists of tags for each filetype, loaded when a document with a
  * matching filetype is first loaded.
  */
 
@@ -88,6 +88,8 @@ static TagFileInfo tag_file_info[GTF_MAX] =
 };
 
 static gchar *user_tags_dir;
+
+static GPtrArray *top_level_iter_names = NULL;
 
 
 static void html_tags_loaded(void);
@@ -370,113 +372,60 @@ void symbols_finalize(void)
 }
 
 
-/* small struct to track tag name and type together */
-typedef struct GeanySymbol
-{
-	gchar	*str;
-	gint	 type;
-	gint	 line;
-} GeanySymbol;
-
-
-/* sort by name, line */
-static gint compare_symbol(const GeanySymbol *a, const GeanySymbol *b)
+/* sort by name, then line */
+static gint compare_symbol(const TMTag *tag_a, const TMTag *tag_b)
 {
 	gint ret;
 
-	if (a == NULL || b == NULL) return 0;
+	if (tag_a == NULL || tag_b == NULL)
+		return 0;
 
-	ret = strcmp(a->str, b->str);
+	ret = strcmp(tag_a->name, tag_b->name);
 	if (ret == 0)
 	{
-		return a->line - b->line;
+		return tag_a->atts.entry.line - tag_b->atts.entry.line;
 	}
 	return ret;
 }
 
 
 /* sort by line only */
-static gint compare_symbol_lines(const GeanySymbol *a, const GeanySymbol *b)
+static gint compare_symbol_lines(gconstpointer a, gconstpointer b)
 {
-	if (a == NULL || b == NULL) return 0;
+	const TMTag *tag_a = TM_TAG(a);
+	const TMTag *tag_b = TM_TAG(b);
 
-	return a->line - b->line;
+	if (a == NULL || b == NULL)
+		return 0;
+
+	return tag_a->atts.entry.line - tag_b->atts.entry.line;
 }
 
 
-static const GList *get_tag_list(GeanyDocument *doc, guint tag_types, gint sort_mode)
+static GList *get_tag_list(GeanyDocument *doc, guint tag_types)
 {
-	static GList *tag_names = NULL;
+	GList *tag_names = NULL;
+	TMTag *tag;
+	guint i;
 
-	if (doc != NULL && doc->tm_file &&
-		doc->tm_file->tags_array)
-	{
-		TMTag *tag;
-		guint i;
-		GeanySymbol *symbol;
-		gboolean doc_is_utf8 = FALSE;
-		gchar *utf8_name;
-		const gchar *cosep =
-			symbols_get_context_separator(FILETYPE_ID(doc->file_type));
+	g_return_val_if_fail(doc, NULL);
 
-		if (tag_names)
-		{
-			GList *tmp;
-			for (tmp = tag_names; tmp; tmp = g_list_next(tmp))
-			{
-				g_free(((GeanySymbol*)tmp->data)->str);
-				g_free(tmp->data);
-			}
-			g_list_free(tag_names);
-			tag_names = NULL;
-		}
-
-		/* encodings_convert_to_utf8_from_charset() fails with charset "None", so skip conversion
-		 * for None at this point completely */
-		if (utils_str_equal(doc->encoding, "UTF-8") ||
-			utils_str_equal(doc->encoding, "None"))
-			doc_is_utf8 = TRUE;
-
-		for (i = 0; i < (doc->tm_file)->tags_array->len; ++i)
-		{
-			tag = TM_TAG((doc->tm_file)->tags_array->pdata[i]);
-			if (tag == NULL)
-				return NULL;
-
-			if (tag->type & tag_types)
-			{
-				if (! doc_is_utf8) utf8_name = encodings_convert_to_utf8_from_charset(tag->name,
-															(gsize)-1, doc->encoding, TRUE);
-				else utf8_name = tag->name;
-
-				if (utf8_name == NULL)
-					continue;
-
-				symbol = g_new0(GeanySymbol, 1);
-				if ((tag->atts.entry.scope != NULL) && isalpha(tag->atts.entry.scope[0]))
-				{
-					symbol->str = g_strconcat(tag->atts.entry.scope, cosep, utf8_name, NULL);
-				}
-				else
-				{
-					symbol->str = g_strdup(utf8_name);
-				}
-				symbol->type = tag->type;
-				symbol->line = tag->atts.entry.line;
-				tag_names = g_list_prepend(tag_names, symbol);
-
-				if (! doc_is_utf8) g_free(utf8_name);
-			}
-		}
-		if (sort_mode == SYMBOLS_SORT_BY_NAME)
-			tag_names = g_list_sort(tag_names, (GCompareFunc) compare_symbol);
-		else
-			tag_names = g_list_sort(tag_names, (GCompareFunc) compare_symbol_lines);
-
-		return tag_names;
-	}
-	else
+	if (!doc->tm_file || !doc->tm_file->tags_array)
 		return NULL;
+
+	for (i = 0; i < doc->tm_file->tags_array->len; ++i)
+	{
+		tag = TM_TAG(doc->tm_file->tags_array->pdata[i]);
+		if (tag == NULL)
+			return NULL;
+
+		if (tag->type & tag_types)
+		{
+			tag_names = g_list_append(tag_names, tag);
+		}
+	}
+	tag_names = g_list_sort(tag_names, compare_symbol_lines);
+	return tag_names;
 }
 
 
@@ -513,13 +462,8 @@ static void init_tag_iters(void)
 }
 
 
-/* Adds symbol list groups in (iter*, title) pairs.
- * The list must be ended with NULL. */
-static void G_GNUC_NULL_TERMINATED
-tag_list_add_groups(GtkTreeStore *tree_store, ...)
+static GdkPixbuf *get_tag_icon(const gchar *icon_name)
 {
-	va_list args;
-	GtkTreeIter *iter;
 	static GtkIconTheme *icon_theme = NULL;
 	static gint x, y;
 
@@ -537,6 +481,19 @@ tag_list_add_groups(GtkTreeStore *tree_store, ...)
 		g_free(path);
 #endif
 	}
+	return gtk_icon_theme_load_icon(icon_theme, icon_name, x, 0, NULL);
+}
+
+
+/* Adds symbol list groups in (iter*, title) pairs.
+ * The list must be ended with NULL. */
+static void G_GNUC_NULL_TERMINATED
+tag_list_add_groups(GtkTreeStore *tree_store, ...)
+{
+	va_list args;
+	GtkTreeIter *iter;
+
+	g_return_if_fail(top_level_iter_names);
 
     va_start(args, tree_store);
     for (; iter = va_arg(args, GtkTreeIter*), iter != NULL;)
@@ -547,29 +504,34 @@ tag_list_add_groups(GtkTreeStore *tree_store, ...)
 
 		if (icon_name)
 		{
-			icon = gtk_icon_theme_load_icon(icon_theme, icon_name, x, 0, NULL);
+			icon = get_tag_icon(icon_name);
 		}
 
     	g_assert(title != NULL);
+		g_ptr_array_add(top_level_iter_names, title);
+
 		gtk_tree_store_append(tree_store, iter, NULL);
 
 		if (G_IS_OBJECT(icon))
 		{
-			gtk_tree_store_set(tree_store, iter, SYMBOLS_COLUMN_ICON, icon,
-				SYMBOLS_COLUMN_NAME, title, -1);
+			gtk_tree_store_set(tree_store, iter, SYMBOLS_COLUMN_ICON, icon, -1);
 			g_object_unref(icon);
 		}
-		else
-			gtk_tree_store_set(tree_store, iter, SYMBOLS_COLUMN_NAME, title, -1);
+		gtk_tree_store_set(tree_store, iter, SYMBOLS_COLUMN_NAME, title, -1);
 	}
 	va_end(args);
 }
 
 
-static void init_tag_list(GeanyDocument *doc)
+static void add_top_level_items(GeanyDocument *doc)
 {
 	filetype_id ft_id = doc->file_type->id;
 	GtkTreeStore *tag_store = doc->priv->tag_store;
+
+	if (top_level_iter_names == NULL)
+		top_level_iter_names = g_ptr_array_new();
+	else
+		g_ptr_array_set_size(top_level_iter_names, 0);
 
 	init_tag_iters();
 
@@ -841,227 +803,317 @@ static void hide_empty_rows(GtkTreeStore *store)
 }
 
 
-static void add_tree_tags(GtkTreeStore *tree_store, const GList *tags, filetype_id ft_id)
+static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag,
+		gboolean found_parent)
 {
-	GList *tmp, *skipped = NULL;
-	GtkTreeIter iter;
-	gint num_parents = 0, do_skipped = FALSE, num_skipped = 0;
-	GHashTable *parent_hash;
-	const gchar *separator = symbols_get_context_separator(ft_id);
+	gchar *utf8_name;
+	const gchar *scope = tag->atts.entry.scope;
+	static GString *buffer = NULL;	/* buffer will be small so we can keep it for reuse */
+	gboolean doc_is_utf8 = FALSE;
 
-	/* Create a hash table to keep track of parents */
-	parent_hash = g_hash_table_new_full(g_str_hash, g_str_equal, NULL,
-		g_free);
+	/* encodings_convert_to_utf8_from_charset() fails with charset "None", so skip conversion
+	 * for None at this point completely */
+	if (utils_str_equal(doc->encoding, "UTF-8") ||
+		utils_str_equal(doc->encoding, "None"))
+		doc_is_utf8 = TRUE;
 
-	for (tmp = (GList*)tags; tmp && num_skipped < 20;)
+	if (! doc_is_utf8)
+		utf8_name = encodings_convert_to_utf8_from_charset(tag->name,
+			(gsize)-1, doc->encoding, TRUE);
+	else
+		utf8_name = tag->name;
+
+	if (utf8_name == NULL)
+		return NULL;
+
+	if (!buffer)
+		buffer = g_string_new(NULL);
+	else
+		g_string_truncate(buffer, 0);
+
+	/* check first char of scope is a wordchar */
+	if (!found_parent && scope &&
+		strpbrk(scope, GEANY_WORDCHARS) == scope)
 	{
-		gchar buf[100] = "", buf2[100] = "";
-		const GeanySymbol *symbol = (GeanySymbol*)tmp->data;
-		GtkTreeIter *parent = NULL, *parent_search = NULL, *parent_search_short = NULL;
-		GtkTreeIter *parent_icon = NULL, *child = NULL;
-		GdkPixbuf *icon = NULL;
-		gint add_parent = FALSE, add_child = FALSE, skip = FALSE;
-		const gchar *final_name = symbol->str;
+		const gchar *sep = symbols_get_context_separator(FILETYPE_ID(doc->file_type));
 
-		switch (symbol->type)
+		g_string_append(buffer, scope);
+		g_string_append(buffer, sep);
+	}
+	g_string_append(buffer, utf8_name);
+
+	if (! doc_is_utf8)
+		g_free(utf8_name);
+
+	g_string_append_printf(buffer, " [%lu]", tag->atts.entry.line);
+
+	return buffer->str;
+}
+
+
+/* find the last word in "foo::bar::blah", e.g. "blah" */
+const gchar *get_parent_name(const TMTag *tag, filetype_id ft_id)
+{
+	const gchar *scope = tag->atts.entry.scope;
+	const gchar *separator = symbols_get_context_separator(ft_id);
+	const gchar *str, *ptr;
+
+	if (!scope)
+		return NULL;
+
+	str = scope;
+
+	while (1)
+	{
+		ptr = strstr(str, separator);
+		if (ptr)
 		{
-			case tm_tag_prototype_t:
-			case tm_tag_method_t:
-			case tm_tag_function_t:
-			{
-				if (tv_iters.tag_function.stamp == -1) break;
-				parent = &(tv_iters.tag_function);
-				parent_icon = &(tv_iters.tag_function);
-				if (ft_id != GEANY_FILETYPES_DIFF)
-					add_child = TRUE;
-				break;
-			}
-			case tm_tag_macro_t:
-			case tm_tag_macro_with_arg_t:
-			{
-				if (tv_iters.tag_macro.stamp == -1) break;
-				parent = &(tv_iters.tag_macro);
-				break;
-			}
-			case tm_tag_class_t:
-			{
-				if (tv_iters.tag_class.stamp == -1) break;
-				parent = &(tv_iters.tag_class);
-				parent_icon = &(tv_iters.tag_class);
-				add_parent = TRUE;
-				add_child = TRUE;
-				break;
-			}
-			case tm_tag_member_t:
-			case tm_tag_field_t:
-			{
-				if (tv_iters.tag_member.stamp == -1) break;
-				parent = &(tv_iters.tag_member);
-				parent_icon = &(tv_iters.tag_member);
-				add_parent = TRUE;
-				add_child = TRUE;
-				break;
-			}
-			case tm_tag_typedef_t:
-			case tm_tag_enum_t:
-			{
-				/* TODO separate C-like types here also */
-				if (ft_id == GEANY_FILETYPES_HAXE)
-				{
-					if (tv_iters.tag_type.stamp == -1) break;
-					parent = &(tv_iters.tag_type);
-					break;
-				}
-			}
-			case tm_tag_union_t:
-			case tm_tag_struct_t:
-			case tm_tag_interface_t:
-			{
-				if (tv_iters.tag_struct.stamp == -1) break;
-				parent = &(tv_iters.tag_struct);
-				parent_icon = &(tv_iters.tag_struct);
-				add_parent = TRUE;
-				add_child = TRUE;
-				break;
-			}
-			case tm_tag_variable_t:
-			{
-				if (tv_iters.tag_variable.stamp == -1) break;
-				parent = &(tv_iters.tag_variable);
-				parent_icon = &(tv_iters.tag_variable);
-				add_child = TRUE;
-				break;
-			}
-			case tm_tag_namespace_t:
-			case tm_tag_package_t:
-			{
-				if (tv_iters.tag_namespace.stamp == -1) break;
-				parent = &(tv_iters.tag_namespace);
-				parent_icon = &(tv_iters.tag_namespace);
-				add_child = TRUE;
-				add_parent = TRUE;
-				break;
-			}
-			default:
-			{
-				if (tv_iters.tag_other.stamp == -1) break;
-				parent = &(tv_iters.tag_other);
-				parent_icon = &(tv_iters.tag_variable);
-				add_child = TRUE;
-			}
-		}
-
-		if (parent)
-		{	/* Split the string to obtain parent child names */
-			gchar **name_elems = g_strsplit(symbol->str, separator, 10);
-			const gchar *child_name = NULL;
-			gchar *parent_name = buf2;
-			gchar *end_ptr = parent_name;
-			gint ne; /* number of name_elements */
-
-			buf2[0]='\0';
-			parent_search_short = NULL;
-			for (ne = 0; name_elems[ne]; ne++)
-			{
-				child_name = name_elems[ne];
-				if (name_elems[ne+1])
-				{
-					if (ne > 0)
-						end_ptr = g_stpcpy(end_ptr, separator);
-					end_ptr = g_stpcpy(end_ptr, name_elems[ne]);
-					parent_search_short =
-						(GtkTreeIter *)g_hash_table_lookup(parent_hash, (gpointer)name_elems[ne]);
-				}
-			}
-
-			child = &iter;
-			if (!parent_icon)
-				parent_icon = parent;
-
-			gtk_tree_model_get(GTK_TREE_MODEL(tree_store), parent_icon,
-				SYMBOLS_COLUMN_ICON, &icon, -1);
-			if (add_child)
-			{
-				if (parent_name)
-				{
-					parent_search = (GtkTreeIter *)g_hash_table_lookup(parent_hash, (gpointer)parent_name);
-					if (parent_search)
-						parent = parent_search;
-					else if (parent_search_short)
-						parent = parent_search_short;
-
-					if (child_name)
-						final_name = child_name;
-					else
-						final_name = symbol->str;
-				}
-				if (ne > 1 && !parent_search && !parent_search_short)
-				{ /* Want to add child but parent not found */
-					GList *newstart;
-					tmp = g_list_previous(tmp);
-					newstart = g_list_remove(tmp, (gconstpointer) symbol);
-					newstart = g_list_append(tmp, (gpointer) symbol);
-					skip = TRUE;
-					num_skipped++;
-				}
-			}
-
-			if (!skip || do_skipped)
-			{
-				num_skipped = 0;
-				if (add_parent)
-				{
-					GtkTreeIter *new_iter = g_new0(GtkTreeIter, 1);
-					g_hash_table_insert(parent_hash, symbol->str, new_iter);
-					child = new_iter;
-					num_parents++;
-				}
-
-				g_snprintf(buf, sizeof(buf), "%s [%d]", final_name, symbol->line);
-				gtk_tree_store_append(tree_store, child, parent);
-				gtk_tree_store_set(tree_store, child,
-					SYMBOLS_COLUMN_ICON, icon,
-					SYMBOLS_COLUMN_NAME, buf,
-					SYMBOLS_COLUMN_LINE, symbol->line, -1);
-			}
-			else
-			{ /* Put in skipped list */
-/*
-				skipped = g_list_append(skipped, (gpointer)symbol);
-*/
-			}
-
-			if (G_LIKELY(G_IS_OBJECT(icon)))
-				g_object_unref(icon);
-			g_strfreev(name_elems);
-		}
-
-		if (! do_skipped && !g_list_next(tmp))
-		{ /* Start adding skipped items */
-			do_skipped = TRUE;
-			tmp = g_list_first(skipped);
+			str = ptr + strlen(separator);
 		}
 		else
-			tmp = g_list_next(tmp);
+			break;
+	}
+
+	return NZV(str) ? str : NULL;
+}
+
+
+static GtkTreeIter *get_tag_type_iter(TMTagType tag_type, filetype_id ft_id)
+{
+	GtkTreeIter *iter = NULL;
+
+	switch (tag_type)
+	{
+		case tm_tag_prototype_t:
+		case tm_tag_method_t:
+		case tm_tag_function_t:
+		{
+			iter = &tv_iters.tag_function;
+			break;
+		}
+		case tm_tag_macro_t:
+		case tm_tag_macro_with_arg_t:
+		{
+			iter = &tv_iters.tag_macro;
+			break;
+		}
+		case tm_tag_class_t:
+		{
+			iter = &tv_iters.tag_class;
+			break;
+		}
+		case tm_tag_member_t:
+		case tm_tag_field_t:
+		{
+			iter = &tv_iters.tag_member;
+			break;
+		}
+		case tm_tag_typedef_t:
+		case tm_tag_enum_t:
+		{
+			/* TODO separate C-like types here also */
+			if (ft_id == GEANY_FILETYPES_HAXE)
+			{
+				iter = &tv_iters.tag_type;
+				break;
+			}
+			/* fall through */
+		}
+		case tm_tag_union_t:
+		case tm_tag_struct_t:
+		case tm_tag_interface_t:
+		{
+			iter = &tv_iters.tag_struct;
+			break;
+		}
+		case tm_tag_variable_t:
+		{
+			iter = &tv_iters.tag_variable;
+			break;
+		}
+		case tm_tag_namespace_t:
+		case tm_tag_package_t:
+		{
+			iter = &tv_iters.tag_namespace;
+			break;
+		}
+		default:
+		{
+			iter = &tv_iters.tag_other;
+		}
+	}
+	if (iter->stamp != -1)
+		return iter;
+	else
+		return NULL;
+}
+
+
+static void add_tree_tag(GeanyDocument *doc, const TMTag *tag, GHashTable *parent_hash)
+{
+	filetype_id ft_id = FILETYPE_ID(doc->file_type);
+	GtkTreeStore *tree_store = doc->priv->tag_store;
+	GtkTreeIter *parent = NULL;
+
+	parent = get_tag_type_iter(tag->type, ft_id);
+
+	if (parent)
+	{
+		const gchar *name;
+		const gchar *parent_name = get_parent_name(tag, ft_id);
+		GtkTreeIter iter;
+		GtkTreeIter *icon_iter = NULL, *child = NULL;
+		GdkPixbuf *icon = NULL;
+
+		child = &iter;
+		icon_iter = (parent != &tv_iters.tag_other) ? parent : &tv_iters.tag_variable;
+
+		gtk_tree_model_get(GTK_TREE_MODEL(tree_store), icon_iter,
+			SYMBOLS_COLUMN_ICON, &icon, -1);
+
+		if (parent_name)
+		{
+			GtkTreeIter *parent_search =
+				(GtkTreeIter *)g_hash_table_lookup(parent_hash, parent_name);
+
+			if (parent_search)
+				parent = parent_search;
+			else
+				parent_name = NULL;
+		}
+
+		/* check if the current tag is a parent of other tags */
+		if (g_hash_table_lookup_extended(parent_hash, tag->name, NULL, NULL))
+		{
+			GtkTreeIter *new_iter = g_new0(GtkTreeIter, 1);
+
+			/* set an iter value for the hash key */
+			g_hash_table_insert(parent_hash, tag->name, new_iter);
+			/* instead of ignoring the appended child iter below, use the one in the hash table */
+			child = new_iter;
+		}
+
+		gtk_tree_store_append(tree_store, child, parent);
+
+		name = get_symbol_name(doc, tag, (parent_name != NULL));
+		gtk_tree_store_set(tree_store, child,
+			SYMBOLS_COLUMN_ICON, icon,
+			SYMBOLS_COLUMN_NAME, name,
+			SYMBOLS_COLUMN_TAG, tag, -1);
+
+		if (G_LIKELY(G_IS_OBJECT(icon)))
+			g_object_unref(icon);
+	}
+	else
+		geany_debug("Missing symbol-tree parent iter for type %d!", tag->type);
+}
+
+
+static void add_tree_tags(GeanyDocument *doc, const GList *tags)
+{
+	const GList *item;
+	GHashTable *parent_hash;
+
+	/* Create a hash table "parent_tag_name":(GtkTreeIter*) */
+	parent_hash = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, g_free);
+
+	/* find and store all parent names in the hash table */
+	for (item = tags; item; item = g_list_next(item))
+	{
+		const TMTag *tag = item->data;
+		const gchar *name = get_parent_name(tag, FILETYPE_ID(doc->file_type));
+
+		if (name)
+			g_hash_table_insert(parent_hash, (gpointer)name, NULL);
+	}
+	for (item = tags; item; item = g_list_next(item))
+	{
+		const TMTag *tag = item->data;
+
+		add_tree_tag(doc, tag, parent_hash);
 	}
 	g_hash_table_destroy(parent_hash);
 }
 
 
+/* @param item Must be a (gpointer*) for implementation reasons.
+ * @example gchar *name = *item; (for when the GPtrArray contains char pointers). */
+#define foreach_ptr_array(item, ptr_array) \
+	for (item = ptr_array->pdata; item < &ptr_array->pdata[ptr_array->len]; item++)
+
+/* we don't want to sort 1st-level nodes, but we can't return 0 because the tree sort
+ * is not stable, so the order is already lost. */
+static gint compare_top_level_names(const gchar *a, const gchar *b)
+{
+	gpointer *item;
+
+	foreach_ptr_array(item, top_level_iter_names)
+	{
+		const gchar *name = *item;
+
+		if (utils_str_equal(name, a))
+			return -1;
+		if (utils_str_equal(name, b))
+			return 1;
+	}
+	g_warning("Couldn't find top level node '%s' or '%s'!", a, b);
+	return 0;
+}
+
+
+static gint tree_sort_func(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
+		gpointer user_data)
+{
+	gboolean sort_by_name = GPOINTER_TO_INT(user_data);
+	const TMTag *tag_a, *tag_b;
+
+	gtk_tree_model_get(model, a, SYMBOLS_COLUMN_TAG, &tag_a, -1);
+	gtk_tree_model_get(model, b, SYMBOLS_COLUMN_TAG, &tag_b, -1);
+
+	if (tag_a && tag_b)
+	{
+		return sort_by_name ? compare_symbol(tag_a, tag_b) :
+			compare_symbol_lines(tag_a, tag_b);
+	}
+	else
+	{
+		gchar *astr, *bstr;
+		gint cmp;
+
+		gtk_tree_model_get(model, a, SYMBOLS_COLUMN_NAME, &astr, -1);
+		gtk_tree_model_get(model, b, SYMBOLS_COLUMN_NAME, &bstr, -1);
+
+		/* if a is toplevel, b must be also */
+		if (gtk_tree_store_iter_depth(GTK_TREE_STORE(model), a) == 0)
+			cmp = compare_top_level_names(astr, bstr);
+		else
+			cmp = strcmp(astr, bstr);
+
+		g_free(astr);
+		g_free(bstr);
+		return cmp;
+	}
+}
+
+
+static void sort_tree(GtkTreeStore *store, gboolean sort_by_name)
+{
+	gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(store), 1, tree_sort_func,
+		GINT_TO_POINTER(sort_by_name), NULL);
+
+	gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(store), 1, GTK_SORT_ASCENDING);
+}
+
+
 gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 {
-	const GList *tags;
+	GList *tags;
 	static gint prev_sort_mode = SYMBOLS_SORT_BY_NAME;
 
 	g_return_val_if_fail(doc != NULL, FALSE);
 
-	if (sort_mode == SYMBOLS_SORT_USE_PREVIOUS)
-		sort_mode = prev_sort_mode;
-	else
-		prev_sort_mode = sort_mode;
-
-	tags = get_tag_list(doc, tm_tag_max_t, sort_mode);
-	if (doc->tm_file == NULL || tags == NULL)
+	tags = get_tag_list(doc, tm_tag_max_t);
+	if (tags == NULL)
 		return FALSE;
 
 	/* Make sure the model stays with us after the tree view unrefs it */
@@ -1072,11 +1124,19 @@ gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 	gtk_tree_store_clear(doc->priv->tag_store);
 
 	/* add grandparent type iters */
-	init_tag_list(doc);
+	add_top_level_items(doc);
 
-	add_tree_tags(doc->priv->tag_store, tags, FILETYPE_ID(doc->file_type));
+	add_tree_tags(doc, tags);
+	g_list_free(tags);
 
 	hide_empty_rows(doc->priv->tag_store);
+
+	if (sort_mode == SYMBOLS_SORT_USE_PREVIOUS)
+		sort_mode = prev_sort_mode;
+	else
+		prev_sort_mode = sort_mode;
+
+	sort_tree(doc->priv->tag_store, sort_mode == SYMBOLS_SORT_BY_NAME);
 
 	/* Re-attach model to view */
 	gtk_tree_view_set_model(GTK_TREE_VIEW(doc->priv->tag_tree),

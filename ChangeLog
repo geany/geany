@@ -1,3 +1,21 @@
+2008-11-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * treeviews.c, treeviews.h, symbols.c:
+   Remove symbol tree 'skipped' code, instead sort parents first when
+   adding tree iters. This should fix missing symbols sometimes.
+   Use TMTag instead of GeanySymbol so the symbol tree can read the
+   scope without parsing it (fixes problems with '.' characters in tag
+   names for e.g. HTML).
+   Free tag list straight after use, instead of next time the list is
+   generated.
+   Use TMTag pointer tree model column instead of line number.
+   Fix not allowing a leading underscore when using scope name prefix.
+   Remember parent tree iter for a tag if it is used for a child tag's
+   scope, rather than just for tags of a certain type. This should be
+   more flexible for various filetypes.
+   Various symbol-tree code refactoring.
+
+
 2008-10-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * Create symbol-tree branch.
