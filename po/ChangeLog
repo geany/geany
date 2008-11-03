@@ -1,3 +1,9 @@
+2008-11-03  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * fr.po: Little update of French translation. Removes a fuzzy string.
+   Thanks to Roland Baudin for input.
+
+
 2008-10-31  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * fr.po: Little update of French translation. Closes #2210060.

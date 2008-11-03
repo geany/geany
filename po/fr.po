@@ -1037,9 +1037,8 @@ msgstr "Tout fichier source"
 
 #: ../src/filetypes.c:1232
 #, c-format
-#, fuzzy
 msgid "Bad regex for filetype %s: %s"
-msgstr "Mauvaise expression régulière pour le type de fichier %s %s"
+msgstr "Mauvaise expression régulière pour le type de fichier %s : %s"
 
 #: ../src/geany.h:50
 msgid "untitled"
