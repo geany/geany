@@ -3,7 +3,11 @@
  * src/editor.c:
    Fix snippets and smart indent using too much indentation when the
    line contains whitespace after non-whitespace characters. This
-   might also have affected other features (auto table, etc).
+   might also have affected other features (auto table, etc). (Fixes
+   #2215044).
+ * src/prefs.c:
+   Fix Prefs dialog Tools tab Context Action open button showing the
+   file dialog twice.
 
 
 2008-11-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

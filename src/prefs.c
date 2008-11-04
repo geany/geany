@@ -1659,8 +1659,6 @@ void prefs_show_dialog(void)
 		/* tools commands */
 		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "button_contextaction"),
 			"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction"));
-		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "button_contextaction"),
-			"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction"));
 
 		/* printing */
 		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "button_print_external_cmd"),
