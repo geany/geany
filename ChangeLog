@@ -1,3 +1,11 @@
+2008-11-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/editor.c:
+   Fix snippets and smart indent using too much indentation when the
+   line contains whitespace after non-whitespace characters. This
+   might also have affected other features (auto table, etc).
+
+
 2008-11-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/callbacks.c:

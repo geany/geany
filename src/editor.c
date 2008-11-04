@@ -901,7 +901,6 @@ static void read_indent(GeanyEditor *editor, gint pos)
 	guint i, len, j = 0;
 	gint line;
 	gchar *linebuf;
-	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
 
 	line = sci_get_line_from_position(sci, pos);
 
@@ -912,7 +911,7 @@ static void read_indent(GeanyEditor *editor, gint pos)
 	{
 		if (linebuf[i] == ' ' || linebuf[i] == '\t')	/* simple indentation */
 			indent[j++] = linebuf[i];
-		else if (iprefs->auto_indent_mode <= GEANY_AUTOINDENT_BASIC)
+		else
 			break;
 	}
 	indent[j] = '\0';
