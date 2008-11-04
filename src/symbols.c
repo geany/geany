@@ -1061,6 +1061,14 @@ static gint compare_top_level_names(const gchar *a, const gchar *b)
 }
 
 
+/* Whether iters can be sorted based on tag name and line, not scope.
+ * If the scope was prepended, e.g. 'ScopeNameWithNoTag::TagName', this returns FALSE */
+#define tag_is_name_sortable(tag, iter) \
+	((tag) && \
+		(!NZV((tag)->atts.entry.scope) || \
+			gtk_tree_store_iter_depth(GTK_TREE_STORE(model), (iter)) > 1))
+
+
 static gint tree_sort_func(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
 		gpointer user_data)
 {
@@ -1070,7 +1078,8 @@ static gint tree_sort_func(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
 	gtk_tree_model_get(model, a, SYMBOLS_COLUMN_TAG, &tag_a, -1);
 	gtk_tree_model_get(model, b, SYMBOLS_COLUMN_TAG, &tag_b, -1);
 
-	if (tag_a && tag_b)
+	if (tag_is_name_sortable(tag_a, a) &&
+		tag_is_name_sortable(tag_b, b))
 	{
 		return sort_by_name ? compare_symbol(tag_a, tag_b) :
 			compare_symbol_lines(tag_a, tag_b);
@@ -1085,10 +1094,17 @@ static gint tree_sort_func(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
 
 		/* if a is toplevel, b must be also */
 		if (gtk_tree_store_iter_depth(GTK_TREE_STORE(model), a) == 0)
+		{
 			cmp = compare_top_level_names(astr, bstr);
+		}
 		else
+		{
 			cmp = strcmp(astr, bstr);
 
+			/* sort duplicate 'ScopeName::OverloadedTagName' items by line as well */
+			if ((!sort_by_name || cmp == 0) && tag_a && tag_b)
+				cmp = tag_a->atts.entry.line - tag_b->atts.entry.line;
+		}
 		g_free(astr);
 		g_free(bstr);
 		return cmp;
