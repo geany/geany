@@ -7,7 +7,7 @@
    #2215044).
  * src/prefs.c:
    Fix Prefs dialog Tools tab Context Action open button showing the
-   file dialog twice.
+   file dialog twice (fixes #2216478).
 
 
 2008-11-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
