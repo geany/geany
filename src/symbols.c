@@ -1105,8 +1105,11 @@ static gint tree_sort_func(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
 			cmp = strcmp(astr, bstr);
 
 			/* sort duplicate 'ScopeName::OverloadedTagName' items by line as well */
-			if ((!sort_by_name || cmp == 0) && tag_a && tag_b)
-				cmp = compare_symbol_lines(tag_a, tag_b);
+			if (tag_a && tag_b)
+				if (!sort_by_name ||
+					(utils_str_equal(tag_a->name, tag_b->name) &&
+						utils_str_equal(tag_a->atts.entry.scope, tag_b->atts.entry.scope)))
+					cmp = compare_symbol_lines(tag_a, tag_b);
 		}
 		g_free(astr);
 		g_free(bstr);
