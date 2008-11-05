@@ -1040,7 +1040,7 @@ static void add_menu_accel(GeanyKeyGroup *group, guint kb_id,
 static void create_build_menu_gen(BuildMenuItems *menu_items)
 {
 	GtkWidget *menu, *item = NULL, *image, *separator;
-	struct GeanyProject *proj;
+	GeanyProject *proj;
 	gchar *tiptext;
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
 	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
@@ -1548,7 +1548,7 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
 		}
 		if( app->project!=NULL )
 		{
-		    struct GeanyProject *proj = app->project;
+		    GeanyProject *proj = app->project;
 
 		    newstr = gtk_entry_get_text( GTK_ENTRY( lookup_widget( GTK_WIDGET(dialog), "build_1_label" ) ) );
 		    if( !utils_str_equal( newstr, proj->build_1_label ) )
@@ -1687,7 +1687,7 @@ static void add_build_command_widgets(GtkWidget *dialog, GtkWidget *vbox, GeanyF
     {
  		GtkWidget *align, *frame;
 		/* in-dialog heading for the project part of the build commands dialog */
-        struct GeanyProject *proj = app->project;
+        GeanyProject *proj = app->project;
 
 		frame = ui_frame_new_with_alignment(_("Project build menu commands"), &align);
 		gtk_container_add(GTK_CONTAINER(vbox), frame);

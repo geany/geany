@@ -8,6 +8,8 @@
    Capitalize 'project build menu commands' string, make fully
    translatable.
    Add column spacing of 6 for project commands table (Gnome HIG).
+ * src/build.c:
+   Use GeanyProject typedef instead of struct.
 
 
 2008-111-01 Lex Trotman <elextr(at)gmail(dot)com>
