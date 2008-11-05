@@ -289,6 +289,7 @@ static GPid build_view_tex_file(GeanyDocument *doc, gint mode)
 }
 
 
+#if 0
 /* get curfile.o in locale encoding from document::file_name */
 static gchar *get_object_filename(GeanyDocument *doc)
 {
@@ -309,6 +310,7 @@ static gchar *get_object_filename(GeanyDocument *doc)
 
 	return object_file;
 }
+#endif
 
 
 static GPid build_make_file(GeanyDocument *doc, gint build_opts)
@@ -323,7 +325,7 @@ static GPid build_make_file(GeanyDocument *doc, gint build_opts)
 		return (GPid) 1;
 
     part1 = tool_prefs.make_cmd;
-    
+
 	if (build_opts == GBO_MAKE_OBJECT)
 	{
 		build_info.type = build_opts;
@@ -347,7 +349,7 @@ static GPid build_make_file(GeanyDocument *doc, gint build_opts)
         else part2 = "all";
 		dir = project_get_make_dir();
 	}
-	
+
 	cmdstr = g_string_new(part1);
 	if( part2!=NULL )
 	{
@@ -1547,7 +1549,7 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
 		if( app->project!=NULL )
 		{
 		    struct GeanyProject *proj = app->project;
-		    
+
 		    newstr = gtk_entry_get_text( GTK_ENTRY( lookup_widget( GTK_WIDGET(dialog), "build_1_label" ) ) );
 		    if( !utils_str_equal( newstr, proj->build_1_label ) )
 		    {
@@ -1698,14 +1700,14 @@ static void show_includes_arguments_gen(void)
 	}
 
     /* see if need project based command fields */
-    
+
     if( app->project!=NULL )
     {
  		GtkWidget *align, *frame;
 		/* in-dialog heading for the project part of the build commands dialog */
 		gchar *frame_title = g_strdup_printf(_("%s build menu commands"), "project");
         struct GeanyProject *proj = app->project;
-        
+
 		frame = ui_frame_new_with_alignment(frame_title, &align);
 		gtk_container_add(GTK_CONTAINER(vbox), frame);
 		g_free(frame_title);
@@ -1713,7 +1715,7 @@ static void show_includes_arguments_gen(void)
 		pr_table = gtk_table_new(3, 3, FALSE);
 		gtk_table_set_row_spacings(GTK_TABLE(pr_table), 6);
 		gtk_container_add(GTK_CONTAINER(align), pr_table);
-		
+
 		/* label and cmd 1 */
 		build_entry = gtk_entry_new();
 		gtk_entry_set_width_chars( GTK_ENTRY(build_entry), 10 );
@@ -1773,9 +1775,9 @@ static void show_includes_arguments_gen(void)
         gtk_table_attach_defaults( GTK_TABLE(pr_table), build_entry, 1, 3, 2, 3 );
 		g_object_set_data_full(G_OBJECT(dialog), "build_3_cmd",
 					gtk_widget_ref(build_entry), (GDestroyNotify)gtk_widget_unref);
-		
+
     }
-    
+
 	label = gtk_label_new(_("%f will be replaced by the current filename, e.g. test_file.c\n"
 							"%e will be replaced by the filename without extension, e.g. test_file"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
