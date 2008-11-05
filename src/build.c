@@ -1591,30 +1591,12 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
 }
 
 
-static void show_includes_arguments_gen(void)
+static void add_build_command_widgets(GtkWidget *dialog, GtkWidget *vbox, GeanyFiletype *ft)
 {
-	GtkWidget *dialog, *label, *entries[3], *vbox, *build_entry;
+	GtkWidget *label, *entries[3], *build_entry;
 	GtkWidget *ft_table = NULL;
 	GtkWidget *pr_table = NULL;
 	gint row = 0;
-	gint response;
-	GeanyDocument *doc = document_get_current();
-	GeanyFiletype *ft = NULL;
-
-	if (doc != NULL)
-		ft = doc->file_type;
-	g_return_if_fail(ft != NULL);
-
-	dialog = gtk_dialog_new_with_buttons(_("Build Menu Commands"), GTK_WINDOW(main_widgets.window),
-										GTK_DIALOG_DESTROY_WITH_PARENT,
-										GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-										GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
-	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
-	gtk_widget_set_name(dialog, "GeanyDialog");
-
-	label = gtk_label_new(_("Set the commands for the build menu."));
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
-	gtk_container_add(GTK_CONTAINER(vbox), label);
 
 	if (ft->actions->can_compile || ft->actions->can_link || ft->actions->can_exec)
 	{
@@ -1777,6 +1759,32 @@ static void show_includes_arguments_gen(void)
 					gtk_widget_ref(build_entry), (GDestroyNotify)gtk_widget_unref);
 
     }
+}
+
+
+static void show_includes_arguments_gen(void)
+{
+	GtkWidget *dialog, *label, *vbox;
+	gint response;
+	GeanyDocument *doc = document_get_current();
+	GeanyFiletype *ft = NULL;
+
+	if (doc != NULL)
+		ft = doc->file_type;
+	g_return_if_fail(ft != NULL);
+
+	dialog = gtk_dialog_new_with_buttons(_("Build Menu Commands"), GTK_WINDOW(main_widgets.window),
+										GTK_DIALOG_DESTROY_WITH_PARENT,
+										GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+										GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
+	gtk_widget_set_name(dialog, "GeanyDialog");
+
+	label = gtk_label_new(_("Set the commands for the build menu."));
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	gtk_container_add(GTK_CONTAINER(vbox), label);
+
+	add_build_command_widgets(dialog, vbox, ft);
 
 	label = gtk_label_new(_("%f will be replaced by the current filename, e.g. test_file.c\n"
 							"%e will be replaced by the filename without extension, e.g. test_file"));
@@ -1856,6 +1864,7 @@ void build_menu_update(GeanyDocument *doc)
 		can_build = can_make && ! is_c_header(doc->file_name);
 	else
 		can_build = can_make;
+
 	if (menu_items->item_compile)
 		gtk_widget_set_sensitive(menu_items->item_compile, can_build && ft->actions->can_compile);
 	if (menu_items->item_link)

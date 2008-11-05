@@ -2,6 +2,8 @@
 
  * src/build.c:
    Fix warning with -Wall -Wextra.
+ * src/build.c:
+   Factor with add_build_command_widgets().
 
 
 2008-111-01 Lex Trotman <elextr(at)gmail(dot)com>
