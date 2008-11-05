@@ -4,6 +4,10 @@
    Fix warning with -Wall -Wextra.
  * src/build.c:
    Factor with add_build_command_widgets().
+ * src/build.c:
+   Capitalize 'project build menu commands' string, make fully
+   translatable.
+   Add column spacing of 6 for project commands table (Gnome HIG).
 
 
 2008-111-01 Lex Trotman <elextr(at)gmail(dot)com>

@@ -1687,14 +1687,13 @@ static void add_build_command_widgets(GtkWidget *dialog, GtkWidget *vbox, GeanyF
     {
  		GtkWidget *align, *frame;
 		/* in-dialog heading for the project part of the build commands dialog */
-		gchar *frame_title = g_strdup_printf(_("%s build menu commands"), "project");
         struct GeanyProject *proj = app->project;
 
-		frame = ui_frame_new_with_alignment(frame_title, &align);
+		frame = ui_frame_new_with_alignment(_("Project build menu commands"), &align);
 		gtk_container_add(GTK_CONTAINER(vbox), frame);
-		g_free(frame_title);
 
 		pr_table = gtk_table_new(3, 3, FALSE);
+		gtk_table_set_col_spacings(GTK_TABLE(pr_table), 6);
 		gtk_table_set_row_spacings(GTK_TABLE(pr_table), 6);
 		gtk_container_add(GTK_CONTAINER(align), pr_table);
 
