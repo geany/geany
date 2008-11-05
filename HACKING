@@ -146,8 +146,8 @@ Style
 * We don't put spaces between function names and the opening brace for
   argument lists.
 * Try to fit in with the existing code brace indenting style, comments,
-  operator spacing etc. It's not required but it makes our lives easier
-  ;-)
+  operator spacing etc. It's not required for patches but it will save
+  us having to manually reformat them.
 
 Libraries
 ---------
