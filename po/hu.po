@@ -4593,7 +4593,7 @@ msgstr "GTK+ típusú konstruktor"
 
 #: ../plugins/classbuilder.c:782
 msgid "Create Cla_ss"
-msgstr "O_stály létrehozása"
+msgstr "O_sztály létrehozása"
 
 #: ../plugins/classbuilder.c:791
 msgid "_C++ Class"
