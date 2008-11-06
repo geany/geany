@@ -1,3 +1,9 @@
+2008-11-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/search.c:
+   Refactor search_show_find_in_files_dialog().
+
+
 2008-11-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/editor.c:
