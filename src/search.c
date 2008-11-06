@@ -716,18 +716,20 @@ void search_show_find_in_files_dialog(const gchar *dir)
 {
 	GtkWidget *entry; /* for child GtkEntry of a GtkComboBoxEntry */
 	GeanyDocument *doc = document_get_current();
+	GeanyEditor *editor = doc ? doc->editor : NULL;
 	gchar *sel = NULL;
 	gchar *cur_dir = NULL;
 
 	if (widgets.find_in_files_dialog == NULL)
 	{
 		create_fif_dialog();
-		sel = editor_get_default_selection(doc->editor, search_prefs.use_current_word, NULL);
+		sel = editor_get_default_selection(editor, search_prefs.use_current_word, NULL);
 	}
-	entry = GTK_BIN(find_in_files.search_combo)->child;
 	/* only set selection if the dialog is not already visible, or has just been created */
 	if (! sel && ! GTK_WIDGET_VISIBLE(widgets.find_in_files_dialog))
-		sel = editor_get_default_selection(doc->editor, search_prefs.use_current_word, NULL);
+		sel = editor_get_default_selection(editor, search_prefs.use_current_word, NULL);
+
+	entry = GTK_BIN(find_in_files.search_combo)->child;
 	if (sel)
 		gtk_entry_set_text(GTK_ENTRY(entry), sel);
 	g_free(sel);
@@ -1131,9 +1133,9 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 {
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
+		GtkWidget *search_combo = find_in_files.search_combo;
 		const gchar *search_text =
-			gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(
-				GTK_BIN(find_in_files.search_combo))));
+			gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(search_combo))));
 		GtkWidget *dir_combo = find_in_files.dir_combo;
 		const gchar *utf8_dir =
 			gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(dir_combo))));
@@ -1154,7 +1156,7 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 
 			if (search_find_in_files(search_text, locale_dir, opts->str))
 			{
-				ui_combo_box_add_to_history(GTK_COMBO_BOX(user_data), search_text);
+				ui_combo_box_add_to_history(GTK_COMBO_BOX(search_combo), search_text);
 				ui_combo_box_add_to_history(GTK_COMBO_BOX(dir_combo), utf8_dir);
 				gtk_widget_hide(widgets.find_in_files_dialog);
 			}
