@@ -2579,6 +2579,52 @@ static void styleset_tcl(ScintillaObject *sci)
 	set_sci_style(sci, SCE_TCL_WORD5, GEANY_FILETYPES_TCL, 15);
 }
 
+
+static void styleset_matlab_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
+{
+	new_style_array(GEANY_FILETYPES_MATLAB, 9);
+	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_MATLAB].styling[0]);
+	get_keyfile_hex(config, config_home, "styling", "comment", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_MATLAB].styling[1]);
+	get_keyfile_hex(config, config_home, "styling", "command", "0x111199", "0xffffff", "true", &style_sets[GEANY_FILETYPES_MATLAB].styling[2]);
+	get_keyfile_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_MATLAB].styling[3]);
+	get_keyfile_hex(config, config_home, "styling", "keyword", "0x001a7f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_MATLAB].styling[4]);
+	get_keyfile_hex(config, config_home, "styling", "string", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_MATLAB].styling[5]);
+	get_keyfile_hex(config, config_home, "styling", "operator", "0x301010", "0xffffff", "false", &style_sets[GEANY_FILETYPES_MATLAB].styling[6]);
+	get_keyfile_hex(config, config_home, "styling", "identifier", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_MATLAB].styling[7]);
+	get_keyfile_hex(config, config_home, "styling", "doublequotedstring", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_MATLAB].styling[8]);
+
+	style_sets[GEANY_FILETYPES_MATLAB].keywords = g_new(gchar*, 2);
+	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_MATLAB, 0, "break case catch continue else elseif end for function global if otherwise persistent return switch try while");
+	style_sets[GEANY_FILETYPES_MATLAB].keywords[1] = NULL;
+
+	get_keyfile_wordchars(config, config_home,
+		&style_sets[GEANY_FILETYPES_MATLAB].wordchars);
+}
+
+
+static void styleset_matlab(ScintillaObject *sci)
+{
+	const filetype_id ft_id = GEANY_FILETYPES_MATLAB;
+
+	styleset_common(sci);
+
+	apply_filetype_properties(sci, SCLEX_MATLAB, ft_id);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_MATLAB].keywords[0]);
+
+	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_MATLAB, 0);
+	set_sci_style(sci, SCE_MATLAB_DEFAULT, GEANY_FILETYPES_MATLAB, 0);
+	set_sci_style(sci, SCE_MATLAB_COMMENT, GEANY_FILETYPES_MATLAB, 1);
+	set_sci_style(sci, SCE_MATLAB_COMMAND, GEANY_FILETYPES_MATLAB, 2);
+	set_sci_style(sci, SCE_MATLAB_NUMBER, GEANY_FILETYPES_MATLAB, 3);
+	set_sci_style(sci, SCE_MATLAB_KEYWORD, GEANY_FILETYPES_MATLAB, 4);
+	set_sci_style(sci, SCE_MATLAB_STRING, GEANY_FILETYPES_MATLAB, 5);
+	set_sci_style(sci, SCE_MATLAB_OPERATOR, GEANY_FILETYPES_MATLAB, 6);
+	set_sci_style(sci, SCE_MATLAB_IDENTIFIER, GEANY_FILETYPES_MATLAB, 7);
+	set_sci_style(sci, SCE_MATLAB_DOUBLEQUOTESTRING, GEANY_FILETYPES_MATLAB, 8);
+}
+
+
 static void styleset_d_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_style_array(GEANY_FILETYPES_D, 18);
@@ -3087,6 +3133,7 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 		init_styleset_case(GEANY_FILETYPES_LATEX,	latex);
 		init_styleset_case(GEANY_FILETYPES_LUA,		lua);
 		init_styleset_case(GEANY_FILETYPES_MAKE,	makefile);
+		init_styleset_case(GEANY_FILETYPES_MATLAB,	matlab);
 		init_styleset_case(GEANY_FILETYPES_OMS,		oms);
 		init_styleset_case(GEANY_FILETYPES_PASCAL,	pascal);
 		init_styleset_case(GEANY_FILETYPES_PERL,	perl);
@@ -3143,6 +3190,7 @@ void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 		styleset_case(GEANY_FILETYPES_LATEX,	latex);
 		styleset_case(GEANY_FILETYPES_LUA,		lua);
 		styleset_case(GEANY_FILETYPES_MAKE,		makefile);
+		styleset_case(GEANY_FILETYPES_MATLAB,	matlab);
 		styleset_case(GEANY_FILETYPES_OMS,		oms);
 		styleset_case(GEANY_FILETYPES_PASCAL,	pascal);
 		styleset_case(GEANY_FILETYPES_PERL,		perl);

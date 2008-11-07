@@ -623,6 +623,14 @@ static void init_tag_list(GeanyDocument *doc)
 				NULL);
 			break;
 		}
+		case GEANY_FILETYPES_MATLAB:
+		{
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
+				&(tv_iters.tag_struct), _("Structures"), "classviewer-struct",
+				NULL);
+			break;
+		}
 		case GEANY_FILETYPES_PERL:
 		{
 			tag_list_add_groups(tag_store,

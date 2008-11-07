@@ -19,6 +19,7 @@ LexHaskell.cxx \
 LexHTML.cxx \
 LexLua.cxx \
 LexOMS.cxx \
+LexMatlab.cxx \
 LexOthers.cxx \
 LexPascal.cxx \
 LexPerl.cxx \

@@ -548,6 +548,7 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 		}
 
 		case GEANY_FILETYPES_LATEX:
+		case GEANY_FILETYPES_MATLAB:
 		{
 			line_prefix = "%";
 			break;

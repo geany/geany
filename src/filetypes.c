@@ -495,6 +495,17 @@ static void init_builtin_filetypes(void)
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
+#define MATLAB
+	ft = filetypes[GEANY_FILETYPES_MATLAB];
+	ft->lang = 32;
+	ft->name = g_strdup("Matlab");
+	ft->title = g_strdup_printf(_("%s source file"), "Matlab");
+	ft->extension = g_strdup("m");
+	ft->pattern = utils_strv_new("*.m", NULL);
+	ft->comment_open = g_strdup("%");
+	ft->comment_close = NULL;
+	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
+
 #define ALL
 	ft = filetypes[GEANY_FILETYPES_NONE];
 	ft->lang = -2;

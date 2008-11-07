@@ -2763,6 +2763,10 @@ static gboolean is_string_style(gint lexer, gint style)
 		case SCLEX_FREEBASIC:
 			return (style == SCE_B_STRING);
 
+		case SCLEX_MATLAB:
+			return (style == SCE_MATLAB_STRING ||
+				style == SCE_MATLAB_DOUBLEQUOTESTRING);
+
 		case SCLEX_HTML:
 			return (style == SCE_HPHP_SIMPLESTRING ||
 				style == SCE_HPHP_HSTRING ||  /* HSTRING is a heredoc */
@@ -2845,6 +2849,9 @@ static gboolean is_comment_style(gint lexer, gint style)
 				style == SCE_TCL_COMMENTLINE ||
 				style == SCE_TCL_COMMENT_BOX ||
 				style == SCE_TCL_BLOCK_COMMENT);
+
+		case SCLEX_MATLAB:
+			return (style == SCE_MATLAB_COMMENT);
 
 		case SCLEX_LUA:
 			return (style == SCE_LUA_COMMENT ||
@@ -4095,6 +4102,7 @@ void editor_set_indentation_guides(GeanyEditor *editor)
 		case SCLEX_FREEBASIC:
 		case SCLEX_D:
 		case SCLEX_OMS:
+		case SCLEX_MATLAB:
 			mode = SC_IV_LOOKBOTH;
 			break;
 

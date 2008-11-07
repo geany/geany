@@ -50,6 +50,7 @@ Timothy Boronczyk <tboronczyk(at)gmail(dot)com> - scroll_stop_at_last_line GUI p
 Jason Oster <parasytic(at)users(dot)sourceforge(dot)net> - various patches
 Andrew Rowland <weibullguy(at)charter(dot)net> - R filetype patch
 Bronisław Białek <after89(at)gmail(dot)com> - CSS parser update
+Roland Baudin <roland(dot)baudin(at)thalesaleniaspace(dot)com> - Matlab filetype patch
 
 Translators:
 ------------
