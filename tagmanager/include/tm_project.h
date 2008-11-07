@@ -13,6 +13,7 @@
 #include <glib.h>
 #include "tm_work_object.h"
 
+
 /*! \file
  The TMProject structure and associated functions can be used to group together
  related source files in a "project". The update, open and save functions take
@@ -141,6 +142,13 @@ TMWorkObject *tm_project_find_file(TMWorkObject *work_object, const char *file_n
  \return TRUE on success, FALSE on failure
 */
 gboolean tm_project_remove_object(TMProject *project, TMWorkObject *w);
+
+/*! Removes only the project-tags associated with the object. Then resort the project's tags.
+ \param project The project from which the file's tags are to be removed.
+ \param w The member work object (source file) to remove the tags.
+ \return TRUE on success, FALSE on failure
+*/
+gboolean tm_project_remove_tags_from_list(TMProject *project, TMWorkObject *w);
 
 /*! Updates the project database and all the source files contained in the
  project. All sorting and deduping is lost and should be redone.

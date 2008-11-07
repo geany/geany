@@ -110,6 +110,7 @@ typedef struct sTokenInfo {
 	fpos_t 			filePosition;
 	int				nestLevel;
 	boolean			ignoreTag;
+    int	bufferPosition;	/* buffer position of line containing name */
 } tokenInfo;
 
 /*
@@ -197,7 +198,10 @@ static tokenInfo *newToken (void)
 	token->nestLevel	= 0;
 	token->ignoreTag	= FALSE;
 	token->lineNumber   = getSourceLineNumber ();
-	token->filePosition = getInputFilePosition ();
+    if (useFile())
+		token->filePosition = getInputFilePosition ();
+    else
+		token->bufferPosition = getInputBufferPosition ();
 
 	return token;
 }
@@ -353,8 +357,11 @@ getNextChar:
 	{
 		c = fileGetc ();
 		token->lineNumber   = getSourceLineNumber ();
-		token->filePosition = getInputFilePosition ();
-	}
+		if (useFile())
+			token->filePosition = getInputFilePosition ();
+		else
+			token->bufferPosition = getInputBufferPosition ();
+		}
 	while (c == '\t'  ||  c == ' ' ||  c == '\n');
 
 	switch (c)
@@ -377,7 +384,10 @@ getNextChar:
 				  token->type = TOKEN_STRING;
 				  parseString (token->string, c);
 				  token->lineNumber = getSourceLineNumber ();
-				  token->filePosition = getInputFilePosition ();
+				  if (useFile())
+					token->filePosition = getInputFilePosition ();
+				  else
+					token->bufferPosition = getInputBufferPosition ();
 				  break;
 
 		case '\\':
@@ -386,7 +396,10 @@ getNextChar:
 					  fileUngetc (c);
 				  token->type = TOKEN_CHARACTER;
 				  token->lineNumber = getSourceLineNumber ();
-				  token->filePosition = getInputFilePosition ();
+				  if (useFile())
+					token->filePosition = getInputFilePosition ();
+				  else
+					token->bufferPosition = getInputBufferPosition ();
 				  break;
 
 		case '/':
@@ -429,7 +442,10 @@ getNextChar:
 				  {
 					  parseIdentifier (token->string, c);
 					  token->lineNumber = getSourceLineNumber ();
-					  token->filePosition = getInputFilePosition ();
+					  if (useFile())
+						token->filePosition = getInputFilePosition ();
+					  else
+						token->bufferPosition = getInputBufferPosition ();
 					  token->keyword = analyzeToken (token->string);
 					  if (isKeyword (token, KEYWORD_NONE))
 						  token->type = TOKEN_IDENTIFIER;
@@ -444,7 +460,10 @@ static void copyToken (tokenInfo *const dest, tokenInfo *const src)
 {
 	dest->nestLevel = src->nestLevel;
 	dest->lineNumber = src->lineNumber;
-	dest->filePosition = src->filePosition;
+    if (useFile())
+		dest->filePosition = src->filePosition;
+    else
+		dest->bufferPosition = src->bufferPosition;
 	dest->type = src->type;
 	dest->keyword = src->keyword;
 	vStringCopy(dest->string, src->string);

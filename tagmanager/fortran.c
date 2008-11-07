@@ -155,6 +155,7 @@ typedef struct sTokenInfo {
     vString* string;
     unsigned long lineNumber;
     fpos_t filePosition;
+    int	bufferPosition;	/* buffer position of line containing name */
 } tokenInfo;
 
 /*
@@ -350,7 +351,10 @@ static void makeFortranTag (tokenInfo *const token, tagType tag)
 	    e.lineNumberEntry = (boolean) (Option.locate != EX_PATTERN);
 
 	e.lineNumber	= token->lineNumber;
-	e.filePosition	= token->filePosition;
+	if (useFile())
+	    e.filePosition   = token->filePosition;
+	else
+	    e.bufferPosition = token->bufferPosition;
 	e.isFileScope	= isFileScope (token->tag);
 	e.kindName	= FortranKinds [token->tag].name;
 	e.kind		= FortranKinds [token->tag].letter;
@@ -390,7 +394,10 @@ static void makeLabelTag (vString *const label)
     token.tag		= TAG_LABEL;
     token.string	= label;
     token.lineNumber	= getSourceLineNumber ();
-    token.filePosition	= getInputFilePosition ();
+    if (useFile())
+	token.filePosition = getInputFilePosition ();
+    else
+	token.bufferPosition = getInputBufferPosition ();
 
     makeFortranTag (&token, TAG_LABEL);
 }
@@ -728,7 +735,10 @@ static tokenInfo *newToken (void)
     token->tag	   = TAG_UNDEFINED;
     token->string  = vStringNew ();
     token->lineNumber   = getSourceLineNumber ();
-    token->filePosition	= getInputFilePosition ();
+    if (useFile())
+	token->filePosition = getInputFilePosition ();
+    else
+	token->bufferPosition = getInputBufferPosition ();
 
     return token;
 }
@@ -797,7 +807,10 @@ static void readToken (tokenInfo *const token)
 
 getNextChar:
     token->lineNumber	= getSourceLineNumber ();
-    token->filePosition	= getInputFilePosition ();
+    if (useFile())
+	token->filePosition = getInputFilePosition ();
+    else
+	token->bufferPosition = getInputBufferPosition ();
 
     c = getChar ();
 

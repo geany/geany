@@ -29,6 +29,11 @@
 */
 inputFile File;			/* globally read through macros */
 static fpos_t StartOfLine;	/* holds deferred position of start of line */
+static int bufferStartOfLine;   /* the same as StartOfLine but for buffer */
+
+
+static int readNextChar (void);
+static int pushBackChar (int c);
 
 /*
 *   FUNCTION DEFINITIONS
@@ -115,7 +120,7 @@ static int skipWhite (void)
 {
     int c;
     do
-	c = getc (File.fp);
+	c = readNextChar ();
     while (c == ' '  ||  c == '\t');
     return c;
 }
@@ -127,9 +132,9 @@ static unsigned long readLineNumber (void)
     while (c != EOF  &&  isdigit (c))
     {
 	lNum = (lNum * 10) + (c - '0');
-	c = getc (File.fp);
+	c = readNextChar ();
     }
-    ungetc (c, File.fp);
+    pushBackChar (c);
     if (c != ' '  &&  c != '\t')
 	lNum = 0;
 
@@ -152,17 +157,17 @@ static vString *readFileName (void)
 
     if (c == '"')
     {
-	c = getc (File.fp);		/* skip double-quote */
+	c = readNextChar ();		/* skip double-quote */
 	quoteDelimited = TRUE;
     }
     while (c != EOF  &&  c != '\n'  &&
 	    (quoteDelimited ? (c != '"') : (c != ' '  &&  c != '\t')))
     {
 	vStringPut (fileName, c);
-	c = getc (File.fp);
+	c = readNextChar ();
     }
     if (c == '\n')
-	ungetc (c, File.fp);
+	pushBackChar (c);
     vStringPut (fileName, '\0');
 
     return fileName;
@@ -176,13 +181,13 @@ static boolean parseLineDirective (void)
 
     if (isdigit (c))
     {
-	ungetc (c, File.fp);
+	pushBackChar (c);
 	result = TRUE;
     }
-    else if (c == 'l'  &&  getc (File.fp) == 'i'  &&
-	     getc (File.fp) == 'n'  &&  getc (File.fp) == 'e')
+    else if (c == 'l'  &&  readNextChar () == 'i'  &&
+	     readNextChar () == 'n'  &&  readNextChar () == 'e')
     {
-	c = getc (File.fp);
+	c = readNextChar ();
 	if (c == ' '  ||  c == '\t')
 	{
 	    DebugStatement ( lineStr = "line"; )
@@ -283,6 +288,60 @@ extern boolean fileOpen (const char *const fileName, const langType language)
     return opened;
 }
 
+/* The user should take care of allocate and free the buffer param. 
+ * This func is NOT THREAD SAFE.
+ * The user should not tamper with the buffer while this func is executing.
+ */
+extern boolean bufferOpen (unsigned char *buffer, int buffer_size, 
+			   const char *const fileName, const langType language )
+{
+    boolean opened = FALSE;
+	
+    /*	Check whether a file of a buffer were already open, then close them.
+     */
+    if (File.fp != NULL) {
+	fclose (File.fp);		/* close any open source file */
+	File.fp = NULL;
+    }
+
+    if (File.fpBuffer != NULL) {
+	error(PERROR, "An unallocated buffer was found. Please check you called \
+	correctly bufferClose ()\n");
+	File.fpBuffer = NULL;
+    }
+    
+    /* check if we got a good buffer */
+    if (buffer == NULL || buffer_size == 0) {
+	opened = FALSE;
+	return opened;
+    }
+	
+    opened = TRUE;
+	    
+    File.fpBuffer = buffer;		
+    setInputFileName (fileName);
+    bufferStartOfLine = 0;
+    File.fpBufferPosition = 0;
+    File.fpBufferSize = buffer_size;
+    File.currentLine  = NULL;
+    File.language     = language;
+    File.lineNumber   = 0L;
+    File.eof          = FALSE;
+    File.newLine      = TRUE;
+
+    if (File.line != NULL)
+	vStringClear (File.line);
+
+    setSourceFileParameters (vStringNewInit (fileName), language);
+    File.source.lineNumber = 0L;
+
+    verbose ("OPENING %s as %s language %sfile\n", fileName,
+	    getLanguageName (language),
+	    File.source.isHeader ? "include " : "");
+
+    return opened;	
+}
+
 extern void fileClose (void)
 {
     if (File.fp != NULL)
@@ -296,6 +355,14 @@ extern void fileClose (void)
 
 	fclose (File.fp);
 	File.fp = NULL;
+    }
+}
+
+/* user should take care of freeing the buffer */
+extern void bufferClose (void)
+{
+    if (File.fpBuffer != NULL) {
+	File.fpBuffer = NULL;
     }
 }
 
@@ -323,7 +390,7 @@ static int iFileGetc (void)
 {
     int	c;
 readnext:
-    c = getc (File.fp);
+    c = readNextChar ();
 
     /*	If previous character was a newline, then we're starting a line.
      */
@@ -336,8 +403,13 @@ readnext:
 		goto readnext;
 	    else
 	    {
-		fsetpos (File.fp, &StartOfLine);
-		c = getc (File.fp);
+		/* FIXME: find out a better way to do this check */
+		if (File.fp != NULL)
+		    fsetpos (File.fp, &StartOfLine);
+		else
+		    File.fpBufferPosition = bufferStartOfLine;
+
+		c = readNextChar ();
 	    }
 	}
     }
@@ -346,8 +418,10 @@ readnext:
 	File.eof = TRUE;
     else if (c == NEWLINE)
     {
-	File.newLine = TRUE;
-	fgetpos (File.fp, &StartOfLine);
+	if (File.fp != NULL)		/* we have a file */
+	    fgetpos (File.fp, &StartOfLine);
+	else						/* it's a buffer */
+	    bufferStartOfLine = File.fpBufferPosition;
     }
     else if (c == CRETURN)
     {
@@ -355,14 +429,17 @@ readnext:
 	 *  used forms if line breaks: LF (UNIX), CR (MacIntosh), and
 	 *  CR-LF (MS-DOS) are converted into a generic newline.
 	 */
-	const int next = getc (File.fp);	/* is CR followed by LF? */
+	const int next = readNextChar ();	/* is CR followed by LF? */
 
 	if (next != NEWLINE)
-	    ungetc (next, File.fp);
+	    pushBackChar (next);
 
 	c = NEWLINE;				/* convert CR into newline */
 	File.newLine = TRUE;
-	fgetpos (File.fp, &StartOfLine);
+	if (File.fp != NULL)
+	    fgetpos (File.fp, &StartOfLine);
+	else
+	    bufferStartOfLine = File.fpBufferPosition;
     }
     DebugStatement ( debugPutc (DEBUG_RAW, c); )
     return c;
@@ -457,8 +534,67 @@ extern const unsigned char *fileReadLine (void)
     return result;
 }
 
+/* Read a character choosing automatically between file or buffer, depending
+ * on which mode we are.
+ */
+static int readNextChar(void) 
+{
+    if (File.fp != NULL) {
+	return getc(File.fp);
+    }
+    else {
+	int c;
+	if (File.fpBufferPosition >= File.fpBufferSize)
+	    return EOF;
+
+	c = File.fpBuffer[File.fpBufferPosition];
+	File.fpBufferPosition++;
+	
+	return c;
+    }
+}
+
+/* Replaces ungetc() for file. In case of buffer we'll perform the same action:
+ * fpBufferPosition-- and write of the param char into the buf.
+ */
+static int pushBackChar (int c) 
+{
+    if (File.fp != NULL) {
+	return ungetc (c, File.fp);
+    }
+    else {
+	File.fpBufferPosition--;
+	if (File.fpBufferPosition < 0)
+	    return EOF;
+	File.fpBuffer[File.fpBufferPosition] = c;
+	return File.fpBuffer[File.fpBufferPosition];
+    }
+}
+
+
+/* replacement for fsetpos, applied to a buffer */
+extern void setBufPos (int new_position) 
+{
+    File.fpBufferPosition = new_position;
+}
+
+/* replacement for fgetpos, applied to a buffer */
+extern int getBufPos (void) 
+{
+    return File.fpBufferPosition;
+}
+
+extern boolean useFile (void)
+{
+    if (File.fp != NULL)
+	return TRUE;
+    else
+	return FALSE;
+}
+
 /*
  *   Source file line reading with automatic buffer sizing
+ *   Does not perform file/buffer checks. Only file is supported.
  */
 extern char *readLine (vString *const vLine, FILE *const fp)
 {

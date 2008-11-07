@@ -631,7 +631,7 @@ TMTag **tm_tags_find(const GPtrArray *sorted_tags_array, const char *name,
 	s_partial = partial;
 	result = (TMTag **) bsearch(&tag, sorted_tags_array->pdata, sorted_tags_array->len
 	  , sizeof(gpointer), tm_tag_compare);
-	/* there can be matches on both sides of result */
+	/* There can be matches on both sides of result */
 	if (result)
 	{
 		TMTag **last = (TMTag **) &sorted_tags_array->pdata[sorted_tags_array->len - 1];
@@ -640,7 +640,7 @@ TMTag **tm_tags_find(const GPtrArray *sorted_tags_array, const char *name,
 		/* First look for any matches after result */
 		adv = result;
 		adv++;
-		for (; *adv && adv <= last; ++ adv)
+		for (; adv <= last && *adv; ++ adv)
 		{
 			if (0 != tm_tag_compare(&tag, adv))
 				break;
@@ -654,7 +654,7 @@ TMTag **tm_tags_find(const GPtrArray *sorted_tags_array, const char *name,
 			++tagMatches;
 		}
 		*tagCount=tagMatches;
-		++ result;	/* correct address for the last successful match */
+		++ result;	/* Correct address for the last successful match */
 	}
 	s_partial = FALSE;
 	return (TMTag **) result;

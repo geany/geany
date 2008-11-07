@@ -138,6 +138,7 @@ typedef struct sTokenInfo {
     vString *	scope;
     unsigned long lineNumber;
     fpos_t filePosition;
+    int	bufferPosition;	/* buffer position of line containing name */
 } tokenInfo;
 
 /*
@@ -274,30 +275,30 @@ static void dispToken (tokenInfo *const token, char * location)
     {
         if ( isType(token, TOKEN_IDENTIFIER) || isType(token, TOKEN_STRING)  )
         {
-            printf( "\n%s: token string  t:%s  s:%s  l:%lu  p:%ld\n"
+            printf( "\n%s: token string  t:%s  s:%s  l:%lu  p:%d\n"
                     , location
                     , vStringValue(token->string)
                     , vStringValue(token->scope)
                     , token->lineNumber
-                    , token->filePosition
+                    , token->bufferPosition
                   );
         } else {
-            printf( "\n%s: token  t:%d  s:%s  l:%lu  p:%lu\n"
+            printf( "\n%s: token  t:%d  s:%s  l:%lu  p:%d\n"
                     , location
                     , token->type
                     , vStringValue(token->scope)
                     , token->lineNumber
-                    , token->filePosition
+                    , token->bufferPosition
                   );
         }
     } else {
-        printf( "\n%s: keyword:%s k:%d  s:%s  l:%lu  p:%ld\n"
+        printf( "\n%s: keyword:%s k:%d  s:%s  l:%lu  p:%d\n"
                 , location
                 , vStringValue(token->string)
                 , token->keyword
                 , vStringValue(token->scope)
                 , token->lineNumber
-                , token->filePosition
+                , token->bufferPosition
               );
     }
 #endif
@@ -391,7 +392,10 @@ static void makeConstTag (tokenInfo *const token, const sqlKind kind)
 	initTagEntry (&e, name);
 
 	e.lineNumber   = token->lineNumber;
-	e.filePosition = token->filePosition;
+	if (useFile())
+	    e.filePosition	= token->filePosition;
+	else
+	    e.bufferPosition 	= token->bufferPosition;
 	e.kindName     = SqlKinds [kind].name;
 	e.kind         = SqlKinds [kind].letter;
 
@@ -491,7 +495,10 @@ getNextChar:
 	    token->type = TOKEN_STRING;
 	    parseString (token->string, c);
             token->lineNumber = getSourceLineNumber ();
-            token->filePosition = getInputFilePosition ();
+	    if (useFile())
+		token->filePosition	= getInputFilePosition ();
+	    else
+		token->bufferPosition = getInputBufferPosition ();
 	    break;
 
 	case '-':
@@ -557,7 +564,10 @@ getNextChar:
 	    {
 		parseIdentifier (token->string, c);
 		token->lineNumber = getSourceLineNumber ();
-		token->filePosition = getInputFilePosition ();
+		if (useFile())
+		    token->filePosition	= getInputFilePosition ();
+		else
+		    token->bufferPosition = getInputBufferPosition ();
 		token->keyword = analyzeToken (token->string);
 		if (isKeyword (token, KEYWORD_rem))
 		{

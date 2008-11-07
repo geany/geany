@@ -29,6 +29,7 @@
 #include "tm_source_file.h"
 #include "tm_tag.h"
 
+
 guint source_file_class_id = 0;
 static TMSourceFile *current_source_file = NULL;
 
@@ -154,6 +155,76 @@ gboolean tm_source_file_parse(TMSourceFile *source_file)
 	return status;
 }
 
+gboolean tm_source_file_buffer_parse(TMSourceFile *source_file, guchar* text_buf, gint buf_size)
+{
+	const char *file_name;
+	gboolean status = TRUE;
+
+	if ((NULL == source_file) || (NULL == source_file->work_object.file_name))
+	{
+		g_warning("Attempt to parse NULL file");
+		return FALSE;
+	}
+
+	if ((NULL == text_buf) || (0 == buf_size))
+	{
+		g_warning("Attempt to parse a NULL text buffer");
+	}
+
+	file_name = source_file->work_object.file_name;
+	if (NULL == LanguageTable)
+	{
+		initializeParsing();
+		installLanguageMapDefaults();
+		if (NULL == TagEntryFunction)
+			TagEntryFunction = tm_source_file_tags;
+	}
+	current_source_file = source_file;
+	if (LANG_AUTO == source_file->lang)
+		source_file->lang = getFileLanguage (file_name);
+	if (source_file->lang == LANG_IGNORE)
+	{
+#ifdef TM_DEBUG
+		g_warning("ignoring %s (unknown language)\n", file_name);
+#endif
+	}
+	else if (! LanguageTable [source_file->lang]->enabled)
+	{
+#ifdef TM_DEBUG
+		g_warning("ignoring %s (language disabled)\n", file_name);
+#endif
+	}
+	else
+	{
+		int passCount = 0;
+		while ((TRUE == status) && (passCount < 3))
+		{
+			if (source_file->work_object.tags_array)
+				tm_tags_array_free(source_file->work_object.tags_array, FALSE);
+			if (bufferOpen (text_buf, buf_size, file_name, source_file->lang))
+			{
+				if (LanguageTable [source_file->lang]->parser != NULL)
+				{
+					LanguageTable [source_file->lang]->parser ();
+					bufferClose ();
+					break;
+				}
+				else if (LanguageTable [source_file->lang]->parser2 != NULL)
+					status = LanguageTable [source_file->lang]->parser2 (passCount);
+				bufferClose ();
+			}
+			else
+			{
+				g_warning("Unable to open %s", file_name);
+				return FALSE;
+			}
+			++ passCount;
+		}
+		return TRUE;
+	}
+	return status;
+}
+
 int tm_source_file_tags(const tagEntryInfo *tag)
 {
 	if (NULL == current_source_file)
@@ -179,9 +250,41 @@ gboolean tm_source_file_update(TMWorkObject *source_file, gboolean force
 		}
 		return TRUE;
 	}
-	else
+	else {
+#ifdef	TM_DEBUG
+		g_message ("no parsing of %s has been done", source_file->file_name);
+#endif
 		return FALSE;
+	}
 }
+
+
+gboolean tm_source_file_buffer_update(TMWorkObject *source_file, guchar* text_buf,
+			gint buf_size, gboolean update_parent)
+{
+#ifdef TM_DEBUG
+	g_message("Buffer updating based on source file %s", source_file->file_name);
+#endif
+
+	tm_source_file_buffer_parse (TM_SOURCE_FILE(source_file), text_buf, buf_size);
+	tm_tags_sort(source_file->tags_array, NULL, FALSE);
+	source_file->analyze_time = time(NULL);
+	if ((source_file->parent) && update_parent)
+	{
+#ifdef TM_DEBUG
+		g_message("Updating parent [project] from buffer..");
+#endif
+		tm_work_object_update(source_file->parent, TRUE, FALSE, TRUE);
+	}
+#ifdef TM_DEBUG
+	else
+		g_message("Skipping parent update because parent is %s and update_parent is %s"
+		  , source_file->parent?"NOT NULL":"NULL", update_parent?"TRUE":"FALSE");
+
+#endif
+	return TRUE;
+}
+
 
 gboolean tm_source_file_write(TMWorkObject *source_file, FILE *fp, guint attrs)
 {

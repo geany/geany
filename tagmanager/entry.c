@@ -403,6 +403,7 @@ extern void initTagEntry (tagEntryInfo *const e, const char *const name)
     e->lineNumber	= getSourceLineNumber ();
     e->language		= getSourceLanguageName ();
     e->filePosition	= getInputFilePosition ();
+    e->bufferPosition	= getInputBufferPosition ();
     e->sourceFileName	= getSourceFileTagPath ();
     e->name		= name;
 }

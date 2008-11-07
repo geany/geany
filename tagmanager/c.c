@@ -169,6 +169,7 @@ typedef struct sTokenInfo {
     vString*      name;		/* the name of the token */
     unsigned long lineNumber;	/* line number of tag */
     fpos_t        filePosition;	/* file position of line containing name */
+    int           bufferPosition; /* buffer position of line containing name */
 } tokenInfo;
 
 typedef enum eImplementation {
@@ -506,7 +507,10 @@ static void initToken (tokenInfo* const token)
     token->type		= TOKEN_NONE;
     token->keyword	= KEYWORD_NONE;
     token->lineNumber	= getSourceLineNumber ();
-    token->filePosition	= getInputFilePosition ();
+    if (useFile())
+	token->filePosition   = getInputFilePosition ();
+    else
+	token->bufferPosition = getInputBufferPosition ();
     vStringClear (token->name);
 }
 
@@ -1057,8 +1061,16 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 				tag->extensionFields.access = accessField (st);
 			}
             if ((TRUE == st->gotArgs) && (TRUE == Option.extensionFields.argList) &&
-			 ((TAG_FUNCTION == type) || (TAG_METHOD == type) || (TAG_PROTOTYPE == type))) {
-				tag->extensionFields.arglist = getArglistFromPos(tag->filePosition, tag->name);
+			 ((TAG_FUNCTION == type) || (TAG_METHOD == type) || (TAG_PROTOTYPE == type)))
+			{
+				if (useFile()) {
+					tag->extensionFields.arglist = getArglistFromFilePos(
+					  tag->filePosition, tag->name);
+				}
+				else {
+					tag->extensionFields.arglist = getArglistFromBufferPos(
+					  tag->bufferPosition, tag->name);
+				}
 			}
 		break;
     }
@@ -1233,8 +1245,11 @@ static void makeTag (const tokenInfo *const token,
 	initTagEntry (&e, vStringValue (token->name));
 
 	e.lineNumber	= token->lineNumber;
-	e.filePosition	= token->filePosition;
-	e.isFileScope	= isFileScope;
+	if (useFile())
+		e.filePosition	= token->filePosition;
+	else
+		e.bufferPosition = token->bufferPosition;
+	e.isFileScope = isFileScope;
 	e.kindName	= tagName (type);
 	e.kind		= tagLetter (type);
 	e.type = type;
@@ -1688,7 +1703,10 @@ static void copyToken (tokenInfo *const dest, const tokenInfo *const src)
 {
     dest->type         = src->type;
     dest->keyword      = src->keyword;
-    dest->filePosition = src->filePosition;
+	if (useFile())
+		dest->filePosition = src->filePosition;
+	else
+		dest->bufferPosition = src->bufferPosition;
     dest->lineNumber   = src->lineNumber;
     vStringCopy (dest->name, src->name);
 }
@@ -2199,7 +2217,14 @@ static int parseParens (statementInfo *const st, parenInfo *const info)
 	--depth;
     }
 	if (st->argEndPosition == 0)
-		st->argEndPosition = ftell(File.fp);
+	{ 
+		if (useFile())
+			st->argEndPosition = ftell(File.fp);
+		else
+			/* FIXME File.fpBufferPosition is wrong here, this breaks function signatures and
+			 * so Geany's calltips */
+			st->argEndPosition = File.fpBufferPosition;
+	}
 
     if (! info->isNameCandidate)
 	initToken (token);

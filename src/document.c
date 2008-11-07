@@ -99,6 +99,7 @@ typedef struct
 
 static void document_undo_clear(GeanyDocument *doc);
 static void document_redo_add(GeanyDocument *doc, guint type, gpointer data);
+static gboolean update_tags_from_buffer(GeanyDocument *doc);
 
 
 /* ignore the case of filenames and paths under WIN32, causes errors if not */
@@ -975,6 +976,25 @@ static void set_indentation(GeanyEditor *editor)
 }
 
 
+#if 0
+static gboolean auto_update_tag_list(gpointer data)
+{
+	GeanyDocument *doc = data;
+
+	if (! doc || ! doc->is_valid || doc->tm_file == NULL)
+		return FALSE;
+	
+	if (gtk_window_get_focus(GTK_WINDOW(main_widgets.window)) != GTK_WIDGET(doc->editor->sci))
+		return TRUE;
+
+	if (update_tags_from_buffer(doc))
+		treeviews_update_tag_list(doc, TRUE);
+	
+	return TRUE;
+}
+#endif
+
+
 /* To open a new file, set doc to NULL; filename should be locale encoded.
  * To reload a file, set the doc for the document to be reloaded; filename should be NULL.
  * pos is the cursor position, which can be overridden by --line and --column.
@@ -989,10 +1009,6 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 	gchar *locale_filename = NULL;
 	GeanyFiletype *use_ft;
 	FileData filedata;
-
-	/*struct timeval tv, tv1;*/
-	/*struct timezone tz;*/
-	/*gettimeofday(&tv, &tz);*/
 
 	if (reload)
 	{
@@ -1123,8 +1139,10 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 
 	g_free(utf8_filename);
 	g_free(locale_filename);
-	/*gettimeofday(&tv1, &tz);*/
-	/*geany_debug("%s: %d", filename, (gint)(tv1.tv_usec - tv.tv_usec)); */
+
+	/* TODO This could be used to automatically update the symbol list,
+	 * based on a configurable interval */
+	/*g_timeout_add(10000, auto_update_tag_list, doc);*/
 
 	return doc;
 }
@@ -1532,10 +1550,10 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 		document_set_filetype(doc, doc->file_type);
 
 		tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
-		{
-			gtk_label_set_text(GTK_LABEL(doc->priv->tab_label), base_name);
-			gtk_label_set_text(GTK_LABEL(doc->priv->tabmenu_label), base_name);
-		}
+
+		gtk_label_set_text(GTK_LABEL(doc->priv->tab_label), base_name);
+		gtk_label_set_text(GTK_LABEL(doc->priv->tabmenu_label), base_name);
+
 		msgwin_status_add(_("File %s saved."), doc->file_name);
 		ui_update_statusbar(doc, -1);
 		g_free(base_name);
@@ -1972,6 +1990,26 @@ gboolean document_replace_all(GeanyDocument *doc, const gchar *find_text, const 
 }
 
 
+static gboolean update_tags_from_buffer(GeanyDocument *doc)
+{
+	gboolean result;
+#if 1
+		/* old code */
+		result = tm_source_file_update(doc->tm_file, TRUE, FALSE, TRUE);
+#else
+		gsize len = sci_get_length(doc->editor->sci) + 1;
+		gchar *text = g_malloc(len);
+
+		/* we copy the whole text into memory instead using a direct char pointer from
+		 * Scintilla because tm_source_file_buffer_update() does modify the string slightly */
+		sci_get_text(doc->editor->sci, len, text);
+		result = tm_source_file_buffer_update(doc->tm_file, (guchar*) text, len, TRUE);
+		g_free(text);
+#endif
+	return result;
+}
+
+
 void document_update_tag_list(GeanyDocument *doc, gboolean update)
 {
 	/* We must call treeviews_update_tag_list() before returning,
@@ -2006,14 +2044,14 @@ void document_update_tag_list(GeanyDocument *doc, gboolean update)
 			else
 			{
 				if (update)
-					tm_source_file_update(doc->tm_file, TRUE, FALSE, TRUE);
+					update_tags_from_buffer(doc);
 				success = TRUE;
 			}
 		}
 	}
 	else
 	{
-		success = tm_source_file_update(doc->tm_file, TRUE, FALSE, TRUE);
+		success = update_tags_from_buffer(doc);
 		if (! success)
 			geany_debug("tag list updating failed");
 	}
