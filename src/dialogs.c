@@ -196,6 +196,9 @@ static void create_open_file_dialog(void)
 	gtk_window_set_type_hint(GTK_WINDOW(ui_widgets.open_filesel), GDK_WINDOW_TYPE_HINT_DIALOG);
 	gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_filesel), GTK_WINDOW(main_widgets.window));
 	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(ui_widgets.open_filesel), TRUE);
+#if GTK_CHECK_VERSION(2, 14, 0)
+	gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(ui_widgets.open_filesel), FALSE);
+#endif
 
 	/* add checkboxes and filename entry */
 	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
