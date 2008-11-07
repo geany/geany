@@ -313,7 +313,7 @@ gboolean utils_is_absolute_path(const gchar *path)
 }
 
 
-gdouble utils_scale_round (gdouble val, gdouble factor)
+gdouble utils_scale_round(gdouble val, gdouble factor)
 {
 	/*val = floor(val * factor + 0.5);*/
 	val = floor(val);
