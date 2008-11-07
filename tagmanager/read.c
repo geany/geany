@@ -418,6 +418,7 @@ readnext:
 	File.eof = TRUE;
     else if (c == NEWLINE)
     {
+	File.newLine = TRUE;
 	if (File.fp != NULL)		/* we have a file */
 	    fgetpos (File.fp, &StartOfLine);
 	else						/* it's a buffer */
