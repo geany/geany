@@ -1177,7 +1177,7 @@ void on_prefs_color_choosed(GtkColorButton *widget, gpointer user_data)
 		case 1:
 		{
 			gtk_color_button_get_color(widget, &color);
-			editor_prefs.long_line_color = utils_get_hex_from_color(&color);
+			setptr(editor_prefs.long_line_color, utils_get_hex_from_color(&color));
 			break;
 		}
 #ifdef HAVE_VTE
