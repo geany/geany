@@ -1,3 +1,35 @@
+2008-11-07  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/editor.c:
+   Don't auto close <hr> tags in HTML (closes #2226117).
+ * THANKS, data/filetype_extensions.conf, data/filetypes.matlab,
+   scintilla/KeyWords.cxx, scintilla/LexMatlab.cxx,
+   scintilla/Makefile.am, scintilla/makefile.win32, src/editor.c,
+   src/filetypes.c, src/filetypes.h, src/highlighting.c,
+   src/plugindata.h, src/symbols.c, src/templates.c,
+   tagmanager/Makefile.am, tagmanager/makefile.win32,
+   tagmanager/matlab.c, tagmanager/parsers.h, wscript:
+   Add new filetype 'Matlab' (closes #1938631, patch by Roland
+   Baudin, thanks).
+ * src/dialogs.c:
+   Allow showing remote locations in the file open dialog with
+   GTK >= 2.14 since it works with Gvfs/FUSE mounts, too.
+ * src/prefs.c:
+   Plug a little memory leak.
+ * src/document.c, tagmanager/c.c, tagmanager/entry.c,
+   tagmanager/entry.h, tagmanager/fortran.c, tagmanager/get.c,
+   tagmanager/get.h, tagmanager/include/tm_source_file.h,
+   tagmanager/include/tm_project.h, tagmanager/js.c,
+   tagmanager/read.c, tagmanager/read, tagmanager/sql.c,
+   tagmanager/tm_source_file.c, tagmanager/tm_tag.c:
+   Add support for updating tags from a memory buffer (code merged from
+   Anjuta).
+   This still doesn't work and is currently disabled. It would only work
+   for a few filetypes like C, Fortran and JavaScript. The current
+   implementation is still buggy, e.g. function signature parsing is
+   broken.
+
+
 2008-11-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/search.c:

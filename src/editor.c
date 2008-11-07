@@ -1918,6 +1918,7 @@ static gboolean handle_xml(GeanyEditor *editor, gchar ch)
 
 	/* when found string is something like br, img or another short tag, quit */
 	if (utils_str_equal(str_found, "br")
+	 || utils_str_equal(str_found, "hr")
 	 || utils_str_equal(str_found, "img")
 	 || utils_str_equal(str_found, "base")
 	 || utils_str_equal(str_found, "basefont")	/* < or not < */
