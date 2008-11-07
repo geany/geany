@@ -83,15 +83,15 @@ enum
 };
 
 static BuildMenuItems default_menu_items =
-	{NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+{NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 static BuildMenuItems latex_menu_items =
-	{NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+{NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 
 
 static struct
 {
-	GtkWidget	*run_button;
-	GtkWidget	*compile_button;
+	GtkWidget *run_button;
+	GtkWidget *compile_button;
 }
 widgets;
 
@@ -150,17 +150,17 @@ static GPid build_compile_tex_file(GeanyDocument *doc, gint mode)
 
 static GPid build_view_tex_file(GeanyDocument *doc, gint mode)
 {
-	gchar **argv, **term_argv;
-	gchar  *executable = NULL;
-	gchar  *view_file = NULL;
-	gchar  *locale_filename = NULL;
-	gchar  *cmd_string = NULL;
-	gchar  *locale_cmd_string = NULL;
-	gchar  *locale_term_cmd;
-	gchar  *script_name;
-	gchar  *working_dir;
-	gint	term_argv_len, i;
-	GError *error = NULL;
+	gchar     **argv, **term_argv;
+	gchar      *executable = NULL;
+	gchar      *view_file = NULL;
+	gchar      *locale_filename = NULL;
+	gchar      *cmd_string = NULL;
+	gchar      *locale_cmd_string = NULL;
+	gchar      *locale_term_cmd;
+	gchar      *script_name;
+	gchar      *working_dir;
+	gint        term_argv_len, i;
+	GError     *error = NULL;
 	struct stat st;
 
 	if (doc == NULL || doc->file_name == NULL)
@@ -185,8 +185,8 @@ static GPid build_view_tex_file(GeanyDocument *doc, gint mode)
 
 	/* replace %f and %e in the run_cmd string */
 	cmd_string = g_strdup((mode == LATEX_CMD_VIEW_DVI) ?
-										g_strdup(doc->file_type->programs->run_cmd) :
-										g_strdup(doc->file_type->programs->run_cmd2));
+						  g_strdup(doc->file_type->programs->run_cmd) :
+						  g_strdup(doc->file_type->programs->run_cmd2));
 	cmd_string = utils_str_replace(cmd_string, "%f", view_file);
 	cmd_string = utils_str_replace(cmd_string, "%e", executable);
 
@@ -210,11 +210,12 @@ static GPid build_view_tex_file(GeanyDocument *doc, gint mode)
 	if (term_argv[0] == NULL)
 	{
 		ui_set_statusbar(TRUE,
-			_("Could not find terminal \"%s\" "
-				"(check path for Terminal tool setting in Preferences)"), tool_prefs.term_cmd);
+						 _("Could not find terminal \"%s\" "
+						   "(check path for Terminal tool setting in Preferences)"),
+						 tool_prefs.term_cmd);
 
 		utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
-										locale_term_cmd, NULL);
+							locale_term_cmd, NULL);
 		g_strfreev(term_argv);
 		return (GPid) 1;
 	}
@@ -226,9 +227,9 @@ static GPid build_view_tex_file(GeanyDocument *doc, gint mode)
 	if (! build_create_shellscript(script_name, locale_cmd_string, TRUE))
 	{
 		ui_set_statusbar(TRUE, _("Failed to execute \"%s\" (start-script could not be created)"),
-													executable);
+						 executable);
 		utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
-										locale_term_cmd, working_dir, NULL);
+							locale_term_cmd, working_dir, NULL);
 		g_strfreev(term_argv);
 		return (GPid) 1;
 	}
@@ -240,17 +241,17 @@ static GPid build_view_tex_file(GeanyDocument *doc, gint mode)
 		argv[i] = g_strdup(term_argv[i]);
 	}
 #ifdef G_OS_WIN32
-		/* command line arguments only for cmd.exe */
-		if (strstr(argv[0], "cmd.exe") != NULL)
-		{
-			argv[term_argv_len   ]  = g_strdup("/Q /C");
-			argv[term_argv_len + 1] = script_name;
-		}
-		else
-		{
-			argv[term_argv_len    ] = script_name;
-			argv[term_argv_len + 1] = NULL;
-		}
+	/* command line arguments only for cmd.exe */
+	if (strstr(argv[0], "cmd.exe") != NULL)
+	{
+		argv[term_argv_len   ]  = g_strdup("/Q /C");
+		argv[term_argv_len + 1] = script_name;
+	}
+	else
+	{
+		argv[term_argv_len    ] = script_name;
+		argv[term_argv_len + 1] = NULL;
+	}
 #else
 	argv[term_argv_len   ]  = g_strdup("-e");
 	argv[term_argv_len + 1] = script_name;
@@ -265,7 +266,7 @@ static GPid build_view_tex_file(GeanyDocument *doc, gint mode)
 		ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
 
 		utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
-										locale_term_cmd, NULL);
+							locale_term_cmd, NULL);
 		g_strfreev(argv);
 		g_strfreev(term_argv);
 		g_error_free(error);
@@ -281,7 +282,7 @@ static GPid build_view_tex_file(GeanyDocument *doc, gint mode)
 	}
 
 	utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
-										locale_term_cmd, NULL);
+						locale_term_cmd, NULL);
 	g_strfreev(argv);
 	g_strfreev(term_argv);
 
@@ -310,52 +311,54 @@ static gchar *get_object_filename(GeanyDocument *doc)
 
 	return object_file;
 }
+
+
 #endif
 
 
 static GPid build_make_file(GeanyDocument *doc, gint build_opts)
 {
 	GString *cmdstr;
-	gchar *dir = NULL;
-	gchar *part1=NULL;
-	gchar *part2=NULL;
-	GPid pid;
+	gchar   *dir = NULL;
+	gchar   *part1=NULL;
+	gchar   *part2=NULL;
+	GPid     pid;
 
 	if (doc == NULL || doc->file_name == NULL)
 		return (GPid) 1;
 
-    part1 = tool_prefs.make_cmd;
+	part1 = tool_prefs.make_cmd;
 
 	if (build_opts == GBO_MAKE_OBJECT)
 	{
 		build_info.type = build_opts;
-		if( app->project!=NULL && app->project->build_3_cmd != NULL )
-            part1 = app->project->build_3_cmd;
-        else  part2 = "\"%e.o\"";
+		if (app->project!=NULL && app->project->build_3_cmd != NULL)
+			part1 = app->project->build_3_cmd;
+		else part2 = "\"%e.o\"";
 	}
 	else if (build_opts == GBO_MAKE_CUSTOM && build_info.custom_target)
 	{
 		build_info.type = GBO_MAKE_CUSTOM;
-		if( app->project != NULL && app->project->build_2_cmd != NULL )
-		    part1 = app->project->build_2_cmd;
-        else part2 = build_info.custom_target;
+		if (app->project != NULL && app->project->build_2_cmd != NULL)
+			part1 = app->project->build_2_cmd;
+		else part2 = build_info.custom_target;
 		dir = project_get_make_dir();
 	}
-	else	/* GBO_MAKE_ALL */
+	else    /* GBO_MAKE_ALL */
 	{
 		build_info.type = GBO_MAKE_ALL;
-		if( app->project != NULL && app->project->build_1_cmd != NULL )
-		    part1 = app->project->build_1_cmd;
-        else part2 = "all";
+		if (app->project != NULL && app->project->build_1_cmd != NULL)
+			part1 = app->project->build_1_cmd;
+		else part2 = "all";
 		dir = project_get_make_dir();
 	}
 
 	cmdstr = g_string_new(part1);
-	if( part2!=NULL )
+	if (part2!=NULL)
 	{
-	    g_string_append_c(cmdstr, ' ');
-	    g_string_append( cmdstr, part2 );
-    }
+		g_string_append_c(cmdstr, ' ');
+		g_string_append(cmdstr, part2);
+	}
 
 	pid = build_spawn_cmd(doc, cmdstr->str, dir); /* if dir is NULL, idx filename is used */
 	g_free(dir);
@@ -419,7 +422,7 @@ static void clear_errors(GeanyDocument *doc)
 static gchar *quote_executable(const gchar *cmd)
 {
 	gchar **fields;
-	gchar *result;
+	gchar  *result;
 
 	if (! NZV(cmd))
 		return NULL;
@@ -433,6 +436,8 @@ static gchar *quote_executable(const gchar *cmd)
 	g_strfreev(fields);
 	return result;
 }
+
+
 #endif
 
 
@@ -440,17 +445,17 @@ static gchar *quote_executable(const gchar *cmd)
  * idx document directory */
 static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *dir)
 {
-	GError  *error = NULL;
-	gchar  **argv;
-	gchar	*working_dir;
-	gchar	*utf8_working_dir;
-	gchar	*cmd_string;
-	gchar	*utf8_cmd_string;
-	gchar	*locale_filename;
-	gchar	*executable;
-	gchar	*tmp;
-	gint     stdout_fd;
-	gint     stderr_fd;
+	GError *error = NULL;
+	gchar **argv;
+	gchar  *working_dir;
+	gchar  *utf8_working_dir;
+	gchar  *cmd_string;
+	gchar  *utf8_cmd_string;
+	gchar  *locale_filename;
+	gchar  *executable;
+	gchar  *tmp;
+	gint    stdout_fd;
+	gint    stderr_fd;
 
 	g_return_val_if_fail(doc != NULL, (GPid) 1);
 	clear_errors(doc);
@@ -487,12 +492,13 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 
 	utf8_cmd_string = utils_get_utf8_from_locale(cmd_string);
 	utf8_working_dir = (dir != NULL) ? g_strdup(dir) :
-		g_path_get_dirname(doc->file_name);
+					   g_path_get_dirname(doc->file_name);
 	working_dir = utils_get_locale_from_utf8(utf8_working_dir);
 
 	gtk_list_store_clear(msgwindow.store_compiler);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER);
-	msgwin_compiler_add_fmt(COLOR_BLUE, _("%s (in directory: %s)"), utf8_cmd_string, utf8_working_dir);
+	msgwin_compiler_add_fmt(COLOR_BLUE, _(
+								"%s (in directory: %s)"), utf8_cmd_string, utf8_working_dir);
 	g_free(utf8_working_dir);
 	g_free(utf8_cmd_string);
 
@@ -501,8 +507,10 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 	build_info.dir = g_strdup(working_dir);
 	build_info.file_type_id = FILETYPE_ID(doc->file_type);
 
-	if (! g_spawn_async_with_pipes(working_dir, argv, NULL, G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD,
-						NULL, NULL, &(build_info.pid), NULL, &stdout_fd, &stderr_fd, &error))
+	if (! g_spawn_async_with_pipes(working_dir, argv, NULL,
+								   G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD,
+								   NULL, NULL, &(build_info.pid), NULL, &stdout_fd,
+								   &stderr_fd, &error))
 	{
 		geany_debug("g_spawn_async_with_pipes() failed: %s", error->message);
 		ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
@@ -522,9 +530,9 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 
 	/* use GIOChannels to monitor stdout and stderr */
 	utils_set_up_io_channel(stdout_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
-		TRUE, build_iofunc, GINT_TO_POINTER(0));
+							TRUE, build_iofunc, GINT_TO_POINTER(0));
 	utils_set_up_io_channel(stderr_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
-		TRUE, build_iofunc, GINT_TO_POINTER(1));
+							TRUE, build_iofunc, GINT_TO_POINTER(1));
 
 	g_strfreev(argv);
 	g_free(working_dir);
@@ -538,9 +546,9 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
  * Returns the name part of the filename, without extension.
  * Returns NULL if executable file doesn't exist. */
 static gchar *get_build_executable(const gchar *locale_filename, gboolean check_exists,
-		filetype_id ft_id)
+								   filetype_id ft_id)
 {
-	gchar *long_executable = NULL;
+	gchar      *long_executable = NULL;
 	struct stat st;
 
 	long_executable = utils_remove_ext_from_filename(locale_filename);
@@ -584,7 +592,7 @@ static gchar *get_build_executable(const gchar *locale_filename, gboolean check_
 			gchar *utf8_check_executable = utils_get_utf8_from_locale(check_executable);
 
 			ui_set_statusbar(TRUE, _("Failed to execute \"%s\" (make sure it is already built)"),
-														utf8_check_executable);
+							 utf8_check_executable);
 			g_free(utf8_check_executable);
 			g_free(check_executable);
 			return NULL;
@@ -603,17 +611,17 @@ static gchar *get_build_executable(const gchar *locale_filename, gboolean check_
  * when vc->skip_run_script is set, otherwise it will be set to NULL */
 static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript)
 {
-	gchar	*locale_filename = NULL;
-	gboolean have_project;
-	GeanyProject *project = app->project;
+	gchar         *locale_filename = NULL;
+	gboolean       have_project;
+	GeanyProject  *project = app->project;
 	GeanyFiletype *ft = doc->file_type;
-	gboolean check_exists;
-	gchar	*cmd = NULL;
-	gchar	*executable = NULL;
-	gchar	*working_dir = NULL;
-	gboolean autoclose = FALSE;
-	gboolean result = FALSE;
-	gchar	*tmp;
+	gboolean       check_exists;
+	gchar         *cmd = NULL;
+	gchar         *executable = NULL;
+	gchar         *working_dir = NULL;
+	gboolean       autoclose = FALSE;
+	gboolean       result = FALSE;
+	gchar         *tmp;
 
 	if (vte_cmd_nonscript != NULL)
 		*vte_cmd_nonscript = NULL;
@@ -622,8 +630,8 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript)
 
 	have_project = (project != NULL && NZV(project->run_cmd));
 	cmd = (have_project) ?
-		project->run_cmd :
-		ft->programs->run_cmd;
+		  project->run_cmd :
+		  ft->programs->run_cmd;
 
 	/* only check for existing executable, if executable is required by %e */
 	check_exists = (strstr(cmd, "%e") != NULL);
@@ -651,7 +659,8 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript)
 	{
 		gchar *utf8_working_dir = utils_get_utf8_from_locale(working_dir);
 
-		ui_set_statusbar(TRUE, _("Failed to change the working directory to \"%s\""), utf8_working_dir);
+		ui_set_statusbar(TRUE, _("Failed to change the working directory to \"%s\""),
+						 utf8_working_dir);
 		utils_free_pointers(utf8_working_dir, working_dir, executable, locale_filename, NULL);
 		return NULL;
 	}
@@ -689,7 +698,7 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript)
 		gchar *utf8_cmd = utils_get_utf8_from_locale(cmd);
 
 		ui_set_statusbar(TRUE, _("Failed to execute \"%s\" (start-script could not be created)"),
-			utf8_cmd);
+						 utf8_cmd);
 		g_free(utf8_cmd);
 	}
 
@@ -705,9 +714,9 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript)
 
 static GPid build_run_cmd(GeanyDocument *doc)
 {
-	gchar	*working_dir;
-	gchar	*vte_cmd_nonscript = NULL;
-	GError	*error = NULL;
+	gchar  *working_dir;
+	gchar  *vte_cmd_nonscript = NULL;
+	GError *error = NULL;
 
 	if (doc == NULL || doc->file_name == NULL)
 		return (GPid) 0;
@@ -722,7 +731,7 @@ static GPid build_run_cmd(GeanyDocument *doc)
 	if (vte_info.load_vte && vc != NULL && vc->run_in_vte)
 	{
 		GeanyProject *project = app->project;
-		gchar *vte_cmd;
+		gchar        *vte_cmd;
 
 		if (vc->skip_run_script)
 		{
@@ -744,7 +753,8 @@ static GPid build_run_cmd(GeanyDocument *doc)
 		}
 		if (! vte_send_cmd(vte_cmd))
 			ui_set_statusbar(FALSE,
-		_("Could not execute the file in the VTE because it probably contains a command."));
+							 _("Could not execute the file in the VTE "
+							   "because it probably contains a command."));
 
 		/* show the VTE */
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_VTE);
@@ -758,10 +768,10 @@ static GPid build_run_cmd(GeanyDocument *doc)
 	else
 #endif
 	{
-		gchar	*locale_term_cmd = NULL;
-		gchar  **term_argv = NULL;
-		guint    term_argv_len, i;
-		gchar  **argv = NULL;
+		gchar  *locale_term_cmd = NULL;
+		gchar **term_argv = NULL;
+		guint   term_argv_len, i;
+		gchar **argv = NULL;
 
 		/* get the terminal path */
 		locale_term_cmd = utils_get_locale_from_utf8(tool_prefs.term_cmd);
@@ -780,8 +790,9 @@ static GPid build_run_cmd(GeanyDocument *doc)
 		if (term_argv[0] == NULL)
 		{
 			ui_set_statusbar(TRUE,
-				_("Could not find terminal \"%s\" "
-					"(check path for Terminal tool setting in Preferences)"), tool_prefs.term_cmd);
+							 _("Could not find terminal \"%s\" "
+							   "(check path for Terminal tool setting in Preferences)"),
+							 tool_prefs.term_cmd);
 			run_info.pid = (GPid) 1;
 			goto free_strings;
 		}
@@ -846,7 +857,7 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 		while (g_io_channel_read_line(ioc, &msg, NULL, NULL, NULL) && msg)
 		{
 			/*if (s != G_IO_STATUS_NORMAL && s != G_IO_STATUS_EOF) break;*/
-			gint color;
+			gint   color;
 			gchar *tmp;
 
 			color = (GPOINTER_TO_INT(data)) ? COLOR_DARK_RED : COLOR_BLACK;
@@ -860,17 +871,17 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 			if (editor_prefs.use_indicators)
 			{
 				gchar *filename;
-				gint line;
+				gint   line;
 
 				msgwin_parse_compiler_error_line(msg, current_dir_entered,
-					&filename, &line);
+												 &filename, &line);
 				if (line != -1 && filename != NULL)
 				{
 					GeanyDocument *doc = document_find_by_filename(filename);
 
 					if (doc)
 						editor_set_indicator_on_line(doc->editor, line - 1);
-					color = COLOR_RED;	/* error message parsed on the line */
+					color = COLOR_RED;  /* error message parsed on the line */
 				}
 				g_free(filename);
 			}
@@ -897,7 +908,7 @@ gboolean build_parse_make_dir(const gchar *string, gchar **prefix)
 
 	if ((pos = strstr(string, "Entering directory")) != NULL)
 	{
-		gsize len;
+		gsize  len;
 		gchar *input;
 
 		/* get the start of the path */
@@ -911,7 +922,7 @@ gboolean build_parse_make_dir(const gchar *string, gchar **prefix)
 		/* kill the ' at the end of the path */
 		len = strlen(input);
 		input[len - 1] = '\0';
-		input = g_realloc(input, len);	/* shorten by 1 */
+		input = g_realloc(input, len);  /* shorten by 1 */
 		*prefix = input;
 
 		return TRUE;
@@ -945,7 +956,7 @@ static void show_build_result_message(gboolean failure)
 		msgwin_compiler_add(COLOR_BLUE, msg);
 		if (! ui_prefs.msgwindow_visible ||
 			gtk_notebook_get_current_page(GTK_NOTEBOOK(msgwindow.notebook)) != MSG_COMPILER)
-				ui_set_statusbar(FALSE, "%s", msg);
+			ui_set_statusbar(FALSE, "%s", msg);
 	}
 }
 
@@ -966,7 +977,8 @@ static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 		failure = TRUE;
 	}
 	else
-	{	/* any other failure occured */
+	{
+		/* any other failure occured */
 		failure = TRUE;
 	}
 	show_build_result_message(failure);
@@ -997,7 +1009,7 @@ static void run_exit_cb(GPid child_pid, gint status, gpointer user_data)
  * fname is the full file name (including path) for the script to create */
 static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, gboolean autoclose)
 {
-	FILE *fp;
+	FILE  *fp;
 	gchar *str;
 
 	fp = g_fopen(fname, "w");
@@ -1006,9 +1018,10 @@ static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, g
 	str = g_strdup_printf("%s\n\n%s\ndel %s\n", cmd, (autoclose) ? "" : "pause", fname);
 #else
 	str = g_strdup_printf(
-		"#!/bin/sh\n\n%s\n\necho \"\n\n------------------\n(program exited with code: $?)\" \
-		\n\n%s\nrm $0\n", cmd, (autoclose) ? "" :
-		"\necho \"Press return to continue\"\n#to be more compatible with shells like dash\ndummy_var=\"\"\nread dummy_var");
+		"#!/bin/sh\n\n%s\n\necho \"\n\n------------------\n(program exited "
+		"with code: $?)\"\n\n%s\nrm $0\n", cmd, (autoclose) ? "" :
+		"\necho \"Press return to continue\"\n#to be more compatible with "
+		"shells like dash\ndummy_var=\"\"\nread dummy_var");
 #endif
 
 	fputs(str, fp);
@@ -1024,26 +1037,26 @@ static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, g
  * Perhaps the separate Tex menu could be merged with the default build menu?
  * Then this could be done with Glade and set the accels in keybindings.c. */
 static void add_menu_accel(GeanyKeyGroup *group, guint kb_id,
-	GtkAccelGroup *accel_group, GtkWidget *menuitem)
+						   GtkAccelGroup *accel_group, GtkWidget *menuitem)
 {
 	GeanyKeyBinding *kb = &group->keys[kb_id];
 
 	if (kb->key != 0)
 		gtk_widget_add_accelerator(menuitem, "activate", accel_group,
-			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
+								   kb->key, kb->mods, GTK_ACCEL_VISIBLE);
 }
 
 
-#define GEANY_ADD_WIDGET_ACCEL(kb_id, menuitem) \
+#define GEANY_ADD_WIDGET_ACCEL(kb_id, menuitem)	\
 	add_menu_accel(group, kb_id, accel_group, menuitem)
 
 static void create_build_menu_gen(BuildMenuItems *menu_items)
 {
-	GtkWidget *menu, *item = NULL, *image, *separator;
-	GeanyProject *proj;
-	gchar *tiptext;
+	GtkWidget     *menu, *item = NULL, *image, *separator;
+	GeanyProject  *proj;
+	gchar         *tiptext;
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
-	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
+	GtkTooltips   *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
 	GeanyKeyGroup *group = g_ptr_array_index(keybinding_groups, GEANY_KEY_GROUP_BUILD);
 
 	menu = gtk_menu_new();
@@ -1065,7 +1078,7 @@ static void create_build_menu_gen(BuildMenuItems *menu_items)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item,
-				_("Builds the current file (generate an executable file)"), NULL);
+						 _("Builds the current file (generate an executable file)"), NULL);
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_LINK, item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_build_build_activate), NULL);
 	menu_items->item_link = item;
@@ -1076,60 +1089,60 @@ static void create_build_menu_gen(BuildMenuItems *menu_items)
 
 	/* build the code with make all or prefs or project command*/
 	proj = app->project;
-	if( proj!=NULL && proj->build_1_label!=NULL )
+	if (proj!=NULL && proj->build_1_label!=NULL)
 	{
-	    item = gtk_image_menu_item_new_with_mnemonic( proj->build_1_label );
-	    tiptext = NULL; /* user label so no tip needed */
-	}/* else if prefs */
+		item = gtk_image_menu_item_new_with_mnemonic(proj->build_1_label);
+		tiptext = NULL; /* user label so no tip needed */
+	} /* else if prefs */
 	else
 	{
-	    item = gtk_image_menu_item_new_with_mnemonic(_("_Make All"));
-	    tiptext = _("Builds the current file with the make tool and the default target");
-    }
+		item = gtk_image_menu_item_new_with_mnemonic(_("_Make All"));
+		tiptext = _("Builds the current file with the make tool and the default target");
+	}
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-	if( tiptext != NULL )gtk_tooltips_set_tip(tooltips, item, tiptext, NULL);
+	if (tiptext != NULL) gtk_tooltips_set_tip(tooltips, item, tiptext, NULL);
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_MAKE, item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_build_make_activate),
-		GINT_TO_POINTER(GBO_MAKE_ALL));
+					 GINT_TO_POINTER(GBO_MAKE_ALL));
 	menu_items->item_make_all = item;
 
 	/* build the code with make custom */
-	if( proj!=NULL && proj->build_2_label!=NULL )
+	if (proj!=NULL && proj->build_2_label!=NULL)
 	{
-	    item = gtk_image_menu_item_new_with_mnemonic( proj->build_2_label );
-	    tiptext = _("Dialog contents appended to this command");
-	}/* else if prefs */
+		item = gtk_image_menu_item_new_with_mnemonic(proj->build_2_label);
+		tiptext = _("Dialog contents appended to this command");
+	} /* else if prefs */
 	else
 	{
-	    item = gtk_image_menu_item_new_with_mnemonic(_("Make Custom _Target"));
-	    tiptext = _("Builds the current file with the make tool and the specified target");
-    }
+		item = gtk_image_menu_item_new_with_mnemonic(_("Make Custom _Target"));
+		tiptext = _("Builds the current file with the make tool and the specified target");
+	}
 	gtk_widget_show(item);
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_MAKEOWNTARGET, item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item, tiptext, NULL);
 	g_signal_connect(item, "activate", G_CALLBACK(on_build_make_activate),
-		GINT_TO_POINTER(GBO_MAKE_CUSTOM));
+					 GINT_TO_POINTER(GBO_MAKE_CUSTOM));
 	menu_items->item_make_custom = item;
 
 	/* build the code with make object */
-	if( proj!=NULL && proj->build_2_label!=NULL )
+	if (proj!=NULL && proj->build_2_label!=NULL)
 	{
-	    item = gtk_image_menu_item_new_with_mnemonic( proj->build_2_label );
-	    tiptext = NULL;
-	}/* else if prefs */
+		item = gtk_image_menu_item_new_with_mnemonic(proj->build_2_label);
+		tiptext = NULL;
+	} /* else if prefs */
 	else
 	{
-	    item = gtk_image_menu_item_new_with_mnemonic(_("Make _Object"));
-	    tiptext = _("Compiles the current file using the make tool");
-    }
+		item = gtk_image_menu_item_new_with_mnemonic(_("Make _Object"));
+		tiptext = _("Compiles the current file using the make tool");
+	}
 	gtk_widget_show(item);
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_MAKEOBJECT, item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item, tiptext, NULL);
 	g_signal_connect(item, "activate", G_CALLBACK(on_build_make_activate),
-		GINT_TO_POINTER(GBO_MAKE_OBJECT));
+					 GINT_TO_POINTER(GBO_MAKE_OBJECT));
 	menu_items->item_make_object = item;
 
 	item = gtk_separator_menu_item_new();
@@ -1175,31 +1188,32 @@ static void create_build_menu_gen(BuildMenuItems *menu_items)
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_OPTIONS, item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item,
-				_("Sets the includes and library paths for the compiler and "
-				  "the program arguments for execution"), NULL);
+						 _("Sets the includes and library paths for the compiler and "
+						   "the program arguments for execution"), NULL);
 	image = gtk_image_new_from_stock("gtk-preferences", GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
 	g_signal_connect(item, "activate", G_CALLBACK(on_build_arguments_activate), NULL);
 	menu_items->item_set_args = item;
 
-    if( menu_items->menu ) g_object_unref( (gpointer)menu_items->menu ); /* free it */
+	if (menu_items->menu) g_object_unref( (gpointer)menu_items->menu);   /* free it */
 	menu_items->menu = menu;
-	g_object_ref((gpointer)menu_items->menu);	/* to hold it after removing */
+	g_object_ref((gpointer)menu_items->menu);   /* to hold it after removing */
 }
+
 
 /* externally callable build default menu for when projects change menu */
 
 void build_default_menu()
 {
-    create_build_menu_gen( &default_menu_items );
+	create_build_menu_gen(&default_menu_items);
 };
 
 static void create_build_menu_tex(BuildMenuItems *menu_items)
 {
-	GtkWidget *menu, *item, *image, *separator;
+	GtkWidget     *menu, *item, *image, *separator;
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
-	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
+	GtkTooltips   *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
 	GeanyKeyGroup *group = g_ptr_array_index(keybinding_groups, GEANY_KEY_GROUP_BUILD);
 
 	menu = gtk_menu_new();
@@ -1214,7 +1228,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
 	g_signal_connect(item, "activate",
-				G_CALLBACK(on_build_tex_activate), GINT_TO_POINTER(LATEX_CMD_TO_DVI));
+					 G_CALLBACK(on_build_tex_activate), GINT_TO_POINTER(LATEX_CMD_TO_DVI));
 	menu_items->item_compile = item;
 
 	/* PDF */
@@ -1227,7 +1241,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
 	g_signal_connect(item, "activate",
-				G_CALLBACK(on_build_tex_activate), GINT_TO_POINTER(LATEX_CMD_TO_PDF));
+					 G_CALLBACK(on_build_tex_activate), GINT_TO_POINTER(LATEX_CMD_TO_PDF));
 	menu_items->item_link = item;
 
 	item = gtk_separator_menu_item_new();
@@ -1242,7 +1256,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 										   "make tool and the default target"), NULL);
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_MAKE, item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_build_make_activate),
-		GINT_TO_POINTER(GBO_MAKE_ALL));
+					 GINT_TO_POINTER(GBO_MAKE_ALL));
 	menu_items->item_make_all = item;
 
 	/* build the code with make custom */
@@ -1253,7 +1267,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	gtk_tooltips_set_tip(tooltips, item, _("Builds the current file with the "
 										   "make tool and the specified target"), NULL);
 	g_signal_connect(item, "activate", G_CALLBACK(on_build_make_activate),
-		GINT_TO_POINTER(GBO_MAKE_CUSTOM));
+					 GINT_TO_POINTER(GBO_MAKE_CUSTOM));
 	menu_items->item_make_custom = item;
 
 	item = gtk_separator_menu_item_new();
@@ -1290,7 +1304,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
 	g_signal_connect(item, "activate",
-					G_CALLBACK(on_build_execute_activate), GINT_TO_POINTER(LATEX_CMD_VIEW_DVI));
+					 G_CALLBACK(on_build_execute_activate), GINT_TO_POINTER(LATEX_CMD_VIEW_DVI));
 	menu_items->item_exec = item;
 
 	/* PDF view */
@@ -1303,7 +1317,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
 	g_signal_connect(item, "activate",
-					G_CALLBACK(on_build_execute_activate), GINT_TO_POINTER(LATEX_CMD_VIEW_PDF));
+					 G_CALLBACK(on_build_execute_activate), GINT_TO_POINTER(LATEX_CMD_VIEW_PDF));
 	menu_items->item_exec2 = item;
 
 	/* separator */
@@ -1318,36 +1332,36 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_OPTIONS, item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item,
-				_("Sets the program paths and arguments"), NULL);
+						 _("Sets the program paths and arguments"), NULL);
 	image = gtk_image_new_from_stock("gtk-preferences", GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
 	g_signal_connect(item, "activate",
-		G_CALLBACK(on_build_arguments_activate), filetypes[GEANY_FILETYPES_LATEX]);
+					 G_CALLBACK(on_build_arguments_activate), filetypes[GEANY_FILETYPES_LATEX]);
 	menu_items->item_set_args = item;
 
 	gtk_window_add_accel_group(GTK_WINDOW(main_widgets.window), accel_group);
 
 	menu_items->menu = menu;
-	g_object_ref((gpointer)menu_items->menu);	/* to hold it after removing */
+	g_object_ref((gpointer)menu_items->menu);   /* to hold it after removing */
 }
 
 
 static void
 on_includes_arguments_tex_dialog_response  (GtkDialog *dialog,
-                                            gint response,
-                                            gpointer user_data)
+											gint       response,
+											gpointer   user_data)
 {
 	GeanyFiletype *ft = user_data;
 	g_return_if_fail(ft != NULL);
 
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
-		const gchar *newstr;
+		const gchar           *newstr;
 		struct build_programs *programs = ft->programs;
 
 		newstr = gtk_entry_get_text(
-				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry1")));
+			GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry1")));
 		if (! utils_str_equal(newstr, programs->compiler))
 		{
 			if (programs->compiler) g_free(programs->compiler);
@@ -1355,7 +1369,7 @@ on_includes_arguments_tex_dialog_response  (GtkDialog *dialog,
 			programs->modified = TRUE;
 		}
 		newstr = gtk_entry_get_text(
-				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry2")));
+			GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry2")));
 		if (! utils_str_equal(newstr, programs->linker))
 		{
 			if (programs->linker) g_free(programs->linker);
@@ -1363,7 +1377,7 @@ on_includes_arguments_tex_dialog_response  (GtkDialog *dialog,
 			programs->modified = TRUE;
 		}
 		newstr = gtk_entry_get_text(
-				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry3")));
+			GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry3")));
 		if (! utils_str_equal(newstr, programs->run_cmd))
 		{
 			if (programs->run_cmd) g_free(programs->run_cmd);
@@ -1371,7 +1385,7 @@ on_includes_arguments_tex_dialog_response  (GtkDialog *dialog,
 			programs->modified = TRUE;
 		}
 		newstr = gtk_entry_get_text(
-				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry4")));
+			GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry4")));
 		if (! utils_str_equal(newstr, programs->run_cmd2))
 		{
 			if (programs->run_cmd2) g_free(programs->run_cmd2);
@@ -1384,9 +1398,9 @@ on_includes_arguments_tex_dialog_response  (GtkDialog *dialog,
 
 static void show_includes_arguments_tex(void)
 {
-	GtkWidget *dialog, *label, *entries[4], *vbox, *table;
+	GtkWidget     *dialog, *label, *entries[4], *vbox, *table;
 	GeanyDocument *doc = document_get_current();
-	gint response;
+	gint           response;
 	GeanyFiletype *ft = NULL;
 
 	if (doc != NULL)
@@ -1394,9 +1408,9 @@ static void show_includes_arguments_tex(void)
 	g_return_if_fail(ft != NULL);
 
 	dialog = gtk_dialog_new_with_buttons(_("Set Arguments"), GTK_WINDOW(main_widgets.window),
-										GTK_DIALOG_DESTROY_WITH_PARENT,
-										GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-										GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+										 GTK_DIALOG_DESTROY_WITH_PARENT,
+										 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+										 GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_widget_set_name(dialog, "GeanyDialog");
 
@@ -1414,7 +1428,7 @@ static void show_includes_arguments_tex(void)
 		label = gtk_label_new(_("DVI creation:"));
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
-			GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
+						 GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
 
 		entries[0] = gtk_entry_new();
 		gtk_entry_set_width_chars(GTK_ENTRY(entries[0]), 30);
@@ -1424,7 +1438,7 @@ static void show_includes_arguments_tex(void)
 		}
 		gtk_table_attach_defaults(GTK_TABLE(table), entries[0], 1, 2, 0, 1);
 		g_object_set_data_full(G_OBJECT(dialog), "tex_entry1",
-					gtk_widget_ref(entries[0]), (GDestroyNotify)gtk_widget_unref);
+							   gtk_widget_ref(entries[0]), (GDestroyNotify)gtk_widget_unref);
 	}
 
 	/* LaTeX -> PDF args */
@@ -1433,7 +1447,7 @@ static void show_includes_arguments_tex(void)
 		label = gtk_label_new(_("PDF creation:"));
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
-			GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
+						 GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
 
 		entries[1] = gtk_entry_new();
 		gtk_entry_set_width_chars(GTK_ENTRY(entries[1]), 30);
@@ -1443,7 +1457,7 @@ static void show_includes_arguments_tex(void)
 		}
 		gtk_table_attach_defaults(GTK_TABLE(table), entries[1], 1, 2, 1, 2);
 		g_object_set_data_full(G_OBJECT(dialog), "tex_entry2",
-					gtk_widget_ref(entries[1]), (GDestroyNotify)gtk_widget_unref);
+							   gtk_widget_ref(entries[1]), (GDestroyNotify)gtk_widget_unref);
 	}
 
 	/* View LaTeX -> DVI args */
@@ -1452,7 +1466,7 @@ static void show_includes_arguments_tex(void)
 		label = gtk_label_new(_("DVI preview:"));
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3,
-			GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
+						 GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
 
 		entries[2] = gtk_entry_new();
 		gtk_entry_set_width_chars(GTK_ENTRY(entries[2]), 30);
@@ -1462,7 +1476,7 @@ static void show_includes_arguments_tex(void)
 		}
 		gtk_table_attach_defaults(GTK_TABLE(table), entries[2], 1, 2, 2, 3);
 		g_object_set_data_full(G_OBJECT(dialog), "tex_entry3",
-					gtk_widget_ref(entries[2]), (GDestroyNotify)gtk_widget_unref);
+							   gtk_widget_ref(entries[2]), (GDestroyNotify)gtk_widget_unref);
 	}
 
 	/* View LaTeX -> PDF args */
@@ -1471,7 +1485,7 @@ static void show_includes_arguments_tex(void)
 		label = gtk_label_new(_("PDF preview:"));
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 3, 4,
-			GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
+						 GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
 
 		entries[3] = gtk_entry_new();
 		gtk_entry_set_width_chars(GTK_ENTRY(entries[3]), 30);
@@ -1481,7 +1495,7 @@ static void show_includes_arguments_tex(void)
 		}
 		gtk_table_attach_defaults(GTK_TABLE(table), entries[3], 1, 2, 3, 4);
 		g_object_set_data_full(G_OBJECT(dialog), "tex_entry4",
-					gtk_widget_ref(entries[3]), (GDestroyNotify)gtk_widget_unref);
+							   gtk_widget_ref(entries[3]), (GDestroyNotify)gtk_widget_unref);
 	}
 
 	label = gtk_label_new(_("%f will be replaced by the current filename, e.g. test_file.c\n"
@@ -1501,8 +1515,8 @@ static void show_includes_arguments_tex(void)
 
 static void
 on_includes_arguments_dialog_response  (GtkDialog *dialog,
-                                        gint response,
-                                        gpointer user_data)
+										gint       response,
+										gpointer   user_data)
 {
 	GeanyFiletype *ft = user_data;
 
@@ -1510,13 +1524,13 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
 
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
-		const gchar *newstr;
+		const gchar           *newstr;
 		struct build_programs *programs = ft->programs;
 
 		if (ft->actions->can_compile)
 		{
 			newstr = gtk_entry_get_text(
-					GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry1")));
+				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry1")));
 			if (! utils_str_equal(newstr, programs->compiler))
 			{
 				if (programs->compiler) g_free(programs->compiler);
@@ -1527,7 +1541,7 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
 		if (ft->actions->can_link)
 		{
 			newstr = gtk_entry_get_text(
-					GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry2")));
+				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry2")));
 			if (! utils_str_equal(newstr, programs->linker))
 			{
 				if (programs->linker) g_free(programs->linker);
@@ -1538,7 +1552,7 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
 		if (ft->actions->can_exec)
 		{
 			newstr = gtk_entry_get_text(
-					GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry3")));
+				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry3")));
 			if (! utils_str_equal(newstr, programs->run_cmd))
 			{
 				if (programs->run_cmd) g_free(programs->run_cmd);
@@ -1546,47 +1560,47 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
 				programs->modified = TRUE;
 			}
 		}
-		if( app->project!=NULL )
+		if (app->project!=NULL)
 		{
-		    GeanyProject *proj = app->project;
+			GeanyProject *proj = app->project;
 
-		    newstr = gtk_entry_get_text( GTK_ENTRY( lookup_widget( GTK_WIDGET(dialog), "build_1_label" ) ) );
-		    if( !utils_str_equal( newstr, proj->build_1_label ) )
-		    {
-		        if( proj->build_1_label ) g_free( proj->build_1_label );
-		        proj->build_1_label = g_strdup(newstr);
-            }
-		    newstr = gtk_entry_get_text( GTK_ENTRY( lookup_widget( GTK_WIDGET(dialog), "build_1_cmd" ) ) );
-		    if( !utils_str_equal( newstr, proj->build_1_cmd ) )
-		    {
-		        if( proj->build_1_cmd ) g_free( proj->build_1_cmd );
-		        proj->build_1_cmd = g_strdup(newstr);
-            }
-		    newstr = gtk_entry_get_text( GTK_ENTRY( lookup_widget( GTK_WIDGET(dialog), "build_2_label" ) ) );
-		    if( !utils_str_equal( newstr, proj->build_2_label ) )
-		    {
-		        if( proj->build_2_label ) g_free( proj->build_2_label );
-		        proj->build_2_label = g_strdup(newstr);
-            }
-		    newstr = gtk_entry_get_text( GTK_ENTRY( lookup_widget( GTK_WIDGET(dialog), "build_2_cmd" ) ) );
-		    if( !utils_str_equal( newstr, proj->build_2_cmd ) )
-		    {
-		        if( proj->build_2_cmd ) g_free( proj->build_2_cmd );
-		        proj->build_2_cmd = g_strdup(newstr);
-            }
-		    newstr = gtk_entry_get_text( GTK_ENTRY( lookup_widget( GTK_WIDGET(dialog), "build_3_label" ) ) );
-		    if( !utils_str_equal( newstr, proj->build_3_label ) )
-		    {
-		        if( proj->build_3_label ) g_free( proj->build_3_label );
-		        proj->build_3_label = g_strdup(newstr);
-            }
-		    newstr = gtk_entry_get_text( GTK_ENTRY( lookup_widget( GTK_WIDGET(dialog), "build_3_cmd" ) ) );
-		    if( !utils_str_equal( newstr, proj->build_3_cmd ) )
-		    {
-		        if( proj->build_3_cmd ) g_free( proj->build_3_cmd );
-		        proj->build_3_cmd = g_strdup(newstr);
-            }
-        }
+			newstr = gtk_entry_get_text(GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "build_1_label") ) );
+			if (!utils_str_equal(newstr, proj->build_1_label) )
+			{
+				if (proj->build_1_label) g_free(proj->build_1_label);
+				proj->build_1_label = g_strdup(newstr);
+			}
+			newstr = gtk_entry_get_text(GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "build_1_cmd") ) );
+			if (!utils_str_equal(newstr, proj->build_1_cmd) )
+			{
+				if (proj->build_1_cmd) g_free(proj->build_1_cmd);
+				proj->build_1_cmd = g_strdup(newstr);
+			}
+			newstr = gtk_entry_get_text(GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "build_2_label") ) );
+			if (!utils_str_equal(newstr, proj->build_2_label) )
+			{
+				if (proj->build_2_label) g_free(proj->build_2_label);
+				proj->build_2_label = g_strdup(newstr);
+			}
+			newstr = gtk_entry_get_text(GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "build_2_cmd") ) );
+			if (!utils_str_equal(newstr, proj->build_2_cmd) )
+			{
+				if (proj->build_2_cmd) g_free(proj->build_2_cmd);
+				proj->build_2_cmd = g_strdup(newstr);
+			}
+			newstr = gtk_entry_get_text(GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "build_3_label") ) );
+			if (!utils_str_equal(newstr, proj->build_3_label) )
+			{
+				if (proj->build_3_label) g_free(proj->build_3_label);
+				proj->build_3_label = g_strdup(newstr);
+			}
+			newstr = gtk_entry_get_text(GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "build_3_cmd") ) );
+			if (!utils_str_equal(newstr, proj->build_3_cmd) )
+			{
+				if (proj->build_3_cmd) g_free(proj->build_3_cmd);
+				proj->build_3_cmd = g_strdup(newstr);
+			}
+		}
 	}
 }
 
@@ -1596,7 +1610,7 @@ static void add_build_command_widgets(GtkWidget *dialog, GtkWidget *vbox, GeanyF
 	GtkWidget *label, *entries[3], *build_entry;
 	GtkWidget *ft_table = NULL;
 	GtkWidget *pr_table = NULL;
-	gint row = 0;
+	gint       row = 0;
 
 	if (ft->actions->can_compile || ft->actions->can_link || ft->actions->can_exec)
 	{
@@ -1620,7 +1634,7 @@ static void add_build_command_widgets(GtkWidget *dialog, GtkWidget *vbox, GeanyF
 		label = gtk_label_new(_("Compile:"));
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 		gtk_table_attach(GTK_TABLE(ft_table), label, 0, 1, row, row + 1,
-			GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
+						 GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
 
 		entries[0] = gtk_entry_new();
 		gtk_entry_set_width_chars(GTK_ENTRY(entries[0]), 30);
@@ -1632,7 +1646,7 @@ static void add_build_command_widgets(GtkWidget *dialog, GtkWidget *vbox, GeanyF
 		row++;
 
 		g_object_set_data_full(G_OBJECT(dialog), "includes_entry1",
-					gtk_widget_ref(entries[0]), (GDestroyNotify)gtk_widget_unref);
+							   gtk_widget_ref(entries[0]), (GDestroyNotify)gtk_widget_unref);
 	}
 
 	/* lib-args */
@@ -1641,7 +1655,7 @@ static void add_build_command_widgets(GtkWidget *dialog, GtkWidget *vbox, GeanyF
 		label = gtk_label_new(_("Build:"));
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 		gtk_table_attach(GTK_TABLE(ft_table), label, 0, 1, row, row + 1,
-			GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
+						 GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
 
 		entries[1] = gtk_entry_new();
 		gtk_entry_set_width_chars(GTK_ENTRY(entries[1]), 30);
@@ -1653,7 +1667,7 @@ static void add_build_command_widgets(GtkWidget *dialog, GtkWidget *vbox, GeanyF
 		row++;
 
 		g_object_set_data_full(G_OBJECT(dialog), "includes_entry2",
-					gtk_widget_ref(entries[1]), (GDestroyNotify)gtk_widget_unref);
+							   gtk_widget_ref(entries[1]), (GDestroyNotify)gtk_widget_unref);
 	}
 
 	/* program-args */
@@ -1662,7 +1676,7 @@ static void add_build_command_widgets(GtkWidget *dialog, GtkWidget *vbox, GeanyF
 		label = gtk_label_new(_("Execute:"));
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 		gtk_table_attach(GTK_TABLE(ft_table), label, 0, 1, row, row + 1,
-			GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
+						 GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
 
 		entries[2] = gtk_entry_new();
 		gtk_entry_set_width_chars(GTK_ENTRY(entries[2]), 30);
@@ -1674,20 +1688,20 @@ static void add_build_command_widgets(GtkWidget *dialog, GtkWidget *vbox, GeanyF
 		row++;
 
 		g_object_set_data_full(G_OBJECT(dialog), "includes_entry3",
-						gtk_widget_ref(entries[2]), (GDestroyNotify)gtk_widget_unref);
+							   gtk_widget_ref(entries[2]), (GDestroyNotify)gtk_widget_unref);
 
 		/* disable the run command if there is a valid project run command set */
 		if (app->project && NZV(app->project->run_cmd))
 			gtk_widget_set_sensitive(entries[2], FALSE);
 	}
 
-    /* see if need project based command fields */
+	/* see if need project based command fields */
 
-    if( app->project!=NULL )
-    {
- 		GtkWidget *align, *frame;
+	if (app->project!=NULL)
+	{
+		GtkWidget *align, *frame;
 		/* in-dialog heading for the project part of the build commands dialog */
-        GeanyProject *proj = app->project;
+		GeanyProject *proj = app->project;
 
 		frame = ui_frame_new_with_alignment(_("Project build menu commands"), &align);
 		gtk_container_add(GTK_CONTAINER(vbox), frame);
@@ -1699,72 +1713,72 @@ static void add_build_command_widgets(GtkWidget *dialog, GtkWidget *vbox, GeanyF
 
 		/* label and cmd 1 */
 		build_entry = gtk_entry_new();
-		gtk_entry_set_width_chars( GTK_ENTRY(build_entry), 10 );
-		if( proj->build_1_label!=NULL )
+		gtk_entry_set_width_chars(GTK_ENTRY(build_entry), 10);
+		if (proj->build_1_label!=NULL)
 		{
-		    gtk_entry_set_text( GTK_ENTRY(build_entry), proj->build_1_label );
-        }
-        gtk_table_attach_defaults( GTK_TABLE(pr_table), build_entry, 0, 1, 0, 1 );
-		g_object_set_data_full( G_OBJECT(dialog), "build_1_label",
-					gtk_widget_ref(build_entry), (GDestroyNotify)gtk_widget_unref );
+			gtk_entry_set_text(GTK_ENTRY(build_entry), proj->build_1_label);
+		}
+		gtk_table_attach_defaults(GTK_TABLE(pr_table), build_entry, 0, 1, 0, 1);
+		g_object_set_data_full(G_OBJECT(dialog), "build_1_label",
+							   gtk_widget_ref(build_entry), (GDestroyNotify)gtk_widget_unref);
 		build_entry = gtk_entry_new();
-		gtk_entry_set_width_chars( GTK_ENTRY(build_entry), 30 );
-		if( proj->build_1_cmd!=NULL )
+		gtk_entry_set_width_chars(GTK_ENTRY(build_entry), 30);
+		if (proj->build_1_cmd!=NULL)
 		{
-		    gtk_entry_set_text( GTK_ENTRY(build_entry), proj->build_1_cmd );
-        }
-        gtk_table_attach_defaults( GTK_TABLE(pr_table), build_entry, 1, 3, 0, 1 );
+			gtk_entry_set_text(GTK_ENTRY(build_entry), proj->build_1_cmd);
+		}
+		gtk_table_attach_defaults(GTK_TABLE(pr_table), build_entry, 1, 3, 0, 1);
 		g_object_set_data_full(G_OBJECT(dialog), "build_1_cmd",
-					gtk_widget_ref(build_entry), (GDestroyNotify)gtk_widget_unref);
+							   gtk_widget_ref(build_entry), (GDestroyNotify)gtk_widget_unref);
 
 		/* label and cmd 2 */
 		build_entry = gtk_entry_new();
-		gtk_entry_set_width_chars( GTK_ENTRY(build_entry), 10 );
-		if( proj->build_2_label!=NULL )
+		gtk_entry_set_width_chars(GTK_ENTRY(build_entry), 10);
+		if (proj->build_2_label!=NULL)
 		{
-		    gtk_entry_set_text( GTK_ENTRY(build_entry), proj->build_2_label );
-        }
-        gtk_table_attach_defaults( GTK_TABLE(pr_table), build_entry, 0, 1, 1, 2 );
-		g_object_set_data_full( G_OBJECT(dialog), "build_2_label",
-					gtk_widget_ref(build_entry), (GDestroyNotify)gtk_widget_unref );
+			gtk_entry_set_text(GTK_ENTRY(build_entry), proj->build_2_label);
+		}
+		gtk_table_attach_defaults(GTK_TABLE(pr_table), build_entry, 0, 1, 1, 2);
+		g_object_set_data_full(G_OBJECT(dialog), "build_2_label",
+							   gtk_widget_ref(build_entry), (GDestroyNotify)gtk_widget_unref);
 		build_entry = gtk_entry_new();
-		gtk_entry_set_width_chars( GTK_ENTRY(build_entry), 30 );
-		if( proj->build_2_cmd!=NULL )
+		gtk_entry_set_width_chars(GTK_ENTRY(build_entry), 30);
+		if (proj->build_2_cmd!=NULL)
 		{
-		    gtk_entry_set_text( GTK_ENTRY(build_entry), proj->build_2_cmd );
-        }
-        gtk_table_attach_defaults( GTK_TABLE(pr_table), build_entry, 1, 3, 1, 2 );
+			gtk_entry_set_text(GTK_ENTRY(build_entry), proj->build_2_cmd);
+		}
+		gtk_table_attach_defaults(GTK_TABLE(pr_table), build_entry, 1, 3, 1, 2);
 		g_object_set_data_full(G_OBJECT(dialog), "build_2_cmd",
-					gtk_widget_ref(build_entry), (GDestroyNotify)gtk_widget_unref);
+							   gtk_widget_ref(build_entry), (GDestroyNotify)gtk_widget_unref);
 
 		/* label and cmd 3 */
 		build_entry = gtk_entry_new();
-		gtk_entry_set_width_chars( GTK_ENTRY(build_entry), 10 );
-		if( proj->build_3_label!=NULL )
+		gtk_entry_set_width_chars(GTK_ENTRY(build_entry), 10);
+		if (proj->build_3_label!=NULL)
 		{
-		    gtk_entry_set_text( GTK_ENTRY(build_entry), proj->build_3_label );
-        }
-        gtk_table_attach_defaults( GTK_TABLE(pr_table), build_entry, 0, 1, 2, 3 );
-		g_object_set_data_full( G_OBJECT(dialog), "build_3_label",
-					gtk_widget_ref(build_entry), (GDestroyNotify)gtk_widget_unref );
+			gtk_entry_set_text(GTK_ENTRY(build_entry), proj->build_3_label);
+		}
+		gtk_table_attach_defaults(GTK_TABLE(pr_table), build_entry, 0, 1, 2, 3);
+		g_object_set_data_full(G_OBJECT(dialog), "build_3_label",
+							   gtk_widget_ref(build_entry), (GDestroyNotify)gtk_widget_unref);
 		build_entry = gtk_entry_new();
-		gtk_entry_set_width_chars( GTK_ENTRY(build_entry), 30 );
-		if( proj->build_3_cmd!=NULL )
+		gtk_entry_set_width_chars(GTK_ENTRY(build_entry), 30);
+		if (proj->build_3_cmd!=NULL)
 		{
-		    gtk_entry_set_text( GTK_ENTRY(build_entry), proj->build_3_cmd );
-        }
-        gtk_table_attach_defaults( GTK_TABLE(pr_table), build_entry, 1, 3, 2, 3 );
+			gtk_entry_set_text(GTK_ENTRY(build_entry), proj->build_3_cmd);
+		}
+		gtk_table_attach_defaults(GTK_TABLE(pr_table), build_entry, 1, 3, 2, 3);
 		g_object_set_data_full(G_OBJECT(dialog), "build_3_cmd",
-					gtk_widget_ref(build_entry), (GDestroyNotify)gtk_widget_unref);
+							   gtk_widget_ref(build_entry), (GDestroyNotify)gtk_widget_unref);
 
-    }
+	}
 }
 
 
 static void show_includes_arguments_gen(void)
 {
-	GtkWidget *dialog, *label, *vbox;
-	gint response;
+	GtkWidget     *dialog, *label, *vbox;
+	gint           response;
 	GeanyDocument *doc = document_get_current();
 	GeanyFiletype *ft = NULL;
 
@@ -1773,9 +1787,9 @@ static void show_includes_arguments_gen(void)
 	g_return_if_fail(ft != NULL);
 
 	dialog = gtk_dialog_new_with_buttons(_("Build Menu Commands"), GTK_WINDOW(main_widgets.window),
-										GTK_DIALOG_DESTROY_WITH_PARENT,
-										GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-										GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+										 GTK_DIALOG_DESTROY_WITH_PARENT,
+										 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+										 GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_widget_set_name(dialog, "GeanyDialog");
 
@@ -1801,8 +1815,8 @@ static void show_includes_arguments_gen(void)
 
 
 static void
-on_build_arguments_activate            (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+on_build_arguments_activate            (GtkMenuItem *menuitem,
+										gpointer     user_data)
 {
 	if (user_data && FILETYPE_ID((GeanyFiletype*) user_data) == GEANY_FILETYPES_LATEX)
 		show_includes_arguments_tex();
@@ -1819,7 +1833,7 @@ static gboolean is_c_header(const gchar *fname)
 	{
 		ext = strrchr(fname, '.');
 	}
-	return (ext == NULL) ? FALSE : (*(ext + 1) == 'h');	/* match *.h* */
+	return (ext == NULL) ? FALSE : (*(ext + 1) == 'h'); /* match *.h* */
 }
 
 
@@ -1827,14 +1841,14 @@ static gboolean is_c_header(const gchar *fname)
  * Uses current document (if there is one) when idx == -1 */
 void build_menu_update(GeanyDocument *doc)
 {
-	GeanyFiletype *ft;
-	gboolean have_path, can_build, can_make, can_run, can_stop, can_set_args, have_errors;
+	GeanyFiletype  *ft;
+	gboolean        have_path, can_build, can_make, can_run, can_stop, can_set_args, have_errors;
 	BuildMenuItems *menu_items;
 
 	if (doc == NULL)
 		doc = document_get_current();
 	if (doc == NULL ||
-		(FILETYPE_ID(doc->file_type) == GEANY_FILETYPES_NONE &&	doc->file_name == NULL))
+		(FILETYPE_ID(doc->file_type) == GEANY_FILETYPES_NONE && doc->file_name == NULL))
 	{
 		gtk_widget_set_sensitive(lookup_widget(main_widgets.window, "menu_build1"), FALSE);
 		gtk_menu_item_remove_submenu(GTK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_build1")));
@@ -1852,7 +1866,7 @@ void build_menu_update(GeanyDocument *doc)
 	/* Note: don't remove the submenu first because it can now cause an X hang if
 	 * the menu is already open when called from build_exit_cb(). */
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_build1")),
-		menu_items->menu);
+							  menu_items->menu);
 
 	have_path = (doc->file_name != NULL);
 
@@ -1876,7 +1890,7 @@ void build_menu_update(GeanyDocument *doc)
 		gtk_widget_set_sensitive(menu_items->item_make_object, can_make);
 
 	if (app->project && NZV(app->project->run_cmd))
-		can_run = have_path;	/* for now run is disabled for all untitled files */
+		can_run = have_path;    /* for now run is disabled for all untitled files */
 	else
 		can_run = have_path && ft->actions->can_exec;
 
@@ -1892,9 +1906,9 @@ void build_menu_update(GeanyDocument *doc)
 
 	can_set_args =
 		((ft->actions->can_compile ||
-		ft->actions->can_link ||
-		ft->actions->can_exec) &&
-		FILETYPE_ID(ft) != GEANY_FILETYPES_NONE);
+		  ft->actions->can_link ||
+		  ft->actions->can_exec) &&
+		 FILETYPE_ID(ft) != GEANY_FILETYPES_NONE);
 	if (menu_items->item_set_args)
 		gtk_widget_set_sensitive(menu_items->item_set_args, can_set_args);
 
@@ -1906,7 +1920,7 @@ void build_menu_update(GeanyDocument *doc)
 
 	/* simply enable next error command if the compiler window has any items */
 	have_errors = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(msgwindow.store_compiler),
-		NULL) > 0;
+												 NULL) > 0;
 	if (menu_items->item_next_error)
 		gtk_widget_set_sensitive(menu_items->item_next_error, have_errors);
 	if (menu_items->item_previous_error)
@@ -1918,13 +1932,14 @@ void build_menu_update(GeanyDocument *doc)
 static void set_stop_button(gboolean stop)
 {
 	GtkStockItem sitem;
-	GtkWidget *menuitem =
+	GtkWidget   *menuitem =
 		build_get_menu_items(run_info.file_type_id)->item_exec;
 
 	if (stop && utils_str_equal(
-		gtk_tool_button_get_stock_id(GTK_TOOL_BUTTON(widgets.run_button)), "gtk-stop")) return;
+			gtk_tool_button_get_stock_id(GTK_TOOL_BUTTON(widgets.run_button)), "gtk-stop")) return;
 	if (! stop && utils_str_equal(
-		gtk_tool_button_get_stock_id(GTK_TOOL_BUTTON(widgets.run_button)), "gtk-execute")) return;
+			gtk_tool_button_get_stock_id(GTK_TOOL_BUTTON(widgets.run_button)),
+			"gtk-execute")) return;
 
 	/* use the run button also as stop button */
 	if (stop)
@@ -1934,10 +1949,10 @@ static void set_stop_button(gboolean stop)
 		if (menuitem != NULL)
 		{
 			gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem),
-							gtk_image_new_from_stock("gtk-stop", GTK_ICON_SIZE_MENU));
+										  gtk_image_new_from_stock("gtk-stop", GTK_ICON_SIZE_MENU));
 			gtk_stock_lookup("gtk-stop", &sitem);
 			gtk_label_set_text_with_mnemonic(GTK_LABEL(gtk_bin_get_child(GTK_BIN(menuitem))),
-						sitem.label);
+											 sitem.label);
 		}
 	}
 	else
@@ -1950,18 +1965,20 @@ static void set_stop_button(gboolean stop)
 			if (run_info.file_type_id == GEANY_FILETYPES_LATEX)
 			{
 				gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem),
-							gtk_image_new_from_stock("gtk-find", GTK_ICON_SIZE_MENU));
+											  gtk_image_new_from_stock("gtk-find",
+																	   GTK_ICON_SIZE_MENU));
 				gtk_label_set_text_with_mnemonic(GTK_LABEL(gtk_bin_get_child(GTK_BIN(menuitem))),
-						LATEX_VIEW_DVI_LABEL);
+												 LATEX_VIEW_DVI_LABEL);
 			}
 			else
 			{
 				gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem),
-							gtk_image_new_from_stock("gtk-execute", GTK_ICON_SIZE_MENU));
+											  gtk_image_new_from_stock("gtk-execute",
+																	   GTK_ICON_SIZE_MENU));
 
 				gtk_stock_lookup("gtk-execute", &sitem);
 				gtk_label_set_text_with_mnemonic(GTK_LABEL(gtk_bin_get_child(GTK_BIN(menuitem))),
-							sitem.label);
+												 sitem.label);
 			}
 		}
 	}
@@ -2001,8 +2018,8 @@ BuildMenuItems *build_get_menu_items(gint filetype_idx)
 
 
 static void
-on_build_compile_activate              (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+on_build_compile_activate              (GtkMenuItem *menuitem,
+										gpointer     user_data)
 {
 	GeanyDocument *doc = document_get_current();
 
@@ -2020,8 +2037,8 @@ on_build_compile_activate              (GtkMenuItem     *menuitem,
 
 
 static void
-on_build_tex_activate                  (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+on_build_tex_activate                  (GtkMenuItem *menuitem,
+										gpointer     user_data)
 {
 	GeanyDocument *doc = document_get_current();
 
@@ -2044,8 +2061,8 @@ on_build_tex_activate                  (GtkMenuItem     *menuitem,
 
 
 static void
-on_build_build_activate                (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+on_build_build_activate                (GtkMenuItem *menuitem,
+										gpointer     user_data)
 {
 	GeanyDocument *doc = document_get_current();
 
@@ -2079,12 +2096,13 @@ on_make_custom_input_response(const gchar *input)
 static void
 show_make_custom(void)
 {
-	static GtkWidget *dialog = NULL;	/* keep dialog for combo history */
+	static GtkWidget *dialog = NULL;    /* keep dialog for combo history */
 
 	if (! dialog)
 		dialog = dialogs_show_input(_("Make Custom Target"),
-			_("Enter custom options here, all entered text is passed to the make command."),
-			build_info.custom_target, TRUE, &on_make_custom_input_response);
+									_("Enter custom options here, all entered text"
+									  " is passed to the make command."),
+									build_info.custom_target, TRUE, &on_make_custom_input_response);
 	else
 	{
 		gtk_widget_show(dialog);
@@ -2093,11 +2111,11 @@ show_make_custom(void)
 
 
 static void
-on_build_make_activate                 (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+on_build_make_activate                 (GtkMenuItem *menuitem,
+										gpointer     user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	gint build_opts = GPOINTER_TO_INT(user_data);
+	gint           build_opts = GPOINTER_TO_INT(user_data);
 
 	g_return_if_fail(doc != NULL && doc->file_name != NULL);
 
@@ -2151,11 +2169,11 @@ static gboolean use_html_builtin(GeanyDocument *doc, GeanyFiletype *ft)
 
 
 static void
-on_build_execute_activate              (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+on_build_execute_activate              (GtkMenuItem *menuitem,
+										gpointer     user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	filetype_id ft_id;
+	filetype_id    ft_id;
 	GeanyFiletype *ft;
 
 	if (doc == NULL)
@@ -2171,7 +2189,7 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 	ft_id = FILETYPE_ID(doc->file_type);
 	ft = filetypes[ft_id];
 	if (ft_id == GEANY_FILETYPES_LATEX)
-	{	/* run LaTeX file */
+	{   /* run LaTeX file */
 		if (build_view_tex_file(doc, GPOINTER_TO_INT(user_data)) == (GPid) 0)
 		{
 			ui_set_statusbar(TRUE, _("Failed to execute the view program"));
@@ -2179,13 +2197,13 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 	}
 	/* use_html_builtin() checks for HTML builtin request and returns FALSE if not */
 	else if (! use_html_builtin(doc, ft))
-	{	/* run everything else */
+	{   /* run everything else */
 
 		/* save the file only if the run command uses it */
 		if (doc->changed &&
-			NZV(ft->programs->run_cmd) &&	/* can happen when project is open */
+			NZV(ft->programs->run_cmd) &&   /* can happen when project is open */
 			strstr(ft->programs->run_cmd, "%f") != NULL)
-				document_save_file(doc, FALSE);
+			document_save_file(doc, FALSE);
 
 		build_run_cmd(doc);
 	}
@@ -2222,11 +2240,11 @@ static void kill_process(GPid *pid)
 
 
 static void
-on_build_next_error                    (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+on_build_next_error                    (GtkMenuItem *menuitem,
+										gpointer     user_data)
 {
 	if (ui_tree_view_find_next(GTK_TREE_VIEW(msgwindow.tree_compiler),
-		msgwin_goto_compiler_file_line))
+							   msgwin_goto_compiler_file_line))
 	{
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER);
 	}
@@ -2236,11 +2254,11 @@ on_build_next_error                    (GtkMenuItem     *menuitem,
 
 
 static void
-on_build_previous_error                (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+on_build_previous_error                (GtkMenuItem *menuitem,
+										gpointer     user_data)
 {
 	if (ui_tree_view_find_previous(GTK_TREE_VIEW(msgwindow.tree_compiler),
-		msgwin_goto_compiler_file_line))
+								   msgwin_goto_compiler_file_line))
 	{
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER);
 	}
@@ -2254,3 +2272,5 @@ void build_init()
 	widgets.compile_button = lookup_widget(main_widgets.window, "toolbutton_compile");
 	widgets.run_button = lookup_widget(main_widgets.window, "toolbutton_run");
 }
+
+
