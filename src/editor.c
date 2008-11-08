@@ -3818,7 +3818,9 @@ void editor_set_line_wrapping(GeanyEditor *editor, gboolean wrap)
 }
 
 
-/* Also sets indent width, tab width. */
+/** Set the indent type for @a editor.
+ * @param editor Editor.
+ * @param type Indent type. */
 void editor_set_indent_type(GeanyEditor *editor, GeanyIndentType type)
 {
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);

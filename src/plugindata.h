@@ -35,13 +35,16 @@
 #ifndef PLUGINDATA_H
 #define PLUGINDATA_H
 
+#include "editor.h"	/* GeanyIndentType */
+
+
 /* Note: We use enum instead of 'static const gint' to allow its use in global variable
  * initializing, otherwise we get errors like:
  * error: initializer element is not constant */
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 105,
+	GEANY_API_VERSION = 106,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -476,12 +479,15 @@ typedef struct EditorFuncs
 
 	const struct GeanyIndentPrefs* (*get_indent_prefs)(struct GeanyEditor *editor);
 	struct _ScintillaObject* (*create_widget)(struct GeanyEditor *editor);
-	/* Remember to convert any GeanyDocument or ScintillaObject pointers in any
-	 * appended functions to GeanyEditor pointers. */
 
 	void	(*set_indicator_full) (struct GeanyEditor *editor, gint indic, gint start, gint end);
 	void	(*set_indicator_on_line_full) (struct GeanyEditor *editor, gint indic, gint line);
 	void	(*clear_indicators_full) (struct GeanyEditor *editor, gint indic);
+	
+	void	(*set_indent_type)(struct GeanyEditor *editor, GeanyIndentType type);
+	
+	/* Remember to convert any GeanyDocument or ScintillaObject pointers in any
+	 * appended functions to GeanyEditor pointers. */
 }
 EditorFuncs;
 

@@ -138,6 +138,7 @@ static EditorFuncs editor_funcs = {
 	&editor_set_indicator_full,
 	&editor_set_indicator_on_line_full,
 	&editor_clear_indicators_full,
+	&editor_set_indent_type
 };
 
 static ScintillaFuncs sci_funcs = {

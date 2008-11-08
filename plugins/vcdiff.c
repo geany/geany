@@ -279,6 +279,9 @@ static void show_output(const gchar *std_output, const gchar *utf8_name_prefix,
 	}
 	if (text)
 	{
+		GeanyIndentType indent_type =
+			p_document->get_current()->editor->indent_type;
+			
 		doc = p_document->find_by_filename(filename);
 		if (doc == NULL)
 		{
@@ -293,6 +296,7 @@ static void show_output(const gchar *std_output, const gchar *utf8_name_prefix,
 			gtk_notebook_set_current_page(book, page);
 			p_document->set_text_changed(doc, FALSE);
 		}
+		p_editor->set_indent_type(doc->editor, indent_type);
 
 		p_document->set_encoding(doc,
 			force_encoding ? force_encoding : detect_enc);
