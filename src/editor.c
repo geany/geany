@@ -188,7 +188,7 @@ on_editor_button_press_event           (GtkWidget *widget,
                                         gpointer user_data)
 {
 	GeanyDocument *doc = user_data;
-	ScintillaObject *sci = doc->editor->sci;
+	GeanyEditor *editor = doc->editor;
 
 	editor_info.click_pos = sci_get_position_from_xy(doc->editor->sci, (gint)event->x, (gint)event->y, FALSE);
 	if (event->button == 1)
@@ -202,8 +202,14 @@ on_editor_button_press_event           (GtkWidget *widget,
 		}
 		if (event->type == GDK_BUTTON_PRESS && state == GDK_CONTROL_MASK)
 		{
-			sci_set_current_position(sci, editor_info.click_pos, FALSE);
-			keybindings_send_command(GEANY_KEY_GROUP_GOTO, GEANY_KEYS_GOTO_TAGDEFINITION);
+			sci_set_current_position(editor->sci, editor_info.click_pos, FALSE);
+
+			editor_find_current_word(editor, editor_info.click_pos,
+				current_word, sizeof current_word, NULL);
+			if (*current_word)
+				symbols_goto_tag(current_word, TRUE);
+			else
+				keybindings_send_command(GEANY_KEY_GROUP_GOTO, GEANY_KEYS_GOTO_MATCHINGBRACE);
 			return TRUE;
 		}
 		return document_check_disk_status(doc, FALSE);

@@ -3366,10 +3366,15 @@ Document notebook
   widgets (to show them again use the View menu or the keyboard shortcut).
 * Middle-click on a document's notebook tab to close the document.
 
-Symbols
--------
+Editor
+------
 
 * Ctrl-click on a word in a document to perform *Go to Tag Definition*.
+* Ctrl-click on a bracket/brace to perform *Go to Matching Brace*.
+
+Interface
+---------
+
 * Double-click on a symbol-list group to expand or compact it.
 
 GTK-related
