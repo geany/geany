@@ -6,6 +6,8 @@
    file to the filename of the new document.
    Make {datetime} wildcard generally available for most template types.
    Allow use of most available wildcards for custom file templates, too.
+ * scintilla/KeyWords.cxx:
+   Remove unused lexers.
 
 
 2008-11-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
