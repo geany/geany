@@ -1127,9 +1127,9 @@ static void create_build_menu_gen(BuildMenuItems *menu_items)
 	menu_items->item_make_custom = item;
 
 	/* build the code with make object */
-	if (proj!=NULL && proj->build_2_label!=NULL)
+	if (proj!=NULL && proj->build_3_label!=NULL)
 	{
-		item = gtk_image_menu_item_new_with_mnemonic(proj->build_2_label);
+		item = gtk_image_menu_item_new_with_mnemonic(proj->build_3_label);
 		tiptext = NULL;
 	} /* else if prefs */
 	else
@@ -1601,6 +1601,7 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
 				proj->build_3_cmd = g_strdup(newstr);
 			}
 		}
+		update_ui();
 	}
 }
 

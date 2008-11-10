@@ -1,3 +1,15 @@
+2008-11-10  Lex Trotman  <elextr(at)gmail(dot)com>
+
+	Fixed build menu updating after dialog close
+	
+ * src/build.c:
+   on_includes_arguments_dialog_response calls projects::update_ui()
+   create_build_menu_gen() fixed reference to build_2_label SB 3
+   format it
+ * src/projects.c:
+   make update_ui() non-static
+   format it
+
 2008-11-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/build.c:
