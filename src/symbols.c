@@ -667,7 +667,7 @@ static void add_top_level_items(GeanyDocument *doc)
 		{
 			tag_list_add_groups(tag_store,
 				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
-				&(tv_iters.tag_member), _("Methods"), "classviewer-member",
+				&(tv_iters.tag_member), _("Methods"), "classviewer-macro",
 				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
 				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
 				NULL);

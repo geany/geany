@@ -22,6 +22,9 @@
    Group Conf symbol list tags by section.
  * src/symbols.c:
    Add icons for Conf symbol tree items.
+ * src/symbols.c:
+   Make Python symbol tree method icon look more like a function than
+   variable.
 
 
 2008-11-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
