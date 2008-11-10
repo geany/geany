@@ -18,6 +18,8 @@
    Free tag list straight after use, instead of next time the list is
    generated.
    Use TMTag pointer tree model column instead of line number.
+ * tagmanager/conf.c:
+   Group Conf symbol list tags by section.
 
 
 2008-11-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
