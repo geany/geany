@@ -567,8 +567,8 @@ static void add_top_level_items(GeanyDocument *doc)
 			break;
 		case GEANY_FILETYPES_CONF:
 			tag_list_add_groups(tag_store,
-				&tv_iters.tag_namespace, _("Sections"), NULL,
-				&tv_iters.tag_macro, _("Keys"), NULL,
+				&tv_iters.tag_namespace, _("Sections"), "classviewer-other",
+				&tv_iters.tag_macro, _("Keys"), "classviewer-var",
 				NULL);
 			break;
 		case GEANY_FILETYPES_LATEX:

@@ -20,6 +20,8 @@
    Use TMTag pointer tree model column instead of line number.
  * tagmanager/conf.c:
    Group Conf symbol list tags by section.
+ * src/symbols.c:
+   Add icons for Conf symbol tree items.
 
 
 2008-11-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
