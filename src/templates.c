@@ -244,7 +244,7 @@ static gchar *ft_templates[GEANY_MAX_BUILT_IN_FILETYPES] = {NULL};
 
 
 
-static void init_general_templates(const gchar *year, const gchar *date)
+static void init_general_templates(const gchar *year, const gchar *date, const gchar *datetime)
 {
 	gchar *template_filename_fileheader = TEMPLATES_GET_FILENAME("fileheader");
 	gchar *template_filename_gpl = TEMPLATES_GET_FILENAME("gpl");
@@ -261,19 +261,19 @@ static void init_general_templates(const gchar *year, const gchar *date)
 
 	/* read the contents */
 	TEMPLATES_READ_FILE(template_filename_fileheader, &templates[GEANY_TEMPLATE_FILEHEADER]);
-	templates[GEANY_TEMPLATE_FILEHEADER] = templates_replace_all(templates[GEANY_TEMPLATE_FILEHEADER], year, date);
+	templates[GEANY_TEMPLATE_FILEHEADER] = templates_replace_all(templates[GEANY_TEMPLATE_FILEHEADER], year, date, datetime);
 
 	TEMPLATES_READ_FILE(template_filename_gpl, &templates[GEANY_TEMPLATE_GPL]);
-	templates[GEANY_TEMPLATE_GPL] = templates_replace_all(templates[GEANY_TEMPLATE_GPL], year, date);
+	templates[GEANY_TEMPLATE_GPL] = templates_replace_all(templates[GEANY_TEMPLATE_GPL], year, date, datetime);
 
 	TEMPLATES_READ_FILE(template_filename_bsd, &templates[GEANY_TEMPLATE_BSD]);
-	templates[GEANY_TEMPLATE_BSD] = templates_replace_all(templates[GEANY_TEMPLATE_BSD], year, date);
+	templates[GEANY_TEMPLATE_BSD] = templates_replace_all(templates[GEANY_TEMPLATE_BSD], year, date, datetime);
 
 	TEMPLATES_READ_FILE(template_filename_function, &templates[GEANY_TEMPLATE_FUNCTION]);
-	templates[GEANY_TEMPLATE_FUNCTION] = templates_replace_all(templates[GEANY_TEMPLATE_FUNCTION], year, date);
+	templates[GEANY_TEMPLATE_FUNCTION] = templates_replace_all(templates[GEANY_TEMPLATE_FUNCTION], year, date, datetime);
 
 	TEMPLATES_READ_FILE(template_filename_changelog, &templates[GEANY_TEMPLATE_CHANGELOG]);
-	templates[GEANY_TEMPLATE_CHANGELOG] = templates_replace_all(templates[GEANY_TEMPLATE_CHANGELOG], year, date);
+	templates[GEANY_TEMPLATE_CHANGELOG] = templates_replace_all(templates[GEANY_TEMPLATE_CHANGELOG], year, date, datetime);
 
 	/* free the whole stuff */
 	g_free(template_filename_fileheader);
@@ -284,7 +284,7 @@ static void init_general_templates(const gchar *year, const gchar *date)
 }
 
 
-static void init_ft_templates(const gchar *year, const gchar *date)
+static void init_ft_templates(const gchar *year, const gchar *date, const gchar *datetime)
 {
 	filetype_id ft_id;
 
@@ -309,7 +309,7 @@ static void init_ft_templates(const gchar *year, const gchar *date)
 			default: break;
 		}
 		TEMPLATES_READ_FILE(fname, &ft_templates[ft_id]);
-		ft_templates[ft_id] = templates_replace_all(ft_templates[ft_id], year, date);
+		ft_templates[ft_id] = templates_replace_all(ft_templates[ft_id], year, date, datetime);
 
 		g_free(fname);
 		g_free(shortname);
@@ -357,21 +357,28 @@ static void create_new_menu_items(void)
 }
 
 
-static gchar *get_template_from_file(const gchar *locale_fname, GeanyFiletype *ft)
+static gchar *get_template_from_file(const gchar *locale_fname, const gchar *doc_filename,
+									 GeanyFiletype *ft)
 {
-	GString template = {NULL, 0, 0};
+	GString template = { NULL, 0, 0 };
 
 	g_file_get_contents(locale_fname, &template.str, &template.len, NULL);
 
 	if (template.len > 0)
 	{
 		gchar *file_header;
+		gchar *year = utils_get_date_time(template_prefs.year_format, NULL);
+		gchar *date = utils_get_date_time(template_prefs.date_format, NULL);
+		gchar *datetime = utils_get_date_time(template_prefs.datetime_format, NULL);
 
 		template.allocated_len = template.len + 1;
 
-		file_header = templates_get_template_fileheader(FILETYPE_ID(ft), NULL);
+		file_header = templates_get_template_fileheader(FILETYPE_ID(ft), doc_filename);
+		template.str = templates_replace_all(template.str, year, date, datetime);
+		utils_string_replace_all(&template, "{filename}", doc_filename);
 		utils_string_replace_all(&template, "{fileheader}", file_header);
-		g_free(file_header);
+
+		utils_free_pointers(year, date, datetime, file_header, NULL);
 	}
 	return template.str;
 }
@@ -383,17 +390,20 @@ on_new_with_file_template(GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer user_dat
 	gchar *fname = ui_menu_item_get_text(menuitem);
 	GeanyFiletype *ft;
 	gchar *template;
+	gchar *extension = strrchr(fname, '.'); /* easy way to get the file extension */
+	gchar *new_filename = g_strconcat(GEANY_STRING_UNTITLED, extension, NULL);
 
 	ft = filetypes_detect_from_extension(fname);
 	setptr(fname, utils_get_locale_from_utf8(fname));
 	/* fname is just the basename from the menu item, so prepend the custom files path */
 	setptr(fname, g_build_path(G_DIR_SEPARATOR_S, app->configdir, GEANY_TEMPLATES_SUBDIR,
 		"files", fname, NULL));
-	template = get_template_from_file(fname, ft);
+	template = get_template_from_file(fname, new_filename, ft);
 	g_free(fname);
 
-	document_new_file(NULL, ft, template);
+	document_new_file(new_filename, ft, template);
 	g_free(template);
+	g_free(new_filename);
 }
 
 
@@ -484,9 +494,10 @@ void templates_init(void)
 {
 	gchar *year = utils_get_date_time(template_prefs.year_format, NULL);
 	gchar *date = utils_get_date_time(template_prefs.date_format, NULL);
+	gchar *datetime = utils_get_date_time(template_prefs.datetime_format, NULL);
 
-	init_general_templates(year, date);
-	init_ft_templates(year, date);
+	init_general_templates(year, date, datetime);
+	init_ft_templates(year, date, datetime);
 
 	g_free(date);
 	g_free(year);
@@ -770,10 +781,12 @@ void templates_free_templates(void)
 }
 
 
-gchar *templates_replace_all(gchar *text, const gchar *year, const gchar *date)
+gchar *templates_replace_all(gchar *text, const gchar *year, const gchar *date,
+							 const gchar *datetime)
 {
 	text = utils_str_replace(text, "{year}", year);
 	text = utils_str_replace(text, "{date}", date);
+	text = utils_str_replace(text, "{datetime}", datetime);
 	text = utils_str_replace(text, "{version}", template_prefs.version);
 	text = utils_str_replace(text, "{initial}", template_prefs.initials);
 	text = utils_str_replace(text, "{developer}", template_prefs.developer);

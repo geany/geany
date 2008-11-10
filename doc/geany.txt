@@ -3178,46 +3178,48 @@ Template wildcards
 
 All wildcards must be enclosed by "{" and "}", e.g. {date}.
 
-============== ============================================= ==============
+============== ============================================= =======================================
 Wildcard       Description                                   Available in
-============== ============================================= ==============
-developer      The name of the developer.                    filetypes, file header, function
-                                                             description, ChangeLog entry, bsd,
-                                                             gpl, snippets
+============== ============================================= =======================================
+developer      The name of the developer.                    filetype templates, file header,
+                                                             function description, ChangeLog entry,
+                                                             bsd, gpl, snippets
 
-initial        The developer's initials, e.g. "ET" for       filetypes, file header, function
-               Enrico Tröger or "JFD" for John Foobar Doe.   description, ChangeLog entry, bsd,
-                                                             gpl, snippets
+initial        The developer's initials, e.g. "ET" for       filetype templates, file header,
+               Enrico Tröger or "JFD" for John Foobar Doe.   function description, ChangeLog entry,
+                                                             bsd, gpl, snippets
 
-mail           The email address of the developer.           file header, function description,
-                                                             ChangeLog entry, bsd, gpl, snippets
+mail           The email address of the developer.           filetype templates, file header,
+                                                             function description, ChangeLog entry,
+                                                             bsd, gpl, snippets
 
-company        The company the developer is working for.     filetypes, file header, function
-                                                             description, ChangeLog entry, bsd,
-                                                             gpl, snippets
+company        The company the developer is working for.     filetype templates, file header,
+                                                             function description, ChangeLog entry,
+                                                             bsd, gpl, snippets
 
-year [1]_      The current year. Default format is: YYYY     filetypes, file header, function
-                                                             description, ChangeLog entry, bsd,
-                                                             gpl, snippets
+year [1]_      The current year. Default format is: YYYY     filetype templates, file header,
+                                                             function description, ChangeLog entry,
+                                                             bsd, gpl, snippets
 
-version        The initial version of a new file.            filetypes, file header, function
-                                                             description, ChangeLog entry, bsd,
-                                                             gpl, snippets
+version        The initial version of a new file.            filetype templates, file header,
+                                                             function description, ChangeLog entry,
+                                                             bsd, gpl, snippets
 
-date [1]_      The current date. Default format: YYYY-MM-DD. filetypes, file header, function
-                                                             description, ChangeLog entry, bsd,
-                                                             gpl, snippets
+date [1]_      The current date. Default format: YYYY-MM-DD. filetype templates, file header,
+                                                             function description, ChangeLog entry,
+                                                             bsd, gpl, snippets
 
-untitled       The string "untitled" (this will be           filetypes, file header, function
-               translated to your locale), used in           description, ChangeLog entry, bsd,
-               filetype templates.                           gpl, snippets
+untitled       The string "untitled" (this will be           filetype templates, file header,
+               translated to your locale), used in           function description, ChangeLog entry,
+               filetype templates.                           bsd, gpl, snippets
 
-geanyversion   The actual Geany version, e.g.                filetypes, file header, function
-               "Geany |(version)|".                          description, ChangeLog entry, bsd,
-                                                             gpl, snippets
+geanyversion   The actual Geany version, e.g.                filetype templates, file header,
+               "Geany |(version)|".                          function description, ChangeLog entry,
+                                                             bsd, gpl, snippets
 
-datetime [1]_  The current date and time. Default format:    file header, function description,
-               DD.MM.YYYY HH:mm:ss ZZZZ.                     snippets
+datetime [1]_  The current date and time. Default format:    filetype templates, file header,
+               DD.MM.YYYY HH:mm:ss ZZZZ.                     function description, ChangeLog entry,
+                                                             bsd, gpl, snippets
 
 filename       The filename of the current file.             file header, snippets
 
@@ -3230,10 +3232,10 @@ functionname   The function name of the function at the      function descriptio
                replaced in the function description
                template.
 
-fileheader     The file header template. This wildcard       filetypes
-               will only be replaced in filetype
+fileheader     The file header template. This wildcard       file header, snippets, custom filetype
+               will only be replaced in filetype             templates
                templates.
-============== ============================================= ==============
+============== ============================================= =======================================
 
 
 .. [1] The format for the ``year``, ``date`` and ``datetime`` wildcards can be changed

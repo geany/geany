@@ -1690,14 +1690,10 @@ static gchar *snippets_replace_wildcards(GeanyEditor *editor, gchar *text)
 	gchar *datetime = utils_get_date_time(template_prefs.datetime_format, NULL);
 	gchar *basename = g_path_get_basename(DOC_FILENAME(editor->document));
 
-	text = templates_replace_all(text, year, date);
-	text = utils_str_replace(text, "{datetime}", datetime);
+	text = templates_replace_all(text, year, date, datetime);
 	text = utils_str_replace(text, "{filename}", basename);
 
-	g_free(year);
-	g_free(date);
-	g_free(datetime);
-	g_free(basename);
+	utils_free_pointers(year, date, datetime, basename, NULL);
 
 	return text;
 }

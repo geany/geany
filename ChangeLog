@@ -1,3 +1,13 @@
+2008-11-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * doc/geany.txt, doc/geany.html, src/templates.c, src/templates.c,
+   src/editor.c:
+   When using custom file templates, add the extension of the template
+   file to the filename of the new document.
+   Make {datetime} wildcard generally available for most template types.
+   Allow use of most available wildcards for custom file templates, too.
+
+
 2008-11-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/about.c, src/treeviews.c, src/treeviews.h, src/symbols.c,
