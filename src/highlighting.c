@@ -3063,9 +3063,11 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 		init_styleset_case(GEANY_FILETYPES_ASM,		asm);
 		init_styleset_case(GEANY_FILETYPES_BASIC,	basic);
 		init_styleset_case(GEANY_FILETYPES_C,		c);
+		init_styleset_case(GEANY_FILETYPES_H,		c);
 		init_styleset_case(GEANY_FILETYPES_CAML,	caml);
 		init_styleset_case(GEANY_FILETYPES_CONF,	conf);
 		init_styleset_case(GEANY_FILETYPES_CPP,		cpp);
+		init_styleset_case(GEANY_FILETYPES_HPP,		cpp);
 		init_styleset_case(GEANY_FILETYPES_CS,		cs);
 		init_styleset_case(GEANY_FILETYPES_CSS,		css);
 		init_styleset_case(GEANY_FILETYPES_D,		d);
@@ -3119,9 +3121,11 @@ void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 		styleset_case(GEANY_FILETYPES_ASM,		asm);
 		styleset_case(GEANY_FILETYPES_BASIC,	basic);
 		styleset_case(GEANY_FILETYPES_C,		c);
+		styleset_case(GEANY_FILETYPES_H,		c);
 		styleset_case(GEANY_FILETYPES_CAML,		caml);
 		styleset_case(GEANY_FILETYPES_CONF,		conf);
 		styleset_case(GEANY_FILETYPES_CPP,		cpp);
+		styleset_case(GEANY_FILETYPES_HPP,		cpp);
 		styleset_case(GEANY_FILETYPES_CS,		cs);
 		styleset_case(GEANY_FILETYPES_CSS,		css);
 		styleset_case(GEANY_FILETYPES_D,		d);

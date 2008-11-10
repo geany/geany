@@ -1,5 +1,25 @@
 2008-11-10  Lex Trotman  <elextr(at)gmail(dot)com>
 
+   Prototype C and CPP header filetypes, also detects .h or no extension
+   files with -*-C++-*- on line 1 as C++ header
+
+ * src/highlighting.c
+   highlighting_set_styles() & highlighting_init_styles() added filetypes
+   H & HPP to switches
+ * src/filetypes.h
+   added H and HPP to filetypes enum, changed guard name to aviod clash
+   with GEANY_FILETYPE_H
+ * src/filetypes.c
+   init_builtin_filetypes() added new filetypes for H and HPP and moved
+   header extensions from C and CPP to them
+   filetypes_detect_from_file_internal() if extensions are .h or none check
+   for '-*-C++-*-' on line 1 and set to filetype HPP if found
+ * data/filetypes.h and data/filetypes.hpp added (copies of .c and .cpp)
+ * data/extensions.conf added H and H++ types
+
+
+2008-11-10  Lex Trotman  <elextr(at)gmail(dot)com>
+
 	Fixed build menu updating after dialog close
 	
  * src/build.c:

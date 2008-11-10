@@ -84,7 +84,18 @@ static void init_builtin_filetypes(void)
 	ft->name = g_strdup("C");
 	ft->title = g_strdup_printf(_("%s source file"), "C");
 	ft->extension = g_strdup("c");
-	ft->pattern = utils_strv_new("*.c", "*.h", NULL);
+	ft->pattern = utils_strv_new("*.c", NULL);
+	ft->comment_open = g_strdup("/*");
+	ft->comment_close = g_strdup("*/");
+	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
+	
+#define CH
+	ft = filetypes[GEANY_FILETYPES_H];
+	ft->lang = 0;
+	ft->name = g_strdup("H");
+	ft->title = g_strdup_printf(_("%s header file"), "C");
+	ft->extension = g_strdup("h");
+	ft->pattern = utils_strv_new("*.h", NULL);
 	ft->comment_open = g_strdup("/*");
 	ft->comment_close = g_strdup("*/");
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
@@ -96,7 +107,18 @@ static void init_builtin_filetypes(void)
 	ft->title = g_strdup_printf(_("%s source file"), "C++");
 	ft->extension = g_strdup("cpp");
 	ft->pattern = utils_strv_new("*.cpp", "*.cxx", "*.c++", "*.cc",
-		"*.h", "*.hpp", "*.hxx", "*.h++", "*.hh", "*.C", NULL);
+		"*.C", NULL);
+	ft->comment_open = g_strdup("//");
+	ft->comment_close = NULL;
+	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
+	
+#define HPP
+	ft = filetypes[GEANY_FILETYPES_HPP];
+	ft->lang = 1;
+	ft->name = g_strdup("H++");
+	ft->title = g_strdup_printf(_("%s header file"), "C++");
+	ft->extension = g_strdup("hpp");
+	ft->pattern = utils_strv_new("*.h", "*.hpp", "*.hxx", "*.h++", "*.hh", NULL);
 	ft->comment_open = g_strdup("//");
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
@@ -767,6 +789,7 @@ static GeanyFiletype *filetypes_detect_from_file_internal(const gchar *utf8_file
 														  const gchar *line)
 {
 	GeanyFiletype *ft;
+	filetype_id id;
 
 	/* try to find a shebang and if found use it prior to the filename extension
 	 * also checks for <?xml */
@@ -775,9 +798,16 @@ static GeanyFiletype *filetypes_detect_from_file_internal(const gchar *utf8_file
 		return ft;
 
 	if (utf8_filename == NULL)
-		return filetypes[GEANY_FILETYPES_NONE];
-
-	return filetypes_detect_from_extension(utf8_filename);
+		ft = filetypes[GEANY_FILETYPES_NONE];
+	else
+		ft = filetypes_detect_from_extension(utf8_filename);
+	id = FILETYPE_ID(ft);
+	if (id == GEANY_FILETYPES_H || id == GEANY_FILETYPES_NONE)
+	{
+		if (strstr(line, "-*-C++-*-"))
+			ft = filetypes[GEANY_FILETYPES_HPP];
+	}
+	return ft;
 }
 
 

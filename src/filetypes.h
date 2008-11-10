@@ -22,8 +22,8 @@
  */
 
 
-#ifndef GEANY_FILETYPES_H
-#define GEANY_FILETYPES_H 1
+#ifndef HAVE_GEANY_FILETYPES_H
+#define HAVE_GEANY_FILETYPES_H 1
 
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
@@ -38,7 +38,9 @@ typedef enum
 	/* normally compiled languages */
 	GEANY_FILETYPES_ASM = 0,
 	GEANY_FILETYPES_C,
+	GEANY_FILETYPES_H,
 	GEANY_FILETYPES_CPP,
+	GEANY_FILETYPES_HPP,
 	GEANY_FILETYPES_CS,
 	GEANY_FILETYPES_CAML,
 	GEANY_FILETYPES_D,
