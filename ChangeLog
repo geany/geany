@@ -14,6 +14,9 @@
    Replace uses of g_strcasecmp() with our own implementation,
    utils_str_casecmp().
    Add utils_str_casecmp() to the plugin API.
+ * doc/Doxyfile.in, src/plugindata.h:
+   Remove obsolete tag in Doxyfile.in.
+   Fix doxygen warnings for undocumented enum in plugindata.h.
 
 
 2008-11-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

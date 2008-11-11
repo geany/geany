@@ -41,6 +41,7 @@
 /* Note: We use enum instead of 'static const gint' to allow its use in global variable
  * initializing, otherwise we get errors like:
  * error: initializer element is not constant */
+/** Versioning data */
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
