@@ -1,3 +1,17 @@
+2008-11-11  Lex Trotman  <elextr(at)gmail(dot)com>
+
+   fix tagmanager interaction with H and HPP filetypes
+   
+ * src/filetypes.c
+   fix h and hpp filetype names to pretend to be c and c++ for tags
+   purposes
+   filetypes_detect_from_file_internal() modified to detect C++ anywhere 
+   between -*- and another -*-
+ * src/symbols.c
+   add GEANY_FILETYPES_H and GEANY_FILETYPES_HPP as alternates where ever
+   GEANY_FILETYPES_C and GEANY_FILETYPES_CPP occur
+
+
 2008-11-10  Lex Trotman  <elextr(at)gmail(dot)com>
 
    Prototype C and CPP header filetypes, also detects .h or no extension

@@ -92,7 +92,7 @@ static void init_builtin_filetypes(void)
 #define CH
 	ft = filetypes[GEANY_FILETYPES_H];
 	ft->lang = 0;
-	ft->name = g_strdup("H");
+	ft->name = g_strdup("C");
 	ft->title = g_strdup_printf(_("%s header file"), "C");
 	ft->extension = g_strdup("h");
 	ft->pattern = utils_strv_new("*.h", NULL);
@@ -115,7 +115,7 @@ static void init_builtin_filetypes(void)
 #define HPP
 	ft = filetypes[GEANY_FILETYPES_HPP];
 	ft->lang = 1;
-	ft->name = g_strdup("H++");
+	ft->name = g_strdup("C++");
 	ft->title = g_strdup_printf(_("%s header file"), "C++");
 	ft->extension = g_strdup("hpp");
 	ft->pattern = utils_strv_new("*.h", "*.hpp", "*.hxx", "*.h++", "*.hh", NULL);
@@ -804,8 +804,11 @@ static GeanyFiletype *filetypes_detect_from_file_internal(const gchar *utf8_file
 	id = FILETYPE_ID(ft);
 	if (id == GEANY_FILETYPES_H || id == GEANY_FILETYPES_NONE)
 	{
-		if (strstr(line, "-*-C++-*-"))
-			ft = filetypes[GEANY_FILETYPES_HPP];
+		char *c;
+		if (c=strstr(line, "-*-")) /* look for C++ between -*- es */
+			if (c=strstr(c,"C++"))
+				if (strstr(c,"-*-"))
+					ft = filetypes[GEANY_FILETYPES_HPP];
 	}
 	return ft;
 }

@@ -118,7 +118,8 @@ void symbols_global_tags_loaded(gint file_type_idx)
 	gint tag_type;
 
 	/* load ignore list for C/C++ parser */
-	if ((file_type_idx == GEANY_FILETYPES_C || file_type_idx == GEANY_FILETYPES_CPP) &&
+	if ((file_type_idx == GEANY_FILETYPES_C || file_type_idx == GEANY_FILETYPES_CPP
+		|| file_type_idx == GEANY_FILETYPES_H || file_type_idx == GEANY_FILETYPES_HPP ) &&
 		c_tags_ignore == NULL)
 	{
 		load_c_ignore_tags();
@@ -138,9 +139,11 @@ void symbols_global_tags_loaded(gint file_type_idx)
 	switch (file_type_idx)
 	{
 		case GEANY_FILETYPES_CPP:
+		case GEANY_FILETYPES_HPP:
 			symbols_global_tags_loaded(GEANY_FILETYPES_C);	/* load C global tags */
 			/* no C++ tagfile yet */
 			return;
+		case GEANY_FILETYPES_H:
 		case GEANY_FILETYPES_C:		tag_type = GTF_C; break;
 		case GEANY_FILETYPES_PASCAL:tag_type = GTF_PASCAL; break;
 		case GEANY_FILETYPES_PHP:	tag_type = GTF_PHP; break;
@@ -232,6 +235,8 @@ const gchar *symbols_get_context_separator(gint ft_id)
 	switch (ft_id)
 	{
 		case GEANY_FILETYPES_C:	/* for C++ .h headers or C structs */
+		case GEANY_FILETYPES_H:
+		case GEANY_FILETYPES_HPP:
 		case GEANY_FILETYPES_CPP:
 		case GEANY_FILETYPES_GLSL:	/* for structs */
 		/*case GEANY_FILETYPES_RUBY:*/ /* not sure what to use atm*/
@@ -1025,11 +1030,13 @@ int symbols_generate_global_tags(int argc, char **argv, gboolean want_preprocess
 			return 1;
 		}
 		/* load ignore list for C/C++ parser */
-		if (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP)
-			load_c_ignore_tags();
+		if (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP
+			|| ft->id == GEANY_FILETYPES_H || ft->id == GEANY_FILETYPES_HPP )
+				load_c_ignore_tags();
 
-		if (want_preprocess && (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP))
-			command = g_strdup_printf("%s %s", pre_process, NVL(getenv("CFLAGS"), ""));
+		if (want_preprocess && (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP
+			|| ft->id == GEANY_FILETYPES_H || ft->id == GEANY_FILETYPES_HPP ))
+				command = g_strdup_printf("%s %s", pre_process, NVL(getenv("CFLAGS"), ""));
 		else
 			command = NULL;	/* don't preprocess */
 
