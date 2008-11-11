@@ -418,13 +418,18 @@ def shutdown():
 		launch('doxygen ' + doxyfile, 'Generating API reference documentation')
 
 	if Options.options.htmldoc:
-		os.chdir('doc')
-		# first try rst2html.py as it is the upstream default
-		ret = launch('rst2html.py -stg --stylesheet=geany.css geany.txt geany.html',
-			'Generating HTML documentation')
-		if not ret == 0:
-			launch('rst2html -stg --stylesheet=geany.css geany.txt geany.html',
-					'Generating HTML documentation (using fallback "rst2html")')
+		# first try rst2html.py as it is the upstream default, fall back to rst2html
+		cmd = Configure.find_program_impl(Build.bld.env, 'rst2html.py')
+		if not cmd:
+			cmd = Configure.find_program_impl(Build.bld.env, 'rst2html')
+		if cmd:
+			os.chdir('doc')
+			ret = launch(cmd + ' -stg --stylesheet=geany.css geany.txt geany.html',
+				'Generating HTML documentation')
+		else:
+			Utils.pprint('RED',
+				'rst2html.py could not be found. Please install the Python docutils package.')
+			sys.exit(1)
 
 	if Options.options.update_po:
 		# the following code was taken from midori's WAF script, thanks
