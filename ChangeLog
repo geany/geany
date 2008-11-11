@@ -1,3 +1,13 @@
+2008-11-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * doc/Makefile.am, wscript, waf:
+   Improve the checking for 'rst2html.py' when creating HTML docs.
+   Update Waf to 1.5.0 (final).
+ * plugins/export.c:
+   Use 'utf8' as encoding package in the LaTeX template as it seems it
+   is the most used version for UTF-8 support.
+
+
 2008-11-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/highlighting.c, src/plugindata.h, src/about.c, src/filetypes.c,
