@@ -297,9 +297,11 @@ const gchar *utils_get_eol_name(gint eol_mode)
 
 gboolean utils_atob(const gchar *str)
 {
-	if (str == NULL) return FALSE;
-	else if (strcasecmp(str, "TRUE")) return FALSE;
-	else return TRUE;
+	if (str == NULL)
+		return FALSE;
+	else if (strcmp(str, "TRUE") == 0 || strcmp(str, "true") == 0)
+		return TRUE;
+	return FALSE;
 }
 
 

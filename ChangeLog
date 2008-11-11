@@ -6,6 +6,9 @@
  * plugins/export.c:
    Use 'utf8' as encoding package in the LaTeX template as it seems it
    is the most used version for UTF-8 support.
+ * src/utils.c:
+   Evaluate only the strings 'TRUE' and 'true' to true in utils_atob(),
+   any other string is treated as false.
 
 
 2008-11-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
