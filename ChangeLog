@@ -9,6 +9,11 @@
  * src/utils.c:
    Evaluate only the strings 'TRUE' and 'true' to true in utils_atob(),
    any other string is treated as false.
+ * src/document.c, src/plugindata.h, src/plugins.c, src/templates.c,
+   src/utils.c, src/utils.h:
+   Replace uses of g_strcasecmp() with our own implementation,
+   utils_str_casecmp().
+   Add utils_str_casecmp() to the plugin API.
 
 
 2008-11-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -104,7 +104,7 @@ static gboolean update_tags_from_buffer(GeanyDocument *doc);
 
 /* ignore the case of filenames and paths under WIN32, causes errors if not */
 #ifdef G_OS_WIN32
-#define filenamecmp(a,b)	strcasecmp((a), (b))
+#define filenamecmp(a,b)	utils_str_casecmp((a), (b))
 #else
 #define filenamecmp(a,b)	strcmp((a), (b))
 #endif
@@ -983,13 +983,13 @@ static gboolean auto_update_tag_list(gpointer data)
 
 	if (! doc || ! doc->is_valid || doc->tm_file == NULL)
 		return FALSE;
-	
+
 	if (gtk_window_get_focus(GTK_WINDOW(main_widgets.window)) != GTK_WIDGET(doc->editor->sci))
 		return TRUE;
 
 	if (update_tags_from_buffer(doc))
 		treeviews_update_tag_list(doc, TRUE);
-	
+
 	return TRUE;
 }
 #endif

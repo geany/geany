@@ -444,9 +444,9 @@ static gint compare_filenames_by_filetype(gconstpointer a, gconstpointer b)
 		if (ft_b->id == GEANY_FILETYPES_NONE)
 			return 1;
 
-		return g_strcasecmp(ft_a->name, ft_b->name);
+		return utils_str_casecmp(ft_a->name, ft_b->name);
 	}
-	return g_strcasecmp(a, b);
+	return utils_str_casecmp(a, b);
 }
 
 

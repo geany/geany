@@ -198,7 +198,8 @@ static UtilsFuncs utils_funcs = {
 	&utils_get_setting_integer,
 	&utils_get_setting_string,
 	&utils_spawn_sync,
-	&utils_spawn_async
+	&utils_spawn_async,
+	&utils_str_casecmp
 };
 
 static UIUtilsFuncs uiutils_funcs = {
@@ -745,7 +746,7 @@ load_plugins_from_path(const gchar *path)
 	for (item = list; item != NULL; item = g_slist_next(item))
 	{
 		tmp = strrchr(item->data, '.');
-		if (tmp == NULL || strcasecmp(tmp, "." PLUGIN_EXT) != 0)
+		if (tmp == NULL || utils_str_casecmp(tmp, "." PLUGIN_EXT) != 0)
 			continue;
 
 		fname = g_strconcat(path, G_DIR_SEPARATOR_S, item->data, NULL);

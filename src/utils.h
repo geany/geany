@@ -141,4 +141,6 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 						   GSpawnChildSetupFunc child_setup, gpointer user_data, GPid *child_pid,
 						   GError **error);
 
+gint utils_str_casecmp(const gchar *s1, const gchar *s2);
+
 #endif

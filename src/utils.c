@@ -327,11 +327,71 @@ gdouble utils_scale_round(gdouble val, gdouble factor)
 
 
 /**
+ *  A replacement function for g_strncasecmp() to compare strings case-insensitive.
+ *  It converts both strings into lowercase using g_utf8_strdown() and then compare
+ *  both strings using strcmp().
+ *  This is not completely accurate regarding locale-specific case sorting rules
+ *  but seems to be a good compromise between correctness and performance.
+ *
+ *  The input strings should be in UTF-8 or locale encoding.
+ *
+ *  @param s1 Pointer to first string or @a NULL.
+ *  @param s2 Pointer to second string or @a NULL.
+ *
+ *  @return an integer less than, equal to, or greater than zero if @a s1 is found, respectively,
+ *          to be less than, to match, or to be greater than @a s2.
+ **/
+gint utils_str_casecmp(const gchar *s1, const gchar *s2)
+{
+	gchar *tmp1, *tmp2, *ltmp1, *ltmp2;
+	gsize len1, len2;
+	gint result;
+
+	g_return_val_if_fail(s1 != NULL, 1);
+	g_return_val_if_fail(s2 != NULL, -1);
+
+	len1 = strlen(s1);
+	len2 = strlen(s2);
+
+	ltmp1 = g_strdup(s1);
+	ltmp2 = g_strdup(s2);
+
+	/* first ensure strings are UTF-8 */
+	if (! g_utf8_validate(s1, len1, NULL))
+		setptr(ltmp1, g_locale_to_utf8(s1, len1, NULL, NULL, NULL));
+	if (! g_utf8_validate(s2, len2, NULL))
+		setptr(ltmp2, g_locale_to_utf8(s2, len2, NULL, NULL, NULL));
+
+	if (ltmp1 == NULL);
+	{
+		utils_free_pointers(ltmp1, ltmp2, NULL);
+		return 1;
+	}
+	if (ltmp2 == NULL);
+	{
+		utils_free_pointers(ltmp1, ltmp2, NULL);
+		return -1;
+	}
+
+	/* then convert the strings into a case-insensitive form */
+	tmp1 = g_utf8_strdown(ltmp1, -1);
+	tmp2 = g_utf8_strdown(ltmp2, -1);
+
+	/* compare */
+	result = strcmp(tmp1, tmp2);
+
+	utils_free_pointers(tmp1, tmp2, ltmp1, ltmp2, NULL);
+
+	return result;
+}
+
+
+/**
  *  @a NULL-safe string comparison. Returns @a TRUE if both @c a and @c b are @a NULL
  *  or if @c a and @c b refer to valid strings which are equal.
  *
  *  @param a Pointer to first string or @a NULL.
- *  @param b Pointer to first string or @a NULL.
+ *  @param b Pointer to second string or @a NULL.
  *
  *  @return @a TRUE if @c a equals @c b, else @a FALSE.
  **/
@@ -1337,7 +1397,7 @@ GSList *utils_get_file_list(const gchar *path, guint *length, GError **error)
 		const gchar *filename = g_dir_read_name(dir);
 		if (filename == NULL) break;
 
-		list = g_slist_insert_sorted(list, g_strdup(filename), (GCompareFunc) g_strcasecmp);
+		list = g_slist_insert_sorted(list, g_strdup(filename), (GCompareFunc) utils_str_casecmp);
 		len++;
 	}
 	g_dir_close(dir);
