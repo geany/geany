@@ -50,7 +50,7 @@ enum {
 	 * existing fields in the plugin data types have to be changed or reordered. */
 	/* This should usually stay the same if fields are only appended, assuming only pointers to
 	 * structs and not structs themselves are declared by plugins. */
-	GEANY_ABI_VERSION = 48
+	GEANY_ABI_VERSION = 49
 };
 
 /** Check the plugin can be loaded by Geany.
@@ -483,9 +483,9 @@ typedef struct EditorFuncs
 	void	(*set_indicator_full) (struct GeanyEditor *editor, gint indic, gint start, gint end);
 	void	(*set_indicator_on_line_full) (struct GeanyEditor *editor, gint indic, gint line);
 	void	(*clear_indicators_full) (struct GeanyEditor *editor, gint indic);
-	
+
 	void	(*set_indent_type)(struct GeanyEditor *editor, GeanyIndentType type);
-	
+
 	/* Remember to convert any GeanyDocument or ScintillaObject pointers in any
 	 * appended functions to GeanyEditor pointers. */
 }

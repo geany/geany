@@ -107,7 +107,18 @@ static void init_builtin_filetypes(void)
 	ft->name = g_strdup("C#");
 	ft->title = g_strdup_printf(_("%s source file"), "C#");
 	ft->extension = g_strdup("cs");
-	ft->pattern = utils_strv_new("*.cs", "*.vala", NULL);
+	ft->pattern = utils_strv_new("*.cs", NULL);
+	ft->comment_open = g_strdup("//");
+	ft->comment_close = NULL;
+	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
+
+#define VALA
+	ft = filetypes[GEANY_FILETYPES_VALA];
+	ft->lang = 33;
+	ft->name = g_strdup("Vala");
+	ft->title = g_strdup_printf(_("%s source file"), "Vala");
+	ft->extension = g_strdup("vala");
+	ft->pattern = utils_strv_new("*.vala", "*.vapi", NULL);
 	ft->comment_open = g_strdup("//");
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;

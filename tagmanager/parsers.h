@@ -47,7 +47,8 @@
     HtmlParser, \
     F77Parser, \
     GLSLParser, \
-    MatlabParser
+    MatlabParser, \
+    ValaParser
 
 /*
 langType of each parser
@@ -84,6 +85,7 @@ langType of each parser
 30  F77Parser
 31  GLSLParser
 32  MatlabParser
+33  ValaParser
 */
 #endif	/* _PARSERS_H */
 

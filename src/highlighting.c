@@ -898,6 +898,66 @@ static void styleset_cs(ScintillaObject *sci)
 }
 
 
+static void styleset_vala_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
+{
+	new_style_array(GEANY_FILETYPES_VALA, 21);
+	styleset_c_like_init(config, config_home, GEANY_FILETYPES_VALA);
+	get_keyfile_int(config, config_home, "styling", "styling_within_preprocessor",
+		1, 0, &style_sets[GEANY_FILETYPES_VALA].styling[20]);
+
+	style_sets[GEANY_FILETYPES_VALA].keywords = g_new(gchar*, 4);
+	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_VALA, 0,
+			"else if switch case default break continue return for foreach in do while is "
+			"try catch finally throw "
+			"namespace interface class struct enum signal errordomain "
+			"construct callback get set base "
+			"const static var weak "
+			"virtual abstract override inline extern "
+			"public protected private delegate "
+			"out ref "
+
+			"lock using "
+
+			"true false null "
+
+			"generic new delete base this value typeof sizeof "
+			"throws requires ensures "
+
+			"void bool char uchar int uint short ushort long ulong size_t ssize_t "
+			"int8 uint8 int16 uint16 int32 uint32 int64 uint64 float double unichar string "
+
+			/* this types are not referenced by the reference manual but are in glib.vapi
+			 * as simple types */
+			/*"constpointer time_t "*/
+			);
+	get_keyfile_keywords(config, config_home, "keywords", "secondary", GEANY_FILETYPES_VALA, 1, "");
+	get_keyfile_keywords(config, config_home, "keywords", "docComment", GEANY_FILETYPES_VALA, 2, "");
+	style_sets[GEANY_FILETYPES_VALA].keywords[3] = NULL;
+
+	get_keyfile_wordchars(config, config_home,
+		&style_sets[GEANY_FILETYPES_VALA].wordchars);
+}
+
+
+static void styleset_vala(ScintillaObject *sci)
+{
+	const filetype_id ft_id = GEANY_FILETYPES_VALA;
+
+	apply_filetype_properties(sci, SCLEX_CPP, ft_id);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[ft_id].keywords[0]);
+	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[ft_id].keywords[2]);
+
+	/* assign global types, merge them with user defined keywords and set them */
+	assign_global_and_user_keywords(sci, style_sets[ft_id].keywords[1], filetypes[ft_id]->lang);
+
+	styleset_c_like(sci, ft_id);
+
+	if (style_sets[ft_id].styling[20].foreground == 1)
+		SSM(sci, ft_id, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
+}
+
+
 static void styleset_pascal_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_style_array(GEANY_FILETYPES_PASCAL, 12);
@@ -3145,6 +3205,7 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 		init_styleset_case(GEANY_FILETYPES_SH,		sh);
 		init_styleset_case(GEANY_FILETYPES_SQL,		sql);
 		init_styleset_case(GEANY_FILETYPES_TCL,		tcl);
+		init_styleset_case(GEANY_FILETYPES_VALA,	vala);
 		init_styleset_case(GEANY_FILETYPES_VHDL,	vhdl);
 		init_styleset_case(GEANY_FILETYPES_XML,		markup);
 	}
@@ -3202,6 +3263,7 @@ void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 		styleset_case(GEANY_FILETYPES_SH,		sh);
 		styleset_case(GEANY_FILETYPES_SQL,		sql);
 		styleset_case(GEANY_FILETYPES_TCL,		tcl);
+		styleset_case(GEANY_FILETYPES_VALA,		vala);
 		styleset_case(GEANY_FILETYPES_VHDL,		vhdl);
 		styleset_case(GEANY_FILETYPES_XML,		xml);
 		default:
