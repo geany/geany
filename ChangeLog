@@ -5,6 +5,8 @@
    data/filetype_extensions.conf:
    Apply patch from Colomban Wendling to add Vala filetype (thanks).
    Fix c.c tagLetter() bug.
+ * tagmanager/c.c:
+   Use separate keyword table for D (still missing keywords though).
 
 
 2008-11-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
