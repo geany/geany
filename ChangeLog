@@ -17,6 +17,8 @@
  * doc/Doxyfile.in, src/plugindata.h:
    Remove obsolete tag in Doxyfile.in.
    Fix doxygen warnings for undocumented enum in plugindata.h.
+ * THANKS, src/about.c, src/templates.c:
+   Add a file template for LaTeX (patch by Herbert Voss, thanks).
 
 
 2008-11-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -226,6 +226,17 @@ def main():\n\
 if __name__ == '__main__': main()\n\
 ";
 
+static const gchar templates_filetype_latex[] = "\
+\\documentclass[a4paper]{article}\n\
+\\usepackage[T1]{fontenc}\n\
+\\usepackage[utf8]{inputenc}\n\
+\\usepackage{lmodern}\n\
+\\usepackage{babel}\n\
+\\begin{document}\n\
+\n\
+\\end{document}\n\
+";
+
 static gchar *templates[GEANY_MAX_TEMPLATES];
 static gchar *ft_templates[GEANY_MAX_BUILT_IN_FILETYPES] = {NULL};
 
@@ -306,6 +317,7 @@ static void init_ft_templates(const gchar *year, const gchar *date, const gchar 
 			case GEANY_FILETYPES_HTML:	TEMPLATES_CREATE_FILE(fname, templates_filetype_html); break;
 			case GEANY_FILETYPES_RUBY:	TEMPLATES_CREATE_FILE(fname, templates_filetype_ruby); break;
 			case GEANY_FILETYPES_PYTHON:    TEMPLATES_CREATE_FILE(fname, templates_filetype_python); break;
+			case GEANY_FILETYPES_LATEX: TEMPLATES_CREATE_FILE(fname, templates_filetype_latex); break;
 			default: break;
 		}
 		TEMPLATES_READ_FILE(fname, &ft_templates[ft_id]);
