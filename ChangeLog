@@ -3,6 +3,9 @@
  * src/utils.c:
    Fix empty statements and possible memory leaks with
    utils_free_pointers() in utils_str_casecmp().
+ * plugins/splitwindow.c, src/about.c, THANKS:
+   Add Split Vertically command (patch by Moritz Barsnick, thanks;
+   #2219553).
 
 
 2008-11-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
