@@ -1,3 +1,10 @@
+2008-11-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/utils.c:
+   Fix empty statements and possible memory leaks with
+   utils_free_pointers() in utils_str_casecmp().
+
+
 2008-11-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * doc/Makefile.am, wscript, waf:

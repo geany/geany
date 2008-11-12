@@ -343,45 +343,41 @@ gdouble utils_scale_round(gdouble val, gdouble factor)
  **/
 gint utils_str_casecmp(const gchar *s1, const gchar *s2)
 {
-	gchar *tmp1, *tmp2, *ltmp1, *ltmp2;
-	gsize len1, len2;
+	gchar *tmp1, *tmp2;
 	gint result;
 
 	g_return_val_if_fail(s1 != NULL, 1);
 	g_return_val_if_fail(s2 != NULL, -1);
 
-	len1 = strlen(s1);
-	len2 = strlen(s2);
-
-	ltmp1 = g_strdup(s1);
-	ltmp2 = g_strdup(s2);
+	tmp1 = g_strdup(s1);
+	tmp2 = g_strdup(s2);
 
 	/* first ensure strings are UTF-8 */
-	if (! g_utf8_validate(s1, len1, NULL))
-		setptr(ltmp1, g_locale_to_utf8(s1, len1, NULL, NULL, NULL));
-	if (! g_utf8_validate(s2, len2, NULL))
-		setptr(ltmp2, g_locale_to_utf8(s2, len2, NULL, NULL, NULL));
+	if (! g_utf8_validate(s1, -1, NULL))
+		setptr(tmp1, g_locale_to_utf8(s1, -1, NULL, NULL, NULL));
+	if (! g_utf8_validate(s2, -1, NULL))
+		setptr(tmp2, g_locale_to_utf8(s2, -1, NULL, NULL, NULL));
 
-	if (ltmp1 == NULL);
+	if (tmp1 == NULL)
 	{
-		utils_free_pointers(ltmp1, ltmp2, NULL);
+		g_free(tmp2);
 		return 1;
 	}
-	if (ltmp2 == NULL);
+	if (tmp2 == NULL)
 	{
-		utils_free_pointers(ltmp1, ltmp2, NULL);
+		g_free(tmp1);
 		return -1;
 	}
 
 	/* then convert the strings into a case-insensitive form */
-	tmp1 = g_utf8_strdown(ltmp1, -1);
-	tmp2 = g_utf8_strdown(ltmp2, -1);
+	setptr(tmp1, g_utf8_strdown(tmp1, -1));
+	setptr(tmp2, g_utf8_strdown(tmp2, -1));
 
 	/* compare */
 	result = strcmp(tmp1, tmp2);
 
-	utils_free_pointers(tmp1, tmp2, ltmp1, ltmp2, NULL);
-
+	g_free(tmp1);
+	g_free(tmp2);
 	return result;
 }
 
