@@ -1,3 +1,10 @@
+2008-11-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * tagmanager/c.c:
+   Fix indentation to consistently use tabs (patch by Colomban Wendling,
+   thanks).
+
+
 2008-11-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/utils.c:
