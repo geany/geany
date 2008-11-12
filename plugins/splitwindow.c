@@ -49,7 +49,7 @@ GeanyFunctions	*geany_functions;
 enum State
 {
 	STATE_SPLIT_HORIZONTAL,
-	/* STATE_SPLIT_VERTICAL, */
+	STATE_SPLIT_VERTICAL,
 	STATE_UNSPLIT,
 	STATE_COUNT
 };
@@ -58,6 +58,7 @@ static struct
 {
 	GtkWidget *main;
 	GtkWidget *horizontal;
+	GtkWidget *vertical;
 	GtkWidget *unsplit;
 }
 menu_items;
@@ -201,7 +202,9 @@ static void set_editor(EditWindow *editwin, GeanyEditor *editor)
 static void set_state(enum State id)
 {
 	gtk_widget_set_sensitive(menu_items.horizontal,
-		id != STATE_SPLIT_HORIZONTAL);
+		(id != STATE_SPLIT_HORIZONTAL) && (id != STATE_SPLIT_VERTICAL));
+	gtk_widget_set_sensitive(menu_items.vertical,
+		(id != STATE_SPLIT_HORIZONTAL) && (id != STATE_SPLIT_VERTICAL));
 	gtk_widget_set_sensitive(menu_items.unsplit,
 		id != STATE_UNSPLIT);
 
@@ -276,25 +279,26 @@ static GtkWidget *create_toolbar(void)
 }
 
 
-static void on_split_view(GtkMenuItem *menuitem, gpointer user_data)
+static void split_view(gboolean horizontal)
 {
 	GtkWidget *notebook = geany_data->main_widgets->notebook;
 	GtkWidget *parent = gtk_widget_get_parent(notebook);
 	GtkWidget *pane, *toolbar, *box;
 	GeanyDocument *doc = p_document->get_current();
 	gint width = notebook->allocation.width / 2;
-
-	set_state(STATE_SPLIT_HORIZONTAL);
+	gint height = notebook->allocation.height / 2;
 
 	g_return_if_fail(doc);
 	g_return_if_fail(edit_window.editor == NULL);
+
+	set_state(horizontal ? STATE_SPLIT_HORIZONTAL : STATE_SPLIT_VERTICAL);
 
 	/* temporarily put document notebook in main vbox (scintilla widgets must stay
 	 * in a visible parent window, otherwise there are X selection and scrollbar issues) */
 	gtk_widget_reparent(notebook,
 		p_support->lookup_widget(geany->main_widgets->window, "vbox1"));
 
-	pane = gtk_hpaned_new();
+	pane = horizontal ? gtk_hpaned_new() : gtk_vpaned_new();
 	gtk_container_add(GTK_CONTAINER(parent), pane);
 	gtk_widget_reparent(notebook, pane);
 
@@ -306,8 +310,27 @@ static void on_split_view(GtkMenuItem *menuitem, gpointer user_data)
 
 	set_editor(&edit_window, doc->editor);
 
-	gtk_paned_set_position(GTK_PANED(pane), width);
+	if (horizontal)
+	{
+		gtk_paned_set_position(GTK_PANED(pane), width);
+	}
+	else
+	{
+		gtk_paned_set_position(GTK_PANED(pane), height);
+	}
 	gtk_widget_show_all(pane);
+}
+
+
+static void on_split_horizontally(GtkMenuItem *menuitem, gpointer user_data)
+{
+	split_view(TRUE);
+}
+
+
+static void on_split_vertically(GtkMenuItem *menuitem, gpointer user_data)
+{
+	split_view(FALSE);
 }
 
 
@@ -346,7 +369,12 @@ void plugin_init(GeanyData *data)
 
 	menu_items.horizontal = item =
 		gtk_menu_item_new_with_mnemonic(_("_Horizontally"));
-	g_signal_connect(item, "activate", G_CALLBACK(on_split_view), NULL);
+	g_signal_connect(item, "activate", G_CALLBACK(on_split_horizontally), NULL);
+	gtk_menu_append(menu, item);
+
+	menu_items.vertical = item =
+		gtk_menu_item_new_with_mnemonic(_("_Vertically"));
+	g_signal_connect(item, "activate", G_CALLBACK(on_split_vertically), NULL);
 	gtk_menu_append(menu, item);
 
 	menu_items.unsplit = item =
