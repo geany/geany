@@ -1716,10 +1716,10 @@ static void fix_line_indents(GeanyEditor *editor, gint line_start, gint line_end
 }
 
 
-/* Insert text, replacing \t tab chars with the correct indent width.
+/* Insert text, replacing \t tab chars with the correct indent width, and \n newline
+ * chars with the correct line ending string.
  * @param text Intended as e.g. "if (1)\n\tdo_something();"
  * @param cursor_index If >= 0, the index into @a text to place the cursor.
- * @todo Correct for CRLF line endings.
  * @warning Make sure all \t tab chars in @a text are intended as indent widths,
  * NOT any hard tabs (you get those when copying document text with the Tabs
  * & Spaces indent mode set).
@@ -1740,6 +1740,9 @@ static void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gin
 
 	if (cursor_index >= 0)
 		g_string_insert(buf, cursor_index, cur_marker);	/* remember cursor pos */
+
+	/* transform line endings */
+	utils_string_replace_all(buf, "\n", editor_get_eol_char(editor));
 
 	/* transform tabs into indent widths in spaces */
 	whitespace = g_strnfill(editor_get_indent_prefs(editor)->width, ' ');
@@ -1789,7 +1792,7 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 	/* we use only spaces so it works with editor_insert_text_block(). */
 	line = sci_get_line_from_position(sci, pos);
 	lindent = g_strnfill(sci_get_line_indentation(sci, line), ' ');
-	setptr(lindent, g_strconcat(editor_get_eol_char(editor), lindent, NULL));
+	setptr(lindent, g_strconcat("\n", lindent, NULL));
 
 	/* remove the typed word, it will be added again by the used auto completion
 	 * (not really necessary but this makes the auto completion more flexible,

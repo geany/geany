@@ -30,6 +30,9 @@
  * src/utils.c:
    Make API function utils_string_replace_all() able to make
    replacements that match the search string.
+ * src/editor.c:
+   Make editor_insert_text_block() transform any \n newline chars with
+   the correct line ending string.
 
 
 2008-11-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
