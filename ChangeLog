@@ -1,3 +1,9 @@
+2008-11-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/editor.c:
+   Fix indenting for Tabs & Spaces mode when inserting snippets.
+
+
 2008-11-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * tagmanager/c.c:

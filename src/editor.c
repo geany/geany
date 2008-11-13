@@ -842,14 +842,6 @@ editor_get_indent_prefs(GeanyEditor *editor)
 }
 
 
-static gchar *get_single_indent(GeanyEditor *editor)
-{
-	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
-
-	return get_whitespace(iprefs, iprefs->width);
-}
-
-
 static void on_new_line_added(GeanyEditor *editor)
 {
 	ScintillaObject *sci = editor->sci;
@@ -900,7 +892,8 @@ static gboolean lexer_has_braces(ScintillaObject *sci)
 
 
 /* Read indent chars for the line that pos is on into indent global variable.
- * Note: Use sci_get_line_indentation() and get_whitespace() instead in any new code.  */
+ * Note: Use sci_get_line_indentation() and get_whitespace()/editor_insert_text_block()
+ * instead in any new code.  */
 static void read_indent(GeanyEditor *editor, gint pos)
 {
 	ScintillaObject *sci = editor->sci;
@@ -1699,16 +1692,68 @@ static gchar *snippets_replace_wildcards(GeanyEditor *editor, gchar *text)
 }
 
 
+/* this only works with spaces only indentation on the lines */
+static void fix_line_indents(GeanyEditor *editor, gint line_start, gint line_end)
+{
+	ScintillaObject *sci = editor->sci;
+	gint line, cur_line, cur_col, pos;
+
+	/* get the line, col position as fixing indentation will move cursor to start of line */
+	pos = sci_get_current_position(sci);
+	cur_col = sci_get_col_from_position(sci, pos);
+	cur_line = sci_get_current_line(sci);
+
+	for (line = line_start; line <= line_end; line++)
+	{
+		gint size = sci_get_line_indentation(sci, line);
+
+		/* set to 0 first to trigger proper indent creation */
+		sci_set_line_indentation(sci, line, 0);
+		sci_set_line_indentation(sci, line, size);
+	}
+	pos = scintilla_send_message(sci, SCI_FINDCOLUMN, cur_line, cur_col);
+	sci_set_current_position(sci, pos, FALSE);
+}
+
+
+/* @param cursor_index If >= 0, the index into @a text to place the cursor.
+ * @todo Correct for CRLF line endings.
+ * @warning Use spaces for indentation. \t tab symbols will be interpreted
+ * as a hard tab, NOT indent width, for the Tabs & Spaces indent type.
+ * @note This doesn't scroll the cursor in view afterwards. */
+static void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint insert_pos,
+		gint cursor_index)
+{
+	ScintillaObject *sci = editor->sci;
+	gint line = sci_get_line_from_position(sci, insert_pos);
+	gint line_end;
+	gsize len;
+
+	g_return_if_fail(text);
+
+	sci_insert_text(sci, insert_pos, text);
+	len = strlen(text);
+	line_end = sci_get_line_from_position(sci, insert_pos + len);
+
+	if (cursor_index >= 0)
+		sci_set_current_position(sci, insert_pos + cursor_index, FALSE);
+
+	/* fixup indentation (very useful for Tabs & Spaces indent type) */
+	fix_line_indents(editor, line, line_end);
+}
+
+
 static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, const gchar *word)
 {
 	gchar *str;
 	gchar *pattern;
 	gchar *lindent;
 	gchar *whitespace;
-	gint step, str_len;
+	gint step, str_len, cur_index, line;
 	gint ft_id = FILETYPE_ID(editor->document->file_type);
 	GHashTable *specials;
 	ScintillaObject *sci = editor->sci;
+	const gint indent_width = editor_get_indent_prefs(editor)->width;
 
 	str = g_strdup(word);
 	g_strstrip(str);
@@ -1720,9 +1765,11 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 		return FALSE;
 	}
 
-	read_indent(editor, pos);
-	lindent = g_strconcat(editor_get_eol_char(editor), indent, NULL);
-	whitespace = get_single_indent(editor);
+	/* we use only spaces so it works with editor_insert_text_block(). */
+	line = sci_get_line_from_position(sci, pos);
+	lindent = g_strnfill(sci_get_line_indentation(sci, line), ' ');
+	setptr(lindent, g_strconcat(editor_get_eol_char(editor), lindent, NULL));
+	whitespace = g_strnfill(indent_width, ' ');
 
 	/* remove the typed word, it will be added again by the used auto completion
 	 * (not really necessary but this makes the auto completion more flexible,
@@ -1759,11 +1806,13 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 		pattern = utils_str_replace(pattern, "%cursor%", "");
 
 	/* finally insert the text and set the cursor */
-	SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) pattern);
 	if (step != -1)
-		sci_goto_pos(sci, pos + step, TRUE);
+		cur_index = step;
 	else
-		sci_goto_pos(sci, pos + strlen(pattern), TRUE);
+		cur_index = strlen(pattern);
+
+	editor_insert_text_block(editor, pattern, pos, cur_index);
+	sci_scroll_caret(sci);
 
 	utils_free_pointers(pattern, whitespace, lindent, str, NULL);
  	return TRUE;
