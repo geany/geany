@@ -38,6 +38,7 @@
 #include "sciwrappers.h"
 #include "ui_utils.h"
 #include "editor.h"
+#include "encodings.h"
 
 #include <unistd.h>
 #include <string.h>
@@ -79,14 +80,13 @@ struct
 {
 	GtkWidget *dir_combo;
 	GtkWidget *search_combo;
+	GtkWidget *encoding_combo;
 	GtkWidget *extra_entry;
 }
-find_in_files = {NULL, NULL, NULL};
+find_in_files = {NULL, NULL, NULL, NULL};
 
 
-static gboolean search_read_io              (GIOChannel *source,
-                                             GIOCondition condition,
-                                             gpointer data);
+static gboolean search_read_io(GIOChannel *source, GIOCondition condition, gpointer data);
 
 static void search_close_pid(GPid child_pid, gint status, gpointer user_data);
 
@@ -115,7 +115,8 @@ static void
 on_find_in_files_dialog_response(GtkDialog *dialog, gint response, gpointer user_data);
 
 static gboolean
-search_find_in_files(const gchar *search_text, const gchar *dir, const gchar *opts);
+search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gchar *opts,
+	const gchar *enc);
 
 
 void search_init(void)
@@ -561,12 +562,14 @@ static void on_extra_options_toggled(GtkToggleButton *togglebutton, gpointer use
 
 static void create_fif_dialog()
 {
-	GtkWidget *dir_combo, *combo, *entry;
+	GtkWidget *dir_combo, *combo, *e_combo, *entry;
 	GtkWidget *label, *label1, *checkbox1, *checkbox2, *check_wholeword,
 		*check_recursive, *check_extra, *entry_extra;
-	GtkWidget *dbox, *sbox, *cbox, *rbox, *rbtn, *hbox, *vbox;
+	GtkWidget *dbox, *sbox, *cbox, *rbox, *rbtn, *hbox, *vbox, *ebox;
 	GtkSizeGroup *size_group;
 	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
+	gchar *encoding_string;
+	guint i;
 
 	load_monospace_style();
 
@@ -609,6 +612,24 @@ static void create_fif_dialog()
 	sbox = gtk_hbox_new(FALSE, 6);
 	gtk_box_pack_start(GTK_BOX(sbox), label, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(sbox), combo, TRUE, TRUE, 0);
+
+	label = gtk_label_new_with_mnemonic(_("E_ncoding:"));
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+
+	e_combo = gtk_combo_box_new_text();
+	for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
+	{
+		encoding_string = encodings_to_string(&encodings[i]);
+		gtk_combo_box_append_text(GTK_COMBO_BOX(e_combo), encoding_string);
+		g_free(encoding_string);
+	}
+	gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(e_combo), 3);
+	gtk_label_set_mnemonic_widget(GTK_LABEL(label), e_combo);
+	find_in_files.encoding_combo = e_combo;
+
+	ebox = gtk_hbox_new(FALSE, 6);
+	gtk_box_pack_start(GTK_BOX(ebox), label, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(ebox), e_combo, TRUE, TRUE, 0);
 
 	size_group = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
 	gtk_size_group_add_widget(size_group, label1);
@@ -675,6 +696,7 @@ static void create_fif_dialog()
 
 	gtk_box_pack_start(GTK_BOX(vbox), dbox, TRUE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), sbox, TRUE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), ebox, TRUE, FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(vbox), hbox);
 
 	check_extra = gtk_check_button_new_with_mnemonic(_("E_xtra options:"));
@@ -719,6 +741,7 @@ void search_show_find_in_files_dialog(const gchar *dir)
 	GeanyEditor *editor = doc ? doc->editor : NULL;
 	gchar *sel = NULL;
 	gchar *cur_dir = NULL;
+	GeanyEncodingIndex enc_idx = GEANY_ENCODING_UTF_8;
 
 	if (widgets.find_in_files_dialog == NULL)
 	{
@@ -756,6 +779,11 @@ void search_show_find_in_files_dialog(const gchar *dir)
 		gtk_entry_set_text(GTK_ENTRY(entry), cur_dir);
 		g_free(cur_dir);
 	}
+
+	/* set the encoding of the current file */
+	if (doc != NULL)
+		enc_idx = encodings_get_idx_from_charset(doc->encoding);
+	gtk_combo_box_set_active(GTK_COMBO_BOX(find_in_files.encoding_combo), enc_idx);
 
 	/* put the focus to the directory entry if it is empty */
 	if (utils_str_equal(gtk_entry_get_text(GTK_ENTRY(entry)), ""))
@@ -1139,6 +1167,8 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 		GtkWidget *dir_combo = find_in_files.dir_combo;
 		const gchar *utf8_dir =
 			gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(dir_combo))));
+		GeanyEncodingIndex enc_idx = gtk_combo_box_get_active(
+			GTK_COMBO_BOX(find_in_files.encoding_combo));
 
 		/* update extra options pref */
 		g_free(search_prefs.fif_extra_options);
@@ -1151,10 +1181,12 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 		{
 			gchar *locale_dir;
 			GString *opts = get_grep_options();
+			const gchar *enc = (enc_idx == GEANY_ENCODING_UTF_8) ? NULL :
+				encodings_get_charset_from_index(enc_idx);
 
 			locale_dir = utils_get_locale_from_utf8(utf8_dir);
 
-			if (search_find_in_files(search_text, locale_dir, opts->str))
+			if (search_find_in_files(search_text, locale_dir, opts->str, enc))
 			{
 				ui_combo_box_add_to_history(GTK_COMBO_BOX(search_combo), search_text);
 				ui_combo_box_add_to_history(GTK_COMBO_BOX(dir_combo), utf8_dir);
@@ -1172,17 +1204,20 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 
 
 static gboolean
-search_find_in_files(const gchar *search_text, const gchar *dir, const gchar *opts)
+search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gchar *opts,
+	const gchar *enc)
 {
 	gchar **argv_prefix, **argv, **opts_argv;
 	gchar *command_grep;
+	gchar *search_text = NULL;
 	guint opts_argv_len, i;
 	GPid child_pid;
 	gint stdout_fd;
 	GError *error = NULL;
 	gboolean ret = FALSE;
+	gssize utf8_text_len;
 
-	if (! search_text || ! *search_text || ! dir) return TRUE;
+	if (! NZV(utf8_search_text) || ! dir) return TRUE;
 
 	command_grep = g_find_program_in_path(tool_prefs.grep_cmd);
 	if (command_grep == NULL)
@@ -1191,6 +1226,16 @@ search_find_in_files(const gchar *search_text, const gchar *dir, const gchar *op
 			" check the path setting in Preferences."), tool_prefs.grep_cmd);
 		return FALSE;
 	}
+
+	/* convert the search text in the preferred encoding (if the text is not valid UTF-8. assume
+	 * it is already in the preferred encoding) */
+	utf8_text_len = strlen(utf8_search_text);
+	if (enc != NULL && g_utf8_validate(utf8_search_text, utf8_text_len, NULL))
+	{
+		search_text = g_convert(utf8_search_text, utf8_text_len, enc, "UTF-8", NULL, NULL, NULL);
+	}
+	if (search_text == NULL)
+		search_text = g_strdup(utf8_search_text);
 
 	opts_argv = g_strsplit(opts, " ", -1);
 	opts_argv_len = g_strv_length(opts_argv);
@@ -1248,12 +1293,14 @@ search_find_in_files(const gchar *search_text, const gchar *dir, const gchar *op
 
 		g_free(msgwindow.find_in_files_dir);
 		msgwindow.find_in_files_dir = g_strdup(dir);
+		/* we can pass 'enc' without strdup'ing it here because it's a global const string and
+		 * always exits longer than the lifetime of this function */
 		utils_set_up_io_channel(stdout_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
-			TRUE, search_read_io, NULL);
+			TRUE, search_read_io, (gpointer) enc);
 		g_child_watch_add(child_pid, search_close_pid, NULL);
 
 		str = g_strdup_printf(_("%s %s -- %s (in directory: %s)"),
-			tool_prefs.grep_cmd, opts, search_text, dir);
+			tool_prefs.grep_cmd, opts, utf8_search_text, dir);
 		utf8_str = utils_get_utf8_from_locale(str);
 		msgwin_msg_add(COLOR_BLUE, -1, NULL, utf8_str);
 		utils_free_pointers(str, utf8_str, NULL);
@@ -1304,18 +1351,25 @@ static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir)
 }
 
 
-static gboolean search_read_io              (GIOChannel *source,
-                                             GIOCondition condition,
-                                             gpointer data)
+static gboolean search_read_io(GIOChannel *source, GIOCondition condition, gpointer data)
 {
 	if (condition & (G_IO_IN | G_IO_PRI))
 	{
-		gchar *msg;
+		gchar *msg, *utf8_msg = NULL;
+		gchar *enc = data;
 
 		while (g_io_channel_read_line(source, &msg, NULL, NULL, NULL) && msg)
 		{
-			msgwin_msg_add(COLOR_BLACK, -1, NULL, g_strstrip(msg));
+			g_strstrip(msg);
+			if (! g_utf8_validate(msg, -1, NULL))
+			{
+				utf8_msg = g_convert(msg, -1, "UTF-8", enc, NULL, NULL, NULL);
+			}
+			if (utf8_msg == NULL)
+				utf8_msg = g_strdup(msg);
+			msgwin_msg_add(COLOR_BLACK, -1, NULL, utf8_msg);
 			g_free(msg);
+			g_free(utf8_msg);
 		}
 	}
 	if (condition & (G_IO_ERR | G_IO_HUP | G_IO_NVAL))

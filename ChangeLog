@@ -12,6 +12,10 @@
    Move utils_make_settings_dir() into main.c.
    Remove win32_get_appdata_folder() because g_get_user_config_dir()
    does the same.
+ * src/search.c:
+   Add an encoding combo box to the Find in Files dialog to choose an
+   encoding to use for searching (i.e. the encoding in which the search
+   text is passed to 'grep').
 
 
 2008-11-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
