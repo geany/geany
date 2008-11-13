@@ -295,7 +295,7 @@ to the s_tag_type_names strings used in foo.c for FooKinds.
 Loading a plugin from GDB
 -------------------------
 This is useful so you can load plugins without installing them first.
-Alternatively you can use a symlink in ~/.geany/plugins or
+Alternatively you can use a symlink in ~/.config/geany/plugins or
 $prefix/lib/geany (where $prefix is /usr/local by default).
 
 The gdb session below was run from the toplevel Geany source directory.

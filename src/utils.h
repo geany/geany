@@ -74,8 +74,6 @@ gchar utils_brace_opposite(gchar ch);
 
 gchar *utils_get_hostname(void);
 
-gint utils_make_settings_dir(void);
-
 gboolean utils_string_replace_all(GString *str, const gchar *needle, const gchar *replace);
 
 gchar *utils_str_replace(gchar *haystack, const gchar *needle, const gchar *replacement);

@@ -1,3 +1,19 @@
+2008-11-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * HACKING, doc/geany.1.in, doc/geany.html, doc/geany.txt,
+   plugins/demoplugin.c, src/geany.h, src/main.c, src/plugins.c,
+   src/socket.c, src/utils.c, src/utils.h, src/win32.c, src/win32.h,
+   tagmanager/options.c:
+   Follow XDG Base Directory specification and use
+   $XDG_CONFIG_HOME/geany (most often this is ~/.config/geany) as
+   default configuration directory (closes #2166229).
+   The previous configuration will be moved to the new location if
+   the new directory doesn't exist yet.
+   Move utils_make_settings_dir() into main.c.
+   Remove win32_get_appdata_folder() because g_get_user_config_dir()
+   does the same.
+
+
 2008-11-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/editor.c:

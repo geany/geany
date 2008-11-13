@@ -30,7 +30,7 @@
  * cd plugins
  * make demoplugin.so
  *
- * Then copy or symlink the plugins/demoplugin.so file to ~/.geany/plugins
+ * Then copy or symlink the plugins/demoplugin.so file to ~/.config/geany/plugins
  * - it will be loaded at next startup.
  */
 
@@ -119,7 +119,7 @@ on_configure_response(GtkDialog *dialog, gint response, gpointer user_data)
 		 * (e.g. using GLib's GKeyFile API)
 		 * all plugin specific files should be created in:
 		 * geany->app->configdir G_DIR_SEPARATOR_S plugins G_DIR_SEPARATOR_S pluginname G_DIR_SEPARATOR_S
-		 * e.g. this could be: ~/.geany/plugins/Demo/, please use geany->app->configdir */
+		 * e.g. this could be: ~/.config/geany/plugins/Demo/, please use geany->app->configdir */
 	}
 }
 

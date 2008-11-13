@@ -63,7 +63,7 @@ typedef struct GeanyFiletype GeanyFiletype;
 typedef struct GeanyApp
 {
 	gboolean			debug_mode;		/**< @c TRUE if debug messages should be printed. */
-	/** User configuration directory, usually @c ~/.geany.
+	/** User configuration directory, usually @c ~/.config/geany.
 	 * @note Plugin configuration files should be saved as:
 	 * @code g_build_path(G_DIR_SEPARATOR_S, geany->app->configdir, "plugins", "pluginname",
 	 * 	"file.conf"); @endcode */

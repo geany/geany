@@ -778,7 +778,7 @@ static void load_all_plugins(void)
 	gchar *path;
 
 	path = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", NULL);
-	/* first load plugins in ~/.geany/plugins/, then in $prefix/lib/geany */
+	/* first load plugins in ~/.config/geany/plugins/, then in $prefix/lib/geany */
 	load_plugins_from_path(path);
 	g_free(path);
 #ifdef G_OS_WIN32

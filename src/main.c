@@ -36,6 +36,7 @@
 #include <stdlib.h>
 
 #include "geany.h"
+#include <glib/gstdio.h>
 
 #ifdef HAVE_LOCALE_H
 # include <locale.h>
@@ -540,22 +541,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	}
 	else
 	{
-#ifdef G_OS_WIN32
-		gchar *appdata;
-
-		appdata = win32_get_appdata_folder();
-		if (appdata != NULL)
-		{
-			app->configdir = g_strconcat(appdata, G_DIR_SEPARATOR_S, "Geany", NULL);
-			g_free(appdata);
-		}
-		else
-		{
-			app->configdir = g_strconcat(g_get_home_dir(), G_DIR_SEPARATOR_S, "Geany", NULL);
-		}
-#else
-		app->configdir = g_strconcat(g_get_home_dir(), G_DIR_SEPARATOR_S, ".geany", NULL);
-#endif
+		app->configdir = g_build_filename(g_get_user_config_dir(), "geany", NULL);
 	}
 
 #ifdef GEANY_DEBUG
@@ -598,6 +584,111 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 }
 
 
+#ifdef G_OS_WIN32
+# define DIR_SEP "\\" /* on Windows we need an additional dir separator */
+#else
+# define DIR_SEP ""
+#endif
+
+static gint create_config_dir(void)
+{
+	gint saved_errno = 0;
+	gchar *conf_file = g_build_filename(app->configdir, "geany.conf", NULL);
+	gchar *filedefs_dir = g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, NULL);
+
+	gchar *templates_dir = g_build_filename(app->configdir, GEANY_TEMPLATES_SUBDIR, NULL);
+
+	if (! g_file_test(app->configdir, G_FILE_TEST_EXISTS))
+	{
+		/* if we are *not* using an alternate config directory, we check whether the old one
+		 * in ~/.geany still exists and try to move it */
+		if (alternate_config == NULL)
+		{
+			gchar *old_dir = g_build_filename(g_get_home_dir(), ".geany", NULL);
+			/* move the old config dir if it exists */
+			if (g_file_test(old_dir, G_FILE_TEST_EXISTS))
+			{
+				if (g_rename(old_dir, app->configdir) == 0)
+				{
+					dialogs_show_msgbox(GTK_MESSAGE_INFO,
+						_("Your configuration directory has been successfully moved from \"%s\" to \"%s\"."),
+						old_dir, app->configdir);
+					g_free(old_dir);
+					return 0;
+				}
+				else
+				{
+					dialogs_show_msgbox(GTK_MESSAGE_WARNING,
+						/* for translators: the third %s in brackets is the error message which
+						 * describes why moving the dir didn't work */
+						_("Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
+						  "Please move manually the directory to the new location."),
+						old_dir, app->configdir, g_strerror(errno));
+				}
+			}
+			g_free(old_dir);
+		}
+		geany_debug("creating config directory %s", app->configdir);
+		saved_errno = utils_mkdir(app->configdir, FALSE);
+	}
+
+	if (saved_errno == 0 && ! g_file_test(conf_file, G_FILE_TEST_EXISTS))
+	{	/* check whether geany.conf can be written */
+		saved_errno = utils_is_file_writeable(app->configdir);
+	}
+
+	/* make subdir for filetype definitions */
+	if (saved_errno == 0)
+	{
+		gchar *filedefs_readme = g_build_filename(app->configdir,
+					GEANY_FILEDEFS_SUBDIR, "filetypes.README", NULL);
+
+		if (! g_file_test(filedefs_dir, G_FILE_TEST_EXISTS))
+		{
+			saved_errno = utils_mkdir(filedefs_dir, FALSE);
+		}
+		if (saved_errno == 0 && ! g_file_test(filedefs_readme, G_FILE_TEST_EXISTS))
+		{
+			gchar *text = g_strconcat(
+"Copy files from ", app->datadir, " to this directory to overwrite "
+"them. To use the defaults, just delete the file in this directory.\nFor more information read "
+"the documentation (in ", app->docdir, DIR_SEP "index.html or visit " GEANY_HOMEPAGE ").", NULL);
+			utils_write_file(filedefs_readme, text);
+			g_free(text);
+		}
+		g_free(filedefs_readme);
+	}
+
+	/* make subdir for template files */
+	if (saved_errno == 0)
+	{
+		gchar *templates_readme = g_build_filename(app->configdir, GEANY_TEMPLATES_SUBDIR,
+						"templates.README", NULL);
+
+		if (! g_file_test(templates_dir, G_FILE_TEST_EXISTS))
+		{
+			saved_errno = utils_mkdir(templates_dir, FALSE);
+		}
+		if (saved_errno == 0 && ! g_file_test(templates_readme, G_FILE_TEST_EXISTS))
+		{
+			gchar *text = g_strconcat(
+"There are several template files in this directory. For these templates you can use wildcards.\n\
+For more information read the documentation (in ", app->docdir, DIR_SEP "index.html or visit " GEANY_HOMEPAGE ").",
+					NULL);
+			utils_write_file(templates_readme, text);
+			g_free(text);
+		}
+		g_free(templates_readme);
+	}
+
+	g_free(filedefs_dir);
+	g_free(templates_dir);
+	g_free(conf_file);
+
+	return saved_errno;
+}
+
+
 /* Returns 0 if config dir is OK. */
 static gint setup_config_dir(void)
 {
@@ -608,7 +699,7 @@ static gint setup_config_dir(void)
 	app->configdir = utils_get_locale_from_utf8(app->configdir);
 	g_free(tmp);
 
-	mkdir_result = utils_make_settings_dir();
+	mkdir_result = create_config_dir();
 	if (mkdir_result != 0)
 	{
 		if (! dialogs_show_question(

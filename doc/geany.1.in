@@ -30,7 +30,7 @@ place the cursor in line 7.
 Set initial column number for the first opened file (useful in conjunction with \-\-line).
 .IP "\fB-c\fP, \fB\-\-config\fP         " 10
 Use an alternate configuration directory. Default configuration directory is
-~/.geany/ and there resides geany.conf and some template files.
+~/.config/geany/ and there resides geany.conf and some template files.
 .IP "\fB-d\fP, \fB\-\-debug\fP         " 10
 Run Geany in debug mode, which means being verbose and printing lots of information.
 .IP "\fB\fP, \fB\-\-ft\-names\fP         " 10

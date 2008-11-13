@@ -716,33 +716,6 @@ void win32_init_debug_code()
 }
 
 
-/* Used to get special Windows folder paths like %appdata%,
- * Code taken from Sylpheed, thanks */
-gchar *win32_get_appdata_folder()
-{
-	gchar *folder = NULL;
-	gint nfolder = CSIDL_APPDATA;
-	HRESULT hr;
-
-	if (G_WIN32_HAVE_WIDECHAR_API())
-	{
-		wchar_t path[MAX_PATH + 1];
-		hr = SHGetFolderPathW(NULL, nfolder, NULL, 0, path);
-		if (hr == S_OK)
-			folder = g_utf16_to_utf8(path, -1, NULL, NULL, NULL);
-	}
-	else
-	{
-		gchar path[MAX_PATH + 1];
-		hr = SHGetFolderPathA(NULL, nfolder, NULL, 0, path);
-		if (hr == S_OK)
-			folder = g_locale_to_utf8(path, -1, NULL, NULL, NULL);
-	}
-
-	return folder;
-}
-
-
 gchar *win32_get_hostname()
 {
 	gchar hostname[100];

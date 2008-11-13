@@ -201,8 +201,8 @@ Short option  Long option              Function
 *none*        --column                 Set initial column number for the first opened file.
 
 -c dir_name   --config=directory_name  Use an alternate configuration directory. Default
-                                       configuration directory is ``~/.geany/`` and there resides
-                                       ``geany.conf`` and other configuration files.
+                                       configuration directory is ``~/.config/geany/`` and there
+                                       resides ``geany.conf`` and other configuration files.
 
 -d            --debug                  Run Geany in debug mode, which means being verbose
                                        and printing lots of information.
@@ -763,16 +763,16 @@ installed (commonly ``/usr/local``). It is not recommended to edit the
 system-wide file, because it will be overridden when Geany is updated.
 
 To change the settings, copy the file from ``$prefix/share/geany``
-in your configuration directory (usually ``~/.geany/``).
+in your configuration directory (usually ``~/.config/geany/``).
 
 For example::
 
-    % cp /usr/local/share/geany/snippets.conf /home/username/.geany/
+    % cp /usr/local/share/geany/snippets.conf /home/username/.config/geany/
 
 Then you can edit the file and the changes are also available
 after an update of Geany because the file resides in your
 configuration directory. Alternatively, you can create a file
-``~/.geany/snippets.conf`` and add only these settings you want
+``~/.config/geany/snippets.conf`` and add only these settings you want
 to change. All missing settings will be read from the global snippets
 file in ``$prefix/share/geany``.
 
@@ -1116,7 +1116,7 @@ Tags
 Geany has built-in functionality for generating tag information (aka
 "workspace tags") for supported filetypes when you open a file.  You
 can also have Geany automatically load external tag files (aka "global
-tags files") from its ``~/.geany/tags`` directory upon startup, or
+tags files") from its ``~/.config/geany/tags`` directory upon startup, or
 manually using *Tools --> Load Tags*.
 
 Geany uses its own tag file format, similar to what ``ctags`` uses
@@ -1147,7 +1147,7 @@ the library.
 You can load a custom global tags file in two ways:
 
 * Using the *Load Tags* command in the Tools menu.
-* By creating a directory ``~/.geany/tags``, and moving or symlinking
+* By creating a directory ``~/.config/geany/tags``, and moving or symlinking
   the tags files there before starting Geany.
 
 You can either download these files or generate your own. They have
@@ -1235,7 +1235,7 @@ Ignore tags
 
 You can also ignore certain tags if they would lead to wrong parsing of
 the code. Simply create a file called "ignore.tags" in your Geany
-configuration directory (usually ``~/.geany/``). Then list all tags
+configuration directory (usually ``~/.config/geany/``). Then list all tags
 you want to ignore in this file, separated by spaces and/or newlines.
 
 More detailed information about the usage from the Exuberant Ctags
@@ -2258,7 +2258,7 @@ the following directories:
 
 *   ``$prefix/lib/geany`` (``$prefix`` is usually ``/usr/local`` or
     ``/usr``)
-*   ``~/.geany/plugins``
+*   ``~/.config/geany/plugins``
 
 Most plugins add menu items to the *Tools* menu when they are loaded.
 
@@ -2687,16 +2687,16 @@ Geany is updated.
 
 To change the settings, copy a file from ``$prefix/share/geany`` to
 the subdirectory filedefs in your configuration directory (usually
-``~/.geany/``).
+``~/.config/geany/``).
 
 For example::
 
-    % cp /usr/local/share/geany/filetypes.c /home/username/.geany/filedefs/
+    % cp /usr/local/share/geany/filetypes.c /home/username/.config/geany/filedefs/
 
 Then you can edit the file and the changes are also
 available after an update of Geany because they reside in your
 configuration directory. Alternatively, you can create a file
-``~/.geany/filedefs/filetypes.X`` and add only these settings you want
+``~/.config/geany/filedefs/filetypes.X`` and add only these settings you want
 to change. All missing settings will be read from the corresponding
 global definition file in ``$prefix/share/geany``.
 
@@ -3057,12 +3057,12 @@ filetype using the ``filetype_extensions.conf`` file.
 
 To override the system-wide configuration file, copy it from
 ``$prefix/share/geany`` to your configuration directory, usually
-``~/.geany/``. ``$prefix`` is the path where Geany is installed
+``~/.config/geany/``. ``$prefix`` is the path where Geany is installed
 (commonly ``/usr/local``).
 
 For example::
 
-    % cp /usr/local/share/geany/filetype_extensions.conf /home/username/.geany/
+    % cp /usr/local/share/geany/filetype_extensions.conf /home/username/.config/geany/
 
 Then edit it and remove all the lines for filetype extensions that
 you do not want to override. The remaining lines can be edited after
@@ -3070,7 +3070,7 @@ the ``=`` sign, using a semi-colon separated list of patterns which
 should be matched for that filetype.
 
 For example, to set the filetype extensions for Make, the
-``/home/username/.geany/filetype_extensions.conf`` file should
+``/home/username/.config/geany/filetype_extensions.conf`` file should
 look like::
 
     [Extensions]
@@ -3138,11 +3138,11 @@ followed by a blank line.
 Custom file templates
 `````````````````````
 
-These are read from the ``~/.geany/templates/files`` directory (created
-the first time Geany is started). The filetype to use is detected from
-the template file's extension, if any. For example, creating a file
-``main.c`` would add a menu item which created a new document with the
-filetype set to 'C'.
+These are read from the ``~/.config/geany/templates/files`` directory
+(created the first time Geany is started). The filetype to use is
+detected from the template file's extension, if any. For example, creating
+a file ``main.c`` would add a menu item which created a new document with
+the filetype set to 'C'.
 
 The template file is read from disk when the corresponding menu item is
 clicked, so you don't need to restart Geany after editing a custom file
@@ -3151,7 +3151,7 @@ template.
 Filetype templates
 ``````````````````
 
-Filetype template files are read from the ``~/.geany/templates``
+Filetype template files are read from the ``~/.config/geany/templates``
 directory, and are named "filetype." followed by the filetype
 name, e.g. "filetype.python", "filetype.sh", etc. If you are
 unsure about the filetype name extensions, they are the same as
@@ -3166,7 +3166,7 @@ Customizing templates
 ^^^^^^^^^^^^^^^^^^^^^
 
 Each template can be customized to your needs. The templates are
-stored in the ``~/.geany/templates/`` directory (see the section called
+stored in the ``~/.config/geany/templates/`` directory (see the section called
 `Command line options`_ for further information about the configuration
 directory). Just open the desired template with an editor (ideally,
 Geany ;-) ) and edit the template to your needs. There are some
@@ -3397,7 +3397,7 @@ Hidden preferences
 ==================
 
 There are some uncommon preferences that are not shown in the Preferences
-dialog. These can be set by editing ``~/.geany/geany.conf``, then
+dialog. These can be set by editing ``~/.config/geany/geany.conf``, then
 restarting Geany. Search for the key name, then edit the value. Example:
 
     ``brace_match_ltgt=true``

@@ -554,8 +554,8 @@ file foo.bar and place the cursor in line 7.</td>
 <tr><td>-c dir_name</td>
 <td>--config=directory_name</td>
 <td>Use an alternate configuration directory. Default
-configuration directory is <tt class="docutils literal"><span class="pre">~/.geany/</span></tt> and there resides
-<tt class="docutils literal"><span class="pre">geany.conf</span></tt> and other configuration files.</td>
+configuration directory is <tt class="docutils literal"><span class="pre">~/.config/geany/</span></tt> and there
+resides <tt class="docutils literal"><span class="pre">geany.conf</span></tt> and other configuration files.</td>
 </tr>
 <tr><td>-d</td>
 <td>--debug</td>
@@ -1084,15 +1084,15 @@ called <tt class="docutils literal"><span class="pre">snippets.conf</span></tt> 
 installed (commonly <tt class="docutils literal"><span class="pre">/usr/local</span></tt>). It is not recommended to edit the
 system-wide file, because it will be overridden when Geany is updated.</p>
 <p>To change the settings, copy the file from <tt class="docutils literal"><span class="pre">$prefix/share/geany</span></tt>
-in your configuration directory (usually <tt class="docutils literal"><span class="pre">~/.geany/</span></tt>).</p>
+in your configuration directory (usually <tt class="docutils literal"><span class="pre">~/.config/geany/</span></tt>).</p>
 <p>For example:</p>
 <pre class="literal-block">
-% cp /usr/local/share/geany/snippets.conf /home/username/.geany/
+% cp /usr/local/share/geany/snippets.conf /home/username/.config/geany/
 </pre>
 <p>Then you can edit the file and the changes are also available
 after an update of Geany because the file resides in your
 configuration directory. Alternatively, you can create a file
-<tt class="docutils literal"><span class="pre">~/.geany/snippets.conf</span></tt> and add only these settings you want
+<tt class="docutils literal"><span class="pre">~/.config/geany/snippets.conf</span></tt> and add only these settings you want
 to change. All missing settings will be read from the global snippets
 file in <tt class="docutils literal"><span class="pre">$prefix/share/geany</span></tt>.</p>
 <p>The file <tt class="docutils literal"><span class="pre">snippets.conf</span></tt> may contain several sections for each
@@ -1410,7 +1410,7 @@ matching is not supported by the Find and Replace dialogs.</p>
 <p>Geany has built-in functionality for generating tag information (aka
 &quot;workspace tags&quot;) for supported filetypes when you open a file.  You
 can also have Geany automatically load external tag files (aka &quot;global
-tags files&quot;) from its <tt class="docutils literal"><span class="pre">~/.geany/tags</span></tt> directory upon startup, or
+tags files&quot;) from its <tt class="docutils literal"><span class="pre">~/.config/geany/tags</span></tt> directory upon startup, or
 manually using <em>Tools --&gt; Load Tags</em>.</p>
 <p>Geany uses its own tag file format, similar to what <tt class="docutils literal"><span class="pre">ctags</span></tt> uses
 (but is incompatible with ctags). You use Geany to generate global
@@ -1433,7 +1433,7 @@ the library.</p>
 <p>You can load a custom global tags file in two ways:</p>
 <ul class="simple">
 <li>Using the <em>Load Tags</em> command in the Tools menu.</li>
-<li>By creating a directory <tt class="docutils literal"><span class="pre">~/.geany/tags</span></tt>, and moving or symlinking
+<li>By creating a directory <tt class="docutils literal"><span class="pre">~/.config/geany/tags</span></tt>, and moving or symlinking
 the tags files there before starting Geany.</li>
 </ul>
 <p>You can either download these files or generate your own. They have
@@ -1508,7 +1508,7 @@ upgrading Geany.</p>
 <h3><a class="toc-backref" href="#id68">Ignore tags</a></h3>
 <p>You can also ignore certain tags if they would lead to wrong parsing of
 the code. Simply create a file called &quot;ignore.tags&quot; in your Geany
-configuration directory (usually <tt class="docutils literal"><span class="pre">~/.geany/</span></tt>). Then list all tags
+configuration directory (usually <tt class="docutils literal"><span class="pre">~/.config/geany/</span></tt>). Then list all tags
 you want to ignore in this file, separated by spaces and/or newlines.</p>
 <p>More detailed information about the usage from the Exuberant Ctags
 manual page:</p>
@@ -2388,7 +2388,7 @@ the following directories:</p>
 <ul class="simple">
 <li><tt class="docutils literal"><span class="pre">$prefix/lib/geany</span></tt> (<tt class="docutils literal"><span class="pre">$prefix</span></tt> is usually <tt class="docutils literal"><span class="pre">/usr/local</span></tt> or
 <tt class="docutils literal"><span class="pre">/usr</span></tt>)</li>
-<li><tt class="docutils literal"><span class="pre">~/.geany/plugins</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">~/.config/geany/plugins</span></tt></li>
 </ul>
 <p>Most plugins add menu items to the <em>Tools</em> menu when they are loaded.</p>
 <p>Since Geany 0.13, there is a Plugin Manager to let you choose which plugins
@@ -3068,15 +3068,15 @@ to edit the system-wide files, because they will be overridden when
 Geany is updated.</p>
 <p>To change the settings, copy a file from <tt class="docutils literal"><span class="pre">$prefix/share/geany</span></tt> to
 the subdirectory filedefs in your configuration directory (usually
-<tt class="docutils literal"><span class="pre">~/.geany/</span></tt>).</p>
+<tt class="docutils literal"><span class="pre">~/.config/geany/</span></tt>).</p>
 <p>For example:</p>
 <pre class="literal-block">
-% cp /usr/local/share/geany/filetypes.c /home/username/.geany/filedefs/
+% cp /usr/local/share/geany/filetypes.c /home/username/.config/geany/filedefs/
 </pre>
 <p>Then you can edit the file and the changes are also
 available after an update of Geany because they reside in your
 configuration directory. Alternatively, you can create a file
-<tt class="docutils literal"><span class="pre">~/.geany/filedefs/filetypes.X</span></tt> and add only these settings you want
+<tt class="docutils literal"><span class="pre">~/.config/geany/filedefs/filetypes.X</span></tt> and add only these settings you want
 to change. All missing settings will be read from the corresponding
 global definition file in <tt class="docutils literal"><span class="pre">$prefix/share/geany</span></tt>.</p>
 <div class="section" id="format">
@@ -3386,18 +3386,18 @@ see <a class="reference internal" href="#filetype-definition-files">Filetype def
 filetype using the <tt class="docutils literal"><span class="pre">filetype_extensions.conf</span></tt> file.</p>
 <p>To override the system-wide configuration file, copy it from
 <tt class="docutils literal"><span class="pre">$prefix/share/geany</span></tt> to your configuration directory, usually
-<tt class="docutils literal"><span class="pre">~/.geany/</span></tt>. <tt class="docutils literal"><span class="pre">$prefix</span></tt> is the path where Geany is installed
+<tt class="docutils literal"><span class="pre">~/.config/geany/</span></tt>. <tt class="docutils literal"><span class="pre">$prefix</span></tt> is the path where Geany is installed
 (commonly <tt class="docutils literal"><span class="pre">/usr/local</span></tt>).</p>
 <p>For example:</p>
 <pre class="literal-block">
-% cp /usr/local/share/geany/filetype_extensions.conf /home/username/.geany/
+% cp /usr/local/share/geany/filetype_extensions.conf /home/username/.config/geany/
 </pre>
 <p>Then edit it and remove all the lines for filetype extensions that
 you do not want to override. The remaining lines can be edited after
 the <tt class="docutils literal"><span class="pre">=</span></tt> sign, using a semi-colon separated list of patterns which
 should be matched for that filetype.</p>
 <p>For example, to set the filetype extensions for Make, the
-<tt class="docutils literal"><span class="pre">/home/username/.geany/filetype_extensions.conf</span></tt> file should
+<tt class="docutils literal"><span class="pre">/home/username/.config/geany/filetype_extensions.conf</span></tt> file should
 look like:</p>
 <pre class="literal-block">
 [Extensions]
@@ -3451,18 +3451,18 @@ be placed anywhere, but is usually on the first line of the file,
 followed by a blank line.</p>
 <div class="section" id="custom-file-templates">
 <h4><a class="toc-backref" href="#id143">Custom file templates</a></h4>
-<p>These are read from the <tt class="docutils literal"><span class="pre">~/.geany/templates/files</span></tt> directory (created
-the first time Geany is started). The filetype to use is detected from
-the template file's extension, if any. For example, creating a file
-<tt class="docutils literal"><span class="pre">main.c</span></tt> would add a menu item which created a new document with the
-filetype set to 'C'.</p>
+<p>These are read from the <tt class="docutils literal"><span class="pre">~/.config/geany/templates/files</span></tt> directory
+(created the first time Geany is started). The filetype to use is
+detected from the template file's extension, if any. For example, creating
+a file <tt class="docutils literal"><span class="pre">main.c</span></tt> would add a menu item which created a new document with
+the filetype set to 'C'.</p>
 <p>The template file is read from disk when the corresponding menu item is
 clicked, so you don't need to restart Geany after editing a custom file
 template.</p>
 </div>
 <div class="section" id="filetype-templates">
 <h4><a class="toc-backref" href="#id144">Filetype templates</a></h4>
-<p>Filetype template files are read from the <tt class="docutils literal"><span class="pre">~/.geany/templates</span></tt>
+<p>Filetype template files are read from the <tt class="docutils literal"><span class="pre">~/.config/geany/templates</span></tt>
 directory, and are named &quot;filetype.&quot; followed by the filetype
 name, e.g. &quot;filetype.python&quot;, &quot;filetype.sh&quot;, etc. If you are
 unsure about the filetype name extensions, they are the same as
@@ -3475,7 +3475,7 @@ the New command is used without a filetype. This is empty by default.</p>
 <div class="section" id="customizing-templates">
 <h3><a class="toc-backref" href="#id145">Customizing templates</a></h3>
 <p>Each template can be customized to your needs. The templates are
-stored in the <tt class="docutils literal"><span class="pre">~/.geany/templates/</span></tt> directory (see the section called
+stored in the <tt class="docutils literal"><span class="pre">~/.config/geany/templates/</span></tt> directory (see the section called
 <a class="reference internal" href="#command-line-options">Command line options</a> for further information about the configuration
 directory). Just open the desired template with an editor (ideally,
 Geany ;-) ) and edit the template to your needs. There are some
@@ -3784,7 +3784,7 @@ position without having to drag it.</li>
 <div class="section" id="hidden-preferences">
 <h1><a class="toc-backref" href="#id158">Hidden preferences</a></h1>
 <p>There are some uncommon preferences that are not shown in the Preferences
-dialog. These can be set by editing <tt class="docutils literal"><span class="pre">~/.geany/geany.conf</span></tt>, then
+dialog. These can be set by editing <tt class="docutils literal"><span class="pre">~/.config/geany/geany.conf</span></tt>, then
 restarting Geany. Search for the key name, then edit the value. Example:</p>
 <blockquote>
 <tt class="docutils literal"><span class="pre">brace_match_ltgt=true</span></tt></blockquote>
@@ -4412,7 +4412,7 @@ USE OR PERFORMANCE OF THIS SOFTWARE.</p>
 <div class="footer">
 <hr class="footer" />
 <a class="reference external" href="geany.txt">View document source</a>.
-Generated on: 2008-11-10 18:20 UTC.
+Generated on: 2008-11-13 14:09 UTC.
 Generated by <a class="reference external" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference external" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 
 </div>
