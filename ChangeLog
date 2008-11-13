@@ -27,6 +27,9 @@
  * src/editor.c:
    Make function editor_insert_text_block() interpret any \t tab chars
    as indent widths when inserting text.
+ * src/utils.c:
+   Make API function utils_string_replace_all() able to make
+   replacements that match the search string.
 
 
 2008-11-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

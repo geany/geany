@@ -1347,37 +1347,44 @@ gboolean utils_str_has_upper(const gchar *str)
 
 
 /**
- *  Replaces all occurrences of @c needle in @c haystack with @c replace.
- *  Currently this is not safe if @c replace matches @c needle, so @c needle and @c replace
- *  must not be equal.
+ * Replaces all occurrences of @c needle in @c haystack with @c replace.
+ * As of Geany 0.16, @a replace can match @a needle, so the following will work:
+ * @code utils_string_replace_all(text, "\n", "\r\n"); @endcode
  *
- *  @param haystack The input string to operate on. This string is modified in place.
- *  @param needle The string which should be replaced.
- *  @param replace The replacement for @c needle.
+ * @param haystack The input string to operate on. This string is modified in place.
+ * @param needle The string which should be replaced.
+ * @param replace The replacement for @c needle.
  *
- *  @return @a TRUE if @c needle was found, else @a FALSE.
+ * @return @a TRUE if @c needle was found, else @a FALSE.
  **/
 gboolean utils_string_replace_all(GString *haystack, const gchar *needle, const gchar *replace)
 {
-	const gchar *c;
+	const gchar *stack, *match;
 	gssize pos = -1;
 
 	if (haystack->len == 0)
 		return FALSE;
 	g_return_val_if_fail(NZV(needle), FALSE);
-	g_return_val_if_fail(! NZV(replace) || strstr(replace, needle) == NULL, FALSE);
 
+	stack = haystack->str;
 	while (1)
 	{
-		c = strstr(haystack->str, needle);
-		if (c == NULL)
+		match = strstr(stack, needle);
+		if (match == NULL)
 			break;
 		else
 		{
-			pos = c - haystack->str;
+			pos = match - haystack->str;
 			g_string_erase(haystack, pos, strlen(needle));
+
+			/* next search is after removed matching text */
+			stack = match;
+
 			if (replace)
+			{
 				g_string_insert(haystack, pos, replace);
+				stack += strlen(replace);	/* don't replace replacements */
+			}
 		}
 	}
 	return (pos != -1);
