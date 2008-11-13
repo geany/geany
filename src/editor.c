@@ -1716,30 +1716,53 @@ static void fix_line_indents(GeanyEditor *editor, gint line_start, gint line_end
 }
 
 
-/* @param cursor_index If >= 0, the index into @a text to place the cursor.
+/* Insert text, replacing \t tab chars with the correct indent width.
+ * @param text Intended as e.g. "if (1)\n\tdo_something();"
+ * @param cursor_index If >= 0, the index into @a text to place the cursor.
  * @todo Correct for CRLF line endings.
- * @warning Use spaces for indentation. \t tab symbols will be interpreted
- * as a hard tab, NOT indent width, for the Tabs & Spaces indent type.
+ * @warning Make sure all \t tab chars in @a text are intended as indent widths,
+ * NOT any hard tabs (you get those when copying document text with the Tabs
+ * & Spaces indent mode set).
  * @note This doesn't scroll the cursor in view afterwards. */
 static void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint insert_pos,
 		gint cursor_index)
 {
 	ScintillaObject *sci = editor->sci;
-	gint line = sci_get_line_from_position(sci, insert_pos);
+	gint line_start = sci_get_line_from_position(sci, insert_pos);
 	gint line_end;
-	gsize len;
+	gchar *whitespace;
+	GString *buf;
+	const gchar cur_marker[] = "__GEANY_CURSOR_MARKER__";
 
 	g_return_if_fail(text);
 
-	sci_insert_text(sci, insert_pos, text);
-	len = strlen(text);
-	line_end = sci_get_line_from_position(sci, insert_pos + len);
+	buf = g_string_new(text);
 
 	if (cursor_index >= 0)
-		sci_set_current_position(sci, insert_pos + cursor_index, FALSE);
+		g_string_insert(buf, cursor_index, cur_marker);	/* remember cursor pos */
+
+	/* transform tabs into indent widths in spaces */
+	whitespace = g_strnfill(editor_get_indent_prefs(editor)->width, ' ');
+	utils_string_replace_all(buf, "\t", whitespace);
+	g_free(whitespace);
+
+	if (cursor_index >= 0)
+	{
+		gint idx = utils_strpos(buf->str, cur_marker);
+
+		g_string_erase(buf, idx, strlen(cur_marker));
+
+		sci_insert_text(sci, insert_pos, buf->str);
+		sci_set_current_position(sci, insert_pos + idx, FALSE);
+	}
+	else
+		sci_insert_text(sci, insert_pos, buf->str);
 
 	/* fixup indentation (very useful for Tabs & Spaces indent type) */
-	fix_line_indents(editor, line, line_end);
+	line_end = sci_get_line_from_position(sci, insert_pos + buf->len);
+	fix_line_indents(editor, line_start, line_end);
+
+	g_string_free(buf, TRUE);
 }
 
 
@@ -1748,12 +1771,10 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 	gchar *str;
 	gchar *pattern;
 	gchar *lindent;
-	gchar *whitespace;
 	gint step, str_len, cur_index, line;
 	gint ft_id = FILETYPE_ID(editor->document->file_type);
 	GHashTable *specials;
 	ScintillaObject *sci = editor->sci;
-	const gint indent_width = editor_get_indent_prefs(editor)->width;
 
 	str = g_strdup(word);
 	g_strstrip(str);
@@ -1769,7 +1790,6 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 	line = sci_get_line_from_position(sci, pos);
 	lindent = g_strnfill(sci_get_line_indentation(sci, line), ' ');
 	setptr(lindent, g_strconcat(editor_get_eol_char(editor), lindent, NULL));
-	whitespace = g_strnfill(indent_width, ' ');
 
 	/* remove the typed word, it will be added again by the used auto completion
 	 * (not really necessary but this makes the auto completion more flexible,
@@ -1794,9 +1814,6 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 	pattern = utils_str_replace(pattern, "\n", "%newline%"); /* to avoid endless replacing of \n */
 	pattern = utils_str_replace(pattern, "%newline%", lindent);
 
-	pattern = utils_str_replace(pattern, "\t", "%ws%"); /* to avoid endless replacing of \t */
-	pattern = utils_str_replace(pattern, "%ws%", whitespace);
-
 	/* replace any %template% wildcards */
 	pattern = snippets_replace_wildcards(editor, pattern);
 
@@ -1814,7 +1831,7 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 	editor_insert_text_block(editor, pattern, pos, cur_index);
 	sci_scroll_caret(sci);
 
-	utils_free_pointers(pattern, whitespace, lindent, str, NULL);
+	utils_free_pointers(pattern, lindent, str, NULL);
  	return TRUE;
 }
 

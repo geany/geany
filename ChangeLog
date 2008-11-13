@@ -18,6 +18,9 @@
 
  * src/editor.c:
    Fix indenting for Tabs & Spaces mode when inserting snippets.
+ * src/editor.c:
+   Make function editor_insert_text_block() interpret any \t tab chars
+   as indent widths when inserting text.
 
 
 2008-11-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
