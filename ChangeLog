@@ -16,6 +16,8 @@
    Add an encoding combo box to the Find in Files dialog to choose an
    encoding to use for searching (i.e. the encoding in which the search
    text is passed to 'grep').
+ * data/filetypes.latex:
+   Remove a few duplicate keywords.
 
 
 2008-11-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
