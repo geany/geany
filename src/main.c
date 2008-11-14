@@ -608,6 +608,12 @@ static gint create_config_dir(void)
 			/* move the old config dir if it exists */
 			if (g_file_test(old_dir, G_FILE_TEST_EXISTS))
 			{
+				if (! dialogs_show_question_full(main_widgets.window,
+					GTK_STOCK_YES, GTK_STOCK_QUIT, _("Move it now?"),
+					"%s",
+					_("Geany needs to move your old configuration directory before starting.")))
+					exit(0);
+
 				if (g_rename(old_dir, app->configdir) == 0)
 				{
 					dialogs_show_msgbox(GTK_MESSAGE_INFO,
@@ -693,11 +699,9 @@ For more information read the documentation (in ", app->docdir, DIR_SEP "index.h
 static gint setup_config_dir(void)
 {
 	gint mkdir_result = 0;
-	gchar *tmp = app->configdir;
 
 	/* convert configdir to locale encoding to avoid troubles */
-	app->configdir = utils_get_locale_from_utf8(app->configdir);
-	g_free(tmp);
+	setptr(app->configdir, utils_get_locale_from_utf8(app->configdir));
 
 	mkdir_result = create_config_dir();
 	if (mkdir_result != 0)

@@ -1,3 +1,11 @@
+2008-11-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/main.c:
+   Prompt the user for whether to move the configuration directory or
+   just quit instead. This is useful if the user is already running an
+   older binary of Geany and the second instance is newer.
+
+
 2008-11-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * HACKING, doc/geany.1.in, doc/geany.html, doc/geany.txt,
