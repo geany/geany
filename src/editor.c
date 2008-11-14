@@ -1720,12 +1720,14 @@ static void fix_line_indents(GeanyEditor *editor, gint line_start, gint line_end
  * chars with the correct line ending string.
  * @param text Intended as e.g. "if (1)\n\tdo_something();"
  * @param cursor_index If >= 0, the index into @a text to place the cursor.
+ * @param newline_indent_size Indentation size (in spaces) to insert for each newline; use
+ * -1 to read the indent size from the line with @a insert_pos on it.
  * @warning Make sure all \t tab chars in @a text are intended as indent widths,
  * NOT any hard tabs (you get those when copying document text with the Tabs
  * & Spaces indent mode set).
  * @note This doesn't scroll the cursor in view afterwards. */
 static void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint insert_pos,
-		gint cursor_index)
+		gint cursor_index, gint newline_indent_size)
 {
 	ScintillaObject *sci = editor->sci;
 	gint line_start = sci_get_line_from_position(sci, insert_pos);
@@ -1741,10 +1743,23 @@ static void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gin
 	if (cursor_index >= 0)
 		g_string_insert(buf, cursor_index, cur_marker);	/* remember cursor pos */
 
+	/* Add line indents (in spaces) */
+
+	if (newline_indent_size == -1)
+		newline_indent_size = sci_get_line_indentation(sci, line_start);
+
+	if (newline_indent_size > 0)
+	{
+		whitespace = g_strnfill(newline_indent_size, ' ');
+		setptr(whitespace, g_strconcat("\n", whitespace, NULL));
+		utils_string_replace_all(buf, "\n", whitespace);
+		g_free(whitespace);
+	}
+
 	/* transform line endings */
 	utils_string_replace_all(buf, "\n", editor_get_eol_char(editor));
 
-	/* transform tabs into indent widths in spaces */
+	/* transform tabs into indent widths (in spaces) */
 	whitespace = g_strnfill(editor_get_indent_prefs(editor)->width, ' ');
 	utils_string_replace_all(buf, "\t", whitespace);
 	g_free(whitespace);
@@ -1773,8 +1788,7 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 {
 	gchar *str;
 	gchar *pattern;
-	gchar *lindent;
-	gint step, str_len, cur_index, line;
+	gint step, str_len, cur_index;
 	gint ft_id = FILETYPE_ID(editor->document->file_type);
 	GHashTable *specials;
 	ScintillaObject *sci = editor->sci;
@@ -1788,11 +1802,6 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 		utils_free_pointers(str, pattern, NULL); /* free pattern in case it is "" */
 		return FALSE;
 	}
-
-	/* we use only spaces so it works with editor_insert_text_block(). */
-	line = sci_get_line_from_position(sci, pos);
-	lindent = g_strnfill(sci_get_line_indentation(sci, line), ' ');
-	setptr(lindent, g_strconcat("\n", lindent, NULL));
 
 	/* remove the typed word, it will be added again by the used auto completion
 	 * (not really necessary but this makes the auto completion more flexible,
@@ -1813,9 +1822,6 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 		pattern = snippets_global_pattern;
 	}
 
-	/* add line indentation */
-	pattern = utils_str_replace(pattern, "\n", lindent);
-
 	/* replace any %template% wildcards */
 	pattern = snippets_replace_wildcards(editor, pattern);
 
@@ -1830,10 +1836,10 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 	else
 		cur_index = strlen(pattern);
 
-	editor_insert_text_block(editor, pattern, pos, cur_index);
+	editor_insert_text_block(editor, pattern, pos, cur_index, -1);
 	sci_scroll_caret(sci);
 
-	utils_free_pointers(pattern, lindent, str, NULL);
+	utils_free_pointers(pattern, str, NULL);
  	return TRUE;
 }
 

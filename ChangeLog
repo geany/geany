@@ -9,6 +9,10 @@
    Make utils_str_replace() call utils_string_replace_all() internally
    (for better memory management and allowing replacements to match
    search string).
+ * src/editor.c:
+   Add editor_insert_text_block() newline_indent_size argument to add
+   fixed indentation on each newline, or -1 to read from insert_pos's
+   line.
 
 
 2008-11-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
