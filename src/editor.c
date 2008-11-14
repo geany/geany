@@ -2016,6 +2016,7 @@ static gboolean handle_xml(GeanyEditor *editor, gchar ch)
 }
 
 
+/* like sci_get_line_indentation(), but for a string. */
 static gsize count_indent_size(GeanyEditor *editor, const gchar *base_indent)
 {
 	const gchar *ptr;
@@ -2040,45 +2041,12 @@ static gsize count_indent_size(GeanyEditor *editor, const gchar *base_indent)
 }
 
 
-static void string_append_indent_width(GString *str, const GeanyIndentPrefs *iprefs,
-		gsize width)
-{
-	gchar *ws = get_whitespace(iprefs, width);
-
-	g_string_append(str, ws);
-	g_free(ws);
-}
-
-
-static gchar *get_table_body(GeanyEditor *editor, const gchar *base_indent)
-{
-	gsize base_size = count_indent_size(editor, base_indent);
-	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
-	gsize indent_width = iprefs->width;
-	GString *str = g_string_new("\n");
-
-	if (! editor->auto_indent)
-		indent_width = 0;
-
-	string_append_indent_width(str, iprefs, base_size + indent_width);
-	g_string_append(str, "<tr>\n");
-	string_append_indent_width(str, iprefs, base_size + indent_width + indent_width);
-	g_string_append(str, "<td>\n");
-	string_append_indent_width(str, iprefs, base_size + indent_width + indent_width);
-	g_string_append(str, "</td>\n");
-	string_append_indent_width(str, iprefs, base_size + indent_width);
-	g_string_append(str, "</tr>\n");
-	string_append_indent_width(str, iprefs, base_size);
-
-	return g_string_free(str, FALSE);
-}
-
-
 static void auto_table(GeanyEditor *editor, gint pos)
 {
 	ScintillaObject *sci = editor->sci;
 	gchar *table;
 	gint indent_pos;
+	const gchar *indent_str;
 
 	if (SSM(sci, SCI_GETLEXER, 0, 0) != SCLEX_HTML) return;
 
@@ -2102,9 +2070,18 @@ static void auto_table(GeanyEditor *editor, gint pos)
 		indent[x] = '\0';
 	}
 
-	/* get indent string for generated code */
-	table = get_table_body(editor, indent);
-	sci_insert_text(sci, pos, table);
+	if (! editor->auto_indent)
+		indent_str = "";
+	else
+		indent_str = "\t";
+
+	table = g_strconcat("\n", indent_str, "<tr>\n",
+						indent_str, indent_str, "<td>\n",
+						indent_str, indent_str, "</td>\n",
+						indent_str, "</tr>\n",
+						NULL);
+	editor_insert_text_block(editor, table, pos, -1,
+		count_indent_size(editor, indent));
 	g_free(table);
 }
 
