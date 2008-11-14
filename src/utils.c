@@ -497,45 +497,19 @@ gint utils_is_file_writeable(const gchar *locale_filename)
 
 
 /* Replaces all occurrences of needle in haystack with replacement.
- * New code should use utils_string_replace_all() instead.
- * All strings have to be NULL-terminated and needle and replacement have to be different,
- * e.g. needle "%" and replacement "%%" causes an endless loop */
+ * Warning: haystack will be freed.
+ * New code should use utils_string_replace_all() instead (freeing arguments
+ * is unusual behaviour).
+ * All strings have to be NULL-terminated.
+ * See utils_string_replace_all() for details. */
 gchar *utils_str_replace(gchar *haystack, const gchar *needle, const gchar *replacement)
 {
-	gint i;
-	gchar *start;
-	gint lt_pos;
-	gchar *result;
-	GString *str;
+	GString *str = g_string_new(haystack);
 
-	if (haystack == NULL)
-		return NULL;
-
-	if (needle == NULL || replacement == NULL)
-		return haystack;
-
-	if (utils_str_equal(needle, replacement))
-		return haystack;
-
-	start = strstr(haystack, needle);
-	lt_pos = utils_strpos(haystack, needle);
-
-	if (start == NULL || lt_pos == -1)
-		return haystack;
-
-	/* substitute by copying */
-	str = g_string_sized_new(strlen(haystack));
-	for (i = 0; i < lt_pos; i++)
-	{
-		g_string_append_c(str, haystack[i]);
-	}
-	g_string_append(str, replacement);
-	g_string_append(str, haystack + lt_pos + strlen(needle));
-
-	result = str->str;
 	g_free(haystack);
-	g_string_free(str, FALSE);
-	return utils_str_replace(result, needle, replacement);
+	utils_string_replace_all(str, needle, replacement);
+
+	return g_string_free(str, FALSE);
 }
 
 
@@ -1377,13 +1351,14 @@ gboolean utils_string_replace_all(GString *haystack, const gchar *needle, const 
 			pos = match - haystack->str;
 			g_string_erase(haystack, pos, strlen(needle));
 
-			/* next search is after removed matching text */
-			stack = match;
+			/* make next search after removed matching text.
+			 * (we have to be careful to only use haystack->str as its address may change) */
+			stack = haystack->str + pos;
 
 			if (replace)
 			{
 				g_string_insert(haystack, pos, replace);
-				stack += strlen(replace);	/* don't replace replacements */
+				stack = haystack->str + pos + strlen(replace);	/* skip past replacement */
 			}
 		}
 	}

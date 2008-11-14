@@ -1813,9 +1813,8 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 		pattern = snippets_global_pattern;
 	}
 
-	/* replace line breaks and whitespaces */
-	pattern = utils_str_replace(pattern, "\n", "%newline%"); /* to avoid endless replacing of \n */
-	pattern = utils_str_replace(pattern, "%newline%", lindent);
+	/* add line indentation */
+	pattern = utils_str_replace(pattern, "\n", lindent);
 
 	/* replace any %template% wildcards */
 	pattern = snippets_replace_wildcards(editor, pattern);
