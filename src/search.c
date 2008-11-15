@@ -1357,11 +1357,13 @@ static gboolean search_read_io(GIOChannel *source, GIOCondition condition, gpoin
 {
 	if (condition & (G_IO_IN | G_IO_PRI))
 	{
-		gchar *msg, *utf8_msg = NULL;
+		gchar *msg, *utf8_msg;
 		gchar *enc = data;
 
 		while (g_io_channel_read_line(source, &msg, NULL, NULL, NULL) && msg)
 		{
+			utf8_msg = NULL;
+			
 			g_strstrip(msg);
 			if (! g_utf8_validate(msg, -1, NULL))
 			{
