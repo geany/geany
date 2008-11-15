@@ -846,6 +846,9 @@ static gint search_mark(GeanyDocument *doc, const gchar *search_text, gint flags
 
 	g_return_val_if_fail(doc != NULL, 0);
 
+	/* clear previous search indicators */
+	editor_clear_indicators_full(doc->editor, GEANY_INDICATOR_SEARCH);
+	
 	len = strlen(search_text);
 	
 	ttf.chrg.cpMin = 0;

@@ -4,6 +4,8 @@
    Fix wrong highlighting of search results when using 'Mark' in
    the Find dialog.
    Fix possible crash when using the Find in Files dialog.
+   Clear previously set search indicators before when using 'Mark' in
+   the Find dialog.
 
 
 2008-11-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
