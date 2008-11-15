@@ -6,6 +6,9 @@
    Fix possible crash when using the Find in Files dialog.
    Clear previously set search indicators before when using 'Mark' in
    the Find dialog.
+ * data/filetypes.common:
+   Change the default values for selection fore- and background colour
+   to some sane values.
 
 
 2008-11-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
