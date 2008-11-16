@@ -7,6 +7,7 @@
    when a Find in Files search fails.
    Add the project's base_path to the directory list in the Find in
    Files dialog if a project is open.
+   Improve layout of the combo box labels in the Find in Files dialog.
  * src/search.c, src/ui_utils.c, src/ui_utils.h:
    Add and use ui_combo_box_prepend_text_once() to add project's
    base_path to the Find in Files dialog even if another project was

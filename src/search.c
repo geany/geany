@@ -565,7 +565,7 @@ static void on_extra_options_toggled(GtkToggleButton *togglebutton, gpointer use
 static void create_fif_dialog()
 {
 	GtkWidget *dir_combo, *combo, *e_combo, *entry;
-	GtkWidget *label, *label1, *checkbox1, *checkbox2, *check_wholeword,
+	GtkWidget *label, *label1, *label2, *checkbox1, *checkbox2, *check_wholeword,
 		*check_recursive, *check_extra, *entry_extra;
 	GtkWidget *dbox, *sbox, *cbox, *rbox, *rbtn, *hbox, *vbox, *ebox;
 	GtkSizeGroup *size_group;
@@ -587,7 +587,7 @@ static void create_fif_dialog()
 		GTK_RESPONSE_ACCEPT);
 
 	label1 = gtk_label_new_with_mnemonic(_("_Directory:"));
-	gtk_misc_set_alignment(GTK_MISC(label1), 0, 0.5);
+	gtk_misc_set_alignment(GTK_MISC(label1), 1, 0.5);
 
 	dir_combo = gtk_combo_box_entry_new_text();
 	entry = gtk_bin_get_child(GTK_BIN(dir_combo));
@@ -601,7 +601,7 @@ static void create_fif_dialog()
 	gtk_box_pack_start(GTK_BOX(dbox), label1, FALSE, FALSE, 0);
 
 	label = gtk_label_new_with_mnemonic(_("_Search for:"));
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	gtk_misc_set_alignment(GTK_MISC(label), 1, 0.5);
 
 	combo = gtk_combo_box_entry_new_text();
 	entry = gtk_bin_get_child(GTK_BIN(combo));
@@ -615,8 +615,8 @@ static void create_fif_dialog()
 	gtk_box_pack_start(GTK_BOX(sbox), label, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(sbox), combo, TRUE, TRUE, 0);
 
-	label = gtk_label_new_with_mnemonic(_("E_ncoding:"));
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	label2 = gtk_label_new_with_mnemonic(_("E_ncoding:"));
+	gtk_misc_set_alignment(GTK_MISC(label2), 1, 0.5);
 
 	e_combo = gtk_combo_box_new_text();
 	for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
@@ -626,16 +626,17 @@ static void create_fif_dialog()
 		g_free(encoding_string);
 	}
 	gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(e_combo), 3);
-	gtk_label_set_mnemonic_widget(GTK_LABEL(label), e_combo);
+	gtk_label_set_mnemonic_widget(GTK_LABEL(label2), e_combo);
 	find_in_files.encoding_combo = e_combo;
 
 	ebox = gtk_hbox_new(FALSE, 6);
-	gtk_box_pack_start(GTK_BOX(ebox), label, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(ebox), label2, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(ebox), e_combo, TRUE, TRUE, 0);
 
 	size_group = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
 	gtk_size_group_add_widget(size_group, label1);
 	gtk_size_group_add_widget(size_group, label);
+	gtk_size_group_add_widget(size_group, label2);
 	g_object_unref(G_OBJECT(size_group));	/* auto destroy the size group */
 
 	rbox = gtk_vbox_new(FALSE, 0);
