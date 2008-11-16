@@ -1,3 +1,9 @@
+2008-11-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * Makefile.am:
+   Add 'waf' to EXTRA_DIST.
+
+
 2008-11-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/search.c:
