@@ -967,7 +967,7 @@ void sci_start_styling(ScintillaObject *sci, gint pos, gint mask)
 	SSM(sci, SCI_STARTSTYLING, pos, mask);
 }
 
-gint sci_get_indicator(ScintillaObject *sci)
+gint sci_indicator_get(ScintillaObject *sci)
 {
 	return SSM(sci, SCI_GETINDICATORCURRENT, 0, 0);
 }
@@ -981,7 +981,7 @@ gint sci_get_indicator(ScintillaObject *sci)
  *
  *  @see sci_indicator_clear
  **/
-void sci_set_indicator(ScintillaObject *sci, gint indic)
+void sci_indicator_set(ScintillaObject *sci, gint indic)
 {
 	SSM(sci, SCI_SETINDICATORCURRENT, indic, 0);
 }

@@ -162,8 +162,8 @@ gint				sci_get_first_visible_line	(ScintillaObject * sci);
 void				sci_set_styling				(ScintillaObject * sci, gint len, gint style);
 void				sci_start_styling			(ScintillaObject * sci, gint pos, gint mask);
 
-gint				sci_get_indicator			(ScintillaObject * sci);
-void				sci_set_indicator			(ScintillaObject * sci, gint indic);
+gint				sci_indicator_get			(ScintillaObject * sci);
+void				sci_indicator_set			(ScintillaObject * sci, gint indic);
 void				sci_indicator_fill			(ScintillaObject * sci, gint pos, gint len);
 void				sci_indicator_clear			(ScintillaObject * sci, gint pos, gint len);
 

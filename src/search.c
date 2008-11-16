@@ -857,7 +857,7 @@ static gint search_mark(GeanyDocument *doc, const gchar *search_text, gint flags
 	g_return_val_if_fail(doc != NULL, 0);
 
 	/* clear previous search indicators */
-	editor_clear_indicators_full(doc->editor, GEANY_INDICATOR_SEARCH);
+	editor_indicator_clear(doc->editor, GEANY_INDICATOR_SEARCH);
 	
 	len = strlen(search_text);
 	
@@ -869,7 +869,7 @@ static gint search_mark(GeanyDocument *doc, const gchar *search_text, gint flags
 		pos = sci_find_text(doc->editor->sci, flags, &ttf);
 		if (pos == -1) break;
 
-		editor_set_indicator_full(doc->editor, GEANY_INDICATOR_SEARCH, pos, pos + len);
+		editor_indicator_set_on_range(doc->editor, GEANY_INDICATOR_SEARCH, pos, pos + len);
 
 		ttf.chrg.cpMin = ttf.chrgText.cpMax + 1;
 		count++;

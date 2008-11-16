@@ -381,7 +381,7 @@ static void clear_errors(GeanyDocument *doc)
 		case GBO_COMPILE:
 		case GBO_MAKE_OBJECT:
 			g_return_if_fail(doc);
-			editor_clear_indicators(doc->editor);
+			editor_indicator_clear_errors(doc->editor);
 			break;
 
 		case GBO_BUILD:
@@ -393,7 +393,7 @@ static void clear_errors(GeanyDocument *doc)
 			for (i = 0; i < documents_array->len; i++)
 			{
 				if (documents[i]->is_valid)
-					editor_clear_indicators(documents[i]->editor);
+					editor_indicator_clear_errors(documents[i]->editor);
 			}
 			break;
 		}
@@ -858,7 +858,7 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 					GeanyDocument *doc = document_find_by_filename(filename);
 
 					if (doc)
-						editor_set_indicator_on_line(doc->editor, line - 1);
+						editor_indicator_set_on_line(doc->editor, GEANY_INDICATOR_ERROR, line - 1);
 					color = COLOR_RED;	/* error message parsed on the line */
 				}
 				g_free(filename);

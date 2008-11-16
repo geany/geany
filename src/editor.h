@@ -210,19 +210,15 @@ void editor_select_lines(GeanyEditor *editor, gboolean extra_line);
 
 void editor_select_paragraph(GeanyEditor *editor);
 
-void editor_set_indicator_on_line(GeanyEditor *editor, gint line);
-
-void editor_set_indicator(GeanyEditor *editor, gint start, gint end);
-
-void editor_clear_indicators(GeanyEditor *editor);
-
 void editor_set_font(GeanyEditor *editor, const gchar *font);
 
-void editor_set_indicator_on_line_full(GeanyEditor *editor, gint indic, gint line);
+void editor_indicator_set_on_line(GeanyEditor *editor, gint indic, gint line);
 
-void editor_set_indicator_full(GeanyEditor *editor, gint indic, gint start, gint end);
+void editor_indicator_clear_errors(GeanyEditor *editor);
 
-void editor_clear_indicators_full(GeanyEditor *editor, gint indic);
+void editor_indicator_set_on_range(GeanyEditor *editor, gint indic, gint start, gint end);
+
+void editor_indicator_clear(GeanyEditor *editor, gint indic);
 
 const gchar *editor_get_eol_char_name(GeanyEditor *editor);
 

@@ -1558,7 +1558,7 @@ on_menu_remove_indicators1_activate    (GtkMenuItem     *menuitem,
 	GeanyDocument *doc = document_get_current();
 
 	if (doc != NULL)
-		editor_clear_indicators_full(doc->editor, GEANY_INDICATOR_ERROR);
+		editor_indicator_clear(doc->editor, GEANY_INDICATOR_ERROR);
 }
 
 
@@ -1918,7 +1918,7 @@ on_remove_markers1_activate            (GtkMenuItem     *menuitem,
 
 	sci_marker_delete_all(doc->editor->sci, 0);	/* delete the yellow tag marker */
 	sci_marker_delete_all(doc->editor->sci, 1);	/* delete user markers */
-	editor_clear_indicators_full(doc->editor, GEANY_INDICATOR_SEARCH);
+	editor_indicator_clear(doc->editor, GEANY_INDICATOR_SEARCH);
 }
 
 

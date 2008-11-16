@@ -130,14 +130,11 @@ static DocumentFuncs doc_funcs = {
 };
 
 static EditorFuncs editor_funcs = {
-	&editor_set_indicator,
-	&editor_set_indicator_on_line,
-	&editor_clear_indicators,
 	&editor_get_indent_prefs,
 	&editor_create_widget,
-	&editor_set_indicator_full,
-	&editor_set_indicator_on_line_full,
-	&editor_clear_indicators_full,
+	&editor_indicator_set_on_range,
+	&editor_indicator_set_on_line,
+	&editor_indicator_clear,
 	&editor_set_indent_type
 };
 
@@ -178,7 +175,7 @@ static ScintillaFuncs sci_funcs = {
 	&sci_has_selection,
 	&sci_get_tab_width,
 	&sci_indicator_clear,
-	&sci_set_indicator
+	&sci_indicator_set
 };
 
 static TemplateFuncs template_funcs = {
