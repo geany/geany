@@ -39,6 +39,7 @@
 #include "ui_utils.h"
 #include "editor.h"
 #include "encodings.h"
+#include "project.h"
 
 #include <unistd.h>
 #include <string.h>
@@ -743,6 +744,7 @@ void search_show_find_in_files_dialog(const gchar *dir)
 	gchar *sel = NULL;
 	gchar *cur_dir = NULL;
 	GeanyEncodingIndex enc_idx = GEANY_ENCODING_UTF_8;
+	static gboolean project_basepath_added = FALSE;
 
 	if (widgets.find_in_files_dialog == NULL)
 	{
@@ -757,6 +759,15 @@ void search_show_find_in_files_dialog(const gchar *dir)
 	if (sel)
 		gtk_entry_set_text(GTK_ENTRY(entry), sel);
 	g_free(sel);
+
+	/* add project's base path directory to the dir list, we do this here once
+	 * (in create_fif_dialog() it would fail if a project is opened after dialog creation) */
+	if (app->project != NULL && NZV(app->project->base_path) && ! project_basepath_added)
+	{
+		gtk_combo_box_prepend_text(GTK_COMBO_BOX(find_in_files.dir_combo),
+			app->project->base_path);
+		project_basepath_added = TRUE;
+	}
 
 	entry = GTK_BIN(find_in_files.dir_combo)->child;
 	if (NZV(dir))

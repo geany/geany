@@ -5,6 +5,8 @@
  * src/search.c:
    Capture command's stderr and log it into the Debug messages window
    when a Find in Files search fails.
+   Add the project's base_path to the directory list in the Find in
+   Files dialog if a project is open.
 
 
 2008-11-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
