@@ -512,6 +512,7 @@ void templates_init(void)
 	init_ft_templates(year, date, datetime);
 
 	g_free(date);
+	g_free(datetime);
 	g_free(year);
 
 	create_file_template_menus();
