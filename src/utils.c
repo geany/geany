@@ -1232,6 +1232,7 @@ g_mkdir_with_parents (const gchar *pathname,
 /**
  *  Create a directory if it doesn't already exist.
  *  Create intermediate parent directories as needed, too.
+ *  The permissions of the created directory are set 0700.
  *
  *  @param path The path of the directory to create, in locale encoding.
  *  @param create_parent_dirs Whether to create intermediate parent directories if necessary.
