@@ -87,6 +87,7 @@ find_in_files = {NULL, NULL, NULL, NULL};
 
 
 static gboolean search_read_io(GIOChannel *source, GIOCondition condition, gpointer data);
+static gboolean search_read_io_stderr(GIOChannel *source, GIOCondition condition, gpointer data);
 
 static void search_close_pid(GPid child_pid, gint status, gpointer user_data);
 
@@ -1218,6 +1219,7 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 	guint opts_argv_len, i;
 	GPid child_pid;
 	gint stdout_fd;
+	gint stderr_fd;
 	GError *error = NULL;
 	gboolean ret = FALSE;
 	gssize utf8_text_len;
@@ -1282,10 +1284,9 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 	gtk_list_store_clear(msgwindow.store_msg);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_MESSAGE);
 
-	if (! g_spawn_async_with_pipes(dir, (gchar**)argv, NULL,
-		G_SPAWN_STDERR_TO_DEV_NULL | G_SPAWN_DO_NOT_REAP_CHILD,
+	if (! g_spawn_async_with_pipes(dir, (gchar**)argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD,
 		NULL, NULL, &child_pid,
-		NULL, &stdout_fd, NULL, &error))
+		NULL, &stdout_fd, &stderr_fd, &error))
 	{
 		geany_debug("%s: g_spawn_async_with_pipes() failed: %s", __func__, error->message);
 		ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
@@ -1302,6 +1303,8 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 		 * always exits longer than the lifetime of this function */
 		utils_set_up_io_channel(stdout_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
 			TRUE, search_read_io, (gpointer) enc);
+		utils_set_up_io_channel(stderr_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
+			TRUE, search_read_io_stderr, (gpointer) enc);
 		g_child_watch_add(child_pid, search_close_pid, NULL);
 
 		str = g_strdup_printf(_("%s %s -- %s (in directory: %s)"),
@@ -1386,11 +1389,41 @@ static gboolean search_read_io(GIOChannel *source, GIOCondition condition, gpoin
 }
 
 
+static gboolean search_read_io_stderr(GIOChannel *source, GIOCondition condition, gpointer data)
+{
+	if (condition & (G_IO_IN | G_IO_PRI))
+	{
+		gchar *msg, *utf8_msg;
+		gchar *enc = data;
+
+		while (g_io_channel_read_line(source, &msg, NULL, NULL, NULL) && msg)
+		{
+			utf8_msg = NULL;
+			
+			g_strstrip(msg);
+			if (! g_utf8_validate(msg, -1, NULL))
+			{
+				utf8_msg = g_convert(msg, -1, "UTF-8", enc, NULL, NULL, NULL);
+			}
+			if (utf8_msg == NULL)
+				utf8_msg = g_strdup(msg);
+			g_warning("Find in Files: %s", utf8_msg);
+			g_free(msg);
+			g_free(utf8_msg);
+		}
+	}
+	if (condition & (G_IO_ERR | G_IO_HUP | G_IO_NVAL))
+		return FALSE;
+
+	return TRUE;
+}
+
+
 static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 {
 	/* TODO: port this also to Windows API */
 #ifdef G_OS_UNIX
-	const gchar *msg = _("Search failed.");
+	const gchar *msg = _("Search failed (see Help->Debug Messages for details).");
 	gint color = COLOR_DARK_RED;
 
 	if (WIFEXITED(status))
