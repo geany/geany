@@ -504,7 +504,12 @@ gint utils_is_file_writeable(const gchar *locale_filename)
  * See utils_string_replace_all() for details. */
 gchar *utils_str_replace(gchar *haystack, const gchar *needle, const gchar *replacement)
 {
-	GString *str = g_string_new(haystack);
+	GString *str;
+	
+	if (haystack == NULL)
+		return NULL;
+		
+	str = g_string_new(haystack);
 
 	g_free(haystack);
 	utils_string_replace_all(str, needle, replacement);
