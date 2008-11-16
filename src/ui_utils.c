@@ -1259,6 +1259,33 @@ void ui_combo_box_add_to_history(GtkComboBox *combo, const gchar *text)
 }
 
 
+/* Same as gtk_combo_box_prepend_text(), except that text is only prepended if it not already
+ * exists in the combo's model. */
+void ui_combo_box_prepend_text_once(GtkComboBox *combo, const gchar *text)
+{
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	gchar *combo_text;
+	gboolean found = FALSE;
+
+	model = gtk_combo_box_get_model(combo);
+	if (gtk_tree_model_get_iter_first(model, &iter))
+	{
+		do
+		{
+			gtk_tree_model_get(model, &iter, 0, &combo_text, -1);
+			found = utils_str_equal(combo_text, text);
+			g_free(combo_text);
+		}
+		while (!found && gtk_tree_model_iter_next(model, &iter));
+	}
+	if (found)
+		return;	/* don't prepend duplicate */
+
+	gtk_combo_box_prepend_text(combo, text);
+}
+
+
 /* Changes the color of the notebook tab text and open files items according to
  * document status. */
 void ui_update_tab_status(GeanyDocument *doc)

@@ -154,6 +154,8 @@ void ui_hbutton_box_copy_layout(GtkButtonBox *master, GtkButtonBox *copy);
 
 void ui_combo_box_add_to_history(GtkComboBox *combo, const gchar *text);
 
+void ui_combo_box_prepend_text_once(GtkComboBox *combo, const gchar *text);
+
 GtkWidget *ui_path_box_new(const gchar *title, GtkFileChooserAction action, GtkEntry *entry);
 
 void ui_setup_open_button_callback(GtkWidget *open_btn, const gchar *title,

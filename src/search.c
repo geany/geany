@@ -744,7 +744,6 @@ void search_show_find_in_files_dialog(const gchar *dir)
 	gchar *sel = NULL;
 	gchar *cur_dir = NULL;
 	GeanyEncodingIndex enc_idx = GEANY_ENCODING_UTF_8;
-	static gboolean project_basepath_added = FALSE;
 
 	if (widgets.find_in_files_dialog == NULL)
 	{
@@ -762,11 +761,10 @@ void search_show_find_in_files_dialog(const gchar *dir)
 
 	/* add project's base path directory to the dir list, we do this here once
 	 * (in create_fif_dialog() it would fail if a project is opened after dialog creation) */
-	if (app->project != NULL && NZV(app->project->base_path) && ! project_basepath_added)
+	if (app->project != NULL && NZV(app->project->base_path))
 	{
-		gtk_combo_box_prepend_text(GTK_COMBO_BOX(find_in_files.dir_combo),
+		ui_combo_box_prepend_text_once(GTK_COMBO_BOX(find_in_files.dir_combo),
 			app->project->base_path);
-		project_basepath_added = TRUE;
 	}
 
 	entry = GTK_BIN(find_in_files.dir_combo)->child;
