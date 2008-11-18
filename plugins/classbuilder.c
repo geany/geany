@@ -223,27 +223,24 @@ static void cc_dlg_on_base_name_entry_changed(GtkWidget *entry, CreateClassDialo
 static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg);
 
 
-/* I don't want this to be in the plugin API because it can cause leaks if any pointers
- * are NULL -ntrel. */
-/* Frees all passed pointers if they are *ALL* non-NULL.
- * Do not use if any pointers may be NULL.
- * The first argument is nothing special, it will also be freed.
- * The list must be ended with NULL. */
+/* The list must be ended with NULL as an extra check that arg_count is correct. */
 static void
-utils_free_pointers(gpointer first, ...)
+utils_free_pointers(gsize arg_count, ...)
 {
 	va_list a;
-	gpointer sa;
+	gsize i;
+	gpointer ptr;
 
-    for (va_start(a, first);  (sa = va_arg(a, gpointer), sa!=NULL);)
-    {
-    	if (sa != NULL)
-    		g_free(sa);
+	va_start(a, arg_count);
+	for (i = 0; i < arg_count; i++)
+	{
+		ptr = va_arg(a, gpointer);
+		g_free(ptr);
 	}
+	ptr = va_arg(a, gpointer);
+	if (ptr)
+		g_warning("Wrong arg_count!");
 	va_end(a);
-
-    if (first != NULL)
-    	g_free(first);
 }
 
 
@@ -748,7 +745,7 @@ static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg)
 		g_free(text);
 	}
 
-	utils_free_pointers(tmp, class_info->class_name, class_info->class_name_up,
+	utils_free_pointers(17, tmp, class_info->class_name, class_info->class_name_up,
 		class_info->base_name, class_info->class_name_low, class_info->base_include,
 		class_info->header, class_info->header_guard, class_info->source, class_info->base_decl,
 		class_info->constructor_decl, class_info->constructor_impl,
