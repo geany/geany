@@ -1686,7 +1686,7 @@ static gchar *snippets_replace_wildcards(GeanyEditor *editor, gchar *text)
 	text = templates_replace_all(text, year, date, datetime);
 	text = utils_str_replace(text, "{filename}", basename);
 
-	utils_free_pointers(year, date, datetime, basename, NULL);
+	utils_free_pointers(4, year, date, datetime, basename, NULL);
 
 	return text;
 }
@@ -1799,7 +1799,7 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 	pattern = snippets_find_completion_by_name(filetypes[ft_id]->name, str);
 	if (pattern == NULL || pattern[0] == '\0')
 	{
-		utils_free_pointers(str, pattern, NULL); /* free pattern in case it is "" */
+		utils_free_pointers(2, str, pattern, NULL); /* free pattern in case it is "" */
 		return FALSE;
 	}
 
@@ -1839,7 +1839,7 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 	editor_insert_text_block(editor, pattern, pos, cur_index, -1);
 	sci_scroll_caret(sci);
 
-	utils_free_pointers(pattern, str, NULL);
+	utils_free_pointers(2, pattern, str, NULL);
  	return TRUE;
 }
 

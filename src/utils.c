@@ -505,10 +505,10 @@ gint utils_is_file_writeable(const gchar *locale_filename)
 gchar *utils_str_replace(gchar *haystack, const gchar *needle, const gchar *replacement)
 {
 	GString *str;
-	
+
 	if (haystack == NULL)
 		return NULL;
-		
+
 	str = g_string_new(haystack);
 
 	g_free(haystack);
@@ -1101,24 +1101,24 @@ gchar *utils_get_utf8_from_locale(const gchar *locale_text)
 }
 
 
-/* Frees all passed pointers if they are *ALL* non-NULL.
- * Do not use if any pointers may be NULL.
- * The first argument is nothing special, it will also be freed.
- * The list must be ended with NULL. */
-void utils_free_pointers(gpointer first, ...)
+/* Pass pointers to free after arg_count.
+ * The last argument must be NULL as an extra check that arg_count is correct. */
+void utils_free_pointers(gsize arg_count, ...)
 {
 	va_list a;
-	gpointer sa;
+	gsize i;
+	gpointer ptr;
 
-    for (va_start(a, first);  (sa = va_arg(a, gpointer), sa!=NULL);)
-    {
-    	if (sa != NULL)
-    		g_free(sa);
+	va_start(a, arg_count);
+	for (i = 0; i < arg_count; i++)
+	{
+		ptr = va_arg(a, gpointer);
+		g_free(ptr);
 	}
+	ptr = va_arg(a, gpointer);
+	if (ptr)
+		g_warning("Wrong arg_count!");
 	va_end(a);
-
-    if (first != NULL)
-    	g_free(first);
 }
 
 

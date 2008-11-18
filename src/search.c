@@ -1321,7 +1321,7 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 			tool_prefs.grep_cmd, opts, utf8_search_text, dir);
 		utf8_str = utils_get_utf8_from_locale(str);
 		msgwin_msg_add(COLOR_BLUE, -1, NULL, utf8_str);
-		utils_free_pointers(str, utf8_str, NULL);
+		utils_free_pointers(2, str, utf8_str, NULL);
 		ret = TRUE;
 	}
 	g_strfreev(argv);

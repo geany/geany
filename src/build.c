@@ -178,7 +178,7 @@ static GPid build_view_tex_file(GeanyDocument *doc, gint mode)
 	if (g_stat(locale_filename, &st) != 0)
 	{
 		ui_set_statusbar(TRUE, _("Failed to view %s (make sure it is already compiled)"), view_file);
-		utils_free_pointers(executable, view_file, locale_filename, NULL);
+		utils_free_pointers(3, executable, view_file, locale_filename, NULL);
 
 		return (GPid) 1;
 	}
@@ -213,7 +213,7 @@ static GPid build_view_tex_file(GeanyDocument *doc, gint mode)
 			_("Could not find terminal \"%s\" "
 				"(check path for Terminal tool setting in Preferences)"), tool_prefs.term_cmd);
 
-		utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
+		utils_free_pointers(6, executable, view_file, locale_filename, cmd_string, locale_cmd_string,
 										locale_term_cmd, NULL);
 		g_strfreev(term_argv);
 		return (GPid) 1;
@@ -227,7 +227,7 @@ static GPid build_view_tex_file(GeanyDocument *doc, gint mode)
 	{
 		ui_set_statusbar(TRUE, _("Failed to execute \"%s\" (start-script could not be created)"),
 													executable);
-		utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
+		utils_free_pointers(7, executable, view_file, locale_filename, cmd_string, locale_cmd_string,
 										locale_term_cmd, working_dir, NULL);
 		g_strfreev(term_argv);
 		return (GPid) 1;
@@ -264,7 +264,7 @@ static GPid build_view_tex_file(GeanyDocument *doc, gint mode)
 		geany_debug("g_spawn_async() failed: %s", error->message);
 		ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
 
-		utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
+		utils_free_pointers(6, executable, view_file, locale_filename, cmd_string, locale_cmd_string,
 										locale_term_cmd, NULL);
 		g_strfreev(argv);
 		g_strfreev(term_argv);
@@ -280,7 +280,7 @@ static GPid build_view_tex_file(GeanyDocument *doc, gint mode)
 		build_menu_update(doc);
 	}
 
-	utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
+	utils_free_pointers(6, executable, view_file, locale_filename, cmd_string, locale_cmd_string,
 										locale_term_cmd, NULL);
 	g_strfreev(argv);
 	g_strfreev(term_argv);
@@ -641,7 +641,7 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript)
 		gchar *utf8_working_dir = utils_get_utf8_from_locale(working_dir);
 
 		ui_set_statusbar(TRUE, _("Failed to change the working directory to \"%s\""), utf8_working_dir);
-		utils_free_pointers(utf8_working_dir, working_dir, executable, locale_filename, NULL);
+		utils_free_pointers(4, utf8_working_dir, working_dir, executable, locale_filename, NULL);
 		return NULL;
 	}
 
@@ -660,7 +660,7 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript)
 			if (vte_cmd_nonscript != NULL)
 				*vte_cmd_nonscript = cmd;
 
-			utils_free_pointers(executable, locale_filename, NULL);
+			utils_free_pointers(2, executable, locale_filename, NULL);
 			return working_dir;
 		}
 		else
@@ -682,7 +682,7 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript)
 		g_free(utf8_cmd);
 	}
 
-	utils_free_pointers(tmp, cmd, executable, locale_filename, NULL);
+	utils_free_pointers(4, tmp, cmd, executable, locale_filename, NULL);
 
 	if (result)
 		return working_dir;

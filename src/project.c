@@ -627,7 +627,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 					SHOW_ERR1(_("Project base directory could not be created (%s)."),
 						g_strerror(err_code));
 				gtk_widget_grab_focus(e->base_path);
-				utils_free_pointers(locale_path, locale_filename, NULL);
+				utils_free_pointers(2, locale_path, locale_filename, NULL);
 				return FALSE;
 			}
 		}

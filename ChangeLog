@@ -13,6 +13,10 @@
    src/symbols.h:
    Move symbol list popup menu code to symbols.c.
    Add symbols_init().
+ * src/templates.c, src/build.c, src/utils.c, src/utils.h,
+   src/project.c, src/search.c, src/editor.c:
+   Make utils_free_pointers() take an arg_count argument to prevent
+   memory leaks.
 
 
 2008-11-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

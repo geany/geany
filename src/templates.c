@@ -390,7 +390,7 @@ static gchar *get_template_from_file(const gchar *locale_fname, const gchar *doc
 		utils_string_replace_all(&template, "{filename}", doc_filename);
 		utils_string_replace_all(&template, "{fileheader}", file_header);
 
-		utils_free_pointers(year, date, datetime, file_header, NULL);
+		utils_free_pointers(4, year, date, datetime, file_header, NULL);
 	}
 	return template.str;
 }

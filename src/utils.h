@@ -118,7 +118,7 @@ gchar *utils_get_locale_from_utf8(const gchar *utf8_text);
 
 gchar *utils_get_utf8_from_locale(const gchar *locale_text);
 
-void utils_free_pointers(gpointer first, ...) G_GNUC_NULL_TERMINATED;
+void utils_free_pointers(gsize arg_count, ...) G_GNUC_NULL_TERMINATED;
 
 gchar **utils_strv_new(const gchar *first, ...) G_GNUC_NULL_TERMINATED;
 
