@@ -143,14 +143,13 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 {
 	GtkWidget *checkbox1, *checkbox2, *check_regexp, *check_back, *checkbox5,
 			  *checkbox7, *hbox, *fbox, *mbox;
-	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
 
 	check_regexp = gtk_check_button_new_with_mnemonic(_("_Use regular expressions"));
 	g_object_set_data_full(G_OBJECT(dialog), "check_regexp",
 					g_object_ref(check_regexp), (GDestroyNotify) g_object_unref);
 	gtk_button_set_focus_on_click(GTK_BUTTON(check_regexp), FALSE);
-	gtk_tooltips_set_tip(tooltips, check_regexp, _("Use POSIX-like regular expressions. "
-		"For detailed information about using regular expressions, please read the documentation."), NULL);
+	ui_widget_set_tooltip_text(check_regexp, _("Use POSIX-like regular expressions. "
+		"For detailed information about using regular expressions, please read the documentation."));
 	g_signal_connect(check_regexp, "toggled",
 		G_CALLBACK(on_find_replace_checkbutton_toggled), GTK_WIDGET(dialog));
 
@@ -174,9 +173,9 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 	g_object_set_data_full(G_OBJECT(dialog), "check_escape",
 					g_object_ref(checkbox7), (GDestroyNotify)g_object_unref);
 	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox7), FALSE);
-	gtk_tooltips_set_tip(tooltips, checkbox7,
+	ui_widget_set_tooltip_text(checkbox7,
 		_("Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
-		  "corresponding control characters."), NULL);
+		  "corresponding control characters."));
 
 	/* Search features */
 	fbox = gtk_vbox_new(FALSE, 0);
@@ -306,7 +305,6 @@ void search_show_find_dialog(void)
 	{
 		GtkWidget *label, *entry, *sbox, *vbox;
 		GtkWidget *exp, *bbox, *button, *check_close;
-		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
 
 		load_monospace_style();
 
@@ -358,8 +356,8 @@ void search_show_find_dialog(void)
 		bbox = gtk_hbutton_box_new();
 
 		button = gtk_button_new_with_mnemonic(_("_Mark"));
-		gtk_tooltips_set_tip(tooltips, button,
-				_("Mark all matches in the current document."), NULL);
+		ui_widget_set_tooltip_text(button,
+				_("Mark all matches in the current document."));
 		gtk_container_add(GTK_CONTAINER(bbox), button);
 		g_signal_connect(button, "clicked", G_CALLBACK(send_find_dialog_response),
 			GINT_TO_POINTER(GEANY_RESPONSE_MARK));
@@ -379,8 +377,8 @@ void search_show_find_dialog(void)
 		g_object_set_data_full(G_OBJECT(widgets.find_dialog), "check_close",
 						g_object_ref(check_close), (GDestroyNotify) g_object_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_close), FALSE);
-		gtk_tooltips_set_tip(tooltips, check_close,
-				_("Disable this option to keep the dialog open."), NULL);
+		ui_widget_set_tooltip_text(check_close,
+				_("Disable this option to keep the dialog open."));
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_close), TRUE);
 		gtk_container_add(GTK_CONTAINER(bbox), check_close);
 		gtk_button_box_set_child_secondary(GTK_BUTTON_BOX(bbox), check_close, TRUE);
@@ -429,7 +427,6 @@ void search_show_replace_dialog(void)
 		GtkWidget *label_find, *label_replace, *entry_find, *entry_replace,
 			*check_close, *button, *rbox, *fbox, *vbox, *exp, *bbox;
 		GtkSizeGroup *label_size;
-		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
 
 		load_monospace_style();
 
@@ -504,8 +501,8 @@ void search_show_replace_dialog(void)
 		bbox = gtk_hbutton_box_new();
 
 		button = gtk_button_new_with_mnemonic(_("In Se_lection"));
-		gtk_tooltips_set_tip(tooltips, button,
-			_("Replace all matches found in the currently selected text"), NULL);
+		ui_widget_set_tooltip_text(button,
+			_("Replace all matches found in the currently selected text"));
 		gtk_container_add(GTK_CONTAINER(bbox), button);
 		g_signal_connect(button, "clicked", G_CALLBACK(send_replace_dialog_response),
 			GINT_TO_POINTER(GEANY_RESPONSE_REPLACE_IN_SEL));
@@ -525,8 +522,8 @@ void search_show_replace_dialog(void)
 		g_object_set_data_full(G_OBJECT(widgets.replace_dialog), "check_close",
 						g_object_ref(check_close), (GDestroyNotify) g_object_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_close), FALSE);
-		gtk_tooltips_set_tip(tooltips, check_close,
-				_("Disable this option to keep the dialog open."), NULL);
+		ui_widget_set_tooltip_text(check_close,
+				_("Disable this option to keep the dialog open."));
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_close), TRUE);
 		gtk_container_add(GTK_CONTAINER(bbox), check_close);
 		gtk_button_box_set_child_secondary(GTK_BUTTON_BOX(bbox), check_close, TRUE);
@@ -569,7 +566,6 @@ static void create_fif_dialog()
 		*check_recursive, *check_extra, *entry_extra;
 	GtkWidget *dbox, *sbox, *cbox, *rbox, *rbtn, *hbox, *vbox, *ebox;
 	GtkSizeGroup *size_group;
-	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
 	gchar *encoding_string;
 	guint i;
 
@@ -652,15 +648,13 @@ static void create_fif_dialog()
 				_("_Grep regular expressions"));
 	g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "radio_grep",
 					g_object_ref(rbtn), (GDestroyNotify)g_object_unref);
-	gtk_tooltips_set_tip(tooltips, rbtn,
-				_("See grep's manual page for more information."), NULL);
+	ui_widget_set_tooltip_text(rbtn, _("See grep's manual page for more information."));
 	gtk_button_set_focus_on_click(GTK_BUTTON(rbtn), FALSE);
 	gtk_container_add(GTK_CONTAINER(rbox), rbtn);
 
 	rbtn = gtk_radio_button_new_with_mnemonic_from_widget(GTK_RADIO_BUTTON(rbtn),
 				_("_Extended regular expressions"));
-	gtk_tooltips_set_tip(tooltips, rbtn,
-				_("See grep's manual page for more information."), NULL);
+	ui_widget_set_tooltip_text(rbtn, _("See grep's manual page for more information."));
 	gtk_button_set_focus_on_click(GTK_BUTTON(rbtn), FALSE);
 	gtk_container_add(GTK_CONTAINER(rbox), rbtn);
 
@@ -684,8 +678,8 @@ static void create_fif_dialog()
 	g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "check_invert",
 					g_object_ref(checkbox2), (GDestroyNotify)g_object_unref);
 	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox2), FALSE);
-	gtk_tooltips_set_tip(tooltips, checkbox2,
-			_("Invert the sense of matching, to select non-matching lines."), NULL);
+	ui_widget_set_tooltip_text(checkbox2,
+			_("Invert the sense of matching, to select non-matching lines."));
 
 	cbox = gtk_vbox_new(FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(cbox), checkbox1);
@@ -711,8 +705,7 @@ static void create_fif_dialog()
 	if (search_prefs.fif_extra_options)
 		gtk_entry_set_text(GTK_ENTRY(entry_extra), search_prefs.fif_extra_options);
 	gtk_widget_set_sensitive(entry_extra, FALSE);
-	gtk_tooltips_set_tip(tooltips, entry_extra,
-			_("Other options to pass to Grep"), NULL);
+	ui_widget_set_tooltip_text(entry_extra, _("Other options to pass to Grep"));
 	find_in_files.extra_entry = entry_extra;
 
 	/* enable entry_extra when check_extra is checked */
@@ -859,9 +852,9 @@ static gint search_mark(GeanyDocument *doc, const gchar *search_text, gint flags
 
 	/* clear previous search indicators */
 	editor_indicator_clear(doc->editor, GEANY_INDICATOR_SEARCH);
-	
+
 	len = strlen(search_text);
-	
+
 	ttf.chrg.cpMin = 0;
 	ttf.chrg.cpMax = sci_get_length(doc->editor->sci);
 	ttf.lpstrText = (gchar *)search_text;
@@ -1379,7 +1372,7 @@ static gboolean search_read_io(GIOChannel *source, GIOCondition condition, gpoin
 		while (g_io_channel_read_line(source, &msg, NULL, NULL, NULL) && msg)
 		{
 			utf8_msg = NULL;
-			
+
 			g_strstrip(msg);
 			if (! g_utf8_validate(msg, -1, NULL))
 			{
@@ -1409,7 +1402,7 @@ static gboolean search_read_io_stderr(GIOChannel *source, GIOCondition condition
 		while (g_io_channel_read_line(source, &msg, NULL, NULL, NULL) && msg)
 		{
 			utf8_msg = NULL;
-			
+
 			g_strstrip(msg);
 			if (! g_utf8_validate(msg, -1, NULL))
 			{

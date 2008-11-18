@@ -171,7 +171,6 @@ static void create_open_file_dialog(void)
 {
 	GtkWidget *filetype_combo, *encoding_combo;
 	GtkWidget *viewbtn;
-	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
 	guint i;
 	gchar *encoding_string;
 
@@ -181,8 +180,8 @@ static void create_open_file_dialog(void)
 
 	viewbtn = gtk_dialog_add_button(GTK_DIALOG(ui_widgets.open_filesel), _("_View"),
 				GEANY_RESPONSE_VIEW);
-	gtk_tooltips_set_tip(tooltips, viewbtn,
-		_("Opens the file in read-only mode. If you choose more than one file to open, all files will be opened read-only."), NULL);
+	ui_widget_set_tooltip_text(viewbtn,
+		_("Opens the file in read-only mode. If you choose more than one file to open, all files will be opened read-only."));
 
 	gtk_dialog_add_buttons(GTK_DIALOG(ui_widgets.open_filesel),
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -288,7 +287,6 @@ static GtkWidget *add_file_open_extra_widget()
 	GtkWidget *vbox, *table, *file_entry, *check_hidden;
 	GtkWidget *filetype_ebox, *filetype_label, *filetype_combo;
 	GtkWidget *encoding_ebox, *encoding_label, *encoding_combo;
-	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
 
 	vbox = gtk_vbox_new(FALSE, 6);
 
@@ -315,8 +313,8 @@ static GtkWidget *add_file_open_extra_widget()
 	encoding_ebox = gtk_event_box_new();
 	encoding_combo = gtk_combo_box_new_text();
 	gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(encoding_combo), 3);
-	gtk_tooltips_set_tip(tooltips, encoding_ebox,
-		_("Explicitly defines an encoding for the file, if it would not be detected. This is useful when you know that the encoding of a file cannot be detected correctly by Geany.\nNote if you choose multiple files, they will all be opened with the chosen encoding."), NULL);
+	ui_widget_set_tooltip_text(encoding_ebox,
+		_("Explicitly defines an encoding for the file, if it would not be detected. This is useful when you know that the encoding of a file cannot be detected correctly by Geany.\nNote if you choose multiple files, they will all be opened with the chosen encoding."));
 	gtk_container_add(GTK_CONTAINER(encoding_ebox), encoding_combo);
 	gtk_table_attach(GTK_TABLE(table), encoding_ebox, 3, 4, 0, 1,
 					(GtkAttachOptions) (GTK_FILL),
@@ -345,8 +343,8 @@ static GtkWidget *add_file_open_extra_widget()
 	filetype_ebox = gtk_event_box_new();
 	filetype_combo = gtk_combo_box_new_text();
 	gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(filetype_combo), 2);
-	gtk_tooltips_set_tip(tooltips, filetype_ebox,
-		_("Explicitly defines a filetype for the file, if it would not be detected by filename extension.\nNote if you choose multiple files, they will all be opened with the chosen filetype."), NULL);
+	ui_widget_set_tooltip_text(filetype_ebox,
+		_("Explicitly defines a filetype for the file, if it would not be detected by filename extension.\nNote if you choose multiple files, they will all be opened with the chosen filetype."));
 	gtk_container_add(GTK_CONTAINER(filetype_ebox), filetype_combo);
 	gtk_table_attach(GTK_TABLE(table), filetype_ebox, 3, 4, 1, 2,
 					(GtkAttachOptions) (GTK_FILL),
@@ -474,7 +472,6 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 static void create_save_file_dialog(void)
 {
 	GtkWidget *vbox, *check_open_new_tab, *rename_btn;
-	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
 
 	ui_widgets.save_filesel = gtk_file_chooser_dialog_new(_("Save File"), GTK_WINDOW(main_widgets.window),
 				GTK_FILE_CHOOSER_ACTION_SAVE, NULL, NULL);
@@ -486,8 +483,7 @@ static void create_save_file_dialog(void)
 
 	rename_btn = gtk_dialog_add_button(GTK_DIALOG(ui_widgets.save_filesel), _("R_ename"),
 					GEANY_RESPONSE_RENAME);
-	gtk_tooltips_set_tip(tooltips, rename_btn,
-		_("Save the file and rename it."), NULL);
+	ui_widget_set_tooltip_text(rename_btn, _("Save the file and rename it."));
 
 	gtk_dialog_add_buttons(GTK_DIALOG(ui_widgets.save_filesel),
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -496,9 +492,9 @@ static void create_save_file_dialog(void)
 
 	vbox = gtk_vbox_new(FALSE, 0);
 	check_open_new_tab = gtk_check_button_new_with_mnemonic(_("_Open file in a new tab"));
-	gtk_tooltips_set_tip(tooltips, check_open_new_tab,
+	ui_widget_set_tooltip_text(check_open_new_tab,
 		_("Keep the current unsaved document open"
-		" and open the newly saved file in a new tab."), NULL);
+		" and open the newly saved file in a new tab."));
 	gtk_box_pack_start(GTK_BOX(vbox), check_open_new_tab, FALSE, FALSE, 0);
 	gtk_widget_show_all(vbox);
 	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(ui_widgets.save_filesel), vbox);

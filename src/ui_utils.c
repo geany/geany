@@ -1658,3 +1658,23 @@ void ui_auto_separator_add_ref(GeanyAutoSeparator *autosep, GtkWidget *item)
 	g_signal_connect(item, "destroy", G_CALLBACK(on_auto_separator_item_destroy), autosep);
 }
 
+
+/**
+ *  Sets @a text as the contents of the tooltip for @a widget.
+ *
+ *  @param widget The widget the tooltip should be set for.
+ *  @param text The text for the tooltip.
+ */
+void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text)
+{
+#if GTK_CHECK_VERSION(2, 12, 0)
+	gtk_widget_set_tooltip_text(widget, text);
+#else
+	static GtkTooltips *tooltips = NULL;
+
+	if (tooltips == NULL)
+		tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
+
+	gtk_tooltips_set_tip(tooltips, widget, text, NULL);
+#endif
+}

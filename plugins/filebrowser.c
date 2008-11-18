@@ -719,34 +719,28 @@ static void prepare_file_view(void)
 static GtkWidget *make_toolbar(void)
 {
 	GtkWidget *wid, *toolbar;
-	GtkTooltips *tooltips = GTK_TOOLTIPS(p_support->lookup_widget(
-		geany->main_widgets->window, "tooltips"));
 
 	toolbar = gtk_toolbar_new();
 	gtk_toolbar_set_icon_size(GTK_TOOLBAR(toolbar), GTK_ICON_SIZE_MENU);
 	gtk_toolbar_set_style(GTK_TOOLBAR(toolbar), GTK_TOOLBAR_ICONS);
 
 	wid = (GtkWidget *) gtk_tool_button_new_from_stock(GTK_STOCK_GO_UP);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(wid), tooltips,
-		_("Up"), NULL);
+	p_ui->widget_set_tooltip_text(wid, _("Up"));
 	g_signal_connect(wid, "clicked", G_CALLBACK(on_go_up), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
 	wid = (GtkWidget *) gtk_tool_button_new_from_stock(GTK_STOCK_REFRESH);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(wid), tooltips,
-		_("Refresh"), NULL);
+	p_ui->widget_set_tooltip_text(wid, _("Refresh"));
 	g_signal_connect(wid, "clicked", G_CALLBACK(refresh), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
 	wid = (GtkWidget *) gtk_tool_button_new_from_stock(GTK_STOCK_HOME);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(wid), tooltips,
-		_("Home"), NULL);
+	p_ui->widget_set_tooltip_text(wid, _("Home"));
 	g_signal_connect(wid, "clicked", G_CALLBACK(on_go_home), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
 	wid = (GtkWidget *) gtk_tool_button_new_from_stock(GTK_STOCK_JUMP_TO);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(wid), tooltips,
-		_("Set path from document"), NULL);
+	p_ui->widget_set_tooltip_text(wid, _("Set path from document"));
 	g_signal_connect(wid, "clicked", G_CALLBACK(on_current_path), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
@@ -754,7 +748,7 @@ static GtkWidget *make_toolbar(void)
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
 	wid = (GtkWidget *) gtk_tool_button_new_from_stock(GTK_STOCK_CLEAR);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(wid), tooltips, _("Clear the filter"), NULL);
+	p_ui->widget_set_tooltip_text(wid, _("Clear the filter"));
 	g_signal_connect(wid, "clicked", G_CALLBACK(on_clear_filter), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
@@ -986,7 +980,6 @@ on_configure_response(GtkDialog *dialog, gint response, gpointer user_data)
 GtkWidget *plugin_configure(GtkDialog *dialog)
 {
 	GtkWidget *label, *entry, *checkbox_of, *checkbox_hf, *vbox;
-	GtkTooltips *tooltips = gtk_tooltips_new();
 
 	vbox = gtk_vbox_new(FALSE, 6);
 
@@ -998,11 +991,10 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	gtk_widget_show(entry);
 	if (open_cmd != NULL)
 		gtk_entry_set_text(GTK_ENTRY(entry), open_cmd);
-	gtk_tooltips_set_tip(tooltips, entry,
+	p_ui->widget_set_tooltip_text(entry,
 		_("The command to execute when using \"Open with\". You can use %f and %d wildcards.\n"
 		  "%f will be replaced with the filename including full path\n"
-		  "%d will be replaced with the path name of the selected file without the filename"),
-		  NULL);
+		  "%d will be replaced with the path name of the selected file without the filename"));
 	gtk_container_add(GTK_CONTAINER(vbox), entry);
 	pref_widgets.open_cmd_entry = entry;
 
@@ -1015,10 +1007,9 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	checkbox_of = gtk_check_button_new_with_label(_("Hide object files"));
 	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_of), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_of), hide_object_files);
-	gtk_tooltips_set_tip(tooltips, checkbox_of,
+	p_ui->widget_set_tooltip_text(checkbox_of,
 		_("Don't show generated object files in the file browser, this includes "
-		  "*.o, *.obj. *.so, *.dll, *.a, *.lib"),
-		  NULL);
+		  "*.o, *.obj. *.so, *.dll, *.a, *.lib"));
 	gtk_box_pack_start(GTK_BOX(vbox), checkbox_of, FALSE, FALSE, 5);
 	pref_widgets.hide_objects_checkbox = checkbox_of;
 

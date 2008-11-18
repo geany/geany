@@ -8,6 +8,15 @@
    Add note about the encoding box in the Find in Files dialog.
  * src/document.c, src/document.h, src/notebook.c:
    Show the full filename of a document as tooltip on the tab labels.
+ * src/dialogs.c, src/document.c, src/plugindata.h, src/plugins.c,
+   src/printing.c, src/project.c, src/search.c, src/ui_utils.c,
+   src/ui_utils.h, src/vte.c:
+   Add ui_widget_set_tooltip_text() as a convenience function to easily
+   set tooltips for widgets. It uses gtk_widget_set_tooltip_text() on
+   GTK >= 2.12 otherwise the old tooltips API.
+ * plugins/export.c, plugins/filebrowser.c, plugins/splitwindow.c,
+   plugins/vcdiff.c:
+   Use ui_widget_set_tooltip_text().
 
 
 2008-11-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

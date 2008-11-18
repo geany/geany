@@ -281,7 +281,7 @@ static void show_output(const gchar *std_output, const gchar *utf8_name_prefix,
 	{
 		GeanyIndentType indent_type =
 			p_document->get_current()->editor->indent_type;
-			
+
 		doc = p_document->find_by_filename(filename);
 		if (doc == NULL)
 		{
@@ -502,9 +502,6 @@ void plugin_init(GeanyData *data)
 {
 	GtkWidget	*menu_vcdiff = NULL;
 	GtkWidget	*menu_vcdiff_menu = NULL;
- 	GtkTooltips	*tooltips = NULL;
-
-	tooltips = gtk_tooltips_new();
 
 	menu_vcdiff = gtk_image_menu_item_new_with_mnemonic(_("_Version Diff"));
 	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), menu_vcdiff);
@@ -517,24 +514,23 @@ void plugin_init(GeanyData *data)
 	/* Single file */
 	menu_vcdiff_file = gtk_menu_item_new_with_mnemonic(_("From Current _File"));
 	gtk_container_add(GTK_CONTAINER (menu_vcdiff_menu), menu_vcdiff_file);
-	gtk_tooltips_set_tip (tooltips, menu_vcdiff_file,
-		_("Make a diff from the current active file"), NULL);
+	p_ui->widget_set_tooltip_text(menu_vcdiff_file, _("Make a diff from the current active file"));
 
 	g_signal_connect(menu_vcdiff_file, "activate", G_CALLBACK(vcfile_activated), NULL);
 
 	/* Directory */
 	menu_vcdiff_dir = gtk_menu_item_new_with_mnemonic(_("From Current _Directory"));
 	gtk_container_add(GTK_CONTAINER (menu_vcdiff_menu), menu_vcdiff_dir);
-	gtk_tooltips_set_tip (tooltips, menu_vcdiff_dir,
-		_("Make a diff from the directory of the current active file"), NULL);
+	p_ui->widget_set_tooltip_text(menu_vcdiff_dir,
+		_("Make a diff from the directory of the current active file"));
 
 	g_signal_connect(menu_vcdiff_dir, "activate", G_CALLBACK(vcdirectory_activated), NULL);
 
 	/* Project */
 	menu_vcdiff_project = gtk_menu_item_new_with_mnemonic(_("From Current _Project"));
 	gtk_container_add(GTK_CONTAINER (menu_vcdiff_menu), menu_vcdiff_project);
-	gtk_tooltips_set_tip (tooltips, menu_vcdiff_project,
-		_("Make a diff from the current project's base path"), NULL);
+	p_ui->widget_set_tooltip_text(menu_vcdiff_project,
+		_("Make a diff from the current project's base path"));
 
 	g_signal_connect(menu_vcdiff_project, "activate", G_CALLBACK(vcproject_activated), NULL);
 

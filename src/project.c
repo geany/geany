@@ -97,7 +97,6 @@ void project_new()
 	GtkWidget *button;
 	GtkWidget *bbox;
 	GtkWidget *label;
-	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
 	PropertyDialogElements *e;
 	gint response;
 
@@ -155,10 +154,10 @@ void project_new()
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	e->base_path = gtk_entry_new();
-	gtk_tooltips_set_tip(tooltips, e->base_path,
+	ui_widget_set_tooltip_text(e->base_path,
 		_("Base directory of all files that make up the project. "
 		"This can be a new path, or an existing directory tree. "
-		"You can use paths relative to the project filename."), NULL);
+		"You can use paths relative to the project filename."));
 	bbox = ui_path_box_new(_("Choose Project Base Path"),
 		GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(e->base_path));
 
@@ -352,7 +351,6 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	GtkWidget *bbox;
 	GtkWidget *label;
 	GtkWidget *swin;
-	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
 
 	e->dialog = gtk_dialog_new_with_buttons(_("Project Properties"), GTK_WINDOW(main_widgets.window),
 										 GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -414,10 +412,10 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	gtk_misc_set_alignment(GTK_MISC(label), -1, 0);
 
 	e->base_path = gtk_entry_new();
-	gtk_tooltips_set_tip(tooltips, e->base_path,
+	ui_widget_set_tooltip_text(e->base_path,
 		_("Base directory of all files that make up the project. "
 		"This can be a new path, or an existing directory tree. "
-		"You can use paths relative to the project filename."), NULL);
+		"You can use paths relative to the project filename."));
 	bbox = ui_path_box_new(_("Choose Project Base Path"),
 		GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(e->base_path));
 	gtk_table_attach(GTK_TABLE(table), bbox, 1, 2, 3, 4,
@@ -436,10 +434,10 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	gtk_misc_set_alignment(GTK_MISC(label), -1, 0);
 
 	e->run_cmd = gtk_entry_new();
-	gtk_tooltips_set_tip(tooltips, e->run_cmd,
+	ui_widget_set_tooltip_text(e->run_cmd,
 		_("Command-line to run in the project base directory. "
 		"Options can be appended to the command. "
-		"Leave blank to use the default run command."), NULL);
+		"Leave blank to use the default run command."));
 	button = gtk_button_new();
 	g_signal_connect(button, "clicked", G_CALLBACK(on_file_open_button_clicked), e->run_cmd);
 	image = gtk_image_new_from_stock("gtk-open", GTK_ICON_SIZE_BUTTON);

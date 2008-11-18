@@ -249,4 +249,6 @@ gint ui_get_toolbar_insert_position(void);
 
 void ui_add_document_sensitive(GtkWidget *widget);
 
+void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text);
+
 #endif

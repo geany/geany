@@ -215,12 +215,10 @@ static void set_state(enum State id)
 static GtkWidget *create_tool_button(const gchar *label, const gchar *stock_id)
 {
 	GtkToolItem *item;
-	GtkTooltips *tooltips = GTK_TOOLTIPS(p_support->lookup_widget(
-		geany->main_widgets->window, "tooltips"));
 
 	item = gtk_tool_button_new(NULL, label);
 	gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(item), stock_id);
-	gtk_tool_item_set_tooltip(item, tooltips, label, NULL);
+	p_ui->widget_set_tooltip_text(GTK_WIDGET(item), label);
 
 	return GTK_WIDGET(item);
 }

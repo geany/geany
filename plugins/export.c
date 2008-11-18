@@ -158,7 +158,6 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 									   gboolean show_zoom_level_checkbox)
 {
 	GtkWidget *dialog;
-	GtkTooltips *tooltips;
 	GeanyDocument *doc;
 	ExportInfo *exi;
 
@@ -166,7 +165,6 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 		return;
 
 	doc = p_document->get_current();
-	tooltips = GTK_TOOLTIPS(p_support->lookup_widget(geany->main_widgets->window, "tooltips"));
 
 	exi = g_new(ExportInfo, 1);
 	exi->doc = doc;
@@ -191,8 +189,8 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 
 		vbox = gtk_vbox_new(FALSE, 0);
 		check_zoom_level = gtk_check_button_new_with_mnemonic(_("_Use current zoom level"));
-		gtk_tooltips_set_tip(tooltips, check_zoom_level,
-			_("Renders the font size of the document together with the current zoom level."), NULL);
+		p_ui->widget_set_tooltip_text(check_zoom_level,
+			_("Renders the font size of the document together with the current zoom level."));
 		gtk_box_pack_start(GTK_BOX(vbox), check_zoom_level, FALSE, FALSE, 0);
 		gtk_widget_show_all(vbox);
 		gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(dialog), vbox);

@@ -279,20 +279,16 @@ void document_update_tab_label(GeanyDocument *doc)
 {
 	gchar *base_name;
 	GtkWidget *parent;
-	static GtkTooltips *tooltips = NULL;
 
 	g_return_if_fail(doc != NULL);
 
 	base_name = g_path_get_basename(DOC_FILENAME(doc));
 	parent = gtk_widget_get_parent(doc->priv->tab_label);
 
-	if (tooltips == NULL)
-		tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
-
 	gtk_label_set_text(GTK_LABEL(doc->priv->tab_label), base_name);
 	gtk_label_set_text(GTK_LABEL(doc->priv->tabmenu_label), base_name);
 
-	gtk_tooltips_set_tip(tooltips, parent, DOC_FILENAME(doc), NULL);
+	ui_widget_set_tooltip_text(parent, DOC_FILENAME(doc));
 
 	g_free(base_name);
 }
