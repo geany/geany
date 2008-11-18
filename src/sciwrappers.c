@@ -995,7 +995,7 @@ void sci_indicator_fill(ScintillaObject *sci, gint pos, gint len)
  *  Clear a range of text from the currently set indicator.
  *  Starting at @a pos, @a len characters long.
  *  In order to make this function properly, you need to set the current indicator before with
- *  @ref sci_set_indicator().
+ *  @ref sci_indicator_set().
  *
  *  @param sci Scintilla widget.
  *  @param pos Starting position.
