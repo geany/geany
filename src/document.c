@@ -277,9 +277,14 @@ void document_finalize()
 
 void document_update_tab_label(GeanyDocument *doc)
 {
-	gchar *base_name = g_path_get_basename(doc->file_name);
-	GtkWidget *parent = gtk_widget_get_parent(doc->priv->tab_label);
+	gchar *base_name;
+	GtkWidget *parent;
 	static GtkTooltips *tooltips = NULL;
+
+	g_return_if_fail(doc != NULL);
+
+	base_name = g_path_get_basename(DOC_FILENAME(doc));
+	parent = gtk_widget_get_parent(doc->priv->tab_label);
 
 	if (tooltips == NULL)
 		tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
@@ -287,7 +292,7 @@ void document_update_tab_label(GeanyDocument *doc)
 	gtk_label_set_text(GTK_LABEL(doc->priv->tab_label), base_name);
 	gtk_label_set_text(GTK_LABEL(doc->priv->tabmenu_label), base_name);
 
-	gtk_tooltips_set_tip(tooltips, parent, doc->file_name, NULL);
+	gtk_tooltips_set_tip(tooltips, parent, DOC_FILENAME(doc), NULL);
 
 	g_free(base_name);
 }

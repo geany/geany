@@ -442,13 +442,11 @@ gint notebook_new_tab(GeanyDocument *this)
 {
 	GtkWidget *hbox, *ebox;
 	gint tabnum;
-	gchar *title;
 	GtkWidget *page;
 
 	g_return_val_if_fail(this != NULL, -1);
 
 	page = GTK_WIDGET(this->editor->sci);
-	title = g_path_get_basename(DOC_FILENAME(this));
 
 	this->priv->tab_label = gtk_label_new(NULL);
 
@@ -511,7 +509,6 @@ gint notebook_new_tab(GeanyDocument *this)
 		gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(main_widgets.notebook), page, TRUE);
 	}
 #endif
-	g_free(title);
 	return tabnum;
 }
 
