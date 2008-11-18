@@ -450,7 +450,7 @@ gint notebook_new_tab(GeanyDocument *this)
 	page = GTK_WIDGET(this->editor->sci);
 	title = g_path_get_basename(DOC_FILENAME(this));
 
-	this->priv->tab_label = gtk_label_new(title);
+	this->priv->tab_label = gtk_label_new(NULL);
 
 	ebox = gtk_event_box_new();
 	GTK_WIDGET_SET_FLAGS(ebox, GTK_NO_WINDOW);
@@ -464,7 +464,6 @@ gint notebook_new_tab(GeanyDocument *this)
 	{
 		GtkWidget *image, *btn, *align;
 		GtkRcStyle *rcstyle;
-		GtkRequisition size;
 
 		btn = gtk_button_new();
 		gtk_button_set_relief(GTK_BUTTON(btn), GTK_RELIEF_NONE);
@@ -491,8 +490,10 @@ gint notebook_new_tab(GeanyDocument *this)
 
 	gtk_widget_show_all(hbox);
 
-	this->priv->tabmenu_label = gtk_label_new(title);
+	this->priv->tabmenu_label = gtk_label_new(NULL);
 	gtk_misc_set_alignment(GTK_MISC(this->priv->tabmenu_label), 0.0, 0);
+
+	document_update_tab_label(this);
 
 	if (file_prefs.tab_order_ltr)
 		tabnum = gtk_notebook_append_page_menu(GTK_NOTEBOOK(main_widgets.notebook), page,

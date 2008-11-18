@@ -224,6 +224,7 @@ void document_redo(GeanyDocument *doc);
 
 void document_undo_add(GeanyDocument *doc, guint type, gpointer data);
 
+void document_update_tab_label(GeanyDocument *doc);
 
 GdkColor *document_get_status_color(GeanyDocument *doc);
 

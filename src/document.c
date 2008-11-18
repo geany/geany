@@ -275,6 +275,24 @@ void document_finalize()
 }
 
 
+void document_update_tab_label(GeanyDocument *doc)
+{
+	gchar *base_name = g_path_get_basename(doc->file_name);
+	GtkWidget *parent = gtk_widget_get_parent(doc->priv->tab_label);
+	static GtkTooltips *tooltips = NULL;
+
+	if (tooltips == NULL)
+		tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
+
+	gtk_label_set_text(GTK_LABEL(doc->priv->tab_label), base_name);
+	gtk_label_set_text(GTK_LABEL(doc->priv->tabmenu_label), base_name);
+
+	gtk_tooltips_set_tip(tooltips, parent, doc->file_name, NULL);
+
+	g_free(base_name);
+}
+
+
 /**
  *  Update the tab labels, the status bar, the window title and some save-sensitive buttons
  *  according to the document's save state.
@@ -1538,8 +1556,6 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	/* ignore the following things if we are quitting */
 	if (! main_status.quitting)
 	{
-		gchar *base_name = g_path_get_basename(doc->file_name);
-
 		sci_set_savepoint(doc->editor->sci);
 
 		/* stat the file to get the timestamp, otherwise on Windows the actual
@@ -1551,12 +1567,10 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 
 		tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
 
-		gtk_label_set_text(GTK_LABEL(doc->priv->tab_label), base_name);
-		gtk_label_set_text(GTK_LABEL(doc->priv->tabmenu_label), base_name);
+		document_update_tab_label(doc);
 
 		msgwin_status_add(_("File %s saved."), doc->file_name);
 		ui_update_statusbar(doc, -1);
-		g_free(base_name);
 #ifdef HAVE_VTE
 		vte_cwd(doc->file_name, FALSE);
 #endif

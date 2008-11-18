@@ -6,6 +6,8 @@
  * doc/geany.txt, doc/geany.html:
    Fix some typos.
    Add note about the encoding box in the Find in Files dialog.
+ * src/document.c, src/document.h, src/notebook.c:
+   Show the full filename of a document as tooltip on the tab labels.
 
 
 2008-11-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
