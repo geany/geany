@@ -245,7 +245,7 @@ Short option  Long option              Function
 *none*        --vte-lib                Specify explicitly the path including filename or only
                                        the filename to the VTE library, e.g.
                                        ``/usr/lib/libvte.so`` or ``libvte.so``. This option is
-                                       only needed when the autodetection does not work. Only
+                                       only needed when the auto detection does not work. Only
                                        available if Geany was compiled with support for VTE.
 
 -v            --version                Show version information and exit.
@@ -255,7 +255,7 @@ Short option  Long option              Function
 *none*        [files ...]              Open all given files at startup. This option causes
                                        Geany to ignore loading stored files from the last
                                        session (if enabled).
-                                       Geany also recognises line and column information when
+                                       Geany also recognizes line and column information when
                                        appended to the filename with colons, e.g.
                                        "geany foo.bar:10:5" will open the file foo.bar and
                                        place the cursor in line 10 at column 5.
@@ -432,9 +432,9 @@ can convert a file from a character set to another one. To do this,
 Geany uses the character conversion capabilities of the GLib.
 
 Only text files are supported, i.e. opening files which contain
-NUL-bytes may fail. Geany will try to open the file anyway but it is
+NULL-bytes may fail. Geany will try to open the file anyway but it is
 likely that the file will be truncated because it can only opened up
-to the first occurrence of a NUL-byte. All characters after this
+to the first occurrence of a NULL-byte. All characters after this
 position are lost and are not written when you save the file.
 
 Geany tries to detect the encoding of a file while opening it. It
@@ -517,7 +517,7 @@ The used regular expression to find the encoding string is:
 
 .. note::
     These specifications must be in the first 512 bytes of the file.
-    Anything after the first 512 bytes will not be recognised.
+    Anything after the first 512 bytes will not be recognized.
 
 
 Special encoding "None"
@@ -526,9 +526,9 @@ Special encoding "None"
 There is a special encoding "None" which is actually no real
 encoding. It is useful when you know that Geany cannot auto-detect
 the encoding of a file and it is not displayed correctly. Especially
-when the file contains NUL-bytes this can be useful to skip auto
+when the file contains NULL-bytes this can be useful to skip auto
 detection and open the file properly at least until the occurrence
-of the first NUL-byte. Using this encoding opens the file as it is
+of the first NULL-byte. Using this encoding opens the file as it is
 without any character conversion.
 
 
@@ -537,7 +537,7 @@ Unicode Byte-Order-Mark (BOM)
 
 Furthermore, Geany detects an Unicode Byte Order Mark (see
 http://en.wikipedia.org/wiki/Byte_Order_Mark for details). Of course,
-this feature is only available if the opened file is in an unicode
+this feature is only available if the opened file is in an Unicode
 encoding. The Byte Order Mark helps to detect the encoding of a file,
 e.g. whether it is UTF-16LE or UTF-16BE and so on. On Unix-like systems
 using a Byte Order Mark could cause some problems, e.g. the gcc stops
@@ -823,7 +823,7 @@ Maybe you need to often type your name, so define a snippet like this::
     [Default]
     myname=Enrico Tröger
 
-Everytime you write ``myname`` <TAB> in Geany, it will replace "myname"
+Every time you write ``myname`` <TAB> in Geany, it will replace "myname"
 with "Enrico Tröger". The key to start auto completion can be changed
 in the preferences dialog, by default it is TAB.
 
@@ -845,7 +845,7 @@ default characters or define it to add or remove characters to fit your
 needs.
 
 
-Inserting unicode characters
+Inserting Unicode characters
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 With GTK 2.10 and above, you can hit Ctrl-Shift-u, then still holding
@@ -899,8 +899,8 @@ The syntax for the Use regular expressions option is shown in
 
 The Use escape sequences option will transform any escaped characters
 into their UTF-8 equivalent. For example, \\t will be transformed into
-a tab character. Other recognised symbols are: \\\\, \\n, \\r, \\uXXXX
-(Unicode chararacters).
+a tab character. Other recognized symbols are: \\\\, \\n, \\r, \\uXXXX
+(Unicode characters).
 
 
 Find all
@@ -918,7 +918,7 @@ current document in the Messages tab of the Message Window. *Find All
 In Session* does the same for all open documents.
 
 Mark will highlight all matches in the current document with a
-coloured box. These markers can be removed by selecting the
+colored box. These markers can be removed by selecting the
 Remove Markers command from the Document menu.
 
 
@@ -926,7 +926,7 @@ Change font in search dialog text fields
 ````````````````````````````````````````
 
 All search related dialogs use a Monospace for the text input fields to
-increase the readibility of input text. This is useful when you are
+increase the readability of input text. This is useful when you are
 typing e.g. regular expressions with spaces, periods and commas which
 might it hard to read with a proportional font.
 
@@ -970,6 +970,9 @@ utility. GNU Grep is recommended.
 .. image:: ./images/find_in_files_dialog.png
 
 
+The Encoding combo box can be used to define the encoding of the files
+to be searched. The chosen encoding is used to convert the entered search
+text into and to convert the search results back to UTF-8.
 The Extra options field is used to pass any additional arguments to
 the grep tool.
 
@@ -1129,7 +1132,7 @@ Workspace tags
 
 Tags for each document are parsed whenever a file is loaded or
 saved. These are shown in the Symbol list in the Sidebar. These tags
-are also used for autocompletion of symbols and calltips for all documents
+are also used for auto completion of symbols and calltips for all documents
 open in the current session that have the same filetype.
 
 The *Go to Tag* commands can be used with all workspace tags. See
@@ -1139,7 +1142,7 @@ The *Go to Tag* commands can be used with all workspace tags. See
 Global tags
 ^^^^^^^^^^^
 
-Global tags are used to provide autocompletion of symbols and calltips
+Global tags are used to provide auto completion of symbols and calltips
 without having to open the corresponding source files. This is intended
 for library APIs, as the tags file only has to be updated when you upgrade
 the library.
@@ -1244,7 +1247,7 @@ manual page::
     Specifies a list of identifiers which are to be specially handled
     while  parsing C and C++ source files. This option is specifically
     provided to handle special cases arising through the use of
-    preprocessor macros. When the identifiers listed are simple identifiers,
+    pre-processor macros. When the identifiers listed are simple identifiers,
     these identifiers will be ignored during parsing of the source files.
     If an identifier is suffixed with a '+' character, ctags will also
     ignore any parenthesis-enclosed argument list which may immediately
@@ -1789,7 +1792,7 @@ Context action
 Template tab in preferences dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This data is used as metadata for various template text to insert into
+This data is used as meta data for various template text to insert into
 a document, such as the file header. You only need to set fields that
 you want to use in your template files.
 
@@ -2186,7 +2189,7 @@ Indicators
 ^^^^^^^^^^
 
 Indicators are red squiggly underlines which are used to highlight
-errors which occured while compiling the current file. So you can
+errors which occurred while compiling the current file. So you can
 easily see where your code failed to compile. To remove the indicators,
 just click on "Remove all indicators" in the document file menu.
 
@@ -2383,7 +2386,7 @@ Suppress snippet completion                               If you type a construc
                                                           insert a space.
 
 Context Action                                            Executes a command and passes the current word
-                                                          (near the cursor postion) or selection as an
+                                                          (near the cursor position) or selection as an
                                                           argument. See the section called `Context
                                                           actions`_.
 
@@ -2630,7 +2633,7 @@ Build options                                             Opens the build option
 
 **Tools**
 
-Show Color Chooser                                        Opens the Colour Chooser dialog.
+Show Color Chooser                                        Opens the Color Chooser dialog.
 
 **Help**
 
@@ -2670,8 +2673,8 @@ contain all settings.
 Filetype definition files
 -------------------------
 
-All colour definitions and other filetype specific settings are
-stored in the filetype definition files. Those settings are colours
+All color definitions and other filetype specific settings are
+stored in the filetype definition files. Those settings are colors
 for syntax highlighting, general settings like comment characters or
 word delimiter characters as well as compiler and linker settings.
 
@@ -2708,10 +2711,10 @@ Format
 [styling] Section
 `````````````````
 
-In this section the colours for syntax highlighting are defined. The
-format is always: key=forground_colour;background_colour;bold;italic
+In this section the colors for syntax highlighting are defined. The
+format is always: key=foreground_color;background_color;bold;italic
 
-Colours have to be specified as RGB hex values prefixed by
+Colors have to be specified as RGB hex values prefixed by
 0x. For example red is 0xff0000, blue is 0x0000ff. The values are
 case-insensitive, but it is a good idea to use small letters. Bold
 and italic are flags and should only be "true" or "false". If their
@@ -2866,15 +2869,15 @@ default
     *Example:* ``default=0x000000;0xffffff;false;false``
 
 selection
-    The style for colouring selected text. The format is:
+    The style for coloring selected text. The format is:
 
-    * Foreground colour
-    * Background colour
-    * Use foreground colour
-    * Use background colour
+    * Foreground color
+    * Background color
+    * Use foreground color
+    * Use background color
 
-    The colours are only set if the 3rd or 4th argument is true. When
-    the colours are not overridden, the default is a dark grey
+    The colors are only set if the 3rd or 4th argument is true. When
+    the colors are not overridden, the default is a dark grey
     background with syntax highlighted foreground text.
 
     *Example:* ``selection=0xc0c0c0;0x00007F;true;true``
@@ -2890,7 +2893,7 @@ brace_bad
     *Example:* ``brace_bad=0x0000ff;0xFFFFFF;true;false``
 
 caret
-    The style for colouring the caret(the blinking cursor). Only first
+    The style for coloring the caret(the blinking cursor). Only first
     and third argument is interpreted.
     Set the third argument to true to change the caret into a block caret.
 
@@ -2905,26 +2908,26 @@ caret_width
     *Example:* ``caret=1;0;false;false``
 
 current_line
-    The style for colouring the background of the current line. Only
+    The style for coloring the background of the current line. Only
     the second and third arguments are interpreted. The second argument
-    is the background colour. Use the third argument to enable or
+    is the background color. Use the third argument to enable or
     disable background highlighting for the current line (has to be
     true/false).
 
     *Example:* ``current_line=0x0;0xe5e5e5;true;false``
 
 indent_guide
-    The style for colouring the indentation guides. Only the first and
+    The style for coloring the indentation guides. Only the first and
     second arguments are interpreted.
 
     *Example:* ``indent_guide=0xc0c0c0;0xffffff;false;false``
 
 white_space
-    The style for colouring the white space if it is shown. The first
-    both arguments define the foreground and background colours, the
-    third argument sets whether to use the defined foreground colour
-    or to use the colour defined by each filetype for the white space.
-    The fourth argument defines whether to use the background colour.
+    The style for coloring the white space if it is shown. The first
+    both arguments define the foreground and background colors, the
+    third argument sets whether to use the defined foreground color
+    or to use the color defined by each filetype for the white space.
+    The fourth argument defines whether to use the background color.
 
     *Example:* ``white_space=0xc0c0c0;0xffffff;true;true``
 
@@ -2957,13 +2960,13 @@ folding_horiz_line
     *Example:* ``folding_horiz_line=0;0;false;false``
 
 invert_all
-    Whether to invert all defined colours. This is useful if you like a
-    dark background colour(e.g. black) and do not want to change every
+    Whether to invert all defined colors. This is useful if you like a
+    dark background color(e.g. black) and do not want to change every
     single line. Please note, at time of writing this was only tested
     with the C syntax highlighting.
 
     Only first argument is interpreted. Set it to 1 to invert all
-    colours.
+    colors.
 
     *Example:* ``invert_all=0;0;false;false``
 
@@ -3008,7 +3011,7 @@ translucency
 
 marker_line
     The style for a highlighted line (e.g when using Goto line or goto tag).
-    The forground colour (first argument) is only used when the Markers margin
+    The foreground color (first argument) is only used when the Markers margin
     is enabled (see View menu).
 
     Only the first and second argument is interpreted.
@@ -3017,7 +3020,7 @@ marker_line
 
 marker_search
     The style for a highlighted search result (e.g when using "Mark" in
-    Search dialogs). The foreground colour (first argument) is only used
+    Search dialogs). The foreground color (first argument) is only used
     when the Markers margin is enabled (see View menu).
 
     Only the first and second argument is interpreted.
@@ -3106,11 +3109,11 @@ function description won't contain the correct function name but "unknown"
 instead.
 
 
-Template metadata
-^^^^^^^^^^^^^^^^^
+Template meta data
+^^^^^^^^^^^^^^^^^^
 
-Metadata can be used with all templates, but by default user set
-metadata is only used for the ChangeLog and File header templates.
+Meta data can be used with all templates, but by default user set
+meta data is only used for the ChangeLog and File header templates.
 
 In the configuration dialog you can find a tab "Templates" (see
 `Template tab in preferences dialog`_). You can define the

@@ -6,7 +6,7 @@
 <meta name="generator" content="Docutils 0.5: http://docutils.sourceforge.net/" />
 <title>Geany</title>
 <meta name="authors" content="Enrico Tröger  Nick Treleaven  Frank Lanitz" />
-<meta name="date" content="$Date$" />
+<meta name="date" content="2008-11-13" />
 <style type="text/css">
 
 /*
@@ -139,7 +139,7 @@ Stylesheet for Geany's documentation based on a version of John Gabriele.
 <br />Nick Treleaven
 <br />Frank Lanitz</td></tr>
 <tr><th class="docinfo-name">Date:</th>
-<td>$Date$</td></tr>
+<td>2008-11-13</td></tr>
 <tr><th class="docinfo-name">Version:</th>
 <td>0.16</td></tr>
 </tbody>
@@ -203,7 +203,7 @@ of this program, and also in the chapter <a class="reference internal" href="#gn
 <li><a class="reference internal" href="#send-text-through-definable-commands" id="id44">Send text through definable commands</a></li>
 <li><a class="reference internal" href="#context-actions" id="id45">Context actions</a></li>
 <li><a class="reference internal" href="#user-definable-snippets" id="id46">User-definable snippets</a></li>
-<li><a class="reference internal" href="#inserting-unicode-characters" id="id47">Inserting unicode characters</a></li>
+<li><a class="reference internal" href="#inserting-unicode-characters" id="id47">Inserting Unicode characters</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#search-replace-and-go-to" id="id48">Search, replace and go to</a><ul>
@@ -351,7 +351,7 @@ of this program, and also in the chapter <a class="reference internal" href="#gn
 </li>
 <li><a class="reference internal" href="#filetype-extensions" id="id139">Filetype extensions</a></li>
 <li><a class="reference internal" href="#templates" id="id140">Templates</a><ul>
-<li><a class="reference internal" href="#template-metadata" id="id141">Template metadata</a></li>
+<li><a class="reference internal" href="#template-meta-data" id="id141">Template meta data</a></li>
 <li><a class="reference internal" href="#file-templates" id="id142">File templates</a><ul>
 <li><a class="reference internal" href="#custom-file-templates" id="id143">Custom file templates</a></li>
 <li><a class="reference internal" href="#filetype-templates" id="id144">Filetype templates</a></li>
@@ -624,7 +624,7 @@ available if Geany was compiled with support for VTE.</td>
 <td>Specify explicitly the path including filename or only
 the filename to the VTE library, e.g.
 <tt class="docutils literal"><span class="pre">/usr/lib/libvte.so</span></tt> or <tt class="docutils literal"><span class="pre">libvte.so</span></tt>. This option is
-only needed when the autodetection does not work. Only
+only needed when the auto detection does not work. Only
 available if Geany was compiled with support for VTE.</td>
 </tr>
 <tr><td>-v</td>
@@ -640,7 +640,7 @@ available if Geany was compiled with support for VTE.</td>
 <td><p class="first">Open all given files at startup. This option causes
 Geany to ignore loading stored files from the last
 session (if enabled).
-Geany also recognises line and column information when
+Geany also recognizes line and column information when
 appended to the filename with colons, e.g.
 &quot;geany foo.bar:10:5&quot; will open the file foo.bar and
 place the cursor in line 10 at column 5.</p>
@@ -794,9 +794,9 @@ you can open and save files in different character sets and even
 can convert a file from a character set to another one. To do this,
 Geany uses the character conversion capabilities of the GLib.</p>
 <p>Only text files are supported, i.e. opening files which contain
-NUL-bytes may fail. Geany will try to open the file anyway but it is
+NULL-bytes may fail. Geany will try to open the file anyway but it is
 likely that the file will be truncated because it can only opened up
-to the first occurrence of a NUL-byte. All characters after this
+to the first occurrence of a NULL-byte. All characters after this
 position are lost and are not written when you save the file.</p>
 <p>Geany tries to detect the encoding of a file while opening it. It
 might be that the encoding of a file cannot be detected correctly so
@@ -872,7 +872,7 @@ correctly the next time.</p>
 <div class="note">
 <p class="first admonition-title">Note</p>
 <p class="last">These specifications must be in the first 512 bytes of the file.
-Anything after the first 512 bytes will not be recognised.</p>
+Anything after the first 512 bytes will not be recognized.</p>
 </div>
 </div>
 <div class="section" id="special-encoding-none">
@@ -880,16 +880,16 @@ Anything after the first 512 bytes will not be recognised.</p>
 <p>There is a special encoding &quot;None&quot; which is actually no real
 encoding. It is useful when you know that Geany cannot auto-detect
 the encoding of a file and it is not displayed correctly. Especially
-when the file contains NUL-bytes this can be useful to skip auto
+when the file contains NULL-bytes this can be useful to skip auto
 detection and open the file properly at least until the occurrence
-of the first NUL-byte. Using this encoding opens the file as it is
+of the first NULL-byte. Using this encoding opens the file as it is
 without any character conversion.</p>
 </div>
 <div class="section" id="unicode-byte-order-mark-bom">
 <h3><a class="toc-backref" href="#id35">Unicode Byte-Order-Mark (BOM)</a></h3>
 <p>Furthermore, Geany detects an Unicode Byte Order Mark (see
 <a class="reference external" href="http://en.wikipedia.org/wiki/Byte_Order_Mark">http://en.wikipedia.org/wiki/Byte_Order_Mark</a> for details). Of course,
-this feature is only available if the opened file is in an unicode
+this feature is only available if the opened file is in an Unicode
 encoding. The Byte Order Mark helps to detect the encoding of a file,
 e.g. whether it is UTF-16LE or UTF-16BE and so on. On Unix-like systems
 using a Byte Order Mark could cause some problems, e.g. the gcc stops
@@ -1149,7 +1149,7 @@ to existing contructs of certain programming languages(like <tt class="docutils 
 [Default]
 myname=Enrico Tröger
 </pre>
-<p>Everytime you write <tt class="docutils literal"><span class="pre">myname</span></tt> &lt;TAB&gt; in Geany, it will replace &quot;myname&quot;
+<p>Every time you write <tt class="docutils literal"><span class="pre">myname</span></tt> &lt;TAB&gt; in Geany, it will replace &quot;myname&quot;
 with &quot;Enrico Tröger&quot;. The key to start auto completion can be changed
 in the preferences dialog, by default it is TAB.</p>
 <p>Since Geany 0.15 you can also use most of the available templates wildcards
@@ -1169,7 +1169,7 @@ default characters or define it to add or remove characters to fit your
 needs.</p>
 </div>
 <div class="section" id="inserting-unicode-characters">
-<h3><a class="toc-backref" href="#id47">Inserting unicode characters</a></h3>
+<h3><a class="toc-backref" href="#id47">Inserting Unicode characters</a></h3>
 <p>With GTK 2.10 and above, you can hit Ctrl-Shift-u, then still holding
 Ctrl-Shift, type some hex digits representing the code point for the
 character you want, then let go of Ctrl-Shift and hit a key such as
@@ -1209,8 +1209,8 @@ using a keyboard shortcut (see the section called <a class="reference internal" 
 <a class="reference internal" href="#regular-expressions">Regular expressions</a>.</p>
 <p>The Use escape sequences option will transform any escaped characters
 into their UTF-8 equivalent. For example, \t will be transformed into
-a tab character. Other recognised symbols are: \\, \n, \r, \uXXXX
-(Unicode chararacters).</p>
+a tab character. Other recognized symbols are: \\, \n, \r, \uXXXX
+(Unicode characters).</p>
 </div>
 <div class="section" id="find-all">
 <h4><a class="toc-backref" href="#id51">Find all</a></h4>
@@ -1225,13 +1225,13 @@ several options:</p>
 current document in the Messages tab of the Message Window. <em>Find All
 In Session</em> does the same for all open documents.</p>
 <p>Mark will highlight all matches in the current document with a
-coloured box. These markers can be removed by selecting the
+colored box. These markers can be removed by selecting the
 Remove Markers command from the Document menu.</p>
 </div>
 <div class="section" id="change-font-in-search-dialog-text-fields">
 <h4><a class="toc-backref" href="#id52">Change font in search dialog text fields</a></h4>
 <p>All search related dialogs use a Monospace for the text input fields to
-increase the readibility of input text. This is useful when you are
+increase the readability of input text. This is useful when you are
 typing e.g. regular expressions with spaces, periods and commas which
 might it hard to read with a proportional font.</p>
 <p>If you want to change the font for some reason, you can do this easily
@@ -1267,7 +1267,10 @@ all files in a certain directory using the Grep tool. The Grep tool
 must be correctly set in Preferences to the path of the system's Grep
 utility. GNU Grep is recommended.</p>
 <img alt="./images/find_in_files_dialog.png" src="./images/find_in_files_dialog.png" />
-<p>The Extra options field is used to pass any additional arguments to
+<p>The Encoding combo box can be used to define the encoding of the files
+to be searched. The chosen encoding is used to convert the entered search
+text into and to convert the search results back to UTF-8.
+The Extra options field is used to pass any additional arguments to
 the grep tool.</p>
 <div class="section" id="filtering-out-version-control-files">
 <h4><a class="toc-backref" href="#id55">Filtering out version control files</a></h4>
@@ -1419,14 +1422,14 @@ tags files, as described below.</p>
 <h3><a class="toc-backref" href="#id64">Workspace tags</a></h3>
 <p>Tags for each document are parsed whenever a file is loaded or
 saved. These are shown in the Symbol list in the Sidebar. These tags
-are also used for autocompletion of symbols and calltips for all documents
+are also used for auto completion of symbols and calltips for all documents
 open in the current session that have the same filetype.</p>
 <p>The <em>Go to Tag</em> commands can be used with all workspace tags. See
 <a class="reference internal" href="#go-to-tag-definition">Go to tag definition</a>.</p>
 </div>
 <div class="section" id="global-tags">
 <h3><a class="toc-backref" href="#id65">Global tags</a></h3>
-<p>Global tags are used to provide autocompletion of symbols and calltips
+<p>Global tags are used to provide auto completion of symbols and calltips
 without having to open the corresponding source files. This is intended
 for library APIs, as the tags file only has to be updated when you upgrade
 the library.</p>
@@ -1516,7 +1519,7 @@ manual page:</p>
 Specifies a list of identifiers which are to be specially handled
 while  parsing C and C++ source files. This option is specifically
 provided to handle special cases arising through the use of
-preprocessor macros. When the identifiers listed are simple identifiers,
+pre-processor macros. When the identifiers listed are simple identifiers,
 these identifiers will be ignored during parsing of the source files.
 If an identifier is suffixed with a '+' character, ctags will also
 ignore any parenthesis-enclosed argument list which may immediately
@@ -2005,7 +2008,7 @@ to the specified command.</dd>
 </div>
 <div class="section" id="template-tab-in-preferences-dialog">
 <h3><a class="toc-backref" href="#id100">Template tab in preferences dialog</a></h3>
-<p>This data is used as metadata for various template text to insert into
+<p>This data is used as meta data for various template text to insert into
 a document, such as the file header. You only need to set fields that
 you want to use in your template files.</p>
 <div class="note">
@@ -2324,7 +2327,7 @@ arguments in the linker command setting.</p>
 <div class="section" id="indicators">
 <h3><a class="toc-backref" href="#id124">Indicators</a></h3>
 <p>Indicators are red squiggly underlines which are used to highlight
-errors which occured while compiling the current file. So you can
+errors which occurred while compiling the current file. So you can
 easily see where your code failed to compile. To remove the indicators,
 just click on &quot;Remove all indicators&quot; in the document file menu.</p>
 <p>If you do not like this feature, you can disable it in the preferences
@@ -2579,7 +2582,7 @@ insert a space.</td>
 <tr><td>Context Action</td>
 <td>&nbsp;</td>
 <td>Executes a command and passes the current word
-(near the cursor postion) or selection as an
+(near the cursor position) or selection as an
 argument. See the section called <a class="reference internal" href="#context-actions">Context
 actions</a>.</td>
 </tr>
@@ -3014,7 +3017,7 @@ the last build process.</td>
 </tr>
 <tr><td>Show Color Chooser</td>
 <td>&nbsp;</td>
-<td>Opens the Colour Chooser dialog.</td>
+<td>Opens the Color Chooser dialog.</td>
 </tr>
 <tr><td><strong>Help</strong></td>
 <td>&nbsp;</td>
@@ -3053,8 +3056,8 @@ need to do that.</p>
 </div>
 <div class="section" id="filetype-definition-files">
 <h2><a class="toc-backref" href="#id132">Filetype definition files</a></h2>
-<p>All colour definitions and other filetype specific settings are
-stored in the filetype definition files. Those settings are colours
+<p>All color definitions and other filetype specific settings are
+stored in the filetype definition files. Those settings are colors
 for syntax highlighting, general settings like comment characters or
 word delimiter characters as well as compiler and linker settings.</p>
 <p>The system-wide configuration files can be found in
@@ -3083,9 +3086,9 @@ global definition file in <tt class="docutils literal"><span class="pre">$prefix
 <h3><a class="toc-backref" href="#id133">Format</a></h3>
 <div class="section" id="styling-section">
 <h4><a class="toc-backref" href="#id134">[styling] Section</a></h4>
-<p>In this section the colours for syntax highlighting are defined. The
-format is always: key=forground_colour;background_colour;bold;italic</p>
-<p>Colours have to be specified as RGB hex values prefixed by
+<p>In this section the colors for syntax highlighting are defined. The
+format is always: key=foreground_color;background_color;bold;italic</p>
+<p>Colors have to be specified as RGB hex values prefixed by
 0x. For example red is 0xff0000, blue is 0x0000ff. The values are
 case-insensitive, but it is a good idea to use small letters. Bold
 and italic are flags and should only be &quot;true&quot; or &quot;false&quot;. If their
@@ -3224,15 +3227,15 @@ filetype set.</p>
 <p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">default=0x000000;0xffffff;false;false</span></tt></p>
 </dd>
 <dt>selection</dt>
-<dd><p class="first">The style for colouring selected text. The format is:</p>
+<dd><p class="first">The style for coloring selected text. The format is:</p>
 <ul class="simple">
-<li>Foreground colour</li>
-<li>Background colour</li>
-<li>Use foreground colour</li>
-<li>Use background colour</li>
+<li>Foreground color</li>
+<li>Background color</li>
+<li>Use foreground color</li>
+<li>Use background color</li>
 </ul>
-<p>The colours are only set if the 3rd or 4th argument is true. When
-the colours are not overridden, the default is a dark grey
+<p>The colors are only set if the 3rd or 4th argument is true. When
+the colors are not overridden, the default is a dark grey
 background with syntax highlighted foreground text.</p>
 <p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">selection=0xc0c0c0;0x00007F;true;true</span></tt></p>
 </dd>
@@ -3245,7 +3248,7 @@ background with syntax highlighted foreground text.</p>
 <p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">brace_bad=0x0000ff;0xFFFFFF;true;false</span></tt></p>
 </dd>
 <dt>caret</dt>
-<dd><p class="first">The style for colouring the caret(the blinking cursor). Only first
+<dd><p class="first">The style for coloring the caret(the blinking cursor). Only first
 and third argument is interpreted.
 Set the third argument to true to change the caret into a block caret.</p>
 <p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">caret=0x000000;0x0;false;false</span></tt></p>
@@ -3258,24 +3261,24 @@ invisible.</p>
 <p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">caret=1;0;false;false</span></tt></p>
 </dd>
 <dt>current_line</dt>
-<dd><p class="first">The style for colouring the background of the current line. Only
+<dd><p class="first">The style for coloring the background of the current line. Only
 the second and third arguments are interpreted. The second argument
-is the background colour. Use the third argument to enable or
+is the background color. Use the third argument to enable or
 disable background highlighting for the current line (has to be
 true/false).</p>
 <p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">current_line=0x0;0xe5e5e5;true;false</span></tt></p>
 </dd>
 <dt>indent_guide</dt>
-<dd><p class="first">The style for colouring the indentation guides. Only the first and
+<dd><p class="first">The style for coloring the indentation guides. Only the first and
 second arguments are interpreted.</p>
 <p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">indent_guide=0xc0c0c0;0xffffff;false;false</span></tt></p>
 </dd>
 <dt>white_space</dt>
-<dd><p class="first">The style for colouring the white space if it is shown. The first
-both arguments define the foreground and background colours, the
-third argument sets whether to use the defined foreground colour
-or to use the colour defined by each filetype for the white space.
-The fourth argument defines whether to use the background colour.</p>
+<dd><p class="first">The style for coloring the white space if it is shown. The first
+both arguments define the foreground and background colors, the
+third argument sets whether to use the defined foreground color
+or to use the color defined by each filetype for the white space.
+The fourth argument defines whether to use the background color.</p>
 <p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">white_space=0xc0c0c0;0xffffff;true;true</span></tt></p>
 </dd>
 <dt>folding_style</dt>
@@ -3305,12 +3308,12 @@ first argument is used.</p>
 <p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">folding_horiz_line=0;0;false;false</span></tt></p>
 </dd>
 <dt>invert_all</dt>
-<dd><p class="first">Whether to invert all defined colours. This is useful if you like a
-dark background colour(e.g. black) and do not want to change every
+<dd><p class="first">Whether to invert all defined colors. This is useful if you like a
+dark background color(e.g. black) and do not want to change every
 single line. Please note, at time of writing this was only tested
 with the C syntax highlighting.</p>
 <p>Only first argument is interpreted. Set it to 1 to invert all
-colours.</p>
+colors.</p>
 <p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">invert_all=0;0;false;false</span></tt></p>
 </dd>
 <dt>line_wrap_visuals</dt>
@@ -3348,14 +3351,14 @@ keep this value at 256 to disable translucency otherwise Geany might crash.</p>
 </dd>
 <dt>marker_line</dt>
 <dd><p class="first">The style for a highlighted line (e.g when using Goto line or goto tag).
-The forground colour (first argument) is only used when the Markers margin
+The foreground color (first argument) is only used when the Markers margin
 is enabled (see View menu).</p>
 <p>Only the first and second argument is interpreted.</p>
 <p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">marker_line=0x000000;0xffff00;false;false</span></tt></p>
 </dd>
 <dt>marker_search</dt>
 <dd><p class="first">The style for a highlighted search result (e.g when using &quot;Mark&quot; in
-Search dialogs). The foreground colour (first argument) is only used
+Search dialogs). The foreground color (first argument) is only used
 when the Markers margin is enabled (see View menu).</p>
 <p>Only the first and second argument is interpreted.</p>
 <p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">marker_search=0x000000;0xB8F4B8;false;false</span></tt></p>
@@ -3427,10 +3430,10 @@ above the function, just check it out. If the cursor is not inside
 of a function or the function name cannot be determined, the inserted
 function description won't contain the correct function name but &quot;unknown&quot;
 instead.</p>
-<div class="section" id="template-metadata">
-<h3><a class="toc-backref" href="#id141">Template metadata</a></h3>
-<p>Metadata can be used with all templates, but by default user set
-metadata is only used for the ChangeLog and File header templates.</p>
+<div class="section" id="template-meta-data">
+<h3><a class="toc-backref" href="#id141">Template meta data</a></h3>
+<p>Meta data can be used with all templates, but by default user set
+meta data is only used for the ChangeLog and File header templates.</p>
 <p>In the configuration dialog you can find a tab &quot;Templates&quot; (see
 <a class="reference internal" href="#template-tab-in-preferences-dialog">Template tab in preferences dialog</a>). You can define the
 default values which will be inserted in the templates. You should
@@ -4412,7 +4415,7 @@ USE OR PERFORMANCE OF THIS SOFTWARE.</p>
 <div class="footer">
 <hr class="footer" />
 <a class="reference external" href="geany.txt">View document source</a>.
-Generated on: 2008-11-13 14:09 UTC.
+Generated on: 2008-11-18 17:43 UTC.
 Generated by <a class="reference external" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference external" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 
 </div>
