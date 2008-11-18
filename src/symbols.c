@@ -365,13 +365,6 @@ const gchar **symbols_get_html_entities(void)
 }
 
 
-void symbols_finalize(void)
-{
-	g_strfreev(html_entities);
-	g_strfreev(c_tags_ignore);
-}
-
-
 /* sort by name, then line */
 static gint compare_symbol(const TMTag *tag_a, const TMTag *tag_b)
 {
@@ -1666,6 +1659,51 @@ gint symbols_get_current_function(GeanyDocument *doc, const gchar **tagname)
 	*tagname = cur_tag;
 	tag_line = -1;
 	return tag_line;
+}
+
+
+static void on_taglist_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user_data)
+{
+	gint sort_mode = GPOINTER_TO_INT(user_data);
+	GeanyDocument *doc = document_get_current();
+
+	if (doc != NULL)
+		doc->has_tags = symbols_recreate_tag_list(doc, sort_mode);
+}
+
+
+static void create_taglist_popup_menu(void)
+{
+	GtkWidget *item;
+
+	tv.popup_taglist = gtk_menu_new();
+
+	item = gtk_menu_item_new_with_mnemonic(_("Sort by _Name"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(tv.popup_taglist), item);
+	g_signal_connect(item, "activate", G_CALLBACK(on_taglist_tree_popup_clicked),
+			GINT_TO_POINTER(SYMBOLS_SORT_BY_NAME));
+
+	item = gtk_menu_item_new_with_mnemonic(_("Sort by _Appearance"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(tv.popup_taglist), item);
+	g_signal_connect(item, "activate", G_CALLBACK(on_taglist_tree_popup_clicked),
+			GINT_TO_POINTER(SYMBOLS_SORT_BY_APPEARANCE));
+
+	sidebar_add_common_menu_items(GTK_MENU(tv.popup_taglist));
+}
+
+
+void symbols_init(void)
+{
+	create_taglist_popup_menu();
+}
+
+
+void symbols_finalize(void)
+{
+	g_strfreev(html_entities);
+	g_strfreev(c_tags_ignore);
 }
 
 

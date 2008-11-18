@@ -54,12 +54,7 @@ enum
 {
 	OPENFILES_ACTION_REMOVE = 0,
 	OPENFILES_ACTION_SAVE,
-	OPENFILES_ACTION_RELOAD,
-	OPENFILES_ACTION_HIDE,
-	OPENFILES_ACTION_HIDE_ALL,
-	SYMBOL_ACTION_SORT_BY_NAME,
-	SYMBOL_ACTION_SORT_BY_APPEARANCE,
-	SYMBOL_ACTION_HIDE
+	OPENFILES_ACTION_RELOAD
 };
 
 typedef struct
@@ -73,7 +68,6 @@ static GtkListStore	*store_openfiles;
 static GtkWidget *tag_window;	/* scrolled window that holds the symbol list GtkTreeView */
 
 /* callback prototypes */
-static void on_taglist_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user_data);
 static void on_openfiles_tree_selection_changed(GtkTreeSelection *selection, gpointer data);
 static void on_openfiles_document_action(GtkMenuItem *menuitem, gpointer user_data);
 static gboolean on_taglist_tree_selection_changed(GtkTreeSelection *selection);
@@ -382,7 +376,7 @@ static gboolean on_sidebar_display_open_files_show(GtkWidget *item)
 }
 
 
-static void sidebar_add_common_menu_items(GtkMenu *menu)
+void sidebar_add_common_menu_items(GtkMenu *menu)
 {
 	GtkWidget *item;
 
@@ -412,28 +406,6 @@ static void sidebar_add_common_menu_items(GtkMenu *menu)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_hide_sidebar), NULL);
-}
-
-
-static void create_taglist_popup_menu(void)
-{
-	GtkWidget *item;
-
-	tv.popup_taglist = gtk_menu_new();
-
-	item = gtk_menu_item_new_with_mnemonic(_("Sort by _Name"));
-	gtk_widget_show(item);
-	gtk_container_add(GTK_CONTAINER(tv.popup_taglist), item);
-	g_signal_connect(item, "activate", G_CALLBACK(on_taglist_tree_popup_clicked),
-			GINT_TO_POINTER(SYMBOL_ACTION_SORT_BY_NAME));
-
-	item = gtk_menu_item_new_with_mnemonic(_("Sort by _Appearance"));
-	gtk_widget_show(item);
-	gtk_container_add(GTK_CONTAINER(tv.popup_taglist), item);
-	g_signal_connect(item, "activate", G_CALLBACK(on_taglist_tree_popup_clicked),
-			GINT_TO_POINTER(SYMBOL_ACTION_SORT_BY_APPEARANCE));
-
-	sidebar_add_common_menu_items(GTK_MENU(tv.popup_taglist));
 }
 
 
@@ -599,34 +571,6 @@ static void on_openfiles_tree_selection_changed(GtkTreeSelection *selection, gpo
 }
 
 
-static void on_taglist_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user_data)
-{
-	switch (GPOINTER_TO_INT(user_data))
-	{
-		case SYMBOL_ACTION_SORT_BY_NAME:
-		{
-			GeanyDocument *doc = document_get_current();
-			if (doc != NULL)
-				doc->has_tags = symbols_recreate_tag_list(doc, SYMBOLS_SORT_BY_NAME);
-			break;
-		}
-		case SYMBOL_ACTION_SORT_BY_APPEARANCE:
-		{
-			GeanyDocument *doc = document_get_current();
-			if (doc != NULL)
-				doc->has_tags = symbols_recreate_tag_list(doc, SYMBOLS_SORT_BY_APPEARANCE);
-			break;
-		}
-		case SYMBOL_ACTION_HIDE:
-		{
-			interface_prefs.sidebar_symbol_visible = FALSE;
-			ui_sidebar_show_hide();
-			break;
-		}
-	}
-}
-
-
 static gboolean on_taglist_tree_selection_changed(GtkTreeSelection *selection)
 {
 	GtkTreeIter iter;
@@ -704,7 +648,7 @@ static gboolean on_treeviews_button_press_event(GtkWidget *widget, GdkEventButto
 		g_idle_add((GSourceFunc) on_taglist_tree_selection_changed, select);
 	}
 	else if (event->button == 3)
-	{	/* popupmenu to hide or clear the active treeview */
+	{	/* update & show popup menus */
 		if (GPOINTER_TO_INT(user_data) == TREEVIEW_OPENFILES)
 		{
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(mi.documents_fullpath),
@@ -729,7 +673,6 @@ void treeviews_init()
 	tag_window = lookup_widget(main_widgets.window, "scrolledwindow2");
 
 	prepare_openfiles();
-	create_taglist_popup_menu();
 	create_openfiles_popup_menu();
 }
 

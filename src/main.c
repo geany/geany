@@ -944,6 +944,7 @@ gint main(gint argc, gchar **argv)
 	navqueue_init();
 	document_init_doclist();
 	treeviews_init();
+	symbols_init();
 	configuration_read_filetype_extensions();
 	editor_snippets_init();
 

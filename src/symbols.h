@@ -35,6 +35,10 @@ enum
 };
 
 
+void symbols_init(void);
+
+void symbols_finalize(void);
+
 void symbols_global_tags_loaded(gint file_type_idx);
 
 GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gint lang);
@@ -46,8 +50,6 @@ const GList *symbols_get_tag_list(GeanyDocument *doc, guint tag_types);
 GString *symbols_get_macro_list(void);
 
 const gchar **symbols_get_html_entities(void);
-
-void symbols_finalize(void);
 
 gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode);
 

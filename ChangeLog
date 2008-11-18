@@ -2,6 +2,10 @@
 
  * src/treeviews.c:
    Refactor with sidebar_add_common_menu_items().
+ * src/treeviews.c, src/treeviews.h, src/main.c, src/symbols.c,
+   src/symbols.h:
+   Move symbol list popup menu code to symbols.c.
+   Add symbols_init().
 
 
 2008-11-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

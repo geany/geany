@@ -59,4 +59,6 @@ void treeviews_select_openfiles_item(GeanyDocument *doc);
 
 void treeviews_remove_document(GeanyDocument *doc);
 
+void sidebar_add_common_menu_items(GtkMenu *menu);
+
 #endif
