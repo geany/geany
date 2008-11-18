@@ -1,3 +1,10 @@
+2008-11-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/notebook.c:
+   Remove forced size requests for the tab close icon as it seems not
+   necessary and broke the icon on Windows.
+
+
 2008-11-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/treeviews.c:

@@ -479,9 +479,7 @@ gint notebook_new_tab(GeanyDocument *this)
 		gtk_rc_style_unref(rcstyle);
 
 		image = gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
-		gtk_widget_size_request(image, &size);
-		gtk_widget_set_size_request(btn, size.width, size.height);
-		gtk_container_add(GTK_CONTAINER(btn), image);
+		gtk_button_set_image(GTK_BUTTON(btn), image);
 
 		align = gtk_alignment_new(1.0, 0.0, 0.0, 0.0);
 		gtk_container_add(GTK_CONTAINER(align), btn);
