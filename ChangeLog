@@ -3,6 +3,8 @@
  * src/search.c:
    Rework search_close_pid() and let it handle the case when the grep
    command was killed externally.
+   Fix wrong encoding handling when the chosen encoding was UTF-8 and
+   properly skip any conversions in this case.
 
 
 2008-11-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

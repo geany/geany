@@ -1374,15 +1374,24 @@ static gboolean search_read_io(GIOChannel *source, GIOCondition condition, gpoin
 			utf8_msg = NULL;
 
 			g_strstrip(msg);
-			if (! g_utf8_validate(msg, -1, NULL))
+			/* enc is NULL when encoding is set to UTF-8, so we can skip any conversion */
+			if (enc != NULL)
 			{
-				utf8_msg = g_convert(msg, -1, "UTF-8", enc, NULL, NULL, NULL);
+				if (! g_utf8_validate(msg, -1, NULL))
+				{
+					utf8_msg = g_convert(msg, -1, "UTF-8", enc, NULL, NULL, NULL);
+				}
+				if (utf8_msg == NULL)
+					utf8_msg = msg;
 			}
-			if (utf8_msg == NULL)
-				utf8_msg = g_strdup(msg);
+			else
+				utf8_msg = msg;
+
 			msgwin_msg_add(COLOR_BLACK, -1, NULL, utf8_msg);
+
+			if (utf8_msg != msg)
+				g_free(utf8_msg);
 			g_free(msg);
-			g_free(utf8_msg);
 		}
 	}
 	if (condition & (G_IO_ERR | G_IO_HUP | G_IO_NVAL))
@@ -1404,15 +1413,24 @@ static gboolean search_read_io_stderr(GIOChannel *source, GIOCondition condition
 			utf8_msg = NULL;
 
 			g_strstrip(msg);
-			if (! g_utf8_validate(msg, -1, NULL))
+			/* enc is NULL when encoding is set to UTF-8, so we can skip any conversion */
+			if (enc != NULL)
 			{
-				utf8_msg = g_convert(msg, -1, "UTF-8", enc, NULL, NULL, NULL);
+				if (! g_utf8_validate(msg, -1, NULL))
+				{
+					utf8_msg = g_convert(msg, -1, "UTF-8", enc, NULL, NULL, NULL);
+				}
+				if (utf8_msg == NULL)
+					utf8_msg = msg;
 			}
-			if (utf8_msg == NULL)
-				utf8_msg = g_strdup(msg);
+			else
+				utf8_msg = msg;
+
 			g_warning("Find in Files: %s", utf8_msg);
+
+			if (utf8_msg != msg)
+				g_free(utf8_msg);
 			g_free(msg);
-			g_free(utf8_msg);
 		}
 	}
 	if (condition & (G_IO_ERR | G_IO_HUP | G_IO_NVAL))
