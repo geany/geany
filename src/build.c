@@ -232,7 +232,7 @@ static GPid build_view_tex_file(GeanyDocument *doc, gint mode)
 		g_strfreev(term_argv);
 		return (GPid) 1;
 	}
-	g_free(working_dir);
+	g_free(script_name);
 
 	argv = g_new0(gchar *, term_argv_len + 3);
 	for (i = 0; i < term_argv_len; i++)
@@ -244,28 +244,27 @@ static GPid build_view_tex_file(GeanyDocument *doc, gint mode)
 		if (strstr(argv[0], "cmd.exe") != NULL)
 		{
 			argv[term_argv_len   ]  = g_strdup("/Q /C");
-			argv[term_argv_len + 1] = script_name;
+			argv[term_argv_len + 1] = g_strconcat("/bin/sh ", RUN_SCRIPT_CMD, NULL);
 		}
 		else
 		{
-			argv[term_argv_len    ] = script_name;
+			argv[term_argv_len    ] = g_strconcat("/bin/sh ", RUN_SCRIPT_CMD, NULL);
 			argv[term_argv_len + 1] = NULL;
 		}
 #else
 	argv[term_argv_len   ]  = g_strdup("-e");
-	argv[term_argv_len + 1] = script_name;
+	argv[term_argv_len + 1] = g_strconcat("/bin/sh ", RUN_SCRIPT_CMD, NULL);
 #endif
 	argv[term_argv_len + 2] = NULL;
 
-
-	if (! g_spawn_async(NULL, argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD,
+	if (! g_spawn_async(working_dir, argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD,
 						NULL, NULL, &(run_info.pid), &error))
 	{
 		geany_debug("g_spawn_async() failed: %s", error->message);
 		ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
 
-		utils_free_pointers(6, executable, view_file, locale_filename, cmd_string, locale_cmd_string,
-										locale_term_cmd, NULL);
+		utils_free_pointers(7, executable, view_file, locale_filename, cmd_string,
+			locale_cmd_string, locale_term_cmd, working_dir, NULL);
 		g_strfreev(argv);
 		g_strfreev(term_argv);
 		g_error_free(error);
@@ -280,8 +279,8 @@ static GPid build_view_tex_file(GeanyDocument *doc, gint mode)
 		build_menu_update(doc);
 	}
 
-	utils_free_pointers(6, executable, view_file, locale_filename, cmd_string, locale_cmd_string,
-										locale_term_cmd, NULL);
+	utils_free_pointers(7, executable, view_file, locale_filename, cmd_string,
+		locale_cmd_string, locale_term_cmd, working_dir, NULL);
 	g_strfreev(argv);
 	g_strfreev(term_argv);
 

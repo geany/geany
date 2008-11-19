@@ -8,6 +8,8 @@
  * geany.nsi:
    Properly support silent installations with the Windows installer
    (closes #2204671).
+ * src/build.c:
+   Fix broken LaTeX view commands (closes #2315014).
 
 
 2008-11-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
