@@ -20,7 +20,11 @@
 !define RESOURCEDIR "geany-${PRODUCT_VERSION}"
 
 SetCompressor /SOLID lzma
+
 XPStyle on
+; set execution level for Windows Vista
+RequestExecutionLevel user
+
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 
 InstallDir "$PROGRAMFILES\Geany"
@@ -51,23 +55,33 @@ RequestExecutionLevel user
 ; Init code    ;
 ;;;;;;;;;;;;;;;;
 Function .onInit
+  SetShellVarContext all
+
   ; prevent running multiple instances of the installer
   System::Call 'kernel32::CreateMutexA(i 0, i 0, t "geany_installer") i .r1 ?e'
   Pop $R0
   StrCmp $R0 0 +3
-    MessageBox MB_OK|MB_ICONEXCLAMATION "The installer is already running."
+    MessageBox MB_OK|MB_ICONEXCLAMATION "The installer is already running." /SD IDOK
     Abort
   ; warn about a new install over an existing installation
   ReadRegStr $R0 ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString"
   StrCmp $R0 "" done
 
   MessageBox MB_YESNO|MB_ICONEXCLAMATION \
-  "Geany has already been installed. $\nDo you want to remove the previous version before installing $(^Name) ?" \
-  IDNO done
+    "Geany has already been installed. $\nDo you want to remove the previous version before installing $(^Name) ?" \
+	/SD IDYES IDYES remove IDNO done
 
+  remove:
   ;Run the uninstaller
   ClearErrors
-  ExecWait '$R0 _?=$INSTDIR' ;Do not copy the uninstaller to a temp file
+  IfSilent dosilent nonsilent
+  dosilent:
+	;TODO read $INSTDIR from registry, the instdir of the old installation might be different
+	; from the new one (command line arg /D=...)
+	ExecWait '$R0 /S _?=$INSTDIR' ;Do not copy the uninstaller to a temp file
+    Goto done
+  nonsilent:
+	ExecWait '$R0 _?=$INSTDIR' ;Do not copy the uninstaller to a temp file
 
   done:
 FunctionEnd
@@ -258,11 +272,11 @@ SectionEnd
 ;;;;;;;;;;;;;;;;;;;;;
 Function un.onUninstSuccess
   HideWindow
-  MessageBox MB_ICONINFORMATION|MB_OK "$(^Name) was successfully removed from your computer."
+  MessageBox MB_ICONINFORMATION|MB_OK "$(^Name) was successfully removed from your computer." /SD IDOK
 FunctionEnd
 
 Function un.onInit
-  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Are you sure you want to completely remove $(^Name) and all of its components?" IDYES +2
+  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Are you sure you want to completely remove $(^Name) and all of its components?" /SD IDYES IDYES +2
   Abort
 FunctionEnd
 
@@ -276,7 +290,7 @@ Function OnDirLeave
 
 notPossible:
   RMDir "$INSTDIR" ; removes folder if empty
-  MessageBox MB_OK "The given directory is not writeable. Please choose another one!"
+  MessageBox MB_OK "The given directory is not writeable. Please choose another one!" /SD IDOK
   Abort
 possible:
   FileClose $0
