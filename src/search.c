@@ -1428,34 +1428,39 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 #ifdef G_OS_UNIX
 	const gchar *msg = _("Search failed (see Help->Debug Messages for details).");
 	gint color = COLOR_DARK_RED;
+	gint exit_status = 1;
 
 	if (WIFEXITED(status))
 	{
-		switch (WEXITSTATUS(status))
-		{
-			case 0:
-			{
-				gint count = gtk_tree_model_iter_n_children(
-					GTK_TREE_MODEL(msgwindow.store_msg), NULL) - 1;
+		exit_status = WEXITSTATUS(status);
+	}
+	else if (WIFSIGNALED(status))
+	{
+		exit_status = -1;
+		g_warning("Find in Files: The command failed unexpectedly (signal received).");
+	}
 
-				msgwin_msg_add_fmt(COLOR_BLUE, -1, NULL,
-					ngettext("Search completed with %d match.",
-							 "Search completed with %d matches.", count),
-					count);
-				ui_set_statusbar(FALSE,
-						ngettext("Search completed with %d match.",
-								 "Search completed with %d matches.", count),
-						count);
-				break;
-			}
-			case 1:
-				msg = _("No matches found.");
-				color = COLOR_BLUE;
-			default:
-				msgwin_msg_add(color, -1, NULL, msg);
-				ui_set_statusbar(FALSE, "%s", msg);
-				break;
+	switch (exit_status)
+	{
+		case 0:
+		{
+			gint count = gtk_tree_model_iter_n_children(
+				GTK_TREE_MODEL(msgwindow.store_msg), NULL) - 1;
+			gchar *text = ngettext(
+						"Search completed with %d match.",
+						"Search completed with %d matches.", count);
+
+			msgwin_msg_add_fmt(COLOR_BLUE, -1, NULL, text, count);
+			ui_set_statusbar(FALSE, text, count);
+			break;
 		}
+		case 1:
+			msg = _("No matches found.");
+			color = COLOR_BLUE;
+		default:
+			msgwin_msg_add(color, -1, NULL, msg);
+			ui_set_statusbar(FALSE, "%s", msg);
+			break;
 	}
 #endif
 

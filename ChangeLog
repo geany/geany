@@ -1,3 +1,10 @@
+2008-11-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/search.c:
+   Rework search_close_pid() and let it handle the case when the grep
+   command was killed externally.
+
+
 2008-11-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/notebook.c:
