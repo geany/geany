@@ -66,6 +66,7 @@ typedef struct GeanyDocumentPrivate
 	FileEncoding	 saved_encoding;
 	gboolean		colourise_needed;	/* use document.c:queue_colourise() instead */
 	gint			line_count;			/* Number of lines in the document. */
+	gint			symbol_list_sort_mode;
 }
 GeanyDocumentPrivate;
 

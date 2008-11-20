@@ -91,6 +91,13 @@ static gchar *user_tags_dir;
 
 static GPtrArray *top_level_iter_names = NULL;
 
+static struct
+{
+	GtkWidget *sort_by_name;
+	GtkWidget *sort_by_appearance;
+}
+symbol_menu = {NULL, NULL};
+
 
 static void html_tags_loaded(void);
 static void load_user_tags(filetype_id ft_id);
@@ -1169,6 +1176,7 @@ gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 		prev_sort_mode = sort_mode;
 
 	sort_tree(doc->priv->tag_store, sort_mode == SYMBOLS_SORT_BY_NAME);
+	doc->priv->symbol_list_sort_mode = sort_mode;
 
 	/* Re-attach model to view */
 	gtk_tree_view_set_model(GTK_TREE_VIEW(doc->priv->tag_tree),
@@ -1662,33 +1670,59 @@ gint symbols_get_current_function(GeanyDocument *doc, const gchar **tagname)
 }
 
 
-static void on_taglist_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user_data)
+static void on_symbol_tree_sort_clicked(GtkMenuItem *menuitem, gpointer user_data)
 {
 	gint sort_mode = GPOINTER_TO_INT(user_data);
 	GeanyDocument *doc = document_get_current();
+
+	if (ignore_callback)
+		return;
 
 	if (doc != NULL)
 		doc->has_tags = symbols_recreate_tag_list(doc, sort_mode);
 }
 
 
+static void on_symbol_tree_menu_show(GtkWidget *widget,
+		gpointer user_data)
+{
+	GeanyDocument *doc = document_get_current();
+
+	if (!doc)
+		return;
+
+	ignore_callback = TRUE;
+
+	if (doc->priv->symbol_list_sort_mode == SYMBOLS_SORT_BY_NAME)
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(symbol_menu.sort_by_name), TRUE);
+	else
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(symbol_menu.sort_by_appearance), TRUE);
+
+	ignore_callback = FALSE;
+}
+
+
 static void create_taglist_popup_menu(void)
 {
-	GtkWidget *item;
+	GtkWidget *item, *menu;
 
-	tv.popup_taglist = gtk_menu_new();
+	tv.popup_taglist = menu = gtk_menu_new();
 
-	item = gtk_menu_item_new_with_mnemonic(_("Sort by _Name"));
+	symbol_menu.sort_by_name = item = gtk_radio_menu_item_new_with_mnemonic(NULL,
+		_("Sort by _Name"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(tv.popup_taglist), item);
-	g_signal_connect(item, "activate", G_CALLBACK(on_taglist_tree_popup_clicked),
+	g_signal_connect(item, "activate", G_CALLBACK(on_symbol_tree_sort_clicked),
 			GINT_TO_POINTER(SYMBOLS_SORT_BY_NAME));
 
-	item = gtk_menu_item_new_with_mnemonic(_("Sort by _Appearance"));
+	symbol_menu.sort_by_appearance = item = gtk_radio_menu_item_new_with_mnemonic_from_widget(
+		GTK_RADIO_MENU_ITEM(item), _("Sort by _Appearance"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(tv.popup_taglist), item);
-	g_signal_connect(item, "activate", G_CALLBACK(on_taglist_tree_popup_clicked),
+	g_signal_connect(item, "activate", G_CALLBACK(on_symbol_tree_sort_clicked),
 			GINT_TO_POINTER(SYMBOLS_SORT_BY_APPEARANCE));
+
+	g_signal_connect(menu, "show", G_CALLBACK(on_symbol_tree_menu_show), NULL);
 
 	sidebar_add_common_menu_items(GTK_MENU(tv.popup_taglist));
 }
