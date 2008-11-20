@@ -1147,7 +1147,6 @@ static void sort_tree(GtkTreeStore *store, gboolean sort_by_name)
 gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 {
 	GList *tags;
-	static gint prev_sort_mode = SYMBOLS_SORT_BY_NAME;
 
 	g_return_val_if_fail(doc != NULL, FALSE);
 
@@ -1171,9 +1170,7 @@ gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 	hide_empty_rows(doc->priv->tag_store);
 
 	if (sort_mode == SYMBOLS_SORT_USE_PREVIOUS)
-		sort_mode = prev_sort_mode;
-	else
-		prev_sort_mode = sort_mode;
+		sort_mode = doc->priv->symbol_list_sort_mode;
 
 	sort_tree(doc->priv->tag_store, sort_mode == SYMBOLS_SORT_BY_NAME);
 	doc->priv->symbol_list_sort_mode = sort_mode;

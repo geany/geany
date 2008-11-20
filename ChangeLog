@@ -2,6 +2,8 @@
 
  * src/documentprivate.h, src/symbols.c:
    Use radio buttons for symbol list popup menu sort items.
+ * src/symbols.c:
+   Fix reloading sometimes changing the symbol list sort order.
 
 
 2008-11-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
