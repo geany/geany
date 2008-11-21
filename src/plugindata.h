@@ -45,7 +45,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 110,
+	GEANY_API_VERSION = 111,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -330,7 +330,8 @@ typedef struct UtilsFuncs
 	gboolean	(*spawn_async) (const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
 				 GSpawnChildSetupFunc child_setup, gpointer user_data, GPid *child_pid,
 				 GError **error);
-	gint		(*utils_str_casecmp) (const gchar *s1, const gchar *s2);
+	gint		(*str_casecmp) (const gchar *s1, const gchar *s2);
+	gchar*		(*get_date_time) (const gchar *format, time_t *time_to_use);
 }
 UtilsFuncs;
 

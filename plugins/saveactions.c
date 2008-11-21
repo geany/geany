@@ -196,14 +196,11 @@ static void backupcopy_document_save_cb(GObject *obj, GeanyDocument *doc, gpoint
 	gchar *locale_filename_dst;
 	gchar *basename_src;
 	gchar *dir_parts_src;
-	gchar stamp[512];
-	time_t t = time(NULL);
-	struct tm *now;
+	gchar *stamp;
 
 	if (! enable_backupcopy)
 		return;
 
-	now = localtime(&t);
 	locale_filename_src = p_utils->get_locale_from_utf8(doc->file_name);
 
 	if ((src = g_fopen(locale_filename_src, "r")) == NULL)
@@ -215,7 +212,7 @@ static void backupcopy_document_save_cb(GObject *obj, GeanyDocument *doc, gpoint
 		return;
 	}
 
-	strftime(stamp, sizeof(stamp), backupcopy_time_fmt, now);
+	stamp = p_utils->get_date_time(backupcopy_time_fmt, NULL);
 	basename_src = g_path_get_basename(locale_filename_src);
 	dir_parts_src = backupcopy_create_dir_parts(locale_filename_src);
 	locale_filename_dst = g_strconcat(
@@ -231,6 +228,7 @@ static void backupcopy_document_save_cb(GObject *obj, GeanyDocument *doc, gpoint
 			g_strerror(errno));
 		g_free(locale_filename_src);
 		g_free(locale_filename_dst);
+		g_free(stamp);
 		fclose(src);
 		return;
 	}
@@ -244,6 +242,7 @@ static void backupcopy_document_save_cb(GObject *obj, GeanyDocument *doc, gpoint
 	fclose(dst);
 	g_free(locale_filename_src);
 	g_free(locale_filename_dst);
+	g_free(stamp);
 }
 
 

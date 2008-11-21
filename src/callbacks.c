@@ -1418,10 +1418,7 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
 {
 	GeanyDocument *doc = document_get_current();
 	gchar *format;
-	gchar time_str[300]; /* the entered format string can be maximal 256 chars long, so we have
-						  * 44 additional characters for strtime's conversion */
-	time_t t;
-	struct tm *tm;
+	gchar *time_str;
 
 	if (doc == NULL) return;
 
@@ -1454,15 +1451,14 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
 		return;
 	}
 
-	/* get the current time */
-	t = time(NULL);
-	tm = localtime(&t);
-	if (strftime(time_str, sizeof time_str, format, tm) != 0)
+	time_str = utils_get_date_time(format, NULL);
+	if (time_str != NULL)
 	{
 		verify_click_pos(doc); /* make sure that the click_pos is valid */
 
 		sci_insert_text(doc->editor->sci, editor_info.click_pos, time_str);
 		sci_goto_pos(doc->editor->sci, editor_info.click_pos + strlen(time_str), FALSE);
+		g_free(time_str);
 	}
 	else
 	{

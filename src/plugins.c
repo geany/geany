@@ -196,7 +196,8 @@ static UtilsFuncs utils_funcs = {
 	&utils_get_setting_string,
 	&utils_spawn_sync,
 	&utils_spawn_async,
-	&utils_str_casecmp
+	&utils_str_casecmp,
+	&utils_get_date_time
 };
 
 static UIUtilsFuncs uiutils_funcs = {

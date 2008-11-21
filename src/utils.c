@@ -554,24 +554,47 @@ gint utils_strpos(const gchar *haystack, const gchar *needle)
 }
 
 
+/**
+ *  This is a convenience function to retrieve a formatted date/time string from strftime().
+ *  This function should be preferred to directly calling strftime() since this function
+ *  works on UTF-8 encoded strings.
+ *
+ *  @param format The format string to pass to strftime(3). See the strftime(3)
+ *                documentation for details, in UTF-8 encoding.
+ *  @param time_to_use The date/time to use, in time_t format or NULL to use the current time.
+ *
+ *  @return A newly-allocated string, should be freed when no longer needed.
+ **/
 gchar *utils_get_date_time(const gchar *format, time_t *time_to_use)
 {
-	time_t tp;
 	const struct tm *tm;
-	gchar *date;
+	static gchar date[1024];
+	gchar *locale_format;
+	gsize len;
 
-	if (format == NULL)
+	g_return_val_if_fail(format != NULL, NULL);
+
+	locale_format = g_locale_from_utf8(format, -1, NULL, NULL, NULL);
+	if (locale_format == NULL)
 		return NULL;
 
 	if (time_to_use != NULL)
-		tp = *time_to_use;
+		tm = localtime(time_to_use);
 	else
-		tp = time(NULL);
+	{
+		time_t tp = time(NULL);
+		tm = localtime(&tp);
+	}
 
-	tm = localtime(&tp);
-	date = g_malloc0(256);
-	strftime(date, 256, format, tm);
-	return date;
+	len = strftime(date, 1024, locale_format, tm);
+	g_free(locale_format);
+	if (len == 0)
+		return NULL;
+
+	if (! g_utf8_validate(date, len, NULL))
+		return g_locale_to_utf8(date, len, NULL, NULL, NULL);
+	else
+		return g_strdup(date);
 }
 
 

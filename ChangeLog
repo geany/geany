@@ -3,6 +3,11 @@
  * src/main.c:
    Try to fix some problems when opening files with non-Ascii characters
    on Windows from the command line.
+ * plugins/export.c, plugins/saveactions.c, src/callbacks.c,
+   src/plugindata.h, src/plugins.c, src/utils.c:
+   Attempt to make utils_get_date_time() UTF-8 safe and add it to the
+   plugin API.
+   Fix misnamed str_casecmp() function in the plugin API, sorry.
 
 
 2008-11-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -281,20 +281,12 @@ static void write_data(const gchar *filename, const gchar *data)
 }
 
 
-static const gchar *get_date(gint type)
+static gchar *get_date(gint type)
 {
-	static gchar str[128];
 	gchar *format;
-	time_t t;
-	struct tm *tmp;
-
-	t = time(NULL);
-	tmp = localtime(&t);
-	if (tmp == NULL)
-		return "";
 
 	if (type == DATE_TYPE_HTML)
-/** needs testing */
+/* needs testing */
 #ifdef _GNU_SOURCE
 		format = "%Y-%m-%dT%H:%M:%S%z";
 #else
@@ -303,9 +295,7 @@ static const gchar *get_date(gint type)
 	else
 		format = "%c";
 
-	strftime(str, sizeof str, format, tmp);
-
-	return str;
+	return p_utils->get_date_time(format, NULL);
 }
 
 
@@ -350,7 +340,7 @@ static void write_latex_file(GeanyDocument *doc, const gchar *filename, gboolean
 {
 	GeanyEditor *editor = doc->editor;
 	gint i, style = -1, old_style = 0, column = 0;
-	gchar c, c_next, *tmp;
+	gchar c, c_next, *tmp, *date;
 	/* 0 - fore, 1 - back, 2 - bold, 3 - italic, 4 - font size, 5 - used(0/1) */
 	gint styles[STYLE_MAX + 1][MAX_TYPES];
 	gboolean block_open = FALSE;
@@ -533,11 +523,12 @@ static void write_latex_file(GeanyDocument *doc, const gchar *filename, gboolean
 		}
 	}
 
+	date = get_date(DATE_TYPE_DEFAULT);
 	/* write all */
 	latex = g_string_new(TEMPLATE_LATEX);
 	p_utils->string_replace_all(latex, "{export_content}", body->str);
 	p_utils->string_replace_all(latex, "{export_styles}", cmds->str);
-	p_utils->string_replace_all(latex, "{export_date}", get_date(DATE_TYPE_DEFAULT));
+	p_utils->string_replace_all(latex, "{export_date}", date);
 	if (doc->file_name == NULL)
 		p_utils->string_replace_all(latex, "{export_filename}", GEANY_STRING_UNTITLED);
 	else
@@ -548,6 +539,7 @@ static void write_latex_file(GeanyDocument *doc, const gchar *filename, gboolean
 	g_string_free(body, TRUE);
 	g_string_free(cmds, TRUE);
 	g_string_free(latex, TRUE);
+	g_free(date);
 }
 
 
@@ -555,7 +547,7 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename, gboolean 
 {
 	GeanyEditor *editor = doc->editor;
 	gint i, style = -1, old_style = 0, column = 0;
-	gchar c, c_next;
+	gchar c, c_next, *date;
 	/* 0 - fore, 1 - back, 2 - bold, 3 - italic, 4 - font size, 5 - used(0/1) */
 	gint styles[STYLE_MAX + 1][MAX_TYPES];
 	gboolean span_open = FALSE;
@@ -686,9 +678,10 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename, gboolean 
 		}
 	}
 
+	date = get_date(DATE_TYPE_HTML);
 	/* write all */
 	html = g_string_new(TEMPLATE_HTML);
-	p_utils->string_replace_all(html, "{export_date}", get_date(DATE_TYPE_HTML));
+	p_utils->string_replace_all(html, "{export_date}", date);
 	p_utils->string_replace_all(html, "{export_content}", body->str);
 	p_utils->string_replace_all(html, "{export_styles}", css->str);
 	if (doc->file_name == NULL)
@@ -702,6 +695,7 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename, gboolean 
 	g_string_free(body, TRUE);
 	g_string_free(css, TRUE);
 	g_string_free(html, TRUE);
+	g_free(date);
 }
 
 
