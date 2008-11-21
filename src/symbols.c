@@ -1708,18 +1708,6 @@ static void on_symbol_tree_menu_show(GtkWidget *widget,
 }
 
 
-static GtkWidget *
-ui_image_menu_item_new_with_stock(const gchar *label, const gchar *stock_id)
-{
-	GtkWidget *item = gtk_image_menu_item_new_with_mnemonic(label);
-	GtkWidget *image = gtk_image_new_from_stock(stock_id, GTK_ICON_SIZE_MENU);
-
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
-	gtk_widget_show(image);
-	return item;
-}
-
-
 static void on_expand_collapse(GtkWidget *widget, gpointer user_data)
 {
 	gboolean expand = utils_str_equal(user_data, GTK_STOCK_ADD);
@@ -1743,13 +1731,13 @@ static void create_taglist_popup_menu(void)
 
 	tv.popup_taglist = menu = gtk_menu_new();
 
-	symbol_menu.expand_all = item = ui_image_menu_item_new_with_stock(
+	symbol_menu.expand_all = item = ui_image_menu_item_new(
 		_("_Expand All"), GTK_STOCK_ADD);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_expand_collapse), GTK_STOCK_ADD);
 
-	symbol_menu.collapse_all = item = ui_image_menu_item_new_with_stock(
+	symbol_menu.collapse_all = item = ui_image_menu_item_new(
 		_("_Collapse All"), GTK_STOCK_REMOVE);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);

@@ -773,16 +773,12 @@ on_menu_create_gtk_class_activate      (GtkMenuItem     *menuitem,
 void plugin_init(GeanyData *data)
 {
 	GtkWidget *menu_create_class1;
-	GtkWidget *image1861;
 	GtkWidget *menu_create_class1_menu;
 	GtkWidget *menu_create_cpp_class;
 	GtkWidget *menu_create_gtk_class;
 
-	menu_create_class1 = gtk_image_menu_item_new_with_mnemonic (_("Create Cla_ss"));
+	menu_create_class1 = p_ui->image_menu_item_new (GTK_STOCK_ADD, _("Create Cla_ss"));
 	gtk_container_add (GTK_CONTAINER (geany->main_widgets->tools_menu), menu_create_class1);
-
-	image1861 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_create_class1), image1861);
 
 	menu_create_class1_menu = gtk_menu_new ();
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_create_class1), menu_create_class1_menu);

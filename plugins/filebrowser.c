@@ -522,7 +522,7 @@ static void on_hide_sidebar(void)
 
 static GtkWidget *create_popup_menu(void)
 {
-	GtkWidget *item, *menu, *image;
+	GtkWidget *item, *menu;
 
 	menu = gtk_menu_new();
 
@@ -532,19 +532,13 @@ static GtkWidget *create_popup_menu(void)
 	g_signal_connect(item, "activate", G_CALLBACK(on_open_clicked), NULL);
 	popup_items.open = item;
 
-	image = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_MENU);
-	gtk_widget_show(image);
-	item = gtk_image_menu_item_new_with_mnemonic(_("Open _externally"));
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
+	item = p_ui->image_menu_item_new(GTK_STOCK_OPEN, _("Open _externally"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_external_open), NULL);
 	popup_items.open_external = item;
 
-	image = gtk_image_new_from_stock(GTK_STOCK_FIND, GTK_ICON_SIZE_MENU);
-	gtk_widget_show(image);
-	item = gtk_image_menu_item_new_with_mnemonic(_("_Find in Files"));
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
+	item = p_ui->image_menu_item_new(GTK_STOCK_FIND, _("_Find in Files"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_find_in_files), NULL);
@@ -563,9 +557,7 @@ static GtkWidget *create_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
-	item = gtk_image_menu_item_new_with_mnemonic(_("H_ide Sidebar"));
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
-		gtk_image_new_from_stock("gtk-close", GTK_ICON_SIZE_MENU));
+	item = p_ui->image_menu_item_new(GTK_STOCK_CLOSE, _("H_ide Sidebar"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_hide_sidebar), NULL);

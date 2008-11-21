@@ -1200,6 +1200,22 @@ GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text)
 }
 
 
+/** Create a @c GtkImageMenuItem with a stock image and a custom label.
+ * @param stock_id Stock image ID, e.g. @c GTK_STOCK_OPEN.
+ * @param label Menu item label, can include mnemonics.
+ * @return The new @c GtkImageMenuItem. */
+GtkWidget *
+ui_image_menu_item_new(const gchar *stock_id, const gchar *label)
+{
+	GtkWidget *item = gtk_image_menu_item_new_with_mnemonic(label);
+	GtkWidget *image = gtk_image_new_from_stock(stock_id, GTK_ICON_SIZE_MENU);
+
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
+	gtk_widget_show(image);
+	return item;
+}
+
+
 static void add_to_size_group(GtkWidget *widget, gpointer size_group)
 {
 	g_return_if_fail(GTK_IS_SIZE_GROUP(size_group));

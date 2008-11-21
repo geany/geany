@@ -207,7 +207,8 @@ static UIUtilsFuncs uiutils_funcs = {
 	&ui_path_box_new,
 	&ui_button_new_with_image,
 	&ui_add_document_sensitive,
-	&ui_widget_set_tooltip_text
+	&ui_widget_set_tooltip_text,
+	&ui_image_menu_item_new
 };
 
 static DialogFuncs dialog_funcs = {

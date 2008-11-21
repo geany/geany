@@ -3,6 +3,10 @@
  * src/symbols.c:
    Add Expand/Collapse All symbol list popup menu items.
    Disable smybol list sort items when there are no tags.
+ * src/ui_utils.h, src/plugindata.h, src/plugins.c, src/symbols.c,
+   src/ui_utils.c, plugins/filebrowser.c, plugins/classbuilder.c:
+   Add function ui_image_menu_item_new() to the plugin API, to easily
+   create a menu item with a stock image and a custom label.
 
 
 2008-11-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
