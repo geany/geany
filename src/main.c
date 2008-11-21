@@ -774,7 +774,10 @@ static gboolean open_cl_files(gint argc, gchar **argv)
 	for (i = 1; i < argc; i++)
 	{
 		gchar *filename = main_get_argv_filename(argv[i]);
-
+#ifdef G_OS_WIN32
+		/* It seems argv elements are encoded in CP1252 on a German Windows */
+		setptr(filename, g_locale_to_utf8(filename, -1, NULL, NULL, NULL));
+#endif
 		if (filename && !main_handle_filename(filename))
 		{
 			const gchar *msg = _("Could not find file '%s'.");
