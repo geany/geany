@@ -72,6 +72,7 @@
 #include "navqueue.h"
 #include "plugins.h"
 #include "printing.h"
+#include "geanyobject.h"
 
 #ifdef HAVE_SOCKET
 # include "socket.h"
@@ -924,6 +925,9 @@ gint main(gint argc, gchar **argv)
 		gtk_major_version, gtk_minor_version, gtk_micro_version,
 		glib_major_version, glib_minor_version, glib_micro_version);
 
+	/* create the object so Geany signals can be connected in init() functions */
+	geany_object = geany_object_new();
+
 	/* inits */
 	main_init();
 	gtk_widget_set_size_request(main_widgets.window, GEANY_WINDOW_MINIMAL_WIDTH, GEANY_WINDOW_MINIMAL_HEIGHT);
@@ -1123,6 +1127,9 @@ void main_quit()
 					gtk_widget_destroy(msgwindow.popup_msg_menu);
 	if (msgwindow.popup_compiler_menu && GTK_IS_WIDGET(msgwindow.popup_compiler_menu))
 					gtk_widget_destroy(msgwindow.popup_compiler_menu);
+
+	g_object_unref(geany_object);
+	geany_object = NULL;
 
 	g_free(app);
 

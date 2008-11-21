@@ -820,7 +820,6 @@ void plugins_init()
 	GtkWidget *widget;
 
 	geany_data_init();
-	geany_object = geany_object_new();
 
 	widget = gtk_separator_menu_item_new();
 	gtk_widget_show(widget);
@@ -910,9 +909,6 @@ void plugins_free(void)
 		g_list_free(active_plugin_list);
 	}
 	g_strfreev(active_plugins_pref);
-
-	g_object_unref(geany_object);
-	geany_object = NULL; /* to mark the object as invalid for any code which tries to emit signals */
 }
 
 

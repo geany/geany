@@ -18,6 +18,9 @@
    Update from file made by Tyler D'Agosta (thanks). This version
    includes all character entities defined by HTML 2.0, HTML 3.2, and
    HTML 4.0, and one (&apos;) defined in XHTML 1.0.
+ * src/plugins.c, src/main.c:
+   Create geany_object in main.c so core functions can use it even
+   when plugins are disabled.
 
 
 2008-11-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
