@@ -477,10 +477,7 @@ gboolean document_remove_page(guint page_num)
 	}
 
 	/* tell any plugins that the document is about to be closed */
-	if (geany_object)
-	{
-		g_signal_emit_by_name(geany_object, "document-close", doc);
-	}
+	g_signal_emit_by_name(geany_object, "document-close", doc);
 
 	/* Checking real_path makes it likely the file exists on disk */
 	if (! main_status.closing_all && doc->real_path != NULL)
@@ -598,10 +595,7 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft,
 	/* "the" SCI signal (connect after initial setup(i.e. adding text)) */
 	g_signal_connect(doc->editor->sci, "sci-notify", G_CALLBACK(on_editor_notification), doc);
 
-	if (geany_object)
-	{
-		g_signal_emit_by_name(geany_object, "document-new", doc);
-	}
+	g_signal_emit_by_name(geany_object, "document-new", doc);
 
 	msgwin_status_add(_("New file \"%s\" opened."),
 		DOC_FILENAME(doc));
@@ -1576,10 +1570,8 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 		vte_cwd(doc->file_name, FALSE);
 #endif
 	}
-	if (geany_object)
-	{
-		g_signal_emit_by_name(geany_object, "document-save", doc);
-	}
+	g_signal_emit_by_name(geany_object, "document-save", doc);
+
 	return TRUE;
 }
 

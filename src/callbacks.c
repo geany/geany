@@ -738,10 +738,7 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
 		vte_cwd(DOC_FILENAME(doc), FALSE);
 #endif
 
-		if (geany_object)
-		{
-			g_signal_emit_by_name(geany_object, "document-activate", doc);
-		}
+		g_signal_emit_by_name(geany_object, "document-activate", doc);
 	}
 }
 

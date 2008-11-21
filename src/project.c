@@ -333,11 +333,8 @@ void project_close(gboolean open_default)
 			document_new_file_if_non_open();
 		}
 	}
+	g_signal_emit_by_name(geany_object, "project-close");
 
-	if (geany_object)
-	{
-		g_signal_emit_by_name(geany_object, "project-close");
-	}
 	update_ui();
 }
 
@@ -909,11 +906,7 @@ static gboolean load_config(const gchar *filename)
 		/* read session files so they can be opened with configuration_open_files() */
 		configuration_load_session_files(config);
 	}
-
-	if (geany_object)
-	{
-		g_signal_emit_by_name(geany_object, "project-open", config);
-	}
+	g_signal_emit_by_name(geany_object, "project-open", config);
 	g_key_file_free(config);
 
 	update_ui();
@@ -959,7 +952,7 @@ static gboolean write_config(gboolean emit_signal)
 	if (project_prefs.project_session)
 		configuration_save_session_files(config);
 
-	if (geany_object && emit_signal)
+	if (emit_signal)
 	{
 		g_signal_emit_by_name(geany_object, "project-save", config);
 	}

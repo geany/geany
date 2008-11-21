@@ -21,6 +21,8 @@
  * src/plugins.c, src/main.c:
    Create geany_object in main.c so core functions can use it even
    when plugins are disabled.
+ * src/project.c, src/callbacks.c, src/document.c, src/editor.c:
+   Remove now-unnecessary checks for geany_object != NULL.
 
 
 2008-11-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
