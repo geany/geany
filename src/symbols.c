@@ -93,10 +93,12 @@ static GPtrArray *top_level_iter_names = NULL;
 
 static struct
 {
+	GtkWidget *expand_all;
+	GtkWidget *collapse_all;
 	GtkWidget *sort_by_name;
 	GtkWidget *sort_by_appearance;
 }
-symbol_menu = {NULL, NULL};
+symbol_menu = {NULL, NULL, NULL, NULL};
 
 
 static void html_tags_loaded(void);
@@ -1684,6 +1686,13 @@ static void on_symbol_tree_menu_show(GtkWidget *widget,
 		gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
+	gboolean enable;
+
+	enable = doc && doc->has_tags;
+	gtk_widget_set_sensitive(symbol_menu.sort_by_name, enable);
+	gtk_widget_set_sensitive(symbol_menu.sort_by_appearance, enable);
+	gtk_widget_set_sensitive(symbol_menu.expand_all, enable);
+	gtk_widget_set_sensitive(symbol_menu.collapse_all, enable);
 
 	if (!doc)
 		return;
@@ -1699,29 +1708,74 @@ static void on_symbol_tree_menu_show(GtkWidget *widget,
 }
 
 
+static GtkWidget *
+ui_image_menu_item_new_with_stock(const gchar *label, const gchar *stock_id)
+{
+	GtkWidget *item = gtk_image_menu_item_new_with_mnemonic(label);
+	GtkWidget *image = gtk_image_new_from_stock(stock_id, GTK_ICON_SIZE_MENU);
+
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
+	gtk_widget_show(image);
+	return item;
+}
+
+
+static void on_expand_collapse(GtkWidget *widget, gpointer user_data)
+{
+	gboolean expand = utils_str_equal(user_data, GTK_STOCK_ADD);
+	GeanyDocument *doc = document_get_current();
+
+	if (!doc)
+		return;
+
+	g_return_if_fail(doc->priv->tag_tree);
+
+	if (expand)
+		gtk_tree_view_expand_all(GTK_TREE_VIEW(doc->priv->tag_tree));
+	else
+		gtk_tree_view_collapse_all(GTK_TREE_VIEW(doc->priv->tag_tree));
+}
+
+
 static void create_taglist_popup_menu(void)
 {
 	GtkWidget *item, *menu;
 
 	tv.popup_taglist = menu = gtk_menu_new();
 
+	symbol_menu.expand_all = item = ui_image_menu_item_new_with_stock(
+		_("_Expand All"), GTK_STOCK_ADD);
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect(item, "activate", G_CALLBACK(on_expand_collapse), GTK_STOCK_ADD);
+
+	symbol_menu.collapse_all = item = ui_image_menu_item_new_with_stock(
+		_("_Collapse All"), GTK_STOCK_REMOVE);
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect(item, "activate", G_CALLBACK(on_expand_collapse), GTK_STOCK_REMOVE);
+
+	item = gtk_separator_menu_item_new();
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+
 	symbol_menu.sort_by_name = item = gtk_radio_menu_item_new_with_mnemonic(NULL,
 		_("Sort by _Name"));
 	gtk_widget_show(item);
-	gtk_container_add(GTK_CONTAINER(tv.popup_taglist), item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_symbol_tree_sort_clicked),
 			GINT_TO_POINTER(SYMBOLS_SORT_BY_NAME));
 
 	symbol_menu.sort_by_appearance = item = gtk_radio_menu_item_new_with_mnemonic_from_widget(
 		GTK_RADIO_MENU_ITEM(item), _("Sort by _Appearance"));
 	gtk_widget_show(item);
-	gtk_container_add(GTK_CONTAINER(tv.popup_taglist), item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_symbol_tree_sort_clicked),
 			GINT_TO_POINTER(SYMBOLS_SORT_BY_APPEARANCE));
 
 	g_signal_connect(menu, "show", G_CALLBACK(on_symbol_tree_menu_show), NULL);
 
-	sidebar_add_common_menu_items(GTK_MENU(tv.popup_taglist));
+	sidebar_add_common_menu_items(GTK_MENU(menu));
 }
 
 

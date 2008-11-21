@@ -1,3 +1,10 @@
+2008-11-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/symbols.c:
+   Add Expand/Collapse All symbol list popup menu items.
+   Disable smybol list sort items when there are no tags.
+
+
 2008-11-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/documentprivate.h, src/symbols.c:
