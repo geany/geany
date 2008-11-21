@@ -574,9 +574,14 @@ gchar *utils_get_date_time(const gchar *format, time_t *time_to_use)
 
 	g_return_val_if_fail(format != NULL, NULL);
 
-	locale_format = g_locale_from_utf8(format, -1, NULL, NULL, NULL);
-	if (locale_format == NULL)
-		return NULL;
+	if (! g_utf8_validate(format, -1, NULL))
+	{
+		locale_format = g_locale_from_utf8(format, -1, NULL, NULL, NULL);
+		if (locale_format == NULL)
+			return NULL;
+	}
+	else
+		locale_format = g_strdup(format);
 
 	if (time_to_use != NULL)
 		tm = localtime(time_to_use);
