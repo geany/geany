@@ -8,6 +8,9 @@
    Attempt to make utils_get_date_time() UTF-8 safe and add it to the
    plugin API.
    Fix misnamed str_casecmp() function in the plugin API, sorry.
+ * src/editor.c, src/templates.c, src/templates.h:
+   Make templates_replace_all() working on GStrings to fix various
+   string replacement problems when using custom file templates.
 
 
 2008-11-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -1658,7 +1658,7 @@ static gchar *snippets_find_completion_by_name(const gchar *type, const gchar *n
  * modified when replacing a completion but the foreach function still passes the old pointer
  * to ac_replace_specials, so we use a global pointer outside of ac_replace_specials and
  * ac_complete_constructs. Any hints to improve this are welcome. */
-static gchar *snippets_global_pattern = NULL;
+static GString *snippets_global_pattern = NULL;
 
 void snippets_replace_specials(gpointer key, gpointer value, gpointer user_data)
 {
@@ -1669,24 +1669,22 @@ void snippets_replace_specials(gpointer key, gpointer value, gpointer user_data)
 
 	needle = g_strconcat("%", (gchar*) key, "%", NULL);
 
-	snippets_global_pattern = utils_str_replace(snippets_global_pattern, needle, (gchar*) value);
+	utils_string_replace_all(snippets_global_pattern, needle, (gchar*) value);
 	g_free(needle);
 }
 
 
-static gchar *snippets_replace_wildcards(GeanyEditor *editor, gchar *text)
+static void snippets_replace_wildcards(GeanyEditor *editor, GString *text)
 {
 	gchar *year = utils_get_date_time(template_prefs.year_format, NULL);
 	gchar *date = utils_get_date_time(template_prefs.date_format, NULL);
 	gchar *datetime = utils_get_date_time(template_prefs.datetime_format, NULL);
 	gchar *basename = g_path_get_basename(DOC_FILENAME(editor->document));
 
-	text = templates_replace_all(text, year, date, datetime);
-	text = utils_str_replace(text, "{filename}", basename);
+	templates_replace_all(text, year, date, datetime);
+	utils_string_replace_all(text, "{filename}", basename);
 
 	utils_free_pointers(4, year, date, datetime, basename, NULL);
-
-	return text;
 }
 
 
@@ -1785,8 +1783,9 @@ static void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gin
 static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, const gchar *word)
 {
 	gchar *str;
-	gchar *pattern;
-	gint step, str_len, cur_index;
+	GString *pattern;
+	gint step, str_len;
+	gsize cur_index;
 	gint ft_id = FILETYPE_ID(editor->document->file_type);
 	GHashTable *specials;
 	ScintillaObject *sci = editor->sci;
@@ -1794,10 +1793,11 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 	str = g_strdup(word);
 	g_strstrip(str);
 
-	pattern = snippets_find_completion_by_name(filetypes[ft_id]->name, str);
-	if (pattern == NULL || pattern[0] == '\0')
+	pattern = g_string_new(snippets_find_completion_by_name(filetypes[ft_id]->name, str));
+	if (pattern == NULL || pattern->len == 0)
 	{
-		utils_free_pointers(2, str, pattern, NULL); /* free pattern in case it is "" */
+		g_free(str);
+		g_string_free(pattern, TRUE);
 		return FALSE;
 	}
 
@@ -1817,27 +1817,28 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 		/* ugly hack using global_pattern */
 		snippets_global_pattern = pattern;
 		g_hash_table_foreach(specials, snippets_replace_specials, NULL);
-		pattern = snippets_global_pattern;
 	}
 
 	/* replace any %template% wildcards */
-	pattern = snippets_replace_wildcards(editor, pattern);
+	snippets_replace_wildcards(editor, pattern);
 
 	/* find the %cursor% pos (has to be done after all other operations) */
-	step = utils_strpos(pattern, "%cursor%");
+	step = utils_strpos(pattern->str, "%cursor%");
 	if (step != -1)
-		pattern = utils_str_replace(pattern, "%cursor%", "");
+		utils_string_replace_all(pattern, "%cursor%", "");
 
 	/* finally insert the text and set the cursor */
 	if (step != -1)
 		cur_index = step;
 	else
-		cur_index = strlen(pattern);
+		cur_index = pattern->len;
 
-	editor_insert_text_block(editor, pattern, pos, cur_index, -1);
+	editor_insert_text_block(editor, pattern->str, pos, cur_index, -1);
 	sci_scroll_caret(sci);
 
-	utils_free_pointers(2, pattern, str, NULL);
+	g_free(str);
+	g_string_free(pattern, TRUE);
+
  	return TRUE;
 }
 

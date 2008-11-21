@@ -255,6 +255,23 @@ static gchar *ft_templates[GEANY_MAX_BUILT_IN_FILETYPES] = {NULL};
 
 
 
+/* FIXME the callers should use GStrings instead of char arrays */
+static gchar *replace_all(gchar *text, const gchar *year, const gchar *date, const gchar *datetime)
+{
+	GString *str;
+
+	if (text == NULL)
+		return NULL;
+
+	str = g_string_new(text);
+
+	g_free(text);
+	templates_replace_all(str, year, date, datetime);
+
+	return g_string_free(str, FALSE);
+}
+
+
 static void init_general_templates(const gchar *year, const gchar *date, const gchar *datetime)
 {
 	gchar *template_filename_fileheader = TEMPLATES_GET_FILENAME("fileheader");
@@ -272,19 +289,19 @@ static void init_general_templates(const gchar *year, const gchar *date, const g
 
 	/* read the contents */
 	TEMPLATES_READ_FILE(template_filename_fileheader, &templates[GEANY_TEMPLATE_FILEHEADER]);
-	templates[GEANY_TEMPLATE_FILEHEADER] = templates_replace_all(templates[GEANY_TEMPLATE_FILEHEADER], year, date, datetime);
+	templates[GEANY_TEMPLATE_FILEHEADER] = replace_all(templates[GEANY_TEMPLATE_FILEHEADER], year, date, datetime);
 
 	TEMPLATES_READ_FILE(template_filename_gpl, &templates[GEANY_TEMPLATE_GPL]);
-	templates[GEANY_TEMPLATE_GPL] = templates_replace_all(templates[GEANY_TEMPLATE_GPL], year, date, datetime);
+	templates[GEANY_TEMPLATE_GPL] = replace_all(templates[GEANY_TEMPLATE_GPL], year, date, datetime);
 
 	TEMPLATES_READ_FILE(template_filename_bsd, &templates[GEANY_TEMPLATE_BSD]);
-	templates[GEANY_TEMPLATE_BSD] = templates_replace_all(templates[GEANY_TEMPLATE_BSD], year, date, datetime);
+	templates[GEANY_TEMPLATE_BSD] = replace_all(templates[GEANY_TEMPLATE_BSD], year, date, datetime);
 
 	TEMPLATES_READ_FILE(template_filename_function, &templates[GEANY_TEMPLATE_FUNCTION]);
-	templates[GEANY_TEMPLATE_FUNCTION] = templates_replace_all(templates[GEANY_TEMPLATE_FUNCTION], year, date, datetime);
+	templates[GEANY_TEMPLATE_FUNCTION] = replace_all(templates[GEANY_TEMPLATE_FUNCTION], year, date, datetime);
 
 	TEMPLATES_READ_FILE(template_filename_changelog, &templates[GEANY_TEMPLATE_CHANGELOG]);
-	templates[GEANY_TEMPLATE_CHANGELOG] = templates_replace_all(templates[GEANY_TEMPLATE_CHANGELOG], year, date, datetime);
+	templates[GEANY_TEMPLATE_CHANGELOG] = replace_all(templates[GEANY_TEMPLATE_CHANGELOG], year, date, datetime);
 
 	/* free the whole stuff */
 	g_free(template_filename_fileheader);
@@ -321,7 +338,7 @@ static void init_ft_templates(const gchar *year, const gchar *date, const gchar 
 			default: break;
 		}
 		TEMPLATES_READ_FILE(fname, &ft_templates[ft_id]);
-		ft_templates[ft_id] = templates_replace_all(ft_templates[ft_id], year, date, datetime);
+		ft_templates[ft_id] = replace_all(ft_templates[ft_id], year, date, datetime);
 
 		g_free(fname);
 		g_free(shortname);
@@ -372,27 +389,28 @@ static void create_new_menu_items(void)
 static gchar *get_template_from_file(const gchar *locale_fname, const gchar *doc_filename,
 									 GeanyFiletype *ft)
 {
-	GString template = { NULL, 0, 0 };
+	gchar *content;
+	GString *template = NULL;
 
-	g_file_get_contents(locale_fname, &template.str, &template.len, NULL);
+	g_file_get_contents(locale_fname, &content, NULL, NULL);
 
-	if (template.len > 0)
+	if (content != NULL)
 	{
 		gchar *file_header;
 		gchar *year = utils_get_date_time(template_prefs.year_format, NULL);
 		gchar *date = utils_get_date_time(template_prefs.date_format, NULL);
 		gchar *datetime = utils_get_date_time(template_prefs.datetime_format, NULL);
 
-		template.allocated_len = template.len + 1;
+		template = g_string_new(content);
 
 		file_header = templates_get_template_fileheader(FILETYPE_ID(ft), doc_filename);
-		template.str = templates_replace_all(template.str, year, date, datetime);
-		utils_string_replace_all(&template, "{filename}", doc_filename);
-		utils_string_replace_all(&template, "{fileheader}", file_header);
+		templates_replace_all(template, year, date, datetime);
+		utils_string_replace_all(template, "{filename}", doc_filename);
+		utils_string_replace_all(template, "{fileheader}", file_header);
 
-		utils_free_pointers(4, year, date, datetime, file_header, NULL);
+		utils_free_pointers(5, year, date, datetime, file_header, content, NULL);
 	}
-	return template.str;
+	return g_string_free(template, FALSE);
 }
 
 
@@ -794,20 +812,18 @@ void templates_free_templates(void)
 }
 
 
-gchar *templates_replace_all(gchar *text, const gchar *year, const gchar *date,
-							 const gchar *datetime)
+void templates_replace_all(GString *text, const gchar *year, const gchar *date,
+						   const gchar *datetime)
 {
-	text = utils_str_replace(text, "{year}", year);
-	text = utils_str_replace(text, "{date}", date);
-	text = utils_str_replace(text, "{datetime}", datetime);
-	text = utils_str_replace(text, "{version}", template_prefs.version);
-	text = utils_str_replace(text, "{initial}", template_prefs.initials);
-	text = utils_str_replace(text, "{developer}", template_prefs.developer);
-	text = utils_str_replace(text, "{mail}", template_prefs.mail);
-	text = utils_str_replace(text, "{company}", template_prefs.company);
-	text = utils_str_replace(text, "{untitled}", GEANY_STRING_UNTITLED);
-	text = utils_str_replace(text, "{geanyversion}", "Geany " VERSION);
-
-	return text;
+	utils_string_replace_all(text, "{year}", year);
+	utils_string_replace_all(text, "{date}", date);
+	utils_string_replace_all(text, "{datetime}", datetime);
+	utils_string_replace_all(text, "{version}", template_prefs.version);
+	utils_string_replace_all(text, "{initial}", template_prefs.initials);
+	utils_string_replace_all(text, "{developer}", template_prefs.developer);
+	utils_string_replace_all(text, "{mail}", template_prefs.mail);
+	utils_string_replace_all(text, "{company}", template_prefs.company);
+	utils_string_replace_all(text, "{untitled}", GEANY_STRING_UNTITLED);
+	utils_string_replace_all(text, "{geanyversion}", "Geany " VERSION);
 }
 
