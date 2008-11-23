@@ -5,6 +5,9 @@
  * src/notebook.c:
    Add previously removed tab close icon sizing code for non-Windows
    systems.
+ * src/keybindings.c:
+   Update the Document menu when Line Breaking/Wrapping were toggled
+   by a keybinding.
 
 
 2008-11-22  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
