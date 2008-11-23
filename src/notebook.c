@@ -462,6 +462,7 @@ gint notebook_new_tab(GeanyDocument *this)
 	{
 		GtkWidget *image, *btn, *align;
 		GtkRcStyle *rcstyle;
+		GtkRequisition size;
 
 		btn = gtk_button_new();
 		gtk_button_set_relief(GTK_BUTTON(btn), GTK_RELIEF_NONE);
@@ -476,6 +477,10 @@ gint notebook_new_tab(GeanyDocument *this)
 		gtk_rc_style_unref(rcstyle);
 
 		image = gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
+#ifndef G_OS_WIN32
+		gtk_widget_size_request(image, &size);
+		gtk_widget_set_size_request(btn, size.width, size.height);
+#endif
 		gtk_button_set_image(GTK_BUTTON(btn), image);
 
 		align = gtk_alignment_new(1.0, 0.0, 0.0, 0.0);

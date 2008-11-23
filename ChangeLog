@@ -2,6 +2,9 @@
 
  * src/symbols.c:
    Fix wrong menu item labels in the symbol list popup menu.
+ * src/notebook.c:
+   Add previously removed tab close icon sizing code for non-Windows
+   systems.
 
 
 2008-11-22  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
