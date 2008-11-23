@@ -1,3 +1,9 @@
+2008-11-23  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/symbols.c:
+   Fix wrong menu item labels in the symbol list popup menu.
+
+
 2008-11-22  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * THANKS: Added Andrew Drynov to list of supports of Russian translation

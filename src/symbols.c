@@ -1731,14 +1731,12 @@ static void create_taglist_popup_menu(void)
 
 	tv.popup_taglist = menu = gtk_menu_new();
 
-	symbol_menu.expand_all = item = ui_image_menu_item_new(
-		_("_Expand All"), GTK_STOCK_ADD);
+	symbol_menu.expand_all = item = ui_image_menu_item_new(GTK_STOCK_ADD, _("_Expand All"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_expand_collapse), GTK_STOCK_ADD);
 
-	symbol_menu.collapse_all = item = ui_image_menu_item_new(
-		_("_Collapse All"), GTK_STOCK_REMOVE);
+	symbol_menu.collapse_all = item = ui_image_menu_item_new(GTK_STOCK_REMOVE, _("_Collapse All"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_expand_collapse), GTK_STOCK_REMOVE);
