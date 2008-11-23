@@ -8,6 +8,8 @@
  * src/keybindings.c:
    Update the Document menu when Line Breaking/Wrapping were toggled
    by a keybinding.
+ * src/keyfile.c:
+   Remember the 'Line breaking' state of documents between sessions.
 
 
 2008-11-22  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

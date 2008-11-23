@@ -225,12 +225,20 @@ static void save_recent_files(GKeyFile *config)
 static gchar *get_session_file_string(GeanyDocument *doc)
 {
 	gchar *fname;
+	gchar *doc_filename;
 	GeanyFiletype *ft = doc->file_type;
 
 	if (ft == NULL)	/* can happen when saving a new file when quitting */
 		ft = filetypes[GEANY_FILETYPES_NONE];
 
-	fname = g_strdup_printf("%d;%s;%d;%d;%d;%d;%d;%s;",
+	doc_filename = g_strdup(doc->file_name);
+	/* If the filename contains any ';' (semi-colons) we need to escape them otherwise
+	 * g_key_file_get_string_list() would fail reading them, so we replace them before
+	 * writing with usual colons which must never appear in a filename and replace them
+	 * back when we read the file again from the file. */
+	g_strdelimit(doc_filename, ";", ':');
+
+	fname = g_strdup_printf("%d;%s;%d;%d;%d;%d;%d;%s;%d",
 		sci_get_current_position(doc->editor->sci),
 		ft->name,
 		doc->readonly,
@@ -238,7 +246,9 @@ static gchar *get_session_file_string(GeanyDocument *doc)
 		doc->editor->indent_type,
 		doc->editor->auto_indent,
 		doc->editor->line_wrapping,
-		doc->file_name);
+		doc_filename,
+		doc->editor->line_breaking);
+	g_free(doc_filename);
 	return fname;
 }
 
@@ -929,13 +939,15 @@ gboolean configuration_load(void)
 }
 
 
-static gboolean open_session_file(gchar **tmp)
+static gboolean open_session_file(gchar **tmp, guint len)
 {
 	guint pos;
 	const gchar *ft_name;
 	gchar *locale_filename;
 	gint enc_idx, indent_type;
 	gboolean ro, auto_indent, line_wrapping;
+	/** TODO when we have a global pref for line breaking, use its value */
+	gboolean line_breaking = FALSE;
 	gboolean ret = FALSE;
 
 	pos = atoi(tmp[0]);
@@ -947,6 +959,10 @@ static gboolean open_session_file(gchar **tmp)
 	line_wrapping = atoi(tmp[6]);
 	/* try to get the locale equivalent for the filename */
 	locale_filename = utils_get_locale_from_utf8(tmp[7]);
+	/* replace ':' back with ';' (see get_session_file_string for details) */
+	g_strdelimit(locale_filename, ":", ';');
+	if (len > 8)
+		line_breaking = atoi(tmp[8]);
 
 	if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 	{
@@ -960,6 +976,7 @@ static gboolean open_session_file(gchar **tmp)
 		{
 			editor_set_indent_type(doc->editor, indent_type);
 			editor_set_line_wrapping(doc->editor, line_wrapping);
+			doc->editor->line_breaking = line_breaking;
 			doc->editor->auto_indent = auto_indent;
 			ret = TRUE;
 		}
@@ -989,10 +1006,11 @@ void configuration_open_files(void)
 	while (TRUE)
 	{
 		gchar **tmp = g_ptr_array_index(session_files, i);
+		guint len;
 
-		if (tmp != NULL && g_strv_length(tmp) == 8)
+		if (tmp != NULL && (len = g_strv_length(tmp)) >= 8)
 		{
-			if (! open_session_file(tmp))
+			if (! open_session_file(tmp, len))
 				failure = TRUE;
 		}
 		g_strfreev(tmp);
