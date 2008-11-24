@@ -117,7 +117,7 @@ static gboolean check_hidden(const gchar *base_name)
 		{
 			const gchar *ext = exts[i];
 
-			if (p_utils->str_equal(&base_name[len - strlen(ext)], ext))
+			if (g_str_has_suffix(base_name, ext))
 				return TRUE;
 		}
 	}
