@@ -1257,7 +1257,8 @@ static void findScopeHierarchy (vString *const string,
 
 		for (s = st->parent  ;  s != NULL  ;  s = s->parent)
 		{
-			if (isContextualStatement (s))
+			if (isContextualStatement (s) ||
+				s->declaration == DECL_NAMESPACE)
 			{
 				vStringCopy (temp, string);
 				vStringClear (string);

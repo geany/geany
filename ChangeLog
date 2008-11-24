@@ -1,3 +1,10 @@
+2008-11-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * tagmanager/c.c:
+   Fix nested namespaces not having parent namespace scope (fixes
+   #2141317).
+
+
 2008-11-23  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/symbols.c:
