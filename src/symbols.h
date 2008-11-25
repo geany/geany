@@ -39,6 +39,8 @@ void symbols_init(void);
 
 void symbols_finalize(void);
 
+void symbols_reload_config_files(void);
+
 void symbols_global_tags_loaded(gint file_type_idx);
 
 GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gint lang);

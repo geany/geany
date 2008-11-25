@@ -1186,5 +1186,8 @@ void main_reload_configuration(void)
 		filetypes_load_config(i, TRUE);
 	}
 
+	/* C tag names to ignore */
+	symbols_reload_config_files();
+
 	ui_set_statusbar(TRUE, _("Configuration files reloaded."));
 }

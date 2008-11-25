@@ -1,3 +1,9 @@
+2008-11-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/main.c, src/symbols.c, src/symbols.h:
+   Make 'Reload Configuration' command also reload ignore.tags.
+
+
 2008-11-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * tagmanager/c.c:

@@ -107,6 +107,8 @@ static void load_user_tags(filetype_id ft_id);
 /* get the tags_ignore list, exported by tagmanager's options.c */
 extern gchar **c_tags_ignore;
 
+/* ignore certain tokens when parsing C-like syntax.
+ * Also works for reloading. */
 static void load_c_ignore_tags(void)
 {
 	gchar *path = g_strconcat(app->configdir, G_DIR_SEPARATOR_S "ignore.tags", NULL);
@@ -114,10 +116,17 @@ static void load_c_ignore_tags(void)
 
 	if (g_file_get_contents(path, &content, NULL, NULL))
 	{
+		g_strfreev(c_tags_ignore);
 		c_tags_ignore = g_strsplit_set(content, " \n\r", -1);
 		g_free(content);
 	}
 	g_free(path);
+}
+
+
+void symbols_reload_config_files(void)
+{
+	load_c_ignore_tags();
 }
 
 
