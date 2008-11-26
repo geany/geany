@@ -10,6 +10,15 @@
    Add ui_add_config_file_menu_item().
    Add utils_build_path(), similar to g_build_path() but (re)using a
    fixed buffer, so the result is never freed.
+ * src/notebook.c:
+   Make middle-clicking to close tabs and double-clicking to toggle
+   widgets work also for the gap between the tab label and close
+   button (shown when there are more tabs than fit on screen), and
+   when middle-clicking on the close button.
+ * src/keyfile.c, src/keyfile.h, src/filetypes.c, src/filetypes.h,
+   src/main.c:
+   Move configuration_read_filetype_extensions() to
+   filetypes_read_extensions().
 
 
 2008-11-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

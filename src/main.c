@@ -559,7 +559,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 		gboolean ret;
 
 		filetypes_init_types();
-		configuration_read_filetype_extensions();	/* needed for *.lang.tags filetype matching */
+		filetypes_read_extensions();	/* needed for *.lang.tags filetype matching */
 		ret = symbols_generate_global_tags(*argc, *argv, ! no_preprocessing);
 		exit(ret);
 	}
@@ -953,7 +953,7 @@ gint main(gint argc, gchar **argv)
 	document_init_doclist();
 	treeviews_init();
 	symbols_init();
-	configuration_read_filetype_extensions();
+	filetypes_read_extensions();
 	editor_snippets_init();
 
 	/* set window icon */
@@ -1175,7 +1175,7 @@ void main_reload_configuration(void)
 	editor_snippets_init();
 
 	/* reload filetype extensions */
-	configuration_read_filetype_extensions();
+	filetypes_read_extensions();
 
 	/* save possibly changed commands before re-reading them */
 	filetypes_save_commands();

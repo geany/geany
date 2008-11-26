@@ -40,8 +40,6 @@ void configuration_load_session_files(GKeyFile *config);
 
 void configuration_save_session_files(GKeyFile *config);
 
-void configuration_read_filetype_extensions(void);
-
 /* set some settings which are already read from the config file, but need other things, like the
  * realisation of the main window */
 void configuration_apply_settings(void);

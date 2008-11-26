@@ -40,7 +40,6 @@
 #include "utils.h"
 #include "sciwrappers.h"
 #include "ui_utils.h"
-#include "keyfile.h"
 #include "geanyobject.h"
 
 #include <stdlib.h>
@@ -591,7 +590,7 @@ static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 
 	if (utils_str_equal(doc->real_path,
 		utils_build_path(app->configdir, "filetype_extensions.conf", NULL)))
-		configuration_read_filetype_extensions();
+		filetypes_read_extensions();
 }
 
 
@@ -1345,5 +1344,42 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 	}
 	return *filename != NULL;
 #endif
+}
+
+
+void filetypes_read_extensions(void)
+{
+	guint i;
+	gsize len = 0;
+	gchar *sysconfigfile = g_strconcat(app->datadir, G_DIR_SEPARATOR_S,
+		"filetype_extensions.conf", NULL);
+	gchar *userconfigfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S,
+		"filetype_extensions.conf", NULL);
+	gchar **list;
+	GKeyFile *sysconfig = g_key_file_new();
+	GKeyFile *userconfig = g_key_file_new();
+
+	g_key_file_load_from_file(sysconfig, sysconfigfile, G_KEY_FILE_NONE, NULL);
+	g_key_file_load_from_file(userconfig, userconfigfile, G_KEY_FILE_NONE, NULL);
+
+	/* read the keys */
+	for (i = 0; i < filetypes_array->len; i++)
+	{
+		gboolean userset =
+			g_key_file_has_key(userconfig, "Extensions", filetypes[i]->name, NULL);
+		list = g_key_file_get_string_list(
+			(userset) ? userconfig : sysconfig, "Extensions", filetypes[i]->name, &len, NULL);
+		if (list && len > 0)
+		{
+			g_strfreev(filetypes[i]->pattern);
+			filetypes[i]->pattern = list;
+		}
+		else g_strfreev(list);
+	}
+
+	g_free(sysconfigfile);
+	g_free(userconfigfile);
+	g_key_file_free(sysconfig);
+	g_key_file_free(userconfig);
 }
 
