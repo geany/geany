@@ -40,6 +40,8 @@
 #include "utils.h"
 #include "sciwrappers.h"
 #include "ui_utils.h"
+#include "keyfile.h"
+#include "geanyobject.h"
 
 #include <stdlib.h>
 
@@ -583,6 +585,25 @@ void filetypes_init_types()
 }
 
 
+static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
+{
+	g_return_if_fail(NZV(doc->real_path));
+
+	if (utils_str_equal(doc->real_path,
+		utils_build_path(app->configdir, "filetype_extensions.conf", NULL)))
+		configuration_read_filetype_extensions();
+}
+
+
+static void setup_config_file_menus(void)
+{
+	ui_add_config_file_menu_item(
+		utils_build_path(app->configdir, "filetype_extensions.conf", NULL), NULL, NULL);
+
+	g_signal_connect(geany_object, "document-save", G_CALLBACK(on_document_save), NULL);
+}
+
+
 #define create_sub_menu(menu, item, title) \
 	(menu) = gtk_menu_new(); \
 	(item) = gtk_menu_item_new_with_mnemonic((title)); \
@@ -645,6 +666,7 @@ void filetypes_init()
 {
 	filetypes_init_types();
 	create_set_filetype_menu();
+	setup_config_file_menus();
 }
 
 

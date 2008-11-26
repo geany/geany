@@ -1,3 +1,17 @@
+2008-11-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/utils.c, src/ui_utils.h, src/utils.h, src/geany.h,
+   src/filetypes.c, src/main.c, src/symbols.c, src/ui_utils.c:
+   Add 'Tools->Configuration Files' menu with items to open
+   filetype_extensions.conf and ignore.tags. These files are also
+   reloaded automatically when saved.
+ - Code changes:
+   Make app->configdir a realpath().
+   Add ui_add_config_file_menu_item().
+   Add utils_build_path(), similar to g_build_path() but (re)using a
+   fixed buffer, so the result is never freed.
+
+
 2008-11-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/main.c, src/symbols.c, src/symbols.h:

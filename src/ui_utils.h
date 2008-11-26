@@ -172,6 +172,9 @@ void ui_auto_separator_add_ref(GeanyAutoSeparator *autosep, GtkWidget *item);
 
 void ui_init(void);
 
+void ui_add_config_file_menu_item(const gchar *real_path, const gchar *label,
+		GtkContainer *parent);
+
 
 void ui_set_statusbar(gboolean log, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
 

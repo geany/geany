@@ -67,6 +67,7 @@ static struct
 	GtkWidget	*redo_items[3];
 	GtkWidget	*undo_items[3];
 	GtkWidget	*save_buttons[4];
+	GtkWidget	*config_files_menu;
 }
 widgets;
 
@@ -1564,6 +1565,64 @@ void ui_table_add_row(GtkTable *table, gint row, ...)
 }
 
 
+static void on_config_file_clicked(GtkWidget *widget, gpointer user_data)
+{
+	const gchar *file_name = user_data;
+
+	if (g_file_test(file_name, G_FILE_TEST_EXISTS))
+		document_open_file(file_name, FALSE, NULL, NULL);
+	else
+	{
+		gchar *utf8 = utils_get_utf8_from_locale(file_name);
+
+		document_new_file(utf8, NULL, NULL);
+		g_free(utf8);
+	}
+}
+
+
+/* @note You should connect to the "document-save" signal yourself to detect
+ * if the user has just saved the config file, reloading it. */
+void ui_add_config_file_menu_item(const gchar *real_path, const gchar *label,
+		GtkContainer *parent)
+{
+	GtkWidget *item;
+
+	if (!parent)
+		parent = GTK_CONTAINER(widgets.config_files_menu);
+
+	if (!label)
+	{
+		gchar *base_name;
+
+		base_name = g_path_get_basename(real_path);
+		item = gtk_menu_item_new_with_label(base_name);
+		g_free(base_name);
+	}
+	else
+		item = gtk_menu_item_new_with_mnemonic(label);
+
+	gtk_widget_show(item);
+	gtk_container_add(parent, item);
+	g_signal_connect(item, "activate", G_CALLBACK(on_config_file_clicked),
+		/* this memory is kept */
+		g_strdup(real_path));
+}
+
+
+static void create_config_files_menu(void)
+{
+	GtkWidget *menu, *item;
+
+	widgets.config_files_menu = menu = gtk_menu_new();
+
+	item = ui_image_menu_item_new(GTK_STOCK_FILE, _("C_onfiguration Files"));
+	gtk_widget_show(item);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), menu);
+	gtk_container_add(GTK_CONTAINER(main_widgets.tools_menu), item);
+}
+
+
 void ui_init(void)
 {
 	ui_widgets.statusbar = lookup_widget(main_widgets.window, "statusbar");
@@ -1593,6 +1652,7 @@ void ui_init(void)
 	widgets.undo_items[2] = lookup_widget(main_widgets.window, "toolbutton_undo");
 
 	init_document_widgets();
+	create_config_files_menu();
 }
 
 

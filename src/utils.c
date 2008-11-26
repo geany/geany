@@ -1518,3 +1518,35 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 #endif
 	return result;
 }
+
+
+/* Similar to g_build_path() but (re)using a fixed buffer, so never free it.
+ * This assumes a small enough resulting string length to be kept without freeing,
+ * but this should be the case for filenames. */
+const gchar *utils_build_path(const gchar *first, ...)
+{
+	static GString *buffer;
+	const gchar *str;
+	va_list args;
+
+	if (!buffer)
+		buffer = g_string_new(first);
+	else
+		g_string_assign(buffer, first);
+
+	va_start(args, first);
+	while (1)
+	{
+		str = va_arg(args, const gchar *);
+		if (!str)
+			break;
+
+		g_string_append_c(buffer, G_DIR_SEPARATOR);
+		g_string_append(buffer, str);
+	}
+	va_end(args);
+
+	return buffer->str;
+}
+
+

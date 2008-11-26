@@ -544,6 +544,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	{
 		app->configdir = g_build_filename(g_get_user_config_dir(), "geany", NULL);
 	}
+	setptr(app->configdir, tm_get_real_path(app->configdir));
 
 #ifdef GEANY_DEBUG
 	if (generate_datafiles)

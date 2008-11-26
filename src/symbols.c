@@ -50,6 +50,7 @@
 #include "ui_utils.h"
 #include "editor.h"
 #include "sciwrappers.h"
+#include "geanyobject.h"
 
 
 const guint TM_GLOBAL_TYPE_MASK =
@@ -1774,9 +1775,23 @@ static void create_taglist_popup_menu(void)
 }
 
 
+static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
+{
+	g_return_if_fail(NZV(doc->real_path));
+
+	if (utils_str_equal(doc->real_path,
+		utils_build_path(app->configdir, "ignore.tags", NULL)))
+		load_c_ignore_tags();
+}
+
+
 void symbols_init(void)
 {
 	create_taglist_popup_menu();
+
+	ui_add_config_file_menu_item(utils_build_path(app->configdir, "ignore.tags", NULL),
+		NULL, NULL);
+	g_signal_connect(geany_object, "document-save", G_CALLBACK(on_document_save), NULL);
 }
 
 
