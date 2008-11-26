@@ -417,7 +417,7 @@ static void tab_count_changed(void)
 }
 
 
-static gboolean notebook_tab_label_cb(GtkWidget *widget, GdkEventButton *event, gpointer data)
+static gboolean notebook_tab_click(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	/* toggle additional widgets on double click */
 	if (event->type == GDK_2BUTTON_PRESS)
@@ -450,13 +450,15 @@ gint notebook_new_tab(GeanyDocument *this)
 
 	this->priv->tab_label = gtk_label_new(NULL);
 
+	/* get button press events for the tab label and the space between it and
+	 * the close button, if any */
 	ebox = gtk_event_box_new();
 	GTK_WIDGET_SET_FLAGS(ebox, GTK_NO_WINDOW);
-	g_signal_connect(ebox, "button-press-event", G_CALLBACK(notebook_tab_label_cb), page);
+	g_signal_connect(ebox, "button-press-event", G_CALLBACK(notebook_tab_click), page);
 
 	hbox = gtk_hbox_new(FALSE, 2);
-	gtk_container_add(GTK_CONTAINER(ebox), this->priv->tab_label);
-	gtk_box_pack_start(GTK_BOX(hbox), ebox, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), this->priv->tab_label, FALSE, FALSE, 0);
+	gtk_container_add(GTK_CONTAINER(ebox), hbox);
 
 	if (file_prefs.show_tab_cross)
 	{
@@ -489,9 +491,11 @@ gint notebook_new_tab(GeanyDocument *this)
 		gtk_box_pack_start(GTK_BOX(hbox), align, TRUE, TRUE, 0);
 
 		g_signal_connect(btn, "clicked", G_CALLBACK(notebook_tab_close_clicked_cb), page);
+		/* button overrides event box, so make middle click on button also close tab */
+		g_signal_connect(btn, "button-press-event", G_CALLBACK(notebook_tab_click), page);
 	}
 
-	gtk_widget_show_all(hbox);
+	gtk_widget_show_all(ebox);
 
 	this->priv->tabmenu_label = gtk_label_new(NULL);
 	gtk_misc_set_alignment(GTK_MISC(this->priv->tabmenu_label), 0.0, 0);
@@ -500,10 +504,10 @@ gint notebook_new_tab(GeanyDocument *this)
 
 	if (file_prefs.tab_order_ltr)
 		tabnum = gtk_notebook_append_page_menu(GTK_NOTEBOOK(main_widgets.notebook), page,
-			hbox, this->priv->tabmenu_label);
+			ebox, this->priv->tabmenu_label);
 	else
 		tabnum = gtk_notebook_insert_page_menu(GTK_NOTEBOOK(main_widgets.notebook), page,
-			hbox, this->priv->tabmenu_label, 0);
+			ebox, this->priv->tabmenu_label, 0);
 
 	tab_count_changed();
 
