@@ -3374,6 +3374,8 @@ Document notebook
 Editor
 ------
 
+* Alt-scroll wheel moves up/down a page.
+* Ctrl-scroll wheel zooms in/out.
 * Ctrl-click on a word in a document to perform *Go to Tag Definition*.
 * Ctrl-click on a bracket/brace to perform *Go to Matching Brace*.
 

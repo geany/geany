@@ -19,6 +19,8 @@
    src/main.c:
    Move configuration_read_filetype_extensions() to
    filetypes_read_extensions().
+ * doc/geany.txt, doc/geany.html:
+   Update tips for Alt/Ctrl + mouse wheel scrolling in the editor.
 
 
 2008-11-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
