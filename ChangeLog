@@ -7,6 +7,8 @@
    synchronizing widgets with C variables. Currently this only
    supports boolean and integer settings.
    Replace keyfile.c SettingEntry code with new stash code.
+ * src/keyfile.c:
+   Make hidden prefs use stash code.
 
 
 2008-11-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

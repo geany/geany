@@ -133,10 +133,28 @@ static void settings_action(GKeyFile *config, SettingAction action)
 		{G_TYPE_BOOLEAN, &search_prefs.use_current_file_dir, "pref_search_current_file_dir",
 			(gpointer)TRUE, NULL}
 	};
+	/* hidden prefs (don't overwrite them so users can edit them manually) */
+	GeanyPrefEntry hidden_items[] =
+	{
+		{G_TYPE_BOOLEAN, &editor_prefs.show_scrollbars, "show_editor_scrollbars",
+			(gpointer)TRUE, NULL},
+		{G_TYPE_BOOLEAN, &editor_prefs.brace_match_ltgt, "brace_match_ltgt",
+			(gpointer)FALSE, NULL},
+		{G_TYPE_BOOLEAN, &editor_prefs.use_gtk_word_boundaries, "use_gtk_word_boundaries",
+			(gpointer)TRUE, NULL},
+		{G_TYPE_BOOLEAN, &editor_prefs.complete_snippets_whilst_editing, "complete_snippets_whilst_editing",
+			(gpointer)FALSE, NULL}
+#if GTK_CHECK_VERSION(2, 12, 0)
+		,
+		{G_TYPE_BOOLEAN, &interface_prefs.show_symbol_list_expanders, "show_symbol_list_expanders",
+			(gpointer)TRUE, NULL},
+#endif
+	};
 	GeanyPrefGroup groups[] =
 	{
 		{PACKAGE, package_items, G_N_ELEMENTS(package_items), FALSE},
-		{"search", search_items, G_N_ELEMENTS(search_items), FALSE}
+		{"search", search_items, G_N_ELEMENTS(search_items), FALSE},
+		{PACKAGE, hidden_items, G_N_ELEMENTS(hidden_items), TRUE}
 	};
 	GeanyPrefGroup *group;
 
@@ -260,6 +278,7 @@ void configuration_save_session_files(GKeyFile *config)
 
 static void save_dialog_prefs(GKeyFile *config)
 {
+	/* new settings should be added in settings_action() */
 	settings_action(config, SETTING_WRITE);
 
 	/* Some of the key names are not consistent, but this is for backwards compatibility */
@@ -457,23 +476,6 @@ static void save_ui_prefs(GKeyFile *config)
 }
 
 
-/* hidden prefs (don't overwrite them so users can edit them manually) */
-#define write_hidden_pref_boolean(conf, pkg, key, val) \
-		if (! g_key_file_has_key((conf), (pkg), (key), NULL)) \
-			g_key_file_set_boolean((conf), (pkg), (key), (val));
-
-static void save_hidden_prefs(GKeyFile *config)
-{
-	write_hidden_pref_boolean(config, PACKAGE, "show_editor_scrollbars", editor_prefs.show_scrollbars);
-	write_hidden_pref_boolean(config, PACKAGE, "brace_match_ltgt", editor_prefs.brace_match_ltgt);
-	write_hidden_pref_boolean(config, PACKAGE, "use_gtk_word_boundaries", editor_prefs.use_gtk_word_boundaries);
-	write_hidden_pref_boolean(config, PACKAGE, "complete_snippets_whilst_editing", editor_prefs.complete_snippets_whilst_editing);
-#if GTK_CHECK_VERSION(2, 12, 0)
-	write_hidden_pref_boolean(config, PACKAGE, "show_symbol_list_expanders", interface_prefs.show_symbol_list_expanders);
-#endif
-}
-
-
 void configuration_save(void)
 {
 	GKeyFile *config = g_key_file_new();
@@ -486,7 +488,6 @@ void configuration_save(void)
 #ifdef HAVE_PLUGINS
 	plugins_save_prefs(config);
 #endif
-	save_hidden_prefs(config);
 	save_ui_prefs(config);
 	project_save_prefs(config);	/* save project filename, etc. */
 	save_recent_files(config);
@@ -565,6 +566,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	gchar *tmp_string, *tmp_string2;
 	const gchar *default_charset = NULL;
 
+	/* new settings should be added in settings_action() */
 	settings_action(config, SETTING_READ);
 
 	/* general */
@@ -593,9 +595,6 @@ static void load_dialog_prefs(GKeyFile *config)
 	interface_prefs.editor_font = utils_get_setting_string(config, PACKAGE, "editor_font", GEANY_DEFAULT_FONT_EDITOR);
 	interface_prefs.tagbar_font = utils_get_setting_string(config, PACKAGE, "tagbar_font", GEANY_DEFAULT_FONT_SYMBOL_LIST);
 	interface_prefs.msgwin_font = utils_get_setting_string(config, PACKAGE, "msgwin_font", GEANY_DEFAULT_FONT_MSG_WINDOW);
-#if GTK_CHECK_VERSION(2, 12, 0)
-	interface_prefs.show_symbol_list_expanders = utils_get_setting_boolean(config, PACKAGE, "show_symbol_list_expanders", TRUE);
-#endif
 
 	/* display, editor */
 	editor_prefs.long_line_type = utils_get_setting_integer(config, PACKAGE, "long_line_type", 0);
@@ -614,15 +613,11 @@ static void load_dialog_prefs(GKeyFile *config)
 	editor_prefs.auto_complete_symbols = utils_get_setting_boolean(config, PACKAGE, "auto_complete_symbols", TRUE);
 	editor_prefs.folding = utils_get_setting_boolean(config, PACKAGE, "use_folding", TRUE);
 	editor_prefs.unfold_all_children = utils_get_setting_boolean(config, PACKAGE, "unfold_all_children", FALSE);
-	editor_prefs.show_scrollbars = utils_get_setting_boolean(config, PACKAGE, "show_editor_scrollbars", TRUE);
 	editor_prefs.show_markers_margin = utils_get_setting_boolean(config, PACKAGE, "show_markers_margin", TRUE);
 	editor_prefs.show_linenumber_margin = utils_get_setting_boolean(config, PACKAGE, "show_linenumber_margin", TRUE);
-	editor_prefs.brace_match_ltgt = utils_get_setting_boolean(config, PACKAGE, "brace_match_ltgt", FALSE);
 	editor_prefs.disable_dnd = utils_get_setting_boolean(config, PACKAGE, "pref_editor_disable_dnd", FALSE);
 	editor_prefs.smart_home_key = utils_get_setting_boolean(config, PACKAGE, "pref_editor_smart_home_key", TRUE);
 	editor_prefs.newline_strip = utils_get_setting_boolean(config, PACKAGE, "pref_editor_newline_strip", FALSE);
-	editor_prefs.use_gtk_word_boundaries = utils_get_setting_boolean(config, PACKAGE, "use_gtk_word_boundaries", TRUE);
-	editor_prefs.complete_snippets_whilst_editing = utils_get_setting_boolean(config, PACKAGE, "complete_snippets_whilst_editing", FALSE);
 	editor_prefs.line_break_column = utils_get_setting_integer(config, PACKAGE, "line_break_column", 72);
 	editor_prefs.auto_continue_multiline = utils_get_setting_boolean(config, PACKAGE, "auto_continue_multiline", TRUE);
 	editor_prefs.comment_toggle_mark = utils_get_setting_string(config, PACKAGE, "comment_toggle_mark", GEANY_TOGGLE_MARK);
