@@ -35,6 +35,7 @@ SRCS = \
 	sciwrappers.c sciwrappers.h \
 	search.c search.h \
 	socket.c socket.h \
+	stash.c stash.h \
 	support.c support.h \
 	symbols.c symbols.h \
 	templates.c templates.h \

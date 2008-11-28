@@ -45,6 +45,9 @@
 		g_free(setptr_tmp);\
 	}
 
+#define foreach_c_array(item, array, len) \
+	for (item = array; item < &array[len]; item++)
+
 
 void utils_start_browser(const gchar *uri);
 

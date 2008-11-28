@@ -59,6 +59,7 @@
 #include "printing.h"
 #include "plugins.h"
 #include "templates.h"
+#include "stash.h"
 
 
 /* some default settings which are used at the very first start of Geany to fill
@@ -91,107 +92,64 @@ static gint hpan_position;
 static gint vpan_position;
 
 
-typedef enum SettingCallbackAction
+/* probably this enum will be removed */
+typedef enum SettingAction
 {
 	SETTING_READ,
 	SETTING_WRITE
 }
-SettingCallbackAction;
+SettingAction;
 
-
-typedef struct SettingEntry
+static void settings_action(GKeyFile *config, SettingAction action)
 {
-	gpointer setting;
-	const gchar *group;
-	const gchar *key_name;
-	gpointer default_value;
-}
-SettingEntry;
-
-
-static void bool_settings_foreach(GKeyFile *config, SettingCallbackAction action)
-{
-	guint i;
-	SettingEntry items[] =
+	GeanyPrefEntry package_items[] =
 	{
-		{&file_prefs.cmdline_new_files, PACKAGE, "cmdline_new_files", (gpointer)TRUE},
+		{G_TYPE_BOOLEAN, &file_prefs.cmdline_new_files, "cmdline_new_files",
+			(gpointer)TRUE, NULL},
 
-		{&search_prefs.suppress_dialogs, PACKAGE, "pref_main_suppress_search_dialogs", (gpointer)FALSE},
-		{&search_prefs.use_current_word, PACKAGE, "pref_main_search_use_current_word", (gpointer)TRUE},
-		{&search_prefs.use_current_file_dir, "search", "pref_search_current_file_dir", (gpointer)TRUE},
+		{G_TYPE_BOOLEAN, &search_prefs.suppress_dialogs, "pref_main_suppress_search_dialogs",
+			(gpointer)FALSE, NULL},
+		{G_TYPE_BOOLEAN, &search_prefs.use_current_word, "pref_main_search_use_current_word",
+			(gpointer)TRUE, NULL},
 
-		{&editor_prefs.indentation->detect_type, PACKAGE, "check_detect_indent", (gpointer)FALSE},
-		{&editor_prefs.use_tab_to_indent, PACKAGE, "use_tab_to_indent", (gpointer)TRUE}
+		{G_TYPE_BOOLEAN, &editor_prefs.indentation->detect_type, "check_detect_indent",
+			(gpointer)FALSE, NULL},
+		{G_TYPE_BOOLEAN, &editor_prefs.use_tab_to_indent, "use_tab_to_indent",
+			(gpointer)TRUE, NULL},
+
+		{G_TYPE_INT, &editor_prefs.indentation->width, "pref_editor_tab_width",
+			(gpointer)4, NULL},
+		{G_TYPE_INT, &editor_prefs.indentation->hard_tab_width, "indent_hard_tab_width",
+			(gpointer)8, NULL},
+		{G_TYPE_INT, &editor_prefs.indentation->auto_indent_mode, "indent_mode",
+			(gpointer)GEANY_AUTOINDENT_CURRENTCHARS, NULL},
+		{G_TYPE_INT, &editor_prefs.indentation->type, "indent_type",
+			(gpointer)GEANY_INDENT_TYPE_TABS, NULL},
+		{G_TYPE_INT, &editor_prefs.autocompletion_max_entries, "autocompletion_max_entries",
+			(gpointer)GEANY_MAX_AUTOCOMPLETE_WORDS, NULL}
 	};
-
-	for (i = 0; i < G_N_ELEMENTS(items); i++)
+	GeanyPrefEntry search_items[] =
 	{
-		SettingEntry *se = &items[i];
-		gboolean *setting = se->setting;
+		{G_TYPE_BOOLEAN, &search_prefs.use_current_file_dir, "pref_search_current_file_dir",
+			(gpointer)TRUE, NULL}
+	};
+	GeanyPrefGroup groups[] =
+	{
+		{PACKAGE, package_items, G_N_ELEMENTS(package_items), FALSE},
+		{"search", search_items, G_N_ELEMENTS(search_items), FALSE}
+	};
+	GeanyPrefGroup *group;
 
+	foreach_c_array(group, groups, G_N_ELEMENTS(groups))
+	{
 		switch (action)
 		{
 			case SETTING_READ:
-				*setting = utils_get_setting_boolean(config, se->group, se->key_name,
-					GPOINTER_TO_INT(se->default_value));
-				break;
+				stash_load_group(group, config); break;
 			case SETTING_WRITE:
-				g_key_file_set_boolean(config, se->group, se->key_name, *setting);
-				break;
+				stash_save_group(group, config); break;
 		}
 	}
-}
-
-
-static void int_settings_foreach(GKeyFile *config, SettingCallbackAction action)
-{
-	guint i;
-	SettingEntry items[] =
-	{
-		{&editor_prefs.indentation->width, PACKAGE, "pref_editor_tab_width", (gpointer)4},
-		{&editor_prefs.indentation->hard_tab_width, PACKAGE, "indent_hard_tab_width", (gpointer)8},
-		{&editor_prefs.indentation->auto_indent_mode, PACKAGE, "indent_mode",
-			(gpointer)GEANY_AUTOINDENT_CURRENTCHARS},
-		{&editor_prefs.indentation->type, PACKAGE, "indent_type", (gpointer)GEANY_INDENT_TYPE_TABS},
-		{&editor_prefs.autocompletion_max_entries, PACKAGE, "autocompletion_max_entries",
-			(gpointer)GEANY_MAX_AUTOCOMPLETE_WORDS}
-	};
-
-	for (i = 0; i < G_N_ELEMENTS(items); i++)
-	{
-		SettingEntry *se = &items[i];
-		gboolean *setting = se->setting;
-
-		switch (action)
-		{
-			case SETTING_READ:
-				*setting = utils_get_setting_integer(config, se->group, se->key_name,
-					GPOINTER_TO_INT(se->default_value));
-				break;
-			case SETTING_WRITE:
-				g_key_file_set_integer(config, se->group, se->key_name, *setting);
-				break;
-		}
-	}
-}
-
-
-typedef void (*SettingItemsCallback)(GKeyFile *config, SettingCallbackAction action);
-
-/* List of functions which hold the SettingEntry arrays. These allow access to
- * runtime setting fields like EditorPrefs::indentation->width. */
-SettingItemsCallback setting_item_callbacks[] = {
-	bool_settings_foreach,
-	int_settings_foreach
-};
-
-
-static void settings_action(GKeyFile *config, SettingCallbackAction action)
-{
-	guint i;
-
-	for (i = 0; i < G_N_ELEMENTS(setting_item_callbacks); i++)
-		setting_item_callbacks[i](config, action);
 }
 
 

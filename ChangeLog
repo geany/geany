@@ -1,3 +1,14 @@
+2008-11-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/utils.h, src/makefile.win32, src/stash.c, src/stash.h,
+   src/keyfile.c, src/Makefile.am, wscript:
+   Add foreach_c_array() macro in utils.h.
+   Add stash.[hc] for reading/writing GKeyFile settings and (later)
+   synchronizing widgets with C variables. Currently this only
+   supports boolean and integer settings.
+   Replace keyfile.c SettingEntry code with new stash code.
+
+
 2008-11-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/utils.c, src/ui_utils.h, src/utils.h, src/geany.h,
