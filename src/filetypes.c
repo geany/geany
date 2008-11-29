@@ -747,6 +747,40 @@ GeanyFiletype *filetypes_detect_from_extension(const gchar *utf8_filename)
 }
 
 
+/* This detects the filetype of the file pointed by 'utf8_filename' and a list of filetype id's,
+ * terminated by -1.
+ * The detected filetype of the file is checked against every id in the passed list and if
+ * there is a match, TRUE is returned. */
+static gboolean shebang_find_and_match_filetype(const gchar *utf8_filename, gint first, ...)
+{
+	GeanyFiletype *ft = NULL;
+	gint test;
+	gboolean result = FALSE;
+	va_list args;
+
+	ft = filetypes_detect_from_extension(utf8_filename);
+	if (ft == NULL || ft->id >= filetypes_array->len)
+		return FALSE;
+
+	va_start(args, first);
+	while (1)
+	{
+		test = va_arg(args, gint);
+		if (test == -1)
+			break;
+
+		if (ft->id == (guint) test)
+		{
+			result = TRUE;
+			break;
+		}
+	}
+	va_end(args);
+
+	return result;
+}
+
+
 static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line)
 {
 	GeanyFiletype *ft = NULL;
@@ -795,19 +829,23 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 	/* detect HTML files */
 	if (strncmp(line, "<!DOCTYPE html", 14) == 0 || strncmp(line, "<html", 5) == 0)
 	{
-		ft = filetypes[GEANY_FILETYPES_HTML];
+		/* PHP, Perl and Python files might also start with <html, so detect them based on filename
+		 * extension and use the detected filetype, else assume HTML */
+		if (! shebang_find_and_match_filetype(utf8_filename,
+				GEANY_FILETYPES_PERL, GEANY_FILETYPES_PHP, GEANY_FILETYPES_PYTHON, -1))
+		{
+			ft = filetypes[GEANY_FILETYPES_HTML];
+		}
 	}
 	/* detect XML files */
 	else if (utf8_filename && strncmp(line, "<?xml", 5) == 0)
 	{
 		/* HTML and DocBook files might also start with <?xml, so detect them based on filename
 		 * extension and use the detected filetype, else assume XML */
-		ft = filetypes_detect_from_extension(utf8_filename);
-		if (FILETYPE_ID(ft) != GEANY_FILETYPES_HTML &&
-			FILETYPE_ID(ft) != GEANY_FILETYPES_DOCBOOK &&
-			FILETYPE_ID(ft) != GEANY_FILETYPES_PERL &&	/* Perl, Python and PHP only to be safe */
-			FILETYPE_ID(ft) != GEANY_FILETYPES_PHP &&
-			FILETYPE_ID(ft) != GEANY_FILETYPES_PYTHON)
+		if (! shebang_find_and_match_filetype(utf8_filename,
+				GEANY_FILETYPES_HTML, GEANY_FILETYPES_DOCBOOK,
+				/* Perl, Python and PHP only to be safe */
+				GEANY_FILETYPES_PERL, GEANY_FILETYPES_PHP, GEANY_FILETYPES_PYTHON, -1))
 		{
 			ft = filetypes[GEANY_FILETYPES_XML];
 		}
