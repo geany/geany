@@ -17,6 +17,8 @@
  * src/notebook.c:
    Another attempt to handle tab close button size properly (based on
    code from Colomban Wendling, thanks).
+ * data/filetypes.c:
+   Sort the keyword list and remove C++ keywords.
 
 
 2008-11-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
