@@ -207,6 +207,17 @@ static gboolean notebook_tab_bar_click_cb(GtkWidget *widget, GdkEventButton *eve
 
 void notebook_init()
 {
+	/* Individual style for the tab close buttons */
+	gtk_rc_parse_string(
+		"style \"geany-close-tab-button-style\" {\n"
+		"	GtkWidget::focus-padding = 0\n"
+		"	GtkWidget::focus-line-width = 0\n"
+		"	xthickness = 0\n"
+		"	ythickness = 0\n"
+		"}\n"
+		"widget \"*.geany-close-tab-button\" style \"geany-close-tab-button-style\""
+	);
+
 	g_signal_connect_after(main_widgets.notebook, "button-press-event",
 		G_CALLBACK(notebook_tab_bar_click_cb), NULL);
 
@@ -463,31 +474,21 @@ gint notebook_new_tab(GeanyDocument *this)
 	if (file_prefs.show_tab_cross)
 	{
 		GtkWidget *image, *btn, *align;
-		GtkRcStyle *rcstyle;
-		GtkRequisition size;
+		gint w, h;
 
 		btn = gtk_button_new();
 		gtk_button_set_relief(GTK_BUTTON(btn), GTK_RELIEF_NONE);
-
-		/* don't allow focus on the close button */
 		gtk_button_set_focus_on_click(GTK_BUTTON(btn), FALSE);
-
-		/* make it as small as possible */
-		rcstyle = gtk_rc_style_new();
-		rcstyle->xthickness = rcstyle->ythickness = 0;
-		gtk_widget_modify_style(btn, rcstyle);
-		gtk_rc_style_unref(rcstyle);
+		gtk_widget_set_name(btn, "geany-close-tab-button");
 
 		image = gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
-#ifndef G_OS_WIN32
-		gtk_widget_size_request(image, &size);
-		gtk_widget_set_size_request(btn, size.width, size.height);
-#endif
-		gtk_button_set_image(GTK_BUTTON(btn), image);
+		gtk_container_add(GTK_CONTAINER(btn), image);
+
+		gtk_icon_size_lookup_for_settings(gtk_widget_get_settings(btn), GTK_ICON_SIZE_MENU, &w, &h);
+		gtk_widget_set_size_request(btn, w + 2, h + 2);
 
 		align = gtk_alignment_new(1.0, 0.0, 0.0, 0.0);
 		gtk_container_add(GTK_CONTAINER(align), btn);
-
 		gtk_box_pack_start(GTK_BOX(hbox), align, TRUE, TRUE, 0);
 
 		g_signal_connect(btn, "clicked", G_CALLBACK(notebook_tab_close_clicked_cb), page);
