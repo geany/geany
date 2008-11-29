@@ -19,6 +19,9 @@
    code from Colomban Wendling, thanks).
  * data/filetypes.c:
    Sort the keyword list and remove C++ keywords.
+ * data/snippets.conf:
+   Add some default snippets for Python (patch by
+   Colomban Wendling, thanks).
 
 
 2008-11-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
