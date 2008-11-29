@@ -76,7 +76,7 @@ scintilla_sources = [
 	'scintilla/LexFortran.cxx', 'scintilla/LexHaskell.cxx', 'scintilla/LexHTML.cxx',
 	'scintilla/LexLua.cxx', 'scintilla/LexOMS.cxx', 'scintilla/LexOthers.cxx',
 	'scintilla/LexPascal.cxx', 'scintilla/LexPerl.cxx', 'scintilla/LexPython.cxx',
-	'scintilla/LexR.cxx', 'scintilla/LexMatlab.cxx',
+	'scintilla/LexR.cxx', 'scintilla/LexMatlab.cxx', 'scintilla/LexYAML.cxx',
 	'scintilla/LexRuby.cxx', 'scintilla/LexSQL.cxx', 'scintilla/LexTCL.cxx',
 	'scintilla/LexVHDL.cxx', 'scintilla/LineMarker.cxx', 'scintilla/PlatGTK.cxx',
 	'scintilla/PositionCache.cxx', 'scintilla/PropSet.cxx', 'scintilla/RESearch.cxx',

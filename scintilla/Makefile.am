@@ -17,6 +17,7 @@ LexD.cxx \
 LexFortran.cxx \
 LexHaskell.cxx \
 LexHTML.cxx \
+LexYAML.cxx \
 LexLua.cxx \
 LexOMS.cxx \
 LexMatlab.cxx \

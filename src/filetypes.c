@@ -518,6 +518,17 @@ static void init_builtin_filetypes(void)
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 
+#define YAML
+	ft = filetypes[GEANY_FILETYPES_YAML];
+	ft->lang = -2;
+	ft->name = g_strdup("YAML");
+	ft->title = g_strdup_printf(_("%s source file"), "YAML");
+	ft->extension = g_strdup("yaml");
+	ft->pattern = utils_strv_new("*.yaml", "*.yml", NULL);
+	ft->comment_open = g_strdup("#");
+	ft->comment_close = NULL;
+	ft->group = GEANY_FILETYPE_GROUP_MISC;
+
 #define ALL
 	ft = filetypes[GEANY_FILETYPES_NONE];
 	ft->lang = -2;

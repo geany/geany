@@ -8,6 +8,12 @@
    src/treeviews.h:
    Add editor_get_calltip_text().
    Add tooltips for the symbol list items.
+ * wscript, THANKS, data/filetypes.yaml, data/filetype_extensions.conf,
+   scintilla/LexYAML.cxx, scintilla/KeyWords.cxx, scintilla/Makefile.am,
+   scintilla/makefile.win32, src/filetypes.c, src/templates.c,
+   src/filetypes.h, src/highlighting.c, src/plugindata.h, src/editor.c,
+   src/about.c:
+   Add new filetype 'YAML' (patch by Walery Studennikov, thanks).
 
 
 2008-11-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

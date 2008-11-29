@@ -2883,6 +2883,52 @@ static void styleset_vhdl(ScintillaObject *sci)
 }
 
 
+static void styleset_yaml_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
+{
+	new_style_array(GEANY_FILETYPES_YAML, 10);
+
+	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_YAML].styling[0]);
+	get_keyfile_hex(config, config_home, "styling", "comment", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_YAML].styling[1]);
+	get_keyfile_hex(config, config_home, "styling", "identifier", "0x000088", "0xffffff", "true", &style_sets[GEANY_FILETYPES_YAML].styling[2]);
+	get_keyfile_hex(config, config_home, "styling", "keyword", "0x991111", "0xffffff", "true", &style_sets[GEANY_FILETYPES_YAML].styling[3]);
+	get_keyfile_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_YAML].styling[4]);
+	get_keyfile_hex(config, config_home, "styling", "reference", "0x008888", "0xffffff", "false", &style_sets[GEANY_FILETYPES_YAML].styling[5]);
+	get_keyfile_hex(config, config_home, "styling", "document", "0x000088", "0xffffff", "false", &style_sets[GEANY_FILETYPES_YAML].styling[6]);
+	get_keyfile_hex(config, config_home, "styling", "text", "0x333366", "0xffffff", "false", &style_sets[GEANY_FILETYPES_YAML].styling[7]);
+	get_keyfile_hex(config, config_home, "styling", "error", "0xff0000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_YAML].styling[8]);
+	get_keyfile_hex(config, config_home, "styling", "operator", "0x301010", "0xffffff", "false", &style_sets[GEANY_FILETYPES_YAML].styling[9]);
+
+	style_sets[GEANY_FILETYPES_YAML].keywords = g_new(gchar*, 2);
+	get_keyfile_keywords(config, config_home, "keywords", "keywords", GEANY_FILETYPES_YAML, 0, "true false yes no");
+	style_sets[GEANY_FILETYPES_YAML].keywords[1] = NULL;
+
+	get_keyfile_wordchars(config, config_home,
+		&style_sets[GEANY_FILETYPES_VHDL].wordchars);
+}
+
+
+static void styleset_yaml(ScintillaObject *sci)
+{
+	const filetype_id ft_id = GEANY_FILETYPES_YAML;
+
+	apply_filetype_properties(sci, SCLEX_YAML, ft_id);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_YAML].keywords[0]);
+
+	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_YAML, 0);
+	set_sci_style(sci, SCE_YAML_DEFAULT, GEANY_FILETYPES_YAML, 0);
+	set_sci_style(sci, SCE_YAML_COMMENT, GEANY_FILETYPES_YAML, 1);
+	set_sci_style(sci, SCE_YAML_IDENTIFIER, GEANY_FILETYPES_YAML, 2);
+	set_sci_style(sci, SCE_YAML_KEYWORD, GEANY_FILETYPES_YAML, 3);
+	set_sci_style(sci, SCE_YAML_NUMBER, GEANY_FILETYPES_YAML, 4);
+	set_sci_style(sci, SCE_YAML_REFERENCE, GEANY_FILETYPES_YAML, 5);
+	set_sci_style(sci, SCE_YAML_DOCUMENT, GEANY_FILETYPES_YAML, 6);
+	set_sci_style(sci, SCE_YAML_TEXT, GEANY_FILETYPES_YAML, 7);
+	set_sci_style(sci, SCE_YAML_ERROR, GEANY_FILETYPES_YAML, 8);
+	set_sci_style(sci, SCE_YAML_OPERATOR, GEANY_FILETYPES_YAML, 9);
+}
+
+
 static void styleset_js_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_style_array(GEANY_FILETYPES_JS, 20);
@@ -3208,6 +3254,7 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 		init_styleset_case(GEANY_FILETYPES_VALA,	vala);
 		init_styleset_case(GEANY_FILETYPES_VHDL,	vhdl);
 		init_styleset_case(GEANY_FILETYPES_XML,		markup);
+		init_styleset_case(GEANY_FILETYPES_YAML,	yaml);
 	}
 }
 
@@ -3266,6 +3313,7 @@ void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 		styleset_case(GEANY_FILETYPES_VALA,		vala);
 		styleset_case(GEANY_FILETYPES_VHDL,		vhdl);
 		styleset_case(GEANY_FILETYPES_XML,		xml);
+		styleset_case(GEANY_FILETYPES_YAML,		yaml);
 		default:
 		styleset_case(GEANY_FILETYPES_NONE,		none);
 	}

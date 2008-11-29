@@ -2934,6 +2934,9 @@ static gboolean is_comment_style(gint lexer, gint style)
 		case SCLEX_FREEBASIC:
 			return (style == SCE_B_COMMENT);
 
+		case SCLEX_YAML:
+			return (style == SCE_YAML_COMMENT);
+
 		case SCLEX_HTML:
 			return (style == SCE_HPHP_COMMENTLINE ||
 				style == SCE_HPHP_COMMENT ||
