@@ -1,3 +1,11 @@
+2008-11-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/treeviews.c:
+   Simplify the tooltips code for the Open Files treeview.
+   Change the dependency handling for GTK 2.12 for some features
+   from compile time to run time.
+
+
 2008-11-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/utils.h, src/makefile.win32, src/stash.c, src/stash.h,
