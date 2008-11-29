@@ -1525,7 +1525,7 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
  * but this should be the case for filenames. */
 const gchar *utils_build_path(const gchar *first, ...)
 {
-	static GString *buffer;
+	static GString *buffer = NULL;
 	const gchar *str;
 	va_list args;
 
