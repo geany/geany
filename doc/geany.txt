@@ -1174,6 +1174,7 @@ corresponding filetype is first used. Currently these are for:
 * PHP
 * HTML -- &symbol; completion, e.g. for ampersand, copyright, etc.
 * LaTeX
+* Python
 
 
 Generating a global tags file

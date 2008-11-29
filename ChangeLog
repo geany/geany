@@ -24,6 +24,8 @@
  * data/snippets.conf:
    Add some default snippets for Python (patch by
    Colomban Wendling, thanks).
+ * doc/geany.txt, doc/geany.html:
+   Add Python to the list of filetypes with default global tags files.
 
 
 2008-11-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
