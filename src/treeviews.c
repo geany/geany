@@ -122,6 +122,10 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 		g_object_set(tree, "show-expanders", interface_prefs.show_symbol_list_expanders, NULL);
 		if (! interface_prefs.show_symbol_list_expanders)
 			g_object_set(tree, "level-indentation", 10, NULL);
+		/* Tooltips */
+		g_object_set(tree,
+			"has-tooltip", TRUE,
+			"tooltip-column", SYMBOLS_COLUMN_TOOLTIP, NULL);
 	}
 
 	/* selection handling */
@@ -180,7 +184,7 @@ void treeviews_update_tag_list(GeanyDocument *doc, gboolean update)
 		if (doc->priv->tag_tree == NULL)
 		{
 			doc->priv->tag_store = gtk_tree_store_new(
-				SYMBOLS_N_COLUMNS, GDK_TYPE_PIXBUF, G_TYPE_STRING, G_TYPE_POINTER);
+				SYMBOLS_N_COLUMNS, GDK_TYPE_PIXBUF, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_STRING);
 			doc->priv->tag_tree = gtk_tree_view_new();
 			prepare_taglist(doc->priv->tag_tree, doc->priv->tag_store);
 			gtk_widget_show(doc->priv->tag_tree);

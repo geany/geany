@@ -831,8 +831,7 @@ static void hide_empty_rows(GtkTreeStore *store)
 }
 
 
-static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag,
-		gboolean found_parent)
+static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboolean found_parent)
 {
 	gchar *utf8_name;
 	const gchar *scope = tag->atts.entry.scope;
@@ -876,6 +875,22 @@ static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag,
 	g_string_append_printf(buffer, " [%lu]", tag->atts.entry.line);
 
 	return buffer->str;
+}
+
+
+static gchar *get_symbol_tooltip(GeanyDocument *doc, const TMTag *tag)
+{
+	gchar *utf8_name = editor_get_calltip_text(doc->editor, tag);
+
+	/* encodings_convert_to_utf8_from_charset() fails with charset "None", so skip conversion
+	 * for None at this point completely */
+	if (! utils_str_equal(doc->encoding, "UTF-8") && ! utils_str_equal(doc->encoding, "None"))
+	{
+		setptr(utf8_name,
+			encodings_convert_to_utf8_from_charset(utf8_name, -1, doc->encoding, TRUE));
+	}
+
+	return utf8_name;
 }
 
 
@@ -989,6 +1004,7 @@ static void add_tree_tag(GeanyDocument *doc, const TMTag *tag, GHashTable *paren
 	{
 		const gchar *name;
 		const gchar *parent_name = get_parent_name(tag, ft_id);
+		gchar *tooltip;
 		GtkTreeIter iter;
 		GtkTreeIter *icon_iter = NULL, *child = NULL;
 		GdkPixbuf *icon = NULL;
@@ -1025,11 +1041,15 @@ static void add_tree_tag(GeanyDocument *doc, const TMTag *tag, GHashTable *paren
 		gtk_tree_store_append(tree_store, child, parent);
 
 		name = get_symbol_name(doc, tag, (parent_name != NULL));
+		tooltip = get_symbol_tooltip(doc, tag);
 		gtk_tree_store_set(tree_store, child,
 			SYMBOLS_COLUMN_ICON, icon,
 			SYMBOLS_COLUMN_NAME, name,
-			SYMBOLS_COLUMN_TAG, tag, -1);
+			SYMBOLS_COLUMN_TAG, tag,
+			SYMBOLS_COLUMN_TOOLTIP, tooltip,
+			-1);
 
+		g_free(tooltip);
 		if (G_LIKELY(G_IS_OBJECT(icon)))
 			g_object_unref(icon);
 	}

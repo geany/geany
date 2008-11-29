@@ -256,4 +256,6 @@ void editor_set_indentation_guides(GeanyEditor *editor);
 
 void editor_apply_update_prefs(GeanyEditor *editor);
 
+gchar *editor_get_calltip_text(GeanyEditor *editor, const TMTag *tag);
+
 #endif

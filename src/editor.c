@@ -1387,6 +1387,20 @@ gboolean editor_show_calltip(GeanyEditor *editor, gint pos)
 }
 
 
+gchar *editor_get_calltip_text(GeanyEditor *editor, const TMTag *tag)
+{
+	GString *str;
+
+	g_return_val_if_fail(editor != NULL, NULL);
+
+	str = g_string_new(NULL);
+	if (append_calltip(str, tag, FILETYPE_ID(editor->document->file_type)))
+		return g_string_free(str, FALSE);
+	else
+		return g_string_free(str, TRUE);
+}
+
+
 static void show_autocomplete(ScintillaObject *sci, gint rootlen, const gchar *words)
 {
 	/* store whether a calltip is showing, so we can reshow it after autocompletion */

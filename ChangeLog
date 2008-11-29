@@ -4,6 +4,10 @@
    Simplify the tooltips code for the Open Files treeview.
    Change the dependency handling for GTK 2.12 for some features
    from compile time to run time.
+ * src/editor.c, src/editor.h, src/symbols.c, src/treeviews.c,
+   src/treeviews.h:
+   Add editor_get_calltip_text().
+   Add tooltips for the symbol list items.
 
 
 2008-11-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
