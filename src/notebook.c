@@ -448,6 +448,16 @@ static gboolean notebook_tab_click(GtkWidget *widget, GdkEventButton *event, gpo
 }
 
 
+static void notebook_tab_close_button_style_set(GtkWidget *btn, GtkRcStyle *prev_style,
+												gpointer data)
+{
+	gint w, h;
+
+	gtk_icon_size_lookup_for_settings(gtk_widget_get_settings(btn), GTK_ICON_SIZE_MENU, &w, &h);
+	gtk_widget_set_size_request(btn, w + 2, h + 2);
+}
+
+
 /* Returns page number of notebook page, or -1 on error */
 gint notebook_new_tab(GeanyDocument *this)
 {
@@ -474,7 +484,6 @@ gint notebook_new_tab(GeanyDocument *this)
 	if (file_prefs.show_tab_cross)
 	{
 		GtkWidget *image, *btn, *align;
-		gint w, h;
 
 		btn = gtk_button_new();
 		gtk_button_set_relief(GTK_BUTTON(btn), GTK_RELIEF_NONE);
@@ -484,9 +493,6 @@ gint notebook_new_tab(GeanyDocument *this)
 		image = gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
 		gtk_container_add(GTK_CONTAINER(btn), image);
 
-		gtk_icon_size_lookup_for_settings(gtk_widget_get_settings(btn), GTK_ICON_SIZE_MENU, &w, &h);
-		gtk_widget_set_size_request(btn, w + 2, h + 2);
-
 		align = gtk_alignment_new(1.0, 0.0, 0.0, 0.0);
 		gtk_container_add(GTK_CONTAINER(align), btn);
 		gtk_box_pack_start(GTK_BOX(hbox), align, TRUE, TRUE, 0);
@@ -494,6 +500,8 @@ gint notebook_new_tab(GeanyDocument *this)
 		g_signal_connect(btn, "clicked", G_CALLBACK(notebook_tab_close_clicked_cb), page);
 		/* button overrides event box, so make middle click on button also close tab */
 		g_signal_connect(btn, "button-press-event", G_CALLBACK(notebook_tab_click), page);
+		/* handle style modification to keep button small as possible even when theme change */
+		g_signal_connect(btn, "style-set", G_CALLBACK(notebook_tab_close_button_style_set), NULL);
 	}
 
 	gtk_widget_show_all(ebox);
