@@ -718,9 +718,6 @@ void prefs_init_dialog(void)
 		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_scrollback");
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), vc->scrollback_lines);
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_emulation");
-		gtk_entry_set_text(GTK_ENTRY(widget), vc->emulation);
-
 		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_shell");
 		gtk_entry_set_text(GTK_ENTRY(widget), vc->shell);
 
@@ -1097,10 +1094,6 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		{
 			widget = lookup_widget(ui_widgets.prefs_dialog, "spin_scrollback");
 			vc->scrollback_lines = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
-
-			widget = lookup_widget(ui_widgets.prefs_dialog, "entry_emulation");
-			g_free(vc->emulation);
-			vc->emulation = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
 			widget = lookup_widget(ui_widgets.prefs_dialog, "entry_shell");
 			g_free(vc->shell);
