@@ -77,6 +77,25 @@ static void handle_int_setting(GeanyPrefGroup *group, GeanyPrefEntry *se,
 }
 
 
+static void handle_string_setting(GeanyPrefGroup *group, GeanyPrefEntry *se,
+		GKeyFile *config, SettingAction action)
+{
+	gchararray *setting = se->setting;
+
+	switch (action)
+	{
+		case SETTING_READ:
+			g_free(*setting);
+			*setting = utils_get_setting_string(config, group->name, se->key_name,
+				se->default_value);
+			break;
+		case SETTING_WRITE:
+			g_key_file_set_string(config, group->name, se->key_name, *setting);
+			break;
+	}
+}
+
+
 static void keyfile_action(GeanyPrefGroup *group, GKeyFile *keyfile, SettingAction action)
 {
 	GeanyPrefEntry *entry;
@@ -93,6 +112,8 @@ static void keyfile_action(GeanyPrefGroup *group, GKeyFile *keyfile, SettingActi
 				handle_bool_setting(group, entry, keyfile, action); break;
 			case G_TYPE_INT:
 				handle_int_setting(group, entry, keyfile, action); break;
+			case G_TYPE_STRING:
+				handle_string_setting(group, entry, keyfile, action); break;
 			default:
 				g_warning("Unhandled type for %s::%s!", group->name, entry->key_name);
 		}

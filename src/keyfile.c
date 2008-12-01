@@ -104,6 +104,8 @@ static void settings_action(GKeyFile *config, SettingAction action)
 {
 	GeanyPrefEntry package_items[] =
 	{
+		{G_TYPE_STRING, &prefs.default_open_path, "default_open_path", "", NULL},
+
 		{G_TYPE_BOOLEAN, &file_prefs.cmdline_new_files, "cmdline_new_files",
 			(gpointer)TRUE, NULL},
 
@@ -116,7 +118,6 @@ static void settings_action(GKeyFile *config, SettingAction action)
 			(gpointer)FALSE, NULL},
 		{G_TYPE_BOOLEAN, &editor_prefs.use_tab_to_indent, "use_tab_to_indent",
 			(gpointer)TRUE, NULL},
-
 		{G_TYPE_INT, &editor_prefs.indentation->width, "pref_editor_tab_width",
 			(gpointer)4, NULL},
 		{G_TYPE_INT, &editor_prefs.indentation->hard_tab_width, "indent_hard_tab_width",
@@ -147,7 +148,7 @@ static void settings_action(GKeyFile *config, SettingAction action)
 #if GTK_CHECK_VERSION(2, 12, 0)
 		,
 		{G_TYPE_BOOLEAN, &interface_prefs.show_symbol_list_expanders, "show_symbol_list_expanders",
-			(gpointer)TRUE, NULL},
+			(gpointer)TRUE, NULL}
 #endif
 	};
 	GeanyPrefGroup groups[] =
@@ -293,7 +294,6 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "switch_msgwin_pages", prefs.switch_to_status);
 	g_key_file_set_boolean(config, PACKAGE, "beep_on_errors", prefs.beep_on_errors);
 	g_key_file_set_boolean(config, PACKAGE, "auto_focus", prefs.auto_focus);
-	g_key_file_set_string(config, PACKAGE, "default_open_path", prefs.default_open_path);
 
 	/* interface */
 	g_key_file_set_boolean(config, PACKAGE, "sidebar_symbol_visible", interface_prefs.sidebar_symbol_visible);
@@ -580,7 +580,6 @@ static void load_dialog_prefs(GKeyFile *config)
 	prefs.beep_on_errors = utils_get_setting_boolean(config, PACKAGE, "beep_on_errors", TRUE);
 	prefs.switch_to_status = utils_get_setting_boolean(config, PACKAGE, "switch_msgwin_pages", FALSE);
 	prefs.auto_focus = utils_get_setting_boolean(config, PACKAGE, "auto_focus", FALSE);
-	prefs.default_open_path = utils_get_setting_string(config, PACKAGE, "default_open_path", "");
 
 	/* interface */
 	interface_prefs.tab_pos_editor = utils_get_setting_integer(config, PACKAGE, "tab_pos_editor", GTK_POS_TOP);
