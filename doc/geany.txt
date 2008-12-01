@@ -3431,6 +3431,10 @@ complete_snippets_whilst_editing  Whether to allow completion of snippets      f
 show_symbol_list_expanders        Whether to show or hide the small expander   true
                                   icons on the symbol list treeview (only
                                   available with GTK 2.12 or above).
+**[VTE]**
+emulation                         Terminal emulation mode. Only change this    xterm
+                                  if you have VTE termcap files other than
+                                  ``vte/termcap/xterm``.
 ================================  ===========================================  ==================
 
 

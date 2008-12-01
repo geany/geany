@@ -400,7 +400,8 @@ static void save_dialog_prefs(GKeyFile *config)
 	{
 		gchar *tmp_string;
 
-		g_key_file_set_string(config, "VTE", "emulation", vc->emulation);
+		if (!g_key_file_has_key(config, "VTE", "emulation", NULL))	/* hidden */
+			g_key_file_set_string(config, "VTE", "emulation", vc->emulation);
 		g_key_file_set_string(config, "VTE", "font", vc->font);
 		g_key_file_set_boolean(config, "VTE", "scroll_on_key", vc->scroll_on_key);
 		g_key_file_set_boolean(config, "VTE", "scroll_on_out", vc->scroll_on_out);

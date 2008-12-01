@@ -1,3 +1,10 @@
+2008-12-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keyfile.c, src/vte.c, doc/geany.txt, doc/geany.html:
+   Make VTE emulation pref hidden, because libvte only comes with an
+   xterm termcaps file and the GUI pref can be confusing.
+
+
 2008-11-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/treeviews.c:

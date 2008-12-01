@@ -676,7 +676,7 @@ void vte_append_preferences_tab(void)
 	if (vte_info.have_vte)
 	{
 		GtkWidget *notebook, *vbox, *label, *alignment, *table, *frame, *box;
-		GtkWidget *font_term, *color_fore, *color_back, *spin_scrollback, *entry_emulation;
+		GtkWidget *font_term, *color_fore, *color_back, *spin_scrollback;
 		GtkWidget *check_scroll_key, *check_scroll_out, *check_follow_path;
 		GtkWidget *check_enable_bash_keys, *check_ignore_menu_key;
 		GtkWidget *check_run_in_vte, *check_skip_script, *entry_shell, *button_shell, *image_shell;
@@ -756,18 +756,6 @@ void vte_append_preferences_tab(void)
 		gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(spin_scrollback), TRUE);
 		gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(spin_scrollback), TRUE);
 
-		label = gtk_label_new(_("Terminal emulation:"));
-		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 4, 5,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
-
-		entry_emulation = gtk_entry_new();
-		gtk_table_attach(GTK_TABLE(table), entry_emulation, 1, 2, 4, 5,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-		ui_widget_set_tooltip_text(entry_emulation, _("Controls how the terminal emulator should behave. Do not change this value unless you know exactly what you are doing."));
-
 		label = gtk_label_new(_("Shell:"));
 		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 5, 6,
 					(GtkAttachOptions) (GTK_FILL),
@@ -838,8 +826,6 @@ void vte_append_preferences_tab(void)
 				g_object_ref(color_back),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "spin_scrollback",
 				g_object_ref(spin_scrollback),	(GDestroyNotify) g_object_unref);
-		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "entry_emulation",
-				g_object_ref(entry_emulation),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "entry_shell",
 				g_object_ref(entry_shell),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_scroll_key",
