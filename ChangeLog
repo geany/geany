@@ -5,6 +5,9 @@
    xterm termcaps file and the GUI pref can be confusing.
  * src/stash.c, src/keyfile.c:
    Add G_TYPE_STRING setting support to Stash code, use in keyfile.c.
+ * src/keyfile.c:
+   Read show_symbol_list_expanders hidden pref even when compiled
+   against GTK < 2.12.
 
 
 2008-11-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

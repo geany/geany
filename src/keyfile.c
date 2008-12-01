@@ -144,12 +144,9 @@ static void settings_action(GKeyFile *config, SettingAction action)
 		{G_TYPE_BOOLEAN, &editor_prefs.use_gtk_word_boundaries, "use_gtk_word_boundaries",
 			(gpointer)TRUE, NULL},
 		{G_TYPE_BOOLEAN, &editor_prefs.complete_snippets_whilst_editing, "complete_snippets_whilst_editing",
-			(gpointer)FALSE, NULL}
-#if GTK_CHECK_VERSION(2, 12, 0)
-		,
+			(gpointer)FALSE, NULL},
 		{G_TYPE_BOOLEAN, &interface_prefs.show_symbol_list_expanders, "show_symbol_list_expanders",
 			(gpointer)TRUE, NULL}
-#endif
 	};
 	GeanyPrefGroup groups[] =
 	{
