@@ -690,8 +690,8 @@ gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const
  *  @param default_value The default value which will be returned when @c section or @c key
  *         don't exist.
  *
- *  @return A newly allocated string, or the given default value if the value could not be
- *          retrieved.
+ *  @return A newly allocated string, either the value for @a key or a copy of the given
+ *          default value if it could not be retrieved.
  **/
 gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gchar *key,
 								const gchar *default_value)
@@ -705,7 +705,7 @@ gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gc
 	if (error)
 	{
 		g_error_free(error);
-		return (gchar*) g_strdup(default_value);
+		return g_strdup(default_value);
 	}
 	return tmp;
 }
