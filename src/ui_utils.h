@@ -167,6 +167,10 @@ void ui_table_add_row(GtkTable *table, gint row, ...) G_GNUC_NULL_TERMINATED;
 
 void ui_auto_separator_add_ref(GeanyAutoSeparator *autosep, GtkWidget *item);
 
+void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text);
+
+GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name);
+
 /* End of 'generic' functions */
 
 
@@ -253,7 +257,5 @@ void ui_statusbar_showhide(gboolean state);
 gint ui_get_toolbar_insert_position(void);
 
 void ui_add_document_sensitive(GtkWidget *widget);
-
-void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text);
 
 #endif

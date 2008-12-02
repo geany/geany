@@ -12,6 +12,12 @@
    Add header guards for geanyfunctions.h and include pluginmacros.h
    temporarily.
    Update Demo plugin.
+ * src/ui_utils.h, src/plugindata.h, src/plugins.c, src/ui_utils.c,
+   plugins/geanyfunctions.h, plugins/genapi.py:
+   Add ui_lookup_widget() to plugin API (so genapi.py has a suitable
+   prefix).
+   Mark SupportFuncs as deprecated.
+   Add description comment for geanyfunctions.h.
 
 
 2008-12-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

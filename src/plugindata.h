@@ -45,7 +45,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 112,
+	GEANY_API_VERSION = 113,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -202,7 +202,8 @@ typedef struct GeanyFunctions
 	struct TemplateFuncs		*p_templates;		/**< See templates.h */
 	struct UtilsFuncs			*p_utils;			/**< See utils.h */
 	struct UIUtilsFuncs			*p_ui;				/**< See ui_utils.h */
-	struct SupportFuncs			*p_support;			/**< See support.h */
+	/** @deprecated Use ui_lookup_widget() instead. */
+	struct SupportFuncs			*p_support;
 	struct DialogFuncs			*p_dialogs;			/**< See dialogs.h */
 	struct MsgWinFuncs			*p_msgwindow;		/**< See msgwindow.h */
 	struct EncodingFuncs		*p_encodings;		/**< See encodings.h */
@@ -361,6 +362,7 @@ typedef struct UIUtilsFuncs
 	void		(*add_document_sensitive) (GtkWidget *widget);
 	void		(*widget_set_tooltip_text) (GtkWidget *widget, const gchar *text);
 	GtkWidget*	(*image_menu_item_new) (const gchar *stock_id, const gchar *label);
+	GtkWidget*	(*lookup_widget) (GtkWidget *widget, const gchar *widget_name);
 }
 UIUtilsFuncs;
 
@@ -375,7 +377,7 @@ typedef struct DialogFuncs
 DialogFuncs;
 
 
-/* See support.h */
+/* @deprecated Use ui_lookup_widget() instead. */
 typedef struct SupportFuncs
 {
 	GtkWidget*	(*lookup_widget) (GtkWidget *widget, const gchar *widget_name);

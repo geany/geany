@@ -1754,3 +1754,17 @@ void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text)
 	gtk_tooltips_set_tip(tooltips, widget, text, NULL);
 #endif
 }
+
+
+/* needed because lookup_widget doesn't have a suitable API prefix */
+/** This function returns a widget in a component created by Glade.
+ * Call it with the toplevel widget in the component (i.e. a window/dialog),
+ * or alternatively any widget in the component, and the name of the widget
+ * you want returned.
+ * @param widget Widget with the @a widget_name property set.
+ * @param widget_name Name to lookup.
+ * @return The widget found. */
+GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name)
+{
+	return lookup_widget(widget, widget_name);
+}

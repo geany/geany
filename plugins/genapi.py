@@ -63,6 +63,8 @@ if __name__ == "__main__":
 		sys.exit("No function names read!")
 
 	f = open(outfile, 'w')
+	print >>f, '/* @file %s @ref geany_functions wrappers. \n' % (outfile) +\
+		'This allows the use of normal API function names in plugins. */\n'
 	print >>f, '#ifndef GEANY_FUNCTIONS_H'
 	print >>f, '#define GEANY_FUNCTIONS_H\n'
 	print >>f, '#include "pluginmacros.h"\n'

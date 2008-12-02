@@ -209,7 +209,8 @@ static UIUtilsFuncs uiutils_funcs = {
 	&ui_button_new_with_image,
 	&ui_add_document_sensitive,
 	&ui_widget_set_tooltip_text,
-	&ui_image_menu_item_new
+	&ui_image_menu_item_new,
+	&ui_lookup_widget
 };
 
 static DialogFuncs dialog_funcs = {
@@ -218,6 +219,7 @@ static DialogFuncs dialog_funcs = {
 	&dialogs_show_save_as
 };
 
+/* deprecated */
 static SupportFuncs support_funcs = {
 	&lookup_widget
 };

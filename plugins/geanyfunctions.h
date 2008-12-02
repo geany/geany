@@ -1,3 +1,6 @@
+/* @file geanyfunctions.h @ref geany_functions wrappers. 
+This allows the use of normal API function names in plugins. */
+
 #ifndef GEANY_FUNCTIONS_H
 #define GEANY_FUNCTIONS_H
 
@@ -169,6 +172,8 @@
 	p_ui->widget_set_tooltip_text
 #define ui_image_menu_item_new \
 	p_ui->image_menu_item_new
+#define ui_lookup_widget \
+	p_ui->lookup_widget
 #define dialogs_show_question \
 	p_dialogs->show_question
 #define dialogs_show_msgbox \
