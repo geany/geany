@@ -73,6 +73,14 @@ INCLUDES = -I$(srcdir)/../scintilla/include -I$(srcdir)/../tagmanager/include @G
 # tell automake we have a C++ file so it uses the C++ linker we need for Scintilla
 nodist_EXTRA_geany_SOURCES = dummy.cxx
 
+
+# generate geanyfunctions.h here so we can read geany_include_HEADERS
+../plugins/geanyfunctions.h: $(geany_include_HEADERS) ../plugins/genapi.py
+	cd ../plugins && python genapi.py || echo -n
+
+all: ../plugins/geanyfunctions.h
+
+
 if MINGW
 # build Geany for Windows on non-Windows systems (cross-compile)
 

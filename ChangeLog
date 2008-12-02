@@ -1,8 +1,21 @@
+2008-12-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/Makefile.am, plugins/geanyfunctions.h, plugins/Makefile.am,
+   plugins/genapi.py:
+   Generate plugin API header geanyfunctions.h containing macros to
+   avoid having to type the function pointer names manually.
+   E.g. plugin_add_toolbar_item(...) is expanded to
+   p_plugin->add_toolbar_item(...).
+   Note: For now, building on Windows or with Waf needs genapi.py to be
+   run manually when adding plugin API functions.
+
+
 2008-12-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keyfile.c, src/vte.c, doc/geany.txt, doc/geany.html:
    Make VTE emulation pref hidden, because libvte only comes with an
-   xterm termcaps file and the GUI pref can be confusing.
+   xterm termcaps file and the GUI pref can be confusing (closes
+   #2340966).
  * src/stash.c, src/keyfile.c:
    Add G_TYPE_STRING setting support to Stash code, use in keyfile.c.
  * src/keyfile.c:

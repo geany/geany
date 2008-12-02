@@ -2,12 +2,16 @@
 
 EXTRA_DIST = \
 	makefile.win32 \
-	pluginmacros.h
+	pluginmacros.h \
+	geanyfunctions.h \
+	genapi.py
 
 plugindir = $(libdir)/geany
 
 plugins_includedir = $(includedir)/geany/
-plugins_include_HEADERS = pluginmacros.h
+plugins_include_HEADERS = \
+	pluginmacros.h \
+	geanyfunctions.h
 
 demoplugin_la_LDFLAGS    = -module -avoid-version
 classbuilder_la_LDFLAGS  = -module -avoid-version
