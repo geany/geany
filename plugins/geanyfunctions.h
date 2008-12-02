@@ -1,3 +1,8 @@
+#ifndef GEANY_FUNCTIONS_H
+#define GEANY_FUNCTIONS_H
+
+#include "pluginmacros.h"
+
 #define plugin_add_toolbar_item \
 	p_plugin->add_toolbar_item
 #define document_new_file \
@@ -218,3 +223,5 @@
 	p_main->reload_configuration
 #define main_locale_init \
 	p_main->locale_init
+
+#endif

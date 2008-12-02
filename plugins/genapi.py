@@ -63,9 +63,13 @@ if __name__ == "__main__":
 		sys.exit("No function names read!")
 
 	f = open(outfile, 'w')
+	print >>f, '#ifndef GEANY_FUNCTIONS_H'
+	print >>f, '#define GEANY_FUNCTIONS_H\n'
+	print >>f, '#include "pluginmacros.h"\n'
 	for fname in fnames:
 		ptr, name = get_api_tuple(fname)
-		print >>f, '#define ' + fname + ' \\\n\t' + ptr + '->' + name
+		print >>f, '#define %s \\\n\t%s->%s' % (fname, ptr, name)
+	print >>f, '\n#endif'
 	f.close
 
 	print 'Generated ' + outfile

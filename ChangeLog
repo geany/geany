@@ -8,6 +8,10 @@
    p_plugin->add_toolbar_item(...).
    Note: For now, building on Windows or with Waf needs genapi.py to be
    run manually when adding plugin API functions.
+ * plugins/geanyfunctions.h, plugins/demoplugin.c, plugins/genapi.py:
+   Add header guards for geanyfunctions.h and include pluginmacros.h
+   temporarily.
+   Update Demo plugin.
 
 
 2008-12-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

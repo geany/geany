@@ -40,7 +40,7 @@
 #include "ui_utils.h"
 
 #include "plugindata.h"		/* this defines the plugin API */
-#include "pluginmacros.h"	/* some useful macros to save typing */
+#include "geanyfunctions.h"	/* this wraps geany_functions function pointers */
 
 
 /* These items are set by Geany before plugin_init() is called. */
@@ -51,7 +51,7 @@ GeanyFunctions	*geany_functions;
 
 /* Check that the running Geany supports the plugin API used below, and check
  * for binary compatibility. */
-PLUGIN_VERSION_CHECK(100)
+PLUGIN_VERSION_CHECK(112)
 
 /* All plugins must set name, description, version and author. */
 PLUGIN_SET_INFO(_("Demo"), _("Example plugin."), VERSION, _("The Geany developer team"))
@@ -95,7 +95,7 @@ void plugin_init(GeanyData *data)
 	g_signal_connect(demo_item, "activate", G_CALLBACK(item_activate), NULL);
 
 	/* make the menu item sensitive only when documents are open */
-	p_ui->add_document_sensitive(demo_item);
+	ui_add_document_sensitive(demo_item);
 	/* keep a pointer to the menu item, so we can remove it when the plugin is unloaded */
 	main_menu_item = demo_item;
 
