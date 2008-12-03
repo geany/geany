@@ -1432,3 +1432,14 @@ void filetypes_read_extensions(void)
 	g_key_file_free(userconfig);
 }
 
+
+/** Accessor function for @ref GeanyData::filetypes_array items.
+ * Example: @code ft = filetypes_index(GEANY_FILETYPES_C); @endcode
+ * @param idx @c filetypes_array index.
+ * @return The filetype, or @c NULL if @a idx is out of range. */
+GeanyFiletype *filetypes_index(gint idx)
+{
+	return (idx >= 0 && idx < (gint) filetypes_array->len) ? filetypes[idx] : NULL;
+}
+
+

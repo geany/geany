@@ -112,10 +112,8 @@ struct GeanyDocument
 extern GPtrArray *documents_array;
 
 
-/**
- *  This wraps documents_array so it can be used with C array syntax.
- *  Example: documents[0]->sci = NULL;
- **/
+/* Wrap documents_array so it can be used with C array syntax.
+ * Example: documents[0]->sci = NULL; */
 #define documents ((GeanyDocument **)documents_array->pdata)
 
 /** Check that the @a doc_ptr document still exists (has not been closed).
@@ -159,6 +157,8 @@ void document_set_text_changed(GeanyDocument *doc, gboolean changed);
 
 void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type);
 
+
+GeanyDocument *document_index(gint idx);
 
 GeanyDocument *document_find_by_sci(ScintillaObject *sci);
 

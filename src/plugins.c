@@ -126,7 +126,8 @@ static DocumentFuncs doc_funcs = {
 	&document_set_encoding,
 	&document_set_text_changed,
 	&document_set_filetype,
-	&document_close
+	&document_close,
+	&document_index
 };
 
 static EditorFuncs editor_funcs = {
@@ -268,10 +269,10 @@ static HighlightingFuncs highlighting_funcs = {
 	&highlighting_get_style
 };
 
-
 static FiletypeFuncs filetype_funcs = {
 	&filetypes_detect_from_file,
-	&filetypes_lookup_by_name
+	&filetypes_lookup_by_name,
+	&filetypes_index
 };
 
 static NavQueueFuncs navqueue_funcs = {

@@ -8,6 +8,10 @@
    the geanyfunctions.h macro works.
    Deprecate p_sci->send_message().
    Add scintilla_new() to the plugin API.
+ * src/plugindata.h, src/filetypes.c, src/filetypes.h, src/document.c,
+   src/plugins.c, src/document.h, plugins/geanyfunctions.h:
+   Add document_index(), filetypes_index() array accessor functions to
+   the plugin API.
 
 
 2008-12-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

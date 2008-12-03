@@ -2470,14 +2470,14 @@ GdkColor *document_get_status_color(GeanyDocument *doc)
 }
 
 
-/* useful debugging function (usually debug macros aren't enabled so can't use
- * documents[idx]) */
-#ifdef GEANY_DEBUG
-GeanyDocument *doc_at(gint idx)
+/** Accessor function for @ref GeanyData::documents_array items.
+ * @warning Always check the returned document is valid (@c doc->is_valid).
+ * @param idx @c documents_array index.
+ * @return The document, or @c NULL if @a idx is out of range. */
+GeanyDocument *document_index(gint idx)
 {
 	return (idx >= 0 && idx < (gint) documents_array->len) ? documents[idx] : NULL;
 }
-#endif
 
 
 /* create a new file and copy file content and properties */

@@ -36,6 +36,8 @@ This allows the use of normal API function names in plugins. */
 	p_document->set_filetype
 #define document_close \
 	p_document->close
+#define document_index \
+	p_document->index
 #define editor_get_indent_prefs \
 	p_editor->get_indent_prefs
 #define editor_create_widget \
@@ -226,6 +228,8 @@ This allows the use of normal API function names in plugins. */
 	p_filetypes->detect_from_file
 #define filetypes_lookup_by_name \
 	p_filetypes->lookup_by_name
+#define filetypes_index \
+	p_filetypes->index
 #define navqueue_goto_line \
 	p_navqueue->goto_line
 #define main_reload_configuration \
