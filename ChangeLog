@@ -3,6 +3,11 @@
  * plugins/Makefile.am, src/Makefile.am:
    Move target for geanyfunctions.h to plugins/Makefile.am and depend
    on src/plugins.c instead of all plugin API headers.
+ * src/plugindata.h, src/plugins.c, plugins/geanyfunctions.h:
+   Add scintilla_send_message() to the API with its own prefix, so
+   the geanyfunctions.h macro works.
+   Deprecate p_sci->send_message().
+   Add scintilla_new() to the plugin API.
 
 
 2008-12-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -45,7 +45,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 113,
+	GEANY_API_VERSION = 114,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -198,7 +198,7 @@ GeanyData;
 typedef struct GeanyFunctions
 {
 	struct DocumentFuncs		*p_document;		/**< See document.h */
-	struct ScintillaFuncs		*p_sci;				/**< See sciwrappers.h */
+	struct SciFuncs				*p_sci;				/**< See sciwrappers.h */
 	struct TemplateFuncs		*p_templates;		/**< See templates.h */
 	struct UtilsFuncs			*p_utils;			/**< See utils.h */
 	struct UIUtilsFuncs			*p_ui;				/**< See ui_utils.h */
@@ -216,6 +216,8 @@ typedef struct GeanyFunctions
 	struct EditorFuncs        	*p_editor;			/**< See editor.h */
 	struct MainFuncs        	*p_main;			/**< See main.h */
 	struct PluginFuncs        	*p_plugin;			/**< See plugins.c */
+	/** See http://scintilla.org for the documentation. */
+	struct ScintillaFuncs		*p_scintilla;
 }
 GeanyFunctions;
 
@@ -250,11 +252,23 @@ DocumentFuncs;
 
 struct _ScintillaObject;
 
-/** See sciwrappers.h. */
+/** See http://scintilla.org for the documentation. */
 typedef struct ScintillaFuncs
 {
-	/** Send Scintilla a message.
-	 * @see http://scintilla.org for the documentation. */
+	/** Send Scintilla a message. */
+	long int	(*send_message) (struct _ScintillaObject* sci, unsigned int iMessage,
+			long unsigned int wParam, long int lParam);
+	/** Create a new ScintillaObject widget. */
+	GtkWidget*	(*new)(void);
+}
+ScintillaFuncs;
+
+
+/** Wrapper functions for Scintilla messages.
+ * See sciwrappers.h for the list of functions. */
+typedef struct SciFuncs
+{
+	/** @deprecated Use @ref ScintillaFuncs::send_message() instead. */
 	long int (*send_message) (struct _ScintillaObject* sci, unsigned int iMessage,
 			long unsigned int wParam, long int lParam);
 	void	(*send_command) (struct _ScintillaObject* sci, gint cmd);
@@ -296,7 +310,7 @@ typedef struct ScintillaFuncs
 	void	(*indicator_clear) (struct _ScintillaObject *sci, gint start, gint end);
 	void	(*indicator_set) (struct _ScintillaObject *sci, gint indic);
 }
-ScintillaFuncs;
+SciFuncs;
 
 
 /* See templates.h */

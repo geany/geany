@@ -138,8 +138,16 @@ static EditorFuncs editor_funcs = {
 	&editor_set_indent_type
 };
 
-static ScintillaFuncs sci_funcs = {
+static ScintillaFuncs scintilla_funcs = {
 	&scintilla_send_message,
+	&scintilla_new
+};
+
+/* Macro to prevent a duplicate macro being generated in geanyfunctions.h */
+#define dummyprefix_scintilla_send_message scintilla_send_message
+
+static SciFuncs sci_funcs = {
+	&dummyprefix_scintilla_send_message,
 	&sci_cmd,
 	&sci_start_undo_action,
 	&sci_end_undo_action,
@@ -293,7 +301,8 @@ static GeanyFunctions geany_functions = {
 	&navqueue_funcs,
 	&editor_funcs,
 	&main_funcs,
-	&plugin_funcs
+	&plugin_funcs,
+	&scintilla_funcs
 };
 
 static GeanyData geany_data;

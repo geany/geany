@@ -50,6 +50,10 @@ This allows the use of normal API function names in plugins. */
 	p_editor->set_indent_type
 #define scintilla_send_message \
 	p_scintilla->send_message
+#define scintilla_new \
+	p_scintilla->new
+#define dummyprefix_scintilla_send_message \
+	p_dummyprefix->scintilla_send_message
 #define sci_cmd \
 	p_sci->cmd
 #define sci_start_undo_action \
