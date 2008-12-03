@@ -13,6 +13,13 @@ plugins_include_HEADERS = \
 	pluginmacros.h \
 	geanyfunctions.h
 
+# systems without python should continue to build OK
+geanyfunctions.h: genapi.py ../src/plugins.c
+	python genapi.py || true
+
+all: geanyfunctions.h
+
+
 demoplugin_la_LDFLAGS    = -module -avoid-version
 classbuilder_la_LDFLAGS  = -module -avoid-version
 htmlchars_la_LDFLAGS     = -module -avoid-version
