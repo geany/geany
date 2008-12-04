@@ -80,7 +80,7 @@ static const gint prev_translators_len = G_N_ELEMENTS(prev_translators);
 static const gchar *contributors =
 "Alexander Rodin, Andrew Rowland, Anh Phạm, blackdog, Bo Lorentsen, Bob Doan, Bronisław Białek, Catalin Marinas, "
 "Christoph Berg, Colomban Wendling, Conrad Steenberg, Daniel Richard G., Dave Moore, Dirk Weber, Felipe Pena, François Cami, "
-"Giuseppe Torelli, Guillaume Hoffmann, Herbert Voss, Jason Oster, Jean-François Wauthy, Jeff Pohlmeyer, "
+"Giuseppe Torelli, Guillaume de Rorthais, Guillaume Hoffmann, Herbert Voss, Jason Oster, Jean-François Wauthy, Jeff Pohlmeyer, "
 "John Gabriele, Josef Whiter, Kevin Ellwood, Kristoffer A. Tjernås, Marko Peric, Matti Mårds, Moritz Barsnick, "
 "Peter Strand, Pierre Joye, Rob van der Linde, Robert McGinley, Roland Baudin, S Jagannathan, Saleem Abdulrasool, "
 "Sebastian Kraft, Shiv, Slava Semushin, Stefan Oltmanns, Tamim, Tomás Vírseda, Walery Studennikov, Yura Siamashka";

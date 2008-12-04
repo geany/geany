@@ -50,6 +50,16 @@ typedef enum
 }
 GeanyAutoIndent;
 
+
+/* Auto-close brackets/quotes */
+enum {
+	GEANY_AC_PARENTHESIS	= 1,
+	GEANY_AC_CBRACKET		= 2,
+	GEANY_AC_SBRACKET		= 4,
+	GEANY_AC_SQUOTE			= 8,
+	GEANY_AC_DQUOTE			= 16
+};
+
 /** Geany indicator types, can be used with Editor indicator functions to highlight
  *  text in the document. */
 typedef enum
@@ -114,6 +124,7 @@ typedef struct GeanyEditorPrefs
 	gboolean	auto_continue_multiline;
 	gchar		*comment_toggle_mark;
 	guint		autocompletion_max_entries;
+	guint		autoclose_chars;
 } GeanyEditorPrefs;
 
 extern GeanyEditorPrefs editor_prefs;

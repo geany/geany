@@ -8,6 +8,10 @@
  * plugins/genapi.py:
    Beatify the header comments of the generated API file.
    Add command line option to suppress status output.
+ * THANKS, geany.glade, src/about.c, src/editor.c, src/editor.h,
+   src/interface.c, src/keyfile.c, src/plugindata.h, src/prefs.c:
+   Add auto-closing of braces, brackets and quotes
+   (patch by Guillaume de Rorthais, thanks).
 
 
 2008-12-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

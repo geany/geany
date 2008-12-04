@@ -2773,6 +2773,7 @@ create_prefs_dialog (void)
   GtkWidget *entry_toggle_mark;
   GtkWidget *label172;
   GtkWidget *label211;
+  GtkWidget *vbox39;
   GtkWidget *frame18;
   GtkWidget *alignment21;
   GtkWidget *vbox19;
@@ -2791,7 +2792,16 @@ create_prefs_dialog (void)
   GtkObject *spin_autocompletion_max_entries_adj;
   GtkWidget *spin_autocompletion_max_entries;
   GtkWidget *label177;
-  GtkWidget *label212;
+  GtkWidget *frame38;
+  GtkWidget *alignment42;
+  GtkWidget *table16;
+  GtkWidget *check_autoclose_parenthesis;
+  GtkWidget *check_autoclose_squote;
+  GtkWidget *check_autoclose_cbracket;
+  GtkWidget *check_autoclose_sbracket;
+  GtkWidget *check_autoclose_dquote;
+  GtkWidget *label225;
+  GtkWidget *label226;
   GtkWidget *vbox24;
   GtkWidget *frame5;
   GtkWidget *alignment6;
@@ -3854,9 +3864,13 @@ create_prefs_dialog (void)
   gtk_widget_show (label211);
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook4), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook4), 0), label211);
 
+  vbox39 = gtk_vbox_new (TRUE, 1);
+  gtk_widget_show (vbox39);
+  gtk_container_add (GTK_CONTAINER (notebook4), vbox39);
+
   frame18 = gtk_frame_new (NULL);
   gtk_widget_show (frame18);
-  gtk_container_add (GTK_CONTAINER (notebook4), frame18);
+  gtk_box_pack_start (GTK_BOX (vbox39), frame18, TRUE, TRUE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (frame18), 5);
   gtk_frame_set_shadow_type (GTK_FRAME (frame18), GTK_SHADOW_NONE);
 
@@ -3948,9 +3962,64 @@ create_prefs_dialog (void)
   gtk_frame_set_label_widget (GTK_FRAME (frame18), label177);
   gtk_label_set_use_markup (GTK_LABEL (label177), TRUE);
 
-  label212 = gtk_label_new (_("Completions"));
-  gtk_widget_show (label212);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook4), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook4), 1), label212);
+  frame38 = gtk_frame_new (NULL);
+  gtk_widget_show (frame38);
+  gtk_box_pack_start (GTK_BOX (vbox39), frame38, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (frame38), 5);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame38), GTK_SHADOW_NONE);
+
+  alignment42 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment42);
+  gtk_container_add (GTK_CONTAINER (frame38), alignment42);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment42), 0, 0, 12, 0);
+
+  table16 = gtk_table_new (5, 2, FALSE);
+  gtk_widget_show (table16);
+  gtk_container_add (GTK_CONTAINER (alignment42), table16);
+
+  check_autoclose_parenthesis = gtk_check_button_new_with_mnemonic (_("Parenthesis ( )"));
+  gtk_widget_show (check_autoclose_parenthesis);
+  gtk_table_attach (GTK_TABLE (table16), check_autoclose_parenthesis, 0, 1, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, check_autoclose_parenthesis, _("Auto-close parenthesis when typing an opening one"), NULL);
+
+  check_autoclose_squote = gtk_check_button_new_with_mnemonic (_("Simple quotes ' '"));
+  gtk_widget_show (check_autoclose_squote);
+  gtk_table_attach (GTK_TABLE (table16), check_autoclose_squote, 0, 1, 3, 4,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, check_autoclose_squote, _("Auto-close simple quote when typing an opening one"), NULL);
+
+  check_autoclose_cbracket = gtk_check_button_new_with_mnemonic (_("Curly brackets { }"));
+  gtk_widget_show (check_autoclose_cbracket);
+  gtk_table_attach (GTK_TABLE (table16), check_autoclose_cbracket, 0, 1, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, check_autoclose_cbracket, _("Auto-close curly bracket when typing an opening one"), NULL);
+
+  check_autoclose_sbracket = gtk_check_button_new_with_mnemonic (_("Square brackets [ ]"));
+  gtk_widget_show (check_autoclose_sbracket);
+  gtk_table_attach (GTK_TABLE (table16), check_autoclose_sbracket, 0, 1, 2, 3,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, check_autoclose_sbracket, _("Auto-close squre-bracket when typing an opening one"), NULL);
+
+  check_autoclose_dquote = gtk_check_button_new_with_mnemonic (_("Double quotes \" \""));
+  gtk_widget_show (check_autoclose_dquote);
+  gtk_table_attach (GTK_TABLE (table16), check_autoclose_dquote, 0, 1, 4, 5,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, check_autoclose_dquote, _("Auto-close double quote when typing an opening one"), NULL);
+
+  label225 = gtk_label_new (_("<b>Auto-close quotes and brackets</b>"));
+  gtk_widget_show (label225);
+  gtk_frame_set_label_widget (GTK_FRAME (frame38), label225);
+  gtk_label_set_use_markup (GTK_LABEL (label225), TRUE);
+
+  label226 = gtk_label_new (_("Completions"));
+  gtk_widget_show (label226);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook4), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook4), 1), label226);
 
   vbox24 = gtk_vbox_new (FALSE, 10);
   gtk_widget_show (vbox24);
@@ -5012,6 +5081,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, entry_toggle_mark, "entry_toggle_mark");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label172, "label172");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label211, "label211");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox39, "vbox39");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame18, "frame18");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment21, "alignment21");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox19, "vbox19");
@@ -5027,7 +5097,16 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, spin_symbollistheight, "spin_symbollistheight");
   GLADE_HOOKUP_OBJECT (prefs_dialog, spin_autocompletion_max_entries, "spin_autocompletion_max_entries");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label177, "label177");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label212, "label212");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame38, "frame38");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment42, "alignment42");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, table16, "table16");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_autoclose_parenthesis, "check_autoclose_parenthesis");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_autoclose_squote, "check_autoclose_squote");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_autoclose_cbracket, "check_autoclose_cbracket");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_autoclose_sbracket, "check_autoclose_sbracket");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_autoclose_dquote, "check_autoclose_dquote");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label225, "label225");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label226, "label226");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox24, "vbox24");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame5, "frame5");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment6, "alignment6");

@@ -606,6 +606,25 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(ui_widgets.prefs_dialog, "spin_line_break");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), editor_prefs.line_break_column);
 
+	widget = lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_parenthesis");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
+		(editor_prefs.autoclose_chars & GEANY_AC_PARENTHESIS));
+
+	widget = lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_cbracket");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
+		(editor_prefs.autoclose_chars & GEANY_AC_CBRACKET));
+
+	widget = lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_sbracket");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
+		(editor_prefs.autoclose_chars & GEANY_AC_SBRACKET));
+
+	widget = lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_squote");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
+		(editor_prefs.autoclose_chars & GEANY_AC_SQUOTE));
+
+	widget = lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_dquote");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
+		(editor_prefs.autoclose_chars & GEANY_AC_DQUOTE));
 
 	/* Tools Settings */
 	if (tool_prefs.make_cmd)
@@ -756,6 +775,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 	{
 		GtkWidget *widget;
 		guint i;
+		guint autoclose_brackets[5];
 
 		prefs_action(PREF_UPDATE);
 
@@ -1003,6 +1023,27 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_line_break");
 		editor_prefs.line_break_column = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
+		widget = lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_parenthesis");
+		autoclose_brackets[0] = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_cbracket");
+		autoclose_brackets[1] = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_sbracket");
+		autoclose_brackets[2] = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_squote");
+		autoclose_brackets[3] = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_dquote");
+		autoclose_brackets[4] = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		editor_prefs.autoclose_chars =
+		  (autoclose_brackets[0] ? GEANY_AC_PARENTHESIS : 0)
+		| (autoclose_brackets[1] ? GEANY_AC_CBRACKET : 0)
+		| (autoclose_brackets[2] ? GEANY_AC_SBRACKET : 0)
+		| (autoclose_brackets[3] ? GEANY_AC_SQUOTE : 0)
+		| (autoclose_brackets[4] ? GEANY_AC_DQUOTE : 0);
 
 		/* Tools Settings */
 		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_com_make");

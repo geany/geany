@@ -89,7 +89,7 @@ static gboolean handle_xml(GeanyEditor *editor, gchar ch);
 static void insert_indent_after_line(GeanyEditor *editor, gint line);
 static void auto_multiline(GeanyEditor *editor, gint pos);
 static gboolean is_code_style(gint lexer, gint style);
-static void auto_close_bracket(ScintillaObject *sci, gint pos, gchar c);
+static void auto_close_chars(ScintillaObject *sci, gint pos, gchar c);
 static void auto_table(GeanyEditor *editor, gint pos);
 static void close_block(GeanyEditor *editor, gint pos);
 
@@ -436,7 +436,9 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 			break;
 		}
 		case '(':
-		{	/* show calltips */
+		{
+			auto_close_chars(sci, pos, nt->ch);
+			/* show calltips */
 			editor_show_calltip(editor, --pos);
 			break;
 		}
@@ -453,14 +455,12 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 			calltip.set = FALSE;
 			break;
 		}
-		case '[':
 		case '{':
-		{	/* Tex auto-closing */
-			if (sci_get_lexer(sci) == SCLEX_LATEX)
-			{
-				auto_close_bracket(sci, pos, nt->ch);	/* Tex auto-closing */
-				editor_show_calltip(editor, --pos);
-			}
+		case '[':
+		case '"':
+		case '\'':
+		{
+			auto_close_chars(sci, pos, nt->ch);
 			break;
 		}
 		case '}':
@@ -1007,20 +1007,36 @@ static void insert_indent_after_line(GeanyEditor *editor, gint line)
 }
 
 
-static void auto_close_bracket(ScintillaObject *sci, gint pos, gchar c)
+static void auto_close_chars(ScintillaObject *sci, gint pos, gchar c)
 {
-	if (! editor_prefs.complete_snippets || SSM(sci, SCI_GETLEXER, 0, 0) != SCLEX_LATEX)
-		return;
+	const gchar *closing_char;
 
-	if (c == '[')
+	if ((editor_prefs.autoclose_chars & GEANY_AC_PARENTHESIS) && c == '(')
 	{
-		sci_add_text(sci, "]");
+		closing_char = ")";
 	}
-	else if (c == '{')
+	else if ((editor_prefs.autoclose_chars & GEANY_AC_CBRACKET) && c == '{')
 	{
-		sci_add_text(sci, "}");
+		closing_char = "}";
 	}
-	sci_set_current_position(sci, pos, TRUE);
+	else if ((editor_prefs.autoclose_chars & GEANY_AC_SBRACKET) && c == '[')
+	{
+		closing_char = "]";
+	}
+	else if ((editor_prefs.autoclose_chars & GEANY_AC_SQUOTE) && c == '\'')
+	{
+		closing_char = "'";
+	}
+	else if ((editor_prefs.autoclose_chars & GEANY_AC_DQUOTE) && c == '"')
+	{
+		closing_char = "\"";
+	}
+
+	if (closing_char != NULL)
+	{
+		sci_add_text(sci, closing_char);
+		sci_set_current_position(sci, pos, TRUE);
+	}
 }
 
 

@@ -56,6 +56,7 @@ Herbert Voss <voss(at)perce(dot)de> - LaTeX file template
 Moritz Barsnick <barsnick(at)users(dot)sourceforge(dot)net> - Split Vertically command
 Tyler D'Agosta - Add missing HTML entities
 Walery Studennikov <despairr(at)gmail(dot)com> - YAML filetype patch
+Guillaume de Rorthais <ioguix(at)free(dot)fr> - Auto-close brackets/braces/quotes patch
 
 Translators:
 ------------
