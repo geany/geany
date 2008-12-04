@@ -26,6 +26,10 @@
    plugins/filebrowser.c, plugins/splitwindow.c, plugins/htmlchars.c,
    plugins/classbuilder.c:
    Update to use geanyfunctions.h.
+ * data/filetypes.common:
+   Make whitespace setting not override background colour by default,
+   otherwise e.g. unterminated strings in C can have inconsistent
+   background colour when Show Whitespace is enabled.
 
 
 2008-12-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
