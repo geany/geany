@@ -1,3 +1,13 @@
+2008-12-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/plugindata.h, src/document.h, doc/pluginsymbols.c,
+   doc/plugins.dox, plugins/geanyfunctions.h, plugins/pluginmacros.h,
+   plugins/genapi.py:
+   Deprecate pluginmacros.h in favour of geanyfunctions.h.
+   Move geany macro to plugindata.h.
+   Remove geanyfunctions.h dependency on pluginmacros.h.
+
+
 2008-12-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * plugins/Makefile.am, src/Makefile.am:

@@ -64,13 +64,13 @@ if __name__ == "__main__":
 
 	f = open(outfile, 'w')
 	print >>f, '/* @file %s @ref geany_functions wrappers. \n' % (outfile) +\
-		'This allows the use of normal API function names in plugins. */\n'
+		'This allows the use of normal API function names in plugins.\n' +\
+		'You need to declare the @ref geany_functions symbol yourself. */\n'
 	print >>f, '#ifndef GEANY_FUNCTIONS_H'
 	print >>f, '#define GEANY_FUNCTIONS_H\n'
-	print >>f, '#include "pluginmacros.h"\n'
 	for fname in fnames:
 		ptr, name = get_api_tuple(fname)
-		print >>f, '#define %s \\\n\t%s->%s' % (fname, ptr, name)
+		print >>f, '#define %s \\\n\tgeany_functions->%s->%s' % (fname, ptr, name)
 	print >>f, '\n#endif'
 	f.close
 

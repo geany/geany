@@ -23,7 +23,8 @@
  */
 
 /** @file pluginmacros.h
- * Useful macros to avoid typing @c geany_data-> or @c geany_functions-> so often.
+ * @deprecated Use geanyfunctions.h instead.
+ * Macros to avoid typing @c geany_functions-> so often.
  *
  * @section function_macros Function Macros
  * These macros are named the same as the first word in the core function name,
@@ -36,9 +37,8 @@
 #define PLUGINMACROS_H
 
 /* common items */
-#define geany			geany_data	/**< Simple macro for @c geany_data that reduces typing. */
-#define documents_array	geany_data->documents_array		/**< Allows use of @c documents[] macro */
-#define filetypes_array	geany_data->filetypes_array		/**< Allows use of @c filetypes[] macro */
+#define documents_array	geany_data->documents_array		/**< @deprecated Use @c geany->documents_array->len and document_index() instead. */
+#define filetypes_array	geany_data->filetypes_array		/**< @deprecated Use @c geany->filetypes_array->len and filetypes_index() instead. */
 
 
 /* function group macros */

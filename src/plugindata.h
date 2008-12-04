@@ -191,6 +191,8 @@ typedef struct GeanyData
 }
 GeanyData;
 
+#define geany			geany_data	/**< Simple macro for @c geany_data that reduces typing. */
+
 
 /** This contains pointers to functions owned by Geany for plugins to use.
  * Functions from the core can be appended when needed by plugin authors, but may

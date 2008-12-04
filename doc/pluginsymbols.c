@@ -55,10 +55,10 @@ const GeanyPlugin *geany_plugin;
 const GeanyData *geany_data;
 
 /** Geany owned function pointers, split into groups.
- * Example: @c geany_functions->p_document->new_file(NULL, NULL, NULL);
- *
- * Note: Usually plugins would use the pluginmacros.h file and just call:
- * @c p_document->new_file(NULL, NULL, NULL); */
+ * Example: @code #include "geanyfunctions.h"
+ * ...
+ * document_new_file(NULL, NULL, NULL); @endcode
+ * This is equivalent of @c geany_functions->p_document->new_file(NULL, NULL, NULL); */
 const GeanyFunctions *geany_functions;
 
 /** @deprecated Use @ref ui_add_document_sensitive() instead.
