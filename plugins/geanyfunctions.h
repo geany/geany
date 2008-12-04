@@ -53,8 +53,6 @@ You need to declare the @ref geany_functions symbol yourself. */
 	geany_functions->p_scintilla->send_message
 #define scintilla_new \
 	geany_functions->p_scintilla->new
-#define dummyprefix_scintilla_send_message \
-	geany_functions->p_dummyprefix->scintilla_send_message
 #define sci_cmd \
 	geany_functions->p_sci->cmd
 #define sci_start_undo_action \
@@ -137,10 +135,10 @@ You need to declare the @ref geany_functions symbol yourself. */
 	geany_functions->p_utils->get_file_list
 #define utils_write_file \
 	geany_functions->p_utils->write_file
-#define utils_get_locale_from_utf \
-	geany_functions->p_utils->get_locale_from_utf
-#define utils_get_utf \
-	geany_functions->p_utils->get_utf
+#define utils_get_locale_from_utf8 \
+	geany_functions->p_utils->get_locale_from_utf8
+#define utils_get_utf8_from_locale \
+	geany_functions->p_utils->get_utf8_from_locale
 #define utils_remove_ext_from_filename \
 	geany_functions->p_utils->remove_ext_from_filename
 #define utils_mkdir \
@@ -185,8 +183,6 @@ You need to declare the @ref geany_functions symbol yourself. */
 	geany_functions->p_dialogs->show_msgbox
 #define dialogs_show_save_as \
 	geany_functions->p_dialogs->show_save_as
-#define lookup_widget \
-	geany_functions->p_lookup->widget
 #define msgwin_status_add \
 	geany_functions->p_msgwin->status_add
 #define msgwin_compiler_add_fmt \
@@ -197,10 +193,10 @@ You need to declare the @ref geany_functions symbol yourself. */
 	geany_functions->p_msgwin->clear_tab
 #define msgwin_switch_tab \
 	geany_functions->p_msgwin->switch_tab
-#define encodings_convert_to_utf \
-	geany_functions->p_encodings->convert_to_utf
-#define encodings_convert_to_utf \
-	geany_functions->p_encodings->convert_to_utf
+#define encodings_convert_to_utf8 \
+	geany_functions->p_encodings->convert_to_utf8
+#define encodings_convert_to_utf8_from_charset \
+	geany_functions->p_encodings->convert_to_utf8_from_charset
 #define encodings_get_charset_from_index \
 	geany_functions->p_encodings->get_charset_from_index
 #define keybindings_send_command \

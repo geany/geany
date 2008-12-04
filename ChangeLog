@@ -6,6 +6,10 @@
    Deprecate pluginmacros.h in favour of geanyfunctions.h.
    Move geany macro to plugindata.h.
    Remove geanyfunctions.h dependency on pluginmacros.h.
+ * src/plugins.c, plugins/geanyfunctions.h, plugins/genapi.py:
+   Allow generating macros for functions with digits in the name.
+   Don't generate dummyprefix_scintilla_send_message and lookup_widget
+   macros.
 
 
 2008-12-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -145,10 +145,10 @@ static ScintillaFuncs scintilla_funcs = {
 };
 
 /* Macro to prevent a duplicate macro being generated in geanyfunctions.h */
-#define dummyprefix_scintilla_send_message scintilla_send_message
+#define _scintilla_send_message_macro	scintilla_send_message
 
 static SciFuncs sci_funcs = {
-	&dummyprefix_scintilla_send_message,
+	&_scintilla_send_message_macro,
 	&sci_cmd,
 	&sci_start_undo_action,
 	&sci_end_undo_action,
@@ -228,9 +228,12 @@ static DialogFuncs dialog_funcs = {
 	&dialogs_show_save_as
 };
 
+/* Macro to prevent confusing macro being generated in geanyfunctions.h */
+#define _lookup_widget_macro	lookup_widget
+
 /* deprecated */
 static SupportFuncs support_funcs = {
-	&lookup_widget
+	&_lookup_widget_macro
 };
 
 static MsgWinFuncs msgwin_funcs = {

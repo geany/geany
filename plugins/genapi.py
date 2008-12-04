@@ -40,7 +40,7 @@ def get_function_names():
 			l = f.readline()
 			if l == "":
 				break;
-			m = re.match("^\t&([a-z_]+)", l)
+			m = re.match("^\t&([a-z][a-z0-9_]+)", l)
 			if m:
 				s = m.group(1)
 				if not s.endswith('_funcs'):
@@ -51,7 +51,7 @@ def get_function_names():
 	return names
 
 def get_api_tuple(str):
-	m = re.match("^([a-z]+)_([a-z_]+)$", str)
+	m = re.match("^([a-z]+)_([a-z][a-z0-9_]+)$", str)
 	return 'p_' + m.group(1), m.group(2)
 
 
