@@ -74,7 +74,7 @@
 
 			  <child>
 			    <widget class="GtkMenuItem" id="invisible2">
-			      <property name="label" translatable="yes">invisible</property>
+			      <property name="label">invisible</property>
 			      <property name="use_underline">True</property>
 			    </widget>
 			  </child>
@@ -205,7 +205,7 @@
 
 			  <child>
 			    <widget class="GtkMenuItem" id="invisible7">
-			      <property name="label" translatable="yes">invisible</property>
+			      <property name="label">invisible</property>
 			      <property name="use_underline">True</property>
 			    </widget>
 			  </child>
@@ -549,7 +549,7 @@
 
 				  <child>
 				    <widget class="GtkMenuItem" id="invisible13">
-				      <property name="label" translatable="yes">invisible</property>
+				      <property name="label">invisible</property>
 				      <property name="use_underline">True</property>
 				    </widget>
 				  </child>
@@ -676,7 +676,7 @@
 
 			  <child>
 			    <widget class="GtkMenuItem" id="invisible8">
-			      <property name="label" translatable="yes">invisible</property>
+			      <property name="label">invisible</property>
 			      <property name="use_underline">True</property>
 			    </widget>
 			  </child>
@@ -708,7 +708,7 @@
 
 			  <child>
 			    <widget class="GtkMenuItem" id="invisible4">
-			      <property name="label" translatable="yes">invisible</property>
+			      <property name="label">invisible</property>
 			      <property name="use_underline">True</property>
 			    </widget>
 			  </child>
@@ -1158,7 +1158,7 @@
 
 			  <child>
 			    <widget class="GtkMenuItem" id="invisible1">
-			      <property name="label" translatable="yes">invisible</property>
+			      <property name="label">invisible</property>
 			      <property name="use_underline">True</property>
 			    </widget>
 			  </child>
@@ -1178,7 +1178,7 @@
 
 			  <child>
 			    <widget class="GtkMenuItem" id="invisible6">
-			      <property name="label" translatable="yes">invisible</property>
+			      <property name="label">invisible</property>
 			      <property name="use_underline">True</property>
 			    </widget>
 			  </child>
@@ -2960,7 +2960,7 @@
 
 		  <child>
 		    <widget class="GtkMenuItem" id="invisible12">
-		      <property name="label" translatable="yes">invisible</property>
+		      <property name="label">invisible</property>
 		      <property name="use_underline">True</property>
 		    </widget>
 		  </child>
@@ -3087,7 +3087,7 @@
 
 	  <child>
 	    <widget class="GtkMenuItem" id="invisible10">
-	      <property name="label" translatable="yes">invisible</property>
+	      <property name="label">invisible</property>
 	      <property name="use_underline">True</property>
 	    </widget>
 	  </child>
@@ -3119,7 +3119,7 @@
 
 	  <child>
 	    <widget class="GtkMenuItem" id="invisible3">
-	      <property name="label" translatable="yes">invisible</property>
+	      <property name="label">invisible</property>
 	      <property name="use_underline">True</property>
 	    </widget>
 	  </child>

@@ -326,7 +326,7 @@ create_window1 (void)
   menu_new_with_template1_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_new_with_template1), menu_new_with_template1_menu);
 
-  invisible2 = gtk_menu_item_new_with_mnemonic (_("invisible"));
+  invisible2 = gtk_menu_item_new_with_mnemonic ("invisible");
   gtk_container_add (GTK_CONTAINER (menu_new_with_template1_menu), invisible2);
 
   separator12 = gtk_separator_menu_item_new ();
@@ -387,7 +387,7 @@ create_window1 (void)
   menu_reload_as1_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_reload_as1), menu_reload_as1_menu);
 
-  invisible7 = gtk_menu_item_new_with_mnemonic (_("invisible"));
+  invisible7 = gtk_menu_item_new_with_mnemonic ("invisible");
   gtk_container_add (GTK_CONTAINER (menu_reload_as1_menu), invisible7);
 
   separator21 = gtk_separator_menu_item_new ();
@@ -565,7 +565,7 @@ create_window1 (void)
   send_selection_to2_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (send_selection_to2), send_selection_to2_menu);
 
-  invisible13 = gtk_menu_item_new_with_mnemonic (_("invisible"));
+  invisible13 = gtk_menu_item_new_with_mnemonic ("invisible");
   gtk_container_add (GTK_CONTAINER (send_selection_to2_menu), invisible13);
 
   separator18 = gtk_separator_menu_item_new ();
@@ -625,7 +625,7 @@ create_window1 (void)
   insert_date1_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (insert_date1), insert_date1_menu);
 
-  invisible8 = gtk_menu_item_new_with_mnemonic (_("invisible"));
+  invisible8 = gtk_menu_item_new_with_mnemonic ("invisible");
   gtk_container_add (GTK_CONTAINER (insert_date1_menu), invisible8);
 
   insert_include2 = gtk_image_menu_item_new_with_mnemonic (_("_Insert \"include <...>\""));
@@ -639,7 +639,7 @@ create_window1 (void)
   insert_include2_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (insert_include2), insert_include2_menu);
 
-  invisible4 = gtk_menu_item_new_with_mnemonic (_("invisible"));
+  invisible4 = gtk_menu_item_new_with_mnemonic ("invisible");
   gtk_container_add (GTK_CONTAINER (insert_include2_menu), invisible4);
 
   separator9 = gtk_separator_menu_item_new ();
@@ -869,7 +869,7 @@ create_window1 (void)
   set_filetype1_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (set_filetype1), set_filetype1_menu);
 
-  invisible1 = gtk_menu_item_new_with_mnemonic (_("invisible"));
+  invisible1 = gtk_menu_item_new_with_mnemonic ("invisible");
   gtk_container_add (GTK_CONTAINER (set_filetype1_menu), invisible1);
 
   set_encoding1 = gtk_menu_item_new_with_mnemonic (_("Set _Encoding"));
@@ -879,7 +879,7 @@ create_window1 (void)
   set_encoding1_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (set_encoding1), set_encoding1_menu);
 
-  invisible6 = gtk_menu_item_new_with_mnemonic (_("invisible"));
+  invisible6 = gtk_menu_item_new_with_mnemonic ("invisible");
   gtk_container_add (GTK_CONTAINER (set_encoding1_menu), invisible6);
 
   menu_line_endings1 = gtk_menu_item_new_with_mnemonic (_("Set Line E_ndings"));
@@ -2330,7 +2330,7 @@ create_edit_menu1 (void)
   send_selection_to1_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (send_selection_to1), send_selection_to1_menu);
 
-  invisible12 = gtk_menu_item_new_with_mnemonic (_("invisible"));
+  invisible12 = gtk_menu_item_new_with_mnemonic ("invisible");
   gtk_container_add (GTK_CONTAINER (send_selection_to1_menu), invisible12);
 
   separator17 = gtk_separator_menu_item_new ();
@@ -2390,7 +2390,7 @@ create_edit_menu1 (void)
   insert_date2_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (insert_date2), insert_date2_menu);
 
-  invisible10 = gtk_menu_item_new_with_mnemonic (_("invisible"));
+  invisible10 = gtk_menu_item_new_with_mnemonic ("invisible");
   gtk_container_add (GTK_CONTAINER (insert_date2_menu), invisible10);
 
   insert_include1 = gtk_image_menu_item_new_with_mnemonic (_("_Insert \"include <...>\""));
@@ -2404,7 +2404,7 @@ create_edit_menu1 (void)
   insert_include1_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (insert_include1), insert_include1_menu);
 
-  invisible3 = gtk_menu_item_new_with_mnemonic (_("invisible"));
+  invisible3 = gtk_menu_item_new_with_mnemonic ("invisible");
   gtk_container_add (GTK_CONTAINER (insert_include1_menu), invisible3);
 
   separator7 = gtk_separator_menu_item_new ();

@@ -12,6 +12,8 @@
    src/interface.c, src/keyfile.c, src/plugindata.h, src/prefs.c:
    Add auto-closing of braces, brackets and quotes
    (patch by Guillaume de Rorthais, thanks).
+ * geany.glade, src/interface.c:
+   Don't mark labels of invisible menu items as translatable.
 
 
 2008-12-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
