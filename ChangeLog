@@ -22,6 +22,10 @@
    Allow generating macros for functions with digits in the name.
    Don't generate dummyprefix_scintilla_send_message and lookup_widget
    macros.
+ * plugins/saveactions.c, plugins/export.c, plugins/vcdiff.c,
+   plugins/filebrowser.c, plugins/splitwindow.c, plugins/htmlchars.c,
+   plugins/classbuilder.c:
+   Update to use geanyfunctions.h.
 
 
 2008-12-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

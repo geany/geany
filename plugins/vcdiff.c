@@ -38,7 +38,7 @@
 #include "utils.h"
 #include "project.h"
 #include "ui_utils.h"
-#include "pluginmacros.h"
+#include "geanyfunctions.h"
 
 #define project	geany->app->project
 
@@ -270,40 +270,40 @@ static void show_output(const gchar *std_output, const gchar *utf8_name_prefix,
 	 * UTF-8 because internally Geany always needs UTF-8 */
 	if (force_encoding)
 	{
-		text = p_encodings->convert_to_utf8_from_charset(
+		text = encodings_convert_to_utf8_from_charset(
 			std_output, (gsize)-1, force_encoding, TRUE);
 	}
 	else
 	{
-		text = p_encodings->convert_to_utf8(std_output, (gsize)-1, &detect_enc);
+		text = encodings_convert_to_utf8(std_output, (gsize)-1, &detect_enc);
 	}
 	if (text)
 	{
 		GeanyIndentType indent_type =
-			p_document->get_current()->editor->indent_type;
+			document_get_current()->editor->indent_type;
 
-		doc = p_document->find_by_filename(filename);
+		doc = document_find_by_filename(filename);
 		if (doc == NULL)
 		{
-			GeanyFiletype *ft = p_filetypes->lookup_by_name("Diff");
-			doc = p_document->new_file(filename, ft, text);
+			GeanyFiletype *ft = filetypes_lookup_by_name("Diff");
+			doc = document_new_file(filename, ft, text);
 		}
 		else
 		{
-			p_sci->set_text(doc->editor->sci, text);
+			sci_set_text(doc->editor->sci, text);
 			book = GTK_NOTEBOOK(geany->main_widgets->notebook);
 			page = gtk_notebook_page_num(book, GTK_WIDGET(doc->editor->sci));
 			gtk_notebook_set_current_page(book, page);
-			p_document->set_text_changed(doc, FALSE);
+			document_set_text_changed(doc, FALSE);
 		}
-		p_editor->set_indent_type(doc->editor, indent_type);
+		editor_set_indent_type(doc->editor, indent_type);
 
-		p_document->set_encoding(doc,
+		document_set_encoding(doc,
 			force_encoding ? force_encoding : detect_enc);
 	}
 	else
 	{
-		p_ui->set_statusbar(FALSE, _("Input conversion of the diff output failed."));
+		ui_set_statusbar(FALSE, _("Input conversion of the diff output failed."));
 	}
 	g_free(text);
 	g_free(detect_enc);
@@ -339,13 +339,13 @@ static gchar *make_diff(const gchar *filename, gint cmd)
 		dir = g_path_get_dirname(filename);
 	}
 
-	if (p_utils->spawn_sync(dir, argv, env, G_SPAWN_SEARCH_PATH, NULL, NULL,
+	if (utils_spawn_sync(dir, argv, env, G_SPAWN_SEARCH_PATH, NULL, NULL,
 			&std_output, &std_error, &exit_code, &error))
 	{
 		/* CVS dump stuff to stderr when diff nested dirs */
 		if (strcmp(argv[0], "cvs") != 0 && NZV(std_error))
 		{
-			p_dialogs->show_msgbox(1,
+			dialogs_show_msgbox(1,
 				_("%s exited with an error: \n%s."), argv[0], g_strstrip(std_error));
 		}
 		else if (NZV(std_output))
@@ -354,7 +354,7 @@ static gchar *make_diff(const gchar *filename, gint cmd)
 		}
 		else
 		{
-			p_ui->set_statusbar(FALSE, _("No changes were made."));
+			ui_set_statusbar(FALSE, _("No changes were made."));
 		}
 		/* win32_spawn() returns sometimes TRUE but error is set anyway, has to be fixed */
 		if (error != NULL)
@@ -376,7 +376,7 @@ static gchar *make_diff(const gchar *filename, gint cmd)
 			msg = g_strdup_printf(_("unknown error while trying to spawn a process for %s"),
 				argv[0]);
 		}
-		p_ui->set_statusbar(FALSE, _("An error occurred (%s)."), msg);
+		ui_set_statusbar(FALSE, _("An error occurred (%s)."), msg);
 		g_free(msg);
 	}
 
@@ -396,22 +396,22 @@ static void vcdirectory_activated(GtkMenuItem *menuitem, gpointer gdata)
 	gchar	*locale_filename = NULL;
 	gchar	*text;
 
-	doc = p_document->get_current();
+	doc = document_get_current();
 
 	g_return_if_fail(doc != NULL && doc->file_name != NULL);
 
 	if (doc->changed)
 	{
-		p_document->save_file(doc, FALSE);
+		document_save_file(doc, FALSE);
 	}
 
-	locale_filename = p_utils->get_locale_from_utf8(doc->file_name);
+	locale_filename = utils_get_locale_from_utf8(doc->file_name);
 	base_name = g_path_get_dirname(locale_filename);
 
 	text = make_diff(base_name, VC_COMMAND_DIFF_DIR);
 	if (text)
 	{
-		setptr(base_name, p_utils->get_utf8_from_locale(base_name));
+		setptr(base_name, utils_get_utf8_from_locale(base_name));
 		show_output(text, base_name, NULL);
 		g_free(text);
 	}
@@ -428,16 +428,16 @@ static void vcproject_activated(GtkMenuItem *menuitem, gpointer gdata)
 	gchar	*locale_filename = NULL;
 	gchar	*text;
 
-	doc = p_document->get_current();
+	doc = document_get_current();
 
 	g_return_if_fail(project != NULL && NZV(project->base_path));
 
 	if (doc != NULL && doc->changed && doc->file_name != NULL)
 	{
-		p_document->save_file(doc, FALSE);
+		document_save_file(doc, FALSE);
 	}
 
-	locale_filename = p_utils->get_locale_from_utf8(project->base_path);
+	locale_filename = utils_get_locale_from_utf8(project->base_path);
 	text = make_diff(locale_filename, VC_COMMAND_DIFF_PROJECT);
 	if (text)
 	{
@@ -454,16 +454,16 @@ static void vcfile_activated(GtkMenuItem *menuitem, gpointer gdata)
 	GeanyDocument *doc;
 	gchar *locale_filename, *text;
 
-	doc = p_document->get_current();
+	doc = document_get_current();
 
 	g_return_if_fail(doc != NULL && doc->file_name != NULL);
 
 	if (doc->changed)
 	{
-		p_document->save_file(doc, FALSE);
+		document_save_file(doc, FALSE);
 	}
 
-	locale_filename = p_utils->get_locale_from_utf8(doc->file_name);
+	locale_filename = utils_get_locale_from_utf8(doc->file_name);
 
 	text = make_diff(locale_filename, VC_COMMAND_DIFF_FILE);
 	if (text)
@@ -485,7 +485,7 @@ static void update_menu_items(void)
 	gboolean	have_file;
 	gboolean    have_vc = FALSE;
 
-	doc = p_document->get_current();
+	doc = document_get_current();
 	have_file = doc && doc->file_name && g_path_is_absolute(doc->file_name);
 	if (find_cmd_env(VC_COMMAND_DIFF_FILE, TRUE, doc->file_name))
 		have_vc = TRUE;
@@ -514,14 +514,14 @@ void plugin_init(GeanyData *data)
 	/* Single file */
 	menu_vcdiff_file = gtk_menu_item_new_with_mnemonic(_("From Current _File"));
 	gtk_container_add(GTK_CONTAINER (menu_vcdiff_menu), menu_vcdiff_file);
-	p_ui->widget_set_tooltip_text(menu_vcdiff_file, _("Make a diff from the current active file"));
+	ui_widget_set_tooltip_text(menu_vcdiff_file, _("Make a diff from the current active file"));
 
 	g_signal_connect(menu_vcdiff_file, "activate", G_CALLBACK(vcfile_activated), NULL);
 
 	/* Directory */
 	menu_vcdiff_dir = gtk_menu_item_new_with_mnemonic(_("From Current _Directory"));
 	gtk_container_add(GTK_CONTAINER (menu_vcdiff_menu), menu_vcdiff_dir);
-	p_ui->widget_set_tooltip_text(menu_vcdiff_dir,
+	ui_widget_set_tooltip_text(menu_vcdiff_dir,
 		_("Make a diff from the directory of the current active file"));
 
 	g_signal_connect(menu_vcdiff_dir, "activate", G_CALLBACK(vcdirectory_activated), NULL);
@@ -529,14 +529,14 @@ void plugin_init(GeanyData *data)
 	/* Project */
 	menu_vcdiff_project = gtk_menu_item_new_with_mnemonic(_("From Current _Project"));
 	gtk_container_add(GTK_CONTAINER (menu_vcdiff_menu), menu_vcdiff_project);
-	p_ui->widget_set_tooltip_text(menu_vcdiff_project,
+	ui_widget_set_tooltip_text(menu_vcdiff_project,
 		_("Make a diff from the current project's base path"));
 
 	g_signal_connect(menu_vcdiff_project, "activate", G_CALLBACK(vcproject_activated), NULL);
 
 	gtk_widget_show_all(menu_vcdiff);
 
-	p_ui->add_document_sensitive(menu_vcdiff);
+	ui_add_document_sensitive(menu_vcdiff);
 	main_menu_item = menu_vcdiff;
 }
 

@@ -32,7 +32,7 @@
 #include "keybindings.h"
 #include "ui_utils.h"
 #include "utils.h"
-#include "pluginmacros.h"
+#include "geanyfunctions.h"
 
 
 GeanyData		*geany_data;
@@ -89,7 +89,7 @@ static void tools_show_dialog_insert_special_chars(void)
 					_("Special Characters"), GTK_WINDOW(geany->main_widgets->window),
 					GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					_("_Insert"), GTK_RESPONSE_OK, NULL);
-		vbox = p_ui->dialog_vbox_new(GTK_DIALOG(sc_dialog));
+		vbox = ui_dialog_vbox_new(GTK_DIALOG(sc_dialog));
 		gtk_box_set_spacing(GTK_BOX(vbox), 6);
 		gtk_widget_set_name(sc_dialog, "GeanyDialog");
 
@@ -439,18 +439,18 @@ static void sc_fill_store(GtkTreeStore *store)
  * returns only TRUE if a valid selection(i.e. no category) could be found */
 static gboolean sc_insert(GtkTreeModel *model, GtkTreeIter *iter)
 {
-	GeanyDocument *doc = p_document->get_current();
+	GeanyDocument *doc = document_get_current();
 	gboolean result = FALSE;
 
 	if (doc != NULL)
 	{
 		gchar *str;
-		gint pos = p_sci->get_current_position(doc->editor->sci);
+		gint pos = sci_get_current_position(doc->editor->sci);
 
 		gtk_tree_model_get(model, iter, COLUMN_HTML_NAME, &str, -1);
 		if (NZV(str))
 		{
-			p_sci->insert_text(doc->editor->sci, pos, str);
+			sci_insert_text(doc->editor->sci, pos, str);
 			g_free(str);
 			result = TRUE;
 		}
@@ -532,11 +532,11 @@ void plugin_init(GeanyData *data)
 	g_signal_connect(menu_item, "activate", G_CALLBACK(item_activate), NULL);
 
 	/* disable menu_item when there are no documents open */
-	p_ui->add_document_sensitive(menu_item);
+	ui_add_document_sensitive(menu_item);
 	main_menu_item = menu_item;
 
 	/* setup keybindings */
-	p_keybindings->set_item(plugin_key_group, KB_INSERT_HTML_CHARS, kb_activate,
+	keybindings_set_item(plugin_key_group, KB_INSERT_HTML_CHARS, kb_activate,
 		0, 0, "insert_html_chars", kb_label, menu_item);
 }
 
