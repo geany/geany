@@ -63,9 +63,10 @@ if __name__ == "__main__":
 		sys.exit("No function names read!")
 
 	f = open(outfile, 'w')
-	print >>f, '/* @file %s @ref geany_functions wrappers. \n' % (outfile) +\
-		'This allows the use of normal API function names in plugins.\n' +\
-		'You need to declare the @ref geany_functions symbol yourself. */\n'
+	print >>f, '/* This file is generated automatically by genapi.py - do not edit.\n *\n' +\
+		' * @file %s @ref geany_functions wrappers.\n' % (outfile) +\
+		' * This allows the use of normal API function names in plugins.\n' +\
+		' * You need to declare the @ref geany_functions symbol yourself.\n */\n'
 	print >>f, '#ifndef GEANY_FUNCTIONS_H'
 	print >>f, '#define GEANY_FUNCTIONS_H\n'
 	for fname in fnames:
@@ -74,4 +75,5 @@ if __name__ == "__main__":
 	print >>f, '\n#endif'
 	f.close
 
-	print 'Generated ' + outfile
+	if not '-q' in sys.argv:
+		print 'Generated ' + outfile

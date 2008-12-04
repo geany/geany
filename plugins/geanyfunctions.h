@@ -1,6 +1,9 @@
-/* @file geanyfunctions.h @ref geany_functions wrappers. 
-This allows the use of normal API function names in plugins.
-You need to declare the @ref geany_functions symbol yourself. */
+/* This file is generated automatically by genapi.py - do not edit.
+ *
+ * @file geanyfunctions.h @ref geany_functions wrappers.
+ * This allows the use of normal API function names in plugins.
+ * You need to declare the @ref geany_functions symbol yourself.
+ */
 
 #ifndef GEANY_FUNCTIONS_H
 #define GEANY_FUNCTIONS_H

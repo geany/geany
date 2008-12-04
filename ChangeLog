@@ -5,6 +5,9 @@
  * src/main.c, src/document.c, src/symbols.c:
    Don't mark console messages as translatable.
    Add two comments for translators.
+ * plugins/genapi.py:
+   Beatify the header comments of the generated API file.
+   Add command line option to suppress status output.
 
 
 2008-12-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
