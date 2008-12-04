@@ -2,6 +2,9 @@
 
  * src/support.c, src/support.h:
    Removed unused code.
+ * src/main.c, src/document.c, src/symbols.c:
+   Don't mark console messages as translatable.
+   Add two comments for translators.
 
 
 2008-12-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

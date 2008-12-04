@@ -1337,6 +1337,7 @@ void symbols_show_load_tags_dialog(void)
 			ft = detect_global_tags_filetype(utf8_fname);
 
 			if (ft != NULL && tm_workspace_load_global_tags(fname, ft->lang))
+				/* For translators: the first wildcard is the filetype, the second the filename */
 				ui_set_statusbar(TRUE, _("Loaded %s tags file '%s'."), ft->name, utf8_fname);
 			else
 				ui_set_statusbar(TRUE, _("Could not load tags file '%s'."), utf8_fname);

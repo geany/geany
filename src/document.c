@@ -823,6 +823,8 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_f
 		}
 		else if (! handle_forced_encoding(filedata, forced_enc))
 		{
+			/* For translators: the second wildcard is an encoding name, e.g.
+			 * The file \"test.txt\" is not valid UTF-8. */
 			ui_set_statusbar(TRUE, _("The file \"%s\" is not valid %s."),
 				utf8_filename, forced_enc);
 			utils_beep();
