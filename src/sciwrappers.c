@@ -921,7 +921,7 @@ gboolean sci_get_readonly(ScintillaObject *sci)
  * @param sci The Scintilla @c GtkWidget.
  * @param cmd @c SCI_COMMAND.
  * @see http://scintilla.org for the documentation. */
-void sci_cmd(ScintillaObject * sci, gint cmd)
+void sci_send_command(ScintillaObject * sci, gint cmd)
 {
 	SSM(sci, cmd, 0, 0);
 }

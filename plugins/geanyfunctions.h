@@ -56,8 +56,8 @@
 	geany_functions->p_scintilla->send_message
 #define scintilla_new \
 	geany_functions->p_scintilla->new
-#define sci_cmd \
-	geany_functions->p_sci->cmd
+#define sci_send_command \
+	geany_functions->p_sci->send_command
 #define sci_start_undo_action \
 	geany_functions->p_sci->start_undo_action
 #define sci_end_undo_action \

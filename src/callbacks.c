@@ -896,7 +896,7 @@ void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer user_data)
 				sci_set_selection_start(sci, sci_get_current_position(sci) - text_len + 1);
 		}
 		else
-			sci_cmd(sci, cmd);
+			sci_send_command(sci, cmd);
 
 		g_free(text);
 
@@ -1712,7 +1712,7 @@ on_menu_increase_indent1_activate      (GtkMenuItem     *menuitem,
 
 	if (sci_get_lines_selected(doc->editor->sci) > 1)
 	{
-		sci_cmd(doc->editor->sci, SCI_TAB);
+		sci_send_command(doc->editor->sci, SCI_TAB);
 	}
 	else
 	{
@@ -1731,7 +1731,7 @@ on_menu_decrease_indent1_activate      (GtkMenuItem     *menuitem,
 
 	if (sci_get_lines_selected(doc->editor->sci) > 1)
 	{
-		sci_cmd(doc->editor->sci, SCI_BACKTAB);
+		sci_send_command(doc->editor->sci, SCI_BACKTAB);
 	}
 	else
 	{

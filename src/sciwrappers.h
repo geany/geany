@@ -153,7 +153,7 @@ gint				sci_get_lexer				(ScintillaObject * sci);
 void				sci_set_readonly			(ScintillaObject * sci, gboolean readonly);
 gboolean			sci_get_readonly			(ScintillaObject * sci);
 gint				sci_get_zoom				(ScintillaObject * sci);
-void				sci_cmd						(ScintillaObject * sci, gint cmd);
+void				sci_send_command			(ScintillaObject * sci, gint cmd);
 
 gint				sci_get_current_line		(ScintillaObject * sci);
 gint				sci_get_lines_selected		(ScintillaObject * sci);

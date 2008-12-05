@@ -1388,10 +1388,10 @@ static void cb_func_clipboard(guint key_id)
 			on_paste1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_CLIPBOARD_COPYLINE:
-			sci_cmd(doc->editor->sci, SCI_LINECOPY);
+			sci_send_command(doc->editor->sci, SCI_LINECOPY);
 			break;
 		case GEANY_KEYS_CLIPBOARD_CUTLINE:
-			sci_cmd(doc->editor->sci, SCI_LINECUT);
+			sci_send_command(doc->editor->sci, SCI_LINECUT);
 			break;
 	}
 }
@@ -1469,16 +1469,16 @@ static void cb_func_goto_action(guint key_id)
 	switch (key_id)
 	{
 		case GEANY_KEYS_GOTO_LINESTART:
-			sci_cmd(doc->editor->sci, editor_prefs.smart_home_key ? SCI_VCHOME : SCI_HOME);
+			sci_send_command(doc->editor->sci, editor_prefs.smart_home_key ? SCI_VCHOME : SCI_HOME);
 			break;
 		case GEANY_KEYS_GOTO_LINEEND:
-			sci_cmd(doc->editor->sci, SCI_LINEEND);
+			sci_send_command(doc->editor->sci, SCI_LINEEND);
 			break;
 		case GEANY_KEYS_GOTO_PREVWORDSTART:
-			sci_cmd(doc->editor->sci, SCI_WORDPARTLEFT);
+			sci_send_command(doc->editor->sci, SCI_WORDPARTLEFT);
 			break;
 		case GEANY_KEYS_GOTO_NEXTWORDSTART:
-			sci_cmd(doc->editor->sci, SCI_WORDPARTRIGHT);
+			sci_send_command(doc->editor->sci, SCI_WORDPARTRIGHT);
 			break;
 	}
 }
@@ -1527,10 +1527,10 @@ static void cb_func_editor_action(guint key_id)
 			editor_scroll_to_line(doc->editor, -1, 0.5F);
 			break;
 		case GEANY_KEYS_EDITOR_SCROLLLINEUP:
-			sci_cmd(doc->editor->sci, SCI_LINESCROLLUP);
+			sci_send_command(doc->editor->sci, SCI_LINESCROLLUP);
 			break;
 		case GEANY_KEYS_EDITOR_SCROLLLINEDOWN:
-			sci_cmd(doc->editor->sci, SCI_LINESCROLLDOWN);
+			sci_send_command(doc->editor->sci, SCI_LINESCROLLDOWN);
 			break;
 		case GEANY_KEYS_EDITOR_DUPLICATELINE:
 			duplicate_lines(doc->editor);
@@ -1539,7 +1539,7 @@ static void cb_func_editor_action(guint key_id)
 			delete_lines(doc->editor);
 			break;
 		case GEANY_KEYS_EDITOR_TRANSPOSELINE:
-			sci_cmd(doc->editor->sci, SCI_LINETRANSPOSE);
+			sci_send_command(doc->editor->sci, SCI_LINETRANSPOSE);
 			break;
 		case GEANY_KEYS_EDITOR_AUTOCOMPLETE:
 			editor_start_auto_complete(doc->editor, sci_get_current_position(doc->editor->sci), TRUE);
@@ -1566,7 +1566,7 @@ static void cb_func_editor_action(guint key_id)
 					sci_add_text(doc->editor->sci, " ");
 					break;
 				case GDK_Tab:
-					sci_cmd(doc->editor->sci, SCI_TAB);
+					sci_send_command(doc->editor->sci, SCI_TAB);
 					break;
 				default:
 					break;

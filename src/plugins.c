@@ -149,7 +149,7 @@ static ScintillaFuncs scintilla_funcs = {
 
 static SciFuncs sci_funcs = {
 	&_scintilla_send_message_macro,
-	&sci_cmd,
+	&sci_send_command,
 	&sci_start_undo_action,
 	&sci_end_undo_action,
 	&sci_set_text,
