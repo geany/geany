@@ -10,6 +10,14 @@
    Deprecate GeanyFunctions::p_msgwindow.
  * plugins/saveactions.c:
    Fix use of filetypes_array.
+ * src/build.c, src/plugindata.h, src/msgwindow.c, src/msgwindow.h,
+   src/search.c, src/plugins.c, plugins/geanyfunctions.h:
+   Rename msgwin_compiler_add -> msgwin_compiler_add_string.
+   Rename msgwin_msg_add -> msgwin_msg_add_string.
+   Rename msgwin_compiler_add_fmt -> msgwin_compiler_add.
+   Rename msgwin_msg_add_fmt -> msgwin_msg_add.
+   This fixes 2 geanyfunctions.h macros, and is more consistent with
+   msgwin_status_add().
 
 
 2008-12-04  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

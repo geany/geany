@@ -219,10 +219,10 @@ static const GdkColor *get_color(gint msg_color)
  *  Adds a new message in the compiler tab treeview in the messages window.
  *
  *  @param msg_color A color to be used for the text. It must be an element of #MsgColors.
- *  @param format Printf()-style format string.
+ *  @param format @c printf()-style format string.
  *  @param ... Arguments for the @c format string.
  **/
-void msgwin_compiler_add_fmt(gint msg_color, const gchar *format, ...)
+void msgwin_compiler_add(gint msg_color, const gchar *format, ...)
 {
 	gchar string[512];
 	va_list args;
@@ -230,11 +230,11 @@ void msgwin_compiler_add_fmt(gint msg_color, const gchar *format, ...)
 	va_start(args, format);
 	g_vsnprintf(string, 512, format, args);
 	va_end(args);
-	msgwin_compiler_add(msg_color, string);
+	msgwin_compiler_add_string(msg_color, string);
 }
 
 
-void msgwin_compiler_add(gint msg_color, const gchar *msg)
+void msgwin_compiler_add_string(gint msg_color, const gchar *msg)
 {
 	GtkTreeIter iter;
 	GtkTreePath *path;
@@ -277,10 +277,10 @@ void msgwin_show_hide(gboolean show)
  *  @param msg_color A color to be used for the text. It must be an element of #MsgColors.
  *  @param line The document's line where the message belongs to. Set to -1 to ignore.
  *  @param doc The document. Set to @c NULL to ignore.
- *  @param format Printf()-style format string.
+ *  @param format @c printf()-style format string.
  *  @param ... Arguments for the @c format string.
  **/
-void msgwin_msg_add_fmt(gint msg_color, gint line, GeanyDocument *doc, const gchar *format, ...)
+void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *format, ...)
 {
 	gchar string[512];
 	va_list args;
@@ -289,12 +289,12 @@ void msgwin_msg_add_fmt(gint msg_color, gint line, GeanyDocument *doc, const gch
 	g_vsnprintf(string, 512, format, args);
 	va_end(args);
 
-	msgwin_msg_add(msg_color, line, doc, string);
+	msgwin_msg_add_string(msg_color, line, doc, string);
 }
 
 
 /* adds string to the msg treeview */
-void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *string)
+void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const gchar *string)
 {
 	GtkTreeIter iter;
 	const GdkColor *color = get_color(msg_color);
@@ -321,7 +321,7 @@ void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *
  *  Log a status message *without* setting the status bar.
  *  (Use ui_set_statusbar() to display text on the statusbar)
  *
- *  @param format Printf()-style format string.
+ *  @param format @c printf()-style format string.
  *  @param ... Arguments for the @c format string.
  **/
 void msgwin_status_add(const gchar *format, ...)

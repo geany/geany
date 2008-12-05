@@ -188,10 +188,10 @@
 	geany_functions->p_dialogs->show_save_as
 #define msgwin_status_add \
 	geany_functions->p_msgwin->status_add
-#define msgwin_compiler_add_fmt \
-	geany_functions->p_msgwin->compiler_add_fmt
-#define msgwin_msg_add_fmt \
-	geany_functions->p_msgwin->msg_add_fmt
+#define msgwin_compiler_add \
+	geany_functions->p_msgwin->compiler_add
+#define msgwin_msg_add \
+	geany_functions->p_msgwin->msg_add
 #define msgwin_clear_tab \
 	geany_functions->p_msgwin->clear_tab
 #define msgwin_switch_tab \

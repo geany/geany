@@ -238,8 +238,8 @@ static SupportFuncs support_funcs = {
 
 static MsgWinFuncs msgwin_funcs = {
 	&msgwin_status_add,
-	&msgwin_compiler_add_fmt,
-	&msgwin_msg_add_fmt,
+	&msgwin_compiler_add,
+	&msgwin_msg_add,
 	&msgwin_clear_tab,
 	&msgwin_switch_tab
 };

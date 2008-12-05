@@ -1313,7 +1313,7 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 		str = g_strdup_printf(_("%s %s -- %s (in directory: %s)"),
 			tool_prefs.grep_cmd, opts, utf8_search_text, dir);
 		utf8_str = utils_get_utf8_from_locale(str);
-		msgwin_msg_add(COLOR_BLUE, -1, NULL, utf8_str);
+		msgwin_msg_add_string(COLOR_BLUE, -1, NULL, utf8_str);
 		utils_free_pointers(2, str, utf8_str, NULL);
 		ret = TRUE;
 	}
@@ -1387,7 +1387,7 @@ static gboolean search_read_io(GIOChannel *source, GIOCondition condition, gpoin
 			else
 				utf8_msg = msg;
 
-			msgwin_msg_add(COLOR_BLACK, -1, NULL, utf8_msg);
+			msgwin_msg_add_string(COLOR_BLACK, -1, NULL, utf8_msg);
 
 			if (utf8_msg != msg)
 				g_free(utf8_msg);
@@ -1468,7 +1468,7 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 						"Search completed with %d match.",
 						"Search completed with %d matches.", count);
 
-			msgwin_msg_add_fmt(COLOR_BLUE, -1, NULL, text, count);
+			msgwin_msg_add(COLOR_BLUE, -1, NULL, text, count);
 			ui_set_statusbar(FALSE, text, count);
 			break;
 		}
@@ -1476,7 +1476,7 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 			msg = _("No matches found.");
 			color = COLOR_BLUE;
 		default:
-			msgwin_msg_add(color, -1, NULL, msg);
+			msgwin_msg_add_string(color, -1, NULL, msg);
 			ui_set_statusbar(FALSE, "%s", msg);
 			break;
 	}
@@ -1514,7 +1514,7 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 		count++;
 		line = sci_get_line_from_position(doc->editor->sci, pos);
 		buffer = sci_get_line(doc->editor->sci, line);
-		msgwin_msg_add_fmt(COLOR_BLACK, line + 1, doc,
+		msgwin_msg_add(COLOR_BLACK, line + 1, doc,
 			"%s:%d : %s", short_file_name, line + 1, g_strstrip(buffer));
 		g_free(buffer);
 
@@ -1555,7 +1555,7 @@ void search_find_usage(const gchar *search_text, gint flags, gboolean in_session
 	if (! found) /* no matches were found */
 	{
 		ui_set_statusbar(FALSE, _("No matches found for \"%s\"."), search_text);
-		msgwin_msg_add_fmt(COLOR_BLUE, -1, NULL, _("No matches found for \"%s\"."), search_text);
+		msgwin_msg_add(COLOR_BLUE, -1, NULL, _("No matches found for \"%s\"."), search_text);
 	}
 	else
 	{
@@ -1564,7 +1564,7 @@ void search_find_usage(const gchar *search_text, gint flags, gboolean in_session
 		ui_set_statusbar(FALSE, ngettext(
 			"Found %d match for \"%s\".", "Found %d matches for \"%s\".", count),
 			count, search_text);
-		msgwin_msg_add_fmt(COLOR_BLUE, -1, NULL, ngettext(
+		msgwin_msg_add(COLOR_BLUE, -1, NULL, ngettext(
 			"Found %d match for \"%s\".", "Found %d matches for \"%s\".", count),
 			count, search_text);
 	}

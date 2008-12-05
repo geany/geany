@@ -407,7 +407,7 @@ SupportFuncs;
 typedef struct MsgWinFuncs
 {
 	/* status_add() does not set the status bar - use ui->set_statusbar() instead. */
-	void		(*status_add) (const gchar *format, ...);
+	void		(*status_add) (const gchar *format, ...) G_GNUC_PRINTF (1, 2);
 	void		(*compiler_add) (gint msg_color, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
 	void		(*msg_add) (gint msg_color, gint line, struct GeanyDocument *doc,
 				 const gchar *format, ...) G_GNUC_PRINTF (4, 5);

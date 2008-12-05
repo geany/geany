@@ -480,7 +480,7 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 
 	gtk_list_store_clear(msgwindow.store_compiler);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER);
-	msgwin_compiler_add_fmt(COLOR_BLUE, _("%s (in directory: %s)"), utf8_cmd_string, utf8_working_dir);
+	msgwin_compiler_add(COLOR_BLUE, _("%s (in directory: %s)"), utf8_cmd_string, utf8_working_dir);
 	g_free(utf8_working_dir);
 	g_free(utf8_cmd_string);
 
@@ -862,7 +862,7 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 				}
 				g_free(filename);
 			}
-			msgwin_compiler_add(color, msg);
+			msgwin_compiler_add_string(color, msg);
 
 			g_free(msg);
 		}
@@ -916,7 +916,7 @@ static void show_build_result_message(gboolean failure)
 	if (failure)
 	{
 		msg = _("Compilation failed.");
-		msgwin_compiler_add(COLOR_DARK_RED, msg);
+		msgwin_compiler_add_string(COLOR_DARK_RED, msg);
 		/* If msgwindow is hidden, user will want to display it to see the error */
 		if (! ui_prefs.msgwindow_visible)
 		{
@@ -930,7 +930,7 @@ static void show_build_result_message(gboolean failure)
 	else
 	{
 		msg = _("Compilation finished successfully.");
-		msgwin_compiler_add(COLOR_BLUE, msg);
+		msgwin_compiler_add_string(COLOR_BLUE, msg);
 		if (! ui_prefs.msgwindow_visible ||
 			gtk_notebook_get_current_page(GTK_NOTEBOOK(msgwindow.notebook)) != MSG_COMPILER)
 				ui_set_statusbar(FALSE, "%s", msg);
