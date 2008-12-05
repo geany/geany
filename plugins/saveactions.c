@@ -623,11 +623,13 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 		gtk_box_pack_start(GTK_BOX(inner_vbox), label, FALSE, FALSE, 0);
 
 		pref_widgets.instantsave_ft_combo = combo = gtk_combo_box_new_text();
-		for (i = 0; i < filetypes_array->len; i++)
+		for (i = 0; i < geany->filetypes_array->len; i++)
 		{
-			gtk_combo_box_append_text(GTK_COMBO_BOX(combo), filetypes[i]->name);
+			GeanyFiletype *ft = filetypes_index(i);
 
-			if (utils_str_equal(filetypes[i]->name, instantsave_default_ft))
+			gtk_combo_box_append_text(GTK_COMBO_BOX(combo), ft->name);
+
+			if (utils_str_equal(ft->name, instantsave_default_ft))
 				gtk_combo_box_set_active(GTK_COMBO_BOX(combo), i);
 		}
 		gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(combo), 3);
