@@ -45,7 +45,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 116,
+	GEANY_API_VERSION = 117,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -207,7 +207,8 @@ typedef struct GeanyFunctions
 	/** @deprecated Use ui_lookup_widget() instead. */
 	struct SupportFuncs			*p_support;
 	struct DialogFuncs			*p_dialogs;			/**< See dialogs.h */
-	struct MsgWinFuncs			*p_msgwindow;		/**< See msgwindow.h */
+	/** @deprecated Use @ref GeanyFunctions::p_msgwin instead. */
+	struct MsgWinFuncs			*p_msgwindow;
 	struct EncodingFuncs		*p_encodings;		/**< See encodings.h */
 	struct KeybindingFuncs		*p_keybindings;		/**< See keybindings.h */
 	struct TagManagerFuncs		*p_tm;				/**< See tagmanager/include */
@@ -218,8 +219,8 @@ typedef struct GeanyFunctions
 	struct EditorFuncs        	*p_editor;			/**< See editor.h */
 	struct MainFuncs        	*p_main;			/**< See main.h */
 	struct PluginFuncs        	*p_plugin;			/**< See plugins.c */
-	/** See http://scintilla.org for the documentation. */
-	struct ScintillaFuncs		*p_scintilla;
+	struct ScintillaFuncs		*p_scintilla;		/**< See ScintillaFuncs */
+	struct MsgWinFuncs			*p_msgwin;			/**< See msgwindow.h */
 }
 GeanyFunctions;
 
@@ -255,7 +256,7 @@ DocumentFuncs;
 
 struct _ScintillaObject;
 
-/** See http://scintilla.org for the documentation. */
+/** See http://scintilla.org for the full documentation. */
 typedef struct ScintillaFuncs
 {
 	/** Send Scintilla a message. */

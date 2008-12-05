@@ -306,7 +306,8 @@ static GeanyFunctions geany_functions = {
 	&editor_funcs,
 	&main_funcs,
 	&plugin_funcs,
-	&scintilla_funcs
+	&scintilla_funcs,
+	&msgwin_funcs
 };
 
 static GeanyData geany_data;
