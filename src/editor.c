@@ -1009,7 +1009,7 @@ static void insert_indent_after_line(GeanyEditor *editor, gint line)
 
 static void auto_close_chars(ScintillaObject *sci, gint pos, gchar c)
 {
-	const gchar *closing_char;
+	const gchar *closing_char = NULL;
 
 	if ((editor_prefs.autoclose_chars & GEANY_AC_PARENTHESIS) && c == '(')
 	{
