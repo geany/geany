@@ -59,6 +59,7 @@
 #include "printing.h"
 #include "plugins.h"
 #include "templates.h"
+#include "toolbar.h"
 #include "stash.h"
 
 
@@ -350,18 +351,6 @@ static void save_dialog_prefs(GKeyFile *config)
 
 	/* toolbar */
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show", toolbar_prefs.visible);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_search", toolbar_prefs.show_search);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_goto", toolbar_prefs.show_goto);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_zoom", toolbar_prefs.show_zoom);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_indent", toolbar_prefs.show_indent);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_undo", toolbar_prefs.show_undo);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_navigation", toolbar_prefs.show_navigation);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_compile", toolbar_prefs.show_compile);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_colour", toolbar_prefs.show_colour);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_fileops", toolbar_prefs.show_fileops);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_cutdelete", toolbar_prefs.show_cutdelete);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_copypaste", toolbar_prefs.show_copypaste);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_quit", toolbar_prefs.show_quit);
 	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_style", toolbar_prefs.icon_style);
 	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_size", toolbar_prefs.icon_size);
 
@@ -658,18 +647,6 @@ static void load_dialog_prefs(GKeyFile *config)
 
 	/* toolbar */
 	toolbar_prefs.visible = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show", TRUE);
-	toolbar_prefs.show_search = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_search", TRUE);
-	toolbar_prefs.show_goto = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_goto", TRUE);
-	toolbar_prefs.show_zoom = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_zoom", FALSE);
-	toolbar_prefs.show_indent = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_indent", FALSE);
-	toolbar_prefs.show_compile = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_compile", TRUE);
-	toolbar_prefs.show_undo = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_undo", FALSE);
-	toolbar_prefs.show_navigation = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_navigation", TRUE);
-	toolbar_prefs.show_colour = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_colour", TRUE);
-	toolbar_prefs.show_fileops = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_fileops", TRUE);
-	toolbar_prefs.show_cutdelete = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_cutdelete", FALSE);
-	toolbar_prefs.show_copypaste = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_copypaste", FALSE);
-	toolbar_prefs.show_quit = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_quit", TRUE);
 	{
 		GtkIconSize tb_iconsize;
 		GtkToolbarStyle tb_style;

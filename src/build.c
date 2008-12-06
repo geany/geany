@@ -56,6 +56,7 @@
 #include "project.h"
 #include "editor.h"
 #include "win32.h"
+#include "toolbar.h"
 
 
 GeanyBuildInfo build_info = {GBO_COMPILE, 0, NULL, GEANY_FILETYPES_NONE, NULL};
@@ -1664,8 +1665,8 @@ void build_menu_update(GeanyDocument *doc)
 	{
 		gtk_widget_set_sensitive(lookup_widget(main_widgets.window, "menu_build1"), FALSE);
 		gtk_menu_item_remove_submenu(GTK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_build1")));
-		gtk_widget_set_sensitive(widgets.compile_button, FALSE);
-		gtk_widget_set_sensitive(widgets.run_button, FALSE);
+		ui_widget_set_sensitive(widgets.compile_button, FALSE);
+		ui_widget_set_sensitive(widgets.run_button, FALSE);
 		return;
 	}
 	else
@@ -1724,8 +1725,8 @@ void build_menu_update(GeanyDocument *doc)
 	if (menu_items->item_set_args)
 		gtk_widget_set_sensitive(menu_items->item_set_args, can_set_args);
 
-	gtk_widget_set_sensitive(widgets.compile_button, can_build && ft->actions->can_compile);
-	gtk_widget_set_sensitive(widgets.run_button, can_run || can_stop);
+	ui_widget_set_sensitive(widgets.compile_button, can_build && ft->actions->can_compile);
+	ui_widget_set_sensitive(widgets.run_button, can_run || can_stop);
 
 	/* show the stop command if a program is running, otherwise show run command */
 	set_stop_button(can_stop);
@@ -1746,6 +1747,9 @@ static void set_stop_button(gboolean stop)
 	GtkStockItem sitem;
 	GtkWidget *menuitem =
 		build_get_menu_items(run_info.file_type_id)->item_exec;
+
+	if (widgets.run_button == NULL)
+		return;
 
 	if (stop && utils_str_equal(
 		gtk_tool_button_get_stock_id(GTK_TOOL_BUTTON(widgets.run_button)), "gtk-stop")) return;
@@ -2077,6 +2081,6 @@ on_build_previous_error                (GtkMenuItem     *menuitem,
 
 void build_init()
 {
-	widgets.compile_button = lookup_widget(main_widgets.window, "toolbutton_compile");
-	widgets.run_button = lookup_widget(main_widgets.window, "toolbutton_run");
+	widgets.compile_button = toolbar_get_widget_by_name("Compile");
+	widgets.run_button = toolbar_get_widget_by_name("Run");
 }

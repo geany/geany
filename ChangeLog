@@ -4,6 +4,20 @@
    A patch to Scintilla 1.77 containing our changes to Scintilla
    (these are mainly commentation character changes and the
    column mode editing patch).
+ * data/ui_toolbar.xml, doc/geany.html, doc/geany.txt, geany.glade,
+   po/POTFILES.in, src/build.c, src/callbacks.c, src/callbacks.h,
+   src/geanyentryaction.c, src/geanyentryaction.h,
+   src/geanymenubuttonaction.c, src/geanymenubuttonaction.h,
+   src/interface.c, src/keybindings.c, src/keyfile.c, src/main.c,
+   src/Makefile.am, src/makefile.win32, src/navqueue.c, wscript,
+   src/plugindata.h, src/plugins.c, src/prefs.c, src/templates.c,
+   src/toolbar.c, src/toolbar.h, src/ui_utils.c, src/ui_utils.h:
+   Rewrite of the whole toolbar code. Now it is based on GtkActions
+   and all elements can be added/removed/reordered using a simple
+   XML file.
+   Add GeanyMenubuttonAction and GeanyEntryAction as GtkAction
+   subclasses to have menu buttons and text entries in the toolbar.
+   Change the Goto line toolbar item back to a plain text entry again.
 
 
 2008-12-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

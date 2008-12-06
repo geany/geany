@@ -1429,49 +1429,6 @@ Toolbar
 Show Toolbar
     Whether to show the toolbar.
 
-Items
-`````
-
-Show File Operation buttons
-    Show the buttons to open a new file, open an existing file, save a file,
-    and save all files.
-
-Show Cut and Delete buttons
-    Show buttons to cut and delete the current selection.
-
-Show Copy and Paste buttons
-    Show buttons to copy the current selection and paste the contents of the clipboard.
-
-Show Redo and Undo buttons
-    Show the undo/redo change buttons.
-
-Show Back and Forward buttons
-    Show the buttons to navigate forwards and backwards between positions
-    in the current session's documents.
-
-Show Compile and Run buttons
-    Show the buttons to run or compile a file.
-
-Show Color Chooser button
-    Show the button to run the color chooser dialog.
-
-Show Zoom In and Zoom Out buttons
-    Show the buttons to zoom in closer to a document or zoom out.
-
-Show Increase and Decrease Indentation buttons
-    Show the buttons to increase or decrease the current line or
-    selection's indentation.
-
-Show Search field
-    Show the incremental search bar in the toolbar (quicker than using
-    the Find command).
-
-Show Go to Line field
-    Show a line number text entry (quicker than using the Go to Line
-    command).
-
-Show Quit button
-    Show a button to quit geany.
 
 Appearance
 ``````````
@@ -3246,6 +3203,71 @@ fileheader     The file header template. This wildcard       file header, snippe
        in the preferences dialog, see `Template tab in preferences dialog`_. You can
        use any conversion specifiers which can be used with the ANSI C strftime function.
        For details please see http://man.cx/strftime.
+
+
+Customizing the toolbar
+-----------------------
+
+You can add, remove and reorder the elements in the toolbar by editing
+the file ``ui_toolbar.xml``.
+
+To override the system-wide configuration file, copy it from
+``$prefix/share/geany`` to your configuration directory, usually
+``~/.config/geany/``. ``$prefix`` is the path where Geany is installed
+(commonly ``/usr/local``).
+
+For example::
+
+    % cp /usr/local/share/geany/ui_toolbar.xml /home/username/.config/geany/
+
+Then edit it and add any of the available elements listed in the file or remove
+any of the existing elements. Of course, you can also reorder the elements as
+you wish and add or remove additional separators.
+This file must be valid XML unless it can't be loaded and the global toolbar
+UI definition is used.
+
+.. note::
+    (1) You cannot add new actions which are not listed below.
+    (2) Everything you add or change must be inside the /ui/toolbar/ path.
+    (3) After you finished the editing of the file, you need to restart Geany
+        for changes to take effect.
+
+
+Available toolbar elements
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+================== ==============================================================================
+Element name       Description
+================== ==============================================================================
+New                Create a new file
+Open               Open an existing file
+Save               Save the current file
+SaveAll            Save all open files
+Reload             Reload the current file from disk
+Close              Close the current file
+Cut                Cut the current selection
+Copy               Copy the current selection
+Paste              Paste the contents of the clipboard
+Delete             Delete the current selection
+Undo               Undo the last modification
+Redo               Redo the last modification
+NavBack            Navigate back a location
+NavFor             Navigate forward a location
+Compile            Compile the current file
+Run                Run or view the current file
+Color              Open a color chooser dialog, to interactively pick colors from a palette
+ZoomIn             Zoom in the text
+ZoomOut            Zoom out the text
+UnIndent           Decrease indentation
+Indent             Increase indentation
+SearchEntry        The search field belonging to the 'Search' element (can be used alone)
+Search             Find the entered text in the current file (only useful if you also
+                   use 'SearchEntry')
+GotoEntry          The goto field belonging to the 'Goto' element (can be used alone)
+Goto               Jump to the entered line number (only useful if you also use 'SearchEntry')
+Quit               Quit Geany
+================== ==============================================================================
+
 
 
 Plugin documentation

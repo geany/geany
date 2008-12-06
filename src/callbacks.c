@@ -65,6 +65,7 @@
 #include "printing.h"
 #include "plugins.h"
 #include "log.h"
+#include "toolbar.h"
 
 #include "geanyobject.h"
 
@@ -424,7 +425,7 @@ on_open1_activate                      (GtkMenuItem     *menuitem,
 
 /* quit toolbar button */
 void
-on_toolbutton_quit_clicked             (GtkToolButton   *toolbutton,
+on_toolbutton_quit_clicked             (GtkAction       *action,
                                         gpointer         user_data)
 {
 	on_exit_clicked(NULL, NULL);
@@ -433,7 +434,7 @@ on_toolbutton_quit_clicked             (GtkToolButton   *toolbutton,
 
 /* reload file */
 void
-on_toolbutton_reload_clicked           (GtkToolButton   *toolbutton,
+on_toolbutton_reload_clicked           (GtkAction       *action,
                                         gpointer         user_data)
 {
 	on_reload_as_activate(NULL, GINT_TO_POINTER(-1));
@@ -514,7 +515,7 @@ on_change_font1_activate               (GtkMenuItem     *menuitem,
 
 /* new file */
 void
-on_toolbutton_new_clicked              (GtkToolButton   *toolbutton,
+on_toolbutton_new_clicked              (GtkAction       *action,
                                         gpointer         user_data)
 {
 	document_new_file(NULL, NULL, NULL);
@@ -522,7 +523,7 @@ on_toolbutton_new_clicked              (GtkToolButton   *toolbutton,
 
 /* open file */
 void
-on_toolbutton_open_clicked             (GtkToolButton   *toolbutton,
+on_toolbutton_open_clicked             (GtkAction       *action,
                                         gpointer         user_data)
 {
 	dialogs_show_open_file();
@@ -531,19 +532,21 @@ on_toolbutton_open_clicked             (GtkToolButton   *toolbutton,
 
 /* save file */
 void
-on_toolbutton_save_clicked             (GtkToolButton   *toolbutton,
+on_toolbutton_save_clicked             (GtkAction       *action,
                                         gpointer         user_data)
 {
 	on_save1_activate(NULL, user_data);
 }
 
 
-static void set_search_bar_background(gboolean success)
+static void set_search_bar_background(GtkWidget *widget, gboolean success)
 {
 	const GdkColor red   = {0, 0xffff, 0x6666, 0x6666};
 	const GdkColor white = {0, 0xffff, 0xffff, 0xffff};
 	static gboolean old_value = TRUE;
-	GtkWidget *widget = lookup_widget(main_widgets.window, "toolbutton_search_entry");
+
+	if (widget == NULL)
+		widget = toolbar_get_widget_child_by_name("SearchEntry");
 
 	/* only update if really needed */
 	if (search_data.search_bar && old_value != success)
@@ -557,10 +560,9 @@ static void set_search_bar_background(gboolean success)
 
 
 /* store text, clear search flags so we can use Search->Find Next/Previous */
-static void setup_find_next(GtkEditable *editable)
+static void setup_find_next(const gchar *text)
 {
-	g_free(search_data.text);
-	search_data.text = gtk_editable_get_chars(editable, 0, -1);
+	setptr(search_data.text, g_strdup(text));
 	search_data.flags = 0;
 	search_data.backwards = FALSE;
 	search_data.search_bar = TRUE;
@@ -569,44 +571,34 @@ static void setup_find_next(GtkEditable *editable)
 
 /* search text */
 void
-on_toolbar_search_entry_activate                     (GtkEntry        *entry,
-                                        gpointer         user_data)
+on_toolbar_search_entry_changed(GtkAction *action, const gchar *text, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
 	gboolean result;
 
-	setup_find_next(GTK_EDITABLE(entry));
-	result = document_search_bar_find(doc, search_data.text, 0, FALSE);
-	set_search_bar_background(result);
-}
-
-
-/* search text */
-void
-on_toolbar_search_entry_changed                      (GtkEditable     *editable,
-                                        gpointer         user_data)
-{
-	GeanyDocument *doc = document_get_current();
-	gboolean result;
-
-	setup_find_next(editable);
+	setup_find_next(text);
 	result = document_search_bar_find(doc, search_data.text, 0, TRUE);
-	set_search_bar_background(result);
+	set_search_bar_background(NULL, result);
 }
 
 
 /* search text */
 void
-on_toolbutton_search_clicked                (GtkToolButton   *toolbutton,
+on_toolbutton_search_clicked           (GtkAction       *action,
                                         gpointer         user_data)
 {
 	GeanyDocument *doc = document_get_current();
 	gboolean result;
-	GtkWidget *entry = lookup_widget(GTK_WIDGET(main_widgets.window), "toolbutton_search_entry");
+	GtkWidget *entry = toolbar_get_widget_child_by_name("SearchEntry");
 
-	setup_find_next(GTK_EDITABLE(entry));
-	result = document_search_bar_find(doc, search_data.text, 0, FALSE);
-	set_search_bar_background(result);
+	if (entry != NULL)
+	{
+		const gchar *text = gtk_entry_get_text(GTK_ENTRY(entry));
+
+		setup_find_next(text);
+		result = document_search_bar_find(doc, search_data.text, 0, FALSE);
+		set_search_bar_background(entry, result);
+	}
 }
 
 
@@ -617,7 +609,7 @@ on_toolbar_large_icons1_activate       (GtkMenuItem     *menuitem,
 	if (ignore_toolbar_toggle) return;
 
 	toolbar_prefs.icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
-	ui_update_toolbar_icons(GTK_ICON_SIZE_LARGE_TOOLBAR);
+	toolbar_update_icons(GTK_ICON_SIZE_LARGE_TOOLBAR);
 }
 
 
@@ -628,7 +620,7 @@ on_toolbar_small_icons1_activate       (GtkMenuItem     *menuitem,
 	if (ignore_toolbar_toggle) return;
 
 	toolbar_prefs.icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR;
-	ui_update_toolbar_icons(GTK_ICON_SIZE_SMALL_TOOLBAR);
+	toolbar_update_icons(GTK_ICON_SIZE_SMALL_TOOLBAR);
 }
 
 
@@ -689,7 +681,7 @@ on_normal_size1_activate               (GtkMenuItem     *menuitem,
 
 /* close tab */
 void
-on_toolbutton_close_clicked                (GtkToolButton   *toolbutton,
+on_toolbutton_close_clicked            (GtkAction       *action,
                                         gpointer         user_data)
 {
 	on_close1_activate(NULL, NULL);
@@ -1079,7 +1071,7 @@ on_show_color_chooser1_activate        (GtkMenuItem     *menuitem,
 
 
 void
-on_compile_button_clicked              (GtkToolButton   *toolbutton,
+on_toolbutton_compile_clicked          (GtkAction       *action,
                                         gpointer         user_data)
 {
 	keybindings_send_command(GEANY_KEY_GROUP_BUILD, GEANY_KEYS_BUILD_COMPILE);
@@ -1109,7 +1101,7 @@ static void find_again(gboolean change_direction)
 		if (result > -1)
 			editor_display_current_line(doc->editor, 0.3F);
 
-		set_search_bar_background((result > -1) ? TRUE : FALSE);
+		set_search_bar_background(NULL, (result > -1) ? TRUE : FALSE);
 	}
 }
 
@@ -1194,10 +1186,10 @@ on_goto_line_dialog_response         (GtkDialog *dialog,
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		GeanyDocument *doc = document_get_current();
-		gint line = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(user_data));
 
 		if (doc != NULL)
 		{
+			gint line = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(user_data));
 			if (! editor_goto_line(doc->editor, line - 1))
 				utils_beep();
 		}
@@ -1208,29 +1200,31 @@ on_goto_line_dialog_response         (GtkDialog *dialog,
 
 
 void
-on_goto_line_entry_activate          (GtkEntry        *entry,
-                                      gpointer         user_data)
+on_toolbutton_goto_entry_activate(GtkAction *action, const gchar *text, gpointer user_data)
 {
-	gtk_spin_button_update(GTK_SPIN_BUTTON(entry));
-	on_goto_line_dialog_response(GTK_DIALOG(user_data), GTK_RESPONSE_ACCEPT, entry);
+	GeanyDocument *doc = document_get_current();
+
+	if (doc != NULL)
+	{
+		gint line = atoi(text);
+		if (! editor_goto_line(doc->editor, line - 1))
+			utils_beep();
+	}
 }
 
 
 void
-on_toolbutton_goto_entry_activate      (GtkEntry        *entry,
+on_toolbutton_goto_clicked             (GtkAction       *action,
                                         gpointer         user_data)
 {
-	gtk_spin_button_update(GTK_SPIN_BUTTON(entry));
-	on_goto_line_dialog_response(NULL, GTK_RESPONSE_ACCEPT, entry);
-}
+	GtkWidget *entry = toolbar_get_widget_child_by_name("GotoEntry");
 
+	if (entry != NULL)
+	{
+		const gchar *text = gtk_entry_get_text(GTK_ENTRY(entry));
 
-void
-on_toolbutton_goto_clicked             (GtkToolButton   *toolbutton,
-                                        gpointer         user_data)
-{
-	on_goto_line_dialog_response(NULL, GTK_RESPONSE_ACCEPT,
-			lookup_widget(main_widgets.window, "toolbutton_goto_entry"));
+		on_toolbutton_goto_entry_activate(NULL, text, NULL);
+	}
 }
 
 
@@ -1528,7 +1522,7 @@ on_menu_unfold_all1_activate           (GtkMenuItem     *menuitem,
 
 
 void
-on_run_button_clicked                  (GtkToolButton   *toolbutton,
+on_toolbutton_run_clicked              (GtkAction       *action,
                                         gpointer         user_data)
 {
 	keybindings_send_command(GEANY_KEY_GROUP_BUILD, GEANY_KEYS_BUILD_RUN);

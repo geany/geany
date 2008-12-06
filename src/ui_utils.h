@@ -44,29 +44,6 @@ GeanyInterfacePrefs;
 extern GeanyInterfacePrefs interface_prefs;
 
 
-typedef struct GeanyToolbarPrefs
-{
-	gboolean		visible;
-	gboolean		show_search;
-	gboolean		show_goto;
-	gboolean		show_undo;
-	gboolean		show_navigation;
-	gboolean		show_compile;
-	gboolean		show_zoom;
-	gboolean		show_indent;
-	gboolean		show_colour;
-	gboolean		show_fileops;
-	gboolean		show_quit;
-	GtkIconSize		icon_size;
-	gint			icon_style;
-	gboolean		show_cutdelete;
-	gboolean		show_copypaste;
-}
-GeanyToolbarPrefs;
-
-extern GeanyToolbarPrefs toolbar_prefs;
-
-
 /** Important widgets in the main window. */
 typedef struct GeanyMainWidgets
 {
@@ -108,8 +85,8 @@ typedef struct UIWidgets
 	GtkWidget	*toolbar_menu;
 	GtkWidget	*new_file_menu;
 	GtkWidget	*recent_files_menuitem;
-	GtkWidget	*recent_files_menubar;
-	GtkWidget	*recent_files_toolbar;
+	GtkWidget	*recent_files_menu_menubar;
+	GtkWidget	*recent_files_menu_toolbar;
 	GtkWidget	*print_page_setup;
 
 	/* dialogs */
@@ -171,6 +148,8 @@ void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text);
 
 GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name);
 
+void ui_widget_set_sensitive(GtkWidget *widget, gboolean set);
+
 /* End of 'generic' functions */
 
 
@@ -222,10 +201,6 @@ void ui_sidebar_show_hide(void);
 void ui_document_show_hide(GeanyDocument *doc);
 
 
-void ui_update_toolbar_icons(GtkIconSize size);
-
-void ui_update_toolbar_items(void);
-
 
 GdkPixbuf *ui_new_pixbuf_from_inline(gint img, gboolean small_img);
 
@@ -253,8 +228,6 @@ gboolean ui_tree_view_find_previous(GtkTreeView *treeview, TVMatchCallback cb);
 
 
 void ui_statusbar_showhide(gboolean state);
-
-gint ui_get_toolbar_insert_position(void);
 
 void ui_add_document_sensitive(GtkWidget *widget);
 

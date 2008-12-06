@@ -44,6 +44,7 @@
 #include "navqueue.h"
 #include "symbols.h"
 #include "vte.h"
+#include "toolbar.h"
 
 
 GPtrArray *keybinding_groups;	/* array of GeanyKeyGroup pointers */
@@ -1242,9 +1243,12 @@ static void cb_func_switch_action(guint key_id)
 			msgwin_switch_tab(MSG_SCRATCH, TRUE);
 			break;
 		case GEANY_KEYS_FOCUS_SEARCHBAR:
-			if (toolbar_prefs.visible && toolbar_prefs.show_search)
-				gtk_widget_grab_focus(
-					lookup_widget(main_widgets.window, "toolbutton_search_entry"));
+			if (toolbar_prefs.visible)
+			{
+				GtkWidget *search_entry = toolbar_get_widget_child_by_name("SearchEntry");
+				if (search_entry != NULL)
+					gtk_widget_grab_focus(search_entry);
+			}
 			break;
 		case GEANY_KEYS_FOCUS_SIDEBAR:
 			focus_sidebar();

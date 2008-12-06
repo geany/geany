@@ -374,14 +374,19 @@ static void create_new_menu_items(void)
 			continue;
 		if (ft_id == GEANY_FILETYPES_NONE)
 			label = _("None");
+
 		tmp_menu = gtk_menu_item_new_with_label(label);
-		tmp_button = gtk_menu_item_new_with_label(label);
 		gtk_widget_show(tmp_menu);
-		gtk_widget_show(tmp_button);
 		gtk_container_add(GTK_CONTAINER(new_with_template_menu), tmp_menu);
-		gtk_container_add(GTK_CONTAINER(ui_widgets.new_file_menu), tmp_button);
-		g_signal_connect(tmp_menu, "activate", G_CALLBACK(on_new_with_template), (gpointer) ft);
-		g_signal_connect(tmp_button, "activate", G_CALLBACK(on_new_with_template), (gpointer) ft);
+		g_signal_connect(tmp_menu, "activate", G_CALLBACK(on_new_with_template), ft);
+
+		if (ui_widgets.new_file_menu != NULL)
+		{
+			tmp_button = gtk_menu_item_new_with_label(label);
+			gtk_widget_show(tmp_button);
+			gtk_container_add(GTK_CONTAINER(ui_widgets.new_file_menu), tmp_button);
+			g_signal_connect(tmp_button, "activate", G_CALLBACK(on_new_with_template), ft);
+		}
 	}
 }
 
@@ -447,16 +452,18 @@ static void add_file_item(gpointer data, gpointer user_data)
 	label = utils_get_utf8_from_locale(data);
 
 	tmp_menu = gtk_menu_item_new_with_label(label);
-	tmp_button = gtk_menu_item_new_with_label(label);
-
-	g_free(label);
-
 	gtk_widget_show(tmp_menu);
-	gtk_widget_show(tmp_button);
 	gtk_container_add(GTK_CONTAINER(new_with_template_menu), tmp_menu);
-	gtk_container_add(GTK_CONTAINER(ui_widgets.new_file_menu), tmp_button);
 	g_signal_connect(tmp_menu, "activate", G_CALLBACK(on_new_with_file_template), NULL);
-	g_signal_connect(tmp_button, "activate", G_CALLBACK(on_new_with_file_template), NULL);
+
+	if (ui_widgets.new_file_menu != NULL)
+	{
+		tmp_button = gtk_menu_item_new_with_label(label);
+		gtk_widget_show(tmp_button);
+		gtk_container_add(GTK_CONTAINER(ui_widgets.new_file_menu), tmp_button);
+		g_signal_connect(tmp_button, "activate", G_CALLBACK(on_new_with_file_template), NULL);
+	}
+	g_free(label);
 }
 
 
@@ -509,13 +516,16 @@ static void create_file_template_menus(void)
 
 	sep1 = gtk_separator_menu_item_new();
 	gtk_container_add(GTK_CONTAINER(new_with_template_menu), sep1);
-	sep2 = gtk_separator_menu_item_new();
-	gtk_container_add(GTK_CONTAINER(ui_widgets.new_file_menu), sep2);
-
+	if (ui_widgets.new_file_menu != NULL)
+	{
+		sep2 = gtk_separator_menu_item_new();
+		gtk_container_add(GTK_CONTAINER(ui_widgets.new_file_menu), sep2);
+	}
 	if (add_custom_template_items())
 	{
 		gtk_widget_show(sep1);
-		gtk_widget_show(sep2);
+		if (ui_widgets.new_file_menu != NULL)
+			gtk_widget_show(sep2);
 	}
 }
 
@@ -800,10 +810,13 @@ void templates_free_templates(void)
 		g_free(ft_templates[i]);
 	}
 	/* destroy "New with template" sub menu items (in case we want to reload the templates) */
-	children = gtk_container_get_children(GTK_CONTAINER(ui_widgets.new_file_menu));
-	for (item = children; item != NULL; item = g_list_next(item))
+	if (ui_widgets.new_file_menu != NULL)
 	{
-		gtk_widget_destroy(GTK_WIDGET(item->data));
+		children = gtk_container_get_children(GTK_CONTAINER(ui_widgets.new_file_menu));
+		for (item = children; item != NULL; item = g_list_next(item))
+		{
+			gtk_widget_destroy(GTK_WIDGET(item->data));
+		}
 	}
 	children = gtk_container_get_children(GTK_CONTAINER(new_with_template_menu));
 	for (item = children; item != NULL; item = g_list_next(item))

@@ -65,7 +65,7 @@ on_change_font1_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_toolbutton_close_clicked            (GtkToolButton   *toolbutton,
+on_toolbutton_close_clicked            (GtkAction       *action,
                                         gpointer         user_data);
 
 void
@@ -103,11 +103,7 @@ on_replace_tabs_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_toolbutton_search_clicked           (GtkToolButton   *toolbutton,
-                                        gpointer         user_data);
-
-void
-on_toolbar_search_entry_activate       (GtkEntry        *entry,
+on_toolbutton_search_clicked           (GtkAction       *action,
                                         gpointer         user_data);
 
 gboolean
@@ -164,8 +160,9 @@ on_zoom_out1_activate                  (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_toolbar_search_entry_changed        (GtkEditable     *editable,
-                                        gpointer         user_data);
+on_toolbar_search_entry_changed        (GtkAction *action,
+                                        const gchar *text,
+                                        gpointer user_data);
 
 void
 on_toggle_case1_activate               (GtkMenuItem     *menuitem,
@@ -254,23 +251,23 @@ on_find_in_files1_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_toolbutton_new_clicked              (GtkToolButton   *toolbutton,
+on_toolbutton_new_clicked              (GtkAction       *action,
                                         gpointer         user_data);
 
 void
-on_toolbutton_open_clicked             (GtkToolButton   *toolbutton,
+on_toolbutton_open_clicked             (GtkAction       *action,
                                         gpointer         user_data);
 
 void
-on_toolbutton_save_clicked             (GtkToolButton   *toolbutton,
+on_toolbutton_save_clicked             (GtkAction       *action,
                                         gpointer         user_data);
 
 void
-on_toolbutton_quit_clicked             (GtkToolButton   *toolbutton,
+on_toolbutton_quit_clicked             (GtkAction       *action,
                                         gpointer         user_data);
 
 void
-on_toolbutton_reload_clicked           (GtkToolButton   *toolbutton,
+on_toolbutton_reload_clicked           (GtkAction       *action,
                                         gpointer         user_data);
 
 void
@@ -283,16 +280,11 @@ on_goto_line_dialog_response           (GtkDialog *dialog,
                                         gpointer user_data);
 
 void
-on_goto_line_entry_activate            (GtkEntry        *entry,
-                                        gpointer         user_data);
-
-
-void
 on_help1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_compile_button_clicked              (GtkToolButton   *toolbutton,
+on_toolbutton_compile_clicked          (GtkAction       *action,
                                         gpointer         user_data);
 
 void
@@ -386,15 +378,14 @@ on_menu_unfold_all1_activate           (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_toolbutton_goto_entry_activate      (GtkEntry        *entry,
+on_toolbutton_goto_entry_activate      (GtkAction *action, const gchar *text, gpointer user_data);
+
+void
+on_toolbutton_goto_clicked             (GtkAction       *action,
                                         gpointer         user_data);
 
 void
-on_toolbutton_goto_clicked             (GtkToolButton   *toolbutton,
-                                        gpointer         user_data);
-
-void
-on_run_button_clicked                  (GtkToolButton   *toolbutton,
+on_toolbutton_run_clicked              (GtkAction       *action,
                                         gpointer         user_data);
 
 void

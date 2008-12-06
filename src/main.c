@@ -72,6 +72,7 @@
 #include "navqueue.h"
 #include "plugins.h"
 #include "printing.h"
+#include "toolbar.h"
 #include "geanyobject.h"
 
 #ifdef HAVE_SOCKET
@@ -207,7 +208,7 @@ static void apply_settings(void)
 	{
 		gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
 	}
-	ui_update_toolbar_icons(toolbar_prefs.icon_size);
+	toolbar_update_icons(toolbar_prefs.icon_size);
 
 	/* line number and markers margin are by default enabled */
 	if (! editor_prefs.show_markers_margin)
@@ -236,16 +237,10 @@ static void apply_settings(void)
 		gtk_widget_hide(ui_widgets.statusbar);
 	}
 
-	/* connect the toolbar dropdown menu for the new button */
-	gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(
-			lookup_widget(main_widgets.window, "toolbutton_new")), ui_widgets.new_file_menu);
-
 	/* set the tab placements of the notebooks */
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.tab_pos_editor);
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), interface_prefs.tab_pos_msgwin);
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.sidebar_notebook), interface_prefs.tab_pos_sidebar);
-
-	ui_update_toolbar_items();
 
 	/* whether to show notebook tabs or not */
 	gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
@@ -272,15 +267,13 @@ static void main_init(void)
 	main_status.opening_session_files		= FALSE;
 
 	main_widgets.window = create_window1();
-	ui_widgets.new_file_menu = gtk_menu_new();
-	ui_widgets.recent_files_toolbar = gtk_menu_new();
 	ui_widgets.recent_files_menuitem = lookup_widget(main_widgets.window, "recent_files1");
-	ui_widgets.recent_files_menubar = gtk_menu_new();
+	ui_widgets.recent_files_menu_menubar = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(ui_widgets.recent_files_menuitem),
-							ui_widgets.recent_files_menubar);
+							ui_widgets.recent_files_menu_menubar);
 
 	/* store important pointers for later reference */
-	main_widgets.toolbar = lookup_widget(main_widgets.window, "toolbar1");
+	main_widgets.toolbar = toolbar_init();
 	main_widgets.sidebar_notebook = lookup_widget(main_widgets.window, "notebook3");
 	main_widgets.notebook = lookup_widget(main_widgets.window, "notebook1");
 	main_widgets.editor_menu = create_edit_menu1();
@@ -966,16 +959,22 @@ gint main(gint argc, gchar **argv)
 	}
 
 	/* registering some basic events */
-	g_signal_connect(main_widgets.window, "delete-event", G_CALLBACK(on_exit_clicked), NULL);
-	g_signal_connect(main_widgets.window, "key-press-event", G_CALLBACK(keybindings_got_event), NULL);
-	g_signal_connect(main_widgets.toolbar, "button-press-event", G_CALLBACK(toolbar_popup_menu), NULL);
-	g_signal_connect(lookup_widget(main_widgets.window, "textview_scribble"),
-							"motion-notify-event", G_CALLBACK(on_motion_event), NULL);
-	g_signal_connect(lookup_widget(main_widgets.window, "toolbutton_search_entry"),
-							"motion-notify-event", G_CALLBACK(on_motion_event), NULL);
-	g_signal_connect(lookup_widget(main_widgets.window, "toolbutton_goto_entry"),
-							"motion-notify-event", G_CALLBACK(on_motion_event), NULL);
+	{
+		GtkWidget *entry;
 
+		g_signal_connect(main_widgets.window, "delete-event", G_CALLBACK(on_exit_clicked), NULL);
+		g_signal_connect(main_widgets.window, "key-press-event", G_CALLBACK(keybindings_got_event), NULL);
+		g_signal_connect(main_widgets.toolbar, "button-press-event", G_CALLBACK(toolbar_popup_menu), NULL);
+
+		g_signal_connect(lookup_widget(main_widgets.window, "textview_scribble"),
+								"motion-notify-event", G_CALLBACK(on_motion_event), NULL);
+		entry = toolbar_get_widget_child_by_name("SearchEntry");
+		if (entry != NULL)
+			g_signal_connect(entry, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
+		entry = toolbar_get_widget_child_by_name("GotoEntry");
+		if (entry != NULL)
+			g_signal_connect(entry, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
+	}
 #ifdef HAVE_VTE
 	vte_init();
 #endif
@@ -1064,6 +1063,7 @@ void main_quit()
 	editor_finalize();
 	editor_snippets_free();
 	encodings_finalize();
+	toolbar_finalize();
 	log_finalize();
 
 	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));

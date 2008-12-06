@@ -35,6 +35,7 @@
 #include "ui_utils.h"
 #include "editor.h"
 #include "navqueue.h"
+#include "toolbar.h"
 
 
 /* for the navigation history queue */
@@ -47,7 +48,7 @@ typedef struct
 static GQueue *navigation_queue;
 static guint nav_queue_pos;
 
-static GtkWidget *navigation_buttons[2];
+static GtkAction *navigation_buttons[2];
 
 
 
@@ -56,8 +57,8 @@ void navqueue_init()
 	navigation_queue = g_queue_new();
 	nav_queue_pos = 0;
 
-	navigation_buttons[0] = lookup_widget(main_widgets.window, "toolbutton_back");
-	navigation_buttons[1] = lookup_widget(main_widgets.window, "toolbutton_forward");
+	navigation_buttons[0] = toolbar_get_action_by_name("NavBack");
+	navigation_buttons[1] = toolbar_get_action_by_name("NavFor");
 }
 
 
@@ -75,23 +76,23 @@ static void adjust_buttons(void)
 {
 	if (g_queue_get_length(navigation_queue) < 2)
 	{
-		gtk_widget_set_sensitive(navigation_buttons[0], FALSE);
-		gtk_widget_set_sensitive(navigation_buttons[1], FALSE);
+		gtk_action_set_sensitive(navigation_buttons[0], FALSE);
+		gtk_action_set_sensitive(navigation_buttons[1], FALSE);
 		return;
 	}
 	if (nav_queue_pos == 0)
 	{
-		gtk_widget_set_sensitive(navigation_buttons[0], TRUE);
-		gtk_widget_set_sensitive(navigation_buttons[1], FALSE);
+		gtk_action_set_sensitive(navigation_buttons[0], TRUE);
+		gtk_action_set_sensitive(navigation_buttons[1], FALSE);
 		return;
 	}
 	/* forward should be sensitive since where not at the start */
-	gtk_widget_set_sensitive(navigation_buttons[1], TRUE);
+	gtk_action_set_sensitive(navigation_buttons[1], TRUE);
 
 	/* back should be sensitive if there's a place to go back to */
 	(nav_queue_pos < g_queue_get_length(navigation_queue) - 1) ?
-		gtk_widget_set_sensitive(navigation_buttons[0], TRUE) :
-			gtk_widget_set_sensitive(navigation_buttons[0], FALSE);
+		gtk_action_set_sensitive(navigation_buttons[0], TRUE) :
+			gtk_action_set_sensitive(navigation_buttons[0], FALSE);
 }
 
 

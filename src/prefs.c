@@ -52,6 +52,7 @@
 #include "geanywraplabel.h"
 #include "templates.h"
 #include "search.h"
+#include "toolbar.h"
 
 #ifdef HAVE_VTE
 # include "vte.h"
@@ -439,43 +440,6 @@ void prefs_init_dialog(void)
 	/* Toolbar settings */
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), toolbar_prefs.visible);
-
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_search");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), toolbar_prefs.show_search);
-
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_goto");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), toolbar_prefs.show_goto);
-
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_compile");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), toolbar_prefs.show_compile);
-
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_zoom");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), toolbar_prefs.show_zoom);
-
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_indent");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), toolbar_prefs.show_indent);
-
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_undo");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), toolbar_prefs.show_undo);
-
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_navigation");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), toolbar_prefs.show_navigation);
-
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_colour");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), toolbar_prefs.show_colour);
-
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_fileops");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), toolbar_prefs.show_fileops);
-
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_cutdelete");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), toolbar_prefs.show_cutdelete);
-
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_copypaste");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), toolbar_prefs.show_copypaste);
-
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_quit");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), toolbar_prefs.show_quit);
-
 
 	switch (toolbar_prefs.icon_style)
 	{
@@ -869,42 +833,6 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show");
 		toolbar_prefs.visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_search");
-		toolbar_prefs.show_search = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_goto");
-		toolbar_prefs.show_goto = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_zoom");
-		toolbar_prefs.show_zoom = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_indent");
-		toolbar_prefs.show_indent = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_undo");
-		toolbar_prefs.show_undo = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_navigation");
-		toolbar_prefs.show_navigation = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_compile");
-		toolbar_prefs.show_compile = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_colour");
-		toolbar_prefs.show_colour = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_fileops");
-		toolbar_prefs.show_fileops = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_cutdelete");
-		toolbar_prefs.show_cutdelete = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_copypaste");
-		toolbar_prefs.show_copypaste = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_quit");
-		toolbar_prefs.show_quit = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
 		widget = lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_imagetext");
 		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) toolbar_prefs.icon_style = 2;
 		else
@@ -1168,8 +1096,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		/* apply the changes made */
 		ui_statusbar_showhide(interface_prefs.statusbar_visible);
 		treeviews_openfiles_update_all(); /* to update if full path setting has changed */
-		ui_update_toolbar_items();
-		ui_update_toolbar_icons(toolbar_prefs.icon_size);
+		toolbar_update_icons(toolbar_prefs.icon_size);
 		gtk_toolbar_set_style(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_style);
 		ui_sidebar_show_hide();
 		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
@@ -1243,9 +1170,10 @@ void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 	{
 		case 1:
 		{
-			if (strcmp(fontbtn, interface_prefs.tagbar_font) == 0) break;
-			g_free(interface_prefs.tagbar_font);
-			interface_prefs.tagbar_font = g_strdup(fontbtn);
+			if (strcmp(fontbtn, interface_prefs.tagbar_font) == 0)
+				break;
+
+			setptr(interface_prefs.tagbar_font, g_strdup(fontbtn));
 			for (i = 0; i < documents_array->len; i++)
 			{
 				GeanyDocument *doc = documents[i];
@@ -1256,17 +1184,13 @@ void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 			}
 			if (GTK_IS_WIDGET(tv.default_tag_tree))
 				ui_widget_modify_font_from_string(tv.default_tag_tree, interface_prefs.tagbar_font);
-			ui_widget_modify_font_from_string(
-				lookup_widget(main_widgets.window, "toolbutton_search_entry"),
-				interface_prefs.tagbar_font);
 			break;
 		}
 		case 2:
 		{
 			if (strcmp(fontbtn, interface_prefs.msgwin_font) == 0)
 				break;
-			g_free(interface_prefs.msgwin_font);
-			interface_prefs.msgwin_font = g_strdup(fontbtn);
+			setptr(interface_prefs.msgwin_font, g_strdup(fontbtn));
 			ui_widget_modify_font_from_string(msgwindow.tree_compiler, interface_prefs.msgwin_font);
 			ui_widget_modify_font_from_string(msgwindow.tree_msg, interface_prefs.msgwin_font);
 			ui_widget_modify_font_from_string(msgwindow.tree_status, interface_prefs.msgwin_font);
@@ -1281,9 +1205,9 @@ void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 		case 4:
 		{
 			/* VTE settings */
-			if (strcmp(fontbtn, vc->font) == 0) break;
-			g_free(vc->font);
-			vc->font = g_strdup(gtk_font_button_get_font_name(widget));
+			if (strcmp(fontbtn, vc->font) == 0)
+				break;
+			setptr(vc->font, g_strdup(gtk_font_button_get_font_name(widget)));
 			vte_apply_user_settings();
 			break;
 		}
@@ -1541,7 +1465,6 @@ static void on_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user
 {
 	gboolean sens = gtk_toggle_button_get_active(togglebutton);
 
-	gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "frame11"), sens);
 	gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "frame13"), sens);
 }
 
@@ -1631,8 +1554,8 @@ void prefs_show_dialog(void)
 		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_eol), utils_get_eol_name(SC_EOL_CR));
 		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_eol), utils_get_eol_name(SC_EOL_LF));
 
-		/* add manually GeanyWrapLabels because it can't be added with Glade
-		 * page Tools */
+		/* add manually GeanyWrapLabels because they can't be added with Glade */
+		/* page Tools */
 		label = geany_wrap_label_new(_("Enter tool paths below. Tools you do not need can be left blank."));
 		gtk_widget_show(label);
 		gtk_box_pack_start(GTK_BOX(lookup_widget(ui_widgets.prefs_dialog, "vbox33")),
@@ -1657,6 +1580,12 @@ void prefs_show_dialog(void)
 		gtk_widget_show(label);
 		gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
 		gtk_box_pack_start(GTK_BOX(lookup_widget(ui_widgets.prefs_dialog, "vbox27")),
+			label, FALSE, TRUE, 5);
+		/* page Toolbar */
+		label = geany_wrap_label_new(_("<i>Notice: To customize the toolbar elements, edit the file 'ui_toolbar.xml'. Please see the documentation for details.</i>"));
+		gtk_widget_show(label);
+		gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
+		gtk_box_pack_start(GTK_BOX(lookup_widget(ui_widgets.prefs_dialog, "vbox15")),
 			label, FALSE, TRUE, 5);
 
 

@@ -58,6 +58,7 @@
 #include "keybindings.h"
 #include "navqueue.h"
 #include "main.h"
+#include "toolbar.h"
 
 
 #ifdef G_OS_WIN32
@@ -1253,7 +1254,7 @@ void plugin_add_toolbar_item(GeanyPlugin *plugin, GtkToolItem *item)
 	{
 		GtkToolItem *sep;
 
-		pos = ui_get_toolbar_insert_position();
+		pos = toolbar_get_insert_position();
 		/* pos should be valid even if the quit btn is hidden */
 		g_return_if_fail(pos >= 0);
 		gtk_toolbar_insert(toolbar, item, pos);

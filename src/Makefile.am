@@ -16,6 +16,8 @@ SRCS = \
 	editor.c editor.h \
 	encodings.c encodings.h \
 	filetypes.c filetypes.h \
+	geanyentryaction.c geanyentryaction.h \
+	geanymenubuttonaction.c geanymenubuttonaction.h \
 	geanyobject.c geanyobject.h \
 	geanywraplabel.c geanywraplabel.h \
 	highlighting.c highlighting.h \
@@ -39,6 +41,7 @@ SRCS = \
 	support.c support.h \
 	symbols.c symbols.h \
 	templates.c templates.h \
+	toolbar.c toolbar.h \
 	tools.c tools.h \
 	treeviews.c treeviews.h \
 	ui_utils.c ui_utils.h \
