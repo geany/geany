@@ -1519,9 +1519,17 @@ static void on_config_file_clicked(GtkWidget *widget, gpointer user_data)
 	else
 	{
 		gchar *utf8 = utils_get_utf8_from_locale(file_name);
+		gchar *base_name = g_path_get_basename(file_name);
+		gchar *global_file = g_build_filename(app->datadir, base_name, NULL);
+		gchar *global_content = NULL;
 
-		document_new_file(utf8, NULL, NULL);
-		g_free(utf8);
+		/* if the requested file doesn't exist in the user's config dir, try loading the file
+		 * from the global data directory and use its contents for the newly created file */
+		if (g_file_test(global_file, G_FILE_TEST_EXISTS))
+			g_file_get_contents(global_file, &global_content, NULL, NULL);
+
+		document_new_file(utf8, NULL, global_content);
+		utils_free_pointers(4, utf8, base_name, global_file, global_content, NULL);
 	}
 }
 
@@ -1572,13 +1580,14 @@ static void add_stock_items(void)
 	GtkIconSet *icon_set;
 	GtkIconFactory *factory = gtk_icon_factory_new();
 	GdkPixbuf *pb;
-	gsize i;
+	gsize i, len;
 	GeanyStockItem items[] =
 	{
-		{ { GEANY_STOCK_SAVE_ALL, _("Save All"), 0, 0, GETTEXT_PACKAGE}, GEANY_IMAGE_SAVE_ALL }
+		{ { GEANY_STOCK_SAVE_ALL, _("Save All"), 0, 0, GETTEXT_PACKAGE }, GEANY_IMAGE_SAVE_ALL }
 	};
 
-	for (i = 0; i < G_N_ELEMENTS(items); i++)
+	len = G_N_ELEMENTS(items);
+	for (i = 0; i < len; i++)
 	{
 		pb = ui_new_pixbuf_from_inline(items[i].image_id, FALSE);
 		icon_set = gtk_icon_set_new_from_pixbuf(pb);
@@ -1588,7 +1597,7 @@ static void add_stock_items(void)
 		gtk_icon_set_unref(icon_set);
 		g_object_unref(pb);
 	}
-	gtk_stock_add((GtkStockItem *) items, G_N_ELEMENTS(items));
+	gtk_stock_add((GtkStockItem *) items, len);
 	gtk_icon_factory_add_default(factory);
 	g_object_unref(factory);
 }

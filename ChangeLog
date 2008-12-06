@@ -23,6 +23,12 @@
    Add new stock icon GEANY_STOCK_SAVE_ALL.
    Remove code to manually update the size of the 'Save All' toolbar
    icon and use the GEANY_STOCK_SAVE_ALL stock icon instead.
+ * src/ui_utils.c, src/toolbar.c:
+   If the requested file in ui_add_config_file_menu_item() doesn't exist
+   in the user's config directory, try reading it from the global
+   data directory and use the contents for the new file.
+   Add a menu item to 'Tools->Configuration files' for the toolbar UI
+   definition.
 
 
 2008-12-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

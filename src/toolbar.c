@@ -33,6 +33,7 @@
 #include "callbacks.h"
 #include "utils.h"
 #include "dialogs.h"
+#include "document.h"
 #include "geanyobject.h"
 #include "geanymenubuttonaction.h"
 #include "geanyentryaction.h"
@@ -138,23 +139,24 @@ GtkAction *toolbar_get_action_by_name(const gchar *name)
 }
 
 
-/*
-static void on_document_save(G_GNUC_UNUSED GObject *object, G_GNUC_UNUSED gpointer *doc,
+static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc,
 							 G_GNUC_UNUSED gpointer data)
 {
-	dialogs_show_msgbox(GTK_MESSAGE_INFO,
+	g_return_if_fail(NZV(doc->real_path));
+
+	if (utils_str_equal(doc->real_path, utils_build_path(app->configdir, "ui_toolbar.xml", NULL)))
+	{
+		dialogs_show_msgbox(GTK_MESSAGE_INFO,
 		_("For all changes you make in this file to take effect, you need to restart Geany."));
+	}
 }
-*/
 
 
 void toolbar_add_config_file_menu_item(void)
 {
-/*
 	ui_add_config_file_menu_item(
 		utils_build_path(app->configdir, "ui_toolbar.xml", NULL), NULL, NULL);
 	g_signal_connect(geany_object, "document-save", G_CALLBACK(on_document_save), NULL);
-*/
 }
 
 
