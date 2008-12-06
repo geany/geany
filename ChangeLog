@@ -33,6 +33,10 @@
    Install toolbar.h.
  * src/ui_utils.c:
    Fix broken recent files menus.
+ * glade.geany, src/callbacks.c, src/callbacks.h, src/interface.c,
+   src/keybindings.c:
+   Remove on_go_to_line1_activate() and directly use
+   on_go_to_line_activate() instead.
 
 
 2008-12-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

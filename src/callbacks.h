@@ -389,10 +389,6 @@ on_toolbutton_run_clicked              (GtkAction       *action,
                                         gpointer         user_data);
 
 void
-on_go_to_line1_activate                (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
 on_notebook1_switch_page_after         (GtkNotebook     *notebook,
                                         GtkNotebookPage *page,
                                         guint            page_num,

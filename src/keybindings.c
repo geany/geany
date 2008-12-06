@@ -1421,7 +1421,7 @@ static void cb_func_goto_action(guint key_id)
 			navqueue_go_forward();
 			return;
 		case GEANY_KEYS_GOTO_LINE:
-			on_go_to_line1_activate(NULL, NULL);
+			on_go_to_line_activate(NULL, NULL);
 			return;
 		case GEANY_KEYS_GOTO_MATCHINGBRACE:
 			goto_matching_brace(doc);

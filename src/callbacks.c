@@ -1530,15 +1530,6 @@ on_toolbutton_run_clicked              (GtkAction       *action,
 
 
 void
-on_go_to_line1_activate                (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	/* this is search menu cb; call popup menu goto cb */
-	on_go_to_line_activate(menuitem, user_data);
-}
-
-
-void
 on_menu_remove_indicators1_activate    (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
