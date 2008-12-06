@@ -72,6 +72,16 @@ static struct
 widgets;
 
 
+/* Local stock item struct to extend the GtkStockItem structure by an image id which is used
+ * as the icon */
+typedef struct
+{
+	GtkStockItem item;
+	guint image_id;
+}
+GeanyStockItem;
+
+
 static void update_recent_menu(void);
 static void recent_file_loaded(const gchar *utf8_filename);
 static void recent_file_activate_cb(GtkMenuItem *menuitem, gpointer user_data);
@@ -808,21 +818,18 @@ GdkPixbuf *ui_new_pixbuf_from_inline(gint img, gboolean small_img)
 {
 	switch(img)
 	{
-		case GEANY_IMAGE_SMALL_CROSS: return gdk_pixbuf_new_from_inline(-1, close_small_inline, FALSE, NULL); break;
-		case GEANY_IMAGE_LOGO: return gdk_pixbuf_new_from_inline(-1, aladin_inline, FALSE, NULL); break;
+		case GEANY_IMAGE_LOGO:
+			return gdk_pixbuf_new_from_inline(-1, aladin_inline, FALSE, NULL);
+			break;
 		case GEANY_IMAGE_SAVE_ALL:
 		{
-			if ((toolbar_prefs.icon_size == GTK_ICON_SIZE_SMALL_TOOLBAR) || small_img)
-			{
-				return gdk_pixbuf_scale_simple(gdk_pixbuf_new_from_inline(-1, save_all_inline, FALSE, NULL),
-                                             16, 16, GDK_INTERP_HYPER);
-			}
-			else
-			{
-				return gdk_pixbuf_new_from_inline(-1, save_all_inline, FALSE, NULL);
-			}
+			return gdk_pixbuf_new_from_inline(-1, save_all_inline, FALSE, NULL);
 			break;
 		}
+/* unused
+		case GEANY_IMAGE_SMALL_CROSS:
+			return gdk_pixbuf_new_from_inline(-1, close_small_inline, FALSE, NULL);
+			break;
 		case GEANY_IMAGE_NEW_ARROW:
 		{
 			if ((toolbar_prefs.icon_size == GTK_ICON_SIZE_SMALL_TOOLBAR) || small_img)
@@ -836,10 +843,10 @@ GdkPixbuf *ui_new_pixbuf_from_inline(gint img, gboolean small_img)
 			}
 			break;
 		}
-		default: return NULL;
+*/
+		default:
+			return NULL;
 	}
-
-	/*return gtk_image_new_from_pixbuf(pixbuf);*/
 }
 
 
@@ -1560,8 +1567,37 @@ static void create_config_files_menu(void)
 }
 
 
+static void add_stock_items(void)
+{
+	GtkIconSet *icon_set;
+	GtkIconFactory *factory = gtk_icon_factory_new();
+	GdkPixbuf *pb;
+	gsize i;
+	GeanyStockItem items[] =
+	{
+		{ { GEANY_STOCK_SAVE_ALL, _("Save All"), 0, 0, GETTEXT_PACKAGE}, GEANY_IMAGE_SAVE_ALL }
+	};
+
+	for (i = 0; i < G_N_ELEMENTS(items); i++)
+	{
+		pb = ui_new_pixbuf_from_inline(items[i].image_id, FALSE);
+		icon_set = gtk_icon_set_new_from_pixbuf(pb);
+
+		gtk_icon_factory_add(factory, items[i].item.stock_id, icon_set);
+
+		gtk_icon_set_unref(icon_set);
+		g_object_unref(pb);
+	}
+	gtk_stock_add((GtkStockItem *) items, G_N_ELEMENTS(items));
+	gtk_icon_factory_add_default(factory);
+	g_object_unref(factory);
+}
+
+
 void ui_init(void)
 {
+	add_stock_items();
+
 	ui_widgets.statusbar = lookup_widget(main_widgets.window, "statusbar");
 	ui_widgets.print_page_setup = lookup_widget(main_widgets.window, "page_setup1");
 

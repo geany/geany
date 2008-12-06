@@ -48,7 +48,7 @@ static GtkActionGroup *group;
  * Fields: name, stock_id, label, accelerator, tooltip, callback */
 const GtkActionEntry ui_entries[] = {
 	{ "Save", GTK_STOCK_SAVE, NULL, NULL, N_("Save the current file"), G_CALLBACK(on_toolbutton_save_clicked) },
-	{ "SaveAll", GTK_STOCK_SAVE, N_("Save All"), NULL, N_("Save all open files"), G_CALLBACK(on_save_all1_activate) },
+	{ "SaveAll", GEANY_STOCK_SAVE_ALL, N_("Save All"), NULL, N_("Save all open files"), G_CALLBACK(on_save_all1_activate) },
 	{ "Reload", GTK_STOCK_REVERT_TO_SAVED, NULL, NULL, N_("Reload the current file from disk"), G_CALLBACK(on_toolbutton_reload_clicked) },
 	{ "Close", GTK_STOCK_CLOSE, NULL, NULL, N_("Close the current file"), G_CALLBACK(on_toolbutton_close_clicked) },
 	{ "Cut", GTK_STOCK_CUT, NULL, NULL, N_("Cut the current selection"), G_CALLBACK(on_cut1_activate) },
@@ -236,30 +236,6 @@ GtkWidget *toolbar_init(void)
 	g_signal_connect(toolbar, "key-press-event", G_CALLBACK(on_escape_key_press_event), NULL);
 
 	return toolbar;
-}
-
-
-/* TODO: remove this code and use stock icons instead */
-void toolbar_update_icons(GtkIconSize size)
-{
-	GtkWidget *button_image = NULL;
-	GtkWidget *widget = NULL;
-	GtkWidget *oldwidget = NULL;
-
-	/* destroy old widget */
-	widget = toolbar_get_widget_by_name("SaveAll");
-	if (widget == NULL)
-		return;
-
-	oldwidget = gtk_tool_button_get_icon_widget(GTK_TOOL_BUTTON(widget));
-	if (oldwidget && GTK_IS_WIDGET(oldwidget))
-		gtk_widget_destroy(oldwidget);
-	/* create new widget */
-	button_image = ui_new_image_from_inline(GEANY_IMAGE_SAVE_ALL, FALSE);
-	gtk_widget_show(button_image);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(widget), button_image);
-
-	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), size);
 }
 
 

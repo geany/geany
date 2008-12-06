@@ -18,6 +18,11 @@
    Add GeanyMenubuttonAction and GeanyEntryAction as GtkAction
    subclasses to have menu buttons and text entries in the toolbar.
    Change the Goto line toolbar item back to a plain text entry again.
+ * src/callbacks.c, src/geany.h, src/main.c, src/prefs.c, src/toolbar.c,
+   src/toolbar.h, src/ui_utils.c:
+   Add new stock icon GEANY_STOCK_SAVE_ALL.
+   Remove code to manually update the size of the 'Save All' toolbar
+   icon and use the GEANY_STOCK_SAVE_ALL stock icon instead.
 
 
 2008-12-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

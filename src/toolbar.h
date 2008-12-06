@@ -42,8 +42,6 @@ GtkWidget *toolbar_get_widget_by_name(const gchar *name);
 
 GtkAction *toolbar_get_action_by_name(const gchar *name);
 
-void toolbar_update_icons(GtkIconSize size);
-
 gint toolbar_get_insert_position(void);
 
 void toolbar_add_config_file_menu_item(void);

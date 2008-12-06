@@ -208,7 +208,7 @@ static void apply_settings(void)
 	{
 		gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
 	}
-	toolbar_update_icons(toolbar_prefs.icon_size);
+	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
 
 	/* line number and markers margin are by default enabled */
 	if (! editor_prefs.show_markers_margin)

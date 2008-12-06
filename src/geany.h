@@ -106,6 +106,8 @@ enum
 	GIGABYTE = (MEGABYTE*1024)
 };
 
+#define GEANY_STOCK_SAVE_ALL "geany-save-all"
+
 
 /* Useful for some variable argument list functions, e.g. in utils.h */
 #if ! GLIB_CHECK_VERSION(2, 8, 0)
