@@ -147,6 +147,7 @@ Section "!Program Files" SEC01
   File "${RESOURCEDIR}\data\GPL-2"
   File "${RESOURCEDIR}\data\file*"
   File "${RESOURCEDIR}\data\snippets.conf"
+  File "${RESOURCEDIR}\data\ui_toolbar.xml"
 
   SetOutPath "$INSTDIR\share\icons"
   File /r "${RESOURCEDIR}\share\icons\*"

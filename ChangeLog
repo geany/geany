@@ -40,6 +40,9 @@
  * src/prefs.c, src/treeviews.c, src/msgwindow.c:
    Make use of ui_widget_modify_font_from_string() at various places.
    Set the message window font also for the scribble.
+ * Makefile.am, wscript, geany.nsi:
+   Add 'ui_toolbar.xml' to EXTRA_DIST, include it in the Windows
+   installer and install it also when using Waf.
 
 
 2008-12-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

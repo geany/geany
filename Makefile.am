@@ -21,7 +21,8 @@ SYS_DATA_FILES = \
 	data/html_entities.tags \
 	$(srcdir)/data/filetypes.* \
 	data/filetype_extensions.conf \
-	data/snippets.conf
+	data/snippets.conf \
+	data/ui_toolbar.xml
 
 EXTRA_DIST = \
 	autogen.sh \

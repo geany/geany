@@ -392,6 +392,7 @@ def build(bld):
 	bld.install_files('${DATADIR}/geany', 'data/filetype*')
 	bld.install_files('${DATADIR}/geany', 'data/*.tags')
 	bld.install_files('${DATADIR}/geany', 'data/snippets.conf')
+	bld.install_files('${DATADIR}/geany', 'data/ui_toolbar.xml')
 	bld.install_as('${DATADIR}/geany/GPL-2', 'COPYING')
 	# Icons
 	bld.install_files('${DATADIR}/pixmaps', 'pixmaps/geany.png')
