@@ -67,6 +67,7 @@ geany_include_HEADERS = \
 	search.h \
 	support.h \
 	templates.h \
+	toolbar.h \
 	ui_utils.h \
 	utils.h
 

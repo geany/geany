@@ -373,7 +373,7 @@ def build(bld):
 		src/dialogs.h src/document.h src/editor.h src/encodings.h src/filetypes.h src/geany.h
 		src/highlighting.h src/keybindings.h src/msgwindow.h src/plugindata.h src/plugins.h
 		src/prefs.h src/project.h src/sciwrappers.h src/search.h src/support.h src/templates.h
-		src/ui_utils.h src/utils.h
+		src/toolbar.h src/ui_utils.h src/utils.h
 		plugins/pluginmacros.h ''')
 	bld.install_files('${PREFIX}/include/geany/scintilla', '''
 		scintilla/include/SciLexer.h scintilla/include/Scintilla.h scintilla/include/Scintilla.iface

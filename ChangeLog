@@ -29,6 +29,8 @@
    data directory and use the contents for the new file.
    Add a menu item to 'Tools->Configuration files' for the toolbar UI
    definition.
+ * src/Makefile.am, wscript:
+   Install toolbar.h.
 
 
 2008-12-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
