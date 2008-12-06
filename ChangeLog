@@ -31,6 +31,8 @@
    definition.
  * src/Makefile.am, wscript:
    Install toolbar.h.
+ * src/ui_utils.c:
+   Fix broken recent files menus.
 
 
 2008-12-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -865,10 +865,11 @@ GtkWidget *ui_new_image_from_inline(gint img, gboolean small_img)
 void ui_create_recent_menu(void)
 {
 	GtkWidget *tmp;
-	guint i;
+	guint i, len;
 	gchar *filename;
 
-	for (i = 0; i < MIN(file_prefs.mru_length, g_queue_get_length(ui_prefs.recent_queue)); i++)
+	len = MIN(file_prefs.mru_length, g_queue_get_length(ui_prefs.recent_queue));
+	for (i = 0; i < len; i++)
 	{
 		filename = g_queue_peek_nth(ui_prefs.recent_queue, i);
 		/* create menu item for the recent files menu in the menu bar */
@@ -888,9 +889,7 @@ void ui_create_recent_menu(void)
 }
 
 
-static void
-recent_file_activate_cb                (GtkMenuItem     *menuitem,
-                                        G_GNUC_UNUSED gpointer         user_data)
+static void recent_file_activate_cb(GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer user_data)
 {
 	gchar *utf8_filename = ui_menu_item_get_text(menuitem);
 	gchar *locale_filename = utils_get_locale_from_utf8(utf8_filename);
@@ -990,7 +989,7 @@ static void recent_file_loaded(const gchar *utf8_filename)
 	 * first for the recent files menu in the menu bar */
 	tmp = gtk_menu_item_new_with_label(utf8_filename);
 	gtk_widget_show(tmp);
-	gtk_container_add(GTK_CONTAINER(ui_widgets.recent_files_menu_menubar), tmp);
+	gtk_menu_shell_prepend(GTK_MENU_SHELL(ui_widgets.recent_files_menu_menubar), tmp);
 	g_signal_connect(tmp, "activate", G_CALLBACK(recent_file_activate_cb), NULL);
 	/* then for the recent files menu in the tool bar */
 	if (ui_widgets.recent_files_menu_toolbar != NULL)
@@ -998,6 +997,10 @@ static void recent_file_loaded(const gchar *utf8_filename)
 		tmp = gtk_menu_item_new_with_label(utf8_filename);
 		gtk_widget_show(tmp);
 		gtk_container_add(GTK_CONTAINER(ui_widgets.recent_files_menu_toolbar), tmp);
+		/* this is a bit ugly, but we need to use gtk_container_add(). Using
+		 * gtk_menu_shell_prepend() doesn't emit GtkContainer's "add" signal which we need in
+		 * GeanyMenubuttonAction */
+		gtk_menu_reorder_child(GTK_MENU(ui_widgets.recent_files_menu_toolbar), tmp, 0);
 		g_signal_connect(tmp, "activate", G_CALLBACK(recent_file_activate_cb), NULL);
 	}
 }
@@ -1026,7 +1029,7 @@ static void update_recent_menu(void)
 	/* create item for the menu bar menu */
 	tmp = gtk_menu_item_new_with_label(filename);
 	gtk_widget_show(tmp);
-	gtk_container_add(GTK_CONTAINER(ui_widgets.recent_files_menu_menubar), tmp);
+	gtk_menu_shell_prepend(GTK_MENU_SHELL(ui_widgets.recent_files_menu_menubar), tmp);
 	g_signal_connect(tmp, "activate", G_CALLBACK(recent_file_activate_cb), NULL);
 
 	/* clean the MRU list before adding an item (toolbar) */
@@ -1047,6 +1050,7 @@ static void update_recent_menu(void)
 		tmp = gtk_menu_item_new_with_label(filename);
 		gtk_widget_show(tmp);
 		gtk_container_add(GTK_CONTAINER(ui_widgets.recent_files_menu_toolbar), tmp);
+		gtk_menu_reorder_child(GTK_MENU(ui_widgets.recent_files_menu_toolbar), tmp, 0);
 		g_signal_connect(tmp, "activate", G_CALLBACK(recent_file_activate_cb), NULL);
 	}
 }
