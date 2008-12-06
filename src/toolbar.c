@@ -205,7 +205,8 @@ GtkWidget *toolbar_init(void)
 	filename = utils_build_path(app->configdir, "ui_toolbar.xml", NULL);
 	if (! gtk_ui_manager_add_ui_from_file(uim, filename, &error))
 	{
-		geany_debug("Loading user toolbar UI definition failed (%s).", error->message);
+		if (error->code != G_FILE_ERROR_NOENT)
+			geany_debug("Loading user toolbar UI definition failed (%s).", error->message);
 		g_error_free(error);
 		error = NULL;
 
