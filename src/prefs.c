@@ -1184,6 +1184,7 @@ void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 			}
 			if (GTK_IS_WIDGET(tv.default_tag_tree))
 				ui_widget_modify_font_from_string(tv.default_tag_tree, interface_prefs.tagbar_font);
+			ui_widget_modify_font_from_string(tv.tree_openfiles, interface_prefs.tagbar_font);
 			break;
 		}
 		case 2:
@@ -1194,6 +1195,9 @@ void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 			ui_widget_modify_font_from_string(msgwindow.tree_compiler, interface_prefs.msgwin_font);
 			ui_widget_modify_font_from_string(msgwindow.tree_msg, interface_prefs.msgwin_font);
 			ui_widget_modify_font_from_string(msgwindow.tree_status, interface_prefs.msgwin_font);
+			ui_widget_modify_font_from_string(
+				lookup_widget(main_widgets.window, "textview_scribble"),
+				interface_prefs.msgwin_font);
 			break;
 		}
 		case 3:

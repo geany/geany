@@ -85,7 +85,6 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 	GtkCellRenderer *text_renderer, *icon_renderer;
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *select;
-	PangoFontDescription *pfd;
 
 	text_renderer = gtk_cell_renderer_text_new();
 	icon_renderer = gtk_cell_renderer_pixbuf_new();
@@ -103,9 +102,7 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree), FALSE);
 
-	pfd = pango_font_description_from_string(interface_prefs.tagbar_font);
-	gtk_widget_modify_font(tree, pfd);
-	pango_font_description_free(pfd);
+	ui_widget_modify_font_from_string(tree, interface_prefs.tagbar_font);
 
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
 	g_object_unref(store);
@@ -211,7 +208,6 @@ static void prepare_openfiles(void)
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *select;
-	PangoFontDescription *pfd;
 	GtkTreeSortable *sortable;
 
 	tv.tree_openfiles = lookup_widget(main_widgets.window, "treeview6");
@@ -240,9 +236,7 @@ static void prepare_openfiles(void)
 	sortable = GTK_TREE_SORTABLE(GTK_TREE_MODEL(store_openfiles));
 	gtk_tree_sortable_set_sort_column_id(sortable, 0, GTK_SORT_ASCENDING);
 
-	pfd = pango_font_description_from_string(interface_prefs.tagbar_font);
-	gtk_widget_modify_font(tv.tree_openfiles, pfd);
-	pango_font_description_free(pfd);
+	ui_widget_modify_font_from_string(tv.tree_openfiles, interface_prefs.tagbar_font);
 
 	/* GTK 2.12 tooltips */
 	if (gtk_check_version(2, 12, 0) == NULL)

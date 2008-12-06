@@ -88,6 +88,9 @@ void msgwin_init()
 	msgwindow.popup_msg_menu = create_message_popup_menu(MSG_MESSAGE);
 	msgwindow.popup_compiler_menu = create_message_popup_menu(MSG_COMPILER);
 
+	ui_widget_modify_font_from_string(
+		lookup_widget(main_widgets.window, "textview_scribble"), interface_prefs.msgwin_font);
+
 	g_signal_connect(lookup_widget(main_widgets.window, "textview_scribble"),
 		"populate-popup", G_CALLBACK(on_scribble_populate), NULL);
 }
@@ -104,7 +107,6 @@ static void prepare_status_tree_view(void)
 {
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
-	PangoFontDescription *pfd;
 
 	msgwindow.store_status = gtk_list_store_new(1, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(msgwindow.tree_status), GTK_TREE_MODEL(msgwindow.store_status));
@@ -116,9 +118,7 @@ static void prepare_status_tree_view(void)
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_status), FALSE);
 
-	pfd = pango_font_description_from_string(interface_prefs.msgwin_font);
-	gtk_widget_modify_font(msgwindow.tree_status, pfd);
-	pango_font_description_free(pfd);
+	ui_widget_modify_font_from_string(msgwindow.tree_status, interface_prefs.msgwin_font);
 
 	g_signal_connect(msgwindow.tree_status, "button-press-event",
 				G_CALLBACK(on_msgwin_button_press_event), GINT_TO_POINTER(MSG_STATUS));
@@ -132,7 +132,6 @@ static void prepare_msg_tree_view(void)
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *selection;
-	PangoFontDescription *pfd;
 
 	/* line, doc, fg, str */
 	msgwindow.store_msg = gtk_list_store_new(4, G_TYPE_INT, G_TYPE_POINTER,
@@ -147,9 +146,7 @@ static void prepare_msg_tree_view(void)
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_msg), FALSE);
 
-	pfd = pango_font_description_from_string(interface_prefs.msgwin_font);
-	gtk_widget_modify_font(msgwindow.tree_msg, pfd);
-	pango_font_description_free(pfd);
+	ui_widget_modify_font_from_string(msgwindow.tree_msg, interface_prefs.msgwin_font);
 
 	/* use button-release-event so the selection has changed
 	 * (connect_after button-press-event doesn't work) */
@@ -169,7 +166,6 @@ static void prepare_compiler_tree_view(void)
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *selection;
-	PangoFontDescription *pfd;
 
 	msgwindow.store_compiler = gtk_list_store_new(2, GDK_TYPE_COLOR, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(msgwindow.tree_compiler), GTK_TREE_MODEL(msgwindow.store_compiler));
@@ -181,9 +177,7 @@ static void prepare_compiler_tree_view(void)
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_compiler), FALSE);
 
-	pfd = pango_font_description_from_string(interface_prefs.msgwin_font);
-	gtk_widget_modify_font(msgwindow.tree_compiler, pfd);
-	pango_font_description_free(pfd);
+	ui_widget_modify_font_from_string(msgwindow.tree_compiler, interface_prefs.msgwin_font);
 
 	/* use button-release-event so the selection has changed
 	 * (connect_after button-press-event doesn't work) */

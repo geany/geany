@@ -37,6 +37,9 @@
    src/keybindings.c:
    Remove on_go_to_line1_activate() and directly use
    on_go_to_line_activate() instead.
+ * src/prefs.c, src/treeviews.c, src/msgwindow.c:
+   Make use of ui_widget_modify_font_from_string() at various places.
+   Set the message window font also for the scribble.
 
 
 2008-12-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
