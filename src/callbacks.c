@@ -2104,8 +2104,10 @@ on_escape_key_press_event              (GtkWidget       *widget,
                                         GdkEventKey     *event,
                                         gpointer         user_data)
 {
+	guint state = event->state & GEANY_KEYS_MODIFIER_MASK;
+
 	/* make pressing escape in the sidebar and toolbar focus the editor */
-	if (event->keyval == GDK_Escape && event->state == 0)
+	if (event->keyval == GDK_Escape && state == 0)
 	{
 		keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
 		return TRUE;
