@@ -115,6 +115,17 @@ typedef struct GeanyAutoSeparator
 GeanyAutoSeparator;
 
 
+typedef enum
+{
+	GEANY_EDITOR_SHOW_MARKERS_MARGIN,
+	GEANY_EDITOR_SHOW_LINE_NUMBERS,
+	GEANY_EDITOR_SHOW_WHITE_SPACE,
+	GEANY_EDITOR_SHOW_INDENTATION_GUIDES,
+	GEANY_EDITOR_SHOW_LINE_ENDINGS
+}
+GeanyUIEditorFeatures;
+
+
 void ui_widget_show_hide(GtkWidget *widget, gboolean show);
 
 void ui_widget_modify_font_from_string(GtkWidget *wid, const gchar *str);
@@ -212,11 +223,6 @@ void ui_create_recent_menu(void);
 void ui_add_recent_file(const gchar *utf8_filename);
 
 
-void ui_show_markers_margin(void);
-
-void ui_show_linenumber_margin(void);
-
-
 void ui_update_tab_status(GeanyDocument *doc);
 
 
@@ -230,5 +236,9 @@ gboolean ui_tree_view_find_previous(GtkTreeView *treeview, TVMatchCallback cb);
 void ui_statusbar_showhide(gboolean state);
 
 void ui_add_document_sensitive(GtkWidget *widget);
+
+void ui_toggle_editor_features(GeanyUIEditorFeatures feature);
+
+void ui_update_view_editor_menu_items(void);
 
 #endif

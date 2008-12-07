@@ -58,7 +58,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2652">
+			<widget class="GtkImage" id="image2690">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -148,7 +148,7 @@
 		      <signal name="activate" handler="on_save_all1_activate" last_modification_time="Thu, 02 Jun 2005 14:15:30 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2653">
+			<widget class="GtkImage" id="image2691">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-save</property>
 			  <property name="icon_size">1</property>
@@ -169,7 +169,7 @@
 		      <signal name="activate" handler="on_toolbutton_reload_clicked" last_modification_time="Mon, 01 Sep 2008 16:57:06 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2654">
+			<widget class="GtkImage" id="image2692">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-revert-to-saved</property>
 			  <property name="icon_size">1</property>
@@ -189,7 +189,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2655">
+			<widget class="GtkImage" id="image2693">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-revert-to-saved</property>
 			  <property name="icon_size">1</property>
@@ -277,7 +277,7 @@
 		      <signal name="activate" handler="on_close_other_documents1_activate" last_modification_time="Fri, 27 Jun 2008 15:19:28 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2656">
+			<widget class="GtkImage" id="image2694">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-close</property>
 			  <property name="icon_size">1</property>
@@ -299,7 +299,7 @@
 		      <signal name="activate" handler="on_close_all1_activate" last_modification_time="Thu, 02 Jun 2005 14:15:30 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2657">
+			<widget class="GtkImage" id="image2695">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-close</property>
 			  <property name="icon_size">1</property>
@@ -498,7 +498,7 @@
 			      <signal name="activate" handler="on_menu_increase_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:28:54 GMT"/>
 
 			      <child internal-child="image">
-				<widget class="GtkImage" id="image2658">
+				<widget class="GtkImage" id="image2696">
 				  <property name="visible">True</property>
 				  <property name="stock">gtk-indent</property>
 				  <property name="icon_size">1</property>
@@ -519,7 +519,7 @@
 			      <signal name="activate" handler="on_menu_decrease_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:28:54 GMT"/>
 
 			      <child internal-child="image">
-				<widget class="GtkImage" id="image2659">
+				<widget class="GtkImage" id="image2697">
 				  <property name="visible">True</property>
 				  <property name="stock">gtk-unindent</property>
 				  <property name="icon_size">1</property>
@@ -575,7 +575,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2660">
+			<widget class="GtkImage" id="image2698">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -660,7 +660,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2661">
+			<widget class="GtkImage" id="image2699">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -692,7 +692,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2662">
+			<widget class="GtkImage" id="image2700">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -790,7 +790,7 @@
 		      <signal name="activate" handler="on_replace1_activate" last_modification_time="Sun, 23 Oct 2005 13:22:36 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2663">
+			<widget class="GtkImage" id="image2701">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-find-and-replace</property>
 			  <property name="icon_size">1</property>
@@ -865,7 +865,7 @@
 		      <signal name="activate" handler="on_go_to_line_activate" last_modification_time="Sat, 06 Dec 2008 17:41:21 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2664">
+			<widget class="GtkImage" id="image2702">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-jump-to</property>
 			  <property name="icon_size">1</property>
@@ -900,7 +900,7 @@
 		      <signal name="activate" handler="on_change_font1_activate" last_modification_time="Fri, 22 Apr 2005 18:58:45 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2665">
+			<widget class="GtkImage" id="image2703">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-font</property>
 			  <property name="icon_size">1</property>
@@ -971,24 +971,67 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkCheckMenuItem" id="menu_markers_margin1">
+		    <widget class="GtkMenuItem" id="menu_view_editor1">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Shows or hides the small margin right of the line numbers, which is used to mark lines.</property>
-		      <property name="label" translatable="yes">Show _Markers Margin</property>
+		      <property name="label" translatable="yes">Editor</property>
 		      <property name="use_underline">True</property>
-		      <property name="active">True</property>
-		      <signal name="toggled" handler="on_markers_margin1_toggled" last_modification_time="Tue, 10 May 2005 18:34:36 GMT"/>
-		    </widget>
-		  </child>
 
-		  <child>
-		    <widget class="GtkCheckMenuItem" id="menu_linenumber_margin1">
-		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Shows or hides the Line Number margin.</property>
-		      <property name="label" translatable="yes">Show _Line Numbers</property>
-		      <property name="use_underline">True</property>
-		      <property name="active">True</property>
-		      <signal name="toggled" handler="on_show_line_numbers1_toggled" last_modification_time="Mon, 13 Feb 2006 20:22:48 GMT"/>
+		      <child>
+			<widget class="GtkMenu" id="menu_view_editor1_menu">
+
+			  <child>
+			    <widget class="GtkCheckMenuItem" id="menu_markers_margin1">
+			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Shows or hides the small margin right of the line numbers, which is used to mark lines.</property>
+			      <property name="label" translatable="yes">Show _Markers Margin</property>
+			      <property name="use_underline">True</property>
+			      <property name="active">True</property>
+			      <signal name="toggled" handler="on_markers_margin1_toggled" last_modification_time="Tue, 10 May 2005 18:34:36 GMT"/>
+			    </widget>
+			  </child>
+
+			  <child>
+			    <widget class="GtkCheckMenuItem" id="menu_linenumber_margin1">
+			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Shows or hides the Line Number margin.</property>
+			      <property name="label" translatable="yes">Show _Line Numbers</property>
+			      <property name="use_underline">True</property>
+			      <property name="active">True</property>
+			      <signal name="toggled" handler="on_show_line_numbers1_toggled" last_modification_time="Mon, 13 Feb 2006 20:22:48 GMT"/>
+			    </widget>
+			  </child>
+
+			  <child>
+			    <widget class="GtkCheckMenuItem" id="menu_show_white_space1">
+			      <property name="visible">True</property>
+			      <property name="label" translatable="yes">Show _White Space</property>
+			      <property name="use_underline">True</property>
+			      <property name="active">False</property>
+			      <signal name="toggled" handler="on_menu_show_white_space1_toggled" last_modification_time="Sun, 07 Dec 2008 11:56:59 GMT"/>
+			    </widget>
+			  </child>
+
+			  <child>
+			    <widget class="GtkCheckMenuItem" id="menu_show_line_endings1">
+			      <property name="visible">True</property>
+			      <property name="label" translatable="yes">Show Line _Endings</property>
+			      <property name="use_underline">True</property>
+			      <property name="active">False</property>
+			      <signal name="toggled" handler="on_menu_show_line_endings1_toggled" last_modification_time="Sun, 07 Dec 2008 11:56:51 GMT"/>
+			    </widget>
+			  </child>
+
+			  <child>
+			    <widget class="GtkCheckMenuItem" id="menu_show_indentation_guides1">
+			      <property name="visible">True</property>
+			      <property name="label" translatable="yes">Show _Indentation Guides</property>
+			      <property name="use_underline">True</property>
+			      <property name="active">False</property>
+			      <signal name="toggled" handler="on_menu_show_indentation_guides1_toggled" last_modification_time="Sun, 07 Dec 2008 11:56:43 GMT"/>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
 		    </widget>
 		  </child>
 
@@ -1340,7 +1383,7 @@
 		      <signal name="activate" handler="on_project_new1_activate" last_modification_time="Thu, 18 Jan 2007 22:16:24 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2666">
+			<widget class="GtkImage" id="image2704">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -1361,7 +1404,7 @@
 		      <signal name="activate" handler="on_project_open1_activate" last_modification_time="Mon, 15 Jan 2007 17:34:17 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2667">
+			<widget class="GtkImage" id="image2705">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-open</property>
 			  <property name="icon_size">1</property>
@@ -1382,7 +1425,7 @@
 		      <signal name="activate" handler="on_project_close1_activate" last_modification_time="Mon, 15 Jan 2007 17:34:17 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2668">
+			<widget class="GtkImage" id="image2706">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-close</property>
 			  <property name="icon_size">1</property>
@@ -1440,7 +1483,7 @@
 		      <signal name="activate" handler="on_show_color_chooser1_activate" last_modification_time="Wed, 22 Jun 2005 18:10:21 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2669">
+			<widget class="GtkImage" id="image2707">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-color</property>
 			  <property name="icon_size">1</property>
@@ -1482,7 +1525,7 @@
 		      <signal name="activate" handler="on_menu_reload_configuration1_activate" last_modification_time="Mon, 30 Jun 2008 16:19:40 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2670">
+			<widget class="GtkImage" id="image2708">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-refresh</property>
 			  <property name="icon_size">1</property>
@@ -1516,7 +1559,7 @@
 		      <signal name="activate" handler="on_help1_activate" last_modification_time="Sun, 24 Jul 2005 15:23:11 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2671">
+			<widget class="GtkImage" id="image2709">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-help</property>
 			  <property name="icon_size">1</property>
@@ -5930,6 +5973,46 @@ Match braces</property>
 				  <property name="tooltip" translatable="yes">Show the line ending character.</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Show line endings</property>
+				  <property name="use_underline">True</property>
+				  <property name="relief">GTK_RELIEF_NORMAL</property>
+				  <property name="focus_on_click">True</property>
+				  <property name="active">False</property>
+				  <property name="inconsistent">False</property>
+				  <property name="draw_indicator">True</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">False</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkCheckButton" id="check_line_numbers">
+				  <property name="visible">True</property>
+				  <property name="tooltip" translatable="yes">Show the line ending character.</property>
+				  <property name="can_focus">True</property>
+				  <property name="label" translatable="yes">Show line numbers</property>
+				  <property name="use_underline">True</property>
+				  <property name="relief">GTK_RELIEF_NORMAL</property>
+				  <property name="focus_on_click">True</property>
+				  <property name="active">False</property>
+				  <property name="inconsistent">False</property>
+				  <property name="draw_indicator">True</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">False</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkCheckButton" id="check_markers_margin">
+				  <property name="visible">True</property>
+				  <property name="tooltip" translatable="yes">Show the line ending character.</property>
+				  <property name="can_focus">True</property>
+				  <property name="label" translatable="yes">Show markers margin</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
 				  <property name="focus_on_click">True</property>

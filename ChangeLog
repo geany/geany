@@ -6,6 +6,13 @@
    Add a setting for the VTE to enable/disable a blinking cursor.
    This is useful for future VTE versions where the cursor blinks
    by default which might be not be desirable.
+ * geany.glade, src/callbacks.c, src/callbacks.h, src/editor.c,
+   src/interface.c, src/main.c, src/prefs.c, src/ui_utils.c,
+   src/ui_utils.h:
+   Add Line number and Markers margin settings to the prefs dialog.
+   Add View->Editor submenu and group there the Line numbers,
+   Markers margin, Show white space, Show line endings and Show
+   indentation guides settings.
 
 
 2008-12-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

@@ -4194,6 +4194,8 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 
 	sci_set_visible_white_spaces(sci, editor_prefs.show_white_space);
 	sci_set_visible_eols(sci, editor_prefs.show_line_endings);
+	sci_set_symbol_margin(sci, editor_prefs.show_markers_margin);
+	sci_set_line_numbers(sci, editor_prefs.show_linenumber_margin, 0);
 
 	sci_set_folding_margin_visible(sci, editor_prefs.folding);
 

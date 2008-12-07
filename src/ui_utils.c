@@ -628,11 +628,10 @@ static void init_document_widgets(void)
 	add_doc_widget("preferences2");
 	add_doc_widget("menu_reload1");
 	add_doc_widget("menu_document1");
-	add_doc_widget("menu_markers_margin1");
-	add_doc_widget("menu_linenumber_margin1");
 	add_doc_widget("menu_choose_color1");
 	add_doc_widget("menu_zoom_in1");
 	add_doc_widget("menu_zoom_out1");
+	add_doc_widget("menu_view_editor1");
 	add_doc_widget("normal_size1");
 	add_doc_widget("treeview6");
 	add_doc_widget("print1");
@@ -1056,7 +1055,7 @@ static void update_recent_menu(void)
 }
 
 
-void ui_show_markers_margin(void)
+void ui_toggle_editor_features(GeanyUIEditorFeatures feature)
 {
 	gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 	GeanyDocument *doc;
@@ -1064,21 +1063,38 @@ void ui_show_markers_margin(void)
 	for(i = 0; i < max; i++)
 	{
 		doc = document_get_from_page(i);
-		sci_set_symbol_margin(doc->editor->sci, editor_prefs.show_markers_margin);
+
+		switch (feature)
+		{
+			case GEANY_EDITOR_SHOW_MARKERS_MARGIN:
+				sci_set_symbol_margin(doc->editor->sci, editor_prefs.show_markers_margin);
+				break;
+			case GEANY_EDITOR_SHOW_LINE_NUMBERS:
+				sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
+				break;
+			case GEANY_EDITOR_SHOW_WHITE_SPACE:
+				sci_set_visible_white_spaces(doc->editor->sci, editor_prefs.show_white_space);
+				break;
+			case GEANY_EDITOR_SHOW_LINE_ENDINGS:
+				sci_set_visible_eols(doc->editor->sci, editor_prefs.show_line_endings);
+				break;
+			case GEANY_EDITOR_SHOW_INDENTATION_GUIDES:
+				editor_set_indentation_guides(doc->editor);
+				break;
+		}
 	}
 }
 
 
-void ui_show_linenumber_margin(void)
+void ui_update_view_editor_menu_items(void)
 {
-	gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
-	GeanyDocument *doc;
-
-	for(i = 0; i < max; i++)
-	{
-		doc = document_get_from_page(i);
-		sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
-	}
+	ignore_callback = TRUE;
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_markers_margin1")), editor_prefs.show_markers_margin);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_linenumber_margin1")), editor_prefs.show_linenumber_margin);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_show_white_space1")), editor_prefs.show_white_space);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_show_line_endings1")), editor_prefs.show_line_endings);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_show_indentation_guides1")), editor_prefs.show_indent_guide);
+	ignore_callback = FALSE;
 }
 
 

@@ -210,17 +210,7 @@ static void apply_settings(void)
 	}
 	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
 
-	/* line number and markers margin are by default enabled */
-	if (! editor_prefs.show_markers_margin)
-	{
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_markers_margin1")), FALSE);
-		editor_prefs.show_markers_margin = FALSE;
-	}
-	if (! editor_prefs.show_linenumber_margin)
-	{
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_linenumber_margin1")), FALSE);
-		editor_prefs.show_linenumber_margin = FALSE;
-	}
+	ui_update_view_editor_menu_items();
 
 	/* interprets the saved window geometry */
 	if (prefs.save_winpos && ui_prefs.geometry[0] != -1)

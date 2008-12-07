@@ -596,3 +596,16 @@ on_tabs_and_spaces1_activate           (GtkMenuItem     *menuitem,
 void
 on_debug_messages1_activate            (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
+
+void
+on_menu_show_white_space1_toggled      (GtkCheckMenuItem *checkmenuitem,
+                                        gpointer         user_data);
+
+void
+on_menu_show_line_endings1_toggled     (GtkCheckMenuItem *checkmenuitem,
+                                        gpointer         user_data);
+
+void
+on_menu_show_indentation_guides1_toggled
+                                        (GtkCheckMenuItem *checkmenuitem,
+                                        gpointer         user_data);
