@@ -34,6 +34,11 @@ Some features:
 %install
 %__rm -Rf $RPM_BUILD_ROOT
 %makeinstall
+# If you experience build problems like
+# "Found '/home/user/rpmbuild/BUILDROOT/geany-0.16svn-3328.i386' in installed files; aborting"
+# try uncommenting the following line to workaround the problem
+#sed -i "s@libdir='.*'@libdir='%{_libdir}/%{name}'@g" $RPM_BUILD_ROOT%{_libdir}/%{name}/*.la
+
 %__rm $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/icon-theme.cache
 
 %clean
