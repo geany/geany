@@ -61,25 +61,22 @@ static gint vte_prefs_tab_num = -1;
 static const gchar VTE_WORDCHARS[] = "-A-Za-z0-9,./?%&#:_";
 
 
-/* taken from original vte.h to make my life easier ;-) */
-
-typedef struct _VteTerminalPrivate VteTerminalPrivate;
-
+/* Incomplete VteTerminal struct from vte/vte.h. */
 typedef struct _VteTerminal VteTerminal;
 struct _VteTerminal
 {
 	GtkWidget widget;
 	GtkAdjustment *adjustment;
-	glong char_width, char_height;
-	glong char_ascent, char_descent;
-	glong row_count, column_count;
-	gchar *window_title;
-	gchar *icon_title;
-	VteTerminalPrivate *pvt;
 };
 
 #define VTE_TERMINAL(obj) (GTK_CHECK_CAST((obj), VTE_TYPE_TERMINAL, VteTerminal))
 #define VTE_TYPE_TERMINAL (vf->vte_terminal_get_type())
+
+typedef enum {
+        VTE_CURSOR_BLINK_SYSTEM,
+        VTE_CURSOR_BLINK_ON,
+        VTE_CURSOR_BLINK_OFF
+} VteTerminalCursorBlinkMode;
 
 
 /* store function pointers in a struct to avoid a strange segfault if they are stored directly
@@ -107,6 +104,9 @@ struct VteFunctions
 	void (*vte_terminal_set_color_background) (VteTerminal *terminal, const GdkColor *background);
 	void (*vte_terminal_feed_child) (VteTerminal *terminal, const char *data, glong length);
 	void (*vte_terminal_im_append_menuitems) (VteTerminal *terminal, GtkMenuShell *menushell);
+	void (*vte_terminal_set_cursor_blink_mode) (VteTerminal *terminal,
+												VteTerminalCursorBlinkMode mode);
+	void (*vte_terminal_set_cursor_blinks) (VteTerminal *terminal, gboolean blink);
 };
 
 
@@ -415,6 +415,18 @@ static gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpo
 }
 
 
+static void vte_set_cursor_blink_mode(void)
+{
+	if (vf->vte_terminal_set_cursor_blink_mode != NULL)
+		/* vte >= 0.17.1 */
+		vf->vte_terminal_set_cursor_blink_mode(VTE_TERMINAL(vc->vte),
+			(vc->cursor_blinks) ? VTE_CURSOR_BLINK_ON : VTE_CURSOR_BLINK_OFF);
+	else
+		/* vte < 0.17.1 */
+		vf->vte_terminal_set_cursor_blinks(VTE_TERMINAL(vc->vte), vc->cursor_blinks);
+}
+
+
 static void vte_register_symbols(GModule *mod)
 {
 	g_module_symbol(mod, "vte_terminal_new", (void*)&vf->vte_terminal_new);
@@ -436,6 +448,11 @@ static void vte_register_symbols(GModule *mod)
 	g_module_symbol(mod, "vte_terminal_set_color_background", (void*)&vf->vte_terminal_set_color_background);
 	g_module_symbol(mod, "vte_terminal_feed_child", (void*)&vf->vte_terminal_feed_child);
 	g_module_symbol(mod, "vte_terminal_im_append_menuitems", (void*)&vf->vte_terminal_im_append_menuitems);
+	g_module_symbol(mod, "vte_terminal_set_cursor_blink_mode", (void*)&vf->vte_terminal_set_cursor_blink_mode);
+	if (vf->vte_terminal_set_cursor_blink_mode == NULL)
+		/* vte_terminal_set_cursor_blink_mode() is only available since 0.17.1, so if we don't find
+		 * this symbol, we are probably on an older version and use the old API instead */
+		g_module_symbol(mod, "vte_terminal_set_cursor_blinks", (void*)&vf->vte_terminal_set_cursor_blinks);
 }
 
 
@@ -451,6 +468,7 @@ void vte_apply_user_settings(void)
 	vf->vte_terminal_set_font_from_string(VTE_TERMINAL(vc->vte), vc->font);
 	vf->vte_terminal_set_color_foreground(VTE_TERMINAL(vc->vte), vc->colour_fore);
 	vf->vte_terminal_set_color_background(VTE_TERMINAL(vc->vte), vc->colour_back);
+	vte_set_cursor_blink_mode();
 
 	override_menu_key();
 }
@@ -678,7 +696,7 @@ void vte_append_preferences_tab(void)
 		GtkWidget *notebook, *vbox, *label, *alignment, *table, *frame, *box;
 		GtkWidget *font_term, *color_fore, *color_back, *spin_scrollback;
 		GtkWidget *check_scroll_key, *check_scroll_out, *check_follow_path;
-		GtkWidget *check_enable_bash_keys, *check_ignore_menu_key;
+		GtkWidget *check_enable_bash_keys, *check_ignore_menu_key, *check_cursor_blinks;
 		GtkWidget *check_run_in_vte, *check_skip_script, *entry_shell, *button_shell, *image_shell;
 		GtkObject *spin_scrollback_adj;
 
@@ -788,6 +806,10 @@ void vte_append_preferences_tab(void)
 		ui_widget_set_tooltip_text(check_scroll_out, _("Whether to scroll to the bottom when output is generated."));
 		gtk_container_add(GTK_CONTAINER(box), check_scroll_out);
 
+		check_cursor_blinks = gtk_check_button_new_with_mnemonic(_("Cursor blinks"));
+		ui_widget_set_tooltip_text(check_cursor_blinks, _("Whether to blink the cursor"));
+		gtk_container_add(GTK_CONTAINER(box), check_cursor_blinks);
+
 		check_enable_bash_keys = gtk_check_button_new_with_mnemonic(_("Override Geany keybindings"));
 		ui_widget_set_tooltip_text(check_enable_bash_keys,
 			_("Allows the VTE to receive keyboard shortcuts (apart from focus commands)."));
@@ -832,6 +854,8 @@ void vte_append_preferences_tab(void)
 				g_object_ref(check_scroll_key),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_scroll_out",
 				g_object_ref(check_scroll_out),	(GDestroyNotify) g_object_unref);
+		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_cursor_blinks",
+				g_object_ref(check_cursor_blinks),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_enable_bash_keys",
 				g_object_ref(check_enable_bash_keys),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_ignore_menu_key",

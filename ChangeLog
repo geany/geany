@@ -2,6 +2,10 @@
 
  * src/callbacks.c:
    Fix pressing escape in the sidebar and toolbar focus the editor.
+ * src/keyfile.c, src/prefs.c, src/vte.c, src/vte.h:
+   Add a setting for the VTE to enable/disable a blinking cursor.
+   This is useful for future VTE versions where the cursor blinks
+   by default which might be not be desirable.
 
 
 2008-12-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

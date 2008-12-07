@@ -397,6 +397,7 @@ static void save_dialog_prefs(GKeyFile *config)
 		g_key_file_set_boolean(config, "VTE", "follow_path", vc->follow_path);
 		g_key_file_set_boolean(config, "VTE", "run_in_vte", vc->run_in_vte);
 		g_key_file_set_boolean(config, "VTE", "skip_run_script", vc->skip_run_script);
+		g_key_file_set_boolean(config, "VTE", "cursor_blinks", vc->cursor_blinks);
 		g_key_file_set_integer(config, "VTE", "scrollback_lines", vc->scrollback_lines);
 		g_key_file_set_string(config, "VTE", "font", vc->font);
 		g_key_file_set_string(config, "VTE", "shell", vc->shell);
@@ -683,6 +684,7 @@ static void load_dialog_prefs(GKeyFile *config)
 		vc->follow_path = utils_get_setting_boolean(config, "VTE", "follow_path", FALSE);
 		vc->run_in_vte = utils_get_setting_boolean(config, "VTE", "run_in_vte", FALSE);
 		vc->skip_run_script = utils_get_setting_boolean(config, "VTE", "skip_run_script", FALSE);
+		vc->cursor_blinks = utils_get_setting_boolean(config, "VTE", "cursor_blinks", FALSE);
 		vc->scrollback_lines = utils_get_setting_integer(config, "VTE", "scrollback_lines", 500);
 		vc->colour_fore = g_new0(GdkColor, 1);
 		vc->colour_back = g_new0(GdkColor, 1);
