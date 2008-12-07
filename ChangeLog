@@ -17,6 +17,8 @@
    When using the focus path entry and file list keyboard shortcuts,
    make sure the filebrowser tab is the current notebook tab in the
    sidebar (closes #2402290).
+ * wscript:
+   Update 'geanyfunctions.h' when using Waf.
 
 
 2008-12-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

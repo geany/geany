@@ -39,6 +39,7 @@ Requires WAF 1.5 (SVN r4695 or later) and Python 2.4 (or later).
 
 
 import Build, Configure, Options, Runner, Task, Utils
+from TaskGen import feature, before, taskgen
 import sys, os, subprocess, shutil
 from distutils import version
 
@@ -301,6 +302,10 @@ def build(bld):
 	obj.uselib	   = 'GTK'
 	obj.uselib_local = 'scintilla tagmanager'
 
+	# geanyfunctions.h
+	bld.new_task_gen(source='plugins/genapi.py src/plugins.c', name='PluginAPI',
+		rule='cd ${SRC[0].parent.abspath()} && python genapi.py -q', before='cc')
+
 	# Plugins
 	if bld.env['HAVE_PLUGINS'] == 1:
 		build_plugin('classbuilder')
@@ -476,4 +481,26 @@ def launch(command, status, success_color='GREEN'):
 def print_message(conf, msg, result, color = 'GREEN'):
 	conf.check_message_1(msg)
 	conf.check_message_2(result, color)
+
+
+# this is necessary for the 'geanyfunctions.h' task
+@taskgen
+@feature('*')
+@before('apply_core')
+def exec_rule(self):
+	if not getattr(self, 'rule', None):
+		return
+	name = self.target
+	cls = Task.simple_task_type(name, self.rule)
+
+	tsk = self.create_task(name)
+	tsk.inputs=[self.path.find_resource(x) for x in self.to_list(self.source)]
+	if getattr(self, 'target', None):
+		tsk.outputs=[self.path.find_or_declare(x) for x in self.to_list(self.target)]
+	else:
+		cls.quiet = True
+	for x in ['after', 'before']:
+		setattr(cls, x, getattr(self, x, []))
+
+
 
