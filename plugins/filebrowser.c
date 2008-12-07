@@ -85,6 +85,8 @@ static gchar		*open_cmd;				/* in locale-encoding */
 static gchar		*config_file;
 static gchar 		*filter = NULL;
 
+static gint			 page_number = 0;
+
 static struct
 {
 	GtkWidget *open;
@@ -865,6 +867,7 @@ static void load_settings(void)
 
 static void kb_activate(guint key_id)
 {
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(geany->main_widgets->sidebar_notebook), page_number);
 	switch (key_id)
 	{
 		case KB_FOCUS_FILE_LIST:
@@ -906,8 +909,8 @@ void plugin_init(GeanyData *data)
 	gtk_container_add(GTK_CONTAINER(file_view_vbox), scrollwin);
 
 	gtk_widget_show_all(file_view_vbox);
-	gtk_notebook_append_page(GTK_NOTEBOOK(geany->main_widgets->sidebar_notebook), file_view_vbox,
-		gtk_label_new(_("Files")));
+	page_number = gtk_notebook_append_page(GTK_NOTEBOOK(geany->main_widgets->sidebar_notebook),
+		file_view_vbox, gtk_label_new(_("Files")));
 
 	load_settings();
 
