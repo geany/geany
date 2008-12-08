@@ -3895,7 +3895,8 @@ gboolean editor_goto_line(GeanyEditor *editor, gint line)
 	gint pos;
 
 	g_return_val_if_fail(editor, FALSE);
-	g_return_val_if_fail(line >= 0 && line <= sci_get_line_count(editor->sci), FALSE);
+	if (line < 0 || line >= sci_get_line_count(editor->sci))
+		return FALSE;
 
 	pos = sci_get_position_from_line(editor->sci, line);
 	return editor_goto_pos(editor, pos, TRUE);
