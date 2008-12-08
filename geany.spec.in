@@ -36,7 +36,7 @@ Some features:
 %makeinstall
 # If you experience build problems like
 # "Found '/home/user/rpmbuild/BUILDROOT/geany-0.16svn-3328.i386' in installed files; aborting"
-# try uncommenting the following line to workaround the problem
+# try uncommenting the following line to workaround the problem (and add sed to BuildRequires)
 #sed -i "s@libdir='.*'@libdir='%{_libdir}/%{name}'@g" $RPM_BUILD_ROOT%{_libdir}/%{name}/*.la
 
 %__rm $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/icon-theme.cache
@@ -48,7 +48,7 @@ Some features:
 %defattr(-, root, root)
 %doc AUTHORS COPYING ChangeLog HACKING INSTALL NEWS README TODO THANKS
 %{_bindir}/%{name}
-%{_libdir}/geany/
+%{_libdir}/%{name}/
 %{_datadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/locale/*/LC_MESSAGES/%{name}.mo
@@ -56,5 +56,5 @@ Some features:
 %{_datadir}/doc/%{name}/
 %{_mandir}/man1/%{name}.1.gz
 %{_datadir}/icons/hicolor/16x16/apps/classviewer-*.png
-%{_includedir}/geany/
+%{_includedir}/%{name}/
 %{_libdir}/pkgconfig/
