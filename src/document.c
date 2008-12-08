@@ -283,7 +283,9 @@ void document_update_tab_label(GeanyDocument *doc)
 	g_return_if_fail(doc != NULL);
 
 	base_name = g_path_get_basename(DOC_FILENAME(doc));
+	/* we need to use the event box for the tooltip, labels don't get the necessary events */
 	parent = gtk_widget_get_parent(doc->priv->tab_label);
+	parent = gtk_widget_get_parent(parent);
 
 	gtk_label_set_text(GTK_LABEL(doc->priv->tab_label), base_name);
 	gtk_label_set_text(GTK_LABEL(doc->priv->tabmenu_label), base_name);

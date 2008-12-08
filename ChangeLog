@@ -1,3 +1,9 @@
+2008-12-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/document.c:
+   Fix showing tooltips for notebook tab labels (oops).
+
+
 2008-12-07  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/callbacks.c:
