@@ -126,6 +126,14 @@ typedef enum
 GeanyUIEditorFeatures;
 
 
+#define GEANY_STOCK_SAVE_ALL "geany-save-all"
+enum
+{
+	GEANY_IMAGE_LOGO,
+	GEANY_IMAGE_SAVE_ALL,
+};
+
+
 void ui_widget_show_hide(GtkWidget *widget, gboolean show);
 
 void ui_widget_modify_font_from_string(GtkWidget *wid, const gchar *str);

@@ -825,24 +825,6 @@ GdkPixbuf *ui_new_pixbuf_from_inline(gint img, gboolean small_img)
 			return gdk_pixbuf_new_from_inline(-1, save_all_inline, FALSE, NULL);
 			break;
 		}
-/* unused
-		case GEANY_IMAGE_SMALL_CROSS:
-			return gdk_pixbuf_new_from_inline(-1, close_small_inline, FALSE, NULL);
-			break;
-		case GEANY_IMAGE_NEW_ARROW:
-		{
-			if ((toolbar_prefs.icon_size == GTK_ICON_SIZE_SMALL_TOOLBAR) || small_img)
-			{
-				return gdk_pixbuf_scale_simple(gdk_pixbuf_new_from_inline(-1, newfile_inline, FALSE, NULL),
-                                             16, 16, GDK_INTERP_HYPER);
-			}
-			else
-			{
-				return gdk_pixbuf_new_from_inline(-1, newfile_inline, FALSE, NULL);
-			}
-			break;
-		}
-*/
 		default:
 			return NULL;
 	}

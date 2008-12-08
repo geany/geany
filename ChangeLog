@@ -3,6 +3,9 @@
  * wscript:
    Little reformatting.
    Beautify the Waf output when generating geanyfunctions.h.
+ * src/geany.c, src/ui_utils.c, src/ui_utils.h, src/images.c:
+   Move stock image name macro and image enum to ui_utils.h.
+   Remove old, unused images.
 
 
 2008-12-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

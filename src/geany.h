@@ -84,15 +84,6 @@ extern gboolean	ignore_callback;
 
 enum
 {
-	GEANY_IMAGE_SMALL_CROSS,
-	GEANY_IMAGE_LOGO,
-	GEANY_IMAGE_COMPILE,
-	GEANY_IMAGE_SAVE_ALL,
-	GEANY_IMAGE_NEW_ARROW
-};
-
-enum
-{
 	UP,
 	DOWN,
 	LEFT,
@@ -105,8 +96,6 @@ enum
 	MEGABYTE = (KILOBYTE*1024),
 	GIGABYTE = (MEGABYTE*1024)
 };
-
-#define GEANY_STOCK_SAVE_ALL "geany-save-all"
 
 
 /* Useful for some variable argument list functions, e.g. in utils.h */
