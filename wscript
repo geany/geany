@@ -255,55 +255,55 @@ def set_options(opt):
 
 def build(bld):
 	def build_plugin(plugin_name, install = True):
-		obj						 = bld.new_task_gen('cc', 'shlib')
-		obj.source				  = 'plugins/' + plugin_name + '.c'
+		obj							= bld.new_task_gen('cc', 'shlib')
+		obj.source					= 'plugins/' + plugin_name + '.c'
 		obj.includes				= '. plugins/ src/ scintilla/include tagmanager/include'
 		obj.env['shlib_PATTERN']	= '%s.so'
-		obj.target				  = plugin_name
-		obj.uselib				  = 'GTK'
+		obj.target					= plugin_name
+		obj.uselib					= 'GTK'
 		if install:
 			obj.install_path		= '${LIBDIR}/geany/'
 		else:
 			obj.install_path		= 0
-		#~ obj.want_libtool		 = 1
+		#~ obj.want_libtool			= 1
 
 	# Tagmanager
 	if bld.env['USE_INCLUDED_REGEX'] == 1:
 		tagmanager_sources.append('tagmanager/regex.c')
-	obj = bld.new_task_gen('cc', 'staticlib')
-	obj.name		 = 'tagmanager'
-	obj.target	   = 'tagmanager'
-	obj.source	   = tagmanager_sources
-	obj.includes	 = '. tagmanager/ tagmanager/include/'
-	obj.uselib	   = 'GTK'
-	obj.install_path = 0 # do not install this library
+	obj					= bld.new_task_gen('cc', 'staticlib')
+	obj.name			= 'tagmanager'
+	obj.target			= 'tagmanager'
+	obj.source			= tagmanager_sources
+	obj.includes		= '. tagmanager/ tagmanager/include/'
+	obj.uselib			= 'GTK'
+	obj.install_path	= 0 # do not install this library
 
 	# Scintilla
-	obj = bld.new_task_gen('cxx', 'staticlib')
+	obj					= bld.new_task_gen('cxx', 'staticlib')
 	obj.features.append('cc')
-	obj.name		 = 'scintilla'
-	obj.target	   = 'scintilla'
-	obj.source	   = scintilla_sources
-	obj.includes	 = 'scintilla/ scintilla/include/'
-	obj.uselib	   = 'GTK'
-	obj.install_path = 0 # do not install this library
+	obj.name			= 'scintilla'
+	obj.target			= 'scintilla'
+	obj.source			= scintilla_sources
+	obj.includes		= 'scintilla/ scintilla/include/'
+	obj.uselib			= 'GTK'
+	obj.install_path	= 0 # do not install this library
 
 	# Geany
 	if bld.env['HAVE_VTE'] == 1:
 		geany_sources.append('src/vte.c')
 	if sys.platform == "win32":
 		geany_sources.append('src/win32.c')
-	obj = bld.new_task_gen('cxx', 'program')
+	obj					= bld.new_task_gen('cxx', 'program')
 	obj.features.append('cc')
-	obj.name		 = 'geany'
-	obj.target	   = 'geany'
-	obj.source	   = geany_sources
-	obj.includes	 = '. src/ scintilla/include/ tagmanager/include/'
-	obj.uselib	   = 'GTK'
-	obj.uselib_local = 'scintilla tagmanager'
+	obj.name			= 'geany'
+	obj.target			= 'geany'
+	obj.source			= geany_sources
+	obj.includes		= '. src/ scintilla/include/ tagmanager/include/'
+	obj.uselib			= 'GTK'
+	obj.uselib_local	= 'scintilla tagmanager'
 
 	# geanyfunctions.h
-	bld.new_task_gen(source='plugins/genapi.py src/plugins.c', name='PluginAPI',
+	bld.new_task_gen(source='plugins/genapi.py src/plugins.c', name='geanyfunctions.h',
 		rule='cd ${SRC[0].parent.abspath()} && python genapi.py -q', before='cc')
 
 	# Plugins
@@ -318,57 +318,57 @@ def build(bld):
 		build_plugin('vcdiff')
 
 	# Translations
-	obj			  = bld.new_task_gen('intltool_po')
-	obj.podir		= 'po'
-	obj.appname	  = 'geany'
+	obj			= bld.new_task_gen('intltool_po')
+	obj.podir	= 'po'
+	obj.appname	= 'geany'
 
 	# geany.desktop
-	obj			  = bld.new_task_gen('intltool_in')
-	obj.source	   = 'geany.desktop.in'
-	obj.flags		= '-d'
-	obj.install_path = '${DATADIR}/applications'
+	obj					= bld.new_task_gen('intltool_in')
+	obj.source			= 'geany.desktop.in'
+	obj.flags			= '-d'
+	obj.install_path	= '${DATADIR}/applications'
 
 	# geany.pc
-	obj		 = bld.new_task_gen('subst')
-	obj.source  = 'geany.pc.in'
-	obj.target  = 'geany.pc'
-	obj.dict	= { 'VERSION' : VERSION,
-					'prefix': bld.env['PREFIX'],
-					'exec_prefix': '${prefix}',
-					'libdir': '${exec_prefix}/lib',
-					'includedir': '${prefix}/include',
-					'datarootdir': '${prefix}/share',
-					'datadir': '${datarootdir}',
-					'localedir': '${datarootdir}/locale' }
+	obj					= bld.new_task_gen('subst')
+	obj.source			= 'geany.pc.in'
+	obj.target			= 'geany.pc'
+	obj.dict			= { 'VERSION' : VERSION,
+							'prefix': bld.env['PREFIX'],
+							'exec_prefix': '${prefix}',
+							'libdir': '${exec_prefix}/lib',
+							'includedir': '${prefix}/include',
+							'datarootdir': '${prefix}/share',
+							'datadir': '${datarootdir}',
+							'localedir': '${datarootdir}/locale' }
 	# seems currently broken in Waf
 	#~ obj.install_path = '${LIBDIR}/pkgconfig'
-	obj.install_path = 0
+	obj.install_path	= 0
 	bld.install_files('${LIBDIR}/pkgconfig', 'geany.pc')
 
 	# geany.1
-	obj			  = bld.new_task_gen('subst')
-	obj.source	   = 'doc/geany.1.in'
-	obj.target	   = 'geany.1'
-	obj.dict		 = { 'VERSION' : VERSION,
-					'GEANY_DATA_DIR': bld.env['DATADIR'] + '/geany' }
+	obj					= bld.new_task_gen('subst')
+	obj.source			= 'doc/geany.1.in'
+	obj.target			= 'geany.1'
+	obj.dict			= { 'VERSION' : VERSION,
+							'GEANY_DATA_DIR': bld.env['DATADIR'] + '/geany' }
 	# seems currently broken in Waf
 	#~ obj.install_path = '${MANDIR}/man1'
-	obj.install_path = 0
+	obj.install_path	= 0
 	bld.install_files('${MANDIR}/man1', 'doc/geany.1')
 
 	# geany.spec
-	obj			  = bld.new_task_gen('subst')
-	obj.source	   = 'geany.spec.in'
-	obj.target	   = 'geany.spec'
-	obj.install_path = 0
-	obj.dict		 = { 'VERSION' : VERSION }
+	obj					= bld.new_task_gen('subst')
+	obj.source			= 'geany.spec.in'
+	obj.target			= 'geany.spec'
+	obj.install_path	= 0
+	obj.dict			= { 'VERSION' : VERSION }
 
 	# Doxyfile
-	obj			  = bld.new_task_gen('subst')
-	obj.source	   = 'doc/Doxyfile.in'
-	obj.target	   = 'Doxyfile'
-	obj.install_path = 0
-	obj.dict		 = { 'VERSION' : VERSION }
+	obj					= bld.new_task_gen('subst')
+	obj.source			= 'doc/Doxyfile.in'
+	obj.target			= 'Doxyfile'
+	obj.install_path	= 0
+	obj.dict			= { 'VERSION' : VERSION }
 
 	###
 	# Install files
@@ -490,7 +490,7 @@ def print_message(conf, msg, result, color = 'GREEN'):
 def exec_rule(self):
 	if not getattr(self, 'rule', None):
 		return
-	name = self.target
+	name = self.target or self.name
 	cls = Task.simple_task_type(name, self.rule)
 
 	tsk = self.create_task(name)

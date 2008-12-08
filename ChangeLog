@@ -1,3 +1,10 @@
+2008-12-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * wscript:
+   Little reformatting.
+   Beautify the Waf output when generating geanyfunctions.h.
+
+
 2008-12-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/document.c:
