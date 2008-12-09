@@ -8,34 +8,8 @@ Everything you add or change must be inside the /ui/toolbar/ path.
 
 For changes to take effect, you need to restart Geany.
 
-Available actions:
-
-New			- Create a new file
-Open		- Open an existing file
-Save		- Save the current file
-SaveAll		- Save all open files
-Reload		- Reload the current file from disk
-Close		- Close the current file
-Cut			- Cut the current selection
-Copy		- Copy the current selection
-Paste		- Paste the contents of the clipboard
-Delete		- Delete the current selection
-Undo		- Undo the last modification
-Redo		- Redo the last modification
-NavBack		- Navigate back a location
-NavFor		- Navigate forward a location
-Compile		- Compile the current file
-Run			- Run or view the current file
-Color		- Open a color chooser dialog, to interactively pick colors from a palette
-ZoomIn		- Zoom in the text
-ZoomOut		- Zoom out the text
-UnIndent	- Decrease indentation
-Indent		- Increase indentation
-SearchEntry	- The search field belonging to the 'Search' element (can be used alone)
-Search		- Find the entered text in the current file (only useful if you also use 'SearchEntry')
-GotoEntry	- The goto field belonging to the 'Goto' element (can be used alone)
-Goto		- Jump to the entered line number (only useful if you also use 'SearchEntry')
-Quit		- Quit Geany
+A list of available actions can be found in the documentation included with Geany or
+at http://www.geany.org/manual/current/index.html#customizing-the-toolbar.
 -->
 
 <ui>

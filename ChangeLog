@@ -4,6 +4,9 @@
    Various improvements for parsing Vala files (mainly fix handling of
    function attributes, fix nested types handling, add some missing
    keywords, patch by Colomban Wendling, thanks).
+ * data/ui_toolbar.xml:
+   Remove the list of available actions and instead refer to the
+   documentation for an up to date list.
 
 
 2008-12-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
