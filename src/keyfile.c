@@ -295,7 +295,7 @@ void configuration_save_session_files(GKeyFile *config)
 
 static void save_dialog_prefs(GKeyFile *config)
 {
-	/* new settings should be added in settings_action() */
+	/* new settings should be added in init_pref_groups() */
 	settings_action(config, SETTING_WRITE);
 
 	/* Some of the key names are not consistent, but this is for backwards compatibility */
@@ -573,7 +573,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	gchar *tmp_string, *tmp_string2;
 	const gchar *default_charset = NULL;
 
-	/* new settings should be added in settings_action() */
+	/* new settings should be added in init_pref_groups() */
 	settings_action(config, SETTING_READ);
 
 	/* general */
