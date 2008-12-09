@@ -1,3 +1,11 @@
+2008-12-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * tagmanager/c.c, tagmanager/get.h:
+   Various improvements for parsing Vala files (mainly fix handling of
+   function attributes, fix nested types handling, add some missing
+   keywords, patch by Colomban Wendling, thanks).
+
+
 2008-12-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/stash.c, src/stash.h, src/keyfile.c, src/keyfile.h, src/main.c:

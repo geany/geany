@@ -76,10 +76,10 @@ typedef enum eKeywordId
 	KEYWORD_M_BAD_STATE, KEYWORD_M_BAD_TRANS, KEYWORD_M_STATE, KEYWORD_M_TRANS,
 	KEYWORD_MODULE, KEYWORD_MUTABLE,
 	KEYWORD_NAMESPACE, KEYWORD_NEW, KEYWORD_NEWCOV, KEYWORD_NATIVE,
-	KEYWORD_OPERATOR, KEYWORD_OUTPUT, KEYWORD_OVERLOAD, KEYWORD_OVERRIDE,
+	KEYWORD_OPERATOR, KEYWORD_OUT, KEYWORD_OUTPUT, KEYWORD_OVERLOAD, KEYWORD_OVERRIDE,
 	KEYWORD_PACKED, KEYWORD_PORT, KEYWORD_PACKAGE, KEYWORD_PRIVATE,
 	KEYWORD_PROGRAM, KEYWORD_PROTECTED, KEYWORD_PUBLIC,
-	KEYWORD_REGISTER, KEYWORD_RETURN,
+	KEYWORD_REF, KEYWORD_REGISTER, KEYWORD_RETURN,
 	KEYWORD_SHADOW, KEYWORD_STATE,
 	KEYWORD_SET, KEYWORD_SHORT, KEYWORD_SIGNAL, KEYWORD_SIGNED, KEYWORD_SIZE_T, KEYWORD_STATIC, KEYWORD_STRING,
 	KEYWORD_STRUCT, KEYWORD_SWITCH, KEYWORD_SYNCHRONIZED,
@@ -89,7 +89,7 @@ typedef enum eKeywordId
 	KEYWORD_UINT, KEYWORD_ULONG, KEYWORD_UNION, KEYWORD_UNSIGNED, KEYWORD_USHORT,
 	KEYWORD_USING,
 	KEYWORD_VIRTUAL, KEYWORD_VOID, KEYWORD_VOLATILE,
-	KEYWORD_WCHAR_T, KEYWORD_WHILE
+	KEYWORD_WCHAR_T, KEYWORD_WEAK, KEYWORD_WHILE
 } keywordId;
 
 /*  Used to determine whether keyword is valid for the current language and
@@ -423,6 +423,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "new",            KEYWORD_NEW,            { 0, 1, 1, 1, 0, 1, 1 } },
 	{ "newcov",         KEYWORD_NEWCOV,         { 0, 0, 0, 0, 1, 0, 0 } },
 	{ "operator",       KEYWORD_OPERATOR,       { 0, 1, 1, 0, 0, 0, 0 } },
+	{ "out",            KEYWORD_OUT,            { 0, 0, 0, 0, 0, 1, 0 } },
 	{ "output",         KEYWORD_OUTPUT,         { 0, 0, 0, 0, 1, 0, 0 } },
 	{ "overload",       KEYWORD_OVERLOAD,       { 0, 1, 0, 0, 0, 0, 0 } },
 	{ "override",       KEYWORD_OVERRIDE,       { 0, 0, 1, 0, 0, 1, 1 } },
@@ -433,6 +434,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "program",        KEYWORD_PROGRAM,        { 0, 0, 0, 0, 1, 0, 0 } },
 	{ "protected",      KEYWORD_PROTECTED,      { 0, 1, 1, 1, 1, 1, 1 } },
 	{ "public",         KEYWORD_PUBLIC,         { 0, 1, 1, 1, 1, 1, 1 } },
+	{ "ref",            KEYWORD_REF,            { 0, 0, 0, 0, 0, 1, 0 } },
 	{ "register",       KEYWORD_REGISTER,       { 1, 1, 0, 0, 0, 0, 0 } },
 	{ "return",         KEYWORD_RETURN,         { 1, 1, 1, 1, 0, 1, 1 } },
 	{ "set",            KEYWORD_SET,            { 0, 0, 0, 0, 0, 1, 0 } },
@@ -468,6 +470,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "void",           KEYWORD_VOID,           { 1, 1, 1, 1, 1, 1, 1 } },
 	{ "volatile",       KEYWORD_VOLATILE,       { 1, 1, 1, 1, 0, 0, 1 } },
 	{ "wchar_t",        KEYWORD_WCHAR_T,        { 1, 1, 1, 0, 0, 0, 1 } },
+	{ "weak",           KEYWORD_WEAK,           { 0, 0, 0, 0, 0, 1, 0 } },
 	{ "while",          KEYWORD_WHILE,          { 1, 1, 1, 1, 0, 1, 1 } }
 };
 
@@ -834,7 +837,7 @@ static boolean isContextualStatement (const statementInfo *const st)
 			}
 		}
 	}
-    return result;
+	return result;
 }
 
 static boolean isMember (const statementInfo *const st)
@@ -917,11 +920,11 @@ static void reinitStatement (statementInfo *const st, const boolean partial)
 
 	/* Init first token */
 	if (!partial)
-	initToken(st->firstToken);
+		initToken(st->firstToken);
 }
 
 static void reinitStatementWithToken (statementInfo *const st,
-                                tokenInfo *token, const boolean partial)
+									  tokenInfo *token, const boolean partial)
 {
 	tokenInfo *const save = newToken ();
 	/* given token can be part of reinit statementInfo */
@@ -1082,13 +1085,13 @@ static tagType declToTagType (const declType declaration)
 
 	switch (declaration)
 	{
-		case DECL_CLASS:	type = TAG_CLASS;	break;
-		case DECL_ENUM:		type = TAG_ENUM;	break;
+		case DECL_CLASS:	type = TAG_CLASS;		break;
+		case DECL_ENUM:		type = TAG_ENUM;		break;
 		case DECL_FUNCTION:	type = TAG_FUNCTION;	break;
 		case DECL_INTERFACE:type = TAG_INTERFACE;	break;
 		case DECL_NAMESPACE:type = TAG_NAMESPACE;	break;
-		case DECL_STRUCT:	type = TAG_STRUCT;	break;
-		case DECL_UNION:	type = TAG_UNION;	break;
+		case DECL_STRUCT:	type = TAG_STRUCT;		break;
+		case DECL_UNION:	type = TAG_UNION;		break;
 
 		default: Assert ("Unexpected declaration" == NULL); break;
 	}
@@ -1666,9 +1669,19 @@ static void readIdentifier (tokenInfo *const token, const int firstChar)
 	{
 		vStringPut (name, c);
 		c = cppGetc ();
-	} while (isident (c));
+	} while (isident (c) || (isLanguage (Lang_vala) && '.' == c));
 	vStringTerminate (name);
 	cppUngetc (c);		/* unget non-identifier character */
+
+	/* Vala supports '?' at end of a type (with or without whitspace before) for nullable types */
+	if (isLanguage (Lang_vala))
+	{
+		c = skipToNonWhite ();
+		if ('?' == c)
+			vStringPut (name, c);
+		else
+			cppUngetc (c);
+	}
 
 	analyzeIdentifier (token);
 }
@@ -2595,17 +2608,23 @@ static void nextToken (statementInfo *const st)
 		switch (c)
 		{
 			case EOF: longjmp (Exception, (int) ExceptionEOF);		break;
-			case '(': analyzeParens (st); token = activeToken (st);     break;
-			case '*': setToken (st, TOKEN_STAR);			break;
-			case ',': setToken (st, TOKEN_COMMA);			break;
-			case ':': processColon (st);				      break;
-			case ';': setToken (st, TOKEN_SEMICOLON);			break;
-			case '<': skipToMatch ("<>");				break;
-			case '=': processInitializer (st);				break;
-			case '[': setToken (st, TOKEN_ARRAY); skipToMatch ("[]");	break;
-			case '{': setToken (st, TOKEN_BRACE_OPEN);			break;
-			case '}': setToken (st, TOKEN_BRACE_CLOSE);			break;
-			default:  parseGeneralToken (st, c);				break;
+			case '(': analyzeParens (st); token = activeToken (st);	break;
+			case '*': setToken (st, TOKEN_STAR);					break;
+			case ',': setToken (st, TOKEN_COMMA);					break;
+			case ':': processColon (st);							break;
+			case ';': setToken (st, TOKEN_SEMICOLON);				break;
+			case '<': skipToMatch ("<>");							break;
+			case '=': processInitializer (st);						break;
+			case '[':
+				/* Hack for Vala: [..] can be a function attribute.
+				 * Seems not to have bad side effects, but have to test it more. */
+				if (!isLanguage (Lang_vala))
+					setToken (st, TOKEN_ARRAY);
+				skipToMatch ("[]");
+				break;
+			case '{': setToken (st, TOKEN_BRACE_OPEN);				break;
+			case '}': setToken (st, TOKEN_BRACE_CLOSE);				break;
+			default:  parseGeneralToken (st, c);					break;
 		}
 	} while (isType (token, TOKEN_NONE));
 
@@ -2895,7 +2914,7 @@ static boolean findCTags (const unsigned int passCount)
 	boolean retry;
 
 	Assert (passCount < 3);
-	cppInit ((boolean) (passCount > 1), (isLanguage (Lang_csharp) || isLanguage (Lang_vala)));
+	cppInit ((boolean) (passCount > 1), isLanguage (Lang_csharp));
 
 	exception = (exception_t) setjmp (Exception);
 	retry = FALSE;

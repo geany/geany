@@ -926,7 +926,7 @@ static void styleset_vala_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 			"void bool char uchar int uint short ushort long ulong size_t ssize_t "
 			"int8 uint8 int16 uint16 int32 uint32 int64 uint64 float double unichar string "
 
-			/* this types are not referenced by the reference manual but are in glib.vapi
+			/* these types are not referenced by the reference manual but are in glib.vapi
 			 * as simple types */
 			/*"constpointer time_t "*/
 			);

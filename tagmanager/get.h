@@ -29,8 +29,9 @@
 /*  Is the character valid as the first character of a C identifier?
  *  C++ allows '~' in destructors.
  *  VMS allows '$' in identifiers.
+ *  Vala allows '@' in identifiers.
  */
-#define isident1(c)  (isalpha(c) || (c) == '_' || (c) == '~' || (c) == '$')
+#define isident1(c)  (isalpha(c) || (c) == '_' || (c) == '~' || (c) == '$' || (c) == '@')
 
 /*
 *   FUNCTION PROTOTYPES
