@@ -3434,13 +3434,13 @@ create_prefs_dialog (void)
   gtk_widget_show (label211);
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook4), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook4), 0), label211);
 
-  vbox39 = gtk_vbox_new (TRUE, 1);
+  vbox39 = gtk_vbox_new (FALSE, 1);
   gtk_widget_show (vbox39);
   gtk_container_add (GTK_CONTAINER (notebook4), vbox39);
 
   frame18 = gtk_frame_new (NULL);
   gtk_widget_show (frame18);
-  gtk_box_pack_start (GTK_BOX (vbox39), frame18, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox39), frame18, FALSE, TRUE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (frame18), 5);
   gtk_frame_set_shadow_type (GTK_FRAME (frame18), GTK_SHADOW_NONE);
 
@@ -3534,7 +3534,7 @@ create_prefs_dialog (void)
 
   frame38 = gtk_frame_new (NULL);
   gtk_widget_show (frame38);
-  gtk_box_pack_start (GTK_BOX (vbox39), frame38, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox39), frame38, FALSE, TRUE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (frame38), 5);
   gtk_frame_set_shadow_type (GTK_FRAME (frame38), GTK_SHADOW_NONE);
 

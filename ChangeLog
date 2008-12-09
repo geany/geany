@@ -4,6 +4,8 @@
    Move Stash data types to stash.c, so Stash functions could be used
    by plugins without breaking the ABI when appending fields. Also the
    user code is neater and has type checking.
+ * src/interface.c, geany.glade:
+   Don't expand Prefs dialog Editor->Completions tab frames.
 
 
 2008-12-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

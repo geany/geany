@@ -5360,7 +5360,7 @@ Match braces</property>
 	      <child>
 		<widget class="GtkVBox" id="vbox39">
 		  <property name="visible">True</property>
-		  <property name="homogeneous">True</property>
+		  <property name="homogeneous">False</property>
 		  <property name="spacing">1</property>
 
 		  <child>
@@ -5664,7 +5664,7 @@ Match braces</property>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
-		      <property name="expand">True</property>
+		      <property name="expand">False</property>
 		      <property name="fill">True</property>
 		    </packing>
 		  </child>
@@ -5842,7 +5842,7 @@ Match braces</property>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
-		      <property name="expand">True</property>
+		      <property name="expand">False</property>
 		      <property name="fill">True</property>
 		    </packing>
 		  </child>
