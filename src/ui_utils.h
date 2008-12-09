@@ -127,10 +127,12 @@ GeanyUIEditorFeatures;
 
 
 #define GEANY_STOCK_SAVE_ALL "geany-save-all"
+#define GEANY_STOCK_CLOSE_ALL "geany-close-all"
 enum
 {
 	GEANY_IMAGE_LOGO,
 	GEANY_IMAGE_SAVE_ALL,
+	GEANY_IMAGE_CLOSE_ALL
 };
 
 
@@ -221,9 +223,9 @@ void ui_document_show_hide(GeanyDocument *doc);
 
 
 
-GdkPixbuf *ui_new_pixbuf_from_inline(gint img, gboolean small_img);
+GdkPixbuf *ui_new_pixbuf_from_inline(gint img);
 
-GtkWidget *ui_new_image_from_inline(gint img, gboolean small_img);
+GtkWidget *ui_new_image_from_inline(gint img);
 
 
 void ui_create_recent_menu(void);

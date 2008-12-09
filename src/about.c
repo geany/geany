@@ -83,7 +83,8 @@ static const gchar *contributors =
 "Giuseppe Torelli, Guillaume de Rorthais, Guillaume Hoffmann, Herbert Voss, Jason Oster, Jean-François Wauthy, Jeff Pohlmeyer, "
 "John Gabriele, Josef Whiter, Kevin Ellwood, Kristoffer A. Tjernås, Marko Peric, Matti Mårds, Moritz Barsnick, "
 "Peter Strand, Pierre Joye, Rob van der Linde, Robert McGinley, Roland Baudin, S Jagannathan, Saleem Abdulrasool, "
-"Sebastian Kraft, Shiv, Slava Semushin, Stefan Oltmanns, Tamim, Tomás Vírseda, Walery Studennikov, Yura Siamashka";
+"Sebastian Kraft, Shiv, Slava Semushin, Stefan Oltmanns, Tamim, Tomás Vírseda, Tyler Mulligan, Walery Studennikov, "
+"Yura Siamashka";
 
 
 static void header_eventbox_style_set(GtkWidget *widget);
@@ -162,7 +163,7 @@ static GtkWidget *create_dialog(void)
 	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), header_eventbox, FALSE, FALSE, 0);
 
 	/* set image */
-	icon = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO, FALSE);
+	icon = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
 	gtk_image_set_from_pixbuf(GTK_IMAGE(header_image), icon);
 	gtk_window_set_icon(GTK_WINDOW(dialog), icon);
 	g_object_unref(icon);	/* free our reference */

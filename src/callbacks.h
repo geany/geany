@@ -69,6 +69,10 @@ on_toolbutton_close_clicked            (GtkAction       *action,
                                         gpointer         user_data);
 
 void
+on_toolbutton_close_all_clicked        (GtkAction       *action,
+                                        gpointer         user_data);
+
+void
 on_notebook1_switch_page               (GtkNotebook     *notebook,
                                         GtkNotebookPage *page,
                                         guint            page_num,
@@ -264,6 +268,10 @@ on_toolbutton_save_clicked             (GtkAction       *action,
 
 void
 on_toolbutton_quit_clicked             (GtkAction       *action,
+                                        gpointer         user_data);
+
+void
+on_toolbutton_preferences_clicked      (GtkAction       *action,
                                         gpointer         user_data);
 
 void

@@ -72,16 +72,6 @@ static struct
 widgets;
 
 
-/* Local stock item struct to extend the GtkStockItem structure by an image id which is used
- * as the icon */
-typedef struct
-{
-	GtkStockItem item;
-	guint image_id;
-}
-GeanyStockItem;
-
-
 static void update_recent_menu(void);
 static void recent_file_loaded(const gchar *utf8_filename);
 static void recent_file_activate_cb(GtkMenuItem *menuitem, gpointer user_data);
@@ -649,6 +639,7 @@ static void init_document_widgets(void)
 	add_doc_widget("find_prevsel1");
 	add_doc_widget("go_to_line1");
 	add_doc_toolitem("Close");
+	add_doc_toolitem("CloseAll");
 	add_doc_toolitem("Search");
 	add_doc_toolitem("SearchEntry");
 	add_doc_toolitem("NavBack");
@@ -813,7 +804,7 @@ void ui_document_show_hide(GeanyDocument *doc)
 
 
 /* Note: remember to unref the pixbuf once an image or window has added a reference. */
-GdkPixbuf *ui_new_pixbuf_from_inline(gint img, gboolean small_img)
+GdkPixbuf *ui_new_pixbuf_from_inline(gint img)
 {
 	switch(img)
 	{
@@ -825,18 +816,34 @@ GdkPixbuf *ui_new_pixbuf_from_inline(gint img, gboolean small_img)
 			return gdk_pixbuf_new_from_inline(-1, save_all_inline, FALSE, NULL);
 			break;
 		}
+		case GEANY_IMAGE_CLOSE_ALL:
+		{
+			return gdk_pixbuf_new_from_inline(-1, close_all_inline, FALSE, NULL);
+			break;
+		}
 		default:
 			return NULL;
 	}
 }
 
 
-GtkWidget *ui_new_image_from_inline(gint img, gboolean small_img)
+static GdkPixbuf *ui_new_pixbuf_from_stock(const gchar *stock_id)
+{
+	if (utils_str_equal(stock_id, GEANY_STOCK_CLOSE_ALL))
+		return ui_new_pixbuf_from_inline(GEANY_IMAGE_CLOSE_ALL);
+	else if (utils_str_equal(stock_id, GEANY_STOCK_SAVE_ALL))
+		return ui_new_pixbuf_from_inline(GEANY_IMAGE_SAVE_ALL);
+
+	return NULL;
+}
+
+
+GtkWidget *ui_new_image_from_inline(gint img)
 {
 	GtkWidget *wid;
 	GdkPixbuf *pb;
 
-	pb = ui_new_pixbuf_from_inline(img, small_img);
+	pb = ui_new_pixbuf_from_inline(img);
 	wid = gtk_image_new_from_pixbuf(pb);
 	g_object_unref(pb);	/* the image doesn't adopt our reference, so remove our ref. */
 	return wid;
@@ -1583,18 +1590,19 @@ static void add_stock_items(void)
 	GtkIconFactory *factory = gtk_icon_factory_new();
 	GdkPixbuf *pb;
 	gsize i, len;
-	GeanyStockItem items[] =
+	GtkStockItem items[] =
 	{
-		{ { GEANY_STOCK_SAVE_ALL, _("Save All"), 0, 0, GETTEXT_PACKAGE }, GEANY_IMAGE_SAVE_ALL }
+		{ GEANY_STOCK_SAVE_ALL, _("Save All"), 0, 0, GETTEXT_PACKAGE },
+		{ GEANY_STOCK_CLOSE_ALL, _("Close All"), 0, 0, GETTEXT_PACKAGE }
 	};
 
 	len = G_N_ELEMENTS(items);
 	for (i = 0; i < len; i++)
 	{
-		pb = ui_new_pixbuf_from_inline(items[i].image_id, FALSE);
+		pb = ui_new_pixbuf_from_stock(items[i].stock_id);
 		icon_set = gtk_icon_set_new_from_pixbuf(pb);
 
-		gtk_icon_factory_add(factory, items[i].item.stock_id, icon_set);
+		gtk_icon_factory_add(factory, items[i].stock_id, icon_set);
 
 		gtk_icon_set_unref(icon_set);
 		g_object_unref(pb);

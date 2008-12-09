@@ -7,6 +7,13 @@
  * data/ui_toolbar.xml:
    Remove the list of available actions and instead refer to the
    documentation for an up to date list.
+ * THANKS, src/about.c, src/callbacks.c, src/callbacks.h, src/images.c,
+   src/main.c, src/toolbar.c, src/ui_utils.c, src/ui_utils.h,
+   doc/geany.txt, doc/geany.html:
+   Add new toolbar elements: Close All and Preferences.
+   The icon for Close All was kindly provided by Tyler Mulligan, thanks.
+   Remove GeanyStockItem and add ui_new_pixbuf_from_stock() as a
+   replacement.
 
 
 2008-12-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
