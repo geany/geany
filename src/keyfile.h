@@ -26,6 +26,10 @@
 #define GEANY_KEYFILE_H 1
 
 
+void configuration_init(void);
+
+void configuration_finalize(void);
+
 void configuration_save(void);
 
 gboolean configuration_load(void);

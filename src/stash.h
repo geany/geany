@@ -25,27 +25,28 @@
 #ifndef GEANY_STASH_H
 #define GEANY_STASH_H
 
-typedef struct GeanyPrefEntry
-{
-	GType type;					/* e.g. G_TYPE_INT */
-	gpointer setting;
-	const gchar *key_name;
-	gpointer default_value;
-	const gchar *widget_name;
-}
-GeanyPrefEntry;
+typedef struct GeanyPrefEntry GeanyPrefEntry;
 
-typedef struct GeanyPrefGroup
-{
-	const gchar *name;			/* group name to use in the keyfile */
-	GeanyPrefEntry *entries;
-	gsize entries_len;
-	gboolean write_once;		/* only write settings if they don't already exist */
-}
-GeanyPrefGroup;
+typedef struct GeanyPrefGroup GeanyPrefGroup;
 
 
-void stash_load_group(GeanyPrefGroup *group, GKeyFile *keyfile);
-void stash_save_group(GeanyPrefGroup *group, GKeyFile *keyfile);
+GeanyPrefGroup *stash_group_new(const gchar *name);
+
+void stash_group_set_write_once(GeanyPrefGroup *group, gboolean write_once);
+
+void stash_group_add_boolean(GeanyPrefGroup *group, gboolean *setting,
+                const gchar *key_name, gboolean default_value);
+
+void stash_group_add_integer(GeanyPrefGroup *group, gint *setting,
+                const gchar *key_name, gint default_value);
+
+void stash_group_add_string(GeanyPrefGroup *group, gchar **setting,
+                const gchar *key_name, const gchar *default_value);
+
+void stash_group_load(GeanyPrefGroup *group, GKeyFile *keyfile);
+
+void stash_group_save(GeanyPrefGroup *group, GKeyFile *keyfile);
+
+void stash_group_free(GeanyPrefGroup *group);
 
 #endif

@@ -31,6 +31,26 @@
 #include "stash.h"
 #include "utils.h"
 
+#define foreach_array(type, item, array) \
+	foreach_c_array(item, ((type*)(gpointer)array->data), array->len)
+
+
+struct GeanyPrefEntry
+{
+	GType type;					/* e.g. G_TYPE_INT */
+	gpointer setting;
+	const gchar *key_name;
+	gpointer default_value;
+	const gchar *widget_name;
+};
+
+struct GeanyPrefGroup
+{
+	const gchar *name;			/* group name to use in the keyfile */
+	GArray *entries;			/* array of GeanyPrefEntry */
+	gboolean write_once;		/* only write settings if they don't already exist */
+};
+
 
 typedef enum SettingAction
 {
@@ -41,7 +61,7 @@ SettingAction;
 
 
 
-static void handle_bool_setting(GeanyPrefGroup *group, GeanyPrefEntry *se,
+static void handle_boolean_setting(GeanyPrefGroup *group, GeanyPrefEntry *se,
 		GKeyFile *config, SettingAction action)
 {
 	gboolean *setting = se->setting;
@@ -59,7 +79,7 @@ static void handle_bool_setting(GeanyPrefGroup *group, GeanyPrefEntry *se,
 }
 
 
-static void handle_int_setting(GeanyPrefGroup *group, GeanyPrefEntry *se,
+static void handle_integer_setting(GeanyPrefGroup *group, GeanyPrefEntry *se,
 		GKeyFile *config, SettingAction action)
 {
 	gboolean *setting = se->setting;
@@ -100,7 +120,7 @@ static void keyfile_action(GeanyPrefGroup *group, GKeyFile *keyfile, SettingActi
 {
 	GeanyPrefEntry *entry;
 
-	foreach_c_array(entry, group->entries, group->entries_len)
+	foreach_array(GeanyPrefEntry, entry, group->entries)
 	{
 		if (group->write_once && action == SETTING_WRITE &&
 			g_key_file_has_key(keyfile, group->name, entry->key_name, NULL))
@@ -109,9 +129,9 @@ static void keyfile_action(GeanyPrefGroup *group, GKeyFile *keyfile, SettingActi
 		switch (entry->type)
 		{
 			case G_TYPE_BOOLEAN:
-				handle_bool_setting(group, entry, keyfile, action); break;
+				handle_boolean_setting(group, entry, keyfile, action); break;
 			case G_TYPE_INT:
-				handle_int_setting(group, entry, keyfile, action); break;
+				handle_integer_setting(group, entry, keyfile, action); break;
 			case G_TYPE_STRING:
 				handle_string_setting(group, entry, keyfile, action); break;
 			default:
@@ -121,15 +141,68 @@ static void keyfile_action(GeanyPrefGroup *group, GKeyFile *keyfile, SettingActi
 }
 
 
-void stash_load_group(GeanyPrefGroup *group, GKeyFile *keyfile)
+void stash_group_load(GeanyPrefGroup *group, GKeyFile *keyfile)
 {
 	keyfile_action(group, keyfile, SETTING_READ);
 }
 
 
-void stash_save_group(GeanyPrefGroup *group, GKeyFile *keyfile)
+void stash_group_save(GeanyPrefGroup *group, GKeyFile *keyfile)
 {
 	keyfile_action(group, keyfile, SETTING_WRITE);
+}
+
+
+GeanyPrefGroup *stash_group_new(const gchar *name)
+{
+	GeanyPrefGroup *group = g_new0(GeanyPrefGroup, 1);
+
+	group->name = name;
+	group->entries = g_array_new(FALSE, FALSE, sizeof(GeanyPrefEntry));
+	return group;
+}
+
+
+void stash_group_free(GeanyPrefGroup *group)
+{
+	g_array_free(group->entries, TRUE);
+	g_free(group);
+}
+
+
+void stash_group_set_write_once(GeanyPrefGroup *group, gboolean write_once)
+{
+	group->write_once = write_once;
+}
+
+
+static void add_pref(GeanyPrefGroup *group, GType type, gpointer setting,
+		const gchar *key_name, gpointer default_value)
+{
+	GeanyPrefEntry entry = {type, setting, key_name, default_value, NULL};
+
+	g_array_append_val(group->entries, entry);
+}
+
+
+void stash_group_add_boolean(GeanyPrefGroup *group, gboolean *setting,
+		const gchar *key_name, gboolean default_value)
+{
+	add_pref(group, G_TYPE_BOOLEAN, setting, key_name, GINT_TO_POINTER(default_value));
+}
+
+
+void stash_group_add_integer(GeanyPrefGroup *group, gint *setting,
+		const gchar *key_name, gint default_value)
+{
+	add_pref(group, G_TYPE_INT, setting, key_name, GINT_TO_POINTER(default_value));
+}
+
+
+void stash_group_add_string(GeanyPrefGroup *group, gchar **setting,
+		const gchar *key_name, const gchar *default_value)
+{
+	add_pref(group, G_TYPE_STRING, setting, key_name, g_strdup(default_value));
 }
 
 

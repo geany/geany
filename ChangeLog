@@ -1,3 +1,11 @@
+2008-12-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/stash.c, src/stash.h, src/keyfile.c, src/keyfile.h, src/main.c:
+   Move Stash data types to stash.c, so Stash functions could be used
+   by plugins without breaking the ABI when appending fields. Also the
+   user code is neater and has type checking.
+
+
 2008-12-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * wscript:

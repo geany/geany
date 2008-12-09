@@ -920,6 +920,7 @@ gint main(gint argc, gchar **argv)
 	encodings_init();
 	editor_init();
 
+	configuration_init();
 	load_settings();
 
 	msgwin_init();
@@ -1054,6 +1055,8 @@ void main_quit()
 	editor_snippets_free();
 	encodings_finalize();
 	toolbar_finalize();
+	configuration_finalize();
+	/* must be last */
 	log_finalize();
 
 	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));

@@ -85,6 +85,11 @@
 #define GEANY_TOGGLE_MARK				"~ "
 #define GEANY_MAX_AUTOCOMPLETE_WORDS	30
 
+/* @param ptr should be a (gpointer*), needed for implementation. */
+#define foreach_ptr_array(item, ptr, ptr_array) \
+	for (ptr = ptr_array->pdata, item = *ptr; \
+		ptr < &ptr_array->pdata[ptr_array->len]; ++ptr, item = *ptr)
+
 
 static gchar *scribble_text = NULL;
 static GPtrArray *session_files = NULL;
@@ -92,8 +97,72 @@ static gint session_notebook_page;
 static gint hpan_position;
 static gint vpan_position;
 
+static GPtrArray *pref_groups = NULL;
 
-/* probably this enum will be removed */
+
+static void add_pref_group(GeanyPrefGroup *group)
+{
+	if (pref_groups == NULL)
+		pref_groups = g_ptr_array_new();
+
+	g_ptr_array_add(pref_groups, group);
+}
+
+
+static void init_pref_groups(void)
+{
+	GeanyPrefGroup *group;
+
+	group = stash_group_new(PACKAGE);
+	add_pref_group(group);
+	stash_group_add_string(group,
+		 &prefs.default_open_path, "default_open_path", "");
+
+	stash_group_add_boolean(group,
+		 &file_prefs.cmdline_new_files, "cmdline_new_files", TRUE);
+
+	stash_group_add_boolean(group,
+		 &search_prefs.suppress_dialogs, "pref_main_suppress_search_dialogs", FALSE);
+	stash_group_add_boolean(group,
+		 &search_prefs.use_current_word, "pref_main_search_use_current_word", TRUE);
+
+	stash_group_add_boolean(group,
+		 &editor_prefs.indentation->detect_type, "check_detect_indent", FALSE);
+	stash_group_add_boolean(group,
+		 &editor_prefs.use_tab_to_indent, "use_tab_to_indent", TRUE);
+	stash_group_add_integer(group,
+		 &editor_prefs.indentation->width, "pref_editor_tab_width", 4);
+	stash_group_add_integer(group,
+		 &editor_prefs.indentation->hard_tab_width, "indent_hard_tab_width", 8);
+	stash_group_add_integer(group,
+		 (gint*)&editor_prefs.indentation->auto_indent_mode, "indent_mode", GEANY_AUTOINDENT_CURRENTCHARS);
+	stash_group_add_integer(group,
+		 (gint*)&editor_prefs.indentation->type, "indent_type", GEANY_INDENT_TYPE_TABS);
+	stash_group_add_integer(group,
+		 (gint*)&editor_prefs.autocompletion_max_entries, "autocompletion_max_entries", GEANY_MAX_AUTOCOMPLETE_WORDS);
+
+	group = stash_group_new("search");
+	add_pref_group(group);
+	stash_group_add_boolean(group,
+		 &search_prefs.use_current_file_dir, "pref_search_current_file_dir", TRUE);
+
+	/* hidden prefs (don't overwrite them so users can edit them manually) */
+	group = stash_group_new(PACKAGE);
+	add_pref_group(group);
+	stash_group_set_write_once(group, TRUE);
+	stash_group_add_boolean(group,
+		 &editor_prefs.show_scrollbars, "show_editor_scrollbars", TRUE);
+	stash_group_add_boolean(group,
+		 &editor_prefs.brace_match_ltgt, "brace_match_ltgt", FALSE);
+	stash_group_add_boolean(group,
+		 &editor_prefs.use_gtk_word_boundaries, "use_gtk_word_boundaries", TRUE);
+	stash_group_add_boolean(group,
+		 &editor_prefs.complete_snippets_whilst_editing, "complete_snippets_whilst_editing", FALSE);
+	stash_group_add_boolean(group,
+		 &interface_prefs.show_symbol_list_expanders, "show_symbol_list_expanders", TRUE);
+}
+
+
 typedef enum SettingAction
 {
 	SETTING_READ,
@@ -103,68 +172,17 @@ SettingAction;
 
 static void settings_action(GKeyFile *config, SettingAction action)
 {
-	GeanyPrefEntry package_items[] =
-	{
-		{G_TYPE_STRING, &prefs.default_open_path, "default_open_path", "", NULL},
-
-		{G_TYPE_BOOLEAN, &file_prefs.cmdline_new_files, "cmdline_new_files",
-			(gpointer)TRUE, NULL},
-
-		{G_TYPE_BOOLEAN, &search_prefs.suppress_dialogs, "pref_main_suppress_search_dialogs",
-			(gpointer)FALSE, NULL},
-		{G_TYPE_BOOLEAN, &search_prefs.use_current_word, "pref_main_search_use_current_word",
-			(gpointer)TRUE, NULL},
-
-		{G_TYPE_BOOLEAN, &editor_prefs.indentation->detect_type, "check_detect_indent",
-			(gpointer)FALSE, NULL},
-		{G_TYPE_BOOLEAN, &editor_prefs.use_tab_to_indent, "use_tab_to_indent",
-			(gpointer)TRUE, NULL},
-		{G_TYPE_INT, &editor_prefs.indentation->width, "pref_editor_tab_width",
-			(gpointer)4, NULL},
-		{G_TYPE_INT, &editor_prefs.indentation->hard_tab_width, "indent_hard_tab_width",
-			(gpointer)8, NULL},
-		{G_TYPE_INT, &editor_prefs.indentation->auto_indent_mode, "indent_mode",
-			(gpointer)GEANY_AUTOINDENT_CURRENTCHARS, NULL},
-		{G_TYPE_INT, &editor_prefs.indentation->type, "indent_type",
-			(gpointer)GEANY_INDENT_TYPE_TABS, NULL},
-		{G_TYPE_INT, &editor_prefs.autocompletion_max_entries, "autocompletion_max_entries",
-			(gpointer)GEANY_MAX_AUTOCOMPLETE_WORDS, NULL}
-	};
-	GeanyPrefEntry search_items[] =
-	{
-		{G_TYPE_BOOLEAN, &search_prefs.use_current_file_dir, "pref_search_current_file_dir",
-			(gpointer)TRUE, NULL}
-	};
-	/* hidden prefs (don't overwrite them so users can edit them manually) */
-	GeanyPrefEntry hidden_items[] =
-	{
-		{G_TYPE_BOOLEAN, &editor_prefs.show_scrollbars, "show_editor_scrollbars",
-			(gpointer)TRUE, NULL},
-		{G_TYPE_BOOLEAN, &editor_prefs.brace_match_ltgt, "brace_match_ltgt",
-			(gpointer)FALSE, NULL},
-		{G_TYPE_BOOLEAN, &editor_prefs.use_gtk_word_boundaries, "use_gtk_word_boundaries",
-			(gpointer)TRUE, NULL},
-		{G_TYPE_BOOLEAN, &editor_prefs.complete_snippets_whilst_editing, "complete_snippets_whilst_editing",
-			(gpointer)FALSE, NULL},
-		{G_TYPE_BOOLEAN, &interface_prefs.show_symbol_list_expanders, "show_symbol_list_expanders",
-			(gpointer)TRUE, NULL}
-	};
-	GeanyPrefGroup groups[] =
-	{
-		{PACKAGE, package_items, G_N_ELEMENTS(package_items), FALSE},
-		{"search", search_items, G_N_ELEMENTS(search_items), FALSE},
-		{PACKAGE, hidden_items, G_N_ELEMENTS(hidden_items), TRUE}
-	};
+	gpointer *ptr;
 	GeanyPrefGroup *group;
 
-	foreach_c_array(group, groups, G_N_ELEMENTS(groups))
+	foreach_ptr_array(group, ptr, pref_groups)
 	{
 		switch (action)
 		{
 			case SETTING_READ:
-				stash_load_group(group, config); break;
+				stash_group_load(group, config); break;
 			case SETTING_WRITE:
-				stash_save_group(group, config); break;
+				stash_group_save(group, config); break;
 		}
 	}
 }
@@ -1072,4 +1090,22 @@ static void generate_filetype_extensions(const gchar *output_dir)
 }
 
 #endif
+
+
+void configuration_init(void)
+{
+	init_pref_groups();
+}
+
+
+void configuration_finalize(void)
+{
+	gpointer *ptr;
+	GeanyPrefGroup *group;
+
+	foreach_ptr_array(group, ptr, pref_groups)
+		stash_group_free(group);
+
+	g_ptr_array_free(pref_groups, TRUE);
+}
 
