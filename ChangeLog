@@ -30,6 +30,14 @@
    Make Shift+Mouse wheel scroll the editor view horizontally
    (#2410732).
    Add function sci_scroll_columns().
+ * src/editor.c:
+   Make snippets only complete for the word stem to the left of the
+   cursor (#2390597).
+   Make snippets complete even when text is to the right of the
+   cursor and the hidden pref is not set, unless the snippet
+   completion key is space.
+   Fix possible memory leak when reading current word.
+   Add editor_read_word_stem().
 
 
 2008-12-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

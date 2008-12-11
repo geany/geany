@@ -1158,8 +1158,8 @@ static void close_block(GeanyEditor *editor, gint pos)
  * NULL terminated in any case, even when the word is truncated because wordlen is too small.
  * position can be -1, then the current position is used.
  * wc are the wordchars to use, if NULL, GEANY_WORDCHARS will be used */
-void editor_find_current_word(GeanyEditor *editor, gint pos, gchar *word, size_t wordlen,
-							  const gchar *wc)
+static void read_current_word(GeanyEditor *editor, gint pos, gchar *word, size_t wordlen,
+							  const gchar *wc, gboolean stem)
 {
 	gint line, line_start, startword, endword;
 	gchar *chunk;
@@ -1188,15 +1188,44 @@ void editor_find_current_word(GeanyEditor *editor, gint pos, gchar *word, size_t
 	 * TODO: improve this code */
 	while (startword > 0 && (strchr(wc, chunk[startword - 1]) || chunk[startword - 1] < 0))
 		startword--;
-	while (chunk[endword] != 0 && (strchr(wc, chunk[endword]) || chunk[endword] < 0))
-		endword++;
-	if(startword == endword)
-		return;
+	if (!stem)
+	{
+		while (chunk[endword] != 0 && (strchr(wc, chunk[endword]) || chunk[endword] < 0))
+			endword++;
+	}
 
-	chunk[endword] = '\0';
+	if (startword != endword)
+	{
+		chunk[endword] = '\0';
 
-	g_strlcpy(word, chunk + startword, wordlen); /* ensure null terminated */
+		g_strlcpy(word, chunk + startword, wordlen); /* ensure null terminated */
+	}
+	else
+		g_strlcpy(word, "", wordlen);
+
 	g_free(chunk);
+}
+
+
+/* Reads the word at given cursor position and writes it into the given buffer. The buffer will be
+ * NULL terminated in any case, even when the word is truncated because wordlen is too small.
+ * position can be -1, then the current position is used.
+ * wc are the wordchars to use, if NULL, GEANY_WORDCHARS will be used */
+void editor_find_current_word(GeanyEditor *editor, gint pos, gchar *word, size_t wordlen,
+							  const gchar *wc)
+{
+	read_current_word(editor, pos, word, wordlen, wc, FALSE);
+}
+
+
+static const gchar *
+editor_read_word_stem(GeanyEditor *editor, gint pos, const gchar *wordchars)
+{
+	static gchar word[GEANY_MAX_WORD_LENGTH];
+
+	read_current_word(editor, pos, word, sizeof word, wordchars, TRUE);
+
+	return (*word) ? word : NULL;
 }
 
 
@@ -1897,6 +1926,7 @@ gboolean editor_complete_snippet(GeanyEditor *editor, gint pos)
 	gboolean result = FALSE;
 	gint lexer, style;
 	gchar *wc;
+	const gchar *word;
 	ScintillaObject *sci;
 
 	if (editor == NULL)
@@ -1904,20 +1934,22 @@ gboolean editor_complete_snippet(GeanyEditor *editor, gint pos)
 
 	sci = editor->sci;
 	/* return if we are editing an existing line (chars on right of cursor) */
-	if (! editor_prefs.complete_snippets_whilst_editing && ! at_eol(sci, pos))
+	if (keybindings_lookup_item(GEANY_KEY_GROUP_EDITOR,
+			GEANY_KEYS_EDITOR_COMPLETESNIPPET)->key == GDK_space &&
+		! editor_prefs.complete_snippets_whilst_editing && ! at_eol(sci, pos))
 		return FALSE;
 
 	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 	style = SSM(sci, SCI_GETSTYLEAT, pos - 2, 0);
 
 	wc = snippets_find_completion_by_name("Special", "wordchars");
-	editor_find_current_word(editor, pos, current_word, sizeof current_word, wc);
+	word = editor_read_word_stem(editor, pos, wc);
 
 	/* prevent completion of "for " */
 	if (! isspace(sci_get_char_at(sci, pos - 1))) /* pos points to the line end char so use pos -1 */
 	{
 		sci_start_undo_action(sci);	/* needed because we insert a space separately from construct */
-		result = snippets_complete_constructs(editor, pos, current_word);
+		result = snippets_complete_constructs(editor, pos, word);
 		sci_end_undo_action(sci);
 		if (result)
 			SSM(sci, SCI_CANCEL, 0, 0);	/* cancel any autocompletion list, etc */
