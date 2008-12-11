@@ -38,6 +38,7 @@ typedef struct GeanyInterfacePrefs
 	gint			tab_pos_sidebar;
 	gboolean		statusbar_visible;
 	gboolean		show_symbol_list_expanders;
+	gboolean		notebook_double_click_hides_widgets;
 }
 GeanyInterfacePrefs;
 

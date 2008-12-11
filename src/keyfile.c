@@ -116,6 +116,9 @@ static void init_pref_groups(void)
 	stash_group_add_toggle_button(group, &file_prefs.cmdline_new_files,
 		"cmdline_new_files", TRUE, "check_cmdline_new_files");
 
+	stash_group_add_toggle_button(group, &interface_prefs.notebook_double_click_hides_widgets,
+		"notebook_double_click_hides_widgets", FALSE, "check_double_click_hides_widgets");
+
 	stash_group_add_toggle_button(group, &search_prefs.suppress_dialogs,
 		"pref_main_suppress_search_dialogs", FALSE, "check_ask_suppress_search_dialogs");
 	stash_group_add_toggle_button(group, &search_prefs.use_current_word,

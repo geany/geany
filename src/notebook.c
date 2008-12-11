@@ -433,7 +433,9 @@ static gboolean notebook_tab_click(GtkWidget *widget, GdkEventButton *event, gpo
 	/* toggle additional widgets on double click */
 	if (event->type == GDK_2BUTTON_PRESS)
 	{
-		on_menu_toggle_all_additional_widgets1_activate(NULL, NULL);
+		if (interface_prefs.notebook_double_click_hides_widgets)
+			on_menu_toggle_all_additional_widgets1_activate(NULL, NULL);
+
 		return TRUE; /* stop other handlers like notebook_tab_bar_click_cb() */
 	}
 	/* close tab on middle click */

@@ -2341,6 +2341,7 @@ create_prefs_dialog (void)
   GtkWidget *radio_tab_left;
   GSList *radio_tab_left_group = NULL;
   GtkWidget *radio_tab_right;
+  GtkWidget *check_double_click_hides_widgets;
   GtkWidget *label197;
   GtkWidget *frame9;
   GtkWidget *alignment12;
@@ -2997,6 +2998,11 @@ create_prefs_dialog (void)
   gtk_tooltips_set_tip (tooltips, radio_tab_right, _("File tabs will be placed on the right of the notebook"), NULL);
   gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_tab_right), radio_tab_left_group);
   radio_tab_left_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_tab_right));
+
+  check_double_click_hides_widgets = gtk_check_button_new_with_mnemonic (_("Double-clicking hides all additional widgets"));
+  gtk_widget_show (check_double_click_hides_widgets);
+  gtk_box_pack_start (GTK_BOX (vbox26), check_double_click_hides_widgets, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_double_click_hides_widgets, _("Calls the View->Toggle All Additional Widgets command."), NULL);
 
   label197 = gtk_label_new (_("<b>Editor tabs</b>"));
   gtk_widget_show (label197);
@@ -4572,6 +4578,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, label150, "label150");
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_tab_left, "radio_tab_left");
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_tab_right, "radio_tab_right");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_double_click_hides_widgets, "check_double_click_hides_widgets");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label197, "label197");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame9, "frame9");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment12, "alignment12");
