@@ -3229,7 +3229,7 @@ UI definition is used.
 .. note::
     (1) You cannot add new actions which are not listed below.
     (2) Everything you add or change must be inside the /ui/toolbar/ path.
-    (3) After you finished the editing of the file, you need to restart Geany
+    (3) After you finish editing the file, you need to restart Geany
         for changes to take effect.
 
 
