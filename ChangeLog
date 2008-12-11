@@ -14,6 +14,9 @@
  * src/socket.c:
    Update comment about using different configuration directories with
    multiple instance support on Windows.
+ * doc/geany.txt, doc/geany.html:
+   On Windows rectangular selections can only be created by pressing
+   Ctrl and Alt where on other systems Ctrl and Shift works too.
 
 
 2008-12-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
