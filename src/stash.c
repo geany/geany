@@ -25,6 +25,10 @@
 /* Mini-library for reading/writing GKeyFile settings and synchronizing widgets with
  * C variables. */
 
+/* Memory Usage
+ * Stash will not duplicate strings if they are normally static arrays, such as
+ * keyfile group names and key names. */
+
 
 #include <gtk/gtk.h>
 
@@ -211,10 +215,11 @@ void stash_group_add_integer(GeanyPrefGroup *group, gint *setting,
 }
 
 
+/* @param default_value Not duplicated. */
 void stash_group_add_string(GeanyPrefGroup *group, gchar **setting,
 		const gchar *key_name, const gchar *default_value)
 {
-	add_pref(group, G_TYPE_STRING, setting, key_name, g_strdup(default_value));
+	add_pref(group, G_TYPE_STRING, setting, key_name, (gpointer)default_value);
 }
 
 
