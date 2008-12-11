@@ -4,6 +4,9 @@
    Fix plugin toolbar icon placement. Now they are always inserted
    before the Quit button if it is the last toolbar element or at
    the end otherwise.
+ * src/toolbar.c, src/ui_utils.c:
+   Move ui_auto_separator_add_ref() and related code back to ui_utils.c
+   since it's no toolbar specific code (oops).
 
 
 2008-12-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

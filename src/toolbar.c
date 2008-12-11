@@ -277,62 +277,6 @@ gint toolbar_get_insert_position(void)
 }
 
 
-static void auto_separator_update(GeanyAutoSeparator *autosep)
-{
-	g_return_if_fail(autosep->ref_count >= 0);
-
-	if (autosep->widget)
-		ui_widget_show_hide(autosep->widget, autosep->ref_count > 0);
-}
-
-
-static void on_auto_separator_item_show_hide(GtkWidget *widget, gpointer user_data)
-{
-	GeanyAutoSeparator *autosep = user_data;
-
-	if (GTK_WIDGET_VISIBLE(widget))
-		autosep->ref_count++;
-	else
-		autosep->ref_count--;
-
-	auto_separator_update(autosep);
-}
-
-
-static void on_auto_separator_item_destroy(GtkWidget *widget, gpointer user_data)
-{
-	GeanyAutoSeparator *autosep = user_data;
-
-	/* GTK_WIDGET_VISIBLE won't work now the widget is being destroyed,
-	 * so assume widget was visible */
-	autosep->ref_count--;
-	autosep->ref_count = MAX(autosep->ref_count, 0);
-	auto_separator_update(autosep);
-}
-
-
-/* Show the separator widget if @a item or another is visible. */
-/* Note: This would be neater taking a widget argument, setting a "visible-count"
- * property, and using reference counting to keep the widget alive whilst its visible group
- * is alive. */
-void ui_auto_separator_add_ref(GeanyAutoSeparator *autosep, GtkWidget *item)
-{
-	/* set widget ptr NULL when widget destroyed */
-	if (autosep->ref_count == 0)
-		g_signal_connect(autosep->widget, "destroy",
-			G_CALLBACK(gtk_widget_destroyed), &autosep->widget);
-
-	if (GTK_WIDGET_VISIBLE(item))
-	{
-		autosep->ref_count++;
-		auto_separator_update(autosep);
-	}
-	g_signal_connect(item, "show", G_CALLBACK(on_auto_separator_item_show_hide), autosep);
-	g_signal_connect(item, "hide", G_CALLBACK(on_auto_separator_item_show_hide), autosep);
-	g_signal_connect(item, "destroy", G_CALLBACK(on_auto_separator_item_destroy), autosep);
-}
-
-
 void toolbar_finalize(void)
 {
     /* unref'ing the GtkUIManager object will destroy all its widgets unless they were ref'ed */
