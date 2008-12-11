@@ -195,13 +195,8 @@ gint socket_init(gint argc, gchar **argv)
 
 #ifdef G_OS_WIN32
 	HANDLE hmutex;
-	/* we need a mutex name which is unique for the used configuration dir,
-	 * but we can't use the whole path, so build a hash on the configdir and use it */
-	gchar *mutex_name = g_strdup_printf("Geany%d", g_str_hash(app->configdir));
-
 	socket_init_win32();
-	hmutex = CreateMutexA(NULL, FALSE, mutex_name);
-	g_free(mutex_name);
+	hmutex = CreateMutexA(NULL, FALSE, "Geany");
 	if (! hmutex)
 	{
 		geany_debug("cannot create Mutex\n");
@@ -209,6 +204,12 @@ gint socket_init(gint argc, gchar **argv)
 	}
 	if (GetLastError() != ERROR_ALREADY_EXISTS)
 	{
+		/* To support multiple instances with different configuration directories (as we do on
+		 * non-Windows systems) we would need to use different port number s but it might be
+		 * difficult to get a port number which is unique for a configuration directory (path)
+		 * and which is unused. This port number has to be guessed by the first and new instance
+		 * and the only data is the configuration directory path.
+		 * For now we use one port number, that is we support only one instance at all. */
 		sock = socket_fd_open_inet(REMOTE_CMD_PORT);
 		if (sock < 0)
 			return 0;

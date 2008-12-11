@@ -11,6 +11,9 @@
    Rename symbol list label for embedded script functions from
    'Javascript functions' to 'Functions' to avoid confusion when it
    finds symbols from other embedded languages (part of #2317001).
+ * src/socket.c:
+   Update comment about using different configuration directories with
+   multiple instance support on Windows.
 
 
 2008-12-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
