@@ -110,8 +110,8 @@ static void init_pref_groups(void)
 
 	group = stash_group_new(PACKAGE);
 	add_pref_group(group);
-	stash_group_add_string(group,
-		 &prefs.default_open_path, "default_open_path", "");
+	stash_group_add_string(group, &prefs.default_open_path,
+		"default_open_path", "");
 
 	stash_group_add_toggle_button(group, &file_prefs.cmdline_new_files,
 		"cmdline_new_files", TRUE, "check_cmdline_new_files");
@@ -125,16 +125,16 @@ static void init_pref_groups(void)
 		"check_detect_indent", FALSE, "check_detect_indent");
 	stash_group_add_toggle_button(group, &editor_prefs.use_tab_to_indent,
 		"use_tab_to_indent", TRUE, "check_tab_key_indents");
-	stash_group_add_integer(group,
-		 &editor_prefs.indentation->width, "pref_editor_tab_width", 4);
-	stash_group_add_integer(group,
-		 &editor_prefs.indentation->hard_tab_width, "indent_hard_tab_width", 8);
-	stash_group_add_integer(group,
-		 (gint*)&editor_prefs.indentation->auto_indent_mode, "indent_mode", GEANY_AUTOINDENT_CURRENTCHARS);
-	stash_group_add_integer(group,
-		 (gint*)&editor_prefs.indentation->type, "indent_type", GEANY_INDENT_TYPE_TABS);
-	stash_group_add_integer(group,
-		 (gint*)&editor_prefs.autocompletion_max_entries, "autocompletion_max_entries", GEANY_MAX_AUTOCOMPLETE_WORDS);
+	stash_group_add_integer(group, &editor_prefs.indentation->width,
+		"pref_editor_tab_width", 4);
+	stash_group_add_integer(group, &editor_prefs.indentation->hard_tab_width,
+		"indent_hard_tab_width", 8);
+	stash_group_add_integer(group, (gint*)&editor_prefs.indentation->auto_indent_mode,
+		"indent_mode", GEANY_AUTOINDENT_CURRENTCHARS);
+	stash_group_add_integer(group, (gint*)&editor_prefs.indentation->type,
+		"indent_type", GEANY_INDENT_TYPE_TABS);
+	stash_group_add_integer(group, (gint*)&editor_prefs.autocompletion_max_entries,
+		"autocompletion_max_entries", GEANY_MAX_AUTOCOMPLETE_WORDS);
 
 	group = stash_group_new("search");
 	add_pref_group(group);
@@ -145,16 +145,16 @@ static void init_pref_groups(void)
 	group = stash_group_new(PACKAGE);
 	add_pref_group(group);
 	stash_group_set_write_once(group, TRUE);
-	stash_group_add_boolean(group,
-		 &editor_prefs.show_scrollbars, "show_editor_scrollbars", TRUE);
-	stash_group_add_boolean(group,
-		 &editor_prefs.brace_match_ltgt, "brace_match_ltgt", FALSE);
-	stash_group_add_boolean(group,
-		 &editor_prefs.use_gtk_word_boundaries, "use_gtk_word_boundaries", TRUE);
-	stash_group_add_boolean(group,
-		 &editor_prefs.complete_snippets_whilst_editing, "complete_snippets_whilst_editing", FALSE);
-	stash_group_add_boolean(group,
-		 &interface_prefs.show_symbol_list_expanders, "show_symbol_list_expanders", TRUE);
+	stash_group_add_boolean(group, &editor_prefs.show_scrollbars,
+		"show_editor_scrollbars", TRUE);
+	stash_group_add_boolean(group, &editor_prefs.brace_match_ltgt,
+		"brace_match_ltgt", FALSE);
+	stash_group_add_boolean(group, &editor_prefs.use_gtk_word_boundaries,
+		"use_gtk_word_boundaries", TRUE);
+	stash_group_add_boolean(group, &editor_prefs.complete_snippets_whilst_editing,
+		"complete_snippets_whilst_editing", FALSE);
+	stash_group_add_boolean(group, &interface_prefs.show_symbol_list_expanders,
+		"show_symbol_list_expanders", TRUE);
 }
 
 
