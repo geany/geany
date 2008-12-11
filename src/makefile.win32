@@ -48,8 +48,8 @@ ALL_GTK_LIBS +=-liconv
 else
 ALL_GTK_LIBS +=-lcairo -lpangocairo-1.0
 endif
-
-WIN_LIBS=-mwindows -lkernel32 -limm32 -lshfolder -lshell32 \
+#-mwindows
+WIN_LIBS=-lkernel32 -limm32 -lshfolder -lshell32 \
 		 -lole32 -luuid -lcomdlg32 -lcomctl32 -liberty -lwsock32
 
 CBASEFLAGS=-Wall -pipe -mms-bitfields $(DEFINES) $(INCLUDEDIRS)
@@ -61,7 +61,7 @@ CFLAGS=-O2 $(CBASEFLAGS)
 endif
 
 OBJS =	about.o build.o callbacks.o dialogs.o document.o editor.o encodings.o filetypes.o \
-		geanyentryaction.c geanymenubuttonaction.o geanyobject.o geanywraplabel.o highlighting.o \
+		geanyentryaction.o geanymenubuttonaction.o geanyobject.o geanywraplabel.o highlighting.o \
 		interface.o keybindings.o keyfile.o \
 		log.o main.o msgwindow.o navqueue.o notebook.o plugins.o prefs.o printing.o project.o \
 		sciwrappers.o search.o socket.o stash.o \
