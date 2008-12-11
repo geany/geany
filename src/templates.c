@@ -509,7 +509,7 @@ static gboolean add_custom_template_items(void)
 
 static void create_file_template_menus(void)
 {
-	GtkWidget *sep1, *sep2;
+	GtkWidget *sep1, *sep2 = NULL;
 
 	new_with_template_menu = lookup_widget(main_widgets.window, "menu_new_with_template1_menu");
 	create_new_menu_items();
@@ -524,7 +524,7 @@ static void create_file_template_menus(void)
 	if (add_custom_template_items())
 	{
 		gtk_widget_show(sep1);
-		if (ui_widgets.new_file_menu != NULL)
+		if (sep2 != NULL)
 			gtk_widget_show(sep2);
 	}
 }
