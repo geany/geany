@@ -53,6 +53,8 @@
 #include "templates.h"
 #include "search.h"
 #include "toolbar.h"
+#include "stash.h"
+#include "keyfile.h"
 
 #ifdef HAVE_VTE
 # include "vte.h"
@@ -104,40 +106,6 @@ typedef struct PrefEntry
 	gpointer setting;
 }
 PrefEntry;
-
-
-static void toggle_prefs_foreach(PrefCallbackAction action)
-{
-	guint i;
-	PrefEntry items[] =
-	{
-		{"check_cmdline_new_files", &file_prefs.cmdline_new_files},
-
-		{"check_ask_suppress_search_dialogs", &search_prefs.suppress_dialogs},
-		{"check_search_use_current_word", &search_prefs.use_current_word},
-		{"check_fif_current_dir", &search_prefs.use_current_file_dir},
-
-		{"check_detect_indent", &editor_prefs.indentation->detect_type},
-		{"check_tab_key_indents", &editor_prefs.use_tab_to_indent}
-	};
-
-	for (i = 0; i < G_N_ELEMENTS(items); i++)
-	{
-		PrefEntry *pe = &items[i];
-		GtkWidget *widget = lookup_widget(ui_widgets.prefs_dialog, pe->widget_name);
-		gboolean *setting = pe->setting;
-
-		switch (action)
-		{
-			case PREF_DISPLAY:
-				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), *setting);
-				break;
-			case PREF_UPDATE:
-				*setting = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-				break;
-		}
-	}
-}
 
 
 static void spin_prefs_foreach(PrefCallbackAction action)
@@ -240,7 +208,6 @@ typedef void (*PrefItemsCallback)(PrefCallbackAction action);
 /* List of functions which hold the PrefEntry arrays. These allow access to
  * runtime setting fields like EditorPrefs::indentation->width. */
 PrefItemsCallback pref_item_callbacks[] = {
-	toggle_prefs_foreach,
 	spin_prefs_foreach,
 	radio_prefs_foreach,
 	combo_prefs_foreach
@@ -250,6 +217,21 @@ PrefItemsCallback pref_item_callbacks[] = {
 static void prefs_action(PrefCallbackAction action)
 {
 	guint i;
+	GeanyPrefGroup *group;
+	gpointer *ptr;
+
+	foreach_ptr_array(group, ptr, pref_groups)
+	{
+		switch (action)
+		{
+			case PREF_DISPLAY:
+				stash_group_display(group, ui_widgets.prefs_dialog);
+				break;
+			case PREF_UPDATE:
+				stash_group_update(group, ui_widgets.prefs_dialog);
+				break;
+		}
+	}
 
 	for (i = 0; i < G_N_ELEMENTS(pref_item_callbacks); i++)
 		pref_item_callbacks[i](action);

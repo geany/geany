@@ -26,6 +26,9 @@
 #define GEANY_KEYFILE_H 1
 
 
+extern GPtrArray *pref_groups;
+
+
 void configuration_init(void);
 
 void configuration_finalize(void);

@@ -1088,20 +1088,15 @@ static void add_tree_tags(GeanyDocument *doc, const GList *tags)
 }
 
 
-/* @param item Must be a (gpointer*) for implementation reasons.
- * @example gchar *name = *item; (for when the GPtrArray contains char pointers). */
-#define foreach_ptr_array(item, ptr_array) \
-	for (item = ptr_array->pdata; item < &ptr_array->pdata[ptr_array->len]; item++)
-
 /* we don't want to sort 1st-level nodes, but we can't return 0 because the tree sort
  * is not stable, so the order is already lost. */
 static gint compare_top_level_names(const gchar *a, const gchar *b)
 {
-	gpointer *item;
+	gpointer *ptr;
+	const gchar *name;
 
-	foreach_ptr_array(item, top_level_iter_names)
+	foreach_ptr_array(name, ptr, top_level_iter_names)
 	{
-		const gchar *name = *item;
 
 		if (utils_str_equal(name, a))
 			return -1;

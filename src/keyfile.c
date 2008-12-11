@@ -85,11 +85,6 @@
 #define GEANY_TOGGLE_MARK				"~ "
 #define GEANY_MAX_AUTOCOMPLETE_WORDS	30
 
-/* @param ptr should be a (gpointer*), needed for implementation. */
-#define foreach_ptr_array(item, ptr, ptr_array) \
-	for (ptr = ptr_array->pdata, item = *ptr; \
-		ptr < &ptr_array->pdata[ptr_array->len]; ++ptr, item = *ptr)
-
 
 static gchar *scribble_text = NULL;
 static GPtrArray *session_files = NULL;
@@ -97,7 +92,7 @@ static gint session_notebook_page;
 static gint hpan_position;
 static gint vpan_position;
 
-static GPtrArray *pref_groups = NULL;
+GPtrArray *pref_groups = NULL;
 
 
 static void add_pref_group(GeanyPrefGroup *group)
@@ -118,18 +113,18 @@ static void init_pref_groups(void)
 	stash_group_add_string(group,
 		 &prefs.default_open_path, "default_open_path", "");
 
-	stash_group_add_boolean(group,
-		 &file_prefs.cmdline_new_files, "cmdline_new_files", TRUE);
+	stash_group_add_toggle_button(group, &file_prefs.cmdline_new_files,
+		"cmdline_new_files", TRUE, "check_cmdline_new_files");
 
-	stash_group_add_boolean(group,
-		 &search_prefs.suppress_dialogs, "pref_main_suppress_search_dialogs", FALSE);
-	stash_group_add_boolean(group,
-		 &search_prefs.use_current_word, "pref_main_search_use_current_word", TRUE);
+	stash_group_add_toggle_button(group, &search_prefs.suppress_dialogs,
+		"pref_main_suppress_search_dialogs", FALSE, "check_ask_suppress_search_dialogs");
+	stash_group_add_toggle_button(group, &search_prefs.use_current_word,
+		"pref_main_search_use_current_word", TRUE, "check_search_use_current_word");
 
-	stash_group_add_boolean(group,
-		 &editor_prefs.indentation->detect_type, "check_detect_indent", FALSE);
-	stash_group_add_boolean(group,
-		 &editor_prefs.use_tab_to_indent, "use_tab_to_indent", TRUE);
+	stash_group_add_toggle_button(group, &editor_prefs.indentation->detect_type,
+		"check_detect_indent", FALSE, "check_detect_indent");
+	stash_group_add_toggle_button(group, &editor_prefs.use_tab_to_indent,
+		"use_tab_to_indent", TRUE, "check_tab_key_indents");
 	stash_group_add_integer(group,
 		 &editor_prefs.indentation->width, "pref_editor_tab_width", 4);
 	stash_group_add_integer(group,
@@ -143,8 +138,8 @@ static void init_pref_groups(void)
 
 	group = stash_group_new("search");
 	add_pref_group(group);
-	stash_group_add_boolean(group,
-		 &search_prefs.use_current_file_dir, "pref_search_current_file_dir", TRUE);
+	stash_group_add_toggle_button(group, &search_prefs.use_current_file_dir,
+		"pref_search_current_file_dir", TRUE, "check_fif_current_dir");
 
 	/* hidden prefs (don't overwrite them so users can edit them manually) */
 	group = stash_group_new(PACKAGE);

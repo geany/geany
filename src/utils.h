@@ -48,6 +48,11 @@
 #define foreach_c_array(item, array, len) \
 	for (item = array; item < &array[len]; item++)
 
+/* @param ptr should be a (gpointer*), needed for implementation. */
+#define foreach_ptr_array(item, ptr, ptr_array) \
+	for (ptr = ptr_array->pdata, item = *ptr; \
+		ptr < &ptr_array->pdata[ptr_array->len]; ++ptr, item = *ptr)
+
 
 void utils_start_browser(const gchar *uri);
 

@@ -1,3 +1,12 @@
+2008-12-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/utils.h, src/prefs.c, src/stash.c, src/stash.h, src/keyfile.c,
+   src/keyfile.h, src/symbols.c:
+   Add foreach_ptr_array() macro to utils.h.
+   Merge toggle button prefs code into keyfile.c Stash code.
+   Add toggle button support to Stash code.
+
+
 2008-12-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * tagmanager/c.c, tagmanager/get.h:
