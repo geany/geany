@@ -1,5 +1,5 @@
 /*
- *      geanyEntryaction.c - this file is part of Geany, a fast and lightweight IDE
+ *      geanyentryaction.c - this file is part of Geany, a fast and lightweight IDE
  *
  *      Copyright 2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
  *      Copyright 2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
