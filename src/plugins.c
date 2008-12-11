@@ -1255,13 +1255,12 @@ void plugin_add_toolbar_item(GeanyPlugin *plugin, GtkToolItem *item)
 		GtkToolItem *sep;
 
 		pos = toolbar_get_insert_position();
-		/* pos should be valid even if the quit btn is hidden */
-		g_return_if_fail(pos >= 0);
-		gtk_toolbar_insert(toolbar, item, pos);
 
 		sep = gtk_separator_tool_item_new();
-		gtk_toolbar_insert(toolbar, sep, pos + 1);
+		gtk_toolbar_insert(toolbar, sep, pos);
 		autosep->widget = GTK_WIDGET(sep);
+
+		gtk_toolbar_insert(toolbar, item, pos + 1);
 	}
 	else
 	{

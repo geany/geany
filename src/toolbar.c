@@ -247,14 +247,31 @@ GtkWidget *toolbar_init(void)
 /*  Returns the position for adding new toolbar items. The returned position can be used
  *  to add new toolbar items with @c gtk_toolbar_insert(). The toolbar object can be accessed
  *  with @a geany->main_widgets->toolbar.
- *  The position is always the last one before the Quit button (if it is shown).
+ *  The position is always the last one before the Quit button or the very last position if the
+ *  Quit button is not the last toolbar item.
  *
- *  @return The position for new toolbar items or @c -1 if an error occurred.
+ *  @return The position for new toolbar items.
  */
 gint toolbar_get_insert_position(void)
 {
 	GtkWidget *quit = toolbar_get_widget_by_name("Quit");
-	gint pos = gtk_toolbar_get_item_index(GTK_TOOLBAR(main_widgets.toolbar), GTK_TOOL_ITEM(quit));
+	gint quit_pos = -1, pos;
+
+	if (quit != NULL)
+		quit_pos = gtk_toolbar_get_item_index(GTK_TOOLBAR(main_widgets.toolbar), GTK_TOOL_ITEM(quit));
+
+	pos = gtk_toolbar_get_n_items(GTK_TOOLBAR(main_widgets.toolbar));
+	if (quit_pos == (pos - 1))
+	{
+		/* if the toolbar item before the quit button is a separator, insert new items before */
+		if (GTK_IS_SEPARATOR_TOOL_ITEM(gtk_toolbar_get_nth_item(
+			GTK_TOOLBAR(main_widgets.toolbar), quit_pos - 1)))
+		{
+			return quit_pos - 1;
+		}
+		/* else return the position of the quit button to insert new items before */
+		return quit_pos;
+	}
 
 	return pos;
 }

@@ -1,3 +1,11 @@
+2008-12-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/plugins.c, src/toolbar.c:
+   Fix plugin toolbar icon placement. Now they are always inserted
+   before the Quit button if it is the last toolbar element or at
+   the end otherwise.
+
+
 2008-12-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/utils.h, src/prefs.c, src/stash.c, src/stash.h, src/keyfile.c,
