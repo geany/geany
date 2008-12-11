@@ -3936,12 +3936,20 @@ gboolean editor_goto_pos(GeanyEditor *editor, gint pos, gboolean mark)
 static gboolean
 on_editor_scroll_event(GtkWidget *widget, GdkEventScroll *event, gpointer user_data)
 {
+	GeanyEditor *editor = user_data;
+
 	/* Handle scroll events if Alt is pressed and scroll whole pages instead of a
 	 * few lines only, maybe this could/should be done in Scintilla directly */
 	if (event->state & GDK_MOD1_MASK)
 	{
-		GeanyEditor *editor = user_data;
 		sci_send_command(editor->sci, (event->direction == GDK_SCROLL_DOWN) ? SCI_PAGEDOWN : SCI_PAGEUP);
+		return TRUE;
+	}
+	else if (event->state & GDK_SHIFT_MASK)
+	{
+		gint amount = (event->direction == GDK_SCROLL_DOWN) ? 8 : -8;
+
+		sci_scroll_columns(editor->sci, amount);
 		return TRUE;
 	}
 

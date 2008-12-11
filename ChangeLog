@@ -19,7 +19,13 @@
  * src/interface.c, src/ui_utils.h, src/notebook.c, src/keyfile.c,
    doc/geany.txt, doc/geany.html, geany.glade:
    Add an interface pref for whether to hide additional widgets when
-   double-clicking on document notebook tabs (off by default).
+   double-clicking on document notebook tabs (off by default) - closes
+   #2300430.
+ * src/sciwrappers.c, src/sciwrappers.h, src/editor.c, doc/geany.txt,
+   doc/geany.html:
+   Make Shift+Mouse wheel scroll the editor view horizontally
+   (#2410732).
+   Add function sci_scroll_columns().
 
 
 2008-12-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
