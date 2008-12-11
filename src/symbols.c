@@ -636,7 +636,7 @@ static void add_top_level_items(GeanyDocument *doc)
 		case GEANY_FILETYPES_HTML:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_function), _("JavaScript functions"), NULL,
+				&(tv_iters.tag_function), _("Functions"), NULL,
 				&(tv_iters.tag_member), _("Anchor"), NULL,
 				&(tv_iters.tag_namespace), _("Heading (H1)"), NULL,
 				&(tv_iters.tag_class), _("Heading (H2)"), NULL,
