@@ -48,8 +48,8 @@ ALL_GTK_LIBS +=-liconv
 else
 ALL_GTK_LIBS +=-lcairo -lpangocairo-1.0
 endif
-#-mwindows
-WIN_LIBS=-lkernel32 -limm32 -lshfolder -lshell32 \
+
+WIN_LIBS=-mwindows -lkernel32 -limm32 -lshfolder -lshell32 \
 		 -lole32 -luuid -lcomdlg32 -lcomctl32 -liberty -lwsock32
 
 CBASEFLAGS=-Wall -pipe -mms-bitfields $(DEFINES) $(INCLUDEDIRS)
