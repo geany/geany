@@ -35,13 +35,13 @@ GeanyPrefGroup *stash_group_new(const gchar *name);
 void stash_group_set_write_once(GeanyPrefGroup *group, gboolean write_once);
 
 void stash_group_add_boolean(GeanyPrefGroup *group, gboolean *setting,
-				const gchar *key_name, gboolean default_value);
+		const gchar *key_name, gboolean default_value);
 
 void stash_group_add_integer(GeanyPrefGroup *group, gint *setting,
-				const gchar *key_name, gint default_value);
+		const gchar *key_name, gint default_value);
 
 void stash_group_add_string(GeanyPrefGroup *group, gchar **setting,
-				const gchar *key_name, const gchar *default_value);
+		const gchar *key_name, const gchar *default_value);
 
 void stash_group_add_toggle_button(GeanyPrefGroup *group, gboolean *setting,
 		const gchar *key_name, gboolean default_value, gpointer widget_id);
