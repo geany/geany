@@ -1218,6 +1218,7 @@ void editor_find_current_word(GeanyEditor *editor, gint pos, gchar *word, size_t
 }
 
 
+/* Read the word up to position @a pos. */
 static const gchar *
 editor_read_word_stem(GeanyEditor *editor, gint pos, const gchar *wordchars)
 {
