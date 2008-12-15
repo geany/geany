@@ -47,6 +47,7 @@ struct GeanyPrefEntry
 	gpointer default_value;
 	GType widget_type;			/* e.g. GTK_TYPE_TOGGLE_BUTTON */
 	gpointer widget_id;			/* can be GtkWidget or gchararray */
+	gpointer fields;			/* extra fields */
 };
 
 struct GeanyPrefGroup
@@ -55,6 +56,13 @@ struct GeanyPrefGroup
 	GArray *entries;			/* array of GeanyPrefEntry */
 	gboolean write_once;		/* only write settings if they don't already exist */
 };
+
+typedef struct EnumWidget
+{
+	gpointer widget_id;
+	gint enum_id;
+}
+EnumWidget;
 
 
 typedef enum SettingAction
@@ -177,6 +185,15 @@ GeanyPrefGroup *stash_group_new(const gchar *name)
 
 void stash_group_free(GeanyPrefGroup *group)
 {
+	GeanyPrefEntry *entry;
+
+	foreach_array(GeanyPrefEntry, entry, group->entries)
+	{
+		if (entry->widget_type == GTK_TYPE_RADIO_BUTTON)
+			g_free(entry->fields);
+		else
+			g_assert(entry->fields == NULL);
+	}
 	g_array_free(group->entries, TRUE);
 	g_free(group);
 }
@@ -192,7 +209,7 @@ static GeanyPrefEntry *
 add_pref(GeanyPrefGroup *group, GType type, gpointer setting,
 		const gchar *key_name, gpointer default_value)
 {
-	GeanyPrefEntry entry = {type, setting, key_name, default_value, G_TYPE_NONE, NULL};
+	GeanyPrefEntry entry = {type, setting, key_name, default_value, G_TYPE_NONE, NULL, NULL};
 	GArray *array = group->entries;
 
 	g_array_append_val(array, entry);
@@ -265,23 +282,88 @@ lookup_widget                          (GtkWidget       *widget,
 }
 
 
+static GtkWidget *
+get_widget(GtkWidget *owner, gpointer widget_id)
+{
+	GtkWidget *widget = widget_id;
+
+	if (owner)
+	{
+		const gchar *widget_name = widget_id;
+
+		widget = lookup_widget(owner, widget_name);
+	}
+	if (!GTK_IS_WIDGET(widget))
+	{
+		g_warning("Unknown widget in %s!", G_GNUC_FUNCTION);
+		return NULL;
+	}
+	return widget;
+}
+
+
+static void handle_radio_button(GtkWidget *widget, gint enum_id, gboolean *setting,
+		PrefAction action)
+{
+	switch (action)
+	{
+		case PREF_DISPLAY:
+			if (*setting == enum_id)
+				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
+			break;
+		case PREF_UPDATE:
+			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
+				*setting = enum_id;
+			break;
+	}
+}
+
+
+static void handle_radio_buttons(GtkWidget *owner, EnumWidget *fields,
+		gboolean *setting,
+		PrefAction action)
+{
+	EnumWidget *field = fields;
+	gsize count = 0;
+	GtkWidget *widget = NULL;
+
+	while (1)
+	{
+		widget = get_widget(owner, field->widget_id);
+
+		if (!widget)
+			continue;
+
+		count++;
+		handle_radio_button(widget, field->enum_id, setting, action);
+		field++;
+		if (!field->widget_id)
+			break;
+	}
+	if (g_slist_length(gtk_radio_button_get_group(GTK_RADIO_BUTTON(widget))) != count)
+		g_warning("Missing/invalid radio button widget IDs found!");
+}
+
+
 static void pref_action(PrefAction action, GeanyPrefGroup *group, GtkWidget *owner)
 {
 	GeanyPrefEntry *entry;
 
 	foreach_array(GeanyPrefEntry, entry, group->entries)
 	{
-		GtkWidget *widget = entry->widget_id;
-		const gchar *widget_name = entry->widget_id;
+		GtkWidget *widget;
 
 		if (entry->widget_type == G_TYPE_NONE)
 			continue;
 
-		if (owner)
+		if (entry->widget_type == GTK_TYPE_RADIO_BUTTON)
 		{
-			widget = lookup_widget(owner, widget_name);
+			handle_radio_buttons(owner, entry->fields, entry->setting, action);
+			continue;
 		}
-		if (!GTK_IS_WIDGET(widget))
+
+		widget = get_widget(owner, entry->widget_id);
+		if (!widget)
 		{
 			g_warning("Unknown widget for %s::%s in %s!", group->name, entry->key_name,
 				G_GNUC_FUNCTION);
@@ -310,6 +392,8 @@ void stash_group_update(GeanyPrefGroup *group, GtkWidget *owner)
 }
 
 
+/* Used for GtkCheckButton or GtkToggleButton widgets.
+ * @see stash_group_add_radio_buttons(). */
 void stash_group_add_toggle_button(GeanyPrefGroup *group, gboolean *setting,
 		const gchar *key_name, gboolean default_value, gpointer widget_id)
 {
@@ -318,6 +402,60 @@ void stash_group_add_toggle_button(GeanyPrefGroup *group, gboolean *setting,
 
 	entry->widget_type = GTK_TYPE_TOGGLE_BUTTON;
 	entry->widget_id = widget_id;
+}
+
+
+/* @param ... pairs of widget_id, enum_id.
+ * Example (using widget lookup strings, but widget pointers can also work):
+ * @code
+ * enum {FOO, BAR};
+ * stash_group_add_radio_buttons(group, &which_one_setting, "which_one", BAR,
+ * 	"radio_foo", FOO, "radio_bar", BAR, NULL);
+ * @endcode */
+void stash_group_add_radio_buttons(GeanyPrefGroup *group, gint *setting,
+		const gchar *key_name, gint default_value,
+		gpointer widget_id, gint enum_id, ...)
+{
+	GeanyPrefEntry *entry =
+		add_pref(group, G_TYPE_INT, setting, key_name, GINT_TO_POINTER(default_value));
+	va_list args;
+	gsize count = 1;
+	EnumWidget *item, *array;
+
+	entry->widget_type = GTK_TYPE_RADIO_BUTTON;
+
+	/* count pairs of args */
+	va_start(args, enum_id);
+	while (1)
+	{
+		gint dummy;
+
+		if (!va_arg(args, gpointer))
+			break;
+		dummy = va_arg(args, gint);
+		count++;
+	}
+	va_end(args);
+
+	array = g_new0(EnumWidget, count + 1);
+	entry->fields = array;
+
+	va_start(args, enum_id);
+	foreach_c_array(item, array, count)
+	{
+		if (item == array)
+		{
+			/* first element */
+			item->widget_id = widget_id;
+			item->enum_id = enum_id;
+		}
+		else
+		{
+			item->widget_id = va_arg(args, gpointer);
+			item->enum_id = va_arg(args, gint);
+		}
+	}
+	va_end(args);
 }
 
 

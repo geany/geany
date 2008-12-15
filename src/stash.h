@@ -46,6 +46,10 @@ void stash_group_add_string(GeanyPrefGroup *group, gchar **setting,
 void stash_group_add_toggle_button(GeanyPrefGroup *group, gboolean *setting,
 		const gchar *key_name, gboolean default_value, gpointer widget_id);
 
+void stash_group_add_radio_buttons(GeanyPrefGroup *group, gint *setting,
+		const gchar *key_name, gint default_value,
+		gpointer widget_id, gint enum_id, ...) G_GNUC_NULL_TERMINATED;
+
 void stash_group_load(GeanyPrefGroup *group, GKeyFile *keyfile);
 
 void stash_group_save(GeanyPrefGroup *group, GKeyFile *keyfile);

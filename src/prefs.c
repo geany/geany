@@ -137,45 +137,6 @@ static void spin_prefs_foreach(PrefCallbackAction action)
 }
 
 
-typedef struct RadioPrefEntry
-{
-	const gchar *widget_name;
-	gpointer setting;
-	gint value;
-}
-RadioPrefEntry;
-
-static void radio_prefs_foreach(PrefCallbackAction action)
-{
-	guint i;
-	RadioPrefEntry items[] =
-	{
-		{"radio_indent_spaces", &editor_prefs.indentation->type, GEANY_INDENT_TYPE_SPACES},
-		{"radio_indent_tabs", &editor_prefs.indentation->type, GEANY_INDENT_TYPE_TABS},
-		{"radio_indent_both", &editor_prefs.indentation->type, GEANY_INDENT_TYPE_BOTH}
-	};
-
-	for (i = 0; i < G_N_ELEMENTS(items); i++)
-	{
-		RadioPrefEntry *pe = &items[i];
-		GtkWidget *widget = lookup_widget(ui_widgets.prefs_dialog, pe->widget_name);
-		gint *setting = pe->setting;
-
-		switch (action)
-		{
-			case PREF_DISPLAY:
-				if (*setting == pe->value)
-					gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
-				break;
-			case PREF_UPDATE:
-				if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
-					*setting = pe->value;
-				break;
-		}
-	}
-}
-
-
 static void combo_prefs_foreach(PrefCallbackAction action)
 {
 	guint i;
@@ -209,7 +170,6 @@ typedef void (*PrefItemsCallback)(PrefCallbackAction action);
  * runtime setting fields like EditorPrefs::indentation->width. */
 PrefItemsCallback pref_item_callbacks[] = {
 	spin_prefs_foreach,
-	radio_prefs_foreach,
 	combo_prefs_foreach
 };
 

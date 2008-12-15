@@ -1,3 +1,10 @@
+2008-12-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/prefs.c, src/stash.c, src/stash.h, src/keyfile.c:
+   Use Stash radio button prefs instead of RadioPrefEntry.
+   Add stash_group_add_radio_buttons().
+
+
 2008-12-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/plugins.c, src/toolbar.c:

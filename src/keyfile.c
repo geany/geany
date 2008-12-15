@@ -134,8 +134,12 @@ static void init_pref_groups(void)
 		"indent_hard_tab_width", 8);
 	stash_group_add_integer(group, (gint*)&editor_prefs.indentation->auto_indent_mode,
 		"indent_mode", GEANY_AUTOINDENT_CURRENTCHARS);
-	stash_group_add_integer(group, (gint*)&editor_prefs.indentation->type,
-		"indent_type", GEANY_INDENT_TYPE_TABS);
+	stash_group_add_radio_buttons(group, (gint*)&editor_prefs.indentation->type,
+		"indent_type", GEANY_INDENT_TYPE_TABS,
+		"radio_indent_spaces", GEANY_INDENT_TYPE_SPACES,
+		"radio_indent_tabs", GEANY_INDENT_TYPE_TABS,
+		"radio_indent_both", GEANY_INDENT_TYPE_BOTH,
+		NULL);
 	stash_group_add_integer(group, (gint*)&editor_prefs.autocompletion_max_entries,
 		"autocompletion_max_entries", GEANY_MAX_AUTOCOMPLETE_WORDS);
 
