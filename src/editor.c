@@ -253,7 +253,7 @@ typedef struct SCNotification SCNotification;
 
 static void fold_symbol_click(ScintillaObject *sci, SCNotification *nt)
 {
-	gint line = SSM(sci, SCI_LINEFROMPOSITION, nt->position, 0);
+	gint line = sci_get_line_from_position(sci, nt->position);
 
 	SSM(sci, SCI_TOGGLEFOLD, line, 0);
 	/* extra toggling of child fold points
@@ -572,8 +572,8 @@ static void fold_changed(ScintillaObject *sci, gint line, gint levelNow, gint le
 static void ensure_range_visible(ScintillaObject *sci, gint posStart, gint posEnd,
 		gboolean enforcePolicy)
 {
-	gint lineStart = SSM(sci, SCI_LINEFROMPOSITION, MIN(posStart, posEnd), 0);
-	gint lineEnd = SSM(sci, SCI_LINEFROMPOSITION, MAX(posStart, posEnd), 0);
+	gint lineStart = sci_get_line_from_position(sci, MIN(posStart, posEnd));
+	gint lineEnd = sci_get_line_from_position(sci, MAX(posStart, posEnd));
 	gint line;
 
 	for (line = lineStart; line <= lineEnd; line++)
@@ -2695,7 +2695,7 @@ void editor_highlight_braces(GeanyEditor *editor, gint cur_pos)
 			return;
 		}
 	}
-	end_pos = SSM(editor->sci, SCI_BRACEMATCH, brace_pos, 0);
+	end_pos = sci_find_matching_brace(editor->sci, brace_pos);
 
 	if (end_pos >= 0)
 	{
