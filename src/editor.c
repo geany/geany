@@ -1015,25 +1015,28 @@ static void auto_close_chars(ScintillaObject *sci, gint pos, gchar c)
 	if (utils_isbrace(c, 0))
 		end_pos = SSM(sci, SCI_BRACEMATCH, pos - 1, 0);
 
-	if ((editor_prefs.autoclose_chars & GEANY_AC_PARENTHESIS) && end_pos == -1 && c == '(')
+	switch (c)
 	{
-		closing_char = ")";
-	}
-	else if ((editor_prefs.autoclose_chars & GEANY_AC_CBRACKET) && end_pos == -1 && c == '{')
-	{
-		closing_char = "}";
-	}
-	else if ((editor_prefs.autoclose_chars & GEANY_AC_SBRACKET) && end_pos == -1 && c == '[')
-	{
-		closing_char = "]";
-	}
-	else if ((editor_prefs.autoclose_chars & GEANY_AC_SQUOTE) && c == '\'')
-	{
-		closing_char = "'";
-	}
-	else if ((editor_prefs.autoclose_chars & GEANY_AC_DQUOTE) && c == '"')
-	{
-		closing_char = "\"";
+		case '(':
+			if ((editor_prefs.autoclose_chars & GEANY_AC_PARENTHESIS) && end_pos == -1)
+				closing_char = ")";
+			break;
+		case '{':
+			if ((editor_prefs.autoclose_chars & GEANY_AC_CBRACKET) && end_pos == -1)
+				closing_char = "}";
+			break;
+		case '[':
+			if ((editor_prefs.autoclose_chars & GEANY_AC_SBRACKET) && end_pos == -1)
+				closing_char = "]";
+			break;
+		case '\'':
+			if (editor_prefs.autoclose_chars & GEANY_AC_SQUOTE)
+				closing_char = "'";
+			break;
+		case '"':
+			if (editor_prefs.autoclose_chars & GEANY_AC_DQUOTE)
+				closing_char = "\"";
+			break;
 	}
 
 	if (closing_char != NULL)
