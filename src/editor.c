@@ -1013,7 +1013,7 @@ static void auto_close_chars(ScintillaObject *sci, gint pos, gchar c)
 	gint end_pos = -1;
 
 	if (utils_isbrace(c, 0))
-		end_pos = SSM(sci, SCI_BRACEMATCH, pos - 1, 0);
+		end_pos = sci_find_matching_brace(sci, pos - 1);
 
 	switch (c)
 	{
