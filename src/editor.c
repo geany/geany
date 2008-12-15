@@ -1010,16 +1010,20 @@ static void insert_indent_after_line(GeanyEditor *editor, gint line)
 static void auto_close_chars(ScintillaObject *sci, gint pos, gchar c)
 {
 	const gchar *closing_char = NULL;
+	gint end_pos = -1;
 
-	if ((editor_prefs.autoclose_chars & GEANY_AC_PARENTHESIS) && c == '(')
+	if (utils_isbrace(c, 0))
+		end_pos = SSM(sci, SCI_BRACEMATCH, pos - 1, 0);
+
+	if ((editor_prefs.autoclose_chars & GEANY_AC_PARENTHESIS) && end_pos == -1 && c == '(')
 	{
 		closing_char = ")";
 	}
-	else if ((editor_prefs.autoclose_chars & GEANY_AC_CBRACKET) && c == '{')
+	else if ((editor_prefs.autoclose_chars & GEANY_AC_CBRACKET) && end_pos == -1 && c == '{')
 	{
 		closing_char = "}";
 	}
-	else if ((editor_prefs.autoclose_chars & GEANY_AC_SBRACKET) && c == '[')
+	else if ((editor_prefs.autoclose_chars & GEANY_AC_SBRACKET) && end_pos == -1 && c == '[')
 	{
 		closing_char = "]";
 	}
