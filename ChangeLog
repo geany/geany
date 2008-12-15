@@ -1,3 +1,13 @@
+2008-12-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/build.c:
+   Remove checks for the executable when executing a file.
+   The executed interpreter or the shell should handle file not found
+   error and print appropriate messages.
+   This makes it a bit more flexible, e.g. allowing to use gcj for
+   Java files.
+
+
 2008-12-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/prefs.c, src/stash.c, src/stash.h, src/keyfile.c:

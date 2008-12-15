@@ -523,70 +523,6 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 }
 
 
-/* Checks if the executable file corresponding to document idx exists.
- * Returns the name part of the filename, without extension.
- * Returns NULL if executable file doesn't exist. */
-static gchar *get_build_executable(const gchar *locale_filename, gboolean check_exists,
-		filetype_id ft_id)
-{
-	gchar *long_executable = NULL;
-	struct stat st;
-
-	long_executable = utils_remove_ext_from_filename(locale_filename);
-#ifdef G_OS_WIN32
-	setptr(long_executable, g_strconcat(long_executable, ".exe", NULL));
-#endif
-
-	if (check_exists)
-	{
-		gchar *check_executable = NULL;
-
-		/* add .class extension for JAVA source files (only for stat) */
-		if (ft_id == GEANY_FILETYPES_JAVA)
-		{
-#ifdef G_OS_WIN32
-			gchar *tmp;
-			/* there is already the extension .exe, so first remove it and then add .class */
-			tmp = utils_remove_ext_from_filename(long_executable);
-			check_executable = g_strconcat(tmp, ".class", NULL);
-			/* store the filename without "exe" extension for Java, tmp will be freed by setptr */
-			setptr(long_executable, tmp);
-#else
-			check_executable = g_strconcat(long_executable, ".class", NULL);
-#endif
-		}
-		else
-			check_executable = g_strdup(long_executable);
-
-		/* check for filename extension and abort if filename doesn't have one */
-		if (utils_str_equal(locale_filename, check_executable))
-		{
-			ui_set_statusbar(TRUE, _("Command stopped because the current file has no extension."));
-			utils_beep();
-			g_free(check_executable);
-			return NULL;
-		}
-
-		/* check whether executable exists */
-		if (g_stat(check_executable, &st) != 0)
-		{
-			gchar *utf8_check_executable = utils_get_utf8_from_locale(check_executable);
-
-			ui_set_statusbar(TRUE, _("Failed to execute \"%s\" (make sure it is already built)"),
-														utf8_check_executable);
-			g_free(utf8_check_executable);
-			g_free(check_executable);
-			return NULL;
-		}
-		g_free(check_executable);
-	}
-
-	/* remove path */
-	setptr(long_executable, g_path_get_basename(long_executable));
-	return long_executable;
-}
-
-
 /* Returns: NULL if there was an error, or the working directory the script was created in.
  * vte_cmd_nonscript is the location of a string which is filled with the command to be used
  * when vc->skip_run_script is set, otherwise it will be set to NULL */
@@ -596,7 +532,6 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript)
 	gboolean have_project;
 	GeanyProject *project = app->project;
 	GeanyFiletype *ft = doc->file_type;
-	gboolean check_exists;
 	gchar	*cmd = NULL;
 	gchar	*executable = NULL;
 	gchar	*working_dir = NULL;
@@ -614,13 +549,10 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript)
 		project->run_cmd :
 		ft->programs->run_cmd;
 
-	/* only check for existing executable, if executable is required by %e */
-	check_exists = (strstr(cmd, "%e") != NULL);
-	executable = get_build_executable(locale_filename, check_exists, FILETYPE_ID(ft));
-	if (executable == NULL)
+	if (strstr(cmd, "%e") != NULL)
 	{
-		g_free(locale_filename);
-		return NULL;
+		executable = utils_remove_ext_from_filename(locale_filename);
+		setptr(executable, g_path_get_basename(executable));
 	}
 
 	if (have_project)
