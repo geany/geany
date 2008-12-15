@@ -196,8 +196,9 @@ static void write_includes_file(FILE *fp, GList *includes_files)
 	{
 		char *str = g_strdup_printf("#include \"%s\"\n", (char*)node->data);
 		int str_len = strlen(str);
+		size_t size;
 
-		fwrite(str, str_len, 1, fp);
+		size = fwrite(str, str_len, 1, fp);
 		free(str);
 		node = g_list_next (node);
 	}
@@ -223,8 +224,9 @@ static void append_to_temp_file(FILE *fp, GList *file_list)
 		}
 		else
 		{
-			fwrite(contents, length, 1, fp);
-			fwrite("\n", 1, 1, fp);	/* in case file doesn't end in newline (e.g. windows). */
+			size_t size;
+			size = fwrite(contents, length, 1, fp);
+			size = fwrite("\n", 1, 1, fp);	/* in case file doesn't end in newline (e.g. windows). */
 			g_free(contents);
 		}
 		node = g_list_next (node);
@@ -358,12 +360,13 @@ gboolean tm_workspace_create_global_tags(const char *config_dir, const char *pre
 	 */
 	if (pre_process != NULL)
 	{
+		int ret;
 		command = g_strdup_printf("%s %s | grep -v -E '^\\s*(G_BEGIN_DECLS|G_END_DECLS)\\s*$' > %s",
 							  pre_process, temp_file, temp_file2);
 #ifdef TM_DEBUG
 		g_message("Executing: %s", command);
 #endif
-		system(command);
+		ret = system(command);
 		g_free(command);
 		g_unlink(temp_file);
 		g_free(temp_file);

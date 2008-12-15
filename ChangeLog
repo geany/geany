@@ -10,6 +10,10 @@
  * src/editor.c:
    Improve auto-closing of braces, brackets and quotes
    (patch by Guillaume de Rorthais, thanks).
+ * tagmanager/get.c, tagmanager/tm_work_object.c,
+   tagmanager/tm_workspace.c:
+   Fix a few compiler warnings about unused return values caused
+   by recent glibc versions.
 
 
 2008-12-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

@@ -79,11 +79,12 @@ gchar *tm_get_real_path(const gchar *file_name)
 		gsize len = get_path_max(file_name) + 1;
 		gchar *path = g_malloc0(len);
 
-		realpath(file_name, path);
-		return path;
+		if (realpath(file_name, path))
+			return path;
+		else
+			g_free(path);
 	}
-	else
-		return NULL;
+	return NULL;
 }
 
 guint tm_work_object_register(GFreeFunc free_func, TMUpdateFunc update_func, TMFindFunc find_func)

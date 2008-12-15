@@ -733,9 +733,8 @@ extern char *getArglistFromFilePos(fpos_t startPosition, const char *tokenName)
 	if (pos2 > pos1)
 	{
 		result = (char *) g_malloc(sizeof(char ) * (pos2 - pos1 + 2));
-		if (result != NULL)
+		if (result != NULL && fread(result, sizeof(char), pos2 - pos1 + 1, File.fp) > 0)
 		{
-			fread(result, sizeof(char), pos2 - pos1 + 1, File.fp);
 			result[pos2-pos1+1] = '\0';
 			arglist = getArglistFromStr(result, tokenName);
 			free(result);
