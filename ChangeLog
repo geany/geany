@@ -10,6 +10,9 @@
  * doc/geany.txt, doc/geany.html, data/snippets.conf:
    Snippet indentation will be replaced according to indent mode.
    Minor edit of snippet docs.
+ * src/search.c:
+   Set Find in Files directory entry to project base path or current
+   working directory if the current file has no path.
 
 
 2008-12-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
