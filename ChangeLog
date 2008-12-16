@@ -15,6 +15,9 @@
    working directory if the current file has no path.
  * src/editor.c:
    Move %ws and %newline% replacement into snippets-only code.
+ * HACKING:
+   Add GDB 'Stop on warnings' and 'Running with batch commands'
+   sections.
 
 
 2008-12-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

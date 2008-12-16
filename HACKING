@@ -292,8 +292,37 @@ Update init_tag_list() for foo, listing the tm_tag_* types corresponding
 to the s_tag_type_names strings used in foo.c for FooKinds.
 
 
-Loading a plugin from GDB
--------------------------
+GDB
+---
+
+Stop on warnings
+^^^^^^^^^^^^^^^^
+When a GLib or GTK warning is printed, often you want to get a
+backtrace to find out what code caused them. You can do that with the
+``--g-fatal-warnings`` argument, which will abort Geany on the first
+warning it receives.
+
+But for ordinary testing, you don't always want your editor to abort
+just because of a warning - use::
+
+    (gdb) b handler_log if level <= G_LOG_LEVEL_WARNING
+
+
+Running with batch commands
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Use::
+
+    $ gdb src/geany -x gdb-commands
+
+Where ``gdb-commands`` is a file with the following lines::
+
+    set pagination off
+    b handler_log if level <= G_LOG_LEVEL_WARNING
+    r -d
+
+
+Loading a plugin
+^^^^^^^^^^^^^^^^
 This is useful so you can load plugins without installing them first.
 Alternatively you can use a symlink in ~/.config/geany/plugins or
 $prefix/lib/geany (where $prefix is /usr/local by default).
