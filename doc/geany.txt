@@ -799,8 +799,8 @@ will be replaced when using the snippet:
 \\n or %newline%  Insert a new line (it will be replaced by the used EOL
                   char(s): LF, CR/LF, or CR).
 
-\\t or %ws%       Insert an indentation step, if using only spaces for
-                  indentation only spaces will be used.
+\\t or %ws%       Insert an indentation step, it will be replaced according
+                  to the current document's indent mode.
 
 \\s               \\s to force whitespace at beginning or end of a value
                   ('key= value' won't work, use 'key=\\svalue')
@@ -813,8 +813,8 @@ will be replaced when using the snippet:
                   section you can use %brace_open" in any other snippet.
 ================  =========================================================
 
-Defined snippets must not contain spaces otherwise they won't
-work correctly. But beside that you can define almost everything
+Snippet names must not contain spaces otherwise they won't
+work correctly. But beside that you can define almost any
 string as a snippet and use it later in Geany. It is not limited
 to existing contructs of certain programming languages(like ``if``,
 ``for``, ``switch``). Define whatever you need.
