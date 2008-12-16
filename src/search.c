@@ -40,6 +40,8 @@
 #include "editor.h"
 #include "encodings.h"
 #include "project.h"
+#include "keyfile.h"
+#include "stash.h"
 
 #include <unistd.h>
 #include <string.h>
@@ -50,7 +52,8 @@
 #endif
 
 
-enum {
+enum
+{
 	GEANY_RESPONSE_FIND = 1,
 	GEANY_RESPONSE_FIND_PREVIOUS,
 	GEANY_RESPONSE_FIND_IN_FILE,
@@ -63,10 +66,26 @@ enum {
 	GEANY_RESPONSE_REPLACE_IN_SEL
 };
 
+enum
+{
+	FIF_FGREP,
+	FIF_GREP,
+	FIF_EGREP
+};
+
 
 GeanySearchData search_data;
 
 GeanySearchPrefs search_prefs;
+
+
+static struct
+{
+	gint fif_mode;
+}
+settings;
+
+GeanyPrefGroup *fif_prefs = NULL;
 
 
 static struct
@@ -121,9 +140,30 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 	const gchar *enc);
 
 
+static void init_prefs(void)
+{
+	GeanyPrefGroup *group;
+
+	group = stash_group_new("search");
+	configuration_add_pref_group(group, TRUE);
+	stash_group_add_toggle_button(group, &search_prefs.use_current_file_dir,
+		"pref_search_current_file_dir", TRUE, "check_fif_current_dir");
+
+	group = stash_group_new("search");
+	fif_prefs = group;
+	configuration_add_pref_group(group, FALSE);
+	stash_group_add_radio_buttons(group, &settings.fif_mode, "fif_mode", FIF_FGREP,
+		"radio_fgrep", FIF_FGREP,
+		"radio_grep", FIF_GREP,
+		"radio_egrep", FIF_EGREP,
+		NULL);
+}
+
+
 void search_init(void)
 {
 	search_data.text = NULL;
+	init_prefs();
 }
 
 
@@ -654,6 +694,8 @@ static void create_fif_dialog()
 
 	rbtn = gtk_radio_button_new_with_mnemonic_from_widget(GTK_RADIO_BUTTON(rbtn),
 				_("_Extended regular expressions"));
+	g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "radio_egrep",
+					g_object_ref(rbtn), (GDestroyNotify)g_object_unref);
 	ui_widget_set_tooltip_text(rbtn, _("See grep's manual page for more information."));
 	gtk_button_set_focus_on_click(GTK_BUTTON(rbtn), FALSE);
 	gtk_container_add(GTK_CONTAINER(rbox), rbtn);
@@ -744,6 +786,8 @@ void search_show_find_in_files_dialog(const gchar *dir)
 		create_fif_dialog();
 		sel = editor_get_default_selection(editor, search_prefs.use_current_word, NULL);
 	}
+	stash_group_display(fif_prefs, widgets.find_in_files_dialog);
+
 	/* only set selection if the dialog is not already visible, or has just been created */
 	if (! sel && ! GTK_WIDGET_VISIBLE(widgets.find_in_files_dialog))
 		sel = editor_get_default_selection(editor, search_prefs.use_current_word, NULL);
@@ -1118,10 +1162,6 @@ on_widget_key_pressed_set_focus(GtkWidget *widget, GdkEventKey *event, gpointer 
 
 static GString *get_grep_options(void)
 {
-	gboolean fgrep = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-					lookup_widget(widgets.find_in_files_dialog, "radio_fgrep")));
-	gboolean grep = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-					lookup_widget(widgets.find_in_files_dialog, "radio_grep")));
 	gboolean invert = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 					lookup_widget(widgets.find_in_files_dialog, "check_invert")));
 	gboolean case_sens = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
@@ -1143,9 +1183,9 @@ static GString *get_grep_options(void)
 	if (recursive)
 		g_string_append_c(gstr, 'r');
 
-	if (fgrep)
+	if (settings.fif_mode == FIF_FGREP)
 		g_string_append_c(gstr, 'F');
-	else if (! grep)
+	else if (settings.fif_mode == FIF_EGREP)
 		g_string_append_c(gstr, 'E');
 
 	if (extra)
@@ -1168,6 +1208,8 @@ static void
 on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 		G_GNUC_UNUSED gpointer user_data)
 {
+	stash_group_update(fif_prefs, widgets.find_in_files_dialog);
+
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		GtkWidget *search_combo = find_in_files.search_combo;

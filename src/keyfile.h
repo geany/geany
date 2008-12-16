@@ -33,6 +33,10 @@ void configuration_init(void);
 
 void configuration_finalize(void);
 
+struct GeanyPrefGroup;
+
+void configuration_add_pref_group(struct GeanyPrefGroup *group, gboolean for_prefs_dialog);
+
 void configuration_save(void);
 
 gboolean configuration_load(void);

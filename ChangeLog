@@ -1,3 +1,12 @@
+2008-12-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keyfile.c, src/keyfile.h, src/search.c, src/main.c:
+   Remember Find in Files mode at startup.
+   Add configuration_add_pref_group(), with separate array for GUI
+   prefs.
+   Move search pref group to search.c.
+
+
 2008-12-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/build.c:

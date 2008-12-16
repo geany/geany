@@ -921,11 +921,11 @@ gint main(gint argc, gchar **argv)
 	editor_init();
 
 	configuration_init();
+	search_init();
 	load_settings();
 
 	msgwin_init();
 	build_init();
-	search_init();
 	ui_create_insert_menu_items();
 	ui_create_insert_date_menu_items();
 	keybindings_init();

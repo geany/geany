@@ -92,15 +92,18 @@ static gint session_notebook_page;
 static gint hpan_position;
 static gint vpan_position;
 
+static GPtrArray *keyfile_groups = NULL;
 GPtrArray *pref_groups = NULL;
 
 
-static void add_pref_group(GeanyPrefGroup *group)
+/* The group will be free'd on quitting.
+ * @param for_prefs_dialog is whether the group also has Prefs dialog items. */
+void configuration_add_pref_group(struct GeanyPrefGroup *group, gboolean for_prefs_dialog)
 {
-	if (pref_groups == NULL)
-		pref_groups = g_ptr_array_new();
+	g_ptr_array_add(keyfile_groups, group);
 
-	g_ptr_array_add(pref_groups, group);
+	if (for_prefs_dialog)
+		g_ptr_array_add(pref_groups, group);
 }
 
 
@@ -109,7 +112,7 @@ static void init_pref_groups(void)
 	GeanyPrefGroup *group;
 
 	group = stash_group_new(PACKAGE);
-	add_pref_group(group);
+	configuration_add_pref_group(group, TRUE);
 	stash_group_add_string(group, &prefs.default_open_path,
 		"default_open_path", "");
 
@@ -143,14 +146,9 @@ static void init_pref_groups(void)
 	stash_group_add_integer(group, (gint*)&editor_prefs.autocompletion_max_entries,
 		"autocompletion_max_entries", GEANY_MAX_AUTOCOMPLETE_WORDS);
 
-	group = stash_group_new("search");
-	add_pref_group(group);
-	stash_group_add_toggle_button(group, &search_prefs.use_current_file_dir,
-		"pref_search_current_file_dir", TRUE, "check_fif_current_dir");
-
 	/* hidden prefs (don't overwrite them so users can edit them manually) */
 	group = stash_group_new(PACKAGE);
-	add_pref_group(group);
+	configuration_add_pref_group(group, FALSE);
 	stash_group_set_write_once(group, TRUE);
 	stash_group_add_boolean(group, &editor_prefs.show_scrollbars,
 		"show_editor_scrollbars", TRUE);
@@ -177,7 +175,7 @@ static void settings_action(GKeyFile *config, SettingAction action)
 	gpointer *ptr;
 	GeanyPrefGroup *group;
 
-	foreach_ptr_array(group, ptr, pref_groups)
+	foreach_ptr_array(group, ptr, keyfile_groups)
 	{
 		switch (action)
 		{
@@ -1096,6 +1094,8 @@ static void generate_filetype_extensions(const gchar *output_dir)
 
 void configuration_init(void)
 {
+	keyfile_groups = g_ptr_array_new();
+	pref_groups = g_ptr_array_new();
 	init_pref_groups();
 }
 
@@ -1105,9 +1105,10 @@ void configuration_finalize(void)
 	gpointer *ptr;
 	GeanyPrefGroup *group;
 
-	foreach_ptr_array(group, ptr, pref_groups)
+	foreach_ptr_array(group, ptr, keyfile_groups)
 		stash_group_free(group);
 
+	g_ptr_array_free(keyfile_groups, TRUE);
 	g_ptr_array_free(pref_groups, TRUE);
 }
 
