@@ -5,6 +5,8 @@
    Add configuration_add_pref_group(), with separate array for GUI
    prefs.
    Move search pref group to search.c.
+ * src/editor.c:
+   Fix replacing %ws% and %newline% in snippets (oops).
 
 
 2008-12-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

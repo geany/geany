@@ -1789,6 +1789,7 @@ static void fix_line_indents(GeanyEditor *editor, gint line_start, gint line_end
  * NOT any hard tabs (you get those when copying document text with the Tabs
  * & Spaces indent mode set).
  * @note This doesn't scroll the cursor in view afterwards. */
+/* note: %ws% and %newline% are just for snippets, they probably shouldn't be here :-/ */
 static void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint insert_pos,
 		gint cursor_index, gint newline_indent_size)
 {
@@ -1821,10 +1822,12 @@ static void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gin
 
 	/* transform line endings */
 	utils_string_replace_all(buf, "\n", editor_get_eol_char(editor));
+	utils_string_replace_all(buf, "%newline%", editor_get_eol_char(editor));
 
 	/* transform tabs into indent widths (in spaces) */
 	whitespace = g_strnfill(editor_get_indent_prefs(editor)->width, ' ');
 	utils_string_replace_all(buf, "\t", whitespace);
+	utils_string_replace_all(buf, "%ws%", whitespace);
 	g_free(whitespace);
 
 	if (cursor_index >= 0)
