@@ -131,7 +131,7 @@ extern GeanyEditorPrefs editor_prefs;
 
 
 /** Editor-owned fields for each document. */
-typedef struct GeanyEditor
+struct GeanyEditor
 {
 	GeanyDocument	*document;		/**< The document associated with the editor. */
 	ScintillaObject	*sci;			/**< The Scintilla editor @c GtkWidget. */
@@ -141,8 +141,7 @@ typedef struct GeanyEditor
 	gfloat			 scroll_percent;
 	GeanyIndentType	 indent_type;	/* Use editor_get_indent_prefs() instead. */
 	gboolean		 line_breaking;	/**< Whether to split long lines as you type. */
-}
-GeanyEditor;
+};
 
 
 typedef struct
@@ -153,7 +152,7 @@ typedef struct
 
 extern EditorInfo editor_info;
 
-
+typedef struct SCNotification SCNotification;
 
 
 void editor_init(void);
@@ -164,7 +163,7 @@ void editor_destroy(GeanyEditor *editor);
 
 ScintillaObject *editor_create_widget(GeanyEditor *editor);
 
-void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer user_data);
+void editor_sci_notify_cb(GtkWidget *widget, gint scn, gpointer scnt, gpointer data);
 
 gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean force);
 

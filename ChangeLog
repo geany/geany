@@ -6,6 +6,12 @@
    Retitle the Terminal/VTE preferences tab section.
    Change (again) the key combinations for creating
    rectangular selections.
+ * doc/Doxyfile.in, doc/plugins.dox, plugins/demoplugin.c, src/editor.c,
+   src/editor.h, src/document.c, src/geanyobject.c, src/geanyobject.h,
+   src/geany.h, src/plugindata.h:
+   Add "editor-notify" to the plugin API.
+   This signal is emitted whenever something in an editor widget
+   changes, e.g. a character was typed.
 
 
 2008-12-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

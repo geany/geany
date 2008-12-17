@@ -249,8 +249,6 @@ static gboolean is_style_php(gint style)
 }
 
 
-typedef struct SCNotification SCNotification;
-
 static void fold_symbol_click(ScintillaObject *sci, SCNotification *nt)
 {
 	gint line = sci_get_line_from_position(sci, nt->position);
@@ -624,18 +622,29 @@ static void auto_update_margin_width(GeanyDocument *doc)
 }
 
 
-/* callback func called by all editors when a signal arises */
-void on_editor_notification(GtkWidget *widget, gint scn, gpointer lscn, gpointer user_data)
+/* Callback for the "sci-notify" signal to emit a "editor-notify" signal.
+ * Plugins can connect to the "editor-notify" signal. */
+void editor_sci_notify_cb(G_GNUC_UNUSED GtkWidget *widget, G_GNUC_UNUSED gint scn,
+						  gpointer scnt, gpointer data)
 {
-	SCNotification *nt;
+	GeanyDocument *doc = data;
+	gboolean retval;
+
+	g_return_if_fail(doc != NULL);
+
+	g_signal_emit_by_name(geany_object, "editor-notify", doc->editor, scnt, &retval);
+}
+
+
+static gboolean on_editor_notify(G_GNUC_UNUSED GeanyObject *object, GeanyEditor *editor,
+								 SCNotification *nt, gpointer data)
+{
 	ScintillaObject *sci;
-	GeanyDocument *doc = user_data;
-	GeanyEditor *editor;
+	GeanyDocument *doc = editor->document;
 
 	editor = doc->editor;
 	sci = editor->sci;
 
-	nt = lscn;
 	switch (nt->nmhdr.code)
 	{
 		case SCN_SAVEPOINTLEFT:
@@ -754,6 +763,8 @@ void on_editor_notification(GtkWidget *widget, gint scn, gpointer lscn, gpointer
 			break;
 		}
 	}
+	/* we always return FALSE here to let plugins handle the event to */
+	return FALSE;
 }
 
 
@@ -4158,6 +4169,10 @@ void editor_init(void)
 	memset(&editor_prefs, 0, sizeof(GeanyEditorPrefs));
 	memset(&indent_prefs, 0, sizeof(GeanyIndentPrefs));
 	editor_prefs.indentation = &indent_prefs;
+
+	/* use g_signal_connect_after() to allow plugins connecting to the signal before the default
+	 * handler (on_editor_notify) is called */
+	g_signal_connect_after(geany_object, "editor-notify", G_CALLBACK(on_editor_notify), NULL);
 }
 
 

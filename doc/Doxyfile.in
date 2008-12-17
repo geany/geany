@@ -40,7 +40,7 @@ ALIASES                = "signal=- @ref  " \
                          "endsignaldef=  " \
                          "signalproto=@code  " \
                          "endsignalproto=@endcode  " \
-                         "signaldesc=@par Description:  " \
+                         "signaldesc=" \
                          "signals=@b Signals:  " \
                          "endsignals=  "
 OPTIMIZE_OUTPUT_FOR_C  = YES

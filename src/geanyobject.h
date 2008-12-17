@@ -43,6 +43,7 @@ typedef enum
 	GCB_PROJECT_SAVE,
 	GCB_PROJECT_CLOSE,
 	GCB_UPDATE_EDITOR_MENU,
+	GCB_EDITOR_NOTIFY,
 	GCB_MAX
 } GeanyCallbackId;
 
@@ -81,6 +82,7 @@ struct _GeanyObjectClass
 	void (*project_save)(GKeyFile *keyfile);
 	void (*project_close)(void);
 	void (*update_editor_menu)(const gchar *word, gint click_pos, GeanyDocument *doc);
+	gboolean (*editor_notify)(GeanyEditor *editor, gpointer scnt);
 };
 
 GType		geany_object_get_type	(void);

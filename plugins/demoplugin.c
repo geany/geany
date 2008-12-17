@@ -38,9 +38,11 @@
 #include "geany.h"		/* for the GeanyApp data type */
 #include "support.h"	/* for the _() translation macro (see also po/POTFILES.in) */
 #include "ui_utils.h"
+#include "Scintilla.h" /* for the SCNotification struct */
 
 #include "plugindata.h"		/* this defines the plugin API */
 #include "geanyfunctions.h"	/* this wraps geany_functions function pointers */
+
 
 
 /* These items are set by Geany before plugin_init() is called. */
@@ -60,6 +62,61 @@ PLUGIN_SET_INFO(_("Demo"), _("Example plugin."), VERSION, _("The Geany developer
 static GtkWidget *main_menu_item = NULL;
 /* text to be shown in the plugin dialog */
 static gchar *welcome_text = NULL;
+
+
+
+static gboolean on_editor_notify(GObject *object, GeanyEditor *editor,
+								 SCNotification *nt, gpointer data)
+{
+	/* For detailed documentation about the SCNotification struct, please see
+	 * http://www.scintilla.org/ScintillaDoc.html#Notifications. */
+	switch (nt->nmhdr.code)
+	{
+		case SCN_UPDATEUI:
+			/* This notification is sent very often, you should not do time-consuming tasks here */
+			break;
+		case SCN_CHARADDED:
+			/* For demonstrating purposes simply print the typed character in the status bar */
+			ui_set_statusbar(FALSE, _("Typed character: %c"), nt->ch);
+			break;
+		case SCN_URIDROPPED:
+		{
+			/* Show a message dialog with the dropped URI list when files (i.e. a list of
+			 * filenames) is dropped to the editor widget) */
+			if (nt->text != NULL)
+			{
+				GtkWidget *dialog;
+
+				dialog = gtk_message_dialog_new(
+					GTK_WINDOW(geany->main_widgets->window),
+					GTK_DIALOG_DESTROY_WITH_PARENT,
+					GTK_MESSAGE_INFO,
+					GTK_BUTTONS_OK,
+					_("The following files were dropped:"));
+				gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					"%s", nt->text);
+
+				gtk_dialog_run(GTK_DIALOG(dialog));
+				gtk_widget_destroy(dialog);
+			}
+			/* we return TRUE here which prevents Geany from processing the SCN_URIDROPPED
+			 * notification, i.e. Geany won't open the passed files */
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+
+PluginCallback plugin_callbacks[] =
+{
+	/* Set 'after' (third field) to TRUE to run the callback @a after the default handler.
+	 * If 'after' is FALSE, the callback is run @a before the default handler, so the plugin
+	 * can prevent Geany from processing the notification. Use this with care. */
+	{ "editor-notify", (GCallback) &on_editor_notify, FALSE, NULL },
+	{ NULL, NULL, FALSE, NULL }
+};
 
 
 /* Callback when the menu item is clicked. */

@@ -56,6 +56,7 @@
 
 /* Common forward declarations */
 typedef struct GeanyDocument GeanyDocument;
+typedef struct GeanyEditor GeanyEditor;
 typedef struct GeanyFiletype GeanyFiletype;
 
 

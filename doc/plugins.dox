@@ -56,6 +56,7 @@
  *
  *  To use plugin signals in Geany, you simply create a PluginCallback array, list the signals
  *  you want to listen to and create the appropiate signal callbacks for each signal.
+ *  The callback array is read @a after plugin_init() has been called.
  *  @note The PluginCallback array has to be ended with a final NULL entry.
  *
  *  The following code demonstrates how to use signals in Geany plugins. The code can be inserted
@@ -183,6 +184,44 @@ PluginCallback plugin_callbacks[] =
  *  @param click_pos the cursor position where the popup will be opened.
  *  @param doc the current document.
  *  @param user_data user data.
+ *  @endsignaldef
+ *
+ *  @signaldef editor-notify
+ *  @signalproto
+ *  gboolean user_function(GObject *obj, GeanyEditor *editor, SCNotification *nt,
+ *  		gpointer user_data);
+ *  @endsignalproto
+ *  @signaldesc
+ *  This signal is sent whenever something in the editor widget changes (character added,
+ *  fold level changes, clicks to the line number margin, ...).
+ *  A detailed description of possible notifications and the SCNotification can be found at
+ *  http://www.scintilla.org/ScintillaDoc.html#Notifications.
+ *
+ *  If you connect to this signal, you must check @c nt->nmhdr.code for the notification type
+ *  to prevent handling unwanted notifications. This is important because for instance SCN_UPDATEUI
+ *  is sent very often whereas you probably don't want to handle this notification.
+ *
+ *  By default, the signal is sent before Geany's default handler is processing the event.
+ *  Your callback function should return FALSE to allow Geany processing the event as well. If you
+ *  want to prevent this for some reason, return TRUE.
+ *  Please use this with care as it can break basic functionality of Geany.
+ *
+ *  The signal can be sent after Geany's default handler has been run when you set
+ *  PluginCallback::after field to TRUE.
+ *
+ *  An example callback implemention of this signal can be found in the Demo plugin.
+ *
+ *  @warning This signal has much power and should be used carefully. You should especially
+ *           care about the return value; make sure to return TRUE only if it is necessary
+ *           and in the correct situations.
+ *
+ *  @param obj a GeanyObject instance, should be ignored.
+ *  @param editor The current GeanyEditor.
+ *  @param nt A pointer to the SCNotification struct which holds additional information for
+ *            the event.
+ *  @param user_data user data.
+ *  @return @c TRUE to stop other handlers from being invoked for the event.
+ * 	    @c FALSE to propagate the event further.
  *  @endsignaldef
  *
  *

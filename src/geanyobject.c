@@ -81,10 +81,10 @@ GType geany_object_get_type(void)
 static void geany_cclosure_marshal_VOID__STRING_INT_POINTER(GClosure *closure, GValue *ret_val,
 				guint n_param_vals, const GValue *param_values, gpointer hint, gpointer mdata)
 {
-	typedef gboolean (*GMarshalFunc_VOID__STRING_INT_POINTER)
+	typedef gboolean (*GeanyMarshalFunc_VOID__STRING_INT_POINTER)
 		(gpointer data1, gconstpointer arg_1, gint arg_2, gpointer arg_3, gpointer data2);
 
-	register GMarshalFunc_VOID__STRING_INT_POINTER callback;
+	register GeanyMarshalFunc_VOID__STRING_INT_POINTER callback;
 	register GCClosure* cc = (GCClosure*) closure;
 	register gpointer data1, data2;
 
@@ -100,7 +100,7 @@ static void geany_cclosure_marshal_VOID__STRING_INT_POINTER(GClosure *closure, G
 		data1 = g_value_peek_pointer(param_values + 0);
 		data2 = closure->data;
 	}
-	callback = (GMarshalFunc_VOID__STRING_INT_POINTER) (mdata ? mdata : cc->callback);
+	callback = (GeanyMarshalFunc_VOID__STRING_INT_POINTER) (mdata ? mdata : cc->callback);
 	callback(data1,
 			  g_value_get_string(param_values + 1),
 			  g_value_get_int(param_values + 2),
@@ -109,8 +109,59 @@ static void geany_cclosure_marshal_VOID__STRING_INT_POINTER(GClosure *closure, G
 }
 
 
+static gboolean boolean_handled_accumulator(GSignalInvocationHint *ihint, GValue *return_accu,
+											const GValue *handler_return, gpointer dummy)
+{
+	gboolean continue_emission, signal_handled;
+
+	signal_handled = g_value_get_boolean(handler_return);
+	g_value_set_boolean(return_accu, signal_handled);
+	continue_emission = !signal_handled;
+
+	return continue_emission;
+}
+
+
+static void geany_cclosure_marshal_BOOL__POINTER_POINTER( GClosure *closure, GValue *return_value,
+								guint n_param_values, const GValue *param_values,
+								gpointer invocation_hint G_GNUC_UNUSED, gpointer marshal_data)
+{
+	typedef gboolean (*GeanyMarshalFunc_BOOLEAN__POINTER_POINTER)
+		(gpointer data1, gpointer arg_1, gpointer arg_2, gpointer data2);
+
+	register GeanyMarshalFunc_BOOLEAN__POINTER_POINTER callback;
+	register GCClosure *cc = (GCClosure*) closure;
+	register gpointer data1, data2;
+	gboolean v_return;
+
+	g_return_if_fail(return_value != NULL);
+	g_return_if_fail(n_param_values == 3);
+
+	if (G_CCLOSURE_SWAP_DATA(closure))
+	{
+		data1 = closure->data;
+		data2 = g_value_peek_pointer(param_values + 0);
+	}
+	else
+	{
+		data1 = g_value_peek_pointer(param_values + 0);
+		data2 = closure->data;
+	}
+	callback = (GeanyMarshalFunc_BOOLEAN__POINTER_POINTER)
+		(marshal_data ? marshal_data : cc->callback);
+
+	v_return = callback(data1,
+					   g_value_get_pointer(param_values + 1),
+					   g_value_get_pointer(param_values + 2),
+					   data2);
+
+	g_value_set_boolean(return_value, v_return);
+}
+
+
 static void create_signals(GObjectClass *g_object_class)
 {
+	/* Document signals */
 	geany_object_signals[GCB_DOCUMENT_NEW] = g_signal_new (
 		"document-new",
 		G_OBJECT_CLASS_TYPE (g_object_class),
@@ -157,6 +208,7 @@ static void create_signals(GObjectClass *g_object_class)
 		G_TYPE_NONE, 1,
 		G_TYPE_POINTER);
 
+	/* Project signals */
 	geany_object_signals[GCB_PROJECT_OPEN] = g_signal_new (
 		"project-open",
 		G_OBJECT_CLASS_TYPE (g_object_class),
@@ -184,6 +236,7 @@ static void create_signals(GObjectClass *g_object_class)
 		g_cclosure_marshal_VOID__VOID,
 		G_TYPE_NONE, 0);
 
+	/* Editor signals */
 	geany_object_signals[GCB_UPDATE_EDITOR_MENU] = g_signal_new (
 		"update-editor-menu",
 		G_OBJECT_CLASS_TYPE (g_object_class),
@@ -193,6 +246,15 @@ static void create_signals(GObjectClass *g_object_class)
 		geany_cclosure_marshal_VOID__STRING_INT_POINTER,
 		G_TYPE_NONE, 3,
 		G_TYPE_STRING, G_TYPE_INT, G_TYPE_POINTER);
+	geany_object_signals[GCB_EDITOR_NOTIFY] = g_signal_new (
+		"editor-notify",
+		G_OBJECT_CLASS_TYPE (g_object_class),
+		G_SIGNAL_RUN_LAST,
+		G_STRUCT_OFFSET (GeanyObjectClass, update_editor_menu),
+		boolean_handled_accumulator, NULL,
+		geany_cclosure_marshal_BOOL__POINTER_POINTER,
+		G_TYPE_BOOLEAN, 2,
+		G_TYPE_POINTER, G_TYPE_POINTER);
 }
 
 
