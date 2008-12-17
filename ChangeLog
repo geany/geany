@@ -12,6 +12,10 @@
    Add "editor-notify" to the plugin API.
    This signal is emitted whenever something in an editor widget
    changes, e.g. a character was typed.
+ * src/editor.c:
+   Make Ctrl-click working again to create rectangular selections when
+   no braces and valid definitions are below the cursor (to whose would
+   be jumped then).
 
 
 2008-12-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
