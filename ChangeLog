@@ -20,6 +20,9 @@
    Change comment character to '!' for Fortran 90 (closes #2438423).
  * waf, wscript:
    Update Waf and various small fixes for the wscript.
+ * geany.glade, src/interface.c:
+   Re-add can_focus flag to the notebook widgets in the preferences
+   dialog to make keyboard navigation easier (closes #2417200).
 
 
 2008-12-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

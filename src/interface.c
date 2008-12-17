@@ -2637,7 +2637,6 @@ create_prefs_dialog (void)
   notebook2 = gtk_notebook_new ();
   gtk_widget_show (notebook2);
   gtk_box_pack_start (GTK_BOX (dialog_vbox3), notebook2, TRUE, TRUE, 6);
-  GTK_WIDGET_UNSET_FLAGS (notebook2, GTK_CAN_FOCUS);
   gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook2), GTK_POS_LEFT);
 
   vbox20 = gtk_vbox_new (FALSE, 10);
@@ -3218,7 +3217,6 @@ create_prefs_dialog (void)
   notebook4 = gtk_notebook_new ();
   gtk_widget_show (notebook4);
   gtk_container_add (GTK_CONTAINER (notebook2), notebook4);
-  GTK_WIDGET_UNSET_FLAGS (notebook4, GTK_CAN_FOCUS);
 
   vbox5 = gtk_vbox_new (FALSE, 10);
   gtk_widget_show (vbox5);
