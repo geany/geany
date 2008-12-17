@@ -187,7 +187,7 @@ static void init_builtin_filetypes(void)
 	ft->title = g_strdup_printf(_("%s source file"), "Fortran (F90)");
 	ft->extension = g_strdup("f90");
 	ft->pattern = utils_strv_new("*.f90", "*.f95", "*.f03", NULL);
-	ft->comment_open = g_strdup("c");
+	ft->comment_open = g_strdup("!");
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 

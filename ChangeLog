@@ -16,6 +16,8 @@
    Make Ctrl-click working again to create rectangular selections when
    no braces and valid definitions are below the cursor (to whose would
    be jumped then).
+ * src/filetypes.c, data/filetypes.fortran:
+   Change comment character to '!' for Fortran 90 (closes #2438423).
 
 
 2008-12-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
