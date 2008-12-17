@@ -23,6 +23,9 @@
  * geany.glade, src/interface.c:
    Re-add can_focus flag to the notebook widgets in the preferences
    dialog to make keyboard navigation easier (closes #2417200).
+ * src/dialogs.c:
+   When allowing non-local locations in the File Open dialog, we should
+   do this in the File Save dialog as well.
 
 
 2008-12-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

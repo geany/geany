@@ -498,6 +498,9 @@ static void create_save_file_dialog(void)
 	gtk_box_pack_start(GTK_BOX(vbox), check_open_new_tab, FALSE, FALSE, 0);
 	gtk_widget_show_all(vbox);
 	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(ui_widgets.save_filesel), vbox);
+#if GTK_CHECK_VERSION(2, 14, 0)
+	gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(ui_widgets.save_filesel), FALSE);
+#endif
 
 	g_signal_connect(check_open_new_tab, "toggled",
 				G_CALLBACK(on_save_as_new_tab_toggled), rename_btn);
