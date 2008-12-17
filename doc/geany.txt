@@ -587,12 +587,12 @@ children of a fold point" option is enabled, pressing Shift will disable
 it for this click and vice versa.
 
 
-Column mode editing
-^^^^^^^^^^^^^^^^^^^
+Column mode editing (rectangular selections)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 There is basic support for column mode editing. To use it, create a
-rectangular selection by holding down the Control and Alt
-(on non-Windows systems Control and Shift works too) key while
+rectangular selection by holding down the Control and Shift keys
+(or Control and Alt if it doesn't work) while
 selecting some text. It is also possible to create a zero-column selection
 but be careful because there is no visual indication of this selection.
 Once a rectangular selection exists you can start editing the text within
@@ -1841,8 +1841,8 @@ Date format
     see http://man.cx/strftime.
 
 
-VTE tab in preferences dialog
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Terminal (VTE) tab in preferences dialog
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See also: `Virtual terminal emulator widget (VTE)`_.
 
