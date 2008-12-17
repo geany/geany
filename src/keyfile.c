@@ -228,8 +228,9 @@ static gchar *get_session_file_string(GeanyDocument *doc)
 	/* If the filename contains any ';' (semi-colons) we need to escape them otherwise
 	 * g_key_file_get_string_list() would fail reading them, so we replace them before
 	 * writing with usual colons which must never appear in a filename and replace them
-	 * back when we read the file again from the file. */
-	g_strdelimit(doc_filename, ";", ':');
+	 * back when we read the file again from the file.
+	 * (g_path_skip_root() to skip C:\... on Windows) */
+	g_strdelimit((gchar *) g_path_skip_root(doc_filename), ";", ':');
 
 	fname = g_strdup_printf("%d;%s;%d;%d;%d;%d;%d;%s;%d",
 		sci_get_current_position(doc->editor->sci),
@@ -909,7 +910,7 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	/* try to get the locale equivalent for the filename */
 	locale_filename = utils_get_locale_from_utf8(tmp[7]);
 	/* replace ':' back with ';' (see get_session_file_string for details) */
-	g_strdelimit(locale_filename, ":", ';');
+	g_strdelimit((gchar *) g_path_skip_root(locale_filename), ":", ';');
 	if (len > 8)
 		line_breaking = atoi(tmp[8]);
 
