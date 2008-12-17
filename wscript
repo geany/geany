@@ -264,8 +264,7 @@ def build(bld):
 		if install:
 			obj.install_path		= '${LIBDIR}/geany/'
 		else:
-			obj.install_path		= 0
-		#~ obj.want_libtool			= 1
+			obj.install_path		= None
 
 	# Tagmanager
 	if bld.env['USE_INCLUDED_REGEX'] == 1:
@@ -276,7 +275,7 @@ def build(bld):
 	obj.source			= tagmanager_sources
 	obj.includes		= '. tagmanager/ tagmanager/include/'
 	obj.uselib			= 'GTK'
-	obj.install_path	= 0 # do not install this library
+	obj.install_path	= None # do not install this library
 
 	# Scintilla
 	obj					= bld.new_task_gen('cxx', 'staticlib')
@@ -286,7 +285,7 @@ def build(bld):
 	obj.source			= scintilla_sources
 	obj.includes		= 'scintilla/ scintilla/include/'
 	obj.uselib			= 'GTK'
-	obj.install_path	= 0 # do not install this library
+	obj.install_path	= None # do not install this library
 
 	# Geany
 	if bld.env['HAVE_VTE'] == 1:
@@ -303,8 +302,12 @@ def build(bld):
 	obj.uselib_local	= 'scintilla tagmanager'
 
 	# geanyfunctions.h
-	bld.new_task_gen(source='plugins/genapi.py src/plugins.c', name='geanyfunctions.h',
-		rule='cd ${SRC[0].parent.abspath()} && python genapi.py -q', before='cc')
+	bld.new_task_gen(
+		source='plugins/genapi.py src/plugins.c',
+		name='geanyfunctions.h',
+		before='cc cxx',
+		cwd='%s/plugins' % bld.path.abspath(),
+		rule='python genapi.py -q')
 
 	# Plugins
 	if bld.env['HAVE_PLUGINS'] == 1:
@@ -340,10 +343,7 @@ def build(bld):
 							'datarootdir': '${prefix}/share',
 							'datadir': '${datarootdir}',
 							'localedir': '${datarootdir}/locale' }
-	# seems currently broken in Waf
-	#~ obj.install_path = '${LIBDIR}/pkgconfig'
-	obj.install_path	= 0
-	bld.install_files('${LIBDIR}/pkgconfig', 'geany.pc')
+	obj.install_path	= '${LIBDIR}/pkgconfig'
 
 	# geany.1
 	obj					= bld.new_task_gen('subst')
@@ -351,23 +351,20 @@ def build(bld):
 	obj.target			= 'geany.1'
 	obj.dict			= { 'VERSION' : VERSION,
 							'GEANY_DATA_DIR': bld.env['DATADIR'] + '/geany' }
-	# seems currently broken in Waf
-	#~ obj.install_path = '${MANDIR}/man1'
-	obj.install_path	= 0
-	bld.install_files('${MANDIR}/man1', 'doc/geany.1')
+	obj.install_path	= '${MANDIR}/man1'
 
 	# geany.spec
 	obj					= bld.new_task_gen('subst')
 	obj.source			= 'geany.spec.in'
 	obj.target			= 'geany.spec'
-	obj.install_path	= 0
+	obj.install_path	= None
 	obj.dict			= { 'VERSION' : VERSION }
 
 	# Doxyfile
 	obj					= bld.new_task_gen('subst')
 	obj.source			= 'doc/Doxyfile.in'
 	obj.target			= 'Doxyfile'
-	obj.install_path	= 0
+	obj.install_path	= None
 	obj.dict			= { 'VERSION' : VERSION }
 
 	###
@@ -379,7 +376,7 @@ def build(bld):
 		src/highlighting.h src/keybindings.h src/msgwindow.h src/plugindata.h src/plugins.h
 		src/prefs.h src/project.h src/sciwrappers.h src/search.h src/support.h src/templates.h
 		src/toolbar.h src/ui_utils.h src/utils.h
-		plugins/pluginmacros.h ''')
+		plugins/pluginmacros.h plugins/geanyfunctions.h ''')
 	bld.install_files('${PREFIX}/include/geany/scintilla', '''
 		scintilla/include/SciLexer.h scintilla/include/Scintilla.h scintilla/include/Scintilla.iface
 		scintilla/include/ScintillaWidget.h ''')
@@ -442,17 +439,17 @@ def shutdown():
 
 	if Options.options.update_po:
 		# the following code was taken from midori's WAF script, thanks
-		os.chdir('./po')
+		os.chdir('%s/po' % srcdir)
 		try:
 			try:
 				size_old = os.stat('geany.pot').st_size
 			except:
 				size_old = 0
-			subprocess.call(['intltool-update', '--pot'])
+			subprocess.call(['intltool-update', '--pot', '-g', APPNAME])
 			size_new = os.stat('geany.pot').st_size
 			if size_new != size_old:
 				Utils.pprint('CYAN', 'Updated POT file.')
-				launch('intltool-update -r', 'Updating translations', 'CYAN')
+				launch('intltool-update -r -g %s' % APPNAME, 'Updating translations', 'CYAN')
 			else:
 				Utils.pprint('CYAN', 'POT file is up to date.')
 		except:
@@ -481,26 +478,4 @@ def launch(command, status, success_color='GREEN'):
 def print_message(conf, msg, result, color = 'GREEN'):
 	conf.check_message_1(msg)
 	conf.check_message_2(result, color)
-
-
-# this is necessary for the 'geanyfunctions.h' task
-@taskgen
-@feature('*')
-@before('apply_core')
-def exec_rule(self):
-	if not getattr(self, 'rule', None):
-		return
-	name = self.target or self.name
-	cls = Task.simple_task_type(name, self.rule)
-
-	tsk = self.create_task(name)
-	tsk.inputs=[self.path.find_resource(x) for x in self.to_list(self.source)]
-	if getattr(self, 'target', None):
-		tsk.outputs=[self.path.find_or_declare(x) for x in self.to_list(self.target)]
-	else:
-		cls.quiet = True
-	for x in ['after', 'before']:
-		setattr(cls, x, getattr(self, x, []))
-
-
 
