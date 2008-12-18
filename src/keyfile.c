@@ -445,7 +445,7 @@ static void save_ui_prefs(GKeyFile *config)
 		GtkTextBuffer *buffer;
 		GtkTextIter start, end;
 
-		buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(lookup_widget(main_widgets.window, "textview_scribble")));
+		buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(ui_lookup_widget(main_widgets.window, "textview_scribble")));
 		gtk_text_buffer_get_bounds(buffer, &start, &end);
 		scribble_text = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
 		g_key_file_set_string(config, PACKAGE, "scribble_text", scribble_text);
@@ -455,9 +455,9 @@ static void save_ui_prefs(GKeyFile *config)
 	if (prefs.save_winpos)
 	{
 		g_key_file_set_integer(config, PACKAGE, "treeview_position",
-				gtk_paned_get_position(GTK_PANED(lookup_widget(main_widgets.window, "hpaned1"))));
+				gtk_paned_get_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned1"))));
 		g_key_file_set_integer(config, PACKAGE, "msgwindow_position",
-				gtk_paned_get_position(GTK_PANED(lookup_widget(main_widgets.window, "vpaned1"))));
+				gtk_paned_get_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "vpaned1"))));
 	}
 
 	if (prefs.save_winpos)
@@ -1002,7 +1002,7 @@ void configuration_apply_settings(void)
 	if (scribble_text)
 	{	/* update the scribble widget, because now it's realized */
 		gtk_text_buffer_set_text(
-				gtk_text_view_get_buffer(GTK_TEXT_VIEW(lookup_widget(main_widgets.window, "textview_scribble"))),
+				gtk_text_view_get_buffer(GTK_TEXT_VIEW(ui_lookup_widget(main_widgets.window, "textview_scribble"))),
 				scribble_text, -1);
 	}
 	g_free(scribble_text);
@@ -1010,15 +1010,15 @@ void configuration_apply_settings(void)
 	/* set the position of the hpaned and vpaned */
 	if (prefs.save_winpos)
 	{
-		gtk_paned_set_position(GTK_PANED(lookup_widget(main_widgets.window, "hpaned1")), hpan_position);
-		gtk_paned_set_position(GTK_PANED(lookup_widget(main_widgets.window, "vpaned1")), vpan_position);
+		gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned1")), hpan_position);
+		gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "vpaned1")), vpan_position);
 	}
 
 	/* set fullscreen after initial draw so that returning to normal view is the right size.
 	 * fullscreen mode is disabled by default, so act only if it is true */
 	if (ui_prefs.fullscreen)
 	{
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_fullscreen1")), TRUE);
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_fullscreen1")), TRUE);
 		ui_prefs.fullscreen = TRUE;
 		ui_set_fullscreen();
 	}

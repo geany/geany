@@ -2209,7 +2209,7 @@ void document_set_encoding(GeanyDocument *doc, const gchar *new_encoding)
 	doc->encoding = g_strdup(new_encoding);
 
 	ui_update_statusbar(doc, -1);
-	gtk_widget_set_sensitive(lookup_widget(main_widgets.window, "menu_write_unicode_bom1"),
+	gtk_widget_set_sensitive(ui_lookup_widget(main_widgets.window, "menu_write_unicode_bom1"),
 			encodings_is_unicode_charset(doc->encoding));
 }
 

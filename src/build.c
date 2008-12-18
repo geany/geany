@@ -962,7 +962,7 @@ static void create_build_menu_gen(BuildMenuItems *menu_items)
 {
 	GtkWidget *menu, *item = NULL, *image, *separator;
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
-	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
+	GtkTooltips *tooltips = GTK_TOOLTIPS(ui_lookup_widget(main_widgets.window, "tooltips"));
 	GeanyKeyGroup *group = g_ptr_array_index(keybinding_groups, GEANY_KEY_GROUP_BUILD);
 
 	menu = gtk_menu_new();
@@ -1086,7 +1086,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 {
 	GtkWidget *menu, *item, *image, *separator;
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
-	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
+	GtkTooltips *tooltips = GTK_TOOLTIPS(ui_lookup_widget(main_widgets.window, "tooltips"));
 	GeanyKeyGroup *group = g_ptr_array_index(keybinding_groups, GEANY_KEY_GROUP_BUILD);
 
 	menu = gtk_menu_new();
@@ -1234,7 +1234,7 @@ on_includes_arguments_tex_dialog_response  (GtkDialog *dialog,
 		struct build_programs *programs = ft->programs;
 
 		newstr = gtk_entry_get_text(
-				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry1")));
+				GTK_ENTRY(ui_lookup_widget(GTK_WIDGET(dialog), "tex_entry1")));
 		if (! utils_str_equal(newstr, programs->compiler))
 		{
 			if (programs->compiler) g_free(programs->compiler);
@@ -1242,7 +1242,7 @@ on_includes_arguments_tex_dialog_response  (GtkDialog *dialog,
 			programs->modified = TRUE;
 		}
 		newstr = gtk_entry_get_text(
-				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry2")));
+				GTK_ENTRY(ui_lookup_widget(GTK_WIDGET(dialog), "tex_entry2")));
 		if (! utils_str_equal(newstr, programs->linker))
 		{
 			if (programs->linker) g_free(programs->linker);
@@ -1250,7 +1250,7 @@ on_includes_arguments_tex_dialog_response  (GtkDialog *dialog,
 			programs->modified = TRUE;
 		}
 		newstr = gtk_entry_get_text(
-				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry3")));
+				GTK_ENTRY(ui_lookup_widget(GTK_WIDGET(dialog), "tex_entry3")));
 		if (! utils_str_equal(newstr, programs->run_cmd))
 		{
 			if (programs->run_cmd) g_free(programs->run_cmd);
@@ -1258,7 +1258,7 @@ on_includes_arguments_tex_dialog_response  (GtkDialog *dialog,
 			programs->modified = TRUE;
 		}
 		newstr = gtk_entry_get_text(
-				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry4")));
+				GTK_ENTRY(ui_lookup_widget(GTK_WIDGET(dialog), "tex_entry4")));
 		if (! utils_str_equal(newstr, programs->run_cmd2))
 		{
 			if (programs->run_cmd2) g_free(programs->run_cmd2);
@@ -1403,7 +1403,7 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
 		if (ft->actions->can_compile)
 		{
 			newstr = gtk_entry_get_text(
-					GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry1")));
+					GTK_ENTRY(ui_lookup_widget(GTK_WIDGET(dialog), "includes_entry1")));
 			if (! utils_str_equal(newstr, programs->compiler))
 			{
 				if (programs->compiler) g_free(programs->compiler);
@@ -1414,7 +1414,7 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
 		if (ft->actions->can_link)
 		{
 			newstr = gtk_entry_get_text(
-					GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry2")));
+					GTK_ENTRY(ui_lookup_widget(GTK_WIDGET(dialog), "includes_entry2")));
 			if (! utils_str_equal(newstr, programs->linker))
 			{
 				if (programs->linker) g_free(programs->linker);
@@ -1425,7 +1425,7 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
 		if (ft->actions->can_exec)
 		{
 			newstr = gtk_entry_get_text(
-					GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry3")));
+					GTK_ENTRY(ui_lookup_widget(GTK_WIDGET(dialog), "includes_entry3")));
 			if (! utils_str_equal(newstr, programs->run_cmd))
 			{
 				if (programs->run_cmd) g_free(programs->run_cmd);
@@ -1595,14 +1595,14 @@ void build_menu_update(GeanyDocument *doc)
 	if (doc == NULL ||
 		(FILETYPE_ID(doc->file_type) == GEANY_FILETYPES_NONE &&	doc->file_name == NULL))
 	{
-		gtk_widget_set_sensitive(lookup_widget(main_widgets.window, "menu_build1"), FALSE);
-		gtk_menu_item_remove_submenu(GTK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_build1")));
+		gtk_widget_set_sensitive(ui_lookup_widget(main_widgets.window, "menu_build1"), FALSE);
+		gtk_menu_item_remove_submenu(GTK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_build1")));
 		ui_widget_set_sensitive(widgets.compile_button, FALSE);
 		ui_widget_set_sensitive(widgets.run_button, FALSE);
 		return;
 	}
 	else
-		gtk_widget_set_sensitive(lookup_widget(main_widgets.window, "menu_build1"), TRUE);
+		gtk_widget_set_sensitive(ui_lookup_widget(main_widgets.window, "menu_build1"), TRUE);
 
 	ft = doc->file_type;
 	g_return_if_fail(ft != NULL);
@@ -1610,7 +1610,7 @@ void build_menu_update(GeanyDocument *doc)
 	menu_items = build_get_menu_items(ft->id);
 	/* Note: don't remove the submenu first because it can now cause an X hang if
 	 * the menu is already open when called from build_exit_cb(). */
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_build1")),
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_build1")),
 		menu_items->menu);
 
 	have_path = (doc->file_name != NULL);

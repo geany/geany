@@ -412,9 +412,9 @@ void ui_update_insert_include_item(GeanyDocument *doc, gint item)
 
 void ui_update_fold_items(void)
 {
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "menu_fold_all1"), editor_prefs.folding);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "menu_unfold_all1"), editor_prefs.folding);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "separator22"), editor_prefs.folding);
+	ui_widget_show_hide(ui_lookup_widget(main_widgets.window, "menu_fold_all1"), editor_prefs.folding);
+	ui_widget_show_hide(ui_lookup_widget(main_widgets.window, "menu_unfold_all1"), editor_prefs.folding);
+	ui_widget_show_hide(ui_lookup_widget(main_widgets.window, "separator22"), editor_prefs.folding);
 }
 
 
@@ -454,8 +454,8 @@ static void insert_include_items(GtkMenu *me, GtkMenu *mp, gchar **includes, gch
 
 void ui_create_insert_menu_items(void)
 {
-	GtkMenu *menu_edit = GTK_MENU(lookup_widget(main_widgets.window, "insert_include2_menu"));
-	GtkMenu *menu_popup = GTK_MENU(lookup_widget(main_widgets.editor_menu, "insert_include1_menu"));
+	GtkMenu *menu_edit = GTK_MENU(ui_lookup_widget(main_widgets.window, "insert_include2_menu"));
+	GtkMenu *menu_popup = GTK_MENU(ui_lookup_widget(main_widgets.editor_menu, "insert_include1_menu"));
 	GtkWidget *blank;
 	const gchar *c_includes_stdlib[] = {
 		"assert.h", "ctype.h", "errno.h", "float.h", "limits.h", "locale.h", "math.h", "setjmp.h",
@@ -521,8 +521,8 @@ static void insert_date_items(GtkMenu *me, GtkMenu *mp, gchar *label)
 
 void ui_create_insert_date_menu_items(void)
 {
-	GtkMenu *menu_edit = GTK_MENU(lookup_widget(main_widgets.window, "insert_date1_menu"));
-	GtkMenu *menu_popup = GTK_MENU(lookup_widget(main_widgets.editor_menu, "insert_date2_menu"));
+	GtkMenu *menu_edit = GTK_MENU(ui_lookup_widget(main_widgets.window, "insert_date1_menu"));
+	GtkMenu *menu_popup = GTK_MENU(ui_lookup_widget(main_widgets.editor_menu, "insert_date2_menu"));
 	GtkWidget *item;
 	gchar *str;
 
@@ -593,7 +593,7 @@ void ui_save_buttons_toggle(gboolean enable)
 
 
 #define add_doc_widget(widget_name) \
-	g_ptr_array_add(widgets.document_buttons, lookup_widget(main_widgets.window, widget_name))
+	g_ptr_array_add(widgets.document_buttons, ui_lookup_widget(main_widgets.window, widget_name))
 
 #define add_doc_toolitem(widget_name) \
 	g_ptr_array_add(widgets.document_buttons, toolbar_get_widget_by_name(widget_name))
@@ -722,7 +722,7 @@ void ui_sidebar_show_hide(void)
 		ui_prefs.sidebar_visible = FALSE;
 	}
 
-	widget = lookup_widget(main_widgets.window, "menu_show_sidebar1");
+	widget = ui_lookup_widget(main_widgets.window, "menu_show_sidebar1");
 	if (ui_prefs.sidebar_visible != gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget)))
 	{
 		ignore_callback = TRUE;
@@ -754,16 +754,16 @@ void ui_document_show_hide(GeanyDocument *doc)
 	ignore_callback = TRUE;
 
 	gtk_check_menu_item_set_active(
-			GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_line_wrapping1")),
+			GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_line_wrapping1")),
 			doc->editor->line_wrapping);
 
 	gtk_check_menu_item_set_active(
-			GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "line_breaking1")),
+			GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "line_breaking1")),
 			doc->editor->line_breaking);
 
 	iprefs = editor_get_indent_prefs(doc->editor);
 
-	item = lookup_widget(main_widgets.window, "menu_use_auto_indentation1");
+	item = ui_lookup_widget(main_widgets.window, "menu_use_auto_indentation1");
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), doc->editor->auto_indent);
 
 	switch (iprefs->type)
@@ -776,14 +776,14 @@ void ui_document_show_hide(GeanyDocument *doc)
 		default:
 			widget_name = "tabs_and_spaces1"; break;
 	}
-	item = lookup_widget(main_widgets.window, widget_name);
+	item = ui_lookup_widget(main_widgets.window, widget_name);
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), TRUE);
 
 	gtk_check_menu_item_set_active(
-			GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "set_file_readonly1")),
+			GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "set_file_readonly1")),
 			doc->readonly);
 
-	item = lookup_widget(main_widgets.window, "menu_write_unicode_bom1");
+	item = ui_lookup_widget(main_widgets.window, "menu_write_unicode_bom1");
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), doc->has_bom);
 	ui_widget_set_sensitive(item, encodings_is_unicode_charset(doc->encoding));
 
@@ -794,7 +794,7 @@ void ui_document_show_hide(GeanyDocument *doc)
 		default: widget_name = "crlf"; break;
 	}
 	gtk_check_menu_item_set_active(
-		GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, widget_name)), TRUE);
+		GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, widget_name)), TRUE);
 
 	encodings_select_radio_item(doc->encoding);
 	filetypes_select_radio_item(doc->file_type);
@@ -1078,11 +1078,11 @@ void ui_toggle_editor_features(GeanyUIEditorFeatures feature)
 void ui_update_view_editor_menu_items(void)
 {
 	ignore_callback = TRUE;
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_markers_margin1")), editor_prefs.show_markers_margin);
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_linenumber_margin1")), editor_prefs.show_linenumber_margin);
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_show_white_space1")), editor_prefs.show_white_space);
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_show_line_endings1")), editor_prefs.show_line_endings);
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_show_indentation_guides1")), editor_prefs.show_indent_guide);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_markers_margin1")), editor_prefs.show_markers_margin);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_linenumber_margin1")), editor_prefs.show_linenumber_margin);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_white_space1")), editor_prefs.show_white_space);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_line_endings1")), editor_prefs.show_line_endings);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_indentation_guides1")), editor_prefs.show_indent_guide);
 	ignore_callback = FALSE;
 }
 
@@ -1617,30 +1617,30 @@ void ui_init(void)
 {
 	add_stock_items();
 
-	ui_widgets.statusbar = lookup_widget(main_widgets.window, "statusbar");
-	ui_widgets.print_page_setup = lookup_widget(main_widgets.window, "page_setup1");
+	ui_widgets.statusbar = ui_lookup_widget(main_widgets.window, "statusbar");
+	ui_widgets.print_page_setup = ui_lookup_widget(main_widgets.window, "page_setup1");
 
-	widgets.popup_goto_items[0] = lookup_widget(main_widgets.editor_menu, "goto_tag_definition1");
-	widgets.popup_goto_items[1] = lookup_widget(main_widgets.editor_menu, "goto_tag_declaration1");
-	widgets.popup_goto_items[2] = lookup_widget(main_widgets.editor_menu, "find_usage1");
-	widgets.popup_goto_items[3] = lookup_widget(main_widgets.editor_menu, "find_document_usage1");
-	widgets.popup_copy_items[0] = lookup_widget(main_widgets.editor_menu, "cut1");
-	widgets.popup_copy_items[1] = lookup_widget(main_widgets.editor_menu, "copy1");
-	widgets.popup_copy_items[2] = lookup_widget(main_widgets.editor_menu, "delete1");
-	widgets.menu_copy_items[0] = lookup_widget(main_widgets.window, "menu_cut1");
-	widgets.menu_copy_items[1] = lookup_widget(main_widgets.window, "menu_copy1");
-	widgets.menu_copy_items[2] = lookup_widget(main_widgets.window, "menu_delete1");
-	widgets.menu_insert_include_items[0] = lookup_widget(main_widgets.editor_menu, "insert_include1");
-	widgets.menu_insert_include_items[1] = lookup_widget(main_widgets.window, "insert_include2");
-	widgets.save_buttons[0] = lookup_widget(main_widgets.window, "menu_save1");
+	widgets.popup_goto_items[0] = ui_lookup_widget(main_widgets.editor_menu, "goto_tag_definition1");
+	widgets.popup_goto_items[1] = ui_lookup_widget(main_widgets.editor_menu, "goto_tag_declaration1");
+	widgets.popup_goto_items[2] = ui_lookup_widget(main_widgets.editor_menu, "find_usage1");
+	widgets.popup_goto_items[3] = ui_lookup_widget(main_widgets.editor_menu, "find_document_usage1");
+	widgets.popup_copy_items[0] = ui_lookup_widget(main_widgets.editor_menu, "cut1");
+	widgets.popup_copy_items[1] = ui_lookup_widget(main_widgets.editor_menu, "copy1");
+	widgets.popup_copy_items[2] = ui_lookup_widget(main_widgets.editor_menu, "delete1");
+	widgets.menu_copy_items[0] = ui_lookup_widget(main_widgets.window, "menu_cut1");
+	widgets.menu_copy_items[1] = ui_lookup_widget(main_widgets.window, "menu_copy1");
+	widgets.menu_copy_items[2] = ui_lookup_widget(main_widgets.window, "menu_delete1");
+	widgets.menu_insert_include_items[0] = ui_lookup_widget(main_widgets.editor_menu, "insert_include1");
+	widgets.menu_insert_include_items[1] = ui_lookup_widget(main_widgets.window, "insert_include2");
+	widgets.save_buttons[0] = ui_lookup_widget(main_widgets.window, "menu_save1");
 	widgets.save_buttons[1] = toolbar_get_widget_by_name("Save");
-	widgets.save_buttons[2] = lookup_widget(main_widgets.window, "menu_save_all1");
+	widgets.save_buttons[2] = ui_lookup_widget(main_widgets.window, "menu_save_all1");
 	widgets.save_buttons[3] = toolbar_get_widget_by_name("SaveAll");
-	widgets.redo_items[0] = lookup_widget(main_widgets.editor_menu, "redo1");
-	widgets.redo_items[1] = lookup_widget(main_widgets.window, "menu_redo2");
+	widgets.redo_items[0] = ui_lookup_widget(main_widgets.editor_menu, "redo1");
+	widgets.redo_items[1] = ui_lookup_widget(main_widgets.window, "menu_redo2");
 	widgets.redo_items[2] = toolbar_get_widget_by_name("Redo");
-	widgets.undo_items[0] = lookup_widget(main_widgets.editor_menu, "undo1");
-	widgets.undo_items[1] = lookup_widget(main_widgets.window, "menu_undo2");
+	widgets.undo_items[0] = ui_lookup_widget(main_widgets.editor_menu, "undo1");
+	widgets.undo_items[1] = ui_lookup_widget(main_widgets.window, "menu_undo2");
 	widgets.undo_items[2] = toolbar_get_widget_by_name("Undo");
 
 	init_document_widgets();
@@ -1719,14 +1719,13 @@ void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text)
 	static GtkTooltips *tooltips = NULL;
 
 	if (tooltips == NULL)
-		tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
+		tooltips = GTK_TOOLTIPS(ui_lookup_widget(main_widgets.window, "tooltips"));
 
 	gtk_tooltips_set_tip(tooltips, widget, text, NULL);
 #endif
 }
 
 
-/* needed because lookup_widget doesn't have a suitable API prefix */
 /** This function returns a widget in a component created by Glade.
  * Call it with the toplevel widget in the component (i.e. a window/dialog),
  * or alternatively any widget in the component, and the name of the widget
@@ -1736,5 +1735,23 @@ void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text)
  * @return The widget found. */
 GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name)
 {
-	return lookup_widget(widget, widget_name);
+	GtkWidget *parent, *found_widget;
+
+	for (;;)
+	{
+		if (GTK_IS_MENU(widget))
+			parent = gtk_menu_get_attach_widget(GTK_MENU(widget));
+		else
+			parent = widget->parent;
+		if (parent == NULL)
+			parent = (GtkWidget*) g_object_get_data(G_OBJECT(widget), "GladeParentKey");
+		if (parent == NULL)
+			break;
+		widget = parent;
+	}
+
+	found_widget = (GtkWidget*) g_object_get_data(G_OBJECT(widget), widget_name);
+	if (found_widget == NULL)
+		g_warning("Widget not found: %s", widget_name);
+	return found_widget;
 }

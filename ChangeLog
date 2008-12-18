@@ -8,6 +8,17 @@
    Remove dead code.
  * src/editor.c, src/document.c:
    Remove remaining uses of doc->editor and use GeanyEditor directly.
+ * wcript, src/build.c, src/callbacks.c, src/dialogs.c, src/document.c,
+   src/encodings.c, src/filetypes.c, src/keybindings.c, src/keyfile.c,
+   src/main.c, src/Makefile.am, src/makefile.win32, src/msgwindow.c,
+   src/plugindata.c, src/plugins.c, src/prefs.c, src/project.c,
+   src/search.c, src/support.c, src/support.h, src/templates.c,
+   src/toolbar.c, src/tools.c, src/treeviews.c, src/ui_utils.c,
+   src/vte.c:
+   Move implementation of lookup_widget() into ui_lookup_widget().
+   Change uses of lookup_widget() to ui_lookup_widget().
+   Remove now unneeded support.c.
+   Use GLib gettext macros in support.h instead of own ones.
 
 
 2008-12-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -160,21 +160,21 @@ static void apply_settings(void)
 	if (! toolbar_prefs.visible)
 	{
 		ignore_callback = TRUE;
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_show_toolbar1")), FALSE);
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_toolbar1")), FALSE);
 		gtk_widget_hide(main_widgets.toolbar);
 		ignore_callback = FALSE;
 	}
 	if (! ui_prefs.msgwindow_visible)
 	{
 		ignore_callback = TRUE;
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_show_messages_window1")), FALSE);
-		gtk_widget_hide(lookup_widget(main_widgets.window, "scrolledwindow1"));
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_messages_window1")), FALSE);
+		gtk_widget_hide(ui_lookup_widget(main_widgets.window, "scrolledwindow1"));
 		ignore_callback = FALSE;
 	}
 	if (! ui_prefs.sidebar_visible)
 	{
 		ignore_callback = TRUE;
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_show_sidebar1")), FALSE);
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_sidebar1")), FALSE);
 		ignore_callback = FALSE;
 	}
 	ui_sidebar_show_hide();
@@ -183,20 +183,20 @@ static void apply_settings(void)
 	{
 		case GTK_TOOLBAR_BOTH:
 		{
-			/*gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "images_and_text1")), TRUE);*/
-			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(ui_widgets.toolbar_menu, "images_and_text2")), TRUE);
+			/*gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "images_and_text1")), TRUE);*/
+			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(ui_widgets.toolbar_menu, "images_and_text2")), TRUE);
 			break;
 		}
 		case GTK_TOOLBAR_ICONS:
 		{
-			/*gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "images_only1")), TRUE);*/
-			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(ui_widgets.toolbar_menu, "images_only2")), TRUE);
+			/*gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "images_only1")), TRUE);*/
+			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(ui_widgets.toolbar_menu, "images_only2")), TRUE);
 			break;
 		}
 		case GTK_TOOLBAR_TEXT:
 		{
-			/*gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "text_only1")), TRUE);*/
-			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(ui_widgets.toolbar_menu, "text_only2")), TRUE);
+			/*gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "text_only1")), TRUE);*/
+			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(ui_widgets.toolbar_menu, "text_only2")), TRUE);
 			break;
 		}
 	}
@@ -257,17 +257,17 @@ static void main_init(void)
 	main_status.opening_session_files		= FALSE;
 
 	main_widgets.window = create_window1();
-	ui_widgets.recent_files_menuitem = lookup_widget(main_widgets.window, "recent_files1");
+	ui_widgets.recent_files_menuitem = ui_lookup_widget(main_widgets.window, "recent_files1");
 	ui_widgets.recent_files_menu_menubar = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(ui_widgets.recent_files_menuitem),
 							ui_widgets.recent_files_menu_menubar);
 
 	/* store important pointers for later reference */
 	main_widgets.toolbar = toolbar_init();
-	main_widgets.sidebar_notebook = lookup_widget(main_widgets.window, "notebook3");
-	main_widgets.notebook = lookup_widget(main_widgets.window, "notebook1");
+	main_widgets.sidebar_notebook = ui_lookup_widget(main_widgets.window, "notebook3");
+	main_widgets.notebook = ui_lookup_widget(main_widgets.window, "notebook1");
 	main_widgets.editor_menu = create_edit_menu1();
-	main_widgets.tools_menu = lookup_widget(main_widgets.window, "tools1_menu");
+	main_widgets.tools_menu = ui_lookup_widget(main_widgets.window, "tools1_menu");
 
 	ui_widgets.toolbar_menu = create_toolbar_popup_menu1();
 	ui_init();
@@ -957,7 +957,7 @@ gint main(gint argc, gchar **argv)
 		g_signal_connect(main_widgets.window, "key-press-event", G_CALLBACK(keybindings_got_event), NULL);
 		g_signal_connect(main_widgets.toolbar, "button-press-event", G_CALLBACK(toolbar_popup_menu), NULL);
 
-		g_signal_connect(lookup_widget(main_widgets.window, "textview_scribble"),
+		g_signal_connect(ui_lookup_widget(main_widgets.window, "textview_scribble"),
 								"motion-notify-event", G_CALLBACK(on_motion_event), NULL);
 		entry = toolbar_get_widget_child_by_name("SearchEntry");
 		if (entry != NULL)

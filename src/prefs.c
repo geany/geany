@@ -121,7 +121,7 @@ static void spin_prefs_foreach(PrefCallbackAction action)
 	for (i = 0; i < G_N_ELEMENTS(items); i++)
 	{
 		PrefEntry *pe = &items[i];
-		GtkWidget *widget = lookup_widget(ui_widgets.prefs_dialog, pe->widget_name);
+		GtkWidget *widget = ui_lookup_widget(ui_widgets.prefs_dialog, pe->widget_name);
 		gint *setting = pe->setting;
 
 		switch (action)
@@ -148,7 +148,7 @@ static void combo_prefs_foreach(PrefCallbackAction action)
 	for (i = 0; i < G_N_ELEMENTS(items); i++)
 	{
 		PrefEntry *pe = &items[i];
-		GtkWidget *widget = lookup_widget(ui_widgets.prefs_dialog, pe->widget_name);
+		GtkWidget *widget = ui_lookup_widget(ui_widgets.prefs_dialog, pe->widget_name);
 		gint *setting = pe->setting;
 
 		switch (action)
@@ -210,7 +210,7 @@ static void init_kb_tree(void)
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
 
-	tree = GTK_TREE_VIEW(lookup_widget(ui_widgets.prefs_dialog, "treeview7"));
+	tree = GTK_TREE_VIEW(ui_lookup_widget(ui_widgets.prefs_dialog, "treeview7"));
 	/*g_object_set(tree, "vertical-separator", 6, NULL);*/
 
 	store = gtk_tree_store_new(3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT);
@@ -229,12 +229,12 @@ static void init_kb_tree(void)
 	/* set policy settings for the scollwedwindow around the treeview again, because glade
 	 * doesn't keep the settings */
 	gtk_scrolled_window_set_policy(
-			GTK_SCROLLED_WINDOW(lookup_widget(ui_widgets.prefs_dialog, "scrolledwindow8")),
+			GTK_SCROLLED_WINDOW(ui_lookup_widget(ui_widgets.prefs_dialog, "scrolledwindow8")),
 			GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
 	g_signal_connect(renderer, "edited", G_CALLBACK(on_cell_edited), NULL);
 	g_signal_connect(tree, "button-press-event", G_CALLBACK(on_tree_view_button_press_event), NULL);
-	g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "button2"), "clicked",
+	g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "button2"), "clicked",
 				G_CALLBACK(on_tree_view_button_press_event), NULL);
 }
 
@@ -280,114 +280,114 @@ void prefs_init_dialog(void)
 
 	/* General settings */
 	/* startup */
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_load_session");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_load_session");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.load_session);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_project_session");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_project_session");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), project_prefs.project_session);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_project_file_in_basedir");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_project_file_in_basedir");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), project_prefs.project_file_in_basedir);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_save_win_pos");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_save_win_pos");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.save_winpos);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_plugins");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_plugins");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.load_plugins);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_ask_for_quit");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_ask_for_quit");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.confirm_exit);
 
 	/* behaviour */
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_beep");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_beep");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.beep_on_errors);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_switch_pages");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_switch_pages");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.switch_to_status);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_suppress_status_msgs");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_suppress_status_msgs");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.suppress_status_messages);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_auto_focus");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_focus");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.auto_focus);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction");
 	gtk_entry_set_text(GTK_ENTRY(widget), tool_prefs.context_action_cmd);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "startup_path_entry");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "startup_path_entry");
 	gtk_entry_set_text(GTK_ENTRY(widget), prefs.default_open_path);
 
 	project_setup_prefs();	/* project files path */
 
 
 	/* Interface settings */
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_list_symbol");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_symbol");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.sidebar_symbol_visible);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_list_openfiles");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_openfiles");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.sidebar_openfiles_visible);
 	on_openfiles_visible_toggled(GTK_TOGGLE_BUTTON(widget), NULL);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_list_openfiles_fullpath");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_openfiles_fullpath");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.sidebar_openfiles_fullpath);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "tagbar_font");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "tagbar_font");
 	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), interface_prefs.tagbar_font);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "msgwin_font");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "msgwin_font");
 	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), interface_prefs.msgwin_font);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "editor_font");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "editor_font");
 	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), interface_prefs.editor_font);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "spin_long_line");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_long_line");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), editor_prefs.long_line_column);
 
 	switch (editor_prefs.long_line_type)
 	{
-		case 0: widget = lookup_widget(ui_widgets.prefs_dialog, "radio_long_line_line"); break;
-		case 1: widget = lookup_widget(ui_widgets.prefs_dialog, "radio_long_line_background"); break;
-		default: widget = lookup_widget(ui_widgets.prefs_dialog, "radio_long_line_disabled"); break;
+		case 0: widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_long_line_line"); break;
+		case 1: widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_long_line_background"); break;
+		default: widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_long_line_disabled"); break;
 	}
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
 
 	color = g_new0(GdkColor, 1);
 	gdk_color_parse(editor_prefs.long_line_color, color);
-	widget = lookup_widget(ui_widgets.prefs_dialog, "long_line_color");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "long_line_color");
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), color);
 	g_free(color);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.show_notebook_tabs);
 	/* disable following setting if notebook tabs are hidden */
 	on_show_notebook_tabs_toggled(GTK_TOGGLE_BUTTON(
-					lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs")), NULL);
+					ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs")), NULL);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_show_tab_cross");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_tab_cross");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.show_tab_cross);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "combo_tab_editor");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_editor");
 	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), interface_prefs.tab_pos_editor);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "combo_tab_msgwin");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_msgwin");
 	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), interface_prefs.tab_pos_msgwin);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "combo_tab_sidebar");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_sidebar");
 	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), interface_prefs.tab_pos_sidebar);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_statusbar_visible");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_statusbar_visible");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.statusbar_visible);
 
 
 	/* Toolbar settings */
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), toolbar_prefs.visible);
 
 	switch (toolbar_prefs.icon_style)
 	{
-		case 0: widget = lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_image"); break;
-		case 1: widget = lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_text"); break;
-		default: widget = lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_imagetext"); break;
+		case 0: widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_image"); break;
+		case 1: widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_text"); break;
+		default: widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_imagetext"); break;
 	}
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
 
@@ -395,39 +395,39 @@ void prefs_init_dialog(void)
 	switch (toolbar_prefs.icon_size)
 	{
 		case GTK_ICON_SIZE_LARGE_TOOLBAR:
-				widget = lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_large"); break;
-		default: widget = lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_small"); break;
+				widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_large"); break;
+		default: widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_small"); break;
 	}
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
 	/* disable elements if toolbar is hidden */
 	on_toolbar_show_toggled(GTK_TOGGLE_BUTTON(
-					lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show")), NULL);
+					ui_lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show")), NULL);
 
 
 	/* Files settings */
 	if (file_prefs.tab_order_ltr)
-		widget = lookup_widget(ui_widgets.prefs_dialog, "radio_tab_right");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_tab_right");
 	else
-		widget = lookup_widget(ui_widgets.prefs_dialog, "radio_tab_left");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_tab_left");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "spin_mru");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_mru");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), file_prefs.mru_length);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "spin_disk_check");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_disk_check");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), file_prefs.disk_check_timeout);
 
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
 	/* luckily the index of the combo box items match the index of the encodings array */
 	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), file_prefs.default_new_encoding);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_open_encoding");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_open_encoding");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
 			(file_prefs.default_open_encoding >= 0) ? TRUE : FALSE);
 	on_open_encoding_toggled(GTK_TOGGLE_BUTTON(widget), NULL);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "combo_open_encoding");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_open_encoding");
 	if (file_prefs.default_open_encoding >= 0)
 	{
 		gtk_combo_box_set_active(GTK_COMBO_BOX(widget), file_prefs.default_open_encoding);
@@ -435,7 +435,7 @@ void prefs_init_dialog(void)
 	else
 		gtk_combo_box_set_active(GTK_COMBO_BOX(widget), GEANY_ENCODING_UTF_8);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "combo_eol");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_eol");
 	if (file_prefs.default_eol_character >= 0 && file_prefs.default_eol_character < 3)
 	{
 		gtk_combo_box_set_active(GTK_COMBO_BOX(widget), file_prefs.default_eol_character);
@@ -443,138 +443,138 @@ void prefs_init_dialog(void)
 	else
 		gtk_combo_box_set_active(GTK_COMBO_BOX(widget), GEANY_DEFAULT_EOL_CHARACTER);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_trailing_spaces");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_trailing_spaces");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.strip_trailing_spaces);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_new_line");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_new_line");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.final_new_line);
 
 	/* Editor settings */
-	widget = lookup_widget(ui_widgets.prefs_dialog, "entry_toggle_mark");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_toggle_mark");
 	gtk_entry_set_text(GTK_ENTRY(widget), editor_prefs.comment_toggle_mark);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_replace_tabs");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_replace_tabs");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.replace_tabs);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_indent");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_indent");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_indent_guide);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_white_space");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_white_space");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_white_space);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_line_end");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_line_end");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_line_endings);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_line_numbers");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_line_numbers");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_linenumber_margin);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_markers_margin");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_markers_margin");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_markers_margin);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_scroll_stop_at_last_line");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_scroll_stop_at_last_line");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.scroll_stop_at_last_line);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_line_wrapping");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_line_wrapping");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.line_wrapping);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_complete_snippets");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_complete_snippets");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.complete_snippets);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_xmltag");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_xmltag");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.auto_close_xml_tags);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_folding");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_folding");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.folding);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_unfold_children");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_unfold_children");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.unfold_all_children);
 	on_use_folding_toggled(GTK_TOGGLE_BUTTON(
-					lookup_widget(ui_widgets.prefs_dialog, "check_folding")), NULL);
+					ui_lookup_widget(ui_widgets.prefs_dialog, "check_folding")), NULL);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_disable_dnd");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_disable_dnd");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.disable_dnd);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_smart_home");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_smart_home");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.smart_home_key);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_newline_strip");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_newline_strip");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.newline_strip);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_indicators");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_indicators");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.use_indicators);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_auto_multiline");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_multiline");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.auto_continue_multiline);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_symbol_auto_completion");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_symbol_auto_completion");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.auto_complete_symbols);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "spin_symbollistheight");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_symbollistheight");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), editor_prefs.symbolcompletion_max_height);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "spin_symbol_complete_chars");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_symbol_complete_chars");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), editor_prefs.symbolcompletion_min_chars);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "spin_line_break");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_line_break");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), editor_prefs.line_break_column);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_parenthesis");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_parenthesis");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
 		(editor_prefs.autoclose_chars & GEANY_AC_PARENTHESIS));
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_cbracket");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_cbracket");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
 		(editor_prefs.autoclose_chars & GEANY_AC_CBRACKET));
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_sbracket");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_sbracket");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
 		(editor_prefs.autoclose_chars & GEANY_AC_SBRACKET));
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_squote");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_squote");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
 		(editor_prefs.autoclose_chars & GEANY_AC_SQUOTE));
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_dquote");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_dquote");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
 		(editor_prefs.autoclose_chars & GEANY_AC_DQUOTE));
 
 	/* Tools Settings */
 	if (tool_prefs.make_cmd)
-			gtk_entry_set_text(GTK_ENTRY(lookup_widget(ui_widgets.prefs_dialog, "entry_com_make")), tool_prefs.make_cmd);
+			gtk_entry_set_text(GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_make")), tool_prefs.make_cmd);
 
     if (tool_prefs.term_cmd)
-            gtk_entry_set_text(GTK_ENTRY(lookup_widget(ui_widgets.prefs_dialog, "entry_com_term")), tool_prefs.term_cmd);
+            gtk_entry_set_text(GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_term")), tool_prefs.term_cmd);
 
 	if (tool_prefs.browser_cmd)
-		gtk_entry_set_text(GTK_ENTRY(lookup_widget(ui_widgets.prefs_dialog, "entry_browser")), tool_prefs.browser_cmd);
+		gtk_entry_set_text(GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_browser")), tool_prefs.browser_cmd);
 
 	if (tool_prefs.grep_cmd)
-		gtk_entry_set_text(GTK_ENTRY(lookup_widget(ui_widgets.prefs_dialog, "entry_grep")), tool_prefs.grep_cmd);
+		gtk_entry_set_text(GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_grep")), tool_prefs.grep_cmd);
 
 
 	/* Template settings */
-	widget = lookup_widget(ui_widgets.prefs_dialog, "entry_template_developer");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_developer");
 	gtk_entry_set_text(GTK_ENTRY(widget), template_prefs.developer);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "entry_template_company");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_company");
 	gtk_entry_set_text(GTK_ENTRY(widget), template_prefs.company);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "entry_template_mail");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_mail");
 	gtk_entry_set_text(GTK_ENTRY(widget), template_prefs.mail);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "entry_template_initial");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_initial");
 	gtk_entry_set_text(GTK_ENTRY(widget), template_prefs.initials);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "entry_template_version");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_version");
 	gtk_entry_set_text(GTK_ENTRY(widget), template_prefs.version);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "entry_template_year");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_year");
 	gtk_entry_set_text(GTK_ENTRY(widget), template_prefs.year_format);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "entry_template_date");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_date");
 	gtk_entry_set_text(GTK_ENTRY(widget), template_prefs.date_format);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "entry_template_datetime");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_datetime");
 	gtk_entry_set_text(GTK_ENTRY(widget), template_prefs.datetime_format);
 
 
@@ -583,18 +583,18 @@ void prefs_init_dialog(void)
 
 	/* Printing */
 	{
-		GtkWidget *widget_gtk = lookup_widget(ui_widgets.prefs_dialog, "radio_print_gtk");
+		GtkWidget *widget_gtk = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_print_gtk");
 		if (printing_prefs.use_gtk_printing)
 			widget = widget_gtk;
 		else
-			widget = lookup_widget(ui_widgets.prefs_dialog, "radio_print_external");
+			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_print_external");
 
 #if GTK_CHECK_VERSION(2, 10, 0)
 		if (gtk_check_version(2, 10, 0) != NULL)
 #endif
 		{
 			gtk_widget_set_sensitive(widget_gtk, FALSE); /* disable the whole option block */
-			widget = lookup_widget(ui_widgets.prefs_dialog, "radio_print_external");
+			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_print_external");
 		}
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
 
@@ -602,78 +602,78 @@ void prefs_init_dialog(void)
 	}
 	if (printing_prefs.external_print_cmd)
 		gtk_entry_set_text(
-			GTK_ENTRY(lookup_widget(ui_widgets.prefs_dialog, "entry_print_external_cmd")),
+			GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_print_external_cmd")),
 			printing_prefs.external_print_cmd);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_print_linenumbers");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_print_linenumbers");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), printing_prefs.print_line_numbers);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_print_pagenumbers");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_print_pagenumbers");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), printing_prefs.print_page_numbers);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_print_pageheader");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_print_pageheader");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), printing_prefs.print_page_header);
 	on_prefs_print_page_header_toggled(GTK_TOGGLE_BUTTON(widget), NULL);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_print_basename");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_print_basename");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), printing_prefs.page_header_basename);
 
 	if (printing_prefs.page_header_datefmt)
 		gtk_entry_set_text(
-			GTK_ENTRY(lookup_widget(ui_widgets.prefs_dialog, "entry_print_dateformat")),
+			GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_print_dateformat")),
 			printing_prefs.page_header_datefmt);
 
 
 #ifndef HAVE_PLUGINS
-	gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "check_plugins"), FALSE);
+	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "check_plugins"), FALSE);
 #endif
 
 #ifdef HAVE_VTE
 	/* make VTE switch visible only when VTE is compiled in, it is hidden by default */
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_vte");
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_vte");
 	gtk_widget_show(widget);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vte_info.load_vte);
 
 	/* VTE settings */
 	if (vte_info.have_vte)
 	{
-		widget = lookup_widget(ui_widgets.prefs_dialog, "font_term");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "font_term");
 		gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), vc->font);
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "color_fore");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "color_fore");
 		gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), vc->colour_fore);
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "color_back");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "color_back");
 		gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), vc->colour_back);
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_scrollback");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_scrollback");
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), vc->scrollback_lines);
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_shell");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_shell");
 		gtk_entry_set_text(GTK_ENTRY(widget), vc->shell);
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_scroll_key");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_scroll_key");
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->scroll_on_key);
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_scroll_out");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_scroll_out");
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->scroll_on_out);
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_enable_bash_keys");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_enable_bash_keys");
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->enable_bash_keys);
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_ignore_menu_key");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_ignore_menu_key");
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->ignore_menu_bar_accel);
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_follow_path");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_follow_path");
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->follow_path);
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_run_in_vte");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_run_in_vte");
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->run_in_vte);
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_skip_script");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_skip_script");
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->skip_run_script);
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_cursor_blinks");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_cursor_blinks");
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->cursor_blinks);
 	}
 #endif
@@ -696,42 +696,42 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 
 		/* General settings */
 		/* startup */
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_load_session");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_load_session");
 		prefs.load_session = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_project_session");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_project_session");
 		project_prefs.project_session = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_project_file_in_basedir");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_project_file_in_basedir");
 		project_prefs.project_file_in_basedir = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_save_win_pos");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_save_win_pos");
 		prefs.save_winpos = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_plugins");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_plugins");
 		prefs.load_plugins = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_ask_for_quit");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_ask_for_quit");
 		prefs.confirm_exit = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		/* behaviour */
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_beep");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_beep");
 		prefs.beep_on_errors = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_switch_pages");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_switch_pages");
 		prefs.switch_to_status = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_suppress_status_msgs");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_suppress_status_msgs");
 		prefs.suppress_status_messages = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_auto_focus");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_focus");
 		prefs.auto_focus = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction");
 		g_free(tool_prefs.context_action_cmd);
 		tool_prefs.context_action_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "startup_path_entry");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "startup_path_entry");
 		g_free(prefs.default_open_path);
 		prefs.default_open_path = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
@@ -739,20 +739,20 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 
 
 		/* Interface settings */
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_list_symbol");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_symbol");
 		interface_prefs.sidebar_symbol_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_list_openfiles");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_openfiles");
 		interface_prefs.sidebar_openfiles_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_list_openfiles_fullpath");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_openfiles_fullpath");
 		interface_prefs.sidebar_openfiles_fullpath = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "radio_long_line_line");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_long_line_line");
 		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) editor_prefs.long_line_type = 0;
 		else
 		{
-			widget = lookup_widget(ui_widgets.prefs_dialog, "radio_long_line_background");
+			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_long_line_background");
 			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) editor_prefs.long_line_type = 1;
 			else
 			{	/* now only the disabled radio remains, so disable it */
@@ -761,34 +761,34 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		}
 		if (editor_prefs.long_line_column == 0) editor_prefs.long_line_type = 2;
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs");
 		interface_prefs.show_notebook_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_show_tab_cross");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_tab_cross");
 		file_prefs.show_tab_cross = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "combo_tab_editor");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_editor");
 		interface_prefs.tab_pos_editor = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "combo_tab_msgwin");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_msgwin");
 		interface_prefs.tab_pos_msgwin = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "combo_tab_sidebar");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_sidebar");
 		interface_prefs.tab_pos_sidebar = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_statusbar_visible");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_statusbar_visible");
 		interface_prefs.statusbar_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 
 		/* Toolbar settings */
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show");
 		toolbar_prefs.visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_imagetext");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_imagetext");
 		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) toolbar_prefs.icon_style = 2;
 		else
 		{
-			widget = lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_image");
+			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_image");
 			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
 				toolbar_prefs.icon_style = 0;
 			else
@@ -797,7 +797,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		}
 
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_large");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_large");
 		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
 			toolbar_prefs.icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
 		else
@@ -805,122 +805,122 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 
 
 		/* Files settings */
-		widget = lookup_widget(ui_widgets.prefs_dialog, "radio_tab_right");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_tab_right");
 		file_prefs.tab_order_ltr = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_mru");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_mru");
 		file_prefs.mru_length = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_disk_check");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_disk_check");
 		file_prefs.disk_check_timeout = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
 		file_prefs.default_new_encoding = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_open_encoding");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_open_encoding");
 		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
 		{
-			widget = lookup_widget(ui_widgets.prefs_dialog, "combo_open_encoding");
+			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_open_encoding");
 			file_prefs.default_open_encoding = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 		}
 		else
 			file_prefs.default_open_encoding = -1;
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "combo_eol");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_eol");
 		file_prefs.default_eol_character = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_trailing_spaces");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_trailing_spaces");
 		file_prefs.strip_trailing_spaces = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_new_line");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_new_line");
 		file_prefs.final_new_line = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_replace_tabs");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_replace_tabs");
 		file_prefs.replace_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 
 		/* Editor settings */
-		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_toggle_mark");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_toggle_mark");
 		setptr(editor_prefs.comment_toggle_mark,
 			gtk_editable_get_chars(GTK_EDITABLE(widget), 0, -1));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_long_line");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_long_line");
 		editor_prefs.long_line_column = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_folding");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_folding");
 		editor_prefs.folding = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 		ui_update_fold_items();
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_unfold_children");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_unfold_children");
 		editor_prefs.unfold_all_children = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_indent");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_indent");
 		editor_prefs.show_indent_guide = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_white_space");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_white_space");
 		editor_prefs.show_white_space = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_line_end");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_line_end");
 		editor_prefs.show_line_endings = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_line_numbers");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_line_numbers");
 		editor_prefs.show_linenumber_margin = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_markers_margin");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_markers_margin");
 		editor_prefs.show_markers_margin = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_scroll_stop_at_last_line");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_scroll_stop_at_last_line");
 		editor_prefs.scroll_stop_at_last_line = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_line_wrapping");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_line_wrapping");
 		editor_prefs.line_wrapping = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_complete_snippets");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_complete_snippets");
 		editor_prefs.complete_snippets = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_xmltag");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_xmltag");
 		editor_prefs.auto_close_xml_tags = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_indicators");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_indicators");
 		editor_prefs.use_indicators = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_disable_dnd");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_disable_dnd");
 		editor_prefs.disable_dnd = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_smart_home");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_smart_home");
 		editor_prefs.smart_home_key = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_newline_strip");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_newline_strip");
 		editor_prefs.newline_strip = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_auto_multiline");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_multiline");
 		editor_prefs.auto_continue_multiline = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_symbol_auto_completion");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_symbol_auto_completion");
 		editor_prefs.auto_complete_symbols = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_symbol_complete_chars");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_symbol_complete_chars");
 		editor_prefs.symbolcompletion_min_chars = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_symbollistheight");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_symbollistheight");
 		editor_prefs.symbolcompletion_max_height = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_line_break");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_line_break");
 		editor_prefs.line_break_column = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_parenthesis");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_parenthesis");
 		autoclose_brackets[0] = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_cbracket");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_cbracket");
 		autoclose_brackets[1] = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_sbracket");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_sbracket");
 		autoclose_brackets[2] = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_squote");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_squote");
 		autoclose_brackets[3] = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_dquote");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_dquote");
 		autoclose_brackets[4] = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		editor_prefs.autoclose_chars =
@@ -931,53 +931,53 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		| (autoclose_brackets[4] ? GEANY_AC_DQUOTE : 0);
 
 		/* Tools Settings */
-		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_com_make");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_make");
 		g_free(tool_prefs.make_cmd);
 		tool_prefs.make_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_com_term");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_term");
 		g_free(tool_prefs.term_cmd);
 		tool_prefs.term_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_browser");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_browser");
 		g_free(tool_prefs.browser_cmd);
 		tool_prefs.browser_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_grep");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_grep");
 		g_free(tool_prefs.grep_cmd);
 		tool_prefs.grep_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
 
 		/* Template settings */
-		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_template_developer");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_developer");
 		g_free(template_prefs.developer);
 		template_prefs.developer = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_template_company");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_company");
 		g_free(template_prefs.company);
 		template_prefs.company = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_template_mail");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_mail");
 		g_free(template_prefs.mail);
 		template_prefs.mail = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_template_initial");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_initial");
 		g_free(template_prefs.initials);
 		template_prefs.initials = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_template_version");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_version");
 		g_free(template_prefs.version);
 		template_prefs.version = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_template_year");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_year");
 		g_free(template_prefs.year_format);
 		template_prefs.year_format = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_template_date");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_date");
 		g_free(template_prefs.date_format);
 		template_prefs.date_format = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_template_datetime");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_datetime");
 		g_free(template_prefs.datetime_format);
 		template_prefs.datetime_format = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
@@ -987,66 +987,66 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 
 
 		/* Printing */
-		widget = lookup_widget(ui_widgets.prefs_dialog, "radio_print_gtk");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_print_gtk");
 		printing_prefs.use_gtk_printing = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_print_external_cmd");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_print_external_cmd");
 		g_free(printing_prefs.external_print_cmd);
 		printing_prefs.external_print_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_print_linenumbers");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_print_linenumbers");
 		printing_prefs.print_line_numbers = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_print_pagenumbers");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_print_pagenumbers");
 		printing_prefs.print_page_numbers = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_print_pageheader");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_print_pageheader");
 		printing_prefs.print_page_header = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_print_basename");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_print_basename");
 		printing_prefs.page_header_basename = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_print_dateformat");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_print_dateformat");
 		g_free(printing_prefs.page_header_datefmt);
 		printing_prefs.page_header_datefmt = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
 
 #ifdef HAVE_VTE
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_vte");
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_vte");
 		vte_info.load_vte = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		/* VTE settings */
 		if (vte_info.have_vte)
 		{
-			widget = lookup_widget(ui_widgets.prefs_dialog, "spin_scrollback");
+			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_scrollback");
 			vc->scrollback_lines = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
-			widget = lookup_widget(ui_widgets.prefs_dialog, "entry_shell");
+			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_shell");
 			g_free(vc->shell);
 			vc->shell = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
-			widget = lookup_widget(ui_widgets.prefs_dialog, "check_scroll_key");
+			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_scroll_key");
 			vc->scroll_on_key = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-			widget = lookup_widget(ui_widgets.prefs_dialog, "check_scroll_out");
+			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_scroll_out");
 			vc->scroll_on_out = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-			widget = lookup_widget(ui_widgets.prefs_dialog, "check_enable_bash_keys");
+			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_enable_bash_keys");
 			vc->enable_bash_keys = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-			widget = lookup_widget(ui_widgets.prefs_dialog, "check_ignore_menu_key");
+			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_ignore_menu_key");
 			vc->ignore_menu_bar_accel = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-			widget = lookup_widget(ui_widgets.prefs_dialog, "check_follow_path");
+			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_follow_path");
 			vc->follow_path = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-			widget = lookup_widget(ui_widgets.prefs_dialog, "check_run_in_vte");
+			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_run_in_vte");
 			vc->run_in_vte = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-			widget = lookup_widget(ui_widgets.prefs_dialog, "check_skip_script");
+			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_skip_script");
 			vc->skip_run_script = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-			widget = lookup_widget(ui_widgets.prefs_dialog, "check_cursor_blinks");
+			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_cursor_blinks");
 			vc->cursor_blinks = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 			vte_apply_user_settings();
@@ -1157,7 +1157,7 @@ void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 			ui_widget_modify_font_from_string(msgwindow.tree_msg, interface_prefs.msgwin_font);
 			ui_widget_modify_font_from_string(msgwindow.tree_status, interface_prefs.msgwin_font);
 			ui_widget_modify_font_from_string(
-				lookup_widget(main_widgets.window, "textview_scribble"),
+				ui_lookup_widget(main_widgets.window, "textview_scribble"),
 				interface_prefs.msgwin_font);
 			break;
 		}
@@ -1430,7 +1430,7 @@ static void on_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user
 {
 	gboolean sens = gtk_toggle_button_get_active(togglebutton);
 
-	gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "frame13"), sens);
+	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "frame13"), sens);
 }
 
 
@@ -1439,8 +1439,8 @@ static void on_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gpointe
 	gboolean sens = gtk_toggle_button_get_active(togglebutton);
 
 	/* tab placement only enabled when tabs are visible */
-	gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "combo_tab_editor"), sens);
-	gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "check_show_tab_cross"), sens);
+	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_editor"), sens);
+	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_tab_cross"), sens);
 }
 
 
@@ -1448,7 +1448,7 @@ static void on_use_folding_toggled(GtkToggleButton *togglebutton, gpointer user_
 {
 	gboolean sens = gtk_toggle_button_get_active(togglebutton);
 
-	gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "check_unfold_children"), sens);
+	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "check_unfold_children"), sens);
 }
 
 
@@ -1456,8 +1456,8 @@ static void on_open_encoding_toggled(GtkToggleButton *togglebutton, gpointer use
 {
 	gboolean sens = gtk_toggle_button_get_active(togglebutton);
 
-	gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "eventbox3"), sens);
-	gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "label_open_encoding"), sens);
+	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "eventbox3"), sens);
+	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "label_open_encoding"), sens);
 }
 
 
@@ -1465,7 +1465,7 @@ static void on_openfiles_visible_toggled(GtkToggleButton *togglebutton, gpointer
 {
 	gboolean sens = gtk_toggle_button_get_active(togglebutton);
 
-	gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "check_list_openfiles_fullpath"), sens);
+	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_openfiles_fullpath"), sens);
 }
 
 
@@ -1473,8 +1473,8 @@ static void on_prefs_print_radio_button_toggled(GtkToggleButton *togglebutton, g
 {
 	gboolean sens = gtk_toggle_button_get_active(togglebutton);
 
-	gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "vbox29"), sens);
-	gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "hbox9"), ! sens);
+	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "vbox29"), sens);
+	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "hbox9"), ! sens);
 }
 
 
@@ -1482,8 +1482,8 @@ static void on_prefs_print_page_header_toggled(GtkToggleButton *togglebutton, gp
 {
 	gboolean sens = gtk_toggle_button_get_active(togglebutton);
 
-	gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "check_print_basename"), sens);
-	gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "entry_print_dateformat"), sens);
+	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "check_print_basename"), sens);
+	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_print_dateformat"), sens);
 }
 
 
@@ -1501,8 +1501,8 @@ void prefs_show_dialog(void)
 		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.prefs_dialog), GTK_WINDOW(main_widgets.window));
 
 		/* init the default file encoding combo box */
-		combo_new = lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
-		combo_open = lookup_widget(ui_widgets.prefs_dialog, "combo_open_encoding");
+		combo_new = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
+		combo_open = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_open_encoding");
 		gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(combo_new), 3);
 		gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(combo_open), 3);
 		for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
@@ -1514,7 +1514,7 @@ void prefs_show_dialog(void)
 		}
 
 		/* init the eol character combo box */
-		combo_eol = lookup_widget(ui_widgets.prefs_dialog, "combo_eol");
+		combo_eol = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_eol");
 		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_eol), utils_get_eol_name(SC_EOL_CRLF));
 		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_eol), utils_get_eol_name(SC_EOL_CR));
 		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_eol), utils_get_eol_name(SC_EOL_LF));
@@ -1523,34 +1523,34 @@ void prefs_show_dialog(void)
 		/* page Tools */
 		label = geany_wrap_label_new(_("Enter tool paths below. Tools you do not need can be left blank."));
 		gtk_widget_show(label);
-		gtk_box_pack_start(GTK_BOX(lookup_widget(ui_widgets.prefs_dialog, "vbox33")),
+		gtk_box_pack_start(GTK_BOX(ui_lookup_widget(ui_widgets.prefs_dialog, "vbox33")),
 			label, FALSE, TRUE, 5);
 		/* page Templates */
 		label = geany_wrap_label_new(_("Set the information to be used in templates. See the documentation for details."));
 		gtk_widget_show(label);
-		gtk_box_pack_start(GTK_BOX(lookup_widget(ui_widgets.prefs_dialog, "vbox31")),
+		gtk_box_pack_start(GTK_BOX(ui_lookup_widget(ui_widgets.prefs_dialog, "vbox31")),
 			label, FALSE, TRUE, 5);
 		label = geany_wrap_label_new(_("<i>Notice: For all changes you make here to take effect, you need to restart Geany or force the reload of the settings using Tools->Reload Configuration.</i>"));
 		gtk_widget_show(label);
 		gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-		gtk_box_pack_start(GTK_BOX(lookup_widget(ui_widgets.prefs_dialog, "vbox9")),
+		gtk_box_pack_start(GTK_BOX(ui_lookup_widget(ui_widgets.prefs_dialog, "vbox9")),
 			label, FALSE, TRUE, 5);
 		/* page Keybindings */
 		label = geany_wrap_label_new(_("Here you can change keyboard shortcuts for various actions. Select one and press the Change button to enter a new shortcut, or double click on an action to edit the string representation of the shortcut directly."));
 		gtk_widget_show(label);
-		gtk_box_pack_start(GTK_BOX(lookup_widget(ui_widgets.prefs_dialog, "vbox32")),
+		gtk_box_pack_start(GTK_BOX(ui_lookup_widget(ui_widgets.prefs_dialog, "vbox32")),
 			label, FALSE, TRUE, 5);
 		/* page Printing */
 		label = geany_wrap_label_new(_("<i>Notice: Native GTK printing is only available if Geany was built against GTK 2.10 (or above) <b>and</b> Geany is running with GTK 2.10 (or above).</i>"));
 		gtk_widget_show(label);
 		gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-		gtk_box_pack_start(GTK_BOX(lookup_widget(ui_widgets.prefs_dialog, "vbox27")),
+		gtk_box_pack_start(GTK_BOX(ui_lookup_widget(ui_widgets.prefs_dialog, "vbox27")),
 			label, FALSE, TRUE, 5);
 		/* page Toolbar */
 		label = geany_wrap_label_new(_("<i>Notice: To customize the toolbar elements, edit the file 'ui_toolbar.xml'. Please see the documentation for details.</i>"));
 		gtk_widget_show(label);
 		gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-		gtk_box_pack_start(GTK_BOX(lookup_widget(ui_widgets.prefs_dialog, "vbox15")),
+		gtk_box_pack_start(GTK_BOX(ui_lookup_widget(ui_widgets.prefs_dialog, "vbox15")),
 			label, FALSE, TRUE, 5);
 
 
@@ -1558,53 +1558,53 @@ void prefs_show_dialog(void)
 		vte_append_preferences_tab();
 #endif
 
-		ui_setup_open_button_callback(lookup_widget(ui_widgets.prefs_dialog, "startup_path_button"), NULL,
-			GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(lookup_widget(ui_widgets.prefs_dialog, "startup_path_entry")));
+		ui_setup_open_button_callback(ui_lookup_widget(ui_widgets.prefs_dialog, "startup_path_button"), NULL,
+			GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "startup_path_entry")));
 
 		g_signal_connect(ui_widgets.prefs_dialog, "response",
 			G_CALLBACK(on_prefs_button_clicked), NULL);
 		g_signal_connect(ui_widgets.prefs_dialog, "delete-event",
 			G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 
-		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "tagbar_font"),
+		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "tagbar_font"),
 				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(1));
-		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "msgwin_font"),
+		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "msgwin_font"),
 				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(2));
-		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "editor_font"),
+		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "editor_font"),
 				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(3));
-		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "long_line_color"),
+		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "long_line_color"),
 				"color-set", G_CALLBACK(on_prefs_color_choosed), GINT_TO_POINTER(1));
 		/* file chooser buttons in the tools tab */
-		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "button_make"),
-				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(ui_widgets.prefs_dialog, "entry_com_make"));
-		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "button_term"),
-				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(ui_widgets.prefs_dialog, "entry_com_term"));
-		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "button_browser"),
-				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(ui_widgets.prefs_dialog, "entry_browser"));
-		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "button_grep"),
-				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(ui_widgets.prefs_dialog, "entry_grep"));
+		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "button_make"),
+				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_make"));
+		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "button_term"),
+				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_term"));
+		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "button_browser"),
+				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), ui_lookup_widget(ui_widgets.prefs_dialog, "entry_browser"));
+		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "button_grep"),
+				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), ui_lookup_widget(ui_widgets.prefs_dialog, "entry_grep"));
 
 		/* tools commands */
-		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "button_contextaction"),
-			"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction"));
+		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "button_contextaction"),
+			"clicked", G_CALLBACK(on_prefs_tools_button_clicked), ui_lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction"));
 
 		/* printing */
-		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "button_print_external_cmd"),
-			"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(ui_widgets.prefs_dialog, "entry_print_external_cmd"));
-		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "radio_print_gtk"),
+		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "button_print_external_cmd"),
+			"clicked", G_CALLBACK(on_prefs_tools_button_clicked), ui_lookup_widget(ui_widgets.prefs_dialog, "entry_print_external_cmd"));
+		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "radio_print_gtk"),
 			"toggled", G_CALLBACK(on_prefs_print_radio_button_toggled), NULL);
-		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "check_print_pageheader"),
+		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_print_pageheader"),
 			"toggled", G_CALLBACK(on_prefs_print_page_header_toggled), NULL);
 
-		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show"),
+		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show"),
 				"toggled", G_CALLBACK(on_toolbar_show_toggled), NULL);
-		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs"),
+		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs"),
 				"toggled", G_CALLBACK(on_show_notebook_tabs_toggled), NULL);
-		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "check_folding"),
+		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_folding"),
 				"toggled", G_CALLBACK(on_use_folding_toggled), NULL);
-		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "check_open_encoding"),
+		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_open_encoding"),
 				"toggled", G_CALLBACK(on_open_encoding_toggled), NULL);
-		g_signal_connect(lookup_widget(ui_widgets.prefs_dialog, "check_list_openfiles"),
+		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_openfiles"),
 				"toggled", G_CALLBACK(on_openfiles_visible_toggled), NULL);
 	}
 

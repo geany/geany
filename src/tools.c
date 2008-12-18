@@ -481,8 +481,8 @@ static void cc_insert_custom_command_items(GtkMenu *me, GtkMenu *mp, gchar *labe
 
 void tools_create_insert_custom_command_menu_items(void)
 {
-	GtkMenu *menu_edit = GTK_MENU(lookup_widget(main_widgets.window, "send_selection_to2_menu"));
-	GtkMenu *menu_popup = GTK_MENU(lookup_widget(main_widgets.editor_menu, "send_selection_to1_menu"));
+	GtkMenu *menu_edit = GTK_MENU(ui_lookup_widget(main_widgets.window, "send_selection_to2_menu"));
+	GtkMenu *menu_popup = GTK_MENU(ui_lookup_widget(main_widgets.editor_menu, "send_selection_to1_menu"));
 	GtkWidget *item;
 	GList *me_children;
 	GList *mp_children;
@@ -538,9 +538,9 @@ void tools_create_insert_custom_command_menu_items(void)
 
 	if (! signal_set)
 	{
-		g_signal_connect(lookup_widget(main_widgets.editor_menu, "send_selection_to1"),
+		g_signal_connect(ui_lookup_widget(main_widgets.editor_menu, "send_selection_to1"),
 					"activate", G_CALLBACK(cc_on_custom_command_menu_activate), menu_popup);
-		g_signal_connect(lookup_widget(main_widgets.window, "send_selection_to2"),
+		g_signal_connect(ui_lookup_widget(main_widgets.window, "send_selection_to2"),
 					"activate", G_CALLBACK(cc_on_custom_command_menu_activate), menu_edit);
 		signal_set = TRUE;
 	}

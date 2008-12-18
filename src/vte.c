@@ -507,7 +507,7 @@ static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data)
 
 			prefs_show_dialog();
 
-			notebook = lookup_widget(ui_widgets.prefs_dialog, "notebook2");
+			notebook = ui_lookup_widget(ui_widgets.prefs_dialog, "notebook2");
 
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), vte_prefs_tab_num);
 			break;
@@ -700,7 +700,7 @@ void vte_append_preferences_tab(void)
 		GtkWidget *check_run_in_vte, *check_skip_script, *entry_shell, *button_shell, *image_shell;
 		GtkObject *spin_scrollback_adj;
 
-		notebook = lookup_widget(ui_widgets.prefs_dialog, "notebook2");
+		notebook = ui_lookup_widget(ui_widgets.prefs_dialog, "notebook2");
 
 		frame = ui_frame_new_with_alignment(_("Terminal plugin"), &alignment);
 		gtk_container_set_border_width(GTK_CONTAINER(frame), 5);

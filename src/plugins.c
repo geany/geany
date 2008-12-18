@@ -230,7 +230,7 @@ static DialogFuncs dialog_funcs = {
 };
 
 /* Macro to prevent confusing macro being generated in geanyfunctions.h */
-#define _lookup_widget_macro	lookup_widget
+#define _lookup_widget_macro	ui_lookup_widget
 
 /* deprecated */
 static SupportFuncs support_funcs = {

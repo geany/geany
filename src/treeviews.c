@@ -210,7 +210,7 @@ static void prepare_openfiles(void)
 	GtkTreeSelection *select;
 	GtkTreeSortable *sortable;
 
-	tv.tree_openfiles = lookup_widget(main_widgets.window, "treeview6");
+	tv.tree_openfiles = ui_lookup_widget(main_widgets.window, "treeview6");
 
 	/* store the short filename to show, and the index as reference,
 	 * the colour (black/red/green) and the full name for the tooltip */
@@ -221,7 +221,7 @@ static void prepare_openfiles(void)
 	/* set policy settings for the scolledwindow around the treeview again, because glade
 	 * doesn't keep the settings */
 	gtk_scrolled_window_set_policy(
-			GTK_SCROLLED_WINDOW(lookup_widget(main_widgets.window, "scrolledwindow7")),
+			GTK_SCROLLED_WINDOW(ui_lookup_widget(main_widgets.window, "scrolledwindow7")),
 			GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
 	renderer = gtk_cell_renderer_text_new();
@@ -632,7 +632,7 @@ static gboolean on_treeviews_button_press_event(GtkWidget *widget, GdkEventButto
 void treeviews_init()
 {
 	tv.default_tag_tree = NULL;
-	tag_window = lookup_widget(main_widgets.window, "scrolledwindow2");
+	tag_window = ui_lookup_widget(main_widgets.window, "scrolledwindow2");
 
 	prepare_openfiles();
 	create_openfiles_popup_menu();

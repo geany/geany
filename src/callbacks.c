@@ -629,7 +629,7 @@ void
 on_hide_toolbar1_activate              (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	GtkWidget *tool_item = lookup_widget(GTK_WIDGET(main_widgets.window), "menu_show_toolbar1");
+	GtkWidget *tool_item = ui_lookup_widget(GTK_WIDGET(main_widgets.window), "menu_show_toolbar1");
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(tool_item), FALSE);
 }
 
@@ -829,17 +829,17 @@ toolbar_popup_menu                     (GtkWidget *widget,
 
 		switch (toolbar_prefs.icon_style)
 		{
-			case 0: w = lookup_widget(ui_widgets.toolbar_menu, "images_only2"); break;
-			case 1: w = lookup_widget(ui_widgets.toolbar_menu, "text_only2"); break;
-			default: w = lookup_widget(ui_widgets.toolbar_menu, "images_and_text2"); break;
+			case 0: w = ui_lookup_widget(ui_widgets.toolbar_menu, "images_only2"); break;
+			case 1: w = ui_lookup_widget(ui_widgets.toolbar_menu, "text_only2"); break;
+			default: w = ui_lookup_widget(ui_widgets.toolbar_menu, "images_and_text2"); break;
 		}
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(w), TRUE);
 
 		switch (toolbar_prefs.icon_size)
 		{
 			case GTK_ICON_SIZE_LARGE_TOOLBAR:
-					w = lookup_widget(ui_widgets.toolbar_menu, "large_icons1"); break;
-			default: w = lookup_widget(ui_widgets.toolbar_menu, "small_icons1"); break;
+					w = ui_lookup_widget(ui_widgets.toolbar_menu, "large_icons1"); break;
+			default: w = ui_lookup_widget(ui_widgets.toolbar_menu, "small_icons1"); break;
 		}
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(w), TRUE);
 
@@ -939,7 +939,7 @@ on_show_messages_window1_toggled       (GtkCheckMenuItem *checkmenuitem,
 	if (ignore_callback) return;
 
 	ui_prefs.msgwindow_visible = (ui_prefs.msgwindow_visible) ? FALSE : TRUE;
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "scrolledwindow1"), ui_prefs.msgwindow_visible);
+	ui_widget_show_hide(ui_lookup_widget(main_widgets.window, "scrolledwindow1"), ui_prefs.msgwindow_visible);
 }
 
 
@@ -1093,7 +1093,7 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gboolean definition = (menuitem ==
-		GTK_MENU_ITEM(lookup_widget(main_widgets.editor_menu, "goto_tag_definition1")));
+		GTK_MENU_ITEM(ui_lookup_widget(main_widgets.editor_menu, "goto_tag_definition1")));
 	GeanyDocument *doc = document_get_current();
 
 	g_return_if_fail(doc != NULL);
@@ -1868,8 +1868,8 @@ on_menu_project1_activate              (GtkMenuItem     *menuitem,
 
 	if (item_close == NULL)
 	{
-		item_close = lookup_widget(main_widgets.window, "project_close1");
-		item_properties = lookup_widget(main_widgets.window, "project_properties1");
+		item_close = ui_lookup_widget(main_widgets.window, "project_close1");
+		item_properties = ui_lookup_widget(main_widgets.window, "project_properties1");
 	}
 
 	gtk_widget_set_sensitive(item_close, (app->project != NULL));
@@ -2000,9 +2000,9 @@ on_menu_toggle_all_additional_widgets1_activate
 {
 	static gint hide_all = -1;
 	GtkCheckMenuItem *msgw = GTK_CHECK_MENU_ITEM(
-		lookup_widget(main_widgets.window, "menu_show_messages_window1"));
+		ui_lookup_widget(main_widgets.window, "menu_show_messages_window1"));
 	GtkCheckMenuItem *toolbari = GTK_CHECK_MENU_ITEM(
-		lookup_widget(main_widgets.window, "menu_show_toolbar1"));
+		ui_lookup_widget(main_widgets.window, "menu_show_toolbar1"));
 
 	/* get the initial state (necessary if Geany was closed with hide_all = TRUE) */
 	if (hide_all == -1)
@@ -2183,8 +2183,8 @@ void
 on_search1_activate                    (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	GtkWidget *next_message = lookup_widget(main_widgets.window, "next_message1");
-	GtkWidget *previous_message = lookup_widget(main_widgets.window, "previous_message1");
+	GtkWidget *next_message = ui_lookup_widget(main_widgets.window, "next_message1");
+	GtkWidget *previous_message = ui_lookup_widget(main_widgets.window, "previous_message1");
 	gboolean have_messages;
 
 	/* enable commands if the messages window has any items */

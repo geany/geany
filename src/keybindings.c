@@ -141,7 +141,7 @@ static GeanyKeyGroup *add_kb_group(GeanyKeyGroup *group,
 
 /* Lookup a widget in the main window */
 #define LW(widget_name) \
-	lookup_widget(main_widgets.window, G_STRINGIFY(widget_name))
+	ui_lookup_widget(main_widgets.window, G_STRINGIFY(widget_name))
 
 /* Expansion for group_id = FILE:
  * static GeanyKeyBinding FILE_keys[GEANY_KEYS_FILE_COUNT]; */
@@ -575,7 +575,7 @@ static void add_menu_accel(GeanyKeyGroup *group, guint kb_id,
 
 
 #define GEANY_ADD_POPUP_ACCEL(kb_id, wid) \
-	add_menu_accel(group, kb_id, accel_group, lookup_widget(main_widgets.editor_menu, G_STRINGIFY(wid)))
+	add_menu_accel(group, kb_id, accel_group, ui_lookup_widget(main_widgets.editor_menu, G_STRINGIFY(wid)))
 
 /* set the menu item accelerator shortcuts (just for visibility, they are handled anyway) */
 static void add_popup_menu_accels(void)
@@ -766,10 +766,10 @@ static void on_dialog_response(GtkWidget *dialog, gint response, gpointer user_d
 
 		prefs_show_dialog();
 		/* select the KB page */
-		wid = lookup_widget(ui_widgets.prefs_dialog, "frame22");
+		wid = ui_lookup_widget(ui_widgets.prefs_dialog, "frame22");
 		if (wid != NULL)
 		{
-			GtkNotebook *nb = GTK_NOTEBOOK(lookup_widget(ui_widgets.prefs_dialog, "notebook2"));
+			GtkNotebook *nb = GTK_NOTEBOOK(ui_lookup_widget(ui_widgets.prefs_dialog, "notebook2"));
 
 			if (nb != NULL)
 				gtk_notebook_set_current_page(nb, gtk_notebook_page_num(nb, wid));
@@ -896,7 +896,7 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 	/* Temporarily disable the menus to prevent conflicting menu accelerators
 	 * from overriding the VTE bash shortcuts.
 	 * Note: maybe there's a better way of doing this ;-) */
-	widget = lookup_widget(main_widgets.window, "menubar1");
+	widget = ui_lookup_widget(main_widgets.window, "menubar1");
 	gtk_widget_set_sensitive(widget, FALSE);
 	{
 		/* make the menubar sensitive before it is redrawn */
@@ -1115,14 +1115,14 @@ static void cb_func_menu_opencolorchooser(G_GNUC_UNUSED guint key_id)
 
 static void cb_func_menu_fullscreen(G_GNUC_UNUSED guint key_id)
 {
-	GtkCheckMenuItem *c = GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_fullscreen1"));
+	GtkCheckMenuItem *c = GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_fullscreen1"));
 
 	gtk_check_menu_item_set_active(c, ! gtk_check_menu_item_get_active(c));
 }
 
 static void cb_func_menu_messagewindow(G_GNUC_UNUSED guint key_id)
 {
-	GtkCheckMenuItem *c = GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_show_messages_window1"));
+	GtkCheckMenuItem *c = GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_messages_window1"));
 
 	gtk_check_menu_item_set_active(c, ! gtk_check_menu_item_get_active(c));
 }
@@ -1556,7 +1556,7 @@ static void cb_func_editor_action(guint key_id)
 			break;
 		case GEANY_KEYS_EDITOR_CONTEXTACTION:
 			if (check_current_word())
-				on_context_action1_activate(GTK_MENU_ITEM(lookup_widget(main_widgets.editor_menu,
+				on_context_action1_activate(GTK_MENU_ITEM(ui_lookup_widget(main_widgets.editor_menu,
 					"context_action1")), NULL);
 			break;
 		case GEANY_KEYS_EDITOR_SUPPRESSSNIPPETCOMPLETION:
@@ -1645,7 +1645,7 @@ static void cb_func_select_action(guint key_id)
 
 	/* special case for Select All in the scribble widget */
 	if (scribble_widget == NULL) /* lookup the scribble widget only once */
-		scribble_widget = lookup_widget(main_widgets.window, "textview_scribble");
+		scribble_widget = ui_lookup_widget(main_widgets.window, "textview_scribble");
 	if (key_id == GEANY_KEYS_SELECT_ALL && focusw == scribble_widget)
 	{
 		g_signal_emit_by_name(scribble_widget, "select-all", TRUE);
@@ -1731,7 +1731,7 @@ static void cb_func_insert_action(guint key_id)
 			editor_insert_alternative_whitespace(doc->editor);
 			break;
 		case GEANY_KEYS_INSERT_DATE:
-			gtk_menu_item_activate(GTK_MENU_ITEM(lookup_widget(main_widgets.window, "insert_date_custom1")));
+			gtk_menu_item_activate(GTK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "insert_date_custom1")));
 			break;
 	}
 }

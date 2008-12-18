@@ -340,8 +340,8 @@ void encodings_init(void)
 #endif
 
 	/* create encodings submenu in document menu */
-	menu[0] = lookup_widget(main_widgets.window, "set_encoding1_menu");
-	menu[1] = lookup_widget(main_widgets.window, "menu_reload_as1_menu");
+	menu[0] = ui_lookup_widget(main_widgets.window, "set_encoding1_menu");
+	menu[1] = ui_lookup_widget(main_widgets.window, "menu_reload_as1_menu");
 	cb_func[0] = G_CALLBACK(on_encoding_change);
 	cb_func[1] = G_CALLBACK(on_reload_as_activate);
 

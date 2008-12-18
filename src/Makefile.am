@@ -38,7 +38,7 @@ SRCS = \
 	search.c search.h \
 	socket.c socket.h \
 	stash.c stash.h \
-	support.c support.h \
+	support.h \
 	symbols.c symbols.h \
 	templates.c templates.h \
 	toolbar.c toolbar.h \

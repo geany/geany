@@ -228,7 +228,7 @@ GtkWidget *toolbar_init(void)
 
 	/* Add the toolbar widget to the main UI */
 	toolbar = gtk_ui_manager_get_widget(uim, "/ui/GeanyToolbar");
-	box = GTK_BOX(lookup_widget(main_widgets.window, "vbox1"));
+	box = GTK_BOX(ui_lookup_widget(main_widgets.window, "vbox1"));
 	gtk_box_pack_start(box, toolbar, FALSE, FALSE, 0);
 	gtk_box_reorder_child(box, toolbar, 1);
 

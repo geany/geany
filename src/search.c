@@ -436,8 +436,8 @@ void search_show_find_dialog(void)
 		/* only set selection if the dialog is not already visible */
 		if (! GTK_WIDGET_VISIBLE(widgets.find_dialog) && sel)
 			gtk_entry_set_text(GTK_ENTRY(GTK_BIN(
-							lookup_widget(widgets.find_dialog, "entry"))->child), sel);
-		gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(lookup_widget(widgets.find_dialog, "entry"))->child));
+							ui_lookup_widget(widgets.find_dialog, "entry"))->child), sel);
+		gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(ui_lookup_widget(widgets.find_dialog, "entry"))->child));
 		gtk_widget_show(widgets.find_dialog);
 		/* bring the dialog back in the foreground in case it is already open but the focus is away */
 		gtk_window_present(GTK_WINDOW(widgets.find_dialog));
@@ -581,8 +581,8 @@ void search_show_replace_dialog(void)
 		/* only set selection if the dialog is not already visible */
 		if (! GTK_WIDGET_VISIBLE(widgets.replace_dialog) && sel)
 			gtk_entry_set_text(GTK_ENTRY(GTK_BIN(
-							lookup_widget(widgets.replace_dialog, "entry_find"))->child), sel);
-		gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(lookup_widget(widgets.replace_dialog, "entry_find"))->child));
+							ui_lookup_widget(widgets.replace_dialog, "entry_find"))->child), sel);
+		gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(ui_lookup_widget(widgets.replace_dialog, "entry_find"))->child));
 		gtk_widget_show(widgets.replace_dialog);
 		/* bring the dialog back in the foreground in case it is already open but the focus is away */
 		gtk_window_present(GTK_WINDOW(widgets.replace_dialog));
@@ -852,22 +852,22 @@ on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user
 {
 	GtkWidget *dialog = GTK_WIDGET(user_data);
 	GtkToggleButton *chk_regexp = GTK_TOGGLE_BUTTON(
-		lookup_widget(dialog, "check_regexp"));
+		ui_lookup_widget(dialog, "check_regexp"));
 
 	if (togglebutton == chk_regexp)
 	{
 		gboolean regex_set = gtk_toggle_button_get_active(chk_regexp);
-		GtkWidget *check_word = lookup_widget(dialog, "check_word");
-		GtkWidget *check_wordstart = lookup_widget(dialog, "check_wordstart");
+		GtkWidget *check_word = ui_lookup_widget(dialog, "check_word");
+		GtkWidget *check_wordstart = ui_lookup_widget(dialog, "check_wordstart");
 		GtkToggleButton *check_case = GTK_TOGGLE_BUTTON(
-			lookup_widget(dialog, "check_case"));
+			ui_lookup_widget(dialog, "check_case"));
 		static gboolean case_state = FALSE; /* state before regex enabled */
 
 		/* hide options that don't apply to regex searches */
 		if (dialog == widgets.find_dialog)
-			gtk_widget_set_sensitive(lookup_widget(dialog, "btn_previous"), ! regex_set);
+			gtk_widget_set_sensitive(ui_lookup_widget(dialog, "btn_previous"), ! regex_set);
 		else
-			gtk_widget_set_sensitive(lookup_widget(dialog, "check_back"), ! regex_set);
+			gtk_widget_set_sensitive(ui_lookup_widget(dialog, "check_back"), ! regex_set);
 
 		gtk_widget_set_sensitive(check_word, ! regex_set);
 		gtk_widget_set_sensitive(check_wordstart, ! regex_set);
@@ -922,7 +922,7 @@ static void
 on_find_entry_activate(GtkEntry *entry, gpointer user_data)
 {
 	on_find_dialog_response(NULL, GEANY_RESPONSE_FIND,
-				lookup_widget(GTK_WIDGET(entry), "entry"));
+				ui_lookup_widget(GTK_WIDGET(entry), "entry"));
 }
 
 
@@ -931,13 +931,13 @@ static gint get_search_flags(GtkWidget *dialog)
 	gboolean fl1, fl2, fl3, fl4;
 
 	fl1 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-				lookup_widget(dialog, "check_case")));
+				ui_lookup_widget(dialog, "check_case")));
 	fl2 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-				lookup_widget(dialog, "check_word")));
+				ui_lookup_widget(dialog, "check_word")));
 	fl3 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-				lookup_widget(dialog, "check_regexp")));
+				ui_lookup_widget(dialog, "check_regexp")));
 	fl4 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-				lookup_widget(dialog, "check_wordstart")));
+				ui_lookup_widget(dialog, "check_wordstart")));
 
 	return (fl1 ? SCFIND_MATCHCASE : 0) |
 		(fl2 ? SCFIND_WHOLEWORD : 0) |
@@ -956,13 +956,13 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		GeanyDocument *doc = document_get_current();
 		gboolean search_replace_escape;
 		gboolean check_close = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-						lookup_widget(GTK_WIDGET(widgets.find_dialog), "check_close")));
+						ui_lookup_widget(GTK_WIDGET(widgets.find_dialog), "check_close")));
 
 		if (doc == NULL)
 			return;
 
 		search_replace_escape = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-						lookup_widget(GTK_WIDGET(widgets.find_dialog), "check_escape")));
+						ui_lookup_widget(GTK_WIDGET(widgets.find_dialog), "check_escape")));
 		search_data.backwards = FALSE;
 		search_data.search_bar = FALSE;
 
@@ -972,7 +972,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			(search_replace_escape && ! utils_str_replace_escape(search_data.text)))
 		{
 			utils_beep();
-			gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(lookup_widget(widgets.find_dialog, "entry"))->child));
+			gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(ui_lookup_widget(widgets.find_dialog, "entry"))->child));
 			return;
 		}
 
@@ -1030,8 +1030,8 @@ static void
 on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	GtkWidget *entry_find = lookup_widget(GTK_WIDGET(widgets.replace_dialog), "entry_find");
-	GtkWidget *entry_replace = lookup_widget(GTK_WIDGET(widgets.replace_dialog), "entry_replace");
+	GtkWidget *entry_find = ui_lookup_widget(GTK_WIDGET(widgets.replace_dialog), "entry_find");
+	GtkWidget *entry_replace = ui_lookup_widget(GTK_WIDGET(widgets.replace_dialog), "entry_replace");
 	gint search_flags_re;
 	gboolean search_backwards_re, search_replace_escape_re;
 	gboolean close_window;
@@ -1044,11 +1044,11 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	}
 
 	close_window = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-				lookup_widget(GTK_WIDGET(widgets.replace_dialog), "check_close")));
+				ui_lookup_widget(GTK_WIDGET(widgets.replace_dialog), "check_close")));
 	search_backwards_re = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-				lookup_widget(GTK_WIDGET(widgets.replace_dialog), "check_back")));
+				ui_lookup_widget(GTK_WIDGET(widgets.replace_dialog), "check_back")));
 	search_replace_escape_re = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-				lookup_widget(GTK_WIDGET(widgets.replace_dialog), "check_escape")));
+				ui_lookup_widget(GTK_WIDGET(widgets.replace_dialog), "check_escape")));
 	find = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_find)))));
 	replace = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_replace)))));
 
@@ -1058,7 +1058,7 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		&& (strcmp(find, replace) == 0))
 	{
 		utils_beep();
-		gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(lookup_widget(widgets.replace_dialog, "entry_find"))->child));
+		gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(ui_lookup_widget(widgets.replace_dialog, "entry_find"))->child));
 		return;
 	}
 
@@ -1069,7 +1069,7 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		(! utils_str_replace_escape(find) || ! utils_str_replace_escape(replace)))
 	{
 		utils_beep();
-		gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(lookup_widget(widgets.replace_dialog, "entry_find"))->child));
+		gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(ui_lookup_widget(widgets.replace_dialog, "entry_find"))->child));
 		return;
 	}
 
@@ -1165,15 +1165,15 @@ on_widget_key_pressed_set_focus(GtkWidget *widget, GdkEventKey *event, gpointer 
 static GString *get_grep_options(void)
 {
 	gboolean invert = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-					lookup_widget(widgets.find_in_files_dialog, "check_invert")));
+					ui_lookup_widget(widgets.find_in_files_dialog, "check_invert")));
 	gboolean case_sens = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-					lookup_widget(widgets.find_in_files_dialog, "check_case")));
+					ui_lookup_widget(widgets.find_in_files_dialog, "check_case")));
 	gboolean whole_word = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-					lookup_widget(widgets.find_in_files_dialog, "check_wholeword")));
+					ui_lookup_widget(widgets.find_in_files_dialog, "check_wholeword")));
 	gboolean recursive = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-					lookup_widget(widgets.find_in_files_dialog, "check_recursive")));
+					ui_lookup_widget(widgets.find_in_files_dialog, "check_recursive")));
 	gboolean extra = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-					lookup_widget(widgets.find_in_files_dialog, "check_extra")));
+					ui_lookup_widget(widgets.find_in_files_dialog, "check_extra")));
 	GString *gstr = g_string_new("-nHI");	/* line numbers, filenames, ignore binaries */
 
 	if (invert)

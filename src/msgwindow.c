@@ -75,10 +75,10 @@ static void on_scribble_populate(GtkTextView *textview, GtkMenu *arg1, gpointer 
 
 void msgwin_init()
 {
-	msgwindow.notebook = lookup_widget(main_widgets.window, "notebook_info");
-	msgwindow.tree_status = lookup_widget(main_widgets.window, "treeview3");
-	msgwindow.tree_msg = lookup_widget(main_widgets.window, "treeview4");
-	msgwindow.tree_compiler = lookup_widget(main_widgets.window, "treeview5");
+	msgwindow.notebook = ui_lookup_widget(main_widgets.window, "notebook_info");
+	msgwindow.tree_status = ui_lookup_widget(main_widgets.window, "treeview3");
+	msgwindow.tree_msg = ui_lookup_widget(main_widgets.window, "treeview4");
+	msgwindow.tree_compiler = ui_lookup_widget(main_widgets.window, "treeview5");
 	msgwindow.find_in_files_dir = NULL;
 
 	prepare_status_tree_view();
@@ -89,9 +89,9 @@ void msgwin_init()
 	msgwindow.popup_compiler_menu = create_message_popup_menu(MSG_COMPILER);
 
 	ui_widget_modify_font_from_string(
-		lookup_widget(main_widgets.window, "textview_scribble"), interface_prefs.msgwin_font);
+		ui_lookup_widget(main_widgets.window, "textview_scribble"), interface_prefs.msgwin_font);
 
-	g_signal_connect(lookup_widget(main_widgets.window, "textview_scribble"),
+	g_signal_connect(ui_lookup_widget(main_widgets.window, "textview_scribble"),
 		"populate-popup", G_CALLBACK(on_scribble_populate), NULL);
 }
 
@@ -256,10 +256,10 @@ void msgwin_show_hide(gboolean show)
 	ui_prefs.msgwindow_visible = show;
 	ignore_callback = TRUE;
 	gtk_check_menu_item_set_active(
-		GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_show_messages_window1")),
+		GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_messages_window1")),
 		show);
 	ignore_callback = FALSE;
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "scrolledwindow1"), show);
+	ui_widget_show_hide(ui_lookup_widget(main_widgets.window, "scrolledwindow1"), show);
 }
 
 
@@ -1006,7 +1006,7 @@ void msgwin_switch_tab(gint tabnum, gboolean show)
 
 	switch (tabnum)
 	{
-		case MSG_SCRATCH: widget = lookup_widget(main_widgets.window, "textview_scribble"); break;
+		case MSG_SCRATCH: widget = ui_lookup_widget(main_widgets.window, "textview_scribble"); break;
 #ifdef HAVE_VTE
 		case MSG_VTE: widget = (vte_info.have_vte) ? vc->vte : NULL; break;
 #endif

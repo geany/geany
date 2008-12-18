@@ -81,9 +81,9 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 	{
 		GSList *filelist;
 		gint filetype_idx = gtk_combo_box_get_active(GTK_COMBO_BOX(
-						lookup_widget(GTK_WIDGET(dialog), "filetype_combo")));
+						ui_lookup_widget(GTK_WIDGET(dialog), "filetype_combo")));
 		gint encoding_idx = gtk_combo_box_get_active(GTK_COMBO_BOX(
-						lookup_widget(GTK_WIDGET(dialog), "encoding_combo")));
+						ui_lookup_widget(GTK_WIDGET(dialog), "encoding_combo")));
 		GeanyFiletype *ft = NULL;
 		gchar *charset = NULL;
 		gboolean ro = (response == GEANY_RESPONSE_VIEW);	/* View clicked */
@@ -142,14 +142,14 @@ on_file_open_selection_changed         (GtkFileChooser  *filechooser,
 		/* try to get the UTF-8 equivalent for the filename, fallback to filename if error */
 		gchar *utf8_filename = utils_get_utf8_from_locale(filename);
 
-		gtk_entry_set_text(GTK_ENTRY(lookup_widget(
+		gtk_entry_set_text(GTK_ENTRY(ui_lookup_widget(
 				GTK_WIDGET(filechooser), "file_entry")), utf8_filename);
 		g_free(utf8_filename);
 		g_free(filename);
 	}
 
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(
-			lookup_widget(GTK_WIDGET(filechooser), "check_hidden")), is_on);
+			ui_lookup_widget(GTK_WIDGET(filechooser), "check_hidden")), is_on);
 }
 #endif
 
@@ -202,7 +202,7 @@ static void create_open_file_dialog(void)
 	/* add checkboxes and filename entry */
 	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
 		add_file_open_extra_widget());
-	filetype_combo = lookup_widget(ui_widgets.open_filesel, "filetype_combo");
+	filetype_combo = ui_lookup_widget(ui_widgets.open_filesel, "filetype_combo");
 
 	/* add FileFilters(start with "All Files") */
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
@@ -223,7 +223,7 @@ static void create_open_file_dialog(void)
 	gtk_combo_box_set_active(GTK_COMBO_BOX(filetype_combo), filetypes_array->len - 1);
 
 	/* fill encoding combo box */
-	encoding_combo = lookup_widget(ui_widgets.open_filesel, "encoding_combo");
+	encoding_combo = ui_lookup_widget(ui_widgets.open_filesel, "encoding_combo");
 	for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
 	{
 		encoding_string = encodings_to_string(&encodings[i]);
@@ -435,7 +435,7 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 		{
 			gchar *new_filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(ui_widgets.save_filesel));
 			gboolean open_new_tab = gtk_toggle_button_get_active(
-					GTK_TOGGLE_BUTTON(lookup_widget(ui_widgets.save_filesel, "check_open_new_tab")));
+					GTK_TOGGLE_BUTTON(ui_lookup_widget(ui_widgets.save_filesel, "check_open_new_tab")));
 			gchar *utf8_filename;
 
 			if (! NZV(new_filename))	/* rename doesn't check for empty filename */
