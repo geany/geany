@@ -856,6 +856,15 @@ void plugins_init()
 }
 
 
+static gint cmp_plugin_names(gconstpointer a, gconstpointer b)
+{
+	const Plugin *pa = a;
+	const Plugin *pb = b;
+
+	return strcmp(pa->info.name, pb->info.name);
+}
+
+
 static void update_active_plugins_pref(void)
 {
 	gint i = 0;
@@ -869,6 +878,10 @@ static void update_active_plugins_pref(void)
 		active_plugins_pref = NULL;
 		return;
 	}
+
+	/* sort the list so next time tools menu items are sorted by plugin name
+	 * (not ideal to do here, but better than nothing) */
+	active_plugin_list = g_list_sort(active_plugin_list, cmp_plugin_names);
 
 	active_plugins_pref = g_new0(gchar*, count + 1);
 
