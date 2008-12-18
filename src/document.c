@@ -595,7 +595,7 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft,
 	sci_goto_pos(doc->editor->sci, 0, TRUE);
 
 	/* "the" SCI signal (connect after initial setup(i.e. adding text)) */
-	g_signal_connect(doc->editor->sci, "sci-notify", G_CALLBACK(editor_sci_notify_cb), doc);
+	g_signal_connect(doc->editor->sci, "sci-notify", G_CALLBACK(editor_sci_notify_cb), doc->editor);
 
 	g_signal_emit_by_name(geany_object, "document-new", doc);
 
@@ -1118,7 +1118,8 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		doc->real_path = get_real_path_from_utf8(doc->file_name);
 
 		/* "the" SCI signal (connect after initial setup(i.e. adding text)) */
-		g_signal_connect(doc->editor->sci, "sci-notify", G_CALLBACK(editor_sci_notify_cb), doc);
+		g_signal_connect(doc->editor->sci, "sci-notify", G_CALLBACK(editor_sci_notify_cb),
+			doc->editor);
 
 		use_ft = (ft != NULL) ? ft : filetypes_detect_from_document(doc);
 	}

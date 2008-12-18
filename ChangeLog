@@ -6,6 +6,8 @@
    Complete HTML styles in is_comment_style() and is_string_style().
  * src/callbacks.c, src/callbacks.h:
    Remove dead code.
+ * src/editor.c, src/document.c:
+   Remove remaining uses of doc->editor and use GeanyEditor directly.
 
 
 2008-12-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

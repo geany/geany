@@ -183,23 +183,22 @@ void editor_snippets_init(void)
 }
 
 
-static gboolean
-on_editor_button_press_event           (GtkWidget *widget,
-                                        GdkEventButton *event,
-                                        gpointer user_data)
+static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *event,
+											 gpointer data)
 {
-	GeanyDocument *doc = user_data;
-	GeanyEditor *editor = doc->editor;
+	GeanyEditor *editor = data;
+	GeanyDocument *doc = editor->document;
 
-	editor_info.click_pos = sci_get_position_from_xy(doc->editor->sci, (gint)event->x, (gint)event->y, FALSE);
+	editor_info.click_pos = sci_get_position_from_xy(editor->sci,
+		(gint)event->x, (gint)event->y, FALSE);
 	if (event->button == 1)
 	{
 		guint state = event->state & GEANY_KEYS_MODIFIER_MASK;
 
 		if (event->type == GDK_BUTTON_PRESS && editor_prefs.disable_dnd)
 		{
-			gint ss = sci_get_selection_start(doc->editor->sci);
-			sci_set_selection_end(doc->editor->sci, ss);
+			gint ss = sci_get_selection_start(editor->sci);
+			sci_set_selection_end(editor->sci, ss);
 		}
 		if (event->type == GDK_BUTTON_PRESS && state == GDK_CONTROL_MASK)
 		{
@@ -219,7 +218,7 @@ on_editor_button_press_event           (GtkWidget *widget,
 	/* calls the edit popup menu in the editor */
 	if (event->button == 3)
 	{
-		editor_find_current_word(doc->editor, editor_info.click_pos,
+		editor_find_current_word(editor, editor_info.click_pos,
 			current_word, sizeof current_word, NULL);
 
 		ui_update_popup_goto_items((current_word[0] != '\0') ? TRUE : FALSE);
@@ -298,7 +297,7 @@ static void on_margin_click(ScintillaObject *sci, SCNotification *nt)
 		gint line = sci_get_line_from_position(sci, nt->position);
 		gboolean set = sci_is_marker_set_at_line(sci, line, 1);
 
-		/*sci_marker_delete_all(doc->editor->sci, 1);*/
+		/*sci_marker_delete_all(editor->sci, 1);*/
 		sci_set_marker_at_line(sci, line, ! set, 1);	/* toggle the marker */
 	}
 	/* left click on the folding margin to toggle folding state of current line */
@@ -607,18 +606,19 @@ static gboolean reshow_calltip(gpointer data)
 }
 
 
-static void auto_update_margin_width(GeanyDocument *doc)
+static void auto_update_margin_width(GeanyEditor *editor)
 {
 	gint next_linecount = 1;
-	gint linecount = sci_get_line_count(doc->editor->sci);
+	gint linecount = sci_get_line_count(editor->sci);
+	GeanyDocument *doc = editor->document;
 
 	while (next_linecount <= linecount)
 		next_linecount *= 10;
 
-	if (doc->priv->line_count != next_linecount)
+	if (editor->document->priv->line_count != next_linecount)
 	{
 		doc->priv->line_count = next_linecount;
-		sci_set_line_numbers(doc->editor->sci, TRUE, 0);
+		sci_set_line_numbers(editor->sci, TRUE, 0);
 	}
 }
 
@@ -628,23 +628,20 @@ static void auto_update_margin_width(GeanyDocument *doc)
 void editor_sci_notify_cb(G_GNUC_UNUSED GtkWidget *widget, G_GNUC_UNUSED gint scn,
 						  gpointer scnt, gpointer data)
 {
-	GeanyDocument *doc = data;
+	GeanyEditor *editor = data;
 	gboolean retval;
 
-	g_return_if_fail(doc != NULL);
+	g_return_if_fail(editor != NULL);
 
-	g_signal_emit_by_name(geany_object, "editor-notify", doc->editor, scnt, &retval);
+	g_signal_emit_by_name(geany_object, "editor-notify", editor, scnt, &retval);
 }
 
 
 static gboolean on_editor_notify(G_GNUC_UNUSED GeanyObject *object, GeanyEditor *editor,
-								 SCNotification *nt, gpointer data)
+								 SCNotification *nt, G_GNUC_UNUSED gpointer data)
 {
-	ScintillaObject *sci;
+	ScintillaObject *sci = editor->sci;
 	GeanyDocument *doc = editor->document;
-
-	editor = doc->editor;
-	sci = editor->sci;
 
 	switch (nt->nmhdr.code)
 	{
@@ -676,7 +673,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GeanyObject *object, GeanyEditor 
 			if (editor_prefs.show_linenumber_margin && (nt->modificationType & (SC_MOD_INSERTTEXT | SC_MOD_DELETETEXT)) && nt->linesAdded)
 			{
 				/* automatically adjust Scintilla's line numbers margin width */
-				auto_update_margin_width(doc);
+				auto_update_margin_width(editor);
 			}
 
 			if (nt->modificationType & SC_STARTACTION && ! ignore_callback)
@@ -2206,7 +2203,7 @@ static void real_uncomment_multiline(GeanyEditor *editor)
 
 	/* remove comment open chars */
 	pos = document_find_text(doc, doc->file_type->comment_open, 0, TRUE, FALSE, NULL);
-	SSM(doc->editor->sci, SCI_DELETEBACK, 0, 0);
+	SSM(editor->sci, SCI_DELETEBACK, 0, 0);
 
 	/* check whether the line is empty and can be deleted */
 	line = sci_get_line_from_position(editor->sci, pos);
@@ -4054,11 +4051,12 @@ static void editor_colourise(ScintillaObject *sci)
 static gboolean on_editor_expose_event(GtkWidget *widget, GdkEventExpose *event,
 		gpointer user_data)
 {
-	GeanyDocument *doc = user_data;
+	GeanyEditor *editor = user_data;
+	GeanyDocument *doc = editor->document;
 
 	if (doc->priv->colourise_needed)
 	{
-		editor_colourise(doc->editor->sci);
+		editor_colourise(editor->sci);
 		doc->priv->colourise_needed = FALSE;
 	}
 	return FALSE;	/* propagate event */
@@ -4101,13 +4099,11 @@ static void setup_sci_keys(ScintillaObject *sci)
 
 /* Create new editor widget (scintilla).
  * @note The @c "sci-notify" signal is connected separately. */
-/* TODO: change to use GeanyEditor */
-static ScintillaObject *create_new_sci(GeanyDocument *doc)
+static ScintillaObject *create_new_sci(GeanyEditor *editor)
 {
 	ScintillaObject	*sci;
 
 	sci = SCINTILLA(scintilla_new());
-	scintilla_set_id(sci, doc->index);
 
 	gtk_widget_show(GTK_WIDGET(sci));
 
@@ -4127,12 +4123,12 @@ static ScintillaObject *create_new_sci(GeanyDocument *doc)
 	SSM(sci, SCI_SETSCROLLWIDTHTRACKING, 1, 0);
 
 	/* only connect signals if this is for the document notebook, not split window */
-	if (doc->editor->sci == NULL)
+	if (editor->sci == NULL)
 	{
-		g_signal_connect(sci, "button-press-event", G_CALLBACK(on_editor_button_press_event), doc);
-		g_signal_connect(sci, "scroll-event", G_CALLBACK(on_editor_scroll_event), doc->editor);
+		g_signal_connect(sci, "button-press-event", G_CALLBACK(on_editor_button_press_event), editor);
+		g_signal_connect(sci, "scroll-event", G_CALLBACK(on_editor_scroll_event), editor);
 		g_signal_connect(sci, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
-		g_signal_connect(sci, "expose-event", G_CALLBACK(on_editor_expose_event), doc);
+		g_signal_connect(sci, "expose-event", G_CALLBACK(on_editor_expose_event), editor);
 	}
 	return sci;
 }
@@ -4148,7 +4144,7 @@ ScintillaObject *editor_create_widget(GeanyEditor *editor)
 
 	/* temporarily change editor to use the new sci widget */
 	old = editor->sci;
-	sci = create_new_sci(editor->document);
+	sci = create_new_sci(editor);
 	editor->sci = sci;
 
 	editor_set_indent_type(editor, iprefs->type);
