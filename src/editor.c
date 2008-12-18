@@ -85,10 +85,11 @@ static gchar indent[100];
 
 
 static void on_new_line_added(GeanyEditor *editor);
-static gboolean handle_xml(GeanyEditor *editor, gchar ch);
+static gboolean handle_xml(GeanyEditor *editor, gint pos, gchar ch);
 static void insert_indent_after_line(GeanyEditor *editor, gint line);
 static void auto_multiline(GeanyEditor *editor, gint pos);
 static gboolean is_code_style(gint lexer, gint style);
+static gboolean is_string_style(gint lexer, gint style);
 static void auto_close_chars(ScintillaObject *sci, gint pos, gchar c);
 static void auto_table(GeanyEditor *editor, gint pos);
 static void close_block(GeanyEditor *editor, gint pos);
@@ -430,7 +431,7 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 		case '>':
 		case '/':
 		{	/* close xml-tags */
-			handle_xml(editor, nt->ch);
+			handle_xml(editor, pos, nt->ch);
 			break;
 		}
 		case '(':
@@ -2037,11 +2038,11 @@ static void insert_closing_tag(GeanyEditor *editor, gint pos, gchar ch, const gc
  * @param ch The character we are dealing with, currently only works with the '>' character
  * @return True if handled, false otherwise
  */
-static gboolean handle_xml(GeanyEditor *editor, gchar ch)
+static gboolean handle_xml(GeanyEditor *editor, gint pos, gchar ch)
 {
 	ScintillaObject *sci = editor->sci;
 	gint lexer = SSM(sci, SCI_GETLEXER, 0, 0);
-	gint pos, min;
+	gint min, style;
 	gchar *str_found, sel[512];
 	gboolean result = FALSE;
 
@@ -2050,15 +2051,10 @@ static gboolean handle_xml(GeanyEditor *editor, gchar ch)
 	if (! editor_prefs.auto_close_xml_tags || (lexer != SCLEX_HTML && lexer != SCLEX_XML))
 		return FALSE;
 
-	pos = sci_get_current_position(sci);
-
-	/* return if we are in PHP but not in a string or outside of <? ?> tags */
-	if (editor->document->file_type->id == GEANY_FILETYPES_PHP)
-	{
-		gint style = sci_get_style_at(sci, pos);
-		if (is_style_php(style) && style != SCE_HPHP_SIMPLESTRING && style != SCE_HPHP_HSTRING)
-			return FALSE;
-	}
+	/* return if we are inside any embedded script */
+	style = sci_get_style_at(sci, pos);
+	if (style > SCE_H_XCCOMMENT && ! is_string_style(lexer, style))
+		return FALSE;
 
 	/* if ch is /, check for </, else quit */
 	if (ch == '/' && sci_get_char_at(sci, pos - 2) != '<')
@@ -2910,14 +2906,31 @@ static gboolean is_string_style(gint lexer, gint style)
 				style == SCE_MATLAB_DOUBLEQUOTESTRING);
 
 		case SCLEX_HTML:
-			return (style == SCE_HPHP_SIMPLESTRING ||
+			return (
+				style == SCE_HBA_STRING ||
+				style == SCE_HB_STRING ||
+				style == SCE_H_CDATA ||
+				style == SCE_H_DOUBLESTRING ||
+				style == SCE_HJA_DOUBLESTRING ||
+				style == SCE_HJA_SINGLESTRING ||
+				style == SCE_HJ_DOUBLESTRING ||
+				style == SCE_HJ_SINGLESTRING ||
+				style == SCE_HPA_CHARACTER ||
+				style == SCE_HPA_STRING ||
+				style == SCE_HPA_TRIPLE ||
+				style == SCE_HPA_TRIPLEDOUBLE ||
+				style == SCE_HP_CHARACTER ||
+				style == SCE_HPHP_HSTRING ||
 				style == SCE_HPHP_HSTRING ||  /* HSTRING is a heredoc */
 				style == SCE_HPHP_HSTRING_VARIABLE ||
-				style == SCE_H_DOUBLESTRING ||
-				style == SCE_H_SINGLESTRING ||
-				style == SCE_H_CDATA ||
+				style == SCE_HPHP_SIMPLESTRING ||
+				style == SCE_HPHP_SIMPLESTRING ||
+				style == SCE_HP_STRING ||
+				style == SCE_HP_TRIPLE ||
+				style == SCE_HP_TRIPLEDOUBLE ||
 				style == SCE_H_SGML_DOUBLESTRING ||
-				style == SCE_H_SGML_SIMPLESTRING);
+				style == SCE_H_SGML_SIMPLESTRING ||
+				style == SCE_H_SINGLESTRING);
 	}
 	return FALSE;
 }
@@ -3013,9 +3026,20 @@ static gboolean is_comment_style(gint lexer, gint style)
 			return (style == SCE_YAML_COMMENT);
 
 		case SCLEX_HTML:
-			return (style == SCE_HPHP_COMMENTLINE ||
-				style == SCE_HPHP_COMMENT ||
+			return (
+				style == SCE_HBA_COMMENTLINE ||
+				style == SCE_HB_COMMENTLINE ||
 				style == SCE_H_COMMENT ||
+				style == SCE_HJA_COMMENT ||
+				style == SCE_HJA_COMMENTDOC ||
+				style == SCE_HJA_COMMENTLINE ||
+				style == SCE_HJ_COMMENT ||
+				style == SCE_HJ_COMMENTDOC ||
+				style == SCE_HJ_COMMENTLINE ||
+				style == SCE_HPA_COMMENTLINE ||
+				style == SCE_HP_COMMENTLINE ||
+				style == SCE_HPHP_COMMENT ||
+				style == SCE_HPHP_COMMENTLINE ||
 				style == SCE_H_SGML_COMMENT);
 	}
 	return FALSE;
