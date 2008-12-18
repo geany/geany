@@ -1237,27 +1237,6 @@ on_go_to_line_activate                 (GtkMenuItem     *menuitem,
 
 
 void
-on_goto_line_dialog_response         (GtkDialog *dialog,
-                                      gint response,
-                                      gpointer user_data)
-{
-	if (response == GTK_RESPONSE_ACCEPT)
-	{
-		GeanyDocument *doc = document_get_current();
-
-		if (doc != NULL)
-		{
-			gint line = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(user_data));
-			if (! editor_goto_line(doc->editor, line - 1))
-				utils_beep();
-		}
-	}
-	if (dialog != NULL)
-		gtk_widget_destroy(GTK_WIDGET(dialog));
-}
-
-
-void
 on_toolbutton_goto_entry_activate(GtkAction *action, const gchar *text, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();

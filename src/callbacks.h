@@ -283,11 +283,6 @@ on_go_to_line_activate                 (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_goto_line_dialog_response           (GtkDialog *dialog,
-                                        gint response,
-                                        gpointer user_data);
-
-void
 on_help1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 

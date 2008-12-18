@@ -4,6 +4,8 @@
    Fix too ambitious auto tag closing in HTML files inside embedded
    scripting languages.
    Complete HTML styles in is_comment_style() and is_string_style().
+ * src/callbacks.c, src/callbacks.h:
+   Remove dead code.
 
 
 2008-12-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
