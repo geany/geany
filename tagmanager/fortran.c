@@ -184,7 +184,7 @@ static kindOption FortranKinds [] = {
     { TRUE,  'n', "namelist",   "namelists"},
     { TRUE,  'p', "package",    "programs"},
     { TRUE,  's', "member",     "subroutines"},
-    { TRUE,  't', "type",       "derived types"},
+    { TRUE,  't', "typedef",    "derived types"},
     { TRUE,  'v', "variable",   "module variables"}
 };
 

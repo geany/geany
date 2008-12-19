@@ -637,10 +637,10 @@ static void add_top_level_items(GeanyDocument *doc)
 		{
 			tag_list_add_groups(tag_store,
 				&(tv_iters.tag_function), _("Functions"), NULL,
-				&(tv_iters.tag_member), _("Anchor"), NULL,
-				&(tv_iters.tag_namespace), _("Heading (H1)"), NULL,
-				&(tv_iters.tag_class), _("Heading (H2)"), NULL,
-				&(tv_iters.tag_variable), _("Heading (H3)"), NULL,
+				&(tv_iters.tag_member), _("Anchors"), NULL,
+				&(tv_iters.tag_namespace), _("H1 Headings"), NULL,
+				&(tv_iters.tag_class), _("H2 Headings"), NULL,
+				&(tv_iters.tag_variable), _("H3 Headings"), NULL,
 				NULL);
 			break;
 		}
@@ -955,10 +955,15 @@ static GtkTreeIter *get_tag_type_iter(TMTagType tag_type, filetype_id ft_id)
 		case tm_tag_enum_t:
 		{
 			/* TODO separate C-like types here also */
-			if (ft_id == GEANY_FILETYPES_HAXE)
+			switch (ft_id)
 			{
-				iter = &tv_iters.tag_type;
-				break;
+				case GEANY_FILETYPES_HAXE:
+				case GEANY_FILETYPES_FORTRAN:
+				case GEANY_FILETYPES_F77:
+					iter = &tv_iters.tag_type;
+					goto skip;
+				default:
+					break;
 			}
 			/* fall through */
 		}
@@ -985,6 +990,7 @@ static GtkTreeIter *get_tag_type_iter(TMTagType tag_type, filetype_id ft_id)
 			iter = &tv_iters.tag_other;
 		}
 	}
+skip:
 	if (iter->stamp != -1)
 		return iter;
 	else
