@@ -24,8 +24,8 @@
 *   DATA DEFINITIONS
 */
 typedef enum {
-    K_CHAPTER,
-    K_SECTION,
+	K_CHAPTER,
+	K_SECTION,
 	K_SUBSECTION,
 	K_SUBSUBSECTION
 } restKind;
@@ -44,28 +44,28 @@ static kindOption RestKinds[] = {
 static void makeRestTag (const vString* const name,
 			   kindOption* const kinds, const int kind)
 {
-    if (name != NULL  &&  vStringLength (name) > 0)
-    {
-        tagEntryInfo e;
-        initTagEntry (&e, vStringValue (name));
+	if (name != NULL && vStringLength (name) > 0)
+	{
+		tagEntryInfo e;
+		initTagEntry (&e, vStringValue (name));
 
-        e.lineNumber--;	/* we want the line before the '---' underline chars */
-        e.kindName = kinds [kind].name;
-        e.kind     = kinds [kind].letter;
+		e.lineNumber--;	/* we want the line before the '---' underline chars */
+		e.kindName = kinds [kind].name;
+		e.kind = kinds [kind].letter;
 
-        makeTagEntry (&e);
-    }
+		makeTagEntry (&e);
+	}
 }
 
 /* TODO: Parse any section with ispunct() underlining, in the order of first use.
  * Also parse overlining & underlining as higher-level sections. */
 static void findRestTags (void)
 {
-    vString *name = vStringNew ();
-    const unsigned char *line;
+	vString *name = vStringNew ();
+	const unsigned char *line;
 
-    while ((line = fileReadLine ()) != NULL)
-    {
+	while ((line = fileReadLine ()) != NULL)
+	{
 		int line_len = strlen((const char*) line);
 
 		if (line_len >= 3 && vStringLength(name) > 0 &&
@@ -96,21 +96,22 @@ static void findRestTags (void)
 		if (! isspace(*line))
 			vStringCatS(name, (const char*) line);
 		vStringTerminate(name);
-    }
-    vStringDelete (name);
+	}
+	vStringDelete (name);
 }
 
 extern parserDefinition* RestParser (void)
 {
-    static const char *const patterns [] = { "*.rest", "*.reST", NULL };
-    static const char *const extensions [] = { "rest", NULL };
-    parserDefinition* const def = parserNew ("reStructuredText");
-    def->kinds      = RestKinds;
-    def->kindCount  = KIND_COUNT (RestKinds);
-    def->patterns   = patterns;
-    def->extensions = extensions;
-    def->parser     = findRestTags;
-    return def;
+	static const char *const patterns [] = { "*.rest", "*.reST", NULL };
+	static const char *const extensions [] = { "rest", NULL };
+	parserDefinition* const def = parserNew ("reStructuredText");
+
+	def->kinds = RestKinds;
+	def->kindCount = KIND_COUNT (RestKinds);
+	def->patterns = patterns;
+	def->extensions = extensions;
+	def->parser = findRestTags;
+	return def;
 }
 
 /* vi:set tabstop=8 shiftwidth=4: */
