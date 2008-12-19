@@ -1971,7 +1971,8 @@ gboolean editor_complete_snippet(GeanyEditor *editor, gint pos)
 	word = editor_read_word_stem(editor, pos, wc);
 
 	/* prevent completion of "for " */
-	if (! isspace(sci_get_char_at(sci, pos - 1))) /* pos points to the line end char so use pos -1 */
+	if (NZV(word) &&
+		! isspace(sci_get_char_at(sci, pos - 1))) /* pos points to the line end char so use pos -1 */
 	{
 		sci_start_undo_action(sci);	/* needed because we insert a space separately from construct */
 		result = snippets_complete_constructs(editor, pos, word);
