@@ -57,6 +57,8 @@ static void makeRestTag (const vString* const name,
     }
 }
 
+/* TODO: Parse any section with ispunct() underlining, in the order of first use.
+ * Also parse overlining & underlining as higher-level sections. */
 static void findRestTags (void)
 {
     vString *name = vStringNew ();
@@ -64,8 +66,10 @@ static void findRestTags (void)
 
     while ((line = fileReadLine ()) != NULL)
     {
-		if (strlen((const char*) line) > 3 && vStringLength(name) > 0 &&
-			! strstr((const char*) line, " "))
+		int line_len = strlen((const char*) line);
+
+		if (line_len >= 3 && vStringLength(name) > 0 &&
+			! strstr((const char*) line, " "))	/* don't parse table borders */
 		{
 			if (strncmp((const char*) line, "===", 3) == 0)
 			{
