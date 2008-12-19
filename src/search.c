@@ -1578,6 +1578,12 @@ void search_find_usage(const gchar *search_text, gint flags, gboolean in_session
 	doc = document_get_current();
 	g_return_if_fail(doc != NULL);
 
+	if (!NZV(search_text))
+	{
+		utils_beep();
+		return;
+	}
+
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_MESSAGE);
 	gtk_list_store_clear(msgwindow.store_msg);
 

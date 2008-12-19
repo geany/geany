@@ -5,6 +5,9 @@
    Fix Fortran Types showing as Interfaces in the symbol list.
  * src/symbols.c:
    Show Structs separately from Typedefs / Enums for the C symbol list.
+ * src/keybindings.c, src/search.c, src/editor.c:
+   Allow Find Usage for selections even when the cursor is not at a
+   word character.
 
 
 2008-12-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

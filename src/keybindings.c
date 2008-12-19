@@ -59,6 +59,7 @@ static const gboolean swap_alt_tab_order = FALSE;
 
 
 static gboolean check_current_word(void);
+static gboolean read_current_word(void);
 
 static void cb_func_file_action(guint key_id);
 static void cb_func_project_action(guint key_id);
@@ -1098,12 +1099,12 @@ static void cb_func_search_action(guint key_id)
 		case GEANY_KEYS_SEARCH_PREVIOUSMESSAGE:
 			on_previous_message1_activate(NULL, NULL); break;
 		case GEANY_KEYS_SEARCH_FINDUSAGE:
-			if (check_current_word())
-				on_find_usage1_activate(NULL, NULL);
+			read_current_word();
+			on_find_usage1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE:
-			if (check_current_word())
-				on_find_document_usage1_activate(NULL, NULL);
+			read_current_word();
+			on_find_document_usage1_activate(NULL, NULL);
 			break;
 	}
 }
@@ -1193,7 +1194,8 @@ static void cb_func_build_action(guint key_id)
 		gtk_menu_item_activate(GTK_MENU_ITEM(item));
 }
 
-static gboolean check_current_word(void)
+
+static gboolean read_current_word(void)
 {
 	gint pos;
 	GeanyDocument *doc = document_get_current();
@@ -1206,7 +1208,13 @@ static gboolean check_current_word(void)
 	editor_find_current_word(doc->editor, pos,
 		editor_info.current_word, GEANY_MAX_WORD_LENGTH, NULL);
 
-	if (*editor_info.current_word == 0)
+	return (*editor_info.current_word != 0);
+}
+
+
+static gboolean check_current_word(void)
+{
+	if (!read_current_word())
 	{
 		utils_beep();
 		return FALSE;
