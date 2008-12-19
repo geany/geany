@@ -572,7 +572,7 @@ static void add_top_level_items(GeanyDocument *doc)
 		case GEANY_FILETYPES_HASKELL:
 			tag_list_add_groups(tag_store,
 				&tv_iters.tag_namespace, _("Module"), NULL,
-				&tv_iters.tag_struct, _("Types"), NULL,
+				&tv_iters.tag_type, _("Types"), NULL,
 				&tv_iters.tag_macro, _("Type constructors"), NULL,
 				&tv_iters.tag_function, _("Functions"), "classviewer-method",
 				NULL);
@@ -787,7 +787,8 @@ static void add_top_level_items(GeanyDocument *doc)
 				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
 				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
 				&(tv_iters.tag_member), _("Members"), "classviewer-member",
-				&(tv_iters.tag_struct), _("Structs / Typedefs"), "classviewer-struct",
+				&(tv_iters.tag_struct), _("Structs"), "classviewer-struct",
+				&(tv_iters.tag_type), _("Typedefs / Enums"), "classviewer-struct",
 				NULL);
 
 			if (ft_id != GEANY_FILETYPES_D)
@@ -954,18 +955,8 @@ static GtkTreeIter *get_tag_type_iter(TMTagType tag_type, filetype_id ft_id)
 		case tm_tag_typedef_t:
 		case tm_tag_enum_t:
 		{
-			/* TODO separate C-like types here also */
-			switch (ft_id)
-			{
-				case GEANY_FILETYPES_HAXE:
-				case GEANY_FILETYPES_FORTRAN:
-				case GEANY_FILETYPES_F77:
-					iter = &tv_iters.tag_type;
-					goto skip;
-				default:
-					break;
-			}
-			/* fall through */
+			iter = &tv_iters.tag_type;
+			break;
 		}
 		case tm_tag_union_t:
 		case tm_tag_struct_t:
@@ -990,7 +981,6 @@ static GtkTreeIter *get_tag_type_iter(TMTagType tag_type, filetype_id ft_id)
 			iter = &tv_iters.tag_other;
 		}
 	}
-skip:
 	if (iter->stamp != -1)
 		return iter;
 	else
