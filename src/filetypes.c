@@ -529,6 +529,28 @@ static void init_builtin_filetypes(void)
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
+#define CMAKE
+	ft = filetypes[GEANY_FILETYPES_CMAKE];
+	ft->lang = -2;
+	ft->name = g_strdup("CMake");
+	ft->title = g_strdup_printf(_("%s source file"), "CMake");
+	ft->extension = g_strdup("cmake");
+	ft->pattern = utils_strv_new("CMakeLists.txt", "*.cmake", "*.ctest", NULL);
+	ft->comment_open = g_strdup("#");
+	ft->comment_close = NULL;
+	ft->group = GEANY_FILETYPE_GROUP_MISC;
+
+#define NSIS
+	ft = filetypes[GEANY_FILETYPES_NSIS];
+	ft->lang = -2;
+	ft->name = g_strdup("NSIS");
+	ft->title = g_strdup_printf(_("%s source file"), "NSIS");
+	ft->extension = g_strdup("nsis");
+	ft->pattern = utils_strv_new("*.nsi", "*.nsh", NULL);
+	ft->comment_open = g_strdup(";");
+	ft->comment_close = NULL;
+	ft->group = GEANY_FILETYPE_GROUP_MISC;
+
 #define ALL
 	ft = filetypes[GEANY_FILETYPES_NONE];
 	ft->lang = -2;

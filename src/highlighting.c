@@ -642,7 +642,7 @@ GeanyLexerStyle gsd_comment_doc =	{0x3f5fbf, 0xffffff, TRUE, FALSE};
 GeanyLexerStyle gsd_number =		{0x007f00, 0xffffff, FALSE, FALSE};
 GeanyLexerStyle gsd_reserved_word =	{0x00007f, 0xffffff, TRUE, FALSE};
 GeanyLexerStyle gsd_system_word =	{0x991111, 0xffffff, TRUE, FALSE};
-GeanyLexerStyle gsd_user_word =	{0x0000d0, 0xffffff, TRUE, FALSE};
+GeanyLexerStyle gsd_user_word =		{0x0000d0, 0xffffff, TRUE, FALSE};
 GeanyLexerStyle gsd_string =		{0xff901e, 0xffffff, FALSE, FALSE};
 GeanyLexerStyle gsd_pragma =		{0x007f7f, 0xffffff, FALSE, FALSE};
 GeanyLexerStyle gsd_string_eol =	{0x000000, 0xe0c0e0, FALSE, FALSE};
@@ -1615,6 +1615,65 @@ static void styleset_python(ScintillaObject *sci)
 }
 
 
+static void styleset_cmake_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
+{
+	new_style_array(GEANY_FILETYPES_CMAKE, 15);
+	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CMAKE].styling[0]);
+	get_keyfile_hex(config, config_home, "styling", "comment", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CMAKE].styling[1]);
+	get_keyfile_hex(config, config_home, "styling", "stringdq", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CMAKE].styling[2]);
+	get_keyfile_hex(config, config_home, "styling", "stringlq", "0x008000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CMAKE].styling[3]);
+	get_keyfile_hex(config, config_home, "styling", "stringrq", "0x008000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CMAKE].styling[4]);
+	get_keyfile_hex(config, config_home, "styling", "command", "0x00007f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CMAKE].styling[5]);
+	get_keyfile_hex(config, config_home, "styling", "parameters", "0x991111", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CMAKE].styling[6]);
+	get_keyfile_hex(config, config_home, "styling", "variable", "0x007f7f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CMAKE].styling[7]);
+	get_keyfile_hex(config, config_home, "styling", "userdefined", "0x0000d0", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CMAKE].styling[8]);
+	get_keyfile_hex(config, config_home, "styling", "whiledef", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CMAKE].styling[9]);
+	get_keyfile_hex(config, config_home, "styling", "foreachdef", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CMAKE].styling[10]);
+	get_keyfile_hex(config, config_home, "styling", "ifdefinedef", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CMAKE].styling[11]);
+	get_keyfile_hex(config, config_home, "styling", "macrodef", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CMAKE].styling[12]);
+	get_keyfile_hex(config, config_home, "styling", "stringvar", "0x007f7f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CMAKE].styling[13]);
+	get_keyfile_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CMAKE].styling[14]);
+
+	style_sets[GEANY_FILETYPES_CMAKE].keywords = g_new(gchar*, 4);
+	get_keyfile_keywords(config, config_home, "keywords", "commands", GEANY_FILETYPES_CMAKE, 0, "");
+	get_keyfile_keywords(config, config_home, "keywords", "parameters", GEANY_FILETYPES_CMAKE, 1, "");
+	get_keyfile_keywords(config, config_home, "keywords", "userdefined", GEANY_FILETYPES_CMAKE, 2, "");
+	style_sets[GEANY_FILETYPES_CMAKE].keywords[3] = NULL;
+
+	get_keyfile_wordchars(config, config_home,
+		&style_sets[GEANY_FILETYPES_CMAKE].wordchars);
+}
+
+
+static void styleset_cmake(ScintillaObject *sci)
+{
+	const filetype_id ft_id = GEANY_FILETYPES_CMAKE;
+
+	apply_filetype_properties(sci, SCLEX_CMAKE, ft_id);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_CMAKE].keywords[0]);
+	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_CMAKE].keywords[1]);
+	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_CMAKE].keywords[2]);
+
+	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_CMAKE, 0);
+	set_sci_style(sci, SCE_CMAKE_DEFAULT, GEANY_FILETYPES_CMAKE, 0);
+	set_sci_style(sci, SCE_CMAKE_COMMENT, GEANY_FILETYPES_CMAKE, 1);
+	set_sci_style(sci, SCE_CMAKE_STRINGDQ, GEANY_FILETYPES_CMAKE, 2);
+	set_sci_style(sci, SCE_CMAKE_STRINGLQ, GEANY_FILETYPES_CMAKE, 3);
+	set_sci_style(sci, SCE_CMAKE_STRINGRQ, GEANY_FILETYPES_CMAKE, 4);
+	set_sci_style(sci, SCE_CMAKE_COMMANDS, GEANY_FILETYPES_CMAKE, 5);
+	set_sci_style(sci, SCE_CMAKE_PARAMETERS, GEANY_FILETYPES_CMAKE, 6);
+	set_sci_style(sci, SCE_CMAKE_VARIABLE, GEANY_FILETYPES_CMAKE, 7);
+	set_sci_style(sci, SCE_CMAKE_USERDEFINED, GEANY_FILETYPES_CMAKE, 8);
+	set_sci_style(sci, SCE_CMAKE_WHILEDEF, GEANY_FILETYPES_CMAKE, 9);
+	set_sci_style(sci, SCE_CMAKE_FOREACHDEF, GEANY_FILETYPES_CMAKE, 10);
+	set_sci_style(sci, SCE_CMAKE_IFDEFINEDEF, GEANY_FILETYPES_CMAKE, 11);
+	set_sci_style(sci, SCE_CMAKE_MACRODEF, GEANY_FILETYPES_CMAKE, 12);
+	set_sci_style(sci, SCE_CMAKE_STRINGVAR, GEANY_FILETYPES_CMAKE, 13);
+	set_sci_style(sci, SCE_CMAKE_NUMBER, GEANY_FILETYPES_CMAKE, 14);
+}
+
+
 static void styleset_r_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_style_array(GEANY_FILETYPES_R, 12);
@@ -2066,6 +2125,78 @@ static void styleset_css(ScintillaObject *sci)
 	set_sci_style(sci, SCE_CSS_EXTENDED_IDENTIFIER, GEANY_FILETYPES_CSS, 19);
 	set_sci_style(sci, SCE_CSS_EXTENDED_PSEUDOCLASS, GEANY_FILETYPES_CSS, 20);
 	set_sci_style(sci, SCE_CSS_EXTENDED_PSEUDOELEMENT, GEANY_FILETYPES_CSS, 21);
+}
+
+
+static void styleset_nsis_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
+{
+	new_style_array(GEANY_FILETYPES_NSIS, 19);
+	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_NSIS].styling[0]);
+	get_keyfile_hex(config, config_home, "styling", "comment", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_NSIS].styling[1]);
+	get_keyfile_hex(config, config_home, "styling", "stringdq", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_NSIS].styling[2]);
+	get_keyfile_hex(config, config_home, "styling", "stringlq", "0x008000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_NSIS].styling[3]);
+	get_keyfile_hex(config, config_home, "styling", "stringrq", "0x008000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_NSIS].styling[4]);
+	get_keyfile_hex(config, config_home, "styling", "function", "0x00007f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_NSIS].styling[5]);
+	get_keyfile_hex(config, config_home, "styling", "variable", "0x991111", "0xffffff", "false", &style_sets[GEANY_FILETYPES_NSIS].styling[6]);
+	get_keyfile_hex(config, config_home, "styling", "label", "0x007f7f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_NSIS].styling[7]);
+	get_keyfile_hex(config, config_home, "styling", "userdefined", "0x0000d0", "0xffffff", "true", &style_sets[GEANY_FILETYPES_NSIS].styling[8]);
+	get_keyfile_hex(config, config_home, "styling", "sectiondef", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_NSIS].styling[9]);
+	get_keyfile_hex(config, config_home, "styling", "subsectiondef", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_NSIS].styling[10]);
+	get_keyfile_hex(config, config_home, "styling", "ifdefinedef", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_NSIS].styling[11]);
+	get_keyfile_hex(config, config_home, "styling", "macrodef", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_NSIS].styling[12]);
+	get_keyfile_hex(config, config_home, "styling", "stringvar", "0x991111", "0xffffff", "false", &style_sets[GEANY_FILETYPES_NSIS].styling[13]);
+	get_keyfile_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_NSIS].styling[14]);
+	get_keyfile_hex(config, config_home, "styling", "sectiongroup", "00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_NSIS].styling[15]);
+	get_keyfile_hex(config, config_home, "styling", "pageex", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_NSIS].styling[16]);
+	get_keyfile_hex(config, config_home, "styling", "functiondef", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_NSIS].styling[17]);
+	get_keyfile_hex(config, config_home, "styling", "commentbox", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_NSIS].styling[18]);
+
+	style_sets[GEANY_FILETYPES_NSIS].keywords = g_new(gchar*, 5);
+	get_keyfile_keywords(config, config_home, "keywords", "functions", GEANY_FILETYPES_NSIS, 0, "");
+	get_keyfile_keywords(config, config_home, "keywords", "variables", GEANY_FILETYPES_NSIS, 1, "");
+	get_keyfile_keywords(config, config_home, "keywords", "lables", GEANY_FILETYPES_NSIS, 2, "");
+	get_keyfile_keywords(config, config_home, "keywords", "userdefined", GEANY_FILETYPES_NSIS, 3, "");
+	style_sets[GEANY_FILETYPES_NSIS].keywords[4] = NULL;
+
+	get_keyfile_wordchars(config, config_home,
+		&style_sets[GEANY_FILETYPES_NSIS].wordchars);
+}
+
+
+static void styleset_nsis(ScintillaObject *sci)
+{
+	const filetype_id ft_id = GEANY_FILETYPES_NSIS;
+
+	apply_filetype_properties(sci, SCLEX_NSIS, ft_id);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_NSIS].keywords[0]);
+	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_NSIS].keywords[1]);
+	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_NSIS].keywords[2]);
+	SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) style_sets[GEANY_FILETYPES_NSIS].keywords[3]);
+
+	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_NSIS, 0);
+	set_sci_style(sci, SCE_NSIS_DEFAULT, GEANY_FILETYPES_NSIS, 0);
+	set_sci_style(sci, SCE_NSIS_COMMENT, GEANY_FILETYPES_NSIS, 1);
+	set_sci_style(sci, SCE_NSIS_STRINGDQ, GEANY_FILETYPES_NSIS, 2);
+	set_sci_style(sci, SCE_NSIS_STRINGLQ, GEANY_FILETYPES_NSIS, 3);
+	set_sci_style(sci, SCE_NSIS_STRINGRQ, GEANY_FILETYPES_NSIS, 4);
+	set_sci_style(sci, SCE_NSIS_FUNCTION, GEANY_FILETYPES_NSIS, 5);
+	set_sci_style(sci, SCE_NSIS_VARIABLE, GEANY_FILETYPES_NSIS, 6);
+	set_sci_style(sci, SCE_NSIS_LABEL, GEANY_FILETYPES_NSIS, 7);
+	set_sci_style(sci, SCE_NSIS_USERDEFINED, GEANY_FILETYPES_NSIS, 8);
+	set_sci_style(sci, SCE_NSIS_SECTIONDEF, GEANY_FILETYPES_NSIS, 9);
+	set_sci_style(sci, SCE_NSIS_SUBSECTIONDEF, GEANY_FILETYPES_NSIS, 10);
+	set_sci_style(sci, SCE_NSIS_IFDEFINEDEF, GEANY_FILETYPES_NSIS, 11);
+	set_sci_style(sci, SCE_NSIS_MACRODEF, GEANY_FILETYPES_NSIS, 12);
+	set_sci_style(sci, SCE_NSIS_STRINGVAR, GEANY_FILETYPES_NSIS, 13);
+	set_sci_style(sci, SCE_NSIS_NUMBER, GEANY_FILETYPES_NSIS, 14);
+	set_sci_style(sci, SCE_NSIS_SECTIONGROUP, GEANY_FILETYPES_NSIS, 15);
+	set_sci_style(sci, SCE_NSIS_PAGEEX, GEANY_FILETYPES_NSIS, 16);
+	set_sci_style(sci, SCE_NSIS_FUNCTIONDEF, GEANY_FILETYPES_NSIS, 17);
+	set_sci_style(sci, SCE_NSIS_COMMENTBOX, GEANY_FILETYPES_NSIS, 18);
+
+	SSM(sci, SCI_SETPROPERTY, (sptr_t) "nsis.uservars", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (sptr_t) "nsis.ignorecase", (sptr_t) "1");
 }
 
 
@@ -3220,6 +3351,7 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 		init_styleset_case(GEANY_FILETYPES_BASIC,	basic);
 		init_styleset_case(GEANY_FILETYPES_C,		c);
 		init_styleset_case(GEANY_FILETYPES_CAML,	caml);
+		init_styleset_case(GEANY_FILETYPES_CMAKE,	cmake);
 		init_styleset_case(GEANY_FILETYPES_CONF,	conf);
 		init_styleset_case(GEANY_FILETYPES_CPP,		cpp);
 		init_styleset_case(GEANY_FILETYPES_CS,		cs);
@@ -3240,6 +3372,7 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 		init_styleset_case(GEANY_FILETYPES_LUA,		lua);
 		init_styleset_case(GEANY_FILETYPES_MAKE,	makefile);
 		init_styleset_case(GEANY_FILETYPES_MATLAB,	matlab);
+		init_styleset_case(GEANY_FILETYPES_NSIS,	nsis);
 		init_styleset_case(GEANY_FILETYPES_OMS,		oms);
 		init_styleset_case(GEANY_FILETYPES_PASCAL,	pascal);
 		init_styleset_case(GEANY_FILETYPES_PERL,	perl);
@@ -3279,6 +3412,7 @@ void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 		styleset_case(GEANY_FILETYPES_BASIC,	basic);
 		styleset_case(GEANY_FILETYPES_C,		c);
 		styleset_case(GEANY_FILETYPES_CAML,		caml);
+		styleset_case(GEANY_FILETYPES_CMAKE,	cmake);
 		styleset_case(GEANY_FILETYPES_CONF,		conf);
 		styleset_case(GEANY_FILETYPES_CPP,		cpp);
 		styleset_case(GEANY_FILETYPES_CS,		cs);
@@ -3299,6 +3433,7 @@ void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 		styleset_case(GEANY_FILETYPES_LUA,		lua);
 		styleset_case(GEANY_FILETYPES_MAKE,		makefile);
 		styleset_case(GEANY_FILETYPES_MATLAB,	matlab);
+		styleset_case(GEANY_FILETYPES_NSIS,		nsis);
 		styleset_case(GEANY_FILETYPES_OMS,		oms);
 		styleset_case(GEANY_FILETYPES_PASCAL,	pascal);
 		styleset_case(GEANY_FILETYPES_PERL,		perl);

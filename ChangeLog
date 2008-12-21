@@ -10,6 +10,13 @@
    file_prefs.disk_check_timeout is set (to greater 0).
    Call realpath() on files only when opening or changing the filename
    but not on every save.
+ * data/filetype_extensions.conf, data/filetypes.cmake,
+   data/filetypes.nsis, scintilla/KeyWords.cxx, scintilla/LexCmake.cxx,
+   scintilla/LexNsis.cxx, scintilla/Makefile.am,
+   scintilla/makefile.win32, src/editor.c, src/filetypes.c,
+   src/filetypes.h, src/highlighting.c, src/plugindata.h,
+   src/templates.c, wscript:
+   Add new filetypes CMake and NSIS.
 
 
 2008-12-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

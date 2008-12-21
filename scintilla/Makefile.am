@@ -11,6 +11,7 @@ LexBasic.cxx \
 LexBash.cxx \
 LexCPP.cxx \
 LexCaml.cxx \
+LexCmake.cxx \
 LexCrontab.cxx \
 LexCSS.cxx \
 LexD.cxx \
@@ -19,6 +20,7 @@ LexHaskell.cxx \
 LexHTML.cxx \
 LexYAML.cxx \
 LexLua.cxx \
+LexNsis.cxx \
 LexOMS.cxx \
 LexMatlab.cxx \
 LexOthers.cxx \

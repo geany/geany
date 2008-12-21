@@ -2932,6 +2932,18 @@ static gboolean is_string_style(gint lexer, gint style)
 				style == SCE_H_SGML_DOUBLESTRING ||
 				style == SCE_H_SGML_SIMPLESTRING ||
 				style == SCE_H_SINGLESTRING);
+
+		case SCLEX_CMAKE:
+			return (style == SCE_CMAKE_STRINGDQ ||
+				style == SCE_CMAKE_STRINGLQ ||
+				style == SCE_CMAKE_STRINGRQ ||
+				style == SCE_CMAKE_STRINGVAR);
+
+		case SCLEX_NSIS:
+			return (style == SCE_NSIS_STRINGDQ ||
+				style == SCE_NSIS_STRINGLQ ||
+				style == SCE_NSIS_STRINGRQ ||
+				style == SCE_NSIS_STRINGVAR);
 	}
 	return FALSE;
 }
@@ -3042,6 +3054,13 @@ static gboolean is_comment_style(gint lexer, gint style)
 				style == SCE_HPHP_COMMENT ||
 				style == SCE_HPHP_COMMENTLINE ||
 				style == SCE_H_SGML_COMMENT);
+
+		case SCLEX_CMAKE:
+			return (style == SCE_CMAKE_COMMENT);
+
+		case SCLEX_NSIS:
+			return (style == SCE_NSIS_COMMENT ||
+				style == SCE_NSIS_COMMENTBOX);
 	}
 	return FALSE;
 }

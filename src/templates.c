@@ -588,6 +588,7 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 		case GEANY_FILETYPES_CONF:
 		case GEANY_FILETYPES_PO:
 		case GEANY_FILETYPES_YAML:
+		case GEANY_FILETYPES_CMAKE:
 		{
 			line_prefix = "#";
 			break;
@@ -623,6 +624,7 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 		}
 
 		case GEANY_FILETYPES_ASM:
+		case GEANY_FILETYPES_NSIS:
 		{
 			line_prefix = ";";
 			break;

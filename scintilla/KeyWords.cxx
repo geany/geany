@@ -145,6 +145,7 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmBash);
 	LINK_LEXER(lmFreeBasic);
 	LINK_LEXER(lmCaml);
+	LINK_LEXER(lmCmake);
 	LINK_LEXER(lmCPP);
 	LINK_LEXER(lmCss);
 	LINK_LEXER(lmD);
@@ -157,6 +158,7 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmLua);
 	LINK_LEXER(lmMake);
 	LINK_LEXER(lmMatlab);
+	LINK_LEXER(lmNsis);
 	LINK_LEXER(lmNull);
 	LINK_LEXER(lmOMS);
 	LINK_LEXER(lmPascal);
