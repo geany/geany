@@ -1,3 +1,10 @@
+2008-12-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * tagmanager/rest.c:
+   Parse sections in the order of first-used underline character,
+   which can now be any punctuation character (as per the spec).
+
+
 2008-12-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/symbols.c, tagmanager/fortran.c:

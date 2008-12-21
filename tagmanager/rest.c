@@ -24,10 +24,11 @@
 *   DATA DEFINITIONS
 */
 typedef enum {
-	K_CHAPTER,
+	K_CHAPTER = 0,
 	K_SECTION,
 	K_SUBSECTION,
-	K_SUBSUBSECTION
+	K_SUBSUBSECTION,
+	SECTION_COUNT
 } restKind;
 
 static kindOption RestKinds[] = {
@@ -36,6 +37,8 @@ static kindOption RestKinds[] = {
 	{ TRUE, 'd', "macro",         "subsections" },
 	{ TRUE, 'v', "variable",      "subsubsections" }
 };
+
+static char kindchars[SECTION_COUNT];
 
 /*
 *   FUNCTION DEFINITIONS
@@ -57,38 +60,67 @@ static void makeRestTag (const vString* const name,
 	}
 }
 
-/* TODO: Parse any section with ispunct() underlining, in the order of first use.
- * Also parse overlining & underlining as higher-level sections. */
+
+/* checks if str is all the same character */
+static boolean issame(const char *str)
+{
+	char first = *str;
+
+	while (*str)
+	{
+		char c;
+
+		str++;
+		c = *str;
+		if (c && c != first)
+			return FALSE;
+	}
+	return TRUE;
+}
+
+
+static int get_kind(char c)
+{
+	int i;
+
+	for (i = 0; i < SECTION_COUNT; i++)
+	{
+		if (kindchars[i] == c)
+			return i;
+
+		if (kindchars[i] == 0)
+		{
+			kindchars[i] = c;
+			return i;
+		}
+	}
+	return -1;
+}
+
+
+/* TODO: parse overlining & underlining as distinct sections. */
 static void findRestTags (void)
 {
 	vString *name = vStringNew ();
 	const unsigned char *line;
 
+	memset(kindchars, 0, sizeof kindchars);
+
 	while ((line = fileReadLine ()) != NULL)
 	{
 		int line_len = strlen((const char*) line);
+		int name_len = vStringLength(name);
 
-		if (line_len >= 3 && vStringLength(name) > 0 &&
-			! strstr((const char*) line, " "))	/* don't parse table borders */
+		/* underlines must be the same length or more */
+		if (line_len >= name_len && name_len > 0 &&
+			ispunct(line[0]) && issame((const char*) line))
 		{
-			if (strncmp((const char*) line, "===", 3) == 0)
+			char c = line[0];
+			int kind = get_kind(c);
+
+			if (kind >= 0)
 			{
-				makeRestTag(name, RestKinds, K_CHAPTER);
-				continue;
-			}
-			else if (strncmp((const char*) line, "---", 3) == 0)
-			{
-				makeRestTag(name, RestKinds, K_SECTION);
-				continue;
-			}
-			else if (strncmp((const char*) line, "^^^", 3) == 0)
-			{
-				makeRestTag(name, RestKinds, K_SUBSECTION);
-				continue;
-			}
-			else if (strncmp((const char*) line, "```", 3) == 0)
-			{
-				makeRestTag(name, RestKinds, K_SUBSUBSECTION);
+				makeRestTag(name, RestKinds, kind);
 				continue;
 			}
 		}
