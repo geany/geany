@@ -1342,6 +1342,8 @@ gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 		g_free(doc->file_name);
 		doc->file_name = g_strdup(utf8_fname);
 	}
+	/* reset real path, it's retrieved again in document_save() */
+	setptr(doc->real_path, NULL);
 
 	/* detect filetype */
 	if (FILETYPE_ID(doc->file_type) == GEANY_FILETYPES_NONE)
@@ -1547,8 +1549,10 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	}
 
 	/* now the file is on disk, set real_path */
-	g_free(doc->real_path);
-	doc->real_path = get_real_path_from_utf8(doc->file_name);
+	if (doc->real_path == NULL)
+	{
+		doc->real_path = get_real_path_from_utf8(doc->file_name);
+	}
 
 	/* store the opened encoding for undo/redo */
 	store_saved_encoding(doc);
@@ -1560,7 +1564,8 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 
 		/* stat the file to get the timestamp, otherwise on Windows the actual
 		 * timestamp can be ahead of time(NULL) */
-		document_update_timestamp(doc);
+		if (file_prefs.disk_check_timeout > 0)
+			document_update_timestamp(doc);
 
 		/* update filetype-related things */
 		document_set_filetype(doc, doc->file_type);

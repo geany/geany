@@ -5,6 +5,11 @@
    Command used (on Debian Sid/Experimental):
    'CFLAGS=`pkg-config --cflags gtk+-2.0` geany -g gtk-2.14.c.tags
    /usr/include/gtk-2.0/gtk/gtk.h'
+ * src/document.c:
+   Only stat() files after saving for the timestamp when
+   file_prefs.disk_check_timeout is set (to greater 0).
+   Call realpath() on files only when opening or changing the filename
+   but not on every save.
 
 
 2008-12-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
