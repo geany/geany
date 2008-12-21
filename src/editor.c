@@ -223,7 +223,7 @@ static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *
 		editor_find_current_word(editor, editor_info.click_pos,
 			current_word, sizeof current_word, NULL);
 
-		can_goto = sci_has_selection(editor->sci) || NZV(current_word);
+		can_goto = sci_has_selection(editor->sci) || current_word[0] != '\0';
 		ui_update_popup_goto_items(can_goto);
 		ui_update_popup_copy_items(doc);
 		ui_update_insert_include_item(doc, 0);
