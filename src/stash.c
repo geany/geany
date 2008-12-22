@@ -35,6 +35,19 @@
  * String settings and other dynamically allocated settings must be initialized to NULL.
  */
 
+/* Implementation Note
+ * We use a GArray to hold prefs. It would be more efficient for user code to declare
+ * a static array of GeanyPrefEntry structs, but we don't do this because:
+ *
+ * * It would be more ugly (lots of casts and NULLs).
+ * * Less type checking.
+ * * The API would have to break when adding/changing fields.
+ *
+ * Usually the prefs code isn't what user code will spend most of its time doing, so this
+ * should be efficient enough. But, if desired we could add a stash_group_set_size() function
+ * to reduce reallocation.
+ * */
+
 
 #include <gtk/gtk.h>
 
@@ -567,6 +580,8 @@ void stash_group_add_combo_box(GeanyPrefGroup *group, gint *setting,
 }
 
 
+/* We could maybe also have something like stash_group_add_combo_box_entry_with_menu()
+ * for the history list - or should that be stored as a separate setting? */
 void stash_group_add_combo_box_entry(GeanyPrefGroup *group, gchar **setting,
 		const gchar *key_name, const gchar *default_value, gpointer widget_id)
 {
