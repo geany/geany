@@ -394,16 +394,27 @@ void stash_group_update(GeanyPrefGroup *group, GtkWidget *owner)
 }
 
 
+static GeanyPrefEntry *
+add_widget_pref(GeanyPrefGroup *group, GType setting_type, gpointer setting,
+		const gchar *key_name, gpointer default_value,
+		GType widget_type, gpointer widget_id)
+{
+	GeanyPrefEntry *entry =
+		add_pref(group, setting_type, setting, key_name, default_value);
+
+	entry->widget_type = widget_type;
+	entry->widget_id = widget_id;
+	return entry;
+}
+
+
 /* Used for GtkCheckButton or GtkToggleButton widgets.
  * @see stash_group_add_radio_buttons(). */
 void stash_group_add_toggle_button(GeanyPrefGroup *group, gboolean *setting,
 		const gchar *key_name, gboolean default_value, gpointer widget_id)
 {
-	GeanyPrefEntry *entry =
-		add_pref(group, G_TYPE_BOOLEAN, setting, key_name, GINT_TO_POINTER(default_value));
-
-	entry->widget_type = GTK_TYPE_TOGGLE_BUTTON;
-	entry->widget_id = widget_id;
+	add_widget_pref(group, G_TYPE_BOOLEAN, setting, key_name, GINT_TO_POINTER(default_value),
+		GTK_TYPE_TOGGLE_BUTTON, widget_id);
 }
 
 
@@ -419,12 +430,11 @@ void stash_group_add_radio_buttons(GeanyPrefGroup *group, gint *setting,
 		gpointer widget_id, gint enum_id, ...)
 {
 	GeanyPrefEntry *entry =
-		add_pref(group, G_TYPE_INT, setting, key_name, GINT_TO_POINTER(default_value));
+		add_widget_pref(group, G_TYPE_INT, setting, key_name, GINT_TO_POINTER(default_value),
+			GTK_TYPE_RADIO_BUTTON, NULL);
 	va_list args;
 	gsize count = 1;
 	EnumWidget *item, *array;
-
-	entry->widget_type = GTK_TYPE_RADIO_BUTTON;
 
 	/* count pairs of args */
 	va_start(args, enum_id);
