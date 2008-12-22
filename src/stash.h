@@ -50,9 +50,9 @@ void stash_group_add_radio_buttons(GeanyPrefGroup *group, gint *setting,
 		const gchar *key_name, gint default_value,
 		gpointer widget_id, gint enum_id, ...) G_GNUC_NULL_TERMINATED;
 
-void stash_group_load(GeanyPrefGroup *group, GKeyFile *keyfile);
+void stash_group_load_from_key_file(GeanyPrefGroup *group, GKeyFile *keyfile);
 
-void stash_group_save(GeanyPrefGroup *group, GKeyFile *keyfile);
+void stash_group_save_to_key_file(GeanyPrefGroup *group, GKeyFile *keyfile);
 
 void stash_group_display(GeanyPrefGroup *group, GtkWidget *owner);
 

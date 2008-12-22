@@ -180,9 +180,9 @@ static void settings_action(GKeyFile *config, SettingAction action)
 		switch (action)
 		{
 			case SETTING_READ:
-				stash_group_load(group, config); break;
+				stash_group_load_from_key_file(group, config); break;
 			case SETTING_WRITE:
-				stash_group_save(group, config); break;
+				stash_group_save_to_key_file(group, config); break;
 		}
 	}
 }

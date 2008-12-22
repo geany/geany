@@ -161,13 +161,13 @@ static void keyfile_action(SettingAction action, GeanyPrefGroup *group, GKeyFile
 }
 
 
-void stash_group_load(GeanyPrefGroup *group, GKeyFile *keyfile)
+void stash_group_load_from_key_file(GeanyPrefGroup *group, GKeyFile *keyfile)
 {
 	keyfile_action(SETTING_READ, group, keyfile);
 }
 
 
-void stash_group_save(GeanyPrefGroup *group, GKeyFile *keyfile)
+void stash_group_save_to_key_file(GeanyPrefGroup *group, GKeyFile *keyfile)
 {
 	keyfile_action(SETTING_WRITE, group, keyfile);
 }
@@ -239,6 +239,8 @@ void stash_group_add_string(GeanyPrefGroup *group, gchar **setting,
 	add_pref(group, G_TYPE_STRING, setting, key_name, (gpointer)default_value);
 }
 
+
+/* *** GTK-related functions *** */
 
 static void handle_toggle_button(GtkWidget *widget, gboolean *setting,
 		PrefAction action)
