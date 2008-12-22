@@ -27,7 +27,11 @@
 
 /* Memory Usage
  * Stash will not duplicate strings if they are normally static arrays, such as
- * keyfile group names and key names. */
+ * keyfile group names and key names.
+ *
+ * Terms
+ * 'Setting' is used for data stored on disk or in memory.
+ * 'Pref' is used mainly for visual widget information.  */
 
 
 #include <gtk/gtk.h>
@@ -41,7 +45,7 @@
 
 struct GeanyPrefEntry
 {
-	GType type;					/* e.g. G_TYPE_INT */
+	GType setting_type;			/* e.g. G_TYPE_INT */
 	gpointer setting;
 	const gchar *key_name;
 	gpointer default_value;
@@ -145,7 +149,7 @@ static void keyfile_action(SettingAction action, GeanyPrefGroup *group, GKeyFile
 			g_key_file_has_key(keyfile, group->name, entry->key_name, NULL))
 			continue; /* don't overwrite write_once prefs */
 
-		switch (entry->type)
+		switch (entry->setting_type)
 		{
 			case G_TYPE_BOOLEAN:
 				handle_boolean_setting(group, entry, keyfile, action); break;
@@ -262,7 +266,7 @@ static void handle_spin_button(GtkWidget *widget, GeanyPrefEntry *entry,
 {
 	gint *setting = entry->setting;
 
-	g_assert(entry->type == G_TYPE_INT);	/* only int spin prefs */
+	g_assert(entry->setting_type == G_TYPE_INT);	/* only int spin prefs */
 
 	switch (action)
 	{
