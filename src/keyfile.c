@@ -131,20 +131,21 @@ static void init_pref_groups(void)
 		"check_detect_indent", FALSE, "check_detect_indent");
 	stash_group_add_toggle_button(group, &editor_prefs.use_tab_to_indent,
 		"use_tab_to_indent", TRUE, "check_tab_key_indents");
-	stash_group_add_integer(group, &editor_prefs.indentation->width,
-		"pref_editor_tab_width", 4);
-	stash_group_add_integer(group, &editor_prefs.indentation->hard_tab_width,
-		"indent_hard_tab_width", 8);
-	stash_group_add_integer(group, (gint*)&editor_prefs.indentation->auto_indent_mode,
-		"indent_mode", GEANY_AUTOINDENT_CURRENTCHARS);
+	stash_group_add_spin_button_integer(group, &editor_prefs.indentation->width,
+		"pref_editor_tab_width", 4, "spin_indent_width");
+	stash_group_add_spin_button_integer(group, &editor_prefs.indentation->hard_tab_width,
+		"indent_hard_tab_width", 8, "spin_tab_width");
+	stash_group_add_combo_box(group, (gint*)&editor_prefs.indentation->auto_indent_mode,
+		"indent_mode", GEANY_AUTOINDENT_CURRENTCHARS, "combo_auto_indent_mode");
 	stash_group_add_radio_buttons(group, (gint*)&editor_prefs.indentation->type,
 		"indent_type", GEANY_INDENT_TYPE_TABS,
 		"radio_indent_spaces", GEANY_INDENT_TYPE_SPACES,
 		"radio_indent_tabs", GEANY_INDENT_TYPE_TABS,
 		"radio_indent_both", GEANY_INDENT_TYPE_BOTH,
 		NULL);
-	stash_group_add_integer(group, (gint*)&editor_prefs.autocompletion_max_entries,
-		"autocompletion_max_entries", GEANY_MAX_AUTOCOMPLETE_WORDS);
+	stash_group_add_spin_button_integer(group, (gint*)&editor_prefs.autocompletion_max_entries,
+		"autocompletion_max_entries", GEANY_MAX_AUTOCOMPLETE_WORDS,
+		"spin_autocompletion_max_entries");
 
 	/* hidden prefs (don't overwrite them so users can edit them manually) */
 	group = stash_group_new(PACKAGE);

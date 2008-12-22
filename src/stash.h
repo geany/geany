@@ -43,13 +43,6 @@ void stash_group_add_integer(GeanyPrefGroup *group, gint *setting,
 void stash_group_add_string(GeanyPrefGroup *group, gchar **setting,
 		const gchar *key_name, const gchar *default_value);
 
-void stash_group_add_toggle_button(GeanyPrefGroup *group, gboolean *setting,
-		const gchar *key_name, gboolean default_value, gpointer widget_id);
-
-void stash_group_add_radio_buttons(GeanyPrefGroup *group, gint *setting,
-		const gchar *key_name, gint default_value,
-		gpointer widget_id, gint enum_id, ...) G_GNUC_NULL_TERMINATED;
-
 void stash_group_load_from_key_file(GeanyPrefGroup *group, GKeyFile *keyfile);
 
 void stash_group_save_to_key_file(GeanyPrefGroup *group, GKeyFile *keyfile);
@@ -59,5 +52,21 @@ void stash_group_display(GeanyPrefGroup *group, GtkWidget *owner);
 void stash_group_update(GeanyPrefGroup *group, GtkWidget *owner);
 
 void stash_group_free(GeanyPrefGroup *group);
+
+
+/* *** GTK-related functions *** */
+
+void stash_group_add_toggle_button(GeanyPrefGroup *group, gboolean *setting,
+		const gchar *key_name, gboolean default_value, gpointer widget_id);
+
+void stash_group_add_radio_buttons(GeanyPrefGroup *group, gint *setting,
+		const gchar *key_name, gint default_value,
+		gpointer widget_id, gint enum_id, ...) G_GNUC_NULL_TERMINATED;
+
+void stash_group_add_spin_button_integer(GeanyPrefGroup *group, gint *setting,
+		const gchar *key_name, gint default_value, gpointer widget_id);
+
+void stash_group_add_combo_box(GeanyPrefGroup *group, gint *setting,
+		const gchar *key_name, gint default_value, gpointer widget_id);
 
 #endif

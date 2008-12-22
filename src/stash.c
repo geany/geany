@@ -257,6 +257,42 @@ static void handle_toggle_button(GtkWidget *widget, gboolean *setting,
 }
 
 
+static void handle_spin_button(GtkWidget *widget, GeanyPrefEntry *entry,
+		PrefAction action)
+{
+	gint *setting = entry->setting;
+
+	g_assert(entry->type == G_TYPE_INT);	/* only int spin prefs */
+
+	switch (action)
+	{
+		case PREF_DISPLAY:
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), *setting);
+			break;
+		case PREF_UPDATE:
+			*setting = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+			break;
+	}
+}
+
+
+static void handle_combo_box(GtkWidget *widget, GeanyPrefEntry *entry,
+		PrefAction action)
+{
+	gint *setting = entry->setting;
+
+	switch (action)
+	{
+		case PREF_DISPLAY:
+			gtk_combo_box_set_active(GTK_COMBO_BOX(widget), *setting);
+			break;
+		case PREF_UPDATE:
+			*setting = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+			break;
+	}
+}
+
+
 /* taken from Glade 2.x generated support.c */
 static GtkWidget*
 lookup_widget                          (GtkWidget       *widget,
@@ -372,8 +408,13 @@ static void pref_action(PrefAction action, GeanyPrefGroup *group, GtkWidget *own
 			continue;
 		}
 
+		/* note: can't use switch for GTK_TYPE macros */
 		if (entry->widget_type == GTK_TYPE_TOGGLE_BUTTON)
 			handle_toggle_button(widget, entry->setting, action);
+		else if (entry->widget_type == GTK_TYPE_SPIN_BUTTON)
+			handle_spin_button(widget, entry, action);
+		else if (entry->widget_type == GTK_TYPE_COMBO_BOX)
+			handle_combo_box(widget, entry, action);
 		else
 			g_warning("Unhandled type for %s::%s in %s!", group->name, entry->key_name,
 				G_GNUC_FUNCTION);
@@ -468,6 +509,23 @@ void stash_group_add_radio_buttons(GeanyPrefGroup *group, gint *setting,
 		}
 	}
 	va_end(args);
+}
+
+
+void stash_group_add_spin_button_integer(GeanyPrefGroup *group, gint *setting,
+		const gchar *key_name, gint default_value, gpointer widget_id)
+{
+	add_widget_pref(group, G_TYPE_INT, setting, key_name, GINT_TO_POINTER(default_value),
+		GTK_TYPE_SPIN_BUTTON, widget_id);
+}
+
+
+/* TODO: stash_group_add_combo_box_entry(). */
+void stash_group_add_combo_box(GeanyPrefGroup *group, gint *setting,
+		const gchar *key_name, gint default_value, gpointer widget_id)
+{
+	add_widget_pref(group, G_TYPE_INT, setting, key_name, GINT_TO_POINTER(default_value),
+		GTK_TYPE_COMBO_BOX, widget_id);
 }
 
 

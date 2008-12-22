@@ -23,6 +23,7 @@
 
 /*
  * Preferences dialog support functions.
+ * New prefs should use Stash code in keyfile.c - init_pref_groups().
  */
 
 #include <stdlib.h>
@@ -100,83 +101,9 @@ typedef enum PrefCallbackAction
 PrefCallbackAction;
 
 
-typedef struct PrefEntry
-{
-	const gchar *widget_name;
-	gpointer setting;
-}
-PrefEntry;
-
-
-static void spin_prefs_foreach(PrefCallbackAction action)
-{
-	guint i;
-	PrefEntry items[] =
-	{
-		{"spin_indent_width", &editor_prefs.indentation->width},
-		{"spin_tab_width", &editor_prefs.indentation->hard_tab_width},
-		{"spin_autocompletion_max_entries", &editor_prefs.autocompletion_max_entries}
-	};
-
-	for (i = 0; i < G_N_ELEMENTS(items); i++)
-	{
-		PrefEntry *pe = &items[i];
-		GtkWidget *widget = ui_lookup_widget(ui_widgets.prefs_dialog, pe->widget_name);
-		gint *setting = pe->setting;
-
-		switch (action)
-		{
-			case PREF_DISPLAY:
-				gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), *setting);
-				break;
-			case PREF_UPDATE:
-				*setting = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
-				break;
-		}
-	}
-}
-
-
-static void combo_prefs_foreach(PrefCallbackAction action)
-{
-	guint i;
-	PrefEntry items[] =
-	{
-		{"combo_auto_indent_mode", &editor_prefs.indentation->auto_indent_mode}
-	};
-
-	for (i = 0; i < G_N_ELEMENTS(items); i++)
-	{
-		PrefEntry *pe = &items[i];
-		GtkWidget *widget = ui_lookup_widget(ui_widgets.prefs_dialog, pe->widget_name);
-		gint *setting = pe->setting;
-
-		switch (action)
-		{
-			case PREF_DISPLAY:
-				gtk_combo_box_set_active(GTK_COMBO_BOX(widget), *setting);
-				break;
-			case PREF_UPDATE:
-				*setting = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
-				break;
-		}
-	}
-}
-
-
-typedef void (*PrefItemsCallback)(PrefCallbackAction action);
-
-/* List of functions which hold the PrefEntry arrays. These allow access to
- * runtime setting fields like EditorPrefs::indentation->width. */
-PrefItemsCallback pref_item_callbacks[] = {
-	spin_prefs_foreach,
-	combo_prefs_foreach
-};
-
-
+/* Synchronize Stash settings with widgets (see keyfile.c - init_pref_groups()). */
 static void prefs_action(PrefCallbackAction action)
 {
-	guint i;
 	GeanyPrefGroup *group;
 	gpointer *ptr;
 
@@ -192,9 +119,6 @@ static void prefs_action(PrefCallbackAction action)
 				break;
 		}
 	}
-
-	for (i = 0; i < G_N_ELEMENTS(pref_item_callbacks); i++)
-		pref_item_callbacks[i](action);
 }
 
 
@@ -271,11 +195,13 @@ static void init_keybindings(void)
 }
 
 
+/* note: new prefs should use Stash code in keyfile.c */
 void prefs_init_dialog(void)
 {
 	GtkWidget *widget;
 	GdkColor *color;
 
+	/* Synchronize with Stash settings */
 	prefs_action(PREF_DISPLAY);
 
 	/* General settings */
@@ -683,6 +609,7 @@ void prefs_init_dialog(void)
 /*
  * callbacks
  */
+/* note: new prefs should use Stash code in keyfile.c */
 static void
 on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 {
@@ -692,6 +619,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		guint i;
 		guint autoclose_brackets[5];
 
+		/* Synchronize Stash settings */
 		prefs_action(PREF_UPDATE);
 
 		/* General settings */
