@@ -25,19 +25,21 @@
 /* Mini-library for reading/writing GKeyFile settings and synchronizing widgets with
  * C variables. */
 
-/* Memory Usage
- * Stash will not duplicate strings if they are normally static arrays, such as
- * keyfile group names and key names.
+/* Terms
+ * 'Setting' is used only for data stored on disk or in memory.
+ * 'Pref' can also include visual widget information.
  *
- * Terms
- * 'Setting' is used for data stored on disk or in memory.
- * 'Pref' is used mainly for visual widget information.  */
+ * Memory Usage
+ * Stash will not duplicate strings if they are normally static arrays, such as
+ * keyfile group names and key names, string default values or widget_id names.
+ * String settings and other dynamically allocated settings must be initialized to NULL.
+ */
 
 
 #include <gtk/gtk.h>
 
 #include "stash.h"
-#include "utils.h"		/* utils_get_setting_*() */
+#include "utils.h"		/* only for utils_get_setting_*(). Stash should not depend on Geany. */
 
 #define foreach_array(type, item, array) \
 	foreach_c_array(item, ((type*)(gpointer)array->data), array->len)
@@ -236,7 +238,9 @@ void stash_group_add_integer(GeanyPrefGroup *group, gint *setting,
 }
 
 
-/* @param default_value Not duplicated. */
+/* The contents of @a setting will be freed before being replaced, so make sure it is
+ * initialized to @c NULL.
+ * @param default_value Not duplicated. */
 void stash_group_add_string(GeanyPrefGroup *group, gchar **setting,
 		const gchar *key_name, const gchar *default_value)
 {
@@ -294,6 +298,32 @@ static void handle_combo_box(GtkWidget *widget, GeanyPrefEntry *entry,
 			*setting = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 			break;
 	}
+}
+
+
+static void handle_entry(GtkWidget *widget, GeanyPrefEntry *entry,
+		PrefAction action)
+{
+	gchararray *setting = entry->setting;
+
+	switch (action)
+	{
+		case PREF_DISPLAY:
+			gtk_entry_set_text(GTK_ENTRY(widget), *setting);
+			break;
+		case PREF_UPDATE:
+			g_free(*setting);
+			*setting = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
+			break;
+	}
+}
+
+
+static void handle_combo_box_entry(GtkWidget *widget, GeanyPrefEntry *entry,
+		PrefAction action)
+{
+	widget = gtk_bin_get_child(GTK_BIN(widget));
+	handle_entry(widget, entry, action);
 }
 
 
@@ -419,6 +449,10 @@ static void pref_action(PrefAction action, GeanyPrefGroup *group, GtkWidget *own
 			handle_spin_button(widget, entry, action);
 		else if (entry->widget_type == GTK_TYPE_COMBO_BOX)
 			handle_combo_box(widget, entry, action);
+		else if (entry->widget_type == GTK_TYPE_COMBO_BOX_ENTRY)
+			handle_combo_box_entry(widget, entry, action);
+		else if (entry->widget_type == GTK_TYPE_ENTRY)
+			handle_entry(widget, entry, action);
 		else
 			g_warning("Unhandled type for %s::%s in %s!", group->name, entry->key_name,
 				G_GNUC_FUNCTION);
@@ -524,12 +558,28 @@ void stash_group_add_spin_button_integer(GeanyPrefGroup *group, gint *setting,
 }
 
 
-/* TODO: stash_group_add_combo_box_entry(). */
+/* @see stash_group_add_combo_box_entry(). */
 void stash_group_add_combo_box(GeanyPrefGroup *group, gint *setting,
 		const gchar *key_name, gint default_value, gpointer widget_id)
 {
 	add_widget_pref(group, G_TYPE_INT, setting, key_name, GINT_TO_POINTER(default_value),
 		GTK_TYPE_COMBO_BOX, widget_id);
+}
+
+
+void stash_group_add_combo_box_entry(GeanyPrefGroup *group, gchar **setting,
+		const gchar *key_name, const gchar *default_value, gpointer widget_id)
+{
+	add_widget_pref(group, G_TYPE_STRING, setting, key_name, (gpointer)default_value,
+		GTK_TYPE_COMBO_BOX_ENTRY, widget_id);
+}
+
+
+void stash_group_add_entry(GeanyPrefGroup *group, gchar **setting,
+		const gchar *key_name, const gchar *default_value, gpointer widget_id)
+{
+	add_widget_pref(group, G_TYPE_STRING, setting, key_name, (gpointer)default_value,
+		GTK_TYPE_ENTRY, widget_id);
 }
 
 

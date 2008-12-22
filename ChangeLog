@@ -7,6 +7,8 @@
    Remove remaining PrefEntry code, use Stash instead.
    Add stash_group_add_spin_button_integer(),
    stash_group_add_combo_box().
+ * src/prefs.c, src/stash.c, src/stash.h, src/keyfile.c:
+   Add stash_group_add_combo_box_entry(), stash_group_add_entry().
 
 
 2008-12-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

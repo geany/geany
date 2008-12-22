@@ -113,8 +113,8 @@ static void init_pref_groups(void)
 
 	group = stash_group_new(PACKAGE);
 	configuration_add_pref_group(group, TRUE);
-	stash_group_add_string(group, &prefs.default_open_path,
-		"default_open_path", "");
+	stash_group_add_entry(group, &prefs.default_open_path,
+		"default_open_path", "", "startup_path_entry");
 
 	stash_group_add_toggle_button(group, &file_prefs.cmdline_new_files,
 		"cmdline_new_files", TRUE, "check_cmdline_new_files");

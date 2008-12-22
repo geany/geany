@@ -240,9 +240,6 @@ void prefs_init_dialog(void)
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction");
 	gtk_entry_set_text(GTK_ENTRY(widget), tool_prefs.context_action_cmd);
 
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "startup_path_entry");
-	gtk_entry_set_text(GTK_ENTRY(widget), prefs.default_open_path);
-
 	project_setup_prefs();	/* project files path */
 
 
@@ -658,10 +655,6 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction");
 		g_free(tool_prefs.context_action_cmd);
 		tool_prefs.context_action_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "startup_path_entry");
-		g_free(prefs.default_open_path);
-		prefs.default_open_path = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
 		project_apply_prefs();	/* project file path */
 

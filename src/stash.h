@@ -69,4 +69,10 @@ void stash_group_add_spin_button_integer(GeanyPrefGroup *group, gint *setting,
 void stash_group_add_combo_box(GeanyPrefGroup *group, gint *setting,
 		const gchar *key_name, gint default_value, gpointer widget_id);
 
+void stash_group_add_combo_box_entry(GeanyPrefGroup *group, gchar **setting,
+		const gchar *key_name, const gchar *default_value, gpointer widget_id);
+
+void stash_group_add_entry(GeanyPrefGroup *group, gchar **setting,
+		const gchar *key_name, const gchar *default_value, gpointer widget_id);
+
 #endif
