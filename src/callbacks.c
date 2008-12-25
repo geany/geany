@@ -36,7 +36,6 @@
 #include <time.h>
 
 #include "callbacks.h"
-#include "interface.h"
 #include "support.h"
 
 #include "keyfile.h"
