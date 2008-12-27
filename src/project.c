@@ -31,6 +31,8 @@
 #include <unistd.h>
 
 #include "project.h"
+#include "projectprivate.h"
+
 #include "dialogs.h"
 #include "support.h"
 #include "utils.h"
@@ -44,9 +46,18 @@
 #endif
 #include "build.h"
 #include "geanyobject.h"
+#include "interface.h"
+#include "editor.h"
+#include "stash.h"
 
 
 ProjectPrefs project_prefs = { NULL, FALSE, FALSE };
+
+
+static GeanyProjectPrivate priv;
+static GeanyIndentPrefs indentation;
+
+static GeanyPrefGroup *indent_group = NULL;
 
 static struct
 {
@@ -341,23 +352,20 @@ void project_close(gboolean open_default)
 
 static void create_properties_dialog(PropertyDialogElements *e)
 {
-	GtkWidget *vbox;
-	GtkWidget *table;
+	GtkWidget *table, *notebook;
 	GtkWidget *image;
 	GtkWidget *button;
 	GtkWidget *bbox;
 	GtkWidget *label;
 	GtkWidget *swin;
 
-	e->dialog = gtk_dialog_new_with_buttons(_("Project Properties"), GTK_WINDOW(main_widgets.window),
-										 GTK_DIALOG_DESTROY_WITH_PARENT,
-										 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
-	gtk_dialog_add_buttons(GTK_DIALOG(e->dialog), GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
+	e->dialog = create_project_dialog();
+	gtk_window_set_transient_for(GTK_WINDOW(e->dialog), GTK_WINDOW(main_widgets.window));
+	gtk_window_set_destroy_with_parent(GTK_WINDOW(e->dialog), TRUE);
 	gtk_widget_set_name(e->dialog, "GeanyDialogProject");
 
-	vbox = ui_dialog_vbox_new(GTK_DIALOG(e->dialog));
-
 	table = gtk_table_new(6, 2, FALSE);
+	gtk_container_set_border_width(GTK_CONTAINER(table), 6);
 	gtk_table_set_row_spacings(GTK_TABLE(table), 5);
 	gtk_table_set_col_spacings(GTK_TABLE(table), 10);
 
@@ -465,7 +473,11 @@ static void create_properties_dialog(PropertyDialogElements *e)
 					(GtkAttachOptions) (0), 0, 0);
 #endif
 
-	gtk_container_add(GTK_CONTAINER(vbox), table);
+	notebook = ui_lookup_widget(e->dialog, "project_notebook");
+	label = gtk_label_new(_("Project"));
+	gtk_widget_show(table);	/* needed to switch current page */
+	gtk_notebook_insert_page(GTK_NOTEBOOK(notebook), table, label, 0);
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 0);
 }
 
 
@@ -480,6 +492,8 @@ void project_properties()
 	entries_modified = FALSE;
 
 	create_properties_dialog(e);
+
+	stash_group_display(indent_group, e->dialog);
 
 	/* fill the elements with the appropriate data */
 	gtk_entry_set_text(GTK_ENTRY(e->name), p->name);
@@ -526,6 +540,8 @@ void project_properties()
 	{
 		if (! update_config(e))
 			goto retry;
+
+		stash_group_update(indent_group, e->dialog);
 	}
 
 	gtk_widget_destroy(e->dialog);
@@ -552,6 +568,20 @@ static gboolean close_open_project()
 	}
 	else
 		return TRUE;
+}
+
+
+static GeanyProject *create_project(void)
+{
+	GeanyProject *project = g_new0(GeanyProject, 1);
+
+	memset(&priv, 0, sizeof priv);
+	indentation = *editor_get_indent_prefs(NULL);
+	priv.indentation = &indentation;
+	project->priv = &priv;
+
+	app->project = project;
+	return project;
 }
 
 
@@ -640,7 +670,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 
 	if (app->project == NULL)
 	{
-		app->project = g_new0(GeanyProject, 1);
+		create_project();
 		new_project = TRUE;
 	}
 	p = app->project;
@@ -887,7 +917,9 @@ static gboolean load_config(const gchar *filename)
 		return FALSE;
 	}
 
-	p = app->project = g_new0(GeanyProject, 1);
+	p = create_project();
+
+	stash_group_load_from_key_file(indent_group, config);
 
 	p->name = utils_get_setting_string(config, "project", "name", GEANY_STRING_UNTITLED);
 	p->description = utils_get_setting_string(config, "project", "description", "");
@@ -935,6 +967,8 @@ static gboolean write_config(gboolean emit_signal)
 	/* try to load an existing config to keep manually added comments */
 	filename = utils_get_locale_from_utf8(p->file_name);
 	g_key_file_load_from_file(config, filename, G_KEY_FILE_NONE, NULL);
+
+	stash_group_save_to_key_file(indent_group, config);
 
 	g_key_file_set_string(config, "project", "name", p->name);
 	g_key_file_set_string(config, "project", "base_path", p->base_path);
@@ -1065,4 +1099,35 @@ void project_apply_prefs()
 	setptr(local_prefs.project_file_path, g_strdup(str));
 }
 
+
+void project_init(void)
+{
+	GeanyPrefGroup *group;
+
+	group = stash_group_new("indentation");
+	/* defaults are copied from editor indent prefs */
+	stash_group_set_use_defaults(group, FALSE);
+	indent_group = group;
+
+	stash_group_add_spin_button_integer(group, &indentation.width,
+		"indent_width", 4, "spin_indent_width");
+	stash_group_add_radio_buttons(group, (gint*)&indentation.type,
+		"indent_type", GEANY_INDENT_TYPE_TABS,
+		"radio_indent_spaces", GEANY_INDENT_TYPE_SPACES,
+		"radio_indent_tabs", GEANY_INDENT_TYPE_TABS,
+		"radio_indent_both", GEANY_INDENT_TYPE_BOTH,
+		NULL);
+	stash_group_add_spin_button_integer(group, &indentation.hard_tab_width,
+		"indent_hard_tab_width", 8, "spin_tab_width");
+	stash_group_add_toggle_button(group, &indentation.detect_type,
+		"detect_indent", FALSE, "check_detect_indent");
+	stash_group_add_combo_box(group, (gint*)&indentation.auto_indent_mode,
+		"indent_mode", GEANY_AUTOINDENT_CURRENTCHARS, "combo_auto_indent_mode");
+}
+
+
+void project_finalize(void)
+{
+	stash_group_free(indent_group);
+}
 

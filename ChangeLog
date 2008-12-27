@@ -1,3 +1,20 @@
+2008-12-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, src/interface.h, src/project.c, src/project.h,
+   src/projectprivate.h, src/stash.c, src/stash.h, src/main.c,
+   src/editor.c, src/Makefile.am, geany.glade:
+   Add Project Indentation prefs, which override the Editor
+   Preferences dialog options. For new projects, these default to the
+   editor indent prefs.
+ - Plugins:
+   For compatibility with this change, use editor_get_indent_prefs().
+ - Code changes:
+   The Project Properties dialog is now created by Glade, but (for
+   now) the existing options are added manually.
+   Add GeanyProjectPrivate project field.
+   Add stash_group_set_use_defaults().
+
+
 2008-12-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/stash.c, src/stash.h, src/keyfile.c:

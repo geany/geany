@@ -57,6 +57,8 @@
 #include "geanyobject.h"
 #include "templates.h"
 #include "keybindings.h"
+#include "project.h"
+#include "projectprivate.h"
 
 
 /* Note: Avoid using SSM in files not related to scintilla, use sciwrappers.h instead. */
@@ -817,8 +819,10 @@ get_whitespace(const GeanyIndentPrefs *iprefs, gint width)
 static const GeanyIndentPrefs *
 get_default_indent_prefs(void)
 {
-	/* In future this might depend on the current project. */
-	return editor_prefs.indentation;
+	static GeanyIndentPrefs iprefs;
+
+	iprefs = app->project ? *app->project->priv->indentation : *editor_prefs.indentation;
+	return &iprefs;
 }
 
 

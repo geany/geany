@@ -34,6 +34,8 @@ GeanyPrefGroup *stash_group_new(const gchar *name);
 
 void stash_group_set_write_once(GeanyPrefGroup *group, gboolean write_once);
 
+void stash_group_set_use_defaults(GeanyPrefGroup *group, gboolean use_defaults);
+
 void stash_group_add_boolean(GeanyPrefGroup *group, gboolean *setting,
 		const gchar *key_name, gboolean default_value);
 

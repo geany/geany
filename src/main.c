@@ -919,6 +919,7 @@ gint main(gint argc, gchar **argv)
 
 	encodings_init();
 	editor_init();
+	project_init();
 
 	configuration_init();
 	search_init();
@@ -1051,6 +1052,7 @@ void main_quit()
 	build_finalize();
 	document_finalize();
 	symbols_finalize();
+	project_finalize();
 	editor_finalize();
 	editor_snippets_free();
 	encodings_finalize();

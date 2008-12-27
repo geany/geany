@@ -41,6 +41,8 @@ typedef struct GeanyProject
 	gint type;
 	gchar **file_patterns;	/**< Array of filename extension patterns. */
 	gboolean make_in_base_path;
+
+	struct GeanyProjectPrivate	*priv;	/* must be last, append fields before this item */
 }
 GeanyProject;
 
@@ -53,6 +55,11 @@ typedef struct ProjectPrefs
 } ProjectPrefs;
 
 extern ProjectPrefs project_prefs;
+
+
+void project_init(void);
+
+void project_finalize(void);
 
 
 void project_new(void);

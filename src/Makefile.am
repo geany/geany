@@ -3,7 +3,7 @@
 
 
 EXTRA_DIST = images.c gb.c win32.c win32.h plugindata.h \
-	documentprivate.h
+	documentprivate.h projectprivate.h
 
 bin_PROGRAMS = geany
 

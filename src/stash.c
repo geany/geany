@@ -74,6 +74,7 @@ struct GeanyPrefGroup
 	const gchar *name;			/* group name to use in the keyfile */
 	GArray *entries;			/* array of GeanyPrefEntry */
 	gboolean write_once;		/* only write settings if they don't already exist */
+	gboolean use_defaults;		/* use default values if there's no keyfile entry */
 };
 
 typedef struct EnumWidget
@@ -160,9 +161,14 @@ static void keyfile_action(SettingAction action, GeanyPrefGroup *group, GKeyFile
 
 	foreach_array(GeanyPrefEntry, entry, group->entries)
 	{
+		/* don't overwrite write_once prefs */
 		if (group->write_once && action == SETTING_WRITE &&
 			g_key_file_has_key(keyfile, group->name, entry->key_name, NULL))
-			continue; /* don't overwrite write_once prefs */
+			continue;
+		/* don't override settings with default values */
+		if (!group->use_defaults && action == SETTING_READ &&
+			!g_key_file_has_key(keyfile, group->name, entry->key_name, NULL))
+			continue;
 
 		switch (entry->setting_type)
 		{
@@ -198,6 +204,7 @@ GeanyPrefGroup *stash_group_new(const gchar *name)
 
 	group->name = name;
 	group->entries = g_array_new(FALSE, FALSE, sizeof(GeanyPrefEntry));
+	group->use_defaults = TRUE;
 	return group;
 }
 
@@ -218,9 +225,21 @@ void stash_group_free(GeanyPrefGroup *group)
 }
 
 
+/* Useful so the user can edit the keyfile manually while the program is running,
+ * and the setting won't be overridden.
+ * @c FALSE by default. */
 void stash_group_set_write_once(GeanyPrefGroup *group, gboolean write_once)
 {
 	group->write_once = write_once;
+}
+
+
+/* When @c FALSE, Stash doesn't change the setting if there is no keyfile entry, so it
+ * remains whatever it was initialized/set to by user code.
+ * @c TRUE by default. */
+void stash_group_set_use_defaults(GeanyPrefGroup *group, gboolean use_defaults)
+{
+	group->use_defaults = use_defaults;
 }
 
 
