@@ -2380,6 +2380,27 @@ create_prefs_dialog (void)
   GtkWidget *label164;
   GtkWidget *notebook4;
   GtkWidget *vbox5;
+  GtkWidget *frame14;
+  GtkWidget *alignment17;
+  GtkWidget *vbox17;
+  GtkWidget *check_line_wrapping;
+  GtkWidget *check_smart_home;
+  GtkWidget *check_disable_dnd;
+  GtkWidget *check_folding;
+  GtkWidget *check_unfold_children;
+  GtkWidget *check_indicators;
+  GtkWidget *check_newline_strip;
+  GtkWidget *hbox11;
+  GtkWidget *label209;
+  GtkObject *spin_line_break_adj;
+  GtkWidget *spin_line_break;
+  GtkWidget *hbox12;
+  GtkWidget *label220;
+  GtkWidget *entry_toggle_mark;
+  GtkWidget *label172;
+  GtkWidget *label211;
+  GtkWidget *vbox40;
+  GtkWidget *label_project_indent_warning;
   GtkWidget *frame27;
   GtkWidget *alignment30;
   GtkWidget *vbox25;
@@ -2402,25 +2423,7 @@ create_prefs_dialog (void)
   GtkWidget *check_detect_indent;
   GtkWidget *check_tab_key_indents;
   GtkWidget *label195;
-  GtkWidget *frame14;
-  GtkWidget *alignment17;
-  GtkWidget *vbox17;
-  GtkWidget *check_line_wrapping;
-  GtkWidget *check_smart_home;
-  GtkWidget *check_disable_dnd;
-  GtkWidget *check_folding;
-  GtkWidget *check_unfold_children;
-  GtkWidget *check_indicators;
-  GtkWidget *check_newline_strip;
-  GtkWidget *hbox11;
-  GtkWidget *label209;
-  GtkObject *spin_line_break_adj;
-  GtkWidget *spin_line_break;
-  GtkWidget *hbox12;
-  GtkWidget *label220;
-  GtkWidget *entry_toggle_mark;
-  GtkWidget *label172;
-  GtkWidget *label211;
+  GtkWidget *label232;
   GtkWidget *vbox39;
   GtkWidget *frame18;
   GtkWidget *alignment21;
@@ -3223,9 +3226,106 @@ create_prefs_dialog (void)
   gtk_container_add (GTK_CONTAINER (notebook4), vbox5);
   gtk_container_set_border_width (GTK_CONTAINER (vbox5), 5);
 
+  frame14 = gtk_frame_new (NULL);
+  gtk_widget_show (frame14);
+  gtk_box_pack_start (GTK_BOX (vbox5), frame14, FALSE, TRUE, 0);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame14), GTK_SHADOW_NONE);
+
+  alignment17 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment17);
+  gtk_container_add (GTK_CONTAINER (frame14), alignment17);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment17), 0, 0, 12, 0);
+
+  vbox17 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (vbox17);
+  gtk_container_add (GTK_CONTAINER (alignment17), vbox17);
+
+  check_line_wrapping = gtk_check_button_new_with_mnemonic (_("Line wrapping"));
+  gtk_widget_show (check_line_wrapping);
+  gtk_box_pack_start (GTK_BOX (vbox17), check_line_wrapping, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_line_wrapping, _("Wrap the line at the window border and continue it on the next line. Note: line wrapping has a high performance cost for large documents so should be disabled on slow machines."), NULL);
+
+  check_smart_home = gtk_check_button_new_with_mnemonic (_("Enable \"smart\" home key"));
+  gtk_widget_show (check_smart_home);
+  gtk_box_pack_start (GTK_BOX (vbox17), check_smart_home, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_smart_home, _("When \"smart\" home is enabled, the HOME key will move the caret to the first non-blank character of the line, unless it is already there, it moves to the very beginning of the line. When this feature is disabled, the HOME key always moves the caret to the start of the current line, regardless of its current position."), NULL);
+
+  check_disable_dnd = gtk_check_button_new_with_mnemonic (_("Disable Drag and Drop"));
+  gtk_widget_show (check_disable_dnd);
+  gtk_box_pack_start (GTK_BOX (vbox17), check_disable_dnd, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_disable_dnd, _("Disable drag and drop completely in the editor window so you can't drag and drop any selections within or outside of the editor window."), NULL);
+
+  check_folding = gtk_check_button_new_with_mnemonic (_("Enable folding"));
+  gtk_widget_show (check_folding);
+  gtk_box_pack_start (GTK_BOX (vbox17), check_folding, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_folding, _("Whether to enable folding the code"), NULL);
+
+  check_unfold_children = gtk_check_button_new_with_mnemonic (_("Fold/unfold all children of a fold point"));
+  gtk_widget_show (check_unfold_children);
+  gtk_box_pack_start (GTK_BOX (vbox17), check_unfold_children, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_unfold_children, _("Fold or unfold all children of a fold point. By pressing the Shift key while clicking on a fold symbol the contrary behavior is used."), NULL);
+
+  check_indicators = gtk_check_button_new_with_mnemonic (_("Use indicators to show compile errors"));
+  gtk_widget_show (check_indicators);
+  gtk_box_pack_start (GTK_BOX (vbox17), check_indicators, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_indicators, _("Whether to use indicators (a squiggly underline) to highlight the lines where the compiler found a warning or an error."), NULL);
+
+  check_newline_strip = gtk_check_button_new_with_mnemonic (_("Newline strips trailing spaces"));
+  gtk_widget_show (check_newline_strip);
+  gtk_box_pack_start (GTK_BOX (vbox17), check_newline_strip, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_newline_strip, _("Enable newline to strip the trailing spaces on the previous line."), NULL);
+
+  hbox11 = gtk_hbox_new (FALSE, 12);
+  gtk_widget_show (hbox11);
+  gtk_box_pack_start (GTK_BOX (vbox17), hbox11, TRUE, TRUE, 0);
+
+  label209 = gtk_label_new (_("Line breaking column:"));
+  gtk_widget_show (label209);
+  gtk_box_pack_start (GTK_BOX (hbox11), label209, FALSE, FALSE, 0);
+
+  spin_line_break_adj = gtk_adjustment_new (72, 3, 1000, 1, 10, 0);
+  spin_line_break = gtk_spin_button_new (GTK_ADJUSTMENT (spin_line_break_adj), 1, 0);
+  gtk_widget_show (spin_line_break);
+  gtk_box_pack_start (GTK_BOX (hbox11), spin_line_break, FALSE, TRUE, 0);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_line_break), TRUE);
+
+  hbox12 = gtk_hbox_new (FALSE, 12);
+  gtk_widget_show (hbox12);
+  gtk_box_pack_start (GTK_BOX (vbox17), hbox12, TRUE, TRUE, 0);
+
+  label220 = gtk_label_new (_("Comment toggle marker:"));
+  gtk_widget_show (label220);
+  gtk_box_pack_start (GTK_BOX (hbox12), label220, FALSE, FALSE, 0);
+
+  entry_toggle_mark = gtk_entry_new ();
+  gtk_widget_show (entry_toggle_mark);
+  gtk_box_pack_start (GTK_BOX (hbox12), entry_toggle_mark, FALSE, TRUE, 0);
+  gtk_tooltips_set_tip (tooltips, entry_toggle_mark, _("A string which is added when toggling a line comment in a source file. It is used to mark the comment as toggled."), NULL);
+
+  label172 = gtk_label_new (_("<b>Features</b>"));
+  gtk_widget_show (label172);
+  gtk_frame_set_label_widget (GTK_FRAME (frame14), label172);
+  gtk_label_set_use_markup (GTK_LABEL (label172), TRUE);
+
+  label211 = gtk_label_new (_("Features"));
+  gtk_widget_show (label211);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook4), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook4), 0), label211);
+
+  vbox40 = gtk_vbox_new (FALSE, 6);
+  gtk_widget_show (vbox40);
+  gtk_container_add (GTK_CONTAINER (notebook4), vbox40);
+
+  label_project_indent_warning = gtk_label_new (_("<i>Warning: these settings are overridden by the current project. See <b>Project->Properties</b>.</i>"));
+  gtk_widget_show (label_project_indent_warning);
+  gtk_box_pack_start (GTK_BOX (vbox40), label_project_indent_warning, FALSE, FALSE, 0);
+  gtk_label_set_use_markup (GTK_LABEL (label_project_indent_warning), TRUE);
+  gtk_label_set_line_wrap (GTK_LABEL (label_project_indent_warning), TRUE);
+  gtk_misc_set_alignment (GTK_MISC (label_project_indent_warning), 0, 0.5);
+  gtk_misc_set_padding (GTK_MISC (label_project_indent_warning), 6, 6);
+
   frame27 = gtk_frame_new (NULL);
   gtk_widget_show (frame27);
-  gtk_box_pack_start (GTK_BOX (vbox5), frame27, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox40), frame27, TRUE, TRUE, 0);
   gtk_frame_set_shadow_type (GTK_FRAME (frame27), GTK_SHADOW_NONE);
 
   alignment30 = gtk_alignment_new (0.5, 0.5, 1, 1);
@@ -3353,90 +3453,9 @@ create_prefs_dialog (void)
   gtk_frame_set_label_widget (GTK_FRAME (frame27), label195);
   gtk_label_set_use_markup (GTK_LABEL (label195), TRUE);
 
-  frame14 = gtk_frame_new (NULL);
-  gtk_widget_show (frame14);
-  gtk_box_pack_start (GTK_BOX (vbox5), frame14, FALSE, TRUE, 0);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame14), GTK_SHADOW_NONE);
-
-  alignment17 = gtk_alignment_new (0.5, 0.5, 1, 1);
-  gtk_widget_show (alignment17);
-  gtk_container_add (GTK_CONTAINER (frame14), alignment17);
-  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment17), 0, 0, 12, 0);
-
-  vbox17 = gtk_vbox_new (FALSE, 0);
-  gtk_widget_show (vbox17);
-  gtk_container_add (GTK_CONTAINER (alignment17), vbox17);
-
-  check_line_wrapping = gtk_check_button_new_with_mnemonic (_("Line wrapping"));
-  gtk_widget_show (check_line_wrapping);
-  gtk_box_pack_start (GTK_BOX (vbox17), check_line_wrapping, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_line_wrapping, _("Wrap the line at the window border and continue it on the next line. Note: line wrapping has a high performance cost for large documents so should be disabled on slow machines."), NULL);
-
-  check_smart_home = gtk_check_button_new_with_mnemonic (_("Enable \"smart\" home key"));
-  gtk_widget_show (check_smart_home);
-  gtk_box_pack_start (GTK_BOX (vbox17), check_smart_home, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_smart_home, _("When \"smart\" home is enabled, the HOME key will move the caret to the first non-blank character of the line, unless it is already there, it moves to the very beginning of the line. When this feature is disabled, the HOME key always moves the caret to the start of the current line, regardless of its current position."), NULL);
-
-  check_disable_dnd = gtk_check_button_new_with_mnemonic (_("Disable Drag and Drop"));
-  gtk_widget_show (check_disable_dnd);
-  gtk_box_pack_start (GTK_BOX (vbox17), check_disable_dnd, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_disable_dnd, _("Disable drag and drop completely in the editor window so you can't drag and drop any selections within or outside of the editor window."), NULL);
-
-  check_folding = gtk_check_button_new_with_mnemonic (_("Enable folding"));
-  gtk_widget_show (check_folding);
-  gtk_box_pack_start (GTK_BOX (vbox17), check_folding, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_folding, _("Whether to enable folding the code"), NULL);
-
-  check_unfold_children = gtk_check_button_new_with_mnemonic (_("Fold/unfold all children of a fold point"));
-  gtk_widget_show (check_unfold_children);
-  gtk_box_pack_start (GTK_BOX (vbox17), check_unfold_children, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_unfold_children, _("Fold or unfold all children of a fold point. By pressing the Shift key while clicking on a fold symbol the contrary behavior is used."), NULL);
-
-  check_indicators = gtk_check_button_new_with_mnemonic (_("Use indicators to show compile errors"));
-  gtk_widget_show (check_indicators);
-  gtk_box_pack_start (GTK_BOX (vbox17), check_indicators, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_indicators, _("Whether to use indicators (a squiggly underline) to highlight the lines where the compiler found a warning or an error."), NULL);
-
-  check_newline_strip = gtk_check_button_new_with_mnemonic (_("Newline strips trailing spaces"));
-  gtk_widget_show (check_newline_strip);
-  gtk_box_pack_start (GTK_BOX (vbox17), check_newline_strip, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_newline_strip, _("Enable newline to strip the trailing spaces on the previous line."), NULL);
-
-  hbox11 = gtk_hbox_new (FALSE, 12);
-  gtk_widget_show (hbox11);
-  gtk_box_pack_start (GTK_BOX (vbox17), hbox11, TRUE, TRUE, 0);
-
-  label209 = gtk_label_new (_("Line breaking column:"));
-  gtk_widget_show (label209);
-  gtk_box_pack_start (GTK_BOX (hbox11), label209, FALSE, FALSE, 0);
-
-  spin_line_break_adj = gtk_adjustment_new (72, 3, 1000, 1, 10, 0);
-  spin_line_break = gtk_spin_button_new (GTK_ADJUSTMENT (spin_line_break_adj), 1, 0);
-  gtk_widget_show (spin_line_break);
-  gtk_box_pack_start (GTK_BOX (hbox11), spin_line_break, FALSE, TRUE, 0);
-  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_line_break), TRUE);
-
-  hbox12 = gtk_hbox_new (FALSE, 12);
-  gtk_widget_show (hbox12);
-  gtk_box_pack_start (GTK_BOX (vbox17), hbox12, TRUE, TRUE, 0);
-
-  label220 = gtk_label_new (_("Comment toggle marker:"));
-  gtk_widget_show (label220);
-  gtk_box_pack_start (GTK_BOX (hbox12), label220, FALSE, FALSE, 0);
-
-  entry_toggle_mark = gtk_entry_new ();
-  gtk_widget_show (entry_toggle_mark);
-  gtk_box_pack_start (GTK_BOX (hbox12), entry_toggle_mark, FALSE, TRUE, 0);
-  gtk_tooltips_set_tip (tooltips, entry_toggle_mark, _("A string which is added when toggling a line comment in a source file. It is used to mark the comment as toggled."), NULL);
-
-  label172 = gtk_label_new (_("<b>Features</b>"));
-  gtk_widget_show (label172);
-  gtk_frame_set_label_widget (GTK_FRAME (frame14), label172);
-  gtk_label_set_use_markup (GTK_LABEL (label172), TRUE);
-
-  label211 = gtk_label_new (_("Features"));
-  gtk_widget_show (label211);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook4), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook4), 0), label211);
+  label232 = gtk_label_new (_("Indentation"));
+  gtk_widget_show (label232);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook4), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook4), 1), label232);
 
   vbox39 = gtk_vbox_new (FALSE, 1);
   gtk_widget_show (vbox39);
@@ -3593,7 +3612,7 @@ create_prefs_dialog (void)
 
   label226 = gtk_label_new (_("Completions"));
   gtk_widget_show (label226);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook4), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook4), 1), label226);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook4), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook4), 2), label226);
 
   vbox24 = gtk_vbox_new (FALSE, 10);
   gtk_widget_show (vbox24);
@@ -3741,7 +3760,7 @@ create_prefs_dialog (void)
 
   label213 = gtk_label_new (_("Display"));
   gtk_widget_show (label213);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook4), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook4), 2), label213);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook4), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook4), 3), label213);
 
   label95 = gtk_label_new (_("Editor"));
   gtk_widget_show (label95);
@@ -4613,6 +4632,26 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, label164, "label164");
   GLADE_HOOKUP_OBJECT (prefs_dialog, notebook4, "notebook4");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox5, "vbox5");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame14, "frame14");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment17, "alignment17");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox17, "vbox17");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_line_wrapping, "check_line_wrapping");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_smart_home, "check_smart_home");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_disable_dnd, "check_disable_dnd");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_folding, "check_folding");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_unfold_children, "check_unfold_children");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_indicators, "check_indicators");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_newline_strip, "check_newline_strip");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox11, "hbox11");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label209, "label209");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, spin_line_break, "spin_line_break");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox12, "hbox12");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label220, "label220");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, entry_toggle_mark, "entry_toggle_mark");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label172, "label172");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label211, "label211");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox40, "vbox40");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label_project_indent_warning, "label_project_indent_warning");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame27, "frame27");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment30, "alignment30");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox25, "vbox25");
@@ -4632,24 +4671,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_detect_indent, "check_detect_indent");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_tab_key_indents, "check_tab_key_indents");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label195, "label195");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, frame14, "frame14");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment17, "alignment17");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox17, "vbox17");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_line_wrapping, "check_line_wrapping");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_smart_home, "check_smart_home");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_disable_dnd, "check_disable_dnd");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_folding, "check_folding");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_unfold_children, "check_unfold_children");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_indicators, "check_indicators");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_newline_strip, "check_newline_strip");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox11, "hbox11");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label209, "label209");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, spin_line_break, "spin_line_break");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox12, "hbox12");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label220, "label220");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, entry_toggle_mark, "entry_toggle_mark");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label172, "label172");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label211, "label211");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label232, "label232");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox39, "vbox39");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame18, "frame18");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment21, "alignment21");

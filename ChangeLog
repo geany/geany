@@ -13,6 +13,10 @@
    now) the existing options are added manually.
    Add GeanyProjectPrivate project field.
    Add stash_group_set_use_defaults().
+ * src/interface.c, src/prefs.c, src/prefs.h, geany.glade:
+   Show warning label on Preferences dialog Editor tab when a project
+   is open.
+   Move Indentation frame to a separate tab.
 
 
 2008-12-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

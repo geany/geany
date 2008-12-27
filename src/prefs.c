@@ -196,13 +196,16 @@ static void init_keybindings(void)
 
 
 /* note: new prefs should use Stash code in keyfile.c */
-void prefs_init_dialog(void)
+static void prefs_init_dialog(void)
 {
 	GtkWidget *widget;
 	GdkColor *color;
 
 	/* Synchronize with Stash settings */
 	prefs_action(PREF_DISPLAY);
+
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "label_project_indent_warning");
+	ui_widget_show_hide(widget, app->project != NULL);
 
 	/* General settings */
 	/* startup */

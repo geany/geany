@@ -55,8 +55,6 @@ GeanyToolPrefs;
 extern GeanyToolPrefs tool_prefs;
 
 
-void prefs_init_dialog(void);
-
 void prefs_show_dialog(void);
 
 void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data);
