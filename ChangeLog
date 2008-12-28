@@ -7,6 +7,8 @@
    Use Stash for plugin-related prefs.
    Add geany_object "save-settings" signal (for core only).
    Add stash_group_add_string_vector().
+ * src/main.c:
+   Fix creating a new configuration directory (oops).
 
 
 2008-12-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
