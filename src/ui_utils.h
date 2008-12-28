@@ -24,6 +24,16 @@
 #ifndef GEANY_UI_UTILS_H
 #define GEANY_UI_UTILS_H 1
 
+/** Set a name to lookup @a widget from @a owner.
+ * @param owner Usually a @c GtkWindow.
+ * @param widget Widget.
+ * @param widget_name Name.
+ * @see ui_lookup_widget(). */
+#define ui_hookup_widget(owner, widget, widget_name) \
+	g_object_set_data_full(G_OBJECT(owner), widget_name, \
+		g_object_ref(widget), (GDestroyNotify)g_object_unref);
+
+
 typedef struct GeanyInterfacePrefs
 {
 	gboolean		sidebar_symbol_visible;

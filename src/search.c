@@ -82,10 +82,11 @@ GeanySearchPrefs search_prefs;
 static struct
 {
 	gint fif_mode;
+	gchar *fif_extra_options;
 }
-settings;
+settings = {0, NULL};
 
-GeanyPrefGroup *fif_prefs = NULL;
+static GeanyPrefGroup *fif_prefs = NULL;
 
 
 static struct
@@ -101,9 +102,8 @@ struct
 	GtkWidget *dir_combo;
 	GtkWidget *search_combo;
 	GtkWidget *encoding_combo;
-	GtkWidget *extra_entry;
 }
-find_in_files = {NULL, NULL, NULL, NULL};
+find_in_files = {NULL, NULL, NULL};
 
 
 static gboolean search_read_io(GIOChannel *source, GIOCondition condition, gpointer data);
@@ -157,6 +157,8 @@ static void init_prefs(void)
 		"radio_grep", FIF_GREP,
 		"radio_egrep", FIF_EGREP,
 		NULL);
+	stash_group_add_entry(group, &settings.fif_extra_options,
+		"fif_extra_options", "", "entry_extra");
 }
 
 
@@ -744,11 +746,9 @@ static void create_fif_dialog()
 	gtk_button_set_focus_on_click(GTK_BUTTON(check_extra), FALSE);
 
 	entry_extra = gtk_entry_new();
-	if (search_prefs.fif_extra_options)
-		gtk_entry_set_text(GTK_ENTRY(entry_extra), search_prefs.fif_extra_options);
 	gtk_widget_set_sensitive(entry_extra, FALSE);
 	ui_widget_set_tooltip_text(entry_extra, _("Other options to pass to Grep"));
-	find_in_files.extra_entry = entry_extra;
+	ui_hookup_widget(widgets.find_in_files_dialog, entry_extra, "entry_extra");
 
 	/* enable entry_extra when check_extra is checked */
 	g_signal_connect(check_extra, "toggled",
@@ -1192,15 +1192,13 @@ static GString *get_grep_options(void)
 
 	if (extra)
 	{
-		gchar *text = g_strdup(gtk_entry_get_text(GTK_ENTRY(find_in_files.extra_entry)));
+		g_strstrip(settings.fif_extra_options);
 
-		text = g_strstrip(text);
-		if (*text != 0)
+		if (*settings.fif_extra_options != 0)
 		{
 			g_string_append_c(gstr, ' ');
-			g_string_append(gstr, text);
+			g_string_append(gstr, settings.fif_extra_options);
 		}
-		g_free(text);
 	}
 	return gstr;
 }
@@ -1222,11 +1220,6 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 			gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(dir_combo))));
 		GeanyEncodingIndex enc_idx = gtk_combo_box_get_active(
 			GTK_COMBO_BOX(find_in_files.encoding_combo));
-
-		/* update extra options pref */
-		g_free(search_prefs.fif_extra_options);
-		search_prefs.fif_extra_options = g_strdup(gtk_entry_get_text(GTK_ENTRY(
-			find_in_files.extra_entry)));
 
 		if (!NZV(utf8_dir))
 			ui_set_statusbar(FALSE, _("Invalid directory for find in files."));

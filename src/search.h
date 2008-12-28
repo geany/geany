@@ -42,7 +42,6 @@ extern GeanySearchData search_data;
 
 typedef struct GeanySearchPrefs
 {
-	gchar		*fif_extra_options;
 	gboolean	suppress_dialogs;
 	gboolean	use_current_word;
 	gboolean	use_current_file_dir;	/* find in files directory to use on showing dialog */

@@ -21,7 +21,7 @@
  * $Id$
  */
 
-/** @file ui_utils.c
+/** @file ui_utils.h
  * User Interface general utility functions.
  */
 
@@ -1726,13 +1726,14 @@ void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text)
 }
 
 
-/** This function returns a widget in a component created by Glade.
+/** This function returns a widget from a name in a component, usually created by Glade.
  * Call it with the toplevel widget in the component (i.e. a window/dialog),
  * or alternatively any widget in the component, and the name of the widget
  * you want returned.
  * @param widget Widget with the @a widget_name property set.
  * @param widget_name Name to lookup.
- * @return The widget found. */
+ * @return The widget found.
+ * @see ui_hookup_widget(). */
 GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name)
 {
 	GtkWidget *parent, *found_widget;

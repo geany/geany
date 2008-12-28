@@ -149,7 +149,8 @@ static void handle_string_setting(GeanyPrefGroup *group, GeanyPrefEntry *se,
 				se->default_value);
 			break;
 		case SETTING_WRITE:
-			g_key_file_set_string(config, group->name, se->key_name, *setting);
+			g_key_file_set_string(config, group->name, se->key_name,
+				*setting ? *setting : "");
 			break;
 	}
 }

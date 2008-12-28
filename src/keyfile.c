@@ -479,9 +479,6 @@ static void save_ui_prefs(GKeyFile *config)
 		g_key_file_set_string_list(config, PACKAGE, "custom_commands",
 				(const gchar**) ui_prefs.custom_commands, g_strv_length(ui_prefs.custom_commands));
 	}
-
-	/* search */
-	g_key_file_set_string(config, "search", "fif_extra_options", search_prefs.fif_extra_options ? search_prefs.fif_extra_options : "");
 }
 
 
@@ -815,9 +812,6 @@ static void load_ui_prefs(GKeyFile *config)
 				(GEANY_MSGWIN_HEIGHT + GEANY_WINDOW_DEFAULT_HEIGHT - 440));
 
 	g_free(geo);
-
-	/* search */
-	search_prefs.fif_extra_options = utils_get_setting_string(config, "search", "fif_extra_options", "");
 }
 
 

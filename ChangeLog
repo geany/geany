@@ -9,6 +9,11 @@
    Add stash_group_add_string_vector().
  * src/main.c:
    Fix creating a new configuration directory (oops).
+ * src/ui_utils.h, src/plugindata.h, src/stash.c, src/keyfile.c,
+   src/search.c, src/search.h, src/ui_utils.c:
+   Add ui_hookup_widget() macro to the API.
+   Make saving Stash string settings NULL-safe.
+   Move fif_extra_options search setting code to search.c.
 
 
 2008-12-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
