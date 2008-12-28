@@ -155,6 +155,35 @@ static void handle_string_setting(GeanyPrefGroup *group, GeanyPrefEntry *se,
 }
 
 
+static void handle_strv_setting(GeanyPrefGroup *group, GeanyPrefEntry *se,
+		GKeyFile *config, SettingAction action)
+{
+	gchararray **setting = se->setting;
+
+	switch (action)
+	{
+		case SETTING_READ:
+			g_strfreev(*setting);
+			*setting = g_key_file_get_string_list(config, group->name, se->key_name,
+				NULL, NULL);
+			if (*setting == NULL)
+				*setting = g_strdupv(se->default_value);
+			break;
+
+		case SETTING_WRITE:
+		{
+			/* don't try to save a NULL string vector */
+			gchar *dummy[] = { "", NULL };
+			gchar **strv = *setting ? *setting : dummy;
+
+			g_key_file_set_string_list(config, group->name, se->key_name,
+				(const gchar**)strv, g_strv_length(strv));
+			break;
+		}
+	}
+}
+
+
 static void keyfile_action(SettingAction action, GeanyPrefGroup *group, GKeyFile *keyfile)
 {
 	GeanyPrefEntry *entry;
@@ -179,8 +208,12 @@ static void keyfile_action(SettingAction action, GeanyPrefGroup *group, GKeyFile
 			case G_TYPE_STRING:
 				handle_string_setting(group, entry, keyfile, action); break;
 			default:
-				g_warning("Unhandled type for %s::%s in %s!", group->name, entry->key_name,
-					G_GNUC_FUNCTION);
+				/* G_TYPE_STRV is not a constant */
+				if (entry->setting_type == G_TYPE_STRV)
+					handle_strv_setting(group, entry, keyfile, action);
+				else
+					g_warning("Unhandled type for %s::%s in %s!", group->name, entry->key_name,
+						G_GNUC_FUNCTION);
 		}
 	}
 }
@@ -271,12 +304,22 @@ void stash_group_add_integer(GeanyPrefGroup *group, gint *setting,
 
 
 /* The contents of @a setting will be freed before being replaced, so make sure it is
- * initialized to @c NULL.
+ * allocated, or initialized to @c NULL.
  * @param default_value Not duplicated. */
 void stash_group_add_string(GeanyPrefGroup *group, gchar **setting,
 		const gchar *key_name, const gchar *default_value)
 {
 	add_pref(group, G_TYPE_STRING, setting, key_name, (gpointer)default_value);
+}
+
+
+/* The contents of @a setting will be freed before being replaced, so make sure it is
+ * allocated, or initialized to @c NULL.
+ * @param default_value Not duplicated. */
+void stash_group_add_string_vector(GeanyPrefGroup *group, gchar ***setting,
+		const gchar *key_name, const gchar **default_value)
+{
+	add_pref(group, G_TYPE_STRV, setting, key_name, (gpointer)default_value);
 }
 
 

@@ -919,10 +919,14 @@ gint main(gint argc, gchar **argv)
 
 	encodings_init();
 	editor_init();
-	project_init();
 
 	configuration_init();
+	/* init stash code before loading keyfile */
 	search_init();
+	project_init();
+#ifdef HAVE_PLUGINS
+	plugins_init();
+#endif
 	load_settings();
 
 	msgwin_init();
@@ -983,7 +987,7 @@ gint main(gint argc, gchar **argv)
 #ifdef HAVE_PLUGINS
 	/* load any enabled plugins before we open any documents */
 	if (want_plugins)
-		plugins_init();
+		plugins_load_active();
 #endif
 
 	/* load keybinding settings after plugins have added their groups */
@@ -1037,8 +1041,7 @@ void main_quit()
 #endif
 
 #ifdef HAVE_PLUGINS
-	if (want_plugins)
-		plugins_free();
+	plugins_finalize();
 #endif
 
 	navqueue_free();

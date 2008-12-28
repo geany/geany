@@ -1,3 +1,14 @@
+2008-12-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/prefs.c, src/geanyobject.c, src/geanyobject.h, src/stash.c,
+   src/stash.h, src/keyfile.c, src/plugins.c, src/main.c,
+   src/plugins.h:
+   Don't forget active plugins after disabling plugin support.
+   Use Stash for plugin-related prefs.
+   Add geany_object "save-settings" signal (for core only).
+   Add stash_group_add_string_vector().
+
+
 2008-12-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/interface.c, src/interface.h, src/project.c, src/project.h,

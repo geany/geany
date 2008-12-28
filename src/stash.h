@@ -45,13 +45,12 @@ void stash_group_add_integer(GeanyPrefGroup *group, gint *setting,
 void stash_group_add_string(GeanyPrefGroup *group, gchar **setting,
 		const gchar *key_name, const gchar *default_value);
 
+void stash_group_add_string_vector(GeanyPrefGroup *group, gchar ***setting,
+		const gchar *key_name, const gchar **default_value);
+
 void stash_group_load_from_key_file(GeanyPrefGroup *group, GKeyFile *keyfile);
 
 void stash_group_save_to_key_file(GeanyPrefGroup *group, GKeyFile *keyfile);
-
-void stash_group_display(GeanyPrefGroup *group, GtkWidget *owner);
-
-void stash_group_update(GeanyPrefGroup *group, GtkWidget *owner);
 
 void stash_group_free(GeanyPrefGroup *group);
 
@@ -76,5 +75,9 @@ void stash_group_add_combo_box_entry(GeanyPrefGroup *group, gchar **setting,
 
 void stash_group_add_entry(GeanyPrefGroup *group, gchar **setting,
 		const gchar *key_name, const gchar *default_value, gpointer widget_id);
+
+void stash_group_display(GeanyPrefGroup *group, GtkWidget *owner);
+
+void stash_group_update(GeanyPrefGroup *group, GtkWidget *owner);
 
 #endif

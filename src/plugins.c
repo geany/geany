@@ -59,6 +59,8 @@
 #include "navqueue.h"
 #include "main.h"
 #include "toolbar.h"
+#include "stash.h"
+#include "keyfile.h"
 
 
 #ifdef G_OS_WIN32
@@ -94,6 +96,8 @@ typedef struct Plugin
 }
 Plugin;
 
+
+static gboolean want_plugins = FALSE;
 
 /* list of all available, loadable plugins, only valid as long as the plugin manager dialog is
  * opened, afterwards it will be destroyed */
@@ -833,9 +837,12 @@ static void on_tools_menu_show(GtkWidget *menu_item, G_GNUC_UNUSED gpointer user
 }
 
 
-void plugins_init()
+/* Calling this starts up plugin support */
+void plugins_load_active(void)
 {
 	GtkWidget *widget;
+
+	want_plugins = TRUE;
 
 	geany_data_init();
 
@@ -903,31 +910,32 @@ static void update_active_plugins_pref(void)
 }
 
 
-void plugins_save_prefs(GKeyFile *config)
+static void on_save_settings(GKeyFile *config)
 {
-	g_key_file_set_boolean(config, "plugins", "load_plugins", prefs.load_plugins);
-
-	update_active_plugins_pref();
-	if (active_plugins_pref != NULL)
-		g_key_file_set_string_list(config, "plugins", "active_plugins",
-			(const gchar**)active_plugins_pref, g_strv_length(active_plugins_pref));
-	else
-	{
-		/* use an empty dummy array to override maybe exisiting value */
-		const gchar *dummy[] = { "" };
-		g_key_file_set_string_list(config, "plugins", "active_plugins", dummy, 1);
-	}
+	/* if plugins are disabled, don't clear list of active plugins */
+	if (want_plugins)
+		update_active_plugins_pref();
 }
 
 
-void plugins_load_prefs(GKeyFile *config)
+/* called even if plugin support is disabled */
+void plugins_init(void)
 {
-	prefs.load_plugins = utils_get_setting_boolean(config, "plugins", "load_plugins", TRUE);
-	active_plugins_pref = g_key_file_get_string_list(config, "plugins", "active_plugins", NULL, NULL);
+	GeanyPrefGroup *group;
+
+	group = stash_group_new("plugins");
+	configuration_add_pref_group(group, TRUE);
+
+	stash_group_add_toggle_button(group, &prefs.load_plugins,
+		"load_plugins", TRUE, "check_plugins");
+
+	g_signal_connect(geany_object, "save-settings", G_CALLBACK(on_save_settings), NULL);
+	stash_group_add_string_vector(group, &active_plugins_pref, "active_plugins", NULL);
 }
 
 
-void plugins_free(void)
+/* called even if plugin support is disabled */
+void plugins_finalize(void)
 {
 	if (failed_plugins_list != NULL)
 	{

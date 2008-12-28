@@ -30,11 +30,9 @@
 
 void plugins_init(void);
 
-void plugins_free(void);
+void plugins_finalize(void);
 
-void plugins_save_prefs(GKeyFile *config);
-
-void plugins_load_prefs(GKeyFile *config);
+void plugins_load_active(void);
 
 #endif
 

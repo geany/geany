@@ -57,10 +57,10 @@
 #include "project.h"
 #include "editor.h"
 #include "printing.h"
-#include "plugins.h"
 #include "templates.h"
 #include "toolbar.h"
 #include "stash.h"
+#include "geanyobject.h"
 
 
 /* some default settings which are used at the very first start of Geany to fill
@@ -493,10 +493,10 @@ void configuration_save(void)
 
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
 
+	/* this signal can be used e.g. to prepare any settings before Stash code reads them below */
+	g_signal_emit_by_name(geany_object, "save-settings", config);
+
 	save_dialog_prefs(config);
-#ifdef HAVE_PLUGINS
-	plugins_save_prefs(config);
-#endif
 	save_ui_prefs(config);
 	project_save_prefs(config);	/* save project filename, etc. */
 	save_recent_files(config);
@@ -877,9 +877,6 @@ gboolean configuration_load(void)
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
 
 	load_dialog_prefs(config);
-#ifdef HAVE_PLUGINS
-	plugins_load_prefs(config);
-#endif
 	load_ui_prefs(config);
 	project_load_prefs(config);
 	configuration_load_session_files(config);
