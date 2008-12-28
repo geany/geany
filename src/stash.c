@@ -212,8 +212,8 @@ static void keyfile_action(SettingAction action, GeanyPrefGroup *group, GKeyFile
 				if (entry->setting_type == G_TYPE_STRV)
 					handle_strv_setting(group, entry, keyfile, action);
 				else
-					g_warning("Unhandled type for %s::%s in %s!", group->name, entry->key_name,
-						G_GNUC_FUNCTION);
+					g_warning("Unhandled type for %s::%s in %s()!", group->name, entry->key_name,
+						G_STRFUNC);
 		}
 	}
 }
@@ -442,7 +442,7 @@ get_widget(GtkWidget *owner, gpointer widget_id)
 	}
 	if (!GTK_IS_WIDGET(widget))
 	{
-		g_warning("Unknown widget in %s!", G_GNUC_FUNCTION);
+		g_warning("Unknown widget in %s()!", G_STRFUNC);
 		return NULL;
 	}
 	return widget;
@@ -512,8 +512,8 @@ static void pref_action(PrefAction action, GeanyPrefGroup *group, GtkWidget *own
 		widget = get_widget(owner, entry->widget_id);
 		if (!widget)
 		{
-			g_warning("Unknown widget for %s::%s in %s!", group->name, entry->key_name,
-				G_GNUC_FUNCTION);
+			g_warning("Unknown widget for %s::%s in %s()!", group->name, entry->key_name,
+				G_STRFUNC);
 			continue;
 		}
 
@@ -529,8 +529,8 @@ static void pref_action(PrefAction action, GeanyPrefGroup *group, GtkWidget *own
 		else if (entry->widget_type == GTK_TYPE_ENTRY)
 			handle_entry(widget, entry, action);
 		else
-			g_warning("Unhandled type for %s::%s in %s!", group->name, entry->key_name,
-				G_GNUC_FUNCTION);
+			g_warning("Unhandled type for %s::%s in %s()!", group->name, entry->key_name,
+				G_STRFUNC);
 	}
 }
 
