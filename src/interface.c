@@ -3315,13 +3315,9 @@ create_prefs_dialog (void)
   gtk_widget_show (vbox40);
   gtk_container_add (GTK_CONTAINER (notebook4), vbox40);
 
-  label_project_indent_warning = gtk_label_new (_("<i>Warning: these settings are overridden by the current project. See <b>Project->Properties</b>.</i>"));
+  label_project_indent_warning = gtk_vbox_new (FALSE, 0);
   gtk_widget_show (label_project_indent_warning);
   gtk_box_pack_start (GTK_BOX (vbox40), label_project_indent_warning, FALSE, FALSE, 0);
-  gtk_label_set_use_markup (GTK_LABEL (label_project_indent_warning), TRUE);
-  gtk_label_set_line_wrap (GTK_LABEL (label_project_indent_warning), TRUE);
-  gtk_misc_set_alignment (GTK_MISC (label_project_indent_warning), 0, 0.5);
-  gtk_misc_set_padding (GTK_MISC (label_project_indent_warning), 6, 6);
 
   frame27 = gtk_frame_new (NULL);
   gtk_widget_show (frame27);

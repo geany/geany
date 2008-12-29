@@ -1470,6 +1470,13 @@ void prefs_show_dialog(void)
 		gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
 		gtk_box_pack_start(GTK_BOX(ui_lookup_widget(ui_widgets.prefs_dialog, "vbox15")),
 			label, FALSE, TRUE, 5);
+		/* page Editor->Indentation */
+		label = geany_wrap_label_new(_("<i>Warning: these settings are overridden by the current project. See <b>Project->Properties</b>.</i>"));
+		gtk_widget_show(label);
+		gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
+		gtk_misc_set_padding(GTK_MISC(label), 6, 0);
+		gtk_box_pack_start(GTK_BOX(ui_lookup_widget(ui_widgets.prefs_dialog,
+			"label_project_indent_warning")), label, FALSE, TRUE, 5);
 
 
 #ifdef HAVE_VTE

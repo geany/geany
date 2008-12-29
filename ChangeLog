@@ -3,6 +3,9 @@
  * src/symbols.c:
    Avoid unnecessary critical warnings when setting tooltips for the
    symbol list with non-UTF-8 files (closes #2473376).
+ * geany.glade, src/interface.c, src/prefs.c:
+   Use a GeanyWrapLabel for the project indentation settings warning
+   text in the prefs dialog.
 
 
 2008-12-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
