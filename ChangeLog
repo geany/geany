@@ -1,3 +1,10 @@
+2008-12-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/symbols.c:
+   Avoid unnecessary critical warnings when setting tooltips for the
+   symbol list with non-UTF-8 files (closes #2473376).
+
+
 2008-12-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/prefs.c, src/geanyobject.c, src/geanyobject.h, src/stash.c,

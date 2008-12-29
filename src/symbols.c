@@ -885,7 +885,9 @@ static gchar *get_symbol_tooltip(GeanyDocument *doc, const TMTag *tag)
 
 	/* encodings_convert_to_utf8_from_charset() fails with charset "None", so skip conversion
 	 * for None at this point completely */
-	if (! utils_str_equal(doc->encoding, "UTF-8") && ! utils_str_equal(doc->encoding, "None"))
+	if (utf8_name != NULL &&
+		! utils_str_equal(doc->encoding, "UTF-8") &&
+		! utils_str_equal(doc->encoding, "None"))
 	{
 		setptr(utf8_name,
 			encodings_convert_to_utf8_from_charset(utf8_name, -1, doc->encoding, TRUE));
