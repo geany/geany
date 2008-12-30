@@ -1322,8 +1322,9 @@ Store project file inside the project base directory
     When creating new projects, the default path for the project file contains
     the project base path. Without this option enabled, the default project file
     path is one level above the project base path.
-    In any case, you can easily the final project file path in the New Project,
-    dialog. This option is just for your convenience to get a proper default path.
+    In any case, you can easily set the final project file path in the
+    *New Project* dialog. This option is just for your convenience to get
+    a proper default path.
 
 Miscellaneous
 `````````````
