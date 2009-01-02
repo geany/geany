@@ -962,7 +962,6 @@ gint main(gint argc, gchar **argv)
 		GtkWidget *entry;
 
 		g_signal_connect(main_widgets.window, "delete-event", G_CALLBACK(on_exit_clicked), NULL);
-		g_signal_connect(main_widgets.window, "key-press-event", G_CALLBACK(keybindings_got_event), NULL);
 		g_signal_connect(main_widgets.toolbar, "button-press-event", G_CALLBACK(toolbar_popup_menu), NULL);
 
 		g_signal_connect(ui_lookup_widget(main_widgets.window, "textview_scribble"),

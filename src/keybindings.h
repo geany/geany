@@ -334,8 +334,5 @@ void keybindings_write_to_file(void);
 
 void keybindings_show_shortcuts(void);
 
-/* central keypress event handler, almost all keypress events go to this function */
-gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
-
 #endif
 

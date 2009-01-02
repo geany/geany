@@ -1,3 +1,12 @@
+2009-01-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c, src/keybindings.h, src/main.c:
+   Add dialog for switching to last used tab, which disappears when
+   releasing the modifier key. (Useful once MRU switching is
+   implemented).
+   Connect window key-press-event in keybindings.c.
+
+
 2008-12-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * doc/geany.txt, doc/geany.html:

@@ -45,6 +45,7 @@
 #include "symbols.h"
 #include "vte.h"
 #include "toolbar.h"
+#include "geanywraplabel.h"
 
 
 GPtrArray *keybinding_groups;	/* array of GeanyKeyGroup pointers */
@@ -57,6 +58,14 @@ static gboolean ignore_keybinding = FALSE;
 static GtkAccelGroup *kb_accel_group = NULL;
 static const gboolean swap_alt_tab_order = FALSE;
 
+static gboolean switch_dialog_cancelled = TRUE;
+static GtkWidget *switch_dialog = NULL;
+static GtkWidget *switch_dialog_label = NULL;
+
+
+/* central keypress event handler, almost all keypress events go to this function */
+static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
+static gboolean on_key_release_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 
 static gboolean check_current_word(void);
 static gboolean read_current_word(void);
@@ -486,6 +495,10 @@ void keybindings_init(void)
 	init_default_kb();
 
 	gtk_window_add_accel_group(GTK_WINDOW(main_widgets.window), kb_accel_group);
+
+	g_signal_connect(main_widgets.window, "key-press-event", G_CALLBACK(on_key_press_event), NULL);
+	/* in case the switch dialog misses an event while drawing the dialog */
+	g_signal_connect(main_widgets.window, "key-release-event", G_CALLBACK(on_key_release_event), NULL);
 }
 
 
@@ -926,7 +939,7 @@ static void check_disk_status(void)
 
 
 /* central keypress event handler, almost all keypress events go to this function */
-gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *ev, gpointer user_data)
+static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer user_data)
 {
 	guint state, keyval;
 	gsize g, i;
@@ -978,6 +991,29 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *ev, gpointer user
 	if (check_fixed_kb(keyval, state))
 		return TRUE;
 	return FALSE;
+}
+
+
+static gboolean is_modifier_key(guint keyval)
+{
+	switch (keyval)
+	{
+		case GDK_Shift_L:
+		case GDK_Shift_R:
+		case GDK_Control_L:
+		case GDK_Control_R:
+		case GDK_Meta_L:
+		case GDK_Meta_R:
+		case GDK_Alt_L:
+		case GDK_Alt_R:
+		case GDK_Super_L:
+		case GDK_Super_R:
+		case GDK_Hyper_L:
+		case GDK_Hyper_R:
+			return TRUE;
+		default:
+			return FALSE;
+	}
 }
 
 
@@ -1303,14 +1339,109 @@ static void cb_func_switch_tabright(G_GNUC_UNUSED guint key_id)
 	switch_document(RIGHT);
 }
 
+
+static gboolean on_key_release_event(GtkWidget *widget, GdkEventKey *ev, gpointer user_data)
+{
+	/* user may have rebound keybinding to a different modifier than Ctrl, so check all */
+	if (!switch_dialog_cancelled && is_modifier_key(ev->keyval))
+	{
+		switch_dialog_cancelled = TRUE;
+
+		if (switch_dialog && GTK_WIDGET_VISIBLE(switch_dialog))
+			gtk_widget_hide(switch_dialog);
+	}
+	return FALSE;
+}
+
+
+static GtkWidget *ui_minimal_dialog_new(GtkWindow *parent, const gchar *title)
+{
+	GtkWidget *dialog;
+
+	dialog = gtk_window_new(GTK_WINDOW_POPUP);
+
+	if (parent)
+	{
+		gtk_window_set_transient_for(GTK_WINDOW(dialog), parent);
+		gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
+	}
+	gtk_window_set_title(GTK_WINDOW(dialog), title);
+	gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
+	gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER_ON_PARENT);
+
+	gtk_widget_set_name(dialog, "GeanyDialog");
+	return dialog;
+}
+
+
+static GtkWidget *create_switch_dialog(void)
+{
+	GtkWidget *dialog, *widget, *vbox;
+
+	dialog = ui_minimal_dialog_new(GTK_WINDOW(main_widgets.window), _("Switch to Document"));
+	gtk_window_set_decorated(GTK_WINDOW(dialog), FALSE);
+	gtk_window_set_default_size(GTK_WINDOW(dialog), 150, -1);
+
+	vbox = gtk_vbox_new(FALSE, 6);
+	gtk_container_set_border_width(GTK_CONTAINER(vbox), 12);
+	gtk_container_add(GTK_CONTAINER(dialog), vbox);
+
+	widget = gtk_image_new_from_stock(GTK_STOCK_JUMP_TO, GTK_ICON_SIZE_BUTTON);
+	gtk_container_add(GTK_CONTAINER(vbox), widget);
+
+	widget = geany_wrap_label_new(NULL);
+	gtk_label_set_justify(GTK_LABEL(widget), GTK_JUSTIFY_CENTER);
+	gtk_container_add(GTK_CONTAINER(vbox), widget);
+	switch_dialog_label = widget;
+
+	g_signal_connect(dialog, "key-release-event", G_CALLBACK(on_key_release_event), NULL);
+	return dialog;
+}
+
+
+static gboolean on_switch_timeout(G_GNUC_UNUSED gpointer data)
+{
+	if (switch_dialog_cancelled)
+		return FALSE;
+
+	if (!switch_dialog)
+		switch_dialog = create_switch_dialog();
+
+	geany_wrap_label_set_text(GTK_LABEL(switch_dialog_label),
+		DOC_FILENAME(document_get_current()));
+	gtk_widget_show_all(switch_dialog);
+	return FALSE;
+}
+
+
 static void cb_func_switch_tablastused(G_GNUC_UNUSED guint key_id)
 {
+	/* TODO: MRU switching order */
 	GeanyDocument *last_doc = callbacks_data.last_doc;
 
-	if (DOC_VALID(last_doc))
-		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
-			document_get_notebook_page(last_doc));
+	if (!DOC_VALID(last_doc))
+		return;
+
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
+		document_get_notebook_page(last_doc));
+
+	/* if there's a modifier key, we can switch back in MRU order each time unless
+	 * the key is released */
+	if (!switch_dialog_cancelled)
+	{
+		on_switch_timeout(NULL);	/* update filename label */
+	}
+	else
+	if (keybindings_lookup_item(GEANY_KEY_GROUP_NOTEBOOK,
+		GEANY_KEYS_NOTEBOOK_SWITCHTABLASTUSED)->mods)
+	{
+		switch_dialog_cancelled = FALSE;
+
+		/* delay showing dialog to give user time to let go of any modifier keys */
+		g_timeout_add(600, on_switch_timeout, NULL);
+	}
 }
+
 
 /* move document left/right/first/last */
 static void cb_func_move_tab(guint key_id)
