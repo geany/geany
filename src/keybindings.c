@@ -82,16 +82,14 @@ static void cb_func_switch_action(guint key_id);
 static void cb_func_clipboard(guint key_id);
 static void cb_func_build_action(guint key_id);
 static void cb_func_document_action(guint key_id);
+static void cb_func_view_action(guint key_id);
 
-/* TODO: refactor individual callbacks per group */
+/* note: new keybindings should normally use per group callbacks */
 static void cb_func_menu_help(guint key_id);
 static void cb_func_menu_preferences(guint key_id);
 
-static void cb_func_menu_toggle_all(guint key_id);
 static void cb_func_menu_fullscreen(guint key_id);
 static void cb_func_menu_messagewindow(guint key_id);
-static void cb_func_menu_zoomin(guint key_id);
-static void cb_func_menu_zoomout(guint key_id);
 
 static void cb_func_menu_opencolorchooser(guint key_id);
 
@@ -99,7 +97,6 @@ static void cb_func_switch_tableft(guint key_id);
 static void cb_func_switch_tabright(guint key_id);
 static void cb_func_switch_tablastused(guint key_id);
 static void cb_func_move_tab(guint key_id);
-static void cb_func_toggle_sidebar(guint key_id);
 
 static void add_popup_menu_accels(void);
 static void apply_kb_accel(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_data);
@@ -384,7 +381,7 @@ static void init_default_kb(void)
 
 	group = ADD_KB_GROUP(VIEW, _("View"));
 
-	keybindings_set_item(group, GEANY_KEYS_VIEW_TOGGLEALL, cb_func_menu_toggle_all,
+	keybindings_set_item(group, GEANY_KEYS_VIEW_TOGGLEALL, cb_func_view_action,
 		0, 0, "menu_toggleall", _("Toggle All Additional Widgets"),
 		LW(menu_toggle_all_additional_widgets1));
 	keybindings_set_item(group, GEANY_KEYS_VIEW_FULLSCREEN, cb_func_menu_fullscreen,
@@ -392,11 +389,11 @@ static void init_default_kb(void)
 	keybindings_set_item(group, GEANY_KEYS_VIEW_MESSAGEWINDOW, cb_func_menu_messagewindow,
 		0, 0, "menu_messagewindow", _("Toggle Messages Window"),
 		LW(menu_show_messages_window1));
-	keybindings_set_item(group, GEANY_KEYS_VIEW_SIDEBAR, cb_func_toggle_sidebar,
+	keybindings_set_item(group, GEANY_KEYS_VIEW_SIDEBAR, cb_func_view_action,
 		0, 0, "toggle_sidebar", _("Toggle Sidebar"), LW(menu_show_sidebar1));
-	keybindings_set_item(group, GEANY_KEYS_VIEW_ZOOMIN, cb_func_menu_zoomin,
+	keybindings_set_item(group, GEANY_KEYS_VIEW_ZOOMIN, cb_func_view_action,
 		GDK_plus, GDK_CONTROL_MASK, "menu_zoomin", _("Zoom In"), LW(menu_zoom_in1));
-	keybindings_set_item(group, GEANY_KEYS_VIEW_ZOOMOUT, cb_func_menu_zoomout,
+	keybindings_set_item(group, GEANY_KEYS_VIEW_ZOOMOUT, cb_func_view_action,
 		GDK_minus, GDK_CONTROL_MASK, "menu_zoomout", _("Zoom Out"), LW(menu_zoom_out1));
 
 	group = ADD_KB_GROUP(FOCUS, _("Focus"));
@@ -1150,6 +1147,29 @@ static void cb_func_menu_opencolorchooser(G_GNUC_UNUSED guint key_id)
 	on_show_color_chooser1_activate(NULL, NULL);
 }
 
+
+static void cb_func_view_action(guint key_id)
+{
+	switch (key_id)
+	{
+		case GEANY_KEYS_VIEW_TOGGLEALL:
+			on_menu_toggle_all_additional_widgets1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_VIEW_SIDEBAR:
+			on_menu_show_sidebar1_toggled(NULL, NULL);
+			break;
+		case GEANY_KEYS_VIEW_ZOOMIN:
+			on_zoom_in1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_VIEW_ZOOMOUT:
+			on_zoom_out1_activate(NULL, NULL);
+			break;
+		default:
+			break;
+	}
+}
+
+
 static void cb_func_menu_fullscreen(G_GNUC_UNUSED guint key_id)
 {
 	GtkCheckMenuItem *c = GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_fullscreen1"));
@@ -1164,15 +1184,6 @@ static void cb_func_menu_messagewindow(G_GNUC_UNUSED guint key_id)
 	gtk_check_menu_item_set_active(c, ! gtk_check_menu_item_get_active(c));
 }
 
-static void cb_func_menu_zoomin(G_GNUC_UNUSED guint key_id)
-{
-	on_zoom_in1_activate(NULL, NULL);
-}
-
-static void cb_func_menu_zoomout(G_GNUC_UNUSED guint key_id)
-{
-	on_zoom_out1_activate(NULL, NULL);
-}
 
 static void cb_func_build_action(guint key_id)
 {
@@ -1478,17 +1489,6 @@ static void cb_func_move_tab(guint key_id)
 			break;
 	}
 	return;
-}
-
-static void cb_func_toggle_sidebar(G_GNUC_UNUSED guint key_id)
-{
-	on_menu_show_sidebar1_toggled(NULL, NULL);
-}
-
-
-static void cb_func_menu_toggle_all(G_GNUC_UNUSED guint key_id)
-{
-	on_menu_toggle_all_additional_widgets1_activate(NULL, NULL);
 }
 
 

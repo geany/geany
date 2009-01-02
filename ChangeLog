@@ -5,6 +5,8 @@
    releasing the modifier key. (Useful once MRU switching is
    implemented).
    Connect window key-press-event in keybindings.c.
+ * src/keybindings.c:
+   Group some View callbacks together.
 
 
 2008-12-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
