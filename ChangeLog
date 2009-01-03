@@ -1,3 +1,15 @@
+2009-01-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, src/keybindings.c, src/geanyobject.c,
+   src/geanyobject.h, src/geany.h, src/callbacks.c, src/callbacks.h,
+   geany.glade:
+   Fix not switching to 2nd last used document when the last used
+   document has been closed (#1945162).
+ - Code changes:
+   Move geany_object extern to geany.h.
+   Remove CallbacksData struct.
+
+
 2009-01-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keybindings.c, src/keybindings.h, src/main.c:

@@ -25,14 +25,6 @@
 #include "geany.h" /* necessary for interface.c */
 
 
-typedef struct
-{
-	GeanyDocument *last_doc;
-} CallbacksData;
-
-extern CallbacksData callbacks_data;
-
-
 gboolean
 on_exit_clicked                        (GtkWidget *widget, gpointer gdata);
 
@@ -70,12 +62,6 @@ on_toolbutton_close_clicked            (GtkAction       *action,
 
 void
 on_toolbutton_close_all_clicked        (GtkAction       *action,
-                                        gpointer         user_data);
-
-void
-on_notebook1_switch_page               (GtkNotebook     *notebook,
-                                        GtkNotebookPage *page,
-                                        guint            page_num,
                                         gpointer         user_data);
 
 void

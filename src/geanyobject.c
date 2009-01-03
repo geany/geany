@@ -34,6 +34,7 @@
 #include "geany.h"
 #include "geanyobject.h"
 
+/* extern in geany.h */
 GObject	*geany_object;
 
 static guint geany_object_signals[GCB_MAX] = { 0 };

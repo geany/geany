@@ -58,6 +58,9 @@ static gboolean ignore_keybinding = FALSE;
 static GtkAccelGroup *kb_accel_group = NULL;
 static const gboolean swap_alt_tab_order = FALSE;
 
+const gsize MAX_MRU_DOCS = 20;
+static GQueue *mru_docs = NULL;
+
 static gboolean switch_dialog_cancelled = TRUE;
 static GtkWidget *switch_dialog = NULL;
 static GtkWidget *switch_dialog_label = NULL;
@@ -483,8 +486,51 @@ static void init_default_kb(void)
 }
 
 
+/* before the tab changes, add the current document to the MRU list */
+static void on_notebook_switch_page()
+{
+	GeanyDocument *old = document_get_current();
+
+	/* when closing current doc, old is NULL */
+	if (old)
+	{
+		g_queue_push_head(mru_docs, old);
+
+		if (g_queue_get_length(mru_docs) > MAX_MRU_DOCS)
+			g_queue_pop_tail(mru_docs);
+	}
+}
+
+
+/* really this should be just after a document was closed, not idle */
+static gboolean on_idle_close(gpointer data)
+{
+	GeanyDocument *current;
+
+	current = document_get_current();
+
+	while (current && g_queue_peek_head(mru_docs) == current)
+		g_queue_pop_head(mru_docs);
+
+	return FALSE;
+}
+
+
+static void on_document_close(GObject *obj, GeanyDocument *doc)
+{
+	g_queue_remove_all(mru_docs, doc);
+	g_idle_add(on_idle_close, NULL);
+}
+
+
 void keybindings_init(void)
 {
+	mru_docs = g_queue_new();
+	g_signal_connect(main_widgets.notebook, "switch-page",
+		G_CALLBACK(on_notebook_switch_page), NULL);
+	g_signal_connect(geany_object, "document-close",
+		G_CALLBACK(on_document_close), NULL);
+
 	keybinding_groups = g_ptr_array_sized_new(GEANY_KEY_GROUP_COUNT);
 
 	kb_accel_group = gtk_accel_group_new();
@@ -671,6 +717,7 @@ void keybindings_write_to_file(void)
 void keybindings_free(void)
 {
 	g_ptr_array_free(keybinding_groups, TRUE);
+	g_queue_free(mru_docs);
 }
 
 
@@ -1428,7 +1475,7 @@ static gboolean on_switch_timeout(G_GNUC_UNUSED gpointer data)
 static void cb_func_switch_tablastused(G_GNUC_UNUSED guint key_id)
 {
 	/* TODO: MRU switching order */
-	GeanyDocument *last_doc = callbacks_data.last_doc;
+	GeanyDocument *last_doc = g_queue_peek_head(mru_docs);
 
 	if (!DOC_VALID(last_doc))
 		return;

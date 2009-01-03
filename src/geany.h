@@ -79,6 +79,8 @@ GeanyApp;
 
 extern GeanyApp *app;
 
+extern GObject *geany_object;
+
 
 extern gboolean	ignore_callback;
 

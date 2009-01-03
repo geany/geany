@@ -30,8 +30,6 @@
 
 G_BEGIN_DECLS
 
-extern GObject *geany_object;
-
 typedef enum
 {
 	GCB_DOCUMENT_NEW,

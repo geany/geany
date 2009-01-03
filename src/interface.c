@@ -1473,9 +1473,6 @@ create_window1 (void)
   g_signal_connect ((gpointer) notebook3, "key_press_event",
                     G_CALLBACK (on_escape_key_press_event),
                     NULL);
-  g_signal_connect ((gpointer) notebook1, "switch_page",
-                    G_CALLBACK (on_notebook1_switch_page),
-                    NULL);
   g_signal_connect_after ((gpointer) notebook1, "switch_page",
                           G_CALLBACK (on_notebook1_switch_page_after),
                           NULL);

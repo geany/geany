@@ -89,8 +89,6 @@ static gboolean insert_callback_from_menu = FALSE;
  * the selection-changed signal from tv.tree_openfiles */
 /*static gboolean switch_tv_notebook_page = FALSE; */
 
-CallbacksData callbacks_data = { NULL };
-
 
 static gboolean check_no_unsaved(void)
 {
@@ -703,17 +701,8 @@ on_toolbutton_preferences_clicked      (GtkAction       *action,
 }
 
 
-void
-on_notebook1_switch_page               (GtkNotebook     *notebook,
-                                        GtkNotebookPage *page,
-                                        guint            page_num,
-                                        gpointer         user_data)
-{
-	callbacks_data.last_doc = document_get_current();
-}
-
-
-/* changes window-title on switching tabs and lots of other things */
+/* Changes window-title after switching tabs and lots of other things.
+ * note: using 'after' makes Scintilla redraw before the UI, appearing more responsive */
 void
 on_notebook1_switch_page_after         (GtkNotebook     *notebook,
                                         GtkNotebookPage *page,
