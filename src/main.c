@@ -73,6 +73,7 @@
 #include "plugins.h"
 #include "printing.h"
 #include "toolbar.h"
+#include "geanyobject.h"
 
 #ifdef HAVE_SOCKET
 # include "socket.h"
