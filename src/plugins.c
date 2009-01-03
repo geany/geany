@@ -49,7 +49,6 @@
 #include "dialogs.h"
 #include "msgwindow.h"
 #include "prefs.h"
-#include "geanyobject.h"
 #include "geanywraplabel.h"
 #include "build.h"
 #include "encodings.h"

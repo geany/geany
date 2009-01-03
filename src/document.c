@@ -65,7 +65,6 @@
 #include "vte.h"
 #include "build.h"
 #include "symbols.h"
-#include "geanyobject.h"
 #include "highlighting.h"
 #include "navqueue.h"
 #include "win32.h"

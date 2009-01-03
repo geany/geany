@@ -54,7 +54,6 @@
 #include "dialogs.h"
 #include "symbols.h"
 #include "callbacks.h"
-#include "geanyobject.h"
 #include "templates.h"
 #include "keybindings.h"
 #include "project.h"
@@ -642,7 +641,7 @@ void editor_sci_notify_cb(G_GNUC_UNUSED GtkWidget *widget, G_GNUC_UNUSED gint sc
 }
 
 
-static gboolean on_editor_notify(G_GNUC_UNUSED GeanyObject *object, GeanyEditor *editor,
+static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *editor,
 								 SCNotification *nt, G_GNUC_UNUSED gpointer data)
 {
 	ScintillaObject *sci = editor->sci;

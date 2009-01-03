@@ -45,7 +45,6 @@
 # include "win32.h"
 #endif
 #include "build.h"
-#include "geanyobject.h"
 #include "interface.h"
 #include "editor.h"
 #include "stash.h"

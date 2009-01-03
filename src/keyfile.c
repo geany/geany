@@ -60,7 +60,6 @@
 #include "templates.h"
 #include "toolbar.h"
 #include "stash.h"
-#include "geanyobject.h"
 
 
 /* some default settings which are used at the very first start of Geany to fill

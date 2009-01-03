@@ -8,6 +8,11 @@
  - Code changes:
    Move geany_object extern to geany.h.
    Remove CallbacksData struct.
+ * src/toolbar.c, src/project.c, src/callbacks.c, src/keyfile.c,
+   src/filetypes.c, src/document.c, src/plugins.c, src/main.c,
+   src/editor.c, src/symbols.c:
+   Remove geanyobject.h includes.
+   Use GObject instead of unused GeanyObject argument.
 
 
 2009-01-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

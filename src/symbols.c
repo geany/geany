@@ -50,7 +50,6 @@
 #include "ui_utils.h"
 #include "editor.h"
 #include "sciwrappers.h"
-#include "geanyobject.h"
 
 
 const guint TM_GLOBAL_TYPE_MASK =

@@ -34,7 +34,6 @@
 #include "utils.h"
 #include "dialogs.h"
 #include "document.h"
-#include "geanyobject.h"
 #include "geanymenubuttonaction.h"
 #include "geanyentryaction.h"
 

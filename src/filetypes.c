@@ -40,7 +40,6 @@
 #include "utils.h"
 #include "sciwrappers.h"
 #include "ui_utils.h"
-#include "geanyobject.h"
 
 #include <stdlib.h>
 

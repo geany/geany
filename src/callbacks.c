@@ -66,7 +66,6 @@
 #include "log.h"
 #include "toolbar.h"
 
-#include "geanyobject.h"
 
 #ifdef HAVE_VTE
 # include "vte.h"
