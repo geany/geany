@@ -23,4 +23,14 @@
 
 #include "geany.h"
 
-#include <glib/gi18n-lib.h>
+#ifdef GETTEXT_PACKAGE
+# include <glib/gi18n-lib.h>
+#else
+# define textdomain(String) (String)
+# define bind_textdomain_codeset(String) (String)
+# define bindtextdomain(Domain,Charset) (Domain)
+# define ngettext(String) (String)
+# define _(String) String
+# define Q_(String) g_strip_context((String), (String))
+# define N_(String) String
+#endif
