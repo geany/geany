@@ -110,8 +110,12 @@ static void newMacro (vString *const name)
 static void newMacroFromDefine (vString *const name)
 {
 	/* name is something like "define JAVAHPP_RULE", find the space and jump to the next char */
-	vStringCopyS (name, strchr (vStringValue (name), ' ') + 1);
-	makeSimpleTag (name, MakeKinds, K_MACRO);
+	char *name_val = strchr (vStringValue (name), ' ');
+
+	if (name_val != NULL) {
+		vStringCopyS (name, name_val + 1);
+		makeSimpleTag (name, MakeKinds, K_MACRO);
+	}
 }
 
 static void readIdentifier (const int first, vString *const id)

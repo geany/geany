@@ -3,6 +3,8 @@
  * src/support.h:
    Prevent compile errors in plugins when GETTEXT_PACKAGE is not
    defined.
+ * tagmanager/make.c:
+   Fix crash in Makefile parser when trying to read defines.
 
 
 2009-01-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
