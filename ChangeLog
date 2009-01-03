@@ -22,6 +22,10 @@
    src/editor.c, src/symbols.c:
    Remove geanyobject.h includes.
    Use GObject instead of unused GeanyObject argument.
+ * doc/geany.txt, doc/geany.html:
+   Update Scintilla regular expression info for v1.77 (character
+   classes, ASCII escaping, character sets containing square
+   brackets peculiarities). Adapted from SciTE doc.
 
 
 2009-01-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
