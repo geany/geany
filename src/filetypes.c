@@ -456,7 +456,7 @@ static void init_builtin_filetypes(void)
 	ft->title = g_strdup(_("Config file"));
 	ft->extension = g_strdup("conf");
 	ft->pattern = utils_strv_new("*.conf", "*.ini", "config", "*rc",
-		"*.cfg", NULL);
+		"*.cfg", "*.desktop", NULL);
 	ft->comment_open = g_strdup("#");
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
