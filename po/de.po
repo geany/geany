@@ -1,7 +1,7 @@
 # German translations for geany package.
 # Copyright (C) 2006-2009 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
-# Enrico Tröger <enrico.troeger@uvena.de> 2006 - 2008
+# Enrico Tröger <enrico.troeger@uvena.de> 2006 - 2009
 # Frank Lanitz <frank@frank.uvena.de> 2006 - 2009
 # Dominic Hopf <dh@dmaphy.de> 2008
 #

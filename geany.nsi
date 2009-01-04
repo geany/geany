@@ -45,7 +45,7 @@ VIProductVersion "${PRODUCT_VERSION_ID}"
 VIAddVersionKey "ProductName" "${PRODUCT_NAME}"
 VIAddVersionKey "FileVersion" "${PRODUCT_VERSION}"
 VIAddVersionKey "ProductVersion" "${PRODUCT_VERSION}"
-VIAddVersionKey "LegalCopyright" "Copyright 2005-2008 by the Geany developers"
+VIAddVersionKey "LegalCopyright" "Copyright 2005-2009 by the Geany developers"
 VIAddVersionKey "FileDescription" "${PRODUCT_NAME} Installer"
 
 ;Request application privileges for Windows Vista
