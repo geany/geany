@@ -550,6 +550,17 @@ static void init_builtin_filetypes(void)
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
+#define ADA
+	ft = filetypes[GEANY_FILETYPES_ADA];
+	ft->lang = -2;
+	ft->name = g_strdup("Ada");
+	ft->title = g_strdup_printf(_("%s source file"), "Ada");
+	ft->extension = g_strdup("adb");
+	ft->pattern = utils_strv_new("*.adb", "*.ads", NULL);
+	ft->comment_open = g_strdup("--");
+	ft->comment_close = NULL;
+	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
+
 #define ALL
 	ft = filetypes[GEANY_FILETYPES_NONE];
 	ft->lang = -2;

@@ -1,3 +1,13 @@
+2009-01-04  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * wscript, THANKS, data/filetype_extensions.conf, src/templates.c,
+   scintilla/KeyWords.cxx, scintilla/LexAda.cxx, scintilla/Makefile.am,
+   scintilla/makefile.win32, src/about.c, src/editor.c, src/filetypes.c,
+   src/filetypes.h, src/highlighting.c, src/plugindata.h:
+   Add filetype Ada (closes #1811306 and #1765830,
+   patch by Philipp Gildein, thanks).
+
+
 2009-01-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/support.h:

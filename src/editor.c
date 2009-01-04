@@ -2947,6 +2947,10 @@ static gboolean is_string_style(gint lexer, gint style)
 				style == SCE_NSIS_STRINGLQ ||
 				style == SCE_NSIS_STRINGRQ ||
 				style == SCE_NSIS_STRINGVAR);
+
+		case SCLEX_ADA:
+			return (style == SCE_ADA_CHARACTER ||
+				style == SCE_ADA_STRING);
 	}
 	return FALSE;
 }
@@ -3063,6 +3067,10 @@ static gboolean is_comment_style(gint lexer, gint style)
 
 		case SCLEX_NSIS:
 			return (style == SCE_NSIS_COMMENT ||
+				style == SCE_NSIS_COMMENTBOX);
+
+		case SCLEX_ADA:
+			return (style == SCE_ADA_COMMENTLINE ||
 				style == SCE_NSIS_COMMENTBOX);
 	}
 	return FALSE;

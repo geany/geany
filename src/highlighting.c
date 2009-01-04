@@ -3331,6 +3331,56 @@ static void styleset_haxe(ScintillaObject *sci)
 }
 
 
+static void styleset_ada_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
+{
+	new_style_array(GEANY_FILETYPES_ADA, 12);
+
+	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_ADA].styling[0]);
+	get_keyfile_hex(config, config_home, "styling", "word", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_ADA].styling[1]);
+	get_keyfile_hex(config, config_home, "styling", "identifier", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_ADA].styling[2]);
+	get_keyfile_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_ADA].styling[3]);
+	get_keyfile_hex(config, config_home, "styling", "delimiter", "0x301010", "0xffffff", "false", &style_sets[GEANY_FILETYPES_ADA].styling[4]);
+	get_keyfile_hex(config, config_home, "styling", "character", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_ADA].styling[5]);
+	get_keyfile_hex(config, config_home, "styling", "charactereol", "0x000000", "0xe0c0e0", "false", &style_sets[GEANY_FILETYPES_ADA].styling[6]);
+	get_keyfile_hex(config, config_home, "styling", "string", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_ADA].styling[7]);
+	get_keyfile_hex(config, config_home, "styling", "stringeol", "0x000000", "0xe0c0e0", "false", &style_sets[GEANY_FILETYPES_ADA].styling[8]);
+	get_keyfile_hex(config, config_home, "styling", "label", "0xaaaaaa", "0xffffff", "false", &style_sets[GEANY_FILETYPES_ADA].styling[9]);
+	get_keyfile_hex(config, config_home, "styling", "commentline", "0xd00000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_ADA].styling[10]);
+	get_keyfile_hex(config, config_home, "styling", "illegal", "0xff0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_ADA].styling[11]);
+
+	style_sets[GEANY_FILETYPES_ADA].keywords = g_new(gchar*, 2);
+	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_ADA, 0, "abort abs abstract accept access aliased all and array at begin body case constant declare delay delta digits do else elsif end entry exception exit for function generic goto if in interface is limited loop mod new not null of or others out overriding package pragma private procedure protected raise range record rem renames requeue return reverse select separate subtype synchronized tagged task terminate then type until use when while with xor");
+	style_sets[GEANY_FILETYPES_ADA].keywords[1] = NULL;
+
+	get_keyfile_wordchars(config, config_home,
+		&style_sets[GEANY_FILETYPES_ADA].wordchars);
+}
+
+
+static void styleset_ada(ScintillaObject *sci)
+{
+	const filetype_id ft_id = GEANY_FILETYPES_ADA;
+
+	apply_filetype_properties(sci, SCLEX_ADA, ft_id);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_ADA].keywords[0]);
+
+	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_ADA, 0);
+	set_sci_style(sci, SCE_ADA_DEFAULT, GEANY_FILETYPES_ADA, 0);
+	set_sci_style(sci, SCE_ADA_WORD, GEANY_FILETYPES_ADA, 1);
+	set_sci_style(sci, SCE_ADA_IDENTIFIER, GEANY_FILETYPES_ADA, 2);
+	set_sci_style(sci, SCE_ADA_NUMBER, GEANY_FILETYPES_ADA, 3);
+	set_sci_style(sci, SCE_ADA_DELIMITER, GEANY_FILETYPES_ADA, 4);
+	set_sci_style(sci, SCE_ADA_CHARACTER, GEANY_FILETYPES_ADA, 5);
+	set_sci_style(sci, SCE_ADA_CHARACTEREOL, GEANY_FILETYPES_ADA, 6);
+	set_sci_style(sci, SCE_ADA_STRING, GEANY_FILETYPES_ADA, 7);
+	set_sci_style(sci, SCE_ADA_STRINGEOL, GEANY_FILETYPES_ADA, 8);
+	set_sci_style(sci, SCE_ADA_LABEL, GEANY_FILETYPES_ADA, 9);
+	set_sci_style(sci, SCE_ADA_COMMENTLINE, GEANY_FILETYPES_ADA, 10);
+	set_sci_style(sci, SCE_ADA_ILLEGAL, GEANY_FILETYPES_ADA, 11);
+}
+
+
 /* lang_name is the name used for the styleset_foo_init function, e.g. foo. */
 #define init_styleset_case(ft_id, lang_name) \
 	case (ft_id): \
@@ -3347,6 +3397,7 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 	switch (filetype_idx)
 	{
 		init_styleset_case(GEANY_FILETYPES_NONE,	common);
+		init_styleset_case(GEANY_FILETYPES_ADA,		ada);
 		init_styleset_case(GEANY_FILETYPES_ASM,		asm);
 		init_styleset_case(GEANY_FILETYPES_BASIC,	basic);
 		init_styleset_case(GEANY_FILETYPES_C,		c);
@@ -3408,6 +3459,7 @@ void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 
 	switch (filetype_idx)
 	{
+		styleset_case(GEANY_FILETYPES_ADA,		ada);
 		styleset_case(GEANY_FILETYPES_ASM,		asm);
 		styleset_case(GEANY_FILETYPES_BASIC,	basic);
 		styleset_case(GEANY_FILETYPES_C,		c);

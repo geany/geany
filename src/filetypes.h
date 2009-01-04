@@ -37,6 +37,7 @@ typedef enum
 {
 	/* normally compiled languages */
 	GEANY_FILETYPES_ASM = 0,
+	GEANY_FILETYPES_ADA,
 	GEANY_FILETYPES_C,
 	GEANY_FILETYPES_CPP,
 	GEANY_FILETYPES_CS,
