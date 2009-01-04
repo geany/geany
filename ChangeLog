@@ -10,6 +10,8 @@
    Add *.desktop as extension for the Conf filetype.
  * *.*:
    Update copyright information
+ * plugins/saveactions.c:
+   Don't write the default filetype to the config if it isn't set.
 
 
 2009-01-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

@@ -455,7 +455,8 @@ static void configure_response_cb(GtkDialog *dialog, gint response, G_GNUC_UNUSE
 		g_key_file_set_boolean(config, "autosave", "save_all", autosave_save_all);
 		g_key_file_set_integer(config, "autosave", "interval", autosave_interval);
 
-		g_key_file_set_string(config, "instantsave", "default_ft", instantsave_default_ft);
+		if (instantsave_default_ft != NULL)
+			g_key_file_set_string(config, "instantsave", "default_ft", instantsave_default_ft);
 
 		g_key_file_set_integer(config, "backupcopy", "dir_levels", backupcopy_dir_levels);
 		g_key_file_set_string(config, "backupcopy", "time_fmt", text_time);
