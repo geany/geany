@@ -771,7 +771,7 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 			gchar *tmp;
 
 			color = (GPOINTER_TO_INT(data)) ? COLOR_DARK_RED : COLOR_BLACK;
-			g_strstrip(msg);
+			g_strchomp(msg);
 
 			if (build_parse_make_dir(msg, &tmp))
 			{
