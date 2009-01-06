@@ -1,3 +1,9 @@
+2009-01-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * tagmanager/basic.c:
+   Fix some bugs in parsing FreeBasic code (#2489605).
+
+
 2009-01-04  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * wscript, THANKS, data/filetype_extensions.conf, src/templates.c,
