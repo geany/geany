@@ -334,12 +334,6 @@ static void prefs_init_dialog(void)
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_tab_left");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
 
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_mru");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), file_prefs.mru_length);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_disk_check");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), file_prefs.disk_check_timeout);
-
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
 	/* luckily the index of the combo box items match the index of the encodings array */
@@ -725,12 +719,6 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		/* Files settings */
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_tab_right");
 		file_prefs.tab_order_ltr = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_mru");
-		file_prefs.mru_length = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_disk_check");
-		file_prefs.disk_check_timeout = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
 		file_prefs.default_new_encoding = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));

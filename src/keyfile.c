@@ -126,6 +126,7 @@ static void init_pref_groups(void)
 	stash_group_add_toggle_button(group, &search_prefs.use_current_word,
 		"pref_main_search_use_current_word", TRUE, "check_search_use_current_word");
 
+	/* editor */
 	stash_group_add_toggle_button(group, &editor_prefs.indentation->detect_type,
 		"check_detect_indent", FALSE, "check_detect_indent");
 	stash_group_add_toggle_button(group, &editor_prefs.use_tab_to_indent,
@@ -145,6 +146,12 @@ static void init_pref_groups(void)
 	stash_group_add_spin_button_integer(group, (gint*)&editor_prefs.autocompletion_max_entries,
 		"autocompletion_max_entries", GEANY_MAX_AUTOCOMPLETE_WORDS,
 		"spin_autocompletion_max_entries");
+
+	/* files */
+	stash_group_add_spin_button_integer(group, (gint*)&file_prefs.mru_length,
+		"mru_length", GEANY_DEFAULT_MRU_LENGTH, "spin_mru");
+	stash_group_add_spin_button_integer(group, &file_prefs.disk_check_timeout,
+		"disk_check_timeout", GEANY_DISK_CHECK_TIMEOUT, "spin_disk_check");
 
 	/* hidden prefs (don't overwrite them so users can edit them manually) */
 	group = stash_group_new(PACKAGE);
@@ -365,8 +372,6 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_new_line", file_prefs.final_new_line);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_replace_tabs", file_prefs.replace_tabs);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_trail_space", file_prefs.strip_trailing_spaces);
-	g_key_file_set_integer(config, PACKAGE, "mru_length", file_prefs.mru_length);
-	g_key_file_set_integer(config, PACKAGE, "disk_check_timeout", file_prefs.disk_check_timeout);
 
 	/* toolbar */
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show", toolbar_prefs.visible);
@@ -658,9 +663,6 @@ static void load_dialog_prefs(GKeyFile *config)
 	file_prefs.replace_tabs = utils_get_setting_boolean(config, PACKAGE, "pref_editor_replace_tabs", FALSE);
 	file_prefs.final_new_line = utils_get_setting_boolean(config, PACKAGE, "pref_editor_new_line", TRUE);
 	file_prefs.strip_trailing_spaces = utils_get_setting_boolean(config, PACKAGE, "pref_editor_trail_space", FALSE);
-	file_prefs.mru_length = utils_get_setting_integer(config, PACKAGE, "mru_length", GEANY_DEFAULT_MRU_LENGTH);
-	file_prefs.disk_check_timeout = utils_get_setting_integer(config, PACKAGE,
-		"disk_check_timeout", GEANY_DISK_CHECK_TIMEOUT);
 
 	/* toolbar */
 	toolbar_prefs.visible = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show", TRUE);

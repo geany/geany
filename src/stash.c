@@ -354,6 +354,8 @@ static void handle_spin_button(GtkWidget *widget, GeanyPrefEntry *entry,
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), *setting);
 			break;
 		case PREF_UPDATE:
+			/* if the widget is focussed, the value might not be updated */
+			gtk_spin_button_update(GTK_SPIN_BUTTON(widget));
 			*setting = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 			break;
 	}

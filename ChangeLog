@@ -1,3 +1,11 @@
+2009-01-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/prefs.c, src/stash.c, src/keyfile.c:
+   Fix using prefs dialog editor & files tab spin button values when
+   they've just been edited and Alt-O is used to close the dialog
+   without moving the focus.
+
+
 2009-01-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * tagmanager/basic.c:
