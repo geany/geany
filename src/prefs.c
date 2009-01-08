@@ -751,6 +751,8 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 			gtk_editable_get_chars(GTK_EDITABLE(widget), 0, -1));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_long_line");
+		/* note: use stash for new code - it updates spin buttons itself */
+		gtk_spin_button_update(GTK_SPIN_BUTTON(widget));
 		editor_prefs.long_line_column = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_folding");
@@ -806,12 +808,15 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		editor_prefs.auto_complete_symbols = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_symbol_complete_chars");
+		gtk_spin_button_update(GTK_SPIN_BUTTON(widget));
 		editor_prefs.symbolcompletion_min_chars = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_symbollistheight");
+		gtk_spin_button_update(GTK_SPIN_BUTTON(widget));
 		editor_prefs.symbolcompletion_max_height = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_line_break");
+		gtk_spin_button_update(GTK_SPIN_BUTTON(widget));
 		editor_prefs.line_break_column = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_parenthesis");
@@ -925,6 +930,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		if (vte_info.have_vte)
 		{
 			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_scrollback");
+			gtk_spin_button_update(GTK_SPIN_BUTTON(widget));
 			vc->scrollback_lines = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
 			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_shell");

@@ -4,6 +4,8 @@
    Fix using prefs dialog editor & files tab spin button values when
    they've just been edited and Alt-O is used to close the dialog
    without moving the focus.
+ * src/prefs.c:
+   Fix remaining spin buttons in the prefs dialog (closes #2492317).
 
 
 2009-01-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
