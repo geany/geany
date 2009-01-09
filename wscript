@@ -185,7 +185,7 @@ def configure(conf):
 	else:
 		gtk_version = 'Unknown'
 	# GIO check
-	conf.check_cfg(package='gio-2.0', uselib_store='GIO')
+	conf.check_cfg(package='gio-2.0', uselib_store='GIO', mandatory=False)
 
 	conf_define_from_opt('LIBDIR', Options.options.libdir, conf.env['PREFIX'] + '/lib')
 	conf_define_from_opt('DOCDIR', Options.options.docdir, conf.env['DATADIR'] + '/doc/geany')
@@ -366,7 +366,7 @@ def build(bld):
 	# Doxyfile
 	obj					= bld.new_task_gen('subst')
 	obj.source			= 'doc/Doxyfile.in'
-	obj.target			= 'Doxyfile'
+	obj.target			= 'doc/Doxyfile'
 	obj.install_path	= None
 	obj.dict			= { 'VERSION' : VERSION }
 
@@ -421,10 +421,15 @@ def shutdown():
 			print 'gtk-update-icon-cache -q -f -t %s' % dir
 
 	if Options.options.apidoc:
-		doxyfile = os.path.join(Build.bld.srcnode.abspath( \
-			Build.bld.env), 'doc', 'Doxyfile')
-		os.chdir('doc')
-		launch('doxygen ' + doxyfile, 'Generating API reference documentation')
+		doxyfile = os.path.join(Build.bld.srcnode.abspath(Build.bld.env), 'doc', 'Doxyfile')
+		cmd = Configure.find_program_impl(Build.bld.env, 'doxygen')
+		if cmd:
+			os.chdir('doc')
+			ret = launch('%s %s' % (cmd, doxyfile), 'Generating API reference documentation')
+		else:
+			Utils.pprint('RED',
+				'doxygen could not be found. Please install the doxygen package.')
+			sys.exit(1)
 
 	if Options.options.htmldoc:
 		# first try rst2html.py as it is the upstream default, fall back to rst2html
