@@ -1453,6 +1453,7 @@ static gint write_data_to_disk(GeanyDocument *doc, const gchar *data, gint len)
 		err = errno;
 
 	fclose(fp);
+	g_free(locale_filename);
 
 	return err;
 }
