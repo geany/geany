@@ -3768,7 +3768,7 @@ msgstr "_Rückwärts suchen"
 
 #: ../src/search.c:214
 msgid "Use _escape sequences"
-msgstr "Sonderzeichen _maskieren"
+msgstr "S_onderzeichen maskieren"
 
 #: ../src/search.c:219
 msgid ""
@@ -3784,11 +3784,11 @@ msgstr "_Groß-/Kleinschreibung beachten"
 
 #: ../src/search.c:233 ../src/search.c:716
 msgid "Match only a _whole word"
-msgstr "Nur g_anze Wörter finden"
+msgstr "N_ur ganze Wörter finden"
 
 #: ../src/search.c:238
 msgid "Match from s_tart of word"
-msgstr "Wort_anfänge finden"
+msgstr "_Wortanfänge finden"
 
 #: ../src/search.c:360
 msgid "_Previous"
@@ -3800,7 +3800,7 @@ msgstr "_Nächstes"
 
 #: ../src/search.c:370 ../src/search.c:492 ../src/search.c:641
 msgid "_Search for:"
-msgstr "_Suche nach:"
+msgstr "Suc_he nach:"
 
 #. Now add the multiple match options
 #: ../src/search.c:397
@@ -3826,7 +3826,7 @@ msgstr "_Im Dokument"
 #. close window checkbox
 #: ../src/search.c:418 ../src/search.c:563
 msgid "Close _dialog"
-msgstr "Diesen Dialog _schließen."
+msgstr "_Diesen Dialog schließen."
 
 #: ../src/search.c:423 ../src/search.c:568
 msgid "Disable this option to keep the dialog open."
@@ -3838,7 +3838,7 @@ msgstr "Ersetzen und _Finden"
 
 #: ../src/search.c:495
 msgid "Replace wit_h:"
-msgstr "_Ersetzen durch:"
+msgstr "Erse_tzen durch:"
 
 #. Now add the multiple replace options
 #: ../src/search.c:542
@@ -3847,7 +3847,7 @@ msgstr "_Alle ersetzen"
 
 #: ../src/search.c:545
 msgid "In Se_lection"
-msgstr "In _Auswahl"
+msgstr "I_n Auswahl"
 
 #: ../src/search.c:547
 msgid "Replace all matches found in the currently selected text"
@@ -3880,11 +3880,11 @@ msgstr "_Erweiterte Reguläre Ausdrücke benutzen"
 
 #: ../src/search.c:705
 msgid "_Recurse in subfolders"
-msgstr "In _Unterverzeichnissen"
+msgstr "_In Unterverzeichnissen"
 
 #: ../src/search.c:721
 msgid "_Invert search results"
-msgstr "_Suchmuster umkehren"
+msgstr "Su_chmuster umkehren"
 
 #: ../src/search.c:726
 msgid "Invert the sense of matching, to select non-matching lines."
