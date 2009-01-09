@@ -301,7 +301,7 @@ gchar *main_get_argv_filename(const gchar *filename)
 {
 	gchar *result;
 
-	if (g_path_is_absolute(filename))
+	if (g_path_is_absolute(filename) || utils_is_uri(filename))
 		result = g_strdup(filename);
 	else
 	{
@@ -717,37 +717,46 @@ static void signal_cb(gint sig)
 
 /* Used for command-line arguments at startup or from socket.
  * this will strip any :line:col filename suffix from locale_filename */
-gboolean main_handle_filename(gchar *locale_filename)
+gboolean main_handle_filename(const gchar *locale_filename)
 {
 	GeanyDocument *doc;
 	gint line = -1, column = -1;
+	gchar *filename;
 
 	g_return_val_if_fail(locale_filename, FALSE);
 
-	get_line_and_column_from_filename(locale_filename, &line, &column);
+	/* check whether the passed filename is an URI */
+	filename = utils_get_path_from_uri(locale_filename);
+	if (filename == NULL)
+		return FALSE;
+
+	get_line_and_column_from_filename(filename, &line, &column);
 	if (line >= 0)
 		cl_options.goto_line = line;
 	if (column >= 0)
 		cl_options.goto_column = column;
 
-	if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+	if (g_file_test(filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 	{
-		doc = document_open_file(locale_filename, FALSE, NULL, NULL);
+		doc = document_open_file(filename, FALSE, NULL, NULL);
 		/* add recent file manually if opening_session_files is set */
 		if (doc != NULL && main_status.opening_session_files)
 			ui_add_recent_file(doc->file_name);
+		g_free(filename);
 		return TRUE;
 	}
 	else if (file_prefs.cmdline_new_files)
 	{	/* create new file with the given filename */
-		gchar *utf8_filename = utils_get_utf8_from_locale(locale_filename);
+		gchar *utf8_filename = utils_get_utf8_from_locale(filename);
 
 		doc = document_new_file(utf8_filename, NULL, NULL);
 		if (doc != NULL)
 			ui_add_recent_file(doc->file_name);
 		g_free(utf8_filename);
+		g_free(filename);
 		return TRUE;
 	}
+	g_free(filename);
 	return FALSE;
 }
 
@@ -825,9 +834,18 @@ static void load_startup_files(gint argc, gchar **argv)
 		if (prefs.load_session)
 		{
 			if (load_project_from_cl)
-				project_load_file(argv[1]);
-			else
-			if (cl_options.load_session && !cl_options.new_instance)
+			{
+				gchar *pfile = argv[1];
+				if (utils_is_uri(argv[1]))
+					pfile = utils_get_path_from_uri(argv[1]);
+				if (pfile != NULL)
+				{
+					project_load_file(pfile);
+					if (pfile != argv[1])
+						g_free(pfile);
+				}
+			}
+			else if (cl_options.load_session && !cl_options.new_instance)
 				load_session_project_file();
 
 			/* when we want a new instance, we still load project session files unless -s

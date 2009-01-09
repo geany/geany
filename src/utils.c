@@ -1550,3 +1550,48 @@ const gchar *utils_build_path(const gchar *first, ...)
 }
 
 
+/* Retrieves the path for the given URI.
+ * It returns:
+ * - the path which was determined by g_filename_from_uri() or GIO
+ * - NULL if the URI is non-local and gvfs-fuse is not installed
+ * - a new copy of 'uri' if it is not an URI. */
+gchar *utils_get_path_from_uri(const gchar *uri)
+{
+	gchar *locale_filename;
+
+	g_return_val_if_fail(uri != NULL, NULL);
+
+	if (! utils_is_uri(uri))
+		return g_strdup(uri);
+
+	/* this will work only for 'file://' URIs */
+	locale_filename = g_filename_from_uri(uri, NULL, NULL);
+#ifdef HAVE_GIO
+	/* g_filename_from_uri() failed, so we probably have a non-local URI */
+	if (locale_filename == NULL)
+	{
+		GFile *file = g_file_new_for_uri(uri);
+		locale_filename = g_file_get_path(file);
+		g_object_unref(file);
+		if (locale_filename == NULL)
+		{
+			geany_debug("The URI '%s' could not be resolved to a local path. This means "
+				"that the URI is invalid or that you don't have gvfs-fuse installed.", uri);
+			return NULL;
+		}
+	}
+#endif
+	if (locale_filename == NULL)
+		geany_debug("The URI '%s' could not be resolved to a local path. This means that the "
+			"URI is invalid or that Geany can't use GVFS (maybe it is not installed).", uri);
+
+	return locale_filename;
+}
+
+
+gboolean utils_is_uri(const gchar *uri)
+{
+	g_return_val_if_fail(uri != NULL, FALSE);
+
+	return (strstr(uri, "://") != NULL);
+}

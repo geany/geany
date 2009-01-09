@@ -1,3 +1,12 @@
+2009-01-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * configure.in, win32-config.h, wscript, src/main.c, src/main.h,
+   src/utils.c, src/utils.h:
+   Add checks for GIO (GLib >= 2.16) support.
+   Allow to specify files on the command line and from remote instances
+   to be URIs (local and with GIO also remote URIs).
+
+
 2009-01-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/prefs.c, src/stash.c, src/keyfile.c:

@@ -184,6 +184,8 @@ def configure(conf):
 			have_gtk_210 = True
 	else:
 		gtk_version = 'Unknown'
+	# GIO check
+	conf.check_cfg(package='gio-2.0', uselib_store='GIO')
 
 	conf_define_from_opt('LIBDIR', Options.options.libdir, conf.env['PREFIX'] + '/lib')
 	conf_define_from_opt('DOCDIR', Options.options.docdir, conf.env['DATADIR'] + '/doc/geany')
