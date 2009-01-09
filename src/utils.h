@@ -155,4 +155,6 @@ gchar *utils_get_path_from_uri(const gchar *uri);
 
 gboolean utils_is_uri(const gchar *uri);
 
+gboolean utils_is_remote_path(const gchar *path);
+
 #endif

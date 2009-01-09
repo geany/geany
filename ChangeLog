@@ -5,6 +5,10 @@
    Add checks for GIO (GLib >= 2.16) support.
    Allow to specify files on the command line and from remote instances
    to be URIs (local and with GIO also remote URIs).
+ * src/document.c, src/documentprivate.h, src/utils.c, src/utils.h:
+   Add utils_is_remote_path().
+   Add private field 'is_remote' to GeanyDocument to indicate whether
+   an opened file is locally accessed or via gvfs-fuse.
 
 
 2009-01-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

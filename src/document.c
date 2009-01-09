@@ -1076,8 +1076,13 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		return NULL;
 	}
 
-	if (! reload) doc = document_create(utf8_filename);
-	g_return_val_if_fail(doc != NULL, NULL);	/* really should not happen */
+	if (! reload)
+	{
+		doc = document_create(utf8_filename);
+		g_return_val_if_fail(doc != NULL, NULL);	/* really should not happen */
+
+		doc->priv->is_remote = utils_is_remote_path(locale_filename);
+	}
 
 	sci_set_undo_collection(doc->editor->sci, FALSE); /* avoid creation of an undo action */
 	sci_empty_undo_buffer(doc->editor->sci);
@@ -1114,7 +1119,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 	{
 		/* file exists on disk, set real_path */
 		g_free(doc->real_path);
-		doc->real_path = get_real_path_from_utf8(doc->file_name);
+		doc->real_path = tm_get_real_path(locale_filename);
 
 		/* "the" SCI signal (connect after initial setup(i.e. adding text)) */
 		g_signal_connect(doc->editor->sci, "sci-notify", G_CALLBACK(editor_sci_notify_cb),
@@ -1453,6 +1458,13 @@ static gint write_data_to_disk(GeanyDocument *doc, const gchar *data, gint len)
 		err = errno;
 
 	fclose(fp);
+
+	/* now the file is on disk, set real_path */
+	if (err == 0 && doc->real_path == NULL)
+	{
+		doc->real_path = tm_get_real_path(locale_filename);
+		doc->priv->is_remote = utils_is_remote_path(locale_filename);
+	}
 	g_free(locale_filename);
 
 	return err;
@@ -1546,12 +1558,6 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 			_("Error saving file."), g_strerror(err));
 		utils_beep();
 		return FALSE;
-	}
-
-	/* now the file is on disk, set real_path */
-	if (doc->real_path == NULL)
-	{
-		doc->real_path = get_real_path_from_utf8(doc->file_name);
 	}
 
 	/* store the opened encoding for undo/redo */
