@@ -316,7 +316,7 @@ void search_find_selection(GeanyDocument *doc, gboolean search_backwards)
  * search dialogs. This needs to be done only once.
  * The monospace font should increase readibility of regular expressions containing spaces, points,
  * commas and similar (#1907117). */
-static void load_monospace_style()
+static void load_monospace_style(void)
 {
 	static const gchar *rcstyle =
 		"style \"geany-monospace\"\n" \
@@ -601,7 +601,7 @@ static void on_extra_options_toggled(GtkToggleButton *togglebutton, gpointer use
 }
 
 
-static void create_fif_dialog()
+static void create_fif_dialog(void)
 {
 	GtkWidget *dir_combo, *combo, *e_combo, *entry;
 	GtkWidget *label, *label1, *label2, *checkbox1, *checkbox2, *check_wholeword,

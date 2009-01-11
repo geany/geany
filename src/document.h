@@ -138,7 +138,7 @@ extern GPtrArray *documents_array;
 
 GeanyDocument* document_new_file(const gchar *filename, GeanyFiletype *ft, const gchar *text);
 
-GeanyDocument* document_new_file_if_non_open();
+GeanyDocument* document_new_file_if_non_open(void);
 
 GeanyDocument* document_find_by_filename(const gchar *utf8_filename);
 

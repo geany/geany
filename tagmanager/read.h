@@ -125,8 +125,8 @@ extern boolean bufferOpen (unsigned char *buffer, int buffer_size,
 			   const char *const fileName, const langType language );
 extern void bufferClose (void);
 extern void setBufPos (int new_position);
-extern int getBufPos ();
-extern boolean useFile ();
+extern int getBufPos (void);
+extern boolean useFile (void);
 
 #endif	/* _READ_H */
 

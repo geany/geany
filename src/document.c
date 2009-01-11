@@ -530,7 +530,7 @@ static void store_saved_encoding(GeanyDocument *doc)
 
 
 /* Opens a new empty document only if there are no other documents open */
-GeanyDocument *document_new_file_if_non_open()
+GeanyDocument *document_new_file_if_non_open(void)
 {
 	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0)
 		return document_new_file(NULL, NULL, NULL);

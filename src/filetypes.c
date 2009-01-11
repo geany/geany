@@ -654,7 +654,7 @@ static void setup_config_file_menus(void)
 	gtk_widget_show((item));
 
 
-static void create_set_filetype_menu()
+static void create_set_filetype_menu(void)
 {
 	filetype_id ft_id;
 	GtkWidget *filetype_menu = ui_lookup_widget(main_widgets.window, "set_filetype1_menu");

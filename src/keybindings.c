@@ -487,7 +487,7 @@ static void init_default_kb(void)
 
 
 /* before the tab changes, add the current document to the MRU list */
-static void on_notebook_switch_page()
+static void on_notebook_switch_page(void)
 {
 	GeanyDocument *old = document_get_current();
 

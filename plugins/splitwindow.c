@@ -410,7 +410,7 @@ PluginCallback plugin_callbacks[] =
 };
 
 
-void plugin_cleanup()
+void plugin_cleanup(void)
 {
 	if (plugin_state != STATE_UNSPLIT)
 		on_unsplit(NULL, NULL);

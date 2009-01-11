@@ -564,11 +564,11 @@ static void styleset_common(ScintillaObject *sci)
 	SSM(sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDERMIDTAIL, 0xffffff);
 	SSM(sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDERMIDTAIL, 0x000000);
 
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold", (sptr_t) "1");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.compact", (sptr_t) "0");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.comment", (sptr_t) "1");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.preprocessor", (sptr_t) "1");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.at.else", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "fold", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "fold.compact", (sptr_t) "0");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "fold.comment", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "fold.preprocessor", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "fold.at.else", (sptr_t) "1");
 
 
 	/* bold (3rd argument) is whether to override default foreground selection */

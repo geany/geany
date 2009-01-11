@@ -846,7 +846,7 @@ static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboole
 
 	if (! doc_is_utf8)
 		utf8_name = encodings_convert_to_utf8_from_charset(tag->name,
-			(gsize)-1, doc->encoding, TRUE);
+			(gsize) -1, doc->encoding, TRUE);
 	else
 		utf8_name = tag->name;
 
@@ -889,7 +889,7 @@ static gchar *get_symbol_tooltip(GeanyDocument *doc, const TMTag *tag)
 		! utils_str_equal(doc->encoding, "None"))
 	{
 		setptr(utf8_name,
-			encodings_convert_to_utf8_from_charset(utf8_name, -1, doc->encoding, TRUE));
+			encodings_convert_to_utf8_from_charset(utf8_name, (gsize) -1, doc->encoding, TRUE));
 	}
 
 	return utf8_name;

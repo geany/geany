@@ -3,6 +3,12 @@
  * configure.in, wscript, src/Makefile.am, src/utils.c:
    Fix build with GTK 2.12 by adding GIO compile and linker flags
    (closes #2498580).
+ * configure.in, plugins/splitwindow.c, src/callbacks.c, src/document.c,
+   src/document.h, src/filetypes.c, src/highlighting.c,
+   src/keybindings.c, src/plugins.c, src/search.c, src/socket.c,
+   src/symbols.c, tagmanager/read.h:
+   Fix several compiler warnings and build errors
+   (patch by Daniel Richard G., thanks).
 
 
 2009-01-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

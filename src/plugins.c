@@ -735,7 +735,7 @@ plugin_free(Plugin *plugin)
 
 /* load active plugins at startup */
 static void
-load_active_plugins()
+load_active_plugins(void)
 {
 	guint i, len;
 

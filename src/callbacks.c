@@ -1216,7 +1216,7 @@ on_go_to_line_activate                 (GtkMenuItem     *menuitem,
 
 		if (doc != NULL)
 		{
-			if (! editor_goto_line(doc->editor, val - 1))
+			if (! editor_goto_line(doc->editor, (gint) val - 1))
 				utils_beep();
 		}
 	}
