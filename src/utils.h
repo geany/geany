@@ -82,7 +82,9 @@ gchar utils_brace_opposite(gchar ch);
 
 gchar *utils_get_hostname(void);
 
-gboolean utils_string_replace_all(GString *str, const gchar *needle, const gchar *replace);
+guint utils_string_replace_all(GString *haystack, const gchar *needle, const gchar *replace);
+
+guint utils_string_replace_first(GString *haystack, const gchar *needle, const gchar *replace);
 
 gchar *utils_str_replace(gchar *haystack, const gchar *needle, const gchar *replacement);
 

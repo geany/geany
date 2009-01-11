@@ -58,11 +58,15 @@
 #include "keybindings.h"
 #include "project.h"
 #include "projectprivate.h"
+#include "queue.h"
 
 
 /* Note: Avoid using SSM in files not related to scintilla, use sciwrappers.h instead. */
 #define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
 
+
+static GeanyQueue *snippet_queue = NULL;
+static gint snippet_cursor_insert_pos;
 
 /* holds word under the mouse or keyboard cursor */
 static gchar current_word[GEANY_MAX_WORD_LENGTH];
@@ -96,9 +100,10 @@ static void auto_table(GeanyEditor *editor, gint pos);
 static void close_block(GeanyEditor *editor, gint pos);
 
 
-void editor_snippets_free()
+void editor_snippets_free(void)
 {
 	g_hash_table_destroy(editor_prefs.snippets);
+	queue_destroy(snippet_queue);
 }
 
 
@@ -112,6 +117,8 @@ void editor_snippets_init(void)
 	GKeyFile *sysconfig = g_key_file_new();
 	GKeyFile *userconfig = g_key_file_new();
 	GHashTable *tmp;
+
+	snippet_queue = queue_init();
 
 	sysconfigfile = g_strconcat(app->datadir, G_DIR_SEPARATOR_S, "snippets.conf", NULL);
 	userconfigfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "snippets.conf", NULL);
@@ -1800,12 +1807,15 @@ static void fix_line_indents(GeanyEditor *editor, gint line_start, gint line_end
  * @param cursor_index If >= 0, the index into @a text to place the cursor.
  * @param newline_indent_size Indentation size (in spaces) to insert for each newline; use
  * -1 to read the indent size from the line with @a insert_pos on it.
+ * @param replace_newlines Whether to replace newlines in text or not. If
+ * newlines have been replaced before, this should be false, to avoid multiple
+ * replacements of newlines, which is error prone on Windows.
  * @warning Make sure all \t tab chars in @a text are intended as indent widths,
  * NOT any hard tabs (you get those when copying document text with the Tabs
  * & Spaces indent mode set).
  * @note This doesn't scroll the cursor in view afterwards. */
 static void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint insert_pos,
-		gint cursor_index, gint newline_indent_size)
+		gint cursor_index, gint newline_indent_size, gboolean replace_newlines)
 {
 	ScintillaObject *sci = editor->sci;
 	gint line_start = sci_get_line_from_position(sci, insert_pos);
@@ -1835,7 +1845,8 @@ static void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gin
 	}
 
 	/* transform line endings */
-	utils_string_replace_all(buf, "\n", editor_get_eol_char(editor));
+	if (replace_newlines)
+		utils_string_replace_all(buf, "\n", editor_get_eol_char(editor));
 
 	/* transform tabs into indent widths (in spaces) */
 	whitespace = g_strnfill(editor_get_indent_prefs(editor)->width, ' ');
@@ -1857,24 +1868,47 @@ static void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gin
 	/* fixup indentation (very useful for Tabs & Spaces indent type) */
 	line_end = sci_get_line_from_position(sci, insert_pos + buf->len);
 	fix_line_indents(editor, line_start, line_end);
+	snippet_cursor_insert_pos = sci_get_current_position(sci);
 
 	g_string_free(buf, TRUE);
 }
 
 
+/* Move the cursor to the next specified cursor position in an inserted snippet.
+ * Can, and should, be optimized to give better results */
+void snippet_goto_next_cursor(ScintillaObject *sci, gint current_pos)
+{
+	if (snippet_queue)
+	{
+		gpointer offset;
+
+		snippet_queue = queue_delete(snippet_queue, &offset, FALSE);
+		if (current_pos > snippet_cursor_insert_pos)
+			snippet_cursor_insert_pos = GPOINTER_TO_INT(offset) + current_pos;
+		else
+			snippet_cursor_insert_pos += GPOINTER_TO_INT(offset);
+
+		sci_set_current_position(sci, snippet_cursor_insert_pos, FALSE);
+	}
+}
+
+
 static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, const gchar *word)
 {
+	ScintillaObject *sci = editor->sci;
 	gchar *str, *whitespace;
 	GString *pattern;
-	gint step, str_len;
-	gsize cur_index;
+	gint i, str_len, tmp_pos, whitespace_len, nl_count = 0;
+	gssize cur_index = -1;
 	gint ft_id = FILETYPE_ID(editor->document->file_type);
 	GHashTable *specials;
-	ScintillaObject *sci = editor->sci;
+	GeanyQueue *temp_list;
+	const GeanyIndentPrefs *iprefs;
+	gsize indent_size;
+	gint cursor_steps, old_cursor = 0;
 
 	str = g_strdup(word);
 	g_strstrip(str);
-
 	pattern = g_string_new(snippets_find_completion_by_name(filetypes[ft_id]->name, str));
 	if (pattern == NULL || pattern->len == 0)
 	{
@@ -1882,6 +1916,11 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 		g_string_free(pattern, TRUE);
 		return FALSE;
 	}
+
+	temp_list = queue_init();
+	iprefs = editor_get_indent_prefs(editor);
+	read_indent(editor, pos);
+	indent_size = strlen(indent);
 
 	/* remove the typed word, it will be added again by the used auto completion
 	 * (not really necessary but this makes the auto completion more flexible,
@@ -1905,25 +1944,71 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 	snippets_replace_wildcards(editor, pattern);
 
 	/* transform other wildcards */
-	utils_string_replace_all(pattern, "%newline%", editor_get_eol_char(editor));
+	/* convert to %newlines%, else we get endless loops */
+	utils_string_replace_all(pattern, "\n", "%newline%");
 
-	/* use spaces for indentation, will be fixed up */
-	whitespace = g_strnfill(editor_get_indent_prefs(editor)->width, ' ');
-	utils_string_replace_all(pattern, "%ws%", whitespace);
-	g_free(whitespace);
-
-	/* find the %cursor% pos (has to be done after all other operations) */
-	step = utils_strpos(pattern->str, "%cursor%");
-	if (step != -1)
-		utils_string_replace_all(pattern, "%cursor%", "");
-
-	/* finally insert the text and set the cursor */
-	if (step != -1)
-		cur_index = step;
+	/* if spaces are used, replaces all tabs with %ws%, which is later replaced
+	 * by real whitespace characters
+	 * otherwise replace all %ws% by \t, which will be replaced later by tab
+	 * characters,
+	 * this makes seperating between tab and spaces intentation pretty easy */
+	if (iprefs->type == GEANY_INDENT_TYPE_SPACES)
+		utils_string_replace_all(pattern, "\t", "%ws%");
 	else
+		utils_string_replace_all(pattern, "%ws%", "\t");
+
+	whitespace = g_strnfill(iprefs->width, ' '); /* use spaces for indentation, will be fixed up */
+	whitespace_len = strlen(whitespace);
+	i = 0;
+	while ((cursor_steps = utils_strpos(pattern->str, "%cursor%")) >= 0)
+	{
+		/* replace every %newline% (up to next %cursor%) with EOL,
+		 * and update cursor_steps after */
+		while ((tmp_pos = utils_strpos(pattern->str, "%newline%")) < cursor_steps && tmp_pos != -1)
+		{
+			nl_count++;
+			utils_string_replace_first(pattern, "%newline%", editor_get_eol_char(editor));
+			cursor_steps = utils_strpos(pattern->str, "%cursor%");
+		}
+		/* replace every %ws% (up to next %cursor%) with whitespaces,
+		 * and update cursor_steps after */
+		while ((tmp_pos = utils_strpos(pattern->str, "%ws%")) < cursor_steps && tmp_pos != -1)
+		{
+			utils_string_replace_first(pattern, "%ws%", whitespace);
+			cursor_steps = utils_strpos(pattern->str, "%cursor%");
+		}
+		/* finally replace the next %cursor% */
+		utils_string_replace_first(pattern, "%cursor%", "");
+
+		/* modify cursor_steps to take indentation count and type into account */
+
+		/* We're saving the relative offset to each cursor position in a simple
+		 * linked list, including intendations between them. */
+		if (i++ > 0)
+		{
+			cursor_steps += (nl_count * indent_size);
+			queue_append(temp_list, GINT_TO_POINTER(cursor_steps - old_cursor));
+		}
+		else
+		{
+			nl_count = 0;
+			cur_index = cursor_steps;
+		}
+		old_cursor = cursor_steps;
+	}
+	/* replace remaining %ws% and %newline% which may occur after the last %cursor% */
+	utils_string_replace_all(pattern, "%newline%", editor_get_eol_char(editor));
+	utils_string_replace_all(pattern, "%ws", whitespace);
+	g_free(whitespace);
+	/* We create a new list, where the cursor positions for the most recent
+	 * parsed snipped come first, followed by the remaining positions */
+	if (temp_list->data)
+		snippet_queue = queue_concat_copy(temp_list, snippet_queue);
+	if (cur_index < 0)
 		cur_index = pattern->len;
 
-	editor_insert_text_block(editor, pattern->str, pos, cur_index, -1);
+	/* finally insert the text and set the cursor */
+	editor_insert_text_block(editor, pattern->str, pos, cur_index, -1, FALSE);
 	sci_scroll_caret(sci);
 
 	g_free(str);
@@ -2169,7 +2254,7 @@ static void auto_table(GeanyEditor *editor, gint pos)
 						indent_str, "</tr>\n",
 						NULL);
 	editor_insert_text_block(editor, table, pos, -1,
-		count_indent_size(editor, indent));
+		count_indent_size(editor, indent), TRUE);
 	g_free(table);
 }
 

@@ -64,7 +64,7 @@ OBJS =	about.o build.o callbacks.o dialogs.o document.o editor.o encodings.o fil
 		geanyentryaction.o geanymenubuttonaction.o geanyobject.o geanywraplabel.o highlighting.o \
 		interface.o keybindings.o keyfile.o \
 		log.o main.o msgwindow.o navqueue.o notebook.o plugins.o prefs.o printing.o project.o \
-		sciwrappers.o search.o socket.o stash.o \
+		queue.o sciwrappers.o search.o socket.o stash.o \
 		symbols.o templates.o toolbar.o tools.o treeviews.o \
 		ui_utils.o utils.o win32.o
 

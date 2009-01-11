@@ -34,6 +34,7 @@ SRCS = \
 	prefs.c prefs.h \
 	printing.c printing.h \
 	project.c project.h \
+	queue.c queue.h \
 	sciwrappers.c sciwrappers.h \
 	search.c search.h \
 	socket.c socket.h \

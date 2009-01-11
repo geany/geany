@@ -45,7 +45,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 123,
+	GEANY_API_VERSION = 124,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -329,7 +329,7 @@ TemplateFuncs;
 typedef struct UtilsFuncs
 {
 	gboolean	(*str_equal) (const gchar *a, const gchar *b);
-	gboolean	(*string_replace_all) (GString *haystack, const gchar *needle,
+	guint		(*string_replace_all) (GString *haystack, const gchar *needle,
 				 const gchar *replacement);
 	GSList*		(*get_file_list) (const gchar *path, guint *length, GError **error);
 	gint		(*write_file) (const gchar *filename, const gchar *text);

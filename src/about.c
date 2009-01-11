@@ -83,8 +83,8 @@ static const gchar *contributors =
 "Giuseppe Torelli, Guillaume de Rorthais, Guillaume Hoffmann, Herbert Voss, Jason Oster, Jean-François Wauthy, Jeff Pohlmeyer, "
 "John Gabriele, Josef Whiter, Kevin Ellwood, Kristoffer A. Tjernås, Marko Peric, Matti Mårds, Moritz Barsnick, "
 "Peter Strand, Philipp Gildein, Pierre Joye, Rob van der Linde, Robert McGinley, Roland Baudin, S Jagannathan, Saleem Abdulrasool, "
-"Sebastian Kraft, Shiv, Slava Semushin, Stefan Oltmanns, Tamim, Tomás Vírseda, Tyler Mulligan, Walery Studennikov, "
-"Yura Siamashka";
+"Sebastian Kraft, Shiv, Slava Semushin, Stefan Oltmanns, Tamim, Thomas Martitz, Tomás Vírseda, "
+"Tyler Mulligan, Walery Studennikov, Yura Siamashka";
 
 
 static void header_eventbox_style_set(GtkWidget *widget);

@@ -26,6 +26,7 @@ src/plugins.c
 src/prefs.c
 src/printing.c
 src/project.c
+src/queue.c
 src/sciwrappers.c
 src/search.c
 src/socket.c

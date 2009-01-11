@@ -9,6 +9,13 @@
    src/symbols.c, tagmanager/read.h:
    Fix several compiler warnings and build errors
    (patch by Daniel Richard G., thanks).
+ * data/snippets.conf, doc/geany.html, doc/geany.txt, src/editor.c,
+   src/editor.h, src/keybindings.c, src/keybindings.h, src/Makefile.am,
+   src/makefile.win32, src/plugindata.h, src/utils.c, src/utils.h,
+   src/about.c, src/queue.c, src/queue.h, THANKS, wscript:
+   Support multiple %cursor% wildcards in Snippets. To switch between
+   %cursor% wildcards, use the new keybinding 'Move cursor in snippet'
+   (patch by Thomas Martitz, thanks).
 
 
 2009-01-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

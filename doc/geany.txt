@@ -806,7 +806,10 @@ will be replaced when using the snippet:
                   ('key= value' won't work, use 'key=\\svalue')
 
 %cursor%          Place the cursor at this position after completion has
-                  been done.
+                  been done. You can define multiple %cursor% wildcards
+                  and use the keybinding ``Move cursor in snippet`` to jump
+                  to the next defined cursor position in the completed
+                  snippet.
 
 %...%             "..." means the name of a key in the "Special" section.
                   If you have defined a key "brace_open" in the "Special"
@@ -826,7 +829,8 @@ Maybe you need to often type your name, so define a snippet like this::
 
 Every time you write ``myname`` <TAB> in Geany, it will replace "myname"
 with "Enrico Tröger". The key to start auto completion can be changed
-in the preferences dialog, by default it is TAB.
+in the preferences dialog, by default it is TAB. The corresponding keybinding
+is called ``Complete snippet``.
 
 Since Geany 0.15 you can also use most of the available templates wildcards
 listed in `Template wildcards`_. All wildcards which are listed as
@@ -2376,6 +2380,10 @@ Context Action                                            Executes a command and
                                                           (near the cursor position) or selection as an
                                                           argument. See the section called `Context
                                                           actions`_.
+
+Move cursor in snippet                                    Jumps to the next defined cursor positions in a
+                                                          completed snippets if multiple cursor positions
+                                                          where defined.
 
 **Clipboard**
 

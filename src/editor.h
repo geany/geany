@@ -167,6 +167,8 @@ void editor_sci_notify_cb(GtkWidget *widget, gint scn, gpointer scnt, gpointer d
 
 gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean force);
 
+void snippet_goto_next_cursor(ScintillaObject *sci, gint current_pos);
+
 gboolean editor_complete_snippet(GeanyEditor *editor, gint pos);
 
 void editor_auto_latex(GeanyEditor *editor, gint pos);

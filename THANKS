@@ -59,6 +59,7 @@ Walery Studennikov <despairr(at)gmail(dot)com> - YAML filetype patch
 Guillaume de Rorthais <ioguix(at)free(dot)fr> - Auto-close brackets/braces/quotes patch
 Tyler Mulligan <tyler(at)doknowevil(dot)net> - Close All toolbar icon
 Philipp Gildein <philipp(at)gildein(dot)com> - Ada filetype patch
+Thomas Martitz <thomas47(at)arcor(dot)de> - Multiple %cursor% wildcards in Snippets patch
 
 Translators:
 ------------

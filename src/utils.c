@@ -1355,6 +1355,41 @@ gboolean utils_str_has_upper(const gchar *str)
 }
 
 
+static guint utils_string_replace_helper(GString *haystack, const gchar *needle,
+										 const gchar *replace, const guint max_replaces)
+{
+	const gchar *stack, *match;
+	guint ret = 0;
+	gssize pos;
+
+	if (haystack->len == 0)
+		return FALSE;
+	g_return_val_if_fail(NZV(needle), 0);
+
+	stack = haystack->str;
+	if (! (match = strstr(stack, needle)))
+		return 0;
+	do
+	{
+		pos = match - haystack->str;
+		g_string_erase(haystack, pos, strlen(needle));
+
+		/* make next search after removed matching text.
+		 * (we have to be careful to only use haystack->str as its address may change) */
+		stack = haystack->str + pos;
+
+		if (replace)
+		{
+			g_string_insert(haystack, pos, replace);
+			stack = haystack->str + pos + strlen(replace);	/* skip past replacement */
+		}
+	}
+	while (++ret != max_replaces && (match = strstr(stack, needle)));
+
+	return ret;
+}
+
+
 /**
  * Replaces all occurrences of @c needle in @c haystack with @c replace.
  * As of Geany 0.16, @a replace can match @a needle, so the following will work:
@@ -1364,40 +1399,28 @@ gboolean utils_str_has_upper(const gchar *str)
  * @param needle The string which should be replaced.
  * @param replace The replacement for @c needle.
  *
- * @return @a TRUE if @c needle was found, else @a FALSE.
+ * @return @a amount of replacements done
  **/
-gboolean utils_string_replace_all(GString *haystack, const gchar *needle, const gchar *replace)
+guint utils_string_replace_all(GString *haystack, const gchar *needle, const gchar *replace)
 {
-	const gchar *stack, *match;
-	gssize pos = -1;
+	return utils_string_replace_helper(haystack, needle, replace, 0);
+}
 
-	if (haystack->len == 0)
-		return FALSE;
-	g_return_val_if_fail(NZV(needle), FALSE);
 
-	stack = haystack->str;
-	while (1)
-	{
-		match = strstr(stack, needle);
-		if (match == NULL)
-			break;
-		else
-		{
-			pos = match - haystack->str;
-			g_string_erase(haystack, pos, strlen(needle));
-
-			/* make next search after removed matching text.
-			 * (we have to be careful to only use haystack->str as its address may change) */
-			stack = haystack->str + pos;
-
-			if (replace)
-			{
-				g_string_insert(haystack, pos, replace);
-				stack = haystack->str + pos + strlen(replace);	/* skip past replacement */
-			}
-		}
-	}
-	return (pos != -1);
+/*
+ * Replaces the first occurrence of @c needle in @c haystack with @c replace.
+ * As of Geany 0.16, @a replace can match @a needle, so the following will work:
+ * @code utils_string_replace_all(text, "\n", "\r\n"); @endcode
+ *
+ * @param haystack The input string to operate on. This string is modified in place.
+ * @param needle The string which should be replaced.
+ * @param replace The replacement for @c needle.
+ *
+ * @return @a amount of replacements done
+ */
+guint utils_string_replace_first(GString *haystack, const gchar *needle, const gchar *replace)
+{
+	return utils_string_replace_helper(haystack, needle, replace, 1);
 }
 
 
