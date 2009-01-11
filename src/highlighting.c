@@ -749,11 +749,11 @@ static void styleset_c(ScintillaObject *sci)
 	styleset_c_like(sci, GEANY_FILETYPES_C);
 
 	if (style_sets[GEANY_FILETYPES_C].styling[20].foreground == 1)
-		SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.symbol.$(file.patterns.cpp)", (sptr_t) "#");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.start.$(file.patterns.cpp)", (sptr_t) "if ifdef ifndef");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.middle.$(file.patterns.cpp)", (sptr_t) "else elif");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.end.$(file.patterns.cpp)", (sptr_t) "endif");
+		SSM(sci, SCI_SETPROPERTY, (uptr_t) "styling.within.preprocessor", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "preprocessor.symbol.$(file.patterns.cpp)", (sptr_t) "#");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "preprocessor.start.$(file.patterns.cpp)", (sptr_t) "if ifdef ifndef");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "preprocessor.middle.$(file.patterns.cpp)", (sptr_t) "else elif");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "preprocessor.end.$(file.patterns.cpp)", (sptr_t) "endif");
 }
 
 
@@ -792,11 +792,11 @@ static void styleset_cpp(ScintillaObject *sci)
 	styleset_c_like(sci, GEANY_FILETYPES_CPP);
 
 	if (style_sets[GEANY_FILETYPES_CPP].styling[20].foreground == 1)
-		SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.symbol.$(file.patterns.cpp)", (sptr_t) "#");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.start.$(file.patterns.cpp)", (sptr_t) "if ifdef ifndef");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.middle.$(file.patterns.cpp)", (sptr_t) "else elif");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.end.$(file.patterns.cpp)", (sptr_t) "endif");
+		SSM(sci, SCI_SETPROPERTY, (uptr_t) "styling.within.preprocessor", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "preprocessor.symbol.$(file.patterns.cpp)", (sptr_t) "#");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "preprocessor.start.$(file.patterns.cpp)", (sptr_t) "if ifdef ifndef");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "preprocessor.middle.$(file.patterns.cpp)", (sptr_t) "else elif");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "preprocessor.end.$(file.patterns.cpp)", (sptr_t) "endif");
 }
 
 
@@ -846,11 +846,11 @@ static void styleset_glsl(ScintillaObject *sci)
 	styleset_c_like(sci, GEANY_FILETYPES_GLSL);
 
 	if (style_sets[GEANY_FILETYPES_GLSL].styling[20].foreground == 1)
-		SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.symbol.$(file.patterns.cpp)", (sptr_t) "#");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.start.$(file.patterns.cpp)", (sptr_t) "if ifdef ifndef");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.middle.$(file.patterns.cpp)", (sptr_t) "else elif");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.end.$(file.patterns.cpp)", (sptr_t) "endif");
+		SSM(sci, SCI_SETPROPERTY, (uptr_t) "styling.within.preprocessor", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "preprocessor.symbol.$(file.patterns.cpp)", (sptr_t) "#");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "preprocessor.start.$(file.patterns.cpp)", (sptr_t) "if ifdef ifndef");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "preprocessor.middle.$(file.patterns.cpp)", (sptr_t) "else elif");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "preprocessor.end.$(file.patterns.cpp)", (sptr_t) "endif");
 }
 
 static void styleset_cs_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
@@ -1132,7 +1132,7 @@ static void styleset_php(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_HTML, ft_id);
 
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "phpscript.mode", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "phpscript.mode", (sptr_t) "1");
 
 	/* use the same colouring as for XML */
 	styleset_markup(sci, TRUE);
@@ -1385,8 +1385,8 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords)
 	set_sci_style(sci, SCE_HPHP_HSTRING_VARIABLE, GEANY_FILETYPES_XML, 41);
 	set_sci_style(sci, SCE_HPHP_COMPLEX_VARIABLE, GEANY_FILETYPES_XML, 42);
 
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.html", (sptr_t) "1");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.html.preprocessor", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "fold.html", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "fold.html.preprocessor", (sptr_t) "0");
 }
 
 
@@ -1510,7 +1510,7 @@ static void styleset_perl(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_PERL, ft_id);
 
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "styling.within.preprocessor", (sptr_t) "1");
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_PERL].keywords[0]);
 
@@ -1610,8 +1610,8 @@ static void styleset_python(ScintillaObject *sci)
 	set_sci_style(sci, SCE_P_WORD2, GEANY_FILETYPES_PYTHON, 14);
 	set_sci_style(sci, SCE_P_DECORATOR, GEANY_FILETYPES_PYTHON, 15);
 
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.comment.python", (sptr_t) "1");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.quotes.python", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "fold.comment.python", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "fold.quotes.python", (sptr_t) "1");
 }
 
 
@@ -2029,8 +2029,8 @@ static void styleset_docbook(ScintillaObject *sci)
 	set_sci_style(sci, SCE_H_SGML_1ST_PARAM_COMMENT, GEANY_FILETYPES_DOCBOOK, 27);
 	set_sci_style(sci, SCE_H_SGML_ERROR, GEANY_FILETYPES_DOCBOOK, 28);
 
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.html", (sptr_t) "1");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.html.preprocessor", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "fold.html", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "fold.html.preprocessor", (sptr_t) "1");
 }
 
 
@@ -2195,8 +2195,8 @@ static void styleset_nsis(ScintillaObject *sci)
 	set_sci_style(sci, SCE_NSIS_FUNCTIONDEF, GEANY_FILETYPES_NSIS, 17);
 	set_sci_style(sci, SCE_NSIS_COMMENTBOX, GEANY_FILETYPES_NSIS, 18);
 
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "nsis.uservars", (sptr_t) "1");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "nsis.ignorecase", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "nsis.uservars", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "nsis.ignorecase", (sptr_t) "1");
 }
 
 
