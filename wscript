@@ -185,7 +185,7 @@ def configure(conf):
 	else:
 		gtk_version = 'Unknown'
 	# GIO check
-	conf.check_cfg(package='gio-2.0', uselib_store='GIO', mandatory=False)
+	conf.check_cfg(package='gio-2.0', uselib_store='GIO', args='--cflags --libs', mandatory=False)
 
 	conf_define_from_opt('LIBDIR', Options.options.libdir, conf.env['PREFIX'] + '/lib')
 	conf_define_from_opt('DOCDIR', Options.options.docdir, conf.env['DATADIR'] + '/doc/geany')
@@ -301,7 +301,7 @@ def build(bld):
 	obj.target			= 'geany'
 	obj.source			= geany_sources
 	obj.includes		= '. src/ scintilla/include/ tagmanager/include/'
-	obj.uselib			= 'GTK'
+	obj.uselib			= 'GTK GIO'
 	obj.uselib_local	= 'scintilla tagmanager'
 
 	# geanyfunctions.h

@@ -43,6 +43,7 @@
 #endif
 
 #include <glib/gstdio.h>
+#include <gio/gio.h>
 
 #include "prefs.h"
 #include "support.h"

@@ -135,6 +135,8 @@ AC_SUBST(GTK_LIBS)
 # GIO checks
 gio_modules="gio-2.0 >= 2.16"
 PKG_CHECK_MODULES(GIO, [$gio_modules], have_gio=1, have_gio=0)
+AC_SUBST(GIO_CFLAGS)
+AC_SUBST(GIO_LIBS)
 AC_DEFINE_UNQUOTED(HAVE_GIO, $have_gio, [Whether GIO is available])
 
 # --disable-deprecated switch for GTK2 purification
