@@ -8,7 +8,7 @@ EXTRA_DIST = \
 
 plugindir = $(libdir)/geany
 
-plugins_includedir = $(includedir)/geany/
+plugins_includedir = $(includedir)/geany
 plugins_include_HEADERS = \
 	pluginmacros.h \
 	geanyfunctions.h

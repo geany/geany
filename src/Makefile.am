@@ -49,7 +49,7 @@ SRCS = \
 	utils.c utils.h
 
 
-geany_includedir = $(includedir)/geany/
+geany_includedir = $(includedir)/geany
 geany_include_HEADERS = \
 	dialogs.h \
 	document.h \

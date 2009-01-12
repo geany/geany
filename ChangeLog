@@ -20,6 +20,11 @@
    Don't fold toplevel PHP script tags (part of #2003912).
    Replace remaining occurences of sptr_t by uptr_t in the third
    argument of SSM() calls.
+ * plugins/Makefile.am, src/Makefile.am, src/utils.c,
+   tagmanager/include/Makefile.am:
+   Fix build without GIO again (sorry).
+   Remove trailing slashes in Makefile.am's
+   (patch by Daniel Richard G., thanks).
 
 
 2009-01-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
