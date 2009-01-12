@@ -1,3 +1,10 @@
+2009-01-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * data/filetypes.vala:
+   Add default build commands (other sections are commented out and 
+   untested).
+
+
 2009-01-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * configure.in, wscript, src/Makefile.am, src/utils.c:
