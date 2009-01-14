@@ -11,6 +11,9 @@
    add the new format specification.
    Update global tags files.
    Add documentation for the two supported global tags files formats.
+ * src/msgwindow.c:
+   Strip the compiler error messages to fix possibly broken message
+   parsing.
 
 
 2009-01-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

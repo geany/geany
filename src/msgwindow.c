@@ -576,10 +576,13 @@ gboolean msgwin_goto_compiler_file_line()
 			gint line;
 			gchar *filename, *dir;
 			GtkTreePath *path;
+			/* save the beginning of the string to use when free'ing it after it was stripped */
+			gchar *string_start = string;
 
 			path = gtk_tree_model_get_path(model, &iter);
 			find_prev_build_dir(path, model, &dir);
 			gtk_tree_path_free(path);
+			g_strchug(string); /* remove possible leading whitespace */
 			msgwin_parse_compiler_error_line(string, dir, &filename, &line);
 
 			if (dir != NULL)
@@ -605,8 +608,8 @@ gboolean msgwin_goto_compiler_file_line()
 				}
 			}
 			g_free(filename);
+			g_free(string_start);
 		}
-		g_free(string);
 	}
 	return ret;
 }
