@@ -265,7 +265,8 @@ def main():
 	tags.sort()
 	# write them
 	fp = open(tag_filename, 'wb')
-	fp.write('# Automatically generated file - do not edit (created on %s)\n' % \
+	fp.write(
+		'# format=tagmanager - Automatically generated file - do not edit (created on %s)\n' % \
 		datetime.datetime.now().ctime())
 	for s in tags:
 		if not s == '\n': # skip empty lines

@@ -1205,22 +1205,58 @@ corresponding filetype is first used. Currently these are for:
 * Python
 
 
+Global tags file format
+```````````````````````
+
+Global tags files can have two different formats:
+
+* Tagmanager format
+* Pipe-separated format
+
+The first line of global tags files should be a comment, introduced
+by ``#`` followed by a space and a string like ``format=pipe``
+respectively ``format=tagmanager`` (case-sensitive).
+This helps Geany to read the file properly. If this line
+is missing, Geany tries to auto-detect the used format but this
+might fail.
+
+
+The Tagmanager format is a bit more complex and is used for files
+created by the ``geany -g`` command. There is one tag per line.
+Different tag attributes like the return value or the argument list
+are separated with different characters indicating the type of the
+following argument.
+
+The Pipe-separated format is easier to read and write.
+There is one tag per line and different tag attributes are separated
+by the pipe character (``|``). A line looks like::
+
+    basename|string|(string path [, string suffix])|
+
+| The first field is the tag name (usually a function name).
+| The second field is the type of the return value.
+| The third field is the argument list for this tag.
+| The fourth field is the description for this tag but
+  currently unused and should be left empty.
+
+Except for the first field (tag name), all other field can be left
+empty but the pipe separator must appear for them.
+
+You can easily write your own global tag files using this format.
+Just save them in your tags directory, as described earlier in the
+section `Global tags`_.
+
+
 Generating a global tags file
 `````````````````````````````
-
-
-*Filetypes support:*
-
-Currently this is not yet supported for Pascal, PHP and LaTeX
-filetypes.
 
 You can generate your own global tags files by parsing a list of
 source files. The command is::
 
     geany -g [-P] <Tag File> <File list>
 
-* Tag File should be in the format described earlier -- see the
-  section called `Global tags`_.
+* Tag File filename should be in the format described earlier --
+  see the section called `Global tags`_.
 * File list is a list of filenames, each with a full path (unless
   you are generating C/C++ tags and have set the CFLAGS environment
   variable appropriately).

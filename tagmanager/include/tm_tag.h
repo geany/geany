@@ -199,7 +199,7 @@ TMTag *tm_tag_new(TMSourceFile *file, const tagEntryInfo *tag_entry);
  Same as tm_tag_new() except that the tag attributes are read from file.
  \param mode langType to use for the tag.
 */
-TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, gint mode);
+TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, gint mode, gboolean format_pipe);
 
 /*!
  Writes tag information to the given FILE *.

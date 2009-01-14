@@ -1,7 +1,22 @@
+2009-01-14  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * data/global.tags, data/latex.tags, data/pascal.tags, data/php.tags,
+   data/python.tags, doc/geany.html, doc/geany.txt,
+   scripts/create_php_tags.php, scripts/create_py_tags.py,
+   tagmanager/include/tm_tag.h, tagmanager/tm_project.c,
+   tagmanager/tm_tag.c, tagmanager/tm_workspace.c:
+   Add a format specification in global tags files and implement
+   an additional fallback if the specification is missing.
+   Adjust code and scripts which generate global tags files to
+   add the new format specification.
+   Update global tags files.
+   Add documentation for the two supported global tags files formats.
+
+
 2009-01-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * data/filetypes.vala:
-   Add default build commands (other sections are commented out and 
+   Add default build commands (other sections are commented out and
    untested).
 
 

@@ -142,8 +142,10 @@ static TMTagAttrType global_tags_sort_attrs[] =
 
 gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
 {
+	guchar buf[BUFSIZ];
 	FILE *fp;
 	TMTag *tag;
+	gboolean format_pipe = FALSE;
 
 	if (NULL == (fp = g_fopen(tags_file, "r")))
 		return FALSE;
@@ -151,7 +153,29 @@ gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
 		return FALSE;
 	if (NULL == theWorkspace->global_tags)
 		theWorkspace->global_tags = g_ptr_array_new();
-	while (NULL != (tag = tm_tag_new_from_file(NULL, fp, mode)))
+	if ((NULL == fgets((gchar*) buf, BUFSIZ, fp)) || ('\0' == *buf))
+		return FALSE; /* early out on error */
+	else
+	{	/* We read the first line for the format specification. */
+		if (buf[0] == '#' && strstr((gchar*) buf, "format=pipe") != NULL)
+			format_pipe = TRUE;
+		else if (buf[0] == '#' && strstr((gchar*) buf, "format=tagmanager") != NULL)
+			format_pipe = FALSE;
+		else
+		{	/* We didn't find a valid format specification, so we try to auto-detect the format
+			 * by counting the pipe characters on the first line and asumme pipe format when
+			 * we find more than one pipe on the line. */
+			guint i, pipe_cnt = 0;
+			for (i = 0; i < BUFSIZ && buf[i] != '\0' && pipe_cnt < 2; i++)
+			{
+				if (buf[i] == '|')
+					pipe_cnt++;
+			}
+			format_pipe = (pipe_cnt > 1);
+		}
+		rewind(fp); /* reset the file pointer, to start reading again from the beginning */
+	}
+	while (NULL != (tag = tm_tag_new_from_file(NULL, fp, mode, format_pipe)))
 		g_ptr_array_add(theWorkspace->global_tags, tag);
 	fclose(fp);
 
@@ -409,6 +433,7 @@ gboolean tm_workspace_create_global_tags(const char *config_dir, const char *pre
 		tm_source_file_free(source_file);
 		return FALSE;
 	}
+	fprintf(fp, "# format=tagmanager\n");
 	for (i = 0; i < tags_array->len; ++i)
 	{
 		tm_tag_write(TM_TAG(tags_array->pdata[i]), fp, tm_tag_attr_type_t

@@ -59,8 +59,9 @@ for($line = 0, $lineCount = count($file); $line < $lineCount; ++$line) {
         TA_ARGLIST, $funcDefMatch['params'], TA_VARTYPE, $funcDefMatch['retType']);
 }
 
-$tagsOutput[] = sprintf('# Automatically generated file - do not edit (created on %s)',
-                    date('r'));
+$tagsOutput[] = sprintf(
+    '# format=tagmanager - Automatically generated file - do not edit (created on %s)',
+    date('r'));
 // Sort the output
 sort($tagsOutput);
 

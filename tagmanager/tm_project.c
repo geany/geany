@@ -385,7 +385,7 @@ gboolean tm_project_open(TMProject *project, gboolean force)
 	tm_project_set_ignorelist(project);
 	if (NULL == (fp = g_fopen(project->work_object.file_name, "r")))
 		return FALSE;
-	while (NULL != (tag = tm_tag_new_from_file(source_file, fp, 0)))
+	while (NULL != (tag = tm_tag_new_from_file(source_file, fp, 0, FALSE)))
 	{
 		if (tm_tag_file_t == tag->type)
 		{

@@ -300,7 +300,7 @@ gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 					tag->atts.entry.impl = *(start + 1);
 					break;
 				default:
-#ifdef TM_DEBUG
+#ifdef GEANY_DEBUG
 					g_warning("Unknown attribute %s", start + 1);
 #endif
 					break;
@@ -359,23 +359,17 @@ gboolean tm_tag_init_from_file_alt(TMTag *tag, TMSourceFile *file, FILE *fp)
 	return TRUE;
 }
 
-TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, gint mode)
+TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, gint mode, gboolean format_pipe)
 {
 	TMTag *tag;
 	gboolean result;
 
 	TAG_NEW(tag);
 
-	switch (mode)
-	{
-		case 4:	/* pascal */
-		case 8:	/* latex */
-			result = tm_tag_init_from_file_alt(tag, file, fp);
-			break;
-
-		default:
-			result = tm_tag_init_from_file(tag, file, fp);
-	}
+	if (format_pipe)
+		result = tm_tag_init_from_file_alt(tag, file, fp);
+	else
+		result = tm_tag_init_from_file(tag, file, fp);
 
 	if (! result)
 	{
