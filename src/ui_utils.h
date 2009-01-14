@@ -49,6 +49,7 @@ typedef struct GeanyInterfacePrefs
 	gboolean		statusbar_visible;
 	gboolean		show_symbol_list_expanders;
 	gboolean		notebook_double_click_hides_widgets;
+	gboolean		highlighting_invert_all;
 }
 GeanyInterfacePrefs;
 

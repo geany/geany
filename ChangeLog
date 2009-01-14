@@ -17,6 +17,9 @@
  * win32-config.h, src/makefile.win32:
    Fix Windows build: don't use GIO.
    Link against GIO anyways just to be safe with GTK 2.14.
+ * geany.glade, src/highlighting.c, src/interface.c, src/keyfile.c,
+   src/plugindata.h, src/ui_utils.h:
+   Add GUI pref to invert all colours for syntax highlighting.
 
 
 2009-01-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

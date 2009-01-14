@@ -2454,7 +2454,7 @@ create_prefs_dialog (void)
   GtkWidget *frame5;
   GtkWidget *alignment6;
   GtkWidget *vbox12;
-  GtkWidget *checkbutton1;
+  GtkWidget *check_highlighting_invert;
   GtkWidget *check_indent;
   GtkWidget *check_white_space;
   GtkWidget *check_line_end;
@@ -3626,9 +3626,10 @@ create_prefs_dialog (void)
   gtk_widget_show (vbox12);
   gtk_container_add (GTK_CONTAINER (alignment6), vbox12);
 
-  checkbutton1 = gtk_check_button_new_with_mnemonic (_("Invert syntax highlighting colors"));
-  gtk_box_pack_start (GTK_BOX (vbox12), checkbutton1, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, checkbutton1, _("Use white text on a black background."), NULL);
+  check_highlighting_invert = gtk_check_button_new_with_mnemonic (_("Invert syntax highlighting colors"));
+  gtk_widget_show (check_highlighting_invert);
+  gtk_box_pack_start (GTK_BOX (vbox12), check_highlighting_invert, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_highlighting_invert, _("Use white text on a black background and invert all colors. This option requires a restart of Geany."), NULL);
 
   check_indent = gtk_check_button_new_with_mnemonic (_("Show indentation guides"));
   gtk_widget_show (check_indent);
@@ -4695,7 +4696,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame5, "frame5");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment6, "alignment6");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox12, "vbox12");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, checkbutton1, "checkbutton1");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_highlighting_invert, "check_highlighting_invert");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_indent, "check_indent");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_white_space, "check_white_space");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_line_end, "check_line_end");

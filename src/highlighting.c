@@ -35,6 +35,7 @@
 #include "utils.h"
 #include "filetypes.h"
 #include "symbols.h"
+#include "ui_utils.h"
 
 
 /* Note: Avoid using SSM in files not related to scintilla, use sciwrappers.h instead. */
@@ -427,6 +428,8 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 		common_style_set.styling[GCS_MARKER_TRANSLUCENCY].background = tmp_style.background;
 	}
 
+	common_style_set.invert_all = interface_prefs.highlighting_invert_all =
+		(common_style_set.invert_all || interface_prefs.highlighting_invert_all);
 	get_keyfile_wordchars(config, config_home, &common_style_set.wordchars);
 	whitespace_chars = get_keyfile_whitespace_chars(config, config_home);
 

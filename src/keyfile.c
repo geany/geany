@@ -121,6 +121,9 @@ static void init_pref_groups(void)
 	stash_group_add_toggle_button(group, &interface_prefs.notebook_double_click_hides_widgets,
 		"notebook_double_click_hides_widgets", FALSE, "check_double_click_hides_widgets");
 
+	stash_group_add_toggle_button(group, &interface_prefs.highlighting_invert_all,
+		"highlighting_invert_all", FALSE, "check_highlighting_invert");
+
 	stash_group_add_toggle_button(group, &search_prefs.suppress_dialogs,
 		"pref_main_suppress_search_dialogs", FALSE, "check_ask_suppress_search_dialogs");
 	stash_group_add_toggle_button(group, &search_prefs.use_current_word,
