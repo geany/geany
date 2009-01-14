@@ -14,6 +14,9 @@
  * src/msgwindow.c:
    Strip the compiler error messages to fix possibly broken message
    parsing.
+ * win32-config.h, src/makefile.win32:
+   Fix Windows build: don't use GIO.
+   Link against GIO anyways just to be safe with GTK 2.14.
 
 
 2009-01-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

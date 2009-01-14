@@ -46,7 +46,7 @@ ALL_GTK_LIBS= \
 ifdef GTK280
 ALL_GTK_LIBS +=-liconv
 else
-ALL_GTK_LIBS +=-lcairo -lpangocairo-1.0
+ALL_GTK_LIBS +=-lcairo -lpangocairo-1.0 -lgio-2.0
 endif
 
 WIN_LIBS=-mwindows -lkernel32 -limm32 -lshfolder -lshell32 \
