@@ -1407,6 +1407,26 @@ Use current word under the cursor for Find dialogs
     Use the currently selected word as the search text when you open
     one of the Search dialogs.
 
+Suppress status messages in the status bar
+    Remove all messages from the status bar. The messages are still displayed
+    in the status messages window.
+
+Auto focus widgets (focus follows mouse)
+    Give the focus automatically to widgets below the mouse cursor.
+    This works for the main editor widget, the scribble, the toolbar search field
+    goto line fields and the VTE.
+
+Paths
+`````
+
+Startup path
+    Path to start in when opening or saving files.
+    It must be an absolute path.
+    Leave it blank to use the current working directory.
+
+Project files
+    Path to start in when opening project files.
+
 
 Interface tab in preferences dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1514,6 +1534,50 @@ Editor Features tab in preferences dialog
 
 .. image:: ./images/pref_dialog_edit_features.png
 
+Features
+````````
+
+Line wrapping
+    Show long lines wrapped around to new display lines.
+
+Enable "smart" home key
+    Whether to move the cursor to the first non-whitespace character
+    on the line when you hit the home key on your keyboard. Pressing it
+    again will go to the very start of the line.
+
+Disable Drag and Drop
+    Do not allow the dragging and dropping of selected text in documents.
+
+Enable folding
+    Allow groups of lines in a document to be collapsed for easier
+    navigation/editing.
+
+Fold/Unfold all children of a fold point
+    Whether to fold/unfold all child fold points when a parent line
+    is folded.
+
+Use indicators to show compile errors
+    Underline lines with compile errors using red squiggles to indicate
+    them in the editor area.
+
+Newline strip trailing spaces
+    Remove any white space at the end of the line when you hit the
+    Enter/Return key.
+
+Line breaking column
+    The editor column number to insert a newline at when Line Breaking
+    is enabled for the current document.
+
+Comment toggle marker
+    A string which is added when toggling a line comment in a source file.
+    It is used to mark the comment as toggled.
+
+
+Editor Indentation tab in preferences dialog
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: ./images/pref_dialog_edit_indentation.png
+
 Indentation group
 `````````````````
 
@@ -1566,49 +1630,13 @@ Tab key indents
         unindent, but this pref allows the tab key to have different
         meanings in different contexts - e.g. for snippet completion.
 
-Features
-````````
-
-Line wrapping
-    Show long lines wrapped around to new display lines.
-
-Enable "smart" home key
-    Whether to move the cursor to the first non-whitespace character
-    on the line when you hit the home key on your keyboard. Pressing it
-    again will go to the very start of the line.
-
-Disable Drag and Drop
-    Do not allow the dragging and dropping of selected text in documents.
-
-Enable folding
-    Allow groups of lines in a document to be collapsed for easier
-    navigation/editing.
-
-Fold/Unfold all children of a fold point
-    Whether to fold/unfold all child fold points when a parent line
-    is folded.
-
-Use indicators to show compile errors
-    Underline lines with compile errors using red squiggles to indicate
-    them in the editor area.
-
-Newline strip trailing spaces
-    Remove any white space at the end of the line when you hit the
-    Enter/Return key.
-
-Line breaking column
-    The editor column number to insert a newline at when Line Breaking
-    is enabled for the current document.
-
-Comment toggle marker
-    A string which is added when toggling a line comment in a source file.
-    It is used to mark the comment as toggled.
-
-
 Editor Completions tab in preferences dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. image:: ./images/pref_dialog_edit_completions.png
+
+Completions
+```````````
 
 Snippet Completion
     Whether to replace special keywords after typing Tab into a
@@ -1650,6 +1678,30 @@ Max. symbol name suggestions
     The maximum number of entries to display in the auto completion list.
 
 
+Auto-close quotes and brackets
+``````````````````````````````
+
+Geany can automatically insert a closing bracket and quote characters when
+you open them. For instance, you type a ``(`` and Geany will automatically
+insert ``)``. With the following options, you can define for which
+characters this should work.
+
+Parenthesis ( )
+    Auto-close parenthesis when typing an opening one
+
+Curly brackets { }
+    Auto-close parenthesis when typing an opening one
+
+Square brackets [ ]
+    Auto-close parenthesis when typing an opening one
+
+Single quotes ' '
+    Auto-close parenthesis when typing an opening one
+
+Double quotes " "
+    Auto-close parenthesis when typing an opening one
+
+
 Editor Display tab in preferences dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1677,13 +1729,15 @@ Show whitespaces
     show which kinds of whitespace are used.
 
 Show line endings
-    Displays a symbol everywhere that a carriage return or line feed
+    Display a symbol everywhere that a carriage return or line feed
     is present.
 
 Show line numbers
-
+    Show or hide the Line Number margin.
 
 Show markers margin
+    Show or hide the small margin right of the line numbers, which is used
+    to mark lines.
 
 Stop scrolling at last line
     When enabled Geany stops scrolling when at the last line of the document.
@@ -1939,12 +1993,6 @@ Background color
 Scrollback lines
     The number of lines buffered so that you can scroll though the history.
 
-Terminal emulation
-    Controls how the terminal emulator should behave.
-    Do not change this value unless you know exactly what you are doing.
-    At time of writing only "xterm" is supported. For further details refer
-    to the documentation of the libvte package.
-
 Shell
     The location of the shell on your system.
 
@@ -1954,8 +2002,11 @@ Scroll on keystroke
 Scroll on output
     Scroll the output down.
 
+Cursor blinks
+    Let the terminal cursor blink.
+
 Override Geany keybindings
-    Allows the VTE to receive keyboard shortcuts (apart from focus commands).
+    Allow the VTE to receive keyboard shortcuts (apart from focus commands).
 
 Disable menu shortcut key (F10 by default)
     Disable the menu shortcut when you are in the virtual terminal.
