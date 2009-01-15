@@ -99,6 +99,7 @@ static gboolean want_plugins;
 
 /* command-line options */
 static gboolean debug_mode = FALSE;
+static gboolean verbose_mode = FALSE;
 static gboolean ignore_global_tags = FALSE;
 static gboolean no_msgwin = FALSE;
 static gboolean show_version = FALSE;
@@ -122,7 +123,7 @@ static GOptionEntry entries[] =
 {
 	{ "column", 0, 0, G_OPTION_ARG_INT, &cl_options.goto_column, N_("Set initial column number for the first opened file (useful in conjunction with --line)"), NULL },
 	{ "config", 'c', 0, G_OPTION_ARG_FILENAME, &alternate_config, N_("Use an alternate configuration directory"), NULL },
-	{ "debug", 'd', 0, G_OPTION_ARG_NONE, &debug_mode, N_("Runs in debug mode (means being verbose)"), NULL },
+	{ "debug", 'd', G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &debug_mode, N_("Be verbose"), NULL },
 	{ "ft-names", 0, 0, G_OPTION_ARG_NONE, &ft_names, N_("Print internal filetype names"), NULL },
 	{ "generate-tags", 'g', 0, G_OPTION_ARG_NONE, &generate_tags, N_("Generate global tags file (see documentation)"), NULL },
 	{ "no-preprocessing", 'P', 0, G_OPTION_ARG_NONE, &no_preprocessing, N_("Don't preprocess C/C++ files when generating tags"), NULL },
@@ -142,7 +143,8 @@ static GOptionEntry entries[] =
 	{ "no-terminal", 't', 0, G_OPTION_ARG_NONE, &no_vte, N_("Don't load terminal support"), NULL },
 	{ "vte-lib", 0, 0, G_OPTION_ARG_FILENAME, &lib_vte, N_("Filename of libvte.so"), NULL },
 #endif
-	{ "version", 'v', 0, G_OPTION_ARG_NONE, &show_version, N_("Show version and exit"), NULL },
+	{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose_mode, N_("Be verbose"), NULL },
+	{ "version", 'V', 0, G_OPTION_ARG_NONE, &show_version, N_("Show version and exit"), NULL },
 	{ "dummy", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &dummy, NULL, NULL }, /* for +NNN line number arguments */
 	{ NULL, 0, 0, 0, NULL, NULL, NULL }
 };
@@ -512,7 +514,13 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 		exit(0);
 	}
 
-	app->debug_mode = debug_mode;
+	app->debug_mode = verbose_mode;
+	if (debug_mode)
+	{
+		app->debug_mode = TRUE;
+		g_warning(
+			"Command line option --debug is obsolete and will be removed in the next version.");
+	}
 
 #ifdef G_OS_WIN32
 	win32_init_debug_code();

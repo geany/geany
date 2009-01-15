@@ -204,9 +204,6 @@ Short option  Long option              Function
                                        configuration directory is ``~/.config/geany/`` and there
                                        resides ``geany.conf`` and other configuration files.
 
--d            --debug                  Run Geany in debug mode, which means being verbose
-                                       and printing lots of information.
-
 *none*        --ft-names               Print a list of Geany's internal filetype names (useful
                                        for snippets configuration).
 
@@ -248,7 +245,9 @@ Short option  Long option              Function
                                        only needed when the auto detection does not work. Only
                                        available if Geany was compiled with support for VTE.
 
--v            --version                Show version information and exit.
+-v            --verbose                Be verbose (print useful status messages).
+
+-V            --version                Show version information and exit.
 
 -?            --help                   Show help information and exit.
 

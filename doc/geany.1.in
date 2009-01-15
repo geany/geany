@@ -1,4 +1,4 @@
-.TH "GEANY" "1" "October 19, 2008" "geany @VERSION@" ""
+.TH "GEANY" "1" "January 15, 2009" "geany @VERSION@" ""
 .SH "NAME"
 Geany \(em a small and lightweight IDE
 .SH "SYNOPSIS"
@@ -31,9 +31,7 @@ Set initial column number for the first opened file (useful in conjunction with 
 .IP "\fB-c\fP, \fB\-\-config\fP         " 10
 Use an alternate configuration directory. Default configuration directory is
 ~/.config/geany/ and there resides geany.conf and some template files.
-.IP "\fB-d\fP, \fB\-\-debug\fP         " 10
-Run Geany in debug mode, which means being verbose and printing lots of information.
-.IP "\fB\fP, \fB\-\-ft\-names\fP         " 10
+.IP "\fB\fP    \fB\-\-ft\-names\fP         " 10
 Print a list of Geany's internal filetype names (useful snippets configuration).
 .IP "\fB-g\fP, \fB\-\-generate\-tags\fP         " 10
 Generate a global tags file (see documentation).
@@ -52,7 +50,7 @@ Don't load symbol completion and call tip data. Use this option, if you don't wa
 For more information please see documentation.
 .IP "\fB-p\fP, \fB\-\-no-plugins\fP         " 10
 Don't load plugin support.
-.IP "\fB\fP   \fB\-\-print-prefix\fP         " 10
+.IP "\fB\fP    \fB\-\-print-prefix\fP         " 10
 Print installation prefix, the data directory, the lib directory and the locale directory (in
 this order) to stdout, each per line. This is mainly intended for plugin authors to detect
 installation paths.
@@ -62,11 +60,13 @@ Don't load the previous session's files.
 Don't load terminal support. Use this option, if you don't want to load the virtual terminal
 emulator widget at startup. If you don't have libvte.so.4 installed, then terminal-support is
 automatically disabled. Only available if Geany was compiled with support for VTE.
-.IP "\fB\fP   \fB\-\-vte-lib\fP         " 10
+.IP "\fB\fP    \fB\-\-vte-lib\fP         " 10
 Specify explicitly the path including filename or only the filename to the VTE library, e.g.
 /usr/lib/libvte.so or libvte.so. This option is only needed, when the autodetection doesn't
 work. Only available if Geany was compiled with support for VTE.
-.IP "\fB-v\fP, \fB\-\-version\fP         " 10
+.IP "\fB-v\fP, \fB\-\-verbose\fP         " 10
+Be verbose (print useful status messages).
+.IP "\fB-V\fP, \fB\-\-version\fP         " 10
 Show version information and exit.
 .IP "\fB-?\fP, \fB\-\-help\fP         " 10
 Show help information and exit.
