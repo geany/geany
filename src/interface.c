@@ -3532,7 +3532,7 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (0), 0, 0);
   gtk_tooltips_set_tip (tooltips, check_autoclose_parenthesis, _("Auto-close parenthesis when typing an opening one"), NULL);
 
-  check_autoclose_squote = gtk_check_button_new_with_mnemonic (_("Simple quotes ' '"));
+  check_autoclose_squote = gtk_check_button_new_with_mnemonic (_("Single quotes ' '"));
   gtk_widget_show (check_autoclose_squote);
   gtk_table_attach (GTK_TABLE (table16), check_autoclose_squote, 0, 1, 3, 4,
                     (GtkAttachOptions) (GTK_FILL),
