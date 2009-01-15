@@ -58,7 +58,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2690">
+			<widget class="GtkImage" id="image2756">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -74,6 +74,7 @@
 
 			  <child>
 			    <widget class="GtkMenuItem" id="invisible2">
+			      <property name="tooltip" translatable="yes">dummy tooltip, don't translate this.</property>
 			      <property name="label" translatable="yes">invisible</property>
 			      <property name="use_underline">True</property>
 			    </widget>
@@ -142,13 +143,12 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="menu_save_all1">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Saves all open files</property>
 		      <property name="label" translatable="yes">Save A_ll</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_save_all1_activate" last_modification_time="Thu, 02 Jun 2005 14:15:30 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2691">
+			<widget class="GtkImage" id="image2757">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-save</property>
 			  <property name="icon_size">1</property>
@@ -169,7 +169,7 @@
 		      <signal name="activate" handler="on_toolbutton_reload_clicked" last_modification_time="Mon, 01 Sep 2008 16:57:06 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2692">
+			<widget class="GtkImage" id="image2758">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-revert-to-saved</property>
 			  <property name="icon_size">1</property>
@@ -189,7 +189,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2693">
+			<widget class="GtkImage" id="image2759">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-revert-to-saved</property>
 			  <property name="icon_size">1</property>
@@ -247,7 +247,6 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="print1">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Prints the current file</property>
 		      <property name="label">gtk-print</property>
 		      <property name="use_stock">True</property>
 		      <signal name="activate" handler="on_print1_activate" last_modification_time="Thu, 29 Jun 2006 12:48:54 GMT"/>
@@ -277,7 +276,7 @@
 		      <signal name="activate" handler="on_close_other_documents1_activate" last_modification_time="Fri, 27 Jun 2008 15:19:28 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2694">
+			<widget class="GtkImage" id="image2760">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-close</property>
 			  <property name="icon_size">1</property>
@@ -293,13 +292,12 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="menu_close_all1">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Closes all open files</property>
 		      <property name="label" translatable="yes">C_lose All</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_close_all1_activate" last_modification_time="Thu, 02 Jun 2005 14:15:30 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2695">
+			<widget class="GtkImage" id="image2761">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-close</property>
 			  <property name="icon_size">1</property>
@@ -321,7 +319,6 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="menu_quit1">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Quit Geany</property>
 		      <property name="label">gtk-quit</property>
 		      <property name="use_stock">True</property>
 		      <signal name="activate" handler="on_quit1_activate" last_modification_time="Thu, 02 Jun 2005 14:15:30 GMT"/>
@@ -426,7 +423,6 @@
 		  <child>
 		    <widget class="GtkMenuItem" id="menu_format1">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Convert the case of the current selection</property>
 		      <property name="label" translatable="yes">_Format</property>
 		      <property name="use_underline">True</property>
 
@@ -498,7 +494,7 @@
 			      <signal name="activate" handler="on_menu_increase_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:28:54 GMT"/>
 
 			      <child internal-child="image">
-				<widget class="GtkImage" id="image2696">
+				<widget class="GtkImage" id="image2762">
 				  <property name="visible">True</property>
 				  <property name="stock">gtk-indent</property>
 				  <property name="icon_size">1</property>
@@ -519,7 +515,7 @@
 			      <signal name="activate" handler="on_menu_decrease_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:28:54 GMT"/>
 
 			      <child internal-child="image">
-				<widget class="GtkImage" id="image2697">
+				<widget class="GtkImage" id="image2763">
 				  <property name="visible">True</property>
 				  <property name="stock">gtk-unindent</property>
 				  <property name="icon_size">1</property>
@@ -575,7 +571,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2698">
+			<widget class="GtkImage" id="image2764">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -592,7 +588,6 @@
 			  <child>
 			    <widget class="GtkMenuItem" id="menu_add_changelog_entry1">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Inserts a typical ChangeLog entry in the current file</property>
 			      <property name="label" translatable="yes">Insert _ChangeLog Entry</property>
 			      <property name="use_underline">True</property>
 			      <signal name="activate" handler="on_comments_changelog_activate" last_modification_time="Sun, 02 Oct 2005 17:29:39 GMT"/>
@@ -602,7 +597,6 @@
 			  <child>
 			    <widget class="GtkMenuItem" id="insert_file_header1">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Inserts a file header at the beginning of the file</property>
 			      <property name="label" translatable="yes">Insert File _Header</property>
 			      <property name="use_underline">True</property>
 			      <signal name="activate" handler="on_comments_fileheader_activate" last_modification_time="Mon, 03 Oct 2005 17:33:08 GMT"/>
@@ -612,7 +606,6 @@
 			  <child>
 			    <widget class="GtkMenuItem" id="insert_function_description2">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Inserts a description before the current function</property>
 			      <property name="label" translatable="yes">Insert _Function Description</property>
 			      <property name="use_underline">True</property>
 			      <signal name="activate" handler="on_comments_function_activate" last_modification_time="Sat, 01 Oct 2005 17:35:15 GMT"/>
@@ -622,7 +615,6 @@
 			  <child>
 			    <widget class="GtkMenuItem" id="insert_multiline_comment2">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Inserts a multiline comment</property>
 			      <property name="label" translatable="yes">Insert _Multiline Comment</property>
 			      <property name="use_underline">True</property>
 			      <signal name="activate" handler="on_menu_comments_multiline_activate" last_modification_time="Sun, 17 Dec 2006 19:01:32 GMT"/>
@@ -632,7 +624,6 @@
 			  <child>
 			    <widget class="GtkMenuItem" id="insert_gpl_notice2">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Inserts a GPL notice (should be done at the beginning of the file)</property>
 			      <property name="label" translatable="yes">Insert _GPL Notice</property>
 			      <property name="use_underline">True</property>
 			      <signal name="activate" handler="on_menu_comments_gpl_activate" last_modification_time="Sun, 17 Dec 2006 19:01:32 GMT"/>
@@ -642,7 +633,6 @@
 			  <child>
 			    <widget class="GtkMenuItem" id="insert_bsd_license_notice2">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Inserts a BSD license notice (should be done at the beginning of the file)</property>
 			      <property name="label" translatable="yes">Insert _BSD License Notice</property>
 			      <property name="use_underline">True</property>
 			      <signal name="activate" handler="on_menu_comments_bsd_activate" last_modification_time="Fri, 05 Jan 2007 13:29:27 GMT"/>
@@ -660,7 +650,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2699">
+			<widget class="GtkImage" id="image2765">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -692,7 +682,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2700">
+			<widget class="GtkImage" id="image2766">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -790,7 +780,7 @@
 		      <signal name="activate" handler="on_replace1_activate" last_modification_time="Sun, 23 Oct 2005 13:22:36 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2701">
+			<widget class="GtkImage" id="image2767">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-find-and-replace</property>
 			  <property name="icon_size">1</property>
@@ -865,7 +855,7 @@
 		      <signal name="activate" handler="on_go_to_line_activate" last_modification_time="Sat, 06 Dec 2008 17:41:21 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2702">
+			<widget class="GtkImage" id="image2768">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-jump-to</property>
 			  <property name="icon_size">1</property>
@@ -894,13 +884,12 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="menu_change_font1">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Change the default font</property>
 		      <property name="label" translatable="yes">Change _Font</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_change_font1_activate" last_modification_time="Fri, 22 Apr 2005 18:58:45 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2703">
+			<widget class="GtkImage" id="image2769">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-font</property>
 			  <property name="icon_size">1</property>
@@ -941,7 +930,6 @@
 		  <child>
 		    <widget class="GtkCheckMenuItem" id="menu_show_messages_window1">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Toggle the window with status and compiler messages on and off</property>
 		      <property name="label" translatable="yes">Show Message _Window</property>
 		      <property name="use_underline">True</property>
 		      <property name="active">True</property>
@@ -952,7 +940,6 @@
 		  <child>
 		    <widget class="GtkCheckMenuItem" id="menu_show_toolbar1">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Toggle the toolbar on and off</property>
 		      <property name="label" translatable="yes">Show _Toolbar</property>
 		      <property name="use_underline">True</property>
 		      <property name="active">True</property>
@@ -982,7 +969,6 @@
 			  <child>
 			    <widget class="GtkCheckMenuItem" id="menu_markers_margin1">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Shows or hides the small margin right of the line numbers, which is used to mark lines.</property>
 			      <property name="label" translatable="yes">Show _Markers Margin</property>
 			      <property name="use_underline">True</property>
 			      <property name="active">True</property>
@@ -993,7 +979,6 @@
 			  <child>
 			    <widget class="GtkCheckMenuItem" id="menu_linenumber_margin1">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Shows or hides the Line Number margin.</property>
 			      <property name="label" translatable="yes">Show _Line Numbers</property>
 			      <property name="use_underline">True</property>
 			      <property name="active">True</property>
@@ -1084,7 +1069,6 @@
 		  <child>
 		    <widget class="GtkCheckMenuItem" id="menu_line_wrapping1">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Wrap the line at the window border and continue it on the next line. Note: line wrapping has a high performance cost for large documents so should be disabled on slow machines.</property>
 		      <property name="label" translatable="yes">_Line Wrapping</property>
 		      <property name="use_underline">True</property>
 		      <property name="active">True</property>
@@ -1166,7 +1150,6 @@
 		  <child>
 		    <widget class="GtkCheckMenuItem" id="set_file_readonly1">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Treat this file as read-only. No changes can be made.</property>
 		      <property name="label" translatable="yes">Read _Only</property>
 		      <property name="use_underline">True</property>
 		      <property name="active">False</property>
@@ -1293,7 +1276,6 @@
 		  <child>
 		    <widget class="GtkMenuItem" id="menu_replace_tabs">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Replaces all tabs in document by spaces.</property>
 		      <property name="label" translatable="yes">_Replace Tabs by Spaces</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_replace_tabs_activate" last_modification_time="Fri, 29 Apr 2005 08:43:22 GMT"/>
@@ -1303,7 +1285,6 @@
 		  <child>
 		    <widget class="GtkMenuItem" id="menu_replace_spaces">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Replaces all spaces in the document by tab characters.</property>
 		      <property name="label" translatable="yes">Replace Spaces b_y Tabs</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_replace_spaces_activate" last_modification_time="Wed, 18 Jun 2008 18:56:33 GMT"/>
@@ -1319,7 +1300,6 @@
 		  <child>
 		    <widget class="GtkMenuItem" id="menu_fold_all1">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Folds all contractible code blocks</property>
 		      <property name="label" translatable="yes">_Fold All</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_menu_fold_all1_activate" last_modification_time="Sun, 26 Feb 2006 15:42:32 GMT"/>
@@ -1329,7 +1309,6 @@
 		  <child>
 		    <widget class="GtkMenuItem" id="menu_unfold_all1">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Unfolds all contracted code blocks</property>
 		      <property name="label" translatable="yes">_Unfold All</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_menu_unfold_all1_activate" last_modification_time="Sun, 26 Feb 2006 15:42:32 GMT"/>
@@ -1354,7 +1333,6 @@
 		  <child>
 		    <widget class="GtkMenuItem" id="menu_remove_indicators1">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Removes all error indicators in the current document.</property>
 		      <property name="label" translatable="yes">Remove Error _Indicators</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_menu_remove_indicators1_activate" last_modification_time="Tue, 13 Jun 2006 19:25:23 GMT"/>
@@ -1383,7 +1361,7 @@
 		      <signal name="activate" handler="on_project_new1_activate" last_modification_time="Thu, 18 Jan 2007 22:16:24 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2704">
+			<widget class="GtkImage" id="image2770">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -1404,7 +1382,7 @@
 		      <signal name="activate" handler="on_project_open1_activate" last_modification_time="Mon, 15 Jan 2007 17:34:17 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2705">
+			<widget class="GtkImage" id="image2771">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-open</property>
 			  <property name="icon_size">1</property>
@@ -1425,7 +1403,7 @@
 		      <signal name="activate" handler="on_project_close1_activate" last_modification_time="Mon, 15 Jan 2007 17:34:17 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2706">
+			<widget class="GtkImage" id="image2772">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-close</property>
 			  <property name="icon_size">1</property>
@@ -1477,13 +1455,12 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="menu_choose_color1">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Open a color chooser dialog, to interactively pick colors from a palette.</property>
 		      <property name="label" translatable="yes">_Color Chooser</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_show_color_chooser1_activate" last_modification_time="Wed, 22 Jun 2005 18:10:21 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2707">
+			<widget class="GtkImage" id="image2773">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-color</property>
 			  <property name="icon_size">1</property>
@@ -1499,7 +1476,6 @@
 		  <child>
 		    <widget class="GtkMenuItem" id="menu_count_words1">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Counts the words and characters in the current selection or the whole document</property>
 		      <property name="label" translatable="yes">_Word Count</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_count_words1_activate" last_modification_time="Mon, 06 Jun 2005 11:49:24 GMT"/>
@@ -1509,7 +1485,6 @@
 		  <child>
 		    <widget class="GtkMenuItem" id="load_tags1">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Load global tags file</property>
 		      <property name="label" translatable="yes">Load Ta_gs</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_load_tags1_activate" last_modification_time="Sun, 15 Apr 2007 15:24:55 GMT"/>
@@ -1519,13 +1494,12 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="menu_reload_configuration1">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Reload configuration data like snippets, templates and filetype extensions.</property>
 		      <property name="label" translatable="yes">_Reload Configuration</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_menu_reload_configuration1_activate" last_modification_time="Mon, 30 Jun 2008 16:19:40 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2708">
+			<widget class="GtkImage" id="image2774">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-refresh</property>
 			  <property name="icon_size">1</property>
@@ -1559,7 +1533,7 @@
 		      <signal name="activate" handler="on_help1_activate" last_modification_time="Sun, 24 Jul 2005 15:23:11 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2709">
+			<widget class="GtkImage" id="image2775">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-help</property>
 			  <property name="icon_size">1</property>
@@ -1584,7 +1558,6 @@
 		  <child>
 		    <widget class="GtkMenuItem" id="keyboard_shortcuts1">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Shows a list of all keyboard shortcuts for Geany.</property>
 		      <property name="label" translatable="yes">_Keyboard Shortcuts</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_help_shortcuts1_activate" last_modification_time="Sun, 18 Dec 2005 22:24:52 GMT"/>
@@ -2329,7 +2302,7 @@
 	      <signal name="activate" handler="on_menu_increase_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:31:38 GMT"/>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image2568">
+		<widget class="GtkImage" id="image2748">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-indent</property>
 		  <property name="icon_size">1</property>
@@ -2350,7 +2323,7 @@
 	      <signal name="activate" handler="on_menu_decrease_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:31:38 GMT"/>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image2569">
+		<widget class="GtkImage" id="image2749">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-unindent</property>
 		  <property name="icon_size">1</property>
@@ -2380,7 +2353,7 @@
 
 		  <child>
 		    <widget class="GtkMenuItem" id="invisible12">
-		      <property name="label">invisible</property>
+		      <property name="label" translatable="yes">invisible</property>
 		      <property name="use_underline">True</property>
 		    </widget>
 		  </child>
@@ -2406,7 +2379,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image2570">
+	<widget class="GtkImage" id="image2750">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -2423,7 +2396,6 @@
 	  <child>
 	    <widget class="GtkMenuItem" id="add_changelog_entry2">
 	      <property name="visible">True</property>
-	      <property name="tooltip" translatable="yes">Inserts a typical ChangeLog entry in the current file</property>
 	      <property name="label" translatable="yes">Insert _ChangeLog Entry</property>
 	      <property name="use_underline">True</property>
 	      <signal name="activate" handler="on_comments_changelog_activate" last_modification_time="Sun, 02 Oct 2005 17:30:10 GMT"/>
@@ -2433,7 +2405,6 @@
 	  <child>
 	    <widget class="GtkMenuItem" id="insert_file_header2">
 	      <property name="visible">True</property>
-	      <property name="tooltip" translatable="yes">Inserts a file header at the beginning of the file</property>
 	      <property name="label" translatable="yes">Insert File _Header</property>
 	      <property name="use_underline">True</property>
 	      <signal name="activate" handler="on_comments_fileheader_activate" last_modification_time="Mon, 03 Oct 2005 17:33:08 GMT"/>
@@ -2443,7 +2414,6 @@
 	  <child>
 	    <widget class="GtkMenuItem" id="insert_function_description1">
 	      <property name="visible">True</property>
-	      <property name="tooltip" translatable="yes">Inserts a description before the current function</property>
 	      <property name="label" translatable="yes">Insert _Function Description</property>
 	      <property name="use_underline">True</property>
 	      <signal name="activate" handler="on_comments_function_activate" last_modification_time="Sat, 01 Oct 2005 17:28:26 GMT"/>
@@ -2453,7 +2423,6 @@
 	  <child>
 	    <widget class="GtkMenuItem" id="insert_multiline_comment1">
 	      <property name="visible">True</property>
-	      <property name="tooltip" translatable="yes">Inserts a multiline comment</property>
 	      <property name="label" translatable="yes">Insert _Multiline Comment</property>
 	      <property name="use_underline">True</property>
 	      <signal name="activate" handler="on_comments_multiline_activate" last_modification_time="Sat, 01 Oct 2005 17:28:26 GMT"/>
@@ -2463,7 +2432,6 @@
 	  <child>
 	    <widget class="GtkMenuItem" id="insert_gpl_notice1">
 	      <property name="visible">True</property>
-	      <property name="tooltip" translatable="yes">Inserts a GPL notice (should be done at the beginning of the file)</property>
 	      <property name="label" translatable="yes">Insert _GPL Notice</property>
 	      <property name="use_underline">True</property>
 	      <signal name="activate" handler="on_comments_gpl_activate" last_modification_time="Sun, 02 Oct 2005 17:37:31 GMT"/>
@@ -2473,7 +2441,6 @@
 	  <child>
 	    <widget class="GtkMenuItem" id="insert_bsd_license_notice1">
 	      <property name="visible">True</property>
-	      <property name="tooltip" translatable="yes">Inserts a BSD license notice (should be done at the beginning of the file)</property>
 	      <property name="label" translatable="yes">Insert _BSD License Notice</property>
 	      <property name="use_underline">True</property>
 	      <signal name="activate" handler="on_comments_bsd_activate" last_modification_time="Fri, 05 Jan 2007 13:32:16 GMT"/>
@@ -2491,7 +2458,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image2571">
+	<widget class="GtkImage" id="image2751">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -2507,7 +2474,7 @@
 
 	  <child>
 	    <widget class="GtkMenuItem" id="invisible10">
-	      <property name="label">invisible</property>
+	      <property name="label" translatable="yes">invisible</property>
 	      <property name="use_underline">True</property>
 	    </widget>
 	  </child>
@@ -2523,7 +2490,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image2572">
+	<widget class="GtkImage" id="image2752">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -2539,7 +2506,7 @@
 
 	  <child>
 	    <widget class="GtkMenuItem" id="invisible3">
-	      <property name="label">invisible</property>
+	      <property name="label" translatable="yes">invisible</property>
 	      <property name="use_underline">True</property>
 	    </widget>
 	  </child>
@@ -2562,7 +2529,7 @@
       <signal name="activate" handler="on_find_usage1_activate" last_modification_time="Fri, 27 May 2005 21:55:12 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image2573">
+	<widget class="GtkImage" id="image2753">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-find</property>
 	  <property name="icon_size">1</property>
@@ -2583,7 +2550,7 @@
       <signal name="activate" handler="on_find_document_usage1_activate" last_modification_time="Thu, 17 Jul 2008 13:42:25 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image2574">
+	<widget class="GtkImage" id="image2754">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-find</property>
 	  <property name="icon_size">1</property>
@@ -2632,13 +2599,12 @@
   <child>
     <widget class="GtkImageMenuItem" id="go_to_line">
       <property name="visible">True</property>
-      <property name="tooltip" translatable="yes">Go to the entered line</property>
       <property name="label" translatable="yes">_Go to Line</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="on_go_to_line_activate" last_modification_time="Sat, 16 Jul 2005 11:20:32 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image2575">
+	<widget class="GtkImage" id="image2755">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-jump-to</property>
 	  <property name="icon_size">1</property>
@@ -2791,7 +2757,7 @@
 
 			  <child>
 			    <widget class="GtkCheckButton" id="check_vte">
-			      <property name="tooltip" translatable="yes">Whether the virtual terminal emulation (VTE) should be loaded at startup. Disable it if you do not need it.</property>
+			      <property name="tooltip" translatable="yes">Whether the virtual terminal emulation (VTE) should be loaded at startup, disable it if you do not need it</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Load virtual terminal support</property>
 			      <property name="use_underline">True</property>
@@ -2909,7 +2875,7 @@
 			  <child>
 			    <widget class="GtkCheckButton" id="check_ask_for_quit">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Shows a confirmation dialog on exit.</property>
+			      <property name="tooltip" translatable="yes">Shows a confirmation dialog on exit</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Confirm exit</property>
 			      <property name="use_underline">True</property>
@@ -2988,7 +2954,7 @@
 			  <child>
 			    <widget class="GtkCheckButton" id="check_project_session">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Whether to store a project's session files and open them when re-opening the project.</property>
+			      <property name="tooltip" translatable="yes">Whether to store a project's session files and open them when re-opening the project</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Use project-based session files</property>
 			      <property name="use_underline">True</property>
@@ -3008,7 +2974,7 @@
 			  <child>
 			    <widget class="GtkCheckButton" id="check_project_file_in_basedir">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">When enabled, a project file is stored by default inside the project base directory when creating new projects instead of one directory above the base directory. You can still change the path of the project file in the New Project dialog.</property>
+			      <property name="tooltip" translatable="yes">When enabled, a project file is stored by default inside the project base directory when creating new projects instead of one directory above the base directory. You can still change the path of the project file in the New Project dialog</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Store project file inside the project base directory</property>
 			      <property name="use_underline">True</property>
@@ -3087,7 +3053,7 @@
 			  <child>
 			    <widget class="GtkCheckButton" id="check_beep">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Whether to beep if an error occurred or when the compilation process has finished.</property>
+			      <property name="tooltip" translatable="yes">Whether to beep if an error occurred or when the compilation process has finished</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Beep on errors or when compilation has finished</property>
 			      <property name="use_underline">True</property>
@@ -3107,7 +3073,7 @@
 			  <child>
 			    <widget class="GtkCheckButton" id="check_switch_pages">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Switch to the status message tab (in the notebook window at the bottom) if a new status message arrives.</property>
+			      <property name="tooltip" translatable="yes">Switch to the status message tab (in the notebook window at the bottom) if a new status message arrives</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Switch to status message list at new message</property>
 			      <property name="use_underline">True</property>
@@ -3827,7 +3793,7 @@
 			  <child>
 			    <widget class="GtkCheckButton" id="check_show_tab_cross">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Shows a small cross button in the file tabs to easily close files when clicking on it (requires restart of Geany).</property>
+			      <property name="tooltip" translatable="yes">Shows a small cross button in the file tabs to easily close files when clicking on it (requires restart of Geany)</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Show close buttons</property>
 			      <property name="use_underline">True</property>
@@ -3926,7 +3892,7 @@
 			  <child>
 			    <widget class="GtkCheckButton" id="check_double_click_hides_widgets">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Calls the View-&gt;Toggle All Additional Widgets command.</property>
+			      <property name="tooltip" translatable="yes">Calls the View-&gt;Toggle All Additional Widgets command</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Double-clicking hides all additional widgets</property>
 			      <property name="use_underline">True</property>
@@ -4217,7 +4183,7 @@ Bottom
 			  <child>
 			    <widget class="GtkCheckButton" id="check_statusbar_visible">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Whether to show the status bar at the bottom of the main window.</property>
+			      <property name="tooltip" translatable="yes">Whether to show the status bar at the bottom of the main window</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Show status bar</property>
 			      <property name="use_underline">True</property>
@@ -4714,7 +4680,7 @@ Bottom
 			      <child>
 				<widget class="GtkCheckButton" id="check_disable_dnd">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Disable drag and drop completely in the editor window so you can't drag and drop any selections within or outside of the editor window.</property>
+				  <property name="tooltip" translatable="yes">Disable drag and drop completely in the editor window so you can't drag and drop any selections within or outside of the editor window</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Disable Drag and Drop</property>
 				  <property name="use_underline">True</property>
@@ -4754,7 +4720,7 @@ Bottom
 			      <child>
 				<widget class="GtkCheckButton" id="check_unfold_children">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Fold or unfold all children of a fold point. By pressing the Shift key while clicking on a fold symbol the contrary behavior is used.</property>
+				  <property name="tooltip" translatable="yes">Fold or unfold all children of a fold point. By pressing the Shift key while clicking on a fold symbol the contrary behavior is used</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Fold/unfold all children of a fold point</property>
 				  <property name="use_underline">True</property>
@@ -4774,7 +4740,7 @@ Bottom
 			      <child>
 				<widget class="GtkCheckButton" id="check_indicators">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Whether to use indicators (a squiggly underline) to highlight the lines where the compiler found a warning or an error.</property>
+				  <property name="tooltip" translatable="yes">Whether to use indicators (a squiggly underline) to highlight the lines where the compiler found a warning or an error</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Use indicators to show compile errors</property>
 				  <property name="use_underline">True</property>
@@ -4794,7 +4760,7 @@ Bottom
 			      <child>
 				<widget class="GtkCheckButton" id="check_newline_strip">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Enable newline to strip the trailing spaces on the previous line.</property>
+				  <property name="tooltip" translatable="yes">Enable newline to strip the trailing spaces on the previous line</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Newline strips trailing spaces</property>
 				  <property name="use_underline">True</property>
@@ -4902,7 +4868,7 @@ Bottom
 				  <child>
 				    <widget class="GtkEntry" id="entry_toggle_mark">
 				      <property name="visible">True</property>
-				      <property name="tooltip" translatable="yes">A string which is added when toggling a line comment in a source file. It is used to mark the comment as toggled.</property>
+				      <property name="tooltip" translatable="yes">A string which is added when toggling a line comment in a source file, it is used to mark the comment as toggled.</property>
 				      <property name="can_focus">True</property>
 				      <property name="editable">True</property>
 				      <property name="visibility">True</property>
@@ -5320,7 +5286,7 @@ Match braces</property>
 				  <child>
 				    <widget class="GtkCheckButton" id="check_detect_indent">
 				      <property name="visible">True</property>
-				      <property name="tooltip" translatable="yes">Whether to detect the indentation type from file contents when a file is opened.</property>
+				      <property name="tooltip" translatable="yes">Whether to detect the indentation type from file contents when a file is opened</property>
 				      <property name="can_focus">True</property>
 				      <property name="label" translatable="yes">Detect from file</property>
 				      <property name="use_underline">True</property>
@@ -5350,7 +5316,7 @@ Match braces</property>
 			      <child>
 				<widget class="GtkCheckButton" id="check_tab_key_indents">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Pressing tab/shift-tab indents/unindents instead of inserting a tab character.</property>
+				  <property name="tooltip" translatable="yes">Pressing tab/shift-tab indents/unindents instead of inserting a tab character</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Tab key indents</property>
 				  <property name="use_underline">True</property>
@@ -5465,7 +5431,7 @@ Match braces</property>
 			      <child>
 				<widget class="GtkCheckButton" id="check_complete_snippets">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Type a defined short character sequence and complete it to a more complex string using a single keypress.</property>
+				  <property name="tooltip" translatable="yes">Type a defined short character sequence and complete it to a more complex string using a single keypress</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Snippet completion</property>
 				  <property name="use_underline">True</property>
@@ -5505,7 +5471,7 @@ Match braces</property>
 			      <child>
 				<widget class="GtkCheckButton" id="check_auto_multiline">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Continue automatically multi-line comments in languages like C, C++ and Java when a new line is entered inside such a comment.</property>
+				  <property name="tooltip" translatable="yes">Continue automatically multi-line comments in languages like C, C++ and Java when a new line is entered inside such a comment</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Automatic continuation of multi-line comments</property>
 				  <property name="use_underline">True</property>
@@ -5638,7 +5604,7 @@ Match braces</property>
 				  <child>
 				    <widget class="GtkSpinButton" id="spin_symbol_complete_chars">
 				      <property name="visible">True</property>
-				      <property name="tooltip" translatable="yes">The amount of characters which are necessary to show the symbol auto completion list.</property>
+				      <property name="tooltip" translatable="yes">The amount of characters which are necessary to show the symbol auto completion list</property>
 				      <property name="can_focus">True</property>
 				      <property name="climb_rate">1</property>
 				      <property name="digits">0</property>
@@ -5660,7 +5626,7 @@ Match braces</property>
 				  <child>
 				    <widget class="GtkSpinButton" id="spin_symbollistheight">
 				      <property name="visible">True</property>
-				      <property name="tooltip" translatable="yes">Display height in rows for the auto completion list.</property>
+				      <property name="tooltip" translatable="yes">Display height in rows for the auto completion list</property>
 				      <property name="can_focus">True</property>
 				      <property name="climb_rate">1</property>
 				      <property name="digits">0</property>
@@ -5682,7 +5648,7 @@ Match braces</property>
 				  <child>
 				    <widget class="GtkSpinButton" id="spin_autocompletion_max_entries">
 				      <property name="visible">True</property>
-				      <property name="tooltip" translatable="yes">Maximum number of entries to display in the auto completion list.</property>
+				      <property name="tooltip" translatable="yes">Maximum number of entries to display in the auto completion list</property>
 				      <property name="can_focus">True</property>
 				      <property name="climb_rate">1</property>
 				      <property name="digits">0</property>
@@ -5984,7 +5950,7 @@ Match braces</property>
 			      <child>
 				<widget class="GtkCheckButton" id="check_highlighting_invert">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Use white text on a black background and invert all colors. This option requires a restart of Geany.</property>
+				  <property name="tooltip" translatable="yes">Use white text on a black background and invert all colors, this option requires a restart of Geany</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Invert syntax highlighting colors</property>
 				  <property name="use_underline">True</property>
@@ -6004,7 +5970,7 @@ Match braces</property>
 			      <child>
 				<widget class="GtkCheckButton" id="check_indent">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Shows small dotted lines to help you to use the right indentation.</property>
+				  <property name="tooltip" translatable="yes">Shows small dotted lines to help you to use the right indentation</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Show indentation guides</property>
 				  <property name="use_underline">True</property>
@@ -6024,7 +5990,7 @@ Match braces</property>
 			      <child>
 				<widget class="GtkCheckButton" id="check_white_space">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Marks spaces with dots and tabs with arrows.</property>
+				  <property name="tooltip" translatable="yes">Marks spaces with dots and tabs with arrows</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Show white space</property>
 				  <property name="use_underline">True</property>
@@ -6044,7 +6010,7 @@ Match braces</property>
 			      <child>
 				<widget class="GtkCheckButton" id="check_line_end">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Show the line ending character.</property>
+				  <property name="tooltip" translatable="yes">Show the line ending character</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Show line endings</property>
 				  <property name="use_underline">True</property>
@@ -6064,7 +6030,7 @@ Match braces</property>
 			      <child>
 				<widget class="GtkCheckButton" id="check_line_numbers">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Show the line ending character.</property>
+				  <property name="tooltip" translatable="yes">Shows or hides the Line Number margin</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Show line numbers</property>
 				  <property name="use_underline">True</property>
@@ -6084,7 +6050,7 @@ Match braces</property>
 			      <child>
 				<widget class="GtkCheckButton" id="check_markers_margin">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Show the line ending character.</property>
+				  <property name="tooltip" translatable="yes">Shows or hides the small margin right of the line numbers, which is used to mark lines</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Show markers margin</property>
 				  <property name="use_underline">True</property>
@@ -6104,7 +6070,7 @@ Match braces</property>
 			      <child>
 				<widget class="GtkCheckButton" id="check_scroll_stop_at_last_line">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Whether to stop scrolling one page past the last line of a document.</property>
+				  <property name="tooltip" translatable="yes">Whether to stop scrolling one page past the last line of a document</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Stop scrolling at last line</property>
 				  <property name="use_underline">True</property>
@@ -6289,7 +6255,7 @@ Match braces</property>
 			      <child>
 				<widget class="GtkSpinButton" id="spin_long_line">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">The long line marker is a thin vertical line in the editor. It helps to mark long lines, or as a hint to break the line. Set this value to a value greater than 0 to specify the column where it should appear.</property>
+				  <property name="tooltip" translatable="yes">The long line marker is a thin vertical line in the editor, it helps to mark long lines, or as a hint to break the line. Set this value to a value greater than 0 to specify the column where it should appear.</property>
 				  <property name="can_focus">True</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">0</property>
@@ -6318,7 +6284,7 @@ Match braces</property>
 				  <child>
 				    <widget class="GtkRadioButton" id="radio_long_line_line">
 				      <property name="visible">True</property>
-				      <property name="tooltip" translatable="yes">Prints a vertical line in the editor window at the given cursor position (see below).</property>
+				      <property name="tooltip" translatable="yes">Prints a vertical line in the editor window at the given cursor position (see below)</property>
 				      <property name="can_focus">True</property>
 				      <property name="label" translatable="yes">Line</property>
 				      <property name="use_underline">True</property>
@@ -6338,7 +6304,7 @@ Match braces</property>
 				  <child>
 				    <widget class="GtkRadioButton" id="radio_long_line_background">
 				      <property name="visible">True</property>
-				      <property name="tooltip" translatable="yes">The background color of characters after the given cursor position (see below) changed to the color set below. (This is recommended if you use proportional fonts)</property>
+				      <property name="tooltip" translatable="yes">The background color of characters after the given cursor position (see below) changed to the color set below, (this is recommended if you use proportional fonts)</property>
 				      <property name="can_focus">True</property>
 				      <property name="label" translatable="yes">Background</property>
 				      <property name="use_underline">True</property>
@@ -6519,7 +6485,7 @@ Match braces</property>
 			      <child>
 				<widget class="GtkCheckButton" id="check_cmdline_new_files">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Start a new file for each command-line filename that doesn't exist.</property>
+				  <property name="tooltip" translatable="yes">Start a new file for each command-line filename that doesn't exist</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Open new documents from the command-line</property>
 				  <property name="use_underline">True</property>
@@ -6668,7 +6634,7 @@ Match braces</property>
 			  <child>
 			    <widget class="GtkEventBox" id="eventbox1">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Sets the default encoding for newly created files.</property>
+			      <property name="tooltip" translatable="yes">Sets the default encoding for newly created files</property>
 			      <property name="visible_window">True</property>
 			      <property name="above_child">False</property>
 
@@ -6749,7 +6715,7 @@ Match braces</property>
 			  <child>
 			    <widget class="GtkEventBox" id="eventbox3">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Sets the default encoding for opening existing files.</property>
+			      <property name="tooltip" translatable="yes">Sets the default encoding for opening existing files</property>
 			      <property name="visible_window">True</property>
 			      <property name="above_child">False</property>
 
@@ -6774,7 +6740,7 @@ Match braces</property>
 			  <child>
 			    <widget class="GtkCheckButton" id="check_open_encoding">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">This option disables the automatic detection of the file encoding when opening files and opens the file with the specified encoding (usually not needed).</property>
+			      <property name="tooltip" translatable="yes">This option disables the automatic detection of the file encoding when opening files and opens the file with the specified encoding (usually not needed)</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Use fixed encoding when opening files</property>
 			      <property name="use_underline">True</property>
@@ -6895,7 +6861,7 @@ Match braces</property>
 			  <child>
 			    <widget class="GtkCheckButton" id="check_replace_tabs">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Replaces all tabs in document by spaces.</property>
+			      <property name="tooltip" translatable="yes">Replaces all tabs in document by spaces</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Replace tabs by space</property>
 			      <property name="use_underline">True</property>
@@ -7011,7 +6977,7 @@ Match braces</property>
 			      <child>
 				<widget class="GtkSpinButton" id="spin_mru">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Specifies the number of files which are stored in the Recent files list.</property>
+				  <property name="tooltip" translatable="yes">Specifies the number of files which are stored in the Recent files list</property>
 				  <property name="can_focus">True</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">0</property>
@@ -7181,7 +7147,7 @@ Match braces</property>
 		      <child>
 			<widget class="GtkCheckButton" id="check_ask_suppress_search_dialogs">
 			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Always wrap search around the document and hide the Find dialog after clicking Find Next/Previous.</property>
+			  <property name="tooltip" translatable="yes">Always wrap search around the document and hide the Find dialog after clicking Find Next/Previous</property>
 			  <property name="can_focus">True</property>
 			  <property name="label" translatable="yes">Always wrap search and hide the Find dialog</property>
 			  <property name="use_underline">True</property>
@@ -7201,7 +7167,7 @@ Match braces</property>
 		      <child>
 			<widget class="GtkCheckButton" id="check_search_use_current_word">
 			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Use current word under the cursor when opening the Find, Find in Files or Replace dialog and there is no selection.</property>
+			  <property name="tooltip" translatable="yes">Use current word under the cursor when opening the Find, Find in Files or Replace dialog and there is no selection</property>
 			  <property name="can_focus">True</property>
 			  <property name="label" translatable="yes">Use the current word under the cursor for Find dialogs</property>
 			  <property name="use_underline">True</property>
@@ -8611,7 +8577,7 @@ Match braces</property>
 			  <child>
 			    <widget class="GtkEntry" id="entry_print_external_cmd">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Path to the command for printing files (use %f for the filename).</property>
+			      <property name="tooltip" translatable="yes">Path to the command for printing files (use %f for the filename)</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
 			      <property name="visibility">True</property>
@@ -8710,7 +8676,7 @@ Match braces</property>
 			  <child>
 			    <widget class="GtkCheckButton" id="check_print_linenumbers">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Add line numbers to the printed page.</property>
+			      <property name="tooltip" translatable="yes">Add line numbers to the printed page</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Print line numbers</property>
 			      <property name="use_underline">True</property>
@@ -8730,7 +8696,7 @@ Match braces</property>
 			  <child>
 			    <widget class="GtkCheckButton" id="check_print_pagenumbers">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Add page numbers at the bottom of each page. It takes 2 lines of the page.</property>
+			      <property name="tooltip" translatable="yes">Add page numbers at the bottom of each page, it takes 2 lines of the page</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Print page numbers</property>
 			      <property name="use_underline">True</property>
@@ -8795,7 +8761,7 @@ Match braces</property>
 				      <child>
 					<widget class="GtkCheckButton" id="check_print_basename">
 					  <property name="visible">True</property>
-					  <property name="tooltip" translatable="yes">Print only the basename(without the path) of the printed file.</property>
+					  <property name="tooltip" translatable="yes">Print only the basename(without the path) of the printed file</property>
 					  <property name="can_focus">True</property>
 					  <property name="label" translatable="yes">Use the basename of the printed file</property>
 					  <property name="use_underline">True</property>
@@ -9304,7 +9270,7 @@ Match braces</property>
 	      <child>
 		<widget class="GtkCheckButton" id="check_detect_indent">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Whether to detect the indentation type from file contents when a file is opened.</property>
+		  <property name="tooltip" translatable="yes">Whether to detect the indentation type from file contents when a file is opened</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Detect from file</property>
 		  <property name="use_underline">True</property>

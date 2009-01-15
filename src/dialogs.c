@@ -483,7 +483,7 @@ static void create_save_file_dialog(void)
 
 	rename_btn = gtk_dialog_add_button(GTK_DIALOG(ui_widgets.save_filesel), _("R_ename"),
 					GEANY_RESPONSE_RENAME);
-	ui_widget_set_tooltip_text(rename_btn, _("Save the file and rename it."));
+	ui_widget_set_tooltip_text(rename_btn, _("Save the file and rename it"));
 
 	gtk_dialog_add_buttons(GTK_DIALOG(ui_widgets.save_filesel),
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -494,7 +494,7 @@ static void create_save_file_dialog(void)
 	check_open_new_tab = gtk_check_button_new_with_mnemonic(_("_Open file in a new tab"));
 	ui_widget_set_tooltip_text(check_open_new_tab,
 		_("Keep the current unsaved document open"
-		" and open the newly saved file in a new tab."));
+		" and open the newly saved file in a new tab"));
 	gtk_box_pack_start(GTK_BOX(vbox), check_open_new_tab, FALSE, FALSE, 0);
 	gtk_widget_show_all(vbox);
 	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(ui_widgets.save_filesel), vbox);

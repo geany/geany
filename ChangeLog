@@ -3,6 +3,10 @@
  * src/main.c, doc/geany.txt, doc/geany.html, doc/geany.1.in:
    Rename command line option --debug to --verbose.
    Change short form of --version from -v to -V.
+ * geany.glade, src/dialogs.c, src/interface.c, src/printing.c,
+   src/search.c, src/vte.c:
+   Remove tooltips from menu items.
+   Don't use full stops in tooltips for short sentences.
 
 
 2009-01-14  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

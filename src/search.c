@@ -217,7 +217,7 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox7), FALSE);
 	ui_widget_set_tooltip_text(checkbox7,
 		_("Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
-		  "corresponding control characters."));
+		  "corresponding control characters"));
 
 	/* Search features */
 	fbox = gtk_vbox_new(FALSE, 0);
@@ -399,7 +399,7 @@ void search_show_find_dialog(void)
 
 		button = gtk_button_new_with_mnemonic(_("_Mark"));
 		ui_widget_set_tooltip_text(button,
-				_("Mark all matches in the current document."));
+				_("Mark all matches in the current document"));
 		gtk_container_add(GTK_CONTAINER(bbox), button);
 		g_signal_connect(button, "clicked", G_CALLBACK(send_find_dialog_response),
 			GINT_TO_POINTER(GEANY_RESPONSE_MARK));
@@ -420,7 +420,7 @@ void search_show_find_dialog(void)
 						g_object_ref(check_close), (GDestroyNotify) g_object_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_close), FALSE);
 		ui_widget_set_tooltip_text(check_close,
-				_("Disable this option to keep the dialog open."));
+				_("Disable this option to keep the dialog open"));
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_close), TRUE);
 		gtk_container_add(GTK_CONTAINER(bbox), check_close);
 		gtk_button_box_set_child_secondary(GTK_BUTTON_BOX(bbox), check_close, TRUE);
@@ -565,7 +565,7 @@ void search_show_replace_dialog(void)
 						g_object_ref(check_close), (GDestroyNotify) g_object_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_close), FALSE);
 		ui_widget_set_tooltip_text(check_close,
-				_("Disable this option to keep the dialog open."));
+				_("Disable this option to keep the dialog open"));
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_close), TRUE);
 		gtk_container_add(GTK_CONTAINER(bbox), check_close);
 		gtk_button_box_set_child_secondary(GTK_BUTTON_BOX(bbox), check_close, TRUE);
@@ -690,7 +690,7 @@ static void create_fif_dialog(void)
 				_("_Grep regular expressions"));
 	g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "radio_grep",
 					g_object_ref(rbtn), (GDestroyNotify)g_object_unref);
-	ui_widget_set_tooltip_text(rbtn, _("See grep's manual page for more information."));
+	ui_widget_set_tooltip_text(rbtn, _("See grep's manual page for more information"));
 	gtk_button_set_focus_on_click(GTK_BUTTON(rbtn), FALSE);
 	gtk_container_add(GTK_CONTAINER(rbox), rbtn);
 
@@ -698,7 +698,7 @@ static void create_fif_dialog(void)
 				_("_Extended regular expressions"));
 	g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "radio_egrep",
 					g_object_ref(rbtn), (GDestroyNotify)g_object_unref);
-	ui_widget_set_tooltip_text(rbtn, _("See grep's manual page for more information."));
+	ui_widget_set_tooltip_text(rbtn, _("See grep's manual page for more information"));
 	gtk_button_set_focus_on_click(GTK_BUTTON(rbtn), FALSE);
 	gtk_container_add(GTK_CONTAINER(rbox), rbtn);
 

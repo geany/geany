@@ -1660,6 +1660,14 @@ This is for visual elements displayed in the editor window.
 Display
 ```````
 
+Invert syntax highlighting colors
+    Use white text on a black background and invert all colors.
+    If the ``invert_all`` setting in ``filetypes.common`` is set, this
+    option is always enabled. See `Special file filetypes.common`_
+    for details.
+
+    This option requires a restart of Geany. The value of this option
+
 Show indendation guides
     Show vertical lines to help show how much leading indentation there
     is on each line.
@@ -1671,6 +1679,11 @@ Show whitespaces
 Show line endings
     Displays a symbol everywhere that a carriage return or line feed
     is present.
+
+Show line numbers
+
+
+Show markers margin
 
 Stop scrolling at last line
     When enabled Geany stops scrolling when at the last line of the document.
