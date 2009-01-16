@@ -138,9 +138,9 @@ static void init_pref_groups(void)
 		"pref_editor_tab_width", 4, "spin_indent_width");
 	stash_group_add_spin_button_integer(group, &editor_prefs.indentation->hard_tab_width,
 		"indent_hard_tab_width", 8, "spin_tab_width");
-	stash_group_add_combo_box(group, (gint*)&editor_prefs.indentation->auto_indent_mode,
+	stash_group_add_combo_box(group, (gint*)(void*)&editor_prefs.indentation->auto_indent_mode,
 		"indent_mode", GEANY_AUTOINDENT_CURRENTCHARS, "combo_auto_indent_mode");
-	stash_group_add_radio_buttons(group, (gint*)&editor_prefs.indentation->type,
+	stash_group_add_radio_buttons(group, (gint*)(void*)&editor_prefs.indentation->type,
 		"indent_type", GEANY_INDENT_TYPE_TABS,
 		"radio_indent_spaces", GEANY_INDENT_TYPE_SPACES,
 		"radio_indent_tabs", GEANY_INDENT_TYPE_TABS,

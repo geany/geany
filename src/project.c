@@ -1110,7 +1110,7 @@ void project_init(void)
 
 	stash_group_add_spin_button_integer(group, &indentation.width,
 		"indent_width", 4, "spin_indent_width");
-	stash_group_add_radio_buttons(group, (gint*)&indentation.type,
+	stash_group_add_radio_buttons(group, (gint*)(gpointer)&indentation.type,
 		"indent_type", GEANY_INDENT_TYPE_TABS,
 		"radio_indent_spaces", GEANY_INDENT_TYPE_SPACES,
 		"radio_indent_tabs", GEANY_INDENT_TYPE_TABS,
@@ -1120,7 +1120,7 @@ void project_init(void)
 		"indent_hard_tab_width", 8, "spin_tab_width");
 	stash_group_add_toggle_button(group, &indentation.detect_type,
 		"detect_indent", FALSE, "check_detect_indent");
-	stash_group_add_combo_box(group, (gint*)&indentation.auto_indent_mode,
+	stash_group_add_combo_box(group, (gint*)(gpointer)&indentation.auto_indent_mode,
 		"indent_mode", GEANY_AUTOINDENT_CURRENTCHARS, "combo_auto_indent_mode");
 }
 
