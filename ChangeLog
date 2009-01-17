@@ -14,6 +14,8 @@
    files were requested (saves about 22 MB otherwise).
  * src/msgwindow.c:
    Properly fix parsing of compiler error messages.
+ * data/filetypes.nsis:
+   Update keywords lists.
 
 
 2009-01-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
