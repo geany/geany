@@ -74,5 +74,8 @@ void build_menu_update(GeanyDocument *doc);
 
 BuildMenuItems *build_get_menu_items(gint filetype_idx);
 
+void build_toolbutton_build_clicked(GtkAction *action, gpointer user_data);
+
+
 
 #endif

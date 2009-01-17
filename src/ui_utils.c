@@ -821,6 +821,11 @@ GdkPixbuf *ui_new_pixbuf_from_inline(gint img)
 			return gdk_pixbuf_new_from_inline(-1, close_all_inline, FALSE, NULL);
 			break;
 		}
+		case GEANY_IMAGE_BUILD:
+		{
+			return gdk_pixbuf_new_from_inline(-1, build_inline, FALSE, NULL);
+			break;
+		}
 		default:
 			return NULL;
 	}
@@ -831,6 +836,8 @@ static GdkPixbuf *ui_new_pixbuf_from_stock(const gchar *stock_id)
 {
 	if (utils_str_equal(stock_id, GEANY_STOCK_CLOSE_ALL))
 		return ui_new_pixbuf_from_inline(GEANY_IMAGE_CLOSE_ALL);
+	else if (utils_str_equal(stock_id, GEANY_STOCK_BUILD))
+		return ui_new_pixbuf_from_inline(GEANY_IMAGE_BUILD);
 	else if (utils_str_equal(stock_id, GEANY_STOCK_SAVE_ALL))
 		return ui_new_pixbuf_from_inline(GEANY_IMAGE_SAVE_ALL);
 
@@ -1593,7 +1600,8 @@ static void add_stock_items(void)
 	GtkStockItem items[] =
 	{
 		{ GEANY_STOCK_SAVE_ALL, _("Save All"), 0, 0, GETTEXT_PACKAGE },
-		{ GEANY_STOCK_CLOSE_ALL, _("Close All"), 0, 0, GETTEXT_PACKAGE }
+		{ GEANY_STOCK_CLOSE_ALL, _("Close All"), 0, 0, GETTEXT_PACKAGE },
+		{ GEANY_STOCK_BUILD, _("Build"), 0, 0, GETTEXT_PACKAGE }
 	};
 
 	len = G_N_ELEMENTS(items);

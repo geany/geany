@@ -13,7 +13,6 @@ Note: features included in brackets have lower priority.
 	o configurable filetype and project make commands (e.g. using
 	  bud for D)
 	o recent projects menu
-	o improve Compile toolbar button for Make (drop down radio list?)
 	o MRU documents switching
 	o (support for adding plugin filetypes - SCI_LOADLEXERLIBRARY?)
 	o (selectable menu of arguments to use for Make, from Make Custom)

@@ -3391,6 +3391,9 @@ Redo               Redo the last modification
 NavBack            Navigate back a location
 NavFor             Navigate forward a location
 Compile            Compile the current file
+Build              Build the current file, includes also a submenu for Make commands. Geany
+                   remembers the last chosen action from the submenu and uses this as default
+                   action when the button itself is clicked.
 Run                Run or view the current file
 Color              Open a color chooser dialog, to interactively pick colors from a palette
 ZoomIn             Zoom in the text

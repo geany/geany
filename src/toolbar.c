@@ -34,6 +34,7 @@
 #include "utils.h"
 #include "dialogs.h"
 #include "document.h"
+#include "build.h"
 #include "geanymenubuttonaction.h"
 #include "geanyentryaction.h"
 
@@ -167,6 +168,7 @@ GtkWidget *toolbar_init(void)
 	GtkBox *box;
 	GtkAction *action_new;
 	GtkAction *action_open;
+	GtkAction *action_build;
 	GtkAction *action_searchentry;
 	GtkAction *action_gotoentry;
 	GError *error = NULL;
@@ -187,6 +189,12 @@ GtkWidget *toolbar_init(void)
 		"Open", NULL, _("Open an existing file"), GTK_STOCK_OPEN);
 	g_signal_connect(action_open, "button-clicked", G_CALLBACK(on_toolbutton_open_clicked), NULL);
 	gtk_action_group_add_action(group, action_open);
+
+	action_build = geany_menu_button_action_new(
+		"Build", NULL, _("Build the current file"), GEANY_STOCK_BUILD);
+	g_signal_connect(action_build, "button-clicked",
+		G_CALLBACK(build_toolbutton_build_clicked), NULL);
+	gtk_action_group_add_action(group, action_build);
 
 	action_searchentry = geany_entry_action_new(
 		"SearchEntry", _("Search"), _("Find the entered text in the current file"), FALSE);

@@ -140,11 +140,14 @@ GeanyUIEditorFeatures;
 
 #define GEANY_STOCK_SAVE_ALL "geany-save-all"
 #define GEANY_STOCK_CLOSE_ALL "geany-close-all"
+#define GEANY_STOCK_BUILD "geany-build"
+
 enum
 {
 	GEANY_IMAGE_LOGO,
 	GEANY_IMAGE_SAVE_ALL,
-	GEANY_IMAGE_CLOSE_ALL
+	GEANY_IMAGE_CLOSE_ALL,
+	GEANY_IMAGE_BUILD
 };
 
 

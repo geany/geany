@@ -16,6 +16,11 @@
    Properly fix parsing of compiler error messages.
  * data/filetypes.nsis:
    Update keywords lists.
+ * doc/geany.txt, src/build.c, src/build.h, src/images.c, src/toolbar.c,
+   src/ui_utils.c, src/ui_utils.h:
+   Add 'Build' toolbar button with a submenu for Make actions.
+   Make use of ui_image_menu_item_new() for some menu items.
+   Remove tooltips from menu items.
 
 
 2009-01-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
