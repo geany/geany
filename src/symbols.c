@@ -79,7 +79,7 @@ enum	/* Geany tag files */
 
 static TagFileInfo tag_file_info[GTF_MAX] =
 {
-	{FALSE, "global.tags"},
+	{FALSE, "c99.tags"},
 	{FALSE, "pascal.tags"},
 	{FALSE, "php.tags"},
 	{FALSE, "html_entities.tags"},

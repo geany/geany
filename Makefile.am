@@ -13,7 +13,7 @@ WIN32_BUILD_FILES = \
     src/makefile.win32
 
 SYS_DATA_FILES = \
-	data/global.tags \
+	data/c99.tags \
 	data/php.tags \
 	data/python.tags \
 	data/latex.tags \
@@ -61,7 +61,7 @@ install-data-local:
 	  $(INSTALL_DATA) $(srcdir)/pixmaps/geany.png $(DESTDIR)$(datadir)/pixmaps; \
 	fi
 	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir); \
-	$(INSTALL_DATA) $(srcdir)/data/global.tags $(DESTDIR)$(pkgdatadir); \
+	$(INSTALL_DATA) $(srcdir)/data/c99.tags $(DESTDIR)$(pkgdatadir); \
 	$(INSTALL_DATA) $(srcdir)/data/php.tags $(DESTDIR)$(pkgdatadir); \
 	$(INSTALL_DATA) $(srcdir)/data/python.tags $(DESTDIR)$(pkgdatadir); \
 	$(INSTALL_DATA) $(srcdir)/data/pascal.tags $(DESTDIR)$(pkgdatadir); \

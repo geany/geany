@@ -1288,11 +1288,11 @@ for whichever libraries you want.
 
 *Replacing the default C/C++ tags file:*
 
-Geany currently uses a default global tags file global.tags for
+Geany currently uses a default global tags file c99.tags for
 C and C++, commonly installed in /usr/share/geany. This file can
 be replaced with one containing tags parsed from a different set
 of header files. When Geany is next started, your custom tags file
-will be loaded instead of the default global.tags. You should keep a
+will be loaded instead of the default c99.tags. You should keep a
 copy of the generated tags file because it will get overwritten when
 upgrading Geany.
 

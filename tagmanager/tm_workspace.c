@@ -180,7 +180,7 @@ gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
 	fclose(fp);
 
 	/* resort the whole array, because tm_tags_find expects a sorted array and it is not sorted
-	 * when global.tags, php.tags and latex.tags are loaded at the same time */
+	 * when c99.tags, php.tags and latex.tags are loaded at the same time */
 	tm_tags_sort(theWorkspace->global_tags, global_tags_sort_attrs, TRUE);
 
 	return TRUE;

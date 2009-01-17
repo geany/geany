@@ -191,7 +191,7 @@ Section "Autocompletion Tags" SEC05
 	File "${RESOURCEDIR}\data\latex.tags"
 	File "${RESOURCEDIR}\data\python.tags"
 	File "${RESOURCEDIR}\data\html_entities.tags"
-	File "${RESOURCEDIR}\data\global.tags"
+	File "${RESOURCEDIR}\data\c99.tags"
 SectionEnd
 
 ; Include GTK runtime library but only if desired from command line

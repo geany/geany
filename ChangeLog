@@ -21,6 +21,11 @@
    Add 'Build' toolbar button with a submenu for Make actions.
    Make use of ui_image_menu_item_new() for some menu items.
    Remove tooltips from menu items.
+ * Makefile.am, geany.nsi, data/c99.tags, data/global.tags,
+   doc/geany.html, doc/geany.txt, scripts/create_c_tags.sh,
+   src/symbols.c, tagmanager/tm_workspace.c:
+   Remove GTK tags (data/global.tags).
+   Add C (C99) tags (data/c99.tags) and a script to generate them).
 
 
 2009-01-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
