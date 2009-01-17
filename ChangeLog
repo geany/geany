@@ -1,3 +1,19 @@
+2009-01-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * geany.nsi:
+   Major improvements for the Windows installer:
+   Register ".geany" as Geany Project File extension.
+   Show a checkbox to open the Release Notes at the end of the
+   installation.
+   When the installer is executed without admin privileges,
+   install Geany only for the user. Otherwise, install Geany
+   for All Users.
+   Fix problems with automatic uninstallation at startup of the
+   installation when the installation directory were different.
+   Install GTK translation files only if installation of translation
+   files were requested (saves about 22 MB otherwise).
+
+
 2009-01-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/project.c, src/keyfile.c:
