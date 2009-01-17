@@ -582,7 +582,6 @@ gboolean msgwin_goto_compiler_file_line()
 			path = gtk_tree_model_get_path(model, &iter);
 			find_prev_build_dir(path, model, &dir);
 			gtk_tree_path_free(path);
-			g_strchug(string); /* remove possible leading whitespace */
 			msgwin_parse_compiler_error_line(string, dir, &filename, &line);
 
 			if (dir != NULL)
@@ -683,7 +682,7 @@ static void parse_file_line(ParseData *data, gchar **filename, gint *line)
 }
 
 
-void parse_compiler_error_line(const gchar *string,
+static void parse_compiler_error_line(const gchar *string,
 		gchar **filename, gint *line)
 {
 	ParseData data = {NULL, NULL, 0, 0, 0};
@@ -855,6 +854,7 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
 		gchar **filename, gint *line)
 {
 	GeanyFiletype *ft;
+	gchar *trimmed_string;
 
 	*filename = NULL;
 	*line = -1;
@@ -866,15 +866,19 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
 		dir = build_info.dir;
 	g_return_if_fail(dir != NULL);
 
+	trimmed_string = g_strdup(string);
+	g_strchug(trimmed_string); /* remove possible leading whitespace */
+
 	ft = filetypes[build_info.file_type_id];
 
 	/* try parsing with a custom regex */
-	if (!filetypes_parse_error_message(ft, string, filename, line))
+	if (!filetypes_parse_error_message(ft, trimmed_string, filename, line))
 	{
 		/* fallback to default old-style parsing */
-		parse_compiler_error_line(string, filename, line);
+		parse_compiler_error_line(trimmed_string, filename, line);
 	}
 	make_absolute(filename, dir);
+	g_free(trimmed_string);
 }
 
 

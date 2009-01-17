@@ -12,6 +12,8 @@
    installation when the installation directory were different.
    Install GTK translation files only if installation of translation
    files were requested (saves about 22 MB otherwise).
+ * src/msgwindow.c:
+   Properly fix parsing of compiler error messages.
 
 
 2009-01-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
