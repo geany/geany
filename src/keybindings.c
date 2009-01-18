@@ -242,7 +242,7 @@ static void init_default_kb(void)
 		GDK_Down, GDK_MOD1_MASK, "edit_scrolllinedown", _("Scroll down the view by one line"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_COMPLETESNIPPET, NULL,	/* handled specially in check_snippet_completion() */
 		GDK_Tab, 0, "edit_completesnippet", _("Complete snippet"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_EDITOR_SNIPPET_NEXT_CURSOR, cb_func_editor_action,
+	keybindings_set_item(group, GEANY_KEYS_EDITOR_SNIPPETNEXTCURSOR, cb_func_editor_action,
 		0, 0, "move_snippetnextcursor", _("Move cursor in snippet"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_SUPPRESSSNIPPETCOMPLETION, cb_func_editor_action,
 		0, 0, "edit_suppresssnippetcompletion", _("Suppress snippet completion"), NULL);
@@ -1727,7 +1727,7 @@ static void cb_func_editor_action(guint key_id)
 		case GEANY_KEYS_EDITOR_DUPLICATELINE:
 			duplicate_lines(doc->editor);
 			break;
-		case GEANY_KEYS_EDITOR_SNIPPET_NEXT_CURSOR:
+		case GEANY_KEYS_EDITOR_SNIPPETNEXTCURSOR:
 			snippet_goto_next_cursor(doc->editor->sci,
 					sci_get_current_position(doc->editor->sci));
 			break;
