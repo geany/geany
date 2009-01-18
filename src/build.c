@@ -1626,13 +1626,18 @@ void build_menu_update(GeanyDocument *doc)
 	if (menu_items->item_set_args)
 		gtk_widget_set_sensitive(menu_items->item_set_args, can_set_args);
 
-	gtk_widget_set_sensitive(widgets.toolitem_build,
-		can_build && ft->actions->can_link && ft->id != GEANY_FILETYPES_LATEX);
-	gtk_widget_set_sensitive(widgets.toolitem_make_all, can_make);
-	gtk_widget_set_sensitive(widgets.toolitem_make_custom, can_make);
-	gtk_widget_set_sensitive(widgets.toolitem_make_object,
-		can_make && ft->id != GEANY_FILETYPES_LATEX);
-	gtk_widget_set_sensitive(widgets.toolitem_set_args, can_set_args);
+	if (widgets.toolitem_build != NULL)
+		gtk_widget_set_sensitive(widgets.toolitem_build,
+			can_build && ft->actions->can_link && ft->id != GEANY_FILETYPES_LATEX);
+	if (widgets.toolitem_make_all != NULL)
+		gtk_widget_set_sensitive(widgets.toolitem_make_all, can_make);
+	if (widgets.toolitem_make_custom != NULL)
+		gtk_widget_set_sensitive(widgets.toolitem_make_custom, can_make);
+	if (widgets.toolitem_make_object != NULL)
+		gtk_widget_set_sensitive(widgets.toolitem_make_object,
+			can_make && ft->id != GEANY_FILETYPES_LATEX);
+	if (widgets.toolitem_set_args != NULL)
+		gtk_widget_set_sensitive(widgets.toolitem_set_args, can_set_args);
 
 	ui_widget_set_sensitive(widgets.compile_button, can_build && ft->actions->can_compile);
 	ui_widget_set_sensitive(widgets.build_button, can_make);
