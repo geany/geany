@@ -14,6 +14,11 @@
    If GIO is available, use GFileMonitor to watch for file disk changes
    and indicate them immediately using an orange tab label colour.
    Break plugin ABI for this and the last commits.
+ * src/build.c:
+   Disable the Build menu item in the Build toolbar button explicitly
+   for LaTeX files.
+   Update the tooltip for the Build toolbar button according to the last
+   used action.
 
 
 2009-01-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

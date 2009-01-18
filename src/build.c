@@ -97,6 +97,7 @@ static struct
 	GtkWidget	*run_button;
 	GtkWidget	*compile_button;
 	GtkWidget	*build_button;
+	GtkAction	*build_action;
 
 	GtkWidget	*toolitem_build;
 	GtkWidget	*toolitem_make_all;
@@ -1625,10 +1626,12 @@ void build_menu_update(GeanyDocument *doc)
 	if (menu_items->item_set_args)
 		gtk_widget_set_sensitive(menu_items->item_set_args, can_set_args);
 
-	gtk_widget_set_sensitive(widgets.toolitem_build, can_build && ft->actions->can_link);
+	gtk_widget_set_sensitive(widgets.toolitem_build,
+		can_build && ft->actions->can_link && ft->id != GEANY_FILETYPES_LATEX);
 	gtk_widget_set_sensitive(widgets.toolitem_make_all, can_make);
 	gtk_widget_set_sensitive(widgets.toolitem_make_custom, can_make);
-	gtk_widget_set_sensitive(widgets.toolitem_make_object, can_make);
+	gtk_widget_set_sensitive(widgets.toolitem_make_object,
+		can_make && ft->id != GEANY_FILETYPES_LATEX);
 	gtk_widget_set_sensitive(widgets.toolitem_set_args, can_set_args);
 
 	ui_widget_set_sensitive(widgets.compile_button, can_build && ft->actions->can_compile);
@@ -1804,6 +1807,7 @@ on_toolbutton_build_activate           (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	last_toolbutton_action = GPOINTER_TO_INT(user_data);
+	g_object_set(widgets.build_action, "tooltip", _("Build the current file"), NULL);
 	on_build_build_activate(menuitem, user_data);
 }
 
@@ -1872,7 +1876,24 @@ static void
 on_toolbutton_make_activate            (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
+	gchar *msg;
+
 	last_toolbutton_action = GPOINTER_TO_INT(user_data);
+	switch (last_toolbutton_action)
+	{
+		case GBO_MAKE_ALL:
+			msg = _("Build the current file with Make and the default target");
+			break;
+		case GBO_MAKE_CUSTOM:
+			msg = _("Build the current file with Make and the specified target");
+			break;
+		case GBO_MAKE_OBJECT:
+			msg = _("Compile the current file with Make");
+			break;
+		default:
+			msg = NULL;
+	}
+	g_object_set(widgets.build_action, "tooltip", msg, NULL);
 	on_build_make_activate(menuitem, user_data);
 }
 
@@ -2007,8 +2028,10 @@ on_build_previous_error                (GtkMenuItem     *menuitem,
 void build_init()
 {
 	GtkWidget *item;
-	GtkWidget *toolmenu = geany_menu_button_action_get_menu(
-		GEANY_MENU_BUTTON_ACTION(toolbar_get_action_by_name("Build")));
+	GtkWidget *toolmenu;
+
+	widgets.build_action = toolbar_get_action_by_name("Build");
+	toolmenu = geany_menu_button_action_get_menu(GEANY_MENU_BUTTON_ACTION(widgets.build_action));
 
 	if (toolmenu != NULL)
 	{
