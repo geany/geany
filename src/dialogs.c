@@ -382,8 +382,7 @@ static void on_save_as_new_tab_toggled(GtkToggleButton *togglebutton, gpointer u
 
 
 #if ! GEANY_USE_WIN32_DIALOG
-static void handle_save_as(const gchar *utf8_filename, gboolean open_new_tab,
-		gboolean rename_file)
+static void handle_save_as(const gchar *utf8_filename, gboolean open_new_tab, gboolean rename_file)
 {
 	GeanyDocument *doc = document_get_current();
 
@@ -400,22 +399,16 @@ static void handle_save_as(const gchar *utf8_filename, gboolean open_new_tab,
 		{
 			if (rename_file)
 			{
-				gchar *old_filename = utils_get_locale_from_utf8(doc->file_name);
-				gchar *new_filename = utils_get_locale_from_utf8(utf8_filename);
-
-				g_rename(old_filename, new_filename);
-				g_free(old_filename);
-				g_free(new_filename);
+				document_rename_file(doc, utf8_filename);
 			}
 			/* create a new tm_source_file object otherwise tagmanager won't work correctly */
 			tm_workspace_remove_object(doc->tm_file, TRUE, TRUE);
 			doc->tm_file = NULL;
 		}
 		document_save_file_as(doc, utf8_filename);
-	}
 
-	if (! open_new_tab)
 		build_menu_update(doc);
+	}
 }
 
 

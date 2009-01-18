@@ -45,13 +45,13 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 125,
+	GEANY_API_VERSION = 126,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
 	/* This should usually stay the same if fields are only appended, assuming only pointers to
 	 * structs and not structs themselves are declared by plugins. */
-	GEANY_ABI_VERSION = 56
+	GEANY_ABI_VERSION = 57
 };
 
 /** Check the plugin can be loaded by Geany.
@@ -248,8 +248,10 @@ typedef struct DocumentFuncs
 	void		(*set_encoding) (struct GeanyDocument *doc, const gchar *new_encoding);
 	void		(*set_text_changed) (struct GeanyDocument *doc, gboolean changed);
 	void		(*set_filetype) (struct GeanyDocument *doc, struct GeanyFiletype *type);
-	gboolean	(*close) (GeanyDocument *doc);
+	gboolean	(*close) (struct GeanyDocument *doc);
 	struct GeanyDocument*	(*index)(gint idx);
+	gboolean	(*save_file_as) (struct GeanyDocument *doc, const gchar *utf8_fname);
+	void		(*rename_file) (struct GeanyDocument *doc, const gchar *new_filename);
 }
 DocumentFuncs;
 

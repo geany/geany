@@ -40,6 +40,10 @@
 	geany_functions->p_document->close
 #define document_index \
 	geany_functions->p_document->index
+#define document_save_file_as \
+	geany_functions->p_document->save_file_as
+#define document_rename_file \
+	geany_functions->p_document->rename_file
 #define editor_get_indent_prefs \
 	geany_functions->p_editor->get_indent_prefs
 #define editor_create_widget \

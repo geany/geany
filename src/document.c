@@ -47,6 +47,10 @@
 /* gstdio.h also includes sys/stat.h */
 #include <glib/gstdio.h>
 
+#ifdef HAVE_GIO
+# include <gio/gio.h>
+#endif
+
 #include "document.h"
 #include "documentprivate.h"
 #include "filetypes.h"
@@ -337,9 +341,7 @@ static void init_doc_struct(GeanyDocument *new_doc)
 	new_doc->encoding = NULL;
 	new_doc->has_bom = FALSE;
 	new_doc->editor = NULL;
-	new_doc->mtime = 0;
 	new_doc->changed = FALSE;
-	new_doc->last_check = time(NULL);
 	new_doc->real_path = NULL;
 
 	new_doc->priv = g_new0(GeanyDocumentPrivate, 1);
@@ -381,6 +383,97 @@ static void queue_colourise(GeanyDocument *doc)
 	 * This ensures we don't start colourising before all documents are opened/saved,
 	 * only once the editor is drawn. */
 	gtk_widget_queue_draw(GTK_WIDGET(doc->editor->sci));
+}
+
+
+#ifdef HAVE_GIO
+static void file_monitor_changed_cb(G_GNUC_UNUSED GFileMonitor *monitor, G_GNUC_UNUSED GFile *file,
+	G_GNUC_UNUSED GFile *other_file, GFileMonitorEvent event, GeanyDocument *doc)
+{
+	if (file_prefs.disk_check_timeout == 0)
+		return;
+
+	switch (event)
+	{
+		case G_FILE_MONITOR_EVENT_CHANGED:
+		{
+			if (doc->priv->file_disk_status == FILE_IGNORE)
+			{	/* ignore this change completely, used after saving a file */
+				doc->priv->file_disk_status = FILE_OK;
+				return;
+			}
+			doc->priv->file_disk_status = FILE_CHANGED;
+			break;
+		}
+		case G_FILE_MONITOR_EVENT_DELETED:
+		{
+			doc->priv->file_disk_status = FILE_MISSING;
+			break;
+		}
+		/* ignore */
+		case G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
+		case G_FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED:
+		case G_FILE_MONITOR_EVENT_PRE_UNMOUNT:
+		case G_FILE_MONITOR_EVENT_UNMOUNTED:
+		/* we ignore 'created' for now since it causes trouble when renaming files */
+		case G_FILE_MONITOR_EVENT_CREATED:
+			return;
+	}
+
+	if (doc->priv->file_disk_status != FILE_OK)
+	{
+		ui_update_tab_status(doc);
+	}
+}
+#endif
+
+
+void document_stop_file_monitoring(GeanyDocument *doc)
+{
+	g_return_if_fail(doc != NULL);
+
+	if (doc->priv->monitor != NULL)
+	{
+		g_object_unref(doc->priv->monitor);
+		doc->priv->monitor = NULL;
+	}
+}
+
+
+static void file_monitor_setup(GeanyDocument *doc)
+{
+	g_return_if_fail(doc != NULL);
+	/* Disable file monitoring completely for remote files (i.e. remote GIO files) as GFileMonitor
+	 * doesn't work at all for remote files and legacy polling is too slow. */
+	if (! doc->priv->is_remote)
+	{
+#ifdef HAVE_GIO
+		gchar *locale_filename;
+		GFile *file;
+
+		/* stop any previous monitoring */
+		document_stop_file_monitoring(doc);
+
+		locale_filename = utils_get_locale_from_utf8(doc->file_name);
+		if (locale_filename != NULL && g_file_test(locale_filename, G_FILE_TEST_EXISTS))
+		{
+			/* get a file monitor and connect to the 'changed' signal */
+			file = g_file_new_for_path(locale_filename);
+			doc->priv->monitor = g_file_monitor_file(file, G_FILE_MONITOR_NONE, NULL, NULL);
+			g_signal_connect(doc->priv->monitor, "changed", G_CALLBACK(file_monitor_changed_cb), doc);
+
+			/* we set the rate limit according to the GUI pref but it's most probably not used */
+			g_file_monitor_set_rate_limit(doc->priv->monitor, file_prefs.disk_check_timeout * 1000);
+
+			g_object_unref(file);
+		}
+		g_free(locale_filename);
+#else
+		doc->priv->last_check = time(NULL);
+		doc->priv->mtime = 0;
+#endif
+	}
+	doc->priv->file_disk_status = FILE_OK;
 }
 
 
@@ -437,7 +530,6 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 	this->is_valid = TRUE;	/* do this last to prevent UI updating with NULL items. */
 	return this;
 }
-
 
 /**
  *  Close the given document.
@@ -496,6 +588,8 @@ gboolean document_remove_page(guint page_num)
 
 	editor_destroy(doc->editor);
 	doc->editor = NULL;
+
+	document_stop_file_monitoring(doc);
 
 	doc->is_valid = FALSE;
 	doc->file_name = NULL;
@@ -571,7 +665,7 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft,
 	sci_set_undo_collection(doc->editor->sci, TRUE);
 	sci_empty_undo_buffer(doc->editor->sci);
 
-	doc->mtime = time(NULL);
+	doc->priv->mtime = time(NULL);
 
 	doc->encoding = g_strdup(encodings[file_prefs.default_new_encoding].charset);
 	/* store the opened encoding for undo/redo */
@@ -592,6 +686,8 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft,
 
 	sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
 	sci_goto_pos(doc->editor->sci, 0, TRUE);
+
+	file_monitor_setup(doc);
 
 	/* "the" SCI signal (connect after initial setup(i.e. adding text)) */
 	g_signal_connect(doc->editor->sci, "sci-notify", G_CALLBACK(editor_sci_notify_cb), doc->editor);
@@ -1082,6 +1178,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		g_return_val_if_fail(doc != NULL, NULL);	/* really should not happen */
 
 		doc->priv->is_remote = utils_is_remote_path(locale_filename);
+		file_monitor_setup(doc);
 	}
 
 	sci_set_undo_collection(doc->editor->sci, FALSE); /* avoid creation of an undo action */
@@ -1099,7 +1196,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 
 	sci_set_undo_collection(doc->editor->sci, TRUE);
 
-	doc->mtime = filedata.mtime; /* get the modification time from file and keep it */
+	doc->priv->mtime = filedata.mtime; /* get the modification time from file and keep it */
 	g_free(doc->encoding);	/* if reloading, free old encoding */
 	doc->encoding = filedata.enc;
 	doc->has_bom = filedata.bom;
@@ -1252,6 +1349,7 @@ gboolean document_reload_file(GeanyDocument *doc, const gchar *forced_enc)
 
 static gboolean document_update_timestamp(GeanyDocument *doc)
 {
+#ifndef HAVE_GIO
 	struct stat st;
 	gchar *locale_filename;
 
@@ -1266,8 +1364,9 @@ static gboolean document_update_timestamp(GeanyDocument *doc)
 		return FALSE;
 	}
 
-	doc->mtime = st.st_mtime; /* get the modification time from file and keep it */
+	doc->priv->mtime = st.st_mtime; /* get the modification time from file and keep it */
 	g_free(locale_filename);
+#endif
 	return TRUE;
 }
 
@@ -1326,22 +1425,47 @@ static void replace_header_filename(GeanyDocument *doc)
 }
 
 
-/*
- * Save the %document, detecting the filetype.
+/**
+ *  Renames the file in @a doc to @a new_filename. Only the file on disk is actually renamed,
+ *  you still have to call @ref document_save_file_as() to change the @a doc object.
+ *  It also stops monitoring for file changes to prevent receiving too many file change events
+ *  while renaming. File monitoring is setup again in @ref document_save_file_as().
+ *
+ *  @param doc The current document which should be renamed.
+ *  @param new_filename The new filename in UTF-8 encoding.
+ */
+void document_rename_file(GeanyDocument *doc, const gchar *new_filename)
+{
+	gchar *old_locale_filename = utils_get_locale_from_utf8(doc->file_name);
+	gchar *new_locale_filename = utils_get_locale_from_utf8(new_filename);
+
+	/* stop file monitoring to avoid getting events for deleting/creating files,
+	 * it's re-setup in document_save_file_as() */
+	document_stop_file_monitoring(doc);
+
+	g_rename(old_locale_filename, new_locale_filename);
+
+	g_free(old_locale_filename);
+	g_free(new_locale_filename);
+}
+
+
+/**
+ * Saves the document, detecting the filetype.
  *
  * @param doc The document for the file to save.
  * @param utf8_fname The new name for the document, in UTF-8, or NULL.
  * @return @c TRUE if the file was saved or @c FALSE if the file could not be saved.
+ *
  * @see document_save_file().
  */
 gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 {
 	gboolean ret;
 
-	if (doc == NULL)
-		return FALSE;
+	g_return_val_if_fail(doc != NULL, FALSE);
 
-	if (utf8_fname)
+	if (utf8_fname != NULL)
 	{
 		g_free(doc->file_name);
 		doc->file_name = g_strdup(utf8_fname);
@@ -1365,6 +1489,12 @@ gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 	replace_header_filename(doc);
 
 	ret = document_save_file(doc, TRUE);
+
+	/* file monitoring support, add file monitoring after the file has been saved
+	 * to ignore any earlier events */
+	file_monitor_setup(doc);
+	doc->priv->file_disk_status = FILE_IGNORE;
+
 	if (ret)
 		ui_add_recent_file(doc->file_name);
 	return ret;
@@ -1550,6 +1680,9 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	/* actually write the content of data to the file on disk */
 	err = write_data_to_disk(doc, data, len);
 	g_free(data);
+
+	/* ignore file changed notification after writing the file */
+	doc->priv->file_disk_status = FILE_IGNORE;
 
 	if (err != 0)
 	{
@@ -2472,6 +2605,7 @@ GdkColor *document_get_status_color(GeanyDocument *doc)
 {
 	static GdkColor red = {0, 0xFFFF, 0, 0};
 	static GdkColor green = {0, 0, 0x7FFF, 0};
+	static GdkColor orange = {0, 0xFFFF, 0x7FFF, 0};
 	GdkColor *color = NULL;
 
 	if (doc == NULL)
@@ -2479,6 +2613,11 @@ GdkColor *document_get_status_color(GeanyDocument *doc)
 
 	if (doc->changed)
 		color = &red;
+	else if (doc->priv->file_disk_status == FILE_MISSING ||
+			 doc->priv->file_disk_status == FILE_CHANGED)
+	{
+		color = &orange;
+	}
 	else if (doc->readonly)
 		color = &green;
 
@@ -2606,62 +2745,103 @@ static gboolean check_reload(GeanyDocument *doc)
 }
 
 
+static gboolean check_resave_missing_file(GeanyDocument *doc)
+{
+	gboolean want_reload = FALSE;
+
+	/* file is missing - set unsaved state */
+	document_set_text_changed(doc, TRUE);
+	/* don't prompt more than once */
+	setptr(doc->real_path, NULL);
+
+	if (dialogs_show_question_full(NULL, GTK_STOCK_SAVE, GTK_STOCK_CANCEL,
+		_("Try to resave the file?"),
+		_("File \"%s\" was not found on disk!"), doc->file_name))
+	{
+		dialogs_show_save_as();
+		want_reload = TRUE;
+	}
+	return want_reload;
+}
+
+
+static time_t check_disk_status_real(GeanyDocument *doc, gboolean force)
+{
+	time_t t = 0;
+#ifndef HAVE_GIO
+	struct stat st;
+	gchar *locale_filename;
+
+	t = time(NULL);
+
+	if (! force && doc->priv->last_check > (t - file_prefs.disk_check_timeout))
+		return 0;
+
+	doc->priv->last_check = t;
+
+	locale_filename = utils_get_locale_from_utf8(doc->file_name);
+	if (g_stat(locale_filename, &st) != 0)
+	{
+		doc->priv->file_disk_status = FILE_MISSING;
+		return 0;
+	}
+	else if (doc->priv->mtime > t || st.st_mtime > t)
+	{
+		g_warning("%s: Something is wrong with the time stamps.", __func__);
+	}
+	else if (doc->priv->mtime < st.st_mtime)
+	{
+		doc->priv->file_disk_status = FILE_CHANGED;
+		/* return st.st_mtime to set it after the file has been possibly reloaded */
+		t = st.st_mtime;
+	}
+	g_free(locale_filename);
+#endif
+	return t;
+}
+
+
 /* Set force to force a disk check, otherwise it is ignored if there was a check
  * in the last file_prefs.disk_check_timeout seconds.
  * @return @c TRUE if the file has changed. */
 gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 {
-	struct stat st;
-	time_t t;
-	gchar *locale_filename;
 	gboolean ret = FALSE;
+	time_t t;
 
 	if (file_prefs.disk_check_timeout == 0)
 		return FALSE;
 	if (doc == NULL)
 		return FALSE;
 	/* ignore documents that have never been saved to disk */
-	if (doc->real_path == NULL) return FALSE;
-
-	t = time(NULL);
-
-	if (! force && doc->last_check > (t - file_prefs.disk_check_timeout))
+	if (doc->real_path == NULL)
 		return FALSE;
 
-	doc->last_check = t;
+	/* check the file's mtime in case we don't have GIO support, otherwise this is a no-op */
+	t = check_disk_status_real(doc, force);
 
-	locale_filename = utils_get_locale_from_utf8(doc->file_name);
-	if (g_stat(locale_filename, &st) != 0)
+	switch (doc->priv->file_disk_status)
 	{
-		/* file is missing - set unsaved state */
-		document_set_text_changed(doc, TRUE);
-		/* don't prompt more than once */
-		setptr(doc->real_path, NULL);
-
-		if (dialogs_show_question_full(NULL, GTK_STOCK_SAVE, GTK_STOCK_CANCEL,
-			_("Try to resave the file?"),
-			_("File \"%s\" was not found on disk!"), doc->file_name))
+		case FILE_CHANGED:
 		{
-			dialogs_show_save_as();
+			check_reload(doc);
+			doc->priv->mtime = t;
+			ret = TRUE;
+			break;
 		}
-	}
-	else if (doc->mtime > t || st.st_mtime > t)
-	{
-		geany_debug("Strange: Something is wrong with the time stamps.");
-	}
-	else if (doc->mtime < st.st_mtime)
-	{
-		if (check_reload(doc))
+		case FILE_MISSING:
 		{
-			/* Update the modification time */
-			doc->mtime = st.st_mtime;
+			check_resave_missing_file(doc);
+			ret = TRUE;
+			break;
 		}
-		else
-			doc->mtime = st.st_mtime;	/* Ignore this change on disk completely */
-
-		ret = TRUE; /* file has changed */
+		default:
+			break;
 	}
-	g_free(locale_filename);
+
+	doc->priv->file_disk_status = FILE_OK;
+	ui_update_tab_status(doc);
+
 	return ret;
 }
 

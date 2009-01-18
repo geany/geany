@@ -131,7 +131,9 @@ static DocumentFuncs doc_funcs = {
 	&document_set_text_changed,
 	&document_set_filetype,
 	&document_close,
-	&document_index
+	&document_index,
+	&document_save_file_as,
+	&document_rename_file
 };
 
 static EditorFuncs editor_funcs = {

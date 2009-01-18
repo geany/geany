@@ -26,6 +26,7 @@
 #ifndef GEANY_DOCUMENT_PRIVATE_H
 #define GEANY_DOCUMENT_PRIVATE_H
 
+
 /* available UNDO actions, UNDO_SCINTILLA is a pseudo action to trigger Scintilla's
  * undo management */
 enum
@@ -35,6 +36,15 @@ enum
 	UNDO_BOM,
 	UNDO_ACTIONS_MAX
 };
+
+typedef enum
+{
+	FILE_OK,
+	FILE_CHANGED,
+	FILE_MISSING,
+	FILE_IGNORE
+}
+FileDiskStatus;
 
 
 typedef struct FileEncoding
@@ -69,7 +79,16 @@ typedef struct GeanyDocumentPrivate
 	gint			 symbol_list_sort_mode;
 	/* indicates whether a file is on a remote filesystem, works only with GIO/GVFS */
 	gboolean		 is_remote;
- }
+	/* File status on disk of the document, can be 'FILE_CHANGED', 'FILE_MISSING' (deleted) or
+	 * 'FILE_OK' if there are no known changes */
+	FileDiskStatus	 file_disk_status;
+	/* Reference to a GFileMonitor object, only used when GIO file monitoring is used. */
+	gpointer		 monitor;
+	/* Time of the last disk check, only used when legacy file monitoring is used. */
+	time_t			 last_check;
+	/* Modification time of the document on disk, only used when legacy file monitoring is used. */
+	time_t			 mtime;
+}
 GeanyDocumentPrivate;
 
 #endif

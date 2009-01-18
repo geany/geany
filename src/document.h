@@ -93,10 +93,6 @@ struct GeanyDocument
 	gboolean		 readonly;
 	/** Whether this %document has been changed since it was last saved. */
 	gboolean		 changed;
-	/** Time of the last disk check. */
-	time_t			 last_check;
-	/** Modification time of this %document on disk. */
-	time_t			 mtime;
 	/** The link-dereferenced, locale-encoded file name.
 	 * If non-NULL, this indicates the file once existed on disk (not just as an
 	 * unsaved document with a filename set).
@@ -157,6 +153,7 @@ void document_set_text_changed(GeanyDocument *doc, gboolean changed);
 
 void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type);
 
+void document_rename_file(GeanyDocument *doc, const gchar *new_filename);
 
 GeanyDocument *document_index(gint idx);
 
