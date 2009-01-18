@@ -101,7 +101,7 @@
 #define SCLEX_R 86
 #define SCLEX_MAGIK 87
 #define SCLEX_POWERSHELL 88
-#define SCLEX_OMS 89
+#define SCLEX_MYSQL 89
 #define SCLEX_PO 90
 #define SCLEX_AUTOMATIC 1000
 #define SCE_P_DEFAULT 0

@@ -2656,59 +2656,6 @@ static void styleset_caml(ScintillaObject *sci)
 }
 
 
-
-
-static void styleset_oms_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
-{
-	new_style_array(GEANY_FILETYPES_OMS, 11);
-	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_OMS].styling[0]);
-	get_keyfile_hex(config, config_home, "styling", "commentline", "0x909090", "0xffffff", "false", &style_sets[GEANY_FILETYPES_OMS].styling[1]);
-	get_keyfile_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_OMS].styling[2]);
-	get_keyfile_hex(config, config_home, "styling", "word", "0x991111", "0xffffff", "false", &style_sets[GEANY_FILETYPES_OMS].styling[3]);
-	get_keyfile_hex(config, config_home, "styling", "string", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_OMS].styling[4]);
-	get_keyfile_hex(config, config_home, "styling", "character", "0x404000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_OMS].styling[5]);
-	get_keyfile_hex(config, config_home, "styling", "operator", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_OMS].styling[6]);
-	get_keyfile_hex(config, config_home, "styling", "identifier", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_OMS].styling[7]);
-	get_keyfile_hex(config, config_home, "styling", "backticks", "0x000000", "0xe0c0e0", "false", &style_sets[GEANY_FILETYPES_OMS].styling[8]);
-	get_keyfile_hex(config, config_home, "styling", "param", "0x991111", "0x0000ff", "false", &style_sets[GEANY_FILETYPES_OMS].styling[9]);
-	get_keyfile_hex(config, config_home, "styling", "scalar", "0x0000ff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_OMS].styling[10]);
-
-	style_sets[GEANY_FILETYPES_OMS].keywords = g_new(gchar*, 2);
-	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_OMS, 0, "clear seq fillcols fillrowsgaspect gaddview \
-			gtitle gxaxis gyaxis max contour gcolor gplot gaddview gxaxis gyaxis gcolor fill coldim gplot \
-			gtitle clear arcov dpss fspec cos gxaxis gyaxis gtitle gplot gupdate rowdim fill print for to begin \
-			end write cocreate coinvoke codispsave cocreate codispset copropput colsum sqrt adddialog \
-			addcontrol addcontrol delwin fillrows function gaspect conjdir");
-	style_sets[GEANY_FILETYPES_OMS].keywords[1] = NULL;
-
-	get_keyfile_wordchars(config, config_home,
-		&style_sets[GEANY_FILETYPES_OMS].wordchars);
-}
-
-
-static void styleset_oms(ScintillaObject *sci)
-{
-	const filetype_id ft_id = GEANY_FILETYPES_OMS;
-
-	apply_filetype_properties(sci, SCLEX_OMS, ft_id);
-
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_OMS].keywords[0]);
-
-	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_OMS, 0);
-	set_sci_style(sci, SCE_SH_DEFAULT, GEANY_FILETYPES_OMS, 0);
-	set_sci_style(sci, SCE_SH_COMMENTLINE, GEANY_FILETYPES_OMS, 1);
-	set_sci_style(sci, SCE_SH_NUMBER, GEANY_FILETYPES_OMS, 2);
-	set_sci_style(sci, SCE_SH_WORD, GEANY_FILETYPES_OMS, 3);
-	set_sci_style(sci, SCE_SH_STRING, GEANY_FILETYPES_OMS, 4);
-	set_sci_style(sci, SCE_SH_CHARACTER, GEANY_FILETYPES_OMS, 5);
-	set_sci_style(sci, SCE_SH_OPERATOR, GEANY_FILETYPES_OMS, 6);
-	set_sci_style(sci, SCE_SH_IDENTIFIER, GEANY_FILETYPES_OMS, 7);
-	set_sci_style(sci, SCE_SH_BACKTICKS, GEANY_FILETYPES_OMS, 8);
-	set_sci_style(sci, SCE_SH_PARAM, GEANY_FILETYPES_OMS, 9);
-	set_sci_style(sci, SCE_SH_SCALAR, GEANY_FILETYPES_OMS, 10);
-}
-
-
 static void styleset_tcl_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_style_array(GEANY_FILETYPES_TCL, 16);
@@ -3427,7 +3374,6 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 		init_styleset_case(GEANY_FILETYPES_MAKE,	makefile);
 		init_styleset_case(GEANY_FILETYPES_MATLAB,	matlab);
 		init_styleset_case(GEANY_FILETYPES_NSIS,	nsis);
-		init_styleset_case(GEANY_FILETYPES_OMS,		oms);
 		init_styleset_case(GEANY_FILETYPES_PASCAL,	pascal);
 		init_styleset_case(GEANY_FILETYPES_PERL,	perl);
 		init_styleset_case(GEANY_FILETYPES_PHP,		php);
@@ -3489,7 +3435,6 @@ void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 		styleset_case(GEANY_FILETYPES_MAKE,		makefile);
 		styleset_case(GEANY_FILETYPES_MATLAB,	matlab);
 		styleset_case(GEANY_FILETYPES_NSIS,		nsis);
-		styleset_case(GEANY_FILETYPES_OMS,		oms);
 		styleset_case(GEANY_FILETYPES_PASCAL,	pascal);
 		styleset_case(GEANY_FILETYPES_PERL,		perl);
 		styleset_case(GEANY_FILETYPES_PHP,		php);

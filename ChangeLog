@@ -1,3 +1,13 @@
+2009-01-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * data/filetype_extensions.conf, data/filetypes.oms,
+   scintilla/include/SciLexer.h, scintilla/include/Scintilla.iface,
+   scintilla/KeyWords.cxx, scintilla/LexOMS.cxx, scintilla/Makefile.am,
+   scintilla/makefile.win32, src/editor.c, src/filetypes.c,
+   src/filetypes.h, src/highlighting.c, src/templates.c, wscript:
+   Remove filetype O-Matrix (probably unused for years).
+
+
 2009-01-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * geany.nsi:

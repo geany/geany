@@ -416,17 +416,6 @@ static void init_builtin_filetypes(void)
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
-#define OMS
-	ft = filetypes[GEANY_FILETYPES_OMS];
-	ft->lang = -2;
-	ft->name = g_strdup("O-Matrix");
-	ft->title = g_strdup_printf(_("%s source file"), "O-Matrix");
-	ft->extension = g_strdup("oms");
-	ft->pattern = utils_strv_new("*.oms", NULL);
-	ft->comment_open = g_strdup("#");
-	ft->comment_close = NULL;
-	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
-
 #define VHDL
 	ft = filetypes[GEANY_FILETYPES_VHDL];
 	ft->lang = 21;
@@ -1228,7 +1217,6 @@ gchar *filetypes_get_conf_extension(gint filetype_idx)
 		case GEANY_FILETYPES_CPP: result = g_strdup("cpp"); break;
 		case GEANY_FILETYPES_CS: result = g_strdup("cs"); break;
 		case GEANY_FILETYPES_MAKE: result = g_strdup("makefile"); break;
-		case GEANY_FILETYPES_OMS: result = g_strdup("oms"); break;
 		default: result = g_ascii_strdown(filetypes[filetype_idx]->name, -1); break;
 	}
 	return result;

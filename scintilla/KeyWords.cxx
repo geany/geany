@@ -161,7 +161,6 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmMatlab);
 	LINK_LEXER(lmNsis);
 	LINK_LEXER(lmNull);
-	LINK_LEXER(lmOMS);
 	LINK_LEXER(lmPascal);
 	LINK_LEXER(lmPerl);
 	LINK_LEXER(lmPo);

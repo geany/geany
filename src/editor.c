@@ -4369,7 +4369,6 @@ void editor_set_indentation_guides(GeanyEditor *editor)
 		case SCLEX_VHDL:
 		case SCLEX_FREEBASIC:
 		case SCLEX_D:
-		case SCLEX_OMS:
 		case SCLEX_MATLAB:
 			mode = SC_IV_LOOKBOTH;
 			break;

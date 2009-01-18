@@ -22,7 +22,6 @@ LexHTML.cxx \
 LexYAML.cxx \
 LexLua.cxx \
 LexNsis.cxx \
-LexOMS.cxx \
 LexMatlab.cxx \
 LexOthers.cxx \
 LexPascal.cxx \

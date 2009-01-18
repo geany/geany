@@ -2007,7 +2007,7 @@ val SCLEX_ASYMPTOTE=85
 val SCLEX_R=86
 val SCLEX_MAGIK=87
 val SCLEX_POWERSHELL=88
-val SCLEX_OMS=89
+val SCLEX_MYSQL=89
 val SCLEX_PO=90
 
 # When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
