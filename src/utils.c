@@ -918,6 +918,7 @@ gchar **utils_read_file_in_array(const gchar *filename)
 	if (data != NULL)
 	{
 		result = g_strsplit_set(data, "\r\n", -1);
+		g_free(data);
 	}
 
 	return result;
