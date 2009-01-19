@@ -324,7 +324,8 @@ void treeviews_openfiles_add(GeanyDocument *doc)
 	}
 	basename = g_path_get_basename(DOC_FILENAME(doc));
 	gtk_tree_store_set(store_openfiles, iter,
-		0, basename, 1, doc, 2, color, 3, DOC_FILENAME(doc), -1);
+		DOCUMENTS_SHORTNAME, basename, DOCUMENTS_DOCUMENT, doc, DOCUMENTS_COLOR, color,
+		DOCUMENTS_FILENAME, DOC_FILENAME(doc), -1);
 	g_free(basename);
 }
 
