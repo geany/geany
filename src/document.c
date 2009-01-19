@@ -2809,12 +2809,11 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 	gboolean ret = FALSE;
 	time_t t;
 
-	if (file_prefs.disk_check_timeout == 0)
+	if (file_prefs.disk_check_timeout == 0 || doc == NULL)
 		return FALSE;
-	if (doc == NULL)
-		return FALSE;
-	/* ignore documents that have never been saved to disk */
-	if (doc->real_path == NULL)
+
+	/* ignore documents that have never been saved to disk and remote files */
+	if (doc->real_path == NULL || doc->priv->is_remote)
 		return FALSE;
 
 	/* check the file's mtime in case we don't have GIO support, otherwise this is a no-op */
