@@ -2278,7 +2278,6 @@ create_prefs_dialog (void)
   GtkWidget *vbox11;
   GtkWidget *check_list_symbol;
   GtkWidget *check_list_openfiles;
-  GtkWidget *check_list_openfiles_fullpath;
   GtkWidget *label146;
   GtkWidget *frame4;
   GtkWidget *alignment5;
@@ -2838,10 +2837,6 @@ create_prefs_dialog (void)
   gtk_widget_show (check_list_openfiles);
   gtk_box_pack_start (GTK_BOX (vbox11), check_list_openfiles, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_list_openfiles, _("Toggle the documents list on and off"), NULL);
-
-  check_list_openfiles_fullpath = gtk_check_button_new_with_mnemonic (_("Show full path name in documents list"));
-  gtk_widget_show (check_list_openfiles_fullpath);
-  gtk_box_pack_start (GTK_BOX (vbox11), check_list_openfiles_fullpath, FALSE, FALSE, 0);
 
   label146 = gtk_label_new (_("<b>Sidebar</b>"));
   gtk_widget_show (label146);
@@ -4530,7 +4525,6 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox11, "vbox11");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_list_symbol, "check_list_symbol");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_list_openfiles, "check_list_openfiles");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_list_openfiles_fullpath, "check_list_openfiles_fullpath");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label146, "label146");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame4, "frame4");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment5, "alignment5");

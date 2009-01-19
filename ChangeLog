@@ -1,3 +1,12 @@
+2009-01-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, src/ui_utils.h, src/prefs.c, src/plugindata.h,
+   src/treeviews.c, src/keyfile.c, geany.glade:
+   Use tree for Documents sidebar, grouped by path.
+   Remove Documents show full path pref.
+   Use enum for documents tree store column ids.
+
+
 2009-01-18  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * src/utils.c: Added a missing g_free().
