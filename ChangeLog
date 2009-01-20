@@ -4,6 +4,8 @@
    Disable documents popup menu items when invalid.
    Make close, save menu items work for all children when a parent row
    is selected.
+ * src/notebook.c:
+   Fix focusing the editor after clicking on a notebook tab.
 
 
 2009-01-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

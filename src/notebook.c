@@ -82,7 +82,7 @@ static gboolean focus_sci(GtkWidget *widget, GdkEventButton *event, gpointer use
 {
 	GeanyDocument *doc = document_get_current();
 
-	if (doc != NULL)
+	if (doc != NULL && event->button == 1)
 		gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
 
 	return FALSE;
@@ -220,10 +220,6 @@ void notebook_init()
 
 	g_signal_connect_after(main_widgets.notebook, "button-press-event",
 		G_CALLBACK(notebook_tab_bar_click_cb), NULL);
-
-	/* focus the current document after clicking on a tab */
-	g_signal_connect_after(main_widgets.notebook, "button-release-event",
-		G_CALLBACK(focus_sci), NULL);
 
 	g_signal_connect(main_widgets.notebook, "drag-data-received",
 		G_CALLBACK(on_window_drag_data_received), NULL);
@@ -478,6 +474,9 @@ gint notebook_new_tab(GeanyDocument *this)
 	ebox = gtk_event_box_new();
 	GTK_WIDGET_SET_FLAGS(ebox, GTK_NO_WINDOW);
 	g_signal_connect(ebox, "button-press-event", G_CALLBACK(notebook_tab_click), page);
+	/* focus the current document after clicking on a tab */
+	g_signal_connect_after(ebox, "button-release-event",
+		G_CALLBACK(focus_sci), NULL);
 
 	hbox = gtk_hbox_new(FALSE, 2);
 	gtk_box_pack_start(GTK_BOX(hbox), this->priv->tab_label, FALSE, FALSE, 0);
