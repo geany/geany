@@ -44,6 +44,14 @@
 
 SidebarTreeviews tv;
 
+static struct
+{
+	GtkWidget *close;
+	GtkWidget *save;
+	GtkWidget *reload;
+}
+doc_items = {NULL, NULL, NULL};
+
 enum
 {
 	TREEVIEW_SYMBOL = 0,
@@ -73,10 +81,12 @@ static GtkWidget *tag_window;	/* scrolled window that holds the symbol list GtkT
 static void on_openfiles_tree_selection_changed(GtkTreeSelection *selection, gpointer data);
 static void on_openfiles_document_action(GtkMenuItem *menuitem, gpointer user_data);
 static gboolean on_taglist_tree_selection_changed(GtkTreeSelection *selection);
-static gboolean on_treeviews_button_press_event(GtkWidget *widget, GdkEventButton *event,
-																			gpointer user_data);
+static gboolean on_symbols_button_press_event(GtkWidget *widget, GdkEventButton *event,
+		gpointer user_data);
+static gboolean on_documents_button_release_event(GtkWidget *widget, GdkEventButton *event,
+		gpointer user_data);
 static gboolean on_treeviews_key_press_event(GtkWidget *widget, GdkEventKey *event,
-																			gpointer user_data);
+		gpointer user_data);
 static void on_list_document_activate(GtkCheckMenuItem *item, gpointer user_data);
 static void on_list_symbol_activate(GtkCheckMenuItem *item, gpointer user_data);
 
@@ -110,9 +120,9 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 	g_object_unref(store);
 
 	g_signal_connect(tree, "button-press-event",
-					G_CALLBACK(on_treeviews_button_press_event), GINT_TO_POINTER(TREEVIEW_SYMBOL));
+		G_CALLBACK(on_symbols_button_press_event), NULL);
 	g_signal_connect(tree, "key-press-event",
-					G_CALLBACK(on_treeviews_key_press_event), GINT_TO_POINTER(TREEVIEW_SYMBOL));
+		G_CALLBACK(on_treeviews_key_press_event), GINT_TO_POINTER(TREEVIEW_SYMBOL));
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(tree), FALSE);
 
@@ -140,7 +150,7 @@ on_default_tag_tree_button_press_event(GtkWidget *widget, GdkEventButton *event,
 {
 	if (event->button == 3)
 	{
-		on_treeviews_button_press_event(widget, event, GINT_TO_POINTER(TREEVIEW_SYMBOL));
+		on_symbols_button_press_event(widget, event, NULL);
 	}
 	return FALSE;
 }
@@ -244,8 +254,8 @@ static void prepare_openfiles(void)
 	if (gtk_check_version(2, 12, 0) == NULL)
 		g_object_set(tv.tree_openfiles, "has-tooltip", TRUE, "tooltip-column", DOCUMENTS_FILENAME, NULL);
 
-	g_signal_connect(tv.tree_openfiles, "button-press-event",
-			G_CALLBACK(on_treeviews_button_press_event), GINT_TO_POINTER(TREEVIEW_OPENFILES));
+	g_signal_connect(tv.tree_openfiles, "button-release-event",
+		G_CALLBACK(on_documents_button_release_event), NULL);
 
 	/* selection handling */
 	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));
@@ -490,6 +500,7 @@ static void create_openfiles_popup_menu(void)
 	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), item);
 	g_signal_connect(item, "activate",
 			G_CALLBACK(on_openfiles_document_action), GINT_TO_POINTER(OPENFILES_ACTION_REMOVE));
+	doc_items.close = item;
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
@@ -500,6 +511,7 @@ static void create_openfiles_popup_menu(void)
 	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), item);
 	g_signal_connect(item, "activate",
 			G_CALLBACK(on_openfiles_document_action), GINT_TO_POINTER(OPENFILES_ACTION_SAVE));
+	doc_items.save = item;
 
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Reload"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
@@ -508,6 +520,7 @@ static void create_openfiles_popup_menu(void)
 	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), item);
 	g_signal_connect(item, "activate",
 			G_CALLBACK(on_openfiles_document_action), GINT_TO_POINTER(OPENFILES_ACTION_RELOAD));
+	doc_items.reload = item;
 
 	sidebar_add_common_menu_items(GTK_MENU(tv.popup_openfiles));
 }
@@ -556,35 +569,60 @@ void treeviews_select_openfiles_item(GeanyDocument *doc)
 
 /* callbacks */
 
+static void document_action(GeanyDocument *doc, gint action)
+{
+	if (!DOC_VALID(doc))
+		return;
+	
+	switch (action)
+	{
+		case OPENFILES_ACTION_REMOVE:
+		{
+			document_close(doc);
+			break;
+		}
+		case OPENFILES_ACTION_SAVE:
+		{
+			document_save_file(doc, FALSE);
+			break;
+		}
+		case OPENFILES_ACTION_RELOAD:
+		{
+			on_toolbutton_reload_clicked(NULL, NULL);
+			break;
+		}
+	}
+	
+}
+
+
 static void on_openfiles_document_action(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GtkTreeIter iter;
 	GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));
 	GtkTreeModel *model;
 	GeanyDocument *doc;
+	gint action = GPOINTER_TO_INT(user_data);
 
 	if (gtk_tree_selection_get_selected(selection, &model, &iter))
 	{
 		gtk_tree_model_get(model, &iter, DOCUMENTS_DOCUMENT, &doc, -1);
-		if (DOC_VALID(doc))
+		if (doc)
 		{
-			switch (GPOINTER_TO_INT(user_data))
+			document_action(doc, action);
+		}
+		else
+		{
+			/* parent item selected */
+			GtkTreeIter child;
+			gint i = gtk_tree_model_iter_n_children(model, &iter) - 1;
+			
+			while (i >= 0 && gtk_tree_model_iter_nth_child(model, &child, &iter, i))
 			{
-				case OPENFILES_ACTION_REMOVE:
-				{
-					document_close(doc);
-					break;
-				}
-				case OPENFILES_ACTION_SAVE:
-				{
-					document_save_file(doc, FALSE);
-					break;
-				}
-				case OPENFILES_ACTION_RELOAD:
-				{
-					on_toolbutton_reload_clicked(NULL, NULL);
-					break;
-				}
+				gtk_tree_model_get(model, &child, DOCUMENTS_DOCUMENT, &doc, -1);
+
+				document_action(doc, action);
+				i--;
 			}
 		}
 	}
@@ -671,16 +709,18 @@ static gboolean on_treeviews_key_press_event(GtkWidget *widget, GdkEventKey *eve
 }
 
 
-static gboolean on_treeviews_button_press_event(GtkWidget *widget, GdkEventButton *event,
-												gpointer user_data)
+static gboolean on_symbols_button_press_event(GtkWidget *widget, GdkEventButton *event,
+		G_GNUC_UNUSED gpointer user_data)
 {
-	if (event->type == GDK_2BUTTON_PRESS && GPOINTER_TO_INT(user_data) == TREEVIEW_SYMBOL)
+	GtkTreeSelection *selection;
+
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
+
+	if (event->type == GDK_2BUTTON_PRESS)
 	{	/* double click on parent node(section) expands/collapses it */
 		GtkTreeModel *model;
-		GtkTreeSelection *selection;
 		GtkTreeIter iter;
 
-		selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
 		if (gtk_tree_selection_get_selected(selection, &model, &iter))
 		{
 			if (gtk_tree_model_iter_has_child(model, &iter))
@@ -697,26 +737,59 @@ static gboolean on_treeviews_button_press_event(GtkWidget *widget, GdkEventButto
 			}
 		}
 	}
-	else if (event->button == 1 && GPOINTER_TO_INT(user_data) == TREEVIEW_SYMBOL)
+	else if (event->button == 1)
 	{	/* allow reclicking of taglist treeview item */
-		GtkTreeSelection *select = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
 		/* delay the query of selection state because this callback is executed before GTK
 		 * changes the selection (g_signal_connect_after would be better but it doesn't work) */
-		g_idle_add((GSourceFunc) on_taglist_tree_selection_changed, select);
+		g_idle_add((GSourceFunc) on_taglist_tree_selection_changed, selection);
 	}
 	else if (event->button == 3)
-	{	/* update & show popup menus */
-		if (GPOINTER_TO_INT(user_data) == TREEVIEW_OPENFILES)
-		{
-			gtk_menu_popup(GTK_MENU(tv.popup_openfiles), NULL, NULL, NULL, NULL,
-																event->button, event->time);
-		}
-		else if (GPOINTER_TO_INT(user_data) == TREEVIEW_SYMBOL)
-		{
-			gtk_menu_popup(GTK_MENU(tv.popup_taglist), NULL, NULL, NULL, NULL,
-																event->button, event->time);
-			return TRUE;	/* prevent selection changed signal for symbol tags */
-		}
+	{
+		gtk_menu_popup(GTK_MENU(tv.popup_taglist), NULL, NULL, NULL, NULL,
+															event->button, event->time);
+		return TRUE;	/* prevent selection changed signal for symbol tags */
+	}
+	return FALSE;
+}
+
+
+static void documents_menu_update(GtkTreeSelection *selection)
+{
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	gboolean sel, path;
+	gchar *shortname = NULL;
+	GeanyDocument *doc = NULL;
+
+	/* maybe no selection e.g. if ctrl-click deselected */
+	sel = gtk_tree_selection_get_selected(selection, &model, &iter);
+	if (sel)
+	{
+		gtk_tree_model_get(model, &iter, DOCUMENTS_DOCUMENT, &doc,
+			DOCUMENTS_SHORTNAME, &shortname, -1);
+	}
+	path = NZV(shortname) && g_path_is_absolute(shortname);
+	
+	/* can close all, save all (except shortname), but only reload individually ATM */
+	gtk_widget_set_sensitive(doc_items.close, sel);
+	gtk_widget_set_sensitive(doc_items.save, (doc && doc->real_path) || path);
+	gtk_widget_set_sensitive(doc_items.reload, doc && doc->real_path);
+	g_free(shortname);
+}
+
+
+static gboolean on_documents_button_release_event(GtkWidget *widget, GdkEventButton *event,
+												gpointer user_data)
+{
+	GtkTreeSelection *selection;
+
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
+	
+	if (event->button == 3)
+	{
+		documents_menu_update(selection);
+		gtk_menu_popup(GTK_MENU(tv.popup_openfiles), NULL, NULL, NULL, NULL,
+			event->button, event->time);
 	}
 	return FALSE;
 }
