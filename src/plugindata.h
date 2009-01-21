@@ -45,7 +45,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 127,
+	GEANY_API_VERSION = 128,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -393,6 +393,9 @@ typedef struct DialogFuncs
 	gboolean	(*show_question) (const gchar *text, ...);
 	void		(*show_msgbox) (gint type, const gchar *text, ...);
 	gboolean	(*show_save_as) (void);
+	gboolean	(*dialogs_show_input_numeric) (const gchar *title, const gchar *label_text,
+				 gdouble *value, gdouble min, gdouble max, gdouble step);
+
 }
 DialogFuncs;
 

@@ -9,6 +9,9 @@
  * src/document.c, src/keyfile.c, src/search.c, src/tools.c,
    src/utils.c, src/vte.c, tagmanager/tm_source_file.c:
    Replace remaining occurrences of '__func__' with 'G_STRFUNC'.
+ * plugins/geanyfunctions.h, src/dialogs.c, src/plugindata.h,
+   src/plugins.c:
+   Add dialogs_show_input_numeric() to the plugins API.
 
 
 2009-01-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

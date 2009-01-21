@@ -231,7 +231,8 @@ static UIUtilsFuncs uiutils_funcs = {
 static DialogFuncs dialog_funcs = {
 	&dialogs_show_question,
 	&dialogs_show_msgbox,
-	&dialogs_show_save_as
+	&dialogs_show_save_as,
+	&dialogs_show_input_numeric
 };
 
 /* Macro to prevent confusing macro being generated in geanyfunctions.h */

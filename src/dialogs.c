@@ -924,11 +924,29 @@ dialogs_show_input(const gchar *title, const gchar *label_text, const gchar *def
 }
 
 
+/**
+ *  Show an input box to enter a numerical value using a GtkSpinButton.
+ *
+ *  @param title The dialog title.
+ *  @param label_text The shown dialog label.
+ *  @param value The default value for the spin button and the return location of the entered value.
+ * 				 Must be non-NULL.
+ *  @param min Minimum allowable value (see documentation for @a gtk_spin_button_new_with_range()).
+ *  @param max Maximum allowable value (see documentation for @a gtk_spin_button_new_with_range()).
+ *  @param step Increment added or subtracted by spinning the widget
+ * 				(see documentation for @a gtk_spin_button_new_with_range()).
+ *
+ *  @return @a TRUE if a value was entered and the dialog closed with 'OK'. @a FALSE otherwise.
+ **/
 gboolean dialogs_show_input_numeric(const gchar *title, const gchar *label_text,
 									gdouble *value, gdouble min, gdouble max, gdouble step)
 {
 	GtkWidget *dialog, *label, *spin, *vbox;
 	gboolean res = FALSE;
+
+	g_return_val_if_fail(title != NULL, FALSE);
+	g_return_val_if_fail(label_text != NULL, FALSE);
+	g_return_val_if_fail(value != NULL, FALSE);
 
 	dialog = gtk_dialog_new_with_buttons(title, GTK_WINDOW(main_widgets.window),
 										GTK_DIALOG_DESTROY_WITH_PARENT,

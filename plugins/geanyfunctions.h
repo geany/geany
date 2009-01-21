@@ -190,6 +190,8 @@
 	geany_functions->p_dialogs->show_msgbox
 #define dialogs_show_save_as \
 	geany_functions->p_dialogs->show_save_as
+#define dialogs_show_input_numeric \
+	geany_functions->p_dialogs->show_input_numeric
 #define msgwin_status_add \
 	geany_functions->p_msgwin->status_add
 #define msgwin_compiler_add \
