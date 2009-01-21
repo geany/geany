@@ -1347,25 +1347,23 @@ gboolean document_reload_file(GeanyDocument *doc, const gchar *forced_enc)
 }
 
 
-static gboolean document_update_timestamp(GeanyDocument *doc)
+static gboolean document_update_timestamp(GeanyDocument *doc, const gchar *locale_filename)
 {
 #ifndef HAVE_GIO
 	struct stat st;
-	gchar *locale_filename;
 
 	g_return_val_if_fail(doc != NULL, FALSE);
 
-	locale_filename = utils_get_locale_from_utf8(doc->file_name);
+	/* stat the file to get the timestamp, otherwise on Windows the actual
+	 * timestamp can be ahead of time(NULL) */
 	if (g_stat(locale_filename, &st) != 0)
 	{
 		ui_set_statusbar(TRUE, _("Could not open file %s (%s)"), doc->file_name,
 			g_strerror(errno));
-		g_free(locale_filename);
 		return FALSE;
 	}
 
 	doc->priv->mtime = st.st_mtime; /* get the modification time from file and keep it */
-	g_free(locale_filename);
 #endif
 	return TRUE;
 }
@@ -1565,22 +1563,18 @@ _("An error occurred while converting the file from UTF-8 in \"%s\". The file re
 }
 
 
-static gint write_data_to_disk(GeanyDocument *doc, const gchar *data, gint len)
+static gint write_data_to_disk(GeanyDocument *doc, const gchar *locale_filename,
+							   const gchar *data, gint len)
 {
 	FILE *fp;
 	gint bytes_written;
-	gchar *locale_filename = NULL;
 	gint err = 0;
 
 	g_return_val_if_fail(data != NULL, EINVAL);
 
-	locale_filename = utils_get_locale_from_utf8(doc->file_name);
 	fp = g_fopen(locale_filename, "wb");
 	if (fp == NULL)
-	{
-		g_free(locale_filename);
 		return errno;
-	}
 
 	bytes_written = fwrite(data, sizeof(gchar), len, fp);
 
@@ -1595,7 +1589,6 @@ static gint write_data_to_disk(GeanyDocument *doc, const gchar *data, gint len)
 		doc->real_path = tm_get_real_path(locale_filename);
 		doc->priv->is_remote = utils_is_remote_path(locale_filename);
 	}
-	g_free(locale_filename);
 
 	return err;
 }
@@ -1619,6 +1612,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	gchar *data;
 	gsize len;
 	gint err;
+	gchar *locale_filename;
 
 	if (doc == NULL)
 		return FALSE;
@@ -1677,8 +1671,10 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 		len = strlen(data);
 	}
 
+	locale_filename = utils_get_locale_from_utf8(doc->file_name);
+
 	/* actually write the content of data to the file on disk */
-	err = write_data_to_disk(doc, data, len);
+	err = write_data_to_disk(doc, locale_filename, data, len);
 	g_free(data);
 
 	/* ignore file changed notification after writing the file */
@@ -1690,6 +1686,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 		dialogs_show_msgbox_with_secondary(GTK_MESSAGE_ERROR,
 			_("Error saving file."), g_strerror(err));
 		utils_beep();
+		g_free(locale_filename);
 		return FALSE;
 	}
 
@@ -1701,10 +1698,8 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	{
 		sci_set_savepoint(doc->editor->sci);
 
-		/* stat the file to get the timestamp, otherwise on Windows the actual
-		 * timestamp can be ahead of time(NULL) */
 		if (file_prefs.disk_check_timeout > 0)
-			document_update_timestamp(doc);
+			document_update_timestamp(doc, locale_filename);
 
 		/* update filetype-related things */
 		document_set_filetype(doc, doc->file_type);
@@ -1719,6 +1714,8 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 		vte_cwd(doc->file_name, FALSE);
 #endif
 	}
+	g_free(locale_filename);
+
 	g_signal_emit_by_name(geany_object, "document-save", doc);
 
 	return TRUE;
