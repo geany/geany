@@ -387,7 +387,31 @@ static void queue_colourise(GeanyDocument *doc)
 
 
 #ifdef HAVE_GIO
-static void file_monitor_changed_cb(G_GNUC_UNUSED GFileMonitor *monitor, G_GNUC_UNUSED GFile *file,
+/* Set the file status to 'changed' after a single 'created' event. */
+static gboolean monitor_finish_pending_create(gpointer doc)
+{
+	g_return_val_if_fail(doc != NULL, FALSE);
+
+	((GeanyDocument *)doc)->priv->file_disk_status = FILE_CHANGED;
+	ui_update_tab_status(doc);
+
+	return FALSE;
+}
+
+
+/* Resets the 'ignore' file status after a reload action. */
+static gboolean monitor_reset_ignore(gpointer doc)
+{
+	g_return_val_if_fail(doc != NULL, FALSE);
+
+	((GeanyDocument *)doc)->priv->file_disk_status = FILE_OK;
+	ui_update_tab_status(doc);
+
+	return FALSE;
+}
+
+
+static void monitor_file_changed_cb(G_GNUC_UNUSED GFileMonitor *monitor, G_GNUC_UNUSED GFile *file,
 	G_GNUC_UNUSED GFile *other_file, GFileMonitorEvent event, GeanyDocument *doc)
 {
 	if (file_prefs.disk_check_timeout == 0)
@@ -395,11 +419,19 @@ static void file_monitor_changed_cb(G_GNUC_UNUSED GFileMonitor *monitor, G_GNUC_
 
 	switch (event)
 	{
-		case G_FILE_MONITOR_EVENT_CHANGED:
+		case G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
 		{
+			if (doc->priv->file_disk_status == FILE_CREATED_PENDING)
+			{
+				g_source_remove(doc->priv->last_check);
+				doc->priv->file_disk_status = FILE_IGNORE;
+			}
 			if (doc->priv->file_disk_status == FILE_IGNORE)
 			{	/* ignore this change completely, used after saving a file */
+				FileDiskStatus old_status = doc->priv->file_disk_status;
 				doc->priv->file_disk_status = FILE_OK;
+				if (old_status != FILE_OK)
+					ui_update_tab_status(doc);
 				return;
 			}
 			doc->priv->file_disk_status = FILE_CHANGED;
@@ -407,19 +439,42 @@ static void file_monitor_changed_cb(G_GNUC_UNUSED GFileMonitor *monitor, G_GNUC_
 		}
 		case G_FILE_MONITOR_EVENT_DELETED:
 		{
-			doc->priv->file_disk_status = FILE_MISSING;
+			if (doc->priv->file_disk_status != FILE_IGNORE)
+				doc->priv->file_disk_status = FILE_MISSING;
+			break;
+		}
+		case G_FILE_MONITOR_EVENT_CREATED:
+		{
+			if (doc->priv->file_disk_status == FILE_MISSING)
+			{	/* When the last state was 'missing', we are most probably in a
+				 * delete-create-change set, so set the new state to 'ok' and do the real handling
+				 * in the upcoming G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT event. */
+				doc->priv->file_disk_status = FILE_OK;
+			}
+			else
+			{	/* In case we have a single 'created' event and not within a set of other events,
+				 * we defer the processing into a timeout function which is removed when a
+				 * G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT event arrives before. */
+				doc->priv->file_disk_status = FILE_CREATED_PENDING;
+				/* re-use otherwise unused 'last_check' field to store the timeout ID, we need it
+				 * to remove the timeout and we need to store it per-document */
+				doc->priv->last_check = g_timeout_add(2000, monitor_finish_pending_create, doc);
+			}
+			if (doc->real_path == NULL)
+			{
+				gchar *locale_filename = g_file_get_path(file);
+				doc->real_path = tm_get_real_path(locale_filename);
+				g_free(locale_filename);
+			}
 			break;
 		}
 		/* ignore */
-		case G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
+		case G_FILE_MONITOR_EVENT_CHANGED:
 		case G_FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED:
 		case G_FILE_MONITOR_EVENT_PRE_UNMOUNT:
 		case G_FILE_MONITOR_EVENT_UNMOUNTED:
-		/* we ignore 'created' for now since it causes trouble when renaming files */
-		case G_FILE_MONITOR_EVENT_CREATED:
 			return;
 	}
-
 	if (doc->priv->file_disk_status != FILE_OK)
 	{
 		ui_update_tab_status(doc);
@@ -440,7 +495,7 @@ void document_stop_file_monitoring(GeanyDocument *doc)
 }
 
 
-static void file_monitor_setup(GeanyDocument *doc)
+static void monitor_file_setup(GeanyDocument *doc)
 {
 	g_return_if_fail(doc != NULL);
 	/* Disable file monitoring completely for remote files (i.e. remote GIO files) as GFileMonitor
@@ -460,7 +515,8 @@ static void file_monitor_setup(GeanyDocument *doc)
 			/* get a file monitor and connect to the 'changed' signal */
 			file = g_file_new_for_path(locale_filename);
 			doc->priv->monitor = g_file_monitor_file(file, G_FILE_MONITOR_NONE, NULL, NULL);
-			g_signal_connect(doc->priv->monitor, "changed", G_CALLBACK(file_monitor_changed_cb), doc);
+			g_signal_connect(doc->priv->monitor, "changed",
+				G_CALLBACK(monitor_file_changed_cb), doc);
 
 			/* we set the rate limit according to the GUI pref but it's most probably not used */
 			g_file_monitor_set_rate_limit(doc->priv->monitor, file_prefs.disk_check_timeout * 1000);
@@ -687,7 +743,7 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft,
 	sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
 	sci_goto_pos(doc->editor->sci, 0, TRUE);
 
-	file_monitor_setup(doc);
+	monitor_file_setup(doc);
 
 	/* "the" SCI signal (connect after initial setup(i.e. adding text)) */
 	g_signal_connect(doc->editor->sci, "sci-notify", G_CALLBACK(editor_sci_notify_cb), doc->editor);
@@ -1177,8 +1233,12 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		doc = document_create(utf8_filename);
 		g_return_val_if_fail(doc != NULL, NULL);	/* really should not happen */
 
+		/* file exists on disk, set real_path */
+		g_free(doc->real_path);
+		doc->real_path = tm_get_real_path(locale_filename);
+
 		doc->priv->is_remote = utils_is_remote_path(locale_filename);
-		file_monitor_setup(doc);
+		monitor_file_setup(doc);
 	}
 
 	sci_set_undo_collection(doc->editor->sci, FALSE); /* avoid creation of an undo action */
@@ -1214,9 +1274,6 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 
 	if (! reload)
 	{
-		/* file exists on disk, set real_path */
-		g_free(doc->real_path);
-		doc->real_path = tm_get_real_path(locale_filename);
 
 		/* "the" SCI signal (connect after initial setup(i.e. adding text)) */
 		g_signal_connect(doc->editor->sci, "sci-notify", G_CALLBACK(editor_sci_notify_cb),
@@ -1321,7 +1378,6 @@ void document_open_files(const GSList *filenames, gboolean readonly, GeanyFilety
 	}
 }
 
-
 /**
  *  Reloads the @a document with the specified file encoding
  *  @a forced_enc or @c NULL to auto-detect the file encoding.
@@ -1343,6 +1399,15 @@ gboolean document_reload_file(GeanyDocument *doc, const gchar *forced_enc)
 	pos = sci_get_current_position(doc->editor->sci);
 	new_doc = document_open_file_full(doc, NULL, pos, doc->readonly,
 					doc->file_type, forced_enc);
+#ifdef HAVE_GIO
+	if (new_doc != NULL)
+	{
+		doc->priv->file_disk_status = FILE_IGNORE;
+		/* In case the reload operation didn't produce any events to ignore,
+		 * remove the ignore status. */
+		g_timeout_add(5000, monitor_reset_ignore, doc);
+	}
+#endif
 	return (new_doc != NULL);
 }
 
@@ -1490,7 +1555,7 @@ gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 
 	/* file monitoring support, add file monitoring after the file has been saved
 	 * to ignore any earlier events */
-	file_monitor_setup(doc);
+	monitor_file_setup(doc);
 	doc->priv->file_disk_status = FILE_IGNORE;
 
 	if (ret)
@@ -2724,7 +2789,7 @@ gboolean document_close_all(void)
 }
 
 
-static gboolean check_reload(GeanyDocument *doc)
+static gboolean monitor_reload_file(GeanyDocument *doc)
 {
 	gchar *base_name = g_path_get_basename(doc->file_name);
 	gboolean want_reload;
@@ -2742,7 +2807,7 @@ static gboolean check_reload(GeanyDocument *doc)
 }
 
 
-static gboolean check_resave_missing_file(GeanyDocument *doc)
+static gboolean monitor_resave_missing_file(GeanyDocument *doc)
 {
 	gboolean want_reload = FALSE;
 
@@ -2762,7 +2827,7 @@ static gboolean check_resave_missing_file(GeanyDocument *doc)
 }
 
 
-static time_t check_disk_status_real(GeanyDocument *doc, gboolean force)
+static time_t monitor_check_status_real(GeanyDocument *doc, gboolean force)
 {
 	time_t t = 0;
 #ifndef HAVE_GIO
@@ -2813,21 +2878,27 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 	if (doc->real_path == NULL || doc->priv->is_remote)
 		return FALSE;
 
+	/* when we saved a file recently, we want to ignore any changes */
+	if (doc->priv->file_disk_status == FILE_IGNORE)
+	{
+		return FALSE;
+	}
+
 	/* check the file's mtime in case we don't have GIO support, otherwise this is a no-op */
-	t = check_disk_status_real(doc, force);
+	t = monitor_check_status_real(doc, force);
 
 	switch (doc->priv->file_disk_status)
 	{
 		case FILE_CHANGED:
 		{
-			check_reload(doc);
+			monitor_reload_file(doc);
 			doc->priv->mtime = t;
 			ret = TRUE;
 			break;
 		}
 		case FILE_MISSING:
 		{
-			check_resave_missing_file(doc);
+			monitor_resave_missing_file(doc);
 			ret = TRUE;
 			break;
 		}

@@ -42,6 +42,7 @@ typedef enum
 	FILE_OK,
 	FILE_CHANGED,
 	FILE_MISSING,
+	FILE_CREATED_PENDING,
 	FILE_IGNORE
 }
 FileDiskStatus;
