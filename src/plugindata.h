@@ -393,7 +393,7 @@ typedef struct DialogFuncs
 	gboolean	(*show_question) (const gchar *text, ...);
 	void		(*show_msgbox) (gint type, const gchar *text, ...);
 	gboolean	(*show_save_as) (void);
-	gboolean	(*dialogs_show_input_numeric) (const gchar *title, const gchar *label_text,
+	gboolean	(*show_input_numeric) (const gchar *title, const gchar *label_text,
 				 gdouble *value, gdouble min, gdouble max, gdouble step);
 
 }
