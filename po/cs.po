@@ -3644,7 +3644,7 @@ msgstr "Název:"
 
 #: ../src/project.c:139 ../src/project.c:381
 msgid "Filename:"
-msgstr "Souboru projektu:"
+msgstr "Soubor projektu:"
 
 #: ../src/project.c:154 ../src/project.c:410
 msgid "Base path:"
