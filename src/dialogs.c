@@ -926,6 +926,7 @@ dialogs_show_input(const gchar *title, const gchar *label_text, const gchar *def
 
 /**
  *  Show an input box to enter a numerical value using a GtkSpinButton.
+ *  If the dialog is aborted, @c value remains untouched.
  *
  *  @param title The dialog title.
  *  @param label_text The shown dialog label.
