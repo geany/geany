@@ -6,6 +6,9 @@
    Don't check disk status for files which are marked to be ignored.
    Reset file disk status when manually reloading a file.
    Various improvements to the GIO-based file disk checking code.
+ * src/document.c, src/keyfile.c, src/search.c, src/tools.c,
+   src/utils.c, src/vte.c, tagmanager/tm_source_file.c:
+   Replace remaining occurrences of '__func__' with 'G_STRFUNC'.
 
 
 2009-01-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

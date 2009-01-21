@@ -890,7 +890,7 @@ GIOChannel *utils_set_up_io_channel(
 		g_io_channel_set_encoding(ioc, encoding, &error);
 		if (error)
 		{
-			geany_debug("%s: %s", __func__, error->message);
+			geany_debug("%s: %s", G_STRFUNC, error->message);
 			g_error_free(error);
 			return ioc;
 		}

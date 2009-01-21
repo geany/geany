@@ -1328,7 +1328,7 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 		NULL, NULL, &child_pid,
 		NULL, &stdout_fd, &stderr_fd, &error))
 	{
-		geany_debug("%s: g_spawn_async_with_pipes() failed: %s", __func__, error->message);
+		geany_debug("%s: g_spawn_async_with_pipes() failed: %s", G_STRFUNC, error->message);
 		ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
 		g_error_free(error);
 		ret = FALSE;

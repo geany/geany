@@ -618,7 +618,7 @@ const gchar* vte_get_working_directory(void)
 					g_free(vte_info.dir);
 					vte_info.dir = g_get_current_dir();
 					if (chdir(cwd) != 0)
-						geany_debug("%s: %s", __func__, g_strerror(errno));
+						geany_debug("%s: %s", G_STRFUNC, g_strerror(errno));
 				}
 				g_free(cwd);
 			}

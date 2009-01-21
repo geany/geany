@@ -147,7 +147,7 @@ gboolean tm_source_file_parse(TMSourceFile *source_file)
 		}
 		else
 		{
-			g_warning("%s: Unable to open %s", __func__, file_name);
+			g_warning("%s: Unable to open %s", G_STRFUNC, file_name);
 			return FALSE;
 		}
 		++ passCount;

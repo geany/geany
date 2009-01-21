@@ -112,7 +112,7 @@ static gboolean cc_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 			}
 			if (err != NULL)
 			{
-				geany_debug("%s: %s", __func__, err->message);
+				geany_debug("%s: %s", G_STRFUNC, err->message);
 				g_error_free(err);
 				err = NULL;
 			}
@@ -120,7 +120,7 @@ static gboolean cc_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 
 		if (rv != G_IO_STATUS_EOF)
 		{	/* Something went wrong? */
-			g_warning("%s: %s\n", __func__, "Incomplete command output");
+			g_warning("%s: %s\n", G_STRFUNC, "Incomplete command output");
 		}
 	}
 	return FALSE;
@@ -274,7 +274,7 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 			wrote = write(stdin_fd, sel, remaining);
 			if (wrote < 0)
 			{
-				g_warning("%s: %s: %s\n", __func__, "Failed sending data to command",
+				g_warning("%s: %s: %s\n", G_STRFUNC, "Failed sending data to command",
 										g_strerror(errno));
 				break;
 			}

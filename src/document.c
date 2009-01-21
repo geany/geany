@@ -616,7 +616,7 @@ gboolean document_remove_page(guint page_num)
 
 	if (doc == NULL)
 	{
-		g_warning("%s: page_num: %d", __func__, page_num);
+		g_warning("%s: page_num: %d", G_STRFUNC, page_num);
 		return FALSE;
 	}
 
@@ -2464,7 +2464,7 @@ void document_undo_clear(GeanyDocument *doc)
 	if (! main_status.quitting && doc->editor != NULL)
 		document_set_text_changed(doc, FALSE);
 
-	/*geany_debug("%s: new undo stack height: %d, new redo stack height: %d", __func__,
+	/*geany_debug("%s: new undo stack height: %d, new redo stack height: %d", G_STRFUNC,
 				 *g_trash_stack_height(&doc->undo_actions), g_trash_stack_height(&doc->redo_actions)); */
 }
 
@@ -2485,7 +2485,7 @@ void document_undo_add(GeanyDocument *doc, guint type, gpointer data)
 	document_set_text_changed(doc, TRUE);
 	ui_update_popup_reundo_items(doc);
 
-	/*geany_debug("%s: new stack height: %d, added type: %d", __func__,
+	/*geany_debug("%s: new stack height: %d, added type: %d", G_STRFUNC,
 				 *g_trash_stack_height(&doc->undo_actions), action->type); */
 }
 
@@ -2524,7 +2524,7 @@ void document_undo(GeanyDocument *doc)
 	if (action == NULL)
 	{
 		/* fallback, should not be necessary */
-		geany_debug("%s: fallback used", __func__);
+		geany_debug("%s: fallback used", G_STRFUNC);
 		sci_undo(doc->editor->sci);
 	}
 	else
@@ -2568,7 +2568,7 @@ void document_undo(GeanyDocument *doc)
 
 	update_changed_state(doc);
 	ui_update_popup_reundo_items(doc);
-	/*geany_debug("%s: new stack height: %d", __func__, g_trash_stack_height(&doc->undo_actions));*/
+	/*geany_debug("%s: new stack height: %d", G_STRFUNC, g_trash_stack_height(&doc->undo_actions));*/
 }
 
 
@@ -2596,7 +2596,7 @@ void document_redo(GeanyDocument *doc)
 	if (action == NULL)
 	{
 		/* fallback, should not be necessary */
-		geany_debug("%s: fallback used", __func__);
+		geany_debug("%s: fallback used", G_STRFUNC);
 		sci_redo(doc->editor->sci);
 	}
 	else
@@ -2639,7 +2639,7 @@ void document_redo(GeanyDocument *doc)
 
 	update_changed_state(doc);
 	ui_update_popup_reundo_items(doc);
-	/*geany_debug("%s: new stack height: %d", __func__, g_trash_stack_height(&doc->redo_actions));*/
+	/*geany_debug("%s: new stack height: %d", G_STRFUNC, g_trash_stack_height(&doc->redo_actions));*/
 }
 
 
@@ -2849,7 +2849,7 @@ static time_t monitor_check_status_real(GeanyDocument *doc, gboolean force)
 	}
 	else if (doc->priv->mtime > t || st.st_mtime > t)
 	{
-		g_warning("%s: Something is wrong with the time stamps.", __func__);
+		g_warning("%s: Something is wrong with the time stamps.", G_STRFUNC);
 	}
 	else if (doc->priv->mtime < st.st_mtime)
 	{

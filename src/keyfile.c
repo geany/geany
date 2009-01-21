@@ -1070,7 +1070,7 @@ static void generate_filetype_extensions(const gchar *output_dir)
 		"See Geany's main documentation for details.", NULL);
 
 	/* write the file */
-	g_print("%s: ", __func__);
+	g_print("%s: ", G_STRFUNC);
 	data = g_key_file_to_data(config, NULL, NULL);
 	basename = g_path_get_basename(configfile);
 
