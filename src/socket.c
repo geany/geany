@@ -39,8 +39,10 @@
  * .\n
  * The first thing should be the command name followed by the data belonging to the command and
  * to mark the end of data send a single '.'. Each message should be ended with \n.
+ * The command window is only available on Windows and takes no additional data, instead it
+ * writes back a Windows handle (HWND) for the main window to set it to the foreground (focus).
  *
- * At the moment the commands open, line and column are available.
+ * At the moment the commands window, open, line and column are available.
  *
  * About the socket files on Unix-like systems:
  * Geany creates a socket in /tmp (or any other directory returned by g_get_tmp_dir()) and
@@ -65,6 +67,8 @@
 # include <netinet/in.h>
 # include <glib/gstdio.h>
 #else
+# include <gdk/gdkwin32.h>
+# include <windows.h>
 # include <winsock2.h>
 # include <ws2tcpip.h>
 #endif
@@ -84,10 +88,8 @@
 
 #ifdef G_OS_WIN32
 #define REMOTE_CMD_PORT		49876
-#define SockDesc			SOCKET
 #define SOCKET_IS_VALID(s)	((s) != INVALID_SOCKET)
 #else
-#define SockDesc			gint
 #define SOCKET_IS_VALID(s)	((s) >= 0)
 #define INVALID_SOCKET		(-1)
 #endif
@@ -192,9 +194,9 @@ static void remove_socket_link_full(void)
 gint socket_init(gint argc, gchar **argv)
 {
 	gint sock;
-
 #ifdef G_OS_WIN32
 	HANDLE hmutex;
+	HWND hwnd;
 	socket_init_win32();
 	hmutex = CreateMutexA(NULL, FALSE, "Geany");
 	if (! hmutex)
@@ -249,6 +251,14 @@ gint socket_init(gint argc, gchar **argv)
 #endif
 
 	/* remote command mode, here we have another running instance and want to use it */
+
+#ifdef G_OS_WIN32
+	/* first we send a request to retrieve the window handle and focus the window */
+	socket_fd_write_all(sock, "window\n", 7);
+	if (socket_fd_read(sock, (gchar *)&hwnd, sizeof(hwnd)) == sizeof(hwnd))
+		SetForegroundWindow(hwnd);
+#endif
+	/* now we send the command line args */
 	if (argc > 1)
 	{
 		send_open_command(sock, argc, argv);
@@ -394,7 +404,7 @@ static gint socket_fd_close(gint fd)
 #ifdef G_OS_WIN32
 static gint socket_fd_open_inet(gushort port)
 {
-	SockDesc sock;
+	SOCKET sock;
 	struct sockaddr_in addr;
 	gchar val;
 
@@ -438,7 +448,7 @@ static gint socket_fd_open_inet(gushort port)
 
 static gint socket_fd_connect_inet(gushort port)
 {
-	SockDesc sock;
+	SOCKET sock;
 	struct sockaddr_in addr;
 
 	sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -498,9 +508,8 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 	gint fd, sock;
 	gchar buf[4096];
 	struct sockaddr_in caddr;
-	guint caddr_len;
-
-	caddr_len = sizeof(caddr);
+	guint caddr_len = sizeof(caddr);
+	GtkWidget *window = data;
 
 	fd = g_io_channel_unix_get_fd(source);
 	sock = accept(fd, (struct sockaddr *)&caddr, &caddr_len);
@@ -514,15 +523,6 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 			{
 				handle_input_filename(g_strstrip(buf));
 			}
-
-#ifdef G_OS_WIN32
-			/* we need to bring the main window up with gtk_window_present() but this is not
-			 * enough, instead we need to iconify it so that gtk_window_deiconify() will
-			 * bring it in the foreground */
-			gtk_window_present(GTK_WINDOW(main_widgets.window));
-			gtk_window_iconify(GTK_WINDOW(main_widgets.window));
-#endif
-			gtk_window_deiconify(GTK_WINDOW(main_widgets.window));
 		}
 		else if (strncmp(buf, "line", 4) == 0)
 		{
@@ -542,6 +542,18 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 				cl_options.goto_column = atoi(buf);
 			}
 		}
+#ifdef G_OS_WIN32
+		else if (strncmp(buf, "window", 6) == 0)
+		{
+			HWND hwnd = (HWND) gdk_win32_drawable_get_handle(GDK_DRAWABLE(window->window));
+			socket_fd_write(sock, (gchar *)&hwnd, sizeof(hwnd));
+
+			gtk_window_present(GTK_WINDOW(window));
+#ifdef G_OS_WIN32
+			gdk_window_show(window->window);
+#endif
+		}
+#endif
 	}
 	socket_fd_close(sock);
 
@@ -608,14 +620,12 @@ static gint socket_fd_check_io(gint fd, GIOCondition cond)
 
 #ifdef G_OS_UNIX
 	/* checking for non-blocking mode */
-
 	flags = fcntl(fd, F_GETFL, 0);
 	if (flags < 0)
 	{
 		perror("fcntl");
 		return 0;
 	}
-
 	if ((flags & O_NONBLOCK) != 0)
 		return 0;
 #endif
@@ -638,7 +648,7 @@ static gint socket_fd_check_io(gint fd, GIOCondition cond)
 	}
 	else
 	{
-		geany_debug("Socket IO timeout\n");
+		geany_debug("Socket IO timeout");
 		return -1;
 	}
 }
@@ -673,7 +683,6 @@ gint socket_fd_write(gint fd, const gchar *buf, gint len)
 	return write(fd, buf, len);
 #endif
 }
-
 
 #endif
 

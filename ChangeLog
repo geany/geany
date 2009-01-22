@@ -1,3 +1,16 @@
+2009-01-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/socket.c:
+   Minor cleanup in the socket code.
+   When files are opened remotely, always use gtk_window_present() to
+   bring the main window to front or whatever the window manager decides
+   to do (part of #2276179).
+   On Windows, we send a pointer to the main window to the remote
+   instance which then brings the window to the front (grab focus). This
+   should work better than the previous implementation and should avoid
+   the blinking tasklist item.
+
+
 2009-01-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/search.c:
