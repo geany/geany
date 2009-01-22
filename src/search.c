@@ -538,13 +538,6 @@ static void create_replace_dialog(void)
 	exp = gtk_expander_new_with_mnemonic(_("Re_place All"));
 	bbox = gtk_hbutton_box_new();
 
-	button = gtk_button_new_with_mnemonic(_("In Se_lection"));
-	ui_widget_set_tooltip_text(button,
-		_("Replace all matches found in the currently selected text"));
-	gtk_container_add(GTK_CONTAINER(bbox), button);
-	g_signal_connect(button, "clicked", G_CALLBACK(send_replace_dialog_response),
-		GINT_TO_POINTER(GEANY_RESPONSE_REPLACE_IN_SEL));
-
 	button = gtk_button_new_with_mnemonic(_("In Sessi_on"));
 	gtk_container_add(GTK_CONTAINER(bbox), button);
 	g_signal_connect(button, "clicked", G_CALLBACK(send_replace_dialog_response),
@@ -554,6 +547,13 @@ static void create_replace_dialog(void)
 	gtk_container_add(GTK_CONTAINER(bbox), button);
 	g_signal_connect(button, "clicked", G_CALLBACK(send_replace_dialog_response),
 		GINT_TO_POINTER(GEANY_RESPONSE_REPLACE_IN_FILE));
+
+	button = gtk_button_new_with_mnemonic(_("In Se_lection"));
+	ui_widget_set_tooltip_text(button,
+		_("Replace all matches found in the currently selected text"));
+	gtk_container_add(GTK_CONTAINER(bbox), button);
+	g_signal_connect(button, "clicked", G_CALLBACK(send_replace_dialog_response),
+		GINT_TO_POINTER(GEANY_RESPONSE_REPLACE_IN_SEL));
 
 	/* close window checkbox */
 	check_close = gtk_check_button_new_with_mnemonic(_("Close _dialog"));
