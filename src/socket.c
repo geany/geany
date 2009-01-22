@@ -547,14 +547,14 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 		{
 			HWND hwnd = (HWND) gdk_win32_drawable_get_handle(GDK_DRAWABLE(window->window));
 			socket_fd_write(sock, (gchar *)&hwnd, sizeof(hwnd));
-
-			gtk_window_present(GTK_WINDOW(window));
-#ifdef G_OS_WIN32
-			gdk_window_show(window->window);
-#endif
 		}
 #endif
 	}
+	gtk_window_present(GTK_WINDOW(window));
+#ifdef G_OS_WIN32
+	gdk_window_show(window->window);
+#endif
+
 	socket_fd_close(sock);
 
 	return TRUE;
