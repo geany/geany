@@ -9,6 +9,9 @@
    instance which then brings the window to the front (grab focus). This
    should work better than the previous implementation and should avoid
    the blinking tasklist item.
+ * HACKING, README, wscript, configure.in, doc/geany.html,
+   doc/geany.txt, geany.nsi, src/geany.h, src/notebook.c, src/utils.c:
+   Increase minimum required GTK version to 2.8.
 
 
 2009-01-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

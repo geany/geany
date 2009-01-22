@@ -101,12 +101,6 @@ enum
 };
 
 
-/* Useful for some variable argument list functions, e.g. in utils.h */
-#if ! GLIB_CHECK_VERSION(2, 8, 0)
-#define G_GNUC_NULL_TERMINATED
-#endif
-
-
 /* prototype is here so that all files can use it. */
 void geany_debug(gchar const *format, ...) G_GNUC_PRINTF (1, 2);
 

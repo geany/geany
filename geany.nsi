@@ -303,7 +303,7 @@ SectionEnd
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC04} "Manual in Text and HTML format."
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC05} "Symbol lists necessary for auto completion of symbols."
 !ifdef INCLUDE_GTK
-!insertmacro MUI_DESCRIPTION_TEXT ${SEC06} "You need this files to run Geany. If you have already installed a GTK Runtime Environment (2.6 or higher), you can skip it."
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC06} "You need this files to run Geany. If you have already installed a GTK Runtime Environment (2.8 or higher), you can skip it."
 !endif
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC07} "Add context menu item 'Open With Geany'"
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC08} "Create shortcuts for Geany on the desktop and in the Quicklaunch Bar"

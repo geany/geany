@@ -58,12 +58,6 @@ static void
 notebook_page_reordered_cb(GtkNotebook *notebook, GtkWidget *child, guint page_num,
 	gpointer user_data);
 
-#if ! GTK_CHECK_VERSION(2, 8, 0)
-static gboolean
-notebook_motion_notify_event_cb(GtkWidget *widget, GdkEventMotion *event,
-	gpointer user_data);
-#endif
-
 static void
 on_window_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context,
                              gint x, gint y, GtkSelectionData *data, guint info,
@@ -248,24 +242,6 @@ static void setup_tab_dnd()
 	/* Set up drag movement callback */
 	g_signal_connect(notebook, "drag-motion", G_CALLBACK(notebook_drag_motion_cb), NULL);
 
-	/* There is a bug on GTK 2.6 with drag reordering of notebook tabs.
-	 * Clicking (not dragging) on a notebook tab, then making a selection in the
-	 * Scintilla widget will cause a strange selection bug.
-	 * It seems there is a conflict; the drag cursor is shown,
-	 * and the selection is blocked; however, when releasing the
-	 * mouse button, the selection continues.
-	 * Bug is present with gtk+2.6.8, not gtk+2.8.x - ntrel */
-#if ! GTK_CHECK_VERSION(2, 8, 0)
-	/* handle higher gtk+ runtime than build environment */
-	if (gtk_check_version(2, 8, 0) != NULL) /* null means version ok */
-	{
-		/* workaround GTK+2.6 drag start bug when over sci widget: */
-		gtk_widget_add_events(notebook, GDK_POINTER_MOTION_MASK);
-		g_signal_connect(notebook, "motion-notify-event",
-			G_CALLBACK(notebook_motion_notify_event_cb), NULL);
-	}
-#endif
-
 	/* set up drag motion for moving notebook pages */
 	gtk_drag_dest_set(notebook, GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
 		drag_targets, G_N_ELEMENTS(drag_targets), GDK_ACTION_MOVE);
@@ -273,37 +249,6 @@ static void setup_tab_dnd()
 	gtk_drag_source_set(notebook, GDK_BUTTON1_MASK,
 		drag_targets, G_N_ELEMENTS(drag_targets), GDK_ACTION_MOVE);
 }
-
-
-#if ! GTK_CHECK_VERSION(2, 8, 0)
-/* This is used to disable tab DnD when the cursor is over the
- * Scintilla widget, and re-enable tab DnD when over the notebook tabs
- */
-static gboolean
-notebook_motion_notify_event_cb(GtkWidget *widget, GdkEventMotion *event,
-	gpointer user_data)
-{
-	static gboolean drag_enabled = TRUE; /* stores current state */
-	GtkWidget *page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook),
-			gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook)));
-
-	if (page == NULL || event->x < 0 || event->y < 0) return FALSE;
-
-	if (event->window == page->window) /* cursor over sci widget */
-	{
-		if (drag_enabled) gtk_drag_source_unset(widget); /* disable */
-		drag_enabled = FALSE;
-	}
-	else /* assume cursor over notebook tab */
-	{
-		if (! drag_enabled)
-			gtk_drag_source_set(widget, GDK_BUTTON1_MASK,
-				drag_targets, G_N_ELEMENTS(drag_targets), GDK_ACTION_MOVE);
-		drag_enabled = TRUE;
-	}
-	return FALSE; /* propagate event */
-}
-#endif
 
 
 static void

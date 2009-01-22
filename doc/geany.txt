@@ -100,7 +100,7 @@ Installation
 Requirements
 ------------
 
-You will need the GTK (>= 2.6.0) libraries and their dependencies
+You will need the GTK (>= 2.8.0) libraries and their dependencies
 (Pango, GLib and ATK). Your distro should provide packages for these,
 usually installed by default. For Windows, you can download an installer
 which bundles these libraries from the website.
@@ -116,7 +116,7 @@ incomplete list see http://www.geany.org/Download/ThirdPartyPackages.
 Source compilation
 ------------------
 
-For compiling Geany yourself, you will need the GTK (>= 2.6.0)
+For compiling Geany yourself, you will need the GTK (>= 2.8.0)
 libraries and header files. You will also need the Pango, GLib and
 ATK libraries and header files. All these files are available at
 http://www.gtk.org, but very often your distro will provide development

@@ -173,7 +173,7 @@ def configure(conf):
 	# checked with cc not cxx
 	conf.check_tool('compiler_cxx intltool misc')
 
-	conf.check_cfg(package='gtk+-2.0', atleast_version='2.6.0', uselib_store='GTK',
+	conf.check_cfg(package='gtk+-2.0', atleast_version='2.8.0', uselib_store='GTK',
 		mandatory=True, args='--cflags --libs')
 
 	# GTK version check

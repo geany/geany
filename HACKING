@@ -91,28 +91,28 @@ If you're in any doubt when making changes to plugin API code, just ask us.
 Glade
 -----
 Use the code generation features of Glade instead of editing interface.c
-or support.c. Glade 2.10 is recommended as long as we support GTK+ 2.6,
-because later versions of Glade are not 100% compatible with GTK+ 2.6
-(e.g. they may use functions added in GTK+ 2.8).
+or support.c. Glade 2.12 is recommended as long as we support GTK+ 2.8,
+because later versions of Glade are not 100% compatible with GTK+ 2.8
+(e.g. they may use functions added in GTK+ 2.10).
 
-You can build Glade 2.10 and run the binary in place, without installing
+You can build Glade 2.12 and run the binary in place, without installing
 it - this should work fine even if you have another version of Glade
 installed on the system.
 
 GTK API documentation
 ---------------------
-The official GTK 2.6 API documentation is not available online anymore,
+The official GTK 2.8 API documentation is not available online anymore,
 so we put them on http://www.geany.org/manual/gtk/.
 There is also a tarball with all available files for download and use
 with devhelp.
 
-Using the 2.6 API documentation of the GTK libs (including GLib, GDK and
+Using the 2.8 API documentation of the GTK libs (including GLib, GDK and
 Pango) has the advantages that you don't get confused by any newer API
 additions and you don't have to take care about whether you can use
 them or not.
-This is because Geany depends on GTK 2.6. API symbols from newer
+This is because Geany depends on GTK 2.8. API symbols from newer
 GTK/GLib versions should be avoided to keep the source code building
-against GTK 2.6.
+against GTK 2.8.
 
 Coding
 ------
@@ -120,8 +120,8 @@ Coding
   them down into smaller static functions where possible. This makes code
   much easier to read and maintain.
 * Use GLib types and functions - e.g. g_free instead of free.
-* Your code should build against GLib 2.6 and GTK 2.6. At least for the
-  moment, we want to keep the minimum requirement for GTK at 2.6 (of
+* Your code should build against GLib 2.8 and GTK 2.8. At least for the
+  moment, we want to keep the minimum requirement for GTK at 2.8 (of
   course, you can use the GTK_CHECK_VERSION macro to protect code using
   later versions).
 * We currently try to support the old GCC 2.9.x compiler,
