@@ -6,6 +6,11 @@
    Reset the file status when saving a file failed.
    Disable GIO based file monitoring for now since it doesn't work yet
    as stable as it should. Define USE_GIO_FILEMON to use.
+ * src/utils.c:
+   Use g_file_set_contents() to write files to disk in
+   utils_write_file() for better error checking and to avoid corruption
+   of config files when there is no more free disk space.
+   This is not used for saving documents (part of Debian bug #503391).
 
 
 2009-01-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
