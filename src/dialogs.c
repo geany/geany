@@ -438,18 +438,7 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 				return;
 			}
 			utf8_filename = utils_get_utf8_from_locale(new_filename);
-			/* check if file exists and ask whether to overwrite or not */
-			if (g_file_test(new_filename, G_FILE_TEST_EXISTS))
-			{
-				if (dialogs_show_question(
-					_("The file '%s' already exists. Do you want to overwrite it?"),
-					utf8_filename) == FALSE)
-				{
-					g_free(utf8_filename);
-					g_free(new_filename);
-					return;
-				}
-			}
+
 			handle_save_as(utf8_filename, open_new_tab, rename_file);
 
 			g_free(utf8_filename);
@@ -491,6 +480,7 @@ static void create_save_file_dialog(void)
 	gtk_box_pack_start(GTK_BOX(vbox), check_open_new_tab, FALSE, FALSE, 0);
 	gtk_widget_show_all(vbox);
 	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(ui_widgets.save_filesel), vbox);
+	gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(ui_widgets.save_filesel), TRUE);
 #if GTK_CHECK_VERSION(2, 14, 0)
 	gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(ui_widgets.save_filesel), FALSE);
 #endif

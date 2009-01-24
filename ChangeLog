@@ -11,6 +11,9 @@
    utils_write_file() for better error checking and to avoid corruption
    of config files when there is no more free disk space.
    This is not used for saving documents (part of Debian bug #503391).
+ * src/dialogs.c:
+   Use the stock overwrite confirmation dialog provided by GTK 2.8
+   in the Save As dialog.
 
 
 2009-01-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
