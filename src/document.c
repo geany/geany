@@ -47,7 +47,10 @@
 /* gstdio.h also includes sys/stat.h */
 #include <glib/gstdio.h>
 
-#ifdef HAVE_GIO
+/* uncomment to use GIO based file monitoring, though it is not completely stable yet */
+/* #define USE_GIO_FILEMON 1 */
+
+#if defined(HAVE_GIO) && defined(USE_GIO_FILEMON)
 # include <gio/gio.h>
 #endif
 
@@ -386,7 +389,7 @@ static void queue_colourise(GeanyDocument *doc)
 }
 
 
-#ifdef HAVE_GIO
+#if defined(HAVE_GIO) && defined(USE_GIO_FILEMON)
 /* Set the file status to 'changed' after a single 'created' event. */
 static gboolean monitor_finish_pending_create(gpointer doc)
 {
@@ -504,7 +507,7 @@ static void monitor_file_setup(GeanyDocument *doc)
 	 * doesn't work at all for remote files and legacy polling is too slow. */
 	if (! doc->priv->is_remote)
 	{
-#ifdef HAVE_GIO
+#if defined(HAVE_GIO) && defined(USE_GIO_FILEMON)
 		gchar *locale_filename;
 		GFile *file;
 
@@ -723,7 +726,7 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft,
 	sci_set_undo_collection(doc->editor->sci, TRUE);
 	sci_empty_undo_buffer(doc->editor->sci);
 
-#ifndef HAVE_GIO
+#if ! defined(HAVE_GIO) || ! defined(USE_GIO_FILEMON)
 	doc->priv->mtime = time(NULL);
 #endif
 
@@ -1403,7 +1406,7 @@ gboolean document_reload_file(GeanyDocument *doc, const gchar *forced_enc)
 	pos = sci_get_current_position(doc->editor->sci);
 	new_doc = document_open_file_full(doc, NULL, pos, doc->readonly,
 					doc->file_type, forced_enc);
-#ifdef HAVE_GIO
+#if defined(HAVE_GIO) && defined(USE_GIO_FILEMON)
 	if (new_doc != NULL)
 	{
 		doc->priv->file_disk_status = FILE_IGNORE;
@@ -1418,7 +1421,7 @@ gboolean document_reload_file(GeanyDocument *doc, const gchar *forced_enc)
 
 static gboolean document_update_timestamp(GeanyDocument *doc, const gchar *locale_filename)
 {
-#ifndef HAVE_GIO
+#if ! defined(HAVE_GIO) || ! defined(USE_GIO_FILEMON)
 	struct stat st;
 
 	g_return_val_if_fail(doc != NULL, FALSE);
@@ -2835,7 +2838,7 @@ static gboolean monitor_resave_missing_file(GeanyDocument *doc)
 static time_t monitor_check_status_real(GeanyDocument *doc, gboolean force)
 {
 	time_t t = 0;
-#ifndef HAVE_GIO
+#if ! defined(HAVE_GIO) || ! defined(USE_GIO_FILEMON)
 	struct stat st;
 	gchar *locale_filename;
 

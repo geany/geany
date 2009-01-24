@@ -4,6 +4,8 @@
    Use g_timeout_add_seconds() instead of g_timeout_add().
    Add missing NULL check in monitor_file_changed_cb().
    Reset the file status when saving a file failed.
+   Disable GIO based file monitoring for now since it doesn't work yet
+   as stable as it should. Define USE_GIO_FILEMON to use.
 
 
 2009-01-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
