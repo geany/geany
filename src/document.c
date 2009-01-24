@@ -414,6 +414,8 @@ static gboolean monitor_reset_ignore(gpointer doc)
 static void monitor_file_changed_cb(G_GNUC_UNUSED GFileMonitor *monitor, G_GNUC_UNUSED GFile *file,
 	G_GNUC_UNUSED GFile *other_file, GFileMonitorEvent event, GeanyDocument *doc)
 {
+	g_return_if_fail(doc != NULL);
+
 	if (file_prefs.disk_check_timeout == 0)
 		return;
 
@@ -458,7 +460,7 @@ static void monitor_file_changed_cb(G_GNUC_UNUSED GFileMonitor *monitor, G_GNUC_
 				doc->priv->file_disk_status = FILE_CREATED_PENDING;
 				/* re-use otherwise unused 'last_check' field to store the timeout ID, we need it
 				 * to remove the timeout and we need to store it per-document */
-				doc->priv->last_check = g_timeout_add(2000, monitor_finish_pending_create, doc);
+				doc->priv->last_check = g_timeout_add_seconds(1, monitor_finish_pending_create, doc);
 			}
 			if (doc->real_path == NULL)
 			{
@@ -721,7 +723,9 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft,
 	sci_set_undo_collection(doc->editor->sci, TRUE);
 	sci_empty_undo_buffer(doc->editor->sci);
 
+#ifndef HAVE_GIO
 	doc->priv->mtime = time(NULL);
+#endif
 
 	doc->encoding = g_strdup(encodings[file_prefs.default_new_encoding].charset);
 	/* store the opened encoding for undo/redo */
@@ -1405,7 +1409,7 @@ gboolean document_reload_file(GeanyDocument *doc, const gchar *forced_enc)
 		doc->priv->file_disk_status = FILE_IGNORE;
 		/* In case the reload operation didn't produce any events to ignore,
 		 * remove the ignore status. */
-		g_timeout_add(5000, monitor_reset_ignore, doc);
+		g_timeout_add_seconds(3, monitor_reset_ignore, doc);
 	}
 #endif
 	return (new_doc != NULL);
@@ -1738,18 +1742,19 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 
 	locale_filename = utils_get_locale_from_utf8(doc->file_name);
 
+	/* ignore file changed notification when the file is written */
+	doc->priv->file_disk_status = FILE_IGNORE;
+
 	/* actually write the content of data to the file on disk */
 	err = write_data_to_disk(doc, locale_filename, data, len);
 	g_free(data);
-
-	/* ignore file changed notification after writing the file */
-	doc->priv->file_disk_status = FILE_IGNORE;
 
 	if (err != 0)
 	{
 		ui_set_statusbar(TRUE, _("Error saving file (%s)."), g_strerror(err));
 		dialogs_show_msgbox_with_secondary(GTK_MESSAGE_ERROR,
 			_("Error saving file."), g_strerror(err));
+		doc->priv->file_disk_status = FILE_OK;
 		utils_beep();
 		g_free(locale_filename);
 		return FALSE;
