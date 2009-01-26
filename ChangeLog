@@ -1,3 +1,9 @@
+2009-01-26  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * po/cs.po, THANKS: Update of Czech translation. Thanks to Karel Kolman
+   for providing.
+
+
 2009-01-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/document.c:
