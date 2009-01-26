@@ -240,7 +240,8 @@ static void init_default_kb(void)
 		GDK_Up, GDK_MOD1_MASK, "edit_scrolllineup", _("Scroll up the view by one line"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_SCROLLLINEDOWN, cb_func_editor_action,
 		GDK_Down, GDK_MOD1_MASK, "edit_scrolllinedown", _("Scroll down the view by one line"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_EDITOR_COMPLETESNIPPET, NULL,	/* handled specially in check_snippet_completion() */
+	/* GEANY_KEYS_EDITOR_COMPLETESNIPPET is handled specially in check_snippet_completion() */
+	keybindings_set_item(group, GEANY_KEYS_EDITOR_COMPLETESNIPPET, NULL,
 		GDK_Tab, 0, "edit_completesnippet", _("Complete snippet"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_SNIPPETNEXTCURSOR, cb_func_editor_action,
 		0, 0, "move_snippetnextcursor", _("Move cursor in snippet"), NULL);
@@ -701,7 +702,9 @@ void keybindings_write_to_file(void)
  	/* add comment if the file is newly created */
 	if (! g_key_file_load_from_file(config, configfile, G_KEY_FILE_KEEP_COMMENTS, NULL))
 	{
-		g_key_file_set_comment(config, NULL, NULL, "Keybindings for Geany\nThe format looks like \"<Control>a\" or \"<Shift><Alt>F1\".\nBut you can also change the keys in Geany's preferences dialog.", NULL);
+		g_key_file_set_comment(config, NULL, NULL,
+			"Keybindings for Geany\nThe format looks like \"<Control>a\" or \"<Shift><Alt>F1\".\n"
+			"But you can also change the keys in Geany's preferences dialog.", NULL);
 	}
 
 	keybindings_foreach(set_keyfile_kb, config);
@@ -1221,14 +1224,16 @@ static void cb_func_view_action(guint key_id)
 
 static void cb_func_menu_fullscreen(G_GNUC_UNUSED guint key_id)
 {
-	GtkCheckMenuItem *c = GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_fullscreen1"));
+	GtkCheckMenuItem *c = GTK_CHECK_MENU_ITEM(
+		ui_lookup_widget(main_widgets.window, "menu_fullscreen1"));
 
 	gtk_check_menu_item_set_active(c, ! gtk_check_menu_item_get_active(c));
 }
 
 static void cb_func_menu_messagewindow(G_GNUC_UNUSED guint key_id)
 {
-	GtkCheckMenuItem *c = GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_messages_window1"));
+	GtkCheckMenuItem *c = GTK_CHECK_MENU_ITEM(
+		ui_lookup_widget(main_widgets.window, "menu_show_messages_window1"));
 
 	gtk_check_menu_item_set_active(c, ! gtk_check_menu_item_get_active(c));
 }
@@ -1923,7 +1928,8 @@ static void cb_func_insert_action(guint key_id)
 			editor_insert_alternative_whitespace(doc->editor);
 			break;
 		case GEANY_KEYS_INSERT_DATE:
-			gtk_menu_item_activate(GTK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "insert_date_custom1")));
+			gtk_menu_item_activate(GTK_MENU_ITEM(
+				ui_lookup_widget(main_widgets.window, "insert_date_custom1")));
 			break;
 	}
 }
