@@ -1178,6 +1178,34 @@ ui_image_menu_item_new(const gchar *stock_id, const gchar *label)
 }
 
 
+static void entry_clear_icon_press_cb(GtkEntry *entry, gint icon_pos, GdkEvent *event, gpointer data)
+{
+	if (event->button.button == 1 && icon_pos == 1)
+	{
+		gtk_entry_set_text(entry, "");
+	}
+}
+
+
+/** Convenience function to add a small clear icon to the right end of the passed @a entry.
+ *  A callback to clear the contents of the GtkEntry is automatically added.
+ *
+ *  This feature is only available with GTK 2.16 but implemented as a runtime check,
+ *  so it is safe to just use this function, if the code is ran with older versions,
+ *  nothing happens. If ran with GTK 2.16 or newer, the icon is displayed.
+ *
+ * @param entry The GtkEntry object to which the icon should be attached.
+ */
+void ui_entry_add_clear_icon(GtkWidget *entry)
+{
+	if (gtk_check_version(2, 15, 2) == NULL)
+	{
+		g_object_set(entry, "secondary-icon-stock", "gtk-clear", NULL);
+		g_signal_connect(entry, "icon-press", G_CALLBACK(entry_clear_icon_press_cb), NULL);
+	}
+}
+
+
 static void add_to_size_group(GtkWidget *widget, gpointer size_group)
 {
 	g_return_if_fail(GTK_IS_SIZE_GROUP(size_group));

@@ -26,6 +26,7 @@
 
 #include "geany.h"
 #include "support.h"
+#include "ui_utils.h"
 #include "geanyentryaction.h"
 #include <ctype.h>
 
@@ -88,7 +89,10 @@ static GtkWidget *geany_entry_action_create_tool_item(GtkAction *action)
 
 	priv->entry = gtk_entry_new();
 	if (priv->numeric)
-		gtk_entry_set_width_chars(GTK_ENTRY(priv->entry), 8);
+		gtk_entry_set_width_chars(GTK_ENTRY(priv->entry), 9);
+
+	ui_entry_add_clear_icon(priv->entry);
+
 	gtk_widget_show(priv->entry);
 
 	toolitem = g_object_new(GTK_TYPE_TOOL_ITEM, NULL);

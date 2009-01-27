@@ -2,6 +2,9 @@
 
  * src/document.c:
    Fix legacy file monitoring since I broke once more.
+ * src/geanyentryaction.c, src/ui_utils.c, src/ui_utils.h:
+   Add a clear icon to the toolbar search and goto text fields
+   (will be available with GTK >= 2.16).
 
 
 2009-01-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
