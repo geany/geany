@@ -1378,6 +1378,8 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 	{
 		gchar *str, *utf8_str;
 
+		ui_progress_bar_start(_("Searching..."));
+
 		g_free(msgwindow.find_in_files_dir);
 		msgwindow.find_in_files_dir = g_strdup(dir);
 		/* we can pass 'enc' without strdup'ing it here because it's a global const string and
@@ -1562,6 +1564,7 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 
 	utils_beep();
 	g_spawn_close_pid(child_pid);
+	ui_progress_bar_stop();
 }
 
 

@@ -75,6 +75,7 @@ widgets;
 static void update_recent_menu(void);
 static void recent_file_loaded(const gchar *utf8_filename);
 static void recent_file_activate_cb(GtkMenuItem *menuitem, gpointer user_data);
+static GtkWidget *progress_bar_create(void);
 
 
 /* simple wrapper for gtk_widget_set_sensitive() to allow widget being NULL */
@@ -1656,6 +1657,8 @@ void ui_init(void)
 	ui_widgets.statusbar = ui_lookup_widget(main_widgets.window, "statusbar");
 	ui_widgets.print_page_setup = ui_lookup_widget(main_widgets.window, "page_setup1");
 
+	main_widgets.progressbar = progress_bar_create();
+
 	widgets.popup_goto_items[0] = ui_lookup_widget(main_widgets.editor_menu, "goto_tag_definition1");
 	widgets.popup_goto_items[1] = ui_lookup_widget(main_widgets.editor_menu, "goto_tag_declaration1");
 	widgets.popup_goto_items[2] = ui_lookup_widget(main_widgets.editor_menu, "find_usage1");
@@ -1792,3 +1795,73 @@ GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name)
 		g_warning("Widget not found: %s", widget_name);
 	return found_widget;
 }
+
+
+
+/* Progress Bar */
+static guint progress_bar_timer_id = (guint) -1;
+
+
+static GtkWidget *progress_bar_create(void)
+{
+	GtkWidget *bar = gtk_progress_bar_new();
+
+    /* Set the progressbar's height to 1 to fit it in the statusbar */
+    gtk_widget_set_size_request(bar, -1, 1);
+    gtk_box_pack_start (GTK_BOX(ui_widgets.statusbar), bar, FALSE, FALSE, 3);
+
+	return bar;
+}
+
+
+static gboolean progress_bar_pulse(gpointer data)
+{
+	gtk_progress_bar_pulse(GTK_PROGRESS_BAR(main_widgets.progressbar));
+
+	return TRUE;
+}
+
+
+/**
+ * Starts a constantly pulsing progressbar in the right corner of the statusbar
+ * (if the statusbar is visible). This is a convenience function which adds a timer to
+ * pulse the progressbar constantly until ui_progress_bar_stop() is called.
+ * You can use this function when you have time consuming asynchronous operation and want to
+ * display some activity in the GUI and when you don't know about detailed progress steps.
+ * The progressbar widget is hidden by default when it is not active. This function and
+ * ui_progress_bar_stop() will show and hide it automatically for you.
+ *
+ * You can also access the progressbar widget directly using @c geany->main_widgets->progressbar
+ * and use the GtkProgressBar API to set discrete fractions to display better progress information.
+ * In this case, you need to show and hide the widget yourself. You can find some example code
+ * in @c src/printing.c.
+ *
+ * @param text The text to be shown as the progress bar label or NULL to leave it empty.
+ */
+void ui_progress_bar_start(const gchar *text)
+{
+	g_return_if_fail(progress_bar_timer_id == (guint) -1);
+
+	if (! interface_prefs.statusbar_visible)
+		return;
+
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(main_widgets.progressbar), text);
+
+	progress_bar_timer_id = g_timeout_add(200, progress_bar_pulse, NULL);
+
+	gtk_widget_show(GTK_WIDGET(main_widgets.progressbar));
+}
+
+
+/** Stops a running progress bar and hides the widget again. */
+void ui_progress_bar_stop(void)
+{
+	gtk_widget_hide(GTK_WIDGET(main_widgets.progressbar));
+
+	if (progress_bar_timer_id != (guint) -1)
+	{
+		g_source_remove(progress_bar_timer_id);
+		progress_bar_timer_id = (guint) -1;
+	}
+}
+

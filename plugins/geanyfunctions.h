@@ -184,6 +184,12 @@
 	geany_functions->p_ui->image_menu_item_new
 #define ui_lookup_widget \
 	geany_functions->p_ui->lookup_widget
+#define ui_progress_bar_start \
+	geany_functions->p_ui->progress_bar_start
+#define ui_progress_bar_stop \
+	geany_functions->p_ui->progress_bar_stop
+#define ui_entry_add_clear_icon \
+	geany_functions->p_ui->entry_add_clear_icon
 #define dialogs_show_question \
 	geany_functions->p_dialogs->show_question
 #define dialogs_show_msgbox \

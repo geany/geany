@@ -5,6 +5,14 @@
  * src/geanyentryaction.c, src/ui_utils.c, src/ui_utils.h:
    Add a clear icon to the toolbar search and goto text fields
    (will be available with GTK >= 2.16).
+ * plugins/geanyfunctions.h, src/build.c, src/plugindata.h,
+   src/plugins.c, src/printing.c, src/search.c, src/ui_utils.c,
+   src/ui_utils.h:
+   Add a progressbar widget to the statusbar and use it to show progress
+   when building with the Make commands, when printing and when using
+   Find in Files.
+   Add progressbar convenience functions and ui_entry_add_clear_icon()
+   to the plugin API.
 
 
 2009-01-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

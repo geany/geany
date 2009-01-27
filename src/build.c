@@ -518,6 +518,7 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 	{
 		g_child_watch_add(build_info.pid, (GChildWatchFunc) build_exit_cb, NULL);
 		build_menu_update(doc);
+		ui_progress_bar_start(NULL);
 	}
 
 	/* use GIOChannels to monitor stdout and stderr */
@@ -912,6 +913,7 @@ static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 	build_info.pid = 0;
 	/* enable build items again */
 	build_menu_update(NULL);
+	ui_progress_bar_stop();
 }
 
 

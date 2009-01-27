@@ -45,7 +45,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 128,
+	GEANY_API_VERSION = 129,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -383,6 +383,9 @@ typedef struct UIUtilsFuncs
 	void		(*widget_set_tooltip_text) (GtkWidget *widget, const gchar *text);
 	GtkWidget*	(*image_menu_item_new) (const gchar *stock_id, const gchar *label);
 	GtkWidget*	(*lookup_widget) (GtkWidget *widget, const gchar *widget_name);
+	void		(*progress_bar_start) (const gchar *text);
+	void		(*progress_bar_stop) (void);
+	void		(*entry_add_clear_icon) (GtkWidget *entry);
 }
 UIUtilsFuncs;
 

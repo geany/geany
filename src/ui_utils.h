@@ -64,6 +64,9 @@ typedef struct GeanyMainWidgets
 	GtkWidget			*notebook;			/**< Document notebook. */
 	GtkWidget			*editor_menu;		/**< Popup editor menu. */
 	GtkWidget			*tools_menu;		/**< Most plugins add menu items to the Tools menu. */
+	GtkWidget			*progressbar;		/**< Progress bar widget in the status bar to show
+	                                             progress of various actions.
+												 See ui_progress_bar_start() for details. */
 }
 GeanyMainWidgets;
 
@@ -266,5 +269,9 @@ void ui_add_document_sensitive(GtkWidget *widget);
 void ui_toggle_editor_features(GeanyUIEditorFeatures feature);
 
 void ui_update_view_editor_menu_items(void);
+
+void ui_progress_bar_start(const gchar *text);
+
+void ui_progress_bar_stop(void);
 
 #endif

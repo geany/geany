@@ -225,7 +225,10 @@ static UIUtilsFuncs uiutils_funcs = {
 	&ui_add_document_sensitive,
 	&ui_widget_set_tooltip_text,
 	&ui_image_menu_item_new,
-	&ui_lookup_widget
+	&ui_lookup_widget,
+	&ui_progress_bar_start,
+	&ui_progress_bar_stop,
+	&ui_entry_add_clear_icon
 };
 
 static DialogFuncs dialog_funcs = {

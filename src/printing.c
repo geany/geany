@@ -396,6 +396,7 @@ static void end_print(GtkPrintOperation *operation, GtkPrintContext *context, gp
 	if (dinfo == NULL)
 		return;
 
+	gtk_widget_hide(main_widgets.progressbar);
 	g_object_unref(dinfo->layout);
 }
 
@@ -409,6 +410,8 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 
 	if (dinfo == NULL)
 		return;
+
+	gtk_widget_show(main_widgets.progressbar);
 
 	desc = pango_font_description_from_string(interface_prefs.editor_font);
 
@@ -477,6 +480,14 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 		return;
 
 	editor = dinfo->doc->editor;
+
+	if (dinfo->n_pages > 0)
+	{
+		gdouble fraction = (page_nr + 1) / (gdouble) dinfo->n_pages;
+		gchar *text = g_strdup_printf(_("Page %d of %d"), page_nr, dinfo->n_pages);
+		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(main_widgets.progressbar), fraction);
+		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(main_widgets.progressbar), text);
+	}
 
 #ifdef GEANY_PRINT_DEBUG
 	geany_debug("draw_page = %d, pages = %d, (real) lines_per_page = %d",
