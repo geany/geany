@@ -7,6 +7,8 @@
    Remember whether find/replace all expanders were expanded.
  * src/search.c:
    Rename static structs, group by dialog.
+ * src/search.c:
+   Refactor with create_find_dialog().
 
 
 2009-01-26  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

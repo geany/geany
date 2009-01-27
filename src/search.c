@@ -92,9 +92,10 @@ static GeanyPrefGroup *fif_prefs = NULL;
 static struct
 {
 	GtkWidget	*dialog;
+	GtkWidget	*entry;
 	gboolean	all_expanded;
 }
-find_dlg = {NULL, FALSE};
+find_dlg = {NULL, NULL, FALSE};
 
 static struct
 {
@@ -352,6 +353,100 @@ static void on_expander_activated(GtkExpander *exp, gpointer data)
 }
 
 
+static void create_find_dialog(void)
+{
+	GtkWidget *label, *entry, *sbox, *vbox;
+	GtkWidget *exp, *bbox, *button, *check_close;
+
+	load_monospace_style();
+
+	find_dlg.dialog = gtk_dialog_new_with_buttons(_("Find"),
+		GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
+		GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(find_dlg.dialog));
+	gtk_widget_set_name(find_dlg.dialog, "GeanyDialogSearch");
+	gtk_box_set_spacing(GTK_BOX(vbox), 9);
+
+	button = ui_button_new_with_image(GTK_STOCK_GO_BACK, _("_Previous"));
+	gtk_dialog_add_action_widget(GTK_DIALOG(find_dlg.dialog), button,
+		GEANY_RESPONSE_FIND_PREVIOUS);
+	g_object_set_data_full(G_OBJECT(find_dlg.dialog), "btn_previous",
+					g_object_ref(button), (GDestroyNotify)g_object_unref);
+
+	button = ui_button_new_with_image(GTK_STOCK_GO_FORWARD, _("_Next"));
+	gtk_dialog_add_action_widget(GTK_DIALOG(find_dlg.dialog), button,
+		GEANY_RESPONSE_FIND);
+
+	label = gtk_label_new_with_mnemonic(_("_Search for:"));
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+
+	entry = gtk_combo_box_entry_new_text();
+	gtk_label_set_mnemonic_widget(GTK_LABEL(label), entry);
+	gtk_entry_set_max_length(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))), 248);
+	gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))), 50);
+	find_dlg.entry = GTK_BIN(entry)->child;
+	g_object_set_data_full(G_OBJECT(find_dlg.dialog), "entry",
+					g_object_ref(entry), (GDestroyNotify)g_object_unref);
+
+	g_signal_connect(gtk_bin_get_child(GTK_BIN(entry)), "activate",
+			G_CALLBACK(on_find_entry_activate), NULL);
+	g_signal_connect(find_dlg.dialog, "response",
+			G_CALLBACK(on_find_dialog_response), entry);
+	g_signal_connect(find_dlg.dialog, "delete-event",
+			G_CALLBACK(gtk_widget_hide_on_delete), NULL);
+
+	sbox = gtk_hbox_new(FALSE, 6);
+	gtk_box_pack_start(GTK_BOX(sbox), label, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(sbox), entry, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), sbox, TRUE, FALSE, 0);
+
+	gtk_container_add(GTK_CONTAINER(vbox),
+		add_find_checkboxes(GTK_DIALOG(find_dlg.dialog)));
+
+	/* Now add the multiple match options */
+	exp = gtk_expander_new_with_mnemonic(_("_Find All"));
+	gtk_expander_set_expanded(GTK_EXPANDER(exp), find_dlg.all_expanded);
+	g_signal_connect_after(exp, "activate",
+		G_CALLBACK(on_expander_activated), &find_dlg.all_expanded);
+
+	bbox = gtk_hbutton_box_new();
+
+	button = gtk_button_new_with_mnemonic(_("_Mark"));
+	ui_widget_set_tooltip_text(button,
+			_("Mark all matches in the current document"));
+	gtk_container_add(GTK_CONTAINER(bbox), button);
+	g_signal_connect(button, "clicked", G_CALLBACK(send_find_dialog_response),
+		GINT_TO_POINTER(GEANY_RESPONSE_MARK));
+
+	button = gtk_button_new_with_mnemonic(_("In Sessi_on"));
+	gtk_container_add(GTK_CONTAINER(bbox), button);
+	g_signal_connect(button, "clicked", G_CALLBACK(send_find_dialog_response),
+		GINT_TO_POINTER(GEANY_RESPONSE_FIND_IN_SESSION));
+
+	button = gtk_button_new_with_mnemonic(_("_In Document"));
+	gtk_container_add(GTK_CONTAINER(bbox), button);
+	g_signal_connect(button, "clicked", G_CALLBACK(send_find_dialog_response),
+		GINT_TO_POINTER(GEANY_RESPONSE_FIND_IN_FILE));
+
+	/* close window checkbox */
+	check_close = gtk_check_button_new_with_mnemonic(_("Close _dialog"));
+	g_object_set_data_full(G_OBJECT(find_dlg.dialog), "check_close",
+					g_object_ref(check_close), (GDestroyNotify) g_object_unref);
+	gtk_button_set_focus_on_click(GTK_BUTTON(check_close), FALSE);
+	ui_widget_set_tooltip_text(check_close,
+			_("Disable this option to keep the dialog open"));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_close), TRUE);
+	gtk_container_add(GTK_CONTAINER(bbox), check_close);
+	gtk_button_box_set_child_secondary(GTK_BUTTON_BOX(bbox), check_close, TRUE);
+
+	ui_hbutton_box_copy_layout(
+		GTK_BUTTON_BOX(GTK_DIALOG(find_dlg.dialog)->action_area),
+		GTK_BUTTON_BOX(bbox));
+	gtk_container_add(GTK_CONTAINER(exp), bbox);
+	gtk_container_add(GTK_CONTAINER(vbox), exp);
+}
+
+
 void search_show_find_dialog(void)
 {
 	GeanyDocument *doc = document_get_current();
@@ -363,95 +458,9 @@ void search_show_find_dialog(void)
 
 	if (find_dlg.dialog == NULL)
 	{
-		GtkWidget *label, *entry, *sbox, *vbox;
-		GtkWidget *exp, *bbox, *button, *check_close;
-
-		load_monospace_style();
-
-		find_dlg.dialog = gtk_dialog_new_with_buttons(_("Find"),
-			GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
-			GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
-		vbox = ui_dialog_vbox_new(GTK_DIALOG(find_dlg.dialog));
-		gtk_widget_set_name(find_dlg.dialog, "GeanyDialogSearch");
-		gtk_box_set_spacing(GTK_BOX(vbox), 9);
-
-		button = ui_button_new_with_image(GTK_STOCK_GO_BACK, _("_Previous"));
-		gtk_dialog_add_action_widget(GTK_DIALOG(find_dlg.dialog), button,
-			GEANY_RESPONSE_FIND_PREVIOUS);
-		g_object_set_data_full(G_OBJECT(find_dlg.dialog), "btn_previous",
-						g_object_ref(button), (GDestroyNotify)g_object_unref);
-
-		button = ui_button_new_with_image(GTK_STOCK_GO_FORWARD, _("_Next"));
-		gtk_dialog_add_action_widget(GTK_DIALOG(find_dlg.dialog), button,
-			GEANY_RESPONSE_FIND);
-
-		label = gtk_label_new_with_mnemonic(_("_Search for:"));
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
-
-		entry = gtk_combo_box_entry_new_text();
-		gtk_label_set_mnemonic_widget(GTK_LABEL(label), entry);
-		gtk_entry_set_max_length(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))), 248);
-		gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))), 50);
-		if (sel) gtk_entry_set_text(GTK_ENTRY(GTK_BIN(entry)->child), sel);
-		g_object_set_data_full(G_OBJECT(find_dlg.dialog), "entry",
-						g_object_ref(entry), (GDestroyNotify)g_object_unref);
-
-		g_signal_connect(gtk_bin_get_child(GTK_BIN(entry)), "activate",
-				G_CALLBACK(on_find_entry_activate), NULL);
-		g_signal_connect(find_dlg.dialog, "response",
-				G_CALLBACK(on_find_dialog_response), entry);
-		g_signal_connect(find_dlg.dialog, "delete-event",
-				G_CALLBACK(gtk_widget_hide_on_delete), NULL);
-
-		sbox = gtk_hbox_new(FALSE, 6);
-		gtk_box_pack_start(GTK_BOX(sbox), label, FALSE, FALSE, 0);
-		gtk_box_pack_start(GTK_BOX(sbox), entry, TRUE, TRUE, 0);
-		gtk_box_pack_start(GTK_BOX(vbox), sbox, TRUE, FALSE, 0);
-
-		gtk_container_add(GTK_CONTAINER(vbox),
-			add_find_checkboxes(GTK_DIALOG(find_dlg.dialog)));
-
-		/* Now add the multiple match options */
-		exp = gtk_expander_new_with_mnemonic(_("_Find All"));
-		gtk_expander_set_expanded(GTK_EXPANDER(exp), find_dlg.all_expanded);
-		g_signal_connect_after(exp, "activate",
-			G_CALLBACK(on_expander_activated), &find_dlg.all_expanded);
-
-		bbox = gtk_hbutton_box_new();
-
-		button = gtk_button_new_with_mnemonic(_("_Mark"));
-		ui_widget_set_tooltip_text(button,
-				_("Mark all matches in the current document"));
-		gtk_container_add(GTK_CONTAINER(bbox), button);
-		g_signal_connect(button, "clicked", G_CALLBACK(send_find_dialog_response),
-			GINT_TO_POINTER(GEANY_RESPONSE_MARK));
-
-		button = gtk_button_new_with_mnemonic(_("In Sessi_on"));
-		gtk_container_add(GTK_CONTAINER(bbox), button);
-		g_signal_connect(button, "clicked", G_CALLBACK(send_find_dialog_response),
-			GINT_TO_POINTER(GEANY_RESPONSE_FIND_IN_SESSION));
-
-		button = gtk_button_new_with_mnemonic(_("_In Document"));
-		gtk_container_add(GTK_CONTAINER(bbox), button);
-		g_signal_connect(button, "clicked", G_CALLBACK(send_find_dialog_response),
-			GINT_TO_POINTER(GEANY_RESPONSE_FIND_IN_FILE));
-
-		/* close window checkbox */
-		check_close = gtk_check_button_new_with_mnemonic(_("Close _dialog"));
-		g_object_set_data_full(G_OBJECT(find_dlg.dialog), "check_close",
-						g_object_ref(check_close), (GDestroyNotify) g_object_unref);
-		gtk_button_set_focus_on_click(GTK_BUTTON(check_close), FALSE);
-		ui_widget_set_tooltip_text(check_close,
-				_("Disable this option to keep the dialog open"));
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_close), TRUE);
-		gtk_container_add(GTK_CONTAINER(bbox), check_close);
-		gtk_button_box_set_child_secondary(GTK_BUTTON_BOX(bbox), check_close, TRUE);
-
-		ui_hbutton_box_copy_layout(
-			GTK_BUTTON_BOX(GTK_DIALOG(find_dlg.dialog)->action_area),
-			GTK_BUTTON_BOX(bbox));
-		gtk_container_add(GTK_CONTAINER(exp), bbox);
-		gtk_container_add(GTK_CONTAINER(vbox), exp);
+		create_find_dialog();
+		if (sel)
+			gtk_entry_set_text(GTK_ENTRY(find_dlg.entry), sel);
 
 		gtk_widget_show_all(find_dlg.dialog);
 	}
@@ -798,8 +807,6 @@ static void create_fif_dialog(void)
 			G_CALLBACK(on_find_in_files_dialog_response), NULL);
 	g_signal_connect(fif_dlg.dialog, "delete-event",
 			G_CALLBACK(gtk_widget_hide_on_delete), NULL);
-
-	gtk_widget_show_all(fif_dlg.dialog);
 }
 
 
@@ -817,6 +824,7 @@ void search_show_find_in_files_dialog(const gchar *dir)
 	if (fif_dlg.dialog == NULL)
 	{
 		create_fif_dialog();
+		gtk_widget_show_all(fif_dlg.dialog);
 		sel = editor_get_default_selection(editor, search_prefs.use_current_word, NULL);
 	}
 	stash_group_display(fif_prefs, fif_dlg.dialog);
