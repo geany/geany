@@ -5,6 +5,8 @@
    Miscellaneous tabs. Merge Search tab into Miscellaneous tab.
  * src/search.c:
    Remember whether find/replace all expanders were expanded.
+ * src/search.c:
+   Rename static structs, group by dialog.
 
 
 2009-01-26  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
