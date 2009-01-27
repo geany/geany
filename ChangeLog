@@ -1,3 +1,10 @@
+2009-01-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, geany.glade:
+   Split Prefs dialog General tab into sub-notebook with Startup and
+   Miscellaneous tabs. Merge Search tab into Miscellaneous tab.
+
+
 2009-01-26  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * po/cs.po, THANKS: Update of Czech translation. Thanks to Karel Kolman

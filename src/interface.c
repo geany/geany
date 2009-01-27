@@ -2231,6 +2231,7 @@ create_prefs_dialog (void)
   GtkWidget *prefs_dialog;
   GtkWidget *dialog_vbox3;
   GtkWidget *notebook2;
+  GtkWidget *notebook5;
   GtkWidget *vbox20;
   GtkWidget *frame10;
   GtkWidget *alignment13;
@@ -2245,20 +2246,6 @@ create_prefs_dialog (void)
   GtkWidget *check_save_win_pos;
   GtkWidget *check_ask_for_quit;
   GtkWidget *label206;
-  GtkWidget *frame35;
-  GtkWidget *alignment38;
-  GtkWidget *vbox35;
-  GtkWidget *check_project_session;
-  GtkWidget *check_project_file_in_basedir;
-  GtkWidget *label207;
-  GtkWidget *frame19;
-  GtkWidget *alignment22;
-  GtkWidget *vbox21;
-  GtkWidget *check_beep;
-  GtkWidget *check_switch_pages;
-  GtkWidget *check_suppress_status_msgs;
-  GtkWidget *check_auto_focus;
-  GtkWidget *label199;
   GtkWidget *frame25;
   GtkWidget *alignment28;
   GtkWidget *table11;
@@ -2271,6 +2258,30 @@ create_prefs_dialog (void)
   GtkWidget *project_file_path_button;
   GtkWidget *image1775;
   GtkWidget *label190;
+  GtkWidget *label233;
+  GtkWidget *vbox41;
+  GtkWidget *frame19;
+  GtkWidget *alignment22;
+  GtkWidget *vbox21;
+  GtkWidget *check_beep;
+  GtkWidget *check_switch_pages;
+  GtkWidget *check_suppress_status_msgs;
+  GtkWidget *check_auto_focus;
+  GtkWidget *label199;
+  GtkWidget *frame36;
+  GtkWidget *alignment39;
+  GtkWidget *vbox36;
+  GtkWidget *check_ask_suppress_search_dialogs;
+  GtkWidget *check_search_use_current_word;
+  GtkWidget *check_fif_current_dir;
+  GtkWidget *label215;
+  GtkWidget *frame35;
+  GtkWidget *alignment38;
+  GtkWidget *vbox35;
+  GtkWidget *check_project_session;
+  GtkWidget *check_project_file_in_basedir;
+  GtkWidget *label207;
+  GtkWidget *label234;
   GtkWidget *label94;
   GtkWidget *vbox14;
   GtkWidget *frame7;
@@ -2480,14 +2491,6 @@ create_prefs_dialog (void)
   GtkWidget *spin_disk_check;
   GtkWidget *label198;
   GtkWidget *label174;
-  GtkWidget *frame36;
-  GtkWidget *alignment39;
-  GtkWidget *vbox36;
-  GtkWidget *check_ask_suppress_search_dialogs;
-  GtkWidget *check_search_use_current_word;
-  GtkWidget *check_fif_current_dir;
-  GtkWidget *label215;
-  GtkWidget *label214;
   GtkWidget *vbox23;
   GtkWidget *frame20;
   GtkWidget *alignment23;
@@ -2600,9 +2603,13 @@ create_prefs_dialog (void)
   gtk_box_pack_start (GTK_BOX (dialog_vbox3), notebook2, TRUE, TRUE, 6);
   gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook2), GTK_POS_LEFT);
 
+  notebook5 = gtk_notebook_new ();
+  gtk_widget_show (notebook5);
+  gtk_container_add (GTK_CONTAINER (notebook2), notebook5);
+
   vbox20 = gtk_vbox_new (FALSE, 10);
   gtk_widget_show (vbox20);
-  gtk_container_add (GTK_CONTAINER (notebook2), vbox20);
+  gtk_container_add (GTK_CONTAINER (notebook5), vbox20);
   gtk_container_set_border_width (GTK_CONTAINER (vbox20), 5);
 
   frame10 = gtk_frame_new (NULL);
@@ -2665,74 +2672,6 @@ create_prefs_dialog (void)
   gtk_widget_show (label206);
   gtk_frame_set_label_widget (GTK_FRAME (frame34), label206);
   gtk_label_set_use_markup (GTK_LABEL (label206), TRUE);
-
-  frame35 = gtk_frame_new (NULL);
-  gtk_widget_show (frame35);
-  gtk_box_pack_start (GTK_BOX (vbox20), frame35, FALSE, TRUE, 0);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame35), GTK_SHADOW_NONE);
-
-  alignment38 = gtk_alignment_new (0.5, 0.5, 1, 1);
-  gtk_widget_show (alignment38);
-  gtk_container_add (GTK_CONTAINER (frame35), alignment38);
-  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment38), 0, 0, 12, 0);
-
-  vbox35 = gtk_vbox_new (FALSE, 0);
-  gtk_widget_show (vbox35);
-  gtk_container_add (GTK_CONTAINER (alignment38), vbox35);
-
-  check_project_session = gtk_check_button_new_with_mnemonic (_("Use project-based session files"));
-  gtk_widget_show (check_project_session);
-  gtk_box_pack_start (GTK_BOX (vbox35), check_project_session, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_project_session, _("Whether to store a project's session files and open them when re-opening the project"), NULL);
-
-  check_project_file_in_basedir = gtk_check_button_new_with_mnemonic (_("Store project file inside the project base directory"));
-  gtk_widget_show (check_project_file_in_basedir);
-  gtk_box_pack_start (GTK_BOX (vbox35), check_project_file_in_basedir, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_project_file_in_basedir, _("When enabled, a project file is stored by default inside the project base directory when creating new projects instead of one directory above the base directory. You can still change the path of the project file in the New Project dialog"), NULL);
-
-  label207 = gtk_label_new (_("<b>Projects</b>"));
-  gtk_widget_show (label207);
-  gtk_frame_set_label_widget (GTK_FRAME (frame35), label207);
-  gtk_label_set_use_markup (GTK_LABEL (label207), TRUE);
-
-  frame19 = gtk_frame_new (NULL);
-  gtk_widget_show (frame19);
-  gtk_box_pack_start (GTK_BOX (vbox20), frame19, FALSE, TRUE, 0);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame19), GTK_SHADOW_NONE);
-
-  alignment22 = gtk_alignment_new (0.5, 0.5, 1, 1);
-  gtk_widget_show (alignment22);
-  gtk_container_add (GTK_CONTAINER (frame19), alignment22);
-  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment22), 0, 0, 12, 0);
-
-  vbox21 = gtk_vbox_new (FALSE, 0);
-  gtk_widget_show (vbox21);
-  gtk_container_add (GTK_CONTAINER (alignment22), vbox21);
-
-  check_beep = gtk_check_button_new_with_mnemonic (_("Beep on errors or when compilation has finished"));
-  gtk_widget_show (check_beep);
-  gtk_box_pack_start (GTK_BOX (vbox21), check_beep, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_beep, _("Whether to beep if an error occurred or when the compilation process has finished"), NULL);
-
-  check_switch_pages = gtk_check_button_new_with_mnemonic (_("Switch to status message list at new message"));
-  gtk_widget_show (check_switch_pages);
-  gtk_box_pack_start (GTK_BOX (vbox21), check_switch_pages, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_switch_pages, _("Switch to the status message tab (in the notebook window at the bottom) if a new status message arrives"), NULL);
-
-  check_suppress_status_msgs = gtk_check_button_new_with_mnemonic (_("Suppress status messages in the status bar"));
-  gtk_widget_show (check_suppress_status_msgs);
-  gtk_box_pack_start (GTK_BOX (vbox21), check_suppress_status_msgs, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_suppress_status_msgs, _("Removes all messages from the status bar. The messages are still displayed in the status messages window."), NULL);
-
-  check_auto_focus = gtk_check_button_new_with_mnemonic (_("Auto focus widgets (focus follows mouse)"));
-  gtk_widget_show (check_auto_focus);
-  gtk_box_pack_start (GTK_BOX (vbox21), check_auto_focus, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_auto_focus, _("Gives the focus automatically to widgets below the mouse cursor. Works for the main editor widget, the scribble, the toolbar search and goto line fields and the VTE."), NULL);
-
-  label199 = gtk_label_new (_("<b>Miscellaneous</b>"));
-  gtk_widget_show (label199);
-  gtk_frame_set_label_widget (GTK_FRAME (frame19), label199);
-  gtk_label_set_use_markup (GTK_LABEL (label199), TRUE);
 
   frame25 = gtk_frame_new (NULL);
   gtk_widget_show (frame25);
@@ -2804,6 +2743,120 @@ create_prefs_dialog (void)
   gtk_widget_show (label190);
   gtk_frame_set_label_widget (GTK_FRAME (frame25), label190);
   gtk_label_set_use_markup (GTK_LABEL (label190), TRUE);
+
+  label233 = gtk_label_new (_("Startup"));
+  gtk_widget_show (label233);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook5), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook5), 0), label233);
+
+  vbox41 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (vbox41);
+  gtk_container_add (GTK_CONTAINER (notebook5), vbox41);
+
+  frame19 = gtk_frame_new (NULL);
+  gtk_widget_show (frame19);
+  gtk_box_pack_start (GTK_BOX (vbox41), frame19, FALSE, TRUE, 0);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame19), GTK_SHADOW_NONE);
+
+  alignment22 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment22);
+  gtk_container_add (GTK_CONTAINER (frame19), alignment22);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment22), 0, 0, 12, 0);
+
+  vbox21 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (vbox21);
+  gtk_container_add (GTK_CONTAINER (alignment22), vbox21);
+
+  check_beep = gtk_check_button_new_with_mnemonic (_("Beep on errors or when compilation has finished"));
+  gtk_widget_show (check_beep);
+  gtk_box_pack_start (GTK_BOX (vbox21), check_beep, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_beep, _("Whether to beep if an error occurred or when the compilation process has finished"), NULL);
+
+  check_switch_pages = gtk_check_button_new_with_mnemonic (_("Switch to status message list at new message"));
+  gtk_widget_show (check_switch_pages);
+  gtk_box_pack_start (GTK_BOX (vbox21), check_switch_pages, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_switch_pages, _("Switch to the status message tab (in the notebook window at the bottom) if a new status message arrives"), NULL);
+
+  check_suppress_status_msgs = gtk_check_button_new_with_mnemonic (_("Suppress status messages in the status bar"));
+  gtk_widget_show (check_suppress_status_msgs);
+  gtk_box_pack_start (GTK_BOX (vbox21), check_suppress_status_msgs, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_suppress_status_msgs, _("Removes all messages from the status bar. The messages are still displayed in the status messages window."), NULL);
+
+  check_auto_focus = gtk_check_button_new_with_mnemonic (_("Auto focus widgets (focus follows mouse)"));
+  gtk_widget_show (check_auto_focus);
+  gtk_box_pack_start (GTK_BOX (vbox21), check_auto_focus, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_auto_focus, _("Gives the focus automatically to widgets below the mouse cursor. Works for the main editor widget, the scribble, the toolbar search and goto line fields and the VTE."), NULL);
+
+  label199 = gtk_label_new (_("<b>Miscellaneous</b>"));
+  gtk_widget_show (label199);
+  gtk_frame_set_label_widget (GTK_FRAME (frame19), label199);
+  gtk_label_set_use_markup (GTK_LABEL (label199), TRUE);
+
+  frame36 = gtk_frame_new (NULL);
+  gtk_widget_show (frame36);
+  gtk_box_pack_start (GTK_BOX (vbox41), frame36, FALSE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (frame36), 5);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame36), GTK_SHADOW_NONE);
+
+  alignment39 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment39);
+  gtk_container_add (GTK_CONTAINER (frame36), alignment39);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment39), 0, 0, 12, 0);
+
+  vbox36 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (vbox36);
+  gtk_container_add (GTK_CONTAINER (alignment39), vbox36);
+
+  check_ask_suppress_search_dialogs = gtk_check_button_new_with_mnemonic (_("Always wrap search and hide the Find dialog"));
+  gtk_widget_show (check_ask_suppress_search_dialogs);
+  gtk_box_pack_start (GTK_BOX (vbox36), check_ask_suppress_search_dialogs, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_ask_suppress_search_dialogs, _("Always wrap search around the document and hide the Find dialog after clicking Find Next/Previous"), NULL);
+
+  check_search_use_current_word = gtk_check_button_new_with_mnemonic (_("Use the current word under the cursor for Find dialogs"));
+  gtk_widget_show (check_search_use_current_word);
+  gtk_box_pack_start (GTK_BOX (vbox36), check_search_use_current_word, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_search_use_current_word, _("Use current word under the cursor when opening the Find, Find in Files or Replace dialog and there is no selection"), NULL);
+
+  check_fif_current_dir = gtk_check_button_new_with_mnemonic (_("Use the current file's directory for Find in Files"));
+  gtk_widget_show (check_fif_current_dir);
+  gtk_box_pack_start (GTK_BOX (vbox36), check_fif_current_dir, FALSE, FALSE, 0);
+
+  label215 = gtk_label_new (_("<b>Search</b>"));
+  gtk_widget_show (label215);
+  gtk_frame_set_label_widget (GTK_FRAME (frame36), label215);
+  gtk_label_set_use_markup (GTK_LABEL (label215), TRUE);
+
+  frame35 = gtk_frame_new (NULL);
+  gtk_widget_show (frame35);
+  gtk_box_pack_start (GTK_BOX (vbox41), frame35, TRUE, TRUE, 0);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame35), GTK_SHADOW_NONE);
+
+  alignment38 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment38);
+  gtk_container_add (GTK_CONTAINER (frame35), alignment38);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment38), 0, 0, 12, 0);
+
+  vbox35 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (vbox35);
+  gtk_container_add (GTK_CONTAINER (alignment38), vbox35);
+
+  check_project_session = gtk_check_button_new_with_mnemonic (_("Use project-based session files"));
+  gtk_widget_show (check_project_session);
+  gtk_box_pack_start (GTK_BOX (vbox35), check_project_session, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_project_session, _("Whether to store a project's session files and open them when re-opening the project"), NULL);
+
+  check_project_file_in_basedir = gtk_check_button_new_with_mnemonic (_("Store project file inside the project base directory"));
+  gtk_widget_show (check_project_file_in_basedir);
+  gtk_box_pack_start (GTK_BOX (vbox35), check_project_file_in_basedir, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_project_file_in_basedir, _("When enabled, a project file is stored by default inside the project base directory when creating new projects instead of one directory above the base directory. You can still change the path of the project file in the New Project dialog"), NULL);
+
+  label207 = gtk_label_new (_("<b>Projects</b>"));
+  gtk_widget_show (label207);
+  gtk_frame_set_label_widget (GTK_FRAME (frame35), label207);
+  gtk_label_set_use_markup (GTK_LABEL (label207), TRUE);
+
+  label234 = gtk_label_new (_("Miscellaneous"));
+  gtk_widget_show (label234);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook5), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook5), 1), label234);
 
   label94 = gtk_label_new (_("General"));
   gtk_widget_show (label94);
@@ -3931,44 +3984,6 @@ create_prefs_dialog (void)
   gtk_widget_show (label174);
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 4), label174);
 
-  frame36 = gtk_frame_new (NULL);
-  gtk_widget_show (frame36);
-  gtk_container_add (GTK_CONTAINER (notebook2), frame36);
-  gtk_container_set_border_width (GTK_CONTAINER (frame36), 5);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame36), GTK_SHADOW_NONE);
-
-  alignment39 = gtk_alignment_new (0.5, 0.5, 1, 1);
-  gtk_widget_show (alignment39);
-  gtk_container_add (GTK_CONTAINER (frame36), alignment39);
-  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment39), 0, 0, 12, 0);
-
-  vbox36 = gtk_vbox_new (FALSE, 0);
-  gtk_widget_show (vbox36);
-  gtk_container_add (GTK_CONTAINER (alignment39), vbox36);
-
-  check_ask_suppress_search_dialogs = gtk_check_button_new_with_mnemonic (_("Always wrap search and hide the Find dialog"));
-  gtk_widget_show (check_ask_suppress_search_dialogs);
-  gtk_box_pack_start (GTK_BOX (vbox36), check_ask_suppress_search_dialogs, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_ask_suppress_search_dialogs, _("Always wrap search around the document and hide the Find dialog after clicking Find Next/Previous"), NULL);
-
-  check_search_use_current_word = gtk_check_button_new_with_mnemonic (_("Use the current word under the cursor for Find dialogs"));
-  gtk_widget_show (check_search_use_current_word);
-  gtk_box_pack_start (GTK_BOX (vbox36), check_search_use_current_word, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_search_use_current_word, _("Use current word under the cursor when opening the Find, Find in Files or Replace dialog and there is no selection"), NULL);
-
-  check_fif_current_dir = gtk_check_button_new_with_mnemonic (_("Use the current file's directory for Find in Files"));
-  gtk_widget_show (check_fif_current_dir);
-  gtk_box_pack_start (GTK_BOX (vbox36), check_fif_current_dir, FALSE, FALSE, 0);
-
-  label215 = gtk_label_new (_("<b>Search</b>"));
-  gtk_widget_show (label215);
-  gtk_frame_set_label_widget (GTK_FRAME (frame36), label215);
-  gtk_label_set_use_markup (GTK_LABEL (label215), TRUE);
-
-  label214 = gtk_label_new (_("Search"));
-  gtk_widget_show (label214);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 5), label214);
-
   vbox23 = gtk_vbox_new (FALSE, 10);
   gtk_widget_show (vbox23);
   gtk_container_add (GTK_CONTAINER (notebook2), vbox23);
@@ -4145,7 +4160,7 @@ create_prefs_dialog (void)
 
   label96 = gtk_label_new (_("Tools"));
   gtk_widget_show (label96);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 6), label96);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 5), label96);
 
   frame21 = gtk_frame_new (NULL);
   gtk_widget_show (frame21);
@@ -4291,7 +4306,7 @@ create_prefs_dialog (void)
 
   label119 = gtk_label_new (_("Templates"));
   gtk_widget_show (label119);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 7), label119);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 6), label119);
 
   frame22 = gtk_frame_new (NULL);
   gtk_widget_show (frame22);
@@ -4338,7 +4353,7 @@ create_prefs_dialog (void)
 
   label151 = gtk_label_new (_("Keybindings"));
   gtk_widget_show (label151);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 8), label151);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 7), label151);
 
   vbox27 = gtk_vbox_new (FALSE, 0);
   gtk_widget_show (vbox27);
@@ -4453,7 +4468,7 @@ create_prefs_dialog (void)
 
   label201 = gtk_label_new (_("Printing"));
   gtk_widget_show (label201);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 9), label201);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 8), label201);
 
   dialog_action_area3 = GTK_DIALOG (prefs_dialog)->action_area;
   gtk_widget_show (dialog_action_area3);
@@ -4478,6 +4493,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT_NO_REF (prefs_dialog, prefs_dialog, "prefs_dialog");
   GLADE_HOOKUP_OBJECT_NO_REF (prefs_dialog, dialog_vbox3, "dialog_vbox3");
   GLADE_HOOKUP_OBJECT (prefs_dialog, notebook2, "notebook2");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, notebook5, "notebook5");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox20, "vbox20");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame10, "frame10");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment13, "alignment13");
@@ -4492,20 +4508,6 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_save_win_pos, "check_save_win_pos");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_ask_for_quit, "check_ask_for_quit");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label206, "label206");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, frame35, "frame35");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment38, "alignment38");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox35, "vbox35");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_project_session, "check_project_session");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_project_file_in_basedir, "check_project_file_in_basedir");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label207, "label207");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, frame19, "frame19");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment22, "alignment22");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox21, "vbox21");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_beep, "check_beep");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_switch_pages, "check_switch_pages");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_suppress_status_msgs, "check_suppress_status_msgs");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_auto_focus, "check_auto_focus");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label199, "label199");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame25, "frame25");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment28, "alignment28");
   GLADE_HOOKUP_OBJECT (prefs_dialog, table11, "table11");
@@ -4518,6 +4520,30 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, project_file_path_button, "project_file_path_button");
   GLADE_HOOKUP_OBJECT (prefs_dialog, image1775, "image1775");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label190, "label190");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label233, "label233");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox41, "vbox41");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame19, "frame19");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment22, "alignment22");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox21, "vbox21");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_beep, "check_beep");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_switch_pages, "check_switch_pages");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_suppress_status_msgs, "check_suppress_status_msgs");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_auto_focus, "check_auto_focus");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label199, "label199");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame36, "frame36");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment39, "alignment39");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox36, "vbox36");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_ask_suppress_search_dialogs, "check_ask_suppress_search_dialogs");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_search_use_current_word, "check_search_use_current_word");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_fif_current_dir, "check_fif_current_dir");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label215, "label215");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame35, "frame35");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment38, "alignment38");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox35, "vbox35");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_project_session, "check_project_session");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_project_file_in_basedir, "check_project_file_in_basedir");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label207, "label207");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label234, "label234");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label94, "label94");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox14, "vbox14");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame7, "frame7");
@@ -4713,14 +4739,6 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, spin_disk_check, "spin_disk_check");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label198, "label198");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label174, "label174");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, frame36, "frame36");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment39, "alignment39");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox36, "vbox36");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_ask_suppress_search_dialogs, "check_ask_suppress_search_dialogs");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_search_use_current_word, "check_search_use_current_word");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_fif_current_dir, "check_fif_current_dir");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label215, "label215");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label214, "label214");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox23, "vbox23");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame20, "frame20");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment23, "alignment23");
