@@ -2683,11 +2683,13 @@ GdkColor *document_get_status_color(GeanyDocument *doc)
 
 	if (doc->changed)
 		color = &red;
+#if defined(HAVE_GIO) && defined(USE_GIO_FILEMON)
 	else if (doc->priv->file_disk_status == FILE_MISSING ||
 			 doc->priv->file_disk_status == FILE_CHANGED)
 	{
 		color = &orange;
 	}
+#endif
 	else if (doc->readonly)
 		color = &green;
 
@@ -2914,8 +2916,8 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 			break;
 	}
 
-	/*doc->priv->file_disk_status = FILE_OK;
-	ui_update_tab_status(doc);*/
+	doc->priv->file_disk_status = FILE_OK;
+	/*ui_update_tab_status(doc);*/
 
 	return ret;
 }
