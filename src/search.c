@@ -99,9 +99,16 @@ widgets = {NULL, NULL, NULL};
 
 static struct
 {
-	GtkWidget *find_entry;
+	gboolean all_expanded;
 }
-replace_widgets = {NULL};
+find_dlg = {FALSE};
+
+static struct
+{
+	GtkWidget *find_entry;
+	gboolean all_expanded;
+}
+replace_widgets = {NULL, FALSE};
 
 static struct
 {
@@ -154,6 +161,8 @@ static void init_prefs(void)
 	configuration_add_pref_group(group, TRUE);
 	stash_group_add_toggle_button(group, &search_prefs.use_current_file_dir,
 		"pref_search_current_file_dir", TRUE, "check_fif_current_dir");
+	stash_group_add_boolean(group, &find_dlg.all_expanded, "find_all_expanded", FALSE);
+	stash_group_add_boolean(group, &replace_widgets.all_expanded, "replace_all_expanded", FALSE);
 
 	group = stash_group_new("search");
 	fif_prefs = group;
@@ -340,6 +349,14 @@ static void load_monospace_style(void)
 }
 
 
+static void on_expander_activated(GtkExpander *exp, gpointer data)
+{
+	gboolean *setting = data;
+
+	*setting = gtk_expander_get_expanded(exp);
+}
+
+
 void search_show_find_dialog(void)
 {
 	GeanyDocument *doc = document_get_current();
@@ -401,6 +418,10 @@ void search_show_find_dialog(void)
 
 		/* Now add the multiple match options */
 		exp = gtk_expander_new_with_mnemonic(_("_Find All"));
+		gtk_expander_set_expanded(GTK_EXPANDER(exp), find_dlg.all_expanded);
+		g_signal_connect_after(exp, "activate",
+			G_CALLBACK(on_expander_activated), &find_dlg.all_expanded);
+
 		bbox = gtk_hbutton_box_new();
 
 		button = gtk_button_new_with_mnemonic(_("_Mark"));
@@ -536,6 +557,10 @@ static void create_replace_dialog(void)
 
 	/* Now add the multiple replace options */
 	exp = gtk_expander_new_with_mnemonic(_("Re_place All"));
+	gtk_expander_set_expanded(GTK_EXPANDER(exp), replace_widgets.all_expanded);
+	g_signal_connect_after(exp, "activate",
+		G_CALLBACK(on_expander_activated), &replace_widgets.all_expanded);
+
 	bbox = gtk_hbutton_box_new();
 
 	button = gtk_button_new_with_mnemonic(_("In Sessi_on"));
