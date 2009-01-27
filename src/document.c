@@ -2838,7 +2838,6 @@ static gboolean monitor_resave_missing_file(GeanyDocument *doc)
 static time_t monitor_check_status_real(GeanyDocument *doc, gboolean force)
 {
 	time_t t = 0;
-#if ! defined(HAVE_GIO) || ! defined(USE_GIO_FILEMON)
 	struct stat st;
 	gchar *locale_filename;
 
@@ -2866,7 +2865,6 @@ static time_t monitor_check_status_real(GeanyDocument *doc, gboolean force)
 		t = st.st_mtime;
 	}
 	g_free(locale_filename);
-#endif
 	return t;
 }
 
@@ -2886,14 +2884,16 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 	if (doc->real_path == NULL || doc->priv->is_remote)
 		return FALSE;
 
+#if defined(HAVE_GIO) && defined(USE_GIO_FILEMON)
 	/* when we saved a file recently, we want to ignore any changes */
 	if (doc->priv->file_disk_status == FILE_IGNORE)
 	{
 		return FALSE;
 	}
-
-	/* check the file's mtime in case we don't have GIO support, otherwise this is a no-op */
+#else
+	/* check the file's mtime */
 	t = monitor_check_status_real(doc, force);
+#endif
 
 	switch (doc->priv->file_disk_status)
 	{
@@ -2914,8 +2914,8 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 			break;
 	}
 
-	doc->priv->file_disk_status = FILE_OK;
-	ui_update_tab_status(doc);
+	/*doc->priv->file_disk_status = FILE_OK;
+	ui_update_tab_status(doc);*/
 
 	return ret;
 }

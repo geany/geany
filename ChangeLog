@@ -1,3 +1,9 @@
+2009-01-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/document.c:
+   Fix legacy file monitoring since I broke once more.
+
+
 2009-01-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/interface.c, geany.glade:
