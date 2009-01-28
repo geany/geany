@@ -1,3 +1,10 @@
+2009-01-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/document.c:
+   Set the documents' mtime field properly for checking disk file
+   changes.
+
+
 2009-01-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/document.c:

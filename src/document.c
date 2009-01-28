@@ -356,6 +356,7 @@ static void init_doc_struct(GeanyDocument *new_doc)
 	priv->undo_actions = NULL;
 	priv->redo_actions = NULL;
 	priv->line_count = 0;
+	priv->last_check = time(NULL);
 }
 
 
@@ -529,9 +530,6 @@ static void monitor_file_setup(GeanyDocument *doc)
 			g_object_unref(file);
 		}
 		g_free(locale_filename);
-#else
-		doc->priv->last_check = time(NULL);
-		doc->priv->mtime = 0;
 #endif
 	}
 	doc->priv->file_disk_status = FILE_OK;
@@ -726,10 +724,6 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft,
 	sci_set_undo_collection(doc->editor->sci, TRUE);
 	sci_empty_undo_buffer(doc->editor->sci);
 
-#if ! defined(HAVE_GIO) || ! defined(USE_GIO_FILEMON)
-	doc->priv->mtime = time(NULL);
-#endif
-
 	doc->encoding = g_strdup(encodings[file_prefs.default_new_encoding].charset);
 	/* store the opened encoding for undo/redo */
 	store_saved_encoding(doc);
@@ -750,7 +744,11 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft,
 	sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
 	sci_goto_pos(doc->editor->sci, 0, TRUE);
 
+#if defined(HAVE_GIO) && defined(USE_GIO_FILEMON)
 	monitor_file_setup(doc);
+#else
+	doc->priv->mtime = time(NULL);
+#endif
 
 	/* "the" SCI signal (connect after initial setup(i.e. adding text)) */
 	g_signal_connect(doc->editor->sci, "sci-notify", G_CALLBACK(editor_sci_notify_cb), doc->editor);
@@ -2675,7 +2673,7 @@ GdkColor *document_get_status_color(GeanyDocument *doc)
 {
 	static GdkColor red = {0, 0xFFFF, 0, 0};
 	static GdkColor green = {0, 0, 0x7FFF, 0};
-	static GdkColor orange = {0, 0xFFFF, 0x7FFF, 0};
+	/*static GdkColor orange = {0, 0xFFFF, 0x7FFF, 0};*/
 	GdkColor *color = NULL;
 
 	if (doc == NULL)
