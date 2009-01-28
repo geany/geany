@@ -4,9 +4,13 @@
    Set the documents' mtime field properly for checking disk file
    changes.
  * src/document.c, src/keyfile.c, src/ui_utils.c, src/ui_utils.h:
-   Add a hiden preference "allow_always_save" to make the Save buttons/
+   Add a hidden preference "allow_always_save" to make the Save buttons/
    menu items always sensitive and allow saving files even without
    changes.
+ * plugins/filebrowser.c:
+   Use the selection 'changed' signal of the treeview to update the
+   popup menu items and show the popup menu on mouse button press events
+   so right clicking on items will select them first.
 
 
 2009-01-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

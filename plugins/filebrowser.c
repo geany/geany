@@ -568,39 +568,30 @@ static GtkWidget *create_popup_menu(void)
 }
 
 
+static void on_tree_selection_changed(GtkTreeSelection *selection, gpointer data)
+{
+	gboolean have_sel = (gtk_tree_selection_count_selected_rows(selection) > 0);
+	gboolean multi_sel = (gtk_tree_selection_count_selected_rows(selection) > 1);
+
+	if (popup_items.open != NULL)
+		gtk_widget_set_sensitive(popup_items.open, have_sel);
+	if (popup_items.open_external != NULL)
+		gtk_widget_set_sensitive(popup_items.open_external, have_sel);
+	if (popup_items.find_in_files != NULL)
+		gtk_widget_set_sensitive(popup_items.find_in_files, have_sel && ! multi_sel);
+}
+
+
 static gboolean on_button_press(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
 	if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)
 		on_open_clicked(NULL, NULL);
 	else if (event->button == 3)
-		return TRUE;
-	return FALSE;
-}
-
-
-static void update_popup_menu(GtkWidget *popup_menu)
-{
-	GtkTreeSelection *treesel = gtk_tree_view_get_selection(GTK_TREE_VIEW(file_view));
-	gboolean have_sel = (gtk_tree_selection_count_selected_rows(treesel) > 0);
-	gboolean multi_sel = (gtk_tree_selection_count_selected_rows(treesel) > 1);
-
-	gtk_widget_set_sensitive(popup_items.open, have_sel);
-	gtk_widget_set_sensitive(popup_items.open_external, have_sel);
-	gtk_widget_set_sensitive(popup_items.find_in_files, have_sel && ! multi_sel);
-}
-
-
-/* delay updating popup menu until the selection has been set */
-static gboolean on_button_release(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
-{
-	if (event->button == 3)
 	{
 		static GtkWidget *popup_menu = NULL;
 
 		if (popup_menu == NULL)
 			popup_menu = create_popup_menu();
-
-		update_popup_menu(popup_menu);
 
 		gtk_menu_popup(GTK_MENU(popup_menu), NULL, NULL, NULL, NULL,
 			event->button, event->time);
@@ -703,9 +694,9 @@ static void prepare_file_view(void)
 	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(file_view));
 	gtk_tree_selection_set_mode(select, GTK_SELECTION_MULTIPLE);
 
-	g_signal_connect(G_OBJECT(file_view), "realize", G_CALLBACK(on_current_path), NULL);
+	g_signal_connect(file_view, "realize", G_CALLBACK(on_current_path), NULL);
+	g_signal_connect(select, "changed", G_CALLBACK(on_tree_selection_changed), NULL);
 	g_signal_connect(file_view, "button-press-event", G_CALLBACK(on_button_press), NULL);
-	g_signal_connect(file_view, "button-release-event", G_CALLBACK(on_button_release), NULL);
 	g_signal_connect(file_view, "key-press-event", G_CALLBACK(on_key_press), NULL);
 }
 
@@ -900,6 +891,8 @@ void plugin_init(GeanyData *data)
 	file_view = gtk_tree_view_new();
 	prepare_file_view();
 	completion_create();
+
+	popup_items.open = popup_items.open_external = popup_items.find_in_files = NULL;
 
 	scrollwin = gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(
