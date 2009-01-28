@@ -3579,7 +3579,7 @@ configuration file.
 ================================  ===========================================  ==================
 Key                               Description                                  Default
 ================================  ===========================================  ==================
-**[editor]**
+**Editor related**
 brace_match_ltgt                  Whether to highlight <, > angle brackets.    false
 show_editor_scrollbars            Whether to display scrollbars. If set to     true
                                   false, the horizontal and vertical
@@ -3591,12 +3591,21 @@ use_gtk_word_boundaries           Whether to look for the end of a word when   t
 complete_snippets_whilst_editing  Whether to allow completion of snippets      false
                                   when editing an existing line (i.e. there
                                   is some text after the current cursor
-                                  position on the line).
-**[interface]**
+                                  position on the line). Only used when the
+                                  keybinding ``Complete snippet`` is set to
+                                  ``Space``.
+**Interface related**
 show_symbol_list_expanders        Whether to show or hide the small expander   true
                                   icons on the symbol list treeview (only
                                   available with GTK 2.12 or above).
-**[VTE]**
+allow_always_save                 Whether files can be saved always, even if   false
+                                  they don't have any changes. By default,
+                                  the Save buttons and menu items are
+                                  disabled when a file is unchanged. When
+                                  setting this option to true, the Save
+                                  buttons and menu items are always active
+                                  and files can be saved.
+**VTE related**
 emulation                         Terminal emulation mode. Only change this    xterm
                                   if you have VTE termcap files other than
                                   ``vte/termcap/xterm``.
