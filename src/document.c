@@ -1688,7 +1688,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 		return FALSE;
 
 	/* the "changed" flag should exclude the "readonly" flag, but check it anyway for safety */
-	if (! force && (! doc->changed || doc->readonly))
+	if (! force && ! ui_prefs.allow_always_save && (! doc->changed || doc->readonly))
 		return FALSE;
 
 	if (doc->file_name == NULL)

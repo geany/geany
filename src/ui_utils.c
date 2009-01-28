@@ -573,6 +573,9 @@ void ui_save_buttons_toggle(gboolean enable)
 	guint i;
 	gboolean dirty_tabs = FALSE;
 
+	if (ui_prefs.allow_always_save)
+		return;
+
 	ui_widget_set_sensitive(widgets.save_buttons[0], enable);
 	ui_widget_set_sensitive(widgets.save_buttons[1], enable);
 
@@ -609,6 +612,7 @@ static void init_document_widgets(void)
 	add_doc_widget("close_other_documents1");
 	add_doc_widget("menu_change_font1");
 	add_doc_widget("menu_close_all1");
+	add_doc_widget("menu_save1");
 	add_doc_widget("menu_save_all1");
 	add_doc_widget("menu_save_as1");
 	add_doc_widget("menu_count_words1");
@@ -653,7 +657,7 @@ static void init_document_widgets(void)
 	add_doc_toolitem("Copy");
 	add_doc_toolitem("Paste");
 	add_doc_toolitem("Delete");
-	add_doc_toolitem("SaveAll");
+	add_doc_toolitem("Save");
 	add_doc_toolitem("SaveAll");
 	add_doc_toolitem("Compile");
 	add_doc_toolitem("Run");

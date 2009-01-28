@@ -81,6 +81,7 @@ typedef struct UIPrefs
 	gboolean	fullscreen;
 	gboolean	sidebar_visible;
 	gboolean	msgwindow_visible;
+	gboolean	allow_always_save; /* if set, files can always be saved, even if unchanged */
 
 	/* Menu-item related data */
 	GQueue		*recent_queue;

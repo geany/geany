@@ -170,6 +170,8 @@ static void init_pref_groups(void)
 		"complete_snippets_whilst_editing", FALSE);
 	stash_group_add_boolean(group, &interface_prefs.show_symbol_list_expanders,
 		"show_symbol_list_expanders", TRUE);
+	stash_group_add_boolean(group, &ui_prefs.allow_always_save,
+		"allow_always_save", FALSE);
 }
 
 
