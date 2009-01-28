@@ -1274,7 +1274,7 @@ on_help1_activate                      (GtkMenuItem     *menuitem,
 		uri = g_strconcat(GEANY_HOMEPAGE, "manual/", VERSION, "/index.html", NULL);
 	}
 
-	utils_start_browser(uri);
+	utils_open_browser(uri);
 	g_free(uri);
 }
 
@@ -1291,7 +1291,7 @@ void
 on_website1_activate                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	utils_start_browser(GEANY_HOMEPAGE);
+	utils_open_browser(GEANY_HOMEPAGE);
 }
 
 

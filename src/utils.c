@@ -59,13 +59,26 @@
 #include "utils.h"
 
 
-void utils_start_browser(const gchar *uri)
+/**
+ *  Tries to open the given URI in a browser.
+ *  On Windows, the system's default browser is opened.
+ *  On non-Windows systems, the browser command set in the preferences dialog is used. In case
+ *  that fails or it is unset, @a xdg-open is used as fallback as well as some other known
+ *  browsers.
+ *
+ *  @param uri The URI to open in the web browser.
+ **/
+void utils_open_browser(const gchar *uri)
 {
 #ifdef G_OS_WIN32
+	g_return_if_fail(uri != NULL);
 	win32_open_browser(uri);
 #else
-	gchar *cmdline = g_strconcat(tool_prefs.browser_cmd, " ", uri, NULL);
+	gchar *cmdline;
 
+	g_return_if_fail(uri != NULL);
+
+	cmdline = g_strconcat(tool_prefs.browser_cmd, " ", uri, NULL);
 	if (! g_spawn_command_line_async(cmdline, NULL))
 	{
 		const gchar *argv[3];

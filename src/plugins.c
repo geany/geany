@@ -91,6 +91,7 @@ typedef struct Plugin
 
 	void		(*init) (GeanyData *data);			/* Called when the plugin is enabled */
 	GtkWidget*	(*configure) (GtkDialog *dialog);	/* plugin configure dialog, optional */
+	void		(*help) (void);					/* Called when the plugin should show some help, optional */
 	void		(*cleanup) (void);					/* Called when the plugin is disabled or when Geany exits */
 }
 Plugin;
@@ -212,7 +213,8 @@ static UtilsFuncs utils_funcs = {
 	&utils_spawn_sync,
 	&utils_spawn_async,
 	&utils_str_casecmp,
-	&utils_get_date_time
+	&utils_get_date_time,
+	&utils_open_browser
 };
 
 static UIUtilsFuncs uiutils_funcs = {
@@ -536,6 +538,7 @@ plugin_init(Plugin *plugin)
 
 	/* store some function pointers for later use */
 	g_module_symbol(plugin->module, "plugin_configure", (void *) &plugin->configure);
+	g_module_symbol(plugin->module, "plugin_help", (void *) &plugin->help);
 	g_module_symbol(plugin->module, "plugin_cleanup", (void *) &plugin->cleanup);
 	if (plugin->cleanup == NULL)
 	{
@@ -964,7 +967,9 @@ enum
 	PLUGIN_COLUMN_NAME,
 	PLUGIN_COLUMN_FILE,
 	PLUGIN_COLUMN_PLUGIN,
-	PLUGIN_N_COLUMNS
+	PLUGIN_N_COLUMNS,
+	PM_BUTTON_CONFIGURE,
+	PM_BUTTON_HELP
 };
 
 typedef struct
@@ -974,6 +979,7 @@ typedef struct
 	GtkListStore *store;
 	GtkWidget *description_label;
 	GtkWidget *configure_button;
+	GtkWidget *help_button;
 }
 PluginManagerWidgets;
 
@@ -1005,6 +1011,8 @@ void pm_selection_changed(GtkTreeSelection *selection, gpointer user_data)
 
 			gtk_widget_set_sensitive(pm_widgets.configure_button,
 				p->configure != NULL && g_list_find(active_plugin_list, p) != NULL);
+			gtk_widget_set_sensitive(pm_widgets.help_button,
+				p->help != NULL && g_list_find(active_plugin_list, p) != NULL);
 		}
 	}
 }
@@ -1032,7 +1040,9 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 
 	/* unload plugin module */
 	if (!state)
-		keybindings_write_to_file();	/* save shortcuts (only need this group, but it doesn't take long) */
+		/* save shortcuts (only need this group, but it doesn't take long) */
+		keybindings_write_to_file();
+
 	plugin_free(p);
 
 	/* reload plugin module and initialize it if item is checked */
@@ -1149,7 +1159,7 @@ static void configure_plugin(Plugin *p)
 }
 
 
-void pm_on_configure_button_clicked(GtkButton *button, gpointer user_data)
+void pm_on_plugin_button_clicked(GtkButton *button, gpointer user_data)
 {
 	GtkTreeModel *model;
 	GtkTreeSelection *selection;
@@ -1163,7 +1173,10 @@ void pm_on_configure_button_clicked(GtkButton *button, gpointer user_data)
 
 		if (p != NULL)
 		{
-			configure_plugin(p);
+			if (GPOINTER_TO_INT(user_data) == PM_BUTTON_CONFIGURE)
+				configure_plugin(p);
+			else if (GPOINTER_TO_INT(user_data) == PM_BUTTON_HELP && p->help != NULL)
+				p->help();
 		}
 	}
 }
@@ -1228,7 +1241,12 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	pm_widgets.configure_button = gtk_button_new_from_stock(GTK_STOCK_PREFERENCES);
 	gtk_widget_set_sensitive(pm_widgets.configure_button, FALSE);
 	g_signal_connect(pm_widgets.configure_button, "clicked",
-		G_CALLBACK(pm_on_configure_button_clicked), NULL);
+		G_CALLBACK(pm_on_plugin_button_clicked), GINT_TO_POINTER(PM_BUTTON_CONFIGURE));
+
+	pm_widgets.help_button = gtk_button_new_from_stock(GTK_STOCK_HELP);
+	gtk_widget_set_sensitive(pm_widgets.help_button, FALSE);
+	g_signal_connect(pm_widgets.help_button, "clicked",
+		G_CALLBACK(pm_on_plugin_button_clicked), GINT_TO_POINTER(PM_BUTTON_HELP));
 
 	label2 = gtk_label_new(_("<b>Plugin details:</b>"));
 	gtk_label_set_use_markup(GTK_LABEL(label2), TRUE);
@@ -1243,13 +1261,14 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 
 	hbox = gtk_hbox_new(FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), label2, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), pm_widgets.help_button, FALSE, FALSE, 4);
 	gtk_box_pack_start(GTK_BOX(hbox), pm_widgets.configure_button, FALSE, FALSE, 0);
 
-	label_vbox = gtk_vbox_new(FALSE, 0);
+	label_vbox = gtk_vbox_new(FALSE, 3);
 	gtk_box_pack_start(GTK_BOX(label_vbox), hbox, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(label_vbox), desc_win, FALSE, FALSE, 0);
 
-	vbox2 = gtk_vbox_new(FALSE, 6);
+	vbox2 = gtk_vbox_new(FALSE, 3);
 	gtk_box_pack_start(GTK_BOX(vbox2), label, FALSE, FALSE, 5);
 	gtk_box_pack_start(GTK_BOX(vbox2), swin, TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox2), label_vbox, FALSE, FALSE, 0);

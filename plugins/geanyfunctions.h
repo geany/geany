@@ -164,6 +164,8 @@
 	geany_functions->p_utils->str_casecmp
 #define utils_get_date_time \
 	geany_functions->p_utils->get_date_time
+#define utils_open_browser \
+	geany_functions->p_utils->open_browser
 #define ui_dialog_vbox_new \
 	geany_functions->p_ui->dialog_vbox_new
 #define ui_frame_new_with_alignment \

@@ -14,6 +14,16 @@
  * doc/plugins.dox, plugins/demoplugin.h:
    Mention necessary header includes in the plugin signal descriptions.
    Add missing header includes for the demoplugin.
+ * doc/pluginsymbols.c, plugins/geanyfunctions.h, src/about.c,
+   src/build.c, src/callbacks.c, src/plugindata.h, src/plugins.c,
+   src/utils.c, src/utils.h:
+   Rename utils_start_browser() in utils_open_browser() and add it to
+   the plugin API.
+   Add plugin symbol plugin_help() which is called by Geany when the
+   plugin should show its documentation (if any). This symbol is
+   optional, plugins can omit it if not needed.
+   Add a Help button next to the Configure button in the plugin manager
+   dialog to easily open a plugin's documentation if available.
 
 
 2009-01-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

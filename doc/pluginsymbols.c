@@ -97,3 +97,9 @@ void plugin_init(GeanyData *data);
  * everything done in plugin_init() - e.g. destroy menu items, free memory. */
 void plugin_cleanup();
 
+/** Called whenever the plugin should show its documentation (if any). This may open a dialog,
+ * a browser with a website or a local installed HTML help file(see utils_start_browser())
+ * or something else.
+ * Can be omitted when not needed. */
+void plugin_help();
+

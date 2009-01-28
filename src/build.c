@@ -1924,7 +1924,7 @@ static gboolean use_html_builtin(GeanyDocument *doc, GeanyFiletype *ft)
 	if (use_builtin)
 	{
 		gchar *uri = g_strconcat("file:///", g_path_skip_root(doc->file_name), NULL);
-		utils_start_browser(uri);
+		utils_open_browser(uri);
 		g_free(uri);
 
 		return TRUE;

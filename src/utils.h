@@ -54,7 +54,7 @@
 		ptr < &ptr_array->pdata[ptr_array->len]; ++ptr, item = *ptr)
 
 
-void utils_start_browser(const gchar *uri);
+void utils_open_browser(const gchar *uri);
 
 gint utils_get_line_endings(const gchar* buffer, glong size);
 
