@@ -11,6 +11,9 @@
    Use the selection 'changed' signal of the treeview to update the
    popup menu items and show the popup menu on mouse button press events
    so right clicking on items will select them first.
+ * doc/plugins.dox, plugins/demoplugin.h:
+   Mention necessary header includes in the plugin signal descriptions.
+   Add missing header includes for the demoplugin.
 
 
 2009-01-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

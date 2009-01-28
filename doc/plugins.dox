@@ -83,6 +83,9 @@ PluginCallback plugin_callbacks[] =
  *  @endsignalproto
  *  @signaldesc
  *  Sent when a new %document is created.
+ *
+ *  You need to include "document.h" for the declaration of GeanyDocument.
+ *
  *  @param obj a GeanyObject instance, should be ignored.
  *  @param doc the new document.
  *  @param user_data user data.
@@ -94,6 +97,9 @@ PluginCallback plugin_callbacks[] =
  *  @endsignalproto
  *  @signaldesc
  *  Sent when a new %document is opened.
+ *
+ *  You need to include "document.h" for the declaration of GeanyDocument.
+ *
  *  @param obj a GeanyObject instance, should be ignored.
  *  @param doc the opened document.
  *  @param user_data user data.
@@ -105,6 +111,9 @@ PluginCallback plugin_callbacks[] =
  *  @endsignalproto
  *  @signaldesc
  *  Sent when a new %document is saved.
+ *
+ *  You need to include "document.h" for the declaration of GeanyDocument.
+ *
  *  @param obj a GeanyObject instance, should be ignored.
  *  @param doc the saved document.
  *  @param user_data user data.
@@ -116,6 +125,9 @@ PluginCallback plugin_callbacks[] =
  *  @endsignalproto
  *  @signaldesc
  *  Sent when switching notebook pages.
+ *
+ *  You need to include "document.h" for the declaration of GeanyDocument.
+ *
  *  @param obj a GeanyObject instance, should be ignored.
  *  @param doc the current document.
  *  @param user_data user data.
@@ -127,6 +139,9 @@ PluginCallback plugin_callbacks[] =
  *  @endsignalproto
  *  @signaldesc
  *  Sent before closing a document.
+ *
+ *  You need to include "document.h" for the declaration of GeanyDocument.
+ *
  *  @param obj a GeanyObject instance, should be ignored.
  *  @param doc the document about to be closed.
  *  @param user_data user data.
@@ -176,8 +191,12 @@ PluginCallback plugin_callbacks[] =
  *  @signaldesc
  *  Sent before the popup menu of the editing widget is shown. This can be used to modify or extend
  *  the popup menu.
+ *
  *  @note You can add menu items from @c plugin_init() using @c geany->main_widgets->editor_menu,
  *  remembering to destroy them in @c plugin_cleanup().
+ *
+ *  You need to include "document.h" for the declaration of GeanyDocument.
+ *
  *  @param obj a GeanyObject instance, should be ignored.
  *  @param word the current word (in UTF-8 encoding) below the cursor position
 		   where the popup menu will be opened.
@@ -214,6 +233,9 @@ PluginCallback plugin_callbacks[] =
  *  @warning This signal has much power and should be used carefully. You should especially
  *           care about the return value; make sure to return TRUE only if it is necessary
  *           and in the correct situations.
+ *
+ *  You need to include "editor.h" for the declaration of GeanyEditor and "Scintilla.h" for
+ *  SCNotification.
  *
  *  @param obj a GeanyObject instance, should be ignored.
  *  @param editor The current GeanyEditor.

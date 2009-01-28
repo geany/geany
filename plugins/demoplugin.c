@@ -37,8 +37,11 @@
 
 #include "geany.h"		/* for the GeanyApp data type */
 #include "support.h"	/* for the _() translation macro (see also po/POTFILES.in) */
+#include "editor.h"		/* for the declaration of the GeanyEditor struct, not strictly necessary
+						   as it will be also included by plugindata.h */
+#include "document.h"	/* for the declaration of the GeanyDocument struct */
 #include "ui_utils.h"
-#include "Scintilla.h" /* for the SCNotification struct */
+#include "Scintilla.h"	/* for the SCNotification struct */
 
 #include "plugindata.h"		/* this defines the plugin API */
 #include "geanyfunctions.h"	/* this wraps geany_functions function pointers */
