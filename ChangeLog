@@ -2,6 +2,8 @@
 
  * autogen.sh:
    Add a check for 'libtoolize' (suggested by Greg Smith, thanks).
+ * tagmanager/fortran.c:
+   Update Fortran parser from CTags SVN (closes #2545000).
 
 
 2009-01-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
