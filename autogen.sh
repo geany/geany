@@ -34,6 +34,16 @@ DIE=0
 	DIE=1
 }
 
+(libtoolize --version) < /dev/null > /dev/null 2>&1 || {
+     (glibtoolize --version) < /dev/null > /dev/null 2>&1 || {
+         echo
+         echo "**Error**: You must have \`libtool' installed."
+         echo "You can get it from:"
+         echo "  http://www.gnu.org/software/libtool/"
+         DIE=1
+     }
+}
+
 (automake --version) < /dev/null > /dev/null 2>&1 || {
 	echo
 	echo "**Error**: You must have \`automake' (1.7 or later) installed."
