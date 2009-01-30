@@ -6,6 +6,8 @@
    Allow entering paths prefixed with '~' in the filebrowser path entry.
    Show the full path for files and folders in the filebrowser plugin
    as tooltips.
+ * HACKING, doc/plugins.dox:
+   Add a few notes about basic plugin writing guidelines.
 
 
 2009-01-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

@@ -44,6 +44,7 @@
  *  - @link plugindata.h Main Datatypes and Macros @endlink
  *  - @link pluginsymbols.c Plugin Symbols @endlink
  *  - @link signals Plugin Signals @endlink
+ *  - @link guidelines Plugin Writing Guidelines @endlink
  *
  *  @note Some of these pages are also listed in Related Pages.
  */
@@ -246,6 +247,77 @@ PluginCallback plugin_callbacks[] =
  * 	    @c FALSE to propagate the event further.
  *  @endsignaldef
  *
+ *
+ *
+ *  @page guidelines Plugin Writing Guidelines
+ *
+ *  @section intro Introduction
+ *
+ *  The following hints and guidelines are only recommendations. Nobody is forced to follow
+ *  them at all.
+ *
+ *  @section general General notes
+ *
+ *  @subsection ideas Getting a plugin idea
+ *
+ *  If you want to write a plugin but don't know yet what it should do, have a look at
+ *  http://www.geany.org/Support/PluginWishlist to get an idea about what users wish.
+ *
+ *  @subsection code Managing the source code
+ *
+ *  For authors of plugins for Geany, we created a dedicated @a geany-plugins project at
+ *  Sourceforge to ease development of plugins and help new authors.
+ *  Project website: http://sourceforge.net/projects/geany-plugins
+ *
+ *  Each plugin author is welcome to use these services. To do so, you need an account at
+ *  Sourceforge. You can easily register at (http://sourceforge.net/account/registration/).
+ *  After you successfully created an account,
+ *  tell your account name Enrico or Nick and you will write access to the SVN repository
+ *  (http://geany-plugins.svn.sourceforge.net/viewvc/geany-plugins/).
+ *  Then you can use the repository for your own plugin.
+ *
+ *  Authors using this service should subscribe to the
+ *  geany-plugins-commits at uvena.de and geany-plugins-tracker at uvena.de
+ *  mailing lists(see my previous post) to stay up to date with changes.
+ *  General plugin discussion can happen on the normal geany at uvena.de or
+ *  geany-devel at uvena.de lists.
+ *
+ *  At time of writing, there are some plugins already available in the
+ *  repository. Feel free to use any of these plugins as a start for your own,
+ *  maybe by copying the directory structure and the autotools files
+ *  (Makefile.am, configure.in, ...). Most of the available plugins are also ready for
+ *  i18n support, just for reference.
+ *
+ *  New plugins should be imported into a new directory inside the trunk/
+ *  directory. There are also the common branches and tags directories, use
+ *  them as needed, use always a subdirectory for your own plugin.
+ *
+ *  We encourage authors using this service to only commit changes to their
+ *  own plugin and not to others' plugins. Instead just send patches to
+ *  geany-devel at uvena.de or the plugin author directly.
+ *
+ *  (the full announcement of this service can be found at
+ *  http://lists.uvena.de/geany/2008-April/003225.html)
+ *
+ *
+ *  @section paths Installation paths
+ *
+ *   - The plugin binary (@c pluginname.so) should be installed in Geany's libdir. This is
+ *     necessary so that Geany can find the plugin.
+ *     An easy way to retrieve Geany's libdir is to use the pkg-config tool, e.g. @code
+ *     `$PKG_CONFIG --variable=libdir geany`/ geany
+ *     @endcode
+ *   - If your plugin creates other binary files like helper programs or helper libraries,
+ *     they should go into @c $prefix/bin (for programs, ideally prefixed with @a geany),
+ *     additional libraries should be installed in Geany's libdir, maybe in a subdirectory.
+ *   - Plugins should install their documentation files (README, NEWS, ChangeLog, licences and
+ *     other documentation files) into the common documentation directory
+ *     @c $prefix/share/doc/geany-plugins/$pluginname/
+ *   - Translation files should be installed normally into @c $prefix/share/locale. There is no
+ *     need to use Geany's translation directory. To set up translation support properly and
+ *     for additional information, see main_locale_init().
+ *   - Do @a never install anything into a user's home directory like installing
+ *     the plugin binary in @c ~/.config/geany/plugins/.
  *
  *
  *  @page howto Plugin Howto

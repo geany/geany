@@ -20,6 +20,8 @@ Writing plugins
 * See plugins/demoplugin.c for a very basic example plugin.
 * src/plugins.c loads and unloads plugins (you shouldn't need to read
   this really).
+* The API documentation contains a few basic guidelines and hints to
+  write plugins.
 
 You should generate and read the plugin API documentation, see below.
 
