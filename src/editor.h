@@ -74,7 +74,10 @@ typedef enum
 GeanyIndicator;
 
 /** Indentation prefs that might be different according to project or filetype.
- * Use @c editor_get_indent_prefs() to lookup the prefs for a particular document. */
+ * Use @c editor_get_indent_prefs() to lookup the prefs for a particular document.
+ *
+ * @since 0.15
+ **/
 typedef struct GeanyIndentPrefs
 {
 	gint			width;				/**< Indent width. */

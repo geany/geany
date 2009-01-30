@@ -684,7 +684,10 @@ void sci_set_tab_width(ScintillaObject * sci, gint width)
 
 /** Get display tab width (this is not indent width, see GeanyIndentPrefs).
  * @param sci Scintilla widget.
- * @return Width. */
+ * @return Width.
+ *
+ * @since 0.15
+ **/
 gint sci_get_tab_width(ScintillaObject * sci)
 {
 	return SSM(sci, SCI_GETTABWIDTH, 0, 0);
@@ -720,7 +723,10 @@ void sci_use_popup(ScintillaObject *sci, gboolean enable)
 
 /** Check if there's a selection.
  * @param sci Scintilla widget.
- * @return Whether a selection is present. */
+ * @return Whether a selection is present.
+ *
+ * @since 0.15
+ **/
 gboolean sci_has_selection(ScintillaObject *sci)
 {
 	if (SSM(sci, SCI_GETSELECTIONEND,0,0) - SSM(sci, SCI_GETSELECTIONSTART,0,0))
@@ -926,7 +932,10 @@ gboolean sci_get_readonly(ScintillaObject *sci)
 /** A simple convenience function for sending Scintilla commands without any parameters.
  * @param sci The Scintilla @c GtkWidget.
  * @param cmd @c SCI_COMMAND.
- * @see http://scintilla.org for the documentation. */
+ * @see http://scintilla.org for the documentation.
+ *
+ *  @since 0.16
+ */
 void sci_send_command(ScintillaObject * sci, gint cmd)
 {
 	SSM(sci, cmd, 0, 0);
@@ -986,7 +995,9 @@ gint sci_indicator_get(ScintillaObject *sci)
  *  @param indic The indicator number to set.
  *
  *  @see sci_indicator_clear
- **/
+ *
+ *  @since 0.16
+ */
 void sci_indicator_set(ScintillaObject *sci, gint indic)
 {
 	SSM(sci, SCI_SETINDICATORCURRENT, indic, 0);
@@ -1006,7 +1017,9 @@ void sci_indicator_fill(ScintillaObject *sci, gint pos, gint len)
  *  @param sci Scintilla widget.
  *  @param pos Starting position.
  *  @param len Length.
- **/
+ *
+ *  @since 0.16
+ */
 void sci_indicator_clear(ScintillaObject *sci, gint pos, gint len)
 {
 	SSM(sci, SCI_INDICATORCLEARRANGE, pos, len);
@@ -1030,7 +1043,10 @@ void sci_set_autoc_max_height(ScintillaObject *sci, gint val)
 /** Find a matching brace at @a pos.
  * @param sci Scintilla widget.
  * @param pos Position.
- * @return Matching brace position. */
+ * @return Matching brace position.
+ *
+ * @since 0.15
+ **/
 gint sci_find_matching_brace(ScintillaObject *sci, gint pos)
 {
 	return SSM(sci, SCI_BRACEMATCH, pos, 0);

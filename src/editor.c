@@ -3692,7 +3692,9 @@ void editor_indicator_clear_errors(GeanyEditor *editor)
  *
  *  @param editor The editor to operate on.
  *  @param indic The indicator number to clear, this is a value of @ref GeanyIndicator.
- **/
+ *
+ *  @since 0.16
+ */
 void editor_indicator_clear(GeanyEditor *editor, gint indic)
 {
 	glong last_pos;
@@ -3715,7 +3717,9 @@ void editor_indicator_clear(GeanyEditor *editor, gint indic)
  *  @param editor The editor to operate on.
  *  @param indic The indicator number to use, this is a value of @ref GeanyIndicator.
  *  @param line The line number which should be marked.
- **/
+ *
+ *  @since 0.16
+ */
 void editor_indicator_set_on_line(GeanyEditor *editor, gint indic, gint line)
 {
 	gint start, end;
@@ -3758,7 +3762,9 @@ void editor_indicator_set_on_line(GeanyEditor *editor, gint indic, gint line)
  *  @param indic The indicator number to use, this is a value of @ref GeanyIndicator.
  *  @param start The starting position for the marker.
  *  @param end The ending position for the marker.
- **/
+ *
+ *  @since 0.16
+ */
 void editor_indicator_set_on_range(GeanyEditor *editor, gint indic, gint start, gint end)
 {
 	if (editor == NULL || start >= end)
@@ -4067,7 +4073,10 @@ void editor_set_line_wrapping(GeanyEditor *editor, gboolean wrap)
 
 /** Set the indent type for @a editor.
  * @param editor Editor.
- * @param type Indent type. */
+ * @param type Indent type.
+ *
+ *  @since 0.16
+ */
 void editor_set_indent_type(GeanyEditor *editor, GeanyIndentType type)
 {
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
@@ -4255,7 +4264,10 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 
 /** Create a new Scintilla @c GtkWidget based on the settings for @a editor.
  * @param editor Editor settings.
- * @return The new widget. */
+ * @return The new widget.
+ *
+ * @since 0.15
+ **/
 ScintillaObject *editor_create_widget(GeanyEditor *editor)
 {
 	const GeanyIndentPrefs *iprefs = get_default_indent_prefs();

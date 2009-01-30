@@ -273,6 +273,8 @@ void msgwin_show_hide(gboolean show)
  *  @param doc The document. Set to @c NULL to ignore.
  *  @param format @c printf()-style format string.
  *  @param ... Arguments for the @c format string.
+ *
+ * @since 0.15
  **/
 void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *format, ...)
 {
@@ -1006,6 +1008,8 @@ static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *
  *  @param tabnum An index of a tab in the messages window. Valid values are all elements of
  *                #MessageWindowTabNum.
  *  @param show Whether to show the messages window at all if it was hidden before.
+ *
+ * @since 0.15
  **/
 void msgwin_switch_tab(gint tabnum, gboolean show)
 {
@@ -1034,6 +1038,8 @@ void msgwin_switch_tab(gint tabnum, gboolean show)
  *
  *  @param tabnum An index of a tab in the messages window which should be cleared.
  *                Valid values are @a MSG_STATUS, @a MSG_COMPILER and @a MSG_MESSAGE.
+ *
+ * @since 0.15
  **/
 void msgwin_clear_tab(gint tabnum)
 {

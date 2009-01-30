@@ -690,7 +690,10 @@ static void on_doc_sensitive_widget_destroy(GtkWidget *widget, G_GNUC_UNUSED gpo
 /** Add a widget to the list of widgets that should be set sensitive/insensitive
  * when some documents are present/no documents are open.
  * It will be removed when the widget is destroyed.
- * @param widget The widget to add. */
+ * @param widget The widget to add.
+ *
+ * @since 0.15
+ **/
 void ui_add_document_sensitive(GtkWidget *widget)
 {
 	gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) ? TRUE : FALSE;
@@ -1170,7 +1173,10 @@ GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text)
 /** Create a @c GtkImageMenuItem with a stock image and a custom label.
  * @param stock_id Stock image ID, e.g. @c GTK_STOCK_OPEN.
  * @param label Menu item label, can include mnemonics.
- * @return The new @c GtkImageMenuItem. */
+ * @return The new @c GtkImageMenuItem.
+ *
+ *  @since 0.16
+ */
 GtkWidget *
 ui_image_menu_item_new(const gchar *stock_id, const gchar *label)
 {
@@ -1200,6 +1206,8 @@ static void entry_clear_icon_press_cb(GtkEntry *entry, gint icon_pos, GdkEvent *
  *  nothing happens. If ran with GTK 2.16 or newer, the icon is displayed.
  *
  * @param entry The GtkEntry object to which the icon should be attached.
+ *
+ *  @since 0.16
  */
 void ui_entry_add_clear_icon(GtkWidget *entry)
 {
@@ -1753,6 +1761,8 @@ void ui_auto_separator_add_ref(GeanyAutoSeparator *autosep, GtkWidget *item)
  *
  *  @param widget The widget the tooltip should be set for.
  *  @param text The text for the tooltip.
+ *
+ *  @since 0.16
  */
 void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text)
 {
@@ -1776,7 +1786,10 @@ void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text)
  * @param widget Widget with the @a widget_name property set.
  * @param widget_name Name to lookup.
  * @return The widget found.
- * @see ui_hookup_widget(). */
+ * @see ui_hookup_widget().
+ *
+ *  @since 0.16
+ */
 GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name)
 {
 	GtkWidget *parent, *found_widget;
@@ -1841,7 +1854,9 @@ static gboolean progress_bar_pulse(gpointer data)
  * in @c src/printing.c.
  *
  * @param text The text to be shown as the progress bar label or NULL to leave it empty.
- */
+ *
+ *  @since 0.16
+ **/
 void ui_progress_bar_start(const gchar *text)
 {
 	g_return_if_fail(progress_bar_timer_id == (guint) -1);
@@ -1857,7 +1872,10 @@ void ui_progress_bar_start(const gchar *text)
 }
 
 
-/** Stops a running progress bar and hides the widget again. */
+/** Stops a running progress bar and hides the widget again.
+ *
+ *  @since 0.16
+ **/
 void ui_progress_bar_stop(void)
 {
 	gtk_widget_hide(GTK_WIDGET(main_widgets.progressbar));

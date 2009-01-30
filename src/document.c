@@ -124,6 +124,8 @@ static gboolean update_tags_from_buffer(GeanyDocument *doc);
  * @return The matching document, or NULL.
  * @note This is only really useful when passing a @c TMWorkObject::file_name.
  * @see document_find_by_filename().
+ *
+ * @since 0.15
  **/
 GeanyDocument* document_find_by_real_path(const gchar *realname)
 {
@@ -596,6 +598,8 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
  *  @param doc The document to remove.
  *
  *  @return @a TRUE if the document was actually removed or @a FALSE otherwise.
+ *
+ * @since 0.15
  **/
 gboolean document_close(GeanyDocument *doc)
 {
@@ -1501,7 +1505,9 @@ static void replace_header_filename(GeanyDocument *doc)
  *
  *  @param doc The current document which should be renamed.
  *  @param new_filename The new filename in UTF-8 encoding.
- */
+ *
+ *  @since 0.16
+ **/
 void document_rename_file(GeanyDocument *doc, const gchar *new_filename)
 {
 	gchar *old_locale_filename = utils_get_locale_from_utf8(doc->file_name);
@@ -1526,7 +1532,9 @@ void document_rename_file(GeanyDocument *doc, const gchar *new_filename)
  * @return @c TRUE if the file was saved or @c FALSE if the file could not be saved.
  *
  * @see document_save_file().
- */
+ *
+ *  @since 0.16
+ **/
 gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 {
 	gboolean ret;
@@ -2698,7 +2706,10 @@ GdkColor *document_get_status_color(GeanyDocument *doc)
 /** Accessor function for @ref GeanyData::documents_array items.
  * @warning Always check the returned document is valid (@c doc->is_valid).
  * @param idx @c documents_array index.
- * @return The document, or @c NULL if @a idx is out of range. */
+ * @return The document, or @c NULL if @a idx is out of range.
+ *
+ *  @since 0.16
+ */
 GeanyDocument *document_index(gint idx)
 {
 	return (idx >= 0 && idx < (gint) documents_array->len) ? documents[idx] : NULL;

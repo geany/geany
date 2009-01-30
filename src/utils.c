@@ -67,6 +67,8 @@
  *  browsers.
  *
  *  @param uri The URI to open in the web browser.
+ *
+ *  @since 0.16
  **/
 void utils_open_browser(const gchar *uri)
 {
@@ -342,7 +344,9 @@ gdouble utils_scale_round(gdouble val, gdouble factor)
  *
  *  @return an integer less than, equal to, or greater than zero if @a s1 is found, respectively,
  *          to be less than, to match, or to be greater than @a s2.
- **/
+ *
+ *  @since 0.16
+ */
 gint utils_str_casecmp(const gchar *s1, const gchar *s2)
 {
 	gchar *tmp1, *tmp2;
@@ -566,7 +570,9 @@ gint utils_strpos(const gchar *haystack, const gchar *needle)
  *  @param time_to_use The date/time to use, in time_t format or NULL to use the current time.
  *
  *  @return A newly-allocated string, should be freed when no longer needed.
- **/
+ *
+ *  @since 0.16
+ */
 gchar *utils_get_date_time(const gchar *format, time_t *time_to_use)
 {
 	const struct tm *tm;
@@ -1334,7 +1340,8 @@ guint utils_string_replace_all(GString *haystack, const gchar *needle, const gch
 
 
 /**
- * Convenience function to replace only the occurrence of @c needle in @c haystack with @c.
+ * Convenience function to replace only the first occurrence of @c needle in @c haystack
+ * with @ replace.
  * For details, see utils_string_replace_all().
  *
  * @param haystack The input string to operate on. This string is modified in place.
@@ -1342,6 +1349,8 @@ guint utils_string_replace_all(GString *haystack, const gchar *needle, const gch
  * @param replace The replacement for @c needle.
  *
  * @return @a amount of replacements done
+ *
+ *  @since 0.16
  */
 guint utils_string_replace_first(GString *haystack, const gchar *needle, const gchar *replace)
 {

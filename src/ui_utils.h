@@ -28,7 +28,10 @@
  * @param owner Usually a @c GtkWindow.
  * @param widget Widget.
  * @param widget_name Name.
- * @see ui_lookup_widget(). */
+ * @see ui_lookup_widget().
+ *
+ *  @since 0.16
+ **/
 #define ui_hookup_widget(owner, widget, widget_name) \
 	g_object_set_data_full(G_OBJECT(owner), widget_name, \
 		g_object_ref(widget), (GDestroyNotify)g_object_unref);

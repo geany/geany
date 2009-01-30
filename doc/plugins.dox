@@ -245,6 +245,8 @@ PluginCallback plugin_callbacks[] =
  *  @param user_data user data.
  *  @return @c TRUE to stop other handlers from being invoked for the event.
  * 	    @c FALSE to propagate the event further.
+ *
+ *  @since 0.16
  *  @endsignaldef
  *
  *

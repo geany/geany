@@ -1316,7 +1316,10 @@ gboolean filetype_has_tags(GeanyFiletype *ft)
 
 /** Find a filetype pointer from its @c name field.
  * @param name Filetype name.
- * @return The filetype found, or @c NULL. */
+ * @return The filetype found, or @c NULL.
+ *
+ * @since 0.15
+ **/
 GeanyFiletype *filetypes_lookup_by_name(const gchar *name)
 {
 	GeanyFiletype *ft;
@@ -1456,7 +1459,10 @@ void filetypes_read_extensions(void)
 /** Accessor function for @ref GeanyData::filetypes_array items.
  * Example: @code ft = filetypes_index(GEANY_FILETYPES_C); @endcode
  * @param idx @c filetypes_array index.
- * @return The filetype, or @c NULL if @a idx is out of range. */
+ * @return The filetype, or @c NULL if @a idx is out of range.
+ *
+ *  @since 0.16
+ */
 GeanyFiletype *filetypes_index(gint idx)
 {
 	return (idx >= 0 && idx < (gint) filetypes_array->len) ? filetypes[idx] : NULL;

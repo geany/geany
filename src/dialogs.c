@@ -928,6 +928,8 @@ dialogs_show_input(const gchar *title, const gchar *label_text, const gchar *def
  * 				(see documentation for @a gtk_spin_button_new_with_range()).
  *
  *  @return @a TRUE if a value was entered and the dialog closed with 'OK'. @a FALSE otherwise.
+ *
+ *  @since 0.16
  **/
 gboolean dialogs_show_input_numeric(const gchar *title, const gchar *label_text,
 									gdouble *value, gdouble min, gdouble max, gdouble step)
