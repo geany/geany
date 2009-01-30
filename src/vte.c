@@ -653,8 +653,12 @@ void vte_cwd(const gchar *filename, gboolean force)
 			gchar *quoted_path = g_shell_quote(path);
 			gchar *cmd = g_strconcat("cd ", quoted_path, "\n", NULL);
 			if (! vte_send_cmd(cmd))
+			{
 				ui_set_statusbar(FALSE,
 		_("Could not change the directory in the VTE because it probably contains a command."));
+				geany_debug(
+		"Could not change the directory in the VTE because it probably contains a command.");
+			}
 			g_free(quoted_path);
 			g_free(cmd);
 		}

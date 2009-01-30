@@ -676,8 +676,11 @@ static GPid build_run_cmd(GeanyDocument *doc)
 			g_free(utf8_working_dir);
 		}
 		if (! vte_send_cmd(vte_cmd))
+		{
 			ui_set_statusbar(FALSE,
 		_("Could not execute the file in the VTE because it probably contains a command."));
+			geany_debug("Could not execute the file in the VTE because it probably contains a command.");
+		}
 
 		/* show the VTE */
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_VTE);
