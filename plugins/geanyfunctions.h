@@ -166,6 +166,8 @@
 	geany_functions->p_utils->get_date_time
 #define utils_open_browser \
 	geany_functions->p_utils->open_browser
+#define utils_string_replace_first \
+	geany_functions->p_utils->string_replace_first
 #define ui_dialog_vbox_new \
 	geany_functions->p_ui->dialog_vbox_new
 #define ui_frame_new_with_alignment \

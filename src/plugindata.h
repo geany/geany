@@ -45,7 +45,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 130,
+	GEANY_API_VERSION = 131,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -354,6 +354,8 @@ typedef struct UtilsFuncs
 	gint		(*str_casecmp) (const gchar *s1, const gchar *s2);
 	gchar*		(*get_date_time) (const gchar *format, time_t *time_to_use);
 	void		(*open_browser) (const gchar *uri);
+	guint		(*string_replace_first) (GString *haystack, const gchar *needle,
+				 const gchar *replace);
 }
 UtilsFuncs;
 

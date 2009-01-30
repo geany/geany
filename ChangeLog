@@ -1,3 +1,13 @@
+2009-01-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/plugins.c, src/plugindata.h, src/utils.c, plugins/filebrowser.c,
+   plugins/geanyfunctions.h:
+   Add utils_string_replace_first() to the plugin API.
+   Allow entering paths prefixed with '~' in the filebrowser path entry.
+   Show the full path for files and folders in the filebrowser plugin
+   as tooltips.
+
+
 2009-01-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * autogen.sh:

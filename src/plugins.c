@@ -214,7 +214,8 @@ static UtilsFuncs utils_funcs = {
 	&utils_spawn_async,
 	&utils_str_casecmp,
 	&utils_get_date_time,
-	&utils_open_browser
+	&utils_open_browser,
+	&utils_string_replace_first
 };
 
 static UIUtilsFuncs uiutils_funcs = {

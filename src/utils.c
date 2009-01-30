@@ -1333,10 +1333,9 @@ guint utils_string_replace_all(GString *haystack, const gchar *needle, const gch
 }
 
 
-/*
- * Replaces the first occurrence of @c needle in @c haystack with @c replace.
- * As of Geany 0.16, @a replace can match @a needle, so the following will work:
- * @code utils_string_replace_all(text, "\n", "\r\n"); @endcode
+/**
+ * Convenience function to replace only the occurrence of @c needle in @c haystack with @c.
+ * For details, see utils_string_replace_all().
  *
  * @param haystack The input string to operate on. This string is modified in place.
  * @param needle The string which should be replaced.

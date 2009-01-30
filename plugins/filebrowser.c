@@ -45,7 +45,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(69)
+PLUGIN_VERSION_CHECK(131)
 
 PLUGIN_SET_INFO(_("File Browser"), _("Adds a file browser tab to the sidebar."), VERSION,
 	_("The Geany developer team"))
@@ -66,6 +66,7 @@ enum
 {
 	FILEVIEW_COLUMN_ICON = 0,
 	FILEVIEW_COLUMN_NAME,
+	FILEVIEW_COLUMN_FILENAME, /* the full filename, including path for display as tooltip */
 	FILEVIEW_N_COLUMNS
 };
 
@@ -146,7 +147,7 @@ static gboolean check_filtered(const gchar *base_name)
 static void add_item(const gchar *name)
 {
 	GtkTreeIter iter;
-	gchar *fname, *utf8_name;
+	gchar *fname, *utf8_name, *utf8_fullname, *sep;
 	gboolean dir;
 
 	if (! show_hidden_files && check_hidden(name))
@@ -155,8 +156,10 @@ static void add_item(const gchar *name)
 	if (check_filtered(name))
 		return;
 
-	fname = g_strconcat(current_dir, G_DIR_SEPARATOR_S, name, NULL);
+	sep = (utils_str_equal(current_dir, "/")) ? "" : G_DIR_SEPARATOR_S;
+	fname = g_strconcat(current_dir, sep, name, NULL);
 	dir = g_file_test(fname, G_FILE_TEST_IS_DIR);
+	utf8_fullname = utils_get_locale_from_utf8(fname);
 	g_free(fname);
 
 	if (dir)
@@ -177,8 +180,11 @@ static void add_item(const gchar *name)
 
 	gtk_list_store_set(file_store, &iter,
 		FILEVIEW_COLUMN_ICON, (dir) ? GTK_STOCK_DIRECTORY : GTK_STOCK_FILE,
-		FILEVIEW_COLUMN_NAME, utf8_name, -1);
+		FILEVIEW_COLUMN_NAME, utf8_name,
+		FILEVIEW_COLUMN_FILENAME, utf8_fullname,
+		-1);
 	g_free(utf8_name);
+	g_free(utf8_fullname);
 }
 
 
@@ -186,15 +192,23 @@ static void add_item(const gchar *name)
 static void add_top_level_entry(void)
 {
 	GtkTreeIter iter;
+	gchar *utf8_dir;
 
 	if (! NZV(g_path_skip_root(current_dir)))
 		return;	/* ignore 'C:\' or '/' */
+
+	utf8_dir = g_path_get_dirname(current_dir);
+	setptr(utf8_dir, utils_get_utf8_from_locale(utf8_dir));
 
 	gtk_list_store_prepend(file_store, &iter);
 	last_dir_iter = gtk_tree_iter_copy(&iter);
 
 	gtk_list_store_set(file_store, &iter,
-		FILEVIEW_COLUMN_ICON, GTK_STOCK_DIRECTORY, FILEVIEW_COLUMN_NAME, "..", -1);
+		FILEVIEW_COLUMN_ICON, GTK_STOCK_DIRECTORY,
+		FILEVIEW_COLUMN_NAME, "..",
+		FILEVIEW_COLUMN_FILENAME, utf8_dir,
+		-1);
+	g_free(utf8_dir);
 }
 
 
@@ -336,17 +350,9 @@ static gchar *get_tree_path_filename(GtkTreePath *treepath)
 	gchar *name, *fname;
 
 	gtk_tree_model_get_iter(model, &iter, treepath);
-	gtk_tree_model_get(model, &iter, FILEVIEW_COLUMN_NAME, &name, -1);
+	gtk_tree_model_get(model, &iter, FILEVIEW_COLUMN_FILENAME, &name, -1);
 
-	if (utils_str_equal(name, ".."))
-	{
-		fname = g_path_get_dirname(current_dir);
-	}
-	else
-	{
-		setptr(name, utils_get_locale_from_utf8(name));
-		fname = g_build_filename(current_dir, name, NULL);
-	}
+	fname = utils_get_locale_from_utf8(name);
 	g_free(name);
 
 	return fname;
@@ -637,7 +643,14 @@ static void on_path_entry_activate(GtkEntry *entry, gpointer user_data)
 			on_go_up();
 			return;
 		}
-		new_dir = utils_get_locale_from_utf8(new_dir);
+		else if (new_dir[0] == '~')
+		{
+			GString *str = g_string_new(new_dir);
+			utils_string_replace_first(str, "~", g_get_home_dir());
+			new_dir = g_string_free(str, FALSE);
+		}
+		else
+			new_dir = utils_get_locale_from_utf8(new_dir);
 	}
 	else
 		new_dir = g_strdup(g_get_home_dir());
@@ -668,7 +681,7 @@ static void prepare_file_view(void)
 	GtkTreeSelection *select;
 	PangoFontDescription *pfd;
 
-	file_store = gtk_list_store_new(FILEVIEW_N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING);
+	file_store = gtk_list_store_new(FILEVIEW_N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
 
 	gtk_tree_view_set_model(GTK_TREE_VIEW(file_view), GTK_TREE_MODEL(file_store));
 	g_object_unref(file_store);
@@ -689,6 +702,10 @@ static void prepare_file_view(void)
 	pfd = pango_font_description_from_string(geany->interface_prefs->tagbar_font);
 	gtk_widget_modify_font(file_view, pfd);
 	pango_font_description_free(pfd);
+
+	/* GTK 2.12 tooltips */
+	if (gtk_check_version(2, 12, 0) == NULL)
+		g_object_set(file_view, "has-tooltip", TRUE, "tooltip-column", FILEVIEW_COLUMN_FILENAME, NULL);
 
 	/* selection handling */
 	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(file_view));
