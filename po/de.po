@@ -3976,7 +3976,7 @@ msgstr "Überschrift (H2)"
 
 #: ../src/symbols.c:642
 msgid "H3 Headings"
-msgstr "Überschrift (H2)"
+msgstr "Überschrift (H3)"
 
 #: ../src/symbols.c:650
 msgid "ID Selectors"
