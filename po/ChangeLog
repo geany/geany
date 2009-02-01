@@ -4,6 +4,8 @@
  * tr.po: Update of Turkish translation. Thanks to Gürkan Gür.
  * *.po, geany.pot: Update for string freeze in preparing of Geany
    0.15 release.
+ * de.po: Fix of a minor translation issue. Thanks to Chikahiro Masami
+   for reporting.
 
 
 

@@ -3972,11 +3972,11 @@ msgstr "Überschrift (H1)"
 
 #: ../src/symbols.c:641
 msgid "H2 Headings"
-msgstr "Überschrift (H1)"
+msgstr "Überschrift (H2)"
 
 #: ../src/symbols.c:642
 msgid "H3 Headings"
-msgstr "Überschrift (H1)"
+msgstr "Überschrift (H2)"
 
 #: ../src/symbols.c:650
 msgid "ID Selectors"
