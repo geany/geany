@@ -35,13 +35,12 @@ Missing features: --enable-binreloc, make targets: dist, pdf (in doc/)
 Known issues: Dependency handling is buggy, e.g. if src/document.h is
 			  changed, depending source files are not rebuilt (maybe Waf bug).
 
-Requires WAF 1.5 (SVN r4695 or later) and Python 2.4 (or later).
+Requires WAF 1.5.3 and Python 2.4 (or later).
 """
 
 
-import Build, Configure, Options, Runner, Task, Utils
-from TaskGen import feature, before, taskgen
-import sys, os, subprocess, shutil
+import Build, Configure, Options, Utils
+import sys, os, shutil
 from distutils import version
 
 
@@ -119,7 +118,7 @@ def configure(conf):
 		# try SVN
 		elif os.path.exists('.svn'):
 			try:
-				stdout = Utils.cmd_output('svn info --non-interactive', {'LANG' : 'C'})
+				stdout = Utils.cmd_output(cmd='svn info --non-interactive', env={'LANG' : 'C'})
 				lines = stdout.splitlines(True)
 				for line in lines:
 					if line.startswith('Last Changed Rev'):
@@ -218,11 +217,11 @@ def configure(conf):
 	print_message(conf, 'Use virtual terminal support', Options.options.no_vte and 'no' or 'yes')
 	if svn_rev != '-1':
 		print_message(conf, 'Compiling Subversion revision', svn_rev)
-		conf.env.append_value('CCFLAGS', '-g -DGEANY_DEBUG')
+		conf.env.append_value('CCFLAGS', '-g -DGEANY_DEBUG'.split())
 
 	conf.env.append_value('CCFLAGS', '-DHAVE_CONFIG_H')
-	conf.env.append_value('CXXFLAGS', '-DNDEBUG -DGTK -DGTK2 -DSCI_LEXER -DG_THREADS_IMPL_NONE \
-			-Wno-missing-braces -Wno-char-subscripts') # Scintilla flags
+	# Scintilla flags
+	conf.env.append_value('CXXFLAGS', '-DNDEBUG -DGTK -DGTK2 -DSCI_LEXER -DG_THREADS_IMPL_NONE'.split())
 
 
 def set_options(opt):
@@ -258,59 +257,69 @@ def set_options(opt):
 
 def build(bld):
 	def build_plugin(plugin_name, install = True):
-		obj							= bld.new_task_gen('cc', 'shlib')
-		obj.source					= 'plugins/' + plugin_name + '.c'
-		obj.includes				= '. plugins/ src/ scintilla/include tagmanager/include'
-		obj.env['shlib_PATTERN']	= '%s.so'
-		obj.target					= plugin_name
-		obj.uselib					= 'GTK'
 		if install:
-			obj.install_path		= '${LIBDIR}/geany/'
+			instpath = '${LIBDIR}/geany/'
 		else:
-			obj.install_path		= None
+			instpath = None
+
+		bld.new_task_gen(
+			features				='cc cshlib',
+			source					= 'plugins/' + plugin_name + '.c',
+			includes				= '. plugins/ src/ scintilla/include tagmanager/include',
+			target					= plugin_name,
+			uselib					= 'GTK',
+			install_path			= instpath,
+		)
+		bld.env['shlib_PATTERN']	= '%s.so'
+
 
 	# Tagmanager
 	if bld.env['USE_INCLUDED_REGEX'] == 1:
 		tagmanager_sources.append('tagmanager/regex.c')
-	obj					= bld.new_task_gen('cc', 'staticlib')
-	obj.name			= 'tagmanager'
-	obj.target			= 'tagmanager'
-	obj.source			= tagmanager_sources
-	obj.includes		= '. tagmanager/ tagmanager/include/'
-	obj.uselib			= 'GTK'
-	obj.install_path	= None # do not install this library
+	bld.new_task_gen(
+		features		= 'cc cstaticlib',
+		source			= tagmanager_sources,
+		name			= 'tagmanager',
+		target			= 'tagmanager',
+		includes		= '. tagmanager/ tagmanager/include/',
+		uselib			= 'GTK',
+		install_path	= None # do not install this library
+	)
 
 	# Scintilla
-	obj					= bld.new_task_gen('cxx', 'staticlib')
-	obj.features.append('cc')
-	obj.name			= 'scintilla'
-	obj.target			= 'scintilla'
-	obj.source			= scintilla_sources
-	obj.includes		= 'scintilla/ scintilla/include/'
-	obj.uselib			= 'GTK'
-	obj.install_path	= None # do not install this library
+	bld.new_task_gen(
+		features		= 'cc cxx cstaticlib',
+		name			= 'scintilla',
+		target			= 'scintilla',
+		source			= scintilla_sources,
+		includes		= 'scintilla/ scintilla/include/',
+		uselib			= 'GTK',
+		install_path	= None, # do not install this library
+	)
 
 	# Geany
 	if bld.env['HAVE_VTE'] == 1:
 		geany_sources.append('src/vte.c')
 	if sys.platform == "win32":
 		geany_sources.append('src/win32.c')
-	obj					= bld.new_task_gen('cxx', 'program')
-	obj.features.append('cc')
-	obj.name			= 'geany'
-	obj.target			= 'geany'
-	obj.source			= geany_sources
-	obj.includes		= '. src/ scintilla/include/ tagmanager/include/'
-	obj.uselib			= 'GTK GIO'
-	obj.uselib_local	= 'scintilla tagmanager'
+	bld.new_task_gen(
+		features		= 'cc cxx cprogram',
+		name			= 'geany',
+		target			= 'geany',
+		source			= geany_sources,
+		includes		= '. src/ scintilla/include/ tagmanager/include/',
+		uselib			= 'GTK GIO',
+		uselib_local	= 'scintilla tagmanager'
+	)
 
 	# geanyfunctions.h
 	bld.new_task_gen(
-		source='plugins/genapi.py src/plugins.c',
-		name='geanyfunctions.h',
-		before='cc cxx',
-		cwd='%s/plugins' % bld.path.abspath(),
-		rule='python genapi.py -q')
+		source	= 'plugins/genapi.py src/plugins.c',
+		name	= 'geanyfunctions.h',
+		before	= 'cc cxx',
+		cwd		= '%s/plugins' % bld.path.abspath(),
+		rule	= 'python genapi.py -q'
+	)
 
 	# Plugins
 	if bld.env['HAVE_PLUGINS'] == 1:
@@ -324,51 +333,62 @@ def build(bld):
 		build_plugin('vcdiff')
 
 	# Translations
-	obj			= bld.new_task_gen('intltool_po')
-	obj.podir	= 'po'
-	obj.appname	= 'geany'
+	bld.new_task_gen(
+		features		= 'intltool_po',
+		podir			= 'po',
+		appname			= 'geany'
+	)
 
-	# geany.desktop
-	obj					= bld.new_task_gen('intltool_in')
-	obj.source			= 'geany.desktop.in'
-	obj.flags			= '-d'
-	obj.install_path	= '${DATADIR}/applications'
+	bld.new_task_gen(
+		features		= 'intltool_in',
+		source			= 'geany.desktop.in',
+		flags			= '-d',
+		install_path	= '${DATADIR}/applications'
+	)
 
 	# geany.pc
-	obj					= bld.new_task_gen('subst')
-	obj.source			= 'geany.pc.in'
-	obj.target			= 'geany.pc'
-	obj.dict			= { 'VERSION' : VERSION,
+	bld.new_task_gen(
+		features		= 'subst',
+		source			= 'geany.pc.in',
+		target			= 'geany.pc',
+		dict			= { 'VERSION' : VERSION,
 							'prefix': bld.env['PREFIX'],
 							'exec_prefix': '${prefix}',
 							'libdir': '${exec_prefix}/lib',
 							'includedir': '${prefix}/include',
 							'datarootdir': '${prefix}/share',
 							'datadir': '${datarootdir}',
-							'localedir': '${datarootdir}/locale' }
-	obj.install_path	= '${LIBDIR}/pkgconfig'
+							'localedir': '${datarootdir}/locale' },
+		install_path	= '${LIBDIR}/pkgconfig'
+	)
 
 	# geany.1
-	obj					= bld.new_task_gen('subst')
-	obj.source			= 'doc/geany.1.in'
-	obj.target			= 'geany.1'
-	obj.dict			= { 'VERSION' : VERSION,
-							'GEANY_DATA_DIR': bld.env['DATADIR'] + '/geany' }
-	obj.install_path	= '${MANDIR}/man1'
+	bld.new_task_gen(
+		features		= 'subst',
+		source			= 'doc/geany.1.in',
+		target			= 'geany.1',
+		dict			= { 'VERSION' : VERSION,
+							'GEANY_DATA_DIR': bld.env['DATADIR'] + '/geany' },
+		install_path	= '${MANDIR}/man1'
+	)
 
 	# geany.spec
-	obj					= bld.new_task_gen('subst')
-	obj.source			= 'geany.spec.in'
-	obj.target			= 'geany.spec'
-	obj.install_path	= None
-	obj.dict			= { 'VERSION' : VERSION }
+	bld.new_task_gen(
+		features		= 'subst',
+		source			= 'geany.spec.in',
+		target			= 'geany.spec',
+		install_path	= None,
+		dict			= { 'VERSION' : VERSION }
+	)
 
 	# Doxyfile
-	obj					= bld.new_task_gen('subst')
-	obj.source			= 'doc/Doxyfile.in'
-	obj.target			= 'doc/Doxyfile'
-	obj.install_path	= None
-	obj.dict			= { 'VERSION' : VERSION }
+	bld.new_task_gen(
+		features		= 'subst',
+		source			= 'doc/Doxyfile.in',
+		target			= 'doc/Doxyfile',
+		install_path	= None,
+		dict			= { 'VERSION' : VERSION }
+	)
 
 	###
 	# Install files
@@ -411,7 +431,7 @@ def shutdown():
 		icon_cache_updated = False
 		if not Options.options.destdir:
 			try:
-				subprocess.call(['gtk-update-icon-cache', '-q', '-f', '-t', dir])
+				Utils.exec_command('gtk-update-icon-cache -q -f -t %s' % dir)
 				Utils.pprint('GREEN', 'GTK icon cache updated.')
 				icon_cache_updated = True
 			except:
@@ -453,7 +473,7 @@ def shutdown():
 				size_old = os.stat('geany.pot').st_size
 			except:
 				size_old = 0
-			subprocess.call(['intltool-update', '--pot', '-g', APPNAME])
+			Utils.exec_command('intltool-update --pot -g %s' % APPNAME)
 			size_new = os.stat('geany.pot').st_size
 			if size_new != size_old:
 				Utils.pprint('CYAN', 'Updated POT file.')
@@ -470,7 +490,7 @@ def launch(command, status, success_color='GREEN'):
 	ret = 0
 	Utils.pprint(success_color, status)
 	try:
-		ret = subprocess.call(command.split())
+		ret = Utils.exec_command(command)
 	except OSError, e:
 		ret = 1
 		print str(e), ":", command

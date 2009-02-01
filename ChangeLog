@@ -9,6 +9,8 @@
    filebrowser plugin.
    Add an option to automatically set the project's base directory when
    a project is opened/changed (closes #2554027).
+ * waf, wscript:
+   Update to waf 1.5.3 and use modern task syntax in the wscript.
 
 
 2009-01-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
