@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: geany 0.16\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-01 20:23+0100\n"
-"PO-Revision-Date: 2009-01-16 23:12+0100\n"
-"Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
+"PO-Revision-Date: 2009-02-01 22:47+0100\n"
+"Last-Translator: Dominic Hopf <dh@dmaphy.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -282,7 +282,6 @@ msgid "Execute:"
 msgstr "Ausführen:"
 
 #: ../src/build.c:1820 ../src/toolbar.c:194
-#, fuzzy
 msgid "Build the current file"
 msgstr "Kompiliert die aktuelle Datei."
 
@@ -296,19 +295,16 @@ msgid ""
 msgstr "Alles was Sie hier angeben, wird direkt an »make« übergeben."
 
 #: ../src/build.c:1895
-#, fuzzy
 msgid "Build the current file with Make and the default target"
 msgstr "Kompiliert die aktuelle Datei mit »make« und dem Standard-Target"
 
 #: ../src/build.c:1898
-#, fuzzy
 msgid "Build the current file with Make and the specified target"
 msgstr "Kompiliert die aktuelle Datei mit »make« und dem angegebenem Target"
 
 #: ../src/build.c:1901
-#, fuzzy
 msgid "Compile the current file with Make"
-msgstr "Kompiliert die aktuelle Datei."
+msgstr "Kompiliert die aktuelle Datei mit make."
 
 #: ../src/build.c:1963
 msgid "Failed to execute the view program"
@@ -1519,9 +1515,8 @@ msgid "<b>Paths</b>"
 msgstr "<b>Pfade</b>"
 
 #: ../src/interface.c:2747
-#, fuzzy
 msgid "Startup"
-msgstr "Status"
+msgstr "Starten & Beenden"
 
 #: ../src/interface.c:2769
 msgid "Beep on errors or when compilation has finished"
@@ -1642,9 +1637,8 @@ msgid "<b>Projects</b>"
 msgstr "<b>Projekte</b>"
 
 #: ../src/interface.c:2857
-#, fuzzy
 msgid "Miscellaneous"
-msgstr "<b>Sonstiges</b>"
+msgstr "Sonstiges"
 
 #: ../src/interface.c:2861
 msgid "General"
@@ -2139,6 +2133,8 @@ msgid ""
 "Use white text on a black background and invert all colors, this option "
 "requires a restart of Geany"
 msgstr ""
+"Schreibt weißen Text auf schwarzem Hintergrund und invertiert alle Farben. "
+"Dies erfordert einen Neustart von Geany."
 
 #: ../src/interface.c:3644
 msgid "Show indentation guides"
@@ -2304,7 +2300,6 @@ msgid "Use fixed encoding when opening files"
 msgstr "Benutze feststehende Zeichenkodierung beim Öffnen neuer Dateien"
 
 #: ../src/interface.c:3882
-#, fuzzy
 msgid ""
 "This option disables the automatic detection of the file encoding when "
 "opening files and opens the file with the specified encoding (usually not "
@@ -2697,7 +2692,7 @@ msgstr "Vervollständige (Code-)Schnipsel"
 
 #: ../src/keybindings.c:247
 msgid "Move cursor in snippet"
-msgstr ""
+msgstr "Bewege den Cursor im Schnipsel"
 
 #: ../src/keybindings.c:249
 msgid "Suppress snippet completion"
@@ -3108,9 +3103,8 @@ msgid "The following keyboard shortcuts are configurable:"
 msgstr "Die folgenden Tastenkürzel sind frei definierbar:"
 
 #: ../src/keybindings.c:1446
-#, fuzzy
 msgid "Switch to Document"
-msgstr "Zum linken Dokument wechseln"
+msgstr "Zum Dokument wechseln"
 
 #: ../src/keyfile.c:783
 msgid "Type here what you want, use it as a notice/scratch board"
@@ -3416,6 +3410,8 @@ msgid ""
 "<i>Notice: To customize the toolbar elements, edit the file 'ui_toolbar."
 "xml'. Please see the documentation for details.</i>"
 msgstr ""
+"<i>Hinweis: Um die Werkzeugleiste anzupassen, kann die Datei »ui_toolbar.xml« "
+"bearbeitet werden. Ausführlicheres in der Dokumentation.</i>"
 
 #. page Editor->Indentation
 #: ../src/prefs.c:1452
@@ -3423,6 +3419,8 @@ msgid ""
 "<i>Warning: these settings are overridden by the current project. See "
 "<b>Project->Properties</b>.</i>"
 msgstr ""
+"<i>Hinweis: Diese Einstellungen werden überschrieben mit denen des aktuellen "
+"Projekts. Siehe Projekt->Einstellungen.</i>"
 
 #: ../src/printing.c:270
 #, c-format
@@ -3441,9 +3439,9 @@ msgstr ""
 "benutzt."
 
 #: ../src/printing.c:487
-#, fuzzy, c-format
+#, c-format
 msgid "Page %d of %d"
-msgstr "<b>Seite %d von %d</b>"
+msgstr "Seite %d von %d"
 
 #: ../src/printing.c:737
 #, c-format
@@ -3809,9 +3807,8 @@ msgstr ""
 "Einstellungen überprüfen)."
 
 #: ../src/search.c:1381
-#, fuzzy
 msgid "Searching..."
-msgstr "Suchen"
+msgstr "Suchen..."
 
 #: ../src/search.c:1393
 #, c-format
@@ -4215,6 +4212,8 @@ msgid ""
 "For all changes you make in this file to take effect, you need to restart "
 "Geany."
 msgstr ""
+"Um Änderungen in dieser Datei zu übernehmen ist ein Neustart von Geany "
+"erforderlich."
 
 #. Create our custom actions
 #: ../src/toolbar.c:184
@@ -4982,15 +4981,15 @@ msgstr ""
 "dll, *.a, *.lib)."
 
 #: ../plugins/filebrowser.c:1106
-#, fuzzy
 msgid "Set the project's base directory"
-msgstr "Soll das Projektbasisverzeichnis erstellt werden?"
+msgstr "dem Projekt-Basisverzeichnis folgen"
 
 #: ../plugins/filebrowser.c:1110
-#, fuzzy
 msgid ""
 "Change the directory to the base directory of the currently opened project"
-msgstr "Erstellt ein Diff für das Verzeichnis der aktuellen Datei."
+msgstr ""
+"Das aktuelle Verzeichnis beim Öffnen eines Projekts dem Basisverzeichnis des "
+"Projekts anpassen"
 
 #: ../plugins/saveactions.c:47
 msgid "Save Actions"
@@ -5376,7 +5375,6 @@ msgstr "_Vertikal"
 #~ msgid "Search failed."
 #~ msgstr "Suche schlug fehl."
 
-#, fuzzy
 #~ msgid "Found %d matches for \"%s\"."
 #~ msgid_plural "Found %d matches for \"%s\"."
 #~ msgstr[0] "%d Treffer für \"%s\" gefunden."
@@ -5397,7 +5395,6 @@ msgstr "_Vertikal"
 #~ msgid "Rows of symbol completion list:"
 #~ msgstr "Anzahl der Zeilen der Vervollständigungsliste:"
 
-#, fuzzy
 #~ msgid "Strip trailing spaces"
 #~ msgstr "_Leerzeichen am Zeilenende entfernen"
 

@@ -5,8 +5,7 @@
  * *.po, geany.pot: Update for string freeze in preparing of Geany
    0.15 release.
  * de.po: Fix of a minor translation issue. Thanks to Chikahiro Masami
-   for reporting.
-
+   for reporting. Also update of translation provided by Dominic Hopf.
 
 
 2009-01-26  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
