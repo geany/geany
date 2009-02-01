@@ -730,7 +730,7 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
 		document_check_disk_status(doc, FALSE);
 
 #ifdef HAVE_VTE
-		vte_cwd(DOC_FILENAME(doc), FALSE);
+		vte_cwd((doc->real_path != NULL) ? doc->real_path : doc->file_name, FALSE);
 #endif
 
 		g_signal_emit_by_name(geany_object, "document-activate", doc);

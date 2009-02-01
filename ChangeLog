@@ -1,3 +1,11 @@
+2009-02-01  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/callbacks.c, src/document.c:
+   Use the document's real path when the VTE setting 'Follow the path of
+   the current file' is used to prevent unnecessary directory changes
+   when symlinks are used (reported by Dominic Hopf).
+
+
 2009-01-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/plugins.c, src/plugindata.h, src/utils.c, plugins/filebrowser.c,

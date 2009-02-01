@@ -1790,7 +1790,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 		msgwin_status_add(_("File %s saved."), doc->file_name);
 		ui_update_statusbar(doc, -1);
 #ifdef HAVE_VTE
-		vte_cwd(doc->file_name, FALSE);
+		vte_cwd((doc->real_path != NULL) ? doc->real_path : doc->file_name, FALSE);
 #endif
 	}
 	g_free(locale_filename);
