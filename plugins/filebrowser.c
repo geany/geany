@@ -70,6 +70,8 @@ enum
 	FILEVIEW_N_COLUMNS
 };
 
+static gboolean fb_set_project_base_path = FALSE;
+static gboolean fb_follow_path 	  = FALSE;
 static gboolean show_hidden_files = FALSE;
 static gboolean hide_object_files = TRUE;
 
@@ -94,6 +96,18 @@ static struct
 	GtkWidget *open_external;
 	GtkWidget *find_in_files;
 } popup_items;
+
+
+static void document_activate_cb(GObject *obj, GeanyDocument *doc, gpointer data);
+static void project_change_cb(GObject *obj, GKeyFile *config, gpointer data);
+
+PluginCallback plugin_callbacks[] =
+{
+	{ "document-activate", (GCallback) &document_activate_cb, TRUE, NULL },
+	{ "project-open", (GCallback) &project_change_cb, TRUE, NULL },
+	{ "project-save", (GCallback) &project_change_cb, TRUE, NULL },
+	{ NULL, NULL, FALSE, NULL }
+};
 
 
 /* Returns: whether name should be hidden. */
@@ -868,8 +882,65 @@ static void load_settings(void)
 	CHECK_READ_SETTING(show_hidden_files, error, tmp);
 	tmp = g_key_file_get_boolean(config, "filebrowser", "hide_object_files", &error);
 	CHECK_READ_SETTING(hide_object_files, error, tmp);
+	tmp = g_key_file_get_boolean(config, "filebrowser", "fb_follow_path", &error);
+	CHECK_READ_SETTING(fb_follow_path, error, tmp);
+	tmp = g_key_file_get_boolean(config, "filebrowser", "fb_set_project_base_path", &error);
+	CHECK_READ_SETTING(fb_set_project_base_path, error, tmp);
 
 	g_key_file_free(config);
+}
+
+
+static void project_change_cb(G_GNUC_UNUSED GObject *obj, G_GNUC_UNUSED GKeyFile *config,
+							  G_GNUC_UNUSED gpointer data)
+{
+	gchar *new_dir;
+	GeanyProject *project = geany->app->project;
+
+	if (! fb_set_project_base_path || project == NULL || ! NZV(project->base_path))
+		return;
+
+	/* TODO this is a copy of project_get_base_path(), add it to the plugin API */
+	if (g_path_is_absolute(project->base_path))
+		new_dir = g_strdup(project->base_path);
+	else
+	{	/* build base_path out of project file name's dir and base_path */
+		gchar *dir = g_path_get_dirname(project->file_name);
+
+		new_dir = g_strconcat(dir, G_DIR_SEPARATOR_S, project->base_path, NULL);
+		g_free(dir);
+	}
+	/* get it into locale encoding */
+	setptr(new_dir, utils_get_locale_from_utf8(new_dir));
+
+	if (! utils_str_equal(current_dir, new_dir))
+	{
+		setptr(current_dir, new_dir);
+		refresh();
+	}
+	else
+		g_free(new_dir);
+}
+
+
+static void document_activate_cb(G_GNUC_UNUSED GObject *obj, GeanyDocument *doc,
+								 G_GNUC_UNUSED gpointer data)
+{
+	gchar *new_dir;
+
+	if (! fb_follow_path || doc->file_name == NULL)
+		return;
+
+	new_dir = g_path_get_dirname(doc->file_name);
+	setptr(new_dir, utils_get_locale_from_utf8(new_dir));
+
+	if (! utils_str_equal(current_dir, new_dir))
+	{
+		setptr(current_dir, new_dir);
+		refresh();
+	}
+	else
+		g_free(new_dir);
 }
 
 
@@ -937,6 +1008,8 @@ static struct
 	GtkWidget *open_cmd_entry;
 	GtkWidget *show_hidden_checkbox;
 	GtkWidget *hide_objects_checkbox;
+	GtkWidget *follow_path_checkbox;
+	GtkWidget *set_project_base_path_checkbox;
 }
 pref_widgets;
 
@@ -953,12 +1026,18 @@ on_configure_response(GtkDialog *dialog, gint response, gpointer user_data)
 		open_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(pref_widgets.open_cmd_entry)));
 		show_hidden_files = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pref_widgets.show_hidden_checkbox));
 		hide_object_files = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pref_widgets.hide_objects_checkbox));
+		fb_follow_path = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pref_widgets.follow_path_checkbox));
+		fb_set_project_base_path = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
+			pref_widgets.set_project_base_path_checkbox));
 
 		g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
 
 		g_key_file_set_string(config, "filebrowser", "open_command", open_cmd);
 		g_key_file_set_boolean(config, "filebrowser", "show_hidden_files", show_hidden_files);
 		g_key_file_set_boolean(config, "filebrowser", "hide_object_files", hide_object_files);
+		g_key_file_set_boolean(config, "filebrowser", "fb_follow_path", fb_follow_path);
+		g_key_file_set_boolean(config, "filebrowser", "fb_set_project_base_path",
+			fb_set_project_base_path);
 
 		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && utils_mkdir(config_dir, TRUE) != 0)
 		{
@@ -984,7 +1063,7 @@ on_configure_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 GtkWidget *plugin_configure(GtkDialog *dialog)
 {
-	GtkWidget *label, *entry, *checkbox_of, *checkbox_hf, *vbox;
+	GtkWidget *label, *entry, *checkbox_of, *checkbox_hf, *checkbox_fp, *checkbox_pb, *vbox;
 
 	vbox = gtk_vbox_new(FALSE, 6);
 
@@ -1017,6 +1096,20 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 		  "*.o, *.obj. *.so, *.dll, *.a, *.lib"));
 	gtk_box_pack_start(GTK_BOX(vbox), checkbox_of, FALSE, FALSE, 5);
 	pref_widgets.hide_objects_checkbox = checkbox_of;
+
+	checkbox_fp = gtk_check_button_new_with_label(_("Follow the path of the current file"));
+	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_fp), FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_fp), fb_follow_path);
+	gtk_box_pack_start(GTK_BOX(vbox), checkbox_fp, FALSE, FALSE, 5);
+	pref_widgets.follow_path_checkbox = checkbox_fp;
+
+	checkbox_pb = gtk_check_button_new_with_label(_("Set the project's base directory"));
+	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_pb), FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_pb), fb_set_project_base_path);
+	ui_widget_set_tooltip_text(checkbox_pb,
+		_("Change the directory to the base directory of the currently opened project"));
+	gtk_box_pack_start(GTK_BOX(vbox), checkbox_pb, FALSE, FALSE, 5);
+	pref_widgets.set_project_base_path_checkbox = checkbox_pb;
 
 	gtk_widget_show_all(vbox);
 

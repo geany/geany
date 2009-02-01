@@ -4,6 +4,11 @@
    Use the document's real path when the VTE setting 'Follow the path of
    the current file' is used to prevent unnecessary directory changes
    when symlinks are used (reported by Dominic Hopf).
+ * plugins/filebrowser.c:
+   Add an option to 'follow the path of the current file' in the
+   filebrowser plugin.
+   Add an option to automatically set the project's base directory when
+   a project is opened/changed (closes #2554027).
 
 
 2009-01-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
