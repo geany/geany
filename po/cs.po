@@ -282,9 +282,8 @@ msgid "Execute:"
 msgstr "Spustit"
 
 #: ../src/build.c:1820 ../src/toolbar.c:194
-#, fuzzy
 msgid "Build the current file"
-msgstr "Přeloží (zkompiluje) aktuální soubor"
+msgstr "Sestavit aktuální soubor"
 
 #: ../src/build.c:1845
 msgid "Make Custom Target"
@@ -297,19 +296,16 @@ msgstr ""
 "Zadejte zde vlastní volby, všechen zadaný text bude předán příkazu make."
 
 #: ../src/build.c:1895
-#, fuzzy
 msgid "Build the current file with Make and the default target"
-msgstr "Sestavení aktuálního souboru nástrojem make a s výchozím cílem"
+msgstr "Sestavit aktuální soubor nástrojem Make s výchozím cílem"
 
 #: ../src/build.c:1898
-#, fuzzy
 msgid "Build the current file with Make and the specified target"
-msgstr "Sestavení aktuálního souboru nástrojem make a se specifikovaným cílem"
+msgstr "Sestavit aktuální soubor nástrojem Make se specifikovaným cílem"
 
 #: ../src/build.c:1901
-#, fuzzy
 msgid "Compile the current file with Make"
-msgstr "Přeloží (zkompiluje) aktuální soubor"
+msgstr "Přeložit aktuální soubor nástrojem Make"
 
 #: ../src/build.c:1963
 msgid "Failed to execute the view program"
@@ -1519,9 +1515,8 @@ msgid "<b>Paths</b>"
 msgstr "<b>Cesty</b>"
 
 #: ../src/interface.c:2747
-#, fuzzy
 msgid "Startup"
-msgstr "Stav"
+msgstr "Při spuštění"
 
 #: ../src/interface.c:2769
 msgid "Beep on errors or when compilation has finished"
@@ -1640,9 +1635,8 @@ msgid "<b>Projects</b>"
 msgstr "<b>Projekty</b>"
 
 #: ../src/interface.c:2857
-#, fuzzy
 msgid "Miscellaneous"
-msgstr "<b>Různé</b>"
+msgstr "Různé"
 
 #: ../src/interface.c:2861
 msgid "General"
@@ -3404,9 +3398,9 @@ msgstr ""
 
 # Původní nepřesný překlad byl "<b>Změněno:</b>".
 #: ../src/printing.c:487
-#, fuzzy, c-format
+#, c-format
 msgid "Page %d of %d"
-msgstr "<b>Stránka %d z %d</b>"
+msgstr "Stránka %d z %d"
 
 # Původní nepřesný překlad byl "tisk souboru ... selhal."
 #: ../src/printing.c:737
@@ -3770,9 +3764,8 @@ msgstr ""
 "Nemohu spustit nástroj grep '%s'; zkontrolujte nastavení cest v Nastavení."
 
 #: ../src/search.c:1381
-#, fuzzy
 msgid "Searching..."
-msgstr "Hledat"
+msgstr "Hledám..."
 
 #: ../src/search.c:1393
 #, c-format
@@ -4946,15 +4939,13 @@ msgstr ""
 "příponami *.o, *.obj. *.so, *.dll, *.a, *.lib"
 
 #: ../plugins/filebrowser.c:1106
-#, fuzzy
 msgid "Set the project's base directory"
-msgstr "Vytvořit adresář projektu?"
+msgstr "Následovat kořenový adresář projektu"
 
 #: ../plugins/filebrowser.c:1110
-#, fuzzy
 msgid ""
 "Change the directory to the base directory of the currently opened project"
-msgstr "Vytvoří diff z adresáře otevřeného souboru"
+msgstr "Měnit adresář podle kořenového adresáře aktuálně otevřeného projektu"
 
 #: ../plugins/saveactions.c:47
 msgid "Save Actions"
