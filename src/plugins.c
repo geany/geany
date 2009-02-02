@@ -1001,6 +1001,7 @@ void pm_selection_changed(GtkTreeSelection *selection, gpointer user_data)
 		{
 			gchar *text;
 			PluginInfo *pi;
+			gboolean is_active;
 
 			pi = &p->info;
 			text = g_strdup_printf(
@@ -1010,10 +1011,9 @@ void pm_selection_changed(GtkTreeSelection *selection, gpointer user_data)
 			geany_wrap_label_set_text(GTK_LABEL(pm_widgets.description_label), text);
 			g_free(text);
 
-			gtk_widget_set_sensitive(pm_widgets.configure_button,
-				p->configure != NULL && g_list_find(active_plugin_list, p) != NULL);
-			gtk_widget_set_sensitive(pm_widgets.help_button,
-				p->help != NULL && g_list_find(active_plugin_list, p) != NULL);
+			is_active = is_active_plugin(p);
+			gtk_widget_set_sensitive(pm_widgets.configure_button, p->configure != NULL && is_active);
+			gtk_widget_set_sensitive(pm_widgets.help_button, p->help != NULL && is_active);
 		}
 	}
 }
@@ -1022,6 +1022,7 @@ void pm_selection_changed(GtkTreeSelection *selection, gpointer user_data)
 static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer data)
 {
 	gboolean old_state, state;
+	gboolean is_active;
 	gchar *file_name;
 	GtkTreeIter iter;
 	GtkTreePath *path = gtk_tree_path_new_from_string(pth);
@@ -1058,9 +1059,10 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 
 	g_free(file_name);
 
-	/* set again the sensitiveness of the configure button */
-	gtk_widget_set_sensitive(pm_widgets.configure_button,
-		p->configure != NULL && is_active_plugin(p));
+	/* set again the sensitiveness of the configure and help buttons */
+	is_active = is_active_plugin(p);
+	gtk_widget_set_sensitive(pm_widgets.configure_button, p->configure != NULL && is_active);
+	gtk_widget_set_sensitive(pm_widgets.help_button, p->help != NULL && is_active);
 }
 
 

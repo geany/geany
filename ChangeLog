@@ -1,3 +1,9 @@
+2009-02-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/plugins.c:
+   Fix wrong Help button sensitiveness in the plugin manager dialog.
+
+
 2009-02-01  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/callbacks.c, src/document.c:
