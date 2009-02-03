@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.16\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-01 20:23+0100\n"
+"POT-Creation-Date: 2009-02-03 18:10+0100\n"
 "PO-Revision-Date: 2008-10-12 15:10+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: British English <geany-i18n@uvena.de>\n"
@@ -2610,7 +2610,7 @@ msgstr "Printing"
 msgid "Project Properties"
 msgstr "Project Properties"
 
-#: ../src/keybindings.c:193 ../src/plugins.c:1089
+#: ../src/keybindings.c:193 ../src/plugins.c:1091
 msgid "File"
 msgstr "File"
 
@@ -3283,7 +3283,7 @@ msgstr ""
 msgid "_Plugin Manager"
 msgstr "_Plugin Manager"
 
-#: ../src/plugins.c:1007
+#: ../src/plugins.c:1008
 #, c-format
 msgid ""
 "Plugin: %s %s\n"
@@ -3294,23 +3294,23 @@ msgstr ""
 "Description: %s\n"
 "Author(s): %s"
 
-#: ../src/plugins.c:1077
+#: ../src/plugins.c:1079
 msgid "Active"
 msgstr "Active"
 
-#: ../src/plugins.c:1083
+#: ../src/plugins.c:1085
 msgid "Plugin"
 msgstr "Plugin"
 
-#: ../src/plugins.c:1107
+#: ../src/plugins.c:1109
 msgid "No plugins available."
 msgstr "No plugins available."
 
-#: ../src/plugins.c:1219
+#: ../src/plugins.c:1221
 msgid "Plugins"
 msgstr "Plugins"
 
-#: ../src/plugins.c:1239
+#: ../src/plugins.c:1241
 msgid ""
 "Below is a list of available plugins. Select the plugins which should be "
 "loaded when Geany is started."
@@ -3318,7 +3318,7 @@ msgstr ""
 "Below is a list of available plugins. Select the plugins which should be "
 "loaded when Geany is started."
 
-#: ../src/plugins.c:1252
+#: ../src/plugins.c:1254
 msgid "<b>Plugin details:</b>"
 msgstr "<b>Plugin details:</b>"
 

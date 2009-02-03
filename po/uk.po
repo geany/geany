@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 0.16\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-01 20:23+0100\n"
+"POT-Creation-Date: 2009-02-03 18:10+0100\n"
 "PO-Revision-Date: 2008-02-04 12:44+0300\n"
 "Last-Translator: Boris Dibrov <dibrov.bor@gmail.com>\n"
 "Language-Team: \n"
@@ -2645,7 +2645,7 @@ msgstr "Друкування"
 msgid "Project Properties"
 msgstr "Властивості проекту"
 
-#: ../src/keybindings.c:193 ../src/plugins.c:1089
+#: ../src/keybindings.c:193 ../src/plugins.c:1091
 msgid "File"
 msgstr "Файл"
 
@@ -3348,7 +3348,7 @@ msgstr ""
 msgid "_Plugin Manager"
 msgstr "Менеджер додатків"
 
-#: ../src/plugins.c:1007
+#: ../src/plugins.c:1008
 #, c-format
 msgid ""
 "Plugin: %s %s\n"
@@ -3359,23 +3359,23 @@ msgstr ""
 "Опис: %s\n"
 "Автор(-и): %s"
 
-#: ../src/plugins.c:1077
+#: ../src/plugins.c:1079
 msgid "Active"
 msgstr "Активно"
 
-#: ../src/plugins.c:1083
+#: ../src/plugins.c:1085
 msgid "Plugin"
 msgstr "Додаток"
 
-#: ../src/plugins.c:1107
+#: ../src/plugins.c:1109
 msgid "No plugins available."
 msgstr "Не доступно жодного додатку."
 
-#: ../src/plugins.c:1219
+#: ../src/plugins.c:1221
 msgid "Plugins"
 msgstr "Додатки"
 
-#: ../src/plugins.c:1239
+#: ../src/plugins.c:1241
 msgid ""
 "Below is a list of available plugins. Select the plugins which should be "
 "loaded when Geany is started."
@@ -3383,7 +3383,7 @@ msgstr ""
 "Нижче представлено список доступних додатків. Оберіть додатки що будуть "
 "завантажені під час запуску Geany."
 
-#: ../src/plugins.c:1252
+#: ../src/plugins.c:1254
 msgid "<b>Plugin details:</b>"
 msgstr "<b>Деталі додатку:</b>"
 

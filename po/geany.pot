@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-01 20:23+0100\n"
+"POT-Creation-Date: 2009-02-03 18:10+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2427,7 +2427,7 @@ msgstr ""
 msgid "Project Properties"
 msgstr ""
 
-#: ../src/keybindings.c:193 ../src/plugins.c:1089
+#: ../src/keybindings.c:193 ../src/plugins.c:1091
 msgid "File"
 msgstr ""
 
@@ -3092,7 +3092,7 @@ msgstr ""
 msgid "_Plugin Manager"
 msgstr ""
 
-#: ../src/plugins.c:1007
+#: ../src/plugins.c:1008
 #, c-format
 msgid ""
 "Plugin: %s %s\n"
@@ -3100,29 +3100,29 @@ msgid ""
 "Author(s): %s"
 msgstr ""
 
-#: ../src/plugins.c:1077
+#: ../src/plugins.c:1079
 msgid "Active"
 msgstr ""
 
-#: ../src/plugins.c:1083
+#: ../src/plugins.c:1085
 msgid "Plugin"
 msgstr ""
 
-#: ../src/plugins.c:1107
+#: ../src/plugins.c:1109
 msgid "No plugins available."
 msgstr ""
 
-#: ../src/plugins.c:1219
+#: ../src/plugins.c:1221
 msgid "Plugins"
 msgstr ""
 
-#: ../src/plugins.c:1239
+#: ../src/plugins.c:1241
 msgid ""
 "Below is a list of available plugins. Select the plugins which should be "
 "loaded when Geany is started."
 msgstr ""
 
-#: ../src/plugins.c:1252
+#: ../src/plugins.c:1254
 msgid "<b>Plugin details:</b>"
 msgstr ""
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.16svn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-01 20:23+0100\n"
+"POT-Creation-Date: 2009-02-03 18:10+0100\n"
 "PO-Revision-Date: 2009-02-01 12:52+0200\n"
 "Last-Translator: Gürkan Gür <seqizz@gmail.com>\n"
 "Language-Team: \n"
@@ -2541,7 +2541,7 @@ msgstr "Yazdırma"
 msgid "Project Properties"
 msgstr "Proje Özellikleri"
 
-#: ../src/keybindings.c:193 ../src/plugins.c:1089
+#: ../src/keybindings.c:193 ../src/plugins.c:1091
 msgid "File"
 msgstr "Dosya"
 
@@ -3215,7 +3215,7 @@ msgstr ""
 msgid "_Plugin Manager"
 msgstr "Eklenti _Yöneticisi"
 
-#: ../src/plugins.c:1007
+#: ../src/plugins.c:1008
 #, c-format
 msgid ""
 "Plugin: %s %s\n"
@@ -3226,23 +3226,23 @@ msgstr ""
 "Tanım: %s\n"
 "Sahip(leri): %s"
 
-#: ../src/plugins.c:1077
+#: ../src/plugins.c:1079
 msgid "Active"
 msgstr "Aktif"
 
-#: ../src/plugins.c:1083
+#: ../src/plugins.c:1085
 msgid "Plugin"
 msgstr "Eklenti"
 
-#: ../src/plugins.c:1107
+#: ../src/plugins.c:1109
 msgid "No plugins available."
 msgstr "Erişilebilir eklenti yok."
 
-#: ../src/plugins.c:1219
+#: ../src/plugins.c:1221
 msgid "Plugins"
 msgstr "Eklentiler"
 
-#: ../src/plugins.c:1239
+#: ../src/plugins.c:1241
 msgid ""
 "Below is a list of available plugins. Select the plugins which should be "
 "loaded when Geany is started."
@@ -3250,7 +3250,7 @@ msgstr ""
 "Aşağıda erişilebilir eklentilerin listesi bulunmakta. Geany açılırken "
 "çalıştırılacak eklentiler için seçiniz."
 
-#: ../src/plugins.c:1252
+#: ../src/plugins.c:1254
 msgid "<b>Plugin details:</b>"
 msgstr "<b>Eklenti detayları:</b>"
 
