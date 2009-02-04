@@ -27,12 +27,6 @@
 
 #ifdef HAVE_VTE
 
-/* include stdlib.h AND unistd.h, because on GNU/Linux pid_t seems to be
- * in stdlib.h, on FreeBSD in unistd.h, sys/types.h is needed for C89 */
-#include <stdlib.h>
-#include <sys/types.h>
-#include <unistd.h>
-
 
 typedef struct
 {
@@ -76,19 +70,12 @@ void vte_apply_user_settings(void);
 
 gboolean vte_send_cmd(const gchar *cmd);
 
-const gchar* vte_get_working_directory(void);
+const gchar *vte_get_working_directory(void);
 
 void vte_cwd(const gchar *filename, gboolean force);
 
 void vte_append_preferences_tab(void);
 
-/*
-void vte_drag_data_received(GtkWidget *widget, GdkDragContext  *drag_context, gint x, gint y,
-							GtkSelectionData *data, guint info, guint time);
-
-gboolean vte_drag_drop(GtkWidget *widget, GdkDragContext *drag_context, gint x, gint y, guint time,
-					   gpointer user_data);
-*/
 
 #endif
 

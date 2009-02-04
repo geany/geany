@@ -29,6 +29,12 @@
 
 #ifdef HAVE_VTE
 
+/* include stdlib.h AND unistd.h, because on GNU/Linux pid_t seems to be
+ * in stdlib.h, on FreeBSD in unistd.h, sys/types.h is needed for C89 */
+#include <stdlib.h>
+#include <sys/types.h>
+#include <unistd.h>
+
 #include <gdk/gdkkeysyms.h>
 #include <signal.h>
 #include <string.h>
@@ -79,8 +85,7 @@ typedef enum {
 } VteTerminalCursorBlinkMode;
 
 
-/* store function pointers in a struct to avoid a strange segfault if they are stored directly
- * if accessed directly, gdb says the segfault arrives at old_tab_width(prefs.c), don't ask me */
+/* Holds function pointers we need to access the VTE API. */
 struct VteFunctions
 {
 	GtkWidget* (*vte_terminal_new) (void);
@@ -114,14 +119,14 @@ static void create_vte(void);
 static void vte_start(GtkWidget *widget);
 static void vte_restart(GtkWidget *widget);
 static gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpointer user_data);
-static gboolean vte_keyrelease(GtkWidget *widget, GdkEventKey *event, gpointer data);
-static gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data);
+static gboolean vte_keyrelease_cb(GtkWidget *widget, GdkEventKey *event, gpointer data);
+static gboolean vte_keypress_cb(GtkWidget *widget, GdkEventKey *event, gpointer data);
 static void vte_register_symbols(GModule *module);
 static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data);
 static GtkWidget *vte_create_popup_menu(void);
-void vte_commit(VteTerminal *vte, gchar *arg1, guint arg2, gpointer user_data);
-void vte_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context, gint x, gint y,
-							GtkSelectionData *data, guint info, guint ltime);
+static void vte_commit_cb(VteTerminal *vte, gchar *arg1, guint arg2, gpointer user_data);
+static void vte_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context,
+								   gint x, gint y, GtkSelectionData *data, guint info, guint ltime);
 
 
 enum
@@ -191,27 +196,27 @@ static gchar **vte_get_child_environment(void)
 static void override_menu_key(void)
 {
 	if (gtk_menu_key_accel == NULL) /* for restoring the default value */
-		g_object_get(G_OBJECT(gtk_settings_get_default()), "gtk-menu-bar-accel",
-																	&gtk_menu_key_accel, NULL);
+		g_object_get(G_OBJECT(gtk_settings_get_default()),
+			"gtk-menu-bar-accel", &gtk_menu_key_accel, NULL);
 
 	if (vc->ignore_menu_bar_accel)
-		gtk_settings_set_string_property(gtk_settings_get_default(), "gtk-menu-bar-accel",
-								"<Shift><Control><Mod1><Mod2><Mod3><Mod4><Mod5>F10", "Geany");
+		gtk_settings_set_string_property(gtk_settings_get_default(),
+			"gtk-menu-bar-accel", "<Shift><Control><Mod1><Mod2><Mod3><Mod4><Mod5>F10", "Geany");
 	else
 		gtk_settings_set_string_property(gtk_settings_get_default(),
-								"gtk-menu-bar-accel", gtk_menu_key_accel, "Geany");
+			"gtk-menu-bar-accel", gtk_menu_key_accel, "Geany");
 }
 
 
 void vte_init(void)
 {
 	if (vte_info.have_vte == FALSE)
-	{	/* app->have_vte can be false, even if VTE is compiled in, think of command line option */
+	{	/* vte_info.have_vte can be false even if VTE is compiled in, think of command line option */
 		geany_debug("Disabling terminal support");
 		return;
 	}
 
-	if (vte_info.lib_vte && vte_info.lib_vte[0] != '\0')
+	if (NZV(vte_info.lib_vte))
 	{
 		module = g_module_open(vte_info.lib_vte, G_MODULE_BIND_LAZY);
 	}
@@ -237,7 +242,7 @@ void vte_init(void)
 	if (module == NULL)
 	{
 		vte_info.have_vte = FALSE;
-		geany_debug("Could not load libvte.so, terminal support disabled");
+		geany_debug("Could not load libvte.so, embedded terminal support disabled");
 		return;
 	}
 	else
@@ -282,9 +287,9 @@ static void create_vte(void)
 
 	g_signal_connect(vte, "child-exited", G_CALLBACK(vte_start), NULL);
 	g_signal_connect(vte, "button-press-event", G_CALLBACK(vte_button_pressed), NULL);
-	g_signal_connect(vte, "event", G_CALLBACK(vte_keypress), NULL);
-	g_signal_connect(vte, "key-release-event", G_CALLBACK(vte_keyrelease), NULL);
-	g_signal_connect(vte, "commit", G_CALLBACK(vte_commit), NULL);
+	g_signal_connect(vte, "event", G_CALLBACK(vte_keypress_cb), NULL);
+	g_signal_connect(vte, "key-release-event", G_CALLBACK(vte_keyrelease_cb), NULL);
+	g_signal_connect(vte, "commit", G_CALLBACK(vte_commit_cb), NULL);
 	g_signal_connect(vte, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
 	g_signal_connect(vte, "drag-data-received", G_CALLBACK(vte_drag_data_received), NULL);
 
@@ -304,7 +309,8 @@ void vte_close(void)
 	/* free the vte widget before unloading vte module
 	 * this prevents a segfault on X close window if the message window is hidden */
 	gtk_widget_destroy(vc->vte);
-	if (popup_menu_created) gtk_widget_destroy(vc->menu);
+	if (popup_menu_created)
+		gtk_widget_destroy(vc->menu);
 	g_free(vc->emulation);
 	g_free(vc->shell);
 	g_free(vc->font);
@@ -312,13 +318,14 @@ void vte_close(void)
 	g_free(vc->colour_fore);
 	g_free(vc);
 	g_free(gtk_menu_key_accel);
-	/* don't unload the module explicitly because it causes a segfault on FreeBSD */
-	/** TODO is this still/really true? */
+	/* Don't unload the module explicitly because it causes a segfault on FreeBSD. The segfault
+	 * happens when the app really exits, not directly on g_module_close(). This still needs to
+	 * be investigated. */
 	/*g_module_close(module); */
 }
 
 
-static gboolean vte_keyrelease(GtkWidget *widget, GdkEventKey *event, gpointer data)
+static gboolean vte_keyrelease_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	if (event->keyval == GDK_Return ||
 			 event->keyval == GDK_ISO_Enter ||
@@ -332,7 +339,7 @@ static gboolean vte_keyrelease(GtkWidget *widget, GdkEventKey *event, gpointer d
 }
 
 
-static gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data)
+static gboolean vte_keypress_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	if (vc->enable_bash_keys)
 		return FALSE;	/* Ctrl-[CD] will be handled by the VTE itself */
@@ -354,7 +361,7 @@ static gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer dat
 }
 
 
-void vte_commit(VteTerminal *vte, gchar *arg1, guint arg2, gpointer user_data)
+static void vte_commit_cb(VteTerminal *vte, gchar *arg1, guint arg2, gpointer user_data)
 {
 	clean = FALSE;
 }
@@ -372,7 +379,7 @@ static void vte_start(GtkWidget *widget)
 	{
 		env = vte_get_child_environment();
 		pid = vf->vte_terminal_fork_command(VTE_TERMINAL(widget), argv[0], argv, env,
-												vte_info.dir, TRUE, TRUE, TRUE);
+											vte_info.dir, TRUE, TRUE, TRUE);
 		g_strfreev(env);
 		g_strfreev(argv);
 	}
@@ -573,7 +580,7 @@ static GtkWidget *vte_create_popup_menu(void)
 }
 
 
-/* if the command could be executed, TRUE is returned, FALSE otherwise (i.e. there was some text
+/* If the command could be executed, TRUE is returned, FALSE otherwise (i.e. there was some text
  * on the prompt). */
 gboolean vte_send_cmd(const gchar *cmd)
 {
@@ -589,8 +596,9 @@ gboolean vte_send_cmd(const gchar *cmd)
 
 
 /* Taken from Terminal by os-cillation: terminal_screen_get_working_directory, thanks.
- * Determines the working directory using various OS-specific mechanisms. */
-const gchar* vte_get_working_directory(void)
+ * Determines the working directory using various OS-specific mechanisms and stores the determined
+ * directory in vte_info.dir. Note: vte_info.dir contains the real path. */
+const gchar *vte_get_working_directory(void)
 {
 	gchar  buffer[4096 + 1];
 	gchar *file;
@@ -600,7 +608,7 @@ const gchar* vte_get_working_directory(void)
 	if (pid > 0)
 	{
 		file = g_strdup_printf("/proc/%d/cwd", pid);
-		length = readlink(file, buffer, sizeof (buffer));
+		length = readlink(file, buffer, sizeof(buffer));
 
 		if (length > 0 && *buffer == '/')
 		{
@@ -634,7 +642,7 @@ const gchar* vte_get_working_directory(void)
  * filename is expected to be in UTF-8 encoding.
  * filename can also be a path, then it is used directly.
  * If force is set to TRUE, it will always change the cwd
- * */
+ */
 void vte_cwd(const gchar *filename, gboolean force)
 {
 	if (vte_info.have_vte && (vc->follow_path || force) && filename != NULL)
@@ -667,8 +675,8 @@ void vte_cwd(const gchar *filename, gboolean force)
 }
 
 
-void vte_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context, gint x, gint y,
-							GtkSelectionData *data, guint info, guint ltime)
+static void vte_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context,
+								   gint x, gint y, GtkSelectionData *data, guint info, guint ltime)
 {
 	if (info == TARGET_TEXT_PLAIN)
 	{
@@ -681,7 +689,7 @@ void vte_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context, gin
 		gchar *text = (gchar*) gtk_selection_data_get_text(data);
 		if (NZV(text))
 			vf->vte_terminal_feed_child(VTE_TERMINAL(widget), text, strlen(text));
-		g_free (text);
+		g_free(text);
 	}
 	gtk_drag_finish(drag_context, TRUE, FALSE, ltime);
 }
