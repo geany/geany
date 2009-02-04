@@ -195,9 +195,8 @@ static void create_open_file_dialog(void)
 	gtk_window_set_type_hint(GTK_WINDOW(ui_widgets.open_filesel), GDK_WINDOW_TYPE_HINT_DIALOG);
 	gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_filesel), GTK_WINDOW(main_widgets.window));
 	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(ui_widgets.open_filesel), TRUE);
-#if GTK_CHECK_VERSION(2, 14, 0)
-	gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(ui_widgets.open_filesel), FALSE);
-#endif
+	if (gtk_check_version(2, 14, 0) == NULL)
+		gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(ui_widgets.open_filesel), FALSE);
 
 	/* add checkboxes and filename entry */
 	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
@@ -481,9 +480,8 @@ static void create_save_file_dialog(void)
 	gtk_widget_show_all(vbox);
 	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(ui_widgets.save_filesel), vbox);
 	gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(ui_widgets.save_filesel), TRUE);
-#if GTK_CHECK_VERSION(2, 14, 0)
-	gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(ui_widgets.save_filesel), FALSE);
-#endif
+	if (gtk_check_version(2, 14, 0) == NULL)
+		gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(ui_widgets.save_filesel), FALSE);
 
 	g_signal_connect(check_open_new_tab, "toggled",
 				G_CALLBACK(on_save_as_new_tab_toggled), rename_btn);

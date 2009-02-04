@@ -7,6 +7,10 @@
    (neither in the user's config nor in the global filetypes.php) and
    (un)commenting is used outside of the PHP tags
    (reported by Frank, thanks).
+ * src/dialogs.c:
+   It's enough to check for GTK 2.14 at runtime, not at build time when
+   to determine whether to show non-local folders in the file chooser
+   dialogs.
 
 
 2009-02-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
