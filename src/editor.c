@@ -2262,15 +2262,17 @@ static void auto_table(GeanyEditor *editor, gint pos)
 static void real_comment_multiline(GeanyEditor *editor, gint line_start, gint last_line)
 {
 	const gchar *eol;
-	gchar *str_begin, *str_end;
+	gchar *str_begin, *str_end, *co, *cc;
 	gint line_len;
 
 	if (editor == NULL || editor->document->file_type == NULL)
 		return;
 
 	eol = editor_get_eol_char(editor);
-	str_begin = g_strdup_printf("%s%s", editor->document->file_type->comment_open, eol);
-	str_end = g_strdup_printf("%s%s", editor->document->file_type->comment_close, eol);
+	co = editor->document->file_type->comment_open;
+	cc = editor->document->file_type->comment_close;
+	str_begin = g_strdup_printf("%s%s", (co != NULL) ? co : "", eol);
+	str_end = g_strdup_printf("%s%s", (cc != NULL) ? cc : "", eol);
 
 	/* insert the comment strings */
 	sci_insert_text(editor->sci, line_start, str_begin);

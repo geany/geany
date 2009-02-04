@@ -2,6 +2,11 @@
 
  * src/vte.c, src/vte.h:
    Some code cleanup and improve comments, no changes in functionality.
+ * src/editor.c:
+   Fix a crash on Windows for PHP files when 'comment_close' in not set
+   (neither in the user's config nor in the global filetypes.php) and
+   (un)commenting is used outside of the PHP tags
+   (reported by Frank, thanks).
 
 
 2009-02-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
