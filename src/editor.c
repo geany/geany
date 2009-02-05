@@ -1998,7 +1998,7 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 	}
 	/* replace remaining %ws% and %newline% which may occur after the last %cursor% */
 	utils_string_replace_all(pattern, "%newline%", editor_get_eol_char(editor));
-	utils_string_replace_all(pattern, "%ws", whitespace);
+	utils_string_replace_all(pattern, "%ws%", whitespace);
 	g_free(whitespace);
 	/* We create a new list, where the cursor positions for the most recent
 	 * parsed snipped come first, followed by the remaining positions */
