@@ -26,7 +26,6 @@
  * Also compiler error message parsing and grep file and line parsing.
  */
 
-#include <time.h>
 
 #include "geany.h"
 
@@ -46,7 +45,9 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 
+#include <gdk/gdkkeysyms.h>
 
 
 /* used for parse_file_line */
@@ -102,6 +103,23 @@ void msgwin_finalize()
 }
 
 
+static gboolean on_msgwin_key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
+{
+	if (event->keyval == GDK_Return ||
+		event->keyval == GDK_ISO_Enter ||
+		event->keyval == GDK_KP_Enter ||
+		event->keyval == GDK_space)
+	{
+		GdkEventButton button_event;
+
+		button_event.button = 1;
+		button_event.time = event->time;
+		on_msgwin_button_press_event(NULL, &button_event, data);
+	}
+	return FALSE;
+}
+
+
 /* does some preparing things to the status message list widget */
 static void prepare_status_tree_view(void)
 {
@@ -152,6 +170,8 @@ static void prepare_msg_tree_view(void)
 	 * (connect_after button-press-event doesn't work) */
 	g_signal_connect(msgwindow.tree_msg, "button-release-event",
 					G_CALLBACK(on_msgwin_button_press_event), GINT_TO_POINTER(MSG_MESSAGE));
+	g_signal_connect(msgwindow.tree_msg, "key-press-event",
+		G_CALLBACK(on_msgwin_key_press_event), GINT_TO_POINTER(MSG_MESSAGE));
 
 	/* selection handling */
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_msg));
@@ -183,6 +203,8 @@ static void prepare_compiler_tree_view(void)
 	 * (connect_after button-press-event doesn't work) */
 	g_signal_connect(msgwindow.tree_compiler, "button-release-event",
 					G_CALLBACK(on_msgwin_button_press_event), GINT_TO_POINTER(MSG_COMPILER));
+	g_signal_connect(msgwindow.tree_compiler, "key-press-event",
+		G_CALLBACK(on_msgwin_key_press_event), GINT_TO_POINTER(MSG_COMPILER));
 
 	/* selection handling */
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_compiler));
@@ -952,7 +974,7 @@ static void msgwin_parse_grep_line(const gchar *string, gchar **filename, gint *
 
 
 static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *event,
-																			gpointer user_data)
+											 gpointer user_data)
 {
 	/* user_data might be NULL, GPOINTER_TO_INT returns 0 if called with NULL */
 
