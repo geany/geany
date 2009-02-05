@@ -272,10 +272,10 @@ static gboolean find_tree_iter_dir(GtkTreeIter *iter, const gchar *dir)
 
 	if (utils_str_equal(dir, "."))
 		dir = GEANY_STRING_UNTITLED;
-	
+
 	gtk_tree_model_get(GTK_TREE_MODEL(store_openfiles), iter, DOCUMENTS_DOCUMENT, &doc, -1);
 	g_return_val_if_fail(!doc, FALSE);
-	
+
 	gtk_tree_model_get(GTK_TREE_MODEL(store_openfiles), iter, DOCUMENTS_SHORTNAME, &name, -1);
 	return utils_str_equal(name, dir);
 }
@@ -286,7 +286,7 @@ static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 	gchar *dirname;
 	static GtkTreeIter parent;
 	GtkTreeModel *model = GTK_TREE_MODEL(store_openfiles);
-	
+
 	dirname = g_path_get_dirname(DOC_FILENAME(doc));
 
 	if (gtk_tree_model_get_iter_first(model, &parent))
@@ -319,9 +319,9 @@ void treeviews_openfiles_add(GeanyDocument *doc)
 	GtkTreeIter *parent = get_doc_parent(doc);
 	gchar *basename;
 	GdkColor *color = document_get_status_color(doc);
-	
+
 	gtk_tree_store_append(store_openfiles, iter, parent);
-	
+
 	/* check if new parent */
 	if (gtk_tree_model_iter_n_children(GTK_TREE_MODEL(store_openfiles), parent) == 1)
 	{
@@ -357,14 +357,14 @@ void treeviews_openfiles_update(GeanyDocument *doc)
 {
 	GtkTreeIter *iter = &doc->priv->iter;
 	gchar *fname;
-	
+
 	gtk_tree_model_get(GTK_TREE_MODEL(store_openfiles), iter, DOCUMENTS_FILENAME, &fname, -1);
-	
+
 	if (utils_str_equal(fname, DOC_FILENAME(doc)))
 	{
 		/* just update color */
 		GdkColor *color = document_get_status_color(doc);
-		
+
 		gtk_tree_store_set(store_openfiles, iter, DOCUMENTS_COLOR, color, -1);
 	}
 	else
@@ -376,7 +376,7 @@ void treeviews_openfiles_update(GeanyDocument *doc)
 		treesel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));
 		sel = gtk_tree_selection_iter_is_selected(treesel, &doc->priv->iter);
 		openfiles_remove(doc);
-		
+
 		treeviews_openfiles_add(doc);
 		if (sel)
 			gtk_tree_selection_select_iter(treesel, &doc->priv->iter);
@@ -405,7 +405,7 @@ void treeviews_openfiles_update_all()
 void treeviews_remove_document(GeanyDocument *doc)
 {
 	openfiles_remove(doc);
-	
+
 	if (GTK_IS_WIDGET(doc->priv->tag_tree))
 	{
 		gtk_widget_destroy(doc->priv->tag_tree);
@@ -530,9 +530,9 @@ static void unfold_parent(GtkTreeIter *iter)
 {
 	GtkTreeIter parent;
 	GtkTreePath *path;
-	
+
 	gtk_tree_model_iter_parent(GTK_TREE_MODEL(store_openfiles), &parent, iter);
-	
+
 	path = gtk_tree_model_get_path(GTK_TREE_MODEL(store_openfiles), &parent);
 	gtk_tree_view_expand_row(GTK_TREE_VIEW(tv.tree_openfiles), path, TRUE);
 	gtk_tree_path_free(path);
@@ -573,7 +573,7 @@ static void document_action(GeanyDocument *doc, gint action)
 {
 	if (!DOC_VALID(doc))
 		return;
-	
+
 	switch (action)
 	{
 		case OPENFILES_ACTION_REMOVE:
@@ -592,7 +592,7 @@ static void document_action(GeanyDocument *doc, gint action)
 			break;
 		}
 	}
-	
+
 }
 
 
@@ -616,7 +616,7 @@ static void on_openfiles_document_action(GtkMenuItem *menuitem, gpointer user_da
 			/* parent item selected */
 			GtkTreeIter child;
 			gint i = gtk_tree_model_iter_n_children(model, &iter) - 1;
-			
+
 			while (i >= 0 && gtk_tree_model_iter_nth_child(model, &child, &iter, i))
 			{
 				gtk_tree_model_get(model, &child, DOCUMENTS_DOCUMENT, &doc, -1);
@@ -769,7 +769,7 @@ static void documents_menu_update(GtkTreeSelection *selection)
 			DOCUMENTS_SHORTNAME, &shortname, -1);
 	}
 	path = NZV(shortname) && g_path_is_absolute(shortname);
-	
+
 	/* can close all, save all (except shortname), but only reload individually ATM */
 	gtk_widget_set_sensitive(doc_items.close, sel);
 	gtk_widget_set_sensitive(doc_items.save, (doc && doc->real_path) || path);
@@ -784,7 +784,7 @@ static gboolean on_documents_button_release_event(GtkWidget *widget, GdkEventBut
 	GtkTreeSelection *selection;
 
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
-	
+
 	if (event->button == 3)
 	{
 		documents_menu_update(selection);
