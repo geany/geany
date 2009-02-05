@@ -53,33 +53,7 @@ enum
 static guint signals[LAST_SIGNAL];
 
 
-static void geany_entry_action_class_init			(GeanyEntryActionClass *klass);
-static void geany_entry_action_init      			(GeanyEntryAction *action);
-
-static GtkActionClass *parent_class = NULL;
-
-GType geany_entry_action_get_type(void)
-{
-	static GType self_type = 0;
-	if (! self_type)
-	{
-		static const GTypeInfo self_info =
-		{
-			sizeof(GeanyEntryActionClass),
-			NULL, NULL,
-			(GClassInitFunc)geany_entry_action_class_init,
-			NULL, NULL,
-			sizeof(GeanyEntryAction),
-			0,
-			(GInstanceInitFunc)geany_entry_action_init,
-			NULL
-		};
-
-		self_type = g_type_register_static(GTK_TYPE_ACTION, "GeanyEntryAction", &self_info, 0);
-	}
-
-	return self_type;
-}
+G_DEFINE_TYPE(GeanyEntryAction, geany_entry_action, GTK_TYPE_ACTION);
 
 
 static GtkWidget *geany_entry_action_create_tool_item(GtkAction *action)
@@ -138,7 +112,7 @@ static void geany_entry_action_connect_proxy(GtkAction *action, GtkWidget *widge
 	g_signal_connect(priv->entry, "changed", G_CALLBACK(delegate_entry_changed_cb), action);
 	g_signal_connect(priv->entry, "activate", G_CALLBACK(delegate_entry_activate_cb), action);
 
-    GTK_ACTION_CLASS(parent_class)->connect_proxy(action, widget);
+    GTK_ACTION_CLASS(geany_entry_action_parent_class)->connect_proxy(action, widget);
 }
 
 
@@ -150,8 +124,7 @@ static void geany_entry_action_class_init(GeanyEntryActionClass *klass)
 	action_class->create_tool_item = geany_entry_action_create_tool_item;
 	action_class->toolbar_item_type = GTK_TYPE_MENU_TOOL_BUTTON;
 
-	parent_class = (GtkActionClass*)g_type_class_peek(GTK_TYPE_ACTION);
-	g_type_class_add_private((gpointer)klass, sizeof(GeanyEntryActionPrivate));
+	g_type_class_add_private(klass, sizeof(GeanyEntryActionPrivate));
 
 	signals[ENTRY_CHANGED] = g_signal_new("entry-changed",
 									G_TYPE_FROM_CLASS(klass),

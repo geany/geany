@@ -1,3 +1,11 @@
+2009-02-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/geanymenubuttonaction.c, src/geanyentryaction.c,
+   src/geanyobject.c, src/geanywraplabel.c:
+   Use the G_DEFINE_TYPE() macro to generate the *_get_type() code.
+   Remove useless geany_object_finalize() function.
+
+
 2009-02-04  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/vte.c, src/vte.h:

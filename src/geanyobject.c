@@ -51,37 +51,9 @@ struct _GeanyObjectPrivate
 	gchar dummy;
 };
 
-static void geany_object_class_init			(GeanyObjectClass *klass);
-static void geany_object_init				(GeanyObject *self);
-static void geany_object_finalize			(GObject *object);
 
-/* Local data */
-static GObjectClass *parent_class = NULL;
+G_DEFINE_TYPE(GeanyObject, geany_object, G_TYPE_OBJECT);
 
-
-GType geany_object_get_type(void)
-{
-	static GType self_type = 0;
-	if (! self_type)
-	{
-		static const GTypeInfo self_info =
-		{
-			sizeof(GeanyObjectClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc)geany_object_class_init,
-			NULL, /* class_finalize */
-			NULL, /* class_data */
-			sizeof(GeanyObject),
-			0,
-			(GInstanceInitFunc)geany_object_init,
-			NULL
-		};
-
-		self_type = g_type_register_static(G_TYPE_OBJECT, "GeanyObject", &self_info, 0);	}
-
-	return self_type;
-}
 
 
 static void geany_cclosure_marshal_VOID__STRING_INT_POINTER(GClosure *closure, GValue *ret_val,
@@ -278,13 +250,9 @@ static void create_signals(GObjectClass *g_object_class)
 static void geany_object_class_init(GeanyObjectClass *klass)
 {
 	GObjectClass *g_object_class;
-
 	g_object_class = G_OBJECT_CLASS(klass);
 
-	g_object_class->finalize = geany_object_finalize;
-
-	parent_class = (GObjectClass*)g_type_class_peek(G_TYPE_OBJECT);
-	g_type_class_add_private((gpointer)klass, sizeof(GeanyObjectPrivate));
+	g_type_class_add_private(klass, sizeof(GeanyObjectPrivate));
 
 	create_signals(g_object_class);
 }
@@ -299,19 +267,5 @@ static void geany_object_init(GeanyObject *self)
 GObject* geany_object_new(void)
 {
 	return (GObject*)g_object_new(GEANY_OBJECT_TYPE, NULL);
-}
-
-
-static void geany_object_finalize(GObject *object)
-{
-	GeanyObject *self;
-
-	g_return_if_fail(object != NULL);
-	g_return_if_fail(IS_GEANY_OBJECT(object));
-
-	self = GEANY_OBJECT(object);
-
-	if (G_OBJECT_CLASS(parent_class)->finalize)
-		(* G_OBJECT_CLASS(parent_class)->finalize)(object);
 }
 

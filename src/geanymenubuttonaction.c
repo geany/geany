@@ -51,33 +51,7 @@ enum
 static guint signals[LAST_SIGNAL];
 
 
-static void geany_menu_button_action_class_init			(GeanyMenubuttonActionClass *klass);
-static void geany_menu_button_action_init      			(GeanyMenubuttonAction *action);
-
-static GtkActionClass *parent_class = NULL;
-
-GType geany_menu_button_action_get_type(void)
-{
-	static GType self_type = 0;
-	if (! self_type)
-	{
-		static const GTypeInfo self_info =
-		{
-			sizeof(GeanyMenubuttonActionClass),
-			NULL, NULL,
-			(GClassInitFunc)geany_menu_button_action_class_init,
-			NULL, NULL,
-			sizeof(GeanyMenubuttonAction),
-			0,
-			(GInstanceInitFunc)geany_menu_button_action_init,
-			NULL
-		};
-
-		self_type = g_type_register_static(GTK_TYPE_ACTION, "GeanyMenubuttonAction", &self_info, 0);
-	}
-
-	return self_type;
-}
+G_DEFINE_TYPE(GeanyMenubuttonAction, geany_menu_button_action, GTK_TYPE_ACTION);
 
 
 static void geany_menu_button_action_finalize(GObject *object)
@@ -86,8 +60,7 @@ static void geany_menu_button_action_finalize(GObject *object)
 
 	g_object_unref(priv->menu);
 
-	if (G_OBJECT_CLASS(parent_class)->finalize)
-		(* G_OBJECT_CLASS(parent_class)->finalize)(object);
+	(* G_OBJECT_CLASS(geany_menu_button_action_parent_class)->finalize)(object);
 }
 
 
@@ -109,7 +82,7 @@ static void geany_menu_button_action_connect_proxy(GtkAction *action, GtkWidget 
 	/* add the menu to the menu button once it got items ("add" from GtkContainer) */
 	g_signal_connect(priv->menu, "add", G_CALLBACK(menu_filled_cb), action);
 
-    GTK_ACTION_CLASS(parent_class)->connect_proxy(action, widget);
+    GTK_ACTION_CLASS(geany_menu_button_action_parent_class)->connect_proxy(action, widget);
 }
 
 
@@ -145,8 +118,7 @@ static void geany_menu_button_action_class_init(GeanyMenubuttonActionClass *klas
 	action_class->create_tool_item = geany_menu_button_action_create_tool_item;
 	action_class->toolbar_item_type = GTK_TYPE_MENU_TOOL_BUTTON;
 
-	parent_class = (GtkActionClass*)g_type_class_peek(GTK_TYPE_ACTION);
-	g_type_class_add_private((gpointer)klass, sizeof(GeanyMenubuttonActionPrivate));
+	g_type_class_add_private(klass, sizeof(GeanyMenubuttonActionPrivate));
 
 	signals[BUTTON_CLICKED] = g_signal_new("button-clicked",
 										G_TYPE_FROM_CLASS(klass),
