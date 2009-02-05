@@ -4,6 +4,10 @@
    src/geanyobject.c, src/geanywraplabel.c:
    Use the G_DEFINE_TYPE() macro to generate the *_get_type() code.
    Remove useless geany_object_finalize() function.
+ * src/keybindings.c:
+   Special case Menu key presses and Shift-F10 to show the popup menu
+   of the widgets where they were pressed instead of always the
+   document notebook tab list.
 
 
 2009-02-04  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

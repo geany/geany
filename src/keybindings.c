@@ -33,6 +33,7 @@
 #include "utils.h"
 #include "ui_utils.h"
 #include "document.h"
+#include "documentprivate.h"
 #include "filetypes.h"
 #include "callbacks.h"
 #include "prefs.h"
@@ -45,6 +46,7 @@
 #include "symbols.h"
 #include "vte.h"
 #include "toolbar.h"
+#include "treeviews.h"
 #include "geanywraplabel.h"
 
 
@@ -915,6 +917,83 @@ static gboolean check_snippet_completion(guint keyval, guint state)
 }
 
 
+/* Transforms a GdkEventKey event into a GdkEventButton event */
+static void trigger_button_event(GtkWidget *widget, guint32 event_time)
+{
+	GdkEventButton *event;
+	gboolean ret;
+
+	event = g_new0(GdkEventButton, 1);
+
+	if (GTK_IS_TEXT_VIEW(widget))
+		event->window = gtk_text_view_get_window(GTK_TEXT_VIEW(widget), GTK_TEXT_WINDOW_TEXT);
+	else
+		event->window = widget->window;
+	event->time = event_time;
+	event->type = GDK_BUTTON_PRESS;
+	event->button = 3;
+
+	g_signal_emit_by_name(widget, "button-press-event", event, &ret);
+	g_signal_emit_by_name(widget, "button-release-event", event, &ret);
+
+	g_free(event);
+}
+
+
+/* Special case for the Menu key and Shift-F10 to show the right-click popup menu for various
+ * widgets. Without this special handling, the notebook tab list of the documents' notebook
+ * would be shown. As a very special case, we differentiate between the Menu key and Shift-F10
+ * if pressed in the editor widget: the Menu key opens the popup menu, Shift-F10 opens the
+ * notebook tab list. */
+static gboolean check_menu_key(guint keyval, guint state, guint32 event_time)
+{
+	if ((keyval == GDK_Menu && state == 0) || (keyval == GDK_F10 && state == GDK_SHIFT_MASK))
+	{
+		GeanyDocument *doc = document_get_current();
+		GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
+		static GtkWidget *scribble = NULL;
+
+		if (scribble == NULL)
+			scribble = ui_lookup_widget(main_widgets.window, "textview_scribble");
+
+		if (doc != NULL)
+		{
+			if (focusw == doc->priv->tag_tree)
+			{
+				trigger_button_event(focusw, event_time);
+				return TRUE;
+			}
+			if (focusw == GTK_WIDGET(doc->editor->sci))
+			{
+				if (keyval == GDK_Menu)
+				{	/* show editor popup menu */
+					trigger_button_event(focusw, event_time);
+					return TRUE;
+				}
+				else
+					/* we return FALSE, so the default handler will be used and show
+					 * the GTK notebook tab list */
+					return FALSE;
+			}
+		}
+		if (focusw == tv.tree_openfiles
+		 || focusw == msgwindow.tree_status
+		 || focusw == msgwindow.tree_compiler
+		 || focusw == msgwindow.tree_msg
+		 || focusw == scribble
+#ifdef HAVE_VTE
+		 || (vte_info.have_vte && focusw == vc->vte)
+#endif
+		)
+		{
+			trigger_button_event(focusw, event_time);
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+
 #ifdef HAVE_VTE
 static gboolean on_menu_expose_event(GtkWidget *widget, GdkEventExpose *event,
 		gpointer user_data)
@@ -1014,6 +1093,8 @@ static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer 
 		return FALSE;
 #endif
 	if (check_snippet_completion(keyval, state))
+		return TRUE;
+	if (check_menu_key(keyval, state, ev->time))
 		return TRUE;
 
 	ignore_keybinding = FALSE;
