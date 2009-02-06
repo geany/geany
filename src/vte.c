@@ -557,6 +557,18 @@ static GtkWidget *vte_create_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
+	item = gtk_image_menu_item_new_from_stock("gtk-preferences", NULL);
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect(item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_PREFERENCES));
+
+	msgwin_menu_add_common_items(GTK_MENU(menu));
+
+	item = gtk_separator_menu_item_new();
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+
+	/* the IM submenu should always be the last item to be consistent with other GTK popup menus */
 	vc->im_submenu = gtk_menu_new();
 
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Input Methods"));
@@ -564,17 +576,6 @@ static GtkWidget *vte_create_popup_menu(void)
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), vc->im_submenu);
-
-	item = gtk_separator_menu_item_new();
-	gtk_widget_show(item);
-	gtk_container_add(GTK_CONTAINER(menu), item);
-
-	item = gtk_image_menu_item_new_from_stock("gtk-preferences", NULL);
-	gtk_widget_show(item);
-	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect(item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_PREFERENCES));
-
-	msgwin_menu_add_common_items(GTK_MENU(menu));
 
 	return menu;
 }

@@ -6,6 +6,8 @@
    Add plugin_module_make_resident() to the plugin API which allows
    plugins to make the module resident. This seems necessary when
    using GTypes, e.g. by using the GObject API.
+ * src/vte.c:
+   Fix ordering of the input methods submenu item in the VTE popup menu.
 
 
 2009-02-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
