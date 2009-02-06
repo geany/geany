@@ -592,6 +592,7 @@ static gint create_config_dir(void)
 
 	if (! g_file_test(app->configdir, G_FILE_TEST_EXISTS))
 	{
+#ifndef G_OS_WIN32
 		/* if we are *not* using an alternate config directory, we check whether the old one
 		 * in ~/.geany still exists and try to move it */
 		if (alternate_config == NULL)
@@ -626,6 +627,7 @@ static gint create_config_dir(void)
 			}
 			g_free(old_dir);
 		}
+#endif
 		geany_debug("creating config directory %s", app->configdir);
 		saved_errno = utils_mkdir(app->configdir, FALSE);
 	}

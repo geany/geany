@@ -1,3 +1,9 @@
+2009-02-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/main.c:
+   Don't check for old configuration directory location on Windows.
+
+
 2009-02-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/geanymenubuttonaction.c, src/geanyentryaction.c,
