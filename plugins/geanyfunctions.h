@@ -10,6 +10,8 @@
 
 #define plugin_add_toolbar_item \
 	geany_functions->p_plugin->add_toolbar_item
+#define plugin_module_make_resident \
+	geany_functions->p_plugin->module_make_resident
 #define document_new_file \
 	geany_functions->p_document->new_file
 #define document_get_current \

@@ -2,6 +2,10 @@
 
  * src/main.c:
    Don't check for old configuration directory location on Windows.
+ * plugins/geanyfunctions.h, src/plugindata.h, src/plugins.c:
+   Add plugin_module_make_resident() to the plugin API which allows
+   plugins to make the module resident. This seems necessary when
+   using GTypes, e.g. by using the GObject API.
 
 
 2009-02-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

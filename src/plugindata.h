@@ -45,7 +45,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 131,
+	GEANY_API_VERSION = 132,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -283,7 +283,7 @@ typedef struct SciFuncs
 	void	(*end_undo_action) (struct _ScintillaObject* sci);
 	void	(*set_text) (struct _ScintillaObject *sci, const gchar *text);
 	void	(*insert_text) (struct _ScintillaObject *sci, gint pos, const gchar *text);
-	void	(*get_text) (struct _ScintillaObject *sci, gint len, gchar* text);
+	void	(*get_text) (struct _ScintillaObject *sci, gint len, gchar *text);
 	gint	(*get_length) (struct _ScintillaObject *sci);
 	gint	(*get_current_position) (struct _ScintillaObject *sci);
 	void	(*set_current_position) (struct _ScintillaObject* sci, gint position,
@@ -291,8 +291,8 @@ typedef struct SciFuncs
 	gint	(*get_col_from_position) (struct _ScintillaObject* sci, gint position);
 	gint	(*get_line_from_position) (struct _ScintillaObject* sci, gint position);
 	gint	(*get_position_from_line) (struct _ScintillaObject* sci, gint line);
-	void	(*replace_sel) (struct _ScintillaObject* sci, const gchar* text);
-	void	(*get_selected_text) (struct _ScintillaObject* sci, gchar* text);
+	void	(*replace_sel) (struct _ScintillaObject* sci, const gchar *text);
+	void	(*get_selected_text) (struct _ScintillaObject* sci, gchar *text);
 	gint	(*get_selected_text_length) (struct _ScintillaObject* sci);
 	gint	(*get_selection_start) (struct _ScintillaObject* sci);
 	gint	(*get_selection_end) (struct _ScintillaObject* sci);
@@ -300,7 +300,7 @@ typedef struct SciFuncs
 	void	(*set_selection_mode) (struct _ScintillaObject* sci, gint mode);
 	void	(*set_selection_start) (struct _ScintillaObject* sci, gint position);
 	void	(*set_selection_end) (struct _ScintillaObject* sci, gint position);
-	void	(*get_text_range) (struct _ScintillaObject* sci, gint start, gint end, gchar*text);
+	void	(*get_text_range) (struct _ScintillaObject* sci, gint start, gint end, gchar *text);
 	gchar*	(*get_line) (struct _ScintillaObject* sci, gint line_num);
 	gint	(*get_line_length) (struct _ScintillaObject* sci, gint line);
 	gint	(*get_line_count) (struct _ScintillaObject* sci);
@@ -529,6 +529,7 @@ EditorFuncs;
 typedef struct PluginFuncs
 {
 	void	(*add_toolbar_item)(GeanyPlugin *plugin, GtkToolItem *item);
+	void	(*module_make_resident) (GeanyPlugin *plugin);
 }
 PluginFuncs;
 

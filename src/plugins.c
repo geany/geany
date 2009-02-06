@@ -72,6 +72,7 @@
 typedef struct GeanyPluginPrivate
 {
 	GeanyAutoSeparator	toolbar_separator;
+	gboolean			resident;
 }
 GeanyPluginPrivate;
 
@@ -111,10 +112,12 @@ static GtkWidget *menu_separator = NULL;
 static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data);
 
 void plugin_add_toolbar_item(GeanyPlugin *plugin, GtkToolItem *item);
+void plugin_module_make_resident(GeanyPlugin *plugin);
 
 
 static PluginFuncs plugin_funcs = {
-	&plugin_add_toolbar_item
+	&plugin_add_toolbar_item,
+	&plugin_module_make_resident
 };
 
 static DocumentFuncs doc_funcs = {
@@ -536,6 +539,9 @@ plugin_init(Plugin *plugin)
 	/* start the plugin */
 	g_return_if_fail(plugin->init);
 	plugin->init(&geany_data);
+
+	if (p_geany_plugin && (*p_geany_plugin)->priv->resident)
+		g_module_make_resident(plugin->module);
 
 	/* store some function pointers for later use */
 	g_module_symbol(plugin->module, "plugin_configure", (void *) &plugin->configure);
@@ -1318,6 +1324,19 @@ void plugin_add_toolbar_item(GeanyPlugin *plugin, GtkToolItem *item)
 	}
 	/* hide the separator widget if there are no toolbar items showing for the plugin */
 	ui_auto_separator_add_ref(autosep, GTK_WIDGET(item));
+}
+
+
+/** Ensures that a plugin's module (*.so) will never be unloaded.
+ *  This is necessary if you register new GTypes in your plugin, e.g. when using own classes
+ *  using the GObject system.
+ *
+ * @param plugin Must be @ref geany_plugin. */
+void plugin_module_make_resident(GeanyPlugin *plugin)
+{
+	g_return_if_fail(plugin);
+
+	plugin->priv->resident = TRUE;
 }
 
 
