@@ -1,8 +1,13 @@
+2009-02-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * de.po: Minor update of German translation, mainly remove full stops
+          in tooltips.
+
+
 2009-02-05  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * en_GB.po: Update British English translation (Thanks to Jeff Bailes)
  * ja.po: Update of Japanese translation (Thanks to Chikahiro Masami).
-
 
 
 2009-02-03  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

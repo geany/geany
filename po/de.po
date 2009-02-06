@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-03 18:10+0100\n"
 "PO-Revision-Date: 2009-02-01 22:47+0100\n"
-"Last-Translator: Dominic Hopf <dh@dmaphy.de>\n"
+"Last-Translator: Enrico Tröger <enrico.troeger@uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -283,7 +283,7 @@ msgstr "Ausführen:"
 
 #: ../src/build.c:1820 ../src/toolbar.c:194
 msgid "Build the current file"
-msgstr "Kompiliert die aktuelle Datei."
+msgstr "Kompiliert die aktuelle Datei"
 
 #: ../src/build.c:1845
 msgid "Make Custom Target"
@@ -304,7 +304,7 @@ msgstr "Kompiliert die aktuelle Datei mit »make« und dem angegebenem Target"
 
 #: ../src/build.c:1901
 msgid "Compile the current file with Make"
-msgstr "Kompiliert die aktuelle Datei mit make."
+msgstr "Kompiliert die aktuelle Datei mit make"
 
 #: ../src/build.c:1963
 msgid "Failed to execute the view program"
@@ -485,7 +485,7 @@ msgid ""
 "new tab"
 msgstr ""
 "Lässt das ungesicherte Dokument geöffnet und öffnet das gesicherte in einem "
-"neuen Tab."
+"neuen Tab"
 
 #: ../src/dialogs.c:658
 msgid "_Don't save"
@@ -1024,7 +1024,7 @@ msgstr "unsichtbar"
 
 #: ../src/interface.c:292
 msgid "dummy tooltip, don't translate this."
-msgstr ""
+msgstr "dummy"
 
 #: ../src/interface.c:303 ../src/interface.c:1889
 msgid "Open Selected F_ile"
@@ -1212,11 +1212,11 @@ msgstr "_Zeilennummern anzeigen"
 
 #: ../src/interface.c:735
 msgid "Show _White Space"
-msgstr ""
+msgstr "_Leerzeichen anzeigen"
 
 #: ../src/interface.c:739
 msgid "Show Line _Endings"
-msgstr "Zeil_enenden anzeigen"
+msgstr "Zeile_nenden anzeigen"
 
 #: ../src/interface.c:743
 msgid "Show _Indentation Guides"
@@ -1444,7 +1444,7 @@ msgstr "Dateien aus der letzten Sitzung laden"
 
 #: ../src/interface.c:2632
 msgid "Opens at startup the files from the last session"
-msgstr "Lädt die geöffneten Dateien aus der letzten Sitzung."
+msgstr "Lädt die geöffneten Dateien aus der letzten Sitzung"
 
 #: ../src/interface.c:2634
 msgid "Load virtual terminal support"
@@ -1483,7 +1483,7 @@ msgstr "Beenden bestätigen"
 
 #: ../src/interface.c:2669
 msgid "Shows a confirmation dialog on exit"
-msgstr "Zeigt einen Bestätigungsdialog vor dem Beenden."
+msgstr "Zeigt einen Bestätigungsdialog vor dem Beenden"
 
 #: ../src/interface.c:2671
 msgid "<b>Shutdown</b>"
@@ -1508,7 +1508,7 @@ msgstr "Projektdateien:"
 
 #: ../src/interface.c:2729
 msgid "Path to start in when opening project files"
-msgstr "Pfad zum Öffnen von Projektdateien."
+msgstr "Pfad zum Öffnen von Projektdateien"
 
 #: ../src/interface.c:2742
 msgid "<b>Paths</b>"
@@ -1528,7 +1528,7 @@ msgid ""
 "finished"
 msgstr ""
 "Legt fest, ob bei einem Fehler oder bei beendeter Kompilierung ein Piepton "
-"ausgegeben werden soll."
+"ausgegeben werden soll"
 
 #: ../src/interface.c:2774
 msgid "Switch to status message list at new message"
@@ -1540,7 +1540,7 @@ msgid ""
 "new status message arrives"
 msgstr ""
 "Wechselt automatisch zu dem Reiter mit den Statusmeldungen im Infobereich, "
-"wenn eine neue Statusmeldung vorliegt."
+"wenn eine neue Statusmeldung vorliegt"
 
 #: ../src/interface.c:2779
 msgid "Suppress status messages in the status bar"
@@ -1583,22 +1583,22 @@ msgid ""
 "clicking Find Next/Previous"
 msgstr ""
 "Immer das vollständige Dokument durchsuchen und den Suchen-Dialog nach "
-"Klicken auf Nächstes/Vorheriges schließen."
+"Klicken auf Nächstes/Vorheriges schließen"
 
 #: ../src/interface.c:2814
 msgid "Use the current word under the cursor for Find dialogs"
-msgstr "Aktuelle Cursorposition zur Suche heranziehen."
+msgstr "Aktuelle Cursorposition zur Suche heranziehen"
 
 #: ../src/interface.c:2817
 msgid ""
 "Use current word under the cursor when opening the Find, Find in Files or "
 "Replace dialog and there is no selection"
 msgstr ""
-"Bestimmt das aktuelle Wort zum Suchen & Ersetzen anhand der Cursorposition."
+"Bestimmt das aktuelle Wort zum Suchen & Ersetzen anhand der Cursorposition"
 
 #: ../src/interface.c:2819
 msgid "Use the current file's directory for Find in Files"
-msgstr "Verzeichnis der aktuellen für »In Dateie suchen« benutzen."
+msgstr "Verzeichnis der aktuellen für »In Dateie suchen« benutzen"
 
 #: ../src/interface.c:2823
 msgid "<b>Search</b>"
@@ -1614,7 +1614,7 @@ msgid ""
 "project"
 msgstr ""
 "Speichert die geöffneten Dateien (aktuelle Sitzung) zusammen mit dem Projekt "
-"und öffnet diese Dateien wieder wenn das Projekt geöffnet wird."
+"und öffnet diese Dateien wieder wenn das Projekt geöffnet wird"
 
 #: ../src/interface.c:2847
 msgid "Store project file inside the project base directory"
@@ -1650,7 +1650,7 @@ msgstr "Symbolliste anzeigen"
 
 #: ../src/interface.c:2887
 msgid "Toggle the symbol list on and off"
-msgstr "Blendet die Symbolliste ein und aus."
+msgstr "Blendet die Symbolliste ein und aus"
 
 #: ../src/interface.c:2889
 msgid "Show documents list"
@@ -1658,7 +1658,7 @@ msgstr "Dokumentenliste anzeigen"
 
 #: ../src/interface.c:2892
 msgid "Toggle the documents list on and off"
-msgstr "Blendet die Dokumentenliste ein und aus."
+msgstr "Blendet die Dokumentenliste ein und aus"
 
 #: ../src/interface.c:2894
 msgid "<b>Sidebar</b>"
@@ -1678,15 +1678,15 @@ msgstr "Editor:"
 
 #: ../src/interface.c:2941
 msgid "Sets the font for the message window"
-msgstr "Ändert die Schriftart für das Meldungsfenster im Infobereich."
+msgstr "Ändert die Schriftart für das Meldungsfenster im Infobereich"
 
 #: ../src/interface.c:2949
 msgid "Sets the font for the symbol list"
-msgstr "Legt die Schriftart für die Symbolliste fest."
+msgstr "Legt die Schriftart für die Symbolliste fest"
 
 #: ../src/interface.c:2957
 msgid "Sets the editor font"
-msgstr "Legt die Schriftart für das Editorfenster fest."
+msgstr "Legt die Schriftart für das Editorfenster fest"
 
 #: ../src/interface.c:2959
 msgid "<b>Fonts</b>"
@@ -1719,7 +1719,7 @@ msgstr "Links"
 
 #: ../src/interface.c:2999
 msgid "File tabs will be placed on the left of the notebook"
-msgstr "Neue Dateien werden links von der Dateiliste platziert."
+msgstr "Neue Dateien werden links von der Dateiliste platziert"
 
 #: ../src/interface.c:3004 ../src/interface.c:3051 ../src/interface.c:3069
 #: ../src/interface.c:3087
@@ -1728,13 +1728,13 @@ msgstr "Rechts"
 
 #: ../src/interface.c:3007
 msgid "File tabs will be placed on the right of the notebook"
-msgstr "Neue Dateien werden rechts von der Dateiliste platziert."
+msgstr "Neue Dateien werden rechts von der Dateiliste platziert"
 
 #: ../src/interface.c:3011
 msgid "Double-clicking hides all additional widgets"
 msgstr ""
 "Doppelklick versteckt die zusätzlichen Unterfenster und zeigt nur das "
-"Editorfenster an."
+"Editorfenster an"
 
 #: ../src/interface.c:3014
 msgid "Calls the View->Toggle All Additional Widgets command"
@@ -1768,7 +1768,7 @@ msgstr "Statusleiste anzeigen"
 msgid "Whether to show the status bar at the bottom of the main window"
 msgstr ""
 "Legt fest, ob die Statuszeile an der unteren Seite des Fensters angezeigt "
-"werden soll oder nicht."
+"werden soll oder nicht"
 
 #: ../src/interface.c:3120
 msgid "Interface"
@@ -1849,7 +1849,7 @@ msgstr "Quelltext-Ausblendung aktivieren"
 #: ../src/interface.c:3268
 msgid "Whether to enable folding the code"
 msgstr ""
-"Legt fest, ob es möglich sein soll, Teile des Quelltextes auszublenden."
+"Legt fest, ob es möglich sein soll, Teile des Quelltextes auszublenden"
 
 #: ../src/interface.c:3270
 msgid "Fold/unfold all children of a fold point"
@@ -1866,7 +1866,7 @@ msgstr ""
 
 #: ../src/interface.c:3275
 msgid "Use indicators to show compile errors"
-msgstr "Benutzt Markierungen, um Probleme beim Kompilieren anzuzeigen."
+msgstr "Benutzt Markierungen, um Probleme beim Kompilieren anzuzeigen"
 
 #: ../src/interface.c:3278
 msgid ""
@@ -1874,7 +1874,7 @@ msgid ""
 "where the compiler found a warning or an error"
 msgstr ""
 "Legt fest, ob Markierungen (gewellte Unterstreichungen) benutzt werden "
-"sollen, um Zeilen mit Fehlern beim Kompiliervorgang zu markieren."
+"sollen, um Zeilen mit Fehlern beim Kompiliervorgang zu markieren"
 
 #: ../src/interface.c:3280
 msgid "Newline strips trailing spaces"
@@ -1884,7 +1884,7 @@ msgstr "Neue Zeile entfernt Leerzeichen am Zeilenende"
 msgid "Enable newline to strip the trailing spaces on the previous line"
 msgstr ""
 "Legt fest, ob unnötige Leerzeichen am Ende einer Zeile automatisch beim "
-"Wechseln in eine neue Zeile entfernt werden sollen."
+"Wechseln in eine neue Zeile entfernt werden sollen"
 
 #: ../src/interface.c:3289
 msgid "Line breaking column:"
@@ -1937,7 +1937,7 @@ msgstr "Breite:"
 
 #: ../src/interface.c:3386 ../src/interface.c:4927
 msgid "The width in chars of a single indent"
-msgstr "Die Breite einer Einrückung in Zeichen."
+msgstr "Die Breite einer Einrückung in Zeichen"
 
 #: ../src/interface.c:3396 ../src/interface.c:4937
 msgid "Use spaces when inserting indentation"
@@ -1952,7 +1952,7 @@ msgid ""
 "Use spaces if the total indent is less than the tab width, otherwise use both"
 msgstr ""
 "Benutzt Leerzeichen, falls die Einrückung kleiner ist als die "
-"Tabulatorenbreite, anderenfalls beides, Leerzeichen und Tabulatoren."
+"Tabulatorenbreite, anderenfalls beides (Leerzeichen und Tabulatoren)"
 
 #: ../src/interface.c:3429 ../src/interface.c:4970
 msgid "Hard tab width:"
@@ -1962,7 +1962,7 @@ msgstr "Tabulatorenbreite:"
 msgid "The width of a tab when Tabs & Spaces is set for a document"
 msgstr ""
 "Die Breite eines Tabulators, wenn »Tabulatoren & Leerzeichen« für das "
-"Dokument ausgewählt ist."
+"Dokument ausgewählt ist"
 
 #: ../src/interface.c:3447 ../src/interface.c:4988
 msgid ""
@@ -1971,7 +1971,7 @@ msgid ""
 msgstr ""
 "Wenn diese Option aktiviert ist, versucht Geany den Typ der Einrückung "
 "(Tabulatoren oder Leerzeichen) automatisch aus der geöffneten Datei zu "
-"bestimmen."
+"bestimmen"
 
 #: ../src/interface.c:3449
 msgid "Tab key indents"
@@ -1982,7 +1982,7 @@ msgid ""
 "Pressing tab/shift-tab indents/unindents instead of inserting a tab character"
 msgstr ""
 "Tabulator und Shift+Tabulator rückt den Text ein oder aus anstatt nur ein "
-"Tabulatorzeichen einzufügen."
+"Tabulatorzeichen einzufügen"
 
 #: ../src/interface.c:3454
 msgid "<b>Indentation</b>"
@@ -2002,7 +2002,7 @@ msgid ""
 "string using a single keypress"
 msgstr ""
 "Mittels eines Tastenkürzels kann ein kurzer (Code-)Schnipsel zu einem "
-"komplexeren Text erweitert werden."
+"komplexeren Text erweitert werden"
 
 #: ../src/interface.c:3487
 msgid "XML tag auto completion"
@@ -2022,7 +2022,7 @@ msgid ""
 "when a new line is entered inside such a comment"
 msgstr ""
 "Verlängert den Kommentarbereich in den Sprachen C, C++ und Java, wenn eine "
-"neue Zeile innerhalb eines Kommentares hinzu gefügt wird."
+"neue Zeile innerhalb eines Kommentares hinzu gefügt wird"
 
 #: ../src/interface.c:3497
 msgid "Automatic symbol completion"
@@ -2034,7 +2034,7 @@ msgid ""
 "variables, ...)"
 msgstr ""
 "Automatische Vervollständigung von bekannten Variablen und Funktionsnamen "
-"geöffneter Dateien."
+"geöffneter Dateien"
 
 #: ../src/interface.c:3508
 msgid "Max. symbol name suggestions:"
@@ -2054,19 +2054,19 @@ msgid ""
 "completion list"
 msgstr ""
 "Die Anzahl der Zeichen, die nötig sind um die Vervollständigungsliste "
-"anzuzeigen."
+"anzuzeigen"
 
 #: ../src/interface.c:3544
 msgid "Display height in rows for the auto completion list"
 msgstr ""
 "Anzahl der Zeilen, die maximal angezeigt werden sollen, wenn die "
-"Vervollständigungsliste angezeigt wird."
+"Vervollständigungsliste angezeigt wird"
 
 #: ../src/interface.c:3553
 msgid "Maximum number of entries to display in the auto completion list"
 msgstr ""
 "Anzahl der Elemente, die maximal angezeigt werden sollen, wenn die "
-"Vervollständigungsliste angezeigt wird."
+"Vervollständigungsliste angezeigt wird"
 
 #: ../src/interface.c:3556
 msgid "<b>Completions</b>"
@@ -2143,7 +2143,7 @@ msgstr "Zeige Einrückungshinweise"
 #: ../src/interface.c:3647
 msgid "Shows small dotted lines to help you to use the right indentation"
 msgstr ""
-"Blendet punktierte Linien ein, um die richtige Einrückung zu erleichtern."
+"Blendet punktierte Linien ein, um die richtige Einrückung zu erleichtern"
 
 #: ../src/interface.c:3649
 msgid "Show white space"
@@ -2151,7 +2151,7 @@ msgstr "Zeige Leerzeichen"
 
 #: ../src/interface.c:3652
 msgid "Marks spaces with dots and tabs with arrows"
-msgstr "Markiert Leerzeichen mit Punkten und Tabulatoren mit kleinen Pfeilen."
+msgstr "Markiert Leerzeichen mit Punkten und Tabulatoren mit kleinen Pfeilen"
 
 #: ../src/interface.c:3654
 msgid "Show line endings"
@@ -2167,7 +2167,7 @@ msgstr "Zeilennummern anzeigen"
 
 #: ../src/interface.c:3662
 msgid "Shows or hides the Line Number margin"
-msgstr "Zeigt oder versteckt den Zeilennummernrand."
+msgstr "Zeigt oder versteckt den Zeilennummernrand"
 
 #: ../src/interface.c:3664
 msgid "Show markers margin"
@@ -2179,17 +2179,17 @@ msgid ""
 "mark lines"
 msgstr ""
 "Zeigt oder versteckt den kleinen Rand rechts von den Zeilennummern, welcher "
-"zum Anzeigen von Markierungen genutzt wird."
+"zum Anzeigen von Markierungen genutzt wird"
 
 #: ../src/interface.c:3669
 msgid "Stop scrolling at last line"
-msgstr "Am Ende des Dokuments nicht mehr weiter rollen."
+msgstr "Am Ende des Dokuments nicht mehr weiter rollen"
 
 #: ../src/interface.c:3672
 msgid "Whether to stop scrolling one page past the last line of a document"
 msgstr ""
 "Legt fest, ob am Ende des Dokuments noch eine Seite weiter nach unten "
-"gerollt werden kann oder nicht."
+"gerollt werden kann oder nicht"
 
 #: ../src/interface.c:3674
 msgid "<b>Display</b>"
@@ -2205,7 +2205,7 @@ msgstr "Farbe der Markierung:"
 
 #: ../src/interface.c:3721
 msgid "Sets the color of the long line marker"
-msgstr "Stellt die Farbe der \"Umbruchhilfe für lange Zeilen\" ein."
+msgstr "Stellt die Farbe der »Umbruchhilfe für lange Zeilen« ein"
 
 #: ../src/interface.c:3722 ../src/toolbar.c:66 ../src/tools.c:743
 #: ../src/vte.c:757 ../src/vte.c:764
@@ -2233,7 +2233,7 @@ msgid ""
 "(see below)"
 msgstr ""
 "Zeichnet eine vertikale Linie im Editorfenster an der angegebenen Cursor-"
-"Position (nur sinnvoll mit Festbreitenschriften)."
+"Position (nur sinnvoll mit Festbreitenschriften)"
 
 #: ../src/interface.c:3747
 msgid "Background"
@@ -2247,7 +2247,7 @@ msgid ""
 msgstr ""
 "Die Hintergrundfarbe der Zeichen, die hinter der angegebenen Cursor-Position "
 "(siehe unten) stehen, wird auf die unten angegebene Farbe geändert (nützlich "
-"für proportionale Schriftarten)."
+"für proportionale Schriftarten)"
 
 #: ../src/interface.c:3754
 msgid "Disabled"
@@ -2269,7 +2269,7 @@ msgstr "Öffne neue Dokumente von der Kommandozeile"
 msgid "Start a new file for each command-line filename that doesn't exist"
 msgstr ""
 "Öffnet eine neue Datei für jeden Dateinamen, der auf der Kommandozeile "
-"angegeben wurde aber nicht geöffnet werden konnte."
+"angegeben wurde aber nicht geöffnet werden konnte"
 
 #: ../src/interface.c:3813
 msgid "Default end of line characters:"
@@ -2281,7 +2281,7 @@ msgstr "<b>Neue Dateien</b>"
 
 #: ../src/interface.c:3846
 msgid "Sets the default encoding for newly created files"
-msgstr "Setzt die Zeichenkodierung für neu erstellte Dateien."
+msgstr "Setzt die Zeichenkodierung für neu erstellte Dateien"
 
 #: ../src/interface.c:3852
 msgid "Default encoding (new files):"
@@ -2293,7 +2293,7 @@ msgstr "Standardzeichenkodierung (existierende Dateien):"
 
 #: ../src/interface.c:3871
 msgid "Sets the default encoding for opening existing files"
-msgstr "Setzt die Standardzeichenkodierung für zu öffnende Dateien."
+msgstr "Setzt die Standardzeichenkodierung für zu öffnende Dateien"
 
 #: ../src/interface.c:3877
 msgid "Use fixed encoding when opening files"
@@ -2319,7 +2319,7 @@ msgstr "Neue Zeile am Dateiende"
 
 #: ../src/interface.c:3906
 msgid "Ensures that at the end of the file is a new line"
-msgstr "Fügt am Dateiende eine neue Zeile an, falls keine vorhanden ist."
+msgstr "Fügt am Dateiende eine neue Zeile an, falls keine vorhanden ist"
 
 #: ../src/interface.c:3908
 msgid "Strip trailing spaces and tabs"
@@ -2327,7 +2327,7 @@ msgstr "Leerzeichen und Tabulatoren am Zeilenende entfernen"
 
 #: ../src/interface.c:3911
 msgid "Removes trailing spaces and tabs and the end of lines"
-msgstr "Entfernt Leerzeichen und Tabulatoren am Ende einer Zeile."
+msgstr "Entfernt Leerzeichen und Tabulatoren am Ende einer Zeile"
 
 #: ../src/interface.c:3913 ../src/keybindings.c:444
 msgid "Replace tabs by space"
@@ -2335,7 +2335,7 @@ msgstr "Tabulatoren durch Leerzeichen ersetzen"
 
 #: ../src/interface.c:3916
 msgid "Replaces all tabs in document by spaces"
-msgstr "Ersetzt alle Tabulatoren im Dokument durch Leerzeichen."
+msgstr "Ersetzt alle Tabulatoren im Dokument durch Leerzeichen"
 
 #: ../src/interface.c:3918
 msgid "<b>Saving files</b>"
@@ -2347,7 +2347,7 @@ msgstr "Anzahl der »Zuletzt geöffneten« Dateien"
 
 #: ../src/interface.c:3957
 msgid "Specifies the number of files which are stored in the Recent files list"
-msgstr "Gibt die Länge der Liste der zuletzt geöffneten Dateien an."
+msgstr "Gibt die Länge der Liste der zuletzt geöffneten Dateien an"
 
 #: ../src/interface.c:3961
 msgid "Disk check timeout:"
@@ -2379,7 +2379,7 @@ msgstr "Browser:"
 
 #: ../src/interface.c:4042
 msgid "Path and options for the make tool"
-msgstr "Pfad und spezielle Optionen für »make« angeben."
+msgstr "Pfad und spezielle Optionen für »make« angeben"
 
 #: ../src/interface.c:4049
 msgid ""
@@ -2387,7 +2387,7 @@ msgid ""
 "-e argument)"
 msgstr ""
 "Eine Terminalemulation wie z.B. xterm, gnome-terminal oder konsole (sie "
-"sollte die Option -e akzeptieren)."
+"sollte die Option -e akzeptieren)"
 
 #: ../src/interface.c:4056
 msgid "Path (and possibly additional arguments) to your favorite browser"
@@ -2529,7 +2529,7 @@ msgstr "Befehl:"
 #: ../src/interface.c:4384
 #, c-format
 msgid "Path to the command for printing files (use %f for the filename)"
-msgstr "Pfad zum Druckbefehl (benutzen Sie %f für den Dateinamen)."
+msgstr "Pfad zum Druckbefehl (benutzen Sie %f für den Dateinamen)"
 
 #: ../src/interface.c:4394
 msgid "Use an external command for printing"
@@ -2574,7 +2574,7 @@ msgstr "Basisnamen der aktuellen Datei benutzen"
 msgid "Print only the basename(without the path) of the printed file"
 msgstr ""
 "Nur den Basisdateinamen (ohne die Pfadangabe) der zu druckenden Datei "
-"verwenden."
+"verwenden"
 
 #: ../src/interface.c:4453 ../src/printing.c:378
 msgid "Date format:"
@@ -2820,7 +2820,7 @@ msgstr "Datum einfügen"
 
 #: ../src/keybindings.c:320
 msgid "Insert alternative white space"
-msgstr "Alternatives »Whitespace«-Zeichen einfügen"
+msgstr "Alternatives Leerzeichen einfügen"
 
 #: ../src/keybindings.c:322
 msgid "Settings"
@@ -2880,11 +2880,11 @@ msgstr "Gehe zu"
 
 #: ../src/keybindings.c:358 ../src/toolbar.c:62
 msgid "Navigate back a location"
-msgstr "Navigiert eine Position nach hinten."
+msgstr "Navigiert eine Position nach hinten"
 
 #: ../src/keybindings.c:360 ../src/toolbar.c:63
 msgid "Navigate forward a location"
-msgstr "Navigiert eine Position nach vorne."
+msgstr "Navigiert eine Position nach vorne"
 
 #: ../src/keybindings.c:365
 msgid "Go to matching brace"
@@ -3133,9 +3133,11 @@ msgstr ""
 msgid "Use an alternate configuration directory"
 msgstr "Benutzt ein anderes Verzeichnis für die Konfigurationsdateien"
 
-#: ../src/main.c:126 ../src/main.c:146
+# siehe http://en.de.open-tran.eu/suggest/be verbose
+#: ../src/main.c:126
+#: ../src/main.c:146
 msgid "Be verbose"
-msgstr "ausführliche Meldungen"
+msgstr "ausführliche Ausgabe"
 
 #: ../src/main.c:127
 msgid "Print internal filetype names"
@@ -3153,7 +3155,7 @@ msgstr "C/C++ Präprozessor überspringen, wenn eine Tag-Datei erstellt wird"
 msgid "Don't open files in a running instance, force opening a new instance"
 msgstr ""
 "Dateien nicht in einer bereits laufenden Instanz, sondern in einer neuen "
-"Instanz öffnen."
+"Instanz öffnen"
 
 #: ../src/main.c:134
 msgid "Set initial line number for the first opened file"
@@ -3544,7 +3546,7 @@ msgstr "Beschreibung:"
 
 #: ../src/project.c:429
 msgid "Make in base path"
-msgstr "»Make« im Basispfad ausführen."
+msgstr "»Make« im Basispfad ausführen"
 
 #: ../src/project.c:434
 msgid "Run command:"
@@ -3622,7 +3624,7 @@ msgstr "Auswahl des Projektdateinamens"
 #. initialise the dialog
 #: ../src/project.c:808 ../src/project.c:819
 msgid "Choose Project Run Command"
-msgstr "Wählen Sie das Kommando zum Ausführen des Projektes."
+msgstr "Wählen Sie das Kommando zum Ausführen des Projektes"
 
 #: ../src/project.c:886
 #, c-format
@@ -3655,7 +3657,7 @@ msgid ""
 "corresponding control characters"
 msgstr ""
 "Ersetzt \\\\, \\t, \\n, \\r und \\uXXXX (Unicode-Zeichen) mit den "
-"entsprechenden Sonderzeichen."
+"entsprechenden Sonderzeichen"
 
 #: ../src/search.c:239 ../src/search.c:752
 msgid "C_ase sensitive"
@@ -3692,7 +3694,7 @@ msgstr "_Markieren"
 
 #: ../src/search.c:416
 msgid "Mark all matches in the current document"
-msgstr "Markiert alle Treffer innerhalb des aktuellen Dokumentes."
+msgstr "Markiert alle Treffer innerhalb des aktuellen Dokumentes"
 
 #: ../src/search.c:421 ../src/search.c:570
 msgid "In Sessi_on"
@@ -3705,11 +3707,11 @@ msgstr "_Im Dokument"
 #. close window checkbox
 #: ../src/search.c:432 ../src/search.c:588
 msgid "Close _dialog"
-msgstr "_Diesen Dialog schließen."
+msgstr "_Diesen Dialog schließen"
 
 #: ../src/search.c:437 ../src/search.c:593
 msgid "Disable this option to keep the dialog open"
-msgstr "Diese Option deaktivieren, um den Dialog nicht zu schließen."
+msgstr "Diese Option deaktivieren, um den Dialog nicht zu schließen"
 
 #: ../src/search.c:509
 msgid "Replace & Fi_nd"
@@ -3751,7 +3753,7 @@ msgstr "Reguläre Ausdrücke _benutzen (grep)"
 #: ../src/search.c:735 ../src/search.c:743
 msgid "See grep's manual page for more information"
 msgstr ""
-"Für mehr Informationen konsultieren Sie bitte die Dokumentation von »grep«."
+"Für mehr Informationen konsultieren Sie bitte die Dokumentation von »grep«"
 
 #: ../src/search.c:740
 msgid "_Extended regular expressions"
@@ -3767,7 +3769,7 @@ msgstr "Su_chmuster umkehren"
 
 #: ../src/search.c:768
 msgid "Invert the sense of matching, to select non-matching lines."
-msgstr "Invertiert die Trefferliste."
+msgstr "Invertiert die Trefferliste"
 
 #: ../src/search.c:785
 msgid "E_xtra options:"
@@ -4115,7 +4117,7 @@ msgstr "Nach _Auftreten sortieren"
 
 #: ../src/toolbar.c:51
 msgid "Save the current file"
-msgstr "Speichert die aktuelle Datei."
+msgstr "Speichert die aktuelle Datei"
 
 #: ../src/toolbar.c:52 ../src/ui_utils.c:1643
 msgid "Save All"
@@ -4123,15 +4125,15 @@ msgstr "Alles speichern"
 
 #: ../src/toolbar.c:52
 msgid "Save all open files"
-msgstr "Speichert alle geöffnete Dateien."
+msgstr "Speichert alle geöffnete Dateien"
 
 #: ../src/toolbar.c:53
 msgid "Reload the current file from disk"
-msgstr "Liest die aktuelle Datei neu ein."
+msgstr "Liest die aktuelle Datei neu ein"
 
 #: ../src/toolbar.c:54
 msgid "Close the current file"
-msgstr "Schließt die aktuelle Datei."
+msgstr "Schließt die aktuelle Datei"
 
 #: ../src/toolbar.c:55
 msgid "Close all open files"
@@ -4155,15 +4157,15 @@ msgstr "Aktuelle Auswahl löschen"
 
 #: ../src/toolbar.c:60
 msgid "Undo the last modification"
-msgstr "Macht die letzte Änderung rückgängig."
+msgstr "Macht die letzte Änderung rückgängig"
 
 #: ../src/toolbar.c:61
 msgid "Redo the last modification"
-msgstr "Wiederholt die letzte Änderung."
+msgstr "Wiederholt die letzte Änderung"
 
 #: ../src/toolbar.c:64
 msgid "Compile the current file"
-msgstr "Kompiliert die aktuelle Datei."
+msgstr "Kompiliert die aktuelle Datei"
 
 #: ../src/toolbar.c:65
 msgid "Run or view the current file"
@@ -4173,7 +4175,7 @@ msgstr "Aktuelle Datei anzeigen oder ausführen"
 msgid ""
 "Open a color chooser dialog, to interactively pick colors from a palette"
 msgstr ""
-"Öffnet einen Farbauswahldialog zum Auswählen einer Farbe aus einer Palette."
+"Öffnet einen Farbauswahldialog zum Auswählen einer Farbe aus einer Palette"
 
 #: ../src/toolbar.c:67
 msgid "Zoom in the text"
@@ -4193,11 +4195,11 @@ msgstr "Einzug erhöhen"
 
 #: ../src/toolbar.c:71 ../src/toolbar.c:200
 msgid "Find the entered text in the current file"
-msgstr "Findet den eingegebenen Text im aktuellen Dokument."
+msgstr "Findet den eingegebenen Text im aktuellen Dokument"
 
 #: ../src/toolbar.c:72
 msgid "Jump to the entered line number"
-msgstr "Springt zur angegebenen Zeile."
+msgstr "Springt zur angegebenen Zeile"
 
 #: ../src/toolbar.c:73
 msgid "Show the preferences dialog"
@@ -4218,11 +4220,11 @@ msgstr ""
 #. Create our custom actions
 #: ../src/toolbar.c:184
 msgid "Create a new file"
-msgstr "Legt eine neue Datei an."
+msgstr "Legt eine neue Datei an"
 
 #: ../src/toolbar.c:189
 msgid "Open an existing file"
-msgstr "Öffnet eine existierende Datei."
+msgstr "Öffnet eine existierende Datei"
 
 #: ../src/toolbar.c:208
 msgid "Goto"
@@ -4230,7 +4232,7 @@ msgstr "Gehe zu"
 
 #: ../src/toolbar.c:208
 msgid "Jump to the entered line number."
-msgstr "Springt zur angegebenen Zeile."
+msgstr "Springt zur angegebenen Zeile"
 
 #: ../src/tools.c:152
 #, c-format
@@ -4301,7 +4303,7 @@ msgstr "Buchstaben:"
 
 #: ../src/treeviews.c:174
 msgid "No tags found"
-msgstr "Keine Symbole gefunden."
+msgstr "Keine Symbole gefunden"
 
 #: ../src/treeviews.c:453
 msgid "Show S_ymbol List"
@@ -4458,7 +4460,7 @@ msgstr "Terminalschriftart:"
 
 #: ../src/vte.c:738
 msgid "Sets the font for the terminal widget"
-msgstr "Ändert die Schriftart des Terminals."
+msgstr "Ändert die Schriftart des Terminals"
 
 #: ../src/vte.c:740
 msgid "Foreground color:"
@@ -4470,11 +4472,11 @@ msgstr "Hintergrundfarbe:"
 
 #: ../src/vte.c:756
 msgid "Sets the foreground color of the text in the terminal widget"
-msgstr "Setzt die Vordergrundfarbe für das Terminal."
+msgstr "Setzt die Vordergrundfarbe für das Terminal"
 
 #: ../src/vte.c:763
 msgid "Sets the background color of the text in the terminal widget"
-msgstr "Setzt die Hintergrundfarbe für das Terminal."
+msgstr "Setzt die Hintergrundfarbe für das Terminal"
 
 #: ../src/vte.c:766
 msgid "Scrollback lines:"
@@ -4484,7 +4486,7 @@ msgstr "Zeilen zum Zurückrollen:"
 msgid ""
 "Specifies the history in lines, which you can scroll back in the terminal "
 "widget"
-msgstr "Gibt die Anzahl der Zeilen an, die man im Terminal zurückrollen kann."
+msgstr "Gibt die Anzahl der Zeilen an, die man im Terminal zurückrollen kann"
 
 #: ../src/vte.c:781
 msgid "Shell:"
@@ -4494,7 +4496,7 @@ msgstr "Shell:"
 msgid ""
 "Sets the path to the shell which should be started inside the terminal "
 "emulation"
-msgstr "Setzt den Pfad zu der Shell, die in der VTE benutzt werden soll."
+msgstr "Setzt den Pfad zu der Shell, die in der VTE benutzt werden soll"
 
 #: ../src/vte.c:805
 msgid "Scroll on keystroke"
@@ -4504,7 +4506,7 @@ msgstr "Bei Tastendruck rollen"
 msgid "Whether to scroll to the bottom if a key was pressed"
 msgstr ""
 "Legt fest, ob das Fenster bei einem Tastendruck bis zum Ende gerollt werden "
-"soll."
+"soll"
 
 #: ../src/vte.c:809
 msgid "Scroll on output"
@@ -4512,7 +4514,7 @@ msgstr "Bei Ausgabe rollen"
 
 #: ../src/vte.c:810
 msgid "Whether to scroll to the bottom when output is generated"
-msgstr "Legt fest, ob das Fenster bei einer Ausgabe gerollt werden soll."
+msgstr "Legt fest, ob das Fenster bei einer Ausgabe gerollt werden soll"
 
 #: ../src/vte.c:813
 msgid "Cursor blinks"
@@ -4520,7 +4522,7 @@ msgstr "Blinkender Cursor"
 
 #: ../src/vte.c:814
 msgid "Whether to blink the cursor"
-msgstr "Legt fest, ob der Cursor blinken soll."
+msgstr "Legt fest, ob der Cursor blinken soll"
 
 #: ../src/vte.c:817
 msgid "Override Geany keybindings"
@@ -4531,7 +4533,7 @@ msgid ""
 "Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
 msgstr ""
 "Erlaubt das integrierte Terminal über Tastenkürzel anzusprechen (mit "
-"Ausnahme der Fokus Kommandos)."
+"Ausnahme der Fokus Kommandos)"
 
 #: ../src/vte.c:822
 msgid "Disable menu shortcut key (F10 by default)"
@@ -4555,7 +4557,7 @@ msgstr "Pfad der aktuellen Datei setzen"
 msgid "Whether to execute \"cd $path\" when you switch between opened files"
 msgstr ""
 "Legt fest, ob »cd $path« in der VTE ausgeführt werden soll, wenn Sie zwischen "
-"geöffneten Dateien wechseln."
+"geöffneten Dateien wechseln"
 
 #. create check_skip_script checkbox before the check_skip_script checkbox to be able to
 #. * use the object for the toggled handler of check_skip_script checkbox
@@ -4569,7 +4571,7 @@ msgid ""
 "status of the executed program"
 msgstr ""
 "Das Run-Skript, welches gewöhnlich zur Ausgabe des Rückgabe-Wertes eines "
-"ausgeführten Programms genutzt wird, nicht benutzen."
+"ausgeführten Programms genutzt wird, nicht benutzen"
 
 #: ../src/vte.c:836
 msgid "Execute programs in VTE"
@@ -4782,7 +4784,7 @@ msgstr "_Aktuelle Vergrößerungsstufe benutzen"
 #: ../plugins/export.c:193
 msgid ""
 "Renders the font size of the document together with the current zoom level."
-msgstr "Vergrößerungsstufe in das exportierte Dokument übernehmen."
+msgstr "Vergrößerungsstufe in das exportierte Dokument übernehmen"
 
 #: ../plugins/export.c:275
 #, c-format
@@ -4869,7 +4871,7 @@ msgstr "Vom aktuellen _Verzeichnis"
 
 #: ../plugins/vcdiff.c:525
 msgid "Make a diff from the directory of the current active file"
-msgstr "Erstellt ein Diff für das Verzeichnis der aktuellen Datei."
+msgstr "Erstellt ein Diff für das Verzeichnis der aktuellen Datei"
 
 #. Project
 #: ../plugins/vcdiff.c:530
@@ -4878,7 +4880,7 @@ msgstr "Vom aktuellen _Projekt"
 
 #: ../plugins/vcdiff.c:533
 msgid "Make a diff from the current project's base path"
-msgstr "Erstellt ein Diff für das aktuell geöffnete Projekt."
+msgstr "Erstellt ein Diff für das aktuell geöffnete Projekt"
 
 #: ../plugins/filebrowser.c:50
 msgid "File Browser"
@@ -4978,7 +4980,7 @@ msgid ""
 "obj. *.so, *.dll, *.a, *.lib"
 msgstr ""
 "Erzeugte Objektdateien nicht im Dateibrowser anzeigen (*.o, *.obj. *.so, *."
-"dll, *.a, *.lib)."
+"dll, *.a, *.lib)"
 
 #: ../plugins/filebrowser.c:1106
 msgid "Set the project's base directory"
@@ -5050,7 +5052,7 @@ msgstr "Sekunden"
 
 #: ../plugins/saveactions.c:578
 msgid "_Print status message if files have been automatically saved"
-msgstr "_Statusmeldung ausgeben, wenn Dateien automatisch gespeichert wurden."
+msgstr "_Statusmeldung ausgeben, wenn Dateien automatisch gespeichert wurden"
 
 #: ../plugins/saveactions.c:586
 msgid "Save only current open _file"
@@ -5078,7 +5080,7 @@ msgstr "_Verzeichnis zum Speichern der Sicherheitskopien"
 
 #: ../plugins/saveactions.c:684
 msgid "Date/_Time format for backup files (\"man strftime\" for details):"
-msgstr "_Datums- und Zeitformat für Sicherungsdateien."
+msgstr "_Datums- und Zeitformat für Sicherungsdateien:"
 
 #: ../plugins/saveactions.c:697
 msgid "Directory _levels to include in the backup destination:"
