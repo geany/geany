@@ -18,7 +18,7 @@ msgstr ""
 "X-Poedit-Country: JAPAN\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Language: Japanese\n"
-"Plural-Forms: nplurals=2; plural=i!=0;\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../geany.desktop.in.h:1
 msgid "A fast and lightweight IDE using GTK2"
