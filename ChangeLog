@@ -13,6 +13,9 @@
    Make document_get_status_color() returning a const GdkColor.
    Add editor_get_word_at_pos() and document_get_status_color() to the
    plugin API.
+ * src/vte.c, plugins/filebrowser.c:
+   Don't follow the path of the document if the document has not an
+   absolute file path.
 
 
 2009-02-08  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

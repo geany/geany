@@ -646,7 +646,8 @@ const gchar *vte_get_working_directory(void)
  */
 void vte_cwd(const gchar *filename, gboolean force)
 {
-	if (vte_info.have_vte && (vc->follow_path || force) && filename != NULL)
+	if (vte_info.have_vte && (vc->follow_path || force) &&
+		filename != NULL && g_path_is_absolute(filename))
 	{
 		gchar *path;
 

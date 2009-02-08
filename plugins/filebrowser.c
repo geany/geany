@@ -949,7 +949,7 @@ static void document_activate_cb(G_GNUC_UNUSED GObject *obj, GeanyDocument *doc,
 {
 	gchar *new_dir;
 
-	if (! fb_follow_path || doc->file_name == NULL)
+	if (! fb_follow_path || doc->file_name == NULL || ! g_path_is_absolute(doc->file_name))
 		return;
 
 	new_dir = g_path_get_dirname(doc->file_name);
