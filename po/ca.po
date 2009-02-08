@@ -8,13 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.16\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-03 18:10+0100\n"
-"PO-Revision-Date: 2008-10-15 23:57+0200\n"
+"POT-Creation-Date: 2009-02-08 17:29+0100\n"
+"PO-Revision-Date: 2009-02-08 19:10+0100\n"
 "Last-Translator: Toni Garcia-Navarro <topi@elpiset.net>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
 #: ../geany.desktop.in.h:1
 msgid "A fast and lightweight IDE using GTK2"
@@ -269,12 +270,11 @@ msgstr "Compila:"
 msgid "Build:"
 msgstr "Munta:"
 
-#: ../src/build.c:1495 ../src/dialogs.c:1222
+#: ../src/build.c:1495 ../src/dialogs.c:1220
 msgid "Execute:"
 msgstr "Execució:"
 
 #: ../src/build.c:1820 ../src/toolbar.c:194
-#, fuzzy
 msgid "Build the current file"
 msgstr "Compila el fitxer"
 
@@ -288,19 +288,16 @@ msgid ""
 msgstr "Indica les opcions que es passaran a l'ordre make."
 
 #: ../src/build.c:1895
-#, fuzzy
 msgid "Build the current file with Make and the default target"
 msgstr "Compila el fitxer amb l'eina make i l'objectiu per defecte"
 
 #: ../src/build.c:1898
-#, fuzzy
 msgid "Build the current file with Make and the specified target"
 msgstr "Compila el fitxer amb l'eina make i l'objectiu especificat"
 
 #: ../src/build.c:1901
-#, fuzzy
 msgid "Compile the current file with Make"
-msgstr "Compila el fitxer"
+msgstr "Compila el fitxer actual amb l'eina Make"
 
 #: ../src/build.c:1963
 msgid "Failed to execute the view program"
@@ -333,7 +330,7 @@ msgstr "Qualsevol canvi no guardat es perdrà!"
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Esteu segurs que voleu actualitzar '%s'?"
 
-#: ../src/callbacks.c:1212 ../src/keybindings.c:362
+#: ../src/callbacks.c:1212 ../src/keybindings.c:364
 msgid "Go to Line"
 msgstr "Vés a la Línia"
 
@@ -411,24 +408,24 @@ msgstr ""
 "Obre el fitxer en mode només lectura. Si trieu més d'un fitxer, tots seran "
 "oberts en aquest mode."
 
-#: ../src/dialogs.c:222
+#: ../src/dialogs.c:221
 msgid "Detect by file extension"
 msgstr "Detecta per l'extensió del fitxer"
 
-#: ../src/dialogs.c:233 ../src/interface.c:3442 ../src/interface.c:4983
+#: ../src/dialogs.c:232 ../src/interface.c:3442 ../src/interface.c:4983
 msgid "Detect from file"
 msgstr "Detecta pel fitxer"
 
 #. line 1 with checkbox and encoding combo
-#: ../src/dialogs.c:296
+#: ../src/dialogs.c:295
 msgid "Show _hidden files"
 msgstr "Mostra els fitxers _ocults"
 
-#: ../src/dialogs.c:307
+#: ../src/dialogs.c:306
 msgid "Set encoding:"
 msgstr "Estableix la codificació dels caràcters:"
 
-#: ../src/dialogs.c:317
+#: ../src/dialogs.c:316
 msgid ""
 "Explicitly defines an encoding for the file, if it would not be detected. "
 "This is useful when you know that the encoding of a file cannot be detected "
@@ -441,11 +438,11 @@ msgstr ""
 "determina correctament.\n"
 "Si trieu més d'un fitxer, tots s'obriran amb aquesta codificació."
 
-#: ../src/dialogs.c:337
+#: ../src/dialogs.c:336
 msgid "Set filetype:"
 msgstr "Especifica el tipus de fitxer:"
 
-#: ../src/dialogs.c:347
+#: ../src/dialogs.c:346
 msgid ""
 "Explicitly defines a filetype for the file, if it would not be detected by "
 "filename extension.\n"
@@ -455,25 +452,23 @@ msgstr ""
 "Defineix explícitament el tipus de fitxer, si aquest no pot ser determinat.\n"
 "Si trieu més d'un fitxer, tots s'obriran com a aquest tipus."
 
-#: ../src/dialogs.c:458
+#: ../src/dialogs.c:457
 msgid "Save File"
 msgstr "Desa el Fitxer"
 
-#: ../src/dialogs.c:466
+#: ../src/dialogs.c:465
 msgid "R_ename"
 msgstr "R_eanomena"
 
-#: ../src/dialogs.c:468
-#, fuzzy
+#: ../src/dialogs.c:467
 msgid "Save the file and rename it"
-msgstr "Desa el fitxer i reanomena'l."
+msgstr "Desa el fitxer i reanomena'l"
 
-#: ../src/dialogs.c:476
+#: ../src/dialogs.c:475
 msgid "_Open file in a new tab"
 msgstr "_Obre un fitxer en una pestanya nova"
 
-#: ../src/dialogs.c:478
-#, fuzzy
+#: ../src/dialogs.c:477
 msgid ""
 "Keep the current unsaved document open and open the newly saved file in a "
 "new tab"
@@ -481,24 +476,24 @@ msgstr ""
 "Mantingues el document actual sense desar i obre el fitxer desat en una "
 "pestanya nova."
 
-#: ../src/dialogs.c:658
+#: ../src/dialogs.c:656
 msgid "_Don't save"
 msgstr "_No desis"
 
-#: ../src/dialogs.c:692
+#: ../src/dialogs.c:690
 #, c-format
 msgid "The file '%s' is not saved."
 msgstr "El fitxer '%s' no s'ha desat."
 
-#: ../src/dialogs.c:694
+#: ../src/dialogs.c:692
 msgid "Do you want to save it before closing?"
 msgstr "Voleu desar abans de tancar?"
 
-#: ../src/dialogs.c:769
+#: ../src/dialogs.c:767
 msgid "Choose font"
 msgstr "Tria la font"
 
-#: ../src/dialogs.c:1006
+#: ../src/dialogs.c:1004
 msgid ""
 "An error occurred or file information could not be retrieved (e.g. from a "
 "new file)."
@@ -506,87 +501,87 @@ msgstr ""
 "S'ha produït un error o no es pot accedir a la informació del fitxer (p.e. "
 "d'un fitxer nou)."
 
-#: ../src/dialogs.c:1025 ../src/dialogs.c:1026 ../src/dialogs.c:1027
-#: ../src/dialogs.c:1033 ../src/dialogs.c:1034 ../src/dialogs.c:1035
+#: ../src/dialogs.c:1023 ../src/dialogs.c:1024 ../src/dialogs.c:1025
+#: ../src/dialogs.c:1031 ../src/dialogs.c:1032 ../src/dialogs.c:1033
 #: ../src/symbols.c:1618 ../src/symbols.c:1639 ../src/symbols.c:1691
 #: ../src/ui_utils.c:203
 msgid "unknown"
 msgstr "desconegut"
 
-#: ../src/dialogs.c:1039
+#: ../src/dialogs.c:1037
 msgid "Properties"
 msgstr "Propietats"
 
-#: ../src/dialogs.c:1069
+#: ../src/dialogs.c:1067
 msgid "<b>Type:</b>"
 msgstr "<b>Tipus:</b>"
 
-#: ../src/dialogs.c:1083
+#: ../src/dialogs.c:1081
 msgid "<b>Size:</b>"
 msgstr "<b>Mida:</b>"
 
-#: ../src/dialogs.c:1099
+#: ../src/dialogs.c:1097
 msgid "<b>Location:</b>"
 msgstr "<b>Ubicació:</b>"
 
-#: ../src/dialogs.c:1113
+#: ../src/dialogs.c:1111
 msgid "<b>Read-only:</b>"
 msgstr "<b>Només lectura:</b>"
 
-#: ../src/dialogs.c:1120
+#: ../src/dialogs.c:1118
 msgid "(only inside Geany)"
 msgstr "(només dins Geany)"
 
-#: ../src/dialogs.c:1129
+#: ../src/dialogs.c:1127
 msgid "<b>Encoding:</b>"
 msgstr "<b>Codificació:</b>"
 
 #. BOM = byte order mark
-#: ../src/dialogs.c:1139 ../src/ui_utils.c:206
+#: ../src/dialogs.c:1137 ../src/ui_utils.c:206
 msgid "(with BOM)"
 msgstr "(amb BOM)"
 
-#: ../src/dialogs.c:1139
+#: ../src/dialogs.c:1137
 msgid "(without BOM)"
 msgstr "(sense BOM)"
 
-#: ../src/dialogs.c:1150
+#: ../src/dialogs.c:1148
 msgid "<b>Modified:</b>"
 msgstr "<b>Modificat:</b>"
 
-#: ../src/dialogs.c:1164
+#: ../src/dialogs.c:1162
 msgid "<b>Changed:</b>"
 msgstr "<b>Canviat:</b>"
 
-#: ../src/dialogs.c:1178
+#: ../src/dialogs.c:1176
 msgid "<b>Accessed:</b>"
 msgstr "<b>Accedit:</b>"
 
-#: ../src/dialogs.c:1200
+#: ../src/dialogs.c:1198
 msgid "<b>Permissions:</b>"
 msgstr "<b>Permisos:</b>"
 
 #. Header
-#: ../src/dialogs.c:1208
+#: ../src/dialogs.c:1206
 msgid "Read:"
 msgstr "Lectura:"
 
-#: ../src/dialogs.c:1215
+#: ../src/dialogs.c:1213
 msgid "Write:"
 msgstr "Escriptura:"
 
 #. Owner
-#: ../src/dialogs.c:1230
+#: ../src/dialogs.c:1228
 msgid "Owner:"
 msgstr "Propietari:"
 
 #. Group
-#: ../src/dialogs.c:1266
+#: ../src/dialogs.c:1264
 msgid "Group:"
 msgstr "Grup:"
 
 #. Other
-#: ../src/dialogs.c:1302
+#: ../src/dialogs.c:1300
 msgid "Other:"
 msgstr "Altres:"
 
@@ -724,11 +719,11 @@ msgid "No matches found for \"%s\"."
 msgstr "No s'ha trobat '%s'."
 
 #: ../src/document.c:2008 ../src/document.c:2017
-#, fuzzy, c-format
+#, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
-msgstr[0] "%s: s'han reemplaçat %d ocurrències de \"%s\" amb \"%s\"."
-msgstr[1] "%s: s'han reemplaçat %d ocurrències de \"%s\" amb \"%s\"."
+msgstr[0] "%s: S'ha reemplaçat %d coincidència de \"%s\" amb \"%s\"."
+msgstr[1] "%s: S'han reemplaçat %d coincidències de \"%s\" amb \"%s\"."
 
 #: ../src/document.c:2817
 msgid "Do you want to reload it?"
@@ -752,23 +747,23 @@ msgstr "Intentar desar el fitxer de nou?"
 msgid "File \"%s\" was not found on disk!"
 msgstr "No s'ha trobat \"%s\" al disc!"
 
-#: ../src/editor.c:3816 ../src/utils.c:295
+#: ../src/editor.c:3818 ../src/utils.c:295
 msgid "Win (CRLF)"
 msgstr "Win (CRLF)"
 
-#: ../src/editor.c:3817 ../src/utils.c:296
+#: ../src/editor.c:3819 ../src/utils.c:296
 msgid "Mac (CR)"
 msgstr "Mac (CR)"
 
-#: ../src/editor.c:3818 ../src/utils.c:297
+#: ../src/editor.c:3820 ../src/utils.c:297
 msgid "Unix (LF)"
 msgstr "Unix (LF)"
 
-#: ../src/editor.c:3944
+#: ../src/editor.c:3946
 msgid "Enter Tab Width"
 msgstr "Amplada de la Tabulació:"
 
-#: ../src/editor.c:3945
+#: ../src/editor.c:3947
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr ""
 "Introdueix la quantitat d'espais que s'ha de reemplaçar amb una tabulació."
@@ -1191,7 +1186,7 @@ msgstr "Mostra la Barra d'Ei_nes"
 msgid "Show Side_bar"
 msgstr "Mostra la _Barra Lateral"
 
-#: ../src/interface.c:718 ../src/interface.c:3769 ../src/keybindings.c:224
+#: ../src/interface.c:718 ../src/interface.c:3769 ../src/keybindings.c:226
 msgid "Editor"
 msgstr "Editor"
 
@@ -1204,19 +1199,16 @@ msgid "Show _Line Numbers"
 msgstr "Mostra els Números de _Línia"
 
 #: ../src/interface.c:735
-#, fuzzy
 msgid "Show _White Space"
-msgstr "Mostra espais en blanc"
+msgstr "Mostra _Espais en Blanc"
 
 #: ../src/interface.c:739
-#, fuzzy
 msgid "Show Line _Endings"
-msgstr "Mostra el final de línia"
+msgstr "Mostra el _Final de Línia"
 
 #: ../src/interface.c:743
-#, fuzzy
 msgid "Show _Indentation Guides"
-msgstr "Mostra les guies de sagnat"
+msgstr "Mostra _Guies de Sagnat"
 
 #: ../src/interface.c:764
 msgid "_Document"
@@ -1430,7 +1422,7 @@ msgstr "Vés a la _Declaració de l'Etiqueta"
 msgid "Conte_xt Action"
 msgstr "Acció Conte_xtual"
 
-#: ../src/interface.c:2593 ../src/keybindings.c:325
+#: ../src/interface.c:2593 ../src/keybindings.c:327
 msgid "Preferences"
 msgstr "Preferències"
 
@@ -1447,13 +1439,12 @@ msgid "Load virtual terminal support"
 msgstr "Carrega l'emulació de terminal virtual"
 
 #: ../src/interface.c:2636
-#, fuzzy
 msgid ""
 "Whether the virtual terminal emulation (VTE) should be loaded at startup, "
 "disable it if you do not need it"
 msgstr ""
 "Indica si l'emulació de terminal virtual (VTE) s'ha de carregar a l'inici. "
-"Desactiva-ho si no et cal."
+"Desactiva-ho si no et cal"
 
 #: ../src/interface.c:2638
 msgid "Enable plugin support"
@@ -1476,9 +1467,8 @@ msgid "Confirm exit"
 msgstr "Confirma la sortida"
 
 #: ../src/interface.c:2669
-#, fuzzy
 msgid "Shows a confirmation dialog on exit"
-msgstr "Mostra un diàleg de confirmació en sortir."
+msgstr "Mostra un diàleg de confirmació en sortir"
 
 #: ../src/interface.c:2671
 msgid "<b>Shutdown</b>"
@@ -1509,35 +1499,32 @@ msgid "<b>Paths</b>"
 msgstr "<b>Rutes</b>"
 
 #: ../src/interface.c:2747
-#, fuzzy
 msgid "Startup"
-msgstr "Estat"
+msgstr "Inici"
 
 #: ../src/interface.c:2769
 msgid "Beep on errors or when compilation has finished"
 msgstr "Avís sonor als errors o quan finalitza la compilació"
 
 #: ../src/interface.c:2772
-#, fuzzy
 msgid ""
 "Whether to beep if an error occurred or when the compilation process has "
 "finished"
 msgstr ""
 "Indica si cal emetre un so quan apareix un error o quan finalitza el procés "
-"de compilació."
+"de compilació"
 
 #: ../src/interface.c:2774
 msgid "Switch to status message list at new message"
 msgstr "Canvia a la llista de missatges quan hi ha un missatge nou"
 
 #: ../src/interface.c:2777
-#, fuzzy
 msgid ""
 "Switch to the status message tab (in the notebook window at the bottom) if a "
 "new status message arrives"
 msgstr ""
 "Canvia a la pestanya de missatges (a la part de baix de la finestra) quan "
-"s'escriu un nou missatge d'estat."
+"s'escriu un nou missatge d'estat"
 
 #: ../src/interface.c:2779
 msgid "Suppress status messages in the status bar"
@@ -1574,7 +1561,6 @@ msgid "Always wrap search and hide the Find dialog"
 msgstr "Torna a començar la cerca i amaga el diàleg sempre"
 
 #: ../src/interface.c:2812
-#, fuzzy
 msgid ""
 "Always wrap search around the document and hide the Find dialog after "
 "clicking Find Next/Previous"
@@ -1587,13 +1573,12 @@ msgid "Use the current word under the cursor for Find dialogs"
 msgstr "Usa la paraula sota el cursor per als diàlegs de Cerca"
 
 #: ../src/interface.c:2817
-#, fuzzy
 msgid ""
 "Use current word under the cursor when opening the Find, Find in Files or "
 "Replace dialog and there is no selection"
 msgstr ""
 "Usa la paraula sota el cursor per als diàlegs de Cerca, Cerca en els Fitxers "
-"o Reemplaça quan no hi ha cap selecció."
+"o Reemplaça quan no hi ha cap selecció"
 
 #: ../src/interface.c:2819
 msgid "Use the current file's directory for Find in Files"
@@ -1608,20 +1593,18 @@ msgid "Use project-based session files"
 msgstr "Usa fitxers de sessió basats en projecte"
 
 #: ../src/interface.c:2845
-#, fuzzy
 msgid ""
 "Whether to store a project's session files and open them when re-opening the "
 "project"
 msgstr ""
 "Indica si es desaran fitxers de sessió de projecte i si s'obriran en reobrir "
-"el projecte."
+"el projecte"
 
 #: ../src/interface.c:2847
 msgid "Store project file inside the project base directory"
 msgstr "Desa el fitxer de projecte dins el directori base del projecte"
 
 #: ../src/interface.c:2850
-#, fuzzy
 msgid ""
 "When enabled, a project file is stored by default inside the project base "
 "directory when creating new projects instead of one directory above the base "
@@ -1631,16 +1614,15 @@ msgstr ""
 "Si està activat, el fitxer de projecte es desa dins el directori base del "
 "projecte en crear un nou project, en comptes de ser creat un directori per "
 "damunt del directori base. Enacara és possible canviar la ruta del fitxer de "
-"projecte al diàled de Nou Projecte."
+"projecte al diàled de Nou Projecte"
 
 #: ../src/interface.c:2852
 msgid "<b>Projects</b>"
 msgstr "<b>Projectes</b>"
 
 #: ../src/interface.c:2857
-#, fuzzy
 msgid "Miscellaneous"
-msgstr "<b>Miscel·lània</b>"
+msgstr "Miscel·lània"
 
 #: ../src/interface.c:2861
 msgid "General"
@@ -1703,13 +1685,12 @@ msgid "Show close buttons"
 msgstr "Mostra el botó del tancament"
 
 #: ../src/interface.c:2985
-#, fuzzy
 msgid ""
 "Shows a small cross button in the file tabs to easily close files when "
 "clicking on it (requires restart of Geany)"
 msgstr ""
 "Mostra un botó a les pestanyes per tancar fàcilment els fitxers clicant en "
-"ell (cal reiniciar Geany)."
+"ell (cal reiniciar Geany)"
 
 #: ../src/interface.c:2991
 msgid "Placement of new file tabs:"
@@ -1734,14 +1715,12 @@ msgid "File tabs will be placed on the right of the notebook"
 msgstr "Les noves pestanyes se situaran a la dreta de la llista de pestanyes"
 
 #: ../src/interface.c:3011
-#, fuzzy
 msgid "Double-clicking hides all additional widgets"
-msgstr "Mostra o amaga tots els extres"
+msgstr "Doble-clic amaga tots els extres addicionals"
 
 #: ../src/interface.c:3014
-#, fuzzy
 msgid "Calls the View->Toggle All Additional Widgets command"
-msgstr "Mostra o Amaga Tots els Extres"
+msgstr "Crida la comanda Visualitza->Mostra o Amaga Tots els Extres"
 
 #: ../src/interface.c:3016
 msgid "<b>Editor tabs</b>"
@@ -1768,10 +1747,9 @@ msgid "Show status bar"
 msgstr "Mostra la barra d'estat"
 
 #: ../src/interface.c:3113
-#, fuzzy
 msgid "Whether to show the status bar at the bottom of the main window"
 msgstr ""
-"Indica si s'ha de mostrar la barra d'estat a la part de baix de la finestra."
+"Indica si s'ha de mostrar la barra d'estat a la part de baix de la finestra"
 
 #: ../src/interface.c:3120
 msgid "Interface"
@@ -1838,13 +1816,12 @@ msgid "Disable Drag and Drop"
 msgstr "Desactiva l'Arrossega i Solta"
 
 #: ../src/interface.c:3263
-#, fuzzy
 msgid ""
 "Disable drag and drop completely in the editor window so you can't drag and "
 "drop any selections within or outside of the editor window"
 msgstr ""
 "Desactiva arrossega i solta (drag and drop) a la finestra de l'editor, així "
-"no serà possible arrossegar text des de l'editor a cap a ell."
+"no serà possible arrossegar text des de l'editor a cap a ell"
 
 #: ../src/interface.c:3265
 msgid "Enable folding"
@@ -1859,36 +1836,33 @@ msgid "Fold/unfold all children of a fold point"
 msgstr "Desplega o plega recursivament un punt plegat"
 
 #: ../src/interface.c:3273
-#, fuzzy
 msgid ""
 "Fold or unfold all children of a fold point. By pressing the Shift key while "
 "clicking on a fold symbol the contrary behavior is used"
 msgstr ""
 "Plega i desplega tots els fills d'un mateix punt. Prement la tecla "
-"Majúscules mentre cliqueu un símbol plegat actua de forma contrària."
+"Majúscules mentre cliqueu un símbol plegat actua de forma contrària"
 
 #: ../src/interface.c:3275
 msgid "Use indicators to show compile errors"
 msgstr "Utilitza indicacions per mostrar els errors de compilació"
 
 #: ../src/interface.c:3278
-#, fuzzy
 msgid ""
 "Whether to use indicators (a squiggly underline) to highlight the lines "
 "where the compiler found a warning or an error"
 msgstr ""
 "Usa indicadors (un subratllat ondulat) per ressaltar les línies on el "
-"compilador ha generat un avís o error."
+"compilador ha generat un avís o error"
 
 #: ../src/interface.c:3280
 msgid "Newline strips trailing spaces"
 msgstr "Elimina espais sobrants en introduir un salt de línia"
 
 #: ../src/interface.c:3283
-#, fuzzy
 msgid "Enable newline to strip the trailing spaces on the previous line"
 msgstr ""
-"En introduir un salt de línia, s'eliminen els espais sobrants de l'anterior."
+"En introduir un salt de línia, s'eliminen els espais sobrants de l'anterior"
 
 #: ../src/interface.c:3289
 msgid "Line breaking column:"
@@ -1899,7 +1873,6 @@ msgid "Comment toggle marker:"
 msgstr "Marcador de comentaris:"
 
 #: ../src/interface.c:3310
-#, fuzzy
 msgid ""
 "A string which is added when toggling a line comment in a source file, it is "
 "used to mark the comment as toggled."
@@ -1967,47 +1940,43 @@ msgstr ""
 "document"
 
 #: ../src/interface.c:3447 ../src/interface.c:4988
-#, fuzzy
 msgid ""
 "Whether to detect the indentation type from file contents when a file is "
 "opened"
 msgstr ""
 "Indica si s'ha de detectar el tipus de sagnat a partir del contingut del "
-"fitxer quan s'obre."
+"fitxer quan s'obre"
 
 #: ../src/interface.c:3449
 msgid "Tab key indents"
 msgstr "Sagnat amb tabulacions"
 
 #: ../src/interface.c:3452
-#, fuzzy
 msgid ""
 "Pressing tab/shift-tab indents/unindents instead of inserting a tab character"
 msgstr ""
 "Prement el tabulador o majúscula+tabulador sagna en comptes d'inserir "
-"tabulacions."
+"tabulacions"
 
 #: ../src/interface.c:3454
 msgid "<b>Indentation</b>"
 msgstr "<b>Sagnat</b>"
 
 #: ../src/interface.c:3459 ../src/interface.c:4990
-#, fuzzy
 msgid "Indentation"
-msgstr "<b>Sagnat</b>"
+msgstr "Sagnat"
 
 #: ../src/interface.c:3482
 msgid "Snippet completion"
 msgstr "Acabament de construccions"
 
 #: ../src/interface.c:3485
-#, fuzzy
 msgid ""
 "Type a defined short character sequence and complete it to a more complex "
 "string using a single keypress"
 msgstr ""
 "Escriu un seqüència curta de caràcters i acaba-la a una de més complexa amb "
-"una sola polsació de teclat."
+"una sola polsació de teclat"
 
 #: ../src/interface.c:3487
 msgid "XML tag auto completion"
@@ -2024,13 +1993,12 @@ msgid "Automatic continuation of multi-line comments"
 msgstr "Continuació auntomàtica dels comentaris multilínia"
 
 #: ../src/interface.c:3495
-#, fuzzy
 msgid ""
 "Continue automatically multi-line comments in languages like C, C++ and Java "
 "when a new line is entered inside such a comment"
 msgstr ""
 "Continua automàticament els comentaris multilínia en llenguatges com C, C++ "
-"i Java quan comença una nova línia dins un comentari."
+"i Java quan comença una nova línia dins un comentari"
 
 #: ../src/interface.c:3497
 msgid "Automatic symbol completion"
@@ -2057,23 +2025,20 @@ msgid "Characters to type for completion:"
 msgstr "Caràcters a escriure per l'acabament:"
 
 #: ../src/interface.c:3535
-#, fuzzy
 msgid ""
 "The amount of characters which are necessary to show the symbol auto "
 "completion list"
 msgstr ""
 "Quantitat de caràcters necessaris per a mostrar la llista d'autoacabament de "
-"símbols."
+"símbols"
 
 #: ../src/interface.c:3544
-#, fuzzy
 msgid "Display height in rows for the auto completion list"
-msgstr "Nombre de files mostrades en la llista d'autoacabament."
+msgstr "Nombre de files mostrades en la llista d'autoacabament"
 
 #: ../src/interface.c:3553
-#, fuzzy
 msgid "Maximum number of entries to display in the auto completion list"
-msgstr "Nombre màxim de files mostrades en la llista d'autoacabament."
+msgstr "Nombre màxim de files mostrades en la llista d'autoacabament"
 
 #: ../src/interface.c:3556
 msgid "<b>Completions</b>"
@@ -2081,47 +2046,47 @@ msgstr "<b>Acabaments</b>"
 
 #: ../src/interface.c:3576
 msgid "Parenthesis ( )"
-msgstr ""
+msgstr "Parèntesis ()"
 
 #: ../src/interface.c:3581
 msgid "Auto-close parenthesis when typing an opening one"
-msgstr ""
+msgstr "Tanca automàticament el parèntesi, quan se n'obre un"
 
 #: ../src/interface.c:3583
 msgid "Single quotes ' '"
-msgstr ""
+msgstr "Cometes senzilles ' ' "
 
 #: ../src/interface.c:3588
 msgid "Auto-close simple quote when typing an opening one"
-msgstr ""
+msgstr "Tanca automàticament les cometes senzilles, quan se n'obre una"
 
 #: ../src/interface.c:3590
 msgid "Curly brackets { }"
-msgstr ""
+msgstr "Claus { }"
 
 #: ../src/interface.c:3595
 msgid "Auto-close curly bracket when typing an opening one"
-msgstr ""
+msgstr "Tanca automàticament les claus, quan se n'obre una"
 
 #: ../src/interface.c:3597
 msgid "Square brackets [ ]"
-msgstr ""
+msgstr "Cluadàtors [ ]"
 
 #: ../src/interface.c:3602
 msgid "Auto-close squre-bracket when typing an opening one"
-msgstr ""
+msgstr "Tanca automàticament els claudàtors, quan se n'obre un"
 
 #: ../src/interface.c:3604
 msgid "Double quotes \" \""
-msgstr ""
+msgstr "Cometes dobles \" \""
 
 #: ../src/interface.c:3609
 msgid "Auto-close double quote when typing an opening one"
-msgstr ""
+msgstr "Tanca automàticament les cometes dobles, quan se n'obre una"
 
 #: ../src/interface.c:3611
 msgid "<b>Auto-close quotes and brackets</b>"
-msgstr ""
+msgstr "<b>Tancament automàtic de cometes i parèntesis</b>"
 
 #: ../src/interface.c:3616
 msgid "Completions"
@@ -2136,68 +2101,62 @@ msgid ""
 "Use white text on a black background and invert all colors, this option "
 "requires a restart of Geany"
 msgstr ""
+"Usa lletra blanca sobre fons negre i inverteix tots els colors, aquesta "
+"opció requereix un reinici de Geany"
 
 #: ../src/interface.c:3644
 msgid "Show indentation guides"
 msgstr "Mostra les guies de sagnat"
 
 #: ../src/interface.c:3647
-#, fuzzy
 msgid "Shows small dotted lines to help you to use the right indentation"
-msgstr "Mostra línies de punts com a guia al sagnat."
+msgstr "Mostra línies de punts com a guia al sagnat"
 
 #: ../src/interface.c:3649
 msgid "Show white space"
 msgstr "Mostra espais en blanc"
 
 #: ../src/interface.c:3652
-#, fuzzy
 msgid "Marks spaces with dots and tabs with arrows"
-msgstr "Marca els espais en blanc amb punts i les tabulacions amb fletxes."
+msgstr "Marca els espais en blanc amb punts i les tabulacions amb fletxes"
 
 #: ../src/interface.c:3654
 msgid "Show line endings"
 msgstr "Mostra el final de línia"
 
 #: ../src/interface.c:3657
-#, fuzzy
 msgid "Show the line ending character"
-msgstr "Mostra el caràcter de final de línia (EOL)."
+msgstr "Mostra el caràcter de final de línia (EOL)"
 
 #: ../src/interface.c:3659
-#, fuzzy
 msgid "Show line numbers"
-msgstr "Mostra els Números de _Línia"
+msgstr "Mostra els números de línia"
 
 #: ../src/interface.c:3662
-#, fuzzy
 msgid "Shows or hides the Line Number margin"
-msgstr "Mostra o amaga el marge amb els números de línia."
+msgstr "Mostra o amaga el marge amb els Números de Línia"
 
 #: ../src/interface.c:3664
-#, fuzzy
 msgid "Show markers margin"
-msgstr "Mostra el Marge de _Marques"
+msgstr "Mostra el marge de marques"
 
 #: ../src/interface.c:3667
-#, fuzzy
 msgid ""
 "Shows or hides the small margin right of the line numbers, which is used to "
 "mark lines"
 msgstr ""
 "Mostra o amaga el marge a la dreta dels números de línia, que s'usa per "
-"marcar les línies."
+"marcar les línies"
 
 #: ../src/interface.c:3669
 msgid "Stop scrolling at last line"
 msgstr "Atura el desplaçament a l'última línia"
 
 #: ../src/interface.c:3672
-#, fuzzy
 msgid "Whether to stop scrolling one page past the last line of a document"
 msgstr ""
 "Indica si aturar el desplaçament en passar una pàgina de l'última l'inia del "
-"document."
+"document"
 
 #: ../src/interface.c:3674
 msgid "<b>Display</b>"
@@ -2216,12 +2175,11 @@ msgid "Sets the color of the long line marker"
 msgstr "Especifica els color de la barra de marques"
 
 #: ../src/interface.c:3722 ../src/toolbar.c:66 ../src/tools.c:743
-#: ../src/vte.c:757 ../src/vte.c:764
+#: ../src/vte.c:766 ../src/vte.c:773
 msgid "Color Chooser"
 msgstr "Selector de Color"
 
 #: ../src/interface.c:3730
-#, fuzzy
 msgid ""
 "The long line marker is a thin vertical line in the editor, it helps to mark "
 "long lines, or as a hint to break the line. Set this value to a value "
@@ -2236,20 +2194,17 @@ msgid "Line"
 msgstr "Línia"
 
 #: ../src/interface.c:3743
-#, fuzzy
 msgid ""
 "Prints a vertical line in the editor window at the given cursor position "
 "(see below)"
 msgstr ""
-"Mostra una línia vertical a l'editor en la posició indicada (veieu més "
-"avall)."
+"Mostra una línia vertical a l'editor en la posició indicada (veieu més avall)"
 
 #: ../src/interface.c:3747
 msgid "Background"
 msgstr "Fons"
 
 #: ../src/interface.c:3750
-#, fuzzy
 msgid ""
 "The background color of characters after the given cursor position (see "
 "below) changed to the color set below, (this is recommended if you use "
@@ -2276,11 +2231,10 @@ msgid "Open new documents from the command-line"
 msgstr "Obre documents nous des de l'intèrpret d'ordres"
 
 #: ../src/interface.c:3799
-#, fuzzy
 msgid "Start a new file for each command-line filename that doesn't exist"
 msgstr ""
 "Inicia un nou fitxer per a cada nom de fitxer passat com a argument que no "
-"existeix."
+"existeix"
 
 #: ../src/interface.c:3813
 msgid "Default end of line characters:"
@@ -2291,9 +2245,8 @@ msgid "<b>New files</b>"
 msgstr "<b>Fitxers nous</b>"
 
 #: ../src/interface.c:3846
-#, fuzzy
 msgid "Sets the default encoding for newly created files"
-msgstr "Especifica la codificació per defecte per a fitxers de nova creació."
+msgstr "Especifica la codificació per defecte per a fitxers de nova creació"
 
 #: ../src/interface.c:3852
 msgid "Default encoding (new files):"
@@ -2304,16 +2257,14 @@ msgid "Default encoding (existing files):"
 msgstr "Codificació per defecte (fitxers existents):"
 
 #: ../src/interface.c:3871
-#, fuzzy
 msgid "Sets the default encoding for opening existing files"
-msgstr "Especifica la codificació per defecte per a fitxers ja existents."
+msgstr "Especifica la codificació per defecte per a fitxers ja existents"
 
 #: ../src/interface.c:3877
 msgid "Use fixed encoding when opening files"
 msgstr "Usa codificació de caràcters fixa en obrir fitxers"
 
 #: ../src/interface.c:3882
-#, fuzzy
 msgid ""
 "This option disables the automatic detection of the file encoding when "
 "opening files and opens the file with the specified encoding (usually not "
@@ -2321,7 +2272,7 @@ msgid ""
 msgstr ""
 "Aquesta opció deshabilita la detecció automàtica de la codificació en obrir "
 "fitxers nous i obre els fitxers amb la codificació especificada (normalment "
-"no és necessari)."
+"no és necessari)"
 
 #: ../src/interface.c:3884
 msgid "<b>Encodings</b>"
@@ -2343,14 +2294,13 @@ msgstr "Elimina espais i tabulacions sobrants"
 msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Elimina els espais i tabulacions sobrants a final de línia"
 
-#: ../src/interface.c:3913 ../src/keybindings.c:444
+#: ../src/interface.c:3913 ../src/keybindings.c:446
 msgid "Replace tabs by space"
 msgstr "Reemplaça tabulacions per espais"
 
 #: ../src/interface.c:3916
-#, fuzzy
 msgid "Replaces all tabs in document by spaces"
-msgstr "Reemplaça totes les tabulacions al document per espais."
+msgstr "Reemplaça totes les tabulacions al document per espais"
 
 #: ../src/interface.c:3918
 msgid "<b>Saving files</b>"
@@ -2361,11 +2311,9 @@ msgid "Recent files list length:"
 msgstr "Mostra la llista de fitxers oberts:"
 
 #: ../src/interface.c:3957
-#, fuzzy
 msgid "Specifies the number of files which are stored in the Recent files list"
 msgstr ""
-"Indica el número de fitxers que s'emmagatzemen a la llista de Fitxers "
-"Recents."
+"Indica el número de fitxers que s'emmagatzemen a la llista de Fitxers Recents"
 
 #: ../src/interface.c:3961
 msgid "Disk check timeout:"
@@ -2438,7 +2386,7 @@ msgstr ""
 msgid "<b>Commands</b>"
 msgstr "<b>Ordres</b>"
 
-#: ../src/interface.c:4161 ../src/keybindings.c:480
+#: ../src/interface.c:4161 ../src/keybindings.c:482
 msgid "Tools"
 msgstr "Eines"
 
@@ -2543,11 +2491,11 @@ msgid "Command:"
 msgstr "Ordre:"
 
 #: ../src/interface.c:4384
-#, fuzzy, c-format
+#, c-format
 msgid "Path to the command for printing files (use %f for the filename)"
 msgstr ""
 "Ruta a l'ordre per imprimir fitxers (utilitzeu %f per indicar el nom del "
-"fitxer)."
+"fitxer)"
 
 #: ../src/interface.c:4394
 msgid "Use an external command for printing"
@@ -2558,20 +2506,18 @@ msgid "Print line numbers"
 msgstr "Imprimeix els números de línia"
 
 #: ../src/interface.c:4417 ../src/printing.c:344
-#, fuzzy
 msgid "Add line numbers to the printed page"
-msgstr "Afegeix números de línia a les pàgines impreses."
+msgstr "Afegeix números de línia a les pàgines impreses"
 
 #: ../src/interface.c:4419 ../src/printing.c:347
 msgid "Print page numbers"
 msgstr "Imprimeix els números de pàgina"
 
 #: ../src/interface.c:4422
-#, fuzzy
 msgid ""
 "Add page numbers at the bottom of each page, it takes 2 lines of the page"
 msgstr ""
-"Afegeix números de pàgina a la part de baix. Ocupa 2 línies de la pàgina."
+"Afegeix números de pàgina a la part de baix. Ocupa 2 línies de la pàgina"
 
 #: ../src/interface.c:4424 ../src/printing.c:352
 msgid "Print page header"
@@ -2590,9 +2536,8 @@ msgid "Use the basename of the printed file"
 msgstr "Usa el nom base del fitxer imprés"
 
 #: ../src/interface.c:4447 ../src/printing.c:372
-#, fuzzy
 msgid "Print only the basename(without the path) of the printed file"
-msgstr "Imprimeix només el nom base (sense el directori) del fitxer imprés."
+msgstr "Imprimeix només el nom base (sense el directori) del fitxer imprés"
 
 #: ../src/interface.c:4453 ../src/printing.c:378
 msgid "Date format:"
@@ -2620,510 +2565,509 @@ msgstr "Impressió"
 msgid "Project Properties"
 msgstr "Propietats del Projecte"
 
-#: ../src/keybindings.c:193 ../src/plugins.c:1091
+#: ../src/keybindings.c:195 ../src/plugins.c:1097
 msgid "File"
 msgstr "Fitxer"
 
-#: ../src/keybindings.c:196
+#: ../src/keybindings.c:198
 msgid "New"
 msgstr "Nou"
 
-#: ../src/keybindings.c:198
+#: ../src/keybindings.c:200
 msgid "Open"
 msgstr "Obre"
 
-#: ../src/keybindings.c:201
+#: ../src/keybindings.c:203
 msgid "Open selected file"
 msgstr "Obre el fitxer seleccionat"
 
-#: ../src/keybindings.c:203
+#: ../src/keybindings.c:205
 msgid "Save"
 msgstr "Desa"
 
-#: ../src/keybindings.c:205
+#: ../src/keybindings.c:207
 msgid "Save as"
 msgstr "Desa com"
 
-#: ../src/keybindings.c:207
+#: ../src/keybindings.c:209
 msgid "Save all"
 msgstr "Desa-ho tot"
 
-#: ../src/keybindings.c:210
+#: ../src/keybindings.c:212
 msgid "Print"
 msgstr "Imprimeix"
 
-#: ../src/keybindings.c:212
+#: ../src/keybindings.c:214
 msgid "Close"
 msgstr "Tanca"
 
-#: ../src/keybindings.c:214
+#: ../src/keybindings.c:216
 msgid "Close all"
 msgstr "Tanca-ho tot"
 
-#: ../src/keybindings.c:217
+#: ../src/keybindings.c:219
 msgid "Reload file"
 msgstr "Actualitza el fitxer"
 
-#: ../src/keybindings.c:219 ../src/project.c:476
+#: ../src/keybindings.c:221 ../src/project.c:476
 msgid "Project"
 msgstr "Projecte"
 
-#: ../src/keybindings.c:222
+#: ../src/keybindings.c:224
 msgid "Project properties"
 msgstr "Propietats del projecte"
 
-#: ../src/keybindings.c:227
+#: ../src/keybindings.c:229
 msgid "Undo"
 msgstr "Desfer"
 
-#: ../src/keybindings.c:229
+#: ../src/keybindings.c:231
 msgid "Redo"
 msgstr "Refer"
 
-#: ../src/keybindings.c:231
+#: ../src/keybindings.c:233
 msgid "Duplicate line or selection"
 msgstr "Duplica la línia i la selecció"
 
-#: ../src/keybindings.c:234
+#: ../src/keybindings.c:236
 msgid "Delete current line(s)"
 msgstr "Suprimeix la línia(es) actual"
 
-#: ../src/keybindings.c:236
+#: ../src/keybindings.c:238
 msgid "Transpose current line"
 msgstr "Transposa la línia(es) actual"
 
-#: ../src/keybindings.c:238
+#: ../src/keybindings.c:240
 msgid "Scroll to current line"
 msgstr "Desplaça la línia actual"
 
-#: ../src/keybindings.c:240
+#: ../src/keybindings.c:242
 msgid "Scroll up the view by one line"
 msgstr "Desplaça cap a dalt la vista en una línia"
 
-#: ../src/keybindings.c:242
+#: ../src/keybindings.c:244
 msgid "Scroll down the view by one line"
 msgstr "Desplaça cap a baix la vista en una línia"
 
-#: ../src/keybindings.c:245
+#: ../src/keybindings.c:247
 msgid "Complete snippet"
 msgstr "Acaba la construcció"
 
-#: ../src/keybindings.c:247
-msgid "Move cursor in snippet"
-msgstr ""
-
 #: ../src/keybindings.c:249
+msgid "Move cursor in snippet"
+msgstr "Desplaça el cursor en la construcció (snippet)"
+
+#: ../src/keybindings.c:251
 msgid "Suppress snippet completion"
 msgstr "Suprimeix el acabament de construccions"
 
-#: ../src/keybindings.c:251
+#: ../src/keybindings.c:253
 msgid "Context Action"
 msgstr "Acció Contextual"
 
-#: ../src/keybindings.c:253
+#: ../src/keybindings.c:255
 msgid "Complete word"
 msgstr "Acaba la paraula"
 
-#: ../src/keybindings.c:255
+#: ../src/keybindings.c:257
 msgid "Show calltip"
 msgstr "Mostra els prototips de funció"
 
-#: ../src/keybindings.c:257
+#: ../src/keybindings.c:259
 msgid "Show macro list"
 msgstr "Mostra la llista de macros"
 
-#: ../src/keybindings.c:259
+#: ../src/keybindings.c:261
 msgid "Clipboard"
 msgstr "Porta-retalls"
 
-#: ../src/keybindings.c:262
+#: ../src/keybindings.c:264
 msgid "Cut"
 msgstr "Talla"
 
-#: ../src/keybindings.c:264
+#: ../src/keybindings.c:266
 msgid "Copy"
 msgstr "Copia"
 
-#: ../src/keybindings.c:266
+#: ../src/keybindings.c:268
 msgid "Paste"
 msgstr "Enganxa"
 
-#: ../src/keybindings.c:268
+#: ../src/keybindings.c:270
 msgid "Copy current line(s)"
 msgstr "Copia la línia(es) actual"
 
-#: ../src/keybindings.c:270
+#: ../src/keybindings.c:272
 msgid "Cut current line(s)"
 msgstr "Talla la línia(es) actual"
 
-#: ../src/keybindings.c:272
+#: ../src/keybindings.c:274
 msgid "Select"
 msgstr "Selecciona"
 
-#: ../src/keybindings.c:275
+#: ../src/keybindings.c:277
 msgid "Select All"
 msgstr "Selecciona-ho Tot"
 
-#: ../src/keybindings.c:277
+#: ../src/keybindings.c:279
 msgid "Select current word"
 msgstr "Selecciona la paraula actual"
 
-#: ../src/keybindings.c:279
+#: ../src/keybindings.c:281
 msgid "Select current line(s)"
 msgstr "Selecciona la línia(es) actual"
 
-#: ../src/keybindings.c:281
+#: ../src/keybindings.c:283
 msgid "Select current paragraph"
 msgstr "Selecciona el paràgraf actual"
 
-#: ../src/keybindings.c:283
+#: ../src/keybindings.c:285
 msgid "Format"
 msgstr "Format"
 
-#: ../src/keybindings.c:287
+#: ../src/keybindings.c:289
 msgid "Toggle Case of Selection"
 msgstr "Canvia la Caixa de la Selecció"
 
-#: ../src/keybindings.c:289
+#: ../src/keybindings.c:291
 msgid "Toggle line commentation"
 msgstr "Activa o desactiva els comentaris de línia"
 
-#: ../src/keybindings.c:292
+#: ../src/keybindings.c:294
 msgid "Comment line(s)"
 msgstr "Comenta la línia(es)"
 
-#: ../src/keybindings.c:294
+#: ../src/keybindings.c:296
 msgid "Uncomment line(s)"
 msgstr "Descomenta la línia(es)"
 
-#: ../src/keybindings.c:296
+#: ../src/keybindings.c:298
 msgid "Increase indent"
 msgstr "Incrementa el sagnat"
 
-#: ../src/keybindings.c:299
+#: ../src/keybindings.c:301
 msgid "Decrease indent"
 msgstr "Redueix el sagnat"
 
-#: ../src/keybindings.c:302
+#: ../src/keybindings.c:304
 msgid "Increase indent by one space"
 msgstr "Incrementa el sagnat en un espai"
 
-#: ../src/keybindings.c:304
+#: ../src/keybindings.c:306
 msgid "Decrease indent by one space"
 msgstr "Redueix el sagnat en un espai"
 
-#: ../src/keybindings.c:306
+#: ../src/keybindings.c:308
 msgid "Smart line indent"
 msgstr "Sagnat de línia \"intel·ligent\""
 
-#: ../src/keybindings.c:308
+#: ../src/keybindings.c:310
 msgid "Send to Custom Command 1"
 msgstr "Envia a l'Ordre Pròpia 1"
 
-#: ../src/keybindings.c:310
+#: ../src/keybindings.c:312
 msgid "Send to Custom Command 2"
 msgstr "Envia a l'Ordre Pròpia 2"
 
-#: ../src/keybindings.c:312
+#: ../src/keybindings.c:314
 msgid "Send to Custom Command 3"
 msgstr "Envia a l'Ordre Pròpia 3"
 
-#: ../src/keybindings.c:314
+#: ../src/keybindings.c:316
 msgid "Insert"
 msgstr "Insereix"
 
-#: ../src/keybindings.c:317
+#: ../src/keybindings.c:319
 msgid "Insert date"
 msgstr "Insereix la data"
 
-#: ../src/keybindings.c:320
+#: ../src/keybindings.c:322
 msgid "Insert alternative white space"
 msgstr "Insereix espai en blanc alternatiu"
 
-#: ../src/keybindings.c:322
+#: ../src/keybindings.c:324
 msgid "Settings"
 msgstr "Preferències"
 
-#: ../src/keybindings.c:328 ../src/toolbar.c:200
+#: ../src/keybindings.c:330 ../src/toolbar.c:200
 msgid "Search"
 msgstr "Cerca"
 
-#: ../src/keybindings.c:331 ../src/search.c:363
+#: ../src/keybindings.c:333 ../src/search.c:363
 msgid "Find"
 msgstr "Cerca"
 
-#: ../src/keybindings.c:333
+#: ../src/keybindings.c:335
 msgid "Find Next"
 msgstr "Cerca el Següent"
 
-#: ../src/keybindings.c:335
+#: ../src/keybindings.c:337
 msgid "Find Previous"
 msgstr "Cerca l'Anterior"
 
-#: ../src/keybindings.c:338
+#: ../src/keybindings.c:340
 msgid "Find Next Selection"
 msgstr "Cerca el Següent Seleccionat"
 
-#: ../src/keybindings.c:340
+#: ../src/keybindings.c:342
 msgid "Find Previous Selection"
 msgstr "Cerca·l'Anterior·Seleccionat"
 
-#: ../src/keybindings.c:342 ../src/search.c:496
+#: ../src/keybindings.c:344 ../src/search.c:496
 msgid "Replace"
 msgstr "Reemplaça"
 
-#: ../src/keybindings.c:344 ../src/search.c:659
+#: ../src/keybindings.c:346 ../src/search.c:659
 msgid "Find in Files"
 msgstr "Cerca en els Fitxers"
 
-#: ../src/keybindings.c:347
+#: ../src/keybindings.c:349
 msgid "Next Message"
 msgstr "Missatge Següent"
 
-#: ../src/keybindings.c:349
+#: ../src/keybindings.c:351
 msgid "Previous Message"
 msgstr "Missatge Anterior"
 
-#: ../src/keybindings.c:351
+#: ../src/keybindings.c:353
 msgid "Find Usage"
 msgstr "Ús de la Cerca"
 
-#: ../src/keybindings.c:353
+#: ../src/keybindings.c:355
 msgid "Find Document Usage"
 msgstr "Ús de la Cerca de Documents"
 
-#: ../src/keybindings.c:355
+#: ../src/keybindings.c:357
 msgid "Go to"
 msgstr "Vés a"
 
-#: ../src/keybindings.c:358 ../src/toolbar.c:62
+#: ../src/keybindings.c:360 ../src/toolbar.c:62
 msgid "Navigate back a location"
 msgstr "Ves enrere"
 
-#: ../src/keybindings.c:360 ../src/toolbar.c:63
+#: ../src/keybindings.c:362 ../src/toolbar.c:63
 msgid "Navigate forward a location"
 msgstr "Ves avant"
 
-#: ../src/keybindings.c:365
+#: ../src/keybindings.c:367
 msgid "Go to matching brace"
 msgstr "Vés al parèntesi corresponent"
 
-#: ../src/keybindings.c:368
+#: ../src/keybindings.c:370
 msgid "Toggle marker"
 msgstr "Activa o desactiva les marques"
 
-#: ../src/keybindings.c:371
+#: ../src/keybindings.c:373
 msgid "Go to next marker"
 msgstr "Ves a la marca següent"
 
-#: ../src/keybindings.c:374
+#: ../src/keybindings.c:376
 msgid "Go to previous marker"
 msgstr "Ves a la marca anterior"
 
-#: ../src/keybindings.c:376
+#: ../src/keybindings.c:378
 msgid "Go to Tag Definition"
 msgstr "Vés a la Definició de l'Etiqueta"
 
-#: ../src/keybindings.c:378
+#: ../src/keybindings.c:380
 msgid "Go to Tag Declaration"
 msgstr "Vés a la Declaració de l'Etiqueta"
 
-#: ../src/keybindings.c:380
+#: ../src/keybindings.c:382
 msgid "Go to Start of Line"
 msgstr "Vés a l'Inici de la Línia"
 
-#: ../src/keybindings.c:382
+#: ../src/keybindings.c:384
 msgid "Go to End of Line"
 msgstr "Vés al Final de la Línia"
 
-#: ../src/keybindings.c:384
+#: ../src/keybindings.c:386
 msgid "Go to Previous Word Part"
 msgstr "Ves a la Part de la Paraula Anterior"
 
-#: ../src/keybindings.c:386
+#: ../src/keybindings.c:388
 msgid "Go to Next Word Part"
 msgstr "Ves a la Part de la Paraula Següent"
 
-#: ../src/keybindings.c:388
+#: ../src/keybindings.c:390
 msgid "View"
 msgstr "Visualitza"
 
-#: ../src/keybindings.c:391
+#: ../src/keybindings.c:393
 msgid "Toggle All Additional Widgets"
 msgstr "Mostra o Amaga Tots els Extres"
 
-#: ../src/keybindings.c:394
+#: ../src/keybindings.c:396
 msgid "Fullscreen"
 msgstr "Pantalla Completa"
 
-#: ../src/keybindings.c:396
+#: ../src/keybindings.c:398
 msgid "Toggle Messages Window"
 msgstr "Mostra o Amaga la Finestra de Missatges"
 
-#: ../src/keybindings.c:399
+#: ../src/keybindings.c:401
 msgid "Toggle Sidebar"
 msgstr "Mostra o Amaga la Barra Lateral"
 
-#: ../src/keybindings.c:401
+#: ../src/keybindings.c:403
 msgid "Zoom In"
 msgstr "Apropa"
 
-#: ../src/keybindings.c:403
+#: ../src/keybindings.c:405
 msgid "Zoom Out"
 msgstr "Allunya"
 
-#: ../src/keybindings.c:405
+#: ../src/keybindings.c:407
 msgid "Focus"
 msgstr "Focus"
 
-#: ../src/keybindings.c:408
+#: ../src/keybindings.c:410
 msgid "Switch to Editor"
 msgstr "Canvia a l'Editor"
 
-#: ../src/keybindings.c:410
+#: ../src/keybindings.c:412
 msgid "Switch to Scribble"
 msgstr "Canvia al Bloc de Notes"
 
-#: ../src/keybindings.c:412
+#: ../src/keybindings.c:414
 msgid "Switch to VTE"
 msgstr "Canvia a l'Emulador de Terminal"
 
-#: ../src/keybindings.c:414
+#: ../src/keybindings.c:416
 msgid "Switch to Search Bar"
 msgstr "Canvia a la Barra de Cerca"
 
-#: ../src/keybindings.c:416
+#: ../src/keybindings.c:418
 msgid "Switch to Sidebar"
 msgstr "Canvia a la Barra Lateral"
 
-#: ../src/keybindings.c:418
+#: ../src/keybindings.c:420
 msgid "Switch to Compiler"
 msgstr "Canvia al Compilador"
 
-#: ../src/keybindings.c:420
+#: ../src/keybindings.c:422
 msgid "Notebook tab"
 msgstr "Pestanya de notes"
 
-#: ../src/keybindings.c:423
+#: ../src/keybindings.c:425
 msgid "Switch to left document"
 msgstr "Canvia al document de l'esquerra"
 
-#: ../src/keybindings.c:425
+#: ../src/keybindings.c:427
 msgid "Switch to right document"
 msgstr "Canvia al document de la dreta"
 
-#: ../src/keybindings.c:427
+#: ../src/keybindings.c:429
 msgid "Switch to last used document"
 msgstr "Canvia a l'últim document utilitzat"
 
-#: ../src/keybindings.c:429
+#: ../src/keybindings.c:431
 msgid "Move document left"
 msgstr "Canvia al document de l'esquerra"
 
-#: ../src/keybindings.c:431
+#: ../src/keybindings.c:433
 msgid "Move document right"
 msgstr "Canvia al document de la dreta"
 
-#: ../src/keybindings.c:433
+#: ../src/keybindings.c:435
 msgid "Move document first"
 msgstr "Canvia al primer document"
 
-#: ../src/keybindings.c:435
+#: ../src/keybindings.c:437
 msgid "Move document last"
 msgstr "Canvia a l'últim document"
 
-#: ../src/keybindings.c:437
+#: ../src/keybindings.c:439
 msgid "Document"
 msgstr "Document"
 
-#: ../src/keybindings.c:440
+#: ../src/keybindings.c:442
 msgid "Toggle Line wrapping"
 msgstr "Activa o desactiva l'Ajust de línia"
 
-#: ../src/keybindings.c:442
+#: ../src/keybindings.c:444
 msgid "Toggle Line breaking"
 msgstr "Activa o desactiva el Trencament de línia"
 
-#: ../src/keybindings.c:446
+#: ../src/keybindings.c:448
 msgid "Replace spaces by tabs"
 msgstr "Reemplaça espais per tabulacions"
 
-#: ../src/keybindings.c:448
+#: ../src/keybindings.c:450
 msgid "Toggle current fold"
 msgstr "Desplega/plega el punt actual"
 
-#: ../src/keybindings.c:450
+#: ../src/keybindings.c:452
 msgid "Fold all"
 msgstr "Plega-ho tot"
 
-#: ../src/keybindings.c:452
+#: ../src/keybindings.c:454
 msgid "Unfold all"
 msgstr "Desplega-ho tot"
 
-#: ../src/keybindings.c:454
+#: ../src/keybindings.c:456
 msgid "Reload symbol list"
 msgstr "Actualitza la llista de símbols"
 
-#: ../src/keybindings.c:456 ../src/keybindings.c:461 ../src/ui_utils.c:1645
+#: ../src/keybindings.c:458 ../src/keybindings.c:463 ../src/ui_utils.c:1645
 msgid "Build"
 msgstr "Munta"
 
-#: ../src/keybindings.c:459 ../src/toolbar.c:64
+#: ../src/keybindings.c:461 ../src/toolbar.c:64
 msgid "Compile"
 msgstr "Compila"
 
-#: ../src/keybindings.c:463
+#: ../src/keybindings.c:465
 msgid "Make all"
 msgstr "Compila-ho tot"
 
-#: ../src/keybindings.c:466
+#: ../src/keybindings.c:468
 msgid "Make custom target"
 msgstr "Compila amb make (objectiu especificat)"
 
-#: ../src/keybindings.c:468
+#: ../src/keybindings.c:470
 msgid "Make object"
 msgstr "Compila amb 'make object'"
 
-#: ../src/keybindings.c:470
+#: ../src/keybindings.c:472
 msgid "Next error"
 msgstr "Error següent"
 
-#: ../src/keybindings.c:472
+#: ../src/keybindings.c:474
 msgid "Previous error"
 msgstr "Error anterior"
 
-#: ../src/keybindings.c:474
+#: ../src/keybindings.c:476
 msgid "Run"
 msgstr "Executa"
 
-#: ../src/keybindings.c:476
+#: ../src/keybindings.c:478
 msgid "Run (alternative command)"
 msgstr "Executa una ordre definida"
 
-#: ../src/keybindings.c:478
+#: ../src/keybindings.c:480
 msgid "Build options"
 msgstr "Opcions per muntar"
 
-#: ../src/keybindings.c:483
+#: ../src/keybindings.c:485
 msgid "Show Color Chooser"
 msgstr "Mostra el Selector de Color"
 
-#: ../src/keybindings.c:485 ../src/keybindings.c:488
+#: ../src/keybindings.c:487 ../src/keybindings.c:490
 msgid "Help"
 msgstr "Ajuda"
 
-#: ../src/keybindings.c:777
+#: ../src/keybindings.c:779
 msgid "Keyboard Shortcuts"
 msgstr "Dreceres de Teclat"
 
-#: ../src/keybindings.c:790
+#: ../src/keybindings.c:792
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Les dreceres de teclat següents són configurables:"
 
-#: ../src/keybindings.c:1446
-#, fuzzy
+#: ../src/keybindings.c:1527
 msgid "Switch to Document"
-msgstr "Canvia al document de l'esquerra"
+msgstr "Canvia al Document"
 
 #: ../src/keyfile.c:783
 msgid "Type here what you want, use it as a notice/scratch board"
@@ -3151,7 +3095,7 @@ msgstr "Utilitza un directori de configuració alternatiu"
 
 #: ../src/main.c:126 ../src/main.c:146
 msgid "Be verbose"
-msgstr ""
+msgstr "Sigues més explicatiu (verbose)"
 
 #: ../src/main.c:127
 msgid "Print internal filetype names"
@@ -3163,7 +3107,7 @@ msgstr "Genera el fitxer d'etiquetes globals (veieu la documentació)"
 
 #: ../src/main.c:129
 msgid "Don't preprocess C/C++ files when generating tags"
-msgstr ""
+msgstr "No processes els fitxers de codi C/C++ quan generes les etiquetes"
 
 #: ../src/main.c:132
 msgid "Don't open files in a running instance, force opening a new instance"
@@ -3216,31 +3160,34 @@ msgstr "[FITXERS...]"
 msgid "(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"
 msgstr "(compilat el %s amb GTK %d.%d.%d, GLib %d.%d.%d)"
 
-#: ../src/main.c:604
+#: ../src/main.c:605
 msgid "Move it now?"
-msgstr ""
+msgstr "Desplaçar ara?"
 
-#: ../src/main.c:606
+#: ../src/main.c:607
 msgid "Geany needs to move your old configuration directory before starting."
-msgstr ""
+msgstr "Geany necessita moure el directori de configuració abans d'iniciar-se."
 
-#: ../src/main.c:612
+#: ../src/main.c:613
 #, c-format
 msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
 "\"."
 msgstr ""
+"El directori de configuració s'ha mogut correctament de \"%s\" to \"%s\"."
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
-#: ../src/main.c:622
+#: ../src/main.c:623
 #, c-format
 msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
 "Please move manually the directory to the new location."
 msgstr ""
+"El directori de configuració \"%s\" no s'ha pogut moure a \"%s\" (%s). Per "
+"favor, moveu el directori manualment a la nova ubicació."
 
-#: ../src/main.c:702
+#: ../src/main.c:704
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -3251,38 +3198,38 @@ msgstr ""
 "Pot haver problemes si useu Geany sense un directori de configuració.\n"
 "Voleu iniciar Geany?"
 
-#: ../src/main.c:788 ../src/socket.c:160
+#: ../src/main.c:790 ../src/socket.c:160
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "No s'ha pogut trobar el fitxer '%s'."
 
-#: ../src/main.c:1007
+#: ../src/main.c:1009
 #, c-format
 msgid "This is Geany %s."
 msgstr "Geany %s."
 
-#: ../src/main.c:1009
+#: ../src/main.c:1011
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "No s'ha pogut crear el directori de configuració (%s)."
 
-#: ../src/main.c:1219
+#: ../src/main.c:1221
 msgid "Configuration files reloaded."
 msgstr "S'ha recarregat el fitxer de configuració."
 
-#: ../src/msgwindow.c:116
+#: ../src/msgwindow.c:134
 msgid "Status messages"
 msgstr "Missatges d'estat"
 
-#: ../src/msgwindow.c:491
+#: ../src/msgwindow.c:513
 msgid "Copy _All"
 msgstr "_Copia-ho Tot"
 
-#: ../src/msgwindow.c:521
+#: ../src/msgwindow.c:543
 msgid "_Hide Message Window"
 msgstr "_Amaga la Finestra de Missatges"
 
-#: ../src/plugins.c:430
+#: ../src/plugins.c:433
 #, c-format
 msgid ""
 "The plugin \"%s\" is not binary compatible with this release of Geany - "
@@ -3291,11 +3238,11 @@ msgstr ""
 "El plugin \"%s\" no és un binari compatible amb aquesta versió de Geany - "
 "l'haureu de recompilar."
 
-#: ../src/plugins.c:862
+#: ../src/plugins.c:868
 msgid "_Plugin Manager"
 msgstr "_Gestor de Connectors"
 
-#: ../src/plugins.c:1008
+#: ../src/plugins.c:1014
 #, c-format
 msgid ""
 "Plugin: %s %s\n"
@@ -3306,23 +3253,23 @@ msgstr ""
 "Descripció:·%s\n"
 "Autor(s):·%s"
 
-#: ../src/plugins.c:1079
+#: ../src/plugins.c:1085
 msgid "Active"
 msgstr "Actiu"
 
-#: ../src/plugins.c:1085
+#: ../src/plugins.c:1091
 msgid "Plugin"
 msgstr "Connector"
 
-#: ../src/plugins.c:1109
+#: ../src/plugins.c:1115
 msgid "No plugins available."
 msgstr "No hi ha connectors disponibles."
 
-#: ../src/plugins.c:1221
+#: ../src/plugins.c:1227
 msgid "Plugins"
 msgstr "Connectors"
 
-#: ../src/plugins.c:1241
+#: ../src/plugins.c:1247
 msgid ""
 "Below is a list of available plugins. Select the plugins which should be "
 "loaded when Geany is started."
@@ -3330,7 +3277,7 @@ msgstr ""
 "Aquesta és la llista de connectors disponibles. Selecciona els connectors "
 "que es carregaran a l'inici."
 
-#: ../src/plugins.c:1254
+#: ../src/plugins.c:1260
 msgid "<b>Plugin details:</b>"
 msgstr "<b>Detalls del connector:</b>"
 
@@ -3418,6 +3365,9 @@ msgid ""
 "<i>Notice: To customize the toolbar elements, edit the file 'ui_toolbar."
 "xml'. Please see the documentation for details.</i>"
 msgstr ""
+"<i>Avís: Per personalitzar els elements de la barra d'eines, editeu el "
+"fitxer 'ui_toolbar.xml'. Per favor, veieu la documentació per a obtindre més "
+"detalls.</i>"
 
 #. page Editor->Indentation
 #: ../src/prefs.c:1452
@@ -3425,6 +3375,8 @@ msgid ""
 "<i>Warning: these settings are overridden by the current project. See "
 "<b>Project->Properties</b>.</i>"
 msgstr ""
+"<i>Advertència: aquestes preferències estan sent sobreescrites pel projecte "
+"actual. Veieu <b>Projecte->Propietats</b>.</i>"
 
 #: ../src/printing.c:270
 #, c-format
@@ -3436,16 +3388,15 @@ msgid "Document Setup"
 msgstr "Configuració del Document"
 
 #: ../src/printing.c:349
-#, fuzzy
 msgid ""
 "Add page numbers at the bottom of each page. It takes 2 lines of the page"
 msgstr ""
-"Afegeix números de pàgina a la part de baix. Ocupa 2 línies de la pàgina."
+"Afegeix números de pàgina a la part de baix. Ocupa 2 línies de la pàgina"
 
 #: ../src/printing.c:487
-#, fuzzy, c-format
+#, c-format
 msgid "Page %d of %d"
-msgstr "<b>Pàgina %d de %d</b>"
+msgstr "Pàgina %d de %d"
 
 #: ../src/printing.c:737
 #, c-format
@@ -3651,13 +3602,12 @@ msgid "Use _escape sequences"
 msgstr "Usa seqüències d'_escapament"
 
 #: ../src/search.c:230
-#, fuzzy
 msgid ""
 "Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
 "corresponding control characters"
 msgstr ""
 "Reemplaça \\\\, \\t, \\n, \\r i \\uXXXX (caràcters Unicode) amb les "
-"seqüències de control corresponents."
+"seqüències de control corresponents"
 
 #: ../src/search.c:239 ../src/search.c:752
 msgid "C_ase sensitive"
@@ -3693,9 +3643,8 @@ msgid "_Mark"
 msgstr "_Marca"
 
 #: ../src/search.c:416
-#, fuzzy
 msgid "Mark all matches in the current document"
-msgstr "Marca totes les coincidències en el document."
+msgstr "Marca totes les coincidències en el document"
 
 #: ../src/search.c:421 ../src/search.c:570
 msgid "In Sessi_on"
@@ -3711,9 +3660,8 @@ msgid "Close _dialog"
 msgstr "Tanca el _diàleg"
 
 #: ../src/search.c:437 ../src/search.c:593
-#, fuzzy
 msgid "Disable this option to keep the dialog open"
-msgstr "Desactiva aquesta opció i mantingues obert el diàleg."
+msgstr "Desactiva aquesta opció i mantingues obert el diàleg"
 
 #: ../src/search.c:509
 msgid "Replace & Fi_nd"
@@ -3741,9 +3689,8 @@ msgid "_Directory:"
 msgstr "_Directori:"
 
 #: ../src/search.c:698
-#, fuzzy
 msgid "E_ncoding:"
-msgstr "Estableix la codificació dels caràcters:"
+msgstr "_Codificació:"
 
 #: ../src/search.c:723
 msgid "Fixed s_trings"
@@ -3754,9 +3701,8 @@ msgid "_Grep regular expressions"
 msgstr "_Grep amb expressions regulars"
 
 #: ../src/search.c:735 ../src/search.c:743
-#, fuzzy
 msgid "See grep's manual page for more information"
-msgstr "Veieu el manual de 'grep' per a més informació."
+msgstr "Veieu el manual de 'grep' per a més informació"
 
 #: ../src/search.c:740
 msgid "_Extended regular expressions"
@@ -3784,17 +3730,17 @@ msgid "Other options to pass to Grep"
 msgstr "Altres opcions per a Grep"
 
 #: ../src/search.c:1051 ../src/search.c:1652 ../src/search.c:1655
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
-msgstr[0] "S'han trobat %d coincidències de \"%s\"."
+msgstr[0] "S'ha trobat %d coincidència de \"%s\"."
 msgstr[1] "S'han trobat %d coincidències de \"%s\"."
 
 #: ../src/search.c:1165
-#, fuzzy, c-format
+#, c-format
 msgid "Replaced text in %u file."
 msgid_plural "Replaced text in %u files."
-msgstr[0] "S'ha reemplaçat el text en %u fitxers."
+msgstr[0] "S'ha reemplaçat el text en %u fitxer."
 msgstr[1] "S'ha reemplaçat el text en %u fitxers."
 
 #: ../src/search.c:1266
@@ -3812,9 +3758,8 @@ msgstr ""
 "No s'ha pogut executar l'eina 'grep' '%s'; comproveu la ruta a Preferències."
 
 #: ../src/search.c:1381
-#, fuzzy
 msgid "Searching..."
-msgstr "Cerca"
+msgstr "Cercant..."
 
 #: ../src/search.c:1393
 #, c-format
@@ -3829,12 +3774,14 @@ msgstr "No s'ha pogut obrir el directori (%s)"
 #: ../src/search.c:1527
 msgid "Search failed (see Help->Debug Messages for details)."
 msgstr ""
+"La cerca ha fallat (veieu Ajuda->Missatges de Depuració per a obtindre més "
+"detalls)."
 
 #: ../src/search.c:1548
-#, fuzzy, c-format
+#, c-format
 msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
-msgstr[0] "S'ha finalitzat la cerca amb %d coincidències."
+msgstr[0] "S'ha finalitzat la cerca amb %d coincidència."
 msgstr[1] "S'ha finalitzat la cerca amb %d coincidències."
 
 #: ../src/search.c:1556
@@ -3922,9 +3869,8 @@ msgid "Label"
 msgstr "Etiqueta"
 
 #: ../src/symbols.c:603
-#, fuzzy
 msgid "Structures"
-msgstr "Estat"
+msgstr "Estructures"
 
 #: ../src/symbols.c:610 ../src/symbols.c:709
 msgid "Package"
@@ -3967,34 +3913,28 @@ msgid "Variables"
 msgstr "Variables"
 
 #: ../src/symbols.c:639
-#, fuzzy
 msgid "Anchors"
-msgstr "Àncora"
+msgstr "Àncores"
 
 #: ../src/symbols.c:640
-#, fuzzy
 msgid "H1 Headings"
 msgstr "Capçalera (H1)"
 
 #: ../src/symbols.c:641
-#, fuzzy
 msgid "H2 Headings"
-msgstr "Capçalera (H1)"
+msgstr "Capçalera (H2)"
 
 #: ../src/symbols.c:642
-#, fuzzy
 msgid "H3 Headings"
-msgstr "Capçalera (H1)"
+msgstr "Capçalera (H3)"
 
 #: ../src/symbols.c:650
-#, fuzzy
 msgid "ID Selectors"
-msgstr "A la Se_lecció"
+msgstr "Selectors de ID"
 
 #: ../src/symbols.c:651
-#, fuzzy
 msgid "Type Selectors"
-msgstr "Constructors de tipus"
+msgstr "Selectors de Tipus"
 
 #: ../src/symbols.c:667
 msgid "Modules"
@@ -4042,13 +3982,12 @@ msgid "Namespaces"
 msgstr "Espais de noms"
 
 #: ../src/symbols.c:789
-#, fuzzy
 msgid "Structs"
-msgstr "Estat"
+msgstr "Structs"
 
 #: ../src/symbols.c:790
 msgid "Typedefs / Enums"
-msgstr ""
+msgstr "Typedefs / Enums"
 
 #: ../src/symbols.c:1263
 #, c-format
@@ -4112,14 +4051,12 @@ msgid "Definition of \"%s\" not found."
 msgstr "No s'ha trobat la definició de \"%s\"."
 
 #: ../src/symbols.c:1760
-#, fuzzy
 msgid "_Expand All"
-msgstr "_Cerca-ho Tot"
+msgstr "_Expandeix-ho Tot"
 
 #: ../src/symbols.c:1765
-#, fuzzy
 msgid "_Collapse All"
-msgstr "_Tanca-ho Tot"
+msgstr "_Plega-ho Tot"
 
 #: ../src/symbols.c:1775
 msgid "Sort by _Name"
@@ -4134,9 +4071,8 @@ msgid "Save the current file"
 msgstr "Desa el fitxer"
 
 #: ../src/toolbar.c:52 ../src/ui_utils.c:1643
-#, fuzzy
 msgid "Save All"
-msgstr "Desa-ho _Tot"
+msgstr "Desa-ho Tot"
 
 #: ../src/toolbar.c:52
 msgid "Save all open files"
@@ -4151,28 +4087,24 @@ msgid "Close the current file"
 msgstr "Tanca el fitxer"
 
 #: ../src/toolbar.c:55
-#, fuzzy
 msgid "Close all open files"
 msgstr "Tanca tots els fitxers oberts"
 
 #: ../src/toolbar.c:56
-#, fuzzy
 msgid "Cut the current selection"
-msgstr "Converteix la caixa del text seleccionat"
+msgstr "Talla el text de la selecció actual"
 
 #: ../src/toolbar.c:57
-#, fuzzy
 msgid "Copy the current selection"
-msgstr "Compila el fitxer"
+msgstr "Copia el text de la selecció actual"
 
 #: ../src/toolbar.c:58
 msgid "Paste the contents of the clipboard"
-msgstr ""
+msgstr "Enganxa el contingut del portaretalls"
 
 #: ../src/toolbar.c:59
-#, fuzzy
 msgid "Delete the current selection"
-msgstr "Converteix la caixa del text seleccionat"
+msgstr "Esborra el text de la selecció actual"
 
 #: ../src/toolbar.c:60
 msgid "Undo the last modification"
@@ -4191,10 +4123,9 @@ msgid "Run or view the current file"
 msgstr "Executa o visualitza el fitxer"
 
 #: ../src/toolbar.c:66
-#, fuzzy
 msgid ""
 "Open a color chooser dialog, to interactively pick colors from a palette"
-msgstr "Obre un selector de color per a triar-ne un de la paleta."
+msgstr "Obre un selector de color per a triar-ne un de la paleta"
 
 #: ../src/toolbar.c:67
 msgid "Zoom in the text"
@@ -4217,13 +4148,12 @@ msgid "Find the entered text in the current file"
 msgstr "Cerca el text al fitxer"
 
 #: ../src/toolbar.c:72
-#, fuzzy
 msgid "Jump to the entered line number"
-msgstr "Vés al número de línia introduït."
+msgstr "Vés al número de línia introduït"
 
 #: ../src/toolbar.c:73
 msgid "Show the preferences dialog"
-msgstr ""
+msgstr "Mostra el diàleg de preferències"
 
 #: ../src/toolbar.c:74
 msgid "Quit Geany"
@@ -4233,7 +4163,7 @@ msgstr "Surt de Geany"
 msgid ""
 "For all changes you make in this file to take effect, you need to restart "
 "Geany."
-msgstr ""
+msgstr "Per aplicar el canvis fets en aquest fitxer, cal que reinicieu Geany."
 
 #. Create our custom actions
 #: ../src/toolbar.c:184
@@ -4245,7 +4175,6 @@ msgid "Open an existing file"
 msgstr "Obre un fitxer existent"
 
 #: ../src/toolbar.c:208
-#, fuzzy
 msgid "Goto"
 msgstr "Vés a"
 
@@ -4430,32 +4359,30 @@ msgid "Select File"
 msgstr "Selecciona Fitxer"
 
 #: ../src/ui_utils.c:1628
-#, fuzzy
 msgid "C_onfiguration Files"
-msgstr "S'ha recarregat el fitxer de configuració."
+msgstr "Fitxer de C_onfiguració"
 
 #: ../src/ui_utils.c:1644
-#, fuzzy
 msgid "Close All"
-msgstr "_Tanca-ho Tot"
+msgstr "Tanca-ho Tot"
 
-#: ../src/vte.c:294 ../src/vte.c:714
+#: ../src/vte.c:299 ../src/vte.c:723
 msgid "Terminal"
 msgstr "Terminal"
 
-#: ../src/vte.c:539
+#: ../src/vte.c:546
 msgid "_Set Path From Document"
 msgstr "Especifica el Directori del Document"
 
-#: ../src/vte.c:544
+#: ../src/vte.c:551
 msgid "_Restart Terminal"
 msgstr "_Reinicia el Terminal"
 
-#: ../src/vte.c:555
+#: ../src/vte.c:574
 msgid "_Input Methods"
 msgstr "Mètodes d'_Entrada"
 
-#: ../src/vte.c:658
+#: ../src/vte.c:667
 msgid ""
 "Could not change the directory in the VTE because it probably contains a "
 "command."
@@ -4463,11 +4390,11 @@ msgstr ""
 "No es pot canviar el directori en l'Emulador de Terminal, probablement "
 "s'està executant una ordre."
 
-#: ../src/vte.c:709
+#: ../src/vte.c:718
 msgid "Terminal plugin"
 msgstr "Connector de terminal"
 
-#: ../src/vte.c:717
+#: ../src/vte.c:726
 msgid ""
 "These settings for the virtual terminal emulator widget (VTE) only apply if "
 "the VTE library could be loaded."
@@ -4475,103 +4402,94 @@ msgstr ""
 "Aquestes opcions per a l'emulador de terminal virtual (VTE) només s'apliquen "
 "la llibreria VTE pot ser carregada."
 
-#: ../src/vte.c:728
+#: ../src/vte.c:737
 msgid "Terminal font:"
 msgstr "Tipus de lletra del terminal:"
 
-#: ../src/vte.c:738
-#, fuzzy
+#: ../src/vte.c:747
 msgid "Sets the font for the terminal widget"
-msgstr "Especifica la font del terminal."
+msgstr "Especifica la font del terminal"
 
-#: ../src/vte.c:740
+#: ../src/vte.c:749
 msgid "Foreground color:"
 msgstr "Color del primer pla:"
 
-#: ../src/vte.c:746
+#: ../src/vte.c:755
 msgid "Background color:"
 msgstr "Color de fons:"
 
-#: ../src/vte.c:756
-#, fuzzy
+#: ../src/vte.c:765
 msgid "Sets the foreground color of the text in the terminal widget"
-msgstr "Especifica el color del text del terminal."
+msgstr "Especifica el color del text del terminal"
 
-#: ../src/vte.c:763
-#, fuzzy
+#: ../src/vte.c:772
 msgid "Sets the background color of the text in the terminal widget"
-msgstr "Especifica el color de fons del terminal."
+msgstr "Especifica el color de fons del terminal"
 
-#: ../src/vte.c:766
+#: ../src/vte.c:775
 msgid "Scrollback lines:"
 msgstr "Desplaçament lateral de línies:"
 
-#: ../src/vte.c:777
-#, fuzzy
+#: ../src/vte.c:786
 msgid ""
 "Specifies the history in lines, which you can scroll back in the terminal "
 "widget"
 msgstr ""
 "Indica el nombre de línies d'història que podeu fer enrere a la finestra del "
-"terminal."
+"terminal"
 
-#: ../src/vte.c:781
+#: ../src/vte.c:790
 msgid "Shell:"
 msgstr "Intèrpret d'ordres:"
 
-#: ../src/vte.c:788
-#, fuzzy
+#: ../src/vte.c:797
 msgid ""
 "Sets the path to the shell which should be started inside the terminal "
 "emulation"
 msgstr ""
 "Indica la ruta a l'intèrpret d'ordres que s'ha d'executar a l'emulador de "
-"terminal."
+"terminal"
 
-#: ../src/vte.c:805
+#: ../src/vte.c:814
 msgid "Scroll on keystroke"
 msgstr "Desplaça en teclejar"
 
-#: ../src/vte.c:806
-#, fuzzy
+#: ../src/vte.c:815
 msgid "Whether to scroll to the bottom if a key was pressed"
-msgstr "Desplaçar a la part de baix quan es prem alguna tecla."
+msgstr "Desplaçar a la part de baix quan es prem alguna tecla"
 
-#: ../src/vte.c:809
+#: ../src/vte.c:818
 msgid "Scroll on output"
 msgstr "Desplaça en aparèixer text"
 
-#: ../src/vte.c:810
-#, fuzzy
+#: ../src/vte.c:819
 msgid "Whether to scroll to the bottom when output is generated"
-msgstr "Desplaçar a la part de baix quan apareix text nou."
+msgstr "Desplaçar a la part de baix quan apareix text nou"
 
-#: ../src/vte.c:813
+#: ../src/vte.c:822
 msgid "Cursor blinks"
-msgstr ""
+msgstr "Parpelleig del cursor"
 
-#: ../src/vte.c:814
-#, fuzzy
+#: ../src/vte.c:823
 msgid "Whether to blink the cursor"
-msgstr "Activa el col·lapse del codi"
+msgstr "Activa el parpelleig del cursor"
 
-#: ../src/vte.c:817
+#: ../src/vte.c:826
 msgid "Override Geany keybindings"
 msgstr "Sobrescriu les dreceres de Geany"
 
-#: ../src/vte.c:819
-#, fuzzy
+#: ../src/vte.c:828
 msgid ""
 "Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
 msgstr ""
 "Permet a l'Emulador de Terminal rebre les dreceres de teclat (a més del "
-"focus)."
+"focus)"
 
-#: ../src/vte.c:822
+#: ../src/vte.c:831
 msgid "Disable menu shortcut key (F10 by default)"
 msgstr "Inhabilita la tecla d'accés al menú (F10 per defecte)"
 
-#: ../src/vte.c:823
+#: ../src/vte.c:832
 msgid ""
 "This option disables the keybinding to popup the menu bar (default is F10). "
 "Disabling it can be useful if you use, for example, Midnight Commander "
@@ -4581,42 +4499,39 @@ msgstr ""
 "defecte és F10). Açò pot ser útil si esteu utilitzant, per exemple, Midnight "
 "Commander al VTE."
 
-#: ../src/vte.c:826 ../plugins/filebrowser.c:1100
+#: ../src/vte.c:835 ../plugins/filebrowser.c:1100
 msgid "Follow the path of the current file"
 msgstr "Segueix la ruta del fitxer"
 
-#: ../src/vte.c:827
-#, fuzzy
+#: ../src/vte.c:836
 msgid "Whether to execute \"cd $path\" when you switch between opened files"
-msgstr "Executa \"cd $path\" en canviar entre fitxers oberts."
+msgstr "Executa \"cd $path\" en canviar entre fitxers oberts"
 
 #. create check_skip_script checkbox before the check_skip_script checkbox to be able to
 #. * use the object for the toggled handler of check_skip_script checkbox
-#: ../src/vte.c:832
+#: ../src/vte.c:841
 msgid "Don't use run script"
 msgstr "No usa l'script d'execució"
 
-#: ../src/vte.c:833
-#, fuzzy
+#: ../src/vte.c:842
 msgid ""
 "Don't use the simple run script which is usually used to display the exit "
 "status of the executed program"
 msgstr ""
 "No usa l'script d'execució, que s'usa normalment per mostrar el valor "
-"d'estat retornat pel programa executat."
+"d'estat retornat pel programa executat"
 
-#: ../src/vte.c:836
+#: ../src/vte.c:845
 msgid "Execute programs in VTE"
 msgstr "Executa els programes a l'Emulador de Terminal"
 
-#: ../src/vte.c:837
-#, fuzzy
+#: ../src/vte.c:846
 msgid ""
 "Run programs in VTE instead of opening a terminal emulation window. Please "
 "note, programs executed in VTE cannot be stopped"
 msgstr ""
 "Executa programes al VTE en comptes d'obrir una finestra de terminal. "
-"Tingueu en compte que els programes executats al VTE no poden ser detinguts."
+"Tingueu en compte que els programes executats al VTE no poden ser detinguts"
 
 #: ../src/win32.c:131
 msgid "Geany project files"
@@ -5013,15 +4928,15 @@ msgstr ""
 "inclou *.o, *.obj. *.so, *.dll, *.a, *.lib"
 
 #: ../plugins/filebrowser.c:1106
-#, fuzzy
 msgid "Set the project's base directory"
-msgstr "Voleu crear el directori base per al projecte?"
+msgstr "Especificva el directori base per al projecte"
 
 #: ../plugins/filebrowser.c:1110
-#, fuzzy
 msgid ""
 "Change the directory to the base directory of the currently opened project"
-msgstr "Mostra les diferències del directori del fitxer actiu"
+msgstr ""
+"Canvia el directori al directori base del projecte del projecte obert "
+"actualment"
 
 #: ../plugins/saveactions.c:47
 msgid "Save Actions"
@@ -5050,10 +4965,10 @@ msgid "Backup Copy: File could not be saved (%s)."
 msgstr "No s'ha pogut desar el Directori de Còpia de Seguretat (%s)."
 
 #: ../plugins/saveactions.c:319
-#, fuzzy, c-format
+#, c-format
 msgid "Autosave: Saved %d file automatically."
 msgid_plural "Autosave: Saved %d files automatically."
-msgstr[0] "Autodesa: S'han desat %d fitxers automàticament."
+msgstr[0] "Autodesa: S'ha desat %d fitxer automàticament."
 msgstr[1] "Autodesa: S'han desat %d fitxers automàticament."
 
 #. initialize the dialog
@@ -5143,7 +5058,7 @@ msgstr "_Horitzontalment"
 
 #: ../plugins/splitwindow.c:374
 msgid "_Vertically"
-msgstr ""
+msgstr "_Verticalment"
 
 #~ msgid "Command stopped because the current file has no extension."
 #~ msgstr "L'ordre s'ha detingut perquè el fitxer no té extensió."
