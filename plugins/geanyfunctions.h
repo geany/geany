@@ -46,6 +46,8 @@
 	geany_functions->p_document->save_file_as
 #define document_rename_file \
 	geany_functions->p_document->rename_file
+#define document_get_status_color \
+	geany_functions->p_document->get_status_color
 #define editor_get_indent_prefs \
 	geany_functions->p_editor->get_indent_prefs
 #define editor_create_widget \
@@ -58,6 +60,8 @@
 	geany_functions->p_editor->indicator_clear
 #define editor_set_indent_type \
 	geany_functions->p_editor->set_indent_type
+#define editor_get_word_at_pos \
+	geany_functions->p_editor->get_word_at_pos
 #define scintilla_send_message \
 	geany_functions->p_scintilla->send_message
 #define scintilla_new \

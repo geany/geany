@@ -252,6 +252,7 @@ typedef struct DocumentFuncs
 	struct GeanyDocument*	(*index)(gint idx);
 	gboolean	(*save_file_as) (struct GeanyDocument *doc, const gchar *utf8_fname);
 	void		(*rename_file) (struct GeanyDocument *doc, const gchar *new_filename);
+	const GdkColor*	(*get_status_color) (struct GeanyDocument *doc);
 }
 DocumentFuncs;
 
@@ -518,6 +519,7 @@ typedef struct EditorFuncs
 	void	(*indicator_clear) (struct GeanyEditor *editor, gint indic);
 
 	void	(*set_indent_type)(struct GeanyEditor *editor, GeanyIndentType type);
+	gchar*	(*get_word_at_pos) (struct GeanyEditor *editor, gint pos, const gchar *wordchars);
 
 	/* Remember to convert any GeanyDocument or ScintillaObject pointers in any
 	 * appended functions to GeanyEditor pointers. */

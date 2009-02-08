@@ -5,6 +5,14 @@
    Return TRUE if appropriate in the event handlers.
  * plugins/vcdiff.c:
    Fix path quoting problems on Windows.
+ * plugins/geanyfunctions.h, src/document.c, src/document.h,
+   src/editor.c, src/editor.h, src/plugindata.h, src/plugins.c,
+   src/treeviews.c, src/ui_utils.c:
+   Add editor_get_word_at_pos() as a convenient function to retrieve
+   the word at a given position.
+   Make document_get_status_color() returning a const GdkColor.
+   Add editor_get_word_at_pos() and document_get_status_color() to the
+   plugin API.
 
 
 2009-02-08  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

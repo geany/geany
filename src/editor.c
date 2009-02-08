@@ -1248,6 +1248,35 @@ void editor_find_current_word(GeanyEditor *editor, gint pos, gchar *word, size_t
 }
 
 
+/**
+ *  Finds the word at the position specified by @c pos. If any word is found, it is returned.
+ *  Otherwise NULL is returned.
+ *  Additional wordchars can be specified to define what to consider as a word.
+ *
+ *  @param editor The editor to operate on.
+ *  @param pos The position where the word should be read from.
+ *             Maybe @a -1 to use the current position.
+ *  @param wordchars The wordchars to separate words. wordchars mean all characters to count
+ *                   as part of a word. Maybe @a NULL to use the default wordchars,
+ *                   see @ref GEANY_WORDCHARS.
+ *
+ *  @return A newly-allocated string containing the word at the given @c pos or NULL.
+ *          Should be freed when no longer needed.
+ *
+ *  @since 0.16
+ */
+gchar *editor_get_word_at_pos(GeanyEditor *editor, gint pos, const gchar *wordchars)
+{
+	static gchar cword[GEANY_MAX_WORD_LENGTH];
+
+	g_return_val_if_fail(editor != NULL, FALSE);
+
+	read_current_word(editor, pos, cword, sizeof(cword), wordchars, FALSE);
+
+	return (*cword == '\0') ? NULL : g_strdup(cword);
+}
+
+
 /* Read the word up to position @a pos. */
 static const gchar *
 editor_read_word_stem(GeanyEditor *editor, gint pos, const gchar *wordchars)

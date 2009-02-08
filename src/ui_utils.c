@@ -1309,7 +1309,7 @@ void ui_combo_box_prepend_text_once(GtkComboBox *combo, const gchar *text)
  * document status. */
 void ui_update_tab_status(GeanyDocument *doc)
 {
-	GdkColor *color = document_get_status_color(doc);
+	const GdkColor *color = document_get_status_color(doc);
 
 	/* NULL color will reset to default */
 	gtk_widget_modify_fg(doc->priv->tab_label, GTK_STATE_NORMAL, color);

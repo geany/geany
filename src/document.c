@@ -2675,9 +2675,19 @@ static void document_redo_add(GeanyDocument *doc, guint type, gpointer data)
 }
 
 
-/* Gets the status colour of the document, or NULL if default widget
- * colouring should be used. */
-GdkColor *document_get_status_color(GeanyDocument *doc)
+/**
+ *  Gets the status colour of the document, or NULL if default widget colouring should be used.
+ *  Returned colours are red if the document has changes, green is the document is read-only
+ *  or simply NULL if the document is unmodified but writable.
+ *
+ *  @param doc The document to use.
+ *
+ *  @return The colour for the document or NULL if the default colour should be used. The colour
+ *          object is owned by Geany and should not be modified or freed.
+ *
+ *  @since 0.16
+ */
+const GdkColor *document_get_status_color(GeanyDocument *doc)
 {
 	static GdkColor red = {0, 0xFFFF, 0, 0};
 	static GdkColor green = {0, 0, 0x7FFF, 0};

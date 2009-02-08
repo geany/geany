@@ -318,7 +318,7 @@ void treeviews_openfiles_add(GeanyDocument *doc)
 	GtkTreeIter *iter = &doc->priv->iter;
 	GtkTreeIter *parent = get_doc_parent(doc);
 	gchar *basename;
-	GdkColor *color = document_get_status_color(doc);
+	const GdkColor *color = document_get_status_color(doc);
 
 	gtk_tree_store_append(store_openfiles, iter, parent);
 
@@ -363,7 +363,7 @@ void treeviews_openfiles_update(GeanyDocument *doc)
 	if (utils_str_equal(fname, DOC_FILENAME(doc)))
 	{
 		/* just update color */
-		GdkColor *color = document_get_status_color(doc);
+		const GdkColor *color = document_get_status_color(doc);
 
 		gtk_tree_store_set(store_openfiles, iter, DOCUMENTS_COLOR, color, -1);
 	}

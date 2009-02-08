@@ -137,7 +137,8 @@ static DocumentFuncs doc_funcs = {
 	&document_close,
 	&document_index,
 	&document_save_file_as,
-	&document_rename_file
+	&document_rename_file,
+	&document_get_status_color
 };
 
 static EditorFuncs editor_funcs = {
@@ -146,7 +147,8 @@ static EditorFuncs editor_funcs = {
 	&editor_indicator_set_on_range,
 	&editor_indicator_set_on_line,
 	&editor_indicator_clear,
-	&editor_set_indent_type
+	&editor_set_indent_type,
+	&editor_get_word_at_pos
 };
 
 static ScintillaFuncs scintilla_funcs = {
@@ -1331,7 +1333,10 @@ void plugin_add_toolbar_item(GeanyPlugin *plugin, GtkToolItem *item)
  *  This is necessary if you register new GTypes in your plugin, e.g. when using own classes
  *  using the GObject system.
  *
- * @param plugin Must be @ref geany_plugin. */
+ * @param plugin Must be @ref geany_plugin.
+ *
+ *  @since 0.16
+ */
 void plugin_module_make_resident(GeanyPlugin *plugin)
 {
 	g_return_if_fail(plugin);

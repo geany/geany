@@ -28,6 +28,7 @@
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
 
+/** Default character set to define which characters shoud be treated as part of a word. */
 #define GEANY_WORDCHARS					"_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 #define GEANY_MAX_WORD_LENGTH			192
 
@@ -216,6 +217,8 @@ void editor_snippets_free(void);
 
 void editor_find_current_word(GeanyEditor *editor, gint pos, gchar *word, size_t wordlen,
 	const gchar *wc);
+
+gchar *editor_get_word_at_pos(GeanyEditor *editor, gint pos, const gchar *wordchars);
 
 gchar *editor_get_default_selection(GeanyEditor *editor, gboolean use_current_word, const gchar *wordchars);
 
