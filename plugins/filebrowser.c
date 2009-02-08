@@ -605,7 +605,10 @@ static void on_tree_selection_changed(GtkTreeSelection *selection, gpointer data
 static gboolean on_button_press(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
 	if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)
+	{
 		on_open_clicked(NULL, NULL);
+		return TRUE;
+	}
 	else if (event->button == 3)
 	{
 		static GtkWidget *popup_menu = NULL;
@@ -613,8 +616,8 @@ static gboolean on_button_press(GtkWidget *widget, GdkEventButton *event, gpoint
 		if (popup_menu == NULL)
 			popup_menu = create_popup_menu();
 
-		gtk_menu_popup(GTK_MENU(popup_menu), NULL, NULL, NULL, NULL,
-			event->button, event->time);
+		gtk_menu_popup(GTK_MENU(popup_menu), NULL, NULL, NULL, NULL, event->button, event->time);
+		/* don't return TRUE here, unless the selection won't be changed */
 	}
 	return FALSE;
 }
@@ -626,12 +629,30 @@ static gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer dat
 		|| event->keyval == GDK_ISO_Enter
 		|| event->keyval == GDK_KP_Enter
 		|| event->keyval == GDK_space)
+	{
 		on_open_clicked(NULL, NULL);
+		return TRUE;
+	}
 
 	if ((event->keyval == GDK_Up ||
 		event->keyval == GDK_KP_Up) &&
 		(event->state & GDK_MOD1_MASK))	/* FIXME: Alt-Up doesn't seem to work! */
+	{
 		on_go_up();
+		return TRUE;
+	}
+
+	if ((event->keyval == GDK_F10 && event->state & GDK_SHIFT_MASK) || event->keyval == GDK_Menu)
+	{
+		GdkEventButton button_event;
+
+		button_event.time = event->time;
+		button_event.button = 3;
+
+		on_button_press(widget, &button_event, data);
+		return TRUE;
+	}
+
 	return FALSE;
 }
 
