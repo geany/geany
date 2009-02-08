@@ -3,6 +3,7 @@
  *
  *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
  *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2009      Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -2249,8 +2250,7 @@ static void auto_table(GeanyEditor *editor, gint pos)
 		indent_str = "\t";
 
 	table = g_strconcat("\n", indent_str, "<tr>\n",
-						indent_str, indent_str, "<td>\n",
-						indent_str, indent_str, "</td>\n",
+						indent_str, indent_str, "<td> </td>\n",
 						indent_str, "</tr>\n",
 						NULL);
 	editor_insert_text_block(editor, table, pos, -1,
