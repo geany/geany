@@ -16,6 +16,9 @@
  * src/vte.c, plugins/filebrowser.c:
    Don't follow the path of the document if the document has not an
    absolute file path.
+ * src/msgwindow.c:
+   Really focus the status/compiler/messages window when the
+   corresponding keybinding is used.
 
 
 2009-02-08  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

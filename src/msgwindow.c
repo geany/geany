@@ -1040,6 +1040,9 @@ void msgwin_switch_tab(gint tabnum, gboolean show)
 	switch (tabnum)
 	{
 		case MSG_SCRATCH: widget = ui_lookup_widget(main_widgets.window, "textview_scribble"); break;
+		case MSG_COMPILER: widget = msgwindow.tree_compiler; break;
+		case MSG_STATUS: widget = msgwindow.tree_status; break;
+		case MSG_MESSAGE: widget = msgwindow.tree_msg; break;
 #ifdef HAVE_VTE
 		case MSG_VTE: widget = (vte_info.have_vte) ? vc->vte : NULL; break;
 #endif
