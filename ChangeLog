@@ -3,6 +3,8 @@
  * plugins/filebrowser.c:
    Make Menu key and Shift-F10 working on the filebrowser treeview.
    Return TRUE if appropriate in the event handlers.
+ * plugins/vcdiff.c:
+   Fix path quoting problems on Windows.
 
 
 2009-02-08  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

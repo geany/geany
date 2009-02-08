@@ -196,6 +196,17 @@ static void* find_cmd_env(gint cmd_type, gboolean cmd, const gchar* filename)
 }
 
 
+static gchar *quote_path(const gchar *path)
+{
+#ifdef G_OS_WIN32
+	/* On Windows we need to quote the path in order to handle spaces in paths correctly. */
+	return g_strconcat("\"", path, "\"", NULL);
+#else
+	return g_strdup(path);
+#endif
+}
+
+
 static void* get_cmd_env(gint cmd_type, gboolean cmd, const gchar* filename, int *size)
 {
 	int i;
@@ -231,18 +242,18 @@ static void* get_cmd_env(gint cmd_type, gboolean cmd, const gchar* filename, int
 	{
 		if (argv[i] == DIRNAME)
 		{
-			ret[i] = g_strdup(dir);
+			ret[i] = quote_path(dir);
 		}
 		else if (argv[i] == FILENAME)
 		{
-			ret[i] = g_strdup(filename);
+			ret[i] = quote_path(filename);
 		}
 		else if (argv[i] == BASE_FILENAME)
 		{
-			ret[i] = g_strdup(base_filename);
+			ret[i] = quote_path(base_filename);
 		}
 		else
-			ret[i] = g_strdup(argv[i]);
+			ret[i] = quote_path(argv[i]);
 	}
 
 	*size = len;
@@ -345,7 +356,7 @@ static gchar *make_diff(const gchar *filename, gint cmd)
 		/* CVS dump stuff to stderr when diff nested dirs */
 		if (strcmp(argv[0], "cvs") != 0 && NZV(std_error))
 		{
-			dialogs_show_msgbox(1,
+			dialogs_show_msgbox(GTK_MESSAGE_WARNING,
 				_("%s exited with an error: \n%s."), argv[0], g_strstrip(std_error));
 		}
 		else if (NZV(std_output))
