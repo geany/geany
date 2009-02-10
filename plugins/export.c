@@ -339,7 +339,7 @@ static void on_file_save_dialog_response(GtkDialog *dialog, gint response, gpoin
 static void write_latex_file(GeanyDocument *doc, const gchar *filename, gboolean use_zoom)
 {
 	GeanyEditor *editor = doc->editor;
-	gint i, style = -1, old_style = 0, column = 0;
+	gint i, doc_len, style = -1, old_style = 0, column = 0;
 	gchar c, c_next, *tmp, *date;
 	/* 0 - fore, 1 - back, 2 - bold, 3 - italic, 4 - font size, 5 - used(0/1) */
 	gint styles[STYLE_MAX + 1][MAX_TYPES];
@@ -361,7 +361,8 @@ static void write_latex_file(GeanyDocument *doc, const gchar *filename, gboolean
 
 	/* read the document and write the LaTeX code */
 	body = g_string_new("");
-	for (i = 0; i < sci_get_length(doc->editor->sci); i++)
+	doc_len = sci_get_length(doc->editor->sci);
+	for (i = 0; i < doc_len; i++)
 	{
 		style = sci_get_style_at(doc->editor->sci, i);
 		c = sci_get_char_at(doc->editor->sci, i);
@@ -546,7 +547,7 @@ static void write_latex_file(GeanyDocument *doc, const gchar *filename, gboolean
 static void write_html_file(GeanyDocument *doc, const gchar *filename, gboolean use_zoom)
 {
 	GeanyEditor *editor = doc->editor;
-	gint i, style = -1, old_style = 0, column = 0;
+	gint i, doc_len, style = -1, old_style = 0, column = 0;
 	gchar c, c_next, *date;
 	/* 0 - fore, 1 - back, 2 - bold, 3 - italic, 4 - font size, 5 - used(0/1) */
 	gint styles[STYLE_MAX + 1][MAX_TYPES];
@@ -580,7 +581,8 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename, gboolean 
 
 	/* read the document and write the HTML body */
 	body = g_string_new("");
-	for (i = 0; i < sci_get_length(doc->editor->sci); i++)
+	doc_len = sci_get_length(doc->editor->sci);
+	for (i = 0; i < doc_len; i++)
 	{
 		style = sci_get_style_at(doc->editor->sci, i);
 		c = sci_get_char_at(doc->editor->sci, i);

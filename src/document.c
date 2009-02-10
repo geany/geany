@@ -1073,13 +1073,14 @@ static GeanyIndentType detect_indent_type(GeanyEditor *editor)
 {
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
 	ScintillaObject *sci = editor->sci;
-	gint line;
+	guint line, line_count;
 	gsize tabs = 0, spaces = 0;
 
 	if (detect_tabs_and_spaces(editor))
 		return GEANY_INDENT_TYPE_BOTH;
 
-	for (line = 0; line < sci_get_line_count(sci); line++)
+	line_count = sci_get_line_count(sci);
+	for (line = 0; line < line_count; line++)
 	{
 		gint pos = sci_get_position_from_line(sci, line);
 		gchar c;
@@ -2758,10 +2759,10 @@ GeanyDocument *document_clone(GeanyDocument *old_doc, const gchar *utf8_filename
  * @return TRUE if all files were saved or had their changes discarded. */
 gboolean document_account_for_unsaved(void)
 {
-	gint p;
-	guint i, len = documents_array->len;
+	guint i, p, page_count, len = documents_array->len;
 
-	for (p = 0; p < gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)); p++)
+	page_count = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+	for (p = 0; p < page_count; p++)
 	{
 		GeanyDocument *doc = document_get_from_page(p);
 

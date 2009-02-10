@@ -323,7 +323,8 @@ static void cc_show_dialog_custom_commands(void)
 	}
 	else
 	{
-		for (i = 0; i < g_strv_length(ui_prefs.custom_commands); i++)
+		guint len = g_strv_length(ui_prefs.custom_commands);
+		for (i = 0; i < len; i++)
 		{
 			if (ui_prefs.custom_commands[i][0] == '\0')
 				continue; /* skip empty fields */
@@ -515,9 +516,10 @@ void tools_create_insert_custom_command_menu_items(void)
 	}
 	else
 	{
-		guint i;
+		guint i, len;
 		gint idx = 0;
-		for (i = 0; i < g_strv_length(ui_prefs.custom_commands); i++)
+		len = g_strv_length(ui_prefs.custom_commands);
+		for (i = 0; i < len; i++)
 		{
 			if (ui_prefs.custom_commands[i][0] != '\0') /* skip empty fields */
 			{

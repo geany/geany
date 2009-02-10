@@ -1154,10 +1154,11 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		}
 		case GEANY_RESPONSE_REPLACE_IN_SESSION:
 		{
-			guint n, count = 0;
+			guint n, page_count, count = 0;
 
 			/* replace in all documents following notebook tab order */
-			for (n = 0; (gint) n < gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)); n++)
+			page_count = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+			for (n = 0; n < page_count; n++)
 			{
 				GeanyDocument *tmp_doc = document_get_from_page(n);
 

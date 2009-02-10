@@ -387,11 +387,12 @@ void treeviews_openfiles_update(GeanyDocument *doc)
 
 void treeviews_openfiles_update_all()
 {
-	guint i;
+	guint i, page_count;
 	GeanyDocument *doc;
 
 	gtk_tree_store_clear(store_openfiles);
-	for (i = 0; i < (guint) gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)); i++)
+	page_count = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+	for (i = 0; i < page_count; i++)
 	{
 		doc = document_get_from_page(i);
 		if (doc == NULL)

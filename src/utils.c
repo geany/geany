@@ -933,11 +933,12 @@ gchar **utils_read_file_in_array(const gchar *filename)
  * Replaces \\, \r, \n, \t and \uXXX by their real counterparts */
 gboolean utils_str_replace_escape(gchar *string)
 {
-	gsize i, j;
+	gsize i, j, len;
 	guint unicodechar;
 
 	j = 0;
-	for (i = 0; i < strlen(string); i++)
+	len = strlen(string);
+	for (i = 0; i < len; i++)
 	{
 		if (string[i]=='\\')
 		{

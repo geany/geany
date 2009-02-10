@@ -151,7 +151,7 @@ static void sc_fill_store(GtkTreeStore *store)
 {
 	GtkTreeIter iter;
 	GtkTreeIter *parent_iter = NULL;
-	guint i;
+	guint i, len;
 
 	gchar *chars[][2] =
 		{
@@ -416,7 +416,8 @@ static void sc_fill_store(GtkTreeStore *store)
 			{ "ƒ", "&fnof;" },
 		};
 
-	for (i = 0; i < G_N_ELEMENTS(chars); i++)
+	len = G_N_ELEMENTS(chars);
+	for (i = 0; i < len; i++)
 	{
 		if (chars[i][1] == NULL)
 		{	/* add a category */

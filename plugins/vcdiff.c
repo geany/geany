@@ -180,9 +180,10 @@ static gboolean check_filename(const gchar* filename, VC_RECORD *vc)
 
 static void* find_cmd_env(gint cmd_type, gboolean cmd, const gchar* filename)
 {
-	guint i;
+	guint i, len;
 
-	for (i = 0; i < G_N_ELEMENTS(VC); i++)
+	len = G_N_ELEMENTS(VC);
+	for (i = 0; i < len; i++)
 	{
 		if (check_filename(filename, &VC[i]))
 		{

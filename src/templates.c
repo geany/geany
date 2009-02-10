@@ -560,7 +560,7 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 	gchar *tmp;
 	gchar *prefix;
 	gchar **lines;
-	guint i;
+	guint i, len;
 
 	/* TODO the following switch could be replaced by some intelligent code which reads
 	 * frame_start, frame_end and line_prefix from the filetype definition files */
@@ -675,7 +675,8 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 
 	/* add line_prefix to every line of comment_text */
 	lines = g_strsplit(comment_text, "\n", -1);
-	for (i = 0; i < (g_strv_length(lines) - 1); i++)
+	len = g_strv_length(lines) - 1;
+	for (i = 0; i < len; i++)
 	{
 		tmp = lines[i];
 		lines[i] = g_strconcat(prefix, tmp, NULL);
