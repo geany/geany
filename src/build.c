@@ -1274,6 +1274,7 @@ static void show_includes_arguments_tex(void)
 			GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
 
 		entries[0] = gtk_entry_new();
+		ui_entry_add_clear_icon(entries[0]);
 		gtk_entry_set_width_chars(GTK_ENTRY(entries[0]), 30);
 		if (ft->programs->compiler)
 		{
@@ -1293,6 +1294,7 @@ static void show_includes_arguments_tex(void)
 			GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
 
 		entries[1] = gtk_entry_new();
+		ui_entry_add_clear_icon(entries[1]);
 		gtk_entry_set_width_chars(GTK_ENTRY(entries[1]), 30);
 		if (ft->programs->linker)
 		{
@@ -1312,6 +1314,7 @@ static void show_includes_arguments_tex(void)
 			GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
 
 		entries[2] = gtk_entry_new();
+		ui_entry_add_clear_icon(entries[2]);
 		gtk_entry_set_width_chars(GTK_ENTRY(entries[2]), 30);
 		if (ft->programs->run_cmd)
 		{
@@ -1331,6 +1334,7 @@ static void show_includes_arguments_tex(void)
 			GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
 
 		entries[3] = gtk_entry_new();
+		ui_entry_add_clear_icon(entries[3]);
 		gtk_entry_set_width_chars(GTK_ENTRY(entries[3]), 30);
 		if (ft->programs->run_cmd2)
 		{
@@ -1456,6 +1460,7 @@ static void show_includes_arguments_gen(void)
 			GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
 
 		entries[0] = gtk_entry_new();
+		ui_entry_add_clear_icon(entries[0]);
 		gtk_entry_set_width_chars(GTK_ENTRY(entries[0]), 30);
 		if (ft->programs->compiler)
 		{
@@ -1477,6 +1482,7 @@ static void show_includes_arguments_gen(void)
 			GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
 
 		entries[1] = gtk_entry_new();
+		ui_entry_add_clear_icon(entries[1]);
 		gtk_entry_set_width_chars(GTK_ENTRY(entries[1]), 30);
 		if (ft->programs->linker)
 		{
@@ -1498,6 +1504,7 @@ static void show_includes_arguments_gen(void)
 			GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
 
 		entries[2] = gtk_entry_new();
+		ui_entry_add_clear_icon(entries[2]);
 		gtk_entry_set_width_chars(GTK_ENTRY(entries[2]), 30);
 		if (ft->programs->run_cmd)
 		{

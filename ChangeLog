@@ -1,3 +1,11 @@
+2009-02-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/build.c, src/dialogs.c, src/prefs.c, src/printing.c,
+   src/project.c, src/search.c, src/tools.c, src/vte.c:
+   Add a clear icon to the used text entries all over the place
+   (will be available with GTK >= 2.16).
+
+
 2009-02-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * plugins/filebrowser.c:

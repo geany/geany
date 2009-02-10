@@ -141,6 +141,7 @@ void project_new()
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	e->name = gtk_entry_new();
+	ui_entry_add_clear_icon(e->name);
 	gtk_entry_set_max_length(GTK_ENTRY(e->name), MAX_NAME_LEN);
 
 	ui_table_add_row(GTK_TABLE(table), 0, label, e->name, NULL);
@@ -149,6 +150,7 @@ void project_new()
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	e->file_name = gtk_entry_new();
+	ui_entry_add_clear_icon(e->file_name);
 	gtk_entry_set_width_chars(GTK_ENTRY(e->file_name), 30);
 	button = gtk_button_new();
 	g_signal_connect(button, "clicked", G_CALLBACK(on_file_save_button_clicked), e);
@@ -164,6 +166,7 @@ void project_new()
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	e->base_path = gtk_entry_new();
+	ui_entry_add_clear_icon(e->base_path);
 	ui_widget_set_tooltip_text(e->base_path,
 		_("Base directory of all files that make up the project. "
 		"This can be a new path, or an existing directory tree. "
@@ -363,6 +366,9 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	gtk_window_set_destroy_with_parent(GTK_WINDOW(e->dialog), TRUE);
 	gtk_widget_set_name(e->dialog, "GeanyDialogProject");
 
+	ui_entry_add_clear_icon(ui_lookup_widget(e->dialog, "spin_indent_width"));
+	ui_entry_add_clear_icon(ui_lookup_widget(e->dialog, "spin_tab_width"));
+
 	table = gtk_table_new(6, 2, FALSE);
 	gtk_container_set_border_width(GTK_CONTAINER(table), 6);
 	gtk_table_set_row_spacings(GTK_TABLE(table), 5);
@@ -375,6 +381,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	gtk_misc_set_alignment(GTK_MISC(label), -1, 0);
 
 	e->name = gtk_entry_new();
+	ui_entry_add_clear_icon(e->name);
 	gtk_entry_set_max_length(GTK_ENTRY(e->name), MAX_NAME_LEN);
 	gtk_table_attach(GTK_TABLE(table), e->name, 1, 2, 0, 1,
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
@@ -387,6 +394,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	gtk_misc_set_alignment(GTK_MISC(label), -1, 0);
 
 	e->file_name = gtk_entry_new();
+	ui_entry_add_clear_icon(e->file_name);
 	gtk_editable_set_editable(GTK_EDITABLE(e->file_name), FALSE);	/* read-only */
 	gtk_table_attach(GTK_TABLE(table), e->file_name, 1, 2, 1, 2,
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
@@ -416,6 +424,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	gtk_misc_set_alignment(GTK_MISC(label), -1, 0);
 
 	e->base_path = gtk_entry_new();
+	ui_entry_add_clear_icon(e->base_path);
 	ui_widget_set_tooltip_text(e->base_path,
 		_("Base directory of all files that make up the project. "
 		"This can be a new path, or an existing directory tree. "
@@ -438,6 +447,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	gtk_misc_set_alignment(GTK_MISC(label), -1, 0);
 
 	e->run_cmd = gtk_entry_new();
+	ui_entry_add_clear_icon(e->run_cmd);
 	ui_widget_set_tooltip_text(e->run_cmd,
 		_("Command-line to run in the project base directory. "
 		"Options can be appended to the command. "

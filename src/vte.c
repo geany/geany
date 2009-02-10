@@ -781,6 +781,7 @@ void vte_append_preferences_tab(void)
 
 		spin_scrollback_adj = gtk_adjustment_new(500, 0, 5000, 1, 10, 0);
 		spin_scrollback = gtk_spin_button_new(GTK_ADJUSTMENT(spin_scrollback_adj), 1, 0);
+		ui_entry_add_clear_icon(spin_scrollback);
 		gtk_table_attach(GTK_TABLE(table), spin_scrollback, 1, 2, 3, 4,
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
@@ -795,6 +796,7 @@ void vte_append_preferences_tab(void)
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 
 		entry_shell = gtk_entry_new();
+		ui_entry_add_clear_icon(entry_shell);
 		ui_widget_set_tooltip_text(entry_shell, _("Sets the path to the shell which should be started inside the terminal emulation"));
 
 		button_shell = gtk_button_new();

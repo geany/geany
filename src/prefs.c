@@ -1456,6 +1456,34 @@ void prefs_show_dialog(void)
 		gtk_box_pack_start(GTK_BOX(ui_lookup_widget(ui_widgets.prefs_dialog,
 			"label_project_indent_warning")), label, FALSE, TRUE, 5);
 
+		/* add the clear icon to GtkEntry widgets in the dialog */
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "startup_path_entry"));
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "project_file_path_entry"));
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "spin_line_break"));
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_toggle_mark"));
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "spin_indent_width"));
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "spin_tab_width"));
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "spin_symbol_complete_chars"));
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "spin_symbollistheight"));
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "spin_autocompletion_max_entries"));
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "spin_long_line"));
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "spin_mru"));
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "spin_disk_check"));
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_make"));
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_term"));
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_browser"));
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_grep"));
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction"));
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_developer"));
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_initial"));
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_mail"));
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_company"));
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_version"));
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_year"));
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_date"));
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_datetime"));
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_print_external_cmd"));
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_print_dateformat"));
 
 #ifdef HAVE_VTE
 		vte_append_preferences_tab();

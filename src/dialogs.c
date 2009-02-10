@@ -322,6 +322,7 @@ static GtkWidget *add_file_open_extra_widget()
 	/* line 2 with filename entry and filetype combo */
 	file_entry = gtk_entry_new();
 	gtk_widget_show(file_entry);
+	ui_entry_add_clear_icon(file_entry);
 	/*gtk_editable_set_editable(GTK_EDITABLE(file_entry), FALSE);*/
 	gtk_entry_set_activates_default(GTK_ENTRY(file_entry), TRUE);
 	gtk_table_attach(GTK_TABLE(table), file_entry, 0, 1, 1, 2,
@@ -857,12 +858,14 @@ static void add_input_widgets(GtkWidget *dialog, GtkWidget *vbox,
 		GtkWidget *combo = gtk_combo_box_entry_new_text();
 
 		entry = GTK_BIN(combo)->child;
+		ui_entry_add_clear_icon(entry);
 		g_object_set_data(G_OBJECT(dialog), "combo", combo);
 		gtk_container_add(GTK_CONTAINER(vbox), combo);
 	}
 	else
 	{
 		entry = gtk_entry_new();
+		ui_entry_add_clear_icon(entry);
 		gtk_container_add(GTK_CONTAINER(vbox), entry);
 	}
 
@@ -951,6 +954,7 @@ gboolean dialogs_show_input_numeric(const gchar *title, const gchar *label_text,
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 
 	spin = gtk_spin_button_new_with_range(min, max, step);
+	ui_entry_add_clear_icon(spin);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin), *value);
 	g_signal_connect(spin, "activate", G_CALLBACK(on_input_numeric_activate), dialog);
 

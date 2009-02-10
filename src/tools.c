@@ -76,6 +76,7 @@ static void cc_add_command(struct cc_dialog *cc, gint idx)
 	entry = gtk_entry_new();
 	if (idx >= 0)
 		gtk_entry_set_text(GTK_ENTRY(entry), ui_prefs.custom_commands[idx]);
+	ui_entry_add_clear_icon(entry);
 	gtk_entry_set_max_length(GTK_ENTRY(entry), 255);
 	gtk_entry_set_width_chars(GTK_ENTRY(entry), 30);
 	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
