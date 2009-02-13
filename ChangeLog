@@ -5,6 +5,8 @@
    messages windows, instead use the default GTK foreground colour.
  * src/prefs.c:
    Don't use the clear icon inside any spin buttons in the prefs dialog.
+ * doc/geany.txt, doc/geany.html, doc/images/*:
+   Update docs and images for Geany 0.16.
 
 
 2009-02-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

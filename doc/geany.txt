@@ -11,7 +11,7 @@
 :Authors: Enrico Tröger,
           Nick Treleaven,
           Frank Lanitz
-:Date: $Date$
+:Date: $Date: 2009-02-13 18:45:23 +0100 (Fr, 13. Feb 2009) $
 :Version: |(version)|
 
 Copyright © 2005-2009
@@ -282,7 +282,7 @@ Startup
 
 At startup, Geany loads all files from the last time Geany was
 launched. You can disable this feature in the preferences dialog
-(see `General tab in preferences dialog`_). If you specify some
+(see `General Startup tab in preferences dialog`_). If you specify some
 files on the command line, only these files will be opened, but you
 can find the files from the last session in the file menu under the
 "Recent files" item. By default this contains the last 10 recently
@@ -1345,10 +1345,10 @@ There are also some rarer `Hidden preferences`_.
     comes after the screenshot of that tab.
 
 
-General tab in preferences dialog
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+General Startup tab in preferences dialog
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. image:: ./images/pref_dialog_gen.png
+.. image:: ./images/pref_dialog_gen_startup.png
 
 Startup
 ```````
@@ -1372,6 +1372,61 @@ Save window position and geometry
 Confirm Exit
     Have a dialog pop up to confirm that you really want to quit Geany.
 
+Paths
+`````
+
+Startup path
+    Path to start in when opening or saving files.
+    It must be an absolute path.
+    Leave it blank to use the current working directory.
+
+Project files
+    Path to start in when opening project files.
+
+
+
+General Miscellaneous tab in preferences dialog
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: ./images/pref_dialog_gen_misc.png
+
+Miscellaneous
+`````````````
+
+Beep on errors when compilation has finished
+    Have the computer make a beeping sound when compilation of your program
+    has completed or any errors occurred.
+
+Switch status message list at new message
+    Switch to the status message tab (in the notebook window at the bottom)
+    once a new status message arrives.
+
+Suppress status messages in the status bar
+    Remove all messages from the status bar. The messages are still displayed
+    in the status messages window.
+
+Auto focus widgets (focus follows mouse)
+    Give the focus automatically to widgets below the mouse cursor.
+    This works for the main editor widget, the scribble, the toolbar search field
+    goto line fields and the VTE.
+
+Search
+^^^^^^
+
+Always wrap search and hide the Find dialog
+    Always wrap search around the document and hide the Find dialog after clicking
+    Find Next/Previous.
+
+Use the current word under the cursor for Find dialogs
+    Use current word under the cursor when opening the Find, Find in Files or Replace dialog and
+    there is no selection. When this option is disabled, the search term of the last use of the
+    appropriate Find dialog is used.
+
+Use the current file's directory for Find in Files
+    When opening the Find in Files dialog, set the directory to search to the directory of the current
+    active file. When this option is disabled, the directory of the last use of the Find in Files
+    dialog is used.
+
 Projects
 ````````
 
@@ -1387,45 +1442,6 @@ Store project file inside the project base directory
     In any case, you can easily set the final project file path in the
     *New Project* dialog. This option is just for your convenience to get
     a proper default path.
-
-Miscellaneous
-`````````````
-
-Beep on errors when compilation has finished
-    Have the computer make a beeping sound when compilation of your program
-    has completed or any errors occurred.
-
-.. Switch status message list at new message
-
-.. Suppress status message in the status bar
-
-.. Autofocus widgets (focus follows mouse)
-
-.. Always wrap search and hide the find dialog
-
-Use current word under the cursor for Find dialogs
-    Use the currently selected word as the search text when you open
-    one of the Search dialogs.
-
-Suppress status messages in the status bar
-    Remove all messages from the status bar. The messages are still displayed
-    in the status messages window.
-
-Auto focus widgets (focus follows mouse)
-    Give the focus automatically to widgets below the mouse cursor.
-    This works for the main editor widget, the scribble, the toolbar search field
-    goto line fields and the VTE.
-
-Paths
-`````
-
-Startup path
-    Path to start in when opening or saving files.
-    It must be an absolute path.
-    Leave it blank to use the current working directory.
-
-Project files
-    Path to start in when opening project files.
 
 
 Interface tab in preferences dialog
@@ -1823,28 +1839,13 @@ Recent files list length
 
 Disk check timeout
     The number of seconds to periodically check the current document's
-    file on disk in case it has changed.
+    file on disk in case it has changed. Setting it to 0 will disable
+    this feature.
 
-
-Search tab in preferences dialog
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. image:: ./images/pref_dialog_search.png
-
-
-Always wrap search and hide the Find dialog
-    Always wrap search around the document and hide the Find dialog after clicking
-    Find Next/Previous.
-
-Use the current word under the cursor for Find dialogs
-    Use current word under the cursor when opening the Find, Find in Files or Replace dialog and
-    there is no selection. When this option is disabled, the search term of the last use of the
-    appropriate Find dialog is used.
-
-Use the current file's directory for Find in Files
-    When opening the Find in Files dialog, set the directory to search to the directory of the current
-    active file. When this option is disabled, the directory of the last use of the Find in Files
-    dialog is used.
+    .. note::
+        These checks are only performed on local files. Remote files are
+        not checked for changes due to performance issues
+        (remote files are files in ``~/.gvfs/``).
 
 
 Tools tab in preferences dialog
