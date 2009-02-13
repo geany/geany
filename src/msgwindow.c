@@ -219,14 +219,13 @@ static const GdkColor *get_color(gint msg_color)
 {
 	static const GdkColor dark_red = {0, 65535 / 2, 0, 0};
 	static const GdkColor blue = {0, 0, 0, 0xD000};	/* not too bright ;-) */
-	static const GdkColor black = {0, 0, 0, 0};
 
 	switch (msg_color)
 	{
 		case COLOR_RED: return &color_error;
 		case COLOR_DARK_RED: return &dark_red;
 		case COLOR_BLUE: return &blue;
-		default: return &black;
+		default: return NULL;
 	}
 }
 
