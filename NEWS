@@ -89,6 +89,10 @@ Geany 0.16 (TBA)
       classes, ASCII escaping, character sets containing square
       brackets peculiarities). Adapted from SciTE doc.
 
+    Internationalisation:
+    * Updated translations: bg, ca, cs, de, en_GB, fr, hu, it, ja,
+      pt_BR, sv, ru, tr, vi, zh_CN
+
 
 Geany 0.15 (October 19, 2008)
 
