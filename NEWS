@@ -1,3 +1,55 @@
+Geany 0.16 (TBA)
+
+    Bug fixes:
+    * Fix indenting for Tabs & Spaces mode when inserting snippets.
+    * Fix snippets and smart indent using too much indentation when the
+      line contains whitespace after non-whitespace characters (#2215044).
+    * Fix segfault when showing Find in Files dialog when no documents are
+      open (#2228544).
+    * Fix not switching to 2nd last used document when the last used
+      document has been closed (#1945162).
+
+    General:
+    * Group child tags by their parents in the symbol list for C-like
+      filetypes, Python, Conf (thanks to Conrad Steenberg).
+    * Use a tree for the Documents sidebar, grouped by path.
+    * Add 'Tools->Configuration Files' menu with items to open
+      filetype_extensions.conf and ignore.tags. These files are also
+      reloaded automatically when saved.
+
+    Prefs:
+    * Add Project Indentation prefs, which override the Editor
+      Preferences dialog options. For new projects, these default to
+      the editor indent prefs.
+    * Add an interface pref for whether to hide additional widgets when
+      double-clicking on document notebook tabs (off by default).
+
+    Editor:
+    * Make Ctrl-click go to matching brace if there's no current word.
+    * Make Shift+Mouse wheel scroll the editor view horizontally.
+
+    Filetypes:
+    * Add Vala filetype (thanks to Colomban Wendling).
+    * Update HTML character entities (thanks to Tyler D'Agosta).
+    * Parse restructuredText sections in the order of first-used underline
+      character, which can now be any punctuation character (as per the spec).
+
+    Plugins:
+    * Add Split Window 'Split Vertically' command (thanks to Moritz Barsnick).
+    * Make Version Diff plugin set the indent type for diffs based on the
+      current file's indent type.
+
+    Plugin API:
+    * Generate plugin API header geanyfunctions.h containing macros to
+      avoid having to type the function pointer names manually.
+    * Deprecate pluginmacros.h in favour of geanyfunctions.h.
+
+    Documentation:
+    * Update Scintilla regular expression info for v1.77 (character
+      classes, ASCII escaping, character sets containing square
+      brackets peculiarities). Adapted from SciTE doc.
+
+
 Geany 0.15 (October 19, 2008)
 
     General:
