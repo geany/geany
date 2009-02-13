@@ -16,6 +16,11 @@ Geany 0.16 (TBA)
     * Add 'Tools->Configuration Files' menu with items to open
       filetype_extensions.conf and ignore.tags. These files are also
       reloaded automatically when saved.
+    * Change configuration directory path to $XDG_CONFIG_HOME/geany
+      (most often this is ~/.config/geany).
+    * Allow to specify files on the command line and from remote instances
+      to be URIs (local and with GIO also remote URIs).
+    * Increase minimum required GTK version to 2.8.
 
     Prefs:
     * Add Project Indentation prefs, which override the Editor
@@ -23,10 +28,25 @@ Geany 0.16 (TBA)
       the editor indent prefs.
     * Add an interface pref for whether to hide additional widgets when
       double-clicking on document notebook tabs (off by default).
+    * Add a preference to invert all colours for syntax highlighting.
+    * Add a hidden preference "allow_always_save" to make the Save buttons
+      and menu items always sensitive.
+
+    Interface:
+    * Rework the toolbar: now all elements can be added/removed/reordered
+      using a simple XML file.
+    * Add new toolbar buttons for Cut, Copy, Paste, Delete, Preferences,
+      Close All and Build (including a submenu for Make actions).
+    * Add a progressbar widget to the statusbar to show progress for time
+      consuming actions.
 
     Editor:
     * Make Ctrl-click go to matching brace if there's no current word.
     * Make Shift+Mouse wheel scroll the editor view horizontally.
+    * Make the 'Mark' button for Find highlight the results with rounded boxes
+      instead of marking the whole line.
+    * Add auto-closing of braces, brackets and quotes (Guillaume de Rorthais).
+    * Support multiple %cursor% wildcards in Snippets (Thomas Martitz).
 
     Filetypes:
     * Add Vala filetype (thanks to Colomban Wendling).
@@ -34,15 +54,35 @@ Geany 0.16 (TBA)
     * Parse restructuredText sections in the order of first-used underline
       character, which can now be any punctuation character (as per the spec).
 
+    Windows:
+    * Improve tab close icon size.
+    * Changes to the Windows installer:
+      - The full installer now includes the GTK 2.14 runtime environment.
+      - Register ".geany" as Geany Project File extension.
+      - Install GTK translation files only if installation of translation
+        files were requested (saves about 22 MB otherwise).
+      - Support silent installations.
+
+    Filetypes:
+    * Add new filetypes Ada, CMake, Matlab, NSIS and YAML.
+    * Remove GTK global tags, replace them with C (C99) tags. The GTK tags
+      file is still available for download on the website.
+    * Minor improvements for filetypes CSS, Fortran, FreeBasic, HTML, Tcl
+      and Vala.
+
     Plugins:
     * Add Split Window 'Split Vertically' command (thanks to Moritz Barsnick).
     * Make Version Diff plugin set the indent type for diffs based on the
       current file's indent type.
+    * Minor improvements to the filebrowser plugin
 
     Plugin API:
     * Generate plugin API header geanyfunctions.h containing macros to
       avoid having to type the function pointer names manually.
     * Deprecate pluginmacros.h in favour of geanyfunctions.h.
+    * Add "editor-notify" to the plugin API.
+    * Add new plugin symbol plugin_help() which is called by Geany when the
+      plugin should show its documentation (if any, symbol is optional).
 
     Documentation:
     * Update Scintilla regular expression info for v1.77 (character
