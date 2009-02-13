@@ -3,6 +3,8 @@
  * src/msgwindow.c:
    Don't use a hard coded black foreground colour for the compiler and
    messages windows, instead use the default GTK foreground colour.
+ * src/prefs.c:
+   Don't use the clear icon inside any spin buttons in the prefs dialog.
 
 
 2009-02-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

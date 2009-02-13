@@ -1459,16 +1459,7 @@ void prefs_show_dialog(void)
 		/* add the clear icon to GtkEntry widgets in the dialog */
 		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "startup_path_entry"));
 		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "project_file_path_entry"));
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "spin_line_break"));
 		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_toggle_mark"));
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "spin_indent_width"));
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "spin_tab_width"));
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "spin_symbol_complete_chars"));
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "spin_symbollistheight"));
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "spin_autocompletion_max_entries"));
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "spin_long_line"));
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "spin_mru"));
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "spin_disk_check"));
 		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_make"));
 		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_term"));
 		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_browser"));
