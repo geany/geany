@@ -49,10 +49,14 @@ Geany 0.16 (TBA)
     * Support multiple %cursor% wildcards in Snippets (Thomas Martitz).
 
     Filetypes:
-    * Add Vala filetype (thanks to Colomban Wendling).
+    * Add new filetypes Ada, CMake, Matlab, NSIS, Vala and YAML.
     * Update HTML character entities (thanks to Tyler D'Agosta).
     * Parse restructuredText sections in the order of first-used underline
       character, which can now be any punctuation character (as per the spec).
+    * Remove GTK global tags, replace them with C (C99) tags. The GTK tags
+      file is still available for download on the website.
+    * Minor improvements for filetypes CSS, Fortran, FreeBasic, HTML, Tcl
+      and Vala.
 
     Windows:
     * Improve tab close icon size.
@@ -62,13 +66,6 @@ Geany 0.16 (TBA)
       - Install GTK translation files only if installation of translation
         files were requested (saves about 22 MB otherwise).
       - Support silent installations.
-
-    Filetypes:
-    * Add new filetypes Ada, CMake, Matlab, NSIS and YAML.
-    * Remove GTK global tags, replace them with C (C99) tags. The GTK tags
-      file is still available for download on the website.
-    * Minor improvements for filetypes CSS, Fortran, FreeBasic, HTML, Tcl
-      and Vala.
 
     Plugins:
     * Add Split Window 'Split Vertically' command (thanks to Moritz Barsnick).
