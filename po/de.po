@@ -1424,11 +1424,11 @@ msgstr "_Auftreten im Dokument finden"
 
 #: ../src/interface.c:2055
 msgid "Go to _Tag Definition"
-msgstr "Gehe zur _Tag Definition"
+msgstr "Gehe zur _Tagdefinition"
 
 #: ../src/interface.c:2059
 msgid "Go to T_ag Declaration"
-msgstr "Gehe zur T_ag Deklaration"
+msgstr "Gehe zur T_agdeklaration"
 
 #: ../src/interface.c:2063
 msgid "Conte_xt Action"
@@ -1598,7 +1598,7 @@ msgstr ""
 
 #: ../src/interface.c:2819
 msgid "Use the current file's directory for Find in Files"
-msgstr "Verzeichnis der aktuellen für »In Dateien suchen« benutzen"
+msgstr "Verzeichnis der aktuellen Datei für »In Dateien suchen« benutzen"
 
 #: ../src/interface.c:2823
 msgid "<b>Search</b>"
@@ -2342,7 +2342,7 @@ msgstr "<b>Speichern</b>"
 
 #: ../src/interface.c:3943
 msgid "Recent files list length:"
-msgstr "Anzahl der »Zuletzt geöffneten Dateien"
+msgstr "Anzahl der »Zuletzt geöffneten Dateien«"
 
 #: ../src/interface.c:3957
 msgid "Specifies the number of files which are stored in the Recent files list"
@@ -2903,11 +2903,11 @@ msgstr "Zur vorherigen Markierung springen"
 
 #: ../src/keybindings.c:378
 msgid "Go to Tag Definition"
-msgstr "Gehe zur Tag Definition"
+msgstr "Gehe zur Tagdefinition"
 
 #: ../src/keybindings.c:380
 msgid "Go to Tag Declaration"
-msgstr "Gehe zur Tag Deklaration"
+msgstr "Gehe zur Tagdeklaration"
 
 #: ../src/keybindings.c:382
 msgid "Go to Start of Line"
@@ -3822,7 +3822,7 @@ msgstr "Konnte Verzeichnis nicht öffnen (%s)."
 
 #: ../src/search.c:1534
 msgid "Search failed (see Help->Debug Messages for details)."
-msgstr "Suche fehlgeschlagen (Sie finde Details in »Hilfe -> Debug Meldungen«)."
+msgstr "Suche fehlgeschlagen (Sie finden Details in »Hilfe -> Debug Meldungen«)."
 
 #: ../src/search.c:1555
 #, c-format
