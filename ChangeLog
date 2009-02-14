@@ -1,3 +1,9 @@
+2009-02-14  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * doc/plugins.dox:
+   Add a plugin howto to the plugin API docs, written by Frank.
+
+
 2009-02-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/msgwindow.c:
