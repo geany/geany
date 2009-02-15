@@ -33,6 +33,7 @@ EXTRA_DIST = \
 	geany.spec \
 	geany.glade \
 	geany.gladep \
+	ChangeLog.pre-0-17 \
 	HACKING \
 	README.I18N \
 	README.Packagers \
