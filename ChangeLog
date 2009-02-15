@@ -3,6 +3,7 @@
  * scitilla/LexHTML.cxx:
    Backport a change from Scintilla CVS to fix wrong folding of comments
    in HTML/XML lexer (Scintilla #2532774, thanks to Jason Oster).
+ * New release: Geany 0.16 "Argon".
 
 
 2009-02-14  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

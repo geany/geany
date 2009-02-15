@@ -11,7 +11,7 @@
 :Authors: Enrico Tröger,
           Nick Treleaven,
           Frank Lanitz
-:Date: $Date: 2009-02-13 18:45:23 +0100 (Fr, 13. Feb 2009) $
+:Date: $Date$
 :Version: |(version)|
 
 Copyright © 2005-2009
