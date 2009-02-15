@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 dnl $Id$
 
 AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(geany, 0.16)
+AM_INIT_AUTOMAKE(geany, 0.17)
 
 AM_CONFIG_HEADER(config.h)
 

@@ -1,3 +1,6 @@
 2009-02-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * ChangeLog, Makefile.am: Rotate ChangeLog.
+ * configure.in, geany.nsi, geany_private.rc, win32-config.h,
+   wscript, doc/geany.txt, doc/geany.html, src/geany.h:
+   Post-release version bump.

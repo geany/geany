@@ -44,7 +44,7 @@
  * listed in the documentation should not be changed */
 #define GEANY_FILEDEFS_SUBDIR			"filedefs"
 #define GEANY_TEMPLATES_SUBDIR			"templates"
-#define GEANY_CODENAME					"Argon"
+#define GEANY_CODENAME					"Wessex"
 #define GEANY_HOMEPAGE					"http://www.geany.org/"
 #define GEANY_USE_WIN32_DIALOG			0
 #define GEANY_STRING_UNTITLED			_("untitled")
