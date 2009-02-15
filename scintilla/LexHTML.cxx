@@ -855,7 +855,7 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 				state = SCE_H_SGML_COMMAND; // wait for a pending command
 			}
 			// fold whole tag (-- when closing the tag)
-			if (foldHTMLPreprocessor)
+			if (foldHTMLPreprocessor || (state == SCE_H_COMMENT))
 				levelCurrent++;
 			continue;
 		}
