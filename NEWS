@@ -85,6 +85,7 @@ Geany 0.16 (February 15, 2009)
     * Update Scintilla regular expression info for v1.77 (character
       classes, ASCII escaping, character sets containing square
       brackets peculiarities). Adapted from SciTE doc.
+    * Complete 'Hello World' Plugin Howto.
 
     Internationalisation:
     * Updated translations: bg, ca, cs, de, en_GB, fr, hu, it, ja,
