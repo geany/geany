@@ -391,6 +391,12 @@ static gint compare_symbol(const TMTag *tag_a, const TMTag *tag_b)
 	if (tag_a == NULL || tag_b == NULL)
 		return 0;
 
+	if (tag_a->name == NULL)
+        return -(tag_a->name != tag_b->name);
+
+	if (tag_b->name == NULL)
+        return tag_a->name != tag_b->name;
+
 	ret = strcmp(tag_a->name, tag_b->name);
 	if (ret == 0)
 	{
