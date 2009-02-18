@@ -3,6 +3,7 @@
  * src/symbols.c:
    Fix a possible crash when comparing symbol names
    (could be related to Ubuntu bug #147151).
+   Fix broken symbol list tooltips when tag names contain ampersands.
 
 
 2009-02-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

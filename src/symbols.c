@@ -898,6 +898,9 @@ static gchar *get_symbol_tooltip(GeanyDocument *doc, const TMTag *tag)
 			encodings_convert_to_utf8_from_charset(utf8_name, (gsize) -1, doc->encoding, TRUE));
 	}
 
+	if (utf8_name != NULL)
+		setptr(utf8_name, g_markup_escape_text(utf8_name, -1));
+
 	return utf8_name;
 }
 
