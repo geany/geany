@@ -29,6 +29,10 @@
 #ifndef GEANY_UTILS_H
 #define GEANY_UTILS_H 1
 
+
+#include <time.h>
+
+
 /** Returns: TRUE if @a ptr points to a non-zero value. */
 #define NZV(ptr) \
 	((ptr) && (ptr)[0])
