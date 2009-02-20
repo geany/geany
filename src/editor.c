@@ -1733,7 +1733,7 @@ void editor_auto_latex(GeanyEditor *editor, gint pos)
 			construct = g_strdup_printf("%s\\end%s{%s}", eol, full_cmd, env);
 
 			SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
-			sci_goto_pos(sci, pos + 1, TRUE);
+			sci_goto_pos(sci,pos, TRUE);
 			g_free(construct);
 			g_free(eol);
 		}
