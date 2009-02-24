@@ -31,6 +31,41 @@ splitwindow_la_LDFLAGS   = -module -avoid-version
 
 if PLUGINS
 
+if MINGW
+# build Geany for Windows on non-Windows systems (cross-compile)
+# (this is a little hack'ish and surely can be improved)
+DLL_LD_FLAGS = -module -avoid-version
+MINGW_CFLAGS = \
+			-DGEANY_DATADIR=\"data\" \
+			-DHAVE_CONFIG_H \
+			-I$(top_srcdir) \
+			-I$(top_srcdir)/src \
+			-I$(top_srcdir)/tagmanager/include \
+			-I$(top_srcdir)/scintilla/include \
+			$(GTK_CFLAGS) \
+			$(PLUGIN_CFLAGS)
+
+.PHONY: all clean
+
+all-local: \
+	classbuilder.dll \
+	htmlchars.dll \
+	export.dll \
+	vcdiff.dll \
+	saveactions.dll \
+	filebrowser.dll
+# Split Window is broken on Windows
+#	splitwindow.dll
+
+.c.dll:
+	$(CC) $(MINGW_CFLAGS) -o $@.o -c $<
+	$(CC) -shared $@.o $(GTK_LIBS) $(DLL_LD_FLAGS) -o $@
+
+clean:
+	rm -f *.o *.dll
+
+else
+
 # Plugins to be installed
 plugin_LTLIBRARIES = \
 	classbuilder.la \
@@ -64,6 +99,7 @@ saveactions_la_LIBADD   = $(GTK_LIBS)
 filebrowser_la_LIBADD   = $(GTK_LIBS)
 splitwindow_la_LIBADD   = $(GTK_LIBS)
 
+endif # MINGW
 endif # PLUGINS
 
 AM_CPPFLAGS = \
