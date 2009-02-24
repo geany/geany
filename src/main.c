@@ -1056,6 +1056,12 @@ gint main(gint argc, gchar **argv)
 	}
 #endif
 
+#ifdef G_OS_WIN32
+	/* On Windows, change the working directory to the Geany installation path to not lock
+	 * the directory of a file passed as command line argument (see bug #2626124). */
+	win32_set_working_directory(g_win32_get_package_installation_directory(NULL, NULL));
+#endif
+
 	/*g_timeout_add(0, (GSourceFunc)destroyapp, NULL);*/ /* useful for start time tests*/
 	gtk_main();
 	return 0;

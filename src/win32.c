@@ -703,7 +703,7 @@ static void debug_setup_console()
 }
 
 
-void win32_init_debug_code()
+void win32_init_debug_code(void)
 {
 	if (app->debug_mode)
 	{
@@ -716,7 +716,7 @@ void win32_init_debug_code()
 }
 
 
-gchar *win32_get_hostname()
+gchar *win32_get_hostname(void)
 {
 	gchar hostname[100];
 	DWORD size = sizeof(hostname);
@@ -1183,5 +1183,9 @@ gchar *win32_get_shortcut_target(const gchar *file_name)
 		return path;
 }
 
+void win32_set_working_directory(const gchar *dir)
+{
+	SetCurrentDirectory(dir);
+}
 
 #endif

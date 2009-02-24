@@ -6,6 +6,9 @@
  * src/msgwindow.c:
    Fix missing NULL checks when reading the colour value of compiler
    output messages.
+ * src/main.c, src/win32.c, src/win32.h:
+   On Windows, change the working directory to the Geany installation
+   path at startup to avoid unwanted directory locking(closes #2626124).
 
 
 2009-02-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

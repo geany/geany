@@ -48,9 +48,11 @@ gchar *win32_show_project_folder_dialog(GtkWidget *parent, const gchar *title,
 
 gint win32_check_write_permission(const gchar *dir);
 
-void win32_init_debug_code();
+void win32_init_debug_code(void);
 
-gchar *win32_get_hostname();
+void win32_set_working_directory(const gchar *dir);
+
+gchar *win32_get_hostname(void);
 
 gboolean win32_get_exit_status(GPid child_pid);
 
