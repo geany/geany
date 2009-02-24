@@ -3,6 +3,9 @@
  * configure.in, plugins/Makefile.am:
    Enable socket support when cross-compiling.
    Enable plugin compilation when cross-compiling.
+ * src/msgwindow.c:
+   Fix missing NULL checks when reading the colour value of compiler
+   output messages.
 
 
 2009-02-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

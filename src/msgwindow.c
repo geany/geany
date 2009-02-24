@@ -586,9 +586,10 @@ gboolean msgwin_goto_compiler_file_line()
 	{
 		/* if the item is not coloured red, it's not an error line */
 		gtk_tree_model_get(model, &iter, 0, &color, -1);
-		if (! gdk_color_equal(color, &color_error))
+		if (color == NULL || ! gdk_color_equal(color, &color_error))
 		{
-			gdk_color_free(color);
+			if (color != NULL)
+				gdk_color_free(color);
 			return FALSE;
 		}
 		gdk_color_free(color);
