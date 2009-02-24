@@ -235,9 +235,6 @@ void encodings_select_radio_item(const gchar *charset)
 {
 	gint i;
 
-	if (ignore_callback)
-		return;
-
 	g_return_if_fail(charset != NULL);
 
 	i = 0;
