@@ -20,6 +20,9 @@
    not the current one). This should speed up file saving a little bit,
    especially with remote files.
    Remove now unnecessary calls to tm_workspace_update().
+ * src/printing.c:
+   Allow an empty value for the date format in the print settings to
+   omit the date/time string in the print header.
 
 
 2009-02-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

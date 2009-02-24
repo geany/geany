@@ -275,12 +275,15 @@ static void add_page_header(PangoLayout *layout, cairo_t *cr, DocInfo *dinfo, gi
 	g_free(data);
 
 	datetime = utils_get_date_time(printing_prefs.page_header_datefmt, &(dinfo->print_time));
-	data = g_strdup_printf("<b>%s</b>", datetime);
-	pango_layout_set_markup(layout, data, -1);
-	pango_layout_set_alignment(layout, PANGO_ALIGN_RIGHT);
-	cairo_move_to(cr, 2, dinfo->line_height * 1.5);
-	pango_cairo_show_layout(cr, layout);
-	g_free(data);
+	if (NZV(datetime))
+	{
+		data = g_strdup_printf("<b>%s</b>", datetime);
+		pango_layout_set_markup(layout, data, -1);
+		pango_layout_set_alignment(layout, PANGO_ALIGN_RIGHT);
+		cairo_move_to(cr, 2, dinfo->line_height * 1.5);
+		pango_cairo_show_layout(cr, layout);
+		g_free(data);
+	}
 	g_free(datetime);
 
 	/* reset layout and re-position cairo context */
