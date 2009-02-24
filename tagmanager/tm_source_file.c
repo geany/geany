@@ -239,11 +239,11 @@ int tm_source_file_tags(const tagEntryInfo *tag)
 gboolean tm_source_file_update(TMWorkObject *source_file, gboolean force
   , gboolean __unused__ recurse, gboolean update_parent)
 {
-	if (force || (tm_work_object_is_changed(source_file)))
+	if (force)
 	{
 		tm_source_file_parse(TM_SOURCE_FILE(source_file));
 		tm_tags_sort(source_file->tags_array, NULL, FALSE);
-		source_file->analyze_time = time(NULL);
+		/* source_file->analyze_time = tm_get_file_timestamp(source_file->file_name); */
 		if ((source_file->parent) && update_parent)
 		{
 			tm_work_object_update(source_file->parent, TRUE, FALSE, TRUE);
@@ -268,7 +268,7 @@ gboolean tm_source_file_buffer_update(TMWorkObject *source_file, guchar* text_bu
 
 	tm_source_file_buffer_parse (TM_SOURCE_FILE(source_file), text_buf, buf_size);
 	tm_tags_sort(source_file->tags_array, NULL, FALSE);
-	source_file->analyze_time = time(NULL);
+	/* source_file->analyze_time = time(NULL); */
 	if ((source_file->parent) && update_parent)
 	{
 #ifdef TM_DEBUG

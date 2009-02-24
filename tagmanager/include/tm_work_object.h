@@ -37,7 +37,7 @@ typedef struct _TMWorkObject
 	char *file_name; /*!< Full file name (inc. path) of the work object */
 	char *short_name; /*!< Just the name of the file (without the path) */
 	struct _TMWorkObject *parent;
-	time_t analyze_time; /*!< Time when the object was last analyzed */
+	time_t analyze_time; /*!< UNUSED Time when the object was last analyzed */
 	GPtrArray *tags_array; /*!< Tags obtained by parsing the object */
 } TMWorkObject;
 
@@ -115,15 +115,6 @@ TMWorkObject *tm_work_object_new(guint type, const char *file_name, gboolean cre
  \return Timestamp of the file's modification time. 0 on failure.
 */
 time_t tm_get_file_timestamp(const char *file_name);
-
-/*
- Checks if the work object has been modified since the last update by comparing
- the timestamp stored in the work object structure with the modification time
- of the physical file.
- \param work_object Pointer to the work object.
- \return TRUE if the file has changed since last update, FALSE otherwise.
-*/
-gboolean tm_work_object_is_changed(TMWorkObject *work_object);
 
 /*
  Destroys a work object's data without freeing the structure itself. It should

@@ -158,6 +158,7 @@ gboolean tm_work_object_init(TMWorkObject *work_object, guint type, const char *
 	return TRUE;
 }
 
+/*
 time_t tm_get_file_timestamp(const char *file_name)
 {
 	struct stat s;
@@ -166,7 +167,6 @@ time_t tm_get_file_timestamp(const char *file_name)
 
 	if (0 != g_stat(file_name, &s))
 	{
-		/*g_warning("Unable to stat %s", file_name);*/
 		return (time_t) 0;
 	}
 	else
@@ -177,6 +177,7 @@ gboolean tm_work_object_is_changed(TMWorkObject *work_object)
 {
 	return (gboolean) (work_object->analyze_time < tm_get_file_timestamp(work_object->file_name));
 }
+*/
 
 TMWorkObject *tm_work_object_new(guint type, const char *file_name, gboolean create)
 {

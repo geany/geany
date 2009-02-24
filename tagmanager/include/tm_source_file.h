@@ -68,7 +68,7 @@ void tm_source_file_free(gpointer source_file);
  also lost. The language parameter is automatically set the first time the file
  is parsed.
  \param source_file The source file to update.
- \param force Whether the cache is to be ignored.
+ \param force Ignored. The source file is always updated.
  \param recurse This parameter is ignored for source files and is only there for consistency.
  \param update_parent If set to TRUE, sends an update signal to parent if required. You should
  always set this to TRUE if you are calling this function directly.

@@ -135,7 +135,7 @@ gboolean tm_tag_init(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag_ent
 		{
 			tag->name = g_strdup(file->work_object.file_name);
 			tag->type = tm_tag_file_t;
-			tag->atts.file.timestamp = file->work_object.analyze_time;
+			/* tag->atts.file.timestamp = file->work_object.analyze_time; */
 			tag->atts.file.lang = file->lang;
 			tag->atts.file.inactive = FALSE;
 			return TRUE;

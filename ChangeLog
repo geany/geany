@@ -11,6 +11,15 @@
    path at startup to avoid unwanted directory locking(closes #2626124).
  * src/encoding.c:
    Fix broken selection of "Document->Set Encoding" menu items.
+ * src/document.c, tagmanager/include/tm_source_file.h,
+   tagmanager/include/tm_work_object.h, tagmanager/tm_project.c,
+   tagmanager/tm_source_file.c, tagmanager/tm_tag.c,
+   tagmanager/tm_work_object.c, tagmanager/tm_workspace.c:
+   Don't let the tagmanager automatically reparse files if they
+   seem to be changed on disk (affects all files in the current session,
+   not the current one). This should speed up file saving a little bit,
+   especially with remote files.
+   Remove now unnecessary calls to tm_workspace_update().
 
 
 2009-02-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

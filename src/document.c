@@ -1784,8 +1784,6 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 		/* update filetype-related things */
 		document_set_filetype(doc, doc->file_type);
 
-		tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
-
 		document_update_tab_label(doc);
 
 		msgwin_status_add(_("File %s saved."), doc->file_name);
@@ -2814,7 +2812,6 @@ gboolean document_close_all(void)
 
 	force_close_all();
 
-	tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
 	return TRUE;
 }
 

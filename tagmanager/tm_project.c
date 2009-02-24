@@ -350,7 +350,7 @@ gboolean tm_project_update(TMWorkObject *work_object, gboolean force
 			tm_project_recreate_tags_array(project);
 		}
 	}
-	work_object->analyze_time = time(NULL);
+	/* work_object->analyze_time = time(NULL); */
 	if ((work_object->parent) && (update_parent))
 		tm_workspace_update(work_object->parent, TRUE, FALSE, FALSE);
 	return update_tags;
@@ -407,7 +407,6 @@ gboolean tm_project_open(TMProject *project, gboolean force)
 			else
 			{
 				source_file->work_object.parent = TM_WORK_OBJECT(project);
-				source_file->work_object.analyze_time = tag->atts.file.timestamp;
 				source_file->lang = tag->atts.file.lang;
 				source_file->inactive = tag->atts.file.inactive;
 				if (!project->file_list)

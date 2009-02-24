@@ -533,7 +533,7 @@ gboolean tm_workspace_update(TMWorkObject *workspace, gboolean force
 	}
 	if (update_tags)
 		tm_workspace_recreate_tags_array();
-	workspace->analyze_time = time(NULL);
+	/* workspace->analyze_time = time(NULL); */
 	return update_tags;
 }
 
