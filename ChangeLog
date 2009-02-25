@@ -8,6 +8,8 @@
    src/vte.h, THANKS:
    Add 'Send Selection to Terminal' command to the Edit->Format menu
    (initial patch by David Gleich, thanks).
+ * geany.glade, src/interface.c:
+   Fix mnemonic for the Edit->Preferences menu item.
 
 
 2009-02-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
