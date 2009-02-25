@@ -49,6 +49,8 @@
 #include "msgwindow.h"
 #include "callbacks.h"
 #include "geanywraplabel.h"
+#include "editor.h"
+#include "sciwrappers.h"
 
 
 VteInfo vte_info;
@@ -896,5 +898,42 @@ void vte_append_preferences_tab(void)
 	}
 }
 
+
+void vte_send_selection_to_vte(void)
+{
+	GeanyDocument *doc;
+	gchar *text;
+	gsize len;
+
+	doc = document_get_current();
+	if (doc == NULL)
+		return;
+
+	if (sci_has_selection(doc->editor->sci))
+	{
+		text = g_malloc0(sci_get_selected_text_length(doc->editor->sci) + 1);
+		sci_get_selected_text(doc->editor->sci, text);
+	}
+	else
+	{	/* Get the current line */
+		gint line_num = sci_get_current_line(doc->editor->sci);
+		text = sci_get_line(doc->editor->sci, line_num);
+	}
+
+	len = strlen(text);
+
+	/* Make sure there is no newline character at the end to prevent unwanted execution */
+	if (text[len-1] == '\n' || text[len-1] == '\r')
+		text[len-1] = '\0';
+
+	vf->vte_terminal_feed_child(VTE_TERMINAL(vc->vte), text, len);
+
+	/* show the VTE */
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_VTE);
+	gtk_widget_grab_focus(vc->vte);
+	msgwin_show_hide(TRUE);
+
+	g_free(text);
+}
 
 #endif

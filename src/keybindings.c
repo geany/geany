@@ -312,6 +312,8 @@ static void init_default_kb(void)
 		GDK_2, GDK_CONTROL_MASK, "edit_sendtocmd2", _("Send to Custom Command 2"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_FORMAT_SENDTOCMD3, cb_func_format_action,
 		GDK_3, GDK_CONTROL_MASK, "edit_sendtocmd3", _("Send to Custom Command 3"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_FORMAT_SENDTOVTE, cb_func_format_action,
+		0, 0, "edit_sendtovte", _("Send Selection to Terminal"), LW(send_selection_to_vte1));
 
 	group = ADD_KB_GROUP(INSERT, _("Insert"));
 
@@ -676,6 +678,7 @@ static void add_popup_menu_accels(void)
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_FORMAT_COMMENTLINETOGGLE, menu_toggle_line_commentation2);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_FORMAT_INCREASEINDENT, menu_increase_indent2);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_FORMAT_DECREASEINDENT, menu_decrease_indent2);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_FORMAT_SENDTOVTE, send_selection_to_vte2);
 
 	/* the build menu items are set if the build menus are created */
 
@@ -1909,6 +1912,9 @@ static void cb_func_format_action(guint key_id)
 		case GEANY_KEYS_FORMAT_SENDTOCMD3:
 			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 2)
 				tools_execute_custom_command(doc, ui_prefs.custom_commands[2]);
+			break;
+		case GEANY_KEYS_FORMAT_SENDTOVTE:
+			on_send_selection_to_vte1_activate(NULL, NULL);
 			break;
 	}
 }

@@ -4459,4 +4459,3 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 		editor_prefs.smart_home_key ? SCI_VCHOMEWRAP : SCI_HOMEWRAP);
 	sci_assign_cmdkey(sci, SCK_END,  SCI_LINEENDWRAP);
 }
-

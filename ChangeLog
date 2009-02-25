@@ -2,6 +2,12 @@
 
  * src/templates.c:
    Fix wrong Fortran 90 comment characters when inserting templates.
+ * doc/geany.html, doc/geany.txt, geany.glade, src/callbacks.c,
+   src/callbacks.h, src/editor.c, src/interface.c, src/keybindings.c,
+   src/keybindings.h, src/main.c, src/plugindata.h, src/vte.c,
+   src/vte.h, THANKS:
+   Add 'Send Selection to Terminal' command to the Edit->Format menu
+   (initial patch by David Gleich, thanks).
 
 
 2009-02-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

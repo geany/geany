@@ -2219,3 +2219,14 @@ on_debug_messages1_activate            (GtkMenuItem     *menuitem,
 	log_show_debug_messages_dialog();
 }
 
+
+void
+on_send_selection_to_vte1_activate     (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+#ifdef HAVE_VTE
+	if (vte_info.load_vte)
+		vte_send_selection_to_vte();
+#endif
+}
+

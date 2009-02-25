@@ -2553,6 +2553,17 @@ Decrease indent by one space                              Deindents the current 
 Smart line indent                                         Indents the current line or all selected lines
                                                           with the same indentation as the previous line.
 
+Send to Custom Command 1 (2,3)  Ctrl-1 (2,3)              Passes the current selection to a configured
+                                                          external command (available for the first
+                                                          three configured commands, see
+                                                          `Send text through definable commands`_ for
+                                                          details).
+
+Send Selection to Verminal                                Sends the current selection or the current
+                                                          line (if there is no selection) to the
+                                                          embedded Terminal (VTE).
+
+
 **Settings**
 
 Preferences                     Ctrl-Alt-P                Opens preferences dialog.

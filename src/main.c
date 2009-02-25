@@ -236,6 +236,17 @@ static void apply_settings(void)
 
 	/* whether to show notebook tabs or not */
 	gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
+
+#ifdef HAVE_VTE
+	if (! vte_info.load_vte)
+	{
+		gtk_widget_hide(ui_lookup_widget(main_widgets.window, "send_selection_to_vte1"));
+		gtk_widget_hide(ui_lookup_widget(main_widgets.editor_menu, "send_selection_to_vte2"));
+	}
+#else
+	gtk_widget_hide(ui_lookup_widget(main_widgets.window, "send_selection_to_vte1"));
+	gtk_widget_hide(ui_lookup_widget(main_widgets.editor_menu, "send_selection_to_vte2"));
+#endif
 }
 
 

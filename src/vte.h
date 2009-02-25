@@ -76,6 +76,7 @@ void vte_cwd(const gchar *filename, gboolean force);
 
 void vte_append_preferences_tab(void);
 
+void vte_send_selection_to_vte(void);
 
 #endif
 
