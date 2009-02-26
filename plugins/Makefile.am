@@ -24,7 +24,6 @@ demoplugin_la_LDFLAGS    = -module -avoid-version
 classbuilder_la_LDFLAGS  = -module -avoid-version
 htmlchars_la_LDFLAGS     = -module -avoid-version
 export_la_LDFLAGS        = -module -avoid-version
-vcdiff_la_LDFLAGS        = -module -avoid-version
 saveactions_la_LDFLAGS   = -module -avoid-version
 filebrowser_la_LDFLAGS   = -module -avoid-version
 splitwindow_la_LDFLAGS   = -module -avoid-version
@@ -51,7 +50,6 @@ all-local: \
 	classbuilder.dll \
 	htmlchars.dll \
 	export.dll \
-	vcdiff.dll \
 	saveactions.dll \
 	filebrowser.dll
 # Split Window is broken on Windows
@@ -71,7 +69,6 @@ plugin_LTLIBRARIES = \
 	classbuilder.la \
 	htmlchars.la \
 	export.la \
-	vcdiff.la \
 	saveactions.la \
 	filebrowser.la \
 	splitwindow.la
@@ -84,7 +81,6 @@ demoplugin_la_SOURCES    = demoplugin.c
 classbuilder_la_SOURCES  = classbuilder.c
 htmlchars_la_SOURCES     = htmlchars.c
 export_la_SOURCES        = export.c
-vcdiff_la_SOURCES        = vcdiff.c
 saveactions_la_SOURCES   = saveactions.c
 filebrowser_la_SOURCES   = filebrowser.c
 splitwindow_la_SOURCES   = splitwindow.c
@@ -94,7 +90,6 @@ demoplugin_la_LIBADD    = $(GTK_LIBS)
 classbuilder_la_LIBADD  = $(GTK_LIBS)
 htmlchars_la_LIBADD     = $(GTK_LIBS)
 export_la_LIBADD        = $(GTK_LIBS)
-vcdiff_la_LIBADD        = $(GTK_LIBS)
 saveactions_la_LIBADD   = $(GTK_LIBS)
 filebrowser_la_LIBADD   = $(GTK_LIBS)
 splitwindow_la_LIBADD   = $(GTK_LIBS)

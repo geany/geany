@@ -330,7 +330,6 @@ def build(bld):
 		build_plugin('htmlchars')
 		build_plugin('saveactions')
 		build_plugin('splitwindow')
-		build_plugin('vcdiff')
 
 	# Translations
 	bld.new_task_gen(

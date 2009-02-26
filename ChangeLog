@@ -1,3 +1,9 @@
+2009-02-26  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * plugins/vcdiff.c, plugins/Makefile.am, po/POTFILES.in:
+   Removed deprecated plugin VC Diff
+
+
 2009-02-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/templates.c:
