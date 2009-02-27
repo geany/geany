@@ -10,6 +10,8 @@
    Minor cleanups in search.c.
  * tagmanager/tm_source_file.c:
    Update source files upon creation.
+ * data/c99.tags:
+   Update C tags for glibc 2.9.
 
 
 2009-02-26  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

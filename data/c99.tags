@@ -638,6 +638,9 @@ atollÌ1024Í(const char *__nptr)Ö0Ïlong long int
 basenameÌ1024Í(const char *__filename)Ö0Ïchar *
 bcmpÌ1024Í(const void *__s1, const void *__s2, size_t __n)Ö0Ïint
 bcopyÌ1024Í(const void *__src, void *__dest, size_t __n)Ö0Ïvoid
+be16tohÌ131072Í(x)Ö0
+be32tohÌ131072Í(x)Ö0
+be64tohÌ131072Í(x)Ö0
 blkcnt64_tÌ4096Ö0Ï__blkcnt64_t
 blkcnt_tÌ4096Ö0Ï__blkcnt_t
 blksize_tÌ4096Ö0Ï__blksize_t
@@ -942,6 +945,12 @@ grantptÌ1024Í(int __fd)Ö0Ïint
 greg_tÌ4096Ö0Ïint
 gregset_tÌ4096Ö0Ïgreg_t
 gsignalÌ1024Í(int __sig)Ö0Ïint
+htobe16Ì131072Í(x)Ö0
+htobe32Ì131072Í(x)Ö0
+htobe64Ì131072Í(x)Ö0
+htole16Ì131072Í(x)Ö0
+htole32Ì131072Í(x)Ö0
+htole64Ì131072Í(x)Ö0
 hypotÌ1024Í(double __x, double __y)Ö0Ïdouble
 hypotfÌ1024Í(float __x, float __y)Ö0Ïfloat
 hypotlÌ1024Í(long double __x, long double __y)Ö0Ïlong double
@@ -1063,6 +1072,9 @@ ldexpfÌ1024Í(float __x, int __exponent)Ö0Ïfloat
 ldexplÌ1024Í(long double __x, int __exponent)Ö0Ïlong double
 ldivÌ1024Í(long int __numer, long int __denom)Ö0Ïldiv_t
 ldiv_tÌ4096Ö0Ïanon_struct_57
+le16tohÌ131072Í(x)Ö0
+le32tohÌ131072Í(x)Ö0
+le64tohÌ131072Í(x)Ö0
 lgammaÌ1024Í(double)Ö0Ïdouble
 lgamma_rÌ1024Í(double, int *__signgamp)Ö0Ïdouble
 lgammafÌ1024Í(float)Ö0Ïfloat
@@ -1219,6 +1231,7 @@ qfcvtÌ1024Í(long double __value, int __ndigit, int * __decpt, int * __sign)Ö0Ïch
 qfcvt_rÌ1024Í(long double __value, int __ndigit, int * __decpt, int * __sign, char * __buf, size_t __len)Ö0Ïint
 qgcvtÌ1024Í(long double __value, int __ndigit, char *__buf)Ö0Ïchar *
 qsortÌ1024Í(void *__base, size_t __nmemb, size_t __size, __compar_fn_t __compar)Ö0Ïvoid
+qsort_rÌ1024Í(void *__base, size_t __nmemb, size_t __size, __compar_d_fn_t __compar, void *__arg)Ö0Ïvoid
 quad_tÌ4096Ö0Ï__quad_t
 raiseÌ1024Í(int __sig)Ö0Ïint
 randÌ1024Í(void)Ö0Ïint
