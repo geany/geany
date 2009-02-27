@@ -164,7 +164,7 @@ static void sync_to_current(ScintillaObject *sci, ScintillaObject *current)
 
 	/* set the new sci widget to view the existing Scintilla document */
 	sdoc = (gpointer) scintilla_send_message(current, SCI_GETDOCPOINTER, 0, 0);
-	scintilla_send_message(sci, SCI_SETDOCPOINTER, 0, GPOINTER_TO_INT(sdoc));
+	scintilla_send_message(sci, SCI_SETDOCPOINTER, 0, (sptr_t) sdoc);
 
 	update_font(current, sci);
 	lexer = scintilla_send_message(current, SCI_GETLEXER, 0, 0);

@@ -15,6 +15,9 @@
  * src/callbacks.c, src/toolbar.c:
    Fix broken non-incremental search with the toolbar search entry when
    pressing Enter (closes #2638180).
+ * plugins/splitwindow.c:
+   Fix possible crash on non-32-bit systems (patch by
+   Wolfgang Ocker, thanks).
 
 
 2009-02-26  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
