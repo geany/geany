@@ -12,6 +12,9 @@
    Update source files upon creation.
  * data/c99.tags:
    Update C tags for glibc 2.9.
+ * src/callbacks.c, src/toolbar.c:
+   Fix broken non-incremental search with the toolbar search entry when
+   pressing Enter (closes #2638180).
 
 
 2009-02-26  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

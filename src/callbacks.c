@@ -553,7 +553,7 @@ on_toolbar_search_entry_changed(GtkAction *action, const gchar *text, gpointer u
 	gboolean result;
 
 	setup_find_next(text);
-	result = document_search_bar_find(doc, search_data.text, 0, TRUE);
+	result = document_search_bar_find(doc, search_data.text, 0, GPOINTER_TO_INT(user_data));
 	if (search_data.search_bar)
 		ui_set_search_entry_background(toolbar_get_widget_child_by_name("SearchEntry"), result);
 }

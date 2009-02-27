@@ -199,9 +199,9 @@ GtkWidget *toolbar_init(void)
 	action_searchentry = geany_entry_action_new(
 		"SearchEntry", _("Search"), _("Find the entered text in the current file"), FALSE);
 	g_signal_connect(action_searchentry, "entry-activate",
-		G_CALLBACK(on_toolbar_search_entry_changed), NULL);
+		G_CALLBACK(on_toolbar_search_entry_changed), GINT_TO_POINTER(FALSE));
 	g_signal_connect(action_searchentry, "entry-changed",
-		G_CALLBACK(on_toolbar_search_entry_changed), NULL);
+		G_CALLBACK(on_toolbar_search_entry_changed), GINT_TO_POINTER(TRUE));
 	gtk_action_group_add_action(group, action_searchentry);
 
 	action_gotoentry = geany_entry_action_new(
