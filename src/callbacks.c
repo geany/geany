@@ -535,26 +535,6 @@ on_toolbutton_save_clicked             (GtkAction       *action,
 }
 
 
-static void set_search_bar_background(GtkWidget *widget, gboolean success)
-{
-	const GdkColor red   = {0, 0xffff, 0x6666, 0x6666};
-	const GdkColor white = {0, 0xffff, 0xffff, 0xffff};
-	static gboolean old_value = TRUE;
-
-	if (widget == NULL)
-		widget = toolbar_get_widget_child_by_name("SearchEntry");
-
-	/* only update if really needed */
-	if (search_data.search_bar && old_value != success)
-	{
-		gtk_widget_modify_base(widget, GTK_STATE_NORMAL, success ? NULL : &red);
-		gtk_widget_modify_text(widget, GTK_STATE_NORMAL, success ? NULL : &white);
-
-		old_value = success;
-	}
-}
-
-
 /* store text, clear search flags so we can use Search->Find Next/Previous */
 static void setup_find_next(const gchar *text)
 {
@@ -574,7 +554,8 @@ on_toolbar_search_entry_changed(GtkAction *action, const gchar *text, gpointer u
 
 	setup_find_next(text);
 	result = document_search_bar_find(doc, search_data.text, 0, TRUE);
-	set_search_bar_background(NULL, result);
+	if (search_data.search_bar)
+		ui_set_search_entry_background(toolbar_get_widget_child_by_name("SearchEntry"), result);
 }
 
 
@@ -593,7 +574,8 @@ on_toolbutton_search_clicked           (GtkAction       *action,
 
 		setup_find_next(text);
 		result = document_search_bar_find(doc, search_data.text, 0, FALSE);
-		set_search_bar_background(entry, result);
+		if (search_data.search_bar)
+			ui_set_search_entry_background(entry, result);
 	}
 }
 
@@ -1146,7 +1128,9 @@ static void find_again(gboolean change_direction)
 		if (result > -1)
 			editor_display_current_line(doc->editor, 0.3F);
 
-		set_search_bar_background(NULL, (result > -1) ? TRUE : FALSE);
+		if (search_data.search_bar)
+			ui_set_search_entry_background(
+				toolbar_get_widget_child_by_name("SearchEntry"), (result > -1));
 	}
 }
 

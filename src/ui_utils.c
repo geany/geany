@@ -811,6 +811,25 @@ void ui_document_show_hide(GeanyDocument *doc)
 }
 
 
+void ui_set_search_entry_background(GtkWidget *widget, gboolean success)
+{
+	static const GdkColor red   = {0, 0xffff, 0x6666, 0x6666};
+	static const GdkColor white = {0, 0xffff, 0xffff, 0xffff};
+	static gboolean old_value = TRUE;
+
+	g_return_if_fail(widget != NULL);
+
+	/* update only if really needed */
+	if (old_value != success)
+	{
+		gtk_widget_modify_base(widget, GTK_STATE_NORMAL, success ? NULL : &red);
+		gtk_widget_modify_text(widget, GTK_STATE_NORMAL, success ? NULL : &white);
+
+		old_value = success;
+	}
+}
+
+
 /* Note: remember to unref the pixbuf once an image or window has added a reference. */
 GdkPixbuf *ui_new_pixbuf_from_inline(gint img)
 {

@@ -244,6 +244,7 @@ void ui_sidebar_show_hide(void);
 
 void ui_document_show_hide(GeanyDocument *doc);
 
+void ui_set_search_entry_background(GtkWidget *widget, gboolean success);
 
 
 GdkPixbuf *ui_new_pixbuf_from_inline(gint img);

@@ -101,9 +101,10 @@ static struct
 {
 	GtkWidget	*dialog;
 	GtkWidget	*find_entry;
+	GtkWidget	*replace_entry;
 	gboolean	all_expanded;
 }
-replace_dlg = {NULL, NULL, FALSE};
+replace_dlg = {NULL, NULL, NULL, FALSE};
 
 static struct
 {
@@ -469,10 +470,11 @@ void search_show_find_dialog(void)
 	{
 		/* only set selection if the dialog is not already visible */
 		if (! GTK_WIDGET_VISIBLE(find_dlg.dialog) && sel)
-			gtk_entry_set_text(GTK_ENTRY(GTK_BIN(
-							ui_lookup_widget(find_dlg.dialog, "entry"))->child), sel);
-		gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(ui_lookup_widget(find_dlg.dialog, "entry"))->child));
+			gtk_entry_set_text(GTK_ENTRY(find_dlg.entry), sel);
+		gtk_widget_grab_focus(find_dlg.entry);
 		gtk_widget_show(find_dlg.dialog);
+		if (sel != NULL) /* when we have a selection, reset the entry widget's background colour */
+			ui_set_search_entry_background(find_dlg.entry, TRUE);
 		/* bring the dialog back in the foreground in case it is already open but the focus is away */
 		gtk_window_present(GTK_WINDOW(find_dlg.dialog));
 	}
@@ -505,9 +507,13 @@ static void create_replace_dialog(void)
 	gtk_dialog_add_action_widget(GTK_DIALOG(replace_dlg.dialog), button,
 		GEANY_RESPONSE_FIND);
 	button = gtk_button_new_with_mnemonic(_("_Replace"));
+	gtk_button_set_image(GTK_BUTTON(button),
+		gtk_image_new_from_stock(GTK_STOCK_FIND_AND_REPLACE, GTK_ICON_SIZE_BUTTON));
 	gtk_dialog_add_action_widget(GTK_DIALOG(replace_dlg.dialog), button,
 		GEANY_RESPONSE_REPLACE);
 	button = gtk_button_new_with_mnemonic(_("Replace & Fi_nd"));
+	gtk_button_set_image(GTK_BUTTON(button),
+		gtk_image_new_from_stock(GTK_STOCK_FIND_AND_REPLACE, GTK_ICON_SIZE_BUTTON));
 	gtk_dialog_add_action_widget(GTK_DIALOG(replace_dlg.dialog), button,
 		GEANY_RESPONSE_REPLACE_AND_FIND);
 
@@ -533,6 +539,7 @@ static void create_replace_dialog(void)
 	gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_replace))), 50);
 	g_object_set_data_full(G_OBJECT(replace_dlg.dialog), "entry_replace",
 		g_object_ref(entry_replace), (GDestroyNotify)g_object_unref);
+	replace_dlg.replace_entry = GTK_BIN(entry_replace)->child;
 
 	g_signal_connect(gtk_bin_get_child(GTK_BIN(entry_find)),
 			"key-press-event", G_CALLBACK(on_widget_key_pressed_set_focus),
@@ -629,6 +636,8 @@ void search_show_replace_dialog(void)
 		/* only set selection if the dialog is not already visible */
 		if (! GTK_WIDGET_VISIBLE(replace_dlg.dialog) && sel)
 			gtk_entry_set_text(GTK_ENTRY(replace_dlg.find_entry), sel);
+		if (sel != NULL) /* when we have a selection, reset the entry widget's background colour */
+			ui_set_search_entry_background(replace_dlg.find_entry, TRUE);
 		gtk_widget_grab_focus(replace_dlg.find_entry);
 		gtk_widget_show(replace_dlg.dialog);
 		/* bring the dialog back in the foreground in case it is already open but the focus is away */
@@ -1019,7 +1028,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			(search_replace_escape && ! utils_str_replace_escape(search_data.text)))
 		{
 			utils_beep();
-			gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(ui_lookup_widget(find_dlg.dialog, "entry"))->child));
+			gtk_widget_grab_focus(find_dlg.entry);
 			return;
 		}
 
@@ -1031,13 +1040,15 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		{
 			case GEANY_RESPONSE_FIND:
 			case GEANY_RESPONSE_FIND_PREVIOUS:
-				document_find_text(doc, search_data.text, search_data.flags,
+			{
+				gint result = document_find_text(doc, search_data.text, search_data.flags,
 					(response == GEANY_RESPONSE_FIND_PREVIOUS), TRUE, GTK_WIDGET(find_dlg.dialog));
+				ui_set_search_entry_background(find_dlg.entry, (result > -1));
 				check_close = FALSE;
 				if (search_prefs.suppress_dialogs)
 					check_close = TRUE;
 				break;
-
+			}
 			case GEANY_RESPONSE_FIND_IN_FILE:
 				search_find_usage(search_data.text, search_data.flags, FALSE);
 				break;
@@ -1077,8 +1088,6 @@ static void
 on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	GtkWidget *entry_find = ui_lookup_widget(GTK_WIDGET(replace_dlg.dialog), "entry_find");
-	GtkWidget *entry_replace = ui_lookup_widget(GTK_WIDGET(replace_dlg.dialog), "entry_replace");
 	gint search_flags_re;
 	gboolean search_backwards_re, search_replace_escape_re;
 	gboolean close_window;
@@ -1096,8 +1105,8 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 				ui_lookup_widget(GTK_WIDGET(replace_dlg.dialog), "check_back")));
 	search_replace_escape_re = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 				ui_lookup_widget(GTK_WIDGET(replace_dlg.dialog), "check_escape")));
-	find = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_find)))));
-	replace = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_replace)))));
+	find = g_strdup(gtk_entry_get_text(GTK_ENTRY(replace_dlg.find_entry)));
+	replace = g_strdup(gtk_entry_get_text(GTK_ENTRY(replace_dlg.replace_entry)));
 
 	search_flags_re = get_search_flags(replace_dlg.dialog);
 
@@ -1105,18 +1114,20 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		&& (strcmp(find, replace) == 0))
 	{
 		utils_beep();
-		gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(ui_lookup_widget(replace_dlg.dialog, "entry_find"))->child));
+		gtk_widget_grab_focus(replace_dlg.find_entry);
 		return;
 	}
 
-	ui_combo_box_add_to_history(GTK_COMBO_BOX(entry_find), find);
-	ui_combo_box_add_to_history(GTK_COMBO_BOX(entry_replace), replace);
+	ui_combo_box_add_to_history(GTK_COMBO_BOX(
+		gtk_widget_get_parent(replace_dlg.find_entry)), find);
+	ui_combo_box_add_to_history(GTK_COMBO_BOX(
+		gtk_widget_get_parent(replace_dlg.replace_entry)), replace);
 
 	if (search_replace_escape_re &&
 		(! utils_str_replace_escape(find) || ! utils_str_replace_escape(replace)))
 	{
 		utils_beep();
-		gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(ui_lookup_widget(replace_dlg.dialog, "entry_find"))->child));
+		gtk_widget_grab_focus(replace_dlg.find_entry);
 		return;
 	}
 
@@ -1139,8 +1150,9 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		}
 		case GEANY_RESPONSE_FIND:
 		{
-			document_find_text(doc, find, search_flags_re, search_backwards_re, TRUE,
-							   GTK_WIDGET(dialog));
+			gint result = document_find_text(doc, find, search_flags_re,
+								search_backwards_re, TRUE, GTK_WIDGET(dialog));
+			ui_set_search_entry_background(replace_dlg.find_entry, (result > -1));
 			break;
 		}
 		case GEANY_RESPONSE_REPLACE_IN_FILE:
