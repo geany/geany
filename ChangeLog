@@ -18,6 +18,11 @@
  * plugins/splitwindow.c:
    Fix possible crash on non-32-bit systems (patch by
    Wolfgang Ocker, thanks).
+ * geany.spec.in:
+   Update the Packager tag due to Dominic's various contributions.
+   Update description and feature list.
+   Change Source tag to the gzip'ed tarball to be in sync with the
+   Makefile target (thanks to Wolfgang Ocker for reporting).
 
 
 2009-02-26  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
