@@ -1251,7 +1251,7 @@ static GeanyFiletype *detect_global_tags_filetype(const gchar *utf8_filename)
 int symbols_generate_global_tags(int argc, char **argv, gboolean want_preprocess)
 {
 	/* -E pre-process, -dD output user macros, -p prof info (?),
-	 * -undef remove builtin macros (seems to be needed with FC5 gcc 4.1.1 */
+	 * -undef remove builtin macros (seems to be needed with FC5 gcc 4.1.1) */
 	const char pre_process[] = "gcc -E -dD -p -undef";
 
 	if (argc > 2)
