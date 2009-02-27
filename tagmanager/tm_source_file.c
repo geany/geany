@@ -63,7 +63,7 @@ gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name
 		source_file->lang = getNamedLanguage(name);
 
 	if (update)
-		tm_source_file_update(TM_WORK_OBJECT(source_file), FALSE, FALSE, FALSE);
+		tm_source_file_update(TM_WORK_OBJECT(source_file), TRUE, FALSE, FALSE);
 	return TRUE;
 }
 

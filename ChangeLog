@@ -8,6 +8,8 @@
    Add images to the 'Replace' and 'Replace and Find' buttons in the
    Replace dialog.
    Minor cleanups in search.c.
+ * tagmanager/tm_source_file.c:
+   Update source files upon creation.
 
 
 2009-02-26  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
