@@ -59,6 +59,7 @@ geany_include_HEADERS = \
 	highlighting.h \
 	keybindings.h \
 	geany.h \
+	main.h \
 	msgwindow.h \
 	plugins.h \
 	plugindata.h \
