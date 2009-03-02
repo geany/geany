@@ -1,3 +1,9 @@
+2009-03-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * geany.pc.in:
+   Adjust minimum required GTK version.
+
+
 2009-02-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/callbacks.c, src/search.c, src/ui_utils.c, src/ui_utils.c:
