@@ -1333,8 +1333,6 @@ void ui_update_tab_status(GeanyDocument *doc)
 	/* NULL color will reset to default */
 	gtk_widget_modify_fg(doc->priv->tab_label, GTK_STATE_NORMAL, color);
 	gtk_widget_modify_fg(doc->priv->tab_label, GTK_STATE_ACTIVE, color);
-	gtk_widget_modify_fg(doc->priv->tabmenu_label, GTK_STATE_NORMAL, color);
-	gtk_widget_modify_fg(doc->priv->tabmenu_label, GTK_STATE_ACTIVE, color);
 
 	treeviews_openfiles_update(doc);
 }

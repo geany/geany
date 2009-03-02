@@ -1766,7 +1766,7 @@
 		  <property name="show_border">True</property>
 		  <property name="tab_pos">GTK_POS_TOP</property>
 		  <property name="scrollable">True</property>
-		  <property name="enable_popup">True</property>
+		  <property name="enable_popup">False</property>
 		  <signal name="switch_page" handler="on_notebook1_switch_page_after" after="yes" last_modification_time="Fri, 26 May 2006 11:47:25 GMT"/>
 		</widget>
 		<packing>

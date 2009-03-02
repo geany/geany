@@ -296,7 +296,6 @@ void document_update_tab_label(GeanyDocument *doc)
 	parent = gtk_widget_get_parent(parent);
 
 	gtk_label_set_text(GTK_LABEL(doc->priv->tab_label), base_name);
-	gtk_label_set_text(GTK_LABEL(doc->priv->tabmenu_label), base_name);
 
 	ui_widget_set_tooltip_text(parent, DOC_FILENAME(doc));
 

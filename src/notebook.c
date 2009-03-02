@@ -179,6 +179,73 @@ static gboolean is_position_on_tab_bar(GtkNotebook *notebook, GdkEventButton *ev
 }
 
 
+static void tab_bar_menu_activate_cb(GtkMenuItem *menuitem, gpointer data)
+{
+	GeanyDocument *doc = data;
+
+	if (! DOC_VALID(doc))
+		return;
+
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
+		document_get_notebook_page(doc));
+}
+
+
+static GtkMenu *get_tab_bar_popup_menu(void)
+{
+	static GtkWidget *menu = NULL;
+	GtkWidget *menu_item, *menu_item_label;
+	const GdkColor *color;
+	GeanyDocument *doc;
+	guint i, len;
+	gchar *base_name;
+
+	if (menu == NULL)
+		menu = gtk_menu_new();
+
+	/* clear the old menu items */
+	gtk_container_foreach(GTK_CONTAINER(menu), (GtkCallback) gtk_widget_destroy, NULL);
+
+	len = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+	for (i = 0; i < len; i++)
+	{
+		doc = document_get_from_page(i);
+		if (! DOC_VALID(doc))
+			continue;
+
+		base_name = g_path_get_basename(doc->file_name);
+		menu_item = gtk_image_menu_item_new_with_label(base_name);
+		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item),
+			gtk_image_new_from_icon_name(GTK_STOCK_FILE, GTK_ICON_SIZE_MENU));
+		gtk_widget_show(menu_item);
+		gtk_container_add(GTK_CONTAINER(menu), menu_item);
+		g_signal_connect(menu_item, "activate", G_CALLBACK(tab_bar_menu_activate_cb), doc);
+
+		color = document_get_status_color(doc);
+		menu_item_label = gtk_bin_get_child(GTK_BIN(menu_item));
+		gtk_widget_modify_fg(menu_item_label, GTK_STATE_NORMAL, color);
+		gtk_widget_modify_fg(menu_item_label, GTK_STATE_ACTIVE, color);
+
+		g_free(base_name);
+	}
+	menu_item = gtk_separator_menu_item_new();
+	gtk_widget_show(menu_item);
+	gtk_container_add(GTK_CONTAINER(menu), menu_item);
+
+	menu_item = ui_image_menu_item_new(GTK_STOCK_CLOSE, _("Close Ot_her Documents"));
+	gtk_widget_show(menu_item);
+	gtk_container_add(GTK_CONTAINER(menu), menu_item);
+	g_signal_connect(menu_item, "activate", G_CALLBACK(on_close_other_documents1_activate), NULL);
+
+	menu_item = ui_image_menu_item_new(GTK_STOCK_CLOSE, _("C_lose All"));
+	gtk_widget_show(menu_item);
+	gtk_container_add(GTK_CONTAINER(menu), menu_item);
+	g_signal_connect(menu_item, "activate", G_CALLBACK(on_close_all1_activate), NULL);
+
+	return GTK_MENU(menu);
+}
+
+
 static gboolean notebook_tab_bar_click_cb(GtkWidget *widget, GdkEventButton *event,
 										  gpointer user_data)
 {
@@ -194,6 +261,11 @@ static gboolean notebook_tab_bar_click_cb(GtkWidget *widget, GdkEventButton *eve
 			document_new_file(NULL, NULL, NULL);
 			return TRUE;
 		}
+	}
+	else if (event->button == 3)
+	{
+		gtk_menu_popup(get_tab_bar_popup_menu(), NULL, NULL,
+			NULL, NULL, event->button, event->time);
 	}
 	return FALSE;
 }
@@ -452,17 +524,14 @@ gint notebook_new_tab(GeanyDocument *this)
 
 	gtk_widget_show_all(ebox);
 
-	this->priv->tabmenu_label = gtk_label_new(NULL);
-	gtk_misc_set_alignment(GTK_MISC(this->priv->tabmenu_label), 0.0, 0);
-
 	document_update_tab_label(this);
 
 	if (file_prefs.tab_order_ltr)
 		tabnum = gtk_notebook_append_page_menu(GTK_NOTEBOOK(main_widgets.notebook), page,
-			ebox, this->priv->tabmenu_label);
+			ebox, NULL);
 	else
 		tabnum = gtk_notebook_insert_page_menu(GTK_NOTEBOOK(main_widgets.notebook), page,
-			ebox, this->priv->tabmenu_label, 0);
+			ebox, NULL, 0);
 
 	tab_count_changed();
 

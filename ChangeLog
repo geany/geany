@@ -4,6 +4,12 @@
    Adjust minimum required GTK version.
  * src/Makefile.am, wscript:
    Add main.h to the list of installed header files.
+ * geany.glade, src/document.c, src/documentprivate.h, src/interface.c,
+   src/notebook.c, src/ui_utils.c:
+   Remove GeanyDocumentPrivate::tabmenu_label.
+   Disable the default tab bar menu for the main notebook widget and
+   use a custom menu instead which lists all open files as usual plus
+   'Close Other Documents' and 'Close All' menu items.
 
 
 2009-02-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
