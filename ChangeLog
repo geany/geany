@@ -1,3 +1,9 @@
+2009-03-03  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * src/about.c, THANKS:
+   Added Jari Rahkonen to list of Finnish translators.
+
+
 2009-03-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * geany.pc.in:
