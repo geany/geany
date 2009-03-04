@@ -3710,7 +3710,7 @@ msgstr "Valitse rivit, jotka eivät vastaa hakua"
 
 #: ../src/search.c:799
 msgid "E_xtra options:"
-msgstr "Lisävalitsimet:"
+msgstr "Lisä_valitsimet:"
 
 #: ../src/search.c:807
 msgid "Other options to pass to Grep"
