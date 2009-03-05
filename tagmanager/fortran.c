@@ -83,6 +83,7 @@ typedef enum eKeywordId {
 	KEYWORD_end,
 	KEYWORD_entry,
 	KEYWORD_equivalence,
+	KEYWORD_extends,
 	KEYWORD_external,
 	KEYWORD_format,
 	KEYWORD_function,
@@ -248,6 +249,7 @@ static const keywordDesc FortranKeywordTable [] = {
 	{ "end",            KEYWORD_end          },
 	{ "entry",          KEYWORD_entry        },
 	{ "equivalence",    KEYWORD_equivalence  },
+	{ "extends",        KEYWORD_extends      },
 	{ "external",       KEYWORD_external     },
 	{ "format",         KEYWORD_format       },
 	{ "function",       KEYWORD_function     },
@@ -1271,6 +1273,7 @@ static boolean skipStatementIfKeyword (tokenInfo *const token, keywordId keyword
  *  component-attr-spec
  *      is POINTER
  *      or DIMENSION ( component-array-spec )
+ *      or EXTENDS ( type name )
  */
 static void parseQualifierSpecList (tokenInfo *const token)
 {
@@ -1293,6 +1296,7 @@ static void parseQualifierSpecList (tokenInfo *const token)
 				break;
 
 			case KEYWORD_dimension:
+			case KEYWORD_extends:
 			case KEYWORD_intent:
 				readToken (token);
 				skipOverParens (token);
@@ -1615,6 +1619,7 @@ static boolean parseSpecificationStmt (tokenInfo *const token)
 		case KEYWORD_data:
 		case KEYWORD_dimension:
 		case KEYWORD_equivalence:
+		case KEYWORD_extends:
 		case KEYWORD_external:
 		case KEYWORD_intent:
 		case KEYWORD_intrinsic:

@@ -3,6 +3,9 @@
  * src/notebook.c:
    Don't use menu item images for the tab bar menu to save some
    vertical space.
+ * data/filetypes.fortran, tagmanager/fortran.c:
+   Add keyword 'extends' and fix Fortran parser to support the
+   'extends' keyword (closes #2654492).
 
 
 2009-03-03  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
