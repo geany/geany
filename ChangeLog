@@ -6,6 +6,9 @@
  * data/filetypes.fortran, tagmanager/fortran.c:
    Add keyword 'extends' and fix Fortran parser to support the
    'extends' keyword (closes #2654492).
+ * geany.glade, plugins/export.c, src/interface.c, src/printing.c,
+   src/search.c, src/toolbar.c:
+   Fix punctuation.
 
 
 2009-03-03  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

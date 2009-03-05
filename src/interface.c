@@ -2870,7 +2870,7 @@ create_prefs_dialog (void)
   check_project_file_in_basedir = gtk_check_button_new_with_mnemonic (_("Store project file inside the project base directory"));
   gtk_widget_show (check_project_file_in_basedir);
   gtk_box_pack_start (GTK_BOX (vbox35), check_project_file_in_basedir, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_project_file_in_basedir, _("When enabled, a project file is stored by default inside the project base directory when creating new projects instead of one directory above the base directory. You can still change the path of the project file in the New Project dialog"), NULL);
+  gtk_tooltips_set_tip (tooltips, check_project_file_in_basedir, _("When enabled, a project file is stored by default inside the project base directory when creating new projects instead of one directory above the base directory. You can still change the path of the project file in the New Project dialog."), NULL);
 
   label207 = gtk_label_new (_("<b>Projects</b>"));
   gtk_widget_show (label207);
@@ -3293,7 +3293,7 @@ create_prefs_dialog (void)
   check_unfold_children = gtk_check_button_new_with_mnemonic (_("Fold/unfold all children of a fold point"));
   gtk_widget_show (check_unfold_children);
   gtk_box_pack_start (GTK_BOX (vbox17), check_unfold_children, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_unfold_children, _("Fold or unfold all children of a fold point. By pressing the Shift key while clicking on a fold symbol the contrary behavior is used"), NULL);
+  gtk_tooltips_set_tip (tooltips, check_unfold_children, _("Fold or unfold all children of a fold point. By pressing the Shift key while clicking on a fold symbol the contrary behavior is used."), NULL);
 
   check_indicators = gtk_check_button_new_with_mnemonic (_("Use indicators to show compile errors"));
   gtk_widget_show (check_indicators);

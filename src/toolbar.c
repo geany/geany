@@ -205,7 +205,7 @@ GtkWidget *toolbar_init(void)
 	gtk_action_group_add_action(group, action_searchentry);
 
 	action_gotoentry = geany_entry_action_new(
-		"GotoEntry", _("Goto"), _("Jump to the entered line number."), TRUE);
+		"GotoEntry", _("Goto"), _("Jump to the entered line number"), TRUE);
 	g_signal_connect(action_gotoentry, "entry-activate",
 		G_CALLBACK(on_toolbutton_goto_entry_activate), NULL);
 	gtk_action_group_add_action(group, action_gotoentry);

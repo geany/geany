@@ -779,7 +779,7 @@ static void create_fif_dialog(void)
 					g_object_ref(checkbox2), (GDestroyNotify)g_object_unref);
 	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox2), FALSE);
 	ui_widget_set_tooltip_text(checkbox2,
-			_("Invert the sense of matching, to select non-matching lines."));
+			_("Invert the sense of matching, to select non-matching lines"));
 
 	cbox = gtk_vbox_new(FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(cbox), checkbox1);

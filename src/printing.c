@@ -829,7 +829,7 @@ static void print_external(GeanyDocument *doc)
 	if (! NZV(printing_prefs.external_print_cmd))
 	{
 		dialogs_show_msgbox(GTK_MESSAGE_ERROR,
-			_("Please set a print command in the preferences dialog first"));
+			_("Please set a print command in the preferences dialog first."));
 		return;
 	}
 

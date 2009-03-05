@@ -3531,7 +3531,7 @@
 			      <child>
 				<widget class="GtkCheckButton" id="check_project_file_in_basedir">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">When enabled, a project file is stored by default inside the project base directory when creating new projects instead of one directory above the base directory. You can still change the path of the project file in the New Project dialog</property>
+				  <property name="tooltip" translatable="yes">When enabled, a project file is stored by default inside the project base directory when creating new projects instead of one directory above the base directory. You can still change the path of the project file in the New Project dialog.</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Store project file inside the project base directory</property>
 				  <property name="use_underline">True</property>
@@ -4928,7 +4928,7 @@ Bottom
 			      <child>
 				<widget class="GtkCheckButton" id="check_unfold_children">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Fold or unfold all children of a fold point. By pressing the Shift key while clicking on a fold symbol the contrary behavior is used</property>
+				  <property name="tooltip" translatable="yes">Fold or unfold all children of a fold point. By pressing the Shift key while clicking on a fold symbol the contrary behavior is used.</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Fold/unfold all children of a fold point</property>
 				  <property name="use_underline">True</property>
