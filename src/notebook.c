@@ -214,9 +214,7 @@ static GtkMenu *get_tab_bar_popup_menu(void)
 			continue;
 
 		base_name = g_path_get_basename(doc->file_name);
-		menu_item = gtk_image_menu_item_new_with_label(base_name);
-		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item),
-			gtk_image_new_from_icon_name(GTK_STOCK_FILE, GTK_ICON_SIZE_MENU));
+		menu_item = gtk_menu_item_new_with_label(base_name);
 		gtk_widget_show(menu_item);
 		gtk_container_add(GTK_CONTAINER(menu), menu_item);
 		g_signal_connect(menu_item, "activate", G_CALLBACK(tab_bar_menu_activate_cb), doc);
@@ -232,12 +230,12 @@ static GtkMenu *get_tab_bar_popup_menu(void)
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 
-	menu_item = ui_image_menu_item_new(GTK_STOCK_CLOSE, _("Close Ot_her Documents"));
+	menu_item = gtk_menu_item_new_with_mnemonic(_("Close Ot_her Documents"));
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 	g_signal_connect(menu_item, "activate", G_CALLBACK(on_close_other_documents1_activate), NULL);
 
-	menu_item = ui_image_menu_item_new(GTK_STOCK_CLOSE, _("C_lose All"));
+	menu_item = gtk_menu_item_new_with_mnemonic(_("C_lose All"));
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 	g_signal_connect(menu_item, "activate", G_CALLBACK(on_close_all1_activate), NULL);
