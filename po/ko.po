@@ -1,6 +1,6 @@
 # Korean translations for Geany package
-# Genany 패키지에 대한 한국어 번역문.
-# Copyright (C) 2008 THE Genany'S COPYRIGHT HOLDER
+# Geany 패키지에 대한 한국어 번역문.
+# Copyright (C) 2008 THE Geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the Genany package.
 # netkiss <dotkabi@gmail.com>, 2008.
 #
