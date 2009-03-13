@@ -1603,6 +1603,7 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 	while (1)
 	{
 		gint pos, line, start, find_len;
+		gint prev_line = -1;
 
 		pos = sci_find_text(doc->editor->sci, flags, &ttf);
 		if (pos == -1)
@@ -1613,10 +1614,14 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 
 		count++;
 		line = sci_get_line_from_position(doc->editor->sci, pos);
-		buffer = sci_get_line(doc->editor->sci, line);
-		msgwin_msg_add(COLOR_BLACK, line + 1, doc,
-			"%s:%d : %s", short_file_name, line + 1, g_strstrip(buffer));
-		g_free(buffer);
+		if (line != prev_line)
+		{
+			buffer = sci_get_line(doc->editor->sci, line);
+			msgwin_msg_add(COLOR_BLACK, line + 1, doc,
+				"%s:%d : %s", short_file_name, line + 1, g_strstrip(buffer));
+			g_free(buffer);
+			prev_line = line;
+		}
 
 		start = ttf.chrgText.cpMax + 1;
 		ttf.chrg.cpMin = start;

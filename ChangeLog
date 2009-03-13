@@ -4,6 +4,9 @@
    src/main.c, src/plugindata.h, src/plugins.c, src/prefs.c,
    src/prefs.h:
    Add an option to set an additional plugin lookup path.
+ * src/search.c:
+   When using Find All in the Find dialog, display matches only once
+   per line in the messages window (patch by Bert Vermeulen, thanks).
 
 
 2009-03-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
