@@ -60,6 +60,7 @@ libtagmanager_a_SOURCES =\
 	tcl.c\
 	sh.c\
 	vhdl.c\
+	actionscript.c\
 	ctags.c\
 	entry.c\
 	get.c\

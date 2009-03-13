@@ -1,3 +1,15 @@
+2009-03-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * data/filetype_extensions.conf, data/filetypes.actionscript,
+   src/about.c, src/document.c, src/filetypes.c, src/filetypes.h,
+   src/highlighting.c, src/plugindata.h, src/symbols.c,
+   tagmanager/Makefile.am, tagmanager/actionscript.c,
+   tagmanager/makefile.win32, tagmanager/parsers.h, THANKS, wscript:
+   Add filetype ActionScript (patch by Chris Macksey, thanks).
+   Update type keywords only for real C-like languages.
+   Fix wrong sorting of Assembler and Ada filetypes.
+
+
 2009-03-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/notebook.c:

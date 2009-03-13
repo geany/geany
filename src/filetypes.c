@@ -472,6 +472,17 @@ static void init_builtin_filetypes(void)
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
+#define ACTIONSCRIPT
+	ft = filetypes[GEANY_FILETYPES_AS];
+	ft->lang = 34;
+	ft->name = g_strdup("ActionScript");
+	ft->title = g_strdup_printf(_("%s source file"), "Actionscript");
+	ft->extension = g_strdup("as");
+	ft->pattern = utils_strv_new("*.as", NULL);
+	ft->comment_open = g_strdup("//");
+	ft->comment_close = NULL;
+	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
+
 #define R
 	ft = filetypes[GEANY_FILETYPES_R];
 	ft->lang = 34;

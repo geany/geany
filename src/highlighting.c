@@ -3236,6 +3236,35 @@ static void styleset_basic(ScintillaObject *sci)
 	set_sci_style(sci, SCE_B_BINNUMBER, GEANY_FILETYPES_BASIC, 18);
 }
 
+
+static void styleset_actionscript_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
+{
+	new_style_array(GEANY_FILETYPES_AS, 20);
+	styleset_c_like_init(config, config_home, GEANY_FILETYPES_AS);
+
+	style_sets[GEANY_FILETYPES_AS].keywords = g_new(gchar *, 4);
+
+	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_AS, 0, "");
+	get_keyfile_keywords(config, config_home, "keywords", "secondary", GEANY_FILETYPES_AS, 1, "");
+	get_keyfile_keywords(config, config_home, "keywords", "classes", GEANY_FILETYPES_AS, 2, "");
+	style_sets[GEANY_FILETYPES_AS].keywords[3] = NULL;
+
+	get_keyfile_wordchars(config, config_home, &style_sets[GEANY_FILETYPES_AS].wordchars);
+}
+
+
+static void styleset_actionscript(ScintillaObject *sci)
+{
+	apply_filetype_properties(sci, SCLEX_CPP, GEANY_FILETYPES_AS);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_AS].keywords[0]);
+	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_AS].keywords[2]);
+	SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) style_sets[GEANY_FILETYPES_AS].keywords[1]);
+
+	styleset_c_like(sci, GEANY_FILETYPES_AS);
+}
+
+
 static void styleset_haxe_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_style_array(GEANY_FILETYPES_HAXE, 20);
@@ -3366,6 +3395,7 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 		init_styleset_case(GEANY_FILETYPES_GLSL,	glsl);
 		init_styleset_case(GEANY_FILETYPES_HASKELL,	haskell);
 		init_styleset_case(GEANY_FILETYPES_HAXE,	haxe);
+		init_styleset_case(GEANY_FILETYPES_AS,		actionscript);
 		init_styleset_case(GEANY_FILETYPES_HTML,	html);
 		init_styleset_case(GEANY_FILETYPES_JAVA,	java);
 		init_styleset_case(GEANY_FILETYPES_JS,		js);
@@ -3427,6 +3457,7 @@ void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 		styleset_case(GEANY_FILETYPES_GLSL,		glsl);
 		styleset_case(GEANY_FILETYPES_HASKELL,	haskell);
 		styleset_case(GEANY_FILETYPES_HAXE,		haxe);
+		styleset_case(GEANY_FILETYPES_AS,		actionscript);
 		styleset_case(GEANY_FILETYPES_HTML,		html);
 		styleset_case(GEANY_FILETYPES_JAVA,		java);
 		styleset_case(GEANY_FILETYPES_JS,		js);

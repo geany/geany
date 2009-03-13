@@ -2334,8 +2334,24 @@ static gboolean update_type_keywords(GeanyDocument *doc, gint lang)
 	gboolean ret = FALSE;
 	guint n;
 	const GString *s;
-	ScintillaObject *sci = doc ? doc->editor->sci : NULL;
+	ScintillaObject *sci = doc->editor->sci;
 
+	g_return_val_if_fail(doc != NULL, FALSE);
+
+	switch (FILETYPE_ID(doc->file_type))
+	{	/* continue working with the following languages, skip on all others */
+		case GEANY_FILETYPES_C:
+		case GEANY_FILETYPES_CPP:
+		case GEANY_FILETYPES_CS:
+		case GEANY_FILETYPES_D:
+		case GEANY_FILETYPES_JAVA:
+		case GEANY_FILETYPES_VALA:
+			break;
+		default:
+			return FALSE;
+	}
+
+	sci = doc->editor->sci;
 	if (sci != NULL && editor_lexer_get_type_keyword_idx(sci_get_lexer(sci)) == -1)
 		return FALSE;
 
