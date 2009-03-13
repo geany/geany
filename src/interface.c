@@ -2280,6 +2280,10 @@ create_prefs_dialog (void)
   GtkWidget *project_file_path_entry;
   GtkWidget *project_file_path_button;
   GtkWidget *image1775;
+  GtkWidget *label235;
+  GtkWidget *extra_plugin_path_entry;
+  GtkWidget *extra_plugin_path_button;
+  GtkWidget *image2852;
   GtkWidget *label190;
   GtkWidget *label233;
   GtkWidget *vbox41;
@@ -2706,7 +2710,7 @@ create_prefs_dialog (void)
   gtk_container_add (GTK_CONTAINER (frame25), alignment28);
   gtk_alignment_set_padding (GTK_ALIGNMENT (alignment28), 0, 0, 12, 0);
 
-  table11 = gtk_table_new (2, 3, FALSE);
+  table11 = gtk_table_new (3, 3, FALSE);
   gtk_widget_show (table11);
   gtk_container_add (GTK_CONTAINER (alignment28), table11);
   gtk_table_set_row_spacings (GTK_TABLE (table11), 3);
@@ -2761,6 +2765,31 @@ create_prefs_dialog (void)
   image1775 = gtk_image_new_from_stock ("gtk-open", GTK_ICON_SIZE_BUTTON);
   gtk_widget_show (image1775);
   gtk_container_add (GTK_CONTAINER (project_file_path_button), image1775);
+
+  label235 = gtk_label_new (_("Extra plugin path:"));
+  gtk_widget_show (label235);
+  gtk_table_attach (GTK_TABLE (table11), label235, 0, 1, 2, 3,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label235), 0, 0.5);
+
+  extra_plugin_path_entry = gtk_entry_new ();
+  gtk_widget_show (extra_plugin_path_entry);
+  gtk_table_attach (GTK_TABLE (table11), extra_plugin_path_entry, 1, 2, 2, 3,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, extra_plugin_path_entry, _("Geany looks by default in the global installation path and in the configuration directory. The path entered here will be searched additionally for plugins. Leave blank to disable."), NULL);
+  gtk_entry_set_invisible_char (GTK_ENTRY (extra_plugin_path_entry), 8226);
+
+  extra_plugin_path_button = gtk_button_new ();
+  gtk_widget_show (extra_plugin_path_button);
+  gtk_table_attach (GTK_TABLE (table11), extra_plugin_path_button, 2, 3, 2, 3,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+
+  image2852 = gtk_image_new_from_stock ("gtk-open", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_show (image2852);
+  gtk_container_add (GTK_CONTAINER (extra_plugin_path_button), image2852);
 
   label190 = gtk_label_new (_("<b>Paths</b>"));
   gtk_widget_show (label190);
@@ -4542,6 +4571,10 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, project_file_path_entry, "project_file_path_entry");
   GLADE_HOOKUP_OBJECT (prefs_dialog, project_file_path_button, "project_file_path_button");
   GLADE_HOOKUP_OBJECT (prefs_dialog, image1775, "image1775");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label235, "label235");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, extra_plugin_path_entry, "extra_plugin_path_entry");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, extra_plugin_path_button, "extra_plugin_path_button");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, image2852, "image2852");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label190, "label190");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label233, "label233");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox41, "vbox41");

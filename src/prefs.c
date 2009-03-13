@@ -86,6 +86,7 @@ static gboolean find_duplicate(GeanyKeyBinding *search_kb,
 		guint key, GdkModifierType mods, const gchar *action);
 static void on_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gpointer user_data);
+static void on_enable_plugins_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_use_folding_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_open_encoding_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_prefs_print_radio_button_toggled(GtkToggleButton *togglebutton, gpointer user_data);
@@ -539,6 +540,7 @@ static void prefs_init_dialog(void)
 #ifndef HAVE_PLUGINS
 	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "check_plugins"), FALSE);
 #endif
+	on_enable_plugins_toggled(GTK_TOGGLE_BUTTON( ui_lookup_widget(ui_widgets.prefs_dialog, "check_plugins")), NULL);
 
 #ifdef HAVE_VTE
 	/* make VTE switch visible only when VTE is compiled in, it is hidden by default */
@@ -1356,6 +1358,15 @@ static void on_use_folding_toggled(GtkToggleButton *togglebutton, gpointer user_
 }
 
 
+static void on_enable_plugins_toggled(GtkToggleButton *togglebutton, gpointer user_data)
+{
+	gboolean sens = gtk_toggle_button_get_active(togglebutton);
+
+	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "extra_plugin_path_entry"), sens);
+	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "extra_plugin_path_button"), sens);
+}
+
+
 static void on_open_encoding_toggled(GtkToggleButton *togglebutton, gpointer user_data)
 {
 	gboolean sens = gtk_toggle_button_get_active(togglebutton);
@@ -1459,6 +1470,7 @@ void prefs_show_dialog(void)
 		/* add the clear icon to GtkEntry widgets in the dialog */
 		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "startup_path_entry"));
 		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "project_file_path_entry"));
+		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "extra_plugin_path_entry"));
 		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_toggle_mark"));
 		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_make"));
 		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_term"));
@@ -1482,6 +1494,8 @@ void prefs_show_dialog(void)
 
 		ui_setup_open_button_callback(ui_lookup_widget(ui_widgets.prefs_dialog, "startup_path_button"), NULL,
 			GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "startup_path_entry")));
+		ui_setup_open_button_callback(ui_lookup_widget(ui_widgets.prefs_dialog, "extra_plugin_path_button"), NULL,
+			GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "extra_plugin_path_entry")));
 
 		g_signal_connect(ui_widgets.prefs_dialog, "response",
 			G_CALLBACK(on_prefs_button_clicked), NULL);
@@ -1518,6 +1532,8 @@ void prefs_show_dialog(void)
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_print_pageheader"),
 			"toggled", G_CALLBACK(on_prefs_print_page_header_toggled), NULL);
 
+		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_plugins"),
+				"toggled", G_CALLBACK(on_enable_plugins_toggled), NULL);
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show"),
 				"toggled", G_CALLBACK(on_toolbar_show_toggled), NULL);
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs"),

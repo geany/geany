@@ -1,3 +1,11 @@
+2009-03-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * doc/geany.txt, doc/geany.html, geany.glade, src/interface.c,
+   src/main.c, src/plugindata.h, src/plugins.c, src/prefs.c,
+   src/prefs.h:
+   Add an option to set an additional plugin lookup path.
+
+
 2009-03-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * data/filetype_extensions.conf, data/filetypes.actionscript,

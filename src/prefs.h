@@ -36,6 +36,7 @@ typedef struct GeanyPrefs
 	gboolean		switch_to_status;
 	gboolean		auto_focus;
 	gchar			*default_open_path;
+	gchar			*custom_plugin_path;
 }
 GeanyPrefs;
 

@@ -1116,6 +1116,7 @@ void main_quit()
 	g_free(app->datadir);
 	g_free(app->docdir);
 	g_free(prefs.default_open_path);
+	g_free(prefs.custom_plugin_path);
 	g_free(ui_prefs.custom_date_format);
 	g_free(interface_prefs.editor_font);
 	g_free(interface_prefs.tagbar_font);

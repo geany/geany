@@ -816,16 +816,21 @@ static void load_all_plugins(void)
 	gchar *path;
 
 	path = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", NULL);
-	/* first load plugins in ~/.config/geany/plugins/, then in $prefix/lib/geany */
+	/* first load plugins in ~/.config/geany/plugins/ */
 	load_plugins_from_path(path);
 	g_free(path);
+
+	/* load plugins from a custom path */
+	if (NZV(prefs.custom_plugin_path))
+		load_plugins_from_path(prefs.custom_plugin_path);
+
+	/* finally load plugins from $prefix/lib/geany */
 #ifdef G_OS_WIN32
 	path = get_plugin_path();
 #else
 	path = g_strconcat(GEANY_LIBDIR, G_DIR_SEPARATOR_S "geany", NULL);
 #endif
 	load_plugins_from_path(path);
-
 	g_free(path);
 }
 
@@ -945,6 +950,8 @@ void plugins_init(void)
 
 	stash_group_add_toggle_button(group, &prefs.load_plugins,
 		"load_plugins", TRUE, "check_plugins");
+	stash_group_add_entry(group, &prefs.custom_plugin_path,
+		"custom_plugin_path", "", "extra_plugin_path_entry");
 
 	g_signal_connect(geany_object, "save-settings", G_CALLBACK(on_save_settings), NULL);
 	stash_group_add_string_vector(group, &active_plugins_pref, "active_plugins", NULL);
