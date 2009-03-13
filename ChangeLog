@@ -8,6 +8,9 @@
    Add filetype ActionScript (patch by Chris Macksey, thanks).
    Update type keywords only for real C-like languages.
    Fix wrong sorting of Assembler and Ada filetypes.
+ * plugins/classbuilder.c:
+   Use G_DEFINE_TYPE in the GTK+ class template instead of manual code.
+   Other minor cleanups.
 
 
 2009-03-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

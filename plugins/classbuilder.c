@@ -168,52 +168,24 @@ struct _{class_name}Private\n\
 	/* add your private declarations here */\n\
 };\n\
 \n\
-static void {class_name_low}_class_init			({class_name}Class *klass);\n\
-static void {class_name_low}_init      			({class_name} *self);\n\
 {destructor_decl}\
 \n\
-/* Local data */\n\
-static {base_name}Class *parent_class = NULL;\n\
-\n\
-GType {class_name_low}_get_type(void)\n\
-{\n\
-	static GType self_type = 0;\n\
-	if (! self_type)\n\
-	{\n\
-		static const GTypeInfo self_info = \n\
-		{\n\
-			sizeof({class_name}Class),\n\
-			NULL, /* base_init */\n\
-			NULL, /* base_finalize */\n\
-			(GClassInitFunc){class_name_low}_class_init,\n\
-			NULL, /* class_finalize */\n\
-			NULL, /* class_data */\n\
-			sizeof({class_name}),\n\
-			0,\n\
-			(GInstanceInitFunc){class_name_low}_init,\n\
-			NULL /* value_table */\n\
-		};\n\
-		\n\
-		self_type = g_type_register_static({base_gtype}, \"{class_name}\", &self_info, 0);\n\
-	}\n\
-	\n\
-	return self_type;\n\
-}\n\
+G_DEFINE_TYPE({class_name}, {class_name_low}, {base_gtype});\n\
 \n\n\
 static void {class_name_low}_class_init({class_name}Class *klass)\n\
 {\n\
 	{gtk_destructor_registration}\n\
-	parent_class = ({base_name}Class*)g_type_class_peek({base_gtype});\n\
 	g_type_class_add_private((gpointer)klass, sizeof({class_name}Private));\n\
 }\n\
-\n\n\
+\n\
+{destructor_impl}\n\
+\n\
 static void {class_name_low}_init({class_name} *self)\n\
 {\n\
 	\n\
 }\n\
 \n\
 {constructor_impl}\n\
-{destructor_impl}\n\
 ";
 
 
@@ -679,13 +651,12 @@ static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg)
 						gtk_entry_get_text(GTK_ENTRY(cc_dlg->gtk_constructor_type_entry)),
 						class_info->class_name_low);
 				class_info->constructor_impl = g_strdup_printf("\n"
-						"%s* %s_new(void)\n"
+						"%s *%s_new(void)\n"
 						"{\n"
-						"\treturn (%s*)g_object_new(%s_TYPE, NULL);\n"
+						"\treturn g_object_new(%s_TYPE, NULL);\n"
 						"}\n",
 						gtk_entry_get_text(GTK_ENTRY(cc_dlg->gtk_constructor_type_entry)),
 						class_info->class_name_low,
-						gtk_entry_get_text(GTK_ENTRY(cc_dlg->gtk_constructor_type_entry)),
 						class_info->class_name_up);
 			}
 			else
@@ -710,13 +681,13 @@ static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg)
 						"\tg_return_if_fail(object != NULL);\n"
 						"\tg_return_if_fail(IS_%s(object));\n\n"
 						"\tself = %s(object);\n\n"
-						"\tif (G_OBJECT_CLASS(parent_class)->finalize)\n"
-						"\t\t(* G_OBJECT_CLASS(parent_class)->finalize)(object);\n"
+						"\tG_OBJECT_CLASS(%s_parent_class)->finalize(object);\n"
 						"}\n",
 						class_info->class_name_low,
 						class_info->class_name,
 						class_info->class_name_up,
-						class_info->class_name_up);
+						class_info->class_name_up,
+						class_info->class_name_low);
 			}
 			else
 			{
