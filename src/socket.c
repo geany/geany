@@ -371,8 +371,6 @@ static gint socket_fd_open_unix(const gchar *path)
 	addr.sun_family = AF_UNIX;
 	strncpy(addr.sun_path, real_path, sizeof(addr.sun_path) - 1);
 
-	g_free(real_path);
-
 	if (bind(sock, (struct sockaddr *)&addr, sizeof(addr)) < 0)
 	{
 		perror("bind");
@@ -386,6 +384,10 @@ static gint socket_fd_open_unix(const gchar *path)
 		socket_fd_close(sock);
 		return -1;
 	}
+
+    g_chmod(real_path, 0600);
+
+	g_free(real_path);
 
 	return sock;
 }
