@@ -1592,6 +1592,7 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 	gchar *buffer, *short_file_name;
 	struct TextToFind ttf;
 	gint count = 0;
+	gint prev_line = -1;
 
 	g_return_val_if_fail(doc != NULL, 0);
 
@@ -1603,7 +1604,6 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 	while (1)
 	{
 		gint pos, line, start, find_len;
-		gint prev_line = -1;
 
 		pos = sci_find_text(doc->editor->sci, flags, &ttf);
 		if (pos == -1)
@@ -1634,7 +1634,7 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 void search_find_usage(const gchar *search_text, gint flags, gboolean in_session)
 {
 	GeanyDocument *doc;
-	gboolean found = FALSE;
+	gint count = 0;
 
 	doc = document_get_current();
 	g_return_if_fail(doc != NULL);
@@ -1650,7 +1650,7 @@ void search_find_usage(const gchar *search_text, gint flags, gboolean in_session
 
 	if (! in_session)
 	{	/* use current document */
-		found = (find_document_usage(doc, search_text, flags) > 0);
+		count = find_document_usage(doc, search_text, flags);
 	}
 	else
 	{
@@ -1658,20 +1658,19 @@ void search_find_usage(const gchar *search_text, gint flags, gboolean in_session
 		for (i = 0; i < documents_array->len; i++)
 		{
 			if (documents[i]->is_valid)
-				if (find_document_usage(documents[i], search_text, flags) > 0)
-					found = TRUE;
+			{
+				count += find_document_usage(documents[i], search_text, flags);
+			}
 		}
 	}
 
-	if (! found) /* no matches were found */
+	if (count == 0) /* no matches were found */
 	{
 		ui_set_statusbar(FALSE, _("No matches found for \"%s\"."), search_text);
 		msgwin_msg_add(COLOR_BLUE, -1, NULL, _("No matches found for \"%s\"."), search_text);
 	}
 	else
 	{
-		gint count = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(msgwindow.store_msg), NULL);
-
 		ui_set_statusbar(FALSE, ngettext(
 			"Found %d match for \"%s\".", "Found %d matches for \"%s\".", count),
 			count, search_text);
