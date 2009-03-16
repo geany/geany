@@ -385,7 +385,7 @@ static gint socket_fd_open_unix(const gchar *path)
 		return -1;
 	}
 
-    g_chmod(real_path, 0600);
+	g_chmod(real_path, 0600);
 
 	g_free(real_path);
 

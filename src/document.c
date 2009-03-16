@@ -2334,9 +2334,10 @@ static gboolean update_type_keywords(GeanyDocument *doc, gint lang)
 	gboolean ret = FALSE;
 	guint n;
 	const GString *s;
-	ScintillaObject *sci = doc->editor->sci;
+	ScintillaObject *sci;
 
 	g_return_val_if_fail(doc != NULL, FALSE);
+	sci = doc->editor->sci;
 
 	switch (FILETYPE_ID(doc->file_type))
 	{	/* continue working with the following languages, skip on all others */
