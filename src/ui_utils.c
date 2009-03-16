@@ -1505,7 +1505,7 @@ static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
 	{
 		gchar *dir_locale;
 
-		dir_locale = gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(dialog));
+		dir_locale = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
 		ret_path = utils_get_utf8_from_locale(dir_locale);
 		g_free(dir_locale);
 	}

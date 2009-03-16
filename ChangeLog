@@ -5,6 +5,9 @@
    display the right amount of matches.
    Fix the display of the matches once per line (I broke the original
    patch).
+ * src/ui_uitls.c:
+   Fix wrong directory selection behaviour in all Open Folder dialogs
+   (closes #2688020, patch by Marcel Stimberg, thanks).
 
 
 2009-03-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
