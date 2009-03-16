@@ -512,6 +512,7 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 	struct sockaddr_in caddr;
 	guint caddr_len = sizeof(caddr);
 	GtkWidget *window = data;
+	gboolean popup = FALSE;
 
 	fd = g_io_channel_unix_get_fd(source);
 	sock = accept(fd, (struct sockaddr *)&caddr, &caddr_len);
@@ -525,6 +526,7 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 			{
 				handle_input_filename(g_strstrip(buf));
 			}
+			popup = TRUE;
 		}
 		else if (strncmp(buf, "line", 4) == 0)
 		{
@@ -552,10 +554,13 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 		}
 #endif
 	}
-	gtk_window_present(GTK_WINDOW(window));
+	if (popup)
+	{
+		gtk_window_present(GTK_WINDOW(window));
 #ifdef G_OS_WIN32
-	gdk_window_show(window->window);
+		gdk_window_show(window->window);
 #endif
+	}
 
 	socket_fd_close(sock);
 
