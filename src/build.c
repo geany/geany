@@ -853,6 +853,12 @@ gboolean build_parse_make_dir(const gchar *string, gchar **prefix)
 		return TRUE;
 	}
 
+	if (strstr(string, "Leaving directory") != NULL)
+	{
+		*prefix = NULL;
+		return TRUE;
+	}
+
 	return FALSE;
 }
 

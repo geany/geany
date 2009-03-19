@@ -5,6 +5,9 @@
    'Set Includes and Arguments' dialog.
    Disable Compile/Run buttons/menu items when Compile/Run commands are
    set but empty.
+   Reset current build directory to the base directory after reading a
+   "Leaving directory" message when parsing Make output
+   (closes #2694479, patch by Andrea Mazzoleni, thanks).
  * src/notebook.c:
    Fix wrong display of the filename in the tab bar menu for new files.
  * src/dialog.c:
