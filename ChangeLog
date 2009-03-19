@@ -5,6 +5,8 @@
    'Set Includes and Arguments' dialog.
    Disable Compile/Run buttons/menu items when Compile/Run commands are
    set but empty.
+ * src/notebook.c:
+   Fix wrong display of the filename in the tab bar menu for new files.
 
 
 2009-03-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

@@ -213,7 +213,7 @@ static GtkMenu *get_tab_bar_popup_menu(void)
 		if (! DOC_VALID(doc))
 			continue;
 
-		base_name = g_path_get_basename(doc->file_name);
+		base_name = g_path_get_basename(DOC_FILENAME(doc));
 		menu_item = gtk_menu_item_new_with_label(base_name);
 		gtk_widget_show(menu_item);
 		gtk_container_add(GTK_CONTAINER(menu), menu_item);
