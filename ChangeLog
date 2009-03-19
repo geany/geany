@@ -12,6 +12,8 @@
    initialisation.
    Add a shortcut of the project's base directory to the
    File Open/Save As dialogs when a project is open for faster access.
+ * src/splitwindow.c:
+   Add keybindings for the split actions.
 
 
 2009-03-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

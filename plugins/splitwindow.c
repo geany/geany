@@ -34,6 +34,7 @@
 #include "document.h"
 #include "editor.h"
 #include "plugindata.h"
+#include "keybindings.h"
 #include "geanyfunctions.h"
 
 
@@ -44,6 +45,18 @@ PLUGIN_SET_INFO(_("Split Window"), _("Splits the editor view into two windows.")
 
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
+
+
+/* Keybinding(s) */
+enum
+{
+	KB_SPLIT_HORIZONTAL,
+	KB_SPLIT_VERTICAL,
+	KB_SPLIT_UNSPLIT,
+	KB_COUNT
+};
+
+PLUGIN_KEY_GROUP(split_window, KB_COUNT);
 
 
 enum State
@@ -354,6 +367,26 @@ static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
+static void kb_activate(guint key_id)
+{
+	switch (key_id)
+	{
+		case KB_SPLIT_HORIZONTAL:
+			if (plugin_state == STATE_UNSPLIT)
+				split_view(TRUE);
+			break;
+		case KB_SPLIT_VERTICAL:
+			if (plugin_state == STATE_UNSPLIT)
+				split_view(FALSE);
+			break;
+		case KB_SPLIT_UNSPLIT:
+			if (plugin_state != STATE_UNSPLIT)
+				on_unsplit(NULL, NULL);
+			break;
+	}
+}
+
+
 void plugin_init(GeanyData *data)
 {
 	GtkWidget *item, *menu;
@@ -383,6 +416,14 @@ void plugin_init(GeanyData *data)
 	gtk_widget_show_all(menu_items.main);
 
 	set_state(STATE_UNSPLIT);
+
+	/* setup keybindings */
+	keybindings_set_item(plugin_key_group, KB_SPLIT_HORIZONTAL, kb_activate,
+		0, 0, "split_horizontal", _("Split Horizontally"), menu_items.horizontal);
+	keybindings_set_item(plugin_key_group, KB_SPLIT_VERTICAL, kb_activate,
+		0, 0, "split_vertical", _("Split Vertically"), menu_items.vertical);
+	keybindings_set_item(plugin_key_group, KB_SPLIT_UNSPLIT, kb_activate,
+		0, 0, "split_unsplit", _("Unsplit"), menu_items.unsplit);
 }
 
 
