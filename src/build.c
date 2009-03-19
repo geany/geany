@@ -1365,8 +1365,12 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
                                         gint response,
                                         gpointer user_data)
 {
-	GeanyFiletype *ft = user_data;
+	GeanyDocument *doc = user_data;
+	GeanyFiletype *ft;
 
+	g_return_if_fail(doc != NULL);
+
+	ft = doc->file_type;
 	g_return_if_fail(ft != NULL);
 
 	if (response == GTK_RESPONSE_ACCEPT)
@@ -1407,6 +1411,8 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
 				programs->modified = TRUE;
 			}
 		}
+		if (programs->modified)
+			build_menu_update(doc);
 	}
 }
 
@@ -1530,7 +1536,7 @@ static void show_includes_arguments_gen(void)
 	/* run modally to prevent user changing idx filetype */
 	response = gtk_dialog_run(GTK_DIALOG(dialog));
 	/* call the callback manually */
-	on_includes_arguments_dialog_response(GTK_DIALOG(dialog), response, ft);
+	on_includes_arguments_dialog_response(GTK_DIALOG(dialog), response, doc);
 
 	gtk_widget_destroy(dialog);
 }
@@ -1605,9 +1611,11 @@ void build_menu_update(GeanyDocument *doc)
 		can_build = can_make;
 
 	if (menu_items->item_compile)
-		gtk_widget_set_sensitive(menu_items->item_compile, can_build && ft->actions->can_compile);
+		gtk_widget_set_sensitive(menu_items->item_compile,
+			can_build && ft->actions->can_compile && NZV(ft->programs->compiler));
 	if (menu_items->item_link)
-		gtk_widget_set_sensitive(menu_items->item_link, can_build && ft->actions->can_link);
+		gtk_widget_set_sensitive(menu_items->item_link,
+			can_build && ft->actions->can_link && NZV(ft->programs->linker));
 	if (menu_items->item_make_all)
 		gtk_widget_set_sensitive(menu_items->item_make_all, can_make);
 	if (menu_items->item_make_custom)
@@ -1618,7 +1626,7 @@ void build_menu_update(GeanyDocument *doc)
 	if (app->project && NZV(app->project->run_cmd))
 		can_run = have_path;	/* for now run is disabled for all untitled files */
 	else
-		can_run = have_path && ft->actions->can_exec;
+		can_run = have_path && ft->actions->can_exec && NZV(ft->programs->run_cmd);
 
 	can_stop = run_info.pid > (GPid) 1;
 	can_run &= ! can_stop;
@@ -1651,7 +1659,8 @@ void build_menu_update(GeanyDocument *doc)
 	if (widgets.toolitem_set_args != NULL)
 		gtk_widget_set_sensitive(widgets.toolitem_set_args, can_set_args);
 
-	ui_widget_set_sensitive(widgets.compile_button, can_build && ft->actions->can_compile);
+	ui_widget_set_sensitive(widgets.compile_button,
+		can_build && ft->actions->can_compile && NZV(ft->programs->compiler));
 	ui_widget_set_sensitive(widgets.build_button, can_make);
 	ui_widget_set_sensitive(widgets.run_button, can_run || can_stop);
 

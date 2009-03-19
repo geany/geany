@@ -1,3 +1,12 @@
+2009-03-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/build.c:
+   Update build menu items after changing anything in the
+   'Set Includes and Arguments' dialog.
+   Disable Compile/Run buttons/menu items when Compile/Run commands are
+   set but empty.
+
+
 2009-03-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/search.c:
