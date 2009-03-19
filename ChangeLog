@@ -7,6 +7,11 @@
    set but empty.
  * src/notebook.c:
    Fix wrong display of the filename in the tab bar menu for new files.
+ * src/dialog.c:
+   Set the initial directory for the Save As dialog only once on
+   initialisation.
+   Add a shortcut of the project's base directory to the
+   File Open/Save As dialogs when a project is open for faster access.
 
 
 2009-03-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

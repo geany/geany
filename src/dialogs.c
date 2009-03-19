@@ -56,6 +56,7 @@
 #include "encodings.h"
 #include "build.h"
 #include "main.h"
+#include "project.h"
 
 
 enum
@@ -102,6 +103,9 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 		}
 		g_slist_free(filelist);
 	}
+	if (app->project && NZV(app->project->base_path))
+		gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
+			app->project->base_path, NULL);
 }
 #endif
 
@@ -272,6 +276,10 @@ void dialogs_show_open_file()
 			gtk_file_chooser_set_current_folder(
 				GTK_FILE_CHOOSER(ui_widgets.open_filesel), initdir);
 	}
+
+	if (app->project && NZV(app->project->base_path))
+		gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
+			app->project->base_path, NULL);
 
 	gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(ui_widgets.open_filesel));
 	gtk_window_present(GTK_WINDOW(ui_widgets.open_filesel));
@@ -550,12 +558,21 @@ static gboolean gtk_show_save_as(const gchar *initdir)
 		g_free(fname);
 	}
 
+	if (app->project && NZV(app->project->base_path))
+		gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(ui_widgets.save_filesel),
+			app->project->base_path, NULL);
+
 	/* if the folder wasn't set so far, we set it to the given directory */
 	if (! folder_set && initdir != NULL && g_path_is_absolute(initdir))
 		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(ui_widgets.save_filesel), initdir);
 
 	/* Run the dialog synchronously, pausing this function call */
 	resp = gtk_dialog_run(GTK_DIALOG(ui_widgets.save_filesel));
+
+	if (app->project && NZV(app->project->base_path))
+		gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(ui_widgets.save_filesel),
+			app->project->base_path, NULL);
+
 	return (resp == GTK_RESPONSE_ACCEPT);
 }
 #endif
@@ -570,13 +587,16 @@ gboolean dialogs_show_save_as()
 {
 	gboolean result;
 	gchar *initdir = NULL;
+	static gboolean initial = TRUE;
 
 	initdir = utils_get_current_file_dir_utf8();
 
 	/* use project or default startup directory (if set) if no files are open */
-	/** TODO should it only be used when initally open the dialog and not on every show? */
-	if (! initdir)
+	if (initdir == NULL && initial)
+	{
 		initdir = g_strdup(utils_get_default_dir_utf8());
+		initial = FALSE;
+	}
 
 	setptr(initdir, utils_get_locale_from_utf8(initdir));
 
