@@ -492,7 +492,7 @@ static void init_builtin_filetypes(void)
 	ft->pattern = utils_strv_new("*.as", NULL);
 	ft->comment_open = g_strdup("//");
 	ft->comment_close = NULL;
-	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
+	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 
 #define R
 	ft = filetypes[GEANY_FILETYPES_R];
