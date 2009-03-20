@@ -4,6 +4,8 @@
    src/filetypes.c, src/filetypes.h, src/symbols.c:
    Make GEANY_FILETYPES_NONE = 0; other things are now broken, e.g.
    setting Open dialog filetypes.
+ * src/dialogs.c:
+   Fix setting Open dialog filetype on opening a file.
 
 
 2009-03-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
