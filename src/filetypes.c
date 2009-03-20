@@ -78,7 +78,18 @@ static void init_builtin_filetypes(void)
 {
 	GeanyFiletype *ft;
 
-#define C	/* these macros are only to ease navigation */
+#define NONE	/* these macros are only to ease navigation */
+	ft = filetypes[GEANY_FILETYPES_NONE];
+	ft->lang = -2;
+	ft->name = g_strdup("None");
+	ft->title = g_strdup(_("All files"));
+	ft->extension = g_strdup("*");
+	ft->pattern = utils_strv_new("*", NULL);
+	ft->comment_open = NULL;
+	ft->comment_close = NULL;
+	ft->group = GEANY_FILETYPE_GROUP_NONE;
+
+#define C
 	ft = filetypes[GEANY_FILETYPES_C];
 	ft->lang = 0;
 	ft->name = g_strdup("C");
@@ -560,17 +571,6 @@ static void init_builtin_filetypes(void)
 	ft->comment_open = g_strdup("--");
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
-
-#define ALL
-	ft = filetypes[GEANY_FILETYPES_NONE];
-	ft->lang = -2;
-	ft->name = g_strdup("None");
-	ft->title = g_strdup(_("All files"));
-	ft->extension = g_strdup("*");
-	ft->pattern = utils_strv_new("*", NULL);
-	ft->comment_open = NULL;
-	ft->comment_close = NULL;
-	ft->group = GEANY_FILETYPE_GROUP_NONE;
 }
 
 
@@ -1240,7 +1240,7 @@ void filetypes_save_commands()
 		G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.", NULL);
 	gint i;
 
-	for (i = 0; i < GEANY_FILETYPES_NONE; i++)
+	for (i = 1; i < GEANY_MAX_BUILT_IN_FILETYPES; i++)
 	{
 		struct build_programs *bp = filetypes[i]->programs;
 		GKeyFile *config_home;

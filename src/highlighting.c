@@ -3433,7 +3433,7 @@ void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 	filetypes_load_config(filetype_idx, FALSE);	/* load filetypes.ext */
 
 	/* load tags files (some lexers highlight global typenames) */
-	if (filetype_idx < GEANY_FILETYPES_NONE)
+	if (filetype_idx != GEANY_FILETYPES_NONE)
 		symbols_global_tags_loaded(filetype_idx);
 
 	switch (filetype_idx)

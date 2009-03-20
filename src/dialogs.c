@@ -90,7 +90,7 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 		gboolean ro = (response == GEANY_RESPONSE_VIEW);	/* View clicked */
 
 		/* ignore detect from file item */
-		if (filetype_idx >= 0 && filetype_idx < GEANY_FILETYPES_NONE)
+		if (filetype_idx > 0 && filetype_idx < GEANY_MAX_BUILT_IN_FILETYPES)
 			ft = filetypes[filetype_idx];
 		if (encoding_idx >= 0 && encoding_idx < GEANY_ENCODINGS_MAX)
 			charset = encodings[encoding_idx].charset;

@@ -29,14 +29,11 @@
 #include "ScintillaWidget.h"
 
 
-/* Each group should be alpha-sorted, based on filetype::name (not enum name).
- * Warning: remember to break the plugin ABI when adding items. */
-/* TODO: for a stable ABI put GEANY_FILETYPES_NONE first, and use a sorted duplicate
- * filetypes array for GUI elements. */
 typedef enum
 {
-	/* normally compiled languages */
-	GEANY_FILETYPES_ADA = 0,
+	GEANY_FILETYPES_NONE = 0,	/* first filetype */
+
+	GEANY_FILETYPES_ADA,
 	GEANY_FILETYPES_AS,
 	GEANY_FILETYPES_ASM,
 	GEANY_FILETYPES_C,
@@ -54,8 +51,6 @@ typedef enum
 	GEANY_FILETYPES_PASCAL,
 	GEANY_FILETYPES_VALA,
 	GEANY_FILETYPES_VHDL,
-
-	/* script languages */
 	GEANY_FILETYPES_FERITE,
 	GEANY_FILETYPES_JS,
 	GEANY_FILETYPES_LUA,
@@ -68,14 +63,10 @@ typedef enum
 	GEANY_FILETYPES_RUBY,
 	GEANY_FILETYPES_SH,
 	GEANY_FILETYPES_TCL,
-
-	/* markup languages */
 	GEANY_FILETYPES_CSS,
 	GEANY_FILETYPES_DOCBOOK,
 	GEANY_FILETYPES_HTML,
 	GEANY_FILETYPES_XML,
-
-	/* miscellaneous languages */
 	GEANY_FILETYPES_CMAKE,
 	GEANY_FILETYPES_CONF,
 	GEANY_FILETYPES_DIFF,
@@ -86,9 +77,10 @@ typedef enum
 	GEANY_FILETYPES_SQL,
 	GEANY_FILETYPES_YAML,
 
-	GEANY_FILETYPES_NONE,	/* must be last filetype */
-	GEANY_MAX_BUILT_IN_FILETYPES	/* Use filetypes_array->len instead */
-} filetype_id;
+	/* ^ append items here */
+	GEANY_MAX_BUILT_IN_FILETYPES	/* Don't use this, use filetypes_array->len instead */
+}
+filetype_id;
 
 typedef enum
 {

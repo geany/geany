@@ -1,3 +1,11 @@
+2009-03-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/highlighting.c, src/dialogs.c, src/plugindata.h,
+   src/filetypes.c, src/filetypes.h, src/symbols.c:
+   Make GEANY_FILETYPES_NONE = 0; other things are now broken, e.g.
+   setting Open dialog filetypes.
+
+
 2009-03-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/build.c:
