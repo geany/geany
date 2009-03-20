@@ -1,3 +1,10 @@
+2009-03-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * plugins/htmlchars.c:
+   Extend plugin by feature to bulk replace and replace on input for
+   special characters to their HTML entities.
+
+
 2009-03-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/build.c:
