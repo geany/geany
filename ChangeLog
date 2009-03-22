@@ -1,3 +1,10 @@
+2009-03-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * tagmanager/css.c:
+   Fix wrong parsing of CSS tags when the definition block starts on
+   a new line (reported by Dominic Hopf, thanks).
+
+
 2009-03-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * plugins/htmlchars.c:
