@@ -1,8 +1,8 @@
 /*
  *      plugindata.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2007-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2007-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2007-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -35,19 +35,23 @@
 #ifndef PLUGINDATA_H
 #define PLUGINDATA_H
 
+#include "editor.h"	/* GeanyIndentType */
+
+
 /* Note: We use enum instead of 'static const gint' to allow its use in global variable
  * initializing, otherwise we get errors like:
  * error: initializer element is not constant */
+/** Versioning data */
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 98,
+	GEANY_API_VERSION = 135,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
 	/* This should usually stay the same if fields are only appended, assuming only pointers to
 	 * structs and not structs themselves are declared by plugins. */
-	GEANY_ABI_VERSION = 46
+	GEANY_ABI_VERSION = 59
 };
 
 /** Check the plugin can be loaded by Geany.
@@ -65,8 +69,8 @@ enum {
 	}
 
 
-/** Plugin info structure to hold basic information about a plugin.
- * Should usually be set with PLUGIN_SET_INFO(). */
+/** Basic information about a plugin available to Geany without loading the plugin.
+ * The fields are set in plugin_set_info(), usually with the PLUGIN_SET_INFO() macro. */
 typedef struct PluginInfo
 {
 	/** The name of the plugin. */
@@ -79,6 +83,17 @@ typedef struct PluginInfo
 	gchar	*author;
 }
 PluginInfo;
+
+
+/** Basic information for the plugin and identification. */
+typedef struct GeanyPlugin
+{
+	PluginInfo	*info;	/**< Fields set in plugin_set_info(). */
+
+	struct GeanyPluginPrivate *priv;	/* private */
+}
+GeanyPlugin;
+
 
 /** Set the plugin name and some other basic information about a plugin.
  * This declares a function, so you can use the _() translation macro for arguments.
@@ -133,8 +148,8 @@ typedef struct PluginCallback
 PluginCallback;
 
 
-
-/** Flags to be set by plugins in PluginFields struct. */
+/** @deprecated Use @ref ui_add_document_sensitive() instead.
+ * Flags to be set by plugins in PluginFields struct. */
 typedef enum
 {
 	/** Whether a plugin's menu item should be disabled when there are no open documents */
@@ -142,7 +157,8 @@ typedef enum
 }
 PluginFlags;
 
-/** Fields set and owned by the plugin. */
+/** @deprecated Use @ref ui_add_document_sensitive() instead.
+ * Fields set and owned by the plugin. */
 typedef struct PluginFields
 {
 	/** Bitmask of PluginFlags. */
@@ -175,6 +191,8 @@ typedef struct GeanyData
 }
 GeanyData;
 
+#define geany			geany_data	/**< Simple macro for @c geany_data that reduces typing. */
+
 
 /** This contains pointers to functions owned by Geany for plugins to use.
  * Functions from the core can be appended when needed by plugin authors, but may
@@ -182,13 +200,15 @@ GeanyData;
 typedef struct GeanyFunctions
 {
 	struct DocumentFuncs		*p_document;		/**< See document.h */
-	struct ScintillaFuncs		*p_sci;				/**< See sciwrappers.h */
+	struct SciFuncs				*p_sci;				/**< See sciwrappers.h */
 	struct TemplateFuncs		*p_templates;		/**< See templates.h */
 	struct UtilsFuncs			*p_utils;			/**< See utils.h */
 	struct UIUtilsFuncs			*p_ui;				/**< See ui_utils.h */
-	struct SupportFuncs			*p_support;			/**< See support.h */
+	/** @deprecated Use ui_lookup_widget() instead. */
+	struct SupportFuncs			*p_support;
 	struct DialogFuncs			*p_dialogs;			/**< See dialogs.h */
-	struct MsgWinFuncs			*p_msgwindow;		/**< See msgwindow.h */
+	/** @deprecated Use @ref GeanyFunctions::p_msgwin instead. */
+	struct MsgWinFuncs			*p_msgwindow;
 	struct EncodingFuncs		*p_encodings;		/**< See encodings.h */
 	struct KeybindingFuncs		*p_keybindings;		/**< See keybindings.h */
 	struct TagManagerFuncs		*p_tm;				/**< See tagmanager/include */
@@ -198,6 +218,9 @@ typedef struct GeanyFunctions
 	struct NavQueueFuncs        *p_navqueue;		/**< See navqueue.h */
 	struct EditorFuncs        	*p_editor;			/**< See editor.h */
 	struct MainFuncs        	*p_main;			/**< See main.h */
+	struct PluginFuncs        	*p_plugin;			/**< See plugins.c */
+	struct ScintillaFuncs		*p_scintilla;		/**< See ScintillaFuncs */
+	struct MsgWinFuncs			*p_msgwin;			/**< See msgwindow.h */
 }
 GeanyFunctions;
 
@@ -225,18 +248,34 @@ typedef struct DocumentFuncs
 	void		(*set_encoding) (struct GeanyDocument *doc, const gchar *new_encoding);
 	void		(*set_text_changed) (struct GeanyDocument *doc, gboolean changed);
 	void		(*set_filetype) (struct GeanyDocument *doc, struct GeanyFiletype *type);
-	gboolean	(*close) (GeanyDocument *doc);
+	gboolean	(*close) (struct GeanyDocument *doc);
+	struct GeanyDocument*	(*index)(gint idx);
+	gboolean	(*save_file_as) (struct GeanyDocument *doc, const gchar *utf8_fname);
+	void		(*rename_file) (struct GeanyDocument *doc, const gchar *new_filename);
+	const GdkColor*	(*get_status_color) (struct GeanyDocument *doc);
 }
 DocumentFuncs;
 
 
 struct _ScintillaObject;
 
-/** See sciwrappers.h. */
+/** See http://scintilla.org for the full documentation. */
 typedef struct ScintillaFuncs
 {
-	/** Send Scintilla a message.
-	 * @see http://scintilla.org for the documentation. */
+	/** Send Scintilla a message. */
+	long int	(*send_message) (struct _ScintillaObject* sci, unsigned int iMessage,
+			long unsigned int wParam, long int lParam);
+	/** Create a new ScintillaObject widget. */
+	GtkWidget*	(*new)(void);
+}
+ScintillaFuncs;
+
+
+/** Wrapper functions for Scintilla messages.
+ * See sciwrappers.h for the list of functions. */
+typedef struct SciFuncs
+{
+	/** @deprecated Use @ref ScintillaFuncs::send_message() instead. */
 	long int (*send_message) (struct _ScintillaObject* sci, unsigned int iMessage,
 			long unsigned int wParam, long int lParam);
 	void	(*send_command) (struct _ScintillaObject* sci, gint cmd);
@@ -245,7 +284,7 @@ typedef struct ScintillaFuncs
 	void	(*end_undo_action) (struct _ScintillaObject* sci);
 	void	(*set_text) (struct _ScintillaObject *sci, const gchar *text);
 	void	(*insert_text) (struct _ScintillaObject *sci, gint pos, const gchar *text);
-	void	(*get_text) (struct _ScintillaObject *sci, gint len, gchar* text);
+	void	(*get_text) (struct _ScintillaObject *sci, gint len, gchar *text);
 	gint	(*get_length) (struct _ScintillaObject *sci);
 	gint	(*get_current_position) (struct _ScintillaObject *sci);
 	void	(*set_current_position) (struct _ScintillaObject* sci, gint position,
@@ -253,8 +292,8 @@ typedef struct ScintillaFuncs
 	gint	(*get_col_from_position) (struct _ScintillaObject* sci, gint position);
 	gint	(*get_line_from_position) (struct _ScintillaObject* sci, gint position);
 	gint	(*get_position_from_line) (struct _ScintillaObject* sci, gint line);
-	void	(*replace_sel) (struct _ScintillaObject* sci, const gchar* text);
-	void	(*get_selected_text) (struct _ScintillaObject* sci, gchar* text);
+	void	(*replace_sel) (struct _ScintillaObject* sci, const gchar *text);
+	void	(*get_selected_text) (struct _ScintillaObject* sci, gchar *text);
 	gint	(*get_selected_text_length) (struct _ScintillaObject* sci);
 	gint	(*get_selection_start) (struct _ScintillaObject* sci);
 	gint	(*get_selection_end) (struct _ScintillaObject* sci);
@@ -262,7 +301,7 @@ typedef struct ScintillaFuncs
 	void	(*set_selection_mode) (struct _ScintillaObject* sci, gint mode);
 	void	(*set_selection_start) (struct _ScintillaObject* sci, gint position);
 	void	(*set_selection_end) (struct _ScintillaObject* sci, gint position);
-	void	(*get_text_range) (struct _ScintillaObject* sci, gint start, gint end, gchar*text);
+	void	(*get_text_range) (struct _ScintillaObject* sci, gint start, gint end, gchar *text);
 	gchar*	(*get_line) (struct _ScintillaObject* sci, gint line_num);
 	gint	(*get_line_length) (struct _ScintillaObject* sci, gint line);
 	gint	(*get_line_count) (struct _ScintillaObject* sci);
@@ -276,8 +315,9 @@ typedef struct ScintillaFuncs
 	gboolean (*has_selection) (struct _ScintillaObject *sci);
 	gint	(*get_tab_width) (struct _ScintillaObject *sci);
 	void	(*indicator_clear) (struct _ScintillaObject *sci, gint start, gint end);
+	void	(*indicator_set) (struct _ScintillaObject *sci, gint indic);
 }
-ScintillaFuncs;
+SciFuncs;
 
 
 /* See templates.h */
@@ -292,7 +332,7 @@ TemplateFuncs;
 typedef struct UtilsFuncs
 {
 	gboolean	(*str_equal) (const gchar *a, const gchar *b);
-	gboolean	(*string_replace_all) (GString *haystack, const gchar *needle,
+	guint		(*string_replace_all) (GString *haystack, const gchar *needle,
 				 const gchar *replacement);
 	GSList*		(*get_file_list) (const gchar *path, guint *length, GError **error);
 	gint		(*write_file) (const gchar *filename, const gchar *text);
@@ -312,6 +352,11 @@ typedef struct UtilsFuncs
 	gboolean	(*spawn_async) (const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
 				 GSpawnChildSetupFunc child_setup, gpointer user_data, GPid *child_pid,
 				 GError **error);
+	gint		(*str_casecmp) (const gchar *s1, const gchar *s2);
+	gchar*		(*get_date_time) (const gchar *format, time_t *time_to_use);
+	void		(*open_browser) (const gchar *uri);
+	guint		(*string_replace_first) (GString *haystack, const gchar *needle,
+				 const gchar *replace);
 }
 UtilsFuncs;
 
@@ -320,6 +365,8 @@ UtilsFuncs;
 typedef struct MainFuncs
 {
 	void		(*reload_configuration) (void);
+	void		(*locale_init) (const gchar *locale_dir, const gchar *package);
+
 }
 MainFuncs;
 
@@ -336,7 +383,13 @@ typedef struct UIUtilsFuncs
 	void		(*table_add_row) (GtkTable *table, gint row, ...) G_GNUC_NULL_TERMINATED;
 	GtkWidget*	(*path_box_new) (const gchar *title, GtkFileChooserAction action, GtkEntry *entry);
 	GtkWidget*	(*button_new_with_image) (const gchar *stock_id, const gchar *text);
-	gint		(*get_toolbar_insert_position) (void);
+	void		(*add_document_sensitive) (GtkWidget *widget);
+	void		(*widget_set_tooltip_text) (GtkWidget *widget, const gchar *text);
+	GtkWidget*	(*image_menu_item_new) (const gchar *stock_id, const gchar *label);
+	GtkWidget*	(*lookup_widget) (GtkWidget *widget, const gchar *widget_name);
+	void		(*progress_bar_start) (const gchar *text);
+	void		(*progress_bar_stop) (void);
+	void		(*entry_add_clear_icon) (GtkWidget *entry);
 }
 UIUtilsFuncs;
 
@@ -347,11 +400,14 @@ typedef struct DialogFuncs
 	gboolean	(*show_question) (const gchar *text, ...);
 	void		(*show_msgbox) (gint type, const gchar *text, ...);
 	gboolean	(*show_save_as) (void);
+	gboolean	(*show_input_numeric) (const gchar *title, const gchar *label_text,
+				 gdouble *value, gdouble min, gdouble max, gdouble step);
+
 }
 DialogFuncs;
 
 
-/* See support.h */
+/* @deprecated Use ui_lookup_widget() instead. */
 typedef struct SupportFuncs
 {
 	GtkWidget*	(*lookup_widget) (GtkWidget *widget, const gchar *widget_name);
@@ -363,7 +419,7 @@ SupportFuncs;
 typedef struct MsgWinFuncs
 {
 	/* status_add() does not set the status bar - use ui->set_statusbar() instead. */
-	void		(*status_add) (const gchar *format, ...);
+	void		(*status_add) (const gchar *format, ...) G_GNUC_PRINTF (1, 2);
 	void		(*compiler_add) (gint msg_color, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
 	void		(*msg_add) (gint msg_color, gint line, struct GeanyDocument *doc,
 				 const gchar *format, ...) G_GNUC_PRINTF (4, 5);
@@ -412,6 +468,7 @@ typedef struct FiletypeFuncs
 {
 	GeanyFiletype*	(*detect_from_file) (const gchar *utf8_filename);
 	GeanyFiletype*	(*lookup_by_name) (const gchar *name);
+	GeanyFiletype*	(*index)(gint idx);
 	/* Remember to convert any filetype_id arguments to GeanyFiletype pointers in any
 	 * appended functions */
 }
@@ -454,16 +511,29 @@ struct GeanyEditor;
 /* See editor.h */
 typedef struct EditorFuncs
 {
-	void	(*set_indicator) (struct GeanyEditor *editor, gint start, gint end);
-	void	(*set_indicator_on_line) (struct GeanyEditor *editor, gint line);
-	void	(*clear_indicators) (struct GeanyEditor *editor);
-
 	const struct GeanyIndentPrefs* (*get_indent_prefs)(struct GeanyEditor *editor);
 	struct _ScintillaObject* (*create_widget)(struct GeanyEditor *editor);
+
+	void	(*indicator_set_on_range) (struct GeanyEditor *editor, gint indic, gint start, gint end);
+	void	(*indicator_set_on_line) (struct GeanyEditor *editor, gint indic, gint line);
+	void	(*indicator_clear) (struct GeanyEditor *editor, gint indic);
+
+	void	(*set_indent_type)(struct GeanyEditor *editor, GeanyIndentType type);
+	gchar*	(*get_word_at_pos) (struct GeanyEditor *editor, gint pos, const gchar *wordchars);
+
 	/* Remember to convert any GeanyDocument or ScintillaObject pointers in any
 	 * appended functions to GeanyEditor pointers. */
 }
 EditorFuncs;
+
+
+/* See plugins.c */
+typedef struct PluginFuncs
+{
+	void	(*add_toolbar_item)(GeanyPlugin *plugin, GtkToolItem *item);
+	void	(*module_make_resident) (GeanyPlugin *plugin);
+}
+PluginFuncs;
 
 
 /* Deprecated aliases */

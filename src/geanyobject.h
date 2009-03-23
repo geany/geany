@@ -1,8 +1,8 @@
 /*
  *      geanyobject.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2007-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2007-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2007-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -30,8 +30,6 @@
 
 G_BEGIN_DECLS
 
-extern GObject *geany_object;
-
 typedef enum
 {
 	GCB_DOCUMENT_NEW,
@@ -43,8 +41,11 @@ typedef enum
 	GCB_PROJECT_SAVE,
 	GCB_PROJECT_CLOSE,
 	GCB_UPDATE_EDITOR_MENU,
+	GCB_EDITOR_NOTIFY,
+	GCB_SAVE_SETTINGS,
 	GCB_MAX
-} GeanyCallbackId;
+}
+GeanyCallbackId;
 
 
 #define GEANY_OBJECT_TYPE				(geany_object_get_type())
@@ -81,6 +82,8 @@ struct _GeanyObjectClass
 	void (*project_save)(GKeyFile *keyfile);
 	void (*project_close)(void);
 	void (*update_editor_menu)(const gchar *word, gint click_pos, GeanyDocument *doc);
+	gboolean (*editor_notify)(GeanyEditor *editor, gpointer scnt);
+	void (*save_settings)(GKeyFile *keyfile);
 };
 
 GType		geany_object_get_type	(void);

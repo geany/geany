@@ -1,8 +1,8 @@
 /*
  *      callbacks.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -36,7 +36,6 @@
 #include <time.h>
 
 #include "callbacks.h"
-#include "interface.h"
 #include "support.h"
 
 #include "keyfile.h"
@@ -65,8 +64,8 @@
 #include "printing.h"
 #include "plugins.h"
 #include "log.h"
+#include "toolbar.h"
 
-#include "geanyobject.h"
 
 #ifdef HAVE_VTE
 # include "vte.h"
@@ -88,8 +87,6 @@ static gboolean insert_callback_from_menu = FALSE;
 /* represents the state at switching a notebook page(in the left treeviews widget), to not emit
  * the selection-changed signal from tv.tree_openfiles */
 /*static gboolean switch_tv_notebook_page = FALSE; */
-
-CallbacksData callbacks_data = { NULL };
 
 
 static gboolean check_no_unsaved(void)
@@ -236,8 +233,10 @@ void
 on_close1_activate                     (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	guint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
-	document_remove_page(cur_page);
+	GeanyDocument *doc = document_get_current();
+
+	if (doc)
+		document_close(doc);
 }
 
 
@@ -382,7 +381,7 @@ on_delete1_activate                    (GtkMenuItem     *menuitem,
 	if (GTK_IS_EDITABLE(focusw))
 		gtk_editable_delete_selection(GTK_EDITABLE(focusw));
 	else
-	if (IS_SCINTILLA(focusw) && doc != NULL)
+	if (IS_SCINTILLA(focusw) && doc != NULL && sci_has_selection(doc->editor->sci))
 		sci_clear(doc->editor->sci);
 	else
 	if (GTK_IS_TEXT_VIEW(focusw))
@@ -422,7 +421,7 @@ on_open1_activate                      (GtkMenuItem     *menuitem,
 
 /* quit toolbar button */
 void
-on_toolbutton_quit_clicked             (GtkToolButton   *toolbutton,
+on_toolbutton_quit_clicked             (GtkAction       *action,
                                         gpointer         user_data)
 {
 	on_exit_clicked(NULL, NULL);
@@ -431,7 +430,7 @@ on_toolbutton_quit_clicked             (GtkToolButton   *toolbutton,
 
 /* reload file */
 void
-on_toolbutton_reload_clicked           (GtkToolButton   *toolbutton,
+on_toolbutton_reload_clicked           (GtkAction       *action,
                                         gpointer         user_data)
 {
 	on_reload_as_activate(NULL, GINT_TO_POINTER(-1));
@@ -512,7 +511,7 @@ on_change_font1_activate               (GtkMenuItem     *menuitem,
 
 /* new file */
 void
-on_toolbutton_new_clicked              (GtkToolButton   *toolbutton,
+on_toolbutton_new_clicked              (GtkAction       *action,
                                         gpointer         user_data)
 {
 	document_new_file(NULL, NULL, NULL);
@@ -520,7 +519,7 @@ on_toolbutton_new_clicked              (GtkToolButton   *toolbutton,
 
 /* open file */
 void
-on_toolbutton_open_clicked             (GtkToolButton   *toolbutton,
+on_toolbutton_open_clicked             (GtkAction       *action,
                                         gpointer         user_data)
 {
 	dialogs_show_open_file();
@@ -529,36 +528,17 @@ on_toolbutton_open_clicked             (GtkToolButton   *toolbutton,
 
 /* save file */
 void
-on_toolbutton_save_clicked             (GtkToolButton   *toolbutton,
+on_toolbutton_save_clicked             (GtkAction       *action,
                                         gpointer         user_data)
 {
 	on_save1_activate(NULL, user_data);
 }
 
 
-static void set_search_bar_background(gboolean success)
-{
-	const GdkColor red   = {0, 0xffff, 0x6666, 0x6666};
-	const GdkColor white = {0, 0xffff, 0xffff, 0xffff};
-	static gboolean old_value = TRUE;
-	GtkWidget *widget = lookup_widget(main_widgets.window, "toolbutton_search_entry");
-
-	/* only update if really needed */
-	if (search_data.search_bar && old_value != success)
-	{
-		gtk_widget_modify_base(widget, GTK_STATE_NORMAL, success ? NULL : &red);
-		gtk_widget_modify_text(widget, GTK_STATE_NORMAL, success ? NULL : &white);
-
-		old_value = success;
-	}
-}
-
-
 /* store text, clear search flags so we can use Search->Find Next/Previous */
-static void setup_find_next(GtkEditable *editable)
+static void setup_find_next(const gchar *text)
 {
-	g_free(search_data.text);
-	search_data.text = gtk_editable_get_chars(editable, 0, -1);
+	setptr(search_data.text, g_strdup(text));
 	search_data.flags = 0;
 	search_data.backwards = FALSE;
 	search_data.search_bar = TRUE;
@@ -567,44 +547,36 @@ static void setup_find_next(GtkEditable *editable)
 
 /* search text */
 void
-on_toolbar_search_entry_activate                     (GtkEntry        *entry,
-                                        gpointer         user_data)
+on_toolbar_search_entry_changed(GtkAction *action, const gchar *text, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
 	gboolean result;
 
-	setup_find_next(GTK_EDITABLE(entry));
-	result = document_search_bar_find(doc, search_data.text, 0, FALSE);
-	set_search_bar_background(result);
+	setup_find_next(text);
+	result = document_search_bar_find(doc, search_data.text, 0, GPOINTER_TO_INT(user_data));
+	if (search_data.search_bar)
+		ui_set_search_entry_background(toolbar_get_widget_child_by_name("SearchEntry"), result);
 }
 
 
 /* search text */
 void
-on_toolbar_search_entry_changed                      (GtkEditable     *editable,
+on_toolbutton_search_clicked           (GtkAction       *action,
                                         gpointer         user_data)
 {
 	GeanyDocument *doc = document_get_current();
 	gboolean result;
+	GtkWidget *entry = toolbar_get_widget_child_by_name("SearchEntry");
 
-	setup_find_next(editable);
-	result = document_search_bar_find(doc, search_data.text, 0, TRUE);
-	set_search_bar_background(result);
-}
+	if (entry != NULL)
+	{
+		const gchar *text = gtk_entry_get_text(GTK_ENTRY(entry));
 
-
-/* search text */
-void
-on_toolbutton_search_clicked                (GtkToolButton   *toolbutton,
-                                        gpointer         user_data)
-{
-	GeanyDocument *doc = document_get_current();
-	gboolean result;
-	GtkWidget *entry = lookup_widget(GTK_WIDGET(main_widgets.window), "toolbutton_search_entry");
-
-	setup_find_next(GTK_EDITABLE(entry));
-	result = document_search_bar_find(doc, search_data.text, 0, FALSE);
-	set_search_bar_background(result);
+		setup_find_next(text);
+		result = document_search_bar_find(doc, search_data.text, 0, FALSE);
+		if (search_data.search_bar)
+			ui_set_search_entry_background(entry, result);
+	}
 }
 
 
@@ -615,7 +587,7 @@ on_toolbar_large_icons1_activate       (GtkMenuItem     *menuitem,
 	if (ignore_toolbar_toggle) return;
 
 	toolbar_prefs.icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
-	ui_update_toolbar_icons(GTK_ICON_SIZE_LARGE_TOOLBAR);
+	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), GTK_ICON_SIZE_LARGE_TOOLBAR);
 }
 
 
@@ -626,7 +598,7 @@ on_toolbar_small_icons1_activate       (GtkMenuItem     *menuitem,
 	if (ignore_toolbar_toggle) return;
 
 	toolbar_prefs.icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR;
-	ui_update_toolbar_icons(GTK_ICON_SIZE_SMALL_TOOLBAR);
+	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), GTK_ICON_SIZE_SMALL_TOOLBAR);
 }
 
 
@@ -635,7 +607,7 @@ void
 on_hide_toolbar1_activate              (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	GtkWidget *tool_item = lookup_widget(GTK_WIDGET(main_widgets.window), "menu_show_toolbar1");
+	GtkWidget *tool_item = ui_lookup_widget(GTK_WIDGET(main_widgets.window), "menu_show_toolbar1");
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(tool_item), FALSE);
 }
 
@@ -687,25 +659,31 @@ on_normal_size1_activate               (GtkMenuItem     *menuitem,
 
 /* close tab */
 void
-on_toolbutton_close_clicked                (GtkToolButton   *toolbutton,
+on_toolbutton_close_clicked            (GtkAction       *action,
                                         gpointer         user_data)
 {
-	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
-	document_remove_page(cur_page);
+	on_close1_activate(NULL, NULL);
 }
 
 
 void
-on_notebook1_switch_page               (GtkNotebook     *notebook,
-                                        GtkNotebookPage *page,
-                                        guint            page_num,
+on_toolbutton_close_all_clicked        (GtkAction       *action,
                                         gpointer         user_data)
 {
-	callbacks_data.last_doc = document_get_current();
+	on_close_all1_activate(NULL, NULL);
 }
 
 
-/* changes window-title on switching tabs and lots of other things */
+void
+on_toolbutton_preferences_clicked      (GtkAction       *action,
+                                        gpointer         user_data)
+{
+	on_preferences1_activate(NULL, NULL);
+}
+
+
+/* Changes window-title after switching tabs and lots of other things.
+ * note: using 'after' makes Scintilla redraw before the UI, appearing more responsive */
 void
 on_notebook1_switch_page_after         (GtkNotebook     *notebook,
                                         GtkNotebookPage *page,
@@ -734,13 +712,10 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
 		document_check_disk_status(doc, FALSE);
 
 #ifdef HAVE_VTE
-		vte_cwd(DOC_FILENAME(doc), FALSE);
+		vte_cwd((doc->real_path != NULL) ? doc->real_path : doc->file_name, FALSE);
 #endif
 
-		if (geany_object)
-		{
-			g_signal_emit_by_name(geany_object, "document-activate", doc);
-		}
+		g_signal_emit_by_name(geany_object, "document-activate", doc);
 	}
 }
 
@@ -823,17 +798,17 @@ toolbar_popup_menu                     (GtkWidget *widget,
 
 		switch (toolbar_prefs.icon_style)
 		{
-			case 0: w = lookup_widget(ui_widgets.toolbar_menu, "images_only2"); break;
-			case 1: w = lookup_widget(ui_widgets.toolbar_menu, "text_only2"); break;
-			default: w = lookup_widget(ui_widgets.toolbar_menu, "images_and_text2"); break;
+			case 0: w = ui_lookup_widget(ui_widgets.toolbar_menu, "images_only2"); break;
+			case 1: w = ui_lookup_widget(ui_widgets.toolbar_menu, "text_only2"); break;
+			default: w = ui_lookup_widget(ui_widgets.toolbar_menu, "images_and_text2"); break;
 		}
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(w), TRUE);
 
 		switch (toolbar_prefs.icon_size)
 		{
 			case GTK_ICON_SIZE_LARGE_TOOLBAR:
-					w = lookup_widget(ui_widgets.toolbar_menu, "large_icons1"); break;
-			default: w = lookup_widget(ui_widgets.toolbar_menu, "small_icons1"); break;
+					w = ui_lookup_widget(ui_widgets.toolbar_menu, "large_icons1"); break;
+			default: w = ui_lookup_widget(ui_widgets.toolbar_menu, "small_icons1"); break;
 		}
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(w), TRUE);
 
@@ -898,7 +873,7 @@ void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer user_data)
 				sci_set_selection_start(sci, sci_get_current_position(sci) - text_len + 1);
 		}
 		else
-			sci_cmd(sci, cmd);
+			sci_send_command(sci, cmd);
 
 		g_free(text);
 
@@ -933,7 +908,7 @@ on_show_messages_window1_toggled       (GtkCheckMenuItem *checkmenuitem,
 	if (ignore_callback) return;
 
 	ui_prefs.msgwindow_visible = (ui_prefs.msgwindow_visible) ? FALSE : TRUE;
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "scrolledwindow1"), ui_prefs.msgwindow_visible);
+	ui_widget_show_hide(ui_lookup_widget(main_widgets.window, "scrolledwindow1"), ui_prefs.msgwindow_visible);
 }
 
 
@@ -941,8 +916,11 @@ void
 on_markers_margin1_toggled             (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data)
 {
-	editor_prefs.show_markers_margin = (editor_prefs.show_markers_margin) ? FALSE : TRUE;
-	ui_show_markers_margin();
+	if (ignore_callback)
+		return;
+
+	editor_prefs.show_markers_margin = ! editor_prefs.show_markers_margin;
+	ui_toggle_editor_features(GEANY_EDITOR_SHOW_MARKERS_MARGIN);
 }
 
 
@@ -950,8 +928,47 @@ void
 on_show_line_numbers1_toggled          (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data)
 {
-	editor_prefs.show_linenumber_margin = (editor_prefs.show_linenumber_margin) ? FALSE : TRUE;
-	ui_show_linenumber_margin();
+	if (ignore_callback)
+		return;
+
+	editor_prefs.show_linenumber_margin = ! editor_prefs.show_linenumber_margin;
+	ui_toggle_editor_features(GEANY_EDITOR_SHOW_LINE_NUMBERS);
+}
+
+
+void
+on_menu_show_white_space1_toggled      (GtkCheckMenuItem *checkmenuitem,
+                                        gpointer         user_data)
+{
+	if (ignore_callback)
+		return;
+
+	editor_prefs.show_white_space = ! editor_prefs.show_white_space;
+	ui_toggle_editor_features(GEANY_EDITOR_SHOW_WHITE_SPACE);
+}
+
+
+void
+on_menu_show_line_endings1_toggled     (GtkCheckMenuItem *checkmenuitem,
+                                        gpointer         user_data)
+{
+	if (ignore_callback)
+		return;
+
+	editor_prefs.show_line_endings = ! editor_prefs.show_line_endings;
+	ui_toggle_editor_features(GEANY_EDITOR_SHOW_LINE_ENDINGS);
+}
+
+
+void
+on_menu_show_indentation_guides1_toggled (GtkCheckMenuItem *checkmenuitem,
+                                          gpointer         user_data)
+{
+	if (ignore_callback)
+		return;
+
+	editor_prefs.show_indent_guide = ! editor_prefs.show_indent_guide;
+	ui_toggle_editor_features(GEANY_EDITOR_SHOW_INDENTATION_GUIDES);
 }
 
 
@@ -1045,7 +1062,7 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gboolean definition = (menuitem ==
-		GTK_MENU_ITEM(lookup_widget(main_widgets.editor_menu, "goto_tag_definition1")));
+		GTK_MENU_ITEM(ui_lookup_widget(main_widgets.editor_menu, "goto_tag_definition1")));
 	GeanyDocument *doc = document_get_current();
 
 	g_return_if_fail(doc != NULL);
@@ -1081,7 +1098,7 @@ on_show_color_chooser1_activate        (GtkMenuItem     *menuitem,
 
 
 void
-on_compile_button_clicked              (GtkToolButton   *toolbutton,
+on_toolbutton_compile_clicked          (GtkAction       *action,
                                         gpointer         user_data)
 {
 	keybindings_send_command(GEANY_KEY_GROUP_BUILD, GEANY_KEYS_BUILD_COMPILE);
@@ -1111,7 +1128,9 @@ static void find_again(gboolean change_direction)
 		if (result > -1)
 			editor_display_current_line(doc->editor, 0.3F);
 
-		set_search_bar_background((result > -1) ? TRUE : FALSE);
+		if (search_data.search_bar)
+			ui_set_search_entry_background(
+				toolbar_get_widget_child_by_name("SearchEntry"), (result > -1));
 	}
 }
 
@@ -1172,60 +1191,48 @@ void
 on_go_to_line_activate                 (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	dialogs_show_goto_line();
-}
+	static gdouble val = 1;
 
-
-void
-on_goto_line_dialog_response         (GtkDialog *dialog,
-                                      gint response,
-                                      gpointer user_data)
-{
-	if (response == GTK_RESPONSE_ACCEPT)
+	if (dialogs_show_input_numeric(_("Go to Line"), _("Enter the line you want to go to:"),
+			&val, 1, 100000000, 1))
 	{
 		GeanyDocument *doc = document_get_current();
-		gint line = strtol(gtk_entry_get_text(GTK_ENTRY(user_data)), NULL, 10);
 
-		if (doc != NULL && line > 0 && line <= sci_get_line_count(doc->editor->sci))
+		if (doc != NULL)
 		{
-			gint pos;
-
-			line--;	/* the user counts lines from 1, we begin at 0 so bring the user line to our one */
-			pos = sci_get_position_from_line(doc->editor->sci, line);
-			editor_goto_pos(doc->editor, pos, TRUE);
-		}
-		else
-		{
-			utils_beep();
+			if (! editor_goto_line(doc->editor, (gint) val - 1))
+				utils_beep();
 		}
 	}
-	if (dialog)
-		gtk_widget_destroy(GTK_WIDGET(dialog));
 }
 
 
 void
-on_goto_line_entry_activate          (GtkEntry        *entry,
-                                      gpointer         user_data)
+on_toolbutton_goto_entry_activate(GtkAction *action, const gchar *text, gpointer user_data)
 {
-	on_goto_line_dialog_response(GTK_DIALOG(user_data), GTK_RESPONSE_ACCEPT, entry);
+	GeanyDocument *doc = document_get_current();
+
+	if (doc != NULL)
+	{
+		gint line = atoi(text);
+		if (! editor_goto_line(doc->editor, line - 1))
+			utils_beep();
+	}
 }
 
 
 void
-on_toolbutton_goto_entry_activate      (GtkEntry        *entry,
+on_toolbutton_goto_clicked             (GtkAction       *action,
                                         gpointer         user_data)
 {
-	on_goto_line_dialog_response(NULL, GTK_RESPONSE_ACCEPT, entry);
-}
+	GtkWidget *entry = toolbar_get_widget_child_by_name("GotoEntry");
 
+	if (entry != NULL)
+	{
+		const gchar *text = gtk_entry_get_text(GTK_ENTRY(entry));
 
-void
-on_toolbutton_goto_clicked             (GtkToolButton   *toolbutton,
-                                        gpointer         user_data)
-{
-	on_goto_line_dialog_response(NULL, GTK_RESPONSE_ACCEPT,
-			lookup_widget(main_widgets.window, "toolbutton_goto_entry"));
+		on_toolbutton_goto_entry_activate(NULL, text, NULL);
+	}
 }
 
 
@@ -1251,7 +1258,7 @@ on_help1_activate                      (GtkMenuItem     *menuitem,
 		uri = g_strconcat(GEANY_HOMEPAGE, "manual/", VERSION, "/index.html", NULL);
 	}
 
-	utils_start_browser(uri);
+	utils_open_browser(uri);
 	g_free(uri);
 }
 
@@ -1268,7 +1275,7 @@ void
 on_website1_activate                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	utils_start_browser(GEANY_HOMEPAGE);
+	utils_open_browser(GEANY_HOMEPAGE);
 }
 
 
@@ -1413,10 +1420,7 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
 {
 	GeanyDocument *doc = document_get_current();
 	gchar *format;
-	gchar time_str[300]; /* the entered format string can be maximal 256 chars long, so we have
-						  * 44 additional characters for strtime's conversion */
-	time_t t;
-	struct tm *tm;
+	gchar *time_str;
 
 	if (doc == NULL) return;
 
@@ -1449,15 +1453,14 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
 		return;
 	}
 
-	/* get the current time */
-	t = time(NULL);
-	tm = localtime(&t);
-	if (strftime(time_str, sizeof time_str, format, tm) != 0)
+	time_str = utils_get_date_time(format, NULL);
+	if (time_str != NULL)
 	{
 		verify_click_pos(doc); /* make sure that the click_pos is valid */
 
 		sci_insert_text(doc->editor->sci, editor_info.click_pos, time_str);
 		sci_goto_pos(doc->editor->sci, editor_info.click_pos + strlen(time_str), FALSE);
+		g_free(time_str);
 	}
 	else
 	{
@@ -1527,19 +1530,10 @@ on_menu_unfold_all1_activate           (GtkMenuItem     *menuitem,
 
 
 void
-on_run_button_clicked                  (GtkToolButton   *toolbutton,
+on_toolbutton_run_clicked              (GtkAction       *action,
                                         gpointer         user_data)
 {
 	keybindings_send_command(GEANY_KEY_GROUP_BUILD, GEANY_KEYS_BUILD_RUN);
-}
-
-
-void
-on_go_to_line1_activate                (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	/* this is search menu cb; call popup menu goto cb */
-	on_go_to_line_activate(menuitem, user_data);
 }
 
 
@@ -1550,7 +1544,7 @@ on_menu_remove_indicators1_activate    (GtkMenuItem     *menuitem,
 	GeanyDocument *doc = document_get_current();
 
 	if (doc != NULL)
-		editor_clear_indicators(doc->editor);
+		editor_indicator_clear(doc->editor, GEANY_INDICATOR_ERROR);
 }
 
 
@@ -1711,7 +1705,7 @@ on_menu_increase_indent1_activate      (GtkMenuItem     *menuitem,
 
 	if (sci_get_lines_selected(doc->editor->sci) > 1)
 	{
-		sci_cmd(doc->editor->sci, SCI_TAB);
+		sci_send_command(doc->editor->sci, SCI_TAB);
 	}
 	else
 	{
@@ -1730,7 +1724,7 @@ on_menu_decrease_indent1_activate      (GtkMenuItem     *menuitem,
 
 	if (sci_get_lines_selected(doc->editor->sci) > 1)
 	{
-		sci_cmd(doc->editor->sci, SCI_BACKTAB);
+		sci_send_command(doc->editor->sci, SCI_BACKTAB);
 	}
 	else
 	{
@@ -1845,8 +1839,8 @@ on_menu_project1_activate              (GtkMenuItem     *menuitem,
 
 	if (item_close == NULL)
 	{
-		item_close = lookup_widget(main_widgets.window, "project_close1");
-		item_properties = lookup_widget(main_widgets.window, "project_properties1");
+		item_close = ui_lookup_widget(main_widgets.window, "project_close1");
+		item_properties = ui_lookup_widget(main_widgets.window, "project_properties1");
 	}
 
 	gtk_widget_set_sensitive(item_close, (app->project != NULL));
@@ -1910,6 +1904,7 @@ on_remove_markers1_activate            (GtkMenuItem     *menuitem,
 
 	sci_marker_delete_all(doc->editor->sci, 0);	/* delete the yellow tag marker */
 	sci_marker_delete_all(doc->editor->sci, 1);	/* delete user markers */
+	editor_indicator_clear(doc->editor, GEANY_INDICATOR_SEARCH);
 }
 
 
@@ -1976,9 +1971,9 @@ on_menu_toggle_all_additional_widgets1_activate
 {
 	static gint hide_all = -1;
 	GtkCheckMenuItem *msgw = GTK_CHECK_MENU_ITEM(
-		lookup_widget(main_widgets.window, "menu_show_messages_window1"));
+		ui_lookup_widget(main_widgets.window, "menu_show_messages_window1"));
 	GtkCheckMenuItem *toolbari = GTK_CHECK_MENU_ITEM(
-		lookup_widget(main_widgets.window, "menu_show_toolbar1"));
+		ui_lookup_widget(main_widgets.window, "menu_show_toolbar1"));
 
 	/* get the initial state (necessary if Geany was closed with hide_all = TRUE) */
 	if (hide_all == -1)
@@ -2112,23 +2107,15 @@ on_page_setup1_activate                (GtkMenuItem     *menuitem,
 }
 
 
-void
-on_tools1_activate                     (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-#ifdef HAVE_PLUGINS
-	plugins_update_tools_menu();
-#endif
-}
-
-
 gboolean
 on_escape_key_press_event              (GtkWidget       *widget,
                                         GdkEventKey     *event,
                                         gpointer         user_data)
 {
+	guint state = event->state & GEANY_KEYS_MODIFIER_MASK;
+
 	/* make pressing escape in the sidebar and toolbar focus the editor */
-	if (event->keyval == GDK_Escape && event->state == 0)
+	if (event->keyval == GDK_Escape && state == 0)
 	{
 		keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
 		return TRUE;
@@ -2167,8 +2154,8 @@ void
 on_search1_activate                    (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	GtkWidget *next_message = lookup_widget(main_widgets.window, "next_message1");
-	GtkWidget *previous_message = lookup_widget(main_widgets.window, "previous_message1");
+	GtkWidget *next_message = ui_lookup_widget(main_widgets.window, "next_message1");
+	GtkWidget *previous_message = ui_lookup_widget(main_widgets.window, "previous_message1");
 	gboolean have_messages;
 
 	/* enable commands if the messages window has any items */
@@ -2214,5 +2201,16 @@ on_debug_messages1_activate            (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	log_show_debug_messages_dialog();
+}
+
+
+void
+on_send_selection_to_vte1_activate     (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+#ifdef HAVE_VTE
+	if (vte_info.load_vte)
+		vte_send_selection_to_vte();
+#endif
 }
 

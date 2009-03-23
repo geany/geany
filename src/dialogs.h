@@ -1,8 +1,8 @@
 /*
  *      dialogs.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -50,8 +50,6 @@ GtkWidget *dialogs_show_input(const gchar *title, const gchar *label_text,
 
 gboolean dialogs_show_input_numeric(const gchar *title, const gchar *label_text,
 									gdouble *value, gdouble min, gdouble max, gdouble step);
-
-void dialogs_show_goto_line(void);
 
 void dialogs_show_file_properties(GeanyDocument *doc);
 

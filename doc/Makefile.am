@@ -18,6 +18,7 @@ hacking-doc: ../HACKING
 
 # when generating documentation, first try rst2html.py as it is the upstream default
 doc: geany.txt
+	(rst2html.py --version) < /dev/null > /dev/null 2>&1 && \
 	rst2html.py -stg --stylesheet=geany.css $(srcdir)/geany.txt geany.html || \
 	rst2html -stg --stylesheet=geany.css $(srcdir)/geany.txt geany.html
 

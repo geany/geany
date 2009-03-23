@@ -1,8 +1,8 @@
 /*
  *      project.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2007-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2007-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2007-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -47,6 +47,8 @@ typedef struct GeanyProject
 	gint type;
 	gchar **file_patterns;	/**< Array of filename extension patterns. */
 	gboolean make_in_base_path;
+
+	struct GeanyProjectPrivate	*priv;	/* must be last, append fields before this item */
 }
 GeanyProject;
 
@@ -59,6 +61,11 @@ typedef struct ProjectPrefs
 } ProjectPrefs;
 
 extern ProjectPrefs project_prefs;
+
+
+void project_init(void);
+
+void project_finalize(void);
 
 
 void project_new(void);

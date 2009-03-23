@@ -1,8 +1,8 @@
 /*
  *      sciwrappers.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
  *      the Free Software Foundation; either version 2 of the License, or
@@ -684,7 +684,10 @@ void sci_set_tab_width(ScintillaObject * sci, gint width)
 
 /** Get display tab width (this is not indent width, see GeanyIndentPrefs).
  * @param sci Scintilla widget.
- * @return Width. */
+ * @return Width.
+ *
+ * @since 0.15
+ **/
 gint sci_get_tab_width(ScintillaObject * sci)
 {
 	return SSM(sci, SCI_GETTABWIDTH, 0, 0);
@@ -720,7 +723,10 @@ void sci_use_popup(ScintillaObject *sci, gboolean enable)
 
 /** Check if there's a selection.
  * @param sci Scintilla widget.
- * @return Whether a selection is present. */
+ * @return Whether a selection is present.
+ *
+ * @since 0.15
+ **/
 gboolean sci_has_selection(ScintillaObject *sci)
 {
 	if (SSM(sci, SCI_GETSELECTIONEND,0,0) - SSM(sci, SCI_GETSELECTIONSTART,0,0))
@@ -760,6 +766,12 @@ void sci_scroll_caret(ScintillaObject *sci)
 void sci_scroll_lines(ScintillaObject *sci, gint lines)
 {
 	SSM(sci, SCI_LINESCROLL, 0, lines);
+}
+
+
+void sci_scroll_columns(ScintillaObject *sci, gint columns)
+{
+	SSM(sci, SCI_LINESCROLL, columns, 0);
 }
 
 
@@ -920,8 +932,11 @@ gboolean sci_get_readonly(ScintillaObject *sci)
 /** A simple convenience function for sending Scintilla commands without any parameters.
  * @param sci The Scintilla @c GtkWidget.
  * @param cmd @c SCI_COMMAND.
- * @see http://scintilla.org for the documentation. */
-void sci_cmd(ScintillaObject * sci, gint cmd)
+ * @see http://scintilla.org for the documentation.
+ *
+ *  @since 0.16
+ */
+void sci_send_command(ScintillaObject * sci, gint cmd)
 {
 	SSM(sci, cmd, 0, 0);
 }
@@ -967,12 +982,23 @@ void sci_start_styling(ScintillaObject *sci, gint pos, gint mask)
 	SSM(sci, SCI_STARTSTYLING, pos, mask);
 }
 
-gint sci_get_indicator(ScintillaObject *sci)
+gint sci_indicator_get(ScintillaObject *sci)
 {
 	return SSM(sci, SCI_GETINDICATORCURRENT, 0, 0);
 }
 
-void sci_set_indicator(ScintillaObject *sci, gint indic)
+/**
+ *  Set the current indicator. This is necessary to define an indicator for a range of text or
+ *  clearing indicators for a range of text.
+ *
+ *  @param sci Scintilla widget.
+ *  @param indic The indicator number to set.
+ *
+ *  @see sci_indicator_clear
+ *
+ *  @since 0.16
+ */
+void sci_indicator_set(ScintillaObject *sci, gint indic)
 {
 	SSM(sci, SCI_SETINDICATORCURRENT, indic, 0);
 }
@@ -982,10 +1008,18 @@ void sci_indicator_fill(ScintillaObject *sci, gint pos, gint len)
 	SSM(sci, SCI_INDICATORFILLRANGE, pos, len);
 }
 
-/** Clear a range of text from any set indicators. Starting at @a pos, @a len characters long.
- * @param sci Scintilla widget.
- * @param pos Starting position.
- * @param len Length. */
+/**
+ *  Clear a range of text from the currently set indicator.
+ *  Starting at @a pos, @a len characters long.
+ *  In order to make this function properly, you need to set the current indicator before with
+ *  @ref sci_indicator_set().
+ *
+ *  @param sci Scintilla widget.
+ *  @param pos Starting position.
+ *  @param len Length.
+ *
+ *  @since 0.16
+ */
 void sci_indicator_clear(ScintillaObject *sci, gint pos, gint len)
 {
 	SSM(sci, SCI_INDICATORCLEARRANGE, pos, len);
@@ -1009,7 +1043,10 @@ void sci_set_autoc_max_height(ScintillaObject *sci, gint val)
 /** Find a matching brace at @a pos.
  * @param sci Scintilla widget.
  * @param pos Position.
- * @return Matching brace position. */
+ * @return Matching brace position.
+ *
+ * @since 0.15
+ **/
 gint sci_find_matching_brace(ScintillaObject *sci, gint pos)
 {
 	return SSM(sci, SCI_BRACEMATCH, pos, 0);

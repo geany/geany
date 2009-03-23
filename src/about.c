@@ -1,8 +1,8 @@
 /*
  *      about.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -41,22 +41,23 @@ static GtkWidget *gb_window = NULL;
 #define INFO "<span size=\"larger\" weight=\"bold\">%s</span>"
 #define CODENAME "<span weight=\"bold\">\"" GEANY_CODENAME "\"</span>"
 #define BUILDDATE "<span size=\"smaller\">%s</span>"
-#define COPYRIGHT "Copyright (c)  2005-2008\nEnrico Tröger\nNick Treleaven\nFrank Lanitz\nAll rights reserved."
+#define COPYRIGHT "Copyright (c)  2005-2009\nEnrico Tröger\nNick Treleaven\nFrank Lanitz\nAll rights reserved."
 
 const gchar *translators[][2] = {
 	{ "be_BY", "Yura Semashko &lt;yurand2@gmail.com&gt;" },
 	{ "bg", "Dilyan Rusev &lt;dilyanrusev@gmail.com&gt;" },
 	{ "ca_ES", "Toni Garcia-Navarro &lt;topi@elpiset.net&gt;" },
 	{ "cs_CZ", "Petr Messner &lt;messa@messa.cz&gt;\nAnna Talianova &lt;anickat1@gmail.com&gt;" },
-	{ "de_DE", "Enrico Tröger &lt;enrico.troeger@uvena.de&gt;\nFrank Lanitz &lt;frank@frank.uvena.de&gt;" },
+	{ "de_DE", "Frank Lanitz &lt;frank@frank.uvena.de&gt;\nDominic Hopf &lt;dmaphy@googlemail.com&gt;" },
 	{ "el", "Stavros Temertzidis &lt;bullgr@gmail.com&gt;" },
 	{ "en_GB", "Jeff Bailes &lt;thepizzaking@gmail.com&gt;" },
 	{ "es", "Damián Viano &lt;debian@damianv.com.ar&gt;\nNacho Cabanes &lt;ncabanes@gmail.com&gt;" },
-	{ "fi_FI", "Harri Koskinen &lt;harri@fastmonkey.org&gt;" },
+	{ "fi", "Harri Koskinen &lt;harri@fastmonkey.org&gt;\nJari Rahkonen &lt;jari.rahkonen@pp1.inet.fi&gt;" },
 	{ "fr", "Jean-Philippe Moal &lt;skateinmars@skateinmars.net&gt;" },
 	{ "hu", "Gabor Kmetyko &lt;kg_kilo@freemail.hu&gt;" },
 	{ "it", "Max Baldinelli &lt;m.baldinelli@agora.it&gt;,\nDario Santomarco &lt;dariello@yahoo.it&gt;" },
 	{ "ja", "Tarot Osuji &lt;tarot@sdf.lonestar.org&gt;\nChikahiro Masami &lt;cmasa.z321@gmail.com&gt;" },
+	{ "ko", "Park Jang-heon &lt;dotkabi@gmail.com&gt;" },
 	{ "nl", "Kurt De Bree &lt;kdebree@telenet.be&gt;" },
 	{ "pl_PL", "Jarosław Foksa &lt;jfoksa@gmail.com&gt;" },
 	{ "pt_BR", "Alexandra Moreire &lt;alexandream@gmail.com&gt;\nAdrovane Marques Kade &lt;adrovane@gmail.com&gt;" },
@@ -77,12 +78,23 @@ const gchar *prev_translators[][2] = {
 static const gint prev_translators_len = G_N_ELEMENTS(prev_translators);
 
 static const gchar *contributors =
+/*<<<<<<< .working
 "Alexander Rodin, Andrew Rowland, Anh Phạm, blackdog, Bo Lorentsen, Bob Doan, Catalin Marinas, "
 "Christoph Berg, Daniel Richard G., Dave Moore, Dirk Weber, Felipe Pena, François Cami, "
 "Giuseppe Torelli, Guillaume Hoffmann, Jason Oster, Jean-François Wauthy, Jeff Pohlmeyer, "
 "John Gabriele, Josef Whiter, Kevin Ellwood, Kristoffer A. Tjernås, Lex Trotman, Marko Peric, Matti Mårds, "
 "Peter Strand, Pierre Joye, Rob van der Linde, Robert McGinley, S Jagannathan, Saleem Abdulrasool, "
 "Sebastian Kraft, Shiv, Slava Semushin, Stefan Oltmanns, Tamim, Tomás Vírseda, Yura Siamashka";
+=======*/
+"Alexander Rodin, Andrew Rowland, Anh Phạm, blackdog, Bo Lorentsen, Bob Doan, Bronisław Białek, Catalin Marinas, "
+"Chris Macksey, Christoph Berg, Colomban Wendling, Conrad Steenberg, Daniel Richard G., Dave Moore, Dirk Weber, "
+"Felipe Pena, François Cami, "
+"Giuseppe Torelli, Guillaume de Rorthais, Guillaume Hoffmann, Herbert Voss, Jason Oster, Jean-François Wauthy, Jeff Pohlmeyer, "
+"John Gabriele, Josef Whiter, Kevin Ellwood, Kristoffer A. Tjernås, Lex Trotman, Marko Peric, Matti Mårds, Moritz Barsnick, "
+"Peter Strand, Philipp Gildein, Pierre Joye, Rob van der Linde, Robert McGinley, Roland Baudin, S Jagannathan, Saleem Abdulrasool, "
+"Sebastian Kraft, Shiv, Slava Semushin, Stefan Oltmanns, Tamim, Thomas Martitz, Tomás Vírseda, "
+"Tyler Mulligan, Walery Studennikov, Yura Siamashka";
+/*>>>>>>> .merge-right.r3643*/
 
 
 static void header_eventbox_style_set(GtkWidget *widget);
@@ -161,7 +173,7 @@ static GtkWidget *create_dialog(void)
 	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), header_eventbox, FALSE, FALSE, 0);
 
 	/* set image */
-	icon = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO, FALSE);
+	icon = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
 	gtk_image_set_from_pixbuf(GTK_IMAGE(header_image), icon);
 	gtk_window_set_icon(GTK_WINDOW(dialog), icon);
 	g_object_unref(icon);	/* free our reference */
@@ -341,7 +353,7 @@ static GtkWidget *create_dialog(void)
 			"THANKS"
 #endif
 		);
-	label = gtk_label_new(buffer);
+	label = geany_wrap_label_new(buffer);
 	gtk_table_attach(GTK_TABLE(table), label, 0, 2, row, row + 1,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 5);
@@ -440,6 +452,6 @@ static void header_label_style_set(GtkWidget *widget)
 
 static void homepage_clicked(GtkButton *button, gpointer data)
 {
-	utils_start_browser(data);
+	utils_open_browser(data);
 }
 

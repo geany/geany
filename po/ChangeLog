@@ -1,3 +1,252 @@
+2009-03-17  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * ru.po: Update of Russian translation. Thanks to John Wehin.
+
+
+2009-03-07  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * tr.po: Update of Turkish translation. Thanks to Gürkan Gür.
+
+
+2009-03-04  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * fi.po: Update of Finnish translation. Thanks to Jari Rahkonen.
+
+
+2009-03-03  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * de.po: Minor update of German translation.
+ * es.po: Another update of Spanish translation.
+ * fi.po: Update of Finnish translation. Thanks to Jari Rahkonen.
+
+
+2009-03-02  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * es.po: Update of Spanish translation. Thanks to Antonio Jiménez
+   González.
+
+
+2009-02-27  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * es.po: Update of Spanish translation. Thanks to Antonio Jiménez
+   González.
+
+
+2009-02-13  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * de.po: Revisit of German translation.
+
+
+2009-02-10  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * zh_CN.po: Update of simply Chinese translation
+   (Thanks to Dormouse Young).
+
+
+2009-02-08  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * ca.po: Update of Catalan translation (Thanks to Toni Garcia-Navarro)
+ * hu.po: Update of Hungarian translation (Thanks to Gabor Kmetyko)
+
+
+2009-02-07  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * sv.po: Update of Swedish translation (Thanks to Tony Mattsson).
+
+
+2009-02-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * de.po: Minor update of German translation, mainly remove full stops
+          in tooltips.
+
+
+2009-02-05  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * en_GB.po: Update British English translation (Thanks to Jeff Bailes)
+ * ja.po: Update of Japanese translation (Thanks to Chikahiro Masami).
+
+
+2009-02-03  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * vi.po: Update of Vietnamese translation. Thanks to Clytie Siddall for
+   providing the update.
+ * pt_BR.po: Update of Brasilian Portuguese translation
+   (Thanks to Adrovane Marques Kade).
+
+
+2009-02-02  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * cs.po: Update of Czech translation. Thanks to Karel Kolman for
+   providing.
+
+
+2009-02-01  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * ja.po: Update of Japanese translation (Thanks to Chikahiro Masami).
+ * tr.po: Update of Turkish translation. Thanks to Gürkan Gür.
+ * *.po, geany.pot: Update for string freeze in preparing of Geany
+   0.15 release.
+ * de.po: Fix of a minor translation issue. Thanks to Chikahiro Masami
+   for reporting. Also update of translation provided by Dominic Hopf.
+
+
+2009-01-26  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * cs.po: Update of Czech translation. Thanks to Karel Kolman for
+   providing.
+
+
+2009-01-21  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * cs.po: Fix of a little spelling mistake. Thanks to Karel Kolman for
+   reporting.
+
+
+2009-01-16  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * de.po: Minor update of German translation
+
+
+2009-01-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * de.po: Fix a couple of bad mnemonics in the Find dialogs.
+
+
+2009-01-01  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * de.po: Minor update of German translation
+
+
+2008-12-31  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * tr.po: Update of Turkish translation. Thanks to Gürkan Gür.
+
+
+2008-12-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * tr.po: Update of Turkish translation. Thanks to Gürkan Gür.
+
+
+2008-12-13  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * de.po: Update of German translation.
+
+
+2008-12-04  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * de.po:
+   Major update of the German translation making it more consistent.
+   Fix some typos and improve serveral phrases.
+   Apply some of the guidelines at http://i18n.xfce.org/wiki/team_de.
+
+
+2008-11-30  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * bg.po: Update of Bulgarian translation. Thanks to Atanas Beloborodov.
+
+
+2008-11-24  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * tr.po: Little update of Turkish translation
+
+
+2008-11-22  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * ru.po: Update of Russian translation. Thanks to Andrew Drynov for
+   supporting update.
+
+
+2008-11-21  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * de.po: Update of German translation.
+
+
+2008-11-19  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * sv.po: Update of Swedish translation (Thanks to Tony Mattsson).
+
+
+2008-11-06  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * hu.po: Corrected a little typo in Hungarian translation. Thanks to
+   Gabor Kmetyko for input.
+
+
+2008-11-03  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * fr.po: Little update of French translation. Removes a fuzzy string.
+   Thanks to Roland Baudin for input.
+
+
+2008-10-31  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * fr.po: Little update of French translation. Closes #2210060.
+   Thanks to Colomban Wendling for reporting.
+
+
+2008-10-29  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * de.po: Little update of German translation
+
+
+2008-10-24  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * fr.po: Update of French translation. Thanks to Roland Baudin.
+
+
+2008-10-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * it.po: Update of Italian translation (Thanks M. Baldinelli).
+ * pt_BR.po: Update of Brasilian Portuguese translation
+   (Thanks to Adrovane Marques Kade).
+
+
+2008-10-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * de.po: Final update of German translation, thanks to Dominic Hopf.
+
+
+2008-10-17  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * hu.po: Update of Hungarian translation (Thanks to Gabor Kmetyko)
+
+
+2008-10-16  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * ca.po: Update of Catalan translation (Thanks to Toni Garcia-Navarro)
+
+
+2008-10-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * ro.po: Update of Romanian translation (Thanks to Alex Eftimie).
+
+
+2008-10-14  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * ko.po: Converted file to UTF-8.
+ * tr.po: Little update of Turkish translation
+ * zh_CN.po: Update of Simplified Chinese translation by
+   Dormouse Young (thanks).
+
+
+2008-10-13  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * de.po: Little update of German translation.
+ * ko.po, LINGUAS: Added Korean translation. Thanks to netkiss for
+   translation.
+ * sv.po: Update of Swedish translation (Thanks to Tony Mattsson).
+ * tr.po: Update of Turkish translation. Removed a fuzzy string since
+   there is no different plural form. Thanks to Gürkan Gür for sending
+   the hint.
+
+
+2008-10-12  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * en_GB.po: Update British English translation (Thanks to Jeff Bailes)
+ * *.po: Update of all po files to add missed string for singular form
+   of some terms.
+
+
 2008-10-09  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * tr.po: Update of Turkish translation. Thanks to Gürkan Gür.
@@ -109,6 +358,11 @@
 2008-04-23  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * sv.po: Update of Swedish translation (Thanks to Tony Mattsson).
+
+
+2008-04-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * New release: Geany 0.14
 
 
 2008-04-18  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

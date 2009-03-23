@@ -1,4 +1,4 @@
-.. |(version)| replace:: 0.15
+.. |(version)| replace:: 0.17
 
 =======
  Geany
@@ -14,7 +14,7 @@
 :Date: $Date$
 :Version: |(version)|
 
-Copyright © 2005-2008
+Copyright © 2005-2009
 
 This document is distributed under the terms of the GNU General Public
 License as published by the Free Software Foundation; either version 2
@@ -100,7 +100,7 @@ Installation
 Requirements
 ------------
 
-You will need the GTK (>= 2.6.0) libraries and their dependencies
+You will need the GTK (>= 2.8.0) libraries and their dependencies
 (Pango, GLib and ATK). Your distro should provide packages for these,
 usually installed by default. For Windows, you can download an installer
 which bundles these libraries from the website.
@@ -116,7 +116,7 @@ incomplete list see http://www.geany.org/Download/ThirdPartyPackages.
 Source compilation
 ------------------
 
-For compiling Geany yourself, you will need the GTK (>= 2.6.0)
+For compiling Geany yourself, you will need the GTK (>= 2.8.0)
 libraries and header files. You will also need the Pango, GLib and
 ATK libraries and header files. All these files are available at
 http://www.gtk.org, but very often your distro will provide development
@@ -201,11 +201,8 @@ Short option  Long option              Function
 *none*        --column                 Set initial column number for the first opened file.
 
 -c dir_name   --config=directory_name  Use an alternate configuration directory. Default
-                                       configuration directory is ``~/.geany/`` and there resides
-                                       ``geany.conf`` and other configuration files.
-
--d            --debug                  Run Geany in debug mode, which means being verbose
-                                       and printing lots of information.
+                                       configuration directory is ``~/.config/geany/`` and there
+                                       resides ``geany.conf`` and other configuration files.
 
 *none*        --ft-names               Print a list of Geany's internal filetype names (useful
                                        for snippets configuration).
@@ -245,17 +242,19 @@ Short option  Long option              Function
 *none*        --vte-lib                Specify explicitly the path including filename or only
                                        the filename to the VTE library, e.g.
                                        ``/usr/lib/libvte.so`` or ``libvte.so``. This option is
-                                       only needed when the autodetection does not work. Only
+                                       only needed when the auto detection does not work. Only
                                        available if Geany was compiled with support for VTE.
 
--v            --version                Show version information and exit.
+-v            --verbose                Be verbose (print useful status messages).
+
+-V            --version                Show version information and exit.
 
 -?            --help                   Show help information and exit.
 
 *none*        [files ...]              Open all given files at startup. This option causes
                                        Geany to ignore loading stored files from the last
                                        session (if enabled).
-                                       Geany also recognises line and column information when
+                                       Geany also recognizes line and column information when
                                        appended to the filename with colons, e.g.
                                        "geany foo.bar:10:5" will open the file foo.bar and
                                        place the cursor in line 10 at column 5.
@@ -264,6 +263,10 @@ Short option  Long option              Function
                                        must be the first non-option argument. All additionally
                                        given files are ignored.
 ============  =======================  =================================================
+
+You can also pass line number and column number information, e.g.::
+
+    geany some_file.foo:55:4
 
 Geany supports all generic GTK options, a list is available on the
 help screen.
@@ -279,7 +282,7 @@ Startup
 
 At startup, Geany loads all files from the last time Geany was
 launched. You can disable this feature in the preferences dialog
-(see `General tab in preferences dialog`_). If you specify some
+(see `General Startup tab in preferences dialog`_). If you specify some
 files on the command line, only these files will be opened, but you
 can find the files from the last session in the file menu under the
 "Recent files" item. By default this contains the last 10 recently
@@ -298,9 +301,18 @@ Opening files from the command-line in a running instance
 Geany detects an already running instance of itself and opens files
 from the command-line in the already running instance. So, Geany can
 be used to view and edit files by opening them from other programs
-such as a file manager. If you do not like this for some reason, you
-can disable using the first instance by using the appropriate command
-line option -- see the section called `Command line options`_.
+such as a file manager.
+
+You can also pass line number and column number information, e.g.::
+
+    geany some_file.foo:55:4
+
+This would open the file ``some_file.foo`` with the cursor on line 55,
+column 4.
+
+If you do not like this for some reason, you can disable using the first
+instance by using the appropriate command line option -- see the section
+called `Command line options`_.
 
 
 Virtual terminal emulator widget (VTE)
@@ -419,9 +431,9 @@ can convert a file from a character set to another one. To do this,
 Geany uses the character conversion capabilities of the GLib.
 
 Only text files are supported, i.e. opening files which contain
-NUL-bytes may fail. Geany will try to open the file anyway but it is
+NULL-bytes may fail. Geany will try to open the file anyway but it is
 likely that the file will be truncated because it can only opened up
-to the first occurrence of a NUL-byte. All characters after this
+to the first occurrence of a NULL-byte. All characters after this
 position are lost and are not written when you save the file.
 
 Geany tries to detect the encoding of a file while opening it. It
@@ -504,7 +516,7 @@ The used regular expression to find the encoding string is:
 
 .. note::
     These specifications must be in the first 512 bytes of the file.
-    Anything after the first 512 bytes will not be recognised.
+    Anything after the first 512 bytes will not be recognized.
 
 
 Special encoding "None"
@@ -513,9 +525,9 @@ Special encoding "None"
 There is a special encoding "None" which is actually no real
 encoding. It is useful when you know that Geany cannot auto-detect
 the encoding of a file and it is not displayed correctly. Especially
-when the file contains NUL-bytes this can be useful to skip auto
+when the file contains NULL-bytes this can be useful to skip auto
 detection and open the file properly at least until the occurrence
-of the first NUL-byte. Using this encoding opens the file as it is
+of the first NULL-byte. Using this encoding opens the file as it is
 without any character conversion.
 
 
@@ -524,7 +536,7 @@ Unicode Byte-Order-Mark (BOM)
 
 Furthermore, Geany detects an Unicode Byte Order Mark (see
 http://en.wikipedia.org/wiki/Byte_Order_Mark for details). Of course,
-this feature is only available if the opened file is in an unicode
+this feature is only available if the opened file is in an Unicode
 encoding. The Byte Order Mark helps to detect the encoding of a file,
 e.g. whether it is UTF-16LE or UTF-16BE and so on. On Unix-like systems
 using a Byte Order Mark could cause some problems, e.g. the gcc stops
@@ -574,13 +586,14 @@ children of a fold point" option is enabled, pressing Shift will disable
 it for this click and vice versa.
 
 
-Column mode editing
-^^^^^^^^^^^^^^^^^^^
+Column mode editing (rectangular selections)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 There is basic support for column mode editing. To use it, create a
-rectangular selection by holding down the Control key while selecting
-some text. It is also possible to create a zero-column selection but
-be careful because there is no visual indication of this selection.
+rectangular selection by holding down the Control and Shift keys
+(or Control and Alt if it doesn't work) while
+selecting some text. It is also possible to create a zero-column selection
+but be careful because there is no visual indication of this selection.
 Once a rectangular selection exists you can start editing the text within
 this selection and the modifications will be done for every line in the
 selection.
@@ -599,13 +612,13 @@ before the selected text was copied to the new position.
 Indentation
 ^^^^^^^^^^^
 
-Geany allows each document to indent either with a tab character
-or multiple spaces. The default indent mode is set in the `Editor Features
-tab in preferences dialog`_. But this can be overridden using either
-the *Document->Indent Type* menu, or by using the *Detect from file*
-indentation preference. When enabled, this scans each file that is opened
-and sets the indent mode based on how many lines start with a tab vs. 2
-or more spaces.
+Geany allows each document to indent either with a tab character or
+multiple spaces. The default indent mode is set in the `Editor Features
+tab in preferences dialog`_ (see the link for more information). But
+this can be overridden using either the *Document->Indent Type* menu,
+or by using the *Detect from file* indentation preference. When enabled,
+this scans each file that is opened and sets the indent mode based on
+how many lines start with a tab vs. 2 or more spaces.
 
 The indent mode for the current document is shown on the status bar
 as follows:
@@ -614,6 +627,9 @@ TAB
     Indent with Tab characters.
 SP
     Indent with spaces.
+T/S
+    Indent with tabs and spaces, depending on how much indentation is
+    on a line.
 
 
 Auto-indentation
@@ -747,16 +763,16 @@ installed (commonly ``/usr/local``). It is not recommended to edit the
 system-wide file, because it will be overridden when Geany is updated.
 
 To change the settings, copy the file from ``$prefix/share/geany``
-in your configuration directory (usually ``~/.geany/``).
+in your configuration directory (usually ``~/.config/geany/``).
 
 For example::
 
-    % cp /usr/local/share/geany/snippets.conf /home/username/.geany/
+    % cp /usr/local/share/geany/snippets.conf /home/username/.config/geany/
 
 Then you can edit the file and the changes are also available
 after an update of Geany because the file resides in your
 configuration directory. Alternatively, you can create a file
-``~/.geany/snippets.conf`` and add only these settings you want
+``~/.config/geany/snippets.conf`` and add only these settings you want
 to change. All missing settings will be read from the global snippets
 file in ``$prefix/share/geany``.
 
@@ -782,22 +798,25 @@ will be replaced when using the snippet:
 \\n or %newline%  Insert a new line (it will be replaced by the used EOL
                   char(s): LF, CR/LF, or CR).
 
-\\t or %ws%       Insert an indentation step, if using only spaces for
-                  indentation only spaces will be used.
+\\t or %ws%       Insert an indentation step, it will be replaced according
+                  to the current document's indent mode.
 
 \\s               \\s to force whitespace at beginning or end of a value
                   ('key= value' won't work, use 'key=\\svalue')
 
 %cursor%          Place the cursor at this position after completion has
-                  been done.
+                  been done. You can define multiple %cursor% wildcards
+                  and use the keybinding ``Move cursor in snippet`` to jump
+                  to the next defined cursor position in the completed
+                  snippet.
 
 %...%             "..." means the name of a key in the "Special" section.
                   If you have defined a key "brace_open" in the "Special"
                   section you can use %brace_open" in any other snippet.
 ================  =========================================================
 
-Defined snippets must not contain spaces otherwise they won't
-work correctly. But beside that you can define almost everything
+Snippet names must not contain spaces otherwise they won't
+work correctly. But beside that you can define almost any
 string as a snippet and use it later in Geany. It is not limited
 to existing contructs of certain programming languages(like ``if``,
 ``for``, ``switch``). Define whatever you need.
@@ -807,9 +826,10 @@ Maybe you need to often type your name, so define a snippet like this::
     [Default]
     myname=Enrico Tröger
 
-Everytime you write ``myname`` <TAB> in Geany, it will replace "myname"
+Every time you write ``myname`` <TAB> in Geany, it will replace "myname"
 with "Enrico Tröger". The key to start auto completion can be changed
-in the preferences dialog, by default it is TAB.
+in the preferences dialog, by default it is TAB. The corresponding keybinding
+is called ``Complete snippet``.
 
 Since Geany 0.15 you can also use most of the available templates wildcards
 listed in `Template wildcards`_. All wildcards which are listed as
@@ -829,7 +849,7 @@ default characters or define it to add or remove characters to fit your
 needs.
 
 
-Inserting unicode characters
+Inserting Unicode characters
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 With GTK 2.10 and above, you can hit Ctrl-Shift-u, then still holding
@@ -883,8 +903,8 @@ The syntax for the Use regular expressions option is shown in
 
 The Use escape sequences option will transform any escaped characters
 into their UTF-8 equivalent. For example, \\t will be transformed into
-a tab character. Other recognised symbols are: \\\\, \\n, \\r, \\uXXXX
-(Unicode chararacters).
+a tab character. Other recognized symbols are: \\\\, \\n, \\r, \\uXXXX
+(Unicode characters).
 
 
 Find all
@@ -901,17 +921,16 @@ Find All In Document will show a list of matching lines in the
 current document in the Messages tab of the Message Window. *Find All
 In Session* does the same for all open documents.
 
-Mark will set markers for all matching lines in the current document,
-if the Markers margin is visible. If not, the background colour of
-matching lines will be highlighted. Markers and highlighting can be
-removed by selecting the Remove Markers command from the Document menu.
+Mark will highlight all matches in the current document with a
+colored box. These markers can be removed by selecting the
+Remove Markers command from the Document menu.
 
 
 Change font in search dialog text fields
 ````````````````````````````````````````
 
 All search related dialogs use a Monospace for the text input fields to
-increase the readibility of input text. This is useful when you are
+increase the readability of input text. This is useful when you are
 typing e.g. regular expressions with spaces, periods and commas which
 might it hard to read with a proportional font.
 
@@ -955,6 +974,9 @@ utility. GNU Grep is recommended.
 .. image:: ./images/find_in_files_dialog.png
 
 
+The Encoding combo box can be used to define the encoding of the files
+to be searched. The chosen encoding is used to convert the entered search
+text into and to convert the search results back to UTF-8.
 The Extra options field is used to pass any additional arguments to
 the grep tool.
 
@@ -1043,6 +1065,8 @@ POSIX-like, as described in the table below.
     (1) Searching backwards with regular expressions is not supported.
     (2) \\r and \\n are never matched because regular expression
         searches are made line per line (stripped of end-of-line chars).
+    (3) The POSIX '?' regular expression character for optional
+        matching is not supported.
 
 **In a regular expression, the following characters are interpreted:**
 
@@ -1062,17 +1086,41 @@ POSIX-like, as described in the table below.
 
 \\>     This matches the end of a word.
 
+\\c     A backslash followed by d, D, s, S, w or W, becomes a
+        character class (both inside and outside sets []).
+
+        * d: decimal digits
+        * D: any char except decimal digits
+        * s: whitespace (space, \\t \\n \\r \\f \\v)
+        * S: any char except whitespace (see above)
+        * w: alphanumeric & underscore (changed by user setting)
+        * W: any char except alphanumeric & underscore (see above)
+
 \\x     This allows you to use a character x that would otherwise have
         a special meaning. For example, \\[ would be interpreted as [
         and not as the start of a character set. Use \\\\ for a literal
         backslash.
 
-[...]   This indicates a set of characters, for example, [abc] means
-        any of the characters a, b or c. You can also use ranges, for
-        example [a-z] for any lower case character.
+\\xHH   A backslash followed by x and two hexa digits, becomes the
+        character whose Ascii code is equal to these digits. If not
+        followed by two digits, it is 'x' char itself.
 
-[^...]  The complement of the characters in the set. For example,
-        [^A-Za-z] means any character except an alphabetic character.
+[...]   Matches one of the characters in the set. If the first
+        character in the set is ^, it matches the characters NOT in
+        the set, i.e. complements the set. A shorthand S-E (start
+        dash end) is used to specify a set of characters S up to E,
+        inclusive. The special characters ] and - have no special
+        meaning if they appear as the first chars in the set. To
+        include both, put - first: [-]A-Z] (or just backslash them).
+
+        Examples::
+
+        [-]|]    matches these 3 chars
+        []-|]    matches from ] to | chars
+        [a-z]    any lowercase alpha
+        [^-]]    any char except - and ]
+        [^A-Z]   any char except uppercase alpha
+        [a-zA-Z] any alpha
 
 ^       This matches the start of a line (unless used inside a set, see
         above).
@@ -1086,12 +1134,9 @@ $       This matches the end of a line.
         Saam, Saaam and so on.
 ======  ============================================================
 
-
-Partial POSIX compatibility
-```````````````````````````
-
-Note that the POSIX '?' regular expression character for optional
-matching is not supported by the Find and Replace dialogs.
+.. note::
+    This table is adapted from Scintilla and SciTE documentation,
+    distributed under the `License for Scintilla and SciTE`_.
 
 
 
@@ -1101,7 +1146,7 @@ Tags
 Geany has built-in functionality for generating tag information (aka
 "workspace tags") for supported filetypes when you open a file.  You
 can also have Geany automatically load external tag files (aka "global
-tags files") from its ``~/.geany/tags`` directory upon startup, or
+tags files") from its ``~/.config/geany/tags`` directory upon startup, or
 manually using *Tools --> Load Tags*.
 
 Geany uses its own tag file format, similar to what ``ctags`` uses
@@ -1114,7 +1159,7 @@ Workspace tags
 
 Tags for each document are parsed whenever a file is loaded or
 saved. These are shown in the Symbol list in the Sidebar. These tags
-are also used for autocompletion of symbols and calltips for all documents
+are also used for auto completion of symbols and calltips for all documents
 open in the current session that have the same filetype.
 
 The *Go to Tag* commands can be used with all workspace tags. See
@@ -1124,7 +1169,7 @@ The *Go to Tag* commands can be used with all workspace tags. See
 Global tags
 ^^^^^^^^^^^
 
-Global tags are used to provide autocompletion of symbols and calltips
+Global tags are used to provide auto completion of symbols and calltips
 without having to open the corresponding source files. This is intended
 for library APIs, as the tags file only has to be updated when you upgrade
 the library.
@@ -1132,7 +1177,7 @@ the library.
 You can load a custom global tags file in two ways:
 
 * Using the *Load Tags* command in the Tools menu.
-* By creating a directory ``~/.geany/tags``, and moving or symlinking
+* By creating a directory ``~/.config/geany/tags``, and moving or symlinking
   the tags files there before starting Geany.
 
 You can either download these files or generate your own. They have
@@ -1156,24 +1201,61 @@ corresponding filetype is first used. Currently these are for:
 * PHP
 * HTML -- &symbol; completion, e.g. for ampersand, copyright, etc.
 * LaTeX
+* Python
+
+
+Global tags file format
+```````````````````````
+
+Global tags files can have two different formats:
+
+* Tagmanager format
+* Pipe-separated format
+
+The first line of global tags files should be a comment, introduced
+by ``#`` followed by a space and a string like ``format=pipe``
+respectively ``format=tagmanager`` (case-sensitive).
+This helps Geany to read the file properly. If this line
+is missing, Geany tries to auto-detect the used format but this
+might fail.
+
+
+The Tagmanager format is a bit more complex and is used for files
+created by the ``geany -g`` command. There is one tag per line.
+Different tag attributes like the return value or the argument list
+are separated with different characters indicating the type of the
+following argument.
+
+The Pipe-separated format is easier to read and write.
+There is one tag per line and different tag attributes are separated
+by the pipe character (``|``). A line looks like::
+
+    basename|string|(string path [, string suffix])|
+
+| The first field is the tag name (usually a function name).
+| The second field is the type of the return value.
+| The third field is the argument list for this tag.
+| The fourth field is the description for this tag but
+  currently unused and should be left empty.
+
+Except for the first field (tag name), all other field can be left
+empty but the pipe separator must appear for them.
+
+You can easily write your own global tag files using this format.
+Just save them in your tags directory, as described earlier in the
+section `Global tags`_.
 
 
 Generating a global tags file
 `````````````````````````````
-
-
-*Filetypes support:*
-
-Currently this is not yet supported for Pascal, PHP and LaTeX
-filetypes.
 
 You can generate your own global tags files by parsing a list of
 source files. The command is::
 
     geany -g [-P] <Tag File> <File list>
 
-* Tag File should be in the format described earlier -- see the
-  section called `Global tags`_.
+* Tag File filename should be in the format described earlier --
+  see the section called `Global tags`_.
 * File list is a list of filenames, each with a full path (unless
   you are generating C/C++ tags and have set the CFLAGS environment
   variable appropriately).
@@ -1206,11 +1288,11 @@ for whichever libraries you want.
 
 *Replacing the default C/C++ tags file:*
 
-Geany currently uses a default global tags file global.tags for
+Geany currently uses a default global tags file c99.tags for
 C and C++, commonly installed in /usr/share/geany. This file can
 be replaced with one containing tags parsed from a different set
 of header files. When Geany is next started, your custom tags file
-will be loaded instead of the default global.tags. You should keep a
+will be loaded instead of the default c99.tags. You should keep a
 copy of the generated tags file because it will get overwritten when
 upgrading Geany.
 
@@ -1220,7 +1302,7 @@ Ignore tags
 
 You can also ignore certain tags if they would lead to wrong parsing of
 the code. Simply create a file called "ignore.tags" in your Geany
-configuration directory (usually ``~/.geany/``). Then list all tags
+configuration directory (usually ``~/.config/geany/``). Then list all tags
 you want to ignore in this file, separated by spaces and/or newlines.
 
 More detailed information about the usage from the Exuberant Ctags
@@ -1229,7 +1311,7 @@ manual page::
     Specifies a list of identifiers which are to be specially handled
     while  parsing C and C++ source files. This option is specifically
     provided to handle special cases arising through the use of
-    preprocessor macros. When the identifiers listed are simple identifiers,
+    pre-processor macros. When the identifiers listed are simple identifiers,
     these identifiers will be ignored during parsing of the source files.
     If an identifier is suffixed with a '+' character, ctags will also
     ignore any parenthesis-enclosed argument list which may immediately
@@ -1263,10 +1345,10 @@ There are also some rarer `Hidden preferences`_.
     comes after the screenshot of that tab.
 
 
-General tab in preferences dialog
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+General Startup tab in preferences dialog
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. image:: ./images/pref_dialog_gen.png
+.. image:: ./images/pref_dialog_gen_startup.png
 
 Startup
 ```````
@@ -1290,6 +1372,68 @@ Save window position and geometry
 Confirm Exit
     Have a dialog pop up to confirm that you really want to quit Geany.
 
+Paths
+`````
+
+Startup path
+    Path to start in when opening or saving files.
+    It must be an absolute path.
+    Leave it blank to use the current working directory.
+
+Project files
+    Path to start in when opening project files.
+
+Extra plugin path
+	Geany looks by default in the global installation path and in the
+	configuration directory. The path entered here will be searched additionally
+	for plugins. Usually you do not need to set an additional path to search for
+	plugins. It might be useful when Geany is installed on a multi-user machine
+	and additional plugins should be available in a custom location for all users.
+	Leave blank to not set an additional lookup path.
+
+
+General Miscellaneous tab in preferences dialog
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: ./images/pref_dialog_gen_misc.png
+
+Miscellaneous
+`````````````
+
+Beep on errors when compilation has finished
+    Have the computer make a beeping sound when compilation of your program
+    has completed or any errors occurred.
+
+Switch status message list at new message
+    Switch to the status message tab (in the notebook window at the bottom)
+    once a new status message arrives.
+
+Suppress status messages in the status bar
+    Remove all messages from the status bar. The messages are still displayed
+    in the status messages window.
+
+Auto focus widgets (focus follows mouse)
+    Give the focus automatically to widgets below the mouse cursor.
+    This works for the main editor widget, the scribble, the toolbar search field
+    goto line fields and the VTE.
+
+Search
+^^^^^^
+
+Always wrap search and hide the Find dialog
+    Always wrap search around the document and hide the Find dialog after clicking
+    Find Next/Previous.
+
+Use the current word under the cursor for Find dialogs
+    Use current word under the cursor when opening the Find, Find in Files or Replace dialog and
+    there is no selection. When this option is disabled, the search term of the last use of the
+    appropriate Find dialog is used.
+
+Use the current file's directory for Find in Files
+    When opening the Find in Files dialog, set the directory to search to the directory of the current
+    active file. When this option is disabled, the directory of the last use of the Find in Files
+    dialog is used.
+
 Projects
 ````````
 
@@ -1302,27 +1446,9 @@ Store project file inside the project base directory
     When creating new projects, the default path for the project file contains
     the project base path. Without this option enabled, the default project file
     path is one level above the project base path.
-    In any case, you can easily the final project file path in the New Project,
-    dialog. This option is just for your convenience to get a proper default path.
-
-Miscellaneous
-`````````````
-
-Beep on errors when compilation has finished
-    Have the computer make a beeping sound when compilation of your program
-    has completed or any errors occurred.
-
-.. Switch status message list at new message
-
-.. Suppress status message in the status bar
-
-.. Autofocus widgets (focus follows mouse)
-
-.. Always wrap search and hide the find dialog
-
-Use current word under the cursor for Find dialogs
-    Use the currently selected word as the search text when you open
-    one of the Search dialogs.
+    In any case, you can easily set the final project file path in the
+    *New Project* dialog. This option is just for your convenience to get
+    a proper default path.
 
 
 Interface tab in preferences dialog
@@ -1373,6 +1499,10 @@ Placement of new file tabs
     Whether to create a document with its notebook tab to the left or
     right of all existing tabs.
 
+Double-clicking hides all additional widgets
+    Whether to call the View->Toggle All Additional Widgets command
+    when double-clicking on a notebook tab.
+
 Tab positions
 `````````````
 
@@ -1410,43 +1540,6 @@ Toolbar
 Show Toolbar
     Whether to show the toolbar.
 
-Items
-`````
-
-Show file operation buttons
-    Show the buttons to open a new file, open an existing file, save a file,
-    and save all files.
-
-Show Redo and Undo buttons
-    Show the undo/redo change buttons.
-
-Show Back and Forward buttons
-    Show the buttons to navigate forwards and backwards between positions
-    in the current session's documents.
-
-Show Compile and Run buttons
-    Show the buttons to run or compile a file.
-
-Show Color Chooser button
-    Show the button to run the color chooser dialog.
-
-Show Zoom In and Zoom Out buttons
-    Show the buttons to zoom in closer to a document or zoom out.
-
-Show Increase and Decrease Indentation buttons
-    Show the buttons to increase or decrease the current line or
-    selection's indentation.
-
-Show Search field
-    Show the incremental search bar in the toolbar (quicker than using
-    the Find command).
-
-Show Go to Line field
-    Show a line number text entry (quicker than using the Go to Line
-    command).
-
-Show Quit button
-    Show a button to quit geany.
 
 Appearance
 ``````````
@@ -1462,43 +1555,7 @@ Icon size
 Editor Features tab in preferences dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. image:: ./images/pref_dialog_edit.png
-
-Indentation group
-`````````````````
-
-See `Indentation`_ for more information.
-
-Type
-    Whether to use tabs or spaces for indentation.
-
-Tab width
-    The width of a single indent size in spaces. By default the indent
-    size is the equivalent of 4 spaces.
-
-Auto-indent mode
-    The type of auto-indentation you wish to use after pressing Enter,
-    if any.
-
-    Basic
-        Just add the indentation of the previous line.
-    Current chars
-        Add indentation based on the current filetype and any characters at
-        the end of the line such as ``{``, ``}`` for C, ``:`` for Python.
-    Match braces
-        Like *Current chars* but for C-like languages, make a closing
-        ``}`` brace line up with the matching opening brace.
-
-Tab key indents
-    If set, pressing tab will indent the current line or selection, and
-    unindent when pressing Shift-tab. Otherwise, the tab key will
-    insert a tab character into the document (which can be different
-    from indentation, depending on the indent type).
-
-    .. note::
-        There are also separate configurable keybindings for indent &
-        unindent, but this pref allows the tab key to have different
-        meanings in different contexts - e.g. for snippet completion.
+.. image:: ./images/pref_dialog_edit_features.png
 
 Features
 ````````
@@ -1539,8 +1596,70 @@ Comment toggle marker
     It is used to mark the comment as toggled.
 
 
+Editor Indentation tab in preferences dialog
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: ./images/pref_dialog_edit_indentation.png
+
+Indentation group
+`````````````````
+
+See `Indentation`_ for more information.
+
+Type
+    When Geany inserts indentation, whether to use:
+
+    * Just Tabs
+    * Just Spaces
+    * Tabs and Spaces, depending on how much indentation is on a line
+
+    The *Tabs and Spaces* indent type is also known as *Soft tab
+    support* in some other editors.
+
+Width
+    The width of a single indent size in spaces. By default the indent
+    size is equivalent to 4 spaces.
+
+Hard tab width
+    When the *Tabs and Spaces* indent type is enabled, this is the
+    display size of a tab. Otherwise this is ignored. Although
+    configurable, this should usually be set to 8.
+
+Detect from file
+    Try to detect and set the indent type based on file content, when
+    a file is opened.
+
+Auto-indent mode
+    The type of auto-indentation you wish to use after pressing Enter,
+    if any.
+
+    Basic
+        Just add the indentation of the previous line.
+    Current chars
+        Add indentation based on the current filetype and any characters at
+        the end of the line such as ``{``, ``}`` for C, ``:`` for Python.
+    Match braces
+        Like *Current chars* but for C-like languages, make a closing
+        ``}`` brace line up with the matching opening brace.
+
+Tab key indents
+    If set, pressing tab will indent the current line or selection, and
+    unindent when pressing Shift-tab. Otherwise, the tab key will
+    insert a tab character into the document (which can be different
+    from indentation, depending on the indent type).
+
+    .. note::
+        There are also separate configurable keybindings for indent &
+        unindent, but this pref allows the tab key to have different
+        meanings in different contexts - e.g. for snippet completion.
+
 Editor Completions tab in preferences dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: ./images/pref_dialog_edit_completions.png
+
+Completions
+```````````
 
 Snippet Completion
     Whether to replace special keywords after typing Tab into a
@@ -1582,16 +1701,47 @@ Max. symbol name suggestions
     The maximum number of entries to display in the auto completion list.
 
 
+Auto-close quotes and brackets
+``````````````````````````````
+
+Geany can automatically insert a closing bracket and quote characters when
+you open them. For instance, you type a ``(`` and Geany will automatically
+insert ``)``. With the following options, you can define for which
+characters this should work.
+
+Parenthesis ( )
+    Auto-close parenthesis when typing an opening one
+
+Curly brackets { }
+    Auto-close parenthesis when typing an opening one
+
+Square brackets [ ]
+    Auto-close parenthesis when typing an opening one
+
+Single quotes ' '
+    Auto-close parenthesis when typing an opening one
+
+Double quotes " "
+    Auto-close parenthesis when typing an opening one
+
+
 Editor Display tab in preferences dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This is for visual elements displayed in the editor window.
 
-.. image:: ./images/pref_dialog_display.png
-
+.. image:: ./images/pref_dialog_edit_display.png
 
 Display
 ```````
+
+Invert syntax highlighting colors
+    Use white text on a black background and invert all colors.
+    If the ``invert_all`` setting in ``filetypes.common`` is set, this
+    option is always enabled. See `Special file filetypes.common`_
+    for details.
+
+    This option requires a restart of Geany. The value of this option
 
 Show indendation guides
     Show vertical lines to help show how much leading indentation there
@@ -1602,8 +1752,15 @@ Show whitespaces
     show which kinds of whitespace are used.
 
 Show line endings
-    Displays a symbol everywhere that a carriage return or line feed
+    Display a symbol everywhere that a carriage return or line feed
     is present.
+
+Show line numbers
+    Show or hide the Line Number margin.
+
+Show markers margin
+    Show or hide the small margin right of the line numbers, which is used
+    to mark lines.
 
 Stop scrolling at last line
     When enabled Geany stops scrolling when at the last line of the document.
@@ -1642,6 +1799,10 @@ Files tab in preferences dialog
 
 New files
 `````````
+
+Open new documents from the command-line
+    Whether to create new documents when passing filenames that don't
+    exist from the command-line.
 
 Default encoding (new files)
     The type of file encoding you wish to use when creating files.
@@ -1685,28 +1846,13 @@ Recent files list length
 
 Disk check timeout
     The number of seconds to periodically check the current document's
-    file on disk in case it has changed.
+    file on disk in case it has changed. Setting it to 0 will disable
+    this feature.
 
-
-Search tab in preferences dialog
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. image:: ./images/pref_dialog_search.png
-
-
-Always wrap search and hide the Find dialog
-    Always wrap search around the document and hide the Find dialog after clicking
-    Find Next/Previous.
-
-Use the current word under the cursor for Find dialogs
-    Use current word under the cursor when opening the Find, Find in Files or Replace dialog and
-    there is no selection. When this option is disabled, the search term of the last use of the
-    appropriate Find dialog is used.
-
-Use the current file's directory for Find in Files
-    When opening the Find in Files dialog, set the directory to search to the directory of the current
-    active file. When this option is disabled, the directory of the last use of the Find in Files
-    dialog is used.
+    .. note::
+        These checks are only performed on local files. Remote files are
+        not checked for changes due to performance issues
+        (remote files are files in ``~/.gvfs/``).
 
 
 Tools tab in preferences dialog
@@ -1751,7 +1897,7 @@ Context action
 Template tab in preferences dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This data is used as metadata for various template text to insert into
+This data is used as meta data for various template text to insert into
 a document, such as the file header. You only need to set fields that
 you want to use in your template files.
 
@@ -1837,8 +1983,8 @@ Date format
     see http://man.cx/strftime.
 
 
-VTE tab in preferences dialog
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Terminal (VTE) tab in preferences dialog
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See also: `Virtual terminal emulator widget (VTE)`_.
 
@@ -1859,12 +2005,6 @@ Background color
 Scrollback lines
     The number of lines buffered so that you can scroll though the history.
 
-Terminal emulation
-    Controls how the terminal emulator should behave.
-    Do not change this value unless you know exactly what you are doing.
-    At time of writing only "xterm" is supported. For further details refer
-    to the documentation of the libvte package.
-
 Shell
     The location of the shell on your system.
 
@@ -1874,8 +2014,11 @@ Scroll on keystroke
 Scroll on output
     Scroll the output down.
 
+Cursor blinks
+    Let the terminal cursor blink.
+
 Override Geany keybindings
-    Allows the VTE to receive keyboard shortcuts (apart from focus commands).
+    Allow the VTE to receive keyboard shortcuts (apart from focus commands).
 
 Disable menu shortcut key (F10 by default)
     Disable the menu shortcut when you are in the virtual terminal.
@@ -2306,7 +2449,7 @@ Indicators
 ^^^^^^^^^^
 
 Indicators are red squiggly underlines which are used to highlight
-errors which occured while compiling the current file. So you can
+errors which occurred while compiling the current file. So you can
 easily see where your code failed to compile. To remove the indicators,
 just click on "Remove all indicators" in the document file menu.
 
@@ -2378,7 +2521,7 @@ the following directories:
 
 *   ``$prefix/lib/geany`` (``$prefix`` is usually ``/usr/local`` or
     ``/usr``)
-*   ``~/.geany/plugins``
+*   ``~/.config/geany/plugins``
 
 Most plugins add menu items to the *Tools* menu when they are loaded.
 
@@ -2503,9 +2646,13 @@ Suppress snippet completion                               If you type a construc
                                                           insert a space.
 
 Context Action                                            Executes a command and passes the current word
-                                                          (near the cursor postion) or selection as an
+                                                          (near the cursor position) or selection as an
                                                           argument. See the section called `Context
                                                           actions`_.
+
+Move cursor in snippet                                    Jumps to the next defined cursor positions in a
+                                                          completed snippets if multiple cursor positions
+                                                          where defined.
 
 **Clipboard**
 
@@ -2575,6 +2722,17 @@ Decrease indent by one space                              Deindents the current 
 Smart line indent                                         Indents the current line or all selected lines
                                                           with the same indentation as the previous line.
 
+Send to Custom Command 1 (2,3)  Ctrl-1 (2,3)              Passes the current selection to a configured
+                                                          external command (available for the first
+                                                          three configured commands, see
+                                                          `Send text through definable commands`_ for
+                                                          details).
+
+Send Selection to Terminal                                Sends the current selection or the current
+                                                          line (if there is no selection) to the
+                                                          embedded Terminal (VTE).
+
+
 **Settings**
 
 Preferences                     Ctrl-Alt-P                Opens preferences dialog.
@@ -2591,12 +2749,21 @@ Replace                         Ctrl-H                    Opens the Replace dial
 
 Find in files                   Ctrl-Shift-F              Opens the Find in files dialog.
 
-Next message                                              Jumps to the line with the next message from
-                                                          the last call to Find usage.
+Next message                                              Jumps to the line with the next message in
+                                                          the Messages window.
+
+Previous message                                          Jumps to the line with the previous message
+                                                          in the Messages window.
 
 Find Usage                                                Finds all occurrences of the current word (near
-                                                          the keyboard cursor) or selection and displays
-                                                          them in the messages window.
+                                                          the keyboard cursor) or selection in all open
+                                                          documents and displays them in the messages
+                                                          window.
+
+Find Document Usage                                       Finds all occurrences of the current word (near
+                                                          the keyboard cursor) or selection in the current
+                                                          document and displays them in the messages
+                                                          window.
 
 **Go to**
 
@@ -2672,6 +2839,10 @@ Switch to VTE                   F4                        Switches to VTE widget
 Switch to Search Bar            F7                        Switches to the search bar in the toolbar (if
                                                           visible).
 
+Switch to Sidebar                                         Focus the Sidebar.
+
+Switch to Compiler                                        Focus the Compiler message window tab.
+
 **Notebook tabs**
 
 Switch to left document         Ctrl-PageUp               Switches to the previous open document.
@@ -2726,6 +2897,9 @@ Make object                                               Compiles the current f
 Next error                                                Jumps to the line with the next error from the
                                                           last build process.
 
+Previous error                                            Jumps to the line with the previous error from
+                                                          the last build process.
+
 Run                             F5                        Executes the current file in a terminal emulation.
 
 Run (alternative command)                                 Executes the current file in a terminal emulation.
@@ -2734,7 +2908,7 @@ Build options                                             Opens the build option
 
 **Tools**
 
-Show Color Chooser                                        Opens the Colour Chooser dialog.
+Show Color Chooser                                        Opens the Color Chooser dialog.
 
 **Help**
 
@@ -2774,8 +2948,8 @@ contain all settings.
 Filetype definition files
 -------------------------
 
-All colour definitions and other filetype specific settings are
-stored in the filetype definition files. Those settings are colours
+All color definitions and other filetype specific settings are
+stored in the filetype definition files. Those settings are colors
 for syntax highlighting, general settings like comment characters or
 word delimiter characters as well as compiler and linker settings.
 
@@ -2791,16 +2965,16 @@ Geany is updated.
 
 To change the settings, copy a file from ``$prefix/share/geany`` to
 the subdirectory filedefs in your configuration directory (usually
-``~/.geany/``).
+``~/.config/geany/``).
 
 For example::
 
-    % cp /usr/local/share/geany/filetypes.c /home/username/.geany/filedefs/
+    % cp /usr/local/share/geany/filetypes.c /home/username/.config/geany/filedefs/
 
 Then you can edit the file and the changes are also
 available after an update of Geany because they reside in your
 configuration directory. Alternatively, you can create a file
-``~/.geany/filedefs/filetypes.X`` and add only these settings you want
+``~/.config/geany/filedefs/filetypes.X`` and add only these settings you want
 to change. All missing settings will be read from the corresponding
 global definition file in ``$prefix/share/geany``.
 
@@ -2812,10 +2986,10 @@ Format
 [styling] Section
 `````````````````
 
-In this section the colours for syntax highlighting are defined. The
-format is always: key=forground_colour;background_colour;bold;italic
+In this section the colors for syntax highlighting are defined. The
+format is always: key=foreground_color;background_color;bold;italic
 
-Colours have to be specified as RGB hex values prefixed by
+Colors have to be specified as RGB hex values prefixed by
 0x. For example red is 0xff0000, blue is 0x0000ff. The values are
 case-insensitive, but it is a good idea to use small letters. Bold
 and italic are flags and should only be "true" or "false". If their
@@ -2971,15 +3145,15 @@ default
     *Example:* ``default=0x000000;0xffffff;false;false``
 
 selection
-    The style for colouring selected text. The format is:
+    The style for coloring selected text. The format is:
 
-    * Foreground colour
-    * Background colour
-    * Use foreground colour
-    * Use background colour
+    * Foreground color
+    * Background color
+    * Use foreground color
+    * Use background color
 
-    The colours are only set if the 3rd or 4th argument is true. When
-    the colours are not overridden, the default is a dark grey
+    The colors are only set if the 3rd or 4th argument is true. When
+    the colors are not overridden, the default is a dark grey
     background with syntax highlighted foreground text.
 
     *Example:* ``selection=0xc0c0c0;0x00007F;true;true``
@@ -2995,7 +3169,7 @@ brace_bad
     *Example:* ``brace_bad=0x0000ff;0xFFFFFF;true;false``
 
 caret
-    The style for colouring the caret(the blinking cursor). Only first
+    The style for coloring the caret(the blinking cursor). Only first
     and third argument is interpreted.
     Set the third argument to true to change the caret into a block caret.
 
@@ -3010,26 +3184,26 @@ caret_width
     *Example:* ``caret=1;0;false;false``
 
 current_line
-    The style for colouring the background of the current line. Only
+    The style for coloring the background of the current line. Only
     the second and third arguments are interpreted. The second argument
-    is the background colour. Use the third argument to enable or
+    is the background color. Use the third argument to enable or
     disable background highlighting for the current line (has to be
     true/false).
 
     *Example:* ``current_line=0x0;0xe5e5e5;true;false``
 
 indent_guide
-    The style for colouring the indentation guides. Only the first and
+    The style for coloring the indentation guides. Only the first and
     second arguments are interpreted.
 
     *Example:* ``indent_guide=0xc0c0c0;0xffffff;false;false``
 
 white_space
-    The style for colouring the white space if it is shown. The first
-    both arguments define the foreground and background colours, the
-    third argument sets whether to use the defined foreground colour
-    or to use the colour defined by each filetype for the white space.
-    The fourth argument defines whether to use the background colour.
+    The style for coloring the white space if it is shown. The first
+    both arguments define the foreground and background colors, the
+    third argument sets whether to use the defined foreground color
+    or to use the color defined by each filetype for the white space.
+    The fourth argument defines whether to use the background color.
 
     *Example:* ``white_space=0xc0c0c0;0xffffff;true;true``
 
@@ -3062,13 +3236,13 @@ folding_horiz_line
     *Example:* ``folding_horiz_line=0;0;false;false``
 
 invert_all
-    Whether to invert all defined colours. This is useful if you like a
-    dark background colour(e.g. black) and do not want to change every
+    Whether to invert all defined colors. This is useful if you like a
+    dark background color(e.g. black) and do not want to change every
     single line. Please note, at time of writing this was only tested
     with the C syntax highlighting.
 
     Only first argument is interpreted. Set it to 1 to invert all
-    colours.
+    colors.
 
     *Example:* ``invert_all=0;0;false;false``
 
@@ -3113,7 +3287,7 @@ translucency
 
 marker_line
     The style for a highlighted line (e.g when using Goto line or goto tag).
-    The forground colour (first argument) is only used when the Markers margin
+    The foreground color (first argument) is only used when the Markers margin
     is enabled (see View menu).
 
     Only the first and second argument is interpreted.
@@ -3122,7 +3296,7 @@ marker_line
 
 marker_search
     The style for a highlighted search result (e.g when using "Mark" in
-    Search dialogs). The foreground colour (first argument) is only used
+    Search dialogs). The foreground color (first argument) is only used
     when the Markers margin is enabled (see View menu).
 
     Only the first and second argument is interpreted.
@@ -3162,12 +3336,12 @@ filetype using the ``filetype_extensions.conf`` file.
 
 To override the system-wide configuration file, copy it from
 ``$prefix/share/geany`` to your configuration directory, usually
-``~/.geany/``. ``$prefix`` is the path where Geany is installed
+``~/.config/geany/``. ``$prefix`` is the path where Geany is installed
 (commonly ``/usr/local``).
 
 For example::
 
-    % cp /usr/local/share/geany/filetype_extensions.conf /home/username/.geany/
+    % cp /usr/local/share/geany/filetype_extensions.conf /home/username/.config/geany/
 
 Then edit it and remove all the lines for filetype extensions that
 you do not want to override. The remaining lines can be edited after
@@ -3175,7 +3349,7 @@ the ``=`` sign, using a semi-colon separated list of patterns which
 should be matched for that filetype.
 
 For example, to set the filetype extensions for Make, the
-``/home/username/.geany/filetype_extensions.conf`` file should
+``/home/username/.config/geany/filetype_extensions.conf`` file should
 look like::
 
     [Extensions]
@@ -3211,11 +3385,11 @@ function description won't contain the correct function name but "unknown"
 instead.
 
 
-Template metadata
-^^^^^^^^^^^^^^^^^
+Template meta data
+^^^^^^^^^^^^^^^^^^
 
-Metadata can be used with all templates, but by default user set
-metadata is only used for the ChangeLog and File header templates.
+Meta data can be used with all templates, but by default user set
+meta data is only used for the ChangeLog and File header templates.
 
 In the configuration dialog you can find a tab "Templates" (see
 `Template tab in preferences dialog`_). You can define the
@@ -3243,11 +3417,11 @@ followed by a blank line.
 Custom file templates
 `````````````````````
 
-These are read from the ``~/.geany/templates/files`` directory (created
-the first time Geany is started). The filetype to use is detected from
-the template file's extension, if any. For example, creating a file
-``main.c`` would add a menu item which created a new document with the
-filetype set to 'C'.
+These are read from the ``~/.config/geany/templates/files`` directory
+(created the first time Geany is started). The filetype to use is
+detected from the template file's extension, if any. For example, creating
+a file ``main.c`` would add a menu item which created a new document with
+the filetype set to 'C'.
 
 The template file is read from disk when the corresponding menu item is
 clicked, so you don't need to restart Geany after editing a custom file
@@ -3256,7 +3430,7 @@ template.
 Filetype templates
 ``````````````````
 
-Filetype template files are read from the ``~/.geany/templates``
+Filetype template files are read from the ``~/.config/geany/templates``
 directory, and are named "filetype." followed by the filetype
 name, e.g. "filetype.python", "filetype.sh", etc. If you are
 unsure about the filetype name extensions, they are the same as
@@ -3271,7 +3445,7 @@ Customizing templates
 ^^^^^^^^^^^^^^^^^^^^^
 
 Each template can be customized to your needs. The templates are
-stored in the ``~/.geany/templates/`` directory (see the section called
+stored in the ``~/.config/geany/templates/`` directory (see the section called
 `Command line options`_ for further information about the configuration
 directory). Just open the desired template with an editor (ideally,
 Geany ;-) ) and edit the template to your needs. There are some
@@ -3283,46 +3457,48 @@ Template wildcards
 
 All wildcards must be enclosed by "{" and "}", e.g. {date}.
 
-============== ============================================= ==============
+============== ============================================= =======================================
 Wildcard       Description                                   Available in
-============== ============================================= ==============
-developer      The name of the developer.                    filetypes, file header, function
-                                                             description, ChangeLog entry, bsd,
-                                                             gpl, snippets
+============== ============================================= =======================================
+developer      The name of the developer.                    filetype templates, file header,
+                                                             function description, ChangeLog entry,
+                                                             bsd, gpl, snippets
 
-initial        The developer's initials, e.g. "ET" for       filetypes, file header, function
-               Enrico Tröger or "JFD" for John Foobar Doe.   description, ChangeLog entry, bsd,
-                                                             gpl, snippets
+initial        The developer's initials, e.g. "ET" for       filetype templates, file header,
+               Enrico Tröger or "JFD" for John Foobar Doe.   function description, ChangeLog entry,
+                                                             bsd, gpl, snippets
 
-mail           The email address of the developer.           file header, function description,
-                                                             ChangeLog entry, bsd, gpl, snippets
+mail           The email address of the developer.           filetype templates, file header,
+                                                             function description, ChangeLog entry,
+                                                             bsd, gpl, snippets
 
-company        The company the developer is working for.     filetypes, file header, function
-                                                             description, ChangeLog entry, bsd,
-                                                             gpl, snippets
+company        The company the developer is working for.     filetype templates, file header,
+                                                             function description, ChangeLog entry,
+                                                             bsd, gpl, snippets
 
-year [1]_      The current year. Default format is: YYYY     filetypes, file header, function
-                                                             description, ChangeLog entry, bsd,
-                                                             gpl, snippets
+year [1]_      The current year. Default format is: YYYY     filetype templates, file header,
+                                                             function description, ChangeLog entry,
+                                                             bsd, gpl, snippets
 
-version        The initial version of a new file.            filetypes, file header, function
-                                                             description, ChangeLog entry, bsd,
-                                                             gpl, snippets
+version        The initial version of a new file.            filetype templates, file header,
+                                                             function description, ChangeLog entry,
+                                                             bsd, gpl, snippets
 
-date [1]_      The current date. Default format: YYYY-MM-DD. filetypes, file header, function
-                                                             description, ChangeLog entry, bsd,
-                                                             gpl, snippets
+date [1]_      The current date. Default format: YYYY-MM-DD. filetype templates, file header,
+                                                             function description, ChangeLog entry,
+                                                             bsd, gpl, snippets
 
-untitled       The string "untitled" (this will be           filetypes, file header, function
-               translated to your locale), used in           description, ChangeLog entry, bsd,
-               filetype templates.                           gpl, snippets
+untitled       The string "untitled" (this will be           filetype templates, file header,
+               translated to your locale), used in           function description, ChangeLog entry,
+               filetype templates.                           bsd, gpl, snippets
 
-geanyversion   The actual Geany version, e.g.                filetypes, file header, function
-               "Geany |(version)|".                          description, ChangeLog entry, bsd,
-                                                             gpl, snippets
+geanyversion   The actual Geany version, e.g.                filetype templates, file header,
+               "Geany |(version)|".                          function description, ChangeLog entry,
+                                                             bsd, gpl, snippets
 
-datetime [1]_  The current date and time. Default format:    file header, function description,
-               DD.MM.YYYY HH:mm:ss ZZZZ.                     snippets
+datetime [1]_  The current date and time. Default format:    filetype templates, file header,
+               DD.MM.YYYY HH:mm:ss ZZZZ.                     function description, ChangeLog entry,
+                                                             bsd, gpl, snippets
 
 filename       The filename of the current file.             file header, snippets
 
@@ -3335,16 +3511,86 @@ functionname   The function name of the function at the      function descriptio
                replaced in the function description
                template.
 
-fileheader     The file header template. This wildcard       filetypes
-               will only be replaced in filetype
+fileheader     The file header template. This wildcard       file header, snippets, custom filetype
+               will only be replaced in filetype             templates
                templates.
-============== ============================================= ==============
+============== ============================================= =======================================
 
 
 .. [1] The format for the ``year``, ``date`` and ``datetime`` wildcards can be changed
        in the preferences dialog, see `Template tab in preferences dialog`_. You can
        use any conversion specifiers which can be used with the ANSI C strftime function.
        For details please see http://man.cx/strftime.
+
+
+Customizing the toolbar
+-----------------------
+
+You can add, remove and reorder the elements in the toolbar by editing
+the file ``ui_toolbar.xml``.
+
+To override the system-wide configuration file, copy it from
+``$prefix/share/geany`` to your configuration directory, usually
+``~/.config/geany/``. ``$prefix`` is the path where Geany is installed
+(commonly ``/usr/local``).
+
+For example::
+
+    % cp /usr/local/share/geany/ui_toolbar.xml /home/username/.config/geany/
+
+Then edit it and add any of the available elements listed in the file or remove
+any of the existing elements. Of course, you can also reorder the elements as
+you wish and add or remove additional separators.
+This file must be valid XML unless it can't be loaded and the global toolbar
+UI definition is used.
+
+.. note::
+    (1) You cannot add new actions which are not listed below.
+    (2) Everything you add or change must be inside the /ui/toolbar/ path.
+    (3) After you finish editing the file, you need to restart Geany
+        for changes to take effect.
+
+
+Available toolbar elements
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+================== ==============================================================================
+Element name       Description
+================== ==============================================================================
+New                Create a new file
+Open               Open an existing file
+Save               Save the current file
+SaveAll            Save all open files
+Reload             Reload the current file from disk
+Close              Close the current file
+CloseAll           Close all open files
+Cut                Cut the current selection
+Copy               Copy the current selection
+Paste              Paste the contents of the clipboard
+Delete             Delete the current selection
+Undo               Undo the last modification
+Redo               Redo the last modification
+NavBack            Navigate back a location
+NavFor             Navigate forward a location
+Compile            Compile the current file
+Build              Build the current file, includes also a submenu for Make commands. Geany
+                   remembers the last chosen action from the submenu and uses this as default
+                   action when the button itself is clicked.
+Run                Run or view the current file
+Color              Open a color chooser dialog, to interactively pick colors from a palette
+ZoomIn             Zoom in the text
+ZoomOut            Zoom out the text
+UnIndent           Decrease indentation
+Indent             Increase indentation
+SearchEntry        The search field belonging to the 'Search' element (can be used alone)
+Search             Find the entered text in the current file (only useful if you also
+                   use 'SearchEntry')
+GotoEntry          The goto field belonging to the 'Goto' element (can be used alone)
+Goto               Jump to the entered line number (only useful if you also use 'SearchEntry')
+Preferences        Show the preferences dialog
+Quit               Quit Geany
+================== ==============================================================================
+
 
 
 Plugin documentation
@@ -3468,13 +3714,22 @@ Document notebook
 * Double-click on empty space in the notebook tab bar to open a
   new document.
 * Double-click on a document's notebook tab to toggle all additional
-  widgets (to show them again use the View menu or the keyboard shortcut).
+  widgets (to show them again use the View menu or the keyboard
+  shortcut). The interface pref must be enabled for this to work.
 * Middle-click on a document's notebook tab to close the document.
 
-Symbols
--------
+Editor
+------
 
+* Alt-scroll wheel moves up/down a page.
+* Ctrl-scroll wheel zooms in/out.
+* Shift-scroll wheel scrolls 8 characters right/left.
 * Ctrl-click on a word in a document to perform *Go to Tag Definition*.
+* Ctrl-click on a bracket/brace to perform *Go to Matching Brace*.
+
+Interface
+---------
+
 * Double-click on a symbol-list group to expand or compact it.
 
 GTK-related
@@ -3495,7 +3750,7 @@ Hidden preferences
 ==================
 
 There are some uncommon preferences that are not shown in the Preferences
-dialog. These can be set by editing ``~/.geany/geany.conf``, then
+dialog. These can be set by editing ``~/.config/geany/geany.conf``, then
 restarting Geany. Search for the key name, then edit the value. Example:
 
     ``brace_match_ltgt=true``
@@ -3506,7 +3761,7 @@ configuration file.
 ================================  ===========================================  ==================
 Key                               Description                                  Default
 ================================  ===========================================  ==================
-**[editor]**
+**Editor related**
 brace_match_ltgt                  Whether to highlight <, > angle brackets.    false
 show_editor_scrollbars            Whether to display scrollbars. If set to     true
                                   false, the horizontal and vertical
@@ -3518,11 +3773,24 @@ use_gtk_word_boundaries           Whether to look for the end of a word when   t
 complete_snippets_whilst_editing  Whether to allow completion of snippets      false
                                   when editing an existing line (i.e. there
                                   is some text after the current cursor
-                                  position on the line).
-**[interface]**
+                                  position on the line). Only used when the
+                                  keybinding ``Complete snippet`` is set to
+                                  ``Space``.
+**Interface related**
 show_symbol_list_expanders        Whether to show or hide the small expander   true
                                   icons on the symbol list treeview (only
                                   available with GTK 2.12 or above).
+allow_always_save                 Whether files can be saved always, even if   false
+                                  they don't have any changes. By default,
+                                  the Save buttons and menu items are
+                                  disabled when a file is unchanged. When
+                                  setting this option to true, the Save
+                                  buttons and menu items are always active
+                                  and files can be saved.
+**VTE related**
+emulation                         Terminal emulation mode. Only change this    xterm
+                                  if you have VTE termcap files other than
+                                  ``vte/termcap/xterm``.
 ================================  ===========================================  ==================
 
 

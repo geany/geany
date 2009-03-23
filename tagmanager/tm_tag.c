@@ -17,6 +17,15 @@
 #define LIBCTAGS_DEFINED
 #include "tm_tag.h"
 
+
+#if GLIB_CHECK_VERSION (2, 10, 0)
+/* Use GSlices if present */
+
+#define TAG_NEW(T)	((T) = g_slice_new0(TMTag))
+#define TAG_FREE(T)	g_slice_free(TMTag, (T))
+
+#else /* GLib < 2.10 */
+
 static GMemChunk *s_tag_mem_chunk = NULL;
 
 #define TAG_NEW(T) {\
@@ -26,6 +35,9 @@ static GMemChunk *s_tag_mem_chunk = NULL;
 	(T) = g_chunk_new0(TMTag, s_tag_mem_chunk);}
 
 #define TAG_FREE(T) g_mem_chunk_free(s_tag_mem_chunk, (T))
+
+#endif /* GLib version check */
+
 
 /* Note: To preserve binary compatibility, it is very important
 	that you only *append* to this list ! */
@@ -123,7 +135,7 @@ gboolean tm_tag_init(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag_ent
 		{
 			tag->name = g_strdup(file->work_object.file_name);
 			tag->type = tm_tag_file_t;
-			tag->atts.file.timestamp = file->work_object.analyze_time;
+			/* tag->atts.file.timestamp = file->work_object.analyze_time; */
 			tag->atts.file.lang = file->lang;
 			tag->atts.file.inactive = FALSE;
 			return TRUE;
@@ -288,7 +300,7 @@ gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 					tag->atts.entry.impl = *(start + 1);
 					break;
 				default:
-#ifdef TM_DEBUG
+#ifdef GEANY_DEBUG
 					g_warning("Unknown attribute %s", start + 1);
 #endif
 					break;
@@ -347,23 +359,17 @@ gboolean tm_tag_init_from_file_alt(TMTag *tag, TMSourceFile *file, FILE *fp)
 	return TRUE;
 }
 
-TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, gint mode)
+TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, gint mode, gboolean format_pipe)
 {
 	TMTag *tag;
 	gboolean result;
 
 	TAG_NEW(tag);
 
-	switch (mode)
-	{
-		case 4:	/* pascal */
-		case 8:	/* latex */
-			result = tm_tag_init_from_file_alt(tag, file, fp);
-			break;
-
-		default:
-			result = tm_tag_init_from_file(tag, file, fp);
-	}
+	if (format_pipe)
+		result = tm_tag_init_from_file_alt(tag, file, fp);
+	else
+		result = tm_tag_init_from_file(tag, file, fp);
 
 	if (! result)
 	{
@@ -619,7 +625,7 @@ TMTag **tm_tags_find(const GPtrArray *sorted_tags_array, const char *name,
 	s_partial = partial;
 	result = (TMTag **) bsearch(&tag, sorted_tags_array->pdata, sorted_tags_array->len
 	  , sizeof(gpointer), tm_tag_compare);
-	/* there can be matches on both sides of result */
+	/* There can be matches on both sides of result */
 	if (result)
 	{
 		TMTag **last = (TMTag **) &sorted_tags_array->pdata[sorted_tags_array->len - 1];
@@ -628,7 +634,7 @@ TMTag **tm_tags_find(const GPtrArray *sorted_tags_array, const char *name,
 		/* First look for any matches after result */
 		adv = result;
 		adv++;
-		for (; *adv && adv <= last; ++ adv)
+		for (; adv <= last && *adv; ++ adv)
 		{
 			if (0 != tm_tag_compare(&tag, adv))
 				break;
@@ -642,7 +648,7 @@ TMTag **tm_tags_find(const GPtrArray *sorted_tags_array, const char *name,
 			++tagMatches;
 		}
 		*tagCount=tagMatches;
-		++ result;	/* correct address for the last successful match */
+		++ result;	/* Correct address for the last successful match */
 	}
 	s_partial = FALSE;
 	return (TMTag **) result;

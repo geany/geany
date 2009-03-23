@@ -283,7 +283,7 @@
 /* #undef TM_IN_SYS_TIME */
 
 /* Version number of package */
-#define VERSION "0.15"
+#define VERSION "0.17"
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */
@@ -320,4 +320,7 @@
 
 /* Define if you want to detect a running instance */
 #define HAVE_SOCKET 1
+
+/* Define if GIO should be used, we don't use GIO on Windows */
+/* #define HAVE_GIO 1 */
 

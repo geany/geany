@@ -61,7 +61,7 @@ gboolean tm_project_init(TMProject *project, const char *dir
   , const char **sources, const char **ignore, gboolean force)
 {
 	struct stat s;
-	char path[PATH_MAX];
+	char *path;
 
 	g_return_val_if_fail((project && dir), FALSE);
 #ifdef TM_DEBUG
@@ -88,7 +88,7 @@ gboolean tm_project_init(TMProject *project, const char *dir
 	else
 		project->ignore = s_ignore;
 	project->file_list = NULL;
-	g_snprintf(path, PATH_MAX, "%s/%s", project->dir, TM_FILE_NAME);
+	path = g_strdup_printf("%s/%s", project->dir, TM_FILE_NAME);
 	if ((0 != g_stat(path, &s)) || (0 == s.st_size))
 		force = TRUE;
 	if (FALSE == tm_work_object_init(&(project->work_object),
@@ -96,14 +96,18 @@ gboolean tm_project_init(TMProject *project, const char *dir
 	{
 		g_warning("Unable to init project file %s", path);
 		g_free(project->dir);
+		g_free(path);
+		g_free(path);
 		return FALSE;
 	}
 	if (! tm_workspace_add_object(TM_WORK_OBJECT(project)))
 	{
 		g_warning("Unable to init project file %s", path);
 		g_free(project->dir);
+		g_free(path);
 		return FALSE;
 	}
+	g_free(path);
 	tm_project_open(project, force);
 	if (!project->file_list || (0 == project->file_list->len))
 		tm_project_autoscan(project);
@@ -346,7 +350,7 @@ gboolean tm_project_update(TMWorkObject *work_object, gboolean force
 			tm_project_recreate_tags_array(project);
 		}
 	}
-	work_object->analyze_time = time(NULL);
+	/* work_object->analyze_time = time(NULL); */
 	if ((work_object->parent) && (update_parent))
 		tm_workspace_update(work_object->parent, TRUE, FALSE, FALSE);
 	return update_tags;
@@ -381,7 +385,7 @@ gboolean tm_project_open(TMProject *project, gboolean force)
 	tm_project_set_ignorelist(project);
 	if (NULL == (fp = g_fopen(project->work_object.file_name, "r")))
 		return FALSE;
-	while (NULL != (tag = tm_tag_new_from_file(source_file, fp, 0)))
+	while (NULL != (tag = tm_tag_new_from_file(source_file, fp, 0, FALSE)))
 	{
 		if (tm_tag_file_t == tag->type)
 		{
@@ -403,7 +407,6 @@ gboolean tm_project_open(TMProject *project, gboolean force)
 			else
 			{
 				source_file->work_object.parent = TM_WORK_OBJECT(project);
-				source_file->work_object.analyze_time = tag->atts.file.timestamp;
 				source_file->lang = tag->atts.file.lang;
 				source_file->inactive = tag->atts.file.inactive;
 				if (!project->file_list)

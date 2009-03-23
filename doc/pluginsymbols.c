@@ -1,8 +1,8 @@
 /*
  *      pluginsymbols.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2008-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2008-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -43,22 +43,27 @@ gint plugin_version_check(gint);
  * @param info The data struct which should be initialized by this function. */
 void plugin_set_info(PluginInfo *info);
 
-/** Basic information about a plugin, which is set in plugin_set_info(). */
-const PluginInfo* plugin_info;
+/** @deprecated Use @ref geany_plugin->info instead.
+ * Basic information about a plugin, which is set in plugin_set_info(). */
+const PluginInfo *plugin_info;
+
+/** Basic information for the plugin and identification. */
+const GeanyPlugin *geany_plugin;
 
 /** Geany owned data pointers.
  * Example: @c assert(geany_data->app->configdir != NULL); */
-const GeanyData* geany_data;
+const GeanyData *geany_data;
 
 /** Geany owned function pointers, split into groups.
- * Example: @c geany_functions->p_document->new_file(NULL, NULL, NULL);
- *
- * Note: Usually plugins would use the pluginmacros.h file and just call:
- * @c p_document->new_file(NULL, NULL, NULL); */
-const GeanyFunctions* geany_functions;
+ * Example: @code #include "geanyfunctions.h"
+ * ...
+ * document_new_file(NULL, NULL, NULL); @endcode
+ * This is equivalent of @c geany_functions->p_document->new_file(NULL, NULL, NULL); */
+const GeanyFunctions *geany_functions;
 
-/** Plugin owned fields, including flags. */
-PluginFields* plugin_fields;
+/** @deprecated Use @ref ui_add_document_sensitive() instead.
+ * Plugin owned fields, including flags. */
+PluginFields *plugin_fields;
 
 /** An array for connecting GeanyObject events, which should be terminated with
  * @c {NULL, NULL, FALSE, NULL}. See @link signals Signal documentation @endlink. */
@@ -91,4 +96,10 @@ void plugin_init(GeanyData *data);
 /** Called before unloading the plugin. Required for normal plugins - it should undo
  * everything done in plugin_init() - e.g. destroy menu items, free memory. */
 void plugin_cleanup();
+
+/** Called whenever the plugin should show its documentation (if any). This may open a dialog,
+ * a browser with a website or a local installed HTML help file(see utils_start_browser())
+ * or something else.
+ * Can be omitted when not needed. */
+void plugin_help();
 

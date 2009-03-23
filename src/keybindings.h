@@ -1,8 +1,8 @@
 /*
  *      keybindings.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -135,6 +135,7 @@ enum
 	GEANY_KEYS_EDITOR_SCROLLLINEDOWN,
 	GEANY_KEYS_EDITOR_COMPLETESNIPPET,
 	GEANY_KEYS_EDITOR_SUPPRESSSNIPPETCOMPLETION,
+	GEANY_KEYS_EDITOR_SNIPPETNEXTCURSOR,
 	GEANY_KEYS_EDITOR_CONTEXTACTION,
 	GEANY_KEYS_EDITOR_AUTOCOMPLETE,
 	GEANY_KEYS_EDITOR_CALLTIP,
@@ -179,6 +180,7 @@ enum
 	GEANY_KEYS_FORMAT_SENDTOCMD1,
 	GEANY_KEYS_FORMAT_SENDTOCMD2,
 	GEANY_KEYS_FORMAT_SENDTOCMD3,
+	GEANY_KEYS_FORMAT_SENDTOVTE,
 	GEANY_KEYS_FORMAT_COUNT
 };
 
@@ -208,8 +210,8 @@ enum
 	GEANY_KEYS_SEARCH_FINDNEXTSEL,
 	GEANY_KEYS_SEARCH_FINDPREVSEL,
 	GEANY_KEYS_SEARCH_NEXTMESSAGE,
-	GEANY_KEYS_SEARCH_FINDUSAGE,
 	GEANY_KEYS_SEARCH_PREVIOUSMESSAGE,
+	GEANY_KEYS_SEARCH_FINDUSAGE,
 	GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE,
 	GEANY_KEYS_SEARCH_COUNT
 };
@@ -220,16 +222,16 @@ enum
 	GEANY_KEYS_GOTO_FORWARD,
 	GEANY_KEYS_GOTO_BACK,
 	GEANY_KEYS_GOTO_LINE,
+	GEANY_KEYS_GOTO_LINESTART,
+	GEANY_KEYS_GOTO_LINEEND,
 	GEANY_KEYS_GOTO_MATCHINGBRACE,
 	GEANY_KEYS_GOTO_TOGGLEMARKER,
 	GEANY_KEYS_GOTO_NEXTMARKER,
 	GEANY_KEYS_GOTO_PREVIOUSMARKER,
-	GEANY_KEYS_GOTO_TAGDEFINITION,
-	GEANY_KEYS_GOTO_TAGDECLARATION,
-	GEANY_KEYS_GOTO_LINESTART,
-	GEANY_KEYS_GOTO_LINEEND,
 	GEANY_KEYS_GOTO_PREVWORDSTART,
 	GEANY_KEYS_GOTO_NEXTWORDSTART,
+	GEANY_KEYS_GOTO_TAGDEFINITION,
+	GEANY_KEYS_GOTO_TAGDECLARATION,
 	GEANY_KEYS_GOTO_COUNT
 };
 
@@ -293,10 +295,10 @@ enum
 	GEANY_KEYS_BUILD_MAKEOWNTARGET,
 	GEANY_KEYS_BUILD_MAKEOBJECT,
 	GEANY_KEYS_BUILD_NEXTERROR,
+	GEANY_KEYS_BUILD_PREVIOUSERROR,
 	GEANY_KEYS_BUILD_RUN,
 	GEANY_KEYS_BUILD_RUN2,
 	GEANY_KEYS_BUILD_OPTIONS,
-	GEANY_KEYS_BUILD_PREVIOUSERROR,
 	GEANY_KEYS_BUILD_COUNT
 };
 
@@ -333,9 +335,6 @@ GeanyKeyBinding *keybindings_lookup_item(guint group_id, guint key_id);
 void keybindings_write_to_file(void);
 
 void keybindings_show_shortcuts(void);
-
-/* central keypress event handler, almost all keypress events go to this function */
-gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 
 #endif
 

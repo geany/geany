@@ -1,8 +1,8 @@
 /*
  *      main.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -27,11 +27,13 @@
 
 typedef struct
 {
+	gboolean	new_instance;
 	gboolean	load_session;
 	gint		goto_line;
 	gint		goto_column;
 	gboolean	ignore_global_tags;
-} CommandLineOptions;
+}
+CommandLineOptions;
 
 extern CommandLineOptions cl_options;
 
@@ -55,8 +57,10 @@ gchar *main_get_argv_filename(const gchar *filename);
 
 void main_quit(void);
 
-gboolean main_handle_filename(gchar *locale_filename);
+gboolean main_handle_filename(const gchar *locale_filename);
 
 void main_reload_configuration(void);
+
+void main_locale_init(const gchar *locale_dir, const gchar *gettext_package);
 
 #endif

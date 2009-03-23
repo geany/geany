@@ -1,8 +1,8 @@
 /*
  *      plugins.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2007-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2007-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2007-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -23,6 +23,8 @@
  */
 
 /* Code to manage, load and unload plugins. */
+/** @file plugins.c
+ * Plugin utility functions. */
 
 #include "geany.h"
 
@@ -47,7 +49,6 @@
 #include "dialogs.h"
 #include "msgwindow.h"
 #include "prefs.h"
-#include "geanyobject.h"
 #include "geanywraplabel.h"
 #include "build.h"
 #include "encodings.h"
@@ -56,6 +57,9 @@
 #include "keybindings.h"
 #include "navqueue.h"
 #include "main.h"
+#include "toolbar.h"
+#include "stash.h"
+#include "keyfile.h"
 
 
 #ifdef G_OS_WIN32
@@ -65,22 +69,36 @@
 #endif
 
 
+typedef struct GeanyPluginPrivate
+{
+	GeanyAutoSeparator	toolbar_separator;
+	gboolean			resident;
+}
+GeanyPluginPrivate;
+
+
 typedef struct Plugin
 {
 	GModule 	*module;
 	gchar		*filename;				/* plugin filename (/path/libname.so) */
 	PluginInfo		info;				/* plugin name, description, etc */
 	PluginFields	fields;
+	GeanyPlugin		public;				/* fields the plugin can read */
+	GeanyPluginPrivate	priv;			/* GeanyPlugin type private data */
+
 	gulong		*signal_ids;			/* signal IDs to disconnect when unloading */
 	gsize		signal_ids_len;
 	GeanyKeyGroup	*key_group;
 
 	void		(*init) (GeanyData *data);			/* Called when the plugin is enabled */
 	GtkWidget*	(*configure) (GtkDialog *dialog);	/* plugin configure dialog, optional */
+	void		(*help) (void);					/* Called when the plugin should show some help, optional */
 	void		(*cleanup) (void);					/* Called when the plugin is disabled or when Geany exits */
 }
 Plugin;
 
+
+static gboolean want_plugins = FALSE;
 
 /* list of all available, loadable plugins, only valid as long as the plugin manager dialog is
  * opened, afterwards it will be destroyed */
@@ -93,6 +111,14 @@ static GtkWidget *menu_separator = NULL;
 
 static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data);
 
+void plugin_add_toolbar_item(GeanyPlugin *plugin, GtkToolItem *item);
+void plugin_module_make_resident(GeanyPlugin *plugin);
+
+
+static PluginFuncs plugin_funcs = {
+	&plugin_add_toolbar_item,
+	&plugin_module_make_resident
+};
 
 static DocumentFuncs doc_funcs = {
 	&document_new_file,
@@ -108,20 +134,34 @@ static DocumentFuncs doc_funcs = {
 	&document_set_encoding,
 	&document_set_text_changed,
 	&document_set_filetype,
-	&document_close
+	&document_close,
+	&document_index,
+	&document_save_file_as,
+	&document_rename_file,
+	&document_get_status_color
 };
 
 static EditorFuncs editor_funcs = {
-	&editor_set_indicator,
-	&editor_set_indicator_on_line,
-	&editor_clear_indicators,
 	&editor_get_indent_prefs,
-	&editor_create_widget
+	&editor_create_widget,
+	&editor_indicator_set_on_range,
+	&editor_indicator_set_on_line,
+	&editor_indicator_clear,
+	&editor_set_indent_type,
+	&editor_get_word_at_pos
 };
 
-static ScintillaFuncs sci_funcs = {
+static ScintillaFuncs scintilla_funcs = {
 	&scintilla_send_message,
-	&sci_cmd,
+	&scintilla_new
+};
+
+/* Macro to prevent a duplicate macro being generated in geanyfunctions.h */
+#define _scintilla_send_message_macro	scintilla_send_message
+
+static SciFuncs sci_funcs = {
+	&_scintilla_send_message_macro,
+	&sci_send_command,
 	&sci_start_undo_action,
 	&sci_end_undo_action,
 	&sci_set_text,
@@ -155,7 +195,8 @@ static ScintillaFuncs sci_funcs = {
 	&sci_get_current_line,
 	&sci_has_selection,
 	&sci_get_tab_width,
-	&sci_indicator_clear
+	&sci_indicator_clear,
+	&sci_indicator_set
 };
 
 static TemplateFuncs template_funcs = {
@@ -175,7 +216,11 @@ static UtilsFuncs utils_funcs = {
 	&utils_get_setting_integer,
 	&utils_get_setting_string,
 	&utils_spawn_sync,
-	&utils_spawn_async
+	&utils_spawn_async,
+	&utils_str_casecmp,
+	&utils_get_date_time,
+	&utils_open_browser,
+	&utils_string_replace_first
 };
 
 static UIUtilsFuncs uiutils_funcs = {
@@ -185,23 +230,34 @@ static UIUtilsFuncs uiutils_funcs = {
 	&ui_table_add_row,
 	&ui_path_box_new,
 	&ui_button_new_with_image,
-	&ui_get_toolbar_insert_position
+	&ui_add_document_sensitive,
+	&ui_widget_set_tooltip_text,
+	&ui_image_menu_item_new,
+	&ui_lookup_widget,
+	&ui_progress_bar_start,
+	&ui_progress_bar_stop,
+	&ui_entry_add_clear_icon
 };
 
 static DialogFuncs dialog_funcs = {
 	&dialogs_show_question,
 	&dialogs_show_msgbox,
-	&dialogs_show_save_as
+	&dialogs_show_save_as,
+	&dialogs_show_input_numeric
 };
 
+/* Macro to prevent confusing macro being generated in geanyfunctions.h */
+#define _lookup_widget_macro	ui_lookup_widget
+
+/* deprecated */
 static SupportFuncs support_funcs = {
-	&lookup_widget
+	&_lookup_widget_macro
 };
 
 static MsgWinFuncs msgwin_funcs = {
 	&msgwin_status_add,
-	&msgwin_compiler_add_fmt,
-	&msgwin_msg_add_fmt,
+	&msgwin_compiler_add,
+	&msgwin_msg_add,
 	&msgwin_clear_tab,
 	&msgwin_switch_tab
 };
@@ -234,10 +290,10 @@ static HighlightingFuncs highlighting_funcs = {
 	&highlighting_get_style
 };
 
-
 static FiletypeFuncs filetype_funcs = {
 	&filetypes_detect_from_file,
-	&filetypes_lookup_by_name
+	&filetypes_lookup_by_name,
+	&filetypes_index
 };
 
 static NavQueueFuncs navqueue_funcs = {
@@ -245,7 +301,8 @@ static NavQueueFuncs navqueue_funcs = {
 };
 
 static MainFuncs main_funcs = {
-	&main_reload_configuration
+	&main_reload_configuration,
+	&main_locale_init
 };
 
 static GeanyFunctions geany_functions = {
@@ -265,7 +322,10 @@ static GeanyFunctions geany_functions = {
 	&filetype_funcs,
 	&navqueue_funcs,
 	&editor_funcs,
-	&main_funcs
+	&main_funcs,
+	&plugin_funcs,
+	&scintilla_funcs,
+	&msgwin_funcs
 };
 
 static GeanyData geany_data;
@@ -454,6 +514,7 @@ add_kb_group(Plugin *plugin)
 static void
 plugin_init(Plugin *plugin)
 {
+	GeanyPlugin **p_geany_plugin;
 	PluginCallback *callbacks;
 	PluginInfo **p_info;
 	PluginFields **plugin_fields;
@@ -461,6 +522,9 @@ plugin_init(Plugin *plugin)
 	GeanyFunctions **p_geany_functions;
 
 	/* set these symbols before plugin_init() is called */
+	g_module_symbol(plugin->module, "geany_plugin", (void *) &p_geany_plugin);
+	if (p_geany_plugin)
+		*p_geany_plugin = &plugin->public;
 	g_module_symbol(plugin->module, "plugin_info", (void *) &p_info);
 	if (p_info)
 		*p_info = &plugin->info;
@@ -478,8 +542,12 @@ plugin_init(Plugin *plugin)
 	g_return_if_fail(plugin->init);
 	plugin->init(&geany_data);
 
+	if (p_geany_plugin && (*p_geany_plugin)->priv->resident)
+		g_module_make_resident(plugin->module);
+
 	/* store some function pointers for later use */
 	g_module_symbol(plugin->module, "plugin_configure", (void *) &plugin->configure);
+	g_module_symbol(plugin->module, "plugin_help", (void *) &plugin->help);
 	g_module_symbol(plugin->module, "plugin_cleanup", (void *) &plugin->cleanup);
 	if (plugin->cleanup == NULL)
 	{
@@ -492,8 +560,7 @@ plugin_init(Plugin *plugin)
 
 	if (plugin->fields.flags & PLUGIN_IS_DOCUMENT_SENSITIVE)
 	{
-		gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) ? TRUE : FALSE;
-		gtk_widget_set_sensitive(plugin->fields.menu_item, enable);
+		ui_add_document_sensitive(plugin->fields.menu_item);
 	}
 
 	g_module_symbol(plugin->module, "plugin_callbacks", (void *) &callbacks);
@@ -548,7 +615,7 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 	module = g_module_open(fname, G_MODULE_BIND_LOCAL);
 	if (! module)
 	{
-		g_warning("%s", g_module_error());
+		geany_debug("Can't load plugin: %s", g_module_error());
 		return NULL;
 	}
 
@@ -608,6 +675,8 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 
 	plugin->filename = g_strdup(fname);
 	plugin->module = module;
+	plugin->public.info = &plugin->info;
+	plugin->public.priv = &plugin->priv;
 
 	if (init_plugin)
 		plugin_init(plugin);
@@ -638,11 +707,13 @@ static gboolean is_active_plugin(Plugin *plugin)
 }
 
 
+/* Clean up anything used by an active plugin  */
 static void
-plugin_unload(Plugin *plugin)
+plugin_cleanup(Plugin *plugin)
 {
+	GtkWidget *widget;
 
-	if (is_active_plugin(plugin) && plugin->cleanup)
+	if (plugin->cleanup)
 		plugin->cleanup();
 
 	remove_callbacks(plugin);
@@ -650,7 +721,10 @@ plugin_unload(Plugin *plugin)
 	if (plugin->key_group)
 		g_ptr_array_remove_fast(keybinding_groups, plugin->key_group);
 
-	active_plugin_list = g_list_remove(active_plugin_list, plugin);
+	widget = plugin->priv.toolbar_separator.widget;
+	if (widget)
+		gtk_widget_destroy(widget);
+
 	geany_debug("Unloaded: %s", plugin->filename);
 }
 
@@ -661,7 +735,10 @@ plugin_free(Plugin *plugin)
 	g_return_if_fail(plugin);
 	g_return_if_fail(plugin->module);
 
-	plugin_unload(plugin);
+	if (is_active_plugin(plugin))
+		plugin_cleanup(plugin);
+
+	active_plugin_list = g_list_remove(active_plugin_list, plugin);
 
 	if (plugin->module != NULL && ! g_module_close(plugin->module))
 		g_warning("%s: %s", plugin->filename, g_module_error());
@@ -676,7 +753,7 @@ plugin_free(Plugin *plugin)
 
 /* load active plugins at startup */
 static void
-load_active_plugins()
+load_active_plugins(void)
 {
 	guint i, len;
 
@@ -707,7 +784,7 @@ load_plugins_from_path(const gchar *path)
 	for (item = list; item != NULL; item = g_slist_next(item))
 	{
 		tmp = strrchr(item->data, '.');
-		if (tmp == NULL || strcasecmp(tmp, "." PLUGIN_EXT) != 0)
+		if (tmp == NULL || utils_str_casecmp(tmp, "." PLUGIN_EXT) != 0)
 			continue;
 
 		fname = g_strconcat(path, G_DIR_SEPARATOR_S, item->data, NULL);
@@ -723,7 +800,7 @@ load_plugins_from_path(const gchar *path)
 #ifdef G_OS_WIN32
 static gchar *get_plugin_path()
 {
-	gchar *install_dir = g_win32_get_package_installation_directory("geany", NULL);
+	gchar *install_dir = g_win32_get_package_installation_directory(NULL, NULL);
 	gchar *path;
 
 	path = g_strconcat(install_dir, "\\lib", NULL);
@@ -739,26 +816,57 @@ static void load_all_plugins(void)
 	gchar *path;
 
 	path = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", NULL);
-	/* first load plugins in ~/.geany/plugins/, then in $prefix/lib/geany */
+	/* first load plugins in ~/.config/geany/plugins/ */
 	load_plugins_from_path(path);
 	g_free(path);
+
+	/* load plugins from a custom path */
+	if (NZV(prefs.custom_plugin_path))
+		load_plugins_from_path(prefs.custom_plugin_path);
+
+	/* finally load plugins from $prefix/lib/geany */
 #ifdef G_OS_WIN32
 	path = get_plugin_path();
 #else
 	path = g_strconcat(GEANY_LIBDIR, G_DIR_SEPARATOR_S "geany", NULL);
 #endif
 	load_plugins_from_path(path);
-
 	g_free(path);
 }
 
 
-void plugins_init()
+static void on_tools_menu_show(GtkWidget *menu_item, G_GNUC_UNUSED gpointer user_data)
+{
+	GList *item, *list = gtk_container_get_children(GTK_CONTAINER(menu_item));
+	guint i = 0;
+	gboolean have_plugin_menu_items = FALSE;
+
+	for (item = list; item != NULL; item = g_list_next(item))
+	{
+		if (item->data == menu_separator)
+		{
+			if (i < g_list_length(list) - 1)
+			{
+				have_plugin_menu_items = TRUE;
+				break;
+			}
+		}
+		i++;
+	}
+	g_list_free(list);
+
+	ui_widget_show_hide(menu_separator, have_plugin_menu_items);
+}
+
+
+/* Calling this starts up plugin support */
+void plugins_load_active(void)
 {
 	GtkWidget *widget;
 
+	want_plugins = TRUE;
+
 	geany_data_init();
-	geany_object = geany_object_new();
 
 	widget = gtk_separator_menu_item_new();
 	gtk_widget_show(widget);
@@ -771,10 +879,18 @@ void plugins_init()
 
 	menu_separator = gtk_separator_menu_item_new();
 	gtk_container_add(GTK_CONTAINER(main_widgets.tools_menu), menu_separator);
+	g_signal_connect(main_widgets.tools_menu, "show", G_CALLBACK(on_tools_menu_show), NULL);
 
 	load_active_plugins();
+}
 
-	plugins_update_tools_menu();
+
+static gint cmp_plugin_names(gconstpointer a, gconstpointer b)
+{
+	const Plugin *pa = a;
+	const Plugin *pb = b;
+
+	return strcmp(pa->info.name, pb->info.name);
 }
 
 
@@ -791,6 +907,10 @@ static void update_active_plugins_pref(void)
 		active_plugins_pref = NULL;
 		return;
 	}
+
+	/* sort the list so next time tools menu items are sorted by plugin name
+	 * (not ideal to do here, but better than nothing) */
+	active_plugin_list = g_list_sort(active_plugin_list, cmp_plugin_names);
 
 	active_plugins_pref = g_new0(gchar*, count + 1);
 
@@ -812,31 +932,34 @@ static void update_active_plugins_pref(void)
 }
 
 
-void plugins_save_prefs(GKeyFile *config)
+static void on_save_settings(GKeyFile *config)
 {
-	g_key_file_set_boolean(config, "plugins", "load_plugins", prefs.load_plugins);
-
-	update_active_plugins_pref();
-	if (active_plugins_pref != NULL)
-		g_key_file_set_string_list(config, "plugins", "active_plugins",
-			(const gchar**)active_plugins_pref, g_strv_length(active_plugins_pref));
-	else
-	{
-		/* use an empty dummy array to override maybe exisiting value */
-		const gchar *dummy[] = { "" };
-		g_key_file_set_string_list(config, "plugins", "active_plugins", dummy, 1);
-	}
+	/* if plugins are disabled, don't clear list of active plugins */
+	if (want_plugins)
+		update_active_plugins_pref();
 }
 
 
-void plugins_load_prefs(GKeyFile *config)
+/* called even if plugin support is disabled */
+void plugins_init(void)
 {
-	prefs.load_plugins = utils_get_setting_boolean(config, "plugins", "load_plugins", TRUE);
-	active_plugins_pref = g_key_file_get_string_list(config, "plugins", "active_plugins", NULL, NULL);
+	GeanyPrefGroup *group;
+
+	group = stash_group_new("plugins");
+	configuration_add_pref_group(group, TRUE);
+
+	stash_group_add_toggle_button(group, &prefs.load_plugins,
+		"load_plugins", TRUE, "check_plugins");
+	stash_group_add_entry(group, &prefs.custom_plugin_path,
+		"custom_plugin_path", "", "extra_plugin_path_entry");
+
+	g_signal_connect(geany_object, "save-settings", G_CALLBACK(on_save_settings), NULL);
+	stash_group_add_string_vector(group, &active_plugins_pref, "active_plugins", NULL);
 }
 
 
-void plugins_free(void)
+/* called even if plugin support is disabled */
+void plugins_finalize(void)
 {
 	if (failed_plugins_list != NULL)
 	{
@@ -849,45 +972,6 @@ void plugins_free(void)
 		g_list_free(active_plugin_list);
 	}
 	g_strfreev(active_plugins_pref);
-
-	g_object_unref(geany_object);
-	geany_object = NULL; /* to mark the object as invalid for any code which tries to emit signals */
-}
-
-
-void plugins_update_document_sensitive(gboolean enabled)
-{
-	GList *item;
-
-	for (item = active_plugin_list; item != NULL; item = g_list_next(item))
-	{
-		Plugin *plugin = item->data;
-
-		if (plugin->fields.flags & PLUGIN_IS_DOCUMENT_SENSITIVE)
-			gtk_widget_set_sensitive(plugin->fields.menu_item, enabled);
-	}
-}
-
-
-static gint
-plugin_has_menu(Plugin *a, Plugin *b)
-{
-	if (a->fields.menu_item != NULL)
-		return 0;
-
-	return 1;
-}
-
-
-void plugins_update_tools_menu()
-{
-	gboolean found;
-
-	if (menu_separator == NULL)
-		return;
-
-	found = (g_list_find_custom(active_plugin_list, NULL, (GCompareFunc) plugin_has_menu) != NULL);
-	ui_widget_show_hide(menu_separator, found);
 }
 
 
@@ -899,7 +983,9 @@ enum
 	PLUGIN_COLUMN_NAME,
 	PLUGIN_COLUMN_FILE,
 	PLUGIN_COLUMN_PLUGIN,
-	PLUGIN_N_COLUMNS
+	PLUGIN_N_COLUMNS,
+	PM_BUTTON_CONFIGURE,
+	PM_BUTTON_HELP
 };
 
 typedef struct
@@ -909,7 +995,9 @@ typedef struct
 	GtkListStore *store;
 	GtkWidget *description_label;
 	GtkWidget *configure_button;
-} PluginManagerWidgets;
+	GtkWidget *help_button;
+}
+PluginManagerWidgets;
 
 static PluginManagerWidgets pm_widgets;
 
@@ -928,6 +1016,7 @@ void pm_selection_changed(GtkTreeSelection *selection, gpointer user_data)
 		{
 			gchar *text;
 			PluginInfo *pi;
+			gboolean is_active;
 
 			pi = &p->info;
 			text = g_strdup_printf(
@@ -937,8 +1026,9 @@ void pm_selection_changed(GtkTreeSelection *selection, gpointer user_data)
 			geany_wrap_label_set_text(GTK_LABEL(pm_widgets.description_label), text);
 			g_free(text);
 
-			gtk_widget_set_sensitive(pm_widgets.configure_button,
-				p->configure != NULL && g_list_find(active_plugin_list, p) != NULL);
+			is_active = is_active_plugin(p);
+			gtk_widget_set_sensitive(pm_widgets.configure_button, p->configure != NULL && is_active);
+			gtk_widget_set_sensitive(pm_widgets.help_button, p->help != NULL && is_active);
 		}
 	}
 }
@@ -947,6 +1037,7 @@ void pm_selection_changed(GtkTreeSelection *selection, gpointer user_data)
 static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer data)
 {
 	gboolean old_state, state;
+	gboolean is_active;
 	gchar *file_name;
 	GtkTreeIter iter;
 	GtkTreePath *path = gtk_tree_path_new_from_string(pth);
@@ -966,7 +1057,9 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 
 	/* unload plugin module */
 	if (!state)
-		keybindings_write_to_file();	/* save shortcuts (only need this group, but it doesn't take long) */
+		/* save shortcuts (only need this group, but it doesn't take long) */
+		keybindings_write_to_file();
+
 	plugin_free(p);
 
 	/* reload plugin module and initialize it if item is checked */
@@ -981,9 +1074,10 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 
 	g_free(file_name);
 
-	/* set again the sensitiveness of the configure button */
-	gtk_widget_set_sensitive(pm_widgets.configure_button,
-		p->configure != NULL && is_active_plugin(p));
+	/* set again the sensitiveness of the configure and help buttons */
+	is_active = is_active_plugin(p);
+	gtk_widget_set_sensitive(pm_widgets.configure_button, p->configure != NULL && is_active);
+	gtk_widget_set_sensitive(pm_widgets.help_button, p->help != NULL && is_active);
 }
 
 
@@ -1083,7 +1177,7 @@ static void configure_plugin(Plugin *p)
 }
 
 
-void pm_on_configure_button_clicked(GtkButton *button, gpointer user_data)
+void pm_on_plugin_button_clicked(GtkButton *button, gpointer user_data)
 {
 	GtkTreeModel *model;
 	GtkTreeSelection *selection;
@@ -1097,7 +1191,10 @@ void pm_on_configure_button_clicked(GtkButton *button, gpointer user_data)
 
 		if (p != NULL)
 		{
-			configure_plugin(p);
+			if (GPOINTER_TO_INT(user_data) == PM_BUTTON_CONFIGURE)
+				configure_plugin(p);
+			else if (GPOINTER_TO_INT(user_data) == PM_BUTTON_HELP && p->help != NULL)
+				p->help();
 		}
 	}
 }
@@ -1162,7 +1259,12 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	pm_widgets.configure_button = gtk_button_new_from_stock(GTK_STOCK_PREFERENCES);
 	gtk_widget_set_sensitive(pm_widgets.configure_button, FALSE);
 	g_signal_connect(pm_widgets.configure_button, "clicked",
-		G_CALLBACK(pm_on_configure_button_clicked), NULL);
+		G_CALLBACK(pm_on_plugin_button_clicked), GINT_TO_POINTER(PM_BUTTON_CONFIGURE));
+
+	pm_widgets.help_button = gtk_button_new_from_stock(GTK_STOCK_HELP);
+	gtk_widget_set_sensitive(pm_widgets.help_button, FALSE);
+	g_signal_connect(pm_widgets.help_button, "clicked",
+		G_CALLBACK(pm_on_plugin_button_clicked), GINT_TO_POINTER(PM_BUTTON_HELP));
 
 	label2 = gtk_label_new(_("<b>Plugin details:</b>"));
 	gtk_label_set_use_markup(GTK_LABEL(label2), TRUE);
@@ -1177,13 +1279,14 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 
 	hbox = gtk_hbox_new(FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), label2, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), pm_widgets.help_button, FALSE, FALSE, 4);
 	gtk_box_pack_start(GTK_BOX(hbox), pm_widgets.configure_button, FALSE, FALSE, 0);
 
-	label_vbox = gtk_vbox_new(FALSE, 0);
+	label_vbox = gtk_vbox_new(FALSE, 3);
 	gtk_box_pack_start(GTK_BOX(label_vbox), hbox, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(label_vbox), desc_win, FALSE, FALSE, 0);
 
-	vbox2 = gtk_vbox_new(FALSE, 6);
+	vbox2 = gtk_vbox_new(FALSE, 3);
 	gtk_box_pack_start(GTK_BOX(vbox2), label, FALSE, FALSE, 5);
 	gtk_box_pack_start(GTK_BOX(vbox2), swin, TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox2), label_vbox, FALSE, FALSE, 0);
@@ -1193,5 +1296,60 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	gtk_container_add(GTK_CONTAINER(vbox), vbox2);
 	gtk_widget_show_all(pm_widgets.dialog);
 }
+
+
+/** Insert a toolbar item before the Quit button, or after the previous plugin toolbar item.
+ * A separator is added on the first call to this function, and will be shown when @a item is
+ * shown; hidden when @a item is hidden.
+ * @note You should still destroy @a item yourself, usually in @ref plugin_cleanup().
+ * @param plugin Must be @ref geany_plugin.
+ * @param item The item to add. */
+void plugin_add_toolbar_item(GeanyPlugin *plugin, GtkToolItem *item)
+{
+	GtkToolbar *toolbar = GTK_TOOLBAR(main_widgets.toolbar);
+	gint pos;
+	GeanyAutoSeparator *autosep;
+
+	g_return_if_fail(plugin);
+	autosep = &plugin->priv->toolbar_separator;
+
+	if (!autosep->widget)
+	{
+		GtkToolItem *sep;
+
+		pos = toolbar_get_insert_position();
+
+		sep = gtk_separator_tool_item_new();
+		gtk_toolbar_insert(toolbar, sep, pos);
+		autosep->widget = GTK_WIDGET(sep);
+
+		gtk_toolbar_insert(toolbar, item, pos + 1);
+	}
+	else
+	{
+		pos = gtk_toolbar_get_item_index(toolbar, GTK_TOOL_ITEM(autosep->widget));
+		g_return_if_fail(pos >= 0);
+		gtk_toolbar_insert(toolbar, item, pos);
+	}
+	/* hide the separator widget if there are no toolbar items showing for the plugin */
+	ui_auto_separator_add_ref(autosep, GTK_WIDGET(item));
+}
+
+
+/** Ensures that a plugin's module (*.so) will never be unloaded.
+ *  This is necessary if you register new GTypes in your plugin, e.g. when using own classes
+ *  using the GObject system.
+ *
+ * @param plugin Must be @ref geany_plugin.
+ *
+ *  @since 0.16
+ */
+void plugin_module_make_resident(GeanyPlugin *plugin)
+{
+	g_return_if_fail(plugin);
+
+	plugin->priv->resident = TRUE;
+}
+
 
 #endif

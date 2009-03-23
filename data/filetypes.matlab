@@ -2,31 +2,28 @@
 [styling]
 # foreground;background;bold;italic
 default=0x000000;0xffffff;false;false
-commentline=0x909090;0xffffff;false;false
+comment=0x808080;0xffffff;false;false
+command=0x111199;0xffffff;true;false
 number=0x007f00;0xffffff;false;false
-word=0x991111;0xffffff;false;false
+keyword=0x001a7f;0xffffff;true;false
 string=0xff901e;0xffffff;false;false
-character=0x404000;0xffffff;false;false
-operator=0x000000;0xffffff;false;false
+operator=0x301010;0xffffff;false;false
 identifier=0x000000;0xffffff;false;false
-backticks=0x000000;0xe0c0e0;false;false
-param=0x991111;0x0000ff;false;false
-scalar=0x0000ff;0xffffff;false;false
+doublequotedstring=0xff901e;0xffffff;false;false
 
 [keywords]
 # all items must be in one line
-primary=clear seq fillcols fillrowsgaspect gaddview gtitle gxaxis gyaxis max contour gcolor gplot gaddview gxaxis gyaxis gcolor fill coldim gplot gtitle clear arcov dpss fspec cos gxaxis gyaxis gtitle gplot gupdate rowdim fill print for to begin end write cocreate coinvoke codispsave cocreate codispset copropput colsum sqrt adddialog addcontrol addcontrol delwin fillrows gaspect function conjdir
-
+primary=break case catch continue else elseif end for function global if otherwise persistent return switch try while
 
 [settings]
 # default extension used when saving files
-#extension=oms
+#extension=m
 
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
 # if only single comment char is supported like # in this file, leave comment_close blank
-comment_open=#
+comment_open=%
 comment_close=
 
 # set to false if a comment character/string should start at column 0 of a line, true uses any

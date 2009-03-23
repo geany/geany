@@ -1,8 +1,8 @@
 /*
  *      keybindings.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@
 #include "utils.h"
 #include "ui_utils.h"
 #include "document.h"
+#include "documentprivate.h"
 #include "filetypes.h"
 #include "callbacks.h"
 #include "prefs.h"
@@ -44,6 +45,9 @@
 #include "navqueue.h"
 #include "symbols.h"
 #include "vte.h"
+#include "toolbar.h"
+#include "treeviews.h"
+#include "geanywraplabel.h"
 
 
 GPtrArray *keybinding_groups;	/* array of GeanyKeyGroup pointers */
@@ -56,8 +60,20 @@ static gboolean ignore_keybinding = FALSE;
 static GtkAccelGroup *kb_accel_group = NULL;
 static const gboolean swap_alt_tab_order = FALSE;
 
+const gsize MAX_MRU_DOCS = 20;
+static GQueue *mru_docs = NULL;
+
+static gboolean switch_dialog_cancelled = TRUE;
+static GtkWidget *switch_dialog = NULL;
+static GtkWidget *switch_dialog_label = NULL;
+
+
+/* central keypress event handler, almost all keypress events go to this function */
+static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
+static gboolean on_key_release_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 
 static gboolean check_current_word(void);
+static gboolean read_current_word(void);
 
 static void cb_func_file_action(guint key_id);
 static void cb_func_project_action(guint key_id);
@@ -71,16 +87,14 @@ static void cb_func_switch_action(guint key_id);
 static void cb_func_clipboard(guint key_id);
 static void cb_func_build_action(guint key_id);
 static void cb_func_document_action(guint key_id);
+static void cb_func_view_action(guint key_id);
 
-/* TODO: refactor individual callbacks per group */
+/* note: new keybindings should normally use per group callbacks */
 static void cb_func_menu_help(guint key_id);
 static void cb_func_menu_preferences(guint key_id);
 
-static void cb_func_menu_toggle_all(guint key_id);
 static void cb_func_menu_fullscreen(guint key_id);
 static void cb_func_menu_messagewindow(guint key_id);
-static void cb_func_menu_zoomin(guint key_id);
-static void cb_func_menu_zoomout(guint key_id);
 
 static void cb_func_menu_opencolorchooser(guint key_id);
 
@@ -88,7 +102,6 @@ static void cb_func_switch_tableft(guint key_id);
 static void cb_func_switch_tabright(guint key_id);
 static void cb_func_switch_tablastused(guint key_id);
 static void cb_func_move_tab(guint key_id);
-static void cb_func_toggle_sidebar(guint key_id);
 
 static void add_popup_menu_accels(void);
 static void apply_kb_accel(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_data);
@@ -140,7 +153,7 @@ static GeanyKeyGroup *add_kb_group(GeanyKeyGroup *group,
 
 /* Lookup a widget in the main window */
 #define LW(widget_name) \
-	lookup_widget(main_widgets.window, G_STRINGIFY(widget_name))
+	ui_lookup_widget(main_widgets.window, G_STRINGIFY(widget_name))
 
 /* Expansion for group_id = FILE:
  * static GeanyKeyBinding FILE_keys[GEANY_KEYS_FILE_COUNT]; */
@@ -229,8 +242,11 @@ static void init_default_kb(void)
 		GDK_Up, GDK_MOD1_MASK, "edit_scrolllineup", _("Scroll up the view by one line"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_SCROLLLINEDOWN, cb_func_editor_action,
 		GDK_Down, GDK_MOD1_MASK, "edit_scrolllinedown", _("Scroll down the view by one line"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_EDITOR_COMPLETESNIPPET, NULL,	/* handled specially in check_snippet_completion() */
+	/* GEANY_KEYS_EDITOR_COMPLETESNIPPET is handled specially in check_snippet_completion() */
+	keybindings_set_item(group, GEANY_KEYS_EDITOR_COMPLETESNIPPET, NULL,
 		GDK_Tab, 0, "edit_completesnippet", _("Complete snippet"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_EDITOR_SNIPPETNEXTCURSOR, cb_func_editor_action,
+		0, 0, "move_snippetnextcursor", _("Move cursor in snippet"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_SUPPRESSSNIPPETCOMPLETION, cb_func_editor_action,
 		0, 0, "edit_suppresssnippetcompletion", _("Suppress snippet completion"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_CONTEXTACTION, cb_func_editor_action,
@@ -296,6 +312,8 @@ static void init_default_kb(void)
 		GDK_2, GDK_CONTROL_MASK, "edit_sendtocmd2", _("Send to Custom Command 2"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_FORMAT_SENDTOCMD3, cb_func_format_action,
 		GDK_3, GDK_CONTROL_MASK, "edit_sendtocmd3", _("Send to Custom Command 3"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_FORMAT_SENDTOVTE, cb_func_format_action,
+		0, 0, "edit_sendtovte", _("Send Selection to Terminal"), LW(send_selection_to_vte1));
 
 	group = ADD_KB_GROUP(INSERT, _("Insert"));
 
@@ -373,7 +391,7 @@ static void init_default_kb(void)
 
 	group = ADD_KB_GROUP(VIEW, _("View"));
 
-	keybindings_set_item(group, GEANY_KEYS_VIEW_TOGGLEALL, cb_func_menu_toggle_all,
+	keybindings_set_item(group, GEANY_KEYS_VIEW_TOGGLEALL, cb_func_view_action,
 		0, 0, "menu_toggleall", _("Toggle All Additional Widgets"),
 		LW(menu_toggle_all_additional_widgets1));
 	keybindings_set_item(group, GEANY_KEYS_VIEW_FULLSCREEN, cb_func_menu_fullscreen,
@@ -381,11 +399,11 @@ static void init_default_kb(void)
 	keybindings_set_item(group, GEANY_KEYS_VIEW_MESSAGEWINDOW, cb_func_menu_messagewindow,
 		0, 0, "menu_messagewindow", _("Toggle Messages Window"),
 		LW(menu_show_messages_window1));
-	keybindings_set_item(group, GEANY_KEYS_VIEW_SIDEBAR, cb_func_toggle_sidebar,
+	keybindings_set_item(group, GEANY_KEYS_VIEW_SIDEBAR, cb_func_view_action,
 		0, 0, "toggle_sidebar", _("Toggle Sidebar"), LW(menu_show_sidebar1));
-	keybindings_set_item(group, GEANY_KEYS_VIEW_ZOOMIN, cb_func_menu_zoomin,
+	keybindings_set_item(group, GEANY_KEYS_VIEW_ZOOMIN, cb_func_view_action,
 		GDK_plus, GDK_CONTROL_MASK, "menu_zoomin", _("Zoom In"), LW(menu_zoom_in1));
-	keybindings_set_item(group, GEANY_KEYS_VIEW_ZOOMOUT, cb_func_menu_zoomout,
+	keybindings_set_item(group, GEANY_KEYS_VIEW_ZOOMOUT, cb_func_view_action,
 		GDK_minus, GDK_CONTROL_MASK, "menu_zoomout", _("Zoom Out"), LW(menu_zoom_out1));
 
 	group = ADD_KB_GROUP(FOCUS, _("Focus"));
@@ -475,8 +493,51 @@ static void init_default_kb(void)
 }
 
 
+/* before the tab changes, add the current document to the MRU list */
+static void on_notebook_switch_page(void)
+{
+	GeanyDocument *old = document_get_current();
+
+	/* when closing current doc, old is NULL */
+	if (old)
+	{
+		g_queue_push_head(mru_docs, old);
+
+		if (g_queue_get_length(mru_docs) > MAX_MRU_DOCS)
+			g_queue_pop_tail(mru_docs);
+	}
+}
+
+
+/* really this should be just after a document was closed, not idle */
+static gboolean on_idle_close(gpointer data)
+{
+	GeanyDocument *current;
+
+	current = document_get_current();
+
+	while (current && g_queue_peek_head(mru_docs) == current)
+		g_queue_pop_head(mru_docs);
+
+	return FALSE;
+}
+
+
+static void on_document_close(GObject *obj, GeanyDocument *doc)
+{
+	g_queue_remove_all(mru_docs, doc);
+	g_idle_add(on_idle_close, NULL);
+}
+
+
 void keybindings_init(void)
 {
+	mru_docs = g_queue_new();
+	g_signal_connect(main_widgets.notebook, "switch-page",
+		G_CALLBACK(on_notebook_switch_page), NULL);
+	g_signal_connect(geany_object, "document-close",
+		G_CALLBACK(on_document_close), NULL);
+
 	keybinding_groups = g_ptr_array_sized_new(GEANY_KEY_GROUP_COUNT);
 
 	kb_accel_group = gtk_accel_group_new();
@@ -484,6 +545,10 @@ void keybindings_init(void)
 	init_default_kb();
 
 	gtk_window_add_accel_group(GTK_WINDOW(main_widgets.window), kb_accel_group);
+
+	g_signal_connect(main_widgets.window, "key-press-event", G_CALLBACK(on_key_press_event), NULL);
+	/* in case the switch dialog misses an event while drawing the dialog */
+	g_signal_connect(main_widgets.window, "key-release-event", G_CALLBACK(on_key_release_event), NULL);
 }
 
 
@@ -574,7 +639,7 @@ static void add_menu_accel(GeanyKeyGroup *group, guint kb_id,
 
 
 #define GEANY_ADD_POPUP_ACCEL(kb_id, wid) \
-	add_menu_accel(group, kb_id, accel_group, lookup_widget(main_widgets.editor_menu, G_STRINGIFY(wid)))
+	add_menu_accel(group, kb_id, accel_group, ui_lookup_widget(main_widgets.editor_menu, G_STRINGIFY(wid)))
 
 /* set the menu item accelerator shortcuts (just for visibility, they are handled anyway) */
 static void add_popup_menu_accels(void)
@@ -613,6 +678,7 @@ static void add_popup_menu_accels(void)
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_FORMAT_COMMENTLINETOGGLE, menu_toggle_line_commentation2);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_FORMAT_INCREASEINDENT, menu_increase_indent2);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_FORMAT_DECREASEINDENT, menu_decrease_indent2);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_FORMAT_SENDTOVTE, send_selection_to_vte2);
 
 	/* the build menu items are set if the build menus are created */
 
@@ -641,7 +707,9 @@ void keybindings_write_to_file(void)
  	/* add comment if the file is newly created */
 	if (! g_key_file_load_from_file(config, configfile, G_KEY_FILE_KEEP_COMMENTS, NULL))
 	{
-		g_key_file_set_comment(config, NULL, NULL, "Keybindings for Geany\nThe format looks like \"<Control>a\" or \"<Shift><Alt>F1\".\nBut you can also change the keys in Geany's preferences dialog.", NULL);
+		g_key_file_set_comment(config, NULL, NULL,
+			"Keybindings for Geany\nThe format looks like \"<Control>a\" or \"<Shift><Alt>F1\".\n"
+			"But you can also change the keys in Geany's preferences dialog.", NULL);
 	}
 
 	keybindings_foreach(set_keyfile_kb, config);
@@ -659,54 +727,56 @@ void keybindings_write_to_file(void)
 void keybindings_free(void)
 {
 	g_ptr_array_free(keybinding_groups, TRUE);
+	g_queue_free(mru_docs);
 }
 
 
-static void get_shortcut_labels_text(GString **text_names_str, GString **text_keys_str)
+static void fill_shortcut_labels_treeview(GtkWidget *tree)
 {
 	gsize g, i;
-	GString *text_names = g_string_sized_new(600);
-	GString *text_keys = g_string_sized_new(600);
+	gchar *shortcut;
+	GeanyKeyBinding *kb;
+	GeanyKeyGroup *group;
+	GtkListStore *store;
+	GtkTreeIter iter;
 
-	*text_names_str = text_names;
-	*text_keys_str = text_keys;
+	store = gtk_list_store_new(3, G_TYPE_STRING, G_TYPE_STRING, PANGO_TYPE_WEIGHT);
 
 	for (g = 0; g < keybinding_groups->len; g++)
 	{
-		GeanyKeyGroup *group = g_ptr_array_index(keybinding_groups, g);
+		group = g_ptr_array_index(keybinding_groups, g);
 
-		if (g == 0)
+		if (g > 0)
 		{
-			g_string_append_printf(text_names, "<b>%s</b>\n", group->label);
-			g_string_append(text_keys, "\n");
+			gtk_list_store_append(store, &iter);
+			gtk_list_store_set(store, &iter, -1);
 		}
-		else
-		{
-			g_string_append_printf(text_names, "\n<b>%s</b>\n", group->label);
-			g_string_append(text_keys, "\n\n");
-		}
+
+		gtk_list_store_append(store, &iter);
+		gtk_list_store_set(store, &iter, 0, group->label, 2, PANGO_WEIGHT_BOLD, -1);
 
 		for (i = 0; i < group->count; i++)
 		{
-			GeanyKeyBinding *kb = &group->keys[i];
-			gchar *shortcut;
-
+			kb = &group->keys[i];
 			shortcut = gtk_accelerator_get_label(kb->key, kb->mods);
-			g_string_append(text_names, kb->label);
-			g_string_append(text_names, "\n");
-			g_string_append(text_keys, shortcut);
-			g_string_append(text_keys, "\n");
+
+			gtk_list_store_append(store, &iter);
+			gtk_list_store_set(store, &iter, 0, kb->label, 1, shortcut, 2, PANGO_WEIGHT_NORMAL, -1);
+
 			g_free(shortcut);
 		}
 	}
+
+	gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
+	g_object_unref(store);
 }
 
 
 static GtkWidget *create_dialog(void)
 {
-	GtkWidget *dialog, *hbox, *label1, *label2, *label3, *swin, *vbox;
-	GString *text_names;
-	GString *text_keys;
+	GtkWidget *dialog, *tree, *label, *swin, *vbox;
+	GtkCellRenderer *text_renderer;
+	GtkTreeViewColumn *column;
 	gint height;
 
 	dialog = gtk_dialog_new_with_buttons(_("Keyboard Shortcuts"), GTK_WINDOW(main_widgets.window),
@@ -722,32 +792,32 @@ static GtkWidget *create_dialog(void)
 
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
 
-	label3 = gtk_label_new(_("The following keyboard shortcuts are configurable:"));
-	gtk_misc_set_alignment(GTK_MISC(label3), 0, 0.5);
+	label = gtk_label_new(_("The following keyboard shortcuts are configurable:"));
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 
-	hbox = gtk_hbox_new(FALSE, 6);
+	tree = gtk_tree_view_new();
+	gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(tree), TRUE);
+	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree), FALSE);
 
-	label1 = gtk_label_new(NULL);
+	text_renderer = gtk_cell_renderer_text_new();
+    /* we can't use "weight-set", see http://bugzilla.gnome.org/show_bug.cgi?id=355214 */
+	column = gtk_tree_view_column_new_with_attributes(
+		NULL, text_renderer, "text", 0, "weight", 2, NULL);
+	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 
-	label2 = gtk_label_new(NULL);
+	text_renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(NULL, text_renderer, "text", 1, NULL);
+	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 
-	get_shortcut_labels_text(&text_names, &text_keys);
-
-	gtk_label_set_markup(GTK_LABEL(label1), text_names->str);
-	gtk_label_set_text(GTK_LABEL(label2), text_keys->str);
-
-	g_string_free(text_names, TRUE);
-	g_string_free(text_keys, TRUE);
-
-	gtk_container_add(GTK_CONTAINER(hbox), label1);
-	gtk_container_add(GTK_CONTAINER(hbox), label2);
+	fill_shortcut_labels_treeview(tree);
 
 	swin = gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin), GTK_POLICY_NEVER,
 		GTK_POLICY_AUTOMATIC);
-	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(swin), hbox);
+	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(swin), GTK_SHADOW_ETCHED_IN);
+	gtk_container_add(GTK_CONTAINER(swin), tree);
 
-	gtk_box_pack_start(GTK_BOX(vbox), label3, FALSE, FALSE, 6);
+	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 6);
 	gtk_box_pack_start(GTK_BOX(vbox), swin, TRUE, TRUE, 0);
 	return dialog;
 }
@@ -764,10 +834,10 @@ static void on_dialog_response(GtkWidget *dialog, gint response, gpointer user_d
 
 		prefs_show_dialog();
 		/* select the KB page */
-		wid = lookup_widget(ui_widgets.prefs_dialog, "frame22");
+		wid = ui_lookup_widget(ui_widgets.prefs_dialog, "frame22");
 		if (wid != NULL)
 		{
-			GtkNotebook *nb = GTK_NOTEBOOK(lookup_widget(ui_widgets.prefs_dialog, "notebook2"));
+			GtkNotebook *nb = GTK_NOTEBOOK(ui_lookup_widget(ui_widgets.prefs_dialog, "notebook2"));
 
 			if (nb != NULL)
 				gtk_notebook_set_current_page(nb, gtk_notebook_page_num(nb, wid));
@@ -850,6 +920,83 @@ static gboolean check_snippet_completion(guint keyval, guint state)
 }
 
 
+/* Transforms a GdkEventKey event into a GdkEventButton event */
+static void trigger_button_event(GtkWidget *widget, guint32 event_time)
+{
+	GdkEventButton *event;
+	gboolean ret;
+
+	event = g_new0(GdkEventButton, 1);
+
+	if (GTK_IS_TEXT_VIEW(widget))
+		event->window = gtk_text_view_get_window(GTK_TEXT_VIEW(widget), GTK_TEXT_WINDOW_TEXT);
+	else
+		event->window = widget->window;
+	event->time = event_time;
+	event->type = GDK_BUTTON_PRESS;
+	event->button = 3;
+
+	g_signal_emit_by_name(widget, "button-press-event", event, &ret);
+	g_signal_emit_by_name(widget, "button-release-event", event, &ret);
+
+	g_free(event);
+}
+
+
+/* Special case for the Menu key and Shift-F10 to show the right-click popup menu for various
+ * widgets. Without this special handling, the notebook tab list of the documents' notebook
+ * would be shown. As a very special case, we differentiate between the Menu key and Shift-F10
+ * if pressed in the editor widget: the Menu key opens the popup menu, Shift-F10 opens the
+ * notebook tab list. */
+static gboolean check_menu_key(guint keyval, guint state, guint32 event_time)
+{
+	if ((keyval == GDK_Menu && state == 0) || (keyval == GDK_F10 && state == GDK_SHIFT_MASK))
+	{
+		GeanyDocument *doc = document_get_current();
+		GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
+		static GtkWidget *scribble = NULL;
+
+		if (scribble == NULL)
+			scribble = ui_lookup_widget(main_widgets.window, "textview_scribble");
+
+		if (doc != NULL)
+		{
+			if (focusw == doc->priv->tag_tree)
+			{
+				trigger_button_event(focusw, event_time);
+				return TRUE;
+			}
+			if (focusw == GTK_WIDGET(doc->editor->sci))
+			{
+				if (keyval == GDK_Menu)
+				{	/* show editor popup menu */
+					trigger_button_event(focusw, event_time);
+					return TRUE;
+				}
+				else
+					/* we return FALSE, so the default handler will be used and show
+					 * the GTK notebook tab list */
+					return FALSE;
+			}
+		}
+		if (focusw == tv.tree_openfiles
+		 || focusw == msgwindow.tree_status
+		 || focusw == msgwindow.tree_compiler
+		 || focusw == msgwindow.tree_msg
+		 || focusw == scribble
+#ifdef HAVE_VTE
+		 || (vte_info.have_vte && focusw == vc->vte)
+#endif
+		)
+		{
+			trigger_button_event(focusw, event_time);
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+
 #ifdef HAVE_VTE
 static gboolean on_menu_expose_event(GtkWidget *widget, GdkEventExpose *event,
 		gpointer user_data)
@@ -894,7 +1041,7 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 	/* Temporarily disable the menus to prevent conflicting menu accelerators
 	 * from overriding the VTE bash shortcuts.
 	 * Note: maybe there's a better way of doing this ;-) */
-	widget = lookup_widget(main_widgets.window, "menubar1");
+	widget = ui_lookup_widget(main_widgets.window, "menubar1");
 	gtk_widget_set_sensitive(widget, FALSE);
 	{
 		/* make the menubar sensitive before it is redrawn */
@@ -923,7 +1070,7 @@ static void check_disk_status(void)
 
 
 /* central keypress event handler, almost all keypress events go to this function */
-gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *ev, gpointer user_data)
+static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer user_data)
 {
 	guint state, keyval;
 	gsize g, i;
@@ -950,6 +1097,8 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *ev, gpointer user
 #endif
 	if (check_snippet_completion(keyval, state))
 		return TRUE;
+	if (check_menu_key(keyval, state, ev->time))
+		return TRUE;
 
 	ignore_keybinding = FALSE;
 	for (g = 0; g < keybinding_groups->len; g++)
@@ -975,6 +1124,29 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *ev, gpointer user
 	if (check_fixed_kb(keyval, state))
 		return TRUE;
 	return FALSE;
+}
+
+
+static gboolean is_modifier_key(guint keyval)
+{
+	switch (keyval)
+	{
+		case GDK_Shift_L:
+		case GDK_Shift_R:
+		case GDK_Control_L:
+		case GDK_Control_R:
+		case GDK_Meta_L:
+		case GDK_Meta_R:
+		case GDK_Alt_L:
+		case GDK_Alt_R:
+		case GDK_Super_L:
+		case GDK_Super_R:
+		case GDK_Hyper_L:
+		case GDK_Hyper_R:
+			return TRUE;
+		default:
+			return FALSE;
+	}
 }
 
 
@@ -1096,12 +1268,12 @@ static void cb_func_search_action(guint key_id)
 		case GEANY_KEYS_SEARCH_PREVIOUSMESSAGE:
 			on_previous_message1_activate(NULL, NULL); break;
 		case GEANY_KEYS_SEARCH_FINDUSAGE:
-			if (check_current_word())
-				on_find_usage1_activate(NULL, NULL);
+			read_current_word();
+			on_find_usage1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE:
-			if (check_current_word())
-				on_find_document_usage1_activate(NULL, NULL);
+			read_current_word();
+			on_find_document_usage1_activate(NULL, NULL);
 			break;
 	}
 }
@@ -1111,29 +1283,45 @@ static void cb_func_menu_opencolorchooser(G_GNUC_UNUSED guint key_id)
 	on_show_color_chooser1_activate(NULL, NULL);
 }
 
+
+static void cb_func_view_action(guint key_id)
+{
+	switch (key_id)
+	{
+		case GEANY_KEYS_VIEW_TOGGLEALL:
+			on_menu_toggle_all_additional_widgets1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_VIEW_SIDEBAR:
+			on_menu_show_sidebar1_toggled(NULL, NULL);
+			break;
+		case GEANY_KEYS_VIEW_ZOOMIN:
+			on_zoom_in1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_VIEW_ZOOMOUT:
+			on_zoom_out1_activate(NULL, NULL);
+			break;
+		default:
+			break;
+	}
+}
+
+
 static void cb_func_menu_fullscreen(G_GNUC_UNUSED guint key_id)
 {
-	GtkCheckMenuItem *c = GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_fullscreen1"));
+	GtkCheckMenuItem *c = GTK_CHECK_MENU_ITEM(
+		ui_lookup_widget(main_widgets.window, "menu_fullscreen1"));
 
 	gtk_check_menu_item_set_active(c, ! gtk_check_menu_item_get_active(c));
 }
 
 static void cb_func_menu_messagewindow(G_GNUC_UNUSED guint key_id)
 {
-	GtkCheckMenuItem *c = GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_show_messages_window1"));
+	GtkCheckMenuItem *c = GTK_CHECK_MENU_ITEM(
+		ui_lookup_widget(main_widgets.window, "menu_show_messages_window1"));
 
 	gtk_check_menu_item_set_active(c, ! gtk_check_menu_item_get_active(c));
 }
 
-static void cb_func_menu_zoomin(G_GNUC_UNUSED guint key_id)
-{
-	on_zoom_in1_activate(NULL, NULL);
-}
-
-static void cb_func_menu_zoomout(G_GNUC_UNUSED guint key_id)
-{
-	on_zoom_out1_activate(NULL, NULL);
-}
 
 static void cb_func_build_action(guint key_id)
 {
@@ -1191,7 +1379,8 @@ static void cb_func_build_action(guint key_id)
 		gtk_menu_item_activate(GTK_MENU_ITEM(item));
 }
 
-static gboolean check_current_word(void)
+
+static gboolean read_current_word(void)
 {
 	gint pos;
 	GeanyDocument *doc = document_get_current();
@@ -1204,7 +1393,13 @@ static gboolean check_current_word(void)
 	editor_find_current_word(doc->editor, pos,
 		editor_info.current_word, GEANY_MAX_WORD_LENGTH, NULL);
 
-	if (*editor_info.current_word == 0)
+	return (*editor_info.current_word != 0);
+}
+
+
+static gboolean check_current_word(void)
+{
+	if (!read_current_word())
 	{
 		utils_beep();
 		return FALSE;
@@ -1241,9 +1436,12 @@ static void cb_func_switch_action(guint key_id)
 			msgwin_switch_tab(MSG_SCRATCH, TRUE);
 			break;
 		case GEANY_KEYS_FOCUS_SEARCHBAR:
-			if (toolbar_prefs.visible && toolbar_prefs.show_search)
-				gtk_widget_grab_focus(
-					lookup_widget(main_widgets.window, "toolbutton_search_entry"));
+			if (toolbar_prefs.visible)
+			{
+				GtkWidget *search_entry = toolbar_get_widget_child_by_name("SearchEntry");
+				if (search_entry != NULL)
+					gtk_widget_grab_focus(search_entry);
+			}
 			break;
 		case GEANY_KEYS_FOCUS_SIDEBAR:
 			focus_sidebar();
@@ -1290,14 +1488,109 @@ static void cb_func_switch_tabright(G_GNUC_UNUSED guint key_id)
 	switch_document(RIGHT);
 }
 
+
+static gboolean on_key_release_event(GtkWidget *widget, GdkEventKey *ev, gpointer user_data)
+{
+	/* user may have rebound keybinding to a different modifier than Ctrl, so check all */
+	if (!switch_dialog_cancelled && is_modifier_key(ev->keyval))
+	{
+		switch_dialog_cancelled = TRUE;
+
+		if (switch_dialog && GTK_WIDGET_VISIBLE(switch_dialog))
+			gtk_widget_hide(switch_dialog);
+	}
+	return FALSE;
+}
+
+
+static GtkWidget *ui_minimal_dialog_new(GtkWindow *parent, const gchar *title)
+{
+	GtkWidget *dialog;
+
+	dialog = gtk_window_new(GTK_WINDOW_POPUP);
+
+	if (parent)
+	{
+		gtk_window_set_transient_for(GTK_WINDOW(dialog), parent);
+		gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
+	}
+	gtk_window_set_title(GTK_WINDOW(dialog), title);
+	gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
+	gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER_ON_PARENT);
+
+	gtk_widget_set_name(dialog, "GeanyDialog");
+	return dialog;
+}
+
+
+static GtkWidget *create_switch_dialog(void)
+{
+	GtkWidget *dialog, *widget, *vbox;
+
+	dialog = ui_minimal_dialog_new(GTK_WINDOW(main_widgets.window), _("Switch to Document"));
+	gtk_window_set_decorated(GTK_WINDOW(dialog), FALSE);
+	gtk_window_set_default_size(GTK_WINDOW(dialog), 150, -1);
+
+	vbox = gtk_vbox_new(FALSE, 6);
+	gtk_container_set_border_width(GTK_CONTAINER(vbox), 12);
+	gtk_container_add(GTK_CONTAINER(dialog), vbox);
+
+	widget = gtk_image_new_from_stock(GTK_STOCK_JUMP_TO, GTK_ICON_SIZE_BUTTON);
+	gtk_container_add(GTK_CONTAINER(vbox), widget);
+
+	widget = geany_wrap_label_new(NULL);
+	gtk_label_set_justify(GTK_LABEL(widget), GTK_JUSTIFY_CENTER);
+	gtk_container_add(GTK_CONTAINER(vbox), widget);
+	switch_dialog_label = widget;
+
+	g_signal_connect(dialog, "key-release-event", G_CALLBACK(on_key_release_event), NULL);
+	return dialog;
+}
+
+
+static gboolean on_switch_timeout(G_GNUC_UNUSED gpointer data)
+{
+	if (switch_dialog_cancelled)
+		return FALSE;
+
+	if (!switch_dialog)
+		switch_dialog = create_switch_dialog();
+
+	geany_wrap_label_set_text(GTK_LABEL(switch_dialog_label),
+		DOC_FILENAME(document_get_current()));
+	gtk_widget_show_all(switch_dialog);
+	return FALSE;
+}
+
+
 static void cb_func_switch_tablastused(G_GNUC_UNUSED guint key_id)
 {
-	GeanyDocument *last_doc = callbacks_data.last_doc;
+	/* TODO: MRU switching order */
+	GeanyDocument *last_doc = g_queue_peek_head(mru_docs);
 
-	if (DOC_VALID(last_doc))
-		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
-			document_get_notebook_page(last_doc));
+	if (!DOC_VALID(last_doc))
+		return;
+
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
+		document_get_notebook_page(last_doc));
+
+	/* if there's a modifier key, we can switch back in MRU order each time unless
+	 * the key is released */
+	if (!switch_dialog_cancelled)
+	{
+		on_switch_timeout(NULL);	/* update filename label */
+	}
+	else
+	if (keybindings_lookup_item(GEANY_KEY_GROUP_NOTEBOOK,
+		GEANY_KEYS_NOTEBOOK_SWITCHTABLASTUSED)->mods)
+	{
+		switch_dialog_cancelled = FALSE;
+
+		/* delay showing dialog to give user time to let go of any modifier keys */
+		g_timeout_add(600, on_switch_timeout, NULL);
+	}
 }
+
 
 /* move document left/right/first/last */
 static void cb_func_move_tab(guint key_id)
@@ -1334,17 +1627,6 @@ static void cb_func_move_tab(guint key_id)
 			break;
 	}
 	return;
-}
-
-static void cb_func_toggle_sidebar(G_GNUC_UNUSED guint key_id)
-{
-	on_menu_show_sidebar1_toggled(NULL, NULL);
-}
-
-
-static void cb_func_menu_toggle_all(G_GNUC_UNUSED guint key_id)
-{
-	on_menu_toggle_all_additional_widgets1_activate(NULL, NULL);
 }
 
 
@@ -1387,10 +1669,10 @@ static void cb_func_clipboard(guint key_id)
 			on_paste1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_CLIPBOARD_COPYLINE:
-			sci_cmd(doc->editor->sci, SCI_LINECOPY);
+			sci_send_command(doc->editor->sci, SCI_LINECOPY);
 			break;
 		case GEANY_KEYS_CLIPBOARD_CUTLINE:
-			sci_cmd(doc->editor->sci, SCI_LINECUT);
+			sci_send_command(doc->editor->sci, SCI_LINECUT);
 			break;
 	}
 }
@@ -1416,7 +1698,7 @@ static void cb_func_goto_action(guint key_id)
 			navqueue_go_forward();
 			return;
 		case GEANY_KEYS_GOTO_LINE:
-			on_go_to_line1_activate(NULL, NULL);
+			on_go_to_line_activate(NULL, NULL);
 			return;
 		case GEANY_KEYS_GOTO_MATCHINGBRACE:
 			goto_matching_brace(doc);
@@ -1468,16 +1750,16 @@ static void cb_func_goto_action(guint key_id)
 	switch (key_id)
 	{
 		case GEANY_KEYS_GOTO_LINESTART:
-			sci_cmd(doc->editor->sci, editor_prefs.smart_home_key ? SCI_VCHOME : SCI_HOME);
+			sci_send_command(doc->editor->sci, editor_prefs.smart_home_key ? SCI_VCHOME : SCI_HOME);
 			break;
 		case GEANY_KEYS_GOTO_LINEEND:
-			sci_cmd(doc->editor->sci, SCI_LINEEND);
+			sci_send_command(doc->editor->sci, SCI_LINEEND);
 			break;
 		case GEANY_KEYS_GOTO_PREVWORDSTART:
-			sci_cmd(doc->editor->sci, SCI_WORDPARTLEFT);
+			sci_send_command(doc->editor->sci, SCI_WORDPARTLEFT);
 			break;
 		case GEANY_KEYS_GOTO_NEXTWORDSTART:
-			sci_cmd(doc->editor->sci, SCI_WORDPARTRIGHT);
+			sci_send_command(doc->editor->sci, SCI_WORDPARTRIGHT);
 			break;
 	}
 }
@@ -1526,19 +1808,23 @@ static void cb_func_editor_action(guint key_id)
 			editor_scroll_to_line(doc->editor, -1, 0.5F);
 			break;
 		case GEANY_KEYS_EDITOR_SCROLLLINEUP:
-			sci_cmd(doc->editor->sci, SCI_LINESCROLLUP);
+			sci_send_command(doc->editor->sci, SCI_LINESCROLLUP);
 			break;
 		case GEANY_KEYS_EDITOR_SCROLLLINEDOWN:
-			sci_cmd(doc->editor->sci, SCI_LINESCROLLDOWN);
+			sci_send_command(doc->editor->sci, SCI_LINESCROLLDOWN);
 			break;
 		case GEANY_KEYS_EDITOR_DUPLICATELINE:
 			duplicate_lines(doc->editor);
+			break;
+		case GEANY_KEYS_EDITOR_SNIPPETNEXTCURSOR:
+			snippet_goto_next_cursor(doc->editor->sci,
+					sci_get_current_position(doc->editor->sci));
 			break;
 		case GEANY_KEYS_EDITOR_DELETELINE:
 			delete_lines(doc->editor);
 			break;
 		case GEANY_KEYS_EDITOR_TRANSPOSELINE:
-			sci_cmd(doc->editor->sci, SCI_LINETRANSPOSE);
+			sci_send_command(doc->editor->sci, SCI_LINETRANSPOSE);
 			break;
 		case GEANY_KEYS_EDITOR_AUTOCOMPLETE:
 			editor_start_auto_complete(doc->editor, sci_get_current_position(doc->editor->sci), TRUE);
@@ -1551,7 +1837,7 @@ static void cb_func_editor_action(guint key_id)
 			break;
 		case GEANY_KEYS_EDITOR_CONTEXTACTION:
 			if (check_current_word())
-				on_context_action1_activate(GTK_MENU_ITEM(lookup_widget(main_widgets.editor_menu,
+				on_context_action1_activate(GTK_MENU_ITEM(ui_lookup_widget(main_widgets.editor_menu,
 					"context_action1")), NULL);
 			break;
 		case GEANY_KEYS_EDITOR_SUPPRESSSNIPPETCOMPLETION:
@@ -1565,7 +1851,7 @@ static void cb_func_editor_action(guint key_id)
 					sci_add_text(doc->editor->sci, " ");
 					break;
 				case GDK_Tab:
-					sci_cmd(doc->editor->sci, SCI_TAB);
+					sci_send_command(doc->editor->sci, SCI_TAB);
 					break;
 				default:
 					break;
@@ -1627,6 +1913,9 @@ static void cb_func_format_action(guint key_id)
 			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 2)
 				tools_execute_custom_command(doc, ui_prefs.custom_commands[2]);
 			break;
+		case GEANY_KEYS_FORMAT_SENDTOVTE:
+			on_send_selection_to_vte1_activate(NULL, NULL);
+			break;
 	}
 }
 
@@ -1640,7 +1929,7 @@ static void cb_func_select_action(guint key_id)
 
 	/* special case for Select All in the scribble widget */
 	if (scribble_widget == NULL) /* lookup the scribble widget only once */
-		scribble_widget = lookup_widget(main_widgets.window, "textview_scribble");
+		scribble_widget = ui_lookup_widget(main_widgets.window, "textview_scribble");
 	if (key_id == GEANY_KEYS_SELECT_ALL && focusw == scribble_widget)
 	{
 		g_signal_emit_by_name(scribble_widget, "select-all", TRUE);
@@ -1685,9 +1974,11 @@ static void cb_func_document_action(guint key_id)
 			break;
 		case GEANY_KEYS_DOCUMENT_LINEBREAK:
 			on_line_breaking1_activate(NULL, NULL);
+			ui_document_show_hide(doc);
 			break;
 		case GEANY_KEYS_DOCUMENT_LINEWRAP:
 			on_line_wrapping1_toggled(NULL, NULL);
+			ui_document_show_hide(doc);
 			break;
 		case GEANY_KEYS_DOCUMENT_RELOADTAGLIST:
 			document_update_tag_list(doc, TRUE);
@@ -1724,7 +2015,8 @@ static void cb_func_insert_action(guint key_id)
 			editor_insert_alternative_whitespace(doc->editor);
 			break;
 		case GEANY_KEYS_INSERT_DATE:
-			gtk_menu_item_activate(GTK_MENU_ITEM(lookup_widget(main_widgets.window, "insert_date_custom1")));
+			gtk_menu_item_activate(GTK_MENU_ITEM(
+				ui_lookup_widget(main_widgets.window, "insert_date_custom1")));
 			break;
 	}
 }

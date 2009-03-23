@@ -1,8 +1,8 @@
 /*
  *      notebook.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -58,12 +58,6 @@ static void
 notebook_page_reordered_cb(GtkNotebook *notebook, GtkWidget *child, guint page_num,
 	gpointer user_data);
 
-#if ! GTK_CHECK_VERSION(2, 8, 0)
-static gboolean
-notebook_motion_notify_event_cb(GtkWidget *widget, GdkEventMotion *event,
-	gpointer user_data);
-#endif
-
 static void
 on_window_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context,
                              gint x, gint y, GtkSelectionData *data, guint info,
@@ -82,7 +76,7 @@ static gboolean focus_sci(GtkWidget *widget, GdkEventButton *event, gpointer use
 {
 	GeanyDocument *doc = document_get_current();
 
-	if (doc != NULL)
+	if (doc != NULL && event->button == 1)
 		gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
 
 	return FALSE;
@@ -185,6 +179,71 @@ static gboolean is_position_on_tab_bar(GtkNotebook *notebook, GdkEventButton *ev
 }
 
 
+static void tab_bar_menu_activate_cb(GtkMenuItem *menuitem, gpointer data)
+{
+	GeanyDocument *doc = data;
+
+	if (! DOC_VALID(doc))
+		return;
+
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
+		document_get_notebook_page(doc));
+}
+
+
+static GtkMenu *get_tab_bar_popup_menu(void)
+{
+	static GtkWidget *menu = NULL;
+	GtkWidget *menu_item, *menu_item_label;
+	const GdkColor *color;
+	GeanyDocument *doc;
+	guint i, len;
+	gchar *base_name;
+
+	if (menu == NULL)
+		menu = gtk_menu_new();
+
+	/* clear the old menu items */
+	gtk_container_foreach(GTK_CONTAINER(menu), (GtkCallback) gtk_widget_destroy, NULL);
+
+	len = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+	for (i = 0; i < len; i++)
+	{
+		doc = document_get_from_page(i);
+		if (! DOC_VALID(doc))
+			continue;
+
+		base_name = g_path_get_basename(DOC_FILENAME(doc));
+		menu_item = gtk_menu_item_new_with_label(base_name);
+		gtk_widget_show(menu_item);
+		gtk_container_add(GTK_CONTAINER(menu), menu_item);
+		g_signal_connect(menu_item, "activate", G_CALLBACK(tab_bar_menu_activate_cb), doc);
+
+		color = document_get_status_color(doc);
+		menu_item_label = gtk_bin_get_child(GTK_BIN(menu_item));
+		gtk_widget_modify_fg(menu_item_label, GTK_STATE_NORMAL, color);
+		gtk_widget_modify_fg(menu_item_label, GTK_STATE_ACTIVE, color);
+
+		g_free(base_name);
+	}
+	menu_item = gtk_separator_menu_item_new();
+	gtk_widget_show(menu_item);
+	gtk_container_add(GTK_CONTAINER(menu), menu_item);
+
+	menu_item = gtk_menu_item_new_with_mnemonic(_("Close Ot_her Documents"));
+	gtk_widget_show(menu_item);
+	gtk_container_add(GTK_CONTAINER(menu), menu_item);
+	g_signal_connect(menu_item, "activate", G_CALLBACK(on_close_other_documents1_activate), NULL);
+
+	menu_item = gtk_menu_item_new_with_mnemonic(_("C_lose All"));
+	gtk_widget_show(menu_item);
+	gtk_container_add(GTK_CONTAINER(menu), menu_item);
+	g_signal_connect(menu_item, "activate", G_CALLBACK(on_close_all1_activate), NULL);
+
+	return GTK_MENU(menu);
+}
+
+
 static gboolean notebook_tab_bar_click_cb(GtkWidget *widget, GdkEventButton *event,
 										  gpointer user_data)
 {
@@ -201,18 +260,30 @@ static gboolean notebook_tab_bar_click_cb(GtkWidget *widget, GdkEventButton *eve
 			return TRUE;
 		}
 	}
+	else if (event->button == 3)
+	{
+		gtk_menu_popup(get_tab_bar_popup_menu(), NULL, NULL,
+			NULL, NULL, event->button, event->time);
+	}
 	return FALSE;
 }
 
 
 void notebook_init()
 {
+	/* Individual style for the tab close buttons */
+	gtk_rc_parse_string(
+		"style \"geany-close-tab-button-style\" {\n"
+		"	GtkWidget::focus-padding = 0\n"
+		"	GtkWidget::focus-line-width = 0\n"
+		"	xthickness = 0\n"
+		"	ythickness = 0\n"
+		"}\n"
+		"widget \"*.geany-close-tab-button\" style \"geany-close-tab-button-style\""
+	);
+
 	g_signal_connect_after(main_widgets.notebook, "button-press-event",
 		G_CALLBACK(notebook_tab_bar_click_cb), NULL);
-
-	/* focus the current document after clicking on a tab */
-	g_signal_connect_after(main_widgets.notebook, "button-release-event",
-		G_CALLBACK(focus_sci), NULL);
 
 	g_signal_connect(main_widgets.notebook, "drag-data-received",
 		G_CALLBACK(on_window_drag_data_received), NULL);
@@ -241,24 +312,6 @@ static void setup_tab_dnd()
 	/* Set up drag movement callback */
 	g_signal_connect(notebook, "drag-motion", G_CALLBACK(notebook_drag_motion_cb), NULL);
 
-	/* There is a bug on GTK 2.6 with drag reordering of notebook tabs.
-	 * Clicking (not dragging) on a notebook tab, then making a selection in the
-	 * Scintilla widget will cause a strange selection bug.
-	 * It seems there is a conflict; the drag cursor is shown,
-	 * and the selection is blocked; however, when releasing the
-	 * mouse button, the selection continues.
-	 * Bug is present with gtk+2.6.8, not gtk+2.8.x - ntrel */
-#if ! GTK_CHECK_VERSION(2, 8, 0)
-	/* handle higher gtk+ runtime than build environment */
-	if (gtk_check_version(2, 8, 0) != NULL) /* null means version ok */
-	{
-		/* workaround GTK+2.6 drag start bug when over sci widget: */
-		gtk_widget_add_events(notebook, GDK_POINTER_MOTION_MASK);
-		g_signal_connect(notebook, "motion-notify-event",
-			G_CALLBACK(notebook_motion_notify_event_cb), NULL);
-	}
-#endif
-
 	/* set up drag motion for moving notebook pages */
 	gtk_drag_dest_set(notebook, GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
 		drag_targets, G_N_ELEMENTS(drag_targets), GDK_ACTION_MOVE);
@@ -266,37 +319,6 @@ static void setup_tab_dnd()
 	gtk_drag_source_set(notebook, GDK_BUTTON1_MASK,
 		drag_targets, G_N_ELEMENTS(drag_targets), GDK_ACTION_MOVE);
 }
-
-
-#if ! GTK_CHECK_VERSION(2, 8, 0)
-/* This is used to disable tab DnD when the cursor is over the
- * Scintilla widget, and re-enable tab DnD when over the notebook tabs
- */
-static gboolean
-notebook_motion_notify_event_cb(GtkWidget *widget, GdkEventMotion *event,
-	gpointer user_data)
-{
-	static gboolean drag_enabled = TRUE; /* stores current state */
-	GtkWidget *page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook),
-			gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook)));
-
-	if (page == NULL || event->x < 0 || event->y < 0) return FALSE;
-
-	if (event->window == page->window) /* cursor over sci widget */
-	{
-		if (drag_enabled) gtk_drag_source_unset(widget); /* disable */
-		drag_enabled = FALSE;
-	}
-	else /* assume cursor over notebook tab */
-	{
-		if (! drag_enabled)
-			gtk_drag_source_set(widget, GDK_BUTTON1_MASK,
-				drag_targets, G_N_ELEMENTS(drag_targets), GDK_ACTION_MOVE);
-		drag_enabled = TRUE;
-	}
-	return FALSE; /* propagate event */
-}
-#endif
 
 
 static void
@@ -417,12 +439,14 @@ static void tab_count_changed(void)
 }
 
 
-static gboolean notebook_tab_label_cb(GtkWidget *widget, GdkEventButton *event, gpointer data)
+static gboolean notebook_tab_click(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	/* toggle additional widgets on double click */
 	if (event->type == GDK_2BUTTON_PRESS)
 	{
-		on_menu_toggle_all_additional_widgets1_activate(NULL, NULL);
+		if (interface_prefs.notebook_double_click_hides_widgets)
+			on_menu_toggle_all_additional_widgets1_activate(NULL, NULL);
+
 		return TRUE; /* stop other handlers like notebook_tab_bar_click_cb() */
 	}
 	/* close tab on middle click */
@@ -437,71 +461,75 @@ static gboolean notebook_tab_label_cb(GtkWidget *widget, GdkEventButton *event, 
 }
 
 
+static void notebook_tab_close_button_style_set(GtkWidget *btn, GtkRcStyle *prev_style,
+												gpointer data)
+{
+	gint w, h;
+
+	gtk_icon_size_lookup_for_settings(gtk_widget_get_settings(btn), GTK_ICON_SIZE_MENU, &w, &h);
+	gtk_widget_set_size_request(btn, w + 2, h + 2);
+}
+
+
 /* Returns page number of notebook page, or -1 on error */
 gint notebook_new_tab(GeanyDocument *this)
 {
 	GtkWidget *hbox, *ebox;
 	gint tabnum;
-	gchar *title;
 	GtkWidget *page;
 
 	g_return_val_if_fail(this != NULL, -1);
 
 	page = GTK_WIDGET(this->editor->sci);
-	title = g_path_get_basename(DOC_FILENAME(this));
 
-	this->priv->tab_label = gtk_label_new(title);
+	this->priv->tab_label = gtk_label_new(NULL);
 
+	/* get button press events for the tab label and the space between it and
+	 * the close button, if any */
 	ebox = gtk_event_box_new();
 	GTK_WIDGET_SET_FLAGS(ebox, GTK_NO_WINDOW);
-	g_signal_connect(ebox, "button-press-event", G_CALLBACK(notebook_tab_label_cb), page);
+	g_signal_connect(ebox, "button-press-event", G_CALLBACK(notebook_tab_click), page);
+	/* focus the current document after clicking on a tab */
+	g_signal_connect_after(ebox, "button-release-event",
+		G_CALLBACK(focus_sci), NULL);
 
 	hbox = gtk_hbox_new(FALSE, 2);
-	gtk_container_add(GTK_CONTAINER(ebox), this->priv->tab_label);
-	gtk_box_pack_start(GTK_BOX(hbox), ebox, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), this->priv->tab_label, FALSE, FALSE, 0);
+	gtk_container_add(GTK_CONTAINER(ebox), hbox);
 
 	if (file_prefs.show_tab_cross)
 	{
 		GtkWidget *image, *btn, *align;
-		GtkRcStyle *rcstyle;
-		GtkRequisition size;
 
 		btn = gtk_button_new();
 		gtk_button_set_relief(GTK_BUTTON(btn), GTK_RELIEF_NONE);
-
-		/* don't allow focus on the close button */
 		gtk_button_set_focus_on_click(GTK_BUTTON(btn), FALSE);
-
-		/* make it as small as possible */
-		rcstyle = gtk_rc_style_new();
-		rcstyle->xthickness = rcstyle->ythickness = 0;
-		gtk_widget_modify_style(btn, rcstyle);
-		gtk_rc_style_unref(rcstyle);
+		gtk_widget_set_name(btn, "geany-close-tab-button");
 
 		image = gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
-		gtk_widget_size_request(image, &size);
-		gtk_widget_set_size_request(btn, size.width, size.height);
 		gtk_container_add(GTK_CONTAINER(btn), image);
 
 		align = gtk_alignment_new(1.0, 0.0, 0.0, 0.0);
 		gtk_container_add(GTK_CONTAINER(align), btn);
-
 		gtk_box_pack_start(GTK_BOX(hbox), align, TRUE, TRUE, 0);
 
 		g_signal_connect(btn, "clicked", G_CALLBACK(notebook_tab_close_clicked_cb), page);
+		/* button overrides event box, so make middle click on button also close tab */
+		g_signal_connect(btn, "button-press-event", G_CALLBACK(notebook_tab_click), page);
+		/* handle style modification to keep button small as possible even when theme change */
+		g_signal_connect(btn, "style-set", G_CALLBACK(notebook_tab_close_button_style_set), NULL);
 	}
 
-	gtk_widget_show_all(hbox);
+	gtk_widget_show_all(ebox);
 
-	this->priv->tabmenu_label = gtk_label_new(title);
-	gtk_misc_set_alignment(GTK_MISC(this->priv->tabmenu_label), 0.0, 0);
+	document_update_tab_label(this);
 
 	if (file_prefs.tab_order_ltr)
 		tabnum = gtk_notebook_append_page_menu(GTK_NOTEBOOK(main_widgets.notebook), page,
-			hbox, this->priv->tabmenu_label);
+			ebox, NULL);
 	else
 		tabnum = gtk_notebook_insert_page_menu(GTK_NOTEBOOK(main_widgets.notebook), page,
-			hbox, this->priv->tabmenu_label, 0);
+			ebox, NULL, 0);
 
 	tab_count_changed();
 
@@ -512,7 +540,6 @@ gint notebook_new_tab(GeanyDocument *this)
 		gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(main_widgets.notebook), page, TRUE);
 	}
 #endif
-	g_free(title);
 	return tabnum;
 }
 

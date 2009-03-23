@@ -1,8 +1,8 @@
 /*
  *      main.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@
 #include <stdlib.h>
 
 #include "geany.h"
+#include <glib/gstdio.h>
 
 #ifdef HAVE_LOCALE_H
 # include <locale.h>
@@ -71,6 +72,8 @@
 #include "navqueue.h"
 #include "plugins.h"
 #include "printing.h"
+#include "toolbar.h"
+#include "geanyobject.h"
 
 #ifdef HAVE_SOCKET
 # include "socket.h"
@@ -96,6 +99,7 @@ static gboolean want_plugins;
 
 /* command-line options */
 static gboolean debug_mode = FALSE;
+static gboolean verbose_mode = FALSE;
 static gboolean ignore_global_tags = FALSE;
 static gboolean no_msgwin = FALSE;
 static gboolean show_version = FALSE;
@@ -103,9 +107,6 @@ static gchar *alternate_config = NULL;
 #ifdef HAVE_VTE
 static gboolean no_vte = FALSE;
 static gchar *lib_vte = NULL;
-#endif
-#ifdef HAVE_SOCKET
-static gboolean ignore_socket = FALSE;
 #endif
 static gboolean generate_datafiles = FALSE;
 static gboolean generate_tags = FALSE;
@@ -122,13 +123,13 @@ static GOptionEntry entries[] =
 {
 	{ "column", 0, 0, G_OPTION_ARG_INT, &cl_options.goto_column, N_("Set initial column number for the first opened file (useful in conjunction with --line)"), NULL },
 	{ "config", 'c', 0, G_OPTION_ARG_FILENAME, &alternate_config, N_("Use an alternate configuration directory"), NULL },
-	{ "debug", 'd', 0, G_OPTION_ARG_NONE, &debug_mode, N_("Runs in debug mode (means being verbose)"), NULL },
+	{ "debug", 'd', G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &debug_mode, N_("Be verbose"), NULL },
 	{ "ft-names", 0, 0, G_OPTION_ARG_NONE, &ft_names, N_("Print internal filetype names"), NULL },
 	{ "generate-tags", 'g', 0, G_OPTION_ARG_NONE, &generate_tags, N_("Generate global tags file (see documentation)"), NULL },
-	{ "no-preprocessing", 'P', 0, G_OPTION_ARG_NONE, &no_preprocessing, NULL, NULL },
+	{ "no-preprocessing", 'P', 0, G_OPTION_ARG_NONE, &no_preprocessing, N_("Don't preprocess C/C++ files when generating tags"), NULL },
 	{ "generate-data-files", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &generate_datafiles, NULL, NULL },
 #ifdef HAVE_SOCKET
-	{ "new-instance", 'i', 0, G_OPTION_ARG_NONE, &ignore_socket, N_("Don't open files in a running instance, force opening a new instance"), NULL },
+	{ "new-instance", 'i', 0, G_OPTION_ARG_NONE, &cl_options.new_instance, N_("Don't open files in a running instance, force opening a new instance"), NULL },
 #endif
 	{ "line", 'l', 0, G_OPTION_ARG_INT, &cl_options.goto_line, N_("Set initial line number for the first opened file"), NULL },
 	{ "no-msgwin", 'm', 0, G_OPTION_ARG_NONE, &no_msgwin, N_("Don't show message window at startup"), NULL },
@@ -142,7 +143,8 @@ static GOptionEntry entries[] =
 	{ "no-terminal", 't', 0, G_OPTION_ARG_NONE, &no_vte, N_("Don't load terminal support"), NULL },
 	{ "vte-lib", 0, 0, G_OPTION_ARG_FILENAME, &lib_vte, N_("Filename of libvte.so"), NULL },
 #endif
-	{ "version", 'v', 0, G_OPTION_ARG_NONE, &show_version, N_("Show version and exit"), NULL },
+	{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose_mode, N_("Be verbose"), NULL },
+	{ "version", 'V', 0, G_OPTION_ARG_NONE, &show_version, N_("Show version and exit"), NULL },
 	{ "dummy", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &dummy, NULL, NULL }, /* for +NNN line number arguments */
 	{ NULL, 0, 0, 0, NULL, NULL, NULL }
 };
@@ -160,21 +162,21 @@ static void apply_settings(void)
 	if (! toolbar_prefs.visible)
 	{
 		ignore_callback = TRUE;
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_show_toolbar1")), FALSE);
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_toolbar1")), FALSE);
 		gtk_widget_hide(main_widgets.toolbar);
 		ignore_callback = FALSE;
 	}
 	if (! ui_prefs.msgwindow_visible)
 	{
 		ignore_callback = TRUE;
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_show_messages_window1")), FALSE);
-		gtk_widget_hide(lookup_widget(main_widgets.window, "scrolledwindow1"));
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_messages_window1")), FALSE);
+		gtk_widget_hide(ui_lookup_widget(main_widgets.window, "scrolledwindow1"));
 		ignore_callback = FALSE;
 	}
 	if (! ui_prefs.sidebar_visible)
 	{
 		ignore_callback = TRUE;
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_show_sidebar1")), FALSE);
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_sidebar1")), FALSE);
 		ignore_callback = FALSE;
 	}
 	ui_sidebar_show_hide();
@@ -183,20 +185,20 @@ static void apply_settings(void)
 	{
 		case GTK_TOOLBAR_BOTH:
 		{
-			/*gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "images_and_text1")), TRUE);*/
-			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(ui_widgets.toolbar_menu, "images_and_text2")), TRUE);
+			/*gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "images_and_text1")), TRUE);*/
+			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(ui_widgets.toolbar_menu, "images_and_text2")), TRUE);
 			break;
 		}
 		case GTK_TOOLBAR_ICONS:
 		{
-			/*gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "images_only1")), TRUE);*/
-			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(ui_widgets.toolbar_menu, "images_only2")), TRUE);
+			/*gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "images_only1")), TRUE);*/
+			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(ui_widgets.toolbar_menu, "images_only2")), TRUE);
 			break;
 		}
 		case GTK_TOOLBAR_TEXT:
 		{
-			/*gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "text_only1")), TRUE);*/
-			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(ui_widgets.toolbar_menu, "text_only2")), TRUE);
+			/*gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "text_only1")), TRUE);*/
+			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(ui_widgets.toolbar_menu, "text_only2")), TRUE);
 			break;
 		}
 	}
@@ -208,19 +210,9 @@ static void apply_settings(void)
 	{
 		gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
 	}
-	ui_update_toolbar_icons(toolbar_prefs.icon_size);
+	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
 
-	/* line number and markers margin are by default enabled */
-	if (! editor_prefs.show_markers_margin)
-	{
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_markers_margin1")), FALSE);
-		editor_prefs.show_markers_margin = FALSE;
-	}
-	if (! editor_prefs.show_linenumber_margin)
-	{
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_linenumber_margin1")), FALSE);
-		editor_prefs.show_linenumber_margin = FALSE;
-	}
+	ui_update_view_editor_menu_items();
 
 	/* interprets the saved window geometry */
 	if (prefs.save_winpos && ui_prefs.geometry[0] != -1)
@@ -237,19 +229,24 @@ static void apply_settings(void)
 		gtk_widget_hide(ui_widgets.statusbar);
 	}
 
-	/* connect the toolbar dropdown menu for the new button */
-	gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(
-			lookup_widget(main_widgets.window, "toolbutton_new")), ui_widgets.new_file_menu);
-
 	/* set the tab placements of the notebooks */
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.tab_pos_editor);
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), interface_prefs.tab_pos_msgwin);
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.sidebar_notebook), interface_prefs.tab_pos_sidebar);
 
-	ui_update_toolbar_items();
-
 	/* whether to show notebook tabs or not */
 	gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
+
+#ifdef HAVE_VTE
+	if (! vte_info.load_vte)
+	{
+		gtk_widget_hide(ui_lookup_widget(main_widgets.window, "send_selection_to_vte1"));
+		gtk_widget_hide(ui_lookup_widget(main_widgets.editor_menu, "send_selection_to_vte2"));
+	}
+#else
+	gtk_widget_hide(ui_lookup_widget(main_widgets.window, "send_selection_to_vte1"));
+	gtk_widget_hide(ui_lookup_widget(main_widgets.editor_menu, "send_selection_to_vte2"));
+#endif
 }
 
 
@@ -273,19 +270,17 @@ static void main_init(void)
 	main_status.opening_session_files		= FALSE;
 
 	main_widgets.window = create_window1();
-	ui_widgets.new_file_menu = gtk_menu_new();
-	ui_widgets.recent_files_toolbar = gtk_menu_new();
-	ui_widgets.recent_files_menuitem = lookup_widget(main_widgets.window, "recent_files1");
-	ui_widgets.recent_files_menubar = gtk_menu_new();
+	ui_widgets.recent_files_menuitem = ui_lookup_widget(main_widgets.window, "recent_files1");
+	ui_widgets.recent_files_menu_menubar = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(ui_widgets.recent_files_menuitem),
-							ui_widgets.recent_files_menubar);
+							ui_widgets.recent_files_menu_menubar);
 
 	/* store important pointers for later reference */
-	main_widgets.toolbar = lookup_widget(main_widgets.window, "toolbar1");
-	main_widgets.sidebar_notebook = lookup_widget(main_widgets.window, "notebook3");
-	main_widgets.notebook = lookup_widget(main_widgets.window, "notebook1");
+	main_widgets.toolbar = toolbar_init();
+	main_widgets.sidebar_notebook = ui_lookup_widget(main_widgets.window, "notebook3");
+	main_widgets.notebook = ui_lookup_widget(main_widgets.window, "notebook1");
 	main_widgets.editor_menu = create_edit_menu1();
-	main_widgets.tools_menu = lookup_widget(main_widgets.window, "tools1_menu");
+	main_widgets.tools_menu = ui_lookup_widget(main_widgets.window, "tools1_menu");
 
 	ui_widgets.toolbar_menu = create_toolbar_popup_menu1();
 	ui_init();
@@ -319,7 +314,7 @@ gchar *main_get_argv_filename(const gchar *filename)
 {
 	gchar *result;
 
-	if (g_path_is_absolute(filename))
+	if (g_path_is_absolute(filename) || utils_is_uri(filename))
 		result = g_strdup(filename);
 	else
 	{
@@ -395,7 +390,7 @@ static void setup_paths(void)
 #ifdef G_OS_WIN32
 	/* use the installation directory(the one where geany.exe is located) as the base for the
 	 * documentation and data files */
-	gchar *install_dir = g_win32_get_package_installation_directory("geany", NULL);
+	gchar *install_dir = g_win32_get_package_installation_directory(NULL, NULL);
 
 	data_dir = g_strconcat(install_dir, "\\data", NULL); /* e.g. C:\Program Files\geany\data */
 	doc_dir = g_strconcat(install_dir, "\\doc", NULL);
@@ -415,29 +410,48 @@ static void setup_paths(void)
 }
 
 
-static void locale_init(void)
+/**
+ *  Initialises the gettext translation system.
+ *  This is a convenience function to set up gettext for internationalisation support
+ *  in external plugins. You should call this function early in @ref plugin_init().
+ *  If the macro HAVE_LOCALE_H is defined, @a setlocale(LC_ALL, "") is called.
+ *  The codeset for the mesaage translations is set to UTF-8.
+ *
+ *  Note that this function only setup the gettext textdomain for you. You still have
+ *  to adjust the build system of your plugin to get internationalisation support
+ *  working properly.
+ *
+ *  @param locale_dir The location where the translation files should be searched. This is
+ *                    usually the @a LOCALEDIR macro, defined by the build system.
+ *                    E.g. $prefix/share/locale.
+ *                    Only used on non-Windows systems. On Windows, the directory is determined
+ *                    by @c g_win32_get_package_installation_directory().
+ *  @param package The package name, usually this is the @a GETTEXT_PACKAGE macro,
+ *                 defined by the build system.
+ *
+ *  @since 0.16
+ **/
+void main_locale_init(const gchar *locale_dir, const gchar *package)
 {
-#ifdef ENABLE_NLS
-	gchar *locale_dir = NULL;
+	gchar *l_locale_dir = NULL;
 
 #ifdef HAVE_LOCALE_H
 	setlocale(LC_ALL, "");
 #endif
 
 #ifdef G_OS_WIN32
-	gchar *install_dir = g_win32_get_package_installation_directory("geany", NULL);
-	/* e.g. C:\Program Files\Geany\share\locale */
-	locale_dir = g_strconcat(install_dir, "\\share\\locale", NULL);
+	gchar *install_dir = g_win32_get_package_installation_directory(NULL, NULL);
+	/* e.g. C:\Program Files\geany\lib\locale */
+	l_locale_dir = g_strconcat(install_dir, "\\share\\locale", NULL);
 	g_free(install_dir);
 #else
-	locale_dir = g_strdup(GEANY_LOCALEDIR);
+	l_locale_dir = g_strdup(locale_dir);
 #endif
 
-	bindtextdomain(GETTEXT_PACKAGE, locale_dir);
-	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
-	textdomain(GETTEXT_PACKAGE);
-	g_free(locale_dir);
-#endif
+	bindtextdomain(package, l_locale_dir);
+	bind_textdomain_codeset(package, "UTF-8");
+	textdomain(package);
+	g_free(l_locale_dir);
 }
 
 
@@ -461,11 +475,10 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	GError *error = NULL;
 	GOptionContext *context;
 	gint i;
+	CommandLineOptions def_clo = {FALSE, TRUE, -1, -1, FALSE};
 
 	/* first initialise cl_options fields with default values */
-	cl_options.load_session = TRUE;
-	cl_options.goto_line = -1;
-	cl_options.goto_column = -1;
+	cl_options = def_clo;
 
 	/* the GLib option parser can't handle the +NNN (line number) option,
 	 * so we grab that here and replace it with a no-op */
@@ -512,7 +525,13 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 		exit(0);
 	}
 
-	app->debug_mode = debug_mode;
+	app->debug_mode = verbose_mode;
+	if (debug_mode)
+	{
+		app->debug_mode = TRUE;
+		g_warning(
+			"Command line option --debug is obsolete and will be removed in the next version.");
+	}
 
 #ifdef G_OS_WIN32
 	win32_init_debug_code();
@@ -525,22 +544,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	}
 	else
 	{
-#ifdef G_OS_WIN32
-		gchar *appdata;
-
-		appdata = win32_get_appdata_folder();
-		if (appdata != NULL)
-		{
-			app->configdir = g_strconcat(appdata, G_DIR_SEPARATOR_S, "Geany", NULL);
-			g_free(appdata);
-		}
-		else
-		{
-			app->configdir = g_strconcat(g_get_home_dir(), G_DIR_SEPARATOR_S, "Geany", NULL);
-		}
-#else
-		app->configdir = g_strconcat(g_get_home_dir(), G_DIR_SEPARATOR_S, ".geany", NULL);
-#endif
+		app->configdir = g_build_filename(g_get_user_config_dir(), "geany", NULL);
 	}
 
 #ifdef GEANY_DEBUG
@@ -556,7 +560,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 		gboolean ret;
 
 		filetypes_init_types();
-		configuration_read_filetype_extensions();	/* needed for *.lang.tags filetype matching */
+		filetypes_read_extensions();	/* needed for *.lang.tags filetype matching */
 		ret = symbols_generate_global_tags(*argc, *argv, ! no_preprocessing);
 		exit(ret);
 	}
@@ -568,9 +572,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	}
 
 #ifdef HAVE_SOCKET
-	socket_info.ignore_socket = ignore_socket;
-	if (ignore_socket)
-		cl_options.load_session = FALSE;
+	socket_info.ignore_socket = cl_options.new_instance;
 #endif
 #ifdef HAVE_VTE
 	vte_info.lib_vte = lib_vte;
@@ -585,17 +587,128 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 }
 
 
+#ifdef G_OS_WIN32
+# define DIR_SEP "\\" /* on Windows we need an additional dir separator */
+#else
+# define DIR_SEP ""
+#endif
+
+static gint create_config_dir(void)
+{
+	gint saved_errno = 0;
+	gchar *conf_file = g_build_filename(app->configdir, "geany.conf", NULL);
+	gchar *filedefs_dir = g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, NULL);
+
+	gchar *templates_dir = g_build_filename(app->configdir, GEANY_TEMPLATES_SUBDIR, NULL);
+
+	if (! g_file_test(app->configdir, G_FILE_TEST_EXISTS))
+	{
+#ifndef G_OS_WIN32
+		/* if we are *not* using an alternate config directory, we check whether the old one
+		 * in ~/.geany still exists and try to move it */
+		if (alternate_config == NULL)
+		{
+			gchar *old_dir = g_build_filename(g_get_home_dir(), ".geany", NULL);
+			/* move the old config dir if it exists */
+			if (g_file_test(old_dir, G_FILE_TEST_EXISTS))
+			{
+				if (! dialogs_show_question_full(main_widgets.window,
+					GTK_STOCK_YES, GTK_STOCK_QUIT, _("Move it now?"),
+					"%s",
+					_("Geany needs to move your old configuration directory before starting.")))
+					exit(0);
+
+				if (g_rename(old_dir, app->configdir) == 0)
+				{
+					dialogs_show_msgbox(GTK_MESSAGE_INFO,
+						_("Your configuration directory has been successfully moved from \"%s\" to \"%s\"."),
+						old_dir, app->configdir);
+					g_free(old_dir);
+					return 0;
+				}
+				else
+				{
+					dialogs_show_msgbox(GTK_MESSAGE_WARNING,
+						/* for translators: the third %s in brackets is the error message which
+						 * describes why moving the dir didn't work */
+						_("Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
+						  "Please move manually the directory to the new location."),
+						old_dir, app->configdir, g_strerror(errno));
+				}
+			}
+			g_free(old_dir);
+		}
+#endif
+		geany_debug("creating config directory %s", app->configdir);
+		saved_errno = utils_mkdir(app->configdir, FALSE);
+	}
+
+	if (saved_errno == 0 && ! g_file_test(conf_file, G_FILE_TEST_EXISTS))
+	{	/* check whether geany.conf can be written */
+		saved_errno = utils_is_file_writeable(app->configdir);
+	}
+
+	/* make subdir for filetype definitions */
+	if (saved_errno == 0)
+	{
+		gchar *filedefs_readme = g_build_filename(app->configdir,
+					GEANY_FILEDEFS_SUBDIR, "filetypes.README", NULL);
+
+		if (! g_file_test(filedefs_dir, G_FILE_TEST_EXISTS))
+		{
+			saved_errno = utils_mkdir(filedefs_dir, FALSE);
+		}
+		if (saved_errno == 0 && ! g_file_test(filedefs_readme, G_FILE_TEST_EXISTS))
+		{
+			gchar *text = g_strconcat(
+"Copy files from ", app->datadir, " to this directory to overwrite "
+"them. To use the defaults, just delete the file in this directory.\nFor more information read "
+"the documentation (in ", app->docdir, DIR_SEP "index.html or visit " GEANY_HOMEPAGE ").", NULL);
+			utils_write_file(filedefs_readme, text);
+			g_free(text);
+		}
+		g_free(filedefs_readme);
+	}
+
+	/* make subdir for template files */
+	if (saved_errno == 0)
+	{
+		gchar *templates_readme = g_build_filename(app->configdir, GEANY_TEMPLATES_SUBDIR,
+						"templates.README", NULL);
+
+		if (! g_file_test(templates_dir, G_FILE_TEST_EXISTS))
+		{
+			saved_errno = utils_mkdir(templates_dir, FALSE);
+		}
+		if (saved_errno == 0 && ! g_file_test(templates_readme, G_FILE_TEST_EXISTS))
+		{
+			gchar *text = g_strconcat(
+"There are several template files in this directory. For these templates you can use wildcards.\n\
+For more information read the documentation (in ", app->docdir, DIR_SEP "index.html or visit " GEANY_HOMEPAGE ").",
+					NULL);
+			utils_write_file(templates_readme, text);
+			g_free(text);
+		}
+		g_free(templates_readme);
+	}
+
+	g_free(filedefs_dir);
+	g_free(templates_dir);
+	g_free(conf_file);
+
+	return saved_errno;
+}
+
+
 /* Returns 0 if config dir is OK. */
 static gint setup_config_dir(void)
 {
 	gint mkdir_result = 0;
-	gchar *tmp = app->configdir;
 
 	/* convert configdir to locale encoding to avoid troubles */
-	app->configdir = utils_get_locale_from_utf8(app->configdir);
-	g_free(tmp);
+	setptr(app->configdir, utils_get_locale_from_utf8(app->configdir));
 
-	mkdir_result = utils_make_settings_dir();
+	mkdir_result = create_config_dir();
 	if (mkdir_result != 0)
 	{
 		if (! dialogs_show_question(
@@ -606,6 +719,10 @@ static gint setup_config_dir(void)
 			exit(0);
 		}
 	}
+	/* make configdir a real path */
+	if (g_file_test(app->configdir, G_FILE_TEST_EXISTS))
+		setptr(app->configdir, tm_get_real_path(app->configdir));
+
 	return mkdir_result;
 }
 
@@ -621,37 +738,46 @@ static void signal_cb(gint sig)
 
 /* Used for command-line arguments at startup or from socket.
  * this will strip any :line:col filename suffix from locale_filename */
-gboolean main_handle_filename(gchar *locale_filename)
+gboolean main_handle_filename(const gchar *locale_filename)
 {
 	GeanyDocument *doc;
 	gint line = -1, column = -1;
+	gchar *filename;
 
 	g_return_val_if_fail(locale_filename, FALSE);
 
-	get_line_and_column_from_filename(locale_filename, &line, &column);
+	/* check whether the passed filename is an URI */
+	filename = utils_get_path_from_uri(locale_filename);
+	if (filename == NULL)
+		return FALSE;
+
+	get_line_and_column_from_filename(filename, &line, &column);
 	if (line >= 0)
 		cl_options.goto_line = line;
 	if (column >= 0)
 		cl_options.goto_column = column;
 
-	if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+	if (g_file_test(filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 	{
-		doc = document_open_file(locale_filename, FALSE, NULL, NULL);
+		doc = document_open_file(filename, FALSE, NULL, NULL);
 		/* add recent file manually if opening_session_files is set */
 		if (doc != NULL && main_status.opening_session_files)
 			ui_add_recent_file(doc->file_name);
+		g_free(filename);
 		return TRUE;
 	}
 	else if (file_prefs.cmdline_new_files)
 	{	/* create new file with the given filename */
-		gchar *utf8_filename = utils_get_utf8_from_locale(locale_filename);
+		gchar *utf8_filename = utils_get_utf8_from_locale(filename);
 
 		doc = document_new_file(utf8_filename, NULL, NULL);
 		if (doc != NULL)
 			ui_add_recent_file(doc->file_name);
 		g_free(utf8_filename);
+		g_free(filename);
 		return TRUE;
 	}
+	g_free(filename);
 	return FALSE;
 }
 
@@ -666,7 +792,10 @@ static gboolean open_cl_files(gint argc, gchar **argv)
 	for (i = 1; i < argc; i++)
 	{
 		gchar *filename = main_get_argv_filename(argv[i]);
-
+#ifdef G_OS_WIN32
+		/* It seems argv elements are encoded in CP1252 on a German Windows */
+		setptr(filename, g_locale_to_utf8(filename, -1, NULL, NULL, NULL));
+#endif
 		if (filename && !main_handle_filename(filename))
 		{
 			const gchar *msg = _("Could not find file '%s'.");
@@ -681,7 +810,7 @@ static gboolean open_cl_files(gint argc, gchar **argv)
 }
 
 
-static void load_project_file(void)
+static void load_session_project_file(void)
 {
 	gchar *locale_filename;
 
@@ -689,7 +818,7 @@ static void load_project_file(void)
 
 	locale_filename = utils_get_locale_from_utf8(project_prefs.session_file);
 
-	if (*locale_filename)
+	if (NZV(locale_filename))
 		project_load_file(locale_filename);
 
 	g_free(locale_filename);
@@ -712,11 +841,56 @@ static void load_settings(void)
 }
 
 
+static void load_startup_files(gint argc, gchar **argv)
+{
+	gboolean load_project_from_cl = FALSE;
+
+	/* ATM when opening a project file any other filenames are ignored */
+	load_project_from_cl = (argc > 1) && g_str_has_suffix(argv[1], ".geany");
+	if (load_project_from_cl && argc > 2)
+		g_print("Ignoring extra filenames after %s", argv[1]);
+
+	if (load_project_from_cl || ! open_cl_files(argc, argv))
+	{
+		if (prefs.load_session)
+		{
+			if (load_project_from_cl)
+			{
+				gchar *pfile = argv[1];
+				if (utils_is_uri(argv[1]))
+					pfile = utils_get_path_from_uri(argv[1]);
+				if (pfile != NULL)
+				{
+					project_load_file(pfile);
+					if (pfile != argv[1])
+						g_free(pfile);
+				}
+			}
+			else if (cl_options.load_session && !cl_options.new_instance)
+				load_session_project_file();
+
+			/* when we want a new instance, we still load project session files unless -s
+			 * was passed */
+			if (!cl_options.load_session || (!load_project_from_cl && cl_options.new_instance))
+				return;
+
+			/* load session files into tabs, as they are found in the session_files variable */
+			configuration_open_files();
+
+			if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0)
+			{
+				ui_update_popup_copy_items(NULL);
+				ui_update_popup_reundo_items(NULL);
+			}
+		}
+	}
+}
+
+
 gint main(gint argc, gchar **argv)
 {
 	GeanyDocument *doc;
 	gint config_dir_result;
-	gboolean load_project_from_cl = FALSE;
 
 	log_handlers_init();
 
@@ -733,7 +907,9 @@ gint main(gint argc, gchar **argv)
 	memset(&ui_widgets, 0, sizeof(UIWidgets));
 
 	setup_paths();
-	locale_init();
+#ifdef ENABLE_NLS
+	main_locale_init(GEANY_LOCALEDIR, GETTEXT_PACKAGE);
+#endif
 	parse_command_line_options(&argc, &argv);
 
 	signal(SIGTERM, signal_cb);
@@ -765,7 +941,7 @@ gint main(gint argc, gchar **argv)
 			}
 			/* Start a new instance if no command line strings were passed */
 			socket_info.ignore_socket = TRUE;
-			cl_options.load_session = FALSE;
+			cl_options.new_instance = TRUE;
 		}
 	}
 #endif
@@ -775,6 +951,9 @@ gint main(gint argc, gchar **argv)
 		gtk_major_version, gtk_minor_version, gtk_micro_version,
 		glib_major_version, glib_minor_version, glib_micro_version);
 
+	/* create the object so Geany signals can be connected in init() functions */
+	geany_object = geany_object_new();
+
 	/* inits */
 	main_init();
 	gtk_widget_set_size_request(main_widgets.window, GEANY_WINDOW_MINIMAL_WIDTH, GEANY_WINDOW_MINIMAL_HEIGHT);
@@ -783,11 +962,17 @@ gint main(gint argc, gchar **argv)
 	encodings_init();
 	editor_init();
 
+	configuration_init();
+	/* init stash code before loading keyfile */
+	search_init();
+	project_init();
+#ifdef HAVE_PLUGINS
+	plugins_init();
+#endif
 	load_settings();
 
 	msgwin_init();
 	build_init();
-	search_init();
 	ui_create_insert_menu_items();
 	ui_create_insert_date_menu_items();
 	keybindings_init();
@@ -798,29 +983,35 @@ gint main(gint argc, gchar **argv)
 	navqueue_init();
 	document_init_doclist();
 	treeviews_init();
-	configuration_read_filetype_extensions();
+	symbols_init();
+	filetypes_read_extensions();
 	editor_snippets_init();
 
 	/* set window icon */
 	{
 		GdkPixbuf *pb;
 
-		pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO, FALSE);
+		pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
 		gtk_window_set_icon(GTK_WINDOW(main_widgets.window), pb);
 		g_object_unref(pb);	/* free our reference */
 	}
 
 	/* registering some basic events */
-	g_signal_connect(main_widgets.window, "delete-event", G_CALLBACK(on_exit_clicked), NULL);
-	g_signal_connect(main_widgets.window, "key-press-event", G_CALLBACK(keybindings_got_event), NULL);
-	g_signal_connect(main_widgets.toolbar, "button-press-event", G_CALLBACK(toolbar_popup_menu), NULL);
-	g_signal_connect(lookup_widget(main_widgets.window, "textview_scribble"),
-							"motion-notify-event", G_CALLBACK(on_motion_event), NULL);
-	g_signal_connect(lookup_widget(main_widgets.window, "toolbutton_search_entry"),
-							"motion-notify-event", G_CALLBACK(on_motion_event), NULL);
-	g_signal_connect(lookup_widget(main_widgets.window, "toolbutton_goto_entry"),
-							"motion-notify-event", G_CALLBACK(on_motion_event), NULL);
+	{
+		GtkWidget *entry;
 
+		g_signal_connect(main_widgets.window, "delete-event", G_CALLBACK(on_exit_clicked), NULL);
+		g_signal_connect(main_widgets.toolbar, "button-press-event", G_CALLBACK(toolbar_popup_menu), NULL);
+
+		g_signal_connect(ui_lookup_widget(main_widgets.window, "textview_scribble"),
+								"motion-notify-event", G_CALLBACK(on_motion_event), NULL);
+		entry = toolbar_get_widget_child_by_name("SearchEntry");
+		if (entry != NULL)
+			g_signal_connect(entry, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
+		entry = toolbar_get_widget_child_by_name("GotoEntry");
+		if (entry != NULL)
+			g_signal_connect(entry, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
+	}
 #ifdef HAVE_VTE
 	vte_init();
 #endif
@@ -837,35 +1028,15 @@ gint main(gint argc, gchar **argv)
 #ifdef HAVE_PLUGINS
 	/* load any enabled plugins before we open any documents */
 	if (want_plugins)
-		plugins_init();
+		plugins_load_active();
 #endif
 
 	/* load keybinding settings after plugins have added their groups */
 	keybindings_load_keyfile();
 
-	load_project_from_cl = (argc > 1) && g_str_has_suffix(argv[1], ".geany");
-
 	/* load any command line files or session files */
 	main_status.opening_session_files = TRUE;
-	if (load_project_from_cl || ! open_cl_files(argc, argv))
-	{
-		if (prefs.load_session && cl_options.load_session)
-		{
-			if (load_project_from_cl)
-				project_load_file(argv[1]);
-			else
-				load_project_file();
-
-			/* load session files into tabs, as they are found in the session_files variable */
-			configuration_open_files();
-
-			if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0)
-			{
-				ui_update_popup_copy_items(NULL);
-				ui_update_popup_reundo_items(NULL);
-			}
-		}
-	}
+	load_startup_files(argc, argv);
 	main_status.opening_session_files = FALSE;
 
 	/* open a new file if no other file was opened */
@@ -896,6 +1067,12 @@ gint main(gint argc, gchar **argv)
 	}
 #endif
 
+#ifdef G_OS_WIN32
+	/* On Windows, change the working directory to the Geany installation path to not lock
+	 * the directory of a file passed as command line argument (see bug #2626124). */
+	win32_set_working_directory(g_win32_get_package_installation_directory(NULL, NULL));
+#endif
+
 	/*g_timeout_add(0, (GSourceFunc)destroyapp, NULL);*/ /* useful for start time tests*/
 	gtk_main();
 	return 0;
@@ -911,8 +1088,7 @@ void main_quit()
 #endif
 
 #ifdef HAVE_PLUGINS
-	if (want_plugins)
-		plugins_free();
+	plugins_finalize();
 #endif
 
 	navqueue_free();
@@ -926,9 +1102,13 @@ void main_quit()
 	build_finalize();
 	document_finalize();
 	symbols_finalize();
+	project_finalize();
 	editor_finalize();
 	editor_snippets_free();
 	encodings_finalize();
+	toolbar_finalize();
+	configuration_finalize();
+	/* must be last */
 	log_finalize();
 
 	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));
@@ -936,6 +1116,7 @@ void main_quit()
 	g_free(app->datadir);
 	g_free(app->docdir);
 	g_free(prefs.default_open_path);
+	g_free(prefs.custom_plugin_path);
 	g_free(ui_prefs.custom_date_format);
 	g_free(interface_prefs.editor_font);
 	g_free(interface_prefs.tagbar_font);
@@ -994,6 +1175,9 @@ void main_quit()
 	if (msgwindow.popup_compiler_menu && GTK_IS_WIDGET(msgwindow.popup_compiler_menu))
 					gtk_widget_destroy(msgwindow.popup_compiler_menu);
 
+	g_object_unref(geany_object);
+	geany_object = NULL;
+
 	g_free(app);
 
 	gtk_main_quit();
@@ -1022,6 +1206,7 @@ void *rpl_malloc(size_t n)
  *  Plugins may call this function if they changed any of these files (e.g. a configuration file
  *  editor plugin).
  *
+ *  @since 0.15
  **/
 void main_reload_configuration(void)
 {
@@ -1036,7 +1221,7 @@ void main_reload_configuration(void)
 	editor_snippets_init();
 
 	/* reload filetype extensions */
-	configuration_read_filetype_extensions();
+	filetypes_read_extensions();
 
 	/* save possibly changed commands before re-reading them */
 	filetypes_save_commands();
@@ -1047,6 +1232,9 @@ void main_reload_configuration(void)
 		/* filetypes_load_config() will skip not loaded filetypes */
 		filetypes_load_config(i, TRUE);
 	}
+
+	/* C tag names to ignore */
+	symbols_reload_config_files();
 
 	ui_set_statusbar(TRUE, _("Configuration files reloaded."));
 }

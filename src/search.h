@@ -1,8 +1,8 @@
 /*
  *      search.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -42,7 +42,6 @@ extern GeanySearchData search_data;
 
 typedef struct GeanySearchPrefs
 {
-	gchar		*fif_extra_options;
 	gboolean	suppress_dialogs;
 	gboolean	use_current_word;
 	gboolean	use_current_file_dir;	/* find in files directory to use on showing dialog */

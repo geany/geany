@@ -1,8 +1,8 @@
 /*
  *      geanywraplabel.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -27,12 +27,8 @@
  */
 
 
-#include <gtk/gtklabel.h>
+#include <gtk/gtk.h>
 #include "geanywraplabel.h"
-
-
-/* Local data */
-static GObjectClass *parent_class = NULL;
 
 
 
@@ -56,44 +52,17 @@ typedef struct
 } GeanyWrapLabelPrivate;
 
 
-static void geany_wrap_label_class_init		(GeanyWrapLabelClass *klass);
-static void geany_wrap_label_init			(GeanyWrapLabel *self);
 static void geany_wrap_label_size_request	(GtkWidget *widget, GtkRequisition *req);
 static void geany_wrap_label_size_allocate	(GtkWidget *widget, GtkAllocation *alloc);
 static void geany_wrap_label_set_wrap_width	(GtkWidget *widget, gsize width);
 
-
-
-GType geany_wrap_label_get_type()
-{
-	static GType type = G_TYPE_INVALID;
-
-	if (G_UNLIKELY(type == G_TYPE_INVALID))
-	{
-		GTypeInfo gwl_info = {
-			sizeof (GeanyWrapLabelClass),
-			NULL, NULL,
-			(GClassInitFunc) geany_wrap_label_class_init,
-			NULL,
-			NULL,
-			sizeof (GeanyWrapLabel),
-			3,
-			(GInstanceInitFunc) geany_wrap_label_init,
-			NULL
-		};
-
-		type = g_type_register_static(GTK_TYPE_LABEL, "GeanyWrapLabel", &gwl_info, 0);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE(GeanyWrapLabel, geany_wrap_label, GTK_TYPE_LABEL);
 
 
 static void geany_wrap_label_class_init(GeanyWrapLabelClass *klass)
 {
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
 
-	parent_class = g_type_class_peek_parent(klass);
 	widget_class->size_request = geany_wrap_label_size_request;
 	widget_class->size_allocate = geany_wrap_label_size_allocate;
 
@@ -148,7 +117,7 @@ static void geany_wrap_label_size_request(GtkWidget *widget, GtkRequisition *req
 /* Sets the wrap width to the width allocated to us. */
 static void geany_wrap_label_size_allocate(GtkWidget *widget, GtkAllocation *alloc)
 {
-	(* GTK_WIDGET_CLASS(parent_class)->size_allocate)(widget, alloc);
+	(* GTK_WIDGET_CLASS(geany_wrap_label_parent_class)->size_allocate)(widget, alloc);
 
 	geany_wrap_label_set_wrap_width(widget, alloc->width);
 }

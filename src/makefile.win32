@@ -46,7 +46,7 @@ ALL_GTK_LIBS= \
 ifdef GTK280
 ALL_GTK_LIBS +=-liconv
 else
-ALL_GTK_LIBS +=-lcairo -lpangocairo-1.0
+ALL_GTK_LIBS +=-lcairo -lpangocairo-1.0 -lgio-2.0
 endif
 
 WIN_LIBS=-mwindows -lkernel32 -limm32 -lshfolder -lshell32 \
@@ -61,9 +61,11 @@ CFLAGS=-O2 $(CBASEFLAGS)
 endif
 
 OBJS =	about.o build.o callbacks.o dialogs.o document.o editor.o encodings.o filetypes.o \
-		geanyobject.o geanywraplabel.o highlighting.o interface.o keybindings.o keyfile.o \
+		geanyentryaction.o geanymenubuttonaction.o geanyobject.o geanywraplabel.o highlighting.o \
+		interface.o keybindings.o keyfile.o \
 		log.o main.o msgwindow.o navqueue.o notebook.o plugins.o prefs.o printing.o project.o \
-		sciwrappers.o search.o socket.o support.o symbols.o templates.o treeviews.o tools.o \
+		queue.o sciwrappers.o search.o socket.o stash.o \
+		symbols.o templates.o toolbar.o tools.o treeviews.o \
 		ui_utils.o utils.o win32.o
 
 .c.o:

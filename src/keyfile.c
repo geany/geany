@@ -1,8 +1,8 @@
 /*
  *      keyfile.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -57,8 +57,9 @@
 #include "project.h"
 #include "editor.h"
 #include "printing.h"
-#include "plugins.h"
 #include "templates.h"
+#include "toolbar.h"
+#include "stash.h"
 
 
 /* some default settings which are used at the very first start of Geany to fill
@@ -90,108 +91,112 @@ static gint session_notebook_page;
 static gint hpan_position;
 static gint vpan_position;
 
+static GPtrArray *keyfile_groups = NULL;
+GPtrArray *pref_groups = NULL;
 
-typedef enum SettingCallbackAction
+
+/* The group will be free'd on quitting.
+ * @param for_prefs_dialog is whether the group also has Prefs dialog items. */
+void configuration_add_pref_group(struct GeanyPrefGroup *group, gboolean for_prefs_dialog)
+{
+	g_ptr_array_add(keyfile_groups, group);
+
+	if (for_prefs_dialog)
+		g_ptr_array_add(pref_groups, group);
+}
+
+
+static void init_pref_groups(void)
+{
+	GeanyPrefGroup *group;
+
+	group = stash_group_new(PACKAGE);
+	configuration_add_pref_group(group, TRUE);
+	stash_group_add_entry(group, &prefs.default_open_path,
+		"default_open_path", "", "startup_path_entry");
+
+	stash_group_add_toggle_button(group, &file_prefs.cmdline_new_files,
+		"cmdline_new_files", TRUE, "check_cmdline_new_files");
+
+	stash_group_add_toggle_button(group, &interface_prefs.notebook_double_click_hides_widgets,
+		"notebook_double_click_hides_widgets", FALSE, "check_double_click_hides_widgets");
+
+	stash_group_add_toggle_button(group, &interface_prefs.highlighting_invert_all,
+		"highlighting_invert_all", FALSE, "check_highlighting_invert");
+
+	stash_group_add_toggle_button(group, &search_prefs.suppress_dialogs,
+		"pref_main_suppress_search_dialogs", FALSE, "check_ask_suppress_search_dialogs");
+	stash_group_add_toggle_button(group, &search_prefs.use_current_word,
+		"pref_main_search_use_current_word", TRUE, "check_search_use_current_word");
+
+	/* editor */
+	stash_group_add_toggle_button(group, &editor_prefs.indentation->detect_type,
+		"check_detect_indent", FALSE, "check_detect_indent");
+	stash_group_add_toggle_button(group, &editor_prefs.use_tab_to_indent,
+		"use_tab_to_indent", TRUE, "check_tab_key_indents");
+	stash_group_add_spin_button_integer(group, &editor_prefs.indentation->width,
+		"pref_editor_tab_width", 4, "spin_indent_width");
+	stash_group_add_spin_button_integer(group, &editor_prefs.indentation->hard_tab_width,
+		"indent_hard_tab_width", 8, "spin_tab_width");
+	stash_group_add_combo_box(group, (gint*)(void*)&editor_prefs.indentation->auto_indent_mode,
+		"indent_mode", GEANY_AUTOINDENT_CURRENTCHARS, "combo_auto_indent_mode");
+	stash_group_add_radio_buttons(group, (gint*)(void*)&editor_prefs.indentation->type,
+		"indent_type", GEANY_INDENT_TYPE_TABS,
+		"radio_indent_spaces", GEANY_INDENT_TYPE_SPACES,
+		"radio_indent_tabs", GEANY_INDENT_TYPE_TABS,
+		"radio_indent_both", GEANY_INDENT_TYPE_BOTH,
+		NULL);
+	stash_group_add_spin_button_integer(group, (gint*)&editor_prefs.autocompletion_max_entries,
+		"autocompletion_max_entries", GEANY_MAX_AUTOCOMPLETE_WORDS,
+		"spin_autocompletion_max_entries");
+
+	/* files */
+	stash_group_add_spin_button_integer(group, (gint*)&file_prefs.mru_length,
+		"mru_length", GEANY_DEFAULT_MRU_LENGTH, "spin_mru");
+	stash_group_add_spin_button_integer(group, &file_prefs.disk_check_timeout,
+		"disk_check_timeout", GEANY_DISK_CHECK_TIMEOUT, "spin_disk_check");
+
+	/* hidden prefs (don't overwrite them so users can edit them manually) */
+	group = stash_group_new(PACKAGE);
+	configuration_add_pref_group(group, FALSE);
+	stash_group_set_write_once(group, TRUE);
+	stash_group_add_boolean(group, &editor_prefs.show_scrollbars,
+		"show_editor_scrollbars", TRUE);
+	stash_group_add_boolean(group, &editor_prefs.brace_match_ltgt,
+		"brace_match_ltgt", FALSE);
+	stash_group_add_boolean(group, &editor_prefs.use_gtk_word_boundaries,
+		"use_gtk_word_boundaries", TRUE);
+	stash_group_add_boolean(group, &editor_prefs.complete_snippets_whilst_editing,
+		"complete_snippets_whilst_editing", FALSE);
+	stash_group_add_boolean(group, &interface_prefs.show_symbol_list_expanders,
+		"show_symbol_list_expanders", TRUE);
+	stash_group_add_boolean(group, &ui_prefs.allow_always_save,
+		"allow_always_save", FALSE);
+}
+
+
+typedef enum SettingAction
 {
 	SETTING_READ,
 	SETTING_WRITE
 }
-SettingCallbackAction;
+SettingAction;
 
-
-typedef struct SettingEntry
+static void settings_action(GKeyFile *config, SettingAction action)
 {
-	gpointer setting;
-	const gchar *group;
-	const gchar *key_name;
-	gpointer default_value;
-}
-SettingEntry;
+	gpointer *ptr;
+	GeanyPrefGroup *group;
 
-
-static void bool_settings_foreach(GKeyFile *config, SettingCallbackAction action)
-{
-	guint i;
-	SettingEntry items[] =
+	foreach_ptr_array(group, ptr, keyfile_groups)
 	{
-		{&file_prefs.cmdline_new_files, PACKAGE, "cmdline_new_files", (gpointer)TRUE},
-
-		{&search_prefs.suppress_dialogs, PACKAGE, "pref_main_suppress_search_dialogs", (gpointer)FALSE},
-		{&search_prefs.use_current_word, PACKAGE, "pref_main_search_use_current_word", (gpointer)TRUE},
-		{&search_prefs.use_current_file_dir, "search", "pref_search_current_file_dir", (gpointer)TRUE},
-
-		{&editor_prefs.indentation->detect_type, PACKAGE, "check_detect_indent", (gpointer)FALSE},
-		{&editor_prefs.use_tab_to_indent, PACKAGE, "use_tab_to_indent", (gpointer)TRUE}
-	};
-
-	for (i = 0; i < G_N_ELEMENTS(items); i++)
-	{
-		SettingEntry *se = &items[i];
-		gboolean *setting = se->setting;
-
 		switch (action)
 		{
 			case SETTING_READ:
-				*setting = utils_get_setting_boolean(config, se->group, se->key_name,
-					GPOINTER_TO_INT(se->default_value));
-				break;
+				stash_group_load_from_key_file(group, config); break;
 			case SETTING_WRITE:
-				g_key_file_set_boolean(config, se->group, se->key_name, *setting);
-				break;
+				stash_group_save_to_key_file(group, config); break;
 		}
 	}
-}
-
-
-static void int_settings_foreach(GKeyFile *config, SettingCallbackAction action)
-{
-	guint i;
-	SettingEntry items[] =
-	{
-		{&editor_prefs.indentation->width, PACKAGE, "pref_editor_tab_width", (gpointer)4},
-		{&editor_prefs.indentation->hard_tab_width, PACKAGE, "indent_hard_tab_width", (gpointer)8},
-		{&editor_prefs.indentation->auto_indent_mode, PACKAGE, "indent_mode",
-			(gpointer)GEANY_AUTOINDENT_CURRENTCHARS},
-		{&editor_prefs.indentation->type, PACKAGE, "indent_type", (gpointer)GEANY_INDENT_TYPE_TABS},
-		{&editor_prefs.autocompletion_max_entries, PACKAGE, "autocompletion_max_entries",
-			(gpointer)GEANY_MAX_AUTOCOMPLETE_WORDS}
-	};
-
-	for (i = 0; i < G_N_ELEMENTS(items); i++)
-	{
-		SettingEntry *se = &items[i];
-		gboolean *setting = se->setting;
-
-		switch (action)
-		{
-			case SETTING_READ:
-				*setting = utils_get_setting_integer(config, se->group, se->key_name,
-					GPOINTER_TO_INT(se->default_value));
-				break;
-			case SETTING_WRITE:
-				g_key_file_set_integer(config, se->group, se->key_name, *setting);
-				break;
-		}
-	}
-}
-
-
-typedef void (*SettingItemsCallback)(GKeyFile *config, SettingCallbackAction action);
-
-/* List of functions which hold the SettingEntry arrays. These allow access to
- * runtime setting fields like EditorPrefs::indentation->width. */
-SettingItemsCallback setting_item_callbacks[] = {
-	bool_settings_foreach,
-	int_settings_foreach
-};
-
-
-static void settings_action(GKeyFile *config, SettingCallbackAction action)
-{
-	guint i;
-
-	for (i = 0; i < G_N_ELEMENTS(setting_item_callbacks); i++)
-		setting_item_callbacks[i](config, action);
 }
 
 
@@ -225,12 +230,21 @@ static void save_recent_files(GKeyFile *config)
 static gchar *get_session_file_string(GeanyDocument *doc)
 {
 	gchar *fname;
+	gchar *doc_filename;
 	GeanyFiletype *ft = doc->file_type;
 
 	if (ft == NULL)	/* can happen when saving a new file when quitting */
 		ft = filetypes[GEANY_FILETYPES_NONE];
 
-	fname = g_strdup_printf("%d;%s;%d;%d;%d;%d;%d;%s;",
+	doc_filename = g_strdup(doc->file_name);
+	/* If the filename contains any ';' (semi-colons) we need to escape them otherwise
+	 * g_key_file_get_string_list() would fail reading them, so we replace them before
+	 * writing with usual colons which must never appear in a filename and replace them
+	 * back when we read the file again from the file.
+	 * (g_path_skip_root() to skip C:\... on Windows) */
+	g_strdelimit((gchar *) g_path_skip_root(doc_filename), ";", ':');
+
+	fname = g_strdup_printf("%d;%s;%d;%d;%d;%d;%d;%s;%d",
 		sci_get_current_position(doc->editor->sci),
 		ft->name,
 		doc->readonly,
@@ -238,7 +252,9 @@ static gchar *get_session_file_string(GeanyDocument *doc)
 		doc->editor->indent_type,
 		doc->editor->auto_indent,
 		doc->editor->line_wrapping,
-		doc->file_name);
+		doc_filename,
+		doc->editor->line_breaking);
+	g_free(doc_filename);
 	return fname;
 }
 
@@ -292,6 +308,7 @@ void configuration_save_session_files(GKeyFile *config)
 
 static void save_dialog_prefs(GKeyFile *config)
 {
+	/* new settings should be added in init_pref_groups() */
 	settings_action(config, SETTING_WRITE);
 
 	/* Some of the key names are not consistent, but this is for backwards compatibility */
@@ -306,12 +323,10 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "switch_msgwin_pages", prefs.switch_to_status);
 	g_key_file_set_boolean(config, PACKAGE, "beep_on_errors", prefs.beep_on_errors);
 	g_key_file_set_boolean(config, PACKAGE, "auto_focus", prefs.auto_focus);
-	g_key_file_set_string(config, PACKAGE, "default_open_path", prefs.default_open_path);
 
 	/* interface */
 	g_key_file_set_boolean(config, PACKAGE, "sidebar_symbol_visible", interface_prefs.sidebar_symbol_visible);
 	g_key_file_set_boolean(config, PACKAGE, "sidebar_openfiles_visible", interface_prefs.sidebar_openfiles_visible);
-	g_key_file_set_boolean(config, PACKAGE, "sidebar_openfiles_fullpath", interface_prefs.sidebar_openfiles_fullpath);
 	g_key_file_set_string(config, PACKAGE, "editor_font", interface_prefs.editor_font);
 	g_key_file_set_string(config, PACKAGE, "tagbar_font", interface_prefs.tagbar_font);
 	g_key_file_set_string(config, PACKAGE, "msgwin_font", interface_prefs.msgwin_font);
@@ -349,6 +364,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "auto_continue_multiline", editor_prefs.auto_continue_multiline);
 	g_key_file_set_string(config, PACKAGE, "comment_toggle_mark", editor_prefs.comment_toggle_mark);
 	g_key_file_set_boolean(config, PACKAGE, "scroll_stop_at_last_line", editor_prefs.scroll_stop_at_last_line);
+	g_key_file_set_integer(config, PACKAGE, "autoclose_chars", editor_prefs.autoclose_chars);
 
 	/* files */
 	g_key_file_set_string(config, PACKAGE, "pref_editor_default_new_encoding", encodings[file_prefs.default_new_encoding].charset);
@@ -360,21 +376,9 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_new_line", file_prefs.final_new_line);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_replace_tabs", file_prefs.replace_tabs);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_trail_space", file_prefs.strip_trailing_spaces);
-	g_key_file_set_integer(config, PACKAGE, "mru_length", file_prefs.mru_length);
-	g_key_file_set_integer(config, PACKAGE, "disk_check_timeout", file_prefs.disk_check_timeout);
 
 	/* toolbar */
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show", toolbar_prefs.visible);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_search", toolbar_prefs.show_search);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_goto", toolbar_prefs.show_goto);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_zoom", toolbar_prefs.show_zoom);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_indent", toolbar_prefs.show_indent);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_undo", toolbar_prefs.show_undo);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_navigation", toolbar_prefs.show_navigation);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_compile", toolbar_prefs.show_compile);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_colour", toolbar_prefs.show_colour);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_fileops", toolbar_prefs.show_fileops);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_quit", toolbar_prefs.show_quit);
 	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_style", toolbar_prefs.icon_style);
 	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_size", toolbar_prefs.icon_size);
 
@@ -411,7 +415,8 @@ static void save_dialog_prefs(GKeyFile *config)
 	{
 		gchar *tmp_string;
 
-		g_key_file_set_string(config, "VTE", "emulation", vc->emulation);
+		if (!g_key_file_has_key(config, "VTE", "emulation", NULL))	/* hidden */
+			g_key_file_set_string(config, "VTE", "emulation", vc->emulation);
 		g_key_file_set_string(config, "VTE", "font", vc->font);
 		g_key_file_set_boolean(config, "VTE", "scroll_on_key", vc->scroll_on_key);
 		g_key_file_set_boolean(config, "VTE", "scroll_on_out", vc->scroll_on_out);
@@ -420,6 +425,7 @@ static void save_dialog_prefs(GKeyFile *config)
 		g_key_file_set_boolean(config, "VTE", "follow_path", vc->follow_path);
 		g_key_file_set_boolean(config, "VTE", "run_in_vte", vc->run_in_vte);
 		g_key_file_set_boolean(config, "VTE", "skip_run_script", vc->skip_run_script);
+		g_key_file_set_boolean(config, "VTE", "cursor_blinks", vc->cursor_blinks);
 		g_key_file_set_integer(config, "VTE", "scrollback_lines", vc->scrollback_lines);
 		g_key_file_set_string(config, "VTE", "font", vc->font);
 		g_key_file_set_string(config, "VTE", "shell", vc->shell);
@@ -448,7 +454,7 @@ static void save_ui_prefs(GKeyFile *config)
 		GtkTextBuffer *buffer;
 		GtkTextIter start, end;
 
-		buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(lookup_widget(main_widgets.window, "textview_scribble")));
+		buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(ui_lookup_widget(main_widgets.window, "textview_scribble")));
 		gtk_text_buffer_get_bounds(buffer, &start, &end);
 		scribble_text = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
 		g_key_file_set_string(config, PACKAGE, "scribble_text", scribble_text);
@@ -458,9 +464,9 @@ static void save_ui_prefs(GKeyFile *config)
 	if (prefs.save_winpos)
 	{
 		g_key_file_set_integer(config, PACKAGE, "treeview_position",
-				gtk_paned_get_position(GTK_PANED(lookup_widget(main_widgets.window, "hpaned1"))));
+				gtk_paned_get_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned1"))));
 		g_key_file_set_integer(config, PACKAGE, "msgwindow_position",
-				gtk_paned_get_position(GTK_PANED(lookup_widget(main_widgets.window, "vpaned1"))));
+				gtk_paned_get_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "vpaned1"))));
 	}
 
 	if (prefs.save_winpos)
@@ -481,26 +487,6 @@ static void save_ui_prefs(GKeyFile *config)
 		g_key_file_set_string_list(config, PACKAGE, "custom_commands",
 				(const gchar**) ui_prefs.custom_commands, g_strv_length(ui_prefs.custom_commands));
 	}
-
-	/* search */
-	g_key_file_set_string(config, "search", "fif_extra_options", search_prefs.fif_extra_options ? search_prefs.fif_extra_options : "");
-}
-
-
-/* hidden prefs (don't overwrite them so users can edit them manually) */
-#define write_hidden_pref_boolean(conf, pkg, key, val) \
-		if (! g_key_file_has_key((conf), (pkg), (key), NULL)) \
-			g_key_file_set_boolean((conf), (pkg), (key), (val));
-
-static void save_hidden_prefs(GKeyFile *config)
-{
-	write_hidden_pref_boolean(config, PACKAGE, "show_editor_scrollbars", editor_prefs.show_scrollbars);
-	write_hidden_pref_boolean(config, PACKAGE, "brace_match_ltgt", editor_prefs.brace_match_ltgt);
-	write_hidden_pref_boolean(config, PACKAGE, "use_gtk_word_boundaries", editor_prefs.use_gtk_word_boundaries);
-	write_hidden_pref_boolean(config, PACKAGE, "complete_snippets_whilst_editing", editor_prefs.complete_snippets_whilst_editing);
-#if GTK_CHECK_VERSION(2, 12, 0)
-	write_hidden_pref_boolean(config, PACKAGE, "show_symbol_list_expanders", interface_prefs.show_symbol_list_expanders);
-#endif
 }
 
 
@@ -512,11 +498,10 @@ void configuration_save(void)
 
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
 
+	/* this signal can be used e.g. to prepare any settings before Stash code reads them below */
+	g_signal_emit_by_name(geany_object, "save-settings", config);
+
 	save_dialog_prefs(config);
-#ifdef HAVE_PLUGINS
-	plugins_save_prefs(config);
-#endif
-	save_hidden_prefs(config);
 	save_ui_prefs(config);
 	project_save_prefs(config);	/* save project filename, etc. */
 	save_recent_files(config);
@@ -595,6 +580,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	gchar *tmp_string, *tmp_string2;
 	const gchar *default_charset = NULL;
 
+	/* new settings should be added in init_pref_groups() */
 	settings_action(config, SETTING_READ);
 
 	/* general */
@@ -607,7 +593,6 @@ static void load_dialog_prefs(GKeyFile *config)
 	prefs.beep_on_errors = utils_get_setting_boolean(config, PACKAGE, "beep_on_errors", TRUE);
 	prefs.switch_to_status = utils_get_setting_boolean(config, PACKAGE, "switch_msgwin_pages", FALSE);
 	prefs.auto_focus = utils_get_setting_boolean(config, PACKAGE, "auto_focus", FALSE);
-	prefs.default_open_path = utils_get_setting_string(config, PACKAGE, "default_open_path", "");
 
 	/* interface */
 	interface_prefs.tab_pos_editor = utils_get_setting_integer(config, PACKAGE, "tab_pos_editor", GTK_POS_TOP);
@@ -615,7 +600,6 @@ static void load_dialog_prefs(GKeyFile *config)
 	interface_prefs.tab_pos_sidebar = utils_get_setting_integer(config, PACKAGE, "tab_pos_sidebar", GTK_POS_TOP);
 	interface_prefs.sidebar_symbol_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_symbol_visible", TRUE);
 	interface_prefs.sidebar_openfiles_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_openfiles_visible", TRUE);
-	interface_prefs.sidebar_openfiles_fullpath = utils_get_setting_boolean(config, PACKAGE, "sidebar_openfiles_fullpath", FALSE);
 	interface_prefs.statusbar_visible = utils_get_setting_boolean(config, PACKAGE, "statusbar_visible", TRUE);
 	file_prefs.tab_order_ltr = utils_get_setting_boolean(config, PACKAGE, "tab_order_ltr", TRUE);
 	interface_prefs.show_notebook_tabs = utils_get_setting_boolean(config, PACKAGE, "show_notebook_tabs", TRUE);
@@ -623,9 +607,6 @@ static void load_dialog_prefs(GKeyFile *config)
 	interface_prefs.editor_font = utils_get_setting_string(config, PACKAGE, "editor_font", GEANY_DEFAULT_FONT_EDITOR);
 	interface_prefs.tagbar_font = utils_get_setting_string(config, PACKAGE, "tagbar_font", GEANY_DEFAULT_FONT_SYMBOL_LIST);
 	interface_prefs.msgwin_font = utils_get_setting_string(config, PACKAGE, "msgwin_font", GEANY_DEFAULT_FONT_MSG_WINDOW);
-#if GTK_CHECK_VERSION(2, 12, 0)
-	interface_prefs.show_symbol_list_expanders = utils_get_setting_boolean(config, PACKAGE, "show_symbol_list_expanders", TRUE);
-#endif
 
 	/* display, editor */
 	editor_prefs.long_line_type = utils_get_setting_integer(config, PACKAGE, "long_line_type", 0);
@@ -644,18 +625,15 @@ static void load_dialog_prefs(GKeyFile *config)
 	editor_prefs.auto_complete_symbols = utils_get_setting_boolean(config, PACKAGE, "auto_complete_symbols", TRUE);
 	editor_prefs.folding = utils_get_setting_boolean(config, PACKAGE, "use_folding", TRUE);
 	editor_prefs.unfold_all_children = utils_get_setting_boolean(config, PACKAGE, "unfold_all_children", FALSE);
-	editor_prefs.show_scrollbars = utils_get_setting_boolean(config, PACKAGE, "show_editor_scrollbars", TRUE);
 	editor_prefs.show_markers_margin = utils_get_setting_boolean(config, PACKAGE, "show_markers_margin", TRUE);
 	editor_prefs.show_linenumber_margin = utils_get_setting_boolean(config, PACKAGE, "show_linenumber_margin", TRUE);
-	editor_prefs.brace_match_ltgt = utils_get_setting_boolean(config, PACKAGE, "brace_match_ltgt", FALSE);
 	editor_prefs.disable_dnd = utils_get_setting_boolean(config, PACKAGE, "pref_editor_disable_dnd", FALSE);
 	editor_prefs.smart_home_key = utils_get_setting_boolean(config, PACKAGE, "pref_editor_smart_home_key", TRUE);
 	editor_prefs.newline_strip = utils_get_setting_boolean(config, PACKAGE, "pref_editor_newline_strip", FALSE);
-	editor_prefs.use_gtk_word_boundaries = utils_get_setting_boolean(config, PACKAGE, "use_gtk_word_boundaries", TRUE);
-	editor_prefs.complete_snippets_whilst_editing = utils_get_setting_boolean(config, PACKAGE, "complete_snippets_whilst_editing", FALSE);
 	editor_prefs.line_break_column = utils_get_setting_integer(config, PACKAGE, "line_break_column", 72);
 	editor_prefs.auto_continue_multiline = utils_get_setting_boolean(config, PACKAGE, "auto_continue_multiline", TRUE);
 	editor_prefs.comment_toggle_mark = utils_get_setting_string(config, PACKAGE, "comment_toggle_mark", GEANY_TOGGLE_MARK);
+	editor_prefs.autoclose_chars = utils_get_setting_integer(config, PACKAGE, "autoclose_chars", 0);
 
 	/* Files
 	 * use current locale encoding as default for new files (should be UTF-8 in most cases) */
@@ -688,22 +666,9 @@ static void load_dialog_prefs(GKeyFile *config)
 	file_prefs.replace_tabs = utils_get_setting_boolean(config, PACKAGE, "pref_editor_replace_tabs", FALSE);
 	file_prefs.final_new_line = utils_get_setting_boolean(config, PACKAGE, "pref_editor_new_line", TRUE);
 	file_prefs.strip_trailing_spaces = utils_get_setting_boolean(config, PACKAGE, "pref_editor_trail_space", FALSE);
-	file_prefs.mru_length = utils_get_setting_integer(config, PACKAGE, "mru_length", GEANY_DEFAULT_MRU_LENGTH);
-	file_prefs.disk_check_timeout = utils_get_setting_integer(config, PACKAGE,
-		"disk_check_timeout", GEANY_DISK_CHECK_TIMEOUT);
 
 	/* toolbar */
 	toolbar_prefs.visible = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show", TRUE);
-	toolbar_prefs.show_search = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_search", TRUE);
-	toolbar_prefs.show_goto = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_goto", TRUE);
-	toolbar_prefs.show_zoom = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_zoom", FALSE);
-	toolbar_prefs.show_indent = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_indent", FALSE);
-	toolbar_prefs.show_compile = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_compile", TRUE);
-	toolbar_prefs.show_undo = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_undo", FALSE);
-	toolbar_prefs.show_navigation = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_navigation", TRUE);
-	toolbar_prefs.show_colour = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_colour", TRUE);
-	toolbar_prefs.show_fileops = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_fileops", TRUE);
-	toolbar_prefs.show_quit = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_quit", TRUE);
 	{
 		GtkIconSize tb_iconsize;
 		GtkToolbarStyle tb_style;
@@ -740,6 +705,7 @@ static void load_dialog_prefs(GKeyFile *config)
 		vc->follow_path = utils_get_setting_boolean(config, "VTE", "follow_path", FALSE);
 		vc->run_in_vte = utils_get_setting_boolean(config, "VTE", "run_in_vte", FALSE);
 		vc->skip_run_script = utils_get_setting_boolean(config, "VTE", "skip_run_script", FALSE);
+		vc->cursor_blinks = utils_get_setting_boolean(config, "VTE", "cursor_blinks", FALSE);
 		vc->scrollback_lines = utils_get_setting_integer(config, "VTE", "scrollback_lines", 500);
 		vc->colour_fore = g_new0(GdkColor, 1);
 		vc->colour_back = g_new0(GdkColor, 1);
@@ -850,9 +816,6 @@ static void load_ui_prefs(GKeyFile *config)
 				(GEANY_MSGWIN_HEIGHT + GEANY_WINDOW_DEFAULT_HEIGHT - 440));
 
 	g_free(geo);
-
-	/* search */
-	search_prefs.fif_extra_options = utils_get_setting_string(config, "search", "fif_extra_options", "");
 }
 
 
@@ -912,9 +875,6 @@ gboolean configuration_load(void)
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
 
 	load_dialog_prefs(config);
-#ifdef HAVE_PLUGINS
-	plugins_load_prefs(config);
-#endif
 	load_ui_prefs(config);
 	project_load_prefs(config);
 	configuration_load_session_files(config);
@@ -925,13 +885,15 @@ gboolean configuration_load(void)
 }
 
 
-static gboolean open_session_file(gchar **tmp)
+static gboolean open_session_file(gchar **tmp, guint len)
 {
 	guint pos;
 	const gchar *ft_name;
 	gchar *locale_filename;
 	gint enc_idx, indent_type;
 	gboolean ro, auto_indent, line_wrapping;
+	/** TODO when we have a global pref for line breaking, use its value */
+	gboolean line_breaking = FALSE;
 	gboolean ret = FALSE;
 
 	pos = atoi(tmp[0]);
@@ -943,6 +905,10 @@ static gboolean open_session_file(gchar **tmp)
 	line_wrapping = atoi(tmp[6]);
 	/* try to get the locale equivalent for the filename */
 	locale_filename = utils_get_locale_from_utf8(tmp[7]);
+	/* replace ':' back with ';' (see get_session_file_string for details) */
+	g_strdelimit((gchar *) g_path_skip_root(locale_filename), ":", ';');
+	if (len > 8)
+		line_breaking = atoi(tmp[8]);
 
 	if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 	{
@@ -956,6 +922,7 @@ static gboolean open_session_file(gchar **tmp)
 		{
 			editor_set_indent_type(doc->editor, indent_type);
 			editor_set_line_wrapping(doc->editor, line_wrapping);
+			doc->editor->line_breaking = line_breaking;
 			doc->editor->auto_indent = auto_indent;
 			ret = TRUE;
 		}
@@ -985,10 +952,11 @@ void configuration_open_files(void)
 	while (TRUE)
 	{
 		gchar **tmp = g_ptr_array_index(session_files, i);
+		guint len;
 
-		if (tmp != NULL && g_strv_length(tmp) == 8)
+		if (tmp != NULL && (len = g_strv_length(tmp)) >= 8)
 		{
-			if (! open_session_file(tmp))
+			if (! open_session_file(tmp, len))
 				failure = TRUE;
 		}
 		g_strfreev(tmp);
@@ -1030,7 +998,7 @@ void configuration_apply_settings(void)
 	if (scribble_text)
 	{	/* update the scribble widget, because now it's realized */
 		gtk_text_buffer_set_text(
-				gtk_text_view_get_buffer(GTK_TEXT_VIEW(lookup_widget(main_widgets.window, "textview_scribble"))),
+				gtk_text_view_get_buffer(GTK_TEXT_VIEW(ui_lookup_widget(main_widgets.window, "textview_scribble"))),
 				scribble_text, -1);
 	}
 	g_free(scribble_text);
@@ -1038,15 +1006,15 @@ void configuration_apply_settings(void)
 	/* set the position of the hpaned and vpaned */
 	if (prefs.save_winpos)
 	{
-		gtk_paned_set_position(GTK_PANED(lookup_widget(main_widgets.window, "hpaned1")), hpan_position);
-		gtk_paned_set_position(GTK_PANED(lookup_widget(main_widgets.window, "vpaned1")), vpan_position);
+		gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned1")), hpan_position);
+		gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "vpaned1")), vpan_position);
 	}
 
 	/* set fullscreen after initial draw so that returning to normal view is the right size.
 	 * fullscreen mode is disabled by default, so act only if it is true */
 	if (ui_prefs.fullscreen)
 	{
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_fullscreen1")), TRUE);
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_fullscreen1")), TRUE);
 		ui_prefs.fullscreen = TRUE;
 		ui_set_fullscreen();
 	}
@@ -1104,7 +1072,7 @@ static void generate_filetype_extensions(const gchar *output_dir)
 		"See Geany's main documentation for details.", NULL);
 
 	/* write the file */
-	g_print("%s: ", __func__);
+	g_print("%s: ", G_STRFUNC);
 	data = g_key_file_to_data(config, NULL, NULL);
 	basename = g_path_get_basename(configfile);
 
@@ -1121,39 +1089,23 @@ static void generate_filetype_extensions(const gchar *output_dir)
 #endif
 
 
-void configuration_read_filetype_extensions(void)
+void configuration_init(void)
 {
-	guint i;
-	gsize len = 0;
-	gchar *sysconfigfile = g_strconcat(app->datadir, G_DIR_SEPARATOR_S,
-		"filetype_extensions.conf", NULL);
-	gchar *userconfigfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S,
-		"filetype_extensions.conf", NULL);
-	gchar **list;
-	GKeyFile *sysconfig = g_key_file_new();
-	GKeyFile *userconfig = g_key_file_new();
+	keyfile_groups = g_ptr_array_new();
+	pref_groups = g_ptr_array_new();
+	init_pref_groups();
+}
 
-	g_key_file_load_from_file(sysconfig, sysconfigfile, G_KEY_FILE_NONE, NULL);
-	g_key_file_load_from_file(userconfig, userconfigfile, G_KEY_FILE_NONE, NULL);
 
-	/* read the keys */
-	for (i = 0; i < filetypes_array->len; i++)
-	{
-		gboolean userset =
-			g_key_file_has_key(userconfig, "Extensions", filetypes[i]->name, NULL);
-		list = g_key_file_get_string_list(
-			(userset) ? userconfig : sysconfig, "Extensions", filetypes[i]->name, &len, NULL);
-		if (list && len > 0)
-		{
-			g_strfreev(filetypes[i]->pattern);
-			filetypes[i]->pattern = list;
-		}
-		else g_strfreev(list);
-	}
+void configuration_finalize(void)
+{
+	gpointer *ptr;
+	GeanyPrefGroup *group;
 
-	g_free(sysconfigfile);
-	g_free(userconfigfile);
-	g_key_file_free(sysconfig);
-	g_key_file_free(userconfig);
+	foreach_ptr_array(group, ptr, keyfile_groups)
+		stash_group_free(group);
+
+	g_ptr_array_free(keyfile_groups, TRUE);
+	g_ptr_array_free(pref_groups, TRUE);
 }
 

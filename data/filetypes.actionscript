@@ -21,20 +21,16 @@ commentlinedoc=0x3f5fbf;0xffffff;true;false
 commentdockeyword=0x3f5fbf;0xffffff;true;true
 commentdockeyworderror=0x3f5fbf;0xffffff;false;false
 globalclass=0x0000d0;0xffffff;true;false
-# whether arguments of preprocessor commands should be styled (only first argument is used)
-# 1 to enable, 0 to disable
-styling_within_preprocessor=1;0;false;false
 
 [keywords]
 # all items must be in one line
-primary=and and_eq asm auto bitand bitor bool break case catch char class compl const const_cast continue default delete do double dynamic_cast else enum explicit export extern false float for friend goto if inline int long mutable namespace new not not_eq operator or or_eq private protected public register reinterpret_cast return short signed sizeof static static_cast struct switch template this throw true try typedef typeid typename union unsigned using virtual void volatile wchar_t while xor xor_eq
-secondary=
-# these are some doxygen keywords (incomplete)
-docComment=attention author brief bug class code date def enum example exception file fn namespace note param remarks return see since struct throw todo typedef var version warning union
+primary=break case catch class const continue default do dynamic each else extends false final finally for function get if implements import in include Infinity int interface internal label namespace NaN native new null override package private protected public return set static super switch this throw true try typeof uint undefined var while with void
+secondary=arguments decodeURI decodeURIcomponent encodeURI encodeURIcomponent escape isFinite isNaN isXMLName parseFloat parseInt trace unescape
+classes=ArgumentError Array Boolean Class Date DefinitionError Error EvalError Function Math NameSpace Null Number Object QName RangeError ReferenceError RegExp SecurityError String SyntaxError TypeError URIError Vector VerifyError XML XMLList
 
 [settings]
 # default extension used when saving files
-#extension=cpp
+#extension=as
 
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
@@ -42,9 +38,6 @@ docComment=attention author brief bug class code date def enum example exception
 # if only single comment char is supported like # in this file, leave comment_close blank
 comment_open=//
 comment_close=
-# this is an alternative way, so multiline comments are used
-#comment_open=/*
-#comment_close=*/
 
 # set to false if a comment character/string should start at column 0 of a line, true uses any
 # indentation of the line, e.g. setting to true causes the following on pressing CTRL+d
@@ -61,7 +54,7 @@ context_action_cmd=
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
 # (use only one of it at one time)
-compiler=g++ -Wall -c "%f"
-linker=
+compiler=
 run_cmd=
+
 

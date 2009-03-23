@@ -1,8 +1,8 @@
 /*
  *      build.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -74,6 +74,12 @@ void build_menu_update(GeanyDocument *doc);
 
 BuildMenuItems *build_get_menu_items(gint filetype_idx);
 
+/*<<<<<<< .working*/
 void build_default_menu();
+/*=======*/
+void build_toolbutton_build_clicked(GtkAction *action, gpointer user_data);
+/*>>>>>>> .merge-right.r3643*/
+
+
 
 #endif

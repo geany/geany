@@ -1,8 +1,8 @@
 /*
  *      ui_utils.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -47,10 +47,10 @@
 #include "editor.h"
 #include "plugins.h"
 #include "symbols.h"
+#include "toolbar.h"
 
 
 GeanyInterfacePrefs	interface_prefs;
-GeanyToolbarPrefs	toolbar_prefs;
 GeanyMainWidgets	main_widgets;
 
 UIPrefs			ui_prefs;
@@ -67,15 +67,23 @@ static struct
 	GtkWidget	*redo_items[3];
 	GtkWidget	*undo_items[3];
 	GtkWidget	*save_buttons[4];
+	GtkWidget	*config_files_menu;
 }
 widgets;
 
 
 static void update_recent_menu(void);
 static void recent_file_loaded(const gchar *utf8_filename);
-static void
-recent_file_activate_cb                (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
+static void recent_file_activate_cb(GtkMenuItem *menuitem, gpointer user_data);
+static GtkWidget *progress_bar_create(void);
+
+
+/* simple wrapper for gtk_widget_set_sensitive() to allow widget being NULL */
+void ui_widget_set_sensitive(GtkWidget *widget, gboolean set)
+{
+	if (widget != NULL)
+		gtk_widget_set_sensitive(widget, set);
+}
 
 
 /* allow_override is TRUE if text can be ignored when another message has been set
@@ -311,6 +319,7 @@ void ui_update_popup_reundo_items(GeanyDocument *doc)
 {
 	gboolean enable_undo;
 	gboolean enable_redo;
+	guint i, len;
 
 	if (doc == NULL)
 	{
@@ -324,44 +333,48 @@ void ui_update_popup_reundo_items(GeanyDocument *doc)
 	}
 
 	/* index 0 is the popup menu, 1 is the menubar, 2 is the toolbar */
-	gtk_widget_set_sensitive(widgets.undo_items[0], enable_undo);
-	gtk_widget_set_sensitive(widgets.undo_items[1], enable_undo);
-	gtk_widget_set_sensitive(widgets.undo_items[2], enable_undo);
-
-	gtk_widget_set_sensitive(widgets.redo_items[0], enable_redo);
-	gtk_widget_set_sensitive(widgets.redo_items[1], enable_redo);
-	gtk_widget_set_sensitive(widgets.redo_items[2], enable_redo);
+	len = G_N_ELEMENTS(widgets.undo_items);
+	for (i = 0; i < len; i++)
+	{
+		ui_widget_set_sensitive(widgets.undo_items[i], enable_undo);
+	}
+	len = G_N_ELEMENTS(widgets.redo_items);
+	for (i = 0; i < len; i++)
+	{
+		ui_widget_set_sensitive(widgets.redo_items[i], enable_undo);
+	}
 }
 
 
 void ui_update_popup_copy_items(GeanyDocument *doc)
 {
 	gboolean enable;
-	guint i;
+	guint i, len;
 
 	if (doc == NULL)
 		enable = FALSE;
 	else
 		enable = sci_has_selection(doc->editor->sci);
 
-	for (i = 0; i < G_N_ELEMENTS(widgets.popup_copy_items); i++)
-		gtk_widget_set_sensitive(widgets.popup_copy_items[i], enable);
+	len = G_N_ELEMENTS(widgets.popup_copy_items);
+	for (i = 0; i < len; i++)
+		ui_widget_set_sensitive(widgets.popup_copy_items[i], enable);
 }
 
 
 void ui_update_popup_goto_items(gboolean enable)
 {
-	gtk_widget_set_sensitive(widgets.popup_goto_items[0], enable);
-	gtk_widget_set_sensitive(widgets.popup_goto_items[1], enable);
-	gtk_widget_set_sensitive(widgets.popup_goto_items[2], enable);
-	gtk_widget_set_sensitive(widgets.popup_goto_items[3], enable);
+	guint i, len;
+	len = G_N_ELEMENTS(widgets.popup_goto_items);
+	for (i = 0; i < len; i++)
+		ui_widget_set_sensitive(widgets.popup_goto_items[i], enable);
 }
 
 
 void ui_update_menu_copy_items(GeanyDocument *doc)
 {
 	gboolean enable = FALSE;
-	guint i;
+	guint i, len;
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	if (IS_SCINTILLA(focusw))
@@ -377,8 +390,9 @@ void ui_update_menu_copy_items(GeanyDocument *doc)
 		enable = gtk_text_buffer_get_selection_bounds(buffer, NULL, NULL);
 	}
 
-	for (i = 0; i < G_N_ELEMENTS(widgets.menu_copy_items); i++)
-		gtk_widget_set_sensitive(widgets.menu_copy_items[i], enable);
+	len = G_N_ELEMENTS(widgets.menu_copy_items);
+	for (i = 0; i < len; i++)
+		ui_widget_set_sensitive(widgets.menu_copy_items[i], enable);
 }
 
 
@@ -393,15 +407,15 @@ void ui_update_insert_include_item(GeanyDocument *doc, gint item)
 	{
 		enable = TRUE;
 	}
-	gtk_widget_set_sensitive(widgets.menu_insert_include_items[item], enable);
+	ui_widget_set_sensitive(widgets.menu_insert_include_items[item], enable);
 }
 
 
 void ui_update_fold_items(void)
 {
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "menu_fold_all1"), editor_prefs.folding);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "menu_unfold_all1"), editor_prefs.folding);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "separator22"), editor_prefs.folding);
+	ui_widget_show_hide(ui_lookup_widget(main_widgets.window, "menu_fold_all1"), editor_prefs.folding);
+	ui_widget_show_hide(ui_lookup_widget(main_widgets.window, "menu_unfold_all1"), editor_prefs.folding);
+	ui_widget_show_hide(ui_lookup_widget(main_widgets.window, "separator22"), editor_prefs.folding);
 }
 
 
@@ -441,8 +455,8 @@ static void insert_include_items(GtkMenu *me, GtkMenu *mp, gchar **includes, gch
 
 void ui_create_insert_menu_items(void)
 {
-	GtkMenu *menu_edit = GTK_MENU(lookup_widget(main_widgets.window, "insert_include2_menu"));
-	GtkMenu *menu_popup = GTK_MENU(lookup_widget(main_widgets.editor_menu, "insert_include1_menu"));
+	GtkMenu *menu_edit = GTK_MENU(ui_lookup_widget(main_widgets.window, "insert_include2_menu"));
+	GtkMenu *menu_popup = GTK_MENU(ui_lookup_widget(main_widgets.editor_menu, "insert_include1_menu"));
 	GtkWidget *blank;
 	const gchar *c_includes_stdlib[] = {
 		"assert.h", "ctype.h", "errno.h", "float.h", "limits.h", "locale.h", "math.h", "setjmp.h",
@@ -508,8 +522,8 @@ static void insert_date_items(GtkMenu *me, GtkMenu *mp, gchar *label)
 
 void ui_create_insert_date_menu_items(void)
 {
-	GtkMenu *menu_edit = GTK_MENU(lookup_widget(main_widgets.window, "insert_date1_menu"));
-	GtkMenu *menu_popup = GTK_MENU(lookup_widget(main_widgets.editor_menu, "insert_date2_menu"));
+	GtkMenu *menu_edit = GTK_MENU(ui_lookup_widget(main_widgets.window, "insert_date1_menu"));
+	GtkMenu *menu_popup = GTK_MENU(ui_lookup_widget(main_widgets.editor_menu, "insert_date2_menu"));
 	GtkWidget *item;
 	gchar *str;
 
@@ -541,14 +555,14 @@ void ui_create_insert_date_menu_items(void)
 	gtk_widget_show(item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_menu_insert_date_activate), str);
 	g_object_set_data_full(G_OBJECT(main_widgets.window),
-		"insert_date_custom1", gtk_widget_ref(item), (GDestroyNotify)gtk_widget_unref);
+		"insert_date_custom1", g_object_ref(item), (GDestroyNotify)g_object_unref);
 
 	item = gtk_menu_item_new_with_mnemonic(str);
 	gtk_container_add(GTK_CONTAINER(menu_popup), item);
 	gtk_widget_show(item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_insert_date_activate), str);
 	g_object_set_data_full(G_OBJECT(main_widgets.editor_menu),
-		"insert_date_custom2", gtk_widget_ref(item), (GDestroyNotify)gtk_widget_unref);
+		"insert_date_custom2", g_object_ref(item), (GDestroyNotify)g_object_unref);
 
 	insert_date_items(menu_edit, menu_popup, _("_Set Custom Date Format"));
 }
@@ -559,8 +573,11 @@ void ui_save_buttons_toggle(gboolean enable)
 	guint i;
 	gboolean dirty_tabs = FALSE;
 
-	gtk_widget_set_sensitive(widgets.save_buttons[0], enable);
-	gtk_widget_set_sensitive(widgets.save_buttons[1], enable);
+	if (ui_prefs.allow_always_save)
+		return;
+
+	ui_widget_set_sensitive(widgets.save_buttons[0], enable);
+	ui_widget_set_sensitive(widgets.save_buttons[1], enable);
 
 	/* save all menu item and tool button */
 	for (i = 0; i < documents_array->len; i++)
@@ -574,13 +591,16 @@ void ui_save_buttons_toggle(gboolean enable)
 		}
 	}
 
-	gtk_widget_set_sensitive(widgets.save_buttons[2], dirty_tabs);
-	gtk_widget_set_sensitive(widgets.save_buttons[3], dirty_tabs);
+	ui_widget_set_sensitive(widgets.save_buttons[2], dirty_tabs);
+	ui_widget_set_sensitive(widgets.save_buttons[3], dirty_tabs);
 }
 
 
 #define add_doc_widget(widget_name) \
-	g_ptr_array_add(widgets.document_buttons, lookup_widget(main_widgets.window, widget_name))
+	g_ptr_array_add(widgets.document_buttons, ui_lookup_widget(main_widgets.window, widget_name))
+
+#define add_doc_toolitem(widget_name) \
+	g_ptr_array_add(widgets.document_buttons, toolbar_get_widget_by_name(widget_name))
 
 static void init_document_widgets(void)
 {
@@ -590,18 +610,11 @@ static void init_document_widgets(void)
 	 * when using ui_document_buttons_update(). */
 	add_doc_widget("menu_close1");
 	add_doc_widget("close_other_documents1");
-	add_doc_widget("toolbutton_close");
 	add_doc_widget("menu_change_font1");
-	add_doc_widget("toolbutton_search_entry");
-	add_doc_widget("toolbutton_search");
-	add_doc_widget("toolbutton_zoomin");
-	add_doc_widget("toolbutton_zoomout");
 	add_doc_widget("menu_close_all1");
+	add_doc_widget("menu_save1");
 	add_doc_widget("menu_save_all1");
-	add_doc_widget("toolbutton_saveall");
-	add_doc_widget("toolbutton_compile"); /* compile_button */
 	add_doc_widget("menu_save_as1");
-	add_doc_widget("toolbutton_reload");
 	add_doc_widget("menu_count_words1");
 	add_doc_widget("menu_build1");
 	add_doc_widget("add_comments1");
@@ -610,15 +623,11 @@ static void init_document_widgets(void)
 	add_doc_widget("preferences2");
 	add_doc_widget("menu_reload1");
 	add_doc_widget("menu_document1");
-	add_doc_widget("menu_markers_margin1");
-	add_doc_widget("menu_linenumber_margin1");
 	add_doc_widget("menu_choose_color1");
 	add_doc_widget("menu_zoom_in1");
 	add_doc_widget("menu_zoom_out1");
+	add_doc_widget("menu_view_editor1");
 	add_doc_widget("normal_size1");
-	add_doc_widget("toolbutton_colour");
-	add_doc_widget("toolbutton_goto");
-	add_doc_widget("toolbutton_goto_entry");
 	add_doc_widget("treeview6");
 	add_doc_widget("print1");
 	add_doc_widget("menu_reload_as1");
@@ -634,6 +643,28 @@ static void init_document_widgets(void)
 	add_doc_widget("find_nextsel1");
 	add_doc_widget("find_prevsel1");
 	add_doc_widget("go_to_line1");
+	add_doc_toolitem("Close");
+	add_doc_toolitem("CloseAll");
+	add_doc_toolitem("Search");
+	add_doc_toolitem("SearchEntry");
+	add_doc_toolitem("NavBack");
+	add_doc_toolitem("NavFor");
+	add_doc_toolitem("ZoomIn");
+	add_doc_toolitem("ZoomOut");
+	add_doc_toolitem("Indent");
+	add_doc_toolitem("UnIndent");
+	add_doc_toolitem("Cut");
+	add_doc_toolitem("Copy");
+	add_doc_toolitem("Paste");
+	add_doc_toolitem("Delete");
+	add_doc_toolitem("Save");
+	add_doc_toolitem("SaveAll");
+	add_doc_toolitem("Compile");
+	add_doc_toolitem("Run");
+	add_doc_toolitem("Reload");
+	add_doc_toolitem("Color");
+	add_doc_toolitem("Goto");
+	add_doc_toolitem("GotoEntry");
 }
 
 
@@ -645,12 +676,32 @@ void ui_document_buttons_update(void)
 	for (i = 0; i < widgets.document_buttons->len; i++)
 	{
 		GtkWidget *widget = g_ptr_array_index(widgets.document_buttons, i);
-		gtk_widget_set_sensitive(widget, enable);
+		ui_widget_set_sensitive(widget, enable);
 	}
+}
 
-#ifdef HAVE_PLUGINS
-	plugins_update_document_sensitive(enable);
-#endif
+
+static void on_doc_sensitive_widget_destroy(GtkWidget *widget, G_GNUC_UNUSED gpointer user_data)
+{
+	g_ptr_array_remove_fast(widgets.document_buttons, widget);
+}
+
+
+/** Add a widget to the list of widgets that should be set sensitive/insensitive
+ * when some documents are present/no documents are open.
+ * It will be removed when the widget is destroyed.
+ * @param widget The widget to add.
+ *
+ * @since 0.15
+ **/
+void ui_add_document_sensitive(GtkWidget *widget)
+{
+	gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) ? TRUE : FALSE;
+
+	ui_widget_set_sensitive(widget, enable);
+
+	g_ptr_array_add(widgets.document_buttons, widget);
+	g_signal_connect(widget, "destroy", G_CALLBACK(on_doc_sensitive_widget_destroy), NULL);
 }
 
 
@@ -679,7 +730,7 @@ void ui_sidebar_show_hide(void)
 		ui_prefs.sidebar_visible = FALSE;
 	}
 
-	widget = lookup_widget(main_widgets.window, "menu_show_sidebar1");
+	widget = ui_lookup_widget(main_widgets.window, "menu_show_sidebar1");
 	if (ui_prefs.sidebar_visible != gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget)))
 	{
 		ignore_callback = TRUE;
@@ -711,16 +762,16 @@ void ui_document_show_hide(GeanyDocument *doc)
 	ignore_callback = TRUE;
 
 	gtk_check_menu_item_set_active(
-			GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_line_wrapping1")),
+			GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_line_wrapping1")),
 			doc->editor->line_wrapping);
 
 	gtk_check_menu_item_set_active(
-			GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "line_breaking1")),
+			GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "line_breaking1")),
 			doc->editor->line_breaking);
 
 	iprefs = editor_get_indent_prefs(doc->editor);
 
-	item = lookup_widget(main_widgets.window, "menu_use_auto_indentation1");
+	item = ui_lookup_widget(main_widgets.window, "menu_use_auto_indentation1");
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), doc->editor->auto_indent);
 
 	switch (iprefs->type)
@@ -733,16 +784,16 @@ void ui_document_show_hide(GeanyDocument *doc)
 		default:
 			widget_name = "tabs_and_spaces1"; break;
 	}
-	item = lookup_widget(main_widgets.window, widget_name);
+	item = ui_lookup_widget(main_widgets.window, widget_name);
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), TRUE);
 
 	gtk_check_menu_item_set_active(
-			GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "set_file_readonly1")),
+			GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "set_file_readonly1")),
 			doc->readonly);
 
-	item = lookup_widget(main_widgets.window, "menu_write_unicode_bom1");
+	item = ui_lookup_widget(main_widgets.window, "menu_write_unicode_bom1");
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), doc->has_bom);
-	gtk_widget_set_sensitive(item, encodings_is_unicode_charset(doc->encoding));
+	ui_widget_set_sensitive(item, encodings_is_unicode_charset(doc->encoding));
 
 	switch (sci_get_eol_mode(doc->editor->sci))
 	{
@@ -751,7 +802,7 @@ void ui_document_show_hide(GeanyDocument *doc)
 		default: widget_name = "crlf"; break;
 	}
 	gtk_check_menu_item_set_active(
-		GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, widget_name)), TRUE);
+		GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, widget_name)), TRUE);
 
 	encodings_select_radio_item(doc->encoding);
 	filetypes_select_radio_item(doc->file_type);
@@ -760,132 +811,73 @@ void ui_document_show_hide(GeanyDocument *doc)
 }
 
 
-void ui_update_toolbar_icons(GtkIconSize size)
+void ui_set_search_entry_background(GtkWidget *widget, gboolean success)
 {
-	GtkWidget *button_image = NULL;
-	GtkWidget *widget = NULL;
-	GtkWidget *oldwidget = NULL;
+	static const GdkColor red   = {0, 0xffff, 0x6666, 0x6666};
+	static const GdkColor white = {0, 0xffff, 0xffff, 0xffff};
+	static gboolean old_value = TRUE;
 
-	/* destroy old widget */
-	widget = lookup_widget(main_widgets.window, "toolbutton_saveall");
-	oldwidget = gtk_tool_button_get_icon_widget(GTK_TOOL_BUTTON(widget));
-	if (oldwidget && GTK_IS_WIDGET(oldwidget)) gtk_widget_destroy(oldwidget);
-	/* create new widget */
-	button_image = ui_new_image_from_inline(GEANY_IMAGE_SAVE_ALL, FALSE);
-	gtk_widget_show(button_image);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(widget), button_image);
+	g_return_if_fail(widget != NULL);
 
-	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), size);
-}
+	/* update only if really needed */
+	if (old_value != success)
+	{
+		gtk_widget_modify_base(widget, GTK_STATE_NORMAL, success ? NULL : &red);
+		gtk_widget_modify_text(widget, GTK_STATE_NORMAL, success ? NULL : &white);
 
-
-void ui_update_toolbar_items(void)
-{
-	/* show toolbar */
-	GtkWidget *widget = lookup_widget(main_widgets.window, "menu_show_toolbar1");
-	if (toolbar_prefs.visible && ! gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget)))
-	{	/* will be changed by the toggled callback */
-		toolbar_prefs.visible = ! toolbar_prefs.visible;
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), TRUE);
+		old_value = success;
 	}
-	else if (! toolbar_prefs.visible && gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget)))
-	{	/* will be changed by the toggled callback */
-		toolbar_prefs.visible = ! toolbar_prefs.visible;
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), FALSE);
-	}
-
-	/* fileops */
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_new"), toolbar_prefs.show_fileops);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_open"), toolbar_prefs.show_fileops);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_save"), toolbar_prefs.show_fileops);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_saveall"), toolbar_prefs.show_fileops);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_reload"), toolbar_prefs.show_fileops);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_close"), toolbar_prefs.show_fileops);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem7"), toolbar_prefs.show_fileops);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem2"), toolbar_prefs.show_fileops);
-	/* search */
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_search_entry"), toolbar_prefs.show_search);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_search"), toolbar_prefs.show_search);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem5"), toolbar_prefs.show_search);
-	/* goto line */
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_goto_entry"), toolbar_prefs.show_goto);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_goto"), toolbar_prefs.show_goto);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem8"), toolbar_prefs.show_goto);
-	/* compile */
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_compile"), toolbar_prefs.show_compile);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_run"), toolbar_prefs.show_compile);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem6"), toolbar_prefs.show_compile);
-	/* colour */
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_colour"), toolbar_prefs.show_colour);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem3"), toolbar_prefs.show_colour);
-	/* zoom */
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_zoomin"), toolbar_prefs.show_zoom);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_zoomout"), toolbar_prefs.show_zoom);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem4"), toolbar_prefs.show_zoom);
-	/* indent */
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_indent_dec"), toolbar_prefs.show_indent);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_indent_inc"), toolbar_prefs.show_indent);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem11"), toolbar_prefs.show_indent);
-	/* undo */
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_undo"), toolbar_prefs.show_undo);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_redo"), toolbar_prefs.show_undo);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem9"), toolbar_prefs.show_undo);
-	/* navigation */
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_back"), toolbar_prefs.show_navigation);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_forward"), toolbar_prefs.show_navigation);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem10"), toolbar_prefs.show_navigation);
-	/* quit */
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "toolbutton_quit"), toolbar_prefs.show_quit);
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "separatortoolitem8"), toolbar_prefs.show_quit);
 }
 
 
 /* Note: remember to unref the pixbuf once an image or window has added a reference. */
-GdkPixbuf *ui_new_pixbuf_from_inline(gint img, gboolean small_img)
+GdkPixbuf *ui_new_pixbuf_from_inline(gint img)
 {
 	switch(img)
 	{
-		case GEANY_IMAGE_SMALL_CROSS: return gdk_pixbuf_new_from_inline(-1, close_small_inline, FALSE, NULL); break;
-		case GEANY_IMAGE_LOGO: return gdk_pixbuf_new_from_inline(-1, aladin_inline, FALSE, NULL); break;
+		case GEANY_IMAGE_LOGO:
+			return gdk_pixbuf_new_from_inline(-1, aladin_inline, FALSE, NULL);
+			break;
 		case GEANY_IMAGE_SAVE_ALL:
 		{
-			if ((toolbar_prefs.icon_size == GTK_ICON_SIZE_SMALL_TOOLBAR) || small_img)
-			{
-				return gdk_pixbuf_scale_simple(gdk_pixbuf_new_from_inline(-1, save_all_inline, FALSE, NULL),
-                                             16, 16, GDK_INTERP_HYPER);
-			}
-			else
-			{
-				return gdk_pixbuf_new_from_inline(-1, save_all_inline, FALSE, NULL);
-			}
+			return gdk_pixbuf_new_from_inline(-1, save_all_inline, FALSE, NULL);
 			break;
 		}
-		case GEANY_IMAGE_NEW_ARROW:
+		case GEANY_IMAGE_CLOSE_ALL:
 		{
-			if ((toolbar_prefs.icon_size == GTK_ICON_SIZE_SMALL_TOOLBAR) || small_img)
-			{
-				return gdk_pixbuf_scale_simple(gdk_pixbuf_new_from_inline(-1, newfile_inline, FALSE, NULL),
-                                             16, 16, GDK_INTERP_HYPER);
-			}
-			else
-			{
-				return gdk_pixbuf_new_from_inline(-1, newfile_inline, FALSE, NULL);
-			}
+			return gdk_pixbuf_new_from_inline(-1, close_all_inline, FALSE, NULL);
 			break;
 		}
-		default: return NULL;
+		case GEANY_IMAGE_BUILD:
+		{
+			return gdk_pixbuf_new_from_inline(-1, build_inline, FALSE, NULL);
+			break;
+		}
+		default:
+			return NULL;
 	}
-
-	/*return gtk_image_new_from_pixbuf(pixbuf);*/
 }
 
 
-GtkWidget *ui_new_image_from_inline(gint img, gboolean small_img)
+static GdkPixbuf *ui_new_pixbuf_from_stock(const gchar *stock_id)
+{
+	if (utils_str_equal(stock_id, GEANY_STOCK_CLOSE_ALL))
+		return ui_new_pixbuf_from_inline(GEANY_IMAGE_CLOSE_ALL);
+	else if (utils_str_equal(stock_id, GEANY_STOCK_BUILD))
+		return ui_new_pixbuf_from_inline(GEANY_IMAGE_BUILD);
+	else if (utils_str_equal(stock_id, GEANY_STOCK_SAVE_ALL))
+		return ui_new_pixbuf_from_inline(GEANY_IMAGE_SAVE_ALL);
+
+	return NULL;
+}
+
+
+GtkWidget *ui_new_image_from_inline(gint img)
 {
 	GtkWidget *wid;
 	GdkPixbuf *pb;
 
-	pb = ui_new_pixbuf_from_inline(img, small_img);
+	pb = ui_new_pixbuf_from_inline(img);
 	wid = gtk_image_new_from_pixbuf(pb);
 	g_object_unref(pb);	/* the image doesn't adopt our reference, so remove our ref. */
 	return wid;
@@ -895,35 +887,31 @@ GtkWidget *ui_new_image_from_inline(gint img, gboolean small_img)
 void ui_create_recent_menu(void)
 {
 	GtkWidget *tmp;
-	guint i;
+	guint i, len;
 	gchar *filename;
 
-	if (g_queue_get_length(ui_prefs.recent_queue) > 0)
-	{
-		gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(
-				lookup_widget(main_widgets.window, "toolbutton_open")), ui_widgets.recent_files_toolbar);
-	}
-
-	for (i = 0; i < MIN(file_prefs.mru_length, g_queue_get_length(ui_prefs.recent_queue)); i++)
+	len = MIN(file_prefs.mru_length, g_queue_get_length(ui_prefs.recent_queue));
+	for (i = 0; i < len; i++)
 	{
 		filename = g_queue_peek_nth(ui_prefs.recent_queue, i);
 		/* create menu item for the recent files menu in the menu bar */
 		tmp = gtk_menu_item_new_with_label(filename);
 		gtk_widget_show(tmp);
-		gtk_menu_shell_append(GTK_MENU_SHELL(ui_widgets.recent_files_menubar), tmp);
+		gtk_container_add(GTK_CONTAINER(ui_widgets.recent_files_menu_menubar), tmp);
 		g_signal_connect(tmp, "activate", G_CALLBACK(recent_file_activate_cb), NULL);
-		/* create menu item for the recent files menu in the toolbar bar */
-		tmp = gtk_menu_item_new_with_label(filename);
-		gtk_widget_show(tmp);
-		gtk_menu_shell_append(GTK_MENU_SHELL(ui_widgets.recent_files_toolbar), tmp);
-		g_signal_connect(tmp, "activate", G_CALLBACK(recent_file_activate_cb), NULL);
+		/* create menu item for the recent files menu in the toolbar */
+		if (ui_widgets.recent_files_menu_toolbar != NULL)
+		{
+			tmp = gtk_menu_item_new_with_label(filename);
+			gtk_widget_show(tmp);
+			gtk_container_add(GTK_CONTAINER(ui_widgets.recent_files_menu_toolbar), tmp);
+			g_signal_connect(tmp, "activate", G_CALLBACK(recent_file_activate_cb), NULL);
+		}
 	}
 }
 
 
-static void
-recent_file_activate_cb                (GtkMenuItem     *menuitem,
-                                        G_GNUC_UNUSED gpointer         user_data)
+static void recent_file_activate_cb(GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer user_data)
 {
 	gchar *utf8_filename = ui_menu_item_get_text(menuitem);
 	gchar *locale_filename = utils_get_locale_from_utf8(utf8_filename);
@@ -1007,82 +995,90 @@ static void recent_file_loaded(const gchar *utf8_filename)
 	g_queue_push_head(ui_prefs.recent_queue, data);
 
 	/* remove the old menuitem for the filename */
-	children = gtk_container_get_children(GTK_CONTAINER(ui_widgets.recent_files_menubar));
+	children = gtk_container_get_children(GTK_CONTAINER(ui_widgets.recent_files_menu_menubar));
 	item = g_list_find_custom(children, utf8_filename, (GCompareFunc) find_recent_file_item);
-	if (item != NULL) gtk_widget_destroy(GTK_WIDGET(item->data));
+	if (item != NULL)
+		gtk_widget_destroy(GTK_WIDGET(item->data));
 
-	children = gtk_container_get_children(GTK_CONTAINER(ui_widgets.recent_files_toolbar));
-	item = g_list_find_custom(children, utf8_filename, (GCompareFunc) find_recent_file_item);
-	if (item != NULL) gtk_widget_destroy(GTK_WIDGET(item->data));
-
+	if (ui_widgets.recent_files_menu_toolbar != NULL)
+	{
+		children = gtk_container_get_children(GTK_CONTAINER(ui_widgets.recent_files_menu_toolbar));
+		item = g_list_find_custom(children, utf8_filename, (GCompareFunc) find_recent_file_item);
+		if (item != NULL)
+			gtk_widget_destroy(GTK_WIDGET(item->data));
+	}
 	/* now prepend a new menuitem for the filename,
 	 * first for the recent files menu in the menu bar */
 	tmp = gtk_menu_item_new_with_label(utf8_filename);
 	gtk_widget_show(tmp);
-	gtk_menu_shell_prepend(GTK_MENU_SHELL(ui_widgets.recent_files_menubar), tmp);
+	gtk_menu_shell_prepend(GTK_MENU_SHELL(ui_widgets.recent_files_menu_menubar), tmp);
 	g_signal_connect(tmp, "activate", G_CALLBACK(recent_file_activate_cb), NULL);
 	/* then for the recent files menu in the tool bar */
-	tmp = gtk_menu_item_new_with_label(utf8_filename);
-	gtk_widget_show(tmp);
-	gtk_menu_shell_prepend(GTK_MENU_SHELL(ui_widgets.recent_files_toolbar), tmp);
-	g_signal_connect(tmp, "activate", G_CALLBACK(recent_file_activate_cb), NULL);
+	if (ui_widgets.recent_files_menu_toolbar != NULL)
+	{
+		tmp = gtk_menu_item_new_with_label(utf8_filename);
+		gtk_widget_show(tmp);
+		gtk_container_add(GTK_CONTAINER(ui_widgets.recent_files_menu_toolbar), tmp);
+		/* this is a bit ugly, but we need to use gtk_container_add(). Using
+		 * gtk_menu_shell_prepend() doesn't emit GtkContainer's "add" signal which we need in
+		 * GeanyMenubuttonAction */
+		gtk_menu_reorder_child(GTK_MENU(ui_widgets.recent_files_menu_toolbar), tmp, 0);
+		g_signal_connect(tmp, "activate", G_CALLBACK(recent_file_activate_cb), NULL);
+	}
 }
 
 
 static void update_recent_menu(void)
 {
 	GtkWidget *tmp;
-	static GtkMenuToolButton *menu = NULL;
 	gchar *filename;
 	GList *children, *item;
 
-	if (menu == NULL)
-		menu = GTK_MENU_TOOL_BUTTON(lookup_widget(main_widgets.window, "toolbutton_open"));
-
-	if (gtk_menu_tool_button_get_menu(menu) == NULL)
-	{
-		gtk_menu_tool_button_set_menu(menu, ui_widgets.recent_files_toolbar);
-	}
+	filename = g_queue_peek_head(ui_prefs.recent_queue);
 
 	/* clean the MRU list before adding an item (menubar) */
-	children = gtk_container_get_children(GTK_CONTAINER(ui_widgets.recent_files_menubar));
+	children = gtk_container_get_children(GTK_CONTAINER(ui_widgets.recent_files_menu_menubar));
 	if (g_list_length(children) > file_prefs.mru_length - 1)
 	{
 		item = g_list_nth(children, file_prefs.mru_length - 1);
 		while (item != NULL)
 		{
-			if (GTK_IS_MENU_ITEM(item->data)) gtk_widget_destroy(GTK_WIDGET(item->data));
+			if (GTK_IS_MENU_ITEM(item->data))
+				gtk_widget_destroy(GTK_WIDGET(item->data));
 			item = g_list_next(item);
 		}
 	}
-
-	/* clean the MRU list before adding an item (toolbar) */
-	children = gtk_container_get_children(GTK_CONTAINER(ui_widgets.recent_files_toolbar));
-	if (g_list_length(children) > file_prefs.mru_length - 1)
-	{
-		item = g_list_nth(children, file_prefs.mru_length - 1);
-		while (item != NULL)
-		{
-			if (GTK_IS_MENU_ITEM(item->data)) gtk_widget_destroy(GTK_WIDGET(item->data));
-			item = g_list_next(item);
-		}
-	}
-
-	filename = g_queue_peek_head(ui_prefs.recent_queue);
 	/* create item for the menu bar menu */
 	tmp = gtk_menu_item_new_with_label(filename);
 	gtk_widget_show(tmp);
-	gtk_menu_shell_prepend(GTK_MENU_SHELL(ui_widgets.recent_files_menubar), tmp);
+	gtk_menu_shell_prepend(GTK_MENU_SHELL(ui_widgets.recent_files_menu_menubar), tmp);
 	g_signal_connect(tmp, "activate", G_CALLBACK(recent_file_activate_cb), NULL);
-	/* create item for the tool bar menu */
-	tmp = gtk_menu_item_new_with_label(filename);
-	gtk_widget_show(tmp);
-	gtk_menu_shell_prepend(GTK_MENU_SHELL(ui_widgets.recent_files_toolbar), tmp);
-	g_signal_connect(tmp, "activate", G_CALLBACK(recent_file_activate_cb), NULL);
+
+	/* clean the MRU list before adding an item (toolbar) */
+	if (ui_widgets.recent_files_menu_toolbar != NULL)
+	{
+		children = gtk_container_get_children(GTK_CONTAINER(ui_widgets.recent_files_menu_toolbar));
+		if (g_list_length(children) > file_prefs.mru_length - 1)
+		{
+			item = g_list_nth(children, file_prefs.mru_length - 1);
+			while (item != NULL)
+			{
+				if (GTK_IS_MENU_ITEM(item->data))
+					gtk_widget_destroy(GTK_WIDGET(item->data));
+				item = g_list_next(item);
+			}
+		}
+		/* create item for the tool bar menu */
+		tmp = gtk_menu_item_new_with_label(filename);
+		gtk_widget_show(tmp);
+		gtk_container_add(GTK_CONTAINER(ui_widgets.recent_files_menu_toolbar), tmp);
+		gtk_menu_reorder_child(GTK_MENU(ui_widgets.recent_files_menu_toolbar), tmp, 0);
+		g_signal_connect(tmp, "activate", G_CALLBACK(recent_file_activate_cb), NULL);
+	}
 }
 
 
-void ui_show_markers_margin(void)
+void ui_toggle_editor_features(GeanyUIEditorFeatures feature)
 {
 	gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 	GeanyDocument *doc;
@@ -1090,21 +1086,38 @@ void ui_show_markers_margin(void)
 	for(i = 0; i < max; i++)
 	{
 		doc = document_get_from_page(i);
-		sci_set_symbol_margin(doc->editor->sci, editor_prefs.show_markers_margin);
+
+		switch (feature)
+		{
+			case GEANY_EDITOR_SHOW_MARKERS_MARGIN:
+				sci_set_symbol_margin(doc->editor->sci, editor_prefs.show_markers_margin);
+				break;
+			case GEANY_EDITOR_SHOW_LINE_NUMBERS:
+				sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
+				break;
+			case GEANY_EDITOR_SHOW_WHITE_SPACE:
+				sci_set_visible_white_spaces(doc->editor->sci, editor_prefs.show_white_space);
+				break;
+			case GEANY_EDITOR_SHOW_LINE_ENDINGS:
+				sci_set_visible_eols(doc->editor->sci, editor_prefs.show_line_endings);
+				break;
+			case GEANY_EDITOR_SHOW_INDENTATION_GUIDES:
+				editor_set_indentation_guides(doc->editor);
+				break;
+		}
 	}
 }
 
 
-void ui_show_linenumber_margin(void)
+void ui_update_view_editor_menu_items(void)
 {
-	gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
-	GeanyDocument *doc;
-
-	for(i = 0; i < max; i++)
-	{
-		doc = document_get_from_page(i);
-		sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
-	}
+	ignore_callback = TRUE;
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_markers_margin1")), editor_prefs.show_markers_margin);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_linenumber_margin1")), editor_prefs.show_linenumber_margin);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_white_space1")), editor_prefs.show_white_space);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_line_endings1")), editor_prefs.show_line_endings);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_indentation_guides1")), editor_prefs.show_indent_guide);
+	ignore_callback = FALSE;
 }
 
 
@@ -1176,6 +1189,55 @@ GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text)
 }
 
 
+/** Create a @c GtkImageMenuItem with a stock image and a custom label.
+ * @param stock_id Stock image ID, e.g. @c GTK_STOCK_OPEN.
+ * @param label Menu item label, can include mnemonics.
+ * @return The new @c GtkImageMenuItem.
+ *
+ *  @since 0.16
+ */
+GtkWidget *
+ui_image_menu_item_new(const gchar *stock_id, const gchar *label)
+{
+	GtkWidget *item = gtk_image_menu_item_new_with_mnemonic(label);
+	GtkWidget *image = gtk_image_new_from_stock(stock_id, GTK_ICON_SIZE_MENU);
+
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
+	gtk_widget_show(image);
+	return item;
+}
+
+
+static void entry_clear_icon_press_cb(GtkEntry *entry, gint icon_pos, GdkEvent *event, gpointer data)
+{
+	if (event->button.button == 1 && icon_pos == 1)
+	{
+		gtk_entry_set_text(entry, "");
+	}
+}
+
+
+/** Convenience function to add a small clear icon to the right end of the passed @a entry.
+ *  A callback to clear the contents of the GtkEntry is automatically added.
+ *
+ *  This feature is only available with GTK 2.16 but implemented as a runtime check,
+ *  so it is safe to just use this function, if the code is ran with older versions,
+ *  nothing happens. If ran with GTK 2.16 or newer, the icon is displayed.
+ *
+ * @param entry The GtkEntry object to which the icon should be attached.
+ *
+ *  @since 0.16
+ */
+void ui_entry_add_clear_icon(GtkWidget *entry)
+{
+	if (gtk_check_version(2, 15, 2) == NULL)
+	{
+		g_object_set(entry, "secondary-icon-stock", "gtk-clear", NULL);
+		g_signal_connect(entry, "icon-press", G_CALLBACK(entry_clear_icon_press_cb), NULL);
+	}
+}
+
+
 static void add_to_size_group(GtkWidget *widget, gpointer size_group)
 {
 	g_return_if_fail(GTK_IS_SIZE_GROUP(size_group));
@@ -1190,9 +1252,7 @@ void ui_hbutton_box_copy_layout(GtkButtonBox *master, GtkButtonBox *copy)
 {
 	GtkSizeGroup *size_group;
 
-	/* set_spacing is deprecated but there seems to be no alternative,
-	* GTK 2.6 defaults to no spacing, unlike dialog button box */
-	gtk_button_box_set_spacing(copy, 10);
+	gtk_box_set_spacing(GTK_BOX(copy), 10);
 	gtk_button_box_set_layout(copy, gtk_button_box_get_layout(master));
 
 	/* now we need to put the widest widget from each button box in a size group,
@@ -1237,17 +1297,42 @@ void ui_combo_box_add_to_history(GtkComboBox *combo, const gchar *text)
 }
 
 
+/* Same as gtk_combo_box_prepend_text(), except that text is only prepended if it not already
+ * exists in the combo's model. */
+void ui_combo_box_prepend_text_once(GtkComboBox *combo, const gchar *text)
+{
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	gchar *combo_text;
+	gboolean found = FALSE;
+
+	model = gtk_combo_box_get_model(combo);
+	if (gtk_tree_model_get_iter_first(model, &iter))
+	{
+		do
+		{
+			gtk_tree_model_get(model, &iter, 0, &combo_text, -1);
+			found = utils_str_equal(combo_text, text);
+			g_free(combo_text);
+		}
+		while (!found && gtk_tree_model_iter_next(model, &iter));
+	}
+	if (found)
+		return;	/* don't prepend duplicate */
+
+	gtk_combo_box_prepend_text(combo, text);
+}
+
+
 /* Changes the color of the notebook tab text and open files items according to
  * document status. */
 void ui_update_tab_status(GeanyDocument *doc)
 {
-	GdkColor *color = document_get_status_color(doc);
+	const GdkColor *color = document_get_status_color(doc);
 
 	/* NULL color will reset to default */
 	gtk_widget_modify_fg(doc->priv->tab_label, GTK_STATE_NORMAL, color);
 	gtk_widget_modify_fg(doc->priv->tab_label, GTK_STATE_ACTIVE, color);
-	gtk_widget_modify_fg(doc->priv->tabmenu_label, GTK_STATE_NORMAL, color);
-	gtk_widget_modify_fg(doc->priv->tabmenu_label, GTK_STATE_ACTIVE, color);
 
 	treeviews_openfiles_update(doc);
 }
@@ -1391,7 +1476,7 @@ void ui_setup_open_button_callback(GtkWidget *open_btn, const gchar *title,
 				(GDestroyNotify) g_free);
 	g_object_set_data(G_OBJECT(open_btn), "action", (gpointer) action);
 	g_object_set_data_full(G_OBJECT(open_btn), "entry",
-		gtk_widget_ref(path_entry), (GDestroyNotify) gtk_widget_unref);
+		g_object_ref(path_entry), (GDestroyNotify) g_object_unref);
 	g_signal_connect(open_btn, "clicked", G_CALLBACK(ui_path_box_open_clicked), open_btn);
 }
 
@@ -1420,7 +1505,7 @@ static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
 	{
 		gchar *dir_locale;
 
-		dir_locale = gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(dialog));
+		dir_locale = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
 		ret_path = utils_get_utf8_from_locale(dir_locale);
 		g_free(dir_locale);
 	}
@@ -1499,54 +1584,323 @@ void ui_table_add_row(GtkTable *table, gint row, ...)
 }
 
 
-void ui_init(void)
+static void on_config_file_clicked(GtkWidget *widget, gpointer user_data)
 {
-	ui_widgets.statusbar = lookup_widget(main_widgets.window, "statusbar");
-	ui_widgets.print_page_setup = lookup_widget(main_widgets.window, "page_setup1");
+	const gchar *file_name = user_data;
 
-	widgets.popup_goto_items[0] = lookup_widget(main_widgets.editor_menu, "goto_tag_definition1");
-	widgets.popup_goto_items[1] = lookup_widget(main_widgets.editor_menu, "goto_tag_declaration1");
-	widgets.popup_goto_items[2] = lookup_widget(main_widgets.editor_menu, "find_usage1");
-	widgets.popup_goto_items[3] = lookup_widget(main_widgets.editor_menu, "find_document_usage1");
-	widgets.popup_copy_items[0] = lookup_widget(main_widgets.editor_menu, "cut1");
-	widgets.popup_copy_items[1] = lookup_widget(main_widgets.editor_menu, "copy1");
-	widgets.popup_copy_items[2] = lookup_widget(main_widgets.editor_menu, "delete1");
-	widgets.menu_copy_items[0] = lookup_widget(main_widgets.window, "menu_cut1");
-	widgets.menu_copy_items[1] = lookup_widget(main_widgets.window, "menu_copy1");
-	widgets.menu_copy_items[2] = lookup_widget(main_widgets.window, "menu_delete1");
-	widgets.menu_insert_include_items[0] = lookup_widget(main_widgets.editor_menu, "insert_include1");
-	widgets.menu_insert_include_items[1] = lookup_widget(main_widgets.window, "insert_include2");
-	widgets.save_buttons[0] = lookup_widget(main_widgets.window, "menu_save1");
-	widgets.save_buttons[1] = lookup_widget(main_widgets.window, "toolbutton_save");
-	widgets.save_buttons[2] = lookup_widget(main_widgets.window, "menu_save_all1");
-	widgets.save_buttons[3] = lookup_widget(main_widgets.window, "toolbutton_saveall");
-	widgets.redo_items[0] = lookup_widget(main_widgets.editor_menu, "redo1");
-	widgets.redo_items[1] = lookup_widget(main_widgets.window, "menu_redo2");
-	widgets.redo_items[2] = lookup_widget(main_widgets.window, "toolbutton_redo");
-	widgets.undo_items[0] = lookup_widget(main_widgets.editor_menu, "undo1");
-	widgets.undo_items[1] = lookup_widget(main_widgets.window, "menu_undo2");
-	widgets.undo_items[2] = lookup_widget(main_widgets.window, "toolbutton_undo");
+	if (g_file_test(file_name, G_FILE_TEST_EXISTS))
+		document_open_file(file_name, FALSE, NULL, NULL);
+	else
+	{
+		gchar *utf8 = utils_get_utf8_from_locale(file_name);
+		gchar *base_name = g_path_get_basename(file_name);
+		gchar *global_file = g_build_filename(app->datadir, base_name, NULL);
+		gchar *global_content = NULL;
 
-	init_document_widgets();
+		/* if the requested file doesn't exist in the user's config dir, try loading the file
+		 * from the global data directory and use its contents for the newly created file */
+		if (g_file_test(global_file, G_FILE_TEST_EXISTS))
+			g_file_get_contents(global_file, &global_content, NULL, NULL);
+
+		document_new_file(utf8, NULL, global_content);
+		utils_free_pointers(4, utf8, base_name, global_file, global_content, NULL);
+	}
 }
 
 
-/** Returns the position for adding new toolbar items. The returned position can be used
- *  to add new toolbar items with @c gtk_toolbar_insert(). The toolbar object can be accessed
- *  with @a geany->main_widgets->toolbar.
- *  The position is always the last one before the Quit button (if it is shown).
- *
- *  @return The position for new toolbar items or @c -1 if an error occurred.
- */
-gint ui_get_toolbar_insert_position(void)
+/* @note You should connect to the "document-save" signal yourself to detect
+ * if the user has just saved the config file, reloading it. */
+void ui_add_config_file_menu_item(const gchar *real_path, const gchar *label, GtkContainer *parent)
 {
-	GtkWidget *quit = lookup_widget(main_widgets.window, "toolbutton_quit");
-	gint pos = gtk_toolbar_get_item_index(GTK_TOOLBAR(main_widgets.toolbar), GTK_TOOL_ITEM(quit));
+	GtkWidget *item;
 
-	if (pos > 0)
-		pos--; /* use one position before the real position of the quit button to place new
-				* items between the last separator and the quit button */
+	if (!parent)
+		parent = GTK_CONTAINER(widgets.config_files_menu);
 
-	return pos;
+	if (!label)
+	{
+		gchar *base_name;
+
+		base_name = g_path_get_basename(real_path);
+		item = gtk_menu_item_new_with_label(base_name);
+		g_free(base_name);
+	}
+	else
+		item = gtk_menu_item_new_with_mnemonic(label);
+
+	gtk_widget_show(item);
+	gtk_container_add(parent, item);
+	g_signal_connect(item, "activate", G_CALLBACK(on_config_file_clicked),
+		/* this memory is kept */
+		g_strdup(real_path));
+}
+
+
+static void create_config_files_menu(void)
+{
+	GtkWidget *menu, *item;
+
+	widgets.config_files_menu = menu = gtk_menu_new();
+
+	item = ui_image_menu_item_new(GTK_STOCK_FILE, _("C_onfiguration Files"));
+	gtk_widget_show(item);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), menu);
+	gtk_container_add(GTK_CONTAINER(main_widgets.tools_menu), item);
+}
+
+
+static void add_stock_items(void)
+{
+	GtkIconSet *icon_set;
+	GtkIconFactory *factory = gtk_icon_factory_new();
+	GdkPixbuf *pb;
+	gsize i, len;
+	GtkStockItem items[] =
+	{
+		{ GEANY_STOCK_SAVE_ALL, _("Save All"), 0, 0, GETTEXT_PACKAGE },
+		{ GEANY_STOCK_CLOSE_ALL, _("Close All"), 0, 0, GETTEXT_PACKAGE },
+		{ GEANY_STOCK_BUILD, _("Build"), 0, 0, GETTEXT_PACKAGE }
+	};
+
+	len = G_N_ELEMENTS(items);
+	for (i = 0; i < len; i++)
+	{
+		pb = ui_new_pixbuf_from_stock(items[i].stock_id);
+		icon_set = gtk_icon_set_new_from_pixbuf(pb);
+
+		gtk_icon_factory_add(factory, items[i].stock_id, icon_set);
+
+		gtk_icon_set_unref(icon_set);
+		g_object_unref(pb);
+	}
+	gtk_stock_add((GtkStockItem *) items, len);
+	gtk_icon_factory_add_default(factory);
+	g_object_unref(factory);
+}
+
+
+void ui_init(void)
+{
+	add_stock_items();
+
+	ui_widgets.statusbar = ui_lookup_widget(main_widgets.window, "statusbar");
+	ui_widgets.print_page_setup = ui_lookup_widget(main_widgets.window, "page_setup1");
+
+	main_widgets.progressbar = progress_bar_create();
+
+	widgets.popup_goto_items[0] = ui_lookup_widget(main_widgets.editor_menu, "goto_tag_definition1");
+	widgets.popup_goto_items[1] = ui_lookup_widget(main_widgets.editor_menu, "goto_tag_declaration1");
+	widgets.popup_goto_items[2] = ui_lookup_widget(main_widgets.editor_menu, "find_usage1");
+	widgets.popup_goto_items[3] = ui_lookup_widget(main_widgets.editor_menu, "find_document_usage1");
+	widgets.popup_copy_items[0] = ui_lookup_widget(main_widgets.editor_menu, "cut1");
+	widgets.popup_copy_items[1] = ui_lookup_widget(main_widgets.editor_menu, "copy1");
+	widgets.popup_copy_items[2] = ui_lookup_widget(main_widgets.editor_menu, "delete1");
+	widgets.menu_copy_items[0] = ui_lookup_widget(main_widgets.window, "menu_cut1");
+	widgets.menu_copy_items[1] = ui_lookup_widget(main_widgets.window, "menu_copy1");
+	widgets.menu_copy_items[2] = ui_lookup_widget(main_widgets.window, "menu_delete1");
+	widgets.menu_insert_include_items[0] = ui_lookup_widget(main_widgets.editor_menu, "insert_include1");
+	widgets.menu_insert_include_items[1] = ui_lookup_widget(main_widgets.window, "insert_include2");
+	widgets.save_buttons[0] = ui_lookup_widget(main_widgets.window, "menu_save1");
+	widgets.save_buttons[1] = toolbar_get_widget_by_name("Save");
+	widgets.save_buttons[2] = ui_lookup_widget(main_widgets.window, "menu_save_all1");
+	widgets.save_buttons[3] = toolbar_get_widget_by_name("SaveAll");
+	widgets.redo_items[0] = ui_lookup_widget(main_widgets.editor_menu, "redo1");
+	widgets.redo_items[1] = ui_lookup_widget(main_widgets.window, "menu_redo2");
+	widgets.redo_items[2] = toolbar_get_widget_by_name("Redo");
+	widgets.undo_items[0] = ui_lookup_widget(main_widgets.editor_menu, "undo1");
+	widgets.undo_items[1] = ui_lookup_widget(main_widgets.window, "menu_undo2");
+	widgets.undo_items[2] = toolbar_get_widget_by_name("Undo");
+
+	init_document_widgets();
+	create_config_files_menu();
+	toolbar_add_config_file_menu_item();
+}
+
+
+static void auto_separator_update(GeanyAutoSeparator *autosep)
+{
+	g_return_if_fail(autosep->ref_count >= 0);
+
+	if (autosep->widget)
+		ui_widget_show_hide(autosep->widget, autosep->ref_count > 0);
+}
+
+
+static void on_auto_separator_item_show_hide(GtkWidget *widget, gpointer user_data)
+{
+	GeanyAutoSeparator *autosep = user_data;
+
+	if (GTK_WIDGET_VISIBLE(widget))
+		autosep->ref_count++;
+	else
+		autosep->ref_count--;
+
+	auto_separator_update(autosep);
+}
+
+
+static void on_auto_separator_item_destroy(GtkWidget *widget, gpointer user_data)
+{
+	GeanyAutoSeparator *autosep = user_data;
+
+	/* GTK_WIDGET_VISIBLE won't work now the widget is being destroyed,
+	 * so assume widget was visible */
+	autosep->ref_count--;
+	autosep->ref_count = MAX(autosep->ref_count, 0);
+	auto_separator_update(autosep);
+}
+
+
+/* Show the separator widget if @a item or another is visible. */
+/* Note: This would be neater taking a widget argument, setting a "visible-count"
+ * property, and using reference counting to keep the widget alive whilst its visible group
+ * is alive. */
+void ui_auto_separator_add_ref(GeanyAutoSeparator *autosep, GtkWidget *item)
+{
+	/* set widget ptr NULL when widget destroyed */
+	if (autosep->ref_count == 0)
+		g_signal_connect(autosep->widget, "destroy",
+			G_CALLBACK(gtk_widget_destroyed), &autosep->widget);
+
+	if (GTK_WIDGET_VISIBLE(item))
+	{
+		autosep->ref_count++;
+		auto_separator_update(autosep);
+	}
+	g_signal_connect(item, "show", G_CALLBACK(on_auto_separator_item_show_hide), autosep);
+	g_signal_connect(item, "hide", G_CALLBACK(on_auto_separator_item_show_hide), autosep);
+	g_signal_connect(item, "destroy", G_CALLBACK(on_auto_separator_item_destroy), autosep);
+}
+
+
+/**
+ *  Sets @a text as the contents of the tooltip for @a widget.
+ *
+ *  @param widget The widget the tooltip should be set for.
+ *  @param text The text for the tooltip.
+ *
+ *  @since 0.16
+ */
+void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text)
+{
+#if GTK_CHECK_VERSION(2, 12, 0)
+	gtk_widget_set_tooltip_text(widget, text);
+#else
+	static GtkTooltips *tooltips = NULL;
+
+	if (tooltips == NULL)
+		tooltips = GTK_TOOLTIPS(ui_lookup_widget(main_widgets.window, "tooltips"));
+
+	gtk_tooltips_set_tip(tooltips, widget, text, NULL);
+#endif
+}
+
+
+/** This function returns a widget from a name in a component, usually created by Glade.
+ * Call it with the toplevel widget in the component (i.e. a window/dialog),
+ * or alternatively any widget in the component, and the name of the widget
+ * you want returned.
+ * @param widget Widget with the @a widget_name property set.
+ * @param widget_name Name to lookup.
+ * @return The widget found.
+ * @see ui_hookup_widget().
+ *
+ *  @since 0.16
+ */
+GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name)
+{
+	GtkWidget *parent, *found_widget;
+
+	for (;;)
+	{
+		if (GTK_IS_MENU(widget))
+			parent = gtk_menu_get_attach_widget(GTK_MENU(widget));
+		else
+			parent = widget->parent;
+		if (parent == NULL)
+			parent = (GtkWidget*) g_object_get_data(G_OBJECT(widget), "GladeParentKey");
+		if (parent == NULL)
+			break;
+		widget = parent;
+	}
+
+	found_widget = (GtkWidget*) g_object_get_data(G_OBJECT(widget), widget_name);
+	if (found_widget == NULL)
+		g_warning("Widget not found: %s", widget_name);
+	return found_widget;
+}
+
+
+
+/* Progress Bar */
+static guint progress_bar_timer_id = (guint) -1;
+
+
+static GtkWidget *progress_bar_create(void)
+{
+	GtkWidget *bar = gtk_progress_bar_new();
+
+    /* Set the progressbar's height to 1 to fit it in the statusbar */
+    gtk_widget_set_size_request(bar, -1, 1);
+    gtk_box_pack_start (GTK_BOX(ui_widgets.statusbar), bar, FALSE, FALSE, 3);
+
+	return bar;
+}
+
+
+static gboolean progress_bar_pulse(gpointer data)
+{
+	gtk_progress_bar_pulse(GTK_PROGRESS_BAR(main_widgets.progressbar));
+
+	return TRUE;
+}
+
+
+/**
+ * Starts a constantly pulsing progressbar in the right corner of the statusbar
+ * (if the statusbar is visible). This is a convenience function which adds a timer to
+ * pulse the progressbar constantly until ui_progress_bar_stop() is called.
+ * You can use this function when you have time consuming asynchronous operation and want to
+ * display some activity in the GUI and when you don't know about detailed progress steps.
+ * The progressbar widget is hidden by default when it is not active. This function and
+ * ui_progress_bar_stop() will show and hide it automatically for you.
+ *
+ * You can also access the progressbar widget directly using @c geany->main_widgets->progressbar
+ * and use the GtkProgressBar API to set discrete fractions to display better progress information.
+ * In this case, you need to show and hide the widget yourself. You can find some example code
+ * in @c src/printing.c.
+ *
+ * @param text The text to be shown as the progress bar label or NULL to leave it empty.
+ *
+ *  @since 0.16
+ **/
+void ui_progress_bar_start(const gchar *text)
+{
+	g_return_if_fail(progress_bar_timer_id == (guint) -1);
+
+	if (! interface_prefs.statusbar_visible)
+		return;
+
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(main_widgets.progressbar), text);
+
+	progress_bar_timer_id = g_timeout_add(200, progress_bar_pulse, NULL);
+
+	gtk_widget_show(GTK_WIDGET(main_widgets.progressbar));
+}
+
+
+/** Stops a running progress bar and hides the widget again.
+ *
+ *  @since 0.16
+ **/
+void ui_progress_bar_stop(void)
+{
+	gtk_widget_hide(GTK_WIDGET(main_widgets.progressbar));
+
+	if (progress_bar_timer_id != (guint) -1)
+	{
+		g_source_remove(progress_bar_timer_id);
+		progress_bar_timer_id = (guint) -1;
+	}
 }
 

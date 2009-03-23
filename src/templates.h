@@ -1,8 +1,8 @@
 /*
  *      templates.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -67,7 +67,8 @@ gchar *templates_get_template_function(gint filetype_idx, const gchar *func_name
 
 gchar *templates_get_template_licence(gint filetype_idx, gint licence_type);
 
-gchar *templates_replace_all(gchar *source, const gchar *year, const gchar *date);
+void templates_replace_all(GString *source, const gchar *year, const gchar *date,
+						   const gchar *datetime);
 
 void templates_free_templates(void);
 

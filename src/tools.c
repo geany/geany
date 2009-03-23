@@ -1,8 +1,8 @@
 /*
  *      tools.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -76,6 +76,7 @@ static void cc_add_command(struct cc_dialog *cc, gint idx)
 	entry = gtk_entry_new();
 	if (idx >= 0)
 		gtk_entry_set_text(GTK_ENTRY(entry), ui_prefs.custom_commands[idx]);
+	ui_entry_add_clear_icon(entry);
 	gtk_entry_set_max_length(GTK_ENTRY(entry), 255);
 	gtk_entry_set_width_chars(GTK_ENTRY(entry), 30);
 	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
@@ -112,7 +113,7 @@ static gboolean cc_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 			}
 			if (err != NULL)
 			{
-				geany_debug("%s: %s", __func__, err->message);
+				geany_debug("%s: %s", G_STRFUNC, err->message);
 				g_error_free(err);
 				err = NULL;
 			}
@@ -120,7 +121,7 @@ static gboolean cc_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 
 		if (rv != G_IO_STATUS_EOF)
 		{	/* Something went wrong? */
-			g_warning("%s: %s\n", __func__, "Incomplete command output");
+			g_warning("%s: %s\n", G_STRFUNC, "Incomplete command output");
 		}
 	}
 	return FALSE;
@@ -274,7 +275,7 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 			wrote = write(stdin_fd, sel, remaining);
 			if (wrote < 0)
 			{
-				g_warning("%s: %s: %s\n", __func__, "Failed sending data to command",
+				g_warning("%s: %s: %s\n", G_STRFUNC, "Failed sending data to command",
 										g_strerror(errno));
 				break;
 			}
@@ -322,7 +323,8 @@ static void cc_show_dialog_custom_commands(void)
 	}
 	else
 	{
-		for (i = 0; i < g_strv_length(ui_prefs.custom_commands); i++)
+		guint len = g_strv_length(ui_prefs.custom_commands);
+		for (i = 0; i < len; i++)
 		{
 			if (ui_prefs.custom_commands[i][0] == '\0')
 				continue; /* skip empty fields */
@@ -481,8 +483,8 @@ static void cc_insert_custom_command_items(GtkMenu *me, GtkMenu *mp, gchar *labe
 
 void tools_create_insert_custom_command_menu_items(void)
 {
-	GtkMenu *menu_edit = GTK_MENU(lookup_widget(main_widgets.window, "send_selection_to2_menu"));
-	GtkMenu *menu_popup = GTK_MENU(lookup_widget(main_widgets.editor_menu, "send_selection_to1_menu"));
+	GtkMenu *menu_edit = GTK_MENU(ui_lookup_widget(main_widgets.window, "send_selection_to2_menu"));
+	GtkMenu *menu_popup = GTK_MENU(ui_lookup_widget(main_widgets.editor_menu, "send_selection_to1_menu"));
 	GtkWidget *item;
 	GList *me_children;
 	GList *mp_children;
@@ -514,9 +516,10 @@ void tools_create_insert_custom_command_menu_items(void)
 	}
 	else
 	{
-		guint i;
+		guint i, len;
 		gint idx = 0;
-		for (i = 0; i < g_strv_length(ui_prefs.custom_commands); i++)
+		len = g_strv_length(ui_prefs.custom_commands);
+		for (i = 0; i < len; i++)
 		{
 			if (ui_prefs.custom_commands[i][0] != '\0') /* skip empty fields */
 			{
@@ -538,9 +541,9 @@ void tools_create_insert_custom_command_menu_items(void)
 
 	if (! signal_set)
 	{
-		g_signal_connect(lookup_widget(main_widgets.editor_menu, "send_selection_to1"),
+		g_signal_connect(ui_lookup_widget(main_widgets.editor_menu, "send_selection_to1"),
 					"activate", G_CALLBACK(cc_on_custom_command_menu_activate), menu_popup);
-		g_signal_connect(lookup_widget(main_widgets.window, "send_selection_to2"),
+		g_signal_connect(ui_lookup_widget(main_widgets.window, "send_selection_to2"),
 					"activate", G_CALLBACK(cc_on_custom_command_menu_activate), menu_edit);
 		signal_set = TRUE;
 	}

@@ -1,8 +1,8 @@
 /*
  *      ui_utils.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -24,11 +24,23 @@
 #ifndef GEANY_UI_UTILS_H
 #define GEANY_UI_UTILS_H 1
 
+/** Set a name to lookup @a widget from @a owner.
+ * @param owner Usually a @c GtkWindow.
+ * @param widget Widget.
+ * @param widget_name Name.
+ * @see ui_lookup_widget().
+ *
+ *  @since 0.16
+ **/
+#define ui_hookup_widget(owner, widget, widget_name) \
+	g_object_set_data_full(G_OBJECT(owner), widget_name, \
+		g_object_ref(widget), (GDestroyNotify)g_object_unref);
+
+
 typedef struct GeanyInterfacePrefs
 {
 	gboolean		sidebar_symbol_visible;
 	gboolean		sidebar_openfiles_visible;
-	gboolean		sidebar_openfiles_fullpath;
 	gchar			*editor_font;
 	gchar			*tagbar_font;
 	gchar			*msgwin_font;
@@ -38,31 +50,12 @@ typedef struct GeanyInterfacePrefs
 	gint			tab_pos_sidebar;
 	gboolean		statusbar_visible;
 	gboolean		show_symbol_list_expanders;
+	gboolean		notebook_double_click_hides_widgets;
+	gboolean		highlighting_invert_all;
 }
 GeanyInterfacePrefs;
 
 extern GeanyInterfacePrefs interface_prefs;
-
-
-typedef struct GeanyToolbarPrefs
-{
-	gboolean		visible;
-	gboolean		show_search;
-	gboolean		show_goto;
-	gboolean		show_undo;
-	gboolean		show_navigation;
-	gboolean		show_compile;
-	gboolean		show_zoom;
-	gboolean		show_indent;
-	gboolean		show_colour;
-	gboolean		show_fileops;
-	gboolean		show_quit;
-	GtkIconSize		icon_size;
-	gint			icon_style;
-}
-GeanyToolbarPrefs;
-
-extern GeanyToolbarPrefs toolbar_prefs;
 
 
 /** Important widgets in the main window. */
@@ -74,6 +67,9 @@ typedef struct GeanyMainWidgets
 	GtkWidget			*notebook;			/**< Document notebook. */
 	GtkWidget			*editor_menu;		/**< Popup editor menu. */
 	GtkWidget			*tools_menu;		/**< Most plugins add menu items to the Tools menu. */
+	GtkWidget			*progressbar;		/**< Progress bar widget in the status bar to show
+	                                             progress of various actions.
+												 See ui_progress_bar_start() for details. */
 }
 GeanyMainWidgets;
 
@@ -88,6 +84,7 @@ typedef struct UIPrefs
 	gboolean	fullscreen;
 	gboolean	sidebar_visible;
 	gboolean	msgwindow_visible;
+	gboolean	allow_always_save; /* if set, files can always be saved, even if unchanged */
 
 	/* Menu-item related data */
 	GQueue		*recent_queue;
@@ -106,8 +103,8 @@ typedef struct UIWidgets
 	GtkWidget	*toolbar_menu;
 	GtkWidget	*new_file_menu;
 	GtkWidget	*recent_files_menuitem;
-	GtkWidget	*recent_files_menubar;
-	GtkWidget	*recent_files_toolbar;
+	GtkWidget	*recent_files_menu_menubar;
+	GtkWidget	*recent_files_menu_toolbar;
 	GtkWidget	*print_page_setup;
 
 	/* dialogs */
@@ -125,8 +122,40 @@ UIWidgets;
 extern UIWidgets ui_widgets;
 
 
-/* The following block of functions are more generic functions and closely related to
+/* The following block of types & functions are more generic and closely related to
  * certain GTK+ widgets. */
+
+typedef struct GeanyAutoSeparator
+{
+	GtkWidget	*widget;	/* e.g. GtkSeparatorToolItem, GtkSeparatorMenuItem */
+	gint		ref_count;	/* set to zero initially */
+}
+GeanyAutoSeparator;
+
+
+typedef enum
+{
+	GEANY_EDITOR_SHOW_MARKERS_MARGIN,
+	GEANY_EDITOR_SHOW_LINE_NUMBERS,
+	GEANY_EDITOR_SHOW_WHITE_SPACE,
+	GEANY_EDITOR_SHOW_INDENTATION_GUIDES,
+	GEANY_EDITOR_SHOW_LINE_ENDINGS
+}
+GeanyUIEditorFeatures;
+
+
+#define GEANY_STOCK_SAVE_ALL "geany-save-all"
+#define GEANY_STOCK_CLOSE_ALL "geany-close-all"
+#define GEANY_STOCK_BUILD "geany-build"
+
+enum
+{
+	GEANY_IMAGE_LOGO,
+	GEANY_IMAGE_SAVE_ALL,
+	GEANY_IMAGE_CLOSE_ALL,
+	GEANY_IMAGE_BUILD
+};
+
 
 void ui_widget_show_hide(GtkWidget *widget, gboolean show);
 
@@ -140,9 +169,13 @@ GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog);
 
 GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text);
 
+GtkWidget *ui_image_menu_item_new(const gchar *stock_id, const gchar *label);
+
 void ui_hbutton_box_copy_layout(GtkButtonBox *master, GtkButtonBox *copy);
 
 void ui_combo_box_add_to_history(GtkComboBox *combo, const gchar *text);
+
+void ui_combo_box_prepend_text_once(GtkComboBox *combo, const gchar *text);
 
 GtkWidget *ui_path_box_new(const gchar *title, GtkFileChooserAction action, GtkEntry *entry);
 
@@ -151,10 +184,23 @@ void ui_setup_open_button_callback(GtkWidget *open_btn, const gchar *title,
 
 void ui_table_add_row(GtkTable *table, gint row, ...) G_GNUC_NULL_TERMINATED;
 
+void ui_auto_separator_add_ref(GeanyAutoSeparator *autosep, GtkWidget *item);
+
+void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text);
+
+GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name);
+
+void ui_widget_set_sensitive(GtkWidget *widget, gboolean set);
+
+void ui_entry_add_clear_icon(GtkWidget *entry);
+
 /* End of 'generic' functions */
 
 
 void ui_init(void);
+
+void ui_add_config_file_menu_item(const gchar *real_path, const gchar *label,
+		GtkContainer *parent);
 
 
 void ui_set_statusbar(gboolean log, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
@@ -198,25 +244,17 @@ void ui_sidebar_show_hide(void);
 
 void ui_document_show_hide(GeanyDocument *doc);
 
-
-void ui_update_toolbar_icons(GtkIconSize size);
-
-void ui_update_toolbar_items(void);
+void ui_set_search_entry_background(GtkWidget *widget, gboolean success);
 
 
-GdkPixbuf *ui_new_pixbuf_from_inline(gint img, gboolean small_img);
+GdkPixbuf *ui_new_pixbuf_from_inline(gint img);
 
-GtkWidget *ui_new_image_from_inline(gint img, gboolean small_img);
+GtkWidget *ui_new_image_from_inline(gint img);
 
 
 void ui_create_recent_menu(void);
 
 void ui_add_recent_file(const gchar *utf8_filename);
-
-
-void ui_show_markers_margin(void);
-
-void ui_show_linenumber_margin(void);
 
 
 void ui_update_tab_status(GeanyDocument *doc);
@@ -231,6 +269,14 @@ gboolean ui_tree_view_find_previous(GtkTreeView *treeview, TVMatchCallback cb);
 
 void ui_statusbar_showhide(gboolean state);
 
-gint ui_get_toolbar_insert_position(void);
+void ui_add_document_sensitive(GtkWidget *widget);
+
+void ui_toggle_editor_features(GeanyUIEditorFeatures feature);
+
+void ui_update_view_editor_menu_items(void);
+
+void ui_progress_bar_start(const gchar *text);
+
+void ui_progress_bar_stop(void);
 
 #endif

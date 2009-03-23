@@ -33,6 +33,7 @@
 #define getInputLineNumber()	File.lineNumber
 #define getInputFileName()	vStringValue (File.source.name)
 #define getInputFilePosition()	File.filePosition
+#define getInputBufferPosition()	File.fpBufferPosition
 #define getSourceFileName()	vStringValue (File.source.name)
 #define getSourceFileTagPath()	File.source.tagPath
 #define getSourceLanguage()	File.source.language
@@ -73,6 +74,10 @@ typedef struct sInputFile {
     vString	*line;		/* last line read from file */
     const unsigned char* currentLine;	/* current line being worked on */
     FILE	*fp;		/* stream used for reading the file */
+    unsigned char* fpBuffer;	/* buffer which contains the text to be parsed.
+				   This is optional to the use of a file-descriptor */
+    int fpBufferSize;		/* size of the fpBuffer */
+    int fpBufferPosition;	/* pointer to the current position in buffer */
     unsigned long lineNumber;	/* line number in the input file */
     fpos_t	filePosition;	/* file position of current line */
     int		ungetch;	/* a single character that was ungotten */
@@ -115,6 +120,13 @@ extern void fileUngetc (int c);
 extern const unsigned char *fileReadLine (void);
 extern char *readLine (vString *const vLine, FILE *const fp);
 extern char *readSourceLine (vString *const vLine, fpos_t location, long *const pSeekValue);
+
+extern boolean bufferOpen (unsigned char *buffer, int buffer_size,
+			   const char *const fileName, const langType language );
+extern void bufferClose (void);
+extern void setBufPos (int new_position);
+extern int getBufPos (void);
+extern boolean useFile (void);
 
 #endif	/* _READ_H */
 

@@ -1,3 +1,4 @@
+# format=pipe
 arc||(X: SmallInt, Y: SmallInt, StAngle: Word, EndAngle: Word, Radius: Word)|
 assigncrt||(File: Text)|
 bar||(x1: SmallInt; y1: SmallInt; x2: SmallInt; y2: SmallInt)|

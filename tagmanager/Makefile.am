@@ -11,6 +11,13 @@ INCLUDES = -I$(srcdir)/include $(GTK_CFLAGS)
 EXTRA_DIST = regex.c
 
 noinst_LIBRARIES = libtagmanager.a
+
+if USE_INCLUDED_REGEX
+regex_sources = regex.c
+else
+regex_sources =
+endif
+
 libtagmanager_a_SOURCES =\
 	general.h\
 	keyword.h\
@@ -42,6 +49,7 @@ libtagmanager_a_SOURCES =\
 	asm.c\
 	latex.c\
 	lregex.c\
+	matlab.c\
 	pascal.c\
 	perl.c\
 	rest.c\
@@ -52,6 +60,7 @@ libtagmanager_a_SOURCES =\
 	tcl.c\
 	sh.c\
 	vhdl.c\
+	actionscript.c\
 	ctags.c\
 	entry.c\
 	get.c\
@@ -70,8 +79,6 @@ libtagmanager_a_SOURCES =\
 	tm_tag.c\
 	tm_symbol.c\
 	tm_file_entry.c\
-	tm_tagmanager.c
+	tm_tagmanager.c \
+	$(regex_sources)
 
-if USE_INCLUDED_REGEX
-libtagmanager_a_SOURCES += regex.c
-endif

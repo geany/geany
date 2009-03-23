@@ -1,8 +1,8 @@
 /*
  *      treeviews.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -41,7 +41,8 @@ enum
 {
 	SYMBOLS_COLUMN_ICON,
 	SYMBOLS_COLUMN_NAME,
-	SYMBOLS_COLUMN_LINE,
+	SYMBOLS_COLUMN_TAG,
+	SYMBOLS_COLUMN_TOOLTIP,
 	SYMBOLS_N_COLUMNS
 };
 
@@ -58,5 +59,7 @@ void treeviews_openfiles_update_all(void);
 void treeviews_select_openfiles_item(GeanyDocument *doc);
 
 void treeviews_remove_document(GeanyDocument *doc);
+
+void sidebar_add_common_menu_items(GtkMenu *menu);
 
 #endif

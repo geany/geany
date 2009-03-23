@@ -1,8 +1,8 @@
 /*
  *      filetypes.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -36,7 +36,9 @@
 typedef enum
 {
 	/* normally compiled languages */
-	GEANY_FILETYPES_ASM = 0,
+	GEANY_FILETYPES_ADA = 0,
+	GEANY_FILETYPES_AS,
+	GEANY_FILETYPES_ASM,
 	GEANY_FILETYPES_C,
 	GEANY_FILETYPES_H,
 	GEANY_FILETYPES_CPP,
@@ -52,6 +54,7 @@ typedef enum
 	GEANY_FILETYPES_HAXE,
 	GEANY_FILETYPES_JAVA,
 	GEANY_FILETYPES_PASCAL,
+	GEANY_FILETYPES_VALA,
 	GEANY_FILETYPES_VHDL,
 
 	/* script languages */
@@ -59,7 +62,7 @@ typedef enum
 	GEANY_FILETYPES_JS,
 	GEANY_FILETYPES_LUA,
 	GEANY_FILETYPES_MAKE,
-	GEANY_FILETYPES_OMS,
+	GEANY_FILETYPES_MATLAB,
 	GEANY_FILETYPES_PERL,
 	GEANY_FILETYPES_PHP,
 	GEANY_FILETYPES_PYTHON,
@@ -68,19 +71,22 @@ typedef enum
 	GEANY_FILETYPES_SH,
 	GEANY_FILETYPES_TCL,
 
-	/* markup langauges */
+	/* markup languages */
 	GEANY_FILETYPES_CSS,
 	GEANY_FILETYPES_DOCBOOK,
 	GEANY_FILETYPES_HTML,
- 	GEANY_FILETYPES_XML,
+	GEANY_FILETYPES_XML,
 
 	/* miscellaneous languages */
+	GEANY_FILETYPES_CMAKE,
 	GEANY_FILETYPES_CONF,
 	GEANY_FILETYPES_DIFF,
+	GEANY_FILETYPES_NSIS,
+	GEANY_FILETYPES_PO,
 	GEANY_FILETYPES_LATEX,
 	GEANY_FILETYPES_REST,
 	GEANY_FILETYPES_SQL,
-	GEANY_FILETYPES_PO,
+	GEANY_FILETYPES_YAML,
 
 	GEANY_FILETYPES_NONE,	/* must be last filetype */
 	GEANY_MAX_BUILT_IN_FILETYPES	/* Use filetypes_array->len instead */
@@ -154,6 +160,10 @@ GeanyFiletype *filetypes_lookup_by_name(const gchar *name);
 void filetypes_init(void);
 
 void filetypes_init_types(void);
+
+void filetypes_read_extensions(void);
+
+GeanyFiletype *filetypes_index(gint idx);
 
 GeanyFiletype *filetypes_detect_from_document(GeanyDocument *doc);
 

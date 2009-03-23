@@ -5,7 +5,7 @@ default=0x000000;0xffffff;false;false
 
 # 3rd selection argument is true to override default foreground
 # 4th selection argument is true to override default background
-selection=0xc0c0c0;0x7f0000;false;false
+selection=0x000000;0xc0c0c0;false;false
 
 # style for a matching brace
 brace_good=0x0000ff;0xFFFFFF;true;false
@@ -51,7 +51,7 @@ indent_guide=0xc0c0c0;0xffffff;false;false
 
 # third argument: if true, use this foreground color. If false, use the default value defined by the filetypes.
 # fourth argument: if true, use this background color. If false, use the default value defined by the filetypes.
-white_space=0xc0c0c0;0xffffff;true;true
+white_space=0xc0c0c0;0xffffff;true;false
 
 # style of folding icons, only first and second arguments are used, valid values are:
 # first argument:  1 for boxes, 2 for circles

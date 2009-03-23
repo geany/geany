@@ -3,7 +3,7 @@
 
 
 EXTRA_DIST = images.c gb.c win32.c win32.h plugindata.h \
-	documentprivate.h
+	documentprivate.h projectprivate.h
 
 bin_PROGRAMS = geany
 
@@ -16,6 +16,8 @@ SRCS = \
 	editor.c editor.h \
 	encodings.c encodings.h \
 	filetypes.c filetypes.h \
+	geanyentryaction.c geanyentryaction.h \
+	geanymenubuttonaction.c geanymenubuttonaction.h \
 	geanyobject.c geanyobject.h \
 	geanywraplabel.c geanywraplabel.h \
 	highlighting.c highlighting.h \
@@ -32,19 +34,22 @@ SRCS = \
 	prefs.c prefs.h \
 	printing.c printing.h \
 	project.c project.h \
+	queue.c queue.h \
 	sciwrappers.c sciwrappers.h \
 	search.c search.h \
 	socket.c socket.h \
-	support.c support.h \
+	stash.c stash.h \
+	support.h \
 	symbols.c symbols.h \
 	templates.c templates.h \
+	toolbar.c toolbar.h \
 	tools.c tools.h \
 	treeviews.c treeviews.h \
 	ui_utils.c ui_utils.h \
 	utils.c utils.h
 
 
-geany_includedir = $(includedir)/geany/
+geany_includedir = $(includedir)/geany
 geany_include_HEADERS = \
 	dialogs.h \
 	document.h \
@@ -54,6 +59,7 @@ geany_include_HEADERS = \
 	highlighting.h \
 	keybindings.h \
 	geany.h \
+	main.h \
 	msgwindow.h \
 	plugins.h \
 	plugindata.h \
@@ -63,21 +69,23 @@ geany_include_HEADERS = \
 	search.h \
 	support.h \
 	templates.h \
+	toolbar.h \
 	ui_utils.h \
 	utils.h
 
 
-INCLUDES = -I$(srcdir)/../scintilla/include -I$(srcdir)/../tagmanager/include @GTK_CFLAGS@
+INCLUDES = -I$(srcdir)/../scintilla/include -I$(srcdir)/../tagmanager/include @GTK_CFLAGS@ @GIO_CFLAGS@
 
 # tell automake we have a C++ file so it uses the C++ linker we need for Scintilla
 nodist_EXTRA_geany_SOURCES = dummy.cxx
+
 
 if MINGW
 # build Geany for Windows on non-Windows systems (cross-compile)
 
 geany_SOURCES = $(SRCS) win32.c win32.h
 
-geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a @GTK_LIBS@ $(INTLLIBS) \
+geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a @GTK_LIBS@ @GIO_LIBS@ $(INTLLIBS) \
 			  -lkernel32 -limm32 -lshfolder -lshell32 -lole32 -luuid -lcomdlg32 \
 			  -lcomctl32 -liberty -lwsock32 geany_private.res
 
@@ -102,7 +110,7 @@ else
 
 geany_SOURCES = $(SRCS) vte.c vte.h
 
-geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a @GTK_LIBS@  $(INTLLIBS)
+geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a @GTK_LIBS@ @GIO_LIBS@ $(INTLLIBS)
 
 AM_CFLAGS = -DGEANY_DATADIR=\""$(datadir)"\" \
 			-DGEANY_DOCDIR=\""$(docdir)"\" \

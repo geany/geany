@@ -8,6 +8,7 @@ header=0x7f0000;0xffffff;false;false
 position=0x00007f;0xffffff;false;false
 deleted=0xff2727;0xffffff;false;false
 added=0x34b034;0xffffff;false;false
+changed=0x7f007f;0xffffff;false;false
 
 
 [settings]

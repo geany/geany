@@ -1,8 +1,8 @@
 /*
  *      saveactions.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2007-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2007-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2007-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -31,14 +31,13 @@
 #include "filetypes.h"
 
 #include "plugindata.h"
-#include "pluginmacros.h"
+#include "geanyfunctions.h"
 
 #include <unistd.h>
 #include <errno.h>
 #include <glib/gstdio.h>
 
 
-PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
@@ -103,7 +102,7 @@ static gboolean backupcopy_set_backup_dir(const gchar *utf8_dir)
 	if (! NZV(utf8_dir))
 		return FALSE;
 
-	tmp = p_utils->get_locale_from_utf8(utf8_dir);
+	tmp = utils_get_locale_from_utf8(utf8_dir);
 
 	if (! g_path_is_absolute(tmp) ||
 		! g_file_test(tmp, G_FILE_TEST_EXISTS) ||
@@ -172,10 +171,10 @@ static gchar *backupcopy_create_dir_parts(const gchar *filename)
 	result = backupcopy_skip_root(cp); /* skip leading slash/backslash and c:\ */
 	target_dir = g_build_filename(backupcopy_backup_dir, result, NULL);
 
-	error = p_utils->mkdir(target_dir, TRUE);
+	error = utils_mkdir(target_dir, TRUE);
 	if (error != 0)
 	{
-		p_ui->set_statusbar(FALSE, _("Backup Copy: Directory could not be created (%s)."),
+		ui_set_statusbar(FALSE, _("Backup Copy: Directory could not be created (%s)."),
 			g_strerror(error));
 
 		result = g_strdup(""); /* return an empty string in case of an error */
@@ -197,26 +196,23 @@ static void backupcopy_document_save_cb(GObject *obj, GeanyDocument *doc, gpoint
 	gchar *locale_filename_dst;
 	gchar *basename_src;
 	gchar *dir_parts_src;
-	gchar stamp[512];
-	time_t t = time(NULL);
-	struct tm *now;
+	gchar *stamp;
 
 	if (! enable_backupcopy)
 		return;
 
-	now = localtime(&t);
-	locale_filename_src = p_utils->get_locale_from_utf8(doc->file_name);
+	locale_filename_src = utils_get_locale_from_utf8(doc->file_name);
 
 	if ((src = g_fopen(locale_filename_src, "r")) == NULL)
 	{
 		/* it's unlikely that this happens */
-		p_ui->set_statusbar(FALSE, _("Backup Copy: File could not be read (%s)."),
+		ui_set_statusbar(FALSE, _("Backup Copy: File could not be read (%s)."),
 			g_strerror(errno));
 		g_free(locale_filename_src);
 		return;
 	}
 
-	strftime(stamp, sizeof(stamp), backupcopy_time_fmt, now);
+	stamp = utils_get_date_time(backupcopy_time_fmt, NULL);
 	basename_src = g_path_get_basename(locale_filename_src);
 	dir_parts_src = backupcopy_create_dir_parts(locale_filename_src);
 	locale_filename_dst = g_strconcat(
@@ -228,10 +224,11 @@ static void backupcopy_document_save_cb(GObject *obj, GeanyDocument *doc, gpoint
 
 	if ((dst = g_fopen(locale_filename_dst, "wb")) == NULL)
 	{
-		p_ui->set_statusbar(FALSE, _("Backup Copy: File could not be saved (%s)."),
+		ui_set_statusbar(FALSE, _("Backup Copy: File could not be saved (%s)."),
 			g_strerror(errno));
 		g_free(locale_filename_src);
 		g_free(locale_filename_dst);
+		g_free(stamp);
 		fclose(src);
 		return;
 	}
@@ -245,6 +242,7 @@ static void backupcopy_document_save_cb(GObject *obj, GeanyDocument *doc, gpoint
 	fclose(dst);
 	g_free(locale_filename_src);
 	g_free(locale_filename_dst);
+	g_free(stamp);
 }
 
 
@@ -254,11 +252,16 @@ static void instantsave_document_new_cb(GObject *obj, GeanyDocument *doc, gpoint
     {
 		gchar *new_filename;
 		gint fd;
-		GeanyFiletype *ft = p_filetypes->lookup_by_name(instantsave_default_ft);
+		GeanyFiletype *ft = doc->file_type;
 
 		fd = g_file_open_tmp("gis_XXXXXX", &new_filename, NULL);
 		if (fd != -1)
 			close(fd); /* close the returned file descriptor as we only need the filename */
+
+		if (ft == NULL)
+			/* ft is NULL when a new file without template was opened, so use the
+			 * configured default file type */
+			ft = filetypes_lookup_by_name(instantsave_default_ft);
 
 		if (ft != NULL)
 			/* add the filetype's default extension to the new filename */
@@ -267,10 +270,10 @@ static void instantsave_document_new_cb(GObject *obj, GeanyDocument *doc, gpoint
 		doc->file_name = new_filename;
 
 		if (FILETYPE_ID(doc->file_type) == GEANY_FILETYPES_NONE)
-			p_document->set_filetype(doc, p_filetypes->lookup_by_name(instantsave_default_ft));
+			document_set_filetype(doc, filetypes_lookup_by_name(instantsave_default_ft));
 
 		/* force saving the file to enable all the related actions(tab name, filetype, etc.) */
-		p_document->save_file(doc, TRUE);
+		document_save_file(doc, TRUE);
     }
 }
 
@@ -286,7 +289,7 @@ PluginCallback plugin_callbacks[] =
 gboolean auto_save(gpointer data)
 {
 	GeanyDocument *doc;
-	GeanyDocument *cur_doc = p_document->get_current();
+	GeanyDocument *cur_doc = document_get_current();
 	gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(geany->main_widgets->notebook));
 	gint saved_files = 0;
 
@@ -297,22 +300,22 @@ gboolean auto_save(gpointer data)
 	{
 		for (i = 0; i < max; i++)
 		{
-			doc = p_document->get_from_page(i);
+			doc = document_get_from_page(i);
 
 			/* skip current file to save it lastly, skip files without name */
 			if (doc != cur_doc && cur_doc->file_name != NULL)
-				if (p_document->save_file(doc, FALSE))
+				if (document_save_file(doc, FALSE))
 					saved_files++;
 		}
 	}
 	/* finally save current file, do it after all other files to get correct window title and
 	 * symbol list */
 	if (cur_doc->file_name != NULL)
-		if (p_document->save_file(cur_doc, FALSE))
+		if (document_save_file(cur_doc, FALSE))
 			saved_files++;
 
 	if (saved_files > 0 && autosave_print_msg)
-		p_ui->set_statusbar(FALSE, ngettext(
+		ui_set_statusbar(FALSE, ngettext(
 			"Autosave: Saved %d file automatically.",
 			"Autosave: Saved %d files automatically.", saved_files),
 			saved_files);
@@ -342,27 +345,27 @@ void plugin_init(GeanyData *data)
 
 	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
 
-	enable_autosave = p_utils->get_setting_boolean(
+	enable_autosave = utils_get_setting_boolean(
 		config, "saveactions", "enable_autosave", FALSE);
-	enable_instantsave = p_utils->get_setting_boolean(
+	enable_instantsave = utils_get_setting_boolean(
 		config, "saveactions", "enable_instantsave", FALSE);
-	enable_backupcopy = p_utils->get_setting_boolean(
+	enable_backupcopy = utils_get_setting_boolean(
 		config, "saveactions", "enable_backupcopy", FALSE);
 
-	instantsave_default_ft = p_utils->get_setting_string(config, "instantsave", "default_ft",
-		filetypes[GEANY_FILETYPES_NONE]->name);
+	instantsave_default_ft = utils_get_setting_string(config, "instantsave", "default_ft",
+		filetypes_index(GEANY_FILETYPES_NONE)->name);
 
 	autosave_src_id = G_MAXUINT; /* mark as invalid */
-	autosave_interval = p_utils->get_setting_integer(config, "autosave", "interval", 300);
-	autosave_print_msg = p_utils->get_setting_boolean(config, "autosave", "print_messages", FALSE);
-	autosave_save_all = p_utils->get_setting_boolean(config, "autosave", "save_all", FALSE);
+	autosave_interval = utils_get_setting_integer(config, "autosave", "interval", 300);
+	autosave_print_msg = utils_get_setting_boolean(config, "autosave", "print_messages", FALSE);
+	autosave_save_all = utils_get_setting_boolean(config, "autosave", "save_all", FALSE);
 	if (enable_autosave)
 		autosave_set_timeout();
 
-	backupcopy_dir_levels = p_utils->get_setting_integer(config, "backupcopy", "dir_levels", 0);
-	backupcopy_time_fmt = p_utils->get_setting_string(
+	backupcopy_dir_levels = utils_get_setting_integer(config, "backupcopy", "dir_levels", 0);
+	backupcopy_time_fmt = utils_get_setting_string(
 		config, "backupcopy", "time_fmt", "%Y-%m-%d-%H-%M-%S");
-	tmp = p_utils->get_setting_string(config, "backupcopy", "backup_dir", g_get_tmp_dir());
+	tmp = utils_get_setting_string(config, "backupcopy", "backup_dir", g_get_tmp_dir());
 	backupcopy_set_backup_dir(tmp);
 
 	g_key_file_free(config);
@@ -387,7 +390,7 @@ static void backupcopy_dir_button_clicked_cb(GtkButton *button, gpointer item)
 					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
 
-	text = p_utils->get_locale_from_utf8(gtk_entry_get_text(GTK_ENTRY(item)));
+	text = utils_get_locale_from_utf8(gtk_entry_get_text(GTK_ENTRY(item)));
 	if (NZV(text))
 		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), text);
 
@@ -397,7 +400,7 @@ static void backupcopy_dir_button_clicked_cb(GtkButton *button, gpointer item)
 		gchar *utf8_filename, *tmp;
 
 		tmp = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-		utf8_filename = p_utils->get_utf8_from_locale(tmp);
+		utf8_filename = utils_get_utf8_from_locale(tmp);
 
 		gtk_entry_set_text(GTK_ENTRY(item), utf8_filename);
 
@@ -452,7 +455,8 @@ static void configure_response_cb(GtkDialog *dialog, gint response, G_GNUC_UNUSE
 		g_key_file_set_boolean(config, "autosave", "save_all", autosave_save_all);
 		g_key_file_set_integer(config, "autosave", "interval", autosave_interval);
 
-		g_key_file_set_string(config, "instantsave", "default_ft", instantsave_default_ft);
+		if (instantsave_default_ft != NULL)
+			g_key_file_set_string(config, "instantsave", "default_ft", instantsave_default_ft);
 
 		g_key_file_set_integer(config, "backupcopy", "dir_levels", backupcopy_dir_levels);
 		g_key_file_set_string(config, "backupcopy", "time_fmt", text_time);
@@ -463,21 +467,21 @@ static void configure_response_cb(GtkDialog *dialog, gint response, G_GNUC_UNUSE
 		}
 		else
 		{
-			p_dialogs->show_msgbox(GTK_MESSAGE_ERROR,
+			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
 					_("Backup directory does not exist or is not writable."));
 		}
 
 
-		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && p_utils->mkdir(config_dir, TRUE) != 0)
+		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && utils_mkdir(config_dir, TRUE) != 0)
 		{
-			p_dialogs->show_msgbox(GTK_MESSAGE_ERROR,
+			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
 				_("Plugin configuration directory could not be created."));
 		}
 		else
 		{
 			/* write config to file */
 			str = g_key_file_to_data(config, NULL, NULL);
-			p_utils->write_file(config_file, str);
+			utils_write_file(config_file, str);
 			g_free(str);
 		}
 
@@ -620,11 +624,13 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 		gtk_box_pack_start(GTK_BOX(inner_vbox), label, FALSE, FALSE, 0);
 
 		pref_widgets.instantsave_ft_combo = combo = gtk_combo_box_new_text();
-		for (i = 0; i < filetypes_array->len; i++)
+		for (i = 0; i < geany->filetypes_array->len; i++)
 		{
-			gtk_combo_box_append_text(GTK_COMBO_BOX(combo), filetypes[i]->name);
+			GeanyFiletype *ft = filetypes_index(i);
 
-			if (p_utils->str_equal(filetypes[i]->name, instantsave_default_ft))
+			gtk_combo_box_append_text(GTK_COMBO_BOX(combo), ft->name);
+
+			if (utils_str_equal(ft->name, instantsave_default_ft))
 				gtk_combo_box_set_active(GTK_COMBO_BOX(combo), i);
 		}
 		gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(combo), 3);

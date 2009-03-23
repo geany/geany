@@ -1,8 +1,8 @@
 /*
  *      geanyobject.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2007-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2007-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2007-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -22,13 +22,19 @@
  * $Id$
  */
 
-/* GObject used for connecting and emitting signals when certain events happen,
+/* A GObject used for connecting and emitting signals when certain events happen,
  * e.g. opening a document.
- * Mainly used for plugins - geany_object is created in plugins_init(). */
+ * Mainly used for plugins - see the API docs.
+ *
+ * Core-only signals:
+ * signal void save_settings(GObject *obj, GKeyFile *keyfile, gpointer user_data);
+ * Emitted just before saving main keyfile settings.
+ */
 
 #include "geany.h"
 #include "geanyobject.h"
 
+/* extern in geany.h */
 GObject	*geany_object;
 
 static guint geany_object_signals[GCB_MAX] = { 0 };
@@ -45,48 +51,102 @@ struct _GeanyObjectPrivate
 	gchar dummy;
 };
 
-static void geany_object_class_init			(GeanyObjectClass *klass);
-static void geany_object_init				(GeanyObject *self);
-static void geany_object_finalize			(GObject *object);
 
-/* Local data */
-static GObjectClass *parent_class = NULL;
+G_DEFINE_TYPE(GeanyObject, geany_object, G_TYPE_OBJECT);
 
 
-GType geany_object_get_type(void)
+
+static void geany_cclosure_marshal_VOID__STRING_INT_POINTER(GClosure *closure, GValue *ret_val,
+				guint n_param_vals, const GValue *param_values, gpointer hint, gpointer mdata)
 {
-	static GType self_type = 0;
-	if (! self_type)
+	typedef gboolean (*GeanyMarshalFunc_VOID__STRING_INT_POINTER)
+		(gpointer data1, gconstpointer arg_1, gint arg_2, gpointer arg_3, gpointer data2);
+
+	register GeanyMarshalFunc_VOID__STRING_INT_POINTER callback;
+	register GCClosure* cc = (GCClosure*) closure;
+	register gpointer data1, data2;
+
+	g_return_if_fail(n_param_vals == 4);
+
+	if (G_CCLOSURE_SWAP_DATA(closure))
 	{
-		static const GTypeInfo self_info =
-		{
-			sizeof(GeanyObjectClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc)geany_object_class_init,
-			NULL, /* class_finalize */
-			NULL, /* class_data */
-			sizeof(GeanyObject),
-			0,
-			(GInstanceInitFunc)geany_object_init,
-			NULL
-		};
+		data1 = closure->data;
+		data2 = g_value_peek_pointer(param_values + 0);
+	}
+	else
+	{
+		data1 = g_value_peek_pointer(param_values + 0);
+		data2 = closure->data;
+	}
+	callback = (GeanyMarshalFunc_VOID__STRING_INT_POINTER) (mdata ? mdata : cc->callback);
+	callback(data1,
+			  g_value_get_string(param_values + 1),
+			  g_value_get_int(param_values + 2),
+			  g_value_get_pointer(param_values + 3),
+			  data2);
+}
 
-		self_type = g_type_register_static(G_TYPE_OBJECT, "GeanyObject", &self_info, 0);	}
 
-	return self_type;
+static gboolean boolean_handled_accumulator(GSignalInvocationHint *ihint, GValue *return_accu,
+											const GValue *handler_return, gpointer dummy)
+{
+	gboolean continue_emission, signal_handled;
+
+	signal_handled = g_value_get_boolean(handler_return);
+	g_value_set_boolean(return_accu, signal_handled);
+	continue_emission = !signal_handled;
+
+	return continue_emission;
+}
+
+
+static void geany_cclosure_marshal_BOOL__POINTER_POINTER( GClosure *closure, GValue *return_value,
+								guint n_param_values, const GValue *param_values,
+								gpointer invocation_hint G_GNUC_UNUSED, gpointer marshal_data)
+{
+	typedef gboolean (*GeanyMarshalFunc_BOOLEAN__POINTER_POINTER)
+		(gpointer data1, gpointer arg_1, gpointer arg_2, gpointer data2);
+
+	register GeanyMarshalFunc_BOOLEAN__POINTER_POINTER callback;
+	register GCClosure *cc = (GCClosure*) closure;
+	register gpointer data1, data2;
+	gboolean v_return;
+
+	g_return_if_fail(return_value != NULL);
+	g_return_if_fail(n_param_values == 3);
+
+	if (G_CCLOSURE_SWAP_DATA(closure))
+	{
+		data1 = closure->data;
+		data2 = g_value_peek_pointer(param_values + 0);
+	}
+	else
+	{
+		data1 = g_value_peek_pointer(param_values + 0);
+		data2 = closure->data;
+	}
+	callback = (GeanyMarshalFunc_BOOLEAN__POINTER_POINTER)
+		(marshal_data ? marshal_data : cc->callback);
+
+	v_return = callback(data1,
+					   g_value_get_pointer(param_values + 1),
+					   g_value_get_pointer(param_values + 2),
+					   data2);
+
+	g_value_set_boolean(return_value, v_return);
 }
 
 
 static void create_signals(GObjectClass *g_object_class)
 {
+	/* Document signals */
 	geany_object_signals[GCB_DOCUMENT_NEW] = g_signal_new (
 		"document-new",
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GeanyObjectClass, document_new),
 		NULL, NULL,
-		gtk_marshal_NONE__POINTER,
+		g_cclosure_marshal_VOID__POINTER,
 		G_TYPE_NONE, 1,
 		G_TYPE_POINTER);
 	geany_object_signals[GCB_DOCUMENT_OPEN] = g_signal_new (
@@ -95,7 +155,7 @@ static void create_signals(GObjectClass *g_object_class)
 		G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GeanyObjectClass, document_open),
 		NULL, NULL,
-		gtk_marshal_NONE__POINTER,
+		g_cclosure_marshal_VOID__POINTER,
 		G_TYPE_NONE, 1,
 		G_TYPE_POINTER);
 	geany_object_signals[GCB_DOCUMENT_SAVE] = g_signal_new (
@@ -104,7 +164,7 @@ static void create_signals(GObjectClass *g_object_class)
 		G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GeanyObjectClass, document_save),
 		NULL, NULL,
-		gtk_marshal_NONE__POINTER,
+		g_cclosure_marshal_VOID__POINTER,
 		G_TYPE_NONE, 1,
 		G_TYPE_POINTER);
 	geany_object_signals[GCB_DOCUMENT_ACTIVATE] = g_signal_new (
@@ -113,7 +173,7 @@ static void create_signals(GObjectClass *g_object_class)
 		G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GeanyObjectClass, document_activate),
 		NULL, NULL,
-		gtk_marshal_NONE__POINTER,
+		g_cclosure_marshal_VOID__POINTER,
 		G_TYPE_NONE, 1,
 		G_TYPE_POINTER);
 	geany_object_signals[GCB_DOCUMENT_CLOSE] = g_signal_new (
@@ -122,17 +182,18 @@ static void create_signals(GObjectClass *g_object_class)
 		G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GeanyObjectClass, document_close),
 		NULL, NULL,
-		gtk_marshal_NONE__POINTER,
+		g_cclosure_marshal_VOID__POINTER,
 		G_TYPE_NONE, 1,
 		G_TYPE_POINTER);
 
+	/* Project signals */
 	geany_object_signals[GCB_PROJECT_OPEN] = g_signal_new (
 		"project-open",
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GeanyObjectClass, project_open),
 		NULL, NULL,
-		gtk_marshal_NONE__POINTER,
+		g_cclosure_marshal_VOID__POINTER,
 		G_TYPE_NONE, 1,
 		G_TYPE_POINTER);
 	geany_object_signals[GCB_PROJECT_SAVE] = g_signal_new (
@@ -141,7 +202,7 @@ static void create_signals(GObjectClass *g_object_class)
 		G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GeanyObjectClass, project_save),
 		NULL, NULL,
-		gtk_marshal_NONE__INT,
+		g_cclosure_marshal_VOID__POINTER,
 		G_TYPE_NONE, 1,
 		G_TYPE_POINTER);
 	geany_object_signals[GCB_PROJECT_CLOSE] = g_signal_new (
@@ -150,31 +211,48 @@ static void create_signals(GObjectClass *g_object_class)
 		G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GeanyObjectClass, project_close),
 		NULL, NULL,
-		gtk_marshal_NONE__NONE,
+		g_cclosure_marshal_VOID__VOID,
 		G_TYPE_NONE, 0);
 
+	/* Editor signals */
 	geany_object_signals[GCB_UPDATE_EDITOR_MENU] = g_signal_new (
 		"update-editor-menu",
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GeanyObjectClass, update_editor_menu),
 		NULL, NULL,
-		gtk_marshal_NONE__STRING_INT_POINTER,
+		geany_cclosure_marshal_VOID__STRING_INT_POINTER,
 		G_TYPE_NONE, 3,
 		G_TYPE_STRING, G_TYPE_INT, G_TYPE_POINTER);
+	geany_object_signals[GCB_EDITOR_NOTIFY] = g_signal_new (
+		"editor-notify",
+		G_OBJECT_CLASS_TYPE (g_object_class),
+		G_SIGNAL_RUN_LAST,
+		G_STRUCT_OFFSET (GeanyObjectClass, update_editor_menu),
+		boolean_handled_accumulator, NULL,
+		geany_cclosure_marshal_BOOL__POINTER_POINTER,
+		G_TYPE_BOOLEAN, 2,
+		G_TYPE_POINTER, G_TYPE_POINTER);
+
+	/* Core-only signals */
+	geany_object_signals[GCB_SAVE_SETTINGS] = g_signal_new (
+		"save-settings",
+		G_OBJECT_CLASS_TYPE (g_object_class),
+		G_SIGNAL_RUN_FIRST,
+		G_STRUCT_OFFSET (GeanyObjectClass, save_settings),
+		NULL, NULL,
+		g_cclosure_marshal_VOID__POINTER,
+		G_TYPE_NONE, 1,
+		G_TYPE_POINTER);
 }
 
 
 static void geany_object_class_init(GeanyObjectClass *klass)
 {
 	GObjectClass *g_object_class;
-
 	g_object_class = G_OBJECT_CLASS(klass);
 
-	g_object_class->finalize = geany_object_finalize;
-
-	parent_class = (GObjectClass*)g_type_class_peek(G_TYPE_OBJECT);
-	g_type_class_add_private((gpointer)klass, sizeof(GeanyObjectPrivate));
+	g_type_class_add_private(klass, sizeof(GeanyObjectPrivate));
 
 	create_signals(g_object_class);
 }
@@ -189,19 +267,5 @@ static void geany_object_init(GeanyObject *self)
 GObject* geany_object_new(void)
 {
 	return (GObject*)g_object_new(GEANY_OBJECT_TYPE, NULL);
-}
-
-
-static void geany_object_finalize(GObject *object)
-{
-	GeanyObject *self;
-
-	g_return_if_fail(object != NULL);
-	g_return_if_fail(IS_GEANY_OBJECT(object));
-
-	self = GEANY_OBJECT(object);
-
-	if (G_OBJECT_CLASS(parent_class)->finalize)
-		(* G_OBJECT_CLASS(parent_class)->finalize)(object);
 }
 

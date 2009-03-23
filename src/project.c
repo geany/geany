@@ -1,8 +1,8 @@
 /*
  *      project.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2007-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2007-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2007-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -31,6 +31,8 @@
 #include <unistd.h>
 
 #include "project.h"
+#include "projectprivate.h"
+
 #include "dialogs.h"
 #include "support.h"
 #include "utils.h"
@@ -43,10 +45,18 @@
 # include "win32.h"
 #endif
 #include "build.h"
-#include "geanyobject.h"
+#include "interface.h"
+#include "editor.h"
+#include "stash.h"
 
 
 ProjectPrefs project_prefs = { NULL, FALSE, FALSE };
+
+
+static GeanyProjectPrivate priv;
+static GeanyIndentPrefs indentation;
+
+static GeanyPrefGroup *indent_group = NULL;
 
 static struct
 {
@@ -91,6 +101,7 @@ static void on_entries_changed(GtkEditable *editable, PropertyDialogElements *e)
 
 void project_new()
 {
+/*<<<<<<< .working
 	GtkWidget              *vbox;
 	GtkWidget              *table;
 	GtkWidget              *image;
@@ -98,6 +109,14 @@ void project_new()
 	GtkWidget              *bbox;
 	GtkWidget              *label;
 	GtkTooltips            *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
+=======*/
+	GtkWidget *vbox;
+	GtkWidget *table;
+	GtkWidget *image;
+	GtkWidget *button;
+	GtkWidget *bbox;
+	GtkWidget *label;
+/*>>>>>>> .merge-right.r3643*/
 	PropertyDialogElements *e;
 	gint                    response;
 
@@ -132,6 +151,7 @@ void project_new()
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	e->name = gtk_entry_new();
+	ui_entry_add_clear_icon(e->name);
 	gtk_entry_set_max_length(GTK_ENTRY(e->name), MAX_NAME_LEN);
 
 	ui_table_add_row(GTK_TABLE(table), 0, label, e->name, NULL);
@@ -140,6 +160,7 @@ void project_new()
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	e->file_name = gtk_entry_new();
+	ui_entry_add_clear_icon(e->file_name);
 	gtk_entry_set_width_chars(GTK_ENTRY(e->file_name), 30);
 	button = gtk_button_new();
 	g_signal_connect(button, "clicked", G_CALLBACK(on_file_save_button_clicked), e);
@@ -155,10 +176,17 @@ void project_new()
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	e->base_path = gtk_entry_new();
-	gtk_tooltips_set_tip(tooltips, e->base_path,
+	ui_entry_add_clear_icon(e->base_path);
+	ui_widget_set_tooltip_text(e->base_path,
+/*<<<<<<< .working
 						 _("Base directory of all files that make up the project. "
 						   "This can be a new path, or an existing directory tree. "
 						   "You can use paths relative to the project filename."), NULL);
+=======*/
+		_("Base directory of all files that make up the project. "
+		"This can be a new path, or an existing directory tree. "
+		"You can use paths relative to the project filename."));
+/*>>>>>>> .merge-right.r3643*/
 	bbox = ui_path_box_new(_("Choose Project Base Path"),
 						   GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(e->base_path));
 
@@ -338,17 +366,15 @@ void project_close(gboolean open_default)
 			document_new_file_if_non_open();
 		}
 	}
+	g_signal_emit_by_name(geany_object, "project-close");
 
-	if (geany_object)
-	{
-		g_signal_emit_by_name(geany_object, "project-close");
-	}
 	update_ui();
 }
 
 
 static void create_properties_dialog(PropertyDialogElements *e)
 {
+/*<<<<<<< .working
 	GtkWidget   *vbox;
 	GtkWidget   *table;
 	GtkWidget   *image;
@@ -356,17 +382,32 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	GtkWidget   *bbox;
 	GtkWidget   *label;
 	GtkWidget   *swin;
-	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(main_widgets.window, "tooltips"));
+=======*/
+	GtkWidget *table, *notebook;
+	GtkWidget *image;
+	GtkWidget *button;
+	GtkWidget *bbox;
+	GtkWidget *label;
+	GtkWidget *swin;
+/*>>>>>>> .merge-right.r3643*/
 
+/*<<<<<<< .working
 	e->dialog = gtk_dialog_new_with_buttons(_("Project Properties"), GTK_WINDOW(main_widgets.window),
 											GTK_DIALOG_DESTROY_WITH_PARENT,
 											GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 	gtk_dialog_add_buttons(GTK_DIALOG(e->dialog), GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
+=======*/
+	e->dialog = create_project_dialog();
+	gtk_window_set_transient_for(GTK_WINDOW(e->dialog), GTK_WINDOW(main_widgets.window));
+	gtk_window_set_destroy_with_parent(GTK_WINDOW(e->dialog), TRUE);
+/*>>>>>>> .merge-right.r3643*/
 	gtk_widget_set_name(e->dialog, "GeanyDialogProject");
 
-	vbox = ui_dialog_vbox_new(GTK_DIALOG(e->dialog));
+	ui_entry_add_clear_icon(ui_lookup_widget(e->dialog, "spin_indent_width"));
+	ui_entry_add_clear_icon(ui_lookup_widget(e->dialog, "spin_tab_width"));
 
 	table = gtk_table_new(6, 2, FALSE);
+	gtk_container_set_border_width(GTK_CONTAINER(table), 6);
 	gtk_table_set_row_spacings(GTK_TABLE(table), 5);
 	gtk_table_set_col_spacings(GTK_TABLE(table), 10);
 
@@ -377,6 +418,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	gtk_misc_set_alignment(GTK_MISC(label), -1, 0);
 
 	e->name = gtk_entry_new();
+	ui_entry_add_clear_icon(e->name);
 	gtk_entry_set_max_length(GTK_ENTRY(e->name), MAX_NAME_LEN);
 	gtk_table_attach(GTK_TABLE(table), e->name, 1, 2, 0, 1,
 					 (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
@@ -389,7 +431,12 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	gtk_misc_set_alignment(GTK_MISC(label), -1, 0);
 
 	e->file_name = gtk_entry_new();
+/*<<<<<<< .working
 	gtk_editable_set_editable(GTK_EDITABLE(e->file_name), FALSE);   /* read-only */
+/*=======*/
+	ui_entry_add_clear_icon(e->file_name);
+	gtk_editable_set_editable(GTK_EDITABLE(e->file_name), FALSE);	/* read-only */
+/*>>>>>>> .merge-right.r3643*/
 	gtk_table_attach(GTK_TABLE(table), e->file_name, 1, 2, 1, 2,
 					 (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					 (GtkAttachOptions) (0), 0, 0);
@@ -418,10 +465,17 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	gtk_misc_set_alignment(GTK_MISC(label), -1, 0);
 
 	e->base_path = gtk_entry_new();
-	gtk_tooltips_set_tip(tooltips, e->base_path,
+	ui_entry_add_clear_icon(e->base_path);
+	ui_widget_set_tooltip_text(e->base_path,
+/*<<<<<<< .working
 						 _("Base directory of all files that make up the project. "
 						   "This can be a new path, or an existing directory tree. "
 						   "You can use paths relative to the project filename."), NULL);
+=======*/
+		_("Base directory of all files that make up the project. "
+		"This can be a new path, or an existing directory tree. "
+		"You can use paths relative to the project filename."));
+/*>>>>>>> .merge-right.r3643*/
 	bbox = ui_path_box_new(_("Choose Project Base Path"),
 						   GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(e->base_path));
 	gtk_table_attach(GTK_TABLE(table), bbox, 1, 2, 3, 4,
@@ -440,10 +494,17 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	gtk_misc_set_alignment(GTK_MISC(label), -1, 0);
 
 	e->run_cmd = gtk_entry_new();
-	gtk_tooltips_set_tip(tooltips, e->run_cmd,
+	ui_entry_add_clear_icon(e->run_cmd);
+	ui_widget_set_tooltip_text(e->run_cmd,
+/*<<<<<<< .working
 						 _("Command-line to run in the project base directory. "
 						   "Options can be appended to the command. "
 						   "Leave blank to use the default run command."), NULL);
+=======*/
+		_("Command-line to run in the project base directory. "
+		"Options can be appended to the command. "
+		"Leave blank to use the default run command."));
+/*>>>>>>> .merge-right.r3643*/
 	button = gtk_button_new();
 	g_signal_connect(button, "clicked", G_CALLBACK(on_file_open_button_clicked), e->run_cmd);
 	image = gtk_image_new_from_stock("gtk-open", GTK_ICON_SIZE_BUTTON);
@@ -474,7 +535,11 @@ static void create_properties_dialog(PropertyDialogElements *e)
 					 (GtkAttachOptions) (0), 0, 0);
 #endif
 
-	gtk_container_add(GTK_CONTAINER(vbox), table);
+	notebook = ui_lookup_widget(e->dialog, "project_notebook");
+	label = gtk_label_new(_("Project"));
+	gtk_widget_show(table);	/* needed to switch current page */
+	gtk_notebook_insert_page(GTK_NOTEBOOK(notebook), table, label, 0);
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 0);
 }
 
 
@@ -489,6 +554,8 @@ void project_properties()
 	entries_modified = FALSE;
 
 	create_properties_dialog(e);
+
+	stash_group_display(indent_group, e->dialog);
 
 	/* fill the elements with the appropriate data */
 	gtk_entry_set_text(GTK_ENTRY(e->name), p->name);
@@ -535,6 +602,8 @@ void project_properties()
 	{
 		if (! update_config(e))
 			goto retry;
+
+		stash_group_update(indent_group, e->dialog);
 	}
 
 	gtk_widget_destroy(e->dialog);
@@ -561,6 +630,20 @@ static gboolean close_open_project()
 	}
 	else
 		return TRUE;
+}
+
+
+static GeanyProject *create_project(void)
+{
+	GeanyProject *project = g_new0(GeanyProject, 1);
+
+	memset(&priv, 0, sizeof priv);
+	indentation = *editor_get_indent_prefs(NULL);
+	priv.indentation = &indentation;
+	project->priv = &priv;
+
+	app->project = project;
+	return project;
 }
 
 
@@ -631,7 +714,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 					SHOW_ERR1(_("Project base directory could not be created (%s)."),
 							  g_strerror(err_code));
 				gtk_widget_grab_focus(e->base_path);
-				utils_free_pointers(locale_path, locale_filename, NULL);
+				utils_free_pointers(2, locale_path, locale_filename, NULL);
 				return FALSE;
 			}
 		}
@@ -649,7 +732,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 
 	if (app->project == NULL)
 	{
-		app->project = g_new0(GeanyProject, 1);
+		create_project();
 		new_project = TRUE;
 	}
 	p = app->project;
@@ -900,7 +983,9 @@ static gboolean load_config(const gchar *filename)
 		return FALSE;
 	}
 
-	p = app->project = g_new0(GeanyProject, 1);
+	p = create_project();
+
+	stash_group_load_from_key_file(indent_group, config);
 
 	p->name = utils_get_setting_string(config, "project", "name", GEANY_STRING_UNTITLED);
 	p->description = utils_get_setting_string(config, "project", "description", "");
@@ -926,11 +1011,7 @@ static gboolean load_config(const gchar *filename)
 		/* read session files so they can be opened with configuration_open_files() */
 		configuration_load_session_files(config);
 	}
-
-	if (geany_object)
-	{
-		g_signal_emit_by_name(geany_object, "project-open", config);
-	}
+	g_signal_emit_by_name(geany_object, "project-open", config);
 	g_key_file_free(config);
 
 	update_ui();
@@ -960,6 +1041,8 @@ static gboolean write_config(gboolean emit_signal)
 	filename = utils_get_locale_from_utf8(p->file_name);
 	g_key_file_load_from_file(config, filename, G_KEY_FILE_NONE, NULL);
 
+	stash_group_save_to_key_file(indent_group, config);
+
 	g_key_file_set_string(config, "project", "name", p->name);
 	g_key_file_set_string(config, "project", "base_path", p->base_path);
 
@@ -988,7 +1071,7 @@ static gboolean write_config(gboolean emit_signal)
 	if (project_prefs.project_session)
 		configuration_save_session_files(config);
 
-	if (geany_object && emit_signal)
+	if (emit_signal)
 	{
 		g_signal_emit_by_name(geany_object, "project-save", config);
 	}
@@ -1082,8 +1165,8 @@ void project_load_prefs(GKeyFile *config)
 /* Initialize project-related preferences in the Preferences dialog. */
 void project_setup_prefs()
 {
-	GtkWidget *path_entry = lookup_widget(ui_widgets.prefs_dialog, "project_file_path_entry");
-	GtkWidget *path_btn = lookup_widget(ui_widgets.prefs_dialog, "project_file_path_button");
+	GtkWidget *path_entry = ui_lookup_widget(ui_widgets.prefs_dialog, "project_file_path_entry");
+	GtkWidget *path_btn = ui_lookup_widget(ui_widgets.prefs_dialog, "project_file_path_button");
 
 	g_return_if_fail(local_prefs.project_file_path != NULL);
 	gtk_entry_set_text(GTK_ENTRY(path_entry), local_prefs.project_file_path);
@@ -1095,11 +1178,46 @@ void project_setup_prefs()
 /* Update project-related preferences after using the Preferences dialog. */
 void project_apply_prefs()
 {
+/*<<<<<<< .working
 	GtkWidget   *path_entry = lookup_widget(ui_widgets.prefs_dialog, "project_file_path_entry");
+=======*/
+	GtkWidget *path_entry = ui_lookup_widget(ui_widgets.prefs_dialog, "project_file_path_entry");
+/*>>>>>>> .merge-right.r3643*/
 	const gchar *str;
 
 	str = gtk_entry_get_text(GTK_ENTRY(path_entry));
 	setptr(local_prefs.project_file_path, g_strdup(str));
 }
 
+
+void project_init(void)
+{
+	GeanyPrefGroup *group;
+
+	group = stash_group_new("indentation");
+	/* defaults are copied from editor indent prefs */
+	stash_group_set_use_defaults(group, FALSE);
+	indent_group = group;
+
+	stash_group_add_spin_button_integer(group, &indentation.width,
+		"indent_width", 4, "spin_indent_width");
+	stash_group_add_radio_buttons(group, (gint*)(gpointer)&indentation.type,
+		"indent_type", GEANY_INDENT_TYPE_TABS,
+		"radio_indent_spaces", GEANY_INDENT_TYPE_SPACES,
+		"radio_indent_tabs", GEANY_INDENT_TYPE_TABS,
+		"radio_indent_both", GEANY_INDENT_TYPE_BOTH,
+		NULL);
+	stash_group_add_spin_button_integer(group, &indentation.hard_tab_width,
+		"indent_hard_tab_width", 8, "spin_tab_width");
+	stash_group_add_toggle_button(group, &indentation.detect_type,
+		"detect_indent", FALSE, "check_detect_indent");
+	stash_group_add_combo_box(group, (gint*)(gpointer)&indentation.auto_indent_mode,
+		"indent_mode", GEANY_AUTOINDENT_CURRENTCHARS, "combo_auto_indent_mode");
+}
+
+
+void project_finalize(void)
+{
+	stash_group_free(indent_group);
+}
 

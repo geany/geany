@@ -1,8 +1,8 @@
 /*
  *      prefs.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@ typedef struct GeanyPrefs
 	gboolean		switch_to_status;
 	gboolean		auto_focus;
 	gchar			*default_open_path;
+	gchar			*custom_plugin_path;
 }
 GeanyPrefs;
 
@@ -54,8 +55,6 @@ GeanyToolPrefs;
 
 extern GeanyToolPrefs tool_prefs;
 
-
-void prefs_init_dialog(void);
 
 void prefs_show_dialog(void);
 

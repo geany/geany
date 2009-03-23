@@ -1,8 +1,8 @@
 /*
  *      document-private.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2008-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2008-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #ifndef GEANY_DOCUMENT_PRIVATE_H
 #define GEANY_DOCUMENT_PRIVATE_H
 
+
 /* available UNDO actions, UNDO_SCINTILLA is a pseudo action to trigger Scintilla's
  * undo management */
 enum
@@ -35,6 +36,16 @@ enum
 	UNDO_BOM,
 	UNDO_ACTIONS_MAX
 };
+
+typedef enum
+{
+	FILE_OK,
+	FILE_CHANGED,
+	FILE_MISSING,
+	FILE_CREATED_PENDING,
+	FILE_IGNORE
+}
+FileDiskStatus;
 
 
 typedef struct FileEncoding
@@ -50,8 +61,6 @@ typedef struct GeanyDocumentPrivate
 {
 	/* GtkLabel shown in the notebook header. */
 	GtkWidget		*tab_label;
-	/* GtkLabel shown in the notebook right-click menu. */
-	GtkWidget		*tabmenu_label;
 	/* GtkTreeView object for this %document within the Symbols treeview of the sidebar. */
 	GtkWidget		*tag_tree;
 	/* GtkTreeStore object for this %document within the Symbols treeview of the sidebar. */
@@ -64,8 +73,20 @@ typedef struct GeanyDocumentPrivate
 	GTrashStack		*redo_actions;
 	/* Used so Undo/Redo works for encoding changes. */
 	FileEncoding	 saved_encoding;
-	gboolean		colourise_needed;	/* use document.c:queue_colourise() instead */
-	gint			line_count;			/* Number of lines in the document. */
+	gboolean		 colourise_needed;	/* use document.c:queue_colourise() instead */
+	gint			 line_count;		/* Number of lines in the document. */
+	gint			 symbol_list_sort_mode;
+	/* indicates whether a file is on a remote filesystem, works only with GIO/GVFS */
+	gboolean		 is_remote;
+	/* File status on disk of the document, can be 'FILE_CHANGED', 'FILE_MISSING' (deleted) or
+	 * 'FILE_OK' if there are no known changes */
+	FileDiskStatus	 file_disk_status;
+	/* Reference to a GFileMonitor object, only used when GIO file monitoring is used. */
+	gpointer		 monitor;
+	/* Time of the last disk check, only used when legacy file monitoring is used. */
+	time_t			 last_check;
+	/* Modification time of the document on disk, only used when legacy file monitoring is used. */
+	time_t			 mtime;
 }
 GeanyDocumentPrivate;
 

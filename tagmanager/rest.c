@@ -1,6 +1,6 @@
 /*
 *
-*   Copyright (c) 2007-2008, Nick Treleaven
+*   Copyright (c) 2007-2009, Nick Treleaven
 *
 *   This source code is released for free distribution under the terms of the
 *   GNU General Public License.
@@ -24,10 +24,11 @@
 *   DATA DEFINITIONS
 */
 typedef enum {
-    K_CHAPTER,
-    K_SECTION,
+	K_CHAPTER = 0,
+	K_SECTION,
 	K_SUBSECTION,
-	K_SUBSUBSECTION
+	K_SUBSUBSECTION,
+	SECTION_COUNT
 } restKind;
 
 static kindOption RestKinds[] = {
@@ -37,6 +38,8 @@ static kindOption RestKinds[] = {
 	{ TRUE, 'v', "variable",      "subsubsections" }
 };
 
+static char kindchars[SECTION_COUNT];
+
 /*
 *   FUNCTION DEFINITIONS
 */
@@ -44,47 +47,80 @@ static kindOption RestKinds[] = {
 static void makeRestTag (const vString* const name,
 			   kindOption* const kinds, const int kind)
 {
-    if (name != NULL  &&  vStringLength (name) > 0)
-    {
-        tagEntryInfo e;
-        initTagEntry (&e, vStringValue (name));
+	if (name != NULL && vStringLength (name) > 0)
+	{
+		tagEntryInfo e;
+		initTagEntry (&e, vStringValue (name));
 
-        e.lineNumber--;	/* we want the line before the '---' underline chars */
-        e.kindName = kinds [kind].name;
-        e.kind     = kinds [kind].letter;
+		e.lineNumber--;	/* we want the line before the '---' underline chars */
+		e.kindName = kinds [kind].name;
+		e.kind = kinds [kind].letter;
 
-        makeTagEntry (&e);
-    }
+		makeTagEntry (&e);
+	}
 }
 
+
+/* checks if str is all the same character */
+static boolean issame(const char *str)
+{
+	char first = *str;
+
+	while (*str)
+	{
+		char c;
+
+		str++;
+		c = *str;
+		if (c && c != first)
+			return FALSE;
+	}
+	return TRUE;
+}
+
+
+static int get_kind(char c)
+{
+	int i;
+
+	for (i = 0; i < SECTION_COUNT; i++)
+	{
+		if (kindchars[i] == c)
+			return i;
+
+		if (kindchars[i] == 0)
+		{
+			kindchars[i] = c;
+			return i;
+		}
+	}
+	return -1;
+}
+
+
+/* TODO: parse overlining & underlining as distinct sections. */
 static void findRestTags (void)
 {
-    vString *name = vStringNew ();
-    const unsigned char *line;
+	vString *name = vStringNew ();
+	const unsigned char *line;
 
-    while ((line = fileReadLine ()) != NULL)
-    {
-		if (strlen((const char*) line) > 3 && vStringLength(name) > 0 &&
-			! strstr((const char*) line, " "))
+	memset(kindchars, 0, sizeof kindchars);
+
+	while ((line = fileReadLine ()) != NULL)
+	{
+		int line_len = strlen((const char*) line);
+		int name_len = vStringLength(name);
+
+		/* underlines must be the same length or more */
+		if (line_len >= name_len && name_len > 0 &&
+			ispunct(line[0]) && issame((const char*) line))
 		{
-			if (strncmp((const char*) line, "===", 3) == 0)
+			char c = line[0];
+			int kind = get_kind(c);
+
+			if (kind >= 0)
 			{
-				makeRestTag(name, RestKinds, K_CHAPTER);
-				continue;
-			}
-			else if (strncmp((const char*) line, "---", 3) == 0)
-			{
-				makeRestTag(name, RestKinds, K_SECTION);
-				continue;
-			}
-			else if (strncmp((const char*) line, "^^^", 3) == 0)
-			{
-				makeRestTag(name, RestKinds, K_SUBSECTION);
-				continue;
-			}
-			else if (strncmp((const char*) line, "```", 3) == 0)
-			{
-				makeRestTag(name, RestKinds, K_SUBSUBSECTION);
+				makeRestTag(name, RestKinds, kind);
 				continue;
 			}
 		}
@@ -92,21 +128,22 @@ static void findRestTags (void)
 		if (! isspace(*line))
 			vStringCatS(name, (const char*) line);
 		vStringTerminate(name);
-    }
-    vStringDelete (name);
+	}
+	vStringDelete (name);
 }
 
 extern parserDefinition* RestParser (void)
 {
-    static const char *const patterns [] = { "*.rest", "*.reST", NULL };
-    static const char *const extensions [] = { "rest", NULL };
-    parserDefinition* const def = parserNew ("reStructuredText");
-    def->kinds      = RestKinds;
-    def->kindCount  = KIND_COUNT (RestKinds);
-    def->patterns   = patterns;
-    def->extensions = extensions;
-    def->parser     = findRestTags;
-    return def;
+	static const char *const patterns [] = { "*.rest", "*.reST", NULL };
+	static const char *const extensions [] = { "rest", NULL };
+	parserDefinition* const def = parserNew ("reStructuredText");
+
+	def->kinds = RestKinds;
+	def->kindCount = KIND_COUNT (RestKinds);
+	def->patterns = patterns;
+	def->extensions = extensions;
+	def->parser = findRestTags;
+	return def;
 }
 
 /* vi:set tabstop=8 shiftwidth=4: */

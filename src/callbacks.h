@@ -1,8 +1,8 @@
 /*
  *      callbacks.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -23,14 +23,6 @@
 
 
 #include "geany.h" /* necessary for interface.c */
-
-
-typedef struct
-{
-	GeanyDocument *last_doc;
-} CallbacksData;
-
-extern CallbacksData callbacks_data;
 
 
 gboolean
@@ -65,13 +57,11 @@ on_change_font1_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_toolbutton_close_clicked            (GtkToolButton   *toolbutton,
+on_toolbutton_close_clicked            (GtkAction       *action,
                                         gpointer         user_data);
 
 void
-on_notebook1_switch_page               (GtkNotebook     *notebook,
-                                        GtkNotebookPage *page,
-                                        guint            page_num,
+on_toolbutton_close_all_clicked        (GtkAction       *action,
                                         gpointer         user_data);
 
 void
@@ -103,11 +93,7 @@ on_replace_tabs_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_toolbutton_search_clicked           (GtkToolButton   *toolbutton,
-                                        gpointer         user_data);
-
-void
-on_toolbar_search_entry_activate       (GtkEntry        *entry,
+on_toolbutton_search_clicked           (GtkAction       *action,
                                         gpointer         user_data);
 
 gboolean
@@ -164,8 +150,9 @@ on_zoom_out1_activate                  (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_toolbar_search_entry_changed        (GtkEditable     *editable,
-                                        gpointer         user_data);
+on_toolbar_search_entry_changed        (GtkAction *action,
+                                        const gchar *text,
+                                        gpointer user_data);
 
 void
 on_toggle_case1_activate               (GtkMenuItem     *menuitem,
@@ -254,23 +241,27 @@ on_find_in_files1_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_toolbutton_new_clicked              (GtkToolButton   *toolbutton,
+on_toolbutton_new_clicked              (GtkAction       *action,
                                         gpointer         user_data);
 
 void
-on_toolbutton_open_clicked             (GtkToolButton   *toolbutton,
+on_toolbutton_open_clicked             (GtkAction       *action,
                                         gpointer         user_data);
 
 void
-on_toolbutton_save_clicked             (GtkToolButton   *toolbutton,
+on_toolbutton_save_clicked             (GtkAction       *action,
                                         gpointer         user_data);
 
 void
-on_toolbutton_quit_clicked             (GtkToolButton   *toolbutton,
+on_toolbutton_quit_clicked             (GtkAction       *action,
                                         gpointer         user_data);
 
 void
-on_toolbutton_reload_clicked           (GtkToolButton   *toolbutton,
+on_toolbutton_preferences_clicked      (GtkAction       *action,
+                                        gpointer         user_data);
+
+void
+on_toolbutton_reload_clicked           (GtkAction       *action,
                                         gpointer         user_data);
 
 void
@@ -278,21 +269,11 @@ on_go_to_line_activate                 (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_goto_line_dialog_response           (GtkDialog *dialog,
-                                        gint response,
-                                        gpointer user_data);
-
-void
-on_goto_line_entry_activate            (GtkEntry        *entry,
-                                        gpointer         user_data);
-
-
-void
 on_help1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_compile_button_clicked              (GtkToolButton   *toolbutton,
+on_toolbutton_compile_clicked          (GtkAction       *action,
                                         gpointer         user_data);
 
 void
@@ -386,19 +367,14 @@ on_menu_unfold_all1_activate           (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_toolbutton_goto_entry_activate      (GtkEntry        *entry,
+on_toolbutton_goto_entry_activate      (GtkAction *action, const gchar *text, gpointer user_data);
+
+void
+on_toolbutton_goto_clicked             (GtkAction       *action,
                                         gpointer         user_data);
 
 void
-on_toolbutton_goto_clicked             (GtkToolButton   *toolbutton,
-                                        gpointer         user_data);
-
-void
-on_run_button_clicked                  (GtkToolButton   *toolbutton,
-                                        gpointer         user_data);
-
-void
-on_go_to_line1_activate                (GtkMenuItem     *menuitem,
+on_toolbutton_run_clicked              (GtkAction       *action,
                                         gpointer         user_data);
 
 void
@@ -569,10 +545,6 @@ void
 on_page_setup1_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
-void
-on_tools1_activate                     (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
 gboolean
 on_escape_key_press_event              (GtkWidget       *widget,
                                         GdkEventKey     *event,
@@ -612,4 +584,21 @@ on_tabs_and_spaces1_activate           (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 void
 on_debug_messages1_activate            (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_menu_show_white_space1_toggled      (GtkCheckMenuItem *checkmenuitem,
+                                        gpointer         user_data);
+
+void
+on_menu_show_line_endings1_toggled     (GtkCheckMenuItem *checkmenuitem,
+                                        gpointer         user_data);
+
+void
+on_menu_show_indentation_guides1_toggled
+                                        (GtkCheckMenuItem *checkmenuitem,
+                                        gpointer         user_data);
+
+void
+on_send_selection_to_vte1_activate     (GtkMenuItem     *menuitem,
                                         gpointer         user_data);

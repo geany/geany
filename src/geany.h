@@ -1,8 +1,8 @@
 /*
  *      geany.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@
  * listed in the documentation should not be changed */
 #define GEANY_FILEDEFS_SUBDIR			"filedefs"
 #define GEANY_TEMPLATES_SUBDIR			"templates"
-#define GEANY_CODENAME					"Quillan"
+#define GEANY_CODENAME					"Wessex"
 #define GEANY_HOMEPAGE					"http://www.geany.org/"
 #define GEANY_USE_WIN32_DIALOG			0
 #define GEANY_STRING_UNTITLED			_("untitled")
@@ -56,6 +56,7 @@
 
 /* Common forward declarations */
 typedef struct GeanyDocument GeanyDocument;
+typedef struct GeanyEditor GeanyEditor;
 typedef struct GeanyFiletype GeanyFiletype;
 
 
@@ -63,7 +64,8 @@ typedef struct GeanyFiletype GeanyFiletype;
 typedef struct GeanyApp
 {
 	gboolean			debug_mode;		/**< @c TRUE if debug messages should be printed. */
-	/** User configuration directory, usually @c ~/.geany.
+	/** User configuration directory, usually @c ~/.config/geany.
+	 * This is a full path read by @ref tm_get_real_path().
 	 * @note Plugin configuration files should be saved as:
 	 * @code g_build_path(G_DIR_SEPARATOR_S, geany->app->configdir, "plugins", "pluginname",
 	 * 	"file.conf"); @endcode */
@@ -77,18 +79,11 @@ GeanyApp;
 
 extern GeanyApp *app;
 
+extern GObject *geany_object;
+
 
 extern gboolean	ignore_callback;
 
-
-enum
-{
-	GEANY_IMAGE_SMALL_CROSS,
-	GEANY_IMAGE_LOGO,
-	GEANY_IMAGE_COMPILE,
-	GEANY_IMAGE_SAVE_ALL,
-	GEANY_IMAGE_NEW_ARROW
-};
 
 enum
 {
@@ -104,12 +99,6 @@ enum
 	MEGABYTE = (KILOBYTE*1024),
 	GIGABYTE = (MEGABYTE*1024)
 };
-
-
-/* Useful for some variable argument list functions, e.g. in utils.h */
-#if ! GLIB_CHECK_VERSION(2, 8, 0)
-#define G_GNUC_NULL_TERMINATED
-#endif
 
 
 /* prototype is here so that all files can use it. */

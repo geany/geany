@@ -1,8 +1,8 @@
 /*
  *      encodings.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -235,9 +235,6 @@ void encodings_select_radio_item(const gchar *charset)
 {
 	gint i;
 
-	if (ignore_callback)
-		return;
-
 	g_return_if_fail(charset != NULL);
 
 	i = 0;
@@ -340,8 +337,8 @@ void encodings_init(void)
 #endif
 
 	/* create encodings submenu in document menu */
-	menu[0] = lookup_widget(main_widgets.window, "set_encoding1_menu");
-	menu[1] = lookup_widget(main_widgets.window, "menu_reload_as1_menu");
+	menu[0] = ui_lookup_widget(main_widgets.window, "set_encoding1_menu");
+	menu[1] = ui_lookup_widget(main_widgets.window, "menu_reload_as1_menu");
 	cb_func[0] = G_CALLBACK(on_encoding_change);
 	cb_func[1] = G_CALLBACK(on_reload_as_activate);
 

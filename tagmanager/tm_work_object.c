@@ -7,6 +7,11 @@
 *
 */
 
+/**
+ * @file tm_work_object.h
+ * A TMWorkObject structure is the base class for TMSourceFile and TMProject.
+*/
+
 #include "general.h"	/* must always come first */
 
 #include <stdio.h>
@@ -26,18 +31,33 @@
 
 static GPtrArray *s_work_object_subclasses = NULL;
 
+
+static int get_path_max(const char *path)
+{
+#ifdef PATH_MAX
+	return PATH_MAX;
+#else
+	int path_max = pathconf(path, _PC_PATH_MAX);
+	if (path_max <= 0)
+		path_max = 4096;
+	return path_max;
+#endif
+}
+
+
 #ifdef G_OS_WIN32
 /* realpath implementation for Windows found at http://bugzilla.gnome.org/show_bug.cgi?id=342926
  * this one is better than e.g. liberty's lrealpath because this one uses Win32 API and works
  * with special chars within the filename */
-static char *realpath (const char *pathname, char resolved_path[PATH_MAX])
+static char *realpath (const char *pathname, char *resolved_path)
 {
   int size;
 
   if (resolved_path != NULL)
   {
-    size = GetFullPathNameA (pathname, PATH_MAX, resolved_path, NULL);
-    if (size > PATH_MAX)
+    int path_max = get_path_max(pathname);
+	size = GetFullPathNameA (pathname, path_max, resolved_path, NULL);
+    if (size > path_max)
       return NULL;
     else
       return resolved_path;
@@ -56,13 +76,15 @@ gchar *tm_get_real_path(const gchar *file_name)
 {
 	if (file_name)
 	{
-		gchar path[PATH_MAX+1];
-		memset(path, '\0', PATH_MAX+1);
-		realpath(file_name, path);
-		return g_strdup(path);
+		gsize len = get_path_max(file_name) + 1;
+		gchar *path = g_malloc0(len);
+
+		if (realpath(file_name, path))
+			return path;
+		else
+			g_free(path);
 	}
-	else
-		return NULL;
+	return NULL;
 }
 
 guint tm_work_object_register(GFreeFunc free_func, TMUpdateFunc update_func, TMFindFunc find_func)
@@ -136,6 +158,7 @@ gboolean tm_work_object_init(TMWorkObject *work_object, guint type, const char *
 	return TRUE;
 }
 
+/*
 time_t tm_get_file_timestamp(const char *file_name)
 {
 	struct stat s;
@@ -144,7 +167,6 @@ time_t tm_get_file_timestamp(const char *file_name)
 
 	if (0 != g_stat(file_name, &s))
 	{
-		/*g_warning("Unable to stat %s", file_name);*/
 		return (time_t) 0;
 	}
 	else
@@ -155,6 +177,7 @@ gboolean tm_work_object_is_changed(TMWorkObject *work_object)
 {
 	return (gboolean) (work_object->analyze_time < tm_get_file_timestamp(work_object->file_name));
 }
+*/
 
 TMWorkObject *tm_work_object_new(guint type, const char *file_name, gboolean create)
 {

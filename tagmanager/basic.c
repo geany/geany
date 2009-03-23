@@ -71,8 +71,13 @@ static KeyWord freebasic_keywords[] = {
 /* Match the name of a dim or const starting at pos. */
 static int extract_dim (char const *pos, vString * name, BasicKind kind)
 {
+	const char *old_pos = pos;
 	while (isspace (*pos))
 		pos++;
+
+	/* create tags only if there is some space between the keyword and the identifier */
+	if (old_pos == pos)
+		return 0;
 
 	vStringClear (name);
 
@@ -95,13 +100,18 @@ static int extract_dim (char const *pos, vString * name, BasicKind kind)
 			pos++;
 		/* now we are at the name */
 	}
-
 	/* capture "dim as foo ptr bar" */
-	if (strncasecmp (pos, "ptr", 3) == 0)
+	if (strncasecmp (pos, "ptr", 3) == 0 && isspace(*(pos+4)))
 	{
 		pos += 3; /* skip keyword "ptr" */
-
 		while (isspace (*pos))
+			pos++;
+	}
+	/*	capture "dim as string * 4096 chunk" */
+	if (strncmp (pos, "*", 1) == 0)
+	{
+		pos += 1; /* skip "*" */
+		while (isspace (*pos) || isdigit(*pos) || ispunct(*pos))
 			pos++;
 	}
 
@@ -155,6 +165,7 @@ static int match_keyword (const char *p, KeyWord const *kw)
 	vString *name;
 	size_t i;
 	int j;
+	const char *old_p;
 	for (i = 0; i < strlen (kw->token); i++)
 	{
 		if (tolower (p[i]) != kw->token[i])
@@ -166,6 +177,17 @@ static int match_keyword (const char *p, KeyWord const *kw)
 		kw == &freebasic_keywords[1] ||
 		kw == &freebasic_keywords[2])
 		return extract_dim (p, name, kw->kind); /* extract_dim adds the found tag(s) */
+
+	old_p = p;
+	while (isspace (*p))
+		p++;
+
+	/* create tags only if there is some space between the keyword and the identifier */
+	if (old_p == p)
+	{
+		vStringDelete (name);
+		return 0;
+	}
 
 	for (j = 0; j < 1; j++)
 	{
@@ -207,8 +229,8 @@ static void findBasicTags (void)
 		while (isspace (*p))
 			p++;
 
-		/* Empty line? */
-		if (!*p)
+		/* Empty line or comment? */
+		if (!*p || *p == '\'')
 			continue;
 
 		/* In Basic, keywords always are at the start of the line. */

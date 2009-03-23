@@ -2,6 +2,8 @@
 
 SUBDIRS = tagmanager scintilla src plugins icons po doc
 
+AUTOMAKE_OPTIONS =	1.7
+
 WIN32_BUILD_FILES = \
 	geany_private.rc \
     win32-config.h \
@@ -11,7 +13,7 @@ WIN32_BUILD_FILES = \
     src/makefile.win32
 
 SYS_DATA_FILES = \
-	data/global.tags \
+	data/c99.tags \
 	data/php.tags \
 	data/python.tags \
 	data/latex.tags \
@@ -19,16 +21,19 @@ SYS_DATA_FILES = \
 	data/html_entities.tags \
 	$(srcdir)/data/filetypes.* \
 	data/filetype_extensions.conf \
-	data/snippets.conf
+	data/snippets.conf \
+	data/ui_toolbar.xml
 
 EXTRA_DIST = \
 	autogen.sh \
 	wscript \
+	waf \
 	geany.desktop.in \
 	geany.pc.in \
 	geany.spec \
 	geany.glade \
 	geany.gladep \
+	ChangeLog.pre-0-17 \
 	HACKING \
 	README.I18N \
 	README.Packagers \
@@ -57,7 +62,7 @@ install-data-local:
 	  $(INSTALL_DATA) $(srcdir)/pixmaps/geany.png $(DESTDIR)$(datadir)/pixmaps; \
 	fi
 	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir); \
-	$(INSTALL_DATA) $(srcdir)/data/global.tags $(DESTDIR)$(pkgdatadir); \
+	$(INSTALL_DATA) $(srcdir)/data/c99.tags $(DESTDIR)$(pkgdatadir); \
 	$(INSTALL_DATA) $(srcdir)/data/php.tags $(DESTDIR)$(pkgdatadir); \
 	$(INSTALL_DATA) $(srcdir)/data/python.tags $(DESTDIR)$(pkgdatadir); \
 	$(INSTALL_DATA) $(srcdir)/data/pascal.tags $(DESTDIR)$(pkgdatadir); \

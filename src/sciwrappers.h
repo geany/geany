@@ -1,8 +1,8 @@
 /*
  *      sciwrappers.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -125,6 +125,7 @@ void				sci_set_search_anchor		(ScintillaObject * sci);
 void				sci_set_anchor				(ScintillaObject * sci, gint pos);
 void				sci_scroll_caret			(ScintillaObject * sci);
 void				sci_scroll_lines			(ScintillaObject * sci, gint lines);
+void				sci_scroll_columns			(ScintillaObject *sci, gint columns);
 gint				sci_search_next				(ScintillaObject * sci, gint flags, const gchar *text);
 gint				sci_search_prev				(ScintillaObject * sci, gint flags, const gchar *text);
 gint				sci_find_text				(ScintillaObject * sci, gint flags, struct TextToFind *ttf);
@@ -153,7 +154,7 @@ gint				sci_get_lexer				(ScintillaObject * sci);
 void				sci_set_readonly			(ScintillaObject * sci, gboolean readonly);
 gboolean			sci_get_readonly			(ScintillaObject * sci);
 gint				sci_get_zoom				(ScintillaObject * sci);
-void				sci_cmd						(ScintillaObject * sci, gint cmd);
+void				sci_send_command			(ScintillaObject * sci, gint cmd);
 
 gint				sci_get_current_line		(ScintillaObject * sci);
 gint				sci_get_lines_selected		(ScintillaObject * sci);
@@ -162,8 +163,8 @@ gint				sci_get_first_visible_line	(ScintillaObject * sci);
 void				sci_set_styling				(ScintillaObject * sci, gint len, gint style);
 void				sci_start_styling			(ScintillaObject * sci, gint pos, gint mask);
 
-gint				sci_get_indicator			(ScintillaObject * sci);
-void				sci_set_indicator			(ScintillaObject * sci, gint indic);
+gint				sci_indicator_get			(ScintillaObject * sci);
+void				sci_indicator_set			(ScintillaObject * sci, gint indic);
 void				sci_indicator_fill			(ScintillaObject * sci, gint pos, gint len);
 void				sci_indicator_clear			(ScintillaObject * sci, gint pos, gint len);
 

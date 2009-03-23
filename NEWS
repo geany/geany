@@ -1,3 +1,199 @@
+Geany 0.16 (February 15, 2009)
+
+    Bug fixes:
+    * Fix indenting for Tabs & Spaces mode when inserting snippets.
+    * Fix snippets and smart indent using too much indentation when the
+      line contains whitespace after non-whitespace characters (#2215044).
+    * Fix segfault when showing Find in Files dialog when no documents are
+      open (#2228544).
+    * Fix not switching to 2nd last used document when the last used
+      document has been closed (#1945162).
+
+    General:
+    * Group child tags by their parents in the symbol list for C-like
+      filetypes, Python, Conf (thanks to Conrad Steenberg).
+    * Use a tree for the Documents sidebar, grouped by path.
+    * Add 'Tools->Configuration Files' menu with items to open
+      filetype_extensions.conf and ignore.tags. These files are also
+      reloaded automatically when saved.
+    * Change configuration directory path to $XDG_CONFIG_HOME/geany
+      (most often this is ~/.config/geany).
+    * Allow to specify files on the command line and from remote instances
+      to be URIs (local and with GIO also remote URIs).
+    * Increase minimum required GTK version to 2.8.
+
+    Prefs:
+    * Add Project Indentation prefs, which override the Editor
+      Preferences dialog options. For new projects, these default to
+      the editor indent prefs.
+    * Add an interface pref for whether to hide additional widgets when
+      double-clicking on document notebook tabs (off by default).
+    * Add a preference to invert all colours for syntax highlighting.
+    * Add a hidden preference "allow_always_save" to make the Save buttons
+      and menu items always sensitive.
+
+    Interface:
+    * Rework the toolbar: now all elements can be added/removed/reordered
+      using a simple XML file.
+    * Add new toolbar buttons for Cut, Copy, Paste, Delete, Preferences,
+      Close All and Build (including a submenu for Make actions).
+    * Add a progressbar widget to the statusbar to show progress for time
+      consuming actions.
+
+    Editor:
+    * Make Ctrl-click go to matching brace if there's no current word.
+    * Make Shift+Mouse wheel scroll the editor view horizontally.
+    * Make the 'Mark' button for Find highlight the results with rounded boxes
+      instead of marking the whole line.
+    * Add auto-closing of braces, brackets and quotes (Guillaume de Rorthais).
+    * Support multiple %cursor% wildcards in Snippets (Thomas Martitz).
+
+    Filetypes:
+    * Add new filetypes Ada, CMake, Matlab, NSIS, Vala and YAML.
+    * Update HTML character entities (thanks to Tyler D'Agosta).
+    * Parse restructuredText sections in the order of first-used underline
+      character, which can now be any punctuation character (as per the spec).
+    * Remove GTK global tags, replace them with C (C99) tags. The GTK tags
+      file is still available for download on the website.
+    * Minor improvements for filetypes CSS, Fortran, FreeBasic, HTML, Tcl
+      and Vala.
+
+    Windows:
+    * Improve tab close icon size.
+    * Changes to the Windows installer:
+      - The full installer now includes the GTK 2.14 runtime environment.
+      - Register ".geany" as Geany Project File extension.
+      - Install GTK translation files only if installation of translation
+        files were requested (saves about 22 MB otherwise).
+      - Support silent installations.
+
+    Plugins:
+    * Add Split Window 'Split Vertically' command (thanks to Moritz Barsnick).
+    * Make Version Diff plugin set the indent type for diffs based on the
+      current file's indent type.
+    * Minor improvements to the filebrowser plugin
+
+    Plugin API:
+    * Generate plugin API header geanyfunctions.h containing macros to
+      avoid having to type the function pointer names manually.
+    * Deprecate pluginmacros.h in favour of geanyfunctions.h.
+    * Add "editor-notify" to the plugin API.
+    * Add new plugin symbol plugin_help() which is called by Geany when the
+      plugin should show its documentation (if any, symbol is optional).
+
+    Documentation:
+    * Update Scintilla regular expression info for v1.77 (character
+      classes, ASCII escaping, character sets containing square
+      brackets peculiarities). Adapted from SciTE doc.
+    * Complete 'Hello World' Plugin Howto.
+
+    Internationalisation:
+    * Updated translations: bg, ca, cs, de, en_GB, fr, hu, it, ja,
+      pt_BR, sv, ru, tr, vi, zh_CN
+
+
+Geany 0.15 (October 19, 2008)
+
+    General:
+    * Add Previous Message, Previous Error commands (thanks also to Beau
+      Barker).
+    * Add 'Close Other Documents' File menu command (#1976724).
+    * Add Find Document Usage popup menu command & keybinding.
+    * Check that the current file is still on disk (as well as checking the
+      modification time).
+    * Add support for custom file templates (found at startup) in the
+      ~/.geany/templates/files directory, shown underneath filetype templates
+      in the New with Template menu.
+    * Make socket open command support filename:line:column syntax.
+    * Add filetypes.* [build_settings] key 'error_regex' to support custom
+      error message parsing using a GNU-style extended regular expression.
+    * Allow loading projects from command line (#1961083).
+    * Add alternative build system: Waf.
+    * Add Tools menu item to reload configuration data without a restart.
+    * Add support to use template wildcards in snippets.
+    * Increase LSB compliance.
+
+    Prefs:
+    * Make disk check timeout configurable (zero disables disk checks).
+    * Add search pref: 'Use the current file's directory for Find in Files'
+      (#1930435).
+
+    Interface:
+    * Make keyboard shortcuts dialog non-modal (#1999384).
+    * Add a debug messages window to easily view debug messages/warnings.
+
+    Editor:
+    * Update Scintilla to version 1.77 (includes many fixes).
+    * Add basic Line Breaking option in the Document menu and 'Line breaking
+      column' editor pref (for now only works when typing characters past
+      the line breaking column number).
+    * Don't colourise any documents until they need to be drawn (this
+      should make opening a session faster for filetypes that support typename
+      highlighting).
+    * Make Ctrl-click on a word perform Go to Tag Definition.
+    * Add 'Max. symbol name suggestions' autocompletion pref.
+    * Show ellipsis (...) item when there are too many symbol names for
+      autocompletion.
+    * Highlight matching brace indent guides (thanks to Jason Oster;
+      #2104099).
+    * Show brace indent guides on empty lines when appropriate (thanks to
+      Jason Oster; #2105982).
+    * Add 'Tab key indents' pref, on by default.
+    * Implement soft tabs support (#1662173). There's now a 'Tabs & Spaces'
+      Indent Type, and separate Width, Hard Tab Width indent prefs. (Thanks
+      to Joerg Desch for explaining how it needed to work).
+    * Auto-update the line margin width as lines are added (thanks to Jason
+      Oster; #2129157).
+    * Add "Replace spaces by tabs".
+
+    Windows:
+    * Install plugins into lib/ not into plugins/.
+    * Install Geany's message catalogs into share/locale rather than
+      lib/locale as GTK does since 2.12.2.
+
+    Keybindings:
+    * Add Go to Start/End of Line keybindings (#1996175).
+    * Add 'Switch to Compiler' keybinding (useful when checking build
+      progress).
+    * Add keybindings for Line wrapping, Line breaking, Toggle fold and
+      Replace Spaces by tabs, Previous/Next word part.
+
+    Filetypes:
+    * Add OpenGL Shader Language (GLSL) filetype (thanks to Colomban
+      Wendling; #2060961).
+    * Add R language filetype (thanks to Andrew Rowland; #2121502).
+    * Split filetype Fortran into Fortran 77 and Fortran 90.
+    * Add Gettext translation filetype (#2131985).
+    * CSS improvements, thanks to Jason Oster.
+
+    Embedded Terminal:
+    * Fix hang when restarting the VTE (#1990323) with VTE 0.16.14.
+      (Note that with VTE 0.16.14 the reset sometimes leaves a blank
+      terminal, but pressing enter makes it then behave as normal).
+
+    Plugins:
+    * Add Split Window plugin (should work OK for viewing; full editing
+      support is not implemented yet).
+    * Merge InstantSave, AutoSave and BackupCopy plugins into the new
+      plugin 'Save Actions'.
+
+    Documentation:
+    * Add Tips and Tricks appendix.
+    * Updated Installation section.
+    * Update 'Build system' for custom error regexes.
+    * Add a section for internal plugins.
+
+    Plugin API:
+    * Many changes; see the API documentation (make api-doc) and the
+      geany-devel list archives.
+    * Deprecated: plugin_fields, plugin_info symbols.
+
+    Internationalisation:
+    * New translations: ko, tr.
+    * Updated translations: be, ca, de, en_GB, fi, hu, it, ja, pl,
+      ro, ru, sv, zh_CN
+
+
 Geany 0.14 (April 19, 2008)
 
     General:

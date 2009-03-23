@@ -1,8 +1,8 @@
 /*
  *      utils.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -29,6 +29,10 @@
 #ifndef GEANY_UTILS_H
 #define GEANY_UTILS_H 1
 
+
+#include <time.h>
+
+
 /** Returns: TRUE if @a ptr points to a non-zero value. */
 #define NZV(ptr) \
 	((ptr) && (ptr)[0])
@@ -45,8 +49,16 @@
 		g_free(setptr_tmp);\
 	}
 
+#define foreach_c_array(item, array, len) \
+	for (item = array; item < &array[len]; item++)
 
-void utils_start_browser(const gchar *uri);
+/* @param ptr should be a (gpointer*), needed for implementation. */
+#define foreach_ptr_array(item, ptr, ptr_array) \
+	for (ptr = ptr_array->pdata, item = *ptr; \
+		ptr < &ptr_array->pdata[ptr_array->len]; ++ptr, item = *ptr)
+
+
+void utils_open_browser(const gchar *uri);
 
 gint utils_get_line_endings(const gchar* buffer, glong size);
 
@@ -74,9 +86,9 @@ gchar utils_brace_opposite(gchar ch);
 
 gchar *utils_get_hostname(void);
 
-gint utils_make_settings_dir(void);
+guint utils_string_replace_all(GString *haystack, const gchar *needle, const gchar *replace);
 
-gboolean utils_string_replace_all(GString *str, const gchar *needle, const gchar *replace);
+guint utils_string_replace_first(GString *haystack, const gchar *needle, const gchar *replace);
 
 gchar *utils_str_replace(gchar *haystack, const gchar *needle, const gchar *replacement);
 
@@ -120,7 +132,7 @@ gchar *utils_get_locale_from_utf8(const gchar *utf8_text);
 
 gchar *utils_get_utf8_from_locale(const gchar *locale_text);
 
-void utils_free_pointers(gpointer first, ...) G_GNUC_NULL_TERMINATED;
+void utils_free_pointers(gsize arg_count, ...) G_GNUC_NULL_TERMINATED;
 
 gchar **utils_strv_new(const gchar *first, ...) G_GNUC_NULL_TERMINATED;
 
@@ -140,5 +152,15 @@ gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFla
 gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
 						   GSpawnChildSetupFunc child_setup, gpointer user_data, GPid *child_pid,
 						   GError **error);
+
+gint utils_str_casecmp(const gchar *s1, const gchar *s2);
+
+const gchar *utils_build_path(const gchar *first, ...) G_GNUC_NULL_TERMINATED;
+
+gchar *utils_get_path_from_uri(const gchar *uri);
+
+gboolean utils_is_uri(const gchar *uri);
+
+gboolean utils_is_remote_path(const gchar *path);
 
 #endif

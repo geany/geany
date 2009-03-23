@@ -12,6 +12,12 @@ if [ "$1" = -s ]; then
 	shift
 fi
 
+# -q to not print warnings
+if [ "$1" = -q ]; then
+	QUIET="set"
+	shift
+fi
+
 status=`svn st $*`
 
 # get list of files changed.
@@ -40,6 +46,9 @@ else
 fi
 
 # warn about anything that isn't a modification or addition
+if [ -n "$QUIET" ]; then
+	exit
+fi
 warn=`echo "$status" |egrep '^[^MA]'`
 if [ -n "$warn" ]; then
 	echo 'Warnings:'

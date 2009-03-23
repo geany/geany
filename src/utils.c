@@ -1,8 +1,8 @@
 /*
  *      utils.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -44,6 +44,10 @@
 
 #include <glib/gstdio.h>
 
+#ifdef HAVE_GIO
+# include <gio/gio.h>
+#endif
+
 #include "prefs.h"
 #include "support.h"
 #include "document.h"
@@ -55,13 +59,28 @@
 #include "utils.h"
 
 
-void utils_start_browser(const gchar *uri)
+/**
+ *  Tries to open the given URI in a browser.
+ *  On Windows, the system's default browser is opened.
+ *  On non-Windows systems, the browser command set in the preferences dialog is used. In case
+ *  that fails or it is unset, @a xdg-open is used as fallback as well as some other known
+ *  browsers.
+ *
+ *  @param uri The URI to open in the web browser.
+ *
+ *  @since 0.16
+ **/
+void utils_open_browser(const gchar *uri)
 {
 #ifdef G_OS_WIN32
+	g_return_if_fail(uri != NULL);
 	win32_open_browser(uri);
 #else
-	gchar *cmdline = g_strconcat(tool_prefs.browser_cmd, " ", uri, NULL);
+	gchar *cmdline;
 
+	g_return_if_fail(uri != NULL);
+
+	cmdline = g_strconcat(tool_prefs.browser_cmd, " ", uri, NULL);
 	if (! g_spawn_command_line_async(cmdline, NULL))
 	{
 		const gchar *argv[3];
@@ -197,7 +216,10 @@ gboolean utils_is_opening_brace(gchar c, gboolean include_angles)
 /**
  *  Write the given @c text into a file with @c filename.
  *  If the file doesn't exist, it will be created.
- *  If it already exists, it will be overwritten.
+ *  If it already exists, it will be overwritten. Internally, g_file_set_contents() is used
+ *  to write the file with all its error checking and related limitations like
+ *  destroying hard links and possibly losing file permissions. Please read the
+ *  API documentation of g_file_set_contents() for details.
  *
  *  @param filename The filename of the file to write, in locale encoding.
  *  @param text The text to write into the file.
@@ -207,34 +229,16 @@ gboolean utils_is_opening_brace(gchar c, gboolean include_angles)
  **/
 gint utils_write_file(const gchar *filename, const gchar *text)
 {
-	FILE *fp;
-	gint bytes_written, len;
+	GError *error = NULL;
 
-	if (filename == NULL)
+	g_return_val_if_fail(filename != NULL, ENOENT);
+	g_return_val_if_fail(text != NULL, EINVAL);
+
+	if (! g_file_set_contents(filename, text, -1, &error))
 	{
-		return ENOENT;
-	}
-
-	len = strlen(text);
-
-	fp = g_fopen(filename, "w");
-	if (fp != NULL)
-	{
-		bytes_written = fwrite(text, sizeof (gchar), len, fp);
-		fclose(fp);
-
-		if (len != bytes_written)
-		{
-			geany_debug("utils_write_file(): written only %d bytes, had to write %d bytes to %s",
-								bytes_written, len, filename);
-			return EIO;
-		}
-	}
-	else
-	{
-		geany_debug("utils_write_file(): could not write to file %s (%s)",
-			filename, g_strerror(errno));
-		return errno;
+		geany_debug("%s: could not write to file %s (%s)", G_STRFUNC, filename, error->message);
+		g_error_free(error);
+		return EIO;
 	}
 	return 0;
 }
@@ -297,9 +301,11 @@ const gchar *utils_get_eol_name(gint eol_mode)
 
 gboolean utils_atob(const gchar *str)
 {
-	if (str == NULL) return FALSE;
-	else if (strcasecmp(str, "TRUE")) return FALSE;
-	else return TRUE;
+	if (str == NULL)
+		return FALSE;
+	else if (strcmp(str, "TRUE") == 0 || strcmp(str, "true") == 0)
+		return TRUE;
+	return FALSE;
 }
 
 
@@ -313,7 +319,7 @@ gboolean utils_is_absolute_path(const gchar *path)
 }
 
 
-gdouble utils_scale_round (gdouble val, gdouble factor)
+gdouble utils_scale_round(gdouble val, gdouble factor)
 {
 	/*val = floor(val * factor + 0.5);*/
 	val = floor(val);
@@ -325,11 +331,69 @@ gdouble utils_scale_round (gdouble val, gdouble factor)
 
 
 /**
+ *  A replacement function for g_strncasecmp() to compare strings case-insensitive.
+ *  It converts both strings into lowercase using g_utf8_strdown() and then compare
+ *  both strings using strcmp().
+ *  This is not completely accurate regarding locale-specific case sorting rules
+ *  but seems to be a good compromise between correctness and performance.
+ *
+ *  The input strings should be in UTF-8 or locale encoding.
+ *
+ *  @param s1 Pointer to first string or @a NULL.
+ *  @param s2 Pointer to second string or @a NULL.
+ *
+ *  @return an integer less than, equal to, or greater than zero if @a s1 is found, respectively,
+ *          to be less than, to match, or to be greater than @a s2.
+ *
+ *  @since 0.16
+ */
+gint utils_str_casecmp(const gchar *s1, const gchar *s2)
+{
+	gchar *tmp1, *tmp2;
+	gint result;
+
+	g_return_val_if_fail(s1 != NULL, 1);
+	g_return_val_if_fail(s2 != NULL, -1);
+
+	tmp1 = g_strdup(s1);
+	tmp2 = g_strdup(s2);
+
+	/* first ensure strings are UTF-8 */
+	if (! g_utf8_validate(s1, -1, NULL))
+		setptr(tmp1, g_locale_to_utf8(s1, -1, NULL, NULL, NULL));
+	if (! g_utf8_validate(s2, -1, NULL))
+		setptr(tmp2, g_locale_to_utf8(s2, -1, NULL, NULL, NULL));
+
+	if (tmp1 == NULL)
+	{
+		g_free(tmp2);
+		return 1;
+	}
+	if (tmp2 == NULL)
+	{
+		g_free(tmp1);
+		return -1;
+	}
+
+	/* then convert the strings into a case-insensitive form */
+	setptr(tmp1, g_utf8_strdown(tmp1, -1));
+	setptr(tmp2, g_utf8_strdown(tmp2, -1));
+
+	/* compare */
+	result = strcmp(tmp1, tmp2);
+
+	g_free(tmp1);
+	g_free(tmp2);
+	return result;
+}
+
+
+/**
  *  @a NULL-safe string comparison. Returns @a TRUE if both @c a and @c b are @a NULL
  *  or if @c a and @c b refer to valid strings which are equal.
  *
  *  @param a Pointer to first string or @a NULL.
- *  @param b Pointer to first string or @a NULL.
+ *  @param b Pointer to second string or @a NULL.
  *
  *  @return @a TRUE if @c a equals @c b, else @a FALSE.
  **/
@@ -438,125 +502,25 @@ gint utils_is_file_writeable(const gchar *locale_filename)
 }
 
 
-#ifdef G_OS_WIN32
-# define DIR_SEP "\\" /* on Windows we need an additional dir separator */
-#else
-# define DIR_SEP ""
-#endif
-
-gint utils_make_settings_dir(void)
-{
-	gint saved_errno = 0;
-	gchar *conf_file = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
-	gchar *filedefs_dir = g_strconcat(app->configdir, G_DIR_SEPARATOR_S,
-					GEANY_FILEDEFS_SUBDIR, G_DIR_SEPARATOR_S, NULL);
-
-	gchar *templates_dir = g_strconcat(app->configdir, G_DIR_SEPARATOR_S,
-					GEANY_TEMPLATES_SUBDIR, G_DIR_SEPARATOR_S, NULL);
-
-	if (! g_file_test(app->configdir, G_FILE_TEST_EXISTS))
-	{
-		geany_debug("creating config directory %s", app->configdir);
-		saved_errno = utils_mkdir(app->configdir, FALSE);
-	}
-
-	if (saved_errno == 0 && ! g_file_test(conf_file, G_FILE_TEST_EXISTS))
-	{	/* check whether geany.conf can be written */
-		saved_errno = utils_is_file_writeable(app->configdir);
-	}
-
-	/* make subdir for filetype definitions */
-	if (saved_errno == 0)
-	{
-		gchar *filedefs_readme = g_strconcat(app->configdir, G_DIR_SEPARATOR_S,
-			GEANY_FILEDEFS_SUBDIR, G_DIR_SEPARATOR_S, "filetypes.README", NULL);
-
-		if (! g_file_test(filedefs_dir, G_FILE_TEST_EXISTS))
-		{
-			saved_errno = utils_mkdir(filedefs_dir, FALSE);
-		}
-		if (saved_errno == 0 && ! g_file_test(filedefs_readme, G_FILE_TEST_EXISTS))
-		{
-			gchar *text = g_strconcat(
-"Copy files from ", app->datadir, " to this directory to overwrite "
-"them. To use the defaults, just delete the file in this directory.\nFor more information read "
-"the documentation (in ", app->docdir, DIR_SEP "index.html or visit " GEANY_HOMEPAGE ").", NULL);
-			utils_write_file(filedefs_readme, text);
-			g_free(text);
-		}
-		g_free(filedefs_readme);
-	}
-
-	/* make subdir for template files */
-	if (saved_errno == 0)
-	{
-		gchar *templates_readme = g_strconcat(app->configdir, G_DIR_SEPARATOR_S,
-			GEANY_TEMPLATES_SUBDIR, G_DIR_SEPARATOR_S, "templates.README", NULL);
-
-		if (! g_file_test(templates_dir, G_FILE_TEST_EXISTS))
-		{
-			saved_errno = utils_mkdir(templates_dir, FALSE);
-		}
-		if (saved_errno == 0 && ! g_file_test(templates_readme, G_FILE_TEST_EXISTS))
-		{
-			gchar *text = g_strconcat(
-"There are several template files in this directory. For these templates you can use wildcards.\n\
-For more information read the documentation (in ", app->docdir, DIR_SEP "index.html or visit " GEANY_HOMEPAGE ").",
-					NULL);
-			utils_write_file(templates_readme, text);
-			g_free(text);
-		}
-		g_free(templates_readme);
-	}
-
-	g_free(filedefs_dir);
-	g_free(templates_dir);
-	g_free(conf_file);
-
-	return saved_errno;
-}
-
-
 /* Replaces all occurrences of needle in haystack with replacement.
- * New code should use utils_string_replace_all() instead.
- * All strings have to be NULL-terminated and needle and replacement have to be different,
- * e.g. needle "%" and replacement "%%" causes an endless loop */
+ * Warning: haystack will be freed.
+ * New code should use utils_string_replace_all() instead (freeing arguments
+ * is unusual behaviour).
+ * All strings have to be NULL-terminated.
+ * See utils_string_replace_all() for details. */
 gchar *utils_str_replace(gchar *haystack, const gchar *needle, const gchar *replacement)
 {
-	gint i;
-	gchar *start;
-	gint lt_pos;
-	gchar *result;
 	GString *str;
 
 	if (haystack == NULL)
 		return NULL;
 
-	if (needle == NULL || replacement == NULL)
-		return haystack;
+	str = g_string_new(haystack);
 
-	if (utils_str_equal(needle, replacement))
-		return haystack;
-
-	start = strstr(haystack, needle);
-	lt_pos = utils_strpos(haystack, needle);
-
-	if (start == NULL || lt_pos == -1)
-		return haystack;
-
-	/* substitute by copying */
-	str = g_string_sized_new(strlen(haystack));
-	for (i = 0; i < lt_pos; i++)
-	{
-		g_string_append_c(str, haystack[i]);
-	}
-	g_string_append(str, replacement);
-	g_string_append(str, haystack + lt_pos + strlen(needle));
-
-	result = str->str;
 	g_free(haystack);
-	g_string_free(str, FALSE);
-	return utils_str_replace(result, needle, replacement);
+	utils_string_replace_all(str, needle, replacement);
+
+	return g_string_free(str, FALSE);
 }
 
 
@@ -596,24 +560,54 @@ gint utils_strpos(const gchar *haystack, const gchar *needle)
 }
 
 
+/**
+ *  This is a convenience function to retrieve a formatted date/time string from strftime().
+ *  This function should be preferred to directly calling strftime() since this function
+ *  works on UTF-8 encoded strings.
+ *
+ *  @param format The format string to pass to strftime(3). See the strftime(3)
+ *                documentation for details, in UTF-8 encoding.
+ *  @param time_to_use The date/time to use, in time_t format or NULL to use the current time.
+ *
+ *  @return A newly-allocated string, should be freed when no longer needed.
+ *
+ *  @since 0.16
+ */
 gchar *utils_get_date_time(const gchar *format, time_t *time_to_use)
 {
-	time_t tp;
 	const struct tm *tm;
-	gchar *date;
+	static gchar date[1024];
+	gchar *locale_format;
+	gsize len;
 
-	if (format == NULL)
-		return NULL;
+	g_return_val_if_fail(format != NULL, NULL);
+
+	if (! g_utf8_validate(format, -1, NULL))
+	{
+		locale_format = g_locale_from_utf8(format, -1, NULL, NULL, NULL);
+		if (locale_format == NULL)
+			return NULL;
+	}
+	else
+		locale_format = g_strdup(format);
 
 	if (time_to_use != NULL)
-		tp = *time_to_use;
+		tm = localtime(time_to_use);
 	else
-		tp = time(NULL);
+	{
+		time_t tp = time(NULL);
+		tm = localtime(&tp);
+	}
 
-	tm = localtime(&tp);
-	date = g_malloc0(256);
-	strftime(date, 256, format, tm);
-	return date;
+	len = strftime(date, 1024, locale_format, tm);
+	g_free(locale_format);
+	if (len == 0)
+		return NULL;
+
+	if (! g_utf8_validate(date, len, NULL))
+		return g_locale_to_utf8(date, len, NULL, NULL, NULL);
+	else
+		return g_strdup(date);
 }
 
 
@@ -704,8 +698,8 @@ gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const
  *  @param default_value The default value which will be returned when @c section or @c key
  *         don't exist.
  *
- *  @return A newly allocated string, or the given default value if the value could not be
- *          retrieved.
+ *  @return A newly allocated string, either the value for @a key or a copy of the given
+ *          default value if it could not be retrieved.
  **/
 gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gchar *key,
 								const gchar *default_value)
@@ -719,7 +713,7 @@ gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gc
 	if (error)
 	{
 		g_error_free(error);
-		return (gchar*) g_strdup(default_value);
+		return g_strdup(default_value);
 	}
 	return tmp;
 }
@@ -900,7 +894,7 @@ GIOChannel *utils_set_up_io_channel(
 		g_io_channel_set_encoding(ioc, encoding, &error);
 		if (error)
 		{
-			geany_debug("%s: %s", __func__, error->message);
+			geany_debug("%s: %s", G_STRFUNC, error->message);
 			g_error_free(error);
 			return ioc;
 		}
@@ -928,6 +922,7 @@ gchar **utils_read_file_in_array(const gchar *filename)
 	if (data != NULL)
 	{
 		result = g_strsplit_set(data, "\r\n", -1);
+		g_free(data);
 	}
 
 	return result;
@@ -938,11 +933,12 @@ gchar **utils_read_file_in_array(const gchar *filename)
  * Replaces \\, \r, \n, \t and \uXXX by their real counterparts */
 gboolean utils_str_replace_escape(gchar *string)
 {
-	gsize i, j;
+	gsize i, j, len;
 	guint unicodechar;
 
 	j = 0;
-	for (i = 0; i < strlen(string); i++)
+	len = strlen(string);
+	for (i = 0; i < len; i++)
 	{
 		if (string[i]=='\\')
 		{
@@ -1143,24 +1139,24 @@ gchar *utils_get_utf8_from_locale(const gchar *locale_text)
 }
 
 
-/* Frees all passed pointers if they are *ALL* non-NULL.
- * Do not use if any pointers may be NULL.
- * The first argument is nothing special, it will also be freed.
- * The list must be ended with NULL. */
-void utils_free_pointers(gpointer first, ...)
+/* Pass pointers to free after arg_count.
+ * The last argument must be NULL as an extra check that arg_count is correct. */
+void utils_free_pointers(gsize arg_count, ...)
 {
 	va_list a;
-	gpointer sa;
+	gsize i;
+	gpointer ptr;
 
-    for (va_start(a, first);  (sa = va_arg(a, gpointer), sa!=NULL);)
-    {
-    	if (sa != NULL)
-    		g_free(sa);
+	va_start(a, arg_count);
+	for (i = 0; i < arg_count; i++)
+	{
+		ptr = va_arg(a, gpointer);
+		g_free(ptr);
 	}
+	ptr = va_arg(a, gpointer);
+	if (ptr)
+		g_warning("Wrong arg_count!");
 	va_end(a);
-
-    if (first != NULL)
-    	g_free(first);
 }
 
 
@@ -1200,85 +1196,10 @@ gchar **utils_strv_new(const gchar *first, ...)
 }
 
 
-#if ! GLIB_CHECK_VERSION(2, 8, 0)
-/* Taken from GLib SVN, 2007-03-10 */
-/**
- * g_mkdir_with_parents:
- * @pathname: a pathname in the GLib file name encoding
- * @mode: permissions to use for newly created directories
- *
- * Create a directory if it doesn't already exist. Create intermediate
- * parent directories as needed, too.
- *
- * Returns: 0 if the directory already exists, or was successfully
- * created. Returns -1 if an error occurred, with errno set.
- *
- * Since: 2.8
- */
-int
-g_mkdir_with_parents (const gchar *pathname,
-		      int          mode)
-{
-  gchar *fn, *p;
-
-  if (pathname == NULL || *pathname == '\0')
-    {
-      errno = EINVAL;
-      return -1;
-    }
-
-  fn = g_strdup (pathname);
-
-  if (g_path_is_absolute (fn))
-    p = (gchar *) g_path_skip_root (fn);
-  else
-    p = fn;
-
-  do
-    {
-      while (*p && !G_IS_DIR_SEPARATOR (*p))
-	p++;
-
-      if (!*p)
-	p = NULL;
-      else
-	*p = '\0';
-
-      if (!g_file_test (fn, G_FILE_TEST_EXISTS))
-	{
-	  if (g_mkdir (fn, mode) == -1)
-	    {
-	      int errno_save = errno;
-	      g_free (fn);
-	      errno = errno_save;
-	      return -1;
-	    }
-	}
-      else if (!g_file_test (fn, G_FILE_TEST_IS_DIR))
-	{
-	  g_free (fn);
-	  errno = ENOTDIR;
-	  return -1;
-	}
-      if (p)
-	{
-	  *p++ = G_DIR_SEPARATOR;
-	  while (*p && G_IS_DIR_SEPARATOR (*p))
-	    p++;
-	}
-    }
-  while (p);
-
-  g_free (fn);
-
-  return 0;
-}
-#endif
-
-
 /**
  *  Create a directory if it doesn't already exist.
  *  Create intermediate parent directories as needed, too.
+ *  The permissions of the created directory are set 0700.
  *
  *  @param path The path of the directory to create, in locale encoding.
  *  @param create_parent_dirs Whether to create intermediate parent directories if necessary.
@@ -1335,7 +1256,7 @@ GSList *utils_get_file_list(const gchar *path, guint *length, GError **error)
 		const gchar *filename = g_dir_read_name(dir);
 		if (filename == NULL) break;
 
-		list = g_slist_insert_sorted(list, g_strdup(filename), (GCompareFunc) g_strcasecmp);
+		list = g_slist_insert_sorted(list, g_strdup(filename), (GCompareFunc) utils_str_casecmp);
 		len++;
 	}
 	g_dir_close(dir);
@@ -1367,41 +1288,74 @@ gboolean utils_str_has_upper(const gchar *str)
 }
 
 
-/**
- *  Replaces all occurrences of @c needle in @c haystack with @c replace.
- *  Currently this is not safe if @c replace matches @c needle, so @c needle and @c replace
- *  must not be equal.
- *
- *  @param haystack The input string to operate on. This string is modified in place.
- *  @param needle The string which should be replaced.
- *  @param replace The replacement for @c needle.
- *
- *  @return @a TRUE if @c needle was found, else @a FALSE.
- **/
-gboolean utils_string_replace_all(GString *haystack, const gchar *needle, const gchar *replace)
+static guint utils_string_replace_helper(GString *haystack, const gchar *needle,
+										 const gchar *replace, const guint max_replaces)
 {
-	const gchar *c;
-	gssize pos = -1;
+	const gchar *stack, *match;
+	guint ret = 0;
+	gssize pos;
 
 	if (haystack->len == 0)
 		return FALSE;
-	g_return_val_if_fail(NZV(needle), FALSE);
-	g_return_val_if_fail(! NZV(replace) || strstr(replace, needle) == NULL, FALSE);
+	g_return_val_if_fail(NZV(needle), 0);
 
-	while (1)
+	stack = haystack->str;
+	if (! (match = strstr(stack, needle)))
+		return 0;
+	do
 	{
-		c = strstr(haystack->str, needle);
-		if (c == NULL)
-			break;
-		else
+		pos = match - haystack->str;
+		g_string_erase(haystack, pos, strlen(needle));
+
+		/* make next search after removed matching text.
+		 * (we have to be careful to only use haystack->str as its address may change) */
+		stack = haystack->str + pos;
+
+		if (replace)
 		{
-			pos = c - haystack->str;
-			g_string_erase(haystack, pos, strlen(needle));
-			if (replace)
-				g_string_insert(haystack, pos, replace);
+			g_string_insert(haystack, pos, replace);
+			stack = haystack->str + pos + strlen(replace);	/* skip past replacement */
 		}
 	}
-	return (pos != -1);
+	while (++ret != max_replaces && (match = strstr(stack, needle)));
+
+	return ret;
+}
+
+
+/**
+ * Replaces all occurrences of @c needle in @c haystack with @c replace.
+ * As of Geany 0.16, @a replace can match @a needle, so the following will work:
+ * @code utils_string_replace_all(text, "\n", "\r\n"); @endcode
+ *
+ * @param haystack The input string to operate on. This string is modified in place.
+ * @param needle The string which should be replaced.
+ * @param replace The replacement for @c needle.
+ *
+ * @return @a amount of replacements done
+ **/
+guint utils_string_replace_all(GString *haystack, const gchar *needle, const gchar *replace)
+{
+	return utils_string_replace_helper(haystack, needle, replace, 0);
+}
+
+
+/**
+ * Convenience function to replace only the first occurrence of @c needle in @c haystack
+ * with @ replace.
+ * For details, see utils_string_replace_all().
+ *
+ * @param haystack The input string to operate on. This string is modified in place.
+ * @param needle The string which should be replaced.
+ * @param replace The replacement for @c needle.
+ *
+ * @return @a amount of replacements done
+ *
+ *  @since 0.16
+ */
+guint utils_string_replace_first(GString *haystack, const gchar *needle, const gchar *replace)
+{
+	return utils_string_replace_helper(haystack, needle, replace, 1);
 }
 
 
@@ -1523,3 +1477,113 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 #endif
 	return result;
 }
+
+
+/* Similar to g_build_path() but (re)using a fixed buffer, so never free it.
+ * This assumes a small enough resulting string length to be kept without freeing,
+ * but this should be the case for filenames. */
+const gchar *utils_build_path(const gchar *first, ...)
+{
+	static GString *buffer = NULL;
+	const gchar *str;
+	va_list args;
+
+	if (!buffer)
+		buffer = g_string_new(first);
+	else
+		g_string_assign(buffer, first);
+
+	va_start(args, first);
+	while (1)
+	{
+		str = va_arg(args, const gchar *);
+		if (!str)
+			break;
+
+		g_string_append_c(buffer, G_DIR_SEPARATOR);
+		g_string_append(buffer, str);
+	}
+	va_end(args);
+
+	return buffer->str;
+}
+
+
+/* Retrieves the path for the given URI.
+ * It returns:
+ * - the path which was determined by g_filename_from_uri() or GIO
+ * - NULL if the URI is non-local and gvfs-fuse is not installed
+ * - a new copy of 'uri' if it is not an URI. */
+gchar *utils_get_path_from_uri(const gchar *uri)
+{
+	gchar *locale_filename;
+
+	g_return_val_if_fail(uri != NULL, NULL);
+
+	if (! utils_is_uri(uri))
+		return g_strdup(uri);
+
+	/* this will work only for 'file://' URIs */
+	locale_filename = g_filename_from_uri(uri, NULL, NULL);
+#ifdef HAVE_GIO
+	/* g_filename_from_uri() failed, so we probably have a non-local URI */
+	if (locale_filename == NULL)
+	{
+		GFile *file = g_file_new_for_uri(uri);
+		locale_filename = g_file_get_path(file);
+		g_object_unref(file);
+		if (locale_filename == NULL)
+		{
+			geany_debug("The URI '%s' could not be resolved to a local path. This means "
+				"that the URI is invalid or that you don't have gvfs-fuse installed.", uri);
+			return NULL;
+		}
+	}
+#endif
+	if (locale_filename == NULL)
+		geany_debug("The URI '%s' could not be resolved to a local path. This means that the "
+			"URI is invalid or that Geany can't use GVFS (maybe it is not installed).", uri);
+
+	return locale_filename;
+}
+
+
+gboolean utils_is_uri(const gchar *uri)
+{
+	g_return_val_if_fail(uri != NULL, FALSE);
+
+	return (strstr(uri, "://") != NULL);
+}
+
+
+/* path should be in locale encoding */
+gboolean utils_is_remote_path(const gchar *path)
+{
+	g_return_val_if_fail(path != NULL, FALSE);
+
+	/* if path is an URI and it doesn't start "file://", we take it as remote */
+	if (utils_is_uri(path) && strncmp(path, "file:", 5) != 0)
+		return TRUE;
+
+#ifndef G_OS_WIN32
+	if (glib_check_version(2, 16, 0) == NULL) /* no need to check for this with GLib < 2.16 */
+	{
+		static gchar *fuse_path = NULL;
+		static gsize len = 0;
+
+		if (fuse_path == NULL)
+		{
+			fuse_path = g_build_filename(g_get_home_dir(), ".gvfs", NULL);
+			len = strlen(fuse_path);
+		}
+		/* Comparing the file path against a hardcoded path is not the most elegant solution
+		 * but for now it is better than nothing. Ideally, g_file_new_for_path() should create
+		 * proper GFile objects for Fuse paths, but it only does in future GVFS
+		 * versions (gvfs 1.1.1). */
+		return (strncmp(path, fuse_path, len) == 0);
+	}
+#endif
+	return FALSE;
+}
+
+

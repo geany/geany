@@ -6,19 +6,23 @@ noinst_LIBRARIES=libscintilla.a
 AM_CXXFLAGS = -DNDEBUG -DGTK -DGTK2 -DSCI_LEXER -DG_THREADS_IMPL_NONE
 
 LEXER_SRCS= \
+LexAda.cxx \
 LexAsm.cxx \
 LexBasic.cxx \
 LexBash.cxx \
 LexCPP.cxx \
 LexCaml.cxx \
+LexCmake.cxx \
 LexCrontab.cxx \
 LexCSS.cxx \
 LexD.cxx \
 LexFortran.cxx \
 LexHaskell.cxx \
 LexHTML.cxx \
+LexYAML.cxx \
 LexLua.cxx \
-LexOMS.cxx \
+LexNsis.cxx \
+LexMatlab.cxx \
 LexOthers.cxx \
 LexPascal.cxx \
 LexPerl.cxx \

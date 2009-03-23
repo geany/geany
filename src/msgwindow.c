@@ -1,8 +1,8 @@
 /*
  *      msgwindow.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@
  * Also compiler error message parsing and grep file and line parsing.
  */
 
-#include <time.h>
 
 #include "geany.h"
 
@@ -46,7 +45,9 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 
+#include <gdk/gdkkeysyms.h>
 
 
 /* used for parse_file_line */
@@ -75,10 +76,10 @@ static void on_scribble_populate(GtkTextView *textview, GtkMenu *arg1, gpointer 
 
 void msgwin_init()
 {
-	msgwindow.notebook = lookup_widget(main_widgets.window, "notebook_info");
-	msgwindow.tree_status = lookup_widget(main_widgets.window, "treeview3");
-	msgwindow.tree_msg = lookup_widget(main_widgets.window, "treeview4");
-	msgwindow.tree_compiler = lookup_widget(main_widgets.window, "treeview5");
+	msgwindow.notebook = ui_lookup_widget(main_widgets.window, "notebook_info");
+	msgwindow.tree_status = ui_lookup_widget(main_widgets.window, "treeview3");
+	msgwindow.tree_msg = ui_lookup_widget(main_widgets.window, "treeview4");
+	msgwindow.tree_compiler = ui_lookup_widget(main_widgets.window, "treeview5");
 	msgwindow.find_in_files_dir = NULL;
 
 	prepare_status_tree_view();
@@ -88,7 +89,10 @@ void msgwin_init()
 	msgwindow.popup_msg_menu = create_message_popup_menu(MSG_MESSAGE);
 	msgwindow.popup_compiler_menu = create_message_popup_menu(MSG_COMPILER);
 
-	g_signal_connect(lookup_widget(main_widgets.window, "textview_scribble"),
+	ui_widget_modify_font_from_string(
+		ui_lookup_widget(main_widgets.window, "textview_scribble"), interface_prefs.msgwin_font);
+
+	g_signal_connect(ui_lookup_widget(main_widgets.window, "textview_scribble"),
 		"populate-popup", G_CALLBACK(on_scribble_populate), NULL);
 }
 
@@ -99,12 +103,28 @@ void msgwin_finalize()
 }
 
 
+static gboolean on_msgwin_key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
+{
+	if (event->keyval == GDK_Return ||
+		event->keyval == GDK_ISO_Enter ||
+		event->keyval == GDK_KP_Enter ||
+		event->keyval == GDK_space)
+	{
+		GdkEventButton button_event;
+
+		button_event.button = 1;
+		button_event.time = event->time;
+		on_msgwin_button_press_event(NULL, &button_event, data);
+	}
+	return FALSE;
+}
+
+
 /* does some preparing things to the status message list widget */
 static void prepare_status_tree_view(void)
 {
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
-	PangoFontDescription *pfd;
 
 	msgwindow.store_status = gtk_list_store_new(1, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(msgwindow.tree_status), GTK_TREE_MODEL(msgwindow.store_status));
@@ -116,9 +136,7 @@ static void prepare_status_tree_view(void)
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_status), FALSE);
 
-	pfd = pango_font_description_from_string(interface_prefs.msgwin_font);
-	gtk_widget_modify_font(msgwindow.tree_status, pfd);
-	pango_font_description_free(pfd);
+	ui_widget_modify_font_from_string(msgwindow.tree_status, interface_prefs.msgwin_font);
 
 	g_signal_connect(msgwindow.tree_status, "button-press-event",
 				G_CALLBACK(on_msgwin_button_press_event), GINT_TO_POINTER(MSG_STATUS));
@@ -132,7 +150,6 @@ static void prepare_msg_tree_view(void)
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *selection;
-	PangoFontDescription *pfd;
 
 	/* line, doc, fg, str */
 	msgwindow.store_msg = gtk_list_store_new(4, G_TYPE_INT, G_TYPE_POINTER,
@@ -147,14 +164,14 @@ static void prepare_msg_tree_view(void)
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_msg), FALSE);
 
-	pfd = pango_font_description_from_string(interface_prefs.msgwin_font);
-	gtk_widget_modify_font(msgwindow.tree_msg, pfd);
-	pango_font_description_free(pfd);
+	ui_widget_modify_font_from_string(msgwindow.tree_msg, interface_prefs.msgwin_font);
 
 	/* use button-release-event so the selection has changed
 	 * (connect_after button-press-event doesn't work) */
 	g_signal_connect(msgwindow.tree_msg, "button-release-event",
 					G_CALLBACK(on_msgwin_button_press_event), GINT_TO_POINTER(MSG_MESSAGE));
+	g_signal_connect(msgwindow.tree_msg, "key-press-event",
+		G_CALLBACK(on_msgwin_key_press_event), GINT_TO_POINTER(MSG_MESSAGE));
 
 	/* selection handling */
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_msg));
@@ -169,7 +186,6 @@ static void prepare_compiler_tree_view(void)
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *selection;
-	PangoFontDescription *pfd;
 
 	msgwindow.store_compiler = gtk_list_store_new(2, GDK_TYPE_COLOR, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(msgwindow.tree_compiler), GTK_TREE_MODEL(msgwindow.store_compiler));
@@ -181,14 +197,14 @@ static void prepare_compiler_tree_view(void)
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_compiler), FALSE);
 
-	pfd = pango_font_description_from_string(interface_prefs.msgwin_font);
-	gtk_widget_modify_font(msgwindow.tree_compiler, pfd);
-	pango_font_description_free(pfd);
+	ui_widget_modify_font_from_string(msgwindow.tree_compiler, interface_prefs.msgwin_font);
 
 	/* use button-release-event so the selection has changed
 	 * (connect_after button-press-event doesn't work) */
 	g_signal_connect(msgwindow.tree_compiler, "button-release-event",
 					G_CALLBACK(on_msgwin_button_press_event), GINT_TO_POINTER(MSG_COMPILER));
+	g_signal_connect(msgwindow.tree_compiler, "key-press-event",
+		G_CALLBACK(on_msgwin_key_press_event), GINT_TO_POINTER(MSG_COMPILER));
 
 	/* selection handling */
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_compiler));
@@ -203,14 +219,13 @@ static const GdkColor *get_color(gint msg_color)
 {
 	static const GdkColor dark_red = {0, 65535 / 2, 0, 0};
 	static const GdkColor blue = {0, 0, 0, 0xD000};	/* not too bright ;-) */
-	static const GdkColor black = {0, 0, 0, 0};
 
 	switch (msg_color)
 	{
 		case COLOR_RED: return &color_error;
 		case COLOR_DARK_RED: return &dark_red;
 		case COLOR_BLUE: return &blue;
-		default: return &black;
+		default: return NULL;
 	}
 }
 
@@ -219,10 +234,10 @@ static const GdkColor *get_color(gint msg_color)
  *  Adds a new message in the compiler tab treeview in the messages window.
  *
  *  @param msg_color A color to be used for the text. It must be an element of #MsgColors.
- *  @param format Printf()-style format string.
+ *  @param format @c printf()-style format string.
  *  @param ... Arguments for the @c format string.
  **/
-void msgwin_compiler_add_fmt(gint msg_color, const gchar *format, ...)
+void msgwin_compiler_add(gint msg_color, const gchar *format, ...)
 {
 	gchar string[512];
 	va_list args;
@@ -230,11 +245,11 @@ void msgwin_compiler_add_fmt(gint msg_color, const gchar *format, ...)
 	va_start(args, format);
 	g_vsnprintf(string, 512, format, args);
 	va_end(args);
-	msgwin_compiler_add(msg_color, string);
+	msgwin_compiler_add_string(msg_color, string);
 }
 
 
-void msgwin_compiler_add(gint msg_color, const gchar *msg)
+void msgwin_compiler_add_string(gint msg_color, const gchar *msg)
 {
 	GtkTreeIter iter;
 	GtkTreePath *path;
@@ -262,10 +277,10 @@ void msgwin_show_hide(gboolean show)
 	ui_prefs.msgwindow_visible = show;
 	ignore_callback = TRUE;
 	gtk_check_menu_item_set_active(
-		GTK_CHECK_MENU_ITEM(lookup_widget(main_widgets.window, "menu_show_messages_window1")),
+		GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_messages_window1")),
 		show);
 	ignore_callback = FALSE;
-	ui_widget_show_hide(lookup_widget(main_widgets.window, "scrolledwindow1"), show);
+	ui_widget_show_hide(ui_lookup_widget(main_widgets.window, "scrolledwindow1"), show);
 }
 
 
@@ -277,10 +292,12 @@ void msgwin_show_hide(gboolean show)
  *  @param msg_color A color to be used for the text. It must be an element of #MsgColors.
  *  @param line The document's line where the message belongs to. Set to -1 to ignore.
  *  @param doc The document. Set to @c NULL to ignore.
- *  @param format Printf()-style format string.
+ *  @param format @c printf()-style format string.
  *  @param ... Arguments for the @c format string.
+ *
+ * @since 0.15
  **/
-void msgwin_msg_add_fmt(gint msg_color, gint line, GeanyDocument *doc, const gchar *format, ...)
+void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *format, ...)
 {
 	gchar string[512];
 	va_list args;
@@ -289,12 +306,12 @@ void msgwin_msg_add_fmt(gint msg_color, gint line, GeanyDocument *doc, const gch
 	g_vsnprintf(string, 512, format, args);
 	va_end(args);
 
-	msgwin_msg_add(msg_color, line, doc, string);
+	msgwin_msg_add_string(msg_color, line, doc, string);
 }
 
 
 /* adds string to the msg treeview */
-void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *string)
+void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const gchar *string)
 {
 	GtkTreeIter iter;
 	const GdkColor *color = get_color(msg_color);
@@ -321,7 +338,7 @@ void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *
  *  Log a status message *without* setting the status bar.
  *  (Use ui_set_statusbar() to display text on the statusbar)
  *
- *  @param format Printf()-style format string.
+ *  @param format @c printf()-style format string.
  *  @param ... Arguments for the @c format string.
  **/
 void msgwin_status_add(const gchar *format, ...)
@@ -569,9 +586,10 @@ gboolean msgwin_goto_compiler_file_line()
 	{
 		/* if the item is not coloured red, it's not an error line */
 		gtk_tree_model_get(model, &iter, 0, &color, -1);
-		if (! gdk_color_equal(color, &color_error))
+		if (color == NULL || ! gdk_color_equal(color, &color_error))
 		{
-			gdk_color_free(color);
+			if (color != NULL)
+				gdk_color_free(color);
 			return FALSE;
 		}
 		gdk_color_free(color);
@@ -582,6 +600,8 @@ gboolean msgwin_goto_compiler_file_line()
 			gint line;
 			gchar *filename, *dir;
 			GtkTreePath *path;
+			/* save the beginning of the string to use when free'ing it after it was stripped */
+			gchar *string_start = string;
 
 			path = gtk_tree_model_get_path(model, &iter);
 			find_prev_build_dir(path, model, &dir);
@@ -605,14 +625,14 @@ gboolean msgwin_goto_compiler_file_line()
 				if (doc != NULL)
 				{
 					if (! doc->changed)	/* if modified, line may be wrong */
-						editor_set_indicator_on_line(doc->editor, line - 1);
+						editor_indicator_set_on_line(doc->editor, GEANY_INDICATOR_ERROR, line - 1);
 
 					ret = navqueue_goto_line(old_doc, doc, line);
 				}
 			}
 			g_free(filename);
+			g_free(string_start);
 		}
-		g_free(string);
 	}
 	return ret;
 }
@@ -686,7 +706,7 @@ static void parse_file_line(ParseData *data, gchar **filename, gint *line)
 }
 
 
-void parse_compiler_error_line(const gchar *string,
+static void parse_compiler_error_line(const gchar *string,
 		gchar **filename, gint *line)
 {
 	ParseData data = {NULL, NULL, 0, 0, 0};
@@ -858,6 +878,7 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
 		gchar **filename, gint *line)
 {
 	GeanyFiletype *ft;
+	gchar *trimmed_string;
 
 	*filename = NULL;
 	*line = -1;
@@ -869,15 +890,19 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
 		dir = build_info.dir;
 	g_return_if_fail(dir != NULL);
 
+	trimmed_string = g_strdup(string);
+	g_strchug(trimmed_string); /* remove possible leading whitespace */
+
 	ft = filetypes[build_info.file_type_id];
 
 	/* try parsing with a custom regex */
-	if (!filetypes_parse_error_message(ft, string, filename, line))
+	if (!filetypes_parse_error_message(ft, trimmed_string, filename, line))
 	{
 		/* fallback to default old-style parsing */
-		parse_compiler_error_line(string, filename, line);
+		parse_compiler_error_line(trimmed_string, filename, line);
 	}
 	make_absolute(filename, dir);
+	g_free(trimmed_string);
 }
 
 
@@ -949,7 +974,7 @@ static void msgwin_parse_grep_line(const gchar *string, gchar **filename, gint *
 
 
 static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *event,
-																			gpointer user_data)
+											 gpointer user_data)
 {
 	/* user_data might be NULL, GPOINTER_TO_INT returns 0 if called with NULL */
 
@@ -1005,6 +1030,8 @@ static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *
  *  @param tabnum An index of a tab in the messages window. Valid values are all elements of
  *                #MessageWindowTabNum.
  *  @param show Whether to show the messages window at all if it was hidden before.
+ *
+ * @since 0.15
  **/
 void msgwin_switch_tab(gint tabnum, gboolean show)
 {
@@ -1012,7 +1039,10 @@ void msgwin_switch_tab(gint tabnum, gboolean show)
 
 	switch (tabnum)
 	{
-		case MSG_SCRATCH: widget = lookup_widget(main_widgets.window, "textview_scribble"); break;
+		case MSG_SCRATCH: widget = ui_lookup_widget(main_widgets.window, "textview_scribble"); break;
+		case MSG_COMPILER: widget = msgwindow.tree_compiler; break;
+		case MSG_STATUS: widget = msgwindow.tree_status; break;
+		case MSG_MESSAGE: widget = msgwindow.tree_msg; break;
 #ifdef HAVE_VTE
 		case MSG_VTE: widget = (vte_info.have_vte) ? vc->vte : NULL; break;
 #endif
@@ -1033,6 +1063,8 @@ void msgwin_switch_tab(gint tabnum, gboolean show)
  *
  *  @param tabnum An index of a tab in the messages window which should be cleared.
  *                Valid values are @a MSG_STATUS, @a MSG_COMPILER and @a MSG_MESSAGE.
+ *
+ * @since 0.15
  **/
 void msgwin_clear_tab(gint tabnum)
 {

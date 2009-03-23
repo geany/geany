@@ -2,8 +2,8 @@
  *      classbuilder.c - this file is part of Geany, a fast and lightweight IDE
  *
  *      Copyright 2007 Alexander Rodin <rodin(dot)alexander(at)gmail(dot)com>
- *      Copyright 2007-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2007-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2007-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -32,18 +32,20 @@
 #include "document.h"
 #include "editor.h"
 #include "ui_utils.h"
-#include "pluginmacros.h"
+#include "geanyfunctions.h"
 
 
-PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(69)
+PLUGIN_VERSION_CHECK(GEANY_API_VERSION)
 
 PLUGIN_SET_INFO(_("Class Builder"), _("Creates source files for new class types."), VERSION,
 	"Alexander Rodin")
+
+
+static GtkWidget *main_menu_item = NULL;
 
 
 enum
@@ -166,52 +168,24 @@ struct _{class_name}Private\n\
 	/* add your private declarations here */\n\
 };\n\
 \n\
-static void {class_name_low}_class_init			({class_name}Class *klass);\n\
-static void {class_name_low}_init      			({class_name} *self);\n\
 {destructor_decl}\
 \n\
-/* Local data */\n\
-static {base_name}Class *parent_class = NULL;\n\
-\n\
-GType {class_name_low}_get_type(void)\n\
-{\n\
-	static GType self_type = 0;\n\
-	if (! self_type)\n\
-	{\n\
-		static const GTypeInfo self_info = \n\
-		{\n\
-			sizeof({class_name}Class),\n\
-			NULL, /* base_init */\n\
-			NULL, /* base_finalize */\n\
-			(GClassInitFunc){class_name_low}_class_init,\n\
-			NULL, /* class_finalize */\n\
-			NULL, /* class_data */\n\
-			sizeof({class_name}),\n\
-			0,\n\
-			(GInstanceInitFunc){class_name_low}_init,\n\
-			NULL /* value_table */\n\
-		};\n\
-		\n\
-		self_type = g_type_register_static({base_gtype}, \"{class_name}\", &self_info, 0);\n\
-	}\n\
-	\n\
-	return self_type;\n\
-}\n\
+G_DEFINE_TYPE({class_name}, {class_name_low}, {base_gtype});\n\
 \n\n\
 static void {class_name_low}_class_init({class_name}Class *klass)\n\
 {\n\
 	{gtk_destructor_registration}\n\
-	parent_class = ({base_name}Class*)g_type_class_peek({base_gtype});\n\
 	g_type_class_add_private((gpointer)klass, sizeof({class_name}Private));\n\
 }\n\
-\n\n\
+\n\
+{destructor_impl}\n\
+\n\
 static void {class_name_low}_init({class_name} *self)\n\
 {\n\
 	\n\
 }\n\
 \n\
 {constructor_impl}\n\
-{destructor_impl}\n\
 ";
 
 
@@ -221,27 +195,24 @@ static void cc_dlg_on_base_name_entry_changed(GtkWidget *entry, CreateClassDialo
 static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg);
 
 
-/* I don't want this to be in the plugin API because it can cause leaks if any pointers
- * are NULL -ntrel. */
-/* Frees all passed pointers if they are *ALL* non-NULL.
- * Do not use if any pointers may be NULL.
- * The first argument is nothing special, it will also be freed.
- * The list must be ended with NULL. */
+/* The list must be ended with NULL as an extra check that arg_count is correct. */
 static void
-utils_free_pointers(gpointer first, ...)
+utils_free_pointers(gsize arg_count, ...)
 {
 	va_list a;
-	gpointer sa;
+	gsize i;
+	gpointer ptr;
 
-    for (va_start(a, first);  (sa = va_arg(a, gpointer), sa!=NULL);)
-    {
-    	if (sa != NULL)
-    		g_free(sa);
+	va_start(a, arg_count);
+	for (i = 0; i < arg_count; i++)
+	{
+		ptr = va_arg(a, gpointer);
+		g_free(ptr);
 	}
+	ptr = va_arg(a, gpointer);
+	if (ptr)
+		g_warning("Wrong arg_count!");
 	va_end(a);
-
-    if (first != NULL)
-    	g_free(first);
 }
 
 
@@ -254,30 +225,30 @@ get_template_class_header(ClassInfo *class_info)
 	switch (class_info->type)
 	{
 		case GEANY_CLASS_TYPE_CPP:
-			fileheader = p_templates->get_template_fileheader(GEANY_FILETYPES_CPP, class_info->header);
+			fileheader = templates_get_template_fileheader(GEANY_FILETYPES_CPP, class_info->header);
 			template = g_string_new(templates_cpp_class_header);
-			p_utils->string_replace_all(template, "{fileheader}", fileheader);
-			p_utils->string_replace_all(template, "{header_guard}", class_info->header_guard);
-			p_utils->string_replace_all(template, "{base_include}", class_info->base_include);
-			p_utils->string_replace_all(template, "{class_name}", class_info->class_name);
-			p_utils->string_replace_all(template, "{base_decl}", class_info->base_decl);
-			p_utils->string_replace_all(template, "{constructor_decl}",
+			utils_string_replace_all(template, "{fileheader}", fileheader);
+			utils_string_replace_all(template, "{header_guard}", class_info->header_guard);
+			utils_string_replace_all(template, "{base_include}", class_info->base_include);
+			utils_string_replace_all(template, "{class_name}", class_info->class_name);
+			utils_string_replace_all(template, "{base_decl}", class_info->base_decl);
+			utils_string_replace_all(template, "{constructor_decl}",
 					class_info->constructor_decl);
-			p_utils->string_replace_all(template, "{destructor_decl}",
+			utils_string_replace_all(template, "{destructor_decl}",
 					class_info->destructor_decl);
 			break;
 
 		case GEANY_CLASS_TYPE_GTK:
-			fileheader = p_templates->get_template_fileheader(GEANY_FILETYPES_C, class_info->header);
+			fileheader = templates_get_template_fileheader(GEANY_FILETYPES_C, class_info->header);
 			template = g_string_new(templates_gtk_class_header);
-			p_utils->string_replace_all(template, "{fileheader}", fileheader);
-			p_utils->string_replace_all(template, "{header_guard}", class_info->header_guard);
-			p_utils->string_replace_all(template, "{base_include}", class_info->base_include);
-			p_utils->string_replace_all(template, "{class_name}", class_info->class_name);
-			p_utils->string_replace_all(template, "{class_name_up}", class_info->class_name_up);
-			p_utils->string_replace_all(template, "{class_name_low}", class_info->class_name_low);
-			p_utils->string_replace_all(template, "{base_name}", class_info->base_name);
-			p_utils->string_replace_all(template, "{constructor_decl}",
+			utils_string_replace_all(template, "{fileheader}", fileheader);
+			utils_string_replace_all(template, "{header_guard}", class_info->header_guard);
+			utils_string_replace_all(template, "{base_include}", class_info->base_include);
+			utils_string_replace_all(template, "{class_name}", class_info->class_name);
+			utils_string_replace_all(template, "{class_name_up}", class_info->class_name_up);
+			utils_string_replace_all(template, "{class_name_low}", class_info->class_name_low);
+			utils_string_replace_all(template, "{base_name}", class_info->base_name);
+			utils_string_replace_all(template, "{constructor_decl}",
 					class_info->constructor_decl);
 			break;
 	}
@@ -300,35 +271,35 @@ get_template_class_source(ClassInfo *class_info)
 	switch (class_info->type)
 	{
 		case GEANY_CLASS_TYPE_CPP:
-			fileheader = p_templates->get_template_fileheader(GEANY_FILETYPES_CPP, class_info->source);
+			fileheader = templates_get_template_fileheader(GEANY_FILETYPES_CPP, class_info->source);
 			template = g_string_new(templates_cpp_class_source);
-			p_utils->string_replace_all(template, "{fileheader}", fileheader);
-			p_utils->string_replace_all(template, "{header}", class_info->header);
-			p_utils->string_replace_all(template, "{class_name}", class_info->class_name);
-			p_utils->string_replace_all(template, "{base_include}", class_info->base_include);
-			p_utils->string_replace_all(template, "{base_name}", class_info->base_name);
-			p_utils->string_replace_all(template, "{constructor_impl}",
+			utils_string_replace_all(template, "{fileheader}", fileheader);
+			utils_string_replace_all(template, "{header}", class_info->header);
+			utils_string_replace_all(template, "{class_name}", class_info->class_name);
+			utils_string_replace_all(template, "{base_include}", class_info->base_include);
+			utils_string_replace_all(template, "{base_name}", class_info->base_name);
+			utils_string_replace_all(template, "{constructor_impl}",
 					class_info->constructor_impl);
-			p_utils->string_replace_all(template, "{destructor_impl}",
+			utils_string_replace_all(template, "{destructor_impl}",
 					class_info->destructor_impl);
 			break;
 
 		case GEANY_CLASS_TYPE_GTK:
-			fileheader = p_templates->get_template_fileheader(GEANY_FILETYPES_C, class_info->source);
+			fileheader = templates_get_template_fileheader(GEANY_FILETYPES_C, class_info->source);
 			template = g_string_new(templates_gtk_class_source);
-			p_utils->string_replace_all(template, "{fileheader}", fileheader);
-			p_utils->string_replace_all(template, "{header}", class_info->header);
-			p_utils->string_replace_all(template, "{class_name}", class_info->class_name);
-			p_utils->string_replace_all(template, "{class_name_up}", class_info->class_name_up);
-			p_utils->string_replace_all(template, "{class_name_low}", class_info->class_name_low);
-			p_utils->string_replace_all(template, "{base_name}", class_info->base_name);
-			p_utils->string_replace_all(template, "{base_gtype}", class_info->base_gtype);
-			p_utils->string_replace_all(template, "{destructor_decl}", class_info->destructor_decl);
-			p_utils->string_replace_all(template, "{constructor_impl}",
+			utils_string_replace_all(template, "{fileheader}", fileheader);
+			utils_string_replace_all(template, "{header}", class_info->header);
+			utils_string_replace_all(template, "{class_name}", class_info->class_name);
+			utils_string_replace_all(template, "{class_name_up}", class_info->class_name_up);
+			utils_string_replace_all(template, "{class_name_low}", class_info->class_name_low);
+			utils_string_replace_all(template, "{base_name}", class_info->base_name);
+			utils_string_replace_all(template, "{base_gtype}", class_info->base_gtype);
+			utils_string_replace_all(template, "{destructor_decl}", class_info->destructor_decl);
+			utils_string_replace_all(template, "{constructor_impl}",
 					class_info->constructor_impl);
-			p_utils->string_replace_all(template, "{destructor_impl}",
+			utils_string_replace_all(template, "{destructor_impl}",
 					class_info->destructor_impl);
-			p_utils->string_replace_all(template, "{gtk_destructor_registration}",
+			utils_string_replace_all(template, "{gtk_destructor_registration}",
 					class_info->gtk_destructor_registration);
 			break;
 	}
@@ -363,9 +334,9 @@ void show_dialog_create_class(gint type)
 			NULL);
 	g_signal_connect_swapped(cc_dlg->dialog, "destroy", G_CALLBACK(g_free), (gpointer)cc_dlg);
 
-	main_box = p_ui->dialog_vbox_new(GTK_DIALOG(cc_dlg->dialog));
+	main_box = ui_dialog_vbox_new(GTK_DIALOG(cc_dlg->dialog));
 
-	frame = p_ui->frame_new_with_alignment(_("Class"), &align);
+	frame = ui_frame_new_with_alignment(_("Class"), &align);
 	gtk_container_add(GTK_CONTAINER(main_box), frame);
 
 	vbox = gtk_vbox_new(FALSE, 10);
@@ -400,7 +371,7 @@ void show_dialog_create_class(gint type)
 	cc_dlg->source_entry = gtk_entry_new();
 	gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->source_entry);
 
-	frame = p_ui->frame_new_with_alignment(_("Inheritance"), &align);
+	frame = ui_frame_new_with_alignment(_("Inheritance"), &align);
 	gtk_container_add(GTK_CONTAINER(main_box), frame);
 
 	vbox = gtk_vbox_new(FALSE, 10);
@@ -447,7 +418,7 @@ void show_dialog_create_class(gint type)
 		gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->base_gtype_entry);
 	}
 
-	frame = p_ui->frame_new_with_alignment(_("Options"), &align);
+	frame = ui_frame_new_with_alignment(_("Options"), &align);
 	gtk_container_add(GTK_CONTAINER(main_box), frame);
 
 	vbox = gtk_vbox_new(FALSE, 10);
@@ -560,7 +531,7 @@ static void cc_dlg_on_base_name_entry_changed(GtkWidget *entry, CreateClassDialo
 		/*tmp = g_strconcat("gtk/", gtk_entry_get_text(GTK_ENTRY(entry)), ".h", NULL);*/
 		/* With GTK 2.14 (and later GTK 3), single header includes are encouraged */
 		tmp = g_strdup("gtk/gtk.h");
-	else if (p_utils->str_equal(gtk_entry_get_text(GTK_ENTRY(entry)), "GObject"))
+	else if (utils_str_equal(gtk_entry_get_text(GTK_ENTRY(entry)), "GObject"))
 		tmp = g_strdup("glib-object.h");
 	else
 		tmp = g_strconcat(gtk_entry_get_text(GTK_ENTRY(entry)), ".h", NULL);
@@ -576,7 +547,7 @@ static void cc_dlg_on_base_name_entry_changed(GtkWidget *entry, CreateClassDialo
 			tmp = g_strdup_printf("%.3s_TYPE%s",
 					base_name_splitted,
 					base_name_splitted + 3);
-		else if (p_utils->str_equal(gtk_entry_get_text(GTK_ENTRY(entry)), "GObject"))
+		else if (utils_str_equal(gtk_entry_get_text(GTK_ENTRY(entry)), "GObject"))
 			tmp = g_strdup("G_TYPE_OBJECT");
 		else
 			tmp = g_strconcat(base_name_splitted, "_TYPE", NULL);
@@ -601,7 +572,7 @@ static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg)
 
 	g_return_if_fail(cc_dlg != NULL);
 
-	if (p_utils->str_equal(gtk_entry_get_text(GTK_ENTRY(cc_dlg->class_name_entry)), ""))
+	if (utils_str_equal(gtk_entry_get_text(GTK_ENTRY(cc_dlg->class_name_entry)), ""))
 		return;
 
 	class_info = g_new0(ClassInfo, 1);
@@ -610,7 +581,7 @@ static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg)
 	tmp = str_case_split(class_info->class_name, '_');
 	class_info->class_name_up = g_ascii_strup(tmp, -1);
 	class_info->class_name_low = g_ascii_strdown(class_info->class_name_up, -1);
-	if (! p_utils->str_equal(gtk_entry_get_text(GTK_ENTRY(cc_dlg->base_name_entry)), ""))
+	if (! utils_str_equal(gtk_entry_get_text(GTK_ENTRY(cc_dlg->base_name_entry)), ""))
 	{
 		class_info->base_name = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->base_name_entry)));
 		class_info->base_include = g_strdup_printf("\n#include %c%s%c\n",
@@ -633,7 +604,7 @@ static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg)
 		case GEANY_CLASS_TYPE_CPP:
 		{
 			class_info->source = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->source_entry)));
-			if (! p_utils->str_equal(class_info->base_name, ""))
+			if (! utils_str_equal(class_info->base_name, ""))
 				class_info->base_decl = g_strdup_printf(": public %s", class_info->base_name);
 			else
 				class_info->base_decl = g_strdup("");
@@ -641,7 +612,7 @@ static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg)
 			{
 				gchar *base_constructor;
 
-				if (p_utils->str_equal(class_info->base_name, ""))
+				if (utils_str_equal(class_info->base_name, ""))
 					base_constructor = g_strdup("");
 				else
 					base_constructor = g_strdup_printf("\t: %s()\n", class_info->base_name);
@@ -680,13 +651,12 @@ static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg)
 						gtk_entry_get_text(GTK_ENTRY(cc_dlg->gtk_constructor_type_entry)),
 						class_info->class_name_low);
 				class_info->constructor_impl = g_strdup_printf("\n"
-						"%s* %s_new(void)\n"
+						"%s *%s_new(void)\n"
 						"{\n"
-						"\treturn (%s*)g_object_new(%s_TYPE, NULL);\n"
+						"\treturn g_object_new(%s_TYPE, NULL);\n"
 						"}\n",
 						gtk_entry_get_text(GTK_ENTRY(cc_dlg->gtk_constructor_type_entry)),
 						class_info->class_name_low,
-						gtk_entry_get_text(GTK_ENTRY(cc_dlg->gtk_constructor_type_entry)),
 						class_info->class_name_up);
 			}
 			else
@@ -711,13 +681,13 @@ static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg)
 						"\tg_return_if_fail(object != NULL);\n"
 						"\tg_return_if_fail(IS_%s(object));\n\n"
 						"\tself = %s(object);\n\n"
-						"\tif (G_OBJECT_CLASS(parent_class)->finalize)\n"
-						"\t\t(* G_OBJECT_CLASS(parent_class)->finalize)(object);\n"
+						"\tG_OBJECT_CLASS(%s_parent_class)->finalize(object);\n"
 						"}\n",
 						class_info->class_name_low,
 						class_info->class_name,
 						class_info->class_name_up,
-						class_info->class_name_up);
+						class_info->class_name_up,
+						class_info->class_name_low);
 			}
 			else
 			{
@@ -730,23 +700,23 @@ static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg)
 	}
 
 	/* only create the files if the filename is not empty */
-	if (! p_utils->str_equal(class_info->source, ""))
+	if (! utils_str_equal(class_info->source, ""))
 	{
 		text = get_template_class_source(class_info);
-		doc = p_document->new_file(class_info->source, NULL, NULL);
-		p_sci->set_text(doc->editor->sci, text);
+		doc = document_new_file(class_info->source, NULL, NULL);
+		sci_set_text(doc->editor->sci, text);
 		g_free(text);
 	}
 
-	if (! p_utils->str_equal(class_info->header, ""))
+	if (! utils_str_equal(class_info->header, ""))
 	{
 		text = get_template_class_header(class_info);
-		doc = p_document->new_file(class_info->header, NULL, NULL);
-		p_sci->set_text(doc->editor->sci, text);
+		doc = document_new_file(class_info->header, NULL, NULL);
+		sci_set_text(doc->editor->sci, text);
 		g_free(text);
 	}
 
-	utils_free_pointers(tmp, class_info->class_name, class_info->class_name_up,
+	utils_free_pointers(17, tmp, class_info->class_name, class_info->class_name_up,
 		class_info->base_name, class_info->class_name_low, class_info->base_include,
 		class_info->header, class_info->header_guard, class_info->source, class_info->base_decl,
 		class_info->constructor_decl, class_info->constructor_impl,
@@ -774,16 +744,12 @@ on_menu_create_gtk_class_activate      (GtkMenuItem     *menuitem,
 void plugin_init(GeanyData *data)
 {
 	GtkWidget *menu_create_class1;
-	GtkWidget *image1861;
 	GtkWidget *menu_create_class1_menu;
 	GtkWidget *menu_create_cpp_class;
 	GtkWidget *menu_create_gtk_class;
 
-	menu_create_class1 = gtk_image_menu_item_new_with_mnemonic (_("Create Cla_ss"));
+	menu_create_class1 = ui_image_menu_item_new (GTK_STOCK_ADD, _("Create Cla_ss"));
 	gtk_container_add (GTK_CONTAINER (geany->main_widgets->tools_menu), menu_create_class1);
-
-	image1861 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_create_class1), image1861);
 
 	menu_create_class1_menu = gtk_menu_new ();
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_create_class1), menu_create_class1_menu);
@@ -803,11 +769,12 @@ void plugin_init(GeanyData *data)
 
 	gtk_widget_show_all(menu_create_class1);
 
-	plugin_fields->menu_item = menu_create_class1;
+	ui_add_document_sensitive(menu_create_class1);
+	main_menu_item = menu_create_class1;
 }
 
 
 void plugin_cleanup(void)
 {
-	gtk_widget_destroy(plugin_fields->menu_item);
+	gtk_widget_destroy(main_menu_item);
 }

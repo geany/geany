@@ -7,6 +7,18 @@
 *
 */
 
+/*!
+ * @file tm_workspace.h
+ The TMWorkspace structure is meant to be used as a singleton to store application
+ wide tag information.
+
+ The workspace is intended to contain a list of global tags
+ and a set of work objects (projects or individual files). You need not use the
+ workspace, though, to use tag manager, unless you need things like global tags
+ and a place to store all current open projects and individual files. TMWorkspace
+ is derived from TMWorkObject.
+*/
+
 #include "general.h"
 
 #include <stdio.h>
@@ -130,8 +142,10 @@ static TMTagAttrType global_tags_sort_attrs[] =
 
 gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
 {
+	guchar buf[BUFSIZ];
 	FILE *fp;
 	TMTag *tag;
+	gboolean format_pipe = FALSE;
 
 	if (NULL == (fp = g_fopen(tags_file, "r")))
 		return FALSE;
@@ -139,12 +153,34 @@ gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
 		return FALSE;
 	if (NULL == theWorkspace->global_tags)
 		theWorkspace->global_tags = g_ptr_array_new();
-	while (NULL != (tag = tm_tag_new_from_file(NULL, fp, mode)))
+	if ((NULL == fgets((gchar*) buf, BUFSIZ, fp)) || ('\0' == *buf))
+		return FALSE; /* early out on error */
+	else
+	{	/* We read the first line for the format specification. */
+		if (buf[0] == '#' && strstr((gchar*) buf, "format=pipe") != NULL)
+			format_pipe = TRUE;
+		else if (buf[0] == '#' && strstr((gchar*) buf, "format=tagmanager") != NULL)
+			format_pipe = FALSE;
+		else
+		{	/* We didn't find a valid format specification, so we try to auto-detect the format
+			 * by counting the pipe characters on the first line and asumme pipe format when
+			 * we find more than one pipe on the line. */
+			guint i, pipe_cnt = 0;
+			for (i = 0; i < BUFSIZ && buf[i] != '\0' && pipe_cnt < 2; i++)
+			{
+				if (buf[i] == '|')
+					pipe_cnt++;
+			}
+			format_pipe = (pipe_cnt > 1);
+		}
+		rewind(fp); /* reset the file pointer, to start reading again from the beginning */
+	}
+	while (NULL != (tag = tm_tag_new_from_file(NULL, fp, mode, format_pipe)))
 		g_ptr_array_add(theWorkspace->global_tags, tag);
 	fclose(fp);
 
 	/* resort the whole array, because tm_tags_find expects a sorted array and it is not sorted
-	 * when global.tags, php.tags and latex.tags are loaded at the same time */
+	 * when c99.tags, php.tags and latex.tags are loaded at the same time */
 	tm_tags_sort(theWorkspace->global_tags, global_tags_sort_attrs, TRUE);
 
 	return TRUE;
@@ -184,8 +220,9 @@ static void write_includes_file(FILE *fp, GList *includes_files)
 	{
 		char *str = g_strdup_printf("#include \"%s\"\n", (char*)node->data);
 		int str_len = strlen(str);
+		size_t size;
 
-		fwrite(str, str_len, 1, fp);
+		size = fwrite(str, str_len, 1, fp);
 		free(str);
 		node = g_list_next (node);
 	}
@@ -211,8 +248,9 @@ static void append_to_temp_file(FILE *fp, GList *file_list)
 		}
 		else
 		{
-			fwrite(contents, length, 1, fp);
-			fwrite("\n", 1, 1, fp);	/* in case file doesn't end in newline (e.g. windows). */
+			size_t size;
+			size = fwrite(contents, length, 1, fp);
+			size = fwrite("\n", 1, 1, fp);	/* in case file doesn't end in newline (e.g. windows). */
 			g_free(contents);
 		}
 		node = g_list_next (node);
@@ -346,12 +384,13 @@ gboolean tm_workspace_create_global_tags(const char *config_dir, const char *pre
 	 */
 	if (pre_process != NULL)
 	{
+		int ret;
 		command = g_strdup_printf("%s %s | grep -v -E '^\\s*(G_BEGIN_DECLS|G_END_DECLS)\\s*$' > %s",
 							  pre_process, temp_file, temp_file2);
 #ifdef TM_DEBUG
 		g_message("Executing: %s", command);
 #endif
-		system(command);
+		ret = system(command);
 		g_free(command);
 		g_unlink(temp_file);
 		g_free(temp_file);
@@ -394,6 +433,7 @@ gboolean tm_workspace_create_global_tags(const char *config_dir, const char *pre
 		tm_source_file_free(source_file);
 		return FALSE;
 	}
+	fprintf(fp, "# format=tagmanager\n");
 	for (i = 0; i < tags_array->len; ++i)
 	{
 		tm_tag_write(TM_TAG(tags_array->pdata[i]), fp, tm_tag_attr_type_t
@@ -493,7 +533,7 @@ gboolean tm_workspace_update(TMWorkObject *workspace, gboolean force
 	}
 	if (update_tags)
 		tm_workspace_recreate_tags_array();
-	workspace->analyze_time = time(NULL);
+	/* workspace->analyze_time = time(NULL); */
 	return update_tags;
 }
 

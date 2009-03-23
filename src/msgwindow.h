@@ -1,8 +1,8 @@
 /*
  *      msgwindow.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -84,14 +84,14 @@ void msgwin_switch_tab(gint tabnum, gboolean show);
 
 void msgwin_clear_tab(gint tabnum);
 
-void msgwin_msg_add_fmt(gint msg_color, gint line, GeanyDocument *doc, const gchar *format, ...)
+void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *format, ...)
 			G_GNUC_PRINTF (4, 5);
 
-void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *string);
+void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const gchar *string);
 
-void msgwin_compiler_add_fmt(gint msg_color, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
+void msgwin_compiler_add(gint msg_color, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
 
-void msgwin_compiler_add(gint msg_color, const gchar *msg);
+void msgwin_compiler_add_string(gint msg_color, const gchar *msg);
 
 void msgwin_status_add(const gchar *format, ...) G_GNUC_PRINTF (1, 2);
 

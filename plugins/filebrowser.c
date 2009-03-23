@@ -1,8 +1,8 @@
 /*
  *      filebrowser.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2007-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2007-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2007-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -38,15 +38,14 @@
 #include "ui_utils.h"
 
 #include "plugindata.h"
-#include "pluginmacros.h"
+#include "geanyfunctions.h"
 
 
-PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(69)
+PLUGIN_VERSION_CHECK(131)
 
 PLUGIN_SET_INFO(_("File Browser"), _("Adds a file browser tab to the sidebar."), VERSION,
 	_("The Geany developer team"))
@@ -67,9 +66,12 @@ enum
 {
 	FILEVIEW_COLUMN_ICON = 0,
 	FILEVIEW_COLUMN_NAME,
+	FILEVIEW_COLUMN_FILENAME, /* the full filename, including path for display as tooltip */
 	FILEVIEW_N_COLUMNS
 };
 
+static gboolean fb_set_project_base_path = FALSE;
+static gboolean fb_follow_path 	  = FALSE;
 static gboolean show_hidden_files = FALSE;
 static gboolean hide_object_files = TRUE;
 
@@ -86,12 +88,26 @@ static gchar		*open_cmd;				/* in locale-encoding */
 static gchar		*config_file;
 static gchar 		*filter = NULL;
 
+static gint			 page_number = 0;
+
 static struct
 {
 	GtkWidget *open;
 	GtkWidget *open_external;
 	GtkWidget *find_in_files;
 } popup_items;
+
+
+static void document_activate_cb(GObject *obj, GeanyDocument *doc, gpointer data);
+static void project_change_cb(GObject *obj, GKeyFile *config, gpointer data);
+
+PluginCallback plugin_callbacks[] =
+{
+	{ "document-activate", (GCallback) &document_activate_cb, TRUE, NULL },
+	{ "project-open", (GCallback) &project_change_cb, TRUE, NULL },
+	{ "project-save", (GCallback) &project_change_cb, TRUE, NULL },
+	{ NULL, NULL, FALSE, NULL }
+};
 
 
 /* Returns: whether name should be hidden. */
@@ -112,13 +128,14 @@ static gboolean check_hidden(const gchar *base_name)
 	if (hide_object_files)
 	{
 		const gchar *exts[] = {".o", ".obj", ".so", ".dll", ".a", ".lib"};
-		guint i;
+		guint i, exts_len;
 
-		for (i = 0; i < G_N_ELEMENTS(exts); i++)
+		exts_len = G_N_ELEMENTS(exts);
+		for (i = 0; i < exts_len; i++)
 		{
 			const gchar *ext = exts[i];
 
-			if (p_utils->str_equal(&base_name[len - strlen(ext)], ext))
+			if (g_str_has_suffix(base_name, ext))
 				return TRUE;
 		}
 	}
@@ -132,7 +149,7 @@ static gboolean check_filtered(const gchar *base_name)
 	if (filter == NULL)
 		return FALSE;
 
-	if (! p_utils->str_equal(base_name, "*") && ! g_pattern_match_simple(filter, base_name))
+	if (! utils_str_equal(base_name, "*") && ! g_pattern_match_simple(filter, base_name))
 	{
 		return TRUE;
 	}
@@ -145,7 +162,7 @@ static gboolean check_filtered(const gchar *base_name)
 static void add_item(const gchar *name)
 {
 	GtkTreeIter iter;
-	gchar *fname, *utf8_name;
+	gchar *fname, *utf8_name, *utf8_fullname, *sep;
 	gboolean dir;
 
 	if (! show_hidden_files && check_hidden(name))
@@ -154,8 +171,10 @@ static void add_item(const gchar *name)
 	if (check_filtered(name))
 		return;
 
-	fname = g_strconcat(current_dir, G_DIR_SEPARATOR_S, name, NULL);
+	sep = (utils_str_equal(current_dir, "/")) ? "" : G_DIR_SEPARATOR_S;
+	fname = g_strconcat(current_dir, sep, name, NULL);
 	dir = g_file_test(fname, G_FILE_TEST_IS_DIR);
+	utf8_fullname = utils_get_locale_from_utf8(fname);
 	g_free(fname);
 
 	if (dir)
@@ -172,12 +191,15 @@ static void add_item(const gchar *name)
 	else
 		gtk_list_store_append(file_store, &iter);
 
-	utf8_name = p_utils->get_utf8_from_locale(name);
+	utf8_name = utils_get_utf8_from_locale(name);
 
 	gtk_list_store_set(file_store, &iter,
 		FILEVIEW_COLUMN_ICON, (dir) ? GTK_STOCK_DIRECTORY : GTK_STOCK_FILE,
-		FILEVIEW_COLUMN_NAME, utf8_name, -1);
+		FILEVIEW_COLUMN_NAME, utf8_name,
+		FILEVIEW_COLUMN_FILENAME, utf8_fullname,
+		-1);
 	g_free(utf8_name);
+	g_free(utf8_fullname);
 }
 
 
@@ -185,15 +207,23 @@ static void add_item(const gchar *name)
 static void add_top_level_entry(void)
 {
 	GtkTreeIter iter;
+	gchar *utf8_dir;
 
 	if (! NZV(g_path_skip_root(current_dir)))
 		return;	/* ignore 'C:\' or '/' */
+
+	utf8_dir = g_path_get_dirname(current_dir);
+	setptr(utf8_dir, utils_get_utf8_from_locale(utf8_dir));
 
 	gtk_list_store_prepend(file_store, &iter);
 	last_dir_iter = gtk_tree_iter_copy(&iter);
 
 	gtk_list_store_set(file_store, &iter,
-		FILEVIEW_COLUMN_ICON, GTK_STOCK_DIRECTORY, FILEVIEW_COLUMN_NAME, "..", -1);
+		FILEVIEW_COLUMN_ICON, GTK_STOCK_DIRECTORY,
+		FILEVIEW_COLUMN_NAME, "..",
+		FILEVIEW_COLUMN_FILENAME, utf8_dir,
+		-1);
+	g_free(utf8_dir);
 }
 
 
@@ -220,13 +250,13 @@ static void refresh(void)
 
 	clear();
 
-	utf8_dir = p_utils->get_utf8_from_locale(current_dir);
+	utf8_dir = utils_get_utf8_from_locale(current_dir);
 	gtk_entry_set_text(GTK_ENTRY(path_entry), utf8_dir);
 	g_free(utf8_dir);
 
 	add_top_level_entry();	/* ".." item */
 
-	list = p_utils->get_file_list(current_dir, NULL, NULL);
+	list = utils_get_file_list(current_dir, NULL, NULL);
 	if (list != NULL)
 	{
 		g_slist_foreach(list, (GFunc) add_item, NULL);
@@ -252,7 +282,7 @@ static gchar *get_default_dir(void)
 	if (project)
 		dir = project->base_path;
 	if (NZV(dir))
-		return p_utils->get_locale_from_utf8(dir);
+		return utils_get_locale_from_utf8(dir);
 
 	return g_get_current_dir();
 }
@@ -262,7 +292,7 @@ static void on_current_path(void)
 {
 	gchar *fname;
 	gchar *dir;
-	GeanyDocument *doc = p_document->get_current();
+	GeanyDocument *doc = document_get_current();
 
 	if (doc == NULL || doc->file_name == NULL || ! g_path_is_absolute(doc->file_name))
 	{
@@ -271,7 +301,7 @@ static void on_current_path(void)
 		return;
 	}
 	fname = doc->file_name;
-	fname = p_utils->get_locale_from_utf8(fname);
+	fname = utils_get_locale_from_utf8(fname);
 	dir = g_path_get_dirname(fname);
 	g_free(fname);
 
@@ -293,7 +323,7 @@ static gboolean check_single_selection(GtkTreeSelection *treesel)
 	if (gtk_tree_selection_count_selected_rows(treesel) == 1)
 		return TRUE;
 
-	p_ui->set_statusbar(FALSE, _("Too many items selected!"));
+	ui_set_statusbar(FALSE, _("Too many items selected!"));
 	return FALSE;
 }
 
@@ -315,7 +345,7 @@ static gboolean is_folder_selected(GList *selected_items)
 		gtk_tree_model_get_iter(model, &iter, treepath);
 		gtk_tree_model_get(model, &iter, FILEVIEW_COLUMN_ICON, &icon, -1);
 
-		if (p_utils->str_equal(icon, GTK_STOCK_DIRECTORY))
+		if (utils_str_equal(icon, GTK_STOCK_DIRECTORY))
 		{
 			dir_found = TRUE;
 			g_free(icon);
@@ -335,17 +365,9 @@ static gchar *get_tree_path_filename(GtkTreePath *treepath)
 	gchar *name, *fname;
 
 	gtk_tree_model_get_iter(model, &iter, treepath);
-	gtk_tree_model_get(model, &iter, FILEVIEW_COLUMN_NAME, &name, -1);
+	gtk_tree_model_get(model, &iter, FILEVIEW_COLUMN_FILENAME, &name, -1);
 
-	if (p_utils->str_equal(name, ".."))
-	{
-		fname = g_path_get_dirname(current_dir);
-	}
-	else
-	{
-		setptr(name, p_utils->get_locale_from_utf8(name));
-		fname = g_build_filename(current_dir, name, NULL);
-	}
+	fname = utils_get_locale_from_utf8(name);
 	g_free(name);
 
 	return fname;
@@ -365,18 +387,18 @@ static void open_external(const gchar *fname, gboolean dir_found)
 	else
 		dir = g_strdup(fname);
 
-	p_utils->string_replace_all(cmd_str, "%f", fname);
-	p_utils->string_replace_all(cmd_str, "%d", dir);
+	utils_string_replace_all(cmd_str, "%f", fname);
+	utils_string_replace_all(cmd_str, "%d", dir);
 
 	cmd = g_string_free(cmd_str, FALSE);
-	locale_cmd = p_utils->get_locale_from_utf8(cmd);
+	locale_cmd = utils_get_locale_from_utf8(cmd);
 	if (! g_spawn_command_line_async(locale_cmd, &error))
 	{
 		gchar *c = strchr(cmd, ' ');
 
 		if (c != NULL)
 			*c = '\0';
-		p_ui->set_statusbar(TRUE,
+		ui_set_statusbar(TRUE,
 			_("Could not execute configured external command '%s' (%s)."),
 			cmd, error->message);
 		g_error_free(error);
@@ -418,7 +440,7 @@ static void on_external_open(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
-/* We use p_document->open_files() as it's more efficient. */
+/* We use document_open_files() as it's more efficient. */
 static void open_selected_files(GList *list)
 {
 	GSList *files = NULL;
@@ -431,7 +453,7 @@ static void open_selected_files(GList *list)
 
 		files = g_slist_append(files, fname);
 	}
-	p_document->open_files(files, FALSE, NULL, NULL);
+	document_open_files(files, FALSE, NULL, NULL);
 	g_slist_foreach(files, (GFunc) g_free, NULL);	/* free filenames */
 	g_slist_free(files);
 }
@@ -502,8 +524,8 @@ static void on_find_in_files(GtkMenuItem *menuitem, gpointer user_data)
 	g_list_foreach(list, (GFunc) gtk_tree_path_free, NULL);
 	g_list_free(list);
 
-	setptr(dir, p_utils->get_utf8_from_locale(dir));
-	p_search->show_find_in_files_dialog(dir);
+	setptr(dir, utils_get_utf8_from_locale(dir));
+	search_show_find_in_files_dialog(dir);
 	g_free(dir);
 }
 
@@ -517,13 +539,13 @@ static void on_hidden_files_clicked(GtkCheckMenuItem *item)
 
 static void on_hide_sidebar(void)
 {
-	p_keybindings->send_command(GEANY_KEY_GROUP_VIEW, GEANY_KEYS_VIEW_SIDEBAR);
+	keybindings_send_command(GEANY_KEY_GROUP_VIEW, GEANY_KEYS_VIEW_SIDEBAR);
 }
 
 
 static GtkWidget *create_popup_menu(void)
 {
-	GtkWidget *item, *menu, *image;
+	GtkWidget *item, *menu;
 
 	menu = gtk_menu_new();
 
@@ -533,19 +555,13 @@ static GtkWidget *create_popup_menu(void)
 	g_signal_connect(item, "activate", G_CALLBACK(on_open_clicked), NULL);
 	popup_items.open = item;
 
-	image = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_MENU);
-	gtk_widget_show(image);
-	item = gtk_image_menu_item_new_with_mnemonic(_("Open _externally"));
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
+	item = ui_image_menu_item_new(GTK_STOCK_OPEN, _("Open _externally"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_external_open), NULL);
 	popup_items.open_external = item;
 
-	image = gtk_image_new_from_stock(GTK_STOCK_FIND, GTK_ICON_SIZE_MENU);
-	gtk_widget_show(image);
-	item = gtk_image_menu_item_new_with_mnemonic(_("_Find in Files"));
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
+	item = ui_image_menu_item_new(GTK_STOCK_FIND, _("_Find in Files"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_find_in_files), NULL);
@@ -564,9 +580,7 @@ static GtkWidget *create_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
-	item = gtk_image_menu_item_new_with_mnemonic(_("H_ide Sidebar"));
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
-		gtk_image_new_from_stock("gtk-close", GTK_ICON_SIZE_MENU));
+	item = ui_image_menu_item_new(GTK_STOCK_CLOSE, _("H_ide Sidebar"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_hide_sidebar), NULL);
@@ -575,42 +589,36 @@ static GtkWidget *create_popup_menu(void)
 }
 
 
+static void on_tree_selection_changed(GtkTreeSelection *selection, gpointer data)
+{
+	gboolean have_sel = (gtk_tree_selection_count_selected_rows(selection) > 0);
+	gboolean multi_sel = (gtk_tree_selection_count_selected_rows(selection) > 1);
+
+	if (popup_items.open != NULL)
+		gtk_widget_set_sensitive(popup_items.open, have_sel);
+	if (popup_items.open_external != NULL)
+		gtk_widget_set_sensitive(popup_items.open_external, have_sel);
+	if (popup_items.find_in_files != NULL)
+		gtk_widget_set_sensitive(popup_items.find_in_files, have_sel && ! multi_sel);
+}
+
+
 static gboolean on_button_press(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
 	if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)
+	{
 		on_open_clicked(NULL, NULL);
-	else if (event->button == 3)
 		return TRUE;
-	return FALSE;
-}
-
-
-static void update_popup_menu(GtkWidget *popup_menu)
-{
-	GtkTreeSelection *treesel = gtk_tree_view_get_selection(GTK_TREE_VIEW(file_view));
-	gboolean have_sel = (gtk_tree_selection_count_selected_rows(treesel) > 0);
-	gboolean multi_sel = (gtk_tree_selection_count_selected_rows(treesel) > 1);
-
-	gtk_widget_set_sensitive(popup_items.open, have_sel);
-	gtk_widget_set_sensitive(popup_items.open_external, have_sel);
-	gtk_widget_set_sensitive(popup_items.find_in_files, have_sel && ! multi_sel);
-}
-
-
-/* delay updating popup menu until the selection has been set */
-static gboolean on_button_release(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
-{
-	if (event->button == 3)
+	}
+	else if (event->button == 3)
 	{
 		static GtkWidget *popup_menu = NULL;
 
 		if (popup_menu == NULL)
 			popup_menu = create_popup_menu();
 
-		update_popup_menu(popup_menu);
-
-		gtk_menu_popup(GTK_MENU(popup_menu), NULL, NULL, NULL, NULL,
-			event->button, event->time);
+		gtk_menu_popup(GTK_MENU(popup_menu), NULL, NULL, NULL, NULL, event->button, event->time);
+		/* don't return TRUE here, unless the selection won't be changed */
 	}
 	return FALSE;
 }
@@ -622,12 +630,30 @@ static gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer dat
 		|| event->keyval == GDK_ISO_Enter
 		|| event->keyval == GDK_KP_Enter
 		|| event->keyval == GDK_space)
+	{
 		on_open_clicked(NULL, NULL);
+		return TRUE;
+	}
 
 	if ((event->keyval == GDK_Up ||
 		event->keyval == GDK_KP_Up) &&
 		(event->state & GDK_MOD1_MASK))	/* FIXME: Alt-Up doesn't seem to work! */
+	{
 		on_go_up();
+		return TRUE;
+	}
+
+	if ((event->keyval == GDK_F10 && event->state & GDK_SHIFT_MASK) || event->keyval == GDK_Menu)
+	{
+		GdkEventButton button_event;
+
+		button_event.time = event->time;
+		button_event.button = 3;
+
+		on_button_press(widget, &button_event, data);
+		return TRUE;
+	}
+
 	return FALSE;
 }
 
@@ -653,7 +679,14 @@ static void on_path_entry_activate(GtkEntry *entry, gpointer user_data)
 			on_go_up();
 			return;
 		}
-		new_dir = p_utils->get_locale_from_utf8(new_dir);
+		else if (new_dir[0] == '~')
+		{
+			GString *str = g_string_new(new_dir);
+			utils_string_replace_first(str, "~", g_get_home_dir());
+			new_dir = g_string_free(str, FALSE);
+		}
+		else
+			new_dir = utils_get_locale_from_utf8(new_dir);
 	}
 	else
 		new_dir = g_strdup(g_get_home_dir());
@@ -684,7 +717,7 @@ static void prepare_file_view(void)
 	GtkTreeSelection *select;
 	PangoFontDescription *pfd;
 
-	file_store = gtk_list_store_new(FILEVIEW_N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING);
+	file_store = gtk_list_store_new(FILEVIEW_N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
 
 	gtk_tree_view_set_model(GTK_TREE_VIEW(file_view), GTK_TREE_MODEL(file_store));
 	g_object_unref(file_store);
@@ -706,13 +739,17 @@ static void prepare_file_view(void)
 	gtk_widget_modify_font(file_view, pfd);
 	pango_font_description_free(pfd);
 
+	/* GTK 2.12 tooltips */
+	if (gtk_check_version(2, 12, 0) == NULL)
+		g_object_set(file_view, "has-tooltip", TRUE, "tooltip-column", FILEVIEW_COLUMN_FILENAME, NULL);
+
 	/* selection handling */
 	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(file_view));
 	gtk_tree_selection_set_mode(select, GTK_SELECTION_MULTIPLE);
 
-	g_signal_connect(G_OBJECT(file_view), "realize", G_CALLBACK(on_current_path), NULL);
+	g_signal_connect(file_view, "realize", G_CALLBACK(on_current_path), NULL);
+	g_signal_connect(select, "changed", G_CALLBACK(on_tree_selection_changed), NULL);
 	g_signal_connect(file_view, "button-press-event", G_CALLBACK(on_button_press), NULL);
-	g_signal_connect(file_view, "button-release-event", G_CALLBACK(on_button_release), NULL);
 	g_signal_connect(file_view, "key-press-event", G_CALLBACK(on_key_press), NULL);
 }
 
@@ -720,34 +757,28 @@ static void prepare_file_view(void)
 static GtkWidget *make_toolbar(void)
 {
 	GtkWidget *wid, *toolbar;
-	GtkTooltips *tooltips = GTK_TOOLTIPS(p_support->lookup_widget(
-		geany->main_widgets->window, "tooltips"));
 
 	toolbar = gtk_toolbar_new();
 	gtk_toolbar_set_icon_size(GTK_TOOLBAR(toolbar), GTK_ICON_SIZE_MENU);
 	gtk_toolbar_set_style(GTK_TOOLBAR(toolbar), GTK_TOOLBAR_ICONS);
 
 	wid = (GtkWidget *) gtk_tool_button_new_from_stock(GTK_STOCK_GO_UP);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(wid), tooltips,
-		_("Up"), NULL);
+	ui_widget_set_tooltip_text(wid, _("Up"));
 	g_signal_connect(wid, "clicked", G_CALLBACK(on_go_up), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
 	wid = (GtkWidget *) gtk_tool_button_new_from_stock(GTK_STOCK_REFRESH);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(wid), tooltips,
-		_("Refresh"), NULL);
+	ui_widget_set_tooltip_text(wid, _("Refresh"));
 	g_signal_connect(wid, "clicked", G_CALLBACK(refresh), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
 	wid = (GtkWidget *) gtk_tool_button_new_from_stock(GTK_STOCK_HOME);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(wid), tooltips,
-		_("Home"), NULL);
+	ui_widget_set_tooltip_text(wid, _("Home"));
 	g_signal_connect(wid, "clicked", G_CALLBACK(on_go_home), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
 	wid = (GtkWidget *) gtk_tool_button_new_from_stock(GTK_STOCK_JUMP_TO);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(wid), tooltips,
-		_("Set path from document"), NULL);
+	ui_widget_set_tooltip_text(wid, _("Set path from document"));
 	g_signal_connect(wid, "clicked", G_CALLBACK(on_current_path), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
@@ -755,7 +786,7 @@ static GtkWidget *make_toolbar(void)
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
 	wid = (GtkWidget *) gtk_tool_button_new_from_stock(GTK_STOCK_CLEAR);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(wid), tooltips, _("Clear the filter"), NULL);
+	ui_widget_set_tooltip_text(wid, _("Clear the filter"));
 	g_signal_connect(wid, "clicked", G_CALLBACK(on_clear_filter), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
@@ -790,7 +821,7 @@ static gboolean completion_match_func(GtkEntryCompletion *completion, const gcha
 	gtk_tree_model_get(GTK_TREE_MODEL(file_store), iter,
 		FILEVIEW_COLUMN_ICON, &icon, FILEVIEW_COLUMN_NAME, &str, -1);
 
-	if (str != NULL && icon != NULL && p_utils->str_equal(icon, GTK_STOCK_DIRECTORY) &&
+	if (str != NULL && icon != NULL && utils_str_equal(icon, GTK_STOCK_DIRECTORY) &&
 		! g_str_has_suffix(key, G_DIR_SEPARATOR_S))
 	{
 		/* key is something like "/tmp/te" and str is a filename like "test",
@@ -873,13 +904,71 @@ static void load_settings(void)
 	CHECK_READ_SETTING(show_hidden_files, error, tmp);
 	tmp = g_key_file_get_boolean(config, "filebrowser", "hide_object_files", &error);
 	CHECK_READ_SETTING(hide_object_files, error, tmp);
+	tmp = g_key_file_get_boolean(config, "filebrowser", "fb_follow_path", &error);
+	CHECK_READ_SETTING(fb_follow_path, error, tmp);
+	tmp = g_key_file_get_boolean(config, "filebrowser", "fb_set_project_base_path", &error);
+	CHECK_READ_SETTING(fb_set_project_base_path, error, tmp);
 
 	g_key_file_free(config);
 }
 
 
+static void project_change_cb(G_GNUC_UNUSED GObject *obj, G_GNUC_UNUSED GKeyFile *config,
+							  G_GNUC_UNUSED gpointer data)
+{
+	gchar *new_dir;
+	GeanyProject *project = geany->app->project;
+
+	if (! fb_set_project_base_path || project == NULL || ! NZV(project->base_path))
+		return;
+
+	/* TODO this is a copy of project_get_base_path(), add it to the plugin API */
+	if (g_path_is_absolute(project->base_path))
+		new_dir = g_strdup(project->base_path);
+	else
+	{	/* build base_path out of project file name's dir and base_path */
+		gchar *dir = g_path_get_dirname(project->file_name);
+
+		new_dir = g_strconcat(dir, G_DIR_SEPARATOR_S, project->base_path, NULL);
+		g_free(dir);
+	}
+	/* get it into locale encoding */
+	setptr(new_dir, utils_get_locale_from_utf8(new_dir));
+
+	if (! utils_str_equal(current_dir, new_dir))
+	{
+		setptr(current_dir, new_dir);
+		refresh();
+	}
+	else
+		g_free(new_dir);
+}
+
+
+static void document_activate_cb(G_GNUC_UNUSED GObject *obj, GeanyDocument *doc,
+								 G_GNUC_UNUSED gpointer data)
+{
+	gchar *new_dir;
+
+	if (! fb_follow_path || doc->file_name == NULL || ! g_path_is_absolute(doc->file_name))
+		return;
+
+	new_dir = g_path_get_dirname(doc->file_name);
+	setptr(new_dir, utils_get_locale_from_utf8(new_dir));
+
+	if (! utils_str_equal(current_dir, new_dir))
+	{
+		setptr(current_dir, new_dir);
+		refresh();
+	}
+	else
+		g_free(new_dir);
+}
+
+
 static void kb_activate(guint key_id)
 {
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(geany->main_widgets->sidebar_notebook), page_number);
 	switch (key_id)
 	{
 		case KB_FOCUS_FILE_LIST:
@@ -913,6 +1002,8 @@ void plugin_init(GeanyData *data)
 	prepare_file_view();
 	completion_create();
 
+	popup_items.open = popup_items.open_external = popup_items.find_in_files = NULL;
+
 	scrollwin = gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(
 		GTK_SCROLLED_WINDOW(scrollwin),
@@ -921,15 +1012,15 @@ void plugin_init(GeanyData *data)
 	gtk_container_add(GTK_CONTAINER(file_view_vbox), scrollwin);
 
 	gtk_widget_show_all(file_view_vbox);
-	gtk_notebook_append_page(GTK_NOTEBOOK(geany->main_widgets->sidebar_notebook), file_view_vbox,
-		gtk_label_new(_("Files")));
+	page_number = gtk_notebook_append_page(GTK_NOTEBOOK(geany->main_widgets->sidebar_notebook),
+		file_view_vbox, gtk_label_new(_("Files")));
 
 	load_settings();
 
 	/* setup keybindings */
-	p_keybindings->set_item(plugin_key_group, KB_FOCUS_FILE_LIST, kb_activate,
+	keybindings_set_item(plugin_key_group, KB_FOCUS_FILE_LIST, kb_activate,
 		0, 0, "focus_file_list", _("Focus File List"), NULL);
-	p_keybindings->set_item(plugin_key_group, KB_FOCUS_PATH_ENTRY, kb_activate,
+	keybindings_set_item(plugin_key_group, KB_FOCUS_PATH_ENTRY, kb_activate,
 		0, 0, "focus_path_entry", _("Focus Path Entry"), NULL);
 }
 
@@ -939,6 +1030,8 @@ static struct
 	GtkWidget *open_cmd_entry;
 	GtkWidget *show_hidden_checkbox;
 	GtkWidget *hide_objects_checkbox;
+	GtkWidget *follow_path_checkbox;
+	GtkWidget *set_project_base_path_checkbox;
 }
 pref_widgets;
 
@@ -955,23 +1048,29 @@ on_configure_response(GtkDialog *dialog, gint response, gpointer user_data)
 		open_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(pref_widgets.open_cmd_entry)));
 		show_hidden_files = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pref_widgets.show_hidden_checkbox));
 		hide_object_files = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pref_widgets.hide_objects_checkbox));
+		fb_follow_path = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pref_widgets.follow_path_checkbox));
+		fb_set_project_base_path = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
+			pref_widgets.set_project_base_path_checkbox));
 
 		g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
 
 		g_key_file_set_string(config, "filebrowser", "open_command", open_cmd);
 		g_key_file_set_boolean(config, "filebrowser", "show_hidden_files", show_hidden_files);
 		g_key_file_set_boolean(config, "filebrowser", "hide_object_files", hide_object_files);
+		g_key_file_set_boolean(config, "filebrowser", "fb_follow_path", fb_follow_path);
+		g_key_file_set_boolean(config, "filebrowser", "fb_set_project_base_path",
+			fb_set_project_base_path);
 
-		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && p_utils->mkdir(config_dir, TRUE) != 0)
+		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && utils_mkdir(config_dir, TRUE) != 0)
 		{
-			p_dialogs->show_msgbox(GTK_MESSAGE_ERROR,
+			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
 				_("Plugin configuration directory could not be created."));
 		}
 		else
 		{
 			/* write config to file */
 			data = g_key_file_to_data(config, NULL, NULL);
-			p_utils->write_file(config_file, data);
+			utils_write_file(config_file, data);
 			g_free(data);
 		}
 
@@ -986,8 +1085,7 @@ on_configure_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 GtkWidget *plugin_configure(GtkDialog *dialog)
 {
-	GtkWidget *label, *entry, *checkbox_of, *checkbox_hf, *vbox;
-	GtkTooltips *tooltips = gtk_tooltips_new();
+	GtkWidget *label, *entry, *checkbox_of, *checkbox_hf, *checkbox_fp, *checkbox_pb, *vbox;
 
 	vbox = gtk_vbox_new(FALSE, 6);
 
@@ -999,11 +1097,10 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	gtk_widget_show(entry);
 	if (open_cmd != NULL)
 		gtk_entry_set_text(GTK_ENTRY(entry), open_cmd);
-	gtk_tooltips_set_tip(tooltips, entry,
+	ui_widget_set_tooltip_text(entry,
 		_("The command to execute when using \"Open with\". You can use %f and %d wildcards.\n"
 		  "%f will be replaced with the filename including full path\n"
-		  "%d will be replaced with the path name of the selected file without the filename"),
-		  NULL);
+		  "%d will be replaced with the path name of the selected file without the filename"));
 	gtk_container_add(GTK_CONTAINER(vbox), entry);
 	pref_widgets.open_cmd_entry = entry;
 
@@ -1016,12 +1113,25 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	checkbox_of = gtk_check_button_new_with_label(_("Hide object files"));
 	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_of), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_of), hide_object_files);
-	gtk_tooltips_set_tip(tooltips, checkbox_of,
+	ui_widget_set_tooltip_text(checkbox_of,
 		_("Don't show generated object files in the file browser, this includes "
-		  "*.o, *.obj. *.so, *.dll, *.a, *.lib"),
-		  NULL);
+		  "*.o, *.obj. *.so, *.dll, *.a, *.lib"));
 	gtk_box_pack_start(GTK_BOX(vbox), checkbox_of, FALSE, FALSE, 5);
 	pref_widgets.hide_objects_checkbox = checkbox_of;
+
+	checkbox_fp = gtk_check_button_new_with_label(_("Follow the path of the current file"));
+	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_fp), FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_fp), fb_follow_path);
+	gtk_box_pack_start(GTK_BOX(vbox), checkbox_fp, FALSE, FALSE, 5);
+	pref_widgets.follow_path_checkbox = checkbox_fp;
+
+	checkbox_pb = gtk_check_button_new_with_label(_("Set the project's base directory"));
+	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_pb), FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_pb), fb_set_project_base_path);
+	ui_widget_set_tooltip_text(checkbox_pb,
+		_("Change the directory to the base directory of the currently opened project"));
+	gtk_box_pack_start(GTK_BOX(vbox), checkbox_pb, FALSE, FALSE, 5);
+	pref_widgets.set_project_base_path_checkbox = checkbox_pb;
 
 	gtk_widget_show_all(vbox);
 

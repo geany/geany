@@ -3,7 +3,8 @@
 #
 # WAF build script - this file is part of Geany, a fast and lightweight IDE
 #
-# Copyright 2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+# Copyright 2008-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+# Copyright 2008-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -34,29 +35,31 @@ Missing features: --enable-binreloc, make targets: dist, pdf (in doc/)
 Known issues: Dependency handling is buggy, e.g. if src/document.h is
 			  changed, depending source files are not rebuilt (maybe Waf bug).
 
-Requires WAF 1.5 (SVN r4661 or later) and Python 2.4 (or later).
+Requires WAF 1.5.3 and Python 2.4 (or later).
 """
 
 
-import Build, Configure, Options, Runner, Task, Utils
-import sys, os, subprocess, shutil
+import Build, Configure, Options, Utils
+import sys, os, shutil
 from distutils import version
 
 
 APPNAME = 'geany'
-VERSION = '0.15'
+VERSION = '0.17'
 
 srcdir = '.'
 blddir = '_build_'
 
 
 tagmanager_sources = [
-	'tagmanager/args.c', 'tagmanager/asm.c', 'tagmanager/basic.c', 'tagmanager/c.c',
+	'tagmanager/args.c', 'tagmanager/actionscript.c', 'tagmanager/asm.c',
+	'tagmanager/basic.c', 'tagmanager/c.c',
 	'tagmanager/conf.c', 'tagmanager/css.c', 'tagmanager/ctags.c', 'tagmanager/diff.c',
 	'tagmanager/docbook.c', 'tagmanager/entry.c', 'tagmanager/fortran.c', 'tagmanager/get.c',
 	'tagmanager/haskell.c', 'tagmanager/haxe.c', 'tagmanager/html.c', 'tagmanager/js.c',
 	'tagmanager/keyword.c', 'tagmanager/latex.c', 'tagmanager/lregex.c', 'tagmanager/lua.c',
-	'tagmanager/make.c', 'tagmanager/options.c', 'tagmanager/parse.c', 'tagmanager/pascal.c',
+	'tagmanager/make.c', 'tagmanager/matlab.c', 'tagmanager/options.c', 'tagmanager/parse.c',
+	'tagmanager/pascal.c',
 	'tagmanager/perl.c', 'tagmanager/php.c', 'tagmanager/python.c', 'tagmanager/read.c',
 	'tagmanager/rest.c', 'tagmanager/ruby.c', 'tagmanager/sh.c', 'tagmanager/sort.c',
 	'tagmanager/sql.c', 'tagmanager/strlist.c', 'tagmanager/tcl.c', 'tagmanager/tm_file_entry.c',
@@ -69,13 +72,13 @@ scintilla_sources = [
 	'scintilla/CharClassify.cxx', 'scintilla/ContractionState.cxx', 'scintilla/Decoration.cxx',
 	'scintilla/DocumentAccessor.cxx', 'scintilla/Document.cxx', 'scintilla/Editor.cxx',
 	'scintilla/ExternalLexer.cxx',  'scintilla/Indicator.cxx',  'scintilla/KeyMap.cxx',
-	'scintilla/KeyWords.cxx', 'scintilla/LexAsm.cxx', 'scintilla/LexBash.cxx',
-	'scintilla/LexBasic.cxx', 'scintilla/LexCaml.cxx', 'scintilla/LexCPP.cxx',
+	'scintilla/KeyWords.cxx', 'scintilla/LexAda.cxx', 'scintilla/LexAsm.cxx', 'scintilla/LexBash.cxx',
+	'scintilla/LexBasic.cxx', 'scintilla/LexCaml.cxx', 'scintilla/LexCmake.cxx', 'scintilla/LexCPP.cxx',
 	'scintilla/LexCrontab.cxx', 'scintilla/LexCSS.cxx', 'scintilla/LexD.cxx',
 	'scintilla/LexFortran.cxx', 'scintilla/LexHaskell.cxx', 'scintilla/LexHTML.cxx',
-	'scintilla/LexLua.cxx', 'scintilla/LexOMS.cxx', 'scintilla/LexOthers.cxx',
+	'scintilla/LexLua.cxx', 'scintilla/LexNsis.cxx', 'scintilla/LexOthers.cxx',
 	'scintilla/LexPascal.cxx', 'scintilla/LexPerl.cxx', 'scintilla/LexPython.cxx',
-	'scintilla/LexR.cxx',
+	'scintilla/LexR.cxx', 'scintilla/LexMatlab.cxx', 'scintilla/LexYAML.cxx',
 	'scintilla/LexRuby.cxx', 'scintilla/LexSQL.cxx', 'scintilla/LexTCL.cxx',
 	'scintilla/LexVHDL.cxx', 'scintilla/LineMarker.cxx', 'scintilla/PlatGTK.cxx',
 	'scintilla/PositionCache.cxx', 'scintilla/PropSet.cxx', 'scintilla/RESearch.cxx',
@@ -86,12 +89,15 @@ scintilla_sources = [
 
 geany_sources = [
 	'src/about.c', 'src/build.c', 'src/callbacks.c', 'src/dialogs.c', 'src/document.c',
-	'src/editor.c', 'src/encodings.c', 'src/filetypes.c', 'src/geanyobject.c',
-	'src/geanywraplabel.c', 'src/highlighting.c', 'src/interface.c', 'src/keybindings.c',
+	'src/editor.c', 'src/encodings.c', 'src/filetypes.c', 'src/geanyentryaction.c',
+	'src/geanymenubuttonaction.c', 'src/geanyobject.c', 'src/geanywraplabel.c',
+	'src/highlighting.c', 'src/interface.c', 'src/keybindings.c',
 	'src/keyfile.c', 'src/log.c', 'src/main.c', 'src/msgwindow.c', 'src/navqueue.c', 'src/notebook.c',
 	'src/plugins.c', 'src/prefix.c', 'src/prefs.c', 'src/printing.c', 'src/project.c',
-	'src/sciwrappers.c', 'src/search.c', 'src/socket.c', 'src/support.c', 'src/symbols.c',
-	'src/templates.c', 'src/tools.c', 'src/treeviews.c', 'src/ui_utils.c', 'src/utils.c' ]
+	'src/queue.c', 'src/sciwrappers.c', 'src/search.c', 'src/socket.c', 'src/stash.c',
+	'src/symbols.c',
+	'src/templates.c', 'src/toolbar.c', 'src/tools.c', 'src/treeviews.c',
+	'src/ui_utils.c', 'src/utils.c' ]
 
 
 
@@ -113,7 +119,7 @@ def configure(conf):
 		# try SVN
 		elif os.path.exists('.svn'):
 			try:
-				stdout = Utils.cmd_output('svn info --non-interactive', {'LANG' : 'C'})
+				stdout = Utils.cmd_output(cmd='svn info --non-interactive', env={'LANG' : 'C'})
 				lines = stdout.splitlines(True)
 				for line in lines:
 					if line.startswith('Last Changed Rev'):
@@ -167,8 +173,8 @@ def configure(conf):
 	# checked with cc not cxx
 	conf.check_tool('compiler_cxx intltool misc')
 
-	conf.check_cfg(package='gtk+-2.0', atleast_version='2.6.0', uselib_store='GTK', mandatory=True)
-	conf.check_cfg(package='gtk+-2.0', args='--cflags --libs', uselib_store='GTK')
+	conf.check_cfg(package='gtk+-2.0', atleast_version='2.8.0', uselib_store='GTK',
+		mandatory=True, args='--cflags --libs')
 
 	# GTK version check
 	have_gtk_210 = False
@@ -178,6 +184,8 @@ def configure(conf):
 			have_gtk_210 = True
 	else:
 		gtk_version = 'Unknown'
+	# GIO check
+	conf.check_cfg(package='gio-2.0', uselib_store='GIO', args='--cflags --libs', mandatory=False)
 
 	conf_define_from_opt('LIBDIR', Options.options.libdir, conf.env['PREFIX'] + '/lib')
 	conf_define_from_opt('DOCDIR', Options.options.docdir, conf.env['DATADIR'] + '/doc/geany')
@@ -203,18 +211,18 @@ def configure(conf):
 	conf.write_config_header('config.h')
 
 	Utils.pprint('BLUE', 'Summary:')
-	print_message('Install Geany ' + VERSION + ' in', conf.env['PREFIX'])
-	print_message('Using GTK version', gtk_version)
-	print_message('Build with GTK printing support', have_gtk_210 and 'yes' or 'no')
-	print_message('Build with plugin support', Options.options.no_plugins and 'no' or 'yes')
-	print_message('Use virtual terminal support', Options.options.no_vte and 'no' or 'yes')
+	print_message(conf, 'Install Geany ' + VERSION + ' in', conf.env['PREFIX'])
+	print_message(conf, 'Using GTK version', gtk_version)
+	print_message(conf, 'Build with GTK printing support', have_gtk_210 and 'yes' or 'no')
+	print_message(conf, 'Build with plugin support', Options.options.no_plugins and 'no' or 'yes')
+	print_message(conf, 'Use virtual terminal support', Options.options.no_vte and 'no' or 'yes')
 	if svn_rev != '-1':
-		print_message('Compiling Subversion revision', svn_rev)
-		conf.env.append_value('CCFLAGS', '-g -DGEANY_DEBUG')
+		print_message(conf, 'Compiling Subversion revision', svn_rev)
+		conf.env.append_value('CCFLAGS', '-g -DGEANY_DEBUG'.split())
 
 	conf.env.append_value('CCFLAGS', '-DHAVE_CONFIG_H')
-	conf.env.append_value('CXXFLAGS', '-DNDEBUG -DGTK -DGTK2 -DSCI_LEXER -DG_THREADS_IMPL_NONE \
-			-Wno-missing-braces -Wno-char-subscripts') # Scintilla flags
+	# Scintilla flags
+	conf.env.append_value('CXXFLAGS', '-DNDEBUG -DGTK -DGTK2 -DSCI_LEXER -DG_THREADS_IMPL_NONE'.split())
 
 
 def set_options(opt):
@@ -250,52 +258,69 @@ def set_options(opt):
 
 def build(bld):
 	def build_plugin(plugin_name, install = True):
-		obj						 = bld.new_task_gen('cc', 'shlib')
-		obj.source				  = 'plugins/' + plugin_name + '.c'
-		obj.includes				= '. plugins/ src/ scintilla/include tagmanager/include'
-		obj.env['shlib_PATTERN']	= '%s.so'
-		obj.target				  = plugin_name
-		obj.uselib				  = 'GTK'
 		if install:
-			obj.install_path		= '${LIBDIR}/geany/'
+			instpath = '${LIBDIR}/geany/'
 		else:
-			obj.install_path		= 0
-		#~ obj.want_libtool		 = 1
+			instpath = None
+
+		bld.new_task_gen(
+			features				='cc cshlib',
+			source					= 'plugins/' + plugin_name + '.c',
+			includes				= '. plugins/ src/ scintilla/include tagmanager/include',
+			target					= plugin_name,
+			uselib					= 'GTK',
+			install_path			= instpath,
+		)
+		bld.env['shlib_PATTERN']	= '%s.so'
+
 
 	# Tagmanager
 	if bld.env['USE_INCLUDED_REGEX'] == 1:
 		tagmanager_sources.append('tagmanager/regex.c')
-	obj = bld.new_task_gen('cc', 'staticlib')
-	obj.name		 = 'tagmanager'
-	obj.target	   = 'tagmanager'
-	obj.source	   = tagmanager_sources
-	obj.includes	 = '. tagmanager/ tagmanager/include/'
-	obj.uselib	   = 'GTK'
-	obj.install_path = 0 # do not install this library
+	bld.new_task_gen(
+		features		= 'cc cstaticlib',
+		source			= tagmanager_sources,
+		name			= 'tagmanager',
+		target			= 'tagmanager',
+		includes		= '. tagmanager/ tagmanager/include/',
+		uselib			= 'GTK',
+		install_path	= None # do not install this library
+	)
 
 	# Scintilla
-	obj = bld.new_task_gen('cxx', 'staticlib')
-	obj.features.append('cc')
-	obj.name		 = 'scintilla'
-	obj.target	   = 'scintilla'
-	obj.source	   = scintilla_sources
-	obj.includes	 = 'scintilla/ scintilla/include/'
-	obj.uselib	   = 'GTK'
-	obj.install_path = 0 # do not install this library
+	bld.new_task_gen(
+		features		= 'cc cxx cstaticlib',
+		name			= 'scintilla',
+		target			= 'scintilla',
+		source			= scintilla_sources,
+		includes		= 'scintilla/ scintilla/include/',
+		uselib			= 'GTK',
+		install_path	= None, # do not install this library
+	)
 
 	# Geany
 	if bld.env['HAVE_VTE'] == 1:
 		geany_sources.append('src/vte.c')
 	if sys.platform == "win32":
 		geany_sources.append('src/win32.c')
-	obj = bld.new_task_gen('cxx', 'program')
-	obj.features.append('cc')
-	obj.name		 = 'geany'
-	obj.target	   = 'geany'
-	obj.source	   = geany_sources
-	obj.includes	 = '. src/ scintilla/include/ tagmanager/include/'
-	obj.uselib	   = 'GTK'
-	obj.uselib_local = 'scintilla tagmanager'
+	bld.new_task_gen(
+		features		= 'cc cxx cprogram',
+		name			= 'geany',
+		target			= 'geany',
+		source			= geany_sources,
+		includes		= '. src/ scintilla/include/ tagmanager/include/',
+		uselib			= 'GTK GIO',
+		uselib_local	= 'scintilla tagmanager'
+	)
+
+	# geanyfunctions.h
+	bld.new_task_gen(
+		source	= 'plugins/genapi.py src/plugins.c',
+		name	= 'geanyfunctions.h',
+		before	= 'cc cxx',
+		cwd		= '%s/plugins' % bld.path.abspath(),
+		rule	= 'python genapi.py -q'
+	)
 
 	# Plugins
 	if bld.env['HAVE_PLUGINS'] == 1:
@@ -306,60 +331,64 @@ def build(bld):
 		build_plugin('htmlchars')
 		build_plugin('saveactions')
 		build_plugin('splitwindow')
-		build_plugin('vcdiff')
 
 	# Translations
-	obj			  = bld.new_task_gen('intltool_po')
-	obj.podir		= 'po'
-	obj.appname	  = 'geany'
+	bld.new_task_gen(
+		features		= 'intltool_po',
+		podir			= 'po',
+		appname			= 'geany'
+	)
 
-	# geany.desktop
-	obj			  = bld.new_task_gen('intltool_in')
-	obj.source	   = 'geany.desktop.in'
-	obj.flags		= '-d'
-	obj.install_path = '${DATADIR}/applications'
+	bld.new_task_gen(
+		features		= 'intltool_in',
+		source			= 'geany.desktop.in',
+		flags			= '-d',
+		install_path	= '${DATADIR}/applications'
+	)
 
 	# geany.pc
-	obj		 = bld.new_task_gen('subst')
-	obj.source  = 'geany.pc.in'
-	obj.target  = 'geany.pc'
-	obj.dict	= { 'VERSION' : VERSION,
-					'prefix': bld.env['PREFIX'],
-					'exec_prefix': '${prefix}',
-					'libdir': '${exec_prefix}/lib',
-					'includedir': '${prefix}/include',
-					'datarootdir': '${prefix}/share',
-					'datadir': '${datarootdir}',
-					'localedir': '${datarootdir}/locale' }
-	# seems currently broken in Waf
-	#~ obj.install_path = '${LIBDIR}/pkgconfig'
-	obj.install_path = 0
-	bld.install_files('${LIBDIR}/pkgconfig', 'geany.pc')
+	bld.new_task_gen(
+		features		= 'subst',
+		source			= 'geany.pc.in',
+		target			= 'geany.pc',
+		dict			= { 'VERSION' : VERSION,
+							'prefix': bld.env['PREFIX'],
+							'exec_prefix': '${prefix}',
+							'libdir': '${exec_prefix}/lib',
+							'includedir': '${prefix}/include',
+							'datarootdir': '${prefix}/share',
+							'datadir': '${datarootdir}',
+							'localedir': '${datarootdir}/locale' },
+		install_path	= '${LIBDIR}/pkgconfig'
+	)
 
 	# geany.1
-	obj			  = bld.new_task_gen('subst')
-	obj.source	   = 'doc/geany.1.in'
-	obj.target	   = 'geany.1'
-	obj.dict		 = { 'VERSION' : VERSION,
-					'GEANY_DATA_DIR': bld.env['DATADIR'] + '/geany' }
-	# seems currently broken in Waf
-	#~ obj.install_path = '${MANDIR}/man1'
-	obj.install_path = 0
-	bld.install_files('${MANDIR}/man1', 'doc/geany.1')
+	bld.new_task_gen(
+		features		= 'subst',
+		source			= 'doc/geany.1.in',
+		target			= 'geany.1',
+		dict			= { 'VERSION' : VERSION,
+							'GEANY_DATA_DIR': bld.env['DATADIR'] + '/geany' },
+		install_path	= '${MANDIR}/man1'
+	)
 
 	# geany.spec
-	obj			  = bld.new_task_gen('subst')
-	obj.source	   = 'geany.spec.in'
-	obj.target	   = 'geany.spec'
-	obj.install_path = 0
-	obj.dict		 = { 'VERSION' : VERSION }
+	bld.new_task_gen(
+		features		= 'subst',
+		source			= 'geany.spec.in',
+		target			= 'geany.spec',
+		install_path	= None,
+		dict			= { 'VERSION' : VERSION }
+	)
 
 	# Doxyfile
-	obj			  = bld.new_task_gen('subst')
-	obj.source	   = 'doc/Doxyfile.in'
-	obj.target	   = 'Doxyfile'
-	obj.install_path = 0
-	obj.dict		 = { 'VERSION' : VERSION }
+	bld.new_task_gen(
+		features		= 'subst',
+		source			= 'doc/Doxyfile.in',
+		target			= 'doc/Doxyfile',
+		install_path	= None,
+		dict			= { 'VERSION' : VERSION }
+	)
 
 	###
 	# Install files
@@ -367,10 +396,10 @@ def build(bld):
 	# Headers
 	bld.install_files('${PREFIX}/include/geany', '''
 		src/dialogs.h src/document.h src/editor.h src/encodings.h src/filetypes.h src/geany.h
-		src/highlighting.h src/keybindings.h src/msgwindow.h src/plugindata.h src/plugins.h
+		src/highlighting.h src/keybindings.h src/main.h src/msgwindow.h src/plugindata.h src/plugins.h
 		src/prefs.h src/project.h src/sciwrappers.h src/search.h src/support.h src/templates.h
-		src/ui_utils.h src/utils.h
-		plugins/pluginmacros.h ''')
+		src/toolbar.h src/ui_utils.h src/utils.h
+		plugins/pluginmacros.h plugins/geanyfunctions.h ''')
 	bld.install_files('${PREFIX}/include/geany/scintilla', '''
 		scintilla/include/SciLexer.h scintilla/include/Scintilla.h scintilla/include/Scintilla.iface
 		scintilla/include/ScintillaWidget.h ''')
@@ -388,6 +417,7 @@ def build(bld):
 	bld.install_files('${DATADIR}/geany', 'data/filetype*')
 	bld.install_files('${DATADIR}/geany', 'data/*.tags')
 	bld.install_files('${DATADIR}/geany', 'data/snippets.conf')
+	bld.install_files('${DATADIR}/geany', 'data/ui_toolbar.xml')
 	bld.install_as('${DATADIR}/geany/GPL-2', 'COPYING')
 	# Icons
 	bld.install_files('${DATADIR}/pixmaps', 'pixmaps/geany.png')
@@ -401,7 +431,7 @@ def shutdown():
 		icon_cache_updated = False
 		if not Options.options.destdir:
 			try:
-				subprocess.call(['gtk-update-icon-cache', '-q', '-f', '-t', dir])
+				Utils.exec_command('gtk-update-icon-cache -q -f -t %s' % dir)
 				Utils.pprint('GREEN', 'GTK icon cache updated.')
 				icon_cache_updated = True
 			except:
@@ -411,33 +441,43 @@ def shutdown():
 			print 'gtk-update-icon-cache -q -f -t %s' % dir
 
 	if Options.options.apidoc:
-		doxyfile = os.path.join(Build.bld.srcnode.abspath( \
-			Build.bld.env), 'doc', 'Doxyfile')
-		os.chdir('doc')
-		launch('doxygen ' + doxyfile, 'Generating API reference documentation')
+		doxyfile = os.path.join(Build.bld.srcnode.abspath(Build.bld.env), 'doc', 'Doxyfile')
+		cmd = Configure.find_program_impl(Build.bld.env, 'doxygen')
+		if cmd:
+			os.chdir('doc')
+			ret = launch('%s %s' % (cmd, doxyfile), 'Generating API reference documentation')
+		else:
+			Utils.pprint('RED',
+				'doxygen could not be found. Please install the doxygen package.')
+			sys.exit(1)
 
 	if Options.options.htmldoc:
-		os.chdir('doc')
-		# first try rst2html.py as it is the upstream default
-		ret = launch('rst2html.py -stg --stylesheet=geany.css geany.txt geany.html',
-			'Generating HTML documentation')
-		if not ret == 0:
-			launch('rst2html -stg --stylesheet=geany.css geany.txt geany.html',
-					'Generating HTML documentation (using fallback "rst2html")')
+		# first try rst2html.py as it is the upstream default, fall back to rst2html
+		cmd = Configure.find_program_impl(Build.bld.env, 'rst2html.py')
+		if not cmd:
+			cmd = Configure.find_program_impl(Build.bld.env, 'rst2html')
+		if cmd:
+			os.chdir('doc')
+			ret = launch(cmd + ' -stg --stylesheet=geany.css geany.txt geany.html',
+				'Generating HTML documentation')
+		else:
+			Utils.pprint('RED',
+				'rst2html.py could not be found. Please install the Python docutils package.')
+			sys.exit(1)
 
 	if Options.options.update_po:
 		# the following code was taken from midori's WAF script, thanks
-		os.chdir('./po')
+		os.chdir('%s/po' % srcdir)
 		try:
 			try:
 				size_old = os.stat('geany.pot').st_size
 			except:
 				size_old = 0
-			subprocess.call(['intltool-update', '--pot'])
+			Utils.exec_command('intltool-update --pot -g %s' % APPNAME)
 			size_new = os.stat('geany.pot').st_size
 			if size_new != size_old:
 				Utils.pprint('CYAN', 'Updated POT file.')
-				launch('intltool-update -r', 'Updating translations', 'CYAN')
+				launch('intltool-update -r -g %s' % APPNAME, 'Updating translations', 'CYAN')
 			else:
 				Utils.pprint('CYAN', 'POT file is up to date.')
 		except:
@@ -450,7 +490,7 @@ def launch(command, status, success_color='GREEN'):
 	ret = 0
 	Utils.pprint(success_color, status)
 	try:
-		ret = subprocess.call(command.split())
+		ret = Utils.exec_command(command)
 	except OSError, e:
 		ret = 1
 		print str(e), ":", command
@@ -462,15 +502,8 @@ def launch(command, status, success_color='GREEN'):
 
 	return ret
 
-line_len = 0
 
-def print_message(msg, result, color = 'GREEN'):
-	global line_len
-	if line_len == 0:
-		line_len = Configure.ConfigurationContext().line_just
-
-	line_len = max(line_len, len(msg))
-	print "%s :" % msg.ljust(line_len),
-	Utils.pprint(color, result)
-	Runner.print_log(msg, '\n\n')
+def print_message(conf, msg, result, color = 'GREEN'):
+	conf.check_message_1(msg)
+	conf.check_message_2(result, color)
 

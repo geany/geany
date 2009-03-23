@@ -1,8 +1,8 @@
 /*
  *      editor.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
 
+/** Default character set to define which characters shoud be treated as part of a word. */
 #define GEANY_WORDCHARS					"_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 #define GEANY_MAX_WORD_LENGTH			192
 
@@ -51,8 +52,33 @@ typedef enum
 GeanyAutoIndent;
 
 
+/* Auto-close brackets/quotes */
+enum {
+	GEANY_AC_PARENTHESIS	= 1,
+	GEANY_AC_CBRACKET		= 2,
+	GEANY_AC_SBRACKET		= 4,
+	GEANY_AC_SQUOTE			= 8,
+	GEANY_AC_DQUOTE			= 16
+};
+
+/** Geany indicator types, can be used with Editor indicator functions to highlight
+ *  text in the document. */
+typedef enum
+{
+	/** Indicator to highlight errors in the document text. This is a red squiggly underline. */
+	GEANY_INDICATOR_ERROR = 0,
+	/** Indicator used to highlight search results in the document. This is a
+	 *  rounded box around the text. */
+	/* start container indicator outside of lexer indicators (0..7), see Scintilla docs */
+	GEANY_INDICATOR_SEARCH = 8
+}
+GeanyIndicator;
+
 /** Indentation prefs that might be different according to project or filetype.
- * Use @c editor_get_indent_prefs() to lookup the prefs for a particular document. */
+ * Use @c editor_get_indent_prefs() to lookup the prefs for a particular document.
+ *
+ * @since 0.15
+ **/
 typedef struct GeanyIndentPrefs
 {
 	gint			width;				/**< Indent width. */
@@ -102,13 +128,14 @@ typedef struct GeanyEditorPrefs
 	gboolean	auto_continue_multiline;
 	gchar		*comment_toggle_mark;
 	guint		autocompletion_max_entries;
+	guint		autoclose_chars;
 } GeanyEditorPrefs;
 
 extern GeanyEditorPrefs editor_prefs;
 
 
 /** Editor-owned fields for each document. */
-typedef struct GeanyEditor
+struct GeanyEditor
 {
 	GeanyDocument	*document;		/**< The document associated with the editor. */
 	ScintillaObject	*sci;			/**< The Scintilla editor @c GtkWidget. */
@@ -118,8 +145,7 @@ typedef struct GeanyEditor
 	gfloat			 scroll_percent;
 	GeanyIndentType	 indent_type;	/* Use editor_get_indent_prefs() instead. */
 	gboolean		 line_breaking;	/**< Whether to split long lines as you type. */
-}
-GeanyEditor;
+};
 
 
 typedef struct
@@ -130,7 +156,7 @@ typedef struct
 
 extern EditorInfo editor_info;
 
-
+typedef struct SCNotification SCNotification;
 
 
 void editor_init(void);
@@ -141,9 +167,11 @@ void editor_destroy(GeanyEditor *editor);
 
 ScintillaObject *editor_create_widget(GeanyEditor *editor);
 
-void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer user_data);
+void editor_sci_notify_cb(GtkWidget *widget, gint scn, gpointer scnt, gpointer data);
 
 gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean force);
+
+void snippet_goto_next_cursor(ScintillaObject *sci, gint current_pos);
 
 gboolean editor_complete_snippet(GeanyEditor *editor, gint pos);
 
@@ -190,6 +218,8 @@ void editor_snippets_free(void);
 void editor_find_current_word(GeanyEditor *editor, gint pos, gchar *word, size_t wordlen,
 	const gchar *wc);
 
+gchar *editor_get_word_at_pos(GeanyEditor *editor, gint pos, const gchar *wordchars);
+
 gchar *editor_get_default_selection(GeanyEditor *editor, gboolean use_current_word, const gchar *wordchars);
 
 void editor_select_word(GeanyEditor *editor);
@@ -198,13 +228,15 @@ void editor_select_lines(GeanyEditor *editor, gboolean extra_line);
 
 void editor_select_paragraph(GeanyEditor *editor);
 
-void editor_set_indicator_on_line(GeanyEditor *editor, gint line);
-
-void editor_set_indicator(GeanyEditor *editor, gint start, gint end);
-
-void editor_clear_indicators(GeanyEditor *editor);
-
 void editor_set_font(GeanyEditor *editor, const gchar *font);
+
+void editor_indicator_set_on_line(GeanyEditor *editor, gint indic, gint line);
+
+void editor_indicator_clear_errors(GeanyEditor *editor);
+
+void editor_indicator_set_on_range(GeanyEditor *editor, gint indic, gint start, gint end);
+
+void editor_indicator_clear(GeanyEditor *editor, gint indic);
 
 const gchar *editor_get_eol_char_name(GeanyEditor *editor);
 
@@ -236,8 +268,12 @@ void editor_set_line_wrapping(GeanyEditor *editor, gboolean wrap);
 
 gboolean editor_goto_pos(GeanyEditor *editor, gint pos, gboolean mark);
 
+gboolean editor_goto_line(GeanyEditor *editor, gint line_no);
+
 void editor_set_indentation_guides(GeanyEditor *editor);
 
 void editor_apply_update_prefs(GeanyEditor *editor);
+
+gchar *editor_get_calltip_text(GeanyEditor *editor, const TMTag *tag);
 
 #endif

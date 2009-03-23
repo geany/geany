@@ -1,8 +1,8 @@
 /*
  *      printing.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2007-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2007-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2007-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -275,12 +275,15 @@ static void add_page_header(PangoLayout *layout, cairo_t *cr, DocInfo *dinfo, gi
 	g_free(data);
 
 	datetime = utils_get_date_time(printing_prefs.page_header_datefmt, &(dinfo->print_time));
-	data = g_strdup_printf("<b>%s</b>", datetime);
-	pango_layout_set_markup(layout, data, -1);
-	pango_layout_set_alignment(layout, PANGO_ALIGN_RIGHT);
-	cairo_move_to(cr, 2, dinfo->line_height * 1.5);
-	pango_cairo_show_layout(cr, layout);
-	g_free(data);
+	if (NZV(datetime))
+	{
+		data = g_strdup_printf("<b>%s</b>", datetime);
+		pango_layout_set_markup(layout, data, -1);
+		pango_layout_set_alignment(layout, PANGO_ALIGN_RIGHT);
+		cairo_move_to(cr, 2, dinfo->line_height * 1.5);
+		pango_cairo_show_layout(cr, layout);
+		g_free(data);
+	}
 	g_free(datetime);
 
 	/* reset layout and re-position cairo context */
@@ -332,7 +335,6 @@ static GtkWidget *create_custom_widget(GtkPrintOperation *operation, gpointer us
 	GtkWidget *vbox30;
 	GtkWidget *hbox10;
 	GtkWidget *label203;
-	GtkTooltips *tooltips = gtk_tooltips_new();
 	PrintWidgets *w = user_data;
 
 	gtk_print_operation_set_custom_tab_label(operation, _("Document Setup"));
@@ -342,17 +344,17 @@ static GtkWidget *create_custom_widget(GtkPrintOperation *operation, gpointer us
 
 	w->check_print_linenumbers = gtk_check_button_new_with_mnemonic(_("Print line numbers"));
 	gtk_box_pack_start(GTK_BOX(page), w->check_print_linenumbers, FALSE, FALSE, 0);
-	gtk_tooltips_set_tip(tooltips, w->check_print_linenumbers, _("Add line numbers to the printed page."), NULL);
+	ui_widget_set_tooltip_text(w->check_print_linenumbers, _("Add line numbers to the printed page"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w->check_print_linenumbers), printing_prefs.print_line_numbers);
 
 	w->check_print_pagenumbers = gtk_check_button_new_with_mnemonic(_("Print page numbers"));
 	gtk_box_pack_start(GTK_BOX(page), w->check_print_pagenumbers, FALSE, FALSE, 0);
-	gtk_tooltips_set_tip(tooltips, w->check_print_pagenumbers, _("Add page numbers at the bottom of each page. It takes 2 lines of the page."), NULL);
+	ui_widget_set_tooltip_text(w->check_print_pagenumbers, _("Add page numbers at the bottom of each page. It takes 2 lines of the page"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w->check_print_pagenumbers), printing_prefs.print_page_numbers);
 
 	w->check_print_pageheader = gtk_check_button_new_with_mnemonic(_("Print page header"));
 	gtk_box_pack_start(GTK_BOX(page), w->check_print_pageheader, FALSE, FALSE, 0);
-	gtk_tooltips_set_tip(tooltips, w->check_print_pageheader, _("Adds a little header to every page containing the page number, the filename and the current date(see below). It takes 3 lines of the page."), NULL);
+	ui_widget_set_tooltip_text(w->check_print_pageheader, _("Adds a little header to every page containing the page number, the filename and the current date(see below). It takes 3 lines of the page."));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w->check_print_pageheader), printing_prefs.print_page_header);
 	g_signal_connect(w->check_print_pageheader, "toggled", G_CALLBACK(on_page_header_toggled), w);
 
@@ -370,7 +372,7 @@ static GtkWidget *create_custom_widget(GtkPrintOperation *operation, gpointer us
 
 	w->check_print_basename = gtk_check_button_new_with_mnemonic(_("Use the basename of the printed file"));
 	gtk_box_pack_start(GTK_BOX(vbox30), w->check_print_basename, FALSE, FALSE, 0);
-	gtk_tooltips_set_tip(tooltips, w->check_print_basename, _("Print only the basename(without the path) of the printed file."), NULL);
+	ui_widget_set_tooltip_text(w->check_print_basename, _("Print only the basename(without the path) of the printed file"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w->check_print_basename), printing_prefs.page_header_basename);
 
 	hbox10 = gtk_hbox_new(FALSE, 5);
@@ -380,8 +382,9 @@ static GtkWidget *create_custom_widget(GtkPrintOperation *operation, gpointer us
 	gtk_box_pack_start(GTK_BOX(hbox10), label203, FALSE, FALSE, 0);
 
 	w->entry_print_dateformat = gtk_entry_new();
+	ui_entry_add_clear_icon(w->entry_print_dateformat);
 	gtk_box_pack_start(GTK_BOX(hbox10), w->entry_print_dateformat, TRUE, TRUE, 0);
-	gtk_tooltips_set_tip(tooltips, w->entry_print_dateformat, _("Specify a format for the date and time stamp which is added to the page header on each page. You can use any conversion specifiers which can be used with the ANSI C strftime function."), NULL);
+	ui_widget_set_tooltip_text(w->entry_print_dateformat, _("Specify a format for the date and time stamp which is added to the page header on each page. You can use any conversion specifiers which can be used with the ANSI C strftime function."));
 	gtk_entry_set_text(GTK_ENTRY(w->entry_print_dateformat), printing_prefs.page_header_datefmt);
 
 	on_page_header_toggled(GTK_TOGGLE_BUTTON(w->check_print_pageheader), w);
@@ -397,6 +400,7 @@ static void end_print(GtkPrintOperation *operation, GtkPrintContext *context, gp
 	if (dinfo == NULL)
 		return;
 
+	gtk_widget_hide(main_widgets.progressbar);
 	g_object_unref(dinfo->layout);
 }
 
@@ -410,6 +414,8 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 
 	if (dinfo == NULL)
 		return;
+
+	gtk_widget_show(main_widgets.progressbar);
 
 	desc = pango_font_description_from_string(interface_prefs.editor_font);
 
@@ -478,6 +484,14 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 		return;
 
 	editor = dinfo->doc->editor;
+
+	if (dinfo->n_pages > 0)
+	{
+		gdouble fraction = (page_nr + 1) / (gdouble) dinfo->n_pages;
+		gchar *text = g_strdup_printf(_("Page %d of %d"), page_nr, dinfo->n_pages);
+		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(main_widgets.progressbar), fraction);
+		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(main_widgets.progressbar), text);
+	}
 
 #ifdef GEANY_PRINT_DEBUG
 	geany_debug("draw_page = %d, pages = %d, (real) lines_per_page = %d",
@@ -815,7 +829,7 @@ static void print_external(GeanyDocument *doc)
 	if (! NZV(printing_prefs.external_print_cmd))
 	{
 		dialogs_show_msgbox(GTK_MESSAGE_ERROR,
-			_("Please set a print command in the preferences dialog first"));
+			_("Please set a print command in the preferences dialog first."));
 		return;
 	}
 

@@ -1,8 +1,8 @@
 /*
  *      highlighting.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@
 #include "utils.h"
 #include "filetypes.h"
 #include "symbols.h"
+#include "ui_utils.h"
 
 
 /* Note: Avoid using SSM in files not related to scintilla, use sciwrappers.h instead. */
@@ -427,6 +428,8 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 		common_style_set.styling[GCS_MARKER_TRANSLUCENCY].background = tmp_style.background;
 	}
 
+	common_style_set.invert_all = interface_prefs.highlighting_invert_all =
+		(common_style_set.invert_all || interface_prefs.highlighting_invert_all);
 	get_keyfile_wordchars(config, config_home, &common_style_set.wordchars);
 	whitespace_chars = get_keyfile_whitespace_chars(config, config_home);
 
@@ -461,9 +464,16 @@ static void styleset_common(ScintillaObject *sci)
 		common_style_set.styling[GCS_LINE_WRAP_VISUALS].background, 0);
 	SSM(sci, SCI_SETWRAPSTARTINDENT, common_style_set.styling[GCS_LINE_WRAP_INDENT].foreground, 0);
 
-	/* indicator settings */
-	SSM(sci, SCI_INDICSETSTYLE, 0, INDIC_SQUIGGLE);
-	SSM(sci, SCI_INDICSETFORE, 0, invert(0x0000ff));
+	/* Error indicator */
+	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_ERROR, INDIC_SQUIGGLE);
+	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_ERROR, invert(rotate_rgb(0xff0000)));
+
+	/* Search indicator, used for 'Mark' matches */
+	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_SEARCH, INDIC_ROUNDBOX);
+	/* TODO make this configurable, but we can't really use the foreground nor the background
+	 * colours of GCS_MARKER_LINE since the drawn box is a little translucent and the default
+	 * colours for GCS_MARKER_LINE are too bright. */
+	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_SEARCH, invert(rotate_rgb(0x00ff00)));
 
 	/* define marker symbols
 	 * 0 -> line marker */
@@ -557,11 +567,11 @@ static void styleset_common(ScintillaObject *sci)
 	SSM(sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDERMIDTAIL, 0xffffff);
 	SSM(sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDERMIDTAIL, 0x000000);
 
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold", (sptr_t) "1");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.compact", (sptr_t) "0");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.comment", (sptr_t) "1");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.preprocessor", (sptr_t) "1");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.at.else", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "fold", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "fold.compact", (sptr_t) "0");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "fold.comment", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "fold.preprocessor", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "fold.at.else", (sptr_t) "1");
 
 
 	/* bold (3rd argument) is whether to override default foreground selection */
@@ -635,7 +645,7 @@ GeanyLexerStyle gsd_comment_doc =	{0x3f5fbf, 0xffffff, TRUE, FALSE};
 GeanyLexerStyle gsd_number =		{0x007f00, 0xffffff, FALSE, FALSE};
 GeanyLexerStyle gsd_reserved_word =	{0x00007f, 0xffffff, TRUE, FALSE};
 GeanyLexerStyle gsd_system_word =	{0x991111, 0xffffff, TRUE, FALSE};
-GeanyLexerStyle gsd_user_word =	{0x0000d0, 0xffffff, TRUE, FALSE};
+GeanyLexerStyle gsd_user_word =		{0x0000d0, 0xffffff, TRUE, FALSE};
 GeanyLexerStyle gsd_string =		{0xff901e, 0xffffff, FALSE, FALSE};
 GeanyLexerStyle gsd_pragma =		{0x007f7f, 0xffffff, FALSE, FALSE};
 GeanyLexerStyle gsd_string_eol =	{0x000000, 0xe0c0e0, FALSE, FALSE};
@@ -742,11 +752,11 @@ static void styleset_c(ScintillaObject *sci)
 	styleset_c_like(sci, GEANY_FILETYPES_C);
 
 	if (style_sets[GEANY_FILETYPES_C].styling[20].foreground == 1)
-		SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.symbol.$(file.patterns.cpp)", (sptr_t) "#");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.start.$(file.patterns.cpp)", (sptr_t) "if ifdef ifndef");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.middle.$(file.patterns.cpp)", (sptr_t) "else elif");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.end.$(file.patterns.cpp)", (sptr_t) "endif");
+		SSM(sci, SCI_SETPROPERTY, (uptr_t) "styling.within.preprocessor", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "preprocessor.symbol.$(file.patterns.cpp)", (sptr_t) "#");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "preprocessor.start.$(file.patterns.cpp)", (sptr_t) "if ifdef ifndef");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "preprocessor.middle.$(file.patterns.cpp)", (sptr_t) "else elif");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "preprocessor.end.$(file.patterns.cpp)", (sptr_t) "endif");
 }
 
 
@@ -785,11 +795,11 @@ static void styleset_cpp(ScintillaObject *sci)
 	styleset_c_like(sci, GEANY_FILETYPES_CPP);
 
 	if (style_sets[GEANY_FILETYPES_CPP].styling[20].foreground == 1)
-		SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.symbol.$(file.patterns.cpp)", (sptr_t) "#");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.start.$(file.patterns.cpp)", (sptr_t) "if ifdef ifndef");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.middle.$(file.patterns.cpp)", (sptr_t) "else elif");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.end.$(file.patterns.cpp)", (sptr_t) "endif");
+		SSM(sci, SCI_SETPROPERTY, (uptr_t) "styling.within.preprocessor", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "preprocessor.symbol.$(file.patterns.cpp)", (sptr_t) "#");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "preprocessor.start.$(file.patterns.cpp)", (sptr_t) "if ifdef ifndef");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "preprocessor.middle.$(file.patterns.cpp)", (sptr_t) "else elif");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "preprocessor.end.$(file.patterns.cpp)", (sptr_t) "endif");
 }
 
 
@@ -839,11 +849,11 @@ static void styleset_glsl(ScintillaObject *sci)
 	styleset_c_like(sci, GEANY_FILETYPES_GLSL);
 
 	if (style_sets[GEANY_FILETYPES_GLSL].styling[20].foreground == 1)
-		SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.symbol.$(file.patterns.cpp)", (sptr_t) "#");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.start.$(file.patterns.cpp)", (sptr_t) "if ifdef ifndef");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.middle.$(file.patterns.cpp)", (sptr_t) "else elif");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.end.$(file.patterns.cpp)", (sptr_t) "endif");
+		SSM(sci, SCI_SETPROPERTY, (uptr_t) "styling.within.preprocessor", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "preprocessor.symbol.$(file.patterns.cpp)", (sptr_t) "#");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "preprocessor.start.$(file.patterns.cpp)", (sptr_t) "if ifdef ifndef");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "preprocessor.middle.$(file.patterns.cpp)", (sptr_t) "else elif");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "preprocessor.end.$(file.patterns.cpp)", (sptr_t) "endif");
 }
 
 static void styleset_cs_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
@@ -875,6 +885,66 @@ static void styleset_cs_init(gint ft_id, GKeyFile *config, GKeyFile *config_home
 static void styleset_cs(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_CS;
+
+	apply_filetype_properties(sci, SCLEX_CPP, ft_id);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[ft_id].keywords[0]);
+	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[ft_id].keywords[2]);
+
+	/* assign global types, merge them with user defined keywords and set them */
+	assign_global_and_user_keywords(sci, style_sets[ft_id].keywords[1], filetypes[ft_id]->lang);
+
+	styleset_c_like(sci, ft_id);
+
+	if (style_sets[ft_id].styling[20].foreground == 1)
+		SSM(sci, ft_id, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
+}
+
+
+static void styleset_vala_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
+{
+	new_style_array(GEANY_FILETYPES_VALA, 21);
+	styleset_c_like_init(config, config_home, GEANY_FILETYPES_VALA);
+	get_keyfile_int(config, config_home, "styling", "styling_within_preprocessor",
+		1, 0, &style_sets[GEANY_FILETYPES_VALA].styling[20]);
+
+	style_sets[GEANY_FILETYPES_VALA].keywords = g_new(gchar*, 4);
+	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_VALA, 0,
+			"else if switch case default break continue return for foreach in do while is "
+			"try catch finally throw "
+			"namespace interface class struct enum signal errordomain "
+			"construct callback get set base "
+			"const static var weak "
+			"virtual abstract override inline extern "
+			"public protected private delegate "
+			"out ref "
+
+			"lock using "
+
+			"true false null "
+
+			"generic new delete base this value typeof sizeof "
+			"throws requires ensures "
+
+			"void bool char uchar int uint short ushort long ulong size_t ssize_t "
+			"int8 uint8 int16 uint16 int32 uint32 int64 uint64 float double unichar string "
+
+			/* these types are not referenced by the reference manual but are in glib.vapi
+			 * as simple types */
+			/*"constpointer time_t "*/
+			);
+	get_keyfile_keywords(config, config_home, "keywords", "secondary", GEANY_FILETYPES_VALA, 1, "");
+	get_keyfile_keywords(config, config_home, "keywords", "docComment", GEANY_FILETYPES_VALA, 2, "");
+	style_sets[GEANY_FILETYPES_VALA].keywords[3] = NULL;
+
+	get_keyfile_wordchars(config, config_home,
+		&style_sets[GEANY_FILETYPES_VALA].wordchars);
+}
+
+
+static void styleset_vala(ScintillaObject *sci)
+{
+	const filetype_id ft_id = GEANY_FILETYPES_VALA;
 
 	apply_filetype_properties(sci, SCLEX_CPP, ft_id);
 
@@ -979,7 +1049,7 @@ static void styleset_makefile(ScintillaObject *sci)
 
 static void styleset_diff_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_style_array(GEANY_FILETYPES_DIFF, 7);
+	new_style_array(GEANY_FILETYPES_DIFF, 8);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_DIFF].styling[0]);
 	get_keyfile_hex(config, config_home, "styling", "comment", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_DIFF].styling[1]);
 	get_keyfile_hex(config, config_home, "styling", "command", "0x7f7f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_DIFF].styling[2]);
@@ -987,6 +1057,7 @@ static void styleset_diff_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 	get_keyfile_hex(config, config_home, "styling", "position", "0x00007f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_DIFF].styling[4]);
 	get_keyfile_hex(config, config_home, "styling", "deleted", "0xff2727", "0xffffff", "false", &style_sets[GEANY_FILETYPES_DIFF].styling[5]);
 	get_keyfile_hex(config, config_home, "styling", "added", "0x34b034", "0xffffff", "false", &style_sets[GEANY_FILETYPES_DIFF].styling[6]);
+	get_keyfile_hex(config, config_home, "styling", "changed", "0x7f007f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_DIFF].styling[7]);
 
 	style_sets[GEANY_FILETYPES_DIFF].keywords = NULL;
 
@@ -1009,6 +1080,7 @@ static void styleset_diff(ScintillaObject *sci)
 	set_sci_style(sci, SCE_DIFF_POSITION, GEANY_FILETYPES_DIFF, 4);
 	set_sci_style(sci, SCE_DIFF_DELETED, GEANY_FILETYPES_DIFF, 5);
 	set_sci_style(sci, SCE_DIFF_ADDED, GEANY_FILETYPES_DIFF, 6);
+	set_sci_style(sci, SCE_DIFF_CHANGED, GEANY_FILETYPES_DIFF, 7);
 }
 
 
@@ -1063,7 +1135,7 @@ static void styleset_php(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_HTML, ft_id);
 
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "phpscript.mode", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "phpscript.mode", (sptr_t) "1");
 
 	/* use the same colouring as for XML */
 	styleset_markup(sci, TRUE);
@@ -1316,8 +1388,8 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords)
 	set_sci_style(sci, SCE_HPHP_HSTRING_VARIABLE, GEANY_FILETYPES_XML, 41);
 	set_sci_style(sci, SCE_HPHP_COMPLEX_VARIABLE, GEANY_FILETYPES_XML, 42);
 
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.html", (sptr_t) "1");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.html.preprocessor", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "fold.html", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "fold.html.preprocessor", (sptr_t) "0");
 }
 
 
@@ -1441,7 +1513,7 @@ static void styleset_perl(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_PERL, ft_id);
 
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "styling.within.preprocessor", (sptr_t) "1");
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_PERL].keywords[0]);
 
@@ -1541,8 +1613,67 @@ static void styleset_python(ScintillaObject *sci)
 	set_sci_style(sci, SCE_P_WORD2, GEANY_FILETYPES_PYTHON, 14);
 	set_sci_style(sci, SCE_P_DECORATOR, GEANY_FILETYPES_PYTHON, 15);
 
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.comment.python", (sptr_t) "1");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.quotes.python", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "fold.comment.python", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "fold.quotes.python", (sptr_t) "1");
+}
+
+
+static void styleset_cmake_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
+{
+	new_style_array(GEANY_FILETYPES_CMAKE, 15);
+	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CMAKE].styling[0]);
+	get_keyfile_hex(config, config_home, "styling", "comment", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CMAKE].styling[1]);
+	get_keyfile_hex(config, config_home, "styling", "stringdq", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CMAKE].styling[2]);
+	get_keyfile_hex(config, config_home, "styling", "stringlq", "0x008000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CMAKE].styling[3]);
+	get_keyfile_hex(config, config_home, "styling", "stringrq", "0x008000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CMAKE].styling[4]);
+	get_keyfile_hex(config, config_home, "styling", "command", "0x00007f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CMAKE].styling[5]);
+	get_keyfile_hex(config, config_home, "styling", "parameters", "0x991111", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CMAKE].styling[6]);
+	get_keyfile_hex(config, config_home, "styling", "variable", "0x007f7f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CMAKE].styling[7]);
+	get_keyfile_hex(config, config_home, "styling", "userdefined", "0x0000d0", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CMAKE].styling[8]);
+	get_keyfile_hex(config, config_home, "styling", "whiledef", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CMAKE].styling[9]);
+	get_keyfile_hex(config, config_home, "styling", "foreachdef", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CMAKE].styling[10]);
+	get_keyfile_hex(config, config_home, "styling", "ifdefinedef", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CMAKE].styling[11]);
+	get_keyfile_hex(config, config_home, "styling", "macrodef", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CMAKE].styling[12]);
+	get_keyfile_hex(config, config_home, "styling", "stringvar", "0x007f7f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CMAKE].styling[13]);
+	get_keyfile_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CMAKE].styling[14]);
+
+	style_sets[GEANY_FILETYPES_CMAKE].keywords = g_new(gchar*, 4);
+	get_keyfile_keywords(config, config_home, "keywords", "commands", GEANY_FILETYPES_CMAKE, 0, "");
+	get_keyfile_keywords(config, config_home, "keywords", "parameters", GEANY_FILETYPES_CMAKE, 1, "");
+	get_keyfile_keywords(config, config_home, "keywords", "userdefined", GEANY_FILETYPES_CMAKE, 2, "");
+	style_sets[GEANY_FILETYPES_CMAKE].keywords[3] = NULL;
+
+	get_keyfile_wordchars(config, config_home,
+		&style_sets[GEANY_FILETYPES_CMAKE].wordchars);
+}
+
+
+static void styleset_cmake(ScintillaObject *sci)
+{
+	const filetype_id ft_id = GEANY_FILETYPES_CMAKE;
+
+	apply_filetype_properties(sci, SCLEX_CMAKE, ft_id);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_CMAKE].keywords[0]);
+	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_CMAKE].keywords[1]);
+	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_CMAKE].keywords[2]);
+
+	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_CMAKE, 0);
+	set_sci_style(sci, SCE_CMAKE_DEFAULT, GEANY_FILETYPES_CMAKE, 0);
+	set_sci_style(sci, SCE_CMAKE_COMMENT, GEANY_FILETYPES_CMAKE, 1);
+	set_sci_style(sci, SCE_CMAKE_STRINGDQ, GEANY_FILETYPES_CMAKE, 2);
+	set_sci_style(sci, SCE_CMAKE_STRINGLQ, GEANY_FILETYPES_CMAKE, 3);
+	set_sci_style(sci, SCE_CMAKE_STRINGRQ, GEANY_FILETYPES_CMAKE, 4);
+	set_sci_style(sci, SCE_CMAKE_COMMANDS, GEANY_FILETYPES_CMAKE, 5);
+	set_sci_style(sci, SCE_CMAKE_PARAMETERS, GEANY_FILETYPES_CMAKE, 6);
+	set_sci_style(sci, SCE_CMAKE_VARIABLE, GEANY_FILETYPES_CMAKE, 7);
+	set_sci_style(sci, SCE_CMAKE_USERDEFINED, GEANY_FILETYPES_CMAKE, 8);
+	set_sci_style(sci, SCE_CMAKE_WHILEDEF, GEANY_FILETYPES_CMAKE, 9);
+	set_sci_style(sci, SCE_CMAKE_FOREACHDEF, GEANY_FILETYPES_CMAKE, 10);
+	set_sci_style(sci, SCE_CMAKE_IFDEFINEDEF, GEANY_FILETYPES_CMAKE, 11);
+	set_sci_style(sci, SCE_CMAKE_MACRODEF, GEANY_FILETYPES_CMAKE, 12);
+	set_sci_style(sci, SCE_CMAKE_STRINGVAR, GEANY_FILETYPES_CMAKE, 13);
+	set_sci_style(sci, SCE_CMAKE_NUMBER, GEANY_FILETYPES_CMAKE, 14);
 }
 
 
@@ -1901,8 +2032,8 @@ static void styleset_docbook(ScintillaObject *sci)
 	set_sci_style(sci, SCE_H_SGML_1ST_PARAM_COMMENT, GEANY_FILETYPES_DOCBOOK, 27);
 	set_sci_style(sci, SCE_H_SGML_ERROR, GEANY_FILETYPES_DOCBOOK, 28);
 
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.html", (sptr_t) "1");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.html.preprocessor", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "fold.html", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "fold.html.preprocessor", (sptr_t) "1");
 }
 
 
@@ -1910,9 +2041,10 @@ static void styleset_none(ScintillaObject *sci)
 {
 	SSM(sci, SCI_SETLEXER, SCLEX_NULL, 0);
 
-	styleset_common(sci);
-
+	/* we need to set STYLE_DEFAULT before we call SCI_STYLECLEARALL in styleset_common() */
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_NONE, GCS_DEFAULT);
+
+	styleset_common(sci);
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) common_style_set.wordchars);
 	SSM(sci, SCI_SETWHITESPACECHARS, 0, (sptr_t) whitespace_chars);
@@ -1921,7 +2053,7 @@ static void styleset_none(ScintillaObject *sci)
 
 static void styleset_css_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_style_array(GEANY_FILETYPES_CSS, 17);
+	new_style_array(GEANY_FILETYPES_CSS, 22);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x003399", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[0]);
 	get_keyfile_hex(config, config_home, "styling", "comment", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[1]);
 	get_keyfile_hex(config, config_home, "styling", "tag", "0x2166a4", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[2]);
@@ -1935,39 +2067,26 @@ static void styleset_css_init(gint ft_id, GKeyFile *config, GKeyFile *config_hom
 	get_keyfile_hex(config, config_home, "styling", "singlestring", "0x330066", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[10]);
 	get_keyfile_hex(config, config_home, "styling", "attribute", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[11]);
 	get_keyfile_hex(config, config_home, "styling", "value", "0x303030", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[12]);
-	get_keyfile_hex(config, config_home, "styling", "id", "0x7f0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[13]);
-	get_keyfile_hex(config, config_home, "styling", "identifier2", "0x6b6bff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[14]);
-	get_keyfile_hex(config, config_home, "styling", "important", "0xff0000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[15]);
+	get_keyfile_hex(config, config_home, "styling", "id", "0xff9000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[13]);
+	get_keyfile_hex(config, config_home, "styling", "identifier2", "0x6b6bff", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[14]);
+	get_keyfile_hex(config, config_home, "styling", "important", "0x990000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[15]);
 	get_keyfile_hex(config, config_home, "styling", "directive", "0x006bff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[16]);
+	get_keyfile_hex(config, config_home, "styling", "identifier3", "0x00c8ff", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[17]);
+	get_keyfile_hex(config, config_home, "styling", "pseudoelement", "0x666610", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[18]);
+	get_keyfile_hex(config, config_home, "styling", "extended_identifier", "0x9090a0", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[19]);
+	get_keyfile_hex(config, config_home, "styling", "extended_pseudoclass", "0x907080", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[20]);
+	get_keyfile_hex(config, config_home, "styling", "extended_pseudoelement", "0x909080", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[21]);
 
-	style_sets[GEANY_FILETYPES_CSS].keywords = g_new(gchar*, 4);
-	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_CSS, 0,
-								"color background-color background-image background-repeat background-attachment background-position background \
-								font-family font-style font-variant font-weight font-size font \
-								word-spacing letter-spacing text-decoration vertical-align text-transform text-align text-indent line-height \
-								margin-top margin-right margin-bottom margin-left margin \
-								padding-top padding-right padding-bottom padding-left padding \
-								border-top-width border-right-width border-bottom-width border-left-width border-width \
-								border-top border-right border-bottom border-left border \
-								border-color border-style width height float clear \
-								display white-space list-style-type list-style-image list-style-position list-style");
-	get_keyfile_keywords(config, config_home, "keywords", "pseudoclasses", GEANY_FILETYPES_CSS, 1, "first-letter first-line link active visited lang first-child focus hover before after left right first");
-	get_keyfile_keywords(config, config_home, "keywords", "secondary", GEANY_FILETYPES_CSS, 2,
-								"border-top-color border-right-color border-bottom-color border-left-color border-color \
-								border-top-style border-right-style border-bottom-style border-left-style border-style \
-								top right bottom left position z-index direction unicode-bidi \
-								min-width max-width min-height max-height overflow clip visibility content quotes \
-								counter-reset counter-increment marker-offset \
-								size marks page-break-before page-break-after page-break-inside page orphans widows \
-								font-stretch font-size-adjust unicode-range units-per-em src \
-								panose-1 stemv stemh slope cap-height x-height ascent descent widths bbox definition-src \
-								baseline centerline mathline topline text-shadow \
-								caption-side table-layout border-collapse border-spacing empty-cells speak-header \
-								cursor outline outline-width outline-style outline-color \
-								volume speak pause-before pause-after pause cue-before cue-after cue \
-								play-during azimuth elevation speech-rate voice-family pitch pitch-range stress richness \
-								speak-punctuation speak-numeral");
-	style_sets[GEANY_FILETYPES_CSS].keywords[3] = NULL;
+	style_sets[GEANY_FILETYPES_CSS].keywords = g_new(gchar*, 9);
+	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_CSS, 0, "");
+	get_keyfile_keywords(config, config_home, "keywords", "pseudoclasses", GEANY_FILETYPES_CSS, 1, "");
+	get_keyfile_keywords(config, config_home, "keywords", "secondary", GEANY_FILETYPES_CSS, 2, "");
+	get_keyfile_keywords(config, config_home, "keywords", "css3_properties", GEANY_FILETYPES_CSS, 3, "");
+	get_keyfile_keywords(config, config_home, "keywords", "pseudo_elements", GEANY_FILETYPES_CSS, 4, "");
+	get_keyfile_keywords(config, config_home, "keywords", "browser_css_properties", GEANY_FILETYPES_CSS, 5, "");
+	get_keyfile_keywords(config, config_home, "keywords", "browser_pseudo_classes", GEANY_FILETYPES_CSS, 6, "");
+	get_keyfile_keywords(config, config_home, "keywords", "browser_pseudo_elements", GEANY_FILETYPES_CSS, 7, "");
+	style_sets[GEANY_FILETYPES_CSS].keywords[8] = NULL;
 
 	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_CSS].wordchars);
@@ -1977,12 +2096,14 @@ static void styleset_css_init(gint ft_id, GKeyFile *config, GKeyFile *config_hom
 static void styleset_css(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_CSS;
+	guint i;
 
 	apply_filetype_properties(sci, SCLEX_CSS, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_CSS].keywords[0]);
-	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_CSS].keywords[1]);
-	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_CSS].keywords[2]);
+	for (i = 0; i < 8; i++)
+	{
+		SSM(sci, SCI_SETKEYWORDS, i, (sptr_t) style_sets[GEANY_FILETYPES_CSS].keywords[i]);
+	}
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_CSS, 0);
 	set_sci_style(sci, SCE_CSS_DEFAULT, GEANY_FILETYPES_CSS, 0);
@@ -2002,6 +2123,83 @@ static void styleset_css(ScintillaObject *sci)
 	set_sci_style(sci, SCE_CSS_IDENTIFIER2, GEANY_FILETYPES_CSS, 14);
 	set_sci_style(sci, SCE_CSS_IMPORTANT, GEANY_FILETYPES_CSS, 15);
 	set_sci_style(sci, SCE_CSS_DIRECTIVE, GEANY_FILETYPES_CSS, 16);
+	set_sci_style(sci, SCE_CSS_IDENTIFIER3, GEANY_FILETYPES_CSS, 17);
+	set_sci_style(sci, SCE_CSS_PSEUDOELEMENT, GEANY_FILETYPES_CSS, 18);
+	set_sci_style(sci, SCE_CSS_EXTENDED_IDENTIFIER, GEANY_FILETYPES_CSS, 19);
+	set_sci_style(sci, SCE_CSS_EXTENDED_PSEUDOCLASS, GEANY_FILETYPES_CSS, 20);
+	set_sci_style(sci, SCE_CSS_EXTENDED_PSEUDOELEMENT, GEANY_FILETYPES_CSS, 21);
+}
+
+
+static void styleset_nsis_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
+{
+	new_style_array(GEANY_FILETYPES_NSIS, 19);
+	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_NSIS].styling[0]);
+	get_keyfile_hex(config, config_home, "styling", "comment", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_NSIS].styling[1]);
+	get_keyfile_hex(config, config_home, "styling", "stringdq", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_NSIS].styling[2]);
+	get_keyfile_hex(config, config_home, "styling", "stringlq", "0x008000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_NSIS].styling[3]);
+	get_keyfile_hex(config, config_home, "styling", "stringrq", "0x008000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_NSIS].styling[4]);
+	get_keyfile_hex(config, config_home, "styling", "function", "0x00007f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_NSIS].styling[5]);
+	get_keyfile_hex(config, config_home, "styling", "variable", "0x991111", "0xffffff", "false", &style_sets[GEANY_FILETYPES_NSIS].styling[6]);
+	get_keyfile_hex(config, config_home, "styling", "label", "0x007f7f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_NSIS].styling[7]);
+	get_keyfile_hex(config, config_home, "styling", "userdefined", "0x0000d0", "0xffffff", "true", &style_sets[GEANY_FILETYPES_NSIS].styling[8]);
+	get_keyfile_hex(config, config_home, "styling", "sectiondef", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_NSIS].styling[9]);
+	get_keyfile_hex(config, config_home, "styling", "subsectiondef", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_NSIS].styling[10]);
+	get_keyfile_hex(config, config_home, "styling", "ifdefinedef", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_NSIS].styling[11]);
+	get_keyfile_hex(config, config_home, "styling", "macrodef", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_NSIS].styling[12]);
+	get_keyfile_hex(config, config_home, "styling", "stringvar", "0x991111", "0xffffff", "false", &style_sets[GEANY_FILETYPES_NSIS].styling[13]);
+	get_keyfile_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_NSIS].styling[14]);
+	get_keyfile_hex(config, config_home, "styling", "sectiongroup", "00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_NSIS].styling[15]);
+	get_keyfile_hex(config, config_home, "styling", "pageex", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_NSIS].styling[16]);
+	get_keyfile_hex(config, config_home, "styling", "functiondef", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_NSIS].styling[17]);
+	get_keyfile_hex(config, config_home, "styling", "commentbox", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_NSIS].styling[18]);
+
+	style_sets[GEANY_FILETYPES_NSIS].keywords = g_new(gchar*, 5);
+	get_keyfile_keywords(config, config_home, "keywords", "functions", GEANY_FILETYPES_NSIS, 0, "");
+	get_keyfile_keywords(config, config_home, "keywords", "variables", GEANY_FILETYPES_NSIS, 1, "");
+	get_keyfile_keywords(config, config_home, "keywords", "lables", GEANY_FILETYPES_NSIS, 2, "");
+	get_keyfile_keywords(config, config_home, "keywords", "userdefined", GEANY_FILETYPES_NSIS, 3, "");
+	style_sets[GEANY_FILETYPES_NSIS].keywords[4] = NULL;
+
+	get_keyfile_wordchars(config, config_home,
+		&style_sets[GEANY_FILETYPES_NSIS].wordchars);
+}
+
+
+static void styleset_nsis(ScintillaObject *sci)
+{
+	const filetype_id ft_id = GEANY_FILETYPES_NSIS;
+
+	apply_filetype_properties(sci, SCLEX_NSIS, ft_id);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_NSIS].keywords[0]);
+	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_NSIS].keywords[1]);
+	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_NSIS].keywords[2]);
+	SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) style_sets[GEANY_FILETYPES_NSIS].keywords[3]);
+
+	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_NSIS, 0);
+	set_sci_style(sci, SCE_NSIS_DEFAULT, GEANY_FILETYPES_NSIS, 0);
+	set_sci_style(sci, SCE_NSIS_COMMENT, GEANY_FILETYPES_NSIS, 1);
+	set_sci_style(sci, SCE_NSIS_STRINGDQ, GEANY_FILETYPES_NSIS, 2);
+	set_sci_style(sci, SCE_NSIS_STRINGLQ, GEANY_FILETYPES_NSIS, 3);
+	set_sci_style(sci, SCE_NSIS_STRINGRQ, GEANY_FILETYPES_NSIS, 4);
+	set_sci_style(sci, SCE_NSIS_FUNCTION, GEANY_FILETYPES_NSIS, 5);
+	set_sci_style(sci, SCE_NSIS_VARIABLE, GEANY_FILETYPES_NSIS, 6);
+	set_sci_style(sci, SCE_NSIS_LABEL, GEANY_FILETYPES_NSIS, 7);
+	set_sci_style(sci, SCE_NSIS_USERDEFINED, GEANY_FILETYPES_NSIS, 8);
+	set_sci_style(sci, SCE_NSIS_SECTIONDEF, GEANY_FILETYPES_NSIS, 9);
+	set_sci_style(sci, SCE_NSIS_SUBSECTIONDEF, GEANY_FILETYPES_NSIS, 10);
+	set_sci_style(sci, SCE_NSIS_IFDEFINEDEF, GEANY_FILETYPES_NSIS, 11);
+	set_sci_style(sci, SCE_NSIS_MACRODEF, GEANY_FILETYPES_NSIS, 12);
+	set_sci_style(sci, SCE_NSIS_STRINGVAR, GEANY_FILETYPES_NSIS, 13);
+	set_sci_style(sci, SCE_NSIS_NUMBER, GEANY_FILETYPES_NSIS, 14);
+	set_sci_style(sci, SCE_NSIS_SECTIONGROUP, GEANY_FILETYPES_NSIS, 15);
+	set_sci_style(sci, SCE_NSIS_PAGEEX, GEANY_FILETYPES_NSIS, 16);
+	set_sci_style(sci, SCE_NSIS_FUNCTIONDEF, GEANY_FILETYPES_NSIS, 17);
+	set_sci_style(sci, SCE_NSIS_COMMENTBOX, GEANY_FILETYPES_NSIS, 18);
+
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "nsis.uservars", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "nsis.ignorecase", (sptr_t) "1");
 }
 
 
@@ -2458,59 +2656,6 @@ static void styleset_caml(ScintillaObject *sci)
 }
 
 
-
-
-static void styleset_oms_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
-{
-	new_style_array(GEANY_FILETYPES_OMS, 11);
-	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_OMS].styling[0]);
-	get_keyfile_hex(config, config_home, "styling", "commentline", "0x909090", "0xffffff", "false", &style_sets[GEANY_FILETYPES_OMS].styling[1]);
-	get_keyfile_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_OMS].styling[2]);
-	get_keyfile_hex(config, config_home, "styling", "word", "0x991111", "0xffffff", "false", &style_sets[GEANY_FILETYPES_OMS].styling[3]);
-	get_keyfile_hex(config, config_home, "styling", "string", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_OMS].styling[4]);
-	get_keyfile_hex(config, config_home, "styling", "character", "0x404000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_OMS].styling[5]);
-	get_keyfile_hex(config, config_home, "styling", "operator", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_OMS].styling[6]);
-	get_keyfile_hex(config, config_home, "styling", "identifier", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_OMS].styling[7]);
-	get_keyfile_hex(config, config_home, "styling", "backticks", "0x000000", "0xe0c0e0", "false", &style_sets[GEANY_FILETYPES_OMS].styling[8]);
-	get_keyfile_hex(config, config_home, "styling", "param", "0x991111", "0x0000ff", "false", &style_sets[GEANY_FILETYPES_OMS].styling[9]);
-	get_keyfile_hex(config, config_home, "styling", "scalar", "0x0000ff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_OMS].styling[10]);
-
-	style_sets[GEANY_FILETYPES_OMS].keywords = g_new(gchar*, 2);
-	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_OMS, 0, "clear seq fillcols fillrowsgaspect gaddview \
-			gtitle gxaxis gyaxis max contour gcolor gplot gaddview gxaxis gyaxis gcolor fill coldim gplot \
-			gtitle clear arcov dpss fspec cos gxaxis gyaxis gtitle gplot gupdate rowdim fill print for to begin \
-			end write cocreate coinvoke codispsave cocreate codispset copropput colsum sqrt adddialog \
-			addcontrol addcontrol delwin fillrows function gaspect conjdir");
-	style_sets[GEANY_FILETYPES_OMS].keywords[1] = NULL;
-
-	get_keyfile_wordchars(config, config_home,
-		&style_sets[GEANY_FILETYPES_OMS].wordchars);
-}
-
-
-static void styleset_oms(ScintillaObject *sci)
-{
-	const filetype_id ft_id = GEANY_FILETYPES_OMS;
-
-	apply_filetype_properties(sci, SCLEX_OMS, ft_id);
-
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_OMS].keywords[0]);
-
-	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_OMS, 0);
-	set_sci_style(sci, SCE_SH_DEFAULT, GEANY_FILETYPES_OMS, 0);
-	set_sci_style(sci, SCE_SH_COMMENTLINE, GEANY_FILETYPES_OMS, 1);
-	set_sci_style(sci, SCE_SH_NUMBER, GEANY_FILETYPES_OMS, 2);
-	set_sci_style(sci, SCE_SH_WORD, GEANY_FILETYPES_OMS, 3);
-	set_sci_style(sci, SCE_SH_STRING, GEANY_FILETYPES_OMS, 4);
-	set_sci_style(sci, SCE_SH_CHARACTER, GEANY_FILETYPES_OMS, 5);
-	set_sci_style(sci, SCE_SH_OPERATOR, GEANY_FILETYPES_OMS, 6);
-	set_sci_style(sci, SCE_SH_IDENTIFIER, GEANY_FILETYPES_OMS, 7);
-	set_sci_style(sci, SCE_SH_BACKTICKS, GEANY_FILETYPES_OMS, 8);
-	set_sci_style(sci, SCE_SH_PARAM, GEANY_FILETYPES_OMS, 9);
-	set_sci_style(sci, SCE_SH_SCALAR, GEANY_FILETYPES_OMS, 10);
-}
-
-
 static void styleset_tcl_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_style_array(GEANY_FILETYPES_TCL, 16);
@@ -2574,6 +2719,52 @@ static void styleset_tcl(ScintillaObject *sci)
 	set_sci_style(sci, SCE_TCL_WORD4, GEANY_FILETYPES_TCL, 14);
 	set_sci_style(sci, SCE_TCL_WORD5, GEANY_FILETYPES_TCL, 15);
 }
+
+
+static void styleset_matlab_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
+{
+	new_style_array(GEANY_FILETYPES_MATLAB, 9);
+	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_MATLAB].styling[0]);
+	get_keyfile_hex(config, config_home, "styling", "comment", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_MATLAB].styling[1]);
+	get_keyfile_hex(config, config_home, "styling", "command", "0x111199", "0xffffff", "true", &style_sets[GEANY_FILETYPES_MATLAB].styling[2]);
+	get_keyfile_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_MATLAB].styling[3]);
+	get_keyfile_hex(config, config_home, "styling", "keyword", "0x001a7f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_MATLAB].styling[4]);
+	get_keyfile_hex(config, config_home, "styling", "string", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_MATLAB].styling[5]);
+	get_keyfile_hex(config, config_home, "styling", "operator", "0x301010", "0xffffff", "false", &style_sets[GEANY_FILETYPES_MATLAB].styling[6]);
+	get_keyfile_hex(config, config_home, "styling", "identifier", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_MATLAB].styling[7]);
+	get_keyfile_hex(config, config_home, "styling", "doublequotedstring", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_MATLAB].styling[8]);
+
+	style_sets[GEANY_FILETYPES_MATLAB].keywords = g_new(gchar*, 2);
+	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_MATLAB, 0, "break case catch continue else elseif end for function global if otherwise persistent return switch try while");
+	style_sets[GEANY_FILETYPES_MATLAB].keywords[1] = NULL;
+
+	get_keyfile_wordchars(config, config_home,
+		&style_sets[GEANY_FILETYPES_MATLAB].wordchars);
+}
+
+
+static void styleset_matlab(ScintillaObject *sci)
+{
+	const filetype_id ft_id = GEANY_FILETYPES_MATLAB;
+
+	styleset_common(sci);
+
+	apply_filetype_properties(sci, SCLEX_MATLAB, ft_id);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_MATLAB].keywords[0]);
+
+	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_MATLAB, 0);
+	set_sci_style(sci, SCE_MATLAB_DEFAULT, GEANY_FILETYPES_MATLAB, 0);
+	set_sci_style(sci, SCE_MATLAB_COMMENT, GEANY_FILETYPES_MATLAB, 1);
+	set_sci_style(sci, SCE_MATLAB_COMMAND, GEANY_FILETYPES_MATLAB, 2);
+	set_sci_style(sci, SCE_MATLAB_NUMBER, GEANY_FILETYPES_MATLAB, 3);
+	set_sci_style(sci, SCE_MATLAB_KEYWORD, GEANY_FILETYPES_MATLAB, 4);
+	set_sci_style(sci, SCE_MATLAB_STRING, GEANY_FILETYPES_MATLAB, 5);
+	set_sci_style(sci, SCE_MATLAB_OPERATOR, GEANY_FILETYPES_MATLAB, 6);
+	set_sci_style(sci, SCE_MATLAB_IDENTIFIER, GEANY_FILETYPES_MATLAB, 7);
+	set_sci_style(sci, SCE_MATLAB_DOUBLEQUOTESTRING, GEANY_FILETYPES_MATLAB, 8);
+}
+
 
 static void styleset_d_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
@@ -2770,6 +2961,52 @@ static void styleset_vhdl(ScintillaObject *sci)
 	set_sci_style(sci, SCE_VHDL_STDPACKAGE, GEANY_FILETYPES_VHDL, 12);
 	set_sci_style(sci, SCE_VHDL_STDTYPE, GEANY_FILETYPES_VHDL, 13);
 	set_sci_style(sci, SCE_VHDL_USERWORD, GEANY_FILETYPES_VHDL, 14);
+}
+
+
+static void styleset_yaml_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
+{
+	new_style_array(GEANY_FILETYPES_YAML, 10);
+
+	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_YAML].styling[0]);
+	get_keyfile_hex(config, config_home, "styling", "comment", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_YAML].styling[1]);
+	get_keyfile_hex(config, config_home, "styling", "identifier", "0x000088", "0xffffff", "true", &style_sets[GEANY_FILETYPES_YAML].styling[2]);
+	get_keyfile_hex(config, config_home, "styling", "keyword", "0x991111", "0xffffff", "true", &style_sets[GEANY_FILETYPES_YAML].styling[3]);
+	get_keyfile_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_YAML].styling[4]);
+	get_keyfile_hex(config, config_home, "styling", "reference", "0x008888", "0xffffff", "false", &style_sets[GEANY_FILETYPES_YAML].styling[5]);
+	get_keyfile_hex(config, config_home, "styling", "document", "0x000088", "0xffffff", "false", &style_sets[GEANY_FILETYPES_YAML].styling[6]);
+	get_keyfile_hex(config, config_home, "styling", "text", "0x333366", "0xffffff", "false", &style_sets[GEANY_FILETYPES_YAML].styling[7]);
+	get_keyfile_hex(config, config_home, "styling", "error", "0xff0000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_YAML].styling[8]);
+	get_keyfile_hex(config, config_home, "styling", "operator", "0x301010", "0xffffff", "false", &style_sets[GEANY_FILETYPES_YAML].styling[9]);
+
+	style_sets[GEANY_FILETYPES_YAML].keywords = g_new(gchar*, 2);
+	get_keyfile_keywords(config, config_home, "keywords", "keywords", GEANY_FILETYPES_YAML, 0, "true false yes no");
+	style_sets[GEANY_FILETYPES_YAML].keywords[1] = NULL;
+
+	get_keyfile_wordchars(config, config_home,
+		&style_sets[GEANY_FILETYPES_VHDL].wordchars);
+}
+
+
+static void styleset_yaml(ScintillaObject *sci)
+{
+	const filetype_id ft_id = GEANY_FILETYPES_YAML;
+
+	apply_filetype_properties(sci, SCLEX_YAML, ft_id);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_YAML].keywords[0]);
+
+	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_YAML, 0);
+	set_sci_style(sci, SCE_YAML_DEFAULT, GEANY_FILETYPES_YAML, 0);
+	set_sci_style(sci, SCE_YAML_COMMENT, GEANY_FILETYPES_YAML, 1);
+	set_sci_style(sci, SCE_YAML_IDENTIFIER, GEANY_FILETYPES_YAML, 2);
+	set_sci_style(sci, SCE_YAML_KEYWORD, GEANY_FILETYPES_YAML, 3);
+	set_sci_style(sci, SCE_YAML_NUMBER, GEANY_FILETYPES_YAML, 4);
+	set_sci_style(sci, SCE_YAML_REFERENCE, GEANY_FILETYPES_YAML, 5);
+	set_sci_style(sci, SCE_YAML_DOCUMENT, GEANY_FILETYPES_YAML, 6);
+	set_sci_style(sci, SCE_YAML_TEXT, GEANY_FILETYPES_YAML, 7);
+	set_sci_style(sci, SCE_YAML_ERROR, GEANY_FILETYPES_YAML, 8);
+	set_sci_style(sci, SCE_YAML_OPERATOR, GEANY_FILETYPES_YAML, 9);
 }
 
 
@@ -2999,6 +3236,35 @@ static void styleset_basic(ScintillaObject *sci)
 	set_sci_style(sci, SCE_B_BINNUMBER, GEANY_FILETYPES_BASIC, 18);
 }
 
+
+static void styleset_actionscript_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
+{
+	new_style_array(GEANY_FILETYPES_AS, 20);
+	styleset_c_like_init(config, config_home, GEANY_FILETYPES_AS);
+
+	style_sets[GEANY_FILETYPES_AS].keywords = g_new(gchar *, 4);
+
+	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_AS, 0, "");
+	get_keyfile_keywords(config, config_home, "keywords", "secondary", GEANY_FILETYPES_AS, 1, "");
+	get_keyfile_keywords(config, config_home, "keywords", "classes", GEANY_FILETYPES_AS, 2, "");
+	style_sets[GEANY_FILETYPES_AS].keywords[3] = NULL;
+
+	get_keyfile_wordchars(config, config_home, &style_sets[GEANY_FILETYPES_AS].wordchars);
+}
+
+
+static void styleset_actionscript(ScintillaObject *sci)
+{
+	apply_filetype_properties(sci, SCLEX_CPP, GEANY_FILETYPES_AS);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_AS].keywords[0]);
+	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_AS].keywords[2]);
+	SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) style_sets[GEANY_FILETYPES_AS].keywords[1]);
+
+	styleset_c_like(sci, GEANY_FILETYPES_AS);
+}
+
+
 static void styleset_haxe_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_style_array(GEANY_FILETYPES_HAXE, 20);
@@ -3044,6 +3310,56 @@ static void styleset_haxe(ScintillaObject *sci)
 }
 
 
+static void styleset_ada_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
+{
+	new_style_array(GEANY_FILETYPES_ADA, 12);
+
+	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_ADA].styling[0]);
+	get_keyfile_hex(config, config_home, "styling", "word", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_ADA].styling[1]);
+	get_keyfile_hex(config, config_home, "styling", "identifier", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_ADA].styling[2]);
+	get_keyfile_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_ADA].styling[3]);
+	get_keyfile_hex(config, config_home, "styling", "delimiter", "0x301010", "0xffffff", "false", &style_sets[GEANY_FILETYPES_ADA].styling[4]);
+	get_keyfile_hex(config, config_home, "styling", "character", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_ADA].styling[5]);
+	get_keyfile_hex(config, config_home, "styling", "charactereol", "0x000000", "0xe0c0e0", "false", &style_sets[GEANY_FILETYPES_ADA].styling[6]);
+	get_keyfile_hex(config, config_home, "styling", "string", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_ADA].styling[7]);
+	get_keyfile_hex(config, config_home, "styling", "stringeol", "0x000000", "0xe0c0e0", "false", &style_sets[GEANY_FILETYPES_ADA].styling[8]);
+	get_keyfile_hex(config, config_home, "styling", "label", "0xaaaaaa", "0xffffff", "false", &style_sets[GEANY_FILETYPES_ADA].styling[9]);
+	get_keyfile_hex(config, config_home, "styling", "commentline", "0xd00000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_ADA].styling[10]);
+	get_keyfile_hex(config, config_home, "styling", "illegal", "0xff0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_ADA].styling[11]);
+
+	style_sets[GEANY_FILETYPES_ADA].keywords = g_new(gchar*, 2);
+	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_ADA, 0, "abort abs abstract accept access aliased all and array at begin body case constant declare delay delta digits do else elsif end entry exception exit for function generic goto if in interface is limited loop mod new not null of or others out overriding package pragma private procedure protected raise range record rem renames requeue return reverse select separate subtype synchronized tagged task terminate then type until use when while with xor");
+	style_sets[GEANY_FILETYPES_ADA].keywords[1] = NULL;
+
+	get_keyfile_wordchars(config, config_home,
+		&style_sets[GEANY_FILETYPES_ADA].wordchars);
+}
+
+
+static void styleset_ada(ScintillaObject *sci)
+{
+	const filetype_id ft_id = GEANY_FILETYPES_ADA;
+
+	apply_filetype_properties(sci, SCLEX_ADA, ft_id);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_ADA].keywords[0]);
+
+	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_ADA, 0);
+	set_sci_style(sci, SCE_ADA_DEFAULT, GEANY_FILETYPES_ADA, 0);
+	set_sci_style(sci, SCE_ADA_WORD, GEANY_FILETYPES_ADA, 1);
+	set_sci_style(sci, SCE_ADA_IDENTIFIER, GEANY_FILETYPES_ADA, 2);
+	set_sci_style(sci, SCE_ADA_NUMBER, GEANY_FILETYPES_ADA, 3);
+	set_sci_style(sci, SCE_ADA_DELIMITER, GEANY_FILETYPES_ADA, 4);
+	set_sci_style(sci, SCE_ADA_CHARACTER, GEANY_FILETYPES_ADA, 5);
+	set_sci_style(sci, SCE_ADA_CHARACTEREOL, GEANY_FILETYPES_ADA, 6);
+	set_sci_style(sci, SCE_ADA_STRING, GEANY_FILETYPES_ADA, 7);
+	set_sci_style(sci, SCE_ADA_STRINGEOL, GEANY_FILETYPES_ADA, 8);
+	set_sci_style(sci, SCE_ADA_LABEL, GEANY_FILETYPES_ADA, 9);
+	set_sci_style(sci, SCE_ADA_COMMENTLINE, GEANY_FILETYPES_ADA, 10);
+	set_sci_style(sci, SCE_ADA_ILLEGAL, GEANY_FILETYPES_ADA, 11);
+}
+
+
 /* lang_name is the name used for the styleset_foo_init function, e.g. foo. */
 #define init_styleset_case(ft_id, lang_name) \
 	case (ft_id): \
@@ -3060,11 +3376,13 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 	switch (filetype_idx)
 	{
 		init_styleset_case(GEANY_FILETYPES_NONE,	common);
+		init_styleset_case(GEANY_FILETYPES_ADA,		ada);
 		init_styleset_case(GEANY_FILETYPES_ASM,		asm);
 		init_styleset_case(GEANY_FILETYPES_BASIC,	basic);
 		init_styleset_case(GEANY_FILETYPES_C,		c);
 		init_styleset_case(GEANY_FILETYPES_H,		c);
 		init_styleset_case(GEANY_FILETYPES_CAML,	caml);
+		init_styleset_case(GEANY_FILETYPES_CMAKE,	cmake);
 		init_styleset_case(GEANY_FILETYPES_CONF,	conf);
 		init_styleset_case(GEANY_FILETYPES_CPP,		cpp);
 		init_styleset_case(GEANY_FILETYPES_HPP,		cpp);
@@ -3079,13 +3397,15 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 		init_styleset_case(GEANY_FILETYPES_GLSL,	glsl);
 		init_styleset_case(GEANY_FILETYPES_HASKELL,	haskell);
 		init_styleset_case(GEANY_FILETYPES_HAXE,	haxe);
+		init_styleset_case(GEANY_FILETYPES_AS,		actionscript);
 		init_styleset_case(GEANY_FILETYPES_HTML,	html);
 		init_styleset_case(GEANY_FILETYPES_JAVA,	java);
 		init_styleset_case(GEANY_FILETYPES_JS,		js);
 		init_styleset_case(GEANY_FILETYPES_LATEX,	latex);
 		init_styleset_case(GEANY_FILETYPES_LUA,		lua);
 		init_styleset_case(GEANY_FILETYPES_MAKE,	makefile);
-		init_styleset_case(GEANY_FILETYPES_OMS,		oms);
+		init_styleset_case(GEANY_FILETYPES_MATLAB,	matlab);
+		init_styleset_case(GEANY_FILETYPES_NSIS,	nsis);
 		init_styleset_case(GEANY_FILETYPES_PASCAL,	pascal);
 		init_styleset_case(GEANY_FILETYPES_PERL,	perl);
 		init_styleset_case(GEANY_FILETYPES_PHP,		php);
@@ -3096,8 +3416,10 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 		init_styleset_case(GEANY_FILETYPES_SH,		sh);
 		init_styleset_case(GEANY_FILETYPES_SQL,		sql);
 		init_styleset_case(GEANY_FILETYPES_TCL,		tcl);
+		init_styleset_case(GEANY_FILETYPES_VALA,	vala);
 		init_styleset_case(GEANY_FILETYPES_VHDL,	vhdl);
 		init_styleset_case(GEANY_FILETYPES_XML,		markup);
+		init_styleset_case(GEANY_FILETYPES_YAML,	yaml);
 	}
 }
 
@@ -3118,11 +3440,13 @@ void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 
 	switch (filetype_idx)
 	{
+		styleset_case(GEANY_FILETYPES_ADA,		ada);
 		styleset_case(GEANY_FILETYPES_ASM,		asm);
 		styleset_case(GEANY_FILETYPES_BASIC,	basic);
 		styleset_case(GEANY_FILETYPES_C,		c);
 		styleset_case(GEANY_FILETYPES_H,		c);
 		styleset_case(GEANY_FILETYPES_CAML,		caml);
+		styleset_case(GEANY_FILETYPES_CMAKE,	cmake);
 		styleset_case(GEANY_FILETYPES_CONF,		conf);
 		styleset_case(GEANY_FILETYPES_CPP,		cpp);
 		styleset_case(GEANY_FILETYPES_HPP,		cpp);
@@ -3137,13 +3461,15 @@ void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 		styleset_case(GEANY_FILETYPES_GLSL,		glsl);
 		styleset_case(GEANY_FILETYPES_HASKELL,	haskell);
 		styleset_case(GEANY_FILETYPES_HAXE,		haxe);
+		styleset_case(GEANY_FILETYPES_AS,		actionscript);
 		styleset_case(GEANY_FILETYPES_HTML,		html);
 		styleset_case(GEANY_FILETYPES_JAVA,		java);
 		styleset_case(GEANY_FILETYPES_JS,		js);
 		styleset_case(GEANY_FILETYPES_LATEX,	latex);
 		styleset_case(GEANY_FILETYPES_LUA,		lua);
 		styleset_case(GEANY_FILETYPES_MAKE,		makefile);
-		styleset_case(GEANY_FILETYPES_OMS,		oms);
+		styleset_case(GEANY_FILETYPES_MATLAB,	matlab);
+		styleset_case(GEANY_FILETYPES_NSIS,		nsis);
 		styleset_case(GEANY_FILETYPES_PASCAL,	pascal);
 		styleset_case(GEANY_FILETYPES_PERL,		perl);
 		styleset_case(GEANY_FILETYPES_PHP,		php);
@@ -3154,8 +3480,10 @@ void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 		styleset_case(GEANY_FILETYPES_SH,		sh);
 		styleset_case(GEANY_FILETYPES_SQL,		sql);
 		styleset_case(GEANY_FILETYPES_TCL,		tcl);
+		styleset_case(GEANY_FILETYPES_VALA,		vala);
 		styleset_case(GEANY_FILETYPES_VHDL,		vhdl);
 		styleset_case(GEANY_FILETYPES_XML,		xml);
+		styleset_case(GEANY_FILETYPES_YAML,		yaml);
 		default:
 		styleset_case(GEANY_FILETYPES_NONE,		none);
 	}

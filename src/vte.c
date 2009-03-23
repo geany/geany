@@ -1,8 +1,8 @@
 /*
  *      vte.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -29,6 +29,12 @@
 
 #ifdef HAVE_VTE
 
+/* include stdlib.h AND unistd.h, because on GNU/Linux pid_t seems to be
+ * in stdlib.h, on FreeBSD in unistd.h, sys/types.h is needed for C89 */
+#include <stdlib.h>
+#include <sys/types.h>
+#include <unistd.h>
+
 #include <gdk/gdkkeysyms.h>
 #include <signal.h>
 #include <string.h>
@@ -43,6 +49,8 @@
 #include "msgwindow.h"
 #include "callbacks.h"
 #include "geanywraplabel.h"
+#include "editor.h"
+#include "sciwrappers.h"
 
 
 VteInfo vte_info;
@@ -61,29 +69,25 @@ static gint vte_prefs_tab_num = -1;
 static const gchar VTE_WORDCHARS[] = "-A-Za-z0-9,./?%&#:_";
 
 
-/* taken from original vte.h to make my life easier ;-) */
-
-typedef struct _VteTerminalPrivate VteTerminalPrivate;
-
+/* Incomplete VteTerminal struct from vte/vte.h. */
 typedef struct _VteTerminal VteTerminal;
 struct _VteTerminal
 {
 	GtkWidget widget;
 	GtkAdjustment *adjustment;
-	glong char_width, char_height;
-	glong char_ascent, char_descent;
-	glong row_count, column_count;
-	gchar *window_title;
-	gchar *icon_title;
-	VteTerminalPrivate *pvt;
 };
 
 #define VTE_TERMINAL(obj) (GTK_CHECK_CAST((obj), VTE_TYPE_TERMINAL, VteTerminal))
 #define VTE_TYPE_TERMINAL (vf->vte_terminal_get_type())
 
+typedef enum {
+        VTE_CURSOR_BLINK_SYSTEM,
+        VTE_CURSOR_BLINK_ON,
+        VTE_CURSOR_BLINK_OFF
+} VteTerminalCursorBlinkMode;
 
-/* store function pointers in a struct to avoid a strange segfault if they are stored directly
- * if accessed directly, gdb says the segfault arrives at old_tab_width(prefs.c), don't ask me */
+
+/* Holds function pointers we need to access the VTE API. */
 struct VteFunctions
 {
 	GtkWidget* (*vte_terminal_new) (void);
@@ -107,6 +111,9 @@ struct VteFunctions
 	void (*vte_terminal_set_color_background) (VteTerminal *terminal, const GdkColor *background);
 	void (*vte_terminal_feed_child) (VteTerminal *terminal, const char *data, glong length);
 	void (*vte_terminal_im_append_menuitems) (VteTerminal *terminal, GtkMenuShell *menushell);
+	void (*vte_terminal_set_cursor_blink_mode) (VteTerminal *terminal,
+												VteTerminalCursorBlinkMode mode);
+	void (*vte_terminal_set_cursor_blinks) (VteTerminal *terminal, gboolean blink);
 };
 
 
@@ -114,14 +121,14 @@ static void create_vte(void);
 static void vte_start(GtkWidget *widget);
 static void vte_restart(GtkWidget *widget);
 static gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpointer user_data);
-static gboolean vte_keyrelease(GtkWidget *widget, GdkEventKey *event, gpointer data);
-static gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data);
+static gboolean vte_keyrelease_cb(GtkWidget *widget, GdkEventKey *event, gpointer data);
+static gboolean vte_keypress_cb(GtkWidget *widget, GdkEventKey *event, gpointer data);
 static void vte_register_symbols(GModule *module);
 static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data);
 static GtkWidget *vte_create_popup_menu(void);
-void vte_commit(VteTerminal *vte, gchar *arg1, guint arg2, gpointer user_data);
-void vte_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context, gint x, gint y,
-							GtkSelectionData *data, guint info, guint ltime);
+static void vte_commit_cb(VteTerminal *vte, gchar *arg1, guint arg2, gpointer user_data);
+static void vte_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context,
+								   gint x, gint y, GtkSelectionData *data, guint info, guint ltime);
 
 
 enum
@@ -191,27 +198,27 @@ static gchar **vte_get_child_environment(void)
 static void override_menu_key(void)
 {
 	if (gtk_menu_key_accel == NULL) /* for restoring the default value */
-		g_object_get(G_OBJECT(gtk_settings_get_default()), "gtk-menu-bar-accel",
-																	&gtk_menu_key_accel, NULL);
+		g_object_get(G_OBJECT(gtk_settings_get_default()),
+			"gtk-menu-bar-accel", &gtk_menu_key_accel, NULL);
 
 	if (vc->ignore_menu_bar_accel)
-		gtk_settings_set_string_property(gtk_settings_get_default(), "gtk-menu-bar-accel",
-								"<Shift><Control><Mod1><Mod2><Mod3><Mod4><Mod5>F10", "Geany");
+		gtk_settings_set_string_property(gtk_settings_get_default(),
+			"gtk-menu-bar-accel", "<Shift><Control><Mod1><Mod2><Mod3><Mod4><Mod5>F10", "Geany");
 	else
 		gtk_settings_set_string_property(gtk_settings_get_default(),
-								"gtk-menu-bar-accel", gtk_menu_key_accel, "Geany");
+			"gtk-menu-bar-accel", gtk_menu_key_accel, "Geany");
 }
 
 
 void vte_init(void)
 {
 	if (vte_info.have_vte == FALSE)
-	{	/* app->have_vte can be false, even if VTE is compiled in, think of command line option */
+	{	/* vte_info.have_vte can be false even if VTE is compiled in, think of command line option */
 		geany_debug("Disabling terminal support");
 		return;
 	}
 
-	if (vte_info.lib_vte && vte_info.lib_vte[0] != '\0')
+	if (NZV(vte_info.lib_vte))
 	{
 		module = g_module_open(vte_info.lib_vte, G_MODULE_BIND_LAZY);
 	}
@@ -237,7 +244,7 @@ void vte_init(void)
 	if (module == NULL)
 	{
 		vte_info.have_vte = FALSE;
-		geany_debug("Could not load libvte.so, terminal support disabled");
+		geany_debug("Could not load libvte.so, embedded terminal support disabled");
 		return;
 	}
 	else
@@ -282,9 +289,9 @@ static void create_vte(void)
 
 	g_signal_connect(vte, "child-exited", G_CALLBACK(vte_start), NULL);
 	g_signal_connect(vte, "button-press-event", G_CALLBACK(vte_button_pressed), NULL);
-	g_signal_connect(vte, "event", G_CALLBACK(vte_keypress), NULL);
-	g_signal_connect(vte, "key-release-event", G_CALLBACK(vte_keyrelease), NULL);
-	g_signal_connect(vte, "commit", G_CALLBACK(vte_commit), NULL);
+	g_signal_connect(vte, "event", G_CALLBACK(vte_keypress_cb), NULL);
+	g_signal_connect(vte, "key-release-event", G_CALLBACK(vte_keyrelease_cb), NULL);
+	g_signal_connect(vte, "commit", G_CALLBACK(vte_commit_cb), NULL);
 	g_signal_connect(vte, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
 	g_signal_connect(vte, "drag-data-received", G_CALLBACK(vte_drag_data_received), NULL);
 
@@ -304,7 +311,8 @@ void vte_close(void)
 	/* free the vte widget before unloading vte module
 	 * this prevents a segfault on X close window if the message window is hidden */
 	gtk_widget_destroy(vc->vte);
-	if (popup_menu_created) gtk_widget_destroy(vc->menu);
+	if (popup_menu_created)
+		gtk_widget_destroy(vc->menu);
 	g_free(vc->emulation);
 	g_free(vc->shell);
 	g_free(vc->font);
@@ -312,13 +320,14 @@ void vte_close(void)
 	g_free(vc->colour_fore);
 	g_free(vc);
 	g_free(gtk_menu_key_accel);
-	/* don't unload the module explicitly because it causes a segfault on FreeBSD */
-	/** TODO is this still/really true? */
+	/* Don't unload the module explicitly because it causes a segfault on FreeBSD. The segfault
+	 * happens when the app really exits, not directly on g_module_close(). This still needs to
+	 * be investigated. */
 	/*g_module_close(module); */
 }
 
 
-static gboolean vte_keyrelease(GtkWidget *widget, GdkEventKey *event, gpointer data)
+static gboolean vte_keyrelease_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	if (event->keyval == GDK_Return ||
 			 event->keyval == GDK_ISO_Enter ||
@@ -332,7 +341,7 @@ static gboolean vte_keyrelease(GtkWidget *widget, GdkEventKey *event, gpointer d
 }
 
 
-static gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data)
+static gboolean vte_keypress_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	if (vc->enable_bash_keys)
 		return FALSE;	/* Ctrl-[CD] will be handled by the VTE itself */
@@ -354,7 +363,7 @@ static gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer dat
 }
 
 
-void vte_commit(VteTerminal *vte, gchar *arg1, guint arg2, gpointer user_data)
+static void vte_commit_cb(VteTerminal *vte, gchar *arg1, guint arg2, gpointer user_data)
 {
 	clean = FALSE;
 }
@@ -372,7 +381,7 @@ static void vte_start(GtkWidget *widget)
 	{
 		env = vte_get_child_environment();
 		pid = vf->vte_terminal_fork_command(VTE_TERMINAL(widget), argv[0], argv, env,
-												vte_info.dir, TRUE, TRUE, TRUE);
+											vte_info.dir, TRUE, TRUE, TRUE);
 		g_strfreev(env);
 		g_strfreev(argv);
 	}
@@ -415,6 +424,18 @@ static gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpo
 }
 
 
+static void vte_set_cursor_blink_mode(void)
+{
+	if (vf->vte_terminal_set_cursor_blink_mode != NULL)
+		/* vte >= 0.17.1 */
+		vf->vte_terminal_set_cursor_blink_mode(VTE_TERMINAL(vc->vte),
+			(vc->cursor_blinks) ? VTE_CURSOR_BLINK_ON : VTE_CURSOR_BLINK_OFF);
+	else
+		/* vte < 0.17.1 */
+		vf->vte_terminal_set_cursor_blinks(VTE_TERMINAL(vc->vte), vc->cursor_blinks);
+}
+
+
 static void vte_register_symbols(GModule *mod)
 {
 	g_module_symbol(mod, "vte_terminal_new", (void*)&vf->vte_terminal_new);
@@ -436,6 +457,11 @@ static void vte_register_symbols(GModule *mod)
 	g_module_symbol(mod, "vte_terminal_set_color_background", (void*)&vf->vte_terminal_set_color_background);
 	g_module_symbol(mod, "vte_terminal_feed_child", (void*)&vf->vte_terminal_feed_child);
 	g_module_symbol(mod, "vte_terminal_im_append_menuitems", (void*)&vf->vte_terminal_im_append_menuitems);
+	g_module_symbol(mod, "vte_terminal_set_cursor_blink_mode", (void*)&vf->vte_terminal_set_cursor_blink_mode);
+	if (vf->vte_terminal_set_cursor_blink_mode == NULL)
+		/* vte_terminal_set_cursor_blink_mode() is only available since 0.17.1, so if we don't find
+		 * this symbol, we are probably on an older version and use the old API instead */
+		g_module_symbol(mod, "vte_terminal_set_cursor_blinks", (void*)&vf->vte_terminal_set_cursor_blinks);
 }
 
 
@@ -451,6 +477,7 @@ void vte_apply_user_settings(void)
 	vf->vte_terminal_set_font_from_string(VTE_TERMINAL(vc->vte), vc->font);
 	vf->vte_terminal_set_color_foreground(VTE_TERMINAL(vc->vte), vc->colour_fore);
 	vf->vte_terminal_set_color_background(VTE_TERMINAL(vc->vte), vc->colour_back);
+	vte_set_cursor_blink_mode();
 
 	override_menu_key();
 }
@@ -489,7 +516,7 @@ static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data)
 
 			prefs_show_dialog();
 
-			notebook = lookup_widget(ui_widgets.prefs_dialog, "notebook2");
+			notebook = ui_lookup_widget(ui_widgets.prefs_dialog, "notebook2");
 
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), vte_prefs_tab_num);
 			break;
@@ -532,6 +559,18 @@ static GtkWidget *vte_create_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
+	item = gtk_image_menu_item_new_from_stock("gtk-preferences", NULL);
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect(item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_PREFERENCES));
+
+	msgwin_menu_add_common_items(GTK_MENU(menu));
+
+	item = gtk_separator_menu_item_new();
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+
+	/* the IM submenu should always be the last item to be consistent with other GTK popup menus */
 	vc->im_submenu = gtk_menu_new();
 
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Input Methods"));
@@ -540,22 +579,11 @@ static GtkWidget *vte_create_popup_menu(void)
 
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), vc->im_submenu);
 
-	item = gtk_separator_menu_item_new();
-	gtk_widget_show(item);
-	gtk_container_add(GTK_CONTAINER(menu), item);
-
-	item = gtk_image_menu_item_new_from_stock("gtk-preferences", NULL);
-	gtk_widget_show(item);
-	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect(item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_PREFERENCES));
-
-	msgwin_menu_add_common_items(GTK_MENU(menu));
-
 	return menu;
 }
 
 
-/* if the command could be executed, TRUE is returned, FALSE otherwise (i.e. there was some text
+/* If the command could be executed, TRUE is returned, FALSE otherwise (i.e. there was some text
  * on the prompt). */
 gboolean vte_send_cmd(const gchar *cmd)
 {
@@ -571,8 +599,9 @@ gboolean vte_send_cmd(const gchar *cmd)
 
 
 /* Taken from Terminal by os-cillation: terminal_screen_get_working_directory, thanks.
- * Determines the working directory using various OS-specific mechanisms. */
-const gchar* vte_get_working_directory(void)
+ * Determines the working directory using various OS-specific mechanisms and stores the determined
+ * directory in vte_info.dir. Note: vte_info.dir contains the real path. */
+const gchar *vte_get_working_directory(void)
 {
 	gchar  buffer[4096 + 1];
 	gchar *file;
@@ -582,7 +611,7 @@ const gchar* vte_get_working_directory(void)
 	if (pid > 0)
 	{
 		file = g_strdup_printf("/proc/%d/cwd", pid);
-		length = readlink(file, buffer, sizeof (buffer));
+		length = readlink(file, buffer, sizeof(buffer));
 
 		if (length > 0 && *buffer == '/')
 		{
@@ -600,7 +629,7 @@ const gchar* vte_get_working_directory(void)
 					g_free(vte_info.dir);
 					vte_info.dir = g_get_current_dir();
 					if (chdir(cwd) != 0)
-						geany_debug("%s: %s", __func__, g_strerror(errno));
+						geany_debug("%s: %s", G_STRFUNC, g_strerror(errno));
 				}
 				g_free(cwd);
 			}
@@ -616,10 +645,11 @@ const gchar* vte_get_working_directory(void)
  * filename is expected to be in UTF-8 encoding.
  * filename can also be a path, then it is used directly.
  * If force is set to TRUE, it will always change the cwd
- * */
+ */
 void vte_cwd(const gchar *filename, gboolean force)
 {
-	if (vte_info.have_vte && (vc->follow_path || force) && filename != NULL)
+	if (vte_info.have_vte && (vc->follow_path || force) &&
+		filename != NULL && g_path_is_absolute(filename))
 	{
 		gchar *path;
 
@@ -635,8 +665,12 @@ void vte_cwd(const gchar *filename, gboolean force)
 			gchar *quoted_path = g_shell_quote(path);
 			gchar *cmd = g_strconcat("cd ", quoted_path, "\n", NULL);
 			if (! vte_send_cmd(cmd))
+			{
 				ui_set_statusbar(FALSE,
 		_("Could not change the directory in the VTE because it probably contains a command."));
+				geany_debug(
+		"Could not change the directory in the VTE because it probably contains a command.");
+			}
 			g_free(quoted_path);
 			g_free(cmd);
 		}
@@ -645,8 +679,8 @@ void vte_cwd(const gchar *filename, gboolean force)
 }
 
 
-void vte_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context, gint x, gint y,
-							GtkSelectionData *data, guint info, guint ltime)
+static void vte_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context,
+								   gint x, gint y, GtkSelectionData *data, guint info, guint ltime)
 {
 	if (info == TARGET_TEXT_PLAIN)
 	{
@@ -659,7 +693,7 @@ void vte_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context, gin
 		gchar *text = (gchar*) gtk_selection_data_get_text(data);
 		if (NZV(text))
 			vf->vte_terminal_feed_child(VTE_TERMINAL(widget), text, strlen(text));
-		g_free (text);
+		g_free(text);
 	}
 	gtk_drag_finish(drag_context, TRUE, FALSE, ltime);
 }
@@ -676,15 +710,13 @@ void vte_append_preferences_tab(void)
 	if (vte_info.have_vte)
 	{
 		GtkWidget *notebook, *vbox, *label, *alignment, *table, *frame, *box;
-		GtkWidget *font_term, *color_fore, *color_back, *spin_scrollback, *entry_emulation;
+		GtkWidget *font_term, *color_fore, *color_back, *spin_scrollback;
 		GtkWidget *check_scroll_key, *check_scroll_out, *check_follow_path;
-		GtkWidget *check_enable_bash_keys, *check_ignore_menu_key;
+		GtkWidget *check_enable_bash_keys, *check_ignore_menu_key, *check_cursor_blinks;
 		GtkWidget *check_run_in_vte, *check_skip_script, *entry_shell, *button_shell, *image_shell;
-		GtkTooltips *tooltips;
 		GtkObject *spin_scrollback_adj;
 
-		tooltips = GTK_TOOLTIPS(lookup_widget(ui_widgets.prefs_dialog, "tooltips"));
-		notebook = lookup_widget(ui_widgets.prefs_dialog, "notebook2");
+		notebook = ui_lookup_widget(ui_widgets.prefs_dialog, "notebook2");
 
 		frame = ui_frame_new_with_alignment(_("Terminal plugin"), &alignment);
 		gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
@@ -715,7 +747,7 @@ void vte_append_preferences_tab(void)
 		gtk_table_attach(GTK_TABLE(table), font_term, 1, 2, 0, 1,
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
-		gtk_tooltips_set_tip(tooltips, font_term, _("Sets the font for the terminal widget."), NULL);
+		ui_widget_set_tooltip_text(font_term, _("Sets the font for the terminal widget"));
 
 		label = gtk_label_new(_("Foreground color:"));
 		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
@@ -733,14 +765,14 @@ void vte_append_preferences_tab(void)
 		gtk_table_attach(GTK_TABLE(table), color_fore, 1, 2, 1, 2,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
-		gtk_tooltips_set_tip(tooltips, color_fore, _("Sets the foreground color of the text in the terminal widget."), NULL);
+		ui_widget_set_tooltip_text(color_fore, _("Sets the foreground color of the text in the terminal widget"));
 		gtk_color_button_set_title(GTK_COLOR_BUTTON(color_fore), _("Color Chooser"));
 
 		color_back = gtk_color_button_new();
 		gtk_table_attach(GTK_TABLE(table), color_back, 1, 2, 2, 3,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
-		gtk_tooltips_set_tip(tooltips, color_back, _("Sets the background color of the text in the terminal widget."), NULL);
+		ui_widget_set_tooltip_text(color_back, _("Sets the background color of the text in the terminal widget"));
 		gtk_color_button_set_title(GTK_COLOR_BUTTON(color_back), _("Color Chooser"));
 
 		label = gtk_label_new(_("Scrollback lines:"));
@@ -751,24 +783,13 @@ void vte_append_preferences_tab(void)
 
 		spin_scrollback_adj = gtk_adjustment_new(500, 0, 5000, 1, 10, 0);
 		spin_scrollback = gtk_spin_button_new(GTK_ADJUSTMENT(spin_scrollback_adj), 1, 0);
+		ui_entry_add_clear_icon(spin_scrollback);
 		gtk_table_attach(GTK_TABLE(table), spin_scrollback, 1, 2, 3, 4,
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
-		gtk_tooltips_set_tip(tooltips, spin_scrollback, _("Specifies the history in lines, which you can scroll back in the terminal widget."), NULL);
+		ui_widget_set_tooltip_text(spin_scrollback, _("Specifies the history in lines, which you can scroll back in the terminal widget"));
 		gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(spin_scrollback), TRUE);
 		gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(spin_scrollback), TRUE);
-
-		label = gtk_label_new(_("Terminal emulation:"));
-		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 4, 5,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
-
-		entry_emulation = gtk_entry_new();
-		gtk_table_attach(GTK_TABLE(table), entry_emulation, 1, 2, 4, 5,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-		gtk_tooltips_set_tip(tooltips, entry_emulation, _("Controls how the terminal emulator should behave. Do not change this value unless you know exactly what you are doing."), NULL);
 
 		label = gtk_label_new(_("Shell:"));
 		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 5, 6,
@@ -777,7 +798,8 @@ void vte_append_preferences_tab(void)
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 
 		entry_shell = gtk_entry_new();
-		gtk_tooltips_set_tip(tooltips, entry_shell, _("Sets the path to the shell which should be started inside the terminal emulation."), NULL);
+		ui_entry_add_clear_icon(entry_shell);
+		ui_widget_set_tooltip_text(entry_shell, _("Sets the path to the shell which should be started inside the terminal emulation"));
 
 		button_shell = gtk_button_new();
 		gtk_widget_show(button_shell);
@@ -795,34 +817,38 @@ void vte_append_preferences_tab(void)
 
 		box = gtk_vbox_new(FALSE, 3);
 		check_scroll_key = gtk_check_button_new_with_mnemonic(_("Scroll on keystroke"));
-		gtk_tooltips_set_tip(tooltips, check_scroll_key, _("Whether to scroll to the bottom if a key was pressed."), NULL);
+		ui_widget_set_tooltip_text(check_scroll_key, _("Whether to scroll to the bottom if a key was pressed"));
 		gtk_container_add(GTK_CONTAINER(box), check_scroll_key);
 
 		check_scroll_out = gtk_check_button_new_with_mnemonic(_("Scroll on output"));
-		gtk_tooltips_set_tip(tooltips, check_scroll_out, _("Whether to scroll to the bottom when output is generated."), NULL);
+		ui_widget_set_tooltip_text(check_scroll_out, _("Whether to scroll to the bottom when output is generated"));
 		gtk_container_add(GTK_CONTAINER(box), check_scroll_out);
 
+		check_cursor_blinks = gtk_check_button_new_with_mnemonic(_("Cursor blinks"));
+		ui_widget_set_tooltip_text(check_cursor_blinks, _("Whether to blink the cursor"));
+		gtk_container_add(GTK_CONTAINER(box), check_cursor_blinks);
+
 		check_enable_bash_keys = gtk_check_button_new_with_mnemonic(_("Override Geany keybindings"));
-		gtk_tooltips_set_tip(tooltips, check_enable_bash_keys,
-			_("Allows the VTE to receive keyboard shortcuts (apart from focus commands)."), NULL);
+		ui_widget_set_tooltip_text(check_enable_bash_keys,
+			_("Allows the VTE to receive keyboard shortcuts (apart from focus commands)"));
 		gtk_container_add(GTK_CONTAINER(box), check_enable_bash_keys);
 
 		check_ignore_menu_key = gtk_check_button_new_with_mnemonic(_("Disable menu shortcut key (F10 by default)"));
-		gtk_tooltips_set_tip(tooltips, check_ignore_menu_key, _("This option disables the keybinding to popup the menu bar (default is F10). Disabling it can be useful if you use, for example, Midnight Commander within the VTE."), NULL);
+		ui_widget_set_tooltip_text(check_ignore_menu_key, _("This option disables the keybinding to popup the menu bar (default is F10). Disabling it can be useful if you use, for example, Midnight Commander within the VTE."));
 		gtk_container_add(GTK_CONTAINER(box), check_ignore_menu_key);
 
 		check_follow_path = gtk_check_button_new_with_mnemonic(_("Follow the path of the current file"));
-		gtk_tooltips_set_tip(tooltips, check_follow_path, _("Whether to execute \"cd $path\" when you switch between opened files."), NULL);
+		ui_widget_set_tooltip_text(check_follow_path, _("Whether to execute \"cd $path\" when you switch between opened files"));
 		gtk_container_add(GTK_CONTAINER(box), check_follow_path);
 
 		/* create check_skip_script checkbox before the check_skip_script checkbox to be able to
 		 * use the object for the toggled handler of check_skip_script checkbox */
 		check_skip_script = gtk_check_button_new_with_mnemonic(_("Don't use run script"));
-		gtk_tooltips_set_tip(tooltips, check_skip_script, _("Don't use the simple run script which is usually used to display the exit status of the executed program."), NULL);
+		ui_widget_set_tooltip_text(check_skip_script, _("Don't use the simple run script which is usually used to display the exit status of the executed program"));
 		gtk_widget_set_sensitive(check_skip_script, vc->run_in_vte);
 
 		check_run_in_vte = gtk_check_button_new_with_mnemonic(_("Execute programs in VTE"));
-		gtk_tooltips_set_tip(tooltips, check_run_in_vte, _("Run programs in VTE instead of opening a terminal emulation window. Please note, programs executed in VTE cannot be stopped."), NULL);
+		ui_widget_set_tooltip_text(check_run_in_vte, _("Run programs in VTE instead of opening a terminal emulation window. Please note, programs executed in VTE cannot be stopped"));
 		gtk_container_add(GTK_CONTAINER(box), check_run_in_vte);
 		g_signal_connect(check_run_in_vte, "toggled",
 			G_CALLBACK(check_run_in_vte_toggled), check_skip_script);
@@ -833,31 +859,31 @@ void vte_append_preferences_tab(void)
 		gtk_box_pack_start(GTK_BOX(vbox), box, FALSE, FALSE, 0);
 
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "font_term",
-				gtk_widget_ref(font_term),	(GDestroyNotify) gtk_widget_unref);
+				g_object_ref(font_term),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "color_fore",
-				gtk_widget_ref(color_fore),	(GDestroyNotify) gtk_widget_unref);
+				g_object_ref(color_fore),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "color_back",
-				gtk_widget_ref(color_back),	(GDestroyNotify) gtk_widget_unref);
+				g_object_ref(color_back),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "spin_scrollback",
-				gtk_widget_ref(spin_scrollback),	(GDestroyNotify) gtk_widget_unref);
-		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "entry_emulation",
-				gtk_widget_ref(entry_emulation),	(GDestroyNotify) gtk_widget_unref);
+				g_object_ref(spin_scrollback),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "entry_shell",
-				gtk_widget_ref(entry_shell),	(GDestroyNotify) gtk_widget_unref);
+				g_object_ref(entry_shell),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_scroll_key",
-				gtk_widget_ref(check_scroll_key),	(GDestroyNotify) gtk_widget_unref);
+				g_object_ref(check_scroll_key),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_scroll_out",
-				gtk_widget_ref(check_scroll_out),	(GDestroyNotify) gtk_widget_unref);
+				g_object_ref(check_scroll_out),	(GDestroyNotify) g_object_unref);
+		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_cursor_blinks",
+				g_object_ref(check_cursor_blinks),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_enable_bash_keys",
-				gtk_widget_ref(check_enable_bash_keys),	(GDestroyNotify) gtk_widget_unref);
+				g_object_ref(check_enable_bash_keys),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_ignore_menu_key",
-				gtk_widget_ref(check_ignore_menu_key),	(GDestroyNotify) gtk_widget_unref);
+				g_object_ref(check_ignore_menu_key),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_follow_path",
-				gtk_widget_ref(check_follow_path),	(GDestroyNotify) gtk_widget_unref);
+				g_object_ref(check_follow_path),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_run_in_vte",
-				gtk_widget_ref(check_run_in_vte),	(GDestroyNotify) gtk_widget_unref);
+				g_object_ref(check_run_in_vte),	(GDestroyNotify) g_object_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_skip_script",
-				gtk_widget_ref(check_skip_script),	(GDestroyNotify) gtk_widget_unref);
+				g_object_ref(check_skip_script),	(GDestroyNotify) g_object_unref);
 
 		gtk_widget_show_all(frame);
 
@@ -872,5 +898,42 @@ void vte_append_preferences_tab(void)
 	}
 }
 
+
+void vte_send_selection_to_vte(void)
+{
+	GeanyDocument *doc;
+	gchar *text;
+	gsize len;
+
+	doc = document_get_current();
+	if (doc == NULL)
+		return;
+
+	if (sci_has_selection(doc->editor->sci))
+	{
+		text = g_malloc0(sci_get_selected_text_length(doc->editor->sci) + 1);
+		sci_get_selected_text(doc->editor->sci, text);
+	}
+	else
+	{	/* Get the current line */
+		gint line_num = sci_get_current_line(doc->editor->sci);
+		text = sci_get_line(doc->editor->sci, line_num);
+	}
+
+	len = strlen(text);
+
+	/* Make sure there is no newline character at the end to prevent unwanted execution */
+	if (text[len-1] == '\n' || text[len-1] == '\r')
+		text[len-1] = '\0';
+
+	vf->vte_terminal_feed_child(VTE_TERMINAL(vc->vte), text, len);
+
+	/* show the VTE */
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_VTE);
+	gtk_widget_grab_focus(vc->vte);
+	msgwin_show_hide(TRUE);
+
+	g_free(text);
+}
 
 #endif

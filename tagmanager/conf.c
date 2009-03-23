@@ -23,8 +23,8 @@
 *   DATA DEFINITIONS
 */
 typedef enum {
-    K_NAMESPACE,
-    K_MACRO
+    K_SECTION,
+    K_KEY
 } confKind;
 
 static kindOption ConfKinds [] = {
@@ -45,6 +45,7 @@ static boolean isIdentifier (int c)
 static void findConfTags (void)
 {
     vString *name = vStringNew ();
+    vString *scope = vStringNew ();
     const unsigned char *line;
 
     while ((line = fileReadLine ()) != NULL)
@@ -67,7 +68,10 @@ static void findConfTags (void)
 				++cp;
 			}
 			vStringTerminate (name);
-			makeSimpleTag (name, ConfKinds, K_NAMESPACE);
+			makeSimpleTag (name, ConfKinds, K_SECTION);
+			/* remember section name */
+			vStringCopy (scope, name);
+			vStringTerminate (scope);
 			vStringClear (name);
 			continue;
 		}
@@ -86,7 +90,13 @@ static void findConfTags (void)
 				while (isspace ((int) *cp))
 					++cp;
 				if (*cp == '=')
-					makeSimpleTag (name, ConfKinds, K_MACRO);
+				{
+					if (vStringLength (scope) > 0)
+						makeSimpleScopedTag (name, ConfKinds, K_KEY,
+							"section", vStringValue(scope), NULL);
+					else
+						makeSimpleTag (name, ConfKinds, K_KEY);
+				}
 				vStringClear (name);
 			}
 			else if (isspace ((int) *cp))
@@ -99,6 +109,7 @@ static void findConfTags (void)
 		}
     }
     vStringDelete (name);
+    vStringDelete (scope);
 }
 
 extern parserDefinition* ConfParser (void)

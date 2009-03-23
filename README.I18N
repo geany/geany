@@ -20,6 +20,9 @@ text editor (like Geany ;-)) or you can also use a graphical
 interface. I can suggest PoEdit (http://www.poedit.net/), but
 there are several other GUIs.
 
+Make sure you add your language to the file po/LINGUAS.
+Just open the file with a text editor and add your code.
+
 When you have finished editing the file, check the file with:
 
 $ msgfmt -c --check-accelerators=_ it.po
@@ -27,7 +30,7 @@ $ msgfmt -c --check-accelerators=_ it.po
 Please take care of menu accelerators(strings containing a "_").
 The "_" character should also be in your translation. Additionally,
 it would be nice if these accelerators are not twice for two strings
-inside on dialog or sub menu.
+inside a dialog or sub menu.
 
 You can also use intl_stats.sh, e.g. by running the following command
 in the top source directory of Geany:

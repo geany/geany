@@ -1,8 +1,8 @@
 /*
  *      document.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -93,10 +93,6 @@ struct GeanyDocument
 	gboolean		 readonly;
 	/** Whether this %document has been changed since it was last saved. */
 	gboolean		 changed;
-	/** Time of the last disk check. */
-	time_t			 last_check;
-	/** Modification time of this %document on disk. */
-	time_t			 mtime;
 	/** The link-dereferenced, locale-encoded file name.
 	 * If non-NULL, this indicates the file once existed on disk (not just as an
 	 * unsaved document with a filename set).
@@ -112,17 +108,15 @@ struct GeanyDocument
 extern GPtrArray *documents_array;
 
 
-/**
- *  This wraps documents_array so it can be used with C array syntax.
- *  Example: documents[0]->sci = NULL;
- **/
+/* Wrap documents_array so it can be used with C array syntax.
+ * Example: documents[0]->sci = NULL; */
 #define documents ((GeanyDocument **)documents_array->pdata)
 
-/** Check that the @a doc_ptr document still exists (has not been closed).
+/** @c NULL-safe way to check @c doc_ptr->is_valid.
  * This is useful when @a doc_ptr was stored some time earlier and documents may have been
  * closed since then.
  * @note This should not be used to check the result of the main API functions,
- * these only need a NULL-pointer check - @c p_document->get_current() != @c NULL. */
+ * these only need a NULL-pointer check - @c document_get_current() != @c NULL. */
 #define DOC_VALID(doc_ptr) \
 	((doc_ptr) != NULL && (doc_ptr)->is_valid)
 
@@ -140,7 +134,7 @@ extern GPtrArray *documents_array;
 
 GeanyDocument* document_new_file(const gchar *filename, GeanyFiletype *ft, const gchar *text);
 
-GeanyDocument* document_new_file_if_non_open();
+GeanyDocument* document_new_file_if_non_open(void);
 
 GeanyDocument* document_find_by_filename(const gchar *utf8_filename);
 
@@ -159,6 +153,9 @@ void document_set_text_changed(GeanyDocument *doc, gboolean changed);
 
 void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type);
 
+void document_rename_file(GeanyDocument *doc, const gchar *new_filename);
+
+GeanyDocument *document_index(gint idx);
 
 GeanyDocument *document_find_by_sci(ScintillaObject *sci);
 
@@ -224,7 +221,8 @@ void document_redo(GeanyDocument *doc);
 
 void document_undo_add(GeanyDocument *doc, guint type, gpointer data);
 
+void document_update_tab_label(GeanyDocument *doc);
 
-GdkColor *document_get_status_color(GeanyDocument *doc);
+const GdkColor *document_get_status_color(GeanyDocument *doc);
 
 #endif

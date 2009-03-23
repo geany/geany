@@ -1,8 +1,8 @@
 /*
  *      pluginmacros.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2007-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2007-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2007-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -23,7 +23,8 @@
  */
 
 /** @file pluginmacros.h
- * Useful macros to avoid typing @c geany_data-> or @c geany_functions-> so often.
+ * @deprecated Use geanyfunctions.h instead.
+ * Macros to avoid typing @c geany_functions-> so often.
  *
  * @section function_macros Function Macros
  * These macros are named the same as the first word in the core function name,
@@ -36,9 +37,8 @@
 #define PLUGINMACROS_H
 
 /* common items */
-#define geany			geany_data	/**< Simple macro for @c geany_data that reduces typing. */
-#define documents_array	geany_data->documents_array		/**< Allows use of @c documents[] macro */
-#define filetypes_array	geany_data->filetypes_array		/**< Allows use of @c filetypes[] macro */
+#define documents_array	geany_data->documents_array		/**< @deprecated Use @c geany->documents_array->len and document_index() instead. */
+#define filetypes_array	geany_data->filetypes_array		/**< @deprecated Use @c geany->filetypes_array->len and filetypes_index() instead. */
 
 
 /* function group macros */
@@ -52,6 +52,7 @@
 #define p_main			geany_functions->p_main			/**< See main.h */
 #define p_msgwindow		geany_functions->p_msgwindow	/**< See msgwindow.h */
 #define p_navqueue		geany_functions->p_navqueue		/**< See navqueue.h */
+#define p_plugin		geany_functions->p_plugin		/**< See plugins.c */
 #define p_sci			geany_functions->p_sci			/**< See sciwrappers.h */
 #define p_search		geany_functions->p_search		/**< See search.h */
 #define p_support		geany_functions->p_support		/**< See support.h */

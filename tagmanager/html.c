@@ -23,15 +23,6 @@
 static void installHtmlRegex (const langType language)
 {
 #define POSSIBLE_ATTRIBUTES "([ \t]+[a-z]+=\"?[^>\"]*\"?)*"
-/* the following matches headings with "<a>" tags inside like
- * <h1><a href="#id109">Some Text</a></h1>
- * but it fails matching simple headings like
- * <h1>Some Text</h1> */
-/*#define INNER_HEADING "[ \t]*<.*>(.+)<.*>[ \t]*"*/
-
-/* this matches simple heading without nested tags */
-/** TODO combine both pattern to be able to match both heading styles */
-#define INNER_HEADING "[ \t]*(.+)[ \t]*"
 
 	addTagRegex (language,
 		"<a"
@@ -41,20 +32,29 @@ static void installHtmlRegex (const langType language)
 		"[ \t]*>",
 		"\\2", "m,member,named anchors", "i");
 
-	addTagRegex (language,
-		"<h1.*>" INNER_HEADING "</h1>",
-		"\\1", "n,namespace,H1 heading", "i");
-
-	addTagRegex (language,
-		"<h2.*>" INNER_HEADING "</h2>",
-		"\\1", "c,class,H2 heading", "i");
-
-	addTagRegex (language,
-		"<h3.*>" INNER_HEADING "</h3>",
-		"\\1", "v,variable,H3 heading", "i");
-
 	addTagRegex (language, "^[ \t]*function[ \t]*([A-Za-z0-9_]+)[ \t]*\\(",
 		"\\1", "f,function,JavaScript functions", NULL);
+
+/* the following matches headings with tags inside like
+ * <h1><a href="#id109"><i>Some Text</i></a></h1>
+ * and
+ * <h1>Some Text</h1> */
+#define SPACES "[ \t]*"
+#define ATTRS "[^>]*"
+#define INNER_HEADING \
+	ATTRS ">" SPACES "(<" ATTRS ">" SPACES ")*([^<]+).*"
+
+	addTagRegex (language,
+		"<h1" INNER_HEADING "</h1>",
+		"\\2", "n,namespace,H1 heading", "i");
+
+	addTagRegex (language,
+		"<h2" INNER_HEADING "</h2>",
+		"\\2", "c,class,H2 heading", "i");
+
+	addTagRegex (language,
+		"<h3" INNER_HEADING "</h3>",
+		"\\2", "v,variable,H3 heading", "i");
 }
 
 /* Create parser definition stucture */

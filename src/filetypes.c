@@ -1,8 +1,8 @@
 /*
  *      filetypes.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -129,7 +129,18 @@ static void init_builtin_filetypes(void)
 	ft->name = g_strdup("C#");
 	ft->title = g_strdup_printf(_("%s source file"), "C#");
 	ft->extension = g_strdup("cs");
-	ft->pattern = utils_strv_new("*.cs", "*.vala", NULL);
+	ft->pattern = utils_strv_new("*.cs", NULL);
+	ft->comment_open = g_strdup("//");
+	ft->comment_close = NULL;
+	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
+
+#define VALA
+	ft = filetypes[GEANY_FILETYPES_VALA];
+	ft->lang = 33;
+	ft->name = g_strdup("Vala");
+	ft->title = g_strdup_printf(_("%s source file"), "Vala");
+	ft->extension = g_strdup("vala");
+	ft->pattern = utils_strv_new("*.vala", "*.vapi", NULL);
 	ft->comment_open = g_strdup("//");
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
@@ -197,7 +208,7 @@ static void init_builtin_filetypes(void)
 	ft->title = g_strdup_printf(_("%s source file"), "Fortran (F90)");
 	ft->extension = g_strdup("f90");
 	ft->pattern = utils_strv_new("*.f90", "*.f95", "*.f03", NULL);
-	ft->comment_open = g_strdup("c");
+	ft->comment_open = g_strdup("!");
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
@@ -427,17 +438,6 @@ static void init_builtin_filetypes(void)
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
-#define OMS
-	ft = filetypes[GEANY_FILETYPES_OMS];
-	ft->lang = -2;
-	ft->name = g_strdup("O-Matrix");
-	ft->title = g_strdup_printf(_("%s source file"), "O-Matrix");
-	ft->extension = g_strdup("oms");
-	ft->pattern = utils_strv_new("*.oms", NULL);
-	ft->comment_open = g_strdup("#");
-	ft->comment_close = NULL;
-	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
-
 #define VHDL
 	ft = filetypes[GEANY_FILETYPES_VHDL];
 	ft->lang = 21;
@@ -467,7 +467,7 @@ static void init_builtin_filetypes(void)
 	ft->title = g_strdup(_("Config file"));
 	ft->extension = g_strdup("conf");
 	ft->pattern = utils_strv_new("*.conf", "*.ini", "config", "*rc",
-		"*.cfg", NULL);
+		"*.cfg", "*.desktop", NULL);
 	ft->comment_open = g_strdup("#");
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
@@ -494,6 +494,17 @@ static void init_builtin_filetypes(void)
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
+#define ACTIONSCRIPT
+	ft = filetypes[GEANY_FILETYPES_AS];
+	ft->lang = 34;
+	ft->name = g_strdup("ActionScript");
+	ft->title = g_strdup_printf(_("%s source file"), "Actionscript");
+	ft->extension = g_strdup("as");
+	ft->pattern = utils_strv_new("*.as", NULL);
+	ft->comment_open = g_strdup("//");
+	ft->comment_close = NULL;
+	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
+
 #define R
 	ft = filetypes[GEANY_FILETYPES_R];
 	ft->lang = 34;
@@ -516,6 +527,61 @@ static void init_builtin_filetypes(void)
 	ft->comment_open = NULL;
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
+
+#define MATLAB
+	ft = filetypes[GEANY_FILETYPES_MATLAB];
+	ft->lang = 32;
+	ft->name = g_strdup("Matlab");
+	ft->title = g_strdup_printf(_("%s source file"), "Matlab");
+	ft->extension = g_strdup("m");
+	ft->pattern = utils_strv_new("*.m", NULL);
+	ft->comment_open = g_strdup("%");
+	ft->comment_close = NULL;
+	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
+
+#define YAML
+	ft = filetypes[GEANY_FILETYPES_YAML];
+	ft->lang = -2;
+	ft->name = g_strdup("YAML");
+	ft->title = g_strdup_printf(_("%s source file"), "YAML");
+	ft->extension = g_strdup("yaml");
+	ft->pattern = utils_strv_new("*.yaml", "*.yml", NULL);
+	ft->comment_open = g_strdup("#");
+	ft->comment_close = NULL;
+	ft->group = GEANY_FILETYPE_GROUP_MISC;
+
+#define CMAKE
+	ft = filetypes[GEANY_FILETYPES_CMAKE];
+	ft->lang = -2;
+	ft->name = g_strdup("CMake");
+	ft->title = g_strdup_printf(_("%s source file"), "CMake");
+	ft->extension = g_strdup("cmake");
+	ft->pattern = utils_strv_new("CMakeLists.txt", "*.cmake", "*.ctest", NULL);
+	ft->comment_open = g_strdup("#");
+	ft->comment_close = NULL;
+	ft->group = GEANY_FILETYPE_GROUP_MISC;
+
+#define NSIS
+	ft = filetypes[GEANY_FILETYPES_NSIS];
+	ft->lang = -2;
+	ft->name = g_strdup("NSIS");
+	ft->title = g_strdup_printf(_("%s source file"), "NSIS");
+	ft->extension = g_strdup("nsis");
+	ft->pattern = utils_strv_new("*.nsi", "*.nsh", NULL);
+	ft->comment_open = g_strdup(";");
+	ft->comment_close = NULL;
+	ft->group = GEANY_FILETYPE_GROUP_MISC;
+
+#define ADA
+	ft = filetypes[GEANY_FILETYPES_ADA];
+	ft->lang = -2;
+	ft->name = g_strdup("Ada");
+	ft->title = g_strdup_printf(_("%s source file"), "Ada");
+	ft->extension = g_strdup("adb");
+	ft->pattern = utils_strv_new("*.adb", "*.ads", NULL);
+	ft->comment_open = g_strdup("--");
+	ft->comment_close = NULL;
+	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
 #define ALL
 	ft = filetypes[GEANY_FILETYPES_NONE];
@@ -583,6 +649,25 @@ void filetypes_init_types()
 }
 
 
+static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
+{
+	g_return_if_fail(NZV(doc->real_path));
+
+	if (utils_str_equal(doc->real_path,
+		utils_build_path(app->configdir, "filetype_extensions.conf", NULL)))
+		filetypes_read_extensions();
+}
+
+
+static void setup_config_file_menus(void)
+{
+	ui_add_config_file_menu_item(
+		utils_build_path(app->configdir, "filetype_extensions.conf", NULL), NULL, NULL);
+
+	g_signal_connect(geany_object, "document-save", G_CALLBACK(on_document_save), NULL);
+}
+
+
 #define create_sub_menu(menu, item, title) \
 	(menu) = gtk_menu_new(); \
 	(item) = gtk_menu_item_new_with_mnemonic((title)); \
@@ -591,10 +676,10 @@ void filetypes_init_types()
 	gtk_widget_show((item));
 
 
-static void create_set_filetype_menu()
+static void create_set_filetype_menu(void)
 {
 	filetype_id ft_id;
-	GtkWidget *filetype_menu = lookup_widget(main_widgets.window, "set_filetype1_menu");
+	GtkWidget *filetype_menu = ui_lookup_widget(main_widgets.window, "set_filetype1_menu");
 	GtkWidget *sub_menu = filetype_menu;
 	GtkWidget *sub_menu_programming, *sub_menu_scripts, *sub_menu_markup, *sub_menu_misc;
 	GtkWidget *sub_item_programming, *sub_item_scripts, *sub_item_markup, *sub_item_misc;
@@ -645,6 +730,7 @@ void filetypes_init()
 {
 	filetypes_init_types();
 	create_set_filetype_menu();
+	setup_config_file_menus();
 }
 
 
@@ -715,6 +801,40 @@ GeanyFiletype *filetypes_detect_from_extension(const gchar *utf8_filename)
 }
 
 
+/* This detects the filetype of the file pointed by 'utf8_filename' and a list of filetype id's,
+ * terminated by -1.
+ * The detected filetype of the file is checked against every id in the passed list and if
+ * there is a match, TRUE is returned. */
+static gboolean shebang_find_and_match_filetype(const gchar *utf8_filename, gint first, ...)
+{
+	GeanyFiletype *ft = NULL;
+	gint test;
+	gboolean result = FALSE;
+	va_list args;
+
+	ft = filetypes_detect_from_extension(utf8_filename);
+	if (ft == NULL || ft->id >= filetypes_array->len)
+		return FALSE;
+
+	va_start(args, first);
+	while (1)
+	{
+		test = va_arg(args, gint);
+		if (test == -1)
+			break;
+
+		if (ft->id == (guint) test)
+		{
+			result = TRUE;
+			break;
+		}
+	}
+	va_end(args);
+
+	return result;
+}
+
+
 static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line)
 {
 	GeanyFiletype *ft = NULL;
@@ -760,17 +880,26 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 
 		g_free(tmp);
 	}
+	/* detect HTML files */
+	if (strncmp(line, "<!DOCTYPE html", 14) == 0 || strncmp(line, "<html", 5) == 0)
+	{
+		/* PHP, Perl and Python files might also start with <html, so detect them based on filename
+		 * extension and use the detected filetype, else assume HTML */
+		if (! shebang_find_and_match_filetype(utf8_filename,
+				GEANY_FILETYPES_PERL, GEANY_FILETYPES_PHP, GEANY_FILETYPES_PYTHON, -1))
+		{
+			ft = filetypes[GEANY_FILETYPES_HTML];
+		}
+	}
 	/* detect XML files */
-	if (utf8_filename && strncmp(line, "<?xml", 5) == 0)
+	else if (utf8_filename && strncmp(line, "<?xml", 5) == 0)
 	{
 		/* HTML and DocBook files might also start with <?xml, so detect them based on filename
 		 * extension and use the detected filetype, else assume XML */
-		ft = filetypes_detect_from_extension(utf8_filename);
-		if (FILETYPE_ID(ft) != GEANY_FILETYPES_HTML &&
-			FILETYPE_ID(ft) != GEANY_FILETYPES_DOCBOOK &&
-			FILETYPE_ID(ft) != GEANY_FILETYPES_PERL &&	/* Perl, Python and PHP only to be safe */
-			FILETYPE_ID(ft) != GEANY_FILETYPES_PHP &&
-			FILETYPE_ID(ft) != GEANY_FILETYPES_PYTHON)
+		if (! shebang_find_and_match_filetype(utf8_filename,
+				GEANY_FILETYPES_HTML, GEANY_FILETYPES_DOCBOOK,
+				/* Perl, Python and PHP only to be safe */
+				GEANY_FILETYPES_PERL, GEANY_FILETYPES_PHP, GEANY_FILETYPES_PYTHON, -1))
 		{
 			ft = filetypes[GEANY_FILETYPES_XML];
 		}
@@ -832,7 +961,14 @@ GeanyFiletype *filetypes_detect_from_document(GeanyDocument *doc)
 
 #ifdef HAVE_PLUGINS
 /* Currently only used by external plugins (e.g. geanyprj). */
-/** Detect filetype based on a shebang line in the file, or the filename extension. */
+/**
+ *  Detect filetype based on a shebang line in the file, or the filename extension.
+ *
+ *  @param utf8_filename The filename in UTF-8 encoding.
+ *
+ *  @return The detected filetype for @c utf8_filename or @c filetypes[GEANY_FILETYPES_NONE]
+ *          if it could not be detected.
+ **/
 GeanyFiletype *filetypes_detect_from_file(const gchar *utf8_filename)
 {
 	gchar line[1024];
@@ -1125,7 +1261,6 @@ gchar *filetypes_get_conf_extension(gint filetype_idx)
 		case GEANY_FILETYPES_CPP: result = g_strdup("cpp"); break;
 		case GEANY_FILETYPES_CS: result = g_strdup("cs"); break;
 		case GEANY_FILETYPES_MAKE: result = g_strdup("makefile"); break;
-		case GEANY_FILETYPES_OMS: result = g_strdup("oms"); break;
 		default: result = g_ascii_strdown(filetypes[filetype_idx]->name, -1); break;
 	}
 	return result;
@@ -1225,7 +1360,10 @@ gboolean filetype_has_tags(GeanyFiletype *ft)
 
 /** Find a filetype pointer from its @c name field.
  * @param name Filetype name.
- * @return The filetype found, or @c NULL. */
+ * @return The filetype found, or @c NULL.
+ *
+ * @since 0.15
+ **/
 GeanyFiletype *filetypes_lookup_by_name(const gchar *name)
 {
 	GeanyFiletype *ft;
@@ -1323,4 +1461,55 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 	return *filename != NULL;
 #endif
 }
+
+
+void filetypes_read_extensions(void)
+{
+	guint i;
+	gsize len = 0;
+	gchar *sysconfigfile = g_strconcat(app->datadir, G_DIR_SEPARATOR_S,
+		"filetype_extensions.conf", NULL);
+	gchar *userconfigfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S,
+		"filetype_extensions.conf", NULL);
+	gchar **list;
+	GKeyFile *sysconfig = g_key_file_new();
+	GKeyFile *userconfig = g_key_file_new();
+
+	g_key_file_load_from_file(sysconfig, sysconfigfile, G_KEY_FILE_NONE, NULL);
+	g_key_file_load_from_file(userconfig, userconfigfile, G_KEY_FILE_NONE, NULL);
+
+	/* read the keys */
+	for (i = 0; i < filetypes_array->len; i++)
+	{
+		gboolean userset =
+			g_key_file_has_key(userconfig, "Extensions", filetypes[i]->name, NULL);
+		list = g_key_file_get_string_list(
+			(userset) ? userconfig : sysconfig, "Extensions", filetypes[i]->name, &len, NULL);
+		if (list && len > 0)
+		{
+			g_strfreev(filetypes[i]->pattern);
+			filetypes[i]->pattern = list;
+		}
+		else g_strfreev(list);
+	}
+
+	g_free(sysconfigfile);
+	g_free(userconfigfile);
+	g_key_file_free(sysconfig);
+	g_key_file_free(userconfig);
+}
+
+
+/** Accessor function for @ref GeanyData::filetypes_array items.
+ * Example: @code ft = filetypes_index(GEANY_FILETYPES_C); @endcode
+ * @param idx @c filetypes_array index.
+ * @return The filetype, or @c NULL if @a idx is out of range.
+ *
+ *  @since 0.16
+ */
+GeanyFiletype *filetypes_index(gint idx)
+{
+	return (idx >= 0 && idx < (gint) filetypes_array->len) ? filetypes[idx] : NULL;
+}
+
 

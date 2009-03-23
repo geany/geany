@@ -3,7 +3,6 @@ TODO List:
 Note: features included in brackets have lower priority.
 
 	Fix bugs:
-	o fix bug that prevents UTF-16, UTF-32 files from being loaded
 	o tagmanager fails on UTF-16/32
 
 
@@ -14,8 +13,6 @@ Note: features included in brackets have lower priority.
 	o configurable filetype and project make commands (e.g. using
 	  bud for D)
 	o recent projects menu
-	o project indentation settings support
-	o improve Compile toolbar button for Make (drop down radio list?)
 	o MRU documents switching
 	o (support for adding plugin filetypes - SCI_LOADLEXERLIBRARY?)
 	o (selectable menu of arguments to use for Make, from Make Custom)
@@ -33,13 +30,10 @@ Note: features included in brackets have lower priority.
 	   target...)
 	o (tango-like icons for the symbol list)
 	o (show autocompletion symbol icons - see SCI_REGISTERIMAGE)
-	o (GFileMonitor support, if/when GIO gets merged with GLib)
 
 
 	1.0:
 	o generating tags for latex/pascal/php
-	o include standard library tags only for C global.tags (offer
-	  separate GTK tags file for download)
 	o stable plugin ABI for the 1.0 series? (Split up geany_data, prefs,
 	  GeanyKeyCommand enum into groups)
 	o review documentation

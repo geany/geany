@@ -1,8 +1,8 @@
 /*
  *      plugins.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2007-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2007-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2007-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -30,15 +30,9 @@
 
 void plugins_init(void);
 
-void plugins_free(void);
+void plugins_finalize(void);
 
-void plugins_save_prefs(GKeyFile *config);
-
-void plugins_load_prefs(GKeyFile *config);
-
-void plugins_update_tools_menu(void);
-
-void plugins_update_document_sensitive(gboolean enabled);
+void plugins_load_active(void);
 
 #endif
 

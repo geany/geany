@@ -313,8 +313,16 @@ static void makeDefineTag (const char *const name, boolean parameterized)
 		e.kindName     = "macro";
 		e.kind         = 'd';
 		if (parameterized)
-			e.extensionFields.arglist = getArglistFromPos(getInputFilePosition()
-				, e.name);
+		{
+			if (useFile()) {
+				e.extensionFields.arglist = getArglistFromFilePos(getInputFilePosition()
+		  			, e.name);
+			}
+			else {
+				e.extensionFields.arglist = getArglistFromBufferPos(getInputBufferPosition()
+		  			, e.name);
+			}
+		}
 		makeTagEntry (&e);
 		if (parameterized)
 			free((char *) e.extensionFields.arglist);
@@ -676,22 +684,57 @@ process:
 	return c;
 }
 
-extern char *getArglistFromPos(fpos_t startPosition, const char *tokenName)
+extern char *getArglistFromBufferPos(int startPosition, const char *tokenName)
 {
-	fpos_t originalPosition;
+	int bufferOriginalPosition;
 	char *result = NULL;
 	char *arglist = NULL;
-	long pos1, pos2 = ftell(File.fp);
+	long pos1, pos2;
 
-	fgetpos(File.fp, &originalPosition);
-	fsetpos(File.fp, &startPosition);
-	pos1 = ftell(File.fp);
+	/* FIXME startPosition as well as getBufPos() are mostly wrong here */
+	pos2 = getBufPos();
+
+	if (!useFile()) {
+		bufferOriginalPosition = getBufPos ();
+		setBufPos(startPosition);
+		pos1 = File.fpBufferPosition;
+	}
+	else
+		return NULL;
+
 	if (pos2 > pos1)
 	{
 		result = (char *) g_malloc(sizeof(char ) * (pos2 - pos1 + 2));
 		if (result != NULL)
 		{
-			fread(result, sizeof(char), pos2 - pos1 + 1, File.fp);
+			memcpy(result, &File.fpBuffer[getBufPos()], pos2 - pos1 + 1);
+			result[pos2-pos1+1] = '\0';
+			arglist = getArglistFromStr(result, tokenName);
+			free(result);
+		}
+	}
+	setBufPos (bufferOriginalPosition);
+	return arglist;
+}
+
+extern char *getArglistFromFilePos(fpos_t startPosition, const char *tokenName)
+{
+	fpos_t originalPosition;
+	char *result = NULL;
+	char *arglist = NULL;
+	long pos1, pos2;
+
+	pos2 = ftell(File.fp);
+
+	fgetpos(File.fp, &originalPosition);
+	fsetpos(File.fp, &startPosition);
+	pos1 = ftell(File.fp);
+
+	if (pos2 > pos1)
+	{
+		result = (char *) g_malloc(sizeof(char ) * (pos2 - pos1 + 2));
+		if (result != NULL && fread(result, sizeof(char), pos2 - pos1 + 1, File.fp) > 0)
+		{
 			result[pos2-pos1+1] = '\0';
 			arglist = getArglistFromStr(result, tokenName);
 			free(result);

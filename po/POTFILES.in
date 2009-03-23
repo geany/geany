@@ -10,6 +10,8 @@ src/editor.c
 src/encodings.c
 src/filetypes.c
 src/geany.h
+src/geanymenubuttonaction.c
+src/geanyentryaction.c
 src/highlighting.c
 src/images.c
 src/interface.c
@@ -24,12 +26,13 @@ src/plugins.c
 src/prefs.c
 src/printing.c
 src/project.c
+src/queue.c
 src/sciwrappers.c
 src/search.c
 src/socket.c
-src/support.c
 src/symbols.c
 src/templates.c
+src/toolbar.c
 src/tools.c
 src/treeviews.c
 src/ui_utils.c
@@ -39,7 +42,6 @@ src/win32.c
 plugins/classbuilder.c
 plugins/htmlchars.c
 plugins/export.c
-plugins/vcdiff.c
 plugins/filebrowser.c
 plugins/saveactions.c
 plugins/splitwindow.c

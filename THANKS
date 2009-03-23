@@ -50,6 +50,19 @@ Timothy Boronczyk <tboronczyk(at)gmail(dot)com> - scroll_stop_at_last_line GUI p
 Jason Oster <parasytic(at)users(dot)sourceforge(dot)net> - various patches
 Andrew Rowland <weibullguy(at)charter(dot)net> - R filetype patch
 Lex Trotman <elextr(at)gmail(dot)com> - build system improvements
+Bronisław Białek <after89(at)gmail(dot)com> - CSS parser update
+Roland Baudin <roland(dot)baudin(at)thalesaleniaspace(dot)com> - Matlab filetype patch
+Conrad Steenberg <gnocci-man(at)users(dot)sourceforge(dot)net> - symbol tree patch
+Herbert Voss <voss(at)perce(dot)de> - LaTeX file template
+Moritz Barsnick <barsnick(at)users(dot)sourceforge(dot)net> - Split Vertically command
+Tyler D'Agosta - Add missing HTML entities
+Walery Studennikov <despairr(at)gmail(dot)com> - YAML filetype patch
+Guillaume de Rorthais <ioguix(at)free(dot)fr> - Auto-close brackets/braces/quotes patch
+Tyler Mulligan <tyler(at)doknowevil(dot)net> - Close All toolbar icon
+Philipp Gildein <philipp(at)gildein(dot)com> - Ada filetype patch
+Thomas Martitz <thomas47(at)arcor(dot)de> - Multiple %cursor% wildcards in Snippets patch
+David Gleich <dgleich(at)stanford(dot)edu> - Send Selection to Terminal patch
+Chris Macksey <cmacksey(at)users(dot)sourceforge(dot)net> - ActionScript filetype patch
 
 Translators:
 ------------
@@ -59,19 +72,24 @@ Dilyan Rusev <dilyanrusev(at)gmail(dot)com> - bg
 Toni Garcia-Navarro <topi(at)elpiset(dot)net> - ca_ES
 Petr Messner <messa(at)messa(dot)cz> - cs_CZ
 Anna Talianova <anickat1(at)gmail(dot)com> - cs_CZ
+Karel Kolman <kolmis(at)gmail(dot)com> - cs_CZ
 Frank Lanitz <frank(at)frank(dot)uvena(dot)de> - de_DE
-Dominic Hopf <dmaphy(at)googlemail(dotcom> - de_DE
+Dominic Hopf <dmaphy(at)googlemail(dot)com> - de_DE
 Stavros Temertzidis <bullgr(at)gmail(dot)com> - el
 Jeff Bailes <thepizzaking(at)gmail(dot)com - en_GB
 Damián Viano <debian(at)damianv(dot)com(dot)ar> - es
+Antonio Jiménez González <tonificante(at)hotmail(dot)com> - es
 Nacho Cabanes <ncabanes(at)gmail(dot)com> - es
-Harri Koskinen <harri(at)fastmonkey(dot)org> - fi_FI
+Harri Koskinen <harri(at)fastmonkey(dot)org> - fi
+Jari Rahkonen <jari(dot)rahkonen(at)pp1(dot)inet(dot)fi> - fi
 Jean-Philippe Moal <skateinmars(at)skateinmars(dot)net> - fr
+Roland Baudin <roland(dot)baudin(at)thalesaleniaspace(dot)com> - fr
 Gabor Kmetyko aka kilo <kg_kilo(at)freemail(dot)hu> - hu
 M.Baldinelli <m(dot)baldinelli(at)agora(dot)it> - it
 Dario Santomarco <dariello(at)yahoo(dot)it> - it
 Tarot Osuji <tarot(at)sdf(dot)lonestar(dot)org> - ja
 Chikahiro Masami <cmasa(dot)z321(at)gmail(dot)com> - ja
+Park Jang-heon <dotkabi(at)gmail(dot)com> - ko
 Kurt De Bree <kdebree(at)telenet(dot)be> - nl
 Jacek Wolszczak <shutdownrunner(at)o2(dot)pl> - pl_PL
 Jarosław Foksa <jfoksa(at)gmail(dot)com> - pl_PL
@@ -82,6 +100,8 @@ Alex Eftimie <alex(at)rosedu(dot)org> - ro
 brahmann_ <brahmann(at)pisem(dot)net> - ru_RU
 Nikita E. Shalaev <nshalaev(at)eu(dot)spb(dot)ru> - ru_RU
 stat.c <Static-Const(at)yandex(dot)ru> - ru_RU
+Andrew Drynov <adryno(at)gmail(dot)com> - ru_RU
+John Wehin <john(dot)wehin(at)gmail(dot)com> - ru_RU
 Tony Mattsson <superxorn(at)gmail(dot)com> - sv
 Gürkan Gür <seqizz(at)gmail(dot)com - tr
 Boris Dibrov <dibrov(dot)bor(at)gmail(dot)com> - uk

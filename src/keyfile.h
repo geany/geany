@@ -1,8 +1,8 @@
 /*
  *      keyfile.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -26,6 +26,17 @@
 #define GEANY_KEYFILE_H 1
 
 
+extern GPtrArray *pref_groups;
+
+
+void configuration_init(void);
+
+void configuration_finalize(void);
+
+struct GeanyPrefGroup;
+
+void configuration_add_pref_group(struct GeanyPrefGroup *group, gboolean for_prefs_dialog);
+
 void configuration_save(void);
 
 gboolean configuration_load(void);
@@ -39,8 +50,6 @@ void configuration_save_default_session(void);
 void configuration_load_session_files(GKeyFile *config);
 
 void configuration_save_session_files(GKeyFile *config);
-
-void configuration_read_filetype_extensions(void);
 
 /* set some settings which are already read from the config file, but need other things, like the
  * realisation of the main window */

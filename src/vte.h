@@ -1,8 +1,8 @@
 /*
  *      vte.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2008 Nick Treleaven <<nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <<nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -26,12 +26,6 @@
 #define GEANY_VTE_H 1
 
 #ifdef HAVE_VTE
-
-/* include stdlib.h AND unistd.h, because on GNU/Linux pid_t seems to be
- * in stdlib.h, on FreeBSD in unistd.h, sys/types.h is needed for C89 */
-#include <stdlib.h>
-#include <sys/types.h>
-#include <unistd.h>
 
 
 typedef struct
@@ -57,6 +51,7 @@ typedef struct
 	gboolean run_in_vte;
 	gboolean skip_run_script;
 	gboolean enable_bash_keys;
+	gboolean cursor_blinks;
 	gint scrollback_lines;
 	gchar *emulation;
 	gchar *shell;
@@ -75,19 +70,13 @@ void vte_apply_user_settings(void);
 
 gboolean vte_send_cmd(const gchar *cmd);
 
-const gchar* vte_get_working_directory(void);
+const gchar *vte_get_working_directory(void);
 
 void vte_cwd(const gchar *filename, gboolean force);
 
 void vte_append_preferences_tab(void);
 
-/*
-void vte_drag_data_received(GtkWidget *widget, GdkDragContext  *drag_context, gint x, gint y,
-							GtkSelectionData *data, guint info, guint time);
-
-gboolean vte_drag_drop(GtkWidget *widget, GdkDragContext *drag_context, gint x, gint y, guint time,
-					   gpointer user_data);
-*/
+void vte_send_selection_to_vte(void);
 
 #endif
 

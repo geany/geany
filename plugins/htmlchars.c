@@ -1,8 +1,9 @@
 /*
  *      htmlchars.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2007-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2009 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
+ *      Copyright 2006-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -32,15 +33,14 @@
 #include "keybindings.h"
 #include "ui_utils.h"
 #include "utils.h"
-#include "pluginmacros.h"
+#include "geanyfunctions.h"
 
 
-PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(69)
+PLUGIN_VERSION_CHECK(GEANY_API_VERSION)
 
 PLUGIN_SET_INFO(_("HTML Characters"), _("Inserts HTML character entities like '&amp;'."), VERSION,
 	_("The Geany developer team"))
@@ -50,6 +50,8 @@ PLUGIN_SET_INFO(_("HTML Characters"), _("Inserts HTML character entities like '&
 enum
 {
 	KB_INSERT_HTML_CHARS,
+	KB_REPLACE_HTML_ENTITIES,
+	KB_HTMLTOGGLE_ACTIVE,
 	KB_COUNT
 };
 
@@ -63,10 +65,305 @@ enum
 	N_COLUMNS
 };
 
-
+static GtkWidget *main_menu_item = NULL;
+static GtkWidget *main_menu = NULL;
+static GtkWidget *main_menu_submenu = NULL;
+static GtkWidget *menu_bulk_replace = NULL;
 static GtkWidget *sc_dialog = NULL;
 static GtkTreeStore *sc_store = NULL;
 static GtkTreeView *sc_tree = NULL;
+static GtkWidget *menu_htmltoggle = NULL;
+static gboolean plugin_active = FALSE;
+
+const gchar *chars[][2] ={
+	{ N_("HTML characters"), NULL },
+	{ "\"", "&quot;" },
+	{ "&", "&amp;" },
+	{ "<", "&lt;" },
+	{ ">", "&gt;" },
+
+	{ N_("ISO 8859-1 characters"), NULL },
+	{ " ", "&nbsp;" },
+	{ "¡", "&iexcl;" },
+	{ "¢", "&cent;" },
+	{ "£", "&pound;" },
+	{ "¤", "&curren;" },
+	{ "¥", "&yen;" },
+	{ "¦", "&brvbar;" },
+	{ "§", "&sect;" },
+	{ "¨", "&uml;" },
+	{ "©", "&copy;" },
+	{ "®", "&reg;" },
+	{ "«", "&laquo;" },
+	{ "»", "&raquo;" },
+	{ "¬", "&not;" },
+	{ " ", "&shy;" },
+	{ "¯", "&macr;" },
+	{ "°", "&deg;" },
+	{ "±", "&plusmn;" },
+	{ "¹", "&sup1;" },
+	{ "²", "&sup2;" },
+	{ "³", "&sup3;" },
+	{ "¼", "&frac14;" },
+	{ "½", "&frac12;" },
+	{ "¾", "&frac34;" },
+	{ "×", "&times;" },
+	{ "÷", "&divide;" },
+	{ "´", "&acute;" },
+	{ "µ", "&micro;" },
+	{ "¶", "&para;" },
+	{ "·", "&middot;" },
+	{ "¸", "&cedil;" },
+	{ "ª", "&ordf;" },
+	{ "º", "&ordm;" },
+	{ "¿", "&iquest;" },
+	{ "À", "&Agrave;" },
+	{ "Á", "&Aacute;" },
+	{ "Â", "&Acirc;" },
+	{ "Ã", "&Atilde;" },
+	{ "Ä", "&Auml;" },
+	{ "Å", "&Aring;" },
+	{ "Æ", "&AElig;" },
+	{ "Ç", "&Ccedil;" },
+	{ "È", "&Egrave;" },
+	{ "É", "&Eacute;" },
+	{ "Ê", "&Ecirc;" },
+	{ "Ë", "&Euml;" },
+	{ "Ì", "&Igrave;" },
+	{ "Í", "&Iacute;" },
+	{ "Î", "&Icirc;" },
+	{ "Ï", "&Iuml;" },
+	{ "Ð", "&ETH;" },
+	{ "Ñ", "&Ntilde;" },
+	{ "Ò", "&Ograve;" },
+	{ "Ó", "&Oacute;" },
+	{ "Ô", "&Ocirc;" },
+	{ "Õ", "&Otilde;" },
+	{ "Ö", "&Ouml;" },
+	{ "Ø", "&Oslash;" },
+	{ "Ù", "&Ugrave;" },
+	{ "Ú", "&Uacute;" },
+	{ "Û", "&Ucirc;" },
+	{ "Ü", "&Uuml;" },
+	{ "Ý", "&Yacute;" },
+	{ "Þ", "&THORN;" },
+	{ "ß", "&szlig;" },
+	{ "à", "&agrave;" },
+	{ "á", "&aacute;" },
+	{ "â", "&acirc;" },
+	{ "ã", "&atilde;" },
+	{ "ä", "&auml;" },
+	{ "å", "&aring;" },
+	{ "æ", "&aelig;" },
+	{ "ç", "&ccedil;" },
+	{ "è", "&egrave;" },
+	{ "é", "&eacute;" },
+	{ "ê", "&ecirc;" },
+	{ "ë", "&euml;" },
+	{ "ì", "&igrave;" },
+	{ "í", "&iacute;" },
+	{ "î", "&icirc;" },
+	{ "ï", "&iuml;" },
+	{ "ð", "&eth;" },
+	{ "ñ", "&ntilde;" },
+	{ "ò", "&ograve;" },
+	{ "ó", "&oacute;" },
+	{ "ô", "&ocirc;" },
+	{ "õ", "&otilde;" },
+	{ "ö", "&ouml;" },
+	{ "ø", "&oslash;" },
+	{ "ù", "&ugrave;" },
+	{ "ú", "&uacute;" },
+	{ "û", "&ucirc;" },
+	{ "ü", "&uuml;" },
+	{ "ý", "&yacute;" },
+	{ "þ", "&thorn;" },
+	{ "ÿ", "&yuml;" },
+
+	{ N_("Greek characters"), NULL },
+	{ "Α", "&Alpha;" },
+	{ "α", "&alpha;" },
+	{ "Β", "&Beta;" },
+	{ "β", "&beta;" },
+	{ "Γ", "&Gamma;" },
+	{ "γ", "&gamma;" },
+	{ "Δ", "&Delta;" },
+	{ "δ", "&Delta;" },
+	{ "δ", "&delta;" },
+	{ "Ε", "&Epsilon;" },
+	{ "ε", "&epsilon;" },
+	{ "Ζ", "&Zeta;" },
+	{ "ζ", "&zeta;" },
+	{ "Η", "&Eta;" },
+	{ "η", "&eta;" },
+	{ "Θ", "&Theta;" },
+	{ "θ", "&theta;" },
+	{ "Ι", "&Iota;" },
+	{ "ι", "&iota;" },
+	{ "Κ", "&Kappa;" },
+	{ "κ", "&kappa;" },
+	{ "Λ", "&Lambda;" },
+	{ "λ", "&lambda;" },
+	{ "Μ", "&Mu;" },
+	{ "μ", "&mu;" },
+	{ "Ν", "&Nu;" },
+	{ "ν", "&nu;" },
+	{ "Ξ", "&Xi;" },
+	{ "ξ", "&xi;" },
+	{ "Ο", "&Omicron;" },
+	{ "ο", "&omicron;" },
+	{ "Π", "&Pi;" },
+	{ "π", "&pi;" },
+	{ "Ρ", "&Rho;" },
+	{ "ρ", "&rho;" },
+	{ "Σ", "&Sigma;" },
+	{ "ς", "&sigmaf;" },
+	{ "σ", "&sigma;" },
+	{ "Τ", "&Tau;" },
+	{ "τ", "&tau;" },
+	{ "Υ", "&Upsilon;" },
+	{ "υ", "&upsilon;" },
+	{ "Φ", "&Phi;" },
+	{ "φ", "&phi;" },
+	{ "Χ", "&Chi;" },
+	{ "χ", "&chi;" },
+	{ "Ψ", "&Psi;" },
+	{ "ψ", "&psi;" },
+	{ "Ω", "&Omega;" },
+	{ "ω", "&omega;" },
+	{ "ϑ", "&thetasym;" },
+	{ "ϒ", "&upsih;" },
+	{ "ϖ", "&piv;" },
+
+	{ N_("Mathematical characters"), NULL },
+	{ "∀", "&forall;" },
+	{ "∂", "&part;" },
+	{ "∃", "&exist;" },
+	{ "∅", "&empty;" },
+	{ "∇", "&nabla;" },
+	{ "∈", "&isin;" },
+	{ "∉", "&notin;" },
+	{ "∋", "&ni;" },
+	{ "∏", "&prod;" },
+	{ "∑", "&sum;" },
+	{ "−", "&minus;" },
+	{ "∗", "&lowast;" },
+	{ "√", "&radic;" },
+	{ "∝", "&prop;" },
+	{ "∞", "&infin;" },
+	{ "∠", "&ang;" },
+	{ "∧", "&and;" },
+	{ "∨", "&or;" },
+	{ "∩", "&cap;" },
+	{ "∪", "&cup;" },
+	{ "∫", "&int;" },
+	{ "∴", "&there4;" },
+	{ "∼", "&sim;" },
+	{ "≅", "&cong;" },
+	{ "≈", "&asymp;" },
+	{ "≠", "&ne;" },
+	{ "≡", "&equiv;" },
+	{ "≤", "&le;" },
+	{ "≥", "&ge;" },
+	{ "⊂", "&sub;" },
+	{ "⊃", "&sup;" },
+	{ "⊄", "&nsub;" },
+	{ "⊆", "&sube;" },
+	{ "⊇", "&supe;" },
+	{ "⊕", "&oplus;" },
+	{ "⊗", "&otimes;" },
+	{ "⊥", "&perp;" },
+	{ "⋅", "&sdot;" },
+	{ "◊", "&loz;" },
+
+	{ N_("Technical characters"), NULL },
+	{ "⌈", "&lceil;" },
+	{ "⌉", "&rceil;" },
+	{ "⌊", "&lfloor;" },
+	{ "⌋", "&rfloor;" },
+	{ "〈", "&lang;" },
+	{ "〉", "&rang;" },
+
+	{ N_("Arrow characters"), NULL },
+	{ "←", "&larr;" },
+	{ "↑", "&uarr;" },
+	{ "→", "&rarr;" },
+	{ "↓", "&darr;" },
+	{ "↔", "&harr;" },
+	{ "↵", "&crarr;" },
+	{ "⇐", "&lArr;" },
+	{ "⇑", "&uArr;" },
+	{ "⇒", "&rArr;" },
+	{ "⇓", "&dArr;" },
+	{ "⇔", "&hArr;" },
+
+	{ N_("Punctuation characters"), NULL },
+	{ "–", "&ndash;" },
+	{ "—", "&mdash;" },
+	{ "‘", "&lsquo;" },
+	{ "’", "&rsquo;" },
+	{ "‚", "&sbquo;" },
+	{ "“", "&ldquo;" },
+	{ "”", "&rdquo;" },
+	{ "„", "&bdquo;" },
+	{ "†", "&dagger;" },
+	{ "‡", "&Dagger;" },
+	{ "…", "&hellip;" },
+	{ "‰", "&permil;" },
+	{ "‹", "&lsaquo;" },
+	{ "›", "&rsaquo;" },
+
+	{ N_("Miscellaneous characters"), NULL },
+	{ "•", "&bull;" },
+	{ "′", "&prime;" },
+	{ "″", "&Prime;" },
+	{ "‾", "&oline;" },
+	{ "⁄", "&frasl;" },
+	{ "℘", "&weierp;" },
+	{ "ℑ", "&image;" },
+	{ "ℜ", "&real;" },
+	{ "™", "&trade;" },
+	{ "€", "&euro;" },
+	{ "ℵ", "&alefsym;" },
+	{ "♠", "&spades;" },
+	{ "♣", "&clubs;" },
+	{ "♥", "&hearts;" },
+	{ "♦", "&diams;" },
+	{ "Œ", "&OElig;" },
+	{ "œ", "&oelig;" },
+	{ "Š", "&Scaron;" },
+	{ "š", "&scaron;" },
+	{ "Ÿ", "&Yuml;" },
+	{ "ƒ", "&fnof;" },
+};
+
+static gboolean ht_editor_notify_cb(GObject *object, GeanyEditor *editor,
+									SCNotification *nt, gpointer data);
+
+
+PluginCallback plugin_callbacks[] =
+{
+	{ "editor-notify", (GCallback) &ht_editor_notify_cb, FALSE, NULL },
+	{ NULL, NULL, FALSE, NULL }
+};
+
+
+/* Functions to toggle the status of plugin */
+void set_status(gboolean new_status)
+{
+	/* No more function at the moment.*/
+	if (plugin_active != new_status)
+		plugin_active = new_status;
+}
+
+static void toggle_status(G_GNUC_UNUSED GtkMenuItem * menuitem)
+{
+	if (plugin_active == TRUE)
+		set_status(FALSE);
+	else
+		set_status(TRUE);
+}
+
 
 static void sc_on_tools_show_dialog_insert_special_chars_response
 		(GtkDialog *dialog, gint response, gpointer user_data);
@@ -75,6 +372,74 @@ static void sc_on_tree_row_activated
 static void sc_fill_store(GtkTreeStore *store);
 static gboolean sc_insert(GtkTreeModel *model, GtkTreeIter *iter);
 
+
+/* Function takes over value of key which was pressed and returns
+ * HTML/SGML entity if any */
+const gchar *get_entity(gchar *letter)
+{
+	guint i, len;
+
+	len = G_N_ELEMENTS(chars);
+
+	/* Ignore tags marking caracters as well as spaces*/
+	for (i = 7; i < len; i++)
+	{
+		if (utils_str_equal(chars[i][0], letter) &&
+			!utils_str_equal(" ", letter))
+		{
+			return chars[i][1];
+		}
+	}
+
+	/* if the char is not in the list */
+	return NULL;
+}
+
+
+static gboolean ht_editor_notify_cb(GObject *object, GeanyEditor *editor,
+									SCNotification *nt, gpointer data)
+{
+	g_return_val_if_fail(editor != NULL, FALSE);
+
+	if (plugin_active != TRUE)
+		return FALSE;
+
+	if (nt->nmhdr.code == SCN_CHARADDED)
+	{
+		gchar buf[7];
+		gint len;
+
+		len = g_unichar_to_utf8(nt->ch, buf);
+		if (len > 0)
+		{
+			const gchar *entity;
+			buf[len] = '\0';
+			entity = get_entity(buf);
+
+			if (entity != NULL)
+			{
+				gint pos = sci_get_current_position(editor->sci);
+
+				sci_set_selection_start(editor->sci, pos - len);
+				sci_set_selection_end(editor->sci, pos);
+
+				sci_replace_sel(editor->sci, entity);
+			}
+		}
+	}
+
+	return FALSE;
+}
+
+
+/* Called when keys were pressed */
+static void kbhtmltoggle_toggle(G_GNUC_UNUSED guint key_id)
+{
+	if (plugin_active == TRUE)
+		set_status(FALSE);
+	else
+		set_status(TRUE);
+}
 
 static void tools_show_dialog_insert_special_chars(void)
 {
@@ -89,7 +454,7 @@ static void tools_show_dialog_insert_special_chars(void)
 					_("Special Characters"), GTK_WINDOW(geany->main_widgets->window),
 					GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					_("_Insert"), GTK_RESPONSE_OK, NULL);
-		vbox = p_ui->dialog_vbox_new(GTK_DIALOG(sc_dialog));
+		vbox = ui_dialog_vbox_new(GTK_DIALOG(sc_dialog));
 		gtk_box_set_spacing(GTK_BOX(vbox), 6);
 		gtk_widget_set_name(sc_dialog, "GeanyDialog");
 
@@ -151,272 +516,10 @@ static void sc_fill_store(GtkTreeStore *store)
 {
 	GtkTreeIter iter;
 	GtkTreeIter *parent_iter = NULL;
-	guint i;
+	guint i, len;
 
-	gchar *chars[][2] =
-		{
-			{ _("HTML characters"), NULL },
-			{ "\"", "&quot;" },
-			{ "&", "&amp;" },
-			{ "<", "&lt;" },
-			{ ">", "&gt;" },
-
-			{ _("ISO 8859-1 characters"), NULL },
-			{ " ", "&nbsp;" },
-			{ "¡", "&iexcl;" },
-			{ "¢", "&cent;" },
-			{ "£", "&pound;" },
-			{ "¤", "&curren;" },
-			{ "¥", "&yen;" },
-			{ "¦", "&brvbar;" },
-			{ "§", "&sect;" },
-			{ "¨", "&uml;" },
-			{ "©", "&copy;" },
-			{ "®", "&reg;" },
-			{ "«", "&laquo;" },
-			{ "»", "&raquo;" },
-			{ "¬", "&not;" },
-			{ " ", "&shy;" },
-			{ "¯", "&macr;" },
-			{ "°", "&deg;" },
-			{ "±", "&plusmn;" },
-			{ "¹", "&sup1;" },
-			{ "²", "&sup2;" },
-			{ "³", "&sup3;" },
-			{ "¼", "&frac14;" },
-			{ "½", "&frac12;" },
-			{ "¾", "&frac34;" },
-			{ "×", "&times;" },
-			{ "÷", "&divide;" },
-			{ "´", "&acute;" },
-			{ "µ", "&micro;" },
-			{ "¶", "&para;" },
-			{ "·", "&middot;" },
-			{ "¸", "&cedil;" },
-			{ "ª", "&ordf;" },
-			{ "º", "&ordm;" },
-			{ "¿", "&iquest;" },
-			{ "À", "&Agrave;" },
-			{ "Á", "&Aacute;" },
-			{ "Â", "&Acirc;" },
-			{ "Ã", "&Atilde;" },
-			{ "Ä", "&Auml;" },
-			{ "Å", "&Aring;" },
-			{ "Æ", "&AElig;" },
-			{ "Ç", "&Ccedil;" },
-			{ "È", "&Egrave;" },
-			{ "É", "&Eacute;" },
-			{ "Ê", "&Ecirc;" },
-			{ "Ë", "&Euml;" },
-			{ "Ì", "&Igrave;" },
-			{ "Í", "&Iacute;" },
-			{ "Î", "&Icirc;" },
-			{ "Ï", "&Iuml;" },
-			{ "Ð", "&ETH;" },
-			{ "Ñ", "&Ntilde;" },
-			{ "Ò", "&Ograve;" },
-			{ "Ó", "&Oacute;" },
-			{ "Ô", "&Ocirc;" },
-			{ "Õ", "&Otilde;" },
-			{ "Ö", "&Ouml;" },
-			{ "Ø", "&Oslash;" },
-			{ "Ù", "&Ugrave;" },
-			{ "Ú", "&Uacute;" },
-			{ "Û", "&Ucirc;" },
-			{ "Ü", "&Uuml;" },
-			{ "Ý", "&Yacute;" },
-			{ "Þ", "&THORN;" },
-			{ "ß", "&szlig;" },
-			{ "à", "&agrave;" },
-			{ "á", "&aacute;" },
-			{ "â", "&acirc;" },
-			{ "ã", "&atilde;" },
-			{ "ä", "&auml;" },
-			{ "å", "&aring;" },
-			{ "æ", "&aelig;" },
-			{ "ç", "&ccedil;" },
-			{ "è", "&egrave;" },
-			{ "é", "&eacute;" },
-			{ "ê", "&ecirc;" },
-			{ "ë", "&euml;" },
-			{ "ì", "&igrave;" },
-			{ "í", "&iacute;" },
-			{ "î", "&icirc;" },
-			{ "ï", "&iuml;" },
-			{ "ð", "&eth;" },
-			{ "ñ", "&ntilde;" },
-			{ "ò", "&ograve;" },
-			{ "ó", "&oacute;" },
-			{ "ô", "&ocirc;" },
-			{ "õ", "&otilde;" },
-			{ "ö", "&ouml;" },
-			{ "ø", "&oslash;" },
-			{ "ù", "&ugrave;" },
-			{ "ú", "&uacute;" },
-			{ "û", "&ucirc;" },
-			{ "ü", "&uuml;" },
-			{ "ý", "&yacute;" },
-			{ "þ", "&thorn;" },
-			{ "ÿ", "&yuml;" },
-
-			{ _("Greek characters"), NULL },
-			{ "Α", "&Alpha;" },
-			{ "α", "&alpha;" },
-			{ "Β", "&Beta;" },
-			{ "β", "&beta;" },
-			{ "Γ", "&Gamma;" },
-			{ "γ", "&gamma;" },
-			{ "Δ", "&Delta;" },
-			{ "δ", "&Delta;" },
-			{ "δ", "&delta;" },
-			{ "Ε", "&Epsilon;" },
-			{ "ε", "&epsilon;" },
-			{ "Ζ", "&Zeta;" },
-			{ "ζ", "&zeta;" },
-			{ "Η", "&Eta;" },
-			{ "η", "&eta;" },
-			{ "Θ", "&Theta;" },
-			{ "θ", "&theta;" },
-			{ "Ι", "&Iota;" },
-			{ "ι", "&iota;" },
-			{ "Κ", "&Kappa;" },
-			{ "κ", "&kappa;" },
-			{ "Λ", "&Lambda;" },
-			{ "λ", "&lambda;" },
-			{ "Μ", "&Mu;" },
-			{ "μ", "&mu;" },
-			{ "Ν", "&Nu;" },
-			{ "ν", "&nu;" },
-			{ "Ξ", "&Xi;" },
-			{ "ξ", "&xi;" },
-			{ "Ο", "&Omicron;" },
-			{ "ο", "&omicron;" },
-			{ "Π", "&Pi;" },
-			{ "π", "&pi;" },
-			{ "Ρ", "&Rho;" },
-			{ "ρ", "&rho;" },
-			{ "Σ", "&Sigma;" },
-			{ "ς", "&sigmaf;" },
-			{ "σ", "&sigma;" },
-			{ "Τ", "&Tau;" },
-			{ "τ", "&tau;" },
-			{ "Υ", "&Upsilon;" },
-			{ "υ", "&upsilon;" },
-			{ "Φ", "&Phi;" },
-			{ "φ", "&phi;" },
-			{ "Χ", "&Chi;" },
-			{ "χ", "&chi;" },
-			{ "Ψ", "&Psi;" },
-			{ "ψ", "&psi;" },
-			{ "Ω", "&Omega;" },
-			{ "ω", "&omega;" },
-			{ "ϑ", "&thetasym;" },
-			{ "ϒ", "&upsih;" },
-			{ "ϖ", "&piv;" },
-
-			{ _("Mathematical characters"), NULL },
-			{ "∀", "&forall;" },
-			{ "∂", "&part;" },
-			{ "∃", "&exist;" },
-			{ "∅", "&empty;" },
-			{ "∇", "&nabla;" },
-			{ "∈", "&isin;" },
-			{ "∉", "&notin;" },
-			{ "∋", "&ni;" },
-			{ "∏", "&prod;" },
-			{ "∑", "&sum;" },
-			{ "−", "&minus;" },
-			{ "∗", "&lowast;" },
-			{ "√", "&radic;" },
-			{ "∝", "&prop;" },
-			{ "∞", "&infin;" },
-			{ "∠", "&ang;" },
-			{ "∧", "&and;" },
-			{ "∨", "&or;" },
-			{ "∩", "&cap;" },
-			{ "∪", "&cup;" },
-			{ "∫", "&int;" },
-			{ "∴", "&there4;" },
-			{ "∼", "&sim;" },
-			{ "≅", "&cong;" },
-			{ "≈", "&asymp;" },
-			{ "≠", "&ne;" },
-			{ "≡", "&equiv;" },
-			{ "≤", "&le;" },
-			{ "≥", "&ge;" },
-			{ "⊂", "&sub;" },
-			{ "⊃", "&sup;" },
-			{ "⊄", "&nsub;" },
-			{ "⊆", "&sube;" },
-			{ "⊇", "&supe;" },
-			{ "⊕", "&oplus;" },
-			{ "⊗", "&otimes;" },
-			{ "⊥", "&perp;" },
-			{ "⋅", "&sdot;" },
-			{ "◊", "&loz;" },
-
-			{ _("Technical characters"), NULL },
-			{ "⌈", "&lceil;" },
-			{ "⌉", "&rceil;" },
-			{ "⌊", "&lfloor;" },
-			{ "⌋", "&rfloor;" },
-			{ "〈", "&lang;" },
-			{ "〉", "&rang;" },
-
-			{ _("Arrow characters"), NULL },
-			{ "←", "&larr;" },
-			{ "↑", "&uarr;" },
-			{ "→", "&rarr;" },
-			{ "↓", "&darr;" },
-			{ "↔", "&harr;" },
-			{ "↵", "&crarr;" },
-			{ "⇐", "&lArr;" },
-			{ "⇑", "&uArr;" },
-			{ "⇒", "&rArr;" },
-			{ "⇓", "&dArr;" },
-			{ "⇔", "&hArr;" },
-
-			{ _("Punctuation characters"), NULL },
-			{ "–", "&ndash;" },
-			{ "—", "&mdash;" },
-			{ "‘", "&lsquo;" },
-			{ "’", "&rsquo;" },
-			{ "‚", "&sbquo;" },
-			{ "“", "&ldquo;" },
-			{ "”", "&rdquo;" },
-			{ "„", "&bdquo;" },
-			{ "†", "&dagger;" },
-			{ "‡", "&Dagger;" },
-			{ "…", "&hellip;" },
-			{ "‰", "&permil;" },
-			{ "‹", "&lsaquo;" },
-			{ "›", "&rsaquo;" },
-
-			{ _("Miscellaneous characters"), NULL },
-			{ "•", "&bull;" },
-			{ "′", "&prime;" },
-			{ "″", "&Prime;" },
-			{ "‾", "&oline;" },
-			{ "⁄", "&frasl;" },
-			{ "℘", "&weierp;" },
-			{ "ℑ", "&image;" },
-			{ "ℜ", "&real;" },
-			{ "™", "&trade;" },
-			{ "€", "&euro;" },
-			{ "ℵ", "&alefsym;" },
-			{ "♠", "&spades;" },
-			{ "♣", "&clubs;" },
-			{ "♥", "&hearts;" },
-			{ "♦", "&diams;" },
-			{ "Œ", "&OElig;" },
-			{ "œ", "&oelig;" },
-			{ "Š", "&Scaron;" },
-			{ "š", "&scaron;" },
-			{ "Ÿ", "&Yuml;" },
-			{ "ƒ", "&fnof;" },
-		};
-
-	for (i = 0; i < G_N_ELEMENTS(chars); i++)
+	len = G_N_ELEMENTS(chars);
+	for (i = 0; i < len; i++)
 	{
 		if (chars[i][1] == NULL)
 		{	/* add a category */
@@ -434,23 +537,22 @@ static void sc_fill_store(GtkTreeStore *store)
 	}
 }
 
-
 /* just inserts the HTML_NAME coloumn of the selected row at current position
  * returns only TRUE if a valid selection(i.e. no category) could be found */
 static gboolean sc_insert(GtkTreeModel *model, GtkTreeIter *iter)
 {
-	GeanyDocument *doc = p_document->get_current();
+	GeanyDocument *doc = document_get_current();
 	gboolean result = FALSE;
 
 	if (doc != NULL)
 	{
 		gchar *str;
-		gint pos = p_sci->get_current_position(doc->editor->sci);
+		gint pos = sci_get_current_position(doc->editor->sci);
 
 		gtk_tree_model_get(model, iter, COLUMN_HTML_NAME, &str, -1);
 		if (NZV(str))
 		{
-			p_sci->insert_text(doc->editor->sci, pos, str);
+			sci_insert_text(doc->editor->sci, pos, str);
 			g_free(str);
 			result = TRUE;
 		}
@@ -504,13 +606,57 @@ static void sc_on_tree_row_activated(GtkTreeView *treeview, GtkTreePath *path,
 }
 
 
-/* Callback when the menu item is clicked */
+static void replace_special_character()
+{
+	GeanyDocument *doc = NULL;
+	doc = document_get_current();
+
+	if (doc != NULL && sci_has_selection(doc->editor->sci))
+	{
+		gint selection_len = sci_get_selected_text_length(doc->editor->sci);
+		gchar *selection = g_malloc(selection_len + 1);
+		GString *replacement = g_string_new(NULL);
+		gint i;
+		gchar *new = NULL;
+		const gchar *entity = NULL;
+		gchar buf[7];
+		gint len;
+
+		sci_get_selected_text(doc->editor->sci, selection);
+
+		selection_len = sci_get_selected_text_length(doc->editor->sci) - 1;
+		for (i = 0; i < selection_len; i++)
+		{
+			len = g_unichar_to_utf8(g_utf8_get_char(selection + i), buf);
+			i = len - 1 + i;
+
+			buf[len] = '\0';
+			entity = get_entity(buf);
+
+			if (entity != NULL)
+			{
+				replacement = g_string_append(replacement, entity);
+			}
+			else
+			{
+				replacement = g_string_append(replacement, buf);
+			}
+
+		}
+		new = g_string_free(replacement, FALSE);
+		sci_replace_sel(doc->editor->sci, new);
+		g_free(selection);
+		g_free(new);
+	}
+}
+
+
+/* Callback for special chars menu */
 static void
 item_activate(GtkMenuItem *menuitem, gpointer gdata)
 {
 	tools_show_dialog_insert_special_chars();
 }
-
 
 static void kb_activate(G_GNUC_UNUSED guint key_id)
 {
@@ -518,33 +664,83 @@ static void kb_activate(G_GNUC_UNUSED guint key_id)
 }
 
 
+/* Callback for bulk replacement of selected text */
+static void
+replace_special_character_activated(GtkMenuItem *menuitem, gpointer gdata)
+{
+	replace_special_character();
+}
+
+
+
+static void kb_special_chars_replacement(G_GNUC_UNUSED guint key_id)
+{
+	replace_special_character();
+}
+
+
 /* Called by Geany to initialize the plugin */
 void plugin_init(GeanyData *data)
 {
-	GtkWidget *demo_item;
+	GtkWidget *menu_item;
 	const gchar *menu_text = _("_Insert Special HTML Characters");
-	gchar *kb_label = _("Insert Special HTML Characters");
 
-	/* Add an item to the Tools menu */
-	demo_item = gtk_menu_item_new_with_mnemonic(menu_text);
-	gtk_widget_show(demo_item);
-	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), demo_item);
-	g_signal_connect(demo_item, "activate", G_CALLBACK(item_activate), NULL);
+	/* Add an item to the Tools menu for html chars dialog*/
+	menu_item = gtk_menu_item_new_with_mnemonic(menu_text);
+	gtk_widget_show(menu_item);
+	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), menu_item);
+	g_signal_connect(menu_item, "activate", G_CALLBACK(item_activate), NULL);
 
 	/* disable menu_item when there are no documents open */
-	plugin_fields->menu_item = demo_item;
-	plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
+	ui_add_document_sensitive(menu_item);
+
+	/* Add menuitem for html replacement functions*/
+	main_menu = gtk_menu_item_new_with_mnemonic(_("HTML Replacement"));
+	gtk_widget_show_all(main_menu);
+	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), main_menu);
+
+	main_menu_submenu = gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(main_menu), main_menu_submenu);
+
+	menu_htmltoggle = gtk_check_menu_item_new_with_mnemonic(_("_HTMLToggle"));
+	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM(menu_htmltoggle),
+		plugin_active);
+	gtk_container_add(GTK_CONTAINER(main_menu_submenu), menu_htmltoggle);
+
+	g_signal_connect((gpointer) menu_htmltoggle, "activate",
+			 G_CALLBACK(toggle_status), NULL);
+
+	menu_bulk_replace = gtk_menu_item_new_with_mnemonic(
+						_("Bulk replacement of special chars"));
+	g_signal_connect((gpointer) menu_bulk_replace, "activate",
+			 G_CALLBACK(replace_special_character_activated), NULL);
+
+	gtk_container_add(GTK_CONTAINER(main_menu_submenu), menu_bulk_replace);
+
+	ui_add_document_sensitive(main_menu);
+	gtk_widget_show(menu_bulk_replace);
+	gtk_widget_show(menu_htmltoggle);
+
+	main_menu_item = menu_item;
 
 	/* setup keybindings */
-	p_keybindings->set_item(plugin_key_group, KB_INSERT_HTML_CHARS, kb_activate,
-		0, 0, "insert_html_chars", kb_label, demo_item);
+	keybindings_set_item(plugin_key_group, KB_INSERT_HTML_CHARS,
+		kb_activate, 0, 0, "insert_html_chars",
+		_("Insert Special HTML Characters"), menu_item);
+	keybindings_set_item(plugin_key_group, KB_REPLACE_HTML_ENTITIES,
+		kb_special_chars_replacement, 0, 0, "replace_special_characters",
+		_("Replace special characters"), NULL);
+	keybindings_set_item(plugin_key_group, KB_HTMLTOGGLE_ACTIVE,
+		kbhtmltoggle_toggle, 0, 0, "htmltoogle_toggle_plugin_status",
+		_("Toggle plugin status"), menu_htmltoggle);
 }
 
 
 /* Destroy widgets */
 void plugin_cleanup(void)
 {
-	gtk_widget_destroy(plugin_fields->menu_item);
+	gtk_widget_destroy(main_menu_item);
+	gtk_widget_destroy(main_menu);
 
 	if (sc_dialog != NULL)
 		gtk_widget_destroy(sc_dialog);
