@@ -1692,7 +1692,7 @@ msgstr "Список тегов:"
 
 #: ../src/interface.c:2974 ../src/interface.c:3089
 msgid "Message window:"
-msgstr "Окно сообщенийи:"
+msgstr "Окно сообщений:"
 
 #: ../src/interface.c:2981 ../src/interface.c:3125
 msgid "Editor:"
@@ -1974,7 +1974,7 @@ msgstr ""
 
 #: ../src/interface.c:3481 ../src/interface.c:5026
 msgid "Hard tab width:"
-msgstr "Ширина табудяции:"
+msgstr "Ширина табуляции:"
 
 #: ../src/interface.c:3489 ../src/interface.c:5034
 msgid "The width of a tab when Tabs & Spaces is set for a document"
@@ -2792,7 +2792,7 @@ msgstr "Комментировать строку (строки)"
 
 #: ../src/keybindings.c:296
 msgid "Uncomment line(s)"
-msgstr "Разкомментировать строку (строки)"
+msgstr "Раскомментировать строку (строки)"
 
 #: ../src/keybindings.c:298
 msgid "Increase indent"
