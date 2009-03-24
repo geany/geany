@@ -1,3 +1,9 @@
+2009-03-24  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * plugins/htmlchars.c:
+   Remove usage of deprecated sci_get_selected_text() from plugin.
+
+
 2009-03-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/callbacks.c:
