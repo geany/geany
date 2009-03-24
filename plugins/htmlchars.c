@@ -613,18 +613,18 @@ static void replace_special_character()
 
 	if (doc != NULL && sci_has_selection(doc->editor->sci))
 	{
-		gint selection_len;
-		gchar *selection = NULL;
+		guint selection_len;
+		gchar *selection;
 		GString *replacement = g_string_new(NULL);
-		gint i;
-		gchar *new = NULL;
+		guint i;
+		gchar *new;
 		const gchar *entity = NULL;
 		gchar buf[7];
 		gint len;
 
 		selection = sci_get_selection_contents(doc->editor->sci);
 
-		selection_len = sci_get_selected_text_length(doc->editor->sci) - 1;
+		selection_len = strlen(selection);
 		for (i = 0; i < selection_len; i++)
 		{
 			len = g_unichar_to_utf8(g_utf8_get_char(selection + i), buf);
@@ -641,7 +641,6 @@ static void replace_special_character()
 			{
 				replacement = g_string_append(replacement, buf);
 			}
-
 		}
 		new = g_string_free(replacement, FALSE);
 		sci_replace_sel(doc->editor->sci, new);
