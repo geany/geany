@@ -3,6 +3,13 @@
  * src/callbacks.c:
    Delay disk file checks when switching between documents a little
    bit to avoid fast, unintentional page switching in some cases.
+ * plugins/geanyfunctions.h, src/plugindata.h, src/plugins.c,
+   src/sciwrappers.c, src/sciwrappers.h:
+   Deprecate sci_get_text(), sci_get_selected_text() and
+   sci_get_text_range().
+   Add sci_get_contents(), sci_get_contents_range() and
+   sci_get_selection_contents() as replacement functions to provide
+   an easier and cleaner API (initial patch by Frank).
 
 
 2009-03-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

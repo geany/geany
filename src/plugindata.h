@@ -45,7 +45,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 135,
+	GEANY_API_VERSION = 136,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -316,6 +316,9 @@ typedef struct SciFuncs
 	gint	(*get_tab_width) (struct _ScintillaObject *sci);
 	void	(*indicator_clear) (struct _ScintillaObject *sci, gint start, gint end);
 	void	(*indicator_set) (struct _ScintillaObject *sci, gint indic);
+	gchar*	(*get_contents) (struct _ScintillaObject *sci, gint len);
+	gchar*	(*get_contents_range) (struct _ScintillaObject *sci, gint start, gint end);
+	gchar*	(*get_selection_contents) (struct _ScintillaObject *sci);
 }
 SciFuncs;
 

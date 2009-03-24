@@ -542,7 +542,6 @@ gint sci_get_line_length(ScintillaObject* sci,gint line)
 }
 
 
-/* TODO: rename/change to use buffer? Otherwise inconsistent with sci_get_text*(). */
 /** Get line contents.
  * @param sci Scintilla widget.
  * @param line_num Line number.
@@ -559,6 +558,9 @@ gchar *sci_get_line(ScintillaObject* sci, gint line_num)
 
 
 /** Get all text.
+ * @deprecated sci_get_text is deprecated and should not be used in newly-written code.
+ * Use sci_get_contents() instead.
+ *
  * @param sci Scintilla widget.
  * @param len Length of @a text buffer, usually sci_get_length() + 1.
  * @param text Text buffer; must be allocated @a len + 1 bytes for null-termination. */
@@ -567,8 +569,25 @@ void sci_get_text(ScintillaObject* sci, gint len, gchar* text)
 	SSM( sci, SCI_GETTEXT, len, (sptr_t) text );
 }
 
+/** Get all text inside a given text length.
+ * @param sci Scintilla widget.
+ * @param len Length of the text to retrieve from the start of the document,
+ *            usually sci_get_length() + 1.
+ * @return A copy of the text. Should be freed when no longer needed.
+ *
+ * @since 0.17
+ */
+gchar *sci_get_contents(ScintillaObject *sci, gint len)
+{
+	gchar *text = g_malloc(len);
+	SSM(sci, SCI_GETTEXT, len, (sptr_t) text);
+	return text;
+}
 
 /** Get selected text.
+ * @deprecated sci_get_selected_text is deprecated and should not be used in newly-written code.
+ * Use sci_get_selection_contents() instead.
+ *
  * @param sci Scintilla widget.
  * @param text Text buffer; must be allocated sci_get_selected_text_length() + 1 bytes
  * for null-termination. */
@@ -577,6 +596,22 @@ void sci_get_selected_text(ScintillaObject* sci, gchar* text)
 	SSM( sci, SCI_GETSELTEXT, 0, (sptr_t) text);
 }
 
+/** Get selected text.
+ * @param sci Scintilla widget.
+ *
+ * @return The selected text. Should be freed when no longer needed.
+ *
+ * @since 0.17
+ */
+gchar *sci_get_selection_contents(ScintillaObject *sci)
+{
+	gint len = sci_get_selected_text_length(sci);
+	gchar *selection = g_malloc(len + 1);
+
+	SSM(sci, SCI_GETSELTEXT, 0, (sptr_t) selection);
+
+	return selection;
+}
 
 /** Get selected text length.
  * @param sci Scintilla widget.
@@ -585,7 +620,6 @@ gint sci_get_selected_text_length(ScintillaObject* sci)
 {
 	return SSM( sci, SCI_GETSELTEXT, 0, 0);
 }
-
 
 gint sci_get_position_from_xy(ScintillaObject* sci, gint x, gint y, gboolean nearby)
 {
@@ -842,6 +876,9 @@ void sci_clear_cmdkey(ScintillaObject *sci, gint key)
 
 
 /** Get text between @a start and @a end.
+ * @deprecated sci_get_text_range is deprecated and should not be used in newly-written code.
+ * Use sci_get_contents_range() instead.
+ *
  * @param sci Scintilla widget.
  * @param start Start.
  * @param end End.
@@ -853,6 +890,22 @@ void sci_get_text_range(ScintillaObject *sci, gint start, gint end, gchar *text)
 	tr.chrg.cpMax = end;
 	tr.lpstrText = text;
 	SSM(sci, SCI_GETTEXTRANGE, 0, (long) &tr);
+}
+
+/** Get text between @a start and @a end.
+ *
+ * @param sci Scintilla widget.
+ * @param start Start.
+ * @param end End.
+ * @return The text inside the given range. Should be freed when no longer needed.
+ *
+ * @since 0.17
+ */
+gchar *sci_get_contents_range(ScintillaObject *sci, gint start, gint end)
+{
+	gchar *text = g_malloc((end - start) + 1);
+	sci_get_text_range(sci, start, end, text);
+	return text;
 }
 
 

@@ -196,7 +196,10 @@ static SciFuncs sci_funcs = {
 	&sci_has_selection,
 	&sci_get_tab_width,
 	&sci_indicator_clear,
-	&sci_indicator_set
+	&sci_indicator_set,
+	&sci_get_contents,
+	&sci_get_contents_range,
+	&sci_get_selection_contents
 };
 
 static TemplateFuncs template_funcs = {
