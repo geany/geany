@@ -126,6 +126,8 @@ static void quit_app(void)
 
 	document_close_all();
 
+	main_status.quitting = TRUE;
+
 	main_quit();
 }
 

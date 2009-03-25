@@ -9,6 +9,9 @@
    succeeded and use the filename itself if not (e.g. on relative
    filenames, #2702844).
    Use the locale encoded filename when saving session files.
+ * src/callbacks.c:
+   Re-set the quitting status after all documents have been closed on
+   quitting.
 
 
 2009-03-24  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
