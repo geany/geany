@@ -4,6 +4,11 @@
    Delete the geany_run_script.sh immediately after execution
    to prevent leaking old copies when the script was quit unexpectedly
    (closes #2710482, patch by Martin Olsson, thanks).
+ * src/keyfile.c:
+   Check whether skipping the root element of a document's filename
+   succeeded and use the filename itself if not (e.g. on relative
+   filenames, #2702844).
+   Use the locale encoded filename when saving session files.
 
 
 2009-03-24  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
