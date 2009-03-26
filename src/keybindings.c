@@ -48,6 +48,7 @@
 #include "toolbar.h"
 #include "treeviews.h"
 #include "geanywraplabel.h"
+#include "main.h"
 
 
 GPtrArray *keybinding_groups;	/* array of GeanyKeyGroup pointers */
@@ -525,8 +526,11 @@ static gboolean on_idle_close(gpointer data)
 
 static void on_document_close(GObject *obj, GeanyDocument *doc)
 {
-	g_queue_remove_all(mru_docs, doc);
-	g_idle_add(on_idle_close, NULL);
+	if (! main_status.quitting)
+	{
+		g_queue_remove_all(mru_docs, doc);
+		g_idle_add(on_idle_close, NULL);
+	}
 }
 
 

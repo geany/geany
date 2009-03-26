@@ -3,6 +3,9 @@
  * src\main.c, src\plugins.c, src\win32.c, src\win32.h:
    Use g_win32_get_package_installation_directory_of_module() on Windows
    with newer GLib versions instead of deprecated API.
+ * src/keybindings.c:
+   Don't manage the last used documents list when quitting to prevent
+   errors by accessing invalid memory (may close #2533990).
 
 
 2009-03-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
