@@ -1188,4 +1188,13 @@ void win32_set_working_directory(const gchar *dir)
 	SetCurrentDirectory(dir);
 }
 
+gchar *win32_get_installation_dir(void)
+{
+#if GLIB_CHECK_VERSION(2, 16, 0)
+	return g_win32_get_package_installation_directory_of_module(NULL);
+#else
+	return g_win32_get_package_installation_directory(NULL, NULL);
+#endif
+}
+
 #endif

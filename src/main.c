@@ -390,7 +390,7 @@ static void setup_paths(void)
 #ifdef G_OS_WIN32
 	/* use the installation directory(the one where geany.exe is located) as the base for the
 	 * documentation and data files */
-	gchar *install_dir = g_win32_get_package_installation_directory(NULL, NULL);
+	gchar *install_dir = win32_get_installation_dir();
 
 	data_dir = g_strconcat(install_dir, "\\data", NULL); /* e.g. C:\Program Files\geany\data */
 	doc_dir = g_strconcat(install_dir, "\\doc", NULL);
@@ -440,7 +440,7 @@ void main_locale_init(const gchar *locale_dir, const gchar *package)
 #endif
 
 #ifdef G_OS_WIN32
-	gchar *install_dir = g_win32_get_package_installation_directory(NULL, NULL);
+	gchar *install_dir = win32_get_installation_dir();
 	/* e.g. C:\Program Files\geany\lib\locale */
 	l_locale_dir = g_strconcat(install_dir, "\\share\\locale", NULL);
 	g_free(install_dir);
@@ -1068,9 +1068,14 @@ gint main(gint argc, gchar **argv)
 #endif
 
 #ifdef G_OS_WIN32
-	/* On Windows, change the working directory to the Geany installation path to not lock
-	 * the directory of a file passed as command line argument (see bug #2626124). */
-	win32_set_working_directory(g_win32_get_package_installation_directory(NULL, NULL));
+	{
+		gchar *dir;
+		/* On Windows, change the working directory to the Geany installation path to not lock
+		 * the directory of a file passed as command line argument (see bug #2626124). */
+		dir = win32_get_installation_dir();
+		win32_set_working_directory(dir);
+		g_free(dir);
+	}
 #endif
 
 	/*g_timeout_add(0, (GSourceFunc)destroyapp, NULL);*/ /* useful for start time tests*/
