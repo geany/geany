@@ -48,7 +48,7 @@ cat > src/Makefile << EOF
 all: build
 
 build:
-	cd .. && $WAF build --targets=geany \$@
+	cd .. && $WAF build \$@
 
 EOF
 
@@ -58,7 +58,7 @@ cat > tagmanager/Makefile << EOF
 all: build
 
 build:
-	cd .. && $WAF build --targets=tagmanager \$@
+	cd .. && $WAF build \$@
 
 EOF
 
@@ -68,7 +68,17 @@ cat > scintilla/Makefile << EOF
 all: build
 
 build:
-	cd .. && $WAF build --targets=scintilla \$@
+	cd .. && $WAF build \$@
+
+EOF
+
+# plugins/Makefile
+cat > plugins/Makefile << EOF
+
+all: build
+
+build:
+	cd .. && $WAF build \$@
 
 EOF
 
