@@ -69,6 +69,10 @@ GPtrArray *filetypes_array = NULL;	/* Dynamic array of filetype pointers */
 
 GHashTable *filetypes_hash = NULL;	/* Hash of filetype pointers based on name keys */
 
+/* List of filetype pointers sorted by name, without ft[GEANY_FILETYPES_NONE], as this
+ * is usually treated specially. */
+static GSList *sorted_filetypes = NULL;
+
 
 static void create_radio_menu_item(GtkWidget *menu, const gchar *label, GeanyFiletype *ftype);
 
@@ -588,7 +592,15 @@ static GeanyFiletype *filetype_new(void)
 }
 
 
-/* Add a filetype pointer to the list of available filetypes,
+static gint cmp_filetype(gconstpointer pft1, gconstpointer pft2)
+{
+	const GeanyFiletype *ft1 = pft1, *ft2 = pft2;
+
+	return utils_str_casecmp(ft1->name, ft2->name);
+}
+
+
+/* Add a filetype pointer to the lists of available filetypes,
  * and set the filetype::id field. */
 static void filetype_add(GeanyFiletype *ft)
 {
@@ -598,6 +610,8 @@ static void filetype_add(GeanyFiletype *ft)
 	ft->id = filetypes_array->len;	/* len will be the index for filetype_array */
 	g_ptr_array_add(filetypes_array, ft);
 	g_hash_table_insert(filetypes_hash, ft->name, ft);
+
+	sorted_filetypes = g_slist_insert_sorted(sorted_filetypes, ft, cmp_filetype);
 }
 
 
@@ -1478,29 +1492,10 @@ GeanyFiletype *filetypes_index(gint idx)
 }
 
 
-static gint cmp_filetype(gconstpointer pft1, gconstpointer pft2)
-{
-	const GeanyFiletype *ft1 = pft1, *ft2 = pft2;
-
-	return utils_str_casecmp(ft1->name, ft2->name);
-}
-
-
-/* TODO: insert when adding filetypes properly */
-static GSList *sorted_filetypes = NULL;
-
-/* Does not include GEANY_FILETYPES_NONE, as this is usually treated specially. */
+/* Does not include ft[GEANY_FILETYPES_NONE], as this is usually treated specially. */
 void filetypes_foreach_sorted(GFunc callback, gpointer user_data)
 {
-	guint i;
 	GSList *item;
-
-	if (sorted_filetypes == NULL)
-	{
-		for (i = 1; i < filetypes_array->len; i++)
-			sorted_filetypes = g_slist_insert_sorted(sorted_filetypes, filetypes[i],
-				cmp_filetype);
-	}
 
 	for (item = sorted_filetypes; item != NULL; item = g_slist_next(item))
 		callback(item->data, user_data);
