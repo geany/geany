@@ -16,13 +16,21 @@ cat > Makefile << EOF
 all: build
 
 build:
-	@$WAF build \$@
+	@$WAF build
 
 install:
-	@$WAF install \$@
+	@if test -n "\$(DESTDIR)"; then \\
+		./waf install --destdir="\$(DESTDIR)"; \\
+	else \\
+		./waf install; \\
+	fi;
 
 uninstall:
-	@$WAF uninstall
+	@if test -n "\$(DESTDIR)"; then \\
+		$WAF uninstall --destdir="\$(DESTDIR)"; \\
+	else \\
+		$WAF uninstall; \\
+	fi;
 
 clean:
 	@$WAF clean
@@ -38,49 +46,23 @@ apidoc:
 	@$WAF --apidoc
 
 configure:
-	@$WAF configure \$@
+	@$WAF configure
 
 EOF
 
-# src/Makefile
-cat > src/Makefile << EOF
-
+template="
 all: build
 
 build:
-	cd .. && $WAF build \$@
+	cd .. && $WAF build
 
-EOF
+"
 
-# tagmanager/Makefile
-cat > tagmanager/Makefile << EOF
+echo "$template" > src/Makefile
+echo "$template" > tagmanager/Makefile
+echo "$template" > scintilla/Makefile
+echo "$template" > plugins/Makefile
 
-all: build
-
-build:
-	cd .. && $WAF build \$@
-
-EOF
-
-# scintilla/Makefile
-cat > scintilla/Makefile << EOF
-
-all: build
-
-build:
-	cd .. && $WAF build \$@
-
-EOF
-
-# plugins/Makefile
-cat > plugins/Makefile << EOF
-
-all: build
-
-build:
-	cd .. && $WAF build \$@
-
-EOF
 
 # configure
 cat > configure << EOF
