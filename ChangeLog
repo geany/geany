@@ -3,6 +3,12 @@
  * src/keyfile.c, src/utils.c, src/utils.h:
    Add utils_path_skip_root(), a relative path safe variant of
    g_path_skip_root (forgotten patch by Colomban Wendling, #2518658).
+ * src/keyfile.c, src/main.c:
+   Allow negative window coordinates when saving and restoring the
+   position of the main window.
+   Restore the main window position and size *after* the window has
+   been realised to get it positioned accordingly
+   (this affects at least Windows).
 
 
 2009-03-26  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

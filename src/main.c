@@ -150,6 +150,17 @@ static GOptionEntry entries[] =
 };
 
 
+static void setup_window_position(void)
+{
+	/* interprets the saved window geometry */
+	if (prefs.save_winpos)
+	{
+		gtk_window_move(GTK_WINDOW(main_widgets.window), ui_prefs.geometry[0], ui_prefs.geometry[1]);
+		gtk_window_set_default_size(GTK_WINDOW(main_widgets.window), ui_prefs.geometry[2], ui_prefs.geometry[3]);
+		if (ui_prefs.geometry[4] == 1)
+			gtk_window_maximize(GTK_WINDOW(main_widgets.window));
+	}
+}
 
 /* special things for the initial setup of the checkboxes and related stuff
  * an action on a setting is only performed if the setting is not equal to the program default
@@ -213,15 +224,6 @@ static void apply_settings(void)
 	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
 
 	ui_update_view_editor_menu_items();
-
-	/* interprets the saved window geometry */
-	if (prefs.save_winpos && ui_prefs.geometry[0] != -1)
-	{
-		gtk_window_move(GTK_WINDOW(main_widgets.window), ui_prefs.geometry[0], ui_prefs.geometry[1]);
-		gtk_window_set_default_size(GTK_WINDOW(main_widgets.window), ui_prefs.geometry[2], ui_prefs.geometry[3]);
-		if (ui_prefs.geometry[4] == 1)
-			gtk_window_maximize(GTK_WINDOW(main_widgets.window));
-	}
 
 	/* hide statusbar if desired */
 	if (! interface_prefs.statusbar_visible)
@@ -1051,7 +1053,14 @@ gint main(gint argc, gchar **argv)
 	build_menu_update(doc);
 	treeviews_update_tag_list(doc, FALSE);
 
-	/* finally realize the window to show the user what we have done */
+#ifdef G_OS_WIN32
+	/* Manually realise the main window to be able to set the position but don't show it.
+	 * We don't set the position after showing the window to avoid flickering. */
+	gtk_widget_realize(main_widgets.window);
+#endif
+	setup_window_position();
+
+	/* finally show the window */
 	gtk_widget_show(main_widgets.window);
 	main_status.main_window_realized = TRUE;
 

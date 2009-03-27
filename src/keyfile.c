@@ -800,10 +800,10 @@ static void load_ui_prefs(GKeyFile *config)
 		ui_prefs.geometry[4] = geo[4];
 
 		/* don't use insane values but when main windows was maximized last time, pos might be
-		 * negative at least on Windows for some reason */
+		 * negative (due to differences in root window and window decorations) */
 		if (ui_prefs.geometry[4] != 1)
 		{
-			for (i = 0; i < 4; i++)
+			for (i = 2; i < 4; i++)
 			{
 				if (ui_prefs.geometry[i] < -1)
 					ui_prefs.geometry[i] = -1;
