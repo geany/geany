@@ -596,7 +596,7 @@ static gint cmp_filetype(gconstpointer pft1, gconstpointer pft2)
 {
 	const GeanyFiletype *ft1 = pft1, *ft2 = pft2;
 
-	return utils_str_casecmp(ft1->name, ft2->name);
+	return utils_str_casecmp(ft1->title, ft2->title);
 }
 
 
@@ -611,7 +611,8 @@ static void filetype_add(GeanyFiletype *ft)
 	g_ptr_array_add(filetypes_array, ft);
 	g_hash_table_insert(filetypes_hash, ft->name, ft);
 
-	sorted_filetypes = g_slist_insert_sorted(sorted_filetypes, ft, cmp_filetype);
+	if (ft->id != GEANY_FILETYPES_NONE)
+		sorted_filetypes = g_slist_insert_sorted(sorted_filetypes, ft, cmp_filetype);
 }
 
 
@@ -660,7 +661,7 @@ static void setup_config_file_menus(void)
 }
 
 
-static GtkWidget *group_menus[GEANY_FILETYPE_GROUP_NONE];
+static GtkWidget *group_menus[GEANY_FILETYPE_GROUP_COUNT];
 
 static void create_sub_menu(GtkWidget *parent, gsize group_id, const gchar *title)
 {
