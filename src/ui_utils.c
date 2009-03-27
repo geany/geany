@@ -134,6 +134,14 @@ void ui_set_statusbar(gboolean log, const gchar *format, ...)
 }
 
 
+static GeanyFiletype *document_get_filetype(GeanyDocument *doc)
+{
+	g_return_val_if_fail(doc, NULL);
+
+	return filetypes[FILETYPE_ID(doc->file_type)];
+}
+
+
 /* updates the status bar document statistics */
 void ui_update_statusbar(GeanyDocument *doc, gint pos)
 {
@@ -149,13 +157,7 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 		const gchar sp[] = "      ";
 		guint line, col;
 		const gchar *cur_tag;
-		gchar *filetype_name;
-
-		/* workaround to make the name of filetype GEANY_FILETYPES_NONE translatable */
-		if (doc->file_type == NULL || doc->file_type->id == GEANY_FILETYPES_NONE)
-			filetype_name = _("None");
-		else
-			filetype_name = doc->file_type->name;
+		gchar *filetype_name = document_get_filetype(doc)->name;
 
 		if (stats_str == NULL)
 			stats_str = g_string_sized_new(120);

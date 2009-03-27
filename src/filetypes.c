@@ -85,8 +85,8 @@ static void init_builtin_filetypes(void)
 #define NONE	/* these macros are only to ease navigation */
 	ft = filetypes[GEANY_FILETYPES_NONE];
 	ft->lang = -2;
-	ft->name = g_strdup("None");
-	ft->title = g_strdup(_("All files"));
+	ft->name = g_strdup(_("None"));
+	ft->title = g_strdup(_("None"));
 	ft->extension = g_strdup("*");
 	ft->pattern = utils_strv_new("*", NULL);
 	ft->comment_open = NULL;
@@ -1294,11 +1294,13 @@ GtkFileFilter *filetypes_create_file_filter(const GeanyFiletype *ft)
 {
 	GtkFileFilter *new_filter;
 	gint i;
+	const gchar *title;
 
 	g_return_val_if_fail(ft != NULL, NULL);
 
 	new_filter = gtk_file_filter_new();
-	gtk_file_filter_set_name(new_filter, ft->title);
+	title = ft->id == GEANY_FILETYPES_NONE ? _("All files") : ft->title;
+	gtk_file_filter_set_name(new_filter, title);
 
 	for (i = 0; ft->pattern[i]; i++)
 	{

@@ -372,8 +372,6 @@ static void create_new_menu_items(void)
 
 		if (ft_templates[ft_id] == NULL)
 			continue;
-		if (ft_id == GEANY_FILETYPES_NONE)
-			label = _("None");
 
 		tmp_menu = gtk_menu_item_new_with_label(label);
 		gtk_widget_show(tmp_menu);

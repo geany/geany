@@ -7,7 +7,8 @@
    Sort filetype IDs randomly (so we can append randomly).
  * src/filetypes.c:
    Fix sorting Document menu filetype names.
-
+ * src/templates.c, src/filetypes.c, src/ui_utils.c:
+   Make None filetype name = title = _("None").
 
 
 2009-03-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
