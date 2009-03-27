@@ -1,6 +1,13 @@
+2009-03-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/keyfile.c, src/utils.c, src/utils.h:
+   Add utils_path_skip_root(), a relative path safe variant of
+   g_path_skip_root (forgotten patch by Colomban Wendling, #2518658).
+
+
 2009-03-26  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
- * src\main.c, src\plugins.c, src\win32.c, src\win32.h:
+ * src/main.c, src/plugins.c, src/win32.c, src/win32.h:
    Use g_win32_get_package_installation_directory_of_module() on Windows
    with newer GLib versions instead of deprecated API.
  * src/keybindings.c:

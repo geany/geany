@@ -76,6 +76,8 @@ gboolean utils_atob(const gchar *str);
 
 gboolean utils_is_absolute_path(const gchar *path);
 
+const gchar *utils_path_skip_root(const gchar *path);
+
 gdouble utils_scale_round(gdouble val, gdouble factor);
 
 gboolean utils_str_equal(const gchar *a, const gchar *b);

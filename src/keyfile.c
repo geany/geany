@@ -231,7 +231,6 @@ static gchar *get_session_file_string(GeanyDocument *doc)
 {
 	gchar *fname;
 	gchar *locale_filename;
-	gchar *rootless_filename;
 	GeanyFiletype *ft = doc->file_type;
 
 	if (ft == NULL)	/* can happen when saving a new file when quitting */
@@ -243,10 +242,7 @@ static gchar *get_session_file_string(GeanyDocument *doc)
 	 * writing with usual colons which must never appear in a filename and replace them
 	 * back when we read the file again from the file.
 	 * (g_path_skip_root() to skip C:\... on Windows) */
-	rootless_filename = (gchar *) g_path_skip_root(locale_filename);
-	if (locale_filename == NULL)
-		rootless_filename = locale_filename;
-	g_strdelimit(rootless_filename, ";", ':');
+	g_strdelimit((gchar*) utils_path_skip_root(locale_filename), ";", ':');
 
 	fname = g_strdup_printf("%d;%s;%d;%d;%d;%d;%d;%s;%d",
 		sci_get_current_position(doc->editor->sci),
@@ -894,7 +890,6 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	guint pos;
 	const gchar *ft_name;
 	gchar *locale_filename;
-	gchar *rootless_filename;
 	gint enc_idx, indent_type;
 	gboolean ro, auto_indent, line_wrapping;
 	/** TODO when we have a global pref for line breaking, use its value */
@@ -911,10 +906,7 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	/* try to get the locale equivalent for the filename */
 	locale_filename = utils_get_locale_from_utf8(tmp[7]);
 	/* replace ':' back with ';' (see get_session_file_string for details) */
-	rootless_filename = (gchar *) g_path_skip_root(locale_filename);
-	if (locale_filename == NULL)
-		rootless_filename = locale_filename;
-	g_strdelimit(rootless_filename, ":", ';');
+	g_strdelimit((gchar*) utils_path_skip_root(locale_filename), ":", ';');
 
 	if (len > 8)
 		line_breaking = atoi(tmp[8]);
