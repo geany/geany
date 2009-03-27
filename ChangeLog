@@ -1,3 +1,10 @@
+2009-03-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/dialogs.c, src/filetypes.c, src/filetypes.h:
+   Sort open dialog filetypes in combo boxes by title.
+   Add filetypes_foreach_sorted(), filetypes_find().
+
+
 2009-03-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/highlighting.c, src/dialogs.c, src/plugindata.h,

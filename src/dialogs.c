@@ -71,6 +71,14 @@ static GtkWidget *add_file_open_extra_widget(void);
 
 
 #if ! GEANY_USE_WIN32_DIALOG
+static gboolean cmp_ft_title(gconstpointer pft, gconstpointer user_data)
+{
+	const GeanyFiletype *ft = pft;
+
+	return (strcmp(ft->title, user_data) == 0);
+}
+
+
 static void
 on_file_open_dialog_response           (GtkDialog *dialog,
                                         gint response,
@@ -81,8 +89,8 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 	if (response == GTK_RESPONSE_ACCEPT || response == GEANY_RESPONSE_VIEW)
 	{
 		GSList *filelist;
-		gint filetype_idx = gtk_combo_box_get_active(GTK_COMBO_BOX(
-						ui_lookup_widget(GTK_WIDGET(dialog), "filetype_combo")));
+		GtkComboBox *filecombo = GTK_COMBO_BOX(
+						ui_lookup_widget(GTK_WIDGET(dialog), "filetype_combo"));
 		gint encoding_idx = gtk_combo_box_get_active(GTK_COMBO_BOX(
 						ui_lookup_widget(GTK_WIDGET(dialog), "encoding_combo")));
 		GeanyFiletype *ft = NULL;
@@ -90,8 +98,12 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 		gboolean ro = (response == GEANY_RESPONSE_VIEW);	/* View clicked */
 
 		/* ignore detect from file item */
-		if (filetype_idx > 0 && filetype_idx < GEANY_MAX_BUILT_IN_FILETYPES)
-			ft = filetypes[filetype_idx];
+		if (gtk_combo_box_get_active(filecombo) > 0)
+		{
+			gchar *title = gtk_combo_box_get_active_text(filecombo);
+			ft = filetypes_find(cmp_ft_title, title);
+			g_free(title);
+		}
 		if (encoding_idx >= 0 && encoding_idx < GEANY_ENCODINGS_MAX)
 			charset = encodings[encoding_idx].charset;
 
@@ -171,6 +183,17 @@ on_file_open_check_hidden_toggled      (GtkToggleButton *togglebutton,
 
 
 #if ! GEANY_USE_WIN32_DIALOG
+static void add_opendlg_filetype(gpointer pft, gpointer filetype_combo)
+{
+	GeanyFiletype *ft = pft;
+
+	gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), ft->title);
+
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
+		filetypes_create_file_filter(ft));
+}
+
+
 static void create_open_file_dialog(void)
 {
 	GtkWidget *filetype_combo, *encoding_combo;
@@ -214,12 +237,7 @@ static void create_open_file_dialog(void)
 	/* now create meta filter "All Source" */
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
 				filetypes_create_file_filter_all_source());
-	for (i = 1; i < filetypes_array->len; i++)
-	{
-		gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), filetypes[i]->title);
-		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
-				filetypes_create_file_filter(filetypes[i]));
-	}
+	filetypes_foreach_sorted(add_opendlg_filetype, filetype_combo);
 	gtk_combo_box_set_active(GTK_COMBO_BOX(filetype_combo), 0);
 
 	/* fill encoding combo box */

@@ -712,20 +712,14 @@ void filetypes_init()
 }
 
 
-typedef gboolean FileTypesPredicate(GeanyFiletype *ft, gpointer user_data);
-
 /* Find a filetype that predicate returns TRUE for, otherwise return NULL. */
-static GeanyFiletype *filetypes_find(gboolean source_only,
-		FileTypesPredicate predicate, gpointer user_data)
+GeanyFiletype *filetypes_find(GCompareFunc predicate, gpointer user_data)
 {
 	guint i;
 
 	for (i = 0; i < filetypes_array->len; i++)
 	{
 		GeanyFiletype *ft = filetypes[i];
-
-		if (source_only && i == GEANY_FILETYPES_NONE)
-			continue;	/* None is not for source files */
 
 		if (predicate(ft, user_data))
 			return ft;
@@ -734,11 +728,15 @@ static GeanyFiletype *filetypes_find(gboolean source_only,
 }
 
 
-static gboolean match_basename(GeanyFiletype *ft, gpointer user_data)
+static gboolean match_basename(gconstpointer pft, gconstpointer user_data)
 {
+	const GeanyFiletype *ft = pft;
 	const gchar *base_filename = user_data;
 	gint j;
 	gboolean ret = FALSE;
+
+	if (ft->id == GEANY_FILETYPES_NONE)
+		return FALSE;
 
 	for (j = 0; ft->pattern[j] != NULL; j++)
 	{
@@ -770,7 +768,7 @@ GeanyFiletype *filetypes_detect_from_extension(const gchar *utf8_filename)
 	setptr(base_filename, g_utf8_strdown(base_filename, -1));
 #endif
 
-	ft = filetypes_find(TRUE, match_basename, base_filename);
+	ft = filetypes_find(match_basename, base_filename);
 	if (ft == NULL)
 		ft = filetypes[GEANY_FILETYPES_NONE];
 
@@ -1479,4 +1477,32 @@ GeanyFiletype *filetypes_index(gint idx)
 	return (idx >= 0 && idx < (gint) filetypes_array->len) ? filetypes[idx] : NULL;
 }
 
+
+static gint cmp_filetype(gconstpointer pft1, gconstpointer pft2)
+{
+	const GeanyFiletype *ft1 = pft1, *ft2 = pft2;
+
+	return utils_str_casecmp(ft1->name, ft2->name);
+}
+
+
+/* TODO: insert when adding filetypes properly */
+static GSList *sorted_filetypes = NULL;
+
+/* Does not include GEANY_FILETYPES_NONE, as this is usually treated specially. */
+void filetypes_foreach_sorted(GFunc callback, gpointer user_data)
+{
+	guint i;
+	GSList *item;
+
+	if (sorted_filetypes == NULL)
+	{
+		for (i = 1; i < filetypes_array->len; i++)
+			sorted_filetypes = g_slist_insert_sorted(sorted_filetypes, filetypes[i],
+				cmp_filetype);
+	}
+
+	for (item = sorted_filetypes; item != NULL; item = g_slist_next(item))
+		callback(item->data, user_data);
+}
 
