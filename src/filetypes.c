@@ -74,7 +74,7 @@ GHashTable *filetypes_hash = NULL;	/* Hash of filetype pointers based on name ke
 static GSList *sorted_filetypes = NULL;
 
 
-static void create_radio_menu_item(GtkWidget *menu, const gchar *label, GeanyFiletype *ftype);
+static void create_radio_menu_item(GtkWidget *menu, GeanyFiletype *ftype);
 
 
 /* Note: remember to update HACKING if this function is renamed. */
@@ -660,61 +660,41 @@ static void setup_config_file_menus(void)
 }
 
 
-#define create_sub_menu(menu, item, title) \
-	(menu) = gtk_menu_new(); \
-	(item) = gtk_menu_item_new_with_mnemonic((title)); \
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM((item)), (menu)); \
-	gtk_container_add(GTK_CONTAINER(filetype_menu), (item)); \
-	gtk_widget_show((item));
+static GtkWidget *group_menus[GEANY_FILETYPE_GROUP_NONE];
+
+static void create_sub_menu(GtkWidget *parent, gsize group_id, const gchar *title)
+{
+	GtkWidget *menu, *item;
+
+	menu = gtk_menu_new();
+	item = gtk_menu_item_new_with_mnemonic((title));
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), menu);
+	gtk_container_add(GTK_CONTAINER(parent), item);
+	gtk_widget_show(item);
+	group_menus[group_id] = menu;
+}
+
+
+static void add_ft_menu_item(gpointer pft, gpointer user_data)
+{
+	GeanyFiletype *ft = pft;
+
+	create_radio_menu_item(group_menus[ft->group], ft);
+}
 
 
 static void create_set_filetype_menu(void)
 {
-	filetype_id ft_id;
 	GtkWidget *filetype_menu = ui_lookup_widget(main_widgets.window, "set_filetype1_menu");
-	GtkWidget *sub_menu = filetype_menu;
-	GtkWidget *sub_menu_programming, *sub_menu_scripts, *sub_menu_markup, *sub_menu_misc;
-	GtkWidget *sub_item_programming, *sub_item_scripts, *sub_item_markup, *sub_item_misc;
 
-	create_sub_menu(sub_menu_programming, sub_item_programming, _("_Programming Languages"));
-	create_sub_menu(sub_menu_scripts, sub_item_scripts, _("_Scripting Languages"));
-	create_sub_menu(sub_menu_markup, sub_item_markup, _("_Markup Languages"));
-	create_sub_menu(sub_menu_misc, sub_item_misc, _("M_iscellaneous Languages"));
+	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_COMPILED, _("_Programming Languages"));
+	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_SCRIPT, _("_Scripting Languages"));
+	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_MARKUP, _("_Markup Languages"));
+	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_MISC, _("M_iscellaneous Languages"));
 
 	/* Append all filetypes to the filetype menu */
-	for (ft_id = 0; ft_id < filetypes_array->len; ft_id++)
-	{
-		GeanyFiletype *ft = filetypes[ft_id];
-		const gchar *title = ft->title;
-
-		/* insert separators for different filetype groups */
-		switch (ft->group)
-		{
-			case GEANY_FILETYPE_GROUP_COMPILED:	/* programming */
-				sub_menu = sub_menu_programming;
-				break;
-
-			case GEANY_FILETYPE_GROUP_SCRIPT:	/* scripts */
-				sub_menu = sub_menu_scripts;
-				break;
-
-			case GEANY_FILETYPE_GROUP_MARKUP:	/* markup */
-				sub_menu = sub_menu_markup;
-				break;
-
-			case GEANY_FILETYPE_GROUP_MISC:	/* misc */
-				sub_menu = sub_menu_misc;
-				break;
-
-			case GEANY_FILETYPE_GROUP_NONE:	/* none */
-				sub_menu = filetype_menu;
-				title = _("None");
-				break;
-
-			default: break;
-		}
-		create_radio_menu_item(sub_menu, title, ft);
-	}
+	filetypes_foreach_sorted(add_ft_menu_item, NULL);
+	create_radio_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_NONE]);
 }
 
 
@@ -994,12 +974,12 @@ on_filetype_change                     (GtkMenuItem     *menuitem,
 }
 
 
-static void create_radio_menu_item(GtkWidget *menu, const gchar *label, GeanyFiletype *ftype)
+static void create_radio_menu_item(GtkWidget *menu, GeanyFiletype *ftype)
 {
 	static GSList *group = NULL;
 	GtkWidget *tmp;
 
-	tmp = gtk_radio_menu_item_new_with_label(group, label);
+	tmp = gtk_radio_menu_item_new_with_label(group, ftype->title);
 	group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(tmp));
 	ftype->priv->menu_item = tmp;
 	gtk_widget_show(tmp);

@@ -5,6 +5,9 @@
    Add filetypes_foreach_sorted(), filetypes_find().
  * src/filetypes.h, src/plugindata.h:
    Sort filetype IDs randomly (so we can append randomly).
+ * src/filetypes.c:
+   Fix sorting Document menu filetype names.
+
 
 
 2009-03-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
