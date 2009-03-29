@@ -589,7 +589,7 @@ on_toolbar_large_icons1_activate       (GtkMenuItem     *menuitem,
 	if (ignore_toolbar_toggle) return;
 
 	toolbar_prefs.icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
-	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), GTK_ICON_SIZE_LARGE_TOOLBAR);
+	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
 }
 
 
@@ -600,7 +600,18 @@ on_toolbar_small_icons1_activate       (GtkMenuItem     *menuitem,
 	if (ignore_toolbar_toggle) return;
 
 	toolbar_prefs.icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR;
-	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), GTK_ICON_SIZE_SMALL_TOOLBAR);
+	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
+}
+
+
+void
+on_very_small_icons1_activate          (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	if (ignore_toolbar_toggle) return;
+
+	toolbar_prefs.icon_size = GTK_ICON_SIZE_MENU;
+	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
 }
 
 
@@ -820,7 +831,9 @@ toolbar_popup_menu                     (GtkWidget *widget,
 		{
 			case GTK_ICON_SIZE_LARGE_TOOLBAR:
 					w = ui_lookup_widget(ui_widgets.toolbar_menu, "large_icons1"); break;
-			default: w = ui_lookup_widget(ui_widgets.toolbar_menu, "small_icons1"); break;
+			case GTK_ICON_SIZE_SMALL_TOOLBAR:
+					w = ui_lookup_widget(ui_widgets.toolbar_menu, "small_icons1"); break;
+			default: w = ui_lookup_widget(ui_widgets.toolbar_menu, "very_small_icons1"); break;
 		}
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(w), TRUE);
 

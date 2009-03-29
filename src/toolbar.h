@@ -30,6 +30,7 @@ typedef struct GeanyToolbarPrefs
 	gboolean		visible;
 	GtkIconSize		icon_size;
 	gint			icon_style;
+	gboolean		append_to_menu;
 }
 GeanyToolbarPrefs;
 
@@ -45,6 +46,8 @@ GtkAction *toolbar_get_action_by_name(const gchar *name);
 gint toolbar_get_insert_position(void);
 
 void toolbar_add_config_file_menu_item(void);
+
+void toolbar_update_ui(void);
 
 GtkWidget *toolbar_init(void);
 

@@ -165,7 +165,6 @@ void toolbar_add_config_file_menu_item(void)
 GtkWidget *toolbar_init(void)
 {
 	GtkWidget *toolbar;
-	GtkBox *box;
 	GtkAction *action_new;
 	GtkAction *action_open;
 	GtkAction *action_build;
@@ -233,13 +232,8 @@ GtkWidget *toolbar_init(void)
 		}
 	}
 
-	/* Add the toolbar widget to the main UI */
-	toolbar = gtk_ui_manager_get_widget(uim, "/ui/GeanyToolbar");
-	box = GTK_BOX(ui_lookup_widget(main_widgets.window, "vbox1"));
-	gtk_box_pack_start(box, toolbar, FALSE, FALSE, 0);
-	gtk_box_reorder_child(box, toolbar, 1);
-
 	/* Set some pointers */
+	toolbar = gtk_ui_manager_get_widget(uim, "/ui/GeanyToolbar");
 	ui_widgets.new_file_menu = geany_menu_button_action_get_menu(
 		GEANY_MENU_BUTTON_ACTION(action_new));
 	ui_widgets.recent_files_menu_toolbar = geany_menu_button_action_get_menu(
@@ -248,6 +242,76 @@ GtkWidget *toolbar_init(void)
 	g_signal_connect(toolbar, "key-press-event", G_CALLBACK(on_escape_key_press_event), NULL);
 
 	return toolbar;
+}
+
+
+void toolbar_update_ui(void)
+{
+	static GtkWidget *hbox_menubar = NULL;
+	static GtkWidget *menubar = NULL;
+	static GtkWidget *menubar_toolbar_separator = NULL;
+	GtkWidget *parent;
+
+	if (menubar == NULL)
+	{	/* cache widget pointers */
+		hbox_menubar = ui_lookup_widget(main_widgets.window, "hbox_menubar");
+		menubar = ui_lookup_widget(main_widgets.window, "menubar1");
+
+		menubar_toolbar_separator = GTK_WIDGET(gtk_separator_tool_item_new());
+		gtk_toolbar_insert(GTK_TOOLBAR(main_widgets.toolbar),
+			GTK_TOOL_ITEM(menubar_toolbar_separator), 0);
+	}
+
+	parent = gtk_widget_get_parent(main_widgets.toolbar);
+
+	if (toolbar_prefs.append_to_menu)
+	{
+		if (parent != NULL)
+		{
+			if (parent != hbox_menubar)
+			{	/* here we manually 'reparent' the toolbar, gtk_widget_reparent() doesn't
+				 * like to do it */
+				g_object_ref(main_widgets.toolbar);
+
+				gtk_container_remove(GTK_CONTAINER(parent), main_widgets.toolbar);
+				gtk_box_pack_start(GTK_BOX(hbox_menubar), main_widgets.toolbar, TRUE, TRUE, 0);
+				gtk_box_reorder_child(GTK_BOX(hbox_menubar), main_widgets.toolbar, 1);
+
+				g_object_unref(main_widgets.toolbar);
+			}
+		}
+		else
+			gtk_box_pack_start(GTK_BOX(hbox_menubar), main_widgets.toolbar, TRUE, TRUE, 0);
+	}
+	else
+	{
+		GtkWidget *box = ui_lookup_widget(main_widgets.window, "vbox1");
+
+		if (parent != NULL)
+		{
+			if (parent != box)
+			{
+				g_object_ref(main_widgets.toolbar);
+
+				gtk_container_remove(GTK_CONTAINER(parent), main_widgets.toolbar);
+				gtk_box_pack_start(GTK_BOX(box), main_widgets.toolbar, FALSE, FALSE, 0);
+				gtk_box_reorder_child(GTK_BOX(box), main_widgets.toolbar, 1);
+
+				g_object_unref(main_widgets.toolbar);
+			}
+		}
+		else
+		{
+			gtk_box_pack_start(GTK_BOX(box), main_widgets.toolbar, FALSE, FALSE, 0);
+			gtk_box_reorder_child(GTK_BOX(box), main_widgets.toolbar, 1);
+		}
+	}
+	/* the separator between the menubar and the toolbar */
+	ui_widget_show_hide(menubar_toolbar_separator, toolbar_prefs.append_to_menu);
+	/* we need to adjust the packing flags for the menubar to expand it if it is alone in the
+	 * hbox and not expand it if the toolbar is appended */
+	gtk_box_set_child_packing(GTK_BOX(hbox_menubar), menubar,
+		! toolbar_prefs.append_to_menu, ! toolbar_prefs.append_to_menu, 0, GTK_PACK_START);
 }
 
 

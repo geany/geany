@@ -379,6 +379,7 @@ static void save_dialog_prefs(GKeyFile *config)
 
 	/* toolbar */
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show", toolbar_prefs.visible);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_append_to_menu", toolbar_prefs.append_to_menu);
 	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_style", toolbar_prefs.icon_style);
 	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_size", toolbar_prefs.icon_size);
 
@@ -669,6 +670,7 @@ static void load_dialog_prefs(GKeyFile *config)
 
 	/* toolbar */
 	toolbar_prefs.visible = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show", TRUE);
+	toolbar_prefs.append_to_menu = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_append_to_menu", FALSE);
 	{
 		GtkIconSize tb_iconsize;
 		GtkToolbarStyle tb_style;

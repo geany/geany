@@ -217,11 +217,12 @@ static void apply_settings(void)
 
 	/* sets the icon size of the toolbar, use user preferences (.gtkrc) if not set */
 	if (toolbar_prefs.icon_size == GTK_ICON_SIZE_SMALL_TOOLBAR ||
-		toolbar_prefs.icon_size == GTK_ICON_SIZE_LARGE_TOOLBAR)
+		toolbar_prefs.icon_size == GTK_ICON_SIZE_LARGE_TOOLBAR ||
+		toolbar_prefs.icon_size == GTK_ICON_SIZE_MENU)
 	{
 		gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
 	}
-	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
+	toolbar_update_ui();
 
 	ui_update_view_editor_menu_items();
 

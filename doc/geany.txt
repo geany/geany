@@ -1540,6 +1540,10 @@ Toolbar
 Show Toolbar
     Whether to show the toolbar.
 
+Append Toolbar to the Menu
+    Allows to append the toolbar to the main menu bar instead of placing it below.
+    This is useful to save vertical space.
+
 
 Appearance
 ``````````
@@ -1549,7 +1553,7 @@ Icon Style
     icons or just text.
 
 Icon size
-    Select the size of the icons you see (large or small).
+    Select the size of the icons you see (large, small or very small).
 
 
 Editor Features tab in preferences dialog
