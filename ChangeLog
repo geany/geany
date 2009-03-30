@@ -1,3 +1,11 @@
+2009-03-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * scintilla/LexOthers.cxx, src/highlighting.c, tagmanager/conf.c:
+   Backport recent changes from Scintilla CVS to add partial support
+   for RFC2822 styled text using the Properties lexer.
+   Ignore leading whitespace for config files and RFC2822 text.
+
+
 2009-03-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * doc/geany.html, doc/geany.txt, geany.glade, src/callbacks.c,
