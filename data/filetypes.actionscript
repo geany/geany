@@ -24,9 +24,9 @@ globalclass=0x0000d0;0xffffff;true;false
 
 [keywords]
 # all items must be in one line
-primary=break case catch class const continue default do dynamic each else extends false final finally for function get if implements import in include Infinity int interface internal label namespace NaN native new null override package private protected public return set static super switch this throw true try typeof uint undefined var while with void
-secondary=arguments decodeURI decodeURIcomponent encodeURI encodeURIcomponent escape isFinite isNaN isXMLName parseFloat parseInt trace unescape
-classes=ArgumentError Array Boolean Class Date DefinitionError Error EvalError Function Math NameSpace Null Number Object QName RangeError ReferenceError RegExp SecurityError String SyntaxError TypeError URIError Vector VerifyError XML XMLList
+primary=arguments break case catch class const continue default do dynamic each else extends false final finally for function get if implements import in include Infinity interface internal label namespace NaN native new null override package private protected public return set static super switch this throw true try typeof undefined var while with
+secondary=decodeURI decodeURIcomponent encodeURI encodeURIcomponent escape isFinite isNaN isXMLName parseFloat parseInt trace unescape
+classes=ArgumentError Array Boolean Class Date DefinitionError Error EvalError Function int Math NameSpace Null Number Object QName RangeError ReferenceError RegExp SecurityError String SyntaxError TypeError uint URIError Vector VerifyError void XML XMLList
 
 [settings]
 # default extension used when saving files

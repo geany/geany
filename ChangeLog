@@ -4,6 +4,8 @@
    Backport recent changes from Scintilla CVS to add partial support
    for RFC2822 styled text using the Properties lexer.
    Ignore leading whitespace for config files and RFC2822 text.
+ * data/filetypes.actionscript:
+   Update/fix ActionScript keywords (patch by Chris Macksey, thanks).
 
 
 2009-03-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
