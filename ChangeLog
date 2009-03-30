@@ -6,6 +6,9 @@
    Ignore leading whitespace for config files and RFC2822 text.
  * data/filetypes.actionscript:
    Update/fix ActionScript keywords (patch by Chris Macksey, thanks).
+ * THANKS, src/treeviews.c:
+   Display file/directory icons in the Documents sidebar
+   (patch by Simon Treny, thanks).
 
 
 2009-03-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
