@@ -3378,8 +3378,8 @@ For example::
 Then edit it and add any of the available elements listed in the file or remove
 any of the existing elements. Of course, you can also reorder the elements as
 you wish and add or remove additional separators.
-This file must be valid XML unless it can't be loaded and the global toolbar
-UI definition is used.
+This file must be valid XML, otherwise the global toolbar UI definition
+will be used instead.
 
 .. note::
     (1) You cannot add new actions which are not listed below.
@@ -3423,7 +3423,7 @@ SearchEntry        The search field belonging to the 'Search' element (can be us
 Search             Find the entered text in the current file (only useful if you also
                    use 'SearchEntry')
 GotoEntry          The goto field belonging to the 'Goto' element (can be used alone)
-Goto               Jump to the entered line number (only useful if you also use 'SearchEntry')
+Goto               Jump to the entered line number (only useful if you also use 'GotoEntry')
 Preferences        Show the preferences dialog
 Quit               Quit Geany
 ================== ==============================================================================
