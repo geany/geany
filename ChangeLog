@@ -7,6 +7,9 @@
    Make sorted_filetypes list public, and include None filetype first.
    Rename filetypes_foreach_sorted() to filetypes_foreach_named() to
    show it doesn't include the None filetype.
+ * src/dialogs.c, src/filetypes.c:
+   Use g_slist_nth_data() with sorted_filetypes list instead of
+   filetypes_find() as it is neater.
 
 
 2009-03-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

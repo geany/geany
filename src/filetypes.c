@@ -70,7 +70,9 @@ GPtrArray *filetypes_array = NULL;	/* Dynamic array of filetype pointers */
 static GHashTable *filetypes_hash = NULL;	/* Hash of filetype pointers based on name keys */
 
 /* List of filetype pointers sorted by name, with ft[GEANY_FILETYPES_NONE] first, as this
- * is usually treated specially. */
+ * is usually treated specially.
+ * The list does not change after filetypes have been initialized, so you can use
+ * @code g_slist_nth_data(sorted_filetypes, n) @endcode and expect the same result at different times. */
 GSList *sorted_filetypes = NULL;
 
 
