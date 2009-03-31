@@ -362,12 +362,13 @@ on_new_with_template                   (GtkMenuItem     *menuitem,
 /* template items for the new file menu */
 static void create_new_menu_items(void)
 {
-	filetype_id ft_id;
+	GeanyFiletype *ft;
+	GSList *node;
 
-	for (ft_id = 0; ft_id < GEANY_MAX_BUILT_IN_FILETYPES; ft_id++)
+	foreach_slist(ft, node, sorted_filetypes)
 	{
+		filetype_id ft_id = ft->id;
 		GtkWidget *tmp_menu, *tmp_button;
-		GeanyFiletype *ft = filetypes[ft_id];
 		const gchar *label = ft->title;
 
 		if (ft_templates[ft_id] == NULL)

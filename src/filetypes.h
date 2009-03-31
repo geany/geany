@@ -144,10 +144,12 @@ extern GPtrArray *filetypes_array;
  * Example: filetypes[GEANY_FILETYPES_C]->name = ...; */
 #define filetypes	((GeanyFiletype **)filetypes_array->pdata)
 
+extern GSList *sorted_filetypes;
+
 
 GeanyFiletype *filetypes_lookup_by_name(const gchar *name);
 
-void filetypes_foreach_sorted(GFunc callback, gpointer user_data);
+void filetypes_foreach_named(GFunc callback, gpointer user_data);
 
 GeanyFiletype *filetypes_find(GCompareFunc predicate, gpointer user_data);
 

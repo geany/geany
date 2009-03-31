@@ -67,11 +67,11 @@ GeanyFiletypePrivate;
 
 GPtrArray *filetypes_array = NULL;	/* Dynamic array of filetype pointers */
 
-GHashTable *filetypes_hash = NULL;	/* Hash of filetype pointers based on name keys */
+static GHashTable *filetypes_hash = NULL;	/* Hash of filetype pointers based on name keys */
 
-/* List of filetype pointers sorted by name, without ft[GEANY_FILETYPES_NONE], as this
+/* List of filetype pointers sorted by name, with ft[GEANY_FILETYPES_NONE] first, as this
  * is usually treated specially. */
-static GSList *sorted_filetypes = NULL;
+GSList *sorted_filetypes = NULL;
 
 
 static void create_radio_menu_item(GtkWidget *menu, GeanyFiletype *ftype);
@@ -596,6 +596,11 @@ static gint cmp_filetype(gconstpointer pft1, gconstpointer pft2)
 {
 	const GeanyFiletype *ft1 = pft1, *ft2 = pft2;
 
+	if (ft1->id == GEANY_FILETYPES_NONE)
+		return -1;
+	if (ft2->id == GEANY_FILETYPES_NONE)
+		return 1;
+
 	return utils_str_casecmp(ft1->title, ft2->title);
 }
 
@@ -611,8 +616,7 @@ static void filetype_add(GeanyFiletype *ft)
 	g_ptr_array_add(filetypes_array, ft);
 	g_hash_table_insert(filetypes_hash, ft->name, ft);
 
-	if (ft->id != GEANY_FILETYPES_NONE)
-		sorted_filetypes = g_slist_insert_sorted(sorted_filetypes, ft, cmp_filetype);
+	sorted_filetypes = g_slist_insert_sorted(sorted_filetypes, ft, cmp_filetype);
 }
 
 
@@ -661,7 +665,7 @@ static void setup_config_file_menus(void)
 }
 
 
-static GtkWidget *group_menus[GEANY_FILETYPE_GROUP_COUNT];
+static GtkWidget *group_menus[GEANY_FILETYPE_GROUP_COUNT] = {NULL};
 
 static void create_sub_menu(GtkWidget *parent, gsize group_id, const gchar *title)
 {
@@ -694,7 +698,7 @@ static void create_set_filetype_menu(void)
 	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_MISC, _("M_iscellaneous Languages"));
 
 	/* Append all filetypes to the filetype menu */
-	filetypes_foreach_sorted(add_ft_menu_item, NULL);
+	filetypes_foreach_named(add_ft_menu_item, NULL);
 	create_radio_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_NONE]);
 }
 
@@ -1476,11 +1480,15 @@ GeanyFiletype *filetypes_index(gint idx)
 
 
 /* Does not include ft[GEANY_FILETYPES_NONE], as this is usually treated specially. */
-void filetypes_foreach_sorted(GFunc callback, gpointer user_data)
+void filetypes_foreach_named(GFunc callback, gpointer user_data)
 {
-	GSList *item;
+	GSList *node;
+	GeanyFiletype *ft;
 
-	for (item = sorted_filetypes; item != NULL; item = g_slist_next(item))
-		callback(item->data, user_data);
+	foreach_slist(ft, node, sorted_filetypes)
+	{
+		if (ft->id != GEANY_FILETYPES_NONE)
+			callback(ft, user_data);
+	}
 }
 

@@ -57,6 +57,11 @@
 	for (ptr = ptr_array->pdata, item = *ptr; \
 		ptr < &ptr_array->pdata[ptr_array->len]; ++ptr, item = *ptr)
 
+/* @param node should be a (GSList*), needed for implementation. */
+#define foreach_slist(data_ptr, node, list) \
+	for (node = list, data_ptr = node ? node->data : NULL; node != NULL; \
+		node = g_slist_next(node), data_ptr = node ? node->data : NULL)
+
 
 void utils_open_browser(const gchar *uri);
 

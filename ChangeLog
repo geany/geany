@@ -1,3 +1,14 @@
+2009-03-31  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/templates.c, src/utils.h, src/dialogs.c, src/filetypes.c,
+   src/filetypes.h:
+   Fix sorting filetype template menu items.
+   Add foreach_slist() macro.
+   Make sorted_filetypes list public, and include None filetype first.
+   Rename filetypes_foreach_sorted() to filetypes_foreach_named() to
+   show it doesn't include the None filetype.
+
+
 2009-03-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/dialogs.c, src/filetypes.c, src/filetypes.h:

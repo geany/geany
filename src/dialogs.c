@@ -237,7 +237,7 @@ static void create_open_file_dialog(void)
 	/* now create meta filter "All Source" */
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
 				filetypes_create_file_filter_all_source());
-	filetypes_foreach_sorted(add_opendlg_filetype, filetype_combo);
+	filetypes_foreach_named(add_opendlg_filetype, filetype_combo);
 	gtk_combo_box_set_active(GTK_COMBO_BOX(filetype_combo), 0);
 
 	/* fill encoding combo box */
