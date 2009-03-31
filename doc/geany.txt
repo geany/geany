@@ -376,7 +376,7 @@ Geany installation on Windows).
 To get a defined style get noticed by Geany you must it assign to
 one of Geany's widgets. To do so, use the following line::
 
-    widget "Geany*" style "geany_style"
+    widget "Geany*" style "geanyStyle"
 
 This would assign your already defined style "geany_style" to all Geany
 widgets. You can also assign styles only to specific widgets. At the
@@ -389,6 +389,8 @@ moment you can use the following widgets:
 * GeanyDialogPrefs
 * GeanyDialogProject
 * GeanyDialogSearch
+* GeanyMenubar
+* GeanyToolbar
 
 Example of a simple ``.gtkrc-2.0``::
 

@@ -292,6 +292,8 @@ static void main_init(void)
 	gtk_widget_set_name(main_widgets.window, "GeanyMainWindow");
 	gtk_widget_set_name(ui_widgets.toolbar_menu, "GeanyToolbarMenu");
 	gtk_widget_set_name(main_widgets.editor_menu, "GeanyEditMenu");
+	gtk_widget_set_name(ui_lookup_widget(main_widgets.window, "menubar1"), "GeanyMenubar");
+	gtk_widget_set_name(main_widgets.toolbar, "GeanyToolbar");
 
 #if ! GTK_CHECK_VERSION(2, 10, 0)
 	/* hide Page setup menu item, it isn't supported with non-GTK printing */
