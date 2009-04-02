@@ -91,7 +91,7 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 
 		/* ignore detect from file item */
 		if (filetype_idx > 0 && filetype_idx < GEANY_MAX_BUILT_IN_FILETYPES)
-			ft = g_slist_nth_data(sorted_filetypes, filetype_idx);
+			ft = g_slist_nth_data(filetypes_by_title, filetype_idx);
 		if (encoding_idx >= 0 && encoding_idx < GEANY_ENCODINGS_MAX)
 			charset = encodings[encoding_idx].charset;
 
@@ -216,7 +216,7 @@ static void create_open_file_dialog(void)
 	/* now create meta filter "All Source" */
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
 				filetypes_create_file_filter_all_source());
-	foreach_slist(ft, node, sorted_filetypes)
+	foreach_slist(ft, node, filetypes_by_title)
 	{
 		if (ft->id == GEANY_FILETYPES_NONE)
 			continue;

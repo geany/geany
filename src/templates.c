@@ -365,7 +365,7 @@ static void create_new_menu_items(void)
 	GeanyFiletype *ft;
 	GSList *node;
 
-	foreach_slist(ft, node, sorted_filetypes)
+	foreach_slist(ft, node, filetypes_by_title)
 	{
 		filetype_id ft_id = ft->id;
 		GtkWidget *tmp_menu, *tmp_button;

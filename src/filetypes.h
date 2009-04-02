@@ -144,7 +144,7 @@ extern GPtrArray *filetypes_array;
  * Example: filetypes[GEANY_FILETYPES_C]->name = ...; */
 #define filetypes	((GeanyFiletype **)filetypes_array->pdata)
 
-extern GSList *sorted_filetypes;
+extern GSList *filetypes_by_title;
 
 
 GeanyFiletype *filetypes_lookup_by_name(const gchar *name);

@@ -1,3 +1,13 @@
+2009-04-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/templates.c, src/dialogs.c, src/plugindata.h, src/filetypes.c,
+   src/filetypes.h, src/plugins.c, plugins/saveactions.c:
+   Rename sorted_filetypes filetypes_by_title, and add to GeanyData
+   for plugin API access.
+   Fix order of filetypes in Save Actions Instant Save configuration
+   dialog.
+
+
 2009-03-31  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/templates.c, src/utils.h, src/dialogs.c, src/filetypes.c,

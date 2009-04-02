@@ -45,7 +45,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 135,
+	GEANY_API_VERSION = 136,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -188,6 +188,7 @@ typedef struct GeanyData
 	struct GeanyToolPrefs		*tool_prefs;		/**< Tool settings */
 	struct GeanyTemplatePrefs	*template_prefs;	/**< Template settings */
 	struct GeanyBuildInfo		*build_info;		/**< Current build information */
+	GSList						*filetypes_by_title; /**< See filetypes.h#filetypes_by_title. */
 }
 GeanyData;
 

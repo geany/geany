@@ -69,11 +69,11 @@ GPtrArray *filetypes_array = NULL;	/* Dynamic array of filetype pointers */
 
 static GHashTable *filetypes_hash = NULL;	/* Hash of filetype pointers based on name keys */
 
-/* List of filetype pointers sorted by name, with ft[GEANY_FILETYPES_NONE] first, as this
- * is usually treated specially.
- * The list does not change after filetypes have been initialized, so you can use
- * @code g_slist_nth_data(sorted_filetypes, n) @endcode and expect the same result at different times. */
-GSList *sorted_filetypes = NULL;
+/** List of filetype pointers sorted by name, but with @c filetypes_index(GEANY_FILETYPES_NONE)
+ * first, as this is usually treated specially.
+ * The list does not change (after filetypes have been initialized), so you can use
+ * @code g_slist_nth_data(filetypes_by_title, n) @endcode and expect the same result at different times. */
+GSList *filetypes_by_title = NULL;
 
 
 static void create_radio_menu_item(GtkWidget *menu, GeanyFiletype *ftype);
@@ -618,7 +618,7 @@ static void filetype_add(GeanyFiletype *ft)
 	g_ptr_array_add(filetypes_array, ft);
 	g_hash_table_insert(filetypes_hash, ft->name, ft);
 
-	sorted_filetypes = g_slist_insert_sorted(sorted_filetypes, ft, cmp_filetype);
+	filetypes_by_title = g_slist_insert_sorted(filetypes_by_title, ft, cmp_filetype);
 }
 
 
@@ -1487,7 +1487,7 @@ void filetypes_foreach_named(GFunc callback, gpointer user_data)
 	GSList *node;
 	GeanyFiletype *ft;
 
-	foreach_slist(ft, node, sorted_filetypes)
+	foreach_slist(ft, node, filetypes_by_title)
 	{
 		if (ft->id != GEANY_FILETYPES_NONE)
 			callback(ft, user_data);
