@@ -54,7 +54,6 @@ plugins: \
 		demoplugin.dll \
 		classbuilder.dll \
 		export.dll \
-		vcdiff.dll \
 		saveactions.dll \
 		filebrowser.dll
 
