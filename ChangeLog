@@ -1,3 +1,10 @@
+2009-04-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/filetypes.c, doc/geany.txt:
+   Move ActionScript to the Script group.
+   Fix wording & typo.
+
+
 2009-03-31  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * doc/geany.txt, doc/geany.html, src/main.c:
