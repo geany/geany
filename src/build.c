@@ -173,7 +173,6 @@ static GPid build_view_tex_file(GeanyDocument *doc, gint mode)
 	gchar  *working_dir;
 	gint	term_argv_len, i;
 	GError *error = NULL;
-	struct stat st;
 
 	if (doc == NULL || doc->file_name == NULL)
 		return (GPid) 1;
@@ -183,17 +182,8 @@ static GPid build_view_tex_file(GeanyDocument *doc, gint mode)
 	executable = utils_remove_ext_from_filename(doc->file_name);
 	view_file = g_strconcat(executable, (mode == LATEX_CMD_VIEW_DVI) ? ".dvi" : ".pdf", NULL);
 
-	/* try convert in locale for stat() */
+	/* try convert in locale */
 	locale_filename = utils_get_locale_from_utf8(view_file);
-
-	/* check whether view_file exists */
-	if (g_stat(locale_filename, &st) != 0)
-	{
-		ui_set_statusbar(TRUE, _("Failed to view %s (make sure it is already compiled)"), view_file);
-		utils_free_pointers(3, executable, view_file, locale_filename, NULL);
-
-		return (GPid) 1;
-	}
 
 	/* replace %f and %e in the run_cmd string */
 	cmd_string = g_strdup((mode == LATEX_CMD_VIEW_DVI) ?
