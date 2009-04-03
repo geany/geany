@@ -42,6 +42,7 @@
 #include "navqueue.h"
 #include "editor.h"
 #include "msgwindow.h"
+#include "keybindings.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -281,6 +282,8 @@ void msgwin_show_hide(gboolean show)
 		show);
 	ignore_callback = FALSE;
 	ui_widget_show_hide(ui_lookup_widget(main_widgets.window, "scrolledwindow1"), show);
+	/* set the input focus back to the editor */
+	keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
 }
 
 

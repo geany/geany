@@ -150,6 +150,17 @@ static GOptionEntry entries[] =
 };
 
 
+static void setup_window_position(void)
+{
+	/* interprets the saved window geometry */
+	if (prefs.save_winpos)
+	{
+		gtk_window_move(GTK_WINDOW(main_widgets.window), ui_prefs.geometry[0], ui_prefs.geometry[1]);
+		gtk_window_set_default_size(GTK_WINDOW(main_widgets.window), ui_prefs.geometry[2], ui_prefs.geometry[3]);
+		if (ui_prefs.geometry[4] == 1)
+			gtk_window_maximize(GTK_WINDOW(main_widgets.window));
+	}
+}
 
 /* special things for the initial setup of the checkboxes and related stuff
  * an action on a setting is only performed if the setting is not equal to the program default
@@ -206,22 +217,14 @@ static void apply_settings(void)
 
 	/* sets the icon size of the toolbar, use user preferences (.gtkrc) if not set */
 	if (toolbar_prefs.icon_size == GTK_ICON_SIZE_SMALL_TOOLBAR ||
-		toolbar_prefs.icon_size == GTK_ICON_SIZE_LARGE_TOOLBAR)
+		toolbar_prefs.icon_size == GTK_ICON_SIZE_LARGE_TOOLBAR ||
+		toolbar_prefs.icon_size == GTK_ICON_SIZE_MENU)
 	{
 		gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
 	}
-	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
+	toolbar_update_ui();
 
 	ui_update_view_editor_menu_items();
-
-	/* interprets the saved window geometry */
-	if (prefs.save_winpos && ui_prefs.geometry[0] != -1)
-	{
-		gtk_window_move(GTK_WINDOW(main_widgets.window), ui_prefs.geometry[0], ui_prefs.geometry[1]);
-		gtk_window_set_default_size(GTK_WINDOW(main_widgets.window), ui_prefs.geometry[2], ui_prefs.geometry[3]);
-		if (ui_prefs.geometry[4] == 1)
-			gtk_window_maximize(GTK_WINDOW(main_widgets.window));
-	}
 
 	/* hide statusbar if desired */
 	if (! interface_prefs.statusbar_visible)
@@ -289,6 +292,8 @@ static void main_init(void)
 	gtk_widget_set_name(main_widgets.window, "GeanyMainWindow");
 	gtk_widget_set_name(ui_widgets.toolbar_menu, "GeanyToolbarMenu");
 	gtk_widget_set_name(main_widgets.editor_menu, "GeanyEditMenu");
+	gtk_widget_set_name(ui_lookup_widget(main_widgets.window, "menubar1"), "GeanyMenubar");
+	gtk_widget_set_name(main_widgets.toolbar, "GeanyToolbar");
 
 #if ! GTK_CHECK_VERSION(2, 10, 0)
 	/* hide Page setup menu item, it isn't supported with non-GTK printing */
@@ -390,7 +395,7 @@ static void setup_paths(void)
 #ifdef G_OS_WIN32
 	/* use the installation directory(the one where geany.exe is located) as the base for the
 	 * documentation and data files */
-	gchar *install_dir = g_win32_get_package_installation_directory(NULL, NULL);
+	gchar *install_dir = win32_get_installation_dir();
 
 	data_dir = g_strconcat(install_dir, "\\data", NULL); /* e.g. C:\Program Files\geany\data */
 	doc_dir = g_strconcat(install_dir, "\\doc", NULL);
@@ -440,7 +445,7 @@ void main_locale_init(const gchar *locale_dir, const gchar *package)
 #endif
 
 #ifdef G_OS_WIN32
-	gchar *install_dir = g_win32_get_package_installation_directory(NULL, NULL);
+	gchar *install_dir = win32_get_installation_dir();
 	/* e.g. C:\Program Files\geany\lib\locale */
 	l_locale_dir = g_strconcat(install_dir, "\\share\\locale", NULL);
 	g_free(install_dir);
@@ -1051,7 +1056,14 @@ gint main(gint argc, gchar **argv)
 	build_menu_update(doc);
 	treeviews_update_tag_list(doc, FALSE);
 
-	/* finally realize the window to show the user what we have done */
+#ifdef G_OS_WIN32
+	/* Manually realise the main window to be able to set the position but don't show it.
+	 * We don't set the position after showing the window to avoid flickering. */
+	gtk_widget_realize(main_widgets.window);
+#endif
+	setup_window_position();
+
+	/* finally show the window */
 	gtk_widget_show(main_widgets.window);
 	main_status.main_window_realized = TRUE;
 
@@ -1068,9 +1080,14 @@ gint main(gint argc, gchar **argv)
 #endif
 
 #ifdef G_OS_WIN32
-	/* On Windows, change the working directory to the Geany installation path to not lock
-	 * the directory of a file passed as command line argument (see bug #2626124). */
-	win32_set_working_directory(g_win32_get_package_installation_directory(NULL, NULL));
+	{
+		gchar *dir;
+		/* On Windows, change the working directory to the Geany installation path to not lock
+		 * the directory of a file passed as command line argument (see bug #2626124). */
+		dir = win32_get_installation_dir();
+		win32_set_working_directory(dir);
+		g_free(dir);
+	}
 #endif
 
 	/*g_timeout_add(0, (GSourceFunc)destroyapp, NULL);*/ /* useful for start time tests*/

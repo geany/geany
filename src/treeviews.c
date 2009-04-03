@@ -68,6 +68,7 @@ enum
 /* documents tree model columns */
 enum
 {
+	DOCUMENTS_ICON,
 	DOCUMENTS_SHORTNAME,	/* dirname for parents, basename for children */
 	DOCUMENTS_DOCUMENT,
 	DOCUMENTS_COLOR,
@@ -217,16 +218,18 @@ void treeviews_update_tag_list(GeanyDocument *doc, gboolean update)
 /* does some preparing things to the open files list widget */
 static void prepare_openfiles(void)
 {
-	GtkCellRenderer *renderer;
+	GtkCellRenderer *icon_renderer;
+	GtkCellRenderer *text_renderer;
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *select;
 	GtkTreeSortable *sortable;
 
 	tv.tree_openfiles = ui_lookup_widget(main_widgets.window, "treeview6");
 
-	/* store the short filename to show, and the index as reference,
+	/* store the icon and the short filename to show, and the index as reference,
 	 * the colour (black/red/green) and the full name for the tooltip */
-	store_openfiles = gtk_tree_store_new(4, G_TYPE_STRING, G_TYPE_POINTER, GDK_TYPE_COLOR, G_TYPE_STRING);
+	store_openfiles = gtk_tree_store_new(5, G_TYPE_STRING, G_TYPE_STRING,
+		G_TYPE_POINTER, GDK_TYPE_COLOR, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tv.tree_openfiles), GTK_TREE_MODEL(store_openfiles));
 	g_object_unref(store_openfiles);
 
@@ -236,9 +239,14 @@ static void prepare_openfiles(void)
 			GTK_SCROLLED_WINDOW(ui_lookup_widget(main_widgets.window, "scrolledwindow7")),
 			GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
-	renderer = gtk_cell_renderer_text_new();
-	column = gtk_tree_view_column_new_with_attributes(_("Documents"), renderer,
-		"text", DOCUMENTS_SHORTNAME, "foreground-gdk", DOCUMENTS_COLOR, NULL);
+	icon_renderer = gtk_cell_renderer_pixbuf_new();
+	text_renderer = gtk_cell_renderer_text_new();
+	column = gtk_tree_view_column_new();
+	gtk_tree_view_column_pack_start(column, icon_renderer, FALSE);
+	gtk_tree_view_column_set_attributes(column, icon_renderer, "stock-id", DOCUMENTS_ICON, NULL);
+	gtk_tree_view_column_pack_start(column, text_renderer, TRUE);
+	gtk_tree_view_column_set_attributes(column, text_renderer, "text", DOCUMENTS_SHORTNAME,
+		"foreground-gdk", DOCUMENTS_COLOR, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tv.tree_openfiles), column);
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tv.tree_openfiles), FALSE);
 
@@ -303,8 +311,8 @@ static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 	}
 	/* no match, add dir parent */
 	gtk_tree_store_append(store_openfiles, &parent, NULL);
-	gtk_tree_store_set(store_openfiles, &parent, DOCUMENTS_SHORTNAME,
-		doc->file_name ? dirname : GEANY_STRING_UNTITLED, -1);
+	gtk_tree_store_set(store_openfiles, &parent, DOCUMENTS_ICON, GTK_STOCK_DIRECTORY,
+		DOCUMENTS_SHORTNAME, doc->file_name ? dirname : GEANY_STRING_UNTITLED, -1);
 
 	g_free(dirname);
 	return &parent;
@@ -333,7 +341,7 @@ void treeviews_openfiles_add(GeanyDocument *doc)
 		gtk_tree_path_free(path);
 	}
 	basename = g_path_get_basename(DOC_FILENAME(doc));
-	gtk_tree_store_set(store_openfiles, iter,
+	gtk_tree_store_set(store_openfiles, iter, DOCUMENTS_ICON, GTK_STOCK_FILE,
 		DOCUMENTS_SHORTNAME, basename, DOCUMENTS_DOCUMENT, doc, DOCUMENTS_COLOR, color,
 		DOCUMENTS_FILENAME, DOC_FILENAME(doc), -1);
 	g_free(basename);

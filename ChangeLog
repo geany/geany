@@ -1,3 +1,19 @@
+2009-04-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * scintilla/LexOthers.cxx, scripts/wafinit.sh, src/build.c,
+   src/utils.c, src/interface.c, src/win32.c, src/toolbar.c,
+   src/utils.h, src/highlighting.c, src/keybindings.c,
+   src/win32.h, src/toolbar.h, src/sciwrappers.c, src/sciwrappers.h,
+   src/prefs.c, src/plugindata.h, src/treeviews.c, src/msgwindow.c,
+   src/callbacks.c, src/callbacks.h, src/keyfile.c, src/plugins.c,
+   src/main.c, THANKS, geany.spec.in, doc/geany.txt, doc/geany.html,
+   tagmanager/conf.c, tagmanager/css.c, data/filetypes.actionscript,
+   geany.glade, po/ru.po, po/ChangeLog, plugins/geanyfunctions.h,
+   plugins/htmlchars.c, plugins/makefile.win32:
+   Merge trunk changes.
+   Add string.h include for htmlchars.c.
+
+
 2009-04-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/templates.c, src/dialogs.c, src/plugindata.h, src/filetypes.c,

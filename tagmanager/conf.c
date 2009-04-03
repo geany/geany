@@ -53,9 +53,7 @@ static void findConfTags (void)
 		const unsigned char* cp = line;
 		boolean possible = TRUE;
 
-		while (isspace ((int) *cp))
-			++cp;
-		if (*cp == '#' || (*cp != '\0' && *cp == '/' && *(cp+1) == '/'))
+		if (isspace ((int) *cp) || *cp == '#' || (*cp != '\0' && *cp == '/' && *(cp+1) == '/'))
 			continue;
 
 		/* look for a section */

@@ -949,8 +949,8 @@ static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, g
 	str = g_strdup_printf("%s\n\n%s\ndel %s\n", cmd, (autoclose) ? "" : "pause", fname);
 #else
 	str = g_strdup_printf(
-		"#!/bin/sh\n\n%s\n\necho \"\n\n------------------\n(program exited with code: $?)\" \
-		\n\n%s\nrm $0\n", cmd, (autoclose) ? "" :
+		"#!/bin/sh\n\nrm $0\n\n%s\n\necho \"\n\n------------------\n(program exited with code: $?)\" \
+		\n\n%s\n", cmd, (autoclose) ? "" :
 		"\necho \"Press return to continue\"\n#to be more compatible with shells like dash\ndummy_var=\"\"\nread dummy_var");
 #endif
 

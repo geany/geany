@@ -49,7 +49,7 @@ Some basic features of Geany:
 # try uncommenting the following line to workaround the problem (and add sed to BuildRequires)
 #sed -i "s@libdir='.*'@libdir='%{_libdir}/%{name}'@g" $RPM_BUILD_ROOT%{_libdir}/%{name}/*.la
 
-%__rm $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/icon-theme.cache
+%__rm -f $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/icon-theme.cache
 
 %clean
 %__rm -Rf $RPM_BUILD_ROOT

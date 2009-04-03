@@ -602,3 +602,7 @@ on_menu_show_indentation_guides1_toggled
 void
 on_send_selection_to_vte1_activate     (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
+
+void
+on_very_small_icons1_activate          (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);

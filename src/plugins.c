@@ -60,6 +60,7 @@
 #include "toolbar.h"
 #include "stash.h"
 #include "keyfile.h"
+#include "win32.h"
 
 
 #ifdef G_OS_WIN32
@@ -196,7 +197,10 @@ static SciFuncs sci_funcs = {
 	&sci_has_selection,
 	&sci_get_tab_width,
 	&sci_indicator_clear,
-	&sci_indicator_set
+	&sci_indicator_set,
+	&sci_get_contents,
+	&sci_get_contents_range,
+	&sci_get_selection_contents
 };
 
 static TemplateFuncs template_funcs = {
@@ -801,10 +805,11 @@ load_plugins_from_path(const gchar *path)
 #ifdef G_OS_WIN32
 static gchar *get_plugin_path()
 {
-	gchar *install_dir = g_win32_get_package_installation_directory(NULL, NULL);
+	gchar *install_dir = win32_get_installation_dir();
 	gchar *path;
 
 	path = g_strconcat(install_dir, "\\lib", NULL);
+	g_free(install_dir);
 
 	return path;
 }

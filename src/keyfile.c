@@ -230,19 +230,19 @@ static void save_recent_files(GKeyFile *config)
 static gchar *get_session_file_string(GeanyDocument *doc)
 {
 	gchar *fname;
-	gchar *doc_filename;
+	gchar *locale_filename;
 	GeanyFiletype *ft = doc->file_type;
 
 	if (ft == NULL)	/* can happen when saving a new file when quitting */
 		ft = filetypes[GEANY_FILETYPES_NONE];
 
-	doc_filename = g_strdup(doc->file_name);
+	locale_filename = utils_get_locale_from_utf8(doc->file_name);
 	/* If the filename contains any ';' (semi-colons) we need to escape them otherwise
 	 * g_key_file_get_string_list() would fail reading them, so we replace them before
 	 * writing with usual colons which must never appear in a filename and replace them
 	 * back when we read the file again from the file.
 	 * (g_path_skip_root() to skip C:\... on Windows) */
-	g_strdelimit((gchar *) g_path_skip_root(doc_filename), ";", ':');
+	g_strdelimit((gchar*) utils_path_skip_root(locale_filename), ";", ':');
 
 	fname = g_strdup_printf("%d;%s;%d;%d;%d;%d;%d;%s;%d",
 		sci_get_current_position(doc->editor->sci),
@@ -252,9 +252,9 @@ static gchar *get_session_file_string(GeanyDocument *doc)
 		doc->editor->indent_type,
 		doc->editor->auto_indent,
 		doc->editor->line_wrapping,
-		doc_filename,
+		locale_filename,
 		doc->editor->line_breaking);
-	g_free(doc_filename);
+	g_free(locale_filename);
 	return fname;
 }
 
@@ -379,6 +379,7 @@ static void save_dialog_prefs(GKeyFile *config)
 
 	/* toolbar */
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show", toolbar_prefs.visible);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_append_to_menu", toolbar_prefs.append_to_menu);
 	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_style", toolbar_prefs.icon_style);
 	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_size", toolbar_prefs.icon_size);
 
@@ -669,6 +670,7 @@ static void load_dialog_prefs(GKeyFile *config)
 
 	/* toolbar */
 	toolbar_prefs.visible = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show", TRUE);
+	toolbar_prefs.append_to_menu = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_append_to_menu", FALSE);
 	{
 		GtkIconSize tb_iconsize;
 		GtkToolbarStyle tb_style;
@@ -800,10 +802,10 @@ static void load_ui_prefs(GKeyFile *config)
 		ui_prefs.geometry[4] = geo[4];
 
 		/* don't use insane values but when main windows was maximized last time, pos might be
-		 * negative at least on Windows for some reason */
+		 * negative (due to differences in root window and window decorations) */
 		if (ui_prefs.geometry[4] != 1)
 		{
-			for (i = 0; i < 4; i++)
+			for (i = 2; i < 4; i++)
 			{
 				if (ui_prefs.geometry[i] < -1)
 					ui_prefs.geometry[i] = -1;
@@ -906,7 +908,8 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	/* try to get the locale equivalent for the filename */
 	locale_filename = utils_get_locale_from_utf8(tmp[7]);
 	/* replace ':' back with ';' (see get_session_file_string for details) */
-	g_strdelimit((gchar *) g_path_skip_root(locale_filename), ":", ';');
+	g_strdelimit((gchar*) utils_path_skip_root(locale_filename), ":", ';');
+
 	if (len > 8)
 		line_breaking = atoi(tmp[8]);
 

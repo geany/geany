@@ -2272,6 +2272,8 @@ static void styleset_conf(ScintillaObject *sci)
 	set_sci_style(sci, SCE_PROPS_KEY, GEANY_FILETYPES_CONF, 3);
 	set_sci_style(sci, SCE_PROPS_ASSIGNMENT, GEANY_FILETYPES_CONF, 4);
 	set_sci_style(sci, SCE_PROPS_DEFVAL, GEANY_FILETYPES_CONF, 5);
+
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "lexer.props.allow.initial.spaces", (sptr_t) "0");
 }
 
 

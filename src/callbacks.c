@@ -126,6 +126,8 @@ static void quit_app(void)
 
 	document_close_all();
 
+	main_status.quitting = TRUE;
+
 	main_quit();
 }
 
@@ -587,7 +589,7 @@ on_toolbar_large_icons1_activate       (GtkMenuItem     *menuitem,
 	if (ignore_toolbar_toggle) return;
 
 	toolbar_prefs.icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
-	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), GTK_ICON_SIZE_LARGE_TOOLBAR);
+	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
 }
 
 
@@ -598,7 +600,18 @@ on_toolbar_small_icons1_activate       (GtkMenuItem     *menuitem,
 	if (ignore_toolbar_toggle) return;
 
 	toolbar_prefs.icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR;
-	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), GTK_ICON_SIZE_SMALL_TOOLBAR);
+	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
+}
+
+
+void
+on_very_small_icons1_activate          (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	if (ignore_toolbar_toggle) return;
+
+	toolbar_prefs.icon_size = GTK_ICON_SIZE_MENU;
+	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
 }
 
 
@@ -682,6 +695,13 @@ on_toolbutton_preferences_clicked      (GtkAction       *action,
 }
 
 
+static gboolean delayed_check_disk_status(gpointer data)
+{
+	document_check_disk_status(data, FALSE);
+	return FALSE;
+}
+
+
 /* Changes window-title after switching tabs and lots of other things.
  * note: using 'after' makes Scintilla redraw before the UI, appearing more responsive */
 void
@@ -709,7 +729,10 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
 		build_menu_update(doc);
 		treeviews_update_tag_list(doc, FALSE);
 
-		document_check_disk_status(doc, FALSE);
+		/* We delay the check to avoid weird fast, unintended switching of notebook pages when
+		 * the 'file has changed' dialog is shown while the switch event is not yet completely
+		 * finished. So, we check after the switch has been performed to be safe. */
+		g_idle_add(delayed_check_disk_status, doc);
 
 #ifdef HAVE_VTE
 		vte_cwd((doc->real_path != NULL) ? doc->real_path : doc->file_name, FALSE);
@@ -808,7 +831,9 @@ toolbar_popup_menu                     (GtkWidget *widget,
 		{
 			case GTK_ICON_SIZE_LARGE_TOOLBAR:
 					w = ui_lookup_widget(ui_widgets.toolbar_menu, "large_icons1"); break;
-			default: w = ui_lookup_widget(ui_widgets.toolbar_menu, "small_icons1"); break;
+			case GTK_ICON_SIZE_SMALL_TOOLBAR:
+					w = ui_lookup_widget(ui_widgets.toolbar_menu, "small_icons1"); break;
+			default: w = ui_lookup_widget(ui_widgets.toolbar_menu, "very_small_icons1"); break;
 		}
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(w), TRUE);
 
