@@ -26,6 +26,8 @@
 /* HTML Characters plugin (Inserts HTML character entities like '&amp;') */
 
 #include "geany.h"
+#include <string.h>
+
 #include "support.h"
 #include "plugindata.h"
 #include "document.h"

@@ -351,7 +351,8 @@ geany_data_init(void)
 		&search_prefs,
 		&tool_prefs,
 		&template_prefs,
-		&build_info
+		&build_info,
+		filetypes_by_title
 	};
 	memcpy(&geany_data, &gd, sizeof(GeanyData));
 }

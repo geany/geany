@@ -90,8 +90,8 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 		gboolean ro = (response == GEANY_RESPONSE_VIEW);	/* View clicked */
 
 		/* ignore detect from file item */
-		if (filetype_idx >= 0 && filetype_idx < GEANY_FILETYPES_NONE)
-			ft = filetypes[filetype_idx];
+		if (filetype_idx > 0 && filetype_idx < GEANY_MAX_BUILT_IN_FILETYPES)
+			ft = g_slist_nth_data(filetypes_by_title, filetype_idx);
 		if (encoding_idx >= 0 && encoding_idx < GEANY_ENCODINGS_MAX)
 			charset = encodings[encoding_idx].charset;
 
@@ -177,6 +177,8 @@ static void create_open_file_dialog(void)
 	GtkWidget *viewbtn;
 	guint i;
 	gchar *encoding_string;
+	GeanyFiletype *ft;
+	GSList *node;
 
 	ui_widgets.open_filesel = gtk_file_chooser_dialog_new(_("Open File"), GTK_WINDOW(main_widgets.window),
 			GTK_FILE_CHOOSER_ACTION_OPEN, NULL, NULL);
@@ -207,23 +209,22 @@ static void create_open_file_dialog(void)
 		add_file_open_extra_widget());
 	filetype_combo = ui_lookup_widget(ui_widgets.open_filesel, "filetype_combo");
 
+	gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), _("Detect by file extension"));
 	/* add FileFilters(start with "All Files") */
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
 				filetypes_create_file_filter(filetypes[GEANY_FILETYPES_NONE]));
 	/* now create meta filter "All Source" */
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
 				filetypes_create_file_filter_all_source());
-	for (i = 0; i < filetypes_array->len; i++)
+	foreach_slist(ft, node, filetypes_by_title)
 	{
-		if (i == GEANY_FILETYPES_NONE)
+		if (ft->id == GEANY_FILETYPES_NONE)
 			continue;
-
-		gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), filetypes[i]->title);
+		gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), ft->title);
 		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
-				filetypes_create_file_filter(filetypes[i]));
+				filetypes_create_file_filter(ft));
 	}
-	gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), _("Detect by file extension"));
-	gtk_combo_box_set_active(GTK_COMBO_BOX(filetype_combo), filetypes_array->len - 1);
+	gtk_combo_box_set_active(GTK_COMBO_BOX(filetype_combo), 0);
 
 	/* fill encoding combo box */
 	encoding_combo = ui_lookup_widget(ui_widgets.open_filesel, "encoding_combo");

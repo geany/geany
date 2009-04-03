@@ -67,10 +67,16 @@ GeanyFiletypePrivate;
 
 GPtrArray *filetypes_array = NULL;	/* Dynamic array of filetype pointers */
 
-GHashTable *filetypes_hash = NULL;	/* Hash of filetype pointers based on name keys */
+static GHashTable *filetypes_hash = NULL;	/* Hash of filetype pointers based on name keys */
+
+/** List of filetype pointers sorted by name, but with @c filetypes_index(GEANY_FILETYPES_NONE)
+ * first, as this is usually treated specially.
+ * The list does not change (after filetypes have been initialized), so you can use
+ * @code g_slist_nth_data(filetypes_by_title, n) @endcode and expect the same result at different times. */
+GSList *filetypes_by_title = NULL;
 
 
-static void create_radio_menu_item(GtkWidget *menu, const gchar *label, GeanyFiletype *ftype);
+static void create_radio_menu_item(GtkWidget *menu, GeanyFiletype *ftype);
 
 
 /* Note: remember to update HACKING if this function is renamed. */
@@ -78,7 +84,18 @@ static void init_builtin_filetypes(void)
 {
 	GeanyFiletype *ft;
 
-#define C	/* these macros are only to ease navigation */
+#define NONE	/* these macros are only to ease navigation */
+	ft = filetypes[GEANY_FILETYPES_NONE];
+	ft->lang = -2;
+	ft->name = g_strdup(_("None"));
+	ft->title = g_strdup(_("None"));
+	ft->extension = g_strdup("*");
+	ft->pattern = utils_strv_new("*", NULL);
+	ft->comment_open = NULL;
+	ft->comment_close = NULL;
+	ft->group = GEANY_FILETYPE_GROUP_NONE;
+
+#define C
 	ft = filetypes[GEANY_FILETYPES_C];
 	ft->lang = 0;
 	ft->name = g_strdup("C");
@@ -560,17 +577,6 @@ static void init_builtin_filetypes(void)
 	ft->comment_open = g_strdup("--");
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
-
-#define ALL
-	ft = filetypes[GEANY_FILETYPES_NONE];
-	ft->lang = -2;
-	ft->name = g_strdup("None");
-	ft->title = g_strdup(_("All files"));
-	ft->extension = g_strdup("*");
-	ft->pattern = utils_strv_new("*", NULL);
-	ft->comment_open = NULL;
-	ft->comment_close = NULL;
-	ft->group = GEANY_FILETYPE_GROUP_NONE;
 }
 
 
@@ -588,7 +594,20 @@ static GeanyFiletype *filetype_new(void)
 }
 
 
-/* Add a filetype pointer to the list of available filetypes,
+static gint cmp_filetype(gconstpointer pft1, gconstpointer pft2)
+{
+	const GeanyFiletype *ft1 = pft1, *ft2 = pft2;
+
+	if (ft1->id == GEANY_FILETYPES_NONE)
+		return -1;
+	if (ft2->id == GEANY_FILETYPES_NONE)
+		return 1;
+
+	return utils_str_casecmp(ft1->title, ft2->title);
+}
+
+
+/* Add a filetype pointer to the lists of available filetypes,
  * and set the filetype::id field. */
 static void filetype_add(GeanyFiletype *ft)
 {
@@ -598,6 +617,8 @@ static void filetype_add(GeanyFiletype *ft)
 	ft->id = filetypes_array->len;	/* len will be the index for filetype_array */
 	g_ptr_array_add(filetypes_array, ft);
 	g_hash_table_insert(filetypes_hash, ft->name, ft);
+
+	filetypes_by_title = g_slist_insert_sorted(filetypes_by_title, ft, cmp_filetype);
 }
 
 
@@ -646,61 +667,41 @@ static void setup_config_file_menus(void)
 }
 
 
-#define create_sub_menu(menu, item, title) \
-	(menu) = gtk_menu_new(); \
-	(item) = gtk_menu_item_new_with_mnemonic((title)); \
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM((item)), (menu)); \
-	gtk_container_add(GTK_CONTAINER(filetype_menu), (item)); \
-	gtk_widget_show((item));
+static GtkWidget *group_menus[GEANY_FILETYPE_GROUP_COUNT] = {NULL};
+
+static void create_sub_menu(GtkWidget *parent, gsize group_id, const gchar *title)
+{
+	GtkWidget *menu, *item;
+
+	menu = gtk_menu_new();
+	item = gtk_menu_item_new_with_mnemonic((title));
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), menu);
+	gtk_container_add(GTK_CONTAINER(parent), item);
+	gtk_widget_show(item);
+	group_menus[group_id] = menu;
+}
+
+
+static void add_ft_menu_item(gpointer pft, gpointer user_data)
+{
+	GeanyFiletype *ft = pft;
+
+	create_radio_menu_item(group_menus[ft->group], ft);
+}
 
 
 static void create_set_filetype_menu(void)
 {
-	filetype_id ft_id;
 	GtkWidget *filetype_menu = ui_lookup_widget(main_widgets.window, "set_filetype1_menu");
-	GtkWidget *sub_menu = filetype_menu;
-	GtkWidget *sub_menu_programming, *sub_menu_scripts, *sub_menu_markup, *sub_menu_misc;
-	GtkWidget *sub_item_programming, *sub_item_scripts, *sub_item_markup, *sub_item_misc;
 
-	create_sub_menu(sub_menu_programming, sub_item_programming, _("_Programming Languages"));
-	create_sub_menu(sub_menu_scripts, sub_item_scripts, _("_Scripting Languages"));
-	create_sub_menu(sub_menu_markup, sub_item_markup, _("_Markup Languages"));
-	create_sub_menu(sub_menu_misc, sub_item_misc, _("M_iscellaneous Languages"));
+	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_COMPILED, _("_Programming Languages"));
+	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_SCRIPT, _("_Scripting Languages"));
+	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_MARKUP, _("_Markup Languages"));
+	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_MISC, _("M_iscellaneous Languages"));
 
 	/* Append all filetypes to the filetype menu */
-	for (ft_id = 0; ft_id < filetypes_array->len; ft_id++)
-	{
-		GeanyFiletype *ft = filetypes[ft_id];
-		const gchar *title = ft->title;
-
-		/* insert separators for different filetype groups */
-		switch (ft->group)
-		{
-			case GEANY_FILETYPE_GROUP_COMPILED:	/* programming */
-				sub_menu = sub_menu_programming;
-				break;
-
-			case GEANY_FILETYPE_GROUP_SCRIPT:	/* scripts */
-				sub_menu = sub_menu_scripts;
-				break;
-
-			case GEANY_FILETYPE_GROUP_MARKUP:	/* markup */
-				sub_menu = sub_menu_markup;
-				break;
-
-			case GEANY_FILETYPE_GROUP_MISC:	/* misc */
-				sub_menu = sub_menu_misc;
-				break;
-
-			case GEANY_FILETYPE_GROUP_NONE:	/* none */
-				sub_menu = filetype_menu;
-				title = _("None");
-				break;
-
-			default: break;
-		}
-		create_radio_menu_item(sub_menu, title, ft);
-	}
+	filetypes_foreach_named(add_ft_menu_item, NULL);
+	create_radio_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_NONE]);
 }
 
 
@@ -712,20 +713,14 @@ void filetypes_init()
 }
 
 
-typedef gboolean FileTypesPredicate(GeanyFiletype *ft, gpointer user_data);
-
 /* Find a filetype that predicate returns TRUE for, otherwise return NULL. */
-static GeanyFiletype *filetypes_find(gboolean source_only,
-		FileTypesPredicate predicate, gpointer user_data)
+GeanyFiletype *filetypes_find(GCompareFunc predicate, gpointer user_data)
 {
 	guint i;
 
 	for (i = 0; i < filetypes_array->len; i++)
 	{
 		GeanyFiletype *ft = filetypes[i];
-
-		if (source_only && i == GEANY_FILETYPES_NONE)
-			continue;	/* None is not for source files */
 
 		if (predicate(ft, user_data))
 			return ft;
@@ -734,11 +729,15 @@ static GeanyFiletype *filetypes_find(gboolean source_only,
 }
 
 
-static gboolean match_basename(GeanyFiletype *ft, gpointer user_data)
+static gboolean match_basename(gconstpointer pft, gconstpointer user_data)
 {
+	const GeanyFiletype *ft = pft;
 	const gchar *base_filename = user_data;
 	gint j;
 	gboolean ret = FALSE;
+
+	if (ft->id == GEANY_FILETYPES_NONE)
+		return FALSE;
 
 	for (j = 0; ft->pattern[j] != NULL; j++)
 	{
@@ -770,7 +769,7 @@ GeanyFiletype *filetypes_detect_from_extension(const gchar *utf8_filename)
 	setptr(base_filename, g_utf8_strdown(base_filename, -1));
 #endif
 
-	ft = filetypes_find(TRUE, match_basename, base_filename);
+	ft = filetypes_find(match_basename, base_filename);
 	if (ft == NULL)
 		ft = filetypes[GEANY_FILETYPES_NONE];
 
@@ -982,12 +981,12 @@ on_filetype_change                     (GtkMenuItem     *menuitem,
 }
 
 
-static void create_radio_menu_item(GtkWidget *menu, const gchar *label, GeanyFiletype *ftype)
+static void create_radio_menu_item(GtkWidget *menu, GeanyFiletype *ftype)
 {
 	static GSList *group = NULL;
 	GtkWidget *tmp;
 
-	tmp = gtk_radio_menu_item_new_with_label(group, label);
+	tmp = gtk_radio_menu_item_new_with_label(group, ftype->title);
 	group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(tmp));
 	ftype->priv->menu_item = tmp;
 	gtk_widget_show(tmp);
@@ -1240,7 +1239,7 @@ void filetypes_save_commands()
 		G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.", NULL);
 	gint i;
 
-	for (i = 0; i < GEANY_FILETYPES_NONE; i++)
+	for (i = 1; i < GEANY_MAX_BUILT_IN_FILETYPES; i++)
 	{
 		struct build_programs *bp = filetypes[i]->programs;
 		GKeyFile *config_home;
@@ -1301,11 +1300,13 @@ GtkFileFilter *filetypes_create_file_filter(const GeanyFiletype *ft)
 {
 	GtkFileFilter *new_filter;
 	gint i;
+	const gchar *title;
 
 	g_return_val_if_fail(ft != NULL, NULL);
 
 	new_filter = gtk_file_filter_new();
-	gtk_file_filter_set_name(new_filter, ft->title);
+	title = ft->id == GEANY_FILETYPES_NONE ? _("All files") : ft->title;
+	gtk_file_filter_set_name(new_filter, title);
 
 	for (i = 0; ft->pattern[i]; i++)
 	{
@@ -1479,4 +1480,17 @@ GeanyFiletype *filetypes_index(gint idx)
 	return (idx >= 0 && idx < (gint) filetypes_array->len) ? filetypes[idx] : NULL;
 }
 
+
+/* Does not include ft[GEANY_FILETYPES_NONE], as this is usually treated specially. */
+void filetypes_foreach_named(GFunc callback, gpointer user_data)
+{
+	GSList *node;
+	GeanyFiletype *ft;
+
+	foreach_slist(ft, node, filetypes_by_title)
+	{
+		if (ft->id != GEANY_FILETYPES_NONE)
+			callback(ft, user_data);
+	}
+}
 

@@ -1381,7 +1381,7 @@ static GHashTable *get_tagfile_hash(const GSList *file_list)
 
 		g_free(utf8_fname);
 
-		if (FILETYPE_ID(ft) < GEANY_FILETYPES_NONE)
+		if (FILETYPE_ID(ft) != GEANY_FILETYPES_NONE)
 		{
 			fnames = g_hash_table_lookup(hash, ft);	/* may be NULL */
 			fnames = g_list_append(fnames, fname);
@@ -1417,13 +1417,14 @@ static GHashTable *init_user_tags(void)
 
 static void load_user_tags(filetype_id ft_id)
 {
-	static guchar tags_loaded[GEANY_FILETYPES_NONE] = {0};
+	static guchar tags_loaded[GEANY_MAX_BUILT_IN_FILETYPES - 1] = {0};
 	static GHashTable *lang_hash = NULL;
 	GList *fnames;
 	const GList *node;
 	const GeanyFiletype *ft = filetypes[ft_id];
 
-	g_return_if_fail(ft_id < GEANY_FILETYPES_NONE);
+	g_return_if_fail(ft_id > 0);
+	g_return_if_fail(ft_id < GEANY_MAX_BUILT_IN_FILETYPES);
 
 	if (tags_loaded[ft_id])
 		return;
