@@ -71,10 +71,19 @@ static struct
 }
 widgets;
 
+typedef struct
+{
+	GQueue *recent_queue;
+	GtkWidget *menubar;
+	GtkWidget *toolbar;
+	void (*activate_cb)(GtkMenuItem *, gpointer);
+} GeanyRecentFiles;
 
-static void update_recent_menu(void);
-static void recent_file_loaded(const gchar *utf8_filename);
+
+static void update_recent_menu(GeanyRecentFiles *grf);
+static void recent_file_loaded(const gchar *utf8_filename, GeanyRecentFiles *grf);
 static void recent_file_activate_cb(GtkMenuItem *menuitem, gpointer user_data);
+static void recent_project_activate_cb(GtkMenuItem *menuitem, gpointer user_data);
 static GtkWidget *progress_bar_create(void);
 
 
@@ -886,30 +895,67 @@ GtkWidget *ui_new_image_from_inline(gint img)
 }
 
 
-void ui_create_recent_menu(void)
+static void recent_create_menu(GeanyRecentFiles *grf)
 {
 	GtkWidget *tmp;
 	guint i, len;
 	gchar *filename;
 
-	len = MIN(file_prefs.mru_length, g_queue_get_length(ui_prefs.recent_queue));
+	len = MIN(file_prefs.mru_length, g_queue_get_length(grf->recent_queue));
 	for (i = 0; i < len; i++)
 	{
-		filename = g_queue_peek_nth(ui_prefs.recent_queue, i);
+		filename = g_queue_peek_nth(grf->recent_queue, i);
 		/* create menu item for the recent files menu in the menu bar */
 		tmp = gtk_menu_item_new_with_label(filename);
 		gtk_widget_show(tmp);
-		gtk_container_add(GTK_CONTAINER(ui_widgets.recent_files_menu_menubar), tmp);
-		g_signal_connect(tmp, "activate", G_CALLBACK(recent_file_activate_cb), NULL);
+		gtk_container_add(GTK_CONTAINER(grf->menubar), tmp);
+		g_signal_connect(tmp, "activate", G_CALLBACK(grf->activate_cb), NULL);
 		/* create menu item for the recent files menu in the toolbar */
-		if (ui_widgets.recent_files_menu_toolbar != NULL)
+		if (grf->toolbar != NULL)
 		{
 			tmp = gtk_menu_item_new_with_label(filename);
 			gtk_widget_show(tmp);
-			gtk_container_add(GTK_CONTAINER(ui_widgets.recent_files_menu_toolbar), tmp);
-			g_signal_connect(tmp, "activate", G_CALLBACK(recent_file_activate_cb), NULL);
+			gtk_container_add(GTK_CONTAINER(grf->toolbar), tmp);
+			g_signal_connect(tmp, "activate", G_CALLBACK(grf->activate_cb), NULL);
 		}
 	}
+}
+
+
+static GeanyRecentFiles *recent_get_recent_files(void)
+{
+	static GeanyRecentFiles grf = { NULL, NULL, NULL, NULL };
+
+	if (grf.recent_queue == NULL)
+	{
+		grf.recent_queue = ui_prefs.recent_queue;
+		grf.menubar = ui_widgets.recent_files_menu_menubar;
+		grf.toolbar = ui_widgets.recent_files_menu_toolbar;
+		grf.activate_cb = recent_file_activate_cb;
+	}
+	return &grf;
+}
+
+
+static GeanyRecentFiles *recent_get_recent_projects(void)
+{
+	static GeanyRecentFiles grf = { NULL, NULL, NULL, NULL };
+
+	if (grf.recent_queue == NULL)
+	{
+		grf.recent_queue = ui_prefs.recent_projects_queue;
+		grf.menubar = ui_widgets.recent_projects_menu_menubar;
+		grf.toolbar = NULL;
+		grf.activate_cb = recent_project_activate_cb;
+	}
+	return &grf;
+}
+
+
+void ui_create_recent_menus(void)
+{
+	recent_create_menu(recent_get_recent_files());
+	recent_create_menu(recent_get_recent_projects());
 }
 
 
@@ -919,16 +965,29 @@ static void recent_file_activate_cb(GtkMenuItem *menuitem, G_GNUC_UNUSED gpointe
 	gchar *locale_filename = utils_get_locale_from_utf8(utf8_filename);
 
 	if (document_open_file(locale_filename, FALSE, NULL, NULL) != NULL)
-		recent_file_loaded(utf8_filename);
+		recent_file_loaded(utf8_filename, recent_get_recent_files());
 
 	g_free(locale_filename);
 	g_free(utf8_filename);
 }
 
 
-void ui_add_recent_file(const gchar *utf8_filename)
+static void recent_project_activate_cb(GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer user_data)
 {
-	if (g_queue_find_custom(ui_prefs.recent_queue, utf8_filename, (GCompareFunc) strcmp) == NULL)
+	gchar *utf8_filename = ui_menu_item_get_text(menuitem);
+	gchar *locale_filename = utils_get_locale_from_utf8(utf8_filename);
+
+	if (project_ask_close() && project_load_file_with_session(locale_filename))
+		recent_file_loaded(utf8_filename, recent_get_recent_projects());
+
+	g_free(locale_filename);
+	g_free(utf8_filename);
+}
+
+
+static void add_recent_file(const gchar *utf8_filename, GeanyRecentFiles *grf)
+{
+	if (g_queue_find_custom(grf->recent_queue, utf8_filename, (GCompareFunc) strcmp) == NULL)
 	{
 #if GTK_CHECK_VERSION(2, 10, 0)
 		GtkRecentManager *manager = gtk_recent_manager_get_default();
@@ -939,14 +998,28 @@ void ui_add_recent_file(const gchar *utf8_filename)
 			g_free(uri);
 		}
 #endif
-		g_queue_push_head(ui_prefs.recent_queue, g_strdup(utf8_filename));
-		if (g_queue_get_length(ui_prefs.recent_queue) > file_prefs.mru_length)
+		g_queue_push_head(grf->recent_queue, g_strdup(utf8_filename));
+		if (g_queue_get_length(grf->recent_queue) > file_prefs.mru_length)
 		{
-			g_free(g_queue_pop_tail(ui_prefs.recent_queue));
+			g_free(g_queue_pop_tail(grf->recent_queue));
 		}
-		update_recent_menu();
+		update_recent_menu(grf);
 	}
-	else recent_file_loaded(utf8_filename);	/* filename already in recent list */
+	/* filename already in recent list */
+	else
+		recent_file_loaded(utf8_filename, grf);
+}
+
+
+void ui_add_recent_file(const gchar *utf8_filename)
+{
+	add_recent_file(utf8_filename, recent_get_recent_files());
+}
+
+
+void ui_add_recent_project_file(const gchar *utf8_filename)
+{
+	add_recent_file(utf8_filename, recent_get_recent_projects());
 }
 
 
@@ -982,29 +1055,29 @@ static gint find_recent_file_item(gconstpointer list_data, gconstpointer user_da
 }
 
 
-static void recent_file_loaded(const gchar *utf8_filename)
+static void recent_file_loaded(const gchar *utf8_filename, GeanyRecentFiles *grf)
 {
 	GList *item, *children;
 	void *data;
 	GtkWidget *tmp;
 
 	/* first reorder the queue */
-	item = g_queue_find_custom(ui_prefs.recent_queue, utf8_filename, (GCompareFunc) strcmp);
+	item = g_queue_find_custom(grf->recent_queue, utf8_filename, (GCompareFunc) strcmp);
 	g_return_if_fail(item != NULL);
 
 	data = item->data;
-	g_queue_remove(ui_prefs.recent_queue, data);
-	g_queue_push_head(ui_prefs.recent_queue, data);
+	g_queue_remove(grf->recent_queue, data);
+	g_queue_push_head(grf->recent_queue, data);
 
 	/* remove the old menuitem for the filename */
-	children = gtk_container_get_children(GTK_CONTAINER(ui_widgets.recent_files_menu_menubar));
+	children = gtk_container_get_children(GTK_CONTAINER(grf->menubar));
 	item = g_list_find_custom(children, utf8_filename, (GCompareFunc) find_recent_file_item);
 	if (item != NULL)
 		gtk_widget_destroy(GTK_WIDGET(item->data));
 
-	if (ui_widgets.recent_files_menu_toolbar != NULL)
+	if (grf->toolbar != NULL)
 	{
-		children = gtk_container_get_children(GTK_CONTAINER(ui_widgets.recent_files_menu_toolbar));
+		children = gtk_container_get_children(GTK_CONTAINER(grf->toolbar));
 		item = g_list_find_custom(children, utf8_filename, (GCompareFunc) find_recent_file_item);
 		if (item != NULL)
 			gtk_widget_destroy(GTK_WIDGET(item->data));
@@ -1013,33 +1086,33 @@ static void recent_file_loaded(const gchar *utf8_filename)
 	 * first for the recent files menu in the menu bar */
 	tmp = gtk_menu_item_new_with_label(utf8_filename);
 	gtk_widget_show(tmp);
-	gtk_menu_shell_prepend(GTK_MENU_SHELL(ui_widgets.recent_files_menu_menubar), tmp);
-	g_signal_connect(tmp, "activate", G_CALLBACK(recent_file_activate_cb), NULL);
+	gtk_menu_shell_prepend(GTK_MENU_SHELL(grf->menubar), tmp);
+	g_signal_connect(tmp, "activate", G_CALLBACK(grf->activate_cb), NULL);
 	/* then for the recent files menu in the tool bar */
-	if (ui_widgets.recent_files_menu_toolbar != NULL)
+	if (grf->toolbar != NULL)
 	{
 		tmp = gtk_menu_item_new_with_label(utf8_filename);
 		gtk_widget_show(tmp);
-		gtk_container_add(GTK_CONTAINER(ui_widgets.recent_files_menu_toolbar), tmp);
+		gtk_container_add(GTK_CONTAINER(grf->toolbar), tmp);
 		/* this is a bit ugly, but we need to use gtk_container_add(). Using
 		 * gtk_menu_shell_prepend() doesn't emit GtkContainer's "add" signal which we need in
 		 * GeanyMenubuttonAction */
-		gtk_menu_reorder_child(GTK_MENU(ui_widgets.recent_files_menu_toolbar), tmp, 0);
-		g_signal_connect(tmp, "activate", G_CALLBACK(recent_file_activate_cb), NULL);
+		gtk_menu_reorder_child(GTK_MENU(grf->toolbar), tmp, 0);
+		g_signal_connect(tmp, "activate", G_CALLBACK(grf->activate_cb), NULL);
 	}
 }
 
 
-static void update_recent_menu(void)
+static void update_recent_menu(GeanyRecentFiles *grf)
 {
 	GtkWidget *tmp;
 	gchar *filename;
 	GList *children, *item;
 
-	filename = g_queue_peek_head(ui_prefs.recent_queue);
+	filename = g_queue_peek_head(grf->recent_queue);
 
 	/* clean the MRU list before adding an item (menubar) */
-	children = gtk_container_get_children(GTK_CONTAINER(ui_widgets.recent_files_menu_menubar));
+	children = gtk_container_get_children(GTK_CONTAINER(grf->menubar));
 	if (g_list_length(children) > file_prefs.mru_length - 1)
 	{
 		item = g_list_nth(children, file_prefs.mru_length - 1);
@@ -1053,13 +1126,13 @@ static void update_recent_menu(void)
 	/* create item for the menu bar menu */
 	tmp = gtk_menu_item_new_with_label(filename);
 	gtk_widget_show(tmp);
-	gtk_menu_shell_prepend(GTK_MENU_SHELL(ui_widgets.recent_files_menu_menubar), tmp);
-	g_signal_connect(tmp, "activate", G_CALLBACK(recent_file_activate_cb), NULL);
+	gtk_menu_shell_prepend(GTK_MENU_SHELL(grf->menubar), tmp);
+	g_signal_connect(tmp, "activate", G_CALLBACK(grf->activate_cb), NULL);
 
 	/* clean the MRU list before adding an item (toolbar) */
-	if (ui_widgets.recent_files_menu_toolbar != NULL)
+	if (grf->toolbar != NULL)
 	{
-		children = gtk_container_get_children(GTK_CONTAINER(ui_widgets.recent_files_menu_toolbar));
+		children = gtk_container_get_children(GTK_CONTAINER(grf->toolbar));
 		if (g_list_length(children) > file_prefs.mru_length - 1)
 		{
 			item = g_list_nth(children, file_prefs.mru_length - 1);
@@ -1073,9 +1146,9 @@ static void update_recent_menu(void)
 		/* create item for the tool bar menu */
 		tmp = gtk_menu_item_new_with_label(filename);
 		gtk_widget_show(tmp);
-		gtk_container_add(GTK_CONTAINER(ui_widgets.recent_files_menu_toolbar), tmp);
-		gtk_menu_reorder_child(GTK_MENU(ui_widgets.recent_files_menu_toolbar), tmp, 0);
-		g_signal_connect(tmp, "activate", G_CALLBACK(recent_file_activate_cb), NULL);
+		gtk_container_add(GTK_CONTAINER(grf->toolbar), tmp);
+		gtk_menu_reorder_child(GTK_MENU(grf->toolbar), tmp, 0);
+		g_signal_connect(tmp, "activate", G_CALLBACK(grf->activate_cb), NULL);
 	}
 }
 

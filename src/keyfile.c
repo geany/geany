@@ -200,18 +200,18 @@ static void settings_action(GKeyFile *config, SettingAction action)
 }
 
 
-static void save_recent_files(GKeyFile *config)
+static void save_recent_files(GKeyFile *config, GQueue *queue, gchar const *key)
 {
 	gchar **recent_files = g_new0(gchar*, file_prefs.mru_length + 1);
 	guint i;
 
 	for (i = 0; i < file_prefs.mru_length; i++)
 	{
-		if (! g_queue_is_empty(ui_prefs.recent_queue))
+		if (! g_queue_is_empty(queue))
 		{
 			/* copy the values, this is necessary when this function is called from the
 			 * preferences dialog or when quitting is canceled to keep the queue intact */
-			recent_files[i] = g_strdup(g_queue_peek_nth(ui_prefs.recent_queue, i));
+			recent_files[i] = g_strdup(g_queue_peek_nth(queue, i));
 		}
 		else
 		{
@@ -221,7 +221,7 @@ static void save_recent_files(GKeyFile *config)
 	}
 	/* There is a bug in GTK 2.6 g_key_file_set_string_list, we must NULL terminate. */
 	recent_files[file_prefs.mru_length] = NULL;
-	g_key_file_set_string_list(config, "files", "recent_files",
+	g_key_file_set_string_list(config, "files", key,
 				(const gchar**)recent_files, file_prefs.mru_length);
 	g_strfreev(recent_files);
 }
@@ -505,7 +505,8 @@ void configuration_save(void)
 	save_dialog_prefs(config);
 	save_ui_prefs(config);
 	project_save_prefs(config);	/* save project filename, etc. */
-	save_recent_files(config);
+	save_recent_files(config, ui_prefs.recent_queue, "recent_files");
+	save_recent_files(config, ui_prefs.recent_projects_queue, "recent_projects");
 	if (cl_options.load_session)
 		configuration_save_session_files(config);
 
@@ -518,15 +519,32 @@ void configuration_save(void)
 	g_free(configfile);
 }
 
+
+static void load_recent_files(GKeyFile *config, GQueue *queue, const gchar *key)
+{
+	gchar **recent_files;
+	gsize i, len = 0;
+
+	recent_files = g_key_file_get_string_list(config, "files", key, &len, NULL);
+	if (recent_files != NULL)
+	{
+		for (i = 0; (i < len) && (i < file_prefs.mru_length); i++)
+		{
+			gchar *filename = g_strdup(recent_files[i]);
+			g_queue_push_tail(queue, filename);
+		}
+	}
+	g_strfreev(recent_files);
+}
+
+
 /*
  * Load session list from the given keyfile, and store it in the global
  * session_files variable for later file loading
  * */
 void configuration_load_session_files(GKeyFile *config)
 {
-	gchar **recent_files;
 	guint i;
-	gsize len = 0;
 	gboolean have_session_files;
 	gchar entry[16];
 	gchar **tmp_array;
@@ -534,16 +552,8 @@ void configuration_load_session_files(GKeyFile *config)
 
 	session_notebook_page = utils_get_setting_integer(config, "files", "current_page", -1);
 
-	recent_files = g_key_file_get_string_list(config, "files", "recent_files", &len, NULL);
-	if (recent_files != NULL)
-	{
-		for (i = 0; (i < len) && (i < file_prefs.mru_length); i++)
-		{
-			gchar *filename = g_strdup(recent_files[i]);
-			g_queue_push_tail(ui_prefs.recent_queue, filename);
-		}
-	}
-	g_strfreev(recent_files);
+	load_recent_files(config, ui_prefs.recent_queue, "recent_files");
+	load_recent_files(config, ui_prefs.recent_projects_queue, "recent_projects");
 
 	/* the project may load another list than the main setting */
 	if (session_files != NULL)

@@ -84,7 +84,6 @@ typedef struct _PropertyDialogElements
 static gboolean update_config(const PropertyDialogElements *e);
 static void on_file_save_button_clicked(GtkButton *button, PropertyDialogElements *e);
 static void on_file_open_button_clicked(GtkButton *button, PropertyDialogElements *e);
-static gboolean close_open_project(void);
 static gboolean load_config(const gchar *filename);
 static gboolean write_config(gboolean emit_signal);
 static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements *e);
@@ -110,7 +109,7 @@ void project_new()
 	PropertyDialogElements *e;
 	gint response;
 
-	if (! close_open_project()) return;
+	if (! project_ask_close()) return;
 
 	g_return_if_fail(app->project == NULL);
 
@@ -199,6 +198,22 @@ void project_new()
 }
 
 
+gboolean project_load_file_with_session(const gchar *locale_file_name)
+{
+	if (project_load_file(locale_file_name))
+	{
+		if (project_prefs.project_session)
+		{
+			configuration_open_files();
+			/* open a new file if no other file was opened */
+			document_new_file_if_non_open();
+		}
+		return TRUE;
+	}
+	return FALSE;
+}
+
+
 #ifndef G_OS_WIN32
 static void run_open_dialog(GtkDialog *dialog)
 {
@@ -212,7 +227,7 @@ static void run_open_dialog(GtkDialog *dialog)
 		gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
 
 		/* try to load the config */
-		if (! project_load_file(filename))
+		if (! project_load_file_with_session(filename))
 		{
 			gchar *utf8_filename = utils_get_utf8_from_locale(filename);
 
@@ -223,12 +238,6 @@ static void run_open_dialog(GtkDialog *dialog)
 			goto retry;
 		}
 		g_free(filename);
-		if (project_prefs.project_session)
-		{
-			configuration_open_files();
-			/* open a new file if no other file was opened */
-			document_new_file_if_non_open();
-		}
 	}
 }
 #endif
@@ -244,22 +253,16 @@ void project_open()
 	GtkFileFilter *filter;
 	gchar *locale_path;
 #endif
-	if (! close_open_project()) return;
+	if (! project_ask_close()) return;
 
 #ifdef G_OS_WIN32
 	file = win32_show_project_open_dialog(main_widgets.window, _("Open Project"), dir, FALSE, TRUE);
 	if (file != NULL)
 	{
 		/* try to load the config */
-		if (! project_load_file(file))
+		if (! project_load_file_full(file))
 		{
 			SHOW_ERR1(_("Project file \"%s\" could not be loaded."), file);
-		}
-		else if (project_prefs.project_session)
-		{
-			configuration_open_files();
-			/* open a new file if no other file was opened */
-			document_new_file_if_non_open();
 		}
 		g_free(file);
 	}
@@ -561,7 +564,7 @@ void project_properties()
 /* checks whether there is an already open project and asks the user if he wants to close it or
  * abort the current action. Returns FALSE when the current action(the caller) should be cancelled
  * and TRUE if we can go ahead */
-static gboolean close_open_project()
+gboolean project_ask_close(void)
 {
 	if (app->project != NULL)
 	{
@@ -893,7 +896,12 @@ gboolean project_load_file(const gchar *locale_file_name)
 
 	if (load_config(locale_file_name))
 	{
+		gchar *utf8_filename = utils_get_utf8_from_locale(locale_file_name);
+
 		ui_set_statusbar(TRUE, _("Project \"%s\" opened."), app->project->name);
+
+		ui_add_recent_project_file(utf8_filename);
+		g_free(utf8_filename);
 		return TRUE;
 	}
 	else

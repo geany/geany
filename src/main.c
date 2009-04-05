@@ -270,13 +270,21 @@ static void main_init(void)
 	ignore_callback	= FALSE;
 	app->tm_workspace		= tm_get_workspace();
 	ui_prefs.recent_queue				= g_queue_new();
-	main_status.opening_session_files		= FALSE;
+	ui_prefs.recent_projects_queue		= g_queue_new();
+	main_status.opening_session_files	= FALSE;
 
 	main_widgets.window = create_window1();
+	/* add recent files to the File menu */
 	ui_widgets.recent_files_menuitem = ui_lookup_widget(main_widgets.window, "recent_files1");
 	ui_widgets.recent_files_menu_menubar = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(ui_widgets.recent_files_menuitem),
 							ui_widgets.recent_files_menu_menubar);
+
+	/* add recent projects to the Project menu */
+	ui_widgets.recent_projects_menuitem = ui_lookup_widget(main_widgets.window, "recent_projects1");
+	ui_widgets.recent_projects_menu_menubar = gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(ui_widgets.recent_projects_menuitem),
+							ui_widgets.recent_projects_menu_menubar);
 
 	/* store important pointers for later reference */
 	main_widgets.toolbar = toolbar_init();
@@ -1020,7 +1028,7 @@ gint main(gint argc, gchar **argv)
 #ifdef HAVE_VTE
 	vte_init();
 #endif
-	ui_create_recent_menu();
+	ui_create_recent_menus();
 
 	ui_set_statusbar(TRUE, _("This is Geany %s."), main_get_version_string());
 	if (config_dir_result != 0)
@@ -1096,6 +1104,16 @@ gint main(gint argc, gchar **argv)
 }
 
 
+static void queue_free(GQueue *queue)
+{
+	while (! g_queue_is_empty(queue))
+	{
+		g_free(g_queue_pop_tail(queue));
+	}
+	g_queue_free(queue);
+}
+
+
 void main_quit()
 {
 	geany_debug("Quitting...");
@@ -1153,11 +1171,9 @@ void main_quit()
 	g_free(printing_prefs.external_print_cmd);
 	g_free(printing_prefs.page_header_datefmt);
 	g_strfreev(ui_prefs.custom_commands);
-	while (! g_queue_is_empty(ui_prefs.recent_queue))
-	{
-		g_free(g_queue_pop_tail(ui_prefs.recent_queue));
-	}
-	g_queue_free(ui_prefs.recent_queue);
+
+	queue_free(ui_prefs.recent_queue);
+	queue_free(ui_prefs.recent_projects_queue);
 
 	if (ui_widgets.prefs_dialog && GTK_IS_WIDGET(ui_widgets.prefs_dialog)) gtk_widget_destroy(ui_widgets.prefs_dialog);
 	if (ui_widgets.save_filesel && GTK_IS_WIDGET(ui_widgets.save_filesel)) gtk_widget_destroy(ui_widgets.save_filesel);

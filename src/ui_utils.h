@@ -88,6 +88,7 @@ typedef struct UIPrefs
 
 	/* Menu-item related data */
 	GQueue		*recent_queue;
+	GQueue		*recent_projects_queue;
 	gchar		*custom_date_format;
 	gchar		**custom_commands;
 }
@@ -106,6 +107,8 @@ typedef struct UIWidgets
 	GtkWidget	*recent_files_menu_menubar;
 	GtkWidget	*recent_files_menu_toolbar;
 	GtkWidget	*print_page_setup;
+	GtkWidget	*recent_projects_menuitem;
+	GtkWidget	*recent_projects_menu_menubar;
 
 	/* dialogs */
 	GtkWidget	*open_colorsel;
@@ -252,9 +255,11 @@ GdkPixbuf *ui_new_pixbuf_from_inline(gint img);
 GtkWidget *ui_new_image_from_inline(gint img);
 
 
-void ui_create_recent_menu(void);
+void ui_create_recent_menus(void);
 
 void ui_add_recent_file(const gchar *utf8_filename);
+
+void ui_add_recent_project_file(const gchar *utf8_filename);
 
 
 void ui_update_tab_status(GeanyDocument *doc);

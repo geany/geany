@@ -70,8 +70,12 @@ void project_close(gboolean open_default);
 
 void project_properties(void);
 
+gboolean project_ask_close(void);
+
 
 gboolean project_load_file(const gchar *locale_file_name);
+
+gboolean project_load_file_with_session(const gchar *locale_file_name);
 
 gchar *project_get_base_path(void);
 

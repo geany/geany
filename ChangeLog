@@ -2,6 +2,11 @@
 
  * src/ui_utils.c:
    Add sanity checks in ui_lookup_widget() just to be safe.
+ * THANKS, TODO, geany.glade, src/about.c, src/interface.c,
+   src/keyfile.c, src/main.c, src/plugindata.h, src/project.c,
+   src/project.h, src/ui_utils.c, src/ui_utils.h:
+   Add "Recent Projects" menu to the Project menu
+   (#2728630, patch by Elias Pschernig, thanks).
 
 
 2009-04-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
