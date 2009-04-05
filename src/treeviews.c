@@ -163,7 +163,7 @@ void treeviews_update_tag_list(GeanyDocument *doc, gboolean update)
 	if (gtk_bin_get_child(GTK_BIN(tag_window)))
 		gtk_container_remove(GTK_CONTAINER(tag_window), gtk_bin_get_child(GTK_BIN(tag_window)));
 
-	if (tv.default_tag_tree == NULL)
+	if (G_UNLIKELY(tv.default_tag_tree == NULL))
 	{
 		GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW(tag_window);
 		GtkWidget *label;
@@ -182,7 +182,7 @@ void treeviews_update_tag_list(GeanyDocument *doc, gboolean update)
 	}
 
 	/* show default empty tag tree if there are no tags */
-	if (doc == NULL || doc->file_type == NULL ||
+	if (G_UNLIKELY(doc == NULL) || G_UNLIKELY(doc->file_type == NULL) ||
 		! filetype_has_tags(doc->file_type))
 	{
 		gtk_container_add(GTK_CONTAINER(tag_window), tv.default_tag_tree);
@@ -191,7 +191,7 @@ void treeviews_update_tag_list(GeanyDocument *doc, gboolean update)
 
 	if (update)
 	{	/* updating the tag list in the left tag window */
-		if (doc->priv->tag_tree == NULL)
+		if (G_UNLIKELY(doc->priv->tag_tree == NULL))
 		{
 			doc->priv->tag_store = gtk_tree_store_new(
 				SYMBOLS_N_COLUMNS, GDK_TYPE_PIXBUF, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_STRING);
@@ -403,7 +403,7 @@ void treeviews_openfiles_update_all()
 	for (i = 0; i < page_count; i++)
 	{
 		doc = document_get_from_page(i);
-		if (doc == NULL)
+		if (G_UNLIKELY(doc == NULL))
 			continue;
 
 		treeviews_openfiles_add(doc);
@@ -580,7 +580,7 @@ void treeviews_select_openfiles_item(GeanyDocument *doc)
 
 static void document_action(GeanyDocument *doc, gint action)
 {
-	if (!DOC_VALID(doc))
+	if (! DOC_VALID(doc))
 		return;
 
 	switch (action)
@@ -665,7 +665,7 @@ static void on_openfiles_tree_selection_changed(GtkTreeSelection *selection, gpo
 	if (gtk_tree_selection_get_selected(selection, &model, &iter) && ! ignore_callback)
 	{
 		gtk_tree_model_get(model, &iter, DOCUMENTS_DOCUMENT, &doc, -1);
-		if (!doc)
+		if (G_UNLIKELY(! doc))
 			return;	/* parent */
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
 					gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
@@ -686,7 +686,7 @@ static gboolean on_taglist_tree_selection_changed(GtkTreeSelection *selection)
 		const TMTag *tag;
 
 		gtk_tree_model_get(model, &iter, SYMBOLS_COLUMN_TAG, &tag, -1);
-		if (!tag)
+		if (G_UNLIKELY(! tag))
 			return FALSE;
 
 		line = tag->atts.entry.line;

@@ -9,6 +9,17 @@
    (#2728630, patch by Elias Pschernig, thanks).
  * doc/geany.txt, doc/geany.html:
    Describe how to build Geany using the Waf build system.
+ * src/build.c, src/callbacks.c, src/dialogs.c, src/document.c,
+   src/document.h, src/editor.c, src/encodings.c, src/filetypes.c,
+   src/geanymenubuttonaction.c, src/geanyobject.c, src/geanywraplabel.c,
+   src/highlighting.c, src/keybindings.c, src/keyfile.c, src/log.c,
+   src/main.c, src/msgwindow.c, src/navqueue.c, src/notebook.c,
+   src/plugins.c, src/prefs.c, src/queue.c, src/sciwrappers.c,
+   src/socket.c, src/symbols.c, src/templates.c, src/toolbar.c,
+   src/tools.c, src/tools.h, src/treeviews.c, src/ui_utils.c,
+   src/utils.c, src/utils.h, src/vte.c:
+   Start using G_LIKELY/G_UNLIKELY macros to gain a little more
+   performance when building the code with gcc.
 
 
 2009-04-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

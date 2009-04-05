@@ -319,13 +319,15 @@ void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const 
 	GtkTreeIter iter;
 	const GdkColor *color = get_color(msg_color);
 	gchar *tmp;
+	gsize len;
 
 	if (! ui_prefs.msgwindow_visible) msgwin_show_hide(TRUE);
 
 	/* work around a strange problem when adding very long lines(greater than 4000 bytes)
 	 * cut the string to a maximum of 1024 bytes and discard the rest */
 	/* TODO: find the real cause for the display problem / if it is GtkTreeView file a bug report */
-	if (strlen(string) > 1024)
+	len = strlen(string);
+	if (G_UNLIKELY(len > 1024))
 		tmp = g_strndup(string, 1024);
 	else
 		tmp = g_strdup(string);
@@ -357,10 +359,7 @@ void msgwin_status_add(const gchar *format, ...)
 
 	/* add a timestamp to status messages */
 	time_str = utils_get_current_time_string();
-	if (time_str == NULL)
-		statusmsg = g_strdup(string);
-	else
-		statusmsg = g_strconcat(time_str, ": ", string, NULL);
+	statusmsg = g_strconcat(time_str, ": ", string, NULL);
 	g_free(time_str);
 
 	/* add message to Status window */
@@ -368,12 +367,13 @@ void msgwin_status_add(const gchar *format, ...)
 	gtk_list_store_set(msgwindow.store_status, &iter, 0, statusmsg, -1);
 	g_free(statusmsg);
 
-	if (main_status.main_window_realized)
+	if (G_LIKELY(main_status.main_window_realized))
 	{
 		GtkTreePath *path = gtk_tree_model_get_path(gtk_tree_view_get_model(GTK_TREE_VIEW(msgwindow.tree_status)), &iter);
 
 		gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(msgwindow.tree_status), path, NULL, FALSE, 0.0, 0.0);
-		if (prefs.switch_to_status) gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_STATUS);
+		if (prefs.switch_to_status)
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_STATUS);
 		gtk_tree_path_free(path);
 	}
 }
@@ -422,7 +422,7 @@ on_compiler_treeview_copy_activate     (GtkMenuItem     *menuitem,
 		gchar *string;
 
 		gtk_tree_model_get(model, &iter, str_idx, &string, -1);
-		if (string && *string)
+		if (NZV(string))
 		{
 			gtk_clipboard_set_text(gtk_clipboard_get(gdk_atom_intern("CLIPBOARD", FALSE)),
 				string, -1);
@@ -475,7 +475,7 @@ static void on_compiler_treeview_copy_all_activate(GtkMenuItem *menuitem, gpoint
 	}
 
 	/* copy the string into the clipboard */
-	if (str->len > 0)
+	if (G_LIKELY(str->len > 0))
 	{
 		gtk_clipboard_set_text(
 			gtk_clipboard_get(gdk_atom_intern("CLIPBOARD", FALSE)),
@@ -562,7 +562,7 @@ find_prev_build_dir(GtkTreePath *cur, GtkTreeModel *model, gchar **prefix)
 		{
 			gchar *string;
 			gtk_tree_model_get(model, &iter, 1, &string, -1);
-			if (string != NULL && build_parse_make_dir(string, prefix))
+			if (G_LIKELY(string != NULL) && build_parse_make_dir(string, prefix))
 			{
 				g_free(string);
 				return TRUE;
@@ -598,7 +598,7 @@ gboolean msgwin_goto_compiler_file_line()
 		gdk_color_free(color);
 
 		gtk_tree_model_get(model, &iter, 1, &string, -1);
-		if (string != NULL)
+		if (G_LIKELY(string != NULL))
 		{
 			gint line;
 			gchar *filename, *dir;
@@ -625,7 +625,7 @@ gboolean msgwin_goto_compiler_file_line()
 				if (doc == NULL)	/* file not already open */
 					doc = document_open_file(filename, FALSE, NULL, NULL);
 
-				if (doc != NULL)
+				if (G_LIKELY(doc != NULL))
 				{
 					if (! doc->changed)	/* if modified, line may be wrong */
 						editor_indicator_set_on_line(doc->editor, GEANY_INDICATOR_ERROR, line - 1);
@@ -645,7 +645,7 @@ static void make_absolute(gchar **filename, const gchar *dir)
 {
 	guint skip_dot_slash = 0;	/* number of characters to skip at the beginning of the filename */
 
-	if (*filename == NULL)
+	if (G_UNLIKELY(*filename == NULL))
 		return;
 
 	/* skip some characters at the beginning of the filename, at the moment only "./"
@@ -673,7 +673,7 @@ static void parse_file_line(ParseData *data, gchar **filename, gint *line)
 	*filename = NULL;
 	*line = -1;
 
-	g_return_if_fail(data->string != NULL);
+	g_return_if_fail(G_LIKELY(data->string != NULL));
 
 	fields = g_strsplit_set(data->string, data->pattern, data->min_fields);
 
@@ -687,7 +687,7 @@ static void parse_file_line(ParseData *data, gchar **filename, gint *line)
 	*line = strtol(fields[data->line_idx], &end, 10);
 
 	/* if the line could not be read, line is 0 and an error occurred, so we leave */
-	if (fields[data->line_idx] == end)
+	if (G_UNLIKELY(fields[data->line_idx] == end))
 	{
 		g_strfreev(fields);
 		return;
@@ -724,7 +724,7 @@ static void parse_compiler_error_line(const gchar *string,
 			 * Parse error: syntax error, unexpected T_LNUMBER, expecting T_FUNCTION in bob.php on line 16 */
 			gchar *tmp = strstr(string, " in ");
 
-			if(tmp != NULL)
+			if (tmp != NULL)
 			{
 				data.string = tmp;
 				data.pattern = " ";
@@ -886,12 +886,12 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
 	*filename = NULL;
 	*line = -1;
 
-	if (string == NULL)
+	if (G_UNLIKELY(string == NULL))
 		return;
 
 	if (dir == NULL)
 		dir = build_info.dir;
-	g_return_if_fail(dir != NULL);
+	g_return_if_fail(G_LIKELY(dir != NULL));
 
 	trimmed_string = g_strdup(string);
 	g_strchug(trimmed_string); /* remove possible leading whitespace */
@@ -930,7 +930,7 @@ gboolean msgwin_goto_messages_file_line()
 		{
 			ret = navqueue_goto_line(old_doc, doc, line);
 		}
-		else if (line < 0 && string != NULL)
+		else if (line < 0 && G_LIKELY(string != NULL))
 		{
 			gchar *filename;
 			msgwin_parse_grep_line(string, &filename, &line);
@@ -938,7 +938,7 @@ gboolean msgwin_goto_messages_file_line()
 			{
 				/* use document_open_file to find an already open file, or open it in place */
 				doc = document_open_file(filename, FALSE, NULL, NULL);
-				if (doc != NULL)
+				if (G_LIKELY(doc != NULL))
 					ret = navqueue_goto_line(old_doc, doc, line);
 			}
 			g_free(filename);
@@ -961,7 +961,7 @@ static void msgwin_parse_grep_line(const gchar *string, gchar **filename, gint *
 	*filename = NULL;
 	*line = -1;
 
-	if (string == NULL || msgwindow.find_in_files_dir == NULL)
+	if (G_UNLIKELY(string == NULL) || msgwindow.find_in_files_dir == NULL)
 		return;
 
 	/* conflict:3:conflicting types for `foo' */
@@ -1087,7 +1087,7 @@ void msgwin_clear_tab(gint tabnum)
 		case MSG_STATUS: store = msgwindow.store_status; break;
 		default: return;
 	}
-	if (store == NULL)
+	if (G_UNLIKELY(store == NULL))
 		return;
 	gtk_list_store_clear(store);
 }

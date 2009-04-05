@@ -141,7 +141,7 @@ on_file_open_selection_changed         (GtkFileChooser  *filechooser,
 	gchar *filename = gtk_file_chooser_get_filename(filechooser);
 	gboolean is_on = gtk_file_chooser_get_show_hidden(filechooser);
 
-	if (filename)
+	if (G_LIKELY(filename))
 	{
 		/* try to get the UTF-8 equivalent for the filename, fallback to filename if error */
 		gchar *utf8_filename = utils_get_utf8_from_locale(filename);
@@ -218,7 +218,7 @@ static void create_open_file_dialog(void)
 				filetypes_create_file_filter_all_source());
 	foreach_slist(ft, node, filetypes_by_title)
 	{
-		if (ft->id == GEANY_FILETYPES_NONE)
+		if (G_UNLIKELY(ft->id == GEANY_FILETYPES_NONE))
 			continue;
 		gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), ft->title);
 		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
@@ -268,7 +268,7 @@ void dialogs_show_open_file()
 
 	/* We use the same file selection widget each time, so first of all we create it
 	 * if it hasn't already been created. */
-	if (ui_widgets.open_filesel == NULL)
+	if (G_UNLIKELY(ui_widgets.open_filesel == NULL))
 		create_open_file_dialog();
 
 	if (initdir != NULL)
@@ -516,7 +516,7 @@ static gboolean gtk_show_save_as(const gchar *initdir)
 	gint resp;
 	gboolean folder_set = FALSE;
 
-	if (ui_widgets.save_filesel == NULL)
+	if (G_UNLIKELY(ui_widgets.save_filesel == NULL))
 		create_save_file_dialog();
 
 	gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(ui_widgets.save_filesel));
@@ -704,7 +704,7 @@ gboolean dialogs_show_unsaved_file(GeanyDocument *doc)
 		document_get_notebook_page(doc));
 	main_status.quitting = old_quitting_state;
 
-	if (doc->file_name != NULL)
+	if (G_LIKELY(doc->file_name != NULL))
 	{
 		short_fn = g_path_get_basename(doc->file_name);
 	}
@@ -959,9 +959,9 @@ gboolean dialogs_show_input_numeric(const gchar *title, const gchar *label_text,
 	GtkWidget *dialog, *label, *spin, *vbox;
 	gboolean res = FALSE;
 
-	g_return_val_if_fail(title != NULL, FALSE);
-	g_return_val_if_fail(label_text != NULL, FALSE);
-	g_return_val_if_fail(value != NULL, FALSE);
+	g_return_val_if_fail(G_LIKELY(title != NULL), FALSE);
+	g_return_val_if_fail(G_LIKELY(label_text != NULL), FALSE);
+	g_return_val_if_fail(G_LIKELY(value != NULL), FALSE);
 
 	dialog = gtk_dialog_new_with_buttons(title, GTK_WINDOW(main_widgets.window),
 										GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -1023,7 +1023,7 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 # define S_IXOTH 0
 #endif
 
-	if (doc == NULL || doc->file_name == NULL)
+	if (G_UNLIKELY(doc == NULL) || G_UNLIKELY(doc->file_name == NULL))
 	{
 		dialogs_show_msgbox(GTK_MESSAGE_ERROR,
 		_("An error occurred or file information could not be retrieved (e.g. from a new file)."));

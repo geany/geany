@@ -406,7 +406,7 @@ static Plugin *find_active_plugin_by_name(const gchar *filename)
 {
 	GList *item;
 
-	g_return_val_if_fail(filename, FALSE);
+	g_return_val_if_fail(G_LIKELY(filename), FALSE);
 
 	for (item = active_plugin_list; item != NULL; item = g_list_next(item))
 	{
@@ -425,7 +425,7 @@ plugin_check_version(GModule *module)
 
 	g_module_symbol(module, "plugin_version_check", (void *) &version_check);
 
-	if (! version_check)
+	if (G_UNLIKELY(! version_check))
 	{
 		geany_debug("Plugin \"%s\" has no plugin_version_check() function - ignoring plugin!",
 				g_module_name(module));
@@ -443,7 +443,7 @@ plugin_check_version(GModule *module)
 				"release of Geany - recompile it.", g_module_name(module));
 			return FALSE;
 		}
-		if (result > 0)
+		if (G_UNLIKELY(result > 0))
 		{
 			geany_debug("Plugin \"%s\" requires a newer version of Geany (API >= v%d).",
 				g_module_name(module), result);
@@ -528,33 +528,33 @@ plugin_init(Plugin *plugin)
 
 	/* set these symbols before plugin_init() is called */
 	g_module_symbol(plugin->module, "geany_plugin", (void *) &p_geany_plugin);
-	if (p_geany_plugin)
+	if (G_LIKELY(p_geany_plugin))
 		*p_geany_plugin = &plugin->public;
 	g_module_symbol(plugin->module, "plugin_info", (void *) &p_info);
-	if (p_info)
+	if (G_LIKELY(p_info))
 		*p_info = &plugin->info;
 	g_module_symbol(plugin->module, "geany_data", (void *) &p_geany_data);
-	if (p_geany_data)
+	if (G_LIKELY(p_geany_data))
 		*p_geany_data = &geany_data;
 	g_module_symbol(plugin->module, "geany_functions", (void *) &p_geany_functions);
-	if (p_geany_functions)
+	if (G_LIKELY(p_geany_functions))
 		*p_geany_functions = &geany_functions;
 	g_module_symbol(plugin->module, "plugin_fields", (void *) &plugin_fields);
 	if (plugin_fields)
 		*plugin_fields = &plugin->fields;
 
 	/* start the plugin */
-	g_return_if_fail(plugin->init);
+	g_return_if_fail(G_LIKELY(plugin->init));
 	plugin->init(&geany_data);
 
-	if (p_geany_plugin && (*p_geany_plugin)->priv->resident)
+	if (G_LIKELY(p_geany_plugin) && (*p_geany_plugin)->priv->resident)
 		g_module_make_resident(plugin->module);
 
 	/* store some function pointers for later use */
 	g_module_symbol(plugin->module, "plugin_configure", (void *) &plugin->configure);
 	g_module_symbol(plugin->module, "plugin_help", (void *) &plugin->help);
 	g_module_symbol(plugin->module, "plugin_cleanup", (void *) &plugin->cleanup);
-	if (plugin->cleanup == NULL)
+	if (G_UNLIKELY(plugin->cleanup == NULL))
 	{
 		if (app->debug_mode)
 			g_warning("Plugin '%s' has no plugin_cleanup() function - there may be memory leaks!",
@@ -572,8 +572,7 @@ plugin_init(Plugin *plugin)
 	if (callbacks)
 		add_callbacks(plugin, callbacks);
 
-	g_module_symbol(plugin->module, "plugin_key_group",
-		(void *) &plugin->key_group);
+	g_module_symbol(plugin->module, "plugin_key_group", (void *) &plugin->key_group);
 	if (plugin->key_group)
 		add_kb_group(plugin);
 
@@ -597,7 +596,7 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 	GModule *module;
 	void (*plugin_set_info)(PluginInfo*);
 
-	g_return_val_if_fail(fname, NULL);
+	g_return_val_if_fail(G_LIKELY(fname), NULL);
 	g_return_val_if_fail(g_module_supported(), NULL);
 
 	/* find the plugin in the list of already loaded, active plugins and use it, otherwise
@@ -618,7 +617,7 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 	 * Also without G_MODULE_BIND_LOCAL calling public functions e.g. the old info()
 	 * function from a plugin will be shadowed. */
 	module = g_module_open(fname, G_MODULE_BIND_LOCAL);
-	if (! module)
+	if (G_UNLIKELY(! module))
 	{
 		geany_debug("Can't load plugin: %s", g_module_error());
 		return NULL;
@@ -641,7 +640,7 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 	}
 
 	g_module_symbol(module, "plugin_set_info", (void *) &plugin_set_info);
-	if (plugin_set_info == NULL)
+	if (G_UNLIKELY(plugin_set_info == NULL))
 	{
 		geany_debug("No plugin_set_info() defined for \"%s\" - ignoring plugin!", fname);
 
@@ -666,7 +665,7 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 	}
 
 	g_module_symbol(module, "plugin_init", (void *) &plugin->init);
-	if (plugin->init == NULL)
+	if (G_UNLIKELY(plugin->init == NULL))
 	{
 		geany_debug("Plugin '%s' has no plugin_init() function - ignoring plugin!",
 			plugin->info.name);
@@ -718,7 +717,7 @@ plugin_cleanup(Plugin *plugin)
 {
 	GtkWidget *widget;
 
-	if (plugin->cleanup)
+	if (G_LIKELY(plugin->cleanup))
 		plugin->cleanup();
 
 	remove_callbacks(plugin);
@@ -737,15 +736,15 @@ plugin_cleanup(Plugin *plugin)
 static void
 plugin_free(Plugin *plugin)
 {
-	g_return_if_fail(plugin);
-	g_return_if_fail(plugin->module);
+	g_return_if_fail(G_LIKELY(plugin));
+	g_return_if_fail(G_LIKELY(plugin->module));
 
 	if (is_active_plugin(plugin))
 		plugin_cleanup(plugin);
 
 	active_plugin_list = g_list_remove(active_plugin_list, plugin);
 
-	if (plugin->module != NULL && ! g_module_close(plugin->module))
+	if (! g_module_close(plugin->module))
 		g_warning("%s: %s", plugin->filename, g_module_error());
 
 	plugin_list = g_list_remove(plugin_list, plugin);
@@ -789,7 +788,7 @@ load_plugins_from_path(const gchar *path)
 	for (item = list; item != NULL; item = g_slist_next(item))
 	{
 		tmp = strrchr(item->data, '.');
-		if (tmp == NULL || utils_str_casecmp(tmp, "." PLUGIN_EXT) != 0)
+		if (G_UNLIKELY(tmp == NULL) || utils_str_casecmp(tmp, "." PLUGIN_EXT) != 0)
 			continue;
 
 		fname = g_strconcat(path, G_DIR_SEPARATOR_S, item->data, NULL);
@@ -1018,7 +1017,7 @@ void pm_selection_changed(GtkTreeSelection *selection, gpointer user_data)
 	{
 		gtk_tree_model_get(model, &iter, PLUGIN_COLUMN_PLUGIN, &p, -1);
 
-		if (p != NULL)
+		if (G_LIKELY(p != NULL))
 		{
 			gchar *text;
 			PluginInfo *pi;
@@ -1054,7 +1053,7 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 
 	gtk_tree_model_get(GTK_TREE_MODEL(pm_widgets.store), &iter,
 		PLUGIN_COLUMN_CHECK, &old_state, PLUGIN_COLUMN_PLUGIN, &p, -1);
-	if (p == NULL)
+	if (G_UNLIKELY(p == NULL))
 		return;
 	state = ! old_state; /* toggle the state */
 
@@ -1132,9 +1131,10 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
 	}
 	else
 	{
+		Plugin *p;
 		for (; list != NULL; list = list->next)
 		{
-			Plugin *p = list->data;
+			p = list->data;
 
 			gtk_list_store_append(store, &iter);
 			gtk_list_store_set(store, &iter,
@@ -1195,7 +1195,7 @@ void pm_on_plugin_button_clicked(GtkButton *button, gpointer user_data)
 	{
 		gtk_tree_model_get(model, &iter, PLUGIN_COLUMN_PLUGIN, &p, -1);
 
-		if (p != NULL)
+		if (G_LIKELY(p != NULL))
 		{
 			if (GPOINTER_TO_INT(user_data) == PM_BUTTON_CONFIGURE)
 				configure_plugin(p);
@@ -1316,7 +1316,7 @@ void plugin_add_toolbar_item(GeanyPlugin *plugin, GtkToolItem *item)
 	gint pos;
 	GeanyAutoSeparator *autosep;
 
-	g_return_if_fail(plugin);
+	g_return_if_fail(G_LIKELY(plugin));
 	autosep = &plugin->priv->toolbar_separator;
 
 	if (!autosep->widget)
@@ -1334,7 +1334,7 @@ void plugin_add_toolbar_item(GeanyPlugin *plugin, GtkToolItem *item)
 	else
 	{
 		pos = gtk_toolbar_get_item_index(toolbar, GTK_TOOL_ITEM(autosep->widget));
-		g_return_if_fail(pos >= 0);
+		g_return_if_fail(G_LIKELY(pos >= 0));
 		gtk_toolbar_insert(toolbar, item, pos);
 	}
 	/* hide the separator widget if there are no toolbar items showing for the plugin */
@@ -1352,7 +1352,7 @@ void plugin_add_toolbar_item(GeanyPlugin *plugin, GtkToolItem *item)
  */
 void plugin_module_make_resident(GeanyPlugin *plugin)
 {
-	g_return_if_fail(plugin);
+	g_return_if_fail(G_LIKELY(plugin));
 
 	plugin->priv->resident = TRUE;
 }

@@ -135,7 +135,6 @@ static void init_kb_tree(void)
 	GtkTreeViewColumn *column;
 
 	tree = GTK_TREE_VIEW(ui_lookup_widget(ui_widgets.prefs_dialog, "treeview7"));
-	/*g_object_set(tree, "vertical-separator", 6, NULL);*/
 
 	store = gtk_tree_store_new(3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
@@ -167,13 +166,16 @@ static void init_keybindings(void)
 {
 	GtkTreeIter parent, iter;
 	gsize g, i;
+	gchar *key_string;
+	GeanyKeyGroup *group;
+	GeanyKeyBinding *kb;
 
-	if (store == NULL)
+	if (G_UNLIKELY(store == NULL))
 		init_kb_tree();
 
 	for (g = 0; g < keybinding_groups->len; g++)
 	{
-		GeanyKeyGroup *group = g_ptr_array_index(keybinding_groups, g);
+		group = g_ptr_array_index(keybinding_groups, g);
 
 		gtk_tree_store_append(store, &parent, NULL);
 		gtk_tree_store_set(store, &parent, KB_TREE_ACTION, group->label,
@@ -181,8 +183,7 @@ static void init_keybindings(void)
 
 		for (i = 0; i < group->count; i++)
 		{
-			GeanyKeyBinding *kb = &group->keys[i];
-			gchar *key_string;
+			kb = &group->keys[i];
 
 			key_string = gtk_accelerator_name(kb->key, kb->mods);
 			gtk_tree_store_append(store, &iter, &parent);
@@ -1184,7 +1185,7 @@ static GeanyKeyBinding *lookup_kb_from_iter(G_GNUC_UNUSED GtkTreeModel *model, G
 
 static void on_cell_edited(GtkCellRendererText *cellrenderertext, gchar *path, gchar *new_text, gpointer user_data)
 {
-	if (path != NULL && new_text != NULL)
+	if (G_LIKELY(path != NULL) && new_text != NULL)
 	{
 		GtkTreeIter iter;
 		guint lkey;
@@ -1221,7 +1222,7 @@ static gboolean on_keytype_dialog_response(GtkWidget *dialog, GdkEventKey *event
 
     state = event->state & GEANY_KEYS_MODIFIER_MASK;
 
-	if (event->keyval == GDK_Escape)
+	if (G_UNLIKELY(event->keyval == GDK_Escape))
 		return FALSE;	/* close the dialog, don't allow escape when detecting keybindings. */
 
 	str = gtk_accelerator_name(event->keyval, state);
@@ -1280,7 +1281,7 @@ static gboolean find_child_iter(GtkTreeIter *parent, guint i, GtkTreeIter *iter)
 	while (TRUE)	/* foreach child */
 	{
 		gtk_tree_model_get(model, iter, KB_TREE_INDEX, &idx, -1);
-		if (idx == i)
+		if (G_UNLIKELY(idx == i))
 			return TRUE;
 		if (! gtk_tree_model_iter_next(model, iter))
 			return FALSE;	/* no more children */
@@ -1312,7 +1313,8 @@ static gboolean find_duplicate(GeanyKeyBinding *search_kb,
 	gsize g, i;
 
 	/* allow duplicate if there is no key combination */
-	if (key == 0 && mods == 0) return FALSE;
+	if (G_UNLIKELY(key == 0) && G_UNLIKELY(mods == 0))
+		return FALSE;
 
 	for (g = 0; g < keybinding_groups->len; g++)
 	{
@@ -1412,7 +1414,7 @@ static void on_prefs_print_page_header_toggled(GtkToggleButton *togglebutton, gp
 
 void prefs_show_dialog(void)
 {
-	if (ui_widgets.prefs_dialog == NULL)
+	if (G_UNLIKELY(ui_widgets.prefs_dialog == NULL))
 	{
 		GtkWidget *combo_new, *combo_open, *combo_eol;
 		GtkWidget *label;

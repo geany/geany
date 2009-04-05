@@ -88,9 +88,9 @@
 
 #ifdef G_OS_WIN32
 #define REMOTE_CMD_PORT		49876
-#define SOCKET_IS_VALID(s)	((s) != INVALID_SOCKET)
+#define SOCKET_IS_VALID(s)	(G_LIKELY((s) != INVALID_SOCKET))
 #else
-#define SOCKET_IS_VALID(s)	((s) >= 0)
+#define SOCKET_IS_VALID(s)	(G_LIKELY((s) >= 0))
 #define INVALID_SOCKET		(-1)
 #endif
 
@@ -122,7 +122,7 @@ void send_open_command(gint sock, gint argc, gchar **argv)
 	gint i;
 	gchar *filename;
 
-	g_return_if_fail(argc > 1);
+	g_return_if_fail(G_LIKELY(argc > 1));
 	geany_debug("using running instance of Geany");
 
 	if (cl_options.goto_line >= 0)
@@ -150,7 +150,7 @@ void send_open_command(gint sock, gint argc, gchar **argv)
 		filename = main_get_argv_filename(argv[i]);
 
 		/* if the filename is valid or if a new file should be opened is check on the other side */
-		if (filename != NULL)
+		if (G_LIKELY(filename != NULL))
 		{
 			socket_fd_write_all(sock, filename, strlen(filename));
 			socket_fd_write_all(sock, "\n", 1);
@@ -199,7 +199,7 @@ gint socket_init(gint argc, gchar **argv)
 	HWND hwnd;
 	socket_init_win32();
 	hmutex = CreateMutexA(NULL, FALSE, "Geany");
-	if (! hmutex)
+	if (G_UNLIKELY(! hmutex))
 	{
 		geany_debug("cannot create Mutex\n");
 		return -1;
@@ -213,20 +213,20 @@ gint socket_init(gint argc, gchar **argv)
 		 * and the only data is the configuration directory path.
 		 * For now we use one port number, that is we support only one instance at all. */
 		sock = socket_fd_open_inet(REMOTE_CMD_PORT);
-		if (sock < 0)
+		if (G_UNLIKELY(sock < 0))
 			return 0;
 		return sock;
 	}
 
 	sock = socket_fd_connect_inet(REMOTE_CMD_PORT);
-	if (sock < 0)
+	if (G_UNLIKELY(sock < 0))
 		return -1;
 #else
 	gchar *display_name = gdk_get_display();
 	gchar *hostname = utils_get_hostname();
 	gchar *p;
 
-	if (display_name == NULL)
+	if (G_UNLIKELY(display_name == NULL))
 		display_name = g_strdup("NODISPLAY");
 
 	/* these lines are taken from dcopc.c in kdelibs */
@@ -235,7 +235,7 @@ gint socket_init(gint argc, gchar **argv)
 	while ((p = strchr(display_name, ':')) != NULL)
 		*p = '_';
 
-	if (socket_info.file_name == NULL)
+	if (G_UNLIKELY(socket_info.file_name == NULL))
 		socket_info.file_name = g_strdup_printf("%s%cgeany_socket_%s_%s",
 			app->configdir, G_DIR_SEPARATOR, hostname, display_name);
 
@@ -271,11 +271,12 @@ gint socket_init(gint argc, gchar **argv)
 
 gint socket_finalize(void)
 {
-	if (socket_info.lock_socket < 0) return -1;
+	if (G_UNLIKELY(socket_info.lock_socket < 0))
+		return -1;
 
-	if (socket_info.lock_socket_tag > 0)
+	if (G_LIKELY(socket_info.lock_socket_tag > 0))
 		g_source_remove(socket_info.lock_socket_tag);
-	if (socket_info.read_ioc)
+	if (G_LIKELY(socket_info.read_ioc))
 	{
 		g_io_channel_shutdown(socket_info.read_ioc, FALSE, NULL);
 		g_io_channel_unref(socket_info.read_ioc);
@@ -285,7 +286,7 @@ gint socket_finalize(void)
 #ifdef G_OS_WIN32
 	WSACleanup();
 #else
-	if (socket_info.file_name != NULL)
+	if (G_LIKELY(socket_info.file_name != NULL))
 	{
 		remove_socket_link_full(); /* deletes the socket file and the symlink */
 		g_free(socket_info.file_name);
@@ -303,7 +304,7 @@ static gint socket_fd_connect_unix(const gchar *path)
 	struct sockaddr_un addr;
 
 	sock = socket(PF_UNIX, SOCK_STREAM, 0);
-	if (sock < 0)
+	if (G_UNLIKELY(sock < 0))
 	{
 		perror("fd_connect_unix(): socket");
 		return -1;
@@ -332,7 +333,7 @@ static gint socket_fd_open_unix(const gchar *path)
 
 	sock = socket(PF_UNIX, SOCK_STREAM, 0);
 
-	if (sock < 0)
+	if (G_UNLIKELY(sock < 0))
 	{
 		perror("sock_open_unix(): socket");
 		return -1;
@@ -498,9 +499,9 @@ static void handle_input_filename(const gchar *buf)
 		utf8_filename = g_strdup(buf);
 
 	locale_filename = utils_get_locale_from_utf8(utf8_filename);
-	g_free(utf8_filename);
-	if (locale_filename)
+	if (G_LIKELY(locale_filename))
 		main_handle_filename(locale_filename);
+	g_free(utf8_filename);
 	g_free(locale_filename);
 }
 
@@ -628,7 +629,7 @@ static gint socket_fd_check_io(gint fd, GIOCondition cond)
 #ifdef G_OS_UNIX
 	/* checking for non-blocking mode */
 	flags = fcntl(fd, F_GETFL, 0);
-	if (flags < 0)
+	if (G_UNLIKELY(flags < 0))
 	{
 		perror("fcntl");
 		return 0;
@@ -668,7 +669,7 @@ static gint socket_fd_write_all(gint fd, const gchar *buf, gint len)
 	while (len)
 	{
 		n = socket_fd_write(fd, buf, len);
-		if (n <= 0)
+		if (G_UNLIKELY(n <= 0))
 			return -1;
 		len -= n;
 		wrlen += n;

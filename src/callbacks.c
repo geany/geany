@@ -95,7 +95,7 @@ static gboolean check_no_unsaved(void)
 
 	for (i = 0; i < documents_array->len; i++)
 	{
-		if (documents[i]->is_valid && documents[i]->changed)
+		if (documents[i]->is_valid && G_UNLIKELY(documents[i]->changed))
 		{
 			return FALSE;
 		}
@@ -179,9 +179,9 @@ on_save1_activate                      (GtkMenuItem     *menuitem,
 	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
 	GeanyDocument *doc = document_get_current();
 
-	if (doc != NULL && cur_page >= 0)
+	if (G_LIKELY(doc != NULL) && G_LIKELY(cur_page >= 0))
 	{
-		if (doc->file_name == NULL)
+		if (G_UNLIKELY(doc->file_name == NULL))
 			dialogs_show_save_as();
 		else
 			document_save_file(doc, FALSE);
@@ -208,7 +208,7 @@ on_save_all1_activate                  (GtkMenuItem     *menuitem,
 	{
 		doc = document_get_from_page(i);
 		if (! doc->changed) continue;
-		if (doc->file_name == NULL)
+		if (G_UNLIKELY(doc->file_name == NULL))
 		{
 			/* display unnamed document */
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
@@ -237,7 +237,7 @@ on_close1_activate                     (GtkMenuItem     *menuitem,
 {
 	GeanyDocument *doc = document_get_current();
 
-	if (doc)
+	if (G_LIKELY(doc))
 		document_close(doc);
 }
 
@@ -282,7 +282,7 @@ on_undo1_activate                      (GtkMenuItem     *menuitem,
 {
 	GeanyDocument *doc = document_get_current();
 
-	if (doc != NULL && document_can_undo(doc))
+	if (G_LIKELY(doc != NULL) && document_can_undo(doc))
 	{
 		sci_cancel(doc->editor->sci);
 		document_undo(doc);
@@ -296,7 +296,7 @@ on_redo1_activate                      (GtkMenuItem     *menuitem,
 {
 	GeanyDocument *doc = document_get_current();
 
-	if (doc != NULL && document_can_redo(doc))
+	if (G_LIKELY(doc != NULL) && document_can_redo(doc))
 	{
 		sci_cancel(doc->editor->sci);
 		document_redo(doc);
@@ -314,7 +314,7 @@ on_cut1_activate                       (GtkMenuItem     *menuitem,
 	if (GTK_IS_EDITABLE(focusw))
 		gtk_editable_cut_clipboard(GTK_EDITABLE(focusw));
 	else
-	if (IS_SCINTILLA(focusw) && doc != NULL)
+	if (IS_SCINTILLA(focusw) && G_LIKELY(doc != NULL))
 		sci_cut(doc->editor->sci);
 	else
 	if (GTK_IS_TEXT_VIEW(focusw))
@@ -336,7 +336,7 @@ on_copy1_activate                      (GtkMenuItem     *menuitem,
 	if (GTK_IS_EDITABLE(focusw))
 		gtk_editable_copy_clipboard(GTK_EDITABLE(focusw));
 	else
-	if (IS_SCINTILLA(focusw) && doc != NULL)
+	if (IS_SCINTILLA(focusw) && G_LIKELY(doc != NULL))
 		sci_copy(doc->editor->sci);
 	else
 	if (GTK_IS_TEXT_VIEW(focusw))
@@ -358,7 +358,7 @@ on_paste1_activate                     (GtkMenuItem     *menuitem,
 	if (GTK_IS_EDITABLE(focusw))
 		gtk_editable_paste_clipboard(GTK_EDITABLE(focusw));
 	else
-	if (IS_SCINTILLA(focusw) && doc != NULL)
+	if (IS_SCINTILLA(focusw) && G_LIKELY(doc != NULL))
 	{
 		sci_paste(doc->editor->sci);
 	}
@@ -383,7 +383,7 @@ on_delete1_activate                    (GtkMenuItem     *menuitem,
 	if (GTK_IS_EDITABLE(focusw))
 		gtk_editable_delete_selection(GTK_EDITABLE(focusw));
 	else
-	if (IS_SCINTILLA(focusw) && doc != NULL && sci_has_selection(doc->editor->sci))
+	if (IS_SCINTILLA(focusw) && G_LIKELY(doc != NULL) && sci_has_selection(doc->editor->sci))
 		sci_clear(doc->editor->sci);
 	else
 	if (GTK_IS_TEXT_VIEW(focusw))
@@ -449,11 +449,12 @@ on_reload_as_activate                  (GtkMenuItem     *menuitem,
 	gint i = GPOINTER_TO_INT(user_data);
 	gchar *charset = NULL;
 
-	if (doc == NULL || doc->file_name == NULL)
+	if (G_UNLIKELY(doc == NULL) || G_UNLIKELY(doc->file_name == NULL))
 		return;
 	if (i >= 0)
 	{
-		if (i >= GEANY_ENCODINGS_MAX || encodings[i].charset == NULL) return;
+		if (G_UNLIKELY(i >= GEANY_ENCODINGS_MAX) || G_UNLIKELY(encodings[i].charset == NULL))
+			return;
 		charset = encodings[i].charset;
 	}
 
@@ -631,9 +632,9 @@ on_zoom_in1_activate                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	static gboolean done = 1;
+	static gint done = 1;
 
-	if (doc != NULL)
+	if (G_LIKELY(doc != NULL))
 	{
 		if (done++ % 3 == 0)
 			sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin,
@@ -662,7 +663,7 @@ on_normal_size1_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	if (doc != NULL)
+	if (G_LIKELY(doc != NULL))
 	{
 		sci_zoom_off(doc->editor->sci);
 		sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
@@ -712,7 +713,7 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
 {
 	GeanyDocument *doc;
 
-	if (main_status.opening_session_files || main_status.closing_all)
+	if (G_UNLIKELY(main_status.opening_session_files) || G_UNLIKELY(main_status.closing_all))
 		return;
 
 	if (page_num == (guint) -1 && page != NULL)
@@ -720,7 +721,7 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
 	else
 		doc = document_get_from_page(page_num);
 
-	if (doc != NULL)
+	if (G_LIKELY(doc != NULL))
 	{
 		treeviews_select_openfiles_item(doc);
 		document_set_text_changed(doc, doc->changed);	/* also sets window title and status bar */
@@ -769,7 +770,8 @@ on_crlf_activate                       (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	if (ignore_callback || doc == NULL) return;
+	if (ignore_callback || G_UNLIKELY(doc == NULL))
+		return;
 	sci_convert_eols(doc->editor->sci, SC_EOL_CRLF);
 	sci_set_eol_mode(doc->editor->sci, SC_EOL_CRLF);
 }
@@ -780,7 +782,8 @@ on_lf_activate                         (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	if (ignore_callback || doc == NULL) return;
+	if (ignore_callback || G_UNLIKELY(doc == NULL))
+		return;
 	sci_convert_eols(doc->editor->sci, SC_EOL_LF);
 	sci_set_eol_mode(doc->editor->sci, SC_EOL_LF);
 }
@@ -791,7 +794,8 @@ on_cr_activate                         (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	if (ignore_callback || doc == NULL) return;
+	if (ignore_callback || G_UNLIKELY(doc == NULL))
+		return;
 	sci_convert_eols(doc->editor->sci, SC_EOL_CR);
 	sci_set_eol_mode(doc->editor->sci, SC_EOL_CR);
 }
@@ -803,7 +807,7 @@ on_replace_tabs_activate               (GtkMenuItem     *menuitem,
 {
 	GeanyDocument *doc = document_get_current();
 
-	if (doc != NULL)
+	if (G_LIKELY(doc != NULL))
 		editor_replace_tabs(doc->editor);
 }
 
@@ -854,7 +858,7 @@ void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer user_data)
 	gchar *text;
 	gboolean keep_sel = TRUE;
 
-	if (doc == NULL)
+	if (G_UNLIKELY(doc == NULL))
 		return;
 
 	sci = doc->editor->sci;
@@ -1004,7 +1008,7 @@ on_line_wrapping1_toggled              (GtkCheckMenuItem *checkmenuitem,
 	if (! ignore_callback)
 	{
 		GeanyDocument *doc = document_get_current();
-		if (doc != NULL)
+		if (G_LIKELY(doc != NULL))
 			editor_set_line_wrapping(doc->editor, ! doc->editor->line_wrapping);
 	}
 }
@@ -1017,7 +1021,7 @@ on_set_file_readonly1_toggled          (GtkCheckMenuItem *checkmenuitem,
 	if (! ignore_callback)
 	{
 		GeanyDocument *doc = document_get_current();
-		if (doc == NULL)
+		if (G_UNLIKELY(doc == NULL))
 			return;
 		doc->readonly = ! doc->readonly;
 		sci_set_readonly(doc->editor->sci, doc->readonly);
@@ -1034,7 +1038,7 @@ on_use_auto_indentation1_toggled       (GtkCheckMenuItem *checkmenuitem,
 	if (! ignore_callback)
 	{
 		GeanyDocument *doc = document_get_current();
-		if (doc != NULL)
+		if (G_LIKELY(doc != NULL))
 			doc->editor->auto_indent = ! doc->editor->auto_indent;
 	}
 }
@@ -1046,7 +1050,7 @@ static void find_usage(gboolean in_session)
 	gchar *search_text;
 	GeanyDocument *doc = document_get_current();
 
-	if (doc == NULL)
+	if (G_UNLIKELY(doc == NULL))
 		return;
 
 	if (sci_has_selection(doc->editor->sci))
@@ -1090,7 +1094,7 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
 		GTK_MENU_ITEM(ui_lookup_widget(main_widgets.editor_menu, "goto_tag_definition1")));
 	GeanyDocument *doc = document_get_current();
 
-	g_return_if_fail(doc != NULL);
+	g_return_if_fail(G_LIKELY(doc != NULL));
 
 	sci_set_current_position(doc->editor->sci, editor_info.click_pos, FALSE);
 	symbols_goto_tag(editor_info.current_word, definition);
@@ -1113,7 +1117,7 @@ on_show_color_chooser1_activate        (GtkMenuItem     *menuitem,
 	GeanyDocument *doc = document_get_current();
 	gint pos;
 
-	if (doc == NULL)
+	if (G_UNLIKELY(doc == NULL))
 		return;
 
 	pos = sci_get_current_position(doc->editor->sci);
@@ -1142,7 +1146,7 @@ static void find_again(gboolean change_direction)
 {
 	GeanyDocument *doc = document_get_current();
 
-	g_return_if_fail(doc != NULL);
+	g_return_if_fail(G_LIKELY(doc != NULL));
 
 	if (search_data.text)
 	{
@@ -1223,7 +1227,7 @@ on_go_to_line_activate                 (GtkMenuItem     *menuitem,
 	{
 		GeanyDocument *doc = document_get_current();
 
-		if (doc != NULL)
+		if (G_LIKELY(doc != NULL))
 		{
 			if (! editor_goto_line(doc->editor, (gint) val - 1))
 				utils_beep();
@@ -1237,7 +1241,7 @@ on_toolbutton_goto_entry_activate(GtkAction *action, const gchar *text, gpointer
 {
 	GeanyDocument *doc = document_get_current();
 
-	if (doc != NULL)
+	if (G_LIKELY(doc != NULL))
 	{
 		gint line = atoi(text);
 		if (! editor_goto_line(doc->editor, line - 1))
@@ -1313,7 +1317,7 @@ on_comments_function_activate          (GtkMenuItem     *menuitem,
 	const gchar *cur_tag = NULL;
 	gint line = -1, pos = 0;
 
-	if (doc == NULL || doc->file_type == NULL)
+	if (G_UNLIKELY(doc == NULL) || G_UNLIKELY(doc->file_type == NULL))
 	{
 		ui_set_statusbar(FALSE,
 			_("Please set the filetype for the current file before using this function."));
@@ -1338,7 +1342,7 @@ on_comments_multiline_activate         (GtkMenuItem     *menuitem,
 {
 	GeanyDocument *doc = document_get_current();
 
-	if (doc == NULL || doc->file_type == NULL)
+	if (G_UNLIKELY(doc == NULL) || G_UNLIKELY(doc->file_type == NULL))
 	{
 		ui_set_statusbar(FALSE,
 			_("Please set the filetype for the current file before using this function."));
@@ -1358,7 +1362,7 @@ on_comments_gpl_activate               (GtkMenuItem     *menuitem,
 	GeanyDocument *doc = document_get_current();
 	gchar *text;
 
-	if (doc == NULL)
+	if (G_UNLIKELY(doc == NULL))
 		return;
 
 	text = templates_get_template_licence(FILETYPE_ID(doc->file_type), GEANY_TEMPLATE_GPL);
@@ -1378,7 +1382,7 @@ on_comments_bsd_activate               (GtkMenuItem     *menuitem,
 	GeanyDocument *doc = document_get_current();
 	gchar *text;
 
-	if (doc == NULL)
+	if (G_UNLIKELY(doc == NULL))
 		return;
 
 	text = templates_get_template_licence(FILETYPE_ID(doc->file_type), GEANY_TEMPLATE_BSD);
@@ -1398,7 +1402,7 @@ on_comments_changelog_activate         (GtkMenuItem     *menuitem,
 	GeanyDocument *doc = document_get_current();
 	gchar *text;
 
-	if (doc == NULL)
+	if (G_UNLIKELY(doc == NULL))
 		return;
 
 	text = templates_get_template_changelog();
@@ -1420,7 +1424,7 @@ on_comments_fileheader_activate        (GtkMenuItem     *menuitem,
 	gchar *fname;
 	GeanyFiletype *ft;
 
-	g_return_if_fail(doc != NULL);
+	g_return_if_fail(G_LIKELY(doc != NULL));
 
 	ft = doc->file_type;
 	fname = doc->file_name;
@@ -1447,7 +1451,8 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
 	gchar *format;
 	gchar *time_str;
 
-	if (doc == NULL) return;
+	if (G_UNLIKELY(doc == NULL))
+		return;
 
 	if (utils_str_equal(_("dd.mm.yyyy"), (gchar*) user_data))
 		format = "%d.%m.%Y";
@@ -1479,7 +1484,7 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
 	}
 
 	time_str = utils_get_date_time(format, NULL);
-	if (time_str != NULL)
+	if (G_UNLIKELY(time_str != NULL))
 	{
 		verify_click_pos(doc); /* make sure that the click_pos is valid */
 
@@ -1504,7 +1509,8 @@ on_insert_include_activate             (GtkMenuItem     *menuitem,
 	gint pos = -1;
 	gchar *text;
 
-	if (doc == NULL || user_data == NULL) return;
+	if (G_UNLIKELY(doc == NULL) || G_UNLIKELY(user_data == NULL))
+		return;
 
 	verify_click_pos(doc); /* make sure that the click_pos is valid */
 
@@ -1520,7 +1526,7 @@ on_insert_include_activate             (GtkMenuItem     *menuitem,
 
 	sci_insert_text(doc->editor->sci, editor_info.click_pos, text);
 	g_free(text);
-	if (pos >= 0)
+	if (G_LIKELY(pos >= 0))
 		sci_goto_pos(doc->editor->sci, pos, FALSE);
 }
 
@@ -1539,7 +1545,7 @@ on_menu_fold_all1_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	if (doc != NULL)
+	if (G_LIKELY(doc != NULL))
 		editor_fold_all(doc->editor);
 }
 
@@ -1549,7 +1555,7 @@ on_menu_unfold_all1_activate           (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	if (doc != NULL)
+	if (G_LIKELY(doc != NULL))
 		editor_unfold_all(doc->editor);
 }
 
@@ -1568,7 +1574,7 @@ on_menu_remove_indicators1_activate    (GtkMenuItem     *menuitem,
 {
 	GeanyDocument *doc = document_get_current();
 
-	if (doc != NULL)
+	if (G_LIKELY(doc != NULL))
 		editor_indicator_clear(doc->editor, GEANY_INDICATOR_ERROR);
 }
 
@@ -1580,11 +1586,11 @@ on_encoding_change                     (GtkMenuItem     *menuitem,
 	GeanyDocument *doc = document_get_current();
 	guint i = GPOINTER_TO_INT(user_data);
 
-	if (ignore_callback || doc == NULL || encodings[i].charset == NULL ||
+	if (ignore_callback || G_UNLIKELY(doc == NULL) || G_UNLIKELY(encodings[i].charset == NULL) ||
 		utils_str_equal(encodings[i].charset, doc->encoding))
 		return;
 
-	if (doc->readonly)
+	if (G_UNLIKELY(doc->readonly))
 	{
 		utils_beep();
 		return;
@@ -1600,7 +1606,7 @@ on_print1_activate                     (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	if (doc != NULL)
+	if (G_LIKELY(doc != NULL))
 		printing_print_doc(doc);
 }
 
@@ -1611,7 +1617,7 @@ on_menu_select_all1_activate           (GtkMenuItem     *menuitem,
 {
 	GeanyDocument *doc = document_get_current();
 
-	if (doc != NULL)
+	if (G_LIKELY(doc != NULL))
 		sci_select_all(doc->editor->sci);
 }
 
@@ -1652,9 +1658,9 @@ on_menu_write_unicode_bom1_toggled     (GtkCheckMenuItem *checkmenuitem,
 	{
 		GeanyDocument *doc = document_get_current();
 
-		if (doc == NULL)
+		if (G_UNLIKELY(doc == NULL))
 			return;
-		if (doc->readonly)
+		if (G_UNLIKELY(doc->readonly))
 		{
 			utils_beep();
 			return;
@@ -1674,7 +1680,7 @@ on_menu_comment_line1_activate         (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	if (doc != NULL)
+	if (G_LIKELY(doc != NULL))
 		editor_do_comment(doc->editor, -1, FALSE, FALSE);
 }
 
@@ -1684,7 +1690,7 @@ on_menu_uncomment_line1_activate       (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	if (doc != NULL)
+	if (G_LIKELY(doc != NULL))
 		editor_do_uncomment(doc->editor, -1, FALSE);
 }
 
@@ -1695,7 +1701,7 @@ on_menu_toggle_line_commentation1_activate
                                         gpointer         user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	if (doc != NULL)
+	if (G_LIKELY(doc != NULL))
 		editor_do_comment_toggle(doc->editor);
 }
 
@@ -1725,7 +1731,7 @@ on_menu_increase_indent1_activate      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	if (doc == NULL)
+	if (G_UNLIKELY(doc == NULL))
 		return;
 
 	if (sci_get_lines_selected(doc->editor->sci) > 1)
@@ -1744,7 +1750,7 @@ on_menu_decrease_indent1_activate      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	if (doc == NULL)
+	if (G_UNLIKELY(doc == NULL))
 		return;
 
 	if (sci_get_lines_selected(doc->editor->sci) > 1)
@@ -1862,7 +1868,7 @@ on_menu_project1_activate              (GtkMenuItem     *menuitem,
 	static GtkWidget *item_close = NULL;
 	static GtkWidget *item_properties = NULL;
 
-	if (item_close == NULL)
+	if (G_UNLIKELY(item_close == NULL))
 	{
 		item_close = ui_lookup_widget(main_widgets.window, "project_close1");
 		item_properties = ui_lookup_widget(main_widgets.window, "project_properties1");
@@ -1880,7 +1886,7 @@ on_menu_open_selected_file1_activate   (GtkMenuItem     *menuitem,
 	GeanyDocument *doc = document_get_current();
 	gchar *sel = NULL;
 
-	if (doc == NULL)
+	if (G_UNLIKELY(doc == NULL))
 		return;
 
 	sel = editor_get_default_selection(doc->editor, TRUE, GEANY_WORDCHARS"./-");
@@ -1924,7 +1930,7 @@ on_remove_markers1_activate            (GtkMenuItem     *menuitem,
 {
 	GeanyDocument *doc = document_get_current();
 
-	if (doc == NULL)
+	if (G_UNLIKELY(doc == NULL))
 		return;
 
 	sci_marker_delete_all(doc->editor->sci, 0);	/* delete the yellow tag marker */
@@ -1949,7 +1955,7 @@ on_context_action1_activate            (GtkMenuItem     *menuitem,
 	GError *error = NULL;
 	GeanyDocument *doc = document_get_current();
 
-	if (doc == NULL)
+	if (G_UNLIKELY(doc == NULL))
 		return;
 
 	if (sci_has_selection(doc->editor->sci))
@@ -1974,7 +1980,7 @@ on_context_action1_activate            (GtkMenuItem     *menuitem,
 	}
 
 	/* substitute the wildcard %s and run the command if it is non empty */
-	if (command != NULL && *command != '\0')
+	if (NZV(command))
 	{
 		command = utils_str_replace(command, "%s", word);
 
@@ -2001,7 +2007,7 @@ on_menu_toggle_all_additional_widgets1_activate
 		ui_lookup_widget(main_widgets.window, "menu_show_toolbar1"));
 
 	/* get the initial state (necessary if Geany was closed with hide_all = TRUE) */
-	if (hide_all == -1)
+	if (G_UNLIKELY(hide_all == -1))
 	{
 		if (! gtk_check_menu_item_get_active(msgw) &&
 			! interface_prefs.show_notebook_tabs &&
@@ -2074,7 +2080,7 @@ static void set_indent_type(GeanyIndentType type)
 {
 	GeanyDocument *doc = document_get_current();
 
-	if (doc == NULL || ignore_callback)
+	if (G_UNLIKELY(doc == NULL) || ignore_callback)
 		return;
 
 	editor_set_indent_type(doc->editor, type);
@@ -2116,7 +2122,7 @@ on_strip_trailing_spaces1_activate     (GtkMenuItem     *menuitem,
 		return;
 
 	doc = document_get_current();
-	g_return_if_fail(doc != NULL);
+	g_return_if_fail(G_LIKELY(doc != NULL));
 
 	editor_strip_trailing_spaces(doc->editor);
 }
@@ -2159,7 +2165,7 @@ on_line_breaking1_activate             (GtkMenuItem     *menuitem,
 		return;
 
 	doc = document_get_current();
-	g_return_if_fail(doc != NULL);
+	g_return_if_fail(G_LIKELY(doc != NULL));
 
 	doc->editor->line_breaking = !doc->editor->line_breaking;
 }
@@ -2170,7 +2176,7 @@ on_replace_spaces_activate             (GtkMenuItem     *menuitem,
 {
 	GeanyDocument *doc = document_get_current();
 
-	if (doc != NULL)
+	if (G_LIKELY(doc != NULL))
 		editor_replace_spaces(doc->editor);
 }
 
@@ -2198,13 +2204,13 @@ on_close_other_documents1_activate     (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	guint i;
-	GeanyDocument *cur_doc = document_get_current();
+	GeanyDocument *doc, *cur_doc = document_get_current();
 
 	for (i = 0; i < documents_array->len; i++)
 	{
-		GeanyDocument *doc = documents[i];
+		doc = documents[i];
 
-		if (doc == cur_doc || ! doc->is_valid)
+		if (G_UNLIKELY(doc == cur_doc) || ! doc->is_valid)
 			continue;
 
 		if (! document_close(doc))

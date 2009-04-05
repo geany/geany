@@ -68,7 +68,7 @@ static void menu_filled_cb(GtkContainer *container, GtkWidget *widget, gpointer 
 {
 	GeanyMenubuttonActionPrivate *priv = GEANY_MENU_BUTTON_ACTION_GET_PRIVATE(data);
 
-	if (! priv->menu_added)
+	if (G_UNLIKELY(! priv->menu_added))
 	{
 		gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(priv->button), priv->menu);
 		priv->menu_added = TRUE;
@@ -161,7 +161,7 @@ GtkWidget *geany_menu_button_action_get_menu(GeanyMenubuttonAction *action)
 {
 	GeanyMenubuttonActionPrivate *priv;
 
-	g_return_val_if_fail(action != NULL, NULL);
+	g_return_val_if_fail(G_LIKELY(action != NULL), NULL);
 
 	priv = GEANY_MENU_BUTTON_ACTION_GET_PRIVATE(action);
 

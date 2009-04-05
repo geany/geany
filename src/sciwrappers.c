@@ -59,7 +59,8 @@ void sci_set_line_numbers(ScintillaObject * sci, gboolean set, gint extra_width)
 
 void sci_set_mark_long_lines(ScintillaObject * sci, gint type, gint column, const gchar *colour)
 {
-	if (column == 0) type = 2;
+	if (column == 0)
+		type = 2;
 	switch (type)
 	{
 		case 0:
@@ -191,7 +192,8 @@ void sci_convert_eols( ScintillaObject* sci, gint eolmode)
 
 void sci_add_text(ScintillaObject* sci, const gchar* text)
 {
-	if( text != NULL ){ /* if null text is passed to scintilla will segfault */
+	if (G_LIKELY(text != NULL))
+	{ /* if null text is passed to scintilla will segfault */
 		SSM( sci, SCI_ADDTEXT, strlen(text), (sptr_t) text);
 	}
 }
@@ -209,7 +211,8 @@ void sci_set_text(ScintillaObject* sci, const gchar* text)
 
 void sci_add_text_buffer(ScintillaObject* sci, const gchar* text, gint len)
 {
-	if( text != NULL ){ /* if null text is passed to scintilla will segfault */
+	if (G_LIKELY(text != NULL))
+	{ /* if null text is passed to scintilla will segfault */
 		SSM(sci, SCI_CLEARALL, 0, 0);
 		SSM(sci, SCI_ADDTEXT, len, (sptr_t) text);
 	}
@@ -232,10 +235,6 @@ void sci_undo( ScintillaObject* sci )
 {
 	if( sci_can_undo(sci) )
 		SSM( sci, SCI_UNDO, 0, 0);
-	else
-	{ /* change it to a document function */
-
-	}
 }
 
 
@@ -243,10 +242,6 @@ void sci_redo( ScintillaObject* sci )
 {
 	if( sci_can_redo( sci ) )
 		SSM( sci, SCI_REDO,0,0);
-	else
-	{ /* change it to a document function */
-
-	}
 }
 
 

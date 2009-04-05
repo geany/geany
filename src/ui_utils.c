@@ -90,7 +90,7 @@ static GtkWidget *progress_bar_create(void);
 /* simple wrapper for gtk_widget_set_sensitive() to allow widget being NULL */
 void ui_widget_set_sensitive(GtkWidget *widget, gboolean set)
 {
-	if (widget != NULL)
+	if (G_LIKELY(widget != NULL))
 		gtk_widget_set_sensitive(widget, set);
 }
 
@@ -145,7 +145,7 @@ void ui_set_statusbar(gboolean log, const gchar *format, ...)
 
 static GeanyFiletype *document_get_filetype(GeanyDocument *doc)
 {
-	g_return_val_if_fail(doc, NULL);
+	g_return_val_if_fail(G_LIKELY(doc), NULL);
 
 	return filetypes[FILETYPE_ID(doc->file_type)];
 }
@@ -157,10 +157,10 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 	if (! interface_prefs.statusbar_visible)
 		return; /* just do nothing if statusbar is not visible */
 
-	if (doc == NULL)
+	if (G_UNLIKELY(doc == NULL))
 		doc = document_get_current();
 
-	if (doc != NULL)
+	if (G_UNLIKELY(doc != NULL))
 	{
 		static GString *stats_str = NULL;
 		const gchar sp[] = "      ";
@@ -168,10 +168,11 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 		const gchar *cur_tag;
 		gchar *filetype_name = document_get_filetype(doc)->name;
 
-		if (stats_str == NULL)
+		if (G_UNLIKELY(stats_str == NULL))
 			stats_str = g_string_sized_new(120);
 
-		if (pos == -1) pos = sci_get_current_position(doc->editor->sci);
+		if (pos == -1)
+			pos = sci_get_current_position(doc->editor->sci);
 		line = sci_get_line_from_position(doc->editor->sci, pos);
 
 		/* Add temporary fix for sci infinite loop in Document::GetColumn(int)
@@ -256,11 +257,11 @@ void ui_set_window_title(GeanyDocument *doc)
 
 	str = g_string_new(NULL);
 
-	if (doc != NULL)
+	if (G_LIKELY(doc != NULL))
 	{
 		g_string_append(str, doc->changed ? "*" : "");
 
-		if (doc->file_name == NULL)
+		if (G_LIKELY(doc->file_name == NULL))
 			g_string_append(str, DOC_FILENAME(doc));
 		else
 		{
@@ -291,11 +292,12 @@ void ui_set_editor_font(const gchar *font_name)
 {
 	guint i;
 
-	g_return_if_fail(font_name != NULL);
+	g_return_if_fail(G_LIKELY(font_name != NULL));
 
 	/* do nothing if font has not changed */
 	if (interface_prefs.editor_font != NULL)
-		if (strcmp(font_name, interface_prefs.editor_font) == 0) return;
+		if (strcmp(font_name, interface_prefs.editor_font) == 0)
+			return;
 
 	g_free(interface_prefs.editor_font);
 	interface_prefs.editor_font = g_strdup(font_name);
@@ -332,7 +334,7 @@ void ui_update_popup_reundo_items(GeanyDocument *doc)
 	gboolean enable_redo;
 	guint i, len;
 
-	if (doc == NULL)
+	if (G_UNLIKELY(doc == NULL))
 	{
 		enable_undo = FALSE;
 		enable_redo = FALSE;
@@ -411,7 +413,7 @@ void ui_update_insert_include_item(GeanyDocument *doc, gint item)
 {
 	gboolean enable = FALSE;
 
-	if (doc == NULL || doc->file_type == NULL)
+	if (G_UNLIKELY(doc == NULL) || G_UNLIKELY(doc->file_type == NULL))
 		enable = FALSE;
 	else if (doc->file_type->id == GEANY_FILETYPES_C ||
 			 doc->file_type->id == GEANY_FILETYPES_CPP)
@@ -767,7 +769,7 @@ void ui_document_show_hide(GeanyDocument *doc)
 	if (doc == NULL)
 		doc = document_get_current();
 
-	if (doc == NULL)
+	if (G_UNLIKELY(doc == NULL))
 		return;
 
 	ignore_callback = TRUE;
@@ -828,7 +830,7 @@ void ui_set_search_entry_background(GtkWidget *widget, gboolean success)
 	static const GdkColor white = {0, 0xffff, 0xffff, 0xffff};
 	static gboolean old_value = TRUE;
 
-	g_return_if_fail(widget != NULL);
+	g_return_if_fail(G_LIKELY(widget != NULL));
 
 	/* update only if really needed */
 	if (old_value != success)
@@ -926,7 +928,7 @@ static GeanyRecentFiles *recent_get_recent_files(void)
 {
 	static GeanyRecentFiles grf = { NULL, NULL, NULL, NULL };
 
-	if (grf.recent_queue == NULL)
+	if (G_UNLIKELY(grf.recent_queue == NULL))
 	{
 		grf.recent_queue = ui_prefs.recent_queue;
 		grf.menubar = ui_widgets.recent_files_menu_menubar;
@@ -941,7 +943,7 @@ static GeanyRecentFiles *recent_get_recent_projects(void)
 {
 	static GeanyRecentFiles grf = { NULL, NULL, NULL, NULL };
 
-	if (grf.recent_queue == NULL)
+	if (G_UNLIKELY(grf.recent_queue == NULL))
 	{
 		grf.recent_queue = ui_prefs.recent_projects_queue;
 		grf.menubar = ui_widgets.recent_projects_menu_menubar;
@@ -992,7 +994,7 @@ static void add_recent_file(const gchar *utf8_filename, GeanyRecentFiles *grf)
 #if GTK_CHECK_VERSION(2, 10, 0)
 		GtkRecentManager *manager = gtk_recent_manager_get_default();
 		gchar *uri = g_filename_to_uri(utf8_filename, NULL, NULL);
-		if (uri != NULL)
+		if (G_LIKELY(uri != NULL))
 		{
 			gtk_recent_manager_add_item(manager, uri);
 			g_free(uri);
@@ -1285,7 +1287,7 @@ ui_image_menu_item_new(const gchar *stock_id, const gchar *label)
 
 static void entry_clear_icon_press_cb(GtkEntry *entry, gint icon_pos, GdkEvent *event, gpointer data)
 {
-	if (event->button.button == 1 && icon_pos == 1)
+	if (event->button.button == 1 && G_LIKELY(icon_pos == 1))
 	{
 		gtk_entry_set_text(entry, "");
 	}
@@ -1569,7 +1571,7 @@ static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
 
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	locale_path = utils_get_locale_from_utf8(utf8_path);
-	if (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+	if (G_LIKELY(action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER))
 	{
 		if (g_path_is_absolute(locale_path) && g_file_test(locale_path, G_FILE_TEST_IS_DIR))
 			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_path);
@@ -1601,7 +1603,7 @@ static void ui_path_box_open_clicked(GtkButton *button, gpointer user_data)
 	gchar *utf8_path;
 
 	/* TODO: extend for other actions */
-	g_return_if_fail(action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+	g_return_if_fail(G_LIKELY(action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER));
 
 	if (title == NULL)
 		title = (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER) ?
@@ -1614,7 +1616,7 @@ static void ui_path_box_open_clicked(GtkButton *button, gpointer user_data)
 	utf8_path = run_file_chooser(title, action, gtk_entry_get_text(GTK_ENTRY(entry)));
 #endif
 
-	if (utf8_path != NULL)
+	if (G_LIKELY(utf8_path != NULL))
 	{
 		gtk_entry_set_text(GTK_ENTRY(entry), utf8_path);
 		g_free(utf8_path);
@@ -1794,7 +1796,7 @@ void ui_init(void)
 
 static void auto_separator_update(GeanyAutoSeparator *autosep)
 {
-	g_return_if_fail(autosep->ref_count >= 0);
+	g_return_if_fail(G_LIKELY(autosep->ref_count >= 0));
 
 	if (autosep->widget)
 		ui_widget_show_hide(autosep->widget, autosep->ref_count > 0);
@@ -1863,7 +1865,7 @@ void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text)
 #else
 	static GtkTooltips *tooltips = NULL;
 
-	if (tooltips == NULL)
+	if (G_UNLIKELY(tooltips == NULL))
 		tooltips = GTK_TOOLTIPS(ui_lookup_widget(main_widgets.window, "tooltips"));
 
 	gtk_tooltips_set_tip(tooltips, widget, text, NULL);
@@ -1886,8 +1888,8 @@ GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name)
 {
 	GtkWidget *parent, *found_widget;
 
-	g_return_val_if_fail(widget != NULL, NULL);
-	g_return_val_if_fail(widget_name != NULL, NULL);
+	g_return_val_if_fail(G_LIKELY(widget != NULL), NULL);
+	g_return_val_if_fail(G_LIKELY(widget_name != NULL), NULL);
 
 	for (;;)
 	{
@@ -1895,7 +1897,7 @@ GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name)
 			parent = gtk_menu_get_attach_widget(GTK_MENU(widget));
 		else
 			parent = widget->parent;
-		if (parent == NULL)
+		if (G_UNLIKELY(parent == NULL))
 			parent = (GtkWidget*) g_object_get_data(G_OBJECT(widget), "GladeParentKey");
 		if (parent == NULL)
 			break;
@@ -1903,7 +1905,7 @@ GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name)
 	}
 
 	found_widget = (GtkWidget*) g_object_get_data(G_OBJECT(widget), widget_name);
-	if (found_widget == NULL)
+	if (G_UNLIKELY(found_widget == NULL))
 		g_warning("Widget not found: %s", widget_name);
 	return found_widget;
 }
@@ -1954,7 +1956,7 @@ static gboolean progress_bar_pulse(gpointer data)
  **/
 void ui_progress_bar_start(const gchar *text)
 {
-	g_return_if_fail(progress_bar_timer_id == (guint) -1);
+	g_return_if_fail(G_LIKELY(progress_bar_timer_id == (guint) -1));
 
 	if (! interface_prefs.statusbar_visible)
 		return;

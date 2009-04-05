@@ -150,7 +150,8 @@ GeanyEncodingIndex encodings_get_idx_from_charset(const gchar *charset)
 {
 	gint i;
 
-	if (charset == NULL) return GEANY_ENCODING_UTF_8;
+	if (G_UNLIKELY(charset == NULL))
+		return GEANY_ENCODING_UTF_8;
 
 	i = 0;
 	while (i < GEANY_ENCODINGS_MAX)
@@ -168,7 +169,8 @@ const GeanyEncoding *encodings_get_from_charset(const gchar *charset)
 {
 	gint i;
 
-	if (charset == NULL) return &encodings[GEANY_ENCODING_UTF_8];
+	if (G_UNLIKELY(charset == NULL))
+		return &encodings[GEANY_ENCODING_UTF_8];
 
 	i = 0;
 	while (i < GEANY_ENCODINGS_MAX)
@@ -185,7 +187,7 @@ const GeanyEncoding *encodings_get_from_charset(const gchar *charset)
 
 const GeanyEncoding *encodings_get_from_index(gint idx)
 {
-	g_return_val_if_fail(idx >= 0 && idx < GEANY_ENCODINGS_MAX, NULL);
+	g_return_val_if_fail(G_LIKELY(idx >= 0) && G_LIKELY(idx < GEANY_ENCODINGS_MAX), NULL);
 
 	return &encodings[idx];
 }
@@ -204,7 +206,7 @@ const GeanyEncoding *encodings_get_from_index(gint idx)
  **/
 const gchar* encodings_get_charset_from_index(gint idx)
 {
-	g_return_val_if_fail(idx >= 0 && idx < GEANY_ENCODINGS_MAX, NULL);
+	g_return_val_if_fail(G_LIKELY(idx >= 0) && G_LIKELY(idx < GEANY_ENCODINGS_MAX), NULL);
 
 	return encodings[idx].charset;
 }
@@ -212,9 +214,9 @@ const gchar* encodings_get_charset_from_index(gint idx)
 
 gchar *encodings_to_string(const GeanyEncoding* enc)
 {
-	g_return_val_if_fail(enc != NULL, NULL);
-	g_return_val_if_fail(enc->name != NULL, NULL);
-	g_return_val_if_fail(enc->charset != NULL, NULL);
+	g_return_val_if_fail(G_LIKELY(enc != NULL), NULL);
+	g_return_val_if_fail(G_LIKELY(enc->name != NULL), NULL);
+	g_return_val_if_fail(G_LIKELY(enc->charset != NULL), NULL);
 
     return g_strdup_printf("%s (%s)", enc->name, enc->charset);
 }
@@ -222,8 +224,8 @@ gchar *encodings_to_string(const GeanyEncoding* enc)
 
 const gchar *encodings_get_charset(const GeanyEncoding* enc)
 {
-	g_return_val_if_fail(enc != NULL, NULL);
-	g_return_val_if_fail(enc->charset != NULL, NULL);
+	g_return_val_if_fail(G_LIKELY(enc != NULL), NULL);
+	g_return_val_if_fail(G_LIKELY(enc->charset != NULL), NULL);
 
 	return enc->charset;
 }
@@ -235,7 +237,7 @@ void encodings_select_radio_item(const gchar *charset)
 {
 	gint i;
 
-	g_return_if_fail(charset != NULL);
+	g_return_if_fail(G_LIKELY(charset != NULL));
 
 	i = 0;
 	while (i < GEANY_ENCODINGS_MAX)
@@ -244,7 +246,7 @@ void encodings_select_radio_item(const gchar *charset)
 			break;
 		i++;
 	}
-	if (i == GEANY_ENCODINGS_MAX)
+	if (G_UNLIKELY(i == GEANY_ENCODINGS_MAX))
 		i = GEANY_ENCODING_UTF_8; /* fallback to UTF-8 */
 
 	/* ignore_callback has to be set by the caller */
@@ -261,7 +263,7 @@ void encodings_select_radio_item(const gchar *charset)
 static void regex_compile(regex_t *preg, const gchar *pattern)
 {
 	gint retval = regcomp(preg, pattern, REG_EXTENDED | REG_ICASE);
-	if (retval != 0)
+	if (G_UNLIKELY(retval != 0))
 	{
 		gchar errmsg[512];
 		regerror(retval, preg, errmsg, 512);
@@ -279,7 +281,7 @@ static gchar *regex_match(regex_t *preg, const gchar *buffer, gsize size)
 	gchar *encoding = NULL;
 	regmatch_t pmatch[10];
 
-	if (! pregs_loaded || buffer == NULL)
+	if (G_UNLIKELY(! pregs_loaded) || G_UNLIKELY(buffer == NULL))
 		return NULL;
 
 	if (size > 512)
@@ -302,10 +304,11 @@ static gchar *regex_match(regex_t *preg, const gchar *buffer, gsize size)
 void encodings_finalize(void)
 {
 #ifdef HAVE_REGCOMP
-	if (pregs_loaded)
+	if (G_LIKELY(pregs_loaded))
 	{
-		guint i;
-		for (i = 0; i < G_N_ELEMENTS(pregs); i++)
+		guint i, len;
+		len = G_N_ELEMENTS(pregs);
+		for (i = 0; i < len; i++)
 		{
 			regfree(&pregs[i]);
 		}
@@ -328,7 +331,7 @@ void encodings_init(void)
 	init_encodings();
 
 #ifdef HAVE_REGCOMP
-	if (! pregs_loaded)
+	if (G_UNLIKELY(! pregs_loaded))
 	{
 		regex_compile(&pregs[0], PATTERN_HTMLMETA);
 		regex_compile(&pregs[1], PATTERN_CODING);
@@ -445,8 +448,8 @@ gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gsize size,
 	gchar* converted_contents = NULL;
 	gsize bytes_written;
 
-	g_return_val_if_fail(buffer != NULL, NULL);
-	g_return_val_if_fail(charset != NULL, NULL);
+	g_return_val_if_fail(G_LIKELY(buffer != NULL), NULL);
+	g_return_val_if_fail(G_LIKELY(charset != NULL), NULL);
 
 	converted_contents = g_convert(buffer, size, "UTF-8", charset, NULL,
 								   &bytes_written, &conv_error);
@@ -468,7 +471,8 @@ gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gsize size,
 			geany_debug("Couldn't convert from %s to UTF-8.", charset);
 
 		utf8_content = NULL;
-		if (converted_contents != NULL) g_free(converted_contents);
+		if (converted_contents != NULL)
+			g_free(converted_contents);
 	}
 	else
 	{
@@ -499,7 +503,7 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 	gchar *utf8_content;
 	gboolean check_regex = FALSE;
 	gboolean check_locale = FALSE;
-	gint i;
+	gint i, len;
 
 	if ((gint)size == -1)
 	{
@@ -508,7 +512,8 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 
 #ifdef HAVE_REGCOMP
 	/* first try to read the encoding from the file content */
-	for (i = 0; i < (gint) G_N_ELEMENTS(pregs) && ! check_regex; i++)
+	len = (gint) G_N_ELEMENTS(pregs);
+	for (i = 0; i < len && ! check_regex; i++)
 	{
 		if ((regex_charset = regex_match(&pregs[i], buffer, size)) != NULL)
 			check_regex = TRUE;
@@ -520,7 +525,7 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 
 	for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
 	{
-		if (i == encodings[GEANY_ENCODING_NONE].idx || i == -1)
+		if (G_UNLIKELY(i == encodings[GEANY_ENCODING_NONE].idx) || G_UNLIKELY(i == -1))
 			continue;
 
 		if (check_regex)
@@ -539,17 +544,17 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 			charset = encodings[i].charset;
 
 
-		if (charset == NULL)
+		if (G_UNLIKELY(charset == NULL))
 			continue;
 
 		geany_debug("Trying to convert %" G_GSIZE_FORMAT " bytes of data from %s into UTF-8.", size, charset);
 		utf8_content = encodings_convert_to_utf8_from_charset(buffer, size, charset, FALSE);
 
-		if (utf8_content != NULL)
+		if (G_LIKELY(utf8_content != NULL))
 		{
 			if (used_encoding != NULL)
 			{
-				if (*used_encoding != NULL)
+				if (G_UNLIKELY(*used_encoding != NULL))
 				{
 					geany_debug("%s:%d", __FILE__, __LINE__);
 					g_free(*used_encoding);
@@ -625,7 +630,8 @@ GeanyEncodingIndex encodings_scan_unicode_bom(const gchar *string, gsize len, gu
 
 gboolean encodings_is_unicode_charset(const gchar *string)
 {
-	if (string != NULL && (strncmp(string, "UTF", 3) == 0 || strncmp(string, "UCS", 3) == 0))
+	if (G_LIKELY(string != NULL) &&
+		(strncmp(string, "UTF", 3) == 0 || strncmp(string, "UCS", 3) == 0))
 	{
 		return TRUE;
 	}

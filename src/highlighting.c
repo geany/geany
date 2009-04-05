@@ -121,16 +121,17 @@ static void get_keyfile_keywords(GKeyFile *config, GKeyFile *configh, const gcha
 {
 	gchar *result;
 
-	if (config == NULL || configh == NULL || section == NULL)
+	if (G_UNLIKELY(config == NULL) || G_UNLIKELY(configh == NULL) || G_UNLIKELY(section == NULL))
 	{
 		style_sets[index].keywords[pos] = g_strdup(default_value);
 		return;
 	}
 
 	result = g_key_file_get_string(configh, section, key, NULL);
-	if (result == NULL) result = g_key_file_get_string(config, section, key, NULL);
-
 	if (result == NULL)
+		result = g_key_file_get_string(config, section, key, NULL);
+
+	if (G_UNLIKELY(result == NULL))
 	{
 		style_sets[index].keywords[pos] = g_strdup(default_value);
 	}
@@ -145,7 +146,7 @@ static void get_keyfile_wordchars(GKeyFile *config, GKeyFile *configh, gchar **w
 {
 	gchar *result;
 
-	if (config == NULL || configh == NULL)
+	if (G_UNLIKELY(config == NULL) || G_UNLIKELY(configh == NULL))
 	{
 		*wordchars = g_strdup(GEANY_WORDCHARS);
 		return;
@@ -154,7 +155,7 @@ static void get_keyfile_wordchars(GKeyFile *config, GKeyFile *configh, gchar **w
 	result = g_key_file_get_string(configh, "settings", "wordchars", NULL);
 	if (result == NULL) result = g_key_file_get_string(config, "settings", "wordchars", NULL);
 
-	if (result == NULL)
+	if (G_UNLIKELY(result == NULL))
 	{
 		*wordchars = g_strdup(GEANY_WORDCHARS);
 	}
@@ -178,26 +179,32 @@ static void get_keyfile_style(GKeyFile *config, GKeyFile *configh,
 	gchar **list;
 	gsize len;
 
-	g_return_if_fail(config && configh && key_name && default_style && style);
+	g_return_if_fail(G_LIKELY(config));
+	g_return_if_fail(G_LIKELY(configh));
+	g_return_if_fail(G_LIKELY(key_name));
+	g_return_if_fail(G_LIKELY(default_style));
+	g_return_if_fail(G_LIKELY(style));
 
 	list = g_key_file_get_string_list(configh, "styling", key_name, &len, NULL);
 	if (list == NULL)
 		list = g_key_file_get_string_list(config, "styling", key_name, &len, NULL);
 
-	if (list != NULL && list[0] != NULL)
+	if (G_LIKELY(list) != NULL && G_UNLIKELY(list[0] != NULL))
 		style->foreground = (gint) utils_strtod(list[0], NULL, FALSE);
 	else
 		style->foreground = rotate_rgb(default_style->foreground);
 
-	if (list != NULL && list[1] != NULL)
+	if (G_LIKELY(list != NULL) && G_LIKELY(list[1] != NULL))
 		style->background = (gint) utils_strtod(list[1], NULL, FALSE);
 	else
 		style->background = rotate_rgb(default_style->background);
 
-	if (list != NULL && list[2] != NULL) style->bold = utils_atob(list[2]);
+	if (G_LIKELY(list) != NULL && G_LIKELY(list[2] != NULL))
+		style->bold = utils_atob(list[2]);
 	else style->bold = default_style->bold;
 
-	if (list != NULL && list[3] != NULL) style->italic = utils_atob(list[3]);
+	if (G_LIKELY(list) != NULL && list[3] != NULL)
+		style->italic = utils_atob(list[3]);
 	else style->italic = default_style->italic;
 
 	g_strfreev(list);
@@ -212,26 +219,34 @@ static void get_keyfile_hex(GKeyFile *config, GKeyFile *configh,
 	gchar **list;
 	gsize len;
 
-	if (config == NULL || configh == NULL || section == NULL) return;
+	g_return_if_fail(G_LIKELY(config));
+	g_return_if_fail(G_LIKELY(configh));
+	g_return_if_fail(G_LIKELY(section));
+	g_return_if_fail(G_LIKELY(key));
 
 	list = g_key_file_get_string_list(configh, section, key, &len, NULL);
-	if (list == NULL) list = g_key_file_get_string_list(config, section, key, &len, NULL);
+	if (list == NULL)
+		list = g_key_file_get_string_list(config, section, key, &len, NULL);
 
-	if (list != NULL && list[0] != NULL)
+	if (G_LIKELY(list != NULL) && G_LIKELY(list[0] != NULL))
 		style->foreground = (gint) utils_strtod(list[0], NULL, FALSE);
 	else if (foreground)
 		style->foreground = (gint) utils_strtod(foreground, NULL, FALSE);
 
-	if (list != NULL && list[1] != NULL)
+	if (G_LIKELY(list != NULL) && G_LIKELY(list[1] != NULL))
 		style->background = (gint) utils_strtod(list[1], NULL, FALSE);
 	else if (background)
 		style->background = (gint) utils_strtod(background, NULL, FALSE);
 
-	if (list != NULL && list[2] != NULL) style->bold = utils_atob(list[2]);
-	else style->bold = utils_atob(bold);
+	if (G_LIKELY(list != NULL) && G_LIKELY(list[2] != NULL))
+		style->bold = utils_atob(list[2]);
+	else
+		style->bold = utils_atob(bold);
 
-	if (list != NULL && list[3] != NULL) style->italic = utils_atob(list[3]);
-	else style->italic = FALSE;
+	if (G_LIKELY(list != NULL) && list[3] != NULL)
+		style->italic = utils_atob(list[3]);
+	else
+		style->italic = FALSE;
 
 	g_strfreev(list);
 }
@@ -245,19 +260,29 @@ static void get_keyfile_int(GKeyFile *config, GKeyFile *configh, const gchar *se
 	gchar *end1, *end2;
 	gsize len;
 
-	if (config == NULL || configh == NULL || section == NULL) return;
+	g_return_if_fail(G_LIKELY(config));
+	g_return_if_fail(G_LIKELY(configh));
+	g_return_if_fail(G_LIKELY(section));
+	g_return_if_fail(G_LIKELY(key));
 
 	list = g_key_file_get_string_list(configh, section, key, &len, NULL);
-	if (list == NULL) list = g_key_file_get_string_list(config, section, key, &len, NULL);
+	if (list == NULL)
+		list = g_key_file_get_string_list(config, section, key, &len, NULL);
 
-	if (list != NULL && list[0] != NULL) style->foreground = strtol(list[0], &end1, 10);
-	else style->foreground = fdefault_val;
-	if (list != NULL && list[1] != NULL) style->background = strtol(list[1], &end2, 10);
-	else style->background = sdefault_val;
+	if (G_LIKELY(list != NULL) && G_LIKELY(list[0] != NULL) )
+		style->foreground = strtol(list[0], &end1, 10);
+	else
+		style->foreground = fdefault_val;
+	if (G_LIKELY(list != NULL) && G_LIKELY(list[1] != NULL) )
+		style->background = strtol(list[1], &end2, 10);
+	else
+		style->background = sdefault_val;
 
 	/* if there was an error, strtol() returns 0 and end is list[x], so then we use default_val */
-	if (list == NULL || list[0] == end1) style->foreground = fdefault_val;
-	if (list == NULL || list[1] == end2) style->background = sdefault_val;
+	if (G_UNLIKELY(list == NULL) || G_UNLIKELY(list[0] == end1))
+		style->foreground = fdefault_val;
+	if (G_UNLIKELY(list == NULL) || G_UNLIKELY(list[1] == end2))
+		style->background = sdefault_val;
 
 	g_strfreev(list);
 }
@@ -280,18 +305,18 @@ static guint invert(guint icolour)
 
 static GeanyLexerStyle *get_style(guint ft_id, guint styling_index)
 {
-	g_assert(ft_id < GEANY_MAX_BUILT_IN_FILETYPES);
+	g_assert(G_LIKELY(ft_id < GEANY_MAX_BUILT_IN_FILETYPES));
 
-	if (ft_id == GEANY_FILETYPES_NONE)
+	if (G_UNLIKELY(ft_id == GEANY_FILETYPES_NONE))
 	{
-		g_assert(styling_index < GCS_MAX);
+		g_assert(G_LIKELY(styling_index < GCS_MAX));
 		return &common_style_set.styling[styling_index];
 	}
 	else
 	{
 		StyleSet *set = &style_sets[ft_id];
 
-		g_assert(styling_index < set->count);
+		g_assert(G_LIKELY(styling_index < set->count));
 		return &set->styling[styling_index];
 	}
 }
@@ -329,11 +354,11 @@ static GString *get_global_typenames(gint lang)
 {
 	GString *s = NULL;
 
-	if (app->tm_workspace)
+	if (G_LIKELY(app->tm_workspace))
 	{
 		GPtrArray *tags_array = app->tm_workspace->global_tags;
 
-		if (tags_array)
+		if (G_LIKELY(tags_array))
 		{
 			s = symbols_find_tags_as_string(tags_array, TM_GLOBAL_TYPE_MASK, lang);
 		}
@@ -347,7 +372,7 @@ get_keyfile_whitespace_chars(GKeyFile *config, GKeyFile *configh)
 {
 	gchar *result;
 
-	if (config == NULL || configh == NULL)
+	if (G_UNLIKELY(config == NULL) || G_UNLIKELY(configh == NULL))
 	{
 		result = NULL;
 	}
@@ -367,7 +392,7 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 {
 	static gboolean common_style_set_valid = FALSE;
 
-	if (common_style_set_valid)
+	if (G_LIKELY(common_style_set_valid))
 		return;
 	common_style_set_valid = TRUE;	/* ensure filetypes.common is only loaded once */
 
@@ -605,7 +630,7 @@ static void assign_global_and_user_keywords(ScintillaObject *sci,
 	GString *s;
 
 	s = get_global_typenames(lang);
-	if (s == NULL)
+	if (G_UNLIKELY(s == NULL))
 		s = g_string_sized_new(200);
 	else
 		g_string_append_c(s, ' '); /* append a space as delimiter to the existing list of words */
@@ -621,7 +646,7 @@ static void assign_global_and_user_keywords(ScintillaObject *sci,
 static void
 apply_filetype_properties(ScintillaObject *sci, gint lexer, filetype_id ft_id)
 {
-	g_assert(ft_id != GEANY_FILETYPES_NONE);
+	g_assert(G_LIKELY(ft_id != GEANY_FILETYPES_NONE));
 
 	SSM(sci, SCI_SETLEXER, lexer, 0);
 
@@ -3498,7 +3523,7 @@ void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
  * @see Scintilla messages @c SCI_STYLEGETFORE, etc, for use with ScintillaFuncs::send_message(). */
 const GeanyLexerStyle *highlighting_get_style(gint ft_id, gint style_id)
 {
-	if (ft_id < 0 || ft_id > GEANY_MAX_BUILT_IN_FILETYPES)
+	if (G_UNLIKELY(ft_id < 0) || G_UNLIKELY(ft_id > GEANY_MAX_BUILT_IN_FILETYPES))
 		return NULL;
 
 	/* ensure filetype loaded */

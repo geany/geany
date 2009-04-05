@@ -112,7 +112,7 @@ GtkWidget *toolbar_get_widget_by_name(const gchar *name)
 	GtkWidget *widget;
 	gchar *path;
 
-	g_return_val_if_fail(name != NULL, NULL);
+	g_return_val_if_fail(G_LIKELY(name != NULL), NULL);
 
 	path = g_strconcat("/ui/GeanyToolbar/", name, NULL);
 	widget = gtk_ui_manager_get_widget(uim, path);
@@ -126,16 +126,16 @@ GtkWidget *toolbar_get_widget_child_by_name(const gchar *name)
 {
 	GtkWidget *widget = toolbar_get_widget_by_name(name);
 
-	if (widget != NULL)
+	if (G_LIKELY(widget != NULL))
 		return gtk_bin_get_child(GTK_BIN(widget));
 	else
-		return widget;
+		return NULL;
 }
 
 
 GtkAction *toolbar_get_action_by_name(const gchar *name)
 {
-	g_return_val_if_fail(name != NULL, NULL);
+	g_return_val_if_fail(G_LIKELY(name != NULL), NULL);
 
 	return gtk_action_group_get_action(group, name);
 }
@@ -252,7 +252,7 @@ void toolbar_update_ui(void)
 	static GtkWidget *menubar_toolbar_separator = NULL;
 	GtkWidget *parent;
 
-	if (menubar == NULL)
+	if (G_UNLIKELY(menubar == NULL))
 	{	/* cache widget pointers */
 		hbox_menubar = ui_lookup_widget(main_widgets.window, "hbox_menubar");
 		menubar = ui_lookup_widget(main_widgets.window, "menubar1");
@@ -266,7 +266,7 @@ void toolbar_update_ui(void)
 
 	if (toolbar_prefs.append_to_menu)
 	{
-		if (parent != NULL)
+		if (G_LIKELY(parent != NULL))
 		{
 			if (parent != hbox_menubar)
 			{	/* here we manually 'reparent' the toolbar, gtk_widget_reparent() doesn't
@@ -287,7 +287,7 @@ void toolbar_update_ui(void)
 	{
 		GtkWidget *box = ui_lookup_widget(main_widgets.window, "vbox1");
 
-		if (parent != NULL)
+		if (G_LIKELY(parent != NULL))
 		{
 			if (parent != box)
 			{

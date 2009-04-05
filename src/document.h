@@ -118,7 +118,7 @@ extern GPtrArray *documents_array;
  * @note This should not be used to check the result of the main API functions,
  * these only need a NULL-pointer check - @c document_get_current() != @c NULL. */
 #define DOC_VALID(doc_ptr) \
-	((doc_ptr) != NULL && (doc_ptr)->is_valid)
+	(G_LIKELY((doc_ptr) != NULL) && G_LIKELY((doc_ptr)->is_valid))
 
 /**
  *  DOC_FILENAME returns the filename of the document passed or
@@ -126,7 +126,7 @@ extern GPtrArray *documents_array;
  *  This macro never returns NULL.
  **/
 #define DOC_FILENAME(doc) \
-	((doc->file_name != NULL) ? (doc->file_name) : GEANY_STRING_UNTITLED)
+	(G_LIKELY(doc->file_name != NULL) ? (doc->file_name) : GEANY_STRING_UNTITLED)
 
 
 

@@ -73,12 +73,12 @@
 void utils_open_browser(const gchar *uri)
 {
 #ifdef G_OS_WIN32
-	g_return_if_fail(uri != NULL);
+	g_return_if_fail(G_LIKELY(uri != NULL));
 	win32_open_browser(uri);
 #else
 	gchar *cmdline;
 
-	g_return_if_fail(uri != NULL);
+	g_return_if_fail(G_LIKELY(uri != NULL));
 
 	cmdline = g_strconcat(tool_prefs.browser_cmd, " ", uri, NULL);
 	if (! g_spawn_command_line_async(cmdline, NULL))
@@ -130,14 +130,14 @@ gint utils_get_line_endings(const gchar* buffer, glong size)
 
 	cr = lf = crlf = 0;
 
-	for ( i = 0; i < size ; i++ )
+	for (i = 0; i < size ; i++)
 	{
-		if ( buffer[i] == 0x0a )
+		if (buffer[i] == 0x0a)
 		{
 			/* LF */
 			lf++;
 		}
-		else if ( buffer[i] == 0x0d )
+		else if (buffer[i] == 0x0d)
 		{
 			if (i >= (size-1))
 			{
@@ -231,8 +231,8 @@ gint utils_write_file(const gchar *filename, const gchar *text)
 {
 	GError *error = NULL;
 
-	g_return_val_if_fail(filename != NULL, ENOENT);
-	g_return_val_if_fail(text != NULL, EINVAL);
+	g_return_val_if_fail(G_LIKELY(filename != NULL), ENOENT);
+	g_return_val_if_fail(G_LIKELY(text != NULL), EINVAL);
 
 	if (! g_file_set_contents(filename, text, -1, &error))
 	{
@@ -253,7 +253,7 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag)
 {
 	const gchar *begin, *cur;
 
-	if (size < 3)
+	if (G_UNLIKELY(size < 3))
 	{	/* Smallest tag is "<p>" which is 3 characters */
 		return NULL;
 	}
@@ -301,7 +301,7 @@ const gchar *utils_get_eol_name(gint eol_mode)
 
 gboolean utils_atob(const gchar *str)
 {
-	if (str == NULL)
+	if (G_UNLIKELY(str == NULL))
 		return FALSE;
 	else if (strcmp(str, "TRUE") == 0 || strcmp(str, "true") == 0)
 		return TRUE;
@@ -312,7 +312,7 @@ gboolean utils_atob(const gchar *str)
 /* NULL-safe version of g_path_is_absolute(). */
 gboolean utils_is_absolute_path(const gchar *path)
 {
-	if (! path || *path == '\0')
+	if (! NZV(path))
 		return FALSE;
 
 	return g_path_is_absolute(path);
@@ -365,8 +365,8 @@ gint utils_str_casecmp(const gchar *s1, const gchar *s2)
 	gchar *tmp1, *tmp2;
 	gint result;
 
-	g_return_val_if_fail(s1 != NULL, 1);
-	g_return_val_if_fail(s2 != NULL, -1);
+	g_return_val_if_fail(G_LIKELY(s1 != NULL), 1);
+	g_return_val_if_fail(G_LIKELY(s2 != NULL), -1);
 
 	tmp1 = g_strdup(s1);
 	tmp2 = g_strdup(s2);
@@ -377,12 +377,12 @@ gint utils_str_casecmp(const gchar *s1, const gchar *s2)
 	if (! g_utf8_validate(s2, -1, NULL))
 		setptr(tmp2, g_locale_to_utf8(s2, -1, NULL, NULL, NULL));
 
-	if (tmp1 == NULL)
+	if (G_UNLIKELY(tmp1 == NULL))
 	{
 		g_free(tmp2);
 		return 1;
 	}
-	if (tmp2 == NULL)
+	if (G_UNLIKELY(tmp2 == NULL))
 	{
 		g_free(tmp1);
 		return -1;
@@ -413,8 +413,8 @@ gint utils_str_casecmp(const gchar *s1, const gchar *s2)
 gboolean utils_str_equal(const gchar *a, const gchar *b)
 {
 	/* (taken from libexo from os-cillation) */
-	if (a == NULL && b == NULL) return TRUE;
-	else if (a == NULL || b == NULL) return FALSE;
+	if (G_UNLIKELY(a == NULL) && G_UNLIKELY(b == NULL)) return TRUE;
+	else if (G_UNLIKELY(a == NULL) || G_UNLIKELY(b == NULL)) return FALSE;
 
 	while (*a == *b++)
 		if (*a++ == '\0')
@@ -433,13 +433,15 @@ gboolean utils_str_equal(const gchar *a, const gchar *b)
  **/
 gchar *utils_remove_ext_from_filename(const gchar *filename)
 {
-	gchar *last_dot = strrchr(filename, '.');
+	gchar *last_dot;
 	gchar *result;
 	gint i;
 
-	if (filename == NULL) return NULL;
+	g_return_val_if_fail(G_LIKELY(filename != NULL), NULL);
 
-	if (! last_dot) return g_strdup(filename);
+	last_dot = strrchr(filename, '.');
+	if (! last_dot)
+		return g_strdup(filename);
 
 	/* assumes extension is small, so extra bytes don't matter */
 	result = g_malloc(strlen(filename));
@@ -525,7 +527,7 @@ gchar *utils_str_replace(gchar *haystack, const gchar *needle, const gchar *repl
 {
 	GString *str;
 
-	if (haystack == NULL)
+	if (G_UNLIKELY(haystack == NULL))
 		return NULL;
 
 	str = g_string_new(haystack);
@@ -543,7 +545,7 @@ gint utils_strpos(const gchar *haystack, const gchar *needle)
 	gint needle_length = strlen(needle);
 	gint i, j, pos = -1;
 
-	if (needle_length > haystack_length)
+	if (G_UNLIKELY(needle_length > haystack_length))
 	{
 		return -1;
 	}
@@ -551,14 +553,16 @@ gint utils_strpos(const gchar *haystack, const gchar *needle)
 	{
 		for (i = 0; (i < haystack_length) && pos == -1; i++)
 		{
-			if (haystack[i] == needle[0] && needle_length == 1)	return i;
+			if (haystack[i] == needle[0] && needle_length == 1)
+				return i;
 			else if (haystack[i] == needle[0])
 			{
 				for (j = 1; (j < needle_length); j++)
 				{
 					if (haystack[i+j] == needle[j])
 					{
-						if (pos == -1) pos = i;
+						if (pos == -1)
+							pos = i;
 					}
 					else
 					{
@@ -593,7 +597,7 @@ gchar *utils_get_date_time(const gchar *format, time_t *time_to_use)
 	gchar *locale_format;
 	gsize len;
 
-	g_return_val_if_fail(format != NULL, NULL);
+	g_return_val_if_fail(G_LIKELY(format != NULL), NULL);
 
 	if (! g_utf8_validate(format, -1, NULL))
 	{
@@ -660,10 +664,11 @@ gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gch
 	gint tmp;
 	GError *error = NULL;
 
-	if (config == NULL) return default_value;
+	if (G_UNLIKELY(config == NULL))
+		return default_value;
 
 	tmp = g_key_file_get_integer(config, section, key, &error);
-	if (error)
+	if (G_UNLIKELY(error))
 	{
 		g_error_free(error);
 		return default_value;
@@ -690,10 +695,11 @@ gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const
 	gboolean tmp;
 	GError *error = NULL;
 
-	if (config == NULL) return default_value;
+	if (G_UNLIKELY(config == NULL))
+		return default_value;
 
 	tmp = g_key_file_get_boolean(config, section, key, &error);
-	if (error)
+	if (G_UNLIKELY(error))
 	{
 		g_error_free(error);
 		return default_value;
@@ -720,10 +726,11 @@ gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gc
 	gchar *tmp;
 	GError *error = NULL;
 
-	if (config == NULL) return g_strdup(default_value);
+	if (G_UNLIKELY(config == NULL))
+		return g_strdup(default_value);
 
 	tmp = g_key_file_get_string(config, section, key, &error);
-	if (error)
+	if (G_UNLIKELY(error))
 	{
 		g_error_free(error);
 		return g_strdup(default_value);
@@ -736,7 +743,8 @@ gchar *utils_get_hex_from_color(GdkColor *color)
 {
 	gchar *buffer = g_malloc0(9);
 
-	if (color == NULL) return NULL;
+	if (G_UNLIKELY(color == NULL))
+		return NULL;
 
 	g_snprintf(buffer, 8, "#%02X%02X%02X",
 	      (guint) (utils_scale_round(color->red / 256, 255)),
@@ -754,12 +762,12 @@ gchar *utils_get_current_file_dir_utf8(void)
 {
 	GeanyDocument *doc = document_get_current();
 
-	if (doc != NULL)
+	if (G_LIKELY(doc != NULL))
 	{
 		/* get current filename */
 		const gchar *cur_fname = doc->file_name;
 
-		if (cur_fname != NULL)
+		if (G_LIKELY(cur_fname != NULL))
 		{
 			/* get folder part from current filename */
 			return g_path_get_dirname(cur_fname); /* returns "." if no path */
@@ -796,7 +804,8 @@ gchar *utils_make_human_readable_str(guint64 size, gulong block_size,
 	frac = 0;
 
 	val = size * block_size;
-	if (val == 0) return g_strdup(u);
+	if (G_UNLIKELY(val == 0))
+		return g_strdup(u);
 
 	if (display_unit)
 	{
@@ -845,7 +854,7 @@ gint utils_strtod(const gchar *source, gchar **end, gboolean with_route)
 {
 	guint red, green, blue, offset = 0;
 
-	if (source == NULL)
+	if (G_UNLIKELY(source == NULL))
 		return -1;
 	else if (with_route && (strlen(source) != 7 || source[0] != '#'))
 		return -1;
@@ -928,11 +937,12 @@ gchar **utils_read_file_in_array(const gchar *filename)
 	gchar **result = NULL;
 	gchar *data;
 
-	if (filename == NULL) return NULL;
+	if (G_UNLIKELY(filename == NULL))
+		return NULL;
 
 	g_file_get_contents(filename, &data, NULL, NULL);
 
-	if (data != NULL)
+	if (G_LIKELY(data != NULL))
 	{
 		result = g_strsplit_set(data, "\r\n", -1);
 		g_free(data);
@@ -953,7 +963,7 @@ gboolean utils_str_replace_escape(gchar *string)
 	len = strlen(string);
 	for (i = 0; i < len; i++)
 	{
-		if (string[i]=='\\')
+		if (G_UNLIKELY(string[i]=='\\'))
 		{
 			if (i++ >= strlen(string))
 			{
@@ -1081,7 +1091,8 @@ gboolean utils_wrap_string(gchar *string, gint wrapstart)
 	gchar *pos, *linestart;
 	gboolean ret = FALSE;
 
-	if (wrapstart < 0) wrapstart = 80;
+	if (wrapstart < 0)
+		wrapstart = 80;
 
 	for (pos = linestart = string; *pos != '\0'; pos++)
 	{
@@ -1114,10 +1125,10 @@ gchar *utils_get_locale_from_utf8(const gchar *utf8_text)
 #else
 	gchar *locale_text;
 
-	if (! utf8_text)
+	if (G_UNLIKELY(! utf8_text))
 		return NULL;
 	locale_text = g_locale_from_utf8(utf8_text, -1, NULL, NULL, NULL);
-	if (locale_text == NULL)
+	if (G_UNLIKELY(locale_text == NULL))
 		locale_text = g_strdup(utf8_text);
 	return locale_text;
 #endif
@@ -1142,10 +1153,10 @@ gchar *utils_get_utf8_from_locale(const gchar *locale_text)
 #else
 	gchar *utf8_text;
 
-	if (! locale_text)
+	if (G_UNLIKELY(! locale_text))
 		return NULL;
 	utf8_text = g_locale_to_utf8(locale_text, -1, NULL, NULL, NULL);
-	if (utf8_text == NULL)
+	if (G_UNLIKELY(utf8_text == NULL))
 		utf8_text = g_strdup(locale_text);
 	return utf8_text;
 #endif
@@ -1167,7 +1178,7 @@ void utils_free_pointers(gsize arg_count, ...)
 		g_free(ptr);
 	}
 	ptr = va_arg(a, gpointer);
-	if (ptr)
+	if (G_UNLIKELY(ptr))
 		g_warning("Wrong arg_count!");
 	va_end(a);
 }
@@ -1184,7 +1195,7 @@ gchar **utils_strv_new(const gchar *first, ...)
 	gchar *str;
 	gchar **strv;
 
-	if (first == NULL)
+	if (G_UNLIKELY(first == NULL))
 		return NULL;
 
 	strvlen = 1;	/* for first argument */
@@ -1225,7 +1236,7 @@ gint utils_mkdir(const gchar *path, gboolean create_parent_dirs)
 	gint mode = 0700;
 	gint result;
 
-	if (path == NULL || strlen(path) == 0)
+	if (G_UNLIKELY(path == NULL) || strlen(path) == 0)
 		return EFAULT;
 
 	result = (create_parent_dirs) ? g_mkdir_with_parents(path, mode) : g_mkdir(path, mode);
@@ -1258,16 +1269,17 @@ GSList *utils_get_file_list(const gchar *path, guint *length, GError **error)
 		*error = NULL;
 	if (length)
 		*length = 0;
-	g_return_val_if_fail(path != NULL, NULL);
+	g_return_val_if_fail(G_LIKELY(path != NULL), NULL);
 
 	dir = g_dir_open(path, 0, error);
-	if (dir == NULL)
+	if (G_UNLIKELY(dir == NULL))
 		return NULL;
 
 	while (1)
 	{
 		const gchar *filename = g_dir_read_name(dir);
-		if (filename == NULL) break;
+		if (G_UNLIKELY(filename == NULL))
+			break;
 
 		list = g_slist_insert_sorted(list, g_strdup(filename), (GCompareFunc) utils_str_casecmp);
 		len++;
@@ -1285,7 +1297,7 @@ gboolean utils_str_has_upper(const gchar *str)
 {
 	gunichar c;
 
-	if (str == NULL || *str == '\0' || ! g_utf8_validate(str, -1, NULL))
+	if (! NZV(str) || ! g_utf8_validate(str, -1, NULL))
 		return FALSE;
 
 	while (*str != '\0')
@@ -1308,9 +1320,9 @@ static guint utils_string_replace_helper(GString *haystack, const gchar *needle,
 	guint ret = 0;
 	gssize pos;
 
-	if (haystack->len == 0)
+	if (G_UNLIKELY(haystack->len == 0))
 		return FALSE;
-	g_return_val_if_fail(NZV(needle), 0);
+	g_return_val_if_fail(G_LIKELY(NZV(needle)), 0);
 
 	stack = haystack->str;
 	if (! (match = strstr(stack, needle)))
@@ -1324,7 +1336,7 @@ static guint utils_string_replace_helper(GString *haystack, const gchar *needle,
 		 * (we have to be careful to only use haystack->str as its address may change) */
 		stack = haystack->str + pos;
 
-		if (replace)
+		if (G_LIKELY(replace))
 		{
 			g_string_insert(haystack, pos, replace);
 			stack = haystack->str + pos + strlen(replace);	/* skip past replacement */
@@ -1390,7 +1402,7 @@ const gchar *utils_get_default_dir_utf8(void)
 
 static gboolean check_error(GError **error)
 {
-	if (error != NULL && *error != NULL)
+	if (G_UNLIKELY(error != NULL) && G_UNLIKELY(*error != NULL))
 	{
 		/* imitate the GLib warning */
 		g_warning(
@@ -1431,7 +1443,7 @@ gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFla
 	if (! check_error(error))
 		return FALSE;
 
-	if (argv == NULL)
+	if (G_UNLIKELY(argv == NULL))
 	{
 		*error = g_error_new(G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "argv must not be NULL");
 		return FALSE;
@@ -1477,7 +1489,7 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 	if (! check_error(error))
 		return FALSE;
 
-	if (argv == NULL)
+	if (G_UNLIKELY(argv == NULL))
 	{
 		*error = g_error_new(G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "argv must not be NULL");
 		return FALSE;
@@ -1501,7 +1513,7 @@ const gchar *utils_build_path(const gchar *first, ...)
 	const gchar *str;
 	va_list args;
 
-	if (!buffer)
+	if (G_UNLIKELY(! buffer))
 		buffer = g_string_new(first);
 	else
 		g_string_assign(buffer, first);
@@ -1531,7 +1543,7 @@ gchar *utils_get_path_from_uri(const gchar *uri)
 {
 	gchar *locale_filename;
 
-	g_return_val_if_fail(uri != NULL, NULL);
+	g_return_val_if_fail(G_LIKELY(uri != NULL), NULL);
 
 	if (! utils_is_uri(uri))
 		return g_strdup(uri);
@@ -1563,7 +1575,7 @@ gchar *utils_get_path_from_uri(const gchar *uri)
 
 gboolean utils_is_uri(const gchar *uri)
 {
-	g_return_val_if_fail(uri != NULL, FALSE);
+	g_return_val_if_fail(G_LIKELY(uri != NULL), FALSE);
 
 	return (strstr(uri, "://") != NULL);
 }
@@ -1572,7 +1584,7 @@ gboolean utils_is_uri(const gchar *uri)
 /* path should be in locale encoding */
 gboolean utils_is_remote_path(const gchar *path)
 {
-	g_return_val_if_fail(path != NULL, FALSE);
+	g_return_val_if_fail(G_LIKELY(path != NULL), FALSE);
 
 	/* if path is an URI and it doesn't start "file://", we take it as remote */
 	if (utils_is_uri(path) && strncmp(path, "file:", 5) != 0)
@@ -1584,7 +1596,7 @@ gboolean utils_is_remote_path(const gchar *path)
 		static gchar *fuse_path = NULL;
 		static gsize len = 0;
 
-		if (fuse_path == NULL)
+		if (G_UNLIKELY(fuse_path == NULL))
 		{
 			fuse_path = g_build_filename(g_get_home_dir(), ".gvfs", NULL);
 			len = strlen(fuse_path);

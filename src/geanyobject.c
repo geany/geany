@@ -66,7 +66,7 @@ static void geany_cclosure_marshal_VOID__STRING_INT_POINTER(GClosure *closure, G
 	register GCClosure* cc = (GCClosure*) closure;
 	register gpointer data1, data2;
 
-	g_return_if_fail(n_param_vals == 4);
+	g_return_if_fail(G_LIKELY(n_param_vals == 4));
 
 	if (G_CCLOSURE_SWAP_DATA(closure))
 	{
@@ -112,8 +112,8 @@ static void geany_cclosure_marshal_BOOL__POINTER_POINTER( GClosure *closure, GVa
 	register gpointer data1, data2;
 	gboolean v_return;
 
-	g_return_if_fail(return_value != NULL);
-	g_return_if_fail(n_param_values == 3);
+	g_return_if_fail(G_LIKELY(return_value != NULL));
+	g_return_if_fail(G_LIKELY(n_param_values == 3));
 
 	if (G_CCLOSURE_SWAP_DATA(closure))
 	{
@@ -260,12 +260,12 @@ static void geany_object_class_init(GeanyObjectClass *klass)
 
 static void geany_object_init(GeanyObject *self)
 {
-
+	/* nothing to do */
 }
 
 
-GObject* geany_object_new(void)
+GObject *geany_object_new(void)
 {
-	return (GObject*)g_object_new(GEANY_OBJECT_TYPE, NULL);
+	return g_object_new(GEANY_OBJECT_TYPE, NULL);
 }
 

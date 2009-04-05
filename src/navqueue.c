@@ -149,8 +149,8 @@ gboolean navqueue_goto_line(GeanyDocument *old_doc, GeanyDocument *new_doc, gint
 {
 	gint pos;
 
-	g_return_val_if_fail(new_doc != NULL, FALSE);
-	g_return_val_if_fail(line >= 1, FALSE);
+	g_return_val_if_fail(G_LIKELY(new_doc != NULL), FALSE);
+	g_return_val_if_fail(G_LIKELY(line >= 1), FALSE);
 
 	pos = sci_get_position_from_line(new_doc->editor->sci, line - 1);
 
@@ -163,7 +163,7 @@ gboolean navqueue_goto_line(GeanyDocument *old_doc, GeanyDocument *new_doc, gint
 	}
 
 	/* now add new file position */
-	if (new_doc->file_name)
+	if (G_LIKELY(new_doc->file_name))
 	{
 		add_new_position(new_doc->file_name, pos);
 	}
@@ -176,7 +176,7 @@ static gboolean goto_file_pos(const gchar *file, gint pos)
 {
 	GeanyDocument *doc = document_find_by_filename(file);
 
-	if (doc == NULL)
+	if (G_UNLIKELY(doc == NULL))
 		return FALSE;
 
 	return editor_goto_pos(doc->editor, pos, TRUE);
@@ -245,7 +245,7 @@ void navqueue_remove_file(const gchar *filename)
 {
 	GList *match;
 
-	if (filename == NULL)
+	if (G_UNLIKELY(filename == NULL))
 		return;
 
 	while ((match = g_queue_find_custom(navigation_queue, filename, find_by_filename)))
