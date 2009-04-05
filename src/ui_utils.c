@@ -1813,6 +1813,9 @@ GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name)
 {
 	GtkWidget *parent, *found_widget;
 
+	g_return_val_if_fail(widget != NULL, NULL);
+	g_return_val_if_fail(widget_name != NULL, NULL);
+
 	for (;;)
 	{
 		if (GTK_IS_MENU(widget))
