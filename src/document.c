@@ -1517,13 +1517,18 @@ void document_rename_file(GeanyDocument *doc, const gchar *new_filename)
 {
 	gchar *old_locale_filename = utils_get_locale_from_utf8(doc->file_name);
 	gchar *new_locale_filename = utils_get_locale_from_utf8(new_filename);
+	gint result;
 
 	/* stop file monitoring to avoid getting events for deleting/creating files,
 	 * it's re-setup in document_save_file_as() */
 	document_stop_file_monitoring(doc);
 
-	g_rename(old_locale_filename, new_locale_filename);
-
+	result = g_rename(old_locale_filename, new_locale_filename);
+	if (G_UNLIKELY(result != 0))
+	{
+		dialogs_show_msgbox_with_secondary(GTK_MESSAGE_ERROR,
+			_("Error renaming file."), g_strerror(errno));
+	}
 	g_free(old_locale_filename);
 	g_free(new_locale_filename);
 }

@@ -23,6 +23,8 @@
  * src/highlighting.c:
    Fix typo in the G_LIKELY checks, introduced in last commit.
    Fix the size of the styles array.
+ * src/document.c:
+   Show a message dialog when renaming a file fails.
 
 
 2009-04-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
