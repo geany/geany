@@ -58,7 +58,7 @@ typedef struct
 } StyleSet;
 
 /* each filetype has a styleset except GEANY_FILETYPES_NONE, which uses common_style_set */
-static StyleSet style_sets[GEANY_MAX_BUILT_IN_FILETYPES - 1] = {{0, NULL, NULL, NULL}};
+static StyleSet style_sets[GEANY_MAX_BUILT_IN_FILETYPES] = {{0, NULL, NULL, NULL}};
 
 
 enum	/* Geany common styling */
@@ -189,7 +189,7 @@ static void get_keyfile_style(GKeyFile *config, GKeyFile *configh,
 	if (list == NULL)
 		list = g_key_file_get_string_list(config, "styling", key_name, &len, NULL);
 
-	if (G_LIKELY(list) != NULL && G_UNLIKELY(list[0] != NULL))
+	if (G_LIKELY(list != NULL) && G_UNLIKELY(list[0] != NULL))
 		style->foreground = (gint) utils_strtod(list[0], NULL, FALSE);
 	else
 		style->foreground = rotate_rgb(default_style->foreground);
@@ -199,11 +199,11 @@ static void get_keyfile_style(GKeyFile *config, GKeyFile *configh,
 	else
 		style->background = rotate_rgb(default_style->background);
 
-	if (G_LIKELY(list) != NULL && G_LIKELY(list[2] != NULL))
+	if (G_LIKELY(list != NULL) && G_LIKELY(list[2] != NULL))
 		style->bold = utils_atob(list[2]);
 	else style->bold = default_style->bold;
 
-	if (G_LIKELY(list) != NULL && list[3] != NULL)
+	if (G_LIKELY(list != NULL) && list[3] != NULL)
 		style->italic = utils_atob(list[3]);
 	else style->italic = default_style->italic;
 
