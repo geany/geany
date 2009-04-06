@@ -260,7 +260,7 @@ void project_open()
 	if (file != NULL)
 	{
 		/* try to load the config */
-		if (! project_load_file_full(file))
+		if (! project_load_file_with_session(file))
 		{
 			SHOW_ERR1(_("Project file \"%s\" could not be loaded."), file);
 		}
