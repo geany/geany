@@ -3695,7 +3695,7 @@ create_prefs_dialog (void)
   gtk_table_attach (GTK_TABLE (table16), check_autoclose_sbracket, 0, 1, 2, 3,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
-  gtk_tooltips_set_tip (tooltips, check_autoclose_sbracket, _("Auto-close squre-bracket when typing an opening one"), NULL);
+  gtk_tooltips_set_tip (tooltips, check_autoclose_sbracket, _("Auto-close square-bracket when typing an opening one"), NULL);
 
   check_autoclose_dquote = gtk_check_button_new_with_mnemonic (_("Double quotes \" \""));
   gtk_widget_show (check_autoclose_dquote);
@@ -3750,7 +3750,7 @@ create_prefs_dialog (void)
   check_line_end = gtk_check_button_new_with_mnemonic (_("Show line endings"));
   gtk_widget_show (check_line_end);
   gtk_box_pack_start (GTK_BOX (vbox12), check_line_end, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_line_end, _("Show the line ending character"), NULL);
+  gtk_tooltips_set_tip (tooltips, check_line_end, _("Shows the line ending character"), NULL);
 
   check_line_numbers = gtk_check_button_new_with_mnemonic (_("Show line numbers"));
   gtk_widget_show (check_line_numbers);
@@ -4515,12 +4515,12 @@ create_prefs_dialog (void)
   check_print_pagenumbers = gtk_check_button_new_with_mnemonic (_("Print page numbers"));
   gtk_widget_show (check_print_pagenumbers);
   gtk_box_pack_start (GTK_BOX (vbox29), check_print_pagenumbers, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_print_pagenumbers, _("Add page numbers at the bottom of each page, it takes 2 lines of the page"), NULL);
+  gtk_tooltips_set_tip (tooltips, check_print_pagenumbers, _("Add page numbers at the bottom of each page. It takes 2 lines of the page."), NULL);
 
   check_print_pageheader = gtk_check_button_new_with_mnemonic (_("Print page header"));
   gtk_widget_show (check_print_pageheader);
   gtk_box_pack_start (GTK_BOX (vbox29), check_print_pageheader, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_print_pageheader, _("Adds a little header to every page containing the page number, the filename and the current date(see below). It takes 3 lines of the page."), NULL);
+  gtk_tooltips_set_tip (tooltips, check_print_pageheader, _("Add a little header to every page containing the page number, the filename and the current date (see below). It takes 3 lines of the page."), NULL);
 
   frame33 = gtk_frame_new (NULL);
   gtk_widget_show (frame33);
@@ -4540,7 +4540,7 @@ create_prefs_dialog (void)
   check_print_basename = gtk_check_button_new_with_mnemonic (_("Use the basename of the printed file"));
   gtk_widget_show (check_print_basename);
   gtk_box_pack_start (GTK_BOX (vbox30), check_print_basename, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_print_basename, _("Print only the basename(without the path) of the printed file"), NULL);
+  gtk_tooltips_set_tip (tooltips, check_print_basename, _("Print only the basename (without the path) of the printed file"), NULL);
 
   hbox10 = gtk_hbox_new (FALSE, 5);
   gtk_widget_show (hbox10);

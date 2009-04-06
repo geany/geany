@@ -1,3 +1,9 @@
+2009-04-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/interface.c, src/printing.c, geany.glade:
+   Minor string improvements (spotted by Jean-Philippe Moal, thanks).
+
+
 2009-04-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/ui_utils.c:

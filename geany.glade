@@ -6188,7 +6188,7 @@ Match braces</property>
 			      <child>
 				<widget class="GtkCheckButton" id="check_autoclose_sbracket">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Auto-close squre-bracket when typing an opening one</property>
+				  <property name="tooltip" translatable="yes">Auto-close square-bracket when typing an opening one</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Square brackets [ ]</property>
 				  <property name="use_underline">True</property>
@@ -6389,7 +6389,7 @@ Match braces</property>
 			      <child>
 				<widget class="GtkCheckButton" id="check_line_end">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Show the line ending character</property>
+				  <property name="tooltip" translatable="yes">Shows the line ending character</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Show line endings</property>
 				  <property name="use_underline">True</property>
@@ -8934,7 +8934,7 @@ Match braces</property>
 			  <child>
 			    <widget class="GtkCheckButton" id="check_print_pagenumbers">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Add page numbers at the bottom of each page, it takes 2 lines of the page</property>
+			      <property name="tooltip" translatable="yes">Add page numbers at the bottom of each page. It takes 2 lines of the page.</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Print page numbers</property>
 			      <property name="use_underline">True</property>
@@ -8954,7 +8954,7 @@ Match braces</property>
 			  <child>
 			    <widget class="GtkCheckButton" id="check_print_pageheader">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Adds a little header to every page containing the page number, the filename and the current date(see below). It takes 3 lines of the page.</property>
+			      <property name="tooltip" translatable="yes">Add a little header to every page containing the page number, the filename and the current date (see below). It takes 3 lines of the page.</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Print page header</property>
 			      <property name="use_underline">True</property>
@@ -8999,7 +8999,7 @@ Match braces</property>
 				      <child>
 					<widget class="GtkCheckButton" id="check_print_basename">
 					  <property name="visible">True</property>
-					  <property name="tooltip" translatable="yes">Print only the basename(without the path) of the printed file</property>
+					  <property name="tooltip" translatable="yes">Print only the basename (without the path) of the printed file</property>
 					  <property name="can_focus">True</property>
 					  <property name="label" translatable="yes">Use the basename of the printed file</property>
 					  <property name="use_underline">True</property>
