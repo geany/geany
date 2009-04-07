@@ -153,7 +153,7 @@ static GOptionEntry entries[] =
 static void setup_window_position(void)
 {
 	/* interprets the saved window geometry */
-	if (prefs.save_winpos)
+	if (prefs.save_winpos && ui_prefs.geometry[0] != -1)
 	{
 		gtk_window_move(GTK_WINDOW(main_widgets.window), ui_prefs.geometry[0], ui_prefs.geometry[1]);
 		gtk_window_set_default_size(GTK_WINDOW(main_widgets.window), ui_prefs.geometry[2], ui_prefs.geometry[3]);
