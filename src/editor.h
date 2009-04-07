@@ -187,8 +187,6 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 
 gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle);
 
-void editor_highlight_braces(GeanyEditor *editor, gint cur_pos);
-
 gboolean editor_lexer_is_c_like(gint lexer);
 
 gint editor_lexer_get_type_keyword_idx(gint lexer);

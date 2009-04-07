@@ -99,6 +99,7 @@ static gboolean is_string_style(gint lexer, gint style);
 static void auto_close_chars(ScintillaObject *sci, gint pos, gchar c);
 static void auto_table(GeanyEditor *editor, gint pos);
 static void close_block(GeanyEditor *editor, gint pos);
+static void editor_highlight_braces(GeanyEditor *editor, gint cur_pos);
 
 
 void editor_snippets_free(void)
@@ -2831,7 +2832,7 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 }
 
 
-void editor_highlight_braces(GeanyEditor *editor, gint cur_pos)
+static void editor_highlight_braces(GeanyEditor *editor, gint cur_pos)
 {
 	gint brace_pos = cur_pos - 1;
 	gint end_pos;

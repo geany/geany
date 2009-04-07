@@ -3,6 +3,9 @@
  * src/main.c:
    Fix setting a wrong default window size when starting without an
    existing configuration.
+ * src/editor.c, src/sciwrappers.c, src/sciwrapper.h:
+   Make editor_highlight_braces() static.
+   Remove unused wrapper functions.
 
 
 2009-04-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
