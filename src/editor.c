@@ -1623,8 +1623,10 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 	if (! editor_prefs.auto_complete_symbols && ! force)
 		return FALSE;
 
-	g_return_val_if_fail(G_LIKELY(editor != NULL) &&
-		G_LIKELY(editor->document->file_type != NULL), FALSE);
+	g_return_val_if_fail(G_LIKELY(editor != NULL), FALSE);
+
+	if (G_UNLIKELY(editor->document->file_type != NULL))
+		return;
 
 	/* If we are at the beginning of the document, we skip autocompletion as we can't determine the
 	 * necessary styling information */
