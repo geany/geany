@@ -49,7 +49,7 @@ const gchar *symbols_get_context_separator(gint ft_id);
 
 const GList *symbols_get_tag_list(GeanyDocument *doc, guint tag_types);
 
-GString *symbols_get_macro_list(void);
+GString *symbols_get_macro_list(gint lang);
 
 const gchar **symbols_get_html_entities(void);
 

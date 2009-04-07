@@ -1626,7 +1626,7 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 	g_return_val_if_fail(G_LIKELY(editor != NULL), FALSE);
 
 	if (G_UNLIKELY(editor->document->file_type != NULL))
-		return;
+		return FALSE;
 
 	/* If we are at the beginning of the document, we skip autocompletion as we can't determine the
 	 * necessary styling information */
@@ -2125,10 +2125,10 @@ void editor_show_macro_list(GeanyEditor *editor)
 {
 	GString *words;
 
-	if (G_UNLIKELY(editor == NULL))
+	if (G_UNLIKELY(editor == NULL) || G_UNLIKELY(editor->document->file_type == NULL))
 		return;
 
-	words = symbols_get_macro_list();
+	words = symbols_get_macro_list(editor->document->file_type->lang);
 	if (G_UNLIKELY(words == NULL))
 		return;
 
