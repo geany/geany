@@ -337,7 +337,7 @@ void highlighting_free_styles()
 {
 	gint i;
 
-	for (i = 0; i < GEANY_MAX_BUILT_IN_FILETYPES - 1; i++)
+	for (i = 0; i < GEANY_MAX_BUILT_IN_FILETYPES; i++)
 	{
 		StyleSet *style_ptr;
 		style_ptr = &style_sets[i];

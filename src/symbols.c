@@ -1419,7 +1419,7 @@ static GHashTable *init_user_tags(void)
 
 static void load_user_tags(filetype_id ft_id)
 {
-	static guchar tags_loaded[GEANY_MAX_BUILT_IN_FILETYPES - 1] = {0};
+	static guchar tags_loaded[GEANY_MAX_BUILT_IN_FILETYPES] = {0};
 	static GHashTable *lang_hash = NULL;
 	GList *fnames;
 	const GList *node;
