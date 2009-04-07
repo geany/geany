@@ -1,3 +1,9 @@
+2009-04-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/editor.c:
+   Add Configuration Files item for snippets.conf.
+
+
 2009-04-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/interface.c, src/printing.c, geany.glade:

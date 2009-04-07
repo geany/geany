@@ -4355,6 +4355,20 @@ void editor_destroy(GeanyEditor *editor)
 }
 
 
+static void on_document_save(GObject *obj, GeanyDocument *doc)
+{
+	g_return_if_fail(NZV(doc->real_path));
+
+	if (utils_str_equal(doc->real_path,
+		utils_build_path(app->configdir, "snippets.conf", NULL)))
+	{
+		/* reload snippets */
+		editor_snippets_free();
+		editor_snippets_init();
+	}
+}
+
+
 void editor_init(void)
 {
 	static GeanyIndentPrefs indent_prefs;
@@ -4366,6 +4380,10 @@ void editor_init(void)
 	/* use g_signal_connect_after() to allow plugins connecting to the signal before the default
 	 * handler (on_editor_notify) is called */
 	g_signal_connect_after(geany_object, "editor-notify", G_CALLBACK(on_editor_notify), NULL);
+
+	ui_add_config_file_menu_item(utils_build_path(app->configdir, "snippets.conf", NULL),
+		NULL, NULL);
+	g_signal_connect(geany_object, "document-save", G_CALLBACK(on_document_save), NULL);
 }
 
 
