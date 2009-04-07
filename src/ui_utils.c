@@ -71,8 +71,15 @@ static struct
 }
 widgets;
 
+enum
+{
+	RECENT_FILE_FILE,
+	RECENT_FILE_PROJECT
+};
+
 typedef struct
 {
+	gint type;
 	GQueue *recent_queue;
 	GtkWidget *menubar;
 	GtkWidget *toolbar;
@@ -926,7 +933,7 @@ static void recent_create_menu(GeanyRecentFiles *grf)
 
 static GeanyRecentFiles *recent_get_recent_files(void)
 {
-	static GeanyRecentFiles grf = { NULL, NULL, NULL, NULL };
+	static GeanyRecentFiles grf = { RECENT_FILE_FILE, NULL, NULL, NULL, NULL };
 
 	if (G_UNLIKELY(grf.recent_queue == NULL))
 	{
@@ -941,7 +948,7 @@ static GeanyRecentFiles *recent_get_recent_files(void)
 
 static GeanyRecentFiles *recent_get_recent_projects(void)
 {
-	static GeanyRecentFiles grf = { NULL, NULL, NULL, NULL };
+	static GeanyRecentFiles grf = { RECENT_FILE_PROJECT, NULL, NULL, NULL, NULL };
 
 	if (G_UNLIKELY(grf.recent_queue == NULL))
 	{
@@ -992,12 +999,15 @@ static void add_recent_file(const gchar *utf8_filename, GeanyRecentFiles *grf)
 	if (g_queue_find_custom(grf->recent_queue, utf8_filename, (GCompareFunc) strcmp) == NULL)
 	{
 #if GTK_CHECK_VERSION(2, 10, 0)
-		GtkRecentManager *manager = gtk_recent_manager_get_default();
-		gchar *uri = g_filename_to_uri(utf8_filename, NULL, NULL);
-		if (G_LIKELY(uri != NULL))
+		if (grf->type == RECENT_FILE_FILE)
 		{
-			gtk_recent_manager_add_item(manager, uri);
-			g_free(uri);
+			GtkRecentManager *manager = gtk_recent_manager_get_default();
+			gchar *uri = g_filename_to_uri(utf8_filename, NULL, NULL);
+			if (G_LIKELY(uri != NULL))
+			{
+				gtk_recent_manager_add_item(manager, uri);
+				g_free(uri);
+			}
 		}
 #endif
 		g_queue_push_head(grf->recent_queue, g_strdup(utf8_filename));

@@ -10,6 +10,8 @@
    Prevent showing an empty macro list.
    Show only macros of the same filetype instead of all macros of all
    loaded filetypes.
+ * src/ui_utils.c:
+   Don't add opened project files to the GtkRecentManager.
 
 
 2009-04-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
