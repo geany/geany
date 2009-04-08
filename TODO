@@ -17,14 +17,12 @@ Note: features included in brackets have lower priority.
 	o (selectable menu of arguments to use for Make, from Make Custom)
 	o (DBUS)
 	o (indent wrapped lines  - Scintilla issue)
-	o (folder tree in the sidebar)
 	o (macro support)
 	o (better search & replace regex support - use
 	   SCI_GETCHARACTERPOINTER and GNU regex?)
 	o (parsing tags from a memory buffer instead of a file on disk)
 	o (calltip support for non-C-like languages that use
 	   function_name(arguments) syntax)
-	o (custom pipe-separated tags files support)
 	o (better tags support for popular languages? - this is a moving
 	   target...)
 	o (tango-like icons for the symbol list)
