@@ -1625,7 +1625,7 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 
 	g_return_val_if_fail(G_LIKELY(editor != NULL), FALSE);
 
-	if (G_UNLIKELY(editor->document->file_type != NULL))
+	if (G_UNLIKELY(editor->document->file_type == NULL))
 		return FALSE;
 
 	/* If we are at the beginning of the document, we skip autocompletion as we can't determine the

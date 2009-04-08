@@ -4,6 +4,8 @@
    Sort Configuration Files menu.
    Add ui_menu_sort_by_label().
    Add foreach_list() macro.
+ * src/editor.c:
+   Fix autocompletion.
 
 
 2009-04-07  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
