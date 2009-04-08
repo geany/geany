@@ -949,6 +949,7 @@ gint main(gint argc, gchar **argv)
 			/* Socket exists */
 			if (argc > 1)	/* filenames were sent to first instance, so quit */
 			{
+				gdk_notify_startup_complete();
 				g_free(app->configdir);
 				g_free(app->datadir);
 				g_free(app->docdir);

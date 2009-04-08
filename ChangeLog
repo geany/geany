@@ -4,6 +4,9 @@
    When opening files from a remote instance on X11, set the window
    server time to encourage window managers to pop up the main window
    (related to #2735467 and #2276179).
+ * src/main.c:
+   When finished sending filenames to a remote instance, notify the
+   environment that we finished starting up.
 
 
 2009-04-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
