@@ -1723,6 +1723,13 @@ void ui_add_config_file_menu_item(const gchar *real_path, const gchar *label, Gt
 }
 
 
+static gboolean sort_menu(gpointer data)
+{
+	ui_menu_sort_by_label(GTK_MENU(data));
+	return FALSE;
+}
+
+
 static void create_config_files_menu(void)
 {
 	GtkWidget *menu, *item;
@@ -1733,6 +1740,9 @@ static void create_config_files_menu(void)
 	gtk_widget_show(item);
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), menu);
 	gtk_container_add(GTK_CONTAINER(main_widgets.tools_menu), item);
+
+	/* sort menu after all items added */
+	g_idle_add(sort_menu, widgets.config_files_menu);
 }
 
 
@@ -1992,5 +2002,40 @@ void ui_progress_bar_stop(void)
 		g_source_remove(progress_bar_timer_id);
 		progress_bar_timer_id = (guint) -1;
 	}
+}
+
+
+static gint compare_menu_item_labels(gconstpointer a, gconstpointer b)
+{
+	GtkMenuItem *item_a = GTK_MENU_ITEM(a);
+	GtkMenuItem *item_b = GTK_MENU_ITEM(b);
+	gchar *sa, *sb;
+	gint result;
+
+	sa = ui_menu_item_get_text(item_a);
+	sb = ui_menu_item_get_text(item_b);
+	result = utils_str_casecmp(sa, sb);
+	g_free(sa);
+	g_free(sb);
+	return result;
+}
+
+
+/* Currently @a menu should contain only GtkMenuItems with labels. */
+void ui_menu_sort_by_label(GtkMenu *menu)
+{
+	GList *list = gtk_container_get_children(GTK_CONTAINER(menu));
+	GList *node;
+	GtkWidget *child;
+	gint pos;
+
+	list = g_list_sort(list, compare_menu_item_labels);
+	pos = 0;
+	foreach_list(child, node, list)
+	{
+		gtk_menu_reorder_child(menu, child, pos);
+		pos++;
+	}
+	g_list_free(list);
 }
 

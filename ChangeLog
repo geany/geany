@@ -1,3 +1,11 @@
+2009-04-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/ui_utils.h, src/utils.h, src/ui_utils.c:
+   Sort Configuration Files menu.
+   Add ui_menu_sort_by_label().
+   Add foreach_list() macro.
+
+
 2009-04-07  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/main.c:

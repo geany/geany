@@ -62,6 +62,11 @@
 	for (node = list, data_ptr = node ? node->data : NULL; node != NULL; \
 		node = g_slist_next(node), data_ptr = node ? node->data : NULL)
 
+/* @param node should be a (GList*), needed for implementation. */
+#define foreach_list(data_ptr, node, list) \
+	for (node = list, data_ptr = node ? node->data : NULL; node != NULL; \
+		node = g_list_next(node), data_ptr = node ? node->data : NULL)
+
 
 void utils_open_browser(const gchar *uri);
 

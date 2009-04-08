@@ -164,6 +164,8 @@ void ui_widget_show_hide(GtkWidget *widget, gboolean show);
 
 void ui_widget_modify_font_from_string(GtkWidget *wid, const gchar *str);
 
+void ui_menu_sort_by_label(GtkMenu *menu);
+
 gchar *ui_menu_item_get_text(GtkMenuItem *menu_item);
 
 GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alignment);
@@ -197,7 +199,7 @@ void ui_widget_set_sensitive(GtkWidget *widget, gboolean set);
 
 void ui_entry_add_clear_icon(GtkWidget *entry);
 
-/* End of 'generic' functions */
+/* End of general widget functions */
 
 
 void ui_init(void);
