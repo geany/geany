@@ -76,6 +76,10 @@
 #include <unistd.h>
 #include <fcntl.h>
 
+#ifdef GDK_WINDOWING_X11
+#include <gdk/gdkx.h>
+#endif
+
 #include "main.h"
 #include "socket.h"
 #include "document.h"
@@ -555,8 +559,16 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 		}
 #endif
 	}
+
 	if (popup)
 	{
+#ifdef GDK_WINDOWING_X11
+		/* Set the proper interaction time on the window. This seems necessary to make
+		 * gtk_window_present() really bring the main window into the foreground on some
+		 * window managers like Gnome's metacity.
+		 * Code taken from Gedit. */
+		gdk_x11_window_set_user_time(window->window, gdk_x11_get_server_time(window->window));
+#endif
 		gtk_window_present(GTK_WINDOW(window));
 #ifdef G_OS_WIN32
 		gdk_window_show(window->window);

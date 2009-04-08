@@ -1,3 +1,11 @@
+2009-04-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/socket.c:
+   When opening files from a remote instance on X11, set the window
+   server time to encourage window managers to pop up the main window
+   (related to #2735467 and #2276179).
+
+
 2009-04-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/ui_utils.h, src/utils.h, src/ui_utils.c:
