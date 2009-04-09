@@ -1,3 +1,10 @@
+2009-04-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/plugins.c:
+   Don't show 'plugin is not binary compatible' messages on the status
+   bar, only the status window.
+
+
 2009-04-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/socket.c:
