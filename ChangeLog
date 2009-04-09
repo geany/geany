@@ -1,3 +1,11 @@
+2009-04-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/symbols.c:
+   When updating global type definitions for opened documents, take
+   also C++ namespace symbols into account and don't ignore symbols
+   which are defined inside a scope.
+
+
 2009-04-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/plugins.c:

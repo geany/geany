@@ -54,7 +54,7 @@
 
 const guint TM_GLOBAL_TYPE_MASK =
 	tm_tag_class_t | tm_tag_enum_t | tm_tag_interface_t |
-	tm_tag_struct_t | tm_tag_typedef_t | tm_tag_union_t;
+	tm_tag_struct_t | tm_tag_typedef_t | tm_tag_union_t | tm_tag_namespace_t;
 
 
 static gchar **html_entities = NULL;
@@ -210,6 +210,7 @@ GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gin
 	TMTag *tag;
 	GString *s = NULL;
 	GPtrArray *typedefs;
+	gint tag_lang;
 
 	g_return_val_if_fail(G_LIKELY(tags_array != NULL), NULL);
 
@@ -221,22 +222,18 @@ GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gin
 		for (j = 0; j < typedefs->len; ++j)
 		{
 			tag = TM_TAG(typedefs->pdata[j]);
-			if (!(tag->atts.entry.scope))
-			{
-				/* tag->atts.file.lang contains (for some reason) the line of the tag if
-				 * tag->atts.entry.file is not NULL */
-				gint tag_lang =
-					(tag->atts.entry.file) ? tag->atts.entry.file->lang : tag->atts.file.lang;
+			/* tag->atts.file.lang contains (for some reason) the line of the tag if
+			 * tag->atts.entry.file is not NULL */
+			tag_lang = (tag->atts.entry.file) ? tag->atts.entry.file->lang : tag->atts.file.lang;
 
-				/* the check for tag_lang == lang is necessary to avoid wrong type colouring of
-				 * e.g. PHP classes in C++ files
-				 * lang = -2 disables the check */
-				if (tag->name && (tag_lang == lang || lang == -2))
-				{
-					if (j != 0)
-						g_string_append_c(s, ' ');
-					g_string_append(s, tag->name);
-				}
+			/* the check for tag_lang == lang is necessary to avoid wrong type colouring of
+			 * e.g. PHP classes in C++ files
+			 * lang = -2 disables the check */
+			if (tag->name && (tag_lang == lang || lang == -2))
+			{
+				if (j != 0)
+					g_string_append_c(s, ' ');
+				g_string_append(s, tag->name);
 			}
 		}
 	}
