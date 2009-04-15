@@ -507,6 +507,7 @@ void configuration_save(void)
 	project_save_prefs(config);	/* save project filename, etc. */
 	save_recent_files(config, ui_prefs.recent_queue, "recent_files");
 	save_recent_files(config, ui_prefs.recent_projects_queue, "recent_projects");
+
 	if (cl_options.load_session)
 		configuration_save_session_files(config);
 
@@ -533,8 +534,8 @@ static void load_recent_files(GKeyFile *config, GQueue *queue, const gchar *key)
 			gchar *filename = g_strdup(recent_files[i]);
 			g_queue_push_tail(queue, filename);
 		}
+		g_strfreev(recent_files);
 	}
-	g_strfreev(recent_files);
 }
 
 
@@ -542,7 +543,7 @@ static void load_recent_files(GKeyFile *config, GQueue *queue, const gchar *key)
  * Load session list from the given keyfile, and store it in the global
  * session_files variable for later file loading
  * */
-void configuration_load_session_files(GKeyFile *config)
+void configuration_load_session_files(GKeyFile *config, gboolean read_recent_files)
 {
 	guint i;
 	gboolean have_session_files;
@@ -552,8 +553,11 @@ void configuration_load_session_files(GKeyFile *config)
 
 	session_notebook_page = utils_get_setting_integer(config, "files", "current_page", -1);
 
-	load_recent_files(config, ui_prefs.recent_queue, "recent_files");
-	load_recent_files(config, ui_prefs.recent_projects_queue, "recent_projects");
+	if (read_recent_files)
+	{
+		load_recent_files(config, ui_prefs.recent_queue, "recent_files");
+		load_recent_files(config, ui_prefs.recent_projects_queue, "recent_projects");
+	}
 
 	/* the project may load another list than the main setting */
 	if (session_files != NULL)
@@ -865,7 +869,7 @@ void configuration_reload_default_session(void)
 
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
 
-	configuration_load_session_files(config);
+	configuration_load_session_files(config, FALSE);
 
 	g_key_file_free(config);
 	g_free(configfile);
@@ -889,7 +893,7 @@ gboolean configuration_load(void)
 	load_dialog_prefs(config);
 	load_ui_prefs(config);
 	project_load_prefs(config);
-	configuration_load_session_files(config);
+	configuration_load_session_files(config, TRUE);
 
 	g_key_file_free(config);
 	g_free(configfile);

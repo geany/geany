@@ -341,7 +341,7 @@ void project_close(gboolean open_default)
 		document_close_all();
 
 		/* after closing all tabs let's open the tabs found in the default config */
-		if (open_default == TRUE && cl_options.load_session)
+		if (open_default && cl_options.load_session)
 		{
 			configuration_reload_default_session();
 			configuration_open_files();
@@ -953,7 +953,7 @@ static gboolean load_config(const gchar *filename)
 		/* now close all open files */
 		document_close_all();
 		/* read session files so they can be opened with configuration_open_files() */
-		configuration_load_session_files(config);
+		configuration_load_session_files(config, FALSE);
 	}
 	g_signal_emit_by_name(geany_object, "project-open", config);
 	g_key_file_free(config);
