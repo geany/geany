@@ -76,7 +76,7 @@ static gboolean focus_sci(GtkWidget *widget, GdkEventButton *event, gpointer use
 {
 	GeanyDocument *doc = document_get_current();
 
-	if (G_LIKELY(doc != NULL) && G_LIKELY(event->button == 1))
+	if (doc != NULL && event->button == 1)
 		gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
 
 	return FALSE;
@@ -127,10 +127,10 @@ static gboolean is_position_on_tab_bar(GtkNotebook *notebook, GdkEventButton *ev
 	gdouble x, y;
 
 	page = gtk_notebook_get_nth_page(notebook, 0);
-	g_return_val_if_fail(G_LIKELY(page != NULL), FALSE);
+	g_return_val_if_fail(page != NULL, FALSE);
 
 	tab = gtk_notebook_get_tab_label(notebook, page);
-	g_return_val_if_fail(G_LIKELY(tab != NULL), FALSE);
+	g_return_val_if_fail(tab != NULL, FALSE);
 
 	tab_pos = gtk_notebook_get_tab_pos(notebook);
 	nb = GTK_WIDGET(notebook);
@@ -478,7 +478,7 @@ gint notebook_new_tab(GeanyDocument *this)
 	gint tabnum;
 	GtkWidget *page;
 
-	g_return_val_if_fail(G_LIKELY(this != NULL), -1);
+	g_return_val_if_fail(this != NULL, -1);
 
 	page = GTK_WIDGET(this->editor->sci);
 

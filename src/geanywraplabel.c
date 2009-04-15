@@ -84,7 +84,7 @@ static void geany_wrap_label_set_wrap_width(GtkWidget *widget, gsize width)
 {
 	GeanyWrapLabelPrivate *priv;
 
-	if (G_UNLIKELY(width == 0))
+	if (width == 0)
 		return;
 
 	/*

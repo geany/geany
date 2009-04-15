@@ -352,7 +352,7 @@ static void get_line_and_column_from_filename(gchar *filename, gint *line, gint 
 	gboolean have_number = FALSE;
 	gsize len;
 
-	g_assert(G_LIKELY(*line == -1) && G_LIKELY(*column == -1));
+	g_assert(*line == -1 && *column == -1);
 
 	if (! NZV(filename))
 		return;
@@ -499,7 +499,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	 * so we grab that here and replace it with a no-op */
 	for (i = 1; i < (*argc); i++)
 	{
-		if (G_LIKELY((*argv)[i][0] != '+'))
+		if ((*argv)[i][0] != '+')
 			continue;
 
 		cl_options.goto_line = atoi((*argv)[i] + 1);
@@ -513,14 +513,14 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	g_option_context_parse(context, argc, argv, &error);
 	g_option_context_free(context);
 
-	if (G_UNLIKELY(error != NULL))
+	if (error != NULL)
 	{
 		g_printerr("Geany: %s\n", error->message);
 		g_error_free(error);
 		exit(1);
 	}
 
-	if (G_UNLIKELY(show_version))
+	if (show_version)
 	{
 		printf(PACKAGE " %s ", main_get_version_string());
 		printf(_("(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"),
@@ -531,7 +531,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 		exit(0);
 	}
 
-	if (G_UNLIKELY(print_prefix))
+	if (print_prefix)
 	{
 		printf("%s\n", GEANY_PREFIX);
 		printf("%s\n", GEANY_DATADIR);
@@ -563,14 +563,14 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	}
 
 #ifdef GEANY_DEBUG
-	if (G_UNLIKELY(generate_datafiles))
+	if (generate_datafiles)
 	{
 		filetypes_init_types();
 		configuration_generate_data_files();	/* currently only filetype_extensions.conf */
 		exit(0);
 	}
 #endif
-	if (G_UNLIKELY(generate_tags))
+	if (generate_tags)
 	{
 		gboolean ret;
 
@@ -580,7 +580,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 		exit(ret);
 	}
 
-	if (G_UNLIKELY(ft_names))
+	if (ft_names)
 	{
 		print_filetypes();
 		exit(0);
@@ -724,7 +724,7 @@ static gint setup_config_dir(void)
 	setptr(app->configdir, utils_get_locale_from_utf8(app->configdir));
 
 	mkdir_result = create_config_dir();
-	if (G_UNLIKELY(mkdir_result != 0))
+	if (mkdir_result != 0)
 	{
 		if (! dialogs_show_question(
 			_("Configuration directory could not be created (%s).\nThere could be some problems "
@@ -759,11 +759,11 @@ gboolean main_handle_filename(const gchar *locale_filename)
 	gint line = -1, column = -1;
 	gchar *filename;
 
-	g_return_val_if_fail(G_LIKELY(locale_filename), FALSE);
+	g_return_val_if_fail(locale_filename, FALSE);
 
 	/* check whether the passed filename is an URI */
 	filename = utils_get_path_from_uri(locale_filename);
-	if (G_UNLIKELY(filename == NULL))
+	if (filename == NULL)
 		return FALSE;
 
 	get_line_and_column_from_filename(filename, &line, &column);
@@ -776,7 +776,7 @@ gboolean main_handle_filename(const gchar *locale_filename)
 	{
 		doc = document_open_file(filename, FALSE, NULL, NULL);
 		/* add recent file manually if opening_session_files is set */
-		if (G_LIKELY(doc != NULL) && main_status.opening_session_files)
+		if (doc != NULL && main_status.opening_session_files)
 			ui_add_recent_file(doc->file_name);
 		g_free(filename);
 		return TRUE;
@@ -786,7 +786,7 @@ gboolean main_handle_filename(const gchar *locale_filename)
 		gchar *utf8_filename = utils_get_utf8_from_locale(filename);
 
 		doc = document_new_file(utf8_filename, NULL, NULL);
-		if (G_LIKELY(doc != NULL))
+		if (doc != NULL)
 			ui_add_recent_file(doc->file_name);
 		g_free(utf8_filename);
 		g_free(filename);
@@ -811,7 +811,7 @@ static gboolean open_cl_files(gint argc, gchar **argv)
 		/* It seems argv elements are encoded in CP1252 on a German Windows */
 		setptr(filename, g_locale_to_utf8(filename, -1, NULL, NULL, NULL));
 #endif
-		if (G_LIKELY(filename) && ! main_handle_filename(filename))
+		if (filename && ! main_handle_filename(filename))
 		{
 			const gchar *msg = _("Could not find file '%s'.");
 
@@ -829,7 +829,7 @@ static void load_session_project_file(void)
 {
 	gchar *locale_filename;
 
-	g_return_if_fail(G_LIKELY(project_prefs.session_file != NULL));
+	g_return_if_fail(project_prefs.session_file != NULL);
 
 	locale_filename = utils_get_locale_from_utf8(project_prefs.session_file);
 

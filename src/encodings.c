@@ -150,7 +150,7 @@ GeanyEncodingIndex encodings_get_idx_from_charset(const gchar *charset)
 {
 	gint i;
 
-	if (G_UNLIKELY(charset == NULL))
+	if (charset == NULL)
 		return GEANY_ENCODING_UTF_8;
 
 	i = 0;
@@ -169,7 +169,7 @@ const GeanyEncoding *encodings_get_from_charset(const gchar *charset)
 {
 	gint i;
 
-	if (G_UNLIKELY(charset == NULL))
+	if (charset == NULL)
 		return &encodings[GEANY_ENCODING_UTF_8];
 
 	i = 0;
@@ -187,7 +187,7 @@ const GeanyEncoding *encodings_get_from_charset(const gchar *charset)
 
 const GeanyEncoding *encodings_get_from_index(gint idx)
 {
-	g_return_val_if_fail(G_LIKELY(idx >= 0) && G_LIKELY(idx < GEANY_ENCODINGS_MAX), NULL);
+	g_return_val_if_fail(idx >= 0 && idx < GEANY_ENCODINGS_MAX, NULL);
 
 	return &encodings[idx];
 }
@@ -206,7 +206,7 @@ const GeanyEncoding *encodings_get_from_index(gint idx)
  **/
 const gchar* encodings_get_charset_from_index(gint idx)
 {
-	g_return_val_if_fail(G_LIKELY(idx >= 0) && G_LIKELY(idx < GEANY_ENCODINGS_MAX), NULL);
+	g_return_val_if_fail(idx >= 0 && idx < GEANY_ENCODINGS_MAX, NULL);
 
 	return encodings[idx].charset;
 }
@@ -214,9 +214,9 @@ const gchar* encodings_get_charset_from_index(gint idx)
 
 gchar *encodings_to_string(const GeanyEncoding* enc)
 {
-	g_return_val_if_fail(G_LIKELY(enc != NULL), NULL);
-	g_return_val_if_fail(G_LIKELY(enc->name != NULL), NULL);
-	g_return_val_if_fail(G_LIKELY(enc->charset != NULL), NULL);
+	g_return_val_if_fail(enc != NULL, NULL);
+	g_return_val_if_fail(enc->name != NULL, NULL);
+	g_return_val_if_fail(enc->charset != NULL, NULL);
 
     return g_strdup_printf("%s (%s)", enc->name, enc->charset);
 }
@@ -224,8 +224,8 @@ gchar *encodings_to_string(const GeanyEncoding* enc)
 
 const gchar *encodings_get_charset(const GeanyEncoding* enc)
 {
-	g_return_val_if_fail(G_LIKELY(enc != NULL), NULL);
-	g_return_val_if_fail(G_LIKELY(enc->charset != NULL), NULL);
+	g_return_val_if_fail(enc != NULL, NULL);
+	g_return_val_if_fail(enc->charset != NULL, NULL);
 
 	return enc->charset;
 }
@@ -237,7 +237,7 @@ void encodings_select_radio_item(const gchar *charset)
 {
 	gint i;
 
-	g_return_if_fail(G_LIKELY(charset != NULL));
+	g_return_if_fail(charset != NULL);
 
 	i = 0;
 	while (i < GEANY_ENCODINGS_MAX)
@@ -246,7 +246,7 @@ void encodings_select_radio_item(const gchar *charset)
 			break;
 		i++;
 	}
-	if (G_UNLIKELY(i == GEANY_ENCODINGS_MAX))
+	if (i == GEANY_ENCODINGS_MAX)
 		i = GEANY_ENCODING_UTF_8; /* fallback to UTF-8 */
 
 	/* ignore_callback has to be set by the caller */
@@ -263,7 +263,7 @@ void encodings_select_radio_item(const gchar *charset)
 static void regex_compile(regex_t *preg, const gchar *pattern)
 {
 	gint retval = regcomp(preg, pattern, REG_EXTENDED | REG_ICASE);
-	if (G_UNLIKELY(retval != 0))
+	if (retval != 0)
 	{
 		gchar errmsg[512];
 		regerror(retval, preg, errmsg, 512);
@@ -304,7 +304,7 @@ static gchar *regex_match(regex_t *preg, const gchar *buffer, gsize size)
 void encodings_finalize(void)
 {
 #ifdef HAVE_REGCOMP
-	if (G_LIKELY(pregs_loaded))
+	if (pregs_loaded)
 	{
 		guint i, len;
 		len = G_N_ELEMENTS(pregs);
@@ -331,7 +331,7 @@ void encodings_init(void)
 	init_encodings();
 
 #ifdef HAVE_REGCOMP
-	if (G_UNLIKELY(! pregs_loaded))
+	if (! pregs_loaded)
 	{
 		regex_compile(&pregs[0], PATTERN_HTMLMETA);
 		regex_compile(&pregs[1], PATTERN_CODING);
@@ -448,8 +448,8 @@ gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gsize size,
 	gchar* converted_contents = NULL;
 	gsize bytes_written;
 
-	g_return_val_if_fail(G_LIKELY(buffer != NULL), NULL);
-	g_return_val_if_fail(G_LIKELY(charset != NULL), NULL);
+	g_return_val_if_fail(buffer != NULL, NULL);
+	g_return_val_if_fail(charset != NULL, NULL);
 
 	converted_contents = g_convert(buffer, size, "UTF-8", charset, NULL,
 								   &bytes_written, &conv_error);
@@ -630,7 +630,7 @@ GeanyEncodingIndex encodings_scan_unicode_bom(const gchar *string, gsize len, gu
 
 gboolean encodings_is_unicode_charset(const gchar *string)
 {
-	if (G_LIKELY(string != NULL) &&
+	if (string != NULL &&
 		(strncmp(string, "UTF", 3) == 0 || strncmp(string, "UCS", 3) == 0))
 	{
 		return TRUE;

@@ -170,7 +170,7 @@ static void init_keybindings(void)
 	GeanyKeyGroup *group;
 	GeanyKeyBinding *kb;
 
-	if (G_UNLIKELY(store == NULL))
+	if (store == NULL)
 		init_kb_tree();
 
 	for (g = 0; g < keybinding_groups->len; g++)
@@ -1185,7 +1185,7 @@ static GeanyKeyBinding *lookup_kb_from_iter(G_GNUC_UNUSED GtkTreeModel *model, G
 
 static void on_cell_edited(GtkCellRendererText *cellrenderertext, gchar *path, gchar *new_text, gpointer user_data)
 {
-	if (G_LIKELY(path != NULL) && new_text != NULL)
+	if (path != NULL && new_text != NULL)
 	{
 		GtkTreeIter iter;
 		guint lkey;
@@ -1222,7 +1222,7 @@ static gboolean on_keytype_dialog_response(GtkWidget *dialog, GdkEventKey *event
 
     state = event->state & GEANY_KEYS_MODIFIER_MASK;
 
-	if (G_UNLIKELY(event->keyval == GDK_Escape))
+	if (event->keyval == GDK_Escape)
 		return FALSE;	/* close the dialog, don't allow escape when detecting keybindings. */
 
 	str = gtk_accelerator_name(event->keyval, state);
@@ -1281,7 +1281,7 @@ static gboolean find_child_iter(GtkTreeIter *parent, guint i, GtkTreeIter *iter)
 	while (TRUE)	/* foreach child */
 	{
 		gtk_tree_model_get(model, iter, KB_TREE_INDEX, &idx, -1);
-		if (G_UNLIKELY(idx == i))
+		if (idx == i)
 			return TRUE;
 		if (! gtk_tree_model_iter_next(model, iter))
 			return FALSE;	/* no more children */
@@ -1313,7 +1313,7 @@ static gboolean find_duplicate(GeanyKeyBinding *search_kb,
 	gsize g, i;
 
 	/* allow duplicate if there is no key combination */
-	if (G_UNLIKELY(key == 0) && G_UNLIKELY(mods == 0))
+	if (key == 0 && mods == 0)
 		return FALSE;
 
 	for (g = 0; g < keybinding_groups->len; g++)
@@ -1414,7 +1414,7 @@ static void on_prefs_print_page_header_toggled(GtkToggleButton *togglebutton, gp
 
 void prefs_show_dialog(void)
 {
-	if (G_UNLIKELY(ui_widgets.prefs_dialog == NULL))
+	if (ui_widgets.prefs_dialog == NULL)
 	{
 		GtkWidget *combo_new, *combo_open, *combo_eol;
 		GtkWidget *label;

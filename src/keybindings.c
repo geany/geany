@@ -126,7 +126,7 @@ void keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 {
 	GeanyKeyBinding *kb;
 
-	g_assert(G_LIKELY(key_id < group->count));
+	g_assert(key_id < group->count);
 
 	kb = &group->keys[key_id];
 
@@ -526,7 +526,7 @@ static gboolean on_idle_close(gpointer data)
 
 static void on_document_close(GObject *obj, GeanyDocument *doc)
 {
-	if (G_LIKELY(! main_status.quitting))
+	if (! main_status.quitting)
 	{
 		g_queue_remove_all(mru_docs, doc);
 		g_idle_add(on_idle_close, NULL);
@@ -558,7 +558,7 @@ void keybindings_init(void)
 
 static void apply_kb_accel(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_data)
 {
-	if (G_LIKELY(kb->key != 0) && kb->menu_item)
+	if (kb->key != 0 && kb->menu_item)
 	{
 		gtk_widget_add_accelerator(kb->menu_item, "activate", kb_accel_group,
 			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
@@ -595,7 +595,7 @@ static void load_kb(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_dat
 	GdkModifierType mods;
 
 	val = g_key_file_get_string(config, group->name, kb->name, NULL);
-	if (G_LIKELY(val != NULL))
+	if (val != NULL)
 	{
 		gtk_accelerator_parse(val, &key, &mods);
 		kb->key = key;
@@ -637,7 +637,7 @@ static void add_menu_accel(GeanyKeyGroup *group, guint kb_id,
 {
 	GeanyKeyBinding *kb = &group->keys[kb_id];
 
-	if (G_LIKELY(kb->key != 0))
+	if (kb->key != 0)
 		gtk_widget_add_accelerator(menuitem, "activate", accel_group,
 			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
 }
@@ -751,7 +751,7 @@ static void fill_shortcut_labels_treeview(GtkWidget *tree)
 	{
 		group = g_ptr_array_index(keybinding_groups, g);
 
-		if (G_LIKELY(g > 0))
+		if (g > 0)
 		{
 			gtk_list_store_append(store, &iter);
 			gtk_list_store_set(store, &iter, -1);
@@ -856,7 +856,7 @@ static void on_dialog_response(GtkWidget *dialog, gint response, gpointer user_d
 
 void keybindings_show_shortcuts(void)
 {
-	if (G_UNLIKELY(key_dialog))
+	if (key_dialog)
 		gtk_widget_destroy(key_dialog);	/* in case the key_dialog is still visible */
 
 	key_dialog = create_dialog();
@@ -912,7 +912,7 @@ static gboolean check_snippet_completion(GeanyDocument *doc, guint keyval, guint
 		GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 		/* keybinding only valid when scintilla widget has focus */
-		if (G_LIKELY(doc != NULL) && focusw == GTK_WIDGET(doc->editor->sci))
+		if (doc != NULL && focusw == GTK_WIDGET(doc->editor->sci))
 		{
 			ScintillaObject *sci = doc->editor->sci;
 			gint pos = sci_get_current_position(sci);
@@ -960,10 +960,10 @@ static gboolean check_menu_key(GeanyDocument *doc, guint keyval, guint state, gu
 		GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 		static GtkWidget *scribble = NULL;
 
-		if (G_UNLIKELY(scribble == NULL))
+		if (scribble == NULL)
 			scribble = ui_lookup_widget(main_widgets.window, "textview_scribble");
 
-		if (G_LIKELY(doc != NULL))
+		if (doc != NULL)
 		{
 			if (focusw == doc->priv->tag_tree)
 			{
@@ -1150,12 +1150,12 @@ GeanyKeyBinding *keybindings_lookup_item(guint group_id, guint key_id)
 {
 	GeanyKeyGroup *group;
 
-	g_return_val_if_fail(G_LIKELY(group_id < keybinding_groups->len), NULL);
+	g_return_val_if_fail(group_id < keybinding_groups->len, NULL);
 
 	group = g_ptr_array_index(keybinding_groups, group_id);
 
-	g_return_val_if_fail(G_LIKELY(group), NULL);
-	g_return_val_if_fail(G_LIKELY(key_id < group->count), NULL);
+	g_return_val_if_fail(group, NULL);
+	g_return_val_if_fail(key_id < group->count, NULL);
 
 	return &group->keys[key_id];
 }
@@ -1169,10 +1169,10 @@ void keybindings_send_command(guint group_id, guint key_id)
 {
 	GeanyKeyBinding *kb;
 
-	g_return_if_fail(G_LIKELY(group_id < GEANY_KEY_GROUP_COUNT)); /* can't use this for plugin groups */
+	g_return_if_fail(group_id < GEANY_KEY_GROUP_COUNT); /* can't use this for plugin groups */
 
 	kb = keybindings_lookup_item(group_id, key_id);
-	if (G_LIKELY(kb))
+	if (kb)
 		kb->callback(key_id);
 }
 
@@ -1330,11 +1330,11 @@ static void cb_func_build_action(guint key_id)
 	BuildMenuItems *menu_items;
 
 	GeanyDocument *doc = document_get_current();
-	if (G_UNLIKELY(doc == NULL))
+	if (doc == NULL)
 		return;
 
 	ft = doc->file_type;
-	if (G_UNLIKELY(! ft))
+	if (! ft)
 		return;
 	menu_items = build_get_menu_items(ft->id);
 
@@ -1385,7 +1385,7 @@ static gboolean read_current_word(GeanyDocument *doc)
 {
 	gint pos;
 
-	if (G_UNLIKELY(doc == NULL))
+	if (doc == NULL)
 		return FALSE;
 
 	pos = sci_get_current_position(doc->editor->sci);
@@ -1428,7 +1428,7 @@ static void cb_func_switch_action(guint key_id)
 		case GEANY_KEYS_FOCUS_EDITOR:
 		{
 			GeanyDocument *doc = document_get_current();
-			if (G_LIKELY(doc != NULL))
+			if (doc != NULL)
 				gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
 			break;
 		}
@@ -1553,7 +1553,7 @@ static gboolean on_switch_timeout(G_GNUC_UNUSED gpointer data)
 	if (switch_dialog_cancelled)
 		return FALSE;
 
-	if (G_UNLIKELY(! switch_dialog))
+	if (! switch_dialog)
 		switch_dialog = create_switch_dialog();
 
 	geany_wrap_label_set_text(GTK_LABEL(switch_dialog_label),
@@ -1600,7 +1600,7 @@ static void cb_func_move_tab(guint key_id)
 	gint cur_page = gtk_notebook_get_current_page(nb);
 	GeanyDocument *doc = document_get_current();
 
-	if (G_UNLIKELY(doc == NULL))
+	if (doc == NULL)
 		return;
 
 	sci = GTK_WIDGET(doc->editor->sci);
@@ -1634,7 +1634,7 @@ static void goto_matching_brace(GeanyDocument *doc)
 {
 	gint pos, new_pos;
 
-	if (G_UNLIKELY(doc == NULL))
+	if (doc == NULL)
 		return;
 
 	pos = sci_get_current_position(doc->editor->sci);
@@ -1654,7 +1654,7 @@ static void cb_func_clipboard(guint key_id)
 {
 	GeanyDocument *doc = document_get_current();
 
-	if (G_UNLIKELY(doc == NULL))
+	if (doc == NULL)
 		return;
 
 	switch (key_id)
@@ -1684,7 +1684,7 @@ static void cb_func_goto_action(guint key_id)
 	gint cur_line;
 	GeanyDocument *doc = document_get_current();
 
-	if (G_UNLIKELY(doc == NULL))
+	if (doc == NULL)
 		return;
 
 	cur_line = sci_get_current_line(doc->editor->sci);
@@ -1793,7 +1793,7 @@ static void cb_func_editor_action(guint key_id)
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	/* edit keybindings only valid when scintilla widget has focus */
-	if (G_UNLIKELY(doc == NULL) || focusw != GTK_WIDGET(doc->editor->sci))
+	if (doc == NULL || focusw != GTK_WIDGET(doc->editor->sci))
 		return;
 
 	switch (key_id)
@@ -1869,7 +1869,7 @@ static void cb_func_format_action(guint key_id)
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	/* keybindings only valid when scintilla widget has focus */
-	if (G_UNLIKELY(doc == NULL) || focusw != GTK_WIDGET(doc->editor->sci))
+	if (doc == NULL || focusw != GTK_WIDGET(doc->editor->sci))
 		return;
 
 	switch (key_id)
@@ -1928,7 +1928,7 @@ static void cb_func_select_action(guint key_id)
 	static GtkWidget *scribble_widget = NULL;
 
 	/* special case for Select All in the scribble widget */
-	if (G_UNLIKELY(scribble_widget == NULL)) /* lookup the scribble widget only once */
+	if (scribble_widget == NULL) /* lookup the scribble widget only once */
 		scribble_widget = ui_lookup_widget(main_widgets.window, "textview_scribble");
 	if (key_id == GEANY_KEYS_SELECT_ALL && focusw == scribble_widget)
 	{
@@ -1938,7 +1938,7 @@ static void cb_func_select_action(guint key_id)
 
 	doc = document_get_current();
 	/* keybindings only valid when scintilla widget has focus */
-	if (G_UNLIKELY(doc == NULL) || focusw != GTK_WIDGET(doc->editor->sci))
+	if (doc == NULL || focusw != GTK_WIDGET(doc->editor->sci))
 		return;
 
 	switch (key_id)
@@ -1962,7 +1962,7 @@ static void cb_func_select_action(guint key_id)
 static void cb_func_document_action(guint key_id)
 {
 	GeanyDocument *doc = document_get_current();
-	if (G_UNLIKELY(doc == NULL))
+	if (doc == NULL)
 		return;
 
 	switch (key_id)
@@ -2008,7 +2008,7 @@ static void cb_func_insert_action(guint key_id)
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	/* keybindings only valid when scintilla widget has focus */
-	if (G_UNLIKELY(doc == NULL) || focusw != GTK_WIDGET(doc->editor->sci))
+	if (doc == NULL || focusw != GTK_WIDGET(doc->editor->sci))
 		return;
 
 	switch (key_id)

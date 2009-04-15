@@ -237,7 +237,7 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 	gint stdout_fd;
 	gint stderr_fd;
 
-	g_return_if_fail(G_LIKELY(doc != NULL) && G_LIKELY(command != NULL));
+	g_return_if_fail(doc != NULL && command != NULL);
 
 	if (! sci_has_selection(doc->editor->sci))
 		return;
@@ -326,7 +326,7 @@ static void cc_show_dialog_custom_commands(void)
 		guint len = g_strv_length(ui_prefs.custom_commands);
 		for (i = 0; i < len; i++)
 		{
-			if (G_UNLIKELY(ui_prefs.custom_commands[i][0] == '\0'))
+			if (ui_prefs.custom_commands[i][0] == '\0')
 				continue; /* skip empty fields */
 
 			cc_add_command(&cc, i);
@@ -402,8 +402,7 @@ static void cc_on_custom_command_menu_activate(GtkMenuItem *menuitem, gpointer u
 	gboolean enable;
 	GList *children;
 
-	if (G_UNLIKELY(doc == NULL))
-		return;
+	g_return_if_fail(doc != NULL);
 
 	enable = sci_has_selection(doc->editor->sci) && (ui_prefs.custom_commands != NULL);
 
@@ -427,8 +426,7 @@ static void cc_on_custom_command_activate(GtkMenuItem *menuitem, gpointer user_d
 	GeanyDocument *doc = document_get_current();
 	gint command_idx;
 
-	if (G_UNLIKELY(doc == NULL))
-		return;
+	g_return_if_fail(doc != NULL);
 
 	command_idx = GPOINTER_TO_INT(user_data);
 
@@ -559,7 +557,7 @@ static void word_count(gchar *text, guint *chars, guint *lines, guint *words)
 	guint in_word = 0;
 	gunichar utext;
 
-	if (G_UNLIKELY(! text))
+	if (! text)
 		return; /* politely refuse to operate on NULL */
 
 	*chars = *words = *lines = 0;
@@ -612,8 +610,7 @@ void tools_word_count(void)
 	gchar *text, *range;
 
 	doc = document_get_current();
-	if (G_UNLIKELY(doc == NULL))
-		return;
+	g_return_if_fail(doc != NULL);
 
 	dialog = gtk_dialog_new_with_buttons(_("Word Count"), GTK_WINDOW(main_widgets.window),
 										 GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -724,8 +721,7 @@ on_color_ok_button_clicked             (GtkButton       *button,
 	gchar *hex;
 
 	gtk_widget_hide(ui_widgets.open_colorsel);
-	if (G_UNLIKELY(doc == NULL))
-		return;
+	g_return_if_fail(doc != NULL);
 
 	gtk_color_selection_get_current_color(
 			GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->colorsel), &color);
@@ -745,7 +741,7 @@ void tools_color_chooser(const gchar *color)
 #else
 	gchar *c = (gchar*) color;
 
-	if (G_UNLIKELY(ui_widgets.open_colorsel == NULL))
+	if (ui_widgets.open_colorsel == NULL)
 	{
 		ui_widgets.open_colorsel = gtk_color_selection_dialog_new(_("Color Chooser"));
 		gtk_widget_set_name(ui_widgets.open_colorsel, "GeanyDialog");

@@ -131,7 +131,7 @@ GeanyDocument* document_find_by_real_path(const gchar *realname)
 {
 	guint i;
 
-	if (G_UNLIKELY(! realname))
+	if (! realname)
 		return NULL;	/* file doesn't exist on disk */
 
 	for (i = 0; i < documents_array->len; i++)
@@ -178,8 +178,7 @@ GeanyDocument *document_find_by_filename(const gchar *utf8_filename)
 	GeanyDocument *doc;
 	gchar *realname;
 
-	if (G_UNLIKELY(! utf8_filename))
-		return NULL;
+	g_return_val_if_fail(utf8_filename != NULL, NULL);
 
 	/* First search GeanyDocument::file_name, so we can find documents with a
 	 * filename set but not saved on disk, like vcdiff produces */
@@ -208,8 +207,7 @@ GeanyDocument *document_find_by_sci(ScintillaObject *sci)
 {
 	guint i;
 
-	if (G_UNLIKELY(sci == NULL))
-		return NULL;
+	g_return_val_if_fail(sci != NULL, NULL);
 
 	for (i = 0; i < documents_array->len; i++)
 	{
@@ -223,8 +221,7 @@ GeanyDocument *document_find_by_sci(ScintillaObject *sci)
 /* returns the index of the notebook page for the document. */
 gint document_get_notebook_page(GeanyDocument *doc)
 {
-	if (G_UNLIKELY(doc == NULL))
-		return -1;
+	g_return_val_if_fail(doc != NULL, -1);
 
 	return gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
 		GTK_WIDGET(doc->editor->sci));
@@ -242,7 +239,7 @@ GeanyDocument *document_get_from_page(guint page_num)
 {
 	ScintillaObject *sci;
 
-	if (G_UNLIKELY(page_num >= documents_array->len))
+	if (page_num >= documents_array->len)
 		return NULL;
 
 	sci = (ScintillaObject*)gtk_notebook_get_nth_page(
@@ -261,7 +258,7 @@ GeanyDocument *document_get_current(void)
 {
 	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
 
-	if (G_UNLIKELY(cur_page == -1))
+	if (cur_page == -1)
 		return NULL;
 	else
 	{
@@ -290,7 +287,7 @@ void document_update_tab_label(GeanyDocument *doc)
 	gchar *base_name;
 	GtkWidget *parent;
 
-	g_return_if_fail(G_LIKELY(doc != NULL));
+	g_return_if_fail(doc != NULL);
 
 	base_name = g_path_get_basename(DOC_FILENAME(doc));
 	/* we need to use the event box for the tooltip, labels don't get the necessary events */
@@ -315,12 +312,11 @@ void document_update_tab_label(GeanyDocument *doc)
  **/
 void document_set_text_changed(GeanyDocument *doc, gboolean changed)
 {
-	if (G_UNLIKELY(doc == NULL))
-		return;
+	g_return_if_fail(doc != NULL);
 
 	doc->changed = changed;
 
-	if (G_LIKELY(! main_status.quitting))
+	if (! main_status.quitting)
 	{
 		ui_update_tab_status(doc);
 		ui_save_buttons_toggle(changed);
@@ -397,7 +393,7 @@ static void queue_colourise(GeanyDocument *doc)
 /* Set the file status to 'changed' after a single 'created' event. */
 static gboolean monitor_finish_pending_create(gpointer doc)
 {
-	g_return_val_if_fail(G_LIKELY(doc != NULL), FALSE);
+	g_return_val_if_fail(doc != NULL, FALSE);
 
 	((GeanyDocument *)doc)->priv->file_disk_status = FILE_CHANGED;
 	ui_update_tab_status(doc);
@@ -409,7 +405,7 @@ static gboolean monitor_finish_pending_create(gpointer doc)
 /* Resets the 'ignore' file status after a reload action. */
 static gboolean monitor_reset_ignore(gpointer doc)
 {
-	g_return_val_if_fail(G_LIKELY(doc != NULL), FALSE);
+	g_return_val_if_fail(doc != NULL, FALSE);
 
 	((GeanyDocument *)doc)->priv->file_disk_status = FILE_OK;
 	ui_update_tab_status(doc);
@@ -421,7 +417,7 @@ static gboolean monitor_reset_ignore(gpointer doc)
 static void monitor_file_changed_cb(G_GNUC_UNUSED GFileMonitor *monitor, G_GNUC_UNUSED GFile *file,
 	G_GNUC_UNUSED GFile *other_file, GFileMonitorEvent event, GeanyDocument *doc)
 {
-	g_return_if_fail(G_LIKELY(doc != NULL));
+	g_return_if_fail(doc != NULL);
 
 	if (file_prefs.disk_check_timeout == 0)
 		return;
@@ -494,7 +490,7 @@ static void monitor_file_changed_cb(G_GNUC_UNUSED GFileMonitor *monitor, G_GNUC_
 
 void document_stop_file_monitoring(GeanyDocument *doc)
 {
-	g_return_if_fail(G_LIKELY(doc != NULL));
+	g_return_if_fail(doc != NULL);
 
 	if (doc->priv->monitor != NULL)
 	{
@@ -506,7 +502,7 @@ void document_stop_file_monitoring(GeanyDocument *doc)
 
 static void monitor_file_setup(GeanyDocument *doc)
 {
-	g_return_if_fail(G_LIKELY(doc != NULL));
+	g_return_if_fail(doc != NULL);
 	/* Disable file monitoring completely for remote files (i.e. remote GIO files) as GFileMonitor
 	 * doesn't work at all for remote files and legacy polling is too slow. */
 	if (! doc->priv->is_remote)
@@ -604,7 +600,7 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
  **/
 gboolean document_close(GeanyDocument *doc)
 {
-	g_return_val_if_fail(G_LIKELY(doc), FALSE);
+	g_return_val_if_fail(doc, FALSE);
 
 	return document_remove_page(document_get_notebook_page(doc));
 }
@@ -712,7 +708,7 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft,
 {
 	GeanyDocument *doc = document_create(utf8_filename);
 
-	g_assert(G_LIKELY(doc != NULL));
+	g_assert(doc != NULL);
 
 	sci_set_undo_collection(doc->editor->sci, FALSE); /* avoid creation of an undo action */
 	if (text)
@@ -814,7 +810,7 @@ handle_forced_encoding(FileData *filedata, const gchar *forced_enc)
 	{
 		gchar *converted_text = encodings_convert_to_utf8_from_charset(
 										filedata->data, filedata->size, forced_enc, FALSE);
-		if (G_LIKELY(converted_text == NULL))
+		if (converted_text == NULL)
 		{
 			return FALSE;
 		}
@@ -836,8 +832,8 @@ handle_forced_encoding(FileData *filedata, const gchar *forced_enc)
 static gboolean
 handle_encoding(FileData *filedata, GeanyEncodingIndex enc_idx)
 {
-	g_return_val_if_fail(G_LIKELY(filedata->enc == NULL), FALSE);
-	g_return_val_if_fail(G_LIKELY(filedata->bom == FALSE), FALSE);
+	g_return_val_if_fail(filedata->enc == NULL, FALSE);
+	g_return_val_if_fail(filedata->bom == FALSE, FALSE);
 
 	if (filedata->size == 0)
 	{
@@ -857,7 +853,7 @@ handle_encoding(FileData *filedata, GeanyEncodingIndex enc_idx)
 			{
 				gchar *converted_text = encodings_convert_to_utf8_from_charset(
 										filedata->data, filedata->size, filedata->enc, FALSE);
-				if (G_LIKELY(converted_text != NULL))
+				if (converted_text != NULL)
 				{
 					g_free(filedata->data);
 					filedata->data = converted_text;
@@ -887,7 +883,7 @@ handle_encoding(FileData *filedata, GeanyEncodingIndex enc_idx)
 				gchar *converted_text = encodings_convert_to_utf8(filedata->data,
 					filedata->size, &filedata->enc);
 
-				if (G_UNLIKELY(converted_text == NULL))
+				if (converted_text == NULL)
 				{
 					return FALSE;
 				}
@@ -1160,7 +1156,7 @@ static gboolean auto_update_tag_list(gpointer data)
 {
 	GeanyDocument *doc = data;
 
-	if (G_UNLIKELY(! doc) || G_UNLIKELY(! doc->is_valid) || G_UNLIKELY(doc->tm_file == NULL))
+	if (! doc || ! doc->is_valid || doc->tm_file == NULL)
 		return FALSE;
 
 	if (gtk_window_get_focus(GTK_WINDOW(main_widgets.window)) != GTK_WIDGET(doc->editor->sci))
@@ -1197,7 +1193,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 	else
 	{
 		/* filename must not be NULL when opening a file */
-		if (G_UNLIKELY(filename == NULL))
+		if (filename == NULL)
 		{
 			ui_set_statusbar(FALSE, _("Invalid filename"));
 			return NULL;
@@ -1242,7 +1238,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 	if (! reload)
 	{
 		doc = document_create(utf8_filename);
-		g_return_val_if_fail(G_LIKELY(doc != NULL), NULL); /* really should not happen */
+		g_return_val_if_fail(doc != NULL, NULL); /* really should not happen */
 
 		/* file exists on disk, set real_path */
 		setptr(doc->real_path, tm_get_real_path(locale_filename));
@@ -1342,8 +1338,7 @@ void document_open_file_list(const gchar *data, gssize length)
 	gchar *filename;
 	gchar **list;
 
-	if (G_UNLIKELY(data == NULL))
-		return;
+	g_return_if_fail(data != NULL);
 
 	if (length < 0)
 		length = strlen(data);
@@ -1405,8 +1400,7 @@ gboolean document_reload_file(GeanyDocument *doc, const gchar *forced_enc)
 	gint pos = 0;
 	GeanyDocument *new_doc;
 
-	if (G_UNLIKELY(doc == NULL))
-		return FALSE;
+	g_return_val_if_fail(doc != NULL, FALSE);
 
 	/* try to set the cursor to the position before reloading */
 	pos = sci_get_current_position(doc->editor->sci);
@@ -1430,7 +1424,7 @@ static gboolean document_update_timestamp(GeanyDocument *doc, const gchar *local
 #if ! defined(HAVE_GIO) || ! defined(USE_GIO_FILEMON)
 	struct stat st;
 
-	g_return_val_if_fail(G_LIKELY(doc != NULL), FALSE);
+	g_return_val_if_fail(doc != NULL, FALSE);
 
 	/* stat the file to get the timestamp, otherwise on Windows the actual
 	 * timestamp can be ahead of time(NULL) */
@@ -1479,8 +1473,8 @@ static void replace_header_filename(GeanyDocument *doc)
 	gchar *filename;
 	struct TextToFind ttf;
 
-	if (G_UNLIKELY(doc == NULL) || G_UNLIKELY(doc->file_type == NULL))
-		return;
+	g_return_if_fail(doc != NULL);
+	g_return_if_fail(doc->file_type != NULL);
 
 	filebase = g_strconcat(GEANY_STRING_UNTITLED, ".", (doc->file_type)->extension, NULL);
 	filename = g_path_get_basename(doc->file_name);
@@ -1524,7 +1518,7 @@ void document_rename_file(GeanyDocument *doc, const gchar *new_filename)
 	document_stop_file_monitoring(doc);
 
 	result = g_rename(old_locale_filename, new_locale_filename);
-	if (G_UNLIKELY(result != 0))
+	if (result != 0)
 	{
 		dialogs_show_msgbox_with_secondary(GTK_MESSAGE_ERROR,
 			_("Error renaming file."), g_strerror(errno));
@@ -1549,7 +1543,7 @@ gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 {
 	gboolean ret;
 
-	g_return_val_if_fail(G_LIKELY(doc != NULL), FALSE);
+	g_return_val_if_fail(doc != NULL, FALSE);
 
 	if (utf8_fname != NULL)
 		setptr(doc->file_name, g_strdup(utf8_fname));
@@ -1579,7 +1573,7 @@ gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 	monitor_file_setup(doc);
 	doc->priv->file_disk_status = FILE_IGNORE;
 
-	if (G_LIKELY(ret))
+	if (ret)
 		ui_add_recent_file(doc->file_name);
 	return ret;
 }
@@ -1592,14 +1586,14 @@ static gsize save_convert_to_encoding(GeanyDocument *doc, gchar **data, gsize *l
 	gsize bytes_read;
 	gsize conv_len;
 
-	g_return_val_if_fail(G_LIKELY(data != NULL) || G_LIKELY(*data == NULL), FALSE);
-	g_return_val_if_fail(G_LIKELY(len != NULL), FALSE);
+	g_return_val_if_fail(data != NULL || *data == NULL, FALSE);
+	g_return_val_if_fail(len != NULL, FALSE);
 
 	/* try to convert it from UTF-8 to original encoding */
 	conv_file_contents = g_convert(*data, *len - 1, doc->encoding, "UTF-8",
 												&bytes_read, &conv_len, &conv_error);
 
-	if (G_UNLIKELY(conv_error != NULL))
+	if (conv_error != NULL)
 	{
 		gchar *text = g_strdup_printf(
 _("An error occurred while converting the file from UTF-8 in \"%s\". The file remains unsaved."),
@@ -1656,7 +1650,7 @@ static gint write_data_to_disk(GeanyDocument *doc, const gchar *locale_filename,
 	gint bytes_written;
 	gint err = 0;
 
-	g_return_val_if_fail(G_LIKELY(data != NULL), EINVAL);
+	g_return_val_if_fail(data != NULL, EINVAL);
 
 	fp = g_fopen(locale_filename, "wb");
 	if (G_UNLIKELY(fp == NULL))
@@ -1700,8 +1694,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	gint err;
 	gchar *locale_filename;
 
-	if (G_UNLIKELY(doc == NULL))
-		return FALSE;
+	g_return_val_if_fail(doc != NULL, FALSE);
 
 	/* the "changed" flag should exclude the "readonly" flag, but check it anyway for safety */
 	if (! force && ! ui_prefs.allow_always_save && (! doc->changed || doc->readonly))
@@ -1781,7 +1774,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	store_saved_encoding(doc);
 
 	/* ignore the following things if we are quitting */
-	if (G_LIKELY(! main_status.quitting))
+	if (! main_status.quitting)
 	{
 		sci_set_savepoint(doc->editor->sci);
 
@@ -1815,10 +1808,9 @@ gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gint fl
 	gint start_pos, search_pos;
 	struct TextToFind ttf;
 
-	g_return_val_if_fail(G_LIKELY(text != NULL), FALSE);
-	if (G_UNLIKELY(doc == NULL))
-		return FALSE;
-	if (G_UNLIKELY(! *text))
+	g_return_val_if_fail(text != NULL, FALSE);
+	g_return_val_if_fail(doc != NULL, FALSE);
+	if (! *text)
 		return TRUE;
 
 	start_pos = (inc) ? sci_get_selection_start(doc->editor->sci) :
@@ -1877,8 +1869,8 @@ gint document_find_text(GeanyDocument *doc, const gchar *text, gint flags, gbool
 {
 	gint selection_end, selection_start, search_pos;
 
-	g_return_val_if_fail(G_LIKELY(doc != NULL) && G_LIKELY(text != NULL), -1);
-	if (G_UNLIKELY(! *text))
+	g_return_val_if_fail(doc != NULL && text != NULL, -1);
+	if (! *text)
 		return -1;
 
 	/* Sci doesn't support searching backwards with a regex */
@@ -1949,10 +1941,9 @@ gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gch
 {
 	gint selection_end, selection_start, search_pos;
 
-	g_return_val_if_fail(G_LIKELY(doc != NULL) && G_LIKELY(find_text != NULL) &&
-		G_LIKELY(replace_text != NULL), -1);
+	g_return_val_if_fail(doc != NULL && find_text != NULL && replace_text != NULL, -1);
 
-	if (G_UNLIKELY(! *find_text))
+	if (! *find_text)
 		return -1;
 
 	/* Sci doesn't support searching backwards with a regex */
@@ -2050,10 +2041,9 @@ document_replace_range(GeanyDocument *doc, const gchar *find_text, const gchar *
 	if (new_range_end != NULL)
 		*new_range_end = -1;
 
-	g_return_val_if_fail(G_LIKELY(doc != NULL) && G_LIKELY(find_text != NULL) &&
-		G_LIKELY(replace_text != NULL), 0);
+	g_return_val_if_fail(doc != NULL && find_text != NULL && replace_text != NULL, 0);
 
-	if (G_UNLIKELY(! *find_text) || doc->readonly)
+	if (! *find_text || doc->readonly)
 		return 0;
 
 	sci = doc->editor->sci;
@@ -2127,10 +2117,9 @@ void document_replace_sel(GeanyDocument *doc, const gchar *find_text, const gcha
 	gint max_column = 0, count = 0;
 	gboolean replaced = FALSE;
 
-	g_return_if_fail(G_LIKELY(doc != NULL) && G_LIKELY(find_text != NULL) &&
-		G_LIKELY(replace_text != NULL));
+	g_return_if_fail(doc != NULL && find_text != NULL && replace_text != NULL);
 
-	if (G_UNLIKELY(! *find_text))
+	if (! *find_text)
 		return;
 
 	selection_start = sci_get_selection_start(doc->editor->sci);
@@ -2228,10 +2217,9 @@ gboolean document_replace_all(GeanyDocument *doc, const gchar *find_text, const 
 		gint flags, gboolean escaped_chars)
 {
 	gint len, count;
-	g_return_val_if_fail(G_LIKELY(doc != NULL) && G_LIKELY(find_text != NULL) &&
-		G_LIKELY(replace_text != NULL), FALSE);
+	g_return_val_if_fail(doc != NULL && find_text != NULL && replace_text != NULL, FALSE);
 
-	if (G_UNLIKELY(! *find_text))
+	if (! *find_text)
 		return FALSE;
 
 	len = sci_get_length(doc->editor->sci);
@@ -2271,16 +2259,15 @@ void document_update_tag_list(GeanyDocument *doc, gboolean update)
 	gboolean success = FALSE;
 
 	/* if the filetype doesn't have a tag parser or it is a new file */
-	if (G_UNLIKELY(doc == NULL) || G_UNLIKELY(doc->file_type == NULL) ||
-		G_UNLIKELY(app->tm_workspace == NULL) ||
-		! filetype_has_tags(doc->file_type) || G_UNLIKELY(! doc->file_name))
+	if (doc == NULL || doc->file_type == NULL || app->tm_workspace == NULL ||
+		! filetype_has_tags(doc->file_type) || ! doc->file_name)
 	{
 		/* set the default (empty) tag list */
 		treeviews_update_tag_list(doc, FALSE);
 		return;
 	}
 
-	if (G_UNLIKELY(doc->tm_file == NULL))
+	if (doc->tm_file == NULL)
 	{
 		gchar *locale_filename = utils_get_locale_from_utf8(doc->file_name);
 
@@ -2320,7 +2307,7 @@ static gboolean get_project_typenames(const GString **types, gint lang)
 	static GString *last_typenames = NULL;
 	GString *s = NULL;
 
-	if (G_LIKELY(app->tm_workspace))
+	if (app->tm_workspace)
 	{
 		GPtrArray *tags_array = app->tm_workspace->work_object.tags_array;
 
@@ -2360,7 +2347,7 @@ static gboolean update_type_keywords(GeanyDocument *doc, gint lang)
 	const GString *s;
 	ScintillaObject *sci;
 
-	g_return_val_if_fail(G_LIKELY(doc != NULL), FALSE);
+	g_return_val_if_fail(doc != NULL, FALSE);
 	sci = doc->editor->sci;
 
 	switch (FILETYPE_ID(doc->file_type))
@@ -2377,7 +2364,7 @@ static gboolean update_type_keywords(GeanyDocument *doc, gint lang)
 	}
 
 	sci = doc->editor->sci;
-	if (G_UNLIKELY(sci != NULL) && editor_lexer_get_type_keyword_idx(sci_get_lexer(sci)) == -1)
+	if (sci != NULL && editor_lexer_get_type_keyword_idx(sci_get_lexer(sci)) == -1)
 		return FALSE;
 
 	if (! get_project_typenames(&s, lang))
@@ -2391,7 +2378,7 @@ static gboolean update_type_keywords(GeanyDocument *doc, gint lang)
 		}
 		return FALSE;
 	}
-	g_return_val_if_fail(G_LIKELY(s != NULL), FALSE);
+	g_return_val_if_fail(s != NULL, FALSE);
 
 	for (n = 0; n < documents_array->len; n++)
 	{
@@ -2419,7 +2406,7 @@ void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type)
 {
 	gboolean ft_changed;
 
-	if (G_UNLIKELY(type == NULL) || G_UNLIKELY(doc == NULL))
+	if (type == NULL || doc == NULL)
 		return;
 
 	geany_debug("%s : %s (%s)",
@@ -2461,7 +2448,7 @@ void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type)
  **/
 void document_set_encoding(GeanyDocument *doc, const gchar *new_encoding)
 {
-	if (G_UNLIKELY(doc == NULL) || G_UNLIKELY(new_encoding == NULL) ||
+	if (doc == NULL || new_encoding == NULL ||
 		utils_str_equal(new_encoding, doc->encoding))
 		return;
 
@@ -2522,8 +2509,7 @@ void document_undo_add(GeanyDocument *doc, guint type, gpointer data)
 {
 	undo_action *action;
 
-	if (G_UNLIKELY(doc == NULL))
-		return;
+	g_return_if_fail(doc != NULL);
 
 	action = g_new0(undo_action, 1);
 	action->type = type;
@@ -2538,8 +2524,7 @@ void document_undo_add(GeanyDocument *doc, guint type, gpointer data)
 
 gboolean document_can_undo(GeanyDocument *doc)
 {
-	if (G_UNLIKELY(doc == NULL))
-		return FALSE;
+	g_return_val_if_fail(doc != NULL, FALSE);
 
 	if (g_trash_stack_height(&doc->priv->undo_actions) > 0 || sci_can_undo(doc->editor->sci))
 		return TRUE;
@@ -2562,8 +2547,7 @@ void document_undo(GeanyDocument *doc)
 {
 	undo_action *action;
 
-	if (G_UNLIKELY(doc == NULL))
-		return;
+	g_return_if_fail(doc != NULL);
 
 	action = g_trash_stack_pop(&doc->priv->undo_actions);
 
@@ -2619,8 +2603,7 @@ void document_undo(GeanyDocument *doc)
 
 gboolean document_can_redo(GeanyDocument *doc)
 {
-	if (G_UNLIKELY(doc == NULL))
-		return FALSE;
+	g_return_val_if_fail(doc != NULL, FALSE);
 
 	if (g_trash_stack_height(&doc->priv->redo_actions) > 0 || sci_can_redo(doc->editor->sci))
 		return TRUE;
@@ -2633,8 +2616,7 @@ void document_redo(GeanyDocument *doc)
 {
 	undo_action *action;
 
-	if (G_UNLIKELY(doc == NULL))
-		return;
+	g_return_if_fail(doc != NULL);
 
 	action = g_trash_stack_pop(&doc->priv->redo_actions);
 
@@ -2691,8 +2673,7 @@ static void document_redo_add(GeanyDocument *doc, guint type, gpointer data)
 {
 	undo_action *action;
 
-	if G_UNLIKELY((doc == NULL))
-		return;
+	g_return_if_fail(doc != NULL);
 
 	action = g_new0(undo_action, 1);
 	action->type = type;
@@ -2724,8 +2705,7 @@ const GdkColor *document_get_status_color(GeanyDocument *doc)
 	/*static GdkColor orange = {0, 0xFFFF, 0x7FFF, 0};*/
 	GdkColor *color = NULL;
 
-	if (G_UNLIKELY(doc == NULL))
-		return NULL;
+	g_return_val_if_fail(doc != NULL, NULL);
 
 	if (doc->changed)
 		color = &red;
@@ -2752,8 +2732,7 @@ const GdkColor *document_get_status_color(GeanyDocument *doc)
  */
 GeanyDocument *document_index(gint idx)
 {
-	return (G_LIKELY(idx >= 0) && G_LIKELY(idx < (gint) documents_array->len)) ?
-		documents[idx] : NULL;
+	return (idx >= 0 && idx < (gint) documents_array->len) ? documents[idx] : NULL;
 }
 
 
@@ -2764,7 +2743,7 @@ GeanyDocument *document_clone(GeanyDocument *old_doc, const gchar *utf8_filename
 	gchar *text;
 	GeanyDocument *doc;
 
-	g_return_val_if_fail(G_LIKELY(old_doc != NULL), NULL);
+	g_return_val_if_fail(old_doc != NULL, NULL);
 
 	len = sci_get_length(old_doc->editor->sci) + 1;
 	text = (gchar*) g_malloc(len);

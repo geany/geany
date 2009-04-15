@@ -73,12 +73,12 @@
 void utils_open_browser(const gchar *uri)
 {
 #ifdef G_OS_WIN32
-	g_return_if_fail(G_LIKELY(uri != NULL));
+	g_return_if_fail(uri != NULL);
 	win32_open_browser(uri);
 #else
 	gchar *cmdline;
 
-	g_return_if_fail(G_LIKELY(uri != NULL));
+	g_return_if_fail(uri != NULL);
 
 	cmdline = g_strconcat(tool_prefs.browser_cmd, " ", uri, NULL);
 	if (! g_spawn_command_line_async(cmdline, NULL))
@@ -231,8 +231,8 @@ gint utils_write_file(const gchar *filename, const gchar *text)
 {
 	GError *error = NULL;
 
-	g_return_val_if_fail(G_LIKELY(filename != NULL), ENOENT);
-	g_return_val_if_fail(G_LIKELY(text != NULL), EINVAL);
+	g_return_val_if_fail(filename != NULL, ENOENT);
+	g_return_val_if_fail(text != NULL, EINVAL);
 
 	if (! g_file_set_contents(filename, text, -1, &error))
 	{
@@ -365,8 +365,8 @@ gint utils_str_casecmp(const gchar *s1, const gchar *s2)
 	gchar *tmp1, *tmp2;
 	gint result;
 
-	g_return_val_if_fail(G_LIKELY(s1 != NULL), 1);
-	g_return_val_if_fail(G_LIKELY(s2 != NULL), -1);
+	g_return_val_if_fail(s1 != NULL, 1);
+	g_return_val_if_fail(s2 != NULL, -1);
 
 	tmp1 = g_strdup(s1);
 	tmp2 = g_strdup(s2);
@@ -377,12 +377,12 @@ gint utils_str_casecmp(const gchar *s1, const gchar *s2)
 	if (! g_utf8_validate(s2, -1, NULL))
 		setptr(tmp2, g_locale_to_utf8(s2, -1, NULL, NULL, NULL));
 
-	if (G_UNLIKELY(tmp1 == NULL))
+	if (tmp1 == NULL)
 	{
 		g_free(tmp2);
 		return 1;
 	}
-	if (G_UNLIKELY(tmp2 == NULL))
+	if (tmp2 == NULL)
 	{
 		g_free(tmp1);
 		return -1;
@@ -413,8 +413,8 @@ gint utils_str_casecmp(const gchar *s1, const gchar *s2)
 gboolean utils_str_equal(const gchar *a, const gchar *b)
 {
 	/* (taken from libexo from os-cillation) */
-	if (G_UNLIKELY(a == NULL) && G_UNLIKELY(b == NULL)) return TRUE;
-	else if (G_UNLIKELY(a == NULL) || G_UNLIKELY(b == NULL)) return FALSE;
+	if (a == NULL && b == NULL) return TRUE;
+	else if (a == NULL || b == NULL) return FALSE;
 
 	while (*a == *b++)
 		if (*a++ == '\0')
@@ -437,7 +437,7 @@ gchar *utils_remove_ext_from_filename(const gchar *filename)
 	gchar *result;
 	gint i;
 
-	g_return_val_if_fail(G_LIKELY(filename != NULL), NULL);
+	g_return_val_if_fail(filename != NULL, NULL);
 
 	last_dot = strrchr(filename, '.');
 	if (! last_dot)
@@ -527,8 +527,7 @@ gchar *utils_str_replace(gchar *haystack, const gchar *needle, const gchar *repl
 {
 	GString *str;
 
-	if (G_UNLIKELY(haystack == NULL))
-		return NULL;
+	g_return_val_if_fail(haystack != NULL, NULL);
 
 	str = g_string_new(haystack);
 
@@ -545,7 +544,7 @@ gint utils_strpos(const gchar *haystack, const gchar *needle)
 	gint needle_length = strlen(needle);
 	gint i, j, pos = -1;
 
-	if (G_UNLIKELY(needle_length > haystack_length))
+	if (needle_length > haystack_length)
 	{
 		return -1;
 	}
@@ -597,7 +596,7 @@ gchar *utils_get_date_time(const gchar *format, time_t *time_to_use)
 	gchar *locale_format;
 	gsize len;
 
-	g_return_val_if_fail(G_LIKELY(format != NULL), NULL);
+	g_return_val_if_fail(format != NULL, NULL);
 
 	if (! g_utf8_validate(format, -1, NULL))
 	{
@@ -743,8 +742,7 @@ gchar *utils_get_hex_from_color(GdkColor *color)
 {
 	gchar *buffer = g_malloc0(9);
 
-	if (G_UNLIKELY(color == NULL))
-		return NULL;
+	g_return_val_if_fail(color != NULL, NULL);
 
 	g_snprintf(buffer, 8, "#%02X%02X%02X",
 	      (guint) (utils_scale_round(color->red / 256, 255)),
@@ -762,12 +760,12 @@ gchar *utils_get_current_file_dir_utf8(void)
 {
 	GeanyDocument *doc = document_get_current();
 
-	if (G_LIKELY(doc != NULL))
+	if (doc != NULL)
 	{
 		/* get current filename */
 		const gchar *cur_fname = doc->file_name;
 
-		if (G_LIKELY(cur_fname != NULL))
+		if (cur_fname != NULL)
 		{
 			/* get folder part from current filename */
 			return g_path_get_dirname(cur_fname); /* returns "." if no path */
@@ -781,7 +779,8 @@ gchar *utils_get_current_file_dir_utf8(void)
 /* very simple convenience function */
 void utils_beep(void)
 {
-	if (prefs.beep_on_errors) gdk_beep();
+	if (prefs.beep_on_errors)
+		gdk_beep();
 }
 
 
@@ -804,7 +803,7 @@ gchar *utils_make_human_readable_str(guint64 size, gulong block_size,
 	frac = 0;
 
 	val = size * block_size;
-	if (G_UNLIKELY(val == 0))
+	if (val == 0)
 		return g_strdup(u);
 
 	if (display_unit)
@@ -854,9 +853,9 @@ gint utils_strtod(const gchar *source, gchar **end, gboolean with_route)
 {
 	guint red, green, blue, offset = 0;
 
-	if (G_UNLIKELY(source == NULL))
-		return -1;
-	else if (with_route && (strlen(source) != 7 || source[0] != '#'))
+	g_return_val_if_fail(source != NULL, -1);
+
+	if (with_route && (strlen(source) != 7 || source[0] != '#'))
 		return -1;
 	else if (! with_route && (strlen(source) != 8 || source[0] != '0' ||
 		(source[1] != 'x' && source[1] != 'X')))
@@ -937,12 +936,11 @@ gchar **utils_read_file_in_array(const gchar *filename)
 	gchar **result = NULL;
 	gchar *data;
 
-	if (G_UNLIKELY(filename == NULL))
-		return NULL;
+	g_return_val_if_fail(filename != NULL, NULL);
 
 	g_file_get_contents(filename, &data, NULL, NULL);
 
-	if (G_LIKELY(data != NULL))
+	if (data != NULL)
 	{
 		result = g_strsplit_set(data, "\r\n", -1);
 		g_free(data);
@@ -959,11 +957,13 @@ gboolean utils_str_replace_escape(gchar *string)
 	gsize i, j, len;
 	guint unicodechar;
 
+	g_return_val_if_fail(string != NULL, FALSE);
+
 	j = 0;
 	len = strlen(string);
 	for (i = 0; i < len; i++)
 	{
-		if (G_UNLIKELY(string[i]=='\\'))
+		if (string[i]=='\\')
 		{
 			if (i++ >= strlen(string))
 			{
@@ -1125,10 +1125,10 @@ gchar *utils_get_locale_from_utf8(const gchar *utf8_text)
 #else
 	gchar *locale_text;
 
-	if (G_UNLIKELY(! utf8_text))
+	if (! utf8_text)
 		return NULL;
 	locale_text = g_locale_from_utf8(utf8_text, -1, NULL, NULL, NULL);
-	if (G_UNLIKELY(locale_text == NULL))
+	if (locale_text == NULL)
 		locale_text = g_strdup(utf8_text);
 	return locale_text;
 #endif
@@ -1153,10 +1153,10 @@ gchar *utils_get_utf8_from_locale(const gchar *locale_text)
 #else
 	gchar *utf8_text;
 
-	if (G_UNLIKELY(! locale_text))
+	if (! locale_text)
 		return NULL;
 	utf8_text = g_locale_to_utf8(locale_text, -1, NULL, NULL, NULL);
-	if (G_UNLIKELY(utf8_text == NULL))
+	if (utf8_text == NULL)
 		utf8_text = g_strdup(locale_text);
 	return utf8_text;
 #endif
@@ -1178,7 +1178,7 @@ void utils_free_pointers(gsize arg_count, ...)
 		g_free(ptr);
 	}
 	ptr = va_arg(a, gpointer);
-	if (G_UNLIKELY(ptr))
+	if (ptr)
 		g_warning("Wrong arg_count!");
 	va_end(a);
 }
@@ -1195,8 +1195,7 @@ gchar **utils_strv_new(const gchar *first, ...)
 	gchar *str;
 	gchar **strv;
 
-	if (G_UNLIKELY(first == NULL))
-		return NULL;
+	g_return_val_if_fail(first != NULL, NULL);
 
 	strvlen = 1;	/* for first argument */
 
@@ -1236,7 +1235,7 @@ gint utils_mkdir(const gchar *path, gboolean create_parent_dirs)
 	gint mode = 0700;
 	gint result;
 
-	if (G_UNLIKELY(path == NULL) || strlen(path) == 0)
+	if (path == NULL || strlen(path) == 0)
 		return EFAULT;
 
 	result = (create_parent_dirs) ? g_mkdir_with_parents(path, mode) : g_mkdir(path, mode);
@@ -1269,16 +1268,16 @@ GSList *utils_get_file_list(const gchar *path, guint *length, GError **error)
 		*error = NULL;
 	if (length)
 		*length = 0;
-	g_return_val_if_fail(G_LIKELY(path != NULL), NULL);
+	g_return_val_if_fail(path != NULL, NULL);
 
 	dir = g_dir_open(path, 0, error);
-	if (G_UNLIKELY(dir == NULL))
+	if (dir == NULL)
 		return NULL;
 
 	while (1)
 	{
 		const gchar *filename = g_dir_read_name(dir);
-		if (G_UNLIKELY(filename == NULL))
+		if (filename == NULL)
 			break;
 
 		list = g_slist_insert_sorted(list, g_strdup(filename), (GCompareFunc) utils_str_casecmp);
@@ -1320,9 +1319,10 @@ static guint utils_string_replace_helper(GString *haystack, const gchar *needle,
 	guint ret = 0;
 	gssize pos;
 
-	if (G_UNLIKELY(haystack->len == 0))
+	g_return_val_if_fail(haystack != NULL, 0);
+	if (haystack->len == 0)
 		return FALSE;
-	g_return_val_if_fail(G_LIKELY(NZV(needle)), 0);
+	g_return_val_if_fail(NZV(needle), 0);
 
 	stack = haystack->str;
 	if (! (match = strstr(stack, needle)))
@@ -1402,7 +1402,7 @@ const gchar *utils_get_default_dir_utf8(void)
 
 static gboolean check_error(GError **error)
 {
-	if (G_UNLIKELY(error != NULL) && G_UNLIKELY(*error != NULL))
+	if (error != NULL && *error != NULL)
 	{
 		/* imitate the GLib warning */
 		g_warning(
@@ -1443,7 +1443,7 @@ gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFla
 	if (! check_error(error))
 		return FALSE;
 
-	if (G_UNLIKELY(argv == NULL))
+	if (argv == NULL)
 	{
 		*error = g_error_new(G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "argv must not be NULL");
 		return FALSE;
@@ -1489,7 +1489,7 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 	if (! check_error(error))
 		return FALSE;
 
-	if (G_UNLIKELY(argv == NULL))
+	if (argv == NULL)
 	{
 		*error = g_error_new(G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "argv must not be NULL");
 		return FALSE;
@@ -1513,7 +1513,7 @@ const gchar *utils_build_path(const gchar *first, ...)
 	const gchar *str;
 	va_list args;
 
-	if (G_UNLIKELY(! buffer))
+	if (! buffer)
 		buffer = g_string_new(first);
 	else
 		g_string_assign(buffer, first);
@@ -1543,7 +1543,7 @@ gchar *utils_get_path_from_uri(const gchar *uri)
 {
 	gchar *locale_filename;
 
-	g_return_val_if_fail(G_LIKELY(uri != NULL), NULL);
+	g_return_val_if_fail(uri != NULL, NULL);
 
 	if (! utils_is_uri(uri))
 		return g_strdup(uri);
@@ -1575,7 +1575,7 @@ gchar *utils_get_path_from_uri(const gchar *uri)
 
 gboolean utils_is_uri(const gchar *uri)
 {
-	g_return_val_if_fail(G_LIKELY(uri != NULL), FALSE);
+	g_return_val_if_fail(uri != NULL, FALSE);
 
 	return (strstr(uri, "://") != NULL);
 }
@@ -1584,7 +1584,7 @@ gboolean utils_is_uri(const gchar *uri)
 /* path should be in locale encoding */
 gboolean utils_is_remote_path(const gchar *path)
 {
-	g_return_val_if_fail(G_LIKELY(path != NULL), FALSE);
+	g_return_val_if_fail(path != NULL, FALSE);
 
 	/* if path is an URI and it doesn't start "file://", we take it as remote */
 	if (utils_is_uri(path) && strncmp(path, "file:", 5) != 0)

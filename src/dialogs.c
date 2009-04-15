@@ -141,7 +141,7 @@ on_file_open_selection_changed         (GtkFileChooser  *filechooser,
 	gchar *filename = gtk_file_chooser_get_filename(filechooser);
 	gboolean is_on = gtk_file_chooser_get_show_hidden(filechooser);
 
-	if (G_LIKELY(filename))
+	if (filename)
 	{
 		/* try to get the UTF-8 equivalent for the filename, fallback to filename if error */
 		gchar *utf8_filename = utils_get_utf8_from_locale(filename);
@@ -268,7 +268,7 @@ void dialogs_show_open_file()
 
 	/* We use the same file selection widget each time, so first of all we create it
 	 * if it hasn't already been created. */
-	if (G_UNLIKELY(ui_widgets.open_filesel == NULL))
+	if (ui_widgets.open_filesel == NULL)
 		create_open_file_dialog();
 
 	if (initdir != NULL)
@@ -704,7 +704,7 @@ gboolean dialogs_show_unsaved_file(GeanyDocument *doc)
 		document_get_notebook_page(doc));
 	main_status.quitting = old_quitting_state;
 
-	if (G_LIKELY(doc->file_name != NULL))
+	if (doc->file_name != NULL)
 	{
 		short_fn = g_path_get_basename(doc->file_name);
 	}
@@ -959,9 +959,9 @@ gboolean dialogs_show_input_numeric(const gchar *title, const gchar *label_text,
 	GtkWidget *dialog, *label, *spin, *vbox;
 	gboolean res = FALSE;
 
-	g_return_val_if_fail(G_LIKELY(title != NULL), FALSE);
-	g_return_val_if_fail(G_LIKELY(label_text != NULL), FALSE);
-	g_return_val_if_fail(G_LIKELY(value != NULL), FALSE);
+	g_return_val_if_fail(title != NULL, FALSE);
+	g_return_val_if_fail(label_text != NULL, FALSE);
+	g_return_val_if_fail(value != NULL, FALSE);
 
 	dialog = gtk_dialog_new_with_buttons(title, GTK_WINDOW(main_widgets.window),
 										GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -1023,7 +1023,7 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 # define S_IXOTH 0
 #endif
 
-	if (G_UNLIKELY(doc == NULL) || G_UNLIKELY(doc->file_name == NULL))
+	if (doc == NULL || doc->file_name == NULL)
 	{
 		dialogs_show_msgbox(GTK_MESSAGE_ERROR,
 		_("An error occurred or file information could not be retrieved (e.g. from a new file)."));

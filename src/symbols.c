@@ -144,7 +144,7 @@ void symbols_global_tags_loaded(gint file_type_idx)
 		load_c_ignore_tags();
 	}
 
-	if (cl_options.ignore_global_tags || G_UNLIKELY(app->tm_workspace == NULL))
+	if (cl_options.ignore_global_tags || app->tm_workspace == NULL)
 		return;
 
 	load_user_tags(file_type_idx);
@@ -171,7 +171,7 @@ void symbols_global_tags_loaded(gint file_type_idx)
 	}
 	tfi = &tag_file_info[tag_type];
 
-	if (G_UNLIKELY(! tfi->tags_loaded))
+	if (! tfi->tags_loaded)
 	{
 		gchar *fname = g_strconcat(app->datadir, G_DIR_SEPARATOR_S, tfi->tag_file, NULL);
 		gint tm_lang;
@@ -193,7 +193,7 @@ static void html_tags_loaded(void)
 		return;
 
 	tfi = &tag_file_info[GTF_HTML_ENTITIES];
-	if (G_UNLIKELY(! tfi->tags_loaded))
+	if (! tfi->tags_loaded)
 	{
 		gchar *file = g_strconcat(app->datadir, G_DIR_SEPARATOR_S, tfi->tag_file, NULL);
 
@@ -212,7 +212,7 @@ GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gin
 	GPtrArray *typedefs;
 	gint tag_lang;
 
-	g_return_val_if_fail(G_LIKELY(tags_array != NULL), NULL);
+	g_return_val_if_fail(tags_array != NULL, NULL);
 
 	typedefs = tm_tags_extract(tags_array, tag_types);
 
@@ -279,7 +279,7 @@ GString *symbols_get_macro_list(gint lang)
 	gint tag_lang;
 	TMTag *tag;
 
-	if (G_UNLIKELY(app->tm_workspace->work_objects == NULL))
+	if (app->tm_workspace->work_objects == NULL)
 		return NULL;
 
 	ftags = g_ptr_array_sized_new(50);
@@ -330,7 +330,7 @@ static TMTag *
 symbols_find_tm_tag(const GPtrArray *tags, const gchar *tag_name)
 {
 	guint i;
-	g_return_val_if_fail(G_LIKELY(tags != NULL), NULL);
+	g_return_val_if_fail(tags != NULL, NULL);
 
 	for (i = 0; i < tags->len; ++i)
 	{
@@ -369,10 +369,10 @@ static TMTag *find_workspace_tag(const gchar *tag_name, gint type)
 	guint j;
 	const GPtrArray *work_objects = NULL;
 
-	if (G_LIKELY(app->tm_workspace != NULL))
+	if (app->tm_workspace != NULL)
 		work_objects = app->tm_workspace->work_objects;
 
-	if (G_LIKELY(work_objects != NULL))
+	if (work_objects != NULL)
 	{
 		for (j = 0; j < work_objects->len; j++)
 		{
@@ -390,7 +390,7 @@ static TMTag *find_workspace_tag(const gchar *tag_name, gint type)
 
 const gchar **symbols_get_html_entities(void)
 {
-	if (G_UNLIKELY(html_entities == NULL))
+	if (html_entities == NULL)
 		html_tags_loaded(); /* if not yet created, force creation of the array but shouldn't occur */
 
 	return (const gchar **) html_entities;
@@ -439,9 +439,9 @@ static GList *get_tag_list(GeanyDocument *doc, guint tag_types)
 	TMTag *tag;
 	guint i;
 
-	g_return_val_if_fail(G_LIKELY(doc), NULL);
+	g_return_val_if_fail(doc, NULL);
 
-	if (G_UNLIKELY(! doc->tm_file) || G_UNLIKELY(! doc->tm_file->tags_array))
+	if (! doc->tm_file || ! doc->tm_file->tags_array)
 		return NULL;
 
 	for (i = 0; i < doc->tm_file->tags_array->len; ++i)
@@ -524,7 +524,7 @@ tag_list_add_groups(GtkTreeStore *tree_store, ...)
 	va_list args;
 	GtkTreeIter *iter;
 
-	g_return_if_fail(G_LIKELY(top_level_iter_names));
+	g_return_if_fail(top_level_iter_names);
 
     va_start(args, tree_store);
     for (; iter = va_arg(args, GtkTreeIter*), iter != NULL;)
@@ -538,7 +538,7 @@ tag_list_add_groups(GtkTreeStore *tree_store, ...)
 			icon = get_tag_icon(icon_name);
 		}
 
-    	g_assert(G_LIKELY(title != NULL));
+    	g_assert(title != NULL);
 		g_ptr_array_add(top_level_iter_names, title);
 
 		gtk_tree_store_append(tree_store, iter, NULL);
@@ -559,7 +559,7 @@ static void add_top_level_items(GeanyDocument *doc)
 	filetype_id ft_id = doc->file_type->id;
 	GtkTreeStore *tag_store = doc->priv->tag_store;
 
-	if (G_UNLIKELY(top_level_iter_names == NULL))
+	if (top_level_iter_names == NULL)
 		top_level_iter_names = g_ptr_array_new();
 	else
 		g_ptr_array_set_size(top_level_iter_names, 0);
@@ -884,10 +884,10 @@ static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboole
 	else
 		utf8_name = tag->name;
 
-	if (G_UNLIKELY(utf8_name == NULL))
+	if (utf8_name == NULL)
 		return NULL;
 
-	if (G_UNLIKELY(! buffer))
+	if (! buffer)
 		buffer = g_string_new(NULL);
 	else
 		g_string_truncate(buffer, 0);
@@ -926,7 +926,7 @@ static gchar *get_symbol_tooltip(GeanyDocument *doc, const TMTag *tag)
 			encodings_convert_to_utf8_from_charset(utf8_name, (gsize) -1, doc->encoding, TRUE));
 	}
 
-	if (G_LIKELY(utf8_name != NULL))
+	if (utf8_name != NULL)
 		setptr(utf8_name, g_markup_escape_text(utf8_name, -1));
 
 	return utf8_name;
@@ -1211,10 +1211,10 @@ gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 {
 	GList *tags;
 
-	g_return_val_if_fail(G_LIKELY(doc != NULL), FALSE);
+	g_return_val_if_fail(doc != NULL, FALSE);
 
 	tags = get_tag_list(doc, tm_tag_max_t);
-	if (G_UNLIKELY(tags == NULL))
+	if (tags == NULL)
 		return FALSE;
 
 	/* Make sure the model stays with us after the tree view unrefs it */
@@ -1232,7 +1232,7 @@ gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 
 	hide_empty_rows(doc->priv->tag_store);
 
-	if (G_LIKELY(sort_mode == SYMBOLS_SORT_USE_PREVIOUS))
+	if (sort_mode == SYMBOLS_SORT_USE_PREVIOUS)
 		sort_mode = doc->priv->symbol_list_sort_mode;
 
 	sort_tree(doc->priv->tag_store, sort_mode == SYMBOLS_SORT_BY_NAME);
@@ -1257,14 +1257,14 @@ static GeanyFiletype *detect_global_tags_filetype(const gchar *utf8_filename)
 	GeanyFiletype *ft = NULL;
 
 	tags_ext = strstr(shortname, ".tags");
-	if (G_LIKELY(tags_ext))
+	if (tags_ext)
 	{
 		*tags_ext = '\0';	/* remove .tags extension */
 		ft = filetypes_detect_from_extension(shortname);
 	}
 	g_free(shortname);
 
-	if (G_UNLIKELY(ft == NULL) || G_UNLIKELY(! filetype_has_tags(ft)))
+	if (ft == NULL || ! filetype_has_tags(ft))
 		return NULL;
 
 	return ft;
@@ -1295,7 +1295,7 @@ int symbols_generate_global_tags(int argc, char **argv, gboolean want_preprocess
 		ft = detect_global_tags_filetype(utf8_fname);
 		g_free(utf8_fname);
 
-		if (G_UNLIKELY(ft == NULL))
+		if (ft == NULL)
 		{
 			g_printerr(_("Unknown filetype extension for \"%s\".\n"), tags_file);
 			return 1;
@@ -1437,14 +1437,14 @@ static void load_user_tags(filetype_id ft_id)
 	const GList *node;
 	const GeanyFiletype *ft = filetypes[ft_id];
 
-	g_return_if_fail(G_LIKELY(ft_id > 0));
-	g_return_if_fail(G_LIKELY(ft_id < GEANY_MAX_BUILT_IN_FILETYPES));
+	g_return_if_fail(ft_id > 0);
+	g_return_if_fail(ft_id < GEANY_MAX_BUILT_IN_FILETYPES);
 
-	if (G_LIKELY(tags_loaded[ft_id]))
+	if (tags_loaded[ft_id])
 		return;
 	tags_loaded[ft_id] = TRUE;	/* prevent reloading */
 
-	if (G_UNLIKELY(lang_hash == NULL))
+	if (lang_hash == NULL)
 		lang_hash = init_user_tags();
 
 	fnames = g_hash_table_lookup(lang_hash, ft);
@@ -1486,7 +1486,7 @@ gboolean symbols_goto_tag(const gchar *name, gboolean definition)
 	if (tmtag == NULL)
 		tmtag = find_workspace_tag(name, type);
 
-	if (G_LIKELY(tmtag != NULL))
+	if (tmtag != NULL)
 	{
 		GeanyDocument *new_doc = document_find_by_real_path(
 			tmtag->atts.entry.file->work_object.file_name);
@@ -1739,10 +1739,10 @@ static void on_symbol_tree_sort_clicked(GtkMenuItem *menuitem, gpointer user_dat
 	gint sort_mode = GPOINTER_TO_INT(user_data);
 	GeanyDocument *doc = document_get_current();
 
-	if (G_UNLIKELY(ignore_callback))
+	if (ignore_callback)
 		return;
 
-	if (G_LIKELY(doc != NULL))
+	if (doc != NULL)
 		doc->has_tags = symbols_recreate_tag_list(doc, sort_mode);
 }
 
@@ -1759,7 +1759,7 @@ static void on_symbol_tree_menu_show(GtkWidget *widget,
 	gtk_widget_set_sensitive(symbol_menu.expand_all, enable);
 	gtk_widget_set_sensitive(symbol_menu.collapse_all, enable);
 
-	if (G_UNLIKELY(! doc))
+	if (! doc)
 		return;
 
 	ignore_callback = TRUE;
@@ -1778,10 +1778,10 @@ static void on_expand_collapse(GtkWidget *widget, gpointer user_data)
 	gboolean expand = utils_str_equal(user_data, GTK_STOCK_ADD);
 	GeanyDocument *doc = document_get_current();
 
-	if (G_UNLIKELY(! doc))
+	if (! doc)
 		return;
 
-	g_return_if_fail(G_LIKELY(doc->priv->tag_tree));
+	g_return_if_fail(doc->priv->tag_tree);
 
 	if (expand)
 		gtk_tree_view_expand_all(GTK_TREE_VIEW(doc->priv->tag_tree));

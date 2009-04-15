@@ -233,7 +233,7 @@ static gchar *get_session_file_string(GeanyDocument *doc)
 	gchar *locale_filename;
 	GeanyFiletype *ft = doc->file_type;
 
-	if (G_UNLIKELY(ft == NULL))	/* can happen when saving a new file when quitting */
+	if (ft == NULL) /* can happen when saving a new file when quitting */
 		ft = filetypes[GEANY_FILETYPES_NONE];
 
 	locale_filename = utils_get_locale_from_utf8(doc->file_name);
@@ -275,7 +275,7 @@ void configuration_save_session_files(GKeyFile *config)
 	for (i = 0; i < max; i++)
 	{
 		doc = document_get_from_page(i);
-		if (G_LIKELY(doc != NULL) && G_LIKELY(doc->real_path != NULL))
+		if (doc != NULL && doc->real_path != NULL)
 		{
 			gchar *fname;
 
@@ -566,11 +566,11 @@ void configuration_load_session_files(GKeyFile *config, gboolean read_recent_fil
 	session_files = g_ptr_array_new();
 	have_session_files = TRUE;
 	i = 0;
-	while (G_UNLIKELY(have_session_files))
+	while (have_session_files)
 	{
 		g_snprintf(entry, sizeof(entry), "FILE_NAME_%d", i);
 		tmp_array = g_key_file_get_string_list(config, "files", entry, NULL, &error);
-		if (G_UNLIKELY(! tmp_array) || G_UNLIKELY(error))
+		if (! tmp_array || error)
 		{
 			g_error_free(error);
 			error = NULL;
@@ -670,7 +670,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	if (tmp_string)
 	{
 		const GeanyEncoding *enc = encodings_get_from_charset(tmp_string);
-		if (G_LIKELY(enc != NULL))
+		if (enc != NULL)
 			file_prefs.default_open_encoding = enc->idx;
 		else
 			file_prefs.default_open_encoding = -1;
@@ -799,7 +799,7 @@ static void load_ui_prefs(GKeyFile *config)
 				_("Type here what you want, use it as a notice/scratch board"));
 
 	geo = g_key_file_get_integer_list(config, PACKAGE, "geometry", NULL, &error);
-	if (G_UNLIKELY(error))
+	if (error)
 	{
 		ui_prefs.geometry[0] = -1;
 		g_error_free(error);
@@ -821,7 +821,7 @@ static void load_ui_prefs(GKeyFile *config)
 		{
 			for (i = 2; i < 4; i++)
 			{
-				if (G_UNLIKELY(ui_prefs.geometry[i] < -1))
+				if (ui_prefs.geometry[i] < -1)
 					ui_prefs.geometry[i] = -1;
 			}
 		}
@@ -924,7 +924,7 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	/* replace ':' back with ';' (see get_session_file_string for details) */
 	g_strdelimit((gchar*) utils_path_skip_root(locale_filename), ":", ';');
 
-	if (G_LIKELY(len > 8))
+	if (len > 8)
 		line_breaking = atoi(tmp[8]);
 
 	if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
@@ -935,7 +935,7 @@ static gboolean open_session_file(gchar **tmp, guint len)
 			(enc_idx >= 0 && enc_idx < GEANY_ENCODINGS_MAX) ?
 				encodings[enc_idx].charset : NULL);
 
-		if (G_LIKELY(doc))
+		if (doc)
 		{
 			editor_set_indent_type(doc->editor, indent_type);
 			editor_set_line_wrapping(doc->editor, line_wrapping);
@@ -971,7 +971,7 @@ void configuration_open_files(void)
 		gchar **tmp = g_ptr_array_index(session_files, i);
 		guint len;
 
-		if (G_LIKELY(tmp != NULL) && (len = g_strv_length(tmp)) >= 8)
+		if (tmp != NULL && (len = g_strv_length(tmp)) >= 8)
 		{
 			if (! open_session_file(tmp, len))
 				failure = TRUE;
@@ -981,13 +981,13 @@ void configuration_open_files(void)
 		if (file_prefs.tab_order_ltr)
 		{
 			i++;
-			if (G_UNLIKELY(i >= (gint)session_files->len))
+			if (i >= (gint)session_files->len)
 				break;
 		}
 		else
 		{
 			i--;
-			if (G_UNLIKELY(i < 0))
+			if (i < 0)
 				break;
 		}
 	}
@@ -995,7 +995,7 @@ void configuration_open_files(void)
 	g_ptr_array_free(session_files, TRUE);
 	session_files = NULL;
 
-	if (G_UNLIKELY(failure))
+	if (failure)
 		ui_set_statusbar(TRUE, _("Failed to load one or more session files."));
 	else if (session_notebook_page >= 0)
 	{
@@ -1014,7 +1014,7 @@ void configuration_open_files(void)
  * realisation of the main window */
 void configuration_apply_settings(void)
 {
-	if (G_LIKELY(scribble_text))
+	if (scribble_text)
 	{	/* update the scribble widget, because now it's realized */
 		gtk_text_buffer_set_text(
 				gtk_text_view_get_buffer(GTK_TEXT_VIEW(ui_lookup_widget(main_widgets.window,

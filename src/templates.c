@@ -260,7 +260,7 @@ static gchar *replace_all(gchar *text, const gchar *year, const gchar *date, con
 {
 	GString *str;
 
-	if (G_UNLIKELY(text == NULL))
+	if (text == NULL)
 		return NULL;
 
 	str = g_string_new(text);
@@ -398,7 +398,7 @@ static gchar *get_template_from_file(const gchar *locale_fname, const gchar *doc
 
 	g_file_get_contents(locale_fname, &content, NULL, NULL);
 
-	if (G_LIKELY(content != NULL))
+	if (content != NULL)
 	{
 		gchar *file_header;
 		gchar *year = utils_get_date_time(template_prefs.year_format, NULL);
@@ -446,7 +446,7 @@ static void add_file_item(gpointer data, gpointer user_data)
 	GtkWidget *tmp_menu, *tmp_button;
 	gchar *label;
 
-	g_return_if_fail(G_LIKELY(data));
+	g_return_if_fail(data);
 
 	label = utils_get_utf8_from_locale(data);
 
@@ -492,7 +492,7 @@ static gboolean add_custom_template_items(void)
 		"files", NULL);
 	GSList *list = utils_get_file_list(path, NULL, NULL);
 
-	if (G_UNLIKELY(list == NULL))
+	if (list == NULL)
 	{
 		utils_mkdir(path, FALSE);
 		return FALSE;
@@ -700,8 +700,7 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 
 gchar *templates_get_template_licence(gint filetype_idx, gint licence_type)
 {
-	if (G_UNLIKELY(licence_type != GEANY_TEMPLATE_GPL) &&
-		G_UNLIKELY(licence_type != GEANY_TEMPLATE_BSD))
+	if (licence_type != GEANY_TEMPLATE_GPL && licence_type != GEANY_TEMPLATE_BSD)
 		return NULL;
 
 	return make_comment_block(templates[licence_type], filetype_idx, 8);
@@ -818,7 +817,7 @@ void templates_free_templates(void)
 		g_free(ft_templates[i]);
 	}
 	/* destroy "New with template" sub menu items (in case we want to reload the templates) */
-	if (G_LIKELY(ui_widgets.new_file_menu != NULL))
+	if (ui_widgets.new_file_menu != NULL)
 	{
 		children = gtk_container_get_children(GTK_CONTAINER(ui_widgets.new_file_menu));
 		for (item = children; item != NULL; item = g_list_next(item))

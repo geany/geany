@@ -197,7 +197,7 @@ static gchar **vte_get_child_environment(void)
 
 static void override_menu_key(void)
 {
-	if (G_UNLIKELY(gtk_menu_key_accel == NULL)) /* for restoring the default value */
+	if (gtk_menu_key_accel == NULL) /* for restoring the default value */
 		g_object_get(G_OBJECT(gtk_settings_get_default()),
 			"gtk-menu-bar-accel", &gtk_menu_key_accel, NULL);
 
@@ -241,7 +241,7 @@ void vte_init(void)
 		}
 	}
 
-	if (G_UNLIKELY(module == NULL))
+	if (module == NULL)
 	{
 		vte_info.have_vte = FALSE;
 		geany_debug("Could not load libvte.so, embedded terminal support disabled");
@@ -395,7 +395,7 @@ static void vte_start(GtkWidget *widget)
 static void vte_restart(GtkWidget *widget)
 {
 	vte_get_working_directory(); /* try to keep the working directory when restarting the VTE */
-	if (G_LIKELY(pid > 0))
+	if (pid > 0)
 	{
 		kill(pid, SIGINT);
 		pid = 0;
@@ -501,7 +501,7 @@ static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data)
 		case POPUP_CHANGEPATH:
 		{
 			GeanyDocument *doc = document_get_current();
-			if (G_LIKELY(doc != NULL))
+			if (doc != NULL)
 				vte_cwd(doc->file_name, TRUE);
 			break;
 		}
@@ -608,7 +608,7 @@ const gchar *vte_get_working_directory(void)
 	gchar *cwd;
 	gint   length;
 
-	if (G_LIKELY(pid > 0))
+	if (pid > 0)
 	{
 		file = g_strdup_printf("/proc/%d/cwd", pid);
 		length = readlink(file, buffer, sizeof(buffer));
@@ -622,7 +622,7 @@ const gchar *vte_get_working_directory(void)
 		else if (length == 0)
 		{
 			cwd = g_get_current_dir();
-			if (G_LIKELY(cwd != NULL))
+			if (cwd != NULL)
 			{
 				if (chdir(file) == 0)
 				{
@@ -649,7 +649,7 @@ const gchar *vte_get_working_directory(void)
 void vte_cwd(const gchar *filename, gboolean force)
 {
 	if (vte_info.have_vte && (vc->follow_path || force) &&
-		G_LIKELY(filename != NULL) && g_path_is_absolute(filename))
+		filename != NULL && g_path_is_absolute(filename))
 	{
 		gchar *path;
 
@@ -906,8 +906,7 @@ void vte_send_selection_to_vte(void)
 	gsize len;
 
 	doc = document_get_current();
-	if (G_UNLIKELY(doc == NULL))
-		return;
+	g_return_if_fail(doc != NULL);
 
 	if (sci_has_selection(doc->editor->sci))
 	{

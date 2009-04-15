@@ -54,7 +54,7 @@ void queue_append(GeanyQueue *queue_start, gpointer data)
 {
 	GeanyQueue *temp, *next;
 
-	if (G_UNLIKELY(queue_start == NULL) || G_UNLIKELY(data == NULL))
+	if (queue_start == NULL || data == NULL)
 		return;
 
 	if (queue_start->data == NULL)
@@ -81,7 +81,7 @@ GeanyQueue *queue_delete(GeanyQueue *queue_start, gpointer *data, const gboolean
 {
 	GeanyQueue *ret;
 
-	if (G_UNLIKELY(NULL == queue_start))
+	if (NULL == queue_start)
 		return NULL;
 
 	if (data != NULL)
@@ -110,7 +110,7 @@ static void queue_foreach_data_2(GeanyQueue *queue_start, ForeachFunc func, Gean
 {
 	GeanyQueue *temp = param;
 
-	if (G_UNLIKELY(! queue_start) || G_UNLIKELY(! param))
+	if (! queue_start || ! param)
 		return;
 
 	do

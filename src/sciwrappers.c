@@ -153,7 +153,7 @@ void sci_convert_eols( ScintillaObject* sci, gint eolmode)
 
 void sci_add_text(ScintillaObject* sci, const gchar* text)
 {
-	if (G_LIKELY(text != NULL))
+	if (text != NULL)
 	{ /* if null text is passed to scintilla will segfault */
 		SSM( sci, SCI_ADDTEXT, strlen(text), (sptr_t) text);
 	}

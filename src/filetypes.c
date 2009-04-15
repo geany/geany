@@ -611,8 +611,8 @@ static gint cmp_filetype(gconstpointer pft1, gconstpointer pft2)
  * and set the filetype::id field. */
 static void filetype_add(GeanyFiletype *ft)
 {
-	g_return_if_fail(G_LIKELY(ft));
-	g_return_if_fail(G_LIKELY(ft->name));
+	g_return_if_fail(ft);
+	g_return_if_fail(ft->name);
 
 	ft->id = filetypes_array->len;	/* len will be the index for filetype_array */
 	g_ptr_array_add(filetypes_array, ft);
@@ -627,8 +627,8 @@ void filetypes_init_types()
 {
 	filetype_id ft_id;
 
-	g_return_if_fail(G_LIKELY(filetypes_array == NULL));
-	g_return_if_fail(G_LIKELY(filetypes_hash == NULL));
+	g_return_if_fail(filetypes_array == NULL);
+	g_return_if_fail(filetypes_hash == NULL);
 
 	filetypes_array = g_ptr_array_sized_new(GEANY_MAX_BUILT_IN_FILETYPES);
 	filetypes_hash = g_hash_table_new(g_str_hash, g_str_equal);
@@ -902,7 +902,7 @@ static GeanyFiletype *filetypes_detect_from_file_internal(const gchar *utf8_file
 	if (ft != NULL)
 		return ft;
 
-	if (G_UNLIKELY(utf8_filename == NULL))
+	if (utf8_filename == NULL)
 		return filetypes[GEANY_FILETYPES_NONE];
 
 	return filetypes_detect_from_extension(utf8_filename);
@@ -915,7 +915,7 @@ GeanyFiletype *filetypes_detect_from_document(GeanyDocument *doc)
 	GeanyFiletype *ft;
 	gchar *line;
 
-	if (G_UNLIKELY(doc == NULL))
+	if (doc == NULL)
 		return filetypes[GEANY_FILETYPES_NONE];
 
 	line = sci_get_line(doc->editor->sci, 0);
@@ -943,7 +943,7 @@ GeanyFiletype *filetypes_detect_from_file(const gchar *utf8_filename)
 
 	f = g_fopen(locale_name, "r");
 	g_free(locale_name);
-	if (G_LIKELY(f != NULL))
+	if (f != NULL)
 	{
 		if (fgets(line, sizeof(line), f) != NULL)
 		{
@@ -962,7 +962,7 @@ void filetypes_select_radio_item(const GeanyFiletype *ft)
 	/* ignore_callback has to be set by the caller */
 	g_return_if_fail(ignore_callback);
 
-	if (G_UNLIKELY(ft == NULL))
+	if (ft == NULL)
 		ft = filetypes[GEANY_FILETYPES_NONE];
 
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ft->priv->menu_item), TRUE);
@@ -974,7 +974,7 @@ on_filetype_change                     (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	if (G_UNLIKELY(ignore_callback) || G_UNLIKELY(doc == NULL))
+	if (ignore_callback || doc == NULL)
 		return;
 
 	document_set_filetype(doc, (GeanyFiletype*)user_data);
@@ -999,7 +999,7 @@ static void create_radio_menu_item(GtkWidget *menu, GeanyFiletype *ftype)
 /* Remove a filetype pointer from the list of available filetypes. */
 static void filetype_remove(GeanyFiletype *ft)
 {
-	g_return_if_fail(G_LIKELY(ft));
+	g_return_if_fail(ft);
 
 	g_ptr_array_remove(filetypes_array, ft);
 
@@ -1027,7 +1027,7 @@ static void filetype_free(gpointer data, G_GNUC_UNUSED gpointer user_data)
 {
 	GeanyFiletype *ft = data;
 
-	g_return_if_fail(G_LIKELY(ft != NULL));
+	g_return_if_fail(ft != NULL);
 
 	g_free(ft->name);
 	g_free(ft->title);
@@ -1051,8 +1051,8 @@ static void filetype_free(gpointer data, G_GNUC_UNUSED gpointer user_data)
 /* frees the array and all related pointers */
 void filetypes_free_types(void)
 {
-	g_return_if_fail(G_LIKELY(filetypes_array != NULL));
-	g_return_if_fail(G_LIKELY(filetypes_hash != NULL));
+	g_return_if_fail(filetypes_array != NULL);
+	g_return_if_fail(filetypes_hash != NULL);
 
 	g_ptr_array_foreach(filetypes_array, filetype_free, NULL);
 	g_ptr_array_free(filetypes_array, TRUE);
@@ -1176,7 +1176,7 @@ void filetypes_load_config(gint ft_id, gboolean reload)
 	GKeyFile *config, *config_home;
 	GeanyFiletypePrivate *pft;
 
-	g_return_if_fail(G_LIKELY(ft_id >= 0) && G_LIKELY(ft_id < (gint) filetypes_array->len));
+	g_return_if_fail(ft_id >= 0 && ft_id < (gint) filetypes_array->len);
 
 	pft = filetypes[ft_id]->priv;
 
@@ -1245,7 +1245,7 @@ void filetypes_save_commands(void)
 		GKeyFile *config_home;
 		gchar *fname, *ext, *data;
 
-		if (G_LIKELY(! bp->modified))
+		if (! bp->modified)
 			continue;
 
 		ext = filetypes_get_conf_extension(i);
@@ -1303,7 +1303,7 @@ GtkFileFilter *filetypes_create_file_filter(const GeanyFiletype *ft)
 	gint i;
 	const gchar *title;
 
-	g_return_val_if_fail(G_LIKELY(ft != NULL), NULL);
+	g_return_val_if_fail(ft != NULL, NULL);
 
 	new_filter = gtk_file_filter_new();
 	title = ft->id == GEANY_FILETYPES_NONE ? _("All files") : ft->title;
@@ -1321,7 +1321,7 @@ GtkFileFilter *filetypes_create_file_filter(const GeanyFiletype *ft)
 /* Indicates whether there is a tag parser for the filetype or not. */
 gboolean filetype_has_tags(GeanyFiletype *ft)
 {
-	g_return_val_if_fail(G_LIKELY(ft != NULL), FALSE);
+	g_return_val_if_fail(ft != NULL, FALSE);
 
 	return ft->lang >= 0;
 }
@@ -1389,9 +1389,9 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 	if (!NZV(ft->error_regex_string))
 		return FALSE;
 
-	if (G_UNLIKELY(!ft->priv->error_regex_compiled))
+	if (!ft->priv->error_regex_compiled)
 		compile_regex(ft, regex);
-	if (G_UNLIKELY(!ft->priv->error_regex_compiled))	/* regex error */
+	if (!ft->priv->error_regex_compiled)	/* regex error */
 		return FALSE;
 
 	if (regexec(regex, message, G_N_ELEMENTS(pmatch), pmatch, 0) != 0)
@@ -1478,8 +1478,7 @@ void filetypes_read_extensions(void)
  */
 GeanyFiletype *filetypes_index(gint idx)
 {
-	return (G_LIKELY(idx >= 0) && G_LIKELY(idx < (gint) filetypes_array->len)) ?
-		filetypes[idx] : NULL;
+	return (idx >= 0 && idx < (gint) filetypes_array->len) ? filetypes[idx] : NULL;
 }
 
 

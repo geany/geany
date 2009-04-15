@@ -1570,12 +1570,11 @@ void build_menu_update(GeanyDocument *doc)
 	BuildMenuItems *menu_items;
 	static GtkWidget *menubar_build_menu = NULL;
 
-	if (G_UNLIKELY(menubar_build_menu == NULL)) /* cache the build menu pointer */
+	if (menubar_build_menu == NULL) /* cache the build menu pointer */
 		menubar_build_menu = ui_lookup_widget(main_widgets.window, "menu_build1");
 	if (doc == NULL)
 		doc = document_get_current();
-	if (G_UNLIKELY(doc == NULL) ||
-		(FILETYPE_ID(doc->file_type) == GEANY_FILETYPES_NONE &&	doc->file_name == NULL))
+	if (doc == NULL || (FILETYPE_ID(doc->file_type) == GEANY_FILETYPES_NONE && doc->file_name == NULL))
 	{
 		gtk_widget_set_sensitive(menubar_build_menu, FALSE);
 		gtk_menu_item_remove_submenu(GTK_MENU_ITEM(menubar_build_menu));
@@ -1588,7 +1587,7 @@ void build_menu_update(GeanyDocument *doc)
 		gtk_widget_set_sensitive(menubar_build_menu, TRUE);
 
 	ft = doc->file_type;
-	g_return_if_fail(G_LIKELY(ft != NULL));
+	g_return_if_fail(ft != NULL);
 
 	menu_items = build_get_menu_items(ft->id);
 	/* Note: don't remove the submenu first because it can now cause an X hang if
@@ -1596,7 +1595,7 @@ void build_menu_update(GeanyDocument *doc)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menubar_build_menu),
 		menu_items->menu);
 
-	have_path = G_LIKELY(doc->file_name != NULL);
+	have_path = doc->file_name != NULL;
 
 	can_make = have_path && build_info.pid <= (GPid) 1;
 
@@ -1853,7 +1852,7 @@ show_make_custom(void)
 {
 	static GtkWidget *dialog = NULL;	/* keep dialog for combo history */
 
-	if (G_UNLIKELY(! dialog))
+	if (! dialog)
 		dialog = dialogs_show_input(_("Make Custom Target"),
 			_("Enter custom options here, all entered text is passed to the make command."),
 			build_info.custom_target, TRUE, &on_make_custom_input_response);
@@ -2055,7 +2054,7 @@ void build_init()
 	widgets.build_action = toolbar_get_action_by_name("Build");
 	toolmenu = geany_menu_button_action_get_menu(GEANY_MENU_BUTTON_ACTION(widgets.build_action));
 
-	if (G_UNLIKELY(toolmenu != NULL))
+	if (toolmenu != NULL)
 	{
 		/* build the code */
 		item = ui_image_menu_item_new(GEANY_STOCK_BUILD, _("_Build"));
