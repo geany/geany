@@ -277,6 +277,7 @@ static gboolean find_tree_iter_dir(GtkTreeIter *iter, const gchar *dir)
 {
 	GeanyDocument *doc;
 	gchar *name;
+	gboolean result;
 
 	if (utils_str_equal(dir, "."))
 		dir = GEANY_STRING_UNTITLED;
@@ -285,7 +286,11 @@ static gboolean find_tree_iter_dir(GtkTreeIter *iter, const gchar *dir)
 	g_return_val_if_fail(!doc, FALSE);
 
 	gtk_tree_model_get(GTK_TREE_MODEL(store_openfiles), iter, DOCUMENTS_SHORTNAME, &name, -1);
-	return utils_str_equal(name, dir);
+
+	result = utils_str_equal(name, dir);
+	g_free(name);
+
+	return result;
 }
 
 
