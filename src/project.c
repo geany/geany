@@ -98,7 +98,7 @@ static void on_entries_changed(GtkEditable *editable, PropertyDialogElements *e)
 #define PROJECT_DIR _("projects")
 
 
-void project_new()
+void project_new(void)
 {
 	GtkWidget *vbox;
 	GtkWidget *table;
@@ -243,7 +243,7 @@ static void run_open_dialog(GtkDialog *dialog)
 #endif
 
 
-void project_open()
+void project_open(void)
 {
 	const gchar *dir = local_prefs.project_file_path;
 #ifdef G_OS_WIN32
@@ -493,7 +493,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 }
 
 
-void project_properties()
+void project_properties(void)
 {
 	PropertyDialogElements *e = g_new(PropertyDialogElements, 1);
 	GeanyProject *p = app->project;
@@ -1024,7 +1024,7 @@ static gboolean write_config(gboolean emit_signal)
  * base path if it is absolute or it is built out of project file name's dir and base_path.
  * If there is no project or project's base_path is invalid, NULL will be returned.
  * The returned string should be freed when no longer needed. */
-gchar *project_get_base_path()
+gchar *project_get_base_path(void)
 {
 	GeanyProject *project = app->project;
 
@@ -1037,7 +1037,10 @@ gchar *project_get_base_path()
 			gchar *path;
 			gchar *dir = g_path_get_dirname(project->file_name);
 
-			path = g_strconcat(dir, G_DIR_SEPARATOR_S, project->base_path, NULL);
+			if (utils_str_equal(project->base_path, "./"))
+				return dir;
+			else
+				path = g_strconcat(dir, G_DIR_SEPARATOR_S, project->base_path, NULL);
 			g_free(dir);
 			return path;
 		}
@@ -1048,7 +1051,7 @@ gchar *project_get_base_path()
 
 /* Returns: NULL if the default path should be used, or a UTF-8 path.
  * Maybe in future this will support a separate project make path from base path. */
-gchar *project_get_make_dir()
+gchar *project_get_make_dir(void)
 {
 	GeanyProject *project = app->project;
 
@@ -1094,7 +1097,7 @@ void project_load_prefs(GKeyFile *config)
 
 
 /* Initialize project-related preferences in the Preferences dialog. */
-void project_setup_prefs()
+void project_setup_prefs(void)
 {
 	GtkWidget *path_entry = ui_lookup_widget(ui_widgets.prefs_dialog, "project_file_path_entry");
 	GtkWidget *path_btn = ui_lookup_widget(ui_widgets.prefs_dialog, "project_file_path_button");
@@ -1107,7 +1110,7 @@ void project_setup_prefs()
 
 
 /* Update project-related preferences after using the Preferences dialog. */
-void project_apply_prefs()
+void project_apply_prefs(void)
 {
 	GtkWidget *path_entry = ui_lookup_widget(ui_widgets.prefs_dialog, "project_file_path_entry");
 	const gchar *str;

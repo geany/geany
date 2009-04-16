@@ -1,3 +1,11 @@
+2009-04-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/project.c:
+   Add some missing 'void's in function definitions.
+   If the project base path is './', just use the path of the project
+   config file instead of appending './'.
+
+
 2009-04-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/keyfile.c, src/keyfile.h, src/project.c:
