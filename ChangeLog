@@ -4,6 +4,10 @@
    Add some missing 'void's in function definitions.
    If the project base path is './', just use the path of the project
    config file instead of appending './'.
+ * src/treeviews.c, src/project.c:
+   When a project is loaded, replace the project base path with the
+   project name in the Documents sidebar for parent items
+   (closes #2723679).
 
 
 2009-04-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

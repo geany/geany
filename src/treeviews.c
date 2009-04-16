@@ -39,6 +39,7 @@
 #include "ui_utils.h"
 #include "symbols.h"
 #include "navqueue.h"
+#include "project.h"
 
 #include <gdk/gdkkeysyms.h>
 
@@ -290,11 +291,34 @@ static gboolean find_tree_iter_dir(GtkTreeIter *iter, const gchar *dir)
 
 static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 {
-	gchar *dirname;
+	gchar *tmp_dirname;
+	gchar *project_base_path;
+	gchar *dirname = NULL;
 	static GtkTreeIter parent;
 	GtkTreeModel *model = GTK_TREE_MODEL(store_openfiles);
 
-	dirname = g_path_get_dirname(DOC_FILENAME(doc));
+	tmp_dirname = g_path_get_dirname(DOC_FILENAME(doc));
+	/* replace the project base path with the project name */
+	project_base_path = project_get_base_path();
+	if (project_base_path != NULL)
+	{
+		gsize len = strlen(project_base_path);
+		const gchar *rest;
+		/* check whether the dir name starts with the project base path */
+		if (strncmp(tmp_dirname, project_base_path, len) == 0)
+		{
+			rest = tmp_dirname + len;
+			dirname = g_strdup_printf("%s%s%s",
+				app->project->name,
+				(*rest != G_DIR_SEPARATOR && *rest != '\0') ? G_DIR_SEPARATOR_S : "",
+				rest);
+		}
+		g_free(project_base_path);
+	}
+	if (dirname == NULL)
+		dirname = tmp_dirname;
+	else
+		g_free(tmp_dirname);
 
 	if (gtk_tree_model_get_iter_first(model, &parent))
 	{
@@ -776,7 +800,9 @@ static void documents_menu_update(GtkTreeSelection *selection)
 		gtk_tree_model_get(model, &iter, DOCUMENTS_DOCUMENT, &doc,
 			DOCUMENTS_SHORTNAME, &shortname, -1);
 	}
-	path = NZV(shortname) && g_path_is_absolute(shortname);
+	path = NZV(shortname) &&
+		(g_path_is_absolute(shortname) ||
+		(app->project && g_str_has_prefix(shortname, app->project->name)));
 
 	/* can close all, save all (except shortname), but only reload individually ATM */
 	gtk_widget_set_sensitive(doc_items.close, sel);
