@@ -38,6 +38,7 @@
 #include "utils.h"
 #include "support.h"
 #include "document.h"
+#include "documentprivate.h"
 #include "msgwindow.h"
 #include "encodings.h"
 #include "callbacks.h"
@@ -301,6 +302,27 @@ static gchar *regex_match(regex_t *preg, const gchar *buffer, gsize size)
 #endif
 
 
+static void encodings_radio_item_change_cb(GtkCheckMenuItem *menuitem, gpointer user_data)
+{
+	GeanyDocument *doc = document_get_current();
+	guint i = GPOINTER_TO_INT(user_data);
+
+	if (ignore_callback || doc == NULL || encodings[i].charset == NULL ||
+		! gtk_check_menu_item_get_active(menuitem) ||
+		utils_str_equal(encodings[i].charset, doc->encoding))
+		return;
+
+	if (doc->readonly)
+	{
+		utils_beep();
+		return;
+	}
+	document_undo_add(doc, UNDO_ENCODING, g_strdup(doc->encoding));
+
+	document_set_encoding(doc, encodings[i].charset);
+}
+
+
 void encodings_finalize(void)
 {
 #ifdef HAVE_REGCOMP
@@ -342,7 +364,7 @@ void encodings_init(void)
 	/* create encodings submenu in document menu */
 	menu[0] = ui_lookup_widget(main_widgets.window, "set_encoding1_menu");
 	menu[1] = ui_lookup_widget(main_widgets.window, "menu_reload_as1_menu");
-	cb_func[0] = G_CALLBACK(on_encoding_change);
+	cb_func[0] = G_CALLBACK(encodings_radio_item_change_cb);
 	cb_func[1] = G_CALLBACK(on_reload_as_activate);
 
 	for (k = 0; k < 2; k++)

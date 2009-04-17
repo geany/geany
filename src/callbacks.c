@@ -479,10 +479,11 @@ on_reload_as_activate                  (GtkMenuItem     *menuitem,
 
 
 void
-on_images_and_text2_activate           (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+on_images_and_text2_activate           (GtkCheckMenuItem *menuitem,
+                                        gpointer          user_data)
 {
-	if (ignore_toolbar_toggle) return;
+	if (ignore_toolbar_toggle || ! gtk_check_menu_item_get_active(menuitem))
+		return;
 
 	gtk_toolbar_set_style(GTK_TOOLBAR(main_widgets.toolbar), GTK_TOOLBAR_BOTH);
 	toolbar_prefs.icon_style = GTK_TOOLBAR_BOTH;
@@ -490,10 +491,11 @@ on_images_and_text2_activate           (GtkMenuItem     *menuitem,
 
 
 void
-on_images_only2_activate               (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+on_images_only2_activate               (GtkCheckMenuItem *menuitem,
+                                        gpointer          user_data)
 {
-	if (ignore_toolbar_toggle) return;
+	if (ignore_toolbar_toggle || ! gtk_check_menu_item_get_active(menuitem))
+		return;
 
 	gtk_toolbar_set_style(GTK_TOOLBAR(main_widgets.toolbar), GTK_TOOLBAR_ICONS);
 	toolbar_prefs.icon_style = GTK_TOOLBAR_ICONS;
@@ -501,10 +503,11 @@ on_images_only2_activate               (GtkMenuItem     *menuitem,
 
 
 void
-on_text_only2_activate                 (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+on_text_only2_activate                 (GtkCheckMenuItem *menuitem,
+                                        gpointer          user_data)
 {
-	if (ignore_toolbar_toggle) return;
+	if (ignore_toolbar_toggle || ! gtk_check_menu_item_get_active(menuitem))
+		return;
 
 	gtk_toolbar_set_style(GTK_TOOLBAR(main_widgets.toolbar), GTK_TOOLBAR_TEXT);
 	toolbar_prefs.icon_style = GTK_TOOLBAR_TEXT;
@@ -591,10 +594,11 @@ on_toolbutton_search_clicked           (GtkAction       *action,
 
 
 void
-on_toolbar_large_icons1_activate       (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+on_toolbar_large_icons1_activate       (GtkCheckMenuItem *menuitem,
+                                        gpointer          user_data)
 {
-	if (ignore_toolbar_toggle) return;
+	if (ignore_toolbar_toggle || ! gtk_check_menu_item_get_active(menuitem))
+		return;
 
 	toolbar_prefs.icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
 	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
@@ -602,10 +606,11 @@ on_toolbar_large_icons1_activate       (GtkMenuItem     *menuitem,
 
 
 void
-on_toolbar_small_icons1_activate       (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+on_toolbar_small_icons1_activate       (GtkCheckMenuItem *menuitem,
+                                        gpointer          user_data)
 {
-	if (ignore_toolbar_toggle) return;
+	if (ignore_toolbar_toggle || ! gtk_check_menu_item_get_active(menuitem))
+		return;
 
 	toolbar_prefs.icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR;
 	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
@@ -613,10 +618,11 @@ on_toolbar_small_icons1_activate       (GtkMenuItem     *menuitem,
 
 
 void
-on_very_small_icons1_activate          (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+on_very_small_icons1_activate          (GtkCheckMenuItem *menuitem,
+                                        gpointer          user_data)
 {
-	if (ignore_toolbar_toggle) return;
+	if (ignore_toolbar_toggle || ! gtk_check_menu_item_get_active(menuitem))
+		return;
 
 	toolbar_prefs.icon_size = GTK_ICON_SIZE_MENU;
 	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
@@ -772,11 +778,11 @@ on_tv_notebook_switch_page_after       (GtkNotebook     *notebook,
 
 
 void
-on_crlf_activate                       (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+on_crlf_activate                       (GtkCheckMenuItem *menuitem,
+                                        gpointer          user_data)
 {
 	GeanyDocument *doc;
-	if (ignore_callback)
+	if (ignore_callback || ! gtk_check_menu_item_get_active(menuitem))
 		return;
 	doc = document_get_current();
 	g_return_if_fail(doc != NULL);
@@ -787,13 +793,13 @@ on_crlf_activate                       (GtkMenuItem     *menuitem,
 
 
 void
-on_lf_activate                         (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+on_lf_activate                         (GtkCheckMenuItem *menuitem,
+                                        gpointer          user_data)
 {
 	GeanyDocument *doc;
-	if (ignore_callback)
+	if (ignore_callback || ! gtk_check_menu_item_get_active(menuitem))
 		return;
-		doc = document_get_current();
+	doc = document_get_current();
 	g_return_if_fail(doc != NULL);
 
 	sci_convert_eols(doc->editor->sci, SC_EOL_LF);
@@ -802,11 +808,11 @@ on_lf_activate                         (GtkMenuItem     *menuitem,
 
 
 void
-on_cr_activate                         (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+on_cr_activate                         (GtkCheckMenuItem *menuitem,
+                                        gpointer          user_data)
 {
 	GeanyDocument *doc;
-	if (ignore_callback)
+	if (ignore_callback || ! gtk_check_menu_item_get_active(menuitem))
 		return;
 	doc = document_get_current();
 	g_return_if_fail(doc != NULL);
@@ -1592,28 +1598,6 @@ on_menu_remove_indicators1_activate    (GtkMenuItem     *menuitem,
 
 
 void
-on_encoding_change                     (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	GeanyDocument *doc = document_get_current();
-	guint i = GPOINTER_TO_INT(user_data);
-
-	if (ignore_callback || doc == NULL || encodings[i].charset == NULL ||
-		utils_str_equal(encodings[i].charset, doc->encoding))
-		return;
-
-	if (doc->readonly)
-	{
-		utils_beep();
-		return;
-	}
-	document_undo_add(doc, UNDO_ENCODING, g_strdup(doc->encoding));
-
-	document_set_encoding(doc, encodings[i].charset);
-}
-
-
-void
 on_print1_activate                     (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
@@ -2085,11 +2069,11 @@ gboolean on_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer user
 }
 
 
-static void set_indent_type(GeanyIndentType type)
+static void set_indent_type(GtkCheckMenuItem *menuitem, GeanyIndentType type)
 {
 	GeanyDocument *doc;
 
-	if (ignore_callback)
+	if (ignore_callback || ! gtk_check_menu_item_get_active(menuitem))
 		return;
 
 	doc = document_get_current();
@@ -2101,26 +2085,26 @@ static void set_indent_type(GeanyIndentType type)
 
 
 void
-on_tabs1_activate                      (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+on_tabs1_activate                      (GtkCheckMenuItem *menuitem,
+                                        gpointer          user_data)
 {
-	set_indent_type(GEANY_INDENT_TYPE_TABS);
+	set_indent_type(menuitem, GEANY_INDENT_TYPE_TABS);
 }
 
 
 void
-on_spaces1_activate                    (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+on_spaces1_activate                    (GtkCheckMenuItem *menuitem,
+                                        gpointer          user_data)
 {
-	set_indent_type(GEANY_INDENT_TYPE_SPACES);
+	set_indent_type(menuitem, GEANY_INDENT_TYPE_SPACES);
 }
 
 
 void
-on_tabs_and_spaces1_activate           (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+on_tabs_and_spaces1_activate           (GtkCheckMenuItem *menuitem,
+                                        gpointer          user_data)
 {
-	set_indent_type(GEANY_INDENT_TYPE_BOTH);
+	set_indent_type(menuitem, GEANY_INDENT_TYPE_BOTH);
 }
 
 
