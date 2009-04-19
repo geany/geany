@@ -1,3 +1,13 @@
+2009-04-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/dialogs.c:
+   Hide the extra file open dialog options in an expander to make the
+   dialog more compact by default and to provide more space for the
+   file view.
+   Remove the filename field as it is also provided by GTK itself with
+   more features like auto-completion.
+
+
 2009-04-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/callbacks.c, src/callbacks.h, src/encodings.c, src/filetypes.c:

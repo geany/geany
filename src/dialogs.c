@@ -111,46 +111,11 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 
 
 #if ! GEANY_USE_WIN32_DIALOG
-/* callback for the text entry for typing in filename */
-static void
-on_file_open_entry_activate            (GtkEntry        *entry,
-                                        gpointer         user_data)
-{
-	gchar *locale_filename = utils_get_locale_from_utf8(gtk_entry_get_text(entry));
-
-	if (g_file_test(locale_filename, G_FILE_TEST_IS_DIR))
-	{
-		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(ui_widgets.open_filesel), locale_filename);
-	}
-	else if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
-	{
-		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(ui_widgets.open_filesel), locale_filename);
-		on_file_open_dialog_response(GTK_DIALOG(ui_widgets.open_filesel), GTK_RESPONSE_ACCEPT, NULL);
-	}
-
-	g_free(locale_filename);
-}
-#endif
-
-
-#if ! GEANY_USE_WIN32_DIALOG
 static void
 on_file_open_selection_changed         (GtkFileChooser  *filechooser,
                                         gpointer         user_data)
 {
-	gchar *filename = gtk_file_chooser_get_filename(filechooser);
 	gboolean is_on = gtk_file_chooser_get_show_hidden(filechooser);
-
-	if (filename)
-	{
-		/* try to get the UTF-8 equivalent for the filename, fallback to filename if error */
-		gchar *utf8_filename = utils_get_utf8_from_locale(filename);
-
-		gtk_entry_set_text(GTK_ENTRY(ui_lookup_widget(
-				GTK_WIDGET(filechooser), "file_entry")), utf8_filename);
-		g_free(utf8_filename);
-		g_free(filename);
-	}
 
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(
 			ui_lookup_widget(GTK_WIDGET(filechooser), "check_hidden")), is_on);
@@ -292,11 +257,13 @@ void dialogs_show_open_file()
 #if ! GEANY_USE_WIN32_DIALOG
 static GtkWidget *add_file_open_extra_widget()
 {
-	GtkWidget *vbox, *table, *file_entry, *check_hidden;
+	GtkWidget *expander, *vbox, *table, *check_hidden;
 	GtkWidget *filetype_ebox, *filetype_label, *filetype_combo;
 	GtkWidget *encoding_ebox, *encoding_label, *encoding_combo;
 
+	expander = gtk_expander_new_with_mnemonic(_("_More Options"));
 	vbox = gtk_vbox_new(FALSE, 6);
+	gtk_container_add(GTK_CONTAINER(expander), vbox);
 
 	table = gtk_table_new(2, 4, FALSE);
 
@@ -328,21 +295,7 @@ static GtkWidget *add_file_open_extra_widget()
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 5);
 
-	/* line 2 with filename entry and filetype combo */
-	file_entry = gtk_entry_new();
-	gtk_widget_show(file_entry);
-	ui_entry_add_clear_icon(file_entry);
-	/*gtk_editable_set_editable(GTK_EDITABLE(file_entry), FALSE);*/
-	gtk_entry_set_activates_default(GTK_ENTRY(file_entry), TRUE);
-	gtk_table_attach(GTK_TABLE(table), file_entry, 0, 1, 1, 2,
-					(GtkAttachOptions) (GTK_FILL | GTK_EXPAND),
-					(GtkAttachOptions) (0), 0, 5);
-
-	/* spacing */
-	gtk_table_attach(GTK_TABLE(table), gtk_label_new(""), 1, 2, 1, 2,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 5, 5);
-
+	/* line 2 with filetype combo */
 	filetype_label = gtk_label_new(_("Set filetype:"));
 	gtk_misc_set_alignment(GTK_MISC(filetype_label), 1, 0);
 	gtk_table_attach(GTK_TABLE(table), filetype_label, 2, 3, 1, 2,
@@ -362,13 +315,9 @@ static GtkWidget *add_file_open_extra_widget()
 	gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 0);
 	gtk_widget_show_all(vbox);
 
-	g_signal_connect(file_entry, "activate",
-				G_CALLBACK(on_file_open_entry_activate), NULL);
 	g_signal_connect(check_hidden, "toggled",
 				G_CALLBACK(on_file_open_check_hidden_toggled), NULL);
 
-	g_object_set_data_full(G_OBJECT(ui_widgets.open_filesel), "file_entry",
-				g_object_ref(file_entry), (GDestroyNotify)g_object_unref);
 	g_object_set_data_full(G_OBJECT(ui_widgets.open_filesel), "check_hidden",
 				g_object_ref(check_hidden), (GDestroyNotify)g_object_unref);
 	g_object_set_data_full(G_OBJECT(ui_widgets.open_filesel), "filetype_combo",
@@ -376,7 +325,7 @@ static GtkWidget *add_file_open_extra_widget()
 	g_object_set_data_full(G_OBJECT(ui_widgets.open_filesel), "encoding_combo",
 				g_object_ref(encoding_combo), (GDestroyNotify)g_object_unref);
 
-	return vbox;
+	return expander;
 }
 #endif
 
