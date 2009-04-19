@@ -67,10 +67,8 @@ enum
 
 #if ! GEANY_USE_WIN32_DIALOG
 static GtkWidget *add_file_open_extra_widget(void);
-#endif
 
 
-#if ! GEANY_USE_WIN32_DIALOG
 static void
 on_file_open_dialog_response           (GtkDialog *dialog,
                                         gint response,
@@ -107,35 +105,32 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 		gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
 			app->project->base_path, NULL);
 }
-#endif
 
 
-#if ! GEANY_USE_WIN32_DIALOG
-static void
-on_file_open_selection_changed         (GtkFileChooser  *filechooser,
-                                        gpointer         user_data)
+static void on_file_open_notify(GObject *filechooser, GParamSpec *pspec, gpointer data)
 {
-	gboolean is_on = gtk_file_chooser_get_show_hidden(filechooser);
+	const gchar *name;
+	GValue *value;
+
+	name = g_intern_string(pspec->name);
+	value = g_new0(GValue, 1);
+	g_value_init(value, pspec->value_type);
+	g_object_get_property(filechooser, name, value);
 
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(
-			ui_lookup_widget(GTK_WIDGET(filechooser), "check_hidden")), is_on);
+		ui_lookup_widget(GTK_WIDGET(filechooser), "check_hidden")), g_value_get_boolean(value));
 }
-#endif
 
 
-#if ! GEANY_USE_WIN32_DIALOG
 static void
-on_file_open_check_hidden_toggled      (GtkToggleButton *togglebutton,
-                                        gpointer         user_data)
+on_file_open_check_hidden_toggled(GtkToggleButton *togglebutton, gpointer user_data)
 {
 	gboolean is_on = gtk_toggle_button_get_active(togglebutton);
 
 	gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(ui_widgets.open_filesel), is_on);
 }
-#endif
 
 
-#if ! GEANY_USE_WIN32_DIALOG
 static void create_open_file_dialog(void)
 {
 	GtkWidget *filetype_combo, *encoding_combo;
@@ -202,8 +197,8 @@ static void create_open_file_dialog(void)
 	gtk_combo_box_append_text(GTK_COMBO_BOX(encoding_combo), _("Detect from file"));
 	gtk_combo_box_set_active(GTK_COMBO_BOX(encoding_combo), GEANY_ENCODINGS_MAX);
 
-	g_signal_connect(ui_widgets.open_filesel, "selection-changed",
-				G_CALLBACK(on_file_open_selection_changed), NULL);
+	g_signal_connect(ui_widgets.open_filesel, "notify::show-hidden",
+				G_CALLBACK(on_file_open_notify), NULL);
 	g_signal_connect(ui_widgets.open_filesel, "delete-event",
 				G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 	g_signal_connect(ui_widgets.open_filesel, "response",

@@ -6,6 +6,9 @@
    file view.
    Remove the filename field as it is also provided by GTK itself with
    more features like auto-completion.
+   Watch the 'show-hidden' property of the file chooser widget using
+   GObject's "notify" signal which gives accurate results and remove
+   the hack using the "selection-changed" signal.
 
 
 2009-04-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
