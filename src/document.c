@@ -2702,7 +2702,9 @@ const GdkColor *document_get_status_color(GeanyDocument *doc)
 {
 	static GdkColor red = {0, 0xFFFF, 0, 0};
 	static GdkColor green = {0, 0, 0x7FFF, 0};
-	/*static GdkColor orange = {0, 0xFFFF, 0x7FFF, 0};*/
+#if defined(HAVE_GIO) && defined(USE_GIO_FILEMON)
+	static GdkColor orange = {0, 0xFFFF, 0x7FFF, 0};
+#endif
 	GdkColor *color = NULL;
 
 	g_return_val_if_fail(doc != NULL, NULL);
