@@ -61,6 +61,7 @@ libtagmanager_a_SOURCES =\
 	sh.c\
 	vhdl.c\
 	actionscript.c\
+	nsis.c\
 	ctags.c\
 	entry.c\
 	get.c\

@@ -558,7 +558,7 @@ static void init_builtin_filetypes(void)
 
 #define NSIS
 	ft = filetypes[GEANY_FILETYPES_NSIS];
-	ft->lang = -2;
+	ft->lang = 35;
 	ft->name = g_strdup("NSIS");
 	ft->title = g_strdup_printf(_("%s source file"), "NSIS");
 	ft->extension = g_strdup("nsis");

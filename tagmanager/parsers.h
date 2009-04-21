@@ -49,7 +49,8 @@
     GLSLParser, \
     MatlabParser, \
     ValaParser, \
-    ActionScriptParser
+    ActionScriptParser, \
+    NsisParser
 
 /*
 langType of each parser
@@ -88,6 +89,7 @@ langType of each parser
 32  MatlabParser
 33  ValaParser
 34  ActionScriptParser
+35  NsisParser
 */
 #endif	/* _PARSERS_H */
 

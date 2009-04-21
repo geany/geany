@@ -602,6 +602,13 @@ static void add_top_level_items(GeanyDocument *doc)
 				&tv_iters.tag_macro, _("Keys"), "classviewer-var",
 				NULL);
 			break;
+		case GEANY_FILETYPES_NSIS:
+			tag_list_add_groups(tag_store,
+				&tv_iters.tag_namespace, _("Sections"), "classviewer-other",
+				&tv_iters.tag_function, _("Functions"), "classviewer-method",
+				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
+				NULL);
+			break;
 		case GEANY_FILETYPES_LATEX:
 		{
 			tag_list_add_groups(tag_store,

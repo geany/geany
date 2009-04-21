@@ -4,6 +4,9 @@
    src/prefs.c:
    Replace our own GEANY_KEYS_MODIFIER_MASK by
    gtk_accelerator_get_default_mod_mask() which gives the same result.
+ * src/filetypes.c, src/symbols.c, tagmanager/Makefile.am,
+   tagmanager/makefile.win32, tagmanager/parsers.h, wscript:
+   Add a trivial symbol parser for NSIS files.
 
 
 2009-04-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
