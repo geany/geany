@@ -108,11 +108,13 @@ static struct
 widgets;
 
 
+#ifndef G_OS_WIN32
+static void build_exit_cb(GPid child_pid, gint status, gpointer user_data);
 static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data);
+#endif
 static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, gboolean autoclose);
 static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *dir);
 static void set_stop_button(gboolean stop);
-static void build_exit_cb(GPid child_pid, gint status, gpointer user_data);
 static void run_exit_cb(GPid child_pid, gint status, gpointer user_data);
 static void on_build_arguments_activate(GtkMenuItem *menuitem, gpointer user_data);
 
@@ -124,6 +126,8 @@ static void on_build_execute_activate(GtkMenuItem *menuitem, gpointer user_data)
 static void on_build_next_error(GtkMenuItem *menuitem, gpointer user_data);
 static void on_build_previous_error(GtkMenuItem *menuitem, gpointer user_data);
 static void kill_process(GPid *pid);
+static void show_build_result_message(gboolean failure);
+static void process_build_output_line(const gchar *line, gint color);
 
 
 void build_finalize()
@@ -422,6 +426,44 @@ static gchar *quote_executable(const gchar *cmd)
 	g_strfreev(fields);
 	return result;
 }
+
+static void parse_build_output(const gchar **output, gint status)
+{
+	guint x, i, len;
+	gchar *line, **lines;
+
+	for (x = 0; x < 2; x++)
+	{
+		if (NZV(output[x]))
+		{
+			lines = g_strsplit_set(output[x], "\r\n", -1);
+			len = g_strv_length(lines);
+
+			for (i = 0; i < len; i++)
+			{
+				if (NZV(lines[i]))
+				{
+					line = lines[i];
+					while (*line != '\0')
+					{	/* replace any conrol characters in the output */
+						if (*line < 32)
+							*line = 32;
+						line++;
+					}
+					process_build_output_line(lines[i], COLOR_BLACK);
+				}
+			}
+			g_strfreev(lines);
+		}
+	}
+
+	show_build_result_message(status != 0);
+	utils_beep();
+
+	build_info.pid = 0;
+	/* enable build items again */
+	build_menu_update(NULL);
+}
 #endif
 
 
@@ -438,8 +480,13 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 	gchar	*locale_filename;
 	gchar	*executable;
 	gchar	*tmp;
+#ifdef G_OS_WIN32
+	gchar	*output[2];
+	gint	 status;
+#else
 	gint     stdout_fd;
 	gint     stderr_fd;
+#endif
 
 	g_return_val_if_fail(doc != NULL, (GPid) 1);
 
@@ -491,8 +538,14 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 	build_info.dir = g_strdup(working_dir);
 	build_info.file_type_id = FILETYPE_ID(doc->file_type);
 
-	if (! g_spawn_async_with_pipes(working_dir, argv, NULL, G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD,
-						NULL, NULL, &(build_info.pid), NULL, &stdout_fd, &stderr_fd, &error))
+#ifdef G_OS_WIN32
+	if (! utils_spawn_sync(working_dir, argv, NULL, G_SPAWN_SEARCH_PATH,
+			NULL, NULL, &output[0], &output[1], &status, &error))
+#else
+	if (! g_spawn_async_with_pipes(working_dir, argv, NULL,
+			G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD, NULL, NULL,
+			&(build_info.pid), NULL, &stdout_fd, &stderr_fd, &error))
+#endif
 	{
 		geany_debug("g_spawn_async_with_pipes() failed: %s", error->message);
 		ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
@@ -504,6 +557,11 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 		return (GPid) 0;
 	}
 
+#ifdef G_OS_WIN32
+	parse_build_output((const gchar**) output, status);
+	g_free(output[0]);
+	g_free(output[1]);
+#else
 	if (build_info.pid > 0)
 	{
 		g_child_watch_add(build_info.pid, (GChildWatchFunc) build_exit_cb, NULL);
@@ -516,6 +574,7 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 		TRUE, build_iofunc, GINT_TO_POINTER(0));
 	utils_set_up_io_channel(stderr_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
 		TRUE, build_iofunc, GINT_TO_POINTER(1));
+#endif
 
 	g_strfreev(argv);
 	g_free(working_dir);
@@ -762,47 +821,54 @@ static GPid build_run_cmd(GeanyDocument *doc)
 }
 
 
+static void process_build_output_line(const gchar *str, gint color)
+{
+	gchar *msg, *tmp;
+
+	msg = g_strdup(str);
+
+	g_strchomp(msg);
+
+	if (build_parse_make_dir(msg, &tmp))
+	{
+		setptr(current_dir_entered, tmp);
+	}
+
+	if (editor_prefs.use_indicators)
+	{
+		gchar *filename;
+		gint line;
+
+		msgwin_parse_compiler_error_line(msg, current_dir_entered, &filename, &line);
+		if (line != -1 && filename != NULL)
+		{
+			GeanyDocument *doc = document_find_by_filename(filename);
+
+			if (doc)
+				editor_indicator_set_on_line(doc->editor, GEANY_INDICATOR_ERROR, line - 1);
+			color = COLOR_RED;	/* error message parsed on the line */
+		}
+		g_free(filename);
+	}
+	msgwin_compiler_add_string(color, msg);
+
+	g_free(msg);
+}
+
+
+#ifndef G_OS_WIN32
 static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 {
 	if (cond & (G_IO_IN | G_IO_PRI))
 	{
-		/*GIOStatus s;*/
 		gchar *msg;
 
 		while (g_io_channel_read_line(ioc, &msg, NULL, NULL, NULL) && msg)
 		{
-			/*if (s != G_IO_STATUS_NORMAL && s != G_IO_STATUS_EOF) break;*/
-			gint color;
-			gchar *tmp;
+			gint color = (GPOINTER_TO_INT(data)) ? COLOR_DARK_RED : COLOR_BLACK;
 
-			color = (GPOINTER_TO_INT(data)) ? COLOR_DARK_RED : COLOR_BLACK;
-			g_strchomp(msg);
-
-			if (build_parse_make_dir(msg, &tmp))
-			{
-				setptr(current_dir_entered, tmp);
-			}
-
-			if (editor_prefs.use_indicators)
-			{
-				gchar *filename;
-				gint line;
-
-				msgwin_parse_compiler_error_line(msg, current_dir_entered,
-					&filename, &line);
-				if (line != -1 && filename != NULL)
-				{
-					GeanyDocument *doc = document_find_by_filename(filename);
-
-					if (doc)
-						editor_indicator_set_on_line(doc->editor, GEANY_INDICATOR_ERROR, line - 1);
-					color = COLOR_RED;	/* error message parsed on the line */
-				}
-				g_free(filename);
-			}
-			msgwin_compiler_add_string(color, msg);
-
-			g_free(msg);
+			process_build_output_line(msg, color);
+ 			g_free(msg);
 		}
 	}
 	if (cond & (G_IO_ERR | G_IO_HUP | G_IO_NVAL))
@@ -810,6 +876,7 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 
 	return TRUE;
 }
+#endif
 
 
 gboolean build_parse_make_dir(const gchar *string, gchar **prefix)
@@ -882,9 +949,9 @@ static void show_build_result_message(gboolean failure)
 }
 
 
+#ifndef G_OS_WIN32
 static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 {
-#ifdef G_OS_UNIX
 	gboolean failure = FALSE;
 
 	if (WIFEXITED(status))
@@ -902,9 +969,6 @@ static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 		failure = TRUE;
 	}
 	show_build_result_message(failure);
-#else
-	show_build_result_message(! win32_get_exit_status(child_pid));
-#endif
 
 	utils_beep();
 	g_spawn_close_pid(child_pid);
@@ -914,6 +978,7 @@ static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 	build_menu_update(NULL);
 	ui_progress_bar_stop();
 }
+#endif
 
 
 static void run_exit_cb(GPid child_pid, gint status, gpointer user_data)
