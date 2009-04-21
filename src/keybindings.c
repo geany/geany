@@ -1078,7 +1078,7 @@ static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer 
 	document_check_disk_status(doc, FALSE);
 
 	keyval = ev->keyval;
-    state = ev->state & GEANY_KEYS_MODIFIER_MASK;
+    state = ev->state & gtk_accelerator_get_default_mod_mask();
 
 	/* hack to get around that CTRL+Shift+r results in GDK_R not GDK_r */
 	if ((ev->state & GDK_SHIFT_MASK) || (ev->state & GDK_LOCK_MASK))

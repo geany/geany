@@ -2139,7 +2139,7 @@ on_escape_key_press_event              (GtkWidget       *widget,
                                         GdkEventKey     *event,
                                         gpointer         user_data)
 {
-	guint state = event->state & GEANY_KEYS_MODIFIER_MASK;
+	guint state = event->state & gtk_accelerator_get_default_mod_mask();
 
 	/* make pressing escape in the sidebar and toolbar focus the editor */
 	if (event->keyval == GDK_Escape && state == 0)

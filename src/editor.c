@@ -203,7 +203,7 @@ static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *
 		(gint)event->x, (gint)event->y, FALSE);
 	if (event->button == 1)
 	{
-		guint state = event->state & GEANY_KEYS_MODIFIER_MASK;
+		guint state = event->state & gtk_accelerator_get_default_mod_mask();
 
 		if (event->type == GDK_BUTTON_PRESS && editor_prefs.disable_dnd)
 		{

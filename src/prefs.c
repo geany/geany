@@ -1220,7 +1220,7 @@ static gboolean on_keytype_dialog_response(GtkWidget *dialog, GdkEventKey *event
 	gchar *str;
 	gint state;
 
-    state = event->state & GEANY_KEYS_MODIFIER_MASK;
+    state = event->state & gtk_accelerator_get_default_mod_mask();
 
 	if (event->keyval == GDK_Escape)
 		return FALSE;	/* close the dialog, don't allow escape when detecting keybindings. */
