@@ -3476,6 +3476,7 @@ SaveAll            Save all open files
 Reload             Reload the current file from disk
 Close              Close the current file
 CloseAll           Close all open files
+Print              Print the current file
 Cut                Cut the current selection
 Copy               Copy the current selection
 Paste              Paste the contents of the clipboard

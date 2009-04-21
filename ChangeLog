@@ -7,6 +7,8 @@
  * src/plugins.c, src/plugindata.h, plugins/geanyfunctions.h:
    Add utils_str_middle_truncate() and
    document_get_basename_for_display() to the plugin API.
+ * doc/geany.html, doc/geany.txt, src/toolbar.c:
+   Add new toolbar element: Print (patch by Roland Baudin, thanks).
 
 
 2009-04-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
