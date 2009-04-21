@@ -60,7 +60,7 @@
 #include "geanymenubuttonaction.h"
 
 
-GeanyBuildInfo build_info = {GBO_COMPILE, 0, NULL, GEANY_FILETYPES_NONE, NULL};
+GeanyBuildInfo build_info = {GBO_COMPILE, 0, NULL, GEANY_FILETYPES_NONE, NULL, 0};
 
 static gchar *current_dir_entered = NULL;
 
@@ -537,6 +537,7 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 	g_free(build_info.dir);
 	build_info.dir = g_strdup(working_dir);
 	build_info.file_type_id = FILETYPE_ID(doc->file_type);
+	build_info.message_count = 0;
 
 #ifdef G_OS_WIN32
 	if (! utils_spawn_sync(working_dir, argv, NULL, G_SPAWN_SEARCH_PATH,
@@ -832,16 +833,17 @@ static void process_build_output_line(const gchar *str, gint color)
 	if (! NZV(msg))
 		return;
 
-	if (build_parse_make_dir(msg, &tmp))
-	{
-		setptr(current_dir_entered, tmp);
-	}
-
-	if (editor_prefs.use_indicators)
+	if (editor_prefs.use_indicators && build_info.message_count < GEANY_BUILD_ERR_HIGHLIGHT_MAX)
 	{
 		gchar *filename;
 		gint line;
 
+		build_info.message_count++;
+
+		if (build_parse_make_dir(msg, &tmp))
+		{
+			setptr(current_dir_entered, tmp);
+		}
 		msgwin_parse_compiler_error_line(msg, current_dir_entered, &filename, &line);
 		if (line != -1 && filename != NULL)
 		{

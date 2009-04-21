@@ -25,6 +25,8 @@
 #ifndef GEANY_BUILD_H
 #define GEANY_BUILD_H 1
 
+#define GEANY_BUILD_ERR_HIGHLIGHT_MAX 50
+
 typedef enum	/* Geany Build Options */
 {
 	GBO_COMPILE,
@@ -41,6 +43,7 @@ typedef struct GeanyBuildInfo
 	gchar			*dir;
 	guint			 file_type_id;
 	gchar			*custom_target;
+	gint			 message_count;
 } GeanyBuildInfo;
 
 extern GeanyBuildInfo build_info;
