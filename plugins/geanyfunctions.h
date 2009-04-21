@@ -48,6 +48,8 @@
 	geany_functions->p_document->rename_file
 #define document_get_status_color \
 	geany_functions->p_document->get_status_color
+#define document_get_basename_for_display \
+	geany_functions->p_document->get_basename_for_display
 #define editor_get_indent_prefs \
 	geany_functions->p_editor->get_indent_prefs
 #define editor_create_widget \
@@ -180,6 +182,8 @@
 	geany_functions->p_utils->open_browser
 #define utils_string_replace_first \
 	geany_functions->p_utils->string_replace_first
+#define utils_str_middle_truncate \
+	geany_functions->p_utils->str_middle_truncate
 #define ui_dialog_vbox_new \
 	geany_functions->p_ui->dialog_vbox_new
 #define ui_frame_new_with_alignment \

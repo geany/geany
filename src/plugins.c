@@ -139,7 +139,8 @@ static DocumentFuncs doc_funcs = {
 	&document_index,
 	&document_save_file_as,
 	&document_rename_file,
-	&document_get_status_color
+	&document_get_status_color,
+	&document_get_basename_for_display
 };
 
 static EditorFuncs editor_funcs = {
@@ -224,7 +225,8 @@ static UtilsFuncs utils_funcs = {
 	&utils_str_casecmp,
 	&utils_get_date_time,
 	&utils_open_browser,
-	&utils_string_replace_first
+	&utils_string_replace_first,
+	&utils_str_middle_truncate
 };
 
 static UIUtilsFuncs uiutils_funcs = {

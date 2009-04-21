@@ -45,7 +45,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 139,
+	GEANY_API_VERSION = 140,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -254,6 +254,7 @@ typedef struct DocumentFuncs
 	gboolean	(*save_file_as) (struct GeanyDocument *doc, const gchar *utf8_fname);
 	void		(*rename_file) (struct GeanyDocument *doc, const gchar *new_filename);
 	const GdkColor*	(*get_status_color) (struct GeanyDocument *doc);
+	gchar*		(*get_basename_for_display) (struct GeanyDocument *doc, gint length);
 }
 DocumentFuncs;
 
@@ -361,6 +362,7 @@ typedef struct UtilsFuncs
 	void		(*open_browser) (const gchar *uri);
 	guint		(*string_replace_first) (GString *haystack, const gchar *needle,
 				 const gchar *replace);
+	gchar*		(*str_middle_truncate) (const gchar *string, guint truncate_length);
 }
 UtilsFuncs;
 
