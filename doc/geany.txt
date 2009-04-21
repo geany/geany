@@ -3704,6 +3704,24 @@ allow_always_save                 Whether files can be saved always, even if   f
 emulation                         Terminal emulation mode. Only change this    xterm
                                   if you have VTE termcap files other than
                                   ``vte/termcap/xterm``.
+**File related**
+use_safe_file_saving              Defines the mode how Geany saves files to    false
+                                  disk. If disabled, Geany directly writes
+                                  the content of the document to disk. This
+                                  might cause in loss of data when there is
+                                  no more free space on disk to save the
+                                  file. When set to true, Geany first saves
+                                  the contents into a temporary file and if
+                                  this succeeded, the temporary file is
+                                  moved to the real file to save.
+                                  This gives better error checking in case of
+                                  no more free disk space. But it also
+                                  destroys hard links of the original file
+                                  and its permissions (e.g. executable flags
+                                  are reset). Use this with care as it can
+                                  break things seriously.
+                                  The better approach would be to ensure your
+                                  disk won't run out of free space.
 ================================  ===========================================  ==================
 
 

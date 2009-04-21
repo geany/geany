@@ -1680,34 +1680,55 @@ _("An error occurred while converting the file from UTF-8 in \"%s\". The file re
 }
 
 
-static gint write_data_to_disk(GeanyDocument *doc, const gchar *locale_filename,
-							   const gchar *data, gint len)
+static gchar *write_data_to_disk(GeanyDocument *doc, const gchar *locale_filename,
+								 const gchar *data, gint len)
 {
 	FILE *fp;
 	gint bytes_written;
 	gint err = 0;
+	GError *error = NULL;
 
-	g_return_val_if_fail(data != NULL, EINVAL);
+	g_return_val_if_fail(doc != NULL, g_strdup(g_strerror(EINVAL)));
+	g_return_val_if_fail(data != NULL, g_strdup(g_strerror(EINVAL)));
 
-	fp = g_fopen(locale_filename, "wb");
-	if (G_UNLIKELY(fp == NULL))
-		return errno;
+	/* we never use g_file_set_contents() for remote files as Geany only writes such files
+	 * 'into' the Fuse mountpoint, the file itself is then written by GVfs on the target
+	 * remote filesystem. */
+	if (! file_prefs.use_safe_file_saving || doc->priv->is_remote)
+	{
+		fp = g_fopen(locale_filename, "wb");
+		if (G_UNLIKELY(fp == NULL))
+			return g_strdup(g_strerror(errno));
 
-	bytes_written = fwrite(data, sizeof(gchar), len, fp);
+		bytes_written = fwrite(data, sizeof(gchar), len, fp);
 
-	if (G_UNLIKELY(len != bytes_written))
-		err = errno;
+		if (G_UNLIKELY(len != bytes_written))
+			err = errno;
 
-	fclose(fp);
+		fclose(fp);
+
+		if (err != 0)
+			return g_strdup(g_strerror(err));
+	}
+	else
+	{
+		g_file_set_contents(locale_filename, data, len, &error);
+		if (error != NULL)
+		{
+			gchar *msg = g_strdup(error->message);
+			g_error_free(error);
+			return msg;
+		}
+	}
 
 	/* now the file is on disk, set real_path */
-	if (err == 0 && doc->real_path == NULL)
+	if (doc->real_path == NULL)
 	{
 		doc->real_path = tm_get_real_path(locale_filename);
 		doc->priv->is_remote = utils_is_remote_path(locale_filename);
 	}
 
-	return err;
+	return NULL;
 }
 
 
@@ -1726,9 +1747,9 @@ static gint write_data_to_disk(GeanyDocument *doc, const gchar *locale_filename,
  **/
 gboolean document_save_file(GeanyDocument *doc, gboolean force)
 {
+	gchar *errmsg;
 	gchar *data;
 	gsize len;
-	gint err;
 	gchar *locale_filename;
 
 	g_return_val_if_fail(doc != NULL, FALSE);
@@ -1793,17 +1814,17 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	doc->priv->file_disk_status = FILE_IGNORE;
 
 	/* actually write the content of data to the file on disk */
-	err = write_data_to_disk(doc, locale_filename, data, len);
+	errmsg = write_data_to_disk(doc, locale_filename, data, len);
 	g_free(data);
 
-	if (G_UNLIKELY(err != 0))
+	if (errmsg != NULL)
 	{
-		ui_set_statusbar(TRUE, _("Error saving file (%s)."), g_strerror(err));
-		dialogs_show_msgbox_with_secondary(GTK_MESSAGE_ERROR,
-			_("Error saving file."), g_strerror(err));
+		ui_set_statusbar(TRUE, _("Error saving file (%s)."), errmsg);
+		dialogs_show_msgbox_with_secondary(GTK_MESSAGE_ERROR, _("Error saving file."), errmsg);
 		doc->priv->file_disk_status = FILE_OK;
 		utils_beep();
 		g_free(locale_filename);
+		g_free(errmsg);
 		return FALSE;
 	}
 

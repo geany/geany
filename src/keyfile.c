@@ -172,6 +172,8 @@ static void init_pref_groups(void)
 		"show_symbol_list_expanders", TRUE);
 	stash_group_add_boolean(group, &ui_prefs.allow_always_save,
 		"allow_always_save", FALSE);
+	stash_group_add_boolean(group, &file_prefs.use_safe_file_saving,
+		"use_safe_file_saving", FALSE);
 }
 
 
