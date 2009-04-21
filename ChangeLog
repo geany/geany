@@ -1,3 +1,11 @@
+2009-04-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/dialogs.c, src/document.c, src/document.h, src/treeviews.c,
+   src/utils.c, src/utils.h:
+   Ellipsize tab labels and some status messages for very long
+   filenames (closes #2777348).
+
+
 2009-04-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/callbacks.c, src/editor.c, src/keybindings.c, src/keybindings.h,

@@ -225,4 +225,6 @@ void document_update_tab_label(GeanyDocument *doc);
 
 const GdkColor *document_get_status_color(GeanyDocument *doc);
 
+gchar *document_get_basename_for_display(GeanyDocument *doc, gint length);
+
 #endif

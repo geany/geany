@@ -648,10 +648,7 @@ gboolean dialogs_show_unsaved_file(GeanyDocument *doc)
 		document_get_notebook_page(doc));
 	main_status.quitting = old_quitting_state;
 
-	if (doc->file_name != NULL)
-	{
-		short_fn = g_path_get_basename(doc->file_name);
-	}
+	short_fn = document_get_basename_for_display(doc, -1);
 
 	msg = g_strdup_printf(_("The file '%s' is not saved."),
 		(short_fn != NULL) ? short_fn : GEANY_STRING_UNTITLED);
@@ -942,6 +939,7 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 {
 	GtkWidget *dialog, *label, *table, *hbox, *image, *perm_table, *check, *vbox;
 	gchar *file_size, *title, *base_name, *time_changed, *time_modified, *time_accessed, *enctext;
+	gchar *short_name;
 #ifdef HAVE_SYS_TYPES_H
 	struct stat st;
 	off_t filesize;
@@ -1003,10 +1001,12 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 #endif
 
 	base_name = g_path_get_basename(doc->file_name);
-	title = g_strconcat(base_name, " ", _("Properties"), NULL);
+	short_name = utils_str_middle_truncate(base_name, 30);
+	title = g_strconcat(short_name, " ", _("Properties"), NULL);
 	dialog = gtk_dialog_new_with_buttons(title, GTK_WINDOW(main_widgets.window),
 										 GTK_DIALOG_DESTROY_WITH_PARENT,
 										 GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
+	g_free(short_name);
 	g_free(title);
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));

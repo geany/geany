@@ -402,6 +402,60 @@ gint utils_str_casecmp(const gchar *s1, const gchar *s2)
 
 
 /**
+ *  Truncates the input string to a given length.
+ *  Characters are removed from the middle of the string, so the start and the end of string
+ *  won't change.
+ *
+ *  @param string Input string.
+ *  @param truncate_length The length in characters of the resulting string.
+ *
+ *  @return A copy of @c string which is truncated to @c truncate_length characters,
+ *          should be freed when no longer needed.
+ *
+ *  @since 0.17
+ */
+/* This following function is taken from Gedit. */
+gchar *utils_str_middle_truncate(const gchar *string, guint truncate_length)
+{
+	GString *truncated;
+	guint length;
+	guint n_chars;
+	guint num_left_chars;
+	guint right_offset;
+	guint delimiter_length;
+	const gchar *delimiter = "\342\200\246";
+
+	g_return_val_if_fail(string != NULL, NULL);
+
+	length = strlen(string);
+
+	g_return_val_if_fail(g_utf8_validate(string, length, NULL), NULL);
+
+	/* It doesnt make sense to truncate strings to less than the size of the delimiter plus 2
+	 * characters (one on each side) */
+	delimiter_length = g_utf8_strlen(delimiter, -1);
+	if (truncate_length < (delimiter_length + 2))
+		return g_strdup(string);
+
+	n_chars = g_utf8_strlen(string, length);
+
+	/* Make sure the string is not already small enough. */
+	if (n_chars <= truncate_length)
+		return g_strdup (string);
+
+	/* Find the 'middle' where the truncation will occur. */
+	num_left_chars = (truncate_length - delimiter_length) / 2;
+	right_offset = n_chars - truncate_length + num_left_chars + delimiter_length;
+
+	truncated = g_string_new_len(string, g_utf8_offset_to_pointer(string, num_left_chars) - string);
+	g_string_append(truncated, delimiter);
+	g_string_append(truncated, g_utf8_offset_to_pointer(string, right_offset));
+
+	return g_string_free(truncated, FALSE);
+}
+
+
+/**
  *  @a NULL-safe string comparison. Returns @a TRUE if both @c a and @c b are @a NULL
  *  or if @c a and @c b refer to valid strings which are equal.
  *

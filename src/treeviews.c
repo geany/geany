@@ -368,7 +368,7 @@ void treeviews_openfiles_add(GeanyDocument *doc)
 		gtk_tree_view_expand_row(GTK_TREE_VIEW(tv.tree_openfiles), path, TRUE);
 		gtk_tree_path_free(path);
 	}
-	basename = g_path_get_basename(DOC_FILENAME(doc));
+	basename = document_get_basename_for_display(doc, 30);
 	gtk_tree_store_set(store_openfiles, iter, DOCUMENTS_ICON, GTK_STOCK_FILE,
 		DOCUMENTS_SHORTNAME, basename, DOCUMENTS_DOCUMENT, doc, DOCUMENTS_COLOR, color,
 		DOCUMENTS_FILENAME, DOC_FILENAME(doc), -1);

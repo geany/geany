@@ -175,4 +175,6 @@ gboolean utils_is_uri(const gchar *uri);
 
 gboolean utils_is_remote_path(const gchar *path);
 
+gchar *utils_str_middle_truncate(const gchar *string, guint truncate_length);
+
 #endif

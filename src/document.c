@@ -282,23 +282,55 @@ void document_finalize()
 }
 
 
+/**
+ *  Returns the last part of the filename of the given GeanyDocument. The result is also
+ *  truncated to a maximum of @c length characters in case the filename is very long.
+ *
+ *  @param doc The document to use.
+ *  @param length The length of the resulting string or -1 to use a default value.
+ *
+ *  @return The ellipsized last part of the filename of @c doc, should be freed when no
+ *          longer needed.
+ *
+ *  @since 0.17
+ */
+/* TODO make more use of this */
+gchar *document_get_basename_for_display(GeanyDocument *doc, gint length)
+{
+	gchar *base_name, *short_name;
+
+	g_return_val_if_fail(doc != NULL, NULL);
+
+	if (length < 0)
+		length = 30;
+
+	base_name = g_path_get_basename(DOC_FILENAME(doc));
+	short_name = utils_str_middle_truncate(base_name, length);
+
+	g_free(base_name);
+
+	return short_name;
+}
+
+
 void document_update_tab_label(GeanyDocument *doc)
 {
-	gchar *base_name;
+	gchar *short_name;
 	GtkWidget *parent;
 
 	g_return_if_fail(doc != NULL);
 
-	base_name = g_path_get_basename(DOC_FILENAME(doc));
+	short_name = document_get_basename_for_display(doc, -1);
+
 	/* we need to use the event box for the tooltip, labels don't get the necessary events */
 	parent = gtk_widget_get_parent(doc->priv->tab_label);
 	parent = gtk_widget_get_parent(parent);
 
-	gtk_label_set_text(GTK_LABEL(doc->priv->tab_label), base_name);
+	gtk_label_set_text(GTK_LABEL(doc->priv->tab_label), short_name);
 
 	ui_widget_set_tooltip_text(parent, DOC_FILENAME(doc));
 
-	g_free(base_name);
+	g_free(short_name);
 }
 
 
@@ -914,8 +946,8 @@ handle_bom(FileData *filedata)
 
 
 /* loads textfile data, verifies and converts to forced_enc or UTF-8. Also handles BOM. */
-static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_filename,
-		FileData *filedata, const gchar *forced_enc)
+static gboolean load_text_file(const gchar *locale_filename, const gchar *display_filename,
+	FileData *filedata, const gchar *forced_enc)
 {
 	GError *err = NULL;
 	struct stat st;
@@ -929,7 +961,8 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_f
 
 	if (g_stat(locale_filename, &st) != 0)
 	{
-		ui_set_statusbar(TRUE, _("Could not open file %s (%s)"), utf8_filename, g_strerror(errno));
+		ui_set_statusbar(TRUE, _("Could not open file %s (%s)"),
+			display_filename, g_strerror(errno));
 		return FALSE;
 	}
 
@@ -963,9 +996,9 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_f
 			"Be aware that saving it can cause data loss.\nThe file was set to read-only.");
 
 		if (main_status.main_window_realized)
-			dialogs_show_msgbox(GTK_MESSAGE_WARNING, warn_msg, utf8_filename);
+			dialogs_show_msgbox(GTK_MESSAGE_WARNING, warn_msg, display_filename);
 
-		ui_set_statusbar(TRUE, warn_msg, utf8_filename);
+		ui_set_statusbar(TRUE, warn_msg, display_filename);
 
 		/* set the file to read-only mode because saving it is probably dangerous */
 		filedata->readonly = TRUE;
@@ -985,7 +1018,7 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_f
 			/* For translators: the second wildcard is an encoding name, e.g.
 			 * The file \"test.txt\" is not valid UTF-8. */
 			ui_set_statusbar(TRUE, _("The file \"%s\" is not valid %s."),
-				utf8_filename, forced_enc);
+				display_filename, forced_enc);
 			utils_beep();
 			g_free(filedata->data);
 			return FALSE;
@@ -995,7 +1028,7 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_f
 	{
 		ui_set_statusbar(TRUE,
 	_("The file \"%s\" does not look like a text file or the file encoding is not supported."),
-			utf8_filename);
+			display_filename);
 		utils_beep();
 		g_free(filedata->data);
 		return FALSE;
@@ -1181,6 +1214,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 	gint editor_mode;
 	gboolean reload = (doc == NULL) ? FALSE : TRUE;
 	gchar *utf8_filename = NULL;
+	gchar *display_filename = NULL;
 	gchar *locale_filename = NULL;
 	GeanyFiletype *use_ft;
 	FileData filedata;
@@ -1223,13 +1257,15 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 			return doc;
 		}
 	}
+	display_filename = utils_str_middle_truncate(utf8_filename, 100);
 
 	/* if default encoding for opening files is set, use it if no forced encoding is set */
 	if (file_prefs.default_open_encoding >= 0 && forced_enc == NULL)
 		forced_enc = encodings[file_prefs.default_open_encoding].charset;
 
-	if (! load_text_file(locale_filename, utf8_filename, &filedata, forced_enc))
+	if (! load_text_file(locale_filename, display_filename, &filedata, forced_enc))
 	{
+		g_free(display_filename);
 		g_free(utf8_filename);
 		g_free(locale_filename);
 		return NULL;
@@ -1313,12 +1349,13 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		g_signal_emit_by_name(geany_object, "document-open", doc);
 
 	if (reload)
-		ui_set_statusbar(TRUE, _("File %s reloaded."), utf8_filename);
+		ui_set_statusbar(TRUE, _("File %s reloaded."), display_filename);
 	else
 		msgwin_status_add(_("File %s opened(%d%s)."),
-				utf8_filename, gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)),
-				(readonly) ? _(", read-only") : "");
+			display_filename, gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)),
+			(readonly) ? _(", read-only") : "");
 
+	g_free(display_filename);
 	g_free(utf8_filename);
 	g_free(locale_filename);
 
