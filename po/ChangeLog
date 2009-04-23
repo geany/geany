@@ -1,3 +1,9 @@
+2009-04-23  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * *.po, geany.pot: Update for string freeze in preparing of Geany
+   0.17 release.
+
+
 2009-04-07  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * fr.po: Update of French translation (Thanks Jean-Philippe Moal).
