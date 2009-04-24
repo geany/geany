@@ -3,6 +3,9 @@
  * src/keybindings.c:
    Manually show the main notebook tab bar menu when Shift-F10 is
    pressed. This broke when we disabled the default GTK tab bar menu.
+ * src/document.c:
+   Fix a crash when USE_GIO_FILEMON is enabled at closing a document
+   which was reloaded shortly before.
 
 
 2009-04-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

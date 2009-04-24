@@ -435,13 +435,17 @@ static gboolean monitor_finish_pending_create(gpointer doc)
 
 
 /* Resets the 'ignore' file status after a reload action. */
-static gboolean monitor_reset_ignore(gpointer doc)
+static gboolean monitor_reset_ignore(gpointer data)
 {
-	g_return_val_if_fail(doc != NULL, FALSE);
-
-	((GeanyDocument *)doc)->priv->file_disk_status = FILE_OK;
-	ui_update_tab_status(doc);
-
+	GeanyDocument *doc = data;
+	/* FIXME even if the doc is valid, it might be the wrong document if the original document was
+	 * closed a new one opened which got this doc pointer while the timeout was active. Either
+	 * remove the timeout when closing or document or remove the timeout completely. */
+	if (DOC_VALID(doc))
+	{
+		doc->priv->file_disk_status = FILE_OK;
+		ui_update_tab_status(doc);
+	}
 	return FALSE;
 }
 
