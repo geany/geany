@@ -13,6 +13,10 @@
  * src/treeviews.c:
    Set the "ellipsize" property of GtkCellRendererText to automatically
    shorten the path and file names in the Documents list.
+ * doc/geany.html, doc/geany.txt, src/build.h:
+   Increase the amount of highlighted build error messages to 100.
+   At least for LaTeX we need higher values as there is a lot of
+   informative output before any errors are reported.
 
 
 2009-04-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

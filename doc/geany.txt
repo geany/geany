@@ -3826,7 +3826,7 @@ build.h
 ==============================  ============================================  ==================
 Option                          Description                                   Default
 ==============================  ============================================  ==================
-GEANY_BUILD_ERR_HIGHLIGHT_MAX   Amount of build error messages which should   50
+GEANY_BUILD_ERR_HIGHLIGHT_MAX   Amount of build error messages which should   100
                                 be highlighted in the Compiler message
                                 window. This affects the special coloring
                                 when Geany detects a compiler output line as

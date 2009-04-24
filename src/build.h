@@ -25,7 +25,7 @@
 #ifndef GEANY_BUILD_H
 #define GEANY_BUILD_H 1
 
-#define GEANY_BUILD_ERR_HIGHLIGHT_MAX 50
+#define GEANY_BUILD_ERR_HIGHLIGHT_MAX 100
 
 typedef enum	/* Geany Build Options */
 {
