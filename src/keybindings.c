@@ -978,9 +978,10 @@ static gboolean check_menu_key(GeanyDocument *doc, guint keyval, guint state, gu
 					return TRUE;
 				}
 				else
-					/* we return FALSE, so the default handler will be used and show
-					 * the GTK notebook tab list */
-					return FALSE;
+				{	/* show tab bar menu */
+					trigger_button_event(main_widgets.notebook, event_time);
+					return TRUE;
+				}
 			}
 		}
 		if (focusw == tv.tree_openfiles

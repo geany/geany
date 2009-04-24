@@ -1,3 +1,10 @@
+2009-04-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/keybindings.c:
+   Manually show the main notebook tab bar menu when Shift-F10 is
+   pressed. This broke when we disabled the default GTK tab bar menu.
+
+
 2009-04-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/dialogs.c, src/document.c, src/document.h, src/treeviews.c,
