@@ -6,11 +6,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: geany 0.16\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: geany 0.1\n"
+"Report-Msgid-Bugs-To: geany-i18n@uvena.de\n"
 "POT-Creation-Date: 2009-04-23 22:36+0200\n"
-"PO-Revision-Date: 2009-03-03 18:53+0100\n"
-"Last-Translator: Antonio Jiménez González <tonificante@hotmail.com>\n"
+"PO-Revision-Date: 2009-04-24 16:31+0100\n"
+"Last-Translator: Antonio Jimenez <tonificante@hotmail.com>\n"
 "Language-Team: Spanish <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -424,9 +424,8 @@ msgid "Detect from file"
 msgstr "Detectar desde archivo"
 
 #: ../src/dialogs.c:259
-#, fuzzy
 msgid "_More Options"
-msgstr "Opciones"
+msgstr "_Más Opciones"
 
 #. line 1 with checkbox and encoding combo
 #: ../src/dialogs.c:266
@@ -682,9 +681,8 @@ msgid ", read-only"
 msgstr ", sólo lectura"
 
 #: ../src/document.c:1561
-#, fuzzy
 msgid "Error renaming file."
-msgstr "Error guardando archivo."
+msgstr "Error al renombrar el archivo."
 
 #: ../src/document.c:1636
 #, c-format
@@ -1221,7 +1219,7 @@ msgstr "Editor"
 
 #: ../src/interface.c:741
 msgid "Show _Markers Margin"
-msgstr "Muestra las _Marcas de Margenes"
+msgstr "Mostrar _Marcas de Márgenes"
 
 #: ../src/interface.c:746
 msgid "Show _Line Numbers"
@@ -1344,9 +1342,8 @@ msgid "_Open"
 msgstr "_Abrir"
 
 #: ../src/interface.c:955
-#, fuzzy
 msgid "_Recent Projects"
-msgstr "Abrir Proyecto"
+msgstr "Proyectos _Recientes"
 
 #: ../src/interface.c:959
 msgid "_Close"
@@ -1433,9 +1430,8 @@ msgid "_Small Icons"
 msgstr "Iconos _pequeños"
 
 #: ../src/interface.c:1760 ../src/interface.c:3306
-#, fuzzy
 msgid "_Very Small Icons"
-msgstr "Iconos _pequeños"
+msgstr "Iconos muy _pequeños"
 
 #: ../src/interface.c:1770
 msgid "_Hide toolbar"
@@ -1535,9 +1531,8 @@ msgid "Path to start in when opening project files"
 msgstr "Ruta a iniciar cuando se abran archivos de proyectos"
 
 #: ../src/interface.c:2796
-#, fuzzy
 msgid "Extra plugin path:"
-msgstr "Activar soporte de complementos"
+msgstr "Ruta para complementos extra:"
 
 #: ../src/interface.c:2808
 msgid ""
@@ -1545,6 +1540,9 @@ msgid ""
 "configuration directory. The path entered here will be searched additionally "
 "for plugins. Leave blank to disable."
 msgstr ""
+"Por defecto, Geany busca en la ruta de instalación global y en el directorio "
+"de configuración. La ruta introducida aquí se usará para buscar más "
+"complementos. Para desactivar esta opción deje esta casilla en blanco."
 
 #: ../src/interface.c:2821
 msgid "<b>Paths</b>"
@@ -1659,7 +1657,6 @@ msgstr ""
 "Almacenar el archivo de proyecto dentro del directorio base del proyecto"
 
 #: ../src/interface.c:2929
-#, fuzzy
 msgid ""
 "When enabled, a project file is stored by default inside the project base "
 "directory when creating new projects instead of one directory above the base "
@@ -1669,7 +1666,7 @@ msgstr ""
 "Cuando está activado, el archivo de proyecto se almacena por defecto dentro "
 "del directorio base del proyecto al crear nuevos proyectos, en lugar de "
 "almacenarse en el directorio superior al directorio base. La ruta del "
-"proyecto todavía se puede cambiar en el diálogo Nuevo Proyecto."
+"proyecto se puede cambiar en el diálogo Nuevo Proyecto."
 
 #: ../src/interface.c:2931
 msgid "<b>Projects</b>"
@@ -1813,17 +1810,17 @@ msgid "Interface"
 msgstr "Interfaz"
 
 #: ../src/interface.c:3222
-#, fuzzy
 msgid "Show T_oolbar"
-msgstr "Mostrar Barra de Herramientas"
+msgstr "M_ostrar Barra de Herramientas"
 
 #: ../src/interface.c:3226
 msgid "_Append Toolbar to the Menu"
-msgstr ""
+msgstr "_Añadir la Barra de Herramientas al Menú"
 
 #: ../src/interface.c:3229
 msgid "Pack the toolbar to the main menu to save vertical space"
 msgstr ""
+"Emplazar la barra de herramientas en el menú principal para ahorrar espacio"
 
 #: ../src/interface.c:3231
 msgid "<b>Toolbar</b>"
@@ -1904,14 +1901,13 @@ msgid "Fold/unfold all children of a fold point"
 msgstr "Plegar/desplegar todos los hijos de un punto de plegado"
 
 #: ../src/interface.c:3369
-#, fuzzy
 msgid ""
 "Fold or unfold all children of a fold point. By pressing the Shift key while "
 "clicking on a fold symbol the contrary behavior is used."
 msgstr ""
 "Pliega o despliega todos los hijos de un punto de plegado. Se logra el "
 "comportamiento inverso apretando la tecla Mayús.(Shift) mientras se hace "
-"click en un símbolo de plegado"
+"click en un símbolo de plegado."
 
 #: ../src/interface.c:3371
 msgid "Use indicators to show compile errors"
@@ -2147,7 +2143,6 @@ msgid "Square brackets [ ]"
 msgstr "Corchetes [ ]"
 
 #: ../src/interface.c:3698
-#, fuzzy
 msgid "Auto-close square-bracket when typing an opening one"
 msgstr "Cerrar automáticamente corchetes al escribir un corchete de apertura"
 
@@ -2204,9 +2199,8 @@ msgid "Show line endings"
 msgstr "Mostrar terminaciones de línea"
 
 #: ../src/interface.c:3753
-#, fuzzy
 msgid "Shows the line ending character"
-msgstr "Muestra los caracteres de terminación de línea"
+msgstr "Muestra el carácter de fin de línea"
 
 #: ../src/interface.c:3755
 msgid "Show line numbers"
@@ -2595,19 +2589,17 @@ msgid "Print page numbers"
 msgstr "Imprimir números de página"
 
 #: ../src/interface.c:4518 ../src/printing.c:352
-#, fuzzy
 msgid ""
 "Add page numbers at the bottom of each page. It takes 2 lines of the page."
 msgstr ""
 "Agregar números de página al final de cada página. Ocupa 2 lineas de la "
-"página"
+"página."
 
 #: ../src/interface.c:4520 ../src/printing.c:355
 msgid "Print page header"
 msgstr "Imprimir encabezado de página"
 
 #: ../src/interface.c:4523 ../src/printing.c:357
-#, fuzzy
 msgid ""
 "Add a little header to every page containing the page number, the filename "
 "and the current date (see below). It takes 3 lines of the page."
@@ -2621,7 +2613,6 @@ msgid "Use the basename of the printed file"
 msgstr "Usar el nombre del archivo impreso"
 
 #: ../src/interface.c:4543
-#, fuzzy
 msgid "Print only the basename (without the path) of the printed file"
 msgstr "Imprimir sólo el nombre (sin la ruta) del archivo impreso"
 
@@ -2645,7 +2636,7 @@ msgstr "Usar la impresión nativa de GTK"
 
 #: ../src/interface.c:4565
 msgid "Printing"
-msgstr "Imprimiendo"
+msgstr "Impresión"
 
 #: ../src/interface.c:4976
 msgid "Project Properties"
@@ -3081,7 +3072,7 @@ msgstr "Activar/Desactivar salto de línea"
 
 #: ../src/keybindings.c:451
 msgid "Replace spaces by tabs"
-msgstr "Reem_plazar Espacios por Tabulaciones"
+msgstr "Reemplazar espacios por tabulaciones"
 
 #: ../src/keybindings.c:453
 msgid "Toggle current fold"
@@ -3370,7 +3361,7 @@ msgid ""
 "loaded when Geany is started."
 msgstr ""
 "Debajo se encuentra una lista de complementos disponibles. Seleccione los "
-"complementos que deben ser cargados cuando se inicia Geayn."
+"complementos que deben ser cargados cuando se inicia Geany."
 
 #: ../src/plugins.c:1276
 msgid "<b>Plugin details:</b>"
@@ -3508,10 +3499,10 @@ msgid "Printing of %s failed (%s)."
 msgstr "La impresión de %s ha fallado (%s)."
 
 #: ../src/printing.c:832
-#, fuzzy
 msgid "Please set a print command in the preferences dialog first."
 msgstr ""
-"Por favor primero configure un comando de impresión en el diálogo de opciones"
+"Por favor configure primero un comando de impresión en el diálogo "
+"Preferencias"
 
 #: ../src/printing.c:840
 #, c-format
@@ -3816,10 +3807,9 @@ msgid "_Invert search results"
 msgstr "_Invertir los resultados de la búsqueda"
 
 #: ../src/search.c:782
-#, fuzzy
 msgid "Invert the sense of matching, to select non-matching lines"
 msgstr ""
-"Invierte el sentido de coincidencia, seleccionando las líneas no "
+"Invierte el sentido de la asociación, seleccionando las líneas no "
 "coincidentes."
 
 #: ../src/search.c:799
@@ -4262,9 +4252,8 @@ msgid "Quit Geany"
 msgstr "Salir de Geany"
 
 #: ../src/toolbar.c:75
-#, fuzzy
 msgid "Print document"
-msgstr "Documento XML"
+msgstr "Imprimir documento"
 
 #: ../src/toolbar.c:153
 msgid ""
@@ -4820,32 +4809,28 @@ msgstr "_Insertar Caracteres Especiales de HTML"
 
 #. Add menuitem for html replacement functions
 #: ../plugins/htmlchars.c:699
-#, fuzzy
 msgid "HTML Replacement"
-msgstr "<b>Ubicación de la tabulación</b>"
+msgstr "Reemplazo HTML"
 
 #: ../plugins/htmlchars.c:706
 msgid "_HTMLToggle"
-msgstr ""
+msgstr "Activar / Desactivar HTML"
 
 #: ../plugins/htmlchars.c:715
-#, fuzzy
 msgid "Bulk replacement of special chars"
-msgstr "Ubicación de las pestañas de archivos nuevos:"
+msgstr "Reemplazo masivo de caracteres especiales"
 
 #: ../plugins/htmlchars.c:730
 msgid "Insert Special HTML Characters"
 msgstr "Insertar Caracteres Especiales HTML"
 
 #: ../plugins/htmlchars.c:733
-#, fuzzy
 msgid "Replace special characters"
-msgstr "Caracteres especiales"
+msgstr "Reemplazar caracteres especiales"
 
 #: ../plugins/htmlchars.c:736
-#, fuzzy
 msgid "Toggle plugin status"
-msgstr "Comentar/Descomentar"
+msgstr "Activar/Desactivar estado del complemento"
 
 #: ../plugins/export.c:45
 msgid "Export"
@@ -4864,12 +4849,11 @@ msgid "_Use current zoom level"
 msgstr "_Usar el nivel actual de acercamiento/alejamiento"
 
 #: ../plugins/export.c:193
-#, fuzzy
 msgid ""
 "Renders the font size of the document together with the current zoom level"
 msgstr ""
-"Muestra el tamaño de fuentes del documento en conjunto con el nivel actual "
-"de acercamiento/alejamiento."
+"Muestra el tamaño de fuente del documento en conjunto con el nivel actual de "
+"acercamiento/alejamiento."
 
 #: ../plugins/export.c:275
 #, c-format
@@ -5133,17 +5117,14 @@ msgid "_Vertically"
 msgstr "_Verticalmente"
 
 #: ../plugins/splitwindow.c:422
-#, fuzzy
 msgid "Split Horizontally"
-msgstr "_Horizontalmente"
+msgstr "Dividir Horizontalmente"
 
 #: ../plugins/splitwindow.c:424
-#, fuzzy
 msgid "Split Vertically"
-msgstr "_Verticalmente"
+msgstr "Dividir Verticalmente"
 
 #: ../plugins/splitwindow.c:426
-#, fuzzy
 msgid "Unsplit"
 msgstr "_Unificar"
 
