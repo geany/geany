@@ -199,8 +199,15 @@ static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *
 	GeanyEditor *editor = data;
 	GeanyDocument *doc = editor->document;
 
-	editor_info.click_pos = sci_get_position_from_xy(editor->sci,
-		(gint)event->x, (gint)event->y, FALSE);
+	/* it's very unlikely we got a 'real' click even on 0, 0, so assume it is a
+	 * fake event to show the editor menu triggered by a key event where we want to use the
+	 * text cursor position. */
+	if (event->x > 0.0 && event->y > 0.0)
+		editor_info.click_pos = sci_get_position_from_xy(editor->sci,
+			(gint)event->x, (gint)event->y, FALSE);
+	else
+		editor_info.click_pos = sci_get_current_position(editor->sci);
+
 	if (event->button == 1)
 	{
 		guint state = event->state & gtk_accelerator_get_default_mod_mask();
