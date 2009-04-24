@@ -10,6 +10,9 @@
    When the editor menu is opened by the Menu key, use the text cursor
    position for retrieving the current word. This fixes disabled
    Go to Tag items in the menu (#2780044).
+ * src/treeviews.c:
+   Set the "ellipsize" property of GtkCellRendererText to automatically
+   shorten the path and file names in the Documents list.
 
 
 2009-04-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

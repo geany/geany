@@ -241,6 +241,7 @@ static void prepare_openfiles(void)
 
 	icon_renderer = gtk_cell_renderer_pixbuf_new();
 	text_renderer = gtk_cell_renderer_text_new();
+	g_object_set(text_renderer, "ellipsize", PANGO_ELLIPSIZE_MIDDLE, NULL);
 	column = gtk_tree_view_column_new();
 	gtk_tree_view_column_pack_start(column, icon_renderer, FALSE);
 	gtk_tree_view_column_set_attributes(column, icon_renderer, "stock-id", DOCUMENTS_ICON, NULL);
@@ -368,7 +369,7 @@ void treeviews_openfiles_add(GeanyDocument *doc)
 		gtk_tree_view_expand_row(GTK_TREE_VIEW(tv.tree_openfiles), path, TRUE);
 		gtk_tree_path_free(path);
 	}
-	basename = document_get_basename_for_display(doc, 30);
+	basename = g_path_get_basename(DOC_FILENAME(doc));
 	gtk_tree_store_set(store_openfiles, iter, DOCUMENTS_ICON, GTK_STOCK_FILE,
 		DOCUMENTS_SHORTNAME, basename, DOCUMENTS_DOCUMENT, doc, DOCUMENTS_COLOR, color,
 		DOCUMENTS_FILENAME, DOC_FILENAME(doc), -1);
