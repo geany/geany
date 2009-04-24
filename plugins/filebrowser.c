@@ -281,6 +281,9 @@ static gchar *get_default_dir(void)
 
 	if (project)
 		dir = project->base_path;
+	else
+		dir = geany->prefs->default_open_path;
+
 	if (NZV(dir))
 		return utils_get_locale_from_utf8(dir);
 

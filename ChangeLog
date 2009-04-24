@@ -17,6 +17,10 @@
    Increase the amount of highlighted build error messages to 100.
    At least for LaTeX we need higher values as there is a lot of
    informative output before any errors are reported.
+ * src/filebrowser.c:
+   Use the startup path as the initial directory for the filebrowser
+   plugin when no project and no files are opened
+   (patch by Matias Gea, thanks; closes #2780521).
 
 
 2009-04-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
