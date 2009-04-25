@@ -1,22 +1,21 @@
 # translation of zh_CN.po to
-# translation of zh_CN.0.14.po to
 # Chinese Simplified translations for geany
 # Copyright (C) 2006 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
-# Dormouse Young <mouselinux@163.com>, 2006-2008.
 #
+# Dormouse Young <dormouse.young@gmail.com>, 2006-2008, 2009.
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 0.16\n"
+"Project-Id-Version: Geany 0.17\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-04-23 22:36+0200\n"
-"PO-Revision-Date: 2008-10-14 22:16+0800\n"
-"Last-Translator: Dormouse Young <mouselinux@163.com>\n"
-"Language-Team: <en@li.org>\n"
+"PO-Revision-Date: 2009-04-25 11:19+0800\n"
+"Last-Translator: Dormouse Young\n"
+"Language-Team: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../geany.desktop.in.h:1
@@ -403,9 +402,8 @@ msgid "Detect from file"
 msgstr "根据文件探测"
 
 #: ../src/dialogs.c:259
-#, fuzzy
 msgid "_More Options"
-msgstr "参数"
+msgstr "更多选项(_M)"
 
 #. line 1 with checkbox and encoding combo
 #: ../src/dialogs.c:266
@@ -650,9 +648,8 @@ msgid ", read-only"
 msgstr ", 只读"
 
 #: ../src/document.c:1561
-#, fuzzy
 msgid "Error renaming file."
-msgstr "保存文件出错。"
+msgstr "重命名文件出错。"
 
 #: ../src/document.c:1636
 #, c-format
@@ -1068,9 +1065,8 @@ msgid "_Decrease Indent"
 msgstr "减少缩进(_D)"
 
 #: ../src/interface.c:526 ../src/interface.c:1995
-#, fuzzy
 msgid "_Send Selection to Terminal"
-msgstr "发送选中的文字到(_S)"
+msgstr "发送选中的文字到终端(_S)"
 
 #: ../src/interface.c:530 ../src/interface.c:1999
 msgid "_Send Selection to"
@@ -1113,9 +1109,8 @@ msgid "_Insert \"include <...>\""
 msgstr "插入 \"include <...>\"(I)"
 
 #: ../src/interface.c:613
-#, fuzzy
 msgid "Preference_s"
-msgstr "首选项"
+msgstr "首选项(_S)"
 
 #: ../src/interface.c:621
 msgid "_Search"
@@ -1310,9 +1305,8 @@ msgid "_Open"
 msgstr "打开(_O)"
 
 #: ../src/interface.c:955
-#, fuzzy
 msgid "_Recent Projects"
-msgstr "打开项目"
+msgstr "最近项目(_R)"
 
 #: ../src/interface.c:959
 msgid "_Close"
@@ -1399,9 +1393,8 @@ msgid "_Small Icons"
 msgstr "小图标(_S)"
 
 #: ../src/interface.c:1760 ../src/interface.c:3306
-#, fuzzy
 msgid "_Very Small Icons"
-msgstr "小图标(_S)"
+msgstr "小小图标(_V)"
 
 #: ../src/interface.c:1770
 msgid "_Hide toolbar"
@@ -1497,9 +1490,8 @@ msgid "Path to start in when opening project files"
 msgstr "当打开项目时的路径"
 
 #: ../src/interface.c:2796
-#, fuzzy
 msgid "Extra plugin path:"
-msgstr "启用插件支持"
+msgstr "额外插件路径:"
 
 #: ../src/interface.c:2808
 msgid ""
@@ -1507,6 +1499,8 @@ msgid ""
 "configuration directory. The path entered here will be searched additionally "
 "for plugins. Leave blank to disable."
 msgstr ""
+"Geany 会在安装路径和定义路径中找寻插件。这里可以定义额外的插件路径。如果留空"
+"则取消这个功能。"
 
 #: ../src/interface.c:2821
 msgid "<b>Paths</b>"
@@ -1607,7 +1601,6 @@ msgid "Store project file inside the project base directory"
 msgstr "在项目根目录保存项目文件"
 
 #: ../src/interface.c:2929
-#, fuzzy
 msgid ""
 "When enabled, a project file is stored by default inside the project base "
 "directory when creating new projects instead of one directory above the base "
@@ -1754,17 +1747,16 @@ msgid "Interface"
 msgstr "界面"
 
 #: ../src/interface.c:3222
-#, fuzzy
 msgid "Show T_oolbar"
-msgstr "显示工具栏"
+msgstr "显示工具栏(_O)"
 
 #: ../src/interface.c:3226
 msgid "_Append Toolbar to the Menu"
-msgstr ""
+msgstr "向菜单添加工具栏(_A)"
 
 #: ../src/interface.c:3229
 msgid "Pack the toolbar to the main menu to save vertical space"
-msgstr ""
+msgstr "把工具栏放在菜单中以节省垂直空间"
 
 #: ../src/interface.c:3231
 msgid "<b>Toolbar</b>"
@@ -1838,7 +1830,6 @@ msgid "Fold/unfold all children of a fold point"
 msgstr "折叠或伸展一个折叠点的所有子孙"
 
 #: ../src/interface.c:3369
-#, fuzzy
 msgid ""
 "Fold or unfold all children of a fold point. By pressing the Shift key while "
 "clicking on a fold symbol the contrary behavior is used."
@@ -2056,7 +2047,6 @@ msgid "Square brackets [ ]"
 msgstr "中括号 [ ]"
 
 #: ../src/interface.c:3698
-#, fuzzy
 msgid "Auto-close square-bracket when typing an opening one"
 msgstr "自动配对中括号"
 
@@ -2107,9 +2097,8 @@ msgid "Show line endings"
 msgstr "显示行尾"
 
 #: ../src/interface.c:3753
-#, fuzzy
 msgid "Shows the line ending character"
-msgstr "显示行尾符号。"
+msgstr "显示行尾符号"
 
 #: ../src/interface.c:3755
 msgid "Show line numbers"
@@ -2473,31 +2462,28 @@ msgid "Print page numbers"
 msgstr "打印页数"
 
 #: ../src/interface.c:4518 ../src/printing.c:352
-#, fuzzy
 msgid ""
 "Add page numbers at the bottom of each page. It takes 2 lines of the page."
-msgstr "在每页底部打印页数，占用每页的两行。"
+msgstr "在每页底部打印页号，占用每页的两行。"
 
 #: ../src/interface.c:4520 ../src/printing.c:355
 msgid "Print page header"
 msgstr "打印页头"
 
 #: ../src/interface.c:4523 ../src/printing.c:357
-#, fuzzy
 msgid ""
 "Add a little header to every page containing the page number, the filename "
 "and the current date (see below). It takes 3 lines of the page."
 msgstr ""
-"在每页打印页头。页头包括页号、文件名和当前数据（见下）。页头占用每页三行。"
+"在每页打印页头。页头包括页号、文件名和当前日期（见下）。页头占用每页三行。"
 
 #: ../src/interface.c:4540 ../src/printing.c:373
 msgid "Use the basename of the printed file"
 msgstr "使用打印文件的基本文件名"
 
 #: ../src/interface.c:4543
-#, fuzzy
 msgid "Print only the basename (without the path) of the printed file"
-msgstr "打印文件的基本文件名，不包括路径。"
+msgstr "只打印文件的基本文件名，不包括路径。"
 
 #: ../src/interface.c:4549 ../src/printing.c:381
 msgid "Date format:"
@@ -2732,9 +2718,8 @@ msgid "Send to Custom Command 3"
 msgstr "发送自定义命令 3"
 
 #: ../src/keybindings.c:317
-#, fuzzy
 msgid "Send Selection to Terminal"
-msgstr "发送选中的文字到(_S)"
+msgstr "发送选中的文字到终端"
 
 #: ../src/keybindings.c:319
 msgid "Insert"
@@ -3353,9 +3338,8 @@ msgid "Printing of %s failed (%s)."
 msgstr "打印 %s 失败 (%s)。"
 
 #: ../src/printing.c:832
-#, fuzzy
 msgid "Please set a print command in the preferences dialog first."
-msgstr "请先在首选项对话框中设置打印命令"
+msgstr "请先在首选项对话框中设置打印命令。"
 
 #: ../src/printing.c:840
 #, c-format
@@ -3651,7 +3635,6 @@ msgid "_Invert search results"
 msgstr "反转查找结果(_I)"
 
 #: ../src/search.c:782
-#, fuzzy
 msgid "Invert the sense of matching, to select non-matching lines"
 msgstr "反转查找结果以选择不匹配的行"
 
@@ -4089,9 +4072,8 @@ msgid "Quit Geany"
 msgstr "退出"
 
 #: ../src/toolbar.c:75
-#, fuzzy
 msgid "Print document"
-msgstr "XML 文档"
+msgstr "打印文档"
 
 #: ../src/toolbar.c:153
 msgid ""
@@ -4621,32 +4603,28 @@ msgstr "插入特殊HTML字符(_I)"
 
 #. Add menuitem for html replacement functions
 #: ../plugins/htmlchars.c:699
-#, fuzzy
 msgid "HTML Replacement"
-msgstr "替换"
+msgstr "HTML替换"
 
 #: ../plugins/htmlchars.c:706
 msgid "_HTMLToggle"
-msgstr ""
+msgstr "HTML开关(_H)"
 
 #: ../plugins/htmlchars.c:715
-#, fuzzy
 msgid "Bulk replacement of special chars"
-msgstr "把新文件标签放在:"
+msgstr "大量替换特殊字符"
 
 #: ../plugins/htmlchars.c:730
 msgid "Insert Special HTML Characters"
 msgstr "插入特殊HTML字符"
 
 #: ../plugins/htmlchars.c:733
-#, fuzzy
 msgid "Replace special characters"
-msgstr "特殊字符"
+msgstr "替换特殊字符"
 
 #: ../plugins/htmlchars.c:736
-#, fuzzy
 msgid "Toggle plugin status"
-msgstr "开关行注释"
+msgstr "开关插件状态"
 
 #: ../plugins/export.c:45
 msgid "Export"
@@ -4665,10 +4643,9 @@ msgid "_Use current zoom level"
 msgstr "使用当前缩放级别(_U)"
 
 #: ../plugins/export.c:193
-#, fuzzy
 msgid ""
 "Renders the font size of the document together with the current zoom level"
-msgstr "把当前缩放级别应用到所有文档上。"
+msgstr "把当前缩放级别应用到所有文档上"
 
 #: ../plugins/export.c:275
 #, c-format
@@ -4924,19 +4901,16 @@ msgid "_Vertically"
 msgstr "垂直分割(_V)"
 
 #: ../plugins/splitwindow.c:422
-#, fuzzy
 msgid "Split Horizontally"
-msgstr "水平分割(_H)"
+msgstr "水平分割"
 
 #: ../plugins/splitwindow.c:424
-#, fuzzy
 msgid "Split Vertically"
-msgstr "垂直分割(_V)"
+msgstr "垂直分割"
 
 #: ../plugins/splitwindow.c:426
-#, fuzzy
 msgid "Unsplit"
-msgstr "合并(_U)"
+msgstr "合并"
 
 #~ msgid "Failed to view %s (make sure it is already compiled)"
 #~ msgstr "查看 %s 失败(请确保其已编译)"
