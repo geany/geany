@@ -1142,6 +1142,10 @@ static gint compare_top_level_names(const gchar *a, const gchar *b)
 			return -1;
 		if (utils_str_equal(name, b))
 			return 1;
+		/* This should never happen as it would mean that two or more top
+		 * level items have the same name but it can happen by typos in the translations. */
+		if (utils_str_equal(a, b))
+			return 1;
 	}
 	g_warning("Couldn't find top level node '%s' or '%s'!", a, b);
 	return 0;
