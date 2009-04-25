@@ -1,6 +1,8 @@
 2009-04-25  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
- * zh_CN.po: Update of simplified Chinese translation
+ * fr.po: Minor update on French translation to fix a typo on HTML
+   headings in symbol list.
+  * zh_CN.po: Update of simplified Chinese translation
    (Thanks to Dormouse Young).
 
 

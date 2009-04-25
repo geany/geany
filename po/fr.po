@@ -4043,11 +4043,11 @@ msgstr "Titres H1"
 
 #: ../src/symbols.c:668
 msgid "H2 Headings"
-msgstr "Titres H1"
+msgstr "Titres H2"
 
 #: ../src/symbols.c:669
 msgid "H3 Headings"
-msgstr "Titres H1"
+msgstr "Titres H3"
 
 #: ../src/symbols.c:677
 msgid "ID Selectors"
