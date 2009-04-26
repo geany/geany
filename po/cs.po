@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: geany 0.16\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-04-23 22:36+0200\n"
-"PO-Revision-Date: 2009-01-25 02:05+0100\n"
+"PO-Revision-Date: 2009-05-26 19:05+0100\n"
 "Last-Translator: Karel Kolman <kolmis@gmail.com>\n"
 "Language-Team: Czech <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
@@ -420,9 +420,8 @@ msgid "Detect from file"
 msgstr "Zjistit podle souboru"
 
 #: ../src/dialogs.c:259
-#, fuzzy
 msgid "_More Options"
-msgstr "Volby"
+msgstr "_Další volby"
 
 #. line 1 with checkbox and encoding combo
 #: ../src/dialogs.c:266
@@ -678,9 +677,8 @@ msgid ", read-only"
 msgstr ", jen pro čtení"
 
 #: ../src/document.c:1561
-#, fuzzy
 msgid "Error renaming file."
-msgstr "Chyba při ukládání souboru."
+msgstr "Chyba při přejmenování souboru."
 
 #: ../src/document.c:1636
 #, c-format
@@ -1099,9 +1097,8 @@ msgid "_Decrease Indent"
 msgstr "Z_rušit odsazení"
 
 #: ../src/interface.c:526 ../src/interface.c:1995
-#, fuzzy
 msgid "_Send Selection to Terminal"
-msgstr "Po_slat výběr do"
+msgstr "Poslat výběr do _terminálu"
 
 #: ../src/interface.c:530 ../src/interface.c:1999
 msgid "_Send Selection to"
@@ -1144,9 +1141,8 @@ msgid "_Insert \"include <...>\""
 msgstr "Vložit \"_include <...>\""
 
 #: ../src/interface.c:613
-#, fuzzy
 msgid "Preference_s"
-msgstr "Nastavení"
+msgstr "_Nastavení"
 
 #: ../src/interface.c:621
 msgid "_Search"
@@ -1342,9 +1338,8 @@ msgid "_Open"
 msgstr "_Otevřít"
 
 #: ../src/interface.c:955
-#, fuzzy
 msgid "_Recent Projects"
-msgstr "Otevřít projekt"
+msgstr "_Nedávné projekty"
 
 #: ../src/interface.c:959
 msgid "_Close"
@@ -1433,9 +1428,8 @@ msgid "_Small Icons"
 msgstr "_Malé ikony"
 
 #: ../src/interface.c:1760 ../src/interface.c:3306
-#, fuzzy
 msgid "_Very Small Icons"
-msgstr "_Malé ikony"
+msgstr "V_elmi malé ikony"
 
 # Původní nepřesný překlad zněl "nástrojová lišta". "toolbar" je "panel nástrojů".
 #: ../src/interface.c:1770
@@ -1537,9 +1531,8 @@ msgid "Path to start in when opening project files"
 msgstr "Výchozí cesta při otevírání souborů projektu"
 
 #: ../src/interface.c:2796
-#, fuzzy
 msgid "Extra plugin path:"
-msgstr "Zapnout podporu pluginů"
+msgstr "Extra cesta pro pluginy:"
 
 #: ../src/interface.c:2808
 msgid ""
@@ -1547,6 +1540,8 @@ msgid ""
 "configuration directory. The path entered here will be searched additionally "
 "for plugins. Leave blank to disable."
 msgstr ""
+"Geany hledá v globální instalační cestě a v adresáři s konfigurací. "
+"Cesta zde zadaná bude prohledávána dodatečně. Pro vypnutí ponechte prázdnou."
 
 #: ../src/interface.c:2821
 msgid "<b>Paths</b>"
@@ -1658,7 +1653,6 @@ msgid "Store project file inside the project base directory"
 msgstr "Projektový soubor ukládat v kořenovém adresáři projektu"
 
 #: ../src/interface.c:2929
-#, fuzzy
 msgid ""
 "When enabled, a project file is stored by default inside the project base "
 "directory when creating new projects instead of one directory above the base "
@@ -1808,17 +1802,16 @@ msgid "Interface"
 msgstr "Rozhraní"
 
 #: ../src/interface.c:3222
-#, fuzzy
 msgid "Show T_oolbar"
-msgstr "Zobrazovat lištu nástrojů"
+msgstr "Zobrazovat lištu _nástrojů"
 
 #: ../src/interface.c:3226
 msgid "_Append Toolbar to the Menu"
-msgstr ""
+msgstr "_Připojit nástrojovou lištu k menu"
 
 #: ../src/interface.c:3229
 msgid "Pack the toolbar to the main menu to save vertical space"
-msgstr ""
+msgstr "Připojit nástrojovou lištu k hlavnímu menu pro ušetření vertikálního místa"
 
 #: ../src/interface.c:3231
 msgid "<b>Toolbar</b>"
@@ -1896,7 +1889,6 @@ msgid "Fold/unfold all children of a fold point"
 msgstr "Při rozbalení složeného kódu rozbalit i vnořené"
 
 #: ../src/interface.c:3369
-#, fuzzy
 msgid ""
 "Fold or unfold all children of a fold point. By pressing the Shift key while "
 "clicking on a fold symbol the contrary behavior is used."
@@ -2129,7 +2121,6 @@ msgid "Square brackets [ ]"
 msgstr "Hranaté závorky [ ]"
 
 #: ../src/interface.c:3698
-#, fuzzy
 msgid "Auto-close square-bracket when typing an opening one"
 msgstr "Automaticky zavírat hranatou závorku po napsání levé"
 
@@ -2183,9 +2174,8 @@ msgid "Show line endings"
 msgstr "Zobrazovat konce řádků"
 
 #: ../src/interface.c:3753
-#, fuzzy
 msgid "Shows the line ending character"
-msgstr "Zobrazí znak konce řádku."
+msgstr "Zobrazí znak konce řádku"
 
 #: ../src/interface.c:3755
 msgid "Show line numbers"
@@ -2554,19 +2544,18 @@ msgstr "Pro tisk používat externí příkaz"
 # Nepřesný překlad zněl jen "Čísla řádků", zkontrolovat!
 #: ../src/interface.c:4510 ../src/printing.c:345
 msgid "Print line numbers"
-msgstr "Vytisknout čísla řádků"
+msgstr "Tisknout čísla řádků"
 
 #: ../src/interface.c:4513 ../src/printing.c:347
 msgid "Add line numbers to the printed page"
-msgstr "Přidat čísla řádků k vytištěné stránce."
+msgstr "Přidat čísla řádků k tištěné stránce."
 
 # Původní nepřesný překlad: "Čísla _řádků".
 #: ../src/interface.c:4515 ../src/printing.c:350
 msgid "Print page numbers"
-msgstr "Vytisknout čísla stránek"
+msgstr "Tisknout čísla stránek"
 
 #: ../src/interface.c:4518 ../src/printing.c:352
-#, fuzzy
 msgid ""
 "Add page numbers at the bottom of each page. It takes 2 lines of the page."
 msgstr ""
@@ -2575,15 +2564,14 @@ msgstr ""
 # Původní nepřesný překlad: "Základní hlavička:".
 #: ../src/interface.c:4520 ../src/printing.c:355
 msgid "Print page header"
-msgstr "Vytisknout hlavičku stránky"
+msgstr "Tisknout hlavičku stránky"
 
 #: ../src/interface.c:4523 ../src/printing.c:357
-#, fuzzy
 msgid ""
 "Add a little header to every page containing the page number, the filename "
 "and the current date (see below). It takes 3 lines of the page."
 msgstr ""
-"Přidá na každou stránku hlavičku s číslem stránky, názvem souboru a aktuální "
+"Přidá na každou stránku hlavičku s číslem stránky, názvem souboru a aktuálním "
 "datem (viz dole). Používá 3 řádky na stránce."
 
 #: ../src/interface.c:4540 ../src/printing.c:373
@@ -2591,7 +2579,6 @@ msgid "Use the basename of the printed file"
 msgstr "Pouze jméno tisknutého souboru"
 
 #: ../src/interface.c:4543
-#, fuzzy
 msgid "Print only the basename (without the path) of the printed file"
 msgstr "Tisknout pouze jméno souboru tisknutého dokumentu (bez cesty)"
 
@@ -2831,9 +2818,8 @@ msgid "Send to Custom Command 3"
 msgstr "Použít Vlastní příkaz 3"
 
 #: ../src/keybindings.c:317
-#, fuzzy
 msgid "Send Selection to Terminal"
-msgstr "Po_slat výběr do"
+msgstr "Po_slat výběr do terminálu"
 
 #: ../src/keybindings.c:319
 msgid "Insert"
@@ -3476,7 +3462,6 @@ msgid "Printing of %s failed (%s)."
 msgstr "Tisk souboru %s selhal (%s)."
 
 #: ../src/printing.c:832
-#, fuzzy
 msgid "Please set a print command in the preferences dialog first."
 msgstr "Nejdříve nastavte příkaz k tisku v okně nastavení"
 
@@ -3780,7 +3765,6 @@ msgid "_Invert search results"
 msgstr "_Obrátit výsledky hledání"
 
 #: ../src/search.c:782
-#, fuzzy
 msgid "Invert the sense of matching, to select non-matching lines"
 msgstr "Obrácení smyslu hledání, k označení nevyhovujících řádků."
 
@@ -4230,9 +4214,8 @@ msgid "Quit Geany"
 msgstr "Ukončí Geany"
 
 #: ../src/toolbar.c:75
-#, fuzzy
 msgid "Print document"
-msgstr "XML dokument"
+msgstr "Tisknout dokument"
 
 #: ../src/toolbar.c:153
 msgid ""
@@ -4780,32 +4763,28 @@ msgstr "Vložit _speciální HTML znak"
 
 #. Add menuitem for html replacement functions
 #: ../plugins/htmlchars.c:699
-#, fuzzy
 msgid "HTML Replacement"
-msgstr "<b>Umístění záložek</b>"
+msgstr "HTML nahrazení"
 
 #: ../plugins/htmlchars.c:706
 msgid "_HTMLToggle"
-msgstr ""
+msgstr "_Zapnuto"
 
 #: ../plugins/htmlchars.c:715
-#, fuzzy
 msgid "Bulk replacement of special chars"
-msgstr "Umístění nových záložek souborů:"
+msgstr "Nahradit speciální znaky"
 
 #: ../plugins/htmlchars.c:730
 msgid "Insert Special HTML Characters"
 msgstr "Vložit speciální HTML znaky"
 
 #: ../plugins/htmlchars.c:733
-#, fuzzy
 msgid "Replace special characters"
-msgstr "Speciální znaky"
+msgstr "Nahradit speciální znaky"
 
 #: ../plugins/htmlchars.c:736
-#, fuzzy
 msgid "Toggle plugin status"
-msgstr "Přepínací řádkový komentář"
+msgstr "Přepnout stav pluginu"
 
 #: ../plugins/export.c:45
 msgid "Export"
@@ -4824,10 +4803,9 @@ msgid "_Use current zoom level"
 msgstr "_Použít současné zvětšení"
 
 #: ../plugins/export.c:193
-#, fuzzy
 msgid ""
 "Renders the font size of the document together with the current zoom level"
-msgstr "Použije velikost fontu dokumentu spolu se současnou úrovní zvětšení."
+msgstr "Nastaví velikost písma exportovaného dokumentu podle současné úrovně zvětšení"
 
 #: ../plugins/export.c:275
 #, c-format
@@ -5086,19 +5064,16 @@ msgid "_Vertically"
 msgstr "_Vertikálně"
 
 #: ../plugins/splitwindow.c:422
-#, fuzzy
 msgid "Split Horizontally"
-msgstr "_Horizontálně"
+msgstr "Rozdělit horizontálně"
 
 #: ../plugins/splitwindow.c:424
-#, fuzzy
 msgid "Split Vertically"
-msgstr "_Vertikálně"
+msgstr "Rozdělit vertikálně"
 
 #: ../plugins/splitwindow.c:426
-#, fuzzy
 msgid "Unsplit"
-msgstr "_Zrušit rozdělení"
+msgstr "Zrušit rozdělení"
 
 #~ msgid "Failed to view %s (make sure it is already compiled)"
 #~ msgstr "Selhalo zobrazení %s (ujistěte se, že soubor byl již přeložen)"

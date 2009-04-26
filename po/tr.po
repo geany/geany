@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.17svn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-23 22:36+0200\n"
-"PO-Revision-Date: 2009-04-05 03:28+0200\n"
+"POT-Creation-Date: 2009-04-26 21:08+0200\n"
+"PO-Revision-Date: 2009-04-25 23:13+0200\n"
 "Last-Translator: Gürkan Gür <seqizz@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -308,8 +308,8 @@ msgstr "Başka inşa hatası yok."
 msgid "Do you really want to quit?"
 msgstr "Gerçekten çıkmak istiyor musunuz?"
 
-#: ../src/callbacks.c:469 ../src/document.c:2898 ../src/interface.c:340
-#: ../src/treeviews.c:553
+#: ../src/callbacks.c:469 ../src/document.c:2902 ../src/interface.c:340
+#: ../src/treeviews.c:554
 msgid "_Reload"
 msgstr "Tek_rar Yükle"
 
@@ -411,9 +411,8 @@ msgid "Detect from file"
 msgstr "Dosyadan algıla"
 
 #: ../src/dialogs.c:259
-#, fuzzy
 msgid "_More Options"
-msgstr "Seçenekler"
+msgstr "_Daha fazla seçenek"
 
 #. line 1 with checkbox and encoding combo
 #: ../src/dialogs.c:266
@@ -502,7 +501,7 @@ msgstr "Bir hata oluştu ya da dosya bilgisi getirilemedi."
 
 #: ../src/dialogs.c:990 ../src/dialogs.c:991 ../src/dialogs.c:992
 #: ../src/dialogs.c:998 ../src/dialogs.c:999 ../src/dialogs.c:1000
-#: ../src/symbols.c:1664 ../src/symbols.c:1685 ../src/symbols.c:1737
+#: ../src/symbols.c:1668 ../src/symbols.c:1689 ../src/symbols.c:1741
 #: ../src/ui_utils.c:222
 msgid "unknown"
 msgstr "bilinmeyen"
@@ -584,22 +583,22 @@ msgstr "Grup:"
 msgid "Other:"
 msgstr "Diğer:"
 
-#: ../src/document.c:674
+#: ../src/document.c:678
 #, c-format
 msgid "File %s closed."
 msgstr "%s dosyası kapatıldı."
 
-#: ../src/document.c:791
+#: ../src/document.c:795
 #, c-format
 msgid "New file \"%s\" opened."
 msgstr "Yeni dosya \"%s\" açıldı."
 
-#: ../src/document.c:964 ../src/document.c:1470
+#: ../src/document.c:968 ../src/document.c:1474
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "%s dosyası açılamadı (%s)"
 
-#: ../src/document.c:994
+#: ../src/document.c:998
 #, c-format
 msgid ""
 "The file \"%s\" could not be opened properly and has been truncated. This "
@@ -614,12 +613,12 @@ msgstr ""
 
 #. For translators: the second wildcard is an encoding name, e.g.
 #. * The file \"test.txt\" is not valid UTF-8.
-#: ../src/document.c:1020
+#: ../src/document.c:1024
 #, c-format
 msgid "The file \"%s\" is not valid %s."
 msgstr "\"%s\" dosyası geçerli değil %s."
 
-#: ../src/document.c:1030
+#: ../src/document.c:1034
 #, c-format
 msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
@@ -628,49 +627,48 @@ msgstr ""
 "\"%s\" dosyası bit yazı dosyası gibi görünmüyor, belki de kodlaması "
 "desteklenmiyor."
 
-#: ../src/document.c:1168
+#: ../src/document.c:1172
 msgid "Spaces"
 msgstr "Boşluklar"
 
-#: ../src/document.c:1171
+#: ../src/document.c:1175
 msgid "Tabs"
 msgstr "Sekmeler"
 
-#: ../src/document.c:1174
+#: ../src/document.c:1178
 msgid "Tabs and Spaces"
 msgstr "Sekmeler ve Boşluklar"
 
 #. For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
 #. * and Spaces), the second one is the filename
-#: ../src/document.c:1179
+#: ../src/document.c:1183
 #, c-format
 msgid "Setting %s indentation mode for %s."
 msgstr "%s girdileme yöntemi %s için ayarlanıyor."
 
-#: ../src/document.c:1232
+#: ../src/document.c:1236
 msgid "Invalid filename"
 msgstr "Geçersiz dosya adı"
 
-#: ../src/document.c:1352
+#: ../src/document.c:1356
 #, c-format
 msgid "File %s reloaded."
 msgstr "%s dosyası yeniden yüklendi."
 
-#: ../src/document.c:1354
+#: ../src/document.c:1358
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "%s dosyası açıldı(%d%s)."
 
-#: ../src/document.c:1356
+#: ../src/document.c:1360
 msgid ", read-only"
 msgstr ", salt okunur"
 
-#: ../src/document.c:1561
-#, fuzzy
+#: ../src/document.c:1565
 msgid "Error renaming file."
-msgstr "Dosya kaydetmede hata"
+msgstr "Dosya isimlendirmesinde hata."
 
-#: ../src/document.c:1636
+#: ../src/document.c:1640
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -679,7 +677,7 @@ msgstr ""
 "Dosyayı UTF-8'den \"%s\" kodlamasına çevirirken hata oluştu. Dosya "
 "kaydedilmeden bırakıldı."
 
-#: ../src/document.c:1658
+#: ../src/document.c:1662
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -688,52 +686,52 @@ msgstr ""
 "Hata mesajı: %s\n"
 "Hatanın oluştuğu yer \"%s\" (satır: %d, sütun: %d)."
 
-#: ../src/document.c:1663
+#: ../src/document.c:1667
 #, c-format
 msgid "Error message: %s."
 msgstr "Hata mesajı: %s."
 
-#: ../src/document.c:1763 ../src/document.c:1823
+#: ../src/document.c:1767 ../src/document.c:1827
 msgid "Error saving file."
 msgstr "Dosya kaydetmede hata"
 
-#: ../src/document.c:1822
+#: ../src/document.c:1826
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Dosya kaydetmede hata (%s)."
 
-#: ../src/document.c:1847
+#: ../src/document.c:1851
 #, c-format
 msgid "File %s saved."
 msgstr "%s dosyası kaydedildi."
 
-#: ../src/document.c:1913 ../src/document.c:1970 ../src/document.c:1978
+#: ../src/document.c:1917 ../src/document.c:1974 ../src/document.c:1982
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" bulunamadı."
 
-#: ../src/document.c:1978
+#: ../src/document.c:1982
 msgid "Wrap search and find again?"
 msgstr "Aramayı geç ve tekrar bul?"
 
-#: ../src/document.c:2057 ../src/search.c:1065 ../src/search.c:1669
+#: ../src/document.c:2061 ../src/search.c:1065 ../src/search.c:1669
 #: ../src/search.c:1670
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "\"%s\" araması için hiçbir eşleşme bulunamadı."
 
-#: ../src/document.c:2068 ../src/document.c:2077
+#: ../src/document.c:2072 ../src/document.c:2081
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] "%s: %d tane \"%s\" değeri \"%s\" ile değiştirildi."
 msgstr[1] "%s: %d tane \"%s\" değeri \"%s\" ile değiştirildi."
 
-#: ../src/document.c:2899
+#: ../src/document.c:2903
 msgid "Do you want to reload it?"
 msgstr "Yeniden yüklemek ister misiniz?"
 
-#: ../src/document.c:2900
+#: ../src/document.c:2904
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
@@ -742,32 +740,32 @@ msgstr ""
 "'%s' dosyasının daha güncel bir hali\n"
 "diskte bulunmakta."
 
-#: ../src/document.c:2921
+#: ../src/document.c:2925
 msgid "Try to resave the file?"
 msgstr "Dosyayı tekrar kurtarmayı denemek ister misiniz?"
 
-#: ../src/document.c:2922
+#: ../src/document.c:2926
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "\"%s\" dosyası diskte bulunamadı!"
 
-#: ../src/editor.c:3852 ../src/utils.c:295
+#: ../src/editor.c:3859 ../src/utils.c:295
 msgid "Win (CRLF)"
 msgstr "Win (CRLF)"
 
-#: ../src/editor.c:3853 ../src/utils.c:296
+#: ../src/editor.c:3860 ../src/utils.c:296
 msgid "Mac (CR)"
 msgstr "Mac (CR)"
 
-#: ../src/editor.c:3854 ../src/utils.c:297
+#: ../src/editor.c:3861 ../src/utils.c:297
 msgid "Unix (LF)"
 msgstr "Unix (LF)"
 
-#: ../src/editor.c:3978
+#: ../src/editor.c:3985
 msgid "Enter Tab Width"
 msgstr "Tab genişliğini girin"
 
-#: ../src/editor.c:3979
+#: ../src/editor.c:3986
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr ""
 "Bir sekme (tab) karakterinin yerine geçecek olan boşluk sayısını giriniz."
@@ -1327,9 +1325,8 @@ msgid "_Open"
 msgstr "A_ç"
 
 #: ../src/interface.c:955
-#, fuzzy
 msgid "_Recent Projects"
-msgstr "Proje Aç"
+msgstr "Son Açılan P_rojeler"
 
 #: ../src/interface.c:959
 msgid "_Close"
@@ -2101,7 +2098,6 @@ msgid "Square brackets [ ]"
 msgstr "Köşeli Parantez [ ]"
 
 #: ../src/interface.c:3698
-#, fuzzy
 msgid "Auto-close square-bracket when typing an opening one"
 msgstr "Yeni köşeli parantez kullanımında parantezi otomatik olarak kapat"
 
@@ -2156,9 +2152,8 @@ msgid "Show line endings"
 msgstr "Satır sonlarını göster"
 
 #: ../src/interface.c:3753
-#, fuzzy
 msgid "Shows the line ending character"
-msgstr "Satır sonu karakterini göster"
+msgstr "Satır sonu karakterini gösterir"
 
 #: ../src/interface.c:3755
 msgid "Show line numbers"
@@ -2357,7 +2352,7 @@ msgstr ""
 "Dosyanın değişir değişmediğini diskten kontrol etme zaman aralığı, saniye "
 "olarak. Sıfır değeri kontrolü iptal eder."
 
-#: ../src/interface.c:4079 ../src/symbols.c:574 ../plugins/filebrowser.c:1016
+#: ../src/interface.c:4079 ../src/symbols.c:574 ../plugins/filebrowser.c:1019
 msgid "Files"
 msgstr "Dosyalar"
 
@@ -2542,34 +2537,31 @@ msgid "Print page numbers"
 msgstr "Sayfa numaralarını yazdır"
 
 #: ../src/interface.c:4518 ../src/printing.c:352
-#, fuzzy
 msgid ""
 "Add page numbers at the bottom of each page. It takes 2 lines of the page."
 msgstr ""
-"Yazdırılmış sayfanın en altında sayfa numaralarını da gösterir. Bu işlem "
-"sayfadan 2 satır alır."
+"Her sayfanın en altında sayfa numaralarını da gösterir. Bu işlem sayfadan 2 "
+"satır alır."
 
 #: ../src/interface.c:4520 ../src/printing.c:355
 msgid "Print page header"
 msgstr "Sayfa başlığını yazdır"
 
 #: ../src/interface.c:4523 ../src/printing.c:357
-#, fuzzy
 msgid ""
 "Add a little header to every page containing the page number, the filename "
 "and the current date (see below). It takes 3 lines of the page."
 msgstr ""
-"Her sayfanın başına sayfa numarası, dosya adı ve geçerli (detay için aşağı "
-"bakın) tarihi gösteren bir bilgi ekler. Bu işlem sayfadan 3 satır alır."
+"Her sayfanın başına sayfa numarası, dosya adı ve geçerli tarihi gösteren bir "
+"bilgi ekler (detay için aşağı bakın). Bu işlem sayfadan 3 satır alır."
 
 #: ../src/interface.c:4540 ../src/printing.c:373
 msgid "Use the basename of the printed file"
 msgstr "Dosyanın sadece adını kullan"
 
 #: ../src/interface.c:4543
-#, fuzzy
 msgid "Print only the basename (without the path) of the printed file"
-msgstr "Yazdırırken dosyanın sadece (yolu olmadan) adını kullan"
+msgstr "Yazdırırken dosyanın sadece adını (yolu olmadan) kullan."
 
 #: ../src/interface.c:4549 ../src/printing.c:381
 msgid "Date format:"
@@ -3100,7 +3092,7 @@ msgstr "Klavye Kısayolları"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Şu kısayollar düzenlenebilir:"
 
-#: ../src/keybindings.c:1530
+#: ../src/keybindings.c:1531
 msgid "Switch to Document"
 msgstr "Dökümana geç"
 
@@ -4013,18 +4005,18 @@ msgstr "Yapılar"
 msgid "Typedefs / Enums"
 msgstr ""
 
-#: ../src/symbols.c:1307
+#: ../src/symbols.c:1311
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "\"%s\" için bilinmeyen dosya uzantısı.\n"
 
-#: ../src/symbols.c:1328
+#: ../src/symbols.c:1332
 #, c-format
 msgid "Failed to create tags file, perhaps because no tags were found.\n"
 msgstr ""
 "Etiket dosyası oluşturulamadı, belki sebebi hiç etiket bulunmamasıdır.\n"
 
-#: ../src/symbols.c:1335
+#: ../src/symbols.c:1339
 #, c-format
 msgid ""
 "Usage: %s -g <Tag File> <File list>\n"
@@ -4033,7 +4025,7 @@ msgstr ""
 "Kullanım: %s -g <Etiket Dosyası> <Dosya listesi>\n"
 "\n"
 
-#: ../src/symbols.c:1336
+#: ../src/symbols.c:1340
 #, c-format
 msgid ""
 "Example:\n"
@@ -4044,48 +4036,48 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1350
+#: ../src/symbols.c:1354
 msgid "Load Tags"
 msgstr "Etiketleri Yükle"
 
-#: ../src/symbols.c:1357
+#: ../src/symbols.c:1361
 msgid "Geany tag files (*.tags)"
 msgstr "Geany etiket dosyaları (*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1377
+#: ../src/symbols.c:1381
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "%s etiket dosyası yüklendi '%s'."
 
-#: ../src/symbols.c:1379
+#: ../src/symbols.c:1383
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "Etiket dosyası '%s' yüklenemedi."
 
-#: ../src/symbols.c:1513
+#: ../src/symbols.c:1517
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr ""
 
-#: ../src/symbols.c:1515
+#: ../src/symbols.c:1519
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "\"%s\" için tanım bulunamadı."
 
-#: ../src/symbols.c:1806
+#: ../src/symbols.c:1810
 msgid "_Expand All"
 msgstr "H_epsini Genişlet"
 
-#: ../src/symbols.c:1811
+#: ../src/symbols.c:1815
 msgid "_Collapse All"
 msgstr "Hepsini _Katla"
 
-#: ../src/symbols.c:1821
+#: ../src/symbols.c:1825
 msgid "Sort by _Name"
 msgstr "İsme Göre Sı_rala"
 
-#: ../src/symbols.c:1828
+#: ../src/symbols.c:1832
 msgid "Sort by _Appearance"
 msgstr "Görünüme Göre Sır_ala"
 
@@ -4183,9 +4175,8 @@ msgid "Quit Geany"
 msgstr "Geany'den Çık"
 
 #: ../src/toolbar.c:75
-#, fuzzy
 msgid "Print document"
-msgstr "XML dosyası"
+msgstr "Belgeyi yazdır"
 
 #: ../src/toolbar.c:153
 msgid ""
@@ -4279,15 +4270,15 @@ msgstr "Karakter:"
 msgid "No tags found"
 msgstr "Etiket bulunamadı"
 
-#: ../src/treeviews.c:490
+#: ../src/treeviews.c:491
 msgid "Show S_ymbol List"
 msgstr "Semb_ol Listesini Göster"
 
-#: ../src/treeviews.c:498
+#: ../src/treeviews.c:499
 msgid "Show _Document List"
 msgstr "_Döküman Listesini Göster"
 
-#: ../src/treeviews.c:506 ../plugins/filebrowser.c:583
+#: ../src/treeviews.c:507 ../plugins/filebrowser.c:586
 msgid "H_ide Sidebar"
 msgstr "Araç Çubuğunu G_izle"
 
@@ -4519,7 +4510,7 @@ msgstr ""
 "hali F10). Pasifleştirmek sanal terminalde MC kullanmak gibi durumlarda "
 "kullanışlı olabilir."
 
-#: ../src/vte.c:840 ../plugins/filebrowser.c:1122
+#: ../src/vte.c:840 ../plugins/filebrowser.c:1125
 msgid "Follow the path of the current file"
 msgstr "Geçerli dosyanın yolunu izle"
 
@@ -4811,68 +4802,68 @@ msgstr "Dosya Yönetici"
 msgid "Adds a file browser tab to the sidebar."
 msgstr "Araç çubuğuna bir dosya yönetim sekmesi ekler."
 
-#: ../plugins/filebrowser.c:326
+#: ../plugins/filebrowser.c:329
 msgid "Too many items selected!"
 msgstr "Çok fazla nesne seçildi!"
 
-#: ../plugins/filebrowser.c:402
+#: ../plugins/filebrowser.c:405
 #, c-format
 msgid "Could not execute configured external command '%s' (%s)."
 msgstr "Düzenlenmiş harici komut '%s' çalıştırılamadı (%s)."
 
-#: ../plugins/filebrowser.c:558
+#: ../plugins/filebrowser.c:561
 msgid "Open _externally"
 msgstr "_Harici olarak aç"
 
-#: ../plugins/filebrowser.c:564
+#: ../plugins/filebrowser.c:567
 msgid "_Find in Files"
 msgstr "Dosyalarda _Bul"
 
-#: ../plugins/filebrowser.c:574
+#: ../plugins/filebrowser.c:577
 msgid "Show _Hidden Files"
 msgstr "Gizli Dosyaları G_öster"
 
-#: ../plugins/filebrowser.c:766
+#: ../plugins/filebrowser.c:769
 msgid "Up"
 msgstr "Yukarı"
 
-#: ../plugins/filebrowser.c:771
+#: ../plugins/filebrowser.c:774
 msgid "Refresh"
 msgstr "Tazele"
 
-#: ../plugins/filebrowser.c:776
+#: ../plugins/filebrowser.c:779
 msgid "Home"
 msgstr "Ev"
 
-#: ../plugins/filebrowser.c:781
+#: ../plugins/filebrowser.c:784
 msgid "Set path from document"
 msgstr "Yolu dökümandan ayarla"
 
-#: ../plugins/filebrowser.c:789
+#: ../plugins/filebrowser.c:792
 msgid "Clear the filter"
 msgstr "Filtreyi temizle"
 
-#: ../plugins/filebrowser.c:803
+#: ../plugins/filebrowser.c:806
 msgid "Filter:"
 msgstr "Filtre:"
 
-#: ../plugins/filebrowser.c:1022
+#: ../plugins/filebrowser.c:1025
 msgid "Focus File List"
 msgstr "Dosya Listesini Odakla"
 
-#: ../plugins/filebrowser.c:1024
+#: ../plugins/filebrowser.c:1027
 msgid "Focus Path Entry"
 msgstr "Yol Girdisini Odakla"
 
-#: ../plugins/filebrowser.c:1067 ../plugins/saveactions.c:478
+#: ../plugins/filebrowser.c:1070 ../plugins/saveactions.c:478
 msgid "Plugin configuration directory could not be created."
 msgstr "Eklenti düzenleme dizini oluşturulamadı."
 
-#: ../plugins/filebrowser.c:1092
+#: ../plugins/filebrowser.c:1095
 msgid "External open command:"
 msgstr "Harici açma komutu:"
 
-#: ../plugins/filebrowser.c:1101
+#: ../plugins/filebrowser.c:1104
 #, c-format
 msgid ""
 "The command to execute when using \"Open with\". You can use %f and %d "
@@ -4886,15 +4877,15 @@ msgstr ""
 "%f dosya adı ile beraber tam dosya yolunu\n"
 "%d ise sadece dosya yolunu belirtir"
 
-#: ../plugins/filebrowser.c:1107
+#: ../plugins/filebrowser.c:1110
 msgid "Show hidden files"
 msgstr "Gizli dosyaları göster"
 
-#: ../plugins/filebrowser.c:1113
+#: ../plugins/filebrowser.c:1116
 msgid "Hide object files"
 msgstr "Nesne dosyalarını sakla"
 
-#: ../plugins/filebrowser.c:1117
+#: ../plugins/filebrowser.c:1120
 msgid ""
 "Don't show generated object files in the file browser, this includes *.o, *."
 "obj. *.so, *.dll, *.a, *.lib"
@@ -4902,11 +4893,11 @@ msgstr ""
 "Dosya yöneticisinde oluşturulmuş nesne dosyalarını görüntüleme, bu dosyalar; "
 "*.o, *.obj. *.so, *.dll, *.a, *.lib"
 
-#: ../plugins/filebrowser.c:1128
+#: ../plugins/filebrowser.c:1131
 msgid "Set the project's base directory"
 msgstr "Projenin ana dizinini ayarla"
 
-#: ../plugins/filebrowser.c:1132
+#: ../plugins/filebrowser.c:1135
 msgid ""
 "Change the directory to the base directory of the currently opened project"
 msgstr "Dizini şu anda açık olan projenin temel dizini olarak ayarla"

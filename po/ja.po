@@ -412,9 +412,8 @@ msgid "Detect from file"
 msgstr "ファイルから検出"
 
 #: ../src/dialogs.c:259
-#, fuzzy
 msgid "_More Options"
-msgstr "オプション"
+msgstr "オプション(_M)"
 
 #. line 1 with checkbox and encoding combo
 #: ../src/dialogs.c:266
@@ -669,9 +668,8 @@ msgid ", read-only"
 msgstr ", 読み取り専用"
 
 #: ../src/document.c:1561
-#, fuzzy
 msgid "Error renaming file."
-msgstr "ファイル保存中にエラー"
+msgstr "ファイル名変更中にエラー"
 
 #: ../src/document.c:1636
 #, c-format
@@ -1088,9 +1086,8 @@ msgid "_Decrease Indent"
 msgstr "インデントを減らす(_D)"
 
 #: ../src/interface.c:526 ../src/interface.c:1995
-#, fuzzy
 msgid "_Send Selection to Terminal"
-msgstr "選択範囲を送る(_S)"
+msgstr "選択範囲を端末に送る(_S)"
 
 #: ../src/interface.c:530 ../src/interface.c:1999
 msgid "_Send Selection to"
@@ -1133,9 +1130,8 @@ msgid "_Insert \"include <...>\""
 msgstr "\"include <...>\" 文を挿入(_I)"
 
 #: ../src/interface.c:613
-#, fuzzy
 msgid "Preference_s"
-msgstr "設定"
+msgstr "設定(_S)"
 
 #: ../src/interface.c:621
 msgid "_Search"
@@ -1330,9 +1326,8 @@ msgid "_Open"
 msgstr "開く(_O)"
 
 #: ../src/interface.c:955
-#, fuzzy
 msgid "_Recent Projects"
-msgstr "プロジェクトを開く"
+msgstr "最近のプロジェクト(_R)"
 
 #: ../src/interface.c:959
 msgid "_Close"
@@ -1419,9 +1414,8 @@ msgid "_Small Icons"
 msgstr "小さいアイコン(_S)"
 
 #: ../src/interface.c:1760 ../src/interface.c:3306
-#, fuzzy
 msgid "_Very Small Icons"
-msgstr "小さいアイコン(_S)"
+msgstr "最小のアイコン(_V)"
 
 #: ../src/interface.c:1770
 msgid "_Hide toolbar"
@@ -1520,9 +1514,8 @@ msgid "Path to start in when opening project files"
 msgstr "プロジェクトファイルを開くときに使用するパスです。"
 
 #: ../src/interface.c:2796
-#, fuzzy
 msgid "Extra plugin path:"
-msgstr "プラグインサポートを有効にする"
+msgstr "プラグインのパス"
 
 #: ../src/interface.c:2808
 msgid ""
@@ -1530,6 +1523,9 @@ msgid ""
 "configuration directory. The path entered here will be searched additionally "
 "for plugins. Leave blank to disable."
 msgstr ""
+"Geany はインストール先と、環境設定が保存されているパスからプラグインを"
+"検索します。ここで指定したパスからもプラグインを検索するようになります。"
+"指定しないときは空欄のままにしてください。"
 
 #: ../src/interface.c:2821
 msgid "<b>Paths</b>"
@@ -1639,7 +1635,6 @@ msgid "Store project file inside the project base directory"
 msgstr "プロジェクトファイルをプロジェクトの基本ディレクトリに保存しますか?"
 
 #: ../src/interface.c:2929
-#, fuzzy
 msgid ""
 "When enabled, a project file is stored by default inside the project base "
 "directory when creating new projects instead of one directory above the base "
@@ -1647,7 +1642,7 @@ msgid ""
 "Project dialog."
 msgstr ""
 "有効にすると、新しいプロジェクトを作成するときに、プロジェクトファイルがプロ"
-"ジェクトの基本ディレクトリに保存されます。無効にすると、基本ディレクトリの１"
+"ジェクトのディレクトリに保存されます。無効にすると、ディレクトリの１"
 "つ上のディレクトリに保存されます。新規プロジェクトダイアログで、プロジェクト"
 "ファイルのパスを変更することも可能です。"
 
@@ -1790,17 +1785,16 @@ msgid "Interface"
 msgstr "インターフェース"
 
 #: ../src/interface.c:3222
-#, fuzzy
 msgid "Show T_oolbar"
-msgstr "ツールバーを表示"
+msgstr "ツールバーを表示(_O)"
 
 #: ../src/interface.c:3226
 msgid "_Append Toolbar to the Menu"
-msgstr ""
+msgstr "メニューにツールバーを追加(_A)"
 
 #: ../src/interface.c:3229
 msgid "Pack the toolbar to the main menu to save vertical space"
-msgstr ""
+msgstr "メインメニューにツールバーを縦に収納する"
 
 #: ../src/interface.c:3231
 msgid "<b>Toolbar</b>"
@@ -1877,7 +1871,6 @@ msgid "Fold/unfold all children of a fold point"
 msgstr "折りたたみ位置のすべてのコードを表示/非表示"
 
 #: ../src/interface.c:3369
-#, fuzzy
 msgid ""
 "Fold or unfold all children of a fold point. By pressing the Shift key while "
 "clicking on a fold symbol the contrary behavior is used."
@@ -2103,16 +2096,15 @@ msgstr "波括弧の補完 {}"
 
 #: ../src/interface.c:3691
 msgid "Auto-close curly bracket when typing an opening one"
-msgstr "開括弧を入力すると閉括弧を補完する"
+msgstr "開波括弧を入力すると閉波括弧を補完する"
 
 #: ../src/interface.c:3693
 msgid "Square brackets [ ]"
 msgstr "角括弧の補完 [ ]"
 
 #: ../src/interface.c:3698
-#, fuzzy
 msgid "Auto-close square-bracket when typing an opening one"
-msgstr "開括弧を入力すると閉括弧を補完する"
+msgstr "開角括弧を入力すると閉角括弧を補完する"
 
 #: ../src/interface.c:3700
 msgid "Double quotes \" \""
@@ -2120,7 +2112,7 @@ msgstr "二重引用符の補完"
 
 #: ../src/interface.c:3705
 msgid "Auto-close double quote when typing an opening one"
-msgstr "引用開始を入力すると引用終了を補完する"
+msgstr "二重引用開始を入力すると二重引用終了を補完する"
 
 #: ../src/interface.c:3707
 msgid "<b>Auto-close quotes and brackets</b>"
@@ -2163,7 +2155,6 @@ msgid "Show line endings"
 msgstr "行末を表示"
 
 #: ../src/interface.c:3753
-#, fuzzy
 msgid "Shows the line ending character"
 msgstr "行末文字を表示します"
 
@@ -2543,17 +2534,16 @@ msgid "Print page numbers"
 msgstr "ページ番号を印刷"
 
 #: ../src/interface.c:4518 ../src/printing.c:352
-#, fuzzy
 msgid ""
 "Add page numbers at the bottom of each page. It takes 2 lines of the page."
-msgstr "ページ番号をページ下部に追加します。２行分を必要とします。"
+msgstr ""
+"ページ番号をページ下部に追加します。２行分を必要とします。"
 
 #: ../src/interface.c:4520 ../src/printing.c:355
 msgid "Print page header"
 msgstr "ページのヘッダを印刷"
 
 #: ../src/interface.c:4523 ../src/printing.c:357
-#, fuzzy
 msgid ""
 "Add a little header to every page containing the page number, the filename "
 "and the current date (see below). It takes 3 lines of the page."
@@ -2566,7 +2556,6 @@ msgid "Use the basename of the printed file"
 msgstr "印刷ファイルのベース名を使用"
 
 #: ../src/interface.c:4543
-#, fuzzy
 msgid "Print only the basename (without the path) of the printed file"
 msgstr "印刷ファイルのベース名（パスを除いたもの）のみを印刷します"
 
@@ -2804,9 +2793,8 @@ msgid "Send to Custom Command 3"
 msgstr "カスタムコマンド 3"
 
 #: ../src/keybindings.c:317
-#, fuzzy
 msgid "Send Selection to Terminal"
-msgstr "選択範囲を送る(_S)"
+msgstr "選択範囲を端末に送る"
 
 #: ../src/keybindings.c:319
 msgid "Insert"
@@ -3440,7 +3428,6 @@ msgid "Printing of %s failed (%s)."
 msgstr "%s の印刷に失敗しました（%s）。"
 
 #: ../src/printing.c:832
-#, fuzzy
 msgid "Please set a print command in the preferences dialog first."
 msgstr "先に設定ダイアログで印刷コマンドを設定してください"
 
@@ -3744,7 +3731,6 @@ msgid "_Invert search results"
 msgstr "検索結果を反転する(_I)"
 
 #: ../src/search.c:782
-#, fuzzy
 msgid "Invert the sense of matching, to select non-matching lines"
 msgstr "検索文字列に合致しない行を選択するには、検索結果を反転してください"
 
@@ -4179,9 +4165,8 @@ msgid "Quit Geany"
 msgstr "Geany を終了"
 
 #: ../src/toolbar.c:75
-#, fuzzy
 msgid "Print document"
-msgstr "XML 文書"
+msgstr "文書を印刷"
 
 #: ../src/toolbar.c:153
 msgid ""
@@ -4695,7 +4680,7 @@ msgstr "その他の記号"
 
 #: ../plugins/htmlchars.c:456
 msgid "Special Characters"
-msgstr "特殊文字"
+msgstr "特殊記号"
 
 #: ../plugins/htmlchars.c:458
 msgid "_Insert"
@@ -4706,7 +4691,7 @@ msgid ""
 "Choose a special character from the list below and double click on it or use "
 "the button to insert it at the current cursor position."
 msgstr ""
-"以下のリストから特殊文字を選択して、ダブルクリックするかボタンを使用して現在"
+"以下のリストから特殊記号を選択して、ダブルクリックするかボタンを使用して現在"
 "のカーソル位置に挿入します"
 
 #: ../plugins/htmlchars.c:481
@@ -4723,32 +4708,28 @@ msgstr "特殊 HTML 記号を挿入(_I)"
 
 #. Add menuitem for html replacement functions
 #: ../plugins/htmlchars.c:699
-#, fuzzy
 msgid "HTML Replacement"
-msgstr "置換"
+msgstr "HTML 置換"
 
 #: ../plugins/htmlchars.c:706
 msgid "_HTMLToggle"
-msgstr ""
+msgstr "HTML 反転(_T)"
 
 #: ../plugins/htmlchars.c:715
-#, fuzzy
 msgid "Bulk replacement of special chars"
-msgstr "新規ファイルタブの配置:"
+msgstr "特殊記号の一括置換"
 
 #: ../plugins/htmlchars.c:730
 msgid "Insert Special HTML Characters"
 msgstr "特殊 HTML 記号を挿入"
 
 #: ../plugins/htmlchars.c:733
-#, fuzzy
 msgid "Replace special characters"
-msgstr "特殊文字"
+msgstr "特殊記号を置換"
 
 #: ../plugins/htmlchars.c:736
-#, fuzzy
 msgid "Toggle plugin status"
-msgstr "行のコメント化を反転"
+msgstr "プラグインの状態を反転"
 
 #: ../plugins/export.c:45
 msgid "Export"
@@ -4767,10 +4748,10 @@ msgid "_Use current zoom level"
 msgstr "現在のズームレベルを使用(_U)"
 
 #: ../plugins/export.c:193
-#, fuzzy
 msgid ""
 "Renders the font size of the document together with the current zoom level"
-msgstr "文書のフォントサイズを現在のズームレベルでレンダリングします"
+msgstr ""
+"文書のフォントサイズを現在のズームレベルでレンダリングします"
 
 #: ../plugins/export.c:275
 #, c-format
@@ -5027,19 +5008,16 @@ msgid "_Vertically"
 msgstr "上下に分割(_V)"
 
 #: ../plugins/splitwindow.c:422
-#, fuzzy
 msgid "Split Horizontally"
-msgstr "左右に分割(_H)"
+msgstr "左右に分割"
 
 #: ../plugins/splitwindow.c:424
-#, fuzzy
 msgid "Split Vertically"
-msgstr "上下に分割(_V)"
+msgstr "上下に分割"
 
 #: ../plugins/splitwindow.c:426
-#, fuzzy
 msgid "Unsplit"
-msgstr "ウィンドウを結合(_U)"
+msgstr "ウィンドウを結合"
 
 #~ msgid "Failed to view %s (make sure it is already compiled)"
 #~ msgstr "%s の表示に失敗（すでにコンパイルされているか確認してください）"
