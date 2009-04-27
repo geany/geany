@@ -759,9 +759,9 @@ void ui_sidebar_show_hide(void)
 	ui_widget_show_hide(main_widgets.sidebar_notebook, ui_prefs.sidebar_visible);
 
 	ui_widget_show_hide(gtk_notebook_get_nth_page(
-					GTK_NOTEBOOK(main_widgets.sidebar_notebook), 0), interface_prefs.sidebar_symbol_visible);
+		GTK_NOTEBOOK(main_widgets.sidebar_notebook), 0), interface_prefs.sidebar_symbol_visible);
 	ui_widget_show_hide(gtk_notebook_get_nth_page(
-					GTK_NOTEBOOK(main_widgets.sidebar_notebook), 1), interface_prefs.sidebar_openfiles_visible);
+		GTK_NOTEBOOK(main_widgets.sidebar_notebook), 1), interface_prefs.sidebar_openfiles_visible);
 }
 
 

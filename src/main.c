@@ -191,6 +191,7 @@ static void apply_settings(void)
 		ignore_callback = FALSE;
 	}
 	ui_sidebar_show_hide();
+
 	/* sets the icon style of the toolbar */
 	switch (toolbar_prefs.icon_style)
 	{
@@ -1047,6 +1048,9 @@ gint main(gint argc, gchar **argv)
 	if (want_plugins)
 		plugins_load_active();
 #endif
+
+	/* set the active sidebar page after plugins have been loaded */
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook), ui_prefs.sidebar_page);
 
 	/* load keybinding settings after plugins have added their groups */
 	keybindings_load_keyfile();

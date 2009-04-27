@@ -1623,16 +1623,12 @@ void
 on_menu_show_sidebar1_toggled          (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data)
 {
-	static gint active_page = -1;
-
-	if (ignore_callback) return;
+	if (ignore_callback)
+		return;
 
 	if (ui_prefs.sidebar_visible)
-	{
-		/* to remember the active page because GTK (e.g. 2.8.18) doesn't do it and shows always
-		 * the last page (for unknown reason, with GTK 2.6.4 it works) */
-		active_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook));
-	}
+		ui_prefs.sidebar_page = gtk_notebook_get_current_page(
+			GTK_NOTEBOOK(main_widgets.sidebar_notebook));
 
 	ui_prefs.sidebar_visible = ! ui_prefs.sidebar_visible;
 
@@ -1643,7 +1639,8 @@ on_menu_show_sidebar1_toggled          (GtkCheckMenuItem *checkmenuitem,
 	}
 
 	ui_sidebar_show_hide();
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook), active_page);
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook),
+		ui_prefs.sidebar_page);
 }
 
 
