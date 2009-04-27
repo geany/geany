@@ -63,12 +63,6 @@
 #include "win32.h"
 
 
-#ifdef G_OS_WIN32
-# define PLUGIN_EXT "dll"
-#else
-# define PLUGIN_EXT "so"
-#endif
-
 
 typedef struct GeanyPluginPrivate
 {
@@ -790,7 +784,7 @@ load_plugins_from_path(const gchar *path)
 	for (item = list; item != NULL; item = g_slist_next(item))
 	{
 		tmp = strrchr(item->data, '.');
-		if (tmp == NULL || utils_str_casecmp(tmp, "." PLUGIN_EXT) != 0)
+		if (tmp == NULL || utils_str_casecmp(tmp, "." G_MODULE_SUFFIX) != 0)
 			continue;
 
 		fname = g_strconcat(path, G_DIR_SEPARATOR_S, item->data, NULL);
