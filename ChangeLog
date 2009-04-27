@@ -3,6 +3,8 @@
  * src/callbacks.c, src/keyfile.c, src/main.c, src/ui_utils.c,
    src/ui_utils.h:
    Remember the active sidebar page between sessions.
+ * src/project.c:
+   Add a recent project item after creating a new project.
 
 
 2009-04-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

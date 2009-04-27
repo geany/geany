@@ -191,8 +191,12 @@ void project_new(void)
 	retry:
 	response = gtk_dialog_run(GTK_DIALOG(e->dialog));
 	if (response == GTK_RESPONSE_OK)
+	{
 		if (! update_config(e))
 			goto retry;
+		else
+			ui_add_recent_project_file(app->project->file_name);
+	}
 
 	gtk_widget_destroy(e->dialog);
 	g_free(e);
