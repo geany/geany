@@ -7,6 +7,9 @@
    Add a recent project item after creating a new project.
  * tagmanager/ruby.c:
    Fix wrong parsing of string literals (closes #2781264).
+ * src/treeviews.c:
+   Fix setting focus to the editor widget after changing the selection
+   in the symbol list.
 
 
 2009-04-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

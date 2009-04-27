@@ -667,19 +667,25 @@ static void on_openfiles_document_action(GtkMenuItem *menuitem, gpointer user_da
 }
 
 
-static gboolean change_focus(gpointer data)
+static gboolean change_focus_to_editor(GeanyDocument *doc, GtkWidget *focus_widget)
 {
-	GeanyDocument *doc = data;
-
 	/* idx might not be valid e.g. if user closed a tab whilst Geany is opening files */
 	if (DOC_VALID(doc))
 	{
 		GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 		GtkWidget *sci = GTK_WIDGET(doc->editor->sci);
 
-		if (focusw == tv.tree_openfiles)
+		if (focusw == focus_widget)
 			gtk_widget_grab_focus(sci);
 	}
+	return FALSE;
+}
+
+
+static gboolean change_focus_cb(gpointer data)
+{
+	change_focus_to_editor(data, tv.tree_openfiles);
+
 	return FALSE;
 }
 
@@ -699,7 +705,7 @@ static void on_openfiles_tree_selection_changed(GtkTreeSelection *selection, gpo
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
 					gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
 					(GtkWidget*) doc->editor->sci));
-		g_idle_add((GSourceFunc) change_focus, doc);
+		g_idle_add((GSourceFunc) change_focus_cb, doc);
 	}
 }
 
@@ -723,7 +729,11 @@ static gboolean on_taglist_tree_selection_changed(GtkTreeSelection *selection)
 		{
 			GeanyDocument *doc = document_get_current();
 
-			navqueue_goto_line(doc, doc, line);
+			if (doc != NULL)
+			{
+				navqueue_goto_line(doc, doc, line);
+				change_focus_to_editor(doc, doc->priv->tag_tree);
+			}
 		}
 	}
 	return FALSE;
