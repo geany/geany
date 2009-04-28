@@ -30,7 +30,6 @@ Note: features included in brackets have lower priority.
 
 
 	1.0:
-	o generating tags for latex/pascal/php
 	o stable plugin ABI for the 1.0 series? (Split up geany_data, prefs,
 	  GeanyKeyCommand enum into groups)
 	o review documentation
@@ -44,4 +43,4 @@ Note: these items might not get worked on.
 
 	o Some kind of support for CTags tags files
 	o Scope resolution for object members
-	o Python plugin interface (different concept from Lua scripting).
+	o Python plugin interface (different concept from Lua scripting)
