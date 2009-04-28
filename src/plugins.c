@@ -671,7 +671,7 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 		g_free(plugin);
 		return NULL;
 	}
-	geany_debug("Initializing plugin '%s'", plugin->info.name);
+	/*geany_debug("Initializing plugin '%s'", plugin->info.name);*/
 
 	plugin->filename = g_strdup(fname);
 	plugin->module = module;
