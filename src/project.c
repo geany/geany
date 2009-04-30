@@ -462,7 +462,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 		"Options can be appended to the command. "
 		"Leave blank to use the default run command."));
 	button = gtk_button_new();
-	g_signal_connect(button, "clicked", G_CALLBACK(on_file_open_button_clicked), e->run_cmd);
+	g_signal_connect(button, "clicked", G_CALLBACK(on_file_open_button_clicked), e);
 	image = gtk_image_new_from_stock("gtk-open", GTK_ICON_SIZE_BUTTON);
 	gtk_container_add(GTK_CONTAINER(button), image);
 	bbox = gtk_hbox_new(FALSE, 6);

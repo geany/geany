@@ -3,6 +3,9 @@
  * src/callbacks.c, src/callbacks.h, src/main.c:
    Update the View->Fullscreen menu item when fullscreen state is
    changed externally (e.g. by the window manager).
+ * src/project.c:
+   Fix passing wrong pointer to the File Open dialog for the Run
+   command in the Project Properties dialog.
 
 
 2009-04-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
