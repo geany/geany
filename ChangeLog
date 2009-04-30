@@ -1,3 +1,10 @@
+2009-04-30  geany test  <elextr(at)gmail(dot)com>
+
+ * geany.glade:
+   Modified to add Build command tab to project preference notebook for
+   comments. (doesn't work yet)
+
+
 2009-03-23  Lex Trotman  <elextr(at)gmail(dot)com>
 
 	Update Branch to truck and backout disputed changes

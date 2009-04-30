@@ -4918,6 +4918,73 @@ create_project_dialog (void)
   GtkWidget *spin_tab_width;
   GtkWidget *check_detect_indent;
   GtkWidget *label227;
+  GtkWidget *table18;
+  GtkWidget *label237;
+  GtkWidget *label242;
+  GtkWidget *label238;
+  GtkWidget *label239;
+  GtkWidget *label251;
+  GtkWidget *entry19;
+  GtkWidget *button16;
+  GtkWidget *image2863;
+  GtkWidget *hseparator9;
+  GtkWidget *label250;
+  GtkWidget *entry21;
+  GtkWidget *entry20;
+  GtkWidget *button15;
+  GtkWidget *image2862;
+  GtkWidget *hseparator5;
+  GtkWidget *label249;
+  GtkWidget *entry13;
+  GtkWidget *entry18;
+  GtkWidget *button14;
+  GtkWidget *image2861;
+  GtkWidget *label248;
+  GtkWidget *entry12;
+  GtkWidget *entry17;
+  GtkWidget *button13;
+  GtkWidget *image2860;
+  GtkWidget *label247;
+  GtkWidget *entry11;
+  GtkWidget *entry16;
+  GtkWidget *button12;
+  GtkWidget *image2859;
+  GtkWidget *label246;
+  GtkWidget *entry10;
+  GtkWidget *entry15;
+  GtkWidget *button11;
+  GtkWidget *image2858;
+  GtkWidget *label245;
+  GtkWidget *entry9;
+  GtkWidget *entry14;
+  GtkWidget *button10;
+  GtkWidget *image2857;
+  GtkWidget *hseparator1;
+  GtkWidget *label244;
+  GtkWidget *entry7;
+  GtkWidget *entry8;
+  GtkWidget *button9;
+  GtkWidget *image2856;
+  GtkWidget *label243;
+  GtkWidget *entry5;
+  GtkWidget *entry6;
+  GtkWidget *button8;
+  GtkWidget *image2855;
+  GtkWidget *label241;
+  GtkWidget *entry3;
+  GtkWidget *entry4;
+  GtkWidget *button7;
+  GtkWidget *image2853;
+  GtkWidget *label240;
+  GtkWidget *entry1;
+  GtkWidget *entry2;
+  GtkWidget *button6;
+  GtkWidget *image2854;
+  GtkWidget *label257;
+  GtkWidget *label258;
+  GtkWidget *label256;
+  GtkWidget *hseparator12;
+  GtkWidget *label255;
   GtkWidget *dialog_action_area4;
   GtkWidget *cancelbutton1;
   GtkWidget *okbutton1;
@@ -5047,6 +5114,425 @@ create_project_dialog (void)
   gtk_widget_show (label227);
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (project_notebook), gtk_notebook_get_nth_page (GTK_NOTEBOOK (project_notebook), 0), label227);
 
+  table18 = gtk_table_new (19, 4, FALSE);
+  gtk_widget_show (table18);
+  gtk_container_add (GTK_CONTAINER (project_notebook), table18);
+
+  label237 = gtk_label_new (_("Item:"));
+  gtk_widget_show (label237);
+  gtk_table_attach (GTK_TABLE (table18), label237, 0, 1, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_label_set_justify (GTK_LABEL (label237), GTK_JUSTIFY_CENTER);
+  gtk_misc_set_alignment (GTK_MISC (label237), 0, 0.5);
+
+  label242 = gtk_label_new (_("Clear"));
+  gtk_widget_show (label242);
+  gtk_table_attach (GTK_TABLE (table18), label242, 3, 4, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_label_set_justify (GTK_LABEL (label242), GTK_JUSTIFY_CENTER);
+  gtk_misc_set_alignment (GTK_MISC (label242), 0, 0.5);
+
+  label238 = gtk_label_new (_("Name:"));
+  gtk_widget_show (label238);
+  gtk_table_attach (GTK_TABLE (table18), label238, 1, 2, 0, 1,
+                    (GtkAttachOptions) (0),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_label_set_justify (GTK_LABEL (label238), GTK_JUSTIFY_CENTER);
+  gtk_misc_set_alignment (GTK_MISC (label238), 0, 0.5);
+
+  label239 = gtk_label_new (_("Command: *"));
+  gtk_widget_show (label239);
+  gtk_table_attach (GTK_TABLE (table18), label239, 2, 3, 0, 1,
+                    (GtkAttachOptions) (0),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_label_set_justify (GTK_LABEL (label239), GTK_JUSTIFY_CENTER);
+  gtk_misc_set_alignment (GTK_MISC (label239), 0, 0.5);
+
+  label251 = gtk_label_new (_("Error regular expression:"));
+  gtk_widget_show (label251);
+  gtk_table_attach (GTK_TABLE (table18), label251, 0, 2, 16, 17,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label251), 0, 0.5);
+
+  entry19 = gtk_entry_new ();
+  gtk_widget_show (entry19);
+  gtk_table_attach (GTK_TABLE (table18), entry19, 2, 3, 16, 17,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_entry_set_invisible_char (GTK_ENTRY (entry19), 9679);
+
+  button16 = gtk_button_new ();
+  gtk_widget_show (button16);
+  gtk_table_attach (GTK_TABLE (table18), button16, 3, 4, 16, 17,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+
+  image2863 = gtk_image_new_from_stock ("gtk-clear", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_show (image2863);
+  gtk_container_add (GTK_CONTAINER (button16), image2863);
+
+  hseparator9 = gtk_hseparator_new ();
+  gtk_widget_show (hseparator9);
+  gtk_table_attach (GTK_TABLE (table18), hseparator9, 0, 4, 15, 16,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), 0, 0);
+
+  label250 = gtk_label_new (_("Run: "));
+  gtk_widget_show (label250);
+  gtk_table_attach (GTK_TABLE (table18), label250, 0, 1, 14, 15,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label250), 0, 0.5);
+
+  entry21 = gtk_entry_new ();
+  gtk_widget_show (entry21);
+  gtk_table_attach (GTK_TABLE (table18), entry21, 1, 2, 14, 15,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_entry_set_invisible_char (GTK_ENTRY (entry21), 9679);
+
+  entry20 = gtk_entry_new ();
+  gtk_widget_show (entry20);
+  gtk_table_attach (GTK_TABLE (table18), entry20, 2, 3, 14, 15,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_entry_set_invisible_char (GTK_ENTRY (entry20), 9679);
+
+  button15 = gtk_button_new ();
+  gtk_widget_show (button15);
+  gtk_table_attach (GTK_TABLE (table18), button15, 3, 4, 14, 15,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+
+  image2862 = gtk_image_new_from_stock ("gtk-clear", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_show (image2862);
+  gtk_container_add (GTK_CONTAINER (button15), image2862);
+
+  hseparator5 = gtk_hseparator_new ();
+  gtk_widget_show (hseparator5);
+  gtk_table_attach (GTK_TABLE (table18), hseparator5, 0, 4, 13, 14,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), 0, 0);
+
+  label249 = gtk_label_new (_("5: "));
+  gtk_widget_show (label249);
+  gtk_table_attach (GTK_TABLE (table18), label249, 0, 1, 12, 13,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label249), 0, 0.5);
+
+  entry13 = gtk_entry_new ();
+  gtk_widget_show (entry13);
+  gtk_table_attach (GTK_TABLE (table18), entry13, 1, 2, 12, 13,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_entry_set_invisible_char (GTK_ENTRY (entry13), 9679);
+
+  entry18 = gtk_entry_new ();
+  gtk_widget_show (entry18);
+  gtk_table_attach (GTK_TABLE (table18), entry18, 2, 3, 12, 13,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_entry_set_invisible_char (GTK_ENTRY (entry18), 9679);
+
+  button14 = gtk_button_new ();
+  gtk_widget_show (button14);
+  gtk_table_attach (GTK_TABLE (table18), button14, 3, 4, 12, 13,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+
+  image2861 = gtk_image_new_from_stock ("gtk-clear", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_show (image2861);
+  gtk_container_add (GTK_CONTAINER (button14), image2861);
+
+  label248 = gtk_label_new (_("4: "));
+  gtk_widget_show (label248);
+  gtk_table_attach (GTK_TABLE (table18), label248, 0, 1, 11, 12,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label248), 0, 0.5);
+
+  entry12 = gtk_entry_new ();
+  gtk_widget_show (entry12);
+  gtk_table_attach (GTK_TABLE (table18), entry12, 1, 2, 11, 12,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_entry_set_invisible_char (GTK_ENTRY (entry12), 9679);
+
+  entry17 = gtk_entry_new ();
+  gtk_widget_show (entry17);
+  gtk_table_attach (GTK_TABLE (table18), entry17, 2, 3, 11, 12,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_entry_set_invisible_char (GTK_ENTRY (entry17), 9679);
+
+  button13 = gtk_button_new ();
+  gtk_widget_show (button13);
+  gtk_table_attach (GTK_TABLE (table18), button13, 3, 4, 11, 12,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+
+  image2860 = gtk_image_new_from_stock ("gtk-clear", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_show (image2860);
+  gtk_container_add (GTK_CONTAINER (button13), image2860);
+
+  label247 = gtk_label_new (_("3: "));
+  gtk_widget_show (label247);
+  gtk_table_attach (GTK_TABLE (table18), label247, 0, 1, 10, 11,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label247), 0, 0.5);
+
+  entry11 = gtk_entry_new ();
+  gtk_widget_show (entry11);
+  gtk_table_attach (GTK_TABLE (table18), entry11, 1, 2, 10, 11,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_entry_set_invisible_char (GTK_ENTRY (entry11), 9679);
+
+  entry16 = gtk_entry_new ();
+  gtk_widget_show (entry16);
+  gtk_table_attach (GTK_TABLE (table18), entry16, 2, 3, 10, 11,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_entry_set_invisible_char (GTK_ENTRY (entry16), 9679);
+
+  button12 = gtk_button_new ();
+  gtk_widget_show (button12);
+  gtk_table_attach (GTK_TABLE (table18), button12, 3, 4, 10, 11,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+
+  image2859 = gtk_image_new_from_stock ("gtk-clear", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_show (image2859);
+  gtk_container_add (GTK_CONTAINER (button12), image2859);
+
+  label246 = gtk_label_new (_("2: "));
+  gtk_widget_show (label246);
+  gtk_table_attach (GTK_TABLE (table18), label246, 0, 1, 9, 10,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label246), 0, 0.5);
+
+  entry10 = gtk_entry_new ();
+  gtk_widget_show (entry10);
+  gtk_table_attach (GTK_TABLE (table18), entry10, 1, 2, 9, 10,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_entry_set_invisible_char (GTK_ENTRY (entry10), 9679);
+
+  entry15 = gtk_entry_new ();
+  gtk_widget_show (entry15);
+  gtk_table_attach (GTK_TABLE (table18), entry15, 2, 3, 9, 10,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_entry_set_invisible_char (GTK_ENTRY (entry15), 9679);
+
+  button11 = gtk_button_new ();
+  gtk_widget_show (button11);
+  gtk_table_attach (GTK_TABLE (table18), button11, 3, 4, 9, 10,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+
+  image2858 = gtk_image_new_from_stock ("gtk-clear", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_show (image2858);
+  gtk_container_add (GTK_CONTAINER (button11), image2858);
+
+  label245 = gtk_label_new (_("1: "));
+  gtk_widget_show (label245);
+  gtk_table_attach (GTK_TABLE (table18), label245, 0, 1, 8, 9,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label245), 0, 0.5);
+
+  entry9 = gtk_entry_new ();
+  gtk_widget_show (entry9);
+  gtk_table_attach (GTK_TABLE (table18), entry9, 1, 2, 8, 9,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_entry_set_invisible_char (GTK_ENTRY (entry9), 9679);
+
+  entry14 = gtk_entry_new ();
+  gtk_widget_show (entry14);
+  gtk_table_attach (GTK_TABLE (table18), entry14, 2, 3, 8, 9,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_entry_set_invisible_char (GTK_ENTRY (entry14), 9679);
+
+  button10 = gtk_button_new ();
+  gtk_widget_show (button10);
+  gtk_table_attach (GTK_TABLE (table18), button10, 3, 4, 8, 9,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+
+  image2857 = gtk_image_new_from_stock ("gtk-clear", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_show (image2857);
+  gtk_container_add (GTK_CONTAINER (button10), image2857);
+
+  hseparator1 = gtk_hseparator_new ();
+  gtk_widget_show (hseparator1);
+  gtk_table_attach (GTK_TABLE (table18), hseparator1, 0, 4, 6, 7,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), 0, 0);
+
+  label244 = gtk_label_new (_("4: "));
+  gtk_widget_show (label244);
+  gtk_table_attach (GTK_TABLE (table18), label244, 0, 1, 5, 6,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label244), 0, 0.5);
+
+  entry7 = gtk_entry_new ();
+  gtk_widget_show (entry7);
+  gtk_table_attach (GTK_TABLE (table18), entry7, 1, 2, 5, 6,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_entry_set_invisible_char (GTK_ENTRY (entry7), 9679);
+
+  entry8 = gtk_entry_new ();
+  gtk_widget_show (entry8);
+  gtk_table_attach (GTK_TABLE (table18), entry8, 2, 3, 5, 6,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_entry_set_invisible_char (GTK_ENTRY (entry8), 9679);
+
+  button9 = gtk_button_new ();
+  gtk_widget_show (button9);
+  gtk_table_attach (GTK_TABLE (table18), button9, 3, 4, 5, 6,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+
+  image2856 = gtk_image_new_from_stock ("gtk-clear", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_show (image2856);
+  gtk_container_add (GTK_CONTAINER (button9), image2856);
+
+  label243 = gtk_label_new (_("3: "));
+  gtk_widget_show (label243);
+  gtk_table_attach (GTK_TABLE (table18), label243, 0, 1, 4, 5,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label243), 0, 0.5);
+
+  entry5 = gtk_entry_new ();
+  gtk_widget_show (entry5);
+  gtk_table_attach (GTK_TABLE (table18), entry5, 1, 2, 4, 5,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_entry_set_invisible_char (GTK_ENTRY (entry5), 9679);
+
+  entry6 = gtk_entry_new ();
+  gtk_widget_show (entry6);
+  gtk_table_attach (GTK_TABLE (table18), entry6, 2, 3, 4, 5,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_entry_set_invisible_char (GTK_ENTRY (entry6), 9679);
+
+  button8 = gtk_button_new ();
+  gtk_widget_show (button8);
+  gtk_table_attach (GTK_TABLE (table18), button8, 3, 4, 4, 5,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+
+  image2855 = gtk_image_new_from_stock ("gtk-clear", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_show (image2855);
+  gtk_container_add (GTK_CONTAINER (button8), image2855);
+
+  label241 = gtk_label_new (_("2: "));
+  gtk_widget_show (label241);
+  gtk_table_attach (GTK_TABLE (table18), label241, 0, 1, 3, 4,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label241), 0, 0.5);
+
+  entry3 = gtk_entry_new ();
+  gtk_widget_show (entry3);
+  gtk_table_attach (GTK_TABLE (table18), entry3, 1, 2, 3, 4,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_entry_set_invisible_char (GTK_ENTRY (entry3), 9679);
+
+  entry4 = gtk_entry_new ();
+  gtk_widget_show (entry4);
+  gtk_table_attach (GTK_TABLE (table18), entry4, 2, 3, 3, 4,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_entry_set_invisible_char (GTK_ENTRY (entry4), 9679);
+
+  button7 = gtk_button_new ();
+  gtk_widget_show (button7);
+  gtk_table_attach (GTK_TABLE (table18), button7, 3, 4, 3, 4,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+
+  image2853 = gtk_image_new_from_stock ("gtk-clear", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_show (image2853);
+  gtk_container_add (GTK_CONTAINER (button7), image2853);
+
+  label240 = gtk_label_new (_("1: "));
+  gtk_widget_show (label240);
+  gtk_table_attach (GTK_TABLE (table18), label240, 0, 1, 2, 3,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label240), 0, 0.5);
+
+  entry1 = gtk_entry_new ();
+  gtk_widget_show (entry1);
+  gtk_table_attach (GTK_TABLE (table18), entry1, 1, 2, 2, 3,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_entry_set_invisible_char (GTK_ENTRY (entry1), 9679);
+
+  entry2 = gtk_entry_new ();
+  gtk_widget_show (entry2);
+  gtk_table_attach (GTK_TABLE (table18), entry2, 2, 3, 2, 3,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_entry_set_invisible_char (GTK_ENTRY (entry2), 9679);
+
+  button6 = gtk_button_new ();
+  gtk_widget_show (button6);
+  gtk_table_attach (GTK_TABLE (table18), button6, 3, 4, 2, 3,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+
+  image2854 = gtk_image_new_from_stock ("gtk-clear", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_show (image2854);
+  gtk_container_add (GTK_CONTAINER (button6), image2854);
+
+  label257 = gtk_label_new (_("Non-Filetype Build Menu Items"));
+  gtk_widget_show (label257);
+  gtk_table_attach (GTK_TABLE (table18), label257, 0, 4, 7, 8,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label257), 0, 0.5);
+
+  label258 = gtk_label_new (_("XXX Filetype Build Menu Items"));
+  gtk_widget_show (label258);
+  gtk_table_attach (GTK_TABLE (table18), label258, 0, 4, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label258), 0, 0.5);
+
+  label256 = gtk_label_new (_("* %f will be replaced by the current filename e.g. file.c\n  %e will be replaced by the filename without extension e.g. file"));
+  gtk_widget_show (label256);
+  gtk_table_attach (GTK_TABLE (table18), label256, 0, 4, 18, 19,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label256), 0, 0.5);
+
+  hseparator12 = gtk_hseparator_new ();
+  gtk_widget_show (hseparator12);
+  gtk_table_attach (GTK_TABLE (table18), hseparator12, 0, 4, 17, 18,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), 0, 0);
+
+  label255 = gtk_label_new (_("Build"));
+  gtk_widget_show (label255);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (project_notebook), gtk_notebook_get_nth_page (GTK_NOTEBOOK (project_notebook), 1), label255);
+
   dialog_action_area4 = GTK_DIALOG (project_dialog)->action_area;
   gtk_widget_show (dialog_action_area4);
   gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area4), GTK_BUTTONBOX_END);
@@ -5080,6 +5566,73 @@ create_project_dialog (void)
   GLADE_HOOKUP_OBJECT (project_dialog, spin_tab_width, "spin_tab_width");
   GLADE_HOOKUP_OBJECT (project_dialog, check_detect_indent, "check_detect_indent");
   GLADE_HOOKUP_OBJECT (project_dialog, label227, "label227");
+  GLADE_HOOKUP_OBJECT (project_dialog, table18, "table18");
+  GLADE_HOOKUP_OBJECT (project_dialog, label237, "label237");
+  GLADE_HOOKUP_OBJECT (project_dialog, label242, "label242");
+  GLADE_HOOKUP_OBJECT (project_dialog, label238, "label238");
+  GLADE_HOOKUP_OBJECT (project_dialog, label239, "label239");
+  GLADE_HOOKUP_OBJECT (project_dialog, label251, "label251");
+  GLADE_HOOKUP_OBJECT (project_dialog, entry19, "entry19");
+  GLADE_HOOKUP_OBJECT (project_dialog, button16, "button16");
+  GLADE_HOOKUP_OBJECT (project_dialog, image2863, "image2863");
+  GLADE_HOOKUP_OBJECT (project_dialog, hseparator9, "hseparator9");
+  GLADE_HOOKUP_OBJECT (project_dialog, label250, "label250");
+  GLADE_HOOKUP_OBJECT (project_dialog, entry21, "entry21");
+  GLADE_HOOKUP_OBJECT (project_dialog, entry20, "entry20");
+  GLADE_HOOKUP_OBJECT (project_dialog, button15, "button15");
+  GLADE_HOOKUP_OBJECT (project_dialog, image2862, "image2862");
+  GLADE_HOOKUP_OBJECT (project_dialog, hseparator5, "hseparator5");
+  GLADE_HOOKUP_OBJECT (project_dialog, label249, "label249");
+  GLADE_HOOKUP_OBJECT (project_dialog, entry13, "entry13");
+  GLADE_HOOKUP_OBJECT (project_dialog, entry18, "entry18");
+  GLADE_HOOKUP_OBJECT (project_dialog, button14, "button14");
+  GLADE_HOOKUP_OBJECT (project_dialog, image2861, "image2861");
+  GLADE_HOOKUP_OBJECT (project_dialog, label248, "label248");
+  GLADE_HOOKUP_OBJECT (project_dialog, entry12, "entry12");
+  GLADE_HOOKUP_OBJECT (project_dialog, entry17, "entry17");
+  GLADE_HOOKUP_OBJECT (project_dialog, button13, "button13");
+  GLADE_HOOKUP_OBJECT (project_dialog, image2860, "image2860");
+  GLADE_HOOKUP_OBJECT (project_dialog, label247, "label247");
+  GLADE_HOOKUP_OBJECT (project_dialog, entry11, "entry11");
+  GLADE_HOOKUP_OBJECT (project_dialog, entry16, "entry16");
+  GLADE_HOOKUP_OBJECT (project_dialog, button12, "button12");
+  GLADE_HOOKUP_OBJECT (project_dialog, image2859, "image2859");
+  GLADE_HOOKUP_OBJECT (project_dialog, label246, "label246");
+  GLADE_HOOKUP_OBJECT (project_dialog, entry10, "entry10");
+  GLADE_HOOKUP_OBJECT (project_dialog, entry15, "entry15");
+  GLADE_HOOKUP_OBJECT (project_dialog, button11, "button11");
+  GLADE_HOOKUP_OBJECT (project_dialog, image2858, "image2858");
+  GLADE_HOOKUP_OBJECT (project_dialog, label245, "label245");
+  GLADE_HOOKUP_OBJECT (project_dialog, entry9, "entry9");
+  GLADE_HOOKUP_OBJECT (project_dialog, entry14, "entry14");
+  GLADE_HOOKUP_OBJECT (project_dialog, button10, "button10");
+  GLADE_HOOKUP_OBJECT (project_dialog, image2857, "image2857");
+  GLADE_HOOKUP_OBJECT (project_dialog, hseparator1, "hseparator1");
+  GLADE_HOOKUP_OBJECT (project_dialog, label244, "label244");
+  GLADE_HOOKUP_OBJECT (project_dialog, entry7, "entry7");
+  GLADE_HOOKUP_OBJECT (project_dialog, entry8, "entry8");
+  GLADE_HOOKUP_OBJECT (project_dialog, button9, "button9");
+  GLADE_HOOKUP_OBJECT (project_dialog, image2856, "image2856");
+  GLADE_HOOKUP_OBJECT (project_dialog, label243, "label243");
+  GLADE_HOOKUP_OBJECT (project_dialog, entry5, "entry5");
+  GLADE_HOOKUP_OBJECT (project_dialog, entry6, "entry6");
+  GLADE_HOOKUP_OBJECT (project_dialog, button8, "button8");
+  GLADE_HOOKUP_OBJECT (project_dialog, image2855, "image2855");
+  GLADE_HOOKUP_OBJECT (project_dialog, label241, "label241");
+  GLADE_HOOKUP_OBJECT (project_dialog, entry3, "entry3");
+  GLADE_HOOKUP_OBJECT (project_dialog, entry4, "entry4");
+  GLADE_HOOKUP_OBJECT (project_dialog, button7, "button7");
+  GLADE_HOOKUP_OBJECT (project_dialog, image2853, "image2853");
+  GLADE_HOOKUP_OBJECT (project_dialog, label240, "label240");
+  GLADE_HOOKUP_OBJECT (project_dialog, entry1, "entry1");
+  GLADE_HOOKUP_OBJECT (project_dialog, entry2, "entry2");
+  GLADE_HOOKUP_OBJECT (project_dialog, button6, "button6");
+  GLADE_HOOKUP_OBJECT (project_dialog, image2854, "image2854");
+  GLADE_HOOKUP_OBJECT (project_dialog, label257, "label257");
+  GLADE_HOOKUP_OBJECT (project_dialog, label258, "label258");
+  GLADE_HOOKUP_OBJECT (project_dialog, label256, "label256");
+  GLADE_HOOKUP_OBJECT (project_dialog, hseparator12, "hseparator12");
+  GLADE_HOOKUP_OBJECT (project_dialog, label255, "label255");
   GLADE_HOOKUP_OBJECT_NO_REF (project_dialog, dialog_action_area4, "dialog_action_area4");
   GLADE_HOOKUP_OBJECT (project_dialog, cancelbutton1, "cancelbutton1");
   GLADE_HOOKUP_OBJECT (project_dialog, okbutton1, "okbutton1");
