@@ -3,6 +3,10 @@
  * src/symbols.c:
    Read custom system global tags files from $prefix/share/geany/tags.
    Closes #2778923.
+ * doc/geany.txt, doc/geany.html:
+   Add 'Installation prefix' section instead of quoting '/usr/local'
+   each time.
+   Update for custom system global tags files.
 
 
 2009-04-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
