@@ -602,3 +602,7 @@ on_send_selection_to_vte1_activate     (GtkMenuItem     *menuitem,
 void
 on_very_small_icons1_activate          (GtkCheckMenuItem *menuitem,
                                         gpointer          user_data);
+
+gboolean on_window_state_event         (GtkWidget           *widget,
+                                        GdkEventWindowState *event,
+                                        gpointer             user_data);
