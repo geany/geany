@@ -87,8 +87,6 @@ static TagFileInfo tag_file_info[GTF_MAX] =
 	{FALSE, "python.tags"}
 };
 
-static gchar *user_tags_dir;
-
 static GPtrArray *top_level_iter_names = NULL;
 
 static struct
@@ -1419,23 +1417,42 @@ static GHashTable *get_tagfile_hash(const GSList *file_list)
 }
 
 
+static void utils_slist_add_path(GSList *list, const gchar *path)
+{
+	GSList *node;
+
+	for (node = list; node != NULL; node = g_slist_next(node))
+	{
+		setptr(node->data,
+			g_build_path(G_DIR_SEPARATOR_S, path, node->data, NULL));
+	}
+}
+
+
 static GHashTable *init_user_tags(void)
 {
-	GSList *file_list;
+	GSList *file_list = NULL, *list = NULL;
 	GHashTable *lang_hash;
+	const gchar *dir;
 
-	user_tags_dir = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "tags", NULL);
-	file_list = utils_get_file_list(user_tags_dir, NULL, NULL);
+	dir = utils_build_path(app->configdir, "tags", NULL);
+	/* create the user tags dir for next time if it doesn't exist */
+	if (! g_file_test(dir, G_FILE_TEST_IS_DIR))
+	{
+		utils_mkdir(dir, FALSE);
+	}
+	file_list = utils_get_file_list(dir, NULL, NULL);
+	utils_slist_add_path(file_list, dir);
+
+	dir = utils_build_path(app->datadir, "tags", NULL);
+	list = utils_get_file_list(dir, NULL, NULL);
+	utils_slist_add_path(list, dir);
+	file_list = g_slist_concat(file_list, list);
+
 	lang_hash = get_tagfile_hash(file_list);
-
 	/* don't need to delete list contents because they are now used for hash contents */
 	g_slist_free(file_list);
 
-	/* create the tags dir for next time if it doesn't exist */
-	if (! g_file_test(user_tags_dir, G_FILE_TEST_IS_DIR))
-	{
-		utils_mkdir(user_tags_dir, FALSE);
-	}
 	return lang_hash;
 }
 
@@ -1463,15 +1480,13 @@ static void load_user_tags(filetype_id ft_id)
 	for (node = fnames; node != NULL; node = g_list_next(node))
 	{
 		const gint tm_lang = ft->lang;
-		gchar *fname;
+		const gchar *fname = node->data;
 
-		fname = g_strconcat(user_tags_dir, G_DIR_SEPARATOR_S, node->data, NULL);
 		if (tm_workspace_load_global_tags(fname, tm_lang))
 		{
 			geany_debug("Loaded %s (%s), total tags: %u.", fname, ft->name,
 				tm_get_workspace()->global_tags->len);
 		}
-		g_free(fname);
 	}
 	g_list_foreach(fnames, (GFunc) g_free, NULL);
 	g_list_free(fnames);
