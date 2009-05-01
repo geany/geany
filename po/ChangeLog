@@ -28,7 +28,7 @@
 
  * fr.po: Minor update on French translation to fix a typo on HTML
    headings in symbol list.
-  * zh_CN.po: Update of simplified Chinese translation
+  *zh_CN.po: Update of simplified Chinese translation
    (Thanks to Dormouse Young).
 
 
@@ -97,6 +97,11 @@
 
  * es.po: Update of Spanish translation. Thanks to Antonio Jiménez
    González.
+
+
+2009-02-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * New release: Geany 0.16
 
 
 2009-02-13  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

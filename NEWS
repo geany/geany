@@ -48,7 +48,10 @@ Geany 0.17 (TBA)
       with reading build commands' output.
 
     Plugins:
+    * HTMLchars: Extend plugin by bulk replace and replace on
+      input for special characters to their HTML entities.
     * Splitwindow: Add keybindings for the split actions.
+    * VCDiff: Remove plugin from Geany. Use GeanyVC instead.
 
     Plugin API:
     * Deprecate sci_get_text(), sci_get_selected_text() and
@@ -59,6 +62,9 @@ Geany 0.17 (TBA)
 
     Documentation:
     * Describe how to build Geany using the Waf build system.
+
+    Internationalisation:
+    * Updated translations: cs de es fi fr hu ja pt_BR ru sv tr zh_CN
 
 
 Geany 0.16 (February 15, 2009)
