@@ -68,8 +68,8 @@ Geany 0.17 (TBA)
     * Describe how to build Geany using the Waf build system.
 
     Internationalisation:
-    * Updated translations: cs, de, es, fi, fr, hu, ja, pt_BR, ru, sv,
-      tr, zh_CN
+    * Updated translations: be, cs, de, es, fi, fr, hu, ja, pt_BR, ru,
+      sv, tr, zh_CN
 
 
 Geany 0.16 (February 15, 2009)
