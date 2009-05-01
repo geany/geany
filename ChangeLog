@@ -1,3 +1,10 @@
+2009-05-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/symbols.c:
+   Show the number of tags in a user global tags file (instead of the
+   running total) in the debug message.
+
+
 2009-04-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/symbols.c:

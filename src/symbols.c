@@ -1457,6 +1457,15 @@ static GHashTable *init_user_tags(void)
 }
 
 
+static gsize get_tag_count()
+{
+	GPtrArray *tags = tm_get_workspace()->global_tags;
+	gsize count = tags ? tags->len : 0;
+
+	return count;
+}
+
+
 static void load_user_tags(filetype_id ft_id)
 {
 	static guchar tags_loaded[GEANY_MAX_BUILT_IN_FILETYPES] = {0};
@@ -1481,11 +1490,12 @@ static void load_user_tags(filetype_id ft_id)
 	{
 		const gint tm_lang = ft->lang;
 		const gchar *fname = node->data;
+		gsize old_tag_count = get_tag_count();
 
 		if (tm_workspace_load_global_tags(fname, tm_lang))
 		{
-			geany_debug("Loaded %s (%s), total tags: %u.", fname, ft->name,
-				tm_get_workspace()->global_tags->len);
+			geany_debug("Loaded %s (%s), %u tag(s).", fname, ft->name,
+				get_tag_count() - old_tag_count);
 		}
 	}
 	g_list_foreach(fnames, (GFunc) g_free, NULL);
