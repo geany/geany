@@ -3,6 +3,9 @@
  * src/symbols.c:
    Show the number of tags in a user global tags file (instead of the
    running total) in the debug message.
+ * src/symbols.c:
+   Also print debug messages when loading a tag file manually or for
+   default global tags files e.g. python.tags.
 
 
 2009-04-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

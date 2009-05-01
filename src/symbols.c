@@ -128,6 +128,33 @@ void symbols_reload_config_files(void)
 }
 
 
+static gsize get_tag_count()
+{
+	GPtrArray *tags = tm_get_workspace()->global_tags;
+	gsize count = tags ? tags->len : 0;
+
+	return count;
+}
+
+
+/* wrapper for tm_workspace_load_global_tags().
+ * note that the tag count only counts new global tags added - if a tag has the same name,
+ * currently it replaces the existing tag, so loading a file twice will say 0 tags the 2nd time. */
+static gboolean symbols_load_global_tags(const gchar *tags_file, GeanyFiletype *ft)
+{
+	gboolean result;
+	gsize old_tag_count = get_tag_count();
+
+	result = tm_workspace_load_global_tags(tags_file, ft->lang);
+	if (result)
+	{
+		geany_debug("Loaded %s (%s), %u tag(s).", tags_file, ft->name,
+			get_tag_count() - old_tag_count);
+	}
+	return result;
+}
+
+
 /* Ensure that the global tags file(s) for the file_type_idx filetype is loaded.
  * This provides autocompletion, calltips, etc. */
 void symbols_global_tags_loaded(gint file_type_idx)
@@ -172,10 +199,8 @@ void symbols_global_tags_loaded(gint file_type_idx)
 	if (! tfi->tags_loaded)
 	{
 		gchar *fname = g_strconcat(app->datadir, G_DIR_SEPARATOR_S, tfi->tag_file, NULL);
-		gint tm_lang;
 
-		tm_lang = filetypes[file_type_idx]->lang;
-		tm_workspace_load_global_tags(fname, tm_lang);
+		symbols_load_global_tags(fname, filetypes[file_type_idx]);
 		tfi->tags_loaded = TRUE;
 		g_free(fname);
 	}
@@ -1374,7 +1399,7 @@ void symbols_show_load_tags_dialog(void)
 			utf8_fname = utils_get_utf8_from_locale(fname);
 			ft = detect_global_tags_filetype(utf8_fname);
 
-			if (ft != NULL && tm_workspace_load_global_tags(fname, ft->lang))
+			if (ft != NULL && symbols_load_global_tags(fname, ft))
 				/* For translators: the first wildcard is the filetype, the second the filename */
 				ui_set_statusbar(TRUE, _("Loaded %s tags file '%s'."), ft->name, utf8_fname);
 			else
@@ -1457,22 +1482,13 @@ static GHashTable *init_user_tags(void)
 }
 
 
-static gsize get_tag_count()
-{
-	GPtrArray *tags = tm_get_workspace()->global_tags;
-	gsize count = tags ? tags->len : 0;
-
-	return count;
-}
-
-
 static void load_user_tags(filetype_id ft_id)
 {
 	static guchar tags_loaded[GEANY_MAX_BUILT_IN_FILETYPES] = {0};
 	static GHashTable *lang_hash = NULL;
 	GList *fnames;
 	const GList *node;
-	const GeanyFiletype *ft = filetypes[ft_id];
+	GeanyFiletype *ft = filetypes[ft_id];
 
 	g_return_if_fail(ft_id > 0);
 	g_return_if_fail(ft_id < GEANY_MAX_BUILT_IN_FILETYPES);
@@ -1488,15 +1504,9 @@ static void load_user_tags(filetype_id ft_id)
 
 	for (node = fnames; node != NULL; node = g_list_next(node))
 	{
-		const gint tm_lang = ft->lang;
 		const gchar *fname = node->data;
-		gsize old_tag_count = get_tag_count();
 
-		if (tm_workspace_load_global_tags(fname, tm_lang))
-		{
-			geany_debug("Loaded %s (%s), %u tag(s).", fname, ft->name,
-				get_tag_count() - old_tag_count);
-		}
+		symbols_load_global_tags(fname, ft);
 	}
 	g_list_foreach(fnames, (GFunc) g_free, NULL);
 	g_list_free(fnames);
