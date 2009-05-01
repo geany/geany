@@ -33,6 +33,7 @@ Geany 0.17 (TBA)
     * Remember the active sidebar page between sessions.
     * Add "Recent Projects" menu to the Project menu (#2728630,
       patch by Elias Pschernig).
+    * Add Tools->Configuration Files item for snippets.conf.
 
     Filetypes:
     * Fix wrong Fortran 90 comment characters when inserting templates.
@@ -59,6 +60,9 @@ Geany 0.17 (TBA)
     * Add sci_get_contents(), sci_get_contents_range() and
       sci_get_selection_contents() as replacement functions to provide
       an easier and cleaner API (initial patch by Frank).
+    * Make GEANY_FILETYPES_NONE = 0, sort filetype IDs randomly (so we can
+      append new filetypes without breaking the ABI); add
+      filetypes_by_title sorted list to GeanyData.
 
     Documentation:
     * Describe how to build Geany using the Waf build system.
