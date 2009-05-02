@@ -766,7 +766,7 @@ void tools_color_chooser(const gchar *color)
 			c[1] = '#';
 			c++;
 		}
-		gdk_color_parse(color, &gc);
+		gdk_color_parse(c, &gc);
 		gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(
 							GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->colorsel), &gc);
 		gtk_color_selection_set_previous_color(GTK_COLOR_SELECTION(
