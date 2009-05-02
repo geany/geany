@@ -1,4 +1,4 @@
-.. |(version)| replace:: 0.17
+.. |(version)| replace:: 0.18
 
 =======
  Geany

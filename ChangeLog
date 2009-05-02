@@ -4,6 +4,9 @@
    Ignore the invert syntax highlighting colours setting when printing
    to not print characters on a dark background (closes #2785244).
  * New release: Geany 0.17 "Wessex".
+ * configure.in, geany.nsi, geany_private.rc, win32-config.h, wscript,
+   src/geany.h, doc/geany.html, doc/geany.txt:
+   Post-release version bump.
 
 
 2009-04-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
