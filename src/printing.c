@@ -117,10 +117,26 @@ static gint get_line_numbers_arity(gint x)
 }
 
 
+/* FIXME use the invert function in highlighting.c */
+static guint invert(guint icolour)
+{
+	if (interface_prefs.highlighting_invert_all)
+	{
+		guint r, g, b;
+
+		r = 0xffffff - icolour;
+		g = 0xffffff - (icolour >> 8);
+		b = 0xffffff - (icolour >> 16);
+		return (r | (g << 8) | (b << 16));
+	}
+	return icolour;
+}
+
+
 /* split a RGB colour into the three colour components */
 static void get_rgb_values(gint c, gint *r, gint *g, gint *b)
 {
-	c = ROTATE_RGB(c);
+	c = invert(ROTATE_RGB(c));
 	*r = c % 256;
 	*g = (c & - 16711936) / 256;
 	*b = (c & 0xff0000) / 65536;
