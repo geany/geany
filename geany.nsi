@@ -196,7 +196,7 @@ SectionEnd
 
 ; Include GTK runtime library but only if desired from command line
 !ifdef INCLUDE_GTK
-Section "GTK 2.14 Runtime Environment" SEC06
+Section "GTK 2.16 Runtime Environment" SEC06
 	SectionIn 1
 	SetOverwrite ifnewer
 	SetOutPath "$INSTDIR\bin"
