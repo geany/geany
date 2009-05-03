@@ -46,6 +46,7 @@ Indicator.cxx \
 KeyMap.cxx \
 KeyWords.cxx \
 LineMarker.cxx \
+PerLine.cxx \
 PositionCache.cxx \
 PropSet.cxx \
 RESearch.cxx \
@@ -77,6 +78,7 @@ Indicator.h \
 KeyMap.h \
 LineMarker.h \
 Partitioning.h \
+PerLine.h \
 PositionCache.h \
 RESearch.h \
 RunStyles.h \

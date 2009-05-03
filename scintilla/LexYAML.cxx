@@ -3,7 +3,7 @@
  ** Lexer for YAML.
  **/
 // Copyright 2003- by Sean O'Dell <sean@celsoft.com>
-// Release under the same license as Scintilla/SciTE.
+// The License.txt file describes the conditions under which this software may be distributed.
 
 #include <stdlib.h>
 #include <string.h>
@@ -62,6 +62,7 @@ static void ColouriseYAMLLine(
 	unsigned int endPos,
 	WordList &keywords,
 	Accessor &styler) {
+
 	unsigned int i = 0;
 	bool bInQuotes = false;
 	unsigned int indentAmount = SpaceCount(lineBuffer);

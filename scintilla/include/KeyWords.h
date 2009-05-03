@@ -1,9 +1,9 @@
-/* Scintilla source code edit control */
+// Scintilla source code edit control
 /** @file KeyWords.h
  ** Colourise for particular languages.
  **/
-/* Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
- * The License.txt file describes the conditions under which this software may be distributed. */
+// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
+// The License.txt file describes the conditions under which this software may be distributed.
 
 #ifdef SCI_NAMESPACE
 namespace Scintilla {
@@ -11,7 +11,7 @@ namespace Scintilla {
 
 typedef void (*LexerFunction)(unsigned int startPos, int lengthDoc, int initStyle,
                   WordList *keywordlists[], Accessor &styler);
-
+                  
 /**
  * A LexerModule is responsible for lexing and folding a particular language.
  * The class maintains a list of LexerModules which can be searched to find a
@@ -31,9 +31,9 @@ protected:
 
 public:
 	const char *languageName;
-	LexerModule(int language_,
-		LexerFunction fnLexer_,
-		const char *languageName_=0,
+	LexerModule(int language_, 
+		LexerFunction fnLexer_, 
+		const char *languageName_=0, 
 		LexerFunction fnFolder_=0,
 		const char * const wordListDescriptions_[] = NULL,
 		int styleBits_=5);
@@ -41,7 +41,7 @@ public:
 	}
 	int GetLanguage() const { return language; }
 
-	/* -1 is returned if no WordList information is available */
+	// -1 is returned if no WordList information is available
 	int GetNumWordLists() const;
 	const char *GetWordListDescription(int index) const;
 
@@ -78,7 +78,7 @@ inline bool iswordstart(char ch) {
 inline bool isoperator(char ch) {
 	if (isascii(ch) && isalnum(ch))
 		return false;
-	/* '.' left out as it is used to make up numbers */
+	// '.' left out as it is used to make up numbers
 	if (ch == '%' || ch == '^' || ch == '&' || ch == '*' ||
 	        ch == '(' || ch == ')' || ch == '-' || ch == '+' ||
 	        ch == '=' || ch == '|' || ch == '{' || ch == '}' ||

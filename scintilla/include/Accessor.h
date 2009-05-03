@@ -1,9 +1,9 @@
-/* Scintilla source code edit control */
+// Scintilla source code edit control
 /** @file Accessor.h
  ** Rapid easy access to contents of a Scintilla.
  **/
-/* Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
- * The License.txt file describes the conditions under which this software may be distributed. */
+// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
+// The License.txt file describes the conditions under which this software may be distributed.
 
 enum { wsSpace = 1, wsTab = 2, wsSpaceTab = 4, wsInconsistent=8};
 
@@ -25,7 +25,7 @@ protected:
 	char buf[bufferSize+1];
 	int startPos;
 	int endPos;
-	int codePage;
+	int codePage;	
 
 	virtual bool InternalIsLeadByte(char ch)=0;
 	virtual void Fill(int position)=0;
@@ -44,7 +44,7 @@ public:
 		if (position < startPos || position >= endPos) {
 			Fill(position);
 			if (position < startPos || position >= endPos) {
-				/* Position is outside range of document  */
+				// Position is outside range of document 
 				return chDefault;
 			}
 		}
@@ -67,7 +67,7 @@ public:
 	virtual int GetPropertyInt(const char *key, int defaultValue=0)=0;
 	virtual char *GetProperties()=0;
 
-	/* Style setting */
+	// Style setting
 	virtual void StartAt(unsigned int start, char chMask=31)=0;
 	virtual void SetFlags(char chFlags_, char chWhile_)=0;
 	virtual unsigned int GetStartSegment()=0;
