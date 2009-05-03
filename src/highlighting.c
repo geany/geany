@@ -988,24 +988,27 @@ static void styleset_vala(ScintillaObject *sci)
 
 static void styleset_pascal_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_style_array(GEANY_FILETYPES_PASCAL, 12);
-	get_keyfile_hex(config, config_home, "styling", "default", "0x0000ff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PASCAL].styling[0]);
-	get_keyfile_style(config, config_home, "comment", &gsd_comment, &style_sets[GEANY_FILETYPES_PASCAL].styling[1]);
-	get_keyfile_hex(config, config_home, "styling", "number", "0x007F00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PASCAL].styling[2]);
-	get_keyfile_hex(config, config_home, "styling", "word", "0x111199", "0xffffff", "true", &style_sets[GEANY_FILETYPES_PASCAL].styling[3]);
-	get_keyfile_hex(config, config_home, "styling", "string", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PASCAL].styling[4]);
-	get_keyfile_hex(config, config_home, "styling", "character", "0x404000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PASCAL].styling[5]);
-	get_keyfile_hex(config, config_home, "styling", "preprocessor", "0x007f7f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PASCAL].styling[6]);
-	get_keyfile_hex(config, config_home, "styling", "operator", "0x301010", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PASCAL].styling[7]);
-	get_keyfile_hex(config, config_home, "styling", "identifier", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PASCAL].styling[8]);
-	get_keyfile_hex(config, config_home, "styling", "regex", "0x1b6313", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PASCAL].styling[9]);
-	get_keyfile_style(config, config_home, "commentline", &gsd_comment, &style_sets[GEANY_FILETYPES_PASCAL].styling[10]);
-	get_keyfile_style(config, config_home, "commentdoc", &gsd_comment_doc, &style_sets[GEANY_FILETYPES_PASCAL].styling[11]);
+	new_style_array(GEANY_FILETYPES_PASCAL, 15);
+	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PASCAL].styling[0]);
+	get_keyfile_hex(config, config_home, "styling", "identifier", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PASCAL].styling[1]);
+	get_keyfile_hex(config, config_home, "styling", "comment", "0xd00000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PASCAL].styling[2]);
+	get_keyfile_hex(config, config_home, "styling", "comment2", "0x3f5fbf", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PASCAL].styling[3]);
+	get_keyfile_hex(config, config_home, "styling", "commentline", "0xd00000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PASCAL].styling[4]);
+	get_keyfile_hex(config, config_home, "styling", "preprocessor", "0x007f7f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PASCAL].styling[5]);
+	get_keyfile_hex(config, config_home, "styling", "preprocessor2", "0x007f7f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PASCAL].styling[6]);
+	get_keyfile_hex(config, config_home, "styling", "number", "0x007F00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PASCAL].styling[7]);
+	get_keyfile_hex(config, config_home, "styling", "hexnumber", "0x007F00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PASCAL].styling[8]);
+	get_keyfile_hex(config, config_home, "styling", "word", "0x111199", "0xffffff", "true", &style_sets[GEANY_FILETYPES_PASCAL].styling[9]);
+	get_keyfile_hex(config, config_home, "styling", "string", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PASCAL].styling[10]);
+	get_keyfile_hex(config, config_home, "styling", "stringeol", "0x000000", "0xe0c0e0", "false", &style_sets[GEANY_FILETYPES_PASCAL].styling[11]);
+	get_keyfile_hex(config, config_home, "styling", "character", "0x404000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PASCAL].styling[12]);
+	get_keyfile_hex(config, config_home, "styling", "operator", "0x301010", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PASCAL].styling[13]);
+	get_keyfile_hex(config, config_home, "styling", "asm", "0x804080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PASCAL].styling[14]);
 
 	style_sets[GEANY_FILETYPES_PASCAL].keywords = g_new(gchar*, 2);
-	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_PASCAL, 0, "word integer char string byte real \
-									for to do until repeat program if uses then else case var begin end \
-									asm unit interface implementation procedure function object try class");
+	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_PASCAL, 0,
+		"asm begin byte case char class do else end for function if implementation integer \
+		 interface object procedure program real repeat string then to try unit until uses var word");
 	style_sets[GEANY_FILETYPES_PASCAL].keywords[1] = NULL;
 
 	get_keyfile_wordchars(config, config_home,
@@ -1022,18 +1025,23 @@ static void styleset_pascal(ScintillaObject *sci)
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_PASCAL].keywords[0]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_PASCAL, 0);
-	set_sci_style(sci, SCE_C_DEFAULT, GEANY_FILETYPES_PASCAL, 0);
-	set_sci_style(sci, SCE_C_COMMENT, GEANY_FILETYPES_PASCAL, 1);
-	set_sci_style(sci, SCE_C_NUMBER, GEANY_FILETYPES_PASCAL, 2);
-	set_sci_style(sci, SCE_C_WORD, GEANY_FILETYPES_PASCAL, 3);
-	set_sci_style(sci, SCE_C_STRING, GEANY_FILETYPES_PASCAL, 4);
-	set_sci_style(sci, SCE_C_CHARACTER, GEANY_FILETYPES_PASCAL, 5);
-	set_sci_style(sci, SCE_C_PREPROCESSOR, GEANY_FILETYPES_PASCAL, 6);
-	set_sci_style(sci, SCE_C_OPERATOR, GEANY_FILETYPES_PASCAL, 7);
-	set_sci_style(sci, SCE_C_IDENTIFIER, GEANY_FILETYPES_PASCAL, 8);
-	set_sci_style(sci, SCE_C_REGEX, GEANY_FILETYPES_PASCAL, 9);
-	set_sci_style(sci, SCE_C_COMMENTLINE, GEANY_FILETYPES_PASCAL, 10);
-	set_sci_style(sci, SCE_C_COMMENTDOC, GEANY_FILETYPES_PASCAL, 11);
+	set_sci_style(sci, SCE_PAS_DEFAULT, GEANY_FILETYPES_PASCAL, 0);
+	set_sci_style(sci, SCE_PAS_IDENTIFIER, GEANY_FILETYPES_PASCAL, 1);
+	set_sci_style(sci, SCE_PAS_COMMENT, GEANY_FILETYPES_PASCAL, 2);
+	set_sci_style(sci, SCE_PAS_COMMENT2, GEANY_FILETYPES_PASCAL, 3);
+	set_sci_style(sci, SCE_PAS_COMMENTLINE, GEANY_FILETYPES_PASCAL, 4);
+	set_sci_style(sci, SCE_PAS_PREPROCESSOR, GEANY_FILETYPES_PASCAL, 5);
+	set_sci_style(sci, SCE_PAS_PREPROCESSOR2, GEANY_FILETYPES_PASCAL, 6);
+	set_sci_style(sci, SCE_PAS_NUMBER, GEANY_FILETYPES_PASCAL, 7);
+	set_sci_style(sci, SCE_PAS_HEXNUMBER, GEANY_FILETYPES_PASCAL, 8);
+	set_sci_style(sci, SCE_PAS_WORD, GEANY_FILETYPES_PASCAL, 9);
+	set_sci_style(sci, SCE_PAS_STRING, GEANY_FILETYPES_PASCAL, 10);
+	set_sci_style(sci, SCE_PAS_STRINGEOL, GEANY_FILETYPES_PASCAL, 11);
+	set_sci_style(sci, SCE_PAS_CHARACTER, GEANY_FILETYPES_PASCAL, 12);
+	set_sci_style(sci, SCE_PAS_OPERATOR, GEANY_FILETYPES_PASCAL, 13);
+	set_sci_style(sci, SCE_PAS_ASM, GEANY_FILETYPES_PASCAL, 14);
+
+	SSM(sci, SCI_SETPROPERTY, (uptr_t) "lexer.pascal.smart.highlighting", (sptr_t) "1");
 }
 
 

@@ -1,21 +1,26 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
 # foreground;background;bold;italic
-default=0x0000ff;0xffffff;false;false
+default=0x000000;0xffffff;false;false
+identifier=0x000000;0xffffff;false;false
 comment=0xd00000;0xffffff;false;false
-number=0x007f00;0xffffff;false;false
+comment2=0x3f5fbf;0xffffff;false;false
+commentline=0xd00000;0xffffff;false;false
+preprocessor=0x007f7f;0xffffff;false;false
+preprocessor2=0x007f7f;0xffffff;false;false
+number=0x007F00;0xffffff;false;false
+hexnumber=0x007F00;0xffffff;false;false
 word=0x111199;0xffffff;true;false
 string=0xff901e;0xffffff;false;false
+stringeol=0x000000;0xe0c0e0;false;false
 character=0x404000;0xffffff;false;false
-preprocessor=0x007f7f;0xffffff;false;false
 operator=0x301010;0xffffff;false;false
-identifier=0x000000;0xffffff;false;false
-regex=0x1b6313;0xffffff;false;false
-commentline=0xd00000;0xffffff;false;false
-commentdoc=0x3f5fbf;0xffffff;false;false
+asm=0x804080;0xffffff;false;false
+
 
 [keywords]
-primary=absolute and array asm begin break case const constructor continue destructor div do downto dynamic else end end. file for function goto if implementation in inherited inline interface label message mod nil not object of on operator or overload outpacked procedure program record reintroduce repeat self set shl shr string then to type unit until uses var while with xor as class except exports finalization finally initialization is library on property raise threadvar try dispose exit false new true absolute abstract alias assembler cdecl cppdecl default export external far far16 forward index name near oldfpccall override pascal private protected public published read register safecall softfloat stdcall virtual write
+# all items must be in one line
+primary=absolute abstract add and array as asm assembler automated begin byte case cdecl char class const constructor contains default deprecated destructor dispid dispinterface div do downto dynamic else end except export exports external far file final finalization finally for forward function goto if implementation implements in index inherited initialization inline integer interface is label library message mod name near nil nodefault not object of on or out overload override package packed pascal platform private procedure program property protected public published raise read readonly real record register reintroduce remove repeat requires resourcestring safecall sealed set shl shr static stdcall stored strict string then threadvar to try type unit unsafe until uses var varargs virtual while with word write writeonly xor
 
 
 [settings]

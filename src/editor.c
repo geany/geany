@@ -2489,6 +2489,7 @@ gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 					case SCLEX_SQL: style_comment = SCE_SQL_COMMENT; break;
 					case SCLEX_CAML: style_comment = SCE_CAML_COMMENT; break;
 					case SCLEX_D: style_comment = SCE_D_COMMENT; break;
+					case SCLEX_PASCAL: style_comment = SCE_PAS_COMMENT; break;
 					default: style_comment = SCE_C_COMMENT;
 				}
 				if (sci_get_style_at(editor->sci, line_start + x) == style_comment)
@@ -2636,6 +2637,7 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 				case SCLEX_D: style_comment = SCE_D_COMMENT; break;
 				case SCLEX_RUBY: style_comment = SCE_RB_POD; break;
 				case SCLEX_PERL: style_comment = SCE_PL_POD; break;
+				case SCLEX_PASCAL: style_comment = SCE_PAS_COMMENT; break;
 				default: style_comment = SCE_C_COMMENT;
 			}
 			if (sci_get_style_at(editor->sci, line_start + x) == style_comment)
@@ -2793,6 +2795,8 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 				/* skip lines which are already comments */
 				switch (lexer)
 				{	/* I will list only those lexers which support multi line comments */
+					/* FIXME Update the list of filetypes and move this switch into a separate
+					 * function to avoid duplicate code. */
 					case SCLEX_XML:
 					case SCLEX_HTML:
 					{
@@ -2805,6 +2809,7 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 					case SCLEX_SQL: style_comment = SCE_SQL_COMMENT; break;
 					case SCLEX_CAML: style_comment = SCE_CAML_COMMENT; break;
 					case SCLEX_D: style_comment = SCE_D_COMMENT; break;
+					case SCLEX_PASCAL: style_comment = SCE_PAS_COMMENT; break;
 					default: style_comment = SCE_C_COMMENT;
 				}
 				if (sci_get_style_at(editor->sci, line_start + x) == style_comment) continue;
@@ -2877,6 +2882,10 @@ static gboolean in_block_comment(gint lexer, gint style)
 		case SCLEX_CPP:
 			return (style == SCE_C_COMMENT ||
 				style == SCE_C_COMMENTDOC);
+
+		case SCLEX_PASCAL:
+			return (style == SCE_PAS_COMMENT ||
+				style == SCE_PAS_COMMENT2);
 
 		case SCLEX_D:
 			return (style == SCE_D_COMMENT ||
@@ -2976,9 +2985,12 @@ static gboolean is_string_style(gint lexer, gint style)
 	switch (lexer)
 	{
 		case SCLEX_CPP:
-		case SCLEX_PASCAL:
 			return (style == SCE_C_CHARACTER ||
 				style == SCE_C_STRING);
+
+		case SCLEX_PASCAL:
+			return (style == SCE_PAS_CHARACTER ||
+				style == SCE_PAS_STRING);
 
 		case SCLEX_D:
 			return (style == SCE_D_CHARACTER ||
@@ -3097,13 +3109,17 @@ static gboolean is_comment_style(gint lexer, gint style)
 	switch (lexer)
 	{
 		case SCLEX_CPP:
-		case SCLEX_PASCAL:
 			return (style == SCE_C_COMMENT ||
 				style == SCE_C_COMMENTLINE ||
 				style == SCE_C_COMMENTDOC ||
 				style == SCE_C_COMMENTLINEDOC ||
 				style == SCE_C_COMMENTDOCKEYWORD ||
 				style == SCE_C_COMMENTDOCKEYWORDERROR);
+
+		case SCLEX_PASCAL:
+			return (style == SCE_PAS_COMMENT ||
+				style == SCE_PAS_COMMENT2 ||
+				style == SCE_PAS_COMMENTLINE);
 
 		case SCLEX_D:
 			return (style == SCE_D_COMMENT ||
