@@ -6,6 +6,10 @@
    itself is also UTF-8.
  * src/utils.c, src/utils.h, src/highlighting.c, src/printing.c:
    Add utils_color_invert() and use it in highlighting.c and printing.c.
+ * scintilla/include/Scintilla.h, scintilla/scintilla_changes.patch:
+   Backport change from Scintilla CVS:
+   Change capitalisation of header file to suit cross-compilation on
+   Unix for Windows.
 
 
 2009-05-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
