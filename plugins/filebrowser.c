@@ -168,13 +168,11 @@ static void add_item(const gchar *name)
 	if (! show_hidden_files && check_hidden(name))
 		return;
 
-	if (check_filtered(name))
-		return;
-
 	sep = (utils_str_equal(current_dir, "/")) ? "" : G_DIR_SEPARATOR_S;
 	fname = g_strconcat(current_dir, sep, name, NULL);
 	dir = g_file_test(fname, G_FILE_TEST_IS_DIR);
 	utf8_fullname = utils_get_locale_from_utf8(fname);
+	utf8_name = utils_get_utf8_from_locale(name);
 	g_free(fname);
 
 	if (dir)
@@ -189,9 +187,16 @@ static void add_item(const gchar *name)
 		last_dir_iter = gtk_tree_iter_copy(&iter);
 	}
 	else
+	{
+		if (check_filtered(utf8_name))
+		{
+			g_free(utf8_name);
+			g_free(utf8_fullname);
+			return;
+		}
 		gtk_list_store_append(file_store, &iter);
+	}
 
-	utf8_name = utils_get_utf8_from_locale(name);
 
 	gtk_list_store_set(file_store, &iter,
 		FILEVIEW_COLUMN_ICON, (dir) ? GTK_STOCK_DIRECTORY : GTK_STOCK_FILE,

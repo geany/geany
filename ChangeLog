@@ -1,3 +1,11 @@
+2009-05-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * plugins/filebrowser.c:
+   When a filter is set, apply it only to files, not directories and
+   apply the filter to the UTF-8 name of the file as the filter string
+   itself is also UTF-8.
+
+
 2009-05-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * wscript, scintilla/*, scintilla/include/*, src/plugindata.h:
