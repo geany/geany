@@ -291,14 +291,8 @@ static void get_keyfile_int(GKeyFile *config, GKeyFile *configh, const gchar *se
 static guint invert(guint icolour)
 {
 	if (common_style_set.invert_all)
-	{
-		guint r, g, b;
+		return utils_invert_color(icolour);
 
-		r = 0xffffff - icolour;
-		g = 0xffffff - (icolour >> 8);
-		b = 0xffffff - (icolour >> 16);
-		return (r | (g << 8) | (b << 16));
-	}
 	return icolour;
 }
 

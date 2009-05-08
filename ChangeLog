@@ -4,6 +4,8 @@
    When a filter is set, apply it only to files, not directories and
    apply the filter to the UTF-8 name of the file as the filter string
    itself is also UTF-8.
+ * src/utils.c, src/utils.h, src/highlighting.c, src/printing.c:
+   Add utils_color_invert() and use it in highlighting.c and printing.c.
 
 
 2009-05-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
