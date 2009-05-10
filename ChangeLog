@@ -5,6 +5,9 @@
    on the press event like for other buttons.
  * src/editor.c:
    Refactor some multiple used code into get_multiline_comment_style().
+ * src/main.c:
+   Create parent directories if necessary when checking for the
+   configuration directory on startup (closes #2784577).
 
 
 2009-05-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

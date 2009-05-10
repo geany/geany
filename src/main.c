@@ -634,6 +634,9 @@ static gint create_config_dir(void)
 					_("Geany needs to move your old configuration directory before starting.")))
 					exit(0);
 
+				if (! g_file_test(app->configdir, G_FILE_TEST_IS_DIR))
+					utils_mkdir(app->configdir, TRUE);
+
 				if (g_rename(old_dir, app->configdir) == 0)
 				{
 					dialogs_show_msgbox(GTK_MESSAGE_INFO,
@@ -656,7 +659,7 @@ static gint create_config_dir(void)
 		}
 #endif
 		geany_debug("creating config directory %s", app->configdir);
-		saved_errno = utils_mkdir(app->configdir, FALSE);
+		saved_errno = utils_mkdir(app->configdir, TRUE);
 	}
 
 	if (saved_errno == 0 && ! g_file_test(conf_file, G_FILE_TEST_EXISTS))
