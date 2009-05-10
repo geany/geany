@@ -3,6 +3,8 @@
  * src/ui_utils.c:
    Make the clear icon of entry fields act on the release event, not
    on the press event like for other buttons.
+ * src/editor.c:
+   Refactor some multiple used code into get_multiline_comment_style().
 
 
 2009-05-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

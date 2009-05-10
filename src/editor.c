@@ -2371,6 +2371,37 @@ static void real_uncomment_multiline(GeanyEditor *editor)
 }
 
 
+static gint get_multiline_comment_style(GeanyEditor *editor, gint line_start)
+{
+	gint lexer = SSM(editor->sci, SCI_GETLEXER, 0, 0);
+	gint style_comment;
+
+	/* List only those lexers which support multi line comments */
+	switch (lexer)
+	{
+		case SCLEX_XML:
+		case SCLEX_HTML:
+		{
+			if (is_style_php(sci_get_style_at(editor->sci, line_start)))
+				style_comment = SCE_HPHP_COMMENT;
+			else
+				style_comment = SCE_H_COMMENT;
+			break;
+		}
+		case SCLEX_HASKELL: style_comment = SCE_HA_COMMENTBLOCK; break;
+		case SCLEX_LUA: style_comment = SCE_LUA_COMMENT; break;
+		case SCLEX_CSS: style_comment = SCE_CSS_COMMENT; break;
+		case SCLEX_SQL: style_comment = SCE_SQL_COMMENT; break;
+		case SCLEX_CAML: style_comment = SCE_CAML_COMMENT; break;
+		case SCLEX_D: style_comment = SCE_D_COMMENT; break;
+		case SCLEX_PASCAL: style_comment = SCE_PAS_COMMENT; break;
+		default: style_comment = SCE_C_COMMENT;
+	}
+
+	return style_comment;
+}
+
+
 /* set toggle to TRUE if the caller is the toggle function, FALSE otherwise
  * returns the amount of uncommented single comment lines, in case of multi line uncomment
  * it returns just 1 */
@@ -2472,26 +2503,9 @@ gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 			else
 			{
 				gint style_comment;
-				gint lexer = SSM(editor->sci, SCI_GETLEXER, 0, 0);
 
-				/* process only lines which are already comments */
-				switch (lexer)
-				{	/* I will list only those lexers which support multi line comments */
-					case SCLEX_XML:
-					case SCLEX_HTML:
-					{
-						if (is_style_php(sci_get_style_at(editor->sci, line_start)))
-							style_comment = SCE_HPHP_COMMENT;
-						else style_comment = SCE_H_COMMENT;
-						break;
-					}
-					case SCLEX_CSS: style_comment = SCE_CSS_COMMENT; break;
-					case SCLEX_SQL: style_comment = SCE_SQL_COMMENT; break;
-					case SCLEX_CAML: style_comment = SCE_CAML_COMMENT; break;
-					case SCLEX_D: style_comment = SCE_D_COMMENT; break;
-					case SCLEX_PASCAL: style_comment = SCE_PAS_COMMENT; break;
-					default: style_comment = SCE_C_COMMENT;
-				}
+				/* skip lines which are already comments */
+				style_comment = get_multiline_comment_style(editor, line_start);
 				if (sci_get_style_at(editor->sci, line_start + x) == style_comment)
 				{
 					real_uncomment_multiline(editor);
@@ -2618,28 +2632,9 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 		else
 		{
 			gint style_comment;
-			gint lexer = SSM(editor->sci, SCI_GETLEXER, 0, 0);
 
 			/* skip lines which are already comments */
-			switch (lexer)
-			{	/* I will list only those lexers which support multi line comments */
-				case SCLEX_XML:
-				case SCLEX_HTML:
-				{
-					if (is_style_php(sci_get_style_at(editor->sci, line_start)))
-						style_comment = SCE_HPHP_COMMENT;
-					else style_comment = SCE_H_COMMENT;
-					break;
-				}
-				case SCLEX_CSS: style_comment = SCE_CSS_COMMENT; break;
-				case SCLEX_SQL: style_comment = SCE_SQL_COMMENT; break;
-				case SCLEX_CAML: style_comment = SCE_CAML_COMMENT; break;
-				case SCLEX_D: style_comment = SCE_D_COMMENT; break;
-				case SCLEX_RUBY: style_comment = SCE_RB_POD; break;
-				case SCLEX_PERL: style_comment = SCE_PL_POD; break;
-				case SCLEX_PASCAL: style_comment = SCE_PAS_COMMENT; break;
-				default: style_comment = SCE_C_COMMENT;
-			}
+			style_comment = get_multiline_comment_style(editor, line_start);
 			if (sci_get_style_at(editor->sci, line_start + x) == style_comment)
 			{
 				real_uncomment_multiline(editor);
@@ -2790,29 +2785,11 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 			else
 			{
 				gint style_comment;
-				gint lexer = SSM(editor->sci, SCI_GETLEXER, 0, 0);
 
 				/* skip lines which are already comments */
-				switch (lexer)
-				{	/* I will list only those lexers which support multi line comments */
-					/* FIXME Update the list of filetypes and move this switch into a separate
-					 * function to avoid duplicate code. */
-					case SCLEX_XML:
-					case SCLEX_HTML:
-					{
-						if (is_style_php(sci_get_style_at(editor->sci, line_start)))
-							style_comment = SCE_HPHP_COMMENT;
-						else style_comment = SCE_H_COMMENT;
-						break;
-					}
-					case SCLEX_CSS: style_comment = SCE_CSS_COMMENT; break;
-					case SCLEX_SQL: style_comment = SCE_SQL_COMMENT; break;
-					case SCLEX_CAML: style_comment = SCE_CAML_COMMENT; break;
-					case SCLEX_D: style_comment = SCE_D_COMMENT; break;
-					case SCLEX_PASCAL: style_comment = SCE_PAS_COMMENT; break;
-					default: style_comment = SCE_C_COMMENT;
-				}
-				if (sci_get_style_at(editor->sci, line_start + x) == style_comment) continue;
+				style_comment = get_multiline_comment_style(editor, line_start);
+				if (sci_get_style_at(editor->sci, line_start + x) == style_comment)
+					continue;
 
 				real_comment_multiline(editor, line_start, last_line);
 
