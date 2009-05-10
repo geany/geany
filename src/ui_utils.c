@@ -1293,7 +1293,8 @@ ui_image_menu_item_new(const gchar *stock_id, const gchar *label)
 }
 
 
-static void entry_clear_icon_press_cb(GtkEntry *entry, gint icon_pos, GdkEvent *event, gpointer data)
+static void entry_clear_icon_release_cb(GtkEntry *entry, gint icon_pos,
+										GdkEvent *event, gpointer data)
 {
 	if (event->button.button == 1 && icon_pos == 1)
 	{
@@ -1318,7 +1319,7 @@ void ui_entry_add_clear_icon(GtkWidget *entry)
 	if (gtk_check_version(2, 15, 2) == NULL)
 	{
 		g_object_set(entry, "secondary-icon-stock", "gtk-clear", NULL);
-		g_signal_connect(entry, "icon-press", G_CALLBACK(entry_clear_icon_press_cb), NULL);
+		g_signal_connect(entry, "icon-release", G_CALLBACK(entry_clear_icon_release_cb), NULL);
 	}
 }
 
