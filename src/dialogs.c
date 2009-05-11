@@ -109,13 +109,11 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 
 static void on_file_open_notify(GObject *filechooser, GParamSpec *pspec, gpointer data)
 {
-	const gchar *name;
 	GValue *value;
 
-	name = g_intern_string(pspec->name);
 	value = g_new0(GValue, 1);
 	g_value_init(value, pspec->value_type);
-	g_object_get_property(filechooser, name, value);
+	g_object_get_property(filechooser, pspec->name, value);
 
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(
 		ui_lookup_widget(GTK_WIDGET(filechooser), "check_hidden")), g_value_get_boolean(value));

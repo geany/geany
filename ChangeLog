@@ -7,6 +7,9 @@
  * src/utils.c:
    Use plain old fwrite() in utils_write_file(). g_file_set_contents()
    is only used when explicitly requested.
+ * src/dialogs.c:
+   Remove unnecessary call to g_intern_string() to fix build with
+   GLib 2.8 (closes #2790051).
 
 
 2009-05-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
