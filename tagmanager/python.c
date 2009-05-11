@@ -21,6 +21,7 @@
 #include "read.h"
 #include "main.h"
 #include "vstring.h"
+#include "nestlevel.h"
 
 /*
 *   DATA DEFINITIONS
@@ -34,23 +35,6 @@ static kindOption PythonKinds[] = {
 	{TRUE, 'f', "function", "functions"},
 	{TRUE, 'm', "member",   "class members"},
     {TRUE, 'v', "variable", "variables"}
-};
-
-typedef struct NestingLevel NestingLevel;
-typedef struct NestingLevels NestingLevels;
-
-struct NestingLevel
-{
-	int indentation;
-	vString *name;
-	boolean is_class;
-};
-
-struct NestingLevels
-{
-	NestingLevel *levels;
-	int n;
-	int allocated;
 };
 
 static char const * const singletriple = "'''";
@@ -328,54 +312,6 @@ static void checkParent(NestingLevels *nls, int indent, vString *parent)
 			break;
 		}
 	}
-}
-
-static NestingLevels *newNestingLevels(void)
-{
-	NestingLevels *nls = xCalloc (1, NestingLevels);
-	return nls;
-}
-
-static void freeNestingLevels(NestingLevels *nls)
-{
-	int i;
-	for (i = 0; i < nls->allocated; i++)
-		vStringDelete(nls->levels[i].name);
-	if (nls->levels) eFree(nls->levels);
-	eFree(nls);
-}
-
-/* TODO: This is totally out of place in python.c, but strlist.h is not usable.
- * Maybe should just move these three functions to a separate file, even if no
- * other parser uses them.
- */
-static void addNestingLevel(NestingLevels *nls, int indentation,
-	vString *name, boolean is_class)
-{
-	int i;
-	NestingLevel *nl = NULL;
-
-	for (i = 0; i < nls->n; i++)
-	{
-		nl = nls->levels + i;
-		if (indentation <= nl->indentation) break;
-	}
-	if (i == nls->n)
-	{
-		if (i >= nls->allocated)
-		{
-			nls->allocated++;
-			nls->levels = xRealloc(nls->levels,
-				nls->allocated, NestingLevel);
-			nls->levels[i].name = vStringNew();
-		}
-		nl = nls->levels + i;
-	}
-	nls->n = i + 1;
-
-	vStringCopy(nl->name, name);
-	nl->indentation = indentation;
-	nl->is_class = is_class;
 }
 
 /* Return a pointer to the start of the next triple string, or NULL. Store
