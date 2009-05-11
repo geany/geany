@@ -4,6 +4,11 @@
    tagmanager/nestlevel.h, tagmanager/python.c, tagmanager/Makefile.am,
    wscript:
    Move NestingLevel code into a separate file.
+ * tagmanager/nestlevel.c, tagmanager/nestlevel.h, tagmanager/rest.c:
+   Add reStructuredText scope information for tags (for symbol list
+   grouping).
+   Add nestingLevelsPush(), nestingLevelsPop(),
+   nestingLevelsGetCurrent().
 
 
 2009-05-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

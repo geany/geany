@@ -37,8 +37,9 @@ extern void freeNestingLevels(NestingLevels *nls)
 	eFree(nls);
 }
 
+/* currently only for indentation langs e.g. python */
 extern void addNestingLevel(NestingLevels *nls, int indentation,
-	vString *name, boolean is_class)
+	const vString *name, boolean is_class)
 {
 	int i;
 	NestingLevel *nl = NULL;
@@ -64,6 +65,44 @@ extern void addNestingLevel(NestingLevels *nls, int indentation,
 	vStringCopy(nl->name, name);
 	nl->indentation = indentation;
 	nl->is_class = is_class;
+}
+
+extern void nestingLevelsPush(NestingLevels *nls,
+	const vString *name, int type)
+{
+	NestingLevel *nl = NULL;
+
+	if (nls->n >= nls->allocated)
+	{
+		nls->allocated++;
+		nls->levels = xRealloc(nls->levels,
+			nls->allocated, NestingLevel);
+		nls->levels[nls->n].name = vStringNew();
+	}
+	nl = &nls->levels[nls->n];
+	nls->n++;
+
+	vStringCopy(nl->name, name);
+	nl->type = type;
+}
+
+extern void nestingLevelsPop(NestingLevels *nls)
+{
+	const NestingLevel *nl = nestingLevelsGetCurrent(nls);
+
+	Assert (nl != NULL);
+	vStringClear(nl->name);
+	nls->n--;
+}
+
+extern NestingLevel *nestingLevelsGetCurrent(NestingLevels *nls)
+{
+	Assert (nls != NULL);
+
+	if (nls->n < 1)
+		return NULL;
+
+	return &nls->levels[nls->n - 1];
 }
 
 /* vi:set tabstop=4 shiftwidth=4: */

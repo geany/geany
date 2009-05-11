@@ -29,23 +29,28 @@ struct NestingLevel
 {
 	int indentation;
 	vString *name;
-	boolean is_class;
+	int type;
+	boolean is_class;		/* should be replaced by type field */
 };
 
 struct NestingLevels
 {
 	NestingLevel *levels;
-	int n;
+	int n;					/* number of levels in use */
 	int allocated;
 };
 
 /*
 *   FUNCTION PROTOTYPES
 */
-NestingLevels *newNestingLevels(void);
-void freeNestingLevels(NestingLevels *nls);
-void addNestingLevel(NestingLevels *nls, int indentation,
-	vString *name, boolean is_class);
+extern NestingLevels *newNestingLevels(void);
+extern void freeNestingLevels(NestingLevels *nls);
+extern void addNestingLevel(NestingLevels *nls, int indentation,
+	const vString *name, boolean is_class);
+extern void nestingLevelsPush(NestingLevels *nls,
+	const vString *name, int type);
+extern void nestingLevelsPop(NestingLevels *nls);
+extern NestingLevel *nestingLevelsGetCurrent(NestingLevels *nls);
 
 #endif  /* _NESTLEVEL_H */
 
