@@ -9,7 +9,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: geany 0.16\n"
+"Project-Id-Version: geany 0.17\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-04-23 22:36+0200\n"
 "PO-Revision-Date: 2009-04-28 23:15+0100\n"
@@ -1153,7 +1153,7 @@ msgstr "Kommentierung _umschalten"
 #: ../src/interface.c:496
 #: ../src/interface.c:1965
 msgid "Du_plicate Line or Selection"
-msgstr "_Zeile oder Auswahl kopieren"
+msgstr "_Zeile oder Auswahl duplizieren"
 
 #: ../src/interface.c:505
 #: ../src/interface.c:1974
@@ -2631,7 +2631,7 @@ msgstr "Wiederholen"
 
 #: ../src/keybindings.c:234
 msgid "Duplicate line or selection"
-msgstr "Zeile oder Auswahl kopieren"
+msgstr "Zeile duplizieren"
 
 #: ../src/keybindings.c:237
 msgid "Delete current line(s)"

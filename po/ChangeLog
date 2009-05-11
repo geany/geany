@@ -1,5 +1,7 @@
 2009-05-11  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
+ * de.po: Minor improvement of German translation. Thanks to Franz
+   Buchinger for pointing it out.
  * ru.po: Fix of a typo at Russian translation. Closes 2790001.
 
 
