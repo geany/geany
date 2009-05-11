@@ -216,10 +216,7 @@ gboolean utils_is_opening_brace(gchar c, gboolean include_angles)
 /**
  *  Write the given @c text into a file with @c filename.
  *  If the file doesn't exist, it will be created.
- *  If it already exists, it will be overwritten. Internally, g_file_set_contents() is used
- *  to write the file with all its error checking and related limitations like
- *  destroying hard links and possibly losing file permissions. Please read the
- *  API documentation of g_file_set_contents() for details.
+ *  If it already exists, it will be overwritten.
  *
  *  @param filename The filename of the file to write, in locale encoding.
  *  @param text The text to write into the file.
@@ -229,16 +226,48 @@ gboolean utils_is_opening_brace(gchar c, gboolean include_angles)
  **/
 gint utils_write_file(const gchar *filename, const gchar *text)
 {
-	GError *error = NULL;
-
 	g_return_val_if_fail(filename != NULL, ENOENT);
 	g_return_val_if_fail(text != NULL, EINVAL);
 
-	if (! g_file_set_contents(filename, text, -1, &error))
+	if (file_prefs.use_safe_file_saving)
 	{
-		geany_debug("%s: could not write to file %s (%s)", G_STRFUNC, filename, error->message);
-		g_error_free(error);
-		return EIO;
+		GError *error = NULL;
+		if (! g_file_set_contents(filename, text, -1, &error))
+		{
+			geany_debug("%s: could not write to file %s (%s)", G_STRFUNC, filename, error->message);
+			g_error_free(error);
+			return EIO;
+		}
+	}
+	else
+	{
+		FILE *fp;
+		gint bytes_written, len;
+
+		if (filename == NULL)
+			return ENOENT;
+
+		len = strlen(text);
+		fp = g_fopen(filename, "w");
+		if (fp != NULL)
+		{
+			bytes_written = fwrite(text, sizeof (gchar), len, fp);
+			fclose(fp);
+
+			if (len != bytes_written)
+			{
+				geany_debug(
+					"utils_write_file(): written only %d bytes, had to write %d bytes to %s",
+					bytes_written, len, filename);
+				return EIO;
+			}
+		}
+		else
+		{
+			geany_debug("utils_write_file(): could not write to file %s (%s)",
+				filename, g_strerror(errno));
+			return errno;
+		}
 	}
 	return 0;
 }
