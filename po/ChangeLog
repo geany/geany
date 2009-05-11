@@ -1,3 +1,8 @@
+2009-05-11  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * ru.po: Fix of a typo at Russian translation. Closes 2790001.
+
+
 2009-05-04  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * it.po: Update of Italian translation (Thanks M. Baldinelli).

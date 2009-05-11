@@ -1989,7 +1989,7 @@ msgstr ""
 
 #: ../src/interface.c:3525 ../src/interface.c:5073
 msgid "Hard tab width:"
-msgstr "Ширина табудяции:"
+msgstr "Ширина табуляции:"
 
 #: ../src/interface.c:3533 ../src/interface.c:5081
 msgid "The width of a tab when Tabs & Spaces is set for a document"
