@@ -1,3 +1,11 @@
+2009-05-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/highlighting.c:
+   Unset maybe previously keywords when setting up Scintilla for
+   XML files. This fixed wrong highlighting after switching back to
+   filetype XML from another one.
+
+
 2009-05-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/ui_utils.c:

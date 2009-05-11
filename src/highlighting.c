@@ -467,7 +467,7 @@ static void styleset_common(ScintillaObject *sci)
 	else
 		SSM(sci, SCI_SETCARETSTYLE, CARETSTYLE_LINE, 0);
 
-	/* colourize the current line */
+	/* colourise the current line */
 	SSM(sci, SCI_SETCARETLINEBACK, invert(common_style_set.styling[GCS_CURRENT_LINE].background), 0);
 	/* bold=enable current line */
 	SSM(sci, SCI_SETCARETLINEVISIBLE, common_style_set.styling[GCS_CURRENT_LINE].bold, 0);
@@ -1268,6 +1268,9 @@ static void styleset_markup_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 
 static void styleset_markup(ScintillaObject *sci, gboolean set_keywords)
 {
+	guint i;
+	const gchar *keywords;
+
 	/* Used by several filetypes */
 	if (style_sets[GEANY_FILETYPES_XML].styling == NULL)
 		filetypes_load_config(GEANY_FILETYPES_XML, FALSE);
@@ -1275,14 +1278,12 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords)
 	/* manually initialise filetype Python for use with embedded Python */
 	filetypes_load_config(GEANY_FILETYPES_PYTHON, FALSE);
 
-	/* don't set keywords for plain XML */
-	if (set_keywords)
+	/* Set keywords. If we don't want to use keywords, we must at least unset maybe previously set
+	 * keywords, e.g. when switching between filetypes. */
+	for (i = 0; i < 5; i++)
 	{
-		SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_XML].keywords[0]);
-		SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_XML].keywords[1]);
-		SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_XML].keywords[2]);
-		SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) style_sets[GEANY_FILETYPES_XML].keywords[3]);
-		SSM(sci, SCI_SETKEYWORDS, 4, (sptr_t) style_sets[GEANY_FILETYPES_XML].keywords[4]);
+		keywords = (set_keywords) ? style_sets[GEANY_FILETYPES_XML].keywords[i] : "";
+		SSM(sci, SCI_SETKEYWORDS, i, (sptr_t) keywords);
 	}
 	SSM(sci, SCI_SETKEYWORDS, 5, (sptr_t) style_sets[GEANY_FILETYPES_XML].keywords[5]);
 
