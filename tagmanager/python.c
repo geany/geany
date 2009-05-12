@@ -327,18 +327,14 @@ static void addNestingLevel(NestingLevels *nls, int indentation,
 	}
 	if (i == nls->n)
 	{
-		if (i >= nls->allocated)
-		{
-			nls->allocated++;
-			nls->levels = xRealloc(nls->levels,
-				nls->allocated, NestingLevel);
-			nls->levels[i].name = vStringNew();
-		}
+		nestingLevelsPush(nls, name, 0);
 		nl = nls->levels + i;
 	}
-	nls->n = i + 1;
-
-	vStringCopy(nl->name, name);
+	else
+	{	/* reuse existing slot */
+		nls->n = i + 1;
+		vStringCopy(nl->name, name);
+	}
 	nl->indentation = indentation;
 	nl->type = is_class ? K_CLASS : !K_CLASS;
 }
