@@ -22,13 +22,13 @@
 *   FUNCTION DEFINITIONS
 */
 
-extern NestingLevels *newNestingLevels(void)
+extern NestingLevels *nestingLevelsNew(void)
 {
 	NestingLevels *nls = xCalloc (1, NestingLevels);
 	return nls;
 }
 
-extern void freeNestingLevels(NestingLevels *nls)
+extern void nestingLevelsFree(NestingLevels *nls)
 {
 	int i;
 	for (i = 0; i < nls->allocated; i++)

@@ -432,7 +432,7 @@ static void findPythonTags (void)
 	vString *const name = vStringNew ();
 	vString *const parent = vStringNew();
 
-	NestingLevels *const nesting_levels = newNestingLevels();
+	NestingLevels *const nesting_levels = nestingLevelsNew();
 
 	const char *line;
 	int line_skip = 0;
@@ -549,7 +549,7 @@ static void findPythonTags (void)
 	vStringDelete (parent);
 	vStringDelete (name);
 	vStringDelete (continuation);
-	freeNestingLevels (nesting_levels);
+	nestingLevelsFree (nesting_levels);
 }
 
 extern parserDefinition *PythonParser (void)

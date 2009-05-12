@@ -42,8 +42,8 @@ struct NestingLevels
 /*
 *   FUNCTION PROTOTYPES
 */
-extern NestingLevels *newNestingLevels(void);
-extern void freeNestingLevels(NestingLevels *nls);
+extern NestingLevels *nestingLevelsNew(void);
+extern void nestingLevelsFree(NestingLevels *nls);
 extern void nestingLevelsPush(NestingLevels *nls,
 	const vString *name, int type);
 extern void nestingLevelsPop(NestingLevels *nls);

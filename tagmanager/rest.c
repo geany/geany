@@ -130,7 +130,7 @@ static void findRestTags (void)
 	const unsigned char *line;
 
 	memset(kindchars, 0, sizeof kindchars);
-	nestingLevels = newNestingLevels();
+	nestingLevels = nestingLevelsNew();
 
 	while ((line = fileReadLine ()) != NULL)
 	{
@@ -156,7 +156,7 @@ static void findRestTags (void)
 		vStringTerminate(name);
 	}
 	vStringDelete (name);
-	freeNestingLevels(nestingLevels);
+	nestingLevelsFree(nestingLevels);
 }
 
 extern parserDefinition* RestParser (void)
