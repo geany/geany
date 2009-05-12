@@ -30,7 +30,6 @@ struct NestingLevel
 	int indentation;
 	vString *name;
 	int type;
-	boolean is_class;		/* should be replaced by type field */
 };
 
 struct NestingLevels
@@ -45,8 +44,6 @@ struct NestingLevels
 */
 extern NestingLevels *newNestingLevels(void);
 extern void freeNestingLevels(NestingLevels *nls);
-extern void addNestingLevel(NestingLevels *nls, int indentation,
-	const vString *name, boolean is_class);
 extern void nestingLevelsPush(NestingLevels *nls,
 	const vString *name, int type);
 extern void nestingLevelsPop(NestingLevels *nls);

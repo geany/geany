@@ -37,36 +37,6 @@ extern void freeNestingLevels(NestingLevels *nls)
 	eFree(nls);
 }
 
-/* currently only for indentation langs e.g. python */
-extern void addNestingLevel(NestingLevels *nls, int indentation,
-	const vString *name, boolean is_class)
-{
-	int i;
-	NestingLevel *nl = NULL;
-
-	for (i = 0; i < nls->n; i++)
-	{
-		nl = nls->levels + i;
-		if (indentation <= nl->indentation) break;
-	}
-	if (i == nls->n)
-	{
-		if (i >= nls->allocated)
-		{
-			nls->allocated++;
-			nls->levels = xRealloc(nls->levels,
-				nls->allocated, NestingLevel);
-			nls->levels[i].name = vStringNew();
-		}
-		nl = nls->levels + i;
-	}
-	nls->n = i + 1;
-
-	vStringCopy(nl->name, name);
-	nl->indentation = indentation;
-	nl->is_class = is_class;
-}
-
 extern void nestingLevelsPush(NestingLevels *nls,
 	const vString *name, int type)
 {

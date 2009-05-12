@@ -1,3 +1,10 @@
+2009-05-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * tagmanager/nestlevel.c, tagmanager/nestlevel.h, tagmanager/python.c:
+   Remove NestingLevel::is_class field, use ::type instead.
+   Move addNestingLevel() back to python.c.
+
+
 2009-05-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * tagmanager/makefile.win32, tagmanager/nestlevel.c,
