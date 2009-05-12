@@ -21,6 +21,7 @@
 #include "read.h"
 #include "main.h"
 #include "vstring.h"
+#include "nestlevel.h"
 
 /*
 *   DATA DEFINITIONS
@@ -34,23 +35,6 @@ static kindOption PythonKinds[] = {
 	{TRUE, 'f', "function", "functions"},
 	{TRUE, 'm', "member",   "class members"},
     {TRUE, 'v', "variable", "variables"}
-};
-
-typedef struct NestingLevel NestingLevel;
-typedef struct NestingLevels NestingLevels;
-
-struct NestingLevel
-{
-	int indentation;
-	vString *name;
-	boolean is_class;
-};
-
-struct NestingLevels
-{
-	NestingLevel *levels;
-	int n;
-	int allocated;
 };
 
 static char const * const singletriple = "'''";
@@ -294,13 +278,13 @@ static boolean constructParentString(NestingLevels *nls, int indent,
 			break;
 		if (prev)
 		{
-			if (prev->is_class)
+			if (prev->type == K_CLASS)
 				vStringCatS(result, ".");
 			else
 				vStringCatS(result, "/");
 		}
 		vStringCat(result, nl->name);
-		is_class = nl->is_class;
+		is_class = (nl->type == K_CLASS);
 		prev = nl;
 	}
 	return is_class;
@@ -330,27 +314,8 @@ static void checkParent(NestingLevels *nls, int indent, vString *parent)
 	}
 }
 
-static NestingLevels *newNestingLevels(void)
-{
-	NestingLevels *nls = xCalloc (1, NestingLevels);
-	return nls;
-}
-
-static void freeNestingLevels(NestingLevels *nls)
-{
-	int i;
-	for (i = 0; i < nls->allocated; i++)
-		vStringDelete(nls->levels[i].name);
-	if (nls->levels) eFree(nls->levels);
-	eFree(nls);
-}
-
-/* TODO: This is totally out of place in python.c, but strlist.h is not usable.
- * Maybe should just move these three functions to a separate file, even if no
- * other parser uses them.
- */
 static void addNestingLevel(NestingLevels *nls, int indentation,
-	vString *name, boolean is_class)
+	const vString *name, boolean is_class)
 {
 	int i;
 	NestingLevel *nl = NULL;
@@ -362,20 +327,16 @@ static void addNestingLevel(NestingLevels *nls, int indentation,
 	}
 	if (i == nls->n)
 	{
-		if (i >= nls->allocated)
-		{
-			nls->allocated++;
-			nls->levels = xRealloc(nls->levels,
-				nls->allocated, NestingLevel);
-			nls->levels[i].name = vStringNew();
-		}
+		nestingLevelsPush(nls, name, 0);
 		nl = nls->levels + i;
 	}
-	nls->n = i + 1;
-
-	vStringCopy(nl->name, name);
+	else
+	{	/* reuse existing slot */
+		nls->n = i + 1;
+		vStringCopy(nl->name, name);
+	}
 	nl->indentation = indentation;
-	nl->is_class = is_class;
+	nl->type = is_class ? K_CLASS : !K_CLASS;
 }
 
 /* Return a pointer to the start of the next triple string, or NULL. Store
@@ -471,7 +432,7 @@ static void findPythonTags (void)
 	vString *const name = vStringNew ();
 	vString *const parent = vStringNew();
 
-	NestingLevels *const nesting_levels = newNestingLevels();
+	NestingLevels *const nesting_levels = nestingLevelsNew();
 
 	const char *line;
 	int line_skip = 0;
@@ -588,7 +549,7 @@ static void findPythonTags (void)
 	vStringDelete (parent);
 	vStringDelete (name);
 	vStringDelete (continuation);
-	freeNestingLevels (nesting_levels);
+	nestingLevelsFree (nesting_levels);
 }
 
 extern parserDefinition *PythonParser (void)

@@ -87,8 +87,6 @@ static TagFileInfo tag_file_info[GTF_MAX] =
 	{FALSE, "python.tags"}
 };
 
-static gchar *user_tags_dir;
-
 static GPtrArray *top_level_iter_names = NULL;
 
 static struct
@@ -127,6 +125,33 @@ static void load_c_ignore_tags(void)
 void symbols_reload_config_files(void)
 {
 	load_c_ignore_tags();
+}
+
+
+static gsize get_tag_count()
+{
+	GPtrArray *tags = tm_get_workspace()->global_tags;
+	gsize count = tags ? tags->len : 0;
+
+	return count;
+}
+
+
+/* wrapper for tm_workspace_load_global_tags().
+ * note that the tag count only counts new global tags added - if a tag has the same name,
+ * currently it replaces the existing tag, so loading a file twice will say 0 tags the 2nd time. */
+static gboolean symbols_load_global_tags(const gchar *tags_file, GeanyFiletype *ft)
+{
+	gboolean result;
+	gsize old_tag_count = get_tag_count();
+
+	result = tm_workspace_load_global_tags(tags_file, ft->lang);
+	if (result)
+	{
+		geany_debug("Loaded %s (%s), %u tag(s).", tags_file, ft->name,
+			get_tag_count() - old_tag_count);
+	}
+	return result;
 }
 
 
@@ -174,10 +199,8 @@ void symbols_global_tags_loaded(gint file_type_idx)
 	if (! tfi->tags_loaded)
 	{
 		gchar *fname = g_strconcat(app->datadir, G_DIR_SEPARATOR_S, tfi->tag_file, NULL);
-		gint tm_lang;
 
-		tm_lang = filetypes[file_type_idx]->lang;
-		tm_workspace_load_global_tags(fname, tm_lang);
+		symbols_load_global_tags(fname, filetypes[file_type_idx]);
 		tfi->tags_loaded = TRUE;
 		g_free(fname);
 	}
@@ -1376,7 +1399,7 @@ void symbols_show_load_tags_dialog(void)
 			utf8_fname = utils_get_utf8_from_locale(fname);
 			ft = detect_global_tags_filetype(utf8_fname);
 
-			if (ft != NULL && tm_workspace_load_global_tags(fname, ft->lang))
+			if (ft != NULL && symbols_load_global_tags(fname, ft))
 				/* For translators: the first wildcard is the filetype, the second the filename */
 				ui_set_statusbar(TRUE, _("Loaded %s tags file '%s'."), ft->name, utf8_fname);
 			else
@@ -1419,23 +1442,42 @@ static GHashTable *get_tagfile_hash(const GSList *file_list)
 }
 
 
+static void utils_slist_add_path(GSList *list, const gchar *path)
+{
+	GSList *node;
+
+	for (node = list; node != NULL; node = g_slist_next(node))
+	{
+		setptr(node->data,
+			g_build_path(G_DIR_SEPARATOR_S, path, node->data, NULL));
+	}
+}
+
+
 static GHashTable *init_user_tags(void)
 {
-	GSList *file_list;
+	GSList *file_list = NULL, *list = NULL;
 	GHashTable *lang_hash;
+	const gchar *dir;
 
-	user_tags_dir = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "tags", NULL);
-	file_list = utils_get_file_list(user_tags_dir, NULL, NULL);
+	dir = utils_build_path(app->configdir, "tags", NULL);
+	/* create the user tags dir for next time if it doesn't exist */
+	if (! g_file_test(dir, G_FILE_TEST_IS_DIR))
+	{
+		utils_mkdir(dir, FALSE);
+	}
+	file_list = utils_get_file_list(dir, NULL, NULL);
+	utils_slist_add_path(file_list, dir);
+
+	dir = utils_build_path(app->datadir, "tags", NULL);
+	list = utils_get_file_list(dir, NULL, NULL);
+	utils_slist_add_path(list, dir);
+	file_list = g_slist_concat(file_list, list);
+
 	lang_hash = get_tagfile_hash(file_list);
-
 	/* don't need to delete list contents because they are now used for hash contents */
 	g_slist_free(file_list);
 
-	/* create the tags dir for next time if it doesn't exist */
-	if (! g_file_test(user_tags_dir, G_FILE_TEST_IS_DIR))
-	{
-		utils_mkdir(user_tags_dir, FALSE);
-	}
 	return lang_hash;
 }
 
@@ -1446,7 +1488,7 @@ static void load_user_tags(filetype_id ft_id)
 	static GHashTable *lang_hash = NULL;
 	GList *fnames;
 	const GList *node;
-	const GeanyFiletype *ft = filetypes[ft_id];
+	GeanyFiletype *ft = filetypes[ft_id];
 
 	g_return_if_fail(ft_id > 0);
 	g_return_if_fail(ft_id < GEANY_MAX_BUILT_IN_FILETYPES);
@@ -1462,16 +1504,9 @@ static void load_user_tags(filetype_id ft_id)
 
 	for (node = fnames; node != NULL; node = g_list_next(node))
 	{
-		const gint tm_lang = ft->lang;
-		gchar *fname;
+		const gchar *fname = node->data;
 
-		fname = g_strconcat(user_tags_dir, G_DIR_SEPARATOR_S, node->data, NULL);
-		if (tm_workspace_load_global_tags(fname, tm_lang))
-		{
-			geany_debug("Loaded %s (%s), total tags: %u.", fname, ft->name,
-				tm_get_workspace()->global_tags->len);
-		}
-		g_free(fname);
+		symbols_load_global_tags(fname, ft);
 	}
 	g_list_foreach(fnames, (GFunc) g_free, NULL);
 	g_list_free(fnames);

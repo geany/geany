@@ -231,6 +231,18 @@ list or one the authors. Sometimes you might need to ask for specific
 help from your distro.
 
 
+Installation prefix
+-------------------
+If you want to edit any of Geany's system configuration files after
+installation you will need to know the installation prefix.  Usually this
+is not necessary as you can just use user configuration files.
+
+Use the ``--print-prefix`` option to check - see `Command line
+options`_. The first path is the prefix.
+
+This is commonly ``/usr`` if you installed from a binary package, or
+``/usr/local`` if you build from source.
+
 
 
 Usage
@@ -830,7 +842,7 @@ called ``snippets.conf`` at startup.
 
 The system-wide configuration file can be found in
 ``$prefix/share/geany``, where ``$prefix`` is the path where Geany is
-installed (commonly ``/usr/local``). It is not recommended to edit the
+installed (see `Installation prefix`_). It is not recommended to edit the
 system-wide file, because it will be overridden when Geany is updated.
 
 To change the settings, copy the file from ``$prefix/share/geany``
@@ -1217,8 +1229,7 @@ Tags
 Geany has built-in functionality for generating tag information (aka
 "workspace tags") for supported filetypes when you open a file.  You
 can also have Geany automatically load external tag files (aka "global
-tags files") from its ``~/.config/geany/tags`` directory upon startup, or
-manually using *Tools --> Load Tags*.
+tags files") upon startup, or manually using *Tools --> Load Tags*.
 
 Geany uses its own tag file format, similar to what ``ctags`` uses
 (but is incompatible with ctags). You use Geany to generate global
@@ -1250,6 +1261,9 @@ You can load a custom global tags file in two ways:
 * Using the *Load Tags* command in the Tools menu.
 * By creating a directory ``~/.config/geany/tags``, and moving or symlinking
   the tags files there before starting Geany.
+* By creating a directory ``$prefix/share/geany/tags``, and moving
+  or symlinking the tags files there before starting Geany.
+  ``$prefix`` is the installation prefix (see `Installation prefix`_).
 
 You can either download these files or generate your own. They have
 the format::
@@ -2432,8 +2446,7 @@ general preference is set. There is also a command-line option,
 ``-p``, which prevents plugins being loaded. Plugins are scanned in
 the following directories:
 
-*   ``$prefix/lib/geany`` (``$prefix`` is usually ``/usr/local`` or
-    ``/usr``)
+*   ``$prefix/lib/geany`` (see `Installation prefix`_)
 *   ``~/.config/geany/plugins``
 
 Most plugins add menu items to the *Tools* menu when they are loaded.
@@ -2845,10 +2858,10 @@ file to use default values.
 
 The global configuration file is read from
 ``$prefix/share/geany/geany.conf`` (where ``$prefix`` is the path where
-Geany is installed) when starting Geany and an user configuration
-file does not exist. It can contain any settings which are found in
-the usual configuration file created by Geany but does not have to
-contain all settings.
+Geany is installed, see `Installation prefix`_) when starting Geany and
+an user configuration file does not exist. It can contain any settings
+which are found in the usual configuration file created by Geany but
+does not have to contain all settings.
 
 .. note::
     This feature is mainly intended for package maintainers or system
@@ -2868,8 +2881,8 @@ word delimiter characters as well as compiler and linker settings.
 
 The system-wide configuration files can be found in
 ``$prefix/share/geany`` and are called ``filetypes.$ext``,
-where ``$prefix`` is the path where Geany is installed (commonly
-``/usr/local``) and $ext is the name of the filetype. For every
+where ``$prefix`` is the path where Geany is installed (see
+`Installation prefix`_) and $ext is the name of the filetype. For every
 filetype there is a corresponding definition file. There is one
 exception: ``filetypes.common`` -- this file is for general settings,
 which are not specific to a certain filetype. It is not recommended
@@ -3249,7 +3262,7 @@ filetype using the ``filetype_extensions.conf`` file.
 To override the system-wide configuration file, copy it from
 ``$prefix/share/geany`` to your configuration directory, usually
 ``~/.config/geany/``. ``$prefix`` is the path where Geany is installed
-(commonly ``/usr/local``).
+(see `Installation prefix`_).
 
 For example::
 
@@ -3444,7 +3457,7 @@ the file ``ui_toolbar.xml``.
 To override the system-wide configuration file, copy it from
 ``$prefix/share/geany`` to your configuration directory, usually
 ``~/.config/geany/``. ``$prefix`` is the path where Geany is installed
-(commonly ``/usr/local``).
+(see `Installation prefix`_).
 
 For example::
 

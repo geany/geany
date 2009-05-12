@@ -1,3 +1,26 @@
+2009-05-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/symbols.c, doc/geany.txt, doc/geany.html,
+   tagmanager/makefile.win32, tagmanager/nestlevel.c,
+   tagmanager/nestlevel.h, tagmanager/python.c, tagmanager/rest.c,
+   tagmanager/Makefile.am, wscript:
+   Merge unstable branch:
+   Add reStructuredText scope information for tags (for symbol list
+   grouping).
+   Read custom system global tags files from $prefix/share/geany/tags;
+   Closes #2778923.
+   Show the number of tags in a user global tags file (instead of the
+   running total) in the debug message.
+   Also print debug messages when loading a tag file manually or for
+   default global tags files e.g. python.tags.
+ - code:
+   Move NestingLevel tags code into a separate file, add functions.
+ - docs:
+   Add 'Installation prefix' section instead of quoting '/usr/local'
+   each time.
+   Update for custom system global tags files.
+
+
 2009-05-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/highlighting.c:
