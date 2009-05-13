@@ -2,6 +2,9 @@
 
  * src/keyfile.c:
    Remember scribble cursor position.
+ * src/keybindings.c, TODO:
+   Implement Most-Recently-Used document switching when pressing
+   Ctrl-Tab keybinding. (It's probably not perfect, but works OK).
 
 
 2009-05-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

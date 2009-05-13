@@ -63,6 +63,7 @@ static const gboolean swap_alt_tab_order = FALSE;
 
 const gsize MAX_MRU_DOCS = 20;
 static GQueue *mru_docs = NULL;
+static guint mru_pos = 0;
 
 static gboolean switch_dialog_cancelled = TRUE;
 static GtkWidget *switch_dialog = NULL;
@@ -1499,6 +1500,8 @@ static gboolean on_key_release_event(GtkWidget *widget, GdkEventKey *ev, gpointe
 
 		if (switch_dialog && GTK_WIDGET_VISIBLE(switch_dialog))
 			gtk_widget_hide(switch_dialog);
+
+		mru_pos = 0;
 	}
 	return FALSE;
 }
@@ -1552,7 +1555,10 @@ static GtkWidget *create_switch_dialog(void)
 static gboolean on_switch_timeout(G_GNUC_UNUSED gpointer data)
 {
 	if (switch_dialog_cancelled)
+	{
 		return FALSE;
+	}
+	mru_pos += 2;
 
 	if (! switch_dialog)
 		switch_dialog = create_switch_dialog();
@@ -1566,9 +1572,13 @@ static gboolean on_switch_timeout(G_GNUC_UNUSED gpointer data)
 
 static void cb_func_switch_tablastused(G_GNUC_UNUSED guint key_id)
 {
-	/* TODO: MRU switching order */
-	GeanyDocument *last_doc = g_queue_peek_head(mru_docs);
+	GeanyDocument *last_doc = g_queue_peek_nth(mru_docs, mru_pos);
 
+	if (! DOC_VALID(last_doc))
+	{
+		mru_pos = 0;
+		last_doc = g_queue_peek_nth(mru_docs, mru_pos);
+	}
 	if (! DOC_VALID(last_doc))
 		return;
 
