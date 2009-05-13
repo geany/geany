@@ -7,6 +7,12 @@
    Ctrl-Tab keybinding. (It's probably not perfect, but works OK).
 
 
+2009-05-13  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * data/latex.tags: Added some more commands from unit.sty and
+   moderncv.sty.
+
+
 2009-05-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/symbols.c, doc/geany.txt, doc/geany.html,
