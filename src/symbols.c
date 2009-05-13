@@ -149,7 +149,7 @@ static gboolean symbols_load_global_tags(const gchar *tags_file, GeanyFiletype *
 	if (result)
 	{
 		geany_debug("Loaded %s (%s), %u tag(s).", tags_file, ft->name,
-			get_tag_count() - old_tag_count);
+			(guint) (get_tag_count() - old_tag_count));
 	}
 	return result;
 }
