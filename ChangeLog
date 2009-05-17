@@ -3,6 +3,8 @@
  * tagmanager/python.c:
    Fix missing symbols for variables when an equal sign is used
    in a comment on the same line as the variable declaration.
+ * src/search.c:
+   Remember the additional Find in Files search flags at startup.
 
 
 2009-05-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
