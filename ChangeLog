@@ -3,6 +3,8 @@
  * tagmanager/python.c:
    Fix missing symbols for variables when an equal sign is used
    in a comment on the same line as the variable declaration.
+   Backport change from CTags SVN to keep the parser more in sync:
+   Add support for Cython constructs to the Python parser.
  * src/search.c:
    Remember the additional Find in Files search flags at startup.
  * src/dialogs.c:
