@@ -5,6 +5,8 @@
    in a comment on the same line as the variable declaration.
  * src/search.c:
    Remember the additional Find in Files search flags at startup.
+ * src/dialogs.c:
+   Don't close the Save As dialog when saving the file didn't succeed.
 
 
 2009-05-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -333,16 +333,17 @@ static void on_save_as_new_tab_toggled(GtkToggleButton *togglebutton, gpointer u
 
 
 #if ! GEANY_USE_WIN32_DIALOG
-static void handle_save_as(const gchar *utf8_filename, gboolean open_new_tab, gboolean rename_file)
+static gboolean handle_save_as(const gchar *utf8_filename, gboolean open_new_tab, gboolean rename_file)
 {
 	GeanyDocument *doc = document_get_current();
+	gboolean success = FALSE;
 
-	g_return_if_fail(NZV(utf8_filename));
+	g_return_val_if_fail(NZV(utf8_filename), FALSE);
 
 	if (open_new_tab)
 	{	/* "open" the saved file in a new tab and switch to it */
 		doc = document_clone(doc, utf8_filename);
-		document_save_file_as(doc, NULL);
+		success = document_save_file_as(doc, NULL);
 	}
 	else
 	{
@@ -356,10 +357,11 @@ static void handle_save_as(const gchar *utf8_filename, gboolean open_new_tab, gb
 			tm_workspace_remove_object(doc->tm_file, TRUE, TRUE);
 			doc->tm_file = NULL;
 		}
-		document_save_file_as(doc, utf8_filename);
+		success = document_save_file_as(doc, utf8_filename);
 
 		build_menu_update(doc);
 	}
+	return success;
 }
 
 
@@ -369,6 +371,7 @@ on_file_save_dialog_response           (GtkDialog *dialog,
                                         gpointer user_data)
 {
 	gboolean rename_file = FALSE;
+	gboolean success = FALSE;
 
 	switch (response)
 	{
@@ -390,13 +393,14 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 			}
 			utf8_filename = utils_get_utf8_from_locale(new_filename);
 
-			handle_save_as(utf8_filename, open_new_tab, rename_file);
+			success = handle_save_as(utf8_filename, open_new_tab, rename_file);
 
 			g_free(utf8_filename);
 			g_free(new_filename);
 		}
 	}
-	gtk_widget_hide(ui_widgets.save_filesel);
+	if (success)
+		gtk_widget_hide(ui_widgets.save_filesel);
 }
 #endif
 
