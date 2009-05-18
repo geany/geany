@@ -1713,18 +1713,6 @@ on_menu_duplicate_line1_activate       (GtkMenuItem     *menuitem,
 }
 
 
-static void change_line_indent(GeanyEditor *editor, gboolean increase)
-{
-	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
-	ScintillaObject	*sci = editor->sci;
-	gint line = sci_get_current_line(sci);
-	gint width = sci_get_line_indentation(sci, line);
-
-	width += increase ? iprefs->width : -iprefs->width;
-	sci_set_line_indentation(sci, line, width);
-}
-
-
 void
 on_menu_increase_indent1_activate      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
@@ -1732,14 +1720,7 @@ on_menu_increase_indent1_activate      (GtkMenuItem     *menuitem,
 	GeanyDocument *doc = document_get_current();
 	g_return_if_fail(doc != NULL);
 
-	if (sci_get_lines_selected(doc->editor->sci) > 1)
-	{
-		sci_send_command(doc->editor->sci, SCI_TAB);
-	}
-	else
-	{
-		change_line_indent(doc->editor, TRUE);
-	}
+	editor_indent(doc->editor, TRUE);
 }
 
 
@@ -1750,14 +1731,7 @@ on_menu_decrease_indent1_activate      (GtkMenuItem     *menuitem,
 	GeanyDocument *doc = document_get_current();
 	g_return_if_fail(doc != NULL);
 
-	if (sci_get_lines_selected(doc->editor->sci) > 1)
-	{
-		sci_send_command(doc->editor->sci, SCI_BACKTAB);
-	}
-	else
-	{
-		change_line_indent(doc->editor, FALSE);
-	}
+	editor_indent(doc->editor, FALSE);
 }
 
 

@@ -4480,3 +4480,78 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 		editor_prefs.smart_home_key ? SCI_VCHOMEWRAP : SCI_HOMEWRAP);
 	sci_assign_cmdkey(sci, SCK_END,  SCI_LINEENDWRAP);
 }
+
+
+/* This is for tab-indents, space aligns formatted code. Spaces should be preserved. */
+static void change_tab_indentation(ScintillaObject *sci, gint line, gboolean increase)
+{
+	gint pos = sci_get_position_from_line(sci, line);
+
+	if (increase)
+	{
+		sci_insert_text(sci, pos, "\t");
+	}
+	else
+	{
+		if (sci_get_char_at(sci, pos) == '\t')
+		{
+			sci_set_selection(sci, pos, pos + 1);
+			sci_replace_sel(sci, "");
+		}
+	}
+}
+
+
+static void editor_change_line_indent(GeanyEditor *editor, gint line, gboolean increase)
+{
+	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
+	ScintillaObject *sci = editor->sci;
+
+	if (iprefs->type == GEANY_INDENT_TYPE_TABS /* && iprefs->ignore_spaces */)
+		change_tab_indentation(sci, line, increase);
+	else
+	{
+		gint width = sci_get_line_indentation(sci, line);
+
+		width += increase ? iprefs->width : -iprefs->width;
+		sci_set_line_indentation(sci, line, width);
+	}
+}
+
+
+void editor_indent(GeanyEditor *editor, gboolean increase)
+{
+	ScintillaObject *sci = editor->sci;
+	gint start, end;
+	gint line, lstart, lend;
+
+	if (sci_get_lines_selected(sci) <= 1)
+	{
+		line = sci_get_current_line(sci);
+		editor_change_line_indent(editor, line, increase);
+		return;
+	}
+	editor_select_lines(editor, FALSE);
+	start = sci_get_selection_start(sci);
+	end = sci_get_selection_end(sci);
+	lstart = sci_get_line_from_position(sci, start);
+	lend = sci_get_line_from_position(sci, end);
+
+	for (line = lstart; line < lend; line++)
+	{
+		editor_change_line_indent(editor, line, increase);
+	}
+	if (lend > lstart)
+	{
+		sci_set_selection_start(sci, start);
+		end = sci_get_position_from_line(sci, lend);
+		sci_set_selection_end(sci, end);
+		editor_select_lines(editor, FALSE);
+	}
+	else
+	{
+		sci_set_current_line(sci, lstart);
+	}
+}
+
+

@@ -4,6 +4,9 @@
    Add sci_set_selection().
  * doc/geany.txt, doc/geany.html:
    Update manual for MRU switching.
+ * src/callbacks.c, src/editor.c, src/editor.h:
+   Make indenting with the Tabs indent type preserve spaces on the line,
+   so it works for the 'tab indents, space aligns' formatting style.
 
 
 2009-05-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

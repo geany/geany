@@ -195,6 +195,8 @@ void editor_insert_multiline_comment(GeanyEditor *editor);
 
 void editor_insert_alternative_whitespace(GeanyEditor *editor);
 
+void editor_indent(GeanyEditor *editor, gboolean increase);
+
 void editor_smart_line_indentation(GeanyEditor *editor, gint pos);
 
 void editor_indentation_by_one_space(GeanyEditor *editor, gint pos, gboolean decrease);
