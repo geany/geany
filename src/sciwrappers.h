@@ -78,6 +78,7 @@ gint				sci_get_pos_at_line_sel_start(ScintillaObject*sci, gint line);
 gint				sci_get_pos_at_line_sel_end	(ScintillaObject* sci, gint line);
 void 				sci_set_selection_start		(ScintillaObject* sci, gint position);
 void				sci_set_selection_end		(ScintillaObject* sci, gint position);
+void				sci_set_selection			(ScintillaObject *sci, gint anchorPos, gint currentPos);
 
 gint				sci_get_length				(ScintillaObject* sci);
 void				sci_get_text				(ScintillaObject* sci,gint len,gchar* text);

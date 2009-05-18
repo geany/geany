@@ -400,6 +400,12 @@ void sci_set_selection_end(ScintillaObject* sci, gint position)
 }
 
 
+void sci_set_selection(ScintillaObject *sci, gint anchorPos, gint currentPos)
+{
+	SSM(sci, SCI_SETSEL, anchorPos, currentPos);
+}
+
+
 gint sci_get_line_end_position(ScintillaObject* sci, gint line)
 {
 	return SSM(sci, SCI_GETLINEENDPOSITION, line, 0);

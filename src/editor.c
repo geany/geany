@@ -2163,7 +2163,7 @@ static void insert_closing_tag(GeanyEditor *editor, gint pos, gchar ch, const gc
 	sci_replace_sel(sci, to_insert);
 	if (ch == '>')
 	{
-		SSM(sci, SCI_SETSEL, pos, pos);
+		sci_set_selection(sci, pos, pos);
 		if (utils_str_equal(tag_name, "table"))
 			auto_table(editor, pos);
 	}
@@ -2495,7 +2495,7 @@ gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 						continue;
 				}
 
-				SSM(editor->sci, SCI_SETSEL, line_start + x, line_start + x + co_len);
+				sci_set_selection(editor->sci, line_start + x, line_start + x + co_len);
 				sci_replace_sel(editor->sci, "");
 				count++;
 			}
@@ -3387,7 +3387,7 @@ void editor_select_word(GeanyEditor *editor)
 			return;
 	}
 
-	SSM(editor->sci, SCI_SETSEL, start, end);
+	sci_set_selection(editor->sci, start, end);
 }
 
 
@@ -3414,7 +3414,7 @@ void editor_select_lines(GeanyEditor *editor, gboolean extra_line)
 	line = sci_get_line_from_position(editor->sci, end);
 	end = sci_get_position_from_line(editor->sci, line + 1);
 
-	SSM(editor->sci, SCI_SETSEL, start, end);
+	sci_set_selection(editor->sci, start, end);
 }
 
 
@@ -3490,7 +3490,7 @@ void editor_select_paragraph(GeanyEditor *editor)
 	line_found = find_paragraph_stop(editor, line_start, DOWN);
 	pos_end = SSM(editor->sci, SCI_POSITIONFROMLINE, line_found, 0);
 
-	SSM(editor->sci, SCI_SETSEL, pos_start, pos_end);
+	sci_set_selection(editor->sci, pos_start, pos_end);
 }
 
 
@@ -3515,7 +3515,7 @@ static void smart_line_indentation(GeanyEditor *editor, gint first_line, gint la
 		sel_end = SSM(editor->sci, SCI_GETLINEINDENTPOSITION, i, 0);
 		if (sel_start < sel_end)
 		{
-			SSM(editor->sci, SCI_SETSEL, sel_start, sel_end);
+			sci_set_selection(editor->sci, sel_start, sel_end);
 			sci_replace_sel(editor->sci, "");
 		}
 		sci_insert_text(editor->sci, sel_start, indent);
@@ -3601,7 +3601,7 @@ void editor_indentation_by_one_space(GeanyEditor *editor, gint pos, gboolean dec
 
 			if (sci_get_char_at(editor->sci, indentation_end) == ' ')
 			{
-				SSM(editor->sci, SCI_SETSEL, indentation_end, indentation_end + 1);
+				sci_set_selection(editor->sci, indentation_end, indentation_end + 1);
 				sci_replace_sel(editor->sci, "");
 				count--;
 				if (i == first_line)
