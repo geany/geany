@@ -500,6 +500,9 @@ combination to move between tabs, the order is determined by the tab
 order, not alphabetical as shown in the documents list (regardless
 of whether or not editor tabs are visible).
 
+See the *Notebook tabs* group in the `Keybindings`_ section for useful
+shortcuts including for Most-Recently-Used document switching.
+
 
 Character sets and Unicode Byte-Order-Mark (BOM)
 ------------------------------------------------
@@ -2775,7 +2778,13 @@ Switch to left document         Ctrl-PageUp               Switches to the previo
 
 Switch to right document        Ctrl-PageDown             Switches to the next open document.
 
-Switch to last used document    Ctrl-Tab                  Switches to the previously selected open document.
+Switch to last used document    Ctrl-Tab                  Switches to the previously shown document (if it's
+                                                          still open).
+                                                          Holding Ctrl (or another modifier if the keybinding
+                                                          has been changed) will show a dialog, then repeated
+                                                          presses of the keybinding will switch to the 2nd-last
+                                                          used document, 3rd-last, etc. Also known as
+                                                          Most-Recently-Used documents switching.
 
 Move document left              Alt-PageUp                Changes the current document with the left hand
                                                           one.
