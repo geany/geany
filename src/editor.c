@@ -100,6 +100,8 @@ static void auto_close_chars(ScintillaObject *sci, gint pos, gchar c);
 static void auto_table(GeanyEditor *editor, gint pos);
 static void close_block(GeanyEditor *editor, gint pos);
 static void editor_highlight_braces(GeanyEditor *editor, gint cur_pos);
+static void editor_auto_latex(GeanyEditor *editor, gint pos);
+static void editor_strip_line_trailing_spaces(GeanyEditor *editor, gint line);
 
 
 void editor_snippets_free(void)
@@ -1686,11 +1688,14 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 }
 
 
-void editor_auto_latex(GeanyEditor *editor, gint pos)
+static void editor_auto_latex(GeanyEditor *editor, gint pos)
 {
 	ScintillaObject *sci;
 
-	g_return_if_fail(editor != NULL && editor->document->file_type != NULL);
+	g_return_if_fail(editor != NULL);
+
+	if (editor->document->file_type == NULL)
+		return;
 
 	sci = editor->sci;
 
@@ -3220,7 +3225,7 @@ static gboolean is_code_style(gint lexer, gint style)
 
 
 #if 0
-gboolean editor_lexer_is_c_like(gint lexer)
+static gboolean editor_lexer_is_c_like(gint lexer)
 {
 	switch (lexer)
 	{
@@ -4006,7 +4011,7 @@ void editor_replace_spaces(GeanyEditor *editor)
 }
 
 
-void editor_strip_line_trailing_spaces(GeanyEditor *editor, gint line)
+static void editor_strip_line_trailing_spaces(GeanyEditor *editor, gint line)
 {
 	gint line_start = sci_get_position_from_line(editor->sci, line);
 	gint line_end = sci_get_line_end_position(editor->sci, line);

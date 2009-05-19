@@ -3,6 +3,9 @@
  * src/symbols.c, tagmanager/python.c:
    Parse Python import statements to get symbol completion for the
    imported module names.
+ * src/editor.c, src/editor.h:
+   Make some only locally used functions static.
+   Fix wrong sanity check.
 
 
 2009-05-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
