@@ -507,13 +507,7 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 	g_free(executable);
 
 #ifdef G_OS_WIN32
-	/* due to g_shell_parse_argv() we need to enclose the command(first element) of cmd_string with
-	 * "" if the command contains a full path(i.e. backslashes) otherwise the backslashes will be
-	 * eaten by g_shell_parse_argv(). */
-	setptr(cmd_string, quote_executable(cmd_string));
-	if (! g_shell_parse_argv(cmd_string, NULL, &argv, NULL))
-		/* if automatic parsing failed, fall back to simple, unsafe argv creation */
-		argv = g_strsplit(cmd_string, " ", 0);
+	argv = g_strsplit(cmd_string, " ", 0);
 #else
 	argv = g_new0(gchar *, 4);
 	argv[0] = g_strdup("/bin/sh");

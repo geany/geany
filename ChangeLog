@@ -6,6 +6,10 @@
  * src/editor.c, src/editor.h:
    Make some only locally used functions static.
    Fix wrong sanity check.
+ * src/build.c:
+   Fix quoting the build command string on Windows (closes #2791769).
+   This broke when we made build commands run synchronously on Windows,
+   now we don't need to special quote the commands anymore.
 
 
 2009-05-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
