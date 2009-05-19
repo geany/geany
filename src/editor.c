@@ -4282,6 +4282,7 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 	sci_set_caret_policy_x(sci, CARET_JUMPS | CARET_EVEN, 0);
 	/*sci_set_caret_policy_y(sci, CARET_JUMPS | CARET_EVEN, 0);*/
 	SSM(sci, SCI_AUTOCSETSEPARATOR, '\n', 0);
+	SSM(sci, SCI_AUTOCSETDROPRESTOFWORD, TRUE, 0);
 	SSM(sci, SCI_SETSCROLLWIDTHTRACKING, 1, 0);
 
 	/* only connect signals if this is for the document notebook, not split window */

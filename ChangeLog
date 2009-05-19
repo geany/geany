@@ -1,3 +1,10 @@
+2009-05-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/editor.c:
+   Drop rest of word to the right of cursor when autocompleting (do we
+   need a pref for this?).
+
+
 2009-05-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/sciwrappers.c, src/sciwrappers.h, src/editor.c:
