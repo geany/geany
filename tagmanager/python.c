@@ -27,14 +27,15 @@
 *   DATA DEFINITIONS
 */
 typedef enum {
-	K_CLASS, K_FUNCTION, K_MEMBER, K_VARIABLE
+	K_CLASS, K_FUNCTION, K_MEMBER, K_VARIABLE, K_IMPORT
 } pythonKind;
 
 static kindOption PythonKinds[] = {
 	{TRUE, 'c', "class",    "classes"},
 	{TRUE, 'f', "function", "functions"},
 	{TRUE, 'm', "member",   "class members"},
-    {TRUE, 'v', "variable", "variables"}
+    {TRUE, 'v', "variable", "variables"},
+    {TRUE, 'i', "namespace", "imports"}
 };
 
 static char const * const singletriple = "'''";
@@ -247,6 +248,49 @@ static void parseClass (const char *cp, vString *const class,
 	vStringDelete (inheritance);
 }
 
+static void parseImports (const char *cp)
+{
+	const char *pos;
+	vString *name, *name_next;
+
+	cp = skipEverything (cp);
+
+	if ((pos = strstr (cp, "import")) == NULL)
+		return;
+
+	cp = pos + 6;
+
+	/* continue only if there is some space between the keyword and the identifier */
+	if (! isspace (*cp))
+		return;
+
+	cp++;
+	cp = skipSpace (cp);
+
+	name = vStringNew ();
+	name_next = vStringNew ();
+
+	cp = skipEverything (cp);
+	while (*cp)
+	{
+		cp = parseIdentifier (cp, name);
+
+		cp = skipEverything (cp);
+		/* we parse the next possible import statement as well to be able to ignore 'foo' in
+		 * 'import foo as bar' */
+		parseIdentifier (cp, name_next);
+
+		/* take the current tag only if the next one is not "as" */
+		if (strcmp (vStringValue (name_next), "as") != 0 &&
+			strcmp (vStringValue (name), "as") != 0)
+		{
+			makeSimpleTag (name, PythonKinds, K_IMPORT);
+		}
+	}
+	vStringDelete (name);
+	vStringDelete (name_next);
+}
+
 static void parseFunction (const char *cp, vString *const def,
 	vString *const parent, int is_class_parent)
 {
@@ -428,18 +472,18 @@ static const char *findVariable(const char *line)
 }
 
 /* Skip type declaration that optionally follows a cdef/cpdef */
-static const char *skipTypeDecl (const char *cp, boolean *is_class) 
-{ 
+static const char *skipTypeDecl (const char *cp, boolean *is_class)
+{
 	const char *lastStart = cp, *ptr = cp;
 	int loopCount = 0;
 	ptr = skipSpace(cp);
-	if (!strncmp("extern", ptr, 6)) { 
-		ptr += 6; 
-		ptr = skipSpace(ptr); 
+	if (!strncmp("extern", ptr, 6)) {
+		ptr += 6;
+		ptr = skipSpace(ptr);
 		if (!strncmp("from", ptr, 4)) { return NULL; }
 	}
 	if (!strncmp("class", ptr, 5)) {
-		ptr += 5 ; 
+		ptr += 5 ;
 		*is_class = TRUE;
 		ptr = skipSpace(ptr);
 		return ptr;
@@ -450,7 +494,7 @@ static const char *skipTypeDecl (const char *cp, boolean *is_class)
 		if (!*ptr || *ptr == '=') return NULL;
 		if (*ptr == '(') {
 		    return lastStart; /* if we stopped on a '(' we are done */
-		}                             
+		}
 		ptr = skipSpace(ptr);
 		lastStart = ptr;
 		while (*lastStart == '*') lastStart++;  /* cdef int *identifier */
@@ -539,7 +583,7 @@ static void findPythonTags (void)
 				is_class = TRUE;
 			}
 			else if (!strncmp (keyword, "cdef ", 5))
-		    { 
+		    {
 		        cp = skipSpace(keyword + 4);
 		        candidate = skipTypeDecl (cp, &is_class);
 		        if (candidate)
@@ -550,7 +594,7 @@ static void findPythonTags (void)
 
 		    }
     		else if (!strncmp (keyword, "cpdef ", 6))
-		    { 
+		    {
 		        cp = skipSpace(keyword + 5);
 		        candidate = skipTypeDecl (cp, &is_class);
 		        if (candidate)
@@ -597,6 +641,8 @@ static void findPythonTags (void)
 
 			makeVariableTag (name, parent);
 		}
+		/* Find and parse imports */
+		parseImports(line);
 	}
 	/* Clean up all memory we allocated. */
 	vStringDelete (parent);
