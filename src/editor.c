@@ -3396,8 +3396,8 @@ void editor_select_word(GeanyEditor *editor)
 }
 
 
-/* extra_line is for selecting the cursor line or anchor line at the bottom of a selection,
- * when those lines have no selection. */
+/* extra_line is for selecting the cursor line (or anchor line) at the bottom of a selection,
+ * when those lines have no selection (cursor at start of line). */
 void editor_select_lines(GeanyEditor *editor, gboolean extra_line)
 {
 	gint start, end, line;
@@ -4542,6 +4542,8 @@ void editor_indent(GeanyEditor *editor, gboolean increase)
 	end = sci_get_selection_end(sci);
 	lstart = sci_get_line_from_position(sci, start);
 	lend = sci_get_line_from_position(sci, end);
+	if (end == sci_get_length(sci))
+		lend++;	/* for last line with text on it */
 
 	for (line = lstart; line < lend; line++)
 	{
