@@ -1377,7 +1377,8 @@ static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 
 	g_return_val_if_fail(ft && word && *word, NULL);
 
-	tags = tm_workspace_find(word, arg_types | tm_tag_class_t, attrs, FALSE, ft->lang);
+	/* use all types in case language uses wrong tag type e.g. python "members" instead of "methods" */
+	tags = tm_workspace_find(word, tm_tag_max_t, attrs, FALSE, ft->lang);
 	if (tags->len == 0)
 		return NULL;
 

@@ -61,13 +61,14 @@ static boolean isIdentifierCharacter (int c)
  * extract all relevant information and create a tag.
  */
 static void makeFunctionTag (vString *const function,
-	vString *const parent, int is_class_parent)
+	vString *const parent, int is_class_parent, const char *arglist)
 {
 	tagEntryInfo tag;
 	initTagEntry (&tag, vStringValue (function));
 
 	tag.kindName = "function";
 	tag.kind = 'f';
+	tag.extensionFields.arglist = arglist;
 
 	if (vStringLength (parent) > 0)
 	{
@@ -291,11 +292,39 @@ static void parseImports (const char *cp)
 	vStringDelete (name_next);
 }
 
+/* modified from get.c getArglistFromStr().
+ * warning: terminates rest of string past arglist!
+ * note: does not ignore brackets inside strings! */
+static char *parseArglist(const char *buf)
+{
+	char *start, *end;
+	int level;
+	if (NULL == buf)
+		return NULL;
+	if (NULL == (start = strchr(buf, '(')))
+		return NULL;
+	for (level = 1, end = start + 1; level > 0; ++end)
+	{
+		if ('\0' == *end)
+			break;
+		else if ('(' == *end)
+			++ level;
+		else if (')' == *end)
+			-- level;
+	}
+	*end = '\0';
+	return strdup(start);
+}
+
 static void parseFunction (const char *cp, vString *const def,
 	vString *const parent, int is_class_parent)
 {
+	char *arglist;
+
 	cp = parseIdentifier (cp, def);
-	makeFunctionTag (def, parent, is_class_parent);
+	arglist = parseArglist (cp);
+	makeFunctionTag (def, parent, is_class_parent, arglist);
+	eFree (arglist);
 }
 
 /* Get the combined name of a nested symbol. Classes are separated with ".",

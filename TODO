@@ -20,10 +20,6 @@ Note: features included in brackets have lower priority.
 	o (better search & replace regex support - use
 	   SCI_GETCHARACTERPOINTER and GNU regex?)
 	o (parsing tags from a memory buffer instead of a file on disk)
-	o (calltip support for non-C-like languages that use
-	   function_name(arguments) syntax)
-	o (better tags support for popular languages? - this is a moving
-	   target...)
 	o (tango-like icons for the symbol list)
 	o (show autocompletion symbol icons - see SCI_REGISTERIMAGE)
 
@@ -40,6 +36,10 @@ Wishlist
 --------
 Note: these items might not get worked on.
 
+	o (calltip support for non-C-like languages that use
+	   function_name(arguments) syntax - see python.c:parseArglist())
+	o (better tags support for popular languages? - this is a moving
+	   target...)
 	o Some kind of support for CTags tags files
 	o Scope resolution for object members
 	o Python plugin interface (different concept from Lua scripting)
