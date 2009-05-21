@@ -397,7 +397,11 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 
 			g_free(utf8_filename);
 			g_free(new_filename);
+			break;
 		}
+		case GTK_RESPONSE_CANCEL:
+			success = TRUE;
+			break;
 	}
 	if (success)
 		gtk_widget_hide(ui_widgets.save_filesel);
