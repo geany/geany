@@ -1,3 +1,12 @@
+2009-05-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c:
+   Improve MRU document switching so there are no duplicates in the
+   list and documents switched to whilst the dialog is open are
+   ignored. Also beep when cycling through to the first document in the
+   list.
+
+
 2009-05-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/dialogs.c:

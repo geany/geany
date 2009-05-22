@@ -500,9 +500,11 @@ static void on_notebook_switch_page(void)
 {
 	GeanyDocument *old = document_get_current();
 
-	/* when closing current doc, old is NULL */
-	if (old)
+	/* when closing current doc, old is NULL.
+	 * Don't add to the mru list when switch dialog is visible. */
+	if (old && switch_dialog_cancelled)
 	{
+		g_queue_remove(mru_docs, old);
 		g_queue_push_head(mru_docs, old);
 
 		if (g_queue_get_length(mru_docs) > MAX_MRU_DOCS)
@@ -517,8 +519,7 @@ static gboolean on_idle_close(gpointer data)
 	GeanyDocument *current;
 
 	current = document_get_current();
-
-	while (current && g_queue_peek_head(mru_docs) == current)
+	if (current && g_queue_peek_head(mru_docs) == current)
 		g_queue_pop_head(mru_docs);
 
 	return FALSE;
@@ -529,7 +530,7 @@ static void on_document_close(GObject *obj, GeanyDocument *doc)
 {
 	if (! main_status.quitting)
 	{
-		g_queue_remove_all(mru_docs, doc);
+		g_queue_remove(mru_docs, doc);
 		g_idle_add(on_idle_close, NULL);
 	}
 }
@@ -1558,7 +1559,10 @@ static gboolean on_switch_timeout(G_GNUC_UNUSED gpointer data)
 	{
 		return FALSE;
 	}
-	mru_pos += 2;
+	if (! switch_dialog || !GTK_WIDGET_VISIBLE(switch_dialog))
+		mru_pos = 2;	/* skip past the previous document */
+	else
+		mru_pos += 1;
 
 	if (! switch_dialog)
 		switch_dialog = create_switch_dialog();
@@ -1576,6 +1580,7 @@ static void cb_func_switch_tablastused(G_GNUC_UNUSED guint key_id)
 
 	if (! DOC_VALID(last_doc))
 	{
+		utils_beep();
 		mru_pos = 0;
 		last_doc = g_queue_peek_nth(mru_docs, mru_pos);
 	}
