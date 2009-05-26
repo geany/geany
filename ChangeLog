@@ -1,3 +1,12 @@
+2009-05-26  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/win32.c:
+   Use the wide character versions of native Windows File dialogs.
+ * src/project.c:
+   Fix wrong initialisation of the default project path button callback
+   in the preferences dialog.
+
+
 2009-05-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keybindings.c:
