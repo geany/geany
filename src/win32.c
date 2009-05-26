@@ -80,11 +80,11 @@ static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline
 static VOID ReadFromPipe(HANDLE hRead, HANDLE hWrite, HANDLE hFile, GError **error);
 
 
-static gchar *get_file_filters()
+static wchar_t *get_file_filters(void)
 {
 	gchar *string;
 	gint i, j, len;
-
+	static wchar_t title[1024];
 	GString *str = g_string_sized_new(100);
 	GString *all_patterns = g_string_sized_new(100);
 	gchar *tmp;
@@ -117,14 +117,18 @@ static gchar *get_file_filters()
 	{
 		if (string[i] == '\t') string[i] = '\0';
 	}
-	return string;
+	MultiByteToWideChar(CP_UTF8, 0, string, len, title, sizeof(title));
+	g_free(string);
+
+	return title;
 }
 
 
-static gchar *get_filters(gboolean project_files)
+static wchar_t *get_filters(gboolean project_files)
 {
 	gchar *string;
 	gint i, len;
+	static wchar_t title[1024];
 
 	if (project_files)
 	{
@@ -145,29 +149,31 @@ static gchar *get_filters(gboolean project_files)
 	{
 		if (string[i] == '\t') string[i] = '\0';
 	}
-	return string;
+	MultiByteToWideChar(CP_UTF8, 0, string, len, title, sizeof(title));
+	g_free(string);
+
+	return title;
 }
 
 
-/* Converts the given UTF-8 filename into something usable for Windows and
+/* Converts the given UTF-8 filename or directory name into something usable for Windows and
  * returns the directory part of the given filename. */
-static gchar *get_dir(const gchar *utf8_filename)
+static wchar_t *get_dir_for_path(const gchar *utf8_filename)
 {
+	static wchar_t w_dir[MAX_PATH];
 	gchar *result;
-	/* don't use utils_get_locale_from_utf8() here because it does only g_strdup() on Windows */
-	gchar *locale_filename = g_locale_from_utf8(utf8_filename, -1, NULL, NULL, NULL);
-
-	/* g_file_test() needs the UTF-8 name, the resulted string is used with the Windows API
-	 * where we need the locale encoding */
-	if (! g_file_test(utf8_filename, G_FILE_TEST_IS_DIR))
-	{
-		result = g_path_get_dirname(locale_filename);
-		g_free(locale_filename);
-	}
+	
+	if (g_file_test(utf8_filename, G_FILE_TEST_IS_DIR))
+		result = (gchar*) utf8_filename;
 	else
-		result = locale_filename;
+		result = g_path_get_dirname(utf8_filename);		
 
-	return result;
+	MultiByteToWideChar(CP_UTF8, 0, result, -1, w_dir, sizeof(w_dir));
+
+	if (result != utf8_filename)
+		g_free(result);
+		
+	return w_dir;
 }
 
 
@@ -180,16 +186,17 @@ INT CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
 	switch(uMsg)
 	{
 		case BFFM_INITIALIZED:
-			SendMessage(hwnd, BFFM_SETSELECTION, TRUE, (LPARAM) pData);
+		{
+			SendMessageW(hwnd, BFFM_SETSELECTIONW, TRUE, pData);
 			break;
-
+		}
 		case BFFM_SELCHANGED:
 		{
 			/* set the status window to the currently selected path. */
-			static TCHAR szDir[MAX_PATH];
-			if (SHGetPathFromIDList((LPITEMIDLIST) lp, szDir))
+			static wchar_t szDir[MAX_PATH];
+			if (SHGetPathFromIDListW((LPITEMIDLIST) lp, szDir))
 			{
-				SendMessage(hwnd, BFFM_SETSTATUSTEXT, 0, (LPARAM) szDir);
+				SendMessageW(hwnd, BFFM_SETSTATUSTEXTW, 0, (LPARAM) szDir);
 			}
 			break;
 		}
@@ -204,11 +211,13 @@ INT CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
 gchar *win32_show_project_folder_dialog(GtkWidget *parent, const gchar *title,
 										const gchar *initial_dir)
 {
-	BROWSEINFO bi;
+	BROWSEINFOW bi;
 	LPCITEMIDLIST pidl;
-	gchar *fname = g_malloc(MAX_PATH);
-	gchar *dir = get_dir(initial_dir);
 	gchar *result = NULL;
+	wchar_t fname[MAX_PATH];
+	wchar_t w_title[512];
+
+	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, sizeof(w_title));
 
 	if (parent == NULL)
 		parent = main_widgets.window;
@@ -216,30 +225,22 @@ gchar *win32_show_project_folder_dialog(GtkWidget *parent, const gchar *title,
 	memset(&bi, 0, sizeof bi);
 	bi.hwndOwner = GDK_WINDOW_HWND(parent->window);
 	bi.pidlRoot = NULL;
-	bi.lpszTitle = title;
+	bi.lpszTitle = w_title;
 	bi.lpfn = BrowseCallbackProc;
-	bi.lParam = (LPARAM) dir;
+	bi.lParam = (LPARAM) get_dir_for_path(initial_dir);
 	bi.ulFlags = BIF_DONTGOBELOWDOMAIN | BIF_RETURNONLYFSDIRS | BIF_STATUSTEXT;
 
-	pidl = SHBrowseForFolder(&bi);
-	g_free(dir);
+	pidl = SHBrowseForFolderW(&bi);
 
 	/* convert the strange Windows folder list item something into an usual path string ;-) */
 	if (pidl != 0)
 	{
-		if (SHGetPathFromIDList(pidl, fname))
+		if (SHGetPathFromIDListW(pidl, fname))
 		{
-			/* Convert the resulting filename into UTF-8 (from whatever encoding it has at
-			 * this moment). Don't use utils_get_utf8_from_locale() here because it does only
-			 * g_strdup() on Windows. */
-			setptr(fname, g_locale_to_utf8(fname, -1, NULL, NULL, NULL));
-			result = fname;
+			result = g_malloc0(MAX_PATH * 2);
+			WideCharToMultiByte(CP_UTF8, 0, fname, -1, result, MAX_PATH * 2, NULL, NULL);
 		}
 		/* SHBrowseForFolder() probably leaks memory here, but how to free the allocated memory? */
-	}
-	else
-	{
-		g_free(fname);
 	}
 	return result;
 }
@@ -255,13 +256,15 @@ gchar *win32_show_project_open_dialog(GtkWidget *parent, const gchar *title,
 								      const gchar *initial_dir, gboolean allow_new_file,
 								      gboolean project_file_filter)
 {
-	OPENFILENAME of;
+	OPENFILENAMEW of;
 	gint retval;
-	gchar *fname = g_malloc(2048);
-	gchar *filters = get_filters(project_file_filter);
-	gchar *dir = get_dir(initial_dir);
+	wchar_t fname[MAX_PATH];
+	wchar_t w_title[512];
+	gchar *filename;
 
 	fname[0] = '\0';
+
+	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, sizeof(w_title));
 
 	if (parent == NULL)
 		parent = main_widgets.window;
@@ -274,24 +277,21 @@ gchar *win32_show_project_open_dialog(GtkWidget *parent, const gchar *title,
 	of.lStructSize = sizeof of;
 #endif
 	of.hwndOwner = GDK_WINDOW_HWND(parent->window);
-	of.lpstrFilter = filters;
+	of.lpstrFilter = get_filters(project_file_filter);
 
 	of.lpstrCustomFilter = NULL;
 	of.nFilterIndex = 0;
 	of.lpstrFile = fname;
-	of.lpstrInitialDir = dir;
+	of.lpstrInitialDir = get_dir_for_path(initial_dir);
 	of.nMaxFile = 2048;
 	of.lpstrFileTitle = NULL;
-	of.lpstrTitle = title;
-	of.lpstrDefExt = "";
+	of.lpstrTitle = w_title;
+	of.lpstrDefExt = L"";
 	of.Flags = OFN_PATHMUSTEXIST | OFN_EXPLORER | OFN_HIDEREADONLY;
 	if (! allow_new_file)
 		of.Flags |= OFN_FILEMUSTEXIST;
 
-	retval = GetOpenFileName(&of);
-
-	g_free(dir);
-	g_free(filters);
+	retval = GetOpenFileNameW(&of);
 
 	if (! retval)
 	{
@@ -302,12 +302,13 @@ gchar *win32_show_project_open_dialog(GtkWidget *parent, const gchar *title,
 			win32_message_dialog(NULL, GTK_MESSAGE_ERROR, error);
 			g_free(error);
 		}
-		g_free(fname);
 		return NULL;
 	}
 	/* convert the resulting filename into UTF-8 (from whatever encoding it has at this moment) */
-	setptr(fname, g_locale_to_utf8(fname, -1, NULL, NULL, NULL));
-	return fname;
+	filename = g_malloc0(MAX_PATH * 2);
+	WideCharToMultiByte(CP_UTF8, 0, fname, -1, filename, MAX_PATH * 2, NULL, NULL);
+
+	return filename;
 }
 
 
@@ -315,14 +316,18 @@ gchar *win32_show_project_open_dialog(GtkWidget *parent, const gchar *title,
  * Returns: TRUE if the dialog was not cancelled. */
 gboolean win32_show_file_dialog(gboolean file_open, const gchar *initial_dir)
 {
-	OPENFILENAME of;
+	OPENFILENAMEW of;
 	gint retval;
-	gchar *fname = g_malloc(2048);
-	gchar *filters = get_file_filters();
+	gchar tmp[MAX_PATH];
+	wchar_t fname[MAX_PATH];
+	wchar_t w_dir[MAX_PATH];
 
 	fname[0] = '\0';
+		g_message("%d",MAX_PATH);
 
-	/* initialize file dialog info struct */
+	MultiByteToWideChar(CP_UTF8, 0, initial_dir, -1, w_dir, sizeof(w_dir));
+
+	/* initialise file dialog info struct */
 	memset(&of, 0, sizeof of);
 #ifdef OPENFILENAME_SIZE_VERSION_400
 	of.lStructSize = OPENFILENAME_SIZE_VERSION_400;
@@ -330,28 +335,26 @@ gboolean win32_show_file_dialog(gboolean file_open, const gchar *initial_dir)
 	of.lStructSize = sizeof of;
 #endif
 	of.hwndOwner = GDK_WINDOW_HWND(main_widgets.window->window);
-	of.lpstrFilter = filters;
+	of.lpstrFilter = get_file_filters();
 
 	of.lpstrCustomFilter = NULL;
 	of.nFilterIndex = GEANY_FILETYPES_NONE + 1;
 	of.lpstrFile = fname;
-	of.lpstrInitialDir = initial_dir;
+	of.lpstrInitialDir = w_dir;
 	of.nMaxFile = 2048;
 	of.lpstrFileTitle = NULL;
 	of.lpstrTitle = NULL;
-	of.lpstrDefExt = "";
+	of.lpstrDefExt = L"";
 	if (file_open)
 	{
 		of.Flags = OFN_ALLOWMULTISELECT | OFN_FILEMUSTEXIST | OFN_EXPLORER;
-		retval = GetOpenFileName(&of);
+		retval = GetOpenFileNameW(&of);
 	}
 	else
 	{
 		of.Flags = OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST;
-		retval = GetSaveFileName(&of);
+		retval = GetSaveFileNameW(&of);
 	}
-
-	g_free(filters);
 
 	if (!retval)
 	{
@@ -361,39 +364,39 @@ gboolean win32_show_file_dialog(gboolean file_open, const gchar *initial_dir)
 			g_snprintf(error, sizeof error, "File dialog box error (%x)", (int)CommDlgExtendedError());
 			win32_message_dialog(NULL, GTK_MESSAGE_ERROR, error);
 		}
-		g_free(fname);
 		return FALSE;
 	}
 
 	if (file_open)
 	{
-		gchar file_name[255];
 		gint x;
 
 		x = of.nFileOffset - 1;
-		if (x != strlen(fname))
+		if (x != wcslen(fname))
 		{	/* open a single file */
-
-			/* convert the resulting filename into UTF-8 */
-			setptr(fname, g_locale_to_utf8(fname, -1, NULL, NULL, NULL));
-
-			document_open_file(fname, of.Flags & OFN_READONLY, NULL, NULL);
+			WideCharToMultiByte(CP_UTF8, 0, fname, -1, tmp, sizeof(tmp), NULL, NULL);
+			document_open_file(tmp, of.Flags & OFN_READONLY, NULL, NULL);
 		}
 		else
 		{	/* open multiple files */
+			gchar file_name[MAX_PATH];
+			gchar dir_name[MAX_PATH];
+			
+			WideCharToMultiByte(CP_UTF8, 0, fname, of.nFileOffset,
+				dir_name, sizeof(dir_name), NULL, NULL);
 			for (; ;)
 			{
 				if (! fname[x])
 				{
-					gchar *utf8_filename;
-					if (! fname[x+1]) break;
+					if (! fname[x+1])
+						break;
 
-					g_snprintf(file_name, 254, "%s\\%s", fname, fname + x + 1);
+					WideCharToMultiByte(CP_UTF8, 0, fname + x + 1, -1,
+						tmp, sizeof(tmp), NULL, NULL);
+					g_snprintf(file_name, 511, "%s\\%s", dir_name, tmp);
 
 					/* convert the resulting filename into UTF-8 */
-					utf8_filename = g_locale_to_utf8(file_name, -1, NULL, NULL, NULL);
-					document_open_file(utf8_filename, of.Flags & OFN_READONLY, NULL, NULL);
-					g_free(utf8_filename);
+					document_open_file(file_name, of.Flags & OFN_READONLY, NULL, NULL);
 				}
 				x++;
 			}
@@ -402,22 +405,19 @@ gboolean win32_show_file_dialog(gboolean file_open, const gchar *initial_dir)
 	else
 	{
 		GeanyDocument *doc = document_get_current();
-		/* convert the resulting filename into UTF-8 */
-		gchar *utf8 = g_locale_to_utf8(fname, -1, NULL, NULL, NULL);
 
-		document_save_file_as(doc, utf8);
-		g_free(utf8);
+		WideCharToMultiByte(CP_UTF8, 0, fname, -1, tmp, sizeof(tmp), NULL, NULL);
+		document_save_file_as(doc, tmp);
 	}
-	g_free(fname);
 	return (retval != 0);
 }
 
 
 void win32_show_font_dialog(void)
 {
-	CHOOSEFONT cf;
 	gint retval;
-	static LOGFONT lf;        /* logical font structure */
+	CHOOSEFONT cf;
+	LOGFONT lf;        /* logical font structure */
 
 	memset(&cf, 0, sizeof cf);
 	cf.lStructSize = sizeof cf;
@@ -427,17 +427,7 @@ void win32_show_font_dialog(void)
 
 	retval = ChooseFont(&cf);
 
-	if (!retval)
-	{
-		if (CommDlgExtendedError())
-		{
-			/*gchar error[100];*/
-			/*snprintf(error, 255, _("Font dialog box error (%x)"), (int)CommDlgExtendedError());*/
-			/*MessageBox(NULL, "Font not availab", _("Error"), MB_OK | MB_ICONERROR);*/
-		}
-		return;
-	}
-	else
+	if (retval)
 	{
 		gchar *editorfont = g_strdup_printf("%s %d", lf.lfFaceName, (cf.iPointSize / 10));
 		ui_set_editor_font(editorfont);
@@ -478,21 +468,24 @@ void win32_show_color_dialog(const gchar *colour)
 
 void win32_show_pref_file_dialog(GtkEntry *item)
 {
-	OPENFILENAME of;
-	gint retval;
-	gchar *fname = g_malloc(512);
-	gchar **field, *filename, *tmp;
-	gchar *filters = get_filters(FALSE);
+	OPENFILENAMEW of;
+	gint retval, len;
+	wchar_t fname[MAX_PATH];
+	gchar tmp[MAX_PATH];
+	gchar **field, *filename;
 
 	fname[0] = '\0';
 
 	/* cut the options from the command line */
 	field = g_strsplit(gtk_entry_get_text(GTK_ENTRY(item)), " ", 2);
-	if (field[0] && g_file_test(field[0], G_FILE_TEST_EXISTS))
+	if (field[0])
 	{
 		filename = g_find_program_in_path(field[0]);
-		strcpy(fname, filename);
-		g_free(filename);
+		if (filename != NULL && g_file_test(filename, G_FILE_TEST_EXISTS))
+		{
+			MultiByteToWideChar(CP_UTF8, 0, filename, -1, fname, sizeof(fname));
+			g_free(filename);
+		}
 	}
 
 	/* initialize file dialog info struct */
@@ -504,21 +497,19 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 #endif
 	of.hwndOwner = GDK_WINDOW_HWND(ui_widgets.prefs_dialog->window);
 
-	of.lpstrFilter = filters;
+	of.lpstrFilter = get_filters(FALSE);
 	of.lpstrCustomFilter = NULL;
 	of.nFilterIndex = 1;
 
 	of.lpstrFile = fname;
-	of.nMaxFile = 512;
+	of.nMaxFile = 2048;
 	of.lpstrFileTitle = NULL;
 	/*of.lpstrInitialDir = g_get_home_dir();*/
 	of.lpstrInitialDir = NULL;
 	of.lpstrTitle = NULL;
-	of.lpstrDefExt = "exe";
+	of.lpstrDefExt = L"exe";
 	of.Flags = OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_EXPLORER;
-	retval = GetOpenFileName(&of);
-
-	g_free(filters);
+	retval = GetOpenFileNameW(&of);
 
 	if (!retval)
 	{
@@ -529,28 +520,24 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 			win32_message_dialog(NULL, GTK_MESSAGE_ERROR, error);
 		}
 		g_strfreev(field);
-		g_free(fname);
 		return;
 	}
 
-	if ((of.nFileOffset - 1) != strlen(fname))
+	len = WideCharToMultiByte(CP_UTF8, 0, fname, -1, tmp, sizeof(tmp), NULL, NULL);
+	if ((of.nFileOffset - 1) != len)
 	{
-		tmp = g_strdup(fname);
 		if (g_strv_length(field) > 1)
 			/* add the command line args of the old command */
 			/** TODO this fails badly when the old command contained spaces, we need quoting here */
 			filename = g_strconcat(tmp, " ", field[1], NULL);
 		else
 		{
-			filename = tmp;
-			tmp = NULL;
+			filename = g_strdup(tmp);
 		}
 		gtk_entry_set_text(GTK_ENTRY(item), filename);
 		g_free(filename);
-		g_free(tmp);
 	}
 	g_strfreev(field);
-	g_free(fname);
 }
 
 
@@ -618,7 +605,7 @@ gboolean win32_message_dialog(GtkWidget *parent, GtkMessageType type, const gcha
 /* Little wrapper for _waccess(), returns errno or 0 if there was no error */
 gint win32_check_write_permission(const gchar *dir)
 {
-	static wchar_t w_dir[512];
+	static wchar_t w_dir[MAX_PATH];
 	MultiByteToWideChar(CP_UTF8, 0, dir, -1, w_dir, sizeof w_dir);
 	if (_waccess(w_dir, R_OK | W_OK) != 0)
 		return errno;
