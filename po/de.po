@@ -3439,7 +3439,7 @@ msgstr "Basisverzeichnis aller Dateien, die zu einem Projekt gehören. Sie könn
 #: ../src/project.c:174
 #: ../src/project.c:437
 msgid "Choose Project Base Path"
-msgstr "Auswahl der Projektbasisverzeichnisses"
+msgstr "Auswahl des Projektbasisverzeichnisses"
 
 #: ../src/project.c:235
 #: ../src/project.c:266
@@ -4520,7 +4520,7 @@ msgstr "Geany Projektdateien"
 
 #: ../src/win32.c:137
 msgid "Executables"
-msgstr "Ausführbare"
+msgstr "Ausführbare Dateien"
 
 #: ../src/win32.c:575
 msgid "Error"
