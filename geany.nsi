@@ -78,7 +78,7 @@ Var UNINSTDIR
 !include "MUI2.nsh"
 
 !define MUI_ABORTWARNING
-!define MUI_ICON "pixmaps\geany.ico"
+!define MUI_ICON "icons\geany.ico"
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall-full.ico"
 
 ; Welcome page

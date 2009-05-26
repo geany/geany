@@ -2,7 +2,7 @@
 #include <windows.h> // include for version info constants
 
 
-A ICON MOVEABLE PURE LOADONCALL DISCARDABLE "../pixmaps/geany.ico"
+A ICON MOVEABLE PURE LOADONCALL DISCARDABLE "../icons/geany.ico"
 
 1 VERSIONINFO
 FILEVERSION 0,18,0,0

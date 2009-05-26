@@ -74,7 +74,7 @@ OBJS =	about.o build.o callbacks.o dialogs.o document.o editor.o encodings.o fil
 # all: binclean $(TARGET) #exec
 all: $(TARGET)
 
-$(RES): ../geany_private.rc ../pixmaps/geany.ico
+$(RES): ../geany_private.rc ../icons/geany.ico
 	$(WINDRES) -i $< --input-format=rc -o $@ -O coff
 
 # this calls parent clean-local target because del ../file won't work

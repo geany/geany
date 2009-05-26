@@ -62,7 +62,7 @@ Some basic features of Geany:
 %{_datadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/locale/*/LC_MESSAGES/%{name}.mo
-%{_datadir}/pixmaps/%{name}.png
+%{_datadir}/icons/48x48/%{name}.png
 %{_datadir}/doc/%{name}/
 %{_mandir}/man1/%{name}.1.gz
 %{_datadir}/icons/hicolor/16x16/apps/classviewer-*.png

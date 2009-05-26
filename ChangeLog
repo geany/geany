@@ -5,6 +5,15 @@
  * src/project.c:
    Fix wrong initialisation of the default project path button callback
    in the preferences dialog.
+ * Makefile.am, configure.in, geany.nsi, geany.spec.in, wscript,
+   geany_private.rc, icons/16x16/Makefile.am, icons/16x16/geany.png,
+   icons/48x48, icons/48x48/Makefile.am, icons/48x48/geany.png,
+   icons/Makefile.am, icons/geany.ico, icons/scalable,
+   icons/scalable/Makefile.am, icons/scalable/geany.svg,
+   src/makefile.win32:
+   Move the icons geany.png and geany.ico into the icons directory.
+   Add a 16x16 pixel Geany icon and the scalable SVG icon.
+   Drop the pixmaps directory.
 
 
 2009-05-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -52,15 +52,9 @@ DISTCLEANFILES = \
 
 uninstall-local:
 	rm -rf $(DESTDIR)$(pkgdatadir);
-	rm -f $(DESTDIR)$(datadir)/pixmaps/geany.png;
-	rm -f $(DESTDIR)$(datadir)/pixmaps/geany.ico;
 
 install-data-local:
 	@$(NORMAL_INSTALL)
-	if test -d $(srcdir)/pixmaps; then \
-	  $(mkinstalldirs) $(DESTDIR)$(datadir)/pixmaps; \
-	  $(INSTALL_DATA) $(srcdir)/pixmaps/geany.png $(DESTDIR)$(datadir)/pixmaps; \
-	fi
 	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir); \
 	$(INSTALL_DATA) $(srcdir)/data/c99.tags $(DESTDIR)$(pkgdatadir); \
 	$(INSTALL_DATA) $(srcdir)/data/php.tags $(DESTDIR)$(pkgdatadir); \
@@ -75,15 +69,6 @@ install-data-local:
 	  fi \
 	done
 
-dist-hook:
-	if test -d pixmaps; then \
-	  mkdir $(distdir)/pixmaps; \
-	  for pixmap in $(srcdir)/pixmaps/*; do \
-	    if test -f $$pixmap; then \
-	      cp -p $$pixmap $(distdir)/pixmaps; \
-	    fi \
-	  done \
-	fi
 
 BZIP2_ENV =--best
 
@@ -104,8 +89,6 @@ deb:
 rpm: dist
 	rpmbuild -ta $(distdir).tar.gz
 
-
-logodir = $(datadir)/pixmaps
 
 pkgconfig_DATA = geany.pc
 pkgconfigdir = $(libdir)/pkgconfig

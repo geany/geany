@@ -422,8 +422,9 @@ def build(bld):
 	bld.install_files('${DATADIR}/geany', 'data/ui_toolbar.xml')
 	bld.install_as('${DATADIR}/geany/GPL-2', 'COPYING')
 	# Icons
-	bld.install_files('${DATADIR}/pixmaps', 'pixmaps/geany.png')
 	bld.install_files('${DATADIR}/icons/hicolor/16x16/apps', 'icons/16x16/*.png')
+	bld.install_files('${DATADIR}/icons/hicolor/48x48/apps', 'icons/48x48/*.png')
+	bld.install_files('${DATADIR}/icons/hicolor/scalable/apps', 'icons/scalable/*.svg')
 
 
 def shutdown():
