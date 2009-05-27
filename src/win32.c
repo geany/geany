@@ -162,17 +162,17 @@ static wchar_t *get_dir_for_path(const gchar *utf8_filename)
 {
 	static wchar_t w_dir[MAX_PATH];
 	gchar *result;
-	
+
 	if (g_file_test(utf8_filename, G_FILE_TEST_IS_DIR))
 		result = (gchar*) utf8_filename;
 	else
-		result = g_path_get_dirname(utf8_filename);		
+		result = g_path_get_dirname(utf8_filename);
 
 	MultiByteToWideChar(CP_UTF8, 0, result, -1, w_dir, sizeof(w_dir));
 
 	if (result != utf8_filename)
 		g_free(result);
-		
+
 	return w_dir;
 }
 
@@ -381,7 +381,7 @@ gboolean win32_show_file_dialog(gboolean file_open, const gchar *initial_dir)
 		{	/* open multiple files */
 			gchar file_name[MAX_PATH];
 			gchar dir_name[MAX_PATH];
-			
+
 			WideCharToMultiByte(CP_UTF8, 0, fname, of.nFileOffset,
 				dir_name, sizeof(dir_name), NULL, NULL);
 			for (; ;)
@@ -749,9 +749,11 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 
 	if (flags & G_SPAWN_SEARCH_PATH)
 	{
-		retval = SearchPath(NULL,
-					argv[0], ".exe", MAX_PATH, buffer, lpPart);
-		g_snprintf(cmdline, MAX_PATH, "\"%s\"", buffer);
+		retval = SearchPath(NULL, argv[0], ".exe", MAX_PATH, buffer, lpPart);
+		if (retval > 0)
+			g_snprintf(cmdline, MAX_PATH, "\"%s\"", buffer);
+		else
+			g_strlcpy(cmdline, argv[0], sizeof(cmdline));
 		cmdpos = 1;
 	}
 

@@ -4,6 +4,9 @@
    Remove quote_executable() as it is not used anymore.
    When creating the geany_run_script.bat use the "%0" variable
    expansion and quote it for the "del" command (closes #2797172).
+ * src/win32.c:
+   On Windows, fallback to the literal build command line if searching
+   for the command in the system path failed (related to #2795923).
 
 
 2009-05-26  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
