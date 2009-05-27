@@ -323,7 +323,6 @@ gboolean win32_show_file_dialog(gboolean file_open, const gchar *initial_dir)
 	wchar_t w_dir[MAX_PATH];
 
 	fname[0] = '\0';
-		g_message("%d",MAX_PATH);
 
 	MultiByteToWideChar(CP_UTF8, 0, initial_dir, -1, w_dir, sizeof(w_dir));
 
@@ -816,7 +815,7 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 	SetHandleInformation(gw_spawn.hChildStdoutRd, HANDLE_FLAG_INHERIT, 0);
 
 	/* Create a pipe for the child process's STDERR. */
-	if (!CreatePipe(&(gw_spawn.hChildStderrRd), &(gw_spawn.hChildStderrWr), &saAttr, 0))
+	if (! CreatePipe(&(gw_spawn.hChildStderrRd), &(gw_spawn.hChildStderrWr), &saAttr, 0))
 	{
 		gchar *msg = g_win32_error_message(GetLastError());
 		geany_debug("win32_spawn: Stderr pipe creation failed");
@@ -830,7 +829,7 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 	SetHandleInformation(gw_spawn.hChildStderrRd, HANDLE_FLAG_INHERIT, 0);
 
 	/* Create a pipe for the child process's STDIN.  */
-	if (!CreatePipe(&(gw_spawn.hChildStdinRd), &(gw_spawn.hChildStdinWr), &saAttr, 0))
+	if (! CreatePipe(&(gw_spawn.hChildStdinRd), &(gw_spawn.hChildStdinWr), &saAttr, 0))
 	{
 		gchar *msg = g_win32_error_message(GetLastError());
 		geany_debug("win32_spawn: Stdin pipe creation failed");
@@ -850,7 +849,7 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 		*exit_status = gw_spawn.dwExitCode;
 	}
 
-	if (!fSuccess)
+	if (! fSuccess)
 	{
 		geany_debug("win32_spawn: Create process failed");
 		if (error != NULL)
@@ -862,7 +861,7 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 	if (std_out != NULL)
 	{
 		ReadFromPipe(gw_spawn.hChildStdoutRd, gw_spawn.hChildStdoutWr, hStdoutTempFile, error);
-		if (!GetContentFromHandle(hStdoutTempFile, &stdout_content, error))
+		if (! GetContentFromHandle(hStdoutTempFile, &stdout_content, error))
 		{
 			return FALSE;
 		}
@@ -872,7 +871,7 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 	if (std_err != NULL)
 	{
 		ReadFromPipe(gw_spawn.hChildStderrRd, gw_spawn.hChildStderrWr, hStderrTempFile, error);
-		if (!GetContentFromHandle(hStderrTempFile, &stderr_content, error))
+		if (! GetContentFromHandle(hStderrTempFile, &stderr_content, error))
 		{
 			return FALSE;
 		}
@@ -888,15 +887,15 @@ static gboolean GetContentFromHandle(HANDLE hFile, gchar **content, GError **err
 	gchar * buffer;
 	DWORD dwRead;
 
-	filesize = GetFileSize(hFile,  NULL);
+	filesize = GetFileSize(hFile, NULL);
 	if (filesize < 1)
 	{
 		*content = NULL;
 		return TRUE;
 	}
 
-	buffer = g_malloc(sizeof(gchar*) * (filesize+1));
-	if (!buffer)
+	buffer = g_malloc(filesize + 1);
+	if (! buffer)
 	{
 		gchar *msg = g_win32_error_message(GetLastError());
 		geany_debug("GetContentFromHandle: Alloc failed");
@@ -906,9 +905,8 @@ static gboolean GetContentFromHandle(HANDLE hFile, gchar **content, GError **err
 		return FALSE;
 	}
 
-	SetFilePointer(hFile,0, NULL, FILE_BEGIN);
-	if (!ReadFile(hFile, buffer, filesize, &dwRead,
-				NULL) || dwRead == 0)
+	SetFilePointer(hFile, 0, NULL, FILE_BEGIN);
+	if (! ReadFile(hFile, buffer, filesize, &dwRead, NULL) || dwRead == 0)
 	{
 		gchar *msg = g_win32_error_message(GetLastError());
 		geany_debug("GetContentFromHandle: Cannot read tempfile");
@@ -918,7 +916,7 @@ static gboolean GetContentFromHandle(HANDLE hFile, gchar **content, GError **err
 		return FALSE;
 	}
 
-	if (!CloseHandle (hFile))
+	if (! CloseHandle(hFile))
 	{
 		gchar *msg = g_win32_error_message(GetLastError());
 		geany_debug("GetContentFromHandle: CloseHandle failed (%d)", (gint) GetLastError());
@@ -976,8 +974,8 @@ static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline
 	}
 	else
 	{
-		int i;
-		DWORD               dwStatus;
+		gint i;
+		DWORD dwStatus;
 
 		for (i = 0; i < 2 && (dwStatus = WaitForSingleObject(piProcInfo.hProcess, 30*1000)) == WAIT_TIMEOUT; i++)
 		{
@@ -1008,7 +1006,7 @@ static VOID ReadFromPipe(HANDLE hRead, HANDLE hWrite, HANDLE hFile, GError **err
 
 	/* Close the write end of the pipe before reading from the
 	   read end of the pipe. */
-	if (!CloseHandle(hWrite))
+	if (! CloseHandle(hWrite))
 	{
 		gchar *msg = g_win32_error_message(GetLastError());
 		geany_debug("ReadFromPipe: Closing handle failed");
@@ -1021,10 +1019,10 @@ static VOID ReadFromPipe(HANDLE hRead, HANDLE hWrite, HANDLE hFile, GError **err
 	/* Read output from the child process, and write to parent's STDOUT. */
 	for (;;)
 	{
-		if( !ReadFile(hRead, chBuf, BUFSIZE, &dwRead,
-				NULL) || dwRead == 0) break;
+		if (! ReadFile(hRead, chBuf, BUFSIZE, &dwRead, NULL) || dwRead == 0)
+			break;
 
-		if (!WriteFile(hFile, chBuf, dwRead, &dwWritten, NULL))
+		if (! WriteFile(hFile, chBuf, dwRead, &dwWritten, NULL))
 			break;
 	}
 }
