@@ -929,6 +929,7 @@ static gboolean GetContentFromHandle(HANDLE hFile, gchar **content, GError **err
 		*content = NULL;
 		return FALSE;
 	}
+	buffer[filesize] = '\0';
 	*content = buffer;
 	return TRUE;
 }
