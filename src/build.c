@@ -407,26 +407,6 @@ static void clear_errors(GeanyDocument *doc)
 
 
 #ifdef G_OS_WIN32
-/* cmd is a command line separated with spaces, first element will be escaped with double quotes
- * and a newly allocated string will be returned */
-static gchar *quote_executable(const gchar *cmd)
-{
-	gchar **fields;
-	gchar *result;
-
-	if (! NZV(cmd))
-		return NULL;
-
-	fields = g_strsplit(cmd, " ", 2);
-	if (fields == NULL || g_strv_length(fields) != 2)
-		return g_strdup(cmd);
-
-	result = g_strconcat("\"", fields[0], "\" ", fields[1], NULL);
-
-	g_strfreev(fields);
-	return result;
-}
-
 static void parse_build_output(const gchar **output, gint status)
 {
 	guint x, i, len;
@@ -998,9 +978,10 @@ static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, g
 	gchar *str;
 
 	fp = g_fopen(fname, "w");
-	if (! fp) return FALSE;
+	if (! fp)
+		return FALSE;
 #ifdef G_OS_WIN32
-	str = g_strdup_printf("%s\n\n%s\ndel %s\n", cmd, (autoclose) ? "" : "pause", fname);
+	str = g_strdup_printf("%s\n\n%s\ndel \"%%0\"\n\npause\n", cmd, (autoclose) ? "" : "pause");
 #else
 	str = g_strdup_printf(
 		"#!/bin/sh\n\nrm $0\n\n%s\n\necho \"\n\n------------------\n(program exited with code: $?)\" \
