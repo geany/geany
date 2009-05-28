@@ -361,7 +361,7 @@ void ui_update_popup_reundo_items(GeanyDocument *doc)
 	len = G_N_ELEMENTS(widgets.redo_items);
 	for (i = 0; i < len; i++)
 	{
-		ui_widget_set_sensitive(widgets.redo_items[i], enable_undo);
+		ui_widget_set_sensitive(widgets.redo_items[i], enable_redo);
 	}
 }
 

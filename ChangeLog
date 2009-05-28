@@ -1,3 +1,9 @@
+2009-05-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/ui_utils.c:
+   Fix wrong sensitiveness of the Redo buttons (closes #2797862).
+
+
 2009-05-28  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * THANKS, src/about.c, po/lb.po, po/LINGUAS:
