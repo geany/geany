@@ -65,6 +65,8 @@ Some basic features of Geany:
 %{_datadir}/icons/48x48/%{name}.png
 %{_datadir}/doc/%{name}/
 %{_mandir}/man1/%{name}.1.gz
-%{_datadir}/icons/hicolor/16x16/apps/classviewer-*.png
+%{_datadir}/icons/hicolor/16x16/apps/*.png
+%{_datadir}/icons/hicolor/48x48/apps/*.png
+%{_datadir}/icons/hicolor/scalable/apps/*.svg
 %{_includedir}/%{name}/
 %{_libdir}/pkgconfig/
