@@ -26,10 +26,12 @@
  * Syntax highlighting for the different filetypes, using the Scintilla lexers.
  */
 
+#include "geany.h"
+
 #include <stdlib.h>
+#include <ctype.h>
 
 #include "SciLexer.h"
-#include "geany.h"
 #include "highlighting.h"
 #include "editor.h"
 #include "utils.h"
@@ -51,10 +53,10 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords);
 
 typedef struct
 {
-	gsize				count;		/* number of styles */
+	gsize			count;		/* number of styles */
 	GeanyLexerStyle	*styling;		/* array of styles, NULL if not used or uninitialised */
-	gchar				**keywords;
-	gchar				*wordchars;	/* NULL used for style sets with no styles */
+	gchar			**keywords;
+	gchar			*wordchars;	/* NULL used for style sets with no styles */
 } StyleSet;
 
 /* each filetype has a styleset except GEANY_FILETYPES_NONE, which uses common_style_set */
@@ -93,18 +95,40 @@ typedef struct
 static struct
 {
 	GeanyLexerStyle	 styling[GCS_MAX];
-	FoldingStyle		 folding_style;
-	gboolean			 invert_all;
-	gchar				*wordchars;
+	FoldingStyle	 folding_style;
+	gboolean		 invert_all;
+	gchar			*wordchars;
 } common_style_set;
 
 
 /* used for default styles */
 typedef struct
 {
-	gchar				*name;
+	gchar			*name;
 	GeanyLexerStyle	*style;
 } StyleEntry;
+
+
+/* For filetypes.common [named_styles] section.
+ * e.g. "comment" => &GeanyLexerStyle{0xd00000, 0xffffff, FALSE, FALSE} */
+static GHashTable *named_style_hash = NULL;
+
+
+/* Geany generic styles, initialized to defaults.
+ * Currently only used as default styling for C-like languages.
+ * Note: Ideally named styles would be used as common styling for all programming
+ * languages (and perhaps all filetypes).
+ * These could be replaced by default named styles in filetypes.common. */
+static GeanyLexerStyle gsd_default =		{0x000000, 0xffffff, FALSE, FALSE};
+static GeanyLexerStyle gsd_comment =		{0xd00000, 0xffffff, FALSE, FALSE};
+static GeanyLexerStyle gsd_comment_doc =	{0x3f5fbf, 0xffffff, TRUE, FALSE};
+static GeanyLexerStyle gsd_number =			{0x007f00, 0xffffff, FALSE, FALSE};
+static GeanyLexerStyle gsd_reserved_word =	{0x00007f, 0xffffff, TRUE, FALSE};
+static GeanyLexerStyle gsd_system_word =	{0x991111, 0xffffff, TRUE, FALSE};
+static GeanyLexerStyle gsd_user_word =		{0x0000d0, 0xffffff, TRUE, FALSE};
+static GeanyLexerStyle gsd_string =			{0xff901e, 0xffffff, FALSE, FALSE};
+static GeanyLexerStyle gsd_pragma =			{0x007f7f, 0xffffff, FALSE, FALSE};
+static GeanyLexerStyle gsd_string_eol =		{0x000000, 0xe0c0e0, FALSE, FALSE};
 
 
 static void new_style_array(gint file_type_id, gint styling_count)
@@ -165,12 +189,65 @@ static void get_keyfile_wordchars(GKeyFile *config, GKeyFile *configh, gchar **w
 }
 
 
+static void read_named_style(const gchar *name, GeanyLexerStyle *style)
+{
+	GeanyLexerStyle *cs = g_hash_table_lookup(named_style_hash, name);
+
+	if (cs)
+		*style = *cs;
+	else
+	{
+		*style = gsd_default;
+		geany_debug("No named style '%s'! Check filetypes.common.", name);
+	}
+}
+
+
 /* convert 0x..RRGGBB to 0x..BBGGRR */
 static gint rotate_rgb(gint color)
 {
 	return ((color & 0xFF0000) >> 16) +
 		(color & 0x00FF00) +
 		((color & 0x0000FF) << 16);
+}
+
+
+/* FIXME: is not safe for badly formed key e.g. "key='" */
+static void parse_keyfile_style(gchar **list,
+		const GeanyLexerStyle *default_style, GeanyLexerStyle *style)
+{
+	g_return_if_fail(default_style);
+	g_return_if_fail(style);
+
+	if (G_LIKELY(list != NULL) && G_UNLIKELY(list[0] != NULL))
+	{
+		const gchar *str = list[0];
+
+		if (list[1] == NULL && isalpha(str[0]))
+		{
+			read_named_style(str, style);
+			return;
+		}
+		else
+			style->foreground = (gint) utils_strtod(str, NULL, FALSE);
+	}
+	else
+		style->foreground = rotate_rgb(default_style->foreground);
+
+	if (G_LIKELY(list != NULL) && G_LIKELY(list[1] != NULL))
+		style->background = (gint) utils_strtod(list[1], NULL, FALSE);
+	else
+		style->background = rotate_rgb(default_style->background);
+
+	if (G_LIKELY(list != NULL) && G_LIKELY(list[2] != NULL))
+		style->bold = utils_atob(list[2]);
+	else
+		style->bold = default_style->bold;
+
+	if (G_LIKELY(list != NULL) && list[3] != NULL)
+		style->italic = utils_atob(list[3]);
+	else
+		style->italic = default_style->italic;
 }
 
 
@@ -190,26 +267,7 @@ static void get_keyfile_style(GKeyFile *config, GKeyFile *configh,
 	if (list == NULL)
 		list = g_key_file_get_string_list(config, "styling", key_name, &len, NULL);
 
-	if (G_LIKELY(list != NULL) && G_UNLIKELY(list[0] != NULL))
-		style->foreground = (gint) utils_strtod(list[0], NULL, FALSE);
-	else
-		style->foreground = rotate_rgb(default_style->foreground);
-
-	if (G_LIKELY(list != NULL) && G_LIKELY(list[1] != NULL))
-		style->background = (gint) utils_strtod(list[1], NULL, FALSE);
-	else
-		style->background = rotate_rgb(default_style->background);
-
-	if (G_LIKELY(list != NULL) && G_LIKELY(list[2] != NULL))
-		style->bold = utils_atob(list[2]);
-	else
-		style->bold = default_style->bold;
-
-	if (G_LIKELY(list != NULL) && list[3] != NULL)
-		style->italic = utils_atob(list[3]);
-	else
-		style->italic = default_style->italic;
-
+	parse_keyfile_style(list, default_style, style);
 	g_strfreev(list);
 }
 
@@ -314,6 +372,9 @@ void highlighting_free_styles()
 		g_strfreev(style_ptr->keywords);
 		g_free(style_ptr->wordchars);
 	}
+
+	if (named_style_hash)
+		g_hash_table_destroy(named_style_hash);
 }
 
 
@@ -352,6 +413,40 @@ get_keyfile_whitespace_chars(GKeyFile *config, GKeyFile *configh)
 	if (result == NULL)
 		result = g_strdup(GEANY_WHITESPACE_CHARS);
 	return result;
+}
+
+
+static void get_named_styles(GKeyFile *config)
+{
+	const gchar group[] = "named_styles";
+	gchar **keys = g_key_file_get_keys(config, group, NULL, NULL);
+	gchar **ptr = keys;
+
+	if (!ptr)
+		return;
+
+	while (1)
+	{
+		gchar **list;
+		gsize len;
+		const gchar *key = *ptr;
+
+		if (!key)
+			break;
+
+		list = g_key_file_get_string_list(config, group, key, &len, NULL);
+		/* we allow a named style to reference another style above it */
+		if (list && len >= 1)
+		{
+			GeanyLexerStyle *style = g_new0(GeanyLexerStyle, 1);
+
+			parse_keyfile_style(list, &gsd_default, style);
+			g_hash_table_insert(named_style_hash, g_strdup(key), style);
+		}
+		g_strfreev(list);
+		ptr++;
+	}
+	g_strfreev(keys);
 }
 
 
@@ -413,6 +508,11 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 	get_keyfile_wordchars(config, config_home, &common_style_set.wordchars);
 	whitespace_chars = get_keyfile_whitespace_chars(config, config_home);
 
+	/* named styles */
+	named_style_hash = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
+	get_named_styles(config);
+	/* home overwrites any system named style */
+	get_named_styles(config_home);
 }
 
 
@@ -613,22 +713,6 @@ apply_filetype_properties(ScintillaObject *sci, gint lexer, filetype_id ft_id)
 
 	styleset_common(sci);
 }
-
-
-/* Geany generic styles, initialized to defaults.
- * Ideally these would be used as common styling for all compilable programming
- * languages (and perhaps partially used for scripting languages too).
- * Currently only used as default styling for C-like languages. */
-GeanyLexerStyle gsd_default =		{0x000000, 0xffffff, FALSE, FALSE};
-GeanyLexerStyle gsd_comment =		{0xd00000, 0xffffff, FALSE, FALSE};
-GeanyLexerStyle gsd_comment_doc =	{0x3f5fbf, 0xffffff, TRUE, FALSE};
-GeanyLexerStyle gsd_number =		{0x007f00, 0xffffff, FALSE, FALSE};
-GeanyLexerStyle gsd_reserved_word =	{0x00007f, 0xffffff, TRUE, FALSE};
-GeanyLexerStyle gsd_system_word =	{0x991111, 0xffffff, TRUE, FALSE};
-GeanyLexerStyle gsd_user_word =		{0x0000d0, 0xffffff, TRUE, FALSE};
-GeanyLexerStyle gsd_string =		{0xff901e, 0xffffff, FALSE, FALSE};
-GeanyLexerStyle gsd_pragma =		{0x007f7f, 0xffffff, FALSE, FALSE};
-GeanyLexerStyle gsd_string_eol =	{0x000000, 0xe0c0e0, FALSE, FALSE};
 
 
 /* call new_style_array(filetype_idx, >= 20) before using this. */

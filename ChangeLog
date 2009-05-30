@@ -1,3 +1,14 @@
+2009-05-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/utils.c, src/highlighting.c, TODO:
+   Implement named styles support for filetypes.* using a
+   filetypes.common [named_styles] section e.g.:
+   foo=0xc00000;0xffffff;false;true
+   bar=foo
+   These can be used in e.g. filetypes.c as:
+   comment=foo
+
+
 2009-05-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/ui_utils.c:

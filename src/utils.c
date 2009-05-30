@@ -928,7 +928,7 @@ gchar *utils_make_human_readable_str(guint64 size, gulong block_size,
 }
 
 
- guint utils_get_value_of_hex(const gchar ch)
+ static guint utils_get_value_of_hex(const gchar ch)
 {
 	if (ch >= '0' && ch <= '9')
 		return ch - '0';
