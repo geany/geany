@@ -2,6 +2,8 @@
 
  * geany.spec.in:
    Adjust icon paths (patch by Dominic Hopf, thanks).
+ * doc/geany.txt, doc/geany.html, src/toolbar.c:
+   Add 'Replace' toolbar button (closes #2798225).
 
 
 2009-05-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
