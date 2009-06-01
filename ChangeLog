@@ -8,6 +8,8 @@
    Fix grouping symbol list children when parent name has "." character
    in for reStructuredText and Conf filetypes (and any in the Misc
    group).
+ * tagmanager/python.c:
+   Fix grouping functions/classes under a nested function.
 
 
 2009-05-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

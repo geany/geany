@@ -352,10 +352,13 @@ static boolean constructParentString(NestingLevels *nls, int indent,
 			break;
 		if (prev)
 		{
+			vStringCatS(result, ".");	/* make Geany symbol list grouping work properly */
+/*
 			if (prev->type == K_CLASS)
 				vStringCatS(result, ".");
 			else
 				vStringCatS(result, "/");
+*/
 		}
 		vStringCat(result, nl->name);
 		is_class = (nl->type == K_CLASS);
