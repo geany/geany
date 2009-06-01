@@ -207,6 +207,7 @@ SVN version. Alternatively, edit the file by hand.
 filetypes.* configuration file
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 All languages need a data/filetypes.foo configuration file. See
+the "Filetype definition files" section in the manual and/or
 data/filetypes.c for an example.
 
 Programming languages should have:

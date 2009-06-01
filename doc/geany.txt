@@ -2894,9 +2894,11 @@ where ``$prefix`` is the path where Geany is installed (see
 `Installation prefix`_) and $ext is the name of the filetype. For every
 filetype there is a corresponding definition file. There is one
 exception: ``filetypes.common`` -- this file is for general settings,
-which are not specific to a certain filetype. It is not recommended
-to edit the system-wide files, because they will be overridden when
-Geany is updated.
+which are not specific to a certain filetype.
+
+.. warning::
+    It is not recommended for users to edit the system-wide files,
+    because they will be overridden when Geany is updated.
 
 To change the settings, copy a file from ``$prefix/share/geany`` to
 the subdirectory filedefs in your configuration directory (usually
@@ -2922,13 +2924,18 @@ Format
 `````````````````
 
 In this section the colors for syntax highlighting are defined. The
-format is always: key=foreground_color;background_color;bold;italic
+format is one of:
+
+* ``key=foreground_color;background_color;bold;italic``
+* ``key=named_style``
 
 Colors have to be specified as RGB hex values prefixed by
 0x. For example red is 0xff0000, blue is 0x0000ff. The values are
 case-insensitive, but it is a good idea to use small letters. Bold
 and italic are flags and should only be "true" or "false". If their
 value is something other than "true" or "false", "false" is assumed.
+
+For named styles, see the filetypes.common `[named_styles] Section`_.
 
 
 [keywords] Section
@@ -3072,6 +3079,33 @@ There is a special filetype definition file called
 filetypes.common. This file defines some general non-filetype-specific
 settings.
 
+[named_styles] Section
+``````````````````````
+Named styles declared here can be used in the [styling] section of any
+filetypes.* file.
+
+For example:
+
+*In filetypes.common*::
+
+    [named_styles]
+    foo=0xc00000;0xffffff;false;true
+    bar=foo
+
+*In filetypes.c*::
+
+    [styling]
+    comment=foo
+
+This saves copying and pasting the whole style definition into several
+different files.
+
+.. note::
+    You can define aliases for named styles, as shown with the ``bar``
+    entry in the above example.
+
+[styling] Section
+`````````````````
 default
     This is the default style. It is used for styling files without a
     filetype set.
@@ -3248,6 +3282,8 @@ marker_translucency
 
     *Example:* ``marker_translucency=256;256;false;false``
 
+[settings] Section
+``````````````````
 whitespace_chars
     Characters to treat as whitespace. These characters are ignored
     when moving, selecting and deleting across word boundaries
