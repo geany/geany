@@ -3769,20 +3769,25 @@ void editor_indicator_set_on_line(GeanyEditor *editor, gint indic, gint line)
 	gchar *linebuf;
 
 	g_return_if_fail(editor != NULL);
+	g_return_if_fail(line >= 0);
 
 	start = sci_get_position_from_line(editor->sci, line);
 	end = sci_get_position_from_line(editor->sci, line + 1);
 
 	/* skip blank lines */
 	if ((start + 1) == end ||
+		start > end ||
 		sci_get_line_length(editor->sci, line) == editor_get_eol_char_len(editor))
+	{
 		return;
+	}
 
 	len = end - start;
 	linebuf = sci_get_line(editor->sci, line);
 
 	/* don't set the indicator on whitespace */
-	while (isspace(linebuf[i])) i++;
+	while (isspace(linebuf[i]))
+		i++;
 	while (len > 1 && len > i && isspace(linebuf[len-1]))
 	{
 		len--;

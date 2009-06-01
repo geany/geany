@@ -824,7 +824,11 @@ static void process_build_output_line(const gchar *str, gint color)
 			GeanyDocument *doc = document_find_by_filename(filename);
 
 			if (doc)
-				editor_indicator_set_on_line(doc->editor, GEANY_INDICATOR_ERROR, line - 1);
+			{
+				if (line > 0) /* some compilers, like pdflatex report errors on line 0 */
+					line--;   /* so only adjust the line number if it is greater than 0 */
+				editor_indicator_set_on_line(doc->editor, GEANY_INDICATOR_ERROR, line);
+			}
 			color = COLOR_RED;	/* error message parsed on the line */
 		}
 		g_free(filename);

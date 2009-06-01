@@ -1,3 +1,10 @@
+2009-06-01  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/build.c, src/editor.c:
+   Fix crashes when parsing the output of a compiler which reports
+   errors on line 0.
+
+
 2009-06-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/highlighting.c:
