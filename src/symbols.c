@@ -268,7 +268,16 @@ GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gin
 
 const gchar *symbols_get_context_separator(gint ft_id)
 {
-	gchar *cosep;
+	GeanyFiletype *ft = filetypes[ft_id];
+
+	switch (ft->group)
+	{
+		/* avoid confusion with other possible separators in section name for e.g. reST, Conf */
+		case GEANY_FILETYPE_GROUP_MISC:
+			return ":::";
+		default:
+			break;
+	}
 
 	switch (ft_id)
 	{
@@ -276,21 +285,11 @@ const gchar *symbols_get_context_separator(gint ft_id)
 		case GEANY_FILETYPES_CPP:
 		case GEANY_FILETYPES_GLSL:	/* for structs */
 		/*case GEANY_FILETYPES_RUBY:*/ /* not sure what to use atm*/
-		{
-			static gchar cc[] = "::";
-
-			cosep = cc;
-		}
-		break;
+			return "::";
 
 		default:
-		{
-			static gchar def[] = ".";
-
-			cosep = def;
-		}
+			return ".";
 	}
-	return cosep;	/* return ptr to static string */
 }
 
 

@@ -4,6 +4,10 @@
    Support named styles also for filetypes.common [styling] entries.
  * doc/geany.txt, doc/geany.html, HACKING:
    Update docs for named styles in filetypes.* files.
+ * src/symbols.c:
+   Fix grouping symbol list children when parent name has "." character
+   in for reStructuredText and Conf filetypes (and any in the Misc
+   group).
 
 
 2009-05-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
