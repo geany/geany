@@ -458,6 +458,12 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 		return;
 	common_style_set_valid = TRUE;	/* ensure filetypes.common is only loaded once */
 
+	/* named styles */
+	named_style_hash = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
+	get_named_styles(config);
+	/* home overwrites any system named style */
+	get_named_styles(config_home);
+
 	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &common_style_set.styling[GCS_DEFAULT]);
 	get_keyfile_hex(config, config_home, "selection", 0xc0c0c0, 0x7f0000, FALSE, &common_style_set.styling[GCS_SELECTION]);
 	get_keyfile_hex(config, config_home, "brace_good", 0x000000, 0xffffff, FALSE, &common_style_set.styling[GCS_BRACE_GOOD]);
@@ -507,12 +513,6 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 		(common_style_set.invert_all || interface_prefs.highlighting_invert_all);
 	get_keyfile_wordchars(config, config_home, &common_style_set.wordchars);
 	whitespace_chars = get_keyfile_whitespace_chars(config, config_home);
-
-	/* named styles */
-	named_style_hash = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
-	get_named_styles(config);
-	/* home overwrites any system named style */
-	get_named_styles(config_home);
 }
 
 

@@ -1,3 +1,9 @@
+2009-06-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/highlighting.c:
+   Support named styles also for filetypes.common [styling] entries.
+
+
 2009-05-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * geany.spec.in:
