@@ -13,8 +13,7 @@
    Update docs for named styles in filetypes.* files.
  * src/symbols.c:
    Fix grouping symbol list children when parent name has "." character
-   in for reStructuredText and Conf filetypes (and any in the Misc
-   group).
+   in for reStructuredText and Conf filetypes.
  * tagmanager/python.c:
    Fix grouping functions/classes under a nested function.
 
