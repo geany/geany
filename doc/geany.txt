@@ -2924,10 +2924,9 @@ Format
 `````````````````
 
 In this section the colors for syntax highlighting are defined. The
-format is one of:
+manual format is:
 
 * ``key=foreground_color;background_color;bold;italic``
-* ``key=named_style``
 
 Colors have to be specified as RGB hex values prefixed by
 0x. For example red is 0xff0000, blue is 0x0000ff. The values are
@@ -2935,7 +2934,22 @@ case-insensitive, but it is a good idea to use small letters. Bold
 and italic are flags and should only be "true" or "false". If their
 value is something other than "true" or "false", "false" is assumed.
 
-For named styles, see the filetypes.common `[named_styles] Section`_.
+The second format uses a *named style* name to reference a style
+defined in filetypes.common.
+
+* ``key=named_style``
+* ``key2=named_style2,bold,italic``
+
+The bold and italic parts are optional, and if present are used to
+toggle the bold or italic flags to the opposite of the named style's
+flags.
+
+.. note::
+    Commas are used for these so Geany can easily determine whether a
+    named style is used or not.
+
+To define named styles, see the filetypes.common `[named_styles]
+Section`_.
 
 
 [keywords] Section
@@ -3079,6 +3093,9 @@ There is a special filetype definition file called
 filetypes.common. This file defines some general non-filetype-specific
 settings.
 
+See the `Format`_ section for how to define styles.
+
+
 [named_styles] Section
 ``````````````````````
 Named styles declared here can be used in the [styling] section of any
@@ -3102,7 +3119,9 @@ different files.
 
 .. note::
     You can define aliases for named styles, as shown with the ``bar``
-    entry in the above example.
+    entry in the above example, but they must be declared after the
+    original style.
+
 
 [styling] Section
 `````````````````
@@ -3281,6 +3300,7 @@ marker_translucency
     Only the first and second argument is interpreted.
 
     *Example:* ``marker_translucency=256;256;false;false``
+
 
 [settings] Section
 ``````````````````

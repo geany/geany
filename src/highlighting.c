@@ -30,6 +30,7 @@
 
 #include <stdlib.h>
 #include <ctype.h>
+#include <string.h>
 
 #include "SciLexer.h"
 #include "highlighting.h"
@@ -189,12 +190,32 @@ static void get_keyfile_wordchars(GKeyFile *config, GKeyFile *configh, gchar **w
 }
 
 
-static void read_named_style(const gchar *name, GeanyLexerStyle *style)
+static void read_named_style(gchar *name, GeanyLexerStyle *style)
 {
-	GeanyLexerStyle *cs = g_hash_table_lookup(named_style_hash, name);
+	GeanyLexerStyle *cs;
+	gchar *comma;
+	const gchar *bold = NULL;
+	const gchar *italic = NULL;
+
+	g_return_if_fail(name);
+
+	comma = strstr(name, ",");
+	if (comma)
+	{
+		bold = strstr(comma, ",bold");
+		italic = strstr(comma, ",italic");
+		*comma = '\0';	/* terminate name to make lookup work */
+	}
+	cs = g_hash_table_lookup(named_style_hash, name);
 
 	if (cs)
+	{
 		*style = *cs;
+		if (bold)
+			style->bold = !style->bold;
+		if (italic)
+			style->italic = !style->italic;
+	}
 	else
 	{
 		*style = gsd_default;
@@ -221,7 +242,7 @@ static void parse_keyfile_style(gchar **list,
 
 	if (G_LIKELY(list != NULL) && G_UNLIKELY(list[0] != NULL))
 	{
-		const gchar *str = list[0];
+		gchar *str = list[0];
 
 		if (list[1] == NULL && isalpha(str[0]))
 		{

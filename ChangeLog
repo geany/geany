@@ -1,3 +1,11 @@
+2009-06-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/highlighting.c, doc/geany.txt, doc/geany.html:
+   Support toggling bold/italic when using a named style, e.g.:
+   commentdockeyword=commentdoc,bold,italic
+   Improve named style docs.
+
+
 2009-06-01  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/build.c, src/editor.c:
