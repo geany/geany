@@ -17,6 +17,11 @@
    dashes (patch by PCMan, thanks).
  * data/filetypes.matlab:
    Add build_settings section to allow executing Matlab scripts.
+ * src/document.c:
+   When closing a document, mark it as invalid before removing it from
+   the documents notebook (this fixes wrong Save All button state when
+   closing an unsaved document because the "switch-page" signal handler
+   was using old data).
 
 
 2009-06-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

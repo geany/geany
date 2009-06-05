@@ -672,6 +672,8 @@ gboolean document_remove_page(guint page_num)
 	if (! main_status.closing_all && doc->real_path != NULL)
 		ui_add_recent_file(doc->file_name);
 
+	doc->is_valid = FALSE;
+
 	notebook_remove_page(page_num);
 	treeviews_remove_document(doc);
 	navqueue_remove_file(doc->file_name);
@@ -687,7 +689,6 @@ gboolean document_remove_page(guint page_num)
 
 	document_stop_file_monitoring(doc);
 
-	doc->is_valid = FALSE;
 	doc->file_name = NULL;
 	doc->real_path = NULL;
 	doc->file_type = NULL;
