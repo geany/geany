@@ -3,6 +3,9 @@
  * src/toolbar.c:
    Set status bar text instead of showing a dialog when saving
    ui_toolbar.xml because the user might save several times.
+ * src/editor.c:
+   Fix redrawing due to colourising just after the document is first
+   drawn. Now colourising should happen before the first draw.
 
 
 2009-06-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

@@ -4210,29 +4210,47 @@ on_editor_scroll_event(GtkWidget *widget, GdkEventScroll *event, gpointer user_d
 }
 
 
-static void editor_colourise(ScintillaObject *sci)
+static gboolean editor_check_colourise(GeanyEditor *editor)
 {
-	sci_colourise(sci, 0, -1);
+	GeanyDocument *doc = editor->document;
+
+	if (!doc->priv->colourise_needed)
+		return FALSE;
+
+	doc->priv->colourise_needed = FALSE;
+	sci_colourise(editor->sci, 0, -1);
 
 	/* now that the current document is colourised, fold points are now accurate,
 	 * so force an update of the current function/tag. */
 	symbols_get_current_function(NULL, NULL);
 	ui_update_statusbar(NULL, -1);
+
+	return TRUE;
 }
 
 
+/* We only want to colourise just before drawing, to save startup time and
+ * prevent unnecessary recolouring other documents after one is saved.
+ * Really we want a "draw" signal but there doesn't seem to be one (expose is too late,
+ * and "show" doesn't work). */
+static gboolean on_editor_focus_in(GtkWidget *widget, GdkEventFocus *event, gpointer user_data)
+{
+	GeanyEditor *editor = user_data;
+
+	editor_check_colourise(editor);
+	return FALSE;
+}
+
+
+/* This is just to catch any uncolourised documents being drawn that didn't receive focus
+ * for some reason, maybe it's not necessary but just in case. */
 static gboolean on_editor_expose_event(GtkWidget *widget, GdkEventExpose *event,
 		gpointer user_data)
 {
 	GeanyEditor *editor = user_data;
-	GeanyDocument *doc = editor->document;
 
-	if (doc->priv->colourise_needed)
-	{
-		editor_colourise(editor->sci);
-		doc->priv->colourise_needed = FALSE;
-	}
-	return FALSE;	/* propagate event */
+	editor_check_colourise(editor);
+	return FALSE;
 }
 
 
@@ -4302,6 +4320,7 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 		g_signal_connect(sci, "button-press-event", G_CALLBACK(on_editor_button_press_event), editor);
 		g_signal_connect(sci, "scroll-event", G_CALLBACK(on_editor_scroll_event), editor);
 		g_signal_connect(sci, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
+		g_signal_connect(sci, "focus-in-event", G_CALLBACK(on_editor_focus_in), editor);
 		g_signal_connect(sci, "expose-event", G_CALLBACK(on_editor_expose_event), editor);
 	}
 	return sci;
