@@ -598,7 +598,7 @@ static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg)
 	}
 	class_info->header = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->header_entry)));
 	class_info->header_guard = g_ascii_strup(class_info->header, -1);
-	g_strdelimit(class_info->header_guard, ".", '_');
+	g_strdelimit(class_info->header_guard, ".-", '_');
 	switch (class_info->type)
 	{
 		case GEANY_CLASS_TYPE_CPP:

@@ -2,6 +2,9 @@
 
  * src/images.c, src/about.c, src/ui_utils.c, THANKS:
    Add a more Tango like icon for 'Save All' (by Jesse Mayes, thanks).
+ * plugins/classbuilder.c:
+   Fix wrongly created header guards when the class filenames contains
+   dashes (patch by PCMan, thanks).
 
 
 2009-06-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
