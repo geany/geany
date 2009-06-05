@@ -6,6 +6,11 @@
  * src/editor.c:
    Fix redrawing due to colourising just after the document is first
    drawn. Now colourising should happen before the first draw.
+ * src/utils.c, src/highlighting.c, data/filetypes.common:
+   Fix segfault on parsing a filetypes.* style definition that has < 4
+   fields.
+   Allow style definitions to have missing fields to use the default
+   style fields.
 
 
 2009-06-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

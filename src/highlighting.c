@@ -233,42 +233,59 @@ static gint rotate_rgb(gint color)
 }
 
 
-/* FIXME: is not safe for badly formed key e.g. "key='" */
+static void parse_color(const gchar *str, gint *clr)
+{
+	gint c;
+
+	/* ignore empty strings */
+	if (!NZV(str))
+		return;
+
+	c = utils_strtod(str, NULL, FALSE);
+	if (c > -1)
+	{
+		*clr = c;
+		return;
+	}
+	geany_debug("Bad color '%s'", str);
+}
+
+
 static void parse_keyfile_style(gchar **list,
 		const GeanyLexerStyle *default_style, GeanyLexerStyle *style)
 {
+	gsize len;
+	gchar *str;
+
 	g_return_if_fail(default_style);
 	g_return_if_fail(style);
 
-	if (G_LIKELY(list != NULL) && G_UNLIKELY(list[0] != NULL))
+	*style = *default_style;
+	style->foreground = rotate_rgb(default_style->foreground);
+	style->background = rotate_rgb(default_style->background);
+
+	if (!list)
+		return;
+
+	len = g_strv_length(list);
+
+	str = list[0];
+	if (len == 1 && isalpha(str[0]))
+		read_named_style(str, style);
+	else
 	{
-		gchar *str = list[0];
-
-		if (list[1] == NULL && isalpha(str[0]))
+		switch (len)
 		{
-			read_named_style(str, style);
-			return;
+			case 4:
+				style->italic = utils_atob(list[3]);
+			case 3:
+				style->bold = utils_atob(list[2]);
+			case 2:
+				parse_color(list[1], &style->background);
+			case 1:
+				parse_color(list[0], &style->foreground);
 		}
-		else
-			style->foreground = (gint) utils_strtod(str, NULL, FALSE);
 	}
-	else
-		style->foreground = rotate_rgb(default_style->foreground);
-
-	if (G_LIKELY(list != NULL) && G_LIKELY(list[1] != NULL))
-		style->background = (gint) utils_strtod(list[1], NULL, FALSE);
-	else
-		style->background = rotate_rgb(default_style->background);
-
-	if (G_LIKELY(list != NULL) && G_LIKELY(list[2] != NULL))
-		style->bold = utils_atob(list[2]);
-	else
-		style->bold = default_style->bold;
-
-	if (G_LIKELY(list != NULL) && list[3] != NULL)
-		style->italic = utils_atob(list[3]);
-	else
-		style->italic = default_style->italic;
 }
 
 
@@ -304,6 +321,7 @@ static void get_keyfile_hex(GKeyFile *config, GKeyFile *configh,
 }
 
 
+/* FIXME: is not safe for badly formed key e.g. "key=" */
 static void get_keyfile_int(GKeyFile *config, GKeyFile *configh, const gchar *section,
 							const gchar *key, gint fdefault_val, gint sdefault_val,
 							GeanyLexerStyle *style)

@@ -943,7 +943,8 @@ gchar *utils_make_human_readable_str(guint64 size, gulong block_size,
 
 /* utils_strtod() converts a string containing a hex colour ("0x00ff00") into an integer.
  * Basically, it is the same as strtod() would do, but it does not understand hex colour values,
- * before ANSI-C99. With with_route set, it takes strings of the format "#00ff00". */
+ * before ANSI-C99. With with_route set, it takes strings of the format "#00ff00".
+ * Returns -1 on failure. */
 gint utils_strtod(const gchar *source, gchar **end, gboolean with_route)
 {
 	guint red, green, blue, offset = 0;
