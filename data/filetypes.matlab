@@ -36,3 +36,10 @@ comment_use_indent=true
 
 # context action command (please see Geany's main documentation for details)
 context_action_cmd=
+
+[build_settings]
+# %f will be replaced by the complete filename
+# %e will be replaced by the filename without extension
+# (use only one of it at one time)
+compiler=
+run_cmd=octave -q "%f"

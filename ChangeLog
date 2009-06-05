@@ -5,6 +5,8 @@
  * plugins/classbuilder.c:
    Fix wrongly created header guards when the class filenames contains
    dashes (patch by PCMan, thanks).
+ * data/filetypes.matlab:
+   Add build_settings section to allow executing Matlab scripts.
 
 
 2009-06-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
