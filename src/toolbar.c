@@ -150,8 +150,8 @@ static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc,
 
 	if (utils_str_equal(doc->real_path, utils_build_path(app->configdir, "ui_toolbar.xml", NULL)))
 	{
-		dialogs_show_msgbox(GTK_MESSAGE_INFO,
-		_("For all changes you make in this file to take effect, you need to restart Geany."));
+		ui_set_statusbar(FALSE, "%s",
+			_("For all changes you make in this file to take effect, you need to restart Geany."));
 	}
 }
 
