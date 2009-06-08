@@ -1,3 +1,10 @@
+2009-06-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/callbacks.c:
+   Add backslash to the wordchars on Windows when using
+   'Open Selected File'.
+
+
 2009-06-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/toolbar.c:
