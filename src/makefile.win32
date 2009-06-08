@@ -2,7 +2,7 @@
 
 DEFINES = -DHAVE_CONFIG_H \
 	-DGEANY_DATADIR=\"data\" \
-	-DGEANY_LOCALEDIR=\"share\" \
+	-DGEANY_LOCALEDIR=\"\" \
 	-DGEANY_LIBDIR=\"\" \
 	-DGEANY_PREFIX=\"\"
 
