@@ -3,6 +3,9 @@
  * src/callbacks.c:
    Add backslash to the wordchars on Windows when using
    'Open Selected File'.
+ * src/wscript:
+   Add support (configure, build and install) for building on Windows
+   and cross-compiling for Windows using the Waf build system.
 
 
 2009-06-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

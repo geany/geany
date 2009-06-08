@@ -121,7 +121,8 @@ def configure(conf):
 		# try SVN
 		elif os.path.exists('.svn'):
 			try:
-				stdout = Utils.cmd_output(cmd='svn info --non-interactive', env={'LANG' : 'C'})
+				_env = None if is_win32 else {'LANG' : 'C'}
+				stdout = Utils.cmd_output(cmd='svn info --non-interactive', silent=True, env=_env)
 				lines = stdout.splitlines(True)
 				for line in lines:
 					if line.startswith('Last Changed Rev'):
@@ -141,7 +142,9 @@ def configure(conf):
 		elif default_value:
 			conf.define(define_name, default_value, quote)
 
+
 	conf.check_tool('compiler_cc')
+	is_win32 = target_is_win32(conf.env)
 
 	conf.check(header_name='fcntl.h')
 	conf.check(header_name='fnmatch.h')
@@ -173,12 +176,19 @@ def configure(conf):
 
 	# check for cxx after the header and function checks have been done to ensure they are
 	# checked with cc not cxx
-	conf.check_tool('compiler_cxx intltool misc')
+	conf.check_tool('compiler_cxx misc')
+	if is_win32:
+		conf.check_tool('winres')
+	# we don't require intltool on Windows (it would require Perl) though it works well
+	try:
+		conf.check_tool('intltool')
+	except:
+		pass
 
+
+	# GTK / GIO version check
 	conf.check_cfg(package='gtk+-2.0', atleast_version='2.8.0', uselib_store='GTK',
 		mandatory=True, args='--cflags --libs')
-
-	# GTK version check
 	have_gtk_210 = False
 	gtk_version = conf.check_cfg(modversion='gtk+-2.0', uselib_store='GTK')
 	if gtk_version:
@@ -186,20 +196,46 @@ def configure(conf):
 			have_gtk_210 = True
 	else:
 		gtk_version = 'Unknown'
-	# GIO check
 	conf.check_cfg(package='gio-2.0', uselib_store='GIO', args='--cflags --libs', mandatory=False)
 
-	conf_define_from_opt('LIBDIR', Options.options.libdir, conf.env['PREFIX'] + '/lib')
-	conf_define_from_opt('DOCDIR', Options.options.docdir, conf.env['DATADIR'] + '/doc/geany')
-	conf_define_from_opt('MANDIR', Options.options.mandir, conf.env['DATADIR'] + '/man')
+	# Windows specials
+	if is_win32:
+		prefix = os.path.splitdrive(conf.srcdir)[1]
+		conf.define('PREFIX', os.path.join(prefix, '%s-%s' % (APPNAME, VERSION)), 1)
+		conf.define('DOCDIR', os.path.join(conf.env['PREFIX'], 'doc'), 1)
+		conf.define('LOCALEDIR', os.path.join(conf.env['PREFIX'], 'share\locale'), 1)
+		conf.define('LIBDIR', conf.env['PREFIX'], 1)
+		# DATADIR is defined in objidl.h, so we remove it from config.h but keep it in env
+		conf.undefine('DATADIR')
+		conf.env['DATADIR'] = os.path.join(conf.env['PREFIX'], 'data')
+		# hack: we add the parent directory of the first include directory as this is missing in
+		# list returned from pkg-config
+		conf.env['CPPPATH_GTK'].insert(0, os.path.dirname(conf.env['CPPPATH_GTK'][0]))
+		# we don't need -fPIC when compiling on or for Windows
+		if '-fPIC' in conf.env['shlib_CCFLAGS']:
+			conf.env['shlib_CCFLAGS'].remove('-fPIC')
+		if '-fPIC' in conf.env['CXXFLAGS']:
+			conf.env['CXXFLAGS'].remove('-fPIC')
+		conf.env.append_value('program_LINKFLAGS', '-mwindows')
+		conf.env.append_value('LIB_WIN32', [ 'wsock32', 'uuid', 'ole32', 'iberty' ])
+		conf.env['shlib_PATTERN'] = '%s.dll'
+		conf.env['program_PATTERN'] = '%s.exe'
+	else:
+		conf.env['shlib_PATTERN'] = '%s.so'
+		conf_define_from_opt('DOCDIR', Options.options.docdir,
+			os.path.join(conf.env['DATADIR'], 'doc/geany'))
+		conf_define_from_opt('LIBDIR', Options.options.libdir,
+			os.path.join(conf.env['PREFIX'], 'lib'))
+		conf_define_from_opt('MANDIR', Options.options.mandir,
+			os.path.join(conf.env['DATADIR'], 'man'))
 
 	svn_rev = conf_get_svn_rev()
 	conf.define('ENABLE_NLS', 1)
-	conf.define('GEANY_LOCALEDIR', 'LOCALEDIR', 0)
-	conf.define('GEANY_DATADIR', 'DATADIR', 0)
-	conf.define('GEANY_DOCDIR', 'DOCDIR', 0)
-	conf.define('GEANY_LIBDIR', 'LIBDIR', 0)
-	conf.define('GEANY_PREFIX', conf.env['PREFIX'], 1)
+	conf.define('GEANY_LOCALEDIR', '' if is_win32 else conf.env['LOCALEDIR'], 1)
+	conf.define('GEANY_DATADIR', 'data' if is_win32 else conf.env['DATADIR'], 1)
+	conf.define('GEANY_DOCDIR', conf.env['DOCDIR'], 1)
+	conf.define('GEANY_LIBDIR', '' if is_win32 else conf.env['LIBDIR'], 1)
+	conf.define('GEANY_PREFIX', '' if is_win32 else conf.env['PREFIX'], 1)
 	conf.define('PACKAGE', APPNAME, 1)
 	conf.define('VERSION', VERSION, 1)
 	conf.define('REVISION', svn_rev, 1)
@@ -238,7 +274,7 @@ def set_options(opt):
 			help='compile without plugin support [default: No]', dest='no_plugins')
 		opt.add_option('--disable-socket', action='store_true', default=False,
 			help='compile without support to detect a running instance [[default: No]', dest='no_socket')
-		opt.add_option('--disable-vte', action='store_true', default=False,
+		opt.add_option('--disable-vte', action='store_true', default=target_is_win32(os.environ),
 			help='compile without support for an embedded virtual terminal [[default: No]', dest='no_vte')
 		opt.add_option('--enable-gnu-regex', action='store_true', default=False,
 			help='compile with included GNU regex library [default: No]', dest='gnu_regex')
@@ -259,21 +295,22 @@ def set_options(opt):
 
 
 def build(bld):
+	is_win32 = target_is_win32(bld.env)
+
 	def build_plugin(plugin_name, install = True):
 		if install:
-			instpath = '${LIBDIR}/geany/'
+			instpath = '${PREFIX}/lib' if is_win32 else '${LIBDIR}/geany/'
 		else:
 			instpath = None
 
 		bld.new_task_gen(
-			features				='cc cshlib',
+			features				= 'cc cshlib',
 			source					= 'plugins/' + plugin_name + '.c',
 			includes				= '. plugins/ src/ scintilla/include tagmanager/include',
 			target					= plugin_name,
 			uselib					= 'GTK',
-			install_path			= instpath,
+			install_path			= instpath
 		)
-		bld.env['shlib_PATTERN']	= '%s.so'
 
 
 	# Tagmanager
@@ -303,16 +340,18 @@ def build(bld):
 	# Geany
 	if bld.env['HAVE_VTE'] == 1:
 		geany_sources.append('src/vte.c')
-	if sys.platform == "win32":
+	if is_win32:
 		geany_sources.append('src/win32.c')
+
 	bld.new_task_gen(
 		features		= 'cc cxx cprogram',
 		name			= 'geany',
 		target			= 'geany',
 		source			= geany_sources,
 		includes		= '. src/ scintilla/include/ tagmanager/include/',
-		uselib			= 'GTK GIO',
-		uselib_local	= 'scintilla tagmanager'
+		uselib			= 'GTK GIO WIN32',
+		uselib_local	= 'scintilla tagmanager',
+		add_objects		= 'geany-rc' if is_win32 else None
 	)
 
 	# geanyfunctions.h
@@ -332,114 +371,139 @@ def build(bld):
 		build_plugin('filebrowser')
 		build_plugin('htmlchars')
 		build_plugin('saveactions')
-		build_plugin('splitwindow')
+		build_plugin('splitwindow', not is_win32)
 
 	# Translations
-	bld.new_task_gen(
-		features		= 'intltool_po',
-		podir			= 'po',
-		appname			= 'geany'
-	)
+	if bld.env['INTLTOOL']:
+		bld.new_task_gen(
+			features		= 'intltool_po',
+			podir			= 'po',
+			install_path	= '${LOCALEDIR}',
+			appname			= 'geany'
+		)
 
-	bld.new_task_gen(
-		features		= 'intltool_in',
-		source			= 'geany.desktop.in',
-		flags			= '-d',
-		install_path	= '${DATADIR}/applications'
-	)
+	if not is_win32:
+		# geany.desktop
+		if bld.env['INTLTOOL']:
+			bld.new_task_gen(
+				features		= 'intltool_in',
+				source			= 'geany.desktop.in',
+				flags			= [ '-d', '-q', '-u', '-c' ],
+				install_path	= '${DATADIR}/applications'
+			)
 
-	# geany.pc
-	bld.new_task_gen(
-		features		= 'subst',
-		source			= 'geany.pc.in',
-		target			= 'geany.pc',
-		dict			= { 'VERSION' : VERSION,
-							'prefix': bld.env['PREFIX'],
-							'exec_prefix': '${prefix}',
-							'libdir': '${exec_prefix}/lib',
-							'includedir': '${prefix}/include',
-							'datarootdir': '${prefix}/share',
-							'datadir': '${datarootdir}',
-							'localedir': '${datarootdir}/locale' },
-		install_path	= '${LIBDIR}/pkgconfig'
-	)
+		# geany.pc
+		bld.new_task_gen(
+			features		= 'subst',
+			source			= 'geany.pc.in',
+			target			= 'geany.pc',
+			dict			= { 'VERSION' : VERSION,
+								'prefix': bld.env['PREFIX'],
+								'exec_prefix': '${prefix}',
+								'libdir': '${exec_prefix}/lib',
+								'includedir': '${prefix}/include',
+								'datarootdir': '${prefix}/share',
+								'datadir': '${datarootdir}',
+								'localedir': '${datarootdir}/locale' },
+			install_path	= '${LIBDIR}/pkgconfig'
+		)
 
-	# geany.1
-	bld.new_task_gen(
-		features		= 'subst',
-		source			= 'doc/geany.1.in',
-		target			= 'geany.1',
-		dict			= { 'VERSION' : VERSION,
-							'GEANY_DATA_DIR': bld.env['DATADIR'] + '/geany' },
-		install_path	= '${MANDIR}/man1'
-	)
+		# geany.1
+		bld.new_task_gen(
+			features		= 'subst',
+			source			= 'doc/geany.1.in',
+			target			= 'geany.1',
+			dict			= { 'VERSION' : VERSION,
+								'GEANY_DATA_DIR': bld.env['DATADIR'] + '/geany' },
+			install_path	= '${MANDIR}/man1'
+		)
 
-	# geany.spec
-	bld.new_task_gen(
-		features		= 'subst',
-		source			= 'geany.spec.in',
-		target			= 'geany.spec',
-		install_path	= None,
-		dict			= { 'VERSION' : VERSION }
-	)
+		# geany.spec
+		bld.new_task_gen(
+			features		= 'subst',
+			source			= 'geany.spec.in',
+			target			= 'geany.spec',
+			install_path	= None,
+			dict			= { 'VERSION' : VERSION }
+		)
 
-	# Doxyfile
-	bld.new_task_gen(
-		features		= 'subst',
-		source			= 'doc/Doxyfile.in',
-		target			= 'doc/Doxyfile',
-		install_path	= None,
-		dict			= { 'VERSION' : VERSION }
-	)
+		# Doxyfile
+		bld.new_task_gen(
+			features		= 'subst',
+			source			= 'doc/Doxyfile.in',
+			target			= 'doc/Doxyfile',
+			install_path	= None,
+			dict			= { 'VERSION' : VERSION }
+		)
+	else:
+		bld.new_task_gen(
+			features		= 'cc',
+			name			= 'geany-rc',
+			source			= 'geany_private.rc'
+		)
 
 	###
 	# Install files
 	###
-	# Headers
-	bld.install_files('${PREFIX}/include/geany', '''
-		src/dialogs.h src/document.h src/editor.h src/encodings.h src/filetypes.h src/geany.h
-		src/highlighting.h src/keybindings.h src/main.h src/msgwindow.h src/plugindata.h src/plugins.h
-		src/prefs.h src/project.h src/sciwrappers.h src/search.h src/support.h src/templates.h
-		src/toolbar.h src/ui_utils.h src/utils.h
-		plugins/pluginmacros.h plugins/geanyfunctions.h ''')
-	bld.install_files('${PREFIX}/include/geany/scintilla', '''
-		scintilla/include/SciLexer.h scintilla/include/Scintilla.h scintilla/include/Scintilla.iface
-		scintilla/include/ScintillaWidget.h ''')
-	bld.install_files('${PREFIX}/include/geany/tagmanager', '''
-		tagmanager/include/tm_file_entry.h tagmanager/include/tm_project.h tagmanager/include/tm_source_file.h
-		tagmanager/include/tm_symbol.h tagmanager/include/tm_tag.h tagmanager/include/tm_tagmanager.h
-		tagmanager/include/tm_work_object.h tagmanager/include/tm_workspace.h ''')
+	if not is_win32:
+		# Headers
+		bld.install_files('${PREFIX}/include/geany', '''
+			src/dialogs.h src/document.h src/editor.h src/encodings.h src/filetypes.h src/geany.h
+			src/highlighting.h src/keybindings.h src/main.h src/msgwindow.h src/plugindata.h
+			src/plugins.h src/prefs.h src/project.h src/sciwrappers.h src/search.h src/support.h
+			src/templates.h src/toolbar.h src/ui_utils.h src/utils.h plugins/pluginmacros.h
+			plugins/geanyfunctions.h ''')
+		bld.install_files('${PREFIX}/include/geany/scintilla', '''
+			scintilla/include/SciLexer.h scintilla/include/Scintilla.h
+			scintilla/include/Scintilla.iface scintilla/include/ScintillaWidget.h ''')
+		bld.install_files('${PREFIX}/include/geany/tagmanager', '''
+			tagmanager/include/tm_file_entry.h tagmanager/include/tm_project.h
+			tagmanager/include/tm_source_file.h
+			tagmanager/include/tm_symbol.h tagmanager/include/tm_tag.h
+			tagmanager/include/tm_tagmanager.h tagmanager/include/tm_work_object.h
+			tagmanager/include/tm_workspace.h ''')
 	# Docs
-	bld.install_files('${DOCDIR}', 'AUTHORS ChangeLog COPYING README NEWS THANKS TODO')
-	bld.install_files('${DOCDIR}/html/images', 'doc/images/*.png')
-	bld.install_as('${DOCDIR}/manual.txt', 'doc/geany.txt')
-	bld.install_as('${DOCDIR}/html/index.html', 'doc/geany.html')
+	base_dir = '${PREFIX}' if is_win32 else '${DOCDIR}'
+	ext = '.txt' if is_win32 else ''
+	html_dir = '' if is_win32 else 'html/'
+	html_name = 'Manual.html' if is_win32 else 'index.html'
+	for f in 'AUTHORS ChangeLog COPYING README NEWS THANKS TODO'.split():
+		bld.install_as("%s/%s%s" % (base_dir, ucFirst(f, is_win32), ext), f)
+	bld.install_files('${DOCDIR}/%simages' % html_dir, 'doc/images/*.png')
+	bld.install_as('${DOCDIR}/%s' % ucFirst('manual.txt', is_win32), 'doc/geany.txt')
+	bld.install_as('${DOCDIR}/%s%s' % (html_dir, html_name), 'doc/geany.html')
 	bld.install_as('${DOCDIR}/ScintillaLicense.txt', 'scintilla/License.txt')
+	if is_win32:
+		bld.install_as('${DOCDIR}/ReadMe.I18n.txt', 'README.I18N')
+		bld.install_as('${DOCDIR}/Hacking.txt', 'HACKING')
 	# Data
-	bld.install_files('${DATADIR}/geany', 'data/filetype*')
-	bld.install_files('${DATADIR}/geany', 'data/*.tags')
-	bld.install_files('${DATADIR}/geany', 'data/snippets.conf')
-	bld.install_files('${DATADIR}/geany', 'data/ui_toolbar.xml')
-	bld.install_as('${DATADIR}/geany/GPL-2', 'COPYING')
+	dir = '' if is_win32 else 'geany'
+	bld.install_files('${DATADIR}/%s' % dir, 'data/filetype*')
+	bld.install_files('${DATADIR}/%s' % dir, 'data/*.tags')
+	bld.install_files('${DATADIR}/%s' % dir, 'data/snippets.conf')
+	bld.install_files('${DATADIR}/%s' % dir, 'data/ui_toolbar.xml')
+	bld.install_as('${DATADIR}/%s/GPL-2' % dir, 'COPYING')
 	# Icons
-	bld.install_files('${DATADIR}/icons/hicolor/16x16/apps', 'icons/16x16/*.png')
-	bld.install_files('${DATADIR}/icons/hicolor/48x48/apps', 'icons/48x48/*.png')
-	bld.install_files('${DATADIR}/icons/hicolor/scalable/apps', 'icons/scalable/*.svg')
+	bld.install_files('${PREFIX}/share/icons'
+		if is_win32	else '${DATADIR}/icons/hicolor/16x16/apps', 'icons/16x16/*.png')
+	if not is_win32:
+		bld.install_files('${DATADIR}/icons/hicolor/48x48/apps', 'icons/48x48/*.png')
+		bld.install_files('${DATADIR}/icons/hicolor/scalable/apps', 'icons/scalable/*.svg')
 
 
 def shutdown():
+	is_win32 = target_is_win32(Build.bld.env)
 	# the following code was taken from midori's WAF script, thanks
-	if Options.commands['install'] or Options.commands['uninstall']:
+	if not is_win32 and not Options.options.destdir and (Options.commands['install'] or Options.commands['uninstall']):
 		dir = Build.bld.get_install_path('${DATADIR}/icons/hicolor')
 		icon_cache_updated = False
-		if not Options.options.destdir:
-			try:
-				Utils.exec_command('gtk-update-icon-cache -q -f -t %s' % dir)
-				Utils.pprint('GREEN', 'GTK icon cache updated.')
-				icon_cache_updated = True
-			except:
-				Utils.pprint('YELLOW', 'Failed to update icon cache for ' + dir + '.')
-		if not icon_cache_updated and not Options.options.destdir:
+		try:
+			Utils.exec_command('gtk-update-icon-cache -q -f -t %s' % dir)
+			Utils.pprint('GREEN', 'GTK icon cache updated.')
+			icon_cache_updated = True
+		except:
+			Utils.pprint('YELLOW', 'Failed to update icon cache for %s.' % dir)
+		if not icon_cache_updated:
 			print 'Icon cache not updated. After install, run this:'
 			print 'gtk-update-icon-cache -q -f -t %s' % dir
 
@@ -510,3 +574,19 @@ def print_message(conf, msg, result, color = 'GREEN'):
 	conf.check_message_1(msg)
 	conf.check_message_2(result, color)
 
+
+def ucFirst(s, is_win32):
+	if is_win32:
+		return s.title()
+	return s
+
+
+def target_is_win32(env):
+	if sys.platform == 'win32':
+		return True
+	if env and 'CC' in env:
+		cc = env['CC']
+		if not isinstance(cc, str):
+			cc = ''.join(cc)
+		return cc.find('mingw') != -1
+	return False
