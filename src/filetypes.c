@@ -655,6 +655,10 @@ static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 	if (utils_str_equal(doc->real_path,
 		utils_build_path(app->configdir, "filetype_extensions.conf", NULL)))
 		filetypes_read_extensions();
+	else if (utils_str_equal(doc->real_path,
+		utils_build_path(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.common", NULL)))
+		ui_set_statusbar(FALSE, "%s",
+			_("For all changes you make in this file to take effect, you need to restart Geany."));
 }
 
 
@@ -662,6 +666,8 @@ static void setup_config_file_menus(void)
 {
 	ui_add_config_file_menu_item(
 		utils_build_path(app->configdir, "filetype_extensions.conf", NULL), NULL, NULL);
+	ui_add_config_file_menu_item(
+		utils_build_path(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.common", NULL), NULL, NULL);
 
 	g_signal_connect(geany_object, "document-save", G_CALLBACK(on_document_save), NULL);
 }
