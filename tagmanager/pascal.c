@@ -281,7 +281,7 @@ static void findPascalTags (void)
 	    if (kind == K_FUNCTION)
 		eFree(vartype);
 	    parseArglist((const char*) cp, &arglist, (kind == K_FUNCTION) ? &vartype : NULL);
-	    createPascalTag (&tag, name, kind, arglist, vartype);
+	    createPascalTag (&tag, name, kind, arglist, (kind == K_FUNCTION) ? vartype : NULL);
 	    dbp = cp;		/* set dbp to e-o-token */
 	    get_tagname = FALSE;
 	    found_tag = TRUE;
