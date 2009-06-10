@@ -31,12 +31,12 @@ extern "C"
  time when the file was analyzed (for caching) and an array of tags which
  should be populated when the object is analyzed.
 */
-typedef struct _TMWorkObject
+typedef struct TMWorkObject
 {
 	guint type; /*!< The type of object. Can be a source file or a project */
 	char *file_name; /*!< Full file name (inc. path) of the work object */
 	char *short_name; /*!< Just the name of the file (without the path) */
-	struct _TMWorkObject *parent;
+	struct TMWorkObject *parent;
 	time_t analyze_time; /*!< UNUSED Time when the object was last analyzed */
 	GPtrArray *tags_array; /*!< Tags obtained by parsing the object */
 } TMWorkObject;

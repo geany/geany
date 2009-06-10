@@ -3,7 +3,12 @@
  * src/editor.c:
    Display calltips for Pascal symbols in the Pascal way (#2803945).
  * tagmanager/pascal.c:
-   Fix wrongly set return values for procedures (closes #2803945.
+   Fix wrongly set return values for procedures (closes #2803945).
+ * doc/Doxyfile.in, tagmanager/include/tm_work_object.h,
+   tagmanager/include/tm_source_file.h,
+   tagmanager/include/tm_workspace.h:
+   Fix doxygen warnings.
+
 
 2009-06-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
