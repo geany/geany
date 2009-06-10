@@ -139,7 +139,7 @@ const GPtrArray *
 tm_workspace_find_scoped (const char *name, const char *scope, gint type,
 		TMTagAttrType *attrs, gboolean partial, langType lang, gboolean global_search);
 
-/*! Returns all matching members tags found in given struct/union/class name.
+/* Returns all matching members tags found in given struct/union/class name.
  \param name Name of the struct/union/class.
  \param file_tags A GPtrArray of edited file TMTag pointers (for search speedup, can be NULL).
  \return A GPtrArray of TMTag pointers to struct/union/class members */
