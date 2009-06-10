@@ -41,5 +41,4 @@ Note: these items might not get worked on.
 	o (better tags support for popular languages? - this is a moving
 	   target...)
 	o Some kind of support for CTags tags files
-	o Scope resolution for object members
 	o Python plugin interface (different concept from Lua scripting)

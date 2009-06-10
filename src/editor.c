@@ -431,6 +431,103 @@ static void check_line_breaking(GeanyEditor *editor, gint pos, gchar c)
 }
 
 
+static void show_autocomplete(ScintillaObject *sci, gint rootlen, const gchar *words)
+{
+	/* store whether a calltip is showing, so we can reshow it after autocompletion */
+	calltip.set = SSM(sci, SCI_CALLTIPACTIVE, 0, 0);
+	SSM(sci, SCI_AUTOCSHOW, rootlen, (sptr_t) words);
+}
+
+
+static void show_tags_list(GeanyEditor *editor, const GPtrArray *tags, gsize rootlen)
+{
+	ScintillaObject *sci = editor->sci;
+
+	g_return_if_fail(tags);
+
+	if (tags->len > 0)
+	{
+		GString *words = g_string_sized_new(150);
+		guint j;
+
+		for (j = 0; j < tags->len; ++j)
+		{
+			if (j > 0)
+				g_string_append_c(words, '\n');
+
+			if (j == editor_prefs.autocompletion_max_entries)
+			{
+				g_string_append(words, "...");
+				break;
+			}
+			g_string_append(words, ((TMTag *) tags->pdata[j])->name);
+		}
+		show_autocomplete(sci, rootlen, words->str);
+		g_string_free(words, TRUE);
+	}
+}
+
+
+/* do not use with long strings */
+static gboolean match_last_chars(ScintillaObject *sci, gint pos, const gchar *str)
+{
+	gsize len = strlen(str);
+	gchar *buf;
+
+	g_return_val_if_fail(len < 100, FALSE);
+
+	buf = g_alloca(len + 1);
+	sci_get_text_range(sci, pos - len, pos, buf);
+	return strcmp(str, buf) == 0;
+}
+
+
+static void autocomplete_scope(GeanyEditor *editor)
+{
+	ScintillaObject *sci = editor->sci;
+	gint pos = sci_get_current_position(editor->sci);
+	gchar typed = sci_get_char_at(sci, pos - 1);
+	gchar *name;
+	const GPtrArray *tags = NULL;
+	const TMTag *tag;
+	gint ft_id = FILETYPE_ID(editor->document->file_type);
+
+	if (ft_id == GEANY_FILETYPES_C || ft_id == GEANY_FILETYPES_CPP)
+	{
+		if (match_last_chars(sci, pos, "->") || match_last_chars(sci, pos, "::"))
+			pos--;
+		else if (typed != '.')
+			return;
+	}
+	else if (typed != '.')
+		return;
+
+	/* allow for a space between word and operator */
+	if (isspace(sci_get_char_at(sci, pos - 2)))
+		pos--;
+	name = editor_get_word_at_pos(editor, pos - 1, NULL);
+	if (!name)
+		return;
+
+	tags = tm_workspace_find(name, tm_tag_max_t, NULL, FALSE, -1);
+	g_free(name);
+	if (!tags || tags->len == 0)
+		return;
+
+	tag = g_ptr_array_index(tags, 0);
+	name = tag->atts.entry.var_type;
+	if (name)
+	{
+		TMWorkObject *obj = editor->document->tm_file;
+
+		tags = tm_workspace_find_scope_members(obj ? obj->tags_array : NULL,
+			name, TRUE, FALSE);
+		if (tags)
+			show_tags_list(editor, tags, 0);
+	}
+}
+
+
 static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 {
 	ScintillaObject *sci = editor->sci;
@@ -450,6 +547,8 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 			break;
 		}
 		case '>':
+			editor_start_auto_complete(editor, pos, FALSE);	/* C/C++ ptr-> scope completion */
+			/* fall through */
 		case '/':
 		{	/* close xml-tags */
 			handle_xml(editor, pos, nt->ch);
@@ -489,6 +588,10 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 				close_block(editor, pos - 1);
 			break;
 		}
+		/* scope autocompletion */
+		case '.':
+		case ':':	/* C/C++ class:: syntax */
+		/* tag autocompletion */
 		default:
 			editor_start_auto_complete(editor, pos, FALSE);
 	}
@@ -1520,14 +1623,6 @@ gchar *editor_get_calltip_text(GeanyEditor *editor, const TMTag *tag)
 }
 
 
-static void show_autocomplete(ScintillaObject *sci, gint rootlen, const gchar *words)
-{
-	/* store whether a calltip is showing, so we can reshow it after autocompletion */
-	calltip.set = SSM(sci, SCI_CALLTIPACTIVE, 0, 0);
-	SSM(sci, SCI_AUTOCSHOW, rootlen, (sptr_t) words);
-}
-
-
 static gboolean
 autocomplete_html(ScintillaObject *sci, const gchar *root, gsize rootlen)
 {	/* HTML entities auto completion */
@@ -1566,35 +1661,15 @@ autocomplete_tags(GeanyEditor *editor, const gchar *root, gsize rootlen)
 {
 	TMTagAttrType attrs[] = { tm_tag_attr_name_t, 0 };
 	const GPtrArray *tags;
-	ScintillaObject *sci;
 	GeanyDocument *doc;
 
 	g_return_val_if_fail(editor != NULL && editor->document->file_type != NULL, FALSE);
 
-	sci = editor->sci;
 	doc = editor->document;
 
 	tags = tm_workspace_find(root, tm_tag_max_t, attrs, TRUE, doc->file_type->lang);
-	if (NULL != tags && tags->len > 0)
-	{
-		GString *words = g_string_sized_new(150);
-		guint j;
-
-		for (j = 0; j < tags->len; ++j)
-		{
-			if (j > 0)
-				g_string_append_c(words, '\n');
-
-			if (j == editor_prefs.autocompletion_max_entries)
-			{
-				g_string_append(words, "...");
-				break;
-			}
-			g_string_append(words, ((TMTag *) tags->pdata[j])->name);
-		}
-		show_autocomplete(sci, rootlen, words->str);
-		g_string_free(words, TRUE);
-	}
+	if (tags)
+		show_tags_list(editor, tags, rootlen);
 	return TRUE;
 }
 
@@ -1657,6 +1732,8 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 	/* don't autocomplete in comments and strings */
 	if (!force && !is_code_style(lexer, style))
 		return FALSE;
+
+	autocomplete_scope(editor);
 
 	linebuf = sci_get_line(sci, line);
 

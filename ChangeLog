@@ -1,3 +1,16 @@
+2009-06-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/editor.c, tagmanager/include/tm_workspace.h,
+   tagmanager/tm_workspace.c, TODO:
+   Autocomplete scoped fields like struct members when typing '.' (and
+   also '->' or '::' in C/C++).
+   Save all tag types for C/C++ when generating a global tags file, so
+   we can use autocompletion for structs also.
+   Merge tm_workspace_find_scope_members(),
+   tm_workspace_find_namespace_members() (currently not built) from
+   Anjuta 2.24.1 tagmanager.
+
+
 2009-06-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * tagmanager/pascal.c:
