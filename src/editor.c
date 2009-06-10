@@ -1442,27 +1442,42 @@ static gboolean append_calltip(GString *str, const TMTag *tag, filetype_id ft_id
 	if (! tag->atts.entry.arglist)
 		return FALSE;
 
-	if (tag->atts.entry.var_type)
-	{
-		guint i;
-
-		g_string_append(str, tag->atts.entry.var_type);
-		for (i = 0; i < tag->atts.entry.pointerOrder; i++)
+	if (ft_id != GEANY_FILETYPES_PASCAL)
+	{	/* usual calltips: "retval tagname (arglist)" */
+		if (tag->atts.entry.var_type)
 		{
-			g_string_append_c(str, '*');
-		}
-		g_string_append_c(str, ' ');
-	}
-	if (tag->atts.entry.scope)
-	{
-		const gchar *cosep = symbols_get_context_separator(ft_id);
+			guint i;
 
-		g_string_append(str, tag->atts.entry.scope);
-		g_string_append(str, cosep);
+			g_string_append(str, tag->atts.entry.var_type);
+			for (i = 0; i < tag->atts.entry.pointerOrder; i++)
+			{
+				g_string_append_c(str, '*');
+			}
+			g_string_append_c(str, ' ');
+		}
+		if (tag->atts.entry.scope)
+		{
+			const gchar *cosep = symbols_get_context_separator(ft_id);
+
+			g_string_append(str, tag->atts.entry.scope);
+			g_string_append(str, cosep);
+		}
+		g_string_append(str, tag->name);
+		g_string_append_c(str, ' ');
+		g_string_append(str, tag->atts.entry.arglist);
 	}
-	g_string_append(str, tag->name);
-	g_string_append_c(str, ' ');
-	g_string_append(str, tag->atts.entry.arglist);
+	else
+	{	/* special case Pascal calltips: "tagname (arglist) : retval" */
+		g_string_append(str, tag->name);
+		g_string_append_c(str, ' ');
+		g_string_append(str, tag->atts.entry.arglist);
+
+		if (NZV(tag->atts.entry.var_type))
+		{
+			g_string_append(str, " : ");
+			g_string_append(str, tag->atts.entry.var_type);
+		}
+	}
 
 	return TRUE;
 }
