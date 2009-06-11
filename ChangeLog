@@ -1,3 +1,9 @@
+2009-06-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * waf:
+   Update Waf to 1.5.7.
+
+
 2009-06-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/editor.c:
