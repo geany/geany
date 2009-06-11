@@ -40,7 +40,7 @@ Requires WAF 1.5.3 and Python 2.4 (or later).
 
 
 import Build, Configure, Options, Utils
-import sys, os, shutil
+import sys, os, shutil, tempfile
 from distutils import version
 
 
@@ -200,8 +200,9 @@ def configure(conf):
 
 	# Windows specials
 	if is_win32:
-		prefix = os.path.splitdrive(conf.srcdir)[1]
-		conf.define('PREFIX', os.path.join(prefix, '%s-%s' % (APPNAME, VERSION)), 1)
+		if conf.env['PREFIX'] == tempfile.gettempdir():
+			# overwrite default prefix on Windows (tempfile.gettempdir() is the Waf default)
+			conf.define('PREFIX', os.path.join(conf.srcdir, '%s-%s' % (APPNAME, VERSION)), 1)
 		conf.define('DOCDIR', os.path.join(conf.env['PREFIX'], 'doc'), 1)
 		conf.define('LOCALEDIR', os.path.join(conf.env['PREFIX'], 'share\locale'), 1)
 		conf.define('LIBDIR', conf.env['PREFIX'], 1)
