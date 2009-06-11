@@ -37,7 +37,7 @@ def add_tag(tags, tag):
 		return
 	for test in tags:
 		if test.startswith(tagname):
-			# check wether we find a tag line which starts with the same name,
+			# check whether we find a tag line which starts with the same name,
 			# include the separating TA_TYPE character to ensure we don't match
 			# writelines() and write()
 			return
