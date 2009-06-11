@@ -1,3 +1,11 @@
+2009-06-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * scintilla/LexPascal.cxx:
+   Backport fix from Scintilla CVS:
+   Pascal lexer hanging on file that starts with 'interface' after
+   whitespace.
+
+
 2009-06-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * waf:
