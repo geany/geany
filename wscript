@@ -35,7 +35,7 @@ Missing features: --enable-binreloc, make targets: dist, pdf (in doc/)
 Known issues: Dependency handling is buggy, e.g. if src/document.h is
 			  changed, depending source files are not rebuilt (maybe Waf bug).
 
-Requires WAF 1.5.3 and Python 2.4 (or later).
+Requires WAF 1.5.7 and Python 2.4 (or later).
 """
 
 
@@ -493,7 +493,7 @@ def build(bld):
 
 
 def shutdown():
-	is_win32 = target_is_win32(Build.bld.env)
+	is_win32 = False if not Build.bld else target_is_win32(Build.bld.env)
 	# the following code was taken from midori's WAF script, thanks
 	if not is_win32 and not Options.options.destdir and (Options.commands['install'] or Options.commands['uninstall']):
 		dir = Build.bld.get_install_path('${DATADIR}/icons/hicolor')
