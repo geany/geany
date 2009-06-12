@@ -3054,6 +3054,8 @@ static void auto_multiline(GeanyEditor *editor, gint cur_line)
 /* Checks whether the given style is a string for the given lexer.
  * It doesn't handle LEX_HTML, this should be done by the caller.
  * Returns true if the style is a string, FALSE otherwise.
+ *
+ * Don't forget STRINGEOL, to prevent completion whilst typing a string with no closing char.
  */
 static gboolean is_string_style(gint lexer, gint style)
 {
@@ -3061,26 +3063,31 @@ static gboolean is_string_style(gint lexer, gint style)
 	{
 		case SCLEX_CPP:
 			return (style == SCE_C_CHARACTER ||
-				style == SCE_C_STRING);
+				style == SCE_C_STRING ||
+				style == SCE_C_STRINGEOL);
 
 		case SCLEX_PASCAL:
 			return (style == SCE_PAS_CHARACTER ||
-				style == SCE_PAS_STRING);
+				style == SCE_PAS_STRING ||
+				style == SCE_PAS_STRINGEOL);
 
 		case SCLEX_D:
 			return (style == SCE_D_CHARACTER ||
-				style == SCE_D_STRING);
+				style == SCE_D_STRING ||
+				style == SCE_D_STRINGEOL);
 
 		case SCLEX_PYTHON:
 			return (style == SCE_P_STRING ||
 				style == SCE_P_TRIPLE ||
 				style == SCE_P_TRIPLEDOUBLE ||
-				style == SCE_P_CHARACTER);
+				style == SCE_P_CHARACTER ||
+				style == SCE_P_STRINGEOL);
 
 		case SCLEX_F77:
 		case SCLEX_FORTRAN:
 			return (style == SCE_F_STRING1 ||
-				style == SCE_F_STRING2);
+				style == SCE_F_STRING2 ||
+				style == SCE_F_STRINGEOL);
 
 		case SCLEX_PERL:
 			return (style == SCE_PL_STRING ||
@@ -3115,6 +3122,7 @@ static gboolean is_string_style(gint lexer, gint style)
 		case SCLEX_LUA:
 			return (style == SCE_LUA_LITERALSTRING ||
 				style == SCE_LUA_CHARACTER ||
+				style == SCE_LUA_STRINGEOL ||
 				style == SCE_LUA_STRING);
 
 		case SCLEX_HASKELL:
@@ -3122,7 +3130,8 @@ static gboolean is_string_style(gint lexer, gint style)
 				style == SCE_HA_STRING);
 
 		case SCLEX_FREEBASIC:
-			return (style == SCE_B_STRING);
+			return (style == SCE_B_STRING ||
+				style == SCE_B_STRINGEOL);
 
 		case SCLEX_MATLAB:
 			return (style == SCE_MATLAB_STRING ||
@@ -3131,13 +3140,17 @@ static gboolean is_string_style(gint lexer, gint style)
 		case SCLEX_HTML:
 			return (
 				style == SCE_HBA_STRING ||
+				style == SCE_HBA_STRINGEOL ||
 				style == SCE_HB_STRING ||
+				style == SCE_HB_STRINGEOL ||
 				style == SCE_H_CDATA ||
 				style == SCE_H_DOUBLESTRING ||
 				style == SCE_HJA_DOUBLESTRING ||
 				style == SCE_HJA_SINGLESTRING ||
+				style == SCE_HJA_STRINGEOL ||
 				style == SCE_HJ_DOUBLESTRING ||
 				style == SCE_HJ_SINGLESTRING ||
+				style == SCE_HJ_STRINGEOL ||
 				style == SCE_HPA_CHARACTER ||
 				style == SCE_HPA_STRING ||
 				style == SCE_HPA_TRIPLE ||
@@ -3169,7 +3182,9 @@ static gboolean is_string_style(gint lexer, gint style)
 
 		case SCLEX_ADA:
 			return (style == SCE_ADA_CHARACTER ||
-				style == SCE_ADA_STRING);
+				style == SCE_ADA_STRING ||
+				style == SCE_ADA_CHARACTEREOL ||
+				style == SCE_ADA_STRINGEOL);
 	}
 	return FALSE;
 }
