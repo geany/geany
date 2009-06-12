@@ -135,7 +135,6 @@ static void create_open_file_dialog(void)
 	GtkWidget *viewbtn;
 	guint i;
 	gchar *encoding_string;
-	GeanyFiletype *ft;
 	GSList *node;
 
 	ui_widgets.open_filesel = gtk_file_chooser_dialog_new(_("Open File"), GTK_WINDOW(main_widgets.window),
@@ -174,8 +173,10 @@ static void create_open_file_dialog(void)
 	/* now create meta filter "All Source" */
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
 				filetypes_create_file_filter_all_source());
-	foreach_slist(ft, node, filetypes_by_title)
+	foreach_slist(node, filetypes_by_title)
 	{
+		GeanyFiletype *ft = node->data;
+
 		if (G_UNLIKELY(ft->id == GEANY_FILETYPES_NONE))
 			continue;
 		gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), ft->title);

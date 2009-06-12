@@ -362,16 +362,15 @@ on_new_with_template                   (GtkMenuItem     *menuitem,
 /* template items for the new file menu */
 static void create_new_menu_items(void)
 {
-	GeanyFiletype *ft;
 	GSList *node;
 
-	foreach_slist(ft, node, filetypes_by_title)
+	foreach_slist(node, filetypes_by_title)
 	{
-		filetype_id ft_id = ft->id;
+		GeanyFiletype *ft = node->data;
 		GtkWidget *tmp_menu, *tmp_button;
 		const gchar *label = ft->title;
 
-		if (ft_templates[ft_id] == NULL)
+		if (ft_templates[ft->id] == NULL)
 			continue;
 
 		tmp_menu = gtk_menu_item_new_with_label(label);

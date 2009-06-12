@@ -57,15 +57,17 @@
 	for (ptr = ptr_array->pdata, item = *ptr; \
 		ptr < &ptr_array->pdata[ptr_array->len]; ++ptr, item = *ptr)
 
-/* @param node should be a (GSList*), needed for implementation. */
-#define foreach_slist(data_ptr, node, list) \
-	for (node = list, data_ptr = node ? node->data : NULL; node != NULL; \
-		node = g_slist_next(node), data_ptr = node ? node->data : NULL)
+/** Iterates all the nodes in @a list.
+ * @param node should be a (GList*).
+ * @param list List to traverse. */
+#define foreach_list(node, list) \
+	for (node = list; node != NULL; node = node->next)
 
-/* @param node should be a (GList*), needed for implementation. */
-#define foreach_list(data_ptr, node, list) \
-	for (node = list, data_ptr = node ? node->data : NULL; node != NULL; \
-		node = g_list_next(node), data_ptr = node ? node->data : NULL)
+/** Iterates all the nodes in @a list.
+ * @param node should be a (GSList*).
+ * @param list List to traverse. */
+#define foreach_slist(node, list) \
+	foreach_list(node, list)
 
 
 void utils_open_browser(const gchar *uri);

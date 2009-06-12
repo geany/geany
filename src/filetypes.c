@@ -1492,10 +1492,11 @@ GeanyFiletype *filetypes_index(gint idx)
 void filetypes_foreach_named(GFunc callback, gpointer user_data)
 {
 	GSList *node;
-	GeanyFiletype *ft;
 
-	foreach_slist(ft, node, filetypes_by_title)
+	foreach_slist(node, filetypes_by_title)
 	{
+		GeanyFiletype *ft = node->data;
+
 		if (G_LIKELY(ft->id != GEANY_FILETYPES_NONE))
 			callback(ft, user_data);
 	}

@@ -2056,14 +2056,13 @@ void ui_menu_sort_by_label(GtkMenu *menu)
 {
 	GList *list = gtk_container_get_children(GTK_CONTAINER(menu));
 	GList *node;
-	GtkWidget *child;
 	gint pos;
 
 	list = g_list_sort(list, compare_menu_item_labels);
 	pos = 0;
-	foreach_list(child, node, list)
+	foreach_list(node, list)
 	{
-		gtk_menu_reorder_child(menu, child, pos);
+		gtk_menu_reorder_child(menu, node->data, pos);
 		pos++;
 	}
 	g_list_free(list);

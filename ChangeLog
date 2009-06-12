@@ -4,6 +4,12 @@
    Fix type definitions being parsed as functions.
  * src/editor.c:
    Don't autocomplete in unterminated strings as well.
+ * src/templates.c, src/utils.h, src/dialogs.c, src/plugindata.h,
+   src/filetypes.c, src/ui_utils.c, plugins/saveactions.c:
+   Remove data_ptr argument to foreach_[s]list() macros, as using
+   node->data is enough sometimes; this makes the macro a bit more
+   efficient too.
+   Add foreach_[s]list() macros to the plugin API docs.
 
 
 2009-06-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
