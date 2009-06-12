@@ -256,6 +256,14 @@ static void findPascalTags (void)
 		    verify_tag = FALSE;
 		}
 	    }
+	    else if (tolower ((int) *dbp) == 't')
+	    {
+		if (tail ("type"))	/*  check for forward reference */
+		{
+		    found_tag = FALSE;
+		    verify_tag = FALSE;
+		}
+	    }
 	    if (found_tag && verify_tag) /* not external proc, so make tag */
 	    {
 		found_tag = FALSE;

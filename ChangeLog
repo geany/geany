@@ -1,3 +1,9 @@
+2009-06-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * tagmanager/pascal.c:
+   Fix type definitions being parsed as functions.
+
+
 2009-06-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * scintilla/LexPascal.cxx:
