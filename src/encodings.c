@@ -138,10 +138,11 @@ static void init_encodings(void)
 	fill(7, EASTASIAN, GEANY_ENCODING_EUC_JP, "EUC-JP", _("Japanese"));
 	fill(8, EASTASIAN, GEANY_ENCODING_ISO_2022_JP, "ISO-2022-JP", _("Japanese"));
 	fill(9, EASTASIAN, GEANY_ENCODING_SHIFT_JIS, "SHIFT_JIS", _("Japanese"));
-	fill(10, EASTASIAN, GEANY_ENCODING_EUC_KR, "EUC-KR", _("Korean"));
-	fill(11, EASTASIAN, GEANY_ENCODING_ISO_2022_KR, "ISO-2022-KR", _("Korean"));
-	fill(12, EASTASIAN, GEANY_ENCODING_JOHAB, "JOHAB", _("Korean"));
-	fill(13, EASTASIAN, GEANY_ENCODING_UHC, "UHC", _("Korean"));
+	fill(10, EASTASIAN, GEANY_ENCODING_CP_932, "CP932", _("Japanese"));
+	fill(11, EASTASIAN, GEANY_ENCODING_EUC_KR, "EUC-KR", _("Korean"));
+	fill(12, EASTASIAN, GEANY_ENCODING_ISO_2022_KR, "ISO-2022-KR", _("Korean"));
+	fill(13, EASTASIAN, GEANY_ENCODING_JOHAB, "JOHAB", _("Korean"));
+	fill(14, EASTASIAN, GEANY_ENCODING_UHC, "UHC", _("Korean"));
 
 	fill(0, NONE, GEANY_ENCODING_NONE, "None", _("Without encoding"));
 }
