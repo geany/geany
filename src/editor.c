@@ -821,8 +821,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 		{
 			if (nt->listType == 1)
 			{
-				gint pos = SSM(sci, SCI_GETCURRENTPOS, 0, 0);
-				SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) nt->text);
+				SSM(sci, SCI_ADDTEXT, strlen(nt->text), (sptr_t) nt->text);
 			}
 			break;
 		}

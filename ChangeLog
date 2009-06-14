@@ -4,6 +4,8 @@
    Add Japanese encoding "CP932" (patch by Ryūsei Yamaguchi, thanks).
  * src/editor.c:
    Remove dead code.
+   When completing from the macro list, put the cursor after
+   the inserted text.
 
 
 2009-06-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
