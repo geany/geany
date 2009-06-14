@@ -824,14 +824,6 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 				gint pos = SSM(sci, SCI_GETCURRENTPOS, 0, 0);
 				SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) nt->text);
 			}
-			else if (nt->listType == 2)
-			{
-				gint start, pos = SSM(sci, SCI_GETCURRENTPOS, 0, 0);
-				start = pos;
-				while (start > 0 && sci_get_char_at(sci, --start) != '&') ;
-
-				SSM(sci, SCI_INSERTTEXT, pos - 1, (sptr_t) nt->text);
-			}
 			break;
 		}
 		case SCN_AUTOCCANCELLED:

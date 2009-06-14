@@ -2,6 +2,8 @@
 
  * src/encodings.c, src/encodings.h, src/plugindata.h:
    Add Japanese encoding "CP932" (patch by Ryūsei Yamaguchi, thanks).
+ * src/editor.c:
+   Remove dead code.
 
 
 2009-06-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
