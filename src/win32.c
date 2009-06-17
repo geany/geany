@@ -324,7 +324,8 @@ gboolean win32_show_file_dialog(gboolean file_open, const gchar *initial_dir)
 
 	fname[0] = '\0';
 
-	MultiByteToWideChar(CP_UTF8, 0, initial_dir, -1, w_dir, sizeof(w_dir));
+	if (initial_dir != NULL)
+		MultiByteToWideChar(CP_UTF8, 0, initial_dir, -1, w_dir, sizeof(w_dir));
 
 	/* initialise file dialog info struct */
 	memset(&of, 0, sizeof of);
@@ -339,7 +340,7 @@ gboolean win32_show_file_dialog(gboolean file_open, const gchar *initial_dir)
 	of.lpstrCustomFilter = NULL;
 	of.nFilterIndex = GEANY_FILETYPES_NONE + 1;
 	of.lpstrFile = fname;
-	of.lpstrInitialDir = w_dir;
+	of.lpstrInitialDir = (initial_dir != NULL) ? w_dir : NULL;
 	of.nMaxFile = 2048;
 	of.lpstrFileTitle = NULL;
 	of.lpstrTitle = NULL;

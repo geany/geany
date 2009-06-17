@@ -1,3 +1,9 @@
+2009-06-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/win32.c:
+   Prevent possible crash on Windows when not setting an initial
+   directory for native File Open/Save dialogs.
+
 2009-06-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/filetypes.h, src/document.c, src/document.h, src/ui_utils.c:
