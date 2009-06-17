@@ -490,9 +490,9 @@ static void autocomplete_scope(GeanyEditor *editor)
 	gchar *name;
 	const GPtrArray *tags = NULL;
 	const TMTag *tag;
-	gint ft_id = FILETYPE_ID(editor->document->file_type);
+	GeanyFiletype *ft = editor->document->file_type;
 
-	if (ft_id == GEANY_FILETYPES_C || ft_id == GEANY_FILETYPES_CPP)
+	if (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP)
 	{
 		if (match_last_chars(sci, pos, "->") || match_last_chars(sci, pos, "::"))
 			pos--;
@@ -509,7 +509,7 @@ static void autocomplete_scope(GeanyEditor *editor)
 	if (!name)
 		return;
 
-	tags = tm_workspace_find(name, tm_tag_max_t, NULL, FALSE, -1);
+	tags = tm_workspace_find(name, tm_tag_max_t, NULL, FALSE, ft->lang);
 	g_free(name);
 	if (!tags || tags->len == 0)
 		return;

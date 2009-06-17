@@ -3,6 +3,9 @@
  * src/filetypes.h, src/document.c, src/document.h, src/ui_utils.c:
    Make GeanyDocument::file_type always be non-NULL, even for a new
    document with no filetype set.
+ * src/editor.c:
+   Only autocomplete scope for scopes matching the current filetype's
+   language.
 
 
 2009-06-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
