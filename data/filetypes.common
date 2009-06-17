@@ -84,3 +84,20 @@ line_wrap_indent=0;0;false;false
 # which characters should be skipped when moving (or included when deleting) to word boundaries
 # should always include space and tab (\s\t)
 whitespace_chars=\s\t!\"#$%&'()*+,-./:;<=>?@[\\]^`{|}~
+
+[named_styles]
+# style names to use in filetypes.* [styling] sections
+default=0x000000;0xffffff;false;false
+comment=0xd00000;0xffffff;false;false
+commentdoc=0x3f5fbf;0xffffff;false;false
+number=0x007f00;0xffffff;false;false
+# keyword
+word=0x00007f;0xffffff;true;false
+# e.g. types from global tags file
+word2=0x991111;0xffffff;true;false
+string=0xff901e;0xffffff;false;false
+preprocessor=0x007f7f;0xffffff;false;false
+operator=0x301010;0xffffff;false;false
+# unterminated string
+stringeol=0x000000;0xe0c0e0;false;false
+type=0x0000d0;0xffffff;true;false

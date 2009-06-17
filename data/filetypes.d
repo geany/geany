@@ -1,24 +1,24 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
 # foreground;background;bold;italic
-default=0x000000;0xffffff;false;false
-comment=0xd00000;0xffffff;false;false
-commentline=0xd00000;0xffffff;false;false
-commentdoc=0x3f5fbf;0xffffff;false;false
-commentdocnested=0x3f5fbf;0xffffff;false;false
-number=0x007f00;0xffffff;false;false
-word=0x00007f;0xffffff;true;false
-word2=0x991111;0xffffff;true;false
-word3=0x991111;0xffffff;true;false
-typedef=0x0000d0;0xffffff;true;false
-string=0xff901e;0xffffff;false;false
-stringeol=0x000000;0xe0c0e0;false;false
-character=0xff901e;0xffffff;false;false
-operator=0x301010;0xffffff;false;false
-identifier=0x000000;0xffffff;false;false
-commentlinedoc=0x3f5fbf;0xffffff;true;false
-commentdockeyword=0x3f5fbf;0xffffff;true;true
-commentdockeyworderror=0x3f5fbf;0xffffff;false;false
+default=default
+comment=comment
+commentline=comment
+commentdoc=commentdoc
+commentdocnested=commentdoc
+number=number
+word=word
+word2=word2
+word3=word2
+typedef=type
+string=string
+stringeol=stringeol
+character=string
+operator=operator
+identifier=default
+commentlinedoc=commentdoc,bold
+commentdockeyword=commentdoc,bold,italic
+commentdockeyworderror=commentdoc
 
 [keywords]
 # all items must be in one line

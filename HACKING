@@ -245,7 +245,9 @@ the following things:
    ``styleset_case(GEANY_FILETYPES_FOO, foo);``.
 
 Please try to make your styles fit in with the other filetypes' default
-colors.
+colors, and to use named styles where possible. Filetypes that share a
+lexer should have the same colors. Normally, styles should leave the
+background color empty to match the default color.
 
 Error message parsing
 ^^^^^^^^^^^^^^^^^^^^^

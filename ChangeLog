@@ -6,6 +6,13 @@
  * src/editor.c:
    Only autocomplete scope for scopes matching the current filetype's
    language.
+ * data/filetypes.java, data/filetypes.cpp, data/filetypes.vala,
+   data/filetypes.haxe, data/filetypes.common, data/filetypes.glsl,
+   data/filetypes.actionscript, data/filetypes.cs,
+   data/filetypes.ferite, data/filetypes.c, data/filetypes.d,
+   data/filetypes.javascript, HACKING:
+   Make C++, D lexer filetypes use named styles (apart from uuid,
+   verbatim, regex styles).
 
 
 2009-06-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
