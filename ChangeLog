@@ -1,3 +1,10 @@
+2009-06-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/filetypes.h, src/document.c, src/document.h, src/ui_utils.c:
+   Make GeanyDocument::file_type always be non-NULL, even for a new
+   document with no filetype set.
+
+
 2009-06-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/dialogs.c:

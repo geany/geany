@@ -94,7 +94,8 @@ typedef enum
 GeanyFiletypeGroupID;
 
 
-/* Safe wrapper to get the id field of a possibly NULL filetype pointer. */
+/* Safe wrapper to get the id field of a possibly NULL filetype pointer.
+ * This shouldn't be necessary since GeanyDocument::file_type is always non-NULL. */
 #define FILETYPE_ID(filetype_ptr) \
 	(((filetype_ptr) != NULL) ? (filetype_ptr)->id : GEANY_FILETYPES_NONE)
 

@@ -88,7 +88,7 @@ struct GeanyDocument
 	/** The filetype for this %document, it's only a reference to one of the elements of the global
 	 *  filetypes array. */
 	GeanyFiletype	*file_type;
-	/** TMWorkObject object for this %document. */
+	/** TMWorkObject object for this %document, or @c NULL. */
 	TMWorkObject	*tm_file;
 	/** Whether this %document is read-only. */
 	gboolean		 readonly;

@@ -766,13 +766,11 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft,
 	/* store the opened encoding for undo/redo */
 	store_saved_encoding(doc);
 
-	/*document_set_filetype(idx, (ft == NULL) ? filetypes[GEANY_FILETYPES_NONE] : ft);*/
 	if (ft == NULL && utf8_filename != NULL) /* guess the filetype from the filename if one is given */
 		ft = filetypes_detect_from_document(doc);
 
 	document_set_filetype(doc, ft);	/* also clears taglist */
-	if (ft == NULL)
-		highlighting_set_styles(doc->editor->sci, GEANY_FILETYPES_NONE);
+
 	ui_set_window_title(doc);
 	build_menu_update(doc);
 	document_update_tag_list(doc, FALSE);
@@ -2469,8 +2467,9 @@ void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type)
 {
 	gboolean ft_changed;
 
-	if (type == NULL || doc == NULL)
-		return;
+	g_return_if_fail(doc);
+	if (type == NULL)
+		type = filetypes[GEANY_FILETYPES_NONE];
 
 	geany_debug("%s : %s (%s)",
 		(doc->file_name != NULL) ? doc->file_name : "unknown",
