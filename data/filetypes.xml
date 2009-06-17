@@ -66,6 +66,7 @@ jscript_singlestring=0xff901e;0xffffff;false;false
 # same as operators
 jscript_symbols=0x301010;0xffffff;false;false
 jscript_stringeol=0x000000;0xe0c0e0;false;false
+jscript_regex=0x105090;0xffffff;false;false
 
 # for embedded Python script (<script language="python">...</script>), Python styles from
 # filetypes.python are used

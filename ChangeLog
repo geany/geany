@@ -3,6 +3,10 @@
  * src/win32.c:
    Prevent possible crash on Windows when not setting an initial
    directory for native File Open/Save dialogs.
+ * data/filetypes.xml, src/highlighting.c:
+   Add style 'jscript_regex' for filetype HTML
+   (patch by Chris Macksey, thanks).
+
 
 2009-06-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 

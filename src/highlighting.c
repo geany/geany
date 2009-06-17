@@ -1276,7 +1276,7 @@ static void styleset_html(ScintillaObject *sci)
 
 static void styleset_markup_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_style_array(GEANY_FILETYPES_XML, 55);
+	new_style_array(GEANY_FILETYPES_XML, 56);
 	get_keyfile_hex(config, config_home, "html_default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[0]);
 	get_keyfile_hex(config, config_home, "html_tag", 0x000099, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[1]);
 	get_keyfile_hex(config, config_home, "html_tagunknown", 0xff0000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[2]);
@@ -1335,6 +1335,7 @@ static void styleset_markup_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 	get_keyfile_hex(config, config_home, "jscript_singlestring", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[52]);
 	get_keyfile_hex(config, config_home, "jscript_symbols", 0x301010, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[53]);
 	get_keyfile_hex(config, config_home, "jscript_stringeol", 0x000000, 0xe0c0e0, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[54]);
+	get_keyfile_hex(config, config_home, "jscript_regex", 0x105090, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[55]);
 
 	style_sets[GEANY_FILETYPES_XML].keywords = g_new(gchar*, 7);
 	get_keyfile_keywords(config, config_home, "html", GEANY_FILETYPES_XML, 0, "a abbr acronym address applet area b base basefont bdo big blockquote body br button caption center cite code col colgroup dd del dfn dir div dl dt em embed fieldset font form frame frameset h1 h2 h3 h4 h5 h6 head hr html i iframe img input ins isindex kbd label legend li link map menu meta noframes noscript object ol optgroup option p param pre q quality s samp script select small span strike strong style sub sup table tbody td textarea tfoot th thead title tr tt u ul var xmlns leftmargin topmargin abbr accept-charset accept accesskey action align alink alt archive axis background bgcolor border cellpadding cellspacing char charoff charset checked cite class classid clear codebase codetype color cols colspan compact content coords data datafld dataformatas datapagesize datasrc datetime declare defer dir disabled enctype face for frame frameborder selected headers height href hreflang hspace http-equiv id ismap label lang language link longdesc marginwidth marginheight maxlength media framespacing method multiple name nohref noresize noshade nowrap object onblur onchange onclick ondblclick onfocus onkeydown onkeypress onkeyup onload onmousedown onmousemove onmouseover onmouseout onmouseup onreset onselect onsubmit onunload profile prompt pluginspage readonly rel rev rows rowspan rules scheme scope scrolling shape size span src standby start style summary tabindex target text title type usemap valign value valuetype version vlink vspace width text password checkbox radio submit reset file hidden image public doctype xml xml:lang");
@@ -1422,6 +1423,7 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords)
 	set_sci_style(sci, SCE_HJ_SINGLESTRING, GEANY_FILETYPES_XML, 52);
 	set_sci_style(sci, SCE_HJ_SYMBOLS, GEANY_FILETYPES_XML, 53);
 	set_sci_style(sci, SCE_HJ_STRINGEOL, GEANY_FILETYPES_XML, 54);
+	set_sci_style(sci, SCE_HJ_REGEX, GEANY_FILETYPES_XML, 55);
 
 	/* for HB, VBScript?, use the same styles as for JavaScript */
 	set_sci_style(sci, SCE_HB_START, GEANY_FILETYPES_XML, 43);
