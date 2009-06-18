@@ -1,3 +1,12 @@
+2009-06-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/highlighting.c, README.Packagers, HACKING:
+   Remove gsd_* default styles, use named styles instead.
+   Note: this relies on filetypes.common being installed.
+   Add load_style_entries(), which makes style initialization
+   simpler, used in styleset_c_like_init().
+
+
 2009-06-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/win32.c:
