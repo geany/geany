@@ -7,6 +7,8 @@
    Instantly reload (i.e. rebuild) the toolbar when ui_toolbar.xml is
    saved within Geany.
    Refactor some related code.
+ * tagmanager/conf.c:
+   Strip trailing spaces from "Key" tags.
 
 
 2009-06-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

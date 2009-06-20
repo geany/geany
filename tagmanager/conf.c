@@ -85,6 +85,7 @@ static void findConfTags (void)
 					++cp;
 				}
 				vStringTerminate (name);
+				vStringStripTrailing (name);
 				while (isspace ((int) *cp))
 					++cp;
 				if (*cp == '=')
