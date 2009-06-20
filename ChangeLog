@@ -21,6 +21,8 @@
  * src/prefs.c:
    Add a popup menu for the keybinding list in the preferences dialog
    to easily expand and collapse all groups.
+   Refactor the keybindings code for the preferences dialog, prefix all
+   related functions.
 
 
 2009-06-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
