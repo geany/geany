@@ -252,11 +252,11 @@ static GPid build_view_tex_file(GeanyDocument *doc, gint mode)
 		if (strstr(argv[0], "cmd.exe") != NULL)
 		{
 			argv[term_argv_len   ]  = g_strdup("/Q /C");
-			argv[term_argv_len + 1] = g_strconcat("/bin/sh ", RUN_SCRIPT_CMD, NULL);
+			argv[term_argv_len + 1] = g_strdup(RUN_SCRIPT_CMD);
 		}
 		else
 		{
-			argv[term_argv_len    ] = g_strconcat("/bin/sh ", RUN_SCRIPT_CMD, NULL);
+			argv[term_argv_len    ] = g_strdup(RUN_SCRIPT_CMD);
 			argv[term_argv_len + 1] = NULL;
 		}
 #else
