@@ -12,6 +12,8 @@
  * geany.nsi:
    Quote the full filename to the Geany executable when creating the
    "Open with Geany" context menu item.
+ * plugins/splitwindow.c:
+   Avoid using deprecated GTK API.
 
 
 2009-06-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

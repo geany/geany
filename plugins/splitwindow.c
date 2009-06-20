@@ -392,7 +392,7 @@ void plugin_init(GeanyData *data)
 	GtkWidget *item, *menu;
 
 	menu_items.main = item = gtk_menu_item_new_with_mnemonic(_("_Split Window"));
-	gtk_menu_append(geany_data->main_widgets->tools_menu, item);
+	gtk_menu_shell_append(GTK_MENU_SHELL(geany_data->main_widgets->tools_menu), item);
 	ui_add_document_sensitive(item);
 
 	menu = gtk_menu_new();
@@ -401,17 +401,17 @@ void plugin_init(GeanyData *data)
 	menu_items.horizontal = item =
 		gtk_menu_item_new_with_mnemonic(_("_Horizontally"));
 	g_signal_connect(item, "activate", G_CALLBACK(on_split_horizontally), NULL);
-	gtk_menu_append(menu, item);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
 	menu_items.vertical = item =
 		gtk_menu_item_new_with_mnemonic(_("_Vertically"));
 	g_signal_connect(item, "activate", G_CALLBACK(on_split_vertically), NULL);
-	gtk_menu_append(menu, item);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
 	menu_items.unsplit = item =
 		gtk_menu_item_new_with_mnemonic(_("_Unsplit"));
 	g_signal_connect(item, "activate", G_CALLBACK(on_unsplit), NULL);
-	gtk_menu_append(menu, item);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
 	gtk_widget_show_all(menu_items.main);
 
