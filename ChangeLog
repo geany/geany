@@ -27,6 +27,10 @@
    Init stock items before creating the toolbar (closes #2809324).
  * wscript:
    Generate the geany.pc file also on Windows.
+ * src/ui_utils.c:
+   Invert the logic to determine which Save All we want to use:
+   Use the Tango like icon only for the Tango theme and the Gnome / GTK
+   like icon for any other themes.
 
 
 2009-06-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

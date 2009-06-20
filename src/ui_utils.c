@@ -845,7 +845,7 @@ void ui_set_search_entry_background(GtkWidget *widget, gboolean success)
 }
 
 
-static gboolean have_gnome_icon_theme(void)
+static gboolean have_tango_icon_theme(void)
 {
 	static gboolean result = FALSE;
 	static gboolean checked = FALSE;
@@ -857,7 +857,7 @@ static gboolean have_gnome_icon_theme(void)
 		g_object_get(G_OBJECT(gtk_settings_get_default()), "gtk-icon-theme-name", &theme_name, NULL);
 		setptr(theme_name, g_utf8_strdown(theme_name, -1));
 
-		result = (strstr(theme_name, "gnome") != NULL);
+		result = (strstr(theme_name, "tango") != NULL);
 		checked = TRUE;
 
 		g_free(theme_name);
@@ -879,10 +879,10 @@ GdkPixbuf *ui_new_pixbuf_from_inline(gint img)
 		{
 			/* check whether the icon theme looks like a Gnome icon theme, if so use the
 			 * old Gnome based Save All icon, otherwise assume a Tango-like icon theme */
-			if (have_gnome_icon_theme())
-				return gdk_pixbuf_new_from_inline(-1, save_all_gnome_inline, FALSE, NULL);
-			else
+			if (have_tango_icon_theme())
 				return gdk_pixbuf_new_from_inline(-1, save_all_tango_inline, FALSE, NULL);
+			else
+				return gdk_pixbuf_new_from_inline(-1, save_all_gnome_inline, FALSE, NULL);
 			break;
 		}
 		case GEANY_IMAGE_CLOSE_ALL:
