@@ -9,6 +9,9 @@
    Refactor some related code.
  * tagmanager/conf.c:
    Strip trailing spaces from "Key" tags.
+ * geany.nsi:
+   Quote the full filename to the Geany executable when creating the
+   "Open with Geany" context menu item.
 
 
 2009-06-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
