@@ -25,6 +25,8 @@
    related functions.
  * src/main.c, src/ui_utils.c, src/ui_utils.h:
    Init stock items before creating the toolbar (closes #2809324).
+ * wscript:
+   Generate the geany.pc file also on Windows.
 
 
 2009-06-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

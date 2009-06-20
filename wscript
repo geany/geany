@@ -383,6 +383,22 @@ def build(bld):
 			appname			= 'geany'
 		)
 
+	# geany.pc
+	bld.new_task_gen(
+		features		= 'subst',
+		source			= 'geany.pc.in',
+		target			= 'geany.pc',
+		dict			= { 'VERSION' : VERSION,
+							'prefix': bld.env['PREFIX'],
+							'exec_prefix': '${prefix}',
+							'libdir': '${exec_prefix}/lib',
+							'includedir': '${prefix}/include',
+							'datarootdir': '${prefix}/share',
+							'datadir': '${datarootdir}',
+							'localedir': '${datarootdir}/locale' },
+		install_path	= None if is_win32 else '${LIBDIR}/pkgconfig'
+	)
+
 	if not is_win32:
 		# geany.desktop
 		if bld.env['INTLTOOL']:
@@ -392,22 +408,6 @@ def build(bld):
 				flags			= [ '-d', '-q', '-u', '-c' ],
 				install_path	= '${DATADIR}/applications'
 			)
-
-		# geany.pc
-		bld.new_task_gen(
-			features		= 'subst',
-			source			= 'geany.pc.in',
-			target			= 'geany.pc',
-			dict			= { 'VERSION' : VERSION,
-								'prefix': bld.env['PREFIX'],
-								'exec_prefix': '${prefix}',
-								'libdir': '${exec_prefix}/lib',
-								'includedir': '${prefix}/include',
-								'datarootdir': '${prefix}/share',
-								'datadir': '${datarootdir}',
-								'localedir': '${datarootdir}/locale' },
-			install_path	= '${LIBDIR}/pkgconfig'
-		)
 
 		# geany.1
 		bld.new_task_gen(
