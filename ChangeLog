@@ -18,6 +18,9 @@
    Properly clean up the logging mechanism.
  * src/build.c:
    Fix LaTeX view commands on Windows (part of #2807688).
+ * src/prefs.c:
+   Add a popup menu for the keybinding list in the preferences dialog
+   to easily expand and collapse all groups.
 
 
 2009-06-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

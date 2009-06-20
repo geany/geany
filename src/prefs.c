@@ -129,6 +129,61 @@ enum
 	KB_TREE_INDEX
 };
 
+
+static void on_expand_collapse(GtkWidget *item, gpointer user_data)
+{
+	if (user_data != NULL)
+		gtk_tree_view_expand_all(tree);
+	else
+		gtk_tree_view_collapse_all(tree);
+}
+
+
+static void kb_show_popup_menu(GtkWidget *widget, GdkEventButton *event)
+{
+	GtkWidget *item;
+	static GtkWidget *menu = NULL;
+	gint button, event_time;
+
+	if (menu == NULL)
+	{
+		menu = gtk_menu_new();
+
+		item = ui_image_menu_item_new(GTK_STOCK_ADD, _("_Expand All"));
+		gtk_widget_show(item);
+		gtk_container_add(GTK_CONTAINER(menu), item);
+		g_signal_connect(item, "activate", G_CALLBACK(on_expand_collapse), GINT_TO_POINTER(TRUE));
+
+		item = ui_image_menu_item_new(GTK_STOCK_REMOVE, _("_Collapse All"));
+		gtk_widget_show(item);
+		gtk_container_add(GTK_CONTAINER(menu), item);
+		g_signal_connect(item, "activate", G_CALLBACK(on_expand_collapse), NULL);
+
+		gtk_menu_attach_to_widget(GTK_MENU(menu), widget, NULL);
+	}
+
+	if (event != NULL)
+	{
+		button = event->button;
+		event_time = event->time;
+	}
+	else
+	{
+		button = 0;
+		event_time = gtk_get_current_event_time();
+	}
+
+	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, button, event_time);
+}
+
+
+static gboolean kb_popup_menu_cb(GtkWidget *widget, gpointer data)
+{
+	kb_show_popup_menu(widget, NULL);
+	return TRUE;
+}
+
+
 static void init_kb_tree(void)
 {
 	GtkCellRenderer *renderer;
@@ -157,6 +212,7 @@ static void init_kb_tree(void)
 
 	g_signal_connect(renderer, "edited", G_CALLBACK(on_cell_edited), NULL);
 	g_signal_connect(tree, "button-press-event", G_CALLBACK(on_tree_view_button_press_event), NULL);
+	g_signal_connect(tree, "popup-menu", G_CALLBACK(kb_popup_menu_cb), NULL);
 	g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "button2"), "clicked",
 				G_CALLBACK(on_tree_view_button_press_event), NULL);
 }
@@ -1109,61 +1165,67 @@ static gboolean on_tree_view_button_press_event(
 	GtkTreeSelection *selection;
 	gchar *name;
 
-	/* discard click events in the tree unless it is a double click */
-	if (widget == (GtkWidget*)tree && event->type != GDK_2BUTTON_PRESS)
-		return FALSE;
-
-	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
-	if (gtk_tree_selection_get_selected(selection, &model, &g_iter))
+	if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
 	{
-		if (gtk_tree_model_iter_has_child(model, &g_iter))
-		{	/* double click on a section to expand or collapse it */
-			GtkTreePath *path = gtk_tree_model_get_path(model, &g_iter);
-
-			if (gtk_tree_view_row_expanded(tree, path))
-				gtk_tree_view_collapse_row(tree, path);
-			else
-				gtk_tree_view_expand_row(tree, path, FALSE);
-
-			gtk_tree_path_free(path);
-			return TRUE;
-		}
-
-		gtk_tree_model_get(model, &g_iter, KB_TREE_ACTION, &name, -1);
-		if (name != NULL)
-		{
-			GtkWidget *dialog;
-			GtkWidget *label;
-			gchar *str;
-
-			dialog = gtk_dialog_new_with_buttons(_("Grab Key"), GTK_WINDOW(ui_widgets.prefs_dialog),
-					GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_NO_SEPARATOR,
-					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
-
-			str = g_strdup_printf(
-					_("Press the combination of the keys you want to use for \"%s\"."), name);
-			label = gtk_label_new(str);
-			gtk_misc_set_padding(GTK_MISC(label), 5, 10);
-			gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
-
-			dialog_label = gtk_label_new("");
-			gtk_misc_set_padding(GTK_MISC(dialog_label), 5, 10);
-			gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), dialog_label);
-
-			g_signal_connect(dialog, "key-press-event",
-								G_CALLBACK(on_keytype_dialog_response), NULL);
-			g_signal_connect(dialog, "response", G_CALLBACK(on_dialog_response), NULL);
-
-			/* copy name to global variable to hold it, will be freed in on_dialog_response() */
-			dialog_key_name = g_strdup(name);
-
-			gtk_widget_show_all(dialog);
-			g_free(str);
-			g_free(name);
-		}
+		kb_show_popup_menu(widget, event);
+		return TRUE;
 	}
-	return TRUE;
+	else if (event->type == GDK_2BUTTON_PRESS)
+	{
+
+		selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
+		if (gtk_tree_selection_get_selected(selection, &model, &g_iter))
+		{
+			if (gtk_tree_model_iter_has_child(model, &g_iter))
+			{	/* double click on a section to expand or collapse it */
+				GtkTreePath *path = gtk_tree_model_get_path(model, &g_iter);
+
+				if (gtk_tree_view_row_expanded(tree, path))
+					gtk_tree_view_collapse_row(tree, path);
+				else
+					gtk_tree_view_expand_row(tree, path, FALSE);
+
+				gtk_tree_path_free(path);
+				return TRUE;
+			}
+
+			gtk_tree_model_get(model, &g_iter, KB_TREE_ACTION, &name, -1);
+			if (name != NULL)
+			{
+				GtkWidget *dialog;
+				GtkWidget *label;
+				gchar *str;
+
+				dialog = gtk_dialog_new_with_buttons(_("Grab Key"), GTK_WINDOW(ui_widgets.prefs_dialog),
+						GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_NO_SEPARATOR,
+						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+						GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+
+				str = g_strdup_printf(
+						_("Press the combination of the keys you want to use for \"%s\"."), name);
+				label = gtk_label_new(str);
+				gtk_misc_set_padding(GTK_MISC(label), 5, 10);
+				gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
+
+				dialog_label = gtk_label_new("");
+				gtk_misc_set_padding(GTK_MISC(dialog_label), 5, 10);
+				gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), dialog_label);
+
+				g_signal_connect(dialog, "key-press-event",
+									G_CALLBACK(on_keytype_dialog_response), NULL);
+				g_signal_connect(dialog, "response", G_CALLBACK(on_dialog_response), NULL);
+
+				/* copy name to global variable to hold it, will be freed in on_dialog_response() */
+				dialog_key_name = g_strdup(name);
+
+				gtk_widget_show_all(dialog);
+				g_free(str);
+				g_free(name);
+			}
+		}
+		return TRUE;
+	}
+	return FALSE;
 }
 
 
