@@ -1109,7 +1109,6 @@ void main_quit()
 	encodings_finalize();
 	toolbar_finalize();
 	configuration_finalize();
-	/* must be last */
 	log_finalize();
 
 	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));
