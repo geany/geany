@@ -3534,11 +3534,11 @@ you wish and add or remove additional separators.
 This file must be valid XML, otherwise the global toolbar UI definition
 will be used instead.
 
+Your changes are applied once you save the file.
+
 .. note::
     (1) You cannot add new actions which are not listed below.
     (2) Everything you add or change must be inside the /ui/toolbar/ path.
-    (3) After you finish editing the file, you need to restart Geany
-        for changes to take effect.
 
 
 Available toolbar elements

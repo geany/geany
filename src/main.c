@@ -192,37 +192,7 @@ static void apply_settings(void)
 	}
 	ui_sidebar_show_hide();
 
-	/* sets the icon style of the toolbar */
-	switch (toolbar_prefs.icon_style)
-	{
-		case GTK_TOOLBAR_BOTH:
-		{
-			/*gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "images_and_text1")), TRUE);*/
-			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(ui_widgets.toolbar_menu, "images_and_text2")), TRUE);
-			break;
-		}
-		case GTK_TOOLBAR_ICONS:
-		{
-			/*gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "images_only1")), TRUE);*/
-			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(ui_widgets.toolbar_menu, "images_only2")), TRUE);
-			break;
-		}
-		case GTK_TOOLBAR_TEXT:
-		{
-			/*gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "text_only1")), TRUE);*/
-			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(ui_widgets.toolbar_menu, "text_only2")), TRUE);
-			break;
-		}
-	}
-	gtk_toolbar_set_style(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_style);
-
-	/* sets the icon size of the toolbar, use user preferences (.gtkrc) if not set */
-	if (toolbar_prefs.icon_size == GTK_ICON_SIZE_SMALL_TOOLBAR ||
-		toolbar_prefs.icon_size == GTK_ICON_SIZE_LARGE_TOOLBAR ||
-		toolbar_prefs.icon_size == GTK_ICON_SIZE_MENU)
-	{
-		gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
-	}
+	toolbar_apply_settings();
 	toolbar_update_ui();
 
 	ui_update_view_editor_menu_items();
@@ -275,11 +245,6 @@ static void main_init(void)
 	main_status.opening_session_files	= FALSE;
 
 	main_widgets.window = create_window1();
-	/* add recent files to the File menu */
-	ui_widgets.recent_files_menuitem = ui_lookup_widget(main_widgets.window, "recent_files1");
-	ui_widgets.recent_files_menu_menubar = gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(ui_widgets.recent_files_menuitem),
-							ui_widgets.recent_files_menu_menubar);
 
 	/* add recent projects to the Project menu */
 	ui_widgets.recent_projects_menuitem = ui_lookup_widget(main_widgets.window, "recent_projects1");
@@ -1018,22 +983,12 @@ gint main(gint argc, gchar **argv)
 	}
 
 	/* registering some basic events */
-	{
-		GtkWidget *entry;
+	g_signal_connect(main_widgets.window, "delete-event", G_CALLBACK(on_exit_clicked), NULL);
+	g_signal_connect(main_widgets.window, "window-state-event", G_CALLBACK(on_window_state_event), NULL);
 
-		g_signal_connect(main_widgets.window, "delete-event", G_CALLBACK(on_exit_clicked), NULL);
-		g_signal_connect(main_widgets.window, "window-state-event", G_CALLBACK(on_window_state_event), NULL);
-		g_signal_connect(main_widgets.toolbar, "button-press-event", G_CALLBACK(toolbar_popup_menu), NULL);
+	g_signal_connect(ui_lookup_widget(main_widgets.window, "textview_scribble"),
+							"motion-notify-event", G_CALLBACK(on_motion_event), NULL);
 
-		g_signal_connect(ui_lookup_widget(main_widgets.window, "textview_scribble"),
-								"motion-notify-event", G_CALLBACK(on_motion_event), NULL);
-		entry = toolbar_get_widget_child_by_name("SearchEntry");
-		if (entry != NULL)
-			g_signal_connect(entry, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
-		entry = toolbar_get_widget_child_by_name("GotoEntry");
-		if (entry != NULL)
-			g_signal_connect(entry, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
-	}
 #ifdef HAVE_VTE
 	vte_init();
 #endif

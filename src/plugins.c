@@ -1325,12 +1325,16 @@ void plugin_add_toolbar_item(GeanyPlugin *plugin, GtkToolItem *item)
 		autosep->widget = GTK_WIDGET(sep);
 
 		gtk_toolbar_insert(toolbar, item, pos + 1);
+
+		toolbar_item_ref(sep);
+		toolbar_item_ref(item);
 	}
 	else
 	{
 		pos = gtk_toolbar_get_item_index(toolbar, GTK_TOOL_ITEM(autosep->widget));
 		g_return_if_fail(pos >= 0);
 		gtk_toolbar_insert(toolbar, item, pos);
+		toolbar_item_ref(item);
 	}
 	/* hide the separator widget if there are no toolbar items showing for the plugin */
 	ui_auto_separator_add_ref(autosep, GTK_WIDGET(item));

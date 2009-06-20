@@ -1,3 +1,14 @@
+2009-06-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * data/ui_toolbar.xml, doc/geany.txt, src/build.c,
+   src/geanymenubuttonaction.c, src/geanymenubuttonaction.h, src/main.c,
+   src/plugins.c, src/templates.c, src/toolbar.c, src/toolbar.h,
+   src/ui_utils.c, src/ui_utils.h:
+   Instantly reload (i.e. rebuild) the toolbar when ui_toolbar.xml is
+   saved within Geany.
+   Refactor some related code.
+
+
 2009-06-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/highlighting.c, README.Packagers, HACKING:

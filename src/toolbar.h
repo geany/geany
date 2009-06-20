@@ -49,6 +49,10 @@ void toolbar_add_config_file_menu_item(void);
 
 void toolbar_update_ui(void);
 
+void toolbar_apply_settings(void);
+
+void toolbar_item_ref(GtkToolItem *item);
+
 GtkWidget *toolbar_init(void);
 
 void toolbar_finalize(void);
