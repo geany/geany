@@ -1774,7 +1774,7 @@ static void create_config_files_menu(void)
 }
 
 
-static void add_stock_items(void)
+void ui_init_stock_items(void)
 {
 	GtkIconSet *icon_set;
 	GtkIconFactory *factory = gtk_icon_factory_new();
@@ -1833,8 +1833,6 @@ static void init_recent_files(void)
 
 void ui_init(void)
 {
-	add_stock_items();
-
 	init_recent_files();
 
 	ui_widgets.statusbar = ui_lookup_widget(main_widgets.window, "statusbar");

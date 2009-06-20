@@ -205,6 +205,8 @@ void ui_init(void);
 
 void ui_init_toolbar_widgets(void);
 
+void ui_init_stock_items(void);
+
 void ui_add_config_file_menu_item(const gchar *real_path, const gchar *label,
 		GtkContainer *parent);
 

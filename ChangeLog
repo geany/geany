@@ -23,6 +23,8 @@
    to easily expand and collapse all groups.
    Refactor the keybindings code for the preferences dialog, prefix all
    related functions.
+ * src/main.c, src/ui_utils.c, src/ui_utils.h:
+   Init stock items before creating the toolbar (closes #2809324).
 
 
 2009-06-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
