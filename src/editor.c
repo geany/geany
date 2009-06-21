@@ -3956,12 +3956,7 @@ const gchar *editor_get_eol_char_name(GeanyEditor *editor)
 	if (editor != NULL)
 		mode = sci_get_eol_mode(editor->sci);
 
-	switch (mode)
-	{
-		case SC_EOL_CRLF: return _("Win (CRLF)"); break;
-		case SC_EOL_CR: return _("Mac (CR)"); break;
-		default: return _("Unix (LF)"); break;
-	}
+	return utils_get_eol_name(mode);
 }
 
 
