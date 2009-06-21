@@ -248,14 +248,29 @@ static gchar *ft_templates[GEANY_MAX_BUILT_IN_FILETYPES] = {NULL};
 	g_strconcat(app->configdir, \
 		G_DIR_SEPARATOR_S GEANY_TEMPLATES_SUBDIR G_DIR_SEPARATOR_S, shortname, NULL)
 
-#define TEMPLATES_CREATE_FILE(fname, text)	\
-	if (! g_file_test(fname, G_FILE_TEST_EXISTS)) \
-		utils_write_file(fname, text)
-
 #define TEMPLATES_READ_FILE(fname, contents_ptr) \
 	g_file_get_contents(fname, contents_ptr, NULL, NULL);
 
 
+static void create_template_file_if_necessary(const gchar *filename, const gchar *content)
+{
+	if (! g_file_test(filename, G_FILE_TEST_EXISTS))
+	{
+		if (file_prefs.default_eol_character != SC_EOL_LF)
+		{
+			/* Replace the \n characters in the default template text by the proper
+			 * platform-specific line ending characters. */
+			GString *tmp = g_string_new(content);
+			const gchar *eol_str = (file_prefs.default_eol_character == SC_EOL_CR) ? "\r" : "\r\n";
+
+			utils_string_replace_all(tmp, "\n", eol_str);
+			utils_write_file(filename, tmp->str);
+			g_string_free(tmp, TRUE);
+		}
+		else
+			utils_write_file(filename, content);
+	}
+}
 
 /* FIXME the callers should use GStrings instead of char arrays */
 static gchar *replace_all(gchar *text, const gchar *year, const gchar *date, const gchar *datetime)
@@ -283,11 +298,11 @@ static void init_general_templates(const gchar *year, const gchar *date, const g
 	gchar *template_filename_changelog = TEMPLATES_GET_FILENAME("changelog");
 
 	/* create the template files in the configuration directory, if they don't exist */
-	TEMPLATES_CREATE_FILE(template_filename_fileheader, templates_fileheader);
-	TEMPLATES_CREATE_FILE(template_filename_gpl, templates_gpl_notice);
-	TEMPLATES_CREATE_FILE(template_filename_bsd, templates_bsd_notice);
-	TEMPLATES_CREATE_FILE(template_filename_function, templates_function_description);
-	TEMPLATES_CREATE_FILE(template_filename_changelog, templates_changelog);
+	create_template_file_if_necessary(template_filename_fileheader, templates_fileheader);
+	create_template_file_if_necessary(template_filename_gpl, templates_gpl_notice);
+	create_template_file_if_necessary(template_filename_bsd, templates_bsd_notice);
+	create_template_file_if_necessary(template_filename_function, templates_function_description);
+	create_template_file_if_necessary(template_filename_changelog, templates_changelog);
 
 	/* read the contents */
 	TEMPLATES_READ_FILE(template_filename_fileheader, &templates[GEANY_TEMPLATE_FILEHEADER]);
@@ -326,17 +341,39 @@ static void init_ft_templates(const gchar *year, const gchar *date, const gchar 
 
 		switch (ft_id)
 		{
-			case GEANY_FILETYPES_NONE:	TEMPLATES_CREATE_FILE(fname, templates_filetype_none); break;
-			case GEANY_FILETYPES_C:		TEMPLATES_CREATE_FILE(fname, templates_filetype_c); break;
-			case GEANY_FILETYPES_CPP:	TEMPLATES_CREATE_FILE(fname, templates_filetype_cpp); break;
-			case GEANY_FILETYPES_D:		TEMPLATES_CREATE_FILE(fname, templates_filetype_d); break;
-			case GEANY_FILETYPES_JAVA:	TEMPLATES_CREATE_FILE(fname, templates_filetype_java); break;
-			case GEANY_FILETYPES_PASCAL:TEMPLATES_CREATE_FILE(fname, templates_filetype_pascal); break;
-			case GEANY_FILETYPES_PHP:	TEMPLATES_CREATE_FILE(fname, templates_filetype_php); break;
-			case GEANY_FILETYPES_HTML:	TEMPLATES_CREATE_FILE(fname, templates_filetype_html); break;
-			case GEANY_FILETYPES_RUBY:	TEMPLATES_CREATE_FILE(fname, templates_filetype_ruby); break;
-			case GEANY_FILETYPES_PYTHON:    TEMPLATES_CREATE_FILE(fname, templates_filetype_python); break;
-			case GEANY_FILETYPES_LATEX: TEMPLATES_CREATE_FILE(fname, templates_filetype_latex); break;
+			case GEANY_FILETYPES_NONE:
+				create_template_file_if_necessary(fname, templates_filetype_none);
+				break;
+			case GEANY_FILETYPES_C:
+				create_template_file_if_necessary(fname, templates_filetype_c);
+				break;
+			case GEANY_FILETYPES_CPP:
+				create_template_file_if_necessary(fname, templates_filetype_cpp);
+				break;
+			case GEANY_FILETYPES_D:
+				create_template_file_if_necessary(fname, templates_filetype_d);
+				break;
+			case GEANY_FILETYPES_JAVA:
+				create_template_file_if_necessary(fname, templates_filetype_java);
+				break;
+			case GEANY_FILETYPES_PASCAL:
+				create_template_file_if_necessary(fname, templates_filetype_pascal);
+				break;
+			case GEANY_FILETYPES_PHP:
+				create_template_file_if_necessary(fname, templates_filetype_php);
+				break;
+			case GEANY_FILETYPES_HTML:
+				create_template_file_if_necessary(fname, templates_filetype_html);
+				break;
+			case GEANY_FILETYPES_RUBY:
+				create_template_file_if_necessary(fname, templates_filetype_ruby);
+				break;
+			case GEANY_FILETYPES_PYTHON:
+				create_template_file_if_necessary(fname, templates_filetype_python);
+				break;
+			case GEANY_FILETYPES_LATEX:
+				create_template_file_if_necessary(fname, templates_filetype_latex);
+				break;
 			default: break;
 		}
 		TEMPLATES_READ_FILE(fname, &ft_templates[ft_id]);
