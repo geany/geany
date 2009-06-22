@@ -396,9 +396,9 @@ static void setup_paths(void)
  *  This is a convenience function to set up gettext for internationalisation support
  *  in external plugins. You should call this function early in @ref plugin_init().
  *  If the macro HAVE_LOCALE_H is defined, @a setlocale(LC_ALL, "") is called.
- *  The codeset for the mesaage translations is set to UTF-8.
+ *  The codeset for the message translations is set to UTF-8.
  *
- *  Note that this function only setup the gettext textdomain for you. You still have
+ *  Note that this function only setups the gettext textdomain for you. You still have
  *  to adjust the build system of your plugin to get internationalisation support
  *  working properly.
  *
