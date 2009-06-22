@@ -112,9 +112,11 @@ typedef struct
 
 
 /* For filetypes.common [named_styles] section.
- * e.g. "comment" => &GeanyLexerStyle{0xd00000, 0xffffff, FALSE, FALSE} */
+ * 0xBBGGRR format.
+ * e.g. "comment" => &GeanyLexerStyle{0x0000d0, 0xffffff, FALSE, FALSE} */
 static GHashTable *named_style_hash = NULL;
 
+/* 0xBBGGRR format. */
 static GeanyLexerStyle gsd_default = {0x000000, 0xffffff, FALSE, FALSE};
 
 
@@ -302,12 +304,28 @@ static void get_keyfile_named_style(GKeyFile *config, GKeyFile *configh,
 }
 
 
-/* convert 0x..RRGGBB to 0x..BBGGRR */
+/* Convert 0xRRGGBB to 0xBBGGRR, which scintilla expects. */
 static gint rotate_rgb(gint color)
 {
 	return ((color & 0xFF0000) >> 16) +
 		(color & 0x00FF00) +
 		((color & 0x0000FF) << 16);
+}
+
+
+/* Convert a hard-coded style to scintilla format, allowing -1 to use the default color. */
+static void convert_hex_style(GeanyLexerStyle *style)
+{
+
+	if (style->foreground == -1)
+		style->foreground = gsd_default.foreground;
+	else
+		style->foreground = rotate_rgb(style->foreground);
+
+	if (style->background == -1)
+		style->background = gsd_default.background;
+	else
+		style->background = rotate_rgb(style->background);
 }
 
 
@@ -319,8 +337,7 @@ static void get_keyfile_hex(GKeyFile *config, GKeyFile *configh,
 {
 	GeanyLexerStyle def = {foreground, background, bold, FALSE};
 
-	def.foreground = rotate_rgb(def.foreground);
-	def.background = rotate_rgb(def.background);
+	convert_hex_style(&def);
 	get_keyfile_style(config, configh, key, &def, style);
 }
 
@@ -459,6 +476,25 @@ get_keyfile_whitespace_chars(GKeyFile *config, GKeyFile *configh)
 }
 
 
+static void add_named_style(GKeyFile *config, const gchar *key)
+{
+	const gchar group[] = "named_styles";
+	gchar **list;
+	gsize len;
+
+	list = g_key_file_get_string_list(config, group, key, &len, NULL);
+	/* we allow a named style to reference another style above it */
+	if (list && len >= 1)
+	{
+		GeanyLexerStyle *style = g_new0(GeanyLexerStyle, 1);
+
+		parse_keyfile_style(list, &gsd_default, style);
+		g_hash_table_insert(named_style_hash, g_strdup(key), style);
+	}
+	g_strfreev(list);
+}
+
+
 static void get_named_styles(GKeyFile *config)
 {
 	const gchar group[] = "named_styles";
@@ -470,23 +506,15 @@ static void get_named_styles(GKeyFile *config)
 
 	while (1)
 	{
-		gchar **list;
-		gsize len;
 		const gchar *key = *ptr;
 
 		if (!key)
 			break;
 
-		list = g_key_file_get_string_list(config, group, key, &len, NULL);
-		/* we allow a named style to reference another style above it */
-		if (list && len >= 1)
-		{
-			GeanyLexerStyle *style = g_new0(GeanyLexerStyle, 1);
+		/* don't replace already read default style with system one */
+		if (!g_str_equal(key, "default"))
+			add_named_style(config, key);
 
-			parse_keyfile_style(list, &gsd_default, style);
-			g_hash_table_insert(named_style_hash, g_strdup(key), style);
-		}
-		g_strfreev(list);
 		ptr++;
 	}
 	g_strfreev(keys);
@@ -503,8 +531,14 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 
 	/* named styles */
 	named_style_hash = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
+
+	/* first set default to the "default" named style */
+	add_named_style(config, "default");
+	add_named_style(config_home, "default");
+	read_named_style("default", &gsd_default);
+
 	get_named_styles(config);
-	/* home overwrites any system named style */
+	/* home overrides any system named style */
 	get_named_styles(config_home);
 
 	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &common_style_set.styling[GCS_DEFAULT]);
@@ -761,7 +795,8 @@ apply_filetype_properties(ScintillaObject *sci, gint lexer, filetype_id ft_id)
 #define foreach_range(i, size) \
 		for (i = 0; i < size; i++)
 
-/* If used, entries[n].style should have foreground and background in 0xRRGGBB format */
+/* entries contains the default styles for the filetype.
+ * If used, entries[n].style should have foreground and background in 0xRRGGBB format, or -1. */
 static void load_style_entries(GKeyFile *config, GKeyFile *config_home, gint filetype_idx,
 		StyleEntry *entries, gsize entries_len)
 {
@@ -779,8 +814,7 @@ static void load_style_entries(GKeyFile *config, GKeyFile *config_home, gint fil
 		{
 			GeanyLexerStyle *def = entry->style;
 
-			def->foreground = rotate_rgb(def->foreground);
-			def->background = rotate_rgb(def->background);
+			convert_hex_style(def);
 			get_keyfile_style(config, config_home, entry->name, def, style);
 		}
 	}
@@ -791,9 +825,9 @@ static void load_style_entries(GKeyFile *config, GKeyFile *config_home, gint fil
 static void
 styleset_c_like_init(GKeyFile *config, GKeyFile *config_home, gint filetype_idx)
 {
-	static GeanyLexerStyle uuid = {0x404080, 0xffffff, FALSE, FALSE};
-	static GeanyLexerStyle verbatim = {0x301010, 0xffffff, FALSE, FALSE};
-	static GeanyLexerStyle regex = {0x105090, 0xffffff, FALSE, FALSE};
+	static GeanyLexerStyle uuid = {0x404080, -1, FALSE, FALSE};
+	static GeanyLexerStyle verbatim = {0x301010, -1, FALSE, FALSE};
+	static GeanyLexerStyle regex = {0x105090, -1, FALSE, FALSE};
 	StyleEntry entries[] =
  	{
 		{"default",		"default", NULL},

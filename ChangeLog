@@ -1,3 +1,16 @@
+2009-06-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/highlighting.c, doc/geany.txt, doc/geany.html,
+   data/filetypes.common, TODO:
+   Make filetypes.common named styles use the "default" named style for
+   all missing style fields.
+   Set named styles to usually leave the background style empty. This
+   currently allows C-like filetypes to have a common default
+   background color.
+   Allow hard-coded colors to use -1 for the default color.
+   Add some highlighting style examples to the manual.
+
+
 2009-06-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/templates.c:

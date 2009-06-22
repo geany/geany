@@ -2926,7 +2926,7 @@ Format
 In this section the colors for syntax highlighting are defined. The
 manual format is:
 
-* ``key=foreground_color;background_color;bold;italic``
+* ``key=foreground_color;background_color;bold_flag;italic_flag``
 
 Colors have to be specified as RGB hex values prefixed by
 0x. For example red is 0xff0000, blue is 0x0000ff. The values are
@@ -2934,6 +2934,15 @@ case-insensitive, but it is a good idea to use small letters. Bold
 and italic are flags and should only be "true" or "false". If their
 value is something other than "true" or "false", "false" is assumed.
 
+You can omit fields to use the ``"default"`` named style.
+
+E.g. ``key=0xff0000;;true``
+
+This makes the key style have red foreground text, default background
+color text and bold emphasis.
+
+Using a named style
+*******************
 The second format uses a *named style* name to reference a style
 defined in filetypes.common.
 
@@ -2942,11 +2951,13 @@ defined in filetypes.common.
 
 The bold and italic parts are optional, and if present are used to
 toggle the bold or italic flags to the opposite of the named style's
-flags.
+flags. In contrast to style definition booleans, they are a literal
+",bold,italic" and commas are used instead of semi-colons.
 
-.. note::
-    Commas are used for these so Geany can easily determine whether a
-    named style is used or not.
+E.g. ``key=comment,italic``
+
+This makes the key style match the ``"comment"`` named style, but with
+italic emphasis.
 
 To define named styles, see the filetypes.common `[named_styles]
 Section`_.

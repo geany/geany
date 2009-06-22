@@ -1,7 +1,9 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
-# foreground;background;bold;italic - used for filetype All/None
-default=0x000000;0xffffff;false;false
+# use foreground;background;bold;italic or named_style,bold,italic
+
+# used for filetype All/None
+default=default
 
 # 3rd selection argument is true to override default foreground
 # 4th selection argument is true to override default background
@@ -47,7 +49,7 @@ caret=0x000000;0x000000;false;false
 caret_width=1;0;false;false
 
 # set foreground and background colour of indentation guides
-indent_guide=0xc0c0c0;0xffffff;false;false
+indent_guide=0xc0c0c0;;false;false
 
 # third argument: if true, use this foreground color. If false, use the default value defined by the filetypes.
 # fourth argument: if true, use this background color. If false, use the default value defined by the filetypes.
@@ -87,17 +89,20 @@ whitespace_chars=\s\t!\"#$%&'()*+,-./:;<=>?@[\\]^`{|}~
 
 [named_styles]
 # style names to use in filetypes.* [styling] sections
+# use foreground;background;bold;italic
+# normally background should be left blank to use the "default" style
+
 default=0x000000;0xffffff;false;false
-comment=0xd00000;0xffffff;false;false
-commentdoc=0x3f5fbf;0xffffff;false;false
-number=0x007f00;0xffffff;false;false
+comment=0xd00000
+commentdoc=0x3f5fbf
+number=0x007f00
 # keyword
-word=0x00007f;0xffffff;true;false
-# e.g. types from global tags file
-word2=0x991111;0xffffff;true;false
-string=0xff901e;0xffffff;false;false
-preprocessor=0x007f7f;0xffffff;false;false
-operator=0x301010;0xffffff;false;false
+word=0x00007f;;true;false
+# e.g. global types from a *.c.tags file
+word2=0x991111;;true;false
+string=0xff901e
+preprocessor=0x007f7f
+operator=0x301010
 # unterminated string
 stringeol=0x000000;0xe0c0e0;false;false
-type=0x0000d0;0xffffff;true;false
+type=0x0000d0;;true;false

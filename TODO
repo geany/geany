@@ -9,7 +9,8 @@ Note: features included in brackets have lower priority.
 	Next version or later:
 	o documentation: list and explain filetype modes
 	o common default highlighting styles configurable for all
-	  programming languages (filetypes.common named styles now done)
+	  programming languages (done for C-like filetypes using
+	  filetypes.common named styles)
 	o configurable filetype and project make commands (e.g. using
 	  bud for D)
 	o (support for adding plugin filetypes - SCI_LOADLEXERLIBRARY?)
