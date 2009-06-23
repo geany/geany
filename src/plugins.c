@@ -484,7 +484,13 @@ add_kb_group(Plugin *plugin)
 {
 	guint i;
 
-	g_return_if_fail(NZV(plugin->key_group->name));
+	if (!NZV(plugin->key_group->name))
+	{
+		geany_debug("Plugin \"%s\" has not set a name for its keybinding group"
+			" - ignoring all keybindings!",
+			plugin->info.name);
+		return;
+	}
 	g_return_if_fail(! g_str_equal(plugin->key_group->name, keybindings_keyfile_group_name));
 
 	for (i = 0; i < plugin->key_group->count; i++)
