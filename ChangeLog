@@ -3,6 +3,8 @@
  * src/plugins.c:
    Add debug message if plugin has not set a name for its keybinding
    group.
+ * data/filetype_extensions.conf:
+   Add *.m4 for shell scripts.
 
 
 2009-06-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
