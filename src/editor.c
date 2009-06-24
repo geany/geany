@@ -1629,10 +1629,12 @@ gchar *editor_get_calltip_text(GeanyEditor *editor, const TMTag *tag)
 }
 
 
+/* HTML entities auto completion from html_entities.tags text file */
 static gboolean
 autocomplete_html(ScintillaObject *sci, const gchar *root, gsize rootlen)
-{	/* HTML entities auto completion */
+{
 	guint i, j = 0;
+	gboolean found = FALSE;
 	GString *words;
 	const gchar **entities = symbols_get_html_entities();
 
@@ -1652,12 +1654,14 @@ autocomplete_html(ScintillaObject *sci, const gchar *root, gsize rootlen)
 			if (j++ > 0)
 				g_string_append_c(words, '\n');
 			g_string_append(words, entities[i]);
+			found = TRUE;
 		}
 	}
-	if (words->len > 0)
+	if (found)
 		show_autocomplete(sci, rootlen, words->str);
+
 	g_string_free(words, TRUE);
-	return TRUE;
+	return found;
 }
 
 
@@ -1669,14 +1673,17 @@ autocomplete_tags(GeanyEditor *editor, const gchar *root, gsize rootlen)
 	const GPtrArray *tags;
 	GeanyDocument *doc;
 
-	g_return_val_if_fail(editor != NULL && editor->document->file_type != NULL, FALSE);
+	g_return_val_if_fail(editor, FALSE);
 
 	doc = editor->document;
 
 	tags = tm_workspace_find(root, tm_tag_max_t, attrs, TRUE, doc->file_type->lang);
 	if (tags)
+	{
 		show_tags_list(editor, tags, rootlen);
-	return TRUE;
+		return tags->len > 0;
+	}
+	return FALSE;
 }
 
 
@@ -1701,6 +1708,70 @@ static gboolean autocomplete_check_for_html(gint ft_id, gint style)
 }
 
 
+/* Algorithm based on based on Scite's StartAutoCompleteWord() */
+static void complete_doc_word(GeanyEditor *editor, gchar *root, gsize rootlen)
+{
+	ScintillaObject *sci = editor->sci;
+	gchar *word;
+	gint len, current, word_end;
+	gint pos_find, flags;
+	guint word_length;
+	GString *words;
+	struct TextToFind ttf;
+
+	len = sci_get_length(sci);
+	current = sci_get_current_position(sci) - rootlen;
+
+	ttf.lpstrText = root;
+	ttf.chrg.cpMin = 0;
+	ttf.chrg.cpMax = len;
+	ttf.chrgText.cpMin = 0;
+	ttf.chrgText.cpMax = 0;
+	flags = SCFIND_WORDSTART | SCFIND_MATCHCASE;
+
+	words = g_string_sized_new(256);
+	g_string_append_c(words, ' ');
+
+	/* search the whole document for the word root and collect results */
+	pos_find = scintilla_send_message(sci, SCI_FINDTEXT, flags, (uptr_t) &ttf);
+	while (pos_find >= 0 && pos_find < len)
+	{
+		word_end = pos_find + rootlen;
+		if (pos_find != current)
+		{
+			while (word_end < len && strchr(GEANY_WORDCHARS, sci_get_char_at(sci, word_end)) != NULL)
+				word_end++;
+
+			word_length = word_end - pos_find;
+			if (word_length > rootlen)
+			{
+				word = g_malloc0(word_length + 3);
+				sci_get_text_range(sci, pos_find, word_end, word + 1);
+				word[0] = ' ';
+				word[word_length + 1] = ' ';
+				/* search the words string whether we already have the word in, otherwise add it */
+				if (strstr(words->str, word) == NULL)
+					g_string_append(words, word + 1);
+				g_free(word);
+			}
+		}
+		ttf.chrg.cpMin = word_end;
+		pos_find = scintilla_send_message(sci, SCI_FINDTEXT, flags, (uptr_t) &ttf);
+	}
+
+	if (words->len > 1)
+	{
+		g_strdelimit(words->str, " ", '\n');
+		words->str[words->len - 1] = '\0'; /* remove the trailing '\n' */
+		show_autocomplete(sci, rootlen, words->str + 1);
+	}
+	else
+		scintilla_send_message(sci, SCI_AUTOCCANCEL, 0, 0);
+
+	g_string_free(words, TRUE);
+}
+
+
 gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean force)
 {
 	gint line, line_start, line_len, line_pos, current, rootlen, startword, lexer, style;
@@ -1714,9 +1785,6 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 		return FALSE;
 
 	g_return_val_if_fail(editor != NULL, FALSE);
-
-	if (editor->document->file_type == NULL)
-		return FALSE;
 
 	/* If we are at the beginning of the document, we skip autocompletion as we can't determine the
 	 * necessary styling information */
@@ -1757,16 +1825,23 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 	root = linebuf + startword;
 	rootlen = current - startword;
 
-	if (autocomplete_check_for_html(ft->id, style))
-		ret = autocomplete_html(sci, root, rootlen);
-	else
+	if (rootlen > 0)
 	{
-		/* force is set when called by keyboard shortcut, otherwise start at the
-		 * editor_prefs.symbolcompletion_min_chars'th char */
-		if (force || rootlen >= editor_prefs.symbolcompletion_min_chars)
-			ret = autocomplete_tags(editor, root, rootlen);
+		if (autocomplete_check_for_html(ft->id, style))
+		{
+			ret = autocomplete_html(sci, root, rootlen);
+		}
+		else
+		{
+			/* force is set when called by keyboard shortcut, otherwise start at the
+			 * editor_prefs.symbolcompletion_min_chars'th char */
+			if (force || rootlen >= editor_prefs.symbolcompletion_min_chars)
+				ret = autocomplete_tags(editor, root, rootlen);
+		}
+		/* If forcing and there's nothing else to show, complete from words in document */
+		if (!ret && force)
+			complete_doc_word(editor, root, rootlen);
 	}
-
 	g_free(linebuf);
 	return ret;
 }

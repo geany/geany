@@ -1,3 +1,11 @@
+2009-06-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/editor.c:
+   If forcing autocompletion and there's nothing else to show, complete
+   from words in the current document (using code from Enrico's
+   'AutoComplete Test' plugin).
+
+
 2009-06-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/plugins.c:
