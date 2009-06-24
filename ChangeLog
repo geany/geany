@@ -1,3 +1,9 @@
+2009-06-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * data/ui_toolbar.xml, src/toolbar.c:
+   Add 'Build' toolbar button to the default layout.
+
+
 2009-06-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/editor.c:

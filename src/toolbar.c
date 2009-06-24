@@ -96,6 +96,7 @@ const gchar *toolbar_markup =
 	"<toolitem action='NavFor'/>"
 	"<separator/>"
 	"<toolitem action='Compile'/>"
+	"<toolitem action='Build'/>"
 	"<toolitem action='Run'/>"
 	"<separator/>"
 	"<toolitem action='Color'/>"

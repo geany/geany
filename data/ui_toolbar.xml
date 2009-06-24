@@ -26,6 +26,7 @@ at http://www.geany.org/manual/current/index.html#customizing-the-toolbar.
 		<toolitem action='NavFor' />
 		<separator/>
 		<toolitem action='Compile' />
+		<toolitem action='Build' />
 		<toolitem action='Run' />
 		<separator/>
 		<toolitem action='Color' />
