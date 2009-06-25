@@ -2245,3 +2245,19 @@ gboolean on_window_state_event         (GtkWidget           *widget,
 	return FALSE;
 }
 
+
+void
+on_customize_toolbar1_activate         (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	toolbar_configure();
+}
+
+
+void
+on_button_customize_toolbar_clicked    (GtkButton       *button,
+                                        gpointer         user_data)
+{
+	toolbar_configure();
+}
+

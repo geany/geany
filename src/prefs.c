@@ -1536,12 +1536,6 @@ void prefs_show_dialog(void)
 		gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
 		gtk_box_pack_start(GTK_BOX(ui_lookup_widget(ui_widgets.prefs_dialog, "vbox27")),
 			label, FALSE, TRUE, 5);
-		/* page Toolbar */
-		label = geany_wrap_label_new(_("<i>Notice: To customize the toolbar elements, edit the file 'ui_toolbar.xml'. Please see the documentation for details.</i>"));
-		gtk_widget_show(label);
-		gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-		gtk_box_pack_start(GTK_BOX(ui_lookup_widget(ui_widgets.prefs_dialog, "vbox15")),
-			label, FALSE, TRUE, 5);
 		/* page Editor->Indentation */
 		label = geany_wrap_label_new(_("<i>Warning: these settings are overridden by the current project. See <b>Project->Properties</b>.</i>"));
 		gtk_widget_show(label);

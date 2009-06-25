@@ -606,3 +606,11 @@ on_very_small_icons1_activate          (GtkCheckMenuItem *menuitem,
 gboolean on_window_state_event         (GtkWidget           *widget,
                                         GdkEventWindowState *event,
                                         gpointer             user_data);
+
+void
+on_customize_toolbar1_activate         (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_button_customize_toolbar_clicked    (GtkButton       *button,
+                                        gpointer         user_data);

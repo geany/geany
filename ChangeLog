@@ -4,6 +4,10 @@
    src/toolbar.c, src/toolbar.h:
    Remove ui_toolbar.xml Configuration Files menu item.
    Add a real toolbar editor dialog.
+ * geany.glade, src/callbacks.c, src/callbacks.h, src/interface.c,
+   src/prefs.c:
+   Add a button in the preferences dialog and an item for the toolbar
+   popup menu to run the toolbar editor dialog.
 
 
 2009-06-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

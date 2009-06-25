@@ -1717,8 +1717,10 @@ create_toolbar_popup_menu1 (void)
   GtkWidget *small_icons1;
   GtkWidget *very_small_icons1;
   GtkWidget *separator20;
+  GtkWidget *customize_toolbar1;
+  GtkWidget *image2878;
   GtkWidget *hide_toolbar1;
-  GtkWidget *image2853;
+  GtkWidget *image2879;
 
   toolbar_popup_menu1 = gtk_menu_new ();
 
@@ -1726,13 +1728,11 @@ create_toolbar_popup_menu1 (void)
   images_and_text2_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (images_and_text2));
   gtk_widget_show (images_and_text2);
   gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), images_and_text2);
-  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (images_and_text2), TRUE);
 
   images_only2 = gtk_radio_menu_item_new_with_mnemonic (images_and_text2_group, _("_Images Only"));
   images_and_text2_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (images_only2));
   gtk_widget_show (images_only2);
   gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), images_only2);
-  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (images_only2), TRUE);
 
   text_only2 = gtk_radio_menu_item_new_with_mnemonic (images_and_text2_group, _("_Text Only"));
   images_and_text2_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (text_only2));
@@ -1749,31 +1749,38 @@ create_toolbar_popup_menu1 (void)
   large_icons1_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (large_icons1));
   gtk_widget_show (large_icons1);
   gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), large_icons1);
-  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (large_icons1), TRUE);
 
   small_icons1 = gtk_radio_menu_item_new_with_mnemonic (large_icons1_group, _("_Small Icons"));
   large_icons1_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (small_icons1));
   gtk_widget_show (small_icons1);
   gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), small_icons1);
-  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (small_icons1), TRUE);
 
   very_small_icons1 = gtk_radio_menu_item_new_with_mnemonic (large_icons1_group, _("_Very Small Icons"));
   large_icons1_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (very_small_icons1));
   gtk_widget_show (very_small_icons1);
   gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), very_small_icons1);
+  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (very_small_icons1), TRUE);
 
   separator20 = gtk_separator_menu_item_new ();
   gtk_widget_show (separator20);
   gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), separator20);
   gtk_widget_set_sensitive (separator20, FALSE);
 
-  hide_toolbar1 = gtk_image_menu_item_new_with_mnemonic (_("_Hide toolbar"));
+  customize_toolbar1 = gtk_image_menu_item_new_with_mnemonic (_("_Customize Toolbar"));
+  gtk_widget_show (customize_toolbar1);
+  gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), customize_toolbar1);
+
+  image2878 = gtk_image_new_from_stock ("gtk-properties", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image2878);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (customize_toolbar1), image2878);
+
+  hide_toolbar1 = gtk_image_menu_item_new_with_mnemonic (_("_Hide Toolbar"));
   gtk_widget_show (hide_toolbar1);
   gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), hide_toolbar1);
 
-  image2853 = gtk_image_new_from_stock ("gtk-cancel", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image2853);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (hide_toolbar1), image2853);
+  image2879 = gtk_image_new_from_stock ("gtk-cancel", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image2879);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (hide_toolbar1), image2879);
 
   g_signal_connect ((gpointer) images_and_text2, "activate",
                     G_CALLBACK (on_images_and_text2_activate),
@@ -1793,6 +1800,9 @@ create_toolbar_popup_menu1 (void)
   g_signal_connect ((gpointer) very_small_icons1, "activate",
                     G_CALLBACK (on_very_small_icons1_activate),
                     NULL);
+  g_signal_connect ((gpointer) customize_toolbar1, "activate",
+                    G_CALLBACK (on_customize_toolbar1_activate),
+                    NULL);
   g_signal_connect ((gpointer) hide_toolbar1, "activate",
                     G_CALLBACK (on_hide_toolbar1_activate),
                     NULL);
@@ -1807,8 +1817,10 @@ create_toolbar_popup_menu1 (void)
   GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, small_icons1, "small_icons1");
   GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, very_small_icons1, "very_small_icons1");
   GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, separator20, "separator20");
+  GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, customize_toolbar1, "customize_toolbar1");
+  GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, image2878, "image2878");
   GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, hide_toolbar1, "hide_toolbar1");
-  GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, image2853, "image2853");
+  GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, image2879, "image2879");
 
   return toolbar_popup_menu1;
 }
@@ -2400,6 +2412,12 @@ create_prefs_dialog (void)
   GtkWidget *radio_toolbar_image;
   GtkWidget *radio_toolbar_verysmall;
   GtkWidget *label167;
+  GtkWidget *hbox15;
+  GtkWidget *button_customize_toolbar;
+  GtkWidget *alignment45;
+  GtkWidget *hbox16;
+  GtkWidget *image2877;
+  GtkWidget *label236;
   GtkWidget *label164;
   GtkWidget *notebook4;
   GtkWidget *vbox5;
@@ -3315,6 +3333,30 @@ create_prefs_dialog (void)
   gtk_widget_show (label167);
   gtk_frame_set_label_widget (GTK_FRAME (frame13), label167);
   gtk_label_set_use_markup (GTK_LABEL (label167), TRUE);
+
+  hbox15 = gtk_hbox_new (TRUE, 0);
+  gtk_widget_show (hbox15);
+  gtk_box_pack_start (GTK_BOX (vbox15), hbox15, FALSE, FALSE, 0);
+
+  button_customize_toolbar = gtk_button_new ();
+  gtk_widget_show (button_customize_toolbar);
+  gtk_box_pack_start (GTK_BOX (hbox15), button_customize_toolbar, FALSE, FALSE, 0);
+
+  alignment45 = gtk_alignment_new (0.5, 0.5, 0, 0);
+  gtk_widget_show (alignment45);
+  gtk_container_add (GTK_CONTAINER (button_customize_toolbar), alignment45);
+
+  hbox16 = gtk_hbox_new (FALSE, 2);
+  gtk_widget_show (hbox16);
+  gtk_container_add (GTK_CONTAINER (alignment45), hbox16);
+
+  image2877 = gtk_image_new_from_stock ("gtk-properties", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_show (image2877);
+  gtk_box_pack_start (GTK_BOX (hbox16), image2877, FALSE, FALSE, 0);
+
+  label236 = gtk_label_new_with_mnemonic (_("Customize Toolbar"));
+  gtk_widget_show (label236);
+  gtk_box_pack_start (GTK_BOX (hbox16), label236, FALSE, FALSE, 0);
 
   label164 = gtk_label_new (_("Toolbar"));
   gtk_widget_show (label164);
@@ -4585,6 +4627,10 @@ create_prefs_dialog (void)
   gtk_dialog_add_action_widget (GTK_DIALOG (prefs_dialog), button5, GTK_RESPONSE_OK);
   GTK_WIDGET_SET_FLAGS (button5, GTK_CAN_DEFAULT);
 
+  g_signal_connect ((gpointer) button_customize_toolbar, "clicked",
+                    G_CALLBACK (on_button_customize_toolbar_clicked),
+                    NULL);
+
   /* Store pointers to all widgets, for use by lookup_widget(). */
   GLADE_HOOKUP_OBJECT_NO_REF (prefs_dialog, prefs_dialog, "prefs_dialog");
   GLADE_HOOKUP_OBJECT_NO_REF (prefs_dialog, dialog_vbox3, "dialog_vbox3");
@@ -4708,6 +4754,12 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_toolbar_image, "radio_toolbar_image");
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_toolbar_verysmall, "radio_toolbar_verysmall");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label167, "label167");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox15, "hbox15");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, button_customize_toolbar, "button_customize_toolbar");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment45, "alignment45");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox16, "hbox16");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, image2877, "image2877");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label236, "label236");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label164, "label164");
   GLADE_HOOKUP_OBJECT (prefs_dialog, notebook4, "notebook4");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox5, "vbox5");
