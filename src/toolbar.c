@@ -39,6 +39,7 @@
 #include "geanymenubuttonaction.h"
 #include "geanyentryaction.h"
 
+#include <glib/gstdio.h>
 
 
 GeanyToolbarPrefs toolbar_prefs;
@@ -167,7 +168,7 @@ void toolbar_item_ref(GtkToolItem *item)
 }
 
 
-static GtkWidget *toolbar_reload(void)
+static GtkWidget *toolbar_reload(const gchar *markup)
 {
 	gint i;
 	GSList *l;
@@ -206,29 +207,34 @@ static GtkWidget *toolbar_reload(void)
 		gtk_ui_manager_ensure_update(uim);
 	}
 
-	/* Load the toolbar UI XML file from disk (first from config dir, then try data dir) */
-	filename = utils_build_path(app->configdir, "ui_toolbar.xml", NULL);
-	merge_id = gtk_ui_manager_add_ui_from_file(uim, filename, &error);
-	if (merge_id == 0)
+	if (markup != NULL)
 	{
-		if (error->code != G_FILE_ERROR_NOENT)
-			geany_debug("Loading user toolbar UI definition failed (%s).", error->message);
-		g_error_free(error);
-		error = NULL;
-
-		filename = utils_build_path(app->datadir, "ui_toolbar.xml", NULL);
+		merge_id = gtk_ui_manager_add_ui_from_string(uim, markup, -1, &error);
+	}
+	else
+	{
+		/* Load the toolbar UI XML file from disk (first from config dir, then try data dir) */
+		filename = utils_build_path(app->configdir, "ui_toolbar.xml", NULL);
 		merge_id = gtk_ui_manager_add_ui_from_file(uim, filename, &error);
 		if (merge_id == 0)
 		{
-			geany_debug(
-				"UI creation failed, using internal fallback definition. Error message: %s",
-				error->message);
+			if (! g_error_matches(error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+				geany_debug("Loading user toolbar UI definition failed (%s).", error->message);
 			g_error_free(error);
-			/* finally load the internally defined markup as fallback */
-			merge_id = gtk_ui_manager_add_ui_from_string(uim, toolbar_markup, -1, NULL);
+			error = NULL;
+
+			filename = utils_build_path(app->datadir, "ui_toolbar.xml", NULL);
+			merge_id = gtk_ui_manager_add_ui_from_file(uim, filename, &error);
 		}
 	}
-
+	if (error != NULL)
+	{
+		geany_debug("UI creation failed, using internal fallback definition. Error message: %s",
+			error->message);
+		g_error_free(error);
+		/* finally load the internally defined markup as fallback */
+		merge_id = gtk_ui_manager_add_ui_from_string(uim, toolbar_markup, -1, NULL);
+	}
 	main_widgets.toolbar = gtk_ui_manager_get_widget(uim, "/ui/GeanyToolbar");
 	ui_init_toolbar_widgets();
 
@@ -308,27 +314,6 @@ static GtkWidget *toolbar_reload(void)
 }
 
 
-static void document_save_cb(G_GNUC_UNUSED GObject *object, GeanyDocument *doc,
-							 G_GNUC_UNUSED gpointer data)
-{
-	g_return_if_fail(NZV(doc->real_path));
-
-	if (utils_str_equal(doc->real_path, utils_build_path(app->configdir, "ui_toolbar.xml", NULL)))
-	{
-		main_widgets.toolbar = toolbar_reload();
-		ui_set_statusbar(FALSE, _("Toolbar reloaded."));
-	}
-}
-
-
-void toolbar_add_config_file_menu_item(void)
-{
-	ui_add_config_file_menu_item(
-		utils_build_path(app->configdir, "ui_toolbar.xml", NULL), NULL, NULL);
-	g_signal_connect(geany_object, "document-save", G_CALLBACK(document_save_cb), NULL);
-}
-
-
 GtkWidget *toolbar_init(void)
 {
 	GtkWidget *toolbar;
@@ -376,7 +361,7 @@ GtkWidget *toolbar_init(void)
 
 	gtk_ui_manager_insert_action_group(uim, group, 0);
 
-	toolbar = toolbar_reload();
+	toolbar = toolbar_reload(NULL);
 
 	return toolbar;
 }
@@ -532,3 +517,456 @@ void toolbar_apply_settings(void)
 		gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
 	}
 }
+
+
+#define TB_EDITOR_SEPARATOR _("--- Separator ---")
+typedef struct
+{
+	GtkWidget *dialog;
+
+	GtkTreeView *tree_available;
+	GtkTreeView *tree_used;
+
+	GtkListStore *store_available;
+	GtkListStore *store_used;
+
+	GtkTreePath *last_drag_path;
+	GtkTreeViewDropPosition last_drag_pos;
+
+	GtkWidget *drag_source;
+} TBEditorWidget;
+
+static const GtkTargetEntry tb_editor_dnd_targets[] =
+{
+	{ "GEANY_TB_EDITOR_ROW", 0, 0 }
+};
+static const gint tb_editor_dnd_targets_len = G_N_ELEMENTS(tb_editor_dnd_targets);
+
+
+
+static void tb_editor_handler_start_element(GMarkupParseContext *context, const gchar *element_name,
+											const gchar **attribute_names,
+											const gchar **attribute_values, gpointer data,
+											GError **error)
+{
+	gint i;
+	GSList **actions = data;
+
+	/* This is very basic parsing, stripped down any error checking, requires a valid UI markup. */
+	if (utils_str_equal(element_name, "separator"))
+		*actions = g_slist_append(*actions, g_strdup(TB_EDITOR_SEPARATOR));
+
+	for (i = 0; attribute_names[i] != NULL; i++)
+	{
+		if (utils_str_equal(attribute_names[i], "action"))
+		{
+			*actions = g_slist_append(*actions, g_strdup(attribute_values[i]));
+		}
+	}
+}
+
+static const GMarkupParser tb_editor_xml_parser =
+{
+	tb_editor_handler_start_element, NULL, NULL, NULL, NULL
+};
+
+
+static GSList *tb_editor_parse_ui(const gchar *buffer, gssize length, GError **error)
+{
+	GMarkupParseContext *context;
+	GSList *list = NULL;
+
+	context = g_markup_parse_context_new(&tb_editor_xml_parser, 0, &list, NULL);
+	g_markup_parse_context_parse(context, buffer, length, error);
+	g_markup_parse_context_free(context);
+
+	return list;
+}
+
+
+static void tb_editor_scroll_to_iter(GtkTreeView *treeview, GtkTreeIter *iter)
+{
+	GtkTreePath *path = gtk_tree_model_get_path(gtk_tree_view_get_model(treeview), iter);
+	gtk_tree_view_scroll_to_cell(treeview, path, NULL, TRUE, 0.5, 0.0);
+	gtk_tree_path_free(path);
+}
+
+
+static void tb_editor_free_path(TBEditorWidget *tbw)
+{
+	if (tbw->last_drag_path != NULL)
+	{
+		gtk_tree_path_free(tbw->last_drag_path);
+		tbw->last_drag_path = NULL;
+	}
+}
+
+
+static void tb_editor_btn_remove_clicked_cb(GtkWidget *button, TBEditorWidget *tbw)
+{
+	GtkTreeModel *model_used;
+	GtkTreeSelection *selection_used;
+	GtkTreeIter iter_used, iter_new;
+	gchar *action_name;
+
+	selection_used = gtk_tree_view_get_selection(tbw->tree_used);
+	if (gtk_tree_selection_get_selected(selection_used, &model_used, &iter_used))
+	{
+		gtk_tree_model_get(model_used, &iter_used, 0, &action_name, -1);
+		if (gtk_list_store_remove(tbw->store_used, &iter_used))
+			gtk_tree_selection_select_iter(selection_used, &iter_used);
+
+		if (! utils_str_equal(action_name, TB_EDITOR_SEPARATOR))
+		{
+			gtk_list_store_insert_with_values(tbw->store_available, &iter_new,
+				-1, 0, action_name, -1);
+			tb_editor_scroll_to_iter(tbw->tree_available, &iter_new);
+		}
+
+		g_free(action_name);
+	}
+}
+
+
+static void tb_editor_btn_add_clicked_cb(GtkWidget *button, TBEditorWidget *tbw)
+{
+	GtkTreeModel *model_available;
+	GtkTreeSelection *selection_available, *selection_used;
+	GtkTreeIter iter_available, iter_new, iter_selected;
+	gchar *action_name;
+
+	selection_available = gtk_tree_view_get_selection(tbw->tree_available);
+	if (gtk_tree_selection_get_selected(selection_available, &model_available, &iter_available))
+	{
+		gtk_tree_model_get(model_available, &iter_available, 0, &action_name, -1);
+		if (! utils_str_equal(action_name, TB_EDITOR_SEPARATOR))
+		{
+			if (gtk_list_store_remove(tbw->store_available, &iter_available))
+				gtk_tree_selection_select_iter(selection_available, &iter_available);
+		}
+
+		selection_used = gtk_tree_view_get_selection(tbw->tree_used);
+		if (gtk_tree_selection_get_selected(selection_used, NULL, &iter_selected))
+		{
+			gtk_list_store_insert_before(tbw->store_used, &iter_new, &iter_selected);
+			gtk_list_store_set(tbw->store_used, &iter_new, 0, action_name, -1);
+		}
+		else
+			gtk_list_store_insert_with_values(tbw->store_used, &iter_new, -1, 0, action_name, -1);
+
+		tb_editor_scroll_to_iter(tbw->tree_used, &iter_new);
+
+		g_free(action_name);
+	}
+}
+
+
+static gboolean tb_editor_drag_motion_cb(GtkWidget *widget, GdkDragContext *drag_context,
+										 gint x, gint y, guint ltime, TBEditorWidget *tbw)
+{
+	if (tbw->last_drag_path != NULL)
+		gtk_tree_path_free(tbw->last_drag_path);
+	gtk_tree_view_get_drag_dest_row(GTK_TREE_VIEW(widget),
+		&(tbw->last_drag_path), &(tbw->last_drag_pos));
+
+	return FALSE;
+}
+
+
+static void tb_editor_drag_data_get_cb(GtkWidget *widget, GdkDragContext *context,
+									   GtkSelectionData *data, guint info, guint ltime,
+									   TBEditorWidget *tbw)
+{
+	GtkTreeIter iter;
+	GtkTreeSelection *selection;
+	GtkTreeModel *model;
+	GtkTreePath *path;
+	GdkAtom atom;
+	gchar *name;
+
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
+	if (! gtk_tree_selection_get_selected(selection, &model, &iter))
+		return;
+
+	gtk_tree_model_get(model, &iter, 0, &name, -1);
+	atom = gdk_atom_intern(tb_editor_dnd_targets[0].target, FALSE);
+	gtk_selection_data_set(data, atom, 8, (guchar*) name, strlen(name));
+
+	g_free(name);
+
+	path = gtk_tree_model_get_path(model, &iter);
+
+	tbw->drag_source = widget;
+}
+
+
+static void tb_editor_drag_data_rcvd_cb(GtkWidget *widget, GdkDragContext *context,
+										gint x, gint y, GtkSelectionData *data, guint info,
+										guint ltime, TBEditorWidget *tbw)
+{
+	GtkTreeView *tree = GTK_TREE_VIEW(widget);
+	gboolean del = FALSE;
+
+	if (data->length >= 0 && data->format == 8)
+	{
+		gboolean is_sep;
+		gchar *text = NULL;
+
+		text = (gchar*) data->data;
+		is_sep = utils_str_equal(text, TB_EDITOR_SEPARATOR);
+		/* If the source of the action is equal to the target, we do just re-order and so need
+		 * to delete the separator to get it moved, not just copied. */
+		if (is_sep && widget == tbw->drag_source)
+			is_sep = FALSE;
+
+		if (tree != tbw->tree_available || ! is_sep)
+		{
+			GtkTreeIter iter, iter_before;
+			GtkListStore *store = GTK_LIST_STORE(gtk_tree_view_get_model(tree));
+
+			if (tbw->last_drag_path != NULL)
+			{
+				gtk_tree_model_get_iter(GTK_TREE_MODEL(store), &iter_before, tbw->last_drag_path);
+
+				if (tbw->last_drag_pos == GTK_TREE_VIEW_DROP_BEFORE ||
+					tbw->last_drag_pos == GTK_TREE_VIEW_DROP_INTO_OR_BEFORE)
+					gtk_list_store_insert_before(store, &iter, &iter_before);
+				else
+					gtk_list_store_insert_after(store, &iter, &iter_before);
+
+				gtk_list_store_set(store, &iter, 0, text, -1);
+			}
+			else
+				gtk_list_store_insert_with_values(store, &iter, -1, 0, text, -1);
+
+			tb_editor_scroll_to_iter(tree, &iter);
+		}
+		if (tree != tbw->tree_used || ! is_sep)
+			del = TRUE;
+	}
+
+	tbw->drag_source = NULL; /* reset the value just to be sure */
+	tb_editor_free_path(tbw);
+	gtk_drag_finish(context, TRUE, del, ltime);
+}
+
+
+static TBEditorWidget *tb_editor_create_dialog(void)
+{
+	GtkWidget *dialog, *vbox, *hbox, *vbox_buttons, *button_add, *button_remove;
+	GtkWidget *swin_available, *swin_used, *tree_available, *tree_used, *label;
+	GtkCellRenderer *text_renderer;
+	GtkTreeViewColumn *column;
+	TBEditorWidget *tbw = g_new(TBEditorWidget, 1);
+
+	dialog = gtk_dialog_new_with_buttons(_("Customize toolbar"),
+				GTK_WINDOW(main_widgets.window),
+				GTK_DIALOG_DESTROY_WITH_PARENT,
+				GTK_STOCK_APPLY, GTK_RESPONSE_APPLY,
+				GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE, NULL);
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
+	gtk_box_set_spacing(GTK_BOX(vbox), 6);
+	gtk_widget_set_name(dialog, "GeanyDialog");
+	gtk_window_set_default_size(GTK_WINDOW(dialog), -1, 400);
+	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);
+
+	tbw->store_available = gtk_list_store_new(1, G_TYPE_STRING);
+	tbw->store_used = gtk_list_store_new(1, G_TYPE_STRING);
+
+	label = gtk_label_new(
+		_("Select items to be displayed on the toolbar. Items can be reodered by drag and drop."));
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+
+	tree_available = gtk_tree_view_new();
+	gtk_tree_view_set_model(GTK_TREE_VIEW(tree_available), GTK_TREE_MODEL(tbw->store_available));
+	gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(tree_available), TRUE);
+	gtk_tree_sortable_set_sort_column_id(
+		GTK_TREE_SORTABLE(tbw->store_available), 0, GTK_SORT_ASCENDING);
+
+	text_renderer = gtk_cell_renderer_text_new();
+	column = gtk_tree_view_column_new_with_attributes(
+		_("Available Items"), text_renderer, "text", 0, NULL);
+	gtk_tree_view_append_column(GTK_TREE_VIEW(tree_available), column);
+
+	swin_available = gtk_scrolled_window_new(NULL, NULL);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin_available),
+		GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(swin_available), GTK_SHADOW_ETCHED_IN);
+	gtk_container_add(GTK_CONTAINER(swin_available), tree_available);
+
+	tree_used = gtk_tree_view_new();
+	gtk_tree_view_set_model(GTK_TREE_VIEW(tree_used), GTK_TREE_MODEL(tbw->store_used));
+	gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(tree_used), TRUE);
+	gtk_tree_view_set_reorderable(GTK_TREE_VIEW(tree_used), TRUE);
+
+	text_renderer = gtk_cell_renderer_text_new();
+	column = gtk_tree_view_column_new_with_attributes(
+		_("Displayed Items"), text_renderer, "text", 0, NULL);
+	gtk_tree_view_append_column(GTK_TREE_VIEW(tree_used), column);
+
+	swin_used = gtk_scrolled_window_new(NULL, NULL);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin_used),
+		GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(swin_used), GTK_SHADOW_ETCHED_IN);
+	gtk_container_add(GTK_CONTAINER(swin_used), tree_used);
+
+	/* drag'n'drop */
+	gtk_tree_view_enable_model_drag_source(GTK_TREE_VIEW(tree_available), GDK_BUTTON1_MASK,
+		tb_editor_dnd_targets, tb_editor_dnd_targets_len, GDK_ACTION_MOVE);
+	gtk_tree_view_enable_model_drag_dest(GTK_TREE_VIEW(tree_available),
+		tb_editor_dnd_targets, tb_editor_dnd_targets_len, GDK_ACTION_MOVE);
+	g_signal_connect(tree_available, "drag-data-get",
+		G_CALLBACK(tb_editor_drag_data_get_cb), tbw);
+	g_signal_connect(tree_available, "drag-data-received",
+		G_CALLBACK(tb_editor_drag_data_rcvd_cb), tbw);
+	g_signal_connect(tree_available, "drag-motion",
+		G_CALLBACK(tb_editor_drag_motion_cb), tbw);
+
+	gtk_tree_view_enable_model_drag_source(GTK_TREE_VIEW(tree_used), GDK_BUTTON1_MASK,
+		tb_editor_dnd_targets, tb_editor_dnd_targets_len, GDK_ACTION_MOVE);
+	gtk_tree_view_enable_model_drag_dest(GTK_TREE_VIEW(tree_used),
+		tb_editor_dnd_targets, tb_editor_dnd_targets_len, GDK_ACTION_MOVE);
+	g_signal_connect(tree_used, "drag-data-get",
+		G_CALLBACK(tb_editor_drag_data_get_cb), tbw);
+	g_signal_connect(tree_used, "drag-data-received",
+		G_CALLBACK(tb_editor_drag_data_rcvd_cb), tbw);
+	g_signal_connect(tree_used, "drag-motion",
+		G_CALLBACK(tb_editor_drag_motion_cb), tbw);
+
+
+	button_add = ui_button_new_with_image(GTK_STOCK_GO_FORWARD, NULL);
+	button_remove = ui_button_new_with_image(GTK_STOCK_GO_BACK, NULL);
+	g_signal_connect(button_add, "clicked", G_CALLBACK(tb_editor_btn_add_clicked_cb), tbw);
+	g_signal_connect(button_remove, "clicked", G_CALLBACK(tb_editor_btn_remove_clicked_cb), tbw);
+
+	vbox_buttons = gtk_vbox_new(FALSE, 6);
+	/* FIXME this is a little hack'ish, any better ideas? */
+	gtk_box_pack_start(GTK_BOX(vbox_buttons), gtk_label_new(""), TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox_buttons), button_add, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox_buttons), button_remove, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox_buttons), gtk_label_new(""), TRUE, TRUE, 0);
+
+	hbox = gtk_hbox_new(FALSE, 6);
+	gtk_box_pack_start(GTK_BOX(hbox), swin_available, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), vbox_buttons, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), swin_used, TRUE, TRUE, 0);
+
+	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 6);
+	gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, TRUE, 0);
+
+	gtk_widget_show_all(vbox);
+
+	g_object_unref(tbw->store_available);
+	g_object_unref(tbw->store_used);
+
+	tbw->dialog = dialog;
+	tbw->tree_available = GTK_TREE_VIEW(tree_available);
+	tbw->tree_used = GTK_TREE_VIEW(tree_used);
+
+	tbw->last_drag_path = NULL;
+
+	return tbw;
+}
+
+
+static gboolean tb_editor_foreach_used(GtkTreeModel *model, GtkTreePath *path,
+									   GtkTreeIter *iter, gpointer data)
+{
+	gchar *action_name;
+
+	gtk_tree_model_get(model, iter, 0, &action_name, -1);
+
+	if (utils_str_equal(action_name, TB_EDITOR_SEPARATOR))
+		g_string_append_printf(data, "\t\t<separator/>\n");
+	else
+		g_string_append_printf(data, "\t\t<toolitem action='%s' />\n", action_name);
+
+	g_free(action_name);
+	return FALSE;
+}
+
+
+static gchar *tb_editor_write_markup(TBEditorWidget *tbw)
+{
+	/* <ui> must be the first tag, otherwise gtk_ui_manager_add_ui_from_string() will fail. */
+	const gchar *template = "<ui>\n<!--\n\
+This is Geany's toolbar UI definition.\nThe DTD can be found at \n\
+http://library.gnome.org/devel/gtk/stable/GtkUIManager.html#GtkUIManager.description.\n\n\
+You can re-order all items and freely add and remove available actions.\n\
+You cannot add new actions which are not listed in the documentation.\n\
+Everything you add or change must be inside the /ui/toolbar/ path.\n\n\
+For changes to take effect, you need to restart Geany. Alternatively you can use the toolbar\n\
+editor in Geany.\n\n\
+A list of available actions can be found in the documentation included with Geany or\n\
+at http://www.geany.org/manual/current/index.html#customizing-the-toolbar.\n-->\n\
+\t<toolbar name='GeanyToolbar'>\n";
+	GString *str = g_string_new(template);
+
+	gtk_tree_model_foreach(GTK_TREE_MODEL(tbw->store_used), tb_editor_foreach_used, str);
+
+	g_string_append(str, "\n\t</toolbar>\n</ui>\n");
+
+	return g_string_free(str, FALSE);
+}
+
+
+void toolbar_configure(void)
+{
+	gchar *markup;
+	const gchar *name;
+	const gchar *filename = utils_build_path(app->configdir, "ui_toolbar.xml", NULL);
+	GSList *sl, *used_items;
+	GList *l, *all_items;
+	GtkTreePath *path;
+	gint response;
+	TBEditorWidget *tbw;
+
+	/* read the current active toolbar items */
+	markup = gtk_ui_manager_get_ui(uim);
+	used_items = tb_editor_parse_ui(markup, strlen(markup), NULL);
+	g_free(markup);
+
+	/* get all available actions */
+	all_items = gtk_action_group_list_actions(group);
+
+	/* create the GUI */
+	tbw = tb_editor_create_dialog();
+
+	/* fill the stores */
+	gtk_list_store_insert_with_values(tbw->store_available, NULL, -1, 0, TB_EDITOR_SEPARATOR, -1);
+	foreach_list(l, all_items)
+	{
+		name = gtk_action_get_name(l->data);
+		if (g_slist_find_custom(used_items, name, (GCompareFunc) strcmp) == NULL)
+			gtk_list_store_insert_with_values(tbw->store_available, NULL, -1, 0, name, -1);
+	}
+	foreach_slist(sl, used_items)
+	{
+		gtk_list_store_insert_with_values(tbw->store_used, NULL, -1, 0, sl->data, -1);
+	}
+	/* select first item */
+	path = gtk_tree_path_new_from_string("0");
+	gtk_tree_selection_select_path(gtk_tree_view_get_selection(tbw->tree_used), path);
+	gtk_tree_path_free(path);
+
+	/* run it */
+	while ((response = gtk_dialog_run(GTK_DIALOG(tbw->dialog))))
+	{
+		markup = tb_editor_write_markup(tbw);
+		toolbar_reload(markup);
+		utils_write_file(filename, markup);
+		g_free(markup);
+
+		if (response == GTK_RESPONSE_CLOSE)
+			break;
+	}
+	gtk_widget_destroy(tbw->dialog);
+
+	g_slist_foreach(used_items, (GFunc) g_free, NULL);
+	g_slist_free(used_items);
+	g_list_free(all_items);
+	tb_editor_free_path(tbw);
+	g_free(tbw);
+}
+
+

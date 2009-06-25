@@ -3527,8 +3527,14 @@ fileheader     The file header template. This wildcard       file header, snippe
 Customizing the toolbar
 -----------------------
 
-You can add, remove and reorder the elements in the toolbar by editing
-the file ``ui_toolbar.xml``.
+You can add, remove and reorder the elements in the toolbar by using the toolbar editor
+by manually editing the file ``ui_toolbar.xml``.
+
+The toolbar editor can be opened from the preferences editor on the Toolbar tab or
+by right-clicking on the toolbar itself and choosing it from the menu.
+
+Manually editing of the toolbar layout
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To override the system-wide configuration file, copy it from
 ``$prefix/share/geany`` to your configuration directory, usually

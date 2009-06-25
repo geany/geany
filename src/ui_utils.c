@@ -1862,7 +1862,6 @@ void ui_init(void)
 	ui_init_toolbar_widgets();
 	init_document_widgets();
 	create_config_files_menu();
-	toolbar_add_config_file_menu_item();
 }
 
 

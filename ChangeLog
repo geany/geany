@@ -1,3 +1,11 @@
+2009-06-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * data/ui_toolbar.xml, doc/geany.txt, doc/geany.html, src/ui_utils.c,
+   src/toolbar.c, src/toolbar.h:
+   Remove ui_toolbar.xml Configuration Files menu item.
+   Add a real toolbar editor dialog.
+
+
 2009-06-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/dialogs.c:
