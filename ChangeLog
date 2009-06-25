@@ -1,3 +1,10 @@
+2009-06-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/dialogs.c:
+   Fix Gtk NULL warning with gtk_file_chooser_set_current_folder().
+   Fix using locale encoding for default Save As dialog path.
+
+
 2009-06-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * data/ui_toolbar.xml, src/toolbar.c:

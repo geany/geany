@@ -414,6 +414,7 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 static void create_save_file_dialog(void)
 {
 	GtkWidget *vbox, *check_open_new_tab, *rename_btn;
+	const gchar *initdir;
 
 	ui_widgets.save_filesel = gtk_file_chooser_dialog_new(_("Save File"), GTK_WINDOW(main_widgets.window),
 				GTK_FILE_CHOOSER_ACTION_SAVE, NULL, NULL);
@@ -445,8 +446,13 @@ static void create_save_file_dialog(void)
 		gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(ui_widgets.save_filesel), FALSE);
 
 	/* set the folder by default to the project base dir or the global pref for opening files */
-	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(ui_widgets.save_filesel),
-			utils_get_default_dir_utf8());
+	initdir = utils_get_default_dir_utf8();
+	if (initdir)
+	{
+		gchar *linitdir = utils_get_locale_from_utf8(initdir);
+		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(ui_widgets.save_filesel), linitdir);
+		g_free(linitdir);
+	}
 
 	g_signal_connect(check_open_new_tab, "toggled",
 				G_CALLBACK(on_save_as_new_tab_toggled), rename_btn);
