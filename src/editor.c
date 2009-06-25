@@ -721,6 +721,7 @@ static gboolean reshow_calltip(gpointer data)
 	if (nt->nmhdr.code == SCN_AUTOCSELECTION)
 	{
 		gint pos = SSM(calltip.sci, SCI_GETCURRENTPOS, 0, 0);
+
 		sci_set_selection_start(calltip.sci, nt->lParam);
 		sci_set_selection_end(calltip.sci, pos);
 		sci_replace_sel(calltip.sci, "");	/* clear root of word */
@@ -825,8 +826,15 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			}
 			break;
 		}
-		case SCN_AUTOCCANCELLED:
 		case SCN_AUTOCSELECTION:
+			if (g_str_equal(nt->text, "..."))
+			{
+				sci_cancel(sci);
+				utils_beep();
+				break;
+			}
+			/* fall through */
+		case SCN_AUTOCCANCELLED:
 		{
 			/* now that autocomplete is finishing or was cancelled, reshow calltips
 			 * if they were showing */
@@ -877,7 +885,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			break;
 		}
 	}
-	/* we always return FALSE here to let plugins handle the event to */
+	/* we always return FALSE here to let plugins handle the event too */
 	return FALSE;
 }
 
@@ -1709,13 +1717,15 @@ static gboolean autocomplete_check_for_html(gint ft_id, gint style)
 
 
 /* Algorithm based on based on Scite's StartAutoCompleteWord() */
-static void complete_doc_word(GeanyEditor *editor, gchar *root, gsize rootlen)
+static gboolean complete_doc_word(GeanyEditor *editor, gchar *root, gsize rootlen)
 {
 	ScintillaObject *sci = editor->sci;
 	gchar *word;
 	gint len, current, word_end;
 	gint pos_find, flags;
 	guint word_length;
+	gsize nmatches = 0;
+	gboolean ret = FALSE;
 	GString *words;
 	struct TextToFind ttf;
 
@@ -1753,6 +1763,13 @@ static void complete_doc_word(GeanyEditor *editor, gchar *root, gsize rootlen)
 				if (strstr(words->str, word) == NULL)
 					g_string_append(words, word + 1);
 				g_free(word);
+
+				nmatches++;
+				if (nmatches == editor_prefs.autocompletion_max_entries)
+				{
+					g_string_append(words, "... ");
+					break;
+				}
 			}
 		}
 		ttf.chrg.cpMin = word_end;
@@ -1764,11 +1781,13 @@ static void complete_doc_word(GeanyEditor *editor, gchar *root, gsize rootlen)
 		g_strdelimit(words->str, " ", '\n');
 		words->str[words->len - 1] = '\0'; /* remove the trailing '\n' */
 		show_autocomplete(sci, rootlen, words->str + 1);
+		ret = TRUE;
 	}
 	else
 		scintilla_send_message(sci, SCI_AUTOCCANCEL, 0, 0);
 
 	g_string_free(words, TRUE);
+	return ret;
 }
 
 
@@ -1836,12 +1855,17 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 			/* force is set when called by keyboard shortcut, otherwise start at the
 			 * editor_prefs.symbolcompletion_min_chars'th char */
 			if (force || rootlen >= editor_prefs.symbolcompletion_min_chars)
+			{
 				ret = autocomplete_tags(editor, root, rootlen);
+				/* If forcing and there's nothing else to show, complete from words in document */
+				if (!ret && force /* || editor_prefs.autocomplete_doc_words) */)
+					ret = complete_doc_word(editor, root, rootlen);
+			}
 		}
-		/* If forcing and there's nothing else to show, complete from words in document */
-		if (!ret && force)
-			complete_doc_word(editor, root, rootlen);
 	}
+	if (!ret && force)
+		utils_beep();
+
 	g_free(linebuf);
 	return ret;
 }

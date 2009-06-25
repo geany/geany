@@ -3,6 +3,11 @@
  * src/dialogs.c:
    Fix Gtk NULL warning with gtk_file_chooser_set_current_folder().
    Fix using locale encoding for default Save As dialog path.
+ * src/editor.c:
+   Beep when trying to activate the '...' autocompletion item.
+   Limit (forced) document word completion to
+   autocompletion_max_entries.
+   Beep if no completions are shown when forcing autocompletion.
 
 
 2009-06-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
