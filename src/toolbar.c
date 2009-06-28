@@ -39,6 +39,7 @@
 #include "geanymenubuttonaction.h"
 #include "geanyentryaction.h"
 
+#include <string.h>
 #include <glib/gstdio.h>
 
 
