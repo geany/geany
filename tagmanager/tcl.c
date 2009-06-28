@@ -24,13 +24,14 @@
 *   DATA DEFINITIONS
 */
 typedef enum {
-	K_CLASS, K_METHOD, K_PROCEDURE
+	K_CLASS, K_METHOD, K_PROCEDURE, K_MODULE
 } tclKind;
 
 static kindOption TclKinds [] = {
 	{ TRUE, 'c', "class",     "classes" },
-	{ TRUE, 'm', "member",    "methods" },
-	{ TRUE, 'p', "function",  "procedures" }
+	{ TRUE, 'f', "member",    "methods" },
+	{ TRUE, 'p', "function",  "procedures" },
+	{ TRUE, 'm', "namespace", "modules" }
 };
 
 /*
@@ -107,6 +108,29 @@ static void findTclTags (void)
 				cp = makeTclTag (cp, name, K_METHOD);
 			}
 		}
+		else if (match (line, "method"))
+		{
+			cp = makeTclTag (cp, name, K_METHOD);
+		}
+		else if (match (line, "oo::class") ) {
+			if (match (cp, "create"))
+			{
+				cp += 6;
+				while (isspace ((int) *cp))
+					++cp;
+				cp = makeTclTag (cp, name, K_CLASS);
+			}
+		}
+		else if (match (line, "namespace") ) {
+			if (match (cp, "eval"))
+			{
+				cp += 4;
+				while (isspace ((int) *cp))
+					++cp;
+				cp = makeTclTag (cp, name, K_MODULE);
+			}
+		}
+
 	}
 	vStringDelete (name);
 }

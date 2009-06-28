@@ -1,3 +1,11 @@
+2009-06-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * tagmanager/tcl.c, src/symbol.c:
+   Improve parsing of Tcl files (parsing new Tcl8.6 style classes,
+   methods and namespaces).
+   Patch by Witek Mozga, thanks.
+
+
 2009-06-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * data/ui_toolbar.xml, doc/geany.txt, doc/geany.html, src/ui_utils.c,

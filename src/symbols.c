@@ -717,6 +717,15 @@ static void add_top_level_items(GeanyDocument *doc)
 			break;
 		}
 		case GEANY_FILETYPES_TCL:
+		{
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_namespace), _("Namespaces"), "classviewer-namespace",
+				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
+				&(tv_iters.tag_member), _("Methods"), "classviewer-method",
+				&(tv_iters.tag_function), _("Procedures"), "classviewer-method",
+				NULL);
+			break;
+		}
 		case GEANY_FILETYPES_PYTHON:
 		{
 			tag_list_add_groups(tag_store,
