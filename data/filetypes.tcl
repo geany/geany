@@ -50,9 +50,6 @@ comment_use_indent=true
 # context action command (please see Geany's main documentation for details)
 context_action_cmd=
 
-# context action command (please see Geany's main documentation for details)
-context_action_cmd=
-
 
 [build_settings]
 # %f will be replaced by the complete filename

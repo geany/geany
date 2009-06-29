@@ -722,7 +722,7 @@ static void add_top_level_items(GeanyDocument *doc)
 				&(tv_iters.tag_namespace), _("Namespaces"), "classviewer-namespace",
 				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
 				&(tv_iters.tag_member), _("Methods"), "classviewer-method",
-				&(tv_iters.tag_function), _("Procedures"), "classviewer-method",
+				&(tv_iters.tag_function), _("Procedures"), "classviewer-other",
 				NULL);
 			break;
 		}
