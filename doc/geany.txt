@@ -2541,6 +2541,10 @@ Redo                            Ctrl-Y                    Re-does the last actio
 
 Delete current line(s)          Ctrl-K                    Deletes the current line (and any lines with a
                                                           selection).
+
+Delete to line end              Ctrl-Shift-Delete         Deletes from the current caret position to the
+                                                          end of the current line.
+
 Duplicate line or selection     Ctrl-D                    Duplicates the current line or selection.
 
 Transpose current line          Ctrl-T                    Transposes the current line with the previous one.
@@ -2735,6 +2739,13 @@ Go to Start of Line             Home                      Move the caret to the 
                                                           it to the start of the line.
 
 Go to End of Line               End                       Move the caret to the end of the line.
+
+Go to End of Display Line       Alt-End                   Move the caret to the end of the display line.
+                                                          This is useful when you use line wrapping and
+                                                          want to jump to the end of the wrapped, virtual
+                                                          line, not the real end of the whole line.
+                                                          If the line is not wrapped, it behaves like
+                                                          `Go to End of Line`, see above.
 
 Go to Previous Word Part        Ctrl-/                    Goto the previous part of the current word.
 
@@ -3696,14 +3707,12 @@ Dedent block.                                   Shift+Tab
 Delete to start of word.                        Ctrl+BackSpace
 Delete to end of word.                          Ctrl+Delete
 Delete to start of line.                        Ctrl+Shift+BackSpace
-Delete to end of line.                          Ctrl+Shift+Delete
 Go to start of document.                        Ctrl+Home
 Extend selection to start of document.          Ctrl+Shift+Home
 Go to start of display line.                    Alt+Home
 Extend selection to start of display line.      Alt+Shift+Home
 Go to end of document.                          Ctrl+End
 Extend selection to end of document.            Ctrl+Shift+End
-Go to end of display line.                      Alt+End
 Extend selection to end of display line.        Alt+Shift+End
 Previous paragraph. Shift extends selection.    Ctrl+Up
 Next paragraph. Shift extends selection.        Ctrl+Down

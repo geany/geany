@@ -6,6 +6,10 @@
    list for Tcl files.
  * src/filetypes.c:
    Fix a small memory leak.
+ * doc/geany.html, doc/geany.txt, src/editor.c, src/keybindings.c,
+   src/keybindings.h, src/plugindata.h:
+   Make the Scintilla keybindings 'Delete to end of line' and
+   'Go to end of display line' configurable.
 
 
 2009-06-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

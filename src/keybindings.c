@@ -236,6 +236,9 @@ static void init_default_kb(void)
 		LW(menu_duplicate_line1));
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_DELETELINE, cb_func_editor_action,
 		GDK_k, GDK_CONTROL_MASK, "edit_deleteline", _("Delete current line(s)"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_EDITOR_DELETELINETOEND, cb_func_editor_action,
+		GDK_Delete, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_deletelinetoend",
+		_("Delete to line end"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_TRANSPOSELINE, cb_func_editor_action,
 		GDK_t, GDK_CONTROL_MASK, "edit_transposeline", _("Transpose current line"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_SCROLLTOLINE, cb_func_editor_action,
@@ -386,6 +389,8 @@ static void init_default_kb(void)
 		GDK_Home, 0, "edit_gotolinestart", _("Go to Start of Line"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_GOTO_LINEEND, cb_func_goto_action,
 		GDK_End, 0, "edit_gotolineend", _("Go to End of Line"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_GOTO_LINEENDVISUAL, cb_func_goto_action,
+		GDK_End, GDK_MOD1_MASK, "edit_gotolineendvisual", _("Go to End of Display Line"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_GOTO_PREVWORDSTART, cb_func_goto_action,
 		GDK_slash, GDK_CONTROL_MASK, "edit_prevwordstart", _("Go to Previous Word Part"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_GOTO_NEXTWORDSTART, cb_func_goto_action,
@@ -1771,6 +1776,9 @@ static void cb_func_goto_action(guint key_id)
 		case GEANY_KEYS_GOTO_LINEEND:
 			sci_send_command(doc->editor->sci, SCI_LINEEND);
 			break;
+		case GEANY_KEYS_GOTO_LINEENDVISUAL:
+			sci_send_command(doc->editor->sci, SCI_LINEENDDISPLAY);
+			break;
 		case GEANY_KEYS_GOTO_PREVWORDSTART:
 			sci_send_command(doc->editor->sci, SCI_WORDPARTLEFT);
 			break;
@@ -1838,6 +1846,9 @@ static void cb_func_editor_action(guint key_id)
 			break;
 		case GEANY_KEYS_EDITOR_DELETELINE:
 			delete_lines(doc->editor);
+			break;
+		case GEANY_KEYS_EDITOR_DELETELINETOEND:
+			sci_send_command(doc->editor->sci, SCI_DELLINERIGHT);
 			break;
 		case GEANY_KEYS_EDITOR_TRANSPOSELINE:
 			sci_send_command(doc->editor->sci, SCI_LINETRANSPOSE);

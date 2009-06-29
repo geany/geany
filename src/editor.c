@@ -4455,12 +4455,14 @@ static void setup_sci_keys(ScintillaObject *sci)
 	sci_clear_cmdkey(sci, 'T' | (SCMOD_CTRL << 16) | (SCMOD_SHIFT << 16)); /* line copy */
 	sci_clear_cmdkey(sci, 'L' | (SCMOD_CTRL << 16)); /* line cut */
 	sci_clear_cmdkey(sci, 'L' | (SCMOD_CTRL << 16) | (SCMOD_SHIFT << 16)); /* line delete */
+	sci_clear_cmdkey(sci, SCK_DELETE | (SCMOD_CTRL << 16) | (SCMOD_SHIFT << 16)); /* line to end delete */
 	sci_clear_cmdkey(sci, '/' | (SCMOD_CTRL << 16)); /* Previous word part */
 	sci_clear_cmdkey(sci, '\\' | (SCMOD_CTRL << 16)); /* Next word part */
 	sci_clear_cmdkey(sci, SCK_UP | (SCMOD_CTRL << 16)); /* scroll line up */
 	sci_clear_cmdkey(sci, SCK_DOWN | (SCMOD_CTRL << 16)); /* scroll line down */
 	sci_clear_cmdkey(sci, SCK_HOME);	/* line start */
 	sci_clear_cmdkey(sci, SCK_END);	/* line end */
+	sci_clear_cmdkey(sci, SCK_END | (SCMOD_ALT << 16));	/* visual line end */
 
 	if (editor_prefs.use_gtk_word_boundaries)
 	{
@@ -4698,10 +4700,6 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 
 	/* (dis)allow scrolling past end of document */
 	sci_set_scroll_stop_at_last_line(sci, editor_prefs.scroll_stop_at_last_line);
-
-	sci_assign_cmdkey(sci, SCK_HOME,
-		editor_prefs.smart_home_key ? SCI_VCHOMEWRAP : SCI_HOMEWRAP);
-	sci_assign_cmdkey(sci, SCK_END,  SCI_LINEENDWRAP);
 }
 
 
