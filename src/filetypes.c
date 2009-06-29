@@ -1050,6 +1050,7 @@ static void filetype_free(gpointer data, G_GNUC_UNUSED gpointer user_data)
 	set_error_regex(ft, NULL);
 
 	g_strfreev(ft->pattern);
+	g_free(ft->priv);
 	g_free(ft);
 }
 

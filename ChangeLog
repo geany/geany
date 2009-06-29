@@ -4,6 +4,8 @@
    Fix duplicate "context_action_cmd" key.
    Use different icons for "Methods" and "Procedures" in the symbol
    list for Tcl files.
+ * src/filetypes.c:
+   Fix a small memory leak.
 
 
 2009-06-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
