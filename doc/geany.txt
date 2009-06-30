@@ -2559,8 +2559,8 @@ Scroll down by one line         Alt-Down                  Scrolls the view.
 
 Complete word                   Ctrl-Space                Shows auto completion list.
 
-Show calltip                    Alt-Space (Unix)          Shows call tips for the current function or
-                                Alt-Shift-Space (Windows) method.
+Show calltip                    Ctrl-Shift-Space          Shows call tips for the current function or
+                                                          method.
 
 Show macro list                 Ctrl-Return               Shows a list of available macros and variables in
                                                           the workspace.
