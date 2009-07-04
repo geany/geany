@@ -765,7 +765,7 @@ static TBEditorWidget *tb_editor_create_dialog(void)
 	GtkTreeViewColumn *column;
 	TBEditorWidget *tbw = g_new(TBEditorWidget, 1);
 
-	dialog = gtk_dialog_new_with_buttons(_("Customize toolbar"),
+	dialog = gtk_dialog_new_with_buttons(_("Customize Toolbar"),
 				GTK_WINDOW(main_widgets.window),
 				GTK_DIALOG_DESTROY_WITH_PARENT,
 				GTK_STOCK_APPLY, GTK_RESPONSE_APPLY,
