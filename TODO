@@ -16,7 +16,6 @@ Note: features included in brackets have lower priority.
 	o (support for adding plugin filetypes - SCI_LOADLEXERLIBRARY?)
 	o (selectable menu of arguments to use for Make, from Make Custom)
 	o (DBUS)
-	o (indent wrapped lines - SCI_SETWRAPINDENTMODE)
 	o (sci macro support)
 	o (better search & replace regex support e.g. multiline - use
 	   SCI_GETCHARACTERPOINTER and GNU regex?)

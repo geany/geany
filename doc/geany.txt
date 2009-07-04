@@ -3276,12 +3276,19 @@ line_wrap_visuals
     *Example:* ``line_wrap_visuals=3;0;false;false``
 
 line_wrap_indent
-    Sets the size of indentation of sublines for wrapped lines in terms
-    of the width of a space.
+    First argument: sets the size of indentation of sublines for wrapped lines
+    in terms of the width of a space, only used when the second argument is ``0``.
 
-    Only first argument is interpreted.
+    Second argument: wrapped sublines can be indented to the position of their
+    first subline or one more indent level. Possible values:
 
-    *Example:* ``line_wrap_indent=0;0;false;false``
+    * 0 - Wrapped sublines aligned to left of window plus amount set by the first argument
+    * 1 - Wrapped sublines are aligned to first subline indent (use the same indentation)
+    * 2 - Wrapped sublines are aligned to first subline indent plus one more level of indentation
+
+    Only first and second argument is interpreted.
+
+    *Example:* ``line_wrap_indent=0;1;false;false``
 
 translucency
     Translucency for the current line (first argument) and the selection

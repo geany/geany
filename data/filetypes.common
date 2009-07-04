@@ -78,9 +78,15 @@ invert_all=0;0;false;false
 # 1 - Visual flag at end of subline drawn near text, 2 - Visual flag at begin of subline drawn near text
 line_wrap_visuals=3;0;false;false
 
-# sets the size of indentation of sublines for wrapped lines in terms of the width of a space,
-# only first argument is interpreted
-line_wrap_indent=0;0;false;false
+# only first and second argument is interpreted
+# first argument: sets the size of indentation of sublines for wrapped lines in terms of
+# the width of a space, only used when the second argument is 0
+# second argument: wrapped sublines can be indented to the position of their first subline or
+# one more indent level, possible values:
+# 0 - Wrapped sublines aligned to left of window plus amount set by the first argument
+# 1 - Wrapped sublines are aligned to first subline indent (use the same indentation)
+# 2 - Wrapped sublines are aligned to first subline indent plus one more level of indentation
+line_wrap_indent=0;1;false;false
 
 [settings]
 # which characters should be skipped when moving (or included when deleting) to word boundaries

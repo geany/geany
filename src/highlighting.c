@@ -576,6 +576,7 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 		get_keyfile_int(config, config_home, "styling", "line_wrap_indent",
 			0, 0, &tmp_style);
 		common_style_set.styling[GCS_LINE_WRAP_INDENT].foreground = tmp_style.foreground;
+		common_style_set.styling[GCS_LINE_WRAP_INDENT].background = tmp_style.background;
 		get_keyfile_int(config, config_home, "styling", "translucency",
 			256, 256, &tmp_style);
 		common_style_set.styling[GCS_TRANSLUCENCY].foreground = tmp_style.foreground;
@@ -620,6 +621,7 @@ static void styleset_common(ScintillaObject *sci)
 	SSM(sci, SCI_SETWRAPVISUALFLAGSLOCATION,
 		common_style_set.styling[GCS_LINE_WRAP_VISUALS].background, 0);
 	SSM(sci, SCI_SETWRAPSTARTINDENT, common_style_set.styling[GCS_LINE_WRAP_INDENT].foreground, 0);
+	SSM(sci, SCI_SETWRAPINDENTMODE, common_style_set.styling[GCS_LINE_WRAP_INDENT].background, 0);
 
 	/* Error indicator */
 	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_ERROR, INDIC_SQUIGGLE);
