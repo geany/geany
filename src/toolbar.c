@@ -958,7 +958,7 @@ void toolbar_configure(void)
 		utils_write_file(filename, markup);
 		g_free(markup);
 
-		if (response == GTK_RESPONSE_CLOSE)
+		if (response == GTK_RESPONSE_CLOSE || response == GTK_RESPONSE_DELETE_EVENT)
 			break;
 	}
 	gtk_widget_destroy(tbw->dialog);
