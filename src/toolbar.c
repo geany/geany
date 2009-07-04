@@ -681,7 +681,6 @@ static void tb_editor_drag_data_get_cb(GtkWidget *widget, GdkDragContext *contex
 	GtkTreeIter iter;
 	GtkTreeSelection *selection;
 	GtkTreeModel *model;
-	GtkTreePath *path;
 	GdkAtom atom;
 	gchar *name;
 
@@ -697,8 +696,6 @@ static void tb_editor_drag_data_get_cb(GtkWidget *widget, GdkDragContext *contex
 	gtk_selection_data_set(data, atom, 8, (guchar*) name, strlen(name));
 
 	g_free(name);
-
-	path = gtk_tree_model_get_path(model, &iter);
 
 	tbw->drag_source = widget;
 }
