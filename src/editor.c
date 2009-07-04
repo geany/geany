@@ -3640,7 +3640,7 @@ static gint find_paragraph_stop(GeanyEditor *editor, gint line, gint direction)
 		return -1;
 	}
 
-	if (direction == UP)
+	if (direction == GTK_DIR_UP)
 		step = -1;
 	else
 		step = 1;
@@ -3679,7 +3679,7 @@ void editor_select_paragraph(GeanyEditor *editor)
 	line_start = SSM(editor->sci, SCI_LINEFROMPOSITION,
 						SSM(editor->sci, SCI_GETCURRENTPOS, 0, 0), 0);
 
-	line_found = find_paragraph_stop(editor, line_start, UP);
+	line_found = find_paragraph_stop(editor, line_start, GTK_DIR_UP);
 	if (line_found == -1)
 		return;
 
@@ -3690,7 +3690,7 @@ void editor_select_paragraph(GeanyEditor *editor)
 
 	pos_start = SSM(editor->sci, SCI_POSITIONFROMLINE, line_found, 0);
 
-	line_found = find_paragraph_stop(editor, line_start, DOWN);
+	line_found = find_paragraph_stop(editor, line_start, GTK_DIR_DOWN);
 	pos_end = SSM(editor->sci, SCI_POSITIONFROMLINE, line_found, 0);
 
 	sci_set_selection(editor->sci, pos_start, pos_end);

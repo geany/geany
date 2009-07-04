@@ -909,12 +909,12 @@ gchar *utils_make_human_readable_str(guint64 size, gulong block_size,
 	else
 	{
 		++u;
-		while ((val >= KILOBYTE) && (u < zero_and_units + sizeof(zero_and_units) - 1))
+		while ((val >= 1024) && (u < zero_and_units + sizeof(zero_and_units) - 1))
 		{
 			f = fmt_tenths;
 			++u;
-			frac = ((((gint)(val % KILOBYTE)) * 10) + (KILOBYTE/2)) / KILOBYTE;
-			val /= KILOBYTE;
+			frac = ((((gint)(val % 1024)) * 10) + (1024/2)) / 1024;
+			val /= 1024;
 		}
 		if (frac >= 10)
 		{		/* We need to round up here. */

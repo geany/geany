@@ -1469,14 +1469,14 @@ static void switch_document(gint direction)
 	gint page_count = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
 
-	if (direction == LEFT)
+	if (direction == GTK_DIR_LEFT)
 	{
 		if (cur_page > 0)
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), cur_page - 1);
 		else
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), page_count - 1);
 	}
-	else if (direction == RIGHT)
+	else if (direction == GTK_DIR_RIGHT)
 	{
 		if (cur_page < page_count - 1)
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), cur_page + 1);
@@ -1488,12 +1488,12 @@ static void switch_document(gint direction)
 
 static void cb_func_switch_tableft(G_GNUC_UNUSED guint key_id)
 {
-	switch_document(LEFT);
+	switch_document(GTK_DIR_LEFT);
 }
 
 static void cb_func_switch_tabright(G_GNUC_UNUSED guint key_id)
 {
-	switch_document(RIGHT);
+	switch_document(GTK_DIR_RIGHT);
 }
 
 

@@ -85,22 +85,6 @@ extern GObject *geany_object;
 extern gboolean	ignore_callback;
 
 
-enum
-{
-	UP,
-	DOWN,
-	LEFT,
-	RIGHT
-};
-
-enum
-{
-	KILOBYTE = 1024,
-	MEGABYTE = (KILOBYTE*1024),
-	GIGABYTE = (MEGABYTE*1024)
-};
-
-
 /* prototype is here so that all files can use it. */
 void geany_debug(gchar const *format, ...) G_GNUC_PRINTF (1, 2);
 
