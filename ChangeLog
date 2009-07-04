@@ -20,6 +20,8 @@
    Properly close the toolbar editor on delete-events.
    Fix warnings and possible crashes in the toolbar editor when the list
    of displayed toolbar items is empty.
+ * data/filetypes.tcl:
+   Update Tcl keywords for Tcl 8.6 (patch by Witek Mozga, thanks).
 
 
 2009-06-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
