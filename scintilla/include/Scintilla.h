@@ -120,6 +120,7 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SC_MARK_FULLRECT 26
 #define SC_MARK_LEFTRECT 27
 #define SC_MARK_AVAILABLE 28
+#define SC_MARK_UNDERLINE 29
 #define SC_MARK_CHARACTER 10000
 #define SC_MARKNUM_FOLDEREND 25
 #define SC_MARKNUM_FOLDEROPENMID 26
@@ -443,6 +444,11 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_GETWRAPVISUALFLAGSLOCATION 2463
 #define SCI_SETWRAPSTARTINDENT 2464
 #define SCI_GETWRAPSTARTINDENT 2465
+#define SC_WRAPINDENT_FIXED 0
+#define SC_WRAPINDENT_SAME 1
+#define SC_WRAPINDENT_INDENT 2
+#define SCI_SETWRAPINDENTMODE 2472
+#define SCI_GETWRAPINDENTMODE 2473
 #define SC_CACHE_NONE 0
 #define SC_CACHE_CARET 1
 #define SC_CACHE_PAGE 2
@@ -558,6 +564,9 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_GETMODEVENTMASK 2378
 #define SCI_SETFOCUS 2380
 #define SCI_GETFOCUS 2381
+#define SC_STATUS_OK 0
+#define SC_STATUS_FAILURE 1
+#define SC_STATUS_BADALLOC 2
 #define SCI_SETSTATUS 2382
 #define SCI_GETSTATUS 2383
 #define SCI_SETMOUSEDOWNCAPTURES 2384
@@ -702,6 +711,8 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_ANNOTATIONGETSTYLEOFFSET 2551
 #define UNDO_MAY_COALESCE 1
 #define SCI_ADDUNDOACTION 2560
+#define SCI_CHARPOSITIONFROMPOINT 2561
+#define SCI_CHARPOSITIONFROMPOINTCLOSE 2562
 #define SCI_STARTRECORD 3001
 #define SCI_STOPRECORD 3002
 #define SCI_SETLEXER 4001
@@ -799,38 +810,44 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 namespace Scintilla {
 #endif
 
-struct CharacterRange {
+struct Sci_CharacterRange {
 	long cpMin;
 	long cpMax;
 };
 
-struct TextRange {
-	struct CharacterRange chrg;
+struct Sci_TextRange {
+	struct Sci_CharacterRange chrg;
 	char *lpstrText;
 };
 
-struct TextToFind {
-	struct CharacterRange chrg;
+struct Sci_TextToFind {
+	struct Sci_CharacterRange chrg;
 	char *lpstrText;
-	struct CharacterRange chrgText;
+	struct Sci_CharacterRange chrgText;
 };
+
+#define CharacterRange Sci_CharacterRange
+#define TextRange Sci_TextRange
+#define TextToFind Sci_TextToFind
 
 #ifdef PLATFORM_H
 
 /* This structure is used in printing and requires some of the graphics types
  * from Platform.h.  Not needed by most client code. */
 
-struct RangeToFormat {
+struct Sci_RangeToFormat {
 	SurfaceID hdc;
 	SurfaceID hdcTarget;
 	PRectangle rc;
 	PRectangle rcPage;
-	CharacterRange chrg;
+	Sci_CharacterRange chrg;
 };
+
+#define RangeToFormat Sci_RangeToFormat
 
 #endif
 
-struct NotifyHeader {
+struct Sci_NotifyHeader {
 	/* Compatible with Windows NMHDR.
 	 * hwndFrom is really an environment specific window handle or pointer
 	 * but most clients of Scintilla.h do not have this type visible. */
@@ -839,8 +856,10 @@ struct NotifyHeader {
 	unsigned int code;
 };
 
+#define NotifyHeader Sci_NotifyHeader
+
 struct SCNotification {
-	struct NotifyHeader nmhdr;
+	struct Sci_NotifyHeader nmhdr;
 	int position;	/* SCN_STYLENEEDED, SCN_MODIFIED, SCN_DWELLSTART, SCN_DWELLEND */
 	int ch;		/* SCN_CHARADDED, SCN_KEY */
 	int modifiers;	/* SCN_KEY */
@@ -864,28 +883,6 @@ struct SCNotification {
 
 #ifdef SCI_NAMESPACE
 }
-#endif
-
-/* Deprecation section listing all API features that are deprecated and
- * will be removed completely in a future version.
- * To enable these features define INCLUDE_DEPRECATED_FEATURES */
-
-#ifdef INCLUDE_DEPRECATED_FEATURES
-
-#define SCI_SETCARETPOLICY 2369
-#define CARET_CENTER 0x02
-#define CARET_XEVEN 0x08
-#define CARET_XJUMPS 0x10
-
-#define SC_FOLDFLAG_BOX 0x0001
-#define SC_FOLDLEVELBOXHEADERFLAG 0x4000
-#define SC_FOLDLEVELBOXFOOTERFLAG 0x8000
-#define SC_FOLDLEVELCONTRACTED 0x10000
-#define SC_FOLDLEVELUNINDENT 0x20000
-
-#define SCN_POSCHANGED 2012
-#define SCN_CHECKBRACE 2007
-
 #endif
 
 #endif

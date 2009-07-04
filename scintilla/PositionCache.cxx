@@ -61,7 +61,8 @@ LineLayout::LineLayout(int maxLineLength_) :
 	hsStart(0),
 	hsEnd(0),
 	widthLine(wrapWidthInfinite),
-	lines(1) {
+	lines(1),
+	wrapIndent(0) {
 	Resize(maxLineLength_);
 }
 
@@ -440,6 +441,10 @@ int BreakFinder::First() {
 	return nextBreak;
 }
 
+static bool IsTrailByte(int ch) {
+	return (ch >= 0x80) && (ch < (0x80 + 0x40));
+}
+
 int BreakFinder::Next() {
 	if (subBreak == -1) {
 		int prev = nextBreak;
@@ -472,15 +477,20 @@ int BreakFinder::Next() {
 	} else {
 		int lastGoodBreak = -1;
 		int lastOKBreak = -1;
+		int lastUTF8Break = -1;
 		int j;
 		for (j = subBreak + 1; j <= nextBreak; j++) {
 			if (IsSpaceOrTab(ll->chars[j - 1]) && !IsSpaceOrTab(ll->chars[j])) {
 				lastGoodBreak = j;
 			}
-			if (ll->chars[j] < 'A') {
+			if (static_cast<unsigned char>(ll->chars[j]) < 'A') {
 				lastOKBreak = j;
 			}
-			if (((j - subBreak) >= lengthEachSubdivision) && ((lastGoodBreak >= 0) || (lastOKBreak >= 0))) {
+			if (utf8 && !IsTrailByte(static_cast<unsigned char>(ll->chars[j]))) {
+				lastUTF8Break = j;
+			}
+			if (((j - subBreak) >= lengthEachSubdivision) &&
+				((lastGoodBreak >= 0) || (lastOKBreak >= 0) || (lastUTF8Break >= 0))) {
 				break;
 			}
 		}
@@ -488,6 +498,8 @@ int BreakFinder::Next() {
 			subBreak = lastGoodBreak;
 		} else if (lastOKBreak >= 0) {
 			subBreak = lastOKBreak;
+		} else if (lastUTF8Break >= 0) {
+			subBreak = lastUTF8Break;
 		} else {
 			subBreak = nextBreak;
 		}

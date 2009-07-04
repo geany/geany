@@ -175,10 +175,11 @@ public:
 	int AddRef();
 	int Release();
 
+	virtual void Init();
 	virtual void InsertLine(int line);
 	virtual void RemoveLine(int line);
 
-	int LineFromPosition(int pos);
+	int LineFromPosition(int pos) const;
 	int ClampPositionIntoDocument(int pos);
 	bool IsCrLf(int pos);
 	int LenChar(int pos);
@@ -237,8 +238,8 @@ public:
 	int LineFromHandle(int markerHandle);
 	int LineStart(int line) const;
 	int LineEnd(int line) const;
-	int LineEndPosition(int position);
-	int VCHomePosition(int position);
+	int LineEndPosition(int position) const;
+	int VCHomePosition(int position) const;
 
 	int SetLevel(int line, int level);
 	int GetLevel(int line);

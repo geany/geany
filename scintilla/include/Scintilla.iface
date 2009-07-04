@@ -270,6 +270,7 @@ val SC_MARK_PIXMAP=25
 val SC_MARK_FULLRECT=26
 val SC_MARK_LEFTRECT=27
 val SC_MARK_AVAILABLE=28
+val SC_MARK_UNDERLINE=29
 
 val SC_MARK_CHARACTER=10000
 
@@ -1130,6 +1131,17 @@ set void SetWrapStartIndent=2464(int indent,)
 # Retrive the start indent for wrapped lines.
 get int GetWrapStartIndent=2465(,)
 
+enu WrapIndentMode=SC_WRAPINDENT_
+val SC_WRAPINDENT_FIXED=0
+val SC_WRAPINDENT_SAME=1
+val SC_WRAPINDENT_INDENT=2
+
+# Sets how wrapped sublines are placed. Default is fixed.
+set void SetWrapIndentMode=2472(int mode,)
+
+# Retrieve how wrapped sublines are placed. Default is fixed.
+get int GetWrapIndentMode=2473(,)
+
 enu LineCache=SC_CACHE_
 val SC_CACHE_NONE=0
 val SC_CACHE_CARET=1
@@ -1475,6 +1487,11 @@ get int GetModEventMask=2378(,)
 set void SetFocus=2380(bool focus,)
 # Get internal focus flag.
 get bool GetFocus=2381(,)
+
+enu Status=SC_STATUS_
+val SC_STATUS_OK=0
+val SC_STATUS_FAILURE=1
+val SC_STATUS_BADALLOC=2
 
 # Change error status - 0 = OK.
 set void SetStatus=2382(int statusCode,)
@@ -1902,6 +1919,13 @@ val UNDO_MAY_COALESCE=1
 # Add a container action to the undo stack
 fun void AddUndoAction=2560(int token, int flags)
 
+# Find the position of a character from a point within the window.
+fun position CharPositionFromPoint=2561(int x, int y)
+
+# Find the position of a character from a point within the window.
+# Return INVALID_POSITION if not close to text.
+fun position CharPositionFromPointClose=2562(int x, int y)
+
 # Start notifying the container of all key presses and commands.
 fun void StartRecord=3001(,)
 
@@ -2177,6 +2201,11 @@ val SCE_D_IDENTIFIER=14
 val SCE_D_COMMENTLINEDOC=15
 val SCE_D_COMMENTDOCKEYWORD=16
 val SCE_D_COMMENTDOCKEYWORDERROR=17
+val SCE_D_STRINGB=18
+val SCE_D_STRINGR=19
+val SCE_D_WORD5=20
+val SCE_D_WORD6=21
+val SCE_D_WORD7=22
 # Lexical states for SCLEX_TCL
 lex TCL=SCLEX_TCL SCE_TCL_
 val SCE_TCL_DEFAULT=0
@@ -3061,6 +3090,7 @@ val SCE_CAML_LINENUM=6
 val SCE_CAML_OPERATOR=7
 val SCE_CAML_NUMBER=8
 val SCE_CAML_CHAR=9
+val SCE_CAML_WHITE=10
 val SCE_CAML_STRING=11
 val SCE_CAML_COMMENT=12
 val SCE_CAML_COMMENT1=13
@@ -3438,6 +3468,7 @@ val SCE_MYSQL_QUOTEDIDENTIFIER=17
 val SCE_MYSQL_USER1=18
 val SCE_MYSQL_USER2=19
 val SCE_MYSQL_USER3=20
+val SCE_MYSQL_HIDDENCOMMAND=21
 # Lexical state for SCLEX_PO
 lex Po=SCLEX_PO SCE_PO_
 val SCE_PO_DEFAULT=0
@@ -3544,26 +3575,3 @@ evt void IndicatorClick=2023(int modifiers, int position)
 evt void IndicatorRelease=2024(int modifiers, int position)
 evt void AutoCCancelled=2025(void)
 evt void AutoCCharDeleted=2026(void)
-
-cat Deprecated
-
-# CARET_POLICY changed in 1.47
-fun void SetCaretPolicy=2369(int caretPolicy, int caretSlop)
-val CARET_CENTER=0x02
-val CARET_XEVEN=0x08
-val CARET_XJUMPS=0x10
-
-# The old name for SCN_UPDATEUI
-val SCN_CHECKBRACE=2007
-evt void PosChanged=2012(int position)
-
-# Box folding support
-val SC_FOLDFLAG_BOX=0x0001
-val SC_FOLDLEVELBOXHEADERFLAG=0x4000
-val SC_FOLDLEVELBOXFOOTERFLAG=0x8000
-val SC_FOLDLEVELCONTRACTED=0x10000
-val SC_FOLDLEVELUNINDENT=0x20000
-
-# SCLEX_HTML should be used in preference to these.
-val SCLEX_ASP=29
-val SCLEX_PHP=30

@@ -21,7 +21,7 @@
 using namespace Scintilla;
 #endif
 
-LineVector::LineVector() : starts(256) {
+LineVector::LineVector() : starts(256), perLine(0) {
 	Init();
 }
 
@@ -31,6 +31,9 @@ LineVector::~LineVector() {
 
 void LineVector::Init() {
 	starts.DeleteAll();
+	if (perLine) {
+		perLine->Init();
+	}
 }
 
 void LineVector::SetPerLine(PerLine *pl) {
@@ -59,7 +62,7 @@ void LineVector::RemoveLine(int line) {
 	}
 }
 
-int LineVector::LineFromPosition(int pos) {
+int LineVector::LineFromPosition(int pos) const {
 	return starts.PartitionFromPosition(pos);
 }
 
