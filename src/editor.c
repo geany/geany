@@ -1727,7 +1727,7 @@ static gboolean complete_doc_word(GeanyEditor *editor, gchar *root, gsize rootle
 	gsize nmatches = 0;
 	gboolean ret = FALSE;
 	GString *words;
-	struct TextToFind ttf;
+	struct Sci_TextToFind ttf;
 
 	len = sci_get_length(sci);
 	current = sci_get_current_position(sci) - rootlen;
@@ -4132,7 +4132,7 @@ void editor_replace_tabs(GeanyEditor *editor)
 	gint search_pos, pos_in_line, current_tab_true_length;
 	gint tab_len;
 	gchar *tab_str;
-	struct TextToFind ttf;
+	struct Sci_TextToFind ttf;
 
 	g_return_if_fail(editor != NULL);
 
@@ -4170,7 +4170,7 @@ void editor_replace_spaces(GeanyEditor *editor)
 	gint search_pos;
 	static gdouble tab_len_f = -1.0; /* keep the last used value */
 	gint tab_len;
-	struct TextToFind ttf;
+	struct Sci_TextToFind ttf;
 
 	g_return_if_fail(editor != NULL);
 

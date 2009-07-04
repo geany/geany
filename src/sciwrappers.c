@@ -747,7 +747,7 @@ gint sci_search_prev(ScintillaObject *sci, gint flags, const gchar *text)
 }
 
 
-gint sci_find_text(ScintillaObject *sci, gint flags, struct TextToFind *ttf)
+gint sci_find_text(ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf)
 {
 	return SSM(sci, SCI_FINDTEXT, flags, (long) ttf );
 }
@@ -811,7 +811,7 @@ void sci_clear_cmdkey(ScintillaObject *sci, gint key)
  * @param text Text will be zero terminated and must be allocated (end - start + 1) bytes. */
 void sci_get_text_range(ScintillaObject *sci, gint start, gint end, gchar *text)
 {
-	struct TextRange tr;
+	struct Sci_TextRange tr;
 	tr.chrg.cpMin = start;
 	tr.chrg.cpMax = end;
 	tr.lpstrText = text;

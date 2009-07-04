@@ -1076,7 +1076,7 @@ static gboolean detect_tabs_and_spaces(GeanyEditor *editor)
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
 	ScintillaObject *sci = editor->sci;
 	gsize count = 0;
-	struct TextToFind ttf;
+	struct Sci_TextToFind ttf;
 	gchar *soft_tab = g_strnfill(iprefs->width, ' ');
 	gchar *regex = g_strconcat("^\t+", soft_tab, "[^ ]", NULL);
 
@@ -1511,7 +1511,7 @@ static void replace_header_filename(GeanyDocument *doc)
 {
 	gchar *filebase;
 	gchar *filename;
-	struct TextToFind ttf;
+	struct Sci_TextToFind ttf;
 
 	g_return_if_fail(doc != NULL);
 	g_return_if_fail(doc->file_type != NULL);
@@ -1867,7 +1867,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gint flags, gboolean inc)
 {
 	gint start_pos, search_pos;
-	struct TextToFind ttf;
+	struct Sci_TextToFind ttf;
 
 	g_return_val_if_fail(text != NULL, FALSE);
 	g_return_val_if_fail(doc != NULL, FALSE);
@@ -2096,7 +2096,7 @@ document_replace_range(GeanyDocument *doc, const gchar *find_text, const gchar *
 	gint flags, gint start, gint end, gboolean scroll_to_match, gint *new_range_end)
 {
 	gint count = 0;
-	struct TextToFind ttf;
+	struct Sci_TextToFind ttf;
 	ScintillaObject *sci;
 
 	if (new_range_end != NULL)

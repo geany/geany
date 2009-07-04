@@ -963,7 +963,7 @@ static gint search_mark(GeanyDocument *doc, const gchar *search_text, gint flags
 {
 	gint pos, count = 0;
 	gsize len;
-	struct TextToFind ttf;
+	struct Sci_TextToFind ttf;
 
 	g_return_val_if_fail(doc != NULL, 0);
 
@@ -1605,7 +1605,7 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gint flags)
 {
 	gchar *buffer, *short_file_name;
-	struct TextToFind ttf;
+	struct Sci_TextToFind ttf;
 	gint count = 0;
 	gint prev_line = -1;
 
