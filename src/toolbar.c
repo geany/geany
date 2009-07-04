@@ -690,6 +690,9 @@ static void tb_editor_drag_data_get_cb(GtkWidget *widget, GdkDragContext *contex
 		return;
 
 	gtk_tree_model_get(model, &iter, 0, &name, -1);
+	if (! NZV(name))
+		return;
+
 	atom = gdk_atom_intern(tb_editor_dnd_targets[0].target, FALSE);
 	gtk_selection_data_set(data, atom, 8, (guchar*) name, strlen(name));
 
@@ -722,18 +725,23 @@ static void tb_editor_drag_data_rcvd_cb(GtkWidget *widget, GdkDragContext *conte
 
 		if (tree != tbw->tree_available || ! is_sep)
 		{
-			GtkTreeIter iter, iter_before;
+			GtkTreeIter iter, iter_before, *iter_before_ptr;
 			GtkListStore *store = GTK_LIST_STORE(gtk_tree_view_get_model(tree));
 
 			if (tbw->last_drag_path != NULL)
 			{
 				gtk_tree_model_get_iter(GTK_TREE_MODEL(store), &iter_before, tbw->last_drag_path);
 
+				if (gtk_list_store_iter_is_valid(store, &iter_before))
+					iter_before_ptr = &iter_before;
+				else
+					iter_before_ptr = NULL;
+
 				if (tbw->last_drag_pos == GTK_TREE_VIEW_DROP_BEFORE ||
 					tbw->last_drag_pos == GTK_TREE_VIEW_DROP_INTO_OR_BEFORE)
-					gtk_list_store_insert_before(store, &iter, &iter_before);
+					gtk_list_store_insert_before(store, &iter, iter_before_ptr);
 				else
-					gtk_list_store_insert_after(store, &iter, &iter_before);
+					gtk_list_store_insert_after(store, &iter, iter_before_ptr);
 
 				gtk_list_store_set(store, &iter, 0, text, -1);
 			}
@@ -879,7 +887,7 @@ static gboolean tb_editor_foreach_used(GtkTreeModel *model, GtkTreePath *path,
 
 	if (utils_str_equal(action_name, TB_EDITOR_SEPARATOR))
 		g_string_append_printf(data, "\t\t<separator/>\n");
-	else
+	else if (NZV(action_name))
 		g_string_append_printf(data, "\t\t<toolitem action='%s' />\n", action_name);
 
 	g_free(action_name);
