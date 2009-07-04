@@ -1247,7 +1247,7 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	gtk_widget_set_name(pm_widgets.dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
 
-	gtk_window_set_default_size(GTK_WINDOW(pm_widgets.dialog), 400, 350);
+	gtk_window_set_default_size(GTK_WINDOW(pm_widgets.dialog), 500, 450);
 
 	pm_widgets.tree = gtk_tree_view_new();
 	pm_widgets.store = gtk_list_store_new(
