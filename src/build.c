@@ -1726,21 +1726,25 @@ void build_menu_update(GeanyDocument *doc)
 /* Call build_menu_update() instead of calling this directly. */
 static void set_stop_button(gboolean stop)
 {
+	const gchar *button_stock_id = NULL;
 	GtkStockItem sitem;
 	GtkToolButton *run_button;
-	GtkWidget *menuitem =
-		build_get_menu_items(run_info.file_type_id)->item_exec;
+	GtkWidget *menuitem = build_get_menu_items(run_info.file_type_id)->item_exec;
 
 	run_button = GTK_TOOL_BUTTON(toolbar_get_widget_by_name("Run"));
-	if (stop && utils_str_equal(gtk_tool_button_get_stock_id(run_button), "gtk-stop"))
+	if (run_button != NULL)
+		button_stock_id = gtk_tool_button_get_stock_id(run_button);
+
+	if (stop && utils_str_equal(button_stock_id, "gtk-stop"))
 		return;
-	if (! stop && utils_str_equal(gtk_tool_button_get_stock_id(run_button), "gtk-execute"))
+	if (! stop && utils_str_equal(button_stock_id, "gtk-execute"))
 		return;
 
 	/* use the run button also as stop button */
 	if (stop)
 	{
-		gtk_tool_button_set_stock_id(run_button, "gtk-stop");
+		if (run_button != NULL)
+			gtk_tool_button_set_stock_id(run_button, "gtk-stop");
 
 		if (menuitem != NULL)
 		{
@@ -1753,7 +1757,8 @@ static void set_stop_button(gboolean stop)
 	}
 	else
 	{
-		gtk_tool_button_set_stock_id(run_button, "gtk-execute");
+		if (run_button != NULL)
+			gtk_tool_button_set_stock_id(run_button, "gtk-execute");
 
 		if (menuitem != NULL)
 		{
