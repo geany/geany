@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.17svn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-26 21:08+0200\n"
-"PO-Revision-Date: 2009-04-25 23:13+0200\n"
+"POT-Creation-Date: 2009-07-07 09:49+0200\n"
+"PO-Revision-Date: 2009-07-07 04:33+0200\n"
 "Last-Translator: Gürkan Gür <seqizz@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -28,67 +28,67 @@ msgstr "Geany"
 msgid "Integrated Development Environment"
 msgstr "Tümleşik Geliştirme Ortamı"
 
-#: ../src/about.c:137
+#: ../src/about.c:138
 msgid "About Geany"
 msgstr "Geany Hakkında"
 
-#: ../src/about.c:187
+#: ../src/about.c:188
 msgid "A fast and lightweight IDE"
 msgstr "Hızlı ve Hafif Bir IDE"
 
-#: ../src/about.c:208
+#: ../src/about.c:209
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(%s veya daha sonrasında derlendi)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:239
+#: ../src/about.c:240
 msgid "Info"
 msgstr "Bilgi"
 
-#: ../src/about.c:255
+#: ../src/about.c:256
 msgid "Developers"
 msgstr "Geliştiriciler"
 
-#: ../src/about.c:264
+#: ../src/about.c:265
 msgid "maintainer"
 msgstr "bakıcı"
 
-#: ../src/about.c:272
+#: ../src/about.c:273
 msgid "developer"
 msgstr "geliştirici"
 
-#: ../src/about.c:280
+#: ../src/about.c:281
 msgid "translation maintainer"
 msgstr "çeviri bakıcısı"
 
-#: ../src/about.c:289
+#: ../src/about.c:290
 msgid "Translators"
 msgstr "Çevirmenler"
 
-#: ../src/about.c:309
+#: ../src/about.c:310
 msgid "Previous Translators"
 msgstr "Önceki Çevirmenler"
 
-#: ../src/about.c:330
+#: ../src/about.c:331
 msgid "Contributors"
 msgstr "Katkıda Bulunanlar"
 
-#: ../src/about.c:340
+#: ../src/about.c:341
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
 msgstr "Bir çok geliştiriciden bazıları (daha detaylı liste için bkz: %s):"
 
-#: ../src/about.c:366
+#: ../src/about.c:367
 msgid "Credits"
 msgstr "Yapımcılar"
 
-#: ../src/about.c:380
+#: ../src/about.c:381
 msgid "License"
 msgstr "Lisans"
 
-#: ../src/about.c:389
+#: ../src/about.c:390
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -96,7 +96,7 @@ msgstr ""
 "Lisans yazısı bulunamadı. Lütfen çevrimiçi olarak görüntülemek için http://"
 "www.gnu.org/licenses/gpl-2.0.txt adresini ziyaret edin."
 
-#: ../src/build.c:219 ../src/build.c:769
+#: ../src/build.c:221 ../src/build.c:745
 #, c-format
 msgid ""
 "Could not find terminal \"%s\" (check path for Terminal tool setting in "
@@ -105,132 +105,132 @@ msgstr ""
 "\"%s\" terminali bulunamadı (Terminal aracının yolunu ayarlamak için "
 "Seçenekler'e bakınız)"
 
-#: ../src/build.c:234 ../src/build.c:674
+#: ../src/build.c:236 ../src/build.c:650
 #, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created)"
 msgstr "\"%s\" çalıştırılamadı (başlangıç-betiği oluşturulamadı)"
 
-#: ../src/build.c:270 ../src/build.c:552 ../src/build.c:802
-#: ../src/search.c:1392
+#: ../src/build.c:272 ../src/build.c:528 ../src/build.c:778
+#: ../src/search.c:1407
 #, c-format
 msgid "Process failed (%s)"
 msgstr "İşlem hatalı (%s)"
 
-#: ../src/build.c:532
+#: ../src/build.c:508
 #, c-format
 msgid "%s (in directory: %s)"
 msgstr "%s (%s dizininde)"
 
-#: ../src/build.c:637
+#: ../src/build.c:613
 #, c-format
 msgid "Failed to change the working directory to \"%s\""
 msgstr "\"%s\" çalışma dizinine geçilemedi."
 
-#: ../src/build.c:731
+#: ../src/build.c:707
 msgid ""
 "Could not execute the file in the VTE because it probably contains a command."
 msgstr ""
 "Dosya sanal terminalde çalıştırılamadı, büyük ihtimalle bir komut içeriyor."
 
-#: ../src/build.c:934
+#: ../src/build.c:914
 msgid "Compilation failed."
 msgstr "Derleme hatalı."
 
-#: ../src/build.c:948
+#: ../src/build.c:928
 msgid "Compilation finished successfully."
 msgstr "Derleme başarılı."
 
 #. compile the code
-#: ../src/build.c:1052
+#: ../src/build.c:1033
 msgid "_Compile"
 msgstr "_Derle"
 
 #. build the code
-#: ../src/build.c:1060 ../src/build.c:2130 ../src/interface.c:976
+#: ../src/build.c:1041 ../src/build.c:2114 ../src/interface.c:976
 msgid "_Build"
 msgstr "İn_şa Et"
 
 #. build the code with make all
-#: ../src/build.c:1072 ../src/build.c:1178 ../src/build.c:2141
+#: ../src/build.c:1053 ../src/build.c:1159 ../src/build.c:2125
 msgid "_Make All"
 msgstr "Tü_münü inşa et"
 
 #. build the code with make custom
-#: ../src/build.c:1081 ../src/build.c:1187 ../src/build.c:2149
+#: ../src/build.c:1062 ../src/build.c:1168 ../src/build.c:2133
 msgid "Make Custom _Target"
 msgstr "_Özel Hedef Derle"
 
 #. build the code with make object
-#: ../src/build.c:1090 ../src/build.c:2157
+#: ../src/build.c:1071 ../src/build.c:2141
 msgid "Make _Object"
 msgstr "Nesne_yi Derle"
 
 #. next error
-#: ../src/build.c:1103 ../src/build.c:1200
+#: ../src/build.c:1084 ../src/build.c:1181
 msgid "_Next Error"
 msgstr "Sonra_ki Hata"
 
-#: ../src/build.c:1110 ../src/build.c:1207
+#: ../src/build.c:1091 ../src/build.c:1188
 msgid "_Previous Error"
 msgstr "Ön_ceki Hata"
 
 #. arguments
-#: ../src/build.c:1135 ../src/build.c:2169
+#: ../src/build.c:1116 ../src/build.c:2153
 msgid "_Set Includes and Arguments"
 msgstr "Dahili _Seçenekleri ve Argümanları Ayarla"
 
 #. DVI
-#: ../src/build.c:1156
+#: ../src/build.c:1137
 msgid "LaTeX -> _DVI"
 msgstr "LaTeX -> _DVI"
 
 #. PDF
-#: ../src/build.c:1165
+#: ../src/build.c:1146
 msgid "LaTeX -> _PDF"
 msgstr "LaTeX -> _PDF"
 
 #. DVI view
-#: ../src/build.c:1219
+#: ../src/build.c:1200
 msgid "_View DVI File"
 msgstr "D_VI Dosyayı İncele"
 
 #. PDF view
-#: ../src/build.c:1229
+#: ../src/build.c:1210
 msgid "V_iew PDF File"
 msgstr "PDF Dosyayı _İncele"
 
 #. arguments
-#: ../src/build.c:1244
+#: ../src/build.c:1225
 msgid "_Set Arguments"
 msgstr "Arg_ümanları Ayarla"
 
-#: ../src/build.c:1319
+#: ../src/build.c:1300
 msgid "Set Arguments"
 msgstr "Argümanları Ayarla"
 
-#: ../src/build.c:1326
+#: ../src/build.c:1307
 msgid "Set programs and options for compiling and viewing (La)TeX files."
 msgstr ""
 "(La)TeX dosyalarının derlenmesi ve incelenmesi için program ve seçenekleri "
 "ayarla."
 
-#: ../src/build.c:1337
+#: ../src/build.c:1318
 msgid "DVI creation:"
 msgstr "DVI oluşturma:"
 
-#: ../src/build.c:1357
+#: ../src/build.c:1338
 msgid "PDF creation:"
 msgstr "PDF oluşturma:"
 
-#: ../src/build.c:1377
+#: ../src/build.c:1358
 msgid "DVI preview:"
 msgstr "DVI izleme:"
 
-#: ../src/build.c:1397
+#: ../src/build.c:1378
 msgid "PDF preview:"
 msgstr "PDF izleme:"
 
-#: ../src/build.c:1414 ../src/build.c:1596
+#: ../src/build.c:1395 ../src/build.c:1577
 #, c-format
 msgid ""
 "%f will be replaced by the current filename, e.g. test_file.c\n"
@@ -239,68 +239,68 @@ msgstr ""
 "%f geçerli dosya adı ile değişecek, örn. test_dosyasi.c\n"
 "%e geçerli dosya adının uzantısız hali ile değişecek, örn. test_dosyasi"
 
-#: ../src/build.c:1499
+#: ../src/build.c:1480
 msgid "Set Includes and Arguments"
 msgstr "Dahili Seçenekleri ve Argümanları Ayarla"
 
-#: ../src/build.c:1506
+#: ../src/build.c:1487
 msgid "Set the commands for building and running programs."
 msgstr "Dosyaları derlemek ve çalıştırmak için kullanılacak komutları ayarla."
 
 #. in-dialog heading for the "Set Includes and Arguments" dialog
-#: ../src/build.c:1514
+#: ../src/build.c:1495
 #, c-format
 msgid "%s commands"
 msgstr "%s komutları"
 
-#: ../src/build.c:1529
+#: ../src/build.c:1510
 msgid "Compile:"
 msgstr "Derle:"
 
-#: ../src/build.c:1551
+#: ../src/build.c:1532
 msgid "Build:"
 msgstr "İnşa Et:"
 
-#: ../src/build.c:1573 ../src/dialogs.c:1189
+#: ../src/build.c:1554 ../src/dialogs.c:1186
 msgid "Execute:"
 msgstr "Çalıştır:"
 
-#: ../src/build.c:1901 ../src/toolbar.c:194
+#: ../src/build.c:1886 ../src/toolbar.c:344
 msgid "Build the current file"
 msgstr "Geçerli dosyayı derle"
 
-#: ../src/build.c:1926
+#: ../src/build.c:1911
 msgid "Make Custom Target"
 msgstr "Özel Hedef Belirle"
 
-#: ../src/build.c:1927
+#: ../src/build.c:1912
 msgid ""
 "Enter custom options here, all entered text is passed to the make command."
 msgstr ""
 "Buraya özel seçenekleri girin, girilen bütün yazı make komutuna gidecek."
 
-#: ../src/build.c:1976
+#: ../src/build.c:1961
 msgid "Build the current file with Make and the default target"
 msgstr "Geçerli dosyayı make aracı ile ve öntanımlı dizinde inşa et"
 
-#: ../src/build.c:1979
+#: ../src/build.c:1964
 msgid "Build the current file with Make and the specified target"
 msgstr "Geçerli dosyayı make aracı kullanarak belirtilen dizinde inşa et"
 
-#: ../src/build.c:1982
+#: ../src/build.c:1967
 msgid "Compile the current file with Make"
 msgstr "Geçerli dosyayı Make ile derle"
 
-#: ../src/build.c:2044
+#: ../src/build.c:2029
 msgid "Failed to execute the view program"
 msgstr "Görüntüleme programı çalıştırılamadı"
 
-#: ../src/build.c:2082
+#: ../src/build.c:2067
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "İşlem durdurulamadı (%s)."
 
-#: ../src/build.c:2101 ../src/build.c:2115
+#: ../src/build.c:2086 ../src/build.c:2100
 msgid "No more build errors."
 msgstr "Başka inşa hatası yok."
 
@@ -322,54 +322,54 @@ msgstr "Kaydedilmemiş bütün içerik kaybolacak."
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Yeniden yüklemek istediğinize emin misiniz '%s'?"
 
-#: ../src/callbacks.c:1246 ../src/keybindings.c:367
+#: ../src/callbacks.c:1249 ../src/keybindings.c:371
 msgid "Go to Line"
 msgstr "Satıra Git"
 
-#: ../src/callbacks.c:1246
+#: ../src/callbacks.c:1249
 msgid "Enter the line you want to go to:"
 msgstr "Gitmek istediğiniz satırı girin:"
 
-#: ../src/callbacks.c:1341 ../src/callbacks.c:1366
+#: ../src/callbacks.c:1344 ../src/callbacks.c:1369
 msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr ""
 "Lütfen bı fonksiyonu kullanmadan önce geçerli dosya için dosya türünü "
 "ayarlayın."
 
-#: ../src/callbacks.c:1471 ../src/ui_utils.c:548
+#: ../src/callbacks.c:1474 ../src/ui_utils.c:542
 msgid "dd.mm.yyyy"
 msgstr "gg.aa.yyyy"
 
-#: ../src/callbacks.c:1473 ../src/ui_utils.c:549
+#: ../src/callbacks.c:1476 ../src/ui_utils.c:543
 msgid "mm.dd.yyyy"
 msgstr "aa.gg.yyyy"
 
-#: ../src/callbacks.c:1475 ../src/ui_utils.c:550
+#: ../src/callbacks.c:1478 ../src/ui_utils.c:544
 msgid "yyyy/mm/dd"
 msgstr "yyyy/aa/gg"
 
-#: ../src/callbacks.c:1477 ../src/ui_utils.c:559
+#: ../src/callbacks.c:1480 ../src/ui_utils.c:553
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "gg.aa.yyyy sa:dk:sn"
 
-#: ../src/callbacks.c:1479 ../src/ui_utils.c:560
+#: ../src/callbacks.c:1482 ../src/ui_utils.c:554
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "gg.aa.yyyy sa:dk:sn"
 
-#: ../src/callbacks.c:1481 ../src/ui_utils.c:561
+#: ../src/callbacks.c:1484 ../src/ui_utils.c:555
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "yyyy/aa/gg sa:dk:sn"
 
-#: ../src/callbacks.c:1483 ../src/ui_utils.c:570
+#: ../src/callbacks.c:1486 ../src/ui_utils.c:564
 msgid "_Use Custom Date Format"
 msgstr "Özel Tarih Formatını K_ullan"
 
-#: ../src/callbacks.c:1494
+#: ../src/callbacks.c:1497
 msgid "Custom Date Format"
 msgstr "Özel Tarih Formatı"
 
-#: ../src/callbacks.c:1495
+#: ../src/callbacks.c:1498
 msgid ""
 "Enter here a custom date and time format. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
@@ -377,24 +377,24 @@ msgstr ""
 "Buraya özel tarih ve zaman biçimini girin. ANSI C uyumlu bütün olasılıkları "
 "kullanabilirsiniz."
 
-#: ../src/callbacks.c:1513
+#: ../src/callbacks.c:1516
 msgid "Date format string could not be converted (possibly too long)."
 msgstr "Tarih biçimi dönüştürülemedi (muhtemelen çok uzun)."
 
-#: ../src/callbacks.c:1770 ../src/callbacks.c:1780
+#: ../src/callbacks.c:1744 ../src/callbacks.c:1754
 msgid "No more message items."
 msgstr "Başka mesaj yok."
 
 #. initialize the dialog
-#: ../src/dialogs.c:143 ../src/prefs.c:1581
+#: ../src/dialogs.c:140 ../src/prefs.c:1640
 msgid "Open File"
 msgstr "Dosya Aç"
 
-#: ../src/dialogs.c:147 ../src/interface.c:691
+#: ../src/dialogs.c:144 ../src/interface.c:691
 msgid "_View"
 msgstr "G_örünüm"
 
-#: ../src/dialogs.c:150
+#: ../src/dialogs.c:147
 msgid ""
 "Opens the file in read-only mode. If you choose more than one file to open, "
 "all files will be opened read-only."
@@ -402,28 +402,28 @@ msgstr ""
 "Dosyayı salt okuma modunda açar. Birden fazla dosya açarsanız hepsi salt "
 "okunur modda açılacaktır."
 
-#: ../src/dialogs.c:172
+#: ../src/dialogs.c:169
 msgid "Detect by file extension"
 msgstr "Dosya uzantısına göre algıla"
 
-#: ../src/dialogs.c:197 ../src/interface.c:3538 ../src/interface.c:5086
+#: ../src/dialogs.c:196 ../src/interface.c:3580 ../src/interface.c:5138
 msgid "Detect from file"
 msgstr "Dosyadan algıla"
 
-#: ../src/dialogs.c:259
+#: ../src/dialogs.c:258
 msgid "_More Options"
 msgstr "_Daha fazla seçenek"
 
 #. line 1 with checkbox and encoding combo
-#: ../src/dialogs.c:266
+#: ../src/dialogs.c:265
 msgid "Show _hidden files"
 msgstr "_Gizli dosyaları görüntüle"
 
-#: ../src/dialogs.c:277
+#: ../src/dialogs.c:276
 msgid "Set encoding:"
 msgstr "Kodlamayı ayarla:"
 
-#: ../src/dialogs.c:287
+#: ../src/dialogs.c:286
 msgid ""
 "Explicitly defines an encoding for the file, if it would not be detected. "
 "This is useful when you know that the encoding of a file cannot be detected "
@@ -436,11 +436,11 @@ msgstr ""
 "Birden çok dosya seçerseniz hepsi seçilen kodlama ile açılacaktır."
 
 #. line 2 with filetype combo
-#: ../src/dialogs.c:294
+#: ../src/dialogs.c:293
 msgid "Set filetype:"
 msgstr "Dosya türünü ayarla:"
 
-#: ../src/dialogs.c:304
+#: ../src/dialogs.c:303
 msgid ""
 "Explicitly defines a filetype for the file, if it would not be detected by "
 "filename extension.\n"
@@ -452,23 +452,23 @@ msgstr ""
 "kullanın.\n"
 "Birden çok dosya seçerseniz hepsi seçilen dosya türünde açılacaktır."
 
-#: ../src/dialogs.c:411
+#: ../src/dialogs.c:419
 msgid "Save File"
 msgstr "Dosyayı Kaydet"
 
-#: ../src/dialogs.c:419
+#: ../src/dialogs.c:427
 msgid "R_ename"
 msgstr "Y_eniden adlandır"
 
-#: ../src/dialogs.c:421
+#: ../src/dialogs.c:429
 msgid "Save the file and rename it"
 msgstr "Dosyayı kaydet ve yeniden isimlendir"
 
-#: ../src/dialogs.c:429
+#: ../src/dialogs.c:437
 msgid "_Open file in a new tab"
 msgstr "D_osyayı yeni sekmede aç"
 
-#: ../src/dialogs.c:431
+#: ../src/dialogs.c:439
 msgid ""
 "Keep the current unsaved document open and open the newly saved file in a "
 "new tab"
@@ -476,129 +476,129 @@ msgstr ""
 "Şimdiki kaydedilmemiş dökümanı açık tut ve yeni kaydedilmiş dosyayı yeni "
 "sekmede aç."
 
-#: ../src/dialogs.c:622
+#: ../src/dialogs.c:619
 msgid "_Don't save"
 msgstr "Kay_detme"
 
-#: ../src/dialogs.c:653
+#: ../src/dialogs.c:650
 #, c-format
 msgid "The file '%s' is not saved."
 msgstr "'%s' dosyası kaydedilmedi."
 
-#: ../src/dialogs.c:655
+#: ../src/dialogs.c:652
 msgid "Do you want to save it before closing?"
 msgstr "Kapatmadan önce kaydetmek ister misiniz?"
 
-#: ../src/dialogs.c:730
+#: ../src/dialogs.c:727
 msgid "Choose font"
 msgstr "Yazıtipi seç"
 
-#: ../src/dialogs.c:971
+#: ../src/dialogs.c:968
 msgid ""
 "An error occurred or file information could not be retrieved (e.g. from a "
 "new file)."
 msgstr "Bir hata oluştu ya da dosya bilgisi getirilemedi."
 
-#: ../src/dialogs.c:990 ../src/dialogs.c:991 ../src/dialogs.c:992
-#: ../src/dialogs.c:998 ../src/dialogs.c:999 ../src/dialogs.c:1000
-#: ../src/symbols.c:1668 ../src/symbols.c:1689 ../src/symbols.c:1741
-#: ../src/ui_utils.c:222
+#: ../src/dialogs.c:987 ../src/dialogs.c:988 ../src/dialogs.c:989
+#: ../src/dialogs.c:995 ../src/dialogs.c:996 ../src/dialogs.c:997
+#: ../src/symbols.c:1706 ../src/symbols.c:1727 ../src/symbols.c:1779
+#: ../src/ui_utils.c:216
 msgid "unknown"
 msgstr "bilinmeyen"
 
-#: ../src/dialogs.c:1005 ../src/symbols.c:754
+#: ../src/dialogs.c:1002 ../src/symbols.c:780
 msgid "Properties"
 msgstr "Özellikler"
 
-#: ../src/dialogs.c:1036
+#: ../src/dialogs.c:1033
 msgid "<b>Type:</b>"
 msgstr "<b>Tür:</b>"
 
-#: ../src/dialogs.c:1050
+#: ../src/dialogs.c:1047
 msgid "<b>Size:</b>"
 msgstr "<b>Boyut:</b>"
 
-#: ../src/dialogs.c:1066
+#: ../src/dialogs.c:1063
 msgid "<b>Location:</b>"
 msgstr "<b>Yer:</b>"
 
-#: ../src/dialogs.c:1080
+#: ../src/dialogs.c:1077
 msgid "<b>Read-only:</b>"
 msgstr "<b>Salt okunur:</b>"
 
-#: ../src/dialogs.c:1087
+#: ../src/dialogs.c:1084
 msgid "(only inside Geany)"
 msgstr "(sadece Geany içinde)"
 
-#: ../src/dialogs.c:1096
+#: ../src/dialogs.c:1093
 msgid "<b>Encoding:</b>"
 msgstr "<b>Kodlama:</b>"
 
 #. BOM = byte order mark
-#: ../src/dialogs.c:1106 ../src/ui_utils.c:225
+#: ../src/dialogs.c:1103 ../src/ui_utils.c:219
 msgid "(with BOM)"
 msgstr "(BOM ile)"
 
-#: ../src/dialogs.c:1106
+#: ../src/dialogs.c:1103
 msgid "(without BOM)"
 msgstr "(BOM olmadan)"
 
-#: ../src/dialogs.c:1117
+#: ../src/dialogs.c:1114
 msgid "<b>Modified:</b>"
 msgstr "<b>Düzenlendi:</b>"
 
-#: ../src/dialogs.c:1131
+#: ../src/dialogs.c:1128
 msgid "<b>Changed:</b>"
 msgstr "<b>Değiştirildi:</b>"
 
-#: ../src/dialogs.c:1145
+#: ../src/dialogs.c:1142
 msgid "<b>Accessed:</b>"
 msgstr "<b>Ulaşıldı:</b>"
 
-#: ../src/dialogs.c:1167
+#: ../src/dialogs.c:1164
 msgid "<b>Permissions:</b>"
 msgstr "<b>İzinler:</b>"
 
 #. Header
-#: ../src/dialogs.c:1175
+#: ../src/dialogs.c:1172
 msgid "Read:"
 msgstr "Okuma:"
 
-#: ../src/dialogs.c:1182
+#: ../src/dialogs.c:1179
 msgid "Write:"
 msgstr "Yazma:"
 
 #. Owner
-#: ../src/dialogs.c:1197
+#: ../src/dialogs.c:1194
 msgid "Owner:"
 msgstr "Sahibi:"
 
 #. Group
-#: ../src/dialogs.c:1233
+#: ../src/dialogs.c:1230
 msgid "Group:"
 msgstr "Grup:"
 
 #. Other
-#: ../src/dialogs.c:1269
+#: ../src/dialogs.c:1266
 msgid "Other:"
 msgstr "Diğer:"
 
-#: ../src/document.c:678
+#: ../src/document.c:680
 #, c-format
 msgid "File %s closed."
 msgstr "%s dosyası kapatıldı."
 
-#: ../src/document.c:795
+#: ../src/document.c:794
 #, c-format
 msgid "New file \"%s\" opened."
 msgstr "Yeni dosya \"%s\" açıldı."
 
-#: ../src/document.c:968 ../src/document.c:1474
+#: ../src/document.c:967 ../src/document.c:1473
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "%s dosyası açılamadı (%s)"
 
-#: ../src/document.c:998
+#: ../src/document.c:997
 #, c-format
 msgid ""
 "The file \"%s\" could not be opened properly and has been truncated. This "
@@ -613,12 +613,12 @@ msgstr ""
 
 #. For translators: the second wildcard is an encoding name, e.g.
 #. * The file \"test.txt\" is not valid UTF-8.
-#: ../src/document.c:1024
+#: ../src/document.c:1023
 #, c-format
 msgid "The file \"%s\" is not valid %s."
 msgstr "\"%s\" dosyası geçerli değil %s."
 
-#: ../src/document.c:1034
+#: ../src/document.c:1033
 #, c-format
 msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
@@ -627,48 +627,48 @@ msgstr ""
 "\"%s\" dosyası bit yazı dosyası gibi görünmüyor, belki de kodlaması "
 "desteklenmiyor."
 
-#: ../src/document.c:1172
+#: ../src/document.c:1171
 msgid "Spaces"
 msgstr "Boşluklar"
 
-#: ../src/document.c:1175
+#: ../src/document.c:1174
 msgid "Tabs"
 msgstr "Sekmeler"
 
-#: ../src/document.c:1178
+#: ../src/document.c:1177
 msgid "Tabs and Spaces"
 msgstr "Sekmeler ve Boşluklar"
 
 #. For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
 #. * and Spaces), the second one is the filename
-#: ../src/document.c:1183
+#: ../src/document.c:1182
 #, c-format
 msgid "Setting %s indentation mode for %s."
 msgstr "%s girdileme yöntemi %s için ayarlanıyor."
 
-#: ../src/document.c:1236
+#: ../src/document.c:1235
 msgid "Invalid filename"
 msgstr "Geçersiz dosya adı"
 
-#: ../src/document.c:1356
+#: ../src/document.c:1355
 #, c-format
 msgid "File %s reloaded."
 msgstr "%s dosyası yeniden yüklendi."
 
-#: ../src/document.c:1358
+#: ../src/document.c:1357
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "%s dosyası açıldı(%d%s)."
 
-#: ../src/document.c:1360
+#: ../src/document.c:1359
 msgid ", read-only"
 msgstr ", salt okunur"
 
-#: ../src/document.c:1565
+#: ../src/document.c:1564
 msgid "Error renaming file."
 msgstr "Dosya isimlendirmesinde hata."
 
-#: ../src/document.c:1640
+#: ../src/document.c:1639
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -677,7 +677,7 @@ msgstr ""
 "Dosyayı UTF-8'den \"%s\" kodlamasına çevirirken hata oluştu. Dosya "
 "kaydedilmeden bırakıldı."
 
-#: ../src/document.c:1662
+#: ../src/document.c:1661
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -686,41 +686,41 @@ msgstr ""
 "Hata mesajı: %s\n"
 "Hatanın oluştuğu yer \"%s\" (satır: %d, sütun: %d)."
 
-#: ../src/document.c:1667
+#: ../src/document.c:1666
 #, c-format
 msgid "Error message: %s."
 msgstr "Hata mesajı: %s."
 
-#: ../src/document.c:1767 ../src/document.c:1827
+#: ../src/document.c:1766 ../src/document.c:1826
 msgid "Error saving file."
 msgstr "Dosya kaydetmede hata"
 
-#: ../src/document.c:1826
+#: ../src/document.c:1825
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Dosya kaydetmede hata (%s)."
 
-#: ../src/document.c:1851
+#: ../src/document.c:1850
 #, c-format
 msgid "File %s saved."
 msgstr "%s dosyası kaydedildi."
 
-#: ../src/document.c:1917 ../src/document.c:1974 ../src/document.c:1982
+#: ../src/document.c:1916 ../src/document.c:1973 ../src/document.c:1981
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" bulunamadı."
 
-#: ../src/document.c:1982
+#: ../src/document.c:1981
 msgid "Wrap search and find again?"
 msgstr "Aramayı geç ve tekrar bul?"
 
-#: ../src/document.c:2061 ../src/search.c:1065 ../src/search.c:1669
-#: ../src/search.c:1670
+#: ../src/document.c:2060 ../src/search.c:1080 ../src/search.c:1684
+#: ../src/search.c:1685
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "\"%s\" araması için hiçbir eşleşme bulunamadı."
 
-#: ../src/document.c:2072 ../src/document.c:2081
+#: ../src/document.c:2071 ../src/document.c:2080
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
@@ -749,23 +749,11 @@ msgstr "Dosyayı tekrar kurtarmayı denemek ister misiniz?"
 msgid "File \"%s\" was not found on disk!"
 msgstr "\"%s\" dosyası diskte bulunamadı!"
 
-#: ../src/editor.c:3859 ../src/utils.c:295
-msgid "Win (CRLF)"
-msgstr "Win (CRLF)"
-
-#: ../src/editor.c:3860 ../src/utils.c:296
-msgid "Mac (CR)"
-msgstr "Mac (CR)"
-
-#: ../src/editor.c:3861 ../src/utils.c:297
-msgid "Unix (LF)"
-msgstr "Unix (LF)"
-
-#: ../src/editor.c:3985
+#: ../src/editor.c:4181
 msgid "Enter Tab Width"
 msgstr "Tab genişliğini girin"
 
-#: ../src/editor.c:3986
+#: ../src/editor.c:4182
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr ""
 "Bir sekme (tab) karakterinin yerine geçecek olan boşluk sayısını giriniz."
@@ -867,44 +855,45 @@ msgid "Chinese Traditional"
 msgstr "Geleneksel Çince"
 
 #: ../src/encodings.c:138 ../src/encodings.c:139 ../src/encodings.c:140
+#: ../src/encodings.c:141
 msgid "Japanese"
 msgstr "Japonca"
 
-#: ../src/encodings.c:141 ../src/encodings.c:142 ../src/encodings.c:143
-#: ../src/encodings.c:144
+#: ../src/encodings.c:142 ../src/encodings.c:143 ../src/encodings.c:144
+#: ../src/encodings.c:145
 msgid "Korean"
 msgstr "Korece"
 
-#: ../src/encodings.c:146
+#: ../src/encodings.c:147
 msgid "Without encoding"
 msgstr "Kodlamasız"
 
-#: ../src/encodings.c:373
+#: ../src/encodings.c:374
 msgid "_West European"
 msgstr "_Batı Avrupa"
 
-#: ../src/encodings.c:379
+#: ../src/encodings.c:380
 msgid "_East European"
 msgstr "_Doğu Avrupa"
 
-#: ../src/encodings.c:385
+#: ../src/encodings.c:386
 msgid "East _Asian"
 msgstr "Doğu _Asya"
 
-#: ../src/encodings.c:391
+#: ../src/encodings.c:392
 msgid "_SE & SW Asian"
 msgstr "_GD & GB Asya"
 
-#: ../src/encodings.c:397
+#: ../src/encodings.c:398
 msgid "_Middle Eastern"
 msgstr "_Orta Asya"
 
-#: ../src/encodings.c:403
+#: ../src/encodings.c:404
 msgid "_Unicode"
 msgstr "_Unicode"
 
-#: ../src/filetypes.c:90 ../src/filetypes.c:91 ../src/interface.c:3457
-#: ../src/interface.c:5005
+#: ../src/filetypes.c:90 ../src/filetypes.c:91 ../src/interface.c:3499
+#: ../src/interface.c:5057
 msgid "None"
 msgstr "Hiçbiri"
 
@@ -964,31 +953,39 @@ msgstr "%s betik dosyası"
 msgid "reStructuredText file"
 msgstr "reStructuredText dosyası"
 
-#: ../src/filetypes.c:697
+#: ../src/filetypes.c:661
+msgid ""
+"For all changes you make in this file to take effect, you need to restart "
+"Geany."
+msgstr ""
+"Bu dosyada yaptığınız tüm değişikliklerin uygulanması için, Geany'i yeniden "
+"başlatmalısınız."
+
+#: ../src/filetypes.c:703
 msgid "_Programming Languages"
 msgstr "_Programlama Dilleri"
 
-#: ../src/filetypes.c:698
+#: ../src/filetypes.c:704
 msgid "_Scripting Languages"
 msgstr "_Betik Dilleri"
 
-#: ../src/filetypes.c:699
+#: ../src/filetypes.c:705
 msgid "_Markup Languages"
 msgstr "İşaretle_me Dilleri"
 
-#: ../src/filetypes.c:700
+#: ../src/filetypes.c:706
 msgid "M_iscellaneous Languages"
 msgstr "D_iğer Diller"
 
-#: ../src/filetypes.c:1284 ../src/win32.c:107
+#: ../src/filetypes.c:1291 ../src/win32.c:107
 msgid "All Source"
 msgstr "Bütün Kaynak"
 
-#: ../src/filetypes.c:1309 ../src/project.c:288
+#: ../src/filetypes.c:1316 ../src/project.c:292
 msgid "All files"
 msgstr "Tüm dosyalar"
 
-#: ../src/filetypes.c:1367
+#: ../src/filetypes.c:1374
 #, c-format
 msgid "Bad regex for filetype %s: %s"
 msgstr "%s dosya türü için geçersiz düzenli ifade: %s"
@@ -1007,8 +1004,8 @@ msgstr "Yeni (_kalıp ile)"
 
 #: ../src/interface.c:298 ../src/interface.c:359 ../src/interface.c:537
 #: ../src/interface.c:591 ../src/interface.c:605 ../src/interface.c:851
-#: ../src/interface.c:861 ../src/interface.c:2006 ../src/interface.c:2060
-#: ../src/interface.c:2074
+#: ../src/interface.c:861 ../src/interface.c:2018 ../src/interface.c:2072
+#: ../src/interface.c:2086
 msgid "invisible"
 msgstr "geçersiz"
 
@@ -1016,7 +1013,7 @@ msgstr "geçersiz"
 msgid "dummy tooltip, don't translate this."
 msgstr ""
 
-#: ../src/interface.c:311 ../src/interface.c:1928
+#: ../src/interface.c:311 ../src/interface.c:1940
 msgid "Open Selected F_ile"
 msgstr "Seç_ilen Dosyayı Aç"
 
@@ -1036,11 +1033,11 @@ msgstr ".. olarak t_ekrar yükle"
 msgid "Page Set_up"
 msgstr "Sayfa D_üzeni"
 
-#: ../src/interface.c:393 ../src/notebook.c:233
+#: ../src/interface.c:393 ../src/notebook.c:240
 msgid "Close Ot_her Documents"
 msgstr "Di_ğer Dosyaları Kapat"
 
-#: ../src/interface.c:401 ../src/notebook.c:238
+#: ../src/interface.c:401 ../src/notebook.c:245
 msgid "C_lose All"
 msgstr "Tümü_nü Kapat"
 
@@ -1048,83 +1045,83 @@ msgstr "Tümü_nü Kapat"
 msgid "_Edit"
 msgstr "Düz_enle"
 
-#: ../src/interface.c:459 ../src/interface.c:1919
+#: ../src/interface.c:459 ../src/interface.c:1931
 msgid "Select _All"
 msgstr "Tümünü Se_ç"
 
-#: ../src/interface.c:468 ../src/interface.c:1937
+#: ../src/interface.c:468 ../src/interface.c:1949
 msgid "_Format"
 msgstr "_Biçim"
 
-#: ../src/interface.c:475 ../src/interface.c:1944
+#: ../src/interface.c:475 ../src/interface.c:1956
 msgid "T_oggle Case of Selection"
 msgstr "Seçimi Büyült/Kü_çült"
 
-#: ../src/interface.c:484 ../src/interface.c:1953
+#: ../src/interface.c:484 ../src/interface.c:1965
 msgid "_Comment Line(s)"
 msgstr "Satırları _Yoruma Çevir"
 
-#: ../src/interface.c:488 ../src/interface.c:1957
+#: ../src/interface.c:488 ../src/interface.c:1969
 msgid "U_ncomment Line(s)"
 msgstr "Satırların Yorumunu _Kaldır"
 
-#: ../src/interface.c:492 ../src/interface.c:1961
+#: ../src/interface.c:492 ../src/interface.c:1973
 msgid "_Toggle Line Commentation"
 msgstr "Sa_tırı Yorum Yap/Yapma"
 
-#: ../src/interface.c:496 ../src/interface.c:1965
+#: ../src/interface.c:496 ../src/interface.c:1977
 msgid "Du_plicate Line or Selection"
 msgstr "Seçimi ya da Satırı Ço_ğalt"
 
-#: ../src/interface.c:505 ../src/interface.c:1974
+#: ../src/interface.c:505 ../src/interface.c:1986
 msgid "_Increase Indent"
 msgstr "Girintiyi _Artır"
 
-#: ../src/interface.c:513 ../src/interface.c:1982
+#: ../src/interface.c:513 ../src/interface.c:1994
 msgid "_Decrease Indent"
 msgstr "Girintiyi A_zalt"
 
-#: ../src/interface.c:526 ../src/interface.c:1995
+#: ../src/interface.c:526 ../src/interface.c:2007
 msgid "_Send Selection to Terminal"
 msgstr "_Seçimi Terminale Gönder"
 
-#: ../src/interface.c:530 ../src/interface.c:1999
+#: ../src/interface.c:530 ../src/interface.c:2011
 msgid "_Send Selection to"
 msgstr "_Seçimi yolla"
 
-#: ../src/interface.c:545 ../src/interface.c:2014
+#: ../src/interface.c:545 ../src/interface.c:2026
 msgid "I_nsert Comments"
 msgstr "Yoru_m Ekle"
 
-#: ../src/interface.c:556 ../src/interface.c:2025
+#: ../src/interface.c:556 ../src/interface.c:2037
 msgid "Insert _ChangeLog Entry"
 msgstr "Değişiklik _Girdisi Ekle"
 
-#: ../src/interface.c:560 ../src/interface.c:2029
+#: ../src/interface.c:560 ../src/interface.c:2041
 msgid "Insert File _Header"
 msgstr "Dosya _Başlığı Ekle"
 
-#: ../src/interface.c:564 ../src/interface.c:2033
+#: ../src/interface.c:564 ../src/interface.c:2045
 msgid "Insert _Function Description"
 msgstr "_Fonksiyon Tanımı Gir"
 
-#: ../src/interface.c:568 ../src/interface.c:2037
+#: ../src/interface.c:568 ../src/interface.c:2049
 msgid "Insert _Multiline Comment"
 msgstr "Çok satırlı yo_rum girer"
 
-#: ../src/interface.c:572 ../src/interface.c:2041
+#: ../src/interface.c:572 ../src/interface.c:2053
 msgid "Insert _GPL Notice"
 msgstr "_GPL Lisans Notu Gir"
 
-#: ../src/interface.c:576 ../src/interface.c:2045
+#: ../src/interface.c:576 ../src/interface.c:2057
 msgid "Insert _BSD License Notice"
 msgstr "_BSD Lisans Notu Gir"
 
-#: ../src/interface.c:580 ../src/interface.c:2049
+#: ../src/interface.c:580 ../src/interface.c:2061
 msgid "Insert Dat_e"
 msgstr "Tari_h Gir"
 
-#: ../src/interface.c:594 ../src/interface.c:2063
+#: ../src/interface.c:594 ../src/interface.c:2075
 msgid "_Insert \"include <...>\""
 msgstr "\"include <...>\" g_ir"
 
@@ -1148,7 +1145,7 @@ msgstr "Ön_cekini Bul"
 msgid "Find in F_iles"
 msgstr "Dosyalar _içinde Bul"
 
-#: ../src/interface.c:644 ../src/search.c:509
+#: ../src/interface.c:644 ../src/search.c:524
 msgid "_Replace"
 msgstr "Değişti_r"
 
@@ -1168,7 +1165,7 @@ msgstr "Sonraki _Mesaj"
 msgid "Pr_evious Message"
 msgstr "Önc_eki Mesaj"
 
-#: ../src/interface.c:683 ../src/interface.c:2115
+#: ../src/interface.c:683 ../src/interface.c:2127
 msgid "_Go to Line"
 msgstr "Satıra _Git"
 
@@ -1196,7 +1193,7 @@ msgstr "Araç Ç_ubuğunu Göster"
 msgid "Show Side_bar"
 msgstr "Yan Pane_li Gçster"
 
-#: ../src/interface.c:734 ../src/interface.c:3865 ../src/keybindings.c:227
+#: ../src/interface.c:734 ../src/interface.c:3907 ../src/keybindings.c:228
 msgid "Editor"
 msgstr "Düzenleyici"
 
@@ -1240,15 +1237,15 @@ msgstr "Otom_atik Girintileme"
 msgid "In_dent Type"
 msgstr "Girintileme T_ürü"
 
-#: ../src/interface.c:808 ../src/interface.c:3496 ../src/interface.c:5044
+#: ../src/interface.c:808 ../src/interface.c:3538 ../src/interface.c:5096
 msgid "_Tabs"
 msgstr "S_ekmeler"
 
-#: ../src/interface.c:814 ../src/interface.c:3487 ../src/interface.c:5035
+#: ../src/interface.c:814 ../src/interface.c:3529 ../src/interface.c:5087
 msgid "_Spaces"
 msgstr "Bo_şluklar"
 
-#: ../src/interface.c:820 ../src/interface.c:3505 ../src/interface.c:5053
+#: ../src/interface.c:820 ../src/interface.c:3547 ../src/interface.c:5105
 msgid "T_abs and Spaces"
 msgstr "_Sekmeler ve Boşluklar"
 
@@ -1392,71 +1389,75 @@ msgstr "Mesajlar"
 msgid "Scribble"
 msgstr "Karalama"
 
-#: ../src/interface.c:1725 ../src/interface.c:3266
+#: ../src/interface.c:1727 ../src/interface.c:3284
 msgid "Images _and Text"
 msgstr "Resimler ve Y_azı"
 
-#: ../src/interface.c:1731 ../src/interface.c:3298
+#: ../src/interface.c:1732 ../src/interface.c:3316
 msgid "_Images Only"
 msgstr "Sadece Res_imler"
 
-#: ../src/interface.c:1737 ../src/interface.c:3290
+#: ../src/interface.c:1737 ../src/interface.c:3308
 msgid "_Text Only"
 msgstr "Sadece Ya_zı"
 
-#: ../src/interface.c:1748 ../src/interface.c:3282
+#: ../src/interface.c:1748 ../src/interface.c:3300
 msgid "_Large Icons"
 msgstr "Geniş Simge_ler"
 
-#: ../src/interface.c:1754 ../src/interface.c:3274
+#: ../src/interface.c:1753 ../src/interface.c:3292
 msgid "_Small Icons"
 msgstr "Küçük _Simgeler"
 
-#: ../src/interface.c:1760 ../src/interface.c:3306
+#: ../src/interface.c:1758 ../src/interface.c:3324
 msgid "_Very Small Icons"
 msgstr "_Çok Küçük Simgeler"
 
-#: ../src/interface.c:1770
-msgid "_Hide toolbar"
-msgstr "Araç çubu_ğunu gizle"
+#: ../src/interface.c:1769
+msgid "_Customize Toolbar"
+msgstr "Araç Çubuğunu _Özelleştir"
 
-#: ../src/interface.c:2082
+#: ../src/interface.c:1777
+msgid "_Hide Toolbar"
+msgstr "A_raç çubuğunu gizle"
+
+#: ../src/interface.c:2094
 msgid "Find _Usage"
 msgstr "K_ullanım Bul"
 
-#: ../src/interface.c:2090
+#: ../src/interface.c:2102
 msgid "Find _Document Usage"
 msgstr "_Döküman Kullanımı Bul"
 
-#: ../src/interface.c:2098
+#: ../src/interface.c:2110
 msgid "Go to _Tag Definition"
 msgstr "Etiket _Tanımına Git"
 
-#: ../src/interface.c:2102
+#: ../src/interface.c:2114
 msgid "Go to T_ag Declaration"
 msgstr "Etik_et İlanına Git"
 
-#: ../src/interface.c:2106
+#: ../src/interface.c:2118
 msgid "Conte_xt Action"
 msgstr "Ba_ğlam Görevi"
 
-#: ../src/interface.c:2647 ../src/keybindings.c:330
+#: ../src/interface.c:2665 ../src/keybindings.c:334
 msgid "Preferences"
 msgstr "Seçenekler"
 
-#: ../src/interface.c:2683
+#: ../src/interface.c:2701
 msgid "Load files from the last session"
 msgstr "Önceki oturumdan dosyaları yükle"
 
-#: ../src/interface.c:2686
+#: ../src/interface.c:2704
 msgid "Opens at startup the files from the last session"
 msgstr "Açılışta önceki oturumdan kalan dosyaları yükler"
 
-#: ../src/interface.c:2688
+#: ../src/interface.c:2706
 msgid "Load virtual terminal support"
 msgstr "Sanal terminal desteğini yükle"
 
-#: ../src/interface.c:2690
+#: ../src/interface.c:2708
 msgid ""
 "Whether the virtual terminal emulation (VTE) should be loaded at startup, "
 "disable it if you do not need it"
@@ -1464,40 +1465,40 @@ msgstr ""
 "Sanal terminal desteği (VTE) açılışta yüklenmiş olmalı. İhtiyacınız yoksa "
 "etkisizleştirin."
 
-#: ../src/interface.c:2692
+#: ../src/interface.c:2710
 msgid "Enable plugin support"
 msgstr "Eklenti desteğini yükle"
 
-#: ../src/interface.c:2696
+#: ../src/interface.c:2714
 msgid "<b>Startup</b>"
 msgstr "<b>Başlangıç</b>"
 
-#: ../src/interface.c:2715
+#: ../src/interface.c:2733
 msgid "Save window position and geometry"
 msgstr "Pencere yeri ve boyutunu kaydet"
 
-#: ../src/interface.c:2718
+#: ../src/interface.c:2736
 msgid "Saves the window position and geometry and restores it at the start"
 msgstr ""
 "Şu anki pencere pozisyonu ve boyutunu kaydeder, açılışta bu şekilde açar."
 
-#: ../src/interface.c:2720
+#: ../src/interface.c:2738
 msgid "Confirm exit"
 msgstr "Çıkışta Onay İste"
 
-#: ../src/interface.c:2723
+#: ../src/interface.c:2741
 msgid "Shows a confirmation dialog on exit"
 msgstr "Çıkışta bir onay sorusu sorar"
 
-#: ../src/interface.c:2725
+#: ../src/interface.c:2743
 msgid "<b>Shutdown</b>"
 msgstr "<b>Kapatma</b>"
 
-#: ../src/interface.c:2746
+#: ../src/interface.c:2764
 msgid "Startup path:"
 msgstr "Başlangıç yolu:"
 
-#: ../src/interface.c:2758
+#: ../src/interface.c:2776
 msgid ""
 "Path to start in when opening or saving files. Must be an absolute path. "
 "Leave blank to use the current working directory."
@@ -1505,19 +1506,19 @@ msgstr ""
 "Bir dosya açılırken veya kaydedilirken öntanımlı yol. Çalışma dizininde "
 "kalması için boş bırakın."
 
-#: ../src/interface.c:2771
+#: ../src/interface.c:2789
 msgid "Project files:"
 msgstr "Proje dosyaları:"
 
-#: ../src/interface.c:2783
+#: ../src/interface.c:2801
 msgid "Path to start in when opening project files"
 msgstr "Proje dosyaları açılırken açılacak yol"
 
-#: ../src/interface.c:2796
+#: ../src/interface.c:2814
 msgid "Extra plugin path:"
 msgstr "Harici eklenti yolu:"
 
-#: ../src/interface.c:2808
+#: ../src/interface.c:2826
 msgid ""
 "Geany looks by default in the global installation path and in the "
 "configuration directory. The path entered here will be searched additionally "
@@ -1527,29 +1528,29 @@ msgstr ""
 "izler. Buraya girdiğiniz yol da harici eklentilerin aranacağı dizin "
 "olacaktır. Kullanmak istemiyorsanız boş bırakın."
 
-#: ../src/interface.c:2821
+#: ../src/interface.c:2839
 msgid "<b>Paths</b>"
 msgstr "<b>Yollar</b>"
 
-#: ../src/interface.c:2826
+#: ../src/interface.c:2844
 msgid "Startup"
 msgstr "Başlangıç"
 
-#: ../src/interface.c:2848
+#: ../src/interface.c:2866
 msgid "Beep on errors or when compilation has finished"
 msgstr "Hatalarda veya başarılı derleme sonlarında sesle uyar"
 
-#: ../src/interface.c:2851
+#: ../src/interface.c:2869
 msgid ""
 "Whether to beep if an error occurred or when the compilation process has "
 "finished"
 msgstr "Bir hata oluştuğunda ya da derleme işlemi bittiğinde ses uyarısı ver"
 
-#: ../src/interface.c:2853
+#: ../src/interface.c:2871
 msgid "Switch to status message list at new message"
 msgstr "Yeni mesaj oluştuğunda durum mesajları listesine gönder"
 
-#: ../src/interface.c:2856
+#: ../src/interface.c:2874
 msgid ""
 "Switch to the status message tab (in the notebook window at the bottom) if a "
 "new status message arrives"
@@ -1557,11 +1558,11 @@ msgstr ""
 "Yeni mesaj oluştuğunda durum mesajları sekmesine (not defteri penceresinin "
 "en altında) gönder"
 
-#: ../src/interface.c:2858
+#: ../src/interface.c:2876
 msgid "Suppress status messages in the status bar"
 msgstr "Durum çubuğunda mesaj gösterme"
 
-#: ../src/interface.c:2861
+#: ../src/interface.c:2879
 msgid ""
 "Removes all messages from the status bar. The messages are still displayed "
 "in the status messages window."
@@ -1569,11 +1570,11 @@ msgstr ""
 "Durum çubuğunda mesaj göstermez. Ancak mesajlar durum penceresinde görünmeye "
 "devam eder."
 
-#: ../src/interface.c:2863
+#: ../src/interface.c:2881
 msgid "Auto focus widgets (focus follows mouse)"
 msgstr "Bölümleri otomatik odakla (odak fareyi takip eder)"
 
-#: ../src/interface.c:2866
+#: ../src/interface.c:2884
 msgid ""
 "Gives the focus automatically to widgets below the mouse cursor. Works for "
 "the main editor widget, the scribble, the toolbar search and goto line "
@@ -1582,15 +1583,15 @@ msgstr ""
 "Odağı farenin olduğu bölgeye taşır. Ana bölgede, karatahtada, arama ve git "
 "bölgeleri ile Sanal Terminal'de çalışır."
 
-#: ../src/interface.c:2868 ../src/interface.c:3194 ../src/interface.c:4074
+#: ../src/interface.c:2886 ../src/interface.c:3212 ../src/interface.c:4116
 msgid "<b>Miscellaneous</b>"
 msgstr "<b>Çeşitli</b>"
 
-#: ../src/interface.c:2888
+#: ../src/interface.c:2906
 msgid "Always wrap search and hide the Find dialog"
 msgstr "Arama diyaloğu penceresini her zaman gizle"
 
-#: ../src/interface.c:2891
+#: ../src/interface.c:2909
 msgid ""
 "Always wrap search around the document and hide the Find dialog after "
 "clicking Find Next/Previous"
@@ -1598,11 +1599,11 @@ msgstr ""
 "Sonraki veya önceki sonuç için tıklama yapıldığında her zaman ilk sonuca "
 "ulaşıp arama diyaloğunu kapat"
 
-#: ../src/interface.c:2893
+#: ../src/interface.c:2911
 msgid "Use the current word under the cursor for Find dialogs"
 msgstr "Arama kutularında farenin gösterdiği kelimeyi göster"
 
-#: ../src/interface.c:2896
+#: ../src/interface.c:2914
 msgid ""
 "Use current word under the cursor when opening the Find, Find in Files or "
 "Replace dialog and there is no selection"
@@ -1610,29 +1611,29 @@ msgstr ""
 "Seçim durumu olmadığında, arama ve yer değiştirme kutularında farenin "
 "altındaki kelime öntanımlı olarak yerleştir"
 
-#: ../src/interface.c:2898
+#: ../src/interface.c:2916
 msgid "Use the current file's directory for Find in Files"
 msgstr "Dosyalarda bulmak için geçerli dosyanın dizinini kullan"
 
-#: ../src/interface.c:2902
+#: ../src/interface.c:2920
 msgid "<b>Search</b>"
 msgstr "<b>Arama</b>"
 
-#: ../src/interface.c:2921
+#: ../src/interface.c:2939
 msgid "Use project-based session files"
 msgstr "Proje tabanlı oturum dosyalarını kullan"
 
-#: ../src/interface.c:2924
+#: ../src/interface.c:2942
 msgid ""
 "Whether to store a project's session files and open them when re-opening the "
 "project"
 msgstr "Oturum dosyasını projeye göm ve açarken onu kullan"
 
-#: ../src/interface.c:2926
+#: ../src/interface.c:2944
 msgid "Store project file inside the project base directory"
 msgstr "Proje dosyasını projenin temel dizininde sakla"
 
-#: ../src/interface.c:2929
+#: ../src/interface.c:2947
 msgid ""
 "When enabled, a project file is stored by default inside the project base "
 "directory when creating new projects instead of one directory above the base "
@@ -1643,75 +1644,75 @@ msgstr ""
 "yerine, proje klasörünün içinde saklanır. İsterseniz proje yolunu Yeni Proje "
 "penceresinden değiştirebilirsiniz."
 
-#: ../src/interface.c:2931
+#: ../src/interface.c:2949
 msgid "<b>Projects</b>"
 msgstr "<b>Projeler</b>"
 
-#: ../src/interface.c:2936
+#: ../src/interface.c:2954
 msgid "Miscellaneous"
 msgstr "Çeşitli"
 
-#: ../src/interface.c:2940
+#: ../src/interface.c:2958
 msgid "General"
 msgstr "Genel"
 
-#: ../src/interface.c:2963
+#: ../src/interface.c:2981
 msgid "Show symbol list"
 msgstr "Sembol listesini göster"
 
-#: ../src/interface.c:2966
+#: ../src/interface.c:2984
 msgid "Toggle the symbol list on and off"
 msgstr "Sembol listesini aç ya da kapat"
 
-#: ../src/interface.c:2968
+#: ../src/interface.c:2986
 msgid "Show documents list"
 msgstr "Döküman listesini göster"
 
-#: ../src/interface.c:2971
+#: ../src/interface.c:2989
 msgid "Toggle the documents list on and off"
 msgstr "Döküman listesini aç ya da kapat"
 
-#: ../src/interface.c:2973
+#: ../src/interface.c:2991
 msgid "<b>Sidebar</b>"
 msgstr "<b>Yan panel</b>"
 
-#: ../src/interface.c:2994
+#: ../src/interface.c:3012
 msgid "Symbol list:"
 msgstr "Sembol listesi:"
 
-#: ../src/interface.c:3001 ../src/interface.c:3116
+#: ../src/interface.c:3019 ../src/interface.c:3134
 msgid "Message window:"
 msgstr "Mesaj penceresi:"
 
-#: ../src/interface.c:3008 ../src/interface.c:3152
+#: ../src/interface.c:3026 ../src/interface.c:3170
 msgid "Editor:"
 msgstr "Editör:"
 
-#: ../src/interface.c:3020
+#: ../src/interface.c:3038
 msgid "Sets the font for the message window"
 msgstr "Mesaj penceresi için yazıtipini seçin"
 
-#: ../src/interface.c:3028
+#: ../src/interface.c:3046
 msgid "Sets the font for the symbol list"
 msgstr "Sembol listesi için yazıtipini seçin"
 
-#: ../src/interface.c:3036
+#: ../src/interface.c:3054
 msgid "Sets the editor font"
 msgstr "Düzenleyici için yazıtipini seçin"
 
-#: ../src/interface.c:3038
+#: ../src/interface.c:3056
 msgid "<b>Fonts</b>"
 msgstr "<b>Yazıtipi</b>"
 
-#: ../src/interface.c:3057
+#: ../src/interface.c:3075
 msgid "Show editor tabs"
 msgstr "Düzenleyici sekmelerini göster"
 
-#: ../src/interface.c:3061
+#: ../src/interface.c:3079
 msgid "Show close buttons"
 msgstr "Kapat tuşlarını göster"
 
-#: ../src/interface.c:3064
+#: ../src/interface.c:3082
 msgid ""
 "Shows a small cross button in the file tabs to easily close files when "
 "clicking on it (requires restart of Geany)"
@@ -1719,105 +1720,109 @@ msgstr ""
 "Kapatmayı kolaylaştırmak için sekmelerin kenarında ufak bir çarpı işareti "
 "gösterir. (Geany'i yeniden başlatmanız gerekir)"
 
-#: ../src/interface.c:3070
+#: ../src/interface.c:3088
 msgid "Placement of new file tabs:"
 msgstr "Yeni dosya sekmelerinin yerleşimi:"
 
-#: ../src/interface.c:3075 ../src/interface.c:3129 ../src/interface.c:3147
-#: ../src/interface.c:3165
+#: ../src/interface.c:3093 ../src/interface.c:3147 ../src/interface.c:3165
+#: ../src/interface.c:3183
 msgid "Left"
 msgstr "Sol"
 
-#: ../src/interface.c:3078
+#: ../src/interface.c:3096
 msgid "File tabs will be placed on the left of the notebook"
 msgstr "Yeni dosyalar not defterinde sola yerleşir"
 
-#: ../src/interface.c:3083 ../src/interface.c:3130 ../src/interface.c:3148
-#: ../src/interface.c:3166
+#: ../src/interface.c:3101 ../src/interface.c:3148 ../src/interface.c:3166
+#: ../src/interface.c:3184
 msgid "Right"
 msgstr "Sağ"
 
-#: ../src/interface.c:3086
+#: ../src/interface.c:3104
 msgid "File tabs will be placed on the right of the notebook"
 msgstr "Yeni dosyalar not defterinde sağa yerleşir"
 
-#: ../src/interface.c:3090
+#: ../src/interface.c:3108
 msgid "Double-clicking hides all additional widgets"
 msgstr "Çift tıklama bütün bölgeleri gizler"
 
-#: ../src/interface.c:3093
+#: ../src/interface.c:3111
 msgid "Calls the View->Toggle All Additional Widgets command"
 msgstr "Görünüm->Tüm Bölümleri Göster/Gizle komutunu çağırır"
 
-#: ../src/interface.c:3095
+#: ../src/interface.c:3113
 msgid "<b>Editor tabs</b>"
 msgstr "<b>Düzenleyici sekmeleri</b>"
 
-#: ../src/interface.c:3131 ../src/interface.c:3149 ../src/interface.c:3167
+#: ../src/interface.c:3149 ../src/interface.c:3167 ../src/interface.c:3185
 msgid "Top"
 msgstr "Üst"
 
-#: ../src/interface.c:3132 ../src/interface.c:3150 ../src/interface.c:3168
+#: ../src/interface.c:3150 ../src/interface.c:3168 ../src/interface.c:3186
 msgid "Bottom"
 msgstr "Taban"
 
-#: ../src/interface.c:3134
+#: ../src/interface.c:3152
 msgid "Sidebar:"
 msgstr "Yan panel:"
 
-#: ../src/interface.c:3170
+#: ../src/interface.c:3188
 msgid "<b>Tab positions</b>"
 msgstr "<b>Sekme pozisyonları</b>"
 
-#: ../src/interface.c:3189
+#: ../src/interface.c:3207
 msgid "Show status bar"
 msgstr "Durum çubuğunu göster"
 
-#: ../src/interface.c:3192
+#: ../src/interface.c:3210
 msgid "Whether to show the status bar at the bottom of the main window"
 msgstr "Ana pencerenin altında durum çubuğu görüntüle"
 
-#: ../src/interface.c:3199
+#: ../src/interface.c:3217
 msgid "Interface"
 msgstr "Arayüz"
 
-#: ../src/interface.c:3222
+#: ../src/interface.c:3240
 msgid "Show T_oolbar"
 msgstr "Araç Çubu_ğunu Göster"
 
-#: ../src/interface.c:3226
+#: ../src/interface.c:3244
 msgid "_Append Toolbar to the Menu"
 msgstr "_Araç Çubuğunu Menüye Tuttur"
 
-#: ../src/interface.c:3229
+#: ../src/interface.c:3247
 msgid "Pack the toolbar to the main menu to save vertical space"
 msgstr "Dikey alanda yer kazanmak için araç çubuğunu menüyle birleştirir"
 
-#: ../src/interface.c:3231
+#: ../src/interface.c:3249
 msgid "<b>Toolbar</b>"
 msgstr "<b>Araç çubuğu</b>"
 
-#: ../src/interface.c:3252
+#: ../src/interface.c:3270
 msgid "Icon style:"
 msgstr "Simge tüyü:"
 
-#: ../src/interface.c:3259
+#: ../src/interface.c:3277
 msgid "Icon size:"
 msgstr "Simge boyutu:"
 
-#: ../src/interface.c:3314
+#: ../src/interface.c:3332
 msgid "<b>Appearance</b>"
 msgstr "<b>Görünüm</b>"
 
-#: ../src/interface.c:3319
+#: ../src/interface.c:3357 ../src/toolbar.c:768
+msgid "Customize Toolbar"
+msgstr "Araç Çubuğunu Özelleştir"
+
+#: ../src/interface.c:3361
 msgid "Toolbar"
 msgstr "Araç Çubuğu"
 
-#: ../src/interface.c:3346
+#: ../src/interface.c:3388
 msgid "Line wrapping"
 msgstr "Satır kaydırma"
 
-#: ../src/interface.c:3349
+#: ../src/interface.c:3391
 msgid ""
 "Wrap the line at the window border and continue it on the next line. Note: "
 "line wrapping has a high performance cost for large documents so should be "
@@ -1827,11 +1832,11 @@ msgstr ""
 "özellik performans kaybına sebep olur ve bu yüzden yavaş makinalarda pasif "
 "olmalıdır."
 
-#: ../src/interface.c:3351
+#: ../src/interface.c:3393
 msgid "Enable \"smart\" home key"
 msgstr "\"Akıllı\" home tuşunu etkinleştir"
 
-#: ../src/interface.c:3354
+#: ../src/interface.c:3396
 msgid ""
 "When \"smart\" home is enabled, the HOME key will move the caret to the "
 "first non-blank character of the line, unless it is already there, it moves "
@@ -1844,11 +1849,11 @@ msgstr ""
 "götürür. Bu özellik pasif ise işaretçi nerede olursa olsun HOME tuşu ile "
 "boşlukları önemsemeden satırın en başına gider."
 
-#: ../src/interface.c:3356
+#: ../src/interface.c:3398
 msgid "Disable Drag and Drop"
 msgstr "Sürükle ve bırak desteğini kapat"
 
-#: ../src/interface.c:3359
+#: ../src/interface.c:3401
 msgid ""
 "Disable drag and drop completely in the editor window so you can't drag and "
 "drop any selections within or outside of the editor window"
@@ -1856,19 +1861,19 @@ msgstr ""
 "Sürükle ve bırak özelliğini kapatır. Bu sayede düzenleyici içinde veya "
 "dışarıyla sürükle bırak yöntemi ile taşıma yapılamaz."
 
-#: ../src/interface.c:3361
+#: ../src/interface.c:3403
 msgid "Enable folding"
 msgstr "Katlamayı etkinleştır"
 
-#: ../src/interface.c:3364
+#: ../src/interface.c:3406
 msgid "Whether to enable folding the code"
 msgstr "Kod için katlama özelliğini aç ya da kapat"
 
-#: ../src/interface.c:3366
+#: ../src/interface.c:3408
 msgid "Fold/unfold all children of a fold point"
 msgstr "Bir katlama noktasında tüm alt katlamaları aç/kapat"
 
-#: ../src/interface.c:3369
+#: ../src/interface.c:3411
 msgid ""
 "Fold or unfold all children of a fold point. By pressing the Shift key while "
 "clicking on a fold symbol the contrary behavior is used."
@@ -1876,34 +1881,34 @@ msgstr ""
 "Bir katlama noktasında tüm alt katlamaları açar/katlar. Tersi davranış için "
 "tıklarken Shift tuşunu kullanın."
 
-#: ../src/interface.c:3371
+#: ../src/interface.c:3413
 msgid "Use indicators to show compile errors"
 msgstr "Derleme hataları için gösterge kullan"
 
-#: ../src/interface.c:3374
+#: ../src/interface.c:3416
 msgid ""
 "Whether to use indicators (a squiggly underline) to highlight the lines "
 "where the compiler found a warning or an error"
 msgstr ""
 "Derleyici hata ve uyarıları için bir gösterge (dalgalı alt çizgi) kullan"
 
-#: ../src/interface.c:3376
+#: ../src/interface.c:3418
 msgid "Newline strips trailing spaces"
 msgstr "Yeni satır alttaki boşlukları keser"
 
-#: ../src/interface.c:3379
+#: ../src/interface.c:3421
 msgid "Enable newline to strip the trailing spaces on the previous line"
 msgstr "Alttaki boşlukları yok etmesi için yeni satırı etkinleştir"
 
-#: ../src/interface.c:3385
+#: ../src/interface.c:3427
 msgid "Line breaking column:"
 msgstr "Satır sonlandırıcı sütun:"
 
-#: ../src/interface.c:3399
+#: ../src/interface.c:3441
 msgid "Comment toggle marker:"
 msgstr "Yorum aç/kapa işaretçisi:"
 
-#: ../src/interface.c:3406
+#: ../src/interface.c:3448
 msgid ""
 "A string which is added when toggling a line comment in a source file, it is "
 "used to mark the comment as toggled."
@@ -1911,95 +1916,95 @@ msgstr ""
 "Kaynak dosyasında yorum satırlarını belirtmek için bir değer. Yorum "
 "satırları arasında geçişlerde kullanılacak."
 
-#: ../src/interface.c:3408
+#: ../src/interface.c:3450
 msgid "<b>Features</b>"
 msgstr "<b>Özellikler</b>"
 
-#: ../src/interface.c:3413
+#: ../src/interface.c:3455
 msgid "Features"
 msgstr "Özellikler"
 
-#: ../src/interface.c:3445 ../src/interface.c:4993
+#: ../src/interface.c:3487 ../src/interface.c:5045
 msgid "Auto-indent mode:"
 msgstr "Oto-Girinti modu:"
 
-#: ../src/interface.c:3458 ../src/interface.c:5006
+#: ../src/interface.c:3500 ../src/interface.c:5058
 msgid "Basic"
 msgstr "Temel"
 
-#: ../src/interface.c:3459 ../src/interface.c:5007
+#: ../src/interface.c:3501 ../src/interface.c:5059
 msgid "Current chars"
 msgstr "Geçerli karakterler"
 
-#: ../src/interface.c:3460 ../src/interface.c:5008
+#: ../src/interface.c:3502 ../src/interface.c:5060
 msgid "Match braces"
 msgstr "Eşleme ayraçları"
 
-#: ../src/interface.c:3462 ../src/interface.c:3805 ../src/interface.c:5010
+#: ../src/interface.c:3504 ../src/interface.c:3847 ../src/interface.c:5062
 msgid "Type:"
 msgstr "Tür:"
 
-#: ../src/interface.c:3469 ../src/interface.c:5017
+#: ../src/interface.c:3511 ../src/interface.c:5069
 msgid "Width:"
 msgstr "Genişlik"
 
-#: ../src/interface.c:3482 ../src/interface.c:5030
+#: ../src/interface.c:3524 ../src/interface.c:5082
 msgid "The width in chars of a single indent"
 msgstr "Tek girdi için karakterin genişliği"
 
-#: ../src/interface.c:3492 ../src/interface.c:5040
+#: ../src/interface.c:3534 ../src/interface.c:5092
 msgid "Use spaces when inserting indentation"
 msgstr "Girinti koyarken boşluk kullan"
 
-#: ../src/interface.c:3501 ../src/interface.c:5049
+#: ../src/interface.c:3543 ../src/interface.c:5101
 msgid "Use one tab per indent"
 msgstr "Her girinti için bir sekme kullan"
 
-#: ../src/interface.c:3510 ../src/interface.c:5058
+#: ../src/interface.c:3552 ../src/interface.c:5110
 msgid ""
 "Use spaces if the total indent is less than the tab width, otherwise use both"
 msgstr ""
 "Girinti boyutu tek sekmeden küçükse boşluk, diğer türlü her ikisini de kullan"
 
-#: ../src/interface.c:3525 ../src/interface.c:5073
+#: ../src/interface.c:3567 ../src/interface.c:5125
 msgid "Hard tab width:"
 msgstr "Sekme genişliği:"
 
-#: ../src/interface.c:3533 ../src/interface.c:5081
+#: ../src/interface.c:3575 ../src/interface.c:5133
 msgid "The width of a tab when Tabs & Spaces is set for a document"
 msgstr ""
 "Sekmeler ve Boşluklar ayarlı olan bir dökümanda kullanılacak sekme genişliği"
 
-#: ../src/interface.c:3543 ../src/interface.c:5091
+#: ../src/interface.c:3585 ../src/interface.c:5143
 msgid ""
 "Whether to detect the indentation type from file contents when a file is "
 "opened"
 msgstr "Girintileme türünün açılan dosyanın içeriğinden tespit edilmesi"
 
-#: ../src/interface.c:3545
+#: ../src/interface.c:3587
 msgid "Tab key indents"
 msgstr "Tab tuşu aralığı"
 
-#: ../src/interface.c:3548
+#: ../src/interface.c:3590
 msgid ""
 "Pressing tab/shift-tab indents/unindents instead of inserting a tab character"
 msgstr ""
 "Tab/Shift-Tab tuşları sekme karakteri eklemek yerine seçilen bölgedeki "
 "girintiyi ayarlar"
 
-#: ../src/interface.c:3550
+#: ../src/interface.c:3592
 msgid "<b>Indentation</b>"
 msgstr "<b>Girintileme</b>"
 
-#: ../src/interface.c:3555 ../src/interface.c:5093
+#: ../src/interface.c:3597 ../src/interface.c:5145
 msgid "Indentation"
 msgstr "Girinti"
 
-#: ../src/interface.c:3578
+#: ../src/interface.c:3620
 msgid "Snippet completion"
 msgstr "Parça tamamlama"
 
-#: ../src/interface.c:3581
+#: ../src/interface.c:3623
 msgid ""
 "Type a defined short character sequence and complete it to a more complex "
 "string using a single keypress"
@@ -2007,19 +2012,19 @@ msgstr ""
 "Önceden belirlenmiş bir değişkenin bir kısmı yazıldığında tek tuşla "
 "tamamlamak için seçenek çıksın"
 
-#: ../src/interface.c:3583
+#: ../src/interface.c:3625
 msgid "XML tag auto completion"
 msgstr "XML için otomatik tamamlama"
 
-#: ../src/interface.c:3586
+#: ../src/interface.c:3628
 msgid "Automatic completion and closing of XML tags (includes HTML tags)"
 msgstr "XML ve HTML etiketleri için otomatik tamamlama ve etiket kapatma."
 
-#: ../src/interface.c:3588
+#: ../src/interface.c:3630
 msgid "Automatic continuation of multi-line comments"
 msgstr "Çok satırlı yorumlara otomatik devam etme"
 
-#: ../src/interface.c:3591
+#: ../src/interface.c:3633
 msgid ""
 "Continue automatically multi-line comments in languages like C, C++ and Java "
 "when a new line is entered inside such a comment"
@@ -2027,11 +2032,11 @@ msgstr ""
 "C, C++ ve Java gibi dillerde çoklu yorum satırlarında alt satıra geçince "
 "yorum olarak işaretlemeye devam et"
 
-#: ../src/interface.c:3593
+#: ../src/interface.c:3635
 msgid "Automatic symbol completion"
 msgstr "Otomatik sembol tamamlama"
 
-#: ../src/interface.c:3596
+#: ../src/interface.c:3638
 msgid ""
 "Automatic completion of known symbols in open files (function names, global "
 "variables, ...)"
@@ -2039,89 +2044,89 @@ msgstr ""
 "Bilinen sembolleri otomatik tamamlama (fonksiyon isimleri, global "
 "değişkenler vs.)"
 
-#: ../src/interface.c:3604
+#: ../src/interface.c:3646
 msgid "Max. symbol name suggestions:"
 msgstr "En fazla verilecek sembol ismi teklifi:"
 
-#: ../src/interface.c:3611
+#: ../src/interface.c:3653
 msgid "Completion list height:"
 msgstr "Tamamlama listesi uzunluğu:"
 
-#: ../src/interface.c:3618
+#: ../src/interface.c:3660
 msgid "Characters to type for completion:"
 msgstr "Tamamlama için girilecek karakter sayısı:"
 
-#: ../src/interface.c:3631
+#: ../src/interface.c:3673
 msgid ""
 "The amount of characters which are necessary to show the symbol auto "
 "completion list"
 msgstr "Tamamlamanın devreye girmesi için yazılması gereken karakter sayısı"
 
-#: ../src/interface.c:3640
+#: ../src/interface.c:3682
 msgid "Display height in rows for the auto completion list"
 msgstr "Otomatik tamamlama listesindeki sıralarda uzunluğu gösterir"
 
-#: ../src/interface.c:3649
+#: ../src/interface.c:3691
 msgid "Maximum number of entries to display in the auto completion list"
 msgstr "Otomatik tamamlama listesinde gösterilecek en fazla sayıda öğe"
 
-#: ../src/interface.c:3652
+#: ../src/interface.c:3694
 msgid "<b>Completions</b>"
 msgstr "<b>Tamamlamalar</b>"
 
-#: ../src/interface.c:3672
+#: ../src/interface.c:3714
 msgid "Parenthesis ( )"
 msgstr "Parantez ( )"
 
-#: ../src/interface.c:3677
+#: ../src/interface.c:3719
 msgid "Auto-close parenthesis when typing an opening one"
 msgstr "Yeni parantez kullanımında parantezi otomatik olarak kapat"
 
-#: ../src/interface.c:3679
+#: ../src/interface.c:3721
 msgid "Single quotes ' '"
 msgstr "Tek tırnak ' '"
 
-#: ../src/interface.c:3684
+#: ../src/interface.c:3726
 msgid "Auto-close simple quote when typing an opening one"
 msgstr "Yeni tek tırnak kullanımında tırnağı otomatik olarak kapat"
 
-#: ../src/interface.c:3686
+#: ../src/interface.c:3728
 msgid "Curly brackets { }"
 msgstr "Küme işareti { }"
 
-#: ../src/interface.c:3691
+#: ../src/interface.c:3733
 msgid "Auto-close curly bracket when typing an opening one"
 msgstr "Yeni küme işareti kullanımında kümeyi otomatik olarak kapat"
 
-#: ../src/interface.c:3693
+#: ../src/interface.c:3735
 msgid "Square brackets [ ]"
 msgstr "Köşeli Parantez [ ]"
 
-#: ../src/interface.c:3698
+#: ../src/interface.c:3740
 msgid "Auto-close square-bracket when typing an opening one"
 msgstr "Yeni köşeli parantez kullanımında parantezi otomatik olarak kapat"
 
-#: ../src/interface.c:3700
+#: ../src/interface.c:3742
 msgid "Double quotes \" \""
 msgstr "Çift tırnak \" \""
 
-#: ../src/interface.c:3705
+#: ../src/interface.c:3747
 msgid "Auto-close double quote when typing an opening one"
 msgstr "Yeni çift tırnak kullanımında tırnağı otomatik olarak kapat"
 
-#: ../src/interface.c:3707
+#: ../src/interface.c:3749
 msgid "<b>Auto-close quotes and brackets</b>"
 msgstr "<b>Tırnak ve kümeleri otomatik kapat</b>"
 
-#: ../src/interface.c:3712
+#: ../src/interface.c:3754
 msgid "Completions"
 msgstr "Tamamlamalar"
 
-#: ../src/interface.c:3735
+#: ../src/interface.c:3777
 msgid "Invert syntax highlighting colors"
 msgstr "Sözdizimi renklendirmesinde renkleri tersine çevir"
 
-#: ../src/interface.c:3738
+#: ../src/interface.c:3780
 msgid ""
 "Use white text on a black background and invert all colors, this option "
 "requires a restart of Geany"
@@ -2129,45 +2134,45 @@ msgstr ""
 "Siyah arkaplan üzerine beyaz yazı kullan ve bütün renkleri zıttına çevir. Bu "
 "seçeneği aktifleştirdikten sonra Geany'i yeniden başlatmanız gerekir"
 
-#: ../src/interface.c:3740
+#: ../src/interface.c:3782
 msgid "Show indentation guides"
 msgstr "Girintileme yönergelerini göster"
 
-#: ../src/interface.c:3743
+#: ../src/interface.c:3785
 msgid "Shows small dotted lines to help you to use the right indentation"
 msgstr ""
 "Doğru girintileme kullandığınızda ufak noktalı satırlar kullanarak size "
 "yardımcı olur"
 
-#: ../src/interface.c:3745
+#: ../src/interface.c:3787
 msgid "Show white space"
 msgstr "Beyaz boş bölgeyi göster"
 
-#: ../src/interface.c:3748
+#: ../src/interface.c:3790
 msgid "Marks spaces with dots and tabs with arrows"
 msgstr "Boşluk ve sekmelerle oluşturulmuş beyaz bölgeyi oklarla işaretler"
 
-#: ../src/interface.c:3750
+#: ../src/interface.c:3792
 msgid "Show line endings"
 msgstr "Satır sonlarını göster"
 
-#: ../src/interface.c:3753
+#: ../src/interface.c:3795
 msgid "Shows the line ending character"
 msgstr "Satır sonu karakterini gösterir"
 
-#: ../src/interface.c:3755
+#: ../src/interface.c:3797
 msgid "Show line numbers"
 msgstr "Satır numaralarını göster"
 
-#: ../src/interface.c:3758
+#: ../src/interface.c:3800
 msgid "Shows or hides the Line Number margin"
 msgstr "Satır numarası bölgesini gösterir ya da gizler"
 
-#: ../src/interface.c:3760
+#: ../src/interface.c:3802
 msgid "Show markers margin"
 msgstr "İşaretçi bölümünü göster"
 
-#: ../src/interface.c:3763
+#: ../src/interface.c:3805
 msgid ""
 "Shows or hides the small margin right of the line numbers, which is used to "
 "mark lines"
@@ -2175,36 +2180,36 @@ msgstr ""
 "Satırları işaretleyebilmek için satır numaralarının sağında ufak bir bölge "
 "açar"
 
-#: ../src/interface.c:3765
+#: ../src/interface.c:3807
 msgid "Stop scrolling at last line"
 msgstr "Son satırda kaydırmayı durdur"
 
-#: ../src/interface.c:3768
+#: ../src/interface.c:3810
 msgid "Whether to stop scrolling one page past the last line of a document"
 msgstr "Son satıra gelindiğinde kaydırmayı durdurur"
 
-#: ../src/interface.c:3770
+#: ../src/interface.c:3812
 msgid "<b>Display</b>"
 msgstr "<b>Görünüm</b>"
 
-#: ../src/interface.c:3791
+#: ../src/interface.c:3833
 msgid "Long line marker:"
 msgstr "Uzun satır işareti:"
 
-#: ../src/interface.c:3798
+#: ../src/interface.c:3840
 msgid "Long line marker color:"
 msgstr "Uzun satır işareti rengi:"
 
-#: ../src/interface.c:3817
+#: ../src/interface.c:3859
 msgid "Sets the color of the long line marker"
 msgstr "Uzun satır işaretinin rengini belirler"
 
-#: ../src/interface.c:3818 ../src/toolbar.c:66 ../src/tools.c:746
+#: ../src/interface.c:3860 ../src/toolbar.c:70 ../src/tools.c:746
 #: ../src/vte.c:769 ../src/vte.c:776
 msgid "Color Chooser"
 msgstr "Renk Seçici"
 
-#: ../src/interface.c:3826
+#: ../src/interface.c:3868
 msgid ""
 "The long line marker is a thin vertical line in the editor, it helps to mark "
 "long lines, or as a hint to break the line. Set this value to a value "
@@ -2214,11 +2219,11 @@ msgstr ""
 "satırları veya satır arası ipuçlarını belirtir. Bu değeri 0 (sıfır)dan "
 "farklı belirterek görünmesi gereken sütunu ayarlayabilirsiniz."
 
-#: ../src/interface.c:3836
+#: ../src/interface.c:3878
 msgid "Line"
 msgstr "Satır"
 
-#: ../src/interface.c:3839
+#: ../src/interface.c:3881
 msgid ""
 "Prints a vertical line in the editor window at the given cursor position "
 "(see below)"
@@ -2226,11 +2231,11 @@ msgstr ""
 "Düzenleyicide işaretci pozisyonunda düşey bir satır belirtir (ayrıntılar "
 "için aşağı bkz)"
 
-#: ../src/interface.c:3843
+#: ../src/interface.c:3885
 msgid "Background"
 msgstr "Arkaplan"
 
-#: ../src/interface.c:3846
+#: ../src/interface.c:3888
 msgid ""
 "The background color of characters after the given cursor position (see "
 "below) changed to the color set below, (this is recommended if you use "
@@ -2240,55 +2245,55 @@ msgstr ""
 "karakterlerin arkaplan rengini ayarlayın. (Orantılı fontlar kullanıyorsanız "
 "tavsiye edilir)"
 
-#: ../src/interface.c:3850
+#: ../src/interface.c:3892
 msgid "Disabled"
 msgstr "Pasifleştirildi"
 
-#: ../src/interface.c:3856
+#: ../src/interface.c:3898
 msgid "<b>Long line marker</b>"
 msgstr "<b>Uzun satır işareti</b>"
 
-#: ../src/interface.c:3861
+#: ../src/interface.c:3903
 msgid "Display"
 msgstr "Gösterim"
 
-#: ../src/interface.c:3892
+#: ../src/interface.c:3934
 msgid "Open new documents from the command-line"
 msgstr "Yeni dökümanları komut satırında aç"
 
-#: ../src/interface.c:3895
+#: ../src/interface.c:3937
 msgid "Start a new file for each command-line filename that doesn't exist"
 msgstr "Komut satırında adı geçip de gerçekte olmayan dosyaları oluştur"
 
-#: ../src/interface.c:3909
+#: ../src/interface.c:3951
 msgid "Default end of line characters:"
 msgstr "Öntanımlı satır sonu karakterleri:"
 
-#: ../src/interface.c:3916
+#: ../src/interface.c:3958
 msgid "<b>New files</b>"
 msgstr "<b>Yeni dosyalar</b>"
 
-#: ../src/interface.c:3942
+#: ../src/interface.c:3984
 msgid "Sets the default encoding for newly created files"
 msgstr "Yeni oluşturulmuş dosyalar için öntanımlı kodlamayı ayarlar"
 
-#: ../src/interface.c:3948
+#: ../src/interface.c:3990
 msgid "Default encoding (new files):"
 msgstr "Öntanımlı kodlama (yeni dosyalar için):"
 
-#: ../src/interface.c:3955
+#: ../src/interface.c:3997
 msgid "Default encoding (existing files):"
 msgstr "Öntanımlı kodlama (varolan dosyalar için):"
 
-#: ../src/interface.c:3967
+#: ../src/interface.c:4009
 msgid "Sets the default encoding for opening existing files"
 msgstr "Açılan eski dosyalar için öntanımlı kodlamayı ayarlar"
 
-#: ../src/interface.c:3973
+#: ../src/interface.c:4015
 msgid "Use fixed encoding when opening files"
 msgstr "Dosyaları açarken sabit kodlama kullan"
 
-#: ../src/interface.c:3978
+#: ../src/interface.c:4020
 msgid ""
 "This option disables the automatic detection of the file encoding when "
 "opening files and opens the file with the specified encoding (usually not "
@@ -2298,53 +2303,53 @@ msgstr ""
 "kılar. Dosya sizin seçtiğiniz kodlamaya göre açılır (ki genellikle bu "
 "tavsiye edilmez)"
 
-#: ../src/interface.c:3980
+#: ../src/interface.c:4022
 msgid "<b>Encodings</b>"
 msgstr "<b>Kodlamalar</b>"
 
-#: ../src/interface.c:3999
+#: ../src/interface.c:4041
 msgid "Ensure new line at file end"
 msgstr "Dosya sonunda bir satır boş bırak"
 
-#: ../src/interface.c:4002
+#: ../src/interface.c:4044
 msgid "Ensures that at the end of the file is a new line"
 msgstr "Dosyanın son satırının altına boş bir satır bırakır"
 
-#: ../src/interface.c:4004
+#: ../src/interface.c:4046
 msgid "Strip trailing spaces and tabs"
 msgstr "Sondaki boşluğu temizle"
 
-#: ../src/interface.c:4007
+#: ../src/interface.c:4049
 msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr ""
 "Dosyaların sonundaki boşluk, sekme ve diğer satır sonu karakterlerini "
 "temizler"
 
-#: ../src/interface.c:4009 ../src/keybindings.c:449
+#: ../src/interface.c:4051 ../src/keybindings.c:455
 msgid "Replace tabs by space"
 msgstr "Sekmeleri boşluklara dönüştür"
 
-#: ../src/interface.c:4012
+#: ../src/interface.c:4054
 msgid "Replaces all tabs in document by spaces"
 msgstr "Dökümandaki bütün sekme karakterlerini boşluklara dönüştürür"
 
-#: ../src/interface.c:4014
+#: ../src/interface.c:4056
 msgid "<b>Saving files</b>"
 msgstr "<b>Dosya kaydı</b>"
 
-#: ../src/interface.c:4039
+#: ../src/interface.c:4081
 msgid "Recent files list length:"
 msgstr "Son açılanlar listesinin uzunluğu:"
 
-#: ../src/interface.c:4053
+#: ../src/interface.c:4095
 msgid "Specifies the number of files which are stored in the Recent files list"
 msgstr "Son açılan dosyalar bölümünde kaç dosyanın gösterileceğini ayarlar"
 
-#: ../src/interface.c:4057
+#: ../src/interface.c:4099
 msgid "Disk check timeout:"
 msgstr "Disk kontrolü zaman aşımı:"
 
-#: ../src/interface.c:4070
+#: ../src/interface.c:4112
 msgid ""
 "How often to check for changes to document files on disk, in seconds. Zero "
 "disables checking."
@@ -2352,27 +2357,27 @@ msgstr ""
 "Dosyanın değişir değişmediğini diskten kontrol etme zaman aralığı, saniye "
 "olarak. Sıfır değeri kontrolü iptal eder."
 
-#: ../src/interface.c:4079 ../src/symbols.c:574 ../plugins/filebrowser.c:1019
+#: ../src/interface.c:4121 ../src/symbols.c:590 ../plugins/filebrowser.c:1024
 msgid "Files"
 msgstr "Dosyalar"
 
-#: ../src/interface.c:4112
+#: ../src/interface.c:4154
 msgid "Make:"
 msgstr "Derleme:"
 
-#: ../src/interface.c:4119
+#: ../src/interface.c:4161
 msgid "Terminal:"
 msgstr "Terminal:"
 
-#: ../src/interface.c:4126
+#: ../src/interface.c:4168
 msgid "Browser:"
 msgstr "Tarayıcı:"
 
-#: ../src/interface.c:4138
+#: ../src/interface.c:4180
 msgid "Path and options for the make tool"
 msgstr "Derleme aracı için yol ve deçenekler"
 
-#: ../src/interface.c:4145
+#: ../src/interface.c:4187
 msgid ""
 "A terminal emulator like xterm, gnome-terminal or konsole (should accept the "
 "-e argument)"
@@ -2380,23 +2385,23 @@ msgstr ""
 "xterm, gnome-terminal veya konsole gibi bir terminal emülatörü ( -e "
 "seçeneğini kabul etmeli)"
 
-#: ../src/interface.c:4152
+#: ../src/interface.c:4194
 msgid "Path (and possibly additional arguments) to your favorite browser"
 msgstr "Kullanacağınız tarayıcının yolu ve diğer argümanları"
 
-#: ../src/interface.c:4184
+#: ../src/interface.c:4226
 msgid "Grep:"
 msgstr "Grep:"
 
-#: ../src/interface.c:4207
+#: ../src/interface.c:4249
 msgid "<b>Tool paths</b>"
 msgstr "<b>Araç yolları</b>"
 
-#: ../src/interface.c:4228
+#: ../src/interface.c:4270
 msgid "Context action:"
 msgstr "Bağlam eylemi:"
 
-#: ../src/interface.c:4239
+#: ../src/interface.c:4281
 #, c-format
 msgid ""
 "Context action command. The currently selected word can be used with %s. It "
@@ -2407,67 +2412,67 @@ msgstr ""
 "Girilecek komutun verildiği her yerde görülür ve çalıştırılmadan önce "
 "gerçeği ile yer değiştirecektir."
 
-#: ../src/interface.c:4252
+#: ../src/interface.c:4294
 msgid "<b>Commands</b>"
 msgstr "<b>Komutlar</b>"
 
-#: ../src/interface.c:4257 ../src/keybindings.c:485
+#: ../src/interface.c:4299 ../src/keybindings.c:491
 msgid "Tools"
 msgstr "Araçlar"
 
-#: ../src/interface.c:4291
+#: ../src/interface.c:4333
 msgid "email address of the developer"
 msgstr "geliştiricinin e-posta adresi"
 
-#: ../src/interface.c:4298
+#: ../src/interface.c:4340
 msgid "Initials of the developer name"
 msgstr "geliştirici isminin baş harfleri"
 
-#: ../src/interface.c:4300
+#: ../src/interface.c:4342
 msgid "Initial version:"
 msgstr "Başlangıç sürümü:"
 
-#: ../src/interface.c:4312
+#: ../src/interface.c:4354
 msgid "Version number, which a new file initially has"
 msgstr "Yeni dosyaya verilecek sürüm numarası"
 
-#: ../src/interface.c:4319
+#: ../src/interface.c:4361
 msgid "Company name"
 msgstr "Şirket adı"
 
-#: ../src/interface.c:4321
+#: ../src/interface.c:4363
 msgid "Developer:"
 msgstr "Geliştirici"
 
-#: ../src/interface.c:4328
+#: ../src/interface.c:4370
 msgid "Company:"
 msgstr "Şirket:"
 
-#: ../src/interface.c:4335
+#: ../src/interface.c:4377
 msgid "Mail address:"
 msgstr "E-posta adresi:"
 
-#: ../src/interface.c:4342
+#: ../src/interface.c:4384
 msgid "Initials:"
 msgstr "Başlangıçlar:"
 
-#: ../src/interface.c:4354
+#: ../src/interface.c:4396
 msgid "The name of the developer"
 msgstr "Geliştiricinin adı"
 
-#: ../src/interface.c:4356
+#: ../src/interface.c:4398
 msgid "Year:"
 msgstr "Yıl:"
 
-#: ../src/interface.c:4363
+#: ../src/interface.c:4405
 msgid "Date:"
 msgstr "Tarih:"
 
-#: ../src/interface.c:4370
+#: ../src/interface.c:4412
 msgid "Date & Time:"
 msgstr "Tarih ve Zaman:"
 
-#: ../src/interface.c:4382
+#: ../src/interface.c:4424
 msgid ""
 "Specify a format for the the {datetime} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
@@ -2475,7 +2480,7 @@ msgstr ""
 "{tarihzaman} değişkeni için bir biçim belirtin. ANSI C uyumlu karakterleri "
 "kullanabilirsiniz."
 
-#: ../src/interface.c:4389
+#: ../src/interface.c:4431
 msgid ""
 "Specify a format for the the {year} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
@@ -2483,7 +2488,7 @@ msgstr ""
 "{yıl} değişkeni için bir biçim belirtin. ANSI C uyumlu karakterleri "
 "kullanabilirsiniz."
 
-#: ../src/interface.c:4396
+#: ../src/interface.c:4438
 msgid ""
 "Specify a format for the the {date} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
@@ -2491,63 +2496,63 @@ msgstr ""
 "{tarih} değişkeni için bir biçim belirtin. ANSI C uyumlu karakterleri "
 "kullanabilirsiniz."
 
-#: ../src/interface.c:4398
+#: ../src/interface.c:4440
 msgid "<b>Template data</b>"
 msgstr "<b>Şema bilgisi</b>"
 
-#: ../src/interface.c:4403
+#: ../src/interface.c:4445
 msgid "Templates"
 msgstr "Şemalar"
 
-#: ../src/interface.c:4441
+#: ../src/interface.c:4483
 msgid "C_hange"
 msgstr "De_ğiştir"
 
-#: ../src/interface.c:4445
+#: ../src/interface.c:4487
 msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>Klavye kısayolları</b>"
 
-#: ../src/interface.c:4450
+#: ../src/interface.c:4492
 msgid "Keybindings"
 msgstr "Tuş kombinasyonları"
 
-#: ../src/interface.c:4473
+#: ../src/interface.c:4515
 msgid "Command:"
 msgstr "Komut:"
 
-#: ../src/interface.c:4480
+#: ../src/interface.c:4522
 #, c-format
 msgid "Path to the command for printing files (use %f for the filename)"
 msgstr "Dosyaları yazdırırken kullanılacak komut (dosya adı için %f kullanın)"
 
-#: ../src/interface.c:4490
+#: ../src/interface.c:4532
 msgid "Use an external command for printing"
 msgstr "Yazdırma için harici bir komut kullan"
 
-#: ../src/interface.c:4510 ../src/printing.c:345
+#: ../src/interface.c:4552 ../src/printing.c:348
 msgid "Print line numbers"
 msgstr "Satır numaralarını yazdır"
 
-#: ../src/interface.c:4513 ../src/printing.c:347
+#: ../src/interface.c:4555 ../src/printing.c:350
 msgid "Add line numbers to the printed page"
 msgstr "Yazdırılacak sayfaya satır numaralarını da ekle"
 
-#: ../src/interface.c:4515 ../src/printing.c:350
+#: ../src/interface.c:4557 ../src/printing.c:353
 msgid "Print page numbers"
 msgstr "Sayfa numaralarını yazdır"
 
-#: ../src/interface.c:4518 ../src/printing.c:352
+#: ../src/interface.c:4560 ../src/printing.c:355
 msgid ""
 "Add page numbers at the bottom of each page. It takes 2 lines of the page."
 msgstr ""
 "Her sayfanın en altında sayfa numaralarını da gösterir. Bu işlem sayfadan 2 "
 "satır alır."
 
-#: ../src/interface.c:4520 ../src/printing.c:355
+#: ../src/interface.c:4562 ../src/printing.c:358
 msgid "Print page header"
 msgstr "Sayfa başlığını yazdır"
 
-#: ../src/interface.c:4523 ../src/printing.c:357
+#: ../src/interface.c:4565 ../src/printing.c:360
 msgid ""
 "Add a little header to every page containing the page number, the filename "
 "and the current date (see below). It takes 3 lines of the page."
@@ -2555,19 +2560,19 @@ msgstr ""
 "Her sayfanın başına sayfa numarası, dosya adı ve geçerli tarihi gösteren bir "
 "bilgi ekler (detay için aşağı bakın). Bu işlem sayfadan 3 satır alır."
 
-#: ../src/interface.c:4540 ../src/printing.c:373
+#: ../src/interface.c:4582 ../src/printing.c:376
 msgid "Use the basename of the printed file"
 msgstr "Dosyanın sadece adını kullan"
 
-#: ../src/interface.c:4543
+#: ../src/interface.c:4585
 msgid "Print only the basename (without the path) of the printed file"
 msgstr "Yazdırırken dosyanın sadece adını (yolu olmadan) kullan."
 
-#: ../src/interface.c:4549 ../src/printing.c:381
+#: ../src/interface.c:4591 ../src/printing.c:384
 msgid "Date format:"
 msgstr "Tarih biçimi:"
 
-#: ../src/interface.c:4556 ../src/printing.c:387
+#: ../src/interface.c:4598 ../src/printing.c:390
 msgid ""
 "Specify a format for the date and time stamp which is added to the page "
 "header on each page. You can use any conversion specifiers which can be used "
@@ -2576,537 +2581,547 @@ msgstr ""
 "Her sayfanın başına eklenecek tarih ve zaman için bir biçim girin. ANSI C "
 "uyumlu karakterleri kullanabilirsiniz."
 
-#: ../src/interface.c:4559
+#: ../src/interface.c:4601
 msgid "Use native GTK printing"
 msgstr "Doğal GTK yazdırma kullan"
 
-#: ../src/interface.c:4565
+#: ../src/interface.c:4607
 msgid "Printing"
 msgstr "Yazdırma"
 
-#: ../src/interface.c:4976
+#: ../src/interface.c:5028
 msgid "Project Properties"
 msgstr "Proje Özellikleri"
 
-#: ../src/keybindings.c:196 ../src/plugins.c:1112
+#: ../src/keybindings.c:197 ../src/plugins.c:1112
 msgid "File"
 msgstr "Dosya"
 
-#: ../src/keybindings.c:199
+#: ../src/keybindings.c:200
 msgid "New"
 msgstr "Yeni"
 
-#: ../src/keybindings.c:201
+#: ../src/keybindings.c:202
 msgid "Open"
 msgstr "Aç"
 
-#: ../src/keybindings.c:204
+#: ../src/keybindings.c:205
 msgid "Open selected file"
 msgstr "Seçilen dosyayı aç"
 
-#: ../src/keybindings.c:206
+#: ../src/keybindings.c:207
 msgid "Save"
 msgstr "Kaydet"
 
-#: ../src/keybindings.c:208
+#: ../src/keybindings.c:209
 msgid "Save as"
 msgstr "Farklı kaydet"
 
-#: ../src/keybindings.c:210
+#: ../src/keybindings.c:211
 msgid "Save all"
 msgstr "Tümünü kaydet"
 
-#: ../src/keybindings.c:213
+#: ../src/keybindings.c:214
 msgid "Print"
 msgstr "Yazdır"
 
-#: ../src/keybindings.c:215
+#: ../src/keybindings.c:216
 msgid "Close"
 msgstr "Kapat"
 
-#: ../src/keybindings.c:217
+#: ../src/keybindings.c:218
 msgid "Close all"
 msgstr "Hepsini kapat"
 
-#: ../src/keybindings.c:220
+#: ../src/keybindings.c:221
 msgid "Reload file"
 msgstr "Yeniden yükle"
 
-#: ../src/keybindings.c:222 ../src/project.c:491
+#: ../src/keybindings.c:223 ../src/project.c:495
 msgid "Project"
 msgstr "Proje"
 
-#: ../src/keybindings.c:225
+#: ../src/keybindings.c:226
 msgid "Project properties"
 msgstr "Proje özellikleri"
 
-#: ../src/keybindings.c:230
+#: ../src/keybindings.c:231
 msgid "Undo"
 msgstr "Geri al"
 
-#: ../src/keybindings.c:232
+#: ../src/keybindings.c:233
 msgid "Redo"
 msgstr "Tekrarla"
 
-#: ../src/keybindings.c:234
+#: ../src/keybindings.c:235
 msgid "Duplicate line or selection"
 msgstr "Seçimi veya satırı çoğalt"
 
-#: ../src/keybindings.c:237
+#: ../src/keybindings.c:238
 msgid "Delete current line(s)"
 msgstr "Geçerli satır(lar)ı sil"
 
-#: ../src/keybindings.c:239
+#: ../src/keybindings.c:241
+#, fuzzy
+msgid "Delete to line end"
+msgstr "Satırın Sonuna Git"
+
+#: ../src/keybindings.c:243
 msgid "Transpose current line"
 msgstr "Geçerli satırı taşı"
 
-#: ../src/keybindings.c:241
+#: ../src/keybindings.c:245
 msgid "Scroll to current line"
 msgstr "Geçerli satıra git"
 
-#: ../src/keybindings.c:243
+#: ../src/keybindings.c:247
 msgid "Scroll up the view by one line"
 msgstr "Görünümü bir satır yukarı kaydır"
 
-#: ../src/keybindings.c:245
+#: ../src/keybindings.c:249
 msgid "Scroll down the view by one line"
 msgstr "Görünümü bir satır aşağı kaydır"
 
-#: ../src/keybindings.c:248
+#: ../src/keybindings.c:252
 msgid "Complete snippet"
 msgstr "Parçayı tamamla"
 
-#: ../src/keybindings.c:250
+#: ../src/keybindings.c:254
 msgid "Move cursor in snippet"
 msgstr "İşaretçiyi parça içinde hareket ettir"
 
-#: ../src/keybindings.c:252
+#: ../src/keybindings.c:256
 msgid "Suppress snippet completion"
 msgstr "Parça tamamlamayı engelle"
 
-#: ../src/keybindings.c:254
+#: ../src/keybindings.c:258
 msgid "Context Action"
 msgstr "Bağlam eylemi"
 
-#: ../src/keybindings.c:256
+#: ../src/keybindings.c:260
 msgid "Complete word"
 msgstr "Kelimeyi tamamla"
 
-#: ../src/keybindings.c:258
+#: ../src/keybindings.c:262
 msgid "Show calltip"
 msgstr "İpucunu göster"
 
-#: ../src/keybindings.c:260
+#: ../src/keybindings.c:264
 msgid "Show macro list"
 msgstr "Makro listesini göster"
 
-#: ../src/keybindings.c:262
+#: ../src/keybindings.c:266
 msgid "Clipboard"
 msgstr "Pano"
 
-#: ../src/keybindings.c:265
+#: ../src/keybindings.c:269
 msgid "Cut"
 msgstr "Kes"
 
-#: ../src/keybindings.c:267
+#: ../src/keybindings.c:271
 msgid "Copy"
 msgstr "Kopyala"
 
-#: ../src/keybindings.c:269
+#: ../src/keybindings.c:273
 msgid "Paste"
 msgstr "Yapıştır"
 
-#: ../src/keybindings.c:271
+#: ../src/keybindings.c:275
 msgid "Copy current line(s)"
 msgstr "Geçerli satır(lar)ı kopyala"
 
-#: ../src/keybindings.c:273
+#: ../src/keybindings.c:277
 msgid "Cut current line(s)"
 msgstr "Geçerli satır(lar)ı kes"
 
-#: ../src/keybindings.c:275
+#: ../src/keybindings.c:279
 msgid "Select"
 msgstr "Seç"
 
-#: ../src/keybindings.c:278
+#: ../src/keybindings.c:282
 msgid "Select All"
 msgstr "Tümünü Seç"
 
-#: ../src/keybindings.c:280
+#: ../src/keybindings.c:284
 msgid "Select current word"
 msgstr "Geçerli kelimeyi seç"
 
-#: ../src/keybindings.c:282
+#: ../src/keybindings.c:286
 msgid "Select current line(s)"
 msgstr "Geçerli satır(lar)ı seç"
 
-#: ../src/keybindings.c:284
+#: ../src/keybindings.c:288
 msgid "Select current paragraph"
 msgstr "Geçerli paragrafı seç"
 
-#: ../src/keybindings.c:286
+#: ../src/keybindings.c:290
 msgid "Format"
 msgstr "Biçim"
 
-#: ../src/keybindings.c:290
+#: ../src/keybindings.c:294
 msgid "Toggle Case of Selection"
 msgstr "Seçimi büyült/küçült"
 
-#: ../src/keybindings.c:292
+#: ../src/keybindings.c:296
 msgid "Toggle line commentation"
 msgstr "Seçimi Yorum yap/yapma"
 
-#: ../src/keybindings.c:295
+#: ../src/keybindings.c:299
 msgid "Comment line(s)"
 msgstr "Satır(lar)ı yoruma çevir"
 
-#: ../src/keybindings.c:297
+#: ../src/keybindings.c:301
 msgid "Uncomment line(s)"
 msgstr "Yorumdan satır(lar)a çevir"
 
-#: ../src/keybindings.c:299
+#: ../src/keybindings.c:303
 msgid "Increase indent"
 msgstr "Girdiyi artır"
 
-#: ../src/keybindings.c:302
+#: ../src/keybindings.c:306
 msgid "Decrease indent"
 msgstr "Girdiyi azalt"
 
-#: ../src/keybindings.c:305
+#: ../src/keybindings.c:309
 msgid "Increase indent by one space"
 msgstr "Tek boşluk ile girdiyi artır"
 
-#: ../src/keybindings.c:307
+#: ../src/keybindings.c:311
 msgid "Decrease indent by one space"
 msgstr "Tek boşluk ile girdiyi azalt"
 
-#: ../src/keybindings.c:309
+#: ../src/keybindings.c:313
 msgid "Smart line indent"
 msgstr "Akıllı girintilendirme"
 
-#: ../src/keybindings.c:311
+#: ../src/keybindings.c:315
 msgid "Send to Custom Command 1"
 msgstr "Özel Komut 1'e gönder"
 
-#: ../src/keybindings.c:313
+#: ../src/keybindings.c:317
 msgid "Send to Custom Command 2"
 msgstr "Özel Komut 2'ye gönder"
 
-#: ../src/keybindings.c:315
+#: ../src/keybindings.c:319
 msgid "Send to Custom Command 3"
 msgstr "Özel Komut 3'e gönder"
 
-#: ../src/keybindings.c:317
+#: ../src/keybindings.c:321
 msgid "Send Selection to Terminal"
 msgstr "Seçimi Terminale Gönder"
 
-#: ../src/keybindings.c:319
+#: ../src/keybindings.c:323
 msgid "Insert"
 msgstr "Araya ekle"
 
-#: ../src/keybindings.c:322
+#: ../src/keybindings.c:326
 msgid "Insert date"
 msgstr "Araya tarih ekle"
 
-#: ../src/keybindings.c:325
+#: ../src/keybindings.c:329
 msgid "Insert alternative white space"
 msgstr "Alternatif beyaz alan ekle"
 
-#: ../src/keybindings.c:327
+#: ../src/keybindings.c:331
 msgid "Settings"
 msgstr "Ayarlar"
 
-#: ../src/keybindings.c:333 ../src/toolbar.c:200
+#: ../src/keybindings.c:337 ../src/toolbar.c:350
 msgid "Search"
 msgstr "Ara"
 
-#: ../src/keybindings.c:336 ../src/search.c:364
+#: ../src/keybindings.c:340 ../src/search.c:379
 msgid "Find"
 msgstr "Bul"
 
-#: ../src/keybindings.c:338
+#: ../src/keybindings.c:342
 msgid "Find Next"
 msgstr "Sonrakini Bul"
 
-#: ../src/keybindings.c:340
+#: ../src/keybindings.c:344
 msgid "Find Previous"
 msgstr "Öncekini Bul"
 
-#: ../src/keybindings.c:343
+#: ../src/keybindings.c:347
 msgid "Find Next Selection"
 msgstr "Sonraki Seçimi Bul"
 
-#: ../src/keybindings.c:345
+#: ../src/keybindings.c:349
 msgid "Find Previous Selection"
 msgstr "Önceki Seçimi Bul"
 
-#: ../src/keybindings.c:347 ../src/search.c:499
+#: ../src/keybindings.c:351 ../src/search.c:514
 msgid "Replace"
 msgstr "Değiştir"
 
-#: ../src/keybindings.c:349 ../src/search.c:671
+#: ../src/keybindings.c:353 ../src/search.c:686
 msgid "Find in Files"
 msgstr "Dosyalarda Bul"
 
-#: ../src/keybindings.c:352
+#: ../src/keybindings.c:356
 msgid "Next Message"
 msgstr "Sonraki Mesaj"
 
-#: ../src/keybindings.c:354
+#: ../src/keybindings.c:358
 msgid "Previous Message"
 msgstr "Önceki Mesaj"
 
-#: ../src/keybindings.c:356
+#: ../src/keybindings.c:360
 msgid "Find Usage"
 msgstr "Kullanım Bul"
 
-#: ../src/keybindings.c:358
+#: ../src/keybindings.c:362
 msgid "Find Document Usage"
 msgstr "Döküman Kullanımı Bul"
 
-#: ../src/keybindings.c:360
+#: ../src/keybindings.c:364
 msgid "Go to"
 msgstr "Git"
 
-#: ../src/keybindings.c:363 ../src/toolbar.c:62
+#: ../src/keybindings.c:367 ../src/toolbar.c:66
 msgid "Navigate back a location"
 msgstr "Bir bölüm geri yolculuk yap"
 
-#: ../src/keybindings.c:365 ../src/toolbar.c:63
+#: ../src/keybindings.c:369 ../src/toolbar.c:67
 msgid "Navigate forward a location"
 msgstr "Bir bölüm ileri yolculuk yap"
 
-#: ../src/keybindings.c:370
+#: ../src/keybindings.c:374
 msgid "Go to matching brace"
 msgstr "Eşleşen ayraca git"
 
-#: ../src/keybindings.c:373
+#: ../src/keybindings.c:377
 msgid "Toggle marker"
 msgstr "İşaretçi ayarla"
 
-#: ../src/keybindings.c:376
+#: ../src/keybindings.c:380
 msgid "Go to next marker"
 msgstr "Sonraki işaretçiye git"
 
-#: ../src/keybindings.c:379
+#: ../src/keybindings.c:383
 msgid "Go to previous marker"
 msgstr "Önceki işaretçiye git"
 
-#: ../src/keybindings.c:381
+#: ../src/keybindings.c:385
 msgid "Go to Tag Definition"
 msgstr "Etiket Tanımına Git"
 
-#: ../src/keybindings.c:383
+#: ../src/keybindings.c:387
 msgid "Go to Tag Declaration"
 msgstr "Etiket İlanına Git"
 
-#: ../src/keybindings.c:385
+#: ../src/keybindings.c:389
 msgid "Go to Start of Line"
 msgstr "Satırın Başına Git"
 
-#: ../src/keybindings.c:387
+#: ../src/keybindings.c:391
 msgid "Go to End of Line"
 msgstr "Satırın Sonuna Git"
 
-#: ../src/keybindings.c:389
+#: ../src/keybindings.c:393
+#, fuzzy
+msgid "Go to End of Display Line"
+msgstr "Satırın sonuna gider"
+
+#: ../src/keybindings.c:395
 msgid "Go to Previous Word Part"
 msgstr "Önceki Yazı Parçasına Git"
 
-#: ../src/keybindings.c:391
+#: ../src/keybindings.c:397
 msgid "Go to Next Word Part"
 msgstr "Sonraki Yazı Parçasına Git"
 
-#: ../src/keybindings.c:393
+#: ../src/keybindings.c:399
 msgid "View"
 msgstr "Bak"
 
-#: ../src/keybindings.c:396
+#: ../src/keybindings.c:402
 msgid "Toggle All Additional Widgets"
 msgstr "Bütün bölümleri Aç/Kapa"
 
-#: ../src/keybindings.c:399
+#: ../src/keybindings.c:405
 msgid "Fullscreen"
 msgstr "Tam ekran"
 
-#: ../src/keybindings.c:401
+#: ../src/keybindings.c:407
 msgid "Toggle Messages Window"
 msgstr "Mesaj Penceresini Aç/Kapa"
 
-#: ../src/keybindings.c:404
+#: ../src/keybindings.c:410
 msgid "Toggle Sidebar"
 msgstr "Araç çubuğunu Aç/Kapa"
 
-#: ../src/keybindings.c:406
+#: ../src/keybindings.c:412
 msgid "Zoom In"
 msgstr "Yakınlaştır"
 
-#: ../src/keybindings.c:408
+#: ../src/keybindings.c:414
 msgid "Zoom Out"
 msgstr "Uzaklaştır"
 
-#: ../src/keybindings.c:410
+#: ../src/keybindings.c:416
 msgid "Focus"
 msgstr "Odakla"
 
-#: ../src/keybindings.c:413
+#: ../src/keybindings.c:419
 msgid "Switch to Editor"
 msgstr "Düzenleyiciye geç"
 
-#: ../src/keybindings.c:415
+#: ../src/keybindings.c:421
 msgid "Switch to Scribble"
 msgstr "Karalama defterine geç"
 
-#: ../src/keybindings.c:417
+#: ../src/keybindings.c:423
 msgid "Switch to VTE"
 msgstr "Terminale geç"
 
-#: ../src/keybindings.c:419
+#: ../src/keybindings.c:425
 msgid "Switch to Search Bar"
 msgstr "Arama çubuğuna geç"
 
-#: ../src/keybindings.c:421
+#: ../src/keybindings.c:427
 msgid "Switch to Sidebar"
 msgstr "Araç çubuğuna geç"
 
-#: ../src/keybindings.c:423
+#: ../src/keybindings.c:429
 msgid "Switch to Compiler"
 msgstr "Derleyiciye geç"
 
-#: ../src/keybindings.c:425
+#: ../src/keybindings.c:431
 msgid "Notebook tab"
 msgstr "Not defteri sekmesi"
 
-#: ../src/keybindings.c:428
+#: ../src/keybindings.c:434
 msgid "Switch to left document"
 msgstr "Soldaki dökümana geç"
 
-#: ../src/keybindings.c:430
+#: ../src/keybindings.c:436
 msgid "Switch to right document"
 msgstr "Sağdaki dökümana geç"
 
-#: ../src/keybindings.c:432
+#: ../src/keybindings.c:438
 msgid "Switch to last used document"
 msgstr "Son kullanılan dökümana geç"
 
-#: ../src/keybindings.c:434
+#: ../src/keybindings.c:440
 msgid "Move document left"
 msgstr "Dükümanı sola taşı"
 
-#: ../src/keybindings.c:436
+#: ../src/keybindings.c:442
 msgid "Move document right"
 msgstr "Dükümanı sağa taşı"
 
-#: ../src/keybindings.c:438
+#: ../src/keybindings.c:444
 msgid "Move document first"
 msgstr "Dükümanı başa taşı"
 
-#: ../src/keybindings.c:440
+#: ../src/keybindings.c:446
 msgid "Move document last"
 msgstr "Dükümanı sona taşı"
 
-#: ../src/keybindings.c:442
+#: ../src/keybindings.c:448
 msgid "Document"
 msgstr "Döküman"
 
-#: ../src/keybindings.c:445
+#: ../src/keybindings.c:451
 msgid "Toggle Line wrapping"
 msgstr "Satır Kaydırmayı aç/kapat"
 
-#: ../src/keybindings.c:447
+#: ../src/keybindings.c:453
 msgid "Toggle Line breaking"
 msgstr "Satır kesmeyi aç/kapat"
 
-#: ../src/keybindings.c:451
+#: ../src/keybindings.c:457
 msgid "Replace spaces by tabs"
 msgstr "Boşlukları sekmeye çevir"
 
-#: ../src/keybindings.c:453
+#: ../src/keybindings.c:459
 msgid "Toggle current fold"
 msgstr "Geçerli katlamayı aç/kapa"
 
-#: ../src/keybindings.c:455
+#: ../src/keybindings.c:461
 msgid "Fold all"
 msgstr "Tümünü katla"
 
-#: ../src/keybindings.c:457
+#: ../src/keybindings.c:463
 msgid "Unfold all"
 msgstr "Tmünü aç"
 
-#: ../src/keybindings.c:459
+#: ../src/keybindings.c:465
 msgid "Reload symbol list"
 msgstr "Simge listesini tekrar yükle"
 
-#: ../src/keybindings.c:461 ../src/keybindings.c:466 ../src/ui_utils.c:1757
+#: ../src/keybindings.c:467 ../src/keybindings.c:472 ../src/ui_utils.c:1787
 msgid "Build"
 msgstr "İnşa et"
 
-#: ../src/keybindings.c:464 ../src/toolbar.c:64
+#: ../src/keybindings.c:470 ../src/toolbar.c:68
 msgid "Compile"
 msgstr "Derle"
 
-#: ../src/keybindings.c:468
+#: ../src/keybindings.c:474
 msgid "Make all"
 msgstr "hepsini derle"
 
-#: ../src/keybindings.c:471
+#: ../src/keybindings.c:477
 msgid "Make custom target"
 msgstr "Özel hedef yap"
 
-#: ../src/keybindings.c:473
+#: ../src/keybindings.c:479
 msgid "Make object"
 msgstr "Nesneyi derle"
 
-#: ../src/keybindings.c:475
+#: ../src/keybindings.c:481
 msgid "Next error"
 msgstr "Sonraki hata"
 
-#: ../src/keybindings.c:477
+#: ../src/keybindings.c:483
 msgid "Previous error"
 msgstr "Önceki hata"
 
-#: ../src/keybindings.c:479
+#: ../src/keybindings.c:485
 msgid "Run"
 msgstr "Çalıştır"
 
-#: ../src/keybindings.c:481
+#: ../src/keybindings.c:487
 msgid "Run (alternative command)"
 msgstr "Çalıştır (alternatif komut)"
 
-#: ../src/keybindings.c:483
+#: ../src/keybindings.c:489
 msgid "Build options"
 msgstr "İnşa seçenekleri"
 
-#: ../src/keybindings.c:488
+#: ../src/keybindings.c:494
 msgid "Show Color Chooser"
 msgstr "Renk Seçiciyi Göster"
 
-#: ../src/keybindings.c:490 ../src/keybindings.c:493
+#: ../src/keybindings.c:496 ../src/keybindings.c:499
 msgid "Help"
 msgstr "Yardım"
 
-#: ../src/keybindings.c:787
+#: ../src/keybindings.c:794
 msgid "Keyboard Shortcuts"
 msgstr "Klavye Kısayolları"
 
-#: ../src/keybindings.c:800
+#: ../src/keybindings.c:807
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Şu kısayollar düzenlenebilir:"
 
-#: ../src/keybindings.c:1531
+#: ../src/keybindings.c:1540
 msgid "Switch to Document"
 msgstr "Dökümana geç"
 
-#: ../src/keyfile.c:801
+#: ../src/keyfile.c:816
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
 "Buraya istediğinizi yazabilirsiniz. Karalama defteri olarak "
 "kullanabilirsiniz."
 
-#: ../src/keyfile.c:1001
+#: ../src/keyfile.c:1017
 msgid "Failed to load one or more session files."
 msgstr "Bir ya da daha fazla oturum dosyasının yüklenmesi sırasında hata."
 
-#: ../src/log.c:177
+#: ../src/log.c:181
 msgid "Debug Messages"
 msgstr "Hata Ayıklama Mesajları"
 
@@ -3176,24 +3191,24 @@ msgstr "libvte.so için dosya adı"
 msgid "Show version and exit"
 msgstr "Sürümü görüntüle ve çık"
 
-#: ../src/main.c:509
+#: ../src/main.c:477
 msgid "[FILES...]"
 msgstr "[DOSYALAR...]"
 
-#: ../src/main.c:526
+#: ../src/main.c:494
 #, c-format
 msgid "(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"
 msgstr "(%s üzerinde GTK %d.%d.%d ve GLib %d.%d.%d ile derlendi)"
 
-#: ../src/main.c:631
+#: ../src/main.c:599
 msgid "Move it now?"
 msgstr "Şimdi taşınsın mı?"
 
-#: ../src/main.c:633
+#: ../src/main.c:601
 msgid "Geany needs to move your old configuration directory before starting."
 msgstr "Geany başlamadan önce eski ayar dizininizi taşıması gerek."
 
-#: ../src/main.c:639
+#: ../src/main.c:610
 #, c-format
 msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
@@ -3202,7 +3217,7 @@ msgstr "Ayar dizininiz \"%s\" konumundan \"%s\" konumuna başarıyla taşındı.
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
-#: ../src/main.c:649
+#: ../src/main.c:620
 #, c-format
 msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
@@ -3211,7 +3226,7 @@ msgstr ""
 "Eski ayar dizininiz \"%s\" , \"%s\" konumuna taşınamadı (%s). Lütfen dizini "
 "yeni konuma elle taşıyın."
 
-#: ../src/main.c:730
+#: ../src/main.c:701
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -3222,22 +3237,22 @@ msgstr ""
 "Geany'i ayar dizini olmadan kullanmak bazı sorunlara yol açabilir.\n"
 "Yine de Geany'i açmak ister misiniz?"
 
-#: ../src/main.c:816 ../src/socket.c:164
+#: ../src/main.c:787 ../src/socket.c:164
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "'%s' dosyası bulunamadı."
 
-#: ../src/main.c:1037
+#: ../src/main.c:999
 #, c-format
 msgid "This is Geany %s."
 msgstr "Bu, Geany %s."
 
-#: ../src/main.c:1039
+#: ../src/main.c:1001
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Ayar dizini oluşturulamadı (%s)."
 
-#: ../src/main.c:1275
+#: ../src/main.c:1239
 msgid "Configuration files reloaded."
 msgstr "Ayar dosyaları tekrar yüklendi."
 
@@ -3253,7 +3268,7 @@ msgstr "Tümünü Kopy_ala"
 msgid "_Hide Message Window"
 msgstr "Mesaj Penceresini Gi_zle"
 
-#: ../src/plugins.c:442
+#: ../src/plugins.c:436
 #, c-format
 msgid ""
 "The plugin \"%s\" is not binary compatible with this release of Geany - "
@@ -3305,53 +3320,61 @@ msgstr ""
 msgid "<b>Plugin details:</b>"
 msgstr "<b>Eklenti detayları:</b>"
 
-#: ../src/prefs.c:144
-msgid "Action"
-msgstr "Hareket"
-
-#: ../src/prefs.c:149
-msgid "Shortcut"
-msgstr "Kısayol"
-
-#: ../src/prefs.c:1139
+#: ../src/prefs.c:160
 msgid "Grab Key"
 msgstr "Tuşu Yakala"
 
-#: ../src/prefs.c:1145
+#: ../src/prefs.c:166
 #, c-format
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "\"%s\" için kullanmak istediğiniz tuş kombinasyonunu girin."
 
-#: ../src/prefs.c:1333
+#: ../src/prefs.c:209 ../src/symbols.c:1848
+msgid "_Expand All"
+msgstr "H_epsini Genişlet"
+
+#: ../src/prefs.c:214 ../src/symbols.c:1853
+msgid "_Collapse All"
+msgstr "Hepsini _Katla"
+
+#: ../src/prefs.c:273
+msgid "Action"
+msgstr "Hareket"
+
+#: ../src/prefs.c:278
+msgid "Shortcut"
+msgstr "Kısayol"
+
+#: ../src/prefs.c:1398
 msgid "_Override"
 msgstr "Üzerine _yaz"
 
-#: ../src/prefs.c:1334
+#: ../src/prefs.c:1399
 msgid "Override that keybinding?"
 msgstr "Bu kısayolun üzerine yaz?"
 
-#: ../src/prefs.c:1335
+#: ../src/prefs.c:1400
 #, c-format
 msgid "The combination '%s' is already used for \"%s\"."
 msgstr "'%s' kombinasyonu zaten \"%s\" için kullanılıyor."
 
 #. add manually GeanyWrapLabels because they can't be added with Glade
 #. page Tools
-#: ../src/prefs.c:1449
+#: ../src/prefs.c:1514
 msgid "Enter tool paths below. Tools you do not need can be left blank."
 msgstr ""
 "Aşağıya araçların yollarını girin. İhtiyacınız olmayan araçlar için boş "
 "bırakabilirsiniz."
 
 #. page Templates
-#: ../src/prefs.c:1454
+#: ../src/prefs.c:1519
 msgid ""
 "Set the information to be used in templates. See the documentation for "
 "details."
 msgstr ""
 "Şablonlarla kullanılacak bilgiyi ayarlayın. Detaylar için belgelere bakınız."
 
-#: ../src/prefs.c:1458
+#: ../src/prefs.c:1523
 msgid ""
 "<i>Notice: For all changes you make here to take effect, you need to restart "
 "Geany or force the reload of the settings using Tools->Reload Configuration."
@@ -3362,7 +3385,7 @@ msgstr ""
 "ayarları tekrar yüklemeye zorlamalısınız.</i>"
 
 #. page Keybindings
-#: ../src/prefs.c:1464
+#: ../src/prefs.c:1529
 msgid ""
 "Here you can change keyboard shortcuts for various actions. Select one and "
 "press the Change button to enter a new shortcut, or double click on an "
@@ -3373,7 +3396,7 @@ msgstr ""
 "olarak düzenlemek için çift tıklayın."
 
 #. page Printing
-#: ../src/prefs.c:1469
+#: ../src/prefs.c:1534
 msgid ""
 "<i>Notice: Native GTK printing is only available if Geany was built against "
 "GTK 2.10 (or above) <b>and</b> Geany is running with GTK 2.10 (or above).</i>"
@@ -3382,17 +3405,8 @@ msgstr ""
 "ile derlendiğinde <b>ve</b> Geany GTK 2.10 (veya yukarı bir sürüm) ile "
 "çalışırken kullanılabilir.</i>"
 
-#. page Toolbar
-#: ../src/prefs.c:1475
-msgid ""
-"<i>Notice: To customize the toolbar elements, edit the file 'ui_toolbar."
-"xml'. Please see the documentation for details.</i>"
-msgstr ""
-"<i>Not: Araç çubuğu öğelerini düzenlemek için 'ui_toolbar.xml' dosyasını "
-"düzenleyebilirsiniz. Lütfen deyatlar için belgeleri inceleyin.</i>"
-
 #. page Editor->Indentation
-#: ../src/prefs.c:1481
+#: ../src/prefs.c:1540
 msgid ""
 "<i>Warning: these settings are overridden by the current project. See "
 "<b>Project->Properties</b>.</i>"
@@ -3400,44 +3414,44 @@ msgstr ""
 "<i>Uyarı: geçerli proje bu ayarları görmezden gelir. Bkz <b>Proje-"
 ">Özellikler</b>.</i>"
 
-#: ../src/printing.c:270
+#: ../src/printing.c:273
 #, c-format
 msgid "<b>Page %d of %d</b>"
 msgstr "<b>Sayfa %d, toplam %d</b>"
 
-#: ../src/printing.c:340
+#: ../src/printing.c:343
 msgid "Document Setup"
 msgstr "Döküman Düzeni"
 
-#: ../src/printing.c:375
+#: ../src/printing.c:378
 msgid "Print only the basename(without the path) of the printed file"
 msgstr "Yazdırırken dosyanın sadece (yolu olmadan) adını kullan"
 
-#: ../src/printing.c:491
+#: ../src/printing.c:494
 #, c-format
 msgid "Page %d of %d"
 msgstr "Sayfa %d / %d"
 
-#: ../src/printing.c:741
+#: ../src/printing.c:744
 #, c-format
 msgid "Printing of file %s was cancelled."
 msgstr "%s dosyasının yazdırılması iptal edildi."
 
-#: ../src/printing.c:743 ../src/printing.c:862
+#: ../src/printing.c:746 ../src/printing.c:865
 #, c-format
 msgid "File %s printed."
 msgstr "%s dosyası yazdırıldı."
 
-#: ../src/printing.c:792
+#: ../src/printing.c:795
 #, c-format
 msgid "Printing of %s failed (%s)."
 msgstr "%s dosyası yazdırılırken hata (%s)."
 
-#: ../src/printing.c:832
+#: ../src/printing.c:835
 msgid "Please set a print command in the preferences dialog first."
 msgstr "Lütfen önce seçenekler bölümünden bir yazdırma komutu ayarlayın."
 
-#: ../src/printing.c:840
+#: ../src/printing.c:843
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -3448,7 +3462,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/printing.c:856
+#: ../src/printing.c:859
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
 msgstr "\"%s\" yazdırma işlemi başarısız (dönüş kodu: %s)."
@@ -3467,19 +3481,19 @@ msgstr "Yeni Proje"
 msgid "C_reate"
 msgstr "Oluştu_r"
 
-#: ../src/project.c:140 ../src/project.c:382
+#: ../src/project.c:140 ../src/project.c:386
 msgid "Name:"
 msgstr "Adı:"
 
-#: ../src/project.c:149 ../src/project.c:395
+#: ../src/project.c:149 ../src/project.c:399
 msgid "Filename:"
 msgstr "Dosya adı:"
 
-#: ../src/project.c:165 ../src/project.c:425
+#: ../src/project.c:165 ../src/project.c:429
 msgid "Base path:"
 msgstr "Temel yol:"
 
-#: ../src/project.c:171 ../src/project.c:434
+#: ../src/project.c:171 ../src/project.c:438
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
@@ -3488,41 +3502,41 @@ msgstr ""
 "Projenin oluşturulacağı ana dizin. Yeni bir tane oluşturabilir veya olan "
 "dizinlerden kullanabilirsiniz."
 
-#: ../src/project.c:174 ../src/project.c:437
+#: ../src/project.c:174 ../src/project.c:441
 msgid "Choose Project Base Path"
 msgstr "Projenin Temel Klasörünü Seç"
 
-#: ../src/project.c:235 ../src/project.c:266 ../src/project.c:913
+#: ../src/project.c:239 ../src/project.c:270 ../src/project.c:917
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "\"%s\" proje dosyası yüklenemedi."
 
-#: ../src/project.c:260 ../src/project.c:272
+#: ../src/project.c:264 ../src/project.c:276
 msgid "Open Project"
 msgstr "Proje Aç"
 
-#: ../src/project.c:292
+#: ../src/project.c:296
 msgid "Project files"
 msgstr "Proje dosyaları"
 
-#: ../src/project.c:326
+#: ../src/project.c:330
 #, c-format
 msgid "Project \"%s\" closed."
 msgstr "\"%s\" projesi kapatıldı."
 
-#: ../src/project.c:408
+#: ../src/project.c:412
 msgid "Description:"
 msgstr "Tanım:"
 
-#: ../src/project.c:443
+#: ../src/project.c:447
 msgid "Make in base path"
 msgstr "Temel klasör içinde yap"
 
-#: ../src/project.c:448
+#: ../src/project.c:452
 msgid "Run command:"
 msgstr "Komutu çalıştır:"
 
-#: ../src/project.c:457
+#: ../src/project.c:461
 msgid ""
 "Command-line to run in the project base directory. Options can be appended "
 "to the command. Leave blank to use the default run command."
@@ -3530,81 +3544,81 @@ msgstr ""
 "Projenin temel dizininde çalıştırılacak olan komut. Komuta seçenekler "
 "eklenebilir. Öntanımlı komutu kullanmak için boş bırakın."
 
-#: ../src/project.c:472
+#: ../src/project.c:476
 msgid "File patterns:"
 msgstr "Dosya örnekleri:"
 
-#: ../src/project.c:574
+#: ../src/project.c:578
 msgid "Do you want to close it before proceeding?"
 msgstr "Onaylamadan kapatmak istiyor musunuz?"
 
-#: ../src/project.c:575
+#: ../src/project.c:579
 #, c-format
 msgid "The '%s' project is already open."
 msgstr "'%s' projesi zaten açık."
 
-#: ../src/project.c:619
+#: ../src/project.c:623
 msgid "The specified project name is too short."
 msgstr "Belirtilen proje ismi çok kısa."
 
-#: ../src/project.c:625
+#: ../src/project.c:629
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr "Belirtilen proje ismi çok uzun (en fazla %d karakter)."
 
-#: ../src/project.c:633
+#: ../src/project.c:637
 msgid "You have specified an invalid project filename."
 msgstr "Geçersiz bir dosya adı girdiniz"
 
-#: ../src/project.c:656
+#: ../src/project.c:660
 msgid "Create the project's base path directory?"
 msgstr "Projenin ana yolunu oluştur?"
 
-#: ../src/project.c:657
+#: ../src/project.c:661
 #, c-format
 msgid "The path \"%s\" does not exist."
 msgstr "\"%s\" yolu bulunamadı."
 
-#: ../src/project.c:666
+#: ../src/project.c:670
 #, c-format
 msgid "Project base directory could not be created (%s)."
 msgstr "Proje temel dizini oluşturulamadı (%s)."
 
-#: ../src/project.c:678
+#: ../src/project.c:682
 #, c-format
 msgid "Project file could not be written (%s)."
 msgstr "Proje dosyası yazılamadı (%s)."
 
-#: ../src/project.c:726
+#: ../src/project.c:730
 #, c-format
 msgid "Project \"%s\" created."
 msgstr "\"%s\" projesi oluşturuldu."
 
-#: ../src/project.c:728
+#: ../src/project.c:732
 #, c-format
 msgid "Project \"%s\" saved."
 msgstr "\"%s\" projesi kaydedildi."
 
 #. initialise the dialog
-#: ../src/project.c:794 ../src/project.c:805
+#: ../src/project.c:798 ../src/project.c:809
 msgid "Choose Project Filename"
 msgstr "Proje Dosya Adını Seç"
 
 #. initialise the dialog
-#: ../src/project.c:823 ../src/project.c:834
+#: ../src/project.c:827 ../src/project.c:838
 msgid "Choose Project Run Command"
 msgstr "Proje Çalıştırma Komutunu Seç"
 
-#: ../src/project.c:903
+#: ../src/project.c:907
 #, c-format
 msgid "Project \"%s\" opened."
 msgstr "\"%s\" projesi açıldı."
 
-#: ../src/search.c:201
+#: ../src/search.c:216
 msgid "_Use regular expressions"
 msgstr "Düzenli ifadeleri k_ullan"
 
-#: ../src/search.c:205
+#: ../src/search.c:220
 msgid ""
 "Use POSIX-like regular expressions. For detailed information about using "
 "regular expressions, please read the documentation."
@@ -3612,15 +3626,15 @@ msgstr ""
 "POSIX tarzı düzenli ifadelendirmeyi kullan. Düzenli ifade kullanımı hakkında "
 "daha fazlası için lütfen yardım sayfalarını okuyun."
 
-#: ../src/search.c:212
+#: ../src/search.c:227
 msgid "Search _backwards"
 msgstr "Geriye do_ğru ara"
 
-#: ../src/search.c:226
+#: ../src/search.c:241
 msgid "Use _escape sequences"
 msgstr ""
 
-#: ../src/search.c:231
+#: ../src/search.c:246
 msgid ""
 "Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
 "corresponding control characters"
@@ -3628,395 +3642,403 @@ msgstr ""
 "Yazıdaki \\\\, \\t, \\n, \\r ve \\uXXXX (Unicode) karakterleri kontrol "
 "karakterleri ile yer değiştir"
 
-#: ../src/search.c:240 ../src/search.c:766
+#: ../src/search.c:255 ../src/search.c:781
 msgid "C_ase sensitive"
 msgstr "Büyük/Küçük harf duy_arlı"
 
-#: ../src/search.c:245 ../src/search.c:772
+#: ../src/search.c:260 ../src/search.c:787
 msgid "Match only a _whole word"
 msgstr "Bütün kelimeyi e_şle"
 
-#: ../src/search.c:250
+#: ../src/search.c:265
 msgid "Match from s_tart of word"
 msgstr "Keli_menin başından eşle"
 
-#: ../src/search.c:371
+#: ../src/search.c:386
 msgid "_Previous"
 msgstr "_Önceki"
 
-#: ../src/search.c:377
+#: ../src/search.c:392
 msgid "_Next"
 msgstr "So_nraki"
 
-#: ../src/search.c:381 ../src/search.c:520 ../src/search.c:696
+#: ../src/search.c:396 ../src/search.c:535 ../src/search.c:711
 msgid "_Search for:"
 msgstr "_Ara:"
 
 #. Now add the multiple match options
-#: ../src/search.c:409
+#: ../src/search.c:424
 msgid "_Find All"
 msgstr "_Tümünü Bul"
 
-#: ../src/search.c:416
+#: ../src/search.c:431
 msgid "_Mark"
 msgstr "İ_şaretle"
 
-#: ../src/search.c:418
+#: ../src/search.c:433
 msgid "Mark all matches in the current document"
 msgstr "Dökümandaki bütün eşleşmeleri işaretle"
 
-#: ../src/search.c:423 ../src/search.c:580
+#: ../src/search.c:438 ../src/search.c:595
 msgid "In Sessi_on"
 msgstr "_Oturumda"
 
-#: ../src/search.c:428 ../src/search.c:585
+#: ../src/search.c:443 ../src/search.c:600
 msgid "_In Document"
 msgstr "D_ökümanda"
 
 #. close window checkbox
-#: ../src/search.c:434 ../src/search.c:598
+#: ../src/search.c:449 ../src/search.c:613
 msgid "Close _dialog"
 msgstr "_Diyaloğu kapat"
 
-#: ../src/search.c:439 ../src/search.c:603
+#: ../src/search.c:454 ../src/search.c:618
 msgid "Disable this option to keep the dialog open"
 msgstr "Pencereyi açık tutmak için bu seçeneği pasifleştirin"
 
-#: ../src/search.c:514
+#: ../src/search.c:529
 msgid "Replace & Fi_nd"
 msgstr "Değişti_r & Bul"
 
-#: ../src/search.c:523
+#: ../src/search.c:538
 msgid "Replace wit_h:"
 msgstr "Şununla değiş_tir:"
 
 #. Now add the multiple replace options
-#: ../src/search.c:573
+#: ../src/search.c:588
 msgid "Re_place All"
 msgstr "Tüm_ünü değiştir"
 
-#: ../src/search.c:590
+#: ../src/search.c:605
 msgid "In Se_lection"
 msgstr "Seç_im içinde"
 
-#: ../src/search.c:592
+#: ../src/search.c:607
 msgid "Replace all matches found in the currently selected text"
 msgstr "Seçilen yazı içinde bütün eşleşmeleri değiştir"
 
-#: ../src/search.c:681
+#: ../src/search.c:696
 msgid "_Directory:"
 msgstr "_Dizin:"
 
-#: ../src/search.c:712
+#: ../src/search.c:727
 msgid "E_ncoding:"
 msgstr "K_odlama:"
 
-#: ../src/search.c:737
+#: ../src/search.c:752
 msgid "Fixed s_trings"
 msgstr "Sabit di_ziler"
 
-#: ../src/search.c:746
+#: ../src/search.c:761
 msgid "_Grep regular expressions"
 msgstr "_Grep düzenli ifadeler"
 
-#: ../src/search.c:749 ../src/search.c:757
+#: ../src/search.c:764 ../src/search.c:772
 msgid "See grep's manual page for more information"
 msgstr "Daha fazla bilgi için grep'in yardım sayfalarına bakınız"
 
-#: ../src/search.c:754
+#: ../src/search.c:769
 msgid "_Extended regular expressions"
 msgstr "Harici düz_enli ifadeler"
 
-#: ../src/search.c:761
+#: ../src/search.c:776
 msgid "_Recurse in subfolders"
 msgstr "Alt klasö_rlerde de uygula"
 
-#: ../src/search.c:777
+#: ../src/search.c:792
 msgid "_Invert search results"
 msgstr "Arama sonuçlarını ters çev_ir"
 
-#: ../src/search.c:782
+#: ../src/search.c:797
 msgid "Invert the sense of matching, to select non-matching lines"
 msgstr "Eşlenen değil, eşlenmeyen satırları seç"
 
-#: ../src/search.c:799
+#: ../src/search.c:814
 msgid "E_xtra options:"
 msgstr "Ekstra s_eçenekler:"
 
-#: ../src/search.c:807
+#: ../src/search.c:822
 msgid "Other options to pass to Grep"
 msgstr "Grep için diğer seçenekler"
 
-#: ../src/search.c:1068 ../src/search.c:1675 ../src/search.c:1678
+#: ../src/search.c:1083 ../src/search.c:1690 ../src/search.c:1693
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
 msgstr[0] "%d eşleşme bulundu, \"%s\""
 msgstr[1] "%d eşleşme bulundu, \"%s\""
 
-#: ../src/search.c:1184
+#: ../src/search.c:1199
 #, c-format
 msgid "Replaced text in %u file."
 msgid_plural "Replaced text in %u files."
 msgstr[0] "Yazı %u dosyada değiştirildi."
 msgstr[1] "Yazı %u dosyada değiştirildi."
 
-#: ../src/search.c:1285
+#: ../src/search.c:1300
 msgid "Invalid directory for find in files."
 msgstr "Dosyalarda bulmak için geçersiz dizin."
 
-#: ../src/search.c:1305
+#: ../src/search.c:1320
 msgid "No text to find."
 msgstr "Bulunacak yazı yok."
 
-#: ../src/search.c:1332
+#: ../src/search.c:1347
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
 msgstr ""
 "grep aracı çalıştırılamadı '%s'; lütfen Seçenekler'de yolu kontrol edin."
 
-#: ../src/search.c:1400
+#: ../src/search.c:1415
 msgid "Searching..."
 msgstr "Arıyor..."
 
-#: ../src/search.c:1412
+#: ../src/search.c:1427
 #, c-format
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (dizin: %s)"
 
-#: ../src/search.c:1440
+#: ../src/search.c:1455
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "Dizin açılamadı (%s)"
 
-#: ../src/search.c:1546
+#: ../src/search.c:1561
 msgid "Search failed (see Help->Debug Messages for details)."
 msgstr "Arama başarısız (detaylar için Yardım->Hata Mesajları)."
 
-#: ../src/search.c:1567
+#: ../src/search.c:1582
 #, c-format
 msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
 msgstr[0] "Arama %d eşleşme ile tamamlandı."
 msgstr[1] "Arama %d eşleşme ile tamamlandı."
 
-#: ../src/search.c:1575
+#: ../src/search.c:1590
 msgid "No matches found."
 msgstr "Eşleşme bulunamadı."
 
-#: ../src/symbols.c:580 ../src/symbols.c:621 ../src/symbols.c:684
+#: ../src/symbols.c:596 ../src/symbols.c:637 ../src/symbols.c:700
 msgid "Chapter"
 msgstr "Bölüm"
 
-#: ../src/symbols.c:581 ../src/symbols.c:617 ../src/symbols.c:685
+#: ../src/symbols.c:597 ../src/symbols.c:633 ../src/symbols.c:701
 msgid "Section"
 msgstr "Bölüm"
 
-#: ../src/symbols.c:582
+#: ../src/symbols.c:598
 msgid "Sect1"
 msgstr "Kısım1"
 
-#: ../src/symbols.c:583
+#: ../src/symbols.c:599
 msgid "Sect2"
 msgstr "Kısım2"
 
-#: ../src/symbols.c:584
+#: ../src/symbols.c:600
 msgid "Sect3"
 msgstr "Kısım3"
 
-#: ../src/symbols.c:585
+#: ../src/symbols.c:601
 msgid "Appendix"
 msgstr "Ek"
 
 #. &(tv_iters.tag_macro), _("Macros"),
 #. &(tv_iters.tag_variable), _("Variables"),
-#: ../src/symbols.c:586 ../src/symbols.c:622 ../src/symbols.c:743
-#: ../src/symbols.c:757 ../src/symbols.c:769 ../src/symbols.c:781
-#: ../src/symbols.c:796 ../src/symbols.c:841
+#: ../src/symbols.c:602 ../src/symbols.c:638 ../src/symbols.c:769
+#: ../src/symbols.c:783 ../src/symbols.c:795 ../src/symbols.c:807
+#: ../src/symbols.c:822 ../src/symbols.c:867
 msgid "Other"
 msgstr "Diğer"
 
-#: ../src/symbols.c:593 ../src/symbols.c:789 ../src/symbols.c:821
+#: ../src/symbols.c:609 ../src/symbols.c:815 ../src/symbols.c:847
 msgid "Module"
 msgstr "Modül"
 
-#: ../src/symbols.c:594 ../src/symbols.c:767 ../src/symbols.c:779
-#: ../src/symbols.c:794 ../src/symbols.c:806
+#: ../src/symbols.c:610 ../src/symbols.c:793 ../src/symbols.c:805
+#: ../src/symbols.c:820 ../src/symbols.c:832
 msgid "Types"
 msgstr "Türler"
 
-#: ../src/symbols.c:595
+#: ../src/symbols.c:611
 msgid "Type constructors"
 msgstr "Tür oluşturucular"
 
-#: ../src/symbols.c:596 ../src/symbols.c:608 ../src/symbols.c:629
-#: ../src/symbols.c:638 ../src/symbols.c:653 ../src/symbols.c:665
-#: ../src/symbols.c:709 ../src/symbols.c:722 ../src/symbols.c:753
-#: ../src/symbols.c:776 ../src/symbols.c:791 ../src/symbols.c:828
+#: ../src/symbols.c:612 ../src/symbols.c:624 ../src/symbols.c:645
+#: ../src/symbols.c:654 ../src/symbols.c:669 ../src/symbols.c:681
+#: ../src/symbols.c:734 ../src/symbols.c:748 ../src/symbols.c:779
+#: ../src/symbols.c:802 ../src/symbols.c:817 ../src/symbols.c:854
 msgid "Functions"
 msgstr "Fonksiyonlar"
 
-#: ../src/symbols.c:601 ../src/symbols.c:607
+#: ../src/symbols.c:617 ../src/symbols.c:623
 msgid "Sections"
 msgstr "Bölümler"
 
-#: ../src/symbols.c:602
+#: ../src/symbols.c:618
 msgid "Keys"
 msgstr "Anahtarlar"
 
 #. &(tv_iters.tag_class), _("Constants"),
 #. &(tv_iters.tag_member), _("Members"),
 #. &(tv_iters.tag_macro), _("Macros"),
-#: ../src/symbols.c:609 ../src/symbols.c:655 ../src/symbols.c:710
-#: ../src/symbols.c:726 ../src/symbols.c:755 ../src/symbols.c:768
-#: ../src/symbols.c:777 ../src/symbols.c:793 ../src/symbols.c:840
+#: ../src/symbols.c:625 ../src/symbols.c:671 ../src/symbols.c:735
+#: ../src/symbols.c:752 ../src/symbols.c:781 ../src/symbols.c:794
+#: ../src/symbols.c:803 ../src/symbols.c:819 ../src/symbols.c:866
 msgid "Variables"
 msgstr "Değişkenler"
 
-#: ../src/symbols.c:615
+#: ../src/symbols.c:631
 msgid "Command"
 msgstr "Komut"
 
-#: ../src/symbols.c:616
+#: ../src/symbols.c:632
 msgid "Environment"
 msgstr "Çevre"
 
-#: ../src/symbols.c:618 ../src/symbols.c:686
+#: ../src/symbols.c:634 ../src/symbols.c:702
 msgid "Subsection"
 msgstr "Altbölüm"
 
-#: ../src/symbols.c:619 ../src/symbols.c:687
+#: ../src/symbols.c:635 ../src/symbols.c:703
 msgid "Subsubsection"
 msgstr "Alt-Altbölüm"
 
-#: ../src/symbols.c:620
+#: ../src/symbols.c:636
 msgid "Label"
 msgstr "Etiket"
 
-#: ../src/symbols.c:630
+#: ../src/symbols.c:646
 msgid "Structures"
 msgstr "Yapılar"
 
-#: ../src/symbols.c:637 ../src/symbols.c:736 ../src/symbols.c:750
+#: ../src/symbols.c:653 ../src/symbols.c:762 ../src/symbols.c:776
 msgid "Package"
 msgstr "Paket"
 
-#: ../src/symbols.c:639
+#: ../src/symbols.c:655
 msgid "My"
 msgstr "Benim"
 
-#: ../src/symbols.c:640
+#: ../src/symbols.c:656
 msgid "Local"
 msgstr "Yerel"
 
-#: ../src/symbols.c:641
+#: ../src/symbols.c:657
 msgid "Our"
 msgstr "Bizim"
 
-#: ../src/symbols.c:651 ../src/symbols.c:737 ../src/symbols.c:751
-#: ../src/symbols.c:764 ../src/symbols.c:790
+#: ../src/symbols.c:667 ../src/symbols.c:763 ../src/symbols.c:777
+#: ../src/symbols.c:790 ../src/symbols.c:816
 msgid "Interfaces"
 msgstr "Arayüzler"
 
-#: ../src/symbols.c:652 ../src/symbols.c:676 ../src/symbols.c:695
-#: ../src/symbols.c:707 ../src/symbols.c:738 ../src/symbols.c:752
-#: ../src/symbols.c:765 ../src/symbols.c:827
+#: ../src/symbols.c:668 ../src/symbols.c:692 ../src/symbols.c:711
+#: ../src/symbols.c:723 ../src/symbols.c:732 ../src/symbols.c:764
+#: ../src/symbols.c:778 ../src/symbols.c:791 ../src/symbols.c:853
 msgid "Classes"
 msgstr "Sınıflar"
 
-#: ../src/symbols.c:654 ../src/symbols.c:756 ../src/symbols.c:778
+#: ../src/symbols.c:670 ../src/symbols.c:782 ../src/symbols.c:804
 msgid "Constants"
 msgstr "Sabitler"
 
-#: ../src/symbols.c:666
+#: ../src/symbols.c:682
 msgid "Anchors"
 msgstr "Çapalar"
 
-#: ../src/symbols.c:667
+#: ../src/symbols.c:683
 msgid "H1 Headings"
 msgstr "H1 Başlıkları"
 
-#: ../src/symbols.c:668
+#: ../src/symbols.c:684
 msgid "H2 Headings"
 msgstr "H2 Başlıkları"
 
-#: ../src/symbols.c:669
+#: ../src/symbols.c:685
 msgid "H3 Headings"
 msgstr "H3 Başlıkları"
 
-#: ../src/symbols.c:677
+#: ../src/symbols.c:693
 msgid "ID Selectors"
 msgstr "Kimlik Seçicileri"
 
-#: ../src/symbols.c:678
+#: ../src/symbols.c:694
 msgid "Type Selectors"
 msgstr "Tür Seçicileri"
 
-#: ../src/symbols.c:694
+#: ../src/symbols.c:710
 msgid "Modules"
 msgstr "Modüller"
 
-#: ../src/symbols.c:696
+#: ../src/symbols.c:712
 msgid "Singletons"
 msgstr "Tekliler"
 
-#: ../src/symbols.c:697 ../src/symbols.c:708 ../src/symbols.c:739
-#: ../src/symbols.c:766
+#: ../src/symbols.c:713 ../src/symbols.c:724 ../src/symbols.c:733
+#: ../src/symbols.c:765 ../src/symbols.c:792
 msgid "Methods"
 msgstr "Yöntemler"
 
-#: ../src/symbols.c:740 ../src/symbols.c:829
-msgid "Members"
-msgstr "Üyeler"
-
-#: ../src/symbols.c:780 ../src/symbols.c:803
-msgid "Labels"
-msgstr "Etiketler"
-
-#: ../src/symbols.c:792
-msgid "Subroutines"
-msgstr "Alt programlar"
-
-#: ../src/symbols.c:795
-msgid "Blocks"
-msgstr "Bloklar"
-
-#: ../src/symbols.c:804 ../src/symbols.c:813 ../src/symbols.c:837
-msgid "Macros"
-msgstr "Makrolar"
-
-#: ../src/symbols.c:805
-msgid "Defines"
-msgstr "Tanımlar"
-
-#: ../src/symbols.c:812
-msgid "Targets"
-msgstr "Hedefler"
-
-#: ../src/symbols.c:824
+#: ../src/symbols.c:722 ../src/symbols.c:850
 msgid "Namespaces"
 msgstr "Ad boşlukları"
 
-#: ../src/symbols.c:830
+#: ../src/symbols.c:725
+msgid "Procedures"
+msgstr "Yordamlar"
+
+#: ../src/symbols.c:736
+msgid "Imports"
+msgstr ""
+
+#: ../src/symbols.c:766 ../src/symbols.c:855
+msgid "Members"
+msgstr "Üyeler"
+
+#: ../src/symbols.c:806 ../src/symbols.c:829
+msgid "Labels"
+msgstr "Etiketler"
+
+#: ../src/symbols.c:818
+msgid "Subroutines"
+msgstr "Alt programlar"
+
+#: ../src/symbols.c:821
+msgid "Blocks"
+msgstr "Bloklar"
+
+#: ../src/symbols.c:830 ../src/symbols.c:839 ../src/symbols.c:863
+msgid "Macros"
+msgstr "Makrolar"
+
+#: ../src/symbols.c:831
+msgid "Defines"
+msgstr "Tanımlar"
+
+#: ../src/symbols.c:838
+msgid "Targets"
+msgstr "Hedefler"
+
+#: ../src/symbols.c:856
 msgid "Structs"
 msgstr "Yapılar"
 
-#: ../src/symbols.c:831
+#: ../src/symbols.c:857
 msgid "Typedefs / Enums"
 msgstr ""
 
-#: ../src/symbols.c:1311
+#: ../src/symbols.c:1337
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "\"%s\" için bilinmeyen dosya uzantısı.\n"
 
-#: ../src/symbols.c:1332
+#: ../src/symbols.c:1358
 #, c-format
 msgid "Failed to create tags file, perhaps because no tags were found.\n"
 msgstr ""
 "Etiket dosyası oluşturulamadı, belki sebebi hiç etiket bulunmamasıdır.\n"
 
-#: ../src/symbols.c:1339
+#: ../src/symbols.c:1365
 #, c-format
 msgid ""
 "Usage: %s -g <Tag File> <File list>\n"
@@ -4025,7 +4047,7 @@ msgstr ""
 "Kullanım: %s -g <Etiket Dosyası> <Dosya listesi>\n"
 "\n"
 
-#: ../src/symbols.c:1340
+#: ../src/symbols.c:1366
 #, c-format
 msgid ""
 "Example:\n"
@@ -4036,168 +4058,175 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1354
+#: ../src/symbols.c:1380
 msgid "Load Tags"
 msgstr "Etiketleri Yükle"
 
-#: ../src/symbols.c:1361
+#: ../src/symbols.c:1387
 msgid "Geany tag files (*.tags)"
 msgstr "Geany etiket dosyaları (*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1381
+#: ../src/symbols.c:1407
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "%s etiket dosyası yüklendi '%s'."
 
-#: ../src/symbols.c:1383
+#: ../src/symbols.c:1409
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "Etiket dosyası '%s' yüklenemedi."
 
-#: ../src/symbols.c:1517
+#: ../src/symbols.c:1555
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr ""
 
-#: ../src/symbols.c:1519
+#: ../src/symbols.c:1557
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "\"%s\" için tanım bulunamadı."
 
-#: ../src/symbols.c:1810
-msgid "_Expand All"
-msgstr "H_epsini Genişlet"
-
-#: ../src/symbols.c:1815
-msgid "_Collapse All"
-msgstr "Hepsini _Katla"
-
-#: ../src/symbols.c:1825
+#: ../src/symbols.c:1863
 msgid "Sort by _Name"
 msgstr "İsme Göre Sı_rala"
 
-#: ../src/symbols.c:1832
+#: ../src/symbols.c:1870
 msgid "Sort by _Appearance"
 msgstr "Görünüme Göre Sır_ala"
 
-#: ../src/toolbar.c:51
+#. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
+#: ../src/toolbar.c:55
 msgid "Save the current file"
 msgstr "Geçerli dosyayı kaydet"
 
-#: ../src/toolbar.c:52 ../src/ui_utils.c:1755
+#: ../src/toolbar.c:56 ../src/ui_utils.c:1785
 msgid "Save All"
 msgstr "Tümünü kaydet"
 
-#: ../src/toolbar.c:52
+#: ../src/toolbar.c:56
 msgid "Save all open files"
 msgstr "Bütün açık dosyaları kaydet"
 
-#: ../src/toolbar.c:53
+#: ../src/toolbar.c:57
 msgid "Reload the current file from disk"
 msgstr "Geçerli dosyayı diskten tekrar yükle"
 
-#: ../src/toolbar.c:54
+#: ../src/toolbar.c:58
 msgid "Close the current file"
 msgstr "Geçerli dosyayı kapat"
 
-#: ../src/toolbar.c:55
+#: ../src/toolbar.c:59
 msgid "Close all open files"
 msgstr "Bütün açık dosyaları kapat"
 
-#: ../src/toolbar.c:56
+#: ../src/toolbar.c:60
 msgid "Cut the current selection"
 msgstr "Geçerli seçimi kes"
 
-#: ../src/toolbar.c:57
+#: ../src/toolbar.c:61
 msgid "Copy the current selection"
 msgstr "Geçerli seçimi kopyala"
 
-#: ../src/toolbar.c:58
+#: ../src/toolbar.c:62
 msgid "Paste the contents of the clipboard"
 msgstr "Panodaki içeriği yapıştır"
 
-#: ../src/toolbar.c:59
+#: ../src/toolbar.c:63
 msgid "Delete the current selection"
 msgstr "Geçerli seçimi sil"
 
-#: ../src/toolbar.c:60
+#: ../src/toolbar.c:64
 msgid "Undo the last modification"
 msgstr "Son yapılan düzenlemeyi geri al"
 
-#: ../src/toolbar.c:61
+#: ../src/toolbar.c:65
 msgid "Redo the last modification"
 msgstr "Son yapılan düzenlemeyi tekrar uygula"
 
-#: ../src/toolbar.c:64
+#: ../src/toolbar.c:68
 msgid "Compile the current file"
 msgstr "Geçerli dosyayı derle"
 
-#: ../src/toolbar.c:65
+#: ../src/toolbar.c:69
 msgid "Run or view the current file"
 msgstr "Geçerli dosyayı çalıştır veya incele"
 
-#: ../src/toolbar.c:66
+#: ../src/toolbar.c:70
 msgid ""
 "Open a color chooser dialog, to interactively pick colors from a palette"
 msgstr "Anında renk seçmek için bir renk paleti aç"
 
-#: ../src/toolbar.c:67
+#: ../src/toolbar.c:71
 msgid "Zoom in the text"
 msgstr "Yazıya yaklaş"
 
-#: ../src/toolbar.c:68
+#: ../src/toolbar.c:72
 msgid "Zoom out the text"
 msgstr "Yazıdan uzaklaş"
 
-#: ../src/toolbar.c:69
+#: ../src/toolbar.c:73
 msgid "Decrease indentation"
 msgstr "Girintiyi azalt"
 
-#: ../src/toolbar.c:70
+#: ../src/toolbar.c:74
 msgid "Increase indentation"
 msgstr "Girintiyi artır"
 
-#: ../src/toolbar.c:71 ../src/toolbar.c:200
+#: ../src/toolbar.c:75 ../src/toolbar.c:350
 msgid "Find the entered text in the current file"
 msgstr "Girilen yazıyı geçerli dosyada bul"
 
-#: ../src/toolbar.c:72 ../src/toolbar.c:208
+#: ../src/toolbar.c:76 ../src/toolbar.c:358
 msgid "Jump to the entered line number"
 msgstr "Girilen satıra git"
 
-#: ../src/toolbar.c:73
+#: ../src/toolbar.c:77
 msgid "Show the preferences dialog"
 msgstr "Seçenekler penceresini göster"
 
-#: ../src/toolbar.c:74
+#: ../src/toolbar.c:78
 msgid "Quit Geany"
 msgstr "Geany'den Çık"
 
-#: ../src/toolbar.c:75
+#: ../src/toolbar.c:79
 msgid "Print document"
 msgstr "Belgeyi yazdır"
 
-#: ../src/toolbar.c:153
-msgid ""
-"For all changes you make in this file to take effect, you need to restart "
-"Geany."
-msgstr ""
-"Bu dosyada yaptığınız tüm değişikliklerin uygulanması için, Geany'i yeniden "
-"başlatmalısınız."
+#: ../src/toolbar.c:80
+msgid "Replace text in the current document"
+msgstr "Mevcut dökümandaki yazıyı yer değiştir"
 
 #. Create our custom actions
-#: ../src/toolbar.c:184
+#: ../src/toolbar.c:334
 msgid "Create a new file"
 msgstr "Yeni bir dosya oluştur"
 
-#: ../src/toolbar.c:189
+#: ../src/toolbar.c:339
 msgid "Open an existing file"
 msgstr "Bir dosyayı aç"
 
-#: ../src/toolbar.c:208
+#: ../src/toolbar.c:358
 msgid "Goto"
 msgstr "Git"
+
+#: ../src/toolbar.c:523
+msgid "--- Separator ---"
+msgstr "--- Ayıraç ---"
+
+#: ../src/toolbar.c:783
+msgid ""
+"Select items to be displayed on the toolbar. Items can be reodered by drag "
+"and drop."
+msgstr ""
+
+#: ../src/toolbar.c:794
+msgid "Available Items"
+msgstr "Erişilebilir Öğeler"
+
+#: ../src/toolbar.c:810
+msgid "Displayed Items"
+msgstr "Gösterilen Öğeler"
 
 #: ../src/tools.c:153
 #, c-format
@@ -4278,110 +4307,122 @@ msgstr "Semb_ol Listesini Göster"
 msgid "Show _Document List"
 msgstr "_Döküman Listesini Göster"
 
-#: ../src/treeviews.c:507 ../plugins/filebrowser.c:586
+#: ../src/treeviews.c:507 ../plugins/filebrowser.c:591
 msgid "H_ide Sidebar"
 msgstr "Araç Çubuğunu G_izle"
 
 #. Status bar statistics: col = column, sel = selection.
-#: ../src/ui_utils.c:194
+#: ../src/ui_utils.c:188
 #, c-format
 msgid "line: %d\t col: %d\t sel: %d\t "
 msgstr "sat: %d\t süt: %d\t seç: %d\t "
 
 #. RO = read-only
-#: ../src/ui_utils.c:200
+#: ../src/ui_utils.c:194
 msgid "RO "
 msgstr "SO "
 
 #. OVR = overwrite/overtype, INS = insert
-#: ../src/ui_utils.c:202
+#: ../src/ui_utils.c:196
 msgid "OVR"
 msgstr "OVR"
 
-#: ../src/ui_utils.c:202
+#: ../src/ui_utils.c:196
 msgid "INS"
 msgstr "INS"
 
-#: ../src/ui_utils.c:208
+#: ../src/ui_utils.c:202
 msgid "TAB"
 msgstr "TAB"
 
-#: ../src/ui_utils.c:211
+#: ../src/ui_utils.c:205
 msgid "SP"
 msgstr "SP"
 
-#: ../src/ui_utils.c:214
+#: ../src/ui_utils.c:208
 msgid "T/S"
 msgstr "T/S"
 
-#: ../src/ui_utils.c:218
+#: ../src/ui_utils.c:212
 #, c-format
 msgid "mode: %s"
 msgstr "mod: %s"
 
-#: ../src/ui_utils.c:221
+#: ../src/ui_utils.c:215
 #, c-format
 msgid "encoding: %s %s"
 msgstr "kodlama: %s %s"
 
-#: ../src/ui_utils.c:227
+#: ../src/ui_utils.c:221
 #, c-format
 msgid "filetype: %s"
 msgstr "dosya türü: %s"
 
-#: ../src/ui_utils.c:231
+#: ../src/ui_utils.c:225
 msgid "MOD"
 msgstr "MOD"
 
-#: ../src/ui_utils.c:236
+#: ../src/ui_utils.c:230
 #, c-format
 msgid "scope: %s"
 msgstr "alan: %s"
 
-#: ../src/ui_utils.c:321
+#: ../src/ui_utils.c:315
 #, c-format
 msgid "Font updated (%s)."
 msgstr "Yazıtipi güncellendi (%s)."
 
-#: ../src/ui_utils.c:517
+#: ../src/ui_utils.c:511
 msgid "C Standard Library"
 msgstr "C Standart Kütüphanesi"
 
-#: ../src/ui_utils.c:518
+#: ../src/ui_utils.c:512
 msgid "ISO C99"
 msgstr "ISO C99"
 
-#: ../src/ui_utils.c:519
+#: ../src/ui_utils.c:513
 msgid "C++ (C Standard Library)"
 msgstr "C++ (C Standart Kütüphanesi)"
 
-#: ../src/ui_utils.c:520
+#: ../src/ui_utils.c:514
 msgid "C++ Standard Library"
 msgstr "C++ Standart Kütüphanesi"
 
-#: ../src/ui_utils.c:521
+#: ../src/ui_utils.c:515
 msgid "C++ STL"
 msgstr "C++ STL"
 
-#: ../src/ui_utils.c:585
+#: ../src/ui_utils.c:579
 msgid "_Set Custom Date Format"
 msgstr "Özel Tari_h Biçimi Ayarla"
 
-#: ../src/ui_utils.c:1618
+#: ../src/ui_utils.c:1644
 msgid "Select Folder"
 msgstr "Dizin Seç"
 
-#: ../src/ui_utils.c:1618
+#: ../src/ui_utils.c:1644
 msgid "Select File"
 msgstr "Dosya Seç"
 
-#: ../src/ui_utils.c:1737
+#: ../src/ui_utils.c:1767
 msgid "C_onfiguration Files"
 msgstr "A_yar Dosyaları"
 
-#: ../src/ui_utils.c:1756
+#: ../src/ui_utils.c:1786
 msgid "Close All"
 msgstr "Tümünü Kapat"
+
+#: ../src/utils.c:324
+msgid "Win (CRLF)"
+msgstr "Win (CRLF)"
+
+#: ../src/utils.c:325
+msgid "Mac (CR)"
+msgstr "Mac (CR)"
+
+#: ../src/utils.c:326
+msgid "Unix (LF)"
+msgstr "Unix (LF)"
 
 #: ../src/vte.c:301 ../src/vte.c:726
 msgid "Terminal"
@@ -4510,7 +4551,7 @@ msgstr ""
 "hali F10). Pasifleştirmek sanal terminalde MC kullanmak gibi durumlarda "
 "kullanışlı olabilir."
 
-#: ../src/vte.c:840 ../plugins/filebrowser.c:1125
+#: ../src/vte.c:840 ../plugins/filebrowser.c:1130
 msgid "Follow the path of the current file"
 msgstr "Geçerli dosyanın yolunu izle"
 
@@ -4544,27 +4585,27 @@ msgstr ""
 "Sanal bir pencere açmak yerine programları terminal penceresinde çalıştırır. "
 "Unutmayın, terminal içerisinde çalıştırılan uygulamalar sonlandırılamaz"
 
-#: ../src/win32.c:131
+#: ../src/win32.c:135
 msgid "Geany project files"
 msgstr "Geany proje dosyaları"
 
-#: ../src/win32.c:137
+#: ../src/win32.c:141
 msgid "Executables"
 msgstr "Çalıştırılabilir dosyalar"
 
-#: ../src/win32.c:575
+#: ../src/win32.c:562
 msgid "Error"
 msgstr "Hata"
 
-#: ../src/win32.c:581 ../src/win32.c:640
+#: ../src/win32.c:568 ../src/win32.c:627
 msgid "Question"
 msgstr "Soru"
 
-#: ../src/win32.c:587
+#: ../src/win32.c:574
 msgid "Warning"
 msgstr "Uyarı"
 
-#: ../src/win32.c:593
+#: ../src/win32.c:580
 msgid "Information"
 msgstr "Bilgi"
 
@@ -4802,68 +4843,68 @@ msgstr "Dosya Yönetici"
 msgid "Adds a file browser tab to the sidebar."
 msgstr "Araç çubuğuna bir dosya yönetim sekmesi ekler."
 
-#: ../plugins/filebrowser.c:329
+#: ../plugins/filebrowser.c:334
 msgid "Too many items selected!"
 msgstr "Çok fazla nesne seçildi!"
 
-#: ../plugins/filebrowser.c:405
+#: ../plugins/filebrowser.c:410
 #, c-format
 msgid "Could not execute configured external command '%s' (%s)."
 msgstr "Düzenlenmiş harici komut '%s' çalıştırılamadı (%s)."
 
-#: ../plugins/filebrowser.c:561
+#: ../plugins/filebrowser.c:566
 msgid "Open _externally"
 msgstr "_Harici olarak aç"
 
-#: ../plugins/filebrowser.c:567
+#: ../plugins/filebrowser.c:572
 msgid "_Find in Files"
 msgstr "Dosyalarda _Bul"
 
-#: ../plugins/filebrowser.c:577
+#: ../plugins/filebrowser.c:582
 msgid "Show _Hidden Files"
 msgstr "Gizli Dosyaları G_öster"
 
-#: ../plugins/filebrowser.c:769
+#: ../plugins/filebrowser.c:774
 msgid "Up"
 msgstr "Yukarı"
 
-#: ../plugins/filebrowser.c:774
+#: ../plugins/filebrowser.c:779
 msgid "Refresh"
 msgstr "Tazele"
 
-#: ../plugins/filebrowser.c:779
+#: ../plugins/filebrowser.c:784
 msgid "Home"
 msgstr "Ev"
 
-#: ../plugins/filebrowser.c:784
+#: ../plugins/filebrowser.c:789
 msgid "Set path from document"
 msgstr "Yolu dökümandan ayarla"
 
-#: ../plugins/filebrowser.c:792
+#: ../plugins/filebrowser.c:797
 msgid "Clear the filter"
 msgstr "Filtreyi temizle"
 
-#: ../plugins/filebrowser.c:806
+#: ../plugins/filebrowser.c:811
 msgid "Filter:"
 msgstr "Filtre:"
 
-#: ../plugins/filebrowser.c:1025
+#: ../plugins/filebrowser.c:1030
 msgid "Focus File List"
 msgstr "Dosya Listesini Odakla"
 
-#: ../plugins/filebrowser.c:1027
+#: ../plugins/filebrowser.c:1032
 msgid "Focus Path Entry"
 msgstr "Yol Girdisini Odakla"
 
-#: ../plugins/filebrowser.c:1070 ../plugins/saveactions.c:478
+#: ../plugins/filebrowser.c:1075 ../plugins/saveactions.c:478
 msgid "Plugin configuration directory could not be created."
 msgstr "Eklenti düzenleme dizini oluşturulamadı."
 
-#: ../plugins/filebrowser.c:1095
+#: ../plugins/filebrowser.c:1100
 msgid "External open command:"
 msgstr "Harici açma komutu:"
 
-#: ../plugins/filebrowser.c:1104
+#: ../plugins/filebrowser.c:1109
 #, c-format
 msgid ""
 "The command to execute when using \"Open with\". You can use %f and %d "
@@ -4877,15 +4918,15 @@ msgstr ""
 "%f dosya adı ile beraber tam dosya yolunu\n"
 "%d ise sadece dosya yolunu belirtir"
 
-#: ../plugins/filebrowser.c:1110
+#: ../plugins/filebrowser.c:1115
 msgid "Show hidden files"
 msgstr "Gizli dosyaları göster"
 
-#: ../plugins/filebrowser.c:1116
+#: ../plugins/filebrowser.c:1121
 msgid "Hide object files"
 msgstr "Nesne dosyalarını sakla"
 
-#: ../plugins/filebrowser.c:1120
+#: ../plugins/filebrowser.c:1125
 msgid ""
 "Don't show generated object files in the file browser, this includes *.o, *."
 "obj. *.so, *.dll, *.a, *.lib"
@@ -4893,11 +4934,11 @@ msgstr ""
 "Dosya yöneticisinde oluşturulmuş nesne dosyalarını görüntüleme, bu dosyalar; "
 "*.o, *.obj. *.so, *.dll, *.a, *.lib"
 
-#: ../plugins/filebrowser.c:1131
+#: ../plugins/filebrowser.c:1136
 msgid "Set the project's base directory"
 msgstr "Projenin ana dizinini ayarla"
 
-#: ../plugins/filebrowser.c:1135
+#: ../plugins/filebrowser.c:1140
 msgid ""
 "Change the directory to the base directory of the currently opened project"
 msgstr "Dizini şu anda açık olan projenin temel dizini olarak ayarla"
@@ -4946,8 +4987,8 @@ msgstr "Yedek için seçilen dizin yok ya da yazılabilir durumda değil."
 msgid "Auto Save"
 msgstr "Otomatik Kayıt"
 
-#: ../plugins/saveactions.c:553 ../plugins/saveactions.c:616
-#: ../plugins/saveactions.c:655
+#: ../plugins/saveactions.c:553 ../plugins/saveactions.c:615
+#: ../plugins/saveactions.c:656
 msgid "_Enable"
 msgstr "_Etkinleştir"
 
@@ -4971,28 +5012,28 @@ msgstr "Sadece açık olan dos_yayı kaydet"
 msgid "Sa_ve all open files"
 msgstr "Bütün a_çık dosyaları kaydet"
 
-#: ../plugins/saveactions.c:614
+#: ../plugins/saveactions.c:613
 msgid "Instant Save"
 msgstr "Anlık Kayıt"
 
-#: ../plugins/saveactions.c:624
+#: ../plugins/saveactions.c:623
 msgid "_Filetype to use for newly opened files:"
 msgstr "Yeni açılan dosyalar için dosya t_ürü:"
 
-#: ../plugins/saveactions.c:653
+#: ../plugins/saveactions.c:654
 msgid "Backup Copy"
 msgstr "Yedek Kopyası"
 
-#: ../plugins/saveactions.c:663
+#: ../plugins/saveactions.c:664
 msgid "_Directory to save backup files in:"
 msgstr "Yedekleri tutmak için _dizin:"
 
-#: ../plugins/saveactions.c:686
+#: ../plugins/saveactions.c:687
 msgid "Date/_Time format for backup files (\"man strftime\" for details):"
 msgstr ""
 "Yedek dosyaları için _Tarih/Zaman formatı (detaylar için \"man strftime\"):"
 
-#: ../plugins/saveactions.c:699
+#: ../plugins/saveactions.c:700
 msgid "Directory _levels to include in the backup destination:"
 msgstr "Yedek dizininde klasör seviye_leri:"
 
@@ -5031,6 +5072,13 @@ msgstr "Dikey olarak böl"
 #: ../plugins/splitwindow.c:426
 msgid "Unsplit"
 msgstr "Birleştir"
+
+#~ msgid ""
+#~ "<i>Notice: To customize the toolbar elements, edit the file 'ui_toolbar."
+#~ "xml'. Please see the documentation for details.</i>"
+#~ msgstr ""
+#~ "<i>Not: Araç çubuğu öğelerini düzenlemek için 'ui_toolbar.xml' dosyasını "
+#~ "düzenleyebilirsiniz. Lütfen deyatlar için belgeleri inceleyin.</i>"
 
 #~ msgid ""
 #~ "Add page numbers at the bottom of each page, it takes 2 lines of the page"
