@@ -49,6 +49,14 @@
 		g_free(setptr_tmp);\
 	}
 
+/** Like glibc's @c strdupa(), but portable.
+ * Duplicate a string on the stack using @c g_alloca().
+ * @note You must include @c string.h yourself.
+ * @warning Don't use excessively or for long strings otherwise there may be stack exhaustion -
+ *          see the GLib docs for @c g_alloca(). */
+#define utils_strdupa(str) \
+	strcpy(g_alloca(strlen(str) + 1), str)
+
 #define foreach_c_array(item, array, len) \
 	for (item = array; item < &array[len]; item++)
 

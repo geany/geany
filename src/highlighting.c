@@ -39,6 +39,7 @@
 #include "filetypes.h"
 #include "symbols.h"
 #include "ui_utils.h"
+#include "utils.h"
 
 
 /* Note: Avoid using SSM in files not related to scintilla, use sciwrappers.h instead. */
@@ -178,12 +179,6 @@ static void get_keyfile_wordchars(GKeyFile *config, GKeyFile *configh, gchar **w
 }
 
 
-/* Like glibc's strdupa, but portable.
- * Don't use for long strings. */
-#define local_strdup(dest, src) \
-	dest = g_alloca(strlen(src) + 1); \
-	strcpy(dest, src);
-
 static void read_named_style(const gchar *named_style, GeanyLexerStyle *style)
 {
 	GeanyLexerStyle *cs;
@@ -192,7 +187,7 @@ static void read_named_style(const gchar *named_style, GeanyLexerStyle *style)
 	const gchar *italic = NULL;
 
 	g_return_if_fail(named_style);
-	local_strdup(name, named_style);
+	name = utils_strdupa(named_style);	/* named_style must not be written to, may be a static string */
 
 	comma = strstr(name, ",");
 	if (comma)

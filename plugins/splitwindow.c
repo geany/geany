@@ -25,6 +25,8 @@
 /* Split Window plugin. */
 
 #include "geany.h"
+#include <string.h>
+
 #include "support.h"
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
@@ -35,6 +37,8 @@
 #include "editor.h"
 #include "plugindata.h"
 #include "keybindings.h"
+#include "utils.h"
+
 #include "geanyfunctions.h"
 
 
@@ -225,14 +229,86 @@ static void set_state(enum State id)
 }
 
 
-static GtkWidget *create_tool_button(const gchar *label, const gchar *stock_id)
+/* Avoid adding new string translations which are the same but without an underscore.
+ * @warning Heavy use may cause stack exhaustion. */
+#define no_underscore(str)\
+	utils_str_remove_chars(utils_strdupa(str), "_")
+
+/* Like strcpy, but can handle overlapping src and dest. */
+static gchar *utils_str_copy(gchar *dest, const gchar *src)
+{
+	gchar *cpy;
+
+	/* strcpy might not handle overlaps, so make a copy */
+	cpy = utils_strdupa(src);
+	return strcpy(dest, cpy);
+}
+
+
+/* Remove characters from a string, in place.
+ * @param chars Characters to remove.
+ * @return @a str */
+/* Note: Could be more efficient by writing non-chars into new string then using only one strcpy. */
+static gchar *utils_str_remove_chars(gchar *str, const gchar *chars)
+{
+	gchar *ptr;
+	gsize len;
+
+	g_return_val_if_fail(str, NULL);
+
+	len = strlen(str);
+	ptr = str;
+
+	while (ptr < str + len)
+	{
+		if (strchr(chars, *ptr))
+		{
+			utils_str_copy(ptr, ptr + 1);
+			len--;
+		}
+		else
+			ptr++;
+	}
+	return str;
+}
+
+
+static const gchar *ui_get_stock_label(const gchar *stock_id)
+{
+	GtkStockItem item;
+
+	if (gtk_stock_lookup(stock_id, &item))
+		return item.label;
+
+	g_warning("No stock id '%s'!", stock_id);
+	return "";
+}
+
+
+/* Create a GtkToolButton with stock icon and tooltip.
+ * @param label can be NULL to use stock label text, without underscores.
+ * @param tooltip can be NULL to use label text (useful for GTK_TOOLBAR_ICONS). */
+static GtkWidget *ui_tool_button_new(const gchar *stock_id, const gchar *label, const gchar *tooltip)
 {
 	GtkToolItem *item;
+	gchar *dup = NULL;
 
+	if (stock_id && !label)
+	{
+		label = ui_get_stock_label(stock_id);
+		dup = g_strdup(label);
+		label = utils_str_remove_chars(dup, "_");
+	}
 	item = gtk_tool_button_new(NULL, label);
-	gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(item), stock_id);
-	ui_widget_set_tooltip_text(GTK_WIDGET(item), label);
+	if (stock_id)
+		gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(item), stock_id);
 
+	if (!tooltip)
+		tooltip = label;
+	if (tooltip)
+		ui_widget_set_tooltip_text(GTK_WIDGET(item), tooltip);
+
+	g_free(dup);
 	return GTK_WIDGET(item);
 }
 
@@ -248,18 +324,6 @@ static void on_refresh(void)
 }
 
 
-/* avoid adding new strings which are the same but without a leading underscore */
-static const gchar *after_underscore(const gchar *str)
-{
-	const gchar *u = g_strstr_len(str, -1, "_");
-
-	if (u)
-		return ++u;
-	else
-		return str;
-}
-
-
 static GtkWidget *create_toolbar(void)
 {
 	GtkWidget *toolbar, *item;
@@ -269,7 +333,8 @@ static GtkWidget *create_toolbar(void)
 	gtk_toolbar_set_icon_size(GTK_TOOLBAR(toolbar), GTK_ICON_SIZE_MENU);
 	gtk_toolbar_set_style(GTK_TOOLBAR(toolbar), GTK_TOOLBAR_ICONS);
 
-	item = (GtkWidget*)gtk_tool_button_new_from_stock(GTK_STOCK_REFRESH);
+	item = ui_tool_button_new(GTK_STOCK_JUMP_TO, "",
+		_("Show the current document"));
 	gtk_container_add(GTK_CONTAINER(toolbar), item);
 	g_signal_connect(item, "clicked", G_CALLBACK(on_refresh), NULL);
 
@@ -282,7 +347,7 @@ static GtkWidget *create_toolbar(void)
 	gtk_container_add(GTK_CONTAINER(tool_item), item);
 	edit_window.name_label = item;
 
-	item = create_tool_button(after_underscore(_("_Unsplit")), GTK_STOCK_CLOSE);
+	item = ui_tool_button_new(GTK_STOCK_CLOSE, no_underscore(_("_Unsplit")), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), item);
 	g_signal_connect(item, "clicked", G_CALLBACK(on_unsplit), NULL);
 
