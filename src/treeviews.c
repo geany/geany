@@ -310,8 +310,10 @@ static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 	{
 		gsize len = strlen(project_base_path);
 		const gchar *rest;
-		/* check whether the dir name starts with the project base path */
-		if (strncmp(tmp_dirname, project_base_path, len) == 0)
+
+		/* check whether the dir name uses the project base path */
+		setptr(project_base_path, g_strconcat(project_base_path, G_DIR_SEPARATOR_S, NULL));
+		if (g_str_has_prefix(tmp_dirname, project_base_path))
 		{
 			rest = tmp_dirname + len;
 			dirname = g_strdup_printf("%s%s%s",
