@@ -415,10 +415,10 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkMenuItem" id="menu_select_all1">
+			<widget class="GtkImageMenuItem" id="menu_select_all1">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Select _All</property>
-			  <property name="use_underline">True</property>
+			  <property name="label">gtk-select-all</property>
+			  <property name="use_stock">True</property>
 			  <signal name="activate" handler="on_menu_select_all1_activate" last_modification_time="Fri, 30 Jun 2006 13:25:08 GMT"/>
 			</widget>
 		      </child>
@@ -2280,10 +2280,10 @@
   </child>
 
   <child>
-    <widget class="GtkMenuItem" id="menu_select_all2">
+    <widget class="GtkImageMenuItem" id="menu_select_all2">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">Select _All</property>
-      <property name="use_underline">True</property>
+      <property name="label">gtk-select-all</property>
+      <property name="use_stock">True</property>
       <signal name="activate" handler="on_menu_select_all1_activate" last_modification_time="Fri, 30 Jun 2006 13:35:07 GMT"/>
     </widget>
   </child>

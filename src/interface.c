@@ -456,7 +456,7 @@ create_window1 (void)
   gtk_container_add (GTK_CONTAINER (edit1_menu), menu_seperator2);
   gtk_widget_set_sensitive (menu_seperator2, FALSE);
 
-  menu_select_all1 = gtk_menu_item_new_with_mnemonic (_("Select _All"));
+  menu_select_all1 = gtk_image_menu_item_new_from_stock ("gtk-select-all", accel_group);
   gtk_widget_show (menu_select_all1);
   gtk_container_add (GTK_CONTAINER (edit1_menu), menu_select_all1);
 
@@ -1928,7 +1928,7 @@ create_edit_menu1 (void)
   gtk_container_add (GTK_CONTAINER (edit_menu1), separator3);
   gtk_widget_set_sensitive (separator3, FALSE);
 
-  menu_select_all2 = gtk_menu_item_new_with_mnemonic (_("Select _All"));
+  menu_select_all2 = gtk_image_menu_item_new_from_stock ("gtk-select-all", accel_group);
   gtk_widget_show (menu_select_all2);
   gtk_container_add (GTK_CONTAINER (edit_menu1), menu_select_all2);
 
