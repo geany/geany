@@ -1778,9 +1778,13 @@ Automatic continuation multi-line comments
     on the next line with the correct indentation based on the previous line,
     as long as the multi-line is not closed by ``*/``.
 
-Automatic symbol completion
+Autocomplete symbols
     When you start to type a symbol name, look for the full string to
     allow it to be completed for you.
+
+Autocomplete all words in documents
+    When you start to type a word, Geany will search the whole document for
+    words starting with the typed part to complete it.
 
 Characters to type for completion
     Number of characters of a word to type before autocompletion is
