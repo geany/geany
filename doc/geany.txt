@@ -3311,13 +3311,21 @@ marker_line
     *Example:* ``marker_line=0x000000;0xffff00;false;false``
 
 marker_search
-    The style for a highlighted search result (e.g when using "Mark" in
-    Search dialogs). The foreground color (first argument) is only used
+    The style for a marked search results (when using "Mark" in Search dialogs).
+    The second argument sets the background colour for the drawn rectangle.
+
+    Only the second argument is interpreted.
+
+    *Example:* ``marker_search=0x000000;0xb8f4b8;false;false``
+
+marker_mark
+    The style for a marked line (e.g when using the "Toggle Marker" keybinding
+    (Ctrl-M)). The foreground color (first argument) is only used
     when the Markers margin is enabled (see View menu).
 
     Only the first and second argument is interpreted.
 
-    *Example:* ``marker_search=0x000000;0xB8F4B8;false;false``
+    *Example:* ``marker_mark=0x000000;0xb8f4b8;false;false``
 
 marker_translucency
     Translucency for the line marker (first argument) and the search marker

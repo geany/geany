@@ -82,6 +82,7 @@ enum	/* Geany common styling */
 	GCS_TRANSLUCENCY,
 	GCS_MARKER_LINE,
 	GCS_MARKER_SEARCH,
+	GCS_MARKER_MARK,
 	GCS_MARKER_TRANSLUCENCY,
 	GCS_LINE_HEIGHT,
 	GCS_MAX
@@ -548,7 +549,8 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 	get_keyfile_hex(config, config_home, "indent_guide", 0xc0c0c0, 0xffffff, FALSE, &common_style_set.styling[GCS_INDENT_GUIDE]);
 	get_keyfile_hex(config, config_home, "white_space", 0xc0c0c0, 0xffffff, TRUE, &common_style_set.styling[GCS_WHITE_SPACE]);
 	get_keyfile_hex(config, config_home, "marker_line", 0x000000, 0xffff00, FALSE, &common_style_set.styling[GCS_MARKER_LINE]);
-	get_keyfile_hex(config, config_home, "marker_search", 0x000000, 0xB8F4B8, FALSE, &common_style_set.styling[GCS_MARKER_SEARCH]);
+	get_keyfile_hex(config, config_home, "marker_search", 0x000000, 0x00007f, FALSE, &common_style_set.styling[GCS_MARKER_SEARCH]);
+	get_keyfile_hex(config, config_home, "marker_mark", 0x000000, 0xb8f4b8, FALSE, &common_style_set.styling[GCS_MARKER_MARK]);
 	{
 		/* hack because get_keyfile_int uses a Style struct */
 		GeanyLexerStyle tmp_style;
@@ -633,10 +635,9 @@ static void styleset_common(ScintillaObject *sci)
 
 	/* Search indicator, used for 'Mark' matches */
 	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_SEARCH, INDIC_ROUNDBOX);
-	/* TODO make this configurable, but we can't really use the foreground nor the background
-	 * colours of GCS_MARKER_LINE since the drawn box is a little translucent and the default
-	 * colours for GCS_MARKER_LINE are too bright. */
-	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_SEARCH, invert(rotate_rgb(0x00ff00)));
+	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_SEARCH,
+		invert(common_style_set.styling[GCS_MARKER_SEARCH].background));
+	SSM(sci, SCI_INDICSETALPHA, GEANY_INDICATOR_SEARCH, 60);
 
 	/* define marker symbols
 	 * 0 -> line marker */
@@ -647,8 +648,8 @@ static void styleset_common(ScintillaObject *sci)
 
 	/* 1 -> user marker */
 	SSM(sci, SCI_MARKERDEFINE, 1, SC_MARK_PLUS);
-	SSM(sci, SCI_MARKERSETFORE, 1, invert(common_style_set.styling[GCS_MARKER_SEARCH].foreground));
-	SSM(sci, SCI_MARKERSETBACK, 1, invert(common_style_set.styling[GCS_MARKER_SEARCH].background));
+	SSM(sci, SCI_MARKERSETFORE, 1, invert(common_style_set.styling[GCS_MARKER_MARK].foreground));
+	SSM(sci, SCI_MARKERSETBACK, 1, invert(common_style_set.styling[GCS_MARKER_MARK].background));
 	SSM(sci, SCI_MARKERSETALPHA, 1, common_style_set.styling[GCS_MARKER_TRANSLUCENCY].background);
 
 	/* 2 -> folding marker, other folding settings */

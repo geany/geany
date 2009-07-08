@@ -32,9 +32,14 @@ translucency=256;256;false;false
 # only the first and second argument is interpreted
 marker_line=0x000000;0xffff00;false;false
 
-# style for a highlighted search result (e.g when using "Mark" in Search dialogs)
+# style for a marked search results (when using "Mark" in Search dialogs)
+# the second argument sets the background colour for the drawn rectangle
+# only the second argument is interpreted
+marker_search=0x000000;0x00007f;false;false
+
+# style for a marked line (e.g when using the "Toggle Marker" keybinding (Ctrl-M))
 # only the first and second argument is interpreted
-marker_search=0x000000;0xB8F4B8;false;false
+marker_mark=0x000000;0xb8f4b8;false;false
 
 # translucency for the line marker(first argument) and the search marker (second argument)
 # only the first and second argument is interpreted
