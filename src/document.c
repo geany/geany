@@ -48,10 +48,13 @@
 #include <glib/gstdio.h>
 
 /* uncomment to use GIO based file monitoring, though it is not completely stable yet */
-/* #define USE_GIO_FILEMON 1 */
-
-#if defined(HAVE_GIO) && defined(USE_GIO_FILEMON)
-# include <gio/gio.h>
+/*#define USE_GIO_FILEMON 1*/
+#if USE_GIO_FILEMON
+# ifdef HAVE_GIO
+#  include <gio/gio.h>
+# else
+#  undef USE_GIO_FILEMON
+# endif
 #endif
 
 #include "document.h"
@@ -423,7 +426,7 @@ static void queue_colourise(GeanyDocument *doc)
 }
 
 
-#if defined(HAVE_GIO) && defined(USE_GIO_FILEMON)
+#if USE_GIO_FILEMON
 static void monitor_file_changed_cb(G_GNUC_UNUSED GFileMonitor *monitor, G_GNUC_UNUSED GFile *file,
 									G_GNUC_UNUSED GFile *other_file, GFileMonitorEvent event,
 									GeanyDocument *doc)
@@ -483,7 +486,7 @@ static void monitor_file_setup(GeanyDocument *doc)
 	 * doesn't work at all for remote files and legacy polling is too slow. */
 	if (! doc->priv->is_remote)
 	{
-#if defined(HAVE_GIO) && defined(USE_GIO_FILEMON)
+#if USE_GIO_FILEMON
 		gchar *locale_filename;
 
 		/* stop any previous monitoring */
@@ -719,7 +722,7 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft,
 	sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
 	sci_goto_pos(doc->editor->sci, 0, TRUE);
 
-#if defined(HAVE_GIO) && defined(USE_GIO_FILEMON)
+#if USE_GIO_FILEMON
 	monitor_file_setup(doc);
 #else
 	doc->priv->mtime = time(NULL);
@@ -1391,7 +1394,7 @@ gboolean document_reload_file(GeanyDocument *doc, const gchar *forced_enc)
 
 static gboolean document_update_timestamp(GeanyDocument *doc, const gchar *locale_filename)
 {
-#if ! defined(HAVE_GIO) || ! defined(USE_GIO_FILEMON)
+#if ! USE_GIO_FILEMON
 	struct stat st;
 
 	g_return_val_if_fail(doc != NULL, FALSE);
@@ -2694,7 +2697,7 @@ const GdkColor *document_get_status_color(GeanyDocument *doc)
 {
 	static GdkColor red = {0, 0xFFFF, 0, 0};
 	static GdkColor green = {0, 0, 0x7FFF, 0};
-#if defined(HAVE_GIO) && defined(USE_GIO_FILEMON)
+#if USE_GIO_FILEMON
 	static GdkColor orange = {0, 0xFFFF, 0x7FFF, 0};
 #endif
 	GdkColor *color = NULL;
@@ -2703,7 +2706,7 @@ const GdkColor *document_get_status_color(GeanyDocument *doc)
 
 	if (doc->changed)
 		color = &red;
-#if defined(HAVE_GIO) && defined(USE_GIO_FILEMON)
+#if USE_GIO_FILEMON
 	else if (doc->priv->file_disk_status == FILE_CHANGED)
 		color = &orange;
 #endif
