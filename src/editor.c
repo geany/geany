@@ -1761,10 +1761,12 @@ static gboolean complete_doc_word(GeanyEditor *editor, gchar *root, gsize rootle
 				word[word_length + 1] = ' ';
 				/* search the words string whether we already have the word in, otherwise add it */
 				if (strstr(words->str, word) == NULL)
+				{
 					g_string_append(words, word + 1);
+					nmatches++;
+				}
 				g_free(word);
 
-				nmatches++;
 				if (nmatches == editor_prefs.autocompletion_max_entries)
 				{
 					g_string_append(words, "... ");

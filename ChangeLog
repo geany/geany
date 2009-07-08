@@ -4,6 +4,8 @@
    doc/geany.txt, doc/geany.html, geany.glade, TODO:
    Add 'Autocomplete all words in document' pref.
    Use 'autocompletion' in dialog and docs, not 'auto completion'.
+ * src/editor.c:
+   Fix limiting number of word completion entries too much.
 
 
 2009-07-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
