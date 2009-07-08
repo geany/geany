@@ -452,6 +452,8 @@ static void show_tags_list(GeanyEditor *editor, const GPtrArray *tags, gsize roo
 
 		for (j = 0; j < tags->len; ++j)
 		{
+			TMTag *tag = tags->pdata[j];
+
 			if (j > 0)
 				g_string_append_c(words, '\n');
 
@@ -460,7 +462,13 @@ static void show_tags_list(GeanyEditor *editor, const GPtrArray *tags, gsize roo
 				g_string_append(words, "...");
 				break;
 			}
-			g_string_append(words, ((TMTag *) tags->pdata[j])->name);
+			g_string_append(words, tag->name);
+
+			/* for now, tag types don't all follow C, so just look at arglist */
+			if (NZV(tag->atts.entry.arglist))
+				g_string_append(words, "?2");
+			else
+				g_string_append(words, "?1");
 		}
 		show_autocomplete(sci, rootlen, words->str);
 		g_string_free(words, TRUE);
@@ -4484,6 +4492,9 @@ static void setup_sci_keys(ScintillaObject *sci)
 }
 
 
+#include "icons/16x16/classviewer-var.xpm"
+#include "icons/16x16/classviewer-method.xpm"
+
 /* Create new editor widget (scintilla).
  * @note The @c "sci-notify" signal is connected separately. */
 static ScintillaObject *create_new_sci(GeanyEditor *editor)
@@ -4509,6 +4520,10 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 	SSM(sci, SCI_AUTOCSETSEPARATOR, '\n', 0);
 	SSM(sci, SCI_AUTOCSETDROPRESTOFWORD, TRUE, 0);
 	SSM(sci, SCI_SETSCROLLWIDTHTRACKING, 1, 0);
+
+	/* tag autocompletion images */
+	SSM(sci, SCI_REGISTERIMAGE, 1, (sptr_t)classviewer_var);
+	SSM(sci, SCI_REGISTERIMAGE, 2, (sptr_t)classviewer_method);
 
 	/* only connect signals if this is for the document notebook, not split window */
 	if (editor->sci == NULL)

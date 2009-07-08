@@ -11,4 +11,6 @@ icons_DATA =									\
 	classviewer-var.png							\
 	geany.png
 
-EXTRA_DIST = $(icons_DATA)
+EXTRA_DIST = $(icons_DATA) \
+	classviewer-var.xpm \
+	classviewer-method.xpm

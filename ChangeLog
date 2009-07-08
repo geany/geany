@@ -6,6 +6,13 @@
    Use 'autocompletion' in dialog and docs, not 'auto completion'.
  * src/editor.c:
    Fix limiting number of word completion entries too much.
+ * src/editor.c, TODO, icons/16x16/classviewer-var.xpm,
+   icons/16x16/classviewer-method.xpm, icons/16x16/Makefile.am:
+   Show autocompletion icons for tag symbols - for now only tags with
+   an arglist have the 'function/method' icon, all others have the
+   'variable' icon.
+   Note: XPMs were created from the PNGs with the ImageMagick 'convert'
+   program.
 
 
 2009-07-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

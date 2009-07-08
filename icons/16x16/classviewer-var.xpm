@@ -1,0 +1,27 @@
+/* XPM */
+static char *classviewer_var[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 5 1",
+"  c black",
+". c #8C748C",
+"X c #9C94A4",
+"o c #ACB4C0",
+"O c None",
+/* pixels */
+"OOOOOOOOOOOOOOOO",
+"OOOOOOOOOOOOOOOO",
+"OOOOOOOOOOOOOOOO",
+"OOOOOOOOOOOOOOOO",
+"OOOOOOOOOOOOOOOO",
+"OOOOOOOOOOOOOOOO",
+"OOOOOOOOO  OOOOO",
+"OOOOOOOO oo  OOO",
+"OOOOOOO ooooo OO",
+"OOOOOO ooooo. OO",
+"OOOOOO XXoo.. OO",
+"OOOOOO XXX... OO",
+"OOOOOO XXX.. OOO",
+"OOOOOOO  X. OOOO",
+"OOOOOOOOO  OOOOO",
+"OOOOOOOOOOOOOOOO"
+};
