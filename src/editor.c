@@ -1879,7 +1879,7 @@ static void editor_auto_latex(GeanyEditor *editor, gint pos)
 
 	g_return_if_fail(editor != NULL);
 
-	if (editor->document->file_type == NULL)
+	if (editor->document->file_type->id != GEANY_FILETYPES_LATEX)
 		return;
 
 	sci = editor->sci;
