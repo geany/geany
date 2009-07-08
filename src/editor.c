@@ -1725,7 +1725,7 @@ static gboolean autocomplete_check_for_html(gint ft_id, gint style)
 
 
 /* Algorithm based on based on Scite's StartAutoCompleteWord() */
-static gboolean complete_doc_word(GeanyEditor *editor, gchar *root, gsize rootlen)
+static gboolean autocomplete_doc_word(GeanyEditor *editor, gchar *root, gsize rootlen)
 {
 	ScintillaObject *sci = editor->sci;
 	gchar *word;
@@ -1869,7 +1869,7 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 				ret = autocomplete_tags(editor, root, rootlen);
 				/* If forcing and there's nothing else to show, complete from words in document */
 				if (!ret && (force || editor_prefs.autocomplete_doc_words))
-					ret = complete_doc_word(editor, root, rootlen);
+					ret = autocomplete_doc_word(editor, root, rootlen);
 			}
 		}
 	}
@@ -3172,9 +3172,11 @@ static gboolean is_string_style(gint lexer, gint style)
 				style == SCE_PAS_STRINGEOL);
 
 		case SCLEX_D:
-			return (style == SCE_D_CHARACTER ||
-				style == SCE_D_STRING ||
-				style == SCE_D_STRINGEOL);
+			return (style == SCE_D_STRING ||
+				style == SCE_D_STRINGEOL ||
+				style == SCE_D_CHARACTER ||
+				style == SCE_D_STRINGB ||
+				style == SCE_D_STRINGR);
 
 		case SCLEX_PYTHON:
 			return (style == SCE_P_STRING ||
