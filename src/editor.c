@@ -1858,7 +1858,7 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 			{
 				ret = autocomplete_tags(editor, root, rootlen);
 				/* If forcing and there's nothing else to show, complete from words in document */
-				if (!ret && force /* || editor_prefs.autocomplete_doc_words) */)
+				if (!ret && (force || editor_prefs.autocomplete_doc_words))
 					ret = complete_doc_word(editor, root, rootlen);
 			}
 		}

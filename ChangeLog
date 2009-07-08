@@ -1,3 +1,11 @@
+2009-07-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, src/keyfile.c, src/editor.c, src/editor.h,
+   doc/geany.txt, doc/geany.html, geany.glade, TODO:
+   Add 'Autocomplete all words in document' pref.
+   Use 'autocompletion' in dialog and docs, not 'auto completion'.
+
+
 2009-07-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/highlighting.c, src/utils.h, plugins/splitwindow.c:

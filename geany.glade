@@ -5945,7 +5945,7 @@ Match braces</property>
 				  <property name="visible">True</property>
 				  <property name="tooltip" translatable="yes">Automatic completion and closing of XML tags (includes HTML tags)</property>
 				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">XML tag auto completion</property>
+				  <property name="label" translatable="yes">XML tag autocompletion</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
 				  <property name="focus_on_click">True</property>
@@ -5985,7 +5985,26 @@ Match braces</property>
 				  <property name="visible">True</property>
 				  <property name="tooltip" translatable="yes">Automatic completion of known symbols in open files (function names, global variables, ...)</property>
 				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">Automatic symbol completion</property>
+				  <property name="label" translatable="yes">Autocomplete symbols</property>
+				  <property name="use_underline">True</property>
+				  <property name="relief">GTK_RELIEF_NORMAL</property>
+				  <property name="focus_on_click">True</property>
+				  <property name="active">False</property>
+				  <property name="inconsistent">False</property>
+				  <property name="draw_indicator">True</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">False</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkCheckButton" id="check_autocomplete_doc_words">
+				  <property name="visible">True</property>
+				  <property name="can_focus">True</property>
+				  <property name="label" translatable="yes">Autocomplete all words in document</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
 				  <property name="focus_on_click">True</property>
@@ -6096,7 +6115,7 @@ Match braces</property>
 				  <child>
 				    <widget class="GtkSpinButton" id="spin_symbol_complete_chars">
 				      <property name="visible">True</property>
-				      <property name="tooltip" translatable="yes">The amount of characters which are necessary to show the symbol auto completion list</property>
+				      <property name="tooltip" translatable="yes">The amount of characters which are necessary to show the symbol autocompletion list</property>
 				      <property name="can_focus">True</property>
 				      <property name="climb_rate">1</property>
 				      <property name="digits">0</property>
@@ -6118,7 +6137,7 @@ Match braces</property>
 				  <child>
 				    <widget class="GtkSpinButton" id="spin_symbollistheight">
 				      <property name="visible">True</property>
-				      <property name="tooltip" translatable="yes">Display height in rows for the auto completion list</property>
+				      <property name="tooltip" translatable="yes">Display height in rows for the autocompletion list</property>
 				      <property name="can_focus">True</property>
 				      <property name="climb_rate">1</property>
 				      <property name="digits">0</property>
@@ -6140,7 +6159,7 @@ Match braces</property>
 				  <child>
 				    <widget class="GtkSpinButton" id="spin_autocompletion_max_entries">
 				      <property name="visible">True</property>
-				      <property name="tooltip" translatable="yes">Maximum number of entries to display in the auto completion list</property>
+				      <property name="tooltip" translatable="yes">Maximum number of entries to display in the autocompletion list</property>
 				      <property name="can_focus">True</property>
 				      <property name="climb_rate">1</property>
 				      <property name="digits">0</property>

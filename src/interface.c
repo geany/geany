@@ -2473,6 +2473,7 @@ create_prefs_dialog (void)
   GtkWidget *check_xmltag;
   GtkWidget *check_auto_multiline;
   GtkWidget *check_symbol_auto_completion;
+  GtkWidget *check_autocomplete_doc_words;
   GtkWidget *table14;
   GtkWidget *label223;
   GtkWidget *label173;
@@ -3622,7 +3623,7 @@ create_prefs_dialog (void)
   gtk_box_pack_start (GTK_BOX (vbox19), check_complete_snippets, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_complete_snippets, _("Type a defined short character sequence and complete it to a more complex string using a single keypress"), NULL);
 
-  check_xmltag = gtk_check_button_new_with_mnemonic (_("XML tag auto completion"));
+  check_xmltag = gtk_check_button_new_with_mnemonic (_("XML tag autocompletion"));
   gtk_widget_show (check_xmltag);
   gtk_box_pack_start (GTK_BOX (vbox19), check_xmltag, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_xmltag, _("Automatic completion and closing of XML tags (includes HTML tags)"), NULL);
@@ -3632,10 +3633,14 @@ create_prefs_dialog (void)
   gtk_box_pack_start (GTK_BOX (vbox19), check_auto_multiline, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_auto_multiline, _("Continue automatically multi-line comments in languages like C, C++ and Java when a new line is entered inside such a comment"), NULL);
 
-  check_symbol_auto_completion = gtk_check_button_new_with_mnemonic (_("Automatic symbol completion"));
+  check_symbol_auto_completion = gtk_check_button_new_with_mnemonic (_("Autocomplete symbols"));
   gtk_widget_show (check_symbol_auto_completion);
   gtk_box_pack_start (GTK_BOX (vbox19), check_symbol_auto_completion, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_symbol_auto_completion, _("Automatic completion of known symbols in open files (function names, global variables, ...)"), NULL);
+
+  check_autocomplete_doc_words = gtk_check_button_new_with_mnemonic (_("Autocomplete all words in document"));
+  gtk_widget_show (check_autocomplete_doc_words);
+  gtk_box_pack_start (GTK_BOX (vbox19), check_autocomplete_doc_words, FALSE, FALSE, 0);
 
   table14 = gtk_table_new (3, 2, FALSE);
   gtk_widget_show (table14);
@@ -3670,7 +3675,7 @@ create_prefs_dialog (void)
   gtk_table_attach (GTK_TABLE (table14), spin_symbol_complete_chars, 1, 2, 0, 1,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
-  gtk_tooltips_set_tip (tooltips, spin_symbol_complete_chars, _("The amount of characters which are necessary to show the symbol auto completion list"), NULL);
+  gtk_tooltips_set_tip (tooltips, spin_symbol_complete_chars, _("The amount of characters which are necessary to show the symbol autocompletion list"), NULL);
   gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_symbol_complete_chars), TRUE);
 
   spin_symbollistheight_adj = gtk_adjustment_new (9, 1, 99, 1, 10, 0);
@@ -3679,7 +3684,7 @@ create_prefs_dialog (void)
   gtk_table_attach (GTK_TABLE (table14), spin_symbollistheight, 1, 2, 1, 2,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
-  gtk_tooltips_set_tip (tooltips, spin_symbollistheight, _("Display height in rows for the auto completion list"), NULL);
+  gtk_tooltips_set_tip (tooltips, spin_symbollistheight, _("Display height in rows for the autocompletion list"), NULL);
   gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_symbollistheight), TRUE);
 
   spin_autocompletion_max_entries_adj = gtk_adjustment_new (9, 1, 10000, 1, 10, 0);
@@ -3688,7 +3693,7 @@ create_prefs_dialog (void)
   gtk_table_attach (GTK_TABLE (table14), spin_autocompletion_max_entries, 1, 2, 2, 3,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
-  gtk_tooltips_set_tip (tooltips, spin_autocompletion_max_entries, _("Maximum number of entries to display in the auto completion list"), NULL);
+  gtk_tooltips_set_tip (tooltips, spin_autocompletion_max_entries, _("Maximum number of entries to display in the autocompletion list"), NULL);
   gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_autocompletion_max_entries), TRUE);
 
   label177 = gtk_label_new (_("<b>Completions</b>"));
@@ -4811,6 +4816,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_xmltag, "check_xmltag");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_auto_multiline, "check_auto_multiline");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_symbol_auto_completion, "check_symbol_auto_completion");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_autocomplete_doc_words, "check_autocomplete_doc_words");
   GLADE_HOOKUP_OBJECT (prefs_dialog, table14, "table14");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label223, "label223");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label173, "label173");

@@ -147,6 +147,8 @@ static void init_pref_groups(void)
 		"radio_indent_tabs", GEANY_INDENT_TYPE_TABS,
 		"radio_indent_both", GEANY_INDENT_TYPE_BOTH,
 		NULL);
+	stash_group_add_toggle_button(group, &editor_prefs.autocomplete_doc_words,
+		"autocomplete_doc_words", FALSE, "check_autocomplete_doc_words");
 	stash_group_add_spin_button_integer(group, (gint*)&editor_prefs.autocompletion_max_entries,
 		"autocompletion_max_entries", GEANY_MAX_AUTOCOMPLETE_WORDS,
 		"spin_autocompletion_max_entries");

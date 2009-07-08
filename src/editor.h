@@ -129,7 +129,9 @@ typedef struct GeanyEditorPrefs
 	gchar		*comment_toggle_mark;
 	guint		autocompletion_max_entries;
 	guint		autoclose_chars;
-} GeanyEditorPrefs;
+	gboolean	autocomplete_doc_words;
+}
+GeanyEditorPrefs;
 
 extern GeanyEditorPrefs editor_prefs;
 
