@@ -3009,7 +3009,7 @@ static void styleset_d(ScintillaObject *sci)
 	set_sci_style(sci, SCE_D_WORD2, GEANY_FILETYPES_D, 7);
 	set_sci_style(sci, SCE_D_WORD3, GEANY_FILETYPES_D, 8);
 	set_sci_style(sci, SCE_D_TYPEDEF, GEANY_FILETYPES_D, 9);
-	set_sci_style(sci, SCE_D_STRING, GEANY_FILETYPES_D, 10);
+	set_sci_style(sci, SCE_D_STRING, GEANY_FILETYPES_D, 10);	/* also for other strings below */
 	set_sci_style(sci, SCE_D_STRINGEOL, GEANY_FILETYPES_D, 11);
 	set_sci_style(sci, SCE_D_CHARACTER, GEANY_FILETYPES_D, 12);
 	set_sci_style(sci, SCE_D_OPERATOR, GEANY_FILETYPES_D, 13);
@@ -3017,6 +3017,10 @@ static void styleset_d(ScintillaObject *sci)
 	set_sci_style(sci, SCE_D_COMMENTLINEDOC, GEANY_FILETYPES_D, 15);
 	set_sci_style(sci, SCE_D_COMMENTDOCKEYWORD, GEANY_FILETYPES_D, 16);
 	set_sci_style(sci, SCE_D_COMMENTDOCKEYWORDERROR, GEANY_FILETYPES_D, 17);
+
+	/* copy existing styles */
+	set_sci_style(sci, SCE_D_STRINGB, GEANY_FILETYPES_D, 10);	/* `string` */
+	set_sci_style(sci, SCE_D_STRINGR, GEANY_FILETYPES_D, 10);	/* r"string" */
 }
 
 

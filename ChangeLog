@@ -13,6 +13,9 @@
    'variable' icon.
    Note: XPMs were created from the PNGs with the ImageMagick 'convert'
    program.
+ * src/highlighting.c:
+   Highlight D WYSIWYG backtick `strings` and r"strings" (closes
+   #1895745).
 
 
 2009-07-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
