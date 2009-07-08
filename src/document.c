@@ -440,7 +440,6 @@ static void monitor_file_changed_cb(G_GNUC_UNUSED GFileMonitor *monitor, G_GNUC_
 		G_STRFUNC, event, doc->priv->file_disk_status);
 	switch (event)
 	{
-		case G_FILE_MONITOR_EVENT_CREATED:
 		case G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
 		{
 			if (doc->priv->file_disk_status == FILE_IGNORE)
