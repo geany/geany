@@ -83,6 +83,7 @@ enum	/* Geany common styling */
 	GCS_MARKER_LINE,
 	GCS_MARKER_SEARCH,
 	GCS_MARKER_TRANSLUCENCY,
+	GCS_LINE_HEIGHT,
 	GCS_MAX
 };
 
@@ -580,6 +581,10 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 			256, 256, &tmp_style);
 		common_style_set.styling[GCS_MARKER_TRANSLUCENCY].foreground = tmp_style.foreground;
 		common_style_set.styling[GCS_MARKER_TRANSLUCENCY].background = tmp_style.background;
+		get_keyfile_int(config, config_home, "styling", "line_height",
+			0, 0, &tmp_style);
+		common_style_set.styling[GCS_LINE_HEIGHT].foreground = tmp_style.foreground;
+		common_style_set.styling[GCS_LINE_HEIGHT].background = tmp_style.background;
 	}
 
 	common_style_set.invert_all = interface_prefs.highlighting_invert_all =
@@ -600,6 +605,10 @@ static void styleset_common(ScintillaObject *sci)
 		SSM(sci, SCI_SETCARETSTYLE, CARETSTYLE_BLOCK, 0);
 	else
 		SSM(sci, SCI_SETCARETSTYLE, CARETSTYLE_LINE, 0);
+
+	/* line height */
+	SSM(sci, SCI_SETEXTRAASCENT, common_style_set.styling[GCS_LINE_HEIGHT].foreground, 0);
+	SSM(sci, SCI_SETEXTRADESCENT, common_style_set.styling[GCS_LINE_HEIGHT].background, 0);
 
 	/* colourise the current line */
 	SSM(sci, SCI_SETCARETLINEBACK, invert(common_style_set.styling[GCS_CURRENT_LINE].background), 0);

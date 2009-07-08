@@ -3330,6 +3330,15 @@ marker_translucency
 
     *Example:* ``marker_translucency=256;256;false;false``
 
+line_height
+    Amount of space to be drawn above and below the line's baseline.
+    The first argument defines the amount of space to be drawn above the line, the second
+    argument defines the amount of space to be drawn below.
+
+    Only the first and second argument is interpreted.
+
+    *Example:* ``line_height=0;0;false;false``
+
 
 [settings] Section
 ``````````````````
