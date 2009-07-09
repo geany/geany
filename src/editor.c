@@ -1136,17 +1136,28 @@ static gint get_indent_size_after_line(GeanyEditor *editor, gint line)
 static void insert_indent_after_line(GeanyEditor *editor, gint line)
 {
 	ScintillaObject *sci = editor->sci;
+	gint line_indent = sci_get_line_indentation(sci, line);
 	gint size = get_indent_size_after_line(editor, line);
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
+	gchar *text;
 
-	if (size > 0)
+	if (size == 0)
+		return;
+
+	if (iprefs->type == GEANY_INDENT_TYPE_TABS && size == line_indent)
 	{
-		gchar *text;
+		/* support tab indents, space aligns style - copy last line 'indent' exactly */
+		gint start = sci_get_position_from_line(sci, line);
+		gint end = sci_get_line_indent_position(sci, line);
 
-		text = get_whitespace(iprefs, size);
-		sci_add_text(sci, text);
-		g_free(text);
+		text = sci_get_contents_range(sci, start, end);
 	}
+	else
+	{
+		text = get_whitespace(iprefs, size);
+	}
+	sci_add_text(sci, text);
+	g_free(text);
 }
 
 
