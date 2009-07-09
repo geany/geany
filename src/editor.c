@@ -1866,7 +1866,10 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 			 * editor_prefs.symbolcompletion_min_chars'th char */
 			if (force || rootlen >= editor_prefs.symbolcompletion_min_chars)
 			{
-				ret = autocomplete_tags(editor, root, rootlen);
+				/* complete tags, except if forcing when completion is already visible */
+				if (!(force && SSM(sci, SCI_AUTOCACTIVE, 0, 0)))
+					ret = autocomplete_tags(editor, root, rootlen);
+
 				/* If forcing and there's nothing else to show, complete from words in document */
 				if (!ret && (force || editor_prefs.autocomplete_doc_words))
 					ret = autocomplete_doc_word(editor, root, rootlen);
