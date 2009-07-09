@@ -73,23 +73,14 @@ static CssParserState parseCssDeclaration( const unsigned char **position, cssKi
 	while ( isCssDeclarationAllowedChar(cp) ||
 			*cp == '\0' ) 	/* track the end of line into the loop */
 	{
-		if( (int) *cp == '\0' )
-		{
-			cp = fileReadLine ();
-			if( cp == NULL ){
-				makeCssSimpleTag(name, kind, TRUE);
-				*position = cp;
-				return P_STATE_AT_END;
-			}
-		}
-		else if( *cp == ',' )
+		if( *cp == ',' )
 		{
 			makeCssSimpleTag(name, kind, TRUE);
 			*position = cp;
 			return P_STATE_NONE;
 		}
-		else if( *cp == '{' )
-		{
+		else if( *cp == '{' || *cp == '\0' )
+		{ /* assume that line end is the same as a starting definition (i.e. the { is on the next line */
 			makeCssSimpleTag(name, kind, TRUE);
 			*position = cp;
 			return P_STATE_IN_DEFINITION;
@@ -197,6 +188,8 @@ static CssParserState parseCssLine( const unsigned char *line, CssParserState st
 			case P_STATE_IN_PAGE:
 			case P_STATE_IN_FONTFACE:
 			case P_STATE_IN_DEFINITION:
+				if( *line == '\0' )
+					line = fileReadLine ();
 				if( *line == '}' )
 					state = P_STATE_NONE;
 				else if( *line == '\'' )

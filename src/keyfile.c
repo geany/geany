@@ -86,6 +86,7 @@
 
 
 static gchar *scribble_text = NULL;
+static gint scribble_pos = -1;
 static GPtrArray *session_files = NULL;
 static gint session_notebook_page;
 static gint hpan_position;
@@ -172,6 +173,8 @@ static void init_pref_groups(void)
 		"show_symbol_list_expanders", TRUE);
 	stash_group_add_boolean(group, &ui_prefs.allow_always_save,
 		"allow_always_save", FALSE);
+	stash_group_add_boolean(group, &file_prefs.use_safe_file_saving,
+		"use_safe_file_saving", FALSE);
 }
 
 
@@ -200,18 +203,18 @@ static void settings_action(GKeyFile *config, SettingAction action)
 }
 
 
-static void save_recent_files(GKeyFile *config)
+static void save_recent_files(GKeyFile *config, GQueue *queue, gchar const *key)
 {
 	gchar **recent_files = g_new0(gchar*, file_prefs.mru_length + 1);
 	guint i;
 
 	for (i = 0; i < file_prefs.mru_length; i++)
 	{
-		if (! g_queue_is_empty(ui_prefs.recent_queue))
+		if (! g_queue_is_empty(queue))
 		{
 			/* copy the values, this is necessary when this function is called from the
 			 * preferences dialog or when quitting is canceled to keep the queue intact */
-			recent_files[i] = g_strdup(g_queue_peek_nth(ui_prefs.recent_queue, i));
+			recent_files[i] = g_strdup(g_queue_peek_nth(queue, i));
 		}
 		else
 		{
@@ -221,7 +224,7 @@ static void save_recent_files(GKeyFile *config)
 	}
 	/* There is a bug in GTK 2.6 g_key_file_set_string_list, we must NULL terminate. */
 	recent_files[file_prefs.mru_length] = NULL;
-	g_key_file_set_string_list(config, "files", "recent_files",
+	g_key_file_set_string_list(config, "files", key,
 				(const gchar**)recent_files, file_prefs.mru_length);
 	g_strfreev(recent_files);
 }
@@ -230,19 +233,19 @@ static void save_recent_files(GKeyFile *config)
 static gchar *get_session_file_string(GeanyDocument *doc)
 {
 	gchar *fname;
-	gchar *doc_filename;
+	gchar *locale_filename;
 	GeanyFiletype *ft = doc->file_type;
 
-	if (ft == NULL)	/* can happen when saving a new file when quitting */
+	if (ft == NULL) /* can happen when saving a new file when quitting */
 		ft = filetypes[GEANY_FILETYPES_NONE];
 
-	doc_filename = g_strdup(doc->file_name);
+	locale_filename = utils_get_locale_from_utf8(doc->file_name);
 	/* If the filename contains any ';' (semi-colons) we need to escape them otherwise
 	 * g_key_file_get_string_list() would fail reading them, so we replace them before
 	 * writing with usual colons which must never appear in a filename and replace them
 	 * back when we read the file again from the file.
 	 * (g_path_skip_root() to skip C:\... on Windows) */
-	g_strdelimit((gchar *) g_path_skip_root(doc_filename), ";", ':');
+	g_strdelimit((gchar*) utils_path_skip_root(locale_filename), ";", ':');
 
 	fname = g_strdup_printf("%d;%s;%d;%d;%d;%d;%d;%s;%d",
 		sci_get_current_position(doc->editor->sci),
@@ -252,9 +255,9 @@ static gchar *get_session_file_string(GeanyDocument *doc)
 		doc->editor->indent_type,
 		doc->editor->auto_indent,
 		doc->editor->line_wrapping,
-		doc_filename,
+		locale_filename,
 		doc->editor->line_breaking);
-	g_free(doc_filename);
+	g_free(locale_filename);
 	return fname;
 }
 
@@ -292,7 +295,7 @@ void configuration_save_session_files(GKeyFile *config)
 	{
 		g_snprintf(entry, sizeof(entry), "FILE_NAME_%d", i);
 		tmp = g_key_file_get_string(config, "files", entry, NULL);
-		if (tmp == NULL)
+		if (G_UNLIKELY(tmp == NULL))
 		{
 			break;
 		}
@@ -379,6 +382,7 @@ static void save_dialog_prefs(GKeyFile *config)
 
 	/* toolbar */
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show", toolbar_prefs.visible);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_append_to_menu", toolbar_prefs.append_to_menu);
 	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_style", toolbar_prefs.icon_style);
 	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_size", toolbar_prefs.icon_size);
 
@@ -444,7 +448,14 @@ static void save_dialog_prefs(GKeyFile *config)
 
 static void save_ui_prefs(GKeyFile *config)
 {
+	/* If the sidebar is visible, retrieve the active page number. Otherwise it was already
+	 * set on hiding the sidebar. */
+	if (ui_prefs.sidebar_visible)
+		ui_prefs.sidebar_page = gtk_notebook_get_current_page(
+			GTK_NOTEBOOK(main_widgets.sidebar_notebook));
+
 	g_key_file_set_boolean(config, PACKAGE, "sidebar_visible", ui_prefs.sidebar_visible);
+	g_key_file_set_integer(config, PACKAGE, "sidebar_page", ui_prefs.sidebar_page);
 	g_key_file_set_boolean(config, PACKAGE, "statusbar_visible", interface_prefs.statusbar_visible);
 	g_key_file_set_boolean(config, PACKAGE, "msgwindow_visible", ui_prefs.msgwindow_visible);
 	g_key_file_set_boolean(config, PACKAGE, "fullscreen", ui_prefs.fullscreen);
@@ -452,13 +463,19 @@ static void save_ui_prefs(GKeyFile *config)
 	/* get the text from the scribble textview */
 	{
 		GtkTextBuffer *buffer;
-		GtkTextIter start, end;
+		GtkTextIter start, end, iter;
+		GtkTextMark *mark;
 
 		buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(ui_lookup_widget(main_widgets.window, "textview_scribble")));
 		gtk_text_buffer_get_bounds(buffer, &start, &end);
 		scribble_text = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
 		g_key_file_set_string(config, PACKAGE, "scribble_text", scribble_text);
 		g_free(scribble_text);
+
+		mark = gtk_text_buffer_get_insert(buffer);
+		gtk_text_buffer_get_iter_at_mark(buffer, &iter, mark);
+		scribble_pos = gtk_text_iter_get_offset(&iter);
+		g_key_file_set_integer(config, PACKAGE, "scribble_pos", scribble_pos);
 	}
 
 	if (prefs.save_winpos)
@@ -504,7 +521,9 @@ void configuration_save(void)
 	save_dialog_prefs(config);
 	save_ui_prefs(config);
 	project_save_prefs(config);	/* save project filename, etc. */
-	save_recent_files(config);
+	save_recent_files(config, ui_prefs.recent_queue, "recent_files");
+	save_recent_files(config, ui_prefs.recent_projects_queue, "recent_projects");
+
 	if (cl_options.load_session)
 		configuration_save_session_files(config);
 
@@ -517,15 +536,32 @@ void configuration_save(void)
 	g_free(configfile);
 }
 
+
+static void load_recent_files(GKeyFile *config, GQueue *queue, const gchar *key)
+{
+	gchar **recent_files;
+	gsize i, len = 0;
+
+	recent_files = g_key_file_get_string_list(config, "files", key, &len, NULL);
+	if (recent_files != NULL)
+	{
+		for (i = 0; (i < len) && (i < file_prefs.mru_length); i++)
+		{
+			gchar *filename = g_strdup(recent_files[i]);
+			g_queue_push_tail(queue, filename);
+		}
+		g_strfreev(recent_files);
+	}
+}
+
+
 /*
  * Load session list from the given keyfile, and store it in the global
  * session_files variable for later file loading
  * */
-void configuration_load_session_files(GKeyFile *config)
+void configuration_load_session_files(GKeyFile *config, gboolean read_recent_files)
 {
-	gchar **recent_files;
 	guint i;
-	gsize len = 0;
 	gboolean have_session_files;
 	gchar entry[16];
 	gchar **tmp_array;
@@ -533,16 +569,11 @@ void configuration_load_session_files(GKeyFile *config)
 
 	session_notebook_page = utils_get_setting_integer(config, "files", "current_page", -1);
 
-	recent_files = g_key_file_get_string_list(config, "files", "recent_files", &len, NULL);
-	if (recent_files != NULL)
+	if (read_recent_files)
 	{
-		for (i = 0; (i < len) && (i < file_prefs.mru_length); i++)
-		{
-			gchar *filename = g_strdup(recent_files[i]);
-			g_queue_push_tail(ui_prefs.recent_queue, filename);
-		}
+		load_recent_files(config, ui_prefs.recent_queue, "recent_files");
+		load_recent_files(config, ui_prefs.recent_projects_queue, "recent_projects");
 	}
-	g_strfreev(recent_files);
 
 	/* the project may load another list than the main setting */
 	if (session_files != NULL)
@@ -669,6 +700,7 @@ static void load_dialog_prefs(GKeyFile *config)
 
 	/* toolbar */
 	toolbar_prefs.visible = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show", TRUE);
+	toolbar_prefs.append_to_menu = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_append_to_menu", FALSE);
 	{
 		GtkIconSize tb_iconsize;
 		GtkToolbarStyle tb_style;
@@ -774,6 +806,7 @@ static void load_ui_prefs(GKeyFile *config)
 	GError *error = NULL;
 
 	ui_prefs.sidebar_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_visible", TRUE);
+	ui_prefs.sidebar_page = utils_get_setting_integer(config, PACKAGE, "sidebar_page", 0);
 	ui_prefs.msgwindow_visible = utils_get_setting_boolean(config, PACKAGE, "msgwindow_visible", TRUE);
 	ui_prefs.fullscreen = utils_get_setting_boolean(config, PACKAGE, "fullscreen", FALSE);
 	ui_prefs.custom_date_format = utils_get_setting_string(config, PACKAGE, "custom_date_format", "");
@@ -781,6 +814,7 @@ static void load_ui_prefs(GKeyFile *config)
 
 	scribble_text = utils_get_setting_string(config, PACKAGE, "scribble_text",
 				_("Type here what you want, use it as a notice/scratch board"));
+	scribble_pos = utils_get_setting_integer(config, PACKAGE, "scribble_pos", -1);
 
 	geo = g_key_file_get_integer_list(config, PACKAGE, "geometry", NULL, &error);
 	if (error)
@@ -800,10 +834,10 @@ static void load_ui_prefs(GKeyFile *config)
 		ui_prefs.geometry[4] = geo[4];
 
 		/* don't use insane values but when main windows was maximized last time, pos might be
-		 * negative at least on Windows for some reason */
+		 * negative (due to differences in root window and window decorations) */
 		if (ui_prefs.geometry[4] != 1)
 		{
-			for (i = 0; i < 4; i++)
+			for (i = 2; i < 4; i++)
 			{
 				if (ui_prefs.geometry[i] < -1)
 					ui_prefs.geometry[i] = -1;
@@ -853,7 +887,7 @@ void configuration_reload_default_session(void)
 
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
 
-	configuration_load_session_files(config);
+	configuration_load_session_files(config, FALSE);
 
 	g_key_file_free(config);
 	g_free(configfile);
@@ -877,7 +911,7 @@ gboolean configuration_load(void)
 	load_dialog_prefs(config);
 	load_ui_prefs(config);
 	project_load_prefs(config);
-	configuration_load_session_files(config);
+	configuration_load_session_files(config, TRUE);
 
 	g_key_file_free(config);
 	g_free(configfile);
@@ -906,7 +940,8 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	/* try to get the locale equivalent for the filename */
 	locale_filename = utils_get_locale_from_utf8(tmp[7]);
 	/* replace ':' back with ';' (see get_session_file_string for details) */
-	g_strdelimit((gchar *) g_path_skip_root(locale_filename), ":", ';');
+	g_strdelimit((gchar*) utils_path_skip_root(locale_filename), ":", ';');
+
 	if (len > 8)
 		line_breaking = atoi(tmp[8]);
 
@@ -964,12 +999,14 @@ void configuration_open_files(void)
 		if (file_prefs.tab_order_ltr)
 		{
 			i++;
-			if (i >= (gint)session_files->len) break;
+			if (i >= (gint)session_files->len)
+				break;
 		}
 		else
 		{
 			i--;
-			if (i < 0) break;
+			if (i < 0)
+				break;
 		}
 	}
 
@@ -997,9 +1034,14 @@ void configuration_apply_settings(void)
 {
 	if (scribble_text)
 	{	/* update the scribble widget, because now it's realized */
-		gtk_text_buffer_set_text(
-				gtk_text_view_get_buffer(GTK_TEXT_VIEW(ui_lookup_widget(main_widgets.window, "textview_scribble"))),
-				scribble_text, -1);
+		GtkTextIter iter;
+		GtkTextBuffer *buffer =
+			gtk_text_view_get_buffer(GTK_TEXT_VIEW(ui_lookup_widget(main_widgets.window,
+				"textview_scribble")));
+
+		gtk_text_buffer_set_text(buffer, scribble_text, -1);
+		gtk_text_buffer_get_iter_at_offset(buffer, &iter, scribble_pos);
+		gtk_text_buffer_place_cursor(buffer, &iter);
 	}
 	g_free(scribble_text);
 

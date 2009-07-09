@@ -110,7 +110,7 @@ static void queue_foreach_data_2(GeanyQueue *queue_start, ForeachFunc func, Gean
 {
 	GeanyQueue *temp = param;
 
-	if (!queue_start || !param)
+	if (! queue_start || ! param)
 		return;
 
 	do

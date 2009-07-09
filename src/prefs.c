@@ -135,7 +135,6 @@ static void init_kb_tree(void)
 	GtkTreeViewColumn *column;
 
 	tree = GTK_TREE_VIEW(ui_lookup_widget(ui_widgets.prefs_dialog, "treeview7"));
-	/*g_object_set(tree, "vertical-separator", 6, NULL);*/
 
 	store = gtk_tree_store_new(3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
@@ -167,13 +166,16 @@ static void init_keybindings(void)
 {
 	GtkTreeIter parent, iter;
 	gsize g, i;
+	gchar *key_string;
+	GeanyKeyGroup *group;
+	GeanyKeyBinding *kb;
 
 	if (store == NULL)
 		init_kb_tree();
 
 	for (g = 0; g < keybinding_groups->len; g++)
 	{
-		GeanyKeyGroup *group = g_ptr_array_index(keybinding_groups, g);
+		group = g_ptr_array_index(keybinding_groups, g);
 
 		gtk_tree_store_append(store, &parent, NULL);
 		gtk_tree_store_set(store, &parent, KB_TREE_ACTION, group->label,
@@ -181,8 +183,7 @@ static void init_keybindings(void)
 
 		for (i = 0; i < group->count; i++)
 		{
-			GeanyKeyBinding *kb = &group->keys[i];
-			gchar *key_string;
+			kb = &group->keys[i];
 
 			key_string = gtk_accelerator_name(kb->key, kb->mods);
 			gtk_tree_store_append(store, &iter, &parent);
@@ -301,6 +302,8 @@ static void prefs_init_dialog(void)
 	/* Toolbar settings */
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), toolbar_prefs.visible);
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_in_menu");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), toolbar_prefs.append_to_menu);
 
 	switch (toolbar_prefs.icon_style)
 	{
@@ -310,14 +313,16 @@ static void prefs_init_dialog(void)
 	}
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
 
-
 	switch (toolbar_prefs.icon_size)
 	{
 		case GTK_ICON_SIZE_LARGE_TOOLBAR:
 				widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_large"); break;
-		default: widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_small"); break;
+		case GTK_ICON_SIZE_SMALL_TOOLBAR:
+				widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_small"); break;
+		default: widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_verysmall"); break;
 	}
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
+
 	/* disable elements if toolbar is hidden */
 	on_toolbar_show_toggled(GTK_TOGGLE_BUTTON(
 					ui_lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show")), NULL);
@@ -689,9 +694,12 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		/* Toolbar settings */
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show");
 		toolbar_prefs.visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_in_menu");
+		toolbar_prefs.append_to_menu = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_imagetext");
-		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) toolbar_prefs.icon_style = 2;
+		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
+			toolbar_prefs.icon_style = 2;
 		else
 		{
 			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_image");
@@ -707,8 +715,13 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
 			toolbar_prefs.icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
 		else
-			toolbar_prefs.icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR;
-
+		{
+			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_small");
+			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
+				toolbar_prefs.icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR;
+			else
+				toolbar_prefs.icon_size = GTK_ICON_SIZE_MENU;
+		}
 
 		/* Files settings */
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_tab_right");
@@ -888,7 +901,8 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 
 
 		/* Keybindings */
-		if (edited) keybindings_write_to_file();
+		if (edited)
+			keybindings_write_to_file();
 
 
 		/* Printing */
@@ -964,6 +978,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		treeviews_openfiles_update_all(); /* to update if full path setting has changed */
 		gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
 		gtk_toolbar_set_style(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_style);
+		toolbar_update_ui();
 		ui_sidebar_show_hide();
 		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
 
@@ -1205,7 +1220,7 @@ static gboolean on_keytype_dialog_response(GtkWidget *dialog, GdkEventKey *event
 	gchar *str;
 	gint state;
 
-    state = event->state & GEANY_KEYS_MODIFIER_MASK;
+    state = event->state & gtk_accelerator_get_default_mod_mask();
 
 	if (event->keyval == GDK_Escape)
 		return FALSE;	/* close the dialog, don't allow escape when detecting keybindings. */
@@ -1298,7 +1313,8 @@ static gboolean find_duplicate(GeanyKeyBinding *search_kb,
 	gsize g, i;
 
 	/* allow duplicate if there is no key combination */
-	if (key == 0 && mods == 0) return FALSE;
+	if (key == 0 && mods == 0)
+		return FALSE;
 
 	for (g = 0; g < keybinding_groups->len; g++)
 	{
@@ -1337,6 +1353,8 @@ static void on_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user
 	gboolean sens = gtk_toggle_button_get_active(togglebutton);
 
 	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "frame13"), sens);
+	gtk_widget_set_sensitive(
+		ui_lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_in_menu"), sens);
 }
 
 

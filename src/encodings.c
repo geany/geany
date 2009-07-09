@@ -38,6 +38,7 @@
 #include "utils.h"
 #include "support.h"
 #include "document.h"
+#include "documentprivate.h"
 #include "msgwindow.h"
 #include "encodings.h"
 #include "callbacks.h"
@@ -137,10 +138,11 @@ static void init_encodings(void)
 	fill(7, EASTASIAN, GEANY_ENCODING_EUC_JP, "EUC-JP", _("Japanese"));
 	fill(8, EASTASIAN, GEANY_ENCODING_ISO_2022_JP, "ISO-2022-JP", _("Japanese"));
 	fill(9, EASTASIAN, GEANY_ENCODING_SHIFT_JIS, "SHIFT_JIS", _("Japanese"));
-	fill(10, EASTASIAN, GEANY_ENCODING_EUC_KR, "EUC-KR", _("Korean"));
-	fill(11, EASTASIAN, GEANY_ENCODING_ISO_2022_KR, "ISO-2022-KR", _("Korean"));
-	fill(12, EASTASIAN, GEANY_ENCODING_JOHAB, "JOHAB", _("Korean"));
-	fill(13, EASTASIAN, GEANY_ENCODING_UHC, "UHC", _("Korean"));
+	fill(10, EASTASIAN, GEANY_ENCODING_CP_932, "CP932", _("Japanese"));
+	fill(11, EASTASIAN, GEANY_ENCODING_EUC_KR, "EUC-KR", _("Korean"));
+	fill(12, EASTASIAN, GEANY_ENCODING_ISO_2022_KR, "ISO-2022-KR", _("Korean"));
+	fill(13, EASTASIAN, GEANY_ENCODING_JOHAB, "JOHAB", _("Korean"));
+	fill(14, EASTASIAN, GEANY_ENCODING_UHC, "UHC", _("Korean"));
 
 	fill(0, NONE, GEANY_ENCODING_NONE, "None", _("Without encoding"));
 }
@@ -150,7 +152,8 @@ GeanyEncodingIndex encodings_get_idx_from_charset(const gchar *charset)
 {
 	gint i;
 
-	if (charset == NULL) return GEANY_ENCODING_UTF_8;
+	if (charset == NULL)
+		return GEANY_ENCODING_UTF_8;
 
 	i = 0;
 	while (i < GEANY_ENCODINGS_MAX)
@@ -168,7 +171,8 @@ const GeanyEncoding *encodings_get_from_charset(const gchar *charset)
 {
 	gint i;
 
-	if (charset == NULL) return &encodings[GEANY_ENCODING_UTF_8];
+	if (charset == NULL)
+		return &encodings[GEANY_ENCODING_UTF_8];
 
 	i = 0;
 	while (i < GEANY_ENCODINGS_MAX)
@@ -279,7 +283,7 @@ static gchar *regex_match(regex_t *preg, const gchar *buffer, gsize size)
 	gchar *encoding = NULL;
 	regmatch_t pmatch[10];
 
-	if (! pregs_loaded || buffer == NULL)
+	if (G_UNLIKELY(! pregs_loaded) || G_UNLIKELY(buffer == NULL))
 		return NULL;
 
 	if (size > 512)
@@ -299,13 +303,35 @@ static gchar *regex_match(regex_t *preg, const gchar *buffer, gsize size)
 #endif
 
 
+static void encodings_radio_item_change_cb(GtkCheckMenuItem *menuitem, gpointer user_data)
+{
+	GeanyDocument *doc = document_get_current();
+	guint i = GPOINTER_TO_INT(user_data);
+
+	if (ignore_callback || doc == NULL || encodings[i].charset == NULL ||
+		! gtk_check_menu_item_get_active(menuitem) ||
+		utils_str_equal(encodings[i].charset, doc->encoding))
+		return;
+
+	if (doc->readonly)
+	{
+		utils_beep();
+		return;
+	}
+	document_undo_add(doc, UNDO_ENCODING, g_strdup(doc->encoding));
+
+	document_set_encoding(doc, encodings[i].charset);
+}
+
+
 void encodings_finalize(void)
 {
 #ifdef HAVE_REGCOMP
 	if (pregs_loaded)
 	{
-		guint i;
-		for (i = 0; i < G_N_ELEMENTS(pregs); i++)
+		guint i, len;
+		len = G_N_ELEMENTS(pregs);
+		for (i = 0; i < len; i++)
 		{
 			regfree(&pregs[i]);
 		}
@@ -339,7 +365,7 @@ void encodings_init(void)
 	/* create encodings submenu in document menu */
 	menu[0] = ui_lookup_widget(main_widgets.window, "set_encoding1_menu");
 	menu[1] = ui_lookup_widget(main_widgets.window, "menu_reload_as1_menu");
-	cb_func[0] = G_CALLBACK(on_encoding_change);
+	cb_func[0] = G_CALLBACK(encodings_radio_item_change_cb);
 	cb_func[1] = G_CALLBACK(on_reload_as_activate);
 
 	for (k = 0; k < 2; k++)
@@ -468,7 +494,8 @@ gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gsize size,
 			geany_debug("Couldn't convert from %s to UTF-8.", charset);
 
 		utf8_content = NULL;
-		if (converted_contents != NULL) g_free(converted_contents);
+		if (converted_contents != NULL)
+			g_free(converted_contents);
 	}
 	else
 	{
@@ -499,7 +526,7 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 	gchar *utf8_content;
 	gboolean check_regex = FALSE;
 	gboolean check_locale = FALSE;
-	gint i;
+	gint i, len;
 
 	if ((gint)size == -1)
 	{
@@ -508,7 +535,8 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 
 #ifdef HAVE_REGCOMP
 	/* first try to read the encoding from the file content */
-	for (i = 0; i < (gint) G_N_ELEMENTS(pregs) && ! check_regex; i++)
+	len = (gint) G_N_ELEMENTS(pregs);
+	for (i = 0; i < len && ! check_regex; i++)
 	{
 		if ((regex_charset = regex_match(&pregs[i], buffer, size)) != NULL)
 			check_regex = TRUE;
@@ -520,7 +548,7 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 
 	for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
 	{
-		if (i == encodings[GEANY_ENCODING_NONE].idx || i == -1)
+		if (G_UNLIKELY(i == encodings[GEANY_ENCODING_NONE].idx) || G_UNLIKELY(i == -1))
 			continue;
 
 		if (check_regex)
@@ -539,17 +567,17 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 			charset = encodings[i].charset;
 
 
-		if (charset == NULL)
+		if (G_UNLIKELY(charset == NULL))
 			continue;
 
 		geany_debug("Trying to convert %" G_GSIZE_FORMAT " bytes of data from %s into UTF-8.", size, charset);
 		utf8_content = encodings_convert_to_utf8_from_charset(buffer, size, charset, FALSE);
 
-		if (utf8_content != NULL)
+		if (G_LIKELY(utf8_content != NULL))
 		{
 			if (used_encoding != NULL)
 			{
-				if (*used_encoding != NULL)
+				if (G_UNLIKELY(*used_encoding != NULL))
 				{
 					geany_debug("%s:%d", __FILE__, __LINE__);
 					g_free(*used_encoding);
@@ -625,7 +653,8 @@ GeanyEncodingIndex encodings_scan_unicode_bom(const gchar *string, gsize len, gu
 
 gboolean encodings_is_unicode_charset(const gchar *string)
 {
-	if (string != NULL && (strncmp(string, "UTF", 3) == 0 || strncmp(string, "UCS", 3) == 0))
+	if (string != NULL &&
+		(strncmp(string, "UTF", 3) == 0 || strncmp(string, "UCS", 3) == 0))
 	{
 		return TRUE;
 	}

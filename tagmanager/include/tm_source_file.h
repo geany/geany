@@ -37,7 +37,7 @@ extern "C"
  The TMSourceFile structure is derived from TMWorkObject and contains all it's
  attributes, plus an integer representing the language of the file.
 */
-typedef struct _TMSourceFile
+typedef struct
 {
 	TMWorkObject work_object; /*!< The base work object */
 	langType lang; /*!< Programming language used */

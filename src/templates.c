@@ -362,18 +362,16 @@ on_new_with_template                   (GtkMenuItem     *menuitem,
 /* template items for the new file menu */
 static void create_new_menu_items(void)
 {
-	filetype_id ft_id;
+	GSList *node;
 
-	for (ft_id = 0; ft_id < GEANY_MAX_BUILT_IN_FILETYPES; ft_id++)
+	foreach_slist(node, filetypes_by_title)
 	{
+		GeanyFiletype *ft = node->data;
 		GtkWidget *tmp_menu, *tmp_button;
-		GeanyFiletype *ft = filetypes[ft_id];
 		const gchar *label = ft->title;
 
-		if (ft_templates[ft_id] == NULL)
+		if (ft_templates[ft->id] == NULL)
 			continue;
-		if (ft_id == GEANY_FILETYPES_NONE)
-			label = _("None");
 
 		tmp_menu = gtk_menu_item_new_with_label(label);
 		gtk_widget_show(tmp_menu);
@@ -473,12 +471,12 @@ static gint compare_filenames_by_filetype(gconstpointer a, gconstpointer b)
 	GeanyFiletype *ft_b = filetypes_detect_from_extension(b);
 
 	/* sort by filetype name first */
-	if (ft_a != ft_b)
+	if (G_LIKELY(ft_a != ft_b))
 	{
 		/* None filetypes should come first */
-		if (ft_a->id == GEANY_FILETYPES_NONE)
+		if (G_UNLIKELY(ft_a->id == GEANY_FILETYPES_NONE))
 			return -1;
-		if (ft_b->id == GEANY_FILETYPES_NONE)
+		if (G_UNLIKELY(ft_b->id == GEANY_FILETYPES_NONE))
 			return 1;
 
 		return utils_str_casecmp(ft_a->name, ft_b->name);

@@ -18,7 +18,7 @@ margin_folding=0x000000;0xdfdfdf;false;false
 
 # background colour of the current line, only the second and third argument is interpreted
 # use the third argument to enable or disable the highlighting of the current line (has to be true/false)
-current_line=0x0;0xf0f0f0;true;false
+current_line=0x000000;0xf0f0f0;true;false
 
 # translucency for the current line(first argument) and the selection (second argument)
 # values between 0 and 256 are accepted. Note for Windows 95, 98 and ME users:
@@ -40,7 +40,7 @@ marker_translucency=256;256;false;false
 
 # colour of the caret(the blinking cursor), only first and third argument is interpreted
 # set the third argument to true to change the caret into a block caret
-caret=0x000000;0x0;false;false
+caret=0x000000;0x000000;false;false
 
 # width of the caret(the blinking cursor), only first argument is interpreted
 # width in pixels, use 0 to make it invisible, maximum width is 3

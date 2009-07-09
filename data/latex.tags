@@ -241,8 +241,10 @@
 \cvcomputer||{param1}{param2}{param3}{param4}|
 \cventry||{param1}{param2}{param3}{param4}{param5}{param6}|
 \cvitem||{param1}{param2}|
-\cvline||{param1}{param2}|
 \cvlanguage||{param1}{param2}{param3}|
+\cvlistitem||{param1}|
+\cvlistitemsymbol|||
+\cvline||{param1}{param2}|
 \dagger|||
 \danger|||
 \dash|||
@@ -811,6 +813,7 @@
 \newtoks|||
 \newwrite|||
 \ni|||
+\nicefrac||[value]{numerator}{denominator}|
 \noalign|||
 \nocite||{keylist}|
 \nocorr|||
@@ -1265,6 +1268,8 @@
 \underline||{text}|
 \unhbox|||
 \unhcopy|||
+\unit||[value]{dimension}|
+\unitfrac||[value]{numerator}{denominator}|
 \unitlength|||
 \unkern|||
 \unlhd|||

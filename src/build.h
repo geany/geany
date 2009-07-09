@@ -25,6 +25,8 @@
 #ifndef GEANY_BUILD_H
 #define GEANY_BUILD_H 1
 
+#define GEANY_BUILD_ERR_HIGHLIGHT_MAX 100
+
 typedef enum	/* Geany Build Options */
 {
 	GBO_COMPILE,
@@ -41,6 +43,7 @@ typedef struct GeanyBuildInfo
 	gchar			*dir;
 	guint			 file_type_id;
 	gchar			*custom_target;
+	gint			 message_count;
 } GeanyBuildInfo;
 
 extern GeanyBuildInfo build_info;
@@ -74,11 +77,7 @@ void build_menu_update(GeanyDocument *doc);
 
 BuildMenuItems *build_get_menu_items(gint filetype_idx);
 
-/*<<<<<<< .working*/
-void build_default_menu();
-/*=======*/
 void build_toolbutton_build_clicked(GtkAction *action, gpointer user_data);
-/*>>>>>>> .merge-right.r3643*/
 
 
 

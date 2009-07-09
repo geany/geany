@@ -32,6 +32,6 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command);
 
 void tools_word_count(void);
 
-void tools_color_chooser(gchar *color);
+void tools_color_chooser(const gchar *color);
 
 #endif

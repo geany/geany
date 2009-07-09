@@ -58,6 +58,7 @@ const gchar *translators[][2] = {
 	{ "it", "Max Baldinelli &lt;m.baldinelli@agora.it&gt;,\nDario Santomarco &lt;dariello@yahoo.it&gt;" },
 	{ "ja", "Tarot Osuji &lt;tarot@sdf.lonestar.org&gt;\nChikahiro Masami &lt;cmasa.z321@gmail.com&gt;" },
 	{ "ko", "Park Jang-heon &lt;dotkabi@gmail.com&gt;" },
+	{ "lb", "Laurent Hoeltgen &lt;hoeltgman@gmail.com&gt;" },
 	{ "nl", "Kurt De Bree &lt;kdebree@telenet.be&gt;" },
 	{ "pl_PL", "Jarosław Foksa &lt;jfoksa@gmail.com&gt;" },
 	{ "pt_BR", "Alexandra Moreire &lt;alexandream@gmail.com&gt;\nAdrovane Marques Kade &lt;adrovane@gmail.com&gt;" },
@@ -78,23 +79,14 @@ const gchar *prev_translators[][2] = {
 static const gint prev_translators_len = G_N_ELEMENTS(prev_translators);
 
 static const gchar *contributors =
-/*<<<<<<< .working
-"Alexander Rodin, Andrew Rowland, Anh Phạm, blackdog, Bo Lorentsen, Bob Doan, Catalin Marinas, "
-"Christoph Berg, Daniel Richard G., Dave Moore, Dirk Weber, Felipe Pena, François Cami, "
-"Giuseppe Torelli, Guillaume Hoffmann, Jason Oster, Jean-François Wauthy, Jeff Pohlmeyer, "
-"John Gabriele, Josef Whiter, Kevin Ellwood, Kristoffer A. Tjernås, Lex Trotman, Marko Peric, Matti Mårds, "
-"Peter Strand, Pierre Joye, Rob van der Linde, Robert McGinley, S Jagannathan, Saleem Abdulrasool, "
-"Sebastian Kraft, Shiv, Slava Semushin, Stefan Oltmanns, Tamim, Tomás Vírseda, Yura Siamashka";
-=======*/
 "Alexander Rodin, Andrew Rowland, Anh Phạm, blackdog, Bo Lorentsen, Bob Doan, Bronisław Białek, Catalin Marinas, "
 "Chris Macksey, Christoph Berg, Colomban Wendling, Conrad Steenberg, Daniel Richard G., Dave Moore, Dirk Weber, "
-"Felipe Pena, François Cami, "
+"Elias Pschernig, Felipe Pena, François Cami, "
 "Giuseppe Torelli, Guillaume de Rorthais, Guillaume Hoffmann, Herbert Voss, Jason Oster, Jean-François Wauthy, Jeff Pohlmeyer, "
-"John Gabriele, Josef Whiter, Kevin Ellwood, Kristoffer A. Tjernås, Lex Trotman, Marko Peric, Matti Mårds, Moritz Barsnick, "
+"Jesse Mayes, John Gabriele, Josef Whiter, Kevin Ellwood, Kristoffer A. Tjernås, Marko Peric, Matti Mårds, Moritz Barsnick, "
 "Peter Strand, Philipp Gildein, Pierre Joye, Rob van der Linde, Robert McGinley, Roland Baudin, S Jagannathan, Saleem Abdulrasool, "
 "Sebastian Kraft, Shiv, Slava Semushin, Stefan Oltmanns, Tamim, Thomas Martitz, Tomás Vírseda, "
 "Tyler Mulligan, Walery Studennikov, Yura Siamashka";
-/*>>>>>>> .merge-right.r3643*/
 
 
 static void header_eventbox_style_set(GtkWidget *widget);

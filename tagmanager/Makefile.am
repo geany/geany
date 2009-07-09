@@ -28,6 +28,7 @@ libtagmanager_a_SOURCES =\
 	entry.h\
 	get.h\
 	main.h\
+	nestlevel.h\
 	read.h\
 	parse.h\
 	strlist.h\
@@ -61,10 +62,12 @@ libtagmanager_a_SOURCES =\
 	sh.c\
 	vhdl.c\
 	actionscript.c\
+	nsis.c\
 	ctags.c\
 	entry.c\
 	get.c\
 	keyword.c\
+	nestlevel.c\
 	options.h\
 	options.c\
 	parse.c\

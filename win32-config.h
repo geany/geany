@@ -282,9 +282,6 @@
 /* Define to 1 if your <sys/time.h> declares `struct tm'. */
 /* #undef TM_IN_SYS_TIME */
 
-/* Version number of package */
-#define VERSION "0.17"
-
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */
 
@@ -315,6 +312,9 @@
 /* Define to empty if the keyword `volatile' does not work. Warning: valid
    code using `volatile' can become incorrect without. Disable with care. */
 /* #undef volatile */
+
+/* Version number of package */
+#define VERSION "0.18"
 
 #define REVISION "-1"
 

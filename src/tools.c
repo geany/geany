@@ -111,7 +111,7 @@ static gboolean cc_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 				g_string_append(cc_buffer, msg);
 				g_free(msg);
 			}
-			if (err != NULL)
+			if (G_UNLIKELY(err != NULL))
 			{
 				geany_debug("%s: %s", G_STRFUNC, err->message);
 				g_error_free(err);
@@ -119,7 +119,7 @@ static gboolean cc_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 			}
 		} while (rv == G_IO_STATUS_NORMAL || rv == G_IO_STATUS_AGAIN);
 
-		if (rv != G_IO_STATUS_EOF)
+		if (G_UNLIKELY(rv != G_IO_STATUS_EOF))
 		{	/* Something went wrong? */
 			g_warning("%s: %s\n", G_STRFUNC, "Incomplete command output");
 		}
@@ -273,7 +273,7 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 		do
 		{
 			wrote = write(stdin_fd, sel, remaining);
-			if (wrote < 0)
+			if (G_UNLIKELY(wrote < 0))
 			{
 				g_warning("%s: %s: %s\n", G_STRFUNC, "Failed sending data to command",
 										g_strerror(errno));
@@ -402,8 +402,7 @@ static void cc_on_custom_command_menu_activate(GtkMenuItem *menuitem, gpointer u
 	gboolean enable;
 	GList *children;
 
-	if (doc == NULL)
-		return;
+	g_return_if_fail(doc != NULL);
 
 	enable = sci_has_selection(doc->editor->sci) && (ui_prefs.custom_commands != NULL);
 
@@ -427,8 +426,7 @@ static void cc_on_custom_command_activate(GtkMenuItem *menuitem, gpointer user_d
 	GeanyDocument *doc = document_get_current();
 	gint command_idx;
 
-	if (doc == NULL)
-		return;
+	g_return_if_fail(doc != NULL);
 
 	command_idx = GPOINTER_TO_INT(user_data);
 
@@ -559,7 +557,8 @@ static void word_count(gchar *text, guint *chars, guint *lines, guint *words)
 	guint in_word = 0;
 	gunichar utext;
 
-	if (!text) return; /* politely refuse to operate on NULL */
+	if (! text)
+		return; /* politely refuse to operate on NULL */
 
 	*chars = *words = *lines = 0;
 	while (*text != '\0')
@@ -595,9 +594,11 @@ static void word_count(gchar *text, guint *chars, guint *lines, guint *words)
 	}
 
 	/* Capture last word, if there's no whitespace at the end of the file. */
-	if (in_word) (*words)++;
+	if (in_word)
+		(*words)++;
 	/* We start counting line numbers from 1 */
-	if (*chars > 0) (*lines)++;
+	if (*chars > 0)
+		(*lines)++;
 }
 
 
@@ -609,8 +610,7 @@ void tools_word_count(void)
 	gchar *text, *range;
 
 	doc = document_get_current();
-	if (doc == NULL)
-		return;
+	g_return_if_fail(doc != NULL);
 
 	dialog = gtk_dialog_new_with_buttons(_("Word Count"), GTK_WINDOW(main_widgets.window),
 										 GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -721,8 +721,7 @@ on_color_ok_button_clicked             (GtkButton       *button,
 	gchar *hex;
 
 	gtk_widget_hide(ui_widgets.open_colorsel);
-	if (doc == NULL)
-		return;
+	g_return_if_fail(doc != NULL);
 
 	gtk_color_selection_get_current_color(
 			GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->colorsel), &color);
@@ -735,11 +734,12 @@ on_color_ok_button_clicked             (GtkButton       *button,
 
 
 /* This shows the color selection dialog to choose a color. */
-void tools_color_chooser(gchar *color)
+void tools_color_chooser(const gchar *color)
 {
 #ifdef G_OS_WIN32
 	win32_show_color_dialog(color);
 #else
+	gchar *c = (gchar*) color;
 
 	if (ui_widgets.open_colorsel == NULL)
 	{
@@ -757,16 +757,16 @@ void tools_color_chooser(gchar *color)
 						G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 	}
 	/* if color is non-NULL set it in the dialog as preselected color */
-	if (color != NULL && (color[0] == '0' || color[0] == '#'))
+	if (c != NULL && (c[0] == '0' || c[0] == '#'))
 	{
 		GdkColor gc;
 
-		if (color[0] == '0' && color[1] == 'x')
+		if (c[0] == '0' && c[1] == 'x')
 		{	/* we have a string of the format "0x00ff00" and we need it to "#00ff00" */
-			color[1] = '#';
-			color++;
+			c[1] = '#';
+			c++;
 		}
-		gdk_color_parse(color, &gc);
+		gdk_color_parse(c, &gc);
 		gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(
 							GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->colorsel), &gc);
 		gtk_color_selection_set_previous_color(GTK_COLOR_SELECTION(

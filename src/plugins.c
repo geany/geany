@@ -60,13 +60,8 @@
 #include "toolbar.h"
 #include "stash.h"
 #include "keyfile.h"
+#include "win32.h"
 
-
-#ifdef G_OS_WIN32
-# define PLUGIN_EXT "dll"
-#else
-# define PLUGIN_EXT "so"
-#endif
 
 
 typedef struct GeanyPluginPrivate
@@ -138,7 +133,8 @@ static DocumentFuncs doc_funcs = {
 	&document_index,
 	&document_save_file_as,
 	&document_rename_file,
-	&document_get_status_color
+	&document_get_status_color,
+	&document_get_basename_for_display
 };
 
 static EditorFuncs editor_funcs = {
@@ -196,7 +192,10 @@ static SciFuncs sci_funcs = {
 	&sci_has_selection,
 	&sci_get_tab_width,
 	&sci_indicator_clear,
-	&sci_indicator_set
+	&sci_indicator_set,
+	&sci_get_contents,
+	&sci_get_contents_range,
+	&sci_get_selection_contents
 };
 
 static TemplateFuncs template_funcs = {
@@ -220,7 +219,8 @@ static UtilsFuncs utils_funcs = {
 	&utils_str_casecmp,
 	&utils_get_date_time,
 	&utils_open_browser,
-	&utils_string_replace_first
+	&utils_string_replace_first,
+	&utils_str_middle_truncate
 };
 
 static UIUtilsFuncs uiutils_funcs = {
@@ -347,7 +347,8 @@ geany_data_init(void)
 		&search_prefs,
 		&tool_prefs,
 		&template_prefs,
-		&build_info
+		&build_info,
+		filetypes_by_title
 	};
 	memcpy(&geany_data, &gd, sizeof(GeanyData));
 }
@@ -420,7 +421,7 @@ plugin_check_version(GModule *module)
 
 	g_module_symbol(module, "plugin_version_check", (void *) &version_check);
 
-	if (! version_check)
+	if (G_UNLIKELY(! version_check))
 	{
 		geany_debug("Plugin \"%s\" has no plugin_version_check() function - ignoring plugin!",
 				g_module_name(module));
@@ -432,7 +433,7 @@ plugin_check_version(GModule *module)
 
 		if (result < 0)
 		{
-			ui_set_statusbar(TRUE, _("The plugin \"%s\" is not binary compatible with this "
+			msgwin_status_add(_("The plugin \"%s\" is not binary compatible with this "
 				"release of Geany - please recompile it."), g_module_name(module));
 			geany_debug("Plugin \"%s\" is not binary compatible with this "
 				"release of Geany - recompile it.", g_module_name(module));
@@ -567,8 +568,7 @@ plugin_init(Plugin *plugin)
 	if (callbacks)
 		add_callbacks(plugin, callbacks);
 
-	g_module_symbol(plugin->module, "plugin_key_group",
-		(void *) &plugin->key_group);
+	g_module_symbol(plugin->module, "plugin_key_group", (void *) &plugin->key_group);
 	if (plugin->key_group)
 		add_kb_group(plugin);
 
@@ -671,7 +671,7 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 		g_free(plugin);
 		return NULL;
 	}
-	geany_debug("Initializing plugin '%s'", plugin->info.name);
+	/*geany_debug("Initializing plugin '%s'", plugin->info.name);*/
 
 	plugin->filename = g_strdup(fname);
 	plugin->module = module;
@@ -740,7 +740,7 @@ plugin_free(Plugin *plugin)
 
 	active_plugin_list = g_list_remove(active_plugin_list, plugin);
 
-	if (plugin->module != NULL && ! g_module_close(plugin->module))
+	if (! g_module_close(plugin->module))
 		g_warning("%s: %s", plugin->filename, g_module_error());
 
 	plugin_list = g_list_remove(plugin_list, plugin);
@@ -784,7 +784,7 @@ load_plugins_from_path(const gchar *path)
 	for (item = list; item != NULL; item = g_slist_next(item))
 	{
 		tmp = strrchr(item->data, '.');
-		if (tmp == NULL || utils_str_casecmp(tmp, "." PLUGIN_EXT) != 0)
+		if (tmp == NULL || utils_str_casecmp(tmp, "." G_MODULE_SUFFIX) != 0)
 			continue;
 
 		fname = g_strconcat(path, G_DIR_SEPARATOR_S, item->data, NULL);
@@ -800,10 +800,11 @@ load_plugins_from_path(const gchar *path)
 #ifdef G_OS_WIN32
 static gchar *get_plugin_path()
 {
-	gchar *install_dir = g_win32_get_package_installation_directory(NULL, NULL);
+	gchar *install_dir = win32_get_installation_dir();
 	gchar *path;
 
 	path = g_strconcat(install_dir, "\\lib", NULL);
+	g_free(install_dir);
 
 	return path;
 }
@@ -1048,8 +1049,7 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 
 	gtk_tree_model_get(GTK_TREE_MODEL(pm_widgets.store), &iter,
 		PLUGIN_COLUMN_CHECK, &old_state, PLUGIN_COLUMN_PLUGIN, &p, -1);
-	if (p == NULL)
-		return;
+	g_return_if_fail(p != NULL);
 	state = ! old_state; /* toggle the state */
 
 	/* save the filename of the plugin */
@@ -1126,9 +1126,10 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
 	}
 	else
 	{
+		Plugin *p;
 		for (; list != NULL; list = list->next)
 		{
-			Plugin *p = list->data;
+			p = list->data;
 
 			gtk_list_store_append(store, &iter);
 			gtk_list_store_set(store, &iter,

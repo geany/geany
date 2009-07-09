@@ -59,7 +59,8 @@ void sci_set_line_numbers(ScintillaObject * sci, gboolean set, gint extra_width)
 
 void sci_set_mark_long_lines(ScintillaObject * sci, gint type, gint column, const gchar *colour)
 {
-	if (column == 0) type = 2;
+	if (column == 0)
+		type = 2;
 	switch (type)
 	{
 		case 0:
@@ -83,15 +84,6 @@ void sci_set_mark_long_lines(ScintillaObject * sci, gint type, gint column, cons
 }
 
 
-gboolean sci_get_line_numbers(ScintillaObject * sci)
-{
-	gint margin_width;
-
-	margin_width = SSM(sci, SCI_GETMARGINWIDTHN, 0, 0);
-	if( margin_width > 0 ) return TRUE;
-	else return FALSE;
-}
-
 /* symbol margin visibility */
 void sci_set_symbol_margin(ScintillaObject * sci, gboolean set )
 {
@@ -105,12 +97,6 @@ void sci_set_symbol_margin(ScintillaObject * sci, gboolean set )
 		SSM (sci, SCI_SETMARGINWIDTHN, 1, 0);
 		SSM(sci, SCI_SETMARGINSENSITIVEN, 1, FALSE);
 	}
-}
-
-gboolean sci_get_symbol_margin(ScintillaObject *sci)
-{
-	if (SSM(sci, SCI_GETMARGINWIDTHN, 1, 0) > 0 ) return TRUE;
-	else return FALSE;
 }
 
 /* folding margin visibility */
@@ -128,24 +114,10 @@ void sci_set_folding_margin_visible(ScintillaObject *sci, gboolean set)
 	}
 }
 
-gboolean sci_get_folding_margin_visible(ScintillaObject * sci)
-{
-	gint margin_width;
-
-	margin_width = SSM(sci, SCI_GETMARGINWIDTHN, 2, 0);
-	if( margin_width > 0 ) return TRUE;
-	else return FALSE;
-}
-
 /* end of lines */
 void sci_set_visible_eols(ScintillaObject* sci, gboolean set )
 {
 	SSM(sci,SCI_SETVIEWEOL,set,0);
-}
-
-gboolean sci_get_visible_eols(ScintillaObject* sci)
-{
-	return SSM( sci, SCI_GETVIEWEOL,0,0);
 }
 
 void sci_set_visible_white_spaces(ScintillaObject* sci, gboolean set )
@@ -156,22 +128,12 @@ void sci_set_visible_white_spaces(ScintillaObject* sci, gboolean set )
 		SSM(sci,SCI_SETVIEWWS,SCWS_INVISIBLE,0);
 }
 
-gboolean sci_get_visible_white_spaces(ScintillaObject* sci)
-{
-	return SSM( sci, SCI_GETVIEWWS,0,0);
-}
-
 void sci_set_lines_wrapped(ScintillaObject* sci, gboolean set )
 {
 	if (set)
 		SSM(sci,SCI_SETWRAPMODE,SC_WRAP_WORD,0);
 	else
 		SSM(sci,SCI_SETWRAPMODE,SC_WRAP_NONE,0);
-}
-
-gboolean sci_get_lines_wrapped(ScintillaObject* sci)
-{
-	return SSM( sci, SCI_GETWRAPMODE,0,0);
 }
 
 gint sci_get_eol_mode( ScintillaObject* sci)
@@ -191,7 +153,8 @@ void sci_convert_eols( ScintillaObject* sci, gint eolmode)
 
 void sci_add_text(ScintillaObject* sci, const gchar* text)
 {
-	if( text != NULL ){ /* if null text is passed to scintilla will segfault */
+	if (text != NULL)
+	{ /* if null text is passed to scintilla will segfault */
 		SSM( sci, SCI_ADDTEXT, strlen(text), (sptr_t) text);
 	}
 }
@@ -203,15 +166,6 @@ void sci_set_text(ScintillaObject* sci, const gchar* text)
 {
 	if( text != NULL ){ /* if null text is passed to scintilla will segfault */
 		SSM( sci, SCI_SETTEXT, 0, (sptr_t) text);
-	}
-}
-
-
-void sci_add_text_buffer(ScintillaObject* sci, const gchar* text, gint len)
-{
-	if( text != NULL ){ /* if null text is passed to scintilla will segfault */
-		SSM(sci, SCI_CLEARALL, 0, 0);
-		SSM(sci, SCI_ADDTEXT, len, (sptr_t) text);
 	}
 }
 
@@ -232,10 +186,6 @@ void sci_undo( ScintillaObject* sci )
 {
 	if( sci_can_undo(sci) )
 		SSM( sci, SCI_UNDO, 0, 0);
-	else
-	{ /* change it to a document function */
-
-	}
 }
 
 
@@ -243,10 +193,6 @@ void sci_redo( ScintillaObject* sci )
 {
 	if( sci_can_redo( sci ) )
 		SSM( sci, SCI_REDO,0,0);
-	else
-	{ /* change it to a document function */
-
-	}
 }
 
 
@@ -271,12 +217,6 @@ void sci_end_undo_action( ScintillaObject* sci )
 void sci_set_undo_collection( ScintillaObject* sci, gboolean set )
 {
 	SSM( sci, SCI_SETUNDOCOLLECTION,set,0);
-}
-
-
-gboolean sci_get_undo_collection( ScintillaObject* sci )
-{
-	return SSM( sci, SCI_GETUNDOCOLLECTION,0,0);
 }
 
 
@@ -460,6 +400,12 @@ void sci_set_selection_end(ScintillaObject* sci, gint position)
 }
 
 
+void sci_set_selection(ScintillaObject *sci, gint anchorPos, gint currentPos)
+{
+	SSM(sci, SCI_SETSEL, anchorPos, currentPos);
+}
+
+
 gint sci_get_line_end_position(ScintillaObject* sci, gint line)
 {
 	return SSM(sci, SCI_GETLINEENDPOSITION, line, 0);
@@ -542,7 +488,6 @@ gint sci_get_line_length(ScintillaObject* sci,gint line)
 }
 
 
-/* TODO: rename/change to use buffer? Otherwise inconsistent with sci_get_text*(). */
 /** Get line contents.
  * @param sci Scintilla widget.
  * @param line_num Line number.
@@ -559,6 +504,9 @@ gchar *sci_get_line(ScintillaObject* sci, gint line_num)
 
 
 /** Get all text.
+ * @deprecated sci_get_text is deprecated and should not be used in newly-written code.
+ * Use sci_get_contents() instead.
+ *
  * @param sci Scintilla widget.
  * @param len Length of @a text buffer, usually sci_get_length() + 1.
  * @param text Text buffer; must be allocated @a len + 1 bytes for null-termination. */
@@ -567,8 +515,25 @@ void sci_get_text(ScintillaObject* sci, gint len, gchar* text)
 	SSM( sci, SCI_GETTEXT, len, (sptr_t) text );
 }
 
+/** Get all text inside a given text length.
+ * @param sci Scintilla widget.
+ * @param len Length of the text to retrieve from the start of the document,
+ *            usually sci_get_length() + 1.
+ * @return A copy of the text. Should be freed when no longer needed.
+ *
+ * @since 0.17
+ */
+gchar *sci_get_contents(ScintillaObject *sci, gint len)
+{
+	gchar *text = g_malloc(len);
+	SSM(sci, SCI_GETTEXT, len, (sptr_t) text);
+	return text;
+}
 
 /** Get selected text.
+ * @deprecated sci_get_selected_text is deprecated and should not be used in newly-written code.
+ * Use sci_get_selection_contents() instead.
+ *
  * @param sci Scintilla widget.
  * @param text Text buffer; must be allocated sci_get_selected_text_length() + 1 bytes
  * for null-termination. */
@@ -577,6 +542,22 @@ void sci_get_selected_text(ScintillaObject* sci, gchar* text)
 	SSM( sci, SCI_GETSELTEXT, 0, (sptr_t) text);
 }
 
+/** Get selected text.
+ * @param sci Scintilla widget.
+ *
+ * @return The selected text. Should be freed when no longer needed.
+ *
+ * @since 0.17
+ */
+gchar *sci_get_selection_contents(ScintillaObject *sci)
+{
+	gint len = sci_get_selected_text_length(sci);
+	gchar *selection = g_malloc(len + 1);
+
+	SSM(sci, SCI_GETSELTEXT, 0, (sptr_t) selection);
+
+	return selection;
+}
 
 /** Get selected text length.
  * @param sci Scintilla widget.
@@ -586,18 +567,10 @@ gint sci_get_selected_text_length(ScintillaObject* sci)
 	return SSM( sci, SCI_GETSELTEXT, 0, 0);
 }
 
-
 gint sci_get_position_from_xy(ScintillaObject* sci, gint x, gint y, gboolean nearby)
 {
 	/* for nearby return -1 if there is no character near to the x,y point. */
 	return SSM(sci, (nearby) ? SCI_POSITIONFROMPOINTCLOSE : SCI_POSITIONFROMPOINT, x, y);
-}
-
-
-void sci_get_xy_from_position(ScintillaObject* sci,gint pos, gint* x, gint* y)
-{
-	*x = SSM(sci, SCI_POINTXFROMPOSITION,0, (int) pos);
- 	*y = SSM(sci, SCI_POINTYFROMPOSITION,0, (int) pos);
 }
 
 
@@ -626,13 +599,6 @@ gint sci_get_fold_level(ScintillaObject* sci, gint line)
 }
 
 
-/* Get the next line after start_line with fold level <= level */
-gint sci_get_last_child(ScintillaObject* sci, gint start_line, gint level)
-{
-	return SSM( sci, SCI_GETLASTCHILD, start_line, level);
-}
-
-
 /* Get the line number of the fold point before start_line, or -1 if there isn't one */
 gint sci_get_fold_parent(ScintillaObject* sci, gint start_line)
 {
@@ -655,12 +621,6 @@ gboolean sci_get_fold_expanded(ScintillaObject* sci, gint line)
 void sci_colourise( ScintillaObject* sci, gint start, gint end)
 {
 	SSM( sci, SCI_COLOURISE, start, end);
-}
-
-
-void sci_set_lexer(ScintillaObject * sci, gint lexer)
-{
-	SSM( sci, SCI_SETLEXER, lexer, 0);
 }
 
 
@@ -842,6 +802,9 @@ void sci_clear_cmdkey(ScintillaObject *sci, gint key)
 
 
 /** Get text between @a start and @a end.
+ * @deprecated sci_get_text_range is deprecated and should not be used in newly-written code.
+ * Use sci_get_contents_range() instead.
+ *
  * @param sci Scintilla widget.
  * @param start Start.
  * @param end End.
@@ -853,6 +816,22 @@ void sci_get_text_range(ScintillaObject *sci, gint start, gint end, gchar *text)
 	tr.chrg.cpMax = end;
 	tr.lpstrText = text;
 	SSM(sci, SCI_GETTEXTRANGE, 0, (long) &tr);
+}
+
+/** Get text between @a start and @a end.
+ *
+ * @param sci Scintilla widget.
+ * @param start Start.
+ * @param end End.
+ * @return The text inside the given range. Should be freed when no longer needed.
+ *
+ * @since 0.17
+ */
+gchar *sci_get_contents_range(ScintillaObject *sci, gint start, gint end)
+{
+	gchar *text = g_malloc((end - start) + 1);
+	sci_get_text_range(sci, start, end, text);
+	return text;
 }
 
 
@@ -875,18 +854,6 @@ void sci_selection_duplicate(ScintillaObject *sci)
 void sci_insert_text(ScintillaObject *sci, gint pos, const gchar *text)
 {
 	SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) text);
-}
-
-
-void sci_grab_focus(ScintillaObject *sci)
-{
-	SSM(sci, SCI_GRABFOCUS, 0, 0);
-}
-
-
-void sci_set_cursor(ScintillaObject *sci, gint cursor)
-{
-	SSM(sci, SCI_SETCURSOR, cursor, 0);
 }
 
 
@@ -922,11 +889,6 @@ void sci_set_keywords(ScintillaObject *sci, gint k, gchar *text)
 void sci_set_readonly(ScintillaObject *sci, gboolean readonly)
 {
 	SSM(sci, SCI_SETREADONLY, readonly, 0);
-}
-
-gboolean sci_get_readonly(ScintillaObject *sci)
-{
-	return SSM(sci, SCI_GETREADONLY, 0, 0);
 }
 
 /** A simple convenience function for sending Scintilla commands without any parameters.
@@ -969,23 +931,6 @@ gint sci_get_first_visible_line(ScintillaObject *sci)
 	return SSM(sci, SCI_GETFIRSTVISIBLELINE, 0, 0);
 }
 
-
-void sci_set_styling(ScintillaObject *sci, gint len, gint style)
-{
-	if (len < 0 || style < 0) return;
-
-	SSM(sci, SCI_SETSTYLING, len, style);
-}
-
-void sci_start_styling(ScintillaObject *sci, gint pos, gint mask)
-{
-	SSM(sci, SCI_STARTSTYLING, pos, mask);
-}
-
-gint sci_indicator_get(ScintillaObject *sci)
-{
-	return SSM(sci, SCI_GETINDICATORCURRENT, 0, 0);
-}
 
 /**
  *  Set the current indicator. This is necessary to define an indicator for a range of text or

@@ -150,6 +150,17 @@ static GOptionEntry entries[] =
 };
 
 
+static void setup_window_position(void)
+{
+	/* interprets the saved window geometry */
+	if (prefs.save_winpos && ui_prefs.geometry[0] != -1)
+	{
+		gtk_window_move(GTK_WINDOW(main_widgets.window), ui_prefs.geometry[0], ui_prefs.geometry[1]);
+		gtk_window_set_default_size(GTK_WINDOW(main_widgets.window), ui_prefs.geometry[2], ui_prefs.geometry[3]);
+		if (ui_prefs.geometry[4] == 1)
+			gtk_window_maximize(GTK_WINDOW(main_widgets.window));
+	}
+}
 
 /* special things for the initial setup of the checkboxes and related stuff
  * an action on a setting is only performed if the setting is not equal to the program default
@@ -180,6 +191,7 @@ static void apply_settings(void)
 		ignore_callback = FALSE;
 	}
 	ui_sidebar_show_hide();
+
 	/* sets the icon style of the toolbar */
 	switch (toolbar_prefs.icon_style)
 	{
@@ -206,22 +218,14 @@ static void apply_settings(void)
 
 	/* sets the icon size of the toolbar, use user preferences (.gtkrc) if not set */
 	if (toolbar_prefs.icon_size == GTK_ICON_SIZE_SMALL_TOOLBAR ||
-		toolbar_prefs.icon_size == GTK_ICON_SIZE_LARGE_TOOLBAR)
+		toolbar_prefs.icon_size == GTK_ICON_SIZE_LARGE_TOOLBAR ||
+		toolbar_prefs.icon_size == GTK_ICON_SIZE_MENU)
 	{
 		gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
 	}
-	gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
+	toolbar_update_ui();
 
 	ui_update_view_editor_menu_items();
-
-	/* interprets the saved window geometry */
-	if (prefs.save_winpos && ui_prefs.geometry[0] != -1)
-	{
-		gtk_window_move(GTK_WINDOW(main_widgets.window), ui_prefs.geometry[0], ui_prefs.geometry[1]);
-		gtk_window_set_default_size(GTK_WINDOW(main_widgets.window), ui_prefs.geometry[2], ui_prefs.geometry[3]);
-		if (ui_prefs.geometry[4] == 1)
-			gtk_window_maximize(GTK_WINDOW(main_widgets.window));
-	}
 
 	/* hide statusbar if desired */
 	if (! interface_prefs.statusbar_visible)
@@ -267,13 +271,21 @@ static void main_init(void)
 	ignore_callback	= FALSE;
 	app->tm_workspace		= tm_get_workspace();
 	ui_prefs.recent_queue				= g_queue_new();
-	main_status.opening_session_files		= FALSE;
+	ui_prefs.recent_projects_queue		= g_queue_new();
+	main_status.opening_session_files	= FALSE;
 
 	main_widgets.window = create_window1();
+	/* add recent files to the File menu */
 	ui_widgets.recent_files_menuitem = ui_lookup_widget(main_widgets.window, "recent_files1");
 	ui_widgets.recent_files_menu_menubar = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(ui_widgets.recent_files_menuitem),
 							ui_widgets.recent_files_menu_menubar);
+
+	/* add recent projects to the Project menu */
+	ui_widgets.recent_projects_menuitem = ui_lookup_widget(main_widgets.window, "recent_projects1");
+	ui_widgets.recent_projects_menu_menubar = gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(ui_widgets.recent_projects_menuitem),
+							ui_widgets.recent_projects_menu_menubar);
 
 	/* store important pointers for later reference */
 	main_widgets.toolbar = toolbar_init();
@@ -289,6 +301,8 @@ static void main_init(void)
 	gtk_widget_set_name(main_widgets.window, "GeanyMainWindow");
 	gtk_widget_set_name(ui_widgets.toolbar_menu, "GeanyToolbarMenu");
 	gtk_widget_set_name(main_widgets.editor_menu, "GeanyEditMenu");
+	gtk_widget_set_name(ui_lookup_widget(main_widgets.window, "menubar1"), "GeanyMenubar");
+	gtk_widget_set_name(main_widgets.toolbar, "GeanyToolbar");
 
 #if ! GTK_CHECK_VERSION(2, 10, 0)
 	/* hide Page setup menu item, it isn't supported with non-GTK printing */
@@ -390,7 +404,7 @@ static void setup_paths(void)
 #ifdef G_OS_WIN32
 	/* use the installation directory(the one where geany.exe is located) as the base for the
 	 * documentation and data files */
-	gchar *install_dir = g_win32_get_package_installation_directory(NULL, NULL);
+	gchar *install_dir = win32_get_installation_dir();
 
 	data_dir = g_strconcat(install_dir, "\\data", NULL); /* e.g. C:\Program Files\geany\data */
 	doc_dir = g_strconcat(install_dir, "\\doc", NULL);
@@ -440,10 +454,12 @@ void main_locale_init(const gchar *locale_dir, const gchar *package)
 #endif
 
 #ifdef G_OS_WIN32
-	gchar *install_dir = g_win32_get_package_installation_directory(NULL, NULL);
-	/* e.g. C:\Program Files\geany\lib\locale */
-	l_locale_dir = g_strconcat(install_dir, "\\share\\locale", NULL);
-	g_free(install_dir);
+	{
+		gchar *install_dir = win32_get_installation_dir();
+		/* e.g. C:\Program Files\geany\lib\locale */
+		l_locale_dir = g_strconcat(install_dir, "\\share\\locale", NULL);
+		g_free(install_dir);
+	}
 #else
 	l_locale_dir = g_strdup(locale_dir);
 #endif
@@ -618,6 +634,9 @@ static gint create_config_dir(void)
 					_("Geany needs to move your old configuration directory before starting.")))
 					exit(0);
 
+				if (! g_file_test(app->configdir, G_FILE_TEST_IS_DIR))
+					utils_mkdir(app->configdir, TRUE);
+
 				if (g_rename(old_dir, app->configdir) == 0)
 				{
 					dialogs_show_msgbox(GTK_MESSAGE_INFO,
@@ -640,7 +659,7 @@ static gint create_config_dir(void)
 		}
 #endif
 		geany_debug("creating config directory %s", app->configdir);
-		saved_errno = utils_mkdir(app->configdir, FALSE);
+		saved_errno = utils_mkdir(app->configdir, TRUE);
 	}
 
 	if (saved_errno == 0 && ! g_file_test(conf_file, G_FILE_TEST_EXISTS))
@@ -796,7 +815,7 @@ static gboolean open_cl_files(gint argc, gchar **argv)
 		/* It seems argv elements are encoded in CP1252 on a German Windows */
 		setptr(filename, g_locale_to_utf8(filename, -1, NULL, NULL, NULL));
 #endif
-		if (filename && !main_handle_filename(filename))
+		if (filename && ! main_handle_filename(filename))
 		{
 			const gchar *msg = _("Could not find file '%s'.");
 
@@ -833,7 +852,8 @@ static void load_settings(void)
 #ifdef HAVE_VTE
 	vte_info.have_vte = (no_vte) ? FALSE : vte_info.load_vte;
 #endif
-	if (no_msgwin) ui_prefs.msgwindow_visible = FALSE;
+	if (no_msgwin)
+		ui_prefs.msgwindow_visible = FALSE;
 
 #ifdef HAVE_PLUGINS
 	want_plugins = prefs.load_plugins && !no_plugins;
@@ -933,6 +953,7 @@ gint main(gint argc, gchar **argv)
 			/* Socket exists */
 			if (argc > 1)	/* filenames were sent to first instance, so quit */
 			{
+				gdk_notify_startup_complete();
 				g_free(app->configdir);
 				g_free(app->datadir);
 				g_free(app->docdir);
@@ -1001,6 +1022,7 @@ gint main(gint argc, gchar **argv)
 		GtkWidget *entry;
 
 		g_signal_connect(main_widgets.window, "delete-event", G_CALLBACK(on_exit_clicked), NULL);
+		g_signal_connect(main_widgets.window, "window-state-event", G_CALLBACK(on_window_state_event), NULL);
 		g_signal_connect(main_widgets.toolbar, "button-press-event", G_CALLBACK(toolbar_popup_menu), NULL);
 
 		g_signal_connect(ui_lookup_widget(main_widgets.window, "textview_scribble"),
@@ -1015,7 +1037,7 @@ gint main(gint argc, gchar **argv)
 #ifdef HAVE_VTE
 	vte_init();
 #endif
-	ui_create_recent_menu();
+	ui_create_recent_menus();
 
 	ui_set_statusbar(TRUE, _("This is Geany %s."), main_get_version_string());
 	if (config_dir_result != 0)
@@ -1030,6 +1052,9 @@ gint main(gint argc, gchar **argv)
 	if (want_plugins)
 		plugins_load_active();
 #endif
+
+	/* set the active sidebar page after plugins have been loaded */
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook), ui_prefs.sidebar_page);
 
 	/* load keybinding settings after plugins have added their groups */
 	keybindings_load_keyfile();
@@ -1051,7 +1076,14 @@ gint main(gint argc, gchar **argv)
 	build_menu_update(doc);
 	treeviews_update_tag_list(doc, FALSE);
 
-	/* finally realize the window to show the user what we have done */
+#ifdef G_OS_WIN32
+	/* Manually realise the main window to be able to set the position but don't show it.
+	 * We don't set the position after showing the window to avoid flickering. */
+	gtk_widget_realize(main_widgets.window);
+#endif
+	setup_window_position();
+
+	/* finally show the window */
 	gtk_widget_show(main_widgets.window);
 	main_status.main_window_realized = TRUE;
 
@@ -1068,14 +1100,28 @@ gint main(gint argc, gchar **argv)
 #endif
 
 #ifdef G_OS_WIN32
-	/* On Windows, change the working directory to the Geany installation path to not lock
-	 * the directory of a file passed as command line argument (see bug #2626124). */
-	win32_set_working_directory(g_win32_get_package_installation_directory(NULL, NULL));
+	{
+		gchar *dir;
+		/* On Windows, change the working directory to the Geany installation path to not lock
+		 * the directory of a file passed as command line argument (see bug #2626124). */
+		dir = win32_get_installation_dir();
+		win32_set_working_directory(dir);
+		g_free(dir);
+	}
 #endif
 
-	/*g_timeout_add(0, (GSourceFunc)destroyapp, NULL);*/ /* useful for start time tests*/
 	gtk_main();
 	return 0;
+}
+
+
+static void queue_free(GQueue *queue)
+{
+	while (! g_queue_is_empty(queue))
+	{
+		g_free(g_queue_pop_tail(queue));
+	}
+	g_queue_free(queue);
 }
 
 
@@ -1136,11 +1182,9 @@ void main_quit()
 	g_free(printing_prefs.external_print_cmd);
 	g_free(printing_prefs.page_header_datefmt);
 	g_strfreev(ui_prefs.custom_commands);
-	while (! g_queue_is_empty(ui_prefs.recent_queue))
-	{
-		g_free(g_queue_pop_tail(ui_prefs.recent_queue));
-	}
-	g_queue_free(ui_prefs.recent_queue);
+
+	queue_free(ui_prefs.recent_queue);
+	queue_free(ui_prefs.recent_projects_queue);
 
 	if (ui_widgets.prefs_dialog && GTK_IS_WIDGET(ui_widgets.prefs_dialog)) gtk_widget_destroy(ui_widgets.prefs_dialog);
 	if (ui_widgets.save_filesel && GTK_IS_WIDGET(ui_widgets.save_filesel)) gtk_widget_destroy(ui_widgets.save_filesel);

@@ -85,14 +85,13 @@ if MINGW
 
 geany_SOURCES = $(SRCS) win32.c win32.h
 
-geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a @GTK_LIBS@ @GIO_LIBS@ $(INTLLIBS) \
-			  -lkernel32 -limm32 -lshfolder -lshell32 -lole32 -luuid -lcomdlg32 \
-			  -lcomctl32 -liberty -lwsock32 geany_private.res
+geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a @GTK_LIBS@ @GIO_LIBS@ \
+				$(INTLLIBS) -lole32 -luuid -liberty -lwsock32 geany_private.res
 
 AM_CFLAGS = -DGEANY_DATADIR=\"data\" \
 			-DGEANY_DOCDIR=\"\" \
 			-DGEANY_LIBDIR=\"\" \
-			-DGEANY_LOCALEDIR=\"data\" \
+			-DGEANY_LOCALEDIR=\"\" \
 			-DGEANY_PREFIX=\"\"
 
 geany_LDFLAGS =	-mwindows -mms-bitfields

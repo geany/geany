@@ -34,6 +34,7 @@
 #include "treeviews.h"
 #include "support.h"
 #include "callbacks.h"
+#include "utils.h"
 
 #define GEANY_DND_NOTEBOOK_TAB_TYPE	"geany_dnd_notebook_tab"
 
@@ -199,8 +200,9 @@ static GtkMenu *get_tab_bar_popup_menu(void)
 	GeanyDocument *doc;
 	guint i, len;
 	gchar *base_name;
+	GeanyDocument *current_doc = document_get_current();
 
-	if (menu == NULL)
+	if (G_UNLIKELY(menu == NULL))
 		menu = gtk_menu_new();
 
 	/* clear the old menu items */
@@ -224,6 +226,11 @@ static GtkMenu *get_tab_bar_popup_menu(void)
 		gtk_widget_modify_fg(menu_item_label, GTK_STATE_NORMAL, color);
 		gtk_widget_modify_fg(menu_item_label, GTK_STATE_ACTIVE, color);
 
+		if (doc == current_doc)
+		{
+			setptr(base_name, g_strconcat("<b>", base_name, "</b>", NULL));
+			gtk_label_set_markup(GTK_LABEL(menu_item_label), base_name);
+		}
 		g_free(base_name);
 	}
 	menu_item = gtk_separator_menu_item_new();
@@ -344,7 +351,7 @@ notebook_drag_motion_cb(GtkWidget *widget, GdkDragContext *dc,
 	{
 		gboolean ok = FALSE;
 		/* prevent oscillation between non-homogeneous sized tabs */
-		switch(gtk_notebook_get_tab_pos(notebook))
+		switch (gtk_notebook_get_tab_pos(notebook))
 		{
 			case GTK_POS_LEFT:
 			case GTK_POS_RIGHT:

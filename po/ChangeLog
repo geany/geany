@@ -1,3 +1,114 @@
+2009-06-01  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * lb.po: Update of Luxembourgian translation. Thanks to Laurent Hoeltgen.
+
+
+2009-05-28  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * lb.po, LINGUAS:
+   Added Luxembourgian translation. Huge thanks to Laurent Hoeltgen.
+
+
+2009-05-26  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * de.po: Minor improvement of German translation.
+
+
+2009-05-25  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * ru.po: Update of Russian translation. Thanks to John Wehin.
+
+
+2009-05-12  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * fi.po: Update of Finnish translation. Thanks to Jari Rahkonen.
+
+
+2009-05-11  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * de.po: Minor improvement of German translation. Thanks to Franz
+   Buchinger for pointing it out.
+ * ru.po: Fix of a typo at Russian translation. Closes 2790001.
+
+
+2009-05-04  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * it.po: Update of Italian translation (Thanks M. Baldinelli).
+
+
+2009-05-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * New release: Geany 0.17 "Wessex".
+
+
+2009-05-01  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * be.po: Update of Belarusian translation (Thanks to Yura Semashko)
+ * hu.po: Update of Hungarian translation (Thanks to Gabor Kmetyko)
+
+
+2009-04-28  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * de.po: Update of German translation.
+
+
+2009-04-27  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * pt_BR.po: Update of Brasilian Portuguese translation
+   (Thanks to Adrovane Marques Kade).
+
+
+2009-04-26  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * cs.po: Update of Czech translation. Thanks to Karel Kolman for
+   providing.
+ * ja.po: Update of Japanese translation. Thanks to Chikahiro Masami.
+ * ru.po: Update of Russian translation. Thanks to John Wehin.
+ * sv.po: Update of Swedish translation. Thanks to Tony Mattsson.
+ * tr.po: Update of Turkish translation. Thanks to Gürkan Gür.
+
+
+2009-04-25  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * fr.po: Minor update on French translation to fix a typo on HTML
+   headings in symbol list.
+ * zh_CN.po: Update of simplified Chinese translation
+   (Thanks to Dormouse Young).
+
+
+2009-04-24  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * es.po: Update of Spanish translation. Thanks to Antonio Jiménez
+   González.
+
+
+2009-04-23  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * *.po, geany.pot: Update for string freeze in preparing of Geany
+   0.17 release.
+
+
+2009-04-07  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * fr.po: Update of French translation (Thanks Jean-Philippe Moal).
+
+
+2009-04-05  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * tr.po: Update of Turkish translation. Thanks to Gürkan Gür.
+
+
+2009-03-27  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * ru.po: Update of Russian translation. Thanks to John Wehin.
+
+
+2009-03-24  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * ru.po: Spelling fixes on Russian translation. Thanks to Yura for
+   providing update.
+
+
 2009-03-17  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * ru.po: Update of Russian translation. Thanks to John Wehin.
@@ -30,6 +141,11 @@
 
  * es.po: Update of Spanish translation. Thanks to Antonio Jiménez
    González.
+
+
+2009-02-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * New release: Geany 0.16
 
 
 2009-02-13  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

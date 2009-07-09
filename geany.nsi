@@ -33,8 +33,8 @@ RequestExecutionLevel user ; set execution level for Windows Vista
 ; helper defines  ;
 ;;;;;;;;;;;;;;;;;;;
 !define PRODUCT_NAME "Geany"
-!define PRODUCT_VERSION "0.17"
-!define PRODUCT_VERSION_ID "0.17.0.0"
+!define PRODUCT_VERSION "0.18"
+!define PRODUCT_VERSION_ID "0.18.0.0"
 !define PRODUCT_PUBLISHER "The Geany developer team"
 !define PRODUCT_WEB_SITE "http://www.geany.org/"
 !define PRODUCT_DIR_REGKEY "Software\Geany"
@@ -54,7 +54,7 @@ VIAddVersionKey "ProductVersion" "${PRODUCT_VERSION}"
 VIAddVersionKey "LegalCopyright" "Copyright 2005-2009 by the Geany developer team"
 VIAddVersionKey "FileDescription" "${PRODUCT_NAME} Installer"
 
-BrandingText "$(^NAME) installer (NSIS 2.42)"
+BrandingText "$(^NAME) installer (NSIS 2.44)"
 InstallDir "$PROGRAMFILES\Geany"
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 SetCompressor /SOLID lzma
@@ -78,7 +78,7 @@ Var UNINSTDIR
 !include "MUI2.nsh"
 
 !define MUI_ABORTWARNING
-!define MUI_ICON "pixmaps\geany.ico"
+!define MUI_ICON "icons\geany.ico"
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall-full.ico"
 
 ; Welcome page
@@ -196,7 +196,7 @@ SectionEnd
 
 ; Include GTK runtime library but only if desired from command line
 !ifdef INCLUDE_GTK
-Section "GTK 2.14 Runtime Environment" SEC06
+Section "GTK 2.16 Runtime Environment" SEC06
 	SectionIn 1
 	SetOverwrite ifnewer
 	SetOutPath "$INSTDIR\bin"

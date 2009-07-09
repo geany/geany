@@ -1,4 +1,4 @@
-.. |(version)| replace:: 0.17
+.. |(version)| replace:: 0.18
 
 =======
  Geany
@@ -116,17 +116,23 @@ incomplete list see http://www.geany.org/Download/ThirdPartyPackages.
 Source compilation
 ------------------
 
-For compiling Geany yourself, you will need the GTK (>= 2.8.0)
-libraries and header files. You will also need the Pango, GLib and
-ATK libraries and header files. All these files are available at
-http://www.gtk.org, but very often your distro will provide development
-packages to save the trouble of building these yourself.
+Compiling Geany is quite easy.
+To do so, you need the GTK (>= 2.8.0) libraries and header files.
+You also need the Pango, GLib and ATK libraries and header files.
+All these files are available at http://www.gtk.org, but very often
+your distro will provide development packages to save the trouble of
+building these yourself.
 
-Furthermore you need, of course, a C compiler and the Make tool; a
-C++ compiler is also required (for the included Scintilla library). The
-GNU versions of these tools are recommended.
+Furthermore you need, of course, a C and C++ compiler. The GNU versions
+of these tools are recommended.
 
-Compiling Geany is quite easy. The following should do it::
+Autotools based build system
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The Autotools based build system is very mature and has been well tested.
+To use it, you just need the Make tool, preferably GNU Make.
+
+Then run the following commands::
 
     $ ./configure
     $ make
@@ -135,12 +141,75 @@ Then as root::
 
     % make install
 
+Waf based build system
+^^^^^^^^^^^^^^^^^^^^^^
+
+The Waf build system is still quite young and under heavy development but already in an
+usable state. In contrary to the Autotools, Waf needs Python. So before using Waf, you need
+to install Python on your system.
+The advantage of the Waf build system over the Autotools based build system is that the whole
+build process might be a bit faster. Especially when you use the Waf cache feature repetitive
+builds (e.g. when changing only a few source files to test something) will become much faster
+since Waf will cache and re-use the unchanged built files and only compile the changed code
+again. See `Waf Cache`_ for details.
+To build Geany with Waf as usual run::
+
+    $ ./waf configure
+    $ ./waf build
+
+Then as root::
+
+    % ./waf install
+
+Waf Cache
+`````````
+
+The Waf build system has a nice and interesting feature which can help a lot to avoid
+unnecessary rebuilding of unchanged code. This often happens when developing new features
+or trying to debug something.
+Waf is able to store and retrieve the object files from a cache. This cache is declared
+using the environment variable ``WAFCACHE``.
+A possible location of the cache directory could be ``~/.cache/waf``. In order to make use of
+this, you first need to create this directory::
+
+	$ mkdir -p ~/.cache/waf
+
+then add the environment variable to your shell configuration (the following example is for
+Bash and should be adjusted to your used shell)::
+
+	export WAFCACHE=/home/username/.cache/waf
+
+Remember to replace ``username`` with your actual username.
+
+More information about the Waf cache feature are available at
+http://code.google.com/p/waf/wiki/CacheObjectFiles.
+
+Cleaning the Cache
+******************
+You should take care about the size of the cache directory as it may grow rapidly by time.
+Waf doesn't do any cleaning or other house-keeping of the cache yet so you need to keep it
+clean by yourself.
+An easy way to keep it clean is to run the following command regularly to remove old
+cached files::
+
+    $ find /home/username/.cache/waf -mtime +14 -exec rm {} \;
+
+This will delete all files in the cache directory which are older than 14 days.
+
+For details about the ``find`` command and its options, check its manual page.
+
+
 Custom installation
 ^^^^^^^^^^^^^^^^^^^
 The configure script supports several common options, for a detailed
 list, type::
 
     $ ./configure --help
+
+or::
+	$ ./waf --help
+
+(depending on which build system you use).
 
 You may also want to read the INSTALL file for advanced installation
 options.
@@ -161,6 +230,18 @@ environment and try to find the error, otherwise contact the mailing
 list or one the authors. Sometimes you might need to ask for specific
 help from your distro.
 
+
+Installation prefix
+-------------------
+If you want to edit any of Geany's system configuration files after
+installation you will need to know the installation prefix.  Usually this
+is not necessary as you can just use user configuration files.
+
+Use the ``--print-prefix`` option to check - see `Command line
+options`_. The first path is the prefix.
+
+This is commonly ``/usr`` if you installed from a binary package, or
+``/usr/local`` if you build from source.
 
 
 
@@ -376,7 +457,7 @@ Geany installation on Windows).
 To get a defined style get noticed by Geany you must it assign to
 one of Geany's widgets. To do so, use the following line::
 
-    widget "Geany*" style "geany_style"
+    widget "Geany*" style "geanyStyle"
 
 This would assign your already defined style "geany_style" to all Geany
 widgets. You can also assign styles only to specific widgets. At the
@@ -389,6 +470,8 @@ moment you can use the following widgets:
 * GeanyDialogPrefs
 * GeanyDialogProject
 * GeanyDialogSearch
+* GeanyMenubar
+* GeanyToolbar
 
 Example of a simple ``.gtkrc-2.0``::
 
@@ -416,6 +499,9 @@ to switch between documents using the mouse. When you hit the key
 combination to move between tabs, the order is determined by the tab
 order, not alphabetical as shown in the documents list (regardless
 of whether or not editor tabs are visible).
+
+See the *Notebook tabs* group in the `Keybindings`_ section for useful
+shortcuts including for Most-Recently-Used document switching.
 
 
 Character sets and Unicode Byte-Order-Mark (BOM)
@@ -759,7 +845,7 @@ called ``snippets.conf`` at startup.
 
 The system-wide configuration file can be found in
 ``$prefix/share/geany``, where ``$prefix`` is the path where Geany is
-installed (commonly ``/usr/local``). It is not recommended to edit the
+installed (see `Installation prefix`_). It is not recommended to edit the
 system-wide file, because it will be overridden when Geany is updated.
 
 To change the settings, copy the file from ``$prefix/share/geany``
@@ -1146,8 +1232,7 @@ Tags
 Geany has built-in functionality for generating tag information (aka
 "workspace tags") for supported filetypes when you open a file.  You
 can also have Geany automatically load external tag files (aka "global
-tags files") from its ``~/.config/geany/tags`` directory upon startup, or
-manually using *Tools --> Load Tags*.
+tags files") upon startup, or manually using *Tools --> Load Tags*.
 
 Geany uses its own tag file format, similar to what ``ctags`` uses
 (but is incompatible with ctags). You use Geany to generate global
@@ -1179,6 +1264,9 @@ You can load a custom global tags file in two ways:
 * Using the *Load Tags* command in the Tools menu.
 * By creating a directory ``~/.config/geany/tags``, and moving or symlinking
   the tags files there before starting Geany.
+* By creating a directory ``$prefix/share/geany/tags``, and moving
+  or symlinking the tags files there before starting Geany.
+  ``$prefix`` is the installation prefix (see `Installation prefix`_).
 
 You can either download these files or generate your own. They have
 the format::
@@ -1540,6 +1628,10 @@ Toolbar
 Show Toolbar
     Whether to show the toolbar.
 
+Append Toolbar to the Menu
+    Allows to append the toolbar to the main menu bar instead of placing it below.
+    This is useful to save vertical space.
+
 
 Appearance
 ``````````
@@ -1549,7 +1641,7 @@ Icon Style
     icons or just text.
 
 Icon size
-    Select the size of the icons you see (large or small).
+    Select the size of the icons you see (large, small or very small).
 
 
 Editor Features tab in preferences dialog
@@ -1691,11 +1783,11 @@ Automatic symbol completion
     allow it to be completed for you.
 
 Characters to type for completion
-    Number of characters of a word to type before autocompletion is
+    Number of characters of a word to type before auto completion is
     displayed.
 
 Rows of symbol completion list
-    The maximum number of symbols to show in the autocompletion window.
+    The maximum number of symbols to show in the auto completion window.
 
 Max. symbol name suggestions
     The maximum number of entries to display in the auto completion list.
@@ -1864,11 +1956,7 @@ Tool paths
 ``````````
 
 Make
-    The location of the make command executables.
-
-.. note::
-    The make commands are set in the *Build->Configure Commands* dialog.
-    This directory is not used for the project based commands.
+    The location of the make executable.
 
 Terminal
     The location of your terminal executable.
@@ -2044,7 +2132,6 @@ Project Management
 Project Management is optional in Geany. Currently it can be used for:
 
 * Storing and opening session files on a project basis.
-* Setting custom Make commands
 * Running *Make* from the project's base directory.
 * Setting a custom *Run* command specific to the project.
 
@@ -2092,9 +2179,24 @@ file name.
 Make in base path
 `````````````````
 
-This setting makes the *Build->Make* commands use the project's base
+This setting makes the *Build->Make* command use the project's base
 path. Uncheck this if you want to use the current file's directory
 instead.
+
+
+Run command
+```````````
+
+The *Run command* overrides the default run command. You can set this
+to the executable or main script file for the project, and append
+any command-line arguments.
+
+The following variables can be used:
+
+* %f -- complete filename without path
+* %e -- filename without path and without extension
+
+See `[build_settings] Section`_ for details.
 
 
 Open Project
@@ -2120,145 +2222,42 @@ session files and open any previously closed default session files.
 Build system
 ------------
 
-Geany does not have it's own integrated build system, instead it provides
-a fast flexible means of invoking customisable build/execute commands
-appropriate to the type of source file, or, to invoke your favourite
-make/build tool.  This system allows Geany to default to sane actions for
-simple single file programs whilst still being configurable to support
-multiple target/multiple programming language projects.
+Geany has an integrated build system. Firstly this means that the
+current source file will be saved before it is processed. This is
+for convenience so that you don't need to keep saving small changes
+to the current file before building.
 
-Rationale
-^^^^^^^^^
-
-If on first reading the build system sounds complicated, it may help to 
-keep in mind the rationale behind its design.  Geany supports many 
-languages which have different commands to compile/link/run their code
-so different commands must be used for each type of source file that 
-Geany understands. Therefore some commands are stored for each type of file.
-
-As software gets more complex and is divided into several source files it
-is usual to run the file containing the main program, not the one currently 
-being edited.  In this case Geany cannot generally identify the correct
-file, so the user has to configure it.  To keep it separate from filetype
-information, this execute command is stored in the user preferences.
-
-For larger software projects compiling and running individual files is 
-not very effective as differing settings and flags may be needed, making
-manual building complex.  Instead some form of build software such as 
-"Make" is used.  It is useful to be able to invoke the builder from 
-Geany, and so have the output parsed for error messages, allowing Geany 
-to take you straight to the source line of the error.  To do this Geany 
-needs to know some more commands which are independant of the type of 
-source.  These commands are also stored with the user preferences.
-
-When operating on several software projects it is annoying and error 
-prone to have to set the build and execute commands each time you start 
-work on a different set of software.  By using the Geany project file to
-store the commands for each different project it is possible to have them
-set automatically whenever that project is opened.
-
-Finally a set of common default values are provided if the user doesn't 
-set any specific information, making simple systems work out of the box.
-
-Operation
-^^^^^^^^^
-
-Two actions are performed for all the build menu items.
-
-* First the current source file will be saved before it is processed. This
-  is for convenience so that you don't need to keep saving small changes
-  to the current file before building.
-
-* Second the output for Compile, Build and Make actions will be captured
-  in the Compiler notebook tab of the messages window. If there are
-  any warnings or errors with line numbers shown in red in the Compiler
-  output tab, you can click on them and Geany will switch to the relevant
-  source file (or open it) and mark the line number so the problem can be
-  corrected. Geany will also set indicators for warnings or errors with
-  line numbers.
+Secondly the output for Compile, Build and Make actions will be captured
+in the Compiler notebook tab of the messages window. If there are
+any warnings or errors with line numbers shown in red in the Compiler
+output tab, you can click on them and Geany will switch to the relevant
+source file (or open it) and mark the line number so the problem can be
+corrected. Geany will also set indicators for warnings or errors with
+line numbers.
 
 .. tip::
     If Geany's default error message parsing does not parse errors for
     the tool you're using, you can set a custom regex. See `Filetype
     definition files`_ and the `[build_settings] Section`_.
 
-The build menu is very flexible and can be set up to perform any
-actions the user requires, and depend on the type of the current file and
-whether there is a project open.  The user can modify both the commands 
-the menu items invoke and the menu item labels themselves so that they 
-can continue to describe the action they perform.
+Depending on the current file's filetype, the Build menu will contain
+the following items:
 
-The default menu (with the current file being a C source file) is shown 
-below with the sections of the menu labelled.
+* Compile
+* Build
+* Make All
+* Make Custom Target
+* Make Object
+* Execute
+* Set Includes and Arguments
 
-.. image:: ./images/build_menu.png
-
-The sections marked on the menu are:
-
-* Filetype menu items - up to three menu items which depend on the 
-  filetype of the current file.  As noted, by default a C language file
-  has only two menu items in this section.  Many interpreted languages
-  have only one by default, however users can add commands using the *Set
-  Build Menu Command* dialog. 
-  
-* Project or user preference items - four menu items which do not depend 
-  on the current filetype, instead getting their values using the 
-  following process: 
-  
-  - If a project is open, the menu item labels and commands can be set 
-    and stored in the project file using the *Set Build Menu Commands*
-    dialog.  Individual menu item labels and commands can be set, 
-    any field not set in the project file will get its value from one 
-    of the following sources.
-	
-  - If no project is open the menu item labels and commands can be 
-    set and stored in the user preference file using the *Set Build Menu
-    Commands* dialog.
-	
-  - Any menu item labels or commands not defined will get the default
-    values shown and described below.
-	
-* Compilation Error Navigation items - help navigate errors found 
-  during compilations.  These are not user modifyable.
-  
-* Execute Menu Item - is intended to provide a flexible method of 
-  running and stopping the program.  The execute menu item obtains its 
-  value using the following process:
-  
-  - If a project is open and defines the menu item label or command use 
-    that or,
-	
-  - if no project is open and the menu item label or command is defined 
-    in the user preference file, use that, otherwise,
-	
-  - the menu item label or command as defined by the current filetype
-    is used.
-	
-  When a program is running this menu item changes to 'Stop'.  Note that 
-  the stop function does not use a command and is not user configurable.
-	
-* Set Build Menu Commands - opens the dialog to modify any of the menu
-  items associated with the build menu and the commands they run.
-
-.. note::
-    Some support for building for different targets on different machines
-    can be provided by having several project files for the same software,
-    e.g. if supporting Windows and Linux from the same source you could
-    have 'my_proj_win.geany' with Make Object defined as 'nmake %e.obj'
-    and 'my_proj_lin.geany' with Make Object defined as 'make %e.o'
-    and so on for the other commands.
-
-Default Menu Actions
-^^^^^^^^^^^^^^^^^^^^
-
-This section describes the default menu items and their actions.
 
 Compile
-```````
+^^^^^^^
 
 The Compile command has different uses for different kinds of files.
 
-For compilable languages such as C and C++, the default Compile command is
+For compilable languages such as C and C++, the Compile command is
 setup to compile the current source file into a binary object file.
 
 Java source files will be compiled to class file bytecode. Interpreted
@@ -2266,64 +2265,47 @@ languages such as Perl, Python, Ruby will compile to bytecode if the
 language supports it, or will run a syntax check, or failing that
 will run the file in its language interpreter.
 
-The table at Appendix ... shows the default command values.
 
 Build
-`````
+^^^^^
 
 For compilable languages such as C and C++, the Build command will link
 the current source file's equivalent object file into an executable. If
 the object file does not exist, the source will be compiled and linked
 in one step, producing just the executable binary.
 
-Interpreted languages do not use the Build command so the user can 
-re-define it to be any useful command.
+Interpreted languages do not use the Build command.
 
-Spare
-`````
 
-There is also a spare command with no default value that the user can use
-for any operation appropriate for the filetype, e.g. running lint
+Make all
+^^^^^^^^
 
-Make All
-````````
-
-By default this runs "make all" in the same directory as the
+This effectively runs "make all" in the same directory as the
 current file.
 
 .. note::
     For each of the Make commands, The Make tool path must be correctly
-    set in the Tools tab of the Preferences dialog.  This path is used
-    for commands not defined by project files.  Commands in project files 
-    have to contain the full path if required.
+    set in the Tools tab of the Preferences dialog.
 
 
-Make Custom Target
-``````````````````
+Make custom target
+^^^^^^^^^^^^^^^^^^
 
-The default use is similar to running 'Make all' but you will be prompted
-for the make target name to be passed to the Make tool. For example,
+This is similar to running 'Make all' but you will be prompted for
+the make target name to be passed to the Make tool. For example,
 typing 'clean' in the dialog prompt will run "make clean".
 
-.. note::
-    Even if you have re-configured the command this menu item will still pop up
-    the dialog asking for extra targets/options and will add them to your
-    re-configured command.
 
-Make Object
-```````````
+Make object
+^^^^^^^^^^^
 
-By default Make Object will run "make current_file.o" in the same directory as
+Make object will run "make current_file.o" in the same directory as
 the current file, using its prefix for 'current_file'. It is useful
 for compiling just the current file without building the whole project.
 
-Make
-````
-
-Make runs the default "make" command.
 
 Execute
-```````
+^^^^^^^
 
 Execute will run the corresponding executable file, shell script or
 interpreted script in a terminal window. Note that the Terminal tool
@@ -2337,7 +2319,7 @@ output from the program before the terminal window is closed.
 
 
 Stopping running processes
-``````````````````````````
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When there is a running program, the Run button in the toolbar
 becomes a stop button and you can stop the current action. This
@@ -2359,15 +2341,20 @@ stopped. Just add this option in the preferences dialog on the Tools
 tab in the terminal field.
 
 
-Set Build Menu Commands
-^^^^^^^^^^^^^^^^^^^^^^^
+Set Includes and Arguments
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 By default the Compile and Build commands invoke the compiler and
 linker with only the basic arguments needed by all programs. Using
-*Set Build Menu Commands* you can add any include paths and compile
+Set Includes and Arguments you can add any include paths and compile
 flags for the compiler, any library names and paths for the linker,
-and any arguments you want to use when running Execute or you can 
-completely change the operation of these menu items.
+and any arguments you want to use when running Execute.
+
+.. note::
+    If you need complex settings for your build system, or several
+    different settings, then writing a Makefile and using the Make
+    commands is recommended; this will also make it easier for users to
+    build your software.
 
 These settings are saved automatically when Geany is shut down.
 
@@ -2376,74 +2363,17 @@ The following variables can be used:
 * %f -- complete filename without path
 * %e -- filename without path and without extension
 
-.. note::
-    If you need complex settings for your build system, or several
-    different settings, using an external build system such as make is
-    recommended; this will also make it easier for users to
-    build your software.
+See `[build_settings] Section`_ for details.
 
-A typical *Set Build Menu Commands* dialog box is shown in the following 
-figure with the various parts of the dialog labelled.  Note that if a 
-project is not open the *Project Build Menu Commands* will be replaced by 
-*User Preferred Build Menu Commands*.
 
-.. image:: ./images/build_menu_cmds.png
-
-The commands are labelled to show that there are two parts to the dialog.
-
-* 'Filetype commands' which depend on the type of the current file.  Do
-  check you have the correct filetype before changing them.
-  
-* 'Build Commands' which do not depend on the type of the current file 
-  but do depend on the open project or if non is open.
-
-All commands allow both the label and the command to be changed.  The 
-right hand button clears the manu label and command to allow it to 
-return to the default value, deleting the menu label or command text sets
-the command to blank, not back to default.
-
-Filetype commands
-`````````````````
-
-These settings are specific to the particular filetype.
-Although they traditionally support the actions described above, you
-can change the commands to perform any file specific action you want,
-e.g. to run Lint or other tools.
 
 One step compilation
 ````````````````````
 
 If you are using the Build command to compile and link in one step,
 you will need to set both the compiler arguments and the linker
-arguments in this command setting.
+arguments in the linker command setting.
 
-Build Commands
-``````````````
-
-These commands allow you to set the commands that are independant of the
-filetype. The dialog section heading indicates whether the commands you 
-are changing will be saved in the project file or preferences file.  The 
-current project file is displayed in the Geany title bar in [] so you can
-check that you will be saving to the correct one.  Commands stored in 
-project files do not use the 'Make Command Path" preference setting so 
-that each project can use differing tools, make sure commands stored in 
-project files include paths if needed.
-
-Extendable Command
-``````````````````
-
-Remember that the second of the build menu items (default the 'Make 
-Custom Target' item) will pop up a dialog to ask for additional 
-targets/options when invoked, allowing you to add to the command which 
-you define here.
-
-Execute Command
-```````````````
-
-As noted on the dialog, if an execute command is set in user preferences 
-or the currently open project it will override the filetype dependent 
-menu item/command.  Remember to clear the saved execute command you must
-use the clear button to the right of the line.
 
 Indicators
 ^^^^^^^^^^
@@ -2519,8 +2449,7 @@ general preference is set. There is also a command-line option,
 ``-p``, which prevents plugins being loaded. Plugins are scanned in
 the following directories:
 
-*   ``$prefix/lib/geany`` (``$prefix`` is usually ``/usr/local`` or
-    ``/usr``)
+*   ``$prefix/lib/geany`` (see `Installation prefix`_)
 *   ``~/.config/geany/plugins``
 
 Most plugins add menu items to the *Tools* menu when they are loaded.
@@ -2849,7 +2778,13 @@ Switch to left document         Ctrl-PageUp               Switches to the previo
 
 Switch to right document        Ctrl-PageDown             Switches to the next open document.
 
-Switch to last used document    Ctrl-Tab                  Switches to the previously selected open document.
+Switch to last used document    Ctrl-Tab                  Switches to the previously shown document (if it's
+                                                          still open).
+                                                          Holding Ctrl (or another modifier if the keybinding
+                                                          has been changed) will show a dialog, then repeated
+                                                          presses of the keybinding will switch to the 2nd-last
+                                                          used document, 3rd-last, etc. Also known as
+                                                          Most-Recently-Used documents switching.
 
 Move document left              Alt-PageUp                Changes the current document with the left hand
                                                           one.
@@ -2932,10 +2867,10 @@ file to use default values.
 
 The global configuration file is read from
 ``$prefix/share/geany/geany.conf`` (where ``$prefix`` is the path where
-Geany is installed) when starting Geany and an user configuration
-file does not exist. It can contain any settings which are found in
-the usual configuration file created by Geany but does not have to
-contain all settings.
+Geany is installed, see `Installation prefix`_) when starting Geany and
+an user configuration file does not exist. It can contain any settings
+which are found in the usual configuration file created by Geany but
+does not have to contain all settings.
 
 .. note::
     This feature is mainly intended for package maintainers or system
@@ -2955,13 +2890,15 @@ word delimiter characters as well as compiler and linker settings.
 
 The system-wide configuration files can be found in
 ``$prefix/share/geany`` and are called ``filetypes.$ext``,
-where ``$prefix`` is the path where Geany is installed (commonly
-``/usr/local``) and $ext is the name of the filetype. For every
+where ``$prefix`` is the path where Geany is installed (see
+`Installation prefix`_) and $ext is the name of the filetype. For every
 filetype there is a corresponding definition file. There is one
 exception: ``filetypes.common`` -- this file is for general settings,
-which are not specific to a certain filetype. It is not recommended
-to edit the system-wide files, because they will be overridden when
-Geany is updated.
+which are not specific to a certain filetype.
+
+.. warning::
+    It is not recommended for users to edit the system-wide files,
+    because they will be overridden when Geany is updated.
 
 To change the settings, copy a file from ``$prefix/share/geany`` to
 the subdirectory filedefs in your configuration directory (usually
@@ -2987,13 +2924,32 @@ Format
 `````````````````
 
 In this section the colors for syntax highlighting are defined. The
-format is always: key=foreground_color;background_color;bold;italic
+manual format is:
+
+* ``key=foreground_color;background_color;bold;italic``
 
 Colors have to be specified as RGB hex values prefixed by
 0x. For example red is 0xff0000, blue is 0x0000ff. The values are
 case-insensitive, but it is a good idea to use small letters. Bold
 and italic are flags and should only be "true" or "false". If their
 value is something other than "true" or "false", "false" is assumed.
+
+The second format uses a *named style* name to reference a style
+defined in filetypes.common.
+
+* ``key=named_style``
+* ``key2=named_style2,bold,italic``
+
+The bold and italic parts are optional, and if present are used to
+toggle the bold or italic flags to the opposite of the named style's
+flags.
+
+.. note::
+    Commas are used for these so Geany can easily determine whether a
+    named style is used or not.
+
+To define named styles, see the filetypes.common `[named_styles]
+Section`_.
 
 
 [keywords] Section
@@ -3096,7 +3052,8 @@ error_regex
 
 **Build commands**
 
-The build commands are all configurable using the `Set Build Menu Commands`_ dialog.
+The build commands are all configurable using the `Set Includes and
+Arguments`_ dialog.
 
 compiler
     This item specifies the command to compile source code files. But
@@ -3128,8 +3085,6 @@ run_cmd
 
     *Example:* ``run_cmd="./%e"``
 
-spare_cmd
-	This item is used for an extra command which can be sued for anything.
 
 Special file filetypes.common
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3138,6 +3093,38 @@ There is a special filetype definition file called
 filetypes.common. This file defines some general non-filetype-specific
 settings.
 
+See the `Format`_ section for how to define styles.
+
+
+[named_styles] Section
+``````````````````````
+Named styles declared here can be used in the [styling] section of any
+filetypes.* file.
+
+For example:
+
+*In filetypes.common*::
+
+    [named_styles]
+    foo=0xc00000;0xffffff;false;true
+    bar=foo
+
+*In filetypes.c*::
+
+    [styling]
+    comment=foo
+
+This saves copying and pasting the whole style definition into several
+different files.
+
+.. note::
+    You can define aliases for named styles, as shown with the ``bar``
+    entry in the above example, but they must be declared after the
+    original style.
+
+
+[styling] Section
+`````````````````
 default
     This is the default style. It is used for styling files without a
     filetype set.
@@ -3314,6 +3301,9 @@ marker_translucency
 
     *Example:* ``marker_translucency=256;256;false;false``
 
+
+[settings] Section
+``````````````````
 whitespace_chars
     Characters to treat as whitespace. These characters are ignored
     when moving, selecting and deleting across word boundaries
@@ -3337,7 +3327,7 @@ filetype using the ``filetype_extensions.conf`` file.
 To override the system-wide configuration file, copy it from
 ``$prefix/share/geany`` to your configuration directory, usually
 ``~/.config/geany/``. ``$prefix`` is the path where Geany is installed
-(commonly ``/usr/local``).
+(see `Installation prefix`_).
 
 For example::
 
@@ -3532,7 +3522,7 @@ the file ``ui_toolbar.xml``.
 To override the system-wide configuration file, copy it from
 ``$prefix/share/geany`` to your configuration directory, usually
 ``~/.config/geany/``. ``$prefix`` is the path where Geany is installed
-(commonly ``/usr/local``).
+(see `Installation prefix`_).
 
 For example::
 
@@ -3541,8 +3531,8 @@ For example::
 Then edit it and add any of the available elements listed in the file or remove
 any of the existing elements. Of course, you can also reorder the elements as
 you wish and add or remove additional separators.
-This file must be valid XML unless it can't be loaded and the global toolbar
-UI definition is used.
+This file must be valid XML, otherwise the global toolbar UI definition
+will be used instead.
 
 .. note::
     (1) You cannot add new actions which are not listed below.
@@ -3564,6 +3554,7 @@ SaveAll            Save all open files
 Reload             Reload the current file from disk
 Close              Close the current file
 CloseAll           Close all open files
+Print              Print the current file
 Cut                Cut the current selection
 Copy               Copy the current selection
 Paste              Paste the contents of the clipboard
@@ -3582,11 +3573,12 @@ ZoomIn             Zoom in the text
 ZoomOut            Zoom out the text
 UnIndent           Decrease indentation
 Indent             Increase indentation
+Replace            Replace text in the current document
 SearchEntry        The search field belonging to the 'Search' element (can be used alone)
 Search             Find the entered text in the current file (only useful if you also
                    use 'SearchEntry')
 GotoEntry          The goto field belonging to the 'Goto' element (can be used alone)
-Goto               Jump to the entered line number (only useful if you also use 'SearchEntry')
+Goto               Jump to the entered line number (only useful if you also use 'GotoEntry')
 Preferences        Show the preferences dialog
 Quit               Quit Geany
 ================== ==============================================================================
@@ -3791,6 +3783,24 @@ allow_always_save                 Whether files can be saved always, even if   f
 emulation                         Terminal emulation mode. Only change this    xterm
                                   if you have VTE termcap files other than
                                   ``vte/termcap/xterm``.
+**File related**
+use_safe_file_saving              Defines the mode how Geany saves files to    false
+                                  disk. If disabled, Geany directly writes
+                                  the content of the document to disk. This
+                                  might cause in loss of data when there is
+                                  no more free space on disk to save the
+                                  file. When set to true, Geany first saves
+                                  the contents into a temporary file and if
+                                  this succeeded, the temporary file is
+                                  moved to the real file to save.
+                                  This gives better error checking in case of
+                                  no more free disk space. But it also
+                                  destroys hard links of the original file
+                                  and its permissions (e.g. executable flags
+                                  are reset). Use this with care as it can
+                                  break things seriously.
+                                  The better approach would be to ensure your
+                                  disk won't run out of free space.
 ================================  ===========================================  ==================
 
 
@@ -3887,6 +3897,23 @@ GEANY_TOGGLE_MARK               A string which is used to mark a toggled      "~
                                 comment.
 GEANY_MAX_AUTOCOMPLETE_WORDS    How many auto completion suggestions should   30
                                 Geany provide.
+==============================  ============================================  ==================
+
+build.h
+-------
+
+==============================  ============================================  ==================
+Option                          Description                                   Default
+==============================  ============================================  ==================
+GEANY_BUILD_ERR_HIGHLIGHT_MAX   Amount of build error messages which should   100
+                                be highlighted in the Compiler message
+                                window. This affects the special coloring
+                                when Geany detects a compiler output line as
+                                an error message and then highlight the
+                                corresponding line in the source code.
+                                Usually only the first few messages are
+                                interesting because following errors are
+                                just aftereffects.
 ==============================  ============================================  ==================
 
 

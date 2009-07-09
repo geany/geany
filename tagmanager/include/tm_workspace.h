@@ -28,11 +28,11 @@ extern "C"
  created. This contains global tags gleaned from /usr/include, etc. and
  should be used for autocompletion, calltips, etc.
 */
-typedef struct _TMWorkspace
+typedef struct
 {
-	TMWorkObject work_object; /*!< The parent work object */
-	GPtrArray *global_tags; /*!< Global tags loaded at startup */
-	GPtrArray *work_objects; /*!< An array of TMWorkObject pointers */
+    TMWorkObject work_object; /*!< The parent work object */
+    GPtrArray *global_tags; /*!< Global tags loaded at startup */
+    GPtrArray *work_objects; /*!< An array of TMWorkObject pointers */
 } TMWorkspace;
 
 /* Since TMWorkspace is a singleton, you should not create multiple
@@ -90,7 +90,7 @@ gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode);
  \return TRUE on success, FALSE on failure.
 */
 gboolean tm_workspace_create_global_tags(const char *config_dir, const char *pre_process,
-	const char **includes, int includes_count, const char *tags_file, int lang);
+    const char **includes, int includes_count, const char *tags_file, int lang);
 
 /* Recreates the tag array of the workspace by collecting the tags of
  all member work objects. You shouldn't have to call this directly since
@@ -137,7 +137,20 @@ const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *at
 */
 const GPtrArray *
 tm_workspace_find_scoped (const char *name, const char *scope, gint type,
-		TMTagAttrType *attrs, gboolean partial, langType lang, gboolean global_search);
+    TMTagAttrType *attrs, gboolean partial, langType lang, gboolean global_search);
+
+/* Returns all matching members tags found in given struct/union/class name.
+ \param name Name of the struct/union/class.
+ \param file_tags A GPtrArray of edited file TMTag pointers (for search speedup, can be NULL).
+ \return A GPtrArray of TMTag pointers to struct/union/class members */
+const GPtrArray *tm_workspace_find_scope_members(const GPtrArray *file_tags,
+                                                 const char *scope_name,
+                                                 gboolean find_global,
+                                                 gboolean no_definitions);
+
+const GPtrArray *
+tm_workspace_find_namespace_members (const GPtrArray * file_tags, const char *name,
+                                     gboolean search_global);
 
 /* Returns TMTag to function which "own" given line
  \param line Current line in edited file.

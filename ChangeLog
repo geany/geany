@@ -1,92 +1,741 @@
-2009-04-30  geany test  <elextr(at)gmail(dot)com>
+2009-06-14  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
- * geany.glade:
-   Modified to add Build command tab to project preference notebook for
-   comments. (doesn't work yet)
+ * src/encodings.c, src/encodings.h, src/plugindata.h:
+   Add Japanese encoding "CP932" (patch by Ryūsei Yamaguchi, thanks).
+ * src/editor.c:
+   Remove dead code.
+   When completing from the macro list, put the cursor after
+   the inserted text.
 
 
-2009-03-23  Lex Trotman  <elextr(at)gmail(dot)com>
+2009-06-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
-	Update Branch to truck and backout disputed changes
-	
- * src/build.c, src/build.h, src/project.c, src/about.c, THANKS, Changelog:
-   hand merged, source files merged by commenting around merge indicators
-   so the process can be undone if problems arise, these comments will 
-   be removed in a later version.
-   
-  * disputed changes backed out by merging with a checkout of R3195
+ * tagmanager/pascal.c:
+   Fix type definitions being parsed as functions.
+ * src/editor.c:
+   Don't autocomplete in unterminated strings as well.
+ * src/templates.c, src/utils.h, src/dialogs.c, src/plugindata.h,
+   src/filetypes.c, src/ui_utils.c, plugins/saveactions.c:
+   Remove data_ptr argument to foreach_[s]list() macros, as using
+   node->data is enough sometimes; this makes the macro a bit more
+   efficient too.
+   Add foreach_[s]list() macros to the plugin API docs.
 
-2008-11-10  Lex Trotman  <elextr(at)gmail(dot)com>
 
-	Fixed build menu updating after dialog close
-	
+2009-06-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * scintilla/LexPascal.cxx:
+   Backport fix from Scintilla CVS:
+   Pascal lexer hanging on file that starts with 'interface' after
+   whitespace.
+
+
+2009-06-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * waf:
+   Update Waf to 1.5.7.
+ * wscript:
+   Overwrite installation prefix on Windows only if it wasn't
+   specified explicitly.
+
+
+2009-06-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/editor.c:
+   Display calltips for Pascal symbols in the Pascal way (#2803945).
+ * tagmanager/pascal.c:
+   Fix wrongly set return values for procedures (closes #2803945).
+ * doc/Doxyfile.in, tagmanager/include/tm_work_object.h,
+   tagmanager/include/tm_source_file.h,
+   tagmanager/include/tm_workspace.h:
+   Fix doxygen warnings.
+
+
+2009-06-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/editor.c, tagmanager/include/tm_workspace.h,
+   tagmanager/tm_workspace.c, TODO:
+   Autocomplete scoped fields like struct members when typing '.' (and
+   also '->' or '::' in C/C++).
+   Save all tag types for C/C++ when generating a global tags file, so
+   we can use autocompletion for structs also.
+   Merge tm_workspace_find_scope_members(),
+   tm_workspace_find_namespace_members() (currently not built) from
+   Anjuta 2.24.1 tagmanager.
+
+
+2009-06-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * tagmanager/pascal.c:
+   Parse Pascal calltips (closes #2802640).
+
+
+2009-06-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/filetypes.c, src/ui_utils.c:
+   Add filetypes.common Configuration Files menu item.
+
+
+2009-06-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/callbacks.c:
+   Add backslash to the wordchars on Windows when using
+   'Open Selected File'.
+ * src/wscript:
+   Add support (configure, build and install) for building on Windows
+   and cross-compiling for Windows using the Waf build system.
+
+
+2009-06-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/toolbar.c:
+   Set status bar text instead of showing a dialog when saving
+   ui_toolbar.xml because the user might save several times.
+ * src/editor.c:
+   Fix redrawing due to colourising just after the document is first
+   drawn. Now colourising should happen before the first draw.
+ * src/utils.c, src/highlighting.c, data/filetypes.common:
+   Fix segfault on parsing a filetypes.* style definition that has < 4
+   fields.
+   Allow style definitions to have missing fields to use the default
+   style fields.
+
+
+2009-06-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/images.c, src/about.c, src/ui_utils.c, THANKS:
+   Add a more Tango like icon for 'Save All' (by Jesse Mayes, thanks).
+ * plugins/classbuilder.c:
+   Fix wrongly created header guards when the class filenames contains
+   dashes (patch by PCMan, thanks).
+ * data/filetypes.matlab:
+   Add build_settings section to allow executing Matlab scripts.
+ * src/document.c:
+   When closing a document, mark it as invalid before removing it from
+   the documents notebook (this fixes wrong Save All button state when
+   closing an unsaved document because the "switch-page" signal handler
+   was using old data).
+
+
+2009-06-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/highlighting.c, doc/geany.txt, doc/geany.html:
+   Support toggling bold/italic when using a named style, e.g.:
+   commentdockeyword=commentdoc,bold,italic
+   Improve named style docs.
+
+
+2009-06-01  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/build.c, src/editor.c:
+   Fix crashes when parsing the output of a compiler which reports
+   errors on line 0.
+
+
+2009-06-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/highlighting.c:
+   Support named styles also for filetypes.common [styling] entries.
+ * doc/geany.txt, doc/geany.html, HACKING:
+   Update docs for named styles in filetypes.* files.
+ * src/symbols.c:
+   Fix grouping symbol list children when parent name has "." character
+   in for reStructuredText and Conf filetypes.
+ * tagmanager/python.c:
+   Fix grouping functions/classes under a nested function.
+
+
+2009-05-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * geany.spec.in:
+   Adjust icon paths (patch by Dominic Hopf, thanks).
+ * doc/geany.txt, doc/geany.html, src/toolbar.c:
+   Add 'Replace' toolbar button (closes #2798225).
+
+
+2009-05-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/utils.c, src/highlighting.c, TODO:
+   Implement named styles support for filetypes.* using a
+   filetypes.common [named_styles] section e.g.:
+   foo=0xc00000;0xffffff;false;true
+   bar=foo
+   These can be used in e.g. filetypes.c as:
+   comment=foo
+
+
+2009-05-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/ui_utils.c:
+   Fix wrong sensitiveness of the Redo buttons (closes #2797862).
+
+
+2009-05-28  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * THANKS, src/about.c, po/lb.po, po/LINGUAS:
+   Added Luxembourgian translation. Huge thanks to Laurent Hoeltgen.
+
+
+2009-05-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
  * src/build.c:
-   on_includes_arguments_dialog_response calls projects::update_ui()
-   create_build_menu_gen() fixed reference to build_2_label SB 3
-   format it
- * src/projects.c:
-   make update_ui() non-static
-   format it
-
-2008-11-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
-
- * src/build.c:
-   Fix warning with -Wall -Wextra.
- * src/build.c:
-   Factor with add_build_command_widgets().
- * src/build.c:
-   Capitalize 'project build menu commands' string, make fully
-   translatable.
-   Add column spacing of 6 for project commands table (Gnome HIG).
- * src/build.c:
-   Use GeanyProject typedef instead of struct.
+   Remove quote_executable() as it is not used anymore.
+   When creating the geany_run_script.bat use the "%0" variable
+   expansion and quote it for the "del" command (closes #2797172).
+ * src/win32.c:
+   On Windows, fallback to the literal build command line if searching
+   for the command in the system path failed (related to #2795923).
+   Properly terminate the resulting strings when reading the stdout
+   and stderr of any spawned commands on Windows.
 
 
-2008-111-01 Lex Trotman <elextr(at)gmail(dot)com>
+2009-05-26  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
- Updated Manual to build geany.html
-
- * doc/geany.txt:
-   Modified to make geany.html build w/o errors
-
-2008-10-27 Lex Trotman <elextr(at)gmail(dot)com>
-
- Updated Manual to reflect desired full functionality of build system
-
- * doc/geany.txt:
-   Build system section heavily re-written, minor changes to preferences
-   and project sections, NOT DONE file formats section until fully
-   implemented.
- * doc/images/build_menu.png, doc/images/build_menu_cmds.png
-   added images for document
-
-2008-10-17 Lex Trotman <elextr(at)gmail(dot)com>
-
- Prototype of project customisable build menu commands
-
- * src/build.h:
-   added build_default_menu() to interface, used by projects
- * src/build.c:
-   build_make_file() changed to take commands from project or default
-   create_build_menu_gen() changed to create the menu from the project
-   settings or default & unref old menu so callable more than once
-   build_default_menu() added
-   on_includes_arguments_dialog_response() added getting the values for
-   the project fields
-   show_includes_arguments_gen() added the extra fields for project commands
- * src/project.h:
-   added command and label fields to the project structure
+ * src/win32.c:
+   Use the wide character versions of native Windows File dialogs.
  * src/project.c:
-   update_ui() calls build_default_menu to make menu match project status
-   load_config() added loads for build commands & labels
-   write_config() added saves for build commands and labels
+   Fix wrong initialisation of the default project path button callback
+   in the preferences dialog.
+ * Makefile.am, configure.in, geany.nsi, geany.spec.in, wscript,
+   geany_private.rc, icons/16x16/Makefile.am, icons/16x16/geany.png,
+   icons/48x48, icons/48x48/Makefile.am, icons/48x48/geany.png,
+   icons/Makefile.am, icons/geany.ico, icons/scalable,
+   icons/scalable/Makefile.am, icons/scalable/geany.svg,
+   src/makefile.win32:
+   Move the icons geany.png and geany.ico into the icons directory.
+   Add a 16x16 pixel Geany icon and the scalable SVG icon.
+   Drop the pixmaps directory.
 
 
-2008-10-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+2009-05-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
- * doc/geany.txt, doc/geany.html, src/about.c, THANKS:
-   Update manual for Lex Trotman's proposed build system changes (under
-   discussion).
+ * src/keybindings.c:
+   Improve MRU document switching so there are no duplicates in the
+   list and documents switched to whilst the dialog is open are
+   ignored. Also beep when cycling through to the first document in the
+   list.
+
+
+2009-05-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/dialogs.c:
+   Fix broken 'Cancel' button in the Save As dialog.
+
+
+2009-05-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/editor.c:
+   Fix multiline indent when selection covers text on the last line.
+ * src/notebook.c:
+   Show current document in bold in tab popup menu.
+ * src/editor.c, tagmanager/python.c, TODO:
+   Parse Python calltips.
+
+
+2009-05-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/symbols.c, tagmanager/python.c:
+   Parse Python import statements to get symbol completion for the
+   imported module names.
+ * src/editor.c, src/editor.h:
+   Make some only locally used functions static.
+   Fix wrong sanity check.
+ * src/build.c:
+   Fix quoting the build command string on Windows (closes #2791769).
+   This broke when we made build commands run synchronously on Windows,
+   now we don't need to special quote the commands anymore.
+
+
+2009-05-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/editor.c:
+   Drop rest of word to the right of cursor when autocompleting (do we
+   need a pref for this?).
+
+
+2009-05-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/sciwrappers.c, src/sciwrappers.h, src/editor.c:
+   Add sci_set_selection().
+ * doc/geany.txt, doc/geany.html:
+   Update manual for MRU switching.
+ * src/callbacks.c, src/editor.c, src/editor.h:
+   Make indenting with the Tabs indent type preserve spaces on the line,
+   so it works for the 'tab indents, space aligns' formatting style.
+
+
+2009-05-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * tagmanager/python.c:
+   Fix missing symbols for variables when an equal sign is used
+   in a comment on the same line as the variable declaration.
+   Backport change from CTags SVN to keep the parser more in sync:
+   Add support for Cython constructs to the Python parser.
+ * src/search.c:
+   Remember the additional Find in Files search flags at startup.
+ * src/dialogs.c:
+   Don't close the Save As dialog when saving the file didn't succeed.
+
+
+2009-05-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keyfile.c:
+   Remember scribble cursor position.
+ * src/keybindings.c, TODO:
+   Implement Most-Recently-Used document switching when pressing
+   Ctrl-Tab keybinding. (It's probably not perfect, but works OK).
+
+
+2009-05-13  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * data/latex.tags: Added some more commands from unit.sty and
+   moderncv.sty.
+
+
+2009-05-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/symbols.c, doc/geany.txt, doc/geany.html,
+   tagmanager/makefile.win32, tagmanager/nestlevel.c,
+   tagmanager/nestlevel.h, tagmanager/python.c, tagmanager/rest.c,
+   tagmanager/Makefile.am, wscript:
+   Merge unstable branch:
+   Add reStructuredText scope information for tags (for symbol list
+   grouping).
+   Read custom system global tags files from $prefix/share/geany/tags;
+   Closes #2778923.
+   Show the number of tags in a user global tags file (instead of the
+   running total) in the debug message.
+   Also print debug messages when loading a tag file manually or for
+   default global tags files e.g. python.tags.
+ - code:
+   Move NestingLevel tags code into a separate file, add functions.
+ - docs:
+   Add 'Installation prefix' section instead of quoting '/usr/local'
+   each time.
+   Update for custom system global tags files.
+
+
+2009-05-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/highlighting.c:
+   Unset maybe previously keywords when setting up Scintilla for
+   XML files. This fixed wrong highlighting after switching back to
+   filetype XML from another one.
+ * src/utils.c:
+   Use plain old fwrite() in utils_write_file(). g_file_set_contents()
+   is only used when explicitly requested.
+ * src/dialogs.c:
+   Remove unnecessary call to g_intern_string() to fix build with
+   GLib 2.8 (closes #2790051).
+
+
+2009-05-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/ui_utils.c:
+   Make the clear icon of entry fields act on the release event, not
+   on the press event like for other buttons.
+ * src/editor.c:
+   Refactor some multiple used code into get_multiline_comment_style().
+ * src/main.c:
+   Create parent directories if necessary when checking for the
+   configuration directory on startup (closes #2784577).
+
+
+2009-05-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * plugins/filebrowser.c:
+   When a filter is set, apply it only to files, not directories and
+   apply the filter to the UTF-8 name of the file as the filter string
+   itself is also UTF-8.
+ * src/utils.c, src/utils.h, src/highlighting.c, src/printing.c:
+   Add utils_color_invert() and use it in highlighting.c and printing.c.
+ * scintilla/include/Scintilla.h, scintilla/scintilla_changes.patch:
+   Backport change from Scintilla CVS:
+   Change capitalisation of header file to suit cross-compilation on
+   Unix for Windows.
+
+
+2009-05-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * wscript, scintilla/*, scintilla/include/*, src/plugindata.h:
+   Update Scintilla to version 1.78.
+ * src/editor.c, src/highlighting.c:
+   Update Pascal styles as they changed in Scintilla.
+
+
+2009-05-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/printing.c:
+   Ignore the invert syntax highlighting colours setting when printing
+   to not print characters on a dark background (closes #2785244).
+ * New release: Geany 0.17 "Wessex".
+ * configure.in, geany.nsi, geany_private.rc, win32-config.h, wscript,
+   src/geany.h, doc/geany.html, doc/geany.txt:
+   Post-release version bump.
+
+
+2009-04-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/callbacks.c, src/callbacks.h, src/main.c:
+   Update the View->Fullscreen menu item when fullscreen state is
+   changed externally (e.g. by the window manager).
+ * src/project.c:
+   Fix passing wrong pointer to the File Open dialog for the Run
+   command in the Project Properties dialog.
+
+
+2009-04-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/callbacks.c, src/keyfile.c, src/main.c, src/ui_utils.c,
+   src/ui_utils.h:
+   Remember the active sidebar page between sessions.
+ * src/project.c:
+   Add a recent project item after creating a new project.
+ * tagmanager/ruby.c:
+   Fix wrong parsing of string literals (closes #2781264).
+ * src/treeviews.c:
+   Fix setting focus to the editor widget after changing the selection
+   in the symbol list.
+
+
+2009-04-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/symbols.c:
+   Prevent crashes when two or more top level items in the symbol
+   list have the same name (closes #2778246).
+
+
+2009-04-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/keybindings.c:
+   Manually show the main notebook tab bar menu when Shift-F10 is
+   pressed. This broke when we disabled the default GTK tab bar menu.
+ * src/document.c:
+   Fix a crash when USE_GIO_FILEMON is enabled at closing a document
+   which was reloaded shortly before.
+ * src/editor.c:
+   When the editor menu is opened by the Menu key, use the text cursor
+   position for retrieving the current word. This fixes disabled
+   Go to Tag items in the menu (#2780044).
+ * src/treeviews.c:
+   Set the "ellipsize" property of GtkCellRendererText to automatically
+   shorten the path and file names in the Documents list.
+ * doc/geany.html, doc/geany.txt, src/build.h:
+   Increase the amount of highlighted build error messages to 100.
+   At least for LaTeX we need higher values as there is a lot of
+   informative output before any errors are reported.
+ * src/filebrowser.c:
+   Use the startup path as the initial directory for the filebrowser
+   plugin when no project and no files are opened
+   (patch by Matias Gea, thanks; closes #2780521).
+
+
+2009-04-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/dialogs.c, src/document.c, src/document.h, src/treeviews.c,
+   src/utils.c, src/utils.h:
+   Ellipsize tab labels and some status messages for very long
+   filenames (closes #2777348).
+ * src/plugins.c, src/plugindata.h, plugins/geanyfunctions.h:
+   Add utils_str_middle_truncate() and
+   document_get_basename_for_display() to the plugin API.
+ * doc/geany.html, doc/geany.txt, src/toolbar.c:
+   Add new toolbar element: Print (patch by Roland Baudin, thanks).
+ * doc/geany.html, doc/geany.txt, src/document.c, src/document.h,
+   src/keyfile.c:
+   Add a hidden preference 'use_safe_file_saving' to save files to disk
+   by creating a temporary file first. This has serious side effects,
+   please read the documentation before enabling this.
+ * src/build.c:
+   Make build commands on Windows run synchronously to avoid problems
+   with reading build commands' output.
+ * doc/geany.html, doc/geany.txt, src/build.c, src/build.h:
+   Limit the amount of highlighted build error messages in the
+   Compiler window to 50 for performance reasons.
+
+
+2009-04-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/callbacks.c, src/editor.c, src/keybindings.c, src/keybindings.h,
+   src/prefs.c:
+   Replace our own GEANY_KEYS_MODIFIER_MASK by
+   gtk_accelerator_get_default_mod_mask() which gives the same result.
+ * src/filetypes.c, src/symbols.c, tagmanager/Makefile.am,
+   tagmanager/makefile.win32, tagmanager/parsers.h, wscript:
+   Add a trivial symbol parser for NSIS files.
+
+
+2009-04-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/dialogs.c:
+   Hide the extra file open dialog options in an expander to make the
+   dialog more compact by default and to provide more space for the
+   file view.
+   Remove the filename field as it is also provided by GTK itself with
+   more features like auto-completion.
+   Watch the 'show-hidden' property of the file chooser widget using
+   GObject's "notify" signal which gives accurate results and remove
+   the hack using the "selection-changed" signal.
+
+
+2009-04-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/callbacks.c, src/callbacks.h, src/encodings.c, src/filetypes.c:
+   Prevent double execution of radio menu item "activate" or "toggled"
+   signal handlers.
+   Move 'Set Encoding' callback function into encodings.c.
+
+
+2009-04-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/project.c:
+   Add some missing 'void's in function definitions.
+   If the project base path is './', just use the path of the project
+   config file instead of appending './'.
+ * src/treeviews.c, src/project.c:
+   When a project is loaded, replace the project base path with the
+   project name in the Documents sidebar for parent items
+   (closes #2723679).
+
+
+2009-04-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/keyfile.c, src/keyfile.h, src/project.c:
+   Fix duplicating the recent files and projects lists when closing
+   a project.
+ * src/build.c, src/callbacks.c, src/dialogs.c, src/document.c,
+   src/editor.c, src/encodings.c, src/filetypes.c,
+   src/geanymenubuttonaction.c, src/geanyobject.c, src/geanywraplabel.c,
+   src/highlighting.c, src/keybindings.c, src/keyfile.c, src/main.c,
+   src/msgwindow.c, src/navqueue.c, src/notebook.c, src/plugins.c,
+   src/prefs.c, src/queue.c, src/sciwrappers.c, src/socket.c,
+   src/symbols.c, src/templates.c, src/toolbar.c, src/tools.c,
+   src/treeviews.c, src/ui_utils.c, src/utils.c, src/vte.c:
+   Remove all G_LIKELY macros inside g_return_if_fail() statements as
+   this is redundant.
+   Remove many other G_LIKELY/G_UNLIKELY macros which doesn't make much
+   sense to keep the code more readable.
+
+
+2009-04-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/symbols.c:
+   When updating global type definitions for opened documents, take
+   also C++ namespace symbols into account and don't ignore symbols
+   which are defined inside a scope.
+
+
+2009-04-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/plugins.c:
+   Don't show 'plugin is not binary compatible' messages on the status
+   bar, only the status window.
+
+
+2009-04-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/socket.c:
+   When opening files from a remote instance on X11, set the window
+   server time to encourage window managers to pop up the main window
+   (related to #2735467 and #2276179).
+ * src/main.c:
+   When finished sending filenames to a remote instance, notify the
+   environment that we finished starting up.
+
+
+2009-04-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/ui_utils.h, src/utils.h, src/ui_utils.c:
+   Sort Configuration Files menu.
+   Add ui_menu_sort_by_label().
+   Add foreach_list() macro.
+ * src/editor.c:
+   Fix autocompletion.
+
+
+2009-04-07  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/main.c:
+   Fix setting a wrong default window size when starting without an
+   existing configuration.
+ * src/editor.c, src/sciwrappers.c, src/sciwrapper.h:
+   Make editor_highlight_braces() static.
+   Remove unused wrapper functions.
+ * src/editor.c, src/symbols.c, src/symbols.h:
+   Prevent showing an empty macro list.
+   Show only macros of the same filetype instead of all macros of all
+   loaded filetypes.
+ * src/ui_utils.c:
+   Don't add opened project files to the GtkRecentManager.
+
+
+2009-04-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/editor.c:
+   Add Configuration Files item for snippets.conf.
+ * src/highlighting.c, src/symbols.c:
+   Fix 2 old uses of filetype IDs.
+
+
+2009-04-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/interface.c, src/printing.c, geany.glade:
+   Minor string improvements (spotted by Jean-Philippe Moal, thanks).
+
+
+2009-04-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/ui_utils.c:
+   Add sanity checks in ui_lookup_widget() just to be safe.
+ * THANKS, TODO, geany.glade, src/about.c, src/interface.c,
+   src/keyfile.c, src/main.c, src/plugindata.h, src/project.c,
+   src/project.h, src/ui_utils.c, src/ui_utils.h:
+   Add "Recent Projects" menu to the Project menu
+   (#2728630, patch by Elias Pschernig, thanks).
+ * doc/geany.txt, doc/geany.html:
+   Describe how to build Geany using the Waf build system.
+ * src/build.c, src/callbacks.c, src/dialogs.c, src/document.c,
+   src/document.h, src/editor.c, src/encodings.c, src/filetypes.c,
+   src/geanymenubuttonaction.c, src/geanyobject.c, src/geanywraplabel.c,
+   src/highlighting.c, src/keybindings.c, src/keyfile.c, src/log.c,
+   src/main.c, src/msgwindow.c, src/navqueue.c, src/notebook.c,
+   src/plugins.c, src/prefs.c, src/queue.c, src/sciwrappers.c,
+   src/socket.c, src/symbols.c, src/templates.c, src/toolbar.c,
+   src/tools.c, src/tools.h, src/treeviews.c, src/ui_utils.c,
+   src/utils.c, src/utils.h, src/vte.c:
+   Start using G_LIKELY/G_UNLIKELY macros to gain a little more
+   performance when building the code with gcc.
+ * src/highlighting.c:
+   Fix typo in the G_LIKELY checks, introduced in last commit.
+   Fix the size of the styles array.
+ * src/document.c:
+   Show a message dialog when renaming a file fails.
+
+
+2009-04-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/build.c:
+   Remove checks for the .pdf or .dvi files when viewing a LaTeX file
+   (as we did for all other files in SVN r3382).
+
+
+2009-04-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/filetypes.c, doc/geany.txt:
+   Move ActionScript to the Script group.
+   Fix wording & typo.
+ * src/templates.c, src/utils.h, src/highlighting.c, src/dialogs.c,
+   src/plugindata.h, src/filetypes.c, src/filetypes.h, src/plugins.c,
+   src/symbols.c, src/ui_utils.c, plugins/saveactions.c,
+   plugins/htmlchars.c:
+   Merge reorder-filetypes branch:
+   Make GEANY_FILETYPES_NONE = 0, sort filetype IDs randomly (so we can
+   append randomly without breaking the ABI).
+   Make None filetype name = title = _("None").
+   Add foreach_slist() macro.
+   Add filetypes_by_title list to GeanyData for plugin API access
+   - a list of filetype pointers, which includes the None filetype
+   first. This list stays constant by the time plugins are initialized,
+   so you can use e.g. g_slist_nth_data(filetypes_by_title, n) to
+   index the sorted list.
+
+
+2009-03-31  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * doc/geany.txt, doc/geany.html, src/main.c:
+   Add widget names for the menubar and toolbar.
+ * src/msgwindow.c:
+   When hiding the messages window, set the input focus back to the
+   editor widget (part of #1910393).
+
+
+2009-03-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * scintilla/LexOthers.cxx, src/highlighting.c, tagmanager/conf.c:
+   Backport recent changes from Scintilla CVS to add partial support
+   for RFC2822 styled text using the Properties lexer.
+   Ignore leading whitespace for config files and RFC2822 text.
+ * data/filetypes.actionscript:
+   Update/fix ActionScript keywords (patch by Chris Macksey, thanks).
+ * THANKS, src/treeviews.c:
+   Display file/directory icons in the Documents sidebar
+   (patch by Simon Treny, thanks).
+
+
+2009-03-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * doc/geany.html, doc/geany.txt, geany.glade, src/callbacks.c,
+   src/callbacks.h, src/interface.c, src/keyfile.c, src/main.c,
+   src/plugindata.h, src/prefs.c, src/toolbar.c, src/toolbar.h:
+   Add an option to allow appending the toolbar to the main menu bar
+   to save some vertical space.
+   Allow setting toolbar icon size to very small (menu icon size).
+
+
+2009-03-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/keyfile.c, src/utils.c, src/utils.h:
+   Add utils_path_skip_root(), a relative path safe variant of
+   g_path_skip_root (forgotten patch by Colomban Wendling, #2518658).
+ * src/keyfile.c, src/main.c:
+   Allow negative window coordinates when saving and restoring the
+   position of the main window.
+   Restore the main window position and size *after* the window has
+   been realised to get it positioned accordingly
+   (this affects at least Windows).
+
+
+2009-03-26  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/main.c, src/plugins.c, src/win32.c, src/win32.h:
+   Use g_win32_get_package_installation_directory_of_module() on Windows
+   with newer GLib versions instead of deprecated API.
+ * src/keybindings.c:
+   Don't manage the last used documents list when quitting to prevent
+   errors by accessing invalid memory (may close #2533990).
+
+
+2009-03-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/build.c:
+   Delete the geany_run_script.sh immediately after execution
+   to prevent leaking old copies when the script was quit unexpectedly
+   (closes #2710482, patch by Martin Olsson, thanks).
+ * src/keyfile.c:
+   Check whether skipping the root element of a document's filename
+   succeeded and use the filename itself if not (e.g. on relative
+   filenames, #2702844).
+   Use the locale encoded filename when saving session files.
+ * src/callbacks.c:
+   Re-set the quitting status after all documents have been closed on
+   quitting.
+
+
+2009-03-24  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * plugins/htmlchars.c:
+   Remove usage of deprecated sci_get_selected_text() from plugin.
+
+
+2009-03-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/callbacks.c:
+   Delay disk file checks when switching between documents a little
+   bit to avoid fast, unintentional page switching in some cases.
+ * plugins/geanyfunctions.h, src/plugindata.h, src/plugins.c,
+   src/sciwrappers.c, src/sciwrappers.h:
+   Deprecate sci_get_text(), sci_get_selected_text() and
+   sci_get_text_range().
+   Add sci_get_contents(), sci_get_contents_range() and
+   sci_get_selection_contents() as replacement functions to provide
+   an easier and cleaner API (initial patch by Frank).
+
+
+2009-03-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * tagmanager/css.c:
+   Fix wrong parsing of CSS tags when the definition block starts on
+   a new line (reported by Dominic Hopf, thanks).
 
 
 2009-03-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

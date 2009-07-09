@@ -30,11 +30,9 @@
 
 void 				sci_set_line_numbers		(ScintillaObject* sci,  gboolean set, gint extra_width);
 void				sci_set_mark_long_lines		(ScintillaObject* sci,	gint type, gint column, const gchar *color);
-gboolean			sci_get_line_numbers		(ScintillaObject * sci);
 
 void 				sci_set_text				(ScintillaObject* sci,  const gchar* text);
 void 				sci_add_text				(ScintillaObject* sci,  const gchar* text);
-void				sci_add_text_buffer			(ScintillaObject* sci,  const gchar* text, gint	len);
 gboolean			sci_can_redo				(ScintillaObject* sci);
 gboolean			sci_can_undo				(ScintillaObject* sci);
 gboolean			sci_has_selection			(ScintillaObject* sci);
@@ -46,11 +44,8 @@ void 				sci_start_undo_action		(ScintillaObject* sci);
 gboolean			sci_is_modified				(ScintillaObject *sci);
 
 void				sci_set_visible_eols		(ScintillaObject* sci, gboolean set );
-gboolean			sci_get_visible_eols		(ScintillaObject* sci);
 void				sci_set_lines_wrapped		(ScintillaObject* sci, gboolean set );
-gboolean 			sci_get_lines_wrapped		(ScintillaObject* sci);
 void				sci_set_visible_white_spaces(ScintillaObject* sci, gboolean set );
-gboolean 			sci_get_visible_white_spaces(ScintillaObject* sci);
 void 				sci_convert_eols			(ScintillaObject* sci, gint eolmode);
 gint				sci_get_eol_mode			(ScintillaObject* sci);
 void 				sci_set_eol_mode			(ScintillaObject* sci, gint eolmode);
@@ -83,19 +78,20 @@ gint				sci_get_pos_at_line_sel_start(ScintillaObject*sci, gint line);
 gint				sci_get_pos_at_line_sel_end	(ScintillaObject* sci, gint line);
 void 				sci_set_selection_start		(ScintillaObject* sci, gint position);
 void				sci_set_selection_end		(ScintillaObject* sci, gint position);
+void				sci_set_selection			(ScintillaObject *sci, gint anchorPos, gint currentPos);
 
 gint				sci_get_length				(ScintillaObject* sci);
 void				sci_get_text				(ScintillaObject* sci,gint len,gchar* text);
+gchar*				sci_get_contents			(ScintillaObject* sci, gint len);
 void				sci_get_selected_text		(ScintillaObject* sci, gchar* text);
 gint				sci_get_selected_text_length(ScintillaObject* sci);
-gchar *				sci_get_line				(ScintillaObject* sci, gint line_num);
+gchar*				sci_get_selection_contents	(ScintillaObject* sci);
+gchar*				sci_get_line				(ScintillaObject* sci, gint line_num);
 gint 				sci_get_line_length			(ScintillaObject* sci, gint line);
 gint				sci_get_line_count			(ScintillaObject* sci);
-void 				sci_get_xy_from_position	(ScintillaObject* sci,gint pos, gint* x, gint* y);
 gint				sci_get_position_from_xy	(ScintillaObject* sci, gint x, gint y, gboolean nearby);
 
 void 				sci_set_undo_collection		(ScintillaObject* sci, gboolean set);
-gboolean			sci_get_undo_collection		(ScintillaObject* sci);
 
 gint				sci_get_line_end_position	(ScintillaObject* sci, gint line);
 
@@ -103,15 +99,12 @@ void 				sci_toggle_fold				(ScintillaObject* sci, gint line);
 gboolean			sci_get_line_is_visible		(ScintillaObject* sci, gint line);
 void				sci_ensure_line_is_visible	(ScintillaObject* sci, gint line);
 gint				sci_get_fold_level			(ScintillaObject* sci, gint line);
-gint				sci_get_last_child			(ScintillaObject* sci, gint start_line, gint level);
 gint				sci_get_fold_parent			(ScintillaObject* sci, gint start_line);
 
 void 				sci_set_folding_margin_visible (ScintillaObject * sci, gboolean set );
-gboolean			sci_get_folding_margin_visible(ScintillaObject * sci);
 gboolean			sci_get_fold_expanded		(ScintillaObject* sci, gint line);
 
 void				sci_colourise				(ScintillaObject* sci, gint start, gint end);
-void				sci_set_lexer				(ScintillaObject * sci, gint lexer);
 void				sci_clear_all				(ScintillaObject * sci);
 gint				sci_get_end_styled			(ScintillaObject * sci);
 void				sci_set_tab_width			(ScintillaObject * sci, gint width);
@@ -134,16 +127,14 @@ void				sci_goto_line				(ScintillaObject * sci, gint line, gboolean unfold);
 void				sci_marker_delete_all		(ScintillaObject * sci, gint marker);
 gint				sci_get_style_at			(ScintillaObject * sci, gint position);
 void				sci_set_symbol_margin		(ScintillaObject * sci, gboolean set);
-gboolean			sci_get_symbol_margin		(ScintillaObject * sci);
 void				sci_set_codepage			(ScintillaObject * sci, gint cp);
 void				sci_clear_cmdkey			(ScintillaObject * sci, gint key);
 void				sci_assign_cmdkey			(ScintillaObject * sci, gint key, gint command);
 void				sci_get_text_range			(ScintillaObject * sci, gint start, gint end, gchar *text);
+gchar*				sci_get_contents_range		(ScintillaObject * sci, gint start, gint end);
 void				sci_selection_duplicate		(ScintillaObject * sci);
 void				sci_line_duplicate			(ScintillaObject * sci);
 void				sci_insert_text				(ScintillaObject * sci, gint pos, const gchar *text);
-void				sci_grab_focus				(ScintillaObject * sci);
-void				sci_set_cursor				(ScintillaObject * sci, gint cursor);
 void				sci_target_from_selection	(ScintillaObject * sci);
 void				sci_target_start			(ScintillaObject * sci, gint start);
 void				sci_target_end				(ScintillaObject * sci, gint end);
@@ -152,7 +143,6 @@ gint				sci_target_replace			(ScintillaObject * sci, const gchar *text, gboolean
 void				sci_set_keywords			(ScintillaObject * sci, gint k, gchar *text);
 gint				sci_get_lexer				(ScintillaObject * sci);
 void				sci_set_readonly			(ScintillaObject * sci, gboolean readonly);
-gboolean			sci_get_readonly			(ScintillaObject * sci);
 gint				sci_get_zoom				(ScintillaObject * sci);
 void				sci_send_command			(ScintillaObject * sci, gint cmd);
 
@@ -160,10 +150,6 @@ gint				sci_get_current_line		(ScintillaObject * sci);
 gint				sci_get_lines_selected		(ScintillaObject * sci);
 gint				sci_get_first_visible_line	(ScintillaObject * sci);
 
-void				sci_set_styling				(ScintillaObject * sci, gint len, gint style);
-void				sci_start_styling			(ScintillaObject * sci, gint pos, gint mask);
-
-gint				sci_indicator_get			(ScintillaObject * sci);
 void				sci_indicator_set			(ScintillaObject * sci, gint indic);
 void				sci_indicator_fill			(ScintillaObject * sci, gint pos, gint len);
 void				sci_indicator_clear			(ScintillaObject * sci, gint pos, gint len);

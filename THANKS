@@ -49,7 +49,6 @@ Colomban Wendling <colombanw(at)users(dot)sourceforge(dot)net> - GLSL filetype p
 Timothy Boronczyk <tboronczyk(at)gmail(dot)com> - scroll_stop_at_last_line GUI pref patch
 Jason Oster <parasytic(at)users(dot)sourceforge(dot)net> - various patches
 Andrew Rowland <weibullguy(at)charter(dot)net> - R filetype patch
-Lex Trotman <elextr(at)gmail(dot)com> - build system improvements
 Bronisław Białek <after89(at)gmail(dot)com> - CSS parser update
 Roland Baudin <roland(dot)baudin(at)thalesaleniaspace(dot)com> - Matlab filetype patch
 Conrad Steenberg <gnocci-man(at)users(dot)sourceforge(dot)net> - symbol tree patch
@@ -63,6 +62,9 @@ Philipp Gildein <philipp(at)gildein(dot)com> - Ada filetype patch
 Thomas Martitz <thomas47(at)arcor(dot)de> - Multiple %cursor% wildcards in Snippets patch
 David Gleich <dgleich(at)stanford(dot)edu> - Send Selection to Terminal patch
 Chris Macksey <cmacksey(at)users(dot)sourceforge(dot)net> - ActionScript filetype patch
+Simon Treny <simon(dot)treny(at)free(dot)fr> - Documents sidebar stock icons patch
+Elias Pschernig <elias(at)users(dot)sourceforge(dot)net> - Recent Projects menu patch
+Jesse Mayes <plasmasheep(at)gmail(dot)com> - Tango'ish Save All icon
 
 Translators:
 ------------
@@ -90,6 +92,7 @@ Dario Santomarco <dariello(at)yahoo(dot)it> - it
 Tarot Osuji <tarot(at)sdf(dot)lonestar(dot)org> - ja
 Chikahiro Masami <cmasa(dot)z321(at)gmail(dot)com> - ja
 Park Jang-heon <dotkabi(at)gmail(dot)com> - ko
+Laurent Hoeltgen <hoeltgman(at)gmail(dot)com> - lb
 Kurt De Bree <kdebree(at)telenet(dot)be> - nl
 Jacek Wolszczak <shutdownrunner(at)o2(dot)pl> - pl_PL
 Jarosław Foksa <jfoksa(at)gmail(dot)com> - pl_PL

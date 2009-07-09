@@ -54,7 +54,7 @@
 
 const guint TM_GLOBAL_TYPE_MASK =
 	tm_tag_class_t | tm_tag_enum_t | tm_tag_interface_t |
-	tm_tag_struct_t | tm_tag_typedef_t | tm_tag_union_t;
+	tm_tag_struct_t | tm_tag_typedef_t | tm_tag_union_t | tm_tag_namespace_t;
 
 
 static gchar **html_entities = NULL;
@@ -86,8 +86,6 @@ static TagFileInfo tag_file_info[GTF_MAX] =
 	{FALSE, "latex.tags"},
 	{FALSE, "python.tags"}
 };
-
-static gchar *user_tags_dir;
 
 static GPtrArray *top_level_iter_names = NULL;
 
@@ -130,6 +128,33 @@ void symbols_reload_config_files(void)
 }
 
 
+static gsize get_tag_count()
+{
+	GPtrArray *tags = tm_get_workspace()->global_tags;
+	gsize count = tags ? tags->len : 0;
+
+	return count;
+}
+
+
+/* wrapper for tm_workspace_load_global_tags().
+ * note that the tag count only counts new global tags added - if a tag has the same name,
+ * currently it replaces the existing tag, so loading a file twice will say 0 tags the 2nd time. */
+static gboolean symbols_load_global_tags(const gchar *tags_file, GeanyFiletype *ft)
+{
+	gboolean result;
+	gsize old_tag_count = get_tag_count();
+
+	result = tm_workspace_load_global_tags(tags_file, ft->lang);
+	if (result)
+	{
+		geany_debug("Loaded %s (%s), %u tag(s).", tags_file, ft->name,
+			(guint) (get_tag_count() - old_tag_count));
+	}
+	return result;
+}
+
+
 /* Ensure that the global tags file(s) for the file_type_idx filetype is loaded.
  * This provides autocompletion, calltips, etc. */
 void symbols_global_tags_loaded(gint file_type_idx)
@@ -138,8 +163,7 @@ void symbols_global_tags_loaded(gint file_type_idx)
 	gint tag_type;
 
 	/* load ignore list for C/C++ parser */
-	if ((file_type_idx == GEANY_FILETYPES_C || file_type_idx == GEANY_FILETYPES_CPP
-		|| file_type_idx == GEANY_FILETYPES_H || file_type_idx == GEANY_FILETYPES_HPP ) &&
+	if ((file_type_idx == GEANY_FILETYPES_C || file_type_idx == GEANY_FILETYPES_CPP) &&
 		c_tags_ignore == NULL)
 	{
 		load_c_ignore_tags();
@@ -159,11 +183,9 @@ void symbols_global_tags_loaded(gint file_type_idx)
 	switch (file_type_idx)
 	{
 		case GEANY_FILETYPES_CPP:
-		case GEANY_FILETYPES_HPP:
 			symbols_global_tags_loaded(GEANY_FILETYPES_C);	/* load C global tags */
 			/* no C++ tagfile yet */
 			return;
-		case GEANY_FILETYPES_H:
 		case GEANY_FILETYPES_C:		tag_type = GTF_C; break;
 		case GEANY_FILETYPES_PASCAL:tag_type = GTF_PASCAL; break;
 		case GEANY_FILETYPES_PHP:	tag_type = GTF_PHP; break;
@@ -177,10 +199,8 @@ void symbols_global_tags_loaded(gint file_type_idx)
 	if (! tfi->tags_loaded)
 	{
 		gchar *fname = g_strconcat(app->datadir, G_DIR_SEPARATOR_S, tfi->tag_file, NULL);
-		gint tm_lang;
 
-		tm_lang = filetypes[file_type_idx]->lang;
-		tm_workspace_load_global_tags(fname, tm_lang);
+		symbols_load_global_tags(fname, filetypes[file_type_idx]);
 		tfi->tags_loaded = TRUE;
 		g_free(fname);
 	}
@@ -192,7 +212,8 @@ static void html_tags_loaded(void)
 {
 	TagFileInfo *tfi;
 
-	if (cl_options.ignore_global_tags) return;
+	if (cl_options.ignore_global_tags)
+		return;
 
 	tfi = &tag_file_info[GTF_HTML_ENTITIES];
 	if (! tfi->tags_loaded)
@@ -212,6 +233,7 @@ GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gin
 	TMTag *tag;
 	GString *s = NULL;
 	GPtrArray *typedefs;
+	gint tag_lang;
 
 	g_return_val_if_fail(tags_array != NULL, NULL);
 
@@ -223,22 +245,18 @@ GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gin
 		for (j = 0; j < typedefs->len; ++j)
 		{
 			tag = TM_TAG(typedefs->pdata[j]);
-			if (!(tag->atts.entry.scope))
-			{
-				/* tag->atts.file.lang contains (for some reason) the line of the tag if
-				 * tag->atts.entry.file is not NULL */
-				gint tag_lang =
-					(tag->atts.entry.file) ? tag->atts.entry.file->lang : tag->atts.file.lang;
+			/* tag->atts.file.lang contains (for some reason) the line of the tag if
+			 * tag->atts.entry.file is not NULL */
+			tag_lang = (tag->atts.entry.file) ? tag->atts.entry.file->lang : tag->atts.file.lang;
 
-				/* the check for tag_lang == lang is necessary to avoid wrong type colouring of
-				 * e.g. PHP classes in C++ files
-				 * lang = -2 disables the check */
-				if (tag->name && (tag_lang == lang || lang == -2))
-				{
-					if (j != 0)
-						g_string_append_c(s, ' ');
-					g_string_append(s, tag->name);
-				}
+			/* the check for tag_lang == lang is necessary to avoid wrong type colouring of
+			 * e.g. PHP classes in C++ files
+			 * lang = -2 disables the check */
+			if (tag->name && (tag_lang == lang || lang == -2))
+			{
+				if (j != 0)
+					g_string_append_c(s, ' ');
+				g_string_append(s, tag->name);
 			}
 		}
 	}
@@ -250,39 +268,32 @@ GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gin
 
 const gchar *symbols_get_context_separator(gint ft_id)
 {
-	gchar *cosep;
-
 	switch (ft_id)
 	{
 		case GEANY_FILETYPES_C:	/* for C++ .h headers or C structs */
-		case GEANY_FILETYPES_H:
-		case GEANY_FILETYPES_HPP:
 		case GEANY_FILETYPES_CPP:
 		case GEANY_FILETYPES_GLSL:	/* for structs */
 		/*case GEANY_FILETYPES_RUBY:*/ /* not sure what to use atm*/
-		{
-			static gchar cc[] = "::";
+			return "::";
 
-			cosep = cc;
-		}
-		break;
+		/* avoid confusion with other possible separators in group/section name */
+		case GEANY_FILETYPES_CONF:
+		case GEANY_FILETYPES_REST:
+			return ":::";
 
 		default:
-		{
-			static gchar def[] = ".";
-
-			cosep = def;
-		}
+			return ".";
 	}
-	return cosep;	/* return ptr to static string */
 }
 
 
-GString *symbols_get_macro_list(void)
+GString *symbols_get_macro_list(gint lang)
 {
 	guint j, i;
 	GPtrArray *ftags;
 	GString *words;
+	gint tag_lang;
+	TMTag *tag;
 
 	if (app->tm_workspace->work_objects == NULL)
 		return NULL;
@@ -300,15 +311,29 @@ GString *symbols_get_macro_list(void)
 		{
 			for (i = 0; ((i < tags->len) && (i < editor_prefs.autocompletion_max_entries)); ++i)
 			{
-				g_ptr_array_add(ftags, (gpointer) tags->pdata[i]);
+				tag = TM_TAG(tags->pdata[i]);
+				tag_lang = (tag->atts.entry.file) ?
+					tag->atts.entry.file->lang : tag->atts.file.lang;
+
+				if (tag_lang == lang)
+					g_ptr_array_add(ftags, (gpointer) tags->pdata[i]);
 			}
 			g_ptr_array_free(tags, TRUE);
 		}
 	}
+
+	if (ftags->len == 0)
+	{
+		g_ptr_array_free(ftags, TRUE);
+		g_string_free(words, TRUE);
+		return NULL;
+	}
+
 	tm_tags_sort(ftags, NULL, FALSE);
 	for (j = 0; j < ftags->len; j++)
 	{
-		if (j > 0) g_string_append_c(words, '\n');
+		if (j > 0)
+			g_string_append_c(words, '\n');
 		g_string_append(words, TM_TAG(ftags->pdata[j])->name);
 	}
 	g_ptr_array_free(ftags, TRUE);
@@ -338,7 +363,7 @@ static TMTag *find_work_object_tag(const TMWorkObject *workobj,
 	GPtrArray *tags;
 	TMTag *tmtag;
 
-	if (workobj != NULL)
+	if (G_LIKELY(workobj != NULL))
 	{
 		tags = tm_tags_extract(workobj->tags_array, type);
 		if (tags != NULL)
@@ -432,13 +457,13 @@ static GList *get_tag_list(GeanyDocument *doc, guint tag_types)
 
 	g_return_val_if_fail(doc, NULL);
 
-	if (!doc->tm_file || !doc->tm_file->tags_array)
+	if (! doc->tm_file || ! doc->tm_file->tags_array)
 		return NULL;
 
 	for (i = 0; i < doc->tm_file->tags_array->len; ++i)
 	{
 		tag = TM_TAG(doc->tm_file->tags_array->pdata[i]);
-		if (tag == NULL)
+		if (G_UNLIKELY(tag == NULL))
 			return NULL;
 
 		if (tag->type & tag_types)
@@ -489,7 +514,7 @@ static GdkPixbuf *get_tag_icon(const gchar *icon_name)
 	static GtkIconTheme *icon_theme = NULL;
 	static gint x, y;
 
-	if (icon_theme == NULL)
+	if (G_UNLIKELY(icon_theme == NULL))
 	{
 #ifndef G_OS_WIN32
 		gchar *path = g_strconcat(GEANY_DATADIR, "/icons", NULL);
@@ -593,6 +618,13 @@ static void add_top_level_items(GeanyDocument *doc)
 				&tv_iters.tag_macro, _("Keys"), "classviewer-var",
 				NULL);
 			break;
+		case GEANY_FILETYPES_NSIS:
+			tag_list_add_groups(tag_store,
+				&tv_iters.tag_namespace, _("Sections"), "classviewer-other",
+				&tv_iters.tag_function, _("Functions"), "classviewer-method",
+				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
+				NULL);
+			break;
 		case GEANY_FILETYPES_LATEX:
 		{
 			tag_list_add_groups(tag_store,
@@ -692,6 +724,7 @@ static void add_top_level_items(GeanyDocument *doc)
 				&(tv_iters.tag_member), _("Methods"), "classviewer-macro",
 				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
 				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
+				&(tv_iters.tag_namespace), _("Imports"), "classviewer-namespace",
 				NULL);
 				/*&(tv_iters.tag_macro), _("Mixin"),*/
 				/*&(tv_iters.tag_variable), _("Variables"),*/
@@ -848,7 +881,7 @@ static void hide_empty_rows(GtkTreeStore *store)
 	/* now actually delete the collected iters */
 	for (i = 0; i < MAX_SYMBOL_TYPES; i++)
 	{
-		if (iters[i] == NULL)
+		if (G_UNLIKELY(iters[i] == NULL))
 			break;
 		gtk_tree_store_remove(store, iters[i]);
 		gtk_tree_iter_free(iters[i]);
@@ -878,7 +911,7 @@ static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboole
 	if (utf8_name == NULL)
 		return NULL;
 
-	if (!buffer)
+	if (! buffer)
 		buffer = g_string_new(NULL);
 	else
 		g_string_truncate(buffer, 0);
@@ -1010,7 +1043,7 @@ static GtkTreeIter *get_tag_type_iter(TMTagType tag_type, filetype_id ft_id)
 			iter = &tv_iters.tag_other;
 		}
 	}
-	if (iter->stamp != -1)
+	if (G_LIKELY(iter->stamp != -1))
 		return iter;
 	else
 		return NULL;
@@ -1025,7 +1058,7 @@ static void add_tree_tag(GeanyDocument *doc, const TMTag *tag, GHashTable *paren
 
 	parent = get_tag_type_iter(tag->type, ft_id);
 
-	if (parent)
+	if (G_LIKELY(parent))
 	{
 		const gchar *name;
 		const gchar *parent_name = get_parent_name(tag, ft_id);
@@ -1122,10 +1155,13 @@ static gint compare_top_level_names(const gchar *a, const gchar *b)
 
 	foreach_ptr_array(name, ptr, top_level_iter_names)
 	{
-
 		if (utils_str_equal(name, a))
 			return -1;
 		if (utils_str_equal(name, b))
+			return 1;
+		/* This should never happen as it would mean that two or more top
+		 * level items have the same name but it can happen by typos in the translations. */
+		if (utils_str_equal(a, b))
 			return 1;
 	}
 	g_warning("Couldn't find top level node '%s' or '%s'!", a, b);
@@ -1258,6 +1294,7 @@ static GeanyFiletype *detect_global_tags_filetype(const gchar *utf8_filename)
 
 	if (ft == NULL || ! filetype_has_tags(ft))
 		return NULL;
+
 	return ft;
 }
 
@@ -1292,13 +1329,11 @@ int symbols_generate_global_tags(int argc, char **argv, gboolean want_preprocess
 			return 1;
 		}
 		/* load ignore list for C/C++ parser */
-		if (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP
-			|| ft->id == GEANY_FILETYPES_H || ft->id == GEANY_FILETYPES_HPP )
-				load_c_ignore_tags();
+		if (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP)
+			load_c_ignore_tags();
 
-		if (want_preprocess && (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP
-			|| ft->id == GEANY_FILETYPES_H || ft->id == GEANY_FILETYPES_HPP ))
-				command = g_strdup_printf("%s %s", pre_process, NVL(getenv("CFLAGS"), ""));
+		if (want_preprocess && (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP))
+			command = g_strdup_printf("%s %s", pre_process, NVL(getenv("CFLAGS"), ""));
 		else
 			command = NULL;	/* don't preprocess */
 
@@ -1358,7 +1393,7 @@ void symbols_show_load_tags_dialog(void)
 			utf8_fname = utils_get_utf8_from_locale(fname);
 			ft = detect_global_tags_filetype(utf8_fname);
 
-			if (ft != NULL && tm_workspace_load_global_tags(fname, ft->lang))
+			if (ft != NULL && symbols_load_global_tags(fname, ft))
 				/* For translators: the first wildcard is the filetype, the second the filename */
 				ui_set_statusbar(TRUE, _("Loaded %s tags file '%s'."), ft->name, utf8_fname);
 			else
@@ -1388,7 +1423,7 @@ static GHashTable *get_tagfile_hash(const GSList *file_list)
 
 		g_free(utf8_fname);
 
-		if (FILETYPE_ID(ft) < GEANY_FILETYPES_NONE)
+		if (FILETYPE_ID(ft) != GEANY_FILETYPES_NONE)
 		{
 			fnames = g_hash_table_lookup(hash, ft);	/* may be NULL */
 			fnames = g_list_append(fnames, fname);
@@ -1401,36 +1436,56 @@ static GHashTable *get_tagfile_hash(const GSList *file_list)
 }
 
 
+static void utils_slist_add_path(GSList *list, const gchar *path)
+{
+	GSList *node;
+
+	for (node = list; node != NULL; node = g_slist_next(node))
+	{
+		setptr(node->data,
+			g_build_path(G_DIR_SEPARATOR_S, path, node->data, NULL));
+	}
+}
+
+
 static GHashTable *init_user_tags(void)
 {
-	GSList *file_list;
+	GSList *file_list = NULL, *list = NULL;
 	GHashTable *lang_hash;
+	const gchar *dir;
 
-	user_tags_dir = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "tags", NULL);
-	file_list = utils_get_file_list(user_tags_dir, NULL, NULL);
+	dir = utils_build_path(app->configdir, "tags", NULL);
+	/* create the user tags dir for next time if it doesn't exist */
+	if (! g_file_test(dir, G_FILE_TEST_IS_DIR))
+	{
+		utils_mkdir(dir, FALSE);
+	}
+	file_list = utils_get_file_list(dir, NULL, NULL);
+	utils_slist_add_path(file_list, dir);
+
+	dir = utils_build_path(app->datadir, "tags", NULL);
+	list = utils_get_file_list(dir, NULL, NULL);
+	utils_slist_add_path(list, dir);
+	file_list = g_slist_concat(file_list, list);
+
 	lang_hash = get_tagfile_hash(file_list);
-
 	/* don't need to delete list contents because they are now used for hash contents */
 	g_slist_free(file_list);
 
-	/* create the tags dir for next time if it doesn't exist */
-	if (! g_file_test(user_tags_dir, G_FILE_TEST_IS_DIR))
-	{
-		utils_mkdir(user_tags_dir, FALSE);
-	}
 	return lang_hash;
 }
 
 
 static void load_user_tags(filetype_id ft_id)
 {
-	static guchar tags_loaded[GEANY_FILETYPES_NONE] = {0};
+	static guchar tags_loaded[GEANY_MAX_BUILT_IN_FILETYPES] = {0};
 	static GHashTable *lang_hash = NULL;
 	GList *fnames;
 	const GList *node;
-	const GeanyFiletype *ft = filetypes[ft_id];
+	GeanyFiletype *ft = filetypes[ft_id];
 
-	g_return_if_fail(ft_id < GEANY_FILETYPES_NONE);
+	g_return_if_fail(ft_id > 0);
+	g_return_if_fail(ft_id < GEANY_MAX_BUILT_IN_FILETYPES);
 
 	if (tags_loaded[ft_id])
 		return;
@@ -1443,16 +1498,9 @@ static void load_user_tags(filetype_id ft_id)
 
 	for (node = fnames; node != NULL; node = g_list_next(node))
 	{
-		const gint tm_lang = ft->lang;
-		gchar *fname;
+		const gchar *fname = node->data;
 
-		fname = g_strconcat(user_tags_dir, G_DIR_SEPARATOR_S, node->data, NULL);
-		if (tm_workspace_load_global_tags(fname, tm_lang))
-		{
-			geany_debug("Loaded %s (%s), total tags: %u.", fname, ft->name,
-				tm_get_workspace()->global_tags->len);
-		}
-		g_free(fname);
+		symbols_load_global_tags(fname, ft);
 	}
 	g_list_foreach(fnames, (GFunc) g_free, NULL);
 	g_list_free(fnames);
@@ -1578,7 +1626,8 @@ static gchar *parse_function_at_line(ScintillaObject *sci, gint tag_line)
 	while (sci_get_style_at(sci, end) == fn_style
 		&& end < max_pos) end++;
 
-	if (start == end) return NULL;
+	if (start == end)
+		return NULL;
 	cur_tag = g_malloc(end - start + 1);
 	sci_get_text_range(sci, start, end, cur_tag);
 	return cur_tag;
@@ -1750,7 +1799,7 @@ static void on_symbol_tree_menu_show(GtkWidget *widget,
 	gtk_widget_set_sensitive(symbol_menu.expand_all, enable);
 	gtk_widget_set_sensitive(symbol_menu.collapse_all, enable);
 
-	if (!doc)
+	if (! doc)
 		return;
 
 	ignore_callback = TRUE;
@@ -1769,7 +1818,7 @@ static void on_expand_collapse(GtkWidget *widget, gpointer user_data)
 	gboolean expand = utils_str_equal(user_data, GTK_STOCK_ADD);
 	GeanyDocument *doc = document_get_current();
 
-	if (!doc)
+	if (! doc)
 		return;
 
 	g_return_if_fail(doc->priv->tag_tree);

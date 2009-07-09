@@ -260,12 +260,12 @@ static void geany_object_class_init(GeanyObjectClass *klass)
 
 static void geany_object_init(GeanyObject *self)
 {
-
+	/* nothing to do */
 }
 
 
-GObject* geany_object_new(void)
+GObject *geany_object_new(void)
 {
-	return (GObject*)g_object_new(GEANY_OBJECT_TYPE, NULL);
+	return g_object_new(GEANY_OBJECT_TYPE, NULL);
 }
 

@@ -121,6 +121,9 @@ static gint get_line_numbers_arity(gint x)
 static void get_rgb_values(gint c, gint *r, gint *g, gint *b)
 {
 	c = ROTATE_RGB(c);
+	if (interface_prefs.highlighting_invert_all)
+		c = utils_invert_color(c);
+
 	*r = c % 256;
 	*g = (c & - 16711936) / 256;
 	*b = (c & 0xff0000) / 65536;
@@ -349,12 +352,12 @@ static GtkWidget *create_custom_widget(GtkPrintOperation *operation, gpointer us
 
 	w->check_print_pagenumbers = gtk_check_button_new_with_mnemonic(_("Print page numbers"));
 	gtk_box_pack_start(GTK_BOX(page), w->check_print_pagenumbers, FALSE, FALSE, 0);
-	ui_widget_set_tooltip_text(w->check_print_pagenumbers, _("Add page numbers at the bottom of each page. It takes 2 lines of the page"));
+	ui_widget_set_tooltip_text(w->check_print_pagenumbers, _("Add page numbers at the bottom of each page. It takes 2 lines of the page."));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w->check_print_pagenumbers), printing_prefs.print_page_numbers);
 
 	w->check_print_pageheader = gtk_check_button_new_with_mnemonic(_("Print page header"));
 	gtk_box_pack_start(GTK_BOX(page), w->check_print_pageheader, FALSE, FALSE, 0);
-	ui_widget_set_tooltip_text(w->check_print_pageheader, _("Adds a little header to every page containing the page number, the filename and the current date(see below). It takes 3 lines of the page."));
+	ui_widget_set_tooltip_text(w->check_print_pageheader, _("Add a little header to every page containing the page number, the filename and the current date (see below). It takes 3 lines of the page."));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w->check_print_pageheader), printing_prefs.print_page_header);
 	g_signal_connect(w->check_print_pageheader, "toggled", G_CALLBACK(on_page_header_toggled), w);
 

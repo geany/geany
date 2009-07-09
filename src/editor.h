@@ -175,8 +175,6 @@ void snippet_goto_next_cursor(ScintillaObject *sci, gint current_pos);
 
 gboolean editor_complete_snippet(GeanyEditor *editor, gint pos);
 
-void editor_auto_latex(GeanyEditor *editor, gint pos);
-
 void editor_show_macro_list(GeanyEditor *editor);
 
 gboolean editor_show_calltip(GeanyEditor *editor, gint pos);
@@ -187,15 +185,13 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 
 gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle);
 
-void editor_highlight_braces(GeanyEditor *editor, gint cur_pos);
-
-gboolean editor_lexer_is_c_like(gint lexer);
-
 gint editor_lexer_get_type_keyword_idx(gint lexer);
 
 void editor_insert_multiline_comment(GeanyEditor *editor);
 
 void editor_insert_alternative_whitespace(GeanyEditor *editor);
+
+void editor_indent(GeanyEditor *editor, gboolean increase);
 
 void editor_smart_line_indentation(GeanyEditor *editor, gint pos);
 
@@ -251,8 +247,6 @@ void editor_unfold_all(GeanyEditor *editor);
 void editor_replace_tabs(GeanyEditor *editor);
 
 void editor_replace_spaces(GeanyEditor *editor);
-
-void editor_strip_line_trailing_spaces(GeanyEditor *editor, gint line);
 
 void editor_strip_trailing_spaces(GeanyEditor *editor);
 

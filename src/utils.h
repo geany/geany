@@ -35,7 +35,7 @@
 
 /** Returns: TRUE if @a ptr points to a non-zero value. */
 #define NZV(ptr) \
-	((ptr) && (ptr)[0])
+	(G_LIKELY((ptr)) && G_LIKELY((ptr)[0]))
 
 /**
  *  Free's @a ptr (if not @c NULL), then assigns @a result to it.
@@ -57,6 +57,18 @@
 	for (ptr = ptr_array->pdata, item = *ptr; \
 		ptr < &ptr_array->pdata[ptr_array->len]; ++ptr, item = *ptr)
 
+/** Iterates all the nodes in @a list.
+ * @param node should be a (GList*).
+ * @param list List to traverse. */
+#define foreach_list(node, list) \
+	for (node = list; node != NULL; node = node->next)
+
+/** Iterates all the nodes in @a list.
+ * @param node should be a (GSList*).
+ * @param list List to traverse. */
+#define foreach_slist(node, list) \
+	foreach_list(node, list)
+
 
 void utils_open_browser(const gchar *uri);
 
@@ -75,6 +87,8 @@ const gchar *utils_get_eol_name(gint eol_mode);
 gboolean utils_atob(const gchar *str);
 
 gboolean utils_is_absolute_path(const gchar *path);
+
+const gchar *utils_path_skip_root(const gchar *path);
 
 gdouble utils_scale_round(gdouble val, gdouble factor);
 
@@ -105,6 +119,8 @@ gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gch
 gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gchar *key, const gchar *default_value);
 
 gchar *utils_get_hex_from_color(GdkColor *color);
+
+guint utils_invert_color(guint color);
 
 const gchar *utils_get_default_dir_utf8(void);
 
@@ -162,5 +178,7 @@ gchar *utils_get_path_from_uri(const gchar *uri);
 gboolean utils_is_uri(const gchar *uri);
 
 gboolean utils_is_remote_path(const gchar *path);
+
+gchar *utils_str_middle_truncate(const gchar *string, guint truncate_length);
 
 #endif

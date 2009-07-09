@@ -1,5 +1,6 @@
 iconsdir = $(datadir)/icons/hicolor/16x16/apps
-icons_DATA =  	                                    			\
+
+icons_DATA =									\
 	classviewer-class.png						\
 	classviewer-macro.png						\
 	classviewer-member.png						\
@@ -7,7 +8,7 @@ icons_DATA =  	                                    			\
 	classviewer-namespace.png					\
 	classviewer-other.png						\
 	classviewer-struct.png						\
-	classviewer-var.png						
-		
-EXTRA_DIST = 								\
-	$(icons_DATA)
+	classviewer-var.png							\
+	geany.png
+
+EXTRA_DIST = $(icons_DATA)

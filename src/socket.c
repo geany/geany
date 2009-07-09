@@ -76,6 +76,10 @@
 #include <unistd.h>
 #include <fcntl.h>
 
+#ifdef GDK_WINDOWING_X11
+#include <gdk/gdkx.h>
+#endif
+
 #include "main.h"
 #include "socket.h"
 #include "document.h"
@@ -88,9 +92,9 @@
 
 #ifdef G_OS_WIN32
 #define REMOTE_CMD_PORT		49876
-#define SOCKET_IS_VALID(s)	((s) != INVALID_SOCKET)
+#define SOCKET_IS_VALID(s)	(G_LIKELY((s) != INVALID_SOCKET))
 #else
-#define SOCKET_IS_VALID(s)	((s) >= 0)
+#define SOCKET_IS_VALID(s)	(G_LIKELY((s) >= 0))
 #define INVALID_SOCKET		(-1)
 #endif
 
@@ -271,7 +275,8 @@ gint socket_init(gint argc, gchar **argv)
 
 gint socket_finalize(void)
 {
-	if (socket_info.lock_socket < 0) return -1;
+	if (socket_info.lock_socket < 0)
+		return -1;
 
 	if (socket_info.lock_socket_tag > 0)
 		g_source_remove(socket_info.lock_socket_tag);
@@ -498,9 +503,9 @@ static void handle_input_filename(const gchar *buf)
 		utf8_filename = g_strdup(buf);
 
 	locale_filename = utils_get_locale_from_utf8(utf8_filename);
-	g_free(utf8_filename);
 	if (locale_filename)
 		main_handle_filename(locale_filename);
+	g_free(utf8_filename);
 	g_free(locale_filename);
 }
 
@@ -554,8 +559,16 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 		}
 #endif
 	}
+
 	if (popup)
 	{
+#ifdef GDK_WINDOWING_X11
+		/* Set the proper interaction time on the window. This seems necessary to make
+		 * gtk_window_present() really bring the main window into the foreground on some
+		 * window managers like Gnome's metacity.
+		 * Code taken from Gedit. */
+		gdk_x11_window_set_user_time(window->window, gdk_x11_get_server_time(window->window));
+#endif
 		gtk_window_present(GTK_WINDOW(window));
 #ifdef G_OS_WIN32
 		gdk_window_show(window->window);

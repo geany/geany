@@ -39,6 +39,7 @@
 #include "ui_utils.h"
 #include "symbols.h"
 #include "navqueue.h"
+#include "project.h"
 
 #include <gdk/gdkkeysyms.h>
 
@@ -68,6 +69,7 @@ enum
 /* documents tree model columns */
 enum
 {
+	DOCUMENTS_ICON,
 	DOCUMENTS_SHORTNAME,	/* dirname for parents, basename for children */
 	DOCUMENTS_DOCUMENT,
 	DOCUMENTS_COLOR,
@@ -181,8 +183,7 @@ void treeviews_update_tag_list(GeanyDocument *doc, gboolean update)
 	}
 
 	/* show default empty tag tree if there are no tags */
-	if (doc == NULL || doc->file_type == NULL ||
-		! filetype_has_tags(doc->file_type))
+	if (doc == NULL || doc->file_type == NULL || ! filetype_has_tags(doc->file_type))
 	{
 		gtk_container_add(GTK_CONTAINER(tag_window), tv.default_tag_tree);
 		return;
@@ -217,16 +218,18 @@ void treeviews_update_tag_list(GeanyDocument *doc, gboolean update)
 /* does some preparing things to the open files list widget */
 static void prepare_openfiles(void)
 {
-	GtkCellRenderer *renderer;
+	GtkCellRenderer *icon_renderer;
+	GtkCellRenderer *text_renderer;
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *select;
 	GtkTreeSortable *sortable;
 
 	tv.tree_openfiles = ui_lookup_widget(main_widgets.window, "treeview6");
 
-	/* store the short filename to show, and the index as reference,
+	/* store the icon and the short filename to show, and the index as reference,
 	 * the colour (black/red/green) and the full name for the tooltip */
-	store_openfiles = gtk_tree_store_new(4, G_TYPE_STRING, G_TYPE_POINTER, GDK_TYPE_COLOR, G_TYPE_STRING);
+	store_openfiles = gtk_tree_store_new(5, G_TYPE_STRING, G_TYPE_STRING,
+		G_TYPE_POINTER, GDK_TYPE_COLOR, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tv.tree_openfiles), GTK_TREE_MODEL(store_openfiles));
 	g_object_unref(store_openfiles);
 
@@ -236,9 +239,15 @@ static void prepare_openfiles(void)
 			GTK_SCROLLED_WINDOW(ui_lookup_widget(main_widgets.window, "scrolledwindow7")),
 			GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
-	renderer = gtk_cell_renderer_text_new();
-	column = gtk_tree_view_column_new_with_attributes(_("Documents"), renderer,
-		"text", DOCUMENTS_SHORTNAME, "foreground-gdk", DOCUMENTS_COLOR, NULL);
+	icon_renderer = gtk_cell_renderer_pixbuf_new();
+	text_renderer = gtk_cell_renderer_text_new();
+	g_object_set(text_renderer, "ellipsize", PANGO_ELLIPSIZE_MIDDLE, NULL);
+	column = gtk_tree_view_column_new();
+	gtk_tree_view_column_pack_start(column, icon_renderer, FALSE);
+	gtk_tree_view_column_set_attributes(column, icon_renderer, "stock-id", DOCUMENTS_ICON, NULL);
+	gtk_tree_view_column_pack_start(column, text_renderer, TRUE);
+	gtk_tree_view_column_set_attributes(column, text_renderer, "text", DOCUMENTS_SHORTNAME,
+		"foreground-gdk", DOCUMENTS_COLOR, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tv.tree_openfiles), column);
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tv.tree_openfiles), FALSE);
 
@@ -269,6 +278,7 @@ static gboolean find_tree_iter_dir(GtkTreeIter *iter, const gchar *dir)
 {
 	GeanyDocument *doc;
 	gchar *name;
+	gboolean result;
 
 	if (utils_str_equal(dir, "."))
 		dir = GEANY_STRING_UNTITLED;
@@ -277,17 +287,44 @@ static gboolean find_tree_iter_dir(GtkTreeIter *iter, const gchar *dir)
 	g_return_val_if_fail(!doc, FALSE);
 
 	gtk_tree_model_get(GTK_TREE_MODEL(store_openfiles), iter, DOCUMENTS_SHORTNAME, &name, -1);
-	return utils_str_equal(name, dir);
+
+	result = utils_str_equal(name, dir);
+	g_free(name);
+
+	return result;
 }
 
 
 static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 {
-	gchar *dirname;
+	gchar *tmp_dirname;
+	gchar *project_base_path;
+	gchar *dirname = NULL;
 	static GtkTreeIter parent;
 	GtkTreeModel *model = GTK_TREE_MODEL(store_openfiles);
 
-	dirname = g_path_get_dirname(DOC_FILENAME(doc));
+	tmp_dirname = g_path_get_dirname(DOC_FILENAME(doc));
+	/* replace the project base path with the project name */
+	project_base_path = project_get_base_path();
+	if (project_base_path != NULL)
+	{
+		gsize len = strlen(project_base_path);
+		const gchar *rest;
+		/* check whether the dir name starts with the project base path */
+		if (strncmp(tmp_dirname, project_base_path, len) == 0)
+		{
+			rest = tmp_dirname + len;
+			dirname = g_strdup_printf("%s%s%s",
+				app->project->name,
+				(*rest != G_DIR_SEPARATOR && *rest != '\0') ? G_DIR_SEPARATOR_S : "",
+				rest);
+		}
+		g_free(project_base_path);
+	}
+	if (dirname == NULL)
+		dirname = tmp_dirname;
+	else
+		g_free(tmp_dirname);
 
 	if (gtk_tree_model_get_iter_first(model, &parent))
 	{
@@ -303,8 +340,8 @@ static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 	}
 	/* no match, add dir parent */
 	gtk_tree_store_append(store_openfiles, &parent, NULL);
-	gtk_tree_store_set(store_openfiles, &parent, DOCUMENTS_SHORTNAME,
-		doc->file_name ? dirname : GEANY_STRING_UNTITLED, -1);
+	gtk_tree_store_set(store_openfiles, &parent, DOCUMENTS_ICON, GTK_STOCK_DIRECTORY,
+		DOCUMENTS_SHORTNAME, doc->file_name ? dirname : GEANY_STRING_UNTITLED, -1);
 
 	g_free(dirname);
 	return &parent;
@@ -333,7 +370,7 @@ void treeviews_openfiles_add(GeanyDocument *doc)
 		gtk_tree_path_free(path);
 	}
 	basename = g_path_get_basename(DOC_FILENAME(doc));
-	gtk_tree_store_set(store_openfiles, iter,
+	gtk_tree_store_set(store_openfiles, iter, DOCUMENTS_ICON, GTK_STOCK_FILE,
 		DOCUMENTS_SHORTNAME, basename, DOCUMENTS_DOCUMENT, doc, DOCUMENTS_COLOR, color,
 		DOCUMENTS_FILENAME, DOC_FILENAME(doc), -1);
 	g_free(basename);
@@ -395,7 +432,7 @@ void treeviews_openfiles_update_all()
 	for (i = 0; i < page_count; i++)
 	{
 		doc = document_get_from_page(i);
-		if (doc == NULL)
+		if (G_UNLIKELY(doc == NULL))
 			continue;
 
 		treeviews_openfiles_add(doc);
@@ -572,7 +609,7 @@ void treeviews_select_openfiles_item(GeanyDocument *doc)
 
 static void document_action(GeanyDocument *doc, gint action)
 {
-	if (!DOC_VALID(doc))
+	if (! DOC_VALID(doc))
 		return;
 
 	switch (action)
@@ -630,19 +667,25 @@ static void on_openfiles_document_action(GtkMenuItem *menuitem, gpointer user_da
 }
 
 
-static gboolean change_focus(gpointer data)
+static gboolean change_focus_to_editor(GeanyDocument *doc, GtkWidget *focus_widget)
 {
-	GeanyDocument *doc = data;
-
 	/* idx might not be valid e.g. if user closed a tab whilst Geany is opening files */
 	if (DOC_VALID(doc))
 	{
 		GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 		GtkWidget *sci = GTK_WIDGET(doc->editor->sci);
 
-		if (focusw == tv.tree_openfiles)
+		if (focusw == focus_widget)
 			gtk_widget_grab_focus(sci);
 	}
+	return FALSE;
+}
+
+
+static gboolean change_focus_cb(gpointer data)
+{
+	change_focus_to_editor(data, tv.tree_openfiles);
+
 	return FALSE;
 }
 
@@ -657,12 +700,12 @@ static void on_openfiles_tree_selection_changed(GtkTreeSelection *selection, gpo
 	if (gtk_tree_selection_get_selected(selection, &model, &iter) && ! ignore_callback)
 	{
 		gtk_tree_model_get(model, &iter, DOCUMENTS_DOCUMENT, &doc, -1);
-		if (!doc)
+		if (! doc)
 			return;	/* parent */
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
 					gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
 					(GtkWidget*) doc->editor->sci));
-		g_idle_add((GSourceFunc) change_focus, doc);
+		g_idle_add((GSourceFunc) change_focus_cb, doc);
 	}
 }
 
@@ -678,7 +721,7 @@ static gboolean on_taglist_tree_selection_changed(GtkTreeSelection *selection)
 		const TMTag *tag;
 
 		gtk_tree_model_get(model, &iter, SYMBOLS_COLUMN_TAG, &tag, -1);
-		if (!tag)
+		if (! tag)
 			return FALSE;
 
 		line = tag->atts.entry.line;
@@ -686,7 +729,11 @@ static gboolean on_taglist_tree_selection_changed(GtkTreeSelection *selection)
 		{
 			GeanyDocument *doc = document_get_current();
 
-			navqueue_goto_line(doc, doc, line);
+			if (doc != NULL)
+			{
+				navqueue_goto_line(doc, doc, line);
+				change_focus_to_editor(doc, doc->priv->tag_tree);
+			}
 		}
 	}
 	return FALSE;
@@ -769,7 +816,9 @@ static void documents_menu_update(GtkTreeSelection *selection)
 		gtk_tree_model_get(model, &iter, DOCUMENTS_DOCUMENT, &doc,
 			DOCUMENTS_SHORTNAME, &shortname, -1);
 	}
-	path = NZV(shortname) && g_path_is_absolute(shortname);
+	path = NZV(shortname) &&
+		(g_path_is_absolute(shortname) ||
+		(app->project && g_str_has_prefix(shortname, app->project->name)));
 
 	/* can close all, save all (except shortname), but only reload individually ATM */
 	gtk_widget_set_sensitive(doc_items.close, sel);

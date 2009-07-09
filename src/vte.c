@@ -409,7 +409,7 @@ static gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpo
 {
 	if (event->button == 3)
 	{
-		if (! popup_menu_created)
+		if (G_UNLIKELY(! popup_menu_created))
 		{
 			vc->menu = vte_create_popup_menu();
 			vf->vte_terminal_im_append_menuitems(VTE_TERMINAL(vc->vte), GTK_MENU_SHELL(vc->im_submenu));
@@ -622,7 +622,7 @@ const gchar *vte_get_working_directory(void)
 		else if (length == 0)
 		{
 			cwd = g_get_current_dir();
-			if (G_LIKELY(cwd != NULL))
+			if (cwd != NULL)
 			{
 				if (chdir(file) == 0)
 				{
@@ -906,8 +906,7 @@ void vte_send_selection_to_vte(void)
 	gsize len;
 
 	doc = document_get_current();
-	if (doc == NULL)
-		return;
+	g_return_if_fail(doc != NULL);
 
 	if (sci_has_selection(doc->editor->sci))
 	{

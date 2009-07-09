@@ -1,3 +1,77 @@
+Geany 0.17 (May 02, 2009)
+
+    Bug fixes:
+    * Fix broken selection of "Document->Set Encoding" menu items.
+    * Fix broken non-incremental search with the toolbar search entry when
+      pressing Enter (closes #2638180).
+    * Fix parsing of Make output (closes #2694479, patch by Andrea Mazzoleni).
+    * Fix crashes on quitting Geany (closes #2533990).
+    * Fix disabled Go to Tag items in the editor menu when using the
+      keyboard (#2780044).
+    * Prevent crashes when two or more top level items in the symbol
+      list have the same name (closes #2778246).
+
+    Prefs:
+    * Add an option to set an additional plugin lookup path.
+    * Add a hidden preference 'use_safe_file_saving'. This has serious side
+      effects, please read the documentation before enabling this.
+
+    Interface:
+    * Add 'Send Selection to Terminal' command to the Edit->Format menu.
+    * Change the background colour of the search entries in the Find
+      and Replace dialogs according to the search results.
+    * Add 'Close Other Documents' and 'Close All' menu items to the tab bar
+      menu.
+    * Add an option to allow appending the toolbar to the main menu bar
+      to save some vertical space.
+    * When a project is loaded, replace the project base path with the
+      project name in the Documents sidebar for parent items (closes #2723679).
+    * Make the file open dialog more compact.
+    * Ellipsize tab labels and some status messages for very long
+      filenames (closes #2777348).
+    * Add new toolbar element: Print (patch by Roland Baudin).
+    * Remember the active sidebar page between sessions.
+    * Add "Recent Projects" menu to the Project menu (#2728630,
+      patch by Elias Pschernig).
+    * Add Tools->Configuration Files item for snippets.conf.
+
+    Filetypes:
+    * Fix wrong Fortran 90 comment characters when inserting templates.
+    * Add filetype ActionScript (patch by Chris Macksey).
+    * Fixes for CSS, Fortran and Ruby parsers.
+    * Add a trivial symbol parser for NSIS files.
+
+    Windows:
+    * On Windows, change the working directory to the Geany installation
+      path at startup to avoid unwanted directory locking(closes #2626124).
+    * Fix window positioning on startup.
+    * Make build commands on Windows run synchronously to avoid problems
+      with reading build commands' output.
+
+    Plugins:
+    * HTMLchars: Extend plugin by bulk replace and replace on
+      input for special characters to their HTML entities.
+    * Splitwindow: Add keybindings for the split actions.
+    * VCDiff: Remove plugin from Geany. Use GeanyVC instead.
+
+    Plugin API:
+    * Deprecate sci_get_text(), sci_get_selected_text() and
+      sci_get_text_range().
+    * Add sci_get_contents(), sci_get_contents_range() and
+      sci_get_selection_contents() as replacement functions to provide
+      an easier and cleaner API (initial patch by Frank).
+    * Make GEANY_FILETYPES_NONE = 0, sort filetype IDs randomly (so we can
+      append new filetypes without breaking the ABI); add
+      filetypes_by_title sorted list to GeanyData.
+
+    Documentation:
+    * Describe how to build Geany using the Waf build system.
+
+    Internationalisation:
+    * Updated translations: be, cs, de, es, fi, fr, hu, ja, pt_BR, ru,
+      sv, tr, zh_CN
+
+
 Geany 0.16 (February 15, 2009)
 
     Bug fixes:

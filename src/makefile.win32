@@ -2,7 +2,7 @@
 
 DEFINES = -DHAVE_CONFIG_H \
 	-DGEANY_DATADIR=\"data\" \
-	-DGEANY_LOCALEDIR=\"share\" \
+	-DGEANY_LOCALEDIR=\"\" \
 	-DGEANY_LIBDIR=\"\" \
 	-DGEANY_PREFIX=\"\"
 
@@ -49,8 +49,7 @@ else
 ALL_GTK_LIBS +=-lcairo -lpangocairo-1.0 -lgio-2.0
 endif
 
-WIN_LIBS=-mwindows -lkernel32 -limm32 -lshfolder -lshell32 \
-		 -lole32 -luuid -lcomdlg32 -lcomctl32 -liberty -lwsock32
+WIN_LIBS=-mwindows -lole32 -luuid -liberty -lwsock32
 
 CBASEFLAGS=-Wall -pipe -mms-bitfields $(DEFINES) $(INCLUDEDIRS)
 ifdef DEBUG
@@ -74,7 +73,7 @@ OBJS =	about.o build.o callbacks.o dialogs.o document.o editor.o encodings.o fil
 # all: binclean $(TARGET) #exec
 all: $(TARGET)
 
-$(RES): ../geany_private.rc ../pixmaps/geany.ico
+$(RES): ../geany_private.rc ../icons/geany.ico
 	$(WINDRES) -i $< --input-format=rc -o $@ -O coff
 
 # this calls parent clean-local target because del ../file won't work

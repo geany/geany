@@ -130,14 +130,14 @@ gint utils_get_line_endings(const gchar* buffer, glong size)
 
 	cr = lf = crlf = 0;
 
-	for ( i = 0; i < size ; i++ )
+	for (i = 0; i < size ; i++)
 	{
-		if ( buffer[i] == 0x0a )
+		if (buffer[i] == 0x0a)
 		{
 			/* LF */
 			lf++;
 		}
-		else if ( buffer[i] == 0x0d )
+		else if (buffer[i] == 0x0d)
 		{
 			if (i >= (size-1))
 			{
@@ -216,10 +216,7 @@ gboolean utils_is_opening_brace(gchar c, gboolean include_angles)
 /**
  *  Write the given @c text into a file with @c filename.
  *  If the file doesn't exist, it will be created.
- *  If it already exists, it will be overwritten. Internally, g_file_set_contents() is used
- *  to write the file with all its error checking and related limitations like
- *  destroying hard links and possibly losing file permissions. Please read the
- *  API documentation of g_file_set_contents() for details.
+ *  If it already exists, it will be overwritten.
  *
  *  @param filename The filename of the file to write, in locale encoding.
  *  @param text The text to write into the file.
@@ -229,16 +226,48 @@ gboolean utils_is_opening_brace(gchar c, gboolean include_angles)
  **/
 gint utils_write_file(const gchar *filename, const gchar *text)
 {
-	GError *error = NULL;
-
 	g_return_val_if_fail(filename != NULL, ENOENT);
 	g_return_val_if_fail(text != NULL, EINVAL);
 
-	if (! g_file_set_contents(filename, text, -1, &error))
+	if (file_prefs.use_safe_file_saving)
 	{
-		geany_debug("%s: could not write to file %s (%s)", G_STRFUNC, filename, error->message);
-		g_error_free(error);
-		return EIO;
+		GError *error = NULL;
+		if (! g_file_set_contents(filename, text, -1, &error))
+		{
+			geany_debug("%s: could not write to file %s (%s)", G_STRFUNC, filename, error->message);
+			g_error_free(error);
+			return EIO;
+		}
+	}
+	else
+	{
+		FILE *fp;
+		gint bytes_written, len;
+
+		if (filename == NULL)
+			return ENOENT;
+
+		len = strlen(text);
+		fp = g_fopen(filename, "w");
+		if (fp != NULL)
+		{
+			bytes_written = fwrite(text, sizeof (gchar), len, fp);
+			fclose(fp);
+
+			if (len != bytes_written)
+			{
+				geany_debug(
+					"utils_write_file(): written only %d bytes, had to write %d bytes to %s",
+					bytes_written, len, filename);
+				return EIO;
+			}
+		}
+		else
+		{
+			geany_debug("utils_write_file(): could not write to file %s (%s)",
+				filename, g_strerror(errno));
+			return errno;
+		}
 	}
 	return 0;
 }
@@ -253,7 +282,7 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag)
 {
 	const gchar *begin, *cur;
 
-	if (size < 3)
+	if (G_UNLIKELY(size < 3))
 	{	/* Smallest tag is "<p>" which is 3 characters */
 		return NULL;
 	}
@@ -301,7 +330,7 @@ const gchar *utils_get_eol_name(gint eol_mode)
 
 gboolean utils_atob(const gchar *str)
 {
-	if (str == NULL)
+	if (G_UNLIKELY(str == NULL))
 		return FALSE;
 	else if (strcmp(str, "TRUE") == 0 || strcmp(str, "true") == 0)
 		return TRUE;
@@ -312,10 +341,23 @@ gboolean utils_atob(const gchar *str)
 /* NULL-safe version of g_path_is_absolute(). */
 gboolean utils_is_absolute_path(const gchar *path)
 {
-	if (! path || *path == '\0')
+	if (! NZV(path))
 		return FALSE;
 
 	return g_path_is_absolute(path);
+}
+
+
+/* Skips root if path is absolute, do nothing otherwise.
+ * This is a relative-safe version of g_path_skip_root().
+ */
+const gchar *utils_path_skip_root(const gchar *path)
+{
+	const gchar *path_relative;
+
+	path_relative = g_path_skip_root(path);
+
+	return (path_relative != NULL) ? path_relative : path;
 }
 
 
@@ -389,6 +431,60 @@ gint utils_str_casecmp(const gchar *s1, const gchar *s2)
 
 
 /**
+ *  Truncates the input string to a given length.
+ *  Characters are removed from the middle of the string, so the start and the end of string
+ *  won't change.
+ *
+ *  @param string Input string.
+ *  @param truncate_length The length in characters of the resulting string.
+ *
+ *  @return A copy of @c string which is truncated to @c truncate_length characters,
+ *          should be freed when no longer needed.
+ *
+ *  @since 0.17
+ */
+/* This following function is taken from Gedit. */
+gchar *utils_str_middle_truncate(const gchar *string, guint truncate_length)
+{
+	GString *truncated;
+	guint length;
+	guint n_chars;
+	guint num_left_chars;
+	guint right_offset;
+	guint delimiter_length;
+	const gchar *delimiter = "\342\200\246";
+
+	g_return_val_if_fail(string != NULL, NULL);
+
+	length = strlen(string);
+
+	g_return_val_if_fail(g_utf8_validate(string, length, NULL), NULL);
+
+	/* It doesnt make sense to truncate strings to less than the size of the delimiter plus 2
+	 * characters (one on each side) */
+	delimiter_length = g_utf8_strlen(delimiter, -1);
+	if (truncate_length < (delimiter_length + 2))
+		return g_strdup(string);
+
+	n_chars = g_utf8_strlen(string, length);
+
+	/* Make sure the string is not already small enough. */
+	if (n_chars <= truncate_length)
+		return g_strdup (string);
+
+	/* Find the 'middle' where the truncation will occur. */
+	num_left_chars = (truncate_length - delimiter_length) / 2;
+	right_offset = n_chars - truncate_length + num_left_chars + delimiter_length;
+
+	truncated = g_string_new_len(string, g_utf8_offset_to_pointer(string, num_left_chars) - string);
+	g_string_append(truncated, delimiter);
+	g_string_append(truncated, g_utf8_offset_to_pointer(string, right_offset));
+
+	return g_string_free(truncated, FALSE);
+}
+
+
+/**
  *  @a NULL-safe string comparison. Returns @a TRUE if both @c a and @c b are @a NULL
  *  or if @c a and @c b refer to valid strings which are equal.
  *
@@ -420,13 +516,15 @@ gboolean utils_str_equal(const gchar *a, const gchar *b)
  **/
 gchar *utils_remove_ext_from_filename(const gchar *filename)
 {
-	gchar *last_dot = strrchr(filename, '.');
+	gchar *last_dot;
 	gchar *result;
 	gint i;
 
-	if (filename == NULL) return NULL;
+	g_return_val_if_fail(filename != NULL, NULL);
 
-	if (! last_dot) return g_strdup(filename);
+	last_dot = strrchr(filename, '.');
+	if (! last_dot)
+		return g_strdup(filename);
 
 	/* assumes extension is small, so extra bytes don't matter */
 	result = g_malloc(strlen(filename));
@@ -512,8 +610,7 @@ gchar *utils_str_replace(gchar *haystack, const gchar *needle, const gchar *repl
 {
 	GString *str;
 
-	if (haystack == NULL)
-		return NULL;
+	g_return_val_if_fail(haystack != NULL, NULL);
 
 	str = g_string_new(haystack);
 
@@ -538,14 +635,16 @@ gint utils_strpos(const gchar *haystack, const gchar *needle)
 	{
 		for (i = 0; (i < haystack_length) && pos == -1; i++)
 		{
-			if (haystack[i] == needle[0] && needle_length == 1)	return i;
+			if (haystack[i] == needle[0] && needle_length == 1)
+				return i;
 			else if (haystack[i] == needle[0])
 			{
 				for (j = 1; (j < needle_length); j++)
 				{
 					if (haystack[i+j] == needle[j])
 					{
-						if (pos == -1) pos = i;
+						if (pos == -1)
+							pos = i;
 					}
 					else
 					{
@@ -647,10 +746,11 @@ gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gch
 	gint tmp;
 	GError *error = NULL;
 
-	if (config == NULL) return default_value;
+	if (G_UNLIKELY(config == NULL))
+		return default_value;
 
 	tmp = g_key_file_get_integer(config, section, key, &error);
-	if (error)
+	if (G_UNLIKELY(error))
 	{
 		g_error_free(error);
 		return default_value;
@@ -677,10 +777,11 @@ gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const
 	gboolean tmp;
 	GError *error = NULL;
 
-	if (config == NULL) return default_value;
+	if (G_UNLIKELY(config == NULL))
+		return default_value;
 
 	tmp = g_key_file_get_boolean(config, section, key, &error);
-	if (error)
+	if (G_UNLIKELY(error))
 	{
 		g_error_free(error);
 		return default_value;
@@ -707,10 +808,11 @@ gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gc
 	gchar *tmp;
 	GError *error = NULL;
 
-	if (config == NULL) return g_strdup(default_value);
+	if (G_UNLIKELY(config == NULL))
+		return g_strdup(default_value);
 
 	tmp = g_key_file_get_string(config, section, key, &error);
-	if (error)
+	if (G_UNLIKELY(error))
 	{
 		g_error_free(error);
 		return g_strdup(default_value);
@@ -723,7 +825,7 @@ gchar *utils_get_hex_from_color(GdkColor *color)
 {
 	gchar *buffer = g_malloc0(9);
 
-	if (color == NULL) return NULL;
+	g_return_val_if_fail(color != NULL, NULL);
 
 	g_snprintf(buffer, 8, "#%02X%02X%02X",
 	      (guint) (utils_scale_round(color->red / 256, 255)),
@@ -731,6 +833,18 @@ gchar *utils_get_hex_from_color(GdkColor *color)
 	      (guint) (utils_scale_round(color->blue / 256, 255)));
 
 	return buffer;
+}
+
+
+guint utils_invert_color(guint color)
+{
+	guint r, g, b;
+
+	r = 0xffffff - color;
+	g = 0xffffff - (color >> 8);
+	b = 0xffffff - (color >> 16);
+
+	return (r | (g << 8) | (b << 16));
 }
 
 
@@ -760,7 +874,8 @@ gchar *utils_get_current_file_dir_utf8(void)
 /* very simple convenience function */
 void utils_beep(void)
 {
-	if (prefs.beep_on_errors) gdk_beep();
+	if (prefs.beep_on_errors)
+		gdk_beep();
 }
 
 
@@ -783,7 +898,8 @@ gchar *utils_make_human_readable_str(guint64 size, gulong block_size,
 	frac = 0;
 
 	val = size * block_size;
-	if (val == 0) return g_strdup(u);
+	if (val == 0)
+		return g_strdup(u);
 
 	if (display_unit)
 	{
@@ -812,7 +928,7 @@ gchar *utils_make_human_readable_str(guint64 size, gulong block_size,
 }
 
 
- guint utils_get_value_of_hex(const gchar ch)
+ static guint utils_get_value_of_hex(const gchar ch)
 {
 	if (ch >= '0' && ch <= '9')
 		return ch - '0';
@@ -827,14 +943,15 @@ gchar *utils_make_human_readable_str(guint64 size, gulong block_size,
 
 /* utils_strtod() converts a string containing a hex colour ("0x00ff00") into an integer.
  * Basically, it is the same as strtod() would do, but it does not understand hex colour values,
- * before ANSI-C99. With with_route set, it takes strings of the format "#00ff00". */
+ * before ANSI-C99. With with_route set, it takes strings of the format "#00ff00".
+ * Returns -1 on failure. */
 gint utils_strtod(const gchar *source, gchar **end, gboolean with_route)
 {
 	guint red, green, blue, offset = 0;
 
-	if (source == NULL)
-		return -1;
-	else if (with_route && (strlen(source) != 7 || source[0] != '#'))
+	g_return_val_if_fail(source != NULL, -1);
+
+	if (with_route && (strlen(source) != 7 || source[0] != '#'))
 		return -1;
 	else if (! with_route && (strlen(source) != 8 || source[0] != '0' ||
 		(source[1] != 'x' && source[1] != 'X')))
@@ -915,7 +1032,7 @@ gchar **utils_read_file_in_array(const gchar *filename)
 	gchar **result = NULL;
 	gchar *data;
 
-	if (filename == NULL) return NULL;
+	g_return_val_if_fail(filename != NULL, NULL);
 
 	g_file_get_contents(filename, &data, NULL, NULL);
 
@@ -935,6 +1052,8 @@ gboolean utils_str_replace_escape(gchar *string)
 {
 	gsize i, j, len;
 	guint unicodechar;
+
+	g_return_val_if_fail(string != NULL, FALSE);
 
 	j = 0;
 	len = strlen(string);
@@ -1068,7 +1187,8 @@ gboolean utils_wrap_string(gchar *string, gint wrapstart)
 	gchar *pos, *linestart;
 	gboolean ret = FALSE;
 
-	if (wrapstart < 0) wrapstart = 80;
+	if (wrapstart < 0)
+		wrapstart = 80;
 
 	for (pos = linestart = string; *pos != '\0'; pos++)
 	{
@@ -1171,8 +1291,7 @@ gchar **utils_strv_new(const gchar *first, ...)
 	gchar *str;
 	gchar **strv;
 
-	if (first == NULL)
-		return NULL;
+	g_return_val_if_fail(first != NULL, NULL);
 
 	strvlen = 1;	/* for first argument */
 
@@ -1254,7 +1373,8 @@ GSList *utils_get_file_list(const gchar *path, guint *length, GError **error)
 	while (1)
 	{
 		const gchar *filename = g_dir_read_name(dir);
-		if (filename == NULL) break;
+		if (filename == NULL)
+			break;
 
 		list = g_slist_insert_sorted(list, g_strdup(filename), (GCompareFunc) utils_str_casecmp);
 		len++;
@@ -1272,7 +1392,7 @@ gboolean utils_str_has_upper(const gchar *str)
 {
 	gunichar c;
 
-	if (str == NULL || *str == '\0' || ! g_utf8_validate(str, -1, NULL))
+	if (! NZV(str) || ! g_utf8_validate(str, -1, NULL))
 		return FALSE;
 
 	while (*str != '\0')
@@ -1295,6 +1415,7 @@ static guint utils_string_replace_helper(GString *haystack, const gchar *needle,
 	guint ret = 0;
 	gssize pos;
 
+	g_return_val_if_fail(haystack != NULL, 0);
 	if (haystack->len == 0)
 		return FALSE;
 	g_return_val_if_fail(NZV(needle), 0);
@@ -1311,7 +1432,7 @@ static guint utils_string_replace_helper(GString *haystack, const gchar *needle,
 		 * (we have to be careful to only use haystack->str as its address may change) */
 		stack = haystack->str + pos;
 
-		if (replace)
+		if (G_LIKELY(replace))
 		{
 			g_string_insert(haystack, pos, replace);
 			stack = haystack->str + pos + strlen(replace);	/* skip past replacement */
@@ -1488,7 +1609,7 @@ const gchar *utils_build_path(const gchar *first, ...)
 	const gchar *str;
 	va_list args;
 
-	if (!buffer)
+	if (! buffer)
 		buffer = g_string_new(first);
 	else
 		g_string_assign(buffer, first);
@@ -1571,7 +1692,7 @@ gboolean utils_is_remote_path(const gchar *path)
 		static gchar *fuse_path = NULL;
 		static gsize len = 0;
 
-		if (fuse_path == NULL)
+		if (G_UNLIKELY(fuse_path == NULL))
 		{
 			fuse_path = g_build_filename(g_get_home_dir(), ".gvfs", NULL);
 			len = strlen(fuse_path);

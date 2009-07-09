@@ -1,9 +1,9 @@
-/* Scintilla source code edit control */
+// Scintilla source code edit control
 /** @file PropSet.h
  ** A Java style properties file module.
  **/
-/* Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org>
- * The License.txt file describes the conditions under which this software may be distributed. */
+// Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org>
+// The License.txt file describes the conditions under which this software may be distributed.
 
 #ifndef PROPSET_H
 #define PROPSET_H
@@ -56,10 +56,10 @@ public:
 	SString Expand(const char *withVars, int maxExpands=100) const;
 	int GetInt(const char *key, int defaultValue=0) const;
 	void Clear();
-	char *ToString() const;	/* Caller must delete[] the return value */
+	char *ToString() const;	// Caller must delete[] the return value
 
 private:
-	/* copy-value semantics not implemented */
+	// copy-value semantics not implemented
 	PropSet(const PropSet &copy);
 	void operator=(const PropSet &assign);
 };
@@ -68,11 +68,11 @@ private:
  */
 class WordList {
 public:
-	/* Each word contains at least one character - a empty word acts as sentinel at the end. */
+	// Each word contains at least one character - a empty word acts as sentinel at the end.
 	char **words;
 	char *list;
 	int len;
-	bool onlyLineEnds;	/**< Delimited by any white space or only line ends */
+	bool onlyLineEnds;	///< Delimited by any white space or only line ends
 	bool sorted;
 	int starts[256];
 	WordList(bool onlyLineEnds_ = false) :
@@ -96,8 +96,8 @@ inline bool IsAlphabetic(unsigned int ch) {
 #endif
 
 #ifdef _MSC_VER
-/* Visual C++ doesn't like the private copy idiom for disabling
- * the default copy constructor and operator=, but it's fine. */
+// Visual C++ doesn't like the private copy idiom for disabling
+// the default copy constructor and operator=, but it's fine.
 #pragma warning(disable: 4511 4512)
 #endif
 

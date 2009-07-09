@@ -83,8 +83,13 @@ static struct
 {
 	gint fif_mode;
 	gchar *fif_extra_options;
+	gboolean fif_case_sensitive;
+	gboolean fif_match_whole_word;
+	gboolean fif_invert_results;
+	gboolean fif_recursive;
+	gboolean fif_use_extra_options;
 }
-settings = {0, NULL};
+settings = {0, NULL, FALSE, FALSE, FALSE, FALSE, FALSE};
 
 static GeanyPrefGroup *fif_prefs = NULL;
 
@@ -171,6 +176,16 @@ static void init_prefs(void)
 		NULL);
 	stash_group_add_entry(group, &settings.fif_extra_options,
 		"fif_extra_options", "", "entry_extra");
+	stash_group_add_toggle_button(group, &settings.fif_case_sensitive,
+		"fif_case_sensitive", TRUE, "check_case");
+	stash_group_add_toggle_button(group, &settings.fif_match_whole_word,
+		"fif_match_whole_word", FALSE, "check_wholeword");
+	stash_group_add_toggle_button(group, &settings.fif_invert_results,
+		"fif_invert_results", FALSE, "check_invert");
+	stash_group_add_toggle_button(group, &settings.fif_recursive,
+		"fif_recursive", FALSE, "check_recursive");
+	stash_group_add_toggle_button(group, &settings.fif_use_extra_options,
+		"fif_use_extra_options", FALSE, "check_extra");
 }
 
 

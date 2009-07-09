@@ -42,6 +42,7 @@
 #include "navqueue.h"
 #include "editor.h"
 #include "msgwindow.h"
+#include "keybindings.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -281,6 +282,8 @@ void msgwin_show_hide(gboolean show)
 		show);
 	ignore_callback = FALSE;
 	ui_widget_show_hide(ui_lookup_widget(main_widgets.window, "scrolledwindow1"), show);
+	/* set the input focus back to the editor */
+	keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
 }
 
 
@@ -316,13 +319,15 @@ void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const 
 	GtkTreeIter iter;
 	const GdkColor *color = get_color(msg_color);
 	gchar *tmp;
+	gsize len;
 
 	if (! ui_prefs.msgwindow_visible) msgwin_show_hide(TRUE);
 
 	/* work around a strange problem when adding very long lines(greater than 4000 bytes)
 	 * cut the string to a maximum of 1024 bytes and discard the rest */
 	/* TODO: find the real cause for the display problem / if it is GtkTreeView file a bug report */
-	if (strlen(string) > 1024)
+	len = strlen(string);
+	if (len > 1024)
 		tmp = g_strndup(string, 1024);
 	else
 		tmp = g_strdup(string);
@@ -354,10 +359,7 @@ void msgwin_status_add(const gchar *format, ...)
 
 	/* add a timestamp to status messages */
 	time_str = utils_get_current_time_string();
-	if (time_str == NULL)
-		statusmsg = g_strdup(string);
-	else
-		statusmsg = g_strconcat(time_str, ": ", string, NULL);
+	statusmsg = g_strconcat(time_str, ": ", string, NULL);
 	g_free(time_str);
 
 	/* add message to Status window */
@@ -365,12 +367,13 @@ void msgwin_status_add(const gchar *format, ...)
 	gtk_list_store_set(msgwindow.store_status, &iter, 0, statusmsg, -1);
 	g_free(statusmsg);
 
-	if (main_status.main_window_realized)
+	if (G_LIKELY(main_status.main_window_realized))
 	{
 		GtkTreePath *path = gtk_tree_model_get_path(gtk_tree_view_get_model(GTK_TREE_VIEW(msgwindow.tree_status)), &iter);
 
 		gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(msgwindow.tree_status), path, NULL, FALSE, 0.0, 0.0);
-		if (prefs.switch_to_status) gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_STATUS);
+		if (prefs.switch_to_status)
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_STATUS);
 		gtk_tree_path_free(path);
 	}
 }
@@ -419,7 +422,7 @@ on_compiler_treeview_copy_activate     (GtkMenuItem     *menuitem,
 		gchar *string;
 
 		gtk_tree_model_get(model, &iter, str_idx, &string, -1);
-		if (string && *string)
+		if (NZV(string))
 		{
 			gtk_clipboard_set_text(gtk_clipboard_get(gdk_atom_intern("CLIPBOARD", FALSE)),
 				string, -1);
@@ -721,7 +724,7 @@ static void parse_compiler_error_line(const gchar *string,
 			 * Parse error: syntax error, unexpected T_LNUMBER, expecting T_FUNCTION in bob.php on line 16 */
 			gchar *tmp = strstr(string, " in ");
 
-			if(tmp != NULL)
+			if (tmp != NULL)
 			{
 				data.string = tmp;
 				data.pattern = " ";
@@ -883,7 +886,7 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
 	*filename = NULL;
 	*line = -1;
 
-	if (string == NULL)
+	if (G_UNLIKELY(string == NULL))
 		return;
 
 	if (dir == NULL)
