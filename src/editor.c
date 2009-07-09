@@ -4520,7 +4520,6 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 	sci_set_caret_policy_x(sci, CARET_JUMPS | CARET_EVEN, 0);
 	/*sci_set_caret_policy_y(sci, CARET_JUMPS | CARET_EVEN, 0);*/
 	SSM(sci, SCI_AUTOCSETSEPARATOR, '\n', 0);
-	SSM(sci, SCI_AUTOCSETDROPRESTOFWORD, TRUE, 0);
 	SSM(sci, SCI_SETSCROLLWIDTHTRACKING, 1, 0);
 
 	/* tag autocompletion images */
@@ -4707,6 +4706,7 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 	sci_set_tab_indents(sci, editor_prefs.use_tab_to_indent);
 
 	sci_set_autoc_max_height(sci, editor_prefs.symbolcompletion_max_height);
+	SSM(sci, SCI_AUTOCSETDROPRESTOFWORD, editor_prefs.completion_drops_rest_of_word, 0);
 
 	editor_set_indentation_guides(editor);
 

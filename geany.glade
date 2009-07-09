@@ -6020,6 +6020,25 @@ Match braces</property>
 			      </child>
 
 			      <child>
+				<widget class="GtkCheckButton" id="check_completion_drops_rest_of_word">
+				  <property name="visible">True</property>
+				  <property name="can_focus">True</property>
+				  <property name="label" translatable="yes">Drop rest of word on completion</property>
+				  <property name="use_underline">True</property>
+				  <property name="relief">GTK_RELIEF_NORMAL</property>
+				  <property name="focus_on_click">True</property>
+				  <property name="active">False</property>
+				  <property name="inconsistent">False</property>
+				  <property name="draw_indicator">True</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">False</property>
+				</packing>
+			      </child>
+
+			      <child>
 				<widget class="GtkTable" id="table14">
 				  <property name="visible">True</property>
 				  <property name="n_rows">3</property>
@@ -6087,7 +6106,7 @@ Match braces</property>
 				  <child>
 				    <widget class="GtkLabel" id="label205">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Characters to type for completion:</property>
+				      <property name="label" translatable="yes">Characters to type for autocompletion:</property>
 				      <property name="use_underline">False</property>
 				      <property name="use_markup">False</property>
 				      <property name="justify">GTK_JUSTIFY_LEFT</property>

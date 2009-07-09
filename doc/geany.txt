@@ -1782,9 +1782,14 @@ Autocomplete symbols
     When you start to type a symbol name, look for the full string to
     allow it to be completed for you.
 
-Autocomplete all words in documents
+Autocomplete all words in document
     When you start to type a word, Geany will search the whole document for
-    words starting with the typed part to complete it.
+    words starting with the typed part to complete it, assuming there
+    are no tag names to show.
+
+Drop rest of word on completion
+    Remove any word part to the right of the cursor when choosing a
+    completion list entry.
 
 Characters to type for completion
     Number of characters of a word to type before autocompletion is

@@ -2474,6 +2474,7 @@ create_prefs_dialog (void)
   GtkWidget *check_auto_multiline;
   GtkWidget *check_symbol_auto_completion;
   GtkWidget *check_autocomplete_doc_words;
+  GtkWidget *check_completion_drops_rest_of_word;
   GtkWidget *table14;
   GtkWidget *label223;
   GtkWidget *label173;
@@ -3642,6 +3643,10 @@ create_prefs_dialog (void)
   gtk_widget_show (check_autocomplete_doc_words);
   gtk_box_pack_start (GTK_BOX (vbox19), check_autocomplete_doc_words, FALSE, FALSE, 0);
 
+  check_completion_drops_rest_of_word = gtk_check_button_new_with_mnemonic (_("Drop rest of word on completion"));
+  gtk_widget_show (check_completion_drops_rest_of_word);
+  gtk_box_pack_start (GTK_BOX (vbox19), check_completion_drops_rest_of_word, FALSE, FALSE, 0);
+
   table14 = gtk_table_new (3, 2, FALSE);
   gtk_widget_show (table14);
   gtk_box_pack_start (GTK_BOX (vbox19), table14, FALSE, FALSE, 0);
@@ -3662,7 +3667,7 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (0), 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label173), 0, 0.5);
 
-  label205 = gtk_label_new (_("Characters to type for completion:"));
+  label205 = gtk_label_new (_("Characters to type for autocompletion:"));
   gtk_widget_show (label205);
   gtk_table_attach (GTK_TABLE (table14), label205, 0, 1, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
@@ -4817,6 +4822,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_auto_multiline, "check_auto_multiline");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_symbol_auto_completion, "check_symbol_auto_completion");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_autocomplete_doc_words, "check_autocomplete_doc_words");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_completion_drops_rest_of_word, "check_completion_drops_rest_of_word");
   GLADE_HOOKUP_OBJECT (prefs_dialog, table14, "table14");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label223, "label223");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label173, "label173");

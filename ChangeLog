@@ -1,3 +1,10 @@
+2009-07-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, src/keyfile.c, src/editor.c, src/editor.h,
+   doc/geany.txt, doc/geany.html, geany.glade:
+   Add 'Drop rest of word on completion' pref.
+
+
 2009-07-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/document.c, src/documentprivate.h:
