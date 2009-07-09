@@ -267,9 +267,9 @@ void msgwin_compiler_add_string(gint msg_color, const gchar *msg)
 		gtk_tree_path_free(path);
 	}
 
-	/* calling build_menu_update for every build message would be overkill */
-	gtk_widget_set_sensitive(build_get_menu_items(-1)->item_next_error, TRUE);
-	gtk_widget_set_sensitive(build_get_menu_items(-1)->item_previous_error, TRUE);
+	/* calling build_menu_update for every build message would be overkill, TODO really should call it once when all done */
+	gtk_widget_set_sensitive(build_get_menu_items(-1)->menu_item[GBG_FIXED][GBF_NEXT_ERROR], TRUE);
+	gtk_widget_set_sensitive(build_get_menu_items(-1)->menu_item[GBG_FIXED][GBF_PREV_ERROR], TRUE);
 }
 
 

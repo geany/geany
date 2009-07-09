@@ -586,8 +586,9 @@ static GeanyFiletype *filetype_new(void)
 	GeanyFiletype *ft = g_new0(GeanyFiletype, 1);
 
 	ft->lang = -2;	/* assume no tagmanager parser */
-	ft->programs = g_new0(struct build_programs, 1);
-	ft->actions = g_new0(struct build_actions, 1);
+/*	ft->programs = g_new0(struct build_programs, 1);
+	ft->actions = g_new0(struct build_actions, 1);*/
+	ft->project_list_entry = -1; /* no entry */
 
 	ft->priv = g_new0(GeanyFiletypePrivate, 1);
 	return ft;
@@ -1041,12 +1042,9 @@ static void filetype_free(gpointer data, G_GNUC_UNUSED gpointer user_data)
 	g_free(ft->comment_open);
 	g_free(ft->comment_close);
 	g_free(ft->context_action_cmd);
-	g_free(ft->programs->compiler);
-	g_free(ft->programs->linker);
-	g_free(ft->programs->run_cmd);
-	g_free(ft->programs->run_cmd2);
-	g_free(ft->programs);
-	g_free(ft->actions);
+	g_free(ft->filecmds);
+	g_free(ft->ftdefcmds);
+	g_free(ft->execcmds);
 	set_error_regex(ft, NULL);
 
 	g_strfreev(ft->pattern);
@@ -1118,7 +1116,9 @@ static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
 	}
 
 	/* read build settings */
-	result = g_key_file_get_string(configh, "build_settings", "compiler", NULL);
+	load_build_menu( config, BCS_FT, (gpointer)ft );
+	load_build_menu( configh, BCS_HOME_FT, (gpointer)ft );
+/*	result = g_key_file_get_string(configh, "build_settings", "compiler", NULL);
 	if (result == NULL) result = g_key_file_get_string(config, "build_settings", "compiler", NULL);
 	if (G_LIKELY(result != NULL))
 	{
@@ -1155,7 +1155,7 @@ static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
 	if (result != NULL)
 	{
 		set_error_regex(ft, result);
-	}
+	} */
 }
 
 
@@ -1247,12 +1247,8 @@ void filetypes_save_commands(void)
 
 	for (i = 1; i < GEANY_MAX_BUILT_IN_FILETYPES; i++)
 	{
-		struct build_programs *bp = filetypes[i]->programs;
 		GKeyFile *config_home;
 		gchar *fname, *ext, *data;
-
-		if (! bp->modified)
-			continue;
 
 		ext = filetypes_get_conf_extension(i);
 		fname = g_strconcat(conf_prefix, ext, NULL);
@@ -1260,16 +1256,6 @@ void filetypes_save_commands(void)
 
 		config_home = g_key_file_new();
 		g_key_file_load_from_file(config_home, fname, G_KEY_FILE_KEEP_COMMENTS, NULL);
-
-		if (NZV(bp->compiler))
-			g_key_file_set_string(config_home, "build_settings", "compiler", bp->compiler);
-		if (NZV(bp->linker))
-			g_key_file_set_string(config_home, "build_settings", "linker", bp->linker);
-		if (NZV(bp->run_cmd))
-			g_key_file_set_string(config_home, "build_settings", "run_cmd", bp->run_cmd);
-		if (NZV(bp->run_cmd2))
-			g_key_file_set_string(config_home, "build_settings", "run_cmd2", bp->run_cmd2);
-
 		data = g_key_file_to_data(config_home, NULL, NULL);
 		utils_write_file(fname, data);
 		g_free(data);

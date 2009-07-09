@@ -27,18 +27,61 @@
 
 #define GEANY_BUILD_ERR_HIGHLIGHT_MAX 100
 
-typedef enum	/* Geany Build Options */
+/* Geany Known Build Commands, currently only these can have keybindings
+ * Order is important (see GBO_TO_GBG, GBO_TO_CMD below) */
+typedef enum
 {
 	GBO_COMPILE,
 	GBO_BUILD,
 	GBO_MAKE_ALL,
 	GBO_MAKE_CUSTOM,
-	GBO_MAKE_OBJECT
+	GBO_MAKE_OBJECT,
+	GBO_EXEC,
+	GBO_COUNT	/* count of how many */
 } GeanyBuildType;
+
+typedef enum	/* build command groups, order as above */
+{
+	GBG_FT,		/* filetype */
+	GBG_NON_FT,	/* non filetype */
+	GBG_EXEC,	/* execute */
+	GBG_COUNT	/* count of how many */
+} GeanyBuildGroup;
+
+#define GBG_FIXED GBG_COUNT
+
+/* convert GBO_xxx to GBG_xxx and command number
+ * Note they are macros so they can be used in static initialisers */
+#define GBO_TO_GBG(gbo) ((gbo)>GBO_EXEC?GBG_COUNT:((gbo)>=GBO_EXEC?GBG_EXEC:((gbo)>=GBO_MAKE_ALL?GBG_NON_FT:GBG_FT)))
+#define GBO_TO_CMD(gbo) ((gbo)>=GBO_COUNT?(gbo)-GBO_COUNT:((gbo)>=GBO_EXEC?(gbo)-GBO_EXEC:((gbo)>=GBO_MAKE_ALL?(gbo)-GBO_MAKE_ALL:(gbo))))
+
+enum GeanyBuildFixedMenuItems
+{
+	GBF_NEXT_ERROR,
+	GBF_PREV_ERROR,
+	GBF_COMMANDS,
+	GBF_SEP_1,
+	GBF_SEP_2,
+	GBF_SEP_3,
+	GBF_SEP_4,
+	GBF_COUNT
+};
+
+typedef enum	/* build command sources, in increasing priority */
+{
+	BCS_DEF,	/* default */
+	BCS_FT,		/* filetype */
+	BCS_HOME_FT,/* filetypes in home */
+	BCS_PREF,	/* preferences */
+	BCS_PROJ_FT,/* filetype in project */
+	BCS_PROJ,	/* project */
+	BCS_COUNT	/* count of how many */
+} GeanyBuildSource;
 
 typedef struct GeanyBuildInfo
 {
-	GeanyBuildType	 type;	/* current action(one of the above enumeration) */
+	GeanyBuildGroup	 grp;
+	gint			 cmd;
 	GPid			 pid;	/* process id of the spawned process */
 	gchar			*dir;
 	guint			 file_type_id;
@@ -48,37 +91,54 @@ typedef struct GeanyBuildInfo
 
 extern GeanyBuildInfo build_info;
 
+typedef struct GeanyBuildCommand
+{
+	gchar		*label;
+	gchar		*command;
+	gboolean	 exists;
+	gboolean	 run_in_base_dir;
+	gboolean	 changed;
+} GeanyBuildCommand;
+
+extern GeanyBuildCommand *non_ft_proj, *exec_proj; /* project command array pointers */
 
 typedef struct BuildMenuItems
 {
 	GtkWidget		*menu;
-	GtkWidget		*item_compile;
-	GtkWidget		*item_link;
-	GtkWidget		*item_make_all;
-	GtkWidget		*item_make_custom;
-	GtkWidget		*item_make_object;
-	GtkWidget		*item_next_error;
-	GtkWidget		*item_previous_error;
-	GtkWidget		*item_exec;
-	GtkWidget		*item_exec2;
-	GtkWidget		*item_set_args;
+	GtkWidget		**menu_item[GBG_COUNT+1];  /* +1 for fixed items */
 } BuildMenuItems;
 
-
+/* opaque pointers returned from build functions and passed back to them */
+typedef struct TableFields *TableData;
 
 void build_init(void);
 
 void build_finalize(void);
 
+/* menu configuration dialog functions */
+GtkWidget *build_commands_table( GeanyDocument *doc, GeanyBuildSource dst, TableData *data, GeanyFiletype *ft );
 
+gboolean read_build_commands( GeanyBuildCommand ***dstcmd, GeanyBuildSource dst, TableData data, gint response );
+
+void free_build_data( TableData data );
+
+/* build response decode assistance function */
 gboolean build_parse_make_dir(const gchar *string, gchar **prefix);
 
+/* build menu functions */
 void build_menu_update(GeanyDocument *doc);
 
 BuildMenuItems *build_get_menu_items(gint filetype_idx);
 
 void build_toolbutton_build_clicked(GtkAction *action, gpointer user_data);
 
+void remove_command( GeanyBuildSource src, GeanyBuildGroup grp, gint cmd );
 
+/* load and store menu configuration */
+void load_build_menu( GKeyFile *config, GeanyBuildSource dst, gpointer ptr );
+
+void save_build_menu( GKeyFile *config, gpointer ptr, GeanyBuildSource src );
+
+void set_build_grp_count( GeanyBuildGroup grp, guint count );
 
 #endif

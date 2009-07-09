@@ -478,8 +478,6 @@ static void init_default_kb(void)
 		0, 0, "build_previouserror", _("Previous error"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_BUILD_RUN, cb_func_build_action,
 		GDK_F5, 0, "build_run", _("Run"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_BUILD_RUN2, cb_func_build_action,
-		0, 0, "build_run2", _("Run (alternative command)"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_BUILD_OPTIONS, cb_func_build_action,
 		0, 0, "build_options", _("Build options"), NULL);
 
@@ -1340,38 +1338,35 @@ static void cb_func_build_action(guint key_id)
 	if (! ft)
 		return;
 	menu_items = build_get_menu_items(ft->id);
-
+/* TODO make it a table??*/
 	switch (key_id)
 	{
 		case GEANY_KEYS_BUILD_COMPILE:
-			item = menu_items->item_compile;
+			item = menu_items->menu_item[GBG_FT][GBO_TO_CMD(GBO_COMPILE)];
 			break;
 		case GEANY_KEYS_BUILD_LINK:
-			item = menu_items->item_link;
+			item = menu_items->menu_item[GBG_FT][GBO_TO_CMD(GBO_BUILD)];
 			break;
 		case GEANY_KEYS_BUILD_MAKE:
-			item = menu_items->item_make_all;
+			item = menu_items->menu_item[GBG_FT][GBO_TO_CMD(GBO_MAKE_ALL)];
 			break;
 		case GEANY_KEYS_BUILD_MAKEOWNTARGET:
-			item = menu_items->item_make_custom;
+			item = menu_items->menu_item[GBG_FT][GBO_TO_CMD(GBO_MAKE_CUSTOM)];
 			break;
 		case GEANY_KEYS_BUILD_MAKEOBJECT:
-			item = menu_items->item_make_object;
+			item = menu_items->menu_item[GBG_FT][GBO_TO_CMD(GBO_MAKE_OBJECT)];
 			break;
 		case GEANY_KEYS_BUILD_NEXTERROR:
-			item = menu_items->item_next_error;
+			item = menu_items->menu_item[GBG_FIXED][GBF_NEXT_ERROR];
 			break;
 		case GEANY_KEYS_BUILD_PREVIOUSERROR:
-			item = menu_items->item_previous_error;
+			item = menu_items->menu_item[GBG_FIXED][GBF_PREV_ERROR];
 			break;
 		case GEANY_KEYS_BUILD_RUN:
-			item = menu_items->item_exec;
-			break;
-		case GEANY_KEYS_BUILD_RUN2:
-			item = menu_items->item_exec2;
+			item = menu_items->menu_item[GBG_EXEC][GBO_TO_CMD(GBO_EXEC)];
 			break;
 		case GEANY_KEYS_BUILD_OPTIONS:
-			item = menu_items->item_set_args;
+			item = menu_items->menu_item[GBG_FIXED][GBF_COMMANDS];
 			break;
 		default:
 			item = NULL;

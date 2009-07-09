@@ -41,6 +41,7 @@ typedef struct GeanyProject
 	gint type;
 	gchar **file_patterns;	/**< Array of filename extension patterns. */
 	gboolean make_in_base_path;
+	GPtrArray *build_filetypes_list; /**< Project has custom filetype builds for these. */
 
 	struct GeanyProjectPrivate	*priv;	/* must be last, append fields before this item */
 }

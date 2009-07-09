@@ -27,6 +27,7 @@
 
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
+#include "build.h"
 
 
 typedef enum
@@ -98,7 +99,7 @@ GeanyFiletypeGroupID;
 #define FILETYPE_ID(filetype_ptr) \
 	(((filetype_ptr) != NULL) ? (filetype_ptr)->id : GEANY_FILETYPES_NONE)
 
-
+/*
 struct build_actions
 {
 	gboolean	can_compile;
@@ -130,8 +131,16 @@ struct GeanyFiletype
 	gchar	 		 *comment_open;
 	gchar	 		 *comment_close;
 	gboolean  		  comment_use_indent;
-	struct build_programs	*programs;
+/*	struct build_programs	*programs; 
 	struct build_actions	*actions;	/* TODO: make private */
+	GeanyBuildCommand *filecmds;	/* these need to be visible since used in build.c so not in private part */
+	GeanyBuildCommand *ftdefcmds;	/* filetype dependent defaults for non_ft commands */
+	GeanyBuildCommand *execcmds;
+	GeanyBuildCommand *homefilecmds;
+	GeanyBuildCommand *homeexeccmds;
+	GeanyBuildCommand *projfilecmds;
+	GeanyBuildCommand *projexeccmds;
+	gint			   project_list_entry;
 	GeanyFiletypeGroupID	group;
 	gchar			 *error_regex_string;
 

@@ -49,6 +49,7 @@
 #include "editor.h"
 #include "stash.h"
 #include "treeviews.h"
+#include "filetypes.h"
 
 
 ProjectPrefs project_prefs = { NULL, FALSE, FALSE };
@@ -78,6 +79,7 @@ typedef struct _PropertyDialogElements
 	GtkWidget *make_in_base_path;
 	GtkWidget *run_cmd;
 	GtkWidget *patterns;
+	TableData  build_properties;
 } PropertyDialogElements;
 
 
@@ -322,9 +324,22 @@ static void update_ui(void)
 }
 
 
+static void remove_foreach_project_filetype( gpointer data, gpointer user_data )
+{
+	GeanyFiletype *ft = (GeanyFiletype*)data;
+	if(ft!=NULL)
+	{
+		setptr( ft->projfilecmds, NULL);
+		setptr(ft->projexeccmds, NULL);
+		ft->project_list_entry = -1;
+	}
+}
+
 /* open_default will make function reload default session files on close */
 void project_close(gboolean open_default)
 {
+	gint i;
+	
 	g_return_if_fail(app->project != NULL);
 
 	ui_set_statusbar(TRUE, _("Project \"%s\" closed."), app->project->name);
@@ -332,6 +347,14 @@ void project_close(gboolean open_default)
 	/* use write_config() to save project session files */
 	write_config(FALSE);
 
+	/* remove project filetypes build entries */
+	g_ptr_array_foreach( app->project->build_filetypes_list, remove_foreach_project_filetype, NULL );
+	g_ptr_array_free(app->project->build_filetypes_list, FALSE);
+	
+	/* remove project non filetype build menu items */
+	remove_command( BCS_PROJ, GBG_NON_FT, -1 );
+	remove_command( BCS_PROJ, GBG_EXEC, -1 );
+	
 	g_free(app->project->name);
 	g_free(app->project->description);
 	g_free(app->project->file_name);
@@ -369,6 +392,9 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	GtkWidget *bbox;
 	GtkWidget *label;
 	GtkWidget *swin;
+	gpointer   data;
+	GeanyDocument *doc = document_get_current();
+	GeanyFiletype *ft;
 
 	e->dialog = create_project_dialog();
 	gtk_window_set_transient_for(GTK_WINDOW(e->dialog), GTK_WINDOW(main_widgets.window));
@@ -495,6 +521,10 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	label = gtk_label_new(_("Project"));
 	gtk_widget_show(table);	/* needed to switch current page */
 	gtk_notebook_insert_page(GTK_NOTEBOOK(notebook), table, label, 0);
+	if(doc!=NULL) ft=doc->file_type;
+	table = build_commands_table( doc, BCS_PROJ, &(e->build_properties), ft );
+	label = gtk_label_new(_("Build"));
+	gtk_notebook_insert_page(GTK_NOTEBOOK(notebook), table, label, 2);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 0);
 }
 
@@ -562,6 +592,7 @@ void project_properties(void)
 		stash_group_update(indent_group, e->dialog);
 	}
 
+	free_build_fields( e->build_properties );
 	gtk_widget_destroy(e->dialog);
 	g_free(e);
 }
@@ -703,6 +734,9 @@ static gboolean update_config(const PropertyDialogElements *e)
 		GtkTextIter start, end;
 		/*gchar *tmp;*/
 		GtkTextBuffer *buffer;
+		GeanyDocument *doc = document_get_current();
+		GeanyBuildCommand **rbc_array[GBG_COUNT], *oldvalue;
+		GeanyFiletype *ft=NULL;
 
 		p->make_in_base_path = gtk_toggle_button_get_active(
 			GTK_TOGGLE_BUTTON(e->make_in_base_path));
@@ -713,6 +747,28 @@ static gboolean update_config(const PropertyDialogElements *e)
 		gtk_text_buffer_get_start_iter(buffer, &start);
 		gtk_text_buffer_get_end_iter(buffer, &end);
 		setptr(p->description, g_strdup(gtk_text_buffer_get_text(buffer, &start, &end, FALSE)));
+		
+		/* read the project build menu */
+		if( doc!=NULL )ft=doc->file_type;
+		if( ft!=NULL )
+		{
+			rbc_array[GBG_FT] = &(ft->projfilecmds);
+			oldvalue = ft->projfilecmds;
+		}
+		else
+		{
+			rbc_array[GBG_FT] = NULL;
+			oldvalue = NULL;
+		}
+		rbc_array[GBG_NON_FT] = &non_ft_proj;
+		rbc_array[GBG_EXEC] = &exec_proj;
+		read_build_commands( rbc_array, BCS_PROJ, e->build_properties,  GTK_RESPONSE_ACCEPT );
+		if(ft!=NULL&&ft->projfilecmds!=oldvalue && ft->project_list_entry<0)
+		{
+			ft->project_list_entry = p->build_filetypes_list->len; 
+			g_ptr_array_add( p->build_filetypes_list, ft );
+		}
+		build_menu_update(doc);
 
 #if 0
 		/* get and set the project file patterns */
@@ -952,6 +1008,7 @@ static gboolean load_config(const gchar *filename)
 	p->run_cmd = utils_get_setting_string(config, "project", "run_cmd", "");
 	p->file_patterns = g_key_file_get_string_list(config, "project", "file_patterns", NULL, NULL);
 
+	load_build_menu( config, BCS_PROJ, (gpointer)p );
 	if (project_prefs.project_session)
 	{
 		/* save current (non-project) session (it could has been changed since program startup) */
@@ -1008,7 +1065,7 @@ static gboolean write_config(gboolean emit_signal)
 	/* store the session files into the project too */
 	if (project_prefs.project_session)
 		configuration_save_session_files(config);
-
+	save_build_menu( config, (gpointer)p, BCS_PROJ );
 	if (emit_signal)
 	{
 		g_signal_emit_by_name(geany_object, "project-save", config);
@@ -1061,9 +1118,9 @@ gchar *project_get_make_dir(void)
 {
 	GeanyProject *project = app->project;
 
-	if (project && ! project->make_in_base_path)
+/*	if (project && ! project->make_in_base_path)
 		return NULL;
-	else
+	else*/
 		return project_get_base_path();
 }
 
