@@ -403,8 +403,8 @@ UIUtilsFuncs;
 /* See dialogs.h */
 typedef struct DialogFuncs
 {
-	gboolean	(*show_question) (const gchar *text, ...);
-	void		(*show_msgbox) (gint type, const gchar *text, ...);
+	gboolean	(*show_question) (const gchar *text, ...) G_GNUC_PRINTF (1, 2);
+	void		(*show_msgbox) (GtkMessageType type, const gchar *text, ...) G_GNUC_PRINTF (2, 3);
 	gboolean	(*show_save_as) (void);
 	gboolean	(*show_input_numeric) (const gchar *title, const gchar *label_text,
 				 gdouble *value, gdouble min, gdouble max, gdouble step);

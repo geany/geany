@@ -557,12 +557,12 @@ gboolean dialogs_show_save_as()
  *  On Unix-like systems a GTK message dialog box is shown, on Win32 systems a native Windows
  *  message dialog box is shown.
  *
- *  @param type A GtkMessageType, can be one of: GTK_MESSAGE_INFO, GTK_MESSAGE_WARNING,
- *              GTK_MESSAGE_QUESTION, GTK_MESSAGE_ERROR
+ *  @param type A GtkMessageType, e.g. GTK_MESSAGE_INFO, GTK_MESSAGE_WARNING,
+ *              GTK_MESSAGE_QUESTION, GTK_MESSAGE_ERROR.
  *  @param text Printf()-style format string.
  *  @param ... Arguments for the @c text format string.
  **/
-void dialogs_show_msgbox(gint type, const gchar *text, ...)
+void dialogs_show_msgbox(GtkMessageType type, const gchar *text, ...)
 {
 #ifndef G_OS_WIN32
 	GtkWidget *dialog;
@@ -586,7 +586,7 @@ void dialogs_show_msgbox(gint type, const gchar *text, ...)
 }
 
 
-void dialogs_show_msgbox_with_secondary(gint type, const gchar *text, const gchar *secondary)
+void dialogs_show_msgbox_with_secondary(GtkMessageType type, const gchar *text, const gchar *secondary)
 {
 #ifdef G_OS_WIN32
 	/* put the two strings together because Windows message boxes don't support secondary texts */
