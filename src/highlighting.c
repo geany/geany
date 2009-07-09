@@ -3493,7 +3493,7 @@ static void styleset_haxe(ScintillaObject *sci)
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_HAXE].keywords[0]);
 	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_HAXE].keywords[1]);
-	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_HAXE].keywords[2]);
+	SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) style_sets[GEANY_FILETYPES_HAXE].keywords[2]);
 
 	styleset_c_like(sci, GEANY_FILETYPES_HAXE);
 }
