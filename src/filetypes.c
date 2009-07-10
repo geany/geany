@@ -1253,9 +1253,9 @@ void filetypes_save_commands(void)
 		ext = filetypes_get_conf_extension(i);
 		fname = g_strconcat(conf_prefix, ext, NULL);
 		g_free(ext);
-
 		config_home = g_key_file_new();
 		g_key_file_load_from_file(config_home, fname, G_KEY_FILE_KEEP_COMMENTS, NULL);
+		save_build_menu(config_home, (gpointer)(filetypes[i]), BCS_HOME_FT);
 		data = g_key_file_to_data(config_home, NULL, NULL);
 		utils_write_file(fname, data);
 		g_free(data);

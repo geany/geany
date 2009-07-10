@@ -118,7 +118,7 @@ void build_finalize(void);
 /* menu configuration dialog functions */
 GtkWidget *build_commands_table( GeanyDocument *doc, GeanyBuildSource dst, TableData *data, GeanyFiletype *ft );
 
-gboolean read_build_commands( GeanyBuildCommand ***dstcmd, GeanyBuildSource dst, TableData data, gint response );
+gboolean read_build_commands( GeanyBuildCommand ***dstcmd, TableData data, gint response );
 
 void free_build_data( TableData data );
 

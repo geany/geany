@@ -1,3 +1,13 @@
+2009-07-10  geany test  <elextr(at)gmail(dot)com>
+
+ * src/build.c
+   fixed problem loading old format filetype files, some formatting fixes
+   fixed saving new format files
+   added operation for clear button on build commands dialog
+ * src/filetypes.c
+   fixed loading and saving filetype files
+
+
 2009-07-09  geany test  <elextr(at)gmail(dot)com>
 
 Configurable Build Menu Changes

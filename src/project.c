@@ -762,7 +762,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 		}
 		rbc_array[GBG_NON_FT] = &non_ft_proj;
 		rbc_array[GBG_EXEC] = &exec_proj;
-		read_build_commands( rbc_array, BCS_PROJ, e->build_properties,  GTK_RESPONSE_ACCEPT );
+		read_build_commands( rbc_array, e->build_properties,  GTK_RESPONSE_ACCEPT );
 		if(ft!=NULL&&ft->projfilecmds!=oldvalue && ft->project_list_entry<0)
 		{
 			ft->project_list_entry = p->build_filetypes_list->len; 
