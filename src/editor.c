@@ -3032,19 +3032,31 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 }
 
 
-static void editor_highlight_braces(GeanyEditor *editor, gint cur_pos)
-{
-	gint brace_pos = cur_pos - 1;
-	gint end_pos;
+static gboolean brace_timeout_active = FALSE;
 
-	if (! utils_isbrace(sci_get_char_at(editor->sci, brace_pos), editor_prefs.brace_match_ltgt))
+static gboolean delay_match_brace(G_GNUC_UNUSED gpointer user_data)
+{
+	GeanyDocument *doc = document_get_current();
+	GeanyEditor *editor;
+	gint brace_pos = GPOINTER_TO_INT(user_data);
+	gint end_pos, cur_pos;
+
+	brace_timeout_active = FALSE;
+	if (!doc)
+		return FALSE;
+
+	editor = doc->editor;
+	cur_pos = sci_get_current_position(editor->sci) - 1;
+
+	if (cur_pos != brace_pos)
 	{
-		brace_pos++;
-		if (! utils_isbrace(sci_get_char_at(editor->sci, brace_pos), editor_prefs.brace_match_ltgt))
+		cur_pos++;
+		if (cur_pos != brace_pos)
 		{
-			SSM(editor->sci, SCI_SETHIGHLIGHTGUIDE, 0, 0);
-			SSM(editor->sci, SCI_BRACEBADLIGHT, (uptr_t)-1, 0);
-			return;
+			/* we have moved past the original brace_pos, but after the timeout
+			 * we may now be on a new brace, so check again */
+			editor_highlight_braces(editor, cur_pos);
+			return FALSE;
 		}
 	}
 	end_pos = sci_find_matching_brace(editor->sci, brace_pos);
@@ -3060,6 +3072,30 @@ static void editor_highlight_braces(GeanyEditor *editor, gint cur_pos)
 	{
 		SSM(editor->sci, SCI_SETHIGHLIGHTGUIDE, 0, 0);
 		SSM(editor->sci, SCI_BRACEBADLIGHT, brace_pos, 0);
+	}
+	return FALSE;
+}
+
+
+static void editor_highlight_braces(GeanyEditor *editor, gint cur_pos)
+{
+	gint brace_pos = cur_pos - 1;
+
+	if (! utils_isbrace(sci_get_char_at(editor->sci, brace_pos), editor_prefs.brace_match_ltgt))
+	{
+		brace_pos++;
+		if (! utils_isbrace(sci_get_char_at(editor->sci, brace_pos), editor_prefs.brace_match_ltgt))
+		{
+			SSM(editor->sci, SCI_SETHIGHLIGHTGUIDE, 0, 0);
+			SSM(editor->sci, SCI_BRACEBADLIGHT, (uptr_t)-1, 0);
+			return;
+		}
+	}
+	if (!brace_timeout_active)
+	{
+		brace_timeout_active = TRUE;
+		/* delaying matching makes scrolling faster e.g. holding down arrow keys */
+		g_timeout_add(100, delay_match_brace, GINT_TO_POINTER(brace_pos));
 	}
 }
 
