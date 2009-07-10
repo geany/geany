@@ -1292,10 +1292,10 @@ static void cb_func_search_action(guint key_id)
 		case GEANY_KEYS_SEARCH_MARKALL:
 			if (sci_has_selection(sci))
 			{
-				gchar *text = g_alloca(sci_get_selected_text_length(sci) + 1);
+				gchar *text = sci_get_selection_contents(sci);
 
-				sci_get_selected_text(sci, text);
 				search_mark_all(doc, text, SCFIND_MATCHCASE);
+				g_free(text);
 			}
 			else
 			{
