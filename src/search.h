@@ -65,4 +65,6 @@ void search_find_usage(const gchar *search_text, gint flags, gboolean in_session
 
 void search_find_selection(GeanyDocument *doc, gboolean search_backwards);
 
+gint search_mark_all(GeanyDocument *doc, const gchar *search_text, gint flags);
+
 #endif

@@ -959,13 +959,16 @@ on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user
 }
 
 
-static gint search_mark(GeanyDocument *doc, const gchar *search_text, gint flags)
+/* @return Number of matches marked. */
+gint search_mark_all(GeanyDocument *doc, const gchar *search_text, gint flags)
 {
 	gint pos, count = 0;
 	gsize len;
 	struct Sci_TextToFind ttf;
 
 	g_return_val_if_fail(doc != NULL, 0);
+	if (!NZV(search_text))
+		return 0;
 
 	/* clear previous search indicators */
 	editor_indicator_clear(doc->editor, GEANY_INDICATOR_SEARCH);
@@ -1074,7 +1077,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 			case GEANY_RESPONSE_MARK:
 			{
-				gint count = search_mark(doc, search_data.text, search_data.flags);
+				gint count = search_mark_all(doc, search_data.text, search_data.flags);
 
 				if (count == 0)
 					ui_set_statusbar(FALSE, _("No matches found for \"%s\"."), search_data.text);

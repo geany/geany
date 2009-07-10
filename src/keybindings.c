@@ -49,6 +49,7 @@
 #include "treeviews.h"
 #include "geanywraplabel.h"
 #include "main.h"
+#include "search.h"
 
 
 GPtrArray *keybinding_groups;	/* array of GeanyKeyGroup pointers */
@@ -360,6 +361,8 @@ static void init_default_kb(void)
 		0, 0, "popup_findusage", _("Find Usage"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE, cb_func_search_action,
 		0, 0, "popup_finddocumentusage", _("Find Document Usage"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_SEARCH_MARKALL, cb_func_search_action,
+		GDK_m, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "find_markall", _("Mark All"), NULL);
 
 	group = ADD_KB_GROUP(GOTO, _("Go to"));
 
@@ -1251,7 +1254,12 @@ static void cb_func_menu_help(G_GNUC_UNUSED guint key_id)
 
 static void cb_func_search_action(guint key_id)
 {
-	GeanyDocument *doc;
+	GeanyDocument *doc = document_get_current();
+	ScintillaObject *sci;
+
+	if (!doc)
+		return;
+	sci = doc->editor->sci;
 
 	switch (key_id)
 	{
@@ -1274,14 +1282,26 @@ static void cb_func_search_action(guint key_id)
 		case GEANY_KEYS_SEARCH_PREVIOUSMESSAGE:
 			on_previous_message1_activate(NULL, NULL); break;
 		case GEANY_KEYS_SEARCH_FINDUSAGE:
-			doc = document_get_current();
 			read_current_word(doc);
 			on_find_usage1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE:
-			doc = document_get_current();
 			read_current_word(doc);
 			on_find_document_usage1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_SEARCH_MARKALL:
+			if (sci_has_selection(sci))
+			{
+				gchar *text = g_alloca(sci_get_selected_text_length(sci) + 1);
+
+				sci_get_selected_text(sci, text);
+				search_mark_all(doc, text, SCFIND_MATCHCASE);
+			}
+			else
+			{
+				read_current_word(doc);
+				search_mark_all(doc, editor_info.current_word, SCFIND_MATCHCASE | SCFIND_WHOLEWORD);
+			}
 			break;
 	}
 }
