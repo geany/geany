@@ -153,10 +153,90 @@ static void add_menu_accel(GeanyKeyGroup *group, guint kb_id,
 /* the various groups of commands not in the filetype struct */
 GeanyBuildCommand *ft_def=NULL, *non_ft_proj=NULL, *non_ft_pref=NULL, *non_ft_def=NULL, *exec_proj=NULL, *exec_pref=NULL, *exec_def=NULL;
 
+/* control if build commands are printed by get_build_cmd for debug */
+#ifndef PRINTBUILDCMDS
+#define PRINTBUILDCMDS FALSE
+#endif
+gboolean printbuildcmds=PRINTBUILDCMDS;
+
+static GeanyBuildCommand **cl[GBG_COUNT][BCS_COUNT] = {
+	/* 	BCS_DEF,     BCS_FT, BCS_HOME_FT, BCS_PREF,	    BCS_PROJ */
+	{   &ft_def,     NULL,   NULL,        NULL,         NULL },
+	{   &non_ft_def, NULL,   NULL,        &non_ft_pref, &non_ft_proj },
+	{   &exec_def,   NULL,   NULL,        &exec_pref,   &exec_proj } };
+
+/* for debug only, print the commands structures in priority order */
+static void printfcmds()
+{
+	GeanyFiletype	*ft=NULL;
+	GeanyDocument	*doc;
+	gint i,j,k,l,m;
+	gint cc[BCS_COUNT];
+	gchar c;
+	if (doc==NULL)doc=document_get_current();
+	if (doc!=NULL)ft = doc->file_type;
+	if(ft!=NULL)
+	{
+		printf("filetype %s\n",ft->name);
+		cl[GBG_FT][BCS_FT] = &(ft->filecmds);
+		cl[GBG_FT][BCS_HOME_FT] = &(ft->homefilecmds);
+		cl[GBG_FT][BCS_PROJ] = &(ft->projfilecmds);
+		cl[GBG_NON_FT][BCS_FT] = &(ft->ftdefcmds);
+		cl[GBG_EXEC][BCS_FT] = &(ft->execcmds);
+		cl[GBG_EXEC][BCS_HOME_FT] = &(ft->homeexeccmds);
+	}
+	for(i=0;i<BCS_COUNT;++i)
+	{
+		m=1;
+		for(j=0;j<GBG_COUNT;++j)
+		{
+			for(k=0;k<build_groups_count[j];++k)
+				if(cl[j][i]!=NULL && *(cl[j][i])!=NULL && (*(cl[j][i]))[k].exists)
+				{
+					if((*(cl[j][i]))[k].label!=NULL && (l=strlen((*(cl[j][i]))[k].label))>m)m=l;
+					if((*(cl[j][i]))[k].command!=NULL && (l=strlen((*(cl[j][i]))[k].command))>m)m=l;
+				}
+		}
+		cc[i]=m;
+	}
+	for(i=0;i<GBG_COUNT;++i)
+	{
+		for(k=0;k<build_groups_count[i];++k)
+		{
+			for(l=0;l<2;++l)
+			{
+				c=' ';
+				for(j=0;j<BCS_COUNT;++j)
+				{
+					if(cl[i][j]!=NULL && *(cl[i][j])!=NULL && (*(cl[i][j]))[k].exists)
+					{
+						if(l==0)
+							if((*(cl[i][j]))[k].label!=NULL)
+								printf("%c %*.*s",c,cc[j],cc[j],(*(cl[i][j]))[k].label);
+							else
+								printf("%c %*.*s",c,cc[j],cc[j]," ");
+						else
+							if((*(cl[i][j]))[k].command!=NULL)
+								printf("%c %*.*s",c,cc[j],cc[j],(*(cl[i][j]))[k].command);
+							else
+								printf("%c %*.*s",c,cc[j],cc[j]," ");
+					}
+					else
+						printf("%c %*.*s",c,cc[j],cc[j]," ");
+					c=',';
+				}
+				printf("\n");
+			}
+		}
+		printf("\n");
+	}
+}
+
+/* macros to save typing and make the logic visible */
 #define return_cmd_if(src, cmds) if (cmds!=NULL && cmds[cmdindex].exists && below>src)\
-									{*fr=src; return &(cmds[cmdindex]);}
+									{*fr=src; if(printbuildcmds)printf("cmd[%d,%d]=%d\n",cmdgrp,cmdindex,src); return &(cmds[cmdindex]);}
 #define return_ft_cmd_if(src, cmds) if (ft!=NULL && ft->cmds!=NULL && ft->cmds[cmdindex].exists && below>src)\
-										{*fr=src; return &(ft->cmds[cmdindex]);}
+										{*fr=src; if(printbuildcmds)printf("cmd[%d,%d]=%d\n",cmdgrp,cmdindex,src); return &(ft->cmds[cmdindex]);}
 
 /* get the next lowest command taking priority into account */
 static GeanyBuildCommand *get_next_build_cmd(GeanyDocument *doc, gint cmdgrp, gint cmdindex, gint below, gint *from)
@@ -164,7 +244,8 @@ static GeanyBuildCommand *get_next_build_cmd(GeanyDocument *doc, gint cmdgrp, gi
 	GeanyBuildSource	 srcindex;
 	GeanyFiletype		*ft=NULL;
 	gint				 sink, *fr = &sink;
-	
+
+	if(printbuildcmds)printfcmds();
 	if (cmdgrp>=GBG_COUNT)return NULL;
 	if (from!=NULL)fr=from;
 	if (doc==NULL)doc=document_get_current();
@@ -174,7 +255,7 @@ static GeanyBuildCommand *get_next_build_cmd(GeanyDocument *doc, gint cmdgrp, gi
 		case GBG_FT: /* order proj ft, home ft, ft, defft */
 			if (ft!=NULL)
 			{
-				return_ft_cmd_if(BCS_PROJ_FT, projfilecmds);
+				return_ft_cmd_if(BCS_PROJ, projfilecmds);
 				return_ft_cmd_if(BCS_PREF, homefilecmds);
 				return_ft_cmd_if(BCS_FT, filecmds);
 			}
@@ -188,7 +269,6 @@ static GeanyBuildCommand *get_next_build_cmd(GeanyDocument *doc, gint cmdgrp, gi
 			break;
 		case GBG_EXEC: /* order proj, proj ft, pref, home ft, ft, def */
 			return_cmd_if(BCS_PROJ, exec_proj);
-			return_ft_cmd_if(BCS_PROJ_FT, projexeccmds);
 			return_cmd_if(BCS_PREF, exec_pref);
 			return_ft_cmd_if(BCS_FT, homeexeccmds);
 			return_ft_cmd_if(BCS_FT, execcmds);
@@ -226,7 +306,6 @@ void remove_command(GeanyBuildSource src, GeanyBuildGroup grp, gint cmd)
 				case BCS_HOME_FT: bc=ft->homefilecmds; break;
 				case BCS_PREF:    bc=ft->homefilecmds; break;
 				case BCS_PROJ:    bc=ft->projfilecmds; break;
-				case BCS_PROJ_FT: bc=ft->projfilecmds; break;
 				default: return;
 			}
 			break;
@@ -249,7 +328,6 @@ void remove_command(GeanyBuildSource src, GeanyBuildGroup grp, gint cmd)
 				case BCS_HOME_FT: bc=ft->homeexeccmds; break;
 				case BCS_PREF:    bc=exec_pref; break;
 				case BCS_PROJ:    bc=exec_proj; break;
-				case BCS_PROJ_FT: bc=ft->projexeccmds; break;
 				default: return;
 				
 			}
@@ -1708,14 +1786,13 @@ void load_build_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 					GeanyFiletype *ft;
 					if (pj->build_filetypes_list==NULL) pj->build_filetypes_list = g_ptr_array_new();
 					g_ptr_array_set_size(pj->build_filetypes_list, 0);
-					for (ftname=ftlist; ftname!=NULL; ++ftname)
+					for (ftname=ftlist; *ftname!=NULL; ++ftname)
 					{
 						ft=filetypes_lookup_by_name(*ftname);
 						if (ft!=NULL)
 						{
 							g_ptr_array_add(pj->build_filetypes_list, ft);
 							load_build_menu_grp(config, &(ft->projfilecmds), GBG_FT, *ftname, FALSE);
-							load_build_menu_grp(config, &(ft->projexeccmds), GBG_EXEC, *ftname, FALSE);
 						}
 					}
 					g_free(ftlist);
@@ -1797,10 +1874,11 @@ void load_build_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 	}
 }
 
-static void save_build_menu_grp(GKeyFile *config, GeanyBuildCommand *src, gint grp, gchar *prefix)
+static gint save_build_menu_grp(GKeyFile *config, GeanyBuildCommand *src, gint grp, gchar *prefix)
 {
 	gint cmd, prefixlen; /* NOTE prefixlen used in macros above */
 	gchar *key;
+	gint count=0;
 	
 	if (src==NULL)return;
 	prefixlen = prefix==NULL?0:strlen(prefix);
@@ -1822,6 +1900,7 @@ static void save_build_menu_grp(GKeyFile *config, GeanyBuildCommand *src, gint g
 				g_key_file_set_string(config, build_grp_name, key, src[cmd].command);
 				set_key_fld(key,"BD");
 				g_key_file_set_boolean(config, build_grp_name, key, src[cmd].run_in_base_dir);
+				++count;
 			}
 			else
 			{
@@ -1834,21 +1913,30 @@ static void save_build_menu_grp(GKeyFile *config, GeanyBuildCommand *src, gint g
 		}
 	}
 	g_free(key);
-	
+	return count;
 }
+
+typedef struct ForEachData
+{
+	GKeyFile *config;
+	GPtrArray *ft_names;
+}ForEachData;
 
 static void foreach_project_filetype(gpointer data, gpointer user_data)
 {
 	GeanyFiletype *ft = (GeanyFiletype*)data;
-	GKeyFile *config = (GKeyFile*)user_data;
-	save_build_menu_grp(config, ft->projfilecmds, GBG_FT, ft->name);
-	save_build_menu_grp(config, ft->projexeccmds, GBG_EXEC, ft->name);
+	ForEachData *d = (ForEachData*)user_data;
+	gint i=0;
+	i += save_build_menu_grp(d->config, ft->projfilecmds, GBG_FT, ft->name);
+	if(i>0)g_ptr_array_add(d->ft_names, ft->name);
 }
 
 void save_build_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src)
 {
-	GeanyFiletype *ft;
-	GeanyProject  *pj;
+	GeanyFiletype 	*ft;
+	GeanyProject  	*pj;
+	ForEachData		 data;
+	
 	switch(src)
 	{
 		case BCS_HOME_FT:
@@ -1865,7 +1953,10 @@ void save_build_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src)
 			pj = (GeanyProject*)ptr;
 			save_build_menu_grp(config, non_ft_proj, GBG_NON_FT, NULL);
 			save_build_menu_grp(config, exec_proj, GBG_EXEC, NULL);
-			g_ptr_array_foreach(pj->build_filetypes_list, foreach_project_filetype, (gpointer)config);
+			data.config = config;
+			data.ft_names = g_ptr_array_new();
+			g_ptr_array_foreach(pj->build_filetypes_list, foreach_project_filetype, (gpointer)(&data));
+			g_key_file_set_string_list(config, build_grp_name, "filetypes", (gchar*)(data.ft_names->pdata), data.ft_names->len);
 			break;
 		default: /* defaults and BCS_FT can't save */
 			break;

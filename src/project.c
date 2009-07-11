@@ -330,7 +330,6 @@ static void remove_foreach_project_filetype( gpointer data, gpointer user_data )
 	if(ft!=NULL)
 	{
 		setptr( ft->projfilecmds, NULL);
-		setptr(ft->projexeccmds, NULL);
 		ft->project_list_entry = -1;
 	}
 }
@@ -763,8 +762,9 @@ static gboolean update_config(const PropertyDialogElements *e)
 		rbc_array[GBG_NON_FT] = &non_ft_proj;
 		rbc_array[GBG_EXEC] = &exec_proj;
 		read_build_commands( rbc_array, e->build_properties,  GTK_RESPONSE_ACCEPT );
-		if(ft!=NULL&&ft->projfilecmds!=oldvalue && ft->project_list_entry<0)
+		if(ft!=NULL && ft->projfilecmds!=oldvalue && ft->project_list_entry<0)
 		{
+			if(p->build_filetypes_list==NULL)p->build_filetypes_list = g_ptr_array_new();
 			ft->project_list_entry = p->build_filetypes_list->len; 
 			g_ptr_array_add( p->build_filetypes_list, ft );
 		}

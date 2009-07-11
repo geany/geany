@@ -73,7 +73,6 @@ typedef enum	/* build command sources, in increasing priority */
 	BCS_FT,		/* filetype */
 	BCS_HOME_FT,/* filetypes in home */
 	BCS_PREF,	/* preferences */
-	BCS_PROJ_FT,/* filetype in project */
 	BCS_PROJ,	/* project */
 	BCS_COUNT	/* count of how many */
 } GeanyBuildSource;
