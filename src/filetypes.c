@@ -648,6 +648,15 @@ void filetypes_init_types()
 }
 
 
+/* Iterates all valid documents.
+ * Use like a @c for statement.
+ * @param i @c guint index for document_index(). */
+#define documents_foreach(i) \
+	for (i = 0; i < documents_array->len; i++)\
+		if (!document_index(i)->is_valid)\
+			{}\
+		else /* prevent outside 'else' matching our macro 'if' */
+
 static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 {
 	g_return_if_fail(NZV(doc->real_path));
@@ -657,8 +666,16 @@ static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 		filetypes_read_extensions();
 	else if (utils_str_equal(doc->real_path,
 		utils_build_path(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.common", NULL)))
-		ui_set_statusbar(FALSE, "%s",
-			_("For all changes you make in this file to take effect, you need to restart Geany."));
+	{
+		guint i;
+
+		/* Note: we don't reload other filetypes, even though the named styles may have changed.
+		 * The user can do this manually with 'Tools->Reload Configuration' */
+		filetypes_load_config(GEANY_FILETYPES_NONE, TRUE);
+
+		documents_foreach(i)
+			document_reload_config(documents[i]);
+	}
 }
 
 
