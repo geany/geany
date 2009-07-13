@@ -3059,6 +3059,9 @@ static gboolean delay_match_brace(G_GNUC_UNUSED gpointer user_data)
 			return FALSE;
 		}
 	}
+	if (!utils_isbrace(sci_get_char_at(editor->sci, brace_pos), editor_prefs.brace_match_ltgt))
+		return FALSE;
+
 	end_pos = sci_find_matching_brace(editor->sci, brace_pos);
 
 	if (end_pos >= 0)

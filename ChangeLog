@@ -6,6 +6,8 @@
    (thanks).
  * src/filetypes.c:
    Reload filetypes.common after saving it.
+ * src/editor.c:
+   Improve wrong brace highlighting of non-brace character.
 
 
 2009-07-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
