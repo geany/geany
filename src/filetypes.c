@@ -1215,9 +1215,7 @@ void filetypes_load_config(gint ft_id, gboolean reload)
 	}
 
 	load_settings(ft_id, config, config_home);
-	if (! reload)
-		/* reloading highlighting settings not yet supported */
-		highlighting_init_styles(ft_id, config, config_home);
+	highlighting_init_styles(ft_id, config, config_home);
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);

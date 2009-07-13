@@ -1233,6 +1233,13 @@ void main_reload_configuration(void)
 		filetypes_load_config(i, TRUE);
 	}
 
+	for (i = 0; i < documents_array->len; i++)
+	{
+		GeanyDocument *doc = documents[i];
+		if (doc->is_valid)
+			document_reload_config(doc);
+	}
+
 	/* C tag names to ignore */
 	symbols_reload_config_files();
 

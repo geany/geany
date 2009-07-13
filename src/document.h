@@ -154,6 +154,8 @@ void document_set_text_changed(GeanyDocument *doc, gboolean changed);
 
 void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type);
 
+void document_reload_config(GeanyDocument *doc);
+
 void document_rename_file(GeanyDocument *doc, const gchar *new_filename);
 
 GeanyDocument *document_index(gint idx);

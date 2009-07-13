@@ -132,6 +132,21 @@ static void new_style_array(gint file_type_id, gint styling_count)
 }
 
 
+static void styleset_free(gint file_type_id)
+{
+	StyleSet *style_ptr;
+	style_ptr = &style_sets[file_type_id];
+
+	style_ptr->count = 0;
+	g_free(style_ptr->styling);
+	style_ptr->styling = NULL;
+	g_strfreev(style_ptr->keywords);
+	style_ptr->keywords = NULL;
+	g_free(style_ptr->wordchars);
+	style_ptr->wordchars = NULL;
+}
+
+
 static void get_keyfile_keywords(GKeyFile *config, GKeyFile *configh,
 				const gchar *key, gint ft_id, gint pos, const gchar *default_value)
 {
@@ -420,15 +435,7 @@ void highlighting_free_styles()
 	gint i;
 
 	for (i = 0; i < GEANY_MAX_BUILT_IN_FILETYPES; i++)
-	{
-		StyleSet *style_ptr;
-		style_ptr = &style_sets[i];
-
-		style_ptr->count = 0;
-		g_free(style_ptr->styling);
-		g_strfreev(style_ptr->keywords);
-		g_free(style_ptr->wordchars);
-	}
+		styleset_free(i);
 
 	if (named_style_hash)
 		g_hash_table_destroy(named_style_hash);
@@ -520,14 +527,11 @@ static void get_named_styles(GKeyFile *config)
 
 static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	static gboolean common_style_set_valid = FALSE;
-
-	if (common_style_set_valid)
-		return;
-	common_style_set_valid = TRUE;	/* ensure filetypes.common is only loaded once */
-
 	/* named styles */
-	named_style_hash = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
+	if (named_style_hash)
+		g_hash_table_remove_all(named_style_hash);	/* reloading */
+	else
+		named_style_hash = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
 
 	/* first set default to the "default" named style */
 	add_named_style(config, "default");
@@ -3558,6 +3562,9 @@ static void styleset_ada(ScintillaObject *sci)
 /* Called by filetypes_load_config(). */
 void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *configh)
 {
+	/* Clear old information if necessary - e.g. reloading config */
+	styleset_free(filetype_idx);
+
 	/* All stylesets depend on filetypes.common */
 	if (filetype_idx != GEANY_FILETYPES_NONE)
 		filetypes_load_config(GEANY_FILETYPES_NONE, FALSE);

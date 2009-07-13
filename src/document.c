@@ -2392,24 +2392,14 @@ static gboolean update_type_keywords(GeanyDocument *doc, gint lang)
 }
 
 
-/** Sets the filetype of the document (which controls syntax highlighting and tags)
- * @param doc The document to use.
- * @param type The filetype. */
-void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type)
+static void document_load_config(GeanyDocument *doc, GeanyFiletype *type,
+		gboolean filetype_changed)
 {
-	gboolean ft_changed;
-
 	g_return_if_fail(doc);
 	if (type == NULL)
 		type = filetypes[GEANY_FILETYPES_NONE];
 
-	geany_debug("%s : %s (%s)",
-		(doc->file_name != NULL) ? doc->file_name : "unknown",
-		(type->name != NULL) ? type->name : "unknown",
-		(doc->encoding != NULL) ? doc->encoding : "unknown");
-
-	ft_changed = (doc->file_type != type);
-	if (ft_changed)	/* filetype has changed */
+	if (filetype_changed)
 	{
 		doc->file_type = type;
 
@@ -2429,6 +2419,33 @@ void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type)
 
 	/* Update session typename keywords. */
 	update_type_keywords(doc, type->lang);
+}
+
+
+/** Sets the filetype of the document (which controls syntax highlighting and tags)
+ * @param doc The document to use.
+ * @param type The filetype. */
+void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type)
+{
+	gboolean ft_changed;
+
+	g_return_if_fail(doc);
+	if (type == NULL)
+		type = filetypes[GEANY_FILETYPES_NONE];
+
+	geany_debug("%s : %s (%s)",
+		(doc->file_name != NULL) ? doc->file_name : "unknown",
+		(type->name != NULL) ? type->name : "unknown",
+		(doc->encoding != NULL) ? doc->encoding : "unknown");
+
+	ft_changed = (doc->file_type != type); /* filetype has changed */
+	document_load_config(doc, type, ft_changed);
+}
+
+
+void document_reload_config(GeanyDocument *doc)
+{
+	document_load_config(doc, doc->file_type, TRUE);
 }
 
 
