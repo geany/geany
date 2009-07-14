@@ -151,8 +151,6 @@ extern GSList *filetypes_by_title;
 
 GeanyFiletype *filetypes_lookup_by_name(const gchar *name);
 
-void filetypes_foreach_named(GFunc callback, gpointer user_data);
-
 GeanyFiletype *filetypes_find(GCompareFunc predicate, gpointer user_data);
 
 

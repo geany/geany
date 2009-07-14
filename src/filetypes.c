@@ -696,16 +696,9 @@ static void create_sub_menu(GtkWidget *parent, gsize group_id, const gchar *titl
 }
 
 
-static void add_ft_menu_item(gpointer pft, gpointer user_data)
-{
-	GeanyFiletype *ft = pft;
-
-	create_radio_menu_item(group_menus[ft->group], ft);
-}
-
-
 static void create_set_filetype_menu(void)
 {
+	GSList *node;
 	GtkWidget *filetype_menu = ui_lookup_widget(main_widgets.window, "set_filetype1_menu");
 
 	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_COMPILED, _("_Programming Languages"));
@@ -714,7 +707,13 @@ static void create_set_filetype_menu(void)
 	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_MISC, _("M_iscellaneous Languages"));
 
 	/* Append all filetypes to the filetype menu */
-	filetypes_foreach_named(add_ft_menu_item, NULL);
+	foreach_slist(node, filetypes_by_title)
+	{
+		GeanyFiletype *ft = node->data;
+
+		if (ft->id != GEANY_FILETYPES_NONE)
+			create_radio_menu_item(group_menus[ft->group], ft);
+	}
 	create_radio_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_NONE]);
 }
 
@@ -1493,19 +1492,3 @@ GeanyFiletype *filetypes_index(gint idx)
 {
 	return (idx >= 0 && idx < (gint) filetypes_array->len) ? filetypes[idx] : NULL;
 }
-
-
-/* Does not include ft[GEANY_FILETYPES_NONE], as this is usually treated specially. */
-void filetypes_foreach_named(GFunc callback, gpointer user_data)
-{
-	GSList *node;
-
-	foreach_slist(node, filetypes_by_title)
-	{
-		GeanyFiletype *ft = node->data;
-
-		if (G_LIKELY(ft->id != GEANY_FILETYPES_NONE))
-			callback(ft, user_data);
-	}
-}
-
