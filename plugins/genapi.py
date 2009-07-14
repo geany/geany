@@ -55,6 +55,20 @@ def get_api_tuple(str):
 	return 'p_' + m.group(1), m.group(2)
 
 
+header = \
+'''/* This file is generated automatically by genapi.py - do not edit.
+ *
+ * @file %s @ref geany_functions wrappers.
+ * This allows the use of normal API function names in plugins.
+ * You need to declare the @ref geany_functions symbol yourself.
+ *
+ * Note: This must be included after all other API headers.
+ */
+
+#ifndef GEANY_FUNCTIONS_H
+#define GEANY_FUNCTIONS_H
+'''
+
 if __name__ == "__main__":
 	outfile = 'geanyfunctions.h'
 
@@ -63,15 +77,12 @@ if __name__ == "__main__":
 		sys.exit("No function names read!")
 
 	f = open(outfile, 'w')
-	print >>f, '/* This file is generated automatically by genapi.py - do not edit.\n *\n' +\
-		' * @file %s @ref geany_functions wrappers.\n' % (outfile) +\
-		' * This allows the use of normal API function names in plugins.\n' +\
-		' * You need to declare the @ref geany_functions symbol yourself.\n */\n'
-	print >>f, '#ifndef GEANY_FUNCTIONS_H'
-	print >>f, '#define GEANY_FUNCTIONS_H\n'
+	print >>f, header % (outfile)
+
 	for fname in fnames:
 		ptr, name = get_api_tuple(fname)
 		print >>f, '#define %s \\\n\tgeany_functions->%s->%s' % (fname, ptr, name)
+
 	print >>f, '\n#endif'
 	f.close
 

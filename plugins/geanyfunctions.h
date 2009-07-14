@@ -3,6 +3,8 @@
  * @file geanyfunctions.h @ref geany_functions wrappers.
  * This allows the use of normal API function names in plugins.
  * You need to declare the @ref geany_functions symbol yourself.
+ *
+ * Note: This must be included after all other API headers.
  */
 
 #ifndef GEANY_FUNCTIONS_H
