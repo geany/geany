@@ -3,6 +3,8 @@
  * src/utils.c:
    Quote the uri before passing it to the browser when opening a
    website (closes #2818635).
+ * src/win32:
+   Fix broken 'builtin' Run command for HTML files on Windows.
 
 
 2009-07-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

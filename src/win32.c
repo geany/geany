@@ -643,6 +643,9 @@ gint win32_message_dialog_unsaved(const gchar *msg)
 /* Just a simple wrapper function to open a browser window */
 void win32_open_browser(const gchar *uri)
 {
+	if (strncmp(uri, "file://", 7) == 0)
+		uri += 7;
+
 	ShellExecute(NULL, "open", uri, NULL, NULL, SW_SHOWNORMAL);
 }
 
