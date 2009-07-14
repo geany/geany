@@ -23,15 +23,7 @@
  */
 
 
-#include "geany.h"
-#include "support.h"
-#include "document.h"
-#include "utils.h"
-#include "ui_utils.h"
-#include "filetypes.h"
-
-#include "plugindata.h"
-#include "geanyfunctions.h"
+#include "geanyplugin.h"
 
 #include <unistd.h>
 #include <errno.h>
@@ -353,7 +345,7 @@ void plugin_init(GeanyData *data)
 		config, "saveactions", "enable_backupcopy", FALSE);
 
 	instantsave_default_ft = utils_get_setting_string(config, "instantsave", "default_ft",
-		filetypes_index(GEANY_FILETYPES_NONE)->name);
+		filetypes[GEANY_FILETYPES_NONE]->name);
 
 	autosave_src_id = G_MAXUINT; /* mark as invalid */
 	autosave_interval = utils_get_setting_integer(config, "autosave", "interval", 300);

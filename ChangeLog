@@ -15,6 +15,15 @@
    Add documents_foreach() API macro that skips invalid docs.
    Make filetypes[], documents[] part of the API again.
    Add GEANY() macro for sharing geany symbols between API and core.
+ * src/plugindata.h, src/plugins.c, doc/plugins.dox,
+   plugins/saveactions.c, plugins/export.c, plugins/geanyfunctions.h,
+   plugins/demoplugin.c, plugins/filebrowser.c, plugins/splitwindow.c,
+   plugins/htmlchars.c, plugins/geanyplugin.h, plugins/Makefile.am,
+   plugins/classbuilder.c, wscript:
+   Add geanyplugin.h single include for plugin API; update all core
+   plugins to use it.
+   Add sci_set_font() to API.
+   Update plugin howto.
 
 
 2009-07-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -24,22 +24,12 @@
 
 /* Split Window plugin. */
 
-#include "geany.h"
+#include "geanyplugin.h"
 #include <string.h>
 
-#include "support.h"
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
 #include "SciLexer.h"
-
-#include "ui_utils.h"
-#include "document.h"
-#include "editor.h"
-#include "plugindata.h"
-#include "keybindings.h"
-#include "utils.h"
-
-#include "geanyfunctions.h"
 
 
 PLUGIN_VERSION_CHECK(GEANY_API_VERSION)
@@ -121,14 +111,6 @@ static void set_styles(ScintillaObject *oldsci, ScintillaObject *newsci)
 		val = sci_get_value(oldsci, SCI_STYLEGETITALIC, style_id);
 		scintilla_send_message(newsci, SCI_STYLESETITALIC, style_id, val);
 	}
-}
-
-
-static void sci_set_font(ScintillaObject *sci, gint style, const gchar *font,
-	gint size)
-{
-	scintilla_send_message(sci, SCI_STYLESETFONT, style, (sptr_t) font);
-	scintilla_send_message(sci, SCI_STYLESETSIZE, style, size);
 }
 
 

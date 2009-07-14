@@ -27,15 +27,7 @@
 #include <ctype.h>
 #include <math.h>
 
-#include "geany.h"
-#include "support.h"
-#include "plugindata.h"
-#include "editor.h"
-#include "document.h"
-#include "prefs.h"
-#include "utils.h"
-#include "ui_utils.h"
-#include "geanyfunctions.h"
+#include "geanyplugin.h"
 
 
 GeanyData		*geany_data;

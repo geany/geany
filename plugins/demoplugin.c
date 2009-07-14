@@ -35,17 +35,8 @@
  */
 
 
-#include "geany.h"		/* for the GeanyApp data type */
-#include "support.h"	/* for the _() translation macro (see also po/POTFILES.in) */
-#include "editor.h"		/* for the declaration of the GeanyEditor struct, not strictly necessary
-						   as it will be also included by plugindata.h */
-#include "document.h"	/* for the declaration of the GeanyDocument struct */
-#include "ui_utils.h"
+#include "geanyplugin.h"	/* plugin API, always comes first */
 #include "Scintilla.h"	/* for the SCNotification struct */
-
-#include "plugindata.h"		/* this defines the plugin API */
-#include "geanyfunctions.h"	/* this wraps geany_functions function pointers */
-
 
 
 /* These items are set by Geany before plugin_init() is called. */
@@ -54,9 +45,9 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-/* Check that the running Geany supports the plugin API used below, and check
+/* Check that the running Geany supports the plugin API version used below, and check
  * for binary compatibility. */
-PLUGIN_VERSION_CHECK(112)
+PLUGIN_VERSION_CHECK(147)
 
 /* All plugins must set name, description, version and author. */
 PLUGIN_SET_INFO(_("Demo"), _("Example plugin."), VERSION, _("The Geany developer team"))

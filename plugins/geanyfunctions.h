@@ -148,6 +148,8 @@
 	geany_functions->p_sci->get_contents_range
 #define sci_get_selection_contents \
 	geany_functions->p_sci->get_selection_contents
+#define sci_set_font \
+	geany_functions->p_sci->set_font
 #define templates_get_template_fileheader \
 	geany_functions->p_templates->get_template_fileheader
 #define utils_str_equal \

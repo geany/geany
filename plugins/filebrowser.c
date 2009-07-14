@@ -24,21 +24,10 @@
 
 /* Sidebar file browser plugin. */
 
-#include "geany.h"
+#include "geanyplugin.h"
 #include <string.h>
 
 #include <gdk/gdkkeysyms.h>
-
-#include "support.h"
-#include "prefs.h"
-#include "document.h"
-#include "utils.h"
-#include "keybindings.h"
-#include "project.h"
-#include "ui_utils.h"
-
-#include "plugindata.h"
-#include "geanyfunctions.h"
 
 
 GeanyData		*geany_data;

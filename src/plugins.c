@@ -195,7 +195,8 @@ static SciFuncs sci_funcs = {
 	&sci_indicator_set,
 	&sci_get_contents,
 	&sci_get_contents_range,
-	&sci_get_selection_contents
+	&sci_get_selection_contents,
+	&sci_set_font
 };
 
 static TemplateFuncs template_funcs = {
