@@ -3060,8 +3060,10 @@ static gboolean delay_match_brace(G_GNUC_UNUSED gpointer user_data)
 		}
 	}
 	if (!utils_isbrace(sci_get_char_at(editor->sci, brace_pos), editor_prefs.brace_match_ltgt))
+	{
+		editor_highlight_braces(editor, cur_pos);
 		return FALSE;
-
+	}
 	end_pos = sci_find_matching_brace(editor->sci, brace_pos);
 
 	if (end_pos >= 0)
@@ -3084,13 +3086,14 @@ static void editor_highlight_braces(GeanyEditor *editor, gint cur_pos)
 {
 	gint brace_pos = cur_pos - 1;
 
+	SSM(editor->sci, SCI_SETHIGHLIGHTGUIDE, 0, 0);
+	SSM(editor->sci, SCI_BRACEBADLIGHT, (uptr_t)-1, 0);
+
 	if (! utils_isbrace(sci_get_char_at(editor->sci, brace_pos), editor_prefs.brace_match_ltgt))
 	{
 		brace_pos++;
 		if (! utils_isbrace(sci_get_char_at(editor->sci, brace_pos), editor_prefs.brace_match_ltgt))
 		{
-			SSM(editor->sci, SCI_SETHIGHLIGHTGUIDE, 0, 0);
-			SSM(editor->sci, SCI_BRACEBADLIGHT, (uptr_t)-1, 0);
 			return;
 		}
 	}
