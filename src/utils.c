@@ -80,7 +80,7 @@ void utils_open_browser(const gchar *uri)
 
 	g_return_if_fail(uri != NULL);
 
-	cmdline = g_strconcat(tool_prefs.browser_cmd, " ", uri, NULL);
+	cmdline = g_strconcat(tool_prefs.browser_cmd, " \"", uri, "\"", NULL);
 	if (! g_spawn_command_line_async(cmdline, NULL))
 	{
 		const gchar *argv[3];
