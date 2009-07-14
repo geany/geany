@@ -323,7 +323,7 @@ Short option  Long option              Function
 *none*        --vte-lib                Specify explicitly the path including filename or only
                                        the filename to the VTE library, e.g.
                                        ``/usr/lib/libvte.so`` or ``libvte.so``. This option is
-                                       only needed when the auto detection does not work. Only
+                                       only needed when the auto-detection does not work. Only
                                        available if Geany was compiled with support for VTE.
 
 -v            --verbose                Be verbose (print useful status messages).
@@ -529,7 +529,7 @@ it correctly. You can this in the file open dialog by selecting
 an encoding in the drop down box or by reloading the file with the
 file menu item "Reload as". The auto-detection works well for most
 encodings but there are also some encodings known where auto-detection
-has its problems. Auto detecting the encoding of a file is not easy
+has its problems. Auto-detecting the encoding of a file is not easy
 and sometimes an encoding might be detected not correctly.
 
 There are different ways to use different encodings in Geany:
@@ -1500,7 +1500,7 @@ Suppress status messages in the status bar
     Remove all messages from the status bar. The messages are still displayed
     in the status messages window.
 
-Auto focus widgets (focus follows mouse)
+Auto-focus widgets (focus follows mouse)
     Give the focus automatically to widgets below the mouse cursor.
     This works for the main editor widget, the scribble, the toolbar search field
     goto line fields and the VTE.

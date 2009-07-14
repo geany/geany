@@ -2880,7 +2880,7 @@ create_prefs_dialog (void)
   gtk_box_pack_start (GTK_BOX (vbox21), check_suppress_status_msgs, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_suppress_status_msgs, _("Removes all messages from the status bar. The messages are still displayed in the status messages window."), NULL);
 
-  check_auto_focus = gtk_check_button_new_with_mnemonic (_("Auto focus widgets (focus follows mouse)"));
+  check_auto_focus = gtk_check_button_new_with_mnemonic (_("Auto-focus widgets (focus follows mouse)"));
   gtk_widget_show (check_auto_focus);
   gtk_box_pack_start (GTK_BOX (vbox21), check_auto_focus, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_auto_focus, _("Gives the focus automatically to widgets below the mouse cursor. Works for the main editor widget, the scribble, the toolbar search and goto line fields and the VTE."), NULL);
