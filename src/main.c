@@ -1232,13 +1232,8 @@ void main_reload_configuration(void)
 		/* filetypes_load_config() will skip not loaded filetypes */
 		filetypes_load_config(i, TRUE);
 	}
-
-	for (i = 0; i < documents_array->len; i++)
-	{
-		GeanyDocument *doc = documents[i];
-		if (doc->is_valid)
-			document_reload_config(doc);
-	}
+	documents_foreach(i)
+		document_reload_config(documents[i]);
 
 	/* C tag names to ignore */
 	symbols_reload_config_files();

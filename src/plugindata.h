@@ -35,6 +35,11 @@
 #ifndef PLUGINDATA_H
 #define PLUGINDATA_H
 
+/* Compatibility for sharing macros between API and core.
+ * First include geany.h, then plugindata.h, then other API headers. */
+#undef GEANY
+#define GEANY(symbol_name) geany->symbol_name
+
 #include "editor.h"	/* GeanyIndentType */
 
 

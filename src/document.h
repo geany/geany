@@ -109,9 +109,19 @@ struct GeanyDocument
 extern GPtrArray *documents_array;
 
 
-/* Wrap documents_array so it can be used with C array syntax.
- * Example: documents[0]->sci = NULL; */
-#define documents ((GeanyDocument **)documents_array->pdata)
+/** Wrap documents_array so it can be used with C array syntax.
+ * Example: documents[0]->sci = NULL;
+ * @see document_index(). */
+#define documents ((GeanyDocument **)GEANY(documents_array)->pdata)
+
+/** Iterates all valid documents.
+ * Use like a @c for statement.
+ * @param i @c guint index for document_index(). */
+#define documents_foreach(i) \
+	for (i = 0; i < GEANY(documents_array)->len; i++)\
+		if (!documents[i]->is_valid)\
+			{}\
+		else /* prevent outside 'else' matching our macro 'if' */
 
 /** @c NULL-safe way to check @c doc_ptr->is_valid.
  * This is useful when @a doc_ptr was stored some time earlier and documents may have been

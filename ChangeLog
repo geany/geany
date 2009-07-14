@@ -10,6 +10,11 @@
    Make Mark highlighting brighter.
  * src/interface.c, doc/geany.txt, doc/geany.html, geany.glade:
    Use hyphen for auto-feature terms.
+ * src/plugindata.h, src/geany.h, src/filetypes.c, src/filetypes.h,
+   src/document.h, src/main.c:
+   Add documents_foreach() API macro that skips invalid docs.
+   Make filetypes[], documents[] part of the API again.
+   Add GEANY() macro for sharing geany symbols between API and core.
 
 
 2009-07-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

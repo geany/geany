@@ -648,15 +648,6 @@ void filetypes_init_types()
 }
 
 
-/* Iterates all valid documents.
- * Use like a @c for statement.
- * @param i @c guint index for document_index(). */
-#define documents_foreach(i) \
-	for (i = 0; i < documents_array->len; i++)\
-		if (!document_index(i)->is_valid)\
-			{}\
-		else /* prevent outside 'else' matching our macro 'if' */
-
 static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 {
 	g_return_if_fail(NZV(doc->real_path));
