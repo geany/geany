@@ -3248,12 +3248,18 @@ static gboolean is_string_style(gint lexer, gint style)
 				style == SCE_F_STRINGEOL);
 
 		case SCLEX_PERL:
-			return (style == SCE_PL_STRING ||
+			return (/*style == SCE_PL_STRING ||*/ /* may want variable autocompletion "$(foo)" */
+				style == SCE_PL_CHARACTER ||
 				style == SCE_PL_HERE_DELIM ||
 				style == SCE_PL_HERE_Q ||
 				style == SCE_PL_HERE_QQ ||
 				style == SCE_PL_HERE_QX ||
 				style == SCE_PL_POD ||
+				style == SCE_PL_STRING_Q ||
+				style == SCE_PL_STRING_QQ ||
+				style == SCE_PL_STRING_QX ||
+				style == SCE_PL_STRING_QR ||
+				style == SCE_PL_STRING_QW ||
 				style == SCE_PL_POD_VERB);
 
 		case SCLEX_R:
