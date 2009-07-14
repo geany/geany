@@ -1,3 +1,13 @@
+2009-07-14  Lex Trotman  <elextr(at)gmail(dot)com>
+
+ * src/build.h, src/build.c
+   added dialog support for error regular expressions from multiple sources
+   and storing and loading them
+   fixed some typos and memory leaks
+ * src/filetypes.c, src/filetypes.h, project.c
+   added support for using error regexes from multiple sources
+
+
 2009-07-11  Lex Trotman  <elextr(at)gmail(dot)com>
 
  * src/filetypes.h, src/filetypes.c, src/build.c, src/build.h, 

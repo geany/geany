@@ -60,6 +60,7 @@ typedef struct GeanyFiletypePrivate
 #ifdef HAVE_REGCOMP
 	regex_t		error_regex;
 	gboolean	error_regex_compiled;
+	gchar		*last_string; /* last one compiled */
 #endif
 }
 GeanyFiletypePrivate;
@@ -1346,9 +1347,9 @@ static gchar *get_regex_match_string(const gchar *message, regmatch_t *pmatch, g
 }
 
 
-static void compile_regex(GeanyFiletype *ft, regex_t *regex)
+static void compile_regex(GeanyFiletype *ft, regex_t *regex, gchar *regstr)
 {
-	gint retval = regcomp(regex, ft->error_regex_string, REG_EXTENDED);
+	gint retval = regcomp(regex, regstr, REG_EXTENDED);
 
 	ft->priv->error_regex_compiled = (retval == 0);	/* prevent recompilation */
 
@@ -1367,8 +1368,19 @@ static void compile_regex(GeanyFiletype *ft, regex_t *regex)
 gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 		gchar **filename, gint *line)
 {
+	gchar *regstr;
+	gchar **tmp;
+	GeanyDocument *doc;
+	if(ft==NULL)
+	{
+		doc = document_get_current();
+		if(doc!=NULL)ft = doc->file_type;
+	}
+	tmp = get_build_regex(build_info.grp, ft, NULL);
+	if (tmp==NULL) return FALSE;
+	regstr = *tmp;
 #ifndef HAVE_REGCOMP
-	if (!NZV(ft->error_regex_string))
+	if (!NZV(regstr))
 		geany_debug("No regex support - maybe you should configure with --enable-gnu-regex!");
 	return FALSE;
 #else
@@ -1378,11 +1390,14 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 	*filename = NULL;
 	*line = -1;
 
-	if (!NZV(ft->error_regex_string))
+	if (!NZV(regstr))
 		return FALSE;
 
-	if (!ft->priv->error_regex_compiled)
-		compile_regex(ft, regex);
+	if (!ft->priv->error_regex_compiled || regstr!=ft->priv->last_string)
+	{
+		compile_regex(ft, regex, regstr);
+		ft->priv->last_string=regstr;
+	}
 	if (!ft->priv->error_regex_compiled)	/* regex error */
 		return FALSE;
 

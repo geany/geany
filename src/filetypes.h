@@ -142,6 +142,8 @@ struct GeanyFiletype
 	gint			   project_list_entry;
 	GeanyFiletypeGroupID	group;
 	gchar			 *error_regex_string;
+	gchar			 *projerror_regex_string;
+	gchar			 *homeerror_regex_string;
 
 	struct GeanyFiletypePrivate	*priv;	/* must be last, append fields before this item */
 };

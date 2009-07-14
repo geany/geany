@@ -330,6 +330,7 @@ static void remove_foreach_project_filetype( gpointer data, gpointer user_data )
 	if(ft!=NULL)
 	{
 		setptr( ft->projfilecmds, NULL);
+		setptr(ft->projerror_regex_string, NULL);
 		ft->project_list_entry = -1;
 	}
 }
@@ -353,6 +354,9 @@ void project_close(gboolean open_default)
 	/* remove project non filetype build menu items */
 	remove_command( BCS_PROJ, GBG_NON_FT, -1 );
 	remove_command( BCS_PROJ, GBG_EXEC, -1 );
+	
+	/* remove project regexen */
+	setptr(regex_proj, NULL);
 	
 	g_free(app->project->name);
 	g_free(app->project->description);
@@ -730,12 +734,12 @@ static gboolean update_config(const PropertyDialogElements *e)
 
 	if (! new_project)	/* save properties specific fields */
 	{
-		GtkTextIter start, end;
-		/*gchar *tmp;*/
-		GtkTextBuffer *buffer;
-		GeanyDocument *doc = document_get_current();
-		GeanyBuildCommand **rbc_array[GBG_COUNT], *oldvalue;
-		GeanyFiletype *ft=NULL;
+		GtkTextIter 		 start, end;
+		GtkTextBuffer		*buffer;
+		GeanyDocument		*doc = document_get_current();
+		BuildDestination 	 menu_dst;
+		GeanyBuildCommand 	*oldvalue;
+		GeanyFiletype 		*ft=NULL;
 
 		p->make_in_base_path = gtk_toggle_button_get_active(
 			GTK_TOGGLE_BUTTON(e->make_in_base_path));
@@ -751,17 +755,20 @@ static gboolean update_config(const PropertyDialogElements *e)
 		if( doc!=NULL )ft=doc->file_type;
 		if( ft!=NULL )
 		{
-			rbc_array[GBG_FT] = &(ft->projfilecmds);
+			menu_dst.dst[GBG_FT] = &(ft->projfilecmds);
 			oldvalue = ft->projfilecmds;
+			menu_dst.fileregexstr = &(ft->projerror_regex_string);
 		}
 		else
 		{
-			rbc_array[GBG_FT] = NULL;
+			menu_dst.dst[GBG_FT] = NULL;
 			oldvalue = NULL;
+			menu_dst.fileregexstr = NULL;
 		}
-		rbc_array[GBG_NON_FT] = &non_ft_proj;
-		rbc_array[GBG_EXEC] = &exec_proj;
-		read_build_commands( rbc_array, e->build_properties,  GTK_RESPONSE_ACCEPT );
+		menu_dst.dst[GBG_NON_FT] = &non_ft_proj;
+		menu_dst.dst[GBG_EXEC] = &exec_proj;
+		menu_dst.nonfileregexstr = &regex_proj;
+		read_build_commands( &menu_dst, e->build_properties,  GTK_RESPONSE_ACCEPT );
 		if(ft!=NULL && ft->projfilecmds!=oldvalue && ft->project_list_entry<0)
 		{
 			if(p->build_filetypes_list==NULL)p->build_filetypes_list = g_ptr_array_new();

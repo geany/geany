@@ -152,8 +152,10 @@ static void add_menu_accel(GeanyKeyGroup *group, guint kb_id,
 
 /* the various groups of commands not in the filetype struct */
 GeanyBuildCommand *ft_def=NULL, *non_ft_proj=NULL, *non_ft_pref=NULL, *non_ft_def=NULL, *exec_proj=NULL, *exec_pref=NULL, *exec_def=NULL;
+/* and the regexen not in the filetype structure */
+gchar *regex_pref=NULL, *regex_proj=NULL;
 
-/* control if build commands are printed by get_build_cmd for debug */
+/* control if build commands are printed by get_build_cmd, for debug purposes only*/
 #ifndef PRINTBUILDCMDS
 #define PRINTBUILDCMDS FALSE
 #endif
@@ -284,6 +286,33 @@ static GeanyBuildCommand *get_next_build_cmd(GeanyDocument *doc, gint cmdgrp, gi
 static GeanyBuildCommand *get_build_cmd(GeanyDocument *doc, gint grp, gint index, gint *from)
 {
 	return get_next_build_cmd(doc, grp, index, BCS_COUNT, from);
+}
+
+#define return_nonblank_regex(src, ptr) if((ptr)!=NULL && strlen(ptr)>0){ *fr = (src); return &(ptr); }
+
+/* like get_build_cmd, but for regexen, used by filetypes */
+gchar **get_build_regex(GeanyBuildGroup grp, GeanyFiletype *ft, gint *from)
+{
+	gint sink, *fr = &sink;
+	if (from!=NULL) fr=from;
+	if (grp==GBG_FT)
+	{
+		if (ft==NULL)
+		{
+			GeanyDocument *doc=document_get_current();
+			if(doc!=NULL)ft=doc->file_type;
+		}
+		if (ft==NULL) return NULL;
+		return_nonblank_regex(BCS_PROJ, ft->projerror_regex_string);
+		return_nonblank_regex(BCS_HOME_FT, ft->homeerror_regex_string);
+		return_nonblank_regex(BCS_FT, ft->error_regex_string);
+	}
+	else if (grp==GBG_NON_FT)
+	{
+		return_nonblank_regex(BCS_PROJ, regex_proj);
+		return_nonblank_regex(BCS_PREF, regex_pref);
+	}
+	return NULL;
 }
 
 /* remove the specified command, cmd<0 remove whole group */
@@ -1400,7 +1429,6 @@ static void on_clear_dialog_row( GtkWidget *unused, gpointer user_data )
 	GeanyBuildCommand *bc = get_next_build_cmd(NULL, r->grp, r->cmd, r->dst, &src);
 	if(bc!=NULL)
 	{
-		printf("clear here %d, %d, %d\n", r->dst, r->src, src);
 		r->cmdsrc = bc;
 		r->src = src;
 		gtk_entry_set_text(GTK_ENTRY(r->label), bc->label!=NULL?bc->label:"");
@@ -1409,12 +1437,16 @@ static void on_clear_dialog_row( GtkWidget *unused, gpointer user_data )
 	}
 	else
 	{
-		printf("clear there\n");
 		gtk_entry_set_text(GTK_ENTRY(r->label), "");
 		gtk_entry_set_text(GTK_ENTRY(r->command), "");
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(r->dir), FALSE);
 	}
 	r->cleared = TRUE;
+}
+
+static void on_clear_dialog_regex_row( GtkEntry *regex, gpointer unused )
+{
+	gtk_entry_set_text(regex,"");
 }
 
 static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gint row,
@@ -1484,7 +1516,8 @@ static gchar *colheads[] = { N_("Item"), N_("Label"), N_("Command*"), N_("Base*"
 
 typedef struct TableFields {
 	RowWidgets 	**rows;
-	GtkWidget	*regex;
+	GtkWidget	 *fileregex, *nonfileregex;
+	gchar		**fileregexstring, **nonfileregexstring;
 } TableFields;
 
 GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, TableData *table_data, GeanyFiletype *ft)
@@ -1493,7 +1526,8 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, TableD
 	TableFields		*fields;
 	GtkTable		*table;
 	gchar			**ch, *txt;
-	gint			 col, row, cmdindex, cmd;
+	gint			 col, row, cmdindex, cmd, src;
+	gboolean		 sensitivity;
 	
 	table = GTK_TABLE(gtk_table_new(build_items_count+12, 5, FALSE));
 	fields = g_new0(TableFields, 1);
@@ -1516,34 +1550,62 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, TableD
 	gtk_table_attach(table, label, 0, 6, 2, 3, GTK_FILL, GTK_FILL | GTK_EXPAND, 0, 0);
 	for (row=3, cmdindex=0, cmd=0; cmd<build_groups_count[GBG_FT]; ++row, ++cmdindex, ++cmd)
 		fields->rows[cmdindex] = build_add_dialog_row(doc, table, row, dst, GBG_FT, cmd, FALSE);
+	label = gtk_label_new(_("Error Regular Expression"));
+	gtk_table_attach(table, label, 0, 2, row, row+1, GTK_FILL, GTK_FILL | GTK_EXPAND, 0, 0);
+	fields->fileregex = gtk_entry_new();
+	fields->fileregexstring = get_build_regex(GBG_FT, NULL, &src);
+	sensitivity = ft==NULL?FALSE:TRUE;
+	if (fields->fileregexstring!=NULL && *(fields->fileregexstring)!=NULL)
+	{
+		gtk_entry_set_text(GTK_ENTRY(fields->fileregex), *(fields->fileregexstring));
+		if (src>dst) sensitivity = FALSE;
+	}
+	gtk_table_attach(table, fields->fileregex, 2, 3, row, row+1, GTK_FILL, GTK_FILL | GTK_EXPAND, 0, 0);
+	clearicon = gtk_image_new_from_stock(GTK_STOCK_CLEAR, GTK_ICON_SIZE_SMALL_TOOLBAR);
+	clear = gtk_button_new();
+	gtk_button_set_image(GTK_BUTTON(clear), clearicon);
+	g_signal_connect_swapped((gpointer)clear, "clicked", G_CALLBACK(on_clear_dialog_regex_row), (gpointer)(fields->fileregex));
+	gtk_table_attach(table, clear, 4, 5, row, row+1, GTK_FILL, GTK_FILL | GTK_EXPAND, 0, 0);
+	gtk_widget_set_sensitive(fields->fileregex, sensitivity);
+	gtk_widget_set_sensitive(clear, sensitivity);
+	++row;
 	sep = gtk_hseparator_new();
 	gtk_table_attach(table, sep, 0, 6, row, row+1, GTK_FILL, GTK_FILL | GTK_EXPAND, 0, 0);
 	++row;
-	label = gtk_label_new(_("Non Filetype Comamnds"));
+	label = gtk_label_new(_("Non Filetype Commands"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
 	gtk_table_attach(table, label, 0, 6, row, row+1, GTK_FILL, GTK_FILL | GTK_EXPAND, 0, 0);
 	for (++row, cmd=0; cmd<build_groups_count[GBG_NON_FT]; ++row,++cmdindex, ++cmd)
 		fields->rows[cmdindex] = build_add_dialog_row(doc, table, row, dst, GBG_NON_FT, cmd, TRUE);
+	label = gtk_label_new(_("Error Regular Expression"));
+	gtk_table_attach(table, label, 0, 2, row, row+1, GTK_FILL, GTK_FILL | GTK_EXPAND, 0, 0);
+	fields->nonfileregex = gtk_entry_new();
+	fields->nonfileregexstring = get_build_regex(GBG_NON_FT, NULL, &src);
+	sensitivity = TRUE;
+	if (fields->nonfileregexstring!=NULL && *(fields->nonfileregexstring)!=NULL)
+	{
+		gtk_entry_set_text(GTK_ENTRY(fields->nonfileregex), *(fields->nonfileregexstring));
+		sensitivity = src>dst?FALSE:TRUE;
+	}
+	gtk_table_attach(table, fields->nonfileregex, 2, 3, row, row+1, GTK_FILL, GTK_FILL | GTK_EXPAND, 0, 0);
+	clearicon = gtk_image_new_from_stock(GTK_STOCK_CLEAR, GTK_ICON_SIZE_SMALL_TOOLBAR);
+	clear = gtk_button_new();
+	gtk_button_set_image(GTK_BUTTON(clear), clearicon);
+	g_signal_connect_swapped((gpointer)clear, "clicked", G_CALLBACK(on_clear_dialog_regex_row), (gpointer)(fields->nonfileregex));
+	gtk_table_attach(table, clear, 4, 5, row, row+1, GTK_FILL, GTK_FILL | GTK_EXPAND, 0, 0);
+	gtk_widget_set_sensitive(fields->nonfileregex, sensitivity);
+	gtk_widget_set_sensitive(clear, sensitivity);
+	++row;
 	sep = gtk_hseparator_new();
 	gtk_table_attach(table, sep, 0, 6, row, row+1, GTK_FILL, GTK_FILL | GTK_EXPAND, 0, 0);
 	++row;
-	label = gtk_label_new(_("Execute Comamnds"));
+	label = gtk_label_new(_("Execute Commands"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
 	gtk_table_attach(table, label, 0, 6, row, row+1, GTK_FILL, GTK_FILL | GTK_EXPAND, 0, 0);
 	for (++row, cmd=0; cmd<build_groups_count[GBG_EXEC]; ++row,++cmdindex, ++cmd)
 		fields->rows[cmdindex] = build_add_dialog_row(doc, table, row, dst, GBG_EXEC, cmd, TRUE);
 	sep = gtk_hseparator_new();
 	gtk_table_attach(table, sep, 0, 6, row, row+1, GTK_FILL, GTK_FILL | GTK_EXPAND, 0, 0);
-	++row;
-	label = gtk_label_new(_("Error Regular Expression"));
-	gtk_table_attach(table, label, 0, 2, row, row+1, GTK_FILL, GTK_FILL | GTK_EXPAND, 0, 0);
-	fields->regex = gtk_entry_new();
-	gtk_table_attach(table, fields->regex, 2, 4, row, row+1, GTK_FILL, GTK_FILL | GTK_EXPAND, 0, 0);
-	clearicon = gtk_image_new_from_stock(GTK_STOCK_CLEAR, GTK_ICON_SIZE_SMALL_TOOLBAR);
-	clear = gtk_button_new();
-	gtk_button_set_image(GTK_BUTTON(clear), clearicon);
-	/* TODO clear callback */
-	gtk_table_attach(table, clear, 4, 5, row, row+1, GTK_FILL, GTK_FILL | GTK_EXPAND, 0, 0);
 	++row;
 	sep = gtk_hseparator_new();
 	gtk_table_attach(table, sep, 0, 6, row, row+1, GTK_FILL, GTK_FILL | GTK_EXPAND, 0, 0);
@@ -1581,11 +1643,7 @@ void free_build_fields(TableData table_data)
 	g_free(table_data);
 }
 
-/* sets of commands to get from the build dialog, NULL gets filetype pointer later */
-static GeanyBuildCommand **proj_cmds[GBG_COUNT]={ NULL, &non_ft_proj, &exec_proj }; /* indexed by GBG */
-static GeanyBuildCommand **pref_cmds[GBG_COUNT]={ NULL, &non_ft_pref, &exec_pref };
-
-static gboolean read_row(GeanyBuildCommand ***dstcmds, TableData table_data, gint drow, gint grp, gint cmd)
+static gboolean read_row(BuildDestination *dst, TableData table_data, gint drow, gint grp, gint cmd)
 {
 	gchar			*label, *command;
 	gboolean		 dir;
@@ -1598,11 +1656,11 @@ static gboolean read_row(GeanyBuildCommand ***dstcmds, TableData table_data, gin
 	dir = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(table_data->rows[drow]->dir));
 	if (table_data->rows[drow]->cleared)
 	{
-		if (dstcmds[grp]!=NULL)
+		if (dst->dst[grp]!=NULL)
 		{
-			if (*(dstcmds[grp])==NULL)*(dstcmds[grp])=g_new0(GeanyBuildCommand, build_groups_count[grp]);
-			(*(dstcmds[grp]))[cmd].exists=FALSE;
-			(*(dstcmds[grp]))[cmd].changed=TRUE;
+			if (*(dst->dst[grp])==NULL)*(dst->dst[grp])=g_new0(GeanyBuildCommand, build_groups_count[grp]);
+			(*(dst->dst[grp]))[cmd].exists=FALSE;
+			(*(dst->dst[grp]))[cmd].changed=TRUE;
 			changed=TRUE;
 		}
 	}
@@ -1613,15 +1671,15 @@ static gboolean read_row(GeanyBuildCommand ***dstcmds, TableData table_data, gin
 		    stcmp(command, table_data->rows[drow]->cmdsrc->command)!=0 || /* command is different or */
 		    dir != table_data->rows[drow]->cmdsrc->run_in_base_dir)))     /* runinbasedir is different */
 	{
-		if (dstcmds[grp]!=NULL)
+		if (dst->dst[grp]!=NULL)
 		{
-			if (*(dstcmds[grp])==NULL)
-				*(dstcmds[grp]) = g_new0(GeanyBuildCommand, build_groups_count[grp]);
-			setptr((*(dstcmds[grp]))[cmd].label, label);
-			setptr((*(dstcmds[grp]))[cmd].command, command);
-			(*(dstcmds[grp]))[cmd].run_in_base_dir = dir;
-			(*(dstcmds[grp]))[cmd].exists = TRUE;
-			(*(dstcmds[grp]))[cmd].changed=TRUE;
+			if (*(dst->dst[grp])==NULL)
+				*(dst->dst[grp]) = g_new0(GeanyBuildCommand, build_groups_count[grp]);
+			setptr((*(dst->dst[grp]))[cmd].label, label);
+			setptr((*(dst->dst[grp]))[cmd].command, command);
+			(*(dst->dst[grp]))[cmd].run_in_base_dir = dir;
+			(*(dst->dst[grp]))[cmd].exists = TRUE;
+			(*(dst->dst[grp]))[cmd].changed=TRUE;
 			changed = TRUE;
 		}
 	}
@@ -1632,23 +1690,54 @@ static gboolean read_row(GeanyBuildCommand ***dstcmds, TableData table_data, gin
 	return changed;
 }
 
-gboolean read_build_commands(GeanyBuildCommand ***dstcmds, TableData table_data, gint response)
+static gboolean read_regex(GtkWidget *regexentry, gchar **src, gchar **dst)
+{
+	gboolean 	changed = FALSE;
+	gchar 		*reg = g_strdup(gtk_entry_get_text(GTK_ENTRY(regexentry)));
+	if (
+		 (
+		   ( src==NULL					/* originally there was no regex or */
+			 || *src==NULL				/* or it was NULL*/
+		   )
+		   && strlen(reg)>0				/*  and something was typed */
+		 )
+		 ||(							/* or */
+			 src!=NULL					/* originally there was a regex*/
+			 && strcmp(*src, reg)!=0 	/* and it has been changed */
+		   )
+		 )
+	{
+		if (dst!=NULL)
+		{
+			setptr(*dst, reg);
+			changed = TRUE;
+		}
+	}
+	return changed;
+}
+
+gboolean read_build_commands(BuildDestination *dst, TableData table_data, gint response)
 {
 	gint			 cmdindex, grp, cmd;
+	gchar 			*reg;
 	gboolean		 changed = FALSE;
 	
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		for (cmdindex=0, cmd=0; cmd<build_groups_count[GBG_FT]; ++cmdindex, ++cmd)
-			changed |= read_row(dstcmds, table_data, cmdindex, GBG_FT, cmd);
+			changed |= read_row(dst, table_data, cmdindex, GBG_FT, cmd);
 		for (cmd=0; cmd<build_groups_count[GBG_NON_FT]; ++cmdindex, ++cmd)
-			changed |= read_row(dstcmds, table_data, cmdindex, GBG_NON_FT, cmd);
+			changed |= read_row(dst, table_data, cmdindex, GBG_NON_FT, cmd);
 		for (cmd=0; cmd<build_groups_count[GBG_EXEC]; ++cmdindex, ++cmd)
-			changed |= read_row(dstcmds, table_data, cmdindex, GBG_EXEC, cmd);
-		/* regex */
+			changed |= read_row(dst, table_data, cmdindex, GBG_EXEC, cmd);
+		changed |= read_regex(table_data->fileregex, table_data->fileregexstring, dst->fileregexstr);
+		changed |= read_regex(table_data->nonfileregex, table_data->nonfileregexstring, dst->nonfileregexstr);
 	}
 	return changed;
 }
+
+/* sets of commands to get from the build dialog, NULL gets pointer set later */
+static BuildDestination prefdsts={ { NULL, &non_ft_pref, &exec_pref }, NULL };
 
 static void show_build_commands_dialog()
 {
@@ -1658,11 +1747,10 @@ static void show_build_commands_dialog()
 	gchar			*title = _("Set Build Commands");
 	gint			 cmdindex, response;
 	TableData		 table_data;
+	BuildDestination prefdsts;
 
 	if (doc != NULL)
 		ft = doc->file_type;
-	if (ft!=NULL)pref_cmds[GBG_FT]= &(ft->homefilecmds);
-	else pref_cmds[GBG_FT] = NULL;
 	dialog = gtk_dialog_new_with_buttons(title, GTK_WINDOW(main_widgets.window),
 										GTK_DIALOG_DESTROY_WITH_PARENT,
 										GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -1672,9 +1760,24 @@ static void show_build_commands_dialog()
 	gtk_widget_show_all(dialog);
 	/* run modally to prevent user changing idx filetype */
 	response = gtk_dialog_run(GTK_DIALOG(dialog));
-	read_build_commands(pref_cmds, table_data, response);
-	build_menu_update(doc);
+	
+	prefdsts.dst[GBG_NON_FT] = &non_ft_pref;
+	prefdsts.dst[GBG_EXEC] = &exec_pref;
+	if (ft!=NULL)
+	{
+		prefdsts.dst[GBG_FT] = &(ft->homefilecmds);
+		prefdsts.fileregexstr = &(ft->homeerror_regex_string);
+	}
+	else
+	{
+		prefdsts.dst[GBG_FT] = NULL;
+		prefdsts.fileregexstr = NULL;
+	}
+	prefdsts.nonfileregexstr = &regex_pref;
+	read_build_commands(&prefdsts, table_data, response);
 	free_build_fields(table_data);
+	
+	build_menu_update(doc);
 	gtk_widget_destroy(dialog);
 }
 
@@ -1763,20 +1866,24 @@ void load_build_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 				load_build_menu_grp(config, &(ft->filecmds), GBG_FT, NULL, TRUE);
 				load_build_menu_grp(config, &(ft->ftdefcmds), GBG_NON_FT, NULL, TRUE);
 				load_build_menu_grp(config, &(ft->execcmds), GBG_EXEC, NULL, TRUE);
+				setptr(ft->error_regex_string, g_key_file_get_string(config, build_grp_name, "error_regex", NULL));
 				break;
 			case BCS_HOME_FT:
 				ft = (GeanyFiletype*)p;
 				if (ft==NULL)return;
 				load_build_menu_grp(config, &(ft->homefilecmds), GBG_FT, NULL, FALSE);
 				load_build_menu_grp(config, &(ft->homeexeccmds), GBG_EXEC, NULL, FALSE);
+				setptr(ft->homeerror_regex_string, g_key_file_get_string(config, build_grp_name, "error_regex", NULL));
 				break;
 			case BCS_PREF:
 				load_build_menu_grp(config, &non_ft_pref, GBG_NON_FT, NULL, FALSE);
 				load_build_menu_grp(config, &exec_pref, GBG_EXEC, NULL, FALSE);
+				setptr(regex_pref, g_key_file_get_string(config, build_grp_name, "error_regex", NULL));
 				break;
 			case BCS_PROJ:
 				load_build_menu_grp(config, &non_ft_proj, GBG_NON_FT, NULL, FALSE);
 				load_build_menu_grp(config, &exec_proj, GBG_EXEC, NULL, FALSE);
+				setptr(regex_proj, g_key_file_get_string(config, build_grp_name, "error_regex", NULL));
 				pj = (GeanyProject*)p;
 				if (p==NULL)return;
 				ftlist = g_key_file_get_string_list(config, build_grp_name, "filetypes", NULL, NULL);
@@ -1791,8 +1898,11 @@ void load_build_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 						ft=filetypes_lookup_by_name(*ftname);
 						if (ft!=NULL)
 						{
+							gchar *regkey = g_strdup_printf("%serror_regex", *ftname);
 							g_ptr_array_add(pj->build_filetypes_list, ft);
 							load_build_menu_grp(config, &(ft->projfilecmds), GBG_FT, *ftname, FALSE);
+							setptr(ft->projerror_regex_string, g_key_file_get_string(config, build_grp_name, regkey, NULL));
+							g_free(regkey);
 						}
 					}
 					g_free(ftlist);
@@ -1834,6 +1944,7 @@ void load_build_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 					ft->execcmds[GBO_TO_CMD(GBO_EXEC)].label = g_strdup(_("_Execute"));
 					ft->execcmds[GBO_TO_CMD(GBO_EXEC)].command = value;
 				}
+				setptr(ft->error_regex_string, g_key_file_get_string(config, "build_settings", "error_regex", NULL));
 				break;
 			case BCS_PROJ:
 				if (non_ft_proj==NULL)non_ft_proj = g_new0(GeanyBuildCommand, build_groups_count[GBG_NON_FT]);
@@ -1927,7 +2038,17 @@ static void foreach_project_filetype(gpointer data, gpointer user_data)
 	GeanyFiletype *ft = (GeanyFiletype*)data;
 	ForEachData *d = (ForEachData*)user_data;
 	gint i=0;
+	gchar *regkey = g_strdup_printf("%serror_regex", ft->name);
+	
 	i += save_build_menu_grp(d->config, ft->projfilecmds, GBG_FT, ft->name);
+	if(ft->projerror_regex_string!=NULL && strlen(ft->projerror_regex_string)>0)
+	{
+		g_key_file_set_string(d->config, build_grp_name, regkey, ft->projerror_regex_string);
+		i+=1;
+	}
+	else
+		g_key_file_remove_key(d->config, build_grp_name,regkey, NULL);
+	g_free(regkey);
 	if(i>0)g_ptr_array_add(d->ft_names, ft->name);
 }
 
@@ -1936,6 +2057,7 @@ void save_build_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src)
 	GeanyFiletype 	*ft;
 	GeanyProject  	*pj;
 	ForEachData		 data;
+	gchar 			*regkey;
 	
 	switch(src)
 	{
@@ -1944,19 +2066,37 @@ void save_build_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src)
 			if (ft==NULL)return;
 			save_build_menu_grp(config, ft->homefilecmds, GBG_FT, NULL);
 			save_build_menu_grp(config, ft->homeexeccmds, GBG_EXEC, NULL);
+			regkey = g_strdup_printf("%serror_regex", ft->name);
+			if(ft->homeerror_regex_string!=NULL && strlen(ft->homeerror_regex_string)>0)
+				g_key_file_set_string(config, build_grp_name, regkey, ft->projerror_regex_string);
+			else
+				g_key_file_remove_key(config, build_grp_name,regkey, NULL);
+			g_free(regkey);
 			break;
 		case BCS_PREF:
 			save_build_menu_grp(config, non_ft_pref, GBG_NON_FT, NULL);
 			save_build_menu_grp(config, exec_pref, GBG_EXEC, NULL);
+			if(regex_pref!=NULL && strlen(regex_pref)>0)
+				g_key_file_set_string(config, build_grp_name, "error_regex", regex_pref);
+			else
+				g_key_file_remove_key(config, build_grp_name, "error_regex", NULL);
 			break;
 		case BCS_PROJ:
 			pj = (GeanyProject*)ptr;
 			save_build_menu_grp(config, non_ft_proj, GBG_NON_FT, NULL);
 			save_build_menu_grp(config, exec_proj, GBG_EXEC, NULL);
+			if(regex_proj!=NULL && strlen(regex_proj)>0)
+				g_key_file_set_string(config, build_grp_name, "error_regex", regex_proj);
+			else
+				g_key_file_remove_key(config, build_grp_name, "error_regex", NULL);
 			data.config = config;
 			data.ft_names = g_ptr_array_new();
 			g_ptr_array_foreach(pj->build_filetypes_list, foreach_project_filetype, (gpointer)(&data));
-			g_key_file_set_string_list(config, build_grp_name, "filetypes", (gchar*)(data.ft_names->pdata), data.ft_names->len);
+			if (data.ft_names->pdata!=NULL)
+				g_key_file_set_string_list(config, build_grp_name, "filetypes", (gchar**)(data.ft_names->pdata), data.ft_names->len);
+			else
+				g_key_file_remove_key(config, build_grp_name, "filetypes", NULL);
+			g_ptr_array_free(data.ft_names, TRUE);
 			break;
 		default: /* defaults and BCS_FT can't save */
 			break;
