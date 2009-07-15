@@ -529,9 +529,9 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 {
 	/* named styles */
 	if (named_style_hash)
-		g_hash_table_remove_all(named_style_hash);	/* reloading */
-	else
-		named_style_hash = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
+		g_hash_table_destroy(named_style_hash);	/* reloading */
+
+	named_style_hash = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
 
 	/* first set default to the "default" named style */
 	add_named_style(config, "default");
