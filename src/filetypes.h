@@ -32,7 +32,7 @@
 
 typedef enum
 {
-	GEANY_FILETYPES_NONE = 0,	/* first filetype is always None */
+	GEANY_FILETYPES_NONE = 0,	/* first filetype is always None & must be 0*/
 
 	GEANY_FILETYPES_PHP,
 	GEANY_FILETYPES_BASIC,	/* FreeBasic */

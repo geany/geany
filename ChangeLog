@@ -1,3 +1,13 @@
+2009-07-15  Lex Trotman  <elextr(at)gmail(dot)com>
+
+ * src/build.h, src/build.c
+   Changed to itterate over entries in build commands dialog to allow
+   additional fields to be added
+   Implement support for multiple run commands
+ * data/filetypes.latex
+   Implement configured commands and labels for latex.
+
+
 2009-07-14  Lex Trotman  <elextr(at)gmail(dot)com>
 
  * src/build.h, src/build.c

@@ -91,10 +91,16 @@ typedef struct GeanyBuildInfo
 
 extern GeanyBuildInfo build_info;
 
+typedef enum  GeanyBuildCmdEntries
+{
+    BC_LABEL,
+    BC_COMMAND,
+    BC_CMDENTRIES_COUNT,
+} GeanyBuildCmdEntries;
+
 typedef struct GeanyBuildCommand
 {
-	gchar		*label;
-	gchar		*command;
+	gchar *entries[BC_CMDENTRIES_COUNT];
 	gboolean	 exists;
 	gboolean	 run_in_base_dir;
 	gboolean	 changed;
