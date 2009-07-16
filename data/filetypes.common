@@ -35,7 +35,7 @@ marker_line=0x000000;0xffff00;false;false
 # style for a marked search results (when using "Mark" in Search dialogs)
 # the second argument sets the background colour for the drawn rectangle
 # only the second argument is interpreted
-marker_search=0x000000;0x00ff00;false;false
+marker_search=0x000000;0x0000f0;false;false
 
 # style for a marked line (e.g when using the "Toggle Marker" keybinding (Ctrl-M))
 # only the first and second argument is interpreted
