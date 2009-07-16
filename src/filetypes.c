@@ -807,9 +807,9 @@ static gboolean shebang_find_and_match_filetype(const gchar *utf8_filename, gint
 		return FALSE;
 
 	va_start(args, first);
+	test = first;
 	while (1)
 	{
-		test = va_arg(args, gint);
 		if (test == -1)
 			break;
 
@@ -818,6 +818,7 @@ static gboolean shebang_find_and_match_filetype(const gchar *utf8_filename, gint
 			result = TRUE;
 			break;
 		}
+		test = va_arg(args, gint);
 	}
 	va_end(args);
 
