@@ -1,3 +1,10 @@
+2009-07-16  Lex Trotman  <elextr(at)gmail(dot)com>
+
+ * src/build.c, src/build.h
+   Incorporated patch for working directory field (thanks Thomas)
+   Removed run_in_base_dir option and associated code that it replaces
+   Improved handling of old config files and mapping to new ones.
+
 2009-07-15  Lex Trotman  <elextr(at)gmail(dot)com>
 
  * src/build.h, src/build.c

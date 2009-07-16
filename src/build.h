@@ -95,6 +95,7 @@ typedef enum  GeanyBuildCmdEntries
 {
     BC_LABEL,
     BC_COMMAND,
+    BC_WORKING_DIR,
     BC_CMDENTRIES_COUNT,
 } GeanyBuildCmdEntries;
 
@@ -102,7 +103,6 @@ typedef struct GeanyBuildCommand
 {
 	gchar *entries[BC_CMDENTRIES_COUNT];
 	gboolean	 exists;
-	gboolean	 run_in_base_dir;
 	gboolean	 changed;
 } GeanyBuildCommand;
 
