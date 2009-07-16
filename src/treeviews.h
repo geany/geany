@@ -32,8 +32,8 @@ typedef struct SidebarTreeviews
 	GtkWidget		*tree_openfiles;
 	GtkWidget		*default_tag_tree;
 	GtkWidget		*popup_taglist;
-	GtkWidget		*popup_openfiles;
-} SidebarTreeviews;
+}
+SidebarTreeviews;
 
 extern SidebarTreeviews tv;
 
@@ -47,6 +47,8 @@ enum
 };
 
 void treeviews_init(void);
+
+void treeviews_finalize(void);
 
 void treeviews_update_tag_list(GeanyDocument *doc, gboolean update);
 

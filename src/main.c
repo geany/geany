@@ -234,7 +234,6 @@ static void main_init(void)
 	ui_widgets.open_filesel		= NULL;
 	ui_widgets.save_filesel		= NULL;
 	ui_widgets.prefs_dialog		= NULL;
-	tv.default_tag_tree	= NULL;
 	main_status.main_window_realized= FALSE;
 	file_prefs.tab_order_ltr		= FALSE;
 	main_status.quitting			= FALSE;
@@ -1110,6 +1109,7 @@ void main_quit()
 	editor_snippets_free();
 	encodings_finalize();
 	toolbar_finalize();
+	treeviews_finalize();
 	configuration_finalize();
 	log_finalize();
 
@@ -1147,11 +1147,6 @@ void main_quit()
 	if (ui_widgets.open_filesel && GTK_IS_WIDGET(ui_widgets.open_filesel)) gtk_widget_destroy(ui_widgets.open_filesel);
 	if (ui_widgets.open_fontsel && GTK_IS_WIDGET(ui_widgets.open_fontsel)) gtk_widget_destroy(ui_widgets.open_fontsel);
 	if (ui_widgets.open_colorsel && GTK_IS_WIDGET(ui_widgets.open_colorsel)) gtk_widget_destroy(ui_widgets.open_colorsel);
-	if (tv.default_tag_tree && GTK_IS_WIDGET(tv.default_tag_tree))
-	{
-		g_object_unref(tv.default_tag_tree);
-		gtk_widget_destroy(tv.default_tag_tree);
-	}
 #ifdef HAVE_VTE
 	if (vte_info.have_vte) vte_close();
 	g_free(vte_info.lib_vte);
@@ -1164,10 +1159,6 @@ void main_quit()
 					gtk_widget_destroy(main_widgets.editor_menu);
 	if (ui_widgets.toolbar_menu && GTK_IS_WIDGET(ui_widgets.toolbar_menu))
 					gtk_widget_destroy(ui_widgets.toolbar_menu);
-	if (tv.popup_taglist && GTK_IS_WIDGET(tv.popup_taglist))
-					gtk_widget_destroy(tv.popup_taglist);
-	if (tv.popup_openfiles && GTK_IS_WIDGET(tv.popup_openfiles))
-					gtk_widget_destroy(tv.popup_openfiles);
 	if (msgwindow.popup_status_menu && GTK_IS_WIDGET(msgwindow.popup_status_menu))
 					gtk_widget_destroy(msgwindow.popup_status_menu);
 	if (msgwindow.popup_msg_menu && GTK_IS_WIDGET(msgwindow.popup_msg_menu))

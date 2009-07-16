@@ -20,6 +20,9 @@
    settings have been read.
  * src/treeviews.c:
    Fix GTK warning when right-clicking on default tag tree.
+ * src/treeviews.c, src/treeviews.h, src/keyfile.c, src/main.c:
+   Add treeviews_finalize().
+   Remove tv.popup_openfiles field.
 
 
 2009-07-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

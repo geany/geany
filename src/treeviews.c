@@ -45,7 +45,7 @@
 
 #include <gdk/gdkkeysyms.h>
 
-SidebarTreeviews tv = {NULL, NULL, NULL, NULL};
+SidebarTreeviews tv = {NULL, NULL, NULL};
 
 static struct
 {
@@ -80,6 +80,7 @@ enum
 };
 
 static GtkTreeStore	*store_openfiles;
+static GtkWidget *openfiles_popup_menu;
 static gboolean documents_show_paths;
 static GtkWidget *tag_window;	/* scrolled window that holds the symbol list GtkTreeView */
 
@@ -553,22 +554,22 @@ static void create_openfiles_popup_menu(void)
 {
 	GtkWidget *item;
 
-	tv.popup_openfiles = gtk_menu_new();
+	openfiles_popup_menu = gtk_menu_new();
 
 	item = gtk_image_menu_item_new_from_stock("gtk-close", NULL);
 	gtk_widget_show(item);
-	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), item);
+	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
 	g_signal_connect(item, "activate",
 			G_CALLBACK(on_openfiles_document_action), GINT_TO_POINTER(OPENFILES_ACTION_REMOVE));
 	doc_items.close = item;
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
-	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), item);
+	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
 
 	item = gtk_image_menu_item_new_from_stock("gtk-save", NULL);
 	gtk_widget_show(item);
-	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), item);
+	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
 	g_signal_connect(item, "activate",
 			G_CALLBACK(on_openfiles_document_action), GINT_TO_POINTER(OPENFILES_ACTION_SAVE));
 	doc_items.save = item;
@@ -577,22 +578,22 @@ static void create_openfiles_popup_menu(void)
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 		gtk_image_new_from_stock("gtk-revert-to-saved", GTK_ICON_SIZE_MENU));
 	gtk_widget_show(item);
-	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), item);
+	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
 	g_signal_connect(item, "activate",
 			G_CALLBACK(on_openfiles_document_action), GINT_TO_POINTER(OPENFILES_ACTION_RELOAD));
 	doc_items.reload = item;
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
-	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), item);
+	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
 
 	doc_items.show_paths = gtk_check_menu_item_new_with_mnemonic(_("Show _Paths"));
 	gtk_widget_show(doc_items.show_paths);
-	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), doc_items.show_paths);
+	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), doc_items.show_paths);
 	g_signal_connect(doc_items.show_paths, "activate",
 			G_CALLBACK(on_openfiles_show_paths_activate), NULL);
 
-	sidebar_add_common_menu_items(GTK_MENU(tv.popup_openfiles));
+	sidebar_add_common_menu_items(GTK_MENU(openfiles_popup_menu));
 }
 
 
@@ -873,11 +874,11 @@ static gboolean on_documents_button_release_event(GtkWidget *widget, GdkEventBut
 
 	if (event->button == 3)
 	{
-		if (!tv.popup_openfiles)
+		if (!openfiles_popup_menu)
 			create_openfiles_popup_menu();
 
 		documents_menu_update(selection);
-		gtk_menu_popup(GTK_MENU(tv.popup_openfiles), NULL, NULL, NULL, NULL,
+		gtk_menu_popup(GTK_MENU(openfiles_popup_menu), NULL, NULL, NULL, NULL,
 			event->button, event->time);
 	}
 	return FALSE;
@@ -905,3 +906,17 @@ void treeviews_init(void)
 }
 
 
+#define WIDGET(w) w && GTK_IS_WIDGET(w)
+
+void treeviews_finalize(void)
+{
+	if (WIDGET(tv.default_tag_tree))
+	{
+		g_object_unref(tv.default_tag_tree);
+		gtk_widget_destroy(tv.default_tag_tree);
+	}
+	if (WIDGET(tv.popup_taglist))
+		gtk_widget_destroy(tv.popup_taglist);
+	if (WIDGET(openfiles_popup_menu))
+		gtk_widget_destroy(openfiles_popup_menu);
+}
