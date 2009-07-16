@@ -40,18 +40,21 @@
 #include "symbols.h"
 #include "navqueue.h"
 #include "project.h"
+#include "stash.h"
+#include "keyfile.h"
 
 #include <gdk/gdkkeysyms.h>
 
-SidebarTreeviews tv;
+SidebarTreeviews tv = {NULL, NULL, NULL, NULL};
 
 static struct
 {
 	GtkWidget *close;
 	GtkWidget *save;
 	GtkWidget *reload;
+	GtkWidget *show_paths;
 }
-doc_items = {NULL, NULL, NULL};
+doc_items = {NULL, NULL, NULL, NULL};
 
 enum
 {
@@ -77,6 +80,7 @@ enum
 };
 
 static GtkTreeStore	*store_openfiles;
+static gboolean documents_show_paths;
 static GtkWidget *tag_window;	/* scrolled window that holds the symbol list GtkTreeView */
 
 /* callback prototypes */
@@ -303,6 +307,9 @@ static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 	static GtkTreeIter parent;
 	GtkTreeModel *model = GTK_TREE_MODEL(store_openfiles);
 
+	if (!documents_show_paths)
+		return NULL;
+
 	tmp_dirname = g_path_get_dirname(DOC_FILENAME(doc));
 	/* replace the project base path with the project name */
 	project_base_path = project_get_base_path();
@@ -362,7 +369,7 @@ void treeviews_openfiles_add(GeanyDocument *doc)
 	gtk_tree_store_append(store_openfiles, iter, parent);
 
 	/* check if new parent */
-	if (gtk_tree_model_iter_n_children(GTK_TREE_MODEL(store_openfiles), parent) == 1)
+	if (parent && gtk_tree_model_iter_n_children(GTK_TREE_MODEL(store_openfiles), parent) == 1)
 	{
 		GtkTreePath *path;
 
@@ -515,6 +522,13 @@ void sidebar_add_common_menu_items(GtkMenu *menu)
 }
 
 
+static void on_openfiles_show_paths_activate(GtkCheckMenuItem *item, gpointer user_data)
+{
+	documents_show_paths = gtk_check_menu_item_get_active(item);
+	treeviews_openfiles_update_all();
+}
+
+
 static void on_list_document_activate(GtkCheckMenuItem *item, gpointer user_data)
 {
 	interface_prefs.sidebar_openfiles_visible = gtk_check_menu_item_get_active(item);
@@ -562,6 +576,16 @@ static void create_openfiles_popup_menu(void)
 			G_CALLBACK(on_openfiles_document_action), GINT_TO_POINTER(OPENFILES_ACTION_RELOAD));
 	doc_items.reload = item;
 
+	item = gtk_separator_menu_item_new();
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), item);
+
+	doc_items.show_paths = gtk_check_menu_item_new_with_mnemonic(_("Show _Paths"));
+	gtk_widget_show(doc_items.show_paths);
+	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), doc_items.show_paths);
+	g_signal_connect(doc_items.show_paths, "activate",
+			G_CALLBACK(on_openfiles_show_paths_activate), NULL);
+
 	sidebar_add_common_menu_items(GTK_MENU(tv.popup_openfiles));
 }
 
@@ -571,11 +595,12 @@ static void unfold_parent(GtkTreeIter *iter)
 	GtkTreeIter parent;
 	GtkTreePath *path;
 
-	gtk_tree_model_iter_parent(GTK_TREE_MODEL(store_openfiles), &parent, iter);
-
-	path = gtk_tree_model_get_path(GTK_TREE_MODEL(store_openfiles), &parent);
-	gtk_tree_view_expand_row(GTK_TREE_VIEW(tv.tree_openfiles), path, TRUE);
-	gtk_tree_path_free(path);
+	if (gtk_tree_model_iter_parent(GTK_TREE_MODEL(store_openfiles), &parent, iter))
+	{
+		path = gtk_tree_model_get_path(GTK_TREE_MODEL(store_openfiles), &parent);
+		gtk_tree_view_expand_row(GTK_TREE_VIEW(tv.tree_openfiles), path, TRUE);
+		gtk_tree_path_free(path);
+	}
 }
 
 
@@ -827,6 +852,9 @@ static void documents_menu_update(GtkTreeSelection *selection)
 	gtk_widget_set_sensitive(doc_items.save, (doc && doc->real_path) || path);
 	gtk_widget_set_sensitive(doc_items.reload, doc && doc->real_path);
 	g_free(shortname);
+
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(doc_items.show_paths),
+		documents_show_paths);
 }
 
 
@@ -839,6 +867,9 @@ static gboolean on_documents_button_release_event(GtkWidget *widget, GdkEventBut
 
 	if (event->button == 3)
 	{
+		if (!tv.popup_openfiles)
+			create_openfiles_popup_menu();
+
 		documents_menu_update(selection);
 		gtk_menu_popup(GTK_MENU(tv.popup_openfiles), NULL, NULL, NULL, NULL,
 			event->button, event->time);
@@ -847,13 +878,24 @@ static gboolean on_documents_button_release_event(GtkWidget *widget, GdkEventBut
 }
 
 
-void treeviews_init()
+static void on_load_settings(void)
 {
-	tv.default_tag_tree = NULL;
 	tag_window = ui_lookup_widget(main_widgets.window, "scrolledwindow2");
 
 	prepare_openfiles();
-	create_openfiles_popup_menu();
+}
+
+
+void treeviews_init(void)
+{
+	GeanyPrefGroup *group;
+
+	group = stash_group_new(PACKAGE);
+	stash_group_add_boolean(group, &documents_show_paths, "documents_show_paths", TRUE);
+	configuration_add_pref_group(group, FALSE);
+
+	/* delay building documents treeview until sidebar font has been read */
+	g_signal_connect(geany_object, "load-settings", on_load_settings, NULL);
 }
 
 

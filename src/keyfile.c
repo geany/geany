@@ -917,6 +917,9 @@ gboolean configuration_load(void)
 	project_load_prefs(config);
 	configuration_load_session_files(config, TRUE);
 
+	/* this signal can be used e.g. to delay building UI elements until settings have been read */
+	g_signal_emit_by_name(geany_object, "load-settings", config);
+
 	g_key_file_free(config);
 	g_free(configfile);
 	return TRUE;

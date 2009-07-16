@@ -957,7 +957,8 @@ gint main(gint argc, gchar **argv)
 #ifdef HAVE_PLUGINS
 	plugins_init();
 #endif
-	load_settings();
+	treeviews_init();
+	load_settings();	/* load keyfile */
 
 	msgwin_init();
 	build_init();
@@ -970,7 +971,6 @@ gint main(gint argc, gchar **argv)
 	templates_init();
 	navqueue_init();
 	document_init_doclist();
-	treeviews_init();
 	symbols_init();
 	filetypes_read_extensions();
 	editor_snippets_init();

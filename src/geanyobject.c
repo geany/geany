@@ -27,8 +27,12 @@
  * Mainly used for plugins - see the API docs.
  *
  * Core-only signals:
+ *
  * signal void save_settings(GObject *obj, GKeyFile *keyfile, gpointer user_data);
  * Emitted just before saving main keyfile settings.
+
+ * signal void load_settings(GObject *obj, GKeyFile *keyfile, gpointer user_data);
+ * Emitted just after loading main keyfile settings.
  */
 
 #include "geany.h"
@@ -240,6 +244,15 @@ static void create_signals(GObjectClass *g_object_class)
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GeanyObjectClass, save_settings),
+		NULL, NULL,
+		g_cclosure_marshal_VOID__POINTER,
+		G_TYPE_NONE, 1,
+		G_TYPE_POINTER);
+	geany_object_signals[GCB_LOAD_SETTINGS] = g_signal_new (
+		"load-settings",
+		G_OBJECT_CLASS_TYPE (g_object_class),
+		G_SIGNAL_RUN_FIRST,
+		G_STRUCT_OFFSET (GeanyObjectClass, load_settings),
 		NULL, NULL,
 		g_cclosure_marshal_VOID__POINTER,
 		G_TYPE_NONE, 1,

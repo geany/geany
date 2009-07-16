@@ -5,6 +5,12 @@
    current word.
  * src/search.c:
    Fix wrong match length when using Mark with regex.
+ * src/geanyobject.c, src/geanyobject.h, src/treeviews.c,
+   src/keyfile.c, src/main.c:
+   Add 'Show Paths' documents list popup item.
+   Add "load_settings" core-only signal emitted just after loading
+   main keyfile settings; useful to delay building UI elements until
+   settings have been read.
 
 
 2009-07-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
