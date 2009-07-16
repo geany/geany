@@ -1,3 +1,10 @@
+2009-07-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/search.c:
+   Make Mark All keybinding clear search highlighting when there's no
+   current word.
+
+
 2009-07-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/highlighting.c:

@@ -967,11 +967,12 @@ gint search_mark_all(GeanyDocument *doc, const gchar *search_text, gint flags)
 	struct Sci_TextToFind ttf;
 
 	g_return_val_if_fail(doc != NULL, 0);
-	if (!NZV(search_text))
-		return 0;
 
 	/* clear previous search indicators */
 	editor_indicator_clear(doc->editor, GEANY_INDICATOR_SEARCH);
+
+	if (!NZV(search_text))
+		return 0;
 
 	len = strlen(search_text);
 
