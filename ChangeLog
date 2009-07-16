@@ -11,6 +11,8 @@
    Add "load_settings" core-only signal emitted just after loading
    main keyfile settings; useful to delay building UI elements until
    settings have been read.
+ * src/treeviews.c:
+   Fix GTK warning when right-clicking on default tag tree.
 
 
 2009-07-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

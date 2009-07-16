@@ -156,9 +156,30 @@ on_default_tag_tree_button_press_event(GtkWidget *widget, GdkEventButton *event,
 {
 	if (event->button == 3)
 	{
-		on_symbols_button_press_event(widget, event, NULL);
+		gtk_menu_popup(GTK_MENU(tv.popup_taglist), NULL, NULL, NULL, NULL,
+			event->button, event->time);
+		return TRUE;
 	}
 	return FALSE;
+}
+
+
+static void create_default_tag_tree(void)
+{
+	GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW(tag_window);
+	GtkWidget *label;
+
+	/* default_tag_tree is a GtkViewPort with a GtkLabel inside it */
+	tv.default_tag_tree = gtk_viewport_new(
+		gtk_scrolled_window_get_hadjustment(scrolled_window),
+		gtk_scrolled_window_get_vadjustment(scrolled_window));
+	label = gtk_label_new(_("No tags found"));
+	gtk_misc_set_alignment(GTK_MISC(label), 0.1, 0.01);
+	gtk_container_add(GTK_CONTAINER(tv.default_tag_tree), label);
+	gtk_widget_show_all(tv.default_tag_tree);
+	g_signal_connect(tv.default_tag_tree, "button-press-event",
+		G_CALLBACK(on_default_tag_tree_button_press_event), NULL);
+	g_object_ref((gpointer)tv.default_tag_tree);	/* to hold it after removing */
 }
 
 
@@ -169,22 +190,7 @@ void treeviews_update_tag_list(GeanyDocument *doc, gboolean update)
 		gtk_container_remove(GTK_CONTAINER(tag_window), gtk_bin_get_child(GTK_BIN(tag_window)));
 
 	if (tv.default_tag_tree == NULL)
-	{
-		GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW(tag_window);
-		GtkWidget *label;
-
-		/* default_tag_tree is a GtkViewPort with a GtkLabel inside it */
-		tv.default_tag_tree = gtk_viewport_new(
-			gtk_scrolled_window_get_hadjustment(scrolled_window),
-			gtk_scrolled_window_get_vadjustment(scrolled_window));
-		label = gtk_label_new(_("No tags found"));
-		gtk_misc_set_alignment(GTK_MISC(label), 0.1, 0.01);
-		gtk_container_add(GTK_CONTAINER(tv.default_tag_tree), label);
-		gtk_widget_show_all(tv.default_tag_tree);
-		g_signal_connect(tv.default_tag_tree, "button-press-event",
-			G_CALLBACK(on_default_tag_tree_button_press_event), NULL);
-		g_object_ref((gpointer)tv.default_tag_tree);	/* to hold it after removing */
-	}
+		create_default_tag_tree();
 
 	/* show default empty tag tree if there are no tags */
 	if (doc == NULL || doc->file_type == NULL || ! filetype_has_tags(doc->file_type))
