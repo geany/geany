@@ -3,6 +3,8 @@
  * src/search.c:
    Make Mark All keybinding clear search highlighting when there's no
    current word.
+ * src/search.c:
+   Fix wrong match length when using Mark with regex.
 
 
 2009-07-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

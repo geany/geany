@@ -974,8 +974,6 @@ gint search_mark_all(GeanyDocument *doc, const gchar *search_text, gint flags)
 	if (!NZV(search_text))
 		return 0;
 
-	len = strlen(search_text);
-
 	ttf.chrg.cpMin = 0;
 	ttf.chrg.cpMax = sci_get_length(doc->editor->sci);
 	ttf.lpstrText = (gchar *)search_text;
@@ -984,7 +982,9 @@ gint search_mark_all(GeanyDocument *doc, const gchar *search_text, gint flags)
 		pos = sci_find_text(doc->editor->sci, flags, &ttf);
 		if (pos == -1) break;
 
-		editor_indicator_set_on_range(doc->editor, GEANY_INDICATOR_SEARCH, pos, pos + len);
+		len = ttf.chrgText.cpMax - ttf.chrgText.cpMin;
+		if (len)
+			editor_indicator_set_on_range(doc->editor, GEANY_INDICATOR_SEARCH, pos, pos + len);
 
 		ttf.chrg.cpMin = ttf.chrgText.cpMax + 1;
 		count++;
