@@ -1661,6 +1661,7 @@ static gchar *write_data_to_disk(GeanyDocument *doc, const gchar *locale_filenam
 	{
 		doc->real_path = tm_get_real_path(locale_filename);
 		doc->priv->is_remote = utils_is_remote_path(locale_filename);
+		monitor_file_setup(doc);
 	}
 
 	return NULL;
@@ -2918,7 +2919,7 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 		monitor_resave_missing_file(doc);
 		ret = TRUE;
 	}
-	else if (! use_gio_filemon && /* ignore these check when using GIO */
+	else if (! use_gio_filemon && /* ignore these checks when using GIO */
 			 (G_UNLIKELY(doc->priv->mtime > cur_time) || G_UNLIKELY(st.st_mtime > cur_time)))
 	{
 		g_warning("%s: Something is wrong with the time stamps.", G_STRFUNC);
