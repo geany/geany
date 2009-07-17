@@ -456,7 +456,7 @@ create_window1 (void)
   gtk_container_add (GTK_CONTAINER (edit1_menu), menu_seperator2);
   gtk_widget_set_sensitive (menu_seperator2, FALSE);
 
-  menu_select_all1 = gtk_menu_item_new_with_mnemonic (_("Select _All"));
+  menu_select_all1 = gtk_image_menu_item_new_from_stock ("gtk-select-all", accel_group);
   gtk_widget_show (menu_select_all1);
   gtk_container_add (GTK_CONTAINER (edit1_menu), menu_select_all1);
 
@@ -1717,8 +1717,10 @@ create_toolbar_popup_menu1 (void)
   GtkWidget *small_icons1;
   GtkWidget *very_small_icons1;
   GtkWidget *separator20;
+  GtkWidget *customize_toolbar1;
+  GtkWidget *image2878;
   GtkWidget *hide_toolbar1;
-  GtkWidget *image2853;
+  GtkWidget *image2879;
 
   toolbar_popup_menu1 = gtk_menu_new ();
 
@@ -1726,13 +1728,11 @@ create_toolbar_popup_menu1 (void)
   images_and_text2_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (images_and_text2));
   gtk_widget_show (images_and_text2);
   gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), images_and_text2);
-  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (images_and_text2), TRUE);
 
   images_only2 = gtk_radio_menu_item_new_with_mnemonic (images_and_text2_group, _("_Images Only"));
   images_and_text2_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (images_only2));
   gtk_widget_show (images_only2);
   gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), images_only2);
-  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (images_only2), TRUE);
 
   text_only2 = gtk_radio_menu_item_new_with_mnemonic (images_and_text2_group, _("_Text Only"));
   images_and_text2_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (text_only2));
@@ -1749,31 +1749,38 @@ create_toolbar_popup_menu1 (void)
   large_icons1_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (large_icons1));
   gtk_widget_show (large_icons1);
   gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), large_icons1);
-  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (large_icons1), TRUE);
 
   small_icons1 = gtk_radio_menu_item_new_with_mnemonic (large_icons1_group, _("_Small Icons"));
   large_icons1_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (small_icons1));
   gtk_widget_show (small_icons1);
   gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), small_icons1);
-  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (small_icons1), TRUE);
 
   very_small_icons1 = gtk_radio_menu_item_new_with_mnemonic (large_icons1_group, _("_Very Small Icons"));
   large_icons1_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (very_small_icons1));
   gtk_widget_show (very_small_icons1);
   gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), very_small_icons1);
+  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (very_small_icons1), TRUE);
 
   separator20 = gtk_separator_menu_item_new ();
   gtk_widget_show (separator20);
   gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), separator20);
   gtk_widget_set_sensitive (separator20, FALSE);
 
-  hide_toolbar1 = gtk_image_menu_item_new_with_mnemonic (_("_Hide toolbar"));
+  customize_toolbar1 = gtk_image_menu_item_new_with_mnemonic (_("_Customize Toolbar"));
+  gtk_widget_show (customize_toolbar1);
+  gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), customize_toolbar1);
+
+  image2878 = gtk_image_new_from_stock ("gtk-properties", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image2878);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (customize_toolbar1), image2878);
+
+  hide_toolbar1 = gtk_image_menu_item_new_with_mnemonic (_("_Hide Toolbar"));
   gtk_widget_show (hide_toolbar1);
   gtk_container_add (GTK_CONTAINER (toolbar_popup_menu1), hide_toolbar1);
 
-  image2853 = gtk_image_new_from_stock ("gtk-cancel", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image2853);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (hide_toolbar1), image2853);
+  image2879 = gtk_image_new_from_stock ("gtk-cancel", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image2879);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (hide_toolbar1), image2879);
 
   g_signal_connect ((gpointer) images_and_text2, "activate",
                     G_CALLBACK (on_images_and_text2_activate),
@@ -1793,6 +1800,9 @@ create_toolbar_popup_menu1 (void)
   g_signal_connect ((gpointer) very_small_icons1, "activate",
                     G_CALLBACK (on_very_small_icons1_activate),
                     NULL);
+  g_signal_connect ((gpointer) customize_toolbar1, "activate",
+                    G_CALLBACK (on_customize_toolbar1_activate),
+                    NULL);
   g_signal_connect ((gpointer) hide_toolbar1, "activate",
                     G_CALLBACK (on_hide_toolbar1_activate),
                     NULL);
@@ -1807,8 +1817,10 @@ create_toolbar_popup_menu1 (void)
   GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, small_icons1, "small_icons1");
   GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, very_small_icons1, "very_small_icons1");
   GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, separator20, "separator20");
+  GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, customize_toolbar1, "customize_toolbar1");
+  GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, image2878, "image2878");
   GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, hide_toolbar1, "hide_toolbar1");
-  GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, image2853, "image2853");
+  GLADE_HOOKUP_OBJECT (toolbar_popup_menu1, image2879, "image2879");
 
   return toolbar_popup_menu1;
 }
@@ -1916,7 +1928,7 @@ create_edit_menu1 (void)
   gtk_container_add (GTK_CONTAINER (edit_menu1), separator3);
   gtk_widget_set_sensitive (separator3, FALSE);
 
-  menu_select_all2 = gtk_menu_item_new_with_mnemonic (_("Select _All"));
+  menu_select_all2 = gtk_image_menu_item_new_from_stock ("gtk-select-all", accel_group);
   gtk_widget_show (menu_select_all2);
   gtk_container_add (GTK_CONTAINER (edit_menu1), menu_select_all2);
 
@@ -2400,6 +2412,12 @@ create_prefs_dialog (void)
   GtkWidget *radio_toolbar_image;
   GtkWidget *radio_toolbar_verysmall;
   GtkWidget *label167;
+  GtkWidget *hbox15;
+  GtkWidget *button_customize_toolbar;
+  GtkWidget *alignment45;
+  GtkWidget *hbox16;
+  GtkWidget *image2877;
+  GtkWidget *label236;
   GtkWidget *label164;
   GtkWidget *notebook4;
   GtkWidget *vbox5;
@@ -2455,6 +2473,8 @@ create_prefs_dialog (void)
   GtkWidget *check_xmltag;
   GtkWidget *check_auto_multiline;
   GtkWidget *check_symbol_auto_completion;
+  GtkWidget *check_autocomplete_doc_words;
+  GtkWidget *check_completion_drops_rest_of_word;
   GtkWidget *table14;
   GtkWidget *label223;
   GtkWidget *label173;
@@ -2856,7 +2876,7 @@ create_prefs_dialog (void)
   gtk_box_pack_start (GTK_BOX (vbox21), check_suppress_status_msgs, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_suppress_status_msgs, _("Removes all messages from the status bar. The messages are still displayed in the status messages window."), NULL);
 
-  check_auto_focus = gtk_check_button_new_with_mnemonic (_("Auto focus widgets (focus follows mouse)"));
+  check_auto_focus = gtk_check_button_new_with_mnemonic (_("Auto-focus widgets (focus follows mouse)"));
   gtk_widget_show (check_auto_focus);
   gtk_box_pack_start (GTK_BOX (vbox21), check_auto_focus, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_auto_focus, _("Gives the focus automatically to widgets below the mouse cursor. Works for the main editor widget, the scribble, the toolbar search and goto line fields and the VTE."), NULL);
@@ -3312,6 +3332,30 @@ create_prefs_dialog (void)
   gtk_frame_set_label_widget (GTK_FRAME (frame13), label167);
   gtk_label_set_use_markup (GTK_LABEL (label167), TRUE);
 
+  hbox15 = gtk_hbox_new (TRUE, 0);
+  gtk_widget_show (hbox15);
+  gtk_box_pack_start (GTK_BOX (vbox15), hbox15, FALSE, FALSE, 0);
+
+  button_customize_toolbar = gtk_button_new ();
+  gtk_widget_show (button_customize_toolbar);
+  gtk_box_pack_start (GTK_BOX (hbox15), button_customize_toolbar, FALSE, FALSE, 0);
+
+  alignment45 = gtk_alignment_new (0.5, 0.5, 0, 0);
+  gtk_widget_show (alignment45);
+  gtk_container_add (GTK_CONTAINER (button_customize_toolbar), alignment45);
+
+  hbox16 = gtk_hbox_new (FALSE, 2);
+  gtk_widget_show (hbox16);
+  gtk_container_add (GTK_CONTAINER (alignment45), hbox16);
+
+  image2877 = gtk_image_new_from_stock ("gtk-properties", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_show (image2877);
+  gtk_box_pack_start (GTK_BOX (hbox16), image2877, FALSE, FALSE, 0);
+
+  label236 = gtk_label_new_with_mnemonic (_("Customize Toolbar"));
+  gtk_widget_show (label236);
+  gtk_box_pack_start (GTK_BOX (hbox16), label236, FALSE, FALSE, 0);
+
   label164 = gtk_label_new (_("Toolbar"));
   gtk_widget_show (label164);
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 2), label164);
@@ -3576,7 +3620,7 @@ create_prefs_dialog (void)
   gtk_box_pack_start (GTK_BOX (vbox19), check_complete_snippets, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_complete_snippets, _("Type a defined short character sequence and complete it to a more complex string using a single keypress"), NULL);
 
-  check_xmltag = gtk_check_button_new_with_mnemonic (_("XML tag auto completion"));
+  check_xmltag = gtk_check_button_new_with_mnemonic (_("XML tag autocompletion"));
   gtk_widget_show (check_xmltag);
   gtk_box_pack_start (GTK_BOX (vbox19), check_xmltag, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_xmltag, _("Automatic completion and closing of XML tags (includes HTML tags)"), NULL);
@@ -3586,10 +3630,18 @@ create_prefs_dialog (void)
   gtk_box_pack_start (GTK_BOX (vbox19), check_auto_multiline, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_auto_multiline, _("Continue automatically multi-line comments in languages like C, C++ and Java when a new line is entered inside such a comment"), NULL);
 
-  check_symbol_auto_completion = gtk_check_button_new_with_mnemonic (_("Automatic symbol completion"));
+  check_symbol_auto_completion = gtk_check_button_new_with_mnemonic (_("Autocomplete symbols"));
   gtk_widget_show (check_symbol_auto_completion);
   gtk_box_pack_start (GTK_BOX (vbox19), check_symbol_auto_completion, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_symbol_auto_completion, _("Automatic completion of known symbols in open files (function names, global variables, ...)"), NULL);
+
+  check_autocomplete_doc_words = gtk_check_button_new_with_mnemonic (_("Autocomplete all words in document"));
+  gtk_widget_show (check_autocomplete_doc_words);
+  gtk_box_pack_start (GTK_BOX (vbox19), check_autocomplete_doc_words, FALSE, FALSE, 0);
+
+  check_completion_drops_rest_of_word = gtk_check_button_new_with_mnemonic (_("Drop rest of word on completion"));
+  gtk_widget_show (check_completion_drops_rest_of_word);
+  gtk_box_pack_start (GTK_BOX (vbox19), check_completion_drops_rest_of_word, FALSE, FALSE, 0);
 
   table14 = gtk_table_new (3, 2, FALSE);
   gtk_widget_show (table14);
@@ -3611,7 +3663,7 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (0), 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label173), 0, 0.5);
 
-  label205 = gtk_label_new (_("Characters to type for completion:"));
+  label205 = gtk_label_new (_("Characters to type for autocompletion:"));
   gtk_widget_show (label205);
   gtk_table_attach (GTK_TABLE (table14), label205, 0, 1, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
@@ -3624,7 +3676,7 @@ create_prefs_dialog (void)
   gtk_table_attach (GTK_TABLE (table14), spin_symbol_complete_chars, 1, 2, 0, 1,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
-  gtk_tooltips_set_tip (tooltips, spin_symbol_complete_chars, _("The amount of characters which are necessary to show the symbol auto completion list"), NULL);
+  gtk_tooltips_set_tip (tooltips, spin_symbol_complete_chars, _("The amount of characters which are necessary to show the symbol autocompletion list"), NULL);
   gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_symbol_complete_chars), TRUE);
 
   spin_symbollistheight_adj = gtk_adjustment_new (9, 1, 99, 1, 10, 0);
@@ -3633,7 +3685,7 @@ create_prefs_dialog (void)
   gtk_table_attach (GTK_TABLE (table14), spin_symbollistheight, 1, 2, 1, 2,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
-  gtk_tooltips_set_tip (tooltips, spin_symbollistheight, _("Display height in rows for the auto completion list"), NULL);
+  gtk_tooltips_set_tip (tooltips, spin_symbollistheight, _("Display height in rows for the autocompletion list"), NULL);
   gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_symbollistheight), TRUE);
 
   spin_autocompletion_max_entries_adj = gtk_adjustment_new (9, 1, 10000, 1, 10, 0);
@@ -3642,7 +3694,7 @@ create_prefs_dialog (void)
   gtk_table_attach (GTK_TABLE (table14), spin_autocompletion_max_entries, 1, 2, 2, 3,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
-  gtk_tooltips_set_tip (tooltips, spin_autocompletion_max_entries, _("Maximum number of entries to display in the auto completion list"), NULL);
+  gtk_tooltips_set_tip (tooltips, spin_autocompletion_max_entries, _("Maximum number of entries to display in the autocompletion list"), NULL);
   gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_autocompletion_max_entries), TRUE);
 
   label177 = gtk_label_new (_("<b>Completions</b>"));
@@ -4557,6 +4609,10 @@ create_prefs_dialog (void)
   gtk_dialog_add_action_widget (GTK_DIALOG (prefs_dialog), button5, GTK_RESPONSE_OK);
   GTK_WIDGET_SET_FLAGS (button5, GTK_CAN_DEFAULT);
 
+  g_signal_connect ((gpointer) button_customize_toolbar, "clicked",
+                    G_CALLBACK (on_button_customize_toolbar_clicked),
+                    NULL);
+
   /* Store pointers to all widgets, for use by lookup_widget(). */
   GLADE_HOOKUP_OBJECT_NO_REF (prefs_dialog, prefs_dialog, "prefs_dialog");
   GLADE_HOOKUP_OBJECT_NO_REF (prefs_dialog, dialog_vbox3, "dialog_vbox3");
@@ -4680,6 +4736,12 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_toolbar_image, "radio_toolbar_image");
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_toolbar_verysmall, "radio_toolbar_verysmall");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label167, "label167");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox15, "hbox15");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, button_customize_toolbar, "button_customize_toolbar");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment45, "alignment45");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox16, "hbox16");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, image2877, "image2877");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label236, "label236");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label164, "label164");
   GLADE_HOOKUP_OBJECT (prefs_dialog, notebook4, "notebook4");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox5, "vbox5");
@@ -4731,6 +4793,8 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_xmltag, "check_xmltag");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_auto_multiline, "check_auto_multiline");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_symbol_auto_completion, "check_symbol_auto_completion");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_autocomplete_doc_words, "check_autocomplete_doc_words");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_completion_drops_rest_of_word, "check_completion_drops_rest_of_word");
   GLADE_HOOKUP_OBJECT (prefs_dialog, table14, "table14");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label223, "label223");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label173, "label173");

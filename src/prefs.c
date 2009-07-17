@@ -77,12 +77,10 @@ static GtkTreeView *tree = NULL;
 static GtkWidget *dialog_label;
 static gboolean edited = FALSE;
 
-static gboolean on_tree_view_button_press_event(
-						GtkWidget *widget, GdkEventButton *event, gpointer user_data);
-static void on_cell_edited(GtkCellRendererText *cellrenderertext, gchar *path, gchar *new_text, gpointer user_data);
-static gboolean on_keytype_dialog_response(GtkWidget *dialog, GdkEventKey *event, gpointer user_data);
-static void on_dialog_response(GtkWidget *dialog, gint response, gpointer user_data);
-static gboolean find_duplicate(GeanyKeyBinding *search_kb,
+static void kb_cell_edited_cb(GtkCellRendererText *cellrenderertext, gchar *path, gchar *new_text, gpointer user_data);
+static gboolean kb_keytype_dialog_response_cb(GtkWidget *dialog, GdkEventKey *event, gpointer user_data);
+static void kb_dialog_response_cb(GtkWidget *dialog, gint response, gpointer user_data);
+static gboolean kb_find_duplicate(GeanyKeyBinding *search_kb,
 		guint key, GdkModifierType mods, const gchar *action);
 static void on_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gpointer user_data);
@@ -129,7 +127,138 @@ enum
 	KB_TREE_INDEX
 };
 
-static void init_kb_tree(void)
+
+static void kb_tree_view_change_button_clicked_cb(GtkWidget *button, gpointer data)
+{
+	GtkTreeModel *model;
+	GtkTreeSelection *selection;
+	gchar *name;
+
+	selection = gtk_tree_view_get_selection(tree);
+	if (gtk_tree_selection_get_selected(selection, &model, &g_iter))
+	{
+		if (gtk_tree_model_iter_has_child(model, &g_iter))
+		{	/* double click on a section to expand or collapse it */
+			GtkTreePath *path = gtk_tree_model_get_path(model, &g_iter);
+
+			if (gtk_tree_view_row_expanded(tree, path))
+				gtk_tree_view_collapse_row(tree, path);
+			else
+				gtk_tree_view_expand_row(tree, path, FALSE);
+
+			gtk_tree_path_free(path);
+			return;
+		}
+
+		gtk_tree_model_get(model, &g_iter, KB_TREE_ACTION, &name, -1);
+		if (name != NULL)
+		{
+			GtkWidget *dialog;
+			GtkWidget *label;
+			gchar *str;
+
+			dialog = gtk_dialog_new_with_buttons(_("Grab Key"), GTK_WINDOW(ui_widgets.prefs_dialog),
+					GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_NO_SEPARATOR,
+					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+					GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+
+			str = g_strdup_printf(
+					_("Press the combination of the keys you want to use for \"%s\"."), name);
+			label = gtk_label_new(str);
+			gtk_misc_set_padding(GTK_MISC(label), 5, 10);
+			gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
+
+			dialog_label = gtk_label_new("");
+			gtk_misc_set_padding(GTK_MISC(dialog_label), 5, 10);
+			gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), dialog_label);
+
+			g_signal_connect(dialog, "key-press-event",
+								G_CALLBACK(kb_keytype_dialog_response_cb), NULL);
+			g_signal_connect(dialog, "response", G_CALLBACK(kb_dialog_response_cb), NULL);
+
+			/* copy name to global variable to hold it, will be freed in on_dialog_response() */
+			dialog_key_name = g_strdup(name);
+
+			gtk_widget_show_all(dialog);
+			g_free(str);
+			g_free(name);
+		}
+	}
+}
+
+
+static void kb_expand_collapse_cb(GtkWidget *item, gpointer user_data)
+{
+	if (user_data != NULL)
+		gtk_tree_view_expand_all(tree);
+	else
+		gtk_tree_view_collapse_all(tree);
+}
+
+
+static void kb_show_popup_menu(GtkWidget *widget, GdkEventButton *event)
+{
+	GtkWidget *item;
+	static GtkWidget *menu = NULL;
+	gint button, event_time;
+
+	if (menu == NULL)
+	{
+		menu = gtk_menu_new();
+
+		item = ui_image_menu_item_new(GTK_STOCK_ADD, _("_Expand All"));
+		gtk_widget_show(item);
+		gtk_container_add(GTK_CONTAINER(menu), item);
+		g_signal_connect(item, "activate", G_CALLBACK(kb_expand_collapse_cb), GINT_TO_POINTER(TRUE));
+
+		item = ui_image_menu_item_new(GTK_STOCK_REMOVE, _("_Collapse All"));
+		gtk_widget_show(item);
+		gtk_container_add(GTK_CONTAINER(menu), item);
+		g_signal_connect(item, "activate", G_CALLBACK(kb_expand_collapse_cb), NULL);
+
+		gtk_menu_attach_to_widget(GTK_MENU(menu), widget, NULL);
+	}
+
+	if (event != NULL)
+	{
+		button = event->button;
+		event_time = event->time;
+	}
+	else
+	{
+		button = 0;
+		event_time = gtk_get_current_event_time();
+	}
+
+	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, button, event_time);
+}
+
+
+static gboolean kb_popup_menu_cb(GtkWidget *widget, gpointer data)
+{
+	kb_show_popup_menu(widget, NULL);
+	return TRUE;
+}
+
+
+static gboolean kb_tree_view_button_press_event_cb(GtkWidget *widget, GdkEventButton *event,
+												   gpointer user_data)
+{
+	if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
+	{
+		kb_show_popup_menu(widget, event);
+		return TRUE;
+	}
+	else if (event->type == GDK_2BUTTON_PRESS)
+	{
+		kb_tree_view_change_button_clicked_cb(NULL, NULL);
+		return TRUE;
+	}
+	return FALSE;
+}
+
+
+static void kb_init_tree(void)
 {
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
@@ -155,14 +284,15 @@ static void init_kb_tree(void)
 			GTK_SCROLLED_WINDOW(ui_lookup_widget(ui_widgets.prefs_dialog, "scrolledwindow8")),
 			GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
-	g_signal_connect(renderer, "edited", G_CALLBACK(on_cell_edited), NULL);
-	g_signal_connect(tree, "button-press-event", G_CALLBACK(on_tree_view_button_press_event), NULL);
+	g_signal_connect(renderer, "edited", G_CALLBACK(kb_cell_edited_cb), NULL);
+	g_signal_connect(tree, "button-press-event", G_CALLBACK(kb_tree_view_button_press_event_cb), NULL);
+	g_signal_connect(tree, "popup-menu", G_CALLBACK(kb_popup_menu_cb), NULL);
 	g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "button2"), "clicked",
-				G_CALLBACK(on_tree_view_button_press_event), NULL);
+				G_CALLBACK(kb_tree_view_change_button_clicked_cb), NULL);
 }
 
 
-static void init_keybindings(void)
+static void kb_init(void)
 {
 	GtkTreeIter parent, iter;
 	gsize g, i;
@@ -171,7 +301,7 @@ static void init_keybindings(void)
 	GeanyKeyBinding *kb;
 
 	if (store == NULL)
-		init_kb_tree();
+		kb_init_tree();
 
 	for (g = 0; g < keybinding_groups->len; g++)
 	{
@@ -495,7 +625,7 @@ static void prefs_init_dialog(void)
 
 
 	/* Keybindings */
-	init_keybindings();
+	kb_init();
 
 	/* Printing */
 	{
@@ -1097,72 +1227,7 @@ void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 }
 
 
-static gboolean on_tree_view_button_press_event(
-						GtkWidget *widget, GdkEventButton *event, gpointer user_data)
-{
-	GtkTreeModel *model;
-	GtkTreeSelection *selection;
-	gchar *name;
-
-	/* discard click events in the tree unless it is a double click */
-	if (widget == (GtkWidget*)tree && event->type != GDK_2BUTTON_PRESS)
-		return FALSE;
-
-	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
-	if (gtk_tree_selection_get_selected(selection, &model, &g_iter))
-	{
-		if (gtk_tree_model_iter_has_child(model, &g_iter))
-		{	/* double click on a section to expand or collapse it */
-			GtkTreePath *path = gtk_tree_model_get_path(model, &g_iter);
-
-			if (gtk_tree_view_row_expanded(tree, path))
-				gtk_tree_view_collapse_row(tree, path);
-			else
-				gtk_tree_view_expand_row(tree, path, FALSE);
-
-			gtk_tree_path_free(path);
-			return TRUE;
-		}
-
-		gtk_tree_model_get(model, &g_iter, KB_TREE_ACTION, &name, -1);
-		if (name != NULL)
-		{
-			GtkWidget *dialog;
-			GtkWidget *label;
-			gchar *str;
-
-			dialog = gtk_dialog_new_with_buttons(_("Grab Key"), GTK_WINDOW(ui_widgets.prefs_dialog),
-					GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_NO_SEPARATOR,
-					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
-
-			str = g_strdup_printf(
-					_("Press the combination of the keys you want to use for \"%s\"."), name);
-			label = gtk_label_new(str);
-			gtk_misc_set_padding(GTK_MISC(label), 5, 10);
-			gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
-
-			dialog_label = gtk_label_new("");
-			gtk_misc_set_padding(GTK_MISC(dialog_label), 5, 10);
-			gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), dialog_label);
-
-			g_signal_connect(dialog, "key-press-event",
-								G_CALLBACK(on_keytype_dialog_response), NULL);
-			g_signal_connect(dialog, "response", G_CALLBACK(on_dialog_response), NULL);
-
-			/* copy name to global variable to hold it, will be freed in on_dialog_response() */
-			dialog_key_name = g_strdup(name);
-
-			gtk_widget_show_all(dialog);
-			g_free(str);
-			g_free(name);
-		}
-	}
-	return TRUE;
-}
-
-
-static GeanyKeyBinding *lookup_kb_from_iter(G_GNUC_UNUSED GtkTreeModel *model, GtkTreeIter *iter)
+static GeanyKeyBinding *kb_lookup_kb_from_iter(G_GNUC_UNUSED GtkTreeModel *model, GtkTreeIter *iter)
 {
 	guint group_idx, keybinding_idx;
 	GtkTreeIter parent;
@@ -1178,7 +1243,7 @@ static GeanyKeyBinding *lookup_kb_from_iter(G_GNUC_UNUSED GtkTreeModel *model, G
 }
 
 
-static void on_cell_edited(GtkCellRendererText *cellrenderertext, gchar *path, gchar *new_text, gpointer user_data)
+static void kb_cell_edited_cb(GtkCellRendererText *cellrenderertext, gchar *path, gchar *new_text, gpointer user_data)
 {
 	if (path != NULL && new_text != NULL)
 	{
@@ -1193,9 +1258,9 @@ static void on_cell_edited(GtkCellRendererText *cellrenderertext, gchar *path, g
 
 		gtk_accelerator_parse(new_text, &lkey, &lmods);
 
-		kb = lookup_kb_from_iter(GTK_TREE_MODEL(store), &iter);
+		kb = kb_lookup_kb_from_iter(GTK_TREE_MODEL(store), &iter);
 
-		if (find_duplicate(kb, lkey, lmods, new_text))
+		if (kb_find_duplicate(kb, lkey, lmods, new_text))
 			return;
 
 		/* set the values here, because of the above check, setting it in
@@ -1210,7 +1275,7 @@ static void on_cell_edited(GtkCellRendererText *cellrenderertext, gchar *path, g
 }
 
 
-static gboolean on_keytype_dialog_response(GtkWidget *dialog, GdkEventKey *event, gpointer user_data)
+static gboolean kb_keytype_dialog_response_cb(GtkWidget *dialog, GdkEventKey *event, gpointer user_data)
 {
 	gchar *str;
 	gint state;
@@ -1229,7 +1294,7 @@ static gboolean on_keytype_dialog_response(GtkWidget *dialog, GdkEventKey *event
 }
 
 
-static void on_dialog_response(GtkWidget *dialog, gint response, G_GNUC_UNUSED gpointer iter)
+static void kb_dialog_response_cb(GtkWidget *dialog, gint response, G_GNUC_UNUSED gpointer iter)
 {
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
@@ -1237,11 +1302,11 @@ static void on_dialog_response(GtkWidget *dialog, gint response, G_GNUC_UNUSED g
 		GdkModifierType lmods;
 		GeanyKeyBinding *kb;
 
-		kb = lookup_kb_from_iter(GTK_TREE_MODEL(store), &g_iter);
+		kb = kb_lookup_kb_from_iter(GTK_TREE_MODEL(store), &g_iter);
 
 		gtk_accelerator_parse(gtk_label_get_text(GTK_LABEL(dialog_label)), &lkey, &lmods);
 
-		if (find_duplicate(kb, lkey, lmods, gtk_label_get_text(GTK_LABEL(dialog_label))))
+		if (kb_find_duplicate(kb, lkey, lmods, gtk_label_get_text(GTK_LABEL(dialog_label))))
 			return;
 
 		/* set the values here, because of the above check, setting it in
@@ -1264,7 +1329,7 @@ static void on_dialog_response(GtkWidget *dialog, gint response, G_GNUC_UNUSED g
 /* Look for a (1st-level) child of parent whose KB_TREE_INDEX matches i,
  * setting iter to point to the node if found.
  * If parent is NULL, look for a parent node whose KB_TREE_INDEX matches i. */
-static gboolean find_child_iter(GtkTreeIter *parent, guint i, GtkTreeIter *iter)
+static gboolean kb_find_child_iter(GtkTreeIter *parent, guint i, GtkTreeIter *iter)
 {
 	GtkTreeModel *model = GTK_TREE_MODEL(store);
 	guint idx;
@@ -1284,17 +1349,17 @@ static gboolean find_child_iter(GtkTreeIter *parent, guint i, GtkTreeIter *iter)
 }
 
 
-static void clear_tree_shortcut(gsize group_id, gsize keybinding_id)
+static void kb_clear_tree_shortcut(gsize group_id, gsize keybinding_id)
 {
 	GtkTreeIter parent;
 	GtkTreeIter child;
 
 	/* find parent kb group */
-	if (! find_child_iter(NULL, group_id, &parent))
+	if (! kb_find_child_iter(NULL, group_id, &parent))
 		return;
 
 	/* find child kb node*/
-	if (! find_child_iter(&parent, keybinding_id, &child))
+	if (! kb_find_child_iter(&parent, keybinding_id, &child))
 		return;
 
 	gtk_tree_store_set(store, &child, KB_TREE_SHORTCUT, NULL, -1);	/* clear shortcut */
@@ -1302,7 +1367,7 @@ static void clear_tree_shortcut(gsize group_id, gsize keybinding_id)
 
 
 /* test if the entered key combination is already used */
-static gboolean find_duplicate(GeanyKeyBinding *search_kb,
+static gboolean kb_find_duplicate(GeanyKeyBinding *search_kb,
 		guint key, GdkModifierType mods, const gchar *action)
 {
 	gsize g, i;
@@ -1332,7 +1397,7 @@ static gboolean find_duplicate(GeanyKeyBinding *search_kb,
 				{
 					kb->key = 0;
 					kb->mods = 0;
-					clear_tree_shortcut(g, i);
+					kb_clear_tree_shortcut(g, i);
 					continue;
 				}
 				return TRUE;
@@ -1465,12 +1530,6 @@ void prefs_show_dialog(void)
 		gtk_widget_show(label);
 		gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
 		gtk_box_pack_start(GTK_BOX(ui_lookup_widget(ui_widgets.prefs_dialog, "vbox27")),
-			label, FALSE, TRUE, 5);
-		/* page Toolbar */
-		label = geany_wrap_label_new(_("<i>Notice: To customize the toolbar elements, edit the file 'ui_toolbar.xml'. Please see the documentation for details.</i>"));
-		gtk_widget_show(label);
-		gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-		gtk_box_pack_start(GTK_BOX(ui_lookup_widget(ui_widgets.prefs_dialog, "vbox15")),
 			label, FALSE, TRUE, 5);
 		/* page Editor->Indentation */
 		label = geany_wrap_label_new(_("<i>Warning: these settings are overridden by the current project. See <b>Project->Properties</b>.</i>"));

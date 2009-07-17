@@ -48,6 +48,7 @@
 #include "plugins.h"
 #include "symbols.h"
 #include "toolbar.h"
+#include "geanymenubuttonaction.h"
 
 
 GeanyInterfacePrefs	interface_prefs;
@@ -58,7 +59,8 @@ UIWidgets		ui_widgets;
 
 static struct
 {
-	/* pointers to widgets only sensitive when there is at least one document */
+	/* pointers to widgets only sensitive when there is at least one document, the pointers can
+	 * also be GtkAction objects, so check each pointer before using it */
 	GPtrArray	*document_buttons;
 	GtkWidget	*menu_insert_include_items[2];
 	GtkWidget	*popup_goto_items[4];
@@ -150,14 +152,6 @@ void ui_set_statusbar(gboolean log, const gchar *format, ...)
 }
 
 
-static GeanyFiletype *document_get_filetype(GeanyDocument *doc)
-{
-	g_return_val_if_fail(doc, NULL);
-
-	return filetypes[FILETYPE_ID(doc->file_type)];
-}
-
-
 /* updates the status bar document statistics */
 void ui_update_statusbar(GeanyDocument *doc, gint pos)
 {
@@ -173,7 +167,7 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 		const gchar sp[] = "      ";
 		guint line, col;
 		const gchar *cur_tag;
-		gchar *filetype_name = document_get_filetype(doc)->name;
+		gchar *filetype_name = doc->file_type->name;
 
 		if (G_UNLIKELY(stats_str == NULL))
 			stats_str = g_string_sized_new(120);
@@ -618,7 +612,7 @@ void ui_save_buttons_toggle(gboolean enable)
 	g_ptr_array_add(widgets.document_buttons, ui_lookup_widget(main_widgets.window, widget_name))
 
 #define add_doc_toolitem(widget_name) \
-	g_ptr_array_add(widgets.document_buttons, toolbar_get_widget_by_name(widget_name))
+	g_ptr_array_add(widgets.document_buttons, toolbar_get_action_by_name(widget_name))
 
 static void init_document_widgets(void)
 {
@@ -694,7 +688,10 @@ void ui_document_buttons_update(void)
 	for (i = 0; i < widgets.document_buttons->len; i++)
 	{
 		GtkWidget *widget = g_ptr_array_index(widgets.document_buttons, i);
-		ui_widget_set_sensitive(widget, enable);
+		if (GTK_IS_ACTION(widget))
+			gtk_action_set_sensitive(GTK_ACTION(widget), enable);
+		else
+			ui_widget_set_sensitive(widget, enable);
 	}
 }
 
@@ -848,7 +845,7 @@ void ui_set_search_entry_background(GtkWidget *widget, gboolean success)
 }
 
 
-static gboolean have_gnome_icon_theme(void)
+static gboolean have_tango_icon_theme(void)
 {
 	static gboolean result = FALSE;
 	static gboolean checked = FALSE;
@@ -860,7 +857,7 @@ static gboolean have_gnome_icon_theme(void)
 		g_object_get(G_OBJECT(gtk_settings_get_default()), "gtk-icon-theme-name", &theme_name, NULL);
 		setptr(theme_name, g_utf8_strdown(theme_name, -1));
 
-		result = (strstr(theme_name, "gnome") != NULL);
+		result = (strstr(theme_name, "tango") != NULL);
 		checked = TRUE;
 
 		g_free(theme_name);
@@ -882,10 +879,10 @@ GdkPixbuf *ui_new_pixbuf_from_inline(gint img)
 		{
 			/* check whether the icon theme looks like a Gnome icon theme, if so use the
 			 * old Gnome based Save All icon, otherwise assume a Tango-like icon theme */
-			if (have_gnome_icon_theme())
-				return gdk_pixbuf_new_from_inline(-1, save_all_gnome_inline, FALSE, NULL);
-			else
+			if (have_tango_icon_theme())
 				return gdk_pixbuf_new_from_inline(-1, save_all_tango_inline, FALSE, NULL);
+			else
+				return gdk_pixbuf_new_from_inline(-1, save_all_gnome_inline, FALSE, NULL);
 			break;
 		}
 		case GEANY_IMAGE_CLOSE_ALL:
@@ -964,7 +961,8 @@ static GeanyRecentFiles *recent_get_recent_files(void)
 	{
 		grf.recent_queue = ui_prefs.recent_queue;
 		grf.menubar = ui_widgets.recent_files_menu_menubar;
-		grf.toolbar = ui_widgets.recent_files_menu_toolbar;
+		grf.toolbar = geany_menu_button_action_get_menu(GEANY_MENU_BUTTON_ACTION(
+						toolbar_get_action_by_name("Open")));
 		grf.activate_cb = recent_file_activate_cb;
 	}
 	return &grf;
@@ -1776,7 +1774,7 @@ static void create_config_files_menu(void)
 }
 
 
-static void add_stock_items(void)
+void ui_init_stock_items(void)
 {
 	GtkIconSet *icon_set;
 	GtkIconFactory *factory = gtk_icon_factory_new();
@@ -1806,9 +1804,36 @@ static void add_stock_items(void)
 }
 
 
+void ui_init_toolbar_widgets(void)
+{
+	widgets.save_buttons[1] = toolbar_get_widget_by_name("Save");
+	widgets.save_buttons[3] = toolbar_get_widget_by_name("SaveAll");
+	widgets.redo_items[2] = toolbar_get_widget_by_name("Redo");
+	widgets.undo_items[2] = toolbar_get_widget_by_name("Undo");
+}
+
+
+static void init_recent_files(void)
+{
+	GtkWidget *toolbar_recent_files_menu;
+
+	/* add recent files to the File menu */
+	ui_widgets.recent_files_menuitem = ui_lookup_widget(main_widgets.window, "recent_files1");
+	ui_widgets.recent_files_menu_menubar = gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(ui_widgets.recent_files_menuitem),
+							ui_widgets.recent_files_menu_menubar);
+
+	/* add recent files to the toolbar Open button */
+	toolbar_recent_files_menu = gtk_menu_new();
+	g_object_ref(toolbar_recent_files_menu);
+	geany_menu_button_action_set_menu(GEANY_MENU_BUTTON_ACTION(
+		toolbar_get_action_by_name("Open")), toolbar_recent_files_menu);
+}
+
+
 void ui_init(void)
 {
-	add_stock_items();
+	init_recent_files();
 
 	ui_widgets.statusbar = ui_lookup_widget(main_widgets.window, "statusbar");
 	ui_widgets.print_page_setup = ui_lookup_widget(main_widgets.window, "page_setup1");
@@ -1828,19 +1853,15 @@ void ui_init(void)
 	widgets.menu_insert_include_items[0] = ui_lookup_widget(main_widgets.editor_menu, "insert_include1");
 	widgets.menu_insert_include_items[1] = ui_lookup_widget(main_widgets.window, "insert_include2");
 	widgets.save_buttons[0] = ui_lookup_widget(main_widgets.window, "menu_save1");
-	widgets.save_buttons[1] = toolbar_get_widget_by_name("Save");
 	widgets.save_buttons[2] = ui_lookup_widget(main_widgets.window, "menu_save_all1");
-	widgets.save_buttons[3] = toolbar_get_widget_by_name("SaveAll");
 	widgets.redo_items[0] = ui_lookup_widget(main_widgets.editor_menu, "redo1");
 	widgets.redo_items[1] = ui_lookup_widget(main_widgets.window, "menu_redo2");
-	widgets.redo_items[2] = toolbar_get_widget_by_name("Redo");
 	widgets.undo_items[0] = ui_lookup_widget(main_widgets.editor_menu, "undo1");
 	widgets.undo_items[1] = ui_lookup_widget(main_widgets.window, "menu_undo2");
-	widgets.undo_items[2] = toolbar_get_widget_by_name("Undo");
 
+	ui_init_toolbar_widgets();
 	init_document_widgets();
 	create_config_files_menu();
-	toolbar_add_config_file_menu_item();
 }
 
 
@@ -1861,7 +1882,6 @@ static void on_auto_separator_item_show_hide(GtkWidget *widget, gpointer user_da
 		autosep->ref_count++;
 	else
 		autosep->ref_count--;
-
 	auto_separator_update(autosep);
 }
 

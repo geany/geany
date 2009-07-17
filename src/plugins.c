@@ -195,7 +195,8 @@ static SciFuncs sci_funcs = {
 	&sci_indicator_set,
 	&sci_get_contents,
 	&sci_get_contents_range,
-	&sci_get_selection_contents
+	&sci_get_selection_contents,
+	&sci_set_font
 };
 
 static TemplateFuncs template_funcs = {
@@ -484,7 +485,13 @@ add_kb_group(Plugin *plugin)
 {
 	guint i;
 
-	g_return_if_fail(NZV(plugin->key_group->name));
+	if (!NZV(plugin->key_group->name))
+	{
+		geany_debug("Plugin \"%s\" has not set a name for its keybinding group"
+			" - ignoring all keybindings!",
+			plugin->info.name);
+		return;
+	}
 	g_return_if_fail(! g_str_equal(plugin->key_group->name, keybindings_keyfile_group_name));
 
 	for (i = 0; i < plugin->key_group->count; i++)
@@ -1241,7 +1248,7 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	gtk_widget_set_name(pm_widgets.dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
 
-	gtk_window_set_default_size(GTK_WINDOW(pm_widgets.dialog), 400, 350);
+	gtk_window_set_default_size(GTK_WINDOW(pm_widgets.dialog), 500, 450);
 
 	pm_widgets.tree = gtk_tree_view_new();
 	pm_widgets.store = gtk_list_store_new(
@@ -1325,12 +1332,16 @@ void plugin_add_toolbar_item(GeanyPlugin *plugin, GtkToolItem *item)
 		autosep->widget = GTK_WIDGET(sep);
 
 		gtk_toolbar_insert(toolbar, item, pos + 1);
+
+		toolbar_item_ref(sep);
+		toolbar_item_ref(item);
 	}
 	else
 	{
 		pos = gtk_toolbar_get_item_index(toolbar, GTK_TOOL_ITEM(autosep->widget));
 		g_return_if_fail(pos >= 0);
 		gtk_toolbar_insert(toolbar, item, pos);
+		toolbar_item_ref(item);
 	}
 	/* hide the separator widget if there are no toolbar items showing for the plugin */
 	ui_auto_separator_add_ref(autosep, GTK_WIDGET(item));

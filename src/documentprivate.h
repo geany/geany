@@ -40,9 +40,7 @@ enum
 typedef enum
 {
 	FILE_OK,
-	FILE_CHANGED,
-	FILE_MISSING,
-	FILE_CREATED_PENDING,
+	FILE_CHANGED, /* also valid for deleted files */
 	FILE_IGNORE
 }
 FileDiskStatus;
@@ -76,10 +74,9 @@ typedef struct GeanyDocumentPrivate
 	gboolean		 colourise_needed;	/* use document.c:queue_colourise() instead */
 	gint			 line_count;		/* Number of lines in the document. */
 	gint			 symbol_list_sort_mode;
-	/* indicates whether a file is on a remote filesystem, works only with GIO/GVFS */
+	/* indicates whether a file is on a remote filesystem, works only with GIO/GVfs */
 	gboolean		 is_remote;
-	/* File status on disk of the document, can be 'FILE_CHANGED', 'FILE_MISSING' (deleted) or
-	 * 'FILE_OK' if there are no known changes */
+	/* File status on disk of the document */
 	FileDiskStatus	 file_disk_status;
 	/* Reference to a GFileMonitor object, only used when GIO file monitoring is used. */
 	gpointer		 monitor;

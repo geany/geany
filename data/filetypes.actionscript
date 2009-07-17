@@ -1,26 +1,28 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
 # foreground;background;bold;italic
-default=0x000000;0xffffff;false;false
-comment=0xd00000;0xffffff;false;false
-commentline=0xd00000;0xffffff;false;false
-commentdoc=0x3f5fbf;0xffffff;false;false
-number=0x007f00;0xffffff;false;false
-word=0x00007f;0xffffff;true;false
-word2=0x991111;0xffffff;true;false
-string=0xff901e;0xffffff;false;false
-character=0xff901e;0xffffff;false;false
-uuid=0x404080;0xffffff;false;false
-preprocessor=0x007F7F;0xffffff;false;false
-operator=0x301010;0xffffff;false;false
-identifier=0x000000;0xffffff;false;false
-stringeol=0x000000;0xe0c0e0;false;false
-verbatim=0x101030;0xffffff;false;false
-regex=0x105090;0xffffff;false;false
-commentlinedoc=0x3f5fbf;0xffffff;true;false
-commentdockeyword=0x3f5fbf;0xffffff;true;true
-commentdockeyworderror=0x3f5fbf;0xffffff;false;false
-globalclass=0x0000d0;0xffffff;true;false
+default=default
+comment=comment
+commentline=comment
+commentdoc=commentdoc
+number=number
+word=word
+word2=word2
+string=string
+character=string
+uuid=0x404080
+preprocessor=preprocessor
+operator=operator
+identifier=default
+stringeol=stringeol
+# @"verbatim"
+verbatim=0x101030
+# (/regex/)
+regex=0x105090
+commentlinedoc=commentdoc,bold
+commentdockeyword=commentdoc,bold,italic
+commentdockeyworderror=commentdoc
+globalclass=type
 
 [keywords]
 # all items must be in one line

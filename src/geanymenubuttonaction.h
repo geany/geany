@@ -55,6 +55,8 @@ GtkAction*	geany_menu_button_action_new		(const gchar	*name,
 												 const gchar	*stock_id);
 GtkWidget*	geany_menu_button_action_get_menu	(GeanyMenubuttonAction *action);
 
+void		geany_menu_button_action_set_menu	(GeanyMenubuttonAction *action, GtkWidget *menu);
+
 G_END_DECLS
 
 #endif /* __GEANY_MENU_BUTTON_ACTION_H__ */

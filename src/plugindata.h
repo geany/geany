@@ -35,6 +35,11 @@
 #ifndef PLUGINDATA_H
 #define PLUGINDATA_H
 
+/* Compatibility for sharing macros between API and core.
+ * First include geany.h, then plugindata.h, then other API headers. */
+#undef GEANY
+#define GEANY(symbol_name) geany->symbol_name
+
 #include "editor.h"	/* GeanyIndentType */
 
 
@@ -45,7 +50,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 143,
+	GEANY_API_VERSION = 147,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -321,6 +326,7 @@ typedef struct SciFuncs
 	gchar*	(*get_contents) (struct _ScintillaObject *sci, gint len);
 	gchar*	(*get_contents_range) (struct _ScintillaObject *sci, gint start, gint end);
 	gchar*	(*get_selection_contents) (struct _ScintillaObject *sci);
+	void	(*set_font) (struct _ScintillaObject *sci, gint style, const gchar *font, gint size);
 }
 SciFuncs;
 
@@ -403,8 +409,8 @@ UIUtilsFuncs;
 /* See dialogs.h */
 typedef struct DialogFuncs
 {
-	gboolean	(*show_question) (const gchar *text, ...);
-	void		(*show_msgbox) (gint type, const gchar *text, ...);
+	gboolean	(*show_question) (const gchar *text, ...) G_GNUC_PRINTF (1, 2);
+	void		(*show_msgbox) (GtkMessageType type, const gchar *text, ...) G_GNUC_PRINTF (2, 3);
 	gboolean	(*show_save_as) (void);
 	gboolean	(*show_input_numeric) (const gchar *title, const gchar *label_text,
 				 gdouble *value, gdouble min, gdouble max, gdouble step);

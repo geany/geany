@@ -2,8 +2,6 @@
 
 EXTRA_DIST = \
 	makefile.win32 \
-	pluginmacros.h \
-	geanyfunctions.h \
 	genapi.py
 
 plugindir = $(libdir)/geany
@@ -11,6 +9,7 @@ plugindir = $(libdir)/geany
 plugins_includedir = $(includedir)/geany
 plugins_include_HEADERS = \
 	pluginmacros.h \
+	geanyplugin.h \
 	geanyfunctions.h
 
 # systems without python should continue to build OK

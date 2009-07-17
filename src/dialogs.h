@@ -58,8 +58,8 @@ gboolean dialogs_show_question(const gchar *text, ...) G_GNUC_PRINTF (1, 2);
 gboolean dialogs_show_question_full(GtkWidget *parent, const gchar *yes_btn, const gchar *no_btn,
 	const gchar *extra_text, const gchar *main_text, ...) G_GNUC_PRINTF (5, 6);
 
-void dialogs_show_msgbox(gint type, const gchar *text, ...) G_GNUC_PRINTF (2, 3);
+void dialogs_show_msgbox(GtkMessageType type, const gchar *text, ...) G_GNUC_PRINTF (2, 3);
 
-void dialogs_show_msgbox_with_secondary(gint type, const gchar *text, const gchar *secondary);
+void dialogs_show_msgbox_with_secondary(GtkMessageType type, const gchar *text, const gchar *secondary);
 
 #endif

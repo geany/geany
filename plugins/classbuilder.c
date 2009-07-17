@@ -25,14 +25,7 @@
 
 /* Class Builder - creates source files containing a new class interface and definition. */
 
-#include "geany.h"
-#include "plugindata.h"
-#include "support.h"
-#include "filetypes.h"
-#include "document.h"
-#include "editor.h"
-#include "ui_utils.h"
-#include "geanyfunctions.h"
+#include "geanyplugin.h"
 
 
 GeanyData		*geany_data;
@@ -197,7 +190,7 @@ static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg);
 
 /* The list must be ended with NULL as an extra check that arg_count is correct. */
 static void
-utils_free_pointers(gsize arg_count, ...)
+free_pointers(gsize arg_count, ...)
 {
 	va_list a;
 	gsize i;
@@ -716,7 +709,7 @@ static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg)
 		g_free(text);
 	}
 
-	utils_free_pointers(17, tmp, class_info->class_name, class_info->class_name_up,
+	free_pointers(17, tmp, class_info->class_name, class_info->class_name_up,
 		class_info->base_name, class_info->class_name_low, class_info->base_include,
 		class_info->header, class_info->header_guard, class_info->source, class_info->base_decl,
 		class_info->constructor_decl, class_info->constructor_impl,

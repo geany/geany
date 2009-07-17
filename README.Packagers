@@ -26,8 +26,9 @@ images. But if you do so, please include at least the text form of the
 manual.
 What you shouldn't skip in your package: the filetype.* files in the
 data/ subdirectory, these files are important. If they are missing,
-Geany has still a fallback mechanism for syntax highlighting but several
-other features for certain filetypes will fail (mainly build support).
+Geany still has a fallback mechanism for syntax highlighting (if
+filetypes.common is installed) but several other features for certain
+filetypes will fail (mainly build support).
 
 
 Testing your package

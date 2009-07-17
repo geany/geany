@@ -44,7 +44,7 @@ Some basic features of Geany:
 
 * Syntax highlighting
 * Code folding
-* Symbol name auto-completion
+* Symbol name autocompletion
 * Construct completion/snippets
 * Auto-closing of XML and HTML tags
 * Call tips
@@ -323,7 +323,7 @@ Short option  Long option              Function
 *none*        --vte-lib                Specify explicitly the path including filename or only
                                        the filename to the VTE library, e.g.
                                        ``/usr/lib/libvte.so`` or ``libvte.so``. This option is
-                                       only needed when the auto detection does not work. Only
+                                       only needed when the auto-detection does not work. Only
                                        available if Geany was compiled with support for VTE.
 
 -v            --verbose                Be verbose (print useful status messages).
@@ -529,7 +529,7 @@ it correctly. You can this in the file open dialog by selecting
 an encoding in the drop down box or by reloading the file with the
 file menu item "Reload as". The auto-detection works well for most
 encodings but there are also some encodings known where auto-detection
-has its problems. Auto detecting the encoding of a file is not easy
+has its problems. Auto-detecting the encoding of a file is not easy
 and sometimes an encoding might be detected not correctly.
 
 There are different ways to use different encodings in Geany:
@@ -913,7 +913,7 @@ Maybe you need to often type your name, so define a snippet like this::
     myname=Enrico Tröger
 
 Every time you write ``myname`` <TAB> in Geany, it will replace "myname"
-with "Enrico Tröger". The key to start auto completion can be changed
+with "Enrico Tröger". The key to start autocompletion can be changed
 in the preferences dialog, by default it is TAB. The corresponding keybinding
 is called ``Complete snippet``.
 
@@ -1244,7 +1244,7 @@ Workspace tags
 
 Tags for each document are parsed whenever a file is loaded or
 saved. These are shown in the Symbol list in the Sidebar. These tags
-are also used for auto completion of symbols and calltips for all documents
+are also used for autocompletion of symbols and calltips for all documents
 open in the current session that have the same filetype.
 
 The *Go to Tag* commands can be used with all workspace tags. See
@@ -1254,7 +1254,7 @@ The *Go to Tag* commands can be used with all workspace tags. See
 Global tags
 ^^^^^^^^^^^
 
-Global tags are used to provide auto completion of symbols and calltips
+Global tags are used to provide autocompletion of symbols and calltips
 without having to open the corresponding source files. This is intended
 for library APIs, as the tags file only has to be updated when you upgrade
 the library.
@@ -1500,7 +1500,7 @@ Suppress status messages in the status bar
     Remove all messages from the status bar. The messages are still displayed
     in the status messages window.
 
-Auto focus widgets (focus follows mouse)
+Auto-focus widgets (focus follows mouse)
     Give the focus automatically to widgets below the mouse cursor.
     This works for the main editor widget, the scribble, the toolbar search field
     goto line fields and the VTE.
@@ -1778,19 +1778,28 @@ Automatic continuation multi-line comments
     on the next line with the correct indentation based on the previous line,
     as long as the multi-line is not closed by ``*/``.
 
-Automatic symbol completion
+Autocomplete symbols
     When you start to type a symbol name, look for the full string to
     allow it to be completed for you.
 
-Characters to type for completion
-    Number of characters of a word to type before auto completion is
+Autocomplete all words in document
+    When you start to type a word, Geany will search the whole document for
+    words starting with the typed part to complete it, assuming there
+    are no tag names to show.
+
+Drop rest of word on completion
+    Remove any word part to the right of the cursor when choosing a
+    completion list item.
+
+Characters to type for autocompletion
+    Number of characters of a word to type before autocompletion is
     displayed.
 
-Rows of symbol completion list
-    The maximum number of symbols to show in the auto completion window.
+Completion list height
+    The number of rows to display for the autocompletion window.
 
 Max. symbol name suggestions
-    The maximum number of entries to display in the auto completion list.
+    The maximum number of items in the autocompletion list.
 
 
 Auto-close quotes and brackets
@@ -2667,6 +2676,10 @@ Redo                            Ctrl-Y                    Re-does the last actio
 
 Delete current line(s)          Ctrl-K                    Deletes the current line (and any lines with a
                                                           selection).
+
+Delete to line end              Ctrl-Shift-Delete         Deletes from the current caret position to the
+                                                          end of the current line.
+
 Duplicate line or selection     Ctrl-D                    Duplicates the current line or selection.
 
 Transpose current line          Ctrl-T                    Transposes the current line with the previous one.
@@ -2679,10 +2692,14 @@ Scroll up by one line           Alt-Up                    Scrolls the view.
 
 Scroll down by one line         Alt-Down                  Scrolls the view.
 
-Complete word                   Ctrl-Space                Shows auto completion list.
+Complete word                   Ctrl-Space                Shows the autocompletion list. If already showing
+                                                          tag completion, it shows document word completion
+                                                          instead, even if it is not enabled for automatic
+                                                          completion. Likewise if no tag suggestions are
+                                                          available, it shows document word completion.
 
-Show calltip                    Alt-Space (Unix)          Shows call tips for the current function or
-                                Alt-Shift-Space (Windows) method.
+Show calltip                    Ctrl-Shift-Space          Shows call tips for the current function or
+                                                          method.
 
 Show macro list                 Ctrl-Return               Shows a list of available macros and variables in
                                                           the workspace.
@@ -2861,6 +2878,13 @@ Go to Start of Line             Home                      Move the caret to the 
                                                           it to the start of the line.
 
 Go to End of Line               End                       Move the caret to the end of the line.
+
+Go to End of Display Line       Alt-End                   Move the caret to the end of the display line.
+                                                          This is useful when you use line wrapping and
+                                                          want to jump to the end of the wrapped, virtual
+                                                          line, not the real end of the whole line.
+                                                          If the line is not wrapped, it behaves like
+                                                          `Go to End of Line`, see above.
 
 Go to Previous Word Part        Ctrl-/                    Goto the previous part of the current word.
 
@@ -3052,7 +3076,7 @@ Format
 In this section the colors for syntax highlighting are defined. The
 manual format is:
 
-* ``key=foreground_color;background_color;bold;italic``
+* ``key=foreground_color;background_color;bold_flag;italic_flag``
 
 Colors have to be specified as RGB hex values prefixed by
 0x. For example red is 0xff0000, blue is 0x0000ff. The values are
@@ -3060,6 +3084,15 @@ case-insensitive, but it is a good idea to use small letters. Bold
 and italic are flags and should only be "true" or "false". If their
 value is something other than "true" or "false", "false" is assumed.
 
+You can omit fields to use the ``"default"`` named style.
+
+E.g. ``key=0xff0000;;true``
+
+This makes the key style have red foreground text, default background
+color text and bold emphasis.
+
+Using a named style
+*******************
 The second format uses a *named style* name to reference a style
 defined in filetypes.common.
 
@@ -3068,11 +3101,13 @@ defined in filetypes.common.
 
 The bold and italic parts are optional, and if present are used to
 toggle the bold or italic flags to the opposite of the named style's
-flags.
+flags. In contrast to style definition booleans, they are a literal
+",bold,italic" and commas are used instead of semi-colons.
 
-.. note::
-    Commas are used for these so Geany can easily determine whether a
-    named style is used or not.
+E.g. ``key=comment,italic``
+
+This makes the key style match the ``"comment"`` named style, but with
+italic emphasis.
 
 To define named styles, see the filetypes.common `[named_styles]
 Section`_.
@@ -3380,12 +3415,19 @@ line_wrap_visuals
     *Example:* ``line_wrap_visuals=3;0;false;false``
 
 line_wrap_indent
-    Sets the size of indentation of sublines for wrapped lines in terms
-    of the width of a space.
+    First argument: sets the size of indentation of sublines for wrapped lines
+    in terms of the width of a space, only used when the second argument is ``0``.
 
-    Only first argument is interpreted.
+    Second argument: wrapped sublines can be indented to the position of their
+    first subline or one more indent level. Possible values:
 
-    *Example:* ``line_wrap_indent=0;0;false;false``
+    * 0 - Wrapped sublines aligned to left of window plus amount set by the first argument
+    * 1 - Wrapped sublines are aligned to first subline indent (use the same indentation)
+    * 2 - Wrapped sublines are aligned to first subline indent plus one more level of indentation
+
+    Only first and second argument is interpreted.
+
+    *Example:* ``line_wrap_indent=0;1;false;false``
 
 translucency
     Translucency for the current line (first argument) and the selection
@@ -3408,13 +3450,21 @@ marker_line
     *Example:* ``marker_line=0x000000;0xffff00;false;false``
 
 marker_search
-    The style for a highlighted search result (e.g when using "Mark" in
-    Search dialogs). The foreground color (first argument) is only used
+    The style for a marked search results (when using "Mark" in Search dialogs).
+    The second argument sets the background colour for the drawn rectangle.
+
+    Only the second argument is interpreted.
+
+    *Example:* ``marker_search=0x000000;0xb8f4b8;false;false``
+
+marker_mark
+    The style for a marked line (e.g when using the "Toggle Marker" keybinding
+    (Ctrl-M)). The foreground color (first argument) is only used
     when the Markers margin is enabled (see View menu).
 
     Only the first and second argument is interpreted.
 
-    *Example:* ``marker_search=0x000000;0xB8F4B8;false;false``
+    *Example:* ``marker_mark=0x000000;0xb8f4b8;false;false``
 
 marker_translucency
     Translucency for the line marker (first argument) and the search marker
@@ -3426,6 +3476,15 @@ marker_translucency
     Only the first and second argument is interpreted.
 
     *Example:* ``marker_translucency=256;256;false;false``
+
+line_height
+    Amount of space to be drawn above and below the line's baseline.
+    The first argument defines the amount of space to be drawn above the line, the second
+    argument defines the amount of space to be drawn below.
+
+    Only the first and second argument is interpreted.
+
+    *Example:* ``line_height=0;0;false;false``
 
 
 [settings] Section
@@ -3642,8 +3701,14 @@ fileheader     The file header template. This wildcard       file header, snippe
 Customizing the toolbar
 -----------------------
 
-You can add, remove and reorder the elements in the toolbar by editing
-the file ``ui_toolbar.xml``.
+You can add, remove and reorder the elements in the toolbar by using the toolbar editor
+by manually editing the file ``ui_toolbar.xml``.
+
+The toolbar editor can be opened from the preferences editor on the Toolbar tab or
+by right-clicking on the toolbar itself and choosing it from the menu.
+
+Manually editing of the toolbar layout
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To override the system-wide configuration file, copy it from
 ``$prefix/share/geany`` to your configuration directory, usually
@@ -3660,11 +3725,11 @@ you wish and add or remove additional separators.
 This file must be valid XML, otherwise the global toolbar UI definition
 will be used instead.
 
+Your changes are applied once you save the file.
+
 .. note::
     (1) You cannot add new actions which are not listed below.
     (2) Everything you add or change must be inside the /ui/toolbar/ path.
-    (3) After you finish editing the file, you need to restart Geany
-        for changes to take effect.
 
 
 Available toolbar elements
@@ -3805,14 +3870,12 @@ Dedent block.                                   Shift+Tab
 Delete to start of word.                        Ctrl+BackSpace
 Delete to end of word.                          Ctrl+Delete
 Delete to start of line.                        Ctrl+Shift+BackSpace
-Delete to end of line.                          Ctrl+Shift+Delete
 Go to start of document.                        Ctrl+Home
 Extend selection to start of document.          Ctrl+Shift+Home
 Go to start of display line.                    Alt+Home
 Extend selection to start of display line.      Alt+Shift+Home
 Go to end of document.                          Ctrl+End
 Extend selection to end of document.            Ctrl+Shift+End
-Go to end of display line.                      Alt+End
 Extend selection to end of display line.        Alt+Shift+End
 Previous paragraph. Shift extends selection.    Ctrl+Up
 Next paragraph. Shift extends selection.        Ctrl+Down
@@ -4001,7 +4064,7 @@ These are default settings that can be overridden in the `Preferences`_ dialog.
 Option                          Description                                   Default
 ==============================  ============================================  ==================
 GEANY_MIN_SYMBOLLIST_CHARS      How many characters you need to type to       4
-                                trigger the auto completion list.
+                                trigger the autocompletion list.
 GEANY_DISK_CHECK_TIMEOUT        Time in seconds between checking a file for   30
                                 external changes.
 GEANY_DEFAULT_TOOLS_MAKE        The make tool. This can also include a path.  "make"
@@ -4021,7 +4084,7 @@ GEANY_DEFAULT_FONT_MSG_WINDOW   The font used in the messages window.         "S
 GEANY_DEFAULT_FONT_EDITOR       The font used in the editor window.           "Monospace 10"
 GEANY_TOGGLE_MARK               A string which is used to mark a toggled      "~ "
                                 comment.
-GEANY_MAX_AUTOCOMPLETE_WORDS    How many auto completion suggestions should   30
+GEANY_MAX_AUTOCOMPLETE_WORDS    How many autocompletion suggestions should    30
                                 Geany provide.
 ==============================  ============================================  ==================
 

@@ -25,17 +25,8 @@
 
 /* HTML Characters plugin (Inserts HTML character entities like '&amp;') */
 
-#include "geany.h"
+#include "geanyplugin.h"
 #include <string.h>
-
-#include "support.h"
-#include "plugindata.h"
-#include "document.h"
-#include "editor.h"
-#include "keybindings.h"
-#include "ui_utils.h"
-#include "utils.h"
-#include "geanyfunctions.h"
 
 
 GeanyData		*geany_data;

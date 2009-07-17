@@ -24,23 +24,17 @@
 
 /* Split Window plugin. */
 
-#include "geany.h"
-#include "support.h"
+#include "geanyplugin.h"
+#include <string.h>
+
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
 #include "SciLexer.h"
 
-#include "ui_utils.h"
-#include "document.h"
-#include "editor.h"
-#include "plugindata.h"
-#include "keybindings.h"
-#include "geanyfunctions.h"
-
 
 PLUGIN_VERSION_CHECK(GEANY_API_VERSION)
 PLUGIN_SET_INFO(_("Split Window"), _("Splits the editor view into two windows."),
-	"0.1", _("The Geany developer team"))
+	VERSION, _("The Geany developer team"))
 
 
 GeanyData		*geany_data;
@@ -117,14 +111,6 @@ static void set_styles(ScintillaObject *oldsci, ScintillaObject *newsci)
 		val = sci_get_value(oldsci, SCI_STYLEGETITALIC, style_id);
 		scintilla_send_message(newsci, SCI_STYLESETITALIC, style_id, val);
 	}
-}
-
-
-static void sci_set_font(ScintillaObject *sci, gint style, const gchar *font,
-	gint size)
-{
-	scintilla_send_message(sci, SCI_STYLESETFONT, style, (sptr_t) font);
-	scintilla_send_message(sci, SCI_STYLESETSIZE, style, size);
 }
 
 
@@ -225,14 +211,86 @@ static void set_state(enum State id)
 }
 
 
-static GtkWidget *create_tool_button(const gchar *label, const gchar *stock_id)
+/* Avoid adding new string translations which are the same but without an underscore.
+ * @warning Heavy use may cause stack exhaustion. */
+#define no_underscore(str)\
+	utils_str_remove_chars(utils_strdupa(str), "_")
+
+/* Like strcpy, but can handle overlapping src and dest. */
+static gchar *utils_str_copy(gchar *dest, const gchar *src)
+{
+	gchar *cpy;
+
+	/* strcpy might not handle overlaps, so make a copy */
+	cpy = utils_strdupa(src);
+	return strcpy(dest, cpy);
+}
+
+
+/* Remove characters from a string, in place.
+ * @param chars Characters to remove.
+ * @return @a str */
+/* Note: Could be more efficient by writing non-chars into new string then using only one strcpy. */
+static gchar *utils_str_remove_chars(gchar *str, const gchar *chars)
+{
+	gchar *ptr;
+	gsize len;
+
+	g_return_val_if_fail(str, NULL);
+
+	len = strlen(str);
+	ptr = str;
+
+	while (ptr < str + len)
+	{
+		if (strchr(chars, *ptr))
+		{
+			utils_str_copy(ptr, ptr + 1);
+			len--;
+		}
+		else
+			ptr++;
+	}
+	return str;
+}
+
+
+static const gchar *ui_get_stock_label(const gchar *stock_id)
+{
+	GtkStockItem item;
+
+	if (gtk_stock_lookup(stock_id, &item))
+		return item.label;
+
+	g_warning("No stock id '%s'!", stock_id);
+	return "";
+}
+
+
+/* Create a GtkToolButton with stock icon and tooltip.
+ * @param label can be NULL to use stock label text, without underscores.
+ * @param tooltip can be NULL to use label text (useful for GTK_TOOLBAR_ICONS). */
+static GtkWidget *ui_tool_button_new(const gchar *stock_id, const gchar *label, const gchar *tooltip)
 {
 	GtkToolItem *item;
+	gchar *dup = NULL;
 
+	if (stock_id && !label)
+	{
+		label = ui_get_stock_label(stock_id);
+		dup = g_strdup(label);
+		label = utils_str_remove_chars(dup, "_");
+	}
 	item = gtk_tool_button_new(NULL, label);
-	gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(item), stock_id);
-	ui_widget_set_tooltip_text(GTK_WIDGET(item), label);
+	if (stock_id)
+		gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(item), stock_id);
 
+	if (!tooltip)
+		tooltip = label;
+	if (tooltip)
+		ui_widget_set_tooltip_text(GTK_WIDGET(item), tooltip);
+
+	g_free(dup);
 	return GTK_WIDGET(item);
 }
 
@@ -248,18 +306,6 @@ static void on_refresh(void)
 }
 
 
-/* avoid adding new strings which are the same but without a leading underscore */
-static const gchar *after_underscore(const gchar *str)
-{
-	const gchar *u = g_strstr_len(str, -1, "_");
-
-	if (u)
-		return ++u;
-	else
-		return str;
-}
-
-
 static GtkWidget *create_toolbar(void)
 {
 	GtkWidget *toolbar, *item;
@@ -269,7 +315,8 @@ static GtkWidget *create_toolbar(void)
 	gtk_toolbar_set_icon_size(GTK_TOOLBAR(toolbar), GTK_ICON_SIZE_MENU);
 	gtk_toolbar_set_style(GTK_TOOLBAR(toolbar), GTK_TOOLBAR_ICONS);
 
-	item = (GtkWidget*)gtk_tool_button_new_from_stock(GTK_STOCK_REFRESH);
+	item = ui_tool_button_new(GTK_STOCK_JUMP_TO, "",
+		_("Show the current document"));
 	gtk_container_add(GTK_CONTAINER(toolbar), item);
 	g_signal_connect(item, "clicked", G_CALLBACK(on_refresh), NULL);
 
@@ -282,7 +329,7 @@ static GtkWidget *create_toolbar(void)
 	gtk_container_add(GTK_CONTAINER(tool_item), item);
 	edit_window.name_label = item;
 
-	item = create_tool_button(after_underscore(_("_Unsplit")), GTK_STOCK_CLOSE);
+	item = ui_tool_button_new(GTK_STOCK_CLOSE, no_underscore(_("_Unsplit")), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), item);
 	g_signal_connect(item, "clicked", G_CALLBACK(on_unsplit), NULL);
 
@@ -392,7 +439,7 @@ void plugin_init(GeanyData *data)
 	GtkWidget *item, *menu;
 
 	menu_items.main = item = gtk_menu_item_new_with_mnemonic(_("_Split Window"));
-	gtk_menu_append(geany_data->main_widgets->tools_menu, item);
+	gtk_menu_shell_append(GTK_MENU_SHELL(geany_data->main_widgets->tools_menu), item);
 	ui_add_document_sensitive(item);
 
 	menu = gtk_menu_new();
@@ -401,17 +448,17 @@ void plugin_init(GeanyData *data)
 	menu_items.horizontal = item =
 		gtk_menu_item_new_with_mnemonic(_("_Horizontally"));
 	g_signal_connect(item, "activate", G_CALLBACK(on_split_horizontally), NULL);
-	gtk_menu_append(menu, item);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
 	menu_items.vertical = item =
 		gtk_menu_item_new_with_mnemonic(_("_Vertically"));
 	g_signal_connect(item, "activate", G_CALLBACK(on_split_vertically), NULL);
-	gtk_menu_append(menu, item);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
 	menu_items.unsplit = item =
 		gtk_menu_item_new_with_mnemonic(_("_Unsplit"));
 	g_signal_connect(item, "activate", G_CALLBACK(on_unsplit), NULL);
-	gtk_menu_append(menu, item);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
 	gtk_widget_show_all(menu_items.main);
 

@@ -74,18 +74,22 @@ void geany_debug(gchar const *format, ...)
 static void handler_print(const gchar *msg)
 {
 	printf("%s\n", msg);
-	g_string_append_printf(log_buffer, "%s\n", msg);
-
-	update_dialog();
+	if (G_LIKELY(log_buffer != NULL))
+	{
+		g_string_append_printf(log_buffer, "%s\n", msg);
+		update_dialog();
+	}
 }
 
 
 static void handler_printerr(const gchar *msg)
 {
 	fprintf(stderr, "%s\n", msg);
-	g_string_append_printf(log_buffer, "%s\n", msg);
-
-	update_dialog();
+	if (G_LIKELY(log_buffer != NULL))
+	{
+		g_string_append_printf(log_buffer, "%s\n", msg);
+		update_dialog();
+	}
 }
 
 
@@ -208,5 +212,8 @@ void log_show_debug_messages_dialog(void)
 
 void log_finalize(void)
 {
+	g_log_set_default_handler(g_log_default_handler, NULL);
+
 	g_string_free(log_buffer, TRUE);
+	log_buffer = NULL;
 }

@@ -415,10 +415,10 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkMenuItem" id="menu_select_all1">
+			<widget class="GtkImageMenuItem" id="menu_select_all1">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Select _All</property>
-			  <property name="use_underline">True</property>
+			  <property name="label">gtk-select-all</property>
+			  <property name="use_stock">True</property>
 			  <signal name="activate" handler="on_menu_select_all1_activate" last_modification_time="Fri, 30 Jun 2006 13:25:08 GMT"/>
 			</widget>
 		      </child>
@@ -2096,7 +2096,7 @@
       <property name="visible">True</property>
       <property name="label" translatable="yes">Images _and Text</property>
       <property name="use_underline">True</property>
-      <property name="active">True</property>
+      <property name="active">False</property>
       <signal name="activate" handler="on_images_and_text2_activate" last_modification_time="Sat, 30 Apr 2005 19:42:24 GMT"/>
     </widget>
   </child>
@@ -2106,7 +2106,7 @@
       <property name="visible">True</property>
       <property name="label" translatable="yes">_Images Only</property>
       <property name="use_underline">True</property>
-      <property name="active">True</property>
+      <property name="active">False</property>
       <property name="group">images_and_text2</property>
       <signal name="activate" handler="on_images_only2_activate" last_modification_time="Sat, 30 Apr 2005 19:42:29 GMT"/>
     </widget>
@@ -2134,7 +2134,7 @@
       <property name="visible">True</property>
       <property name="label" translatable="yes">_Large Icons</property>
       <property name="use_underline">True</property>
-      <property name="active">True</property>
+      <property name="active">False</property>
       <signal name="activate" handler="on_toolbar_large_icons1_activate" last_modification_time="Sat, 22 Oct 2005 11:52:26 GMT"/>
     </widget>
   </child>
@@ -2144,7 +2144,7 @@
       <property name="visible">True</property>
       <property name="label" translatable="yes">_Small Icons</property>
       <property name="use_underline">True</property>
-      <property name="active">True</property>
+      <property name="active">False</property>
       <property name="group">large_icons1</property>
       <signal name="activate" handler="on_toolbar_small_icons1_activate" last_modification_time="Sat, 22 Oct 2005 11:52:26 GMT"/>
     </widget>
@@ -2155,7 +2155,7 @@
       <property name="visible">True</property>
       <property name="label" translatable="yes">_Very Small Icons</property>
       <property name="use_underline">True</property>
-      <property name="active">False</property>
+      <property name="active">True</property>
       <property name="group">large_icons1</property>
       <signal name="activate" handler="on_very_small_icons1_activate" last_modification_time="Sun, 29 Mar 2009 18:51:50 GMT"/>
     </widget>
@@ -2168,14 +2168,35 @@
   </child>
 
   <child>
+    <widget class="GtkImageMenuItem" id="customize_toolbar1">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">_Customize Toolbar</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="on_customize_toolbar1_activate" last_modification_time="Thu, 25 Jun 2009 17:08:08 GMT"/>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="image2878">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-properties</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+      </child>
+    </widget>
+  </child>
+
+  <child>
     <widget class="GtkImageMenuItem" id="hide_toolbar1">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">_Hide toolbar</property>
+      <property name="label" translatable="yes">_Hide Toolbar</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="on_hide_toolbar1_activate" last_modification_time="Sat, 30 Apr 2005 20:23:03 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image2853">
+	<widget class="GtkImage" id="image2879">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-cancel</property>
 	  <property name="icon_size">1</property>
@@ -2259,10 +2280,10 @@
   </child>
 
   <child>
-    <widget class="GtkMenuItem" id="menu_select_all2">
+    <widget class="GtkImageMenuItem" id="menu_select_all2">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">Select _All</property>
-      <property name="use_underline">True</property>
+      <property name="label">gtk-select-all</property>
+      <property name="use_stock">True</property>
       <signal name="activate" handler="on_menu_select_all1_activate" last_modification_time="Fri, 30 Jun 2006 13:35:07 GMT"/>
     </widget>
   </child>
@@ -3430,7 +3451,7 @@
 				  <property name="visible">True</property>
 				  <property name="tooltip" translatable="yes">Gives the focus automatically to widgets below the mouse cursor. Works for the main editor widget, the scribble, the toolbar search and goto line fields and the VTE.</property>
 				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">Auto focus widgets (focus follows mouse)</property>
+				  <property name="label" translatable="yes">Auto-focus widgets (focus follows mouse)</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
 				  <property name="focus_on_click">True</property>
@@ -4944,6 +4965,98 @@ Bottom
 		  <property name="fill">False</property>
 		</packing>
 	      </child>
+
+	      <child>
+		<widget class="GtkHBox" id="hbox15">
+		  <property name="visible">True</property>
+		  <property name="homogeneous">True</property>
+		  <property name="spacing">0</property>
+
+		  <child>
+		    <widget class="GtkButton" id="button_customize_toolbar">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
+		      <signal name="clicked" handler="on_button_customize_toolbar_clicked" last_modification_time="Thu, 25 Jun 2009 17:09:43 GMT"/>
+
+		      <child>
+			<widget class="GtkAlignment" id="alignment45">
+			  <property name="visible">True</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xscale">0</property>
+			  <property name="yscale">0</property>
+			  <property name="top_padding">0</property>
+			  <property name="bottom_padding">0</property>
+			  <property name="left_padding">0</property>
+			  <property name="right_padding">0</property>
+
+			  <child>
+			    <widget class="GtkHBox" id="hbox16">
+			      <property name="visible">True</property>
+			      <property name="homogeneous">False</property>
+			      <property name="spacing">2</property>
+
+			      <child>
+				<widget class="GtkImage" id="image2877">
+				  <property name="visible">True</property>
+				  <property name="stock">gtk-properties</property>
+				  <property name="icon_size">4</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">False</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkLabel" id="label236">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">Customize Toolbar</property>
+				  <property name="use_underline">True</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_LEFT</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+				  <property name="width_chars">-1</property>
+				  <property name="single_line_mode">False</property>
+				  <property name="angle">0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">False</property>
+				</packing>
+			      </child>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
 	    </widget>
 	    <packing>
 	      <property name="tab_expand">False</property>
@@ -5832,7 +5945,7 @@ Match braces</property>
 				  <property name="visible">True</property>
 				  <property name="tooltip" translatable="yes">Automatic completion and closing of XML tags (includes HTML tags)</property>
 				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">XML tag auto completion</property>
+				  <property name="label" translatable="yes">XML tag autocompletion</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
 				  <property name="focus_on_click">True</property>
@@ -5872,7 +5985,45 @@ Match braces</property>
 				  <property name="visible">True</property>
 				  <property name="tooltip" translatable="yes">Automatic completion of known symbols in open files (function names, global variables, ...)</property>
 				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">Automatic symbol completion</property>
+				  <property name="label" translatable="yes">Autocomplete symbols</property>
+				  <property name="use_underline">True</property>
+				  <property name="relief">GTK_RELIEF_NORMAL</property>
+				  <property name="focus_on_click">True</property>
+				  <property name="active">False</property>
+				  <property name="inconsistent">False</property>
+				  <property name="draw_indicator">True</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">False</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkCheckButton" id="check_autocomplete_doc_words">
+				  <property name="visible">True</property>
+				  <property name="can_focus">True</property>
+				  <property name="label" translatable="yes">Autocomplete all words in document</property>
+				  <property name="use_underline">True</property>
+				  <property name="relief">GTK_RELIEF_NORMAL</property>
+				  <property name="focus_on_click">True</property>
+				  <property name="active">False</property>
+				  <property name="inconsistent">False</property>
+				  <property name="draw_indicator">True</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">False</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkCheckButton" id="check_completion_drops_rest_of_word">
+				  <property name="visible">True</property>
+				  <property name="can_focus">True</property>
+				  <property name="label" translatable="yes">Drop rest of word on completion</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
 				  <property name="focus_on_click">True</property>
@@ -5955,7 +6106,7 @@ Match braces</property>
 				  <child>
 				    <widget class="GtkLabel" id="label205">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Characters to type for completion:</property>
+				      <property name="label" translatable="yes">Characters to type for autocompletion:</property>
 				      <property name="use_underline">False</property>
 				      <property name="use_markup">False</property>
 				      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -5983,7 +6134,7 @@ Match braces</property>
 				  <child>
 				    <widget class="GtkSpinButton" id="spin_symbol_complete_chars">
 				      <property name="visible">True</property>
-				      <property name="tooltip" translatable="yes">The amount of characters which are necessary to show the symbol auto completion list</property>
+				      <property name="tooltip" translatable="yes">The amount of characters which are necessary to show the symbol autocompletion list</property>
 				      <property name="can_focus">True</property>
 				      <property name="climb_rate">1</property>
 				      <property name="digits">0</property>
@@ -6005,7 +6156,7 @@ Match braces</property>
 				  <child>
 				    <widget class="GtkSpinButton" id="spin_symbollistheight">
 				      <property name="visible">True</property>
-				      <property name="tooltip" translatable="yes">Display height in rows for the auto completion list</property>
+				      <property name="tooltip" translatable="yes">Display height in rows for the autocompletion list</property>
 				      <property name="can_focus">True</property>
 				      <property name="climb_rate">1</property>
 				      <property name="digits">0</property>
@@ -6027,7 +6178,7 @@ Match braces</property>
 				  <child>
 				    <widget class="GtkSpinButton" id="spin_autocompletion_max_entries">
 				      <property name="visible">True</property>
-				      <property name="tooltip" translatable="yes">Maximum number of entries to display in the auto completion list</property>
+				      <property name="tooltip" translatable="yes">Maximum number of entries to display in the autocompletion list</property>
 				      <property name="can_focus">True</property>
 				      <property name="climb_rate">1</property>
 				      <property name="digits">0</property>

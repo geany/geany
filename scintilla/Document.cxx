@@ -100,6 +100,13 @@ Document::~Document() {
 	regex = 0;
 }
 
+void Document::Init() {
+	for (int j=0; j<ldSize; j++) {
+		if (perLineData[j])
+			perLineData[j]->Init();
+	}
+}
+
 void Document::InsertLine(int line) {
 	for (int j=0; j<ldSize; j++) {
 		if (perLineData[j])
@@ -202,15 +209,15 @@ int Document::LineEnd(int line) const {
 	}
 }
 
-int Document::LineFromPosition(int pos) {
+int Document::LineFromPosition(int pos) const {
 	return cb.LineFromPosition(pos);
 }
 
-int Document::LineEndPosition(int position) {
+int Document::LineEndPosition(int position) const {
 	return LineEnd(LineFromPosition(position));
 }
 
-int Document::VCHomePosition(int position) {
+int Document::VCHomePosition(int position) const {
 	int line = LineFromPosition(position);
 	int startPosition = LineStart(line);
 	int endLine = LineEnd(line);

@@ -49,6 +49,7 @@
 #include "treeviews.h"
 #include "geanywraplabel.h"
 #include "main.h"
+#include "search.h"
 
 
 GPtrArray *keybinding_groups;	/* array of GeanyKeyGroup pointers */
@@ -236,6 +237,9 @@ static void init_default_kb(void)
 		LW(menu_duplicate_line1));
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_DELETELINE, cb_func_editor_action,
 		GDK_k, GDK_CONTROL_MASK, "edit_deleteline", _("Delete current line(s)"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_EDITOR_DELETELINETOEND, cb_func_editor_action,
+		GDK_Delete, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_deletelinetoend",
+		_("Delete to line end"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_TRANSPOSELINE, cb_func_editor_action,
 		GDK_t, GDK_CONTROL_MASK, "edit_transposeline", _("Transpose current line"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_SCROLLTOLINE, cb_func_editor_action,
@@ -357,6 +361,8 @@ static void init_default_kb(void)
 		0, 0, "popup_findusage", _("Find Usage"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE, cb_func_search_action,
 		0, 0, "popup_finddocumentusage", _("Find Document Usage"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_SEARCH_MARKALL, cb_func_search_action,
+		GDK_m, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "find_markall", _("Mark All"), NULL);
 
 	group = ADD_KB_GROUP(GOTO, _("Go to"));
 
@@ -386,6 +392,8 @@ static void init_default_kb(void)
 		GDK_Home, 0, "edit_gotolinestart", _("Go to Start of Line"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_GOTO_LINEEND, cb_func_goto_action,
 		GDK_End, 0, "edit_gotolineend", _("Go to End of Line"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_GOTO_LINEENDVISUAL, cb_func_goto_action,
+		GDK_End, GDK_MOD1_MASK, "edit_gotolineendvisual", _("Go to End of Display Line"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_GOTO_PREVWORDSTART, cb_func_goto_action,
 		GDK_slash, GDK_CONTROL_MASK, "edit_prevwordstart", _("Go to Previous Word Part"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_GOTO_NEXTWORDSTART, cb_func_goto_action,
@@ -1244,7 +1252,12 @@ static void cb_func_menu_help(G_GNUC_UNUSED guint key_id)
 
 static void cb_func_search_action(guint key_id)
 {
-	GeanyDocument *doc;
+	GeanyDocument *doc = document_get_current();
+	ScintillaObject *sci;
+
+	if (!doc)
+		return;
+	sci = doc->editor->sci;
 
 	switch (key_id)
 	{
@@ -1267,14 +1280,26 @@ static void cb_func_search_action(guint key_id)
 		case GEANY_KEYS_SEARCH_PREVIOUSMESSAGE:
 			on_previous_message1_activate(NULL, NULL); break;
 		case GEANY_KEYS_SEARCH_FINDUSAGE:
-			doc = document_get_current();
 			read_current_word(doc);
 			on_find_usage1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE:
-			doc = document_get_current();
 			read_current_word(doc);
 			on_find_document_usage1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_SEARCH_MARKALL:
+			if (sci_has_selection(sci))
+			{
+				gchar *text = sci_get_selection_contents(sci);
+
+				search_mark_all(doc, text, SCFIND_MATCHCASE);
+				g_free(text);
+			}
+			else
+			{
+				read_current_word(doc);
+				search_mark_all(doc, editor_info.current_word, SCFIND_MATCHCASE | SCFIND_WHOLEWORD);
+			}
 			break;
 	}
 }
@@ -1459,14 +1484,14 @@ static void switch_document(gint direction)
 	gint page_count = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
 
-	if (direction == LEFT)
+	if (direction == GTK_DIR_LEFT)
 	{
 		if (cur_page > 0)
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), cur_page - 1);
 		else
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), page_count - 1);
 	}
-	else if (direction == RIGHT)
+	else if (direction == GTK_DIR_RIGHT)
 	{
 		if (cur_page < page_count - 1)
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), cur_page + 1);
@@ -1478,12 +1503,12 @@ static void switch_document(gint direction)
 
 static void cb_func_switch_tableft(G_GNUC_UNUSED guint key_id)
 {
-	switch_document(LEFT);
+	switch_document(GTK_DIR_LEFT);
 }
 
 static void cb_func_switch_tabright(G_GNUC_UNUSED guint key_id)
 {
-	switch_document(RIGHT);
+	switch_document(GTK_DIR_RIGHT);
 }
 
 
@@ -1766,6 +1791,9 @@ static void cb_func_goto_action(guint key_id)
 		case GEANY_KEYS_GOTO_LINEEND:
 			sci_send_command(doc->editor->sci, SCI_LINEEND);
 			break;
+		case GEANY_KEYS_GOTO_LINEENDVISUAL:
+			sci_send_command(doc->editor->sci, SCI_LINEENDDISPLAY);
+			break;
 		case GEANY_KEYS_GOTO_PREVWORDSTART:
 			sci_send_command(doc->editor->sci, SCI_WORDPARTLEFT);
 			break;
@@ -1833,6 +1861,9 @@ static void cb_func_editor_action(guint key_id)
 			break;
 		case GEANY_KEYS_EDITOR_DELETELINE:
 			delete_lines(doc->editor);
+			break;
+		case GEANY_KEYS_EDITOR_DELETELINETOEND:
+			sci_send_command(doc->editor->sci, SCI_DELLINERIGHT);
 			break;
 		case GEANY_KEYS_EDITOR_TRANSPOSELINE:
 			sci_send_command(doc->editor->sci, SCI_LINETRANSPOSE);

@@ -125,6 +125,10 @@ void MarkerHandleSet::CombineWith(MarkerHandleSet *other) {
 }
 
 LineMarkers::~LineMarkers() {
+	Init();
+}
+
+void LineMarkers::Init() {
 	for (int line = 0; line < markers.Length(); line++) {
 		delete markers[line];
 		markers[line] = 0;
@@ -227,6 +231,10 @@ void LineMarkers::DeleteMarkFromHandle(int markerHandle) {
 LineLevels::~LineLevels() {
 }
 
+void LineLevels::Init() {
+	levels.DeleteAll();
+}
+
 void LineLevels::InsertLine(int line) {
 	if (levels.Length()) {
 		int level = SC_FOLDLEVELBASE;
@@ -243,7 +251,9 @@ void LineLevels::RemoveLine(int line) {
 		// to line before to avoid a temporary disappearence causing expansion.
 		int firstHeader = levels[line] & SC_FOLDLEVELHEADERFLAG;
 		levels.Delete(line);
-		if (line > 0)
+		if (line == levels.Length()-1) // Last line loses the header flag
+			levels[line-1] &= ~SC_FOLDLEVELHEADERFLAG;
+		else if (line > 0)
 			levels[line-1] |= firstHeader;
 	}
 }
@@ -279,6 +289,10 @@ int LineLevels::GetLevel(int line) {
 }
 
 LineState::~LineState() {
+}
+
+void LineState::Init() {
+	lineStates.DeleteAll();
 }
 
 void LineState::InsertLine(int line) {
@@ -336,6 +350,10 @@ struct AnnotationHeader {
 };
 
 LineAnnotation::~LineAnnotation() {
+	ClearAll();
+}
+
+void LineAnnotation::Init() {
 	ClearAll();
 }
 

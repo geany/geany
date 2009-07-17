@@ -95,7 +95,8 @@ typedef enum
 GeanyFiletypeGroupID;
 
 
-/* Safe wrapper to get the id field of a possibly NULL filetype pointer. */
+/* Safe wrapper to get the id field of a possibly NULL filetype pointer.
+ * This shouldn't be necessary since GeanyDocument::file_type is always non-NULL. */
 #define FILETYPE_ID(filetype_ptr) \
 	(((filetype_ptr) != NULL) ? (filetype_ptr)->id : GEANY_FILETYPES_NONE)
 
@@ -131,16 +132,15 @@ struct GeanyFiletype
 
 extern GPtrArray *filetypes_array;
 
-/* Wrap filetypes_array so it can be used with C array syntax.
- * Example: filetypes[GEANY_FILETYPES_C]->name = ...; */
-#define filetypes	((GeanyFiletype **)filetypes_array->pdata)
+/** Wrap filetypes_array so it can be used with C array syntax.
+ * Example: filetypes[GEANY_FILETYPES_C]->name = ...;
+ * @see filetypes_index(). */
+#define filetypes	((GeanyFiletype **)GEANY(filetypes_array)->pdata)
 
 extern GSList *filetypes_by_title;
 
 
 GeanyFiletype *filetypes_lookup_by_name(const gchar *name);
-
-void filetypes_foreach_named(GFunc callback, gpointer user_data);
 
 GeanyFiletype *filetypes_find(GCompareFunc predicate, gpointer user_data);
 

@@ -26,6 +26,7 @@
 
 #include "geany.h"
 #include "support.h"
+#include "utils.h"
 #include "geanymenubuttonaction.h"
 
 
@@ -37,9 +38,7 @@ typedef struct _GeanyMenubuttonActionPrivate		GeanyMenubuttonActionPrivate;
 
 struct _GeanyMenubuttonActionPrivate
 {
-	GtkWidget	*button;
 	GtkWidget	*menu;
-	gboolean	 menu_added;
 };
 
 enum
@@ -64,45 +63,9 @@ static void geany_menu_button_action_finalize(GObject *object)
 }
 
 
-static void menu_filled_cb(GtkContainer *container, GtkWidget *widget, gpointer data)
-{
-	GeanyMenubuttonActionPrivate *priv = GEANY_MENU_BUTTON_ACTION_GET_PRIVATE(data);
-
-	if (! priv->menu_added)
-	{
-		gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(priv->button), priv->menu);
-		priv->menu_added = TRUE;
-	}
-}
-
-
-static void geany_menu_button_action_connect_proxy(GtkAction *action, GtkWidget *widget)
-{
-	GeanyMenubuttonActionPrivate *priv = GEANY_MENU_BUTTON_ACTION_GET_PRIVATE(action);
-	/* add the menu to the menu button once it got items ("add" from GtkContainer) */
-	g_signal_connect(priv->menu, "add", G_CALLBACK(menu_filled_cb), action);
-
-    GTK_ACTION_CLASS(geany_menu_button_action_parent_class)->connect_proxy(action, widget);
-}
-
-
 static void delegate_button_activated(GtkAction *action)
 {
 	g_signal_emit(action, signals[BUTTON_CLICKED], 0);
-}
-
-
-static GtkWidget *geany_menu_button_action_create_tool_item(GtkAction *action)
-{
-	GeanyMenubuttonActionPrivate *priv = GEANY_MENU_BUTTON_ACTION_GET_PRIVATE(action);
-
-	priv->menu = gtk_menu_new();
-	g_object_ref(priv->menu);
-	gtk_widget_show(priv->menu);
-
-	priv->button = g_object_new(GTK_TYPE_MENU_TOOL_BUTTON, NULL);
-
-	return priv->button;
 }
 
 
@@ -114,8 +77,6 @@ static void geany_menu_button_action_class_init(GeanyMenubuttonActionClass *klas
 	g_object_class->finalize = geany_menu_button_action_finalize;
 
 	action_class->activate = delegate_button_activated;
-	action_class->connect_proxy = geany_menu_button_action_connect_proxy;
-	action_class->create_tool_item = geany_menu_button_action_create_tool_item;
 	action_class->toolbar_item_type = GTK_TYPE_MENU_TOOL_BUTTON;
 
 	g_type_class_add_private(klass, sizeof(GeanyMenubuttonActionPrivate));
@@ -133,11 +94,7 @@ static void geany_menu_button_action_class_init(GeanyMenubuttonActionClass *klas
 
 static void geany_menu_button_action_init(GeanyMenubuttonAction *action)
 {
-	GeanyMenubuttonActionPrivate *priv = GEANY_MENU_BUTTON_ACTION_GET_PRIVATE(action);
-
-	priv->menu = NULL;
-	priv->button = NULL;
-	priv->menu_added = FALSE;
+	/* nothing to do */
 }
 
 
@@ -166,4 +123,23 @@ GtkWidget *geany_menu_button_action_get_menu(GeanyMenubuttonAction *action)
 	priv = GEANY_MENU_BUTTON_ACTION_GET_PRIVATE(action);
 
 	return priv->menu;
+}
+
+
+void geany_menu_button_action_set_menu(GeanyMenubuttonAction *action, GtkWidget *menu)
+{
+	GeanyMenubuttonActionPrivate *priv;
+	GSList *l;
+
+	g_return_if_fail(action != NULL);
+	g_return_if_fail(menu != NULL);
+
+	priv = GEANY_MENU_BUTTON_ACTION_GET_PRIVATE(action);
+
+	priv->menu = menu;
+
+	foreach_slist(l, gtk_action_get_proxies(GTK_ACTION(action)))
+	{
+		gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(l->data), priv->menu);
+	}
 }

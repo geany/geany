@@ -659,8 +659,16 @@ static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 		filetypes_read_extensions();
 	else if (utils_str_equal(doc->real_path,
 		utils_build_path(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.common", NULL)))
-		ui_set_statusbar(FALSE, "%s",
-			_("For all changes you make in this file to take effect, you need to restart Geany."));
+	{
+		guint i;
+
+		/* Note: we don't reload other filetypes, even though the named styles may have changed.
+		 * The user can do this manually with 'Tools->Reload Configuration' */
+		filetypes_load_config(GEANY_FILETYPES_NONE, TRUE);
+
+		documents_foreach(i)
+			document_reload_config(documents[i]);
+	}
 }
 
 
@@ -690,16 +698,9 @@ static void create_sub_menu(GtkWidget *parent, gsize group_id, const gchar *titl
 }
 
 
-static void add_ft_menu_item(gpointer pft, gpointer user_data)
-{
-	GeanyFiletype *ft = pft;
-
-	create_radio_menu_item(group_menus[ft->group], ft);
-}
-
-
 static void create_set_filetype_menu(void)
 {
+	GSList *node;
 	GtkWidget *filetype_menu = ui_lookup_widget(main_widgets.window, "set_filetype1_menu");
 
 	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_COMPILED, _("_Programming Languages"));
@@ -708,7 +709,13 @@ static void create_set_filetype_menu(void)
 	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_MISC, _("M_iscellaneous Languages"));
 
 	/* Append all filetypes to the filetype menu */
-	filetypes_foreach_named(add_ft_menu_item, NULL);
+	foreach_slist(node, filetypes_by_title)
+	{
+		GeanyFiletype *ft = node->data;
+
+		if (ft->id != GEANY_FILETYPES_NONE)
+			create_radio_menu_item(group_menus[ft->group], ft);
+	}
 	create_radio_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_NONE]);
 }
 
@@ -802,9 +809,9 @@ static gboolean shebang_find_and_match_filetype(const gchar *utf8_filename, gint
 		return FALSE;
 
 	va_start(args, first);
+	test = first;
 	while (1)
 	{
-		test = va_arg(args, gint);
 		if (test == -1)
 			break;
 
@@ -813,6 +820,7 @@ static gboolean shebang_find_and_match_filetype(const gchar *utf8_filename, gint
 			result = TRUE;
 			break;
 		}
+		test = va_arg(args, gint);
 	}
 	va_end(args);
 
@@ -1049,6 +1057,7 @@ static void filetype_free(gpointer data, G_GNUC_UNUSED gpointer user_data)
 	set_error_regex(ft, NULL);
 
 	g_strfreev(ft->pattern);
+	g_free(ft->priv);
 	g_free(ft);
 }
 
@@ -1178,9 +1187,7 @@ void filetypes_load_config(gint ft_id, gboolean reload)
 	}
 
 	load_settings(ft_id, config, config_home);
-	if (! reload)
-		/* reloading highlighting settings not yet supported */
-		highlighting_init_styles(ft_id, config, config_home);
+	highlighting_init_styles(ft_id, config, config_home);
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
@@ -1450,19 +1457,3 @@ GeanyFiletype *filetypes_index(gint idx)
 {
 	return (idx >= 0 && idx < (gint) filetypes_array->len) ? filetypes[idx] : NULL;
 }
-
-
-/* Does not include ft[GEANY_FILETYPES_NONE], as this is usually treated specially. */
-void filetypes_foreach_named(GFunc callback, gpointer user_data)
-{
-	GSList *node;
-
-	foreach_slist(node, filetypes_by_title)
-	{
-		GeanyFiletype *ft = node->data;
-
-		if (G_LIKELY(ft->id != GEANY_FILETYPES_NONE))
-			callback(ft, user_data);
-	}
-}
-

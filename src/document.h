@@ -88,7 +88,7 @@ struct GeanyDocument
 	/** The filetype for this %document, it's only a reference to one of the elements of the global
 	 *  filetypes array. */
 	GeanyFiletype	*file_type;
-	/** TMWorkObject object for this %document. */
+	/** TMWorkObject object for this %document, or @c NULL. */
 	TMWorkObject	*tm_file;
 	/** Whether this %document is read-only. */
 	gboolean		 readonly;
@@ -109,9 +109,19 @@ struct GeanyDocument
 extern GPtrArray *documents_array;
 
 
-/* Wrap documents_array so it can be used with C array syntax.
- * Example: documents[0]->sci = NULL; */
-#define documents ((GeanyDocument **)documents_array->pdata)
+/** Wrap documents_array so it can be used with C array syntax.
+ * Example: documents[0]->sci = NULL;
+ * @see document_index(). */
+#define documents ((GeanyDocument **)GEANY(documents_array)->pdata)
+
+/** Iterates all valid documents.
+ * Use like a @c for statement.
+ * @param i @c guint index for document_index(). */
+#define documents_foreach(i) \
+	for (i = 0; i < GEANY(documents_array)->len; i++)\
+		if (!documents[i]->is_valid)\
+			{}\
+		else /* prevent outside 'else' matching our macro 'if' */
 
 /** @c NULL-safe way to check @c doc_ptr->is_valid.
  * This is useful when @a doc_ptr was stored some time earlier and documents may have been
@@ -153,6 +163,8 @@ gboolean document_reload_file(GeanyDocument *doc, const gchar *forced_enc);
 void document_set_text_changed(GeanyDocument *doc, gboolean changed);
 
 void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type);
+
+void document_reload_config(GeanyDocument *doc);
 
 void document_rename_file(GeanyDocument *doc, const gchar *new_filename);
 

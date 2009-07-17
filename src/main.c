@@ -192,37 +192,7 @@ static void apply_settings(void)
 	}
 	ui_sidebar_show_hide();
 
-	/* sets the icon style of the toolbar */
-	switch (toolbar_prefs.icon_style)
-	{
-		case GTK_TOOLBAR_BOTH:
-		{
-			/*gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "images_and_text1")), TRUE);*/
-			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(ui_widgets.toolbar_menu, "images_and_text2")), TRUE);
-			break;
-		}
-		case GTK_TOOLBAR_ICONS:
-		{
-			/*gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "images_only1")), TRUE);*/
-			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(ui_widgets.toolbar_menu, "images_only2")), TRUE);
-			break;
-		}
-		case GTK_TOOLBAR_TEXT:
-		{
-			/*gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "text_only1")), TRUE);*/
-			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(ui_widgets.toolbar_menu, "text_only2")), TRUE);
-			break;
-		}
-	}
-	gtk_toolbar_set_style(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_style);
-
-	/* sets the icon size of the toolbar, use user preferences (.gtkrc) if not set */
-	if (toolbar_prefs.icon_size == GTK_ICON_SIZE_SMALL_TOOLBAR ||
-		toolbar_prefs.icon_size == GTK_ICON_SIZE_LARGE_TOOLBAR ||
-		toolbar_prefs.icon_size == GTK_ICON_SIZE_MENU)
-	{
-		gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
-	}
+	toolbar_apply_settings();
 	toolbar_update_ui();
 
 	ui_update_view_editor_menu_items();
@@ -264,7 +234,6 @@ static void main_init(void)
 	ui_widgets.open_filesel		= NULL;
 	ui_widgets.save_filesel		= NULL;
 	ui_widgets.prefs_dialog		= NULL;
-	tv.default_tag_tree	= NULL;
 	main_status.main_window_realized= FALSE;
 	file_prefs.tab_order_ltr		= FALSE;
 	main_status.quitting			= FALSE;
@@ -274,12 +243,9 @@ static void main_init(void)
 	ui_prefs.recent_projects_queue		= g_queue_new();
 	main_status.opening_session_files	= FALSE;
 
+	ui_init_stock_items();
+
 	main_widgets.window = create_window1();
-	/* add recent files to the File menu */
-	ui_widgets.recent_files_menuitem = ui_lookup_widget(main_widgets.window, "recent_files1");
-	ui_widgets.recent_files_menu_menubar = gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(ui_widgets.recent_files_menuitem),
-							ui_widgets.recent_files_menu_menubar);
 
 	/* add recent projects to the Project menu */
 	ui_widgets.recent_projects_menuitem = ui_lookup_widget(main_widgets.window, "recent_projects1");
@@ -429,9 +395,9 @@ static void setup_paths(void)
  *  This is a convenience function to set up gettext for internationalisation support
  *  in external plugins. You should call this function early in @ref plugin_init().
  *  If the macro HAVE_LOCALE_H is defined, @a setlocale(LC_ALL, "") is called.
- *  The codeset for the mesaage translations is set to UTF-8.
+ *  The codeset for the message translations is set to UTF-8.
  *
- *  Note that this function only setup the gettext textdomain for you. You still have
+ *  Note that this function only setups the gettext textdomain for you. You still have
  *  to adjust the build system of your plugin to get internationalisation support
  *  working properly.
  *
@@ -990,7 +956,8 @@ gint main(gint argc, gchar **argv)
 #ifdef HAVE_PLUGINS
 	plugins_init();
 #endif
-	load_settings();
+	treeviews_init();
+	load_settings();	/* load keyfile */
 
 	msgwin_init();
 	build_init();
@@ -1003,7 +970,6 @@ gint main(gint argc, gchar **argv)
 	templates_init();
 	navqueue_init();
 	document_init_doclist();
-	treeviews_init();
 	symbols_init();
 	filetypes_read_extensions();
 	editor_snippets_init();
@@ -1018,22 +984,12 @@ gint main(gint argc, gchar **argv)
 	}
 
 	/* registering some basic events */
-	{
-		GtkWidget *entry;
+	g_signal_connect(main_widgets.window, "delete-event", G_CALLBACK(on_exit_clicked), NULL);
+	g_signal_connect(main_widgets.window, "window-state-event", G_CALLBACK(on_window_state_event), NULL);
 
-		g_signal_connect(main_widgets.window, "delete-event", G_CALLBACK(on_exit_clicked), NULL);
-		g_signal_connect(main_widgets.window, "window-state-event", G_CALLBACK(on_window_state_event), NULL);
-		g_signal_connect(main_widgets.toolbar, "button-press-event", G_CALLBACK(toolbar_popup_menu), NULL);
+	g_signal_connect(ui_lookup_widget(main_widgets.window, "textview_scribble"),
+							"motion-notify-event", G_CALLBACK(on_motion_event), NULL);
 
-		g_signal_connect(ui_lookup_widget(main_widgets.window, "textview_scribble"),
-								"motion-notify-event", G_CALLBACK(on_motion_event), NULL);
-		entry = toolbar_get_widget_child_by_name("SearchEntry");
-		if (entry != NULL)
-			g_signal_connect(entry, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
-		entry = toolbar_get_widget_child_by_name("GotoEntry");
-		if (entry != NULL)
-			g_signal_connect(entry, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
-	}
 #ifdef HAVE_VTE
 	vte_init();
 #endif
@@ -1153,8 +1109,8 @@ void main_quit()
 	editor_snippets_free();
 	encodings_finalize();
 	toolbar_finalize();
+	treeviews_finalize();
 	configuration_finalize();
-	/* must be last */
 	log_finalize();
 
 	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));
@@ -1190,11 +1146,6 @@ void main_quit()
 	if (ui_widgets.open_filesel && GTK_IS_WIDGET(ui_widgets.open_filesel)) gtk_widget_destroy(ui_widgets.open_filesel);
 	if (ui_widgets.open_fontsel && GTK_IS_WIDGET(ui_widgets.open_fontsel)) gtk_widget_destroy(ui_widgets.open_fontsel);
 	if (ui_widgets.open_colorsel && GTK_IS_WIDGET(ui_widgets.open_colorsel)) gtk_widget_destroy(ui_widgets.open_colorsel);
-	if (tv.default_tag_tree && GTK_IS_WIDGET(tv.default_tag_tree))
-	{
-		g_object_unref(tv.default_tag_tree);
-		gtk_widget_destroy(tv.default_tag_tree);
-	}
 #ifdef HAVE_VTE
 	if (vte_info.have_vte) vte_close();
 	g_free(vte_info.lib_vte);
@@ -1207,10 +1158,6 @@ void main_quit()
 					gtk_widget_destroy(main_widgets.editor_menu);
 	if (ui_widgets.toolbar_menu && GTK_IS_WIDGET(ui_widgets.toolbar_menu))
 					gtk_widget_destroy(ui_widgets.toolbar_menu);
-	if (tv.popup_taglist && GTK_IS_WIDGET(tv.popup_taglist))
-					gtk_widget_destroy(tv.popup_taglist);
-	if (tv.popup_openfiles && GTK_IS_WIDGET(tv.popup_openfiles))
-					gtk_widget_destroy(tv.popup_openfiles);
 	if (msgwindow.popup_status_menu && GTK_IS_WIDGET(msgwindow.popup_status_menu))
 					gtk_widget_destroy(msgwindow.popup_status_menu);
 	if (msgwindow.popup_msg_menu && GTK_IS_WIDGET(msgwindow.popup_msg_menu))
@@ -1275,6 +1222,8 @@ void main_reload_configuration(void)
 		/* filetypes_load_config() will skip not loaded filetypes */
 		filetypes_load_config(i, TRUE);
 	}
+	documents_foreach(i)
+		document_reload_config(documents[i]);
 
 	/* C tag names to ignore */
 	symbols_reload_config_files();

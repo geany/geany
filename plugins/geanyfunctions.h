@@ -3,6 +3,8 @@
  * @file geanyfunctions.h @ref geany_functions wrappers.
  * This allows the use of normal API function names in plugins.
  * You need to declare the @ref geany_functions symbol yourself.
+ *
+ * Note: This must be included after all other API headers.
  */
 
 #ifndef GEANY_FUNCTIONS_H
@@ -146,6 +148,8 @@
 	geany_functions->p_sci->get_contents_range
 #define sci_get_selection_contents \
 	geany_functions->p_sci->get_selection_contents
+#define sci_set_font \
+	geany_functions->p_sci->set_font
 #define templates_get_template_fileheader \
 	geany_functions->p_templates->get_template_fileheader
 #define utils_str_equal \

@@ -75,6 +75,382 @@ Configurable Build Menu Changes
  * src/project.h, src/project.c:
    Changed to load/store the new configuration info.
 
+2009-07-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/document.c:
+   Enable file monitoring for files which are written to disk by Geany
+   for the first time.
+ * src/filetypes.c:
+   Fix broken special case handling when detecting filetypes from a
+   shebang or other special file headers.
+
+
+2009-07-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/search.c:
+   Make Mark All keybinding clear search highlighting when there's no
+   current word.
+ * src/search.c:
+   Fix wrong match length when using Mark with regex.
+ * src/geanyobject.c, src/geanyobject.h, src/treeviews.c,
+   src/keyfile.c, src/main.c:
+   Add 'Show Paths' documents list popup item.
+   Add "load_settings" core-only signal emitted just after loading
+   main keyfile settings; useful to delay building UI elements until
+   settings have been read.
+ * src/treeviews.c:
+   Fix GTK warning when right-clicking on default tag tree.
+ * src/treeviews.c, src/treeviews.h, src/keyfile.c, src/main.c:
+   Add treeviews_finalize().
+   Remove tv.popup_openfiles field.
+
+
+2009-07-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/highlighting.c:
+   Fix building on GTK 2.8 (patch by Eugene Arshinov, thanks).
+
+
+2009-07-14  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/utils.c:
+   Quote the uri before passing it to the browser when opening a
+   website (closes #2818635).
+ * src/win32:
+   Fix broken 'builtin' Run command for HTML files on Windows.
+
+
+2009-07-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/editor.c:
+   Properly fix wrong brace highlighting of non-brace character.
+ * src/editor.c:
+   Allow autocompletion in Perl double-quoted strings.
+   Don't autocomplete in Perl single-quoted strings (closes #2821061).
+   Don't autocomplete in Perl q() strings.
+ * data/filetypes.common:
+   Make Mark highlighting brighter.
+ * src/interface.c, doc/geany.txt, doc/geany.html, geany.glade:
+   Use hyphen for auto-feature terms.
+ * src/plugindata.h, src/geany.h, src/filetypes.c, src/filetypes.h,
+   src/document.h, src/main.c:
+   Add documents_foreach() API macro that skips invalid docs.
+   Make filetypes[], documents[] part of the API again.
+   Add GEANY() macro for sharing geany symbols between API and core.
+ * src/plugindata.h, src/plugins.c, doc/plugins.dox,
+   plugins/saveactions.c, plugins/export.c, plugins/geanyfunctions.h,
+   plugins/demoplugin.c, plugins/filebrowser.c, plugins/splitwindow.c,
+   plugins/htmlchars.c, plugins/geanyplugin.h, plugins/Makefile.am,
+   plugins/classbuilder.c, wscript:
+   Add geanyplugin.h single include for plugin API; update all core
+   plugins to use it.
+   Add sci_set_font() to API.
+   Update plugin howto.
+ * src/filetypes.c, src/filetypes.h:
+   Remove filetypes_foreach_named().
+
+
+2009-07-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/highlighting.c, src/about.c, src/filetypes.c, src/document.c,
+   src/document.h, src/main.c, THANKS:
+   Apply patch from Eugene Arshinov to reload color schemes via menu
+   (thanks).
+ * src/filetypes.c:
+   Reload filetypes.common after saving it.
+ * src/editor.c:
+   Improve wrong brace highlighting of non-brace character.
+
+
+2009-07-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/editor.c:
+   Delay highlighting matching braces by 100ms, which speeds up
+   scrolling with the arrow keys.
+ * src/keybindings.c, src/keybindings.h, src/search.c, src/search.h:
+   Add 'Mark All' keybinding.
+ * tagmanager/diff.c:
+   Show relative paths in diff filename tags.
+
+
+2009-07-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/highlighting.c:
+   Fix setting keyword list 'classes' for Haxe
+   (pointed out by Andreas Mokros, thanks).
+
+
+2009-07-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, src/keyfile.c, src/editor.c, src/editor.h,
+   doc/geany.txt, doc/geany.html, geany.glade:
+   Add 'Drop rest of word on completion' pref.
+ * src/editor.c, doc/geany.txt, doc/geany.html:
+   If autocompletion is already visible when forcing completion, show
+   document word completion instead of tag completion.
+   Docs: Minor edits of related prefs items.
+ * src/printing.c, src/dialogs.c, src/dialogs.h, src/plugindata.h:
+   Add warning when printing and editor font is not monospaced.
+   Fix using GtkMessageType instead of gint param for
+   dialogs_show_msgbox*().
+   Add missing G_GNUC_PRINTF macro check to API dialog funcs.
+ * src/editor.c:
+   Support 'tab indents, space aligns' style for auto-indentation
+   (closes #2789109).
+
+
+2009-07-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/document.c, src/documentprivate.h:
+   Rework the GIO based file monitoring code. Now it is used only
+   to indicate a possible change of the file, the real check if the
+   file has been changed is performed by stat().
+ * data/filetypes.common, doc/geany.txt, src/highlighting.c:
+   Add style 'line_height' to increase the line height.
+   Add style 'marker_mark' and change style 'marker_search' to
+   define the style used for marked search results.
+ * doc/geany.txt, doc/geany.html:
+   Add the new 'Autocomplete all words in document' pref to the docs.
+
+
+2009-07-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, src/keyfile.c, src/editor.c, src/editor.h,
+   doc/geany.txt, doc/geany.html, geany.glade, TODO:
+   Add 'Autocomplete all words in document' pref.
+   Use 'autocompletion' in dialog and docs, not 'auto completion'.
+ * src/editor.c:
+   Fix limiting number of word completion entries too much.
+ * src/editor.c, TODO, icons/16x16/classviewer-var.xpm,
+   icons/16x16/classviewer-method.xpm, icons/16x16/Makefile.am:
+   Show autocompletion icons for tag symbols - for now only tags with
+   an arglist have the 'function/method' icon, all others have the
+   'variable' icon.
+   Note: XPMs were created from the PNGs with the ImageMagick 'convert'
+   program.
+ * src/highlighting.c:
+   Highlight D WYSIWYG backtick `strings` and r"strings" (closes
+   #1895745).
+
+
+2009-07-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/highlighting.c, src/utils.h, plugins/splitwindow.c:
+   Fix removing underscores in translated string using no_underscore()
+   macro.
+   Set a tooltip for the Split Window plugin's Show Current tool button.
+   Add utils_strdupa() macro.
+ * src/interface.c, geany.glade:
+   Use stock Select All icon now we have >= GTK 2.8.
+ * src/treeviews.c:
+   Fix using project name for document items that start with the
+   project base path but don't match it e.g. ".../geany-plugins"
+   instead of ".../geany" when project name is 'geany'.
+
+
+2009-07-04  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/build.c:
+   Fix warnings when the toolbar does not contain the Run button.
+ * tagmanager/lua.c:
+   Fix wrong parsing of complex expressions in the Lua parser.
+ * src/editor.c, src/geany.h, src/keybindings.c, src/plugindata.h,
+   src/utils.c:
+   Remove unnecessary enums.
+ * scintilla/*, scintilla/include/*, src/plugindata.h:
+   Update Scintilla to version 1.79.
+ * src/document.c, src/editor.c, src/sciwrappers.c, src/sciwrappers.h,
+   src/search.c:
+   Use the new Scintilla struct names prefixed with 'Sci_'.
+ * TODO, data/filetypes.common, doc/geany.html, doc/geany.txt,
+   src/highlighting.c:
+   Add second argument to the 'line_wrap_indent' styling setting to
+   control the new Scintilla indentation mode for wrapped lines.
+ * src/toolbar.c:
+   Properly close the toolbar editor on delete-events.
+   Fix warnings and possible crashes in the toolbar editor when the list
+   of displayed toolbar items is empty.
+ * data/filetypes.tcl:
+   Update Tcl keywords for Tcl 8.6 (patch by Witek Mozga, thanks).
+ * src/plugins.c:
+   Make the plugin manager dialog a bit bigger.
+
+
+2009-06-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * doc/geany.html, doc/geany.txt:
+   Fix wrong default values for the 'Show Calltip' keybinding.
+
+
+2009-06-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * data/filetypes.tcl, src/symbols.c:
+   Fix duplicate "context_action_cmd" key.
+   Use different icons for "Methods" and "Procedures" in the symbol
+   list for Tcl files.
+ * src/filetypes.c:
+   Fix a small memory leak.
+ * doc/geany.html, doc/geany.txt, src/editor.c, src/keybindings.c,
+   src/keybindings.h, src/plugindata.h:
+   Make the Scintilla keybindings 'Delete to end of line' and
+   'Go to end of display line' configurable.
+ * geany.nsi:
+   Fix a typo (closes #2813624).
+
+
+2009-06-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * tagmanager/tcl.c, src/symbol.c:
+   Improve parsing of Tcl files (parsing new Tcl8.6 style classes,
+   methods and namespaces).
+   Patch by Witek Mozga, thanks.
+
+
+2009-06-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * data/ui_toolbar.xml, doc/geany.txt, doc/geany.html, src/ui_utils.c,
+   src/toolbar.c, src/toolbar.h:
+   Remove ui_toolbar.xml Configuration Files menu item.
+   Add a real toolbar editor dialog.
+ * geany.glade, src/callbacks.c, src/callbacks.h, src/interface.c,
+   src/prefs.c:
+   Add a button in the preferences dialog and an item for the toolbar
+   popup menu to run the toolbar editor dialog.
+
+
+2009-06-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/dialogs.c:
+   Fix Gtk NULL warning with gtk_file_chooser_set_current_folder().
+   Fix using locale encoding for default Save As dialog path.
+ * src/editor.c:
+   Beep when trying to activate the '...' autocompletion item.
+   Limit (forced) document word completion to
+   autocompletion_max_entries.
+   Beep if no completions are shown when forcing autocompletion.
+
+
+2009-06-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * data/ui_toolbar.xml, src/toolbar.c:
+   Add 'Build' toolbar button to the default layout.
+
+
+2009-06-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/editor.c:
+   If forcing autocompletion and there's nothing else to show, complete
+   from words in the current document (using code from Enrico's
+   'AutoComplete Test' plugin).
+
+
+2009-06-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/plugins.c:
+   Add debug message if plugin has not set a name for its keybinding
+   group.
+ * data/filetype_extensions.conf:
+   Add *.m4 for shell scripts.
+
+
+2009-06-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/highlighting.c, doc/geany.txt, doc/geany.html,
+   data/filetypes.common, TODO:
+   Make filetypes.common named styles use the "default" named style for
+   all missing style fields.
+   Set named styles to usually leave the background style empty. This
+   currently allows C-like filetypes to have a common default
+   background color.
+   Allow hard-coded colors to use -1 for the default color.
+   Add some highlighting style examples to the manual.
+
+
+2009-06-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/templates.c:
+   Create initial template files with proper platform-specific line
+   ending characters.
+
+
+2009-06-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * data/ui_toolbar.xml, doc/geany.txt, src/build.c,
+   src/geanymenubuttonaction.c, src/geanymenubuttonaction.h, src/main.c,
+   src/plugins.c, src/templates.c, src/toolbar.c, src/toolbar.h,
+   src/ui_utils.c, src/ui_utils.h:
+   Instantly reload (i.e. rebuild) the toolbar when ui_toolbar.xml is
+   saved within Geany.
+   Refactor some related code.
+ * tagmanager/conf.c:
+   Strip trailing spaces from "Key" tags.
+ * geany.nsi:
+   Quote the full filename to the Geany executable when creating the
+   "Open with Geany" context menu item.
+ * plugins/splitwindow.c:
+   Avoid using deprecated GTK API.
+ * src/log.c, src/main.c:
+   Properly clean up the logging mechanism.
+ * src/build.c:
+   Fix LaTeX view commands on Windows (part of #2807688).
+ * src/prefs.c:
+   Add a popup menu for the keybinding list in the preferences dialog
+   to easily expand and collapse all groups.
+   Refactor the keybindings code for the preferences dialog, prefix all
+   related functions.
+ * src/main.c, src/ui_utils.c, src/ui_utils.h:
+   Init stock items before creating the toolbar (closes #2809324).
+ * wscript:
+   Generate the geany.pc file also on Windows.
+ * src/ui_utils.c:
+   Invert the logic to determine which Save All we want to use:
+   Use the Tango like icon only for the Tango theme and the Gnome / GTK
+   like icon for any other themes.
+
+
+2009-06-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/highlighting.c, README.Packagers, HACKING:
+   Remove gsd_* default styles, use named styles instead.
+   Note: this relies on filetypes.common being installed.
+   Add load_style_entries(), which makes style initialization
+   simpler, used in styleset_c_like_init().
+
+
+2009-06-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/win32.c:
+   Prevent possible crash on Windows when not setting an initial
+   directory for native File Open/Save dialogs.
+ * data/filetypes.xml, src/highlighting.c:
+   Add style 'jscript_regex' for filetype HTML
+   (patch by Chris Macksey, thanks).
+
+
+2009-06-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/filetypes.h, src/document.c, src/document.h, src/ui_utils.c:
+   Make GeanyDocument::file_type always be non-NULL, even for a new
+   document with no filetype set.
+ * src/editor.c:
+   Only autocomplete scope for scopes matching the current filetype's
+   language.
+ * data/filetypes.java, data/filetypes.cpp, data/filetypes.vala,
+   data/filetypes.haxe, data/filetypes.common, data/filetypes.glsl,
+   data/filetypes.actionscript, data/filetypes.cs,
+   data/filetypes.ferite, data/filetypes.c, data/filetypes.d,
+   data/filetypes.javascript, HACKING:
+   Make C++, D lexer filetypes use named styles (apart from uuid,
+   verbatim, regex styles).
+
+
+2009-06-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/dialogs.c:
+   Don't explicitly change the current directory of the Save As dialog
+   so that it uses the last used directory.
+
+
 2009-06-14  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/encodings.c, src/encodings.h, src/plugindata.h:

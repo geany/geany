@@ -9,19 +9,20 @@ Note: features included in brackets have lower priority.
 	Next version or later:
 	o documentation: list and explain filetype modes
 	o common default highlighting styles configurable for all
-	  programming languages (filetypes.common named styles now done)
+	  programming languages (done for C-like filetypes using
+	  filetypes.common named styles)
 	o configurable filetype and project make commands (e.g. using
-	  bud for D)
+	  bud for D) - see the build-system SVN branch
+	o (custom filetypes)
 	o (support for adding plugin filetypes - SCI_LOADLEXERLIBRARY?)
 	o (selectable menu of arguments to use for Make, from Make Custom)
 	o (DBUS)
-	o (indent wrapped lines  - Scintilla issue)
-	o (macro support)
-	o (better search & replace regex support - use
+	o (sci macro support)
+	o (better search & replace regex support e.g. multiline - use
 	   SCI_GETCHARACTERPOINTER and GNU regex?)
 	o (parsing tags from a memory buffer instead of a file on disk)
 	o (tango-like icons for the symbol list)
-	o (show autocompletion symbol icons - see SCI_REGISTERIMAGE)
+	o (per-workspace instances with socket support?)
 
 
 	1.0:

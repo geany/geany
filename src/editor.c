@@ -452,6 +452,8 @@ static void show_tags_list(GeanyEditor *editor, const GPtrArray *tags, gsize roo
 
 		for (j = 0; j < tags->len; ++j)
 		{
+			TMTag *tag = tags->pdata[j];
+
 			if (j > 0)
 				g_string_append_c(words, '\n');
 
@@ -460,7 +462,13 @@ static void show_tags_list(GeanyEditor *editor, const GPtrArray *tags, gsize roo
 				g_string_append(words, "...");
 				break;
 			}
-			g_string_append(words, ((TMTag *) tags->pdata[j])->name);
+			g_string_append(words, tag->name);
+
+			/* for now, tag types don't all follow C, so just look at arglist */
+			if (NZV(tag->atts.entry.arglist))
+				g_string_append(words, "?2");
+			else
+				g_string_append(words, "?1");
 		}
 		show_autocomplete(sci, rootlen, words->str);
 		g_string_free(words, TRUE);
@@ -490,9 +498,9 @@ static void autocomplete_scope(GeanyEditor *editor)
 	gchar *name;
 	const GPtrArray *tags = NULL;
 	const TMTag *tag;
-	gint ft_id = FILETYPE_ID(editor->document->file_type);
+	GeanyFiletype *ft = editor->document->file_type;
 
-	if (ft_id == GEANY_FILETYPES_C || ft_id == GEANY_FILETYPES_CPP)
+	if (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP)
 	{
 		if (match_last_chars(sci, pos, "->") || match_last_chars(sci, pos, "::"))
 			pos--;
@@ -509,7 +517,7 @@ static void autocomplete_scope(GeanyEditor *editor)
 	if (!name)
 		return;
 
-	tags = tm_workspace_find(name, tm_tag_max_t, NULL, FALSE, -1);
+	tags = tm_workspace_find(name, tm_tag_max_t, NULL, FALSE, ft->lang);
 	g_free(name);
 	if (!tags || tags->len == 0)
 		return;
@@ -721,6 +729,7 @@ static gboolean reshow_calltip(gpointer data)
 	if (nt->nmhdr.code == SCN_AUTOCSELECTION)
 	{
 		gint pos = SSM(calltip.sci, SCI_GETCURRENTPOS, 0, 0);
+
 		sci_set_selection_start(calltip.sci, nt->lParam);
 		sci_set_selection_end(calltip.sci, pos);
 		sci_replace_sel(calltip.sci, "");	/* clear root of word */
@@ -825,8 +834,15 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			}
 			break;
 		}
-		case SCN_AUTOCCANCELLED:
 		case SCN_AUTOCSELECTION:
+			if (g_str_equal(nt->text, "..."))
+			{
+				sci_cancel(sci);
+				utils_beep();
+				break;
+			}
+			/* fall through */
+		case SCN_AUTOCCANCELLED:
 		{
 			/* now that autocomplete is finishing or was cancelled, reshow calltips
 			 * if they were showing */
@@ -877,7 +893,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			break;
 		}
 	}
-	/* we always return FALSE here to let plugins handle the event to */
+	/* we always return FALSE here to let plugins handle the event too */
 	return FALSE;
 }
 
@@ -1120,17 +1136,28 @@ static gint get_indent_size_after_line(GeanyEditor *editor, gint line)
 static void insert_indent_after_line(GeanyEditor *editor, gint line)
 {
 	ScintillaObject *sci = editor->sci;
+	gint line_indent = sci_get_line_indentation(sci, line);
 	gint size = get_indent_size_after_line(editor, line);
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
+	gchar *text;
 
-	if (size > 0)
+	if (size == 0)
+		return;
+
+	if (iprefs->type == GEANY_INDENT_TYPE_TABS && size == line_indent)
 	{
-		gchar *text;
+		/* support tab indents, space aligns style - copy last line 'indent' exactly */
+		gint start = sci_get_position_from_line(sci, line);
+		gint end = sci_get_line_indent_position(sci, line);
 
-		text = get_whitespace(iprefs, size);
-		sci_add_text(sci, text);
-		g_free(text);
+		text = sci_get_contents_range(sci, start, end);
 	}
+	else
+	{
+		text = get_whitespace(iprefs, size);
+	}
+	sci_add_text(sci, text);
+	g_free(text);
 }
 
 
@@ -1629,10 +1656,12 @@ gchar *editor_get_calltip_text(GeanyEditor *editor, const TMTag *tag)
 }
 
 
+/* HTML entities auto completion from html_entities.tags text file */
 static gboolean
 autocomplete_html(ScintillaObject *sci, const gchar *root, gsize rootlen)
-{	/* HTML entities auto completion */
+{
 	guint i, j = 0;
+	gboolean found = FALSE;
 	GString *words;
 	const gchar **entities = symbols_get_html_entities();
 
@@ -1652,12 +1681,14 @@ autocomplete_html(ScintillaObject *sci, const gchar *root, gsize rootlen)
 			if (j++ > 0)
 				g_string_append_c(words, '\n');
 			g_string_append(words, entities[i]);
+			found = TRUE;
 		}
 	}
-	if (words->len > 0)
+	if (found)
 		show_autocomplete(sci, rootlen, words->str);
+
 	g_string_free(words, TRUE);
-	return TRUE;
+	return found;
 }
 
 
@@ -1669,14 +1700,17 @@ autocomplete_tags(GeanyEditor *editor, const gchar *root, gsize rootlen)
 	const GPtrArray *tags;
 	GeanyDocument *doc;
 
-	g_return_val_if_fail(editor != NULL && editor->document->file_type != NULL, FALSE);
+	g_return_val_if_fail(editor, FALSE);
 
 	doc = editor->document;
 
 	tags = tm_workspace_find(root, tm_tag_max_t, attrs, TRUE, doc->file_type->lang);
 	if (tags)
+	{
 		show_tags_list(editor, tags, rootlen);
-	return TRUE;
+		return tags->len > 0;
+	}
+	return FALSE;
 }
 
 
@@ -1701,6 +1735,83 @@ static gboolean autocomplete_check_for_html(gint ft_id, gint style)
 }
 
 
+/* Algorithm based on based on Scite's StartAutoCompleteWord() */
+static gboolean autocomplete_doc_word(GeanyEditor *editor, gchar *root, gsize rootlen)
+{
+	ScintillaObject *sci = editor->sci;
+	gchar *word;
+	gint len, current, word_end;
+	gint pos_find, flags;
+	guint word_length;
+	gsize nmatches = 0;
+	gboolean ret = FALSE;
+	GString *words;
+	struct Sci_TextToFind ttf;
+
+	len = sci_get_length(sci);
+	current = sci_get_current_position(sci) - rootlen;
+
+	ttf.lpstrText = root;
+	ttf.chrg.cpMin = 0;
+	ttf.chrg.cpMax = len;
+	ttf.chrgText.cpMin = 0;
+	ttf.chrgText.cpMax = 0;
+	flags = SCFIND_WORDSTART | SCFIND_MATCHCASE;
+
+	words = g_string_sized_new(256);
+	g_string_append_c(words, ' ');
+
+	/* search the whole document for the word root and collect results */
+	pos_find = scintilla_send_message(sci, SCI_FINDTEXT, flags, (uptr_t) &ttf);
+	while (pos_find >= 0 && pos_find < len)
+	{
+		word_end = pos_find + rootlen;
+		if (pos_find != current)
+		{
+			while (word_end < len && strchr(GEANY_WORDCHARS, sci_get_char_at(sci, word_end)) != NULL)
+				word_end++;
+
+			word_length = word_end - pos_find;
+			if (word_length > rootlen)
+			{
+				word = g_malloc0(word_length + 3);
+				sci_get_text_range(sci, pos_find, word_end, word + 1);
+				word[0] = ' ';
+				word[word_length + 1] = ' ';
+				/* search the words string whether we already have the word in, otherwise add it */
+				if (strstr(words->str, word) == NULL)
+				{
+					g_string_append(words, word + 1);
+					nmatches++;
+				}
+				g_free(word);
+
+				if (nmatches == editor_prefs.autocompletion_max_entries)
+				{
+					g_string_append(words, "... ");
+					break;
+				}
+			}
+		}
+		ttf.chrg.cpMin = word_end;
+		pos_find = scintilla_send_message(sci, SCI_FINDTEXT, flags, (uptr_t) &ttf);
+	}
+
+	if (words->len > 1)
+	{
+		g_strdelimit(words->str, " ", '\n');
+		words->str[words->len - 1] = '\0'; /* remove the trailing '\n' */
+		show_autocomplete(sci, rootlen, words->str + 1);
+		ret = TRUE;
+	}
+	else
+		scintilla_send_message(sci, SCI_AUTOCCANCEL, 0, 0);
+
+	g_string_free(words, TRUE);
+	return ret;
+}
+
+
 gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean force)
 {
 	gint line, line_start, line_len, line_pos, current, rootlen, startword, lexer, style;
@@ -1714,9 +1825,6 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 		return FALSE;
 
 	g_return_val_if_fail(editor != NULL, FALSE);
-
-	if (editor->document->file_type == NULL)
-		return FALSE;
 
 	/* If we are at the beginning of the document, we skip autocompletion as we can't determine the
 	 * necessary styling information */
@@ -1757,15 +1865,30 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 	root = linebuf + startword;
 	rootlen = current - startword;
 
-	if (autocomplete_check_for_html(ft->id, style))
-		ret = autocomplete_html(sci, root, rootlen);
-	else
+	if (rootlen > 0)
 	{
-		/* force is set when called by keyboard shortcut, otherwise start at the
-		 * editor_prefs.symbolcompletion_min_chars'th char */
-		if (force || rootlen >= editor_prefs.symbolcompletion_min_chars)
-			ret = autocomplete_tags(editor, root, rootlen);
+		if (autocomplete_check_for_html(ft->id, style))
+		{
+			ret = autocomplete_html(sci, root, rootlen);
+		}
+		else
+		{
+			/* force is set when called by keyboard shortcut, otherwise start at the
+			 * editor_prefs.symbolcompletion_min_chars'th char */
+			if (force || rootlen >= editor_prefs.symbolcompletion_min_chars)
+			{
+				/* complete tags, except if forcing when completion is already visible */
+				if (!(force && SSM(sci, SCI_AUTOCACTIVE, 0, 0)))
+					ret = autocomplete_tags(editor, root, rootlen);
+
+				/* If forcing and there's nothing else to show, complete from words in document */
+				if (!ret && (force || editor_prefs.autocomplete_doc_words))
+					ret = autocomplete_doc_word(editor, root, rootlen);
+			}
+		}
 	}
+	if (!ret && force)
+		utils_beep();
 
 	g_free(linebuf);
 	return ret;
@@ -1778,7 +1901,7 @@ static void editor_auto_latex(GeanyEditor *editor, gint pos)
 
 	g_return_if_fail(editor != NULL);
 
-	if (editor->document->file_type == NULL)
+	if (editor->document->file_type->id != GEANY_FILETYPES_LATEX)
 		return;
 
 	sci = editor->sci;
@@ -2909,20 +3032,37 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 }
 
 
-static void editor_highlight_braces(GeanyEditor *editor, gint cur_pos)
-{
-	gint brace_pos = cur_pos - 1;
-	gint end_pos;
+static gboolean brace_timeout_active = FALSE;
 
-	if (! utils_isbrace(sci_get_char_at(editor->sci, brace_pos), editor_prefs.brace_match_ltgt))
+static gboolean delay_match_brace(G_GNUC_UNUSED gpointer user_data)
+{
+	GeanyDocument *doc = document_get_current();
+	GeanyEditor *editor;
+	gint brace_pos = GPOINTER_TO_INT(user_data);
+	gint end_pos, cur_pos;
+
+	brace_timeout_active = FALSE;
+	if (!doc)
+		return FALSE;
+
+	editor = doc->editor;
+	cur_pos = sci_get_current_position(editor->sci) - 1;
+
+	if (cur_pos != brace_pos)
 	{
-		brace_pos++;
-		if (! utils_isbrace(sci_get_char_at(editor->sci, brace_pos), editor_prefs.brace_match_ltgt))
+		cur_pos++;
+		if (cur_pos != brace_pos)
 		{
-			SSM(editor->sci, SCI_SETHIGHLIGHTGUIDE, 0, 0);
-			SSM(editor->sci, SCI_BRACEBADLIGHT, (uptr_t)-1, 0);
-			return;
+			/* we have moved past the original brace_pos, but after the timeout
+			 * we may now be on a new brace, so check again */
+			editor_highlight_braces(editor, cur_pos);
+			return FALSE;
 		}
+	}
+	if (!utils_isbrace(sci_get_char_at(editor->sci, brace_pos), editor_prefs.brace_match_ltgt))
+	{
+		editor_highlight_braces(editor, cur_pos);
+		return FALSE;
 	}
 	end_pos = sci_find_matching_brace(editor->sci, brace_pos);
 
@@ -2937,6 +3077,31 @@ static void editor_highlight_braces(GeanyEditor *editor, gint cur_pos)
 	{
 		SSM(editor->sci, SCI_SETHIGHLIGHTGUIDE, 0, 0);
 		SSM(editor->sci, SCI_BRACEBADLIGHT, brace_pos, 0);
+	}
+	return FALSE;
+}
+
+
+static void editor_highlight_braces(GeanyEditor *editor, gint cur_pos)
+{
+	gint brace_pos = cur_pos - 1;
+
+	SSM(editor->sci, SCI_SETHIGHLIGHTGUIDE, 0, 0);
+	SSM(editor->sci, SCI_BRACEBADLIGHT, (uptr_t)-1, 0);
+
+	if (! utils_isbrace(sci_get_char_at(editor->sci, brace_pos), editor_prefs.brace_match_ltgt))
+	{
+		brace_pos++;
+		if (! utils_isbrace(sci_get_char_at(editor->sci, brace_pos), editor_prefs.brace_match_ltgt))
+		{
+			return;
+		}
+	}
+	if (!brace_timeout_active)
+	{
+		brace_timeout_active = TRUE;
+		/* delaying matching makes scrolling faster e.g. holding down arrow keys */
+		g_timeout_add(100, delay_match_brace, GINT_TO_POINTER(brace_pos));
 	}
 }
 
@@ -3063,9 +3228,11 @@ static gboolean is_string_style(gint lexer, gint style)
 				style == SCE_PAS_STRINGEOL);
 
 		case SCLEX_D:
-			return (style == SCE_D_CHARACTER ||
-				style == SCE_D_STRING ||
-				style == SCE_D_STRINGEOL);
+			return (style == SCE_D_STRING ||
+				style == SCE_D_STRINGEOL ||
+				style == SCE_D_CHARACTER ||
+				style == SCE_D_STRINGB ||
+				style == SCE_D_STRINGR);
 
 		case SCLEX_PYTHON:
 			return (style == SCE_P_STRING ||
@@ -3081,12 +3248,18 @@ static gboolean is_string_style(gint lexer, gint style)
 				style == SCE_F_STRINGEOL);
 
 		case SCLEX_PERL:
-			return (style == SCE_PL_STRING ||
+			return (/*style == SCE_PL_STRING ||*/ /* may want variable autocompletion "$(foo)" */
+				style == SCE_PL_CHARACTER ||
 				style == SCE_PL_HERE_DELIM ||
 				style == SCE_PL_HERE_Q ||
 				style == SCE_PL_HERE_QQ ||
 				style == SCE_PL_HERE_QX ||
 				style == SCE_PL_POD ||
+				style == SCE_PL_STRING_Q ||
+				style == SCE_PL_STRING_QQ ||
+				style == SCE_PL_STRING_QX ||
+				style == SCE_PL_STRING_QR ||
+				style == SCE_PL_STRING_QW ||
 				style == SCE_PL_POD_VERB);
 
 		case SCLEX_R:
@@ -3541,7 +3714,7 @@ static gint find_paragraph_stop(GeanyEditor *editor, gint line, gint direction)
 		return -1;
 	}
 
-	if (direction == UP)
+	if (direction == GTK_DIR_UP)
 		step = -1;
 	else
 		step = 1;
@@ -3580,7 +3753,7 @@ void editor_select_paragraph(GeanyEditor *editor)
 	line_start = SSM(editor->sci, SCI_LINEFROMPOSITION,
 						SSM(editor->sci, SCI_GETCURRENTPOS, 0, 0), 0);
 
-	line_found = find_paragraph_stop(editor, line_start, UP);
+	line_found = find_paragraph_stop(editor, line_start, GTK_DIR_UP);
 	if (line_found == -1)
 		return;
 
@@ -3591,7 +3764,7 @@ void editor_select_paragraph(GeanyEditor *editor)
 
 	pos_start = SSM(editor->sci, SCI_POSITIONFROMLINE, line_found, 0);
 
-	line_found = find_paragraph_stop(editor, line_start, DOWN);
+	line_found = find_paragraph_stop(editor, line_start, GTK_DIR_DOWN);
 	pos_end = SSM(editor->sci, SCI_POSITIONFROMLINE, line_found, 0);
 
 	sci_set_selection(editor->sci, pos_start, pos_end);
@@ -3956,12 +4129,7 @@ const gchar *editor_get_eol_char_name(GeanyEditor *editor)
 	if (editor != NULL)
 		mode = sci_get_eol_mode(editor->sci);
 
-	switch (mode)
-	{
-		case SC_EOL_CRLF: return _("Win (CRLF)"); break;
-		case SC_EOL_CR: return _("Mac (CR)"); break;
-		default: return _("Unix (LF)"); break;
-	}
+	return utils_get_eol_name(mode);
 }
 
 
@@ -4038,7 +4206,7 @@ void editor_replace_tabs(GeanyEditor *editor)
 	gint search_pos, pos_in_line, current_tab_true_length;
 	gint tab_len;
 	gchar *tab_str;
-	struct TextToFind ttf;
+	struct Sci_TextToFind ttf;
 
 	g_return_if_fail(editor != NULL);
 
@@ -4076,7 +4244,7 @@ void editor_replace_spaces(GeanyEditor *editor)
 	gint search_pos;
 	static gdouble tab_len_f = -1.0; /* keep the last used value */
 	gint tab_len;
-	struct TextToFind ttf;
+	struct Sci_TextToFind ttf;
 
 	g_return_if_fail(editor != NULL);
 
@@ -4361,12 +4529,14 @@ static void setup_sci_keys(ScintillaObject *sci)
 	sci_clear_cmdkey(sci, 'T' | (SCMOD_CTRL << 16) | (SCMOD_SHIFT << 16)); /* line copy */
 	sci_clear_cmdkey(sci, 'L' | (SCMOD_CTRL << 16)); /* line cut */
 	sci_clear_cmdkey(sci, 'L' | (SCMOD_CTRL << 16) | (SCMOD_SHIFT << 16)); /* line delete */
+	sci_clear_cmdkey(sci, SCK_DELETE | (SCMOD_CTRL << 16) | (SCMOD_SHIFT << 16)); /* line to end delete */
 	sci_clear_cmdkey(sci, '/' | (SCMOD_CTRL << 16)); /* Previous word part */
 	sci_clear_cmdkey(sci, '\\' | (SCMOD_CTRL << 16)); /* Next word part */
 	sci_clear_cmdkey(sci, SCK_UP | (SCMOD_CTRL << 16)); /* scroll line up */
 	sci_clear_cmdkey(sci, SCK_DOWN | (SCMOD_CTRL << 16)); /* scroll line down */
 	sci_clear_cmdkey(sci, SCK_HOME);	/* line start */
 	sci_clear_cmdkey(sci, SCK_END);	/* line end */
+	sci_clear_cmdkey(sci, SCK_END | (SCMOD_ALT << 16));	/* visual line end */
 
 	if (editor_prefs.use_gtk_word_boundaries)
 	{
@@ -4385,6 +4555,9 @@ static void setup_sci_keys(ScintillaObject *sci)
 	sci_clear_cmdkey(sci, SCK_BACK | (SCMOD_ALT << 16)); /* clear Alt-Backspace (Undo) */
 }
 
+
+#include "icons/16x16/classviewer-var.xpm"
+#include "icons/16x16/classviewer-method.xpm"
 
 /* Create new editor widget (scintilla).
  * @note The @c "sci-notify" signal is connected separately. */
@@ -4409,8 +4582,11 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 	sci_set_caret_policy_x(sci, CARET_JUMPS | CARET_EVEN, 0);
 	/*sci_set_caret_policy_y(sci, CARET_JUMPS | CARET_EVEN, 0);*/
 	SSM(sci, SCI_AUTOCSETSEPARATOR, '\n', 0);
-	SSM(sci, SCI_AUTOCSETDROPRESTOFWORD, TRUE, 0);
 	SSM(sci, SCI_SETSCROLLWIDTHTRACKING, 1, 0);
+
+	/* tag autocompletion images */
+	SSM(sci, SCI_REGISTERIMAGE, 1, (sptr_t)classviewer_var);
+	SSM(sci, SCI_REGISTERIMAGE, 2, (sptr_t)classviewer_method);
 
 	/* only connect signals if this is for the document notebook, not split window */
 	if (editor->sci == NULL)
@@ -4592,6 +4768,7 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 	sci_set_tab_indents(sci, editor_prefs.use_tab_to_indent);
 
 	sci_set_autoc_max_height(sci, editor_prefs.symbolcompletion_max_height);
+	SSM(sci, SCI_AUTOCSETDROPRESTOFWORD, editor_prefs.completion_drops_rest_of_word, 0);
 
 	editor_set_indentation_guides(editor);
 
@@ -4604,10 +4781,6 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 
 	/* (dis)allow scrolling past end of document */
 	sci_set_scroll_stop_at_last_line(sci, editor_prefs.scroll_stop_at_last_line);
-
-	sci_assign_cmdkey(sci, SCK_HOME,
-		editor_prefs.smart_home_key ? SCI_VCHOMEWRAP : SCI_HOMEWRAP);
-	sci_assign_cmdkey(sci, SCK_END,  SCI_LINEENDWRAP);
 }
 
 

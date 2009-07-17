@@ -121,7 +121,7 @@ void				sci_scroll_lines			(ScintillaObject * sci, gint lines);
 void				sci_scroll_columns			(ScintillaObject *sci, gint columns);
 gint				sci_search_next				(ScintillaObject * sci, gint flags, const gchar *text);
 gint				sci_search_prev				(ScintillaObject * sci, gint flags, const gchar *text);
-gint				sci_find_text				(ScintillaObject * sci, gint flags, struct TextToFind *ttf);
+gint				sci_find_text				(ScintillaObject * sci, gint flags, struct Sci_TextToFind *ttf);
 void				sci_set_font				(ScintillaObject * sci, gint style, const gchar* font, gint size);
 void				sci_goto_line				(ScintillaObject * sci, gint line, gboolean unfold);
 void				sci_marker_delete_all		(ScintillaObject * sci, gint marker);

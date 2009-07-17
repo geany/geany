@@ -103,10 +103,8 @@ typedef struct UIWidgets
 {
 	/* menu widgets */
 	GtkWidget	*toolbar_menu;
-	GtkWidget	*new_file_menu;
 	GtkWidget	*recent_files_menuitem;
 	GtkWidget	*recent_files_menu_menubar;
-	GtkWidget	*recent_files_menu_toolbar;
 	GtkWidget	*print_page_setup;
 	GtkWidget	*recent_projects_menuitem;
 	GtkWidget	*recent_projects_menu_menubar;
@@ -204,6 +202,10 @@ void ui_entry_add_clear_icon(GtkWidget *entry);
 
 
 void ui_init(void);
+
+void ui_init_toolbar_widgets(void);
+
+void ui_init_stock_items(void);
 
 void ui_add_config_file_menu_item(const gchar *real_path, const gchar *label,
 		GtkContainer *parent);

@@ -150,6 +150,31 @@ static PangoLayout *setup_pango_layout(GtkPrintContext *context, PangoFontDescri
 }
 
 
+static gboolean utils_font_desc_check_monospace(PangoContext *pc, PangoFontDescription *desc)
+{
+	PangoFontFamily **families;
+	gint n_families, i;
+	const gchar *font;
+	gboolean ret = TRUE;
+
+	font = pango_font_description_get_family(desc);
+	pango_context_list_families(pc, &families, &n_families);
+	for (i = 0; i < n_families; i++)
+	{
+		if (utils_str_equal(font, pango_font_family_get_name(families[i])))
+		{
+			if (!pango_font_family_is_monospace(families[i]))
+			{
+				ret = FALSE;
+			}
+		}
+	}
+	g_free(families);
+	return ret;
+}
+
+
+/* We don't support variable width fonts (yet) */
 static gint get_font_width(GtkPrintContext *context, PangoFontDescription *desc)
 {
 	PangoContext *pc;
@@ -157,6 +182,11 @@ static gint get_font_width(GtkPrintContext *context, PangoFontDescription *desc)
 	gint width;
 
 	pc = gtk_print_context_create_pango_context(context);
+
+	if (!utils_font_desc_check_monospace(pc, desc))
+		dialogs_show_msgbox_with_secondary(GTK_MESSAGE_WARNING,
+			_("The editor font is not a monospaced font!"),
+			_("Text will be wrongly spaced."));
 
 	metrics = pango_context_get_metrics(pc, desc, pango_context_get_language(pc));
 	/** TODO is this the best result we can get? */
@@ -166,6 +196,8 @@ static gint get_font_width(GtkPrintContext *context, PangoFontDescription *desc)
 	width = pango_font_metrics_get_approximate_digit_width(metrics) / PANGO_SCALE;
 
 	pango_font_metrics_unref(metrics);
+	g_object_unref(pc);
+
 	return width;
 }
 

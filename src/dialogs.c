@@ -414,6 +414,7 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 static void create_save_file_dialog(void)
 {
 	GtkWidget *vbox, *check_open_new_tab, *rename_btn;
+	const gchar *initdir;
 
 	ui_widgets.save_filesel = gtk_file_chooser_dialog_new(_("Save File"), GTK_WINDOW(main_widgets.window),
 				GTK_FILE_CHOOSER_ACTION_SAVE, NULL, NULL);
@@ -444,6 +445,15 @@ static void create_save_file_dialog(void)
 	if (gtk_check_version(2, 14, 0) == NULL)
 		gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(ui_widgets.save_filesel), FALSE);
 
+	/* set the folder by default to the project base dir or the global pref for opening files */
+	initdir = utils_get_default_dir_utf8();
+	if (initdir)
+	{
+		gchar *linitdir = utils_get_locale_from_utf8(initdir);
+		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(ui_widgets.save_filesel), linitdir);
+		g_free(linitdir);
+	}
+
 	g_signal_connect(check_open_new_tab, "toggled",
 				G_CALLBACK(on_save_as_new_tab_toggled), rename_btn);
 
@@ -461,11 +471,10 @@ static void create_save_file_dialog(void)
 
 
 #if ! GEANY_USE_WIN32_DIALOG
-static gboolean gtk_show_save_as(const gchar *initdir)
+static gboolean gtk_show_save_as(void)
 {
 	GeanyDocument *doc = document_get_current();
 	gint resp;
-	gboolean folder_set = FALSE;
 
 	if (G_UNLIKELY(ui_widgets.save_filesel == NULL))
 		create_save_file_dialog();
@@ -480,7 +489,6 @@ static gboolean gtk_show_save_as(const gchar *initdir)
 			gchar *locale_basename = g_path_get_basename(locale_filename);
 			gchar *locale_dirname = g_path_get_dirname(locale_filename);
 
-			folder_set = TRUE;
 			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(ui_widgets.save_filesel),
 				locale_dirname);
 			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(ui_widgets.save_filesel),
@@ -514,10 +522,6 @@ static gboolean gtk_show_save_as(const gchar *initdir)
 		gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(ui_widgets.save_filesel),
 			app->project->base_path, NULL);
 
-	/* if the folder wasn't set so far, we set it to the given directory */
-	if (! folder_set && initdir != NULL && g_path_is_absolute(initdir))
-		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(ui_widgets.save_filesel), initdir);
-
 	/* Run the dialog synchronously, pausing this function call */
 	resp = gtk_dialog_run(GTK_DIALOG(ui_widgets.save_filesel));
 
@@ -538,26 +542,12 @@ static gboolean gtk_show_save_as(const gchar *initdir)
 gboolean dialogs_show_save_as()
 {
 	gboolean result;
-	gchar *initdir = NULL;
-	static gboolean initial = TRUE;
-
-	initdir = utils_get_current_file_dir_utf8();
-
-	/* use project or default startup directory (if set) if no files are open */
-	if (initdir == NULL && initial)
-	{
-		initdir = g_strdup(utils_get_default_dir_utf8());
-		initial = FALSE;
-	}
-
-	setptr(initdir, utils_get_locale_from_utf8(initdir));
 
 #if GEANY_USE_WIN32_DIALOG
-	result = win32_show_file_dialog(FALSE, initdir);
+	result = win32_show_file_dialog(FALSE, utils_get_default_dir_utf8());
 #else
-	result = gtk_show_save_as(initdir);
+	result = gtk_show_save_as();
 #endif
-	g_free(initdir);
 	return result;
 }
 
@@ -567,12 +557,12 @@ gboolean dialogs_show_save_as()
  *  On Unix-like systems a GTK message dialog box is shown, on Win32 systems a native Windows
  *  message dialog box is shown.
  *
- *  @param type A GtkMessageType, can be one of: GTK_MESSAGE_INFO, GTK_MESSAGE_WARNING,
- *              GTK_MESSAGE_QUESTION, GTK_MESSAGE_ERROR
+ *  @param type A GtkMessageType, e.g. GTK_MESSAGE_INFO, GTK_MESSAGE_WARNING,
+ *              GTK_MESSAGE_QUESTION, GTK_MESSAGE_ERROR.
  *  @param text Printf()-style format string.
  *  @param ... Arguments for the @c text format string.
  **/
-void dialogs_show_msgbox(gint type, const gchar *text, ...)
+void dialogs_show_msgbox(GtkMessageType type, const gchar *text, ...)
 {
 #ifndef G_OS_WIN32
 	GtkWidget *dialog;
@@ -596,7 +586,7 @@ void dialogs_show_msgbox(gint type, const gchar *text, ...)
 }
 
 
-void dialogs_show_msgbox_with_secondary(gint type, const gchar *text, const gchar *secondary)
+void dialogs_show_msgbox_with_secondary(GtkMessageType type, const gchar *text, const gchar *secondary)
 {
 #ifdef G_OS_WIN32
 	/* put the two strings together because Windows message boxes don't support secondary texts */

@@ -24,21 +24,10 @@
 
 /* Sidebar file browser plugin. */
 
-#include "geany.h"
+#include "geanyplugin.h"
 #include <string.h>
 
 #include <gdk/gdkkeysyms.h>
-
-#include "support.h"
-#include "prefs.h"
-#include "document.h"
-#include "utils.h"
-#include "keybindings.h"
-#include "project.h"
-#include "ui_utils.h"
-
-#include "plugindata.h"
-#include "geanyfunctions.h"
 
 
 GeanyData		*geany_data;
@@ -279,6 +268,7 @@ static void on_go_home(void)
 }
 
 
+/* TODO: use utils_get_default_dir_utf8() */
 static gchar *get_default_dir(void)
 {
 	const gchar *dir = NULL;
@@ -1133,7 +1123,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	gtk_box_pack_start(GTK_BOX(vbox), checkbox_fp, FALSE, FALSE, 5);
 	pref_widgets.follow_path_checkbox = checkbox_fp;
 
-	checkbox_pb = gtk_check_button_new_with_label(_("Set the project's base directory"));
+	checkbox_pb = gtk_check_button_new_with_label(_("Use the project's base directory"));
 	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_pb), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_pb), fb_set_project_base_path);
 	ui_widget_set_tooltip_text(checkbox_pb,

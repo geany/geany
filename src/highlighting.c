@@ -39,6 +39,7 @@
 #include "filetypes.h"
 #include "symbols.h"
 #include "ui_utils.h"
+#include "utils.h"
 
 
 /* Note: Avoid using SSM in files not related to scintilla, use sciwrappers.h instead. */
@@ -81,7 +82,9 @@ enum	/* Geany common styling */
 	GCS_TRANSLUCENCY,
 	GCS_MARKER_LINE,
 	GCS_MARKER_SEARCH,
+	GCS_MARKER_MARK,
 	GCS_MARKER_TRANSLUCENCY,
+	GCS_LINE_HEIGHT,
 	GCS_MAX
 };
 
@@ -106,30 +109,18 @@ static struct
 typedef struct
 {
 	gchar			*name;
+	gchar			*named_style;
 	GeanyLexerStyle	*style;
 } StyleEntry;
 
 
 /* For filetypes.common [named_styles] section.
- * e.g. "comment" => &GeanyLexerStyle{0xd00000, 0xffffff, FALSE, FALSE} */
+ * 0xBBGGRR format.
+ * e.g. "comment" => &GeanyLexerStyle{0x0000d0, 0xffffff, FALSE, FALSE} */
 static GHashTable *named_style_hash = NULL;
 
-
-/* Geany generic styles, initialized to defaults.
- * Currently only used as default styling for C-like languages.
- * Note: Ideally named styles would be used as common styling for all programming
- * languages (and perhaps all filetypes).
- * These could be replaced by default named styles in filetypes.common. */
-static GeanyLexerStyle gsd_default =		{0x000000, 0xffffff, FALSE, FALSE};
-static GeanyLexerStyle gsd_comment =		{0xd00000, 0xffffff, FALSE, FALSE};
-static GeanyLexerStyle gsd_comment_doc =	{0x3f5fbf, 0xffffff, TRUE, FALSE};
-static GeanyLexerStyle gsd_number =			{0x007f00, 0xffffff, FALSE, FALSE};
-static GeanyLexerStyle gsd_reserved_word =	{0x00007f, 0xffffff, TRUE, FALSE};
-static GeanyLexerStyle gsd_system_word =	{0x991111, 0xffffff, TRUE, FALSE};
-static GeanyLexerStyle gsd_user_word =		{0x0000d0, 0xffffff, TRUE, FALSE};
-static GeanyLexerStyle gsd_string =			{0xff901e, 0xffffff, FALSE, FALSE};
-static GeanyLexerStyle gsd_pragma =			{0x007f7f, 0xffffff, FALSE, FALSE};
-static GeanyLexerStyle gsd_string_eol =		{0x000000, 0xe0c0e0, FALSE, FALSE};
+/* 0xBBGGRR format. */
+static GeanyLexerStyle gsd_default = {0x000000, 0xffffff, FALSE, FALSE};
 
 
 static void new_style_array(gint file_type_id, gint styling_count)
@@ -138,6 +129,21 @@ static void new_style_array(gint file_type_id, gint styling_count)
 
 	set->count = styling_count;
 	set->styling = g_new0(GeanyLexerStyle, styling_count);
+}
+
+
+static void styleset_free(gint file_type_id)
+{
+	StyleSet *style_ptr;
+	style_ptr = &style_sets[file_type_id];
+
+	style_ptr->count = 0;
+	g_free(style_ptr->styling);
+	style_ptr->styling = NULL;
+	g_strfreev(style_ptr->keywords);
+	style_ptr->keywords = NULL;
+	g_free(style_ptr->wordchars);
+	style_ptr->wordchars = NULL;
 }
 
 
@@ -190,14 +196,15 @@ static void get_keyfile_wordchars(GKeyFile *config, GKeyFile *configh, gchar **w
 }
 
 
-static void read_named_style(gchar *name, GeanyLexerStyle *style)
+static void read_named_style(const gchar *named_style, GeanyLexerStyle *style)
 {
 	GeanyLexerStyle *cs;
-	gchar *comma;
+	gchar *comma, *name = NULL;
 	const gchar *bold = NULL;
 	const gchar *italic = NULL;
 
-	g_return_if_fail(name);
+	g_return_if_fail(named_style);
+	name = utils_strdupa(named_style);	/* named_style must not be written to, may be a static string */
 
 	comma = strstr(name, ",");
 	if (comma)
@@ -210,26 +217,17 @@ static void read_named_style(gchar *name, GeanyLexerStyle *style)
 
 	if (cs)
 	{
-		*style = *cs;
-		if (bold)
-			style->bold = !style->bold;
-		if (italic)
-			style->italic = !style->italic;
+ 		*style = *cs;
+ 		if (bold)
+ 			style->bold = !style->bold;
+ 		if (italic)
+ 			style->italic = !style->italic;
 	}
 	else
 	{
 		*style = gsd_default;
 		geany_debug("No named style '%s'! Check filetypes.common.", name);
 	}
-}
-
-
-/* convert 0x..RRGGBB to 0x..BBGGRR */
-static gint rotate_rgb(gint color)
-{
-	return ((color & 0xFF0000) >> 16) +
-		(color & 0x00FF00) +
-		((color & 0x0000FF) << 16);
 }
 
 
@@ -261,8 +259,6 @@ static void parse_keyfile_style(gchar **list,
 	g_return_if_fail(style);
 
 	*style = *default_style;
-	style->foreground = rotate_rgb(default_style->foreground);
-	style->background = rotate_rgb(default_style->background);
 
 	if (!list)
 		return;
@@ -310,6 +306,42 @@ static void get_keyfile_style(GKeyFile *config, GKeyFile *configh,
 }
 
 
+static void get_keyfile_named_style(GKeyFile *config, GKeyFile *configh,
+		const gchar *key_name, gchar *named_style, GeanyLexerStyle *style)
+{
+	GeanyLexerStyle def;
+
+	read_named_style(named_style, &def);
+	get_keyfile_style(config, configh, key_name, &def, style);
+}
+
+
+/* Convert 0xRRGGBB to 0xBBGGRR, which scintilla expects. */
+static gint rotate_rgb(gint color)
+{
+	return ((color & 0xFF0000) >> 16) +
+		(color & 0x00FF00) +
+		((color & 0x0000FF) << 16);
+}
+
+
+/* Convert a hard-coded style to scintilla format, allowing -1 to use the default color. */
+static void convert_hex_style(GeanyLexerStyle *style)
+{
+
+	if (style->foreground == -1)
+		style->foreground = gsd_default.foreground;
+	else
+		style->foreground = rotate_rgb(style->foreground);
+
+	if (style->background == -1)
+		style->background = gsd_default.background;
+	else
+		style->background = rotate_rgb(style->background);
+}
+
+
+/* foreground and background are in 0xRRGGBB format */
 static void get_keyfile_hex(GKeyFile *config, GKeyFile *configh,
 				const gchar *key,
 				gint foreground, gint background, gboolean bold,
@@ -317,6 +349,7 @@ static void get_keyfile_hex(GKeyFile *config, GKeyFile *configh,
 {
 	GeanyLexerStyle def = {foreground, background, bold, FALSE};
 
+	convert_hex_style(&def);
 	get_keyfile_style(config, configh, key, &def, style);
 }
 
@@ -402,15 +435,7 @@ void highlighting_free_styles()
 	gint i;
 
 	for (i = 0; i < GEANY_MAX_BUILT_IN_FILETYPES; i++)
-	{
-		StyleSet *style_ptr;
-		style_ptr = &style_sets[i];
-
-		style_ptr->count = 0;
-		g_free(style_ptr->styling);
-		g_strfreev(style_ptr->keywords);
-		g_free(style_ptr->wordchars);
-	}
+		styleset_free(i);
 
 	if (named_style_hash)
 		g_hash_table_destroy(named_style_hash);
@@ -455,6 +480,25 @@ get_keyfile_whitespace_chars(GKeyFile *config, GKeyFile *configh)
 }
 
 
+static void add_named_style(GKeyFile *config, const gchar *key)
+{
+	const gchar group[] = "named_styles";
+	gchar **list;
+	gsize len;
+
+	list = g_key_file_get_string_list(config, group, key, &len, NULL);
+	/* we allow a named style to reference another style above it */
+	if (list && len >= 1)
+	{
+		GeanyLexerStyle *style = g_new0(GeanyLexerStyle, 1);
+
+		parse_keyfile_style(list, &gsd_default, style);
+		g_hash_table_insert(named_style_hash, g_strdup(key), style);
+	}
+	g_strfreev(list);
+}
+
+
 static void get_named_styles(GKeyFile *config)
 {
 	const gchar group[] = "named_styles";
@@ -466,23 +510,15 @@ static void get_named_styles(GKeyFile *config)
 
 	while (1)
 	{
-		gchar **list;
-		gsize len;
 		const gchar *key = *ptr;
 
 		if (!key)
 			break;
 
-		list = g_key_file_get_string_list(config, group, key, &len, NULL);
-		/* we allow a named style to reference another style above it */
-		if (list && len >= 1)
-		{
-			GeanyLexerStyle *style = g_new0(GeanyLexerStyle, 1);
+		/* don't replace already read default style with system one */
+		if (!g_str_equal(key, "default"))
+			add_named_style(config, key);
 
-			parse_keyfile_style(list, &gsd_default, style);
-			g_hash_table_insert(named_style_hash, g_strdup(key), style);
-		}
-		g_strfreev(list);
 		ptr++;
 	}
 	g_strfreev(keys);
@@ -491,16 +527,19 @@ static void get_named_styles(GKeyFile *config)
 
 static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	static gboolean common_style_set_valid = FALSE;
-
-	if (common_style_set_valid)
-		return;
-	common_style_set_valid = TRUE;	/* ensure filetypes.common is only loaded once */
-
 	/* named styles */
+	if (named_style_hash)
+		g_hash_table_destroy(named_style_hash);	/* reloading */
+
 	named_style_hash = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
+
+	/* first set default to the "default" named style */
+	add_named_style(config, "default");
+	add_named_style(config_home, "default");
+	read_named_style("default", &gsd_default);
+
 	get_named_styles(config);
-	/* home overwrites any system named style */
+	/* home overrides any system named style */
 	get_named_styles(config_home);
 
 	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &common_style_set.styling[GCS_DEFAULT]);
@@ -514,7 +553,8 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 	get_keyfile_hex(config, config_home, "indent_guide", 0xc0c0c0, 0xffffff, FALSE, &common_style_set.styling[GCS_INDENT_GUIDE]);
 	get_keyfile_hex(config, config_home, "white_space", 0xc0c0c0, 0xffffff, TRUE, &common_style_set.styling[GCS_WHITE_SPACE]);
 	get_keyfile_hex(config, config_home, "marker_line", 0x000000, 0xffff00, FALSE, &common_style_set.styling[GCS_MARKER_LINE]);
-	get_keyfile_hex(config, config_home, "marker_search", 0x000000, 0xB8F4B8, FALSE, &common_style_set.styling[GCS_MARKER_SEARCH]);
+	get_keyfile_hex(config, config_home, "marker_search", 0x000000, 0x00007f, FALSE, &common_style_set.styling[GCS_MARKER_SEARCH]);
+	get_keyfile_hex(config, config_home, "marker_mark", 0x000000, 0xb8f4b8, FALSE, &common_style_set.styling[GCS_MARKER_MARK]);
 	{
 		/* hack because get_keyfile_int uses a Style struct */
 		GeanyLexerStyle tmp_style;
@@ -538,6 +578,7 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 		get_keyfile_int(config, config_home, "styling", "line_wrap_indent",
 			0, 0, &tmp_style);
 		common_style_set.styling[GCS_LINE_WRAP_INDENT].foreground = tmp_style.foreground;
+		common_style_set.styling[GCS_LINE_WRAP_INDENT].background = tmp_style.background;
 		get_keyfile_int(config, config_home, "styling", "translucency",
 			256, 256, &tmp_style);
 		common_style_set.styling[GCS_TRANSLUCENCY].foreground = tmp_style.foreground;
@@ -546,6 +587,10 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 			256, 256, &tmp_style);
 		common_style_set.styling[GCS_MARKER_TRANSLUCENCY].foreground = tmp_style.foreground;
 		common_style_set.styling[GCS_MARKER_TRANSLUCENCY].background = tmp_style.background;
+		get_keyfile_int(config, config_home, "styling", "line_height",
+			0, 0, &tmp_style);
+		common_style_set.styling[GCS_LINE_HEIGHT].foreground = tmp_style.foreground;
+		common_style_set.styling[GCS_LINE_HEIGHT].background = tmp_style.background;
 	}
 
 	common_style_set.invert_all = interface_prefs.highlighting_invert_all =
@@ -567,6 +612,10 @@ static void styleset_common(ScintillaObject *sci)
 	else
 		SSM(sci, SCI_SETCARETSTYLE, CARETSTYLE_LINE, 0);
 
+	/* line height */
+	SSM(sci, SCI_SETEXTRAASCENT, common_style_set.styling[GCS_LINE_HEIGHT].foreground, 0);
+	SSM(sci, SCI_SETEXTRADESCENT, common_style_set.styling[GCS_LINE_HEIGHT].background, 0);
+
 	/* colourise the current line */
 	SSM(sci, SCI_SETCARETLINEBACK, invert(common_style_set.styling[GCS_CURRENT_LINE].background), 0);
 	/* bold=enable current line */
@@ -582,6 +631,7 @@ static void styleset_common(ScintillaObject *sci)
 	SSM(sci, SCI_SETWRAPVISUALFLAGSLOCATION,
 		common_style_set.styling[GCS_LINE_WRAP_VISUALS].background, 0);
 	SSM(sci, SCI_SETWRAPSTARTINDENT, common_style_set.styling[GCS_LINE_WRAP_INDENT].foreground, 0);
+	SSM(sci, SCI_SETWRAPINDENTMODE, common_style_set.styling[GCS_LINE_WRAP_INDENT].background, 0);
 
 	/* Error indicator */
 	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_ERROR, INDIC_SQUIGGLE);
@@ -589,10 +639,9 @@ static void styleset_common(ScintillaObject *sci)
 
 	/* Search indicator, used for 'Mark' matches */
 	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_SEARCH, INDIC_ROUNDBOX);
-	/* TODO make this configurable, but we can't really use the foreground nor the background
-	 * colours of GCS_MARKER_LINE since the drawn box is a little translucent and the default
-	 * colours for GCS_MARKER_LINE are too bright. */
-	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_SEARCH, invert(rotate_rgb(0x00ff00)));
+	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_SEARCH,
+		invert(common_style_set.styling[GCS_MARKER_SEARCH].background));
+	SSM(sci, SCI_INDICSETALPHA, GEANY_INDICATOR_SEARCH, 60);
 
 	/* define marker symbols
 	 * 0 -> line marker */
@@ -603,8 +652,8 @@ static void styleset_common(ScintillaObject *sci)
 
 	/* 1 -> user marker */
 	SSM(sci, SCI_MARKERDEFINE, 1, SC_MARK_PLUS);
-	SSM(sci, SCI_MARKERSETFORE, 1, invert(common_style_set.styling[GCS_MARKER_SEARCH].foreground));
-	SSM(sci, SCI_MARKERSETBACK, 1, invert(common_style_set.styling[GCS_MARKER_SEARCH].background));
+	SSM(sci, SCI_MARKERSETFORE, 1, invert(common_style_set.styling[GCS_MARKER_MARK].foreground));
+	SSM(sci, SCI_MARKERSETBACK, 1, invert(common_style_set.styling[GCS_MARKER_MARK].background));
 	SSM(sci, SCI_MARKERSETALPHA, 1, common_style_set.styling[GCS_MARKER_TRANSLUCENCY].background);
 
 	/* 2 -> folding marker, other folding settings */
@@ -754,43 +803,67 @@ apply_filetype_properties(ScintillaObject *sci, gint lexer, filetype_id ft_id)
 }
 
 
+#define foreach_range(i, size) \
+		for (i = 0; i < size; i++)
+
+/* entries contains the default styles for the filetype.
+ * If used, entries[n].style should have foreground and background in 0xRRGGBB format, or -1. */
+static void load_style_entries(GKeyFile *config, GKeyFile *config_home, gint filetype_idx,
+		StyleEntry *entries, gsize entries_len)
+{
+	guint i;
+
+	foreach_range(i, entries_len)
+	{
+		StyleEntry *entry = &entries[i];
+		GeanyLexerStyle *style = &style_sets[filetype_idx].styling[i];
+
+		if (entry->named_style)
+			get_keyfile_named_style(config, config_home, entry->name, entry->named_style, style);
+		else
+		if (entry->style)
+		{
+			GeanyLexerStyle *def = entry->style;
+
+			convert_hex_style(def);
+			get_keyfile_style(config, config_home, entry->name, def, style);
+		}
+	}
+}
+
+
 /* call new_style_array(filetype_idx, >= 20) before using this. */
 static void
 styleset_c_like_init(GKeyFile *config, GKeyFile *config_home, gint filetype_idx)
 {
-	static GeanyLexerStyle uuid = {0x404080, 0xffffff, FALSE, FALSE};
-	static GeanyLexerStyle operator = {0x301010, 0xffffff, FALSE, FALSE};
-	static GeanyLexerStyle verbatim = {0x301010, 0xffffff, FALSE, FALSE};
-	static GeanyLexerStyle regex = {0x105090, 0xffffff, FALSE, FALSE};
-
+	static GeanyLexerStyle uuid = {0x404080, -1, FALSE, FALSE};
+	static GeanyLexerStyle verbatim = {0x301010, -1, FALSE, FALSE};
+	static GeanyLexerStyle regex = {0x105090, -1, FALSE, FALSE};
 	StyleEntry entries[] =
-	{
-		{"default",		&gsd_default},
-		{"comment",		&gsd_comment},
-		{"commentline",	&gsd_comment},
-		{"commentdoc",	&gsd_comment_doc},
-		{"number",		&gsd_number},
-		{"word",		&gsd_reserved_word},
-		{"word2",		&gsd_system_word},
-		{"string",		&gsd_string},
-		{"character",	&gsd_string},
-		{"uuid",		&uuid},
-		{"preprocessor",&gsd_pragma},
-		{"operator",	&operator},
-		{"identifier",	&gsd_default},
-		{"stringeol",	&gsd_string_eol},
-		{"verbatim",	&verbatim},
-		{"regex",		&regex},
-		{"commentlinedoc", &gsd_comment_doc},
-		{"commentdockeyword", &gsd_comment_doc},
-		{"commentdockeyworderror", &gsd_comment_doc},
-		{"globalclass",	&gsd_user_word}
+ 	{
+		{"default",		"default", NULL},
+		{"comment",		"comment", NULL},
+		{"commentline",	"comment", NULL},
+		{"commentdoc",	"commentdoc", NULL},
+		{"number",		"number", NULL},
+		{"word",		"word", NULL},
+		{"word2",		"word2", NULL},
+		{"string",		"string", NULL},
+		{"character",	"string", NULL},
+		{"uuid",		NULL, &uuid},
+		{"preprocessor","preprocessor", NULL},
+		{"operator",	"operator", NULL},
+		{"identifier",	"default", NULL},
+		{"stringeol",	"stringeol", NULL},
+		{"verbatim",	NULL, &verbatim},
+		{"regex",		NULL, &regex},
+		{"commentlinedoc",	"commentdoc,bold", NULL},
+		{"commentdockeyword",	"commentdoc,bold,italic", NULL},
+		{"commentdockeyworderror",	"commentdoc", NULL},
+		{"globalclass",	"type", NULL}
 	};
-	gint i;
 
-	for (i = 0; i < 20; i++)
-		get_keyfile_style(config, config_home, entries[i].name, entries[i].style,
-			&style_sets[filetype_idx].styling[i]);
+	load_style_entries(config, config_home, filetype_idx, entries, G_N_ELEMENTS(entries));
 }
 
 
@@ -1127,7 +1200,7 @@ static void styleset_makefile_init(gint ft_id, GKeyFile *config, GKeyFile *confi
 {
 	new_style_array(GEANY_FILETYPES_MAKE, 7);
 	get_keyfile_hex(config, config_home, "default", 0x00002f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MAKE].styling[0]);
-	get_keyfile_style(config, config_home, "comment", &gsd_comment, &style_sets[GEANY_FILETYPES_MAKE].styling[1]);
+	get_keyfile_named_style(config, config_home, "comment", "comment", &style_sets[GEANY_FILETYPES_MAKE].styling[1]);
 	get_keyfile_hex(config, config_home, "preprocessor", 0x007f7f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MAKE].styling[2]);
 	get_keyfile_hex(config, config_home, "identifier", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MAKE].styling[3]);
 	get_keyfile_hex(config, config_home, "operator", 0x301010, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MAKE].styling[4]);
@@ -1276,7 +1349,7 @@ static void styleset_html(ScintillaObject *sci)
 
 static void styleset_markup_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_style_array(GEANY_FILETYPES_XML, 55);
+	new_style_array(GEANY_FILETYPES_XML, 56);
 	get_keyfile_hex(config, config_home, "html_default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[0]);
 	get_keyfile_hex(config, config_home, "html_tag", 0x000099, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[1]);
 	get_keyfile_hex(config, config_home, "html_tagunknown", 0xff0000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[2]);
@@ -1335,6 +1408,7 @@ static void styleset_markup_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 	get_keyfile_hex(config, config_home, "jscript_singlestring", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[52]);
 	get_keyfile_hex(config, config_home, "jscript_symbols", 0x301010, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[53]);
 	get_keyfile_hex(config, config_home, "jscript_stringeol", 0x000000, 0xe0c0e0, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[54]);
+	get_keyfile_hex(config, config_home, "jscript_regex", 0x105090, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[55]);
 
 	style_sets[GEANY_FILETYPES_XML].keywords = g_new(gchar*, 7);
 	get_keyfile_keywords(config, config_home, "html", GEANY_FILETYPES_XML, 0, "a abbr acronym address applet area b base basefont bdo big blockquote body br button caption center cite code col colgroup dd del dfn dir div dl dt em embed fieldset font form frame frameset h1 h2 h3 h4 h5 h6 head hr html i iframe img input ins isindex kbd label legend li link map menu meta noframes noscript object ol optgroup option p param pre q quality s samp script select small span strike strong style sub sup table tbody td textarea tfoot th thead title tr tt u ul var xmlns leftmargin topmargin abbr accept-charset accept accesskey action align alink alt archive axis background bgcolor border cellpadding cellspacing char charoff charset checked cite class classid clear codebase codetype color cols colspan compact content coords data datafld dataformatas datapagesize datasrc datetime declare defer dir disabled enctype face for frame frameborder selected headers height href hreflang hspace http-equiv id ismap label lang language link longdesc marginwidth marginheight maxlength media framespacing method multiple name nohref noresize noshade nowrap object onblur onchange onclick ondblclick onfocus onkeydown onkeypress onkeyup onload onmousedown onmousemove onmouseover onmouseout onmouseup onreset onselect onsubmit onunload profile prompt pluginspage readonly rel rev rows rowspan rules scheme scope scrolling shape size span src standby start style summary tabindex target text title type usemap valign value valuetype version vlink vspace width text password checkbox radio submit reset file hidden image public doctype xml xml:lang");
@@ -1422,6 +1496,7 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords)
 	set_sci_style(sci, SCE_HJ_SINGLESTRING, GEANY_FILETYPES_XML, 52);
 	set_sci_style(sci, SCE_HJ_SYMBOLS, GEANY_FILETYPES_XML, 53);
 	set_sci_style(sci, SCE_HJ_STRINGEOL, GEANY_FILETYPES_XML, 54);
+	set_sci_style(sci, SCE_HJ_REGEX, GEANY_FILETYPES_XML, 55);
 
 	/* for HB, VBScript?, use the same styles as for JavaScript */
 	set_sci_style(sci, SCE_HB_START, GEANY_FILETYPES_XML, 43);
@@ -1548,7 +1623,7 @@ static void styleset_perl_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 	new_style_array(GEANY_FILETYPES_PERL, 35);
 	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[0]);
 	get_keyfile_hex(config, config_home, "error", 0xff0000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[1]);
-	get_keyfile_style(config, config_home, "commentline", &gsd_comment, &style_sets[GEANY_FILETYPES_PERL].styling[2]);
+	get_keyfile_named_style(config, config_home, "commentline", "comment", &style_sets[GEANY_FILETYPES_PERL].styling[2]);
 	get_keyfile_hex(config, config_home, "number", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[3]);
 	get_keyfile_hex(config, config_home, "word", 0x111199, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_PERL].styling[4]);
 	get_keyfile_hex(config, config_home, "string", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[5]);
@@ -1847,7 +1922,7 @@ static void styleset_ruby_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 {
 	new_style_array(GEANY_FILETYPES_RUBY, 35);
 	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[0]);
-	get_keyfile_style(config, config_home, "commentline", &gsd_comment, &style_sets[GEANY_FILETYPES_RUBY].styling[1]);
+	get_keyfile_named_style(config, config_home, "commentline", "comment", &style_sets[GEANY_FILETYPES_RUBY].styling[1]);
 	get_keyfile_hex(config, config_home, "number", 0x400080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[2]);
 	get_keyfile_hex(config, config_home, "string", 0x008000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[3]);
 	get_keyfile_hex(config, config_home, "character", 0x008000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[4]);
@@ -1942,7 +2017,7 @@ static void styleset_sh_init(gint ft_id, GKeyFile *config, GKeyFile *config_home
 {
 	new_style_array(GEANY_FILETYPES_SH, 14);
 	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_SH].styling[0]);
-	get_keyfile_style(config, config_home, "commentline", &gsd_comment, &style_sets[GEANY_FILETYPES_SH].styling[1]);
+	get_keyfile_named_style(config, config_home, "commentline", "comment", &style_sets[GEANY_FILETYPES_SH].styling[1]);
 	get_keyfile_hex(config, config_home, "number", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_SH].styling[2]);
 	get_keyfile_hex(config, config_home, "word", 0x119911, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_SH].styling[3]);
 	get_keyfile_hex(config, config_home, "string", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_SH].styling[4]);
@@ -2774,8 +2849,8 @@ static void styleset_tcl_init(gint ft_id, GKeyFile *config, GKeyFile *config_hom
 {
 	new_style_array(GEANY_FILETYPES_TCL, 16);
 	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_TCL].styling[0]);
-	get_keyfile_style(config, config_home, "comment", &gsd_comment, &style_sets[GEANY_FILETYPES_TCL].styling[1]);
-	get_keyfile_style(config, config_home, "commentline", &gsd_comment, &style_sets[GEANY_FILETYPES_TCL].styling[2]);
+	get_keyfile_named_style(config, config_home, "comment", "comment", &style_sets[GEANY_FILETYPES_TCL].styling[1]);
+	get_keyfile_named_style(config, config_home, "commentline", "comment", &style_sets[GEANY_FILETYPES_TCL].styling[2]);
 	get_keyfile_hex(config, config_home, "number", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_TCL].styling[3]);
 	get_keyfile_hex(config, config_home, "operator", 0x301010, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_TCL].styling[4]);
 	get_keyfile_hex(config, config_home, "identifier", 0xa20000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_TCL].styling[5]);
@@ -2948,7 +3023,7 @@ static void styleset_d(ScintillaObject *sci)
 	set_sci_style(sci, SCE_D_WORD2, GEANY_FILETYPES_D, 7);
 	set_sci_style(sci, SCE_D_WORD3, GEANY_FILETYPES_D, 8);
 	set_sci_style(sci, SCE_D_TYPEDEF, GEANY_FILETYPES_D, 9);
-	set_sci_style(sci, SCE_D_STRING, GEANY_FILETYPES_D, 10);
+	set_sci_style(sci, SCE_D_STRING, GEANY_FILETYPES_D, 10);	/* also for other strings below */
 	set_sci_style(sci, SCE_D_STRINGEOL, GEANY_FILETYPES_D, 11);
 	set_sci_style(sci, SCE_D_CHARACTER, GEANY_FILETYPES_D, 12);
 	set_sci_style(sci, SCE_D_OPERATOR, GEANY_FILETYPES_D, 13);
@@ -2956,6 +3031,10 @@ static void styleset_d(ScintillaObject *sci)
 	set_sci_style(sci, SCE_D_COMMENTLINEDOC, GEANY_FILETYPES_D, 15);
 	set_sci_style(sci, SCE_D_COMMENTDOCKEYWORD, GEANY_FILETYPES_D, 16);
 	set_sci_style(sci, SCE_D_COMMENTDOCKEYWORDERROR, GEANY_FILETYPES_D, 17);
+
+	/* copy existing styles */
+	set_sci_style(sci, SCE_D_STRINGB, GEANY_FILETYPES_D, 10);	/* `string` */
+	set_sci_style(sci, SCE_D_STRINGR, GEANY_FILETYPES_D, 10);	/* r"string" */
 }
 
 
@@ -3418,7 +3497,7 @@ static void styleset_haxe(ScintillaObject *sci)
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_HAXE].keywords[0]);
 	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_HAXE].keywords[1]);
-	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_HAXE].keywords[2]);
+	SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) style_sets[GEANY_FILETYPES_HAXE].keywords[2]);
 
 	styleset_c_like(sci, GEANY_FILETYPES_HAXE);
 }
@@ -3483,6 +3562,9 @@ static void styleset_ada(ScintillaObject *sci)
 /* Called by filetypes_load_config(). */
 void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *configh)
 {
+	/* Clear old information if necessary - e.g. reloading config */
+	styleset_free(filetype_idx);
+
 	/* All stylesets depend on filetypes.common */
 	if (filetype_idx != GEANY_FILETYPES_NONE)
 		filetypes_load_config(GEANY_FILETYPES_NONE, FALSE);

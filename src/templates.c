@@ -37,6 +37,8 @@
 #include "document.h"
 #include "filetypes.h"
 #include "ui_utils.h"
+#include "toolbar.h"
+#include "geanymenubuttonaction.h"
 
 
 GeanyTemplatePrefs template_prefs;
@@ -246,14 +248,29 @@ static gchar *ft_templates[GEANY_MAX_BUILT_IN_FILETYPES] = {NULL};
 	g_strconcat(app->configdir, \
 		G_DIR_SEPARATOR_S GEANY_TEMPLATES_SUBDIR G_DIR_SEPARATOR_S, shortname, NULL)
 
-#define TEMPLATES_CREATE_FILE(fname, text)	\
-	if (! g_file_test(fname, G_FILE_TEST_EXISTS)) \
-		utils_write_file(fname, text)
-
 #define TEMPLATES_READ_FILE(fname, contents_ptr) \
 	g_file_get_contents(fname, contents_ptr, NULL, NULL);
 
 
+static void create_template_file_if_necessary(const gchar *filename, const gchar *content)
+{
+	if (! g_file_test(filename, G_FILE_TEST_EXISTS))
+	{
+		if (file_prefs.default_eol_character != SC_EOL_LF)
+		{
+			/* Replace the \n characters in the default template text by the proper
+			 * platform-specific line ending characters. */
+			GString *tmp = g_string_new(content);
+			const gchar *eol_str = (file_prefs.default_eol_character == SC_EOL_CR) ? "\r" : "\r\n";
+
+			utils_string_replace_all(tmp, "\n", eol_str);
+			utils_write_file(filename, tmp->str);
+			g_string_free(tmp, TRUE);
+		}
+		else
+			utils_write_file(filename, content);
+	}
+}
 
 /* FIXME the callers should use GStrings instead of char arrays */
 static gchar *replace_all(gchar *text, const gchar *year, const gchar *date, const gchar *datetime)
@@ -281,11 +298,11 @@ static void init_general_templates(const gchar *year, const gchar *date, const g
 	gchar *template_filename_changelog = TEMPLATES_GET_FILENAME("changelog");
 
 	/* create the template files in the configuration directory, if they don't exist */
-	TEMPLATES_CREATE_FILE(template_filename_fileheader, templates_fileheader);
-	TEMPLATES_CREATE_FILE(template_filename_gpl, templates_gpl_notice);
-	TEMPLATES_CREATE_FILE(template_filename_bsd, templates_bsd_notice);
-	TEMPLATES_CREATE_FILE(template_filename_function, templates_function_description);
-	TEMPLATES_CREATE_FILE(template_filename_changelog, templates_changelog);
+	create_template_file_if_necessary(template_filename_fileheader, templates_fileheader);
+	create_template_file_if_necessary(template_filename_gpl, templates_gpl_notice);
+	create_template_file_if_necessary(template_filename_bsd, templates_bsd_notice);
+	create_template_file_if_necessary(template_filename_function, templates_function_description);
+	create_template_file_if_necessary(template_filename_changelog, templates_changelog);
 
 	/* read the contents */
 	TEMPLATES_READ_FILE(template_filename_fileheader, &templates[GEANY_TEMPLATE_FILEHEADER]);
@@ -324,17 +341,39 @@ static void init_ft_templates(const gchar *year, const gchar *date, const gchar 
 
 		switch (ft_id)
 		{
-			case GEANY_FILETYPES_NONE:	TEMPLATES_CREATE_FILE(fname, templates_filetype_none); break;
-			case GEANY_FILETYPES_C:		TEMPLATES_CREATE_FILE(fname, templates_filetype_c); break;
-			case GEANY_FILETYPES_CPP:	TEMPLATES_CREATE_FILE(fname, templates_filetype_cpp); break;
-			case GEANY_FILETYPES_D:		TEMPLATES_CREATE_FILE(fname, templates_filetype_d); break;
-			case GEANY_FILETYPES_JAVA:	TEMPLATES_CREATE_FILE(fname, templates_filetype_java); break;
-			case GEANY_FILETYPES_PASCAL:TEMPLATES_CREATE_FILE(fname, templates_filetype_pascal); break;
-			case GEANY_FILETYPES_PHP:	TEMPLATES_CREATE_FILE(fname, templates_filetype_php); break;
-			case GEANY_FILETYPES_HTML:	TEMPLATES_CREATE_FILE(fname, templates_filetype_html); break;
-			case GEANY_FILETYPES_RUBY:	TEMPLATES_CREATE_FILE(fname, templates_filetype_ruby); break;
-			case GEANY_FILETYPES_PYTHON:    TEMPLATES_CREATE_FILE(fname, templates_filetype_python); break;
-			case GEANY_FILETYPES_LATEX: TEMPLATES_CREATE_FILE(fname, templates_filetype_latex); break;
+			case GEANY_FILETYPES_NONE:
+				create_template_file_if_necessary(fname, templates_filetype_none);
+				break;
+			case GEANY_FILETYPES_C:
+				create_template_file_if_necessary(fname, templates_filetype_c);
+				break;
+			case GEANY_FILETYPES_CPP:
+				create_template_file_if_necessary(fname, templates_filetype_cpp);
+				break;
+			case GEANY_FILETYPES_D:
+				create_template_file_if_necessary(fname, templates_filetype_d);
+				break;
+			case GEANY_FILETYPES_JAVA:
+				create_template_file_if_necessary(fname, templates_filetype_java);
+				break;
+			case GEANY_FILETYPES_PASCAL:
+				create_template_file_if_necessary(fname, templates_filetype_pascal);
+				break;
+			case GEANY_FILETYPES_PHP:
+				create_template_file_if_necessary(fname, templates_filetype_php);
+				break;
+			case GEANY_FILETYPES_HTML:
+				create_template_file_if_necessary(fname, templates_filetype_html);
+				break;
+			case GEANY_FILETYPES_RUBY:
+				create_template_file_if_necessary(fname, templates_filetype_ruby);
+				break;
+			case GEANY_FILETYPES_PYTHON:
+				create_template_file_if_necessary(fname, templates_filetype_python);
+				break;
+			case GEANY_FILETYPES_LATEX:
+				create_template_file_if_necessary(fname, templates_filetype_latex);
+				break;
 			default: break;
 		}
 		TEMPLATES_READ_FILE(fname, &ft_templates[ft_id]);
@@ -360,7 +399,7 @@ on_new_with_template                   (GtkMenuItem     *menuitem,
 
 
 /* template items for the new file menu */
-static void create_new_menu_items(void)
+static void create_new_menu_items(GtkWidget *toolbar_new_file_menu)
 {
 	GSList *node;
 
@@ -378,13 +417,10 @@ static void create_new_menu_items(void)
 		gtk_container_add(GTK_CONTAINER(new_with_template_menu), tmp_menu);
 		g_signal_connect(tmp_menu, "activate", G_CALLBACK(on_new_with_template), ft);
 
-		if (ui_widgets.new_file_menu != NULL)
-		{
-			tmp_button = gtk_menu_item_new_with_label(label);
-			gtk_widget_show(tmp_button);
-			gtk_container_add(GTK_CONTAINER(ui_widgets.new_file_menu), tmp_button);
-			g_signal_connect(tmp_button, "activate", G_CALLBACK(on_new_with_template), ft);
-		}
+		tmp_button = gtk_menu_item_new_with_label(label);
+		gtk_widget_show(tmp_button);
+		gtk_container_add(GTK_CONTAINER(toolbar_new_file_menu), tmp_button);
+		g_signal_connect(tmp_button, "activate", G_CALLBACK(on_new_with_template), ft);
 	}
 }
 
@@ -443,6 +479,7 @@ on_new_with_file_template(GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer user_dat
 static void add_file_item(gpointer data, gpointer user_data)
 {
 	GtkWidget *tmp_menu, *tmp_button;
+	GtkWidget *toolbar_new_file_menu = user_data;
 	gchar *label;
 
 	g_return_if_fail(data);
@@ -454,13 +491,11 @@ static void add_file_item(gpointer data, gpointer user_data)
 	gtk_container_add(GTK_CONTAINER(new_with_template_menu), tmp_menu);
 	g_signal_connect(tmp_menu, "activate", G_CALLBACK(on_new_with_file_template), NULL);
 
-	if (ui_widgets.new_file_menu != NULL)
-	{
-		tmp_button = gtk_menu_item_new_with_label(label);
-		gtk_widget_show(tmp_button);
-		gtk_container_add(GTK_CONTAINER(ui_widgets.new_file_menu), tmp_button);
-		g_signal_connect(tmp_button, "activate", G_CALLBACK(on_new_with_file_template), NULL);
-	}
+	tmp_button = gtk_menu_item_new_with_label(label);
+	gtk_widget_show(tmp_button);
+	gtk_container_add(GTK_CONTAINER(toolbar_new_file_menu), tmp_button);
+	g_signal_connect(tmp_button, "activate", G_CALLBACK(on_new_with_file_template), NULL);
+
 	g_free(label);
 }
 
@@ -485,7 +520,7 @@ static gint compare_filenames_by_filetype(gconstpointer a, gconstpointer b)
 }
 
 
-static gboolean add_custom_template_items(void)
+static gboolean add_custom_template_items(GtkWidget *toolbar_new_file_menu)
 {
 	gchar *path = g_build_path(G_DIR_SEPARATOR_S, app->configdir, GEANY_TEMPLATES_SUBDIR,
 		"files", NULL);
@@ -497,7 +532,7 @@ static gboolean add_custom_template_items(void)
 		return FALSE;
 	}
 	list = g_slist_sort(list, compare_filenames_by_filetype);
-	g_slist_foreach(list, add_file_item, NULL);
+	g_slist_foreach(list, add_file_item, toolbar_new_file_menu);
 	g_slist_foreach(list, (GFunc) g_free, NULL);
 	g_slist_free(list);
 	g_free(path);
@@ -508,23 +543,28 @@ static gboolean add_custom_template_items(void)
 static void create_file_template_menus(void)
 {
 	GtkWidget *sep1, *sep2 = NULL;
+	GtkWidget *toolbar_new_file_menu = NULL;
 
 	new_with_template_menu = ui_lookup_widget(main_widgets.window, "menu_new_with_template1_menu");
-	create_new_menu_items();
+	toolbar_new_file_menu = gtk_menu_new();
+	/* we hold our own ref on the menu in case it is not used in the toolbar */
+	g_object_ref(toolbar_new_file_menu);
+
+	create_new_menu_items(toolbar_new_file_menu);
 
 	sep1 = gtk_separator_menu_item_new();
 	gtk_container_add(GTK_CONTAINER(new_with_template_menu), sep1);
-	if (ui_widgets.new_file_menu != NULL)
-	{
-		sep2 = gtk_separator_menu_item_new();
-		gtk_container_add(GTK_CONTAINER(ui_widgets.new_file_menu), sep2);
-	}
-	if (add_custom_template_items())
+	sep2 = gtk_separator_menu_item_new();
+	gtk_container_add(GTK_CONTAINER(toolbar_new_file_menu), sep2);
+
+	if (add_custom_template_items(toolbar_new_file_menu))
 	{
 		gtk_widget_show(sep1);
-		if (sep2 != NULL)
-			gtk_widget_show(sep2);
+		gtk_widget_show(sep2);
 	}
+
+	geany_menu_button_action_set_menu(GEANY_MENU_BUTTON_ACTION(
+		toolbar_get_action_by_name("New")), toolbar_new_file_menu);
 }
 
 
@@ -806,6 +846,8 @@ void templates_free_templates(void)
 {
 	gint i;
 	GList *children, *item;
+	GtkWidget *toolbar_new_file_menu = geany_menu_button_action_get_menu(
+					GEANY_MENU_BUTTON_ACTION(toolbar_get_action_by_name("New")));
 
 	for (i = 0; i < GEANY_MAX_TEMPLATES; i++)
 	{
@@ -816,16 +858,14 @@ void templates_free_templates(void)
 		g_free(ft_templates[i]);
 	}
 	/* destroy "New with template" sub menu items (in case we want to reload the templates) */
-	if (ui_widgets.new_file_menu != NULL)
+	children = gtk_container_get_children(GTK_CONTAINER(toolbar_new_file_menu));
+	foreach_list(item, children)
 	{
-		children = gtk_container_get_children(GTK_CONTAINER(ui_widgets.new_file_menu));
-		for (item = children; item != NULL; item = g_list_next(item))
-		{
-			gtk_widget_destroy(GTK_WIDGET(item->data));
-		}
+		gtk_widget_destroy(GTK_WIDGET(item->data));
 	}
+	g_object_unref(toolbar_new_file_menu);
 	children = gtk_container_get_children(GTK_CONTAINER(new_with_template_menu));
-	for (item = children; item != NULL; item = g_list_next(item))
+	foreach_list(item, children)
 	{
 		gtk_widget_destroy(GTK_WIDGET(item->data));
 	}
