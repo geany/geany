@@ -1,5 +1,13 @@
 2009-07-17  Lex Trotman  <elextr(at)gmail(dot)com>
 
+ * src/build.c
+   Fixed substitute %f etc in commands 
+   Fixed potential leak in build_replace_placeholder
+   Fixed leak in prepare_run_script (Thanks for patch Thomas)
+   Fixed build_replace_placeholder to not require document.
+   
+2009-07-17  Lex Trotman  <elextr(at)gmail(dot)com>
+
  * src/build.c, src/build.h, src/filetypes.h, src/filetypes.c
    Fixed crash and lots of warnings, deleted some commented out code.
  * geany.glade, src/keyfile.c, src/prefs.c, src/prefs.h, src/project.c

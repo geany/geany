@@ -479,30 +479,30 @@ static gchar* build_replace_placeholder(const GeanyDocument* doc, const gchar* s
     gchar* executable;
     gchar* ret_str; /* to be freed when not in use anymore */
 
-    stack = g_string_new(src);
+	stack = g_string_new(src);
+	if (doc!=NULL)
+	{
+		filename = utils_get_utf8_from_locale(doc->file_name);
 
-    g_return_val_if_fail((doc && src), NULL);
+		/* replace %f with the filename (including extension) */
+		replacement = g_path_get_basename(filename);
+		utils_string_replace_all(stack, "%f", replacement);
+		g_free(replacement);
 
-	filename = utils_get_utf8_from_locale(doc->file_name);
+		/* replace %d with the absolute path of the dir of the current file */
+		replacement = g_path_get_dirname(filename);
+		utils_string_replace_all(stack, "%d", replacement);
+		g_free(replacement);
 
-    /* replace %f with the filename (including extension) */
-	replacement = g_path_get_basename(filename);
-	utils_string_replace_all(stack, "%f", replacement);
-	g_free(replacement);
-
-    /* replace %e with the filename (excluding extension) */
-	executable = utils_remove_ext_from_filename(filename);
-	replacement = g_path_get_basename(executable);
-	utils_string_replace_all(stack, "%e", replacement);
-	g_free(replacement);
-
-    /* replace %d with the absolute path of the dir of the current file */
-    replacement = g_path_get_dirname(filename);
-	utils_string_replace_all(stack, "%d", replacement);
-	g_free(replacement);
-
-
+		/* replace %e with the filename (excluding extension) */
+		executable = utils_remove_ext_from_filename(filename);
+		replacement = g_path_get_basename(executable);
+		utils_string_replace_all(stack, "%e", replacement);
+		g_free(replacement);
+	}
+	
     /* replace %p with the current project's (absolute) base directory */
+	replacement = NULL; /* prevent double free if no replacement found */
     if (app->project)
     {
         replacement = project_get_base_path();
@@ -510,10 +510,9 @@ static gchar* build_replace_placeholder(const GeanyDocument* doc, const gchar* s
     else if (strstr(stack->str, "%p"))
     {   /* fall back to %d */
         ui_set_statusbar(FALSE, _("failed to substitute %%p, no project active"));
-        replacement = g_path_get_dirname(filename);
+        if (doc!=NULL)
+			replacement = g_path_get_dirname(filename);
     }
-    else /* aganst double free */
-        replacement = NULL;
 
     utils_string_replace_all(stack, "%p", replacement);
     g_free(replacement);
@@ -564,7 +563,7 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 #endif
 
 	utf8_cmd_string = utils_get_utf8_from_locale(cmd_string);
-	utf8_working_dir = (dir != NULL) ? g_strdup(dir) :
+	utf8_working_dir = (dir != NULL && strlen(dir)>0) ? g_strdup(dir) :
 		g_path_get_dirname(doc->file_name);
 	working_dir = utils_get_locale_from_utf8(utf8_working_dir);
 
@@ -638,7 +637,6 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, 
 	gboolean 			 result = FALSE;
 	gchar				*tmp;
     gchar               *cmd_string;
-    gchar               *file;
 
 	if (vte_cmd_nonscript != NULL)
 		*vte_cmd_nonscript = NULL;
@@ -650,7 +648,6 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, 
 
 
     cmd_string = build_replace_placeholder(doc, buildcmd_cmd(cmd));
-    file = g_path_get_basename(cmd_string);
     working_dir = build_replace_placeholder(doc, buildcmd_working_dir(cmd)); /* in utf-8 */
 
 	/* only test whether working dir exists, don't change it or else Windows support will break
@@ -1053,7 +1050,7 @@ typedef void callback(GtkWidget *w, gpointer u);
 static void build_command(GeanyDocument *doc, GeanyBuildGroup grp, gint cmd, gchar *cmd_cat)
 {
 	gchar *dir;
-	gchar *full_command;
+	gchar *full_command, *subs_command;
 	GeanyBuildCommand *buildcmd = get_build_cmd(doc, grp, cmd, NULL);
     gchar* cmdstr;
 	
@@ -1074,9 +1071,11 @@ static void build_command(GeanyDocument *doc, GeanyBuildGroup grp, gint cmd, gch
 
 
     dir = build_replace_placeholder(doc, buildcmd_working_dir(buildcmd));
+	subs_command = build_replace_placeholder(doc, full_command);
 	build_info.grp = grp;
 	build_info.cmd = cmd;
-	build_spawn_cmd(doc, full_command, dir);
+	build_spawn_cmd(doc, subs_command, dir);
+	g_free(subs_command);
 	g_free(dir);
 	if (cmd_cat != NULL) g_free(full_command);
 	build_menu_update(doc);
@@ -1423,7 +1422,8 @@ on_toolbutton_make_activate  (GtkWidget *menuitem, gpointer user_data)
 	gint grp,cmd;
 
 	last_toolbutton_action = user_data;
-	grp = GPOINTER_TO_GRP(user_data); cmd = GPOINTER_TO_CMD(user_data);
+	grp = GPOINTER_TO_GRP(user_data);
+	cmd = GPOINTER_TO_CMD(user_data);
 	if ( last_toolbutton_action==GBO_TO_POINTER(GBO_MAKE_ALL))
 			msg = _("Build the current file with Make and the default target");
 	else if (last_toolbutton_action==GBO_TO_POINTER(GBO_MAKE_CUSTOM))
