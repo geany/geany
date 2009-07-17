@@ -1119,44 +1119,7 @@ static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
 	/* read build settings */
 	load_build_menu( config, BCS_FT, (gpointer)ft );
 	load_build_menu( configh, BCS_HOME_FT, (gpointer)ft );
-/*	result = g_key_file_get_string(configh, "build_settings", "compiler", NULL);
-	if (result == NULL) result = g_key_file_get_string(config, "build_settings", "compiler", NULL);
-	if (G_LIKELY(result != NULL))
-	{
-		filetypes[ft_id]->programs->compiler = result;
-		filetypes[ft_id]->actions->can_compile = TRUE;
-	}
 
-	result = g_key_file_get_string(configh, "build_settings", "linker", NULL);
-	if (result == NULL) result = g_key_file_get_string(config, "build_settings", "linker", NULL);
-	if (result != NULL)
-	{
-		filetypes[ft_id]->programs->linker = result;
-		filetypes[ft_id]->actions->can_link = TRUE;
-	}
-
-	result = g_key_file_get_string(configh, "build_settings", "run_cmd", NULL);
-	if (result == NULL) result = g_key_file_get_string(config, "build_settings", "run_cmd", NULL);
-	if (G_LIKELY(result != NULL))
-	{
-		filetypes[ft_id]->programs->run_cmd = result;
-		filetypes[ft_id]->actions->can_exec = TRUE;
-	}
-
-	result = g_key_file_get_string(configh, "build_settings", "run_cmd2", NULL);
-	if (result == NULL) result = g_key_file_get_string(config, "build_settings", "run_cmd2", NULL);
-	if (result != NULL)
-	{
-		filetypes[ft_id]->programs->run_cmd2 = result;
-		filetypes[ft_id]->actions->can_exec = TRUE;
-	}
-
-	result = g_key_file_get_string(configh, "build_settings", "error_regex", NULL);
-	if (result == NULL) result = g_key_file_get_string(config, "build_settings", "error_regex", NULL);
-	if (result != NULL)
-	{
-		set_error_regex(ft, result);
-	} */
 }
 
 

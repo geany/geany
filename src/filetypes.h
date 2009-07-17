@@ -99,23 +99,6 @@ GeanyFiletypeGroupID;
 #define FILETYPE_ID(filetype_ptr) \
 	(((filetype_ptr) != NULL) ? (filetype_ptr)->id : GEANY_FILETYPES_NONE)
 
-/*
-struct build_actions
-{
-	gboolean	can_compile;
-	gboolean	can_link;
-	gboolean	can_exec;
-};
-
-struct build_programs
-{
-	gchar *compiler;
-	gchar *linker;
-	gchar *run_cmd;
-	gchar *run_cmd2;
-	gboolean modified;
-};
-
 /** Represents a filetype. */
 struct GeanyFiletype
 {
@@ -131,8 +114,6 @@ struct GeanyFiletype
 	gchar	 		 *comment_open;
 	gchar	 		 *comment_close;
 	gboolean  		  comment_use_indent;
-/*	struct build_programs	*programs; 
-	struct build_actions	*actions;	/* TODO: make private */
 	GeanyBuildCommand *filecmds;	/* these need to be visible since used in build.c so not in private part */
 	GeanyBuildCommand *ftdefcmds;	/* filetype dependent defaults for non_ft commands */
 	GeanyBuildCommand *execcmds;

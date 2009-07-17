@@ -457,8 +457,6 @@ static void prefs_init_dialog(void)
 		(editor_prefs.autoclose_chars & GEANY_AC_DQUOTE));
 
 	/* Tools Settings */
-	if (tool_prefs.make_cmd)
-			gtk_entry_set_text(GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_make")), tool_prefs.make_cmd);
 
     if (tool_prefs.term_cmd)
             gtk_entry_set_text(GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_term")), tool_prefs.term_cmd);
@@ -849,9 +847,6 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		| (autoclose_brackets[4] ? GEANY_AC_DQUOTE : 0);
 
 		/* Tools Settings */
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_make");
-		g_free(tool_prefs.make_cmd);
-		tool_prefs.make_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_term");
 		g_free(tool_prefs.term_cmd);
@@ -1490,7 +1485,7 @@ void prefs_show_dialog(void)
 		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "project_file_path_entry"));
 		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "extra_plugin_path_entry"));
 		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_toggle_mark"));
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_make"));
+	/*	ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_make")); */
 		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_term"));
 		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_browser"));
 		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_grep"));
@@ -1528,9 +1523,9 @@ void prefs_show_dialog(void)
 				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(3));
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "long_line_color"),
 				"color-set", G_CALLBACK(on_prefs_color_choosed), GINT_TO_POINTER(1));
-		/* file chooser buttons in the tools tab */
+		/* file chooser buttons in the tools tab 
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "button_make"),
-				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_make"));
+				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_make")); */
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "button_term"),
 				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_term"));
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "button_browser"),

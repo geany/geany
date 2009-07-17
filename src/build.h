@@ -154,7 +154,7 @@ void load_build_menu( GKeyFile *config, GeanyBuildSource dst, gpointer ptr );
 
 void save_build_menu( GKeyFile *config, gpointer ptr, GeanyBuildSource src );
 
-void set_build_grp_count( GeanyBuildGroup grp, guint count );
+void set_build_grp_count( GeanyBuildGroup grp, gint count );
 
 gchar **get_build_regex(GeanyBuildGroup grp, GeanyFiletype *ft, gint *from);
 

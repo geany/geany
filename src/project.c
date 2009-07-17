@@ -327,7 +327,7 @@ static void update_ui(void)
 static void remove_foreach_project_filetype( gpointer data, gpointer user_data )
 {
 	GeanyFiletype *ft = (GeanyFiletype*)data;
-	if(ft!=NULL)
+	if (ft!=NULL)
 	{
 		setptr( ft->projfilecmds, NULL);
 		setptr(ft->projerror_regex_string, NULL);
@@ -524,7 +524,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	label = gtk_label_new(_("Project"));
 	gtk_widget_show(table);	/* needed to switch current page */
 	gtk_notebook_insert_page(GTK_NOTEBOOK(notebook), table, label, 0);
-	if(doc!=NULL) ft=doc->file_type;
+	if (doc!=NULL) ft=doc->file_type;
 	table = build_commands_table( doc, BCS_PROJ, &(e->build_properties), ft );
 	label = gtk_label_new(_("Build"));
 	gtk_notebook_insert_page(GTK_NOTEBOOK(notebook), table, label, 2);
@@ -752,8 +752,8 @@ static gboolean update_config(const PropertyDialogElements *e)
 		setptr(p->description, g_strdup(gtk_text_buffer_get_text(buffer, &start, &end, FALSE)));
 		
 		/* read the project build menu */
-		if( doc!=NULL )ft=doc->file_type;
-		if( ft!=NULL )
+		if ( doc!=NULL )ft=doc->file_type;
+		if ( ft!=NULL )
 		{
 			menu_dst.dst[GBG_FT] = &(ft->projfilecmds);
 			oldvalue = ft->projfilecmds;
@@ -769,11 +769,11 @@ static gboolean update_config(const PropertyDialogElements *e)
 		menu_dst.dst[GBG_EXEC] = &exec_proj;
 		menu_dst.nonfileregexstr = &regex_proj;
 		read_build_commands( &menu_dst, e->build_properties,  GTK_RESPONSE_ACCEPT );
-		if(ft!=NULL && ft->projfilecmds!=oldvalue && ft->project_list_entry<0)
+		if (ft!=NULL && ft->projfilecmds!=oldvalue && ft->project_list_entry<0)
 		{
-			if(p->build_filetypes_list==NULL)p->build_filetypes_list = g_ptr_array_new();
+			if (p->build_filetypes_list==NULL)p->build_filetypes_list = g_ptr_array_new();
 			ft->project_list_entry = p->build_filetypes_list->len; 
-			g_ptr_array_add( p->build_filetypes_list, ft );
+			g_ptr_array_add(p->build_filetypes_list, ft);
 		}
 		build_menu_update(doc);
 

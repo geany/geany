@@ -1,3 +1,10 @@
+2009-07-17  Lex Trotman  <elextr(at)gmail(dot)com>
+
+ * src/build.c, src/build.h, src/filetypes.h, src/filetypes.c
+   Fixed crash and lots of warnings, deleted some commented out code.
+ * geany.glade, src/keyfile.c, src/prefs.c, src/prefs.h, src/project.c
+   Removed make command from preferences and associated code
+
 2009-07-16  Lex Trotman  <elextr(at)gmail(dot)com>
 
  * src/build.c, src/build.h

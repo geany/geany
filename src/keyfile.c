@@ -397,7 +397,6 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_string(config, PACKAGE, "pref_template_datetime", template_prefs.datetime_format);
 
 	/* tools settings */
-	g_key_file_set_string(config, "tools", "make_cmd", tool_prefs.make_cmd ? tool_prefs.make_cmd : "");
 	g_key_file_set_string(config, "tools", "term_cmd", tool_prefs.term_cmd ? tool_prefs.term_cmd : "");
 	g_key_file_set_string(config, "tools", "browser_cmd", tool_prefs.browser_cmd ? tool_prefs.browser_cmd : "");
 	g_key_file_set_string(config, "tools", "grep_cmd", tool_prefs.grep_cmd ? tool_prefs.grep_cmd : "");
@@ -771,7 +770,6 @@ static void load_dialog_prefs(GKeyFile *config)
 	template_prefs.datetime_format = utils_get_setting_string(config, PACKAGE, "pref_template_datetime", "%d.%m.%Y %H:%M:%S %Z");
 
 	/* tools */
-	tool_prefs.make_cmd = utils_get_setting_string(config, "tools", "make_cmd", GEANY_DEFAULT_TOOLS_MAKE);
 	tool_prefs.term_cmd = utils_get_setting_string(config, "tools", "term_cmd", GEANY_DEFAULT_TOOLS_TERMINAL);
 	tool_prefs.browser_cmd = utils_get_setting_string(config, "tools", "browser_cmd", GEANY_DEFAULT_TOOLS_BROWSER);
 	tool_prefs.grep_cmd = utils_get_setting_string(config, "tools", "grep_cmd", GEANY_DEFAULT_TOOLS_GREP);
