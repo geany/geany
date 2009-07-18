@@ -813,6 +813,66 @@ static void tb_editor_drag_data_rcvd_cb(GtkWidget *widget, GdkDragContext *conte
 }
 
 
+static gboolean tb_editor_foreach_used(GtkTreeModel *model, GtkTreePath *path,
+									   GtkTreeIter *iter, gpointer data)
+{
+	gchar *action_name;
+
+	gtk_tree_model_get(model, iter, TB_EDITOR_COL_ACTION, &action_name, -1);
+
+	if (utils_str_equal(action_name, TB_EDITOR_SEPARATOR))
+		g_string_append_printf(data, "\t\t<separator/>\n");
+	else if (NZV(action_name))
+		g_string_append_printf(data, "\t\t<toolitem action='%s' />\n", action_name);
+
+	g_free(action_name);
+	return FALSE;
+}
+
+
+static void tb_editor_write_markup(TBEditorWidget *tbw)
+{
+	/* <ui> must be the first tag, otherwise gtk_ui_manager_add_ui_from_string() will fail. */
+	const gchar *template = "<ui>\n<!--\n\
+This is Geany's toolbar UI definition.\nThe DTD can be found at \n\
+http://library.gnome.org/devel/gtk/stable/GtkUIManager.html#GtkUIManager.description.\n\n\
+You can re-order all items and freely add and remove available actions.\n\
+You cannot add new actions which are not listed in the documentation.\n\
+Everything you add or change must be inside the /ui/toolbar/ path.\n\n\
+For changes to take effect, you need to restart Geany. Alternatively you can use the toolbar\n\
+editor in Geany.\n\n\
+A list of available actions can be found in the documentation included with Geany or\n\
+at http://www.geany.org/manual/current/index.html#customizing-the-toolbar.\n-->\n\
+\t<toolbar name='GeanyToolbar'>\n";
+	const gchar *filename = utils_build_path(app->configdir, "ui_toolbar.xml", NULL);
+	GString *str = g_string_new(template);
+
+	gtk_tree_model_foreach(GTK_TREE_MODEL(tbw->store_used), tb_editor_foreach_used, str);
+
+	g_string_append(str, "\n\t</toolbar>\n</ui>\n");
+
+	toolbar_reload(str->str);
+
+	utils_write_file(filename, str->str);
+
+	g_string_free(str, TRUE);
+}
+
+
+static void tb_editor_available_items_changed_cb(GtkTreeModel *model, GtkTreePath *arg1,
+												 GtkTreeIter *arg2, TBEditorWidget *tbw)
+{
+	tb_editor_write_markup(tbw);
+}
+
+
+static void tb_editor_available_items_deleted_cb(GtkTreeModel *model, GtkTreePath *arg1,
+												 TBEditorWidget *tbw)
+{
+	tb_editor_write_markup(tbw);
+}
+
+
 static TBEditorWidget *tb_editor_create_dialog(void)
 {
 	GtkWidget *dialog, *vbox, *hbox, *vbox_buttons, *button_add, *button_remove;
@@ -824,7 +884,6 @@ static TBEditorWidget *tb_editor_create_dialog(void)
 	dialog = gtk_dialog_new_with_buttons(_("Customize Toolbar"),
 				GTK_WINDOW(main_widgets.window),
 				GTK_DIALOG_DESTROY_WITH_PARENT,
-				GTK_STOCK_APPLY, GTK_RESPONSE_APPLY,
 				GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
@@ -871,6 +930,11 @@ static TBEditorWidget *tb_editor_create_dialog(void)
 		GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(swin_used), GTK_SHADOW_ETCHED_IN);
 	gtk_container_add(GTK_CONTAINER(swin_used), tree_used);
+
+	g_signal_connect(tbw->store_used, "row-changed",
+		G_CALLBACK(tb_editor_available_items_changed_cb), tbw);
+	g_signal_connect(tbw->store_used, "row-deleted",
+		G_CALLBACK(tb_editor_available_items_deleted_cb), tbw);
 
 	/* drag'n'drop */
 	gtk_tree_view_enable_model_drag_source(GTK_TREE_VIEW(tree_available), GDK_BUTTON1_MASK,
@@ -931,56 +995,13 @@ static TBEditorWidget *tb_editor_create_dialog(void)
 }
 
 
-static gboolean tb_editor_foreach_used(GtkTreeModel *model, GtkTreePath *path,
-									   GtkTreeIter *iter, gpointer data)
-{
-	gchar *action_name;
-
-	gtk_tree_model_get(model, iter, TB_EDITOR_COL_ACTION, &action_name, -1);
-
-	if (utils_str_equal(action_name, TB_EDITOR_SEPARATOR))
-		g_string_append_printf(data, "\t\t<separator/>\n");
-	else if (NZV(action_name))
-		g_string_append_printf(data, "\t\t<toolitem action='%s' />\n", action_name);
-
-	g_free(action_name);
-	return FALSE;
-}
-
-
-static gchar *tb_editor_write_markup(TBEditorWidget *tbw)
-{
-	/* <ui> must be the first tag, otherwise gtk_ui_manager_add_ui_from_string() will fail. */
-	const gchar *template = "<ui>\n<!--\n\
-This is Geany's toolbar UI definition.\nThe DTD can be found at \n\
-http://library.gnome.org/devel/gtk/stable/GtkUIManager.html#GtkUIManager.description.\n\n\
-You can re-order all items and freely add and remove available actions.\n\
-You cannot add new actions which are not listed in the documentation.\n\
-Everything you add or change must be inside the /ui/toolbar/ path.\n\n\
-For changes to take effect, you need to restart Geany. Alternatively you can use the toolbar\n\
-editor in Geany.\n\n\
-A list of available actions can be found in the documentation included with Geany or\n\
-at http://www.geany.org/manual/current/index.html#customizing-the-toolbar.\n-->\n\
-\t<toolbar name='GeanyToolbar'>\n";
-	GString *str = g_string_new(template);
-
-	gtk_tree_model_foreach(GTK_TREE_MODEL(tbw->store_used), tb_editor_foreach_used, str);
-
-	g_string_append(str, "\n\t</toolbar>\n</ui>\n");
-
-	return g_string_free(str, FALSE);
-}
-
-
 void toolbar_configure(void)
 {
 	gchar *markup, *label;
 	const gchar *name;
-	const gchar *filename = utils_build_path(app->configdir, "ui_toolbar.xml", NULL);
 	GSList *sl, *used_items;
 	GList *l, *all_items;
 	GtkTreePath *path;
-	gint response;
 	TBEditorWidget *tbw;
 
 	/* read the current active toolbar items */
@@ -1025,16 +1046,8 @@ void toolbar_configure(void)
 	gtk_tree_path_free(path);
 
 	/* run it */
-	while ((response = gtk_dialog_run(GTK_DIALOG(tbw->dialog))))
-	{
-		markup = tb_editor_write_markup(tbw);
-		toolbar_reload(markup);
-		utils_write_file(filename, markup);
-		g_free(markup);
+	gtk_dialog_run(GTK_DIALOG(tbw->dialog));
 
-		if (response == GTK_RESPONSE_CLOSE || response == GTK_RESPONSE_DELETE_EVENT)
-			break;
-	}
 	gtk_widget_destroy(tbw->dialog);
 
 	g_slist_foreach(used_items, (GFunc) g_free, NULL);
