@@ -931,11 +931,6 @@ static TBEditorWidget *tb_editor_create_dialog(void)
 	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(swin_used), GTK_SHADOW_ETCHED_IN);
 	gtk_container_add(GTK_CONTAINER(swin_used), tree_used);
 
-	g_signal_connect(tbw->store_used, "row-changed",
-		G_CALLBACK(tb_editor_available_items_changed_cb), tbw);
-	g_signal_connect(tbw->store_used, "row-deleted",
-		G_CALLBACK(tb_editor_available_items_deleted_cb), tbw);
-
 	/* drag'n'drop */
 	gtk_tree_view_enable_model_drag_source(GTK_TREE_VIEW(tree_available), GDK_BUTTON1_MASK,
 		tb_editor_dnd_targets, tb_editor_dnd_targets_len, GDK_ACTION_MOVE);
@@ -1039,6 +1034,12 @@ void toolbar_configure(void)
 	path = gtk_tree_path_new_from_string("0");
 	gtk_tree_selection_select_path(gtk_tree_view_get_selection(tbw->tree_used), path);
 	gtk_tree_path_free(path);
+
+	/* connect the changed signals after populating the store */
+	g_signal_connect(tbw->store_used, "row-changed",
+		G_CALLBACK(tb_editor_available_items_changed_cb), tbw);
+	g_signal_connect(tbw->store_used, "row-deleted",
+		G_CALLBACK(tb_editor_available_items_deleted_cb), tbw);
 
 	/* run it */
 	gtk_dialog_run(GTK_DIALOG(tbw->dialog));
