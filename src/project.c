@@ -386,10 +386,15 @@ void project_close(gboolean open_default)
 	update_ui();
 }
 
+static void on_set_use_base_path_clicked( GtkWidget *unused1, gpointer user_data )
+{
+	TableData td = (TableData)user_data;
+	set_build_non_ft_wd_to_proj(td);
+}
 
 static void create_properties_dialog(PropertyDialogElements *e)
 {
-	GtkWidget *table, *notebook;
+	GtkWidget *table, *notebook, *build_table;
 	GtkWidget *image;
 	GtkWidget *button;
 	GtkWidget *bbox;
@@ -416,7 +421,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), -1, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 
 	e->name = gtk_entry_new();
 	ui_entry_add_clear_icon(e->name);
@@ -429,7 +434,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), -1, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 
 	e->file_name = gtk_entry_new();
 	ui_entry_add_clear_icon(e->file_name);
@@ -442,7 +447,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (GTK_FILL), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), -1, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 
 	e->description = gtk_text_view_new();
 	gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(e->description), GTK_WRAP_WORD);
@@ -459,7 +464,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 3, 4,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), -1, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 
 	e->base_path = gtk_entry_new();
 	ui_entry_add_clear_icon(e->base_path);
@@ -472,34 +477,28 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	gtk_table_attach(GTK_TABLE(table), bbox, 1, 2, 3, 4,
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
+	
+	if (doc!=NULL) ft=doc->file_type;
+	build_table = build_commands_table( doc, BCS_PROJ, &(e->build_properties), ft );
+	label = gtk_label_new(_("Build"));
+	notebook = ui_lookup_widget(e->dialog, "project_notebook");
+	gtk_notebook_insert_page(GTK_NOTEBOOK(notebook), build_table, label, 2);
 
-	e->make_in_base_path = gtk_check_button_new_with_label(_("Make in base path"));
-	gtk_table_attach(GTK_TABLE(table), e->make_in_base_path, 0, 3, 4, 5,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-
-	label = gtk_label_new(_("Run command:"));
-	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 5, 6,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), -1, 0);
-
-	e->run_cmd = gtk_entry_new();
-	ui_entry_add_clear_icon(e->run_cmd);
-	ui_widget_set_tooltip_text(e->run_cmd,
-		_("Command-line to run in the project base directory. "
-		"Options can be appended to the command. "
-		"Leave blank to use the default run command."));
-	button = gtk_button_new();
-	g_signal_connect(button, "clicked", G_CALLBACK(on_file_open_button_clicked), e);
-	image = gtk_image_new_from_stock("gtk-open", GTK_ICON_SIZE_BUTTON);
-	gtk_container_add(GTK_CONTAINER(button), image);
+	label = gtk_label_new(_("Set the non-filetype working directories on build tab to use base path:"));
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	
+	button = gtk_button_new_with_label(_("Set"));
+	ui_widget_set_tooltip_text(button,
+		_("Set the working directories (on the Build tab) "
+		"for the non-filetype build commands to use the base path"));
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	g_signal_connect(button, "clicked", G_CALLBACK(on_set_use_base_path_clicked), e->build_properties);
 	bbox = gtk_hbox_new(FALSE, 6);
-	gtk_box_pack_start_defaults(GTK_BOX(bbox), e->run_cmd);
+	gtk_box_pack_start(GTK_BOX(bbox), label, TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
-	gtk_table_attach(GTK_TABLE(table), bbox, 1, 2, 5, 6,
+	gtk_table_attach(GTK_TABLE(table), bbox, 0, 2, 4, 5,
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
+					(GtkAttachOptions) (GTK_FILL), 0, 0);
 
 #if 0
 	label = gtk_label_new(_("File patterns:"));
@@ -507,7 +506,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 6, 7,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (GTK_FILL), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), -1, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 
 	e->patterns = gtk_text_view_new();
 	swin = gtk_scrolled_window_new(NULL, NULL);
@@ -520,14 +519,9 @@ static void create_properties_dialog(PropertyDialogElements *e)
 					(GtkAttachOptions) (0), 0, 0);
 #endif
 
-	notebook = ui_lookup_widget(e->dialog, "project_notebook");
 	label = gtk_label_new(_("Project"));
 	gtk_widget_show(table);	/* needed to switch current page */
 	gtk_notebook_insert_page(GTK_NOTEBOOK(notebook), table, label, 0);
-	if (doc!=NULL) ft=doc->file_type;
-	table = build_commands_table( doc, BCS_PROJ, &(e->build_properties), ft );
-	label = gtk_label_new(_("Build"));
-	gtk_notebook_insert_page(GTK_NOTEBOOK(notebook), table, label, 2);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 0);
 }
 
@@ -578,11 +572,6 @@ void project_properties(void)
 
 	gtk_entry_set_text(GTK_ENTRY(e->file_name), p->file_name);
 	gtk_entry_set_text(GTK_ENTRY(e->base_path), p->base_path);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(e->make_in_base_path),
-		p->make_in_base_path);
-	if (p->run_cmd != NULL)
-		gtk_entry_set_text(GTK_ENTRY(e->run_cmd), p->run_cmd);
-
 	gtk_widget_show_all(e->dialog);
 
 	retry:
@@ -740,10 +729,6 @@ static gboolean update_config(const PropertyDialogElements *e)
 		BuildDestination 	 menu_dst;
 		GeanyBuildCommand 	*oldvalue;
 		GeanyFiletype 		*ft=NULL;
-
-		p->make_in_base_path = gtk_toggle_button_get_active(
-			GTK_TOGGLE_BUTTON(e->make_in_base_path));
-		setptr(p->run_cmd, g_strdup(gtk_entry_get_text(GTK_ENTRY(e->run_cmd))));
 
 		/* get and set the project description */
 		buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e->description));

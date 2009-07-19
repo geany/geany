@@ -104,6 +104,7 @@ typedef struct GeanyBuildCommand
 	gchar *entries[BC_CMDENTRIES_COUNT];
 	gboolean	 exists;
 	gboolean	 changed;
+	gboolean	 old;
 } GeanyBuildCommand;
 
 extern GeanyBuildCommand *non_ft_proj, *exec_proj; /* project command array pointers */
@@ -137,6 +138,8 @@ gboolean read_build_commands( BuildDestination *dst, TableData data, gint respon
 
 void free_build_data( TableData data );
 
+void set_build_non_ft_wd_to_proj(TableData table_data);
+
 /* build response decode assistance function */
 gboolean build_parse_make_dir(const gchar *string, gchar **prefix);
 
@@ -147,14 +150,16 @@ BuildMenuItems *build_get_menu_items(gint filetype_idx);
 
 void build_toolbutton_build_clicked(GtkAction *action, gpointer user_data);
 
-void remove_command( GeanyBuildSource src, GeanyBuildGroup grp, gint cmd );
+void remove_command(GeanyBuildSource src, GeanyBuildGroup grp, gint cmd);
 
 /* load and store menu configuration */
-void load_build_menu( GKeyFile *config, GeanyBuildSource dst, gpointer ptr );
+void load_build_menu( GKeyFile *config, GeanyBuildSource dst, gpointer ptr);
 
-void save_build_menu( GKeyFile *config, gpointer ptr, GeanyBuildSource src );
+void save_build_menu( GKeyFile *config, gpointer ptr, GeanyBuildSource src);
 
-void set_build_grp_count( GeanyBuildGroup grp, gint count );
+void set_build_grp_count(GeanyBuildGroup grp, gint count);
+
+gint get_build_group_count(GeanyBuildGroup grp);
 
 gchar **get_build_regex(GeanyBuildGroup grp, GeanyFiletype *ft, gint *from);
 

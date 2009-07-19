@@ -1,3 +1,14 @@
+2009-07-19  Lex Trotman  <elextr(at)gmail(dot)com>
+
+ * src/build.c, src/build.h
+   Added set_build_non_ft_wd_to_proj() for use by project dialog.
+   Improved interpretation of run_in_base_dir from old [build-settings]
+   Added spacing to build commands dialog
+ * src/project.c
+   Removed run in base path option from project dialog and added button to
+   set working directories to d the same.
+
+
 2009-07-18  Lex Trotman  <elextr(at)gmail(dot)com>
 
  * src/build.c
