@@ -552,6 +552,40 @@ gboolean dialogs_show_save_as()
 }
 
 
+#ifndef G_OS_WIN32
+static void show_msgbox_dialog(GtkWidget *dialog, GtkMessageType type, GtkWindow *parent)
+{
+	const gchar *title;
+	switch (type)
+	{
+		case GTK_MESSAGE_ERROR:
+			title = _("Error");
+			break;
+		case GTK_MESSAGE_QUESTION:
+			title = _("Question");
+			break;
+		case GTK_MESSAGE_WARNING:
+			title = _("Warning");
+			break;
+		default:
+			title = _("Information");
+			break;
+	}
+	gtk_window_set_title(GTK_WINDOW(dialog), title);
+	if (parent == NULL)
+	{
+		GdkPixbuf *pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
+		gtk_window_set_icon(GTK_WINDOW(dialog), pb);
+		g_object_unref(pb);
+	}
+	gtk_widget_set_name(dialog, "GeanyDialog");
+
+	gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy(dialog);
+}
+#endif
+
+
 /**
  *  Show a message box of the type @c type with @c text.
  *  On Unix-like systems a GTK message dialog box is shown, on Win32 systems a native Windows
@@ -569,38 +603,36 @@ void dialogs_show_msgbox(GtkMessageType type, const gchar *text, ...)
 #endif
 	gchar string[512];
 	va_list args;
+	GtkWindow *parent = (main_status.main_window_realized) ? GTK_WINDOW(main_widgets.window) : NULL;
 
 	va_start(args, text);
 	g_vsnprintf(string, 511, text, args);
 	va_end(args);
 
 #ifdef G_OS_WIN32
-	win32_message_dialog(NULL, type, string);
+	win32_message_dialog(GTK_WIDGET(parent), type, string);
 #else
-	dialog = gtk_message_dialog_new(GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
+	dialog = gtk_message_dialog_new(parent, GTK_DIALOG_DESTROY_WITH_PARENT,
                                   type, GTK_BUTTONS_OK, "%s", string);
-	gtk_widget_set_name(dialog, "GeanyDialog");
-	gtk_dialog_run(GTK_DIALOG(dialog));
-	gtk_widget_destroy(dialog);
+	show_msgbox_dialog(dialog, type, parent);
 #endif
 }
 
 
 void dialogs_show_msgbox_with_secondary(GtkMessageType type, const gchar *text, const gchar *secondary)
 {
+	GtkWindow *parent = (main_status.main_window_realized) ? GTK_WINDOW(main_widgets.window) : NULL;
 #ifdef G_OS_WIN32
 	/* put the two strings together because Windows message boxes don't support secondary texts */
 	gchar *string = g_strconcat(text, "\n", secondary, NULL);
-	win32_message_dialog(NULL, type, string);
+	win32_message_dialog(GTK_WIDGET(parent), type, string);
 	g_free(string);
 #else
 	GtkWidget *dialog;
-	dialog = gtk_message_dialog_new(GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
+	dialog = gtk_message_dialog_new(parent, GTK_DIALOG_DESTROY_WITH_PARENT,
                                   type, GTK_BUTTONS_OK, "%s", text);
-	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", secondary);
-	gtk_dialog_run(GTK_DIALOG(dialog));
-	gtk_widget_destroy(dialog);
+	show_msgbox_dialog(dialog, type, parent);
 #endif
 }
 
@@ -1321,13 +1353,21 @@ static gboolean show_question(GtkWidget *parent, const gchar *yes_btn, const gch
 #else
 	GtkWidget *dialog;
 
-	if (parent == NULL)
+	if (parent == NULL && main_status.main_window_realized)
 		parent = main_widgets.window;
 
 	dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
 		GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_QUESTION,
 		GTK_BUTTONS_NONE, "%s", question_text);
 	gtk_widget_set_name(dialog, "GeanyDialog");
+	gtk_window_set_title(GTK_WINDOW(dialog), _("Question"));
+	if (parent == NULL)
+	{
+		GdkPixbuf *pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
+		gtk_window_set_icon(GTK_WINDOW(dialog), pb);
+		g_object_unref(pb);
+	}
+
 	/* question_text will be in bold if optional extra_text used */
 	if (extra_text != NULL)
 		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
@@ -1361,11 +1401,12 @@ gboolean dialogs_show_question(const gchar *text, ...)
 	gboolean ret = FALSE;
 	gchar string[512];
 	va_list args;
+	GtkWidget *parent = (main_status.main_window_realized) ? main_widgets.window : NULL;
 
 	va_start(args, text);
 	g_vsnprintf(string, 511, text, args);
 	va_end(args);
-	ret = show_question(main_widgets.window, GTK_STOCK_YES, GTK_STOCK_NO, string, NULL);
+	ret = show_question(parent, GTK_STOCK_YES, GTK_STOCK_NO, string, NULL);
 	return ret;
 }
 

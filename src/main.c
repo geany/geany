@@ -976,9 +976,7 @@ gint main(gint argc, gchar **argv)
 
 	/* set window icon */
 	{
-		GdkPixbuf *pb;
-
-		pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
+		GdkPixbuf *pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
 		gtk_window_set_icon(GTK_WINDOW(main_widgets.window), pb);
 		g_object_unref(pb);	/* free our reference */
 	}

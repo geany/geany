@@ -1,3 +1,11 @@
+2009-07-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/dialogs.c:
+   Don't use the main window as parent for dialog boxes if it is not
+   yet realised.
+   Set titles for message dialogs.
+
+
 2009-07-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/toolbar.c:
