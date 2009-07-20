@@ -1,3 +1,9 @@
+2009-07-20  Lex Trotman  <elextr(at)gmail(dot)com>
+
+ * doc/geany.txt
+   Updated manual to match build-menu capability.
+
+
 2009-07-19  Lex Trotman  <elextr(at)gmail(dot)com>
 
  * src/build.c, src/build.h
