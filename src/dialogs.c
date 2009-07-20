@@ -373,37 +373,42 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 {
 	gboolean rename_file = FALSE;
 	gboolean success = FALSE;
+	gchar *new_filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(ui_widgets.save_filesel));
 
 	switch (response)
 	{
 		case GEANY_RESPONSE_RENAME:
+			/* rename doesn't check for empty filename or overwriting */
+			if (! NZV(new_filename))
+			{
+				utils_beep();
+				break;
+			}
+			if (g_file_test(new_filename, G_FILE_TEST_EXISTS) &&
+				!dialogs_show_question_full(NULL, NULL, NULL,
+					_("Overwrite?"),
+					_("Filename already exists!")))
+				break;
 			rename_file = TRUE;
 			/* fall through */
 		case GTK_RESPONSE_ACCEPT:
 		{
-			gchar *new_filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(ui_widgets.save_filesel));
 			gboolean open_new_tab = gtk_toggle_button_get_active(
 					GTK_TOGGLE_BUTTON(ui_lookup_widget(ui_widgets.save_filesel, "check_open_new_tab")));
 			gchar *utf8_filename;
 
-			if (! NZV(new_filename))	/* rename doesn't check for empty filename */
-			{
-				utils_beep();
-				g_free(new_filename);
-				return;
-			}
 			utf8_filename = utils_get_utf8_from_locale(new_filename);
-
 			success = handle_save_as(utf8_filename, open_new_tab, rename_file);
 
 			g_free(utf8_filename);
-			g_free(new_filename);
 			break;
 		}
 		case GTK_RESPONSE_CANCEL:
 			success = TRUE;
 			break;
 	}
+	g_free(new_filename);
+
 	if (success)
 		gtk_widget_hide(ui_widgets.save_filesel);
 }
@@ -1412,13 +1417,19 @@ gboolean dialogs_show_question(const gchar *text, ...)
 
 
 /* extra_text can be NULL; otherwise it is displayed below main_text.
- * if parent is NULL, main_widgets.window will be used */
+ * if parent is NULL, main_widgets.window will be used
+ * yes_btn, no_btn can be NULL. */
 gboolean dialogs_show_question_full(GtkWidget *parent, const gchar *yes_btn, const gchar *no_btn,
 	const gchar *extra_text, const gchar *main_text, ...)
 {
 	gboolean ret = FALSE;
 	gchar string[512];
 	va_list args;
+
+	if (!yes_btn)
+		yes_btn = GTK_STOCK_YES;
+	if (!no_btn)
+		no_btn = GTK_STOCK_NO;
 
 	va_start(args, main_text);
 	g_vsnprintf(string, 511, main_text, args);
