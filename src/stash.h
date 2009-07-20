@@ -76,6 +76,10 @@ void stash_group_add_combo_box_entry(GeanyPrefGroup *group, gchar **setting,
 void stash_group_add_entry(GeanyPrefGroup *group, gchar **setting,
 		const gchar *key_name, const gchar *default_value, gpointer widget_id);
 
+void stash_group_add_widget_property(GeanyPrefGroup *group, gpointer setting,
+		const gchar *key_name, gpointer default_value, gpointer widget_id,
+		const gchar *property_name, GType type);
+
 void stash_group_display(GeanyPrefGroup *group, GtkWidget *owner);
 
 void stash_group_update(GeanyPrefGroup *group, GtkWidget *owner);

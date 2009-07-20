@@ -31,8 +31,18 @@
  *
  * Memory Usage
  * Stash will not duplicate strings if they are normally static arrays, such as
- * keyfile group names and key names, string default values or widget_id names.
- * String settings and other dynamically allocated settings must be initialized to NULL.
+ * keyfile group names and key names, string default values, widget_id names, property names.
+ *
+ * String Settings
+ * String settings and other dynamically allocated settings must be initialized to NULL as they
+ * will be freed before reassigning.
+ *
+ * Widget Support
+ * Widgets very commonly used in configuration dialogs will be supported with their own function.
+ * Widgets less commonly used such as GtkExpander or widget settings that aren't commonly needed
+ * to be persistent won't be directly supported, to keep the library lightweight. However, you can
+ * use stash_group_add_widget_property() to also save these settings for any read/write widget
+ * property.
  */
 
 /* Implementation Note
@@ -251,8 +261,10 @@ void stash_group_free(GeanyPrefGroup *group)
 	{
 		if (entry->widget_type == GTK_TYPE_RADIO_BUTTON)
 			g_free(entry->fields);
+		else if (entry->widget_type == G_TYPE_PARAM)
+			continue;
 		else
-			g_assert(entry->fields == NULL);
+			g_assert(entry->fields == NULL);	/* to prevent memory leaks, must handle fields above */
 	}
 	g_array_free(group->entries, TRUE);
 	g_free(group);
@@ -407,8 +419,7 @@ static void handle_combo_box_entry(GtkWidget *widget, GeanyPrefEntry *entry,
 
 /* taken from Glade 2.x generated support.c */
 static GtkWidget*
-lookup_widget                          (GtkWidget       *widget,
-                                        const gchar     *widget_name)
+lookup_widget(GtkWidget *widget, const gchar *widget_name)
 {
 	GtkWidget *parent, *found_widget;
 
@@ -495,6 +506,28 @@ static void handle_radio_buttons(GtkWidget *owner, EnumWidget *fields,
 }
 
 
+static void handle_widget_property(GtkWidget *widget, GeanyPrefEntry *entry,
+		PrefAction action)
+{
+	GObject *object = G_OBJECT(widget);
+	const gchar *name = entry->fields;
+
+	switch (action)
+	{
+		case PREF_DISPLAY:
+			g_object_set(object, name, entry->setting, NULL);
+			break;
+		case PREF_UPDATE:
+			if (entry->setting_type == G_TYPE_STRING)
+				g_free(entry->setting);
+			/* TODO: Which other types need freeing here? */
+
+			g_object_get(object, name, entry->setting, NULL);
+			break;
+	}
+}
+
+
 static void pref_action(PrefAction action, GeanyPrefGroup *group, GtkWidget *owner)
 {
 	GeanyPrefEntry *entry;
@@ -503,9 +536,11 @@ static void pref_action(PrefAction action, GeanyPrefGroup *group, GtkWidget *own
 	{
 		GtkWidget *widget;
 
+		/* ignore settings with no widgets */
 		if (entry->widget_type == G_TYPE_NONE)
 			continue;
 
+		/* radio buttons have several widgets */
 		if (entry->widget_type == GTK_TYPE_RADIO_BUTTON)
 		{
 			handle_radio_buttons(owner, entry->fields, entry->setting, action);
@@ -531,6 +566,8 @@ static void pref_action(PrefAction action, GeanyPrefGroup *group, GtkWidget *own
 			handle_combo_box_entry(widget, entry, action);
 		else if (entry->widget_type == GTK_TYPE_ENTRY)
 			handle_entry(widget, entry, action);
+		else if (entry->widget_type == G_TYPE_PARAM)
+			handle_widget_property(widget, entry, action);
 		else
 			g_warning("Unhandled type for %s::%s in %s()!", group->name, entry->key_name,
 				G_STRFUNC);
@@ -660,6 +697,36 @@ void stash_group_add_entry(GeanyPrefGroup *group, gchar **setting,
 {
 	add_widget_pref(group, G_TYPE_STRING, setting, key_name, (gpointer)default_value,
 		GTK_TYPE_ENTRY, widget_id);
+}
+
+
+static GType object_get_property_type(GObject *object, const gchar *property_name)
+{
+	GObjectClass *klass = G_OBJECT_GET_CLASS(object);
+	GParamSpec *ps;
+
+	ps = g_object_class_find_property(klass, property_name);
+	return ps->value_type;
+}
+
+
+/* Add a widget's read/write property to the stash group. The property will be set when calling
+ * stash_group_display(), and read when calling stash_group_update().
+ * @param setting address of e.g. an integer if using an integer property.
+ * @param default_value should be cast into a pointer e.g. with @c GINT_TO_POINTER().
+ * @param type can be 0 if passing a GtkWidget as the @a widget_id argument to look it up from the
+ * GObject data.
+ * @warning Currently only string GValue properties will be freed before setting; patch for
+ * other types - see handle_widget_property(). */
+void stash_group_add_widget_property(GeanyPrefGroup *group, gpointer setting,
+		const gchar *key_name, gpointer default_value, gpointer widget_id,
+		const gchar *property_name, GType type)
+{
+	if (!type)
+		type = object_get_property_type(G_OBJECT(widget_id), property_name);
+
+	add_widget_pref(group, type, setting, key_name, default_value,
+		G_TYPE_PARAM, widget_id)->fields = (gchar*)property_name;
 }
 
 

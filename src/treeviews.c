@@ -885,11 +885,21 @@ static gboolean on_documents_button_release_event(GtkWidget *widget, GdkEventBut
 }
 
 
+GeanyPrefGroup *stash_group = NULL;
+
 static void on_load_settings(void)
 {
 	tag_window = ui_lookup_widget(main_widgets.window, "scrolledwindow2");
 
 	prepare_openfiles();
+	/* note: ui_prefs.sidebar_page is reapplied after plugins are loaded */
+	stash_group_display(stash_group, NULL);
+}
+
+
+static void on_save_settings(void)
+{
+	stash_group_update(stash_group, NULL);
 }
 
 
@@ -899,10 +909,14 @@ void treeviews_init(void)
 
 	group = stash_group_new(PACKAGE);
 	stash_group_add_boolean(group, &documents_show_paths, "documents_show_paths", TRUE);
+	stash_group_add_widget_property(group, &ui_prefs.sidebar_page, "sidebar_page", GINT_TO_POINTER(0),
+		main_widgets.sidebar_notebook, "page", 0);
 	configuration_add_pref_group(group, FALSE);
+	stash_group = group;
 
 	/* delay building documents treeview until sidebar font has been read */
 	g_signal_connect(geany_object, "load-settings", on_load_settings, NULL);
+	g_signal_connect(geany_object, "save-settings", on_save_settings, NULL);
 }
 
 
