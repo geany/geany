@@ -737,7 +737,7 @@ gchar *utils_get_initials(const gchar *name)
  *  @param default_value The default value which will be returned when @c section or @c key
  *         don't exist.
  *
- *  @return The value associated with c key as an integer, or the given default value if the value
+ *  @return The value associated with @c key as an integer, or the given default value if the value
  *          could not be retrieved.
  **/
 gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gchar *key,
@@ -768,7 +768,7 @@ gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gch
  *  @param default_value The default value which will be returned when @c section or @c key
  *         don't exist.
  *
- *  @return The value associated with c key as a boolean, or the given default value if the value
+ *  @return The value associated with @c key as a boolean, or the given default value if the value
  *          could not be retrieved.
  **/
 gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const gchar *key,
@@ -799,7 +799,7 @@ gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const
  *  @param default_value The default value which will be returned when @c section or @c key
  *         don't exist.
  *
- *  @return A newly allocated string, either the value for @a key or a copy of the given
+ *  @return A newly allocated string, either the value for @c key or a copy of the given
  *          default value if it could not be retrieved.
  **/
 gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gchar *key,

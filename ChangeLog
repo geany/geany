@@ -13,6 +13,8 @@
    instead of modifying it in place.
  * src/toolbar.c:
    Remove underscores from the toolbar items labels.
+ * src/utils.c:
+   Fix typos.
 
 
 2009-07-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
