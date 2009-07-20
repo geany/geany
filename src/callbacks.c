@@ -1841,6 +1841,8 @@ on_menu_project1_activate              (GtkMenuItem     *menuitem,
 
 	gtk_widget_set_sensitive(item_close, (app->project != NULL));
 	gtk_widget_set_sensitive(item_properties, (app->project != NULL));
+	gtk_widget_set_sensitive(ui_widgets.recent_projects_menuitem,
+						g_queue_get_length(ui_prefs.recent_projects_queue) > 0);
 }
 
 
