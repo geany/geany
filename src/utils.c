@@ -1602,7 +1602,9 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 
 /* Similar to g_build_path() but (re)using a fixed buffer, so never free it.
  * This assumes a small enough resulting string length to be kept without freeing,
- * but this should be the case for filenames. */
+ * but this should be the case for filenames.
+ * @warning As the buffer is reused, you can't call this recursively, e.g. for a
+ * function argument and within the function called. */
 const gchar *utils_build_path(const gchar *first, ...)
 {
 	static GString *buffer = NULL;
