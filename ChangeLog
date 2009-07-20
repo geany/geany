@@ -15,6 +15,8 @@
    Remove underscores from the toolbar items labels.
  * src/utils.c:
    Fix typos.
+ * plugins/splitwindow.c:
+   Fix broken 'Show the current document' tool button icon.
 
 
 2009-07-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

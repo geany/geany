@@ -239,7 +239,7 @@ static GtkWidget *ui_tool_button_new(const gchar *stock_id, const gchar *label, 
 	}
 	item = gtk_tool_button_new(NULL, label);
 	if (stock_id)
-		gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(item), stock_id);
+		gtk_tool_button_set_stock_id(GTK_TOOL_BUTTON(item), stock_id);
 
 	if (!tooltip)
 		tooltip = label;
