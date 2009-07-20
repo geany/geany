@@ -1183,6 +1183,9 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 #else
 		locale_filename = g_strdup(filename);
 #endif
+		/* remove relative junk */
+		utils_tidy_path(locale_filename);
+
 		/* try to get the UTF-8 equivalent for the filename, fallback to filename if error */
 		utf8_filename = utils_get_utf8_from_locale(locale_filename);
 

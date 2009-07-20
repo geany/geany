@@ -1710,3 +1710,49 @@ gboolean utils_is_remote_path(const gchar *path)
 }
 
 
+/* Remove all relative and untidy elements from the path of @a filename.
+ * @param filename must be a valid absolute path.
+ * @see tm_get_real_path() - also resolves links. */
+void utils_tidy_path(gchar *filename)
+{
+	GString *str = g_string_new(filename);
+	const gchar *c, *needle;
+	gchar *tmp;
+	gssize pos;
+
+	g_return_if_fail(g_path_is_absolute(filename));
+
+	/* replace "/./" and "//" */
+	utils_string_replace_all(str, G_DIR_SEPARATOR_S "." G_DIR_SEPARATOR_S, G_DIR_SEPARATOR_S);
+	utils_string_replace_all(str, G_DIR_SEPARATOR_S G_DIR_SEPARATOR_S, G_DIR_SEPARATOR_S);
+
+	/* replace "/.." */
+	needle = G_DIR_SEPARATOR_S "..";
+	while (1)
+	{
+		c = strstr(str->str, needle);
+		if (c == NULL)
+			break;
+		else
+		{
+			pos = c - str->str;
+			if (pos <= 3)
+				break;	/* bad path */
+
+			g_string_erase(str, pos, strlen(needle));	/* erase "/.." */
+
+			tmp = g_strndup(str->str, pos);	/* path up to "/.." */
+			c = g_strrstr(tmp, G_DIR_SEPARATOR_S);
+			g_return_if_fail(c);
+
+			pos = c - tmp;	/* position of previous "/" */
+			g_string_erase(str, pos, strlen(c));
+			g_free(tmp);
+		}
+	}
+	g_return_if_fail(strlen(str->str) <= strlen(filename));
+	strcpy(filename, str->str);
+	g_string_free(str, TRUE);
+}
+
+
