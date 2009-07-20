@@ -615,8 +615,7 @@ static void tb_editor_set_item_values(const gchar *name, GtkListStore *store, Gt
 
 		g_object_get(action, "label", &label, NULL);
 		if (label != NULL)
-			/* FIXME strip mnemonics here */
-			label_clean = g_strdup(label);
+			label_clean = utils_str_remove_chars(label, "_");
 	}
 
 	gtk_list_store_set(store, iter,
