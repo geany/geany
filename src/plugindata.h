@@ -50,7 +50,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 147,
+	GEANY_API_VERSION = 148,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -369,6 +369,7 @@ typedef struct UtilsFuncs
 	guint		(*string_replace_first) (GString *haystack, const gchar *needle,
 				 const gchar *replace);
 	gchar*		(*str_middle_truncate) (const gchar *string, guint truncate_length);
+	gchar*		(*str_remove_chars) (const gchar *string, const gchar *chars);
 }
 UtilsFuncs;
 

@@ -1756,3 +1756,49 @@ void utils_tidy_path(gchar *filename)
 }
 
 
+/* Like strcpy, but can handle overlapping src and dest. */
+static gchar *utils_str_copy(gchar *dest, const gchar *src)
+{
+	gchar *cpy;
+
+	/* strcpy might not handle overlaps, so make a copy */
+	cpy = utils_strdupa(src);
+	return strcpy(dest, cpy);
+}
+
+
+/**
+ *  Remove characters from a string.
+ *
+ *  @param str The original string
+ *  @param chars Characters to remove.
+ *
+ *  @return A newly-allocated copy of @c str without the characters in @c chars,
+ *          should be freed when no longer needed.
+ **/
+gchar *utils_str_remove_chars(const gchar *string, const gchar *chars)
+{
+	gchar *ptr;
+	gchar *result;
+	gsize len;
+
+	g_return_val_if_fail(string, NULL);
+
+	result = g_strdup(string);
+	len = strlen(result);
+	ptr = result;
+
+	while (ptr < result + len)
+	{
+		if (strchr(chars, *ptr))
+		{
+			utils_str_copy(ptr, ptr + 1);
+			len--;
+		}
+		else
+			ptr++;
+	}
+	return result;
+}
+
+

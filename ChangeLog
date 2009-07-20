@@ -5,6 +5,12 @@
    is empty.
  * src/win32.c:
    Fix some harmless compiler warnings.
+ * plugins/geanyfunctions.h, plugins/splitwindow.c, src/plugindata.h,
+   src/plugins.c, src/utils.c, src/utils.h:
+   Move utils_str_remove_chars() from the plugins/splitwindow.c to
+   src/utils.c and add it to the plugin API.
+   Make utils_str_remove_chars() work on a new copy of the input string
+   instead of modifying it in place.
 
 
 2009-07-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

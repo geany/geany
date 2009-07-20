@@ -211,50 +211,6 @@ static void set_state(enum State id)
 }
 
 
-/* Avoid adding new string translations which are the same but without an underscore.
- * @warning Heavy use may cause stack exhaustion. */
-#define no_underscore(str)\
-	utils_str_remove_chars(utils_strdupa(str), "_")
-
-/* Like strcpy, but can handle overlapping src and dest. */
-static gchar *utils_str_copy(gchar *dest, const gchar *src)
-{
-	gchar *cpy;
-
-	/* strcpy might not handle overlaps, so make a copy */
-	cpy = utils_strdupa(src);
-	return strcpy(dest, cpy);
-}
-
-
-/* Remove characters from a string, in place.
- * @param chars Characters to remove.
- * @return @a str */
-/* Note: Could be more efficient by writing non-chars into new string then using only one strcpy. */
-static gchar *utils_str_remove_chars(gchar *str, const gchar *chars)
-{
-	gchar *ptr;
-	gsize len;
-
-	g_return_val_if_fail(str, NULL);
-
-	len = strlen(str);
-	ptr = str;
-
-	while (ptr < str + len)
-	{
-		if (strchr(chars, *ptr))
-		{
-			utils_str_copy(ptr, ptr + 1);
-			len--;
-		}
-		else
-			ptr++;
-	}
-	return str;
-}
-
-
 static const gchar *ui_get_stock_label(const gchar *stock_id)
 {
 	GtkStockItem item;
@@ -278,8 +234,8 @@ static GtkWidget *ui_tool_button_new(const gchar *stock_id, const gchar *label, 
 	if (stock_id && !label)
 	{
 		label = ui_get_stock_label(stock_id);
-		dup = g_strdup(label);
-		label = utils_str_remove_chars(dup, "_");
+		dup = utils_str_remove_chars(label, "_");
+		label = dup;
 	}
 	item = gtk_tool_button_new(NULL, label);
 	if (stock_id)
@@ -310,6 +266,7 @@ static GtkWidget *create_toolbar(void)
 {
 	GtkWidget *toolbar, *item;
 	GtkToolItem *tool_item;
+	gchar *label;
 
 	toolbar = gtk_toolbar_new();
 	gtk_toolbar_set_icon_size(GTK_TOOLBAR(toolbar), GTK_ICON_SIZE_MENU);
@@ -329,9 +286,11 @@ static GtkWidget *create_toolbar(void)
 	gtk_container_add(GTK_CONTAINER(tool_item), item);
 	edit_window.name_label = item;
 
-	item = ui_tool_button_new(GTK_STOCK_CLOSE, no_underscore(_("_Unsplit")), NULL);
+	label = utils_str_remove_chars(_("_Unsplit"), "_");
+	item = ui_tool_button_new(GTK_STOCK_CLOSE, label, NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), item);
 	g_signal_connect(item, "clicked", G_CALLBACK(on_unsplit), NULL);
+	g_free(label);
 
 	return toolbar;
 }

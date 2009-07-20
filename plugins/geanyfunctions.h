@@ -188,6 +188,8 @@
 	geany_functions->p_utils->string_replace_first
 #define utils_str_middle_truncate \
 	geany_functions->p_utils->str_middle_truncate
+#define utils_str_remove_chars \
+	geany_functions->p_utils->str_remove_chars
 #define ui_dialog_vbox_new \
 	geany_functions->p_ui->dialog_vbox_new
 #define ui_frame_new_with_alignment \
