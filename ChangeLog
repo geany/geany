@@ -5,6 +5,11 @@
    Add stash_group_add_widget_property() so we can save any widget's
    read/write properties.
    Use Stash for ui_prefs.sidebar_page setting.
+ * src/utils.h, src/prefs.c, src/keyfile.c, src/symbols.c:
+   Make foreach_ptr_array() use an integer argument for its
+   implementation, as this is more useful potentially than a gpointer*
+   argument, and more straightforward.
+   Add foreach_c_array(), foreach_ptr_array() to API.
 
 
 2009-07-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

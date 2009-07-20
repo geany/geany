@@ -192,10 +192,10 @@ SettingAction;
 
 static void settings_action(GKeyFile *config, SettingAction action)
 {
-	gpointer *ptr;
+	guint i;
 	GeanyPrefGroup *group;
 
-	foreach_ptr_array(group, ptr, keyfile_groups)
+	foreach_ptr_array(group, i, keyfile_groups)
 	{
 		switch (action)
 		{
@@ -1139,10 +1139,10 @@ void configuration_init(void)
 
 void configuration_finalize(void)
 {
-	gpointer *ptr;
+	guint i;
 	GeanyPrefGroup *group;
 
-	foreach_ptr_array(group, ptr, keyfile_groups)
+	foreach_ptr_array(group, i, keyfile_groups)
 		stash_group_free(group);
 
 	g_ptr_array_free(keyfile_groups, TRUE);

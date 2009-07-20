@@ -103,9 +103,9 @@ PrefCallbackAction;
 static void prefs_action(PrefCallbackAction action)
 {
 	GeanyPrefGroup *group;
-	gpointer *ptr;
+	guint i;
 
-	foreach_ptr_array(group, ptr, pref_groups)
+	foreach_ptr_array(group, i, pref_groups)
 	{
 		switch (action)
 		{
