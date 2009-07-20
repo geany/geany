@@ -3,6 +3,8 @@
  * src/callbacks.c:
    Disable 'Recent Projects' menu item if the list of recent projects
    is empty.
+ * src/win32.c:
+   Fix some harmless compiler warnings.
 
 
 2009-07-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
