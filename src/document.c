@@ -684,7 +684,16 @@ GeanyDocument *document_new_file_if_non_open(void)
 GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft,
 		const gchar *text)
 {
-	GeanyDocument *doc = document_create(utf8_filename);
+	GeanyDocument *doc;
+
+	if (utf8_filename && g_path_is_absolute(utf8_filename))
+	{
+		gchar *tmp;
+		tmp = utils_strdupa(utf8_filename);	/* work around const */
+		utils_tidy_path(tmp);
+		utf8_filename = tmp;
+	}
+	doc = document_create(utf8_filename);
 
 	g_assert(doc != NULL);
 
