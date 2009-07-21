@@ -170,13 +170,7 @@ static void apply_settings(void)
 	ui_update_fold_items();
 
 	/* toolbar, message window and sidebar are by default visible, so don't change it if it is true */
-	if (! toolbar_prefs.visible)
-	{
-		ignore_callback = TRUE;
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_toolbar1")), FALSE);
-		gtk_widget_hide(main_widgets.toolbar);
-		ignore_callback = FALSE;
-	}
+	toolbar_show_hide();
 	if (! ui_prefs.msgwindow_visible)
 	{
 		ignore_callback = TRUE;

@@ -484,6 +484,16 @@ void toolbar_finalize(void)
 }
 
 
+void toolbar_show_hide(void)
+{
+	ignore_callback = TRUE;
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(
+		ui_lookup_widget(main_widgets.window, "menu_show_toolbar1")), toolbar_prefs.visible);
+	ui_widget_show_hide(main_widgets.toolbar, toolbar_prefs.visible);
+	ignore_callback = FALSE;
+}
+
+
 void toolbar_apply_settings(void)
 {
 	/* sets the icon style of the toolbar */

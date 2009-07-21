@@ -49,6 +49,8 @@ void toolbar_update_ui(void);
 
 void toolbar_apply_settings(void);
 
+void toolbar_show_hide(void);
+
 void toolbar_item_ref(GtkToolItem *item);
 
 GtkWidget *toolbar_init(void);

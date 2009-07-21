@@ -3,6 +3,9 @@
  * src/utils.c:
    Start unifying usage of @a and @c markup elements in API docs,
    to be continued.
+ * src/main.c, src/prefs.c, src/toolbar.c, src/toolbar.h:
+   Show/hide the toolbar without a restart when the setting in the
+   preferences dialog is changed (closes #2824785).
 
 
 2009-07-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
