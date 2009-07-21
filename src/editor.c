@@ -1379,18 +1379,18 @@ void editor_find_current_word(GeanyEditor *editor, gint pos, gchar *word, size_t
 
 
 /**
- *  Finds the word at the position specified by @c pos. If any word is found, it is returned.
+ *  Finds the word at the position specified by @a pos. If any word is found, it is returned.
  *  Otherwise NULL is returned.
  *  Additional wordchars can be specified to define what to consider as a word.
  *
  *  @param editor The editor to operate on.
  *  @param pos The position where the word should be read from.
- *             Maybe @a -1 to use the current position.
+ *             Maybe @c -1 to use the current position.
  *  @param wordchars The wordchars to separate words. wordchars mean all characters to count
- *                   as part of a word. Maybe @a NULL to use the default wordchars,
+ *                   as part of a word. Maybe @c NULL to use the default wordchars,
  *                   see @ref GEANY_WORDCHARS.
  *
- *  @return A newly-allocated string containing the word at the given @c pos or NULL.
+ *  @return A newly-allocated string containing the word at the given @a pos or @c NULL.
  *          Should be freed when no longer needed.
  *
  *  @since 0.16
@@ -4071,7 +4071,7 @@ void editor_indicator_set_on_line(GeanyEditor *editor, gint indic, gint line)
 
 
 /**
- *  Sets an indicator on the range specified by @c start and @c end.
+ *  Sets an indicator on the range specified by @a start and @a end.
  *  No error checking or whitespace removal is performed, this should be done by the calling
  *  function if necessary.
  *

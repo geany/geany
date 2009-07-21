@@ -143,7 +143,7 @@ static void add_new_position(const gchar *utf8_filename, gint pos)
  *  @param new_doc The document of the new position, must be valid.
  *  @param line the line number of the new position. It is counted with 1 as the first line, not 0.
  *
- *  @return @a TRUE if the cursor has changed the position to @a line or @a FALSE otherwise.
+ *  @return @c TRUE if the cursor has changed the position to @a line or @c FALSE otherwise.
  **/
 gboolean navqueue_goto_line(GeanyDocument *old_doc, GeanyDocument *new_doc, gint line)
 {

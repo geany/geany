@@ -461,7 +461,7 @@ void encodings_init(void)
  *  @param fast @c TRUE to only convert the input and skip extended checks on the converted string.
  *
  *  @return If the conversion was successful, a newly allocated nul-terminated string,
- *    which must be freed with g_free(). Otherwise @c NULL.
+ *    which must be freed with @c g_free(). Otherwise @c NULL.
  **/
 gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gsize size,
 											  const gchar *charset, gboolean fast)
@@ -516,7 +516,7 @@ gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gsize size,
  *  @param used_encoding return location of the detected encoding of the input string, or @c NULL.
  *
  *  @return If the conversion was successful, a newly allocated nul-terminated string,
- *    which must be freed with g_free(). Otherwise @c NULL.
+ *    which must be freed with @c g_free(). Otherwise @c NULL.
  **/
 gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encoding)
 {

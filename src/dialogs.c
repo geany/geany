@@ -542,7 +542,7 @@ static gboolean gtk_show_save_as(void)
 /**
  *  Show the Save As dialog for the current notebook page.
  *
- *  @return @a TRUE if the file was saved, otherwise @a FALSE.
+ *  @return @c TRUE if the file was saved, otherwise @c FALSE.
  **/
 gboolean dialogs_show_save_as()
 {
@@ -592,14 +592,14 @@ static void show_msgbox_dialog(GtkWidget *dialog, GtkMessageType type, GtkWindow
 
 
 /**
- *  Show a message box of the type @c type with @c text.
+ *  Show a message box of the type @a type with @a text.
  *  On Unix-like systems a GTK message dialog box is shown, on Win32 systems a native Windows
  *  message dialog box is shown.
  *
- *  @param type A GtkMessageType, e.g. GTK_MESSAGE_INFO, GTK_MESSAGE_WARNING,
- *              GTK_MESSAGE_QUESTION, GTK_MESSAGE_ERROR.
+ *  @param type A @c GtkMessageType, e.g. @c GTK_MESSAGE_INFO, @c GTK_MESSAGE_WARNING,
+ *              @c GTK_MESSAGE_QUESTION, @c GTK_MESSAGE_ERROR.
  *  @param text Printf()-style format string.
- *  @param ... Arguments for the @c text format string.
+ *  @param ... Arguments for the @a text format string.
  **/
 void dialogs_show_msgbox(GtkMessageType type, const gchar *text, ...)
 {
@@ -913,18 +913,18 @@ dialogs_show_input(const gchar *title, const gchar *label_text, const gchar *def
 
 /**
  *  Show an input box to enter a numerical value using a GtkSpinButton.
- *  If the dialog is aborted, @c value remains untouched.
+ *  If the dialog is aborted, @a value remains untouched.
  *
  *  @param title The dialog title.
  *  @param label_text The shown dialog label.
  *  @param value The default value for the spin button and the return location of the entered value.
  * 				 Must be non-NULL.
- *  @param min Minimum allowable value (see documentation for @a gtk_spin_button_new_with_range()).
- *  @param max Maximum allowable value (see documentation for @a gtk_spin_button_new_with_range()).
+ *  @param min Minimum allowable value (see documentation for @c gtk_spin_button_new_with_range()).
+ *  @param max Maximum allowable value (see documentation for @c gtk_spin_button_new_with_range()).
  *  @param step Increment added or subtracted by spinning the widget
- * 				(see documentation for @a gtk_spin_button_new_with_range()).
+ * 				(see documentation for @c gtk_spin_button_new_with_range()).
  *
- *  @return @a TRUE if a value was entered and the dialog closed with 'OK'. @a FALSE otherwise.
+ *  @return @c TRUE if a value was entered and the dialog closed with 'OK'. @c FALSE otherwise.
  *
  *  @since 0.16
  **/
@@ -1392,14 +1392,14 @@ static gboolean show_question(GtkWidget *parent, const gchar *yes_btn, const gch
 
 
 /**
- *  Show a question message box with @c text and Yes/No buttons.
+ *  Show a question message box with @a text and Yes/No buttons.
  *  On Unix-like systems a GTK message dialog box is shown, on Win32 systems a native Windows
  *  message dialog box is shown.
  *
  *  @param text Printf()-style format string.
- *  @param ... Arguments for the @c text format string.
+ *  @param ... Arguments for the @a text format string.
  *
- *  @return @a TRUE if the user answered with Yes, otherwise @a FALSE.
+ *  @return @c TRUE if the user answered with Yes, otherwise @c FALSE.
  **/
 gboolean dialogs_show_question(const gchar *text, ...)
 {

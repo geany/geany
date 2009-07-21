@@ -388,7 +388,7 @@ static void setup_paths(void)
  *  Initialises the gettext translation system.
  *  This is a convenience function to set up gettext for internationalisation support
  *  in external plugins. You should call this function early in @ref plugin_init().
- *  If the macro HAVE_LOCALE_H is defined, @a setlocale(LC_ALL, "") is called.
+ *  If the macro HAVE_LOCALE_H is defined, @c setlocale(LC_ALL, "") is called.
  *  The codeset for the message translations is set to UTF-8.
  *
  *  Note that this function only setups the gettext textdomain for you. You still have
@@ -396,11 +396,11 @@ static void setup_paths(void)
  *  working properly.
  *
  *  @param locale_dir The location where the translation files should be searched. This is
- *                    usually the @a LOCALEDIR macro, defined by the build system.
- *                    E.g. $prefix/share/locale.
+ *                    usually the @c LOCALEDIR macro, defined by the build system.
+ *                    E.g. @c $prefix/share/locale.
  *                    Only used on non-Windows systems. On Windows, the directory is determined
  *                    by @c g_win32_get_package_installation_directory().
- *  @param package The package name, usually this is the @a GETTEXT_PACKAGE macro,
+ *  @param package The package name, usually this is the @c GETTEXT_PACKAGE macro,
  *                 defined by the build system.
  *
  *  @since 0.16

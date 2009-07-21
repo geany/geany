@@ -166,11 +166,11 @@ PluginFlags;
  * Fields set and owned by the plugin. */
 typedef struct PluginFields
 {
-	/** Bitmask of PluginFlags. */
+	/** Bitmask of @c PluginFlags. */
 	PluginFlags	flags;
 	/** Pointer to a plugin's menu item which will be automatically enabled/disabled when there
-	 *  are no open documents and PLUGIN_IS_DOCUMENT_SENSITIVE is set.
-	 *  This is required if using PLUGIN_IS_DOCUMENT_SENSITIVE, ignored otherwise */
+	 *  are no open documents and @c PLUGIN_IS_DOCUMENT_SENSITIVE is set.
+	 *  This is required if using @c PLUGIN_IS_DOCUMENT_SENSITIVE, ignored otherwise */
 	GtkWidget	*menu_item;
 }
 PluginFields;
@@ -552,7 +552,7 @@ PluginFuncs;
 /* Deprecated aliases */
 #ifndef GEANY_DISABLE_DEPRECATED
 
-/** NULL-safe way to get the index of @a doc_ptr in the documents array. */
+/** @c NULL-safe way to get the index of @a doc_ptr in the documents array. */
 #define DOC_IDX(doc_ptr) \
 	(doc_ptr ? doc_ptr->index : -1)
 #define DOC_IDX_VALID(doc_idx) \

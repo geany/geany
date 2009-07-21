@@ -124,7 +124,7 @@ static gboolean update_tags_from_buffer(GeanyDocument *doc);
  * @param realname The filename to search, which should be identical to the
  * string returned by @c tm_get_real_path().
  *
- * @return The matching document, or NULL.
+ * @return The matching document, or @c NULL.
  * @note This is only really useful when passing a @c TMWorkObject::file_name.
  * @see document_find_by_filename().
  *
@@ -172,7 +172,7 @@ static gchar *get_real_path_from_utf8(const gchar *utf8_filename)
  *
  *  @param utf8_filename The filename to search (in UTF-8 encoding).
  *
- *  @return The matching document, or NULL.
+ *  @return The matching document, or @c NULL.
  *  @see document_find_by_real_path().
  **/
 GeanyDocument *document_find_by_filename(const gchar *utf8_filename)
@@ -236,7 +236,7 @@ gint document_get_notebook_page(GeanyDocument *doc)
  *
  *  @param page_num The notebook page number to search.
  *
- *  @return The corresponding document for the given notebook page, or NULL.
+ *  @return The corresponding document for the given notebook page, or @c NULL.
  **/
 GeanyDocument *document_get_from_page(guint page_num)
 {
@@ -287,12 +287,12 @@ void document_finalize()
 
 /**
  *  Returns the last part of the filename of the given GeanyDocument. The result is also
- *  truncated to a maximum of @c length characters in case the filename is very long.
+ *  truncated to a maximum of @a length characters in case the filename is very long.
  *
  *  @param doc The document to use.
  *  @param length The length of the resulting string or -1 to use a default value.
  *
- *  @return The ellipsized last part of the filename of @c doc, should be freed when no
+ *  @return The ellipsized last part of the filename of @a doc, should be freed when no
  *          longer needed.
  *
  *  @since 0.17
@@ -571,7 +571,7 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
  *
  *  @param doc The document to remove.
  *
- *  @return @a TRUE if the document was actually removed or @a FALSE otherwise.
+ *  @return @c TRUE if the document was actually removed or @c FALSE otherwise.
  *
  * @since 0.15
  **/
@@ -589,7 +589,7 @@ gboolean document_close(GeanyDocument *doc)
  *
  *  @param page_num The notebook page number to remove.
  *
- *  @return @a TRUE if the document was actually removed or @a FALSE otherwise.
+ *  @return @c TRUE if the document was actually removed or @c FALSE otherwise.
  **/
 gboolean document_remove_page(guint page_num)
 {
@@ -757,7 +757,7 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft,
  *  @param ft The %filetype for the %document or @c NULL to auto-detect the %filetype.
  *  @param forced_enc The file encoding to use or @c NULL to auto-detect the file encoding.
  *
- *  @return The document opened or NULL.
+ *  @return The document opened or @c NULL.
  **/
 GeanyDocument *document_open_file(const gchar *locale_filename, gboolean readonly,
 		GeanyFiletype *ft, const gchar *forced_enc)
@@ -1380,13 +1380,13 @@ void document_open_files(const GSList *filenames, gboolean readonly, GeanyFilety
 }
 
 /**
- *  Reloads the @a document with the specified file encoding
+ *  Reloads the document with the specified file encoding
  *  @a forced_enc or @c NULL to auto-detect the file encoding.
  *
  *  @param doc The document to reload.
  *  @param forced_enc The file encoding to use or @c NULL to auto-detect the file encoding.
  *
- *  @return @a TRUE if the %document was actually reloaded or @a FALSE otherwise.
+ *  @return @c TRUE if the %document was actually reloaded or @c FALSE otherwise.
  **/
 gboolean document_reload_file(GeanyDocument *doc, const gchar *forced_enc)
 {
@@ -1681,7 +1681,7 @@ static gchar *write_data_to_disk(GeanyDocument *doc, const gchar *locale_filenam
 
 
 /**
- *  Save the @a document. Saving includes replacing tabs by spaces,
+ *  Save the document. Saving includes replacing tabs by spaces,
  *  stripping trailing spaces and adding a final new line at the end of the file (all only if
  *  user enabled these features). The filetype is set again or auto-detected if it wasn't
  *  set yet. After all, the "document-save" signal is emitted for plugins.
@@ -2711,13 +2711,13 @@ static void document_redo_add(GeanyDocument *doc, guint type, gpointer data)
 
 
 /**
- *  Gets the status colour of the document, or NULL if default widget colouring should be used.
+ *  Gets the status colour of the document, or @c NULL if default widget colouring should be used.
  *  Returned colours are red if the document has changes, green is the document is read-only
- *  or simply NULL if the document is unmodified but writable.
+ *  or simply @c NULL if the document is unmodified but writable.
  *
  *  @param doc The document to use.
  *
- *  @return The colour for the document or NULL if the default colour should be used. The colour
+ *  @return The colour for the document or @c NULL if the default colour should be used. The colour
  *          object is owned by Geany and should not be modified or freed.
  *
  *  @since 0.16

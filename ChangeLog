@@ -6,6 +6,11 @@
  * src/main.c, src/prefs.c, src/toolbar.c, src/toolbar.h:
    Show/hide the toolbar without a restart when the setting in the
    preferences dialog is changed (closes #2824785).
+ * src/dialogs.c, src/document.c, src/editor.c, src/encodings.c,
+   src/filetypes.c, src/keybindings.h, src/main.c, src/msgwindow.c,
+   src/navqueue.c, src/plugindata.h, src/prefs.c, src/toolbar.c,
+   src/toolbar.h:
+   Continue unifying usage of @a and @c markup elements in API docs.
 
 
 2009-07-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -289,11 +289,11 @@ void msgwin_show_hide(gboolean show)
 
 /**
  *  Adds a new message in the messages tab treeview in the messages window.
- *  If @c line and @c doc are set, clicking on this line jumps into the file which is specified
- *  by @c doc into the line specified with @c line.
+ *  If @a line and @a doc are set, clicking on this line jumps into the file which is specified
+ *  by @a doc into the line specified with @a line.
  *
  *  @param msg_color A color to be used for the text. It must be an element of #MsgColors.
- *  @param line The document's line where the message belongs to. Set to -1 to ignore.
+ *  @param line The document's line where the message belongs to. Set to @c -1 to ignore.
  *  @param doc The document. Set to @c NULL to ignore.
  *  @param format @c printf()-style format string.
  *  @param ... Arguments for the @c format string.
@@ -1028,7 +1028,7 @@ static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *
 
 /**
  *  Switches to the given notebook tab of the messages window and shows the messages window
- *  if it was previously hidden and @c show is set to @a TRUE.
+ *  if it was previously hidden and @a show is set to @c TRUE.
  *
  *  @param tabnum An index of a tab in the messages window. Valid values are all elements of
  *                #MessageWindowTabNum.
@@ -1062,10 +1062,10 @@ void msgwin_switch_tab(gint tabnum, gboolean show)
 }
 
 /**
- *  Removes all messages from a tab specified by @c tabnum in the messages window.
+ *  Removes all messages from a tab specified by @a tabnum in the messages window.
  *
  *  @param tabnum An index of a tab in the messages window which should be cleared.
- *                Valid values are @a MSG_STATUS, @a MSG_COMPILER and @a MSG_MESSAGE.
+ *                Valid values are @c MSG_STATUS, @c MSG_COMPILER and @c MSG_MESSAGE.
  *
  * @since 0.15
  **/
