@@ -1,3 +1,13 @@
+2009-07-22  Lex Trotman  <elextr(at)gmail(dot)com>
+
+ * src/build.h, src/build.c, src/project.c
+   Created and documented plugins interface to build menu.
+   Factored out new get_cmd_group function.
+   Changed name of remove_command function to be consistent with the rest
+   of the interface & changed calls in project.c.
+ * src/Makefile.am, wscript
+   Added build.h to installed files lists.
+
 2009-07-20  Lex Trotman  <elextr(at)gmail(dot)com>
 
  * doc/geany.txt

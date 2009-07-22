@@ -291,8 +291,8 @@ static GeanyBuildCommand *get_next_build_cmd(GeanyDocument *doc, gint cmdgrp, gi
 
 	if (printbuildcmds)printfcmds();
 	if (cmdgrp>=GBG_COUNT)return NULL;
-	if (from!=NULL)fr=from;
-	if (doc==NULL)doc=document_get_current();
+	if (from!=NULL)fr = from;
+	if (doc==NULL)doc = document_get_current();
 	if (doc!=NULL)ft = doc->file_type;
 	switch(cmdgrp)
 	{
@@ -357,61 +357,84 @@ gchar **get_build_regex(GeanyBuildGroup grp, GeanyFiletype *ft, gint *from)
 	return NULL;
 }
 
-/* remove the specified command, cmd<0 remove whole group */
-void remove_command(GeanyBuildSource src, GeanyBuildGroup grp, gint cmd)
+/* get pointer to the command group array */
+GeanyBuildCommand *get_build_group(GeanyBuildSource src, GeanyBuildGroup grp)
 {
-	GeanyBuildCommand *bc;
-	gint i;
 	GeanyDocument *doc;
 	GeanyFiletype *ft;
 	
 	switch(grp)
 	{
 		case GBG_FT:
-			if ((doc=document_get_current())==NULL)return;
-			if ((ft=doc->file_type)==NULL)return;
+			if ((doc=document_get_current())==NULL)return NULL;
+			if ((ft=doc->file_type)==NULL)return NULL;
 			switch(src)
 			{
-				case BCS_DEF:     bc=ft->ftdefcmds; break;
-				case BCS_FT:      bc=ft->filecmds; break;
-				case BCS_HOME_FT: bc=ft->homefilecmds; break;
-				case BCS_PREF:    bc=ft->homefilecmds; break;
-				case BCS_PROJ:    bc=ft->projfilecmds; break;
-				default: return;
+				case BCS_DEF:     return ft->ftdefcmds;
+				case BCS_FT:      return ft->filecmds;
+				case BCS_HOME_FT: return ft->homefilecmds;
+				case BCS_PREF:    return ft->homefilecmds;
+				case BCS_PROJ:    return ft->projfilecmds;
+				default: return NULL;
 			}
 			break;
 		case GBG_NON_FT:
 			switch(src)
 			{
-				case BCS_DEF:     bc=non_ft_def; break;
-				case BCS_PREF:    bc=non_ft_pref; break;
-				case BCS_PROJ:    bc=non_ft_proj; break;
-				default: return;
+				case BCS_DEF:     return non_ft_def;
+				case BCS_PREF:    return non_ft_pref;
+				case BCS_PROJ:    return non_ft_proj;
+				default: return NULL;
 			}
 			break;
 		case GBG_EXEC:
-			if ((doc=document_get_current())==NULL)return;
-			if ((ft=doc->file_type)==NULL)return;
+			if ((doc=document_get_current())==NULL)return NULL;
+			if ((ft=doc->file_type)==NULL)return NULL;
 			switch(src)
 			{
-				case BCS_DEF:     bc=exec_def; break;
-				case BCS_FT:      bc=ft->execcmds; break;
-				case BCS_HOME_FT: bc=ft->homeexeccmds; break;
-				case BCS_PREF:    bc=exec_pref; break;
-				case BCS_PROJ:    bc=exec_proj; break;
-				default: return;
+				case BCS_DEF:     return exec_def;
+				case BCS_FT:      return ft->execcmds;
+				case BCS_HOME_FT: return ft->homeexeccmds;
+				case BCS_PREF:    return exec_pref;
+				case BCS_PROJ:    return exec_proj;
+				default: return NULL;
 				
 			}
 			break;
 		default:
-			return;
+			return NULL;
 	}
+}
+
+/* remove the specified command, cmd<0 remove whole group */
+void build_remove_menu_item(GeanyBuildSource src, GeanyBuildGroup grp, gint cmd)
+{
+	GeanyBuildCommand *bc;
+	gint i;
+	bc = get_build_group(src, grp);
 	if (bc==NULL)return;
 	if (cmd<0)
 		for (i=0; i<build_groups_count[grp]; ++i)
 			bc[i].exists=FALSE;
-	else
+	else if(cmd<build_groups_count[grp])
 		bc[cmd].exists=FALSE;
+}
+
+/* get the build build command for the specified menu item */
+GeanyBuildCommand *build_get_menu_item(GeanyBuildSource src, GeanyBuildGroup grp, gint cmd)
+{
+	GeanyBuildCommand *bc;
+	if (src>=BCS_COUNT || grp>=GBG_COUNT || cmd>=build_groups_count[grp]) return NULL;
+	bc = get_build_group(src, grp);
+	if (bc==NULL) return NULL;
+	return &(bc[cmd]);
+}
+
+/* parameter checked version of get_build_cmd for external interface */
+GeanyBuildCommand *build_get_current_menu_item(GeanyBuildGroup grp, gint cmd, gint *src)
+{
+	if (src>=BCS_COUNT || grp>=GBG_COUNT || cmd>=build_groups_count[grp]) return NULL;
+	return get_build_cmd(NULL, grp, cmd, src);
 }
 
 /* Clear all error indicators in all documents. */

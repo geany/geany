@@ -71,7 +71,8 @@ geany_include_HEADERS = \
 	templates.h \
 	toolbar.h \
 	ui_utils.h \
-	utils.h
+	utils.h \
+	build.h
 
 
 INCLUDES = -I$(srcdir)/../scintilla/include -I$(srcdir)/../tagmanager/include @GTK_CFLAGS@ @GIO_CFLAGS@
