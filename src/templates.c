@@ -692,10 +692,10 @@ gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname)
 	else
 		shortname = g_path_get_basename(fname);
 
-	template = utils_str_replace(template, "{filename}", shortname);
-	template = utils_str_replace(template, "{gpl}", templates[GEANY_TEMPLATE_GPL]);
-	template = utils_str_replace(template, "{bsd}", templates[GEANY_TEMPLATE_BSD]);
-	template = utils_str_replace(template, "{datetime}", date);
+	utils_str_replace_all(&template, "{filename}", shortname);
+	utils_str_replace_all(&template, "{gpl}", templates[GEANY_TEMPLATE_GPL]);
+	utils_str_replace_all(&template, "{bsd}", templates[GEANY_TEMPLATE_BSD]);
+	utils_str_replace_all(&template, "{datetime}", date);
 
 	result = make_comment_block(template, ft_id, 8);
 
@@ -724,7 +724,7 @@ gchar *templates_get_template_new_file(GeanyFiletype *ft)
 
 	file_header = templates_get_template_fileheader(ft->id, NULL);	/* file template only used for new files */
 	ft_template = get_file_template(ft);
-	ft_template = utils_str_replace(ft_template, "{fileheader}", file_header);
+	utils_str_replace_all(&ft_template, "{fileheader}", file_header);
 	g_free(file_header);
 	return ft_template;
 }
@@ -743,9 +743,9 @@ gchar *templates_get_template_function(gint filetype_idx, const gchar *func_name
 	gchar *datetime = utils_get_date_time(template_prefs.datetime_format, NULL);
 	gchar *result;
 
-	template = utils_str_replace(template, "{date}", date);
-	template = utils_str_replace(template, "{datetime}", datetime);
-	template = utils_str_replace(template, "{functionname}", (func_name) ? func_name : "");
+	utils_str_replace_all(&template, "{date}", date);
+	utils_str_replace_all(&template, "{datetime}", datetime);
+	utils_str_replace_all(&template, "{functionname}", (func_name) ? func_name : "");
 
 	result = make_comment_block(template, filetype_idx, 3);
 
@@ -760,7 +760,8 @@ gchar *templates_get_template_changelog(void)
 {
 	gchar *date = utils_get_date_time(template_prefs.datetime_format, NULL);
 	gchar *result = g_strdup(templates[GEANY_TEMPLATE_CHANGELOG]);
-	result = utils_str_replace(result, "{date}", date);
+
+	utils_str_replace_all(&result, "{date}", date);
 
 	g_free(date);
 	return result;

@@ -1952,7 +1952,7 @@ on_context_action1_activate            (GtkMenuItem     *menuitem,
 	/* substitute the wildcard %s and run the command if it is non empty */
 	if (NZV(command))
 	{
-		command = utils_str_replace(command, "%s", word);
+		utils_str_replace_all(&command, "%s", word);
 
 		if (! g_spawn_command_line_async(command, &error))
 		{

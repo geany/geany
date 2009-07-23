@@ -195,8 +195,8 @@ static GPid build_view_tex_file(GeanyDocument *doc, gint mode)
 	cmd_string = g_strdup((mode == LATEX_CMD_VIEW_DVI) ?
 										g_strdup(doc->file_type->programs->run_cmd) :
 										g_strdup(doc->file_type->programs->run_cmd2));
-	cmd_string = utils_str_replace(cmd_string, "%f", view_file);
-	cmd_string = utils_str_replace(cmd_string, "%e", executable);
+	utils_str_replace_all(&cmd_string, "%f", view_file);
+	utils_str_replace_all(&cmd_string, "%e", executable);
 
 	/* try convert in locale */
 	locale_cmd_string = utils_get_locale_from_utf8(cmd_string);
@@ -481,10 +481,10 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 	cmd_string = g_strdup(cmd);
 	/* replace %f and %e in the command string */
 	tmp = g_path_get_basename(locale_filename);
-	cmd_string = utils_str_replace(cmd_string, "%f", tmp);
+	utils_str_replace_all(&cmd_string, "%f", tmp);
 	g_free(tmp);
 	tmp = g_path_get_basename(executable);
-	cmd_string = utils_str_replace(cmd_string, "%e", tmp);
+	utils_str_replace_all(&cmd_string, "%e", tmp);
 	g_free(tmp);
 	g_free(executable);
 
@@ -618,9 +618,9 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript)
 	/* replace %f and %e in the run_cmd string */
 	cmd = g_strdup(cmd);
 	tmp = g_path_get_basename(locale_filename);
-	cmd = utils_str_replace(cmd, "%f", tmp);
+	utils_str_replace_all(&cmd, "%f", tmp);
 	g_free(tmp);
-	cmd = utils_str_replace(cmd, "%e", executable);
+	utils_str_replace_all(&cmd, "%e", executable);
 
 #ifdef HAVE_VTE
 	if (vte_info.load_vte && vc != NULL && vc->run_in_vte)

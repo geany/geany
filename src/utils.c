@@ -601,23 +601,23 @@ gint utils_is_file_writeable(const gchar *locale_filename)
 
 
 /* Replaces all occurrences of needle in haystack with replacement.
- * Warning: haystack will be freed.
- * New code should use utils_string_replace_all() instead (freeing arguments
- * is unusual behaviour).
+ * Warning: *haystack must be a heap address; it may be freed and reassigned.
+ * Note: utils_string_replace_all() will always be faster when @a replacement is longer
+ * than @a needle.
  * All strings have to be NULL-terminated.
  * See utils_string_replace_all() for details. */
-gchar *utils_str_replace(gchar *haystack, const gchar *needle, const gchar *replacement)
+void utils_str_replace_all(gchar **haystack, const gchar *needle, const gchar *replacement)
 {
 	GString *str;
 
-	g_return_val_if_fail(haystack != NULL, NULL);
+	g_return_if_fail(*haystack != NULL);
 
-	str = g_string_new(haystack);
+	str = g_string_new(*haystack);
 
-	g_free(haystack);
+	g_free(*haystack);
 	utils_string_replace_all(str, needle, replacement);
 
-	return g_string_free(str, FALSE);
+	*haystack = g_string_free(str, FALSE);
 }
 
 

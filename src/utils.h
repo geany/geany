@@ -121,7 +121,7 @@ guint utils_string_replace_all(GString *haystack, const gchar *needle, const gch
 
 guint utils_string_replace_first(GString *haystack, const gchar *needle, const gchar *replace);
 
-gchar *utils_str_replace(gchar *haystack, const gchar *needle, const gchar *replacement);
+void utils_str_replace_all(gchar **haystack, const gchar *needle, const gchar *replacement);
 
 gint utils_strpos(const gchar* haystack, const gchar *needle);
 

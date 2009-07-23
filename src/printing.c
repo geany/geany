@@ -869,7 +869,7 @@ static void print_external(GeanyDocument *doc)
 	}
 
 	cmdline = g_strdup(printing_prefs.external_print_cmd);
-	cmdline = utils_str_replace(cmdline, "%f", doc->file_name);
+	utils_str_replace_all(&cmdline, "%f", doc->file_name);
 
 	if (dialogs_show_question(
 			_("The file \"%s\" will be printed with the following command:\n\n%s"),
