@@ -3948,7 +3948,9 @@ gchar *editor_get_default_selection(GeanyEditor *editor, gboolean use_current_wo
 
 /* Note: Usually the line should be made visible (not folded) before calling this.
  * Returns: TRUE if line is/will be displayed to the user, or FALSE if it is
- * outside the view. */
+ * outside the *vertical* view.
+ * Warning: You may need horizontal scrolling to make the cursor visible - so always call
+ * sci_scroll_caret() when this returns TRUE. */
 gboolean editor_line_in_view(GeanyEditor *editor, gint line)
 {
 	gint vis1, los;
@@ -3984,6 +3986,8 @@ void editor_display_current_line(GeanyEditor *editor, gfloat percent_of_view)
 	/* scroll the line if it's off screen */
 	if (! editor_line_in_view(editor, line))
 		editor->scroll_percent = percent_of_view;
+	else
+		sci_scroll_caret(editor->sci); /* may need horizontal scrolling */
 }
 
 

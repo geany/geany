@@ -12,6 +12,9 @@
    For the Tabs indent type, remove spaces when unindenting (only) if
    there are no tabs on the line.
    Group undo actions for (un)indenting of multiple lines.
+ * src/document.c, src/editor.c:
+   Fix scrolling horizontally after finding a search match with the
+   search bar or Find Next/Previous which is off-screen.
 
 
 2009-07-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

@@ -1852,6 +1852,8 @@ gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gint fl
 			 * while searching */
 			editor_scroll_to_line(doc->editor, -1, 0.3F);
 		}
+		else
+			sci_scroll_caret(doc->editor->sci); /* may need horizontal scrolling */
 		return TRUE;
 	}
 	else
