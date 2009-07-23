@@ -223,8 +223,9 @@ static const gchar *ui_get_stock_label(const gchar *stock_id)
 }
 
 
-/* Create a GtkToolButton with stock icon and tooltip.
- * @param label can be NULL to use stock label text, without underscores.
+/* Create a GtkToolButton with stock icon, label and tooltip.
+ * @param label can be NULL to use stock label text. @a label can contain underscores,
+ * which will be removed.
  * @param tooltip can be NULL to use label text (useful for GTK_TOOLBAR_ICONS). */
 static GtkWidget *ui_tool_button_new(const gchar *stock_id, const gchar *label, const gchar *tooltip)
 {
@@ -234,9 +235,10 @@ static GtkWidget *ui_tool_button_new(const gchar *stock_id, const gchar *label, 
 	if (stock_id && !label)
 	{
 		label = ui_get_stock_label(stock_id);
-		dup = utils_str_remove_chars(label, "_");
-		label = dup;
 	}
+	dup = utils_str_remove_chars(g_strdup(label), "_");
+	label = dup;
+
 	item = gtk_tool_button_new(NULL, label);
 	if (stock_id)
 		gtk_tool_button_set_stock_id(GTK_TOOL_BUTTON(item), stock_id);
@@ -266,7 +268,6 @@ static GtkWidget *create_toolbar(void)
 {
 	GtkWidget *toolbar, *item;
 	GtkToolItem *tool_item;
-	gchar *label;
 
 	toolbar = gtk_toolbar_new();
 	gtk_toolbar_set_icon_size(GTK_TOOLBAR(toolbar), GTK_ICON_SIZE_MENU);
@@ -286,11 +287,9 @@ static GtkWidget *create_toolbar(void)
 	gtk_container_add(GTK_CONTAINER(tool_item), item);
 	edit_window.name_label = item;
 
-	label = utils_str_remove_chars(_("_Unsplit"), "_");
-	item = ui_tool_button_new(GTK_STOCK_CLOSE, label, NULL);
+	item = ui_tool_button_new(GTK_STOCK_CLOSE, _("_Unsplit"), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), item);
 	g_signal_connect(item, "clicked", G_CALLBACK(on_unsplit), NULL);
-	g_free(label);
 
 	return toolbar;
 }

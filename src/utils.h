@@ -198,6 +198,6 @@ gboolean utils_is_remote_path(const gchar *path);
 
 gchar *utils_str_middle_truncate(const gchar *string, guint truncate_length);
 
-gchar *utils_str_remove_chars(const gchar *string, const gchar *chars);
+gchar *utils_str_remove_chars(gchar *string, const gchar *chars);
 
 #endif

@@ -1756,49 +1756,37 @@ void utils_tidy_path(gchar *filename)
 }
 
 
-/* Like strcpy, but can handle overlapping src and dest. */
-static gchar *utils_str_copy(gchar *dest, const gchar *src)
-{
-	gchar *cpy;
-
-	/* strcpy might not handle overlaps, so make a copy */
-	cpy = utils_strdupa(src);
-	return strcpy(dest, cpy);
-}
-
+/* @warning Doesn't include null terminating character. */
+#define foreach_str(char_ptr, string) \
+	for (char_ptr = string; *char_ptr; char_ptr++)
 
 /**
- *  Remove characters from a string.
+ *  Replace or remove characters from a string in place.
  *
- *  @param string The original string
+ *  @param string String to search.
  *  @param chars Characters to remove.
  *
- *  @return A newly-allocated copy of @a str without the characters in @a chars,
- *          should be freed when no longer needed.
+ *  @return @a string - return value is only useful when nesting function calls, e.g.:
+ *  @code str = utils_str_remove_chars(g_strdup("f_o_o"), "_"); @endcode
+ *
+ *  @see @c g_strdelimit.
  **/
-gchar *utils_str_remove_chars(const gchar *string, const gchar *chars)
+gchar *utils_str_remove_chars(gchar *string, const gchar *chars)
 {
-	gchar *ptr;
-	gchar *result;
-	gsize len;
+	const gchar *r;
+	gchar *w = string;
 
 	g_return_val_if_fail(string, NULL);
+	if (!NZV(chars))
+		return string;
 
-	result = g_strdup(string);
-	len = strlen(result);
-	ptr = result;
-
-	while (ptr < result + len)
+	foreach_str(r, string)
 	{
-		if (strchr(chars, *ptr))
-		{
-			utils_str_copy(ptr, ptr + 1);
-			len--;
-		}
-		else
-			ptr++;
+		if (!strchr(chars, *r))
+			*w++ = *r;
 	}
-	return result;
+	*w = 0x0;
+	return string;
 }
 
 
