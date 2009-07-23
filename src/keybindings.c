@@ -1354,17 +1354,15 @@ static void cb_func_menu_messagewindow(G_GNUC_UNUSED guint key_id)
 static void cb_func_build_action(guint key_id)
 {
 	GtkWidget *item;
-	GeanyFiletype *ft;
 	BuildMenuItems *menu_items;
 
 	GeanyDocument *doc = document_get_current();
 	if (doc == NULL)
 		return;
 
-	ft = doc->file_type;
-	if (! ft)
+	if (!GTK_WIDGET_IS_SENSITIVE(ui_lookup_widget(main_widgets.window, "menu_build1")))
 		return;
-	menu_items = build_get_menu_items(ft->id);
+	menu_items = build_get_menu_items(doc->file_type->id);
 
 	switch (key_id)
 	{
