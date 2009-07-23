@@ -917,12 +917,14 @@ static gboolean check_snippet_completion(GeanyDocument *doc, guint keyval, guint
 	GeanyKeyBinding *kb = keybindings_lookup_item(GEANY_KEY_GROUP_EDITOR,
 		GEANY_KEYS_EDITOR_COMPLETESNIPPET);
 
+	g_return_val_if_fail(doc, FALSE);
+
 	if (kb->key == keyval && kb->mods == state)
 	{
 		GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 		/* keybinding only valid when scintilla widget has focus */
-		if (doc != NULL && focusw == GTK_WIDGET(doc->editor->sci))
+		if (focusw == GTK_WIDGET(doc->editor->sci))
 		{
 			ScintillaObject *sci = doc->editor->sci;
 			gint pos = sci_get_current_position(sci);
@@ -1086,7 +1088,8 @@ static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer 
 		return FALSE;
 
 	doc = document_get_current();
-	document_check_disk_status(doc, FALSE);
+	if (doc)
+		document_check_disk_status(doc, FALSE);
 
 	keyval = ev->keyval;
     state = ev->state & gtk_accelerator_get_default_mod_mask();
@@ -1103,7 +1106,7 @@ static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer 
 	if (vte_info.have_vte && check_vte(state, keyval))
 		return FALSE;
 #endif
-	if (check_snippet_completion(doc, keyval, state))
+	if (doc && check_snippet_completion(doc, keyval, state))
 		return TRUE;
 	if (check_menu_key(doc, keyval, state, ev->time))
 		return TRUE;
