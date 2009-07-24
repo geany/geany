@@ -320,6 +320,8 @@ static void init_default_kb(void)
 		GDK_3, GDK_CONTROL_MASK, "edit_sendtocmd3", _("Send to Custom Command 3"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_FORMAT_SENDTOVTE, cb_func_format_action,
 		0, 0, "edit_sendtovte", _("Send Selection to Terminal"), LW(send_selection_to_vte1));
+	keybindings_set_item(group, GEANY_KEYS_FORMAT_REFLOWPARAGRAPH, cb_func_format_action,
+		GDK_j, GDK_CONTROL_MASK, "format_reflowparagraph", _("Reflow lines/paragraph"), NULL);
 
 	group = ADD_KB_GROUP(INSERT, _("Insert"));
 
@@ -1910,6 +1912,145 @@ static void cb_func_editor_action(guint key_id)
 }
 
 
+static void join_lines(GeanyEditor *editor)
+{
+	gint start, end, i;
+
+	start = sci_get_line_from_position(editor->sci,
+		sci_get_selection_start(editor->sci));
+	end = sci_get_line_from_position(editor->sci,
+		sci_get_selection_end(editor->sci));
+
+	/* if there is only one line in selection, join it with the following one */
+	if (end == start)
+		end = start + 1;
+
+	/*
+	 * remove trailing spaces for every line except the last one
+	 * so that these spaces won't appear within text after joining
+	 */
+	for (i = start; i < end; i++)
+		editor_strip_line_trailing_spaces(editor, i);
+
+	/* remove starting spaces from second and following lines due to the same reason */
+	for (i = start+1; i <= end; i++)
+		sci_set_line_indentation(editor->sci, i, 0);
+
+	/*
+	 * SCI_LINESJOIN automatically adds spaces between joined lines, including
+	 * empty ones. We should drop empty lines if we want only one space to be
+	 * inserted (see also example below). I don't think we should care of that.
+	 */
+
+	sci_target_start(editor->sci,
+		sci_get_position_from_line(editor->sci, start));
+	sci_target_end(editor->sci,
+		sci_get_position_from_line(editor->sci, end));
+	sci_lines_join(editor->sci);
+
+	/*
+	 * Example: joining
+	 *
+	 * [TAB]if (something_wrong)
+	 * [TAB]{
+	 * [TAB][TAB]
+	 * [TAB][TAB]exit(1);[SPACE][SPACE]
+	 * [TAB]}[SPACE]
+	 *
+	 * gives
+	 *
+	 * [TAB]if (something_wrong) {  exit(1); }[SPACE]
+	 */
+}
+
+
+static void split_lines(GeanyEditor *editor)
+{
+	gint start, indent, linescount, i;
+
+	/* do nothing if long line marker is disabled */
+	if (editor_prefs.long_line_type == 2)
+		return;
+
+	start = sci_get_line_from_position(editor->sci,
+		sci_get_selection_start(editor->sci));
+
+	/*
+	 * If several lines are selected, first join them.
+	 * This allows to reformat text paragraphs easily.
+	 */
+	if (sci_get_lines_selected(editor->sci) > 1)
+		join_lines(editor);
+
+	/*
+	 * If this line is short enough, just return
+	 */
+	if (editor_prefs.long_line_column >
+		sci_get_line_end_position(editor->sci, start) -
+		sci_get_position_from_line(editor->sci, start))
+	{
+		return;
+	}
+
+	/*
+	 * We have to manipulate line indentation so that indentation
+	 * of the resulting lines would be consistent. For example,
+	 * the result of splitting "[TAB]very long content":
+	 *
+	 * +-------------+-------------+
+	 * |   proper    |    wrong    |
+	 * +-------------+-------------+
+	 * | [TAB]very   | [TAB]very   |
+	 * | [TAB]long   | long        |
+	 * | [TAB]content| content     |
+	 * +-------------+-------------+
+	 */
+	indent = sci_get_line_indentation(editor->sci, start);
+	sci_set_line_indentation(editor->sci, start, 0);
+
+	/*
+	 * Use sci_get_line_count() to determine how many new lines
+	 * appeared during splitting. SCI_LINESSPLIT should better return
+	 * this value itself...
+	 */
+	sci_target_from_selection(editor->sci);
+	linescount = sci_get_line_count(editor->sci);
+	sci_lines_split(editor->sci,
+		(editor_prefs.long_line_column - indent) *
+		sci_text_width(editor->sci, STYLE_DEFAULT, " "));
+	linescount = sci_get_line_count(editor->sci) - linescount;
+
+	/* Fix indentation. */
+	for (i = start; i <= start + linescount; i++)
+		sci_set_line_indentation(editor->sci, i, indent);
+}
+
+
+static void reflow_paragraph(GeanyEditor *editor)
+{
+	ScintillaObject *sci = editor->sci;
+	gboolean sel;
+
+	sci_start_undo_action(sci);
+	sel = sci_has_selection(sci);
+	if (!sel)
+	{
+		gint line, pos;
+
+		keybindings_send_command(GEANY_KEY_GROUP_SELECT, GEANY_KEYS_SELECT_PARAGRAPH);
+		/* deselect last line break */
+		pos = sci_get_selection_end(sci);
+		line = sci_get_line_from_position(sci, pos);
+		pos = sci_get_line_end_position(sci, line - 1);
+		sci_set_selection_end(sci, pos);
+	}
+	split_lines(editor);
+	if (!sel)
+		sci_set_anchor(sci, -1);
+	sci_end_undo_action(sci);
+}
+
+
 /* common function for format keybindings, only valid when scintilla has focus. */
 static void cb_func_format_action(guint key_id)
 {
@@ -1963,6 +2104,9 @@ static void cb_func_format_action(guint key_id)
 			break;
 		case GEANY_KEYS_FORMAT_SENDTOVTE:
 			on_send_selection_to_vte1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_FORMAT_REFLOWPARAGRAPH:
+			reflow_paragraph(doc->editor);
 			break;
 	}
 }

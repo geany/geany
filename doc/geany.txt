@@ -2678,6 +2678,9 @@ Send Selection to Terminal                                Sends the current sele
                                                           line (if there is no selection) to the
                                                           embedded Terminal (VTE).
 
+Reflow lines/paragraph                                    Reformat selected lines or current paragraph,
+                                                          breaking lines at the long line marker.
+
 
 **Settings**
 

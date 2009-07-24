@@ -100,7 +100,7 @@ typedef struct GeanyEditorPrefs
 	gboolean	show_white_space;
 	gboolean	show_indent_guide;
 	gboolean	show_line_endings;
-	gint		long_line_type;
+	gint		long_line_type; /* 0 - line, 1 - background, 2 - none */
 	gint		long_line_column;
 	gchar		*long_line_color;
 	gboolean	show_markers_margin;		/* view menu */
@@ -250,6 +250,8 @@ void editor_unfold_all(GeanyEditor *editor);
 void editor_replace_tabs(GeanyEditor *editor);
 
 void editor_replace_spaces(GeanyEditor *editor);
+
+void editor_strip_line_trailing_spaces(GeanyEditor *editor, gint line);
 
 void editor_strip_trailing_spaces(GeanyEditor *editor);
 

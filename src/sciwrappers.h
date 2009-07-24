@@ -59,7 +59,7 @@ gint				sci_marker_previous			(ScintillaObject* sci, gint line, gint marker_mask
 
 gint 				sci_get_col_from_position	(ScintillaObject* sci, gint position);
 gint 				sci_get_line_from_position	(ScintillaObject* sci, gint position);
-gint 				sci_get_position_from_line	(ScintillaObject* sci, gint line );
+gint 				sci_get_position_from_line	(ScintillaObject* sci, gint line);
 gint 				sci_get_current_position	(ScintillaObject* sci);
 void 				sci_set_current_position	(ScintillaObject* sci, gint position, gboolean scroll_to_caret);
 void 				sci_set_current_line		(ScintillaObject* sci, gint line);
@@ -175,5 +175,9 @@ void				sci_cancel					(ScintillaObject *sci);
 
 gint				sci_get_target_end			(ScintillaObject *sci);
 gint				sci_get_position_after		(ScintillaObject *sci, gint start);
+
+void				sci_lines_split				(ScintillaObject *sci, gint pixelWidth);
+void				sci_lines_join				(ScintillaObject *sci);
+gint				sci_text_width				(ScintillaObject *sci, int styleNumber, const char * text);
 
 #endif

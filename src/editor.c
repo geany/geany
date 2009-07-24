@@ -101,7 +101,6 @@ static void auto_table(GeanyEditor *editor, gint pos);
 static void close_block(GeanyEditor *editor, gint pos);
 static void editor_highlight_braces(GeanyEditor *editor, gint cur_pos);
 static void editor_auto_latex(GeanyEditor *editor, gint pos);
-static void editor_strip_line_trailing_spaces(GeanyEditor *editor, gint line);
 
 
 void editor_snippets_free(void)
@@ -4307,7 +4306,7 @@ void editor_replace_spaces(GeanyEditor *editor)
 }
 
 
-static void editor_strip_line_trailing_spaces(GeanyEditor *editor, gint line)
+void editor_strip_line_trailing_spaces(GeanyEditor *editor, gint line)
 {
 	gint line_start = sci_get_position_from_line(editor->sci, line);
 	gint line_end = sci_get_line_end_position(editor->sci, line);
