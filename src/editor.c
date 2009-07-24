@@ -490,6 +490,57 @@ static gboolean match_last_chars(ScintillaObject *sci, gint pos, const gchar *st
 }
 
 
+typedef struct
+{
+	gint message;
+	gint pos;
+	gchar *text;
+} CalltipReshowInfo;
+
+
+static gboolean reshow_calltip(gpointer data)
+{
+	CalltipReshowInfo *cri = data;
+
+	g_return_val_if_fail(calltip.sci != NULL, FALSE);
+
+	SSM(calltip.sci, SCI_CALLTIPCANCEL, 0, 0);
+	/* we use the position where the calltip was previously started as SCI_GETCURRENTPOS
+	 * may be completely wrong in case the user cancelled the auto completion with the mouse */
+	SSM(calltip.sci, SCI_CALLTIPSHOW, calltip.pos, (sptr_t) calltip.text);
+
+	/* now autocompletion has been cancelled by SCI_CALLTIPSHOW, so do it manually */
+	if (cri->message == SCN_AUTOCSELECTION)
+	{
+		gint pos = SSM(calltip.sci, SCI_GETCURRENTPOS, 0, 0);
+
+		sci_set_selection_start(calltip.sci, cri->pos);
+		sci_set_selection_end(calltip.sci, pos);
+		sci_replace_sel(calltip.sci, "");	/* clear root of word */
+		SSM(calltip.sci, SCI_INSERTTEXT, cri->pos, (sptr_t) cri->text);
+		sci_goto_pos(calltip.sci, cri->pos + strlen(cri->text), FALSE);
+	}
+	g_free(cri->text);
+	g_free(cri);
+
+	return FALSE;
+}
+
+
+static void request_reshowing_calltip(SCNotification *nt)
+{
+	if (calltip.set)
+	{
+		CalltipReshowInfo *cri = g_new0(CalltipReshowInfo, 1);
+		cri->message = nt->nmhdr.code;
+		cri->message = nt->lParam;
+		cri->text = g_strdup(nt->text);
+		/* delay the reshow of the calltip window to make sure it is actually displayed,
+		 * without it might be not visible on SCN_AUTOCCANCEL */
+		g_idle_add(reshow_calltip, cri);
+	}
+}
+
 static void autocomplete_scope(GeanyEditor *editor)
 {
 	ScintillaObject *sci = editor->sci;
@@ -601,7 +652,8 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 		case ':':	/* C/C++ class:: syntax */
 		/* tag autocompletion */
 		default:
-			editor_start_auto_complete(editor, pos, FALSE);
+			if (! editor_start_auto_complete(editor, pos, FALSE))
+				request_reshowing_calltip(nt);
 	}
 	check_line_breaking(editor, pos, nt->ch);
 }
@@ -714,43 +766,6 @@ static void ensure_range_visible(ScintillaObject *sci, gint posStart, gint posEn
 }
 
 
-typedef struct
-{
-	gint message;
-	gint pos;
-	gchar *text;
-} CalltipReshowInfo;
-
-
-static gboolean reshow_calltip(gpointer data)
-{
-	CalltipReshowInfo *cri = data;
-
-	g_return_val_if_fail(calltip.sci != NULL, FALSE);
-
-	SSM(calltip.sci, SCI_CALLTIPCANCEL, 0, 0);
-	/* we use the position where the calltip was previously started as SCI_GETCURRENTPOS
-	 * may be completely wrong in case the user cancelled the auto completion with the mouse */
-	SSM(calltip.sci, SCI_CALLTIPSHOW, calltip.pos, (sptr_t) calltip.text);
-
-	/* now autocompletion has been cancelled by SCI_CALLTIPSHOW, so do it manually */
-	if (cri->message == SCN_AUTOCSELECTION)
-	{
-		gint pos = SSM(calltip.sci, SCI_GETCURRENTPOS, 0, 0);
-
-		sci_set_selection_start(calltip.sci, cri->pos);
-		sci_set_selection_end(calltip.sci, pos);
-		sci_replace_sel(calltip.sci, "");	/* clear root of word */
-		SSM(calltip.sci, SCI_INSERTTEXT, cri->pos, (sptr_t) cri->text);
-		sci_goto_pos(calltip.sci, cri->pos + strlen(cri->text), FALSE);
-	}
-	g_free(cri->text);
-	g_free(cri);
-
-	return FALSE;
-}
-
-
 static void auto_update_margin_width(GeanyEditor *editor)
 {
 	gint next_linecount = 1;
@@ -857,16 +872,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 		{
 			/* now that autocomplete is finishing or was cancelled, reshow calltips
 			 * if they were showing */
-			if (calltip.set)
-			{
-				CalltipReshowInfo *cri = g_new0(CalltipReshowInfo, 1);
-				cri->message = nt->nmhdr.code;
-				cri->message = nt->lParam;
-				cri->text = g_strdup(nt->text);
-				/* delay the reshow of the calltip window to make sure it is actually displayed,
-				 * without it might be not visible on SCN_AUTOCCANCEL */
-				g_idle_add(reshow_calltip, cri);
-			}
+			request_reshowing_calltip(nt);
 			break;
 		}
 #ifdef GEANY_DEBUG

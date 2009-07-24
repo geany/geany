@@ -3,6 +3,8 @@
  * src/editor.c:
    Attempt to fix reshowing calltips after the autocompletion list
    has been shown.
+   Reshow calltips also when the autocompletion list was closed
+   implicitly by not choosing an item.
 
 
 2009-07-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
