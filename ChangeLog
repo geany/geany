@@ -1,3 +1,10 @@
+2009-07-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/editor.c:
+   Attempt to fix reshowing calltips after the autocompletion list
+   has been shown.
+
+
 2009-07-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/utils.c, src/utils.h, src/toolbar.c, src/plugindata.h,
