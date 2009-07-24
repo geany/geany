@@ -433,7 +433,7 @@ GeanyBuildCommand *build_get_menu_item(GeanyBuildSource src, GeanyBuildGroup grp
 /* parameter checked version of get_build_cmd for external interface */
 GeanyBuildCommand *build_get_current_menu_item(GeanyBuildGroup grp, gint cmd, gint *src)
 {
-	if (src>=BCS_COUNT || grp>=GBG_COUNT || cmd>=build_groups_count[grp]) return NULL;
+	if (*src>=BCS_COUNT || grp>=GBG_COUNT || cmd>=build_groups_count[grp]) return NULL;
 	return get_build_cmd(NULL, grp, cmd, src);
 }
 
@@ -510,18 +510,18 @@ static gchar* build_replace_placeholder(const GeanyDocument* doc, const gchar* s
 
 		/* replace %f with the filename (including extension) */
 		replacement = g_path_get_basename(filename);
-		utils_string_replace_all(&stack, "%f", replacement);
+		utils_string_replace_all(stack, "%f", replacement);
 		g_free(replacement);
 
 		/* replace %d with the absolute path of the dir of the current file */
 		replacement = g_path_get_dirname(filename);
-		utils_string_replace_all(&stack, "%d", replacement);
+		utils_string_replace_all(stack, "%d", replacement);
 		g_free(replacement);
 
 		/* replace %e with the filename (excluding extension) */
 		executable = utils_remove_ext_from_filename(filename);
 		replacement = g_path_get_basename(executable);
-		utils_string_replace_all(&stack, "%e", replacement);
+		utils_string_replace_all(stack, "%e", replacement);
 		g_free(replacement);
 	}
 	
@@ -538,7 +538,7 @@ static gchar* build_replace_placeholder(const GeanyDocument* doc, const gchar* s
 			replacement = g_path_get_dirname(filename);
     }
 
-    utils_string_replace_all(&stack, "%p", replacement);
+    utils_string_replace_all(stack, "%p", replacement);
     g_free(replacement);
 
     ret_str = utils_get_utf8_from_locale(stack->str);
