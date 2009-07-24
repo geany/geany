@@ -192,10 +192,10 @@ SettingAction;
 
 static void settings_action(GKeyFile *config, SettingAction action)
 {
-	gpointer *ptr;
+	guint i;
 	GeanyPrefGroup *group;
 
-	foreach_ptr_array(group, ptr, keyfile_groups)
+	foreach_ptr_array(group, i, keyfile_groups)
 	{
 		switch (action)
 		{
@@ -454,14 +454,7 @@ static void save_dialog_prefs(GKeyFile *config)
 
 static void save_ui_prefs(GKeyFile *config)
 {
-	/* If the sidebar is visible, retrieve the active page number. Otherwise it was already
-	 * set on hiding the sidebar. */
-	if (ui_prefs.sidebar_visible)
-		ui_prefs.sidebar_page = gtk_notebook_get_current_page(
-			GTK_NOTEBOOK(main_widgets.sidebar_notebook));
-
 	g_key_file_set_boolean(config, PACKAGE, "sidebar_visible", ui_prefs.sidebar_visible);
-	g_key_file_set_integer(config, PACKAGE, "sidebar_page", ui_prefs.sidebar_page);
 	g_key_file_set_boolean(config, PACKAGE, "statusbar_visible", interface_prefs.statusbar_visible);
 	g_key_file_set_boolean(config, PACKAGE, "msgwindow_visible", ui_prefs.msgwindow_visible);
 	g_key_file_set_boolean(config, PACKAGE, "fullscreen", ui_prefs.fullscreen);
@@ -816,7 +809,6 @@ static void load_ui_prefs(GKeyFile *config)
 	GError *error = NULL;
 
 	ui_prefs.sidebar_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_visible", TRUE);
-	ui_prefs.sidebar_page = utils_get_setting_integer(config, PACKAGE, "sidebar_page", 0);
 	ui_prefs.msgwindow_visible = utils_get_setting_boolean(config, PACKAGE, "msgwindow_visible", TRUE);
 	ui_prefs.fullscreen = utils_get_setting_boolean(config, PACKAGE, "fullscreen", FALSE);
 	ui_prefs.custom_date_format = utils_get_setting_string(config, PACKAGE, "custom_date_format", "");
@@ -1154,10 +1146,10 @@ void configuration_init(void)
 
 void configuration_finalize(void)
 {
-	gpointer *ptr;
+	guint i;
 	GeanyPrefGroup *group;
 
-	foreach_ptr_array(group, ptr, keyfile_groups)
+	foreach_ptr_array(group, i, keyfile_groups)
 		stash_group_free(group);
 
 	g_ptr_array_free(keyfile_groups, TRUE);

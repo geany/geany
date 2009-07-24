@@ -63,7 +63,7 @@
  *  Tries to open the given URI in a browser.
  *  On Windows, the system's default browser is opened.
  *  On non-Windows systems, the browser command set in the preferences dialog is used. In case
- *  that fails or it is unset, @a xdg-open is used as fallback as well as some other known
+ *  that fails or it is unset, @c xdg-open is used as fallback as well as some other known
  *  browsers.
  *
  *  @param uri The URI to open in the web browser.
@@ -214,7 +214,7 @@ gboolean utils_is_opening_brace(gchar c, gboolean include_angles)
 
 
 /**
- *  Write the given @c text into a file with @c filename.
+ *  Write the given @a text into a file with @a filename.
  *  If the file doesn't exist, it will be created.
  *  If it already exists, it will be overwritten.
  *
@@ -381,8 +381,8 @@ gdouble utils_scale_round(gdouble val, gdouble factor)
  *
  *  The input strings should be in UTF-8 or locale encoding.
  *
- *  @param s1 Pointer to first string or @a NULL.
- *  @param s2 Pointer to second string or @a NULL.
+ *  @param s1 Pointer to first string or @c NULL.
+ *  @param s2 Pointer to second string or @c NULL.
  *
  *  @return an integer less than, equal to, or greater than zero if @a s1 is found, respectively,
  *          to be less than, to match, or to be greater than @a s2.
@@ -438,7 +438,7 @@ gint utils_str_casecmp(const gchar *s1, const gchar *s2)
  *  @param string Input string.
  *  @param truncate_length The length in characters of the resulting string.
  *
- *  @return A copy of @c string which is truncated to @c truncate_length characters,
+ *  @return A copy of @a string which is truncated to @a truncate_length characters,
  *          should be freed when no longer needed.
  *
  *  @since 0.17
@@ -485,13 +485,13 @@ gchar *utils_str_middle_truncate(const gchar *string, guint truncate_length)
 
 
 /**
- *  @a NULL-safe string comparison. Returns @a TRUE if both @c a and @c b are @a NULL
- *  or if @c a and @c b refer to valid strings which are equal.
+ *  @c NULL-safe string comparison. Returns @c TRUE if both @a a and @a b are @c NULL
+ *  or if @a a and @a b refer to valid strings which are equal.
  *
- *  @param a Pointer to first string or @a NULL.
- *  @param b Pointer to second string or @a NULL.
+ *  @param a Pointer to first string or @c NULL.
+ *  @param b Pointer to second string or @c NULL.
  *
- *  @return @a TRUE if @c a equals @c b, else @a FALSE.
+ *  @return @c TRUE if @a a equals @a b, else @c FALSE.
  **/
 gboolean utils_str_equal(const gchar *a, const gchar *b)
 {
@@ -508,7 +508,7 @@ gboolean utils_str_equal(const gchar *a, const gchar *b)
 
 
 /**
- *  Remove the extension from @c filename and return the result in a newly allocated string.
+ *  Remove the extension from @a filename and return the result in a newly allocated string.
  *
  *  @param filename The filename to operate on.
  *
@@ -601,23 +601,23 @@ gint utils_is_file_writeable(const gchar *locale_filename)
 
 
 /* Replaces all occurrences of needle in haystack with replacement.
- * Warning: haystack will be freed.
- * New code should use utils_string_replace_all() instead (freeing arguments
- * is unusual behaviour).
+ * Warning: *haystack must be a heap address; it may be freed and reassigned.
+ * Note: utils_string_replace_all() will always be faster when @a replacement is longer
+ * than @a needle.
  * All strings have to be NULL-terminated.
  * See utils_string_replace_all() for details. */
-gchar *utils_str_replace(gchar *haystack, const gchar *needle, const gchar *replacement)
+void utils_str_replace_all(gchar **haystack, const gchar *needle, const gchar *replacement)
 {
 	GString *str;
 
-	g_return_val_if_fail(haystack != NULL, NULL);
+	g_return_if_fail(*haystack != NULL);
 
-	str = g_string_new(haystack);
+	str = g_string_new(*haystack);
 
-	g_free(haystack);
+	g_free(*haystack);
 	utils_string_replace_all(str, needle, replacement);
 
-	return g_string_free(str, FALSE);
+	*haystack = g_string_free(str, FALSE);
 }
 
 
@@ -734,10 +734,10 @@ gchar *utils_get_initials(const gchar *name)
  *  @param config A GKeyFile object.
  *  @param section The group name to look in for the key.
  *  @param key The key to find.
- *  @param default_value The default value which will be returned when @c section or @c key
+ *  @param default_value The default value which will be returned when @a section or @a key
  *         don't exist.
  *
- *  @return The value associated with c key as an integer, or the given default value if the value
+ *  @return The value associated with @a key as an integer, or the given default value if the value
  *          could not be retrieved.
  **/
 gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gchar *key,
@@ -768,7 +768,7 @@ gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gch
  *  @param default_value The default value which will be returned when @c section or @c key
  *         don't exist.
  *
- *  @return The value associated with c key as a boolean, or the given default value if the value
+ *  @return The value associated with @a key as a boolean, or the given default value if the value
  *          could not be retrieved.
  **/
 gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const gchar *key,
@@ -796,7 +796,7 @@ gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const
  *  @param config A GKeyFile object.
  *  @param section The group name to look in for the key.
  *  @param key The key to find.
- *  @param default_value The default value which will be returned when @c section or @c key
+ *  @param default_value The default value which will be returned when @a section or @a key
  *         don't exist.
  *
  *  @return A newly allocated string, either the value for @a key or a copy of the given
@@ -1347,11 +1347,11 @@ gint utils_mkdir(const gchar *path, gboolean create_parent_dirs)
  *  in the list should be freed after use.
  *
  *  @param path The path of the directory to scan, in locale encoding.
- *  @param length The location to store the number of non-@a NULL data items in the list,
- *                unless @a NULL.
- *  @param error The is the location for storing a possible error, or @a NULL.
+ *  @param length The location to store the number of non-@c NULL data items in the list,
+ *                unless @c NULL.
+ *  @param error The is the location for storing a possible error, or @c NULL.
  *
- *  @return A newly allocated list or @a NULL if no files found. The list and its data should be
+ *  @return A newly allocated list or @c NULL if no files found. The list and its data should be
  *          freed when no longer needed.
  **/
 GSList *utils_get_file_list(const gchar *path, guint *length, GError **error)
@@ -1445,15 +1445,15 @@ static guint utils_string_replace_helper(GString *haystack, const gchar *needle,
 
 
 /**
- * Replaces all occurrences of @c needle in @c haystack with @c replace.
+ * Replaces all occurrences of @a needle in @a haystack with @a replace.
  * As of Geany 0.16, @a replace can match @a needle, so the following will work:
  * @code utils_string_replace_all(text, "\n", "\r\n"); @endcode
  *
  * @param haystack The input string to operate on. This string is modified in place.
  * @param needle The string which should be replaced.
- * @param replace The replacement for @c needle.
+ * @param replace The replacement for @a needle.
  *
- * @return @a amount of replacements done
+ * @return amount of replacements done
  **/
 guint utils_string_replace_all(GString *haystack, const gchar *needle, const gchar *replace)
 {
@@ -1462,15 +1462,15 @@ guint utils_string_replace_all(GString *haystack, const gchar *needle, const gch
 
 
 /**
- * Convenience function to replace only the first occurrence of @c needle in @c haystack
- * with @ replace.
+ * Convenience function to replace only the first occurrence of @a needle in @a haystack
+ * with @a replace.
  * For details, see utils_string_replace_all().
  *
  * @param haystack The input string to operate on. This string is modified in place.
  * @param needle The string which should be replaced.
- * @param replace The replacement for @c needle.
+ * @param replace The replacement for @a needle.
  *
- * @return @a amount of replacements done
+ * @return amount of replacements done
  *
  *  @since 0.16
  */
@@ -1528,7 +1528,7 @@ static gboolean check_error(GError **error)
  *  @param exit_status The child exit status, as returned by waitpid().
  *  @param error The return location for error or @a NULL.
  *
- *  @return @a TRUE on success, @a FALSE if an error was set.
+ *  @return @c TRUE on success, @c FALSE if an error was set.
  **/
 gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
 						  GSpawnChildSetupFunc child_setup, gpointer user_data, gchar **std_out,
@@ -1574,7 +1574,7 @@ gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFla
  *  @param child_pid The return location for child process ID, or NULL.
  *  @param error The return location for error or @a NULL.
  *
- *  @return @a TRUE on success, @a FALSE if an error was set.
+ *  @return @c TRUE on success, @c FALSE if an error was set.
  **/
 gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
 						   GSpawnChildSetupFunc child_setup, gpointer user_data, GPid *child_pid,
@@ -1602,7 +1602,9 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 
 /* Similar to g_build_path() but (re)using a fixed buffer, so never free it.
  * This assumes a small enough resulting string length to be kept without freeing,
- * but this should be the case for filenames. */
+ * but this should be the case for filenames.
+ * @warning As the buffer is reused, you can't call this recursively, e.g. for a
+ * function argument and within the function called. */
 const gchar *utils_build_path(const gchar *first, ...)
 {
 	static GString *buffer = NULL;
@@ -1705,6 +1707,86 @@ gboolean utils_is_remote_path(const gchar *path)
 	}
 #endif
 	return FALSE;
+}
+
+
+/* Remove all relative and untidy elements from the path of @a filename.
+ * @param filename must be a valid absolute path.
+ * @see tm_get_real_path() - also resolves links. */
+void utils_tidy_path(gchar *filename)
+{
+	GString *str = g_string_new(filename);
+	const gchar *c, *needle;
+	gchar *tmp;
+	gssize pos;
+
+	g_return_if_fail(g_path_is_absolute(filename));
+
+	/* replace "/./" and "//" */
+	utils_string_replace_all(str, G_DIR_SEPARATOR_S "." G_DIR_SEPARATOR_S, G_DIR_SEPARATOR_S);
+	utils_string_replace_all(str, G_DIR_SEPARATOR_S G_DIR_SEPARATOR_S, G_DIR_SEPARATOR_S);
+
+	/* replace "/.." */
+	needle = G_DIR_SEPARATOR_S "..";
+	while (1)
+	{
+		c = strstr(str->str, needle);
+		if (c == NULL)
+			break;
+		else
+		{
+			pos = c - str->str;
+			if (pos <= 3)
+				break;	/* bad path */
+
+			g_string_erase(str, pos, strlen(needle));	/* erase "/.." */
+
+			tmp = g_strndup(str->str, pos);	/* path up to "/.." */
+			c = g_strrstr(tmp, G_DIR_SEPARATOR_S);
+			g_return_if_fail(c);
+
+			pos = c - tmp;	/* position of previous "/" */
+			g_string_erase(str, pos, strlen(c));
+			g_free(tmp);
+		}
+	}
+	g_return_if_fail(strlen(str->str) <= strlen(filename));
+	strcpy(filename, str->str);
+	g_string_free(str, TRUE);
+}
+
+
+/* @warning Doesn't include null terminating character. */
+#define foreach_str(char_ptr, string) \
+	for (char_ptr = string; *char_ptr; char_ptr++)
+
+/**
+ *  Replace or remove characters from a string in place.
+ *
+ *  @param string String to search.
+ *  @param chars Characters to remove.
+ *
+ *  @return @a string - return value is only useful when nesting function calls, e.g.:
+ *  @code str = utils_str_remove_chars(g_strdup("f_o_o"), "_"); @endcode
+ *
+ *  @see @c g_strdelimit.
+ **/
+gchar *utils_str_remove_chars(gchar *string, const gchar *chars)
+{
+	const gchar *r;
+	gchar *w = string;
+
+	g_return_val_if_fail(string, NULL);
+	if (!NZV(chars))
+		return string;
+
+	foreach_str(r, string)
+	{
+		if (!strchr(chars, *r))
+			*w++ = *r;
+	}
+	*w = 0x0;
+	return string;
 }
 
 

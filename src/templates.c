@@ -591,122 +591,46 @@ void templates_init(void)
  * 6 characters are filled with whitespace when the comment characters include " *" */
 static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, guint indent)
 {
-	gchar *frame_start = "";	/* to add before comment_text */
-	gchar *frame_end = "";		/* to add after comment_text */
-	gchar *line_prefix;			/* to add before every line in comment_text */
+	gchar *frame_start;		/* to add before comment_text */
+	gchar *frame_end;		/* to add after comment_text */
+	gchar *line_prefix;		/* to add before every line in comment_text */
 	gchar *result;
 	gchar *tmp;
 	gchar *prefix;
 	gchar **lines;
 	guint i, len;
+	GeanyFiletype *ft = filetypes_index(filetype_idx);
 
-	/* TODO the following switch could be replaced by some intelligent code which reads
-	 * frame_start, frame_end and line_prefix from the filetype definition files */
-	switch (filetype_idx)
+	g_return_val_if_fail(ft != NULL, NULL);
+
+	if (NZV(ft->comment_open))
 	{
-		case GEANY_FILETYPES_HTML:
-		case GEANY_FILETYPES_XML:
-		case GEANY_FILETYPES_DOCBOOK:
+		if (NZV(ft->comment_close))
 		{
-			frame_start = "<!--\n";
-			frame_end = "-->\n";
+			frame_start = g_strconcat(ft->comment_open, "\n", NULL);
+			frame_end = g_strconcat(ft->comment_close, "\n", NULL);
 			line_prefix = "";
-			break;
 		}
-
-		case GEANY_FILETYPES_PYTHON:
-		case GEANY_FILETYPES_R:
-		case GEANY_FILETYPES_RUBY:
-		case GEANY_FILETYPES_SH:
-		case GEANY_FILETYPES_MAKE:
-		case GEANY_FILETYPES_PERL:
-		case GEANY_FILETYPES_DIFF:
-		case GEANY_FILETYPES_TCL:
-		case GEANY_FILETYPES_CONF:
-		case GEANY_FILETYPES_PO:
-		case GEANY_FILETYPES_YAML:
-		case GEANY_FILETYPES_CMAKE:
+		else
 		{
-			line_prefix = "#";
-			break;
+			frame_start = NULL;
+			frame_end = NULL;
+			line_prefix = ft->comment_open;
 		}
+	}
+	else
+	{	/* use C-like multi-line comments as fallback */
+		frame_start = g_strdup("/*\n");
+		frame_end = g_strdup("*/\n");
+		line_prefix = "";
+	}
 
-		case GEANY_FILETYPES_JS:
-		case GEANY_FILETYPES_HAXE:
-		{
-			line_prefix = "//";
-			break;
-		}
-
-		case GEANY_FILETYPES_LATEX:
-		case GEANY_FILETYPES_MATLAB:
-		{
-			line_prefix = "%";
-			break;
-		}
-
-		case GEANY_FILETYPES_ADA:
-		case GEANY_FILETYPES_HASKELL:
-		case GEANY_FILETYPES_VHDL:
-		case GEANY_FILETYPES_LUA:
-		{
-			line_prefix = "--";
-			break;
-		}
-
-		case GEANY_FILETYPES_FORTRAN:
-		{
-			line_prefix = "!";
-			break;
-		}
-
-		case GEANY_FILETYPES_F77:
-		{
-			line_prefix = "c";
-			break;
-		}
-
-		case GEANY_FILETYPES_ASM:
-		case GEANY_FILETYPES_NSIS:
-		{
-			line_prefix = ";";
-			break;
-		}
-
-		case GEANY_FILETYPES_BASIC:
-		{
-			line_prefix = "'";
-			break;
-		}
-
-		case GEANY_FILETYPES_PASCAL:
-		{
-			frame_start = "{\n";
-			frame_end = "}\n";
-			line_prefix = "";
-			break;
-		}
-
-		case GEANY_FILETYPES_CAML:
-		{
-			frame_start = "(*\n";
-			frame_end = " *)\n";
-			line_prefix = " *";
-			break;
-		}
-
-		case GEANY_FILETYPES_NONE:
-		{
-			line_prefix = "";
-			break;
-		}
-
-		default: /* assume C-like multi-line comment is appropriate */
-		{
-			frame_start = "/*\n";
-			frame_end = " */\n";
-			line_prefix = " *";
-		}
+	/* do some magic to nicely format C-like multi-line comments */
+	if (NZV(frame_start) && frame_start[1] == '*')
+	{
+		/* prefix the string with a space */
+		setptr(frame_end, g_strconcat(" ", frame_end, NULL));
+		line_prefix = " *";
 	}
 
 	/* construct the real prefix with given amount of whitespace */
@@ -714,7 +638,6 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 	tmp = g_strnfill(i, ' ');
 	prefix = g_strconcat(line_prefix, tmp, NULL);
 	g_free(tmp);
-
 
 	/* add line_prefix to every line of comment_text */
 	lines = g_strsplit(comment_text, "\n", -1);
@@ -728,10 +651,12 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 	tmp = g_strjoinv("\n", lines);
 
 	/* add frame_start and frame_end */
-	result = g_strconcat(frame_start, tmp, frame_end, NULL);
+	if (frame_start != NULL)
+		result = g_strconcat(frame_start, tmp, frame_end, NULL);
+	else
+		result = g_strconcat(tmp, frame_end, NULL);
 
-	g_free(prefix);
-	g_free(tmp);
+	utils_free_pointers(4, prefix, tmp, frame_start, frame_end, NULL);
 	g_strfreev(lines);
 	return result;
 }
@@ -767,10 +692,10 @@ gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname)
 	else
 		shortname = g_path_get_basename(fname);
 
-	template = utils_str_replace(template, "{filename}", shortname);
-	template = utils_str_replace(template, "{gpl}", templates[GEANY_TEMPLATE_GPL]);
-	template = utils_str_replace(template, "{bsd}", templates[GEANY_TEMPLATE_BSD]);
-	template = utils_str_replace(template, "{datetime}", date);
+	utils_str_replace_all(&template, "{filename}", shortname);
+	utils_str_replace_all(&template, "{gpl}", templates[GEANY_TEMPLATE_GPL]);
+	utils_str_replace_all(&template, "{bsd}", templates[GEANY_TEMPLATE_BSD]);
+	utils_str_replace_all(&template, "{datetime}", date);
 
 	result = make_comment_block(template, ft_id, 8);
 
@@ -799,7 +724,7 @@ gchar *templates_get_template_new_file(GeanyFiletype *ft)
 
 	file_header = templates_get_template_fileheader(ft->id, NULL);	/* file template only used for new files */
 	ft_template = get_file_template(ft);
-	ft_template = utils_str_replace(ft_template, "{fileheader}", file_header);
+	utils_str_replace_all(&ft_template, "{fileheader}", file_header);
 	g_free(file_header);
 	return ft_template;
 }
@@ -818,9 +743,9 @@ gchar *templates_get_template_function(gint filetype_idx, const gchar *func_name
 	gchar *datetime = utils_get_date_time(template_prefs.datetime_format, NULL);
 	gchar *result;
 
-	template = utils_str_replace(template, "{date}", date);
-	template = utils_str_replace(template, "{datetime}", datetime);
-	template = utils_str_replace(template, "{functionname}", (func_name) ? func_name : "");
+	utils_str_replace_all(&template, "{date}", date);
+	utils_str_replace_all(&template, "{datetime}", datetime);
+	utils_str_replace_all(&template, "{functionname}", (func_name) ? func_name : "");
 
 	result = make_comment_block(template, filetype_idx, 3);
 
@@ -835,7 +760,8 @@ gchar *templates_get_template_changelog(void)
 {
 	gchar *date = utils_get_date_time(template_prefs.datetime_format, NULL);
 	gchar *result = g_strdup(templates[GEANY_TEMPLATE_CHANGELOG]);
-	result = utils_str_replace(result, "{date}", date);
+
+	utils_str_replace_all(&result, "{date}", date);
 
 	g_free(date);
 	return result;

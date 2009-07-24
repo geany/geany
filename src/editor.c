@@ -1379,18 +1379,18 @@ void editor_find_current_word(GeanyEditor *editor, gint pos, gchar *word, size_t
 
 
 /**
- *  Finds the word at the position specified by @c pos. If any word is found, it is returned.
+ *  Finds the word at the position specified by @a pos. If any word is found, it is returned.
  *  Otherwise NULL is returned.
  *  Additional wordchars can be specified to define what to consider as a word.
  *
  *  @param editor The editor to operate on.
  *  @param pos The position where the word should be read from.
- *             Maybe @a -1 to use the current position.
+ *             Maybe @c -1 to use the current position.
  *  @param wordchars The wordchars to separate words. wordchars mean all characters to count
- *                   as part of a word. Maybe @a NULL to use the default wordchars,
+ *                   as part of a word. Maybe @c NULL to use the default wordchars,
  *                   see @ref GEANY_WORDCHARS.
  *
- *  @return A newly-allocated string containing the word at the given @c pos or NULL.
+ *  @return A newly-allocated string containing the word at the given @a pos or @c NULL.
  *          Should be freed when no longer needed.
  *
  *  @since 0.16
@@ -3948,7 +3948,9 @@ gchar *editor_get_default_selection(GeanyEditor *editor, gboolean use_current_wo
 
 /* Note: Usually the line should be made visible (not folded) before calling this.
  * Returns: TRUE if line is/will be displayed to the user, or FALSE if it is
- * outside the view. */
+ * outside the *vertical* view.
+ * Warning: You may need horizontal scrolling to make the cursor visible - so always call
+ * sci_scroll_caret() when this returns TRUE. */
 gboolean editor_line_in_view(GeanyEditor *editor, gint line)
 {
 	gint vis1, los;
@@ -3984,6 +3986,8 @@ void editor_display_current_line(GeanyEditor *editor, gfloat percent_of_view)
 	/* scroll the line if it's off screen */
 	if (! editor_line_in_view(editor, line))
 		editor->scroll_percent = percent_of_view;
+	else
+		sci_scroll_caret(editor->sci); /* may need horizontal scrolling */
 }
 
 
@@ -4071,7 +4075,7 @@ void editor_indicator_set_on_line(GeanyEditor *editor, gint indic, gint line)
 
 
 /**
- *  Sets an indicator on the range specified by @c start and @c end.
+ *  Sets an indicator on the range specified by @a start and @a end.
  *  No error checking or whitespace removal is performed, this should be done by the calling
  *  function if necessary.
  *
@@ -4785,8 +4789,9 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 
 
 /* This is for tab-indents, space aligns formatted code. Spaces should be preserved. */
-static void change_tab_indentation(ScintillaObject *sci, gint line, gboolean increase)
+static void change_tab_indentation(GeanyEditor *editor, gint line, gboolean increase)
 {
+	ScintillaObject *sci = editor->sci;
 	gint pos = sci_get_position_from_line(sci, line);
 
 	if (increase)
@@ -4800,6 +4805,13 @@ static void change_tab_indentation(ScintillaObject *sci, gint line, gboolean inc
 			sci_set_selection(sci, pos, pos + 1);
 			sci_replace_sel(sci, "");
 		}
+		else /* remove spaces only if no tabs */
+		{
+			gint width = sci_get_line_indentation(sci, line);
+
+			width -= editor_get_indent_prefs(editor)->width;
+			sci_set_line_indentation(sci, line, width);
+		}
 	}
 }
 
@@ -4809,8 +4821,8 @@ static void editor_change_line_indent(GeanyEditor *editor, gint line, gboolean i
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
 	ScintillaObject *sci = editor->sci;
 
-	if (iprefs->type == GEANY_INDENT_TYPE_TABS /* && iprefs->ignore_spaces */)
-		change_tab_indentation(sci, line, increase);
+	if (iprefs->type == GEANY_INDENT_TYPE_TABS)
+		change_tab_indentation(editor, line, increase);
 	else
 	{
 		gint width = sci_get_line_indentation(sci, line);
@@ -4841,10 +4853,14 @@ void editor_indent(GeanyEditor *editor, gboolean increase)
 	if (end == sci_get_length(sci))
 		lend++;	/* for last line with text on it */
 
+	sci_start_undo_action(sci);
 	for (line = lstart; line < lend; line++)
 	{
 		editor_change_line_indent(editor, line, increase);
 	}
+	sci_end_undo_action(sci);
+
+	/* set cursor/selection */
 	if (lend > lstart)
 	{
 		sci_set_selection_start(sci, start);

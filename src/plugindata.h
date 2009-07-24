@@ -50,13 +50,13 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 147,
+	GEANY_API_VERSION = 149,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
 	/* This should usually stay the same if fields are only appended, assuming only pointers to
 	 * structs and not structs themselves are declared by plugins. */
-	GEANY_ABI_VERSION = 62
+	GEANY_ABI_VERSION = 63
 };
 
 /** Check the plugin can be loaded by Geany.
@@ -166,11 +166,11 @@ PluginFlags;
  * Fields set and owned by the plugin. */
 typedef struct PluginFields
 {
-	/** Bitmask of PluginFlags. */
+	/** Bitmask of @c PluginFlags. */
 	PluginFlags	flags;
 	/** Pointer to a plugin's menu item which will be automatically enabled/disabled when there
-	 *  are no open documents and PLUGIN_IS_DOCUMENT_SENSITIVE is set.
-	 *  This is required if using PLUGIN_IS_DOCUMENT_SENSITIVE, ignored otherwise */
+	 *  are no open documents and @c PLUGIN_IS_DOCUMENT_SENSITIVE is set.
+	 *  This is required if using @c PLUGIN_IS_DOCUMENT_SENSITIVE, ignored otherwise */
 	GtkWidget	*menu_item;
 }
 PluginFields;
@@ -369,6 +369,7 @@ typedef struct UtilsFuncs
 	guint		(*string_replace_first) (GString *haystack, const gchar *needle,
 				 const gchar *replace);
 	gchar*		(*str_middle_truncate) (const gchar *string, guint truncate_length);
+	gchar*		(*str_remove_chars) (gchar *string, const gchar *chars);
 }
 UtilsFuncs;
 
@@ -551,7 +552,7 @@ PluginFuncs;
 /* Deprecated aliases */
 #ifndef GEANY_DISABLE_DEPRECATED
 
-/** NULL-safe way to get the index of @a doc_ptr in the documents array. */
+/** @c NULL-safe way to get the index of @a doc_ptr in the documents array. */
 #define DOC_IDX(doc_ptr) \
 	(doc_ptr ? doc_ptr->index : -1)
 #define DOC_IDX_VALID(doc_idx) \

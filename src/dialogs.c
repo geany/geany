@@ -373,37 +373,42 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 {
 	gboolean rename_file = FALSE;
 	gboolean success = FALSE;
+	gchar *new_filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(ui_widgets.save_filesel));
 
 	switch (response)
 	{
 		case GEANY_RESPONSE_RENAME:
+			/* rename doesn't check for empty filename or overwriting */
+			if (! NZV(new_filename))
+			{
+				utils_beep();
+				break;
+			}
+			if (g_file_test(new_filename, G_FILE_TEST_EXISTS) &&
+				!dialogs_show_question_full(NULL, NULL, NULL,
+					_("Overwrite?"),
+					_("Filename already exists!")))
+				break;
 			rename_file = TRUE;
 			/* fall through */
 		case GTK_RESPONSE_ACCEPT:
 		{
-			gchar *new_filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(ui_widgets.save_filesel));
 			gboolean open_new_tab = gtk_toggle_button_get_active(
 					GTK_TOGGLE_BUTTON(ui_lookup_widget(ui_widgets.save_filesel, "check_open_new_tab")));
 			gchar *utf8_filename;
 
-			if (! NZV(new_filename))	/* rename doesn't check for empty filename */
-			{
-				utils_beep();
-				g_free(new_filename);
-				return;
-			}
 			utf8_filename = utils_get_utf8_from_locale(new_filename);
-
 			success = handle_save_as(utf8_filename, open_new_tab, rename_file);
 
 			g_free(utf8_filename);
-			g_free(new_filename);
 			break;
 		}
 		case GTK_RESPONSE_CANCEL:
 			success = TRUE;
 			break;
 	}
+	g_free(new_filename);
+
 	if (success)
 		gtk_widget_hide(ui_widgets.save_filesel);
 }
@@ -537,7 +542,7 @@ static gboolean gtk_show_save_as(void)
 /**
  *  Show the Save As dialog for the current notebook page.
  *
- *  @return @a TRUE if the file was saved, otherwise @a FALSE.
+ *  @return @c TRUE if the file was saved, otherwise @c FALSE.
  **/
 gboolean dialogs_show_save_as()
 {
@@ -552,15 +557,49 @@ gboolean dialogs_show_save_as()
 }
 
 
+#ifndef G_OS_WIN32
+static void show_msgbox_dialog(GtkWidget *dialog, GtkMessageType type, GtkWindow *parent)
+{
+	const gchar *title;
+	switch (type)
+	{
+		case GTK_MESSAGE_ERROR:
+			title = _("Error");
+			break;
+		case GTK_MESSAGE_QUESTION:
+			title = _("Question");
+			break;
+		case GTK_MESSAGE_WARNING:
+			title = _("Warning");
+			break;
+		default:
+			title = _("Information");
+			break;
+	}
+	gtk_window_set_title(GTK_WINDOW(dialog), title);
+	if (parent == NULL)
+	{
+		GdkPixbuf *pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
+		gtk_window_set_icon(GTK_WINDOW(dialog), pb);
+		g_object_unref(pb);
+	}
+	gtk_widget_set_name(dialog, "GeanyDialog");
+
+	gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy(dialog);
+}
+#endif
+
+
 /**
- *  Show a message box of the type @c type with @c text.
+ *  Show a message box of the type @a type with @a text.
  *  On Unix-like systems a GTK message dialog box is shown, on Win32 systems a native Windows
  *  message dialog box is shown.
  *
- *  @param type A GtkMessageType, e.g. GTK_MESSAGE_INFO, GTK_MESSAGE_WARNING,
- *              GTK_MESSAGE_QUESTION, GTK_MESSAGE_ERROR.
+ *  @param type A @c GtkMessageType, e.g. @c GTK_MESSAGE_INFO, @c GTK_MESSAGE_WARNING,
+ *              @c GTK_MESSAGE_QUESTION, @c GTK_MESSAGE_ERROR.
  *  @param text Printf()-style format string.
- *  @param ... Arguments for the @c text format string.
+ *  @param ... Arguments for the @a text format string.
  **/
 void dialogs_show_msgbox(GtkMessageType type, const gchar *text, ...)
 {
@@ -569,38 +608,36 @@ void dialogs_show_msgbox(GtkMessageType type, const gchar *text, ...)
 #endif
 	gchar string[512];
 	va_list args;
+	GtkWindow *parent = (main_status.main_window_realized) ? GTK_WINDOW(main_widgets.window) : NULL;
 
 	va_start(args, text);
 	g_vsnprintf(string, 511, text, args);
 	va_end(args);
 
 #ifdef G_OS_WIN32
-	win32_message_dialog(NULL, type, string);
+	win32_message_dialog(GTK_WIDGET(parent), type, string);
 #else
-	dialog = gtk_message_dialog_new(GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
+	dialog = gtk_message_dialog_new(parent, GTK_DIALOG_DESTROY_WITH_PARENT,
                                   type, GTK_BUTTONS_OK, "%s", string);
-	gtk_widget_set_name(dialog, "GeanyDialog");
-	gtk_dialog_run(GTK_DIALOG(dialog));
-	gtk_widget_destroy(dialog);
+	show_msgbox_dialog(dialog, type, parent);
 #endif
 }
 
 
 void dialogs_show_msgbox_with_secondary(GtkMessageType type, const gchar *text, const gchar *secondary)
 {
+	GtkWindow *parent = (main_status.main_window_realized) ? GTK_WINDOW(main_widgets.window) : NULL;
 #ifdef G_OS_WIN32
 	/* put the two strings together because Windows message boxes don't support secondary texts */
 	gchar *string = g_strconcat(text, "\n", secondary, NULL);
-	win32_message_dialog(NULL, type, string);
+	win32_message_dialog(GTK_WIDGET(parent), type, string);
 	g_free(string);
 #else
 	GtkWidget *dialog;
-	dialog = gtk_message_dialog_new(GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
+	dialog = gtk_message_dialog_new(parent, GTK_DIALOG_DESTROY_WITH_PARENT,
                                   type, GTK_BUTTONS_OK, "%s", text);
-	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", secondary);
-	gtk_dialog_run(GTK_DIALOG(dialog));
-	gtk_widget_destroy(dialog);
+	show_msgbox_dialog(dialog, type, parent);
 #endif
 }
 
@@ -876,18 +913,18 @@ dialogs_show_input(const gchar *title, const gchar *label_text, const gchar *def
 
 /**
  *  Show an input box to enter a numerical value using a GtkSpinButton.
- *  If the dialog is aborted, @c value remains untouched.
+ *  If the dialog is aborted, @a value remains untouched.
  *
  *  @param title The dialog title.
  *  @param label_text The shown dialog label.
  *  @param value The default value for the spin button and the return location of the entered value.
  * 				 Must be non-NULL.
- *  @param min Minimum allowable value (see documentation for @a gtk_spin_button_new_with_range()).
- *  @param max Maximum allowable value (see documentation for @a gtk_spin_button_new_with_range()).
+ *  @param min Minimum allowable value (see documentation for @c gtk_spin_button_new_with_range()).
+ *  @param max Maximum allowable value (see documentation for @c gtk_spin_button_new_with_range()).
  *  @param step Increment added or subtracted by spinning the widget
- * 				(see documentation for @a gtk_spin_button_new_with_range()).
+ * 				(see documentation for @c gtk_spin_button_new_with_range()).
  *
- *  @return @a TRUE if a value was entered and the dialog closed with 'OK'. @a FALSE otherwise.
+ *  @return @c TRUE if a value was entered and the dialog closed with 'OK'. @c FALSE otherwise.
  *
  *  @since 0.16
  **/
@@ -1321,13 +1358,21 @@ static gboolean show_question(GtkWidget *parent, const gchar *yes_btn, const gch
 #else
 	GtkWidget *dialog;
 
-	if (parent == NULL)
+	if (parent == NULL && main_status.main_window_realized)
 		parent = main_widgets.window;
 
 	dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
 		GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_QUESTION,
 		GTK_BUTTONS_NONE, "%s", question_text);
 	gtk_widget_set_name(dialog, "GeanyDialog");
+	gtk_window_set_title(GTK_WINDOW(dialog), _("Question"));
+	if (parent == NULL)
+	{
+		GdkPixbuf *pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO);
+		gtk_window_set_icon(GTK_WINDOW(dialog), pb);
+		g_object_unref(pb);
+	}
+
 	/* question_text will be in bold if optional extra_text used */
 	if (extra_text != NULL)
 		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
@@ -1347,37 +1392,44 @@ static gboolean show_question(GtkWidget *parent, const gchar *yes_btn, const gch
 
 
 /**
- *  Show a question message box with @c text and Yes/No buttons.
+ *  Show a question message box with @a text and Yes/No buttons.
  *  On Unix-like systems a GTK message dialog box is shown, on Win32 systems a native Windows
  *  message dialog box is shown.
  *
  *  @param text Printf()-style format string.
- *  @param ... Arguments for the @c text format string.
+ *  @param ... Arguments for the @a text format string.
  *
- *  @return @a TRUE if the user answered with Yes, otherwise @a FALSE.
+ *  @return @c TRUE if the user answered with Yes, otherwise @c FALSE.
  **/
 gboolean dialogs_show_question(const gchar *text, ...)
 {
 	gboolean ret = FALSE;
 	gchar string[512];
 	va_list args;
+	GtkWidget *parent = (main_status.main_window_realized) ? main_widgets.window : NULL;
 
 	va_start(args, text);
 	g_vsnprintf(string, 511, text, args);
 	va_end(args);
-	ret = show_question(main_widgets.window, GTK_STOCK_YES, GTK_STOCK_NO, string, NULL);
+	ret = show_question(parent, GTK_STOCK_YES, GTK_STOCK_NO, string, NULL);
 	return ret;
 }
 
 
 /* extra_text can be NULL; otherwise it is displayed below main_text.
- * if parent is NULL, main_widgets.window will be used */
+ * if parent is NULL, main_widgets.window will be used
+ * yes_btn, no_btn can be NULL. */
 gboolean dialogs_show_question_full(GtkWidget *parent, const gchar *yes_btn, const gchar *no_btn,
 	const gchar *extra_text, const gchar *main_text, ...)
 {
 	gboolean ret = FALSE;
 	gchar string[512];
 	va_list args;
+
+	if (!yes_btn)
+		yes_btn = GTK_STOCK_YES;
+	if (!no_btn)
+		no_btn = GTK_STOCK_NO;
 
 	va_start(args, main_text);
 	g_vsnprintf(string, 511, main_text, args);

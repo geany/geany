@@ -103,9 +103,9 @@ PrefCallbackAction;
 static void prefs_action(PrefCallbackAction action)
 {
 	GeanyPrefGroup *group;
-	gpointer *ptr;
+	guint i;
 
-	foreach_ptr_array(group, ptr, pref_groups)
+	foreach_ptr_array(group, i, pref_groups)
 	{
 		switch (action)
 		{
@@ -1101,9 +1101,9 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		/* apply the changes made */
 		ui_statusbar_showhide(interface_prefs.statusbar_visible);
 		treeviews_openfiles_update_all(); /* to update if full path setting has changed */
-		gtk_toolbar_set_icon_size(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_size);
-		gtk_toolbar_set_style(GTK_TOOLBAR(main_widgets.toolbar), toolbar_prefs.icon_style);
+		toolbar_apply_settings();
 		toolbar_update_ui();
+		toolbar_show_hide();
 		ui_sidebar_show_hide();
 		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
 

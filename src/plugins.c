@@ -221,7 +221,8 @@ static UtilsFuncs utils_funcs = {
 	&utils_get_date_time,
 	&utils_open_browser,
 	&utils_string_replace_first,
-	&utils_str_middle_truncate
+	&utils_str_middle_truncate,
+	&utils_str_remove_chars
 };
 
 static UIUtilsFuncs uiutils_funcs = {

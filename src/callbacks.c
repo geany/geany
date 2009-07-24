@@ -1629,10 +1629,6 @@ on_menu_show_sidebar1_toggled          (GtkCheckMenuItem *checkmenuitem,
 	if (ignore_callback)
 		return;
 
-	if (ui_prefs.sidebar_visible)
-		ui_prefs.sidebar_page = gtk_notebook_get_current_page(
-			GTK_NOTEBOOK(main_widgets.sidebar_notebook));
-
 	ui_prefs.sidebar_visible = ! ui_prefs.sidebar_visible;
 
 	if ((! interface_prefs.sidebar_openfiles_visible && ! interface_prefs.sidebar_symbol_visible))
@@ -1642,8 +1638,6 @@ on_menu_show_sidebar1_toggled          (GtkCheckMenuItem *checkmenuitem,
 	}
 
 	ui_sidebar_show_hide();
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook),
-		ui_prefs.sidebar_page);
 }
 
 
@@ -1847,6 +1841,8 @@ on_menu_project1_activate              (GtkMenuItem     *menuitem,
 
 	gtk_widget_set_sensitive(item_close, (app->project != NULL));
 	gtk_widget_set_sensitive(item_properties, (app->project != NULL));
+	gtk_widget_set_sensitive(ui_widgets.recent_projects_menuitem,
+						g_queue_get_length(ui_prefs.recent_projects_queue) > 0);
 }
 
 
@@ -1956,7 +1952,7 @@ on_context_action1_activate            (GtkMenuItem     *menuitem,
 	/* substitute the wildcard %s and run the command if it is non empty */
 	if (NZV(command))
 	{
-		command = utils_str_replace(command, "%s", word);
+		utils_str_replace_all(&command, "%s", word);
 
 		if (! g_spawn_command_line_async(command, &error))
 		{

@@ -57,23 +57,30 @@
 #define utils_strdupa(str) \
 	strcpy(g_alloca(strlen(str) + 1), str)
 
+/** Iterates all the items in @a array using pointers.
+ * @param item pointer to an item in @a array.
+ * @param array C array to traverse.
+ * @param len Length of the array. */
 #define foreach_c_array(item, array, len) \
 	for (item = array; item < &array[len]; item++)
 
-/* @param ptr should be a (gpointer*), needed for implementation. */
-#define foreach_ptr_array(item, ptr, ptr_array) \
-	for (ptr = ptr_array->pdata, item = *ptr; \
-		ptr < &ptr_array->pdata[ptr_array->len]; ++ptr, item = *ptr)
+/** Iterates all the pointers in @a ptr_array.
+ * @param item pointer in @a ptr_array.
+ * @param idx @c guint index into @a ptr_array.
+ * @param ptr_array @c GPtrArray to traverse. */
+#define foreach_ptr_array(item, idx, ptr_array) \
+	for (idx = 0, item = g_ptr_array_index(ptr_array, 0); \
+		idx < ptr_array->len; ++idx, item = g_ptr_array_index(ptr_array, idx))
 
 /** Iterates all the nodes in @a list.
- * @param node should be a (GList*).
- * @param list List to traverse. */
+ * @param node should be a (@c GList*).
+ * @param list @c GList to traverse. */
 #define foreach_list(node, list) \
 	for (node = list; node != NULL; node = node->next)
 
 /** Iterates all the nodes in @a list.
- * @param node should be a (GSList*).
- * @param list List to traverse. */
+ * @param node should be a (@c GSList*).
+ * @param list @c GSList to traverse. */
 #define foreach_slist(node, list) \
 	foreach_list(node, list)
 
@@ -94,6 +101,8 @@ const gchar *utils_get_eol_name(gint eol_mode);
 
 gboolean utils_atob(const gchar *str);
 
+void utils_tidy_path(gchar *filename);
+
 gboolean utils_is_absolute_path(const gchar *path);
 
 const gchar *utils_path_skip_root(const gchar *path);
@@ -112,7 +121,7 @@ guint utils_string_replace_all(GString *haystack, const gchar *needle, const gch
 
 guint utils_string_replace_first(GString *haystack, const gchar *needle, const gchar *replace);
 
-gchar *utils_str_replace(gchar *haystack, const gchar *needle, const gchar *replacement);
+void utils_str_replace_all(gchar **haystack, const gchar *needle, const gchar *replacement);
 
 gint utils_strpos(const gchar* haystack, const gchar *needle);
 
@@ -188,5 +197,7 @@ gboolean utils_is_uri(const gchar *uri);
 gboolean utils_is_remote_path(const gchar *path);
 
 gchar *utils_str_middle_truncate(const gchar *string, guint truncate_length);
+
+gchar *utils_str_remove_chars(gchar *string, const gchar *chars);
 
 #endif

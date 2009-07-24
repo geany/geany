@@ -948,7 +948,7 @@ GeanyFiletype *filetypes_detect_from_document(GeanyDocument *doc)
  *
  *  @param utf8_filename The filename in UTF-8 encoding.
  *
- *  @return The detected filetype for @c utf8_filename or @c filetypes[GEANY_FILETYPES_NONE]
+ *  @return The detected filetype for @a utf8_filename or @c filetypes[GEANY_FILETYPES_NONE]
  *          if it could not be detected.
  **/
 GeanyFiletype *filetypes_detect_from_file(const gchar *utf8_filename)
@@ -1290,7 +1290,7 @@ gboolean filetype_has_tags(GeanyFiletype *ft)
 }
 
 
-/** Find a filetype pointer from its @c name field.
+/** Find a filetype pointer from its @a name field.
  * @param name Filetype name.
  * @return The filetype found, or @c NULL.
  *

@@ -1159,10 +1159,10 @@ static void add_tree_tags(GeanyDocument *doc, const GList *tags)
  * is not stable, so the order is already lost. */
 static gint compare_top_level_names(const gchar *a, const gchar *b)
 {
-	gpointer *ptr;
+	guint i;
 	const gchar *name;
 
-	foreach_ptr_array(name, ptr, top_level_iter_names)
+	foreach_ptr_array(name, i, top_level_iter_names)
 	{
 		if (utils_str_equal(name, a))
 			return -1;

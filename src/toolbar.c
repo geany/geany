@@ -53,7 +53,7 @@ static GSList *plugin_items = NULL;
 const GtkActionEntry ui_entries[] = {
 	/* custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build" */
 	{ "Save", GTK_STOCK_SAVE, NULL, NULL, N_("Save the current file"), G_CALLBACK(on_toolbutton_save_clicked) },
-	{ "SaveAll", GEANY_STOCK_SAVE_ALL, N_("Save All"), NULL, N_("Save all open files"), G_CALLBACK(on_save_all1_activate) },
+	{ "SaveAll", GEANY_STOCK_SAVE_ALL, NULL, NULL, N_("Save all open files"), G_CALLBACK(on_save_all1_activate) },
 	{ "Reload", GTK_STOCK_REVERT_TO_SAVED, NULL, NULL, N_("Reload the current file from disk"), G_CALLBACK(on_toolbutton_reload_clicked) },
 	{ "Close", GTK_STOCK_CLOSE, NULL, NULL, N_("Close the current file"), G_CALLBACK(on_toolbutton_close_clicked) },
 	{ "CloseAll", GEANY_STOCK_CLOSE_ALL, NULL, NULL, N_("Close all open files"), G_CALLBACK(on_toolbutton_close_all_clicked) },
@@ -484,6 +484,16 @@ void toolbar_finalize(void)
 }
 
 
+void toolbar_show_hide(void)
+{
+	ignore_callback = TRUE;
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(
+		ui_lookup_widget(main_widgets.window, "menu_show_toolbar1")), toolbar_prefs.visible);
+	ui_widget_show_hide(main_widgets.toolbar, toolbar_prefs.visible);
+	ignore_callback = FALSE;
+}
+
+
 void toolbar_apply_settings(void)
 {
 	/* sets the icon style of the toolbar */
@@ -520,7 +530,8 @@ void toolbar_apply_settings(void)
 }
 
 
-#define TB_EDITOR_SEPARATOR _("--- Separator ---")
+#define TB_EDITOR_SEPARATOR _("Separator")
+#define TB_EDITOR_SEPARATOR_LABEL _("--- Separator ---")
 typedef struct
 {
 	GtkWidget *dialog;
@@ -543,7 +554,13 @@ static const GtkTargetEntry tb_editor_dnd_targets[] =
 };
 static const gint tb_editor_dnd_targets_len = G_N_ELEMENTS(tb_editor_dnd_targets);
 
-
+enum
+{
+	TB_EDITOR_COL_ACTION,
+	TB_EDITOR_COL_LABEL,
+	TB_EDITOR_COL_ICON,
+	TB_EDITOR_COLS_MAX
+};
 
 static void tb_editor_handler_start_element(GMarkupParseContext *context, const gchar *element_name,
 											const gchar **attribute_names,
@@ -585,6 +602,44 @@ static GSList *tb_editor_parse_ui(const gchar *buffer, gssize length, GError **e
 }
 
 
+static void tb_editor_set_item_values(const gchar *name, GtkListStore *store, GtkTreeIter *iter)
+{
+	gchar *icon = NULL;
+	gchar *label = NULL;
+	gchar *label_clean = NULL;
+	GtkAction *action;
+
+	action = gtk_action_group_get_action(group, name);
+	if (action == NULL)
+	{
+		if (utils_str_equal(name, TB_EDITOR_SEPARATOR))
+			label_clean = g_strdup(TB_EDITOR_SEPARATOR_LABEL);
+		else
+			return;
+	}
+	else
+	{
+		g_object_get(action, "icon-name", &icon, NULL);
+		if (icon == NULL)
+			g_object_get(action, "stock-id", &icon, NULL);
+
+		g_object_get(action, "label", &label, NULL);
+		if (label != NULL)
+			label_clean = utils_str_remove_chars(g_strdup(label), "_");
+	}
+
+	gtk_list_store_set(store, iter,
+		TB_EDITOR_COL_ACTION, name,
+		TB_EDITOR_COL_LABEL, label_clean,
+		TB_EDITOR_COL_ICON, icon,
+		-1);
+
+	g_free(icon);
+	g_free(label);
+	g_free(label_clean);
+}
+
+
 static void tb_editor_scroll_to_iter(GtkTreeView *treeview, GtkTreeIter *iter)
 {
 	GtkTreePath *path = gtk_tree_model_get_path(gtk_tree_view_get_model(treeview), iter);
@@ -613,14 +668,14 @@ static void tb_editor_btn_remove_clicked_cb(GtkWidget *button, TBEditorWidget *t
 	selection_used = gtk_tree_view_get_selection(tbw->tree_used);
 	if (gtk_tree_selection_get_selected(selection_used, &model_used, &iter_used))
 	{
-		gtk_tree_model_get(model_used, &iter_used, 0, &action_name, -1);
+		gtk_tree_model_get(model_used, &iter_used, TB_EDITOR_COL_ACTION, &action_name, -1);
 		if (gtk_list_store_remove(tbw->store_used, &iter_used))
 			gtk_tree_selection_select_iter(selection_used, &iter_used);
 
 		if (! utils_str_equal(action_name, TB_EDITOR_SEPARATOR))
 		{
-			gtk_list_store_insert_with_values(tbw->store_available, &iter_new,
-				-1, 0, action_name, -1);
+			gtk_list_store_append(tbw->store_available, &iter_new);
+			tb_editor_set_item_values(action_name, tbw->store_available, &iter_new);
 			tb_editor_scroll_to_iter(tbw->tree_available, &iter_new);
 		}
 
@@ -639,7 +694,8 @@ static void tb_editor_btn_add_clicked_cb(GtkWidget *button, TBEditorWidget *tbw)
 	selection_available = gtk_tree_view_get_selection(tbw->tree_available);
 	if (gtk_tree_selection_get_selected(selection_available, &model_available, &iter_available))
 	{
-		gtk_tree_model_get(model_available, &iter_available, 0, &action_name, -1);
+		gtk_tree_model_get(model_available, &iter_available,
+			TB_EDITOR_COL_ACTION, &action_name, -1);
 		if (! utils_str_equal(action_name, TB_EDITOR_SEPARATOR))
 		{
 			if (gtk_list_store_remove(tbw->store_available, &iter_available))
@@ -648,13 +704,11 @@ static void tb_editor_btn_add_clicked_cb(GtkWidget *button, TBEditorWidget *tbw)
 
 		selection_used = gtk_tree_view_get_selection(tbw->tree_used);
 		if (gtk_tree_selection_get_selected(selection_used, NULL, &iter_selected))
-		{
 			gtk_list_store_insert_before(tbw->store_used, &iter_new, &iter_selected);
-			gtk_list_store_set(tbw->store_used, &iter_new, 0, action_name, -1);
-		}
 		else
-			gtk_list_store_insert_with_values(tbw->store_used, &iter_new, -1, 0, action_name, -1);
+			gtk_list_store_append(tbw->store_used, &iter_new);
 
+		tb_editor_set_item_values(action_name, tbw->store_used, &iter_new);
 		tb_editor_scroll_to_iter(tbw->tree_used, &iter_new);
 
 		g_free(action_name);
@@ -688,7 +742,7 @@ static void tb_editor_drag_data_get_cb(GtkWidget *widget, GdkDragContext *contex
 	if (! gtk_tree_selection_get_selected(selection, &model, &iter))
 		return;
 
-	gtk_tree_model_get(model, &iter, 0, &name, -1);
+	gtk_tree_model_get(model, &iter, TB_EDITOR_COL_ACTION, &name, -1);
 	if (! NZV(name))
 		return;
 
@@ -739,12 +793,11 @@ static void tb_editor_drag_data_rcvd_cb(GtkWidget *widget, GdkDragContext *conte
 					gtk_list_store_insert_before(store, &iter, iter_before_ptr);
 				else
 					gtk_list_store_insert_after(store, &iter, iter_before_ptr);
-
-				gtk_list_store_set(store, &iter, 0, text, -1);
 			}
 			else
-				gtk_list_store_insert_with_values(store, &iter, -1, 0, text, -1);
+				gtk_list_store_append(store, &iter);
 
+			tb_editor_set_item_values(text, store, &iter);
 			tb_editor_scroll_to_iter(tree, &iter);
 		}
 		if (tree != tbw->tree_used || ! is_sep)
@@ -757,18 +810,77 @@ static void tb_editor_drag_data_rcvd_cb(GtkWidget *widget, GdkDragContext *conte
 }
 
 
+static gboolean tb_editor_foreach_used(GtkTreeModel *model, GtkTreePath *path,
+									   GtkTreeIter *iter, gpointer data)
+{
+	gchar *action_name;
+
+	gtk_tree_model_get(model, iter, TB_EDITOR_COL_ACTION, &action_name, -1);
+
+	if (utils_str_equal(action_name, TB_EDITOR_SEPARATOR))
+		g_string_append_printf(data, "\t\t<separator/>\n");
+	else if (NZV(action_name))
+		g_string_append_printf(data, "\t\t<toolitem action='%s' />\n", action_name);
+
+	g_free(action_name);
+	return FALSE;
+}
+
+
+static void tb_editor_write_markup(TBEditorWidget *tbw)
+{
+	/* <ui> must be the first tag, otherwise gtk_ui_manager_add_ui_from_string() will fail. */
+	const gchar *template = "<ui>\n<!--\n\
+This is Geany's toolbar UI definition.\nThe DTD can be found at \n\
+http://library.gnome.org/devel/gtk/stable/GtkUIManager.html#GtkUIManager.description.\n\n\
+You can re-order all items and freely add and remove available actions.\n\
+You cannot add new actions which are not listed in the documentation.\n\
+Everything you add or change must be inside the /ui/toolbar/ path.\n\n\
+For changes to take effect, you need to restart Geany. Alternatively you can use the toolbar\n\
+editor in Geany.\n\n\
+A list of available actions can be found in the documentation included with Geany or\n\
+at http://www.geany.org/manual/current/index.html#customizing-the-toolbar.\n-->\n\
+\t<toolbar name='GeanyToolbar'>\n";
+	const gchar *filename = utils_build_path(app->configdir, "ui_toolbar.xml", NULL);
+	GString *str = g_string_new(template);
+
+	gtk_tree_model_foreach(GTK_TREE_MODEL(tbw->store_used), tb_editor_foreach_used, str);
+
+	g_string_append(str, "\n\t</toolbar>\n</ui>\n");
+
+	toolbar_reload(str->str);
+
+	utils_write_file(filename, str->str);
+
+	g_string_free(str, TRUE);
+}
+
+
+static void tb_editor_available_items_changed_cb(GtkTreeModel *model, GtkTreePath *arg1,
+												 GtkTreeIter *arg2, TBEditorWidget *tbw)
+{
+	tb_editor_write_markup(tbw);
+}
+
+
+static void tb_editor_available_items_deleted_cb(GtkTreeModel *model, GtkTreePath *arg1,
+												 TBEditorWidget *tbw)
+{
+	tb_editor_write_markup(tbw);
+}
+
+
 static TBEditorWidget *tb_editor_create_dialog(void)
 {
 	GtkWidget *dialog, *vbox, *hbox, *vbox_buttons, *button_add, *button_remove;
 	GtkWidget *swin_available, *swin_used, *tree_available, *tree_used, *label;
-	GtkCellRenderer *text_renderer;
+	GtkCellRenderer *text_renderer, *icon_renderer;
 	GtkTreeViewColumn *column;
 	TBEditorWidget *tbw = g_new(TBEditorWidget, 1);
 
 	dialog = gtk_dialog_new_with_buttons(_("Customize Toolbar"),
 				GTK_WINDOW(main_widgets.window),
 				GTK_DIALOG_DESTROY_WITH_PARENT,
-				GTK_STOCK_APPLY, GTK_RESPONSE_APPLY,
 				GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
@@ -776,22 +888,29 @@ static TBEditorWidget *tb_editor_create_dialog(void)
 	gtk_window_set_default_size(GTK_WINDOW(dialog), -1, 400);
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);
 
-	tbw->store_available = gtk_list_store_new(1, G_TYPE_STRING);
-	tbw->store_used = gtk_list_store_new(1, G_TYPE_STRING);
+	tbw->store_available = gtk_list_store_new(TB_EDITOR_COLS_MAX,
+		G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+	tbw->store_used = gtk_list_store_new(TB_EDITOR_COLS_MAX,
+		G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
 
 	label = gtk_label_new(
 		_("Select items to be displayed on the toolbar. Items can be reordered by drag and drop."));
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
 
 	tree_available = gtk_tree_view_new();
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tree_available), GTK_TREE_MODEL(tbw->store_available));
 	gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(tree_available), TRUE);
 	gtk_tree_sortable_set_sort_column_id(
-		GTK_TREE_SORTABLE(tbw->store_available), 0, GTK_SORT_ASCENDING);
+		GTK_TREE_SORTABLE(tbw->store_available), TB_EDITOR_COL_LABEL, GTK_SORT_ASCENDING);
+
+	icon_renderer = gtk_cell_renderer_pixbuf_new();
+	column = gtk_tree_view_column_new_with_attributes(
+		NULL, icon_renderer, "stock-id", TB_EDITOR_COL_ICON, NULL);
+	gtk_tree_view_append_column(GTK_TREE_VIEW(tree_available), column);
 
 	text_renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(
-		_("Available Items"), text_renderer, "text", 0, NULL);
+		_("Available Items"), text_renderer, "text", TB_EDITOR_COL_LABEL, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree_available), column);
 
 	swin_available = gtk_scrolled_window_new(NULL, NULL);
@@ -805,9 +924,14 @@ static TBEditorWidget *tb_editor_create_dialog(void)
 	gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(tree_used), TRUE);
 	gtk_tree_view_set_reorderable(GTK_TREE_VIEW(tree_used), TRUE);
 
+	icon_renderer = gtk_cell_renderer_pixbuf_new();
+	column = gtk_tree_view_column_new_with_attributes(
+		NULL, icon_renderer, "stock-id", TB_EDITOR_COL_ICON, NULL);
+	gtk_tree_view_append_column(GTK_TREE_VIEW(tree_used), column);
+
 	text_renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(
-		_("Displayed Items"), text_renderer, "text", 0, NULL);
+		_("Displayed Items"), text_renderer, "text", TB_EDITOR_COL_LABEL, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree_used), column);
 
 	swin_used = gtk_scrolled_window_new(NULL, NULL);
@@ -875,56 +999,14 @@ static TBEditorWidget *tb_editor_create_dialog(void)
 }
 
 
-static gboolean tb_editor_foreach_used(GtkTreeModel *model, GtkTreePath *path,
-									   GtkTreeIter *iter, gpointer data)
-{
-	gchar *action_name;
-
-	gtk_tree_model_get(model, iter, 0, &action_name, -1);
-
-	if (utils_str_equal(action_name, TB_EDITOR_SEPARATOR))
-		g_string_append_printf(data, "\t\t<separator/>\n");
-	else if (NZV(action_name))
-		g_string_append_printf(data, "\t\t<toolitem action='%s' />\n", action_name);
-
-	g_free(action_name);
-	return FALSE;
-}
-
-
-static gchar *tb_editor_write_markup(TBEditorWidget *tbw)
-{
-	/* <ui> must be the first tag, otherwise gtk_ui_manager_add_ui_from_string() will fail. */
-	const gchar *template = "<ui>\n<!--\n\
-This is Geany's toolbar UI definition.\nThe DTD can be found at \n\
-http://library.gnome.org/devel/gtk/stable/GtkUIManager.html#GtkUIManager.description.\n\n\
-You can re-order all items and freely add and remove available actions.\n\
-You cannot add new actions which are not listed in the documentation.\n\
-Everything you add or change must be inside the /ui/toolbar/ path.\n\n\
-For changes to take effect, you need to restart Geany. Alternatively you can use the toolbar\n\
-editor in Geany.\n\n\
-A list of available actions can be found in the documentation included with Geany or\n\
-at http://www.geany.org/manual/current/index.html#customizing-the-toolbar.\n-->\n\
-\t<toolbar name='GeanyToolbar'>\n";
-	GString *str = g_string_new(template);
-
-	gtk_tree_model_foreach(GTK_TREE_MODEL(tbw->store_used), tb_editor_foreach_used, str);
-
-	g_string_append(str, "\n\t</toolbar>\n</ui>\n");
-
-	return g_string_free(str, FALSE);
-}
-
-
 void toolbar_configure(void)
 {
 	gchar *markup;
 	const gchar *name;
-	const gchar *filename = utils_build_path(app->configdir, "ui_toolbar.xml", NULL);
 	GSList *sl, *used_items;
 	GList *l, *all_items;
+	GtkTreeIter iter;
 	GtkTreePath *path;
-	gint response;
 	TBEditorWidget *tbw;
 
 	/* read the current active toolbar items */
@@ -939,33 +1021,38 @@ void toolbar_configure(void)
 	tbw = tb_editor_create_dialog();
 
 	/* fill the stores */
-	gtk_list_store_insert_with_values(tbw->store_available, NULL, -1, 0, TB_EDITOR_SEPARATOR, -1);
+	gtk_list_store_insert_with_values(tbw->store_available, NULL, -1,
+		TB_EDITOR_COL_ACTION, TB_EDITOR_SEPARATOR,
+		TB_EDITOR_COL_LABEL, TB_EDITOR_SEPARATOR_LABEL,
+		-1);
 	foreach_list(l, all_items)
 	{
 		name = gtk_action_get_name(l->data);
 		if (g_slist_find_custom(used_items, name, (GCompareFunc) strcmp) == NULL)
-			gtk_list_store_insert_with_values(tbw->store_available, NULL, -1, 0, name, -1);
+		{
+			gtk_list_store_append(tbw->store_available, &iter);
+			tb_editor_set_item_values(name, tbw->store_available, &iter);
+		}
 	}
 	foreach_slist(sl, used_items)
 	{
-		gtk_list_store_insert_with_values(tbw->store_used, NULL, -1, 0, sl->data, -1);
+		gtk_list_store_append(tbw->store_used, &iter);
+		tb_editor_set_item_values(sl->data, tbw->store_used, &iter);
 	}
 	/* select first item */
 	path = gtk_tree_path_new_from_string("0");
 	gtk_tree_selection_select_path(gtk_tree_view_get_selection(tbw->tree_used), path);
 	gtk_tree_path_free(path);
 
-	/* run it */
-	while ((response = gtk_dialog_run(GTK_DIALOG(tbw->dialog))))
-	{
-		markup = tb_editor_write_markup(tbw);
-		toolbar_reload(markup);
-		utils_write_file(filename, markup);
-		g_free(markup);
+	/* connect the changed signals after populating the store */
+	g_signal_connect(tbw->store_used, "row-changed",
+		G_CALLBACK(tb_editor_available_items_changed_cb), tbw);
+	g_signal_connect(tbw->store_used, "row-deleted",
+		G_CALLBACK(tb_editor_available_items_deleted_cb), tbw);
 
-		if (response == GTK_RESPONSE_CLOSE || response == GTK_RESPONSE_DELETE_EVENT)
-			break;
-	}
+	/* run it */
+	gtk_dialog_run(GTK_DIALOG(tbw->dialog));
+
 	gtk_widget_destroy(tbw->dialog);
 
 	g_slist_foreach(used_items, (GFunc) g_free, NULL);

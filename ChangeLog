@@ -115,6 +115,113 @@ Configurable Build Menu Changes
  * src/project.h, src/project.c:
    Changed to load/store the new configuration info.
 
+2009-07-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/utils.c, src/utils.h, src/toolbar.c, src/plugindata.h,
+   plugins/splitwindow.c:
+   Change utils_str_remove_chars() to work in place; fix allocating on
+   the stack (the string length could exhaust the stack size).
+ * src/templates.c, src/build.c, src/utils.c, src/utils.h,
+   src/printing.c, src/callbacks.c:
+   Rename utils_str_replace() utils_str_replace_all(), setting a
+   'gchar **haystack' argument instead of returning a new string.
+ * src/editor.c:
+   For the Tabs indent type, remove spaces when unindenting (only) if
+   there are no tabs on the line.
+   Group undo actions for (un)indenting of multiple lines.
+ * src/document.c, src/editor.c:
+   Fix scrolling horizontally after finding a search match with the
+   search bar or Find Next/Previous which is off-screen.
+ * src/keybindings.c:
+   Fix GLib warning when pressing a key with no documents open.
+
+
+2009-07-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/utils.c:
+   Start unifying usage of @a and @c markup elements in API docs,
+   to be continued.
+ * src/main.c, src/prefs.c, src/toolbar.c, src/toolbar.h:
+   Show/hide the toolbar without a restart when the setting in the
+   preferences dialog is changed (closes #2824785).
+ * src/dialogs.c, src/document.c, src/editor.c, src/encodings.c,
+   src/filetypes.c, src/keybindings.h, src/main.c, src/msgwindow.c,
+   src/navqueue.c, src/plugindata.h, src/prefs.c, src/toolbar.c,
+   src/toolbar.h:
+   Continue unifying usage of @a and @c markup elements in API docs.
+
+
+2009-07-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/document.c:
+   Remove relative/untidy path elements when creating new documents
+   with a filename (e.g. from the command-line) (#2823998).
+
+
+2009-07-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/callbacks.c:
+   Disable 'Recent Projects' menu item if the list of recent projects
+   is empty.
+ * src/win32.c:
+   Fix some harmless compiler warnings.
+ * plugins/geanyfunctions.h, plugins/splitwindow.c, src/plugindata.h,
+   src/plugins.c, src/utils.c, src/utils.h:
+   Move utils_str_remove_chars() from the plugins/splitwindow.c to
+   src/utils.c and add it to the plugin API.
+   Make utils_str_remove_chars() work on a new copy of the input string
+   instead of modifying it in place.
+ * src/toolbar.c:
+   Remove underscores from the toolbar items labels.
+ * src/utils.c:
+   Fix typos.
+ * plugins/splitwindow.c:
+   Fix broken 'Show the current document' tool button icon.
+
+
+2009-07-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/treeviews.c, src/callbacks.c, src/stash.c, src/stash.h,
+   src/keyfile.c:
+   Add stash_group_add_widget_property() so we can save any widget's
+   read/write properties.
+   Use Stash for ui_prefs.sidebar_page setting.
+ * src/utils.h, src/prefs.c, src/keyfile.c, src/symbols.c:
+   Make foreach_ptr_array() use an integer argument for its
+   implementation, as this is more useful potentially than a gpointer*
+   argument, and more straightforward.
+   Add foreach_c_array(), foreach_ptr_array() to API.
+ * src/utils.c, src/utils.h, src/document.c:
+   Remove relative/untidy path elements when opening documents (closes
+   #2823998).
+ * src/treeviews.c:
+   Fix showing project name for documents list files with no
+   subdirectory (oops).
+ * src/dialogs.c:
+   Fix checking whether to overwrite when using the Rename button in
+   the 'Save As' dialog.
+
+
+2009-07-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/dialogs.c:
+   Don't use the main window as parent for dialog boxes if it is not
+   yet realised.
+   Set titles for message dialogs.
+
+
+2009-07-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/toolbar.c:
+   Display item labels instead of raw names in the toolbar editor.
+   Apply changes in the toolbar editor instantly.
+   Show icons in the toolbar editor.
+   Speed up toolbar editor dialog creation.
+ * src/templates.c:
+   Improve inserting of comment templates like File header or licence
+   notices. The comment information are now read from the filetype
+   configuration files.
+
 2009-07-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/document.c:
