@@ -3554,10 +3554,10 @@ static void styleset_ada(ScintillaObject *sci)
 
 
 /* lang_name is the name used for the styleset_foo_init function, e.g. foo. */
-#define init_styleset_case(ft_id, lang_name) \
+#define init_styleset_case(ft_id, init_styleset_func) \
 	case (ft_id): \
-		styleset_ ## lang_name ## _init(filetype_idx, config, configh); \
-		break;
+		init_styleset_func(filetype_idx, config, configh); \
+		break
 
 /* Called by filetypes_load_config(). */
 void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *configh)
@@ -3571,58 +3571,58 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 
 	switch (filetype_idx)
 	{
-		init_styleset_case(GEANY_FILETYPES_NONE,	common);
-		init_styleset_case(GEANY_FILETYPES_ADA,		ada);
-		init_styleset_case(GEANY_FILETYPES_ASM,		asm);
-		init_styleset_case(GEANY_FILETYPES_BASIC,	basic);
-		init_styleset_case(GEANY_FILETYPES_C,		c);
-		init_styleset_case(GEANY_FILETYPES_CAML,	caml);
-		init_styleset_case(GEANY_FILETYPES_CMAKE,	cmake);
-		init_styleset_case(GEANY_FILETYPES_CONF,	conf);
-		init_styleset_case(GEANY_FILETYPES_CPP,		cpp);
-		init_styleset_case(GEANY_FILETYPES_CS,		cs);
-		init_styleset_case(GEANY_FILETYPES_CSS,		css);
-		init_styleset_case(GEANY_FILETYPES_D,		d);
-		init_styleset_case(GEANY_FILETYPES_DIFF,	diff);
-		init_styleset_case(GEANY_FILETYPES_DOCBOOK,	docbook);
-		init_styleset_case(GEANY_FILETYPES_FERITE,	ferite);
-		init_styleset_case(GEANY_FILETYPES_F77,		f77);
-		init_styleset_case(GEANY_FILETYPES_FORTRAN,	fortran);
-		init_styleset_case(GEANY_FILETYPES_GLSL,	glsl);
-		init_styleset_case(GEANY_FILETYPES_HASKELL,	haskell);
-		init_styleset_case(GEANY_FILETYPES_HAXE,	haxe);
-		init_styleset_case(GEANY_FILETYPES_AS,		actionscript);
-		init_styleset_case(GEANY_FILETYPES_HTML,	html);
-		init_styleset_case(GEANY_FILETYPES_JAVA,	java);
-		init_styleset_case(GEANY_FILETYPES_JS,		js);
-		init_styleset_case(GEANY_FILETYPES_LATEX,	latex);
-		init_styleset_case(GEANY_FILETYPES_LUA,		lua);
-		init_styleset_case(GEANY_FILETYPES_MAKE,	makefile);
-		init_styleset_case(GEANY_FILETYPES_MATLAB,	matlab);
-		init_styleset_case(GEANY_FILETYPES_NSIS,	nsis);
-		init_styleset_case(GEANY_FILETYPES_PASCAL,	pascal);
-		init_styleset_case(GEANY_FILETYPES_PERL,	perl);
-		init_styleset_case(GEANY_FILETYPES_PHP,		php);
-		init_styleset_case(GEANY_FILETYPES_PO,		po);
-		init_styleset_case(GEANY_FILETYPES_PYTHON,	python);
-		init_styleset_case(GEANY_FILETYPES_R,		r);
-		init_styleset_case(GEANY_FILETYPES_RUBY,	ruby);
-		init_styleset_case(GEANY_FILETYPES_SH,		sh);
-		init_styleset_case(GEANY_FILETYPES_SQL,		sql);
-		init_styleset_case(GEANY_FILETYPES_TCL,		tcl);
-		init_styleset_case(GEANY_FILETYPES_VALA,	vala);
-		init_styleset_case(GEANY_FILETYPES_VHDL,	vhdl);
-		init_styleset_case(GEANY_FILETYPES_XML,		markup);
-		init_styleset_case(GEANY_FILETYPES_YAML,	yaml);
+		init_styleset_case(GEANY_FILETYPES_NONE,	styleset_common_init);
+		init_styleset_case(GEANY_FILETYPES_ADA,		styleset_ada_init);
+		init_styleset_case(GEANY_FILETYPES_ASM,		styleset_asm_init);
+		init_styleset_case(GEANY_FILETYPES_BASIC,	styleset_basic_init);
+		init_styleset_case(GEANY_FILETYPES_C,		styleset_c_init);
+		init_styleset_case(GEANY_FILETYPES_CAML,	styleset_caml_init);
+		init_styleset_case(GEANY_FILETYPES_CMAKE,	styleset_cmake_init);
+		init_styleset_case(GEANY_FILETYPES_CONF,	styleset_conf_init);
+		init_styleset_case(GEANY_FILETYPES_CPP,		styleset_cpp_init);
+		init_styleset_case(GEANY_FILETYPES_CS,		styleset_cs_init);
+		init_styleset_case(GEANY_FILETYPES_CSS,		styleset_css_init);
+		init_styleset_case(GEANY_FILETYPES_D,		styleset_d_init);
+		init_styleset_case(GEANY_FILETYPES_DIFF,	styleset_diff_init);
+		init_styleset_case(GEANY_FILETYPES_DOCBOOK,	styleset_docbook_init);
+		init_styleset_case(GEANY_FILETYPES_FERITE,	styleset_ferite_init);
+		init_styleset_case(GEANY_FILETYPES_F77,		styleset_f77_init);
+		init_styleset_case(GEANY_FILETYPES_FORTRAN,	styleset_fortran_init);
+		init_styleset_case(GEANY_FILETYPES_GLSL,	styleset_glsl_init);
+		init_styleset_case(GEANY_FILETYPES_HASKELL,	styleset_haskell_init);
+		init_styleset_case(GEANY_FILETYPES_HAXE,	styleset_haxe_init);
+		init_styleset_case(GEANY_FILETYPES_AS,		styleset_actionscript_init);
+		init_styleset_case(GEANY_FILETYPES_HTML,	styleset_html_init);
+		init_styleset_case(GEANY_FILETYPES_JAVA,	styleset_java_init);
+		init_styleset_case(GEANY_FILETYPES_JS,		styleset_js_init);
+		init_styleset_case(GEANY_FILETYPES_LATEX,	styleset_latex_init);
+		init_styleset_case(GEANY_FILETYPES_LUA,		styleset_lua_init);
+		init_styleset_case(GEANY_FILETYPES_MAKE,	styleset_makefile_init);
+		init_styleset_case(GEANY_FILETYPES_MATLAB,	styleset_matlab_init);
+		init_styleset_case(GEANY_FILETYPES_NSIS,	styleset_nsis_init);
+		init_styleset_case(GEANY_FILETYPES_PASCAL,	styleset_pascal_init);
+		init_styleset_case(GEANY_FILETYPES_PERL,	styleset_perl_init);
+		init_styleset_case(GEANY_FILETYPES_PHP,		styleset_php_init);
+		init_styleset_case(GEANY_FILETYPES_PO,		styleset_po_init);
+		init_styleset_case(GEANY_FILETYPES_PYTHON,	styleset_python_init);
+		init_styleset_case(GEANY_FILETYPES_R,		styleset_r_init);
+		init_styleset_case(GEANY_FILETYPES_RUBY,	styleset_ruby_init);
+		init_styleset_case(GEANY_FILETYPES_SH,		styleset_sh_init);
+		init_styleset_case(GEANY_FILETYPES_SQL,		styleset_sql_init);
+		init_styleset_case(GEANY_FILETYPES_TCL,		styleset_tcl_init);
+		init_styleset_case(GEANY_FILETYPES_VALA,	styleset_vala_init);
+		init_styleset_case(GEANY_FILETYPES_VHDL,	styleset_vhdl_init);
+		init_styleset_case(GEANY_FILETYPES_XML,		styleset_markup_init);
+		init_styleset_case(GEANY_FILETYPES_YAML,	styleset_yaml_init);
 	}
 }
 
 
 /* lang_name is the name used for the styleset_foo function, e.g. foo. */
-#define styleset_case(ft_id, lang_name) \
+#define styleset_case(ft_id, styleset_func) \
 	case (ft_id): \
-		styleset_ ## lang_name (sci); \
-		break;
+		styleset_func (sci); \
+		break
 
 void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 {
@@ -3634,50 +3634,50 @@ void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 
 	switch (filetype_idx)
 	{
-		styleset_case(GEANY_FILETYPES_ADA,		ada);
-		styleset_case(GEANY_FILETYPES_ASM,		asm);
-		styleset_case(GEANY_FILETYPES_BASIC,	basic);
-		styleset_case(GEANY_FILETYPES_C,		c);
-		styleset_case(GEANY_FILETYPES_CAML,		caml);
-		styleset_case(GEANY_FILETYPES_CMAKE,	cmake);
-		styleset_case(GEANY_FILETYPES_CONF,		conf);
-		styleset_case(GEANY_FILETYPES_CPP,		cpp);
-		styleset_case(GEANY_FILETYPES_CS,		cs);
-		styleset_case(GEANY_FILETYPES_CSS,		css);
-		styleset_case(GEANY_FILETYPES_D,		d);
-		styleset_case(GEANY_FILETYPES_DIFF,		diff);
-		styleset_case(GEANY_FILETYPES_DOCBOOK,	docbook);
-		styleset_case(GEANY_FILETYPES_FERITE,	ferite);
-		styleset_case(GEANY_FILETYPES_F77,		f77);
-		styleset_case(GEANY_FILETYPES_FORTRAN,	fortran);
-		styleset_case(GEANY_FILETYPES_GLSL,		glsl);
-		styleset_case(GEANY_FILETYPES_HASKELL,	haskell);
-		styleset_case(GEANY_FILETYPES_HAXE,		haxe);
-		styleset_case(GEANY_FILETYPES_AS,		actionscript);
-		styleset_case(GEANY_FILETYPES_HTML,		html);
-		styleset_case(GEANY_FILETYPES_JAVA,		java);
-		styleset_case(GEANY_FILETYPES_JS,		js);
-		styleset_case(GEANY_FILETYPES_LATEX,	latex);
-		styleset_case(GEANY_FILETYPES_LUA,		lua);
-		styleset_case(GEANY_FILETYPES_MAKE,		makefile);
-		styleset_case(GEANY_FILETYPES_MATLAB,	matlab);
-		styleset_case(GEANY_FILETYPES_NSIS,		nsis);
-		styleset_case(GEANY_FILETYPES_PASCAL,	pascal);
-		styleset_case(GEANY_FILETYPES_PERL,		perl);
-		styleset_case(GEANY_FILETYPES_PHP,		php);
-		styleset_case(GEANY_FILETYPES_PO,		po);
-		styleset_case(GEANY_FILETYPES_PYTHON,	python);
-		styleset_case(GEANY_FILETYPES_R,		r);
-		styleset_case(GEANY_FILETYPES_RUBY,		ruby);
-		styleset_case(GEANY_FILETYPES_SH,		sh);
-		styleset_case(GEANY_FILETYPES_SQL,		sql);
-		styleset_case(GEANY_FILETYPES_TCL,		tcl);
-		styleset_case(GEANY_FILETYPES_VALA,		vala);
-		styleset_case(GEANY_FILETYPES_VHDL,		vhdl);
-		styleset_case(GEANY_FILETYPES_XML,		xml);
-		styleset_case(GEANY_FILETYPES_YAML,		yaml);
+		styleset_case(GEANY_FILETYPES_ADA,		styleset_ada);
+		styleset_case(GEANY_FILETYPES_ASM,		styleset_asm);
+		styleset_case(GEANY_FILETYPES_BASIC,	styleset_basic);
+		styleset_case(GEANY_FILETYPES_C,		styleset_c);
+		styleset_case(GEANY_FILETYPES_CAML,		styleset_caml);
+		styleset_case(GEANY_FILETYPES_CMAKE,	styleset_cmake);
+		styleset_case(GEANY_FILETYPES_CONF,		styleset_conf);
+		styleset_case(GEANY_FILETYPES_CPP,		styleset_cpp);
+		styleset_case(GEANY_FILETYPES_CS,		styleset_cs);
+		styleset_case(GEANY_FILETYPES_CSS,		styleset_css);
+		styleset_case(GEANY_FILETYPES_D,		styleset_d);
+		styleset_case(GEANY_FILETYPES_DIFF,		styleset_diff);
+		styleset_case(GEANY_FILETYPES_DOCBOOK,	styleset_docbook);
+		styleset_case(GEANY_FILETYPES_FERITE,	styleset_ferite);
+		styleset_case(GEANY_FILETYPES_F77,		styleset_f77);
+		styleset_case(GEANY_FILETYPES_FORTRAN,	styleset_fortran);
+		styleset_case(GEANY_FILETYPES_GLSL,		styleset_glsl);
+		styleset_case(GEANY_FILETYPES_HASKELL,	styleset_haskell);
+		styleset_case(GEANY_FILETYPES_HAXE,		styleset_haxe);
+		styleset_case(GEANY_FILETYPES_AS,		styleset_actionscript);
+		styleset_case(GEANY_FILETYPES_HTML,		styleset_html);
+		styleset_case(GEANY_FILETYPES_JAVA,		styleset_java);
+		styleset_case(GEANY_FILETYPES_JS,		styleset_js);
+		styleset_case(GEANY_FILETYPES_LATEX,	styleset_latex);
+		styleset_case(GEANY_FILETYPES_LUA,		styleset_lua);
+		styleset_case(GEANY_FILETYPES_MAKE,		styleset_makefile);
+		styleset_case(GEANY_FILETYPES_MATLAB,	styleset_matlab);
+		styleset_case(GEANY_FILETYPES_NSIS,		styleset_nsis);
+		styleset_case(GEANY_FILETYPES_PASCAL,	styleset_pascal);
+		styleset_case(GEANY_FILETYPES_PERL,		styleset_perl);
+		styleset_case(GEANY_FILETYPES_PHP,		styleset_php);
+		styleset_case(GEANY_FILETYPES_PO,		styleset_po);
+		styleset_case(GEANY_FILETYPES_PYTHON,	styleset_python);
+		styleset_case(GEANY_FILETYPES_R,		styleset_r);
+		styleset_case(GEANY_FILETYPES_RUBY,		styleset_ruby);
+		styleset_case(GEANY_FILETYPES_SH,		styleset_sh);
+		styleset_case(GEANY_FILETYPES_SQL,		styleset_sql);
+		styleset_case(GEANY_FILETYPES_TCL,		styleset_tcl);
+		styleset_case(GEANY_FILETYPES_VALA,		styleset_vala);
+		styleset_case(GEANY_FILETYPES_VHDL,		styleset_vhdl);
+		styleset_case(GEANY_FILETYPES_XML,		styleset_xml);
+		styleset_case(GEANY_FILETYPES_YAML,		styleset_yaml);
 		default:
-		styleset_case(GEANY_FILETYPES_NONE,		none);
+		styleset_case(GEANY_FILETYPES_NONE,		styleset_none);
 	}
 }
 
