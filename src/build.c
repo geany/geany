@@ -2160,11 +2160,12 @@ void load_build_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 #define ASSIGNIF(type, id, string, value) \
 	if (value!=NULL && !type[GBO_TO_CMD(id)].exists && strlen(value)>0) { \
 		type[GBO_TO_CMD(id)].exists = TRUE; \
-		type[GBO_TO_CMD(id)].entries[BC_LABEL] = g_strdup(_(string)); \
-		type[GBO_TO_CMD(id)].entries[BC_COMMAND] = (value); \
-		type[GBO_TO_CMD(id)].entries[BC_WORKING_DIR] = NULL; \
+		setptr(type[GBO_TO_CMD(id)].entries[BC_LABEL], g_strdup(_(string))); \
+		setptr(type[GBO_TO_CMD(id)].entries[BC_COMMAND], (value)); \
+		setptr(type[GBO_TO_CMD(id)].entries[BC_WORKING_DIR], NULL); \
 		type[GBO_TO_CMD(id)].old = TRUE; \
-	}
+	} else \
+		g_free(value);
 		
 	switch(src)
 	{
@@ -2186,11 +2187,11 @@ void load_build_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 			bvalue = g_key_file_get_boolean(config, "project", "make_in_base_path", NULL);
 			value = bvalue?"%p":"%d";
 			if (non_ft_pref[GBO_TO_CMD(GBO_MAKE_ALL)].old)
-				setptr(non_ft_pref[GBO_TO_CMD(GBO_MAKE_ALL)].entries[BC_WORKING_DIR], value );
+				setptr(non_ft_pref[GBO_TO_CMD(GBO_MAKE_ALL)].entries[BC_WORKING_DIR], g_strdup(value) );
 			if (non_ft_pref[GBO_TO_CMD(GBO_MAKE_CUSTOM)].old)
-				setptr(non_ft_pref[GBO_TO_CMD(GBO_MAKE_CUSTOM)].entries[BC_WORKING_DIR], value );
+				setptr(non_ft_pref[GBO_TO_CMD(GBO_MAKE_CUSTOM)].entries[BC_WORKING_DIR], g_strdup(value) );
 			if (non_ft_pref[GBO_TO_CMD(GBO_MAKE_OBJECT)].old)
-				setptr(non_ft_pref[GBO_TO_CMD(GBO_MAKE_OBJECT)].entries[BC_WORKING_DIR], value );
+				setptr(non_ft_pref[GBO_TO_CMD(GBO_MAKE_OBJECT)].entries[BC_WORKING_DIR], g_strdup(value) );
 			value = g_key_file_get_string(config, "project", "run_cmd", NULL);
 			if (value !=NULL)
 			{
@@ -2201,11 +2202,11 @@ void load_build_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 		case BCS_PREF:
 			if (non_ft_pref==NULL)non_ft_pref = g_new0(GeanyBuildCommand, build_groups_count[GBG_NON_FT]);
 			value = g_key_file_get_string(config, "tools", "make_cmd", NULL);
-			ASSIGNIF(non_ft_pref, GBO_MAKE_ALL, g_strdup(_("_Make")), value);
-			ASSIGNIF(non_ft_pref, GBO_MAKE_CUSTOM, g_strdup(_("Make Custom _Target")),
-					g_strdup_printf("%s ",value));
-			ASSIGNIF(non_ft_pref, GBO_MAKE_OBJECT, g_strdup(_("Make _Object")),
+			ASSIGNIF(non_ft_pref, GBO_MAKE_CUSTOM, "Make Custom _Target",
+					g_strdup_printf("%s ", value));
+			ASSIGNIF(non_ft_pref, GBO_MAKE_OBJECT, "Make _Object",
 					g_strdup_printf("%s %%e.o",value));
+			ASSIGNIF(non_ft_pref, GBO_MAKE_ALL, "_Make", value);
 			break;
 		default:
 			break;
@@ -2316,15 +2317,18 @@ void save_build_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src)
 				g_key_file_set_string(config, build_grp_name, "error_regex", regex_proj);
 			else
 				g_key_file_remove_key(config, build_grp_name, "error_regex", NULL);
-			data.config = config;
-			data.ft_names = g_ptr_array_new();
-			g_ptr_array_foreach(pj->build_filetypes_list, foreach_project_filetype, (gpointer)(&data));
-			if (data.ft_names->pdata!=NULL)
-				g_key_file_set_string_list(config, build_grp_name, "filetypes",
-							(const gchar**)(data.ft_names->pdata), data.ft_names->len);
-			else
-				g_key_file_remove_key(config, build_grp_name, "filetypes", NULL);
-			g_ptr_array_free(data.ft_names, TRUE);
+			if (pj->build_filetypes_list!=NULL)
+			{
+				data.config = config;
+				data.ft_names = g_ptr_array_new();
+				g_ptr_array_foreach(pj->build_filetypes_list, foreach_project_filetype, (gpointer)(&data));
+				if (data.ft_names->pdata!=NULL)
+					g_key_file_set_string_list(config, build_grp_name, "filetypes",
+								(const gchar**)(data.ft_names->pdata), data.ft_names->len);
+				else
+					g_key_file_remove_key(config, build_grp_name, "filetypes", NULL);
+				g_ptr_array_free(data.ft_names, TRUE);
+			}
 			break;
 		default: /* defaults and BCS_FT can't save */
 			break;

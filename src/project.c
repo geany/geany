@@ -348,8 +348,11 @@ void project_close(gboolean open_default)
 	write_config(FALSE);
 
 	/* remove project filetypes build entries */
-	g_ptr_array_foreach( app->project->build_filetypes_list, remove_foreach_project_filetype, NULL );
-	g_ptr_array_free(app->project->build_filetypes_list, FALSE);
+	if (app->project->build_filetypes_list!=NULL)
+	{
+		g_ptr_array_foreach( app->project->build_filetypes_list, remove_foreach_project_filetype, NULL );
+		g_ptr_array_free(app->project->build_filetypes_list, FALSE);
+	}
 	
 	/* remove project non filetype build menu items */
 	build_remove_menu_item( BCS_PROJ, GBG_NON_FT, -1 );
