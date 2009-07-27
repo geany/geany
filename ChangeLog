@@ -5,6 +5,12 @@
    (patch by Lex Trotman, thanks).
 
 
+2009-07-25  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * po/LINGUAS, po/sl_SI.po, THANKS, src/about.c: 
+   Added a first Slovenian translation. Thanks to Joze Klepec.
+
+
 2009-07-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/highlighting.c:

@@ -1,4 +1,10 @@
-2009-07-24  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+2009-07-25  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * sl_SI.po: Added a first Slovenian translation. 
+             Thanks to joze Klepec.
+
+
+2009-07-24  Frank Lanitz  
 
  * de.po: Minor update of German translation.
 
