@@ -338,8 +338,6 @@ static void remove_foreach_project_filetype( gpointer data, gpointer user_data )
 /* open_default will make function reload default session files on close */
 void project_close(gboolean open_default)
 {
-	gint i;
-	
 	g_return_if_fail(app->project != NULL);
 
 	ui_set_statusbar(TRUE, _("Project \"%s\" closed."), app->project->name);
@@ -353,14 +351,14 @@ void project_close(gboolean open_default)
 		g_ptr_array_foreach( app->project->build_filetypes_list, remove_foreach_project_filetype, NULL );
 		g_ptr_array_free(app->project->build_filetypes_list, FALSE);
 	}
-	
+
 	/* remove project non filetype build menu items */
 	build_remove_menu_item( BCS_PROJ, GBG_NON_FT, -1 );
 	build_remove_menu_item( BCS_PROJ, GBG_EXEC, -1 );
-	
+
 	/* remove project regexen */
 	setptr(regex_proj, NULL);
-	
+
 	g_free(app->project->name);
 	g_free(app->project->description);
 	g_free(app->project->file_name);
@@ -398,12 +396,10 @@ static void on_set_use_base_path_clicked( GtkWidget *unused1, gpointer user_data
 static void create_properties_dialog(PropertyDialogElements *e)
 {
 	GtkWidget *table, *notebook, *build_table;
-	GtkWidget *image;
 	GtkWidget *button;
 	GtkWidget *bbox;
 	GtkWidget *label;
 	GtkWidget *swin;
-	gpointer   data;
 	GeanyDocument *doc = document_get_current();
 	GeanyFiletype *ft;
 
@@ -480,7 +476,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	gtk_table_attach(GTK_TABLE(table), bbox, 1, 2, 3, 4,
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
-	
+
 	if (doc!=NULL) ft=doc->file_type;
 	build_table = build_commands_table( doc, BCS_PROJ, &(e->build_properties), ft );
 	label = gtk_label_new(_("Build"));
@@ -489,7 +485,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 
 	label = gtk_label_new(_("Set the non-filetype working directories on build tab to use base path:"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
-	
+
 	button = gtk_button_new_with_label(_("Set"));
 	ui_widget_set_tooltip_text(button,
 		_("Set the working directories (on the Build tab) "
@@ -738,7 +734,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 		gtk_text_buffer_get_start_iter(buffer, &start);
 		gtk_text_buffer_get_end_iter(buffer, &end);
 		setptr(p->description, g_strdup(gtk_text_buffer_get_text(buffer, &start, &end, FALSE)));
-		
+
 		/* read the project build menu */
 		if ( doc!=NULL )ft=doc->file_type;
 		if ( ft!=NULL )
@@ -760,7 +756,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 		if (ft!=NULL && ft->projfilecmds!=oldvalue && ft->project_list_entry<0)
 		{
 			if (p->build_filetypes_list==NULL)p->build_filetypes_list = g_ptr_array_new();
-			ft->project_list_entry = p->build_filetypes_list->len; 
+			ft->project_list_entry = p->build_filetypes_list->len;
 			g_ptr_array_add(p->build_filetypes_list, ft);
 		}
 		build_menu_update(doc);
@@ -1111,9 +1107,9 @@ gchar *project_get_base_path(void)
  * Maybe in future this will support a separate project make path from base path. */
 gchar *project_get_make_dir(void)
 {
-	GeanyProject *project = app->project;
+/*	GeanyProject *project = app->project;
 
-/*	if (project && ! project->make_in_base_path)
+	if (project && ! project->make_in_base_path)
 		return NULL;
 	else*/
 		return project_get_base_path();
@@ -1162,7 +1158,7 @@ void project_setup_prefs(void)
 	static gboolean callback_setup = FALSE;
 
 	g_return_if_fail(local_prefs.project_file_path != NULL);
-	
+
 	gtk_entry_set_text(GTK_ENTRY(path_entry), local_prefs.project_file_path);
 	if (! callback_setup)
 	{	/* connect the callback only once */

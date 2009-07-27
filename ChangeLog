@@ -1,3 +1,9 @@
+2009-07-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/build.c, src/build.h, src/project.c:
+   Fix some gcc warnings with '-Wall -W -ansi' enabled.
+
+
 2009-07-25  Lex Trotman  <elextr(at)gmail(dot)com>
 
  * src/build.c
@@ -48,11 +54,11 @@
 2009-07-17  Lex Trotman  <elextr(at)gmail(dot)com>
 
  * src/build.c
-   Fixed substitute %f etc in commands 
+   Fixed substitute %f etc in commands
    Fixed potential leak in build_replace_placeholder
    Fixed leak in prepare_run_script (Thanks for patch Thomas)
    Fixed build_replace_placeholder to not require document.
-   
+
 2009-07-17  Lex Trotman  <elextr(at)gmail(dot)com>
 
  * src/build.c, src/build.h, src/filetypes.h, src/filetypes.c
@@ -89,13 +95,13 @@
 
 2009-07-11  Lex Trotman  <elextr(at)gmail(dot)com>
 
- * src/filetypes.h, src/filetypes.c, src/build.c, src/build.h, 
+ * src/filetypes.h, src/filetypes.c, src/build.c, src/build.h,
    src/project.c
    Removal of build menu item source made redundant by the following fix
  * src/build.c
    Corrected priority oreder and loading of filetype dependent build
-   menu items saved in the project file.  Added print routine for 
-   debugging command sources and priorities set compile symbol 
+   menu items saved in the project file.  Added print routine for
+   debugging command sources and priorities set compile symbol
    PRINTBUILDCMDS true to enable
 
 2009-07-10  Lex Trotman  <elextr(at)gmail(dot)com>

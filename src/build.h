@@ -143,7 +143,7 @@ GtkWidget *build_commands_table( GeanyDocument *doc, GeanyBuildSource dst, Table
 
 gboolean read_build_commands( BuildDestination *dst, TableData data, gint response );
 
-void free_build_data( TableData data );
+void free_build_fields( TableData data );
 
 void set_build_non_ft_wd_to_proj(TableData table_data);
 
@@ -153,18 +153,18 @@ gboolean build_parse_make_dir(const gchar *string, gchar **prefix);
 /* build menu functions */
 
 /** Update the build menu to reflect changes in configuration or status.
- * 
+ *
  * Sets the labels and number of visible items to match the highest
  * priority configured commands.  Also sets sensitivity if build commands are
  * running and switches executes to stop when commands are running.
- * 
+ *
  * @param doc The current document, if available, to save looking it up.
  *        If @c NULL it will be looked up.
- * 
+ *
  * Call this after modifying any fields of a GeanyBuildCommand structure.
- * 
+ *
  * @see Build Menu Configuration section of the Manual.
- * 
+ *
  **/
 
 void build_menu_update(GeanyDocument *doc);
@@ -173,55 +173,55 @@ void build_menu_update(GeanyDocument *doc);
 void build_toolbutton_build_clicked(GtkAction *action, gpointer user_data);
 
 /** Remove the specified Build menu item.
- * 
+ *
  * Makes the specified menu item configuration no longer exist. This
  * is different to setting fields to blank because the menu item
- * will be deleted from the configuration file on saving 
- * (except the system filetypes settings @see Build Menu Configuration 
- * section of the Manual).  
- * 
+ * will be deleted from the configuration file on saving
+ * (except the system filetypes settings @see Build Menu Configuration
+ * section of the Manual).
+ *
  * @param src the source of the menu item to remove.
  * @param grp the group of the command to remove.
- * @param cmd the index (from 0) of the command within the group. A negative 
+ * @param cmd the index (from 0) of the command within the group. A negative
  *        value will remove the whole group.
- * 
+ *
  * If any parameter is out of range does nothing.
- * 
+ *
  * @see build_menu_update
  **/
 
 void build_remove_menu_item(GeanyBuildSource src, GeanyBuildGroup grp, gint cmd);
 
 /** Get the @a GeanyBuildCommand structure for the specified Build menu item.
- * 
- * Get the command for any menu item specified by @a src, @a grp and @a cmd even if it is 
+ *
+ * Get the command for any menu item specified by @a src, @a grp and @a cmd even if it is
  * hidden by higher priority commands.
- * 
+ *
  * @param src the source of the specified menu item.
  * @param grp the group of the specified menu item.
  * @param cmd the index of the command within the group.
- * 
+ *
  * @return a pointer to the @a GeanyBuildCommand structure or @a NULL if it doesn't exist.
  *         This is a pointer to an internal structure and must not be freed.
- * 
+ *
  * @see build_menu_update
  **/
 
 GeanyBuildCommand *build_get_menu_item(GeanyBuildSource src, GeanyBuildGroup grp, gint cmd);
 
 /** Get the @a GeanyBuildCommand structure for the menu item.
- * 
- * Get the current highest priority command specified by @a grp and @a cmd.  This is the one 
+ *
+ * Get the current highest priority command specified by @a grp and @a cmd.  This is the one
  * that the menu item will use if activated.
- * 
+ *
  * @param grp the group of the specified menu item.
  * @param cmd the index of the command within the group.
  * @param src pointer to @a gint to return which source provided the command. Ignored if @a NULL.
  *        Values are one of @a GeanyBuildSource but returns a signed type not the enum.
- * 
+ *
  * @return a pointer to the @a GeanyBuildCommand structure or @a NULL if it doesn't exist.
  *         This is a pointer to an internal structure and must not be freed.
- * 
+ *
  * @see build_menu_update
  **/
 
