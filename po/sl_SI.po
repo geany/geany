@@ -6,10 +6,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 0.18svn\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-04-23 22:36+0200\n"
-"PO-Revision-Date: 2009-07-24 23:11+0100\n"
+"PO-Revision-Date: 2009-07-26 23:13+0100\n"
 "Last-Translator: Jože Klepec <joze dot klepec AT siol net>\n"
 "Language-Team: Slovenian\n"
 "MIME-Version: 1.0\n"
@@ -42,7 +42,7 @@ msgstr "Hitro in lahkotno razvojno okolje"
 #: ../src/about.c:208
 #, c-format
 msgid "(built on or after %s)"
-msgstr "(zgrajeno na osnovi ali okoli %s)"
+msgstr "(zgrajeno dne %s ali kasneje)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
 #: ../src/about.c:239
@@ -59,7 +59,7 @@ msgstr "vzdrževalec"
 
 #: ../src/about.c:272
 msgid "developer"
-msgstr "razvojnik"
+msgstr "razvijalec"
 
 #: ../src/about.c:280
 msgid "translation maintainer"
@@ -102,9 +102,9 @@ msgstr "Ne najdem terminala \"%s\" (preverite pot za nastavitve orodja Terminal 
 
 #: ../src/build.c:234
 #: ../src/build.c:674
-#, c-format
+#, fuzzy, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created)"
-msgstr ""
+msgstr "Spodletelo izvajanje \"%s\" (ni mogoče ustvariti zagonske skripte)."
 
 #: ../src/build.c:270
 #: ../src/build.c:552
@@ -241,11 +241,11 @@ msgstr ""
 
 #: ../src/build.c:1377
 msgid "DVI preview:"
-msgstr ""
+msgstr "DVI predogled:"
 
 #: ../src/build.c:1397
 msgid "PDF preview:"
-msgstr ""
+msgstr "PDF predogled:"
 
 #: ../src/build.c:1414
 #: ../src/build.c:1596
@@ -270,17 +270,20 @@ msgid "%s commands"
 msgstr ""
 
 #: ../src/build.c:1529
+#, fuzzy
 msgid "Compile:"
-msgstr ""
+msgstr "Prevedi:"
 
 #: ../src/build.c:1551
+#, fuzzy
 msgid "Build:"
-msgstr ""
+msgstr "Zgradi:"
 
 #: ../src/build.c:1573
 #: ../src/dialogs.c:1189
+#, fuzzy
 msgid "Execute:"
-msgstr ""
+msgstr "Poženi:"
 
 #: ../src/build.c:1901
 #: ../src/toolbar.c:194
@@ -476,32 +479,32 @@ msgstr ""
 
 #: ../src/dialogs.c:429
 msgid "_Open file in a new tab"
-msgstr ""
+msgstr "_Odpri datoteko v novem zavihku"
 
 #: ../src/dialogs.c:431
 msgid "Keep the current unsaved document open and open the newly saved file in a new tab"
-msgstr ""
+msgstr "Ohrani trenutni neshranjen dokument odprt in odpre novo datoteko v novem zavihku"
 
 #: ../src/dialogs.c:622
 msgid "_Don't save"
-msgstr ""
+msgstr "_Ne shrani"
 
 #: ../src/dialogs.c:653
 #, c-format
 msgid "The file '%s' is not saved."
-msgstr ""
+msgstr "Datoteka '%s' ni bila shranjena."
 
 #: ../src/dialogs.c:655
 msgid "Do you want to save it before closing?"
-msgstr ""
+msgstr "Ali jo želite shraniti pred zapiranjem?"
 
 #: ../src/dialogs.c:730
 msgid "Choose font"
-msgstr ""
+msgstr "Izberite nabor znakov"
 
 #: ../src/dialogs.c:971
 msgid "An error occurred or file information could not be retrieved (e.g. from a new file)."
-msgstr ""
+msgstr "Pojavila se je napaka ali informacij o datoteki ni mogoče pridobiti (npr. o novi datoteki)."
 
 #: ../src/dialogs.c:990
 #: ../src/dialogs.c:991
@@ -519,97 +522,103 @@ msgstr ""
 #: ../src/dialogs.c:1005
 #: ../src/symbols.c:754
 msgid "Properties"
-msgstr ""
+msgstr "Lastnosti"
 
 #: ../src/dialogs.c:1036
 msgid "<b>Type:</b>"
-msgstr ""
+msgstr "<b>Tip:</b>"
 
 #: ../src/dialogs.c:1050
 msgid "<b>Size:</b>"
-msgstr ""
+msgstr "<b>Velikost:</b>"
 
 #: ../src/dialogs.c:1066
 msgid "<b>Location:</b>"
-msgstr ""
+msgstr "<b>Location:</b>"
 
 #: ../src/dialogs.c:1080
 msgid "<b>Read-only:</b>"
-msgstr ""
+msgstr "<b>Read-only:</b>"
 
 #: ../src/dialogs.c:1087
 msgid "(only inside Geany)"
-msgstr ""
+msgstr "(samo znotraj Geany)"
 
 #: ../src/dialogs.c:1096
 msgid "<b>Encoding:</b>"
-msgstr ""
+msgstr "<b>Encoding:</b>"
 
 #. BOM = byte order mark
 #: ../src/dialogs.c:1106
 #: ../src/ui_utils.c:225
 msgid "(with BOM)"
-msgstr ""
+msgstr "(z BOM)"
 
 #: ../src/dialogs.c:1106
 msgid "(without BOM)"
-msgstr ""
+msgstr "(brez BOM)"
 
 #: ../src/dialogs.c:1117
+#, fuzzy
 msgid "<b>Modified:</b>"
-msgstr ""
+msgstr "<b>Modified:</b>"
 
 #: ../src/dialogs.c:1131
+#, fuzzy
 msgid "<b>Changed:</b>"
-msgstr ""
+msgstr "<b>Changed:</b>"
 
 #: ../src/dialogs.c:1145
 msgid "<b>Accessed:</b>"
-msgstr ""
+msgstr "<b>Dostopano:</b>"
 
 #: ../src/dialogs.c:1167
 msgid "<b>Permissions:</b>"
-msgstr ""
+msgstr "<b>Dovoljenja:</b>"
 
 #. Header
 #: ../src/dialogs.c:1175
+#, fuzzy
 msgid "Read:"
-msgstr ""
+msgstr "Read:"
 
 #: ../src/dialogs.c:1182
+#, fuzzy
 msgid "Write:"
-msgstr ""
+msgstr "Write:"
 
+# Lastnik
 #. Owner
 #: ../src/dialogs.c:1197
 msgid "Owner:"
-msgstr ""
+msgstr "Lastnik:"
 
 #. Group
 #: ../src/dialogs.c:1233
 msgid "Group:"
-msgstr ""
+msgstr "Skupina:"
 
+# Drugo
 #. Other
 #: ../src/dialogs.c:1269
 msgid "Other:"
-msgstr ""
+msgstr "Drugo:"
 
 #: ../src/document.c:674
 #, c-format
 msgid "File %s closed."
-msgstr ""
+msgstr "Datoteka %s zaprta."
 
 #: ../src/document.c:791
 #, c-format
 msgid "New file \"%s\" opened."
-msgstr ""
+msgstr "Odprta nova datoteka \"%s\"."
 
 #: ../src/document.c:964
 #: ../src/document.c:1470
 #, c-format
 msgid "Could not open file %s (%s)"
-msgstr ""
+msgstr "Ni mogoče odpreti datoteke %s (%s)"
 
 #: ../src/document.c:994
 #, c-format
@@ -617,18 +626,22 @@ msgid ""
 "The file \"%s\" could not be opened properly and has been truncated. This can occur if the file contains a NULL byte. Be aware that saving it can cause data loss.\n"
 "The file was set to read-only."
 msgstr ""
+"Datoteke \"%s\" ni bilo mogoče odpreti pravilno, zato je bila skrajšana. To se lahko zgodi, če datoteka vsebuje znak NULL. Zavedajte se, da njeno shranjevanje lahko povzroči izgubo podatkov.\n"
+"Datoteka je nastavljena samo za branje."
 
+# Za prevajalce - primer:
+# Datoteka \"test.txt" ni veljavna UTF-8 datoteka.
 #. For translators: the second wildcard is an encoding name, e.g.
 #. * The file \"test.txt\" is not valid UTF-8.
 #: ../src/document.c:1020
 #, c-format
 msgid "The file \"%s\" is not valid %s."
-msgstr ""
+msgstr "Datoteka \"%s\" ni veljavna %s datoteka."
 
 #: ../src/document.c:1030
 #, c-format
 msgid "The file \"%s\" does not look like a text file or the file encoding is not supported."
-msgstr ""
+msgstr "Datoteka \"%s\" ni besedilna datoteka ali kodiranje besedila ni podprto."
 
 #: ../src/document.c:1168
 msgid "Spaces"
@@ -651,7 +664,7 @@ msgstr ""
 
 #: ../src/document.c:1232
 msgid "Invalid filename"
-msgstr ""
+msgstr "Napačno ime datoteke"
 
 #: ../src/document.c:1352
 #, c-format
@@ -661,20 +674,21 @@ msgstr ""
 #: ../src/document.c:1354
 #, c-format
 msgid "File %s opened(%d%s)."
-msgstr ""
+msgstr "Datoteka %s je odprta (%d%s)."
 
 #: ../src/document.c:1356
+#, fuzzy
 msgid ", read-only"
-msgstr ""
+msgstr ", read-only"
 
 #: ../src/document.c:1561
 msgid "Error renaming file."
-msgstr ""
+msgstr "Napaka med preimenovanjem datoteke."
 
 #: ../src/document.c:1636
 #, c-format
 msgid "An error occurred while converting the file from UTF-8 in \"%s\". The file remains unsaved."
-msgstr ""
+msgstr "Napaka se je pojavila med pretvorbo datoteke iz UTF-8 \"%s\". Datoteka ostaja neshranjena."
 
 #: ../src/document.c:1658
 #, c-format
@@ -682,26 +696,28 @@ msgid ""
 "Error message: %s\n"
 "The error occurred at \"%s\" (line: %d, column: %d)."
 msgstr ""
+"Sporočilo o napaki: %s\n"
+"Napaka se je pojavila na mestu \"%s\" (vrstica: %d, stolpec %d)."
 
 #: ../src/document.c:1663
 #, c-format
 msgid "Error message: %s."
-msgstr ""
+msgstr "Sporočilo o napaki: %s."
 
 #: ../src/document.c:1763
 #: ../src/document.c:1823
 msgid "Error saving file."
-msgstr ""
+msgstr "Napaka med shranjevanjem datoteke."
 
 #: ../src/document.c:1822
 #, c-format
 msgid "Error saving file (%s)."
-msgstr ""
+msgstr "Napaka med shranjevanjem datoteke (%s)."
 
 #: ../src/document.c:1847
 #, c-format
 msgid "File %s saved."
-msgstr ""
+msgstr "Datoteka %s shranjena."
 
 #: ../src/document.c:1913
 #: ../src/document.c:1970
@@ -742,75 +758,78 @@ msgid ""
 "The file '%s' on the disk is more recent than\n"
 "the current buffer."
 msgstr ""
+"Datoteka '%s' na disku je bolj sveža kot\n"
+"trenutni pomnilnik."
 
 #: ../src/document.c:2921
 msgid "Try to resave the file?"
-msgstr ""
+msgstr "Želite ponovno shraniti?"
 
 #: ../src/document.c:2922
 #, c-format
 msgid "File \"%s\" was not found on disk!"
-msgstr ""
+msgstr "Datoteka \"%s\" ni bila najdena na disku!"
 
 #: ../src/editor.c:3852
 #: ../src/utils.c:295
 msgid "Win (CRLF)"
-msgstr ""
+msgstr "Win (CRLF)"
 
 #: ../src/editor.c:3853
 #: ../src/utils.c:296
 msgid "Mac (CR)"
-msgstr ""
+msgstr "Mac (CR)"
 
 #: ../src/editor.c:3854
 #: ../src/utils.c:297
 msgid "Unix (LF)"
-msgstr ""
+msgstr "Unix (LF)"
 
 #: ../src/editor.c:3978
 msgid "Enter Tab Width"
-msgstr ""
+msgstr "Vnesite širino tabulatorja"
 
 #: ../src/editor.c:3979
 msgid "Enter the amount of spaces which should be replaced by a tab character."
-msgstr ""
+msgstr "Vnesite število presledkov, ki naj bodo zamenjani s tabulatorjem.  "
 
 #: ../src/encodings.c:76
 msgid "Celtic"
-msgstr ""
+msgstr "Keltsko"
 
 #: ../src/encodings.c:77
 #: ../src/encodings.c:78
 msgid "Greek"
-msgstr ""
+msgstr "Grško"
 
 #: ../src/encodings.c:79
 msgid "Nordic"
-msgstr ""
+msgstr "Nordijsko"
 
 #: ../src/encodings.c:80
 msgid "South European"
-msgstr ""
+msgstr "Južnoevropsko"
 
 #: ../src/encodings.c:81
 #: ../src/encodings.c:82
 #: ../src/encodings.c:83
 #: ../src/encodings.c:84
 msgid "Western"
-msgstr ""
+msgstr "Zahodno"
 
 #: ../src/encodings.c:86
 #: ../src/encodings.c:87
 #: ../src/encodings.c:88
 msgid "Baltic"
-msgstr ""
+msgstr "Baltsko"
 
 #: ../src/encodings.c:89
 #: ../src/encodings.c:90
 #: ../src/encodings.c:91
 msgid "Central European"
-msgstr ""
+msgstr "Centralnoevropsko"
 
+# ISO-IR-111 ni na voljo pod Windows
 #. ISO-IR-111 not available on Windows
 #: ../src/encodings.c:92
 #: ../src/encodings.c:93
@@ -818,60 +837,61 @@ msgstr ""
 #: ../src/encodings.c:96
 #: ../src/encodings.c:97
 msgid "Cyrillic"
-msgstr ""
+msgstr "Cirilsko"
 
 #: ../src/encodings.c:98
 msgid "Cyrillic/Russian"
-msgstr ""
+msgstr "Cirilsko-rusko"
 
 #: ../src/encodings.c:99
 msgid "Cyrillic/Ukrainian"
-msgstr ""
+msgstr "Cirilsko-ukrajinsko"
 
 #: ../src/encodings.c:100
 msgid "Romanian"
-msgstr ""
+msgstr "Romunsko"
 
 #: ../src/encodings.c:102
 #: ../src/encodings.c:103
 #: ../src/encodings.c:104
 msgid "Arabic"
-msgstr ""
+msgstr "Arabsko"
 
+# sploh ni na voljo, ?
 #. not available at all, ?
 #: ../src/encodings.c:105
 #: ../src/encodings.c:107
 #: ../src/encodings.c:108
 msgid "Hebrew"
-msgstr ""
+msgstr "Hebrejsko"
 
 #: ../src/encodings.c:109
 msgid "Hebrew Visual"
-msgstr ""
+msgstr "Hebrajsko vizualno"
 
 #: ../src/encodings.c:111
 msgid "Armenian"
-msgstr ""
+msgstr "Armensko"
 
 #: ../src/encodings.c:112
 msgid "Georgian"
-msgstr ""
+msgstr "Gruzinsko"
 
 #: ../src/encodings.c:113
 msgid "Thai"
-msgstr ""
+msgstr "Tajsko"
 
 #: ../src/encodings.c:114
 #: ../src/encodings.c:115
 #: ../src/encodings.c:116
 msgid "Turkish"
-msgstr ""
+msgstr "Turško"
 
 #: ../src/encodings.c:117
 #: ../src/encodings.c:118
 #: ../src/encodings.c:119
 msgid "Vietnamese"
-msgstr ""
+msgstr "Vietnamsko"
 
 #: ../src/encodings.c:121
 #: ../src/encodings.c:122
@@ -882,7 +902,7 @@ msgstr ""
 #: ../src/encodings.c:127
 #: ../src/encodings.c:128
 msgid "Unicode"
-msgstr ""
+msgstr "Unicode"
 
 #. maybe not available on Linux
 #: ../src/encodings.c:130
@@ -890,61 +910,61 @@ msgstr ""
 #: ../src/encodings.c:132
 #: ../src/encodings.c:134
 msgid "Chinese Simplified"
-msgstr ""
+msgstr "Kitajsko poenostavljeno"
 
 #: ../src/encodings.c:135
 #: ../src/encodings.c:136
 #: ../src/encodings.c:137
 msgid "Chinese Traditional"
-msgstr ""
+msgstr "Kitajsko tradicionalno"
 
 #: ../src/encodings.c:138
 #: ../src/encodings.c:139
 #: ../src/encodings.c:140
 msgid "Japanese"
-msgstr ""
+msgstr "Japonsko"
 
 #: ../src/encodings.c:141
 #: ../src/encodings.c:142
 #: ../src/encodings.c:143
 #: ../src/encodings.c:144
 msgid "Korean"
-msgstr ""
+msgstr "Korejsko"
 
 #: ../src/encodings.c:146
 msgid "Without encoding"
-msgstr ""
+msgstr "Brez kodiranja"
 
 #: ../src/encodings.c:373
 msgid "_West European"
-msgstr ""
+msgstr "_Zahodnoevropsko"
 
 #: ../src/encodings.c:379
 msgid "_East European"
-msgstr ""
+msgstr "_Vzhodnoevropsko"
 
 #: ../src/encodings.c:385
 msgid "East _Asian"
-msgstr ""
+msgstr "Vzhodno _azijsko"
 
 #: ../src/encodings.c:391
 msgid "_SE & SW Asian"
-msgstr ""
+msgstr "_JV & JZ azijsko"
 
 #: ../src/encodings.c:397
 msgid "_Middle Eastern"
-msgstr ""
+msgstr "_Bližnjevzhodno"
 
 #: ../src/encodings.c:403
 msgid "_Unicode"
-msgstr ""
+msgstr "_Unicode"
 
 #: ../src/filetypes.c:90
 #: ../src/filetypes.c:91
 #: ../src/interface.c:3457
 #: ../src/interface.c:5005
 msgid "None"
-msgstr ""
+msgstr "Brez"
 
 #: ../src/filetypes.c:102
 #: ../src/filetypes.c:113
@@ -4982,5 +5002,4 @@ msgstr "Razdeli navpično"
 #: ../plugins/splitwindow.c:426
 msgid "Unsplit"
 msgstr "Razveljavi razdeli"
-
 
