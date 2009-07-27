@@ -114,14 +114,14 @@ static void apply_kb_accel(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer u
  * assign the keybinding to the menu_item (apply_kb_accel) otherwise it can't be overridden
  * by user keybindings anymore */
 /** Simple convenience function to fill a GeanyKeyBinding struct item.
- * @param group
- * @param key_id
- * @param callback
- * @param key
- * @param mod
- * @param name
- * @param label
- * @param menu_item */
+ * @param group Group.
+ * @param key_id Keybinding index for the group.
+ * @param callback Function to call when activated.
+ * @param key (Lower case) default key, e.g. @c GDK_j, but usually 0 for unset.
+ * @param mod Default modifier, e.g. @c GDK_CONTROL_MASK, but usually 0 for unset.
+ * @param name Not duplicated - use a static string.
+ * @param label Currently not duplicated - use a static or heap-allocated (e.g. translated) string.
+ * @param menu_item Optional widget to set an accelerator for, or @c NULL. */
 void keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 		GeanyKeyCallback callback, guint key, GdkModifierType mod,
 		gchar *name, gchar *label, GtkWidget *menu_item)
