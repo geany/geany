@@ -80,8 +80,6 @@ gboolean project_load_file_with_session(const gchar *locale_file_name);
 
 gchar *project_get_base_path(void);
 
-gchar *project_get_make_dir(void);
-
 
 void project_save_prefs(GKeyFile *config);
 

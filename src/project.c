@@ -1073,19 +1073,6 @@ gchar *project_get_base_path(void)
 }
 
 
-/* Returns: NULL if the default path should be used, or a UTF-8 path.
- * Maybe in future this will support a separate project make path from base path. */
-gchar *project_get_make_dir(void)
-{
-/*	GeanyProject *project = app->project;
-
-	if (project && ! project->make_in_base_path)
-		return NULL;
-	else*/
-		return project_get_base_path();
-}
-
-
 /* This is to save project-related global settings, NOT project file settings. */
 void project_save_prefs(GKeyFile *config)
 {

@@ -1,5 +1,12 @@
 2009-07-28  Lex Trotman  <elextr(at)gmail(dot)com>
 
+ * src/project.h, src/project.c
+   Removed unused project_get_make_dir function, this is now per 
+   command.
+
+
+2009-07-28  Lex Trotman  <elextr(at)gmail(dot)com>
+
  * src/build.c, src/build.h, src/project.c, src/keyfile.c, src/filetypes.c
    Fix some more warnings.
    Fix commented out execute/stop toolbar code in build.c.
