@@ -28,17 +28,20 @@
 
 #define GEANY_BUILD_ERR_HIGHLIGHT_MAX 100
 
-/* Geany Known Build Commands, currently only these can have keybindings
- * Order is important (see GBO_TO_GBG, GBO_TO_CMD below) */
+/* Order is important (see GBO_TO_GBG, GBO_TO_CMD below) */
+/** Geany Known Build Commands.
+ * These commands are named after their default use.
+ * Only these commands can currently have keybindings.
+ **/
 typedef enum
 {
-	GBO_COMPILE,
-	GBO_BUILD,
-	GBO_MAKE_ALL,
-	GBO_MAKE_CUSTOM,
-	GBO_MAKE_OBJECT,
-	GBO_EXEC,
-	GBO_COUNT	/* count of how many */
+	GBO_COMPILE,		/**< default compile file */
+	GBO_BUILD,			/**< default build file */
+	GBO_MAKE_ALL,		/**< default make */
+	GBO_MAKE_CUSTOM,	/**< default make user specified target */
+	GBO_MAKE_OBJECT,	/**< default make object, make %e.o */
+	GBO_EXEC,			/**< default execute ./%e */
+	GBO_COUNT			/**< count of how many */
 } GeanyBuildType;
 
 /** Groups of Build menu items. */
@@ -53,10 +56,33 @@ typedef enum
 /* include the fixed widgets in an array indexed by groups */
 #define GBG_FIXED GBG_COUNT
 
-/* convert GBO_xxx to GBG_xxx and command number
- * Note they are macros so they can be used in static initialisers */
-#define GBO_TO_GBG(gbo) ((gbo)>GBO_EXEC?GBG_COUNT:((gbo)>=GBO_EXEC?GBG_EXEC:((gbo)>=GBO_MAKE_ALL?GBG_NON_FT:GBG_FT)))
-#define GBO_TO_CMD(gbo) ((gbo)>=GBO_COUNT?(gbo)-GBO_COUNT:((gbo)>=GBO_EXEC?(gbo)-GBO_EXEC:((gbo)>=GBO_MAKE_ALL?(gbo)-GBO_MAKE_ALL:(gbo))))
+/** Convert @c GeanyBuildType to @c GeanyBuildGroup .
+ * 
+ * This macro converts @c GeanyBiuildType enum values (the "known" commands)
+ * to the group they are part of.
+ * 
+ * @param gbo the @c GeanyBuildType value.
+ * 
+ * @return the @c GeanyBuildGroup group that @a gbo is in.
+ * 
+ * Note this is a macro so that it can be used in static initialisers
+ **/
+#define GBO_TO_GBG(gbo) ((gbo)>GBO_EXEC?GBG_COUNT:((gbo)>=GBO_EXEC?GBG_EXEC: \
+						 ((gbo)>=GBO_MAKE_ALL?GBG_NON_FT:GBG_FT)))
+
+/** Convert @c GeanyBuildType to command index.
+ * 
+ * This macro converts @c GeanyBuildType enum values (the "known" commands)
+ * to the index within the group.
+ * 
+ * @param gbo the @c GeanyBuildType value.
+ * 
+ * @return the index of the @a gbo command in its group.
+ * 
+ * Note this is a macro so that it can be used in static initialisers
+ **/
+#define GBO_TO_CMD(gbo) ((gbo)>=GBO_COUNT?(gbo)-GBO_COUNT:((gbo)>=GBO_EXEC?(gbo)-GBO_EXEC: \
+						 ((gbo)>=GBO_MAKE_ALL?(gbo)-GBO_MAKE_ALL:(gbo))))
 
 enum GeanyBuildFixedMenuItems
 {
@@ -230,14 +256,14 @@ GeanyBuildCommand *build_get_current_menu_item(GeanyBuildGroup grp, gint cmd, gi
 BuildMenuItems *build_get_menu_items(gint filetype_idx);
 
 /* load and store menu configuration */
-void load_build_menu( GKeyFile *config, GeanyBuildSource dst, gpointer ptr);
+void build_load_menu( GKeyFile *config, GeanyBuildSource dst, gpointer ptr);
 
-void save_build_menu( GKeyFile *config, gpointer ptr, GeanyBuildSource src);
+void build_save_menu( GKeyFile *config, gpointer ptr, GeanyBuildSource src);
 
-void set_build_grp_count(GeanyBuildGroup grp, gint count);
+void build_set_group_count(GeanyBuildGroup grp, gint count);
 
-gint get_build_group_count(GeanyBuildGroup grp);
+gint build_get_group_count(GeanyBuildGroup grp);
 
-gchar **get_build_regex(GeanyBuildGroup grp, GeanyFiletype *ft, gint *from);
+gchar **build_get_regex(GeanyBuildGroup grp, GeanyFiletype *ft, gint *from);
 
 #endif

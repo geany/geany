@@ -86,7 +86,6 @@ typedef struct _PropertyDialogElements
 
 static gboolean update_config(const PropertyDialogElements *e);
 static void on_file_save_button_clicked(GtkButton *button, PropertyDialogElements *e);
-static void on_file_open_button_clicked(GtkButton *button, PropertyDialogElements *e);
 static gboolean load_config(const gchar *filename);
 static gboolean write_config(gboolean emit_signal);
 static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements *e);
@@ -868,35 +867,6 @@ static void on_file_save_button_clicked(GtkButton *button, PropertyDialogElement
 }
 
 
-static void on_file_open_button_clicked(GtkButton *button, PropertyDialogElements *e)
-{
-#ifdef G_OS_WIN32
-	gchar *path = win32_show_project_open_dialog(e->dialog, _("Choose Project Run Command"),
-						gtk_entry_get_text(GTK_ENTRY(e->run_cmd)), FALSE, FALSE);
-	if (path != NULL)
-	{
-		gtk_entry_set_text(GTK_ENTRY(e->run_cmd), path);
-		g_free(path);
-	}
-#else
-	GtkWidget *dialog;
-
-	/* initialise the dialog */
-	dialog = gtk_file_chooser_dialog_new(_("Choose Project Run Command"), NULL,
-					GTK_FILE_CHOOSER_ACTION_OPEN,
-					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
-	gtk_widget_set_name(dialog, "GeanyDialog");
-	gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
-	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), TRUE);
-	gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
-	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
-
-	run_dialog(dialog, e->run_cmd);
-#endif
-}
-
-
 /* sets the project base path and the project file name according to the project name */
 static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements *e)
 {
@@ -999,7 +969,7 @@ static gboolean load_config(const gchar *filename)
 	p->run_cmd = utils_get_setting_string(config, "project", "run_cmd", "");
 	p->file_patterns = g_key_file_get_string_list(config, "project", "file_patterns", NULL, NULL);
 
-	load_build_menu( config, BCS_PROJ, (gpointer)p );
+	build_load_menu( config, BCS_PROJ, (gpointer)p );
 	if (project_prefs.project_session)
 	{
 		/* save current (non-project) session (it could has been changed since program startup) */
@@ -1056,7 +1026,7 @@ static gboolean write_config(gboolean emit_signal)
 	/* store the session files into the project too */
 	if (project_prefs.project_session)
 		configuration_save_session_files(config);
-	save_build_menu( config, (gpointer)p, BCS_PROJ );
+	build_save_menu( config, (gpointer)p, BCS_PROJ );
 	if (emit_signal)
 	{
 		g_signal_emit_by_name(geany_object, "project-save", config);

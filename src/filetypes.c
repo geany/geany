@@ -1126,8 +1126,8 @@ static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
 	}
 
 	/* read build settings */
-	load_build_menu( config, BCS_FT, (gpointer)ft );
-	load_build_menu( configh, BCS_HOME_FT, (gpointer)ft );
+	build_load_menu( config, BCS_FT, (gpointer)ft );
+	build_load_menu( configh, BCS_HOME_FT, (gpointer)ft );
 
 }
 
@@ -1226,7 +1226,7 @@ void filetypes_save_commands(void)
 		g_free(ext);
 		config_home = g_key_file_new();
 		g_key_file_load_from_file(config_home, fname, G_KEY_FILE_KEEP_COMMENTS, NULL);
-		save_build_menu(config_home, (gpointer)(filetypes[i]), BCS_HOME_FT);
+		build_save_menu(config_home, (gpointer)(filetypes[i]), BCS_HOME_FT);
 		data = g_key_file_to_data(config_home, NULL, NULL);
 		utils_write_file(fname, data);
 		g_free(data);
@@ -1346,7 +1346,7 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 		doc = document_get_current();
 		if(doc!=NULL)ft = doc->file_type;
 	}
-	tmp = get_build_regex(build_info.grp, ft, NULL);
+	tmp = build_get_regex(build_info.grp, ft, NULL);
 	if (tmp==NULL) return FALSE;
 	regstr = *tmp;
 #ifndef HAVE_REGCOMP
