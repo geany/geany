@@ -90,7 +90,8 @@ typedef struct PluginInfo
 PluginInfo;
 
 
-/** Basic information for the plugin and identification. */
+/** Basic information for the plugin and identification.
+ * @see geany_plugin. */
 typedef struct GeanyPlugin
 {
 	PluginInfo	*info;	/**< Fields set in plugin_set_info(). */
