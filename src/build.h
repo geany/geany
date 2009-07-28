@@ -56,30 +56,30 @@ typedef enum
 /* include the fixed widgets in an array indexed by groups */
 #define GBG_FIXED GBG_COUNT
 
-/** Convert @c GeanyBuildType to @c GeanyBuildGroup .
- * 
- * This macro converts @c GeanyBiuildType enum values (the "known" commands)
+/** Convert @c GeanyBuildType to @c GeanyBuildGroup.
+ *
+ * This macro converts @c GeanyBuildType enum values (the "known" commands)
  * to the group they are part of.
- * 
+ *
  * @param gbo the @c GeanyBuildType value.
- * 
+ *
  * @return the @c GeanyBuildGroup group that @a gbo is in.
- * 
- * Note this is a macro so that it can be used in static initialisers
+ *
+ * Note this is a macro so that it can be used in static initialisers.
  **/
 #define GBO_TO_GBG(gbo) ((gbo)>GBO_EXEC?GBG_COUNT:((gbo)>=GBO_EXEC?GBG_EXEC: \
 						 ((gbo)>=GBO_MAKE_ALL?GBG_NON_FT:GBG_FT)))
 
 /** Convert @c GeanyBuildType to command index.
- * 
+ *
  * This macro converts @c GeanyBuildType enum values (the "known" commands)
  * to the index within the group.
- * 
+ *
  * @param gbo the @c GeanyBuildType value.
- * 
+ *
  * @return the index of the @a gbo command in its group.
- * 
- * Note this is a macro so that it can be used in static initialisers
+ *
+ * Note this is a macro so that it can be used in static initialisers.
  **/
 #define GBO_TO_CMD(gbo) ((gbo)>=GBO_COUNT?(gbo)-GBO_COUNT:((gbo)>=GBO_EXEC?(gbo)-GBO_EXEC: \
 						 ((gbo)>=GBO_MAKE_ALL?(gbo)-GBO_MAKE_ALL:(gbo))))
@@ -132,7 +132,7 @@ typedef enum  GeanyBuildCmdEntries
 /** The command for a menu item. */
 typedef struct GeanyBuildCommand
 {
- 	/** Pointers to g_string values values of the command entries.
+ 	/** Pointers to g_string values of the command entries.
 	 * Must be freed if the pointer is changed. */
 	gchar *entries[BC_CMDENTRIES_COUNT];
 	gboolean	 exists;					/**< If the entries have valid values. */
