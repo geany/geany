@@ -500,24 +500,30 @@ typedef struct
 static gboolean reshow_calltip(gpointer data)
 {
 	CalltipReshowInfo *cri = data;
+	GeanyDocument *doc;
 
 	g_return_val_if_fail(calltip.sci != NULL, FALSE);
 
 	SSM(calltip.sci, SCI_CALLTIPCANCEL, 0, 0);
-	/* we use the position where the calltip was previously started as SCI_GETCURRENTPOS
-	 * may be completely wrong in case the user cancelled the auto completion with the mouse */
-	SSM(calltip.sci, SCI_CALLTIPSHOW, calltip.pos, (sptr_t) calltip.text);
+	doc = document_get_current();
 
-	/* now autocompletion has been cancelled by SCI_CALLTIPSHOW, so do it manually */
-	if (cri->message == SCN_AUTOCSELECTION)
+	if (doc && doc->editor->sci == calltip.sci)
 	{
-		gint pos = SSM(calltip.sci, SCI_GETCURRENTPOS, 0, 0);
+		/* we use the position where the calltip was previously started as SCI_GETCURRENTPOS
+		 * may be completely wrong in case the user cancelled the auto completion with the mouse */
+		SSM(calltip.sci, SCI_CALLTIPSHOW, calltip.pos, (sptr_t) calltip.text);
 
-		sci_set_selection_start(calltip.sci, cri->pos);
-		sci_set_selection_end(calltip.sci, pos);
-		sci_replace_sel(calltip.sci, "");	/* clear root of word */
-		SSM(calltip.sci, SCI_INSERTTEXT, cri->pos, (sptr_t) cri->text);
-		sci_goto_pos(calltip.sci, cri->pos + strlen(cri->text), FALSE);
+		/* now autocompletion has been cancelled by SCI_CALLTIPSHOW, so do it manually */
+		if (cri->message == SCN_AUTOCSELECTION)
+		{
+			gint pos = SSM(calltip.sci, SCI_GETCURRENTPOS, 0, 0);
+
+			sci_set_selection_start(calltip.sci, cri->pos);
+			sci_set_selection_end(calltip.sci, pos);
+			sci_replace_sel(calltip.sci, "");	/* clear root of word */
+			SSM(calltip.sci, SCI_INSERTTEXT, cri->pos, (sptr_t) cri->text);
+			sci_goto_pos(calltip.sci, cri->pos + strlen(cri->text), FALSE);
+		}
 	}
 	g_free(cri->text);
 	g_free(cri);
