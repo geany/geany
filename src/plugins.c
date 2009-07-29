@@ -72,8 +72,6 @@ typedef struct Plugin
 	GeanyPlugin		public;				/* fields the plugin can read */
 	GeanyPluginPrivate	priv;			/* GeanyPlugin type private data, same as (*public.priv) */
 
-	gulong		*signal_ids;			/* signal IDs to disconnect when unloading */
-	gsize		signal_ids_len;
 	GeanyKeyGroup	*key_group;
 
 	void		(*init) (GeanyData *data);			/* Called when the plugin is enabled */
@@ -100,7 +98,8 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data);
 
 static PluginFuncs plugin_funcs = {
 	&plugin_add_toolbar_item,
-	&plugin_module_make_resident
+	&plugin_module_make_resident,
+	&plugin_signal_connect
 };
 
 static DocumentFuncs doc_funcs = {
@@ -455,16 +454,12 @@ static void add_callbacks(Plugin *plugin, PluginCallback *callbacks)
 	if (len == 0)
 		return;
 
-	plugin->signal_ids_len = len;
-	plugin->signal_ids = g_new(gulong, len);
-
 	for (i = 0; i < len; i++)
 	{
 		cb = &callbacks[i];
 
-		plugin->signal_ids[i] = (cb->after) ?
-			g_signal_connect_after(geany_object, cb->signal_name, cb->callback, cb->user_data) :
-			g_signal_connect(geany_object, cb->signal_name, cb->callback, cb->user_data);
+		plugin_signal_connect(&plugin->public, NULL, cb->signal_name, cb->after,
+			cb->callback, cb->user_data);
 	}
 }
 
@@ -686,14 +681,16 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 
 static void remove_callbacks(Plugin *plugin)
 {
-	guint i;
+	GArray *signal_ids = plugin->priv.signal_ids;
+	gulong *i;
 
-	if (plugin->signal_ids == NULL)
+	if (signal_ids == NULL)
 		return;
 
-	for (i = 0; i < plugin->signal_ids_len; i++)
-		g_signal_handler_disconnect(geany_object, plugin->signal_ids[i]);
-	g_free(plugin->signal_ids);
+	foreach_array(gulong, i, signal_ids)
+		g_signal_handler_disconnect(geany_object, *i);
+
+	g_array_free(signal_ids, TRUE);
 }
 
 

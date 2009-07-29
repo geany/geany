@@ -32,6 +32,7 @@ typedef struct GeanyPluginPrivate
 {
 	GeanyAutoSeparator	toolbar_separator;
 	gboolean			resident;
+	GArray				*signal_ids;			/* gulong signal IDs to disconnect when unloading */
 }
 GeanyPluginPrivate;
 

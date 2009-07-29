@@ -14,6 +14,8 @@
 	geany_functions->p_plugin->add_toolbar_item
 #define plugin_module_make_resident \
 	geany_functions->p_plugin->module_make_resident
+#define plugin_signal_connect \
+	geany_functions->p_plugin->signal_connect
 #define document_new_file \
 	geany_functions->p_document->new_file
 #define document_get_current \

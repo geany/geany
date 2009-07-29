@@ -30,6 +30,7 @@
 #include <gdk/gdkkeysyms.h>
 
 
+GeanyPlugin		*geany_plugin;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
@@ -87,12 +88,10 @@ static struct
 } popup_items;
 
 
-static void document_activate_cb(GObject *obj, GeanyDocument *doc, gpointer data);
 static void project_change_cb(GObject *obj, GKeyFile *config, gpointer data);
 
 PluginCallback plugin_callbacks[] =
 {
-	{ "document-activate", (GCallback) &document_activate_cb, TRUE, NULL },
 	{ "project-open", (GCallback) &project_change_cb, TRUE, NULL },
 	{ "project-save", (GCallback) &project_change_cb, TRUE, NULL },
 	{ NULL, NULL, FALSE, NULL }
@@ -1020,6 +1019,9 @@ void plugin_init(GeanyData *data)
 		0, 0, "focus_file_list", _("Focus File List"), NULL);
 	keybindings_set_item(plugin_key_group, KB_FOCUS_PATH_ENTRY, kb_activate,
 		0, 0, "focus_path_entry", _("Focus Path Entry"), NULL);
+
+	plugin_signal_connect(geany_plugin, NULL, "document-activate", TRUE,
+		(GCallback) &document_activate_cb, NULL);
 }
 
 

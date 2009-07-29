@@ -50,7 +50,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 149,
+	GEANY_API_VERSION = 150,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -138,7 +138,7 @@ GeanyPlugin;
 	};
 
 
-/** callback array entry */
+/** Callback array entry type used with the @ref plugin_callbacks symbol. */
 typedef struct PluginCallback
 {
 	/** The name of signal, must be an existing signal. For a list of available signals,
@@ -546,6 +546,9 @@ typedef struct PluginFuncs
 {
 	void	(*add_toolbar_item)(GeanyPlugin *plugin, GtkToolItem *item);
 	void	(*module_make_resident) (GeanyPlugin *plugin);
+	void	(*signal_connect) (GeanyPlugin *plugin,
+		GObject *object, gchar *signal_name, gboolean after,
+		GCallback callback, gpointer user_data);
 }
 PluginFuncs;
 

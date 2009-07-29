@@ -92,3 +92,33 @@ void plugin_module_make_resident(GeanyPlugin *plugin)
 }
 
 
+/** Connect a signal which will be disconnected on unloading the plugin, to prevent a possible segfault.
+ * @param plugin Must be @ref geany_plugin.
+ * @param object Object to connect to, or @c NULL when using @link signals Geany signals @endlink.
+ * @param signal_name The name of the signal. For a list of available
+ * signals, please see the @link signals Signal documentation @endlink.
+ * @param after Set to @c TRUE to call your handler after the main signal handlers have been called
+ * (if supported by @a signal_name).
+ * @param callback The function to call when the signal is emitted.
+ * @param user_data The user data passed to the signal handler.
+ * @see plugin_callbacks. */
+void plugin_signal_connect(GeanyPlugin *plugin,
+		GObject *object, gchar *signal_name, gboolean after,
+		GCallback callback, gpointer user_data)
+{
+	gulong id;
+
+	if (!object)
+		object = geany_object;
+
+	id = after ?
+		g_signal_connect_after(object, signal_name, callback, user_data) :
+		g_signal_connect(object, signal_name, callback, user_data);
+
+	if (!plugin->priv->signal_ids)
+		plugin->priv->signal_ids = g_array_new(FALSE, FALSE, sizeof(gulong));
+
+	g_array_append_val(plugin->priv->signal_ids, id);
+}
+
+

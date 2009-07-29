@@ -66,7 +66,8 @@ const GeanyFunctions *geany_functions;
 PluginFields *plugin_fields;
 
 /** An array for connecting GeanyObject events, which should be terminated with
- * @c {NULL, NULL, FALSE, NULL}. See @link signals Signal documentation @endlink. */
+ * @c {NULL, NULL, FALSE, NULL}. See @link signals Signal documentation @endlink.
+ * @see plugin_signal_connect(). */
 PluginCallback plugin_callbacks[];
 
 /** Most plugins should use the PLUGIN_KEY_GROUP() macro to define it. However,
