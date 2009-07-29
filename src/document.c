@@ -1471,9 +1471,9 @@ static void replace_header_filename(GeanyDocument *doc)
 
 	if (sci_find_text(doc->editor->sci, SCFIND_MATCHCASE, &ttf) != -1)
 	{
-		sci_target_start(doc->editor->sci, ttf.chrgText.cpMin);
-		sci_target_end(doc->editor->sci, ttf.chrgText.cpMax);
-		sci_target_replace(doc->editor->sci, filename, FALSE);
+		sci_set_target_start(doc->editor->sci, ttf.chrgText.cpMin);
+		sci_set_target_end(doc->editor->sci, ttf.chrgText.cpMax);
+		sci_replace_target(doc->editor->sci, filename, FALSE);
 	}
 
 	g_free(filebase);
@@ -1984,7 +1984,7 @@ gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gch
 		gint replace_len;
 		/* search next/prev will select matching text, which we use to set the replace target */
 		sci_target_from_selection(doc->editor->sci);
-		replace_len = sci_target_replace(doc->editor->sci, replace_text, flags & SCFIND_REGEXP);
+		replace_len = sci_replace_target(doc->editor->sci, replace_text, flags & SCFIND_REGEXP);
 		/* select the replacement - find text will skip past the selected text */
 		sci_set_selection_start(doc->editor->sci, search_pos);
 		sci_set_selection_end(doc->editor->sci, search_pos + replace_len);
@@ -2080,8 +2080,8 @@ document_replace_range(GeanyDocument *doc, const gchar *find_text, const gchar *
 		{
 			gint movepastEOL = 0;
 
-			sci_target_start(sci, search_pos);
-			sci_target_end(sci, search_pos + find_len);
+			sci_set_target_start(sci, search_pos);
+			sci_set_target_end(sci, search_pos + find_len);
 
 			if (find_len <= 0)
 			{
@@ -2090,7 +2090,7 @@ document_replace_range(GeanyDocument *doc, const gchar *find_text, const gchar *
 				if (chNext == '\r' || chNext == '\n')
 					movepastEOL = 1;
 			}
-			replace_len = sci_target_replace(sci, replace_text,
+			replace_len = sci_replace_target(sci, replace_text,
 				flags & SCFIND_REGEXP);
 			count++;
 			if (search_pos == end)

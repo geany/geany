@@ -868,19 +868,19 @@ void sci_target_from_selection(ScintillaObject *sci)
 }
 
 
-void sci_target_start(ScintillaObject *sci, gint start)
+void sci_set_target_start(ScintillaObject *sci, gint start)
 {
 	SSM(sci, SCI_SETTARGETSTART, start, 0);
 }
 
 
-void sci_target_end(ScintillaObject *sci, gint end)
+void sci_set_target_end(ScintillaObject *sci, gint end)
 {
 	SSM(sci, SCI_SETTARGETEND, end, 0);
 }
 
 
-gint sci_target_replace(ScintillaObject *sci, const gchar *text, gboolean regex)
+gint sci_replace_target(ScintillaObject *sci, const gchar *text, gboolean regex)
 {
 	return SSM(sci, (regex) ? SCI_REPLACETARGETRE : SCI_REPLACETARGET, (uptr_t) -1, (sptr_t) text);
 }

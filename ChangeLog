@@ -8,6 +8,11 @@
    runtime and also for connecting to any GObject signal.
    Add 'Plugin Utility Functions' on main page.
    Add foreach_array() macro.
+ * src/keybindings.c, src/sciwrappers.c, src/sciwrappers.h,
+   src/document.c, src/editor.c:
+   Rename 3 sci functions to sci_set_target_start(),
+   sci_set_target_end(), sci_replace_target() to match the SCI_
+   message name.
 
 
 2009-07-28  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

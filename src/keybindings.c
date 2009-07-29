@@ -1942,9 +1942,9 @@ static void join_lines(GeanyEditor *editor)
 	 * inserted (see also example below). I don't think we should care of that.
 	 */
 
-	sci_target_start(editor->sci,
+	sci_set_target_start(editor->sci,
 		sci_get_position_from_line(editor->sci, start));
-	sci_target_end(editor->sci,
+	sci_set_target_end(editor->sci,
 		sci_get_position_from_line(editor->sci, end));
 	sci_lines_join(editor->sci);
 

@@ -4254,9 +4254,9 @@ void editor_replace_tabs(GeanyEditor *editor)
 		pos_in_line = sci_get_col_from_position(editor->sci,search_pos);
 		current_tab_true_length = tab_len - (pos_in_line % tab_len);
 		tab_str = g_strnfill(current_tab_true_length, ' ');
-		sci_target_start(editor->sci, search_pos);
-		sci_target_end(editor->sci, search_pos + 1);
-		sci_target_replace(editor->sci, tab_str, FALSE);
+		sci_set_target_start(editor->sci, search_pos);
+		sci_set_target_end(editor->sci, search_pos + 1);
+		sci_replace_target(editor->sci, tab_str, FALSE);
 		/* next search starts after replacement */
 		ttf.chrg.cpMin = search_pos + current_tab_true_length - 1;
 		/* update end of range now text has changed */
@@ -4300,9 +4300,9 @@ void editor_replace_spaces(GeanyEditor *editor)
 		if (search_pos == -1)
 			break;
 
-		sci_target_start(editor->sci, search_pos);
-		sci_target_end(editor->sci, search_pos + tab_len);
-		sci_target_replace(editor->sci, "\t", FALSE);
+		sci_set_target_start(editor->sci, search_pos);
+		sci_set_target_end(editor->sci, search_pos + tab_len);
+		sci_replace_target(editor->sci, "\t", FALSE);
 		ttf.chrg.cpMin = search_pos;
 		/* update end of range now text has changed */
 		ttf.chrg.cpMax -= tab_len - 1;
@@ -4326,9 +4326,9 @@ void editor_strip_line_trailing_spaces(GeanyEditor *editor, gint line)
 	}
 	if (i < (line_end-1))
 	{
-		sci_target_start(editor->sci, i + 1);
-		sci_target_end(editor->sci, line_end);
-		sci_target_replace(editor->sci, "", FALSE);
+		sci_set_target_start(editor->sci, i + 1);
+		sci_set_target_end(editor->sci, line_end);
+		sci_replace_target(editor->sci, "", FALSE);
 	}
 }
 
