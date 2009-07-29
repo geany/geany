@@ -76,8 +76,6 @@ typedef struct _PropertyDialogElements
 	GtkWidget *description;
 	GtkWidget *file_name;
 	GtkWidget *base_path;
-	GtkWidget *make_in_base_path;
-	GtkWidget *run_cmd;
 	GtkWidget *patterns;
 	TableData  build_properties;
 } PropertyDialogElements;
@@ -362,7 +360,6 @@ void project_close(gboolean open_default)
 	g_free(app->project->description);
 	g_free(app->project->file_name);
 	g_free(app->project->base_path);
-	g_free(app->project->run_cmd);
 
 	g_free(app->project);
 	app->project = NULL;
@@ -965,8 +962,6 @@ static gboolean load_config(const gchar *filename)
 	p->description = utils_get_setting_string(config, "project", "description", "");
 	p->file_name = utils_get_utf8_from_locale(filename);
 	p->base_path = utils_get_setting_string(config, "project", "base_path", "");
-	p->make_in_base_path = utils_get_setting_boolean(config, "project", "make_in_base_path", TRUE);
-	p->run_cmd = utils_get_setting_string(config, "project", "run_cmd", "");
 	p->file_patterns = g_key_file_get_string_list(config, "project", "file_patterns", NULL, NULL);
 
 	build_load_menu( config, BCS_PROJ, (gpointer)p );
@@ -1016,9 +1011,6 @@ static gboolean write_config(gboolean emit_signal)
 
 	if (p->description)
 		g_key_file_set_string(config, "project", "description", p->description);
-	g_key_file_set_boolean(config, "project", "make_in_base_path", p->make_in_base_path);
-	if (p->run_cmd)
-		g_key_file_set_string(config, "project", "run_cmd", p->run_cmd);
 	if (p->file_patterns)
 		g_key_file_set_string_list(config, "project", "file_patterns",
 			(const gchar**) p->file_patterns, g_strv_length(p->file_patterns));

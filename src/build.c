@@ -743,7 +743,6 @@ static GPid build_run_cmd(GeanyDocument *doc, gint cmdindex)
 #ifdef HAVE_VTE
 	if (vte_info.load_vte && vc != NULL && vc->run_in_vte)
 	{
-		GeanyProject *project = app->project;
 		gchar *vte_cmd;
 
 		if (vc->skip_run_script)
@@ -755,9 +754,8 @@ static GPid build_run_cmd(GeanyDocument *doc, gint cmdindex)
 		else
 			vte_cmd = g_strconcat("\n/bin/sh ", RUN_SCRIPT_CMD, "\n", NULL);
 
-		/* change into current directory if it is not done by default or we have a project and
-		 * project run command(working_dir is already set accordingly) */
-		if (! vc->follow_path || (project != NULL && NZV(project->run_cmd)))
+		/* change into current directory if it is not done by default */
+		if (! vc->follow_path )
 		{
 			/* we need to convert the working_dir back to UTF-8 because the VTE expects it */
 			gchar *utf8_working_dir = utils_get_utf8_from_locale(working_dir);
