@@ -11,6 +11,8 @@
    tagmanager/parsers.h, tagmanager/makefile.win32,
    tagmanager/markdown.c, tagmanager/Makefile.am, wscript:
    Add Markdown filetype (patch by Jon Strait, thanks).
+ * src/pluginprivate.h, src/pluginutils.c, src/plugins.c:
+   Fix disconnecting plugin signal id when not using geany_object.
 
 
 2009-07-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

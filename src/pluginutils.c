@@ -107,6 +107,7 @@ void plugin_signal_connect(GeanyPlugin *plugin,
 		GCallback callback, gpointer user_data)
 {
 	gulong id;
+	SignalConnection sc;
 
 	if (!object)
 		object = geany_object;
@@ -116,9 +117,11 @@ void plugin_signal_connect(GeanyPlugin *plugin,
 		g_signal_connect(object, signal_name, callback, user_data);
 
 	if (!plugin->priv->signal_ids)
-		plugin->priv->signal_ids = g_array_new(FALSE, FALSE, sizeof(gulong));
+		plugin->priv->signal_ids = g_array_new(FALSE, FALSE, sizeof(SignalConnection));
 
-	g_array_append_val(plugin->priv->signal_ids, id);
+	sc.object = object;
+	sc.handler_id = id;
+	g_array_append_val(plugin->priv->signal_ids, sc);
 }
 
 

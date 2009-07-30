@@ -682,13 +682,13 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 static void remove_callbacks(Plugin *plugin)
 {
 	GArray *signal_ids = plugin->priv.signal_ids;
-	gulong *i;
+	SignalConnection *sc;
 
 	if (signal_ids == NULL)
 		return;
 
-	foreach_array(gulong, i, signal_ids)
-		g_signal_handler_disconnect(geany_object, *i);
+	foreach_array(SignalConnection, sc, signal_ids)
+		g_signal_handler_disconnect(sc->object, sc->handler_id);
 
 	g_array_free(signal_ids, TRUE);
 }

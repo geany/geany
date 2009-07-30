@@ -28,11 +28,18 @@
 
 #include "ui_utils.h"
 
+typedef struct SignalConnection
+{
+	GObject	*object;
+	gulong	handler_id;
+}
+SignalConnection;
+
 typedef struct GeanyPluginPrivate
 {
 	GeanyAutoSeparator	toolbar_separator;
 	gboolean			resident;
-	GArray				*signal_ids;			/* gulong signal IDs to disconnect when unloading */
+	GArray				*signal_ids;			/* SignalConnection's to disconnect when unloading */
 }
 GeanyPluginPrivate;
 
