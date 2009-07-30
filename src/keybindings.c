@@ -321,7 +321,7 @@ static void init_default_kb(void)
 	keybindings_set_item(group, GEANY_KEYS_FORMAT_SENDTOVTE, cb_func_format_action,
 		0, 0, "edit_sendtovte", _("Send Selection to Terminal"), LW(send_selection_to_vte1));
 	keybindings_set_item(group, GEANY_KEYS_FORMAT_REFLOWPARAGRAPH, cb_func_format_action,
-		GDK_j, GDK_CONTROL_MASK, "format_reflowparagraph", _("Reflow lines/paragraph"), NULL);
+		GDK_j, GDK_CONTROL_MASK, "format_reflowparagraph", _("Reflow lines/block"), NULL);
 
 	group = ADD_KB_GROUP(INSERT, _("Insert"));
 
