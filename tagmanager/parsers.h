@@ -50,8 +50,8 @@
     MatlabParser, \
     ValaParser, \
     ActionScriptParser, \
-    NsisParser
-
+    NsisParser, \
+    MarkdownParser
 /*
 langType of each parser
  0	CParser
@@ -90,6 +90,7 @@ langType of each parser
 33  ValaParser
 34  ActionScriptParser
 35  NsisParser
+36  MarkdownParser
 */
 #endif	/* _PARSERS_H */
 

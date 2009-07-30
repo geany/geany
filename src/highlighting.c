@@ -2725,6 +2725,64 @@ static void styleset_sql(ScintillaObject *sci)
 }
 
 
+static void styleset_markdown_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
+{
+	new_style_array(GEANY_FILETYPES_MARKDOWN, 17);
+
+	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[0]);
+	get_keyfile_hex(config, config_home, "strong", 0xff0000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[1]);
+	get_keyfile_hex(config, config_home, "emphasis", 0xff0000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[2]);
+	get_keyfile_hex(config, config_home, "header1", 0x0000bb, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[3]);
+	get_keyfile_hex(config, config_home, "header2", 0x0000bb, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[4]);
+	get_keyfile_hex(config, config_home, "header3", 0x0000bb, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[5]);
+	get_keyfile_hex(config, config_home, "header4", 0x0000bb, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[6]);
+	get_keyfile_hex(config, config_home, "header5", 0x0000bb, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[7]);
+	get_keyfile_hex(config, config_home, "header6", 0x0000bb, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[8]);
+	get_keyfile_hex(config, config_home, "ulist_item", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[9]);
+	get_keyfile_hex(config, config_home, "olist_item", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[10]);
+	get_keyfile_hex(config, config_home, "blockquote", 0xff0000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[11]);
+	get_keyfile_hex(config, config_home, "strikeout", 0xaa00ff, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[12]);
+	get_keyfile_hex(config, config_home, "hrule", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[13]);
+	get_keyfile_hex(config, config_home, "link", 0x0000ff, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[14]);
+	get_keyfile_hex(config, config_home, "code", 0x009f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[15]);
+	get_keyfile_hex(config, config_home, "codebk", 0x005f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[16]);
+
+	style_sets[GEANY_FILETYPES_MARKDOWN].keywords = NULL;
+
+	get_keyfile_wordchars(config, config_home, &style_sets[GEANY_FILETYPES_MARKDOWN].wordchars);
+}
+
+static void styleset_markdown(ScintillaObject *sci)
+{
+	const filetype_id ft_id = GEANY_FILETYPES_MARKDOWN;
+
+	apply_filetype_properties(sci, SCLEX_MARKDOWN, ft_id);
+
+	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_MARKDOWN, 0);
+	set_sci_style(sci, SCE_MARKDOWN_DEFAULT, GEANY_FILETYPES_MARKDOWN, 0);
+	set_sci_style(sci, SCE_MARKDOWN_LINE_BEGIN, GEANY_FILETYPES_MARKDOWN, 0);
+	set_sci_style(sci, SCE_MARKDOWN_PRECHAR, GEANY_FILETYPES_MARKDOWN, 0);
+	set_sci_style(sci, SCE_MARKDOWN_STRONG1, GEANY_FILETYPES_MARKDOWN, 1);
+	set_sci_style(sci, SCE_MARKDOWN_STRONG2, GEANY_FILETYPES_MARKDOWN, 1);
+	set_sci_style(sci, SCE_MARKDOWN_EM1, GEANY_FILETYPES_MARKDOWN, 2);
+	set_sci_style(sci, SCE_MARKDOWN_EM2, GEANY_FILETYPES_MARKDOWN, 2);
+	set_sci_style(sci, SCE_MARKDOWN_HEADER1, GEANY_FILETYPES_MARKDOWN, 3);
+	set_sci_style(sci, SCE_MARKDOWN_HEADER2, GEANY_FILETYPES_MARKDOWN, 4);
+	set_sci_style(sci, SCE_MARKDOWN_HEADER3, GEANY_FILETYPES_MARKDOWN, 5);
+	set_sci_style(sci, SCE_MARKDOWN_HEADER4, GEANY_FILETYPES_MARKDOWN, 6);
+	set_sci_style(sci, SCE_MARKDOWN_HEADER5, GEANY_FILETYPES_MARKDOWN, 7);
+	set_sci_style(sci, SCE_MARKDOWN_HEADER6, GEANY_FILETYPES_MARKDOWN, 8);
+	set_sci_style(sci, SCE_MARKDOWN_ULIST_ITEM, GEANY_FILETYPES_MARKDOWN, 9);
+	set_sci_style(sci, SCE_MARKDOWN_OLIST_ITEM, GEANY_FILETYPES_MARKDOWN, 10);
+	set_sci_style(sci, SCE_MARKDOWN_BLOCKQUOTE, GEANY_FILETYPES_MARKDOWN, 11);
+	set_sci_style(sci, SCE_MARKDOWN_STRIKEOUT, GEANY_FILETYPES_MARKDOWN, 12);
+	set_sci_style(sci, SCE_MARKDOWN_HRULE, GEANY_FILETYPES_MARKDOWN, 13);
+	set_sci_style(sci, SCE_MARKDOWN_LINK, GEANY_FILETYPES_MARKDOWN, 14);
+	set_sci_style(sci, SCE_MARKDOWN_CODE, GEANY_FILETYPES_MARKDOWN, 15);
+	set_sci_style(sci, SCE_MARKDOWN_CODE2, GEANY_FILETYPES_MARKDOWN, 15);
+	set_sci_style(sci, SCE_MARKDOWN_CODEBK, GEANY_FILETYPES_MARKDOWN, 16);
+}
+
 static void styleset_haskell_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_style_array(GEANY_FILETYPES_HASKELL, 17);
@@ -3599,6 +3657,7 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 		init_styleset_case(GEANY_FILETYPES_LUA,		styleset_lua_init);
 		init_styleset_case(GEANY_FILETYPES_MAKE,	styleset_makefile_init);
 		init_styleset_case(GEANY_FILETYPES_MATLAB,	styleset_matlab_init);
+		init_styleset_case(GEANY_FILETYPES_MARKDOWN,	styleset_markdown_init);
 		init_styleset_case(GEANY_FILETYPES_NSIS,	styleset_nsis_init);
 		init_styleset_case(GEANY_FILETYPES_PASCAL,	styleset_pascal_init);
 		init_styleset_case(GEANY_FILETYPES_PERL,	styleset_perl_init);
@@ -3660,6 +3719,7 @@ void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 		styleset_case(GEANY_FILETYPES_LATEX,	styleset_latex);
 		styleset_case(GEANY_FILETYPES_LUA,		styleset_lua);
 		styleset_case(GEANY_FILETYPES_MAKE,		styleset_makefile);
+		styleset_case(GEANY_FILETYPES_MARKDOWN,	styleset_markdown);
 		styleset_case(GEANY_FILETYPES_MATLAB,	styleset_matlab);
 		styleset_case(GEANY_FILETYPES_NSIS,		styleset_nsis);
 		styleset_case(GEANY_FILETYPES_PASCAL,	styleset_pascal);

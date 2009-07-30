@@ -341,6 +341,17 @@ static void init_builtin_filetypes(void)
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_COMPILED;
 
+#define MARKDOWN
+	ft = filetypes[GEANY_FILETYPES_MARKDOWN];
+	ft->lang = 36;
+	ft->name = g_strdup("Markdown");
+	ft->title = g_strdup_printf(_("%s source file"), "Markdown");
+	ft->extension = g_strdup("md");
+	ft->pattern = utils_strv_new("*.mdml", "*.mdwn", "*.markdown", "*.md", NULL);
+	ft->comment_open = NULL;
+	ft->comment_close = NULL;
+	ft->group = GEANY_FILETYPE_GROUP_MISC;
+
 #define SH
 	ft = filetypes[GEANY_FILETYPES_SH];
 	ft->lang = 16;
