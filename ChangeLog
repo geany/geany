@@ -13,6 +13,10 @@
    Add Markdown filetype (patch by Jon Strait, thanks).
  * src/pluginprivate.h, src/pluginutils.c, src/plugins.c:
    Fix disconnecting plugin signal id when not using geany_object.
+ * src/filetypes.c:
+   Add filetype_make_title() instead of using:
+   ft->title = g_strdup_printf(_("%s source file"), ft->name);
+   It also supports "%s file" strings.
 
 
 2009-07-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
