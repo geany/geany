@@ -1,3 +1,10 @@
+2009-07-30  Lex Trotman  <elextr(at)gmail(dot)com>
+
+ * src/build.h, src/build.c, src/keybindings.c, src/filetypes.c
+   src/keyfile.c, src/project.c
+   Changed names of symbols visible in build API to GEANY_xxx.
+
+
 2009-07-29  Lex Trotman  <elextr(at)gmail(dot)com>
 
  * src/project.h, src/project.c, src/build.c

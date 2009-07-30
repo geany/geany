@@ -407,7 +407,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_string(config, PACKAGE, "context_action_cmd", tool_prefs.context_action_cmd);
 
 	/* build menu */
-	build_save_menu( config, NULL, BCS_PREF );
+	build_save_menu( config, NULL, GEANY_BCS_PREF );
 	
 	/* printing */
 	g_key_file_set_string(config, "printing", "print_cmd", printing_prefs.external_print_cmd ? printing_prefs.external_print_cmd : "");
@@ -773,10 +773,10 @@ static void load_dialog_prefs(GKeyFile *config)
 	tool_prefs.context_action_cmd = utils_get_setting_string(config, PACKAGE, "context_action_cmd", "");
 
 	/* build menu */
-	build_set_group_count( GBG_FT, utils_get_setting_integer( config, "build-menu", "number_ft_menu_items", 0 ));
-	build_set_group_count( GBG_NON_FT, utils_get_setting_integer( config, "build-menu", "number_non_ft_menu_items", 0 ));
-	build_set_group_count( GBG_EXEC, utils_get_setting_integer( config, "build-menu", "number_exec_menu_items", 0 ));
-	build_load_menu( config, BCS_PREF, NULL );
+	build_set_group_count( GEANY_GBG_FT, utils_get_setting_integer( config, "build-menu", "number_ft_menu_items", 0 ));
+	build_set_group_count( GEANY_GBG_NON_FT, utils_get_setting_integer( config, "build-menu", "number_non_ft_menu_items", 0 ));
+	build_set_group_count( GEANY_GBG_EXEC, utils_get_setting_integer( config, "build-menu", "number_exec_menu_items", 0 ));
+	build_load_menu( config, GEANY_BCS_PREF, NULL );
 
 	/* printing */
 	tmp_string2 = g_find_program_in_path(GEANY_DEFAULT_TOOLS_PRINTCMD);

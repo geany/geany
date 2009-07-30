@@ -350,8 +350,8 @@ void project_close(gboolean open_default)
 	}
 
 	/* remove project non filetype build menu items */
-	build_remove_menu_item( BCS_PROJ, GBG_NON_FT, -1 );
-	build_remove_menu_item( BCS_PROJ, GBG_EXEC, -1 );
+	build_remove_menu_item( GEANY_BCS_PROJ, GEANY_GBG_NON_FT, -1 );
+	build_remove_menu_item( GEANY_BCS_PROJ, GEANY_GBG_EXEC, -1 );
 
 	/* remove project regexen */
 	setptr(regex_proj, NULL);
@@ -474,7 +474,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 					(GtkAttachOptions) (0), 0, 0);
 
 	if (doc!=NULL) ft=doc->file_type;
-	build_table = build_commands_table( doc, BCS_PROJ, &(e->build_properties), ft );
+	build_table = build_commands_table( doc, GEANY_BCS_PROJ, &(e->build_properties), ft );
 	label = gtk_label_new(_("Build"));
 	notebook = ui_lookup_widget(e->dialog, "project_notebook");
 	gtk_notebook_insert_page(GTK_NOTEBOOK(notebook), build_table, label, 2);
@@ -735,18 +735,18 @@ static gboolean update_config(const PropertyDialogElements *e)
 		if ( doc!=NULL )ft=doc->file_type;
 		if ( ft!=NULL )
 		{
-			menu_dst.dst[GBG_FT] = &(ft->projfilecmds);
+			menu_dst.dst[GEANY_GBG_FT] = &(ft->projfilecmds);
 			oldvalue = ft->projfilecmds;
 			menu_dst.fileregexstr = &(ft->projerror_regex_string);
 		}
 		else
 		{
-			menu_dst.dst[GBG_FT] = NULL;
+			menu_dst.dst[GEANY_GBG_FT] = NULL;
 			oldvalue = NULL;
 			menu_dst.fileregexstr = NULL;
 		}
-		menu_dst.dst[GBG_NON_FT] = &non_ft_proj;
-		menu_dst.dst[GBG_EXEC] = &exec_proj;
+		menu_dst.dst[GEANY_GBG_NON_FT] = &non_ft_proj;
+		menu_dst.dst[GEANY_GBG_EXEC] = &exec_proj;
 		menu_dst.nonfileregexstr = &regex_proj;
 		read_build_commands( &menu_dst, e->build_properties,  GTK_RESPONSE_ACCEPT );
 		if (ft!=NULL && ft->projfilecmds!=oldvalue && ft->project_list_entry<0)
@@ -964,7 +964,7 @@ static gboolean load_config(const gchar *filename)
 	p->base_path = utils_get_setting_string(config, "project", "base_path", "");
 	p->file_patterns = g_key_file_get_string_list(config, "project", "file_patterns", NULL, NULL);
 
-	build_load_menu( config, BCS_PROJ, (gpointer)p );
+	build_load_menu( config, GEANY_BCS_PROJ, (gpointer)p );
 	if (project_prefs.project_session)
 	{
 		/* save current (non-project) session (it could has been changed since program startup) */
@@ -1018,7 +1018,7 @@ static gboolean write_config(gboolean emit_signal)
 	/* store the session files into the project too */
 	if (project_prefs.project_session)
 		configuration_save_session_files(config);
-	build_save_menu( config, (gpointer)p, BCS_PROJ );
+	build_save_menu( config, (gpointer)p, GEANY_BCS_PROJ );
 	if (emit_signal)
 	{
 		g_signal_emit_by_name(geany_object, "project-save", config);

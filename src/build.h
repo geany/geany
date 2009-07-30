@@ -35,26 +35,26 @@
  **/
 typedef enum
 {
-	GBO_COMPILE,		/**< default compile file */
-	GBO_BUILD,			/**< default build file */
-	GBO_MAKE_ALL,		/**< default make */
-	GBO_MAKE_CUSTOM,	/**< default make user specified target */
-	GBO_MAKE_OBJECT,	/**< default make object, make %e.o */
-	GBO_EXEC,			/**< default execute ./%e */
-	GBO_COUNT			/**< count of how many */
+	GEANY_GBO_COMPILE,		/**< default compile file */
+	GEANY_GBO_BUILD,		/**< default build file */
+	GEANY_GBO_MAKE_ALL,		/**< default make */
+	GEANY_GBO_CUSTOM,		/**< default make user specified target */
+	GEANY_GBO_MAKE_OBJECT,	/**< default make object, make %e.o */
+	GEANY_GBO_EXEC,			/**< default execute ./%e */
+	GEANY_GBO_COUNT			/**< count of how many */
 } GeanyBuildType;
 
 /** Groups of Build menu items. */
 typedef enum
 {
-	GBG_FT,		/**< filetype items */
-	GBG_NON_FT,	/**< non filetype items.*/
-	GBG_EXEC,	/**< execute items */
-	GBG_COUNT	/**< count of groups. */
+	GEANY_GBG_FT,		/**< filetype items */
+	GEANY_GBG_NON_FT,	/**< non filetype items.*/
+	GEANY_GBG_EXEC,		/**< execute items */
+	GEANY_GBG_COUNT		/**< count of groups. */
 } GeanyBuildGroup;
 
 /* include the fixed widgets in an array indexed by groups */
-#define GBG_FIXED GBG_COUNT
+#define GBG_FIXED GEANY_GBG_COUNT
 
 /** Convert @c GeanyBuildType to @c GeanyBuildGroup.
  *
@@ -67,8 +67,8 @@ typedef enum
  *
  * Note this is a macro so that it can be used in static initialisers.
  **/
-#define GBO_TO_GBG(gbo) ((gbo)>GBO_EXEC?GBG_COUNT:((gbo)>=GBO_EXEC?GBG_EXEC: \
-						 ((gbo)>=GBO_MAKE_ALL?GBG_NON_FT:GBG_FT)))
+#define GBO_TO_GBG(gbo) ((gbo)>GEANY_GBO_EXEC?GEANY_GBG_COUNT:((gbo)>=GEANY_GBO_EXEC?GEANY_GBG_EXEC: \
+						 ((gbo)>=GEANY_GBO_MAKE_ALL?GEANY_GBG_NON_FT:GEANY_GBG_FT)))
 
 /** Convert @c GeanyBuildType to command index.
  *
@@ -81,8 +81,8 @@ typedef enum
  *
  * Note this is a macro so that it can be used in static initialisers.
  **/
-#define GBO_TO_CMD(gbo) ((gbo)>=GBO_COUNT?(gbo)-GBO_COUNT:((gbo)>=GBO_EXEC?(gbo)-GBO_EXEC: \
-						 ((gbo)>=GBO_MAKE_ALL?(gbo)-GBO_MAKE_ALL:(gbo))))
+#define GBO_TO_CMD(gbo) ((gbo)>=GEANY_GBO_COUNT?(gbo)-GEANY_GBO_COUNT:((gbo)>=GEANY_GBO_EXEC?(gbo)-GEANY_GBO_EXEC: \
+						 ((gbo)>=GEANY_GBO_MAKE_ALL?(gbo)-GEANY_GBO_MAKE_ALL:(gbo))))
 
 enum GeanyBuildFixedMenuItems
 {
@@ -99,12 +99,12 @@ enum GeanyBuildFixedMenuItems
 /** Build menu item sources in increasing priority */
 typedef enum
 {
-	BCS_DEF,	/**< Default values. */
-	BCS_FT,		/**< System filetype values. */
-	BCS_HOME_FT,/**< Filetypes in ~/.config/geany/filedefs */
-	BCS_PREF,	/**< Preferences file ~/.config/geany/geany.conf */
-	BCS_PROJ,	/**< Project file if open. */
-	BCS_COUNT	/**< Count of sources. */
+	GEANY_BCS_DEF,		/**< Default values. */
+	GEANY_BCS_FT,		/**< System filetype values. */
+	GEANY_BCS_HOME_FT,	/**< Filetypes in ~/.config/geany/filedefs */
+	GEANY_BCS_PREF,		/**< Preferences file ~/.config/geany/geany.conf */
+	GEANY_BCS_PROJ,		/**< Project file if open. */
+	GEANY_BCS_COUNT		/**< Count of sources. */
 } GeanyBuildSource;
 
 typedef struct GeanyBuildInfo
@@ -123,10 +123,10 @@ extern GeanyBuildInfo build_info;
 /** The entries of a command for a menu item */
 typedef enum  GeanyBuildCmdEntries
 {
-    BC_LABEL,				/**< The menu item label, _ marks mnemonic */
-    BC_COMMAND,				/**< The command to run. */
-    BC_WORKING_DIR,			/**< The directory to run in */
-    BC_CMDENTRIES_COUNT,	/**< Count of entries */
+    GEANY_BC_LABEL,				/**< The menu item label, _ marks mnemonic */
+    GEANY_BC_COMMAND,			/**< The command to run. */
+    GEANY_BC_WORKING_DIR,		/**< The directory to run in */
+    GEANY_BC_CMDENTRIES_COUNT,	/**< Count of entries */
 } GeanyBuildCmdEntries;
 
 /** The command for a menu item. */
@@ -134,7 +134,7 @@ typedef struct GeanyBuildCommand
 {
  	/** Pointers to g_string values of the command entries.
 	 * Must be freed if the pointer is changed. */
-	gchar *entries[BC_CMDENTRIES_COUNT];
+	gchar *entries[GEANY_BC_CMDENTRIES_COUNT];
 	gboolean	 exists;					/**< If the entries have valid values. */
 	gboolean	 changed;					/**< Save on exit if @c changed, remove if not @c exist. */
 	gboolean	 old;						/**< Converted from old format. */
@@ -146,13 +146,13 @@ extern gchar *regex_proj; /* project non-fileregex string */
 typedef struct BuildMenuItems
 {
 	GtkWidget		*menu;
-	GtkWidget		**menu_item[GBG_COUNT+1];  /* +1 for fixed items */
+	GtkWidget		**menu_item[GEANY_GBG_COUNT+1];  /* +1 for fixed items */
 } BuildMenuItems;
 
 /* a structure defining the destinations for a set of groups of commands & regex */
 typedef struct BuildDestination
 {
-	GeanyBuildCommand	**dst[GBG_COUNT];
+	GeanyBuildCommand	**dst[GEANY_GBG_COUNT];
 	gchar				**fileregexstr;
 	gchar				**nonfileregexstr;
 } BuildDestination;
