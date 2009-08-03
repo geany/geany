@@ -1,7 +1,7 @@
 # British English translation of geany.
 # Copyright (C) 2007 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
-# Jeff Bailes <thepizzaking@gmail.com>, 2007, 2008.
+# Jeff Bailes <thepizzaking@gmail.com>, 2007-2009.
 #
 #
 msgid ""
@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: geany 0.18\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-08-01 12:20+0200\n"
-"PO-Revision-Date: 2009-02-05 23:05+1100\n"
-"Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
+"PO-Revision-Date: 2009-08-03 21:19+1000\n"
+"Last-Translator: Jeff Bailes <thepizzaking@gmail.com>\n"
 "Language-Team: British English <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -410,9 +410,8 @@ msgid "Detect from file"
 msgstr "Detect from file"
 
 #: ../src/dialogs.c:258
-#, fuzzy
 msgid "_More Options"
-msgstr "Options"
+msgstr "_More Options"
 
 #. line 1 with checkbox and encoding combo
 #: ../src/dialogs.c:265
@@ -455,13 +454,12 @@ msgstr ""
 "filetype."
 
 #: ../src/dialogs.c:389
-#, fuzzy
 msgid "Overwrite?"
-msgstr "_Override"
+msgstr "Overwrite?"
 
 #: ../src/dialogs.c:390
 msgid "Filename already exists!"
-msgstr ""
+msgstr "Filename already exists!"
 
 #: ../src/dialogs.c:424
 msgid "Save File"
@@ -695,9 +693,8 @@ msgid ", read-only"
 msgstr ", read-only"
 
 #: ../src/document.c:1509
-#, fuzzy
 msgid "Error renaming file."
-msgstr "Error saving file."
+msgstr "Error renaming file."
 
 #: ../src/document.c:1584
 #, c-format
@@ -930,9 +927,9 @@ msgid "%s source file"
 msgstr "%s source file"
 
 #: ../src/filetypes.c:97
-#, fuzzy, c-format
+#, c-format
 msgid "%s file"
-msgstr "%s source file"
+msgstr "%s file"
 
 #: ../src/filetypes.c:113 ../src/filetypes.c:114 ../src/interface.c:3501
 #: ../src/interface.c:5069
@@ -1089,9 +1086,8 @@ msgid "_Decrease Indent"
 msgstr "_Decrease Indent"
 
 #: ../src/interface.c:526 ../src/interface.c:2007
-#, fuzzy
 msgid "_Send Selection to Terminal"
-msgstr "_Send Selection to"
+msgstr "_Send Selection to Terminal"
 
 #: ../src/interface.c:530 ../src/interface.c:2011
 msgid "_Send Selection to"
@@ -1134,9 +1130,8 @@ msgid "_Insert \"include <...>\""
 msgstr "_Insert \"include <...>\""
 
 #: ../src/interface.c:613
-#, fuzzy
 msgid "Preference_s"
-msgstr "Preferences"
+msgstr "Preference_s"
 
 #: ../src/interface.c:621
 msgid "_Search"
@@ -1331,9 +1326,8 @@ msgid "_Open"
 msgstr "_Open"
 
 #: ../src/interface.c:955
-#, fuzzy
 msgid "_Recent Projects"
-msgstr "Open Project"
+msgstr "_Recent Projects"
 
 #: ../src/interface.c:959
 msgid "_Close"
@@ -1420,19 +1414,16 @@ msgid "_Small Icons"
 msgstr "_Small Icons"
 
 #: ../src/interface.c:1758 ../src/interface.c:3326
-#, fuzzy
 msgid "_Very Small Icons"
-msgstr "_Small Icons"
+msgstr "_Very Small Icons"
 
 #: ../src/interface.c:1769
-#, fuzzy
 msgid "_Customize Toolbar"
-msgstr "_Hide toolbar"
+msgstr "_Customise Toolbar"
 
 #: ../src/interface.c:1777
-#, fuzzy
 msgid "_Hide Toolbar"
-msgstr "_Hide toolbar"
+msgstr "_Hide Toolbar"
 
 #: ../src/interface.c:2094
 msgid "Find _Usage"
@@ -1527,9 +1518,8 @@ msgid "Path to start in when opening project files"
 msgstr "Path to start in when opening project files"
 
 #: ../src/interface.c:2816
-#, fuzzy
 msgid "Extra plugin path:"
-msgstr "Enable plugin support"
+msgstr "Extra plugin path:"
 
 #: ../src/interface.c:2828
 msgid ""
@@ -1537,6 +1527,9 @@ msgid ""
 "configuration directory. The path entered here will be searched additionally "
 "for plugins. Leave blank to disable."
 msgstr ""
+"Geany looks by default in the global installation path and in the "
+"configuration directory. The path entered here will be searched additionally "
+"for plugins. Leave blank to disable."
 
 #: ../src/interface.c:2841
 msgid "<b>Paths</b>"
@@ -1583,9 +1576,8 @@ msgstr ""
 "in the status messages window."
 
 #: ../src/interface.c:2883
-#, fuzzy
 msgid "Auto-focus widgets (focus follows mouse)"
-msgstr "Auto focus widgets (focus follows mouse)"
+msgstr "Auto-focus widgets (focus follows mouse)"
 
 #: ../src/interface.c:2886
 msgid ""
@@ -1650,7 +1642,6 @@ msgid "Store project file inside the project base directory"
 msgstr "Store project file inside the project base directory"
 
 #: ../src/interface.c:2949
-#, fuzzy
 msgid ""
 "When enabled, a project file is stored by default inside the project base "
 "directory when creating new projects instead of one directory above the base "
@@ -1660,7 +1651,7 @@ msgstr ""
 "When enabled, a project file is stored by default inside the project base "
 "directory when creating new projects instead of one directory above the base "
 "directory. You can still change the path of the project file in the New "
-"Project dialogue"
+"Project dialogue."
 
 #: ../src/interface.c:2951
 msgid "<b>Projects</b>"
@@ -1801,17 +1792,16 @@ msgid "Interface"
 msgstr "Interface"
 
 #: ../src/interface.c:3242
-#, fuzzy
 msgid "Show T_oolbar"
-msgstr "Show Toolbar"
+msgstr "Show T_oolbar"
 
 #: ../src/interface.c:3246
 msgid "_Append Toolbar to the Menu"
-msgstr ""
+msgstr "_Append Toolbar to the Menu"
 
 #: ../src/interface.c:3249
 msgid "Pack the toolbar to the main menu to save vertical space"
-msgstr ""
+msgstr "Pack the toolbar to the main menu to save vertical space"
 
 #: ../src/interface.c:3251
 msgid "<b>Toolbar</b>"
@@ -1830,9 +1820,8 @@ msgid "<b>Appearance</b>"
 msgstr "<b>Appearance</b>"
 
 #: ../src/interface.c:3359 ../src/toolbar.c:881
-#, fuzzy
 msgid "Customize Toolbar"
-msgstr "Show _Toolbar"
+msgstr "Customise Toolbar"
 
 #: ../src/interface.c:3363
 msgid "Toolbar"
@@ -1895,13 +1884,12 @@ msgid "Fold/unfold all children of a fold point"
 msgstr "Fold/unfold all children of a fold point"
 
 #: ../src/interface.c:3413
-#, fuzzy
 msgid ""
 "Fold or unfold all children of a fold point. By pressing the Shift key while "
 "clicking on a fold symbol the contrary behavior is used."
 msgstr ""
 "Fold or unfold all children of a fold point. By pressing the Shift key while "
-"clicking on a fold symbol the contrary behaviour is used"
+"clicking on a fold symbol the contrary behaviour is used."
 
 #: ../src/interface.c:3415
 msgid "Use indicators to show compile errors"
@@ -2036,9 +2024,8 @@ msgstr ""
 "string using a single keypress"
 
 #: ../src/interface.c:3627
-#, fuzzy
 msgid "XML tag autocompletion"
-msgstr "XML tag auto completion"
+msgstr "XML tag autocompletion"
 
 #: ../src/interface.c:3630
 msgid "Automatic completion and closing of XML tags (includes HTML tags)"
@@ -2058,7 +2045,7 @@ msgstr ""
 
 #: ../src/interface.c:3637
 msgid "Autocomplete symbols"
-msgstr ""
+msgstr "Autocomplete symbols"
 
 #: ../src/interface.c:3640
 msgid ""
@@ -2070,12 +2057,11 @@ msgstr ""
 
 #: ../src/interface.c:3642
 msgid "Autocomplete all words in document"
-msgstr ""
+msgstr "Autocomplete all words in document"
 
 #: ../src/interface.c:3646
-#, fuzzy
 msgid "Drop rest of word on completion"
-msgstr "Suppress construct completion"
+msgstr "Drop rest of word on completion"
 
 #: ../src/interface.c:3656
 msgid "Max. symbol name suggestions:"
@@ -2086,28 +2072,24 @@ msgid "Completion list height:"
 msgstr "Completion list height:"
 
 #: ../src/interface.c:3670
-#, fuzzy
 msgid "Characters to type for autocompletion:"
-msgstr "Characters to type for completion:"
+msgstr "Characters to type for autocompletion:"
 
 #: ../src/interface.c:3683
-#, fuzzy
 msgid ""
 "The amount of characters which are necessary to show the symbol "
 "autocompletion list"
 msgstr ""
-"The amount of characters which are necessary to show the symbol auto "
-"completion list"
+"The amount of characters which are necessary to show the symbol "
+"autocompletion list"
 
 #: ../src/interface.c:3692
-#, fuzzy
 msgid "Display height in rows for the autocompletion list"
-msgstr "Display height in rows for the auto completion list"
+msgstr "Display height in rows for the autocompletion list"
 
 #: ../src/interface.c:3701
-#, fuzzy
 msgid "Maximum number of entries to display in the autocompletion list"
-msgstr "Maximum number of entries to display in the auto completion list"
+msgstr "Maximum number of entries to display in the autocompletion list"
 
 #: ../src/interface.c:3704
 msgid "<b>Completions</b>"
@@ -2142,9 +2124,8 @@ msgid "Square brackets [ ]"
 msgstr "Square brackets [ ]"
 
 #: ../src/interface.c:3750
-#, fuzzy
 msgid "Auto-close square-bracket when typing an opening one"
-msgstr "Auto-close squre-bracket when typing an opening one"
+msgstr "Auto-close square-bracket when typing an opening one"
 
 #: ../src/interface.c:3752
 msgid "Double quotes \" \""
@@ -2195,9 +2176,8 @@ msgid "Show line endings"
 msgstr "Show line endings"
 
 #: ../src/interface.c:3805
-#, fuzzy
 msgid "Shows the line ending character"
-msgstr "Show the line ending character"
+msgstr "Shows the line ending character"
 
 #: ../src/interface.c:3807
 msgid "Show line numbers"
@@ -2580,33 +2560,30 @@ msgid "Print page numbers"
 msgstr "Print page numbers"
 
 #: ../src/interface.c:4570 ../src/printing.c:387
-#, fuzzy
 msgid ""
 "Add page numbers at the bottom of each page. It takes 2 lines of the page."
 msgstr ""
-"Add page numbers at the bottom of each page. It takes 2 lines of the page"
+"Add page numbers at the bottom of each page. It takes 2 lines of the page."
 
 #: ../src/interface.c:4572 ../src/printing.c:390
 msgid "Print page header"
 msgstr "Print page header"
 
 #: ../src/interface.c:4575 ../src/printing.c:392
-#, fuzzy
 msgid ""
 "Add a little header to every page containing the page number, the filename "
 "and the current date (see below). It takes 3 lines of the page."
 msgstr ""
-"Adds a little header to every page containing the page number, the filename "
-"and the current date(see below). It takes 3 lines of the page."
+"Add a little header to every page containing the page number, the filename "
+"and the current date (see below). It takes 3 lines of the page."
 
 #: ../src/interface.c:4592 ../src/printing.c:408
 msgid "Use the basename of the printed file"
 msgstr "Use the basename of the printed file"
 
 #: ../src/interface.c:4595
-#, fuzzy
 msgid "Print only the basename (without the path) of the printed file"
-msgstr "Print only the basename(without the path) of the printed file"
+msgstr "Print only the basename (without the path) of the printed file"
 
 #: ../src/interface.c:4601 ../src/printing.c:416
 msgid "Date format:"
@@ -2703,9 +2680,8 @@ msgid "Delete current line(s)"
 msgstr "Delete current line(s)"
 
 #: ../src/keybindings.c:242
-#, fuzzy
 msgid "Delete to line end"
-msgstr "Delete current line(s)"
+msgstr "Delete to line end"
 
 #: ../src/keybindings.c:244
 msgid "Transpose current line"
@@ -2848,13 +2824,12 @@ msgid "Send to Custom Command 3"
 msgstr "Send to Custom Command 3"
 
 #: ../src/keybindings.c:322
-#, fuzzy
 msgid "Send Selection to Terminal"
-msgstr "_Send Selection to"
+msgstr "Send Selection to Terminal"
 
 #: ../src/keybindings.c:324
 msgid "Reflow lines/block"
-msgstr ""
+msgstr "Reflow lines/block"
 
 #: ../src/keybindings.c:326
 msgid "Insert"
@@ -2921,9 +2896,8 @@ msgid "Find Document Usage"
 msgstr "Find Document Usage"
 
 #: ../src/keybindings.c:367
-#, fuzzy
 msgid "Mark All"
-msgstr "_Make All"
+msgstr "Mark All"
 
 #: ../src/keybindings.c:369
 msgid "Go to"
@@ -2970,9 +2944,8 @@ msgid "Go to End of Line"
 msgstr "Go to End of Line"
 
 #: ../src/keybindings.c:398
-#, fuzzy
 msgid "Go to End of Display Line"
-msgstr "Go to End of Line"
+msgstr "Go to End of Display Line"
 
 #: ../src/keybindings.c:400
 msgid "Go to Previous Word Part"
@@ -3467,11 +3440,11 @@ msgstr ""
 
 #: ../src/printing.c:188
 msgid "The editor font is not a monospaced font!"
-msgstr ""
+msgstr "The editor font is not a monospaced font!"
 
 #: ../src/printing.c:189
 msgid "Text will be wrongly spaced."
-msgstr ""
+msgstr "Text will be wrongly spaced."
 
 #: ../src/printing.c:305
 #, c-format
@@ -3507,9 +3480,8 @@ msgid "Printing of %s failed (%s)."
 msgstr "Printing of %s failed (%s)."
 
 #: ../src/printing.c:867
-#, fuzzy
 msgid "Please set a print command in the preferences dialog first."
-msgstr "Please set a print command in the preferences dialogue first"
+msgstr "Please set a print command in the preferences dialogue first."
 
 #: ../src/printing.c:875
 #, c-format
@@ -3811,9 +3783,8 @@ msgid "_Invert search results"
 msgstr "_Invert search results"
 
 #: ../src/search.c:797
-#, fuzzy
 msgid "Invert the sense of matching, to select non-matching lines"
-msgstr "Invert the sense of matching, to select non-matching lines."
+msgstr "Invert the sense of matching, to select non-matching lines"
 
 #: ../src/search.c:814
 msgid "E_xtra options:"
@@ -4045,14 +4016,12 @@ msgid "Namespaces"
 msgstr "Namespaces"
 
 #: ../src/symbols.c:725
-#, fuzzy
 msgid "Procedures"
-msgstr "Properties"
+msgstr "Procedures"
 
 #: ../src/symbols.c:736
-#, fuzzy
 msgid "Imports"
-msgstr "Export"
+msgstr "Imports"
 
 #: ../src/symbols.c:766 ../src/symbols.c:855
 msgid "Members"
@@ -4249,14 +4218,12 @@ msgid "Quit Geany"
 msgstr "Quit Geany"
 
 #: ../src/toolbar.c:79
-#, fuzzy
 msgid "Print document"
-msgstr "XML document"
+msgstr "Print document"
 
 #: ../src/toolbar.c:80
-#, fuzzy
 msgid "Replace text in the current document"
-msgstr "Mark all matches in the current document"
+msgstr "Replace text in the current document"
 
 #. Create our custom actions
 #: ../src/toolbar.c:334
@@ -4273,26 +4240,27 @@ msgstr "Goto"
 
 #: ../src/toolbar.c:533
 msgid "Separator"
-msgstr ""
+msgstr "Separator"
 
 #: ../src/toolbar.c:534
 msgid "--- Separator ---"
-msgstr ""
+msgstr "--- Separator ---"
 
 #: ../src/toolbar.c:897
 msgid ""
 "Select items to be displayed on the toolbar. Items can be reordered by drag "
 "and drop."
 msgstr ""
+"Select items to be displayed on the toolbar. Items can be reordered by drag "
+"and drop."
 
 #: ../src/toolbar.c:913
 msgid "Available Items"
-msgstr ""
+msgstr "Available Items"
 
 #: ../src/toolbar.c:934
-#, fuzzy
 msgid "Displayed Items"
-msgstr "Display"
+msgstr "Displayed Items"
 
 #: ../src/tools.c:153
 #, c-format
@@ -4378,9 +4346,8 @@ msgid "H_ide Sidebar"
 msgstr "H_ide Sidebar"
 
 #: ../src/treeviews.c:591
-#, fuzzy
 msgid "Show _Paths"
-msgstr "Show _Full Path Name"
+msgstr "Show _Paths"
 
 #. Status bar statistics: col = column, sel = selection.
 #: ../src/ui_utils.c:188
@@ -4825,32 +4792,28 @@ msgstr "_Insert Special HTML Characters"
 
 #. Add menuitem for html replacement functions
 #: ../plugins/htmlchars.c:690
-#, fuzzy
 msgid "HTML Replacement"
-msgstr "<b>Tab placement</b>"
+msgstr "HTML Replacement"
 
 #: ../plugins/htmlchars.c:697
 msgid "_HTMLToggle"
-msgstr ""
+msgstr "_HTMLToggle"
 
 #: ../plugins/htmlchars.c:706
-#, fuzzy
 msgid "Bulk replacement of special chars"
-msgstr "Placement of new file tabs:"
+msgstr "Bulk replacement of special chars"
 
 #: ../plugins/htmlchars.c:721
 msgid "Insert Special HTML Characters"
 msgstr "Insert Special HTML Characters"
 
 #: ../plugins/htmlchars.c:724
-#, fuzzy
 msgid "Replace special characters"
-msgstr "Special Characters"
+msgstr "Replace special characters"
 
 #: ../plugins/htmlchars.c:727
-#, fuzzy
 msgid "Toggle plugin status"
-msgstr "Toggle line commentation"
+msgstr "Toggle plugin status"
 
 #: ../plugins/export.c:37
 msgid "Export"
@@ -4869,11 +4832,10 @@ msgid "_Use current zoom level"
 msgstr "_Use current zoom level"
 
 #: ../plugins/export.c:185
-#, fuzzy
 msgid ""
 "Renders the font size of the document together with the current zoom level"
 msgstr ""
-"Renders the font size of the document together with the current zoom level."
+"Renders the font size of the document together with the current zoom level"
 
 #: ../plugins/export.c:267
 #, c-format
@@ -5005,9 +4967,8 @@ msgstr ""
 "obj. *.so, *.dll, *.a, *.lib"
 
 #: ../plugins/filebrowser.c:1128
-#, fuzzy
 msgid "Use the project's base directory"
-msgstr "Set the project's base directory"
+msgstr "Use the project's base directory"
 
 #: ../plugins/filebrowser.c:1132
 msgid ""
@@ -5117,9 +5078,8 @@ msgid "Splits the editor view into two windows."
 msgstr "Splits the editor view into two windows."
 
 #: ../plugins/splitwindow.c:277
-#, fuzzy
 msgid "Show the current document"
-msgstr "Mark all matches in the current document"
+msgstr "Show the current document"
 
 #: ../plugins/splitwindow.c:290 ../plugins/splitwindow.c:417
 msgid "_Unsplit"
@@ -5138,19 +5098,16 @@ msgid "_Vertically"
 msgstr "_Vertically"
 
 #: ../plugins/splitwindow.c:427
-#, fuzzy
 msgid "Split Horizontally"
-msgstr "_Horizontally"
+msgstr "Split Horizontally"
 
 #: ../plugins/splitwindow.c:429
-#, fuzzy
 msgid "Split Vertically"
-msgstr "_Vertically"
+msgstr "Split Vertically"
 
 #: ../plugins/splitwindow.c:431
-#, fuzzy
 msgid "Unsplit"
-msgstr "_Unsplit"
+msgstr "Unsplit"
 
 #~ msgid "Diff file"
 #~ msgstr "Diff file"
