@@ -1487,36 +1487,56 @@ static void cb_func_switch_action(guint key_id)
 }
 
 
-static void switch_document(gint direction)
+static void switch_notebook_page(gint direction)
 {
-	gint page_count = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
-	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
+	gint page_count, cur_page;
+	gboolean parent_is_notebook = FALSE;
+	GtkNotebook *notebook;
+	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
+
+	/* check whether the current widget is a GtkNotebook or a child of a GtkNotebook */
+	do
+	{
+		parent_is_notebook = GTK_IS_NOTEBOOK(focusw);
+	}
+	while (! parent_is_notebook && (focusw = gtk_widget_get_parent(focusw)) != NULL);
+
+	/* if we found a GtkNotebook widget, use it. Otherwise fallback to the documents notebook */
+	if (parent_is_notebook)
+		notebook = GTK_NOTEBOOK(focusw);
+	else
+		notebook = GTK_NOTEBOOK(main_widgets.notebook);
+
+	/* now switch pages */
+	page_count = gtk_notebook_get_n_pages(notebook);
+	cur_page = gtk_notebook_get_current_page(notebook);
 
 	if (direction == GTK_DIR_LEFT)
 	{
 		if (cur_page > 0)
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), cur_page - 1);
+			gtk_notebook_set_current_page(notebook, cur_page - 1);
 		else
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), page_count - 1);
+			gtk_notebook_set_current_page(notebook, page_count - 1);
 	}
 	else if (direction == GTK_DIR_RIGHT)
 	{
 		if (cur_page < page_count - 1)
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), cur_page + 1);
+			gtk_notebook_set_current_page(notebook, cur_page + 1);
 		else
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), 0);
+			gtk_notebook_set_current_page(notebook, 0);
 	}
 }
 
 
 static void cb_func_switch_tableft(G_GNUC_UNUSED guint key_id)
 {
-	switch_document(GTK_DIR_LEFT);
+	switch_notebook_page(GTK_DIR_LEFT);
 }
+
 
 static void cb_func_switch_tabright(G_GNUC_UNUSED guint key_id)
 {
-	switch_document(GTK_DIR_RIGHT);
+	switch_notebook_page(GTK_DIR_RIGHT);
 }
 
 
