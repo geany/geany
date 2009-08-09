@@ -1,3 +1,9 @@
+2009-08-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * data/filetypes.ada:
+   Add missing file.
+
+
 2009-08-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/build.c, src/win32.h, src/win32.c:
