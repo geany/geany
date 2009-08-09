@@ -5,6 +5,9 @@
  * src/keybindings.c:
    Switching notebook tabs now works for the currently used notebook
    widget instead of always using the documents notebook.
+ * src/document.c, src/document.h, src/documentprivate.h,
+   doc/plugins.dox:
+   Small corrections to some API docs.
 
 
 2009-08-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

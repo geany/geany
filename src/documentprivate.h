@@ -59,11 +59,11 @@ typedef struct GeanyDocumentPrivate
 {
 	/* GtkLabel shown in the notebook header. */
 	GtkWidget		*tab_label;
-	/* GtkTreeView object for this %document within the Symbols treeview of the sidebar. */
+	/* GtkTreeView object for this document within the Symbols treeview of the sidebar. */
 	GtkWidget		*tag_tree;
-	/* GtkTreeStore object for this %document within the Symbols treeview of the sidebar. */
+	/* GtkTreeStore object for this document within the Symbols treeview of the sidebar. */
 	GtkTreeStore	*tag_store;
-	/* Iter for this %document within the Open Files treeview of the sidebar. */
+	/* Iter for this document within the Open Files treeview of the sidebar. */
 	GtkTreeIter		 iter;
 	/* Used by the Undo/Redo management code. */
 	GTrashStack		*undo_actions;

@@ -37,7 +37,7 @@
  *  @section Intro
  *  This is the Geany API documentation. It is far from being complete and should be
  *  considered as a work in progress.
- *  We will try to %document as many functions and structs as possible.
+ *  We will try to document as many functions and structs as possible.
  *
  *  To get started, see the @link howto Plugin Howto @endlink.
  *
@@ -89,7 +89,7 @@ PluginCallback plugin_callbacks[] =
  *  void user_function(GObject *obj, GeanyDocument *doc, gpointer user_data);
  *  @endsignalproto
  *  @signaldesc
- *  Sent when a new %document is created.
+ *  Sent when a new document is created.
  *
  *  You need to include "document.h" for the declaration of GeanyDocument.
  *
@@ -103,7 +103,7 @@ PluginCallback plugin_callbacks[] =
  *  void user_function(GObject *obj, GeanyDocument *doc, gpointer user_data);
  *  @endsignalproto
  *  @signaldesc
- *  Sent when a new %document is opened.
+ *  Sent when a new document is opened.
  *
  *  You need to include "document.h" for the declaration of GeanyDocument.
  *
@@ -117,7 +117,7 @@ PluginCallback plugin_callbacks[] =
  *  void user_function(GObject *obj, GeanyDocument *doc, gpointer user_data);
  *  @endsignalproto
  *  @signaldesc
- *  Sent when a new %document is saved.
+ *  Sent when a new document is saved.
  *
  *  You need to include "document.h" for the declaration of GeanyDocument.
  *
@@ -333,7 +333,7 @@ PluginCallback plugin_callbacks[] =
  *  @section intro Introduction
  *
  *  Since Geany 0.12 there is a plugin interface to extend Geany's functionality and
- *  add new features. This %document gives a brief overview about how to add new
+ *  add new features. This document gives a brief overview about how to add new
  *  plugins by writing a simple "Hello World" plugin in C.
  *
  *
