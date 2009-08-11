@@ -1,3 +1,9 @@
+2009-08-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/highlighting.c:
+   Call get_keyfile_wordchars() in highlighting_init_styles().
+
+
 2009-08-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * data/filetypes.ada:
