@@ -123,14 +123,14 @@ struct GeanyFiletype
 	/** Represents the langType of tagmanager (see the table
 	 * in tagmanager/parsers.h), -1 represents all, -2 none. */
 	langType 		  lang;
-	gchar	 		 *name;				/**< Used as name for tagmanager. E.g. "C". */
-	gchar	 		 *title;			/**< Shown in the file open dialog. E.g. "C source file". */
-	gchar	 		 *extension;		/**< Default file extension for new files. */
+	gchar			 *name;				/**< Used as name for tagmanager. E.g. "C". */
+	gchar			 *title;			/**< Shown in the file open dialog. E.g. "C source file". */
+	gchar			 *extension;		/**< Default file extension for new files. */
 	gchar			**pattern;			/**< Array of filename-matching wildcard strings. */
-	gchar	 		 *context_action_cmd;
-	gchar	 		 *comment_open;
-	gchar	 		 *comment_close;
-	gboolean  		  comment_use_indent;
+	gchar			 *context_action_cmd;
+	gchar			 *comment_open;
+	gchar			 *comment_close;
+	gboolean		  comment_use_indent;
 	struct build_programs	*programs;
 	struct build_actions	*actions;	/* TODO: make private */
 	GeanyFiletypeGroupID	group;
