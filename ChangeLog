@@ -2,7 +2,7 @@
 
  * po/pt_PT.po, po/LINGUAS:
    Added a first Portugese (Portugal) translation based on work done at
-   launchpad by e.g. nAndré Glória and Alexandre Jesus.
+   launchpad by e.g. André Glória and Alexandre Jesus.
  * src/main.c: Fix a minor typo on --help call.
 
 
