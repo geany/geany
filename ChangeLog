@@ -3,6 +3,7 @@
  * po/pt_PT.po, po/LINGUAS:
    Added a first Portugese (Portugal) translation based on work done at
    launchpad by e.g. nAndré Glória and Alexandre Jesus.
+ * src/main.c: Fix a minor typo on --help call.
 
 
 2009-08-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
