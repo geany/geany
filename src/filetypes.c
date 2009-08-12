@@ -670,6 +670,9 @@ static void add_custom_filetype(const gchar *filename)
 
 	*dot = 0x0;
 
+	if (g_hash_table_lookup(filetypes_hash, fn))
+		return;
+
 	geany_debug("Adding filetype %s.", fn);
 	ft = filetype_new();
 	ft->name = g_strdup(fn);

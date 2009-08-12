@@ -11,6 +11,9 @@
    Fix loading custom filetype settings (e.g. default extension).
    Add note about using GeanyFiletype pointer instead of filetype_id
    for function arguments.
+ * src/filetypes.c:
+   Prevent adding entries for both system and user custom filetype
+   files.
 
 
 2009-08-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
