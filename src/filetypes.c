@@ -112,7 +112,7 @@ static void init_builtin_filetypes(void)
 	ft->lang = -2;
 	ft->name = g_strdup(_("None"));
 	ft->title = g_strdup(_("None"));
-	ft->extension = g_strdup("*");
+	ft->extension = NULL;
 	ft->pattern = utils_strv_new("*", NULL);
 	ft->comment_open = NULL;
 	ft->comment_close = NULL;
@@ -656,6 +656,51 @@ static void filetype_add(GeanyFiletype *ft)
 }
 
 
+static void add_custom_filetype(const gchar *filename)
+{
+	gchar *fn = utils_strdupa(strstr(filename, ".") + 1);
+	gchar *dot = g_strrstr(fn, ".conf");
+	GeanyFiletype *ft;
+
+	g_return_if_fail(dot);
+
+	*dot = 0x0;
+
+	geany_debug("Adding filetype %s.", fn);
+	ft = filetype_new();
+	ft->name = g_strdup(fn);
+	filetype_make_title(ft, TITLE_FILE);
+	ft->pattern = g_new0(gchar*, 1);
+	filetype_add(ft);
+}
+
+
+static void init_custom_filetypes(const gchar *path)
+{
+	GDir *dir;
+
+	g_return_if_fail(path);
+
+	dir = g_dir_open(path, 0, NULL);
+	if (dir == NULL)
+		return;
+
+	while (1)
+	{
+		const gchar *filename = g_dir_read_name(dir);
+
+		if (filename == NULL)
+			break;
+
+		if (g_str_has_prefix(filename, "filetype.") && g_str_has_suffix(filename + 9, ".conf"))
+		{
+			add_custom_filetype(filename);
+		}
+	}
+	g_dir_close(dir);
+}
+
+
 /* Create the filetypes array and fill it with the known filetypes. */
 void filetypes_init_types()
 {
@@ -679,6 +724,8 @@ void filetypes_init_types()
 	{
 		filetype_add(filetypes[ft_id]);
 	}
+	init_custom_filetypes(app->datadir);
+	init_custom_filetypes(utils_build_path(app->configdir, GEANY_FILEDEFS_SUBDIR, NULL));
 }
 
 
@@ -745,16 +792,18 @@ static void create_set_filetype_menu(void)
 	{
 		GeanyFiletype *ft = node->data;
 
-		if (ft->id != GEANY_FILETYPES_NONE)
+		if (ft->group != GEANY_FILETYPE_GROUP_NONE)
 			create_radio_menu_item(group_menus[ft->group], ft);
+		else
+			create_radio_menu_item(filetype_menu, ft);
 	}
-	create_radio_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_NONE]);
 }
 
 
 void filetypes_init()
 {
 	filetypes_init_types();
+
 	create_set_filetype_menu();
 	setup_config_file_menus();
 }
@@ -1284,9 +1333,9 @@ void filetypes_save_commands(void)
 {
 	gchar *conf_prefix = g_strconcat(app->configdir,
 		G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.", NULL);
-	gint i;
+	guint i;
 
-	for (i = 1; i < GEANY_MAX_BUILT_IN_FILETYPES; i++)
+	for (i = 1; i < filetypes_array->len; i++)
 	{
 		struct build_programs *bp = filetypes[i]->programs;
 		GKeyFile *config_home;

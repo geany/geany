@@ -3497,6 +3497,9 @@ static void styleset_ada(ScintillaObject *sci)
 /* Called by filetypes_load_config(). */
 void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *configh)
 {
+	if (filetype_idx >= GEANY_MAX_BUILT_IN_FILETYPES)
+		return;	/* not supported yet */
+
 	/* Clear old information if necessary - e.g. reloading config */
 	styleset_free(filetype_idx);
 

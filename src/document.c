@@ -1461,7 +1461,11 @@ static void replace_header_filename(GeanyDocument *doc)
 	g_return_if_fail(doc != NULL);
 	g_return_if_fail(doc->file_type != NULL);
 
-	filebase = g_strconcat(GEANY_STRING_UNTITLED, ".", (doc->file_type)->extension, NULL);
+	if (doc->file_type->extension)
+		filebase = g_strconcat(GEANY_STRING_UNTITLED, ".", doc->file_type->extension, NULL);
+	else
+		filebase = g_strdup(GEANY_STRING_UNTITLED);
+
 	filename = g_path_get_basename(doc->file_name);
 
 	/* only search the first 3 lines */

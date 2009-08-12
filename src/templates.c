@@ -240,6 +240,8 @@ static const gchar templates_filetype_latex[] = "\
 ";
 
 static gchar *templates[GEANY_MAX_TEMPLATES];
+
+/* TODO: remove filetype templates, use custom file templates instead. */
 static gchar *ft_templates[GEANY_MAX_BUILT_IN_FILETYPES] = {NULL};
 
 
@@ -684,7 +686,7 @@ gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname)
 
 	if (fname == NULL)
 	{
-		if (ft_id == GEANY_FILETYPES_NONE)
+		if (!ft->extension)
 			shortname = g_strdup(GEANY_STRING_UNTITLED);
 		else
 			shortname = g_strconcat(GEANY_STRING_UNTITLED, ".", ft->extension, NULL);
