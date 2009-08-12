@@ -5,6 +5,12 @@
    Support adding custom filetype files e.g. filetype.Foo.conf. (Only
    tested with empty file so far).
    Allow GeanyFiletype::extension to be NULL.
+ * src/filetypes.c:
+   Change custom filetype filename format to filetypes.Foo.conf for
+   consistency with built-in filetype files.
+   Fix loading custom filetype settings (e.g. default extension).
+   Add note about using GeanyFiletype pointer instead of filetype_id
+   for function arguments.
 
 
 2009-08-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

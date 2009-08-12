@@ -26,6 +26,9 @@
  * Filetype detection, file extensions and filetype menu items.
  */
 
+/* Note: we use filetype_id for some function arguments, but GeanyFiletype is better; we should
+ * only use GeanyFiletype for API functions. */
+
 #include <string.h>
 #include <glib/gstdio.h>
 
@@ -61,6 +64,7 @@ typedef struct GeanyFiletypePrivate
 	regex_t		error_regex;
 	gboolean	error_regex_compiled;
 #endif
+	gboolean	custom;
 }
 GeanyFiletypePrivate;
 
@@ -671,6 +675,7 @@ static void add_custom_filetype(const gchar *filename)
 	ft->name = g_strdup(fn);
 	filetype_make_title(ft, TITLE_FILE);
 	ft->pattern = g_new0(gchar*, 1);
+	ft->priv->custom = TRUE;
 	filetype_add(ft);
 }
 
@@ -687,12 +692,14 @@ static void init_custom_filetypes(const gchar *path)
 
 	while (1)
 	{
+		const gchar prefix[] = "filetypes.";
 		const gchar *filename = g_dir_read_name(dir);
 
 		if (filename == NULL)
 			break;
 
-		if (g_str_has_prefix(filename, "filetype.") && g_str_has_suffix(filename + 9, ".conf"))
+		if (g_str_has_prefix(filename, prefix) &&
+			g_str_has_suffix(filename + strlen(prefix), ".conf"))
 		{
 			add_custom_filetype(filename);
 		}
@@ -1253,13 +1260,16 @@ static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
 
 /* simple wrapper function to print file errors in DEBUG mode */
 static void load_system_keyfile(GKeyFile *key_file, const gchar *file, GKeyFileFlags flags,
-								G_GNUC_UNUSED GError **just_for_compatibility)
+		GeanyFiletype *ft)
 {
 	GError *error = NULL;
 	gboolean done = g_key_file_load_from_file(key_file, file, flags, &error);
-	if (G_UNLIKELY(! done) && G_UNLIKELY(error != NULL))
+
+	if (error != NULL)
 	{
-		geany_debug("Failed to open %s (%s)", file, error->message);
+		if (!done && !ft->priv->custom)
+			geany_debug("Failed to open %s (%s)", file, error->message);
+
 		g_error_free(error);
 		error = NULL;
 	}
@@ -1273,10 +1283,12 @@ void filetypes_load_config(gint ft_id, gboolean reload)
 {
 	GKeyFile *config, *config_home;
 	GeanyFiletypePrivate *pft;
+	GeanyFiletype *ft;
 
 	g_return_if_fail(ft_id >= 0 && ft_id < (gint) filetypes_array->len);
 
-	pft = filetypes[ft_id]->priv;
+	ft = filetypes[ft_id];
+	pft = ft->priv;
 
 	/* when reloading, proceed only if the settings were already loaded */
 	if (reload && G_UNLIKELY(! pft->keyfile_loaded))
@@ -1297,7 +1309,7 @@ void filetypes_load_config(gint ft_id, gboolean reload)
 		gchar *f = g_strconcat(app->configdir,
 			G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.", ext, NULL);
 
-		load_system_keyfile(config, f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
+		load_system_keyfile(config, f0, G_KEY_FILE_KEEP_COMMENTS, ft);
 		g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 		g_free(ext);
@@ -1316,6 +1328,10 @@ void filetypes_load_config(gint ft_id, gboolean reload)
 gchar *filetypes_get_conf_extension(gint filetype_idx)
 {
 	gchar *result;
+	GeanyFiletype *ft = filetypes[filetype_idx];
+
+	if (ft->priv->custom)
+		return g_strconcat(ft->name, ".conf", NULL);
 
 	/* Handle any special extensions different from lowercase filetype->name */
 	switch (filetype_idx)
@@ -1323,7 +1339,7 @@ gchar *filetypes_get_conf_extension(gint filetype_idx)
 		case GEANY_FILETYPES_CPP: result = g_strdup("cpp"); break;
 		case GEANY_FILETYPES_CS: result = g_strdup("cs"); break;
 		case GEANY_FILETYPES_MAKE: result = g_strdup("makefile"); break;
-		default: result = g_ascii_strdown(filetypes[filetype_idx]->name, -1); break;
+		default: result = g_ascii_strdown(ft->name, -1); break;
 	}
 	return result;
 }
