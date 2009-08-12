@@ -1,3 +1,10 @@
+2009-08-12  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * pt_PT.po, LINGUAS:
+   Added a first Portugese (Portugal) translation based on work done at
+   launchpad by e.g. nAndré Glória and Alexandre Jesus.
+
+
 2009-08-11  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * fr.po: Update of French translation (Thanks Jean-Philippe Moal).
