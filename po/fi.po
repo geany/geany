@@ -1,16 +1,16 @@
 # Finnish translations for geany.
 # Copyright (C) 2007-2009 geany's development team.
 # This file is distributed under the same license as the geany package.
-# Harri Koskinen <harri@fastmonkey.fi>, 2007-2008.
+# Harri Koskinen <harri@fastmonkey.fi>, 2007-2009.
 # Jari Rahkonen <jari.rahkonen@pp1.inet.fi>, 2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 0.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-01 12:20+0200\n"
-"PO-Revision-Date: 2009-05-12 11:27+0300\n"
-"Last-Translator:  Jari Rahkonen <jari.rahkonen@pp1.inet.fi>\n"
+"POT-Creation-Date: 2009-08-13 18:12+0200\n"
+"PO-Revision-Date: 2009-08-13 15:48+0200\n"
+"Last-Translator: Harri Koskinen <reg2009@fastmonkey.fi>\n"
 "Language-Team: Finnish\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -147,94 +147,94 @@ msgid "Compilation finished successfully."
 msgstr "Käännös onnistui."
 
 #. compile the code
-#: ../src/build.c:1033
+#: ../src/build.c:1039
 msgid "_Compile"
 msgstr "_Käännä"
 
 #. build the code
-#: ../src/build.c:1041 ../src/build.c:2114 ../src/interface.c:976
+#: ../src/build.c:1047 ../src/build.c:2120 ../src/interface.c:976
 msgid "_Build"
 msgstr "K_oosta"
 
 #. build the code with make all
-#: ../src/build.c:1053 ../src/build.c:1159 ../src/build.c:2125
+#: ../src/build.c:1059 ../src/build.c:1165 ../src/build.c:2131
 msgid "_Make All"
 msgstr "Koosta k_aikki"
 
 #. build the code with make custom
-#: ../src/build.c:1062 ../src/build.c:1168 ../src/build.c:2133
+#: ../src/build.c:1068 ../src/build.c:1174 ../src/build.c:2139
 msgid "Make Custom _Target"
 msgstr "Koosta _mukautettu kohde"
 
 #. build the code with make object
-#: ../src/build.c:1071 ../src/build.c:2141
+#: ../src/build.c:1077 ../src/build.c:2147
 msgid "Make _Object"
 msgstr "Koosta o_lio"
 
 #. next error
-#: ../src/build.c:1084 ../src/build.c:1181
+#: ../src/build.c:1090 ../src/build.c:1187
 msgid "_Next Error"
 msgstr "Seu_raava virhe"
 
-#: ../src/build.c:1091 ../src/build.c:1188
+#: ../src/build.c:1097 ../src/build.c:1194
 msgid "_Previous Error"
 msgstr "_Edellinen virhe"
 
 #. arguments
-#: ../src/build.c:1116 ../src/build.c:2153
+#: ../src/build.c:1122 ../src/build.c:2159
 msgid "_Set Includes and Arguments"
 msgstr "Ase_ta sisällytettävät tiedostot ja valitsimet"
 
 #. DVI
-#: ../src/build.c:1137
+#: ../src/build.c:1143
 msgid "LaTeX -> _DVI"
 msgstr "LaTeX -> _DVI"
 
 #. PDF
-#: ../src/build.c:1146
+#: ../src/build.c:1152
 msgid "LaTeX -> _PDF"
 msgstr "LaTeX -> _PDF"
 
 #. DVI view
-#: ../src/build.c:1200
+#: ../src/build.c:1206
 msgid "_View DVI File"
 msgstr "Näytä _DVI-tiedosto"
 
 #. PDF view
-#: ../src/build.c:1210
+#: ../src/build.c:1216
 msgid "V_iew PDF File"
 msgstr "Näytä _PDF-tiedosto"
 
 #. arguments
-#: ../src/build.c:1225
+#: ../src/build.c:1231
 msgid "_Set Arguments"
 msgstr "_Aseta valitsimet"
 
-#: ../src/build.c:1300
+#: ../src/build.c:1306
 msgid "Set Arguments"
 msgstr "Aseta valitsimet"
 
-#: ../src/build.c:1307
+#: ../src/build.c:1313
 msgid "Set programs and options for compiling and viewing (La)TeX files."
 msgstr "Aseta (La)Tex-tiedostojen kääntö- ja katseluohjelmat sekä valitsimet."
 
-#: ../src/build.c:1318
+#: ../src/build.c:1324
 msgid "DVI creation:"
 msgstr "DVI:n luominen:"
 
-#: ../src/build.c:1338
+#: ../src/build.c:1344
 msgid "PDF creation:"
 msgstr "PDF:n luominen:"
 
-#: ../src/build.c:1358
+#: ../src/build.c:1364
 msgid "DVI preview:"
 msgstr "DVI:n esikatselu:"
 
-#: ../src/build.c:1378
+#: ../src/build.c:1384
 msgid "PDF preview:"
 msgstr "PDF:n esikatselu:"
 
-#: ../src/build.c:1395 ../src/build.c:1577
+#: ../src/build.c:1401 ../src/build.c:1583
 #, c-format
 msgid ""
 "%f will be replaced by the current filename, e.g. test_file.c\n"
@@ -243,67 +243,67 @@ msgstr ""
 "%f korvataan nykyisellä tiedostonimellä, esim. tiedosto.c\n"
 "%e korvataan tiedostonimellä ilman päätettä, esim. tiedosto"
 
-#: ../src/build.c:1480
+#: ../src/build.c:1486
 msgid "Set Includes and Arguments"
 msgstr "Sisällytettävät tiedostot ja valitsimet"
 
-#: ../src/build.c:1487
+#: ../src/build.c:1493
 msgid "Set the commands for building and running programs."
 msgstr "Aseta ohjelmien koostamis- ja suorituskomennot."
 
 #. in-dialog heading for the "Set Includes and Arguments" dialog
-#: ../src/build.c:1495
+#: ../src/build.c:1501
 #, c-format
 msgid "%s commands"
 msgstr "%s komennot"
 
-#: ../src/build.c:1510
+#: ../src/build.c:1516
 msgid "Compile:"
 msgstr "Käännä:"
 
-#: ../src/build.c:1532
+#: ../src/build.c:1538
 msgid "Build:"
 msgstr "Koosta:"
 
-#: ../src/build.c:1554 ../src/dialogs.c:1223
+#: ../src/build.c:1560 ../src/dialogs.c:1223
 msgid "Execute:"
 msgstr "Suorita:"
 
-#: ../src/build.c:1886 ../src/toolbar.c:344
+#: ../src/build.c:1892 ../src/toolbar.c:344
 msgid "Build the current file"
 msgstr "Käännä nykyinen tiedosto"
 
-#: ../src/build.c:1911
+#: ../src/build.c:1917
 msgid "Make Custom Target"
 msgstr "Koosta valinnainen kohde"
 
-#: ../src/build.c:1912
+#: ../src/build.c:1918
 msgid ""
 "Enter custom options here, all entered text is passed to the make command."
 msgstr "Tähän syöttämäsi valitsimet välitetään sellaisenaan make -komennolle."
 
-#: ../src/build.c:1961
+#: ../src/build.c:1967
 msgid "Build the current file with Make and the default target"
 msgstr "Koosta nykyinen tiedosto make-komennolla määrittämättä kohdetta"
 
-#: ../src/build.c:1964
+#: ../src/build.c:1970
 msgid "Build the current file with Make and the specified target"
 msgstr "Koosta nykyinen tiedosto make-komennon määritetyllä kohteella"
 
-#: ../src/build.c:1967
+#: ../src/build.c:1973
 msgid "Compile the current file with Make"
 msgstr "Käännä nykyinen tiedosto make-komennolla"
 
-#: ../src/build.c:2029
+#: ../src/build.c:2035
 msgid "Failed to execute the view program"
 msgstr "Katseluohjelman suoritus epäonnistui"
 
-#: ../src/build.c:2067
+#: ../src/build.c:2073
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Prosessin (%s) pysäytys epäonnistui."
 
-#: ../src/build.c:2086 ../src/build.c:2100
+#: ../src/build.c:2092 ../src/build.c:2106
 msgid "No more build errors."
 msgstr "Kääntövirheitä ei ole enempää."
 
@@ -455,13 +455,12 @@ msgstr ""
 "Jos valitset useita tiedostoja, tyyppimääritys koskee niitä kaikkia."
 
 #: ../src/dialogs.c:389
-#, fuzzy
 msgid "Overwrite?"
-msgstr "K_orvaa"
+msgstr "Korvaa?"
 
 #: ../src/dialogs.c:390
 msgid "Filename already exists!"
-msgstr ""
+msgstr "Tiedoston nimi on jo olemassa!"
 
 #: ../src/dialogs.c:424
 msgid "Save File"
@@ -926,9 +925,9 @@ msgid "%s source file"
 msgstr "%s-lähdekoodi"
 
 #: ../src/filetypes.c:97
-#, fuzzy, c-format
+#, c-format
 msgid "%s file"
-msgstr "%s-lähdekoodi"
+msgstr "%s tiedosto"
 
 #: ../src/filetypes.c:113 ../src/filetypes.c:114 ../src/interface.c:3501
 #: ../src/interface.c:5069
@@ -1018,7 +1017,7 @@ msgstr "näkymätön"
 
 #: ../src/interface.c:300
 msgid "dummy tooltip, don't translate this."
-msgstr ""
+msgstr "dummy"
 
 #: ../src/interface.c:311 ../src/interface.c:1940
 msgid "Open Selected F_ile"
@@ -1417,12 +1416,10 @@ msgid "_Very Small Icons"
 msgstr "_Erittäin pienet kuvakkeet"
 
 #: ../src/interface.c:1769
-#, fuzzy
 msgid "_Customize Toolbar"
-msgstr "_Piilota työkalupalkki"
+msgstr "_Muokkaa työkalupalkkia"
 
 #: ../src/interface.c:1777
-#, fuzzy
 msgid "_Hide Toolbar"
 msgstr "_Piilota työkalupalkki"
 
@@ -1577,9 +1574,8 @@ msgstr ""
 "tilaviestiruudussa."
 
 #: ../src/interface.c:2883
-#, fuzzy
 msgid "Auto-focus widgets (focus follows mouse)"
-msgstr "Kohdista automaattisesti (kohdistus seuraa hiirtä)"
+msgstr "Kohdista widgetit automaattisesti (kohdistus seuraa hiirtä)"
 
 #: ../src/interface.c:2886
 msgid ""
@@ -1822,9 +1818,8 @@ msgid "<b>Appearance</b>"
 msgstr "<b>Ulkoasu</b>"
 
 #: ../src/interface.c:3359 ../src/toolbar.c:881
-#, fuzzy
 msgid "Customize Toolbar"
-msgstr "Näytä työ_kalupalkki"
+msgstr "Muokkaa työkalupalkkia"
 
 #: ../src/interface.c:3363
 msgid "Toolbar"
@@ -2025,9 +2020,8 @@ msgstr ""
 "näppäimenpainalluksella"
 
 #: ../src/interface.c:3627
-#, fuzzy
 msgid "XML tag autocompletion"
-msgstr "XML-tunnisteiden täydennys"
+msgstr "XML-tunnisteiden automaattinen täydennys"
 
 #: ../src/interface.c:3630
 msgid "Automatic completion and closing of XML tags (includes HTML tags)"
@@ -2047,7 +2041,7 @@ msgstr ""
 
 #: ../src/interface.c:3637
 msgid "Autocomplete symbols"
-msgstr ""
+msgstr "Symbolien automaattitäydennys"
 
 #: ../src/interface.c:3640
 msgid ""
@@ -2059,11 +2053,11 @@ msgstr ""
 
 #: ../src/interface.c:3642
 msgid "Autocomplete all words in document"
-msgstr ""
+msgstr "Täydennä automaattisesti kaikki sanat asiakirjassa"
 
 #: ../src/interface.c:3646
 msgid "Drop rest of word on completion"
-msgstr ""
+msgstr "Poista loppuosa sanasta täydennettäessä"
 
 #: ../src/interface.c:3656
 msgid "Max. symbol name suggestions:"
@@ -2074,24 +2068,20 @@ msgid "Completion list height:"
 msgstr "Ehdotusluettelon korkeus:"
 
 #: ../src/interface.c:3670
-#, fuzzy
 msgid "Characters to type for autocompletion:"
-msgstr "Täydennettävä merkkimäärä:"
+msgstr "Automaattisen täydennyksen vaatima merkkimäärä:"
 
 #: ../src/interface.c:3683
-#, fuzzy
 msgid ""
 "The amount of characters which are necessary to show the symbol "
 "autocompletion list"
 msgstr "Täydennysehdotuksia ei näytetä tätä lyhyemmille merkkijonoille"
 
 #: ../src/interface.c:3692
-#, fuzzy
 msgid "Display height in rows for the autocompletion list"
 msgstr "Täydennysehdotusluettelon korkeus riveinä"
 
 #: ../src/interface.c:3701
-#, fuzzy
 msgid "Maximum number of entries to display in the autocompletion list"
 msgstr "Täydennysehdotusluettelossa näytettävien kohteiden enimmäismäärä"
 
@@ -2685,9 +2675,8 @@ msgid "Delete current line(s)"
 msgstr "Poista rivi(t)"
 
 #: ../src/keybindings.c:242
-#, fuzzy
 msgid "Delete to line end"
-msgstr "Poista rivi(t)"
+msgstr "Poista rivin loppuun"
 
 #: ../src/keybindings.c:244
 msgid "Transpose current line"
@@ -2835,7 +2824,7 @@ msgstr "Lähetä valinta päätteeseen"
 
 #: ../src/keybindings.c:324
 msgid "Reflow lines/block"
-msgstr ""
+msgstr "Rivitä uudelleen valinta tai nykyinen kappale"
 
 #: ../src/keybindings.c:326
 msgid "Insert"
@@ -2902,9 +2891,8 @@ msgid "Find Document Usage"
 msgstr "Etsi asiakirjasta"
 
 #: ../src/keybindings.c:367
-#, fuzzy
 msgid "Mark All"
-msgstr "Koosta k_aikki"
+msgstr "Merkitse kaikki"
 
 #: ../src/keybindings.c:369
 msgid "Go to"
@@ -2951,9 +2939,8 @@ msgid "Go to End of Line"
 msgstr "Rivin loppuun"
 
 #: ../src/keybindings.c:398
-#, fuzzy
 msgid "Go to End of Display Line"
-msgstr "Rivin loppuun"
+msgstr "Näytöllä rivin loppuun"
 
 #: ../src/keybindings.c:400
 msgid "Go to Previous Word Part"
@@ -3139,7 +3126,7 @@ msgstr "Pikanäppäimet"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Voit muokata seuraavia pikanäppäimiä:"
 
-#: ../src/keybindings.c:1563
+#: ../src/keybindings.c:1583
 msgid "Switch to Document"
 msgstr "Siirry asiakirjaan"
 
@@ -3208,7 +3195,8 @@ msgid "Print Geany's installation prefix"
 msgstr "Tulosta Geanyn asennuspolku"
 
 #: ../src/main.c:141
-msgid "don't load the previous session's files"
+#, fuzzy
+msgid "Don't load the previous session's files"
 msgstr "Älä lataa edellisen istunnon tiedostoja"
 
 #: ../src/main.c:143
@@ -3445,11 +3433,11 @@ msgstr ""
 
 #: ../src/printing.c:188
 msgid "The editor font is not a monospaced font!"
-msgstr ""
+msgstr "Editorin kirjasin ei ole tasalevyinen!"
 
 #: ../src/printing.c:189
 msgid "Text will be wrongly spaced."
-msgstr ""
+msgstr "Tekstin sanavälit menevät väärin."
 
 #: ../src/printing.c:305
 #, c-format
@@ -4020,14 +4008,12 @@ msgid "Namespaces"
 msgstr "Nimiavaruudet"
 
 #: ../src/symbols.c:725
-#, fuzzy
 msgid "Procedures"
-msgstr "Ominaisuudet"
+msgstr "Proseduurit"
 
 #: ../src/symbols.c:736
-#, fuzzy
 msgid "Imports"
-msgstr "Vie"
+msgstr "Viennit"
 
 #: ../src/symbols.c:766 ../src/symbols.c:855
 msgid "Members"
@@ -4228,9 +4214,8 @@ msgid "Print document"
 msgstr "Tulosta tiedosto"
 
 #: ../src/toolbar.c:80
-#, fuzzy
 msgid "Replace text in the current document"
-msgstr "Merkitse kaikki asiakirjasta löydetyt esiintymät."
+msgstr "Korvaa tekstiä nykyisestä asiakirjasta"
 
 #. Create our custom actions
 #: ../src/toolbar.c:334
@@ -4247,26 +4232,27 @@ msgstr "Siirry"
 
 #: ../src/toolbar.c:533
 msgid "Separator"
-msgstr ""
+msgstr "Erotin"
 
 #: ../src/toolbar.c:534
 msgid "--- Separator ---"
-msgstr ""
+msgstr "--- Erotin ---"
 
 #: ../src/toolbar.c:897
 msgid ""
 "Select items to be displayed on the toolbar. Items can be reordered by drag "
 "and drop."
 msgstr ""
+"Valitse työkalupalkissa näytettävät kohteet. Niitä voi järjestellä "
+"raahaamalla ja pudottamalla."
 
 #: ../src/toolbar.c:913
 msgid "Available Items"
-msgstr ""
+msgstr "Saatavilla olevat kohteet"
 
 #: ../src/toolbar.c:934
-#, fuzzy
 msgid "Displayed Items"
-msgstr "Näyttö"
+msgstr "Näytetyt kohteet"
 
 #: ../src/tools.c:153
 #, c-format
@@ -4352,9 +4338,8 @@ msgid "H_ide Sidebar"
 msgstr "_Piilota sivupalkki"
 
 #: ../src/treeviews.c:591
-#, fuzzy
 msgid "Show _Paths"
-msgstr "Näytä tilapalkki"
+msgstr "Näytä _Polut"
 
 #. Status bar statistics: col = column, sel = selection.
 #: ../src/ui_utils.c:188
@@ -4970,9 +4955,8 @@ msgstr ""
 "obj, *.so, *.dll, *.a, *.lib)"
 
 #: ../plugins/filebrowser.c:1128
-#, fuzzy
 msgid "Use the project's base directory"
-msgstr "Siirry projektin pääkansioon"
+msgstr "Käytä projektin pääkansiota"
 
 #: ../plugins/filebrowser.c:1132
 msgid ""
@@ -5082,9 +5066,8 @@ msgid "Splits the editor view into two windows."
 msgstr "Jakaa editorin kahteen näkymään"
 
 #: ../plugins/splitwindow.c:277
-#, fuzzy
 msgid "Show the current document"
-msgstr "Merkitse kaikki asiakirjasta löydetyt esiintymät."
+msgstr "Näytä nykyinen asiakirja"
 
 #: ../plugins/splitwindow.c:290 ../plugins/splitwindow.c:417
 msgid "_Unsplit"
