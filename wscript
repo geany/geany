@@ -35,12 +35,21 @@ Missing features: --enable-binreloc, make targets: dist, pdf (in doc/)
 Known issues: Dependency handling is buggy, e.g. if src/document.h is
 			  changed, depending source files are not rebuilt (maybe Waf bug).
 
+The code of this file itself loosely follows PEP 8 with some exceptions 
+(line width 100 characters and some other minor things).
+
 Requires WAF 1.5.7 and Python 2.4 (or later).
 """
 
 
-import Build, Configure, Options, Utils
-import sys, os, shutil, tempfile
+import Build
+import Configure
+import Options
+import Utils
+import sys
+import os
+import shutil
+import tempfile
 from distutils import version
 
 
@@ -264,7 +273,8 @@ def configure(conf):
 
 	conf.env.append_value('CCFLAGS', '-DHAVE_CONFIG_H')
 	# Scintilla flags
-	conf.env.append_value('CXXFLAGS', '-DNDEBUG -DGTK -DGTK2 -DSCI_LEXER -DG_THREADS_IMPL_NONE'.split())
+	conf.env.append_value('CXXFLAGS', 
+		'-DNDEBUG -DGTK -DGTK2 -DSCI_LEXER -DG_THREADS_IMPL_NONE'.split())
 
 
 def set_options(opt):
@@ -277,9 +287,11 @@ def set_options(opt):
 		opt.add_option('--disable-plugins', action='store_true', default=False,
 			help='compile without plugin support [default: No]', dest='no_plugins')
 		opt.add_option('--disable-socket', action='store_true', default=False,
-			help='compile without support to detect a running instance [[default: No]', dest='no_socket')
+			help='compile without support to detect a running instance [[default: No]', 
+			dest='no_socket')
 		opt.add_option('--disable-vte', action='store_true', default=target_is_win32(os.environ),
-			help='compile without support for an embedded virtual terminal [[default: No]', dest='no_vte')
+			help='compile without support for an embedded virtual terminal [[default: No]', 
+			dest='no_vte')
 		opt.add_option('--enable-gnu-regex', action='store_true', default=False,
 			help='compile with included GNU regex library [default: No]', dest='gnu_regex')
 		# Paths
@@ -472,9 +484,9 @@ def build(bld):
 	html_dir = '' if is_win32 else 'html/'
 	html_name = 'Manual.html' if is_win32 else 'index.html'
 	for f in 'AUTHORS ChangeLog COPYING README NEWS THANKS TODO'.split():
-		bld.install_as("%s/%s%s" % (base_dir, ucFirst(f, is_win32), ext), f)
+		bld.install_as("%s/%s%s" % (base_dir, uc_first(f, is_win32), ext), f)
 	bld.install_files('${DOCDIR}/%simages' % html_dir, 'doc/images/*.png')
-	bld.install_as('${DOCDIR}/%s' % ucFirst('manual.txt', is_win32), 'doc/geany.txt')
+	bld.install_as('${DOCDIR}/%s' % uc_first('manual.txt', is_win32), 'doc/geany.txt')
 	bld.install_as('${DOCDIR}/%s%s' % (html_dir, html_name), 'doc/geany.html')
 	bld.install_as('${DOCDIR}/ScintillaLicense.txt', 'scintilla/License.txt')
 	if is_win32:
@@ -498,7 +510,8 @@ def build(bld):
 def shutdown():
 	is_win32 = False if not Build.bld else target_is_win32(Build.bld.env)
 	# the following code was taken from midori's WAF script, thanks
-	if not is_win32 and not Options.options.destdir and (Options.commands['install'] or Options.commands['uninstall']):
+	if not is_win32 and not Options.options.destdir and (Options.commands['install'] or \
+			Options.commands['uninstall']):
 		dir = Build.bld.get_install_path('${DATADIR}/icons/hicolor')
 		icon_cache_updated = False
 		try:
@@ -579,7 +592,7 @@ def print_message(conf, msg, result, color = 'GREEN'):
 	conf.check_message_2(result, color)
 
 
-def ucFirst(s, is_win32):
+def uc_first(s, is_win32):
 	if is_win32:
 		return s.title()
 	return s
