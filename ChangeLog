@@ -1,3 +1,10 @@
+2009-08-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * wscript:
+   Add command '--hackingdoc' to create the HTML form of the 
+   HACKING file.
+
+
 2009-08-12  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * po/pt_PT.po, po/LINGUAS:

@@ -304,6 +304,8 @@ def set_options(opt):
 	# Actions
 	opt.add_option('--htmldoc', action='store_true', default=False,
 		help='generate HTML documentation', dest='htmldoc')
+	opt.add_option('--hackingdoc', action='store_true', default=False,
+		help='generate HTML documentation from HACKING file', dest='hackingdoc')
 	opt.add_option('--apidoc', action='store_true', default=False,
 		help='generate API reference documentation', dest='apidoc')
 	opt.add_option('--update-po', action='store_true', default=False,
@@ -535,15 +537,23 @@ def shutdown():
 				'doxygen could not be found. Please install the doxygen package.')
 			sys.exit(1)
 
-	if Options.options.htmldoc:
+	if Options.options.htmldoc or Options.options.hackingdoc:
 		# first try rst2html.py as it is the upstream default, fall back to rst2html
 		cmd = Configure.find_program_impl(Build.bld.env, 'rst2html.py')
 		if not cmd:
 			cmd = Configure.find_program_impl(Build.bld.env, 'rst2html')
 		if cmd:
+			if Options.options.hackingdoc:
+				file_in = '../HACKING'
+				file_out = 'hacking.html'
+				msg = 'HACKING HTML'
+			else:
+				file_in = 'geany.txt'
+				file_out = 'geany.html'
+				msg = 'HTML'
 			os.chdir('doc')
-			ret = launch(cmd + ' -stg --stylesheet=geany.css geany.txt geany.html',
-				'Generating HTML documentation')
+			ret = launch(cmd + ' -stg --stylesheet=geany.css %s %s' % (file_in, file_out),
+				'Generating %s documentation' % msg)
 		else:
 			Utils.pprint('RED',
 				'rst2html.py could not be found. Please install the Python docutils package.')
