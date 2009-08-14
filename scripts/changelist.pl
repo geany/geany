@@ -1,5 +1,5 @@
 #!/usr/bin/env perl
-# Copyright:	2008, Nick Treleaven
+# Copyright:	2008-2009, Nick Treleaven
 # License:		GNU GPL V2 or later
 # Warranty:		NONE
 
@@ -8,6 +8,17 @@
 # repeats until all matching blocks of text are found.
 # Results are printed in reverse, hence in chronological order (as ChangeLogs
 # are usually written in reverse date order).
+#
+# The resulting lines are then formatted to be easier to read and edit into a
+# NEWS file.
+
+# Example ChangeLog format:
+#2009-04-03  Joe Author  <joe@example.net>
+#
+# * src/file.c, src/file.h,
+#   src/another.c:
+#   Some change description,
+#   spanning several lines.
 
 use strict;
 use warnings;
@@ -15,8 +26,12 @@ use warnings;
 my $scriptname = "changelist.pl";
 my $argc = $#ARGV + 1;
 
-($argc == 2)
-	or die "Usage:\n$scriptname matchstring changelogfile\n";
+($argc == 2) or die <<END;
+Usage:
+$scriptname matchstring changelogfile >outfile
+
+  matchstring is not case sensitive.
+END
 
 my ($matchstr, $infile) = @ARGV;
 
@@ -24,7 +39,10 @@ open(INPUT, $infile)
 	or die "Couldn't open $infile for reading: $!\n";
 
 my $entry;	# the current matching block of text
-my @entries;
+my @entries;	# changelog entries, one per date
+
+# first parse each ChangeLog entry into an array
+
 my $found = 0;	# if we're in a matching block of text
 my $blank = 0;	# whether the last line was empty
 
@@ -34,8 +52,7 @@ while (<INPUT>) {
 	if (! $found) {
 		($line =~ m/$matchstr/) and $found = 1;
 	} else {
-		if (length($line) <= 1)	# current line is empty
-		{
+		if (length($line) <= 1) {	# current line is empty
 			if ($blank > 0) {	# previous line was also empty
 				push(@entries, $entry);	# append entry
 				$entry = "";
@@ -47,10 +64,52 @@ while (<INPUT>) {
 			}
 		}
 	}
-	$found and $entry .= $line;
+	if ($found) {
+		$entry .= $line;
+	}
 }
 close(INPUT);
 
+# reformat entries
 foreach $entry (reverse @entries) {
-	print "$entry\n\n";
+	my @lines = split(/\n/, $entry);
+	my $fl = 0;	# in file list lines
+	my $cm = 0; # in commit message lines
+
+	foreach my $line (@lines){
+		my $flset = $fl;
+
+		if (!$cm){
+			# check if in filelist
+			($line =~ m/ \* /) and $fl = 1;
+			# join filelist together on one line
+			$fl and ($line =~ s/^   / /);
+			$fl and ($line =~ m/:/) and $fl = 0;
+			$fl and ($line =~ m/,$/) or $fl = 0;
+		}
+		if (!$flset){
+			# Asterisk commit messages
+			if (!$cm and ($line =~ m/^   /)){
+				$cm = 1;
+				$line =~ s/^(   )/$1* /;
+			} else {
+				$cm and ($line =~ s/^(   )/$1  /);	# indent continuing lines
+			}
+			$cm and ($line =~ m/\.$/) and $cm = 0;
+		}
+		#~ print $fl.','.$cm.','.$line."\n"; next;	# debug
+
+		# change file list start char to easily distinguish between file list and commit messages
+		$line =~ s/^ \* /@ /g;
+		# strip date line
+		$line =~ s/^([0-9-]+(\s+\w+)+).*/$1/g;
+		# remove indent
+		$line =~ s/^   //g;
+
+		if ($line ne ""){
+			print $line;
+			(!$fl) and print "\n";
+		}
+	}
+	print "\n";
 }
