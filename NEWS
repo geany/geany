@@ -14,7 +14,7 @@ Geany 0.18 (TBA)
     * Implement Most-Recently-Used document switching when pressing
       'Switch to last used document' keybinding (Ctrl-Tab).
     * Add 'Mark All' keybinding (Ctrl-Shift-M).
-    * Add 'Reflow lines/block' keybinding, (Ctrl-J; thanks to 
+    * Add 'Reflow lines/block' keybinding, (Ctrl-J; thanks to
       Eugene Arshinov).
 
     Editor:
@@ -59,6 +59,10 @@ Geany 0.18 (TBA)
     * Add documents_foreach(), filetypes[], documents[], utils_strdupa()
       and various foreach_type() macros.
     * Make GeanyDocument::file_type always be non-NULL.
+
+    Internationalisation:
+    * Added translations: lb, sl, pt_PT
+    * Updated translations: ca, cs, de, en_GB, fi, fr, ja, pt_BR, ru, tr
 
 
 Geany 0.17 (May 02, 2009)
