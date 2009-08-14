@@ -4,6 +4,9 @@
    Fix setting wordchars for custom filetypes.
    Use style_sets array for custom filetypes too.
    Replace styleset_none() with styleset_default().
+ * src/highlighting.c:
+   Rename new_style_array -> new_styleset.
+   Rename styleset_free -> free_styleset.
 
 
 2009-08-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
