@@ -80,6 +80,9 @@ foreach $entry (reverse @entries) {
 	foreach my $line (@lines){
 		my $flset = $fl;
 
+		# strip trailing space
+		$line =~ s/\s+$//g;
+
 		if (!$cm){
 			# check if in filelist
 			($line =~ m/ \* /) and $fl = 1;
@@ -108,8 +111,8 @@ foreach $entry (reverse @entries) {
 
 		# change file list start char to easily distinguish between file list and commit messages
 		$line =~ s/^ \* /@ /g;
-		# strip date line
-		$line =~ s/^([0-9-]+(\s+\w+)+).*/$1/g;
+		# strip <email> from date line
+		$line =~ s/^([0-9-]+.*?)\s+<.+>$/$1/g;
 		# remove indent
 		$line =~ s/^   //g;
 
