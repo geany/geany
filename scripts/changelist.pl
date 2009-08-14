@@ -19,6 +19,7 @@
 #   src/another.c:
 #   Some change description,
 #   spanning several lines.
+# * foo.c: Combined line.
 
 use strict;
 use warnings;
@@ -84,7 +85,13 @@ foreach $entry (reverse @entries) {
 			($line =~ m/ \* /) and $fl = 1;
 			# join filelist together on one line
 			$fl and ($line =~ s/^   / /);
-			$fl and ($line =~ m/:/) and $fl = 0;
+			if ($fl and ($line =~ m/:/)){
+				$fl = 0;
+				# separate ' * foo.c: Some edit.' messages:
+				if (!($line =~ m/:$/)) {
+					($line =~ s/:/:\n*/);
+				}
+			}
 			$fl and ($line =~ m/,$/) or $fl = 0;
 		}
 		if (!$flset){
