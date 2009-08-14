@@ -62,7 +62,7 @@ typedef struct
 } StyleSet;
 
 /* each filetype has a styleset except GEANY_FILETYPES_NONE, which uses common_style_set */
-static StyleSet style_sets[GEANY_MAX_BUILT_IN_FILETYPES] = {{0, NULL, NULL, NULL}};
+static StyleSet *style_sets = NULL;
 
 
 enum	/* Geany common styling */
@@ -402,7 +402,7 @@ static guint invert(guint icolour)
 
 static GeanyLexerStyle *get_style(guint ft_id, guint styling_index)
 {
-	g_assert(ft_id < GEANY_MAX_BUILT_IN_FILETYPES);
+	g_assert(ft_id < filetypes_array->len);
 
 	if (G_UNLIKELY(ft_id == GEANY_FILETYPES_NONE))
 	{
@@ -432,13 +432,16 @@ static void set_sci_style(ScintillaObject *sci, gint style, guint ft_id, guint s
 
 void highlighting_free_styles()
 {
-	gint i;
+	guint i;
 
-	for (i = 0; i < GEANY_MAX_BUILT_IN_FILETYPES; i++)
+	for (i = 0; i < filetypes_array->len; i++)
 		styleset_free(i);
 
 	if (named_style_hash)
 		g_hash_table_destroy(named_style_hash);
+
+	if (style_sets)
+		g_free(style_sets);
 }
 
 
@@ -600,9 +603,14 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 }
 
 
-static void styleset_common(ScintillaObject *sci)
+static void styleset_common(ScintillaObject *sci, filetype_id ft_id)
 {
 	SSM(sci, SCI_STYLECLEARALL, 0, 0);
+
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) (ft_id == GEANY_FILETYPES_NONE ?
+		common_style_set.wordchars : style_sets[ft_id].wordchars));
+	/* have to set whitespace after setting wordchars */
+	SSM(sci, SCI_SETWHITESPACECHARS, 0, (sptr_t) whitespace_chars);
 
 	/* caret colour, style and width */
 	SSM(sci, SCI_SETCARETFORE, invert(common_style_set.styling[GCS_CARET].foreground), 0);
@@ -793,13 +801,7 @@ apply_filetype_properties(ScintillaObject *sci, gint lexer, filetype_id ft_id)
 
 	SSM(sci, SCI_SETLEXER, lexer, 0);
 
-	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[ft_id].wordchars);
-	/* have to set whitespace after setting wordchars */
-	SSM(sci, SCI_SETWHITESPACECHARS, 0, (sptr_t) whitespace_chars);
-
-	SSM(sci, SCI_AUTOCSETMAXHEIGHT, editor_prefs.symbolcompletion_max_height, 0);
-
-	styleset_common(sci);
+	styleset_common(sci, ft_id);
 }
 
 
@@ -2164,17 +2166,14 @@ static void styleset_docbook(ScintillaObject *sci)
 }
 
 
-static void styleset_none(ScintillaObject *sci)
+static void styleset_default(ScintillaObject *sci, gint ft_id)
 {
 	SSM(sci, SCI_SETLEXER, SCLEX_NULL, 0);
 
 	/* we need to set STYLE_DEFAULT before we call SCI_STYLECLEARALL in styleset_common() */
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_NONE, GCS_DEFAULT);
 
-	styleset_common(sci);
-
-	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) common_style_set.wordchars);
-	SSM(sci, SCI_SETWHITESPACECHARS, 0, (sptr_t) whitespace_chars);
+	styleset_common(sci, ft_id);
 }
 
 
@@ -2897,8 +2896,6 @@ static void styleset_matlab(ScintillaObject *sci)
 {
 	const filetype_id ft_id = GEANY_FILETYPES_MATLAB;
 
-	styleset_common(sci);
-
 	apply_filetype_properties(sci, SCLEX_MATLAB, ft_id);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_MATLAB].keywords[0]);
@@ -3497,10 +3494,10 @@ static void styleset_ada(ScintillaObject *sci)
 /* Called by filetypes_load_config(). */
 void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *configh)
 {
-	if (filetype_idx >= GEANY_MAX_BUILT_IN_FILETYPES)
-		return;	/* not supported yet */
+	if (!style_sets)
+		style_sets = g_new0(StyleSet, filetypes_array->len);
 
-	/* Clear old information if necessary - e.g. reloading config */
+	/* Clear old information if necessary - e.g. when reloading config */
 	styleset_free(filetype_idx);
 
 	/* All stylesets depend on filetypes.common */
@@ -3619,8 +3616,9 @@ void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 		styleset_case(GEANY_FILETYPES_VHDL,		styleset_vhdl);
 		styleset_case(GEANY_FILETYPES_XML,		styleset_xml);
 		styleset_case(GEANY_FILETYPES_YAML,		styleset_yaml);
+		case GEANY_FILETYPES_NONE:
 		default:
-		styleset_case(GEANY_FILETYPES_NONE,		styleset_none);
+			styleset_default(sci, filetype_idx);
 	}
 }
 
@@ -3635,7 +3633,7 @@ void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
  * @see Scintilla messages @c SCI_STYLEGETFORE, etc, for use with ScintillaFuncs::send_message(). */
 const GeanyLexerStyle *highlighting_get_style(gint ft_id, gint style_id)
 {
-	if (ft_id < 0 || ft_id > GEANY_MAX_BUILT_IN_FILETYPES)
+	if (ft_id < 0 || ft_id >= (gint)filetypes_array->len)
 		return NULL;
 
 	/* ensure filetype loaded */

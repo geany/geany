@@ -1088,7 +1088,6 @@ void main_quit()
 	navqueue_free();
 	keybindings_free();
 	filetypes_save_commands();
-	filetypes_free_types();
 	highlighting_free_styles();
 	templates_free_templates();
 	msgwin_finalize();
@@ -1103,6 +1102,7 @@ void main_quit()
 	toolbar_finalize();
 	treeviews_finalize();
 	configuration_finalize();
+	filetypes_free_types();
 	log_finalize();
 
 	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));
