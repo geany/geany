@@ -1,3 +1,66 @@
+Geany 0.18 (TBA)
+
+    General:
+    * Fix scrolling horizontally after finding a search match with the
+      search bar or Find Next/Previous which is off-screen.
+    * Remove relative/untidy path elements from filenames when opening
+      documents (#2823998).
+
+    Interface:
+    * Add 'Show Paths' documents list popup item.
+    * Add filetypes.common to 'Configuration Files' menu.
+
+    Keybindings:
+    * Implement Most-Recently-Used document switching when pressing
+      'Switch to last used document' keybinding (Ctrl-Tab).
+    * Add 'Mark All' keybinding (Ctrl-Shift-M).
+    * Add 'Reflow lines/block' keybinding, (Ctrl-J; thanks to 
+      Eugene Arshinov).
+
+    Editor:
+    * Fix a redraw when documents were first drawn uncolourised.
+    * Delay highlighting matching braces by 100ms to speed up scrolling
+      with the arrow keys.
+    * Support 'tab indents, space aligns' style when indenting (#2789109).
+    * Add 'Autocomplete all words in document' pref; also used when forcing
+      autocompletion and there's no symbol names to show.
+    * Add 'Drop rest of word on completion' pref.
+
+    Syntax highlighting:
+    * Reload color schemes via Tools menu (thanks to Eugene Arshinov).
+    * Implement named styles support for filetypes.* using a
+      filetypes.common [named_styles] section; used as
+      "style=named_style,bold". (See the manual for details).
+    * Allow style definitions with missing fields to use the
+      filetypes.common default style's fields.
+    * Make C-like filetype styles use named styles & default background
+      color. (Anyone who wants to likewise update any other filetype's
+      styles, please let us know ;-)).
+
+    Filetypes:
+    * Add Markdown filetype (thanks to Jon Strait).
+    * Highlight D WYSIWYG backtick `strings` and r"strings" (#1895745).
+
+    Tags:
+    * Read custom system global tags files from $prefix/share/geany/tags
+      (#2778923).
+    * Autocomplete scoped fields like struct members when typing '.' (and
+      also '->' or '::' in C/C++) if the language's tag parser supports it.
+    * Save field tags for C/C++ when generating a global tags file (you may
+      want to regenerate your tag files).
+    * Parse Python calltips.
+    * Show relative paths in Diff filename tags.
+    * Group reStructuredText symbol list items by scope level.
+
+    Plugin API:
+    * Add geanyplugin.h single include.
+    * Add plugin_signal_connect() for connecting plugin signals at
+      runtime and also for connecting to any GObject signal.
+    * Add documents_foreach(), filetypes[], documents[], utils_strdupa()
+      and various foreach_type() macros.
+    * Make GeanyDocument::file_type always be non-NULL.
+
+
 Geany 0.17 (May 02, 2009)
 
     Bug fixes:
