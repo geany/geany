@@ -5,10 +5,20 @@ Geany 0.18 (TBA)
       search bar or Find Next/Previous which is off-screen.
     * Remove relative/untidy path elements from filenames when opening
       documents (#2823998).
+    * Create initial template files with proper platform-specific line
+      ending characters.
+    * Improve inserting of comment templates like File header or licence
+      notices.
 
     Interface:
     * Add 'Show Paths' documents list popup item.
     * Add filetypes.common to 'Configuration Files' menu.
+    * Implement a graphical toolbar editor.
+    * Add 'Build' toolbar button to the default layout.
+    * Add 'Replace' toolbar button (closes #2798225).
+    * Use a more Tango like icon for 'Save All' (by Jesse Mayes, thanks).
+    * Add a popup menu for the keybinding list in the preferences dialog
+      to easily expand and collapse all groups.
 
     Keybindings:
     * Implement Most-Recently-Used document switching when pressing
@@ -16,6 +26,10 @@ Geany 0.18 (TBA)
     * Add 'Mark All' keybinding (Ctrl-Shift-M).
     * Add 'Reflow lines/block' keybinding, (Ctrl-J; thanks to
       Eugene Arshinov).
+    * Make the Scintilla keybindings 'Delete to end of line' and
+      'Go to end of display line' configurable.
+    * Switching notebook tabs now works for the currently used notebook
+      widget instead of always using the documents notebook.
 
     Editor:
     * Fix a redraw when documents were first drawn uncolourised.
@@ -25,6 +39,8 @@ Geany 0.18 (TBA)
     * Add 'Autocomplete all words in document' pref; also used when forcing
       autocompletion and there's no symbol names to show.
     * Add 'Drop rest of word on completion' pref.
+    * Update Scintilla to version 1.79.
+    * Improve showing and reshowing of calltips.
 
     Syntax highlighting:
     * Reload color schemes via Tools menu (thanks to Eugene Arshinov).
@@ -36,10 +52,14 @@ Geany 0.18 (TBA)
     * Make C-like filetype styles use named styles & default background
       color. (Anyone who wants to likewise update any other filetype's
       styles, please let us know ;-)).
+    * Allow indentation of wrapped lines (see style 'line_wrap_indent').
+    * Add new styles 'line_height' and 'marker_mark'.
 
     Filetypes:
     * Add Markdown filetype (thanks to Jon Strait).
     * Highlight D WYSIWYG backtick `strings` and r"strings" (#1895745).
+    * Minor improvements for filetypes: Fortran,  Haxe, HTML, Lua,
+      Matlab, Pascal, Python, Tcl
 
     Tags:
     * Read custom system global tags files from $prefix/share/geany/tags
@@ -59,6 +79,12 @@ Geany 0.18 (TBA)
     * Add documents_foreach(), filetypes[], documents[], utils_strdupa()
       and various foreach_type() macros.
     * Make GeanyDocument::file_type always be non-NULL.
+
+    Windows:
+    * Fix quoting the build command string on Windows (closes #2791769).
+    * Fix LaTeX view commands on Windows (part of #2807688).
+    * Expand system environment variables (%variableName%) on Windows when
+      running Build commands.
 
     Internationalisation:
     * Added translations: lb, sl, pt_PT
@@ -366,7 +392,7 @@ Geany 0.14 (April 19, 2008)
     * Add translucency settings to filetypes.common for semi-transparency.
     * Add HTML parser to get h1, h2, h3 symbols as well as link anchors and
       JavaScript functions (fixes #1896068).
-    * Update Javascript, TCL and Assembler parser.
+    * Update Javascript, Tcl and Assembler parser.
 
     Interface:
     * When closing a tab when using left-to-right tabs, focus the next
@@ -680,7 +706,7 @@ Geany 0.11 (May 21, 2007)
       Tab.
     * Add MimeType associatiations for: C++ header, Pascal, Perl,
       Python, httpd-PHP and XML files (thanks to Iñaki Rodriguez).
-    * Add brace indenting support for Perl and TCL.
+    * Add brace indenting support for Perl and Tcl.
     * Make backspace unindent when using spaces for indentation.
     * Wrap notebook pages when switching tabs.
     * Speed up loading multiple C-like files slightly.
