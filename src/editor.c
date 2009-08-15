@@ -657,8 +657,12 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 		case ':':	/* C/C++ class:: syntax */
 		/* tag autocompletion */
 		default:
+#if 0
 			if (! editor_start_auto_complete(editor, pos, FALSE))
 				request_reshowing_calltip(nt);
+#else
+			editor_start_auto_complete(editor, pos, FALSE);
+#endif
 	}
 	check_line_breaking(editor, pos, nt->ch);
 }

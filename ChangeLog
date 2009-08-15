@@ -1,7 +1,15 @@
+2009-08-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/editor.c:
+   Temporarily disable reshowing calltips when the autocompletion
+   list was closed implicitly by not choosing an item to fix
+   problems with wrongly displayed calltips.
+
+
 2009-08-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * wscript:
-   Add command '--hackingdoc' to create the HTML form of the 
+   Add command '--hackingdoc' to create the HTML form of the
    HACKING file.
 
 
