@@ -6,6 +6,9 @@
    problems with wrongly displayed calltips.
  * src/template.c:
    Add missing 'coding' cookie to the Python filetype template.
+ * doc/images/pref_dialog_edit_completions.png,
+   doc/images/pref_dialog_toolbar.png:
+   Update images for Geany 0.18.
 
 
 2009-08-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
