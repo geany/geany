@@ -1,4 +1,4 @@
-Geany 0.18 (TBA)
+Geany 0.18 (August 16, 2009)
 
     General:
     * Fix scrolling horizontally after finding a search match with the
@@ -40,7 +40,7 @@ Geany 0.18 (TBA)
       autocompletion and there's no symbol names to show.
     * Add 'Drop rest of word on completion' pref.
     * Update Scintilla to version 1.79.
-    * Improve showing and reshowing of calltips.
+    * Improve displaying and reshowing of calltips.
 
     Syntax highlighting:
     * Reload color schemes via Tools menu (thanks to Eugene Arshinov).
