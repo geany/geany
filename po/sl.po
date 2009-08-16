@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-12 00:21+0200\n"
+"POT-Creation-Date: 2009-08-16 18:09+0200\n"
 "PO-Revision-Date: 2009-08-11 23:24+0100\n"
 "Last-Translator: Jože Klepec <joze.klepec@siol.net>\n"
 "Language-Team: Slovenian <geany-i18n@uvena.de>\n"
@@ -324,7 +324,7 @@ msgid "Do you really want to quit?"
 msgstr "Zares želite končati z delom?"
 
 # ponovno naloži datoteko
-#: ../src/callbacks.c:469 ../src/document.c:2864 ../src/interface.c:340
+#: ../src/callbacks.c:469 ../src/document.c:2867 ../src/interface.c:340
 #: ../src/treeviews.c:578
 msgid "_Reload"
 msgstr "_Ponovno odpri"
@@ -645,7 +645,7 @@ msgstr "Datoteka %s zaprta."
 msgid "New file \"%s\" opened."
 msgstr "Odprta nova datoteka \"%s\"."
 
-#: ../src/document.c:918 ../src/document.c:1418
+#: ../src/document.c:918 ../src/document.c:1421
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Ni mogoče odpreti datoteke %s (%s)"
@@ -710,20 +710,23 @@ msgstr "Napačno ime datoteke"
 msgid "File %s reloaded."
 msgstr "Datoteka %s ponovno odprta."
 
-#: ../src/document.c:1311
+#. For translators: this is the status window message for opening a file. %d is the number
+#. * of the newly opened file, %s indicates whether the file is opened read-only
+#. * (it is replaced with the string ", read-only").
+#: ../src/document.c:1314
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "Datoteka %s je odprta (%d%s)."
 
-#: ../src/document.c:1313
+#: ../src/document.c:1316
 msgid ", read-only"
 msgstr ", za branje"
 
-#: ../src/document.c:1509
+#: ../src/document.c:1512
 msgid "Error renaming file."
 msgstr "Napaka med preimenovanjem datoteke."
 
-#: ../src/document.c:1584
+#: ../src/document.c:1587
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -732,7 +735,7 @@ msgstr ""
 "Napaka se je pojavila med pretvorbo datoteke iz UTF-8 \"%s\". Datoteka "
 "ostaja neshranjena."
 
-#: ../src/document.c:1606
+#: ../src/document.c:1609
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -741,42 +744,42 @@ msgstr ""
 "Sporočilo o napaki: %s\n"
 "Napaka se je pojavila na mestu \"%s\" (vrstica: %d, stolpec %d)."
 
-#: ../src/document.c:1611
+#: ../src/document.c:1614
 #, c-format
 msgid "Error message: %s."
 msgstr "Sporočilo o napaki: %s."
 
-#: ../src/document.c:1712 ../src/document.c:1772
+#: ../src/document.c:1715 ../src/document.c:1775
 msgid "Error saving file."
 msgstr "Napaka med shranjevanjem datoteke."
 
-#: ../src/document.c:1771
+#: ../src/document.c:1774
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Napaka med shranjevanjem datoteke (%s)."
 
-#: ../src/document.c:1796
+#: ../src/document.c:1799
 #, c-format
 msgid "File %s saved."
 msgstr "Datoteka %s shranjena."
 
 # Search regexp I assume for now.
-#: ../src/document.c:1864 ../src/document.c:1921 ../src/document.c:1929
+#: ../src/document.c:1867 ../src/document.c:1924 ../src/document.c:1932
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" ni bila najden."
 
-#: ../src/document.c:1929
+#: ../src/document.c:1932
 msgid "Wrap search and find again?"
 msgstr "Zaključim iskanje v preostanku?"
 
-#: ../src/document.c:2008 ../src/search.c:1084 ../src/search.c:1688
+#: ../src/document.c:2011 ../src/search.c:1084 ../src/search.c:1688
 #: ../src/search.c:1689
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Ni ujemanj za \"%s\"."
 
-#: ../src/document.c:2019 ../src/document.c:2028
+#: ../src/document.c:2022 ../src/document.c:2031
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
@@ -785,11 +788,11 @@ msgstr[1] "%s: zamenjani %d pojavljanji niza \"%s\" z nizom \"%s\"."
 msgstr[2] "%s: zamenjanih %d pojavljanj niza \"%s\" z nizom \"%s\"."
 msgstr[3] "%s: zamenjanih %d pojavljanj niza \"%s\" z nizom \"%s\"."
 
-#: ../src/document.c:2865
+#: ../src/document.c:2868
 msgid "Do you want to reload it?"
 msgstr "Ali želite ponovno odpreti datoteko?"
 
-#: ../src/document.c:2866
+#: ../src/document.c:2869
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
@@ -798,20 +801,20 @@ msgstr ""
 "Datoteka '%s' na disku je bolj sveža kot\n"
 "trenutni pomnilnik."
 
-#: ../src/document.c:2887
+#: ../src/document.c:2890
 msgid "Try to resave the file?"
 msgstr "Želite ponovno shraniti?"
 
-#: ../src/document.c:2888
+#: ../src/document.c:2891
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "Datoteka \"%s\" ni bila najdena na disku!"
 
-#: ../src/editor.c:4284
+#: ../src/editor.c:4288
 msgid "Enter Tab Width"
 msgstr "Vnesite širino tabulatorja"
 
-#: ../src/editor.c:4285
+#: ../src/editor.c:4289
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr "Vnesite število presledkov, ki naj bodo zamenjani s tabulatorjem.  "
 
@@ -3223,8 +3226,8 @@ msgid "Print Geany's installation prefix"
 msgstr "Izpiši Geanyjevo namestitveno predpono"
 
 #: ../src/main.c:141
-msgid "don't load the previous session's files"
-msgstr "ne naloži datotek prejšnje seje"
+msgid "Don't load the previous session's files"
+msgstr "Ne naloži datotek prejšnje seje"
 
 #: ../src/main.c:143
 msgid "Don't load terminal support"

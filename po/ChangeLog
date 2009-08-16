@@ -3,6 +3,9 @@
  * de.po:
    Several improvements of the German translation by
    Dominic Hopf, thanks.
+ * *.po, geany.pot:
+   Regenerate message catalog template.
+   Remove a fuzzy mark from all translations.
 
 
 2009-08-13  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

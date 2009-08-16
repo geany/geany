@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 0.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-13 18:12+0200\n"
+"POT-Creation-Date: 2009-08-16 18:09+0200\n"
 "PO-Revision-Date: 2009-08-13 15:48+0200\n"
 "Last-Translator: Harri Koskinen <reg2009@fastmonkey.fi>\n"
 "Language-Team: Finnish\n"
@@ -311,7 +311,7 @@ msgstr "Kääntövirheitä ei ole enempää."
 msgid "Do you really want to quit?"
 msgstr "Haluatko varmasti sulkea sovelluksen?"
 
-#: ../src/callbacks.c:469 ../src/document.c:2864 ../src/interface.c:340
+#: ../src/callbacks.c:469 ../src/document.c:2867 ../src/interface.c:340
 #: ../src/treeviews.c:578
 msgid "_Reload"
 msgstr "_Lataa uudelleen"
@@ -622,7 +622,7 @@ msgstr "Tiedosto %s suljettu."
 msgid "New file \"%s\" opened."
 msgstr "Uusi tiedosto \"%s\" avattu."
 
-#: ../src/document.c:918 ../src/document.c:1418
+#: ../src/document.c:918 ../src/document.c:1421
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Tiedoston %s avaaminen epäonnistui (%s)"
@@ -682,20 +682,23 @@ msgstr "Tiedostonimi ei kelpaa"
 msgid "File %s reloaded."
 msgstr "Tiedosto %s ladattu uudelleen."
 
-#: ../src/document.c:1311
+#. For translators: this is the status window message for opening a file. %d is the number
+#. * of the newly opened file, %s indicates whether the file is opened read-only
+#. * (it is replaced with the string ", read-only").
+#: ../src/document.c:1314
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "Tiedosto %s avattu (%d%s)."
 
-#: ../src/document.c:1313
+#: ../src/document.c:1316
 msgid ", read-only"
 msgstr ", kirjoitussuojattu"
 
-#: ../src/document.c:1509
+#: ../src/document.c:1512
 msgid "Error renaming file."
 msgstr "Tiedostonimen muutosvirhe."
 
-#: ../src/document.c:1584
+#: ../src/document.c:1587
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -704,7 +707,7 @@ msgstr ""
 "Virhe muunnettaessa tiedostoa merkistöstä UTF-8 (%s). Tiedostoa ei "
 "tallennettu."
 
-#: ../src/document.c:1606
+#: ../src/document.c:1609
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -713,52 +716,52 @@ msgstr ""
 "Virheilmoitus: %s\n"
 "Tiedostossa \"%s\" (rivi %d, merkki %d)."
 
-#: ../src/document.c:1611
+#: ../src/document.c:1614
 #, c-format
 msgid "Error message: %s."
 msgstr "Virheilmoitus: %s."
 
-#: ../src/document.c:1712 ../src/document.c:1772
+#: ../src/document.c:1715 ../src/document.c:1775
 msgid "Error saving file."
 msgstr "Tiedoston tallennusvirhe."
 
-#: ../src/document.c:1771
+#: ../src/document.c:1774
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Tiedoston tallennusvirhe (%s)."
 
-#: ../src/document.c:1796
+#: ../src/document.c:1799
 #, c-format
 msgid "File %s saved."
 msgstr "Tiedosto %s tallennettu."
 
-#: ../src/document.c:1864 ../src/document.c:1921 ../src/document.c:1929
+#: ../src/document.c:1867 ../src/document.c:1924 ../src/document.c:1932
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" ei löytynyt."
 
-#: ../src/document.c:1929
+#: ../src/document.c:1932
 msgid "Wrap search and find again?"
 msgstr "Jatketaanko etsintää tiedoston alusta?"
 
-#: ../src/document.c:2008 ../src/search.c:1084 ../src/search.c:1688
+#: ../src/document.c:2011 ../src/search.c:1084 ../src/search.c:1688
 #: ../src/search.c:1689
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Osumia ei löytynyt: \"%s\"."
 
-#: ../src/document.c:2019 ../src/document.c:2028
+#: ../src/document.c:2022 ../src/document.c:2031
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] "%1$s: \"%3$s\" korvattiin merkkijonolla \"%4$s\" %2$d kerran."
 msgstr[1] "%1$s: \"%3$s\" korvattiin merkkijonolla \"%4$s\" %2$d kertaa."
 
-#: ../src/document.c:2865
+#: ../src/document.c:2868
 msgid "Do you want to reload it?"
 msgstr "Ladataanko uudelleen?"
 
-#: ../src/document.c:2866
+#: ../src/document.c:2869
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
@@ -767,20 +770,20 @@ msgstr ""
 "Levyllä oleva tiedosto \"%s\" on uudempi kuin\n"
 "Geanyn muistissa oleva."
 
-#: ../src/document.c:2887
+#: ../src/document.c:2890
 msgid "Try to resave the file?"
 msgstr "Yritetäänkö tallentaa uudelleen?"
 
-#: ../src/document.c:2888
+#: ../src/document.c:2891
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "Tiedostoa \"%s\" ei löytynyt!"
 
-#: ../src/editor.c:4284
+#: ../src/editor.c:4288
 msgid "Enter Tab Width"
 msgstr "Sarkaimen leveys"
 
-#: ../src/editor.c:4285
+#: ../src/editor.c:4289
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr "Montako peräkkäistä välilyöntiä korvataan sarkaimella."
 
@@ -3195,7 +3198,6 @@ msgid "Print Geany's installation prefix"
 msgstr "Tulosta Geanyn asennuspolku"
 
 #: ../src/main.c:141
-#, fuzzy
 msgid "Don't load the previous session's files"
 msgstr "Älä lataa edellisen istunnon tiedostoja"
 

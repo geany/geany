@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-01 12:20+0200\n"
+"POT-Creation-Date: 2009-08-16 18:09+0200\n"
 "PO-Revision-Date: 2009-04-24 16:31+0100\n"
 "Last-Translator: Antonio Jimenez <tonificante@hotmail.com>\n"
 "Language-Team: Spanish <geany-i18n@uvena.de>\n"
@@ -145,96 +145,96 @@ msgid "Compilation finished successfully."
 msgstr "La compilación terminó con éxito."
 
 #. compile the code
-#: ../src/build.c:1033
+#: ../src/build.c:1039
 msgid "_Compile"
 msgstr "_Compilar"
 
 #. build the code
-#: ../src/build.c:1041 ../src/build.c:2114 ../src/interface.c:976
+#: ../src/build.c:1047 ../src/build.c:2120 ../src/interface.c:976
 msgid "_Build"
 msgstr "_Construir"
 
 #. build the code with make all
-#: ../src/build.c:1053 ../src/build.c:1159 ../src/build.c:2125
+#: ../src/build.c:1059 ../src/build.c:1165 ../src/build.c:2131
 msgid "_Make All"
 msgstr "_Make All"
 
 #. build the code with make custom
-#: ../src/build.c:1062 ../src/build.c:1168 ../src/build.c:2133
+#: ../src/build.c:1068 ../src/build.c:1174 ../src/build.c:2139
 msgid "Make Custom _Target"
 msgstr "Make Obje_tivo Personalizado"
 
 #. build the code with make object
-#: ../src/build.c:1071 ../src/build.c:2141
+#: ../src/build.c:1077 ../src/build.c:2147
 msgid "Make _Object"
 msgstr "Make _Object"
 
 #. next error
-#: ../src/build.c:1084 ../src/build.c:1181
+#: ../src/build.c:1090 ../src/build.c:1187
 msgid "_Next Error"
 msgstr "Siguie_nte Error"
 
-#: ../src/build.c:1091 ../src/build.c:1188
+#: ../src/build.c:1097 ../src/build.c:1194
 msgid "_Previous Error"
 msgstr "Error _anterior"
 
 #. arguments
-#: ../src/build.c:1116 ../src/build.c:2153
+#: ../src/build.c:1122 ../src/build.c:2159
 msgid "_Set Includes and Arguments"
 msgstr "_Selecciona Inclusiones y Argumentos"
 
 #. DVI
-#: ../src/build.c:1137
+#: ../src/build.c:1143
 msgid "LaTeX -> _DVI"
 msgstr "LaTeX -> _DVI"
 
 #. PDF
-#: ../src/build.c:1146
+#: ../src/build.c:1152
 msgid "LaTeX -> _PDF"
 msgstr "LaTeX -> _PDF"
 
 #. DVI view
-#: ../src/build.c:1200
+#: ../src/build.c:1206
 msgid "_View DVI File"
 msgstr "_Ver Archivo DVI"
 
 #. PDF view
-#: ../src/build.c:1210
+#: ../src/build.c:1216
 msgid "V_iew PDF File"
 msgstr "V_er Archivo PDF"
 
 #. arguments
-#: ../src/build.c:1225
+#: ../src/build.c:1231
 msgid "_Set Arguments"
 msgstr "_Seleccionar argumentos"
 
-#: ../src/build.c:1300
+#: ../src/build.c:1306
 msgid "Set Arguments"
 msgstr "Seleccionar argumentos"
 
-#: ../src/build.c:1307
+#: ../src/build.c:1313
 msgid "Set programs and options for compiling and viewing (La)TeX files."
 msgstr ""
 "Seleccione los programas y opciones para la compilación y visualización de "
 "archivos (La)TeX."
 
-#: ../src/build.c:1318
+#: ../src/build.c:1324
 msgid "DVI creation:"
 msgstr "Creación de DVI:"
 
-#: ../src/build.c:1338
+#: ../src/build.c:1344
 msgid "PDF creation:"
 msgstr "Creación de PDF:"
 
-#: ../src/build.c:1358
+#: ../src/build.c:1364
 msgid "DVI preview:"
 msgstr "Previsualización de DVI"
 
-#: ../src/build.c:1378
+#: ../src/build.c:1384
 msgid "PDF preview:"
 msgstr "Previsualización de PDF"
 
-#: ../src/build.c:1395 ../src/build.c:1577
+#: ../src/build.c:1401 ../src/build.c:1583
 #, c-format
 msgid ""
 "%f will be replaced by the current filename, e.g. test_file.c\n"
@@ -244,73 +244,73 @@ msgstr ""
 "%e será reemplazado por el nombre del archivo actual sin extencion, ej. "
 "prueba"
 
-#: ../src/build.c:1480
+#: ../src/build.c:1486
 msgid "Set Includes and Arguments"
 msgstr "Selecciona Inclusiones y Argumentos"
 
-#: ../src/build.c:1487
+#: ../src/build.c:1493
 msgid "Set the commands for building and running programs."
 msgstr "Configure los comandos para construir y ejecutar programas."
 
 #. in-dialog heading for the "Set Includes and Arguments" dialog
-#: ../src/build.c:1495
+#: ../src/build.c:1501
 #, c-format
 msgid "%s commands"
 msgstr "comandos de %s"
 
-#: ../src/build.c:1510
+#: ../src/build.c:1516
 msgid "Compile:"
 msgstr "Compilar:"
 
-#: ../src/build.c:1532
+#: ../src/build.c:1538
 msgid "Build:"
 msgstr "Construir:"
 
-#: ../src/build.c:1554 ../src/dialogs.c:1223
+#: ../src/build.c:1560 ../src/dialogs.c:1223
 msgid "Execute:"
 msgstr "Ejecución:"
 
-#: ../src/build.c:1886 ../src/toolbar.c:344
+#: ../src/build.c:1892 ../src/toolbar.c:344
 msgid "Build the current file"
 msgstr "Compilar el archivo actual"
 
-#: ../src/build.c:1911
+#: ../src/build.c:1917
 msgid "Make Custom Target"
 msgstr "Make Objetivo Personalizado"
 
-#: ../src/build.c:1912
+#: ../src/build.c:1918
 msgid ""
 "Enter custom options here, all entered text is passed to the make command."
 msgstr ""
 "Ingresar opciones personalizadas aquí, todo el texto ingresado es pasado a "
 "la herramienta make"
 
-#: ../src/build.c:1961
+#: ../src/build.c:1967
 msgid "Build the current file with Make and the default target"
 msgstr ""
 "Construye el archivo actual con la herramienta make y el objetivo "
 "predeterminado"
 
-#: ../src/build.c:1964
+#: ../src/build.c:1970
 msgid "Build the current file with Make and the specified target"
 msgstr ""
 "Construye el archivo actual con la herramienta make y el objetivo "
 "especificado"
 
-#: ../src/build.c:1967
+#: ../src/build.c:1973
 msgid "Compile the current file with Make"
 msgstr "Compilar el archivo actual con Make"
 
-#: ../src/build.c:2029
+#: ../src/build.c:2035
 msgid "Failed to execute the view program"
 msgstr "Fallo al ejecutar el programa visualizador"
 
-#: ../src/build.c:2067
+#: ../src/build.c:2073
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "El proceso no pudo ser detenido (%s)."
 
-#: ../src/build.c:2086 ../src/build.c:2100
+#: ../src/build.c:2092 ../src/build.c:2106
 msgid "No more build errors."
 msgstr "No hay más errores de construción."
 
@@ -318,7 +318,7 @@ msgstr "No hay más errores de construción."
 msgid "Do you really want to quit?"
 msgstr "¿Realmente desea salir?"
 
-#: ../src/callbacks.c:469 ../src/document.c:2864 ../src/interface.c:340
+#: ../src/callbacks.c:469 ../src/document.c:2867 ../src/interface.c:340
 #: ../src/treeviews.c:578
 msgid "_Reload"
 msgstr "_Recargar"
@@ -636,7 +636,7 @@ msgstr "El archivo %s fue cerrado."
 msgid "New file \"%s\" opened."
 msgstr "Nuevo archivo \"%s\" abierto."
 
-#: ../src/document.c:918 ../src/document.c:1418
+#: ../src/document.c:918 ../src/document.c:1421
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "No se pudo abrir el archivo %s (%s)"
@@ -697,20 +697,23 @@ msgstr "Nombre de archivo invalido"
 msgid "File %s reloaded."
 msgstr "Archivo %s recargado."
 
-#: ../src/document.c:1311
+#. For translators: this is the status window message for opening a file. %d is the number
+#. * of the newly opened file, %s indicates whether the file is opened read-only
+#. * (it is replaced with the string ", read-only").
+#: ../src/document.c:1314
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "Archivo %s abierto(%d%s)"
 
-#: ../src/document.c:1313
+#: ../src/document.c:1316
 msgid ", read-only"
 msgstr ", sólo lectura"
 
-#: ../src/document.c:1509
+#: ../src/document.c:1512
 msgid "Error renaming file."
 msgstr "Error al renombrar el archivo."
 
-#: ../src/document.c:1584
+#: ../src/document.c:1587
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -719,7 +722,7 @@ msgstr ""
 "Ocurrió un error mientras se convertía el archivo desde UTF-8 en \"%s\". El "
 "archivo no fue guardado.n"
 
-#: ../src/document.c:1606
+#: ../src/document.c:1609
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -728,52 +731,52 @@ msgstr ""
 "Mensaje de error: %s\n"
 "El error ocurrió en \"%s\" (linea: %d, columna: %d)."
 
-#: ../src/document.c:1611
+#: ../src/document.c:1614
 #, c-format
 msgid "Error message: %s."
 msgstr "Mensaje de error: %s."
 
-#: ../src/document.c:1712 ../src/document.c:1772
+#: ../src/document.c:1715 ../src/document.c:1775
 msgid "Error saving file."
 msgstr "Error guardando archivo."
 
-#: ../src/document.c:1771
+#: ../src/document.c:1774
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Error guardando archivo (%s)."
 
-#: ../src/document.c:1796
+#: ../src/document.c:1799
 #, c-format
 msgid "File %s saved."
 msgstr "Archivo %s guardado."
 
-#: ../src/document.c:1864 ../src/document.c:1921 ../src/document.c:1929
+#: ../src/document.c:1867 ../src/document.c:1924 ../src/document.c:1932
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "no se encontró \"%s\"."
 
-#: ../src/document.c:1929
+#: ../src/document.c:1932
 msgid "Wrap search and find again?"
 msgstr "Volver al principio y buscar de nuevo?"
 
-#: ../src/document.c:2008 ../src/search.c:1084 ../src/search.c:1688
+#: ../src/document.c:2011 ../src/search.c:1084 ../src/search.c:1688
 #: ../src/search.c:1689
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "No se encontraron coincidencias para \"%s\"."
 
-#: ../src/document.c:2019 ../src/document.c:2028
+#: ../src/document.c:2022 ../src/document.c:2031
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] "%s: se reemplazó %d ocurrencia de \"%s\" con \"%s\"."
 msgstr[1] "%s: se reemplazaron %d ocurrencias de \"%s\" con \"%s\"."
 
-#: ../src/document.c:2865
+#: ../src/document.c:2868
 msgid "Do you want to reload it?"
 msgstr "¿Quiere recargarlo?"
 
-#: ../src/document.c:2866
+#: ../src/document.c:2869
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
@@ -782,20 +785,20 @@ msgstr ""
 "El archivo '%s' del disco es más reciente\n"
 "que la vista actual."
 
-#: ../src/document.c:2887
+#: ../src/document.c:2890
 msgid "Try to resave the file?"
 msgstr "¿Intentar volver a salvar el archivo?"
 
-#: ../src/document.c:2888
+#: ../src/document.c:2891
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "No se encontró el archivo \"%s\"!"
 
-#: ../src/editor.c:4284
+#: ../src/editor.c:4288
 msgid "Enter Tab Width"
 msgstr "Introduzca el Ancho de Tabulación:"
 
-#: ../src/editor.c:4285
+#: ../src/editor.c:4289
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr ""
 "Introduzca la cantidad de espacios que debería ser reemplazada por una "
@@ -3190,7 +3193,7 @@ msgstr "Atajos de Teclado"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Los siguientes atajos de teclado son configurables:"
 
-#: ../src/keybindings.c:1563
+#: ../src/keybindings.c:1583
 msgid "Switch to Document"
 msgstr "Cambiar a Documento"
 
@@ -3261,7 +3264,8 @@ msgid "Print Geany's installation prefix"
 msgstr "Imprimir el prefijo de instalación de Geany"
 
 #: ../src/main.c:141
-msgid "don't load the previous session's files"
+#, fuzzy
+msgid "Don't load the previous session's files"
 msgstr "no cargar los archivos de la sesión anterior"
 
 #: ../src/main.c:143

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 0.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-04 12:02+0200\n"
+"POT-Creation-Date: 2009-08-16 18:09+0200\n"
 "PO-Revision-Date: 2009-08-06 06:38+0400\n"
 "Last-Translator: John Wehin <john.wehin@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -314,7 +314,7 @@ msgstr "Ошибок сборки больше нет."
 msgid "Do you really want to quit?"
 msgstr "Вы действительно хотите выйти?"
 
-#: ../src/callbacks.c:469 ../src/document.c:2864 ../src/interface.c:340
+#: ../src/callbacks.c:469 ../src/document.c:2867 ../src/interface.c:340
 #: ../src/treeviews.c:578
 msgid "_Reload"
 msgstr "_Обновить"
@@ -628,7 +628,7 @@ msgstr "Файл '%s' закрыт."
 msgid "New file \"%s\" opened."
 msgstr "Открыт новый файл \"%s\"."
 
-#: ../src/document.c:918 ../src/document.c:1418
+#: ../src/document.c:918 ../src/document.c:1421
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Невозможно открыть файл %s (%s)"
@@ -690,20 +690,23 @@ msgstr "Неправильное имя файла"
 msgid "File %s reloaded."
 msgstr "Файл %s обновлен."
 
-#: ../src/document.c:1311
+#. For translators: this is the status window message for opening a file. %d is the number
+#. * of the newly opened file, %s indicates whether the file is opened read-only
+#. * (it is replaced with the string ", read-only").
+#: ../src/document.c:1314
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "Файл %s открыт (%d%s)."
 
-#: ../src/document.c:1313
+#: ../src/document.c:1316
 msgid ", read-only"
 msgstr ", только чтение"
 
-#: ../src/document.c:1509
+#: ../src/document.c:1512
 msgid "Error renaming file."
 msgstr "Ошибка смены имени файла."
 
-#: ../src/document.c:1584
+#: ../src/document.c:1587
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -712,7 +715,7 @@ msgstr ""
 "Произошла ошибка при переводе файла из UTF-8 в \"%s\". Файл остается не "
 "сохраненным."
 
-#: ../src/document.c:1606
+#: ../src/document.c:1609
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -721,41 +724,41 @@ msgstr ""
 "Текст ошибки:  %s\n"
 "Ошибка возникла в \"%s\" (строка: %d, столбец: %d)."
 
-#: ../src/document.c:1611
+#: ../src/document.c:1614
 #, c-format
 msgid "Error message: %s."
 msgstr "Текст ошибки: %s."
 
-#: ../src/document.c:1712 ../src/document.c:1772
+#: ../src/document.c:1715 ../src/document.c:1775
 msgid "Error saving file."
 msgstr "Ошибка записи файла."
 
-#: ../src/document.c:1771
+#: ../src/document.c:1774
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Ошибка записи файла (%s)."
 
-#: ../src/document.c:1796
+#: ../src/document.c:1799
 #, c-format
 msgid "File %s saved."
 msgstr "Файл %s сохранен."
 
-#: ../src/document.c:1864 ../src/document.c:1921 ../src/document.c:1929
+#: ../src/document.c:1867 ../src/document.c:1924 ../src/document.c:1932
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "Невозможно найти \"%s\"."
 
-#: ../src/document.c:1929
+#: ../src/document.c:1932
 msgid "Wrap search and find again?"
 msgstr "Перейти в начало и возобновить поиск?"
 
-#: ../src/document.c:2008 ../src/search.c:1084 ../src/search.c:1688
+#: ../src/document.c:2011 ../src/search.c:1084 ../src/search.c:1688
 #: ../src/search.c:1689
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Совпадений для  \"%s\" не найдено."
 
-#: ../src/document.c:2019 ../src/document.c:2028
+#: ../src/document.c:2022 ../src/document.c:2031
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
@@ -763,11 +766,11 @@ msgstr[0] "%s: %d замен(а,ы) для \"%s\" на \"%s\"."
 msgstr[1] "%s: %d замен(а,ы) для \"%s\" на \"%s\"."
 msgstr[2] "%s: %d замен(а,ы) для \"%s\" на \"%s\"."
 
-#: ../src/document.c:2865
+#: ../src/document.c:2868
 msgid "Do you want to reload it?"
 msgstr "Вы действительно хотите обновить его?"
 
-#: ../src/document.c:2866
+#: ../src/document.c:2869
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
@@ -776,20 +779,20 @@ msgstr ""
 "Файл \"%s\" на диске более новый,\n"
 "чем в текущем буфере."
 
-#: ../src/document.c:2887
+#: ../src/document.c:2890
 msgid "Try to resave the file?"
 msgstr "Попытаться сохранить файл заново?"
 
-#: ../src/document.c:2888
+#: ../src/document.c:2891
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "Файл \"%s\" не был найден на диске!"
 
-#: ../src/editor.c:4284
+#: ../src/editor.c:4288
 msgid "Enter Tab Width"
 msgstr "Ширина табуляции:"
 
-#: ../src/editor.c:4285
+#: ../src/editor.c:4289
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr "Количество пробелов, которые будут заменены символом табуляции."
 
@@ -3155,7 +3158,7 @@ msgid "The following keyboard shortcuts are configurable:"
 msgstr "Следующие сочетания клавиш можно настроить:"
 
 # Перейти на документ слева
-#: ../src/keybindings.c:1563
+#: ../src/keybindings.c:1583
 msgid "Switch to Document"
 msgstr "Перейти к документу"
 
@@ -3227,7 +3230,7 @@ msgid "Print Geany's installation prefix"
 msgstr "Вывести инсталляционный префикс Geany"
 
 #: ../src/main.c:141
-msgid "don't load the previous session's files"
+msgid "Don't load the previous session's files"
 msgstr "Не загружать файлы предыдущей сессии"
 
 #: ../src/main.c:143

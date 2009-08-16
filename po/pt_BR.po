@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 0.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-04 12:02+0200\n"
+"POT-Creation-Date: 2009-08-16 18:09+0200\n"
 "PO-Revision-Date: 2009-08-03 10:46-0300\n"
 "Last-Translator: Adrovane Marques Kade <adrovane@gmail.com>\n"
 "Language-Team: Portuguese <geany-i18n@uvena.de>\n"
@@ -312,7 +312,7 @@ msgstr "Não há mais erros de construção."
 msgid "Do you really want to quit?"
 msgstr "Deseja realmente sair?"
 
-#: ../src/callbacks.c:469 ../src/document.c:2864 ../src/interface.c:340
+#: ../src/callbacks.c:469 ../src/document.c:2867 ../src/interface.c:340
 #: ../src/treeviews.c:578
 msgid "_Reload"
 msgstr "Recarre_gar"
@@ -628,7 +628,7 @@ msgstr "Arquivo %s fechado."
 msgid "New file \"%s\" opened."
 msgstr "Novo arquivo \"%s\" aberto."
 
-#: ../src/document.c:918 ../src/document.c:1418
+#: ../src/document.c:918 ../src/document.c:1421
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Não foi possível abrir o arquivo %s (%s)"
@@ -690,20 +690,23 @@ msgstr "Nome de arquivo inválido"
 msgid "File %s reloaded."
 msgstr "Arquivo %s recarregado."
 
-#: ../src/document.c:1311
+#. For translators: this is the status window message for opening a file. %d is the number
+#. * of the newly opened file, %s indicates whether the file is opened read-only
+#. * (it is replaced with the string ", read-only").
+#: ../src/document.c:1314
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "Arquivo %s aberto (%d%s)."
 
-#: ../src/document.c:1313
+#: ../src/document.c:1316
 msgid ", read-only"
 msgstr ", somente-leitura"
 
-#: ../src/document.c:1509
+#: ../src/document.c:1512
 msgid "Error renaming file."
 msgstr "Erro ao renomear arquivo."
 
-#: ../src/document.c:1584
+#: ../src/document.c:1587
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -712,7 +715,7 @@ msgstr ""
 "Ocorreu um erro ao converter o arquivo de UTF-8 para \"%s\". O arquivo "
 "permanece sem ser salvo."
 
-#: ../src/document.c:1606
+#: ../src/document.c:1609
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -721,52 +724,52 @@ msgstr ""
 "Mensagem de erro: %s\n"
 "O erro ocorreu em \"%s\" (linha: %d, coluna %d)."
 
-#: ../src/document.c:1611
+#: ../src/document.c:1614
 #, c-format
 msgid "Error message: %s."
 msgstr "Mensagem de erro: %s."
 
-#: ../src/document.c:1712 ../src/document.c:1772
+#: ../src/document.c:1715 ../src/document.c:1775
 msgid "Error saving file."
 msgstr "Erro ao salvar arquivo."
 
-#: ../src/document.c:1771
+#: ../src/document.c:1774
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Erro ao salvar arquivo (%s)."
 
-#: ../src/document.c:1796
+#: ../src/document.c:1799
 #, c-format
 msgid "File %s saved."
 msgstr "Arquivo %s salvo."
 
-#: ../src/document.c:1864 ../src/document.c:1921 ../src/document.c:1929
+#: ../src/document.c:1867 ../src/document.c:1924 ../src/document.c:1932
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" não foi encontrado."
 
-#: ../src/document.c:1929
+#: ../src/document.c:1932
 msgid "Wrap search and find again?"
 msgstr "Circular pesquisa e procurar novamente?"
 
-#: ../src/document.c:2008 ../src/search.c:1084 ../src/search.c:1688
+#: ../src/document.c:2011 ../src/search.c:1084 ../src/search.c:1688
 #: ../src/search.c:1689
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Nenhuma combinação encontrada para '%s'."
 
-#: ../src/document.c:2019 ../src/document.c:2028
+#: ../src/document.c:2022 ../src/document.c:2031
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] "%s: %d ocorrência de \"%s\" substituída por \"%s\"."
 msgstr[1] "%s: %d ocorrências de \"%s\" substituídas por \"%s\"."
 
-#: ../src/document.c:2865
+#: ../src/document.c:2868
 msgid "Do you want to reload it?"
 msgstr "Deseja recarregá-lo?"
 
-#: ../src/document.c:2866
+#: ../src/document.c:2869
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
@@ -775,20 +778,20 @@ msgstr ""
 "O arquivo '%s' que está no disco é \n"
 "mais recente do que o buffer atual."
 
-#: ../src/document.c:2887
+#: ../src/document.c:2890
 msgid "Try to resave the file?"
 msgstr "Tentar salvar novamente o arquivo?"
 
-#: ../src/document.c:2888
+#: ../src/document.c:2891
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "Arquivo \"%s\" não foi encontrado no disco!"
 
-#: ../src/editor.c:4284
+#: ../src/editor.c:4288
 msgid "Enter Tab Width"
 msgstr "Insira a Largura do Tab:"
 
-#: ../src/editor.c:4285
+#: ../src/editor.c:4289
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr ""
 "Informe o número de espaços que deve ser substituído por um caracter de "
@@ -3156,7 +3159,7 @@ msgstr "Atalhos de Teclado"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Os atalhos de teclado a seguir são configuráveis:"
 
-#: ../src/keybindings.c:1563
+#: ../src/keybindings.c:1583
 msgid "Switch to Document"
 msgstr "Ir para o Documento "
 
@@ -3227,8 +3230,8 @@ msgid "Print Geany's installation prefix"
 msgstr "Imprimir o prefixo de instalação do Geany"
 
 #: ../src/main.c:141
-msgid "don't load the previous session's files"
-msgstr "não carregar os arquivos da sessão anterior"
+msgid "Don't load the previous session's files"
+msgstr "Não carregar os arquivos da sessão anterior"
 
 #: ../src/main.c:143
 msgid "Don't load terminal support"

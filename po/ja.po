@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-04 12:02+0200\n"
+"POT-Creation-Date: 2009-08-16 18:09+0200\n"
 "PO-Revision-Date: 2009-01-01 13:44+0100\n"
 "Last-Translator: Chikahiro Masami <cmasa.z321@gmail.com>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -311,7 +311,7 @@ msgstr "これ以上ビルドエラーはありません"
 msgid "Do you really want to quit?"
 msgstr "本当に終了しますか?"
 
-#: ../src/callbacks.c:469 ../src/document.c:2864 ../src/interface.c:340
+#: ../src/callbacks.c:469 ../src/document.c:2867 ../src/interface.c:340
 #: ../src/treeviews.c:578
 msgid "_Reload"
 msgstr "再読み込み(_R)"
@@ -621,7 +621,7 @@ msgstr "ファイル %s を閉じました"
 msgid "New file \"%s\" opened."
 msgstr "新しいファイル \"%s\" を開きました"
 
-#: ../src/document.c:918 ../src/document.c:1418
+#: ../src/document.c:918 ../src/document.c:1421
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "ファイル %s を開けません（%s）"
@@ -683,20 +683,23 @@ msgstr "無効なファイル名"
 msgid "File %s reloaded."
 msgstr "ファイル %s を再読み込みしました"
 
-#: ../src/document.c:1311
+#. For translators: this is the status window message for opening a file. %d is the number
+#. * of the newly opened file, %s indicates whether the file is opened read-only
+#. * (it is replaced with the string ", read-only").
+#: ../src/document.c:1314
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "ファイル %s を開きました（%d%s）"
 
-#: ../src/document.c:1313
+#: ../src/document.c:1316
 msgid ", read-only"
 msgstr ", 読み取り専用"
 
-#: ../src/document.c:1509
+#: ../src/document.c:1512
 msgid "Error renaming file."
 msgstr "ファイル名変更中にエラー"
 
-#: ../src/document.c:1584
+#: ../src/document.c:1587
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -705,7 +708,7 @@ msgstr ""
 "ファイルを UTF-8 から \"%s\" に変換するときにエラーがありました。ファイルは保"
 "存されていません。"
 
-#: ../src/document.c:1606
+#: ../src/document.c:1609
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -714,51 +717,51 @@ msgstr ""
 "エラーメッセージ: %s\n"
 "\"%s\" (行: %d, 桁: %d)でエラー"
 
-#: ../src/document.c:1611
+#: ../src/document.c:1614
 #, c-format
 msgid "Error message: %s."
 msgstr "エラーメッセージ: %s"
 
-#: ../src/document.c:1712 ../src/document.c:1772
+#: ../src/document.c:1715 ../src/document.c:1775
 msgid "Error saving file."
 msgstr "ファイル保存中にエラー"
 
-#: ../src/document.c:1771
+#: ../src/document.c:1774
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "ファイル保存エラー（%s）"
 
-#: ../src/document.c:1796
+#: ../src/document.c:1799
 #, c-format
 msgid "File %s saved."
 msgstr "ファイル %s を保存しました"
 
-#: ../src/document.c:1864 ../src/document.c:1921 ../src/document.c:1929
+#: ../src/document.c:1867 ../src/document.c:1924 ../src/document.c:1932
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" が見つかりません"
 
-#: ../src/document.c:1929
+#: ../src/document.c:1932
 msgid "Wrap search and find again?"
 msgstr "もう一度折り返して検索しますか?"
 
-#: ../src/document.c:2008 ../src/search.c:1084 ../src/search.c:1688
+#: ../src/document.c:2011 ../src/search.c:1084 ../src/search.c:1688
 #: ../src/search.c:1689
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "\"%s\" に一致するものが見つかりません"
 
-#: ../src/document.c:2019 ../src/document.c:2028
+#: ../src/document.c:2022 ../src/document.c:2031
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] "%s: %d 個の \"%s\" を \"%s\" と置換しました"
 
-#: ../src/document.c:2865
+#: ../src/document.c:2868
 msgid "Do you want to reload it?"
 msgstr "再読み込みしますか?"
 
-#: ../src/document.c:2866
+#: ../src/document.c:2869
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
@@ -767,20 +770,20 @@ msgstr ""
 "ディスク上のファイル '%s' は現在のバッファの内容より\n"
 "新しいです"
 
-#: ../src/document.c:2887
+#: ../src/document.c:2890
 msgid "Try to resave the file?"
 msgstr "ファイルを保存し直しますか?"
 
-#: ../src/document.c:2888
+#: ../src/document.c:2891
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "ディスク上にファイル \"%s\" が見つかりません"
 
-#: ../src/editor.c:4284
+#: ../src/editor.c:4288
 msgid "Enter Tab Width"
 msgstr "タブの幅:"
 
-#: ../src/editor.c:4285
+#: ../src/editor.c:4289
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr "タブ文字に置き換えられる空白の数を指定"
 
@@ -3117,7 +3120,7 @@ msgstr "ショートカットキー"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "以下のショートカットキーが設定できます:"
 
-#: ../src/keybindings.c:1563
+#: ../src/keybindings.c:1583
 msgid "Switch to Document"
 msgstr "文書に切り替える"
 
@@ -3186,7 +3189,7 @@ msgid "Print Geany's installation prefix"
 msgstr "Geanyのインストール先ディレクトリを表示"
 
 #: ../src/main.c:141
-msgid "don't load the previous session's files"
+msgid "Don't load the previous session's files"
 msgstr "以前のセッションファイルを読み込みません"
 
 #: ../src/main.c:143

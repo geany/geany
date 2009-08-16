@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 0.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-01 12:20+0200\n"
+"POT-Creation-Date: 2009-08-16 18:09+0200\n"
 "PO-Revision-Date: 2006-09-28 17:25+0200\n"
 "Last-Translator: Kurt De Bree <kdebree@telenet.be>\n"
 "Language-Team: Dutch <geany-i18n@uvena.de>\n"
@@ -142,84 +142,84 @@ msgid "Compilation finished successfully."
 msgstr "Compilatie met succes beëindigd."
 
 #. compile the code
-#: ../src/build.c:1033
+#: ../src/build.c:1039
 msgid "_Compile"
 msgstr "_Compileren"
 
 #. build the code
-#: ../src/build.c:1041 ../src/build.c:2114 ../src/interface.c:976
+#: ../src/build.c:1047 ../src/build.c:2120 ../src/interface.c:976
 msgid "_Build"
 msgstr "B_ouwen"
 
 #. build the code with make all
-#: ../src/build.c:1053 ../src/build.c:1159 ../src/build.c:2125
+#: ../src/build.c:1059 ../src/build.c:1165 ../src/build.c:2131
 #, fuzzy
 msgid "_Make All"
 msgstr "_Make all"
 
 #. build the code with make custom
-#: ../src/build.c:1062 ../src/build.c:1168 ../src/build.c:2133
+#: ../src/build.c:1068 ../src/build.c:1174 ../src/build.c:2139
 #, fuzzy
 msgid "Make Custom _Target"
 msgstr "Make aangepast _doel"
 
 #. build the code with make object
-#: ../src/build.c:1071 ../src/build.c:2141
+#: ../src/build.c:1077 ../src/build.c:2147
 #, fuzzy
 msgid "Make _Object"
 msgstr "Make _object"
 
 #. next error
-#: ../src/build.c:1084 ../src/build.c:1181
+#: ../src/build.c:1090 ../src/build.c:1187
 #, fuzzy
 msgid "_Next Error"
 msgstr "Fout"
 
-#: ../src/build.c:1091 ../src/build.c:1188
+#: ../src/build.c:1097 ../src/build.c:1194
 #, fuzzy
 msgid "_Previous Error"
 msgstr "Zoek Vor_ige"
 
 #. arguments
-#: ../src/build.c:1116 ../src/build.c:2153
+#: ../src/build.c:1122 ../src/build.c:2159
 msgid "_Set Includes and Arguments"
 msgstr "Programma parameters instellen"
 
 #. DVI
-#: ../src/build.c:1137
+#: ../src/build.c:1143
 #, fuzzy
 msgid "LaTeX -> _DVI"
 msgstr "LaTeX -> DVI"
 
 #. PDF
-#: ../src/build.c:1146
+#: ../src/build.c:1152
 #, fuzzy
 msgid "LaTeX -> _PDF"
 msgstr "LaTeX -> PDF"
 
 #. DVI view
-#: ../src/build.c:1200
+#: ../src/build.c:1206
 #, fuzzy
 msgid "_View DVI File"
 msgstr "DVI bestand weergeven"
 
 #. PDF view
-#: ../src/build.c:1210
+#: ../src/build.c:1216
 #, fuzzy
 msgid "V_iew PDF File"
 msgstr "PDF besand weergeven"
 
 #. arguments
-#: ../src/build.c:1225
+#: ../src/build.c:1231
 #, fuzzy
 msgid "_Set Arguments"
 msgstr "Argumenten instellen"
 
-#: ../src/build.c:1300
+#: ../src/build.c:1306
 msgid "Set Arguments"
 msgstr "Argumenten instellen"
 
-#: ../src/build.c:1307
+#: ../src/build.c:1313
 #, fuzzy
 msgid "Set programs and options for compiling and viewing (La)TeX files."
 msgstr ""
@@ -227,23 +227,23 @@ msgstr ""
 "bestanden.\n"
 "De bestandsnaam wordt automatisch aan het einde toegevoegd.\n"
 
-#: ../src/build.c:1318
+#: ../src/build.c:1324
 msgid "DVI creation:"
 msgstr ""
 
-#: ../src/build.c:1338
+#: ../src/build.c:1344
 msgid "PDF creation:"
 msgstr ""
 
-#: ../src/build.c:1358
+#: ../src/build.c:1364
 msgid "DVI preview:"
 msgstr ""
 
-#: ../src/build.c:1378
+#: ../src/build.c:1384
 msgid "PDF preview:"
 msgstr ""
 
-#: ../src/build.c:1395 ../src/build.c:1577
+#: ../src/build.c:1401 ../src/build.c:1583
 #, c-format
 msgid ""
 "%f will be replaced by the current filename, e.g. test_file.c\n"
@@ -253,74 +253,74 @@ msgstr ""
 "%e zal worden vervangen door de bestandsnaam zonder extensie, bijv "
 "test_bestand"
 
-#: ../src/build.c:1480
+#: ../src/build.c:1486
 msgid "Set Includes and Arguments"
 msgstr "Programma parameters instellen"
 
-#: ../src/build.c:1487
+#: ../src/build.c:1493
 msgid "Set the commands for building and running programs."
 msgstr "Stel de commandos in voor het bouwen en draaien van programma's."
 
 #. in-dialog heading for the "Set Includes and Arguments" dialog
-#: ../src/build.c:1495
+#: ../src/build.c:1501
 #, fuzzy, c-format
 msgid "%s commands"
 msgstr " commandos"
 
-#: ../src/build.c:1510
+#: ../src/build.c:1516
 msgid "Compile:"
 msgstr "Compileer:"
 
-#: ../src/build.c:1532
+#: ../src/build.c:1538
 msgid "Build:"
 msgstr "Bouwen:"
 
-#: ../src/build.c:1554 ../src/dialogs.c:1223
+#: ../src/build.c:1560 ../src/dialogs.c:1223
 msgid "Execute:"
 msgstr "Uitvoeren:"
 
-#: ../src/build.c:1886 ../src/toolbar.c:344
+#: ../src/build.c:1892 ../src/toolbar.c:344
 #, fuzzy
 msgid "Build the current file"
 msgstr "Huidig bestand compileren"
 
-#: ../src/build.c:1911
+#: ../src/build.c:1917
 #, fuzzy
 msgid "Make Custom Target"
 msgstr "Make aangepast doel"
 
-#: ../src/build.c:1912
+#: ../src/build.c:1918
 msgid ""
 "Enter custom options here, all entered text is passed to the make command."
 msgstr ""
 "Voer hier de aangepaste opties in, alle ingevoerde tekst wordt aan het "
 "commando 'make' overgegeven."
 
-#: ../src/build.c:1961
+#: ../src/build.c:1967
 #, fuzzy
 msgid "Build the current file with Make and the default target"
 msgstr "Bouwt het huidig bestand met 'make' en het standaard  doel"
 
-#: ../src/build.c:1964
+#: ../src/build.c:1970
 #, fuzzy
 msgid "Build the current file with Make and the specified target"
 msgstr "Bouwt het huidig bestand met 'make' en het opgegeven doel"
 
-#: ../src/build.c:1967
+#: ../src/build.c:1973
 #, fuzzy
 msgid "Compile the current file with Make"
 msgstr "Huidig bestand compileren"
 
-#: ../src/build.c:2029
+#: ../src/build.c:2035
 msgid "Failed to execute the view program"
 msgstr "Kon het weergaveprogramma niet uitvoeren"
 
-#: ../src/build.c:2067
+#: ../src/build.c:2073
 #, fuzzy, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Configuratiemap kon niet worden aangemaakt (%s)."
 
-#: ../src/build.c:2086 ../src/build.c:2100
+#: ../src/build.c:2092 ../src/build.c:2106
 msgid "No more build errors."
 msgstr ""
 
@@ -328,7 +328,7 @@ msgstr ""
 msgid "Do you really want to quit?"
 msgstr "Wilt u Geany werkelijk afsluiten?"
 
-#: ../src/callbacks.c:469 ../src/document.c:2864 ../src/interface.c:340
+#: ../src/callbacks.c:469 ../src/document.c:2867 ../src/interface.c:340
 #: ../src/treeviews.c:578
 msgid "_Reload"
 msgstr "_Herladen"
@@ -656,7 +656,7 @@ msgstr "Bestand %s gesloten."
 msgid "New file \"%s\" opened."
 msgstr "Nieuw bestand geopend."
 
-#: ../src/document.c:918 ../src/document.c:1418
+#: ../src/document.c:918 ../src/document.c:1421
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Kon bestand %s niet openen (%s)"
@@ -716,21 +716,24 @@ msgstr "Ongeldige bestandsnaam"
 msgid "File %s reloaded."
 msgstr "Bestand %s herladen."
 
-#: ../src/document.c:1311
+#. For translators: this is the status window message for opening a file. %d is the number
+#. * of the newly opened file, %s indicates whether the file is opened read-only
+#. * (it is replaced with the string ", read-only").
+#: ../src/document.c:1314
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "Bestand %s geopend (%d%s)."
 
-#: ../src/document.c:1313
+#: ../src/document.c:1316
 msgid ", read-only"
 msgstr ", alleen lezen"
 
-#: ../src/document.c:1509
+#: ../src/document.c:1512
 #, fuzzy
 msgid "Error renaming file."
 msgstr "Fout bij het opslaan van het bestand."
 
-#: ../src/document.c:1584
+#: ../src/document.c:1587
 #, fuzzy, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -740,59 +743,59 @@ msgstr ""
 "8 in \"%s\". Het bestand blijft niet opgeslagen.\n"
 "Foutmelding: %s\n"
 
-#: ../src/document.c:1606
+#: ../src/document.c:1609
 #, c-format
 msgid ""
 "Error message: %s\n"
 "The error occurred at \"%s\" (line: %d, column: %d)."
 msgstr ""
 
-#: ../src/document.c:1611
+#: ../src/document.c:1614
 #, fuzzy, c-format
 msgid "Error message: %s."
 msgstr "Fout bij het opslaan van het bestand (%s)."
 
-#: ../src/document.c:1712 ../src/document.c:1772
+#: ../src/document.c:1715 ../src/document.c:1775
 msgid "Error saving file."
 msgstr "Fout bij het opslaan van het bestand."
 
-#: ../src/document.c:1771
+#: ../src/document.c:1774
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Fout bij het opslaan van het bestand (%s)."
 
-#: ../src/document.c:1796
+#: ../src/document.c:1799
 #, c-format
 msgid "File %s saved."
 msgstr "Bestand %s opgeslagen."
 
-#: ../src/document.c:1864 ../src/document.c:1921 ../src/document.c:1929
+#: ../src/document.c:1867 ../src/document.c:1924 ../src/document.c:1932
 #, c-format
 msgid "\"%s\" was not found."
 msgstr ""
 
-#: ../src/document.c:1929
+#: ../src/document.c:1932
 msgid "Wrap search and find again?"
 msgstr ""
 
-#: ../src/document.c:2008 ../src/search.c:1084 ../src/search.c:1688
+#: ../src/document.c:2011 ../src/search.c:1084 ../src/search.c:1688
 #: ../src/search.c:1689
 #, fuzzy, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Geen overeenkomsten gevonden voor '%s'"
 
-#: ../src/document.c:2019 ../src/document.c:2028
+#: ../src/document.c:2022 ../src/document.c:2031
 #, fuzzy, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] "Verving %d keer \"%s\" door\"%s\"."
 msgstr[1] "Verving %d keer \"%s\" door\"%s\"."
 
-#: ../src/document.c:2865
+#: ../src/document.c:2868
 msgid "Do you want to reload it?"
 msgstr "Wenst u het opnieuw te laden?"
 
-#: ../src/document.c:2866
+#: ../src/document.c:2869
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
@@ -801,21 +804,21 @@ msgstr ""
 "Het bestand '%s' op de schijf is recenter als\n"
 "de huidig geopende versie."
 
-#: ../src/document.c:2887
+#: ../src/document.c:2890
 msgid "Try to resave the file?"
 msgstr ""
 
-#: ../src/document.c:2888
+#: ../src/document.c:2891
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr ""
 
-#: ../src/editor.c:4284
+#: ../src/editor.c:4288
 #, fuzzy
 msgid "Enter Tab Width"
 msgstr "Tabgrootte:"
 
-#: ../src/editor.c:4285
+#: ../src/editor.c:4289
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr ""
 
@@ -3379,7 +3382,7 @@ msgstr "_Sneltoetsen"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Volgende sneltoetsen zijn gedefinieert:"
 
-#: ../src/keybindings.c:1563
+#: ../src/keybindings.c:1583
 #, fuzzy
 msgid "Switch to Document"
 msgstr "Schakel naar linker document"
@@ -3456,7 +3459,7 @@ msgid "Print Geany's installation prefix"
 msgstr ""
 
 #: ../src/main.c:141
-msgid "don't load the previous session's files"
+msgid "Don't load the previous session's files"
 msgstr "bestanden van vorige sessies niet laden"
 
 #: ../src/main.c:143
