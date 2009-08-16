@@ -4,6 +4,8 @@
    Add a translation hint to an ambiguous format string.
  * src/Makefile.am:
    Add missing include path to fix 'make distcheck'.
+ * src/win32.c:
+   Fix opening of local files in the browser on Windows.
  * New release: Geany 0.18 "Kaine".
 
 
