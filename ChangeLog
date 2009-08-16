@@ -2,6 +2,8 @@
 
  * src/document.c:
    Add a translation hint to an ambiguous format string.
+ * src/Makefile.am:
+   Add missing include path to fix 'make distcheck'.
  * New release: Geany 0.18 "Kaine".
 
 
