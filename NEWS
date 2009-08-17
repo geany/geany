@@ -58,8 +58,8 @@ Geany 0.18 (August 16, 2009)
     Filetypes:
     * Add Markdown filetype (thanks to Jon Strait).
     * Highlight D WYSIWYG backtick `strings` and r"strings" (#1895745).
-    * Minor improvements for filetypes: Fortran,  Haxe, HTML, Lua,
-      Matlab, Pascal, Python, Tcl
+    * Minor improvements for filetypes: Fortran, Haxe, HTML, Lua,
+      Matlab, Pascal, Python, Tcl.
 
     Tags:
     * Read custom system global tags files from $prefix/share/geany/tags

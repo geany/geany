@@ -1,3 +1,12 @@
+2009-08-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * doc/geany.txt, doc/geany.html, NEWS:
+   Add 'Scope autocompletion' section.
+   Add 'Tools menu items' section to explain configuration files
+   submenu, reload configuration item.
+   Minor updates/fixes.
+
+
 2009-08-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/document.c:
