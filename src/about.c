@@ -64,6 +64,7 @@ const gchar *translators[][2] = {
 	{ "pt_BR", "Alexandra Moreire &lt;alexandream@gmail.com&gt;\nAdrovane Marques Kade &lt;adrovane@gmail.com&gt;" },
 	{ "ro", "Alex Eftimie &lt;alex@rosedu.org&gt;" },
 	{ "ru_RU", "brahmann_ &lt;brahmann@pisem.net&gt;,\nNikita E. Shalaev &lt;nshalaev@eu.spb.ru&gt;" },
+	{ "sl_SI", "Jože Klepec &lt;joze.klepec@siol.net&gt;"},
 	{ "sv", "Tony Mattsson &lt;superxorn@gmail.com&gt;" },
 	{ "tr", "Gürkan Gür &lt;seqizz@gmail.com&gt;"},
 	{ "uk", "Boris Dibrov &lt;dibrov.bor@gmail.com&gt;" },
@@ -83,7 +84,7 @@ static const gchar *contributors =
 "Chris Macksey, Christoph Berg, Colomban Wendling, Conrad Steenberg, Daniel Richard G., Dave Moore, Dirk Weber, "
 "Elias Pschernig, Eugene Arshinov, Felipe Pena, François Cami, "
 "Giuseppe Torelli, Guillaume de Rorthais, Guillaume Hoffmann, Herbert Voss, Jason Oster, Jean-François Wauthy, Jeff Pohlmeyer, "
-"Jesse Mayes, John Gabriele, Josef Whiter, Kevin Ellwood, Kristoffer A. Tjernås, Marko Peric, Matti Mårds, Moritz Barsnick, "
+"Jesse Mayes, John Gabriele, Jon Strait, Josef Whiter, Kevin Ellwood, Kristoffer A. Tjernås, Marko Peric, Matti Mårds, Moritz Barsnick, "
 "Peter Strand, Philipp Gildein, Pierre Joye, Rob van der Linde, Robert McGinley, Roland Baudin, S Jagannathan, Saleem Abdulrasool, "
 "Sebastian Kraft, Shiv, Slava Semushin, Stefan Oltmanns, Tamim, Thomas Martitz, Tomás Vírseda, "
 "Tyler Mulligan, Walery Studennikov, Yura Siamashka";

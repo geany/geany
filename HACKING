@@ -249,9 +249,9 @@ the following things:
    is created. Again you could copy and adapt a function like
    styleset_tcl().
 3. In highlighting_init_styles(), add
-   ``init_styleset_case(GEANY_FILETYPES_FOO, foo);``.
+   ``init_styleset_case(GEANY_FILETYPES_FOO, styleset_foo_init);``.
 4. In highlighting_set_styles(), add
-   ``styleset_case(GEANY_FILETYPES_FOO, foo);``.
+   ``styleset_case(GEANY_FILETYPES_FOO, styleset_foo);``.
 
 Error message parsing
 ^^^^^^^^^^^^^^^^^^^^^

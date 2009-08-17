@@ -29,7 +29,9 @@ SRCS = \
 	msgwindow.c msgwindow.h \
 	navqueue.c navqueue.h \
 	notebook.c notebook.h \
+	pluginprivate.h \
 	plugins.c plugins.h \
+	pluginutils.c pluginutils.h \
 	prefix.c prefix.h \
 	prefs.c prefs.h \
 	printing.c printing.h \
@@ -75,7 +77,8 @@ geany_include_HEADERS = \
 	build.h
 
 
-INCLUDES = -I$(srcdir)/../scintilla/include -I$(srcdir)/../tagmanager/include @GTK_CFLAGS@ @GIO_CFLAGS@
+INCLUDES = -I$(top_srcdir) -I$(srcdir)/../scintilla/include -I$(srcdir)/../tagmanager/include \
+			@GTK_CFLAGS@ @GIO_CFLAGS@
 
 # tell automake we have a C++ file so it uses the C++ linker we need for Scintilla
 nodist_EXTRA_geany_SOURCES = dummy.cxx

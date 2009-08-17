@@ -644,8 +644,11 @@ gint win32_message_dialog_unsaved(const gchar *msg)
 void win32_open_browser(const gchar *uri)
 {
 	if (strncmp(uri, "file://", 7) == 0)
+	{
 		uri += 7;
-
+		while (*uri == '/')
+			uri++;
+	}
 	ShellExecute(NULL, "open", uri, NULL, NULL, SW_SHOWNORMAL);
 }
 
@@ -937,11 +940,23 @@ static gboolean GetContentFromHandle(HANDLE hFile, gchar **content, GError **err
 }
 
 
+gchar *win32_expand_environment_variables(const gchar *str)
+{
+	gchar expCmdline[32768]; /* 32768 is the limit for ExpandEnvironmentStrings() */
+
+	if (ExpandEnvironmentStrings((LPCTSTR) str, (LPTSTR) expCmdline, sizeof(expCmdline)) != 0)
+		return g_strdup(expCmdline);
+	else
+		return g_strdup(str);
+}
+
+
 static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline, const TCHAR *dir, GError **error)
 {
 	PROCESS_INFORMATION piProcInfo;
 	STARTUPINFO siStartInfo;
 	BOOL bFuncRetn = FALSE;
+	gchar *expandedCmdline;
 
 	/* Set up members of the PROCESS_INFORMATION structure. */
 	ZeroMemory(&piProcInfo, sizeof(PROCESS_INFORMATION) );
@@ -955,9 +970,12 @@ static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline
 	siStartInfo.hStdInput  = gw_spawn->hChildStdinRd;
 	siStartInfo.dwFlags   |= STARTF_USESTDHANDLES;
 
+	/* Expand environment variables like %blah%. */
+	expandedCmdline = win32_expand_environment_variables(szCmdline);
+
 	/* Create the child process. */
 	bFuncRetn = CreateProcess(NULL,
-		szCmdline,     /* command line */
+		expandedCmdline,             /* command line */
 		NULL,          /* process security attributes */
 		NULL,          /* primary thread security attributes */
 		TRUE,          /* handles are inherited */
@@ -966,6 +984,8 @@ static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline
 		dir,           /* use parent's current directory */
 		&siStartInfo,  /* STARTUPINFO pointer */
 		&piProcInfo);  /* receives PROCESS_INFORMATION */
+
+	g_free(expandedCmdline);
 
 	if (bFuncRetn == 0)
 	{

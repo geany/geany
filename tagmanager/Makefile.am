@@ -51,6 +51,7 @@ libtagmanager_a_SOURCES =\
 	latex.c\
 	lregex.c\
 	matlab.c\
+	markdown.c\
 	pascal.c\
 	perl.c\
 	rest.c\

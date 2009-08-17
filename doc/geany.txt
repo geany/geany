@@ -1,4 +1,4 @@
-.. |(version)| replace:: 0.18
+.. |(version)| replace:: 0.19
 
 =======
  Geany
@@ -832,6 +832,38 @@ when executing the command, the %s is substituted by the word near
 the cursor position or by the current selection. If the cursor is at
 the word "echo", a browser window will open(assumed your browser is
 called firefox) and it will open the address: http://www.php.net/echo.
+
+
+Autocompletion
+^^^^^^^^^^^^^^
+
+Geany can offer a list of possible completions for symbols defined in the
+tags and for all words in a document.
+
+The autocompletion list for symbols is presented when the first few
+characters of the symbol are typed (configurable, see `Editor Completions
+tab in preferences dialog`_, default 4) or when the *Complete word*
+keybinding is pressed (configurable, see `Configurable keybindings`_,
+default Ctrl-Space).
+
+When the defined keybinding is typed and the *Autocomplete all words in
+document* preference (in `Editor Completions tab in preferences dialog`_)
+is selected then the autocompletion list will show all matching words
+in the document, if there are no matching symbols.
+
+If you don't want to use autocompletion it can be dismissed until
+the next symbol by typing Escape. The autocompletion list is updated
+as more characters are typed so that it only shows completions that start
+with the characters typed so far. If no symbols begin with the sequence,
+the autocompletion window is closed.
+
+The up and down arrows will move the selected item. The highlighted
+item on the autocompletion list can be chosen from the list by Tab or
+Enter/Return. You can also double-click to select an item. The sequence
+will be completed to match the chosen item, and if the *Drop rest of
+word on completion* preference is set (in `Editor Completions tab in
+preferences dialog`_) then any characters after the cursor that match
+a symbol or word are deleted.
 
 
 User-definable snippets
@@ -2854,6 +2886,9 @@ Send to Custom Command 1 (2,3)  Ctrl-1 (2,3)              Passes the current sel
 Send Selection to Terminal                                Sends the current selection or the current
                                                           line (if there is no selection) to the
                                                           embedded Terminal (VTE).
+
+Reflow lines/paragraph                                    Reformat selected lines or current paragraph,
+                                                          breaking lines at the long line marker.
 
 
 **Settings**

@@ -23,8 +23,6 @@
  */
 
 /* Code to manage, load and unload plugins. */
-/** @file plugins.c
- * Plugin utility functions. */
 
 #include "geany.h"
 
@@ -61,15 +59,8 @@
 #include "stash.h"
 #include "keyfile.h"
 #include "win32.h"
-
-
-
-typedef struct GeanyPluginPrivate
-{
-	GeanyAutoSeparator	toolbar_separator;
-	gboolean			resident;
-}
-GeanyPluginPrivate;
+#include "pluginutils.h"
+#include "pluginprivate.h"
 
 
 typedef struct Plugin
@@ -79,10 +70,8 @@ typedef struct Plugin
 	PluginInfo		info;				/* plugin name, description, etc */
 	PluginFields	fields;
 	GeanyPlugin		public;				/* fields the plugin can read */
-	GeanyPluginPrivate	priv;			/* GeanyPlugin type private data */
+	GeanyPluginPrivate	priv;			/* GeanyPlugin type private data, same as (*public.priv) */
 
-	gulong		*signal_ids;			/* signal IDs to disconnect when unloading */
-	gsize		signal_ids_len;
 	GeanyKeyGroup	*key_group;
 
 	void		(*init) (GeanyData *data);			/* Called when the plugin is enabled */
@@ -106,13 +95,11 @@ static GtkWidget *menu_separator = NULL;
 
 static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data);
 
-void plugin_add_toolbar_item(GeanyPlugin *plugin, GtkToolItem *item);
-void plugin_module_make_resident(GeanyPlugin *plugin);
-
 
 static PluginFuncs plugin_funcs = {
 	&plugin_add_toolbar_item,
-	&plugin_module_make_resident
+	&plugin_module_make_resident,
+	&plugin_signal_connect
 };
 
 static DocumentFuncs doc_funcs = {
@@ -467,16 +454,12 @@ static void add_callbacks(Plugin *plugin, PluginCallback *callbacks)
 	if (len == 0)
 		return;
 
-	plugin->signal_ids_len = len;
-	plugin->signal_ids = g_new(gulong, len);
-
 	for (i = 0; i < len; i++)
 	{
 		cb = &callbacks[i];
 
-		plugin->signal_ids[i] = (cb->after) ?
-			g_signal_connect_after(geany_object, cb->signal_name, cb->callback, cb->user_data) :
-			g_signal_connect(geany_object, cb->signal_name, cb->callback, cb->user_data);
+		plugin_signal_connect(&plugin->public, NULL, cb->signal_name, cb->after,
+			cb->callback, cb->user_data);
 	}
 }
 
@@ -698,14 +681,16 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 
 static void remove_callbacks(Plugin *plugin)
 {
-	guint i;
+	GArray *signal_ids = plugin->priv.signal_ids;
+	SignalConnection *sc;
 
-	if (plugin->signal_ids == NULL)
+	if (signal_ids == NULL)
 		return;
 
-	for (i = 0; i < plugin->signal_ids_len; i++)
-		g_signal_handler_disconnect(geany_object, plugin->signal_ids[i]);
-	g_free(plugin->signal_ids);
+	foreach_array(SignalConnection, sc, signal_ids)
+		g_signal_handler_disconnect(sc->object, sc->handler_id);
+
+	g_array_free(signal_ids, TRUE);
 }
 
 
@@ -1304,64 +1289,6 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 
 	gtk_container_add(GTK_CONTAINER(vbox), vbox2);
 	gtk_widget_show_all(pm_widgets.dialog);
-}
-
-
-/** Insert a toolbar item before the Quit button, or after the previous plugin toolbar item.
- * A separator is added on the first call to this function, and will be shown when @a item is
- * shown; hidden when @a item is hidden.
- * @note You should still destroy @a item yourself, usually in @ref plugin_cleanup().
- * @param plugin Must be @ref geany_plugin.
- * @param item The item to add. */
-void plugin_add_toolbar_item(GeanyPlugin *plugin, GtkToolItem *item)
-{
-	GtkToolbar *toolbar = GTK_TOOLBAR(main_widgets.toolbar);
-	gint pos;
-	GeanyAutoSeparator *autosep;
-
-	g_return_if_fail(plugin);
-	autosep = &plugin->priv->toolbar_separator;
-
-	if (!autosep->widget)
-	{
-		GtkToolItem *sep;
-
-		pos = toolbar_get_insert_position();
-
-		sep = gtk_separator_tool_item_new();
-		gtk_toolbar_insert(toolbar, sep, pos);
-		autosep->widget = GTK_WIDGET(sep);
-
-		gtk_toolbar_insert(toolbar, item, pos + 1);
-
-		toolbar_item_ref(sep);
-		toolbar_item_ref(item);
-	}
-	else
-	{
-		pos = gtk_toolbar_get_item_index(toolbar, GTK_TOOL_ITEM(autosep->widget));
-		g_return_if_fail(pos >= 0);
-		gtk_toolbar_insert(toolbar, item, pos);
-		toolbar_item_ref(item);
-	}
-	/* hide the separator widget if there are no toolbar items showing for the plugin */
-	ui_auto_separator_add_ref(autosep, GTK_WIDGET(item));
-}
-
-
-/** Ensures that a plugin's module (*.so) will never be unloaded.
- *  This is necessary if you register new GTypes in your plugin, e.g. when using own classes
- *  using the GObject system.
- *
- * @param plugin Must be @ref geany_plugin.
- *
- *  @since 0.16
- */
-void plugin_module_make_resident(GeanyPlugin *plugin)
-{
-	g_return_if_fail(plugin);
-
-	plugin->priv->resident = TRUE;
 }
 
 

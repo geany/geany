@@ -71,7 +71,7 @@ struct GeanyDocument
 	/** General flag to represent this document is active and all properties are set correctly. */
 	gboolean		 is_valid;
 	gint			 index;		/**< Index in the documents array. */
-	/** Whether this %document support source code symbols(tags) to show in the sidebar. */
+	/** Whether this document supports source code symbols(tags) to show in the sidebar. */
 	gboolean		 has_tags;
 	/** The UTF-8 encoded file name.
 	 * Be careful; glibc and GLib file functions expect the locale representation of the
@@ -79,20 +79,20 @@ struct GeanyDocument
 	 * For conversion into locale encoding, you can use @ref utils_get_locale_from_utf8().
 	 * @see real_path. */
 	gchar 			*file_name;
-	/** The encoding of the %document, must be a valid string representation of an encoding, can
+	/** The encoding of the document, must be a valid string representation of an encoding, can
 	 *  be retrieved with @ref encodings_get_charset_from_index. */
 	gchar 			*encoding;
-	/** Internally used flag to indicate whether the file of this %document has a byte-order-mark. */
+	/** Internally used flag to indicate whether the file of this document has a byte-order-mark. */
 	gboolean		 has_bom;
 	struct GeanyEditor *editor;	/**< The editor associated with the document. */
-	/** The filetype for this %document, it's only a reference to one of the elements of the global
+	/** The filetype for this document, it's only a reference to one of the elements of the global
 	 *  filetypes array. */
 	GeanyFiletype	*file_type;
-	/** TMWorkObject object for this %document, or @c NULL. */
+	/** TMWorkObject object for this document, or @c NULL. */
 	TMWorkObject	*tm_file;
-	/** Whether this %document is read-only. */
+	/** Whether this document is read-only. */
 	gboolean		 readonly;
-	/** Whether this %document has been changed since it was last saved. */
+	/** Whether this document has been changed since it was last saved. */
 	gboolean		 changed;
 	/** The link-dereferenced, locale-encoded file name.
 	 * If non-NULL, this indicates the file once existed on disk (not just as an
@@ -133,8 +133,8 @@ extern GPtrArray *documents_array;
 
 /**
  *  DOC_FILENAME returns the filename of the document passed or
- *  GEANY_STRING_UNTITLED (e.g. _("untitled")) if the %document's filename was not yet set.
- *  This macro never returns NULL.
+ *  GEANY_STRING_UNTITLED (e.g. _("untitled")) if the document's filename was not yet set.
+ *  This macro never returns @c NULL.
  **/
 #define DOC_FILENAME(doc) \
 	(G_LIKELY(doc->file_name != NULL) ? (doc->file_name) : GEANY_STRING_UNTITLED)

@@ -77,7 +77,7 @@ typedef enum
 	GEANY_FILETYPES_VHDL,
 	GEANY_FILETYPES_ADA,
 	GEANY_FILETYPES_CMAKE,
-
+	GEANY_FILETYPES_MARKDOWN,
 	/* ^ append items here */
 	GEANY_MAX_BUILT_IN_FILETYPES	/* Don't use this, use filetypes_array->len instead */
 }
@@ -107,14 +107,14 @@ struct GeanyFiletype
 	/** Represents the langType of tagmanager (see the table
 	 * in tagmanager/parsers.h), -1 represents all, -2 none. */
 	langType 		  lang;
-	gchar	 		 *name;				/**< Used as name for tagmanager. E.g. "C". */
-	gchar	 		 *title;			/**< Shown in the file open dialog. E.g. "C source file". */
-	gchar	 		 *extension;		/**< Default file extension for new files. */
+	gchar			 *name;				/**< Used as name for tagmanager. E.g. "C". */
+	gchar			 *title;			/**< Shown in the file open dialog. E.g. "C source file". */
+	gchar			 *extension;		/**< Default file extension for new files. */
 	gchar			**pattern;			/**< Array of filename-matching wildcard strings. */
-	gchar	 		 *context_action_cmd;
-	gchar	 		 *comment_open;
-	gchar	 		 *comment_close;
-	gboolean  		  comment_use_indent;
+	gchar			 *context_action_cmd;
+	gchar			 *comment_open;
+	gchar			 *comment_close;
+	gboolean		  comment_use_indent;
 	GeanyBuildCommand *filecmds;	/* these need to be visible since used in build.c so not in private part */
 	GeanyBuildCommand *ftdefcmds;	/* filetype dependent defaults for non_ft commands */
 	GeanyBuildCommand *execcmds;

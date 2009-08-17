@@ -114,14 +114,14 @@ static void apply_kb_accel(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer u
  * assign the keybinding to the menu_item (apply_kb_accel) otherwise it can't be overridden
  * by user keybindings anymore */
 /** Simple convenience function to fill a GeanyKeyBinding struct item.
- * @param group
- * @param key_id
- * @param callback
- * @param key
- * @param mod
- * @param name
- * @param label
- * @param menu_item */
+ * @param group Group.
+ * @param key_id Keybinding index for the group.
+ * @param callback Function to call when activated.
+ * @param key (Lower case) default key, e.g. @c GDK_j, but usually 0 for unset.
+ * @param mod Default modifier, e.g. @c GDK_CONTROL_MASK, but usually 0 for unset.
+ * @param name Not duplicated - use a static string.
+ * @param label Currently not duplicated - use a static or heap-allocated (e.g. translated) string.
+ * @param menu_item Optional widget to set an accelerator for, or @c NULL. */
 void keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 		GeanyKeyCallback callback, guint key, GdkModifierType mod,
 		gchar *name, gchar *label, GtkWidget *menu_item)
@@ -320,6 +320,8 @@ static void init_default_kb(void)
 		GDK_3, GDK_CONTROL_MASK, "edit_sendtocmd3", _("Send to Custom Command 3"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_FORMAT_SENDTOVTE, cb_func_format_action,
 		0, 0, "edit_sendtovte", _("Send Selection to Terminal"), LW(send_selection_to_vte1));
+	keybindings_set_item(group, GEANY_KEYS_FORMAT_REFLOWPARAGRAPH, cb_func_format_action,
+		GDK_j, GDK_CONTROL_MASK, "format_reflowparagraph", _("Reflow lines/block"), NULL);
 
 	group = ADD_KB_GROUP(INSERT, _("Insert"));
 
@@ -1091,7 +1093,6 @@ static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer 
 
 	keyval = ev->keyval;
     state = ev->state & gtk_accelerator_get_default_mod_mask();
-
 	/* hack to get around that CTRL+Shift+r results in GDK_R not GDK_r */
 	if ((ev->state & GDK_SHIFT_MASK) || (ev->state & GDK_LOCK_MASK))
 		if (keyval >= GDK_A && keyval <= GDK_Z)
@@ -1108,7 +1109,6 @@ static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer 
 		return TRUE;
 	if (check_menu_key(doc, keyval, state, ev->time))
 		return TRUE;
-
 	ignore_keybinding = FALSE;
 	for (g = 0; g < keybinding_groups->len; g++)
 	{
@@ -1480,36 +1480,56 @@ static void cb_func_switch_action(guint key_id)
 }
 
 
-static void switch_document(gint direction)
+static void switch_notebook_page(gint direction)
 {
-	gint page_count = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
-	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
+	gint page_count, cur_page;
+	gboolean parent_is_notebook = FALSE;
+	GtkNotebook *notebook;
+	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
+
+	/* check whether the current widget is a GtkNotebook or a child of a GtkNotebook */
+	do
+	{
+		parent_is_notebook = GTK_IS_NOTEBOOK(focusw);
+	}
+	while (! parent_is_notebook && (focusw = gtk_widget_get_parent(focusw)) != NULL);
+
+	/* if we found a GtkNotebook widget, use it. Otherwise fallback to the documents notebook */
+	if (parent_is_notebook)
+		notebook = GTK_NOTEBOOK(focusw);
+	else
+		notebook = GTK_NOTEBOOK(main_widgets.notebook);
+
+	/* now switch pages */
+	page_count = gtk_notebook_get_n_pages(notebook);
+	cur_page = gtk_notebook_get_current_page(notebook);
 
 	if (direction == GTK_DIR_LEFT)
 	{
 		if (cur_page > 0)
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), cur_page - 1);
+			gtk_notebook_set_current_page(notebook, cur_page - 1);
 		else
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), page_count - 1);
+			gtk_notebook_set_current_page(notebook, page_count - 1);
 	}
 	else if (direction == GTK_DIR_RIGHT)
 	{
 		if (cur_page < page_count - 1)
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), cur_page + 1);
+			gtk_notebook_set_current_page(notebook, cur_page + 1);
 		else
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), 0);
+			gtk_notebook_set_current_page(notebook, 0);
 	}
 }
 
 
 static void cb_func_switch_tableft(G_GNUC_UNUSED guint key_id)
 {
-	switch_document(GTK_DIR_LEFT);
+	switch_notebook_page(GTK_DIR_LEFT);
 }
+
 
 static void cb_func_switch_tabright(G_GNUC_UNUSED guint key_id)
 {
-	switch_document(GTK_DIR_RIGHT);
+	switch_notebook_page(GTK_DIR_RIGHT);
 }
 
 
@@ -1905,6 +1925,145 @@ static void cb_func_editor_action(guint key_id)
 }
 
 
+static void join_lines(GeanyEditor *editor)
+{
+	gint start, end, i;
+
+	start = sci_get_line_from_position(editor->sci,
+		sci_get_selection_start(editor->sci));
+	end = sci_get_line_from_position(editor->sci,
+		sci_get_selection_end(editor->sci));
+
+	/* if there is only one line in selection, join it with the following one */
+	if (end == start)
+		end = start + 1;
+
+	/*
+	 * remove trailing spaces for every line except the last one
+	 * so that these spaces won't appear within text after joining
+	 */
+	for (i = start; i < end; i++)
+		editor_strip_line_trailing_spaces(editor, i);
+
+	/* remove starting spaces from second and following lines due to the same reason */
+	for (i = start+1; i <= end; i++)
+		sci_set_line_indentation(editor->sci, i, 0);
+
+	/*
+	 * SCI_LINESJOIN automatically adds spaces between joined lines, including
+	 * empty ones. We should drop empty lines if we want only one space to be
+	 * inserted (see also example below). I don't think we should care of that.
+	 */
+
+	sci_set_target_start(editor->sci,
+		sci_get_position_from_line(editor->sci, start));
+	sci_set_target_end(editor->sci,
+		sci_get_position_from_line(editor->sci, end));
+	sci_lines_join(editor->sci);
+
+	/*
+	 * Example: joining
+	 *
+	 * [TAB]if (something_wrong)
+	 * [TAB]{
+	 * [TAB][TAB]
+	 * [TAB][TAB]exit(1);[SPACE][SPACE]
+	 * [TAB]}[SPACE]
+	 *
+	 * gives
+	 *
+	 * [TAB]if (something_wrong) {  exit(1); }[SPACE]
+	 */
+}
+
+
+static void split_lines(GeanyEditor *editor)
+{
+	gint start, indent, linescount, i;
+
+	/* do nothing if long line marker is disabled */
+	if (editor_prefs.long_line_type == 2)
+		return;
+
+	start = sci_get_line_from_position(editor->sci,
+		sci_get_selection_start(editor->sci));
+
+	/*
+	 * If several lines are selected, first join them.
+	 * This allows to reformat text paragraphs easily.
+	 */
+	if (sci_get_lines_selected(editor->sci) > 1)
+		join_lines(editor);
+
+	/*
+	 * If this line is short enough, just return
+	 */
+	if (editor_prefs.long_line_column >
+		sci_get_line_end_position(editor->sci, start) -
+		sci_get_position_from_line(editor->sci, start))
+	{
+		return;
+	}
+
+	/*
+	 * We have to manipulate line indentation so that indentation
+	 * of the resulting lines would be consistent. For example,
+	 * the result of splitting "[TAB]very long content":
+	 *
+	 * +-------------+-------------+
+	 * |   proper    |    wrong    |
+	 * +-------------+-------------+
+	 * | [TAB]very   | [TAB]very   |
+	 * | [TAB]long   | long        |
+	 * | [TAB]content| content     |
+	 * +-------------+-------------+
+	 */
+	indent = sci_get_line_indentation(editor->sci, start);
+	sci_set_line_indentation(editor->sci, start, 0);
+
+	/*
+	 * Use sci_get_line_count() to determine how many new lines
+	 * appeared during splitting. SCI_LINESSPLIT should better return
+	 * this value itself...
+	 */
+	sci_target_from_selection(editor->sci);
+	linescount = sci_get_line_count(editor->sci);
+	sci_lines_split(editor->sci,
+		(editor_prefs.long_line_column - indent) *
+		sci_text_width(editor->sci, STYLE_DEFAULT, " "));
+	linescount = sci_get_line_count(editor->sci) - linescount;
+
+	/* Fix indentation. */
+	for (i = start; i <= start + linescount; i++)
+		sci_set_line_indentation(editor->sci, i, indent);
+}
+
+
+static void reflow_paragraph(GeanyEditor *editor)
+{
+	ScintillaObject *sci = editor->sci;
+	gboolean sel;
+
+	sci_start_undo_action(sci);
+	sel = sci_has_selection(sci);
+	if (!sel)
+	{
+		gint line, pos;
+
+		keybindings_send_command(GEANY_KEY_GROUP_SELECT, GEANY_KEYS_SELECT_PARAGRAPH);
+		/* deselect last line break */
+		pos = sci_get_selection_end(sci);
+		line = sci_get_line_from_position(sci, pos);
+		pos = sci_get_line_end_position(sci, line - 1);
+		sci_set_selection_end(sci, pos);
+	}
+	split_lines(editor);
+	if (!sel)
+		sci_set_anchor(sci, -1);
+	sci_end_undo_action(sci);
+}
+
+
 /* common function for format keybindings, only valid when scintilla has focus. */
 static void cb_func_format_action(guint key_id)
 {
@@ -1958,6 +2117,9 @@ static void cb_func_format_action(guint key_id)
 			break;
 		case GEANY_KEYS_FORMAT_SENDTOVTE:
 			on_send_selection_to_vte1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_FORMAT_REFLOWPARAGRAPH:
+			reflow_paragraph(doc->editor);
 			break;
 	}
 }

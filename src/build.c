@@ -1046,12 +1046,18 @@ static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, g
 {
 	FILE *fp;
 	gchar *str;
+#ifdef G_OS_WIN32
+	gchar *expanded_cmd;
+#endif
 
 	fp = g_fopen(fname, "w");
 	if (! fp)
 		return FALSE;
 #ifdef G_OS_WIN32
-	str = g_strdup_printf("%s\n\n%s\ndel \"%%0\"\n\npause\n", cmd, (autoclose) ? "" : "pause");
+	/* Expand environment variables like %blah%. */
+	expanded_cmd = win32_expand_environment_variables(cmd);
+	str = g_strdup_printf("%s\n\n%s\ndel \"%%0\"\n\npause\n", expanded_cmd, (autoclose) ? "" : "pause");
+	g_free(expanded_cmd);
 #else
 	str = g_strdup_printf(
 		"#!/bin/sh\n\nrm $0\n\n%s\n\necho \"\n\n------------------\n(program exited with code: $?)\" \

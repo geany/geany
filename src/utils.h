@@ -64,6 +64,13 @@
 #define foreach_c_array(item, array, len) \
 	for (item = array; item < &array[len]; item++)
 
+/** Iterates all items in @a array.
+ * @param type Type of @a item.
+ * @param item pointer to item in @a array.
+ * @param array @c GArray to traverse. */
+#define foreach_array(type, item, array) \
+	foreach_c_array(item, ((type*)(gpointer)array->data), array->len)
+
 /** Iterates all the pointers in @a ptr_array.
  * @param item pointer in @a ptr_array.
  * @param idx @c guint index into @a ptr_array.

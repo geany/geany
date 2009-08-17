@@ -19,10 +19,10 @@ LexD.cxx \
 LexFortran.cxx \
 LexHaskell.cxx \
 LexHTML.cxx \
-LexYAML.cxx \
 LexLua.cxx \
-LexNsis.cxx \
+LexMarkdown.cxx \
 LexMatlab.cxx \
+LexNsis.cxx \
 LexOthers.cxx \
 LexPascal.cxx \
 LexPerl.cxx \
@@ -31,7 +31,8 @@ LexR.cxx \
 LexRuby.cxx \
 LexSQL.cxx \
 LexTCL.cxx \
-LexVHDL.cxx
+LexVHDL.cxx \
+LexYAML.cxx
 
 SRCS= \
 CallTip.cxx \

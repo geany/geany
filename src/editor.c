@@ -101,7 +101,6 @@ static void auto_table(GeanyEditor *editor, gint pos);
 static void close_block(GeanyEditor *editor, gint pos);
 static void editor_highlight_braces(GeanyEditor *editor, gint cur_pos);
 static void editor_auto_latex(GeanyEditor *editor, gint pos);
-static void editor_strip_line_trailing_spaces(GeanyEditor *editor, gint line);
 
 
 void editor_snippets_free(void)
@@ -490,6 +489,63 @@ static gboolean match_last_chars(ScintillaObject *sci, gint pos, const gchar *st
 }
 
 
+typedef struct
+{
+	gint message;
+	gint pos;
+	gchar *text;
+} CalltipReshowInfo;
+
+
+static gboolean reshow_calltip(gpointer data)
+{
+	CalltipReshowInfo *cri = data;
+	GeanyDocument *doc;
+
+	g_return_val_if_fail(calltip.sci != NULL, FALSE);
+
+	SSM(calltip.sci, SCI_CALLTIPCANCEL, 0, 0);
+	doc = document_get_current();
+
+	if (doc && doc->editor->sci == calltip.sci)
+	{
+		/* we use the position where the calltip was previously started as SCI_GETCURRENTPOS
+		 * may be completely wrong in case the user cancelled the auto completion with the mouse */
+		SSM(calltip.sci, SCI_CALLTIPSHOW, calltip.pos, (sptr_t) calltip.text);
+
+		/* now autocompletion has been cancelled by SCI_CALLTIPSHOW, so do it manually */
+		if (cri->message == SCN_AUTOCSELECTION)
+		{
+			gint pos = SSM(calltip.sci, SCI_GETCURRENTPOS, 0, 0);
+
+			sci_set_selection_start(calltip.sci, cri->pos);
+			sci_set_selection_end(calltip.sci, pos);
+			sci_replace_sel(calltip.sci, "");	/* clear root of word */
+			SSM(calltip.sci, SCI_INSERTTEXT, cri->pos, (sptr_t) cri->text);
+			sci_goto_pos(calltip.sci, cri->pos + strlen(cri->text), FALSE);
+		}
+	}
+	g_free(cri->text);
+	g_free(cri);
+
+	return FALSE;
+}
+
+
+static void request_reshowing_calltip(SCNotification *nt)
+{
+	if (calltip.set)
+	{
+		CalltipReshowInfo *cri = g_new0(CalltipReshowInfo, 1);
+		cri->message = nt->nmhdr.code;
+		cri->message = nt->lParam;
+		cri->text = g_strdup(nt->text);
+		/* delay the reshow of the calltip window to make sure it is actually displayed,
+		 * without it might be not visible on SCN_AUTOCCANCEL */
+		g_idle_add(reshow_calltip, cri);
+	}
+}
+
 static void autocomplete_scope(GeanyEditor *editor)
 {
 	ScintillaObject *sci = editor->sci;
@@ -601,7 +657,12 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 		case ':':	/* C/C++ class:: syntax */
 		/* tag autocompletion */
 		default:
+#if 0
+			if (! editor_start_auto_complete(editor, pos, FALSE))
+				request_reshowing_calltip(nt);
+#else
 			editor_start_auto_complete(editor, pos, FALSE);
+#endif
 	}
 	check_line_breaking(editor, pos, nt->ch);
 }
@@ -714,32 +775,6 @@ static void ensure_range_visible(ScintillaObject *sci, gint posStart, gint posEn
 }
 
 
-static gboolean reshow_calltip(gpointer data)
-{
-	SCNotification *nt = data;
-
-	g_return_val_if_fail(calltip.sci != NULL, FALSE);
-
-	SSM(calltip.sci, SCI_CALLTIPCANCEL, 0, 0);
-	/* we use the position where the calltip was previously started as SCI_GETCURRENTPOS
-	 * may be completely wrong in case the user cancelled the auto completion with the mouse */
-	SSM(calltip.sci, SCI_CALLTIPSHOW, calltip.pos, (sptr_t) calltip.text);
-
-	/* now autocompletion has been cancelled by SCI_CALLTIPSHOW, so do it manually */
-	if (nt->nmhdr.code == SCN_AUTOCSELECTION)
-	{
-		gint pos = SSM(calltip.sci, SCI_GETCURRENTPOS, 0, 0);
-
-		sci_set_selection_start(calltip.sci, nt->lParam);
-		sci_set_selection_end(calltip.sci, pos);
-		sci_replace_sel(calltip.sci, "");	/* clear root of word */
-		SSM(calltip.sci, SCI_INSERTTEXT, nt->lParam, (sptr_t) nt->text);
-		sci_goto_pos(calltip.sci, nt->lParam + strlen(nt->text), FALSE);
-	}
-	return FALSE;
-}
-
-
 static void auto_update_margin_width(GeanyEditor *editor)
 {
 	gint next_linecount = 1;
@@ -846,13 +881,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 		{
 			/* now that autocomplete is finishing or was cancelled, reshow calltips
 			 * if they were showing */
-			if (calltip.set)
-			{
-				/* delay the reshow of the calltip window to make sure it is actually displayed,
-				 * without it might be not visible on SCN_AUTOCCANCEL */
-				/* TODO g_idle_add() seems to be not enough, only with a timeout it works stable */
-				g_timeout_add(50, reshow_calltip, nt);
-			}
+			request_reshowing_calltip(nt);
 			break;
 		}
 #ifdef GEANY_DEBUG
@@ -4229,9 +4258,9 @@ void editor_replace_tabs(GeanyEditor *editor)
 		pos_in_line = sci_get_col_from_position(editor->sci,search_pos);
 		current_tab_true_length = tab_len - (pos_in_line % tab_len);
 		tab_str = g_strnfill(current_tab_true_length, ' ');
-		sci_target_start(editor->sci, search_pos);
-		sci_target_end(editor->sci, search_pos + 1);
-		sci_target_replace(editor->sci, tab_str, FALSE);
+		sci_set_target_start(editor->sci, search_pos);
+		sci_set_target_end(editor->sci, search_pos + 1);
+		sci_replace_target(editor->sci, tab_str, FALSE);
 		/* next search starts after replacement */
 		ttf.chrg.cpMin = search_pos + current_tab_true_length - 1;
 		/* update end of range now text has changed */
@@ -4275,9 +4304,9 @@ void editor_replace_spaces(GeanyEditor *editor)
 		if (search_pos == -1)
 			break;
 
-		sci_target_start(editor->sci, search_pos);
-		sci_target_end(editor->sci, search_pos + tab_len);
-		sci_target_replace(editor->sci, "\t", FALSE);
+		sci_set_target_start(editor->sci, search_pos);
+		sci_set_target_end(editor->sci, search_pos + tab_len);
+		sci_replace_target(editor->sci, "\t", FALSE);
 		ttf.chrg.cpMin = search_pos;
 		/* update end of range now text has changed */
 		ttf.chrg.cpMax -= tab_len - 1;
@@ -4287,7 +4316,7 @@ void editor_replace_spaces(GeanyEditor *editor)
 }
 
 
-static void editor_strip_line_trailing_spaces(GeanyEditor *editor, gint line)
+void editor_strip_line_trailing_spaces(GeanyEditor *editor, gint line)
 {
 	gint line_start = sci_get_position_from_line(editor->sci, line);
 	gint line_end = sci_get_line_end_position(editor->sci, line);
@@ -4301,9 +4330,9 @@ static void editor_strip_line_trailing_spaces(GeanyEditor *editor, gint line)
 	}
 	if (i < (line_end-1))
 	{
-		sci_target_start(editor->sci, i + 1);
-		sci_target_end(editor->sci, line_end);
-		sci_target_replace(editor->sci, "", FALSE);
+		sci_set_target_start(editor->sci, i + 1);
+		sci_set_target_end(editor->sci, line_end);
+		sci_replace_target(editor->sci, "", FALSE);
 	}
 }
 

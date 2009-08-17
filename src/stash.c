@@ -62,10 +62,7 @@
 #include <gtk/gtk.h>
 
 #include "stash.h"
-#include "utils.h"		/* only for utils_get_setting_*(). Stash should not depend on Geany. */
-
-#define foreach_array(type, item, array) \
-	foreach_c_array(item, ((type*)(gpointer)array->data), array->len)
+#include "utils.h"		/* only for foreach_*, utils_get_setting_*(). Stash should not depend on Geany. */
 
 
 struct GeanyPrefEntry

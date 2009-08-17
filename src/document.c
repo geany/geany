@@ -254,9 +254,9 @@ GeanyDocument *document_get_from_page(guint page_num)
 
 
 /**
- *  Find and retrieve the current %document.
+ *  Find and retrieve the current document.
  *
- *  @return A pointer to the current %document or @c NULL if there are no opened documents.
+ *  @return A pointer to the current document or @c NULL if there are no opened documents.
  **/
 GeanyDocument *document_get_current(void)
 {
@@ -750,12 +750,12 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft,
 
 
 /**
- *  Open a %document specified by @a locale_filename.
+ *  Open a document specified by @a locale_filename.
  *  After all, the "document-open" signal is emitted for plugins.
  *
- *  @param locale_filename The filename of the %document to load, in locale encoding.
- *  @param readonly Whether to open the %document in read-only mode.
- *  @param ft The %filetype for the %document or @c NULL to auto-detect the %filetype.
+ *  @param locale_filename The filename of the document to load, in locale encoding.
+ *  @param readonly Whether to open the document in read-only mode.
+ *  @param ft The filetype for the document or @c NULL to auto-detect the filetype.
  *  @param forced_enc The file encoding to use or @c NULL to auto-detect the file encoding.
  *
  *  @return The document opened or @c NULL.
@@ -1308,6 +1308,9 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 	if (reload)
 		ui_set_statusbar(TRUE, _("File %s reloaded."), display_filename);
 	else
+		/* For translators: this is the status window message for opening a file. %d is the number
+		 * of the newly opened file, %s indicates whether the file is opened read-only
+		 * (it is replaced with the string ", read-only"). */
 		msgwin_status_add(_("File %s opened(%d%s)."),
 			display_filename, gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)),
 			(readonly) ? _(", read-only") : "");
@@ -1365,8 +1368,8 @@ void document_open_file_list(const gchar *data, gssize length)
  *  Internally, document_open_file() is called for every list item.
  *
  *  @param filenames A list of filenames to load, in locale encoding.
- *  @param readonly Whether to open the %document in read-only mode.
- *  @param ft The %filetype for the %document or @c NULL to auto-detect the %filetype.
+ *  @param readonly Whether to open the document in read-only mode.
+ *  @param ft The filetype for the document or @c NULL to auto-detect the filetype.
  *  @param forced_enc The file encoding to use or @c NULL to auto-detect the file encoding.
  **/
 void document_open_files(const GSList *filenames, gboolean readonly, GeanyFiletype *ft,
@@ -1387,7 +1390,7 @@ void document_open_files(const GSList *filenames, gboolean readonly, GeanyFilety
  *  @param doc The document to reload.
  *  @param forced_enc The file encoding to use or @c NULL to auto-detect the file encoding.
  *
- *  @return @c TRUE if the %document was actually reloaded or @c FALSE otherwise.
+ *  @return @c TRUE if the document was actually reloaded or @c FALSE otherwise.
  **/
 gboolean document_reload_file(GeanyDocument *doc, const gchar *forced_enc)
 {
@@ -1471,9 +1474,9 @@ static void replace_header_filename(GeanyDocument *doc)
 
 	if (sci_find_text(doc->editor->sci, SCFIND_MATCHCASE, &ttf) != -1)
 	{
-		sci_target_start(doc->editor->sci, ttf.chrgText.cpMin);
-		sci_target_end(doc->editor->sci, ttf.chrgText.cpMax);
-		sci_target_replace(doc->editor->sci, filename, FALSE);
+		sci_set_target_start(doc->editor->sci, ttf.chrgText.cpMin);
+		sci_set_target_end(doc->editor->sci, ttf.chrgText.cpMax);
+		sci_replace_target(doc->editor->sci, filename, FALSE);
 	}
 
 	g_free(filebase);
@@ -1689,7 +1692,7 @@ static gchar *write_data_to_disk(GeanyDocument *doc, const gchar *locale_filenam
  *
  *  If the file is not modified, this functions does nothing unless force is set to @c TRUE.
  *
- *  @param doc The %document to save.
+ *  @param doc The document to save.
  *  @param force Whether to save the file even if it is not modified (e.g. for Save As).
  *
  *  @return @c TRUE if the file was saved or @c FALSE if the file could not or should not be saved.
@@ -1984,7 +1987,7 @@ gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gch
 		gint replace_len;
 		/* search next/prev will select matching text, which we use to set the replace target */
 		sci_target_from_selection(doc->editor->sci);
-		replace_len = sci_target_replace(doc->editor->sci, replace_text, flags & SCFIND_REGEXP);
+		replace_len = sci_replace_target(doc->editor->sci, replace_text, flags & SCFIND_REGEXP);
 		/* select the replacement - find text will skip past the selected text */
 		sci_set_selection_start(doc->editor->sci, search_pos);
 		sci_set_selection_end(doc->editor->sci, search_pos + replace_len);
@@ -2080,8 +2083,8 @@ document_replace_range(GeanyDocument *doc, const gchar *find_text, const gchar *
 		{
 			gint movepastEOL = 0;
 
-			sci_target_start(sci, search_pos);
-			sci_target_end(sci, search_pos + find_len);
+			sci_set_target_start(sci, search_pos);
+			sci_set_target_end(sci, search_pos + find_len);
 
 			if (find_len <= 0)
 			{
@@ -2090,7 +2093,7 @@ document_replace_range(GeanyDocument *doc, const gchar *find_text, const gchar *
 				if (chNext == '\r' || chNext == '\n')
 					movepastEOL = 1;
 			}
-			replace_len = sci_target_replace(sci, replace_text,
+			replace_len = sci_replace_target(sci, replace_text,
 				flags & SCFIND_REGEXP);
 			count++;
 			if (search_pos == end)
@@ -2466,12 +2469,12 @@ void document_reload_config(GeanyDocument *doc)
 
 
 /**
- *  Sets the encoding of a %document.
+ *  Sets the encoding of a document.
  *  This function only set the encoding of the %document, it does not any conversions. The new
  *  encoding is used when e.g. saving the file.
  *
- *  @param doc The %document to use.
- *  @param new_encoding The encoding to be set for the %document.
+ *  @param doc The document to use.
+ *  @param new_encoding The encoding to be set for the document.
  **/
 void document_set_encoding(GeanyDocument *doc, const gchar *new_encoding)
 {

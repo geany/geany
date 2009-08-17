@@ -59,7 +59,7 @@ gint				sci_marker_previous			(ScintillaObject* sci, gint line, gint marker_mask
 
 gint 				sci_get_col_from_position	(ScintillaObject* sci, gint position);
 gint 				sci_get_line_from_position	(ScintillaObject* sci, gint position);
-gint 				sci_get_position_from_line	(ScintillaObject* sci, gint line );
+gint 				sci_get_position_from_line	(ScintillaObject* sci, gint line);
 gint 				sci_get_current_position	(ScintillaObject* sci);
 void 				sci_set_current_position	(ScintillaObject* sci, gint position, gboolean scroll_to_caret);
 void 				sci_set_current_line		(ScintillaObject* sci, gint line);
@@ -135,10 +135,12 @@ gchar*				sci_get_contents_range		(ScintillaObject * sci, gint start, gint end);
 void				sci_selection_duplicate		(ScintillaObject * sci);
 void				sci_line_duplicate			(ScintillaObject * sci);
 void				sci_insert_text				(ScintillaObject * sci, gint pos, const gchar *text);
+
 void				sci_target_from_selection	(ScintillaObject * sci);
-void				sci_target_start			(ScintillaObject * sci, gint start);
-void				sci_target_end				(ScintillaObject * sci, gint end);
-gint				sci_target_replace			(ScintillaObject * sci, const gchar *text, gboolean regex);
+void				sci_set_target_start		(ScintillaObject * sci, gint start);
+void				sci_set_target_end			(ScintillaObject * sci, gint end);
+gint				sci_get_target_end			(ScintillaObject * sci);
+gint				sci_replace_target			(ScintillaObject * sci, const gchar *text, gboolean regex);
 
 void				sci_set_keywords			(ScintillaObject * sci, gint k, gchar *text);
 gint				sci_get_lexer				(ScintillaObject * sci);
@@ -173,7 +175,10 @@ void				sci_set_scroll_stop_at_last_line	(ScintillaObject* sci, gboolean set);
 
 void				sci_cancel					(ScintillaObject *sci);
 
-gint				sci_get_target_end			(ScintillaObject *sci);
 gint				sci_get_position_after		(ScintillaObject *sci, gint start);
+
+void				sci_lines_split				(ScintillaObject *sci, gint pixelWidth);
+void				sci_lines_join				(ScintillaObject *sci);
+gint				sci_text_width				(ScintillaObject *sci, int styleNumber, const char * text);
 
 #endif

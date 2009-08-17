@@ -46,8 +46,9 @@ void sci_set_line_numbers(ScintillaObject * sci, gboolean set, gint extra_width)
 		gchar tmp_str[15];
 		gint len = SSM(sci, SCI_GETLINECOUNT, 0, 0);
 		gint width;
+
 		g_snprintf(tmp_str, 15, "_%d%d", len, extra_width);
-		width = SSM(sci, SCI_TEXTWIDTH, STYLE_LINENUMBER, (sptr_t) tmp_str);
+		width = sci_text_width(sci, STYLE_LINENUMBER, tmp_str);
 		SSM (sci, SCI_SETMARGINWIDTHN, 0, width);
 		SSM (sci, SCI_SETMARGINSENSITIVEN, 0, FALSE); /* use default behaviour */
 	}
@@ -709,8 +710,12 @@ void sci_set_search_anchor(ScintillaObject *sci)
 }
 
 
+/* removes a selection if pos < 0 */
 void sci_set_anchor(ScintillaObject *sci, gint pos)
 {
+	if (pos < 0)
+		pos = sci_get_current_position(sci);
+
 	SSM(sci, SCI_SETANCHOR, pos, 0);
 }
 
@@ -863,19 +868,19 @@ void sci_target_from_selection(ScintillaObject *sci)
 }
 
 
- void sci_target_start(ScintillaObject *sci, gint start)
+void sci_set_target_start(ScintillaObject *sci, gint start)
 {
 	SSM(sci, SCI_SETTARGETSTART, start, 0);
 }
 
 
-void sci_target_end(ScintillaObject *sci, gint end)
+void sci_set_target_end(ScintillaObject *sci, gint end)
 {
 	SSM(sci, SCI_SETTARGETEND, end, 0);
 }
 
 
-gint sci_target_replace(ScintillaObject *sci, const gchar *text, gboolean regex)
+gint sci_replace_target(ScintillaObject *sci, const gchar *text, gboolean regex)
 {
 	return SSM(sci, (regex) ? SCI_REPLACETARGETRE : SCI_REPLACETARGET, (uptr_t) -1, (sptr_t) text);
 }
@@ -1084,4 +1089,17 @@ gint sci_get_position_after(ScintillaObject *sci, gint start)
 	return SSM(sci, SCI_POSITIONAFTER, start, 0);
 }
 
+void sci_lines_split(ScintillaObject *sci, gint pixelWidth)
+{
+	SSM(sci, SCI_LINESSPLIT, pixelWidth, 0);
+}
 
+void sci_lines_join(ScintillaObject *sci)
+{
+	SSM(sci, SCI_LINESJOIN, 0, 0);
+}
+
+gint sci_text_width(ScintillaObject *sci, gint styleNumber, const gchar *text)
+{
+	return SSM(sci, SCI_TEXTWIDTH, styleNumber, (sptr_t) text);
+}
