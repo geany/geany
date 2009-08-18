@@ -5,6 +5,9 @@
  * src/keybindings.c, src/keybindings.h, src/prefs.c:
    Fix updating main menu accelerators after changing keybindings
    (thanks to Lex Trotman).
+ * src/callbacks.c:
+   Fix using 'Insert date' keybinding when a custom date string has
+   not been set.
 
 
 2009-08-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
