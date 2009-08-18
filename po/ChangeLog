@@ -1,5 +1,7 @@
 2009-08-19  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
+ * pt.po: Rename Portuguese translation file so it can work as a fall
+   back for all Portuguese based languages.
  * sl.po: Update of Slovenian translation. Thanks to Joze Klepec.
 
 
