@@ -1,3 +1,9 @@
+2009-08-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/callbacks.c:
+   Fix 'Open Selected File' for unsaved new documents.
+
+
 2009-08-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/keybindings.c:
