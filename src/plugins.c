@@ -62,24 +62,7 @@
 #include "pluginutils.h"
 #include "pluginprivate.h"
 
-
-typedef struct Plugin
-{
-	GModule 	*module;
-	gchar		*filename;				/* plugin filename (/path/libname.so) */
-	PluginInfo		info;				/* plugin name, description, etc */
-	PluginFields	fields;
-	GeanyPlugin		public;				/* fields the plugin can read */
-	GeanyPluginPrivate	priv;			/* GeanyPlugin type private data, same as (*public.priv) */
-
-	GeanyKeyGroup	*key_group;
-
-	void		(*init) (GeanyData *data);			/* Called when the plugin is enabled */
-	GtkWidget*	(*configure) (GtkDialog *dialog);	/* plugin configure dialog, optional */
-	void		(*help) (void);					/* Called when the plugin should show some help, optional */
-	void		(*cleanup) (void);					/* Called when the plugin is disabled or when Geany exits */
-}
-Plugin;
+typedef GeanyPluginPrivate Plugin;	/* shorter alias */
 
 
 static gboolean want_plugins = FALSE;
@@ -534,9 +517,6 @@ plugin_init(Plugin *plugin)
 	g_return_if_fail(plugin->init);
 	plugin->init(&geany_data);
 
-	if (p_geany_plugin && (*p_geany_plugin)->priv->resident)
-		g_module_make_resident(plugin->module);
-
 	/* store some function pointers for later use */
 	g_module_symbol(plugin->module, "plugin_configure", (void *) &plugin->configure);
 	g_module_symbol(plugin->module, "plugin_help", (void *) &plugin->help);
@@ -667,7 +647,7 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 	plugin->filename = g_strdup(fname);
 	plugin->module = module;
 	plugin->public.info = &plugin->info;
-	plugin->public.priv = &plugin->priv;
+	plugin->public.priv = plugin;
 
 	if (init_plugin)
 		plugin_init(plugin);
@@ -681,7 +661,7 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 
 static void remove_callbacks(Plugin *plugin)
 {
-	GArray *signal_ids = plugin->priv.signal_ids;
+	GArray *signal_ids = plugin->signal_ids;
 	SignalConnection *sc;
 
 	if (signal_ids == NULL)
@@ -714,7 +694,7 @@ plugin_cleanup(Plugin *plugin)
 	if (plugin->key_group)
 		g_ptr_array_remove_fast(keybinding_groups, plugin->key_group);
 
-	widget = plugin->priv.toolbar_separator.widget;
+	widget = plugin->toolbar_separator.widget;
 	if (widget)
 		gtk_widget_destroy(widget);
 

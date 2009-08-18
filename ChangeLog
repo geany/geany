@@ -167,6 +167,35 @@ Configurable Build Menu Changes
  * src/project.h, src/project.c:
    Changed to load/store the new configuration info.
 
+2009-08-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/callbacks.c:
+   Fix 'Open Selected File' for unsaved new documents.
+ * src/keybindings.c, src/keybindings.h, src/prefs.c:
+   Fix updating main menu accelerators after changing keybindings
+   (thanks to Lex Trotman).
+ * src/callbacks.c:
+   Fix using 'Insert date' keybinding when a custom date string has
+   not been set.
+ * src/pluginprivate.h, src/pluginutils.c, src/plugins.c:
+   Merge Plugin and GeanyPluginPrivate structs.
+
+
+2009-08-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/keybindings.c:
+   Fix non-working Home and End keys on numpads.
+
+
+2009-08-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * doc/geany.txt, doc/geany.html, NEWS:
+   Add 'Scope autocompletion' section.
+   Add 'Tools menu items' section to explain configuration files
+   submenu, reload configuration item.
+   Minor updates/fixes.
+
+
 2009-08-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/document.c:

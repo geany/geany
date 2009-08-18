@@ -26,7 +26,9 @@
 #ifndef PLUGINPRIVATE_H
 #define PLUGINPRIVATE_H
 
-#include "ui_utils.h"
+#include "ui_utils.h"	/* GeanyAutoSeparator */
+#include "keybindings.h"	/* GeanyKeyGroup */
+
 
 typedef struct SignalConnection
 {
@@ -35,11 +37,24 @@ typedef struct SignalConnection
 }
 SignalConnection;
 
+
 typedef struct GeanyPluginPrivate
 {
+	GModule 		*module;
+	gchar			*filename;				/* plugin filename (/path/libname.so) */
+	PluginInfo		info;				/* plugin name, description, etc */
+	GeanyPlugin		public;				/* fields the plugin can read */
+
+	void		(*init) (GeanyData *data);			/* Called when the plugin is enabled */
+	GtkWidget*	(*configure) (GtkDialog *dialog);	/* plugin configure dialog, optional */
+	void		(*help) (void);					/* Called when the plugin should show some help, optional */
+	void		(*cleanup) (void);					/* Called when the plugin is disabled or when Geany exits */
+
+	/* extra stuff */
+	PluginFields	fields;
+	GeanyKeyGroup	*key_group;
 	GeanyAutoSeparator	toolbar_separator;
-	gboolean			resident;
-	GArray				*signal_ids;			/* SignalConnection's to disconnect when unloading */
+	GArray			*signal_ids;			/* SignalConnection's to disconnect when unloading */
 }
 GeanyPluginPrivate;
 

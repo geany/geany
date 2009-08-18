@@ -107,12 +107,10 @@ static void cb_func_switch_tablastused(guint key_id);
 static void cb_func_move_tab(guint key_id);
 
 static void add_popup_menu_accels(void);
-static void apply_kb_accel(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_data);
 
 
-/* This is used to set default keybindings on startup but at this point we don't want to
- * assign the keybinding to the menu_item (apply_kb_accel) otherwise it can't be overridden
- * by user keybindings anymore */
+/* This is used to set default keybindings on startup.
+ * Menu accels are set in apply_kb_accel(). */
 /** Simple convenience function to fill a GeanyKeyBinding struct item.
  * @param group Group.
  * @param key_id Keybinding index for the group.
@@ -566,16 +564,6 @@ void keybindings_init(void)
 }
 
 
-static void apply_kb_accel(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_data)
-{
-	if (kb->key != 0 && kb->menu_item)
-	{
-		gtk_widget_add_accelerator(kb->menu_item, "activate", kb_accel_group,
-			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
-	}
-}
-
-
 typedef void (*KBItemCallback) (GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_data);
 
 static void keybindings_foreach(KBItemCallback cb, gpointer user_data)
@@ -630,36 +618,42 @@ static void load_user_kb(void)
 }
 
 
+static void apply_kb_accel(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_data)
+{
+	if (kb->key != 0 && kb->menu_item)
+	{
+		gtk_widget_add_accelerator(kb->menu_item, "activate", kb_accel_group,
+			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
+	}
+}
+
+
 void keybindings_load_keyfile(void)
 {
 	load_user_kb();
 	add_popup_menu_accels();
 
-	/* set menu accels now, after user keybindings have been read and processed
-	 * if we would set it before, user keybindings could not override menu item's default
-	 * keybindings */
+	/* set menu accels now, after user keybindings have been read */
 	keybindings_foreach(apply_kb_accel, NULL);
 }
 
 
-static void add_menu_accel(GeanyKeyGroup *group, guint kb_id,
-	GtkAccelGroup *accel_group, GtkWidget *menuitem)
+static void add_menu_accel(GeanyKeyGroup *group, guint kb_id, GtkWidget *menuitem)
 {
 	GeanyKeyBinding *kb = &group->keys[kb_id];
 
 	if (kb->key != 0)
-		gtk_widget_add_accelerator(menuitem, "activate", accel_group,
+		gtk_widget_add_accelerator(menuitem, "activate", kb_accel_group,
 			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
 }
 
 
 #define GEANY_ADD_POPUP_ACCEL(kb_id, wid) \
-	add_menu_accel(group, kb_id, accel_group, ui_lookup_widget(main_widgets.editor_menu, G_STRINGIFY(wid)))
+	add_menu_accel(group, kb_id, ui_lookup_widget(main_widgets.editor_menu, G_STRINGIFY(wid)))
 
 /* set the menu item accelerator shortcuts (just for visibility, they are handled anyway) */
 static void add_popup_menu_accels(void)
 {
-	GtkAccelGroup *accel_group = gtk_accel_group_new();
 	GeanyKeyGroup *group;
 
 	group = g_ptr_array_index(keybinding_groups, GEANY_KEY_GROUP_EDITOR);
@@ -696,8 +690,6 @@ static void add_popup_menu_accels(void)
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_FORMAT_SENDTOVTE, send_selection_to_vte2);
 
 	/* the build menu items are set if the build menus are created */
-
-	gtk_window_add_accel_group(GTK_WINDOW(main_widgets.window), accel_group);
 }
 
 
@@ -1075,6 +1067,37 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 #endif
 
 
+/* Map the keypad keys to their equivalent functions (taken from ScintillaGTK.cxx) */
+static guint key_kp_translate(guint key_in)
+{
+	switch (key_in)
+	{
+		case GDK_KP_Down:
+			return GDK_Down;
+		case GDK_KP_Up:
+			return GDK_Up;
+		case GDK_KP_Left:
+			return GDK_Left;
+		case GDK_KP_Right:
+			return GDK_Right;
+		case GDK_KP_Home:
+			return GDK_Home;
+		case GDK_KP_End:
+			return GDK_End;
+		case GDK_KP_Page_Up:
+			return GDK_Page_Up;
+		case GDK_KP_Page_Down:
+			return GDK_Page_Down;
+		case GDK_KP_Delete:
+			return GDK_Delete;
+		case GDK_KP_Insert:
+			return GDK_Insert;
+		default:
+			return key_in;
+	}
+}
+
+
 /* central keypress event handler, almost all keypress events go to this function */
 static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer user_data)
 {
@@ -1097,6 +1120,9 @@ static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer 
 	if ((ev->state & GDK_SHIFT_MASK) || (ev->state & GDK_LOCK_MASK))
 		if (keyval >= GDK_A && keyval <= GDK_Z)
 			keyval += GDK_a - GDK_A;
+
+	if (keyval >= GDK_KP_Space && keyval < GDK_KP_Equal)
+		keyval = key_kp_translate(keyval);
 
 	/*geany_debug("%d (%d) %d (%d)", keyval, ev->keyval, state, ev->state);*/
 
@@ -2226,5 +2252,22 @@ static void cb_func_insert_action(guint key_id)
 				ui_lookup_widget(main_widgets.window, "insert_date_custom1")));
 			break;
 	}
+}
+
+
+/* update key combination */
+void keybindings_update_combo(GeanyKeyBinding *kb, guint key, GdkModifierType mods)
+{
+	GtkWidget *widget = kb->menu_item;
+
+	if (widget && kb->key)
+		gtk_widget_remove_accelerator(widget, kb_accel_group, kb->key, kb->mods);
+
+	kb->key = key;
+	kb->mods = mods;
+
+	if (widget && kb->key)
+		gtk_widget_add_accelerator(widget, "activate", kb_accel_group,
+			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
 }
 

@@ -88,7 +88,7 @@ void plugin_module_make_resident(GeanyPlugin *plugin)
 {
 	g_return_if_fail(plugin);
 
-	plugin->priv->resident = TRUE;
+	g_module_make_resident(plugin->priv->module);
 }
 
 

@@ -6,9 +6,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: geany 0.18\n"
+"Project-Id-Version: geany 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-16 18:09+0200\n"
+"POT-Creation-Date: 2009-08-16 18:14+0200\n"
 "PO-Revision-Date: 2009-08-11 23:24+0100\n"
 "Last-Translator: Jože Klepec <joze.klepec@siol.net>\n"
 "Language-Team: Slovenian <geany-i18n@uvena.de>\n"
@@ -3226,8 +3226,9 @@ msgid "Print Geany's installation prefix"
 msgstr "Izpiši Geanyjevo namestitveno predpono"
 
 #: ../src/main.c:141
+#, fuzzy
 msgid "Don't load the previous session's files"
-msgstr "Ne naloži datotek prejšnje seje"
+msgstr "ne naloži datotek prejšnje seje"
 
 #: ../src/main.c:143
 msgid "Don't load terminal support"

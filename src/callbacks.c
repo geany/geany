@@ -1466,10 +1466,17 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	gchar *format;
+	gchar *format = NULL;
 	gchar *time_str;
 
 	g_return_if_fail(doc != NULL);
+
+	/* set default value */
+	if (utils_str_equal("", ui_prefs.custom_date_format))
+	{
+		g_free(ui_prefs.custom_date_format);
+		ui_prefs.custom_date_format = g_strdup("%d.%m.%Y");
+	}
 
 	if (utils_str_equal(_("dd.mm.yyyy"), (gchar*) user_data))
 		format = "%d.%m.%Y";
@@ -1487,13 +1494,6 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
 		format = ui_prefs.custom_date_format;
 	else
 	{
-		/* set default value */
-		if (utils_str_equal("", ui_prefs.custom_date_format))
-		{
-			g_free(ui_prefs.custom_date_format);
-			ui_prefs.custom_date_format = g_strdup("%d.%m.%Y");
-		}
-
 		dialogs_show_input(_("Custom Date Format"),
 			_("Enter here a custom date and time format. You can use any conversion specifiers which can be used with the ANSI C strftime function."),
 			ui_prefs.custom_date_format, FALSE, &on_custom_date_input_response);
@@ -1866,7 +1866,7 @@ on_menu_open_selected_file1_activate   (GtkMenuItem     *menuitem,
 
 	if (sel != NULL)
 	{
-		gchar *locale_filename, *filename;
+		gchar *locale_filename, *filename = NULL;
 
 		if (g_path_is_absolute(sel))
 			filename = g_strdup(sel);
@@ -1874,7 +1874,10 @@ on_menu_open_selected_file1_activate   (GtkMenuItem     *menuitem,
 		{	/* relative filename, add the path of the current file */
 			gchar *path;
 
-			path = g_path_get_dirname(doc->file_name);
+			path = utils_get_current_file_dir_utf8();
+			if (!path)
+				path = g_get_current_dir();
+
 			filename = g_build_path(G_DIR_SEPARATOR_S, path, sel, NULL);
 
 			if (! g_file_test(filename, G_FILE_TEST_EXISTS) &&
