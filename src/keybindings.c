@@ -107,12 +107,10 @@ static void cb_func_switch_tablastused(guint key_id);
 static void cb_func_move_tab(guint key_id);
 
 static void add_popup_menu_accels(void);
-static void apply_kb_accel(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_data);
 
 
-/* This is used to set default keybindings on startup but at this point we don't want to
- * assign the keybinding to the menu_item (apply_kb_accel) otherwise it can't be overridden
- * by user keybindings anymore */
+/* This is used to set default keybindings on startup.
+ * Menu accels are set in apply_kb_accel(). */
 /** Simple convenience function to fill a GeanyKeyBinding struct item.
  * @param group Group.
  * @param key_id Keybinding index for the group.
@@ -568,16 +566,6 @@ void keybindings_init(void)
 }
 
 
-static void apply_kb_accel(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_data)
-{
-	if (kb->key != 0 && kb->menu_item)
-	{
-		gtk_widget_add_accelerator(kb->menu_item, "activate", kb_accel_group,
-			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
-	}
-}
-
-
 typedef void (*KBItemCallback) (GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_data);
 
 static void keybindings_foreach(KBItemCallback cb, gpointer user_data)
@@ -632,14 +620,22 @@ static void load_user_kb(void)
 }
 
 
+static void apply_kb_accel(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_data)
+{
+	if (kb->key != 0 && kb->menu_item)
+	{
+		gtk_widget_add_accelerator(kb->menu_item, "activate", kb_accel_group,
+			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
+	}
+}
+
+
 void keybindings_load_keyfile(void)
 {
 	load_user_kb();
 	add_popup_menu_accels();
 
-	/* set menu accels now, after user keybindings have been read and processed
-	 * if we would set it before, user keybindings could not override menu item's default
-	 * keybindings */
+	/* set menu accels now, after user keybindings have been read */
 	keybindings_foreach(apply_kb_accel, NULL);
 }
 
@@ -2267,5 +2263,22 @@ static void cb_func_insert_action(guint key_id)
 				ui_lookup_widget(main_widgets.window, "insert_date_custom1")));
 			break;
 	}
+}
+
+
+/* update key combination */
+void keybindings_update_combo(GeanyKeyBinding *kb, guint key, GdkModifierType mods)
+{
+	GtkWidget *widget = kb->menu_item;
+
+	if (widget && kb->key)
+		gtk_widget_remove_accelerator(widget, kb_accel_group, kb->key, kb->mods);
+
+	kb->key = key;
+	kb->mods = mods;
+
+	if (widget && kb->key)
+		gtk_widget_add_accelerator(widget, "activate", kb_accel_group,
+			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
 }
 
