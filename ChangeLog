@@ -8,6 +8,8 @@
  * src/callbacks.c:
    Fix using 'Insert date' keybinding when a custom date string has
    not been set.
+ * src/pluginprivate.h, src/pluginutils.c, src/plugins.c:
+   Merge Plugin and GeanyPluginPrivate structs.
 
 
 2009-08-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
