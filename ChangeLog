@@ -1,3 +1,9 @@
+2009-08-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * doc/Doxyfile.in, plugins/geanyfunctions.h, plugins/genapi.py:
+   Add geanyfunctions.h to API docs.
+
+
 2009-08-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/callbacks.c:
