@@ -97,11 +97,10 @@ static gint sci_get_value(ScintillaObject *sci, gint message_id, gint param)
 static void set_styles(ScintillaObject *oldsci, ScintillaObject *newsci)
 {
 	gint style_id;
+	gint val;
 
 	for (style_id = 0; style_id <= 127; style_id++)
 	{
-		gint val;
-
 		val = sci_get_value(oldsci, SCI_STYLEGETFORE, style_id);
 		scintilla_send_message(newsci, SCI_STYLESETFORE, style_id, val);
 		val = sci_get_value(oldsci, SCI_STYLEGETBACK, style_id);
@@ -111,6 +110,8 @@ static void set_styles(ScintillaObject *oldsci, ScintillaObject *newsci)
 		val = sci_get_value(oldsci, SCI_STYLEGETITALIC, style_id);
 		scintilla_send_message(newsci, SCI_STYLESETITALIC, style_id, val);
 	}
+	val = sci_get_value(oldsci, SCI_GETCARETFORE, 0);
+	scintilla_send_message(newsci, SCI_SETCARETFORE, val, 0);
 }
 
 
