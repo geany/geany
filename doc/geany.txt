@@ -2170,7 +2170,7 @@ Follow path of the current file
 Execute programs in VTE
     Execute programs in the virtual terminal instead of using the external
     terminal tool.  Note that if you run multiple execute commands at once
-    the output may become mixed togehter in the VTE.
+    the output may become mixed together in the VTE.
 
 Don't use run script
     Don't use the simple run script which is usually used to display
@@ -2192,7 +2192,7 @@ when the *Use project-based session files* preference is enabled,
 in the *Project* group of the `Preferences`_ dialog.
 
 As long as a project is open, the Build menu will use
-the items defined in project's settings, instead of the defaults. 
+the items defined in project's settings, instead of the defaults.
 See `Build Menu Configuration` for information on configuring the menu.
 
 The current project's settings are saved when it is closed, or when
@@ -2222,18 +2222,18 @@ You can set an optional description for the project, but it is not
 used elsewhere by Geany.
 
 The *Base path* field is used as the directory to run the Build menu commands.
-The specified path can be an absolute path or it is considered to be 
+The specified path can be an absolute path or it is considered to be
 relative to the project's file name.
 
 
 Set Base Path Button
 ````````````````````
 
-This button is a convenience to set the working directory fields 
+This button is a convenience to set the working directory fields
 in the non-filetype Build menu items to %p to use the project base path.
 
 .. note::
-    Pressing the 'set' button will overright any working directories 
+    Pressing the 'set' button will overright any working directories
     you have configured for the project.
 
 
@@ -2259,30 +2259,30 @@ session files and open any previously closed default session files.
 
 Build Menu
 ----------
-After editing code with Geany, the next step is to compile, link, build, 
-interpret, run etc.  As Geany supports many languages each with a different 
-approach to such operations, and as there are also many language independant 
-software building systems, Geany does not have a built in build system, nor 
+After editing code with Geany, the next step is to compile, link, build,
+interpret, run etc.  As Geany supports many languages each with a different
+approach to such operations, and as there are also many language independant
+software building systems, Geany does not have a built in build system, nor
 does it limit which system you can use.  Instead the build menu provides
 a configurable and flexible means of running any external commands.
 
-This section provides a description of the default configuration of the 
+This section provides a description of the default configuration of the
 build menu and then covers how to configure it, and where the defaults fit in.
 
 Running the commands from within Geany has two benefits:
 
 * the current file is automatically saved before the command is run
-* the output is captured in the Compiler notebook tab and parsed for 
+* the output is captured in the Compiler notebook tab and parsed for
   warnings or errors
 
-Warnings and errors that can be parsed for line numbers will be shown in 
-red in the Compiler tab and you can click on them to switch to the relevant 
-source file (or open it) and mark the line number.  Also lines with 
+Warnings and errors that can be parsed for line numbers will be shown in
+red in the Compiler tab and you can click on them to switch to the relevant
+source file (or open it) and mark the line number.  Also lines with
 warnings or errors are marked in the source, see `Indicators`_ below.
 
 .. tip::
     If Geany's default error message parsing does not parse errors for
-    the tool you're using, you can set a custom regex in the Build Commands 
+    the tool you're using, you can set a custom regex in the Build Commands
     Dialog, see `Build Menu Configuration`
 
 Indicators
@@ -2323,8 +2323,8 @@ setup to compile the current source file into a binary object file.
 
 Java source files will be compiled to class file bytecode.
 
-Interpreted languages such as Perl, Python, Ruby will compile to 
-bytecode if the language supports it, or will run a syntax check, 
+Interpreted languages such as Perl, Python, Ruby will compile to
+bytecode if the language supports it, or will run a syntax check,
 or if that is not available will run the file in its language interpreter.
 
 
@@ -2376,8 +2376,8 @@ Execute will run the corresponding executable file, shell script or
 interpreted script in a terminal window. Note that the Terminal tool
 path must be correctly set in the Tools tab of the Preferences dialog -
 you can use any terminal program that runs a Bourne compatible shell
-and accept the "-e" command line argument to start a command or can be 
-selected to us the build-in VTE if it is available, see 
+and accept the "-e" command line argument to start a command or can be
+selected to us the build-in VTE if it is available, see
 `Virtual terminal emulator widget (VTE)`_.
 
 After your program or script has finished executing, you will be
@@ -2390,14 +2390,14 @@ The execute command output is not parsed for errors.
 Stopping running processes
 ``````````````````````````
 
-When there is a running program, the Execute menu item in the menu and 
+When there is a running program, the Execute menu item in the menu and
 the Run button in the toolbar
 becomes a stop button and you can stop the current running program. This
 works by sending a signal to the process (and its child process(es))
 to stop the process. The signal used is SIGQUIT.
 
 Depending on the process you started it is possible that the process
-cannot be stopped. For example this can happen when the process creates 
+cannot be stopped. For example this can happen when the process creates
 more than one child process.
 
 
@@ -2434,36 +2434,36 @@ Build Menu Configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 The build menu has considerable flexibility and configurability, allowing
-both menu labels the commands they execute and the directory they execute 
-in to be configured. 
+both menu labels the commands they execute and the directory they execute
+in to be configured.
 
-For example, if you change one of the default make commands to run say 'waf' 
+For example, if you change one of the default make commands to run say 'waf'
 you can also change the label to match.
 
 Underlines in the labels set mnemonic characters.
 
-The build menu is divided into four groups of items each with different 
+The build menu is divided into four groups of items each with different
 behaviors:
 
-* file items - are configurable and depend on the filetype of the current 
+* file items - are configurable and depend on the filetype of the current
   document, put the output in the compiler tab and parse it for errors
-* non-file items - are configurable and mostly don't depend on the filetype 
-  of the current document, put the output in the compiler tab and parse 
+* non-file items - are configurable and mostly don't depend on the filetype
+  of the current document, put the output in the compiler tab and parse
   it for errors
-* execute items - are configurable and intended for executing your 
+* execute items - are configurable and intended for executing your
   program or other long running programs.  The output is not parsed for errors
   and is directed to the terminal selected in preferences.
 * fixed items - are not configurable because they perform the Geany built in actions,
-  go to the next error, go to the previous error and show the build menu 
+  go to the next error, go to the previous error and show the build menu
   commands dialog
 
-The maximum numbers of items in each of the configurable groups can be 
-configured when Geany starts using hidden settings(see `Preferences File Format`).  
-Even though the maximum number of items may have been increased, only 
+The maximum numbers of items in each of the configurable groups can be
+configured when Geany starts using hidden settings(see `Preferences File Format`).
+Even though the maximum number of items may have been increased, only
 those menu items that have values configured are shown in the menu.
 
-The groups of menu items obtain their configuration from four potential 
-sources.  The highest pririty source that has the menu item defined will 
+The groups of menu items obtain their configuration from four potential
+sources.  The highest pririty source that has the menu item defined will
 be used. The sources in decreasing priority are:
 
 * a project file if open
@@ -2471,7 +2471,7 @@ be used. The sources in decreasing priority are:
 * the system filetype definitions
 * the defaults
 
-The detailed relationships between sources and the configurable menu item groups 
+The detailed relationships between sources and the configurable menu item groups
 is shown in the following table.
 
 +--------------+---------------------+--------------------------+-------------------+-------------------------------+
@@ -2509,32 +2509,32 @@ is shown in the following table.
 
 The following notes on the table reference cells by coordinate as (group,source):
 
-* General - for filetype.xxx substitute the appropriate extension for the 
+* General - for filetype.xxx substitute the appropriate extension for the
   current document for xxx.
 
-* System Filetypes - Labels loaded from these sources are locale sensitive 
+* System Filetypes - Labels loaded from these sources are locale sensitive
   and can contain translations.
 
 * (Filetype, Project File) and (Filetype, Preferences) - preferences use a full
   filetype file so that users can configure all other filetype preferences
-  as well.  Projects can only configure menu items per filetype.  Saving 
+  as well.  Projects can only configure menu items per filetype.  Saving
   in the project file means that there is only one file per project not
   a whole directory.
 
 * (Non-Filetype, System Filetype) - although conceptually strange, defining
-  non-filetype commands in a filetype file, this provides the ability to 
+  non-filetype commands in a filetype file, this provides the ability to
   define filetype dependent default menu items.
 
-* (Execute, Project File) and (Execute, Preferences) - the filetype based execute 
-  configuration can only be set by hand editing the appropriate file, see 
+* (Execute, Project File) and (Execute, Preferences) - the filetype based execute
+  configuration can only be set by hand editing the appropriate file, see
   `Preferences File Format` and `Project File Format`.
 
 Build Menu Commands Dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Most of the configuration of the build menu is done through the Build Menu 
-Commands Dialog.  You edit the configuration sourced from preferences in the 
-dialog opened from the Build->Build Menu Commands item and you edit the 
+Most of the configuration of the build menu is done through the Build Menu
+Commands Dialog.  You edit the configuration sourced from preferences in the
+dialog opened from the Build->Build Menu Commands item and you edit the
 configuration from the project in the build tab of the project preferences
 dialog.  Both use the same form shown below.
 
@@ -2542,17 +2542,17 @@ dialog.  Both use the same form shown below.
 
 The dialog is divided into three sections:
 
-* Filetype menu items which will be selected based on the filetype of the 
-  currently open document, 
+* Filetype menu items which will be selected based on the filetype of the
+  currently open document,
 
 * Non-filetype menu items, and
 
 * Execute menu items.
 
-The filetype and non-filetype sections also contain a field for the regular 
+The filetype and non-filetype sections also contain a field for the regular
 expression used for parsing command output for error and warning messages.
 
-The columns in the first three sections allow setting of the label, command, 
+The columns in the first three sections allow setting of the label, command,
 and working directory to run the command in.
 
 An item with an empty label will not be shown in the menu.
@@ -2560,25 +2560,25 @@ An item with an empty label will not be shown in the menu.
 An empty working directory will default to the directory of the current document.
 If there is no current document then the command will not run.
 
-The dialog will always show the command selected by priority, not just the 
+The dialog will always show the command selected by priority, not just the
 commands configured in this configuration source. This ensures that you always
 see what the menu item is going to do if activated.
 
-If the current source of the menu item is higher priority than the 
-configuration source you are editing then the command will be shown 
-in the dialog but will be insensitive (greyed out).  This can't happen 
+If the current source of the menu item is higher priority than the
+configuration source you are editing then the command will be shown
+in the dialog but will be insensitive (greyed out).  This can't happen
 with the project source but can with the preferences source dialog.
 
 The clear buttons remove the definition from the configuration source you are editing.
 When you do this the command from the next lower priority source will be shown.
-To hide lower priority menu items without having anything show in the menu 
+To hide lower priority menu items without having anything show in the menu
 configure with a nothing in the label but at least one character in the command.
 
 Substitutions in Commands and Working Directories
 `````````````````````````````````````````````````
 
-The first occurance of each of the following character sequences in each of the 
-command and working directory fields is substituted by the items specified below 
+The first occurance of each of the following character sequences in each of the
+command and working directory fields is substituted by the items specified below
 before the command is run.
 
 * %d - substituted by the absolute path to the directory of the current file.
@@ -2588,16 +2588,16 @@ before the command is run.
 
 .. note::
    If the basepath set in the project preferences is not an absolute path , then it is
-   taken as relative to the directory of the project file.  This allows a project file 
-   stored in the source tree to specify all commands and working directories relative 
+   taken as relative to the directory of the project file.  This allows a project file
+   stored in the source tree to specify all commands and working directories relative
    to the tree itself, so that the whole tree including the project file, can be moved
-   and even checked into and out of version control without having to re-configure the 
+   and even checked into and out of version control without having to re-configure the
    build menu.
 
 Build Menu Keyboard Shortcuts
 `````````````````````````````
 
-Keyboard shortcuts can be defiend for the first two filetype menu items, the first three 
+Keyboard shortcuts can be defiend for the first two filetype menu items, the first three
 non-filetype menu items, the first two execute menu items and the fixed menu items.
 In the keybindings configuration dialog (see `Keybinding tab in preferences dialog`_)
 these items are identified by the default labels shown in the `Build Menu`_ section above.
@@ -2607,13 +2607,13 @@ It is currently not possible to bind keyboard shortcuts to more than these menu 
 Configuration Files
 ```````````````````
 
-The configurable Build Menu capability was introduced in Geany V0.19 and 
-required a new section to be added to the configuration files (See 
+The configurable Build Menu capability was introduced in Geany V0.19 and
+required a new section to be added to the configuration files (See
 `Preferences File Format`_).  Geany will still load older format project,
 preferences and filetype file settings and will attempt to map them into the new
 configuration format.  There is not a simple clean mapping between the formats.
 The mapping used produces the most sensible results for the majority of cases.
-However, if they do not map the way you want, you may have to manually 
+However, if they do not map the way you want, you may have to manually
 configure some settings using the Build Commands
 Dialog or the Build tab of the project preferences dialog.
 
@@ -3345,9 +3345,9 @@ error_regex
 
 **Build commands**
 
-If any build menu item settings have been configured in the Build Menu Commands 
+If any build menu item settings have been configured in the Build Menu Commands
 dialog or the Build tab of the project preferences dialog then these
-settings are stored in the [build-menu] section and override the settings in 
+settings are stored in the [build-menu] section and override the settings in
 this section for that item.
 
 compiler
@@ -3667,8 +3667,8 @@ look like::
 Preferences File Format
 -----------------------
 
-The preferences file ``~/.config/geany/geany.conf`` holds settings for all the items configured 
-in the preferences dialog.  These are not detailed as they should not be edited 
+The preferences file ``~/.config/geany/geany.conf`` holds settings for all the items configured
+in the preferences dialog.  These are not detailed as they should not be edited
 as they are overwritten by Geany.
 
 
@@ -3736,7 +3736,7 @@ use_safe_file_saving              Defines the mode how Geany saves files to    f
                                   The better approach would be to ensure your
                                   disk won't run out of free space.
 **Build Menu related**
-number_ft_menu_items              The maximum number of menu items in the      2 
+number_ft_menu_items              The maximum number of menu items in the      2
                                   filetype section of the Build menu.
 number_non_ft_menu_items          The maximum number of menu items in the      3
                                   non-filetype section of the Build menu.
@@ -3748,9 +3748,9 @@ number_exec_menu_items            The maximum number of menu items in the      2
 ^^^^^^^^^^^^^^^^^^^^
 
 The [build-menu] section contains the configuration of the build menu.
-This section can occur in filetype, preferences and project files and 
+This section can occur in filetype, preferences and project files and
 always has the format described here.  Different menu items are loaded
-from different files, see the table in the `Build Menu Configuration` 
+from different files, see the table in the `Build Menu Configuration`
 section for details.  All the settings can be configured from the dialogs
 except the execute command in filetype files and filetype definitions in
 the project file, so these are the only ones which need hand editing.
@@ -3767,7 +3767,7 @@ where:
   - FT for filetype
   - NF for non-filetype
   - EX for execute
-  
+
 * NN - is a two decimal digit number of the item within the group,
   starting at 00
 * FF - is the field,
@@ -3780,25 +3780,25 @@ where:
 Project File Format
 -------------------
 
-The project file contains project related settings and possibly a 
+The project file contains project related settings and possibly a
 record of the current session files.
 
 
 [build-menu] Additions
 ^^^^^^^^^^^^^^^^^^^^^^
 
-The project file also can have extra fields in the [build-menu] section 
+The project file also can have extra fields in the [build-menu] section
 in addition to those listed in `[build-menu] Section`_ above.
 
-When filetype menu items are configured for the project they are stored 
+When filetype menu items are configured for the project they are stored
 in the project file.
 
-The ``filetypes`` entry is a list of the filetypes which exist in the 
+The ``filetypes`` entry is a list of the filetypes which exist in the
 project file.
 
-For each filetype the entries for that filetype have the format defined in 
-`[build-menu] Section` but the key is prefixed by the name of the filetype 
-as it appears in the ``filetypes`` entry, eg the entry for the label of 
+For each filetype the entries for that filetype have the format defined in
+`[build-menu] Section` but the key is prefixed by the name of the filetype
+as it appears in the ``filetypes`` entry, eg the entry for the label of
 filetype menu item 0 for the C filetype would be
 
   ``CFT_00_LB=Label``
@@ -4319,11 +4319,11 @@ build.c
 Option                          Description                                   Default
 ==============================  ============================================  ==================
 PRINTBUILDCMDS                  Every time a build menu item priority         FALSE
-                                calculation is run, print the state of the 
+                                calculation is run, print the state of the
                                 menu item table in the form of the table
-                                in `Build Menu Configuration`_.  May be 
-                                useful to debug configuration file 
-                                overloading.  Warning produces a lot of 
+                                in `Build Menu Configuration`_.  May be
+                                useful to debug configuration file
+                                overloading.  Warning produces a lot of
                                 output.  Can also be enabled/disabled by the
                                 debugger by setting printbuildcmds to 1/0
                                 overriding the compile setting.
