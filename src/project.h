@@ -39,9 +39,11 @@ typedef struct GeanyProject
 	 * by a plugin. */
 	gint type;
 	gchar **file_patterns;	/**< Array of filename extension patterns. */
-	GPtrArray *build_filetypes_list; /**< Project has custom filetype builds for these. */
 
 	struct GeanyProjectPrivate	*priv;	/* must be last, append fields before this item */
+
+	/* Do not use following fields in plugins */
+	GPtrArray *build_filetypes_list; /* *< Project has custom filetype builds for these. */
 }
 GeanyProject;
 

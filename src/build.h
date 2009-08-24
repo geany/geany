@@ -21,7 +21,7 @@
  * $Id$
  */
 
-/** @file build.h Interface to the Build menu functionality. */
+/* * @file build.h Interface to the Build menu functionality. */
 
 #ifndef GEANY_BUILD_H
 #define GEANY_BUILD_H 1
