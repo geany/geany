@@ -70,16 +70,10 @@ PluginFields *plugin_fields;
  * @see plugin_signal_connect(). */
 PluginCallback plugin_callbacks[];
 
-/** Most plugins should use the PLUGIN_KEY_GROUP() macro to define it. However,
- * its fields are not read until after plugin_init() is called for the plugin, so it
- * is possible to setup a variable number of keybindings, e.g. based on the
- * plugin's configuration file settings.
- * - The @c name field must not be empty or match Geany's default group name.
- * - The @c label field is set by Geany after plugin_init() is called to the name of the
- * plugin.
- * @note This is a single element array for implementation reasons,
- * but you can treat it like a pointer. */
-KeyBindingGroup plugin_key_group[1];
+/** Plugins must use the PLUGIN_KEY_GROUP() macro to define it.
+ * To setup a variable number of keybindings, e.g. based on the
+ * plugin's configuration file settings, use plugin_set_key_group() instead. */
+KeyBindingGroup *plugin_key_group;
 
 
 /** Called before showing the plugin preferences dialog to let the user set some basic

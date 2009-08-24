@@ -39,6 +39,7 @@ PLUGIN_SET_INFO(_("Split Window"), _("Splits the editor view into two windows.")
 
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
+GeanyPlugin		*geany_plugin;
 
 
 /* Keybinding(s) */
@@ -49,9 +50,6 @@ enum
 	KB_SPLIT_UNSPLIT,
 	KB_COUNT
 };
-
-PLUGIN_KEY_GROUP(split_window, KB_COUNT);
-
 
 enum State
 {
@@ -396,6 +394,7 @@ static void kb_activate(guint key_id)
 void plugin_init(GeanyData *data)
 {
 	GtkWidget *item, *menu;
+	GeanyKeyGroup *key_group;
 
 	menu_items.main = item = gtk_menu_item_new_with_mnemonic(_("_Split Window"));
 	gtk_menu_shell_append(GTK_MENU_SHELL(geany_data->main_widgets->tools_menu), item);
@@ -424,11 +423,12 @@ void plugin_init(GeanyData *data)
 	set_state(STATE_UNSPLIT);
 
 	/* setup keybindings */
-	keybindings_set_item(plugin_key_group, KB_SPLIT_HORIZONTAL, kb_activate,
+	key_group = plugin_set_key_group(geany_plugin, "split_window", KB_COUNT, NULL);
+	keybindings_set_item(key_group, KB_SPLIT_HORIZONTAL, kb_activate,
 		0, 0, "split_horizontal", _("Split Horizontally"), menu_items.horizontal);
-	keybindings_set_item(plugin_key_group, KB_SPLIT_VERTICAL, kb_activate,
+	keybindings_set_item(key_group, KB_SPLIT_VERTICAL, kb_activate,
 		0, 0, "split_vertical", _("Split Vertically"), menu_items.vertical);
-	keybindings_set_item(plugin_key_group, KB_SPLIT_UNSPLIT, kb_activate,
+	keybindings_set_item(key_group, KB_SPLIT_UNSPLIT, kb_activate,
 		0, 0, "split_unsplit", _("Unsplit"), menu_items.unsplit);
 }
 

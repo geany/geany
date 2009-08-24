@@ -22,6 +22,8 @@
 	geany_functions->p_plugin->module_make_resident
 #define plugin_signal_connect \
 	geany_functions->p_plugin->signal_connect
+#define plugin_set_key_group \
+	geany_functions->p_plugin->set_key_group
 #define document_new_file \
 	geany_functions->p_document->new_file
 #define document_get_current \

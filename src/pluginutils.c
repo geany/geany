@@ -27,11 +27,15 @@
  * These functions all take the @ref geany_plugin symbol as their first argument. */
 
 #include "geany.h"
+
+#include <string.h>
+
 #include "pluginutils.h"
 #include "pluginprivate.h"
 
 #include "ui_utils.h"
 #include "toolbar.h"
+#include "utils.h"
 
 
 /** Insert a toolbar item before the Quit button, or after the previous plugin toolbar item.
@@ -122,6 +126,54 @@ void plugin_signal_connect(GeanyPlugin *plugin,
 	sc.object = object;
 	sc.handler_id = id;
 	g_array_append_val(plugin->priv->signal_ids, sc);
+}
+
+
+/** Setup or resize a keybinding group for the plugin.
+ * You should then call keybindings_set_item() for each keybinding in the group.
+ * @param plugin Must be @ref geany_plugin.
+ * @param section_name Name used in the configuration file, such as @c "html_chars".
+ * @param count Number of keybindings for the group.
+ * @param callback Unused, must be @c NULL.
+ * @return The plugin's keybinding group.
+ * @since 0.19. */
+GeanyKeyGroup *plugin_set_key_group(GeanyPlugin *plugin,
+		const gchar *section_name, gsize count, GeanyKeyGroupCallback callback)
+{
+	GeanyKeyGroup *group;
+	GeanyPluginPrivate *priv = plugin->priv;
+
+	g_return_val_if_fail(section_name, NULL);
+	g_return_val_if_fail(count, NULL);
+	g_return_val_if_fail(!callback, NULL);
+
+	if (!priv->key_group)
+		priv->key_group = g_new0(GeanyKeyGroup, 1);
+	group = priv->key_group;
+
+	group->name = section_name;
+
+	if (!group->keys || count > group->count)
+	{
+		group->keys = g_renew(GeanyKeyBinding, group->keys, count);
+		memset(group->keys + group->count, 0, (count - group->count) * sizeof(GeanyKeyBinding));
+	}
+	group->count = count;
+
+	if (!NZV(group->name))
+	{
+		geany_debug("Plugin \"%s\" has not set the name field for its keybinding group"
+			" - ignoring all keybindings!",
+			priv->info.name);
+		return NULL;
+	}
+	/* prevent conflict with core bindings */
+	g_return_val_if_fail(! g_str_equal(group->name, keybindings_keyfile_group_name), NULL);
+
+	group->label = priv->info.name;
+
+	g_ptr_array_add(keybinding_groups, group);
+	return group;
 }
 
 

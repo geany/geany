@@ -114,11 +114,11 @@ static void add_popup_menu_accels(void);
 /** Simple convenience function to fill a GeanyKeyBinding struct item.
  * @param group Group.
  * @param key_id Keybinding index for the group.
- * @param callback Function to call when activated.
+ * @param callback Function to call when activated, or @c NULL.
  * @param key (Lower case) default key, e.g. @c GDK_j, but usually 0 for unset.
  * @param mod Default modifier, e.g. @c GDK_CONTROL_MASK, but usually 0 for unset.
- * @param name Not duplicated - use a static string.
- * @param label Currently not duplicated - use a static or heap-allocated (e.g. translated) string.
+ * @param name Key name for the configuration file, such as @c "menu_new".
+ * @param label Label used in the preferences dialog keybindings tab.
  * @param menu_item Optional widget to set an accelerator for, or @c NULL. */
 void keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 		GeanyKeyCallback callback, guint key, GdkModifierType mod,
