@@ -50,13 +50,13 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 150,
+	GEANY_API_VERSION = 151,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
 	/* This should usually stay the same if fields are only appended, assuming only pointers to
 	 * structs and not structs themselves are declared by plugins. */
-	GEANY_ABI_VERSION = 63
+	GEANY_ABI_VERSION = 64
 };
 
 /** Check the plugin can be loaded by Geany.
@@ -119,23 +119,32 @@ GeanyPlugin;
 	}
 
 
+/** @see PLUGIN_KEY_GROUP() macro. */
+typedef struct GeanyKeyGroupInfo
+{
+	const gchar *name;		/**< Group name used in the configuration file, such as @c "html_chars" */
+	gsize count;			/**< The number of keybindings the group will hold */
+}
+GeanyKeyGroupInfo;
+
 /** Declare and initialise a keybinding group.
- * @code GeanyKeyGroup plugin_key_group[1]; @endcode
- * You must then set the @c plugin_key_group::keys[] entries for the group in plugin_init().
+ * @code GeanyKeyGroup *plugin_key_group; @endcode
+ * You must then set the @c plugin_key_group::keys[] entries for the group in plugin_init(),
+ * normally using keybindings_set_item().
  * The @c plugin_key_group::label field is set by Geany after @c plugin_init()
  * is called, to the name of the plugin.
  * @param group_name A unique group name (without quotes) to be used in the
  * configuration file, such as @c html_chars.
- * @param key_count	The number of keybindings the group will hold. */
+ * @param key_count	The number of keybindings the group will hold.
+ * @see plugin_set_key_group() to set the group size dynamically. */
 #define PLUGIN_KEY_GROUP(group_name, key_count) \
-	static GeanyKeyBinding plugin_keys[key_count]; \
-	\
-	/* We have to declare plugin_key_group as a single element array.
+	/* We have to declare this as a single element array.
 	 * Declaring as a pointer to a struct doesn't work with g_module_symbol(). */ \
-	GeanyKeyGroup plugin_key_group[1] = \
+	GeanyKeyGroupInfo plugin_key_group_info[1] = \
 	{ \
-		{G_STRINGIFY(group_name), NULL, key_count, plugin_keys} \
-	};
+		{G_STRINGIFY(group_name), key_count} \
+	};\
+	GeanyKeyGroup *plugin_key_group = NULL;
 
 
 /** Callback array entry type used with the @ref plugin_callbacks symbol. */
@@ -225,7 +234,7 @@ typedef struct GeanyFunctions
 	struct NavQueueFuncs        *p_navqueue;		/**< See navqueue.h */
 	struct EditorFuncs        	*p_editor;			/**< See editor.h */
 	struct MainFuncs        	*p_main;			/**< See main.h */
-	struct PluginFuncs        	*p_plugin;			/**< See plugins.c */
+	struct PluginFuncs        	*p_plugin;			/**< See pluginutils.c */
 	struct ScintillaFuncs		*p_scintilla;		/**< See ScintillaFuncs */
 	struct MsgWinFuncs			*p_msgwin;			/**< See msgwindow.h */
 }
@@ -541,7 +550,10 @@ typedef struct EditorFuncs
 EditorFuncs;
 
 
-/* See plugins.c */
+/* avoid including keybindings.h */
+typedef gboolean (*_GeanyKeyGroupCallback) (guint key_id);
+
+/* See pluginutils.c */
 typedef struct PluginFuncs
 {
 	void	(*add_toolbar_item)(GeanyPlugin *plugin, GtkToolItem *item);
@@ -549,6 +561,8 @@ typedef struct PluginFuncs
 	void	(*signal_connect) (GeanyPlugin *plugin,
 		GObject *object, gchar *signal_name, gboolean after,
 		GCallback callback, gpointer user_data);
+	struct GeanyKeyGroup* (*set_key_group)(GeanyPlugin *plugin,
+		const gchar *section_name, gsize count, _GeanyKeyGroupCallback callback);
 }
 PluginFuncs;
 
@@ -556,7 +570,8 @@ PluginFuncs;
 /* Deprecated aliases */
 #ifndef GEANY_DISABLE_DEPRECATED
 
-/** @c NULL-safe way to get the index of @a doc_ptr in the documents array. */
+/** @deprecated - copy into your plugin code if needed.
+ * @c NULL-safe way to get the index of @a doc_ptr in the documents array. */
 #define DOC_IDX(doc_ptr) \
 	(doc_ptr ? doc_ptr->index : -1)
 #define DOC_IDX_VALID(doc_idx) \

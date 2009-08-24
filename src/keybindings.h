@@ -31,30 +31,30 @@
 #define GEANY_KEYBINDINGS_H 1
 
 
-/** Function pointer type used for keybinding callbacks */
+/** Function pointer type used for keybinding callbacks. */
 typedef void (*GeanyKeyCallback) (guint key_id);
 
-/** Represents a single keybinding action */
+/** Represents a single keybinding action. */
 /* Note: name and label are not const strings so plugins can set them to malloc'd strings
  * and free them in cleanup(). */
 typedef struct GeanyKeyBinding
 {
-	guint key;				/**< Key value in lower-case, such as @c GDK_a */
-	GdkModifierType mods;	/**< Modifier keys, such as @c GDK_CONTROL_MASK */
+	guint key;				/**< Key value in lower-case, such as @c GDK_a or 0 */
+	GdkModifierType mods;	/**< Modifier keys, such as @c GDK_CONTROL_MASK or 0 */
 	gchar *name;			/**< Key name for the configuration file, such as @c "menu_new" */
 	gchar *label;			/**< Label used in the preferences dialog keybindings tab */
-	GeanyKeyCallback callback;	/**< Callback function called when the key combination is pressed */
-	GtkWidget *menu_item;	/**< Menu item widget for setting the menu accelerator */
+	GeanyKeyCallback callback;	/**< Function called when the key combination is pressed, or @c NULL */
+	GtkWidget *menu_item;	/**< Optional widget to set an accelerator for, or @c NULL */
 } GeanyKeyBinding;
 
 
-/** A collection of keybindings grouped together. */
+/** A collection of keybindings grouped together. Plugins should not set these fields. */
 typedef struct GeanyKeyGroup
 {
 	const gchar *name;		/**< Group name used in the configuration file, such as @c "html_chars" */
-	const gchar *label;		/**< Group label used in the preferences dialog keybindings tab */
-	gsize count;			/**< Count of GeanyKeyBinding structs in @c keys */
-	GeanyKeyBinding *keys;	/**< Fixed array of GeanyKeyBinding structs */
+	const gchar *label;		/* Group label used in the preferences dialog keybindings tab */
+	gsize count;			/**< The number of keybindings the group holds */
+	GeanyKeyBinding *keys;	/* array of GeanyKeyBinding structs */
 }
 GeanyKeyGroup;
 

@@ -1,8 +1,13 @@
+2009-08-24  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * sl.po: Update of Slovenian translation. Thanks to Jože Klepec.
+
+
 2009-08-19  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * pt.po: Rename Portuguese translation file so it can work as a fall
    back for all Portuguese based languages.
- * sl.po: Update of Slovenian translation. Thanks to Joze Klepec.
+ * sl.po: Update of Slovenian translation. Thanks to Jože Klepec.
 
 
 2009-08-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
@@ -36,7 +41,7 @@
 2009-08-11  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * fr.po: Update of French translation (Thanks Jean-Philippe Moal).
- * sl.po: Update of Slovenian translation. Thanks to Joze Klepec.
+ * sl.po: Update of Slovenian translation. Thanks to Jože Klepec.
 
 
 2009-08-08  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
@@ -52,7 +57,7 @@
 2009-08-05  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * ru.po: Update of Russian translation. Thanks to John Wehin.
- * sl.po: Update of Slovenian translation. Thanks to Joze Klepec.
+ * sl.po: Update of Slovenian translation. Thanks to Jože Klepec.
 
 
 2009-08-05  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
@@ -75,7 +80,7 @@
 
 2009-08-02  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
- * sl_SI.po: Update of Slovenian translation. Thanks to Joze Klepec.
+ * sl_SI.po: Update of Slovenian translation. Thanks to Jože Klepec.
  * sl.po: Rename Slovenian translation file.
 
 
@@ -86,13 +91,13 @@
 
 2009-07-27  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
- * sl_SI.po: Update of Slovenian translation. Thanks to Joze Klepec.
+ * sl_SI.po: Update of Slovenian translation. Thanks to Jože Klepec.
 
 
 2009-07-25  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * sl_SI.po: Added a first Slovenian translation.
-             Thanks to Joze Klepec.
+             Thanks to Jože Klepec.
 
 
 2009-07-24  Frank Lanitz
