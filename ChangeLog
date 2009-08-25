@@ -177,6 +177,29 @@ Configurable Build Menu Changes
  * src/project.h, src/project.c:
    Changed to load/store the new configuration info.
 
+2009-08-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c, src/keybindings.h, src/plugindata.h,
+   src/pluginutils.c, src/plugins.c, src/pluginutils.h,
+   doc/pluginsymbols.c, plugins/geanyfunctions.h,
+   plugins/splitwindow.c:
+   Update PLUGIN_KEY_GROUP() macro so it doesn't allocate any
+   GeanyKeyBinding or GeanyKeyGroup structs, so we don't need to break
+   the ABI when adding fields to them.
+   Add plugin_set_key_group() for plugins to dynamically set a
+   keybinding group (e.g. for the Lua script plugin). Used in Split
+   Window plugin as an example.
+   Improve keybinding docs a little.
+
+
+2009-08-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * doc/Doxyfile.in, plugins/geanyfunctions.h, plugins/genapi.py:
+   Add geanyfunctions.h to API docs.
+ * plugins/splitwindow.c:
+   Set the cursor color for the split window.
+
+
 2009-08-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/callbacks.c:
