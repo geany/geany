@@ -1,3 +1,12 @@
+2009-08-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * tagmanager/php.c:
+   Improve parsing of PHP functions by requiring a valid modifier or
+   whitespace before the 'function' keyword to ignore some false
+   positives like function tags inside comments
+   (patch by Harold Aling, thanks).
+
+
 2009-08-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * data/filetypes.markdown:
