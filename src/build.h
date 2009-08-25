@@ -21,24 +21,96 @@
  * $Id$
  */
 
+/* * @file build.h Interface to the Build menu functionality. */
 
 #ifndef GEANY_BUILD_H
 #define GEANY_BUILD_H 1
 
 #define GEANY_BUILD_ERR_HIGHLIGHT_MAX 100
 
-typedef enum	/* Geany Build Options */
+/* Order is important (see GBO_TO_GBG, GBO_TO_CMD below) */
+/** Geany Known Build Commands.
+ * These commands are named after their default use.
+ * Only these commands can currently have keybindings.
+ **/
+typedef enum
 {
-	GBO_COMPILE,
-	GBO_BUILD,
-	GBO_MAKE_ALL,
-	GBO_MAKE_CUSTOM,
-	GBO_MAKE_OBJECT
+	GEANY_GBO_COMPILE,		/**< default compile file */
+	GEANY_GBO_BUILD,		/**< default build file */
+	GEANY_GBO_MAKE_ALL,		/**< default make */
+	GEANY_GBO_CUSTOM,		/**< default make user specified target */
+	GEANY_GBO_MAKE_OBJECT,	/**< default make object, make %e.o */
+	GEANY_GBO_EXEC,			/**< default execute ./%e */
+	GEANY_GBO_COUNT			/**< count of how many */
 } GeanyBuildType;
+
+/** Groups of Build menu items. */
+typedef enum
+{
+	GEANY_GBG_FT,		/**< filetype items */
+	GEANY_GBG_NON_FT,	/**< non filetype items.*/
+	GEANY_GBG_EXEC,		/**< execute items */
+	GEANY_GBG_COUNT		/**< count of groups. */
+} GeanyBuildGroup;
+
+/* include the fixed widgets in an array indexed by groups */
+#define GBG_FIXED GEANY_GBG_COUNT
+
+/** Convert @c GeanyBuildType to @c GeanyBuildGroup.
+ *
+ * This macro converts @c GeanyBuildType enum values (the "known" commands)
+ * to the group they are part of.
+ *
+ * @param gbo the @c GeanyBuildType value.
+ *
+ * @return the @c GeanyBuildGroup group that @a gbo is in.
+ *
+ * Note this is a macro so that it can be used in static initialisers.
+ **/
+#define GBO_TO_GBG(gbo) ((gbo)>GEANY_GBO_EXEC?GEANY_GBG_COUNT:((gbo)>=GEANY_GBO_EXEC?GEANY_GBG_EXEC: \
+						 ((gbo)>=GEANY_GBO_MAKE_ALL?GEANY_GBG_NON_FT:GEANY_GBG_FT)))
+
+/** Convert @c GeanyBuildType to command index.
+ *
+ * This macro converts @c GeanyBuildType enum values (the "known" commands)
+ * to the index within the group.
+ *
+ * @param gbo the @c GeanyBuildType value.
+ *
+ * @return the index of the @a gbo command in its group.
+ *
+ * Note this is a macro so that it can be used in static initialisers.
+ **/
+#define GBO_TO_CMD(gbo) ((gbo)>=GEANY_GBO_COUNT?(gbo)-GEANY_GBO_COUNT:((gbo)>=GEANY_GBO_EXEC?(gbo)-GEANY_GBO_EXEC: \
+						 ((gbo)>=GEANY_GBO_MAKE_ALL?(gbo)-GEANY_GBO_MAKE_ALL:(gbo))))
+
+enum GeanyBuildFixedMenuItems
+{
+	GBF_NEXT_ERROR,
+	GBF_PREV_ERROR,
+	GBF_COMMANDS,
+	GBF_SEP_1,
+	GBF_SEP_2,
+	GBF_SEP_3,
+	GBF_SEP_4,
+	GBF_COUNT
+};
+
+/** Build menu item sources in increasing priority */
+typedef enum
+{
+	GEANY_BCS_DEF,		/**< Default values. */
+	GEANY_BCS_FT,		/**< System filetype values. */
+	GEANY_BCS_HOME_FT,	/**< Filetypes in ~/.config/geany/filedefs */
+	GEANY_BCS_PREF,		/**< Preferences file ~/.config/geany/geany.conf */
+	GEANY_BCS_PROJ,		/**< Project file if open. */
+	GEANY_BCS_COUNT		/**< Count of sources. */
+} GeanyBuildSource;
 
 typedef struct GeanyBuildInfo
 {
-	GeanyBuildType	 type;	/* current action(one of the above enumeration) */
+	GeanyBuildGroup	 grp;
+	gint			 cmd;
 	GPid			 pid;	/* process id of the spawned process */
 	gchar			*dir;
 	guint			 file_type_id;
@@ -48,37 +120,150 @@ typedef struct GeanyBuildInfo
 
 extern GeanyBuildInfo build_info;
 
+/** The entries of a command for a menu item */
+typedef enum  GeanyBuildCmdEntries
+{
+    GEANY_BC_LABEL,				/**< The menu item label, _ marks mnemonic */
+    GEANY_BC_COMMAND,			/**< The command to run. */
+    GEANY_BC_WORKING_DIR,		/**< The directory to run in */
+    GEANY_BC_CMDENTRIES_COUNT,	/**< Count of entries */
+} GeanyBuildCmdEntries;
+
+/** The command for a menu item. */
+typedef struct GeanyBuildCommand
+{
+ 	/** Pointers to g_string values of the command entries.
+	 * Must be freed if the pointer is changed. */
+	gchar *entries[GEANY_BC_CMDENTRIES_COUNT];
+	gboolean	 exists;					/**< If the entries have valid values. */
+	gboolean	 changed;					/**< Save on exit if @c changed, remove if not @c exist. */
+	gboolean	 old;						/**< Converted from old format. */
+} GeanyBuildCommand;
+
+extern GeanyBuildCommand *non_ft_proj, *exec_proj; /* project command array pointers */
+extern gchar *regex_proj; /* project non-fileregex string */
 
 typedef struct BuildMenuItems
 {
 	GtkWidget		*menu;
-	GtkWidget		*item_compile;
-	GtkWidget		*item_link;
-	GtkWidget		*item_make_all;
-	GtkWidget		*item_make_custom;
-	GtkWidget		*item_make_object;
-	GtkWidget		*item_next_error;
-	GtkWidget		*item_previous_error;
-	GtkWidget		*item_exec;
-	GtkWidget		*item_exec2;
-	GtkWidget		*item_set_args;
+	GtkWidget		**menu_item[GEANY_GBG_COUNT+1];  /* +1 for fixed items */
 } BuildMenuItems;
 
+/* a structure defining the destinations for a set of groups of commands & regex */
+typedef struct BuildDestination
+{
+	GeanyBuildCommand	**dst[GEANY_GBG_COUNT];
+	gchar				**fileregexstr;
+	gchar				**nonfileregexstr;
+} BuildDestination;
 
+/* opaque pointers returned from build functions and passed back to them */
+typedef struct TableFields *TableData;
 
 void build_init(void);
 
 void build_finalize(void);
 
+/* menu configuration dialog functions */
+GtkWidget *build_commands_table( GeanyDocument *doc, GeanyBuildSource dst, TableData *data, GeanyFiletype *ft );
 
+gboolean read_build_commands( BuildDestination *dst, TableData data, gint response );
+
+void free_build_fields( TableData data );
+
+void set_build_non_ft_wd_to_proj(TableData table_data);
+
+/* build response decode assistance function */
 gboolean build_parse_make_dir(const gchar *string, gchar **prefix);
+
+/* build menu functions */
+
+/** Update the build menu to reflect changes in configuration or status.
+ *
+ * Sets the labels and number of visible items to match the highest
+ * priority configured commands.  Also sets sensitivity if build commands are
+ * running and switches executes to stop when commands are running.
+ *
+ * @param doc The current document, if available, to save looking it up.
+ *        If @c NULL it will be looked up.
+ *
+ * Call this after modifying any fields of a GeanyBuildCommand structure.
+ *
+ * @see Build Menu Configuration section of the Manual.
+ *
+ **/
 
 void build_menu_update(GeanyDocument *doc);
 
-BuildMenuItems *build_get_menu_items(gint filetype_idx);
 
 void build_toolbutton_build_clicked(GtkAction *action, gpointer user_data);
 
+/** Remove the specified Build menu item.
+ *
+ * Makes the specified menu item configuration no longer exist. This
+ * is different to setting fields to blank because the menu item
+ * will be deleted from the configuration file on saving
+ * (except the system filetypes settings @see Build Menu Configuration
+ * section of the Manual).
+ *
+ * @param src the source of the menu item to remove.
+ * @param grp the group of the command to remove.
+ * @param cmd the index (from 0) of the command within the group. A negative
+ *        value will remove the whole group.
+ *
+ * If any parameter is out of range does nothing.
+ *
+ * @see build_menu_update
+ **/
 
+void build_remove_menu_item(GeanyBuildSource src, GeanyBuildGroup grp, gint cmd);
+
+/** Get the @a GeanyBuildCommand structure for the specified Build menu item.
+ *
+ * Get the command for any menu item specified by @a src, @a grp and @a cmd even if it is
+ * hidden by higher priority commands.
+ *
+ * @param src the source of the specified menu item.
+ * @param grp the group of the specified menu item.
+ * @param cmd the index of the command within the group.
+ *
+ * @return a pointer to the @a GeanyBuildCommand structure or @a NULL if it doesn't exist.
+ *         This is a pointer to an internal structure and must not be freed.
+ *
+ * @see build_menu_update
+ **/
+
+GeanyBuildCommand *build_get_menu_item(GeanyBuildSource src, GeanyBuildGroup grp, gint cmd);
+
+/** Get the @a GeanyBuildCommand structure for the menu item.
+ *
+ * Get the current highest priority command specified by @a grp and @a cmd.  This is the one
+ * that the menu item will use if activated.
+ *
+ * @param grp the group of the specified menu item.
+ * @param cmd the index of the command within the group.
+ * @param src pointer to @a gint to return which source provided the command. Ignored if @a NULL.
+ *        Values are one of @a GeanyBuildSource but returns a signed type not the enum.
+ *
+ * @return a pointer to the @a GeanyBuildCommand structure or @a NULL if it doesn't exist.
+ *         This is a pointer to an internal structure and must not be freed.
+ *
+ * @see build_menu_update
+ **/
+
+GeanyBuildCommand *build_get_current_menu_item(GeanyBuildGroup grp, gint cmd, gint *src);
+
+BuildMenuItems *build_get_menu_items(gint filetype_idx);
+
+/* load and store menu configuration */
+void build_load_menu( GKeyFile *config, GeanyBuildSource dst, gpointer ptr);
+
+void build_save_menu( GKeyFile *config, gpointer ptr, GeanyBuildSource src);
+
+void build_set_group_count(GeanyBuildGroup grp, gint count);
+
+gint build_get_group_count(GeanyBuildGroup grp);
+
+gchar **build_get_regex(GeanyBuildGroup grp, GeanyFiletype *ft, gint *from);
 
 #endif

@@ -35,14 +35,15 @@ typedef struct GeanyProject
 	gchar *description; 	/**< Short description of the project. */
 	gchar *file_name; 		/**< Where the project file is stored (in UTF-8). */
 	gchar *base_path;		/**< Base path of the project directory (in UTF-8, maybe relative). */
-	gchar *run_cmd; 		/**< Project run command (in UTF-8). */
 	/** Identifier whether it is a pure Geany project or modified/extended
 	 * by a plugin. */
 	gint type;
 	gchar **file_patterns;	/**< Array of filename extension patterns. */
-	gboolean make_in_base_path;
 
 	struct GeanyProjectPrivate	*priv;	/* must be last, append fields before this item */
+
+	/* Do not use following fields in plugins */
+	GPtrArray *build_filetypes_list; /* *< Project has custom filetype builds for these. */
 }
 GeanyProject;
 
@@ -78,8 +79,6 @@ gboolean project_load_file(const gchar *locale_file_name);
 gboolean project_load_file_with_session(const gchar *locale_file_name);
 
 gchar *project_get_base_path(void);
-
-gchar *project_get_make_dir(void);
 
 
 void project_save_prefs(GKeyFile *config);

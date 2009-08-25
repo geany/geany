@@ -43,3 +43,17 @@ compiler=latex --file-line-error-style "%f"
 linker=pdflatex --file-line-error-style "%f"
 run_cmd=xdvi "%f"
 run_cmd2=xpdf "%f"
+
+[build-menu]
+FT_00_LB=LaTeX -> _DVI
+FT_00_CM=latex --file-line-error-style "%f"
+FT_00_BD=false
+FT_01_LB=LaTeX -> _PDF
+FT_01_CM=pdflatex --file-line-error-style "%f"
+FT_01_BD=false
+EX_00_LB=V_iew PDF File
+EX_00_CM=xpdf "%f"
+EX_00_BD=false
+EX_01_LB=_View DVI File
+EX_01_CM=xdvi "%f"
+EX_01_BD=false

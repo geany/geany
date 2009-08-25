@@ -2571,14 +2571,10 @@ create_prefs_dialog (void)
   GtkWidget *vbox2;
   GtkWidget *vbox33;
   GtkWidget *table1;
-  GtkWidget *label11;
   GtkWidget *label97;
   GtkWidget *label117;
-  GtkWidget *entry_com_make;
   GtkWidget *entry_com_term;
   GtkWidget *entry_browser;
-  GtkWidget *button_make;
-  GtkWidget *image285;
   GtkWidget *button_term;
   GtkWidget *image286;
   GtkWidget *button_browser;
@@ -4161,13 +4157,6 @@ create_prefs_dialog (void)
   gtk_table_set_row_spacings (GTK_TABLE (table1), 3);
   gtk_table_set_col_spacings (GTK_TABLE (table1), 6);
 
-  label11 = gtk_label_new (_("Make:"));
-  gtk_widget_show (label11);
-  gtk_table_attach (GTK_TABLE (table1), label11, 0, 1, 0, 1,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label11), 0, 0.5);
-
   label97 = gtk_label_new (_("Terminal:"));
   gtk_widget_show (label97);
   gtk_table_attach (GTK_TABLE (table1), label97, 0, 1, 1, 2,
@@ -4182,13 +4171,6 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (0), 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label117), 0, 0.5);
 
-  entry_com_make = gtk_entry_new ();
-  gtk_widget_show (entry_com_make);
-  gtk_table_attach (GTK_TABLE (table1), entry_com_make, 1, 2, 0, 1,
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_tooltips_set_tip (tooltips, entry_com_make, _("Path and options for the make tool"), NULL);
-
   entry_com_term = gtk_entry_new ();
   gtk_widget_show (entry_com_term);
   gtk_table_attach (GTK_TABLE (table1), entry_com_term, 1, 2, 1, 2,
@@ -4202,16 +4184,6 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
   gtk_tooltips_set_tip (tooltips, entry_browser, _("Path (and possibly additional arguments) to your favorite browser"), NULL);
-
-  button_make = gtk_button_new ();
-  gtk_widget_show (button_make);
-  gtk_table_attach (GTK_TABLE (table1), button_make, 2, 3, 0, 1,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-
-  image285 = gtk_image_new_from_stock ("gtk-open", GTK_ICON_SIZE_BUTTON);
-  gtk_widget_show (image285);
-  gtk_container_add (GTK_CONTAINER (button_make), image285);
 
   button_term = gtk_button_new ();
   gtk_widget_show (button_term);
@@ -4912,14 +4884,10 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox2, "vbox2");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox33, "vbox33");
   GLADE_HOOKUP_OBJECT (prefs_dialog, table1, "table1");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label11, "label11");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label97, "label97");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label117, "label117");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, entry_com_make, "entry_com_make");
   GLADE_HOOKUP_OBJECT (prefs_dialog, entry_com_term, "entry_com_term");
   GLADE_HOOKUP_OBJECT (prefs_dialog, entry_browser, "entry_browser");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, button_make, "button_make");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, image285, "image285");
   GLADE_HOOKUP_OBJECT (prefs_dialog, button_term, "button_term");
   GLADE_HOOKUP_OBJECT (prefs_dialog, image286, "image286");
   GLADE_HOOKUP_OBJECT (prefs_dialog, button_browser, "button_browser");

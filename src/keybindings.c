@@ -486,8 +486,6 @@ static void init_default_kb(void)
 		0, 0, "build_previouserror", _("Previous error"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_BUILD_RUN, cb_func_build_action,
 		GDK_F5, 0, "build_run", _("Run"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_BUILD_RUN2, cb_func_build_action,
-		0, 0, "build_run2", _("Run (alternative command)"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_BUILD_OPTIONS, cb_func_build_action,
 		0, 0, "build_options", _("Build options"), NULL);
 
@@ -1118,7 +1116,6 @@ static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer 
 
 	keyval = ev->keyval;
     state = ev->state & gtk_accelerator_get_default_mod_mask();
-
 	/* hack to get around that CTRL+Shift+r results in GDK_R not GDK_r */
 	if ((ev->state & GDK_SHIFT_MASK) || (ev->state & GDK_LOCK_MASK))
 		if (keyval >= GDK_A && keyval <= GDK_Z)
@@ -1138,7 +1135,6 @@ static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer 
 		return TRUE;
 	if (check_menu_key(doc, keyval, state, ev->time))
 		return TRUE;
-
 	ignore_keybinding = FALSE;
 	for (g = 0; g < keybinding_groups->len; g++)
 	{
@@ -1394,38 +1390,35 @@ static void cb_func_build_action(guint key_id)
 	if (!GTK_WIDGET_IS_SENSITIVE(ui_lookup_widget(main_widgets.window, "menu_build1")))
 		return;
 	menu_items = build_get_menu_items(doc->file_type->id);
-
+/* TODO make it a table??*/
 	switch (key_id)
 	{
 		case GEANY_KEYS_BUILD_COMPILE:
-			item = menu_items->item_compile;
+			item = menu_items->menu_item[GEANY_GBG_FT][GBO_TO_CMD(GEANY_GBO_COMPILE)];
 			break;
 		case GEANY_KEYS_BUILD_LINK:
-			item = menu_items->item_link;
+			item = menu_items->menu_item[GEANY_GBG_FT][GBO_TO_CMD(GEANY_GBO_BUILD)];
 			break;
 		case GEANY_KEYS_BUILD_MAKE:
-			item = menu_items->item_make_all;
+			item = menu_items->menu_item[GEANY_GBG_FT][GBO_TO_CMD(GEANY_GBO_MAKE_ALL)];
 			break;
 		case GEANY_KEYS_BUILD_MAKEOWNTARGET:
-			item = menu_items->item_make_custom;
+			item = menu_items->menu_item[GEANY_GBG_FT][GBO_TO_CMD(GEANY_GBO_CUSTOM)];
 			break;
 		case GEANY_KEYS_BUILD_MAKEOBJECT:
-			item = menu_items->item_make_object;
+			item = menu_items->menu_item[GEANY_GBG_FT][GBO_TO_CMD(GEANY_GBO_MAKE_OBJECT)];
 			break;
 		case GEANY_KEYS_BUILD_NEXTERROR:
-			item = menu_items->item_next_error;
+			item = menu_items->menu_item[GBG_FIXED][GBF_NEXT_ERROR];
 			break;
 		case GEANY_KEYS_BUILD_PREVIOUSERROR:
-			item = menu_items->item_previous_error;
+			item = menu_items->menu_item[GBG_FIXED][GBF_PREV_ERROR];
 			break;
 		case GEANY_KEYS_BUILD_RUN:
-			item = menu_items->item_exec;
-			break;
-		case GEANY_KEYS_BUILD_RUN2:
-			item = menu_items->item_exec2;
+			item = menu_items->menu_item[GEANY_GBG_EXEC][GBO_TO_CMD(GEANY_GBO_EXEC)];
 			break;
 		case GEANY_KEYS_BUILD_OPTIONS:
-			item = menu_items->item_set_args;
+			item = menu_items->menu_item[GBG_FIXED][GBF_COMMANDS];
 			break;
 		default:
 			item = NULL;

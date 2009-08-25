@@ -1123,7 +1123,6 @@ void main_quit()
 	g_free(template_prefs.mail);
 	g_free(template_prefs.initials);
 	g_free(template_prefs.version);
-	g_free(tool_prefs.make_cmd);
 	g_free(tool_prefs.term_cmd);
 	g_free(tool_prefs.browser_cmd);
 	g_free(tool_prefs.grep_cmd);
