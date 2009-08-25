@@ -1,3 +1,9 @@
+2009-08-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * data/filetypes.markdown:
+   Add filetypes.markdown for configuration (thanks to Jon Strait).
+
+
 2009-08-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/build.h, src/project.h, src/plugindata.h, src/filetypes.h:
