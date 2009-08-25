@@ -1074,7 +1074,7 @@ static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, g
 	return TRUE;
 }
 
-typedef void callback(GtkWidget *w, gpointer u);
+typedef void Callback(GtkWidget *w, gpointer u);
 
 /* run the command catenating cmd_cat if present */
 static void build_command(GeanyDocument *doc, GeanyBuildGroup grp, gint cmd, gchar *cmd_cat)
@@ -1190,12 +1190,12 @@ static void on_build_menu_item(GtkWidget *w, gpointer user_data)
 #define MENU_DONE        (MENU_COMMANDS+1)
 
 
-static struct build_menu_item_spec {
+static struct BuildMenuItemSpec {
 	const gchar	*stock_id;
 	const gint	 key_binding;
 	const gint	 build_grp, build_cmd;
 	const gchar	*fix_label;
-	callback *cb;
+	Callback *cb;
 } build_menu_specs[] = {
 	{ GTK_STOCK_CONVERT, GEANY_KEYS_BUILD_COMPILE, GBO_TO_GBG(GEANY_GBO_COMPILE),
 		GBO_TO_CMD(GEANY_GBO_COMPILE),       NULL, on_build_menu_item },
@@ -1234,7 +1234,7 @@ static struct build_menu_item_spec {
 };
 
 static void create_build_menu_item(GtkWidget *menu, GeanyKeyGroup *group, GtkAccelGroup *ag,
-							struct build_menu_item_spec *bs, gchar *lbl, gint grp, gint cmd)
+							struct BuildMenuItemSpec *bs, gchar *lbl, gint grp, gint cmd)
 {
 	GtkWidget *item = gtk_image_menu_item_new_with_mnemonic(lbl);
 	if (bs->stock_id!=NULL)
@@ -1269,7 +1269,7 @@ static void create_build_menu(BuildMenuItems *build_menu_items)
 
 	for (i=0; build_menu_specs[i].build_grp != MENU_DONE; ++i)
 	{
-		struct build_menu_item_spec *bs = &(build_menu_specs[i]);
+		struct BuildMenuItemSpec *bs = &(build_menu_specs[i]);
 		if (bs->build_grp == MENU_SEPARATOR)
 		{
 			GtkWidget *item = gtk_separator_menu_item_new();
@@ -1332,7 +1332,7 @@ void build_menu_update(GeanyDocument *doc)
 	have_errors = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(msgwindow.store_compiler), NULL) > 0;
 	for (i=0; build_menu_specs[i].build_grp != MENU_DONE; ++i)
 	{
-		struct build_menu_item_spec *bs = &(build_menu_specs[i]);
+		struct BuildMenuItemSpec *bs = &(build_menu_specs[i]);
 		switch(bs->build_grp)
 		{
 			case MENU_SEPARATOR:
