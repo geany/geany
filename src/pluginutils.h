@@ -26,7 +26,9 @@
 #ifndef PLUGINUTILS_H
 #define PLUGINUTILS_H
 
-#include "plugindata.h"	/* GeanyPlugin */
+#include "plugindata.h"		/* GeanyPlugin */
+#include "keybindings.h"	/* GeanyKeyGroupCallback */
+
 
 void plugin_add_toolbar_item(GeanyPlugin *plugin, GtkToolItem *item);
 
@@ -35,10 +37,6 @@ void plugin_module_make_resident(GeanyPlugin *plugin);
 void plugin_signal_connect(GeanyPlugin *plugin,
 		GObject *object, gchar *signal_name, gboolean after,
 		GCallback callback, gpointer user_data);
-
-
-/** Function pointer type used for keybinding group callbacks. */
-typedef gboolean (*GeanyKeyGroupCallback) (guint key_id);
 
 struct GeanyKeyGroup *plugin_set_key_group(GeanyPlugin *plugin,
 		const gchar *section_name, gsize count, GeanyKeyGroupCallback callback);

@@ -50,7 +50,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 152,
+	GEANY_API_VERSION = 153,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -471,9 +471,11 @@ typedef void (*_GeanyKeyCallback) (guint key_id);
 typedef struct KeybindingFuncs
 {
 	void		(*send_command) (guint group_id, guint key_id);
-	void		(*set_item) (struct GeanyKeyGroup *group, gsize key_id,
+	struct GeanyKeyBinding* (*set_item) (struct GeanyKeyGroup *group, gsize key_id,
 					_GeanyKeyCallback callback, guint key, GdkModifierType mod,
 					gchar *name, gchar *label, GtkWidget *menu_item);
+	struct GeanyKeyBinding* (*get_item)(struct GeanyKeyGroup *group, gsize key_id);
+
 }
 KeybindingFuncs;
 

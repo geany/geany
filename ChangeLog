@@ -2,6 +2,15 @@
 
  * data/filetypes.markdown:
    Add filetypes.markdown for configuration (thanks to Jon Strait).
+ * src/build.c, src/keybindings.c, src/keybindings.h, src/plugindata.h,
+   src/pluginutils.c, src/plugins.c, src/pluginutils.h,
+   plugins/geanyfunctions.h:
+   Remove GeanyKeyGroup struct from the API - plugins should not set
+   these fields.
+   Make keybindings_set_item() duplicate the name and label fields
+   (needed by GeanyLua) and return a keybinding pointer.
+   Add keybindings_get_item() to the API (in case it's useful).
+   Move some keybinding code out of plugin source files.
 
 
 2009-08-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

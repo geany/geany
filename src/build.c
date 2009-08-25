@@ -139,7 +139,7 @@ void build_finalize(void)
 static void add_menu_accel(GeanyKeyGroup *group, guint kb_id,
 	GtkAccelGroup *accel_group, GtkWidget *menuitem)
 {
-	GeanyKeyBinding *kb = &group->keys[kb_id];
+	GeanyKeyBinding *kb = keybindings_get_item(group, kb_id);
 
 	if (kb->key != 0)
 		gtk_widget_add_accelerator(menuitem, "activate", accel_group,

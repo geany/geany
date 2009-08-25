@@ -25,9 +25,12 @@
  * Configurable keyboard shortcuts.
  */
 
-#include <gdk/gdkkeysyms.h>
 
 #include "geany.h"
+
+#include <gdk/gdkkeysyms.h>
+#include <string.h>
+
 #include "keybindings.h"
 #include "support.h"
 #include "utils.h"
@@ -109,6 +112,19 @@ static void cb_func_move_tab(guint key_id);
 static void add_popup_menu_accels(void);
 
 
+/** Lookup a keybinding item.
+ * @param group Group.
+ * @param key_id Keybinding index for the group.
+ * @return The keybinding.
+ * @since 0.19. */
+GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id)
+{
+	g_assert(key_id < group->count);
+
+	return &group->keys[key_id];
+}
+
+
 /* This is used to set default keybindings on startup.
  * Menu accels are set in apply_kb_accel(). */
 /** Simple convenience function to fill a GeanyKeyBinding struct item.
@@ -117,25 +133,32 @@ static void add_popup_menu_accels(void);
  * @param callback Function to call when activated, or @c NULL.
  * @param key (Lower case) default key, e.g. @c GDK_j, but usually 0 for unset.
  * @param mod Default modifier, e.g. @c GDK_CONTROL_MASK, but usually 0 for unset.
- * @param name Key name for the configuration file, such as @c "menu_new".
+ * @param kf_name Key name for the configuration file, such as @c "menu_new".
  * @param label Label used in the preferences dialog keybindings tab.
- * @param menu_item Optional widget to set an accelerator for, or @c NULL. */
-void keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
+ * @param menu_item Optional widget to set an accelerator for, or @c NULL.
+ * @return The keybinding - normally this is ignored. */
+GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 		GeanyKeyCallback callback, guint key, GdkModifierType mod,
-		gchar *name, gchar *label, GtkWidget *menu_item)
+		gchar *kf_name, gchar *label, GtkWidget *menu_item)
 {
-	GeanyKeyBinding *kb;
+	GeanyKeyBinding *kb = keybindings_get_item(group, key_id);
 
-	g_assert(key_id < group->count);
-
-	kb = &group->keys[key_id];
-
-	kb->name = name;
-	kb->label = label;
+	if (group->plugin)
+	{
+		/* some plugins e.g. GeanyLua need these fields duplicated */
+		setptr(kb->name, g_strdup(kf_name));
+		setptr(kb->label, g_strdup(label));
+	}
+	else
+	{
+		kb->name = kf_name;
+		kb->label = label;
+	}
 	kb->key = key;
 	kb->mods = mod;
 	kb->callback = callback;
 	kb->menu_item = menu_item;
+	return kb;
 }
 
 
@@ -2271,3 +2294,46 @@ void keybindings_update_combo(GeanyKeyBinding *kb, guint key, GdkModifierType mo
 			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
 }
 
+
+/* used for plugins */
+GeanyKeyGroup *keybindings_set_group(GeanyKeyGroup *group, const gchar *section_name,
+		const gchar *label, gsize count, GeanyKeyGroupCallback callback)
+{
+	g_return_val_if_fail(section_name, NULL);
+	g_return_val_if_fail(count, NULL);
+	g_return_val_if_fail(!callback, NULL);
+
+	/* prevent conflict with core bindings */
+	g_return_val_if_fail(!g_str_equal(section_name, keybindings_keyfile_group_name), NULL);
+
+	if (!group)
+		group = g_new0(GeanyKeyGroup, 1);
+
+	if (!group->keys || count > group->count)
+	{
+		/* allow resizing existing array of keys */
+		group->keys = g_renew(GeanyKeyBinding, group->keys, count);
+		memset(group->keys + group->count, 0, (count - group->count) * sizeof(GeanyKeyBinding));
+	}
+	group->plugin = TRUE;
+	add_kb_group(group, section_name, label, count, group->keys);
+	return group;
+}
+
+
+/* used for plugins */
+void keybindings_free_group(GeanyKeyGroup *group)
+{
+	GeanyKeyBinding *kb;
+
+	g_assert(group->plugin);
+
+	foreach_c_array(kb, group->keys, group->count)
+	{
+		g_free(kb->name);
+		g_free(kb->label);
+	}
+	g_free(group->keys);
+	g_ptr_array_remove_fast(keybinding_groups, group);
+	g_free(group);
+}

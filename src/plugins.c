@@ -243,7 +243,8 @@ static EncodingFuncs encoding_funcs = {
 
 static KeybindingFuncs keybindings_funcs = {
 	&keybindings_send_command,
-	&keybindings_set_item
+	&keybindings_set_item,
+	&keybindings_get_item
 };
 
 static TagManagerFuncs tagmanager_funcs = {
@@ -684,11 +685,8 @@ plugin_cleanup(Plugin *plugin)
 	remove_callbacks(plugin);
 
 	if (plugin->key_group)
-	{
-		g_free(plugin->key_group->keys);
-		g_ptr_array_remove_fast(keybinding_groups, plugin->key_group);
-		setptr(plugin->key_group, NULL);
-	}
+		keybindings_free_group(plugin->key_group);
+
 	widget = plugin->toolbar_separator.widget;
 	if (widget)
 		gtk_widget_destroy(widget);

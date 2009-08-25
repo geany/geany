@@ -254,6 +254,8 @@
 	geany_functions->p_keybindings->send_command
 #define keybindings_set_item \
 	geany_functions->p_keybindings->set_item
+#define keybindings_get_item \
+	geany_functions->p_keybindings->get_item
 #define tm_get_real_path \
 	geany_functions->p_tm->get_real_path
 #define tm_source_file_new \

@@ -28,8 +28,6 @@
 
 #include "geany.h"
 
-#include <string.h>
-
 #include "pluginutils.h"
 #include "pluginprivate.h"
 
@@ -140,40 +138,11 @@ void plugin_signal_connect(GeanyPlugin *plugin,
 GeanyKeyGroup *plugin_set_key_group(GeanyPlugin *plugin,
 		const gchar *section_name, gsize count, GeanyKeyGroupCallback callback)
 {
-	GeanyKeyGroup *group;
 	GeanyPluginPrivate *priv = plugin->priv;
 
-	g_return_val_if_fail(section_name, NULL);
-	g_return_val_if_fail(count, NULL);
-	g_return_val_if_fail(!callback, NULL);
-
-	if (!priv->key_group)
-		priv->key_group = g_new0(GeanyKeyGroup, 1);
-	group = priv->key_group;
-
-	group->name = section_name;
-
-	if (!group->keys || count > group->count)
-	{
-		group->keys = g_renew(GeanyKeyBinding, group->keys, count);
-		memset(group->keys + group->count, 0, (count - group->count) * sizeof(GeanyKeyBinding));
-	}
-	group->count = count;
-
-	if (!NZV(group->name))
-	{
-		geany_debug("Plugin \"%s\" has not set the name field for its keybinding group"
-			" - ignoring all keybindings!",
-			priv->info.name);
-		return NULL;
-	}
-	/* prevent conflict with core bindings */
-	g_return_val_if_fail(! g_str_equal(group->name, keybindings_keyfile_group_name), NULL);
-
-	group->label = priv->info.name;
-
-	g_ptr_array_add(keybinding_groups, group);
-	return group;
+	priv->key_group = keybindings_set_group(priv->key_group, section_name,
+		priv->info.name, count, callback);
+	return priv->key_group;
 }
 
 
