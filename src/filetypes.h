@@ -119,7 +119,7 @@ struct GeanyFiletype
 	gchar			 *error_regex_string;
 
 	struct GeanyFiletypePrivate	*priv;	/* must be last, append fields before this item */
-
+#ifdef GEANY_PRIVATE
 	/* Do not use following fields in plugins */
 	GeanyBuildCommand *filecmds;	/* these need to be visible since used in build.c so not in private part */
 	GeanyBuildCommand *ftdefcmds;	/* filetype dependent defaults for non_ft commands */
@@ -130,6 +130,7 @@ struct GeanyFiletype
 	gint			 project_list_entry;
 	gchar			 *projerror_regex_string;
 	gchar			 *homeerror_regex_string;
+#endif
 };
 
 extern GPtrArray *filetypes_array;

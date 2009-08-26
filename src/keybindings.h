@@ -51,6 +51,7 @@ GeanyKeyBinding;
 typedef struct GeanyKeyGroup GeanyKeyGroup;
 
 /* Plugins should not set these fields. */
+#ifdef GEANY_PRIVATE
 struct GeanyKeyGroup
 {
 	const gchar *name;		/* Group name used in the configuration file, such as @c "html_chars" */
@@ -59,6 +60,7 @@ struct GeanyKeyGroup
 	GeanyKeyBinding *keys;	/* array of GeanyKeyBinding structs */
 	gboolean plugin;		/* used by plugin */
 };
+#endif
 
 
 extern GPtrArray *keybinding_groups;	/* array of GeanyKeyGroup pointers */
