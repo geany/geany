@@ -358,7 +358,7 @@ gchar **build_get_regex(GeanyBuildGroup grp, GeanyFiletype *ft, gint *from)
 }
 
 /* get pointer to the command group array */
-GeanyBuildCommand *get_build_group(GeanyBuildSource src, GeanyBuildGroup grp)
+static GeanyBuildCommand *get_build_group(GeanyBuildSource src, GeanyBuildGroup grp)
 {
 	GeanyDocument *doc;
 	GeanyFiletype *ft;
@@ -1820,7 +1820,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, TableD
 	return GTK_WIDGET(table);
 }
 
-void free_build_fields(TableData table_data)
+void build_free_fields(TableData table_data)
 {
 	gint cmdindex;
 	for (cmdindex=0; cmdindex<build_items_count; ++cmdindex)
@@ -1929,7 +1929,7 @@ static gboolean read_regex(GtkWidget *regexentry, gchar **src, gchar **dst)
 	return changed;
 }
 
-gboolean read_build_commands(BuildDestination *dst, TableData table_data, gint response)
+gboolean build_read_commands(BuildDestination *dst, TableData table_data, gint response)
 {
 	gint			 cmdindex, cmd;
 	gboolean		 changed = FALSE;
@@ -1984,8 +1984,8 @@ static void show_build_commands_dialog()
 		prefdsts.fileregexstr = NULL;
 	}
 	prefdsts.nonfileregexstr = &regex_pref;
-	read_build_commands(&prefdsts, table_data, response);
-	free_build_fields(table_data);
+	build_read_commands(&prefdsts, table_data, response);
+	build_free_fields(table_data);
 
 	build_menu_update(doc);
 	gtk_widget_destroy(dialog);
@@ -2002,7 +2002,7 @@ BuildMenuItems *build_get_menu_items(gint filetype_idx)
 }
 
 /* set non_ft working directory entries to %p for project */
-void set_build_non_ft_wd_to_proj(TableData table_data)
+void build_set_non_ft_wd_to_proj(TableData table_data)
 {
 	gint i, start, end;
 	start = build_groups_count[GEANY_GBG_FT];

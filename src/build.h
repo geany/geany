@@ -167,11 +167,11 @@ void build_finalize(void);
 /* menu configuration dialog functions */
 GtkWidget *build_commands_table( GeanyDocument *doc, GeanyBuildSource dst, TableData *data, GeanyFiletype *ft );
 
-gboolean read_build_commands( BuildDestination *dst, TableData data, gint response );
+gboolean build_read_commands( BuildDestination *dst, TableData data, gint response );
 
-void free_build_fields( TableData data );
+void build_free_fields( TableData data );
 
-void set_build_non_ft_wd_to_proj(TableData table_data);
+void build_set_non_ft_wd_to_proj(TableData table_data);
 
 /* build response decode assistance function */
 gboolean build_parse_make_dir(const gchar *string, gchar **prefix);

@@ -386,7 +386,8 @@ void project_close(gboolean open_default)
 static void on_set_use_base_path_clicked( GtkWidget *unused1, gpointer user_data )
 {
 	TableData td = (TableData)user_data;
-	set_build_non_ft_wd_to_proj(td);
+
+	build_set_non_ft_wd_to_proj(td);
 }
 
 static void create_properties_dialog(PropertyDialogElements *e)
@@ -579,7 +580,7 @@ void project_properties(void)
 		stash_group_update(indent_group, e->dialog);
 	}
 
-	free_build_fields( e->build_properties );
+	build_free_fields( e->build_properties );
 	gtk_widget_destroy(e->dialog);
 	g_free(e);
 }
@@ -748,7 +749,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 		menu_dst.dst[GEANY_GBG_NON_FT] = &non_ft_proj;
 		menu_dst.dst[GEANY_GBG_EXEC] = &exec_proj;
 		menu_dst.nonfileregexstr = &regex_proj;
-		read_build_commands( &menu_dst, e->build_properties,  GTK_RESPONSE_ACCEPT );
+		build_read_commands( &menu_dst, e->build_properties,  GTK_RESPONSE_ACCEPT );
 		if (ft!=NULL && ft->projfilecmds!=oldvalue && ft->project_list_entry<0)
 		{
 			if (p->build_filetypes_list==NULL)p->build_filetypes_list = g_ptr_array_new();

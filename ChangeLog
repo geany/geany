@@ -10,6 +10,8 @@
    Use GEANY_PRIVATE to hide some fields from plugins.
  * src/build.c:
    Fix invalid memory read (#2844632, patch by Lex Trotman, thanks).
+ * src/build.c, src/build.h, src/project.c:
+   Use build_ prefix for 3 functions in build.h; add a static modifier.
 
 
 2009-08-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
