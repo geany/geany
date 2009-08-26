@@ -2351,21 +2351,21 @@ void build_init(void)
 {
 	GtkWidget *item;
 	GtkWidget *toolmenu;
-	gint i, cmdindex;
+	gint cmdindex;
 
 	ft_def = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_FT]);
 	non_ft_def = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_NON_FT]);
 	exec_def = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_EXEC]);
 	run_info = g_new0(RunInfo, build_groups_count[GEANY_GBG_EXEC]);
-	for (cmdindex=0; default_cmds[cmdindex].entries[i] != NULL; ++cmdindex)
+	for (cmdindex=0; default_cmds[cmdindex].entries[GEANY_BC_COMMAND] != NULL; ++cmdindex)
 	{
-        enum GeanyBuildCmdEntries k;
+		enum GeanyBuildCmdEntries k;
 		GeanyBuildCommand *cmd = &((*(default_cmds[cmdindex].ptr))[ default_cmds[cmdindex].index ]);
 		cmd->exists = TRUE;
-        FOREACH_GEANYBUILDCMD_ENTRY(k)
-        {
-            cmd->entries[k] = g_strdup(default_cmds[cmdindex].entries[k]);
-        }
+		FOREACH_GEANYBUILDCMD_ENTRY(k)
+		{
+			cmd->entries[k] = g_strdup(default_cmds[cmdindex].entries[k]);
+		}
 	}
 
 
