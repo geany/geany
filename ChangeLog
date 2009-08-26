@@ -3,6 +3,8 @@
  * doc/plugins.dox:
    Add warning about not using undocumented features.
    Add reference to HACKING for plugin API development.
+ * HACKING:
+   Add section 'Plugin API/ABI design'.
 
 
 2009-08-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
