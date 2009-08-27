@@ -35,8 +35,7 @@
  * @date $Date$
  *
  * @section Intro
- * This is the Geany API documentation. It is far from being complete and should be
- * considered as a work in progress.
+ * This is the Geany API documentation. It should be considered work in progress.
  * We will try to document as many functions and structs as possible.
  *
  * To get started, see the @link howto Plugin Howto @endlink.
@@ -47,11 +46,13 @@
  * - @link signals Plugin Signals @endlink
  * - @link pluginutils.c Plugin Utility Functions @endlink
  * - @link guidelines Plugin Writing Guidelines @endlink
+ * - <b>plugins/demoplugin.c</b> - in Geany's source, bigger than the howto example
+ * - Header files for functions and types - see <b>Files</b> link at the top
+ * - Deprecated symbols - see <b>Related Pages</b> link at the top
  *
- * @note Some of these pages are also listed in Related Pages, plus the list of deprecated symbols.
- * @warning Do not use anything not documented here, it may change.
- * @note You should see the HACKING file for information about developing the plugin API and
- * other useful things.
+ * @warning Do not use any symbol not in the documentation - it may change.
+ * @note See the HACKING file for information about developing the plugin API and
+ * other useful notes.
  */
 
 /**
