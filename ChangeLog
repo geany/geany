@@ -7,6 +7,12 @@
  * doc/plugins.dox:
    Mention Files link at top for header files; demoplugin.c.
    Minor edits; remove 'far from being complete'.
+ * src/keyfile.c, src/keyfile.h, src/main.c,
+   data/filetype_extensions.conf, HACKING:
+   Remove --generate-data-files argument & code - just edit
+   filetype_extensions.conf by hand (filetype order was broken
+   anyway).
+   Add *.H extension for C++ (useful for non-Windows systems).
 
 
 2009-08-27  Lex Trotman  <elextr(at)gmail(dot)com>
