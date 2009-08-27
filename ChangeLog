@@ -1,3 +1,11 @@
+2009-08-27  Lex Trotman  <elextr(at)gmail(dot)com>
+
+ * src/build.c:
+   Change make custom and make object to ignore make in base path
+   when reading old project file settings.  Changed some indent 
+   spaces to tabs. Fix missing compile menu accelerator.
+
+
 2009-08-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * doc/plugins.dox:
