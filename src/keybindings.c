@@ -1423,13 +1423,13 @@ static void cb_func_build_action(guint key_id)
 			item = menu_items->menu_item[GEANY_GBG_FT][GBO_TO_CMD(GEANY_GBO_BUILD)];
 			break;
 		case GEANY_KEYS_BUILD_MAKE:
-			item = menu_items->menu_item[GEANY_GBG_FT][GBO_TO_CMD(GEANY_GBO_MAKE_ALL)];
+			item = menu_items->menu_item[GEANY_GBG_NON_FT][GBO_TO_CMD(GEANY_GBO_MAKE_ALL)];
 			break;
 		case GEANY_KEYS_BUILD_MAKEOWNTARGET:
-			item = menu_items->menu_item[GEANY_GBG_FT][GBO_TO_CMD(GEANY_GBO_CUSTOM)];
+			item = menu_items->menu_item[GEANY_GBG_NON_FT][GBO_TO_CMD(GEANY_GBO_CUSTOM)];
 			break;
 		case GEANY_KEYS_BUILD_MAKEOBJECT:
-			item = menu_items->menu_item[GEANY_GBG_FT][GBO_TO_CMD(GEANY_GBO_MAKE_OBJECT)];
+			item = menu_items->menu_item[GEANY_GBG_NON_FT][GBO_TO_CMD(GEANY_GBO_MAKE_OBJECT)];
 			break;
 		case GEANY_KEYS_BUILD_NEXTERROR:
 			item = menu_items->menu_item[GBG_FIXED][GBF_NEXT_ERROR];
