@@ -2078,7 +2078,7 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 	GeanyFiletype 	*ft;
 	GeanyProject  	*pj;
 	gchar 			**ftlist;
-	gchar 			*value;
+	gchar 			*value, *basedir;
 	gboolean 		 bvalue;
 
 	if (g_key_file_has_group(config, build_grp_name))
@@ -2171,19 +2171,31 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 		case GEANY_BCS_PROJ:
 			if (non_ft_proj==NULL)non_ft_proj = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_NON_FT]);
 			bvalue = g_key_file_get_boolean(config, "project", "make_in_base_path", NULL);
-			value = bvalue?"%p":"%d";
+			if (bvalue)
+			{
+				basedir = g_key_file_get_string(config, "project", "base_path", NULL);
+				if (basedir==NULL || !g_path_is_absolute(basedir))
+					basedir = g_build_filename("%p", basedir, NULL);
+				else
+					basedir = g_strdup(basedir);
+			}
+			else
+				basedir = g_strdup("%d");
 			if (non_ft_pref[GBO_TO_CMD(GEANY_GBO_MAKE_ALL)].old)
-				setptr(non_ft_pref[GBO_TO_CMD(GEANY_GBO_MAKE_ALL)].entries[GEANY_BC_WORKING_DIR], g_strdup(value) );
+				setptr(non_ft_pref[GBO_TO_CMD(GEANY_GBO_MAKE_ALL)].entries[GEANY_BC_WORKING_DIR], g_strdup(basedir));
 			if (non_ft_pref[GBO_TO_CMD(GEANY_GBO_CUSTOM)].old)
-				setptr(non_ft_pref[GBO_TO_CMD(GEANY_GBO_CUSTOM)].entries[GEANY_BC_WORKING_DIR], g_strdup("%d") );
+				setptr(non_ft_pref[GBO_TO_CMD(GEANY_GBO_CUSTOM)].entries[GEANY_BC_WORKING_DIR], g_strdup(basedir));
 			if (non_ft_pref[GBO_TO_CMD(GEANY_GBO_MAKE_OBJECT)].old)
-				setptr(non_ft_pref[GBO_TO_CMD(GEANY_GBO_MAKE_OBJECT)].entries[GEANY_BC_WORKING_DIR], g_strdup("%d") );
+				setptr(non_ft_pref[GBO_TO_CMD(GEANY_GBO_MAKE_OBJECT)].entries[GEANY_BC_WORKING_DIR], g_strdup("%d"));
 			value = g_key_file_get_string(config, "project", "run_cmd", NULL);
-			if (value !=NULL)
+			if (value!=NULL && strlen(value)>0)
 			{
 				if (exec_proj==NULL)exec_proj = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_EXEC]);
 				ASSIGNIF(exec_proj, GEANY_GBO_EXEC, "_Execute", value);
+				if (exec_proj[GBO_TO_CMD(GEANY_GBO_EXEC)].old)
+					setptr(exec_proj[GBO_TO_CMD(GEANY_GBO_EXEC)].entries[GEANY_BC_WORKING_DIR], g_strdup(basedir));
 			}
+			g_free(basedir);
 			break;
 		case GEANY_BCS_PREF:
 			if (non_ft_pref==NULL)non_ft_pref = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_NON_FT]);

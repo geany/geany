@@ -1,5 +1,12 @@
 2009-08-27  Lex Trotman  <elextr(at)gmail(dot)com>
 
+ * src/build.c
+   Change usage of project base directory to conform with
+   previous documented behavior when loading old project files.
+
+
+2009-08-27  Lex Trotman  <elextr(at)gmail(dot)com>
+
  * src/build.c:
    Change make custom and make object to ignore make in base path
    when reading old project file settings.  Changed some indent 
