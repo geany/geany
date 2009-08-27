@@ -91,4 +91,9 @@ extern gboolean	ignore_callback;
 /* prototype is here so that all files can use it. */
 void geany_debug(gchar const *format, ...) G_GNUC_PRINTF (1, 2);
 
+
+#ifndef G_GNUC_WARN_UNUSED_RESULT
+#define G_GNUC_WARN_UNUSED_RESULT
+#endif
+
 #endif

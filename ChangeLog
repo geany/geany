@@ -2,6 +2,8 @@
 
  * src/keybindings.c:
    Fix Make keybindings (patch by Lex Trotman, thanks).
+ * src/geany.h:
+   Define G_GNUC_WARN_UNUSED_RESULT if GLib < 2.10.
 
 
 2009-08-27  Lex Trotman  <elextr(at)gmail(dot)com>
