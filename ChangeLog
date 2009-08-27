@@ -1,6 +1,15 @@
 2009-08-27  Lex Trotman  <elextr(at)gmail(dot)com>
 
  * src/build.c
+   Fix implementation of loading old project files with base
+   directories. Use project_make_base_path instead of re-
+   implementing.  Now depends on project.c reading base dir 
+   prior to calling load_build_menu.
+
+
+2009-08-27  Lex Trotman  <elextr(at)gmail(dot)com>
+
+ * src/build.c
    Change usage of project base directory to conform with
    previous documented behavior when loading old project files.
 
