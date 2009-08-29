@@ -1375,21 +1375,26 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 	gchar *regstr;
 	gchar **tmp;
 	GeanyDocument *doc;
-	if(ft==NULL)
+#ifdef HAVE_REGCOMP
+	regex_t *regex;
+	regmatch_t pmatch[3];
+#endif
+	if (ft == NULL)
 	{
 		doc = document_get_current();
-		if(doc!=NULL)ft = doc->file_type;
+		if (doc != NULL)
+			ft = doc->file_type;
 	}
 	tmp = build_get_regex(build_info.grp, ft, NULL);
-	if (tmp==NULL) return FALSE;
+	if (tmp == NULL)
+		return FALSE;
 	regstr = *tmp;
 #ifndef HAVE_REGCOMP
 	if (!NZV(regstr))
 		geany_debug("No regex support - maybe you should configure with --enable-gnu-regex!");
 	return FALSE;
 #else
-	regex_t *regex = &ft->priv->error_regex;
-	regmatch_t pmatch[3];
+	regex = &ft->priv->error_regex;
 
 	*filename = NULL;
 	*line = -1;

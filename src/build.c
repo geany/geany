@@ -1392,7 +1392,7 @@ void build_menu_update(GeanyDocument *doc)
 					else
 					{
 						GtkWidget *image;
-						exec_running = run_info[cmd].pid>1;
+						exec_running = run_info[cmd].pid > (GPid) 1;
 						cmd_sensitivity = bc!=NULL || exec_running;
 						gtk_widget_set_sensitive(menu_item, cmd_sensitivity);
 						if (cmd==GBO_TO_CMD(GEANY_GBO_EXEC)) run_sensitivity = cmd_sensitivity;

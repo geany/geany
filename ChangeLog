@@ -1,3 +1,9 @@
+2009-08-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/build.c, src/filetypes.c:
+   Fix compiler warnings.
+
+
 2009-08-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keybindings.c:
