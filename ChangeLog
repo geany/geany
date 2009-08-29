@@ -2,6 +2,9 @@
 
  * src/build.c, src/filetypes.c:
    Fix compiler warnings.
+ * src/utils.c:
+   Fix removing leading double slashes in filenames which are used for
+   network resources on Windows (closes #2844085).
 
 
 2009-08-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
