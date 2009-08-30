@@ -1104,6 +1104,8 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		toolbar_apply_settings();
 		toolbar_update_ui();
 		toolbar_show_hide();
+		if (interface_prefs.sidebar_openfiles_visible || interface_prefs.sidebar_symbol_visible)
+			ui_prefs.sidebar_visible = TRUE;
 		ui_sidebar_show_hide();
 		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
 
