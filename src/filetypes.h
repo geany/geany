@@ -109,7 +109,7 @@ struct GeanyFiletype
 	langType 		  lang;
 	gchar			 *name;				/**< Used as name for tagmanager. E.g. "C". */
 	gchar			 *title;			/**< Shown in the file open dialog. E.g. "C source file". */
-	gchar			 *extension;		/**< Default file extension for new files. */
+	gchar			 *extension;		/**< Default file extension for new files, or @c NULL. */
 	gchar			**pattern;			/**< Array of filename-matching wildcard strings. */
 	gchar			 *context_action_cmd;
 	gchar			 *comment_open;

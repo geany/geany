@@ -1487,15 +1487,16 @@ static GHashTable *init_user_tags(void)
 
 static void load_user_tags(filetype_id ft_id)
 {
-	static guchar tags_loaded[GEANY_MAX_BUILT_IN_FILETYPES] = {0};
+	static guchar *tags_loaded = NULL;
 	static GHashTable *lang_hash = NULL;
 	GList *fnames;
 	const GList *node;
 	GeanyFiletype *ft = filetypes[ft_id];
 
 	g_return_if_fail(ft_id > 0);
-	g_return_if_fail(ft_id < GEANY_MAX_BUILT_IN_FILETYPES);
 
+	if (!tags_loaded)
+		tags_loaded = g_new0(guchar, filetypes_array->len);
 	if (tags_loaded[ft_id])
 		return;
 	tags_loaded[ft_id] = TRUE;	/* prevent reloading */

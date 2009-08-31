@@ -88,7 +88,7 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 		gboolean ro = (response == GEANY_RESPONSE_VIEW);	/* View clicked */
 
 		/* ignore detect from file item */
-		if (filetype_idx > 0 && filetype_idx < GEANY_MAX_BUILT_IN_FILETYPES)
+		if (filetype_idx > 0)
 			ft = g_slist_nth_data(filetypes_by_title, filetype_idx);
 		if (encoding_idx >= 0 && encoding_idx < GEANY_ENCODINGS_MAX)
 			charset = encodings[encoding_idx].charset;
@@ -511,8 +511,7 @@ static gboolean gtk_show_save_as(void)
 	{
 		gchar *fname = NULL;
 
-		if (doc->file_type != NULL && doc->file_type->id != GEANY_FILETYPES_NONE &&
-			doc->file_type->extension != NULL)
+		if (doc->file_type != NULL && doc->file_type->extension != NULL)
 			fname = g_strconcat(GEANY_STRING_UNTITLED, ".",
 								doc->file_type->extension, NULL);
 		else

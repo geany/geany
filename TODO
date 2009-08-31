@@ -13,7 +13,7 @@ Note: features included in brackets have lower priority.
 	  filetypes.common named styles)
 	o configurable filetype and project make commands (e.g. using
 	  bud for D) - see the build-system SVN branch
-	o (custom filetypes)
+	o (better custom filetype support)
 	o (support for adding plugin filetypes - SCI_LOADLEXERLIBRARY?)
 	o (selectable menu of arguments to use for Make, from Make Custom)
 	o (DBUS)

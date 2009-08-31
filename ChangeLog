@@ -3,6 +3,16 @@
  * src/plugins.c:
    Add warning if only one of the plugin_key_group[_info] symbols is
    defined for a plugin.
+ * src/templates.c, src/highlighting.c, src/dialogs.c, src/filetypes.c,
+   src/filetypes.h, src/document.c, src/main.c, src/symbols.c,
+   TODO:
+   Merge custom-filetypes branch:
+   Support adding custom filetype files e.g. filetypes.Foo.conf.
+ - Code:
+   Allow GeanyFiletype::extension to be NULL.
+   Add note about using GeanyFiletype pointer instead of filetype_id
+   for filetypes.c function arguments.
+   Replace styleset_none() with styleset_default().
 
 
 2009-08-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
