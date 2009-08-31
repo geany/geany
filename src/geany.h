@@ -47,7 +47,7 @@
  * listed in the documentation should not be changed */
 #define GEANY_FILEDEFS_SUBDIR			"filedefs"
 #define GEANY_TEMPLATES_SUBDIR			"templates"
-#define GEANY_CODENAME					"Kaine"
+#define GEANY_CODENAME					"Vellam"
 #define GEANY_HOMEPAGE					"http://www.geany.org/"
 #define GEANY_USE_WIN32_DIALOG			0
 #define GEANY_STRING_UNTITLED			_("untitled")
@@ -90,5 +90,10 @@ extern gboolean	ignore_callback;
 
 /* prototype is here so that all files can use it. */
 void geany_debug(gchar const *format, ...) G_GNUC_PRINTF (1, 2);
+
+
+#ifndef G_GNUC_WARN_UNUSED_RESULT
+#define G_GNUC_WARN_UNUSED_RESULT
+#endif
 
 #endif

@@ -218,14 +218,16 @@ end\n\
 x = StdClass.new\n\
 ";
 
-static const gchar templates_filetype_python[] = "#!/usr/bin/env python\n#\n\
+static const gchar templates_filetype_python[] = "#!/usr/bin/env python\n\
+# -*- coding: utf-8 -*-\n#\n\
 {fileheader}\n\n\
 \n\
 def main():\n\
 	\n\
 	return 0\n\
 \n\
-if __name__ == '__main__': main()\n\
+if __name__ == '__main__':\n\
+	main()\n\
 ";
 
 static const gchar templates_filetype_latex[] = "\

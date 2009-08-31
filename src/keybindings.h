@@ -31,32 +31,37 @@
 #define GEANY_KEYBINDINGS_H 1
 
 
-/** Function pointer type used for keybinding callbacks */
+/** Function pointer type used for keybinding callbacks. */
 typedef void (*GeanyKeyCallback) (guint key_id);
 
-/** Represents a single keybinding action */
-/* Note: name and label are not const strings so plugins can set them to malloc'd strings
- * and free them in cleanup(). */
+/** Represents a single keybinding action.
+ * Use keybindings_set_item() to set. */
 typedef struct GeanyKeyBinding
 {
-	guint key;				/**< Key value in lower-case, such as @c GDK_a */
-	GdkModifierType mods;	/**< Modifier keys, such as @c GDK_CONTROL_MASK */
+	guint key;				/**< Key value in lower-case, such as @c GDK_a or 0 */
+	GdkModifierType mods;	/**< Modifier keys, such as @c GDK_CONTROL_MASK or 0 */
 	gchar *name;			/**< Key name for the configuration file, such as @c "menu_new" */
 	gchar *label;			/**< Label used in the preferences dialog keybindings tab */
-	GeanyKeyCallback callback;	/**< Callback function called when the key combination is pressed */
-	GtkWidget *menu_item;	/**< Menu item widget for setting the menu accelerator */
-} GeanyKeyBinding;
-
+	GeanyKeyCallback callback;	/**< Function called when the key combination is pressed, or @c NULL */
+	GtkWidget *menu_item;	/**< Optional widget to set an accelerator for, or @c NULL */
+}
+GeanyKeyBinding;
 
 /** A collection of keybindings grouped together. */
-typedef struct GeanyKeyGroup
+typedef struct GeanyKeyGroup GeanyKeyGroup;
+
+/* Plugins should not set these fields. */
+#ifdef GEANY_PRIVATE
+struct GeanyKeyGroup
 {
-	const gchar *name;		/**< Group name used in the configuration file, such as @c "html_chars" */
-	const gchar *label;		/**< Group label used in the preferences dialog keybindings tab */
-	gsize count;			/**< Count of GeanyKeyBinding structs in @c keys */
-	GeanyKeyBinding *keys;	/**< Fixed array of GeanyKeyBinding structs */
-}
-GeanyKeyGroup;
+	const gchar *name;		/* Group name used in the configuration file, such as @c "html_chars" */
+	const gchar *label;		/* Group label used in the preferences dialog keybindings tab */
+	gsize count;			/* number of keybindings the group holds */
+	GeanyKeyBinding *keys;	/* array of GeanyKeyBinding structs */
+	gboolean plugin;		/* used by plugin */
+};
+#endif
+
 
 extern GPtrArray *keybinding_groups;	/* array of GeanyKeyGroup pointers */
 
@@ -293,7 +298,6 @@ enum
 	GEANY_KEYS_BUILD_NEXTERROR,
 	GEANY_KEYS_BUILD_PREVIOUSERROR,
 	GEANY_KEYS_BUILD_RUN,
-	GEANY_KEYS_BUILD_RUN2,
 	GEANY_KEYS_BUILD_OPTIONS,
 	GEANY_KEYS_BUILD_COUNT
 };
@@ -319,9 +323,21 @@ void keybindings_load_keyfile(void);
 
 void keybindings_free(void);
 
-void keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
+/** Function pointer type used for keybinding group callbacks. */
+typedef gboolean (*GeanyKeyGroupCallback) (guint key_id);
+
+GeanyKeyGroup *keybindings_set_group(GeanyKeyGroup *group, const gchar *section_name,
+		const gchar *label, gsize count, GeanyKeyGroupCallback callback) G_GNUC_WARN_UNUSED_RESULT;
+
+void keybindings_free_group(GeanyKeyGroup *group);
+
+GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 		GeanyKeyCallback callback, guint key, GdkModifierType mod,
 		gchar *name, gchar *label, GtkWidget *menu_item);
+
+GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id);
+
+void keybindings_update_combo(GeanyKeyBinding *kb, guint key, GdkModifierType mods);
 
 void keybindings_send_command(guint group_id, guint key_id);
 

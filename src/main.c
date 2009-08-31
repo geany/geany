@@ -108,7 +108,6 @@ static gchar *alternate_config = NULL;
 static gboolean no_vte = FALSE;
 static gchar *lib_vte = NULL;
 #endif
-static gboolean generate_datafiles = FALSE;
 static gboolean generate_tags = FALSE;
 static gboolean no_preprocessing = FALSE;
 static gboolean ft_names = FALSE;
@@ -127,7 +126,6 @@ static GOptionEntry entries[] =
 	{ "ft-names", 0, 0, G_OPTION_ARG_NONE, &ft_names, N_("Print internal filetype names"), NULL },
 	{ "generate-tags", 'g', 0, G_OPTION_ARG_NONE, &generate_tags, N_("Generate global tags file (see documentation)"), NULL },
 	{ "no-preprocessing", 'P', 0, G_OPTION_ARG_NONE, &no_preprocessing, N_("Don't preprocess C/C++ files when generating tags"), NULL },
-	{ "generate-data-files", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &generate_datafiles, NULL, NULL },
 #ifdef HAVE_SOCKET
 	{ "new-instance", 'i', 0, G_OPTION_ARG_NONE, &cl_options.new_instance, N_("Don't open files in a running instance, force opening a new instance"), NULL },
 #endif
@@ -138,7 +136,7 @@ static GOptionEntry entries[] =
 	{ "no-plugins", 'p', 0, G_OPTION_ARG_NONE, &no_plugins, N_("Don't load plugins"), NULL },
 #endif
 	{ "print-prefix", 0, 0, G_OPTION_ARG_NONE, &print_prefix, N_("Print Geany's installation prefix"), NULL },
-	{ "no-session", 's', G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &cl_options.load_session, N_("don't load the previous session's files"), NULL },
+	{ "no-session", 's', G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &cl_options.load_session, N_("Don't load the previous session's files"), NULL },
 #ifdef HAVE_VTE
 	{ "no-terminal", 't', 0, G_OPTION_ARG_NONE, &no_vte, N_("Don't load terminal support"), NULL },
 	{ "vte-lib", 0, 0, G_OPTION_ARG_FILENAME, &lib_vte, N_("Filename of libvte.so"), NULL },
@@ -523,14 +521,6 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 		app->configdir = g_build_filename(g_get_user_config_dir(), "geany", NULL);
 	}
 
-#ifdef GEANY_DEBUG
-	if (generate_datafiles)
-	{
-		filetypes_init_types();
-		configuration_generate_data_files();	/* currently only filetype_extensions.conf */
-		exit(0);
-	}
-#endif
 	if (generate_tags)
 	{
 		gboolean ret;
@@ -1123,7 +1113,6 @@ void main_quit()
 	g_free(template_prefs.mail);
 	g_free(template_prefs.initials);
 	g_free(template_prefs.version);
-	g_free(tool_prefs.make_cmd);
 	g_free(tool_prefs.term_cmd);
 	g_free(tool_prefs.browser_cmd);
 	g_free(tool_prefs.grep_cmd);

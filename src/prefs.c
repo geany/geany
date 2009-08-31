@@ -587,8 +587,6 @@ static void prefs_init_dialog(void)
 		(editor_prefs.autoclose_chars & GEANY_AC_DQUOTE));
 
 	/* Tools Settings */
-	if (tool_prefs.make_cmd)
-			gtk_entry_set_text(GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_make")), tool_prefs.make_cmd);
 
     if (tool_prefs.term_cmd)
             gtk_entry_set_text(GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_term")), tool_prefs.term_cmd);
@@ -979,9 +977,6 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		| (autoclose_brackets[4] ? GEANY_AC_DQUOTE : 0);
 
 		/* Tools Settings */
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_make");
-		g_free(tool_prefs.make_cmd);
-		tool_prefs.make_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_term");
 		g_free(tool_prefs.term_cmd);
@@ -1109,6 +1104,8 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		toolbar_apply_settings();
 		toolbar_update_ui();
 		toolbar_show_hide();
+		if (interface_prefs.sidebar_openfiles_visible || interface_prefs.sidebar_symbol_visible)
+			ui_prefs.sidebar_visible = TRUE;
 		ui_sidebar_show_hide();
 		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
 
@@ -1270,8 +1267,7 @@ static void kb_cell_edited_cb(GtkCellRendererText *cellrenderertext, gchar *path
 
 		/* set the values here, because of the above check, setting it in
 		 * gtk_accelerator_parse would return a wrong key combination if it is duplicate */
-		kb->key = lkey;
-		kb->mods = lmods;
+		keybindings_update_combo(kb, lkey, lmods);
 
 		gtk_tree_store_set(store, &iter, KB_TREE_SHORTCUT, new_text, -1);
 
@@ -1316,8 +1312,7 @@ static void kb_dialog_response_cb(GtkWidget *dialog, gint response, G_GNUC_UNUSE
 
 		/* set the values here, because of the above check, setting it in
 		 * gtk_accelerator_parse would return a wrong key combination if it is duplicate */
-		kb->key = lkey;
-		kb->mods = lmods;
+		keybindings_update_combo(kb, lkey, lmods);
 
 		gtk_tree_store_set(store, &g_iter,
 			KB_TREE_SHORTCUT, gtk_label_get_text(GTK_LABEL(dialog_label)), -1);
@@ -1400,8 +1395,7 @@ static gboolean kb_find_duplicate(GeanyKeyBinding *search_kb,
 					_("The combination '%s' is already used for \"%s\"."),
 					action, kb->label))
 				{
-					kb->key = 0;
-					kb->mods = 0;
+					keybindings_update_combo(kb, 0, 0);
 					kb_clear_tree_shortcut(g, i);
 					continue;
 				}
@@ -1549,7 +1543,7 @@ void prefs_show_dialog(void)
 		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "project_file_path_entry"));
 		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "extra_plugin_path_entry"));
 		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_toggle_mark"));
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_make"));
+	/*	ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_make")); */
 		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_term"));
 		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_browser"));
 		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_grep"));
@@ -1587,9 +1581,9 @@ void prefs_show_dialog(void)
 				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(3));
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "long_line_color"),
 				"color-set", G_CALLBACK(on_prefs_color_choosed), GINT_TO_POINTER(1));
-		/* file chooser buttons in the tools tab */
+		/* file chooser buttons in the tools tab 
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "button_make"),
-				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_make"));
+				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_make")); */
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "button_term"),
 				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_term"));
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "button_browser"),

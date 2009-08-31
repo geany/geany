@@ -62,24 +62,7 @@
 #include "pluginutils.h"
 #include "pluginprivate.h"
 
-
-typedef struct Plugin
-{
-	GModule 	*module;
-	gchar		*filename;				/* plugin filename (/path/libname.so) */
-	PluginInfo		info;				/* plugin name, description, etc */
-	PluginFields	fields;
-	GeanyPlugin		public;				/* fields the plugin can read */
-	GeanyPluginPrivate	priv;			/* GeanyPlugin type private data, same as (*public.priv) */
-
-	GeanyKeyGroup	*key_group;
-
-	void		(*init) (GeanyData *data);			/* Called when the plugin is enabled */
-	GtkWidget*	(*configure) (GtkDialog *dialog);	/* plugin configure dialog, optional */
-	void		(*help) (void);					/* Called when the plugin should show some help, optional */
-	void		(*cleanup) (void);					/* Called when the plugin is disabled or when Geany exits */
-}
-Plugin;
+typedef GeanyPluginPrivate Plugin;	/* shorter alias */
 
 
 static gboolean want_plugins = FALSE;
@@ -99,7 +82,8 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data);
 static PluginFuncs plugin_funcs = {
 	&plugin_add_toolbar_item,
 	&plugin_module_make_resident,
-	&plugin_signal_connect
+	&plugin_signal_connect,
+	&plugin_set_key_group
 };
 
 static DocumentFuncs doc_funcs = {
@@ -259,7 +243,8 @@ static EncodingFuncs encoding_funcs = {
 
 static KeybindingFuncs keybindings_funcs = {
 	&keybindings_send_command,
-	&keybindings_set_item
+	&keybindings_set_item,
+	&keybindings_get_item
 };
 
 static TagManagerFuncs tagmanager_funcs = {
@@ -464,42 +449,40 @@ static void add_callbacks(Plugin *plugin, PluginCallback *callbacks)
 }
 
 
-static void
-add_kb_group(Plugin *plugin)
+static void read_key_group(Plugin *plugin)
 {
-	guint i;
+	GeanyKeyGroupInfo *p_key_info;
+	GeanyKeyGroup **p_key_group;
 
-	if (!NZV(plugin->key_group->name))
+	g_module_symbol(plugin->module, "plugin_key_group_info", (void *) &p_key_info);
+	g_module_symbol(plugin->module, "plugin_key_group", (void *) &p_key_group);
+	if (p_key_info && p_key_group)
 	{
-		geany_debug("Plugin \"%s\" has not set a name for its keybinding group"
-			" - ignoring all keybindings!",
-			plugin->info.name);
-		return;
-	}
-	g_return_if_fail(! g_str_equal(plugin->key_group->name, keybindings_keyfile_group_name));
+		GeanyKeyGroupInfo *key_info = p_key_info;
 
-	for (i = 0; i < plugin->key_group->count; i++)
-	{
-		GeanyKeyBinding *kb = &plugin->key_group->keys[i];
-
-		if (!NZV(kb->name))
+		if (*p_key_group)
+			geany_debug("Ignoring plugin_key_group symbol for plugin '%s' - "
+				"use plugin_set_key_group() instead to allocate keybindings dynamically.",
+				plugin->info.name);
+		else
 		{
-			geany_debug("Plugin \"%s\" has not set a name for keybinding %d"
-				" - ignoring all keybindings!",
-				plugin->info.name, i);
-			plugin->key_group->count = 0;
-			break;
+			if (key_info->count)
+			{
+				GeanyKeyGroup *key_group =
+					plugin_set_key_group(&plugin->public, key_info->name, key_info->count, NULL);
+				if (key_group)
+					*p_key_group = key_group;
+			}
+			else
+				geany_debug("Ignoring plugin_key_group_info symbol for plugin '%s' - "
+					"count field is zero. Maybe use plugin_set_key_group() instead?",
+					plugin->info.name);
 		}
 	}
-	if (plugin->key_group->count == 0)
-	{
-		plugin->key_group = NULL;	/* Ignore the group (maybe the plugin has optional KB) */
-		return;
-	}
-
-	plugin->key_group->label = plugin->info.name;
-
-	g_ptr_array_add(keybinding_groups, plugin->key_group);
+	else if (p_key_info || p_key_group)
+		geany_debug("Ignoring only one of plugin_key_group[_info] symbols defined for plugin '%s'. "
+			"Maybe use plugin_set_key_group() instead?",
+			plugin->info.name);
 }
 
 
@@ -529,13 +512,11 @@ plugin_init(Plugin *plugin)
 	g_module_symbol(plugin->module, "plugin_fields", (void *) &plugin_fields);
 	if (plugin_fields)
 		*plugin_fields = &plugin->fields;
+	read_key_group(plugin);
 
 	/* start the plugin */
 	g_return_if_fail(plugin->init);
 	plugin->init(&geany_data);
-
-	if (p_geany_plugin && (*p_geany_plugin)->priv->resident)
-		g_module_make_resident(plugin->module);
 
 	/* store some function pointers for later use */
 	g_module_symbol(plugin->module, "plugin_configure", (void *) &plugin->configure);
@@ -558,10 +539,6 @@ plugin_init(Plugin *plugin)
 	g_module_symbol(plugin->module, "plugin_callbacks", (void *) &callbacks);
 	if (callbacks)
 		add_callbacks(plugin, callbacks);
-
-	g_module_symbol(plugin->module, "plugin_key_group", (void *) &plugin->key_group);
-	if (plugin->key_group)
-		add_kb_group(plugin);
 
 	/* remember which plugins are active */
 	active_plugin_list = g_list_append(active_plugin_list, plugin);
@@ -667,7 +644,7 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 	plugin->filename = g_strdup(fname);
 	plugin->module = module;
 	plugin->public.info = &plugin->info;
-	plugin->public.priv = &plugin->priv;
+	plugin->public.priv = plugin;
 
 	if (init_plugin)
 		plugin_init(plugin);
@@ -681,7 +658,7 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 
 static void remove_callbacks(Plugin *plugin)
 {
-	GArray *signal_ids = plugin->priv.signal_ids;
+	GArray *signal_ids = plugin->signal_ids;
 	SignalConnection *sc;
 
 	if (signal_ids == NULL)
@@ -712,9 +689,9 @@ plugin_cleanup(Plugin *plugin)
 	remove_callbacks(plugin);
 
 	if (plugin->key_group)
-		g_ptr_array_remove_fast(keybinding_groups, plugin->key_group);
+		keybindings_free_group(plugin->key_group);
 
-	widget = plugin->priv.toolbar_separator.widget;
+	widget = plugin->toolbar_separator.widget;
 	if (widget)
 		gtk_widget_destroy(widget);
 

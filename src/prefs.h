@@ -46,7 +46,6 @@ extern GeanyPrefs prefs;
 typedef struct GeanyToolPrefs
 {
 	gchar			*browser_cmd;
-	gchar			*make_cmd;
 	gchar			*term_cmd;
 	gchar			*grep_cmd;
 	gchar			*context_action_cmd;

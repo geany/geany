@@ -27,11 +27,12 @@
 
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
+#include "build.h"
 
 
 typedef enum
 {
-	GEANY_FILETYPES_NONE = 0,	/* first filetype is always None */
+	GEANY_FILETYPES_NONE = 0,	/* first filetype is always None & must be 0 */
 
 	GEANY_FILETYPES_PHP,
 	GEANY_FILETYPES_BASIC,	/* FreeBasic */
@@ -99,23 +100,6 @@ GeanyFiletypeGroupID;
 #define FILETYPE_ID(filetype_ptr) \
 	(((filetype_ptr) != NULL) ? (filetype_ptr)->id : GEANY_FILETYPES_NONE)
 
-
-struct build_actions
-{
-	gboolean	can_compile;
-	gboolean	can_link;
-	gboolean	can_exec;
-};
-
-struct build_programs
-{
-	gchar *compiler;
-	gchar *linker;
-	gchar *run_cmd;
-	gchar *run_cmd2;
-	gboolean modified;
-};
-
 /** Represents a filetype. */
 struct GeanyFiletype
 {
@@ -131,12 +115,22 @@ struct GeanyFiletype
 	gchar			 *comment_open;
 	gchar			 *comment_close;
 	gboolean		  comment_use_indent;
-	struct build_programs	*programs;
-	struct build_actions	*actions;	/* TODO: make private */
-	GeanyFiletypeGroupID	group;
+	GeanyFiletypeGroupID group;
 	gchar			 *error_regex_string;
 
 	struct GeanyFiletypePrivate	*priv;	/* must be last, append fields before this item */
+#ifdef GEANY_PRIVATE
+	/* Do not use following fields in plugins */
+	GeanyBuildCommand *filecmds;	/* these need to be visible since used in build.c so not in private part */
+	GeanyBuildCommand *ftdefcmds;	/* filetype dependent defaults for non_ft commands */
+	GeanyBuildCommand *execcmds;
+	GeanyBuildCommand *homefilecmds;
+	GeanyBuildCommand *homeexeccmds;
+	GeanyBuildCommand *projfilecmds;
+	gint			 project_list_entry;
+	gchar			 *projerror_regex_string;
+	gchar			 *homeerror_regex_string;
+#endif
 };
 
 extern GPtrArray *filetypes_array;

@@ -25,9 +25,12 @@
  * Configurable keyboard shortcuts.
  */
 
-#include <gdk/gdkkeysyms.h>
 
 #include "geany.h"
+
+#include <gdk/gdkkeysyms.h>
+#include <string.h>
+
 #include "keybindings.h"
 #include "support.h"
 #include "utils.h"
@@ -107,37 +110,55 @@ static void cb_func_switch_tablastused(guint key_id);
 static void cb_func_move_tab(guint key_id);
 
 static void add_popup_menu_accels(void);
-static void apply_kb_accel(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_data);
 
 
-/* This is used to set default keybindings on startup but at this point we don't want to
- * assign the keybinding to the menu_item (apply_kb_accel) otherwise it can't be overridden
- * by user keybindings anymore */
+/** Lookup a keybinding item.
+ * @param group Group.
+ * @param key_id Keybinding index for the group.
+ * @return The keybinding.
+ * @since 0.19. */
+GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id)
+{
+	g_assert(key_id < group->count);
+
+	return &group->keys[key_id];
+}
+
+
+/* This is used to set default keybindings on startup.
+ * Menu accels are set in apply_kb_accel(). */
 /** Simple convenience function to fill a GeanyKeyBinding struct item.
  * @param group Group.
  * @param key_id Keybinding index for the group.
- * @param callback Function to call when activated.
+ * @param callback Function to call when activated, or @c NULL.
  * @param key (Lower case) default key, e.g. @c GDK_j, but usually 0 for unset.
  * @param mod Default modifier, e.g. @c GDK_CONTROL_MASK, but usually 0 for unset.
- * @param name Not duplicated - use a static string.
- * @param label Currently not duplicated - use a static or heap-allocated (e.g. translated) string.
- * @param menu_item Optional widget to set an accelerator for, or @c NULL. */
-void keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
+ * @param kf_name Key name for the configuration file, such as @c "menu_new".
+ * @param label Label used in the preferences dialog keybindings tab.
+ * @param menu_item Optional widget to set an accelerator for, or @c NULL.
+ * @return The keybinding - normally this is ignored. */
+GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 		GeanyKeyCallback callback, guint key, GdkModifierType mod,
-		gchar *name, gchar *label, GtkWidget *menu_item)
+		gchar *kf_name, gchar *label, GtkWidget *menu_item)
 {
-	GeanyKeyBinding *kb;
+	GeanyKeyBinding *kb = keybindings_get_item(group, key_id);
 
-	g_assert(key_id < group->count);
-
-	kb = &group->keys[key_id];
-
-	kb->name = name;
-	kb->label = label;
+	if (group->plugin)
+	{
+		/* some plugins e.g. GeanyLua need these fields duplicated */
+		setptr(kb->name, g_strdup(kf_name));
+		setptr(kb->label, g_strdup(label));
+	}
+	else
+	{
+		kb->name = kf_name;
+		kb->label = label;
+	}
 	kb->key = key;
 	kb->mods = mod;
 	kb->callback = callback;
 	kb->menu_item = menu_item;
+	return kb;
 }
 
 
@@ -488,8 +509,6 @@ static void init_default_kb(void)
 		0, 0, "build_previouserror", _("Previous error"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_BUILD_RUN, cb_func_build_action,
 		GDK_F5, 0, "build_run", _("Run"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_BUILD_RUN2, cb_func_build_action,
-		0, 0, "build_run2", _("Run (alternative command)"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_BUILD_OPTIONS, cb_func_build_action,
 		0, 0, "build_options", _("Build options"), NULL);
 
@@ -568,16 +587,6 @@ void keybindings_init(void)
 }
 
 
-static void apply_kb_accel(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_data)
-{
-	if (kb->key != 0 && kb->menu_item)
-	{
-		gtk_widget_add_accelerator(kb->menu_item, "activate", kb_accel_group,
-			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
-	}
-}
-
-
 typedef void (*KBItemCallback) (GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_data);
 
 static void keybindings_foreach(KBItemCallback cb, gpointer user_data)
@@ -632,36 +641,42 @@ static void load_user_kb(void)
 }
 
 
+static void apply_kb_accel(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_data)
+{
+	if (kb->key != 0 && kb->menu_item)
+	{
+		gtk_widget_add_accelerator(kb->menu_item, "activate", kb_accel_group,
+			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
+	}
+}
+
+
 void keybindings_load_keyfile(void)
 {
 	load_user_kb();
 	add_popup_menu_accels();
 
-	/* set menu accels now, after user keybindings have been read and processed
-	 * if we would set it before, user keybindings could not override menu item's default
-	 * keybindings */
+	/* set menu accels now, after user keybindings have been read */
 	keybindings_foreach(apply_kb_accel, NULL);
 }
 
 
-static void add_menu_accel(GeanyKeyGroup *group, guint kb_id,
-	GtkAccelGroup *accel_group, GtkWidget *menuitem)
+static void add_menu_accel(GeanyKeyGroup *group, guint kb_id, GtkWidget *menuitem)
 {
 	GeanyKeyBinding *kb = &group->keys[kb_id];
 
 	if (kb->key != 0)
-		gtk_widget_add_accelerator(menuitem, "activate", accel_group,
+		gtk_widget_add_accelerator(menuitem, "activate", kb_accel_group,
 			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
 }
 
 
 #define GEANY_ADD_POPUP_ACCEL(kb_id, wid) \
-	add_menu_accel(group, kb_id, accel_group, ui_lookup_widget(main_widgets.editor_menu, G_STRINGIFY(wid)))
+	add_menu_accel(group, kb_id, ui_lookup_widget(main_widgets.editor_menu, G_STRINGIFY(wid)))
 
 /* set the menu item accelerator shortcuts (just for visibility, they are handled anyway) */
 static void add_popup_menu_accels(void)
 {
-	GtkAccelGroup *accel_group = gtk_accel_group_new();
 	GeanyKeyGroup *group;
 
 	group = g_ptr_array_index(keybinding_groups, GEANY_KEY_GROUP_EDITOR);
@@ -698,8 +713,6 @@ static void add_popup_menu_accels(void)
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_FORMAT_SENDTOVTE, send_selection_to_vte2);
 
 	/* the build menu items are set if the build menus are created */
-
-	gtk_window_add_accel_group(GTK_WINDOW(main_widgets.window), accel_group);
 }
 
 
@@ -1077,6 +1090,37 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 #endif
 
 
+/* Map the keypad keys to their equivalent functions (taken from ScintillaGTK.cxx) */
+static guint key_kp_translate(guint key_in)
+{
+	switch (key_in)
+	{
+		case GDK_KP_Down:
+			return GDK_Down;
+		case GDK_KP_Up:
+			return GDK_Up;
+		case GDK_KP_Left:
+			return GDK_Left;
+		case GDK_KP_Right:
+			return GDK_Right;
+		case GDK_KP_Home:
+			return GDK_Home;
+		case GDK_KP_End:
+			return GDK_End;
+		case GDK_KP_Page_Up:
+			return GDK_Page_Up;
+		case GDK_KP_Page_Down:
+			return GDK_Page_Down;
+		case GDK_KP_Delete:
+			return GDK_Delete;
+		case GDK_KP_Insert:
+			return GDK_Insert;
+		default:
+			return key_in;
+	}
+}
+
+
 /* central keypress event handler, almost all keypress events go to this function */
 static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer user_data)
 {
@@ -1095,11 +1139,13 @@ static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer 
 
 	keyval = ev->keyval;
     state = ev->state & gtk_accelerator_get_default_mod_mask();
-
 	/* hack to get around that CTRL+Shift+r results in GDK_R not GDK_r */
 	if ((ev->state & GDK_SHIFT_MASK) || (ev->state & GDK_LOCK_MASK))
 		if (keyval >= GDK_A && keyval <= GDK_Z)
 			keyval += GDK_a - GDK_A;
+
+	if (keyval >= GDK_KP_Space && keyval < GDK_KP_Equal)
+		keyval = key_kp_translate(keyval);
 
 	/*geany_debug("%d (%d) %d (%d)", keyval, ev->keyval, state, ev->state);*/
 
@@ -1112,7 +1158,6 @@ static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer 
 		return TRUE;
 	if (check_menu_key(doc, keyval, state, ev->time))
 		return TRUE;
-
 	ignore_keybinding = FALSE;
 	for (g = 0; g < keybinding_groups->len; g++)
 	{
@@ -1368,38 +1413,35 @@ static void cb_func_build_action(guint key_id)
 	if (!GTK_WIDGET_IS_SENSITIVE(ui_lookup_widget(main_widgets.window, "menu_build1")))
 		return;
 	menu_items = build_get_menu_items(doc->file_type->id);
-
+/* TODO make it a table??*/
 	switch (key_id)
 	{
 		case GEANY_KEYS_BUILD_COMPILE:
-			item = menu_items->item_compile;
+			item = menu_items->menu_item[GEANY_GBG_FT][GBO_TO_CMD(GEANY_GBO_COMPILE)];
 			break;
 		case GEANY_KEYS_BUILD_LINK:
-			item = menu_items->item_link;
+			item = menu_items->menu_item[GEANY_GBG_FT][GBO_TO_CMD(GEANY_GBO_BUILD)];
 			break;
 		case GEANY_KEYS_BUILD_MAKE:
-			item = menu_items->item_make_all;
+			item = menu_items->menu_item[GEANY_GBG_NON_FT][GBO_TO_CMD(GEANY_GBO_MAKE_ALL)];
 			break;
 		case GEANY_KEYS_BUILD_MAKEOWNTARGET:
-			item = menu_items->item_make_custom;
+			item = menu_items->menu_item[GEANY_GBG_NON_FT][GBO_TO_CMD(GEANY_GBO_CUSTOM)];
 			break;
 		case GEANY_KEYS_BUILD_MAKEOBJECT:
-			item = menu_items->item_make_object;
+			item = menu_items->menu_item[GEANY_GBG_NON_FT][GBO_TO_CMD(GEANY_GBO_MAKE_OBJECT)];
 			break;
 		case GEANY_KEYS_BUILD_NEXTERROR:
-			item = menu_items->item_next_error;
+			item = menu_items->menu_item[GBG_FIXED][GBF_NEXT_ERROR];
 			break;
 		case GEANY_KEYS_BUILD_PREVIOUSERROR:
-			item = menu_items->item_previous_error;
+			item = menu_items->menu_item[GBG_FIXED][GBF_PREV_ERROR];
 			break;
 		case GEANY_KEYS_BUILD_RUN:
-			item = menu_items->item_exec;
-			break;
-		case GEANY_KEYS_BUILD_RUN2:
-			item = menu_items->item_exec2;
+			item = menu_items->menu_item[GEANY_GBG_EXEC][GBO_TO_CMD(GEANY_GBO_EXEC)];
 			break;
 		case GEANY_KEYS_BUILD_OPTIONS:
-			item = menu_items->item_set_args;
+			item = menu_items->menu_item[GBG_FIXED][GBF_COMMANDS];
 			break;
 		default:
 			item = NULL;
@@ -2235,3 +2277,63 @@ static void cb_func_insert_action(guint key_id)
 	}
 }
 
+
+/* update key combination */
+void keybindings_update_combo(GeanyKeyBinding *kb, guint key, GdkModifierType mods)
+{
+	GtkWidget *widget = kb->menu_item;
+
+	if (widget && kb->key)
+		gtk_widget_remove_accelerator(widget, kb_accel_group, kb->key, kb->mods);
+
+	kb->key = key;
+	kb->mods = mods;
+
+	if (widget && kb->key)
+		gtk_widget_add_accelerator(widget, "activate", kb_accel_group,
+			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
+}
+
+
+/* used for plugins */
+GeanyKeyGroup *keybindings_set_group(GeanyKeyGroup *group, const gchar *section_name,
+		const gchar *label, gsize count, GeanyKeyGroupCallback callback)
+{
+	g_return_val_if_fail(section_name, NULL);
+	g_return_val_if_fail(count, NULL);
+	g_return_val_if_fail(!callback, NULL);
+
+	/* prevent conflict with core bindings */
+	g_return_val_if_fail(!g_str_equal(section_name, keybindings_keyfile_group_name), NULL);
+
+	if (!group)
+		group = g_new0(GeanyKeyGroup, 1);
+
+	if (!group->keys || count > group->count)
+	{
+		/* allow resizing existing array of keys */
+		group->keys = g_renew(GeanyKeyBinding, group->keys, count);
+		memset(group->keys + group->count, 0, (count - group->count) * sizeof(GeanyKeyBinding));
+	}
+	group->plugin = TRUE;
+	add_kb_group(group, section_name, label, count, group->keys);
+	return group;
+}
+
+
+/* used for plugins */
+void keybindings_free_group(GeanyKeyGroup *group)
+{
+	GeanyKeyBinding *kb;
+
+	g_assert(group->plugin);
+
+	foreach_c_array(kb, group->keys, group->count)
+	{
+		g_free(kb->name);
+		g_free(kb->label);
+	}
+	g_free(group->keys);
+	g_ptr_array_remove_fast(keybinding_groups, group);
+	g_free(group);
+}

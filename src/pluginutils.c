@@ -27,11 +27,13 @@
  * These functions all take the @ref geany_plugin symbol as their first argument. */
 
 #include "geany.h"
+
 #include "pluginutils.h"
 #include "pluginprivate.h"
 
 #include "ui_utils.h"
 #include "toolbar.h"
+#include "utils.h"
 
 
 /** Insert a toolbar item before the Quit button, or after the previous plugin toolbar item.
@@ -88,7 +90,7 @@ void plugin_module_make_resident(GeanyPlugin *plugin)
 {
 	g_return_if_fail(plugin);
 
-	plugin->priv->resident = TRUE;
+	g_module_make_resident(plugin->priv->module);
 }
 
 
@@ -122,6 +124,25 @@ void plugin_signal_connect(GeanyPlugin *plugin,
 	sc.object = object;
 	sc.handler_id = id;
 	g_array_append_val(plugin->priv->signal_ids, sc);
+}
+
+
+/** Setup or resize a keybinding group for the plugin.
+ * You should then call keybindings_set_item() for each keybinding in the group.
+ * @param plugin Must be @ref geany_plugin.
+ * @param section_name Name used in the configuration file, such as @c "html_chars".
+ * @param count Number of keybindings for the group.
+ * @param callback Unused, must be @c NULL.
+ * @return The plugin's keybinding group.
+ * @since 0.19. */
+GeanyKeyGroup *plugin_set_key_group(GeanyPlugin *plugin,
+		const gchar *section_name, gsize count, GeanyKeyGroupCallback callback)
+{
+	GeanyPluginPrivate *priv = plugin->priv;
+
+	priv->key_group = keybindings_set_group(priv->key_group, section_name,
+		priv->info.name, count, callback);
+	return priv->key_group;
 }
 
 

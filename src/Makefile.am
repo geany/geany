@@ -73,10 +73,12 @@ geany_include_HEADERS = \
 	templates.h \
 	toolbar.h \
 	ui_utils.h \
-	utils.h
+	utils.h \
+	build.h
 
 
-INCLUDES = -I$(srcdir)/../scintilla/include -I$(srcdir)/../tagmanager/include @GTK_CFLAGS@ @GIO_CFLAGS@
+INCLUDES = -I$(top_srcdir) -I$(srcdir)/../scintilla/include -I$(srcdir)/../tagmanager/include \
+			@GTK_CFLAGS@ @GIO_CFLAGS@
 
 # tell automake we have a C++ file so it uses the C++ linker we need for Scintilla
 nodist_EXTRA_geany_SOURCES = dummy.cxx
@@ -94,7 +96,8 @@ AM_CFLAGS = -DGEANY_DATADIR=\"data\" \
 			-DGEANY_DOCDIR=\"\" \
 			-DGEANY_LIBDIR=\"\" \
 			-DGEANY_LOCALEDIR=\"\" \
-			-DGEANY_PREFIX=\"\"
+			-DGEANY_PREFIX=\"\" \
+			-DGEANY_PRIVATE
 
 geany_LDFLAGS =	-mwindows -mms-bitfields
 
@@ -117,7 +120,8 @@ AM_CFLAGS = -DGEANY_DATADIR=\""$(datadir)"\" \
 			-DGEANY_DOCDIR=\""$(docdir)"\" \
 			-DGEANY_LIBDIR=\""$(libdir)"\" \
 			-DGEANY_LOCALEDIR=\""$(localedir)"\" \
-			-DGEANY_PREFIX=\""$(prefix)"\"
+			-DGEANY_PREFIX=\""$(prefix)"\" \
+			-DGEANY_PRIVATE
 
 clean-local:
 

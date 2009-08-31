@@ -657,8 +657,12 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 		case ':':	/* C/C++ class:: syntax */
 		/* tag autocompletion */
 		default:
+#if 0
 			if (! editor_start_auto_complete(editor, pos, FALSE))
 				request_reshowing_calltip(nt);
+#else
+			editor_start_auto_complete(editor, pos, FALSE);
+#endif
 	}
 	check_line_breaking(editor, pos, nt->ch);
 }
@@ -4563,7 +4567,7 @@ static void setup_sci_keys(ScintillaObject *sci)
 	sci_clear_cmdkey(sci, '\\' | (SCMOD_CTRL << 16)); /* Next word part */
 	sci_clear_cmdkey(sci, SCK_UP | (SCMOD_CTRL << 16)); /* scroll line up */
 	sci_clear_cmdkey(sci, SCK_DOWN | (SCMOD_CTRL << 16)); /* scroll line down */
-	sci_clear_cmdkey(sci, SCK_HOME);	/* line start */
+	sci_clear_cmdkey(sci, SCK_HOME); /* line start */
 	sci_clear_cmdkey(sci, SCK_END);	/* line end */
 	sci_clear_cmdkey(sci, SCK_END | (SCMOD_ALT << 16));	/* visual line end */
 

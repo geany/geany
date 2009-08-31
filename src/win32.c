@@ -644,8 +644,11 @@ gint win32_message_dialog_unsaved(const gchar *msg)
 void win32_open_browser(const gchar *uri)
 {
 	if (strncmp(uri, "file://", 7) == 0)
+	{
 		uri += 7;
-
+		while (*uri == '/')
+			uri++;
+	}
 	ShellExecute(NULL, "open", uri, NULL, NULL, SW_SHOWNORMAL);
 }
 

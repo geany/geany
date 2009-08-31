@@ -55,9 +55,4 @@ void configuration_save_session_files(GKeyFile *config);
  * realisation of the main window */
 void configuration_apply_settings(void);
 
-#ifdef GEANY_DEBUG
-/* Generate the config files in "data/" from defaults */
-void configuration_generate_data_files(void);
-#endif
-
 #endif
