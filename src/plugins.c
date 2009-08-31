@@ -479,6 +479,10 @@ static void read_key_group(Plugin *plugin)
 					plugin->info.name);
 		}
 	}
+	else if (p_key_info || p_key_group)
+		geany_debug("Ignoring only one of plugin_key_group[_info] symbols defined for plugin '%s'. "
+			"Maybe use plugin_set_key_group() instead?",
+			plugin->info.name);
 }
 
 

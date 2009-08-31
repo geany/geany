@@ -1,3 +1,10 @@
+2009-08-31  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/plugins.c:
+   Add warning if only one of the plugin_key_group[_info] symbols is
+   defined for a plugin.
+
+
 2009-08-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/prefs.c:
