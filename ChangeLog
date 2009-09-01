@@ -1,3 +1,10 @@
+2009-09-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/plugins.c:
+   Remove plugin from plugin manager dialog on unloading if it no
+   longer exists or is incompatible.
+
+
 2009-08-31  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/plugins.c:
