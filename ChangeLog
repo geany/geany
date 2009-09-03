@@ -3,6 +3,9 @@
  * src/build.c, src/filetypes.h, src/filetypes.c
    Only write filetype config files when build command or regex is
    actually changed.  Removed commented code in src/filetypes.c.
+ * src/build.c
+   Ensure uses of filename are protected against nulls when running
+   a build command and give status message if not.
 
 
 2009-09-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

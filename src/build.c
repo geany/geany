@@ -504,7 +504,7 @@ static gchar* build_replace_placeholder(const GeanyDocument* doc, const gchar* s
 	gchar* ret_str; /* to be freed when not in use anymore */
 
 	stack = g_string_new(src);
-	if (doc!=NULL)
+	if (doc!=NULL && doc->file_name!=NULL)
 	{
 		filename = utils_get_utf8_from_locale(doc->file_name);
 
@@ -534,7 +534,7 @@ static gchar* build_replace_placeholder(const GeanyDocument* doc, const gchar* s
 	else if (strstr(stack->str, "%p"))
 	{   /* fall back to %d */
 		ui_set_statusbar(FALSE, _("failed to substitute %%p, no project active"));
-		if (doc!=NULL)
+		if (doc!=NULL && filename!=NULL)
 			replacement = g_path_get_dirname(filename);
 	}
 
@@ -568,7 +568,12 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 	gint	 stderr_fd;
 #endif
 
-	g_return_val_if_fail(doc!=NULL || dir!=NULL, (GPid) 1);
+	if(!( (doc!=NULL && NZV(doc->file_name)) || NZV(dir) ))
+	{
+		geany_debug("Failed to run command with no working directory");
+		ui_set_statusbar(TRUE, _("Process failed, no working directory"));
+		return (GPid)1;
+	}
 
 	if (doc!=NULL)
 		clear_errors(doc);
@@ -712,7 +717,7 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, 
 	if (! result)
 	{
 		ui_set_statusbar(TRUE, _("Failed to execute \"%s\" (start-script could not be created)"),
-			cmd_string);
+			NZV(cmd_string) ? cmd_string: NULL);
 	}
 
 	utils_free_pointers(4, cmd_string, tmp, executable, locale_filename, NULL);
