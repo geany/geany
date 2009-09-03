@@ -1984,7 +1984,8 @@ static void show_build_commands_dialog()
 		prefdsts.fileregexstr = NULL;
 	}
 	prefdsts.nonfileregexstr = &regex_pref;
-	build_read_commands(&prefdsts, table_data, response);
+	if (build_read_commands(&prefdsts, table_data, response) && ft!=NULL)
+		ft->home_save_needed = TRUE;
 	build_free_fields(table_data);
 
 	build_menu_update(doc);

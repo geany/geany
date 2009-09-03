@@ -625,8 +625,6 @@ static GeanyFiletype *filetype_new(void)
 	GeanyFiletype *ft = g_new0(GeanyFiletype, 1);
 
 	ft->lang = -2;	/* assume no tagmanager parser */
-/*	ft->programs = g_new0(struct build_programs, 1);
-	ft->actions = g_new0(struct build_actions, 1);*/
 	ft->project_list_entry = -1; /* no entry */
 
 	ft->priv = g_new0(GeanyFiletypePrivate, 1);
@@ -1323,17 +1321,20 @@ void filetypes_save_commands(void)
 		GKeyFile *config_home;
 		gchar *fname, *ext, *data;
 
-		ext = filetypes_get_conf_extension(i);
-		fname = g_strconcat(conf_prefix, ext, NULL);
-		g_free(ext);
-		config_home = g_key_file_new();
-		g_key_file_load_from_file(config_home, fname, G_KEY_FILE_KEEP_COMMENTS, NULL);
-		build_save_menu(config_home, (gpointer)(filetypes[i]), GEANY_BCS_HOME_FT);
-		data = g_key_file_to_data(config_home, NULL, NULL);
-		utils_write_file(fname, data);
-		g_free(data);
-		g_key_file_free(config_home);
-		g_free(fname);
+		if (filetypes[i]->home_save_needed)
+		{
+			ext = filetypes_get_conf_extension(i);
+			fname = g_strconcat(conf_prefix, ext, NULL);
+			g_free(ext);
+			config_home = g_key_file_new();
+			g_key_file_load_from_file(config_home, fname, G_KEY_FILE_KEEP_COMMENTS, NULL);
+			build_save_menu(config_home, (gpointer)(filetypes[i]), GEANY_BCS_HOME_FT);
+			data = g_key_file_to_data(config_home, NULL, NULL);
+			utils_write_file(fname, data);
+			g_free(data);
+			g_key_file_free(config_home);
+			g_free(fname);
+		}
 	}
 	g_free(conf_prefix);
 }

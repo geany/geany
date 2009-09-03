@@ -130,6 +130,7 @@ struct GeanyFiletype
 	gint			 project_list_entry;
 	gchar			 *projerror_regex_string;
 	gchar			 *homeerror_regex_string;
+	gboolean		  home_save_needed;
 #endif
 };
 

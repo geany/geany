@@ -1,3 +1,10 @@
+2009-09-03  Lex Trotman  <elextr(at)gmail(dot)com>
+
+ * src/build.c, src/filetypes.h, src/filetypes.c
+   Only write filetype config files when build command or regex is
+   actually changed.  Removed commented code in src/filetypes.c.
+
+
 2009-09-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/plugins.c:
