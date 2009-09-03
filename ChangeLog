@@ -3,6 +3,8 @@
  * src/treeviews.c, src/document.c, src/document.h, THANKS:
    Enable type-ahead find for sidebar symbols and documents tabs
    (patch by Thomas Martitz, thanks).
+ * src/build.c:
+   Fix 2 free's of possibly uninitialized pointers.
 
 
 2009-09-03  Lex Trotman  <elextr(at)gmail(dot)com>

@@ -498,9 +498,9 @@ static void parse_build_output(const gchar **output, gint status)
 static gchar* build_replace_placeholder(const GeanyDocument* doc, const gchar* src)
 {
 	GString* stack;
-	gchar* filename;
+	gchar* filename = NULL;
 	gchar* replacement;
-	gchar* executable;
+	gchar* executable = NULL;
 	gchar* ret_str; /* to be freed when not in use anymore */
 
 	stack = g_string_new(src);
