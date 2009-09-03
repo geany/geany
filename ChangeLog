@@ -1,3 +1,10 @@
+2009-09-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/treeviews.c, src/document.c, src/document.h, THANKS:
+   Enable type-ahead find for sidebar symbols and documents tabs
+   (patch by Thomas Martitz, thanks).
+
+
 2009-09-03  Lex Trotman  <elextr(at)gmail(dot)com>
 
  * src/build.c, src/filetypes.h, src/filetypes.c

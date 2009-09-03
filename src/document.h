@@ -184,6 +184,8 @@ void document_finalize(void);
 
 gboolean document_remove_page(guint page_num);
 
+void document_try_focus(GeanyDocument *doc);
+
 gboolean document_close(GeanyDocument *doc);
 
 gboolean document_account_for_unsaved(void);

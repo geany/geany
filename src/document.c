@@ -513,19 +513,40 @@ static void monitor_file_setup(GeanyDocument *doc)
 }
 
 
+void document_try_focus(GeanyDocument *doc)
+{
+	/* doc might not be valid e.g. if user closed a tab whilst Geany is opening files */
+	if (DOC_VALID(doc))
+	{
+		GtkWidget *sci = GTK_WIDGET(doc->editor->sci);
+		GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
+
+		if (focusw == doc->priv->tag_tree)
+			gtk_widget_grab_focus(sci);
+	}
+}
+
+
+static gboolean on_idle_focus(gpointer doc)
+{
+	document_try_focus(doc);
+	return FALSE;
+}
+
+
 /* Creates a new document and editor, adding a tab in the notebook.
  * @return The created document */
 static GeanyDocument *document_create(const gchar *utf8_filename)
 {
-	GeanyDocument *this;
+	GeanyDocument *doc;
 	gint new_idx;
 	gint cur_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 
 	if (cur_pages == 1)
 	{
-		GeanyDocument *doc = document_get_current();
+		GeanyDocument *cur = document_get_current();
 		/* remove the empty document and open a new one */
-		if (doc != NULL && doc->file_name == NULL && ! doc->changed)
+		if (cur != NULL && cur->file_name == NULL && ! cur->changed)
 			document_remove_page(0);
 	}
 
@@ -537,35 +558,34 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 		new_idx = documents_array->len;
 		g_ptr_array_add(documents_array, new_doc);
 	}
-	this = documents[new_idx];
-	init_doc_struct(this);	/* initialize default document settings */
-	this->index = new_idx;
+	doc = documents[new_idx];
+	init_doc_struct(doc);	/* initialize default document settings */
+	doc->index = new_idx;
 
-	this->file_name = g_strdup(utf8_filename);
+	doc->file_name = g_strdup(utf8_filename);
 
-	this->editor = editor_create(this);
+	doc->editor = editor_create(doc);
 
-	editor_apply_update_prefs(this->editor);
+	editor_apply_update_prefs(doc->editor);
 
-	treeviews_openfiles_add(this);	/* sets this->iter */
+	treeviews_openfiles_add(doc);	/* sets doc->iter */
 
-	notebook_new_tab(this);
+	notebook_new_tab(doc);
 
 	/* select document in sidebar */
 	{
 		GtkTreeSelection *sel;
 
 		sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));
-		gtk_tree_selection_select_iter(sel, &this->priv->iter);
+		gtk_tree_selection_select_iter(sel, &doc->priv->iter);
 	}
 
 	ui_document_buttons_update();
 
-	gtk_widget_grab_focus(GTK_WIDGET(this->editor->sci));
-
-	this->is_valid = TRUE;	/* do this last to prevent UI updating with NULL items. */
-	return this;
+	doc->is_valid = TRUE;	/* do this last to prevent UI updating with NULL items. */
+	return doc;
 }
+
 
 /**
  *  Close the given document.
@@ -729,7 +749,9 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft,
 	ui_document_show_hide(doc); /* update the document menu */
 
 	sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
-	sci_goto_pos(doc->editor->sci, 0, TRUE);
+	/* bring it in front, jump to the start and grab the focus */
+	editor_goto_pos(doc->editor, 0, FALSE);
+	document_try_focus(doc);
 
 #if USE_GIO_FILEMON
 	monitor_file_setup(doc);
@@ -996,8 +1018,10 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *displa
 
 /* Sets the cursor position on opening a file. First it sets the line when cl_options.goto_line
  * is set, otherwise it sets the line when pos is greater than zero and finally it sets the column
- * if cl_options.goto_column is set. */
-static void set_cursor_position(GeanyEditor *editor, gint pos)
+ * if cl_options.goto_column is set.
+ *
+ * returns the new position which may have changed */
+static int set_cursor_position(GeanyEditor *editor, gint pos)
 {
 	if (cl_options.goto_line >= 0)
 	{	/* goto line which was specified on command line and then undefine the line */
@@ -1013,11 +1037,14 @@ static void set_cursor_position(GeanyEditor *editor, gint pos)
 
 	if (cl_options.goto_column >= 0)
 	{	/* goto column which was specified on command line and then undefine the column */
-		gint cur_pos = sci_get_current_position(editor->sci);
-		sci_set_current_position(editor->sci, cur_pos + cl_options.goto_column, FALSE);
+
+		gint new_pos = sci_get_current_position(editor->sci) + cl_options.goto_column;
+		sci_set_current_position(editor->sci, new_pos, FALSE);
 		editor->scroll_percent = 0.5F;
 		cl_options.goto_column = -1;
+		return new_pos;
 	}
+	return sci_get_current_position(editor->sci);
 }
 
 
@@ -1204,14 +1231,10 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		if (doc != NULL)
 		{
 			ui_add_recent_file(utf8_filename);	/* either add or reorder recent item */
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
-					gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
-					(GtkWidget*) doc->editor->sci));
 			g_free(utf8_filename);
 			g_free(locale_filename);
 			document_check_disk_status(doc, TRUE);	/* force a file changed check */
-			set_cursor_position(doc->editor, pos);
-			return doc;
+			goto end;
 		}
 	}
 	display_filename = utils_str_middle_truncate(utf8_filename, 100);
@@ -1269,7 +1292,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 	sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
 
 	/* set the cursor position according to pos, cl_options.goto_line and cl_options.goto_column */
-	set_cursor_position(doc->editor, pos);
+	pos = set_cursor_position(doc->editor, pos);
 
 	if (! reload)
 	{
@@ -1323,6 +1346,13 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 	 * based on a configurable interval */
 	/*g_timeout_add(10000, auto_update_tag_list, doc);*/
 
+end:
+	/* now bring the file in front */
+	editor_goto_pos(doc->editor, pos, FALSE);
+
+	/* finally, let the editor widget grab the focus so you can start coding
+	 * right away */
+	g_idle_add(on_idle_focus, doc);
 	return doc;
 }
 

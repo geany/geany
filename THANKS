@@ -59,7 +59,7 @@ Walery Studennikov <despairr(at)gmail(dot)com> - YAML filetype patch
 Guillaume de Rorthais <ioguix(at)free(dot)fr> - Auto-close brackets/braces/quotes patch
 Tyler Mulligan <tyler(at)doknowevil(dot)net> - Close All toolbar icon
 Philipp Gildein <philipp(at)gildein(dot)com> - Ada filetype patch
-Thomas Martitz <thomas47(at)arcor(dot)de> - Multiple %cursor% wildcards in Snippets patch
+Thomas Martitz <thomas47(at)arcor(dot)de> - Multiple %cursor% in Snippets, typeahead sidebar patch
 David Gleich <dgleich(at)stanford(dot)edu> - Send Selection to Terminal patch
 Chris Macksey <cmacksey(at)users(dot)sourceforge(dot)net> - ActionScript filetype patch
 Simon Treny <simon(dot)treny(at)free(dot)fr> - Documents sidebar stock icons patch
