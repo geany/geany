@@ -721,16 +721,15 @@ static gboolean on_openfiles_tree_selection_changed(GtkTreeSelection *selection)
 	/* use switch_notebook_page to ignore changing the notebook page because it is already done */
 	if (gtk_tree_selection_get_selected(selection, &model, &iter) && ! ignore_callback)
 	{
-		gint pos;
 		gtk_tree_model_get(model, &iter, DOCUMENTS_DOCUMENT, &doc, -1);
 		if (! doc)
 			return FALSE;	/* parent */
-		pos = sci_get_current_position(doc->editor->sci);
 
-		/* we could just reload, but that would destroy the notification about
-		 * the file being modified if it was externally, so fill in all required fields */
-		document_open_file_full(NULL, doc->file_name, pos,
-			doc->readonly, doc->file_type, doc->encoding);
+		/* switch to the doc and grab the focus */
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
+			gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
+			(GtkWidget*) doc->editor->sci));
+		change_focus_to_editor(doc);
 	}
 	return FALSE;
 }

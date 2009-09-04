@@ -1,3 +1,13 @@
+2009-09-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/treeviews.c, src/document.c:
+   Apply patch from Thomas Martitz to improve sidebar type-ahead code:
+   Use gtk_notebook_set_current_page() instead of
+   document_open_file_full() when choosing an item from the documents
+   list.
+   Avoid using goto in document_open_file_full().
+
+
 2009-09-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/treeviews.c, src/document.c, src/document.h, THANKS:

@@ -1231,112 +1231,112 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		if (doc != NULL)
 		{
 			ui_add_recent_file(utf8_filename);	/* either add or reorder recent item */
-			g_free(utf8_filename);
-			g_free(locale_filename);
 			document_check_disk_status(doc, TRUE);	/* force a file changed check */
-			goto end;
 		}
 	}
-	display_filename = utils_str_middle_truncate(utf8_filename, 100);
+	if (reload || (!reload && doc != NULL))
+	{	/* doc possibly changed */
+		display_filename = utils_str_middle_truncate(utf8_filename, 100);
 
-	/* if default encoding for opening files is set, use it if no forced encoding is set */
-	if (file_prefs.default_open_encoding >= 0 && forced_enc == NULL)
-		forced_enc = encodings[file_prefs.default_open_encoding].charset;
+		/* if default encoding for opening files is set, use it if no forced encoding is set */
+		if (file_prefs.default_open_encoding >= 0 && forced_enc == NULL)
+			forced_enc = encodings[file_prefs.default_open_encoding].charset;
 
-	if (! load_text_file(locale_filename, display_filename, &filedata, forced_enc))
-	{
-		g_free(display_filename);
-		g_free(utf8_filename);
-		g_free(locale_filename);
-		return NULL;
+		if (! load_text_file(locale_filename, display_filename, &filedata, forced_enc))
+		{
+			g_free(display_filename);
+			g_free(utf8_filename);
+			g_free(locale_filename);
+			return NULL;
+		}
+
+		if (! reload)
+		{
+			doc = document_create(utf8_filename);
+			g_return_val_if_fail(doc != NULL, NULL); /* really should not happen */
+
+			/* file exists on disk, set real_path */
+			setptr(doc->real_path, tm_get_real_path(locale_filename));
+
+			doc->priv->is_remote = utils_is_remote_path(locale_filename);
+			monitor_file_setup(doc);
+		}
+
+		sci_set_undo_collection(doc->editor->sci, FALSE); /* avoid creation of an undo action */
+		sci_empty_undo_buffer(doc->editor->sci);
+
+		/* add the text to the ScintillaObject */
+		sci_set_readonly(doc->editor->sci, FALSE);	/* to allow replacing text */
+		sci_set_text(doc->editor->sci, filedata.data);	/* NULL terminated data */
+		queue_colourise(doc);	/* Ensure the document gets colourised. */
+
+		/* detect & set line endings */
+		editor_mode = utils_get_line_endings(filedata.data, filedata.len);
+		sci_set_eol_mode(doc->editor->sci, editor_mode);
+		g_free(filedata.data);
+
+		sci_set_undo_collection(doc->editor->sci, TRUE);
+
+		doc->priv->mtime = filedata.mtime; /* get the modification time from file and keep it */
+		g_free(doc->encoding);	/* if reloading, free old encoding */
+		doc->encoding = filedata.enc;
+		doc->has_bom = filedata.bom;
+		store_saved_encoding(doc);	/* store the opened encoding for undo/redo */
+
+		doc->readonly = readonly || filedata.readonly;
+		sci_set_readonly(doc->editor->sci, doc->readonly);
+
+		/* update line number margin width */
+		doc->priv->line_count = sci_get_line_count(doc->editor->sci);
+		sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
+
+		/* set the cursor position according to pos, cl_options.goto_line and cl_options.goto_column */
+		pos = set_cursor_position(doc->editor, pos);
+
+		if (! reload)
+		{
+
+			/* "the" SCI signal (connect after initial setup(i.e. adding text)) */
+			g_signal_connect(doc->editor->sci, "sci-notify", G_CALLBACK(editor_sci_notify_cb),
+				doc->editor);
+
+			use_ft = (ft != NULL) ? ft : filetypes_detect_from_document(doc);
+		}
+		else
+		{	/* reloading */
+			document_undo_clear(doc);
+
+			use_ft = ft;
+		}
+		/* update taglist, typedef keywords and build menu if necessary */
+		document_set_filetype(doc, use_ft);
+
+		/* set indentation settings after setting the filetype */
+		if (reload)
+			editor_set_indent_type(doc->editor, doc->editor->indent_type); /* resetup sci */
+		else
+			set_indentation(doc->editor);
+
+		document_set_text_changed(doc, FALSE);	/* also updates tab state */
+		ui_document_show_hide(doc);	/* update the document menu */
+
+		/* finally add current file to recent files menu, but not the files from the last session */
+		if (! main_status.opening_session_files)
+			ui_add_recent_file(utf8_filename);
+
+		if (! reload)
+			g_signal_emit_by_name(geany_object, "document-open", doc);
+
+		if (reload)
+			ui_set_statusbar(TRUE, _("File %s reloaded."), display_filename);
+		else
+			/* For translators: this is the status window message for opening a file. %d is the number
+			 * of the newly opened file, %s indicates whether the file is opened read-only
+			 * (it is replaced with the string ", read-only"). */
+			msgwin_status_add(_("File %s opened(%d%s)."),
+				display_filename, gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)),
+				(readonly) ? _(", read-only") : "");
 	}
-
-	if (! reload)
-	{
-		doc = document_create(utf8_filename);
-		g_return_val_if_fail(doc != NULL, NULL); /* really should not happen */
-
-		/* file exists on disk, set real_path */
-		setptr(doc->real_path, tm_get_real_path(locale_filename));
-
-		doc->priv->is_remote = utils_is_remote_path(locale_filename);
-		monitor_file_setup(doc);
-	}
-
-	sci_set_undo_collection(doc->editor->sci, FALSE); /* avoid creation of an undo action */
-	sci_empty_undo_buffer(doc->editor->sci);
-
-	/* add the text to the ScintillaObject */
-	sci_set_readonly(doc->editor->sci, FALSE);	/* to allow replacing text */
-	sci_set_text(doc->editor->sci, filedata.data);	/* NULL terminated data */
-	queue_colourise(doc);	/* Ensure the document gets colourised. */
-
-	/* detect & set line endings */
-	editor_mode = utils_get_line_endings(filedata.data, filedata.len);
-	sci_set_eol_mode(doc->editor->sci, editor_mode);
-	g_free(filedata.data);
-
-	sci_set_undo_collection(doc->editor->sci, TRUE);
-
-	doc->priv->mtime = filedata.mtime; /* get the modification time from file and keep it */
-	g_free(doc->encoding);	/* if reloading, free old encoding */
-	doc->encoding = filedata.enc;
-	doc->has_bom = filedata.bom;
-	store_saved_encoding(doc);	/* store the opened encoding for undo/redo */
-
-	doc->readonly = readonly || filedata.readonly;
-	sci_set_readonly(doc->editor->sci, doc->readonly);
-
-	/* update line number margin width */
-	doc->priv->line_count = sci_get_line_count(doc->editor->sci);
-	sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
-
-	/* set the cursor position according to pos, cl_options.goto_line and cl_options.goto_column */
-	pos = set_cursor_position(doc->editor, pos);
-
-	if (! reload)
-	{
-
-		/* "the" SCI signal (connect after initial setup(i.e. adding text)) */
-		g_signal_connect(doc->editor->sci, "sci-notify", G_CALLBACK(editor_sci_notify_cb),
-			doc->editor);
-
-		use_ft = (ft != NULL) ? ft : filetypes_detect_from_document(doc);
-	}
-	else
-	{	/* reloading */
-		document_undo_clear(doc);
-
-		use_ft = ft;
-	}
-	/* update taglist, typedef keywords and build menu if necessary */
-	document_set_filetype(doc, use_ft);
-
-	/* set indentation settings after setting the filetype */
-	if (reload)
-		editor_set_indent_type(doc->editor, doc->editor->indent_type); /* resetup sci */
-	else
-		set_indentation(doc->editor);
-
-	document_set_text_changed(doc, FALSE);	/* also updates tab state */
-	ui_document_show_hide(doc);	/* update the document menu */
-
-	/* finally add current file to recent files menu, but not the files from the last session */
-	if (! main_status.opening_session_files)
-		ui_add_recent_file(utf8_filename);
-
-	if (! reload)
-		g_signal_emit_by_name(geany_object, "document-open", doc);
-
-	if (reload)
-		ui_set_statusbar(TRUE, _("File %s reloaded."), display_filename);
-	else
-		/* For translators: this is the status window message for opening a file. %d is the number
-		 * of the newly opened file, %s indicates whether the file is opened read-only
-		 * (it is replaced with the string ", read-only"). */
-		msgwin_status_add(_("File %s opened(%d%s)."),
-			display_filename, gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)),
-			(readonly) ? _(", read-only") : "");
 
 	g_free(display_filename);
 	g_free(utf8_filename);
@@ -1346,7 +1346,6 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 	 * based on a configurable interval */
 	/*g_timeout_add(10000, auto_update_tag_list, doc);*/
 
-end:
 	/* now bring the file in front */
 	editor_goto_pos(doc->editor, pos, FALSE);
 
