@@ -3,7 +3,8 @@
 # License:		GNU GPL V2 or later, as published by the Free Software Foundation, USA.
 # Warranty:		NONE
 
-# Re-align C source code for Geany
+# Re-align C source code for Geany.
+# Doesn't handle indents/blank lines/anything complicated ;-)
 
 use strict;
 use warnings;
@@ -45,16 +46,18 @@ while (<INPUT>) {
 	if (!($line =~ m,/\*|\*/|//|"|\\$|',) and !($line =~ m/^\s*[*#]/)) {
 		# make these operators have *one* space each side
 		# operators must have longer variants first
-		# others require special handling: &,*,+,-,> can be (part of) unary op
+		# some require special handling below
 		my $ops = '<<=,<<,>>=,>>,<=,>=,<,||,|=,|,-=,+=,*=,/=,/,==,!=,%=,%,=';
 		$ops =~ s/([|*+])/\\$1/g; # escape regex chars
 		$ops =~ s/,/|/g;
 		$line =~ s/($ops)\s*/$1 /g; # space after op
 		$line =~ s/(\S)\s*($ops)/$1 $2/g; # space before op unless indent
 
+		# &,*,+,-,> can be (part of) unary op
 		# ignore no space after & address-of operator, enforce space around x & y operator
 		# ignore lines starting with &, ambiguous.
 		$line =~ s/([\w)])\s*&\s*([\w(]|$)/$1 & $2/g;
+		# TODO: other possible unarys
 
 		# space after statements
 		my $statements = 'for|if|while|switch';
