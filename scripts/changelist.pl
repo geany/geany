@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 # Copyright:	2008-2009, Nick Treleaven
-# License:		GNU GPL V2 or later
+# License:		GNU GPL V2 or later, as published by the Free Software Foundation, USA.
 # Warranty:		NONE
 
 # Searches a ChangeLog file for a line matching 'matchstring', then matches
@@ -24,12 +24,11 @@
 use strict;
 use warnings;
 
-my $scriptname = "changelist.pl";
 my $argc = $#ARGV + 1;
 
 ($argc == 2) or die <<END;
 Usage:
-$scriptname matchstring changelogfile >outfile
+$0 matchstring changelogfile >outfile
 
   matchstring is not case sensitive.
 END
