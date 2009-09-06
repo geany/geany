@@ -61,6 +61,7 @@ libtagmanager_a_SOURCES =\
 	python.c\
 	tcl.c\
 	sh.c\
+	txt2tags.c\
 	vhdl.c\
 	actionscript.c\
 	nsis.c\

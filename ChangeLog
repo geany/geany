@@ -25,6 +25,12 @@
    replace_target() to the plugin API
    (patch by Eugene Arshinov, thanks).
    Add new plugin signal: "document-filetype-set" (closes #2852286).
+ * data/filetype_extensions.conf, data/filetypes.txt2tags, src/about.c,
+   src/filetypes.c, src/filetypes.h, src/plugindata.h, src/symbols.c,
+   tagmanager/Makefile.am, tagmanager/makefile.win32,
+   tagmanager/parsers.h, tagmanager/txt2tags.c, tagmanager/txt2tags.c,
+   wscript, THANKS:
+   Add new filetype: Txt2Tags (patch by Eric Forgeot, thanks).
 
 
 2009-09-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -379,6 +379,17 @@ static void init_builtin_filetypes(void)
 	ft->comment_open = NULL;
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
+	
+#define TXT2TAGS
+	ft = filetypes[GEANY_FILETYPES_TXT2TAGS];
+	ft->lang = 37;
+	ft->name = g_strdup("Txt2tags");
+	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->extension = g_strdup("t2t");
+	ft->pattern = utils_strv_new("*.t2t", "*.txt2tags", NULL);
+	ft->comment_open = NULL;
+	ft->comment_close = NULL;
+	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
 #define SH
 	ft = filetypes[GEANY_FILETYPES_SH];

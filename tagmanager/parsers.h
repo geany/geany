@@ -51,7 +51,8 @@
     ValaParser, \
     ActionScriptParser, \
     NsisParser, \
-    MarkdownParser
+    MarkdownParser, \
+    Txt2tagsParser
 /*
 langType of each parser
  0	CParser
@@ -91,6 +92,7 @@ langType of each parser
 34  ActionScriptParser
 35  NsisParser
 36  MarkdownParser
+37  Txt2tagsParser
 */
 #endif	/* _PARSERS_H */
 

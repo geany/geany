@@ -695,6 +695,7 @@ static void add_top_level_items(GeanyDocument *doc)
 			break;
 		}
 		case GEANY_FILETYPES_REST:
+		case GEANY_FILETYPES_TXT2TAGS:
 		{
 			tag_list_add_groups(tag_store,
 				&(tv_iters.tag_namespace), _("Chapter"), NULL,

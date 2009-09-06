@@ -72,7 +72,8 @@ tagmanager_sources = [
 	'tagmanager/parse.c', 'tagmanager/pascal.c',
 	'tagmanager/perl.c', 'tagmanager/php.c', 'tagmanager/python.c', 'tagmanager/read.c',
 	'tagmanager/rest.c', 'tagmanager/ruby.c', 'tagmanager/sh.c', 'tagmanager/sort.c',
-	'tagmanager/sql.c', 'tagmanager/strlist.c', 'tagmanager/tcl.c', 'tagmanager/tm_file_entry.c',
+	'tagmanager/sql.c', 'tagmanager/strlist.c', 'tagmanager/txt2tags.c', 'tagmanager/tcl.c',
+	'tagmanager/tm_file_entry.c',
 	'tagmanager/tm_project.c', 'tagmanager/tm_source_file.c', 'tagmanager/tm_symbol.c',
 	'tagmanager/tm_tag.c', 'tagmanager/tm_tagmanager.c', 'tagmanager/tm_work_object.c',
 	'tagmanager/tm_workspace.c', 'tagmanager/vhdl.c', 'tagmanager/vstring.c' ]
