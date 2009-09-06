@@ -140,13 +140,15 @@ typedef struct GeanyBuildCommand
 	gboolean	 old;						/**< Converted from old format. */
 } GeanyBuildCommand;
 
-extern GeanyBuildCommand *non_ft_proj, *exec_proj; /* project command array pointers */
+/* project command array pointers */
+extern GeanyBuildCommand *non_ft_proj;
+extern GeanyBuildCommand *exec_proj;
 extern gchar *regex_proj; /* project non-fileregex string */
 
 typedef struct BuildMenuItems
 {
 	GtkWidget		*menu;
-	GtkWidget		**menu_item[GEANY_GBG_COUNT+1];  /* +1 for fixed items */
+	GtkWidget		**menu_item[GEANY_GBG_COUNT + 1];  /* +1 for fixed items */
 } BuildMenuItems;
 
 /* a structure defining the destinations for a set of groups of commands & regex */
@@ -165,11 +167,11 @@ void build_init(void);
 void build_finalize(void);
 
 /* menu configuration dialog functions */
-GtkWidget *build_commands_table( GeanyDocument *doc, GeanyBuildSource dst, TableData *data, GeanyFiletype *ft );
+GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, TableData *data, GeanyFiletype *ft);
 
-gboolean build_read_commands( BuildDestination *dst, TableData data, gint response );
+gboolean build_read_commands(BuildDestination *dst, TableData data, gint response);
 
-void build_free_fields( TableData data );
+void build_free_fields(TableData data);
 
 void build_set_non_ft_wd_to_proj(TableData table_data);
 
@@ -256,9 +258,9 @@ GeanyBuildCommand *build_get_current_menu_item(GeanyBuildGroup grp, gint cmd, gi
 BuildMenuItems *build_get_menu_items(gint filetype_idx);
 
 /* load and store menu configuration */
-void build_load_menu( GKeyFile *config, GeanyBuildSource dst, gpointer ptr);
+void build_load_menu(GKeyFile *config, GeanyBuildSource dst, gpointer ptr);
 
-void build_save_menu( GKeyFile *config, gpointer ptr, GeanyBuildSource src);
+void build_save_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src);
 
 void build_set_group_count(GeanyBuildGroup grp, gint count);
 

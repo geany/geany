@@ -63,7 +63,7 @@ static GeanyPrefGroup *indent_group = NULL;
 static struct
 {
 	gchar *project_file_path; /* in UTF-8 */
-} local_prefs = {NULL};
+} local_prefs = { NULL };
 
 
 static gboolean entries_modified;
@@ -109,7 +109,8 @@ void project_new(void)
 	PropertyDialogElements *e;
 	gint response;
 
-	if (! project_ask_close()) return;
+	if (! project_ask_close())
+		return;
 
 	g_return_if_fail(app->project == NULL);
 
@@ -324,13 +325,14 @@ static void update_ui(void)
 static void remove_foreach_project_filetype( gpointer data, gpointer user_data )
 {
 	GeanyFiletype *ft = (GeanyFiletype*)data;
-	if (ft!=NULL)
+	if (ft != NULL)
 	{
 		setptr( ft->projfilecmds, NULL);
 		setptr(ft->projerror_regex_string, NULL);
 		ft->project_list_entry = -1;
 	}
 }
+
 
 /* open_default will make function reload default session files on close */
 void project_close(gboolean open_default)
@@ -343,15 +345,15 @@ void project_close(gboolean open_default)
 	write_config(FALSE);
 
 	/* remove project filetypes build entries */
-	if (app->project->build_filetypes_list!=NULL)
+	if (app->project->build_filetypes_list != NULL)
 	{
-		g_ptr_array_foreach( app->project->build_filetypes_list, remove_foreach_project_filetype, NULL );
+		g_ptr_array_foreach( app->project->build_filetypes_list, remove_foreach_project_filetype, NULL);
 		g_ptr_array_free(app->project->build_filetypes_list, FALSE);
 	}
 
 	/* remove project non filetype build menu items */
-	build_remove_menu_item( GEANY_BCS_PROJ, GEANY_GBG_NON_FT, -1 );
-	build_remove_menu_item( GEANY_BCS_PROJ, GEANY_GBG_EXEC, -1 );
+	build_remove_menu_item(GEANY_BCS_PROJ, GEANY_GBG_NON_FT, -1);
+	build_remove_menu_item(GEANY_BCS_PROJ, GEANY_GBG_EXEC, -1);
 
 	/* remove project regexen */
 	setptr(regex_proj, NULL);
@@ -383,12 +385,12 @@ void project_close(gboolean open_default)
 	update_ui();
 }
 
-static void on_set_use_base_path_clicked( GtkWidget *unused1, gpointer user_data )
-{
-	TableData td = (TableData)user_data;
 
-	build_set_non_ft_wd_to_proj(td);
+static void on_set_use_base_path_clicked(GtkWidget *unused1, gpointer user_data)
+{
+	build_set_non_ft_wd_to_proj((TableData)user_data);
 }
+
 
 static void create_properties_dialog(PropertyDialogElements *e)
 {
@@ -733,7 +735,8 @@ static gboolean update_config(const PropertyDialogElements *e)
 		setptr(p->description, g_strdup(gtk_text_buffer_get_text(buffer, &start, &end, FALSE)));
 
 		/* read the project build menu */
-		if ( doc!=NULL )ft=doc->file_type;
+		if ( doc!=NULL )
+			ft = doc->file_type;
 		if ( ft!=NULL )
 		{
 			menu_dst.dst[GEANY_GBG_FT] = &(ft->projfilecmds);
@@ -750,9 +753,10 @@ static gboolean update_config(const PropertyDialogElements *e)
 		menu_dst.dst[GEANY_GBG_EXEC] = &exec_proj;
 		menu_dst.nonfileregexstr = &regex_proj;
 		build_read_commands( &menu_dst, e->build_properties,  GTK_RESPONSE_ACCEPT );
-		if (ft!=NULL && ft->projfilecmds!=oldvalue && ft->project_list_entry<0)
+		if (ft != NULL && ft->projfilecmds != oldvalue && ft->project_list_entry < 0)
 		{
-			if (p->build_filetypes_list==NULL)p->build_filetypes_list = g_ptr_array_new();
+			if (p->build_filetypes_list == NULL)
+				p->build_filetypes_list = g_ptr_array_new();
 			ft->project_list_entry = p->build_filetypes_list->len;
 			g_ptr_array_add(p->build_filetypes_list, ft);
 		}
@@ -813,8 +817,7 @@ static void run_dialog(GtkWidget *dialog, GtkWidget *entry)
 			g_free(locale_dir);
 		}
 	}
-	else
-	if (gtk_file_chooser_get_action(GTK_FILE_CHOOSER(dialog)) != GTK_FILE_CHOOSER_ACTION_OPEN)
+	else if (gtk_file_chooser_get_action(GTK_FILE_CHOOSER(dialog)) != GTK_FILE_CHOOSER_ACTION_OPEN)
 	{
 		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), utf8_filename);
 	}
