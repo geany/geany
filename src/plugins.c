@@ -1231,8 +1231,7 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(swin), GTK_SHADOW_IN);
 	gtk_container_add(GTK_CONTAINER(swin), pm_widgets.tree);
 
-	label = geany_wrap_label_new(_("Below is a list of available plugins. "
-		"Select the plugins which should be loaded when Geany is started."));
+	label = geany_wrap_label_new(_("Choose those plugins which should be loaded at startup"));
 
 	pm_widgets.configure_button = gtk_button_new_from_stock(GTK_STOCK_PREFERENCES);
 	gtk_widget_set_sensitive(pm_widgets.configure_button, FALSE);
