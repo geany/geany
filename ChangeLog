@@ -16,6 +16,7 @@
    Adjust coding style (no code changes).
  * src/build.c, src/project.c:
    Use NZV() macro instead of strlen() to check for empty strings.
+   Remove the FOREACH_GEANYBUILDCMD_ENTRY() macro.
 
 
 2009-09-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

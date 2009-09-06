@@ -83,7 +83,6 @@ static const gchar RUN_SCRIPT_CMD[] = "./geany_run_script.sh";
 #define GBO_TO_POINTER(gbo) (GRP_CMD_TO_POINTER(GBO_TO_GBG(gbo), GBO_TO_CMD(gbo)))
 #define GPOINTER_TO_CMD(gptr) (GPOINTER_TO_INT(gptr)&0x1f)
 #define GPOINTER_TO_GRP(gptr) ((GPOINTER_TO_INT(gptr)&0xe0)>>5)
-#define FOREACH_GEANYBUILDCMD_ENTRY(i) for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
 
 static gpointer last_toolbutton_action = GBO_TO_POINTER(GEANY_GBO_BUILD);
 
@@ -241,7 +240,7 @@ static void printfcmds()
 			for (k = 0; k < build_groups_count[j]; ++k)
 				if (cl[j][i] != NULL && *(cl[j][i]) != NULL && (*(cl[j][i]))[k].exists)
 				{
-					FOREACH_GEANYBUILDCMD_ENTRY(n)
+					for (n = 0; n < GEANY_BC_CMDENTRIES_COUNT; n++)
 					{
 						if ((*(cl[j][i]))[k].entries[n] != NULL &&
 							(l=strlen((*(cl[j][i]))[k].entries[n])) > m)
@@ -264,7 +263,7 @@ static void printfcmds()
 				{
 					if (cl[i][j]!=NULL && *(cl[i][j]) != NULL && (*(cl[i][j]))[k].exists)
 					{
-						FOREACH_GEANYBUILDCMD_ENTRY(n)
+						for (n = 0; n < GEANY_BC_CMDENTRIES_COUNT; n++)
 						{
 							if ((*(cl[i][j]))[k].entries[i] != NULL)
 								printf("%c %*.*s",c,cc[j],cc[j],(*(cl[i][j]))[k].entries[i]);
@@ -1660,7 +1659,7 @@ static void on_clear_dialog_row(GtkWidget *unused, gpointer user_data)
 	{
 		r->cmdsrc = bc;
 		r->src = src;
-		FOREACH_GEANYBUILDCMD_ENTRY(i)
+		for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
 		{
 			gtk_entry_set_text(GTK_ENTRY(r->entries[i]),
 				id_to_str(bc,i) != NULL ? id_to_str(bc,i) : "");
@@ -1669,7 +1668,7 @@ static void on_clear_dialog_row(GtkWidget *unused, gpointer user_data)
 	else
 	{
 		r->cmdsrc = NULL;
-		FOREACH_GEANYBUILDCMD_ENTRY(i)
+		for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
 		{
 			gtk_entry_set_text(GTK_ENTRY(r->entries[i]), "");
 		}
@@ -1721,7 +1720,7 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gin
 	roww->grp = grp;
 	roww->cmd = cmd;
 	roww->dst = dst;
-	FOREACH_GEANYBUILDCMD_ENTRY(i)
+	for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
 	{
 		column += 1;
 		roww->entries[i] = gtk_entry_new();
@@ -1739,7 +1738,7 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gin
 	if (bc != NULL)
 		roww->src = src;
 
-	FOREACH_GEANYBUILDCMD_ENTRY(i)
+	for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
 	{
 		gchar *str = "";
 		if (bc != NULL && (str = bc->entries[i]) == NULL)
@@ -1748,7 +1747,7 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gin
 	}
 	if (src > (gint)dst || (grp == GEANY_GBG_FT && (doc == NULL || doc->file_type == NULL)))
 	{
-		FOREACH_GEANYBUILDCMD_ENTRY(i)
+		for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
 			gtk_widget_set_sensitive(roww->entries[i], FALSE);
 		gtk_widget_set_sensitive(clear, FALSE);
 	}
@@ -1924,7 +1923,7 @@ static gboolean read_row(BuildDestination *dst, TableData table_data, gint drow,
 
 	src = table_data->rows[drow]->src;
 
-	FOREACH_GEANYBUILDCMD_ENTRY(i)
+	for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
 	{
 		entries[i] = g_strdup(gtk_entry_get_text(GTK_ENTRY(table_data->rows[drow]->entries[i])));
 	}
@@ -1966,7 +1965,7 @@ static gboolean read_row(BuildDestination *dst, TableData table_data, gint drow,
 		{
 			if (*(dst->dst[grp]) == NULL)
 				*(dst->dst[grp]) = g_new0(GeanyBuildCommand, build_groups_count[grp]);
-			FOREACH_GEANYBUILDCMD_ENTRY(i)
+			for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
 				setptr((*(dst->dst[grp]))[cmd].entries[i], entries[i]);
 			(*(dst->dst[grp]))[cmd].exists = TRUE;
 			(*(dst->dst[grp]))[cmd].changed = TRUE;
@@ -1975,7 +1974,7 @@ static gboolean read_row(BuildDestination *dst, TableData table_data, gint drow,
 	}
 	else
 	{
-		FOREACH_GEANYBUILDCMD_ENTRY(i)
+		for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
 			g_free(entries[i]);
 	}
 	return changed;
@@ -2334,7 +2333,7 @@ static gint build_save_menu_grp(GKeyFile *config, GeanyBuildCommand *src, gint g
 			set_key_cmd(key, cmdbuf);
 			if (src[cmd].exists)
 			{
-				FOREACH_GEANYBUILDCMD_ENTRY(i)
+				for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
 				{
 					set_key_fld(key, config_keys[i]);
 					g_key_file_set_string(config, build_grp_name, key, src[cmd].entries[i]);
@@ -2343,7 +2342,7 @@ static gint build_save_menu_grp(GKeyFile *config, GeanyBuildCommand *src, gint g
 			}
 			else
 			{
-				FOREACH_GEANYBUILDCMD_ENTRY(i)
+				for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
 				{
 					set_key_fld(key, config_keys[i]);
 					g_key_file_remove_key(config, build_grp_name, key, NULL);
@@ -2486,7 +2485,7 @@ void build_init(void)
 		enum GeanyBuildCmdEntries k;
 		GeanyBuildCommand *cmd = &((*(default_cmds[cmdindex].ptr))[ default_cmds[cmdindex].index ]);
 		cmd->exists = TRUE;
-		FOREACH_GEANYBUILDCMD_ENTRY(k)
+		for (k = 0; k < GEANY_BC_CMDENTRIES_COUNT; k++)
 		{
 			cmd->entries[k] = g_strdup(default_cmds[cmdindex].entries[k]);
 		}
