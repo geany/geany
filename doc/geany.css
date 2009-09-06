@@ -12,7 +12,7 @@ Stylesheet for Geany's documentation based on a version of John Gabriele.
 		background-color: #f2f2f2;
 		color: #404040;
 		margin-left: 0.4em;
-		width: 60em;
+		max-width: 60em;
 		font-size: 90%;
 	}
 
