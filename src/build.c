@@ -355,7 +355,7 @@ static GeanyBuildCommand *get_build_cmd(GeanyDocument *doc, gint grp, gint cmdin
 	return get_next_build_cmd(doc, grp, cmdindex, GEANY_BCS_COUNT, from);
 }
 
-#define return_nonblank_regex(src, ptr) if ((ptr) != NULL && strlen(ptr) > 0) \
+#define return_nonblank_regex(src, ptr) if (NZV(ptr)) \
 											{ *fr = (src); return &(ptr); }
 
 
@@ -631,8 +631,7 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 #endif
 
 	utf8_cmd_string = utils_get_utf8_from_locale(cmd_string);
-	utf8_working_dir = (dir != NULL && strlen(dir) > 0) ?
-		g_strdup(dir) : g_path_get_dirname(doc->file_name);
+	utf8_working_dir = NZV(dir) ? g_strdup(dir) : g_path_get_dirname(doc->file_name);
 	working_dir = utils_get_locale_from_utf8(utf8_working_dir);
 
 	gtk_list_store_clear(msgwindow.store_compiler);
@@ -1433,7 +1432,7 @@ void build_menu_update(GeanyDocument *doc)
 							(grp == GEANY_GBG_FT && bc != NULL && have_path && ! build_running) ||
 							(grp == GEANY_GBG_NON_FT && bc != NULL && ! build_running);
 						gtk_widget_set_sensitive(menu_item, cmd_sensitivity);
-						if (bc != NULL && label != NULL && strlen(label) > 0)
+						if (bc != NULL && NZV(label))
 						{
 							geany_menu_item_set_label(menu_item, label);
 							gtk_widget_show_all(menu_item);
@@ -1461,7 +1460,7 @@ void build_menu_update(GeanyDocument *doc)
 						if (cmd == GBO_TO_CMD(GEANY_GBO_EXEC))
 							run_running = exec_running;
 						gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item), image);
-						if (bc != NULL && label != NULL && strlen(label) > 0)
+						if (bc != NULL && NZV(label))
 						{
 							geany_menu_item_set_label(menu_item, label);
 							gtk_widget_show_all(menu_item);
@@ -1945,9 +1944,9 @@ static gboolean read_row(BuildDestination *dst, TableData table_data, gint drow,
 				table_data->rows[drow]->cmdsrc == NULL		/* originally there was no content */
 				&&
 				(
-					strlen(entries[GEANY_BC_LABEL]) > 0		/* but now one field has some */
-					|| strlen(entries[GEANY_BC_COMMAND]) > 0
-					|| strlen(entries[GEANY_BC_WORKING_DIR]) > 0
+					NZV(entries[GEANY_BC_LABEL])			/* but now one field has some */
+					|| NZV(entries[GEANY_BC_COMMAND])
+					|| NZV(entries[GEANY_BC_WORKING_DIR])
 				)
 			)
 			||
@@ -1992,7 +1991,7 @@ static gboolean read_regex(GtkWidget *regexentry, gchar **src, gchar **dst)
 				(src == NULL			/* originally there was no regex */
 				 || *src == NULL		/* or it was NULL*/
 				)
-				&& strlen(reg) > 0		/*  and something was typed */
+				&& NZV(reg) > 0			/*  and something was typed */
 			)
 			||(src != NULL				/* originally there was a regex*/
 			&& strcmp(*src, reg) != 0 	/* and it has been changed */
@@ -2236,7 +2235,7 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 
 	/* set GeanyBuildCommand if it doesn't already exist and there is a command */
 #define ASSIGNIF(type, id, string, value) \
-	if (value != NULL && ! type[GBO_TO_CMD(id)].exists && strlen(value) > 0) { \
+	if (NZV(value) && ! type[GBO_TO_CMD(id)].exists) { \
 		type[GBO_TO_CMD(id)].exists = TRUE; \
 		setptr(type[GBO_TO_CMD(id)].entries[GEANY_BC_LABEL], g_strdup(_(string))); \
 		setptr(type[GBO_TO_CMD(id)].entries[GEANY_BC_COMMAND], (value)); \
@@ -2280,7 +2279,7 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 			if (non_ft_pref[GBO_TO_CMD(GEANY_GBO_MAKE_OBJECT)].old)
 				setptr(non_ft_pref[GBO_TO_CMD(GEANY_GBO_MAKE_OBJECT)].entries[GEANY_BC_WORKING_DIR], g_strdup("%d"));
 			value = g_key_file_get_string(config, "project", "run_cmd", NULL);
-			if (value != NULL && strlen(value) > 0)
+			if (NZV(value))
 			{
 				if (exec_proj == NULL)
 					exec_proj = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_EXEC]);
@@ -2372,7 +2371,7 @@ static void foreach_project_filetype(gpointer data, gpointer user_data)
 	gchar *regkey = g_strdup_printf("%serror_regex", ft->name);
 
 	i += build_save_menu_grp(d->config, ft->projfilecmds, GEANY_GBG_FT, ft->name);
-	if (ft->projerror_regex_string != NULL && strlen(ft->projerror_regex_string) > 0)
+	if (NZV(ft->projerror_regex_string))
 	{
 		g_key_file_set_string(d->config, build_grp_name, regkey, ft->projerror_regex_string);
 		i++;
@@ -2400,7 +2399,7 @@ void build_save_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src)
 			build_save_menu_grp(config, ft->homefilecmds, GEANY_GBG_FT, NULL);
 			build_save_menu_grp(config, ft->homeexeccmds, GEANY_GBG_EXEC, NULL);
 			regkey = g_strdup_printf("%serror_regex", ft->name);
-			if (ft->homeerror_regex_string != NULL && strlen(ft->homeerror_regex_string) > 0)
+			if (NZV(ft->homeerror_regex_string))
 				g_key_file_set_string(config, build_grp_name, regkey, ft->projerror_regex_string);
 			else
 				g_key_file_remove_key(config, build_grp_name,regkey, NULL);
@@ -2409,7 +2408,7 @@ void build_save_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src)
 		case GEANY_BCS_PREF:
 			build_save_menu_grp(config, non_ft_pref, GEANY_GBG_NON_FT, NULL);
 			build_save_menu_grp(config, exec_pref, GEANY_GBG_EXEC, NULL);
-			if (regex_pref != NULL && strlen(regex_pref) > 0)
+			if (NZV(regex_pref))
 				g_key_file_set_string(config, build_grp_name, "error_regex", regex_pref);
 			else
 				g_key_file_remove_key(config, build_grp_name, "error_regex", NULL);
@@ -2418,7 +2417,7 @@ void build_save_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src)
 			pj = (GeanyProject*)ptr;
 			build_save_menu_grp(config, non_ft_proj, GEANY_GBG_NON_FT, NULL);
 			build_save_menu_grp(config, exec_proj, GEANY_GBG_EXEC, NULL);
-			if (regex_proj != NULL && strlen(regex_proj) > 0)
+			if (NZV(regex_proj))
 				g_key_file_set_string(config, build_grp_name, "error_regex", regex_proj);
 			else
 				g_key_file_remove_key(config, build_grp_name, "error_regex", NULL);

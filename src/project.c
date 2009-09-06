@@ -880,7 +880,7 @@ static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements 
 		return;
 
 	name = gtk_editable_get_chars(editable, 0, -1);
-	if (name != NULL && strlen(name) > 0)
+	if (NZV(name))
 	{
 		base_path = g_strconcat(project_dir, G_DIR_SEPARATOR_S,
 			name, G_DIR_SEPARATOR_S, NULL);

@@ -14,6 +14,8 @@
    Fix crash when opening documents.
  * src/build.c, src/build.h, src/project.c:
    Adjust coding style (no code changes).
+ * src/build.c, src/project.c:
+   Use NZV() macro instead of strlen() to check for empty strings.
 
 
 2009-09-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
