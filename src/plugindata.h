@@ -50,7 +50,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 153,
+	GEANY_API_VERSION = 154,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -337,6 +337,10 @@ typedef struct SciFuncs
 	gchar*	(*get_contents_range) (struct _ScintillaObject *sci, gint start, gint end);
 	gchar*	(*get_selection_contents) (struct _ScintillaObject *sci);
 	void	(*set_font) (struct _ScintillaObject *sci, gint style, const gchar *font, gint size);
+	gint (*get_line_end_position) (ScintillaObject* sci, gint line);
+	void (*set_target_start) (ScintillaObject *sci, gint start);
+	void (*set_target_end) (ScintillaObject *sci, gint end);
+	gint (*replace_target) (ScintillaObject *sci, const gchar *text, gboolean regex);
 }
 SciFuncs;
 

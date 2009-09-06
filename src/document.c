@@ -1720,8 +1720,10 @@ static gchar *write_data_to_disk(GeanyDocument *doc, const gchar *locale_filenam
 /**
  *  Save the document. Saving includes replacing tabs by spaces,
  *  stripping trailing spaces and adding a final new line at the end of the file (all only if
- *  user enabled these features). The filetype is set again or auto-detected if it wasn't
- *  set yet. After all, the "document-save" signal is emitted for plugins.
+ *  user enabled these features). Then the "document-before-save" signal is emitted,
+ *  allowing plugins to modify the document before it is saved, and data is
+ *  actually written to disk. The filetype is set again or auto-detected if it wasn't set yet.
+ *  After all, the "document-save" signal is emitted for plugins.
  *
  *  If the file is not modified, this functions does nothing unless force is set to @c TRUE.
  *
@@ -1759,6 +1761,9 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	/* ensure the file has a newline at the end */
 	if (file_prefs.final_new_line)
 		editor_ensure_final_newline(doc->editor);
+
+	/* notify plugins which may wish to modify the document before it's saved */
+	g_signal_emit_by_name(geany_object, "document-before-save", doc);
 
 	len = sci_get_length(doc->editor->sci) + 1;
 	if (doc->has_bom && encodings_is_unicode_charset(doc->encoding))
@@ -2480,11 +2485,13 @@ static void document_load_config(GeanyDocument *doc, GeanyFiletype *type,
 void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type)
 {
 	gboolean ft_changed;
+	GeanyFiletype *old_ft;
 
 	g_return_if_fail(doc);
 	if (type == NULL)
 		type = filetypes[GEANY_FILETYPES_NONE];
 
+	old_ft = doc->file_type;
 	geany_debug("%s : %s (%s)",
 		(doc->file_name != NULL) ? doc->file_name : "unknown",
 		(type->name != NULL) ? type->name : "unknown",
@@ -2492,6 +2499,9 @@ void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type)
 
 	ft_changed = (doc->file_type != type); /* filetype has changed */
 	document_load_config(doc, type, ft_changed);
+
+	if (ft_changed)
+		g_signal_emit_by_name(geany_object, "document-filetype-set", doc, old_ft);
 }
 
 

@@ -167,7 +167,11 @@ static SciFuncs sci_funcs = {
 	&sci_get_contents,
 	&sci_get_contents_range,
 	&sci_get_selection_contents,
-	&sci_set_font
+	&sci_set_font,
+	&sci_get_line_end_position,
+	&sci_set_target_start,
+	&sci_set_target_end,
+	&sci_replace_target
 };
 
 static TemplateFuncs template_funcs = {

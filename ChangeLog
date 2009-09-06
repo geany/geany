@@ -17,6 +17,14 @@
  * src/build.c, src/project.c:
    Use NZV() macro instead of strlen() to check for empty strings.
    Remove the FOREACH_GEANYBUILDCMD_ENTRY() macro.
+ * doc/plugins.dox, plugins/geanyfunctions.h, src/document.c,
+   src/geanyobject.c, src/geanyobject.h, src/plugindata.h,
+   src/plugins.c, THANKS:
+   Add new plugin signal: "document-before-save".
+   Add get_line_end_position(), set_target_start(), set_target_end(),
+   replace_target() to the plugin API
+   (patch by Eugene Arshinov, thanks).
+   Add new plugin signal: "document-filetype-set" (closes #2852286).
 
 
 2009-09-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

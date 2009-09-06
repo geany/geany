@@ -160,6 +160,14 @@
 	geany_functions->p_sci->get_selection_contents
 #define sci_set_font \
 	geany_functions->p_sci->set_font
+#define sci_get_line_end_position \
+	geany_functions->p_sci->get_line_end_position
+#define sci_set_target_start \
+	geany_functions->p_sci->set_target_start
+#define sci_set_target_end \
+	geany_functions->p_sci->set_target_end
+#define sci_replace_target \
+	geany_functions->p_sci->replace_target
 #define templates_get_template_fileheader \
 	geany_functions->p_templates->get_template_fileheader
 #define utils_str_equal \

@@ -91,6 +91,36 @@ static void geany_cclosure_marshal_VOID__STRING_INT_POINTER(GClosure *closure, G
 }
 
 
+static void geany_cclosure_marshal_VOID__POINTER_POINTER(GClosure *closure, GValue *ret_val,
+				guint n_param_vals, const GValue *param_values, gpointer hint, gpointer mdata)
+{
+	typedef gboolean (*GeanyMarshalFunc_VOID__POINTER_POINTER)
+		(gpointer data1, gconstpointer arg_1, gconstpointer arg_2, gpointer data2);
+
+	register GeanyMarshalFunc_VOID__POINTER_POINTER callback;
+	register GCClosure* cc = (GCClosure*) closure;
+	register gpointer data1, data2;
+
+	g_return_if_fail(n_param_vals == 3);
+
+	if (G_CCLOSURE_SWAP_DATA(closure))
+	{
+		data1 = closure->data;
+		data2 = g_value_peek_pointer(param_values + 0);
+	}
+	else
+	{
+		data1 = g_value_peek_pointer(param_values + 0);
+		data2 = closure->data;
+	}
+	callback = (GeanyMarshalFunc_VOID__POINTER_POINTER) (mdata ? mdata : cc->callback);
+	callback(data1,
+			  g_value_get_pointer(param_values + 1),
+			  g_value_get_pointer(param_values + 2),
+			  data2);
+}
+
+
 static gboolean boolean_handled_accumulator(GSignalInvocationHint *ihint, GValue *return_accu,
 											const GValue *handler_return, gpointer dummy)
 {
@@ -162,6 +192,15 @@ static void create_signals(GObjectClass *g_object_class)
 		g_cclosure_marshal_VOID__POINTER,
 		G_TYPE_NONE, 1,
 		G_TYPE_POINTER);
+	geany_object_signals[GCB_DOCUMENT_BEFORE_SAVE] = g_signal_new (
+		"document-before-save",
+		G_OBJECT_CLASS_TYPE (g_object_class),
+		G_SIGNAL_RUN_FIRST,
+		G_STRUCT_OFFSET (GeanyObjectClass, document_before_save),
+		NULL, NULL,
+		g_cclosure_marshal_VOID__POINTER,
+		G_TYPE_NONE, 1,
+		G_TYPE_POINTER);
 	geany_object_signals[GCB_DOCUMENT_SAVE] = g_signal_new (
 		"document-save",
 		G_OBJECT_CLASS_TYPE (g_object_class),
@@ -171,6 +210,15 @@ static void create_signals(GObjectClass *g_object_class)
 		g_cclosure_marshal_VOID__POINTER,
 		G_TYPE_NONE, 1,
 		G_TYPE_POINTER);
+	geany_object_signals[GCB_DOCUMENT_FILETYPE_SET] = g_signal_new (
+		"document-filetype-set",
+		G_OBJECT_CLASS_TYPE (g_object_class),
+		G_SIGNAL_RUN_FIRST,
+		G_STRUCT_OFFSET (GeanyObjectClass, document_filetype_set),
+		NULL, NULL,
+		geany_cclosure_marshal_VOID__POINTER_POINTER,
+		G_TYPE_NONE, 2,
+		G_TYPE_POINTER, G_TYPE_POINTER);
 	geany_object_signals[GCB_DOCUMENT_ACTIVATE] = g_signal_new (
 		"document-activate",
 		G_OBJECT_CLASS_TYPE (g_object_class),

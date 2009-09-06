@@ -116,6 +116,20 @@ PluginCallback plugin_callbacks[] =
  *  @param user_data user data.
  *  @endsignaldef
  *
+ *  @signaldef document-before-save
+ *  @signalproto
+ *  void user_function(GObject *obj, GeanyDocument *doc, gpointer user_data);
+ *  @endsignalproto
+ *  @signaldesc
+ *  Sent before a document is saved.
+ *
+ *  You need to include "document.h" for the declaration of GeanyDocument.
+ *
+ *  @param obj a GeanyObject instance, should be ignored.
+ *  @param doc the document to be saved.
+ *  @param user_data user data.
+ *  @endsignaldef
+ *
  *  @signaldef document-save
  *  @signalproto
  *  void user_function(GObject *obj, GeanyDocument *doc, gpointer user_data);
@@ -127,6 +141,23 @@ PluginCallback plugin_callbacks[] =
  *
  *  @param obj a GeanyObject instance, should be ignored.
  *  @param doc the saved document.
+ *  @param user_data user data.
+ *  @endsignaldef
+ *
+ *  @signaldef document-filetype-set
+ *  @signalproto
+ *  void user_function(GObject *obj, GeanyDocument *doc, GeanyFiletype *filetype_old, gpointer user_data);
+ *  @endsignalproto
+ *  @signaldesc
+ *  Sent after the filetype of a document has been changed.
+ *  The previous filetype object is passed but it can be NULL (e.g. at startup).
+ *  The new filetype can be read with: @code
+ *     GeanyFiletype *ft = doc->filetype;
+ *  @endcode
+ *
+ *  @param obj a GeanyObject instance, should be ignored.
+ *  @param doc the saved document.
+ *  @param filetype_old the previous filetype of the document.
  *  @param user_data user data.
  *  @endsignaldef
  *
