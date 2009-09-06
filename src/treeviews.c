@@ -774,8 +774,8 @@ static gboolean treeviews_key_press_cb(GtkWidget *widget, GdkEventKey *event,
 		event->keyval == GDK_KP_Enter ||
 		event->keyval == GDK_space)
 	{
-		may_steal_focus = TRUE;
 		GtkTreeSelection *select = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
+		may_steal_focus = TRUE;
 		/* delay the query of selection state because this callback is executed before GTK
 		 * changes the selection (g_signal_connect_after would be better but it doesn't work) */
 		if (widget ==  tv.tree_openfiles) /* tag and doc list have separate handlers */

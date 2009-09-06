@@ -8,6 +8,8 @@
  * src/prefs.c, src/tagmanager/include/guregex.h,
    src/tagmanager/include/tm_tagmanager.h:
    Remove trailing spaces (patch by André Hentschel, thanks).
+ * src/treeviews.c:
+   Fix a compiler warning.
 
 
 2009-09-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
