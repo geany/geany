@@ -10,6 +10,8 @@
    Remove trailing spaces (patch by André Hentschel, thanks).
  * src/treeviews.c:
    Fix a compiler warning.
+ * src/document.c:
+   Fix crash when opening documents.
 
 
 2009-09-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

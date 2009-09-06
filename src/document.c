@@ -1234,7 +1234,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 			document_check_disk_status(doc, TRUE);	/* force a file changed check */
 		}
 	}
-	if (reload || (!reload && doc != NULL))
+	if (reload || (!reload && doc == NULL))
 	{	/* doc possibly changed */
 		display_filename = utils_str_middle_truncate(utf8_filename, 100);
 
