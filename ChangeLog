@@ -5,6 +5,9 @@
  * doc/geany.css:
    Use "max-width" to set the document width of the generated
    HTML documentation to let the text be auto-wrapped.
+ * src/prefs.c, src/tagmanager/include/guregex.h,
+   src/tagmanager/include/tm_tagmanager.h:
+   Remove trailing spaces (patch by André Hentschel, thanks).
 
 
 2009-09-04  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

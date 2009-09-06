@@ -38,12 +38,12 @@
  if you want to hack on the sources. If you simply plan to use it, only GLib is required.
  \section Installation
  TagManager can be installed using the standard UNIX method, i.e.:
- 
+
  	-# tar zxvf TagManager-[Version].tar.gz
  	-# cd TagManager-[Version]
  	-# ./configure [configure options]
 	-# make
- 
+
  Currently, 'make install' will not do anything since TagManager is meant to be
  included statically in projects. This might change in the future.
  \section Usage
