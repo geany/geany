@@ -86,7 +86,7 @@ static void findTxt2tagsTags (void)
 			vStringTerminate(name);
 			makeTxt2tagsTag(name, FALSE);
 		}*/
-		else if (line[0] == '°') {
+		else if (strcmp((char*)line, "°") == 0) {
 			/*vStringClear(name);*/
 			vStringCatS(name, (const char *) line);
 			vStringTerminate(name);
