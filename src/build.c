@@ -1,22 +1,22 @@
 /*
- *	  build.c - this file is part of Geany, a fast and lightweight IDE
+ *      build.c - this file is part of Geany, a fast and lightweight IDE
  *
- *	  Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *	  Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
- *	  This program is free software; you can redistribute it and/or modify
- *	  it under the terms of the GNU General Public License as published by
- *	  the Free Software Foundation; either version 2 of the License, or
- *	  (at your option) any later version.
+ *      This program is free software; you can redistribute it and/or modify
+ *      it under the terms of the GNU General Public License as published by
+ *      the Free Software Foundation; either version 2 of the License, or
+ *      (at your option) any later version.
  *
- *	  This program is distributed in the hope that it will be useful,
- *	  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *	  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *	  GNU General Public License for more details.
+ *      This program is distributed in the hope that it will be useful,
+ *      but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *      GNU General Public License for more details.
  *
- *	  You should have received a copy of the GNU General Public License
- *	  along with this program; if not, write to the Free Software
- *	  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *      You should have received a copy of the GNU General Public License
+ *      along with this program; if not, write to the Free Software
+ *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * $Id$
  */
@@ -1246,39 +1246,39 @@ static struct BuildMenuItemSpec {
 	Callback *cb;
 } build_menu_specs[] = {
 	{ GTK_STOCK_CONVERT, GEANY_KEYS_BUILD_COMPILE, GBO_TO_GBG(GEANY_GBO_COMPILE),
-		GBO_TO_CMD(GEANY_GBO_COMPILE),	   NULL, on_build_menu_item },
-	{ GEANY_STOCK_BUILD, GEANY_KEYS_BUILD_LINK,	GBO_TO_GBG(GEANY_GBO_BUILD),
-		GBO_TO_CMD(GEANY_GBO_BUILD),		 NULL, on_build_menu_item },
-	{ NULL,			  -1,					   MENU_FT_REST,
-		GBO_TO_CMD(GEANY_GBO_BUILD)+1,	   NULL, on_build_menu_item },
-	{ NULL,			  -1,					   MENU_SEPARATOR,
-		GBF_SEP_1,					 NULL, NULL },
-	{ NULL,			  GEANY_KEYS_BUILD_MAKE,	GBO_TO_GBG(GEANY_GBO_MAKE_ALL),
-		GBO_TO_CMD(GEANY_GBO_MAKE_ALL),	  NULL, on_build_menu_item },
-	{ NULL, GEANY_KEYS_BUILD_MAKEOWNTARGET,		GBO_TO_GBG(GEANY_GBO_CUSTOM),
+		GBO_TO_CMD(GEANY_GBO_COMPILE),       NULL, on_build_menu_item },
+	{ GEANY_STOCK_BUILD, GEANY_KEYS_BUILD_LINK,    GBO_TO_GBG(GEANY_GBO_BUILD),
+		GBO_TO_CMD(GEANY_GBO_BUILD),         NULL, on_build_menu_item },
+	{ NULL,              -1,                       MENU_FT_REST,
+		GBO_TO_CMD(GEANY_GBO_BUILD)+1,       NULL, on_build_menu_item },
+	{ NULL,              -1,                       MENU_SEPARATOR,
+		GBF_SEP_1,                     NULL, NULL },
+	{ NULL,              GEANY_KEYS_BUILD_MAKE,    GBO_TO_GBG(GEANY_GBO_MAKE_ALL),
+		GBO_TO_CMD(GEANY_GBO_MAKE_ALL),      NULL, on_build_menu_item },
+	{ NULL, GEANY_KEYS_BUILD_MAKEOWNTARGET,        GBO_TO_GBG(GEANY_GBO_CUSTOM),
 		GBO_TO_CMD(GEANY_GBO_CUSTOM),   NULL, on_build_menu_item },
-	{ NULL, GEANY_KEYS_BUILD_MAKEOBJECT,		   GBO_TO_GBG(GEANY_GBO_MAKE_OBJECT),
+	{ NULL, GEANY_KEYS_BUILD_MAKEOBJECT,           GBO_TO_GBG(GEANY_GBO_MAKE_OBJECT),
 		GBO_TO_CMD(GEANY_GBO_MAKE_OBJECT),   NULL, on_build_menu_item },
-	{ NULL,			  -1,					   MENU_NON_FT_REST,
+	{ NULL,              -1,                       MENU_NON_FT_REST,
 		GBO_TO_CMD(GEANY_GBO_MAKE_OBJECT)+1, NULL, on_build_menu_item },
-	{ NULL,			  -1,					   MENU_SEPARATOR,
-		GBF_SEP_2,					 NULL, NULL },
-	{ NULL, GEANY_KEYS_BUILD_NEXTERROR,			MENU_NEXT_ERROR,
-		GBF_NEXT_ERROR,				N_("_Next Error"), on_build_next_error },
-	{ NULL, GEANY_KEYS_BUILD_PREVIOUSERROR,		MENU_PREV_ERROR,
-		GBF_PREV_ERROR,				N_("_Previous Error"), on_build_previous_error },
-	{ NULL,			  -1,					   MENU_SEPARATOR,
-		GBF_SEP_3,					 NULL, NULL },
-	{ GTK_STOCK_EXECUTE, GEANY_KEYS_BUILD_RUN,	 GBO_TO_GBG(GEANY_GBO_EXEC),
-		GBO_TO_CMD(GEANY_GBO_EXEC),		  NULL, on_build_menu_item },
-	{ NULL,			  -1,					   MENU_EXEC_REST,
-		GBO_TO_CMD(GEANY_GBO_EXEC)+1,		NULL, on_build_menu_item },
-	{ NULL,			  -1,					   MENU_SEPARATOR,
-		GBF_SEP_4,					 NULL, NULL },
+	{ NULL,              -1,                       MENU_SEPARATOR,
+		GBF_SEP_2,                     NULL, NULL },
+	{ NULL, GEANY_KEYS_BUILD_NEXTERROR,            MENU_NEXT_ERROR,
+		GBF_NEXT_ERROR,                N_("_Next Error"), on_build_next_error },
+	{ NULL, GEANY_KEYS_BUILD_PREVIOUSERROR,        MENU_PREV_ERROR,
+		GBF_PREV_ERROR,                N_("_Previous Error"), on_build_previous_error },
+	{ NULL,              -1,                       MENU_SEPARATOR,
+		GBF_SEP_3,                     NULL, NULL },
+	{ GTK_STOCK_EXECUTE, GEANY_KEYS_BUILD_RUN,     GBO_TO_GBG(GEANY_GBO_EXEC),
+		GBO_TO_CMD(GEANY_GBO_EXEC),          NULL, on_build_menu_item },
+	{ NULL,              -1,                       MENU_EXEC_REST,
+		GBO_TO_CMD(GEANY_GBO_EXEC)+1,        NULL, on_build_menu_item },
+	{ NULL,              -1,                       MENU_SEPARATOR,
+		GBF_SEP_4,                     NULL, NULL },
 	{ GTK_STOCK_PREFERENCES, GEANY_KEYS_BUILD_OPTIONS, MENU_COMMANDS,
-		GBF_COMMANDS,				  N_("_Set Build Commands"), on_set_build_commands_activate },
-	{ NULL,			  -1,					   MENU_DONE,
-		0,							 NULL, NULL }
+		GBF_COMMANDS,                  N_("_Set Build Commands"), on_set_build_commands_activate },
+	{ NULL,              -1,                       MENU_DONE,
+		0,                             NULL, NULL }
 };
 
 
@@ -2104,8 +2104,8 @@ static const gchar *build_grp_name = "build-menu";
 
 /* config format for build-menu group is prefix_gg_nn_xx=value
  * where gg = FT, NF, EX for the command group
- *	   nn = 2 digit command number
- *	   xx = LB for label, CM for command and WD for working dir */
+ *       nn = 2 digit command number
+ *       xx = LB for label, CM for command and WD for working dir */
 static const gchar *groups[GEANY_GBG_COUNT] = { "FT", "NF", "EX" };
 static const gchar *fixedkey="xx_xx_xx";
 
