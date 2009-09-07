@@ -57,6 +57,9 @@ while (<INPUT>) {
 		# space ternary conditional operator
 		$line =~ s/\s*\?\s*(.+?)\s*:\s*/ ? $1 : /g;
 
+		# space comma operator (allowing for possible alignment space afterwards)
+		$line =~ s/\s*,(\S)/, $1/g;
+
 		# space after statements
 		my $statements = 'for|if|while|switch';
 		$line =~ s/\b($statements)\b\s*/$1 /g;
