@@ -41,23 +41,21 @@ while (<INPUT>) {
 	# strip trailing space & newline
 	$line =~ s/\s+$//g;
 
-	# for now, don't process lines with comments, strings, preproc, overflowed lines or chars
-	# multi-line comments are skipped if they start with ' * '.
-	if (!($line =~ m,/\*|\*/|//|"|\\$|',) and !($line =~ m/^\s*[*#]/)) {
-		# make these operators have *one* space each side
-		# operators must have longer variants first
-		# some require special handling below
-		my $ops = '<<=,<<,>>=,>>,<=,>=,<,||,|=,|,-=,+=,*=,/=,/,==,!=,%=,%,=';
+	# for now, don't process lines with comments, strings, preproc non-defines, overflowed lines or chars
+	# multi-line comment internal lines are skipped only if they start with '* '.
+	if (!($line =~ m,/\*|\*/|//|"|\\$|',) and !($line =~ m/^\s*(\*\s|#[^d])/)) {
+		# make binary operators have *one* space each side
+		# operators must have longer variants first otherwise trailing operators can be broken e.g. "+ ="
+		# '*' ignored as could be pointer
+		# '-' ignored as could be unary "-1"
+		# '&' ignored as could be address-of "(type*)&foo"
+		my $ops = '<<=,<<,>>=,>>,<=,>=,<,>,||,|=,|,&&,&=,-=,+=,+,*=,/=,/,==,!=,%=,%,^=,^,=';
 		$ops =~ s/([|*+])/\\$1/g; # escape regex chars
 		$ops =~ s/,/|/g;
-		$line =~ s/($ops)\s*/$1 /g; # space after op
-		$line =~ s/(\S)\s*($ops)/$1 $2/g; # space before op unless indent
+		$line =~ s/([\w)\]])\s*($ops)\s*([\w(]|$)/$1 $2 $3/g;
 
-		# &,*,+,-,> can be (part of) unary op
-		# ignore no space after & address-of operator, enforce space around x & y operator
-		# ignore lines starting with &, ambiguous.
-		$line =~ s/([\w)])\s*&\s*([\w(]|$)/$1 & $2/g;
-		# TODO: other possible unarys
+		# space ternary conditional operator
+		$line =~ s/\s*\?\s*(.+?)\s*:\s*/ ? $1 : /g;
 
 		# space after statements
 		my $statements = 'for|if|while|switch';
@@ -65,9 +63,9 @@ while (<INPUT>) {
 
 		# no space on inside of brackets
 		$line =~ s/\(\s+/(/g;
-		$line =~ s/\s+\)/)/g;
+		$line =~ s/(\S)\s+\)/$1)/g;
 	}
-	# strip trailing space again (e.g. trailing operator now has space afterwards)
+	# strip trailing space again (e.g. a trailing operator now has space afterwards)
 	$line =~ s/\s+$//g;
 
 	$opt_write or print $line."\n";
