@@ -1,3 +1,9 @@
+2009-09-07  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * src/about.c, THANKS:
+   Change language string for Slovenian translation.
+
+
 2009-09-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * tagmanager/txt2tags.c:
