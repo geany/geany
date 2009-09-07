@@ -827,12 +827,13 @@ static gboolean treeviews_button_press_cb(GtkWidget *widget, GdkEventButton *eve
 	}
 	else if (event->button == 3)
 	{
-		documents_menu_update(selection);
 		if (widget == tv.tree_openfiles)
 		{
 			if (!openfiles_popup_menu)
 				create_openfiles_popup_menu();
 
+			/* update menu item sensitivity */
+			documents_menu_update(selection);
 			gtk_menu_popup(GTK_MENU(openfiles_popup_menu), NULL, NULL, NULL, NULL,
 					event->button, event->time);
 		}
