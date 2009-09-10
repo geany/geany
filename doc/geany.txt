@@ -1556,7 +1556,7 @@ Auto-focus widgets (focus follows mouse)
     goto line fields and the VTE.
 
 Search
-^^^^^^
+``````
 
 Always wrap search and hide the Find dialog
     Always wrap search around the document and hide the Find dialog after clicking

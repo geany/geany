@@ -1021,7 +1021,7 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *displa
  * if cl_options.goto_column is set.
  *
  * returns the new position which may have changed */
-static int set_cursor_position(GeanyEditor *editor, gint pos)
+static gint set_cursor_position(GeanyEditor *editor, gint pos)
 {
 	if (cl_options.goto_line >= 0)
 	{	/* goto line which was specified on command line and then undefine the line */
