@@ -200,7 +200,8 @@ check to see if those features have been written in other projects first.
 
 * Add GEANY_FILETYPES_FOO to filetypes.h.
 * Initialize GEANY_FILETYPES_FOO in init_builtin_filetypes() of
-  filetypes.c.
+  filetypes.c. You should use filetype_make_title() to avoid a
+  translation whenever possible.
 * Update data/filetype_extensions.conf.
 
 filetypes.* configuration file
@@ -223,7 +224,14 @@ Syntax highlighting
 ^^^^^^^^^^^^^^^^^^^
 It may be possible to use an existing Scintilla lexer in the scintilla/
 subdirectory - if not, you will need to find (or write) one,
-LexFoo.cxx. Try the Scintilla project first. When adding a lexer, update:
+LexFoo.cxx. Try the official Scintilla project first.
+
+.. warning::
+    We won't accept adding a lexer that conflicts with one in
+    Scintilla. All new lexers should be submitted back to the Scintilla
+    project to save duplication of work.
+
+When adding a lexer, update:
 
 * scintilla/Makefile.am
 * scintilla/makefile.win32
