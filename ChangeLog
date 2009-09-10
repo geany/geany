@@ -1,3 +1,10 @@
+2009-09-10  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * data/filetypes.latex:
+   Changing default value for showing pdf and dvi to ensure to take
+   *.pdf and *.dvi file.
+
+
 2009-09-07  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * src/about.c, THANKS:
