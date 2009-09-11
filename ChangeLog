@@ -1,3 +1,9 @@
+2009-09-11  Lex Trotman  <elextr(at)gmail(dot)com>
+
+ * src/build.c
+   Fix erroneous free of returned string in prepare_run_script.
+
+
 2009-09-10  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * data/filetypes.latex:

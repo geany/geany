@@ -738,7 +738,7 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, 
 			if (vte_cmd_nonscript != NULL)
 				*vte_cmd_nonscript = cmd_string;
 
-			utils_free_pointers(3, cmd_string, executable, locale_filename, NULL);
+			utils_free_pointers(2, executable, locale_filename, NULL);
 			return working_dir;
 		}
 		else
