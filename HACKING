@@ -304,8 +304,8 @@ In filetypes.c, init_builtin_filetypes():
 Set filetypes[GEANY_FILETYPES_FOO].lang = foo's parser number.
 
 In symbols.c:
-Update init_tag_list() for foo, listing the tm_tag_* types corresponding
-to the s_tag_type_names strings used in foo.c for FooKinds.
+If your parser doesn't use C-like tag type names, update
+add_top_level_items() for foo, calling tag_list_add_groups().
 
 
 GDB
