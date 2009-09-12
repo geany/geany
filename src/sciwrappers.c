@@ -257,25 +257,48 @@ gint sci_get_zoom( ScintillaObject* sci )
 }
 
 
-void sci_set_marker_at_line( ScintillaObject* sci, gint line_number, gboolean set, gint marker )
+/** Set a line marker.
+ * @param sci Scintilla widget.
+ * @param line_number Line number.
+ * @param marker Marker number. */
+void sci_set_marker_at_line( ScintillaObject* sci, gint line_number, gint marker )
 {
-	if ( set )
-	{
-		SSM( sci, SCI_MARKERADD, line_number, marker);
-	}
-	else
-	{
-		SSM( sci, SCI_MARKERDELETE, line_number, marker);
-	}
+	SSM( sci, SCI_MARKERADD, line_number, marker);
 }
 
 
+/** Delete a line marker.
+ * @param sci Scintilla widget.
+ * @param line_number Line number.
+ * @param marker Marker number. */
+void sci_delete_marker_at_line( ScintillaObject* sci, gint line_number, gint marker )
+{
+	SSM( sci, SCI_MARKERDELETE, line_number, marker);
+}
+
+
+/** Check if a line has a marker set.
+ * @param sci Scintilla widget.
+ * @param line Line number.
+ * @param marker Marker number.
+ * @return Whether it's set. */
 gboolean sci_is_marker_set_at_line(ScintillaObject* sci, gint line, gint marker)
 {
 	gint state;
 
 	state = SSM( sci, SCI_MARKERGET, line, 0 );
 	return (state & (1 << marker));
+}
+
+
+void sci_toggle_marker_at_line(ScintillaObject* sci, gint line, gint marker)
+{
+	gboolean set = sci_is_marker_set_at_line(sci, line, marker);
+
+	if (!set)
+		sci_set_marker_at_line(sci, line, marker);
+	else
+		sci_delete_marker_at_line(sci, line, marker);
 }
 
 

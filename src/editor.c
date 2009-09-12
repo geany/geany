@@ -316,10 +316,9 @@ static void on_margin_click(ScintillaObject *sci, SCNotification *nt)
 	if (nt->margin == 1)
 	{
 		gint line = sci_get_line_from_position(sci, nt->position);
-		gboolean set = sci_is_marker_set_at_line(sci, line, 1);
 
 		/*sci_marker_delete_all(editor->sci, 1);*/
-		sci_set_marker_at_line(sci, line, ! set, 1);	/* toggle the marker */
+		sci_toggle_marker_at_line(sci, line, 1);	/* toggle the marker */
 	}
 	/* left click on the folding margin to toggle folding state of current line */
 	else if (nt->margin == 2 && editor_prefs.folding)
@@ -4471,7 +4470,7 @@ gboolean editor_goto_pos(GeanyEditor *editor, gint pos, gboolean mark)
 
 		/* mark the tag with the yellow arrow */
 		sci_marker_delete_all(editor->sci, 0);
-		sci_set_marker_at_line(editor->sci, line, TRUE, 0);
+		sci_set_marker_at_line(editor->sci, line, 0);
 	}
 
 	sci_goto_pos(editor->sci, pos, TRUE);

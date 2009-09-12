@@ -1811,9 +1811,7 @@ static void cb_func_goto_action(guint key_id)
 			return;
 		case GEANY_KEYS_GOTO_TOGGLEMARKER:
 		{
-			gboolean set = sci_is_marker_set_at_line(doc->editor->sci, cur_line, 1);
-
-			sci_set_marker_at_line(doc->editor->sci, cur_line, ! set, 1);
+			sci_toggle_marker_at_line(doc->editor->sci, cur_line, 1);
 			return;
 		}
 		case GEANY_KEYS_GOTO_NEXTMARKER:

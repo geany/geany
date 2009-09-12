@@ -171,7 +171,10 @@ static SciFuncs sci_funcs = {
 	&sci_get_line_end_position,
 	&sci_set_target_start,
 	&sci_set_target_end,
-	&sci_replace_target
+	&sci_replace_target,
+	&sci_set_marker_at_line,
+	&sci_delete_marker_at_line,
+	&sci_is_marker_set_at_line
 };
 
 static TemplateFuncs template_funcs = {

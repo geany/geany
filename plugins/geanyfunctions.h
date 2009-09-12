@@ -168,6 +168,12 @@
 	geany_functions->p_sci->set_target_end
 #define sci_replace_target \
 	geany_functions->p_sci->replace_target
+#define sci_set_marker_at_line \
+	geany_functions->p_sci->set_marker_at_line
+#define sci_delete_marker_at_line \
+	geany_functions->p_sci->delete_marker_at_line
+#define sci_is_marker_set_at_line \
+	geany_functions->p_sci->is_marker_set_at_line
 #define templates_get_template_fileheader \
 	geany_functions->p_templates->get_template_fileheader
 #define utils_str_equal \

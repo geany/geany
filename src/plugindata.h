@@ -50,7 +50,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 155,
+	GEANY_API_VERSION = 156,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -293,39 +293,39 @@ ScintillaFuncs;
 typedef struct SciFuncs
 {
 	/** @deprecated Use @ref ScintillaFuncs::send_message() instead. */
-	long int (*send_message) (struct _ScintillaObject* sci, unsigned int iMessage,
+	long int (*send_message) (struct _ScintillaObject *sci, unsigned int iMessage,
 			long unsigned int wParam, long int lParam);
-	void	(*send_command) (struct _ScintillaObject* sci, gint cmd);
+	void	(*send_command) (struct _ScintillaObject *sci, gint cmd);
 
-	void	(*start_undo_action) (struct _ScintillaObject* sci);
-	void	(*end_undo_action) (struct _ScintillaObject* sci);
+	void	(*start_undo_action) (struct _ScintillaObject *sci);
+	void	(*end_undo_action) (struct _ScintillaObject *sci);
 	void	(*set_text) (struct _ScintillaObject *sci, const gchar *text);
 	void	(*insert_text) (struct _ScintillaObject *sci, gint pos, const gchar *text);
 	void	(*get_text) (struct _ScintillaObject *sci, gint len, gchar *text);
 	gint	(*get_length) (struct _ScintillaObject *sci);
 	gint	(*get_current_position) (struct _ScintillaObject *sci);
-	void	(*set_current_position) (struct _ScintillaObject* sci, gint position,
+	void	(*set_current_position) (struct _ScintillaObject *sci, gint position,
 			 gboolean scroll_to_caret);
-	gint	(*get_col_from_position) (struct _ScintillaObject* sci, gint position);
-	gint	(*get_line_from_position) (struct _ScintillaObject* sci, gint position);
-	gint	(*get_position_from_line) (struct _ScintillaObject* sci, gint line);
-	void	(*replace_sel) (struct _ScintillaObject* sci, const gchar *text);
-	void	(*get_selected_text) (struct _ScintillaObject* sci, gchar *text);
-	gint	(*get_selected_text_length) (struct _ScintillaObject* sci);
-	gint	(*get_selection_start) (struct _ScintillaObject* sci);
-	gint	(*get_selection_end) (struct _ScintillaObject* sci);
-	gint	(*get_selection_mode) (struct _ScintillaObject* sci);
-	void	(*set_selection_mode) (struct _ScintillaObject* sci, gint mode);
-	void	(*set_selection_start) (struct _ScintillaObject* sci, gint position);
-	void	(*set_selection_end) (struct _ScintillaObject* sci, gint position);
-	void	(*get_text_range) (struct _ScintillaObject* sci, gint start, gint end, gchar *text);
-	gchar*	(*get_line) (struct _ScintillaObject* sci, gint line_num);
-	gint	(*get_line_length) (struct _ScintillaObject* sci, gint line);
-	gint	(*get_line_count) (struct _ScintillaObject* sci);
-	gboolean (*get_line_is_visible) (struct _ScintillaObject* sci, gint line);
-	void	(*ensure_line_is_visible) (struct _ScintillaObject* sci, gint line);
-	void	(*scroll_caret) (struct _ScintillaObject* sci);
-	gint	(*find_matching_brace) (struct _ScintillaObject* sci, gint pos);
+	gint	(*get_col_from_position) (struct _ScintillaObject *sci, gint position);
+	gint	(*get_line_from_position) (struct _ScintillaObject *sci, gint position);
+	gint	(*get_position_from_line) (struct _ScintillaObject *sci, gint line);
+	void	(*replace_sel) (struct _ScintillaObject *sci, const gchar *text);
+	void	(*get_selected_text) (struct _ScintillaObject *sci, gchar *text);
+	gint	(*get_selected_text_length) (struct _ScintillaObject *sci);
+	gint	(*get_selection_start) (struct _ScintillaObject *sci);
+	gint	(*get_selection_end) (struct _ScintillaObject *sci);
+	gint	(*get_selection_mode) (struct _ScintillaObject *sci);
+	void	(*set_selection_mode) (struct _ScintillaObject *sci, gint mode);
+	void	(*set_selection_start) (struct _ScintillaObject *sci, gint position);
+	void	(*set_selection_end) (struct _ScintillaObject *sci, gint position);
+	void	(*get_text_range) (struct _ScintillaObject *sci, gint start, gint end, gchar *text);
+	gchar*	(*get_line) (struct _ScintillaObject *sci, gint line_num);
+	gint	(*get_line_length) (struct _ScintillaObject *sci, gint line);
+	gint	(*get_line_count) (struct _ScintillaObject *sci);
+	gboolean (*get_line_is_visible) (struct _ScintillaObject *sci, gint line);
+	void	(*ensure_line_is_visible) (struct _ScintillaObject *sci, gint line);
+	void	(*scroll_caret) (struct _ScintillaObject *sci);
+	gint	(*find_matching_brace) (struct _ScintillaObject *sci, gint pos);
 	gint	(*get_style_at) (struct _ScintillaObject *sci, gint position);
 	gchar	(*get_char_at) (struct _ScintillaObject *sci, gint pos);
 	gint	(*get_current_line) (struct _ScintillaObject *sci);
@@ -337,10 +337,13 @@ typedef struct SciFuncs
 	gchar*	(*get_contents_range) (struct _ScintillaObject *sci, gint start, gint end);
 	gchar*	(*get_selection_contents) (struct _ScintillaObject *sci);
 	void	(*set_font) (struct _ScintillaObject *sci, gint style, const gchar *font, gint size);
-	gint (*get_line_end_position) (ScintillaObject* sci, gint line);
-	void (*set_target_start) (ScintillaObject *sci, gint start);
-	void (*set_target_end) (ScintillaObject *sci, gint end);
-	gint (*replace_target) (ScintillaObject *sci, const gchar *text, gboolean regex);
+	gint	(*get_line_end_position) (struct _ScintillaObject *sci, gint line);
+	void	(*set_target_start) (struct _ScintillaObject *sci, gint start);
+	void	(*set_target_end) (struct _ScintillaObject *sci, gint end);
+	gint	(*replace_target) (struct _ScintillaObject *sci, const gchar *text, gboolean regex);
+	void	(*set_marker_at_line) (struct _ScintillaObject *sci, gint line_number, gint marker);
+	void	(*delete_marker_at_line) (struct _ScintillaObject *sci, gint line_number, gint marker);
+	gboolean (*is_marker_set_at_line) (struct _ScintillaObject *sci, gint line, gint marker);
 }
 SciFuncs;
 

@@ -1,3 +1,15 @@
+2009-09-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c, src/sciwrappers.c, src/sciwrappers.h,
+   src/plugindata.h, src/plugins.c, src/editor.c,
+   plugins/geanyfunctions.h:
+   Add sci_set_marker_at_line(), sci_delete_marker_at_line(),
+   sci_is_marker_set_at_line() to the plugin API (thanks to Yura
+   Siamashka).
+   Add sci_toggle_marker_at_line().
+   Fix SciFuncs alignment.
+
+
 2009-09-11  Lex Trotman  <elextr(at)gmail(dot)com>
 
  * src/build.c
