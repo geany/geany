@@ -396,8 +396,11 @@ static GeanyBuildCommand *get_build_group(GeanyBuildSource src, GeanyBuildGroup 
 	switch(grp)
 	{
 		case GEANY_GBG_FT:
-			if ((doc=document_get_current())==NULL)return NULL;
-			if ((ft=doc->file_type)==NULL)return NULL;
+			if ((doc=document_get_current())==NULL)
+				return NULL;
+			if ((ft=doc->file_type)==NULL)
+				return NULL;
+
 			switch(src)
 			{
 				case GEANY_BCS_DEF:	 return ft->ftdefcmds;
@@ -418,8 +421,11 @@ static GeanyBuildCommand *get_build_group(GeanyBuildSource src, GeanyBuildGroup 
 			}
 			break;
 		case GEANY_GBG_EXEC:
-			if ((doc=document_get_current())==NULL)return NULL;
-			if ((ft=doc->file_type)==NULL)return NULL;
+			if ((doc=document_get_current())==NULL)
+				return NULL;
+			if ((ft=doc->file_type)==NULL)
+				return NULL;
+
 			switch(src)
 			{
 				case GEANY_BCS_DEF:	 return exec_def;
