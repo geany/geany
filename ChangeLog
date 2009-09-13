@@ -3,6 +3,11 @@
  * src/keybindings.c:
    Fix 'Reflow block' command when at the last paragraph and there's
    no last newline (patch by Eugene Arshinov, thanks).
+ * HACKING:
+   Add 'Compiler options & warnings' section.
+   Update Style section to be clearer about code alignment and show
+   some example code.
+   Other minor edits.
 
 
 2009-09-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
