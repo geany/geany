@@ -49,12 +49,15 @@ sub parse($)
 			# make binary operators have *one* space each side
 			# operators must have longer variants first otherwise trailing operators can be broken e.g. "+ ="
 			# '*' ignored as could be pointer
-			# '-' ignored as could be unary "-1"
-			# '&' ignored as could be address-of "(type*)&foo"
 			my $ops = '<<=,<<,>>=,>>,<=,>=,<,>,||,|=,|,&&,&=,-=,+=,+,*=,/=,/,==,!=,%=,%,^=,^,=';
 			$ops =~ s/([|*+])/\\$1/g; # escape regex chars
 			$ops =~ s/,/|/g;
 			$line =~ s/([\w)\]])\s*($ops)\s*([\w(]|$)/$1 $2 $3/g;
+
+			# space binary operators that can conflict with unaries with cast and/or 'return -1/&foo'
+			# '-' could be unary "(gint)-j"
+			# '&' could be address-of "(type*)&foo"
+			$line =~ s/(\w)(-|&)\s*([\w(]|$)/$1 $2 $3/g;
 
 			# space ternary conditional operator
 			$line =~ s/\s*\?\s*(.+?)\s*:\s*/ ? $1 : /g;
@@ -73,19 +76,25 @@ sub parse($)
 		# strip trailing space again (e.g. a trailing operator now has space afterwards)
 		$line =~ s/\s+$//g;
 
-		$opt_write or print $line."\n";
-		$opt_write and push(@lines, $line);
+		push(@lines, $line);
 	}
 	close(INPUT);
 
-	$opt_write or return;
+	my $text = join("\n", @lines);
+	undef @lines;	# free memory
+	$text .= "\n";
 
-	open(OUTPUT, ">$infile") or die "Couldn't open $infile for writing: $!\n";
-	foreach my $line (@lines)
-	{
-		print OUTPUT $line."\n";
+	# 1+ newline -> 2 newlines after function
+	$text =~ s/^}\n\n+([^\n])/}\n\n\n$1/gm;
+
+	if (!$opt_write) {
+		print $text;
 	}
-	close(OUTPUT);
+	else {
+		open(OUTPUT, ">$infile") or die "Couldn't open $infile for writing: $!\n";
+		print OUTPUT $text;
+		close(OUTPUT);
+	}
 }
 
 
