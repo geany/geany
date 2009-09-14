@@ -20,10 +20,12 @@
  * $Id$
  */
 
-/*
- * This provides a simple single linked list, with some functons to modify it.
- * Being a queue, you can append data only to the end of the list, end retrieve
- * data from the beginning. Only the first node is directly visible, but with the several foreach
+/* WARNING: Do not use this in new code, use GQueue or GList instead - this code may be
+ * removed.
+ *
+ * This provides a simple single linked list, with some functions to modify it.
+ * Being a queue, you can append data only to the end of the list, and retrieve
+ * data from the beginning. Only the first node is directly visible, but with the foreach
  * functions you can iterate through the entire list.
  */
 

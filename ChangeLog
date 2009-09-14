@@ -14,6 +14,8 @@
    Make dialogs_show_question_full() use GTK dialog on Windows if
    button text is not the stock yes/no items.
    Add dialogs_show_prompt() which also has an 'Apply' button.
+ * src/queue.c, src/queue.h:
+   Add warning that GeanyQueue may be removed.
 
 
 2009-09-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -20,6 +20,9 @@
  * $Id$
  */
 
+/* WARNING: Do not use this in new code, use GQueue or GList instead - this code may be
+ * removed. */
+
 #ifndef __QUEUE_H__
 #define __QUEUE_H__
 
