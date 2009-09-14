@@ -1924,8 +1924,7 @@ static void cb_func_editor_action(guint key_id)
 			duplicate_lines(doc->editor);
 			break;
 		case GEANY_KEYS_EDITOR_SNIPPETNEXTCURSOR:
-			snippet_goto_next_cursor(doc->editor->sci,
-					sci_get_current_position(doc->editor->sci));
+			editor_goto_next_snippet_cursor(doc->editor);
 			break;
 		case GEANY_KEYS_EDITOR_DELETELINE:
 			delete_lines(doc->editor);

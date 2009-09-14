@@ -16,6 +16,10 @@
    Add dialogs_show_prompt() which also has an 'Apply' button.
  * src/queue.c, src/queue.h:
    Add warning that GeanyQueue may be removed.
+ * src/keybindings.c, src/editor.c, src/editor.h:
+   Change snippet_goto_next_cursor() to
+   editor_goto_next_snippet_cursor() as it's in editor.h.
+   Avoid using GPOINTER_TO_INT macro.
 
 
 2009-09-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
