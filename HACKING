@@ -42,11 +42,11 @@ is already working on similar code.
 In general it's best to work from the current SVN, but we accept patches
 against other releases::
 
-	$ svn diff > fix-some-bug.patch
+    $ svn diff > fix-some-bug.patch
 
 If you're not using SVN, you can use the diff command::
 
-	$ diff -u originalpath modifiedpath > new-feature.patch
+    $ diff -u originalpath modifiedpath > new-feature.patch
 
 .. note::
     Please make sure patches follow the style of existing code - In
@@ -75,10 +75,10 @@ the existing elements stay in place - this will keep the ABI stable.
 
 .. warning::
 
-	Some structs like GeanyKeyGroupInfo and GeanyCallback cannot be
-	appended to without breaking the ABI because they are used to declare
-	structs by plugins, not just for accessing struct members through
-	a pointer.
+    Some structs like GeanyKeyGroupInfo and GeanyCallback cannot be
+    appended to without breaking the ABI because they are used to declare
+    structs by plugins, not just for accessing struct members through
+    a pointer.
 
 Before the 1.0 release series, the ABI can change when necessary, and
 even the API can change. An ABI change just means that all plugins will
@@ -406,17 +406,17 @@ Press Ctrl-C from the gdb window to interrupt program execution.
 
 Example::
 
-	Program received signal SIGINT, Interrupt.
-	0x00d16402 in __kernel_vsyscall ()
-	(gdb) call plugin_new("./plugins/.libs/demoplugin.so")
-	** INFO: Loaded:   ./plugins/.libs/demoplugin.so (Demo)
-	$1 = (Plugin *) 0x905a890
-	(gdb) c
-	Continuing.
+    Program received signal SIGINT, Interrupt.
+    0x00d16402 in __kernel_vsyscall ()
+    (gdb) call plugin_new("./plugins/.libs/demoplugin.so")
+    ** INFO: Loaded:   ./plugins/.libs/demoplugin.so (Demo)
+    $1 = (Plugin *) 0x905a890
+    (gdb) c
+    Continuing.
 
-	Program received signal SIGINT, Interrupt.
-	0x00d16402 in __kernel_vsyscall ()
-	(gdb) call plugin_free(0x905a890)
-	** INFO: Unloaded: ./plugins/.libs/demoplugin.so
-	(gdb) c
-	Continuing.
+    Program received signal SIGINT, Interrupt.
+    0x00d16402 in __kernel_vsyscall ()
+    (gdb) call plugin_free(0x905a890)
+    ** INFO: Unloaded: ./plugins/.libs/demoplugin.so
+    (gdb) c
+    Continuing.
