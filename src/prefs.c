@@ -56,6 +56,7 @@
 #include "toolbar.h"
 #include "stash.h"
 #include "keyfile.h"
+#include "filetypes.h"
 
 #ifdef HAVE_VTE
 # include "vte.h"
@@ -739,9 +740,13 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		GtkWidget *widget;
 		guint i;
 		guint autoclose_brackets[5];
+		gboolean old_invert_all = interface_prefs.highlighting_invert_all;
 
 		/* Synchronize Stash settings */
 		prefs_action(PREF_UPDATE);
+
+		if (interface_prefs.highlighting_invert_all != old_invert_all)
+			filetypes_reload();
 
 		/* General settings */
 		/* startup */
@@ -1581,7 +1586,7 @@ void prefs_show_dialog(void)
 				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(3));
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "long_line_color"),
 				"color-set", G_CALLBACK(on_prefs_color_choosed), GINT_TO_POINTER(1));
-		/* file chooser buttons in the tools tab 
+		/* file chooser buttons in the tools tab
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "button_make"),
 				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_make")); */
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "button_term"),

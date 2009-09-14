@@ -100,7 +100,6 @@ static struct
 {
 	GeanyLexerStyle	 styling[GCS_MAX];
 	FoldingStyle	 folding_style;
-	gboolean		 invert_all;
 	gchar			*wordchars;
 } common_style_set;
 
@@ -393,7 +392,7 @@ static void get_keyfile_int(GKeyFile *config, GKeyFile *configh, const gchar *se
 
 static guint invert(guint icolour)
 {
-	if (common_style_set.invert_all)
+	if (interface_prefs.highlighting_invert_all)
 		return utils_invert_color(icolour);
 
 	return icolour;
@@ -565,9 +564,6 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 			1, 1, &tmp_style);
 		common_style_set.folding_style.marker = tmp_style.foreground;
 		common_style_set.folding_style.lines = tmp_style.background;
-		get_keyfile_int(config, config_home, "styling", "invert_all",
-			0, 0, &tmp_style);
-		common_style_set.invert_all = tmp_style.foreground;
 		get_keyfile_int(config, config_home, "styling", "folding_horiz_line",
 			2, 0, &tmp_style);
 		common_style_set.folding_style.draw_line = tmp_style.foreground;
@@ -596,8 +592,6 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 		common_style_set.styling[GCS_LINE_HEIGHT].background = tmp_style.background;
 	}
 
-	common_style_set.invert_all = interface_prefs.highlighting_invert_all =
-		(common_style_set.invert_all || interface_prefs.highlighting_invert_all);
 	get_keyfile_wordchars(config, config_home, &common_style_set.wordchars);
 	whitespace_chars = get_keyfile_whitespace_chars(config, config_home);
 }

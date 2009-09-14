@@ -1182,8 +1182,6 @@ void *rpl_malloc(size_t n)
  **/
 void main_reload_configuration(void)
 {
-	guint i;
-
 	/* reload templates */
 	templates_free_templates();
 	templates_init();
@@ -1195,17 +1193,7 @@ void main_reload_configuration(void)
 	/* reload filetype extensions */
 	filetypes_read_extensions();
 
-	/* save possibly changed commands before re-reading them */
-	filetypes_save_commands();
-
-	/* reload filetype configs */
-	for (i = 0; i < filetypes_array->len; i++)
-	{
-		/* filetypes_load_config() will skip not loaded filetypes */
-		filetypes_load_config(i, TRUE);
-	}
-	documents_foreach(i)
-		document_reload_config(documents[i]);
+	filetypes_reload();
 
 	/* C tag names to ignore */
 	symbols_reload_config_files();

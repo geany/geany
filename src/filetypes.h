@@ -156,6 +156,9 @@ void filetypes_init_types(void);
 
 void filetypes_read_extensions(void);
 
+void filetypes_reload(void);
+
+
 GeanyFiletype *filetypes_index(gint idx);
 
 GeanyFiletype *filetypes_detect_from_document(GeanyDocument *doc);

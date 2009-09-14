@@ -2,6 +2,13 @@
 
  * src/utils.c:
    Fix opening filenames beginning with two dots (closes #2858487).
+ * src/interface.c, src/highlighting.c, src/prefs.c, src/filetypes.c,
+   src/filetypes.h, src/main.c, doc/geany.txt, doc/geany.html,
+   data/filetypes.common, geany.glade:
+   Update syntax highlighting after changing the 'Invert syntax
+   highlighting colors' pref, instead of requiring a restart.
+   Remove filetypes.common invert_all option - use 'Invert syntax
+   highlighting colors' pref instead (closes #2854525).
 
 
 2009-09-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

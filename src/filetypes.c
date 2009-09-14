@@ -379,7 +379,7 @@ static void init_builtin_filetypes(void)
 	ft->comment_open = NULL;
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
-	
+
 #define TXT2TAGS
 	ft = filetypes[GEANY_FILETYPES_TXT2TAGS];
 	ft->lang = 37;
@@ -1576,3 +1576,24 @@ GeanyFiletype *filetypes_index(gint idx)
 {
 	return (idx >= 0 && idx < (gint) filetypes_array->len) ? filetypes[idx] : NULL;
 }
+
+
+void filetypes_reload(void)
+{
+	guint i;
+
+	/* save possibly changed commands before re-reading them */
+	filetypes_save_commands();
+
+	/* reload filetype configs */
+	for (i = 0; i < filetypes_array->len; i++)
+	{
+		/* filetypes_load_config() will skip not loaded filetypes */
+		filetypes_load_config(i, TRUE);
+	}
+	/* update document styling */
+	documents_foreach(i)
+		document_reload_config(documents[i]);
+}
+
+

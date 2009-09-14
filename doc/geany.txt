@@ -1883,12 +1883,8 @@ Display
 ```````
 
 Invert syntax highlighting colors
-    Use white text on a black background and invert all colors.
-    If the ``invert_all`` setting in ``filetypes.common`` is set, this
-    option is always enabled. See `Special file filetypes.common`_
-    for details.
-
-    This option requires a restart of Geany. The value of this option
+    Invert all colors, by default this makes white text on a black
+    background.
 
 Show indendation guides
     Show vertical lines to help show how much leading indentation there
@@ -3516,17 +3512,6 @@ folding_horiz_line
     * 2 -- draw the line below folded text
 
     *Example:* ``folding_horiz_line=0;0;false;false``
-
-invert_all
-    Whether to invert all defined colors. This is useful if you like a
-    dark background color(e.g. black) and do not want to change every
-    single line. Please note, at time of writing this was only tested
-    with the C syntax highlighting.
-
-    Only first argument is interpreted. Set it to 1 to invert all
-    colors.
-
-    *Example:* ``invert_all=0;0;false;false``
 
 line_wrap_visuals
     First argument: drawing of visual flags to indicate a line is wrapped.

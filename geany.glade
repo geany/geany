@@ -6480,7 +6480,7 @@ Match braces</property>
 			      <child>
 				<widget class="GtkCheckButton" id="check_highlighting_invert">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Use white text on a black background and invert all colors, this option requires a restart of Geany</property>
+				  <property name="tooltip" translatable="yes">Invert all colors, by default using white text on a black background</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Invert syntax highlighting colors</property>
 				  <property name="use_underline">True</property>

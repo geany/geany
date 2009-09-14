@@ -3783,7 +3783,7 @@ create_prefs_dialog (void)
   check_highlighting_invert = gtk_check_button_new_with_mnemonic (_("Invert syntax highlighting colors"));
   gtk_widget_show (check_highlighting_invert);
   gtk_box_pack_start (GTK_BOX (vbox12), check_highlighting_invert, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_highlighting_invert, _("Use white text on a black background and invert all colors, this option requires a restart of Geany"), NULL);
+  gtk_tooltips_set_tip (tooltips, check_highlighting_invert, _("Invert all colors, by default using white text on a black background"), NULL);
 
   check_indent = gtk_check_button_new_with_mnemonic (_("Show indentation guides"));
   gtk_widget_show (check_indent);
