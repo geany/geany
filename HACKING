@@ -195,14 +195,16 @@ Example::
     gint function_long_name(gchar arg1, <too many args to fit on this line>,
             gchar argN)
     {
-        gint foo;
+        gint foo, bar;  /* variables can go on the same line */
+        gchar *ptr;     /* pointer symbol must go next to variable name, not type */
+        gchar *another; /* pointers should go on separate lines */
 
         if (foo)
         {
             gint dir = -1;    /* -1 to search backwards */
 
             bar = foo;
-            if (bar != 7)
+            if ((bar & (guint)dir) != 7)
                 some_code(arg1, <too many args to fit on this line>,
                     argN - 1, argN);
 
