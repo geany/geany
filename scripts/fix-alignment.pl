@@ -52,18 +52,18 @@ sub parse($)
 			my $ops = '<<=,<<,>>=,>>,<=,>=,<,>,||,|=,|,&&,&=,-=,+=,+,*=,/=,/,==,!=,%=,%,^=,^,=';
 			$ops =~ s/([|*+])/\\$1/g; # escape regex chars
 			$ops =~ s/,/|/g;
-			$line =~ s/([\w)\]])\s*($ops)\s*([\w(]|$)/$1 $2 $3/g;
+			$line =~ s/([\w)\]]) ?($ops) ?([\w(]|$)/$1 $2 $3/g;
 
 			# space binary operators that can conflict with unaries with cast and/or 'return -1/&foo'
 			# '-' could be unary "(gint)-j"
 			# '&' could be address-of "(type*)&foo"
-			$line =~ s/(\w)(-|&)\s*([\w(]|$)/$1 $2 $3/g;
+			$line =~ s/([\w\]])(-|&) ?([\w(]|$)/$1 $2 $3/g;
 
 			# space ternary conditional operator
-			$line =~ s/\s*\?\s*(.+?)\s*:\s*/ ? $1 : /g;
+			$line =~ s/ ?\? ?(.+?) ?: ?/ ? $1 : /g;
 
 			# space comma operator (allowing for possible alignment space afterwards)
-			$line =~ s/\s*,(\S)/, $1/g;
+			$line =~ s/ ?,(\S)/, $1/g;
 
 			# space after statements
 			my $statements = 'for|if|while|switch';
