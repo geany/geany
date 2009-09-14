@@ -1371,7 +1371,8 @@ static void kb_clear_tree_shortcut(gsize group_id, gsize keybinding_id)
 }
 
 
-/* test if the entered key combination is already used */
+/* test if the entered key combination is already used
+ * returns true if cancelling duplicate */
 static gboolean kb_find_duplicate(GeanyKeyBinding *search_kb,
 		guint key, GdkModifierType mods, const gchar *action)
 {
@@ -1395,16 +1396,20 @@ static gboolean kb_find_duplicate(GeanyKeyBinding *search_kb,
 			if (kb->key == key && kb->mods == mods
 				&& ! (kb->key == search_kb->key && kb->mods == search_kb->mods))
 			{
-				if (dialogs_show_question_full(main_widgets.window, _("_Override"), GTK_STOCK_CANCEL,
+				gint ret = dialogs_show_prompt(main_widgets.window,
+					_("_Override"), GTK_STOCK_CANCEL, _("_Allow"),
 					_("Override that keybinding?"),
 					_("The combination '%s' is already used for \"%s\"."),
-					action, kb->label))
+					action, kb->label);
+
+				if (ret == GTK_RESPONSE_YES)
 				{
 					keybindings_update_combo(kb, 0, 0);
 					kb_clear_tree_shortcut(g, i);
+					/* carry on looking for other duplicates if overriding */
 					continue;
 				}
-				return TRUE;
+				return ret == GTK_RESPONSE_NO;
 			}
 		}
 	}

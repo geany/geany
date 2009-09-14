@@ -9,6 +9,11 @@
    highlighting colors' pref, instead of requiring a restart.
    Remove filetypes.common invert_all option - use 'Invert syntax
    highlighting colors' pref instead (closes #2854525).
+ * src/prefs.c, src/dialogs.c, src/dialogs.h:
+   Add 'Allow' button when showing the conflicting keybinding dialog.
+   Make dialogs_show_question_full() use GTK dialog on Windows if
+   button text is not the stock yes/no items.
+   Add dialogs_show_prompt() which also has an 'Apply' button.
 
 
 2009-09-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
