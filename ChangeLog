@@ -1,3 +1,11 @@
+2009-09-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/search.c:
+   Show Find in Files stderr output in messages window instead of
+   debug window so that invalid regex messages can be seen easily.
+   Combine FIF stdout and stderr callback code.
+
+
 2009-09-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/utils.c:
