@@ -42,7 +42,7 @@ There are a few things to take care of when you create a package:
   The file COPYING is the GPLv2 license text and should(have to?) be
   included in your package.
 - Start Geany after it was installed out of your package. Pass the
-  command line argument "-d" to see whether Geany complains about
+  command line argument "-v" to see whether Geany complains about
   missing files.
 - Check whether the help menu item (Help->Help or F1) works and opens
   the local installed HTML documentation in your browser (if it opens

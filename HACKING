@@ -392,7 +392,7 @@ Where ``gdb-commands`` is a file with the following lines::
 
     set pagination off
     b handler_log if level <= G_LOG_LEVEL_WARNING
-    r -d
+    r -v
 
 
 Loading a plugin

@@ -1,3 +1,9 @@
+2009-09-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * src/main.c:
+   Remove deprecated --debug flag. Please use --verbose/-v instead.
+
+
 2009-09-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/search.c:

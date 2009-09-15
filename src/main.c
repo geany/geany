@@ -122,7 +122,6 @@ static GOptionEntry entries[] =
 {
 	{ "column", 0, 0, G_OPTION_ARG_INT, &cl_options.goto_column, N_("Set initial column number for the first opened file (useful in conjunction with --line)"), NULL },
 	{ "config", 'c', 0, G_OPTION_ARG_FILENAME, &alternate_config, N_("Use an alternate configuration directory"), NULL },
-	{ "debug", 'd', G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &debug_mode, N_("Be verbose"), NULL },
 	{ "ft-names", 0, 0, G_OPTION_ARG_NONE, &ft_names, N_("Print internal filetype names"), NULL },
 	{ "generate-tags", 'g', 0, G_OPTION_ARG_NONE, &generate_tags, N_("Generate global tags file (see documentation)"), NULL },
 	{ "no-preprocessing", 'P', 0, G_OPTION_ARG_NONE, &no_preprocessing, N_("Don't preprocess C/C++ files when generating tags"), NULL },
@@ -500,12 +499,6 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	}
 
 	app->debug_mode = verbose_mode;
-	if (debug_mode)
-	{
-		app->debug_mode = TRUE;
-		g_warning(
-			"Command line option --debug is obsolete and will be removed in the next version.");
-	}
 
 #ifdef G_OS_WIN32
 	win32_init_debug_code();
