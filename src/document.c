@@ -1234,7 +1234,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 			document_check_disk_status(doc, TRUE);	/* force a file changed check */
 		}
 	}
-	if (reload || (!reload && doc == NULL))
+	if (reload || doc == NULL)
 	{	/* doc possibly changed */
 		display_filename = utils_str_middle_truncate(utf8_filename, 100);
 
@@ -1290,9 +1290,6 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		doc->priv->line_count = sci_get_line_count(doc->editor->sci);
 		sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
 
-		/* set the cursor position according to pos, cl_options.goto_line and cl_options.goto_column */
-		pos = set_cursor_position(doc->editor, pos);
-
 		if (! reload)
 		{
 
@@ -1346,6 +1343,8 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 	 * based on a configurable interval */
 	/*g_timeout_add(10000, auto_update_tag_list, doc);*/
 
+	/* set the cursor position according to pos, cl_options.goto_line and cl_options.goto_column */
+	pos = set_cursor_position(doc->editor, pos);
 	/* now bring the file in front */
 	editor_goto_pos(doc->editor, pos, FALSE);
 

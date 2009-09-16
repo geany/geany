@@ -4,6 +4,8 @@
    Make Goto Tag commands use the current selection if present (useful
    for selecting part of a tag or for ReST section names with spaces
    in).
+ * src/document.c:
+   Don't move the cursor when reloading.
 
 
 2009-09-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
