@@ -120,7 +120,6 @@ typedef struct GeanyEditorPrefs
 	gboolean	complete_snippets;
 	gint		symbolcompletion_min_chars;
 	gint		symbolcompletion_max_height;
-	GHashTable	*snippets;
 	gboolean	brace_match_ltgt;	/* whether to highlight < and > chars (hidden pref) */
 	gboolean	use_gtk_word_boundaries;	/* hidden pref */
 	gboolean	complete_snippets_whilst_editing;	/* hidden pref */

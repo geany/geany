@@ -66,6 +66,7 @@
 #define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
 
 
+static GHashTable *snippet_hash = NULL;
 static GeanyQueue *snippet_queue = NULL;
 static gint snippet_cursor_insert_pos;
 
@@ -105,7 +106,7 @@ static void editor_auto_latex(GeanyEditor *editor, gint pos);
 
 void editor_snippets_free(void)
 {
-	g_hash_table_destroy(editor_prefs.snippets);
+	g_hash_table_destroy(snippet_hash);
 	queue_destroy(snippet_queue);
 }
 
@@ -136,7 +137,7 @@ void editor_snippets_init(void)
 	g_key_file_load_from_file(userconfig, userconfigfile, G_KEY_FILE_NONE, NULL);
 
 	/* keys are strings, values are GHashTables, so use g_free and g_hash_table_destroy */
-	editor_prefs.snippets =
+	snippet_hash =
 		g_hash_table_new_full(g_str_hash, g_str_equal, g_free, (GDestroyNotify) g_hash_table_destroy);
 
 	/* first read all globally defined auto completions */
@@ -146,7 +147,7 @@ void editor_snippets_init(void)
 		keys_sys = g_key_file_get_keys(sysconfig, groups_sys[i], &len_keys, NULL);
 		/* create new hash table for the read section (=> filetype) */
 		tmp = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
-		g_hash_table_insert(editor_prefs.snippets, g_strdup(groups_sys[i]), tmp);
+		g_hash_table_insert(snippet_hash, g_strdup(groups_sys[i]), tmp);
 
 		for (j = 0; j < len_keys; j++)
 		{
@@ -162,11 +163,11 @@ void editor_snippets_init(void)
 	{
 		keys_user = g_key_file_get_keys(userconfig, groups_user[i], &len_keys, NULL);
 
-		tmp = g_hash_table_lookup(editor_prefs.snippets, groups_user[i]);
+		tmp = g_hash_table_lookup(snippet_hash, groups_user[i]);
 		if (tmp == NULL)
 		{	/* new key found, create hash table */
 			tmp = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
-			g_hash_table_insert(editor_prefs.snippets, g_strdup(groups_user[i]), tmp);
+			g_hash_table_insert(snippet_hash, g_strdup(groups_user[i]), tmp);
 		}
 		for (j = 0; j < len_keys; j++)
 		{
@@ -2012,7 +2013,7 @@ static gchar *snippets_find_completion_by_name(const gchar *type, const gchar *n
 
 	g_return_val_if_fail(type != NULL && name != NULL, NULL);
 
-	tmp = g_hash_table_lookup(editor_prefs.snippets, type);
+	tmp = g_hash_table_lookup(snippet_hash, type);
 	if (tmp != NULL)
 	{
 		result = g_hash_table_lookup(tmp, name);
@@ -2021,7 +2022,7 @@ static gchar *snippets_find_completion_by_name(const gchar *type, const gchar *n
 	 * the particular completion for this filetype is not set (result is NULL) */
 	if (tmp == NULL || result == NULL)
 	{
-		tmp = g_hash_table_lookup(editor_prefs.snippets, "Default");
+		tmp = g_hash_table_lookup(snippet_hash, "Default");
 		if (tmp != NULL)
 		{
 			result = g_hash_table_lookup(tmp, name);
@@ -2226,7 +2227,7 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 	pos -= str_len; /* pos has changed while deleting */
 
 	/* replace 'special' completions */
-	specials = g_hash_table_lookup(editor_prefs.snippets, "Special");
+	specials = g_hash_table_lookup(snippet_hash, "Special");
 	if (G_LIKELY(specials != NULL))
 	{
 		/* ugly hack using global_pattern */

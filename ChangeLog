@@ -6,6 +6,8 @@
    in).
  * src/document.c:
    Don't move the cursor when reloading.
+ * src/plugindata.h, src/editor.c, src/editor.h:
+   Make editor_prefs.snippets hash table private (not a pref).
 
 
 2009-09-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
