@@ -276,6 +276,7 @@ static void create_template_file_if_necessary(const gchar *filename, const gchar
 	}
 }
 
+
 /* FIXME the callers should use GStrings instead of char arrays */
 static gchar *replace_all(gchar *text, const gchar *year, const gchar *date, const gchar *datetime)
 {

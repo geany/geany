@@ -139,14 +139,14 @@ gint utils_get_line_endings(const gchar* buffer, glong size)
 		}
 		else if (buffer[i] == 0x0d)
 		{
-			if (i >= (size-1))
+			if (i >= (size - 1))
 			{
 				/* Last char, CR */
 				cr++;
 			}
 			else
 			{
-				if (buffer[i+1] != 0x0a)
+				if (buffer[i + 1] != 0x0a)
 				{
 					/* CR */
 					cr++;
@@ -641,7 +641,7 @@ gint utils_strpos(const gchar *haystack, const gchar *needle)
 			{
 				for (j = 1; (j < needle_length); j++)
 				{
-					if (haystack[i+j] == needle[j])
+					if (haystack[i + j] == needle[j])
 					{
 						if (pos == -1)
 							pos = i;
@@ -913,7 +913,7 @@ gchar *utils_make_human_readable_str(guint64 size, gulong block_size,
 		{
 			f = fmt_tenths;
 			++u;
-			frac = ((((gint)(val % 1024)) * 10) + (1024/2)) / 1024;
+			frac = ((((gint)(val % 1024)) * 10) + (1024 / 2)) / 1024;
 			val /= 1024;
 		}
 		if (frac >= 10)
@@ -1086,11 +1086,11 @@ gboolean utils_str_replace_escape(gchar *string)
 					{
 						return FALSE;
 					}
-					if (isdigit(string[i-1])) string[j] = string[i-1]-48;
-					else if (isxdigit(string[i-1])) string[j] = tolower(string[i-1])-87;
+					if (isdigit(string[i - 1])) string[j] = string[i - 1] - 48;
+					else if (isxdigit(string[i - 1])) string[j] = tolower(string[i - 1])-87;
 					else return FALSE;
 					string[j] <<= 4;
-					if (isdigit(string[i])) string[j] |= string[i]-48;
+					if (isdigit(string[i])) string[j] |= string[i] - 48;
 					else if (isxdigit(string[i])) string[j] |= tolower(string[i])-87;
 					else return FALSE;
 					break;
@@ -1101,42 +1101,42 @@ gboolean utils_str_replace_escape(gchar *string)
 					{
 						return FALSE;
 					}
-					if (isdigit(string[i-1])) unicodechar = string[i-1]-48;
-					else if (isxdigit(string[i-1])) unicodechar = tolower(string[i-1])-87;
+					if (isdigit(string[i - 1])) unicodechar = string[i - 1] - 48;
+					else if (isxdigit(string[i - 1])) unicodechar = tolower(string[i - 1])-87;
 					else return FALSE;
 					unicodechar <<= 4;
-					if (isdigit(string[i])) unicodechar |= string[i]-48;
+					if (isdigit(string[i])) unicodechar |= string[i] - 48;
 					else if (isxdigit(string[i])) unicodechar |= tolower(string[i])-87;
 					else return FALSE;
-					if (((i+2) < strlen(string)) && (isdigit(string[i+1]) || isxdigit(string[i+1]))
-						&& (isdigit(string[i+2]) || isxdigit(string[i+2])))
+					if (((i + 2) < strlen(string)) && (isdigit(string[i + 1]) || isxdigit(string[i + 1]))
+						&& (isdigit(string[i + 2]) || isxdigit(string[i + 2])))
 					{
 						i += 2;
 						unicodechar <<= 8;
-						if (isdigit(string[i-1])) unicodechar |= ((string[i-1]-48)<<4);
-						else unicodechar |= ((tolower(string[i-1])-87) << 4);
-						if (isdigit(string[i])) unicodechar |= string[i]-48;
+						if (isdigit(string[i - 1])) unicodechar |= ((string[i - 1] - 48) << 4);
+						else unicodechar |= ((tolower(string[i - 1])-87) << 4);
+						if (isdigit(string[i])) unicodechar |= string[i] - 48;
 						else unicodechar |= tolower(string[i])-87;
 					}
-					if (((i+2) < strlen(string)) && (isdigit(string[i+1]) || isxdigit(string[i+1]))
-						&& (isdigit(string[i+2]) || isxdigit(string[i+2])))
+					if (((i + 2) < strlen(string)) && (isdigit(string[i + 1]) || isxdigit(string[i + 1]))
+						&& (isdigit(string[i + 2]) || isxdigit(string[i + 2])))
 					{
 						i += 2;
 						unicodechar <<= 8;
-						if (isdigit(string[i-1])) unicodechar |= ((string[i-1]-48) << 4);
-						else unicodechar |= ((tolower(string[i-1])-87) << 4);
-						if (isdigit(string[i])) unicodechar |= string[i]-48;
+						if (isdigit(string[i - 1])) unicodechar |= ((string[i - 1] - 48) << 4);
+						else unicodechar |= ((tolower(string[i - 1])-87) << 4);
+						if (isdigit(string[i])) unicodechar |= string[i] - 48;
 						else unicodechar |= tolower(string[i])-87;
 					}
-					if(unicodechar < 0x80)
+					if (unicodechar < 0x80)
 					{
 						string[j] = unicodechar;
 					}
 					else if (unicodechar < 0x800)
 					{
-						string[j] = (unsigned char) ((unicodechar >> 6)| 0xC0);
+						string[j] = (unsigned char) ((unicodechar >> 6) | 0xC0);
 						j++;
-						string[j] = (unsigned char) ((unicodechar & 0x3F)| 0x80);
+						string[j] = (unsigned char) ((unicodechar & 0x3F) | 0x80);
 					}
 					else if (unicodechar < 0x10000)
 					{

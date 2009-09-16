@@ -696,7 +696,7 @@ gboolean dialogs_show_unsaved_file(GeanyDocument *doc)
 #endif
 	g_free(msg);
 
-	switch(ret)
+	switch (ret)
 	{
 		case GTK_RESPONSE_YES:
 		{

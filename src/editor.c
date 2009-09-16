@@ -545,6 +545,7 @@ static void request_reshowing_calltip(SCNotification *nt)
 	}
 }
 
+
 static void autocomplete_scope(GeanyEditor *editor)
 {
 	ScintillaObject *sci = editor->sci;
@@ -1993,7 +1994,7 @@ static void editor_auto_latex(GeanyEditor *editor, gint pos)
 			construct = g_strdup_printf("%s\\end%s{%s}", eol, full_cmd, env);
 
 			SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
-			sci_goto_pos(sci,pos, TRUE);
+			sci_goto_pos(sci, pos, TRUE);
 			g_free(construct);
 			g_free(eol);
 		}
@@ -4094,7 +4095,7 @@ void editor_indicator_set_on_line(GeanyEditor *editor, gint indic, gint line)
 	/* don't set the indicator on whitespace */
 	while (isspace(linebuf[i]))
 		i++;
-	while (len > 1 && len > i && isspace(linebuf[len-1]))
+	while (len > 1 && len > i && isspace(linebuf[len - 1]))
 	{
 		len--;
 		end--;
@@ -4257,7 +4258,7 @@ void editor_replace_tabs(GeanyEditor *editor)
 		if (search_pos == -1)
 			break;
 
-		pos_in_line = sci_get_col_from_position(editor->sci,search_pos);
+		pos_in_line = sci_get_col_from_position(editor->sci, search_pos);
 		current_tab_true_length = tab_len - (pos_in_line % tab_len);
 		tab_str = g_strnfill(current_tab_true_length, ' ');
 		sci_set_target_start(editor->sci, search_pos);
@@ -4330,7 +4331,7 @@ void editor_strip_line_trailing_spaces(GeanyEditor *editor, gint line)
 		i--;
 		ch = sci_get_char_at(editor->sci, i);
 	}
-	if (i < (line_end-1))
+	if (i < (line_end - 1))
 	{
 		sci_set_target_start(editor->sci, i + 1);
 		sci_set_target_end(editor->sci, line_end);

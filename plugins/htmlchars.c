@@ -349,6 +349,7 @@ void set_status(gboolean new_status)
 		plugin_active = new_status;
 }
 
+
 static void toggle_status(G_GNUC_UNUSED GtkMenuItem * menuitem)
 {
 	if (plugin_active == TRUE)
@@ -433,6 +434,7 @@ static void kbhtmltoggle_toggle(G_GNUC_UNUSED guint key_id)
 	else
 		set_status(TRUE);
 }
+
 
 static void tools_show_dialog_insert_special_chars(void)
 {
@@ -529,6 +531,7 @@ static void sc_fill_store(GtkTreeStore *store)
 		}
 	}
 }
+
 
 /* just inserts the HTML_NAME coloumn of the selected row at current position
  * returns only TRUE if a valid selection(i.e. no category) could be found */
@@ -650,6 +653,7 @@ item_activate(GtkMenuItem *menuitem, gpointer gdata)
 	tools_show_dialog_insert_special_chars();
 }
 
+
 static void kb_activate(G_GNUC_UNUSED guint key_id)
 {
 	item_activate(NULL, NULL);
@@ -662,7 +666,6 @@ replace_special_character_activated(GtkMenuItem *menuitem, gpointer gdata)
 {
 	replace_special_character();
 }
-
 
 
 static void kb_special_chars_replacement(G_GNUC_UNUSED guint key_id)

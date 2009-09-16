@@ -870,7 +870,7 @@ static gboolean have_tango_icon_theme(void)
 /* Note: remember to unref the pixbuf once an image or window has added a reference. */
 GdkPixbuf *ui_new_pixbuf_from_inline(gint img)
 {
-	switch(img)
+	switch (img)
 	{
 		case GEANY_IMAGE_LOGO:
 			return gdk_pixbuf_new_from_inline(-1, aladin_inline, FALSE, NULL);
@@ -1193,7 +1193,7 @@ void ui_toggle_editor_features(GeanyUIEditorFeatures feature)
 	gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 	GeanyDocument *doc;
 
-	for(i = 0; i < max; i++)
+	for (i = 0; i < max; i++)
 	{
 		doc = document_get_from_page(i);
 
@@ -1979,7 +1979,6 @@ GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name)
 		g_warning("Widget not found: %s", widget_name);
 	return found_widget;
 }
-
 
 
 /* Progress Bar */

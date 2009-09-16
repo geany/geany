@@ -105,6 +105,7 @@ void queue_destroy(GeanyQueue *queue_start)
 	while ((queue_start = queue_delete(queue_start, NULL, FALSE)));
 }
 
+
 typedef void (*ForeachFunc) (GeanyQueue *queue_start, gpointer data);
 
 /* Iterates through param, and calls func with the node queue_start and each node in param */

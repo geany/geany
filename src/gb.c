@@ -146,6 +146,7 @@ static void create_window(void)
 	gtk_widget_grab_focus(button4);
 }
 
+
 static GtkWidget *create_help_dialog(void)
 {
 	GtkWidget *help_dialog;
@@ -251,7 +252,7 @@ static void on_button1_clicked(GtkButton *button, gpointer user_data)
 
 	/* assign icons */
 	loops = 30;
-	for(i = 0; i < loops; i++)
+	for (i = 0; i < loops; i++)
 	{
 		if (l > 9) l = 0;
 		if (m > 9) m = 0;

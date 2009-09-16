@@ -257,10 +257,10 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 			g_child_watch_add(pid, (GChildWatchFunc) cc_exit_cb, doc);
 
 		/* use GIOChannel to monitor stdout */
-		utils_set_up_io_channel(stdout_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
+		utils_set_up_io_channel(stdout_fd, G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP | G_IO_NVAL,
 				FALSE, cc_iofunc, NULL);
 		/* copy program's stderr to Geany's stdout to help error tracking */
-		utils_set_up_io_channel(stderr_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
+		utils_set_up_io_channel(stderr_fd, G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP | G_IO_NVAL,
 				FALSE, cc_iofunc_err, (gpointer)command);
 
 		/* get selection */

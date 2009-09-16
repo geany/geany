@@ -158,6 +158,7 @@ static void setup_window_position(void)
 	}
 }
 
+
 /* special things for the initial setup of the checkboxes and related stuff
  * an action on a setting is only performed if the setting is not equal to the program default
  * (all the following code is not perfect but it works for the moment) */
@@ -224,7 +225,7 @@ static void main_init(void)
 	ui_widgets.open_filesel		= NULL;
 	ui_widgets.save_filesel		= NULL;
 	ui_widgets.prefs_dialog		= NULL;
-	main_status.main_window_realized= FALSE;
+	main_status.main_window_realized = FALSE;
 	file_prefs.tab_order_ltr		= FALSE;
 	main_status.quitting			= FALSE;
 	ignore_callback	= FALSE;
@@ -1025,7 +1026,7 @@ gint main(gint argc, gchar **argv)
 	{
 		socket_info.read_ioc = g_io_channel_unix_new(socket_info.lock_socket);
 		socket_info.lock_socket_tag = g_io_add_watch(socket_info.read_ioc,
-						G_IO_IN|G_IO_PRI|G_IO_ERR, socket_lock_input_cb, main_widgets.window);
+						G_IO_IN | G_IO_PRI | G_IO_ERR, socket_lock_input_cb, main_widgets.window);
 	}
 #endif
 

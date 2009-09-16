@@ -530,6 +530,7 @@ on_toolbutton_new_clicked              (GtkAction       *action,
 	document_new_file(NULL, NULL, NULL);
 }
 
+
 /* open file */
 void
 on_toolbutton_open_clicked             (GtkAction       *action,
@@ -654,6 +655,7 @@ on_zoom_in1_activate                   (GtkMenuItem     *menuitem,
 				(sci_get_zoom(doc->editor->sci) / 2));
 	sci_zoom_in(doc->editor->sci);
 }
+
 
 /* zoom out from menu bar and popup menu */
 void
@@ -2153,6 +2155,7 @@ on_line_breaking1_activate             (GtkMenuItem     *menuitem,
 	doc->editor->line_breaking = !doc->editor->line_breaking;
 }
 
+
 void
 on_replace_spaces_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
@@ -2228,6 +2231,7 @@ on_send_selection_to_vte1_activate     (GtkMenuItem     *menuitem,
 		vte_send_selection_to_vte();
 #endif
 }
+
 
 gboolean on_window_state_event         (GtkWidget           *widget,
                                         GdkEventWindowState *event,

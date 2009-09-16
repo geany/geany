@@ -114,9 +114,9 @@ static gboolean update_tags_from_buffer(GeanyDocument *doc);
 
 /* ignore the case of filenames and paths under WIN32, causes errors if not */
 #ifdef G_OS_WIN32
-#define filenamecmp(a,b)	utils_str_casecmp((a), (b))
+#define filenamecmp(a, b)	utils_str_casecmp((a), (b))
 #else
-#define filenamecmp(a,b)	strcmp((a), (b))
+#define filenamecmp(a, b)	strcmp((a), (b))
 #endif
 
 /**
@@ -1411,6 +1411,7 @@ void document_open_files(const GSList *filenames, gboolean readonly, GeanyFilety
 	}
 }
 
+
 /**
  *  Reloads the document with the specified file encoding
  *  @a forced_enc or @c NULL to auto-detect the file encoding.
@@ -1786,7 +1787,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	if (doc->encoding != NULL && ! utils_str_equal(doc->encoding, "UTF-8") &&
 		! utils_str_equal(doc->encoding, encodings[GEANY_ENCODING_NONE].charset))
 	{
-		if  (! save_convert_to_encoding(doc, &data, &len))
+		if (! save_convert_to_encoding(doc, &data, &len))
 		{
 			g_free(data);
 			return FALSE;

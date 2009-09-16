@@ -1298,10 +1298,12 @@ static void cb_func_menu_preferences(G_GNUC_UNUSED guint key_id)
 	on_preferences1_activate(NULL, NULL);
 }
 
+
 static void cb_func_menu_help(G_GNUC_UNUSED guint key_id)
 {
 	on_help1_activate(NULL, NULL);
 }
+
 
 static void cb_func_search_action(guint key_id)
 {
@@ -1393,6 +1395,7 @@ static void cb_func_menu_fullscreen(G_GNUC_UNUSED guint key_id)
 
 	gtk_check_menu_item_set_active(c, ! gtk_check_menu_item_get_active(c));
 }
+
 
 static void cb_func_menu_messagewindow(G_GNUC_UNUSED guint key_id)
 {
@@ -2016,7 +2019,7 @@ static void join_lines(GeanyEditor *editor)
 		editor_strip_line_trailing_spaces(editor, i);
 
 	/* remove starting spaces from second and following lines due to the same reason */
-	for (i = start+1; i <= end; i++)
+	for (i = start + 1; i <= end; i++)
 		sci_set_line_indentation(editor->sci, i, 0);
 
 	/*

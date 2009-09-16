@@ -941,7 +941,7 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 
 		if (strncmp(tmp, "env ", 4) == 0 && strlen(tmp) > 4)
 		{	/* skip "env" and read the following interpreter */
-			basename_interpreter +=4;
+			basename_interpreter += 4;
 		}
 
 		if (strncmp(basename_interpreter, "sh", 2) == 0)
@@ -1228,8 +1228,8 @@ static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
 	}
 
 	/* read build settings */
-	build_load_menu( config, GEANY_BCS_FT, (gpointer)ft );
-	build_load_menu( configh, GEANY_BCS_HOME_FT, (gpointer)ft );
+	build_load_menu(config, GEANY_BCS_FT, (gpointer)ft);
+	build_load_menu(configh, GEANY_BCS_HOME_FT, (gpointer)ft);
 
 }
 
@@ -1482,10 +1482,10 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 	if (!NZV(regstr))
 		return FALSE;
 
-	if (!ft->priv->error_regex_compiled || regstr!=ft->priv->last_string)
+	if (!ft->priv->error_regex_compiled || regstr != ft->priv->last_string)
 	{
 		compile_regex(ft, regex, regstr);
-		ft->priv->last_string=regstr;
+		ft->priv->last_string = regstr;
 	}
 	if (!ft->priv->error_regex_compiled)	/* regex error */
 		return FALSE;

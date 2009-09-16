@@ -235,7 +235,7 @@ void vte_init(void)
 		const gchar *sonames[] = {  "libvte.so", "libvte.so.4",
 									"libvte.so.8", "libvte.so.9", NULL };
 
-		for (i = 0; sonames[i] != NULL && module == NULL; i++ )
+		for (i = 0; sonames[i] != NULL && module == NULL; i++)
 		{
 			module = g_module_open(sonames[i], G_MODULE_BIND_LAZY);
 		}
@@ -934,5 +934,6 @@ void vte_send_selection_to_vte(void)
 
 	g_free(text);
 }
+
 
 #endif

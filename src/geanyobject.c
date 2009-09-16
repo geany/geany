@@ -134,7 +134,7 @@ static gboolean boolean_handled_accumulator(GSignalInvocationHint *ihint, GValue
 }
 
 
-static void geany_cclosure_marshal_BOOL__POINTER_POINTER( GClosure *closure, GValue *return_value,
+static void geany_cclosure_marshal_BOOL__POINTER_POINTER(GClosure *closure, GValue *return_value,
 								guint n_param_values, const GValue *param_values,
 								gpointer invocation_hint G_GNUC_UNUSED, gpointer marshal_data)
 {

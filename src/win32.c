@@ -113,7 +113,7 @@ static wchar_t *get_file_filters(void)
 
 	/* replace all "\t"s by \0 */
 	len = strlen(string);
-	for(i = 0; i < len; i++)
+	for (i = 0; i < len; i++)
 	{
 		if (string[i] == '\t') string[i] = '\0';
 	}
@@ -145,7 +145,7 @@ static wchar_t *get_filters(gboolean project_files)
 
 	/* replace all "\t"s by \0 */
 	len = strlen(string);
-	for(i = 0; i < len; i++)
+	for (i = 0; i < len; i++)
 	{
 		if (string[i] == '\t') string[i] = '\0';
 	}
@@ -183,7 +183,7 @@ static wchar_t *get_dir_for_path(const gchar *utf8_filename)
  * folder when the dialog is initialised. Yeah, I like Windows. */
 INT CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
 {
-	switch(uMsg)
+	switch (uMsg)
 	{
 		case BFFM_INITIALIZED:
 		{
@@ -388,7 +388,7 @@ gboolean win32_show_file_dialog(gboolean file_open, const gchar *initial_dir)
 			{
 				if (! fname[x])
 				{
-					if (! fname[x+1])
+					if (! fname[x + 1])
 						break;
 
 					WideCharToMultiByte(CP_UTF8, 0, fname + x + 1, -1,
@@ -630,7 +630,7 @@ gint win32_message_dialog_unsaved(const gchar *msg)
 		parent_hwnd = GDK_WINDOW_HWND(main_widgets.window->window);
 
 	ret = MessageBoxW(parent_hwnd, w_msg, w_title, MB_YESNOCANCEL | MB_ICONQUESTION);
-	switch(ret)
+	switch (ret)
 	{
 		case IDYES: ret = GTK_RESPONSE_YES; break;
 		case IDNO: ret = GTK_RESPONSE_NO; break;
@@ -639,6 +639,7 @@ gint win32_message_dialog_unsaved(const gchar *msg)
 
 	return ret;
 }
+
 
 /* Just a simple wrapper function to open a browser window */
 void win32_open_browser(const gchar *uri)
@@ -729,9 +730,9 @@ gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags fl
 	TCHAR  buffer[MAX_PATH]=TEXT("");
 	TCHAR  cmdline[MAX_PATH] = TEXT("");
 	TCHAR* lpPart[MAX_PATH]={NULL};
-	DWORD  retval=0;
+	DWORD  retval = 0;
 	gint argc = 0, i;
-	gint cmdpos=0;
+	gint cmdpos = 0;
 
 	SECURITY_ATTRIBUTES saAttr;
 	BOOL fSuccess;
@@ -959,10 +960,10 @@ static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline
 	gchar *expandedCmdline;
 
 	/* Set up members of the PROCESS_INFORMATION structure. */
-	ZeroMemory(&piProcInfo, sizeof(PROCESS_INFORMATION) );
+	ZeroMemory(&piProcInfo, sizeof(PROCESS_INFORMATION));
 
 	/* Set up members of the STARTUPINFO structure.*/
-	ZeroMemory(&siStartInfo, sizeof(STARTUPINFO) );
+	ZeroMemory(&siStartInfo, sizeof(STARTUPINFO));
 
 	siStartInfo.cb         = sizeof(STARTUPINFO);
 	siStartInfo.hStdError  = gw_spawn->hChildStderrWr;
@@ -1055,7 +1056,7 @@ static VOID ReadFromPipe(HANDLE hRead, HANDLE hWrite, HANDLE hFile, GError **err
 static HANDLE GetTempFileHandle(GError **error)
 {
 	/* Temp file */
-	DWORD dwBufSize=BUFSIZE;
+	DWORD dwBufSize = BUFSIZE;
 	UINT uRetVal;
 	TCHAR szTempName[BUFSIZE];
 	TCHAR lpPathBuffer[BUFSIZE];
@@ -1195,10 +1196,12 @@ gchar *win32_get_shortcut_target(const gchar *file_name)
 		return path;
 }
 
+
 void win32_set_working_directory(const gchar *dir)
 {
 	SetCurrentDirectory(dir);
 }
+
 
 gchar *win32_get_installation_dir(void)
 {
@@ -1208,5 +1211,6 @@ gchar *win32_get_installation_dir(void)
 	return g_win32_get_package_installation_directory(NULL, NULL);
 #endif
 }
+
 
 #endif

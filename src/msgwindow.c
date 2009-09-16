@@ -1061,6 +1061,7 @@ void msgwin_switch_tab(gint tabnum, gboolean show)
 		gtk_widget_grab_focus(widget);
 }
 
+
 /**
  *  Removes all messages from a tab specified by @a tabnum in the messages window.
  *

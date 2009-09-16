@@ -583,6 +583,7 @@ static void tb_editor_handler_start_element(GMarkupParseContext *context, const 
 	}
 }
 
+
 static const GMarkupParser tb_editor_xml_parser =
 {
 	tb_editor_handler_start_element, NULL, NULL, NULL, NULL

@@ -846,6 +846,7 @@ static gboolean treeviews_button_press_cb(GtkWidget *widget, GdkEventButton *eve
 	return FALSE;
 }
 
+
 static void documents_menu_update(GtkTreeSelection *selection)
 {
 	GtkTreeModel *model;

@@ -232,6 +232,7 @@ const gchar *encodings_get_charset(const GeanyEncoding* enc)
 	return enc->charset;
 }
 
+
 static GtkWidget *radio_items[GEANY_ENCODINGS_MAX];
 
 
@@ -636,7 +637,7 @@ GeanyEncodingIndex encodings_scan_unicode_bom(const gchar *string, gsize len, gu
 		if (bom_len)
 			*bom_len = 2;
 
-		if ((guchar)string[0]==0xfe && (guchar)string[1] == 0xff)
+		if ((guchar)string[0] == 0xfe && (guchar)string[1] == 0xff)
 		{
 			return GEANY_ENCODING_UTF_16BE; /* Big endian */
 		}

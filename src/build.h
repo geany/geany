@@ -68,7 +68,7 @@ typedef enum
  * Note this is a macro so that it can be used in static initialisers.
  **/
 #define GBO_TO_GBG(gbo) ((gbo)>GEANY_GBO_EXEC?GEANY_GBG_COUNT:((gbo)>=GEANY_GBO_EXEC?GEANY_GBG_EXEC: \
-						 ((gbo)>=GEANY_GBO_MAKE_ALL?GEANY_GBG_NON_FT:GEANY_GBG_FT)))
+						 ((gbo) >= GEANY_GBO_MAKE_ALL ? GEANY_GBG_NON_FT : GEANY_GBG_FT)))
 
 /** Convert @c GeanyBuildType to command index.
  *
@@ -82,7 +82,7 @@ typedef enum
  * Note this is a macro so that it can be used in static initialisers.
  **/
 #define GBO_TO_CMD(gbo) ((gbo)>=GEANY_GBO_COUNT?(gbo)-GEANY_GBO_COUNT:((gbo)>=GEANY_GBO_EXEC?(gbo)-GEANY_GBO_EXEC: \
-						 ((gbo)>=GEANY_GBO_MAKE_ALL?(gbo)-GEANY_GBO_MAKE_ALL:(gbo))))
+						 ((gbo) >= GEANY_GBO_MAKE_ALL ? (gbo)-GEANY_GBO_MAKE_ALL : (gbo))))
 
 enum GeanyBuildFixedMenuItems
 {

@@ -390,7 +390,7 @@ notebook_find_tab_num_at_pos(GtkNotebook *notebook, gint x, gint y)
 	GtkWidget *page;
 
 	/* deal with less than 2 pages */
-	switch(gtk_notebook_get_n_pages(notebook))
+	switch (gtk_notebook_get_n_pages(notebook))
 	{case 0: return -1; case 1: return 0;}
 
 	tab_pos = gtk_notebook_get_tab_pos(notebook); /* which edge */
@@ -412,9 +412,9 @@ notebook_find_tab_num_at_pos(GtkNotebook *notebook, gint x, gint y)
 		max_x = tab->allocation.x + tab->allocation.width - GTK_WIDGET(notebook)->allocation.x;
 		max_y = tab->allocation.y + tab->allocation.height - GTK_WIDGET(notebook)->allocation.y;
 
-		if (((tab_pos == GTK_POS_TOP) || (tab_pos == GTK_POS_BOTTOM)) && (x<=max_x))
+		if (((tab_pos == GTK_POS_TOP) || (tab_pos == GTK_POS_BOTTOM)) && (x <= max_x))
 			return page_num;
-		else if (((tab_pos == GTK_POS_LEFT) || (tab_pos == GTK_POS_RIGHT)) && (y<=max_y))
+		else if (((tab_pos == GTK_POS_LEFT) || (tab_pos == GTK_POS_RIGHT)) && (y <= max_y))
 			return page_num;
 
 		page_num++;

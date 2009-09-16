@@ -39,7 +39,7 @@
 #ifdef __GNUC__
 	#define br_return_val_if_fail(expr,val) if (!(expr)) {fprintf (stderr, "** BinReloc (%s): assertion %s failed\n", __PRETTY_FUNCTION__, #expr); return val;}
 #else
-	#define br_return_val_if_fail(expr,val) if (!(expr)) return val
+	#define br_return_val_if_fail(expr, val) if (!(expr)) return val
 #endif /* __GNUC__ */
 
 
@@ -58,6 +58,7 @@ br_free_last_value ()
     if (br_last_value)
         free (br_last_value);
 }
+
 
 /**
  * br_thread_local_store:
@@ -286,6 +287,7 @@ br_prepend_prefix (void *symbol, char *path)
 	free (tmp);
 	return newpath;
 }
+
 
 #else /* ENABLE_BINRELOC */
 

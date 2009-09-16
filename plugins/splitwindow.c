@@ -149,7 +149,7 @@ static void set_line_numbers(ScintillaObject * sci, gboolean set, gint extra_wid
 	}
 	else
 	{
-		scintilla_send_message(sci, SCI_SETMARGINWIDTHN, 0, 0 );
+		scintilla_send_message(sci, SCI_SETMARGINWIDTHN, 0, 0);
 	}
 }
 
