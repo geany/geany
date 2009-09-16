@@ -80,6 +80,7 @@ static gboolean on_key_release_event(GtkWidget *widget, GdkEventKey *event, gpoi
 
 static gboolean check_current_word(GeanyDocument *doc);
 static gboolean read_current_word(GeanyDocument *doc);
+static gchar *get_current_word_or_sel(GeanyDocument *doc);
 
 static void cb_func_file_action(guint key_id);
 static void cb_func_project_action(guint key_id);
@@ -1340,21 +1341,22 @@ static void cb_func_search_action(guint key_id)
 			on_find_document_usage1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_SEARCH_MARKALL:
-			if (sci_has_selection(sci))
-			{
-				gchar *text = sci_get_selection_contents(sci);
+		{
+			gchar *text = get_current_word_or_sel(doc);
 
+			if (sci_has_selection(sci))
 				search_mark_all(doc, text, SCFIND_MATCHCASE);
-				g_free(text);
-			}
 			else
 			{
-				read_current_word(doc);
-				search_mark_all(doc, editor_info.current_word, SCFIND_MATCHCASE | SCFIND_WHOLEWORD);
+				/* clears markers if text is null */
+				search_mark_all(doc, text, SCFIND_MATCHCASE | SCFIND_WHOLEWORD);
 			}
+			g_free(text);
 			break;
+		}
 	}
 }
+
 
 static void cb_func_menu_opencolorchooser(G_GNUC_UNUSED guint key_id)
 {
@@ -1478,6 +1480,17 @@ static gboolean check_current_word(GeanyDocument *doc)
 		return FALSE;
 	}
 	return TRUE;
+}
+
+
+static gchar *get_current_word_or_sel(GeanyDocument *doc)
+{
+	ScintillaObject *sci = doc->editor->sci;
+
+	if (sci_has_selection(sci))
+		return sci_get_selection_contents(sci);
+
+	return read_current_word(doc) ? g_strdup(editor_info.current_word) : NULL;
 }
 
 
@@ -1784,6 +1797,19 @@ static void cb_func_clipboard(guint key_id)
 }
 
 
+static void goto_tag(GeanyDocument *doc, gboolean definition)
+{
+	gchar *text = get_current_word_or_sel(doc);
+
+	if (text)
+		symbols_goto_tag(text, definition);
+	else
+		utils_beep();
+
+	g_free(text);
+}
+
+
 /* Common function for goto keybindings, useful even when sci doesn't have focus. */
 static void cb_func_goto_action(guint key_id)
 {
@@ -1837,12 +1863,10 @@ static void cb_func_goto_action(guint key_id)
 			return;
 		}
 		case GEANY_KEYS_GOTO_TAGDEFINITION:
-			if (check_current_word(doc))
-				symbols_goto_tag(editor_info.current_word, TRUE);
+			goto_tag(doc, TRUE);
 			return;
 		case GEANY_KEYS_GOTO_TAGDECLARATION:
-			if (check_current_word(doc))
-				symbols_goto_tag(editor_info.current_word, FALSE);
+			goto_tag(doc, FALSE);
 			return;
 	}
 	/* only check editor-sensitive keybindings when editor has focus */

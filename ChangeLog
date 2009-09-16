@@ -1,3 +1,11 @@
+2009-09-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c, src/callbacks.c, src/search.c:
+   Make Goto Tag commands use the current selection if present (useful
+   for selecting part of a tag or for ReST section names with spaces
+   in).
+
+
 2009-09-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * src/main.c:

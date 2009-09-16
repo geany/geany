@@ -1121,8 +1121,15 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
 
 	g_return_if_fail(doc != NULL);
 
-	sci_set_current_position(doc->editor->sci, editor_info.click_pos, FALSE);
-	symbols_goto_tag(editor_info.current_word, definition);
+	/* update cursor pos for navigating back afterwards */
+	if (!sci_has_selection(doc->editor->sci))
+		sci_set_current_position(doc->editor->sci, editor_info.click_pos, FALSE);
+
+	/* use the keybinding callback as it checks for selections as well as current word */
+	if (definition)
+		keybindings_send_command(GEANY_KEY_GROUP_GOTO, GEANY_KEYS_GOTO_TAGDEFINITION);
+	else
+		keybindings_send_command(GEANY_KEY_GROUP_GOTO, GEANY_KEYS_GOTO_TAGDECLARATION);
 }
 
 

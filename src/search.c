@@ -959,7 +959,8 @@ on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user
 }
 
 
-/* @return Number of matches marked. */
+/* Clears markers if text is null/empty.
+ * @return Number of matches marked. */
 gint search_mark_all(GeanyDocument *doc, const gchar *search_text, gint flags)
 {
 	gint pos, count = 0;
