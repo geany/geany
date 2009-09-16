@@ -98,7 +98,6 @@ CommandLineOptions cl_options;	/* fields initialised in parse_command_line_optio
 static gboolean want_plugins;
 
 /* command-line options */
-static gboolean debug_mode = FALSE;
 static gboolean verbose_mode = FALSE;
 static gboolean ignore_global_tags = FALSE;
 static gboolean no_msgwin = FALSE;
