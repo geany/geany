@@ -547,6 +547,9 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 	cairo_move_to(cr, 0, 0);
 
 	pango_layout_set_width(dinfo->layout, width * PANGO_SCALE);
+	pango_layout_set_alignment(dinfo->layout, PANGO_ALIGN_LEFT);
+	pango_layout_set_ellipsize(dinfo->layout, FALSE);
+	pango_layout_set_justify(dinfo->layout, FALSE);
 
 	if (printing_prefs.print_page_header)
 		add_page_header(dinfo->layout, cr, dinfo, width, page_nr);
