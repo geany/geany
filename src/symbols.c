@@ -1238,10 +1238,10 @@ static gint tree_sort_func(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
 
 static void sort_tree(GtkTreeStore *store, gboolean sort_by_name)
 {
-	gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(store), 1, tree_sort_func,
+	gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(store), SYMBOLS_COLUMN_NAME, tree_sort_func,
 		GINT_TO_POINTER(sort_by_name), NULL);
 
-	gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(store), 1, GTK_SORT_ASCENDING);
+	gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(store), SYMBOLS_COLUMN_NAME, GTK_SORT_ASCENDING);
 }
 
 
