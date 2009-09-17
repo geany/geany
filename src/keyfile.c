@@ -483,10 +483,7 @@ static void save_ui_prefs(GKeyFile *config)
 				gtk_paned_get_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned1"))));
 		g_key_file_set_integer(config, PACKAGE, "msgwindow_position",
 				gtk_paned_get_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "vpaned1"))));
-	}
 
-	if (prefs.save_winpos)
-	{
 		gtk_window_get_position(GTK_WINDOW(main_widgets.window), &ui_prefs.geometry[0], &ui_prefs.geometry[1]);
 		gtk_window_get_size(GTK_WINDOW(main_widgets.window), &ui_prefs.geometry[2], &ui_prefs.geometry[3]);
 		if (gdk_window_get_state(main_widgets.window->window) & GDK_WINDOW_STATE_MAXIMIZED)

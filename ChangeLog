@@ -5,6 +5,8 @@
    disabled (closes #2856822).
    Plug a small memory leak and improve function signature of
    add_page_header().
+ * src/keyfile.c:
+   Save an if expression.
 
 
 2009-09-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
