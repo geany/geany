@@ -3,6 +3,8 @@
  * src/printing.c:
    Fix wrong alignment of printed pages when page headers are
    disabled (closes #2856822).
+   Plug a small memory leak and improve function signature of
+   add_page_header().
 
 
 2009-09-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
