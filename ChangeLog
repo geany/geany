@@ -3,6 +3,9 @@
  * plugins/filebrowser.c:
    Free file list memory whilst iterating the list.
    Minor formatting fixes.
+ * src/utils.c, src/utils.h:
+   Add foreach_dir() API macro.
+   Update API docs for utils_get_file_list().
 
 
 2009-09-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

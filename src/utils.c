@@ -1342,23 +1342,30 @@ gint utils_mkdir(const gchar *path, gboolean create_parent_dirs)
 
 
 /**
- *  Gets a sorted list of files from the specified directory.
- *  Locale encoding is expected for path and used for the file list. The list and the data
- *  in the list should be freed after use.
+ * Gets a sorted list of files from the specified directory.
+ * Locale encoding is expected for @a path and used for the file list. The list and the data
+ * in the list should be freed after use, e.g.:
+ * @code
+ * g_slist_foreach(list, (GFunc) g_free, NULL);
+ * g_slist_free(list); @endcode
  *
- *  @param path The path of the directory to scan, in locale encoding.
- *  @param length The location to store the number of non-@c NULL data items in the list,
- *                unless @c NULL.
- *  @param error The is the location for storing a possible error, or @c NULL.
+ * @note If you don't want sorted filenames you should use the foreach_dir() macro instead -
+ * it's more efficient and perhaps easier to use than freeing the list and its contents.
  *
- *  @return A newly allocated list or @c NULL if no files found. The list and its data should be
- *          freed when no longer needed.
+ * @param path The path of the directory to scan, in locale encoding.
+ * @param length The location to store the number of non-@c NULL data items in the list,
+ *               unless @c NULL.
+ * @param error The location for storing a possible error, or @c NULL.
+ *
+ * @return A newly allocated list or @c NULL if no files found. The list and its data should be
+ *         freed when no longer needed.
  **/
 GSList *utils_get_file_list(const gchar *path, guint *length, GError **error)
 {
 	GSList *list = NULL;
 	guint len = 0;
 	GDir *dir;
+	const gchar *filename;
 
 	if (error)
 		*error = NULL;
@@ -1370,12 +1377,8 @@ GSList *utils_get_file_list(const gchar *path, guint *length, GError **error)
 	if (dir == NULL)
 		return NULL;
 
-	while (1)
+	foreach_dir(filename, dir)
 	{
-		const gchar *filename = g_dir_read_name(dir);
-		if (filename == NULL)
-			break;
-
 		list = g_slist_insert_sorted(list, g_strdup(filename), (GCompareFunc) utils_str_casecmp);
 		len++;
 	}

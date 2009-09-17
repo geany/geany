@@ -91,6 +91,14 @@
 #define foreach_slist(node, list) \
 	foreach_list(node, list)
 
+/** Iterates through each unsorted filename in a @c GDir.
+ * @param filename (@c const @c gchar*) locale-encoded filename, without path. Do not modify or free.
+ * @param dir @c GDir created with @c g_dir_open(). Call @c g_dir_close() afterwards.
+ * @see utils_get_file_list() if you want a sorted list.
+ * @since Geany 0.19. */
+#define foreach_dir(filename, dir)\
+	for ((filename) = g_dir_read_name(dir); (filename) != NULL; (filename) = g_dir_read_name(dir))
+
 
 void utils_open_browser(const gchar *uri);
 
