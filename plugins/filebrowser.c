@@ -131,7 +131,7 @@ static gboolean check_hidden(const gchar *base_name)
 }
 
 
-/* Returns: whether name has been removed by filter. */
+/* Returns: whether filename should be removed. */
 static gboolean check_filtered(const gchar *base_name)
 {
 	if (filter == NULL)
@@ -141,7 +141,6 @@ static gboolean check_filtered(const gchar *base_name)
 	{
 		return TRUE;
 	}
-
 	return FALSE;
 }
 
@@ -184,8 +183,6 @@ static void add_item(const gchar *name)
 		}
 		gtk_list_store_append(file_store, &iter);
 	}
-
-
 	gtk_list_store_set(file_store, &iter,
 		FILEVIEW_COLUMN_ICON, (dir) ? GTK_STOCK_DIRECTORY : GTK_STOCK_FILE,
 		FILEVIEW_COLUMN_NAME, utf8_name,
@@ -252,11 +249,22 @@ static void refresh(void)
 	list = utils_get_file_list(current_dir, NULL, NULL);
 	if (list != NULL)
 	{
-		g_slist_foreach(list, (GFunc) add_item, NULL);
-		g_slist_foreach(list, (GFunc) g_free, NULL);
-		g_slist_free(list);
+		GSList *node;
+
+		/* free filenames & nodes as we go through the list */
+		for (node = list; node != NULL;)
+		{
+			gchar *fname = node->data;
+			GSList *old;
+
+			add_item(fname);
+			g_free(fname);
+			old = node;
+			node = node->next;
+			g_slist_free_1(old);
+		}
 	}
-   	gtk_entry_completion_set_model(entry_completion, GTK_TREE_MODEL(file_store));
+	gtk_entry_completion_set_model(entry_completion, GTK_TREE_MODEL(file_store));
 }
 
 
@@ -722,10 +730,10 @@ static void prepare_file_view(void)
 	icon_renderer = gtk_cell_renderer_pixbuf_new();
 	text_renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new();
-    gtk_tree_view_column_pack_start(column, icon_renderer, FALSE);
-  	gtk_tree_view_column_set_attributes(column, icon_renderer, "stock-id", FILEVIEW_COLUMN_ICON, NULL);
-    gtk_tree_view_column_pack_start(column, text_renderer, TRUE);
-  	gtk_tree_view_column_set_attributes(column, text_renderer, "text", FILEVIEW_COLUMN_NAME, NULL);
+	gtk_tree_view_column_pack_start(column, icon_renderer, FALSE);
+	gtk_tree_view_column_set_attributes(column, icon_renderer, "stock-id", FILEVIEW_COLUMN_ICON, NULL);
+	gtk_tree_view_column_pack_start(column, text_renderer, TRUE);
+	gtk_tree_view_column_set_attributes(column, text_renderer, "text", FILEVIEW_COLUMN_NAME, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(file_view), column);
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(file_view), FALSE);
 

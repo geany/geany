@@ -1,3 +1,10 @@
+2009-09-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * plugins/filebrowser.c:
+   Free file list memory whilst iterating the list.
+   Minor formatting fixes.
+
+
 2009-09-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keybindings.c, src/callbacks.c, src/search.c:
