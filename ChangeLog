@@ -6,6 +6,11 @@
  * src/utils.c, src/utils.h:
    Add foreach_dir() API macro.
    Update API docs for utils_get_file_list().
+ * wscript, src/queue.c, src/editor.c, src/Makefile.am, src/queue.h,
+   po/POTFILES.in:
+   Remove queue.[hc] - use GQueue instead of GeanyQueue.
+   Beep if there are no more snippet positions.
+   Limit length of snippet positions queue to 20.
 
 
 2009-09-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

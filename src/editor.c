@@ -59,7 +59,6 @@
 #include "keybindings.h"
 #include "project.h"
 #include "projectprivate.h"
-#include "queue.h"
 
 
 /* Note: Avoid using SSM in files not related to scintilla, use sciwrappers.h instead. */
@@ -67,7 +66,7 @@
 
 
 static GHashTable *snippet_hash = NULL;
-static GeanyQueue *snippet_queue = NULL;
+static GQueue *snippet_offsets = NULL;
 static gint snippet_cursor_insert_pos;
 
 /* holds word under the mouse or keyboard cursor */
@@ -107,7 +106,7 @@ static void editor_auto_latex(GeanyEditor *editor, gint pos);
 void editor_snippets_free(void)
 {
 	g_hash_table_destroy(snippet_hash);
-	queue_destroy(snippet_queue);
+	g_queue_free(snippet_offsets);
 }
 
 
@@ -122,7 +121,7 @@ void editor_snippets_init(void)
 	GKeyFile *userconfig = g_key_file_new();
 	GHashTable *tmp;
 
-	snippet_queue = queue_init();
+	snippet_offsets = g_queue_new();
 
 	sysconfigfile = g_strconcat(app->datadir, G_DIR_SEPARATOR_S, "snippets.conf", NULL);
 	userconfigfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "snippets.conf", NULL);
@@ -2173,17 +2172,21 @@ void editor_goto_next_snippet_cursor(GeanyEditor *editor)
 	ScintillaObject *sci = editor->sci;
 	gint current_pos = sci_get_current_position(sci);
 
-	if (snippet_queue)
+	if (snippet_offsets && !g_queue_is_empty(snippet_offsets))
 	{
 		gint offset;
 
-		snippet_queue = queue_delete(snippet_queue, (gpointer*)&offset, FALSE);
+		offset = (gint)g_queue_pop_head(snippet_offsets);
 		if (current_pos > snippet_cursor_insert_pos)
 			snippet_cursor_insert_pos = offset + current_pos;
 		else
 			snippet_cursor_insert_pos += offset;
 
 		sci_set_current_position(sci, snippet_cursor_insert_pos, FALSE);
+	}
+	else
+	{
+		utils_beep();
 	}
 }
 
@@ -2197,7 +2200,7 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 	gssize cur_index = -1;
 	gint ft_id = FILETYPE_ID(editor->document->file_type);
 	GHashTable *specials;
-	GeanyQueue *temp_list;
+	GList *temp_list = NULL;
 	const GeanyIndentPrefs *iprefs;
 	gsize indent_size;
 	gint cursor_steps, old_cursor = 0;
@@ -2212,7 +2215,6 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 		return FALSE;
 	}
 
-	temp_list = queue_init();
 	iprefs = editor_get_indent_prefs(editor);
 	read_indent(editor, pos);
 	indent_size = strlen(indent);
@@ -2282,7 +2284,7 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 		if (i++ > 0)
 		{
 			cursor_steps += (nl_count * indent_size);
-			queue_append(temp_list, GINT_TO_POINTER(cursor_steps - old_cursor));
+			temp_list = g_list_append(temp_list, GINT_TO_POINTER(cursor_steps - old_cursor));
 		}
 		else
 		{
@@ -2295,10 +2297,22 @@ static gboolean snippets_complete_constructs(GeanyEditor *editor, gint pos, cons
 	utils_string_replace_all(pattern, "%newline%", editor_get_eol_char(editor));
 	utils_string_replace_all(pattern, "%ws%", whitespace);
 	g_free(whitespace);
-	/* We create a new list, where the cursor positions for the most recent
-	 * parsed snipped come first, followed by the remaining positions */
-	if (temp_list->data)
-		snippet_queue = queue_concat_copy(temp_list, snippet_queue);
+	/* We put the cursor positions for the most recent
+	 * parsed snippet first, followed by any remaining positions */
+	i = 0;
+	if (temp_list)
+	{
+		GList *node;
+
+		foreach_list(node, temp_list)
+			g_queue_push_nth(snippet_offsets, node->data, i++);
+
+		/* limit length of queue */
+		while (g_queue_get_length(snippet_offsets) > 20)
+			g_queue_pop_tail(snippet_offsets);
+
+		g_list_free(temp_list);
+	}
 	if (cur_index < 0)
 		cur_index = pattern->len;
 
