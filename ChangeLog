@@ -7,6 +7,9 @@
    add_page_header().
  * src/keyfile.c:
    Save an if expression.
+ * src/ui_utils.c:
+   After clearing a text field using the embedded clear icon, put the
+   input focus into this text field.
 
 
 2009-09-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

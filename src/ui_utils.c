@@ -1324,6 +1324,7 @@ static void entry_clear_icon_release_cb(GtkEntry *entry, gint icon_pos,
 	if (event->button.button == 1 && icon_pos == 1)
 	{
 		gtk_entry_set_text(entry, "");
+		gtk_widget_grab_focus(GTK_WIDGET(entry));
 	}
 }
 
