@@ -3,10 +3,7 @@
 # This script creates a "configure" script and a Makefile to imitate autotools
 # but Waf is actually used to build
 
-WAF="waf"
-(waf --version) < /dev/null > /dev/null 2>&1 || {
-    WAF="./waf"
-}
+WAF="./waf"
 
 # Makefile
 cat > Makefile << EOF
