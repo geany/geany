@@ -391,6 +391,17 @@ static void init_builtin_filetypes(void)
 	ft->comment_close = NULL;
 	ft->group = GEANY_FILETYPE_GROUP_MISC;
 
+#define ABC
+	ft = filetypes[GEANY_FILETYPES_ABC];
+	ft->lang = 38;
+	ft->name = g_strdup("Abc");
+	filetype_make_title(ft, TITLE_SOURCE_FILE);
+	ft->extension = g_strdup("abc");
+	ft->pattern = utils_strv_new("*.abc", "*.abp", NULL);
+	ft->comment_open = NULL;
+	ft->comment_close = NULL;
+	ft->group = GEANY_FILETYPE_GROUP_MISC;
+
 #define SH
 	ft = filetypes[GEANY_FILETYPES_SH];
 	ft->lang = 16;

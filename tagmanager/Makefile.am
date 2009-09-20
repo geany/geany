@@ -34,6 +34,7 @@ libtagmanager_a_SOURCES =\
 	strlist.h\
 	args.c\
 	args.h\
+	abc.c\
 	basic.c\
 	c.c\
 	conf.c\

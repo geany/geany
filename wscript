@@ -61,7 +61,7 @@ blddir = '_build_'
 
 
 tagmanager_sources = [
-	'tagmanager/args.c', 'tagmanager/actionscript.c', 'tagmanager/asm.c',
+	'tagmanager/args.c', 'tagmanager/abc.c', 'tagmanager/actionscript.c', 'tagmanager/asm.c',
 	'tagmanager/basic.c', 'tagmanager/c.c',
 	'tagmanager/conf.c', 'tagmanager/css.c', 'tagmanager/ctags.c', 'tagmanager/diff.c',
 	'tagmanager/docbook.c', 'tagmanager/entry.c', 'tagmanager/fortran.c', 'tagmanager/get.c',
