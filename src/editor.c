@@ -2176,7 +2176,7 @@ void editor_goto_next_snippet_cursor(GeanyEditor *editor)
 	{
 		gint offset;
 
-		offset = (gint)g_queue_pop_head(snippet_offsets);
+		offset = GPOINTER_TO_INT(g_queue_pop_head(snippet_offsets));
 		if (current_pos > snippet_cursor_insert_pos)
 			snippet_cursor_insert_pos = offset + current_pos;
 		else
