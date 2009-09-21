@@ -2913,7 +2913,7 @@ static gboolean monitor_reload_file(GeanyDocument *doc)
 		base_name);
 
 	if (want_reload)
-		document_reload_file(doc, NULL);
+		document_reload_file(doc, doc->encoding);
 
 	g_free(base_name);
 	return want_reload;
