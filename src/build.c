@@ -1731,9 +1731,11 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gin
 	roww->dst = dst;
 	for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
 	{
+		gint xflags = (i == GEANY_BC_COMMAND) ? GTK_FILL | GTK_EXPAND : GTK_FILL;
+
 		column += 1;
 		roww->entries[i] = gtk_entry_new();
-		gtk_table_attach(table, roww->entries[i], column, column + 1, row, row + 1, GTK_FILL,
+		gtk_table_attach(table, roww->entries[i], column, column + 1, row, row + 1, xflags,
 			GTK_FILL | GTK_EXPAND, entry_x_padding, entry_y_padding);
 	}
 	column++;
