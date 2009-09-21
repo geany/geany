@@ -1786,6 +1786,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, TableD
 	gint			 col, row, cmdindex, cmd;
 	gint			 src;
 	gboolean		 sensitivity;
+	gint sep_padding = entry_y_padding + 3;
 
 	table = GTK_TABLE(gtk_table_new(build_items_count + 12, 5, FALSE));
 	fields = g_new0(TableFields, 1);
@@ -1798,10 +1799,10 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, TableD
 	}
 	sep = gtk_hseparator_new();
 	gtk_table_attach(table, sep, 0, DC_N_COL, 1, 2, GTK_FILL, GTK_FILL | GTK_EXPAND,
-		entry_x_padding, entry_y_padding);
+		entry_x_padding, sep_padding);
 	if (ft != NULL)
 	{
-		txt = g_strdup_printf(_("%s commands"), ft->title);
+		txt = g_strdup_printf(_("%s Commands"), ft->title);
 	}
 	else
 		txt = g_strdup(_("No Filetype"));
@@ -1812,7 +1813,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, TableD
 		entry_x_padding, entry_y_padding);
 	for (row = 3, cmdindex = 0, cmd = 0; cmd < build_groups_count[GEANY_GBG_FT]; ++row, ++cmdindex, ++cmd)
 		fields->rows[cmdindex] = build_add_dialog_row(doc, table, row, dst, GEANY_GBG_FT, cmd, FALSE);
-	label = gtk_label_new(_("Error Regular Expression"));
+	label = gtk_label_new(_("Error Regular Expression:"));
 	gtk_table_attach(table, label, 0, DC_ENTRIES + 1, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, entry_y_padding);
 	fields->fileregex = gtk_entry_new();
@@ -1838,7 +1839,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, TableD
 	++row;
 	sep = gtk_hseparator_new();
 	gtk_table_attach(table, sep, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
-		entry_x_padding, entry_y_padding);
+		entry_x_padding, sep_padding);
 	++row;
 	label = gtk_label_new(_("Non Filetype Commands"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
@@ -1847,7 +1848,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, TableD
 	for (++row, cmd = 0; cmd < build_groups_count[GEANY_GBG_NON_FT]; ++row, ++cmdindex, ++cmd)
 		fields->rows[cmdindex] = build_add_dialog_row(
 			doc, table, row, dst, GEANY_GBG_NON_FT, cmd, TRUE);
-	label = gtk_label_new(_("Error Regular Expression"));
+	label = gtk_label_new(_("Error Regular Expression:"));
 	gtk_table_attach(table, label, 0, DC_ENTRIES + 1, row, row + 1, GTK_FILL,
 		GTK_FILL | GTK_EXPAND, entry_x_padding, entry_y_padding);
 	fields->nonfileregex = gtk_entry_new();
@@ -1877,7 +1878,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, TableD
 	++row;
 	sep = gtk_hseparator_new();
 	gtk_table_attach(table, sep, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
-		entry_x_padding, entry_y_padding);
+		entry_x_padding, sep_padding);
 	++row;
 	label = gtk_label_new(_("Execute Commands"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
@@ -1887,11 +1888,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, TableD
 		fields->rows[cmdindex] = build_add_dialog_row(doc, table, row, dst, GEANY_GBG_EXEC, cmd, TRUE);
 	sep = gtk_hseparator_new();
 	gtk_table_attach(table, sep, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
-		entry_x_padding, entry_y_padding);
-	++row;
-	sep = gtk_hseparator_new();
-	gtk_table_attach(table, sep, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
-		entry_x_padding, entry_y_padding);
+		entry_x_padding, sep_padding);
 	++row;
 	label = gtk_label_new(
 		_("%d, %e, %f, %p are substituted in command and directory fields, see manual for details."));
