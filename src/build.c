@@ -1776,6 +1776,19 @@ typedef struct TableFields
 } TableFields;
 
 
+static GtkWidget *ui_label_new_bold(const gchar *text)
+{
+	GtkWidget *wid;
+	gchar *str = g_strdup_printf("<b>%s</b>", text);
+
+	wid = gtk_label_new(str);
+	g_free(str);
+
+	gtk_label_set_use_markup(GTK_LABEL(wid), TRUE);
+	return wid;
+}
+
+
 GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, TableData *table_data,
 								GeanyFiletype *ft)
 {
@@ -1800,13 +1813,11 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, TableD
 	sep = gtk_hseparator_new();
 	gtk_table_attach(table, sep, 0, DC_N_COL, 1, 2, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, sep_padding);
-	if (ft != NULL)
-	{
+	if (ft->id != GEANY_FILETYPES_NONE)
 		txt = g_strdup_printf(_("%s Commands"), ft->title);
-	}
 	else
-		txt = g_strdup(_("No Filetype"));
-	label = gtk_label_new(txt);
+		txt = g_strdup_printf(_("%s Commands"), _("No Filetype"));
+	label = ui_label_new_bold(txt);
 	g_free(txt);
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
 	gtk_table_attach(table, label, 0, DC_N_COL, 2, 3, GTK_FILL, GTK_FILL | GTK_EXPAND,
@@ -1841,7 +1852,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, TableD
 	gtk_table_attach(table, sep, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, sep_padding);
 	++row;
-	label = gtk_label_new(_("Non Filetype Commands"));
+	label = ui_label_new_bold(_("Non-Filetype Commands"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
 	gtk_table_attach(table, label, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, entry_y_padding);
@@ -1880,7 +1891,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, TableD
 	gtk_table_attach(table, sep, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, sep_padding);
 	++row;
-	label = gtk_label_new(_("Execute Commands"));
+	label = ui_label_new_bold(_("Execute Commands"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
 	gtk_table_attach(table, label, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, entry_y_padding);
