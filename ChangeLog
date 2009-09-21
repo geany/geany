@@ -1,3 +1,9 @@
+2009-09-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/build.c:
+   Fix compiler warnings about uninitialised variables.
+
+
 2009-09-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/utils.c:

@@ -1381,7 +1381,7 @@ void build_menu_update(GeanyDocument *doc)
 	gint i, cmdcount, cmd, grp;
 	gboolean vis = FALSE;
 	gboolean have_path, build_running, exec_running, have_errors, cmd_sensitivity;
-	gboolean can_compile, can_make, run_sensitivity, run_running;
+	gboolean can_compile, can_make, run_sensitivity = FALSE, run_running = FALSE;
 	GeanyBuildCommand *bc;
 
 	if (menu_items.menu == NULL)
