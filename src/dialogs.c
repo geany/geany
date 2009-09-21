@@ -853,14 +853,14 @@ static void add_input_widgets(GtkWidget *dialog, GtkWidget *vbox,
 		GtkWidget *combo = gtk_combo_box_entry_new_text();
 
 		entry = GTK_BIN(combo)->child;
-		ui_entry_add_clear_icon(entry);
+		ui_entry_add_clear_icon(GTK_ENTRY(entry));
 		g_object_set_data(G_OBJECT(dialog), "combo", combo);
 		gtk_container_add(GTK_CONTAINER(vbox), combo);
 	}
 	else
 	{
 		entry = gtk_entry_new();
-		ui_entry_add_clear_icon(entry);
+		ui_entry_add_clear_icon(GTK_ENTRY(entry));
 		gtk_container_add(GTK_CONTAINER(vbox), entry);
 	}
 
@@ -949,7 +949,7 @@ gboolean dialogs_show_input_numeric(const gchar *title, const gchar *label_text,
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 
 	spin = gtk_spin_button_new_with_range(min, max, step);
-	ui_entry_add_clear_icon(spin);
+	ui_entry_add_clear_icon(GTK_ENTRY(spin));
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin), *value);
 	g_signal_connect(spin, "activate", G_CALLBACK(on_input_numeric_activate), dialog);
 

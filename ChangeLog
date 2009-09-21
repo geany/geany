@@ -16,6 +16,10 @@
  * src/build.c, src/ui_utils.h, src/dialogs.c, src/notebook.c,
    src/ui_utils.c:
    Add & use ui_label_set_markup(), ui_label_new_bold().
+ * src/ui_utils.h, src/printing.c, src/tools.c, src/project.c,
+   src/prefs.c, src/dialogs.c, src/geanyentryaction.c,
+   src/plugindata.h, src/vte.c, src/search.c, src/ui_utils.c:
+   Make ui_entry_add_clear_icon() take a GtkEntry, not GtkWidget.
 
 
 2009-09-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

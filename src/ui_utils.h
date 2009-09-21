@@ -196,7 +196,7 @@ GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name);
 
 void ui_widget_set_sensitive(GtkWidget *widget, gboolean set);
 
-void ui_entry_add_clear_icon(GtkWidget *entry);
+void ui_entry_add_clear_icon(GtkEntry *entry);
 
 
 #define ui_label_new_bold(text)\

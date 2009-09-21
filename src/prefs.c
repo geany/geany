@@ -1549,25 +1549,32 @@ void prefs_show_dialog(void)
 			"label_project_indent_warning")), label, FALSE, TRUE, 5);
 
 		/* add the clear icon to GtkEntry widgets in the dialog */
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "startup_path_entry"));
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "project_file_path_entry"));
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "extra_plugin_path_entry"));
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_toggle_mark"));
-	/*	ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_make")); */
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_term"));
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_browser"));
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_grep"));
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction"));
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_developer"));
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_initial"));
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_mail"));
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_company"));
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_version"));
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_year"));
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_date"));
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_datetime"));
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_print_external_cmd"));
-		ui_entry_add_clear_icon(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_print_dateformat"));
+		{
+			const gchar *names[] = {
+				"startup_path_entry",
+				"project_file_path_entry",
+				"extra_plugin_path_entry",
+				"entry_toggle_mark",
+			/*	"entry_com_make", */
+				"entry_com_term",
+				"entry_browser",
+				"entry_grep",
+				"entry_contextaction",
+				"entry_template_developer",
+				"entry_template_initial",
+				"entry_template_mail",
+				"entry_template_company",
+				"entry_template_version",
+				"entry_template_year",
+				"entry_template_date",
+				"entry_template_datetime",
+				"entry_print_external_cmd",
+				"entry_print_dateformat"};
+			const gchar **name;
+
+			foreach_c_array(name, names, G_N_ELEMENTS(names))
+				ui_entry_add_clear_icon(GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, *name)));
+		}
 
 #ifdef HAVE_VTE
 		vte_append_preferences_tab();

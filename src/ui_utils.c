@@ -1336,7 +1336,7 @@ static void entry_clear_icon_release_cb(GtkEntry *entry, gint icon_pos,
  *
  *  @since 0.16
  */
-void ui_entry_add_clear_icon(GtkWidget *entry)
+void ui_entry_add_clear_icon(GtkEntry *entry)
 {
 	if (gtk_check_version(2, 15, 2) == NULL)
 	{

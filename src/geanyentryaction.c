@@ -65,7 +65,7 @@ static GtkWidget *geany_entry_action_create_tool_item(GtkAction *action)
 	if (priv->numeric)
 		gtk_entry_set_width_chars(GTK_ENTRY(priv->entry), 9);
 
-	ui_entry_add_clear_icon(priv->entry);
+	ui_entry_add_clear_icon(GTK_ENTRY(priv->entry));
 
 	gtk_widget_show(priv->entry);
 
