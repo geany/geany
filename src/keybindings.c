@@ -1833,8 +1833,16 @@ static void cb_func_goto_action(guint key_id)
 			navqueue_go_forward();
 			return;
 		case GEANY_KEYS_GOTO_LINE:
-			on_go_to_line_activate(NULL, NULL);
+		{
+			GtkWidget *wid = toolbar_get_widget_child_by_name("GotoEntry");
+
+			/* use toolbar item if shown */
+			if (wid)
+				gtk_widget_grab_focus(wid);
+			else
+				on_go_to_line_activate(NULL, NULL);
 			return;
+		}
 		case GEANY_KEYS_GOTO_MATCHINGBRACE:
 			goto_matching_brace(doc);
 			return;
