@@ -5,6 +5,8 @@
  * src/callbacks.c, src/document.c:
    When reloading files, use the previously set encoding instead of
    detecting it again (closes #2862041).
+ * configure.in:
+   Turn on automake silent rules if supported.
 
 
 2009-09-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

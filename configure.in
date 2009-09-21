@@ -4,6 +4,8 @@ dnl $Id$
 AC_INIT(configure.in)
 AM_INIT_AUTOMAKE(geany, 0.19)
 
+m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
+
 AM_CONFIG_HEADER(config.h)
 
 AC_GNU_SOURCE
