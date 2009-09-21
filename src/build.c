@@ -1776,19 +1776,6 @@ typedef struct TableFields
 } TableFields;
 
 
-static GtkWidget *ui_label_new_bold(const gchar *text)
-{
-	GtkWidget *wid;
-	gchar *str = g_strdup_printf("<b>%s</b>", text);
-
-	wid = gtk_label_new(str);
-	g_free(str);
-
-	gtk_label_set_use_markup(GTK_LABEL(wid), TRUE);
-	return wid;
-}
-
-
 GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, TableData *table_data,
 								GeanyFiletype *ft)
 {

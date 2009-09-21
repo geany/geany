@@ -1049,8 +1049,7 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 
 	gtk_window_set_default_size(GTK_WINDOW(dialog), 300, -1);
 
-	title = g_strdup_printf("<b>%s</b>", base_name);
-	label = gtk_label_new(title);
+	label = ui_label_new_bold(base_name);
 	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
 	image = gtk_image_new_from_stock("gtk-file", GTK_ICON_SIZE_BUTTON);
@@ -1060,7 +1059,6 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 	gtk_container_add(GTK_CONTAINER(hbox), image);
 	gtk_container_add(GTK_CONTAINER(hbox), label);
 	gtk_container_add(GTK_CONTAINER(vbox), hbox);
-	g_free(title);
 
 	table = gtk_table_new(8, 2, FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table), 10);

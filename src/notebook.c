@@ -227,10 +227,8 @@ static GtkMenu *get_tab_bar_popup_menu(void)
 		gtk_widget_modify_fg(menu_item_label, GTK_STATE_ACTIVE, color);
 
 		if (doc == current_doc)
-		{
-			setptr(base_name, g_strconcat("<b>", base_name, "</b>", NULL));
-			gtk_label_set_markup(GTK_LABEL(menu_item_label), base_name);
-		}
+			ui_label_set_markup(GTK_LABEL(menu_item_label), "<b>%s</b>", base_name);
+
 		g_free(base_name);
 	}
 	menu_item = gtk_separator_menu_item_new();

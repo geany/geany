@@ -13,6 +13,9 @@
  * src/build.c:
    Fix none filetype Build Commands dialog label.
    Make group labels bold.
+ * src/build.c, src/ui_utils.h, src/dialogs.c, src/notebook.c,
+   src/ui_utils.c:
+   Add & use ui_label_set_markup(), ui_label_new_bold().
 
 
 2009-09-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

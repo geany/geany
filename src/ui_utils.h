@@ -198,6 +198,12 @@ void ui_widget_set_sensitive(GtkWidget *widget, gboolean set);
 
 void ui_entry_add_clear_icon(GtkWidget *entry);
 
+
+#define ui_label_new_bold(text)\
+	ui_label_set_markup(GTK_LABEL(gtk_label_new(NULL)), "<b>%s</b>", text);
+
+GtkWidget *ui_label_set_markup(GtkLabel *label, const gchar *format, ...) G_GNUC_PRINTF(2, 3);
+
 /* End of general widget functions */
 
 

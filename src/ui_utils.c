@@ -1238,20 +1238,16 @@ void ui_update_view_editor_menu_items(void)
 GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alignment)
 {
 	GtkWidget *label, *align;
-	GtkWidget *frame = gtk_frame_new (NULL);
-	gchar *label_markup;
+	GtkWidget *frame = gtk_frame_new(NULL);
 
-	gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
+	gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_NONE);
 
-	align = gtk_alignment_new (0.5, 0.5, 1, 1);
-	gtk_container_add (GTK_CONTAINER (frame), align);
-	gtk_alignment_set_padding (GTK_ALIGNMENT (align), 0, 0, 12, 0);
+	align = gtk_alignment_new(0.5, 0.5, 1, 1);
+	gtk_container_add(GTK_CONTAINER(frame), align);
+	gtk_alignment_set_padding(GTK_ALIGNMENT(align), 0, 0, 12, 0);
 
-	label_markup = g_strconcat("<b>", label_text, "</b>", NULL);
-	label = gtk_label_new (label_markup);
-	gtk_frame_set_label_widget (GTK_FRAME (frame), label);
-	gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-	g_free(label_markup);
+	label = ui_label_new_bold(label_text);
+	gtk_frame_set_label_widget(GTK_FRAME(frame), label);
 
 	*alignment = align;
 	return frame;
@@ -2087,4 +2083,22 @@ void ui_menu_sort_by_label(GtkMenu *menu)
 	}
 	g_list_free(list);
 }
+
+
+/* return value is for macros */
+GtkWidget *ui_label_set_markup(GtkLabel *label, const gchar *format, ...)
+{
+	va_list a;
+	gchar *text;
+
+	va_start(a, format);
+	text = g_strdup_vprintf(format, a);
+	va_end(a);
+
+	gtk_label_set_text(label, text);
+	gtk_label_set_use_markup(label, TRUE);
+	g_free(text);
+	return GTK_WIDGET(label);
+}
+
 
