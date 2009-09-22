@@ -363,7 +363,7 @@ Startup
 
 At startup, Geany loads all files from the last time Geany was
 launched. You can disable this feature in the preferences dialog
-(see `General Startup tab in preferences dialog`_). If you specify some
+(see `General Startup preferences`_). If you specify some
 files on the command line, only these files will be opened, but you
 can find the files from the last session in the file menu under the
 "Recent files" item. By default this contains the last 10 recently
@@ -700,7 +700,7 @@ Indentation
 
 Geany allows each document to indent either with a tab character or
 multiple spaces. The default indent mode is set in the `Editor Features
-tab in preferences dialog`_ (see the link for more information). But
+preferences`_ (see the link for more information). But
 this can be overridden using either the *Document->Indent Type* menu,
 or by using the *Detect from file* indentation preference. When enabled,
 this scans each file that is opened and sets the indent mode based on
@@ -763,7 +763,7 @@ together with the commands to switch from one editor tab to another
 navigate around multiple files.
 
 
-Code Navigation History
+Code navigation history
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 To ease navigation in source files and especially between
@@ -842,17 +842,17 @@ tags and for all words in a document.
 
 The autocompletion list for symbols is presented when the first few
 characters of the symbol are typed (configurable, see `Editor Completions
-tab in preferences dialog`_, default 4) or when the *Complete word*
+preferences`_, default 4) or when the *Complete word*
 keybinding is pressed (configurable, see `Configurable keybindings`_,
 default Ctrl-Space).
 
 When the defined keybinding is typed and the *Autocomplete all words in
-document* preference (in `Editor Completions tab in preferences dialog`_)
+document* preference (in `Editor Completions preferences`_)
 is selected then the autocompletion list will show all matching words
 in the document, if there are no matching symbols.
 
 If you don't want to use autocompletion it can be dismissed until
-the next symbol by typing Escape. The autocompletion list is updated
+the next symbol by pressing Escape. The autocompletion list is updated
 as more characters are typed so that it only shows completions that start
 with the characters typed so far. If no symbols begin with the sequence,
 the autocompletion window is closed.
@@ -861,8 +861,8 @@ The up and down arrows will move the selected item. The highlighted
 item on the autocompletion list can be chosen from the list by Tab or
 Enter/Return. You can also double-click to select an item. The sequence
 will be completed to match the chosen item, and if the *Drop rest of
-word on completion* preference is set (in `Editor Completions tab in
-preferences dialog`_) then any characters after the cursor that match
+word on completion* preference is set (in `Editor Completions
+preferences`_) then any characters after the cursor that match
 a symbol or word are deleted.
 
 Scope autocompletion
@@ -994,7 +994,7 @@ character you want, then let go of Ctrl-Shift and hit a key such as
 the right arrow.
 
 For this to work in Geany, you'll need to first unbind Ctrl-Shift-u
-in the `keybinding tab in preferences dialog`_, then restart Geany.
+in the `keybinding preferences`_, then restart Geany.
 Note that it works slightly differently from other GTK applications,
 in that you'll need to continue to hold down the Ctrl and Shift keys
 while typing the code point hex digits.
@@ -1483,8 +1483,8 @@ There are also some rarer `Hidden preferences`_.
     comes after the screenshot of that tab.
 
 
-General Startup tab in preferences dialog
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+General Startup preferences
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. image:: ./images/pref_dialog_gen_startup.png
 
@@ -1530,8 +1530,8 @@ Extra plugin path
 	Leave blank to not set an additional lookup path.
 
 
-General Miscellaneous tab in preferences dialog
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+General Miscellaneous preferences
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. image:: ./images/pref_dialog_gen_misc.png
 
@@ -1589,8 +1589,8 @@ Store project file inside the project base directory
     a proper default path.
 
 
-Interface tab in preferences dialog
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Interface preferences
+^^^^^^^^^^^^^^^^^^^^^
 
 .. image:: ./images/pref_dialog_interface.png
 
@@ -1661,8 +1661,8 @@ Show status bar
     modifications were done, the file encoding, the filetype and other information.
 
 
-Toolbar tab in preferences dialog
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Toolbar preferences
+^^^^^^^^^^^^^^^^^^^
 
 Affects the main toolbar underneath the menu bar.
 
@@ -1690,8 +1690,8 @@ Icon size
     Select the size of the icons you see (large, small or very small).
 
 
-Editor Features tab in preferences dialog
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Editor Features preferences
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. image:: ./images/pref_dialog_edit_features.png
 
@@ -1734,8 +1734,8 @@ Comment toggle marker
     It is used to mark the comment as toggled.
 
 
-Editor Indentation tab in preferences dialog
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Editor Indentation preferences
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. image:: ./images/pref_dialog_edit_indentation.png
 
@@ -1791,8 +1791,8 @@ Tab key indents
         unindent, but this pref allows the tab key to have different
         meanings in different contexts - e.g. for snippet completion.
 
-Editor Completions tab in preferences dialog
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Editor Completions preferences
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. image:: ./images/pref_dialog_edit_completions.png
 
@@ -1872,8 +1872,8 @@ Double quotes " "
     Auto-close parenthesis when typing an opening one
 
 
-Editor Display tab in preferences dialog
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Editor Display preferences
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This is for visual elements displayed in the editor window.
 
@@ -1935,8 +1935,8 @@ Long line marker color
     Set the color of the long line marker.
 
 
-Files tab in preferences dialog
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Files preferences
+^^^^^^^^^^^^^^^^^
 
 .. image:: ./images/pref_dialog_files.png
 
@@ -1998,8 +1998,8 @@ Disk check timeout
         (remote files are files in ``~/.gvfs/``).
 
 
-Tools tab in preferences dialog
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Tools preferences
+^^^^^^^^^^^^^^^^^
 
 .. image:: ./images/pref_dialog_tools.png
 
@@ -2030,8 +2030,8 @@ Context action
     to the specified command.
 
 
-Template tab in preferences dialog
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Template preferences
+^^^^^^^^^^^^^^^^^^^^
 
 This data is used as meta data for various template text to insert into
 a document, such as the file header. You only need to set fields that
@@ -2078,8 +2078,8 @@ Date & Time
     http://man.cx/strftime.
 
 
-Keybinding tab in preferences dialog
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Keybinding preferences
+^^^^^^^^^^^^^^^^^^^^^^
 
 .. image:: ./images/pref_dialog_keys.png
 
@@ -2090,8 +2090,8 @@ bound to a key combination, and may not be available as a menu item.
     For more information see the section called `Keybindings`_.
 
 
-Printing tab in preferences dialog
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Printing preferences
+^^^^^^^^^^^^^^^^^^^^
 
 .. image:: ./images/pref_dialog_printing.png
 
@@ -2119,8 +2119,8 @@ Date format
     see http://man.cx/strftime.
 
 
-Terminal (VTE) tab in preferences dialog
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Terminal (VTE) preferences
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See also: `Virtual terminal emulator widget (VTE)`_.
 
@@ -2595,7 +2595,7 @@ Build Menu Keyboard Shortcuts
 
 Keyboard shortcuts can be defiend for the first two filetype menu items, the first three
 non-filetype menu items, the first two execute menu items and the fixed menu items.
-In the keybindings configuration dialog (see `Keybinding tab in preferences dialog`_)
+In the keybindings configuration dialog (see `Keybinding preferences`_)
 these items are identified by the default labels shown in the `Build Menu`_ section above.
 
 It is currently not possible to bind keyboard shortcuts to more than these menu items.
@@ -2947,7 +2947,7 @@ Navigate forward a location                               Switches to the next l
 
 Navigate back a location                                  Switches to the previous location in the
                                                           navigation history. See the section called
-                                                          `Code Navigation History`_.
+                                                          `Code navigation history`_.
 
 Go to line                      Ctrl-L                    Opens the Go to line dialog.
 
@@ -3824,7 +3824,7 @@ Meta data can be used with all templates, but by default user set
 meta data is only used for the ChangeLog and File header templates.
 
 In the configuration dialog you can find a tab "Templates" (see
-`Template tab in preferences dialog`_). You can define the
+`Template preferences`_). You can define the
 default values which will be inserted in the templates. You should
 restart Geany after making changes, because they are only read
 at startup.
@@ -3950,7 +3950,7 @@ fileheader     The file header template. This wildcard       file header, snippe
 
 
 .. [1] The format for the ``year``, ``date`` and ``datetime`` wildcards can be changed
-       in the preferences dialog, see `Template tab in preferences dialog`_. You can
+       in the preferences dialog, see `Template preferences`_. You can
        use any conversion specifiers which can be used with the ANSI C strftime function.
        For details please see http://man.cx/strftime.
 

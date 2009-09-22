@@ -6,7 +6,7 @@
 <meta name="generator" content="Docutils 0.4: http://docutils.sourceforge.net/" />
 <title>Geany</title>
 <meta name="authors" content="Enrico Tröger  Nick Treleaven  Frank Lanitz" />
-<meta name="date" content="2009-09-10" />
+<meta name="date" content="2009-09-14" />
 <style type="text/css">
 
 /*
@@ -139,7 +139,7 @@ Stylesheet for Geany's documentation based on a version of John Gabriele.
 <br />Nick Treleaven
 <br />Frank Lanitz</td></tr>
 <tr><th class="docinfo-name">Date:</th>
-<td>2009-09-10</td></tr>
+<td>2009-09-14</td></tr>
 <tr><th class="docinfo-name">Version:</th>
 <td>0.19</td></tr>
 </tbody>
@@ -208,7 +208,7 @@ of this program, and also in the chapter <a class="reference" href="#gnu-general
 <li><a class="reference" href="#indentation" id="id48" name="id48">Indentation</a></li>
 <li><a class="reference" href="#auto-indentation" id="id49" name="id49">Auto-indentation</a></li>
 <li><a class="reference" href="#bookmarks" id="id50" name="id50">Bookmarks</a></li>
-<li><a class="reference" href="#code-navigation-history" id="id51" name="id51">Code Navigation History</a></li>
+<li><a class="reference" href="#code-navigation-history" id="id51" name="id51">Code navigation history</a></li>
 <li><a class="reference" href="#send-text-through-definable-commands" id="id52" name="id52">Send text through definable commands</a></li>
 <li><a class="reference" href="#context-actions" id="id53" name="id53">Context actions</a></li>
 <li><a class="reference" href="#autocompletion" id="id54" name="id54">Autocompletion</a><ul>
@@ -253,19 +253,19 @@ of this program, and also in the chapter <a class="reference" href="#gnu-general
 </ul>
 </li>
 <li><a class="reference" href="#preferences" id="id79" name="id79">Preferences</a><ul>
-<li><a class="reference" href="#general-startup-tab-in-preferences-dialog" id="id80" name="id80">General Startup tab in preferences dialog</a><ul>
+<li><a class="reference" href="#general-startup-preferences" id="id80" name="id80">General Startup preferences</a><ul>
 <li><a class="reference" href="#id1" id="id81" name="id81">Startup</a></li>
 <li><a class="reference" href="#shutdown" id="id82" name="id82">Shutdown</a></li>
 <li><a class="reference" href="#paths" id="id83" name="id83">Paths</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#general-miscellaneous-tab-in-preferences-dialog" id="id84" name="id84">General Miscellaneous tab in preferences dialog</a><ul>
+<li><a class="reference" href="#general-miscellaneous-preferences" id="id84" name="id84">General Miscellaneous preferences</a><ul>
 <li><a class="reference" href="#miscellaneous" id="id85" name="id85">Miscellaneous</a></li>
 <li><a class="reference" href="#search" id="id86" name="id86">Search</a></li>
 <li><a class="reference" href="#projects" id="id87" name="id87">Projects</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#interface-tab-in-preferences-dialog" id="id88" name="id88">Interface tab in preferences dialog</a><ul>
+<li><a class="reference" href="#interface-preferences" id="id88" name="id88">Interface preferences</a><ul>
 <li><a class="reference" href="#sidebar" id="id89" name="id89">Sidebar</a></li>
 <li><a class="reference" href="#fonts" id="id90" name="id90">Fonts</a></li>
 <li><a class="reference" href="#editor-tabs" id="id91" name="id91">Editor tabs</a></li>
@@ -273,47 +273,47 @@ of this program, and also in the chapter <a class="reference" href="#gnu-general
 <li><a class="reference" href="#id2" id="id93" name="id93">Miscellaneous</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#toolbar-tab-in-preferences-dialog" id="id94" name="id94">Toolbar tab in preferences dialog</a><ul>
+<li><a class="reference" href="#toolbar-preferences" id="id94" name="id94">Toolbar preferences</a><ul>
 <li><a class="reference" href="#toolbar" id="id95" name="id95">Toolbar</a></li>
 <li><a class="reference" href="#appearance" id="id96" name="id96">Appearance</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#editor-features-tab-in-preferences-dialog" id="id97" name="id97">Editor Features tab in preferences dialog</a><ul>
+<li><a class="reference" href="#editor-features-preferences" id="id97" name="id97">Editor Features preferences</a><ul>
 <li><a class="reference" href="#features" id="id98" name="id98">Features</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#editor-indentation-tab-in-preferences-dialog" id="id99" name="id99">Editor Indentation tab in preferences dialog</a><ul>
+<li><a class="reference" href="#editor-indentation-preferences" id="id99" name="id99">Editor Indentation preferences</a><ul>
 <li><a class="reference" href="#indentation-group" id="id100" name="id100">Indentation group</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#editor-completions-tab-in-preferences-dialog" id="id101" name="id101">Editor Completions tab in preferences dialog</a><ul>
+<li><a class="reference" href="#editor-completions-preferences" id="id101" name="id101">Editor Completions preferences</a><ul>
 <li><a class="reference" href="#completions" id="id102" name="id102">Completions</a></li>
 <li><a class="reference" href="#auto-close-quotes-and-brackets" id="id103" name="id103">Auto-close quotes and brackets</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#editor-display-tab-in-preferences-dialog" id="id104" name="id104">Editor Display tab in preferences dialog</a><ul>
+<li><a class="reference" href="#editor-display-preferences" id="id104" name="id104">Editor Display preferences</a><ul>
 <li><a class="reference" href="#display" id="id105" name="id105">Display</a></li>
 <li><a class="reference" href="#long-line-marker" id="id106" name="id106">Long line marker</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#files-tab-in-preferences-dialog" id="id107" name="id107">Files tab in preferences dialog</a><ul>
+<li><a class="reference" href="#files-preferences" id="id107" name="id107">Files preferences</a><ul>
 <li><a class="reference" href="#new-files" id="id108" name="id108">New files</a></li>
 <li><a class="reference" href="#saving-files" id="id109" name="id109">Saving files</a></li>
 <li><a class="reference" href="#id3" id="id110" name="id110">Miscellaneous</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#tools-tab-in-preferences-dialog" id="id111" name="id111">Tools tab in preferences dialog</a><ul>
+<li><a class="reference" href="#tools-preferences" id="id111" name="id111">Tools preferences</a><ul>
 <li><a class="reference" href="#tool-paths" id="id112" name="id112">Tool paths</a></li>
 <li><a class="reference" href="#commands" id="id113" name="id113">Commands</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#template-tab-in-preferences-dialog" id="id114" name="id114">Template tab in preferences dialog</a><ul>
+<li><a class="reference" href="#template-preferences" id="id114" name="id114">Template preferences</a><ul>
 <li><a class="reference" href="#template-data" id="id115" name="id115">Template data</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#keybinding-tab-in-preferences-dialog" id="id116" name="id116">Keybinding tab in preferences dialog</a></li>
-<li><a class="reference" href="#printing-tab-in-preferences-dialog" id="id117" name="id117">Printing tab in preferences dialog</a></li>
-<li><a class="reference" href="#terminal-vte-tab-in-preferences-dialog" id="id118" name="id118">Terminal (VTE) tab in preferences dialog</a><ul>
+<li><a class="reference" href="#keybinding-preferences" id="id116" name="id116">Keybinding preferences</a></li>
+<li><a class="reference" href="#printing-preferences" id="id117" name="id117">Printing preferences</a></li>
+<li><a class="reference" href="#terminal-vte-preferences" id="id118" name="id118">Terminal (VTE) preferences</a><ul>
 <li><a class="reference" href="#terminal-widget" id="id119" name="id119">Terminal widget</a></li>
 </ul>
 </li>
@@ -790,7 +790,7 @@ help screen.</p>
 <h3><a class="toc-backref" href="#id33" id="startup" name="startup">Startup</a></h3>
 <p>At startup, Geany loads all files from the last time Geany was
 launched. You can disable this feature in the preferences dialog
-(see <a class="reference" href="#general-startup-tab-in-preferences-dialog">General Startup tab in preferences dialog</a>). If you specify some
+(see <a class="reference" href="#general-startup-preferences">General Startup preferences</a>). If you specify some
 files on the command line, only these files will be opened, but you
 can find the files from the last session in the file menu under the
 &quot;Recent files&quot; item. By default this contains the last 10 recently
@@ -1084,8 +1084,8 @@ before the selected text was copied to the new position.</p>
 <div class="section">
 <h3><a class="toc-backref" href="#id48" id="indentation" name="indentation">Indentation</a></h3>
 <p>Geany allows each document to indent either with a tab character or
-multiple spaces. The default indent mode is set in the <a class="reference" href="#editor-features-tab-in-preferences-dialog">Editor Features
-tab in preferences dialog</a> (see the link for more information). But
+multiple spaces. The default indent mode is set in the <a class="reference" href="#editor-features-preferences">Editor Features
+preferences</a> (see the link for more information). But
 this can be overridden using either the <em>Document-&gt;Indent Type</em> menu,
 or by using the <em>Detect from file</em> indentation preference. When enabled,
 this scans each file that is opened and sets the indent mode based on
@@ -1142,7 +1142,7 @@ together with the commands to switch from one editor tab to another
 navigate around multiple files.</p>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id51" id="code-navigation-history" name="code-navigation-history">Code Navigation History</a></h3>
+<h3><a class="toc-backref" href="#id51" id="code-navigation-history" name="code-navigation-history">Code navigation history</a></h3>
 <p>To ease navigation in source files and especially between
 different files, Geany lets you jump between different navigation
 points. Currently, this works for the following:</p>
@@ -1208,16 +1208,16 @@ called firefox) and it will open the address: <a class="reference" href="http://
 <p>Geany can offer a list of possible completions for symbols defined in the
 tags and for all words in a document.</p>
 <p>The autocompletion list for symbols is presented when the first few
-characters of the symbol are typed (configurable, see <a class="reference" href="#editor-completions-tab-in-preferences-dialog">Editor Completions
-tab in preferences dialog</a>, default 4) or when the <em>Complete word</em>
+characters of the symbol are typed (configurable, see <a class="reference" href="#editor-completions-preferences">Editor Completions
+preferences</a>, default 4) or when the <em>Complete word</em>
 keybinding is pressed (configurable, see <a class="reference" href="#configurable-keybindings">Configurable keybindings</a>,
 default Ctrl-Space).</p>
 <p>When the defined keybinding is typed and the <em>Autocomplete all words in
-document</em> preference (in <a class="reference" href="#editor-completions-tab-in-preferences-dialog">Editor Completions tab in preferences dialog</a>)
+document</em> preference (in <a class="reference" href="#editor-completions-preferences">Editor Completions preferences</a>)
 is selected then the autocompletion list will show all matching words
 in the document, if there are no matching symbols.</p>
 <p>If you don't want to use autocompletion it can be dismissed until
-the next symbol by typing Escape. The autocompletion list is updated
+the next symbol by pressing Escape. The autocompletion list is updated
 as more characters are typed so that it only shows completions that start
 with the characters typed so far. If no symbols begin with the sequence,
 the autocompletion window is closed.</p>
@@ -1225,8 +1225,8 @@ the autocompletion window is closed.</p>
 item on the autocompletion list can be chosen from the list by Tab or
 Enter/Return. You can also double-click to select an item. The sequence
 will be completed to match the chosen item, and if the <em>Drop rest of
-word on completion</em> preference is set (in <a class="reference" href="#editor-completions-tab-in-preferences-dialog">Editor Completions tab in
-preferences dialog</a>) then any characters after the cursor that match
+word on completion</em> preference is set (in <a class="reference" href="#editor-completions-preferences">Editor Completions
+preferences</a>) then any characters after the cursor that match
 a symbol or word are deleted.</p>
 <div class="section">
 <h4><a class="toc-backref" href="#id55" id="scope-autocompletion" name="scope-autocompletion">Scope autocompletion</a></h4>
@@ -1353,7 +1353,7 @@ Ctrl-Shift, type some hex digits representing the code point for the
 character you want, then let go of Ctrl-Shift and hit a key such as
 the right arrow.</p>
 <p>For this to work in Geany, you'll need to first unbind Ctrl-Shift-u
-in the <a class="reference" href="#keybinding-tab-in-preferences-dialog">keybinding tab in preferences dialog</a>, then restart Geany.
+in the <a class="reference" href="#keybinding-preferences">keybinding preferences</a>, then restart Geany.
 Note that it works slightly differently from other GTK applications,
 in that you'll need to continue to hold down the Ctrl and Shift keys
 while typing the code point hex digits.</p>
@@ -1795,7 +1795,7 @@ when restarting Geany.</p>
 comes after the screenshot of that tab.</p>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id80" id="general-startup-tab-in-preferences-dialog" name="general-startup-tab-in-preferences-dialog">General Startup tab in preferences dialog</a></h3>
+<h3><a class="toc-backref" href="#id80" id="general-startup-preferences" name="general-startup-preferences">General Startup preferences</a></h3>
 <img alt="./images/pref_dialog_gen_startup.png" src="./images/pref_dialog_gen_startup.png" />
 <div class="section">
 <h4><a class="toc-backref" href="#id81" id="id1" name="id1">Startup</a></h4>
@@ -1839,7 +1839,7 @@ Leave blank to not set an additional lookup path.</dd>
 </div>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id84" id="general-miscellaneous-tab-in-preferences-dialog" name="general-miscellaneous-tab-in-preferences-dialog">General Miscellaneous tab in preferences dialog</a></h3>
+<h3><a class="toc-backref" href="#id84" id="general-miscellaneous-preferences" name="general-miscellaneous-preferences">General Miscellaneous preferences</a></h3>
 <img alt="./images/pref_dialog_gen_misc.png" src="./images/pref_dialog_gen_misc.png" />
 <div class="section">
 <h4><a class="toc-backref" href="#id85" id="miscellaneous" name="miscellaneous">Miscellaneous</a></h4>
@@ -1893,7 +1893,7 @@ a proper default path.</dd>
 </div>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id88" id="interface-tab-in-preferences-dialog" name="interface-tab-in-preferences-dialog">Interface tab in preferences dialog</a></h3>
+<h3><a class="toc-backref" href="#id88" id="interface-preferences" name="interface-preferences">Interface preferences</a></h3>
 <img alt="./images/pref_dialog_interface.png" src="./images/pref_dialog_interface.png" />
 <div class="section">
 <h4><a class="toc-backref" href="#id89" id="sidebar" name="sidebar">Sidebar</a></h4>
@@ -1960,7 +1960,7 @@ modifications were done, the file encoding, the filetype and other information.<
 </div>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id94" id="toolbar-tab-in-preferences-dialog" name="toolbar-tab-in-preferences-dialog">Toolbar tab in preferences dialog</a></h3>
+<h3><a class="toc-backref" href="#id94" id="toolbar-preferences" name="toolbar-preferences">Toolbar preferences</a></h3>
 <p>Affects the main toolbar underneath the menu bar.</p>
 <img alt="./images/pref_dialog_toolbar.png" src="./images/pref_dialog_toolbar.png" />
 <div class="section">
@@ -1985,7 +1985,7 @@ icons or just text.</dd>
 </div>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id97" id="editor-features-tab-in-preferences-dialog" name="editor-features-tab-in-preferences-dialog">Editor Features tab in preferences dialog</a></h3>
+<h3><a class="toc-backref" href="#id97" id="editor-features-preferences" name="editor-features-preferences">Editor Features preferences</a></h3>
 <img alt="./images/pref_dialog_edit_features.png" src="./images/pref_dialog_edit_features.png" />
 <div class="section">
 <h4><a class="toc-backref" href="#id98" id="features" name="features">Features</a></h4>
@@ -2020,7 +2020,7 @@ It is used to mark the comment as toggled.</dd>
 </div>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id99" id="editor-indentation-tab-in-preferences-dialog" name="editor-indentation-tab-in-preferences-dialog">Editor Indentation tab in preferences dialog</a></h3>
+<h3><a class="toc-backref" href="#id99" id="editor-indentation-preferences" name="editor-indentation-preferences">Editor Indentation preferences</a></h3>
 <img alt="./images/pref_dialog_edit_indentation.png" src="./images/pref_dialog_edit_indentation.png" />
 <div class="section">
 <h4><a class="toc-backref" href="#id100" id="indentation-group" name="indentation-group">Indentation group</a></h4>
@@ -2076,7 +2076,7 @@ meanings in different contexts - e.g. for snippet completion.</p>
 </div>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id101" id="editor-completions-tab-in-preferences-dialog" name="editor-completions-tab-in-preferences-dialog">Editor Completions tab in preferences dialog</a></h3>
+<h3><a class="toc-backref" href="#id101" id="editor-completions-preferences" name="editor-completions-preferences">Editor Completions preferences</a></h3>
 <img alt="./images/pref_dialog_edit_completions.png" src="./images/pref_dialog_edit_completions.png" />
 <div class="section">
 <h4><a class="toc-backref" href="#id102" id="completions" name="completions">Completions</a></h4>
@@ -2144,7 +2144,7 @@ characters this should work.</p>
 </div>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id104" id="editor-display-tab-in-preferences-dialog" name="editor-display-tab-in-preferences-dialog">Editor Display tab in preferences dialog</a></h3>
+<h3><a class="toc-backref" href="#id104" id="editor-display-preferences" name="editor-display-preferences">Editor Display preferences</a></h3>
 <p>This is for visual elements displayed in the editor window.</p>
 <img alt="./images/pref_dialog_edit_display.png" src="./images/pref_dialog_edit_display.png" />
 <div class="section">
@@ -2199,7 +2199,7 @@ where it should appear.</dd>
 </div>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id107" id="files-tab-in-preferences-dialog" name="files-tab-in-preferences-dialog">Files tab in preferences dialog</a></h3>
+<h3><a class="toc-backref" href="#id107" id="files-preferences" name="files-preferences">Files preferences</a></h3>
 <img alt="./images/pref_dialog_files.png" src="./images/pref_dialog_files.png" />
 <div class="section">
 <h4><a class="toc-backref" href="#id108" id="new-files" name="new-files">New files</a></h4>
@@ -2260,7 +2260,7 @@ not checked for changes due to performance issues
 </div>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id111" id="tools-tab-in-preferences-dialog" name="tools-tab-in-preferences-dialog">Tools tab in preferences dialog</a></h3>
+<h3><a class="toc-backref" href="#id111" id="tools-preferences" name="tools-preferences">Tools preferences</a></h3>
 <img alt="./images/pref_dialog_tools.png" src="./images/pref_dialog_tools.png" />
 <div class="section">
 <h4><a class="toc-backref" href="#id112" id="tool-paths" name="tool-paths">Tool paths</a></h4>
@@ -2291,7 +2291,7 @@ to the specified command.</dd>
 </div>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id114" id="template-tab-in-preferences-dialog" name="template-tab-in-preferences-dialog">Template tab in preferences dialog</a></h3>
+<h3><a class="toc-backref" href="#id114" id="template-preferences" name="template-preferences">Template preferences</a></h3>
 <p>This data is used as meta data for various template text to insert into
 a document, such as the file header. You only need to set fields that
 you want to use in your template files.</p>
@@ -2334,7 +2334,7 @@ which can be used with the ANSI C strftime function.  For details please see
 </div>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id116" id="keybinding-tab-in-preferences-dialog" name="keybinding-tab-in-preferences-dialog">Keybinding tab in preferences dialog</a></h3>
+<h3><a class="toc-backref" href="#id116" id="keybinding-preferences" name="keybinding-preferences">Keybinding preferences</a></h3>
 <img alt="./images/pref_dialog_keys.png" src="./images/pref_dialog_keys.png" />
 <p>There are some handy commands in here that are not, by default,
 bound to a key combination, and may not be available as a menu item.</p>
@@ -2344,7 +2344,7 @@ bound to a key combination, and may not be available as a menu item.</p>
 </div>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id117" id="printing-tab-in-preferences-dialog" name="printing-tab-in-preferences-dialog">Printing tab in preferences dialog</a></h3>
+<h3><a class="toc-backref" href="#id117" id="printing-preferences" name="printing-preferences">Printing preferences</a></h3>
 <img alt="./images/pref_dialog_printing.png" src="./images/pref_dialog_printing.png" />
 <dl class="docutils">
 <dt>Use external command for printing</dt>
@@ -2366,7 +2366,7 @@ see <a class="reference" href="http://man.cx/strftime">http://man.cx/strftime</a
 </dl>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id118" id="terminal-vte-tab-in-preferences-dialog" name="terminal-vte-tab-in-preferences-dialog">Terminal (VTE) tab in preferences dialog</a></h3>
+<h3><a class="toc-backref" href="#id118" id="terminal-vte-preferences" name="terminal-vte-preferences">Terminal (VTE) preferences</a></h3>
 <p>See also: <a class="reference" href="#virtual-terminal-emulator-widget-vte">Virtual terminal emulator widget (VTE)</a>.</p>
 <img alt="./images/pref_dialog_vte.png" src="./images/pref_dialog_vte.png" />
 <div class="section">
@@ -2822,7 +2822,7 @@ build menu.</p>
 <h4><a class="toc-backref" href="#id143" id="build-menu-keyboard-shortcuts" name="build-menu-keyboard-shortcuts">Build Menu Keyboard Shortcuts</a></h4>
 <p>Keyboard shortcuts can be defiend for the first two filetype menu items, the first three
 non-filetype menu items, the first two execute menu items and the fixed menu items.
-In the keybindings configuration dialog (see <a class="reference" href="#keybinding-tab-in-preferences-dialog">Keybinding tab in preferences dialog</a>)
+In the keybindings configuration dialog (see <a class="reference" href="#keybinding-preferences">Keybinding preferences</a>)
 these items are identified by the default labels shown in the <a class="reference" href="#build-menu">Build Menu</a> section above.</p>
 <p>It is currently not possible to bind keyboard shortcuts to more than these menu items.</p>
 </div>
@@ -3320,7 +3320,7 @@ History</a>.</td>
 <td>&nbsp;</td>
 <td>Switches to the previous location in the
 navigation history. See the section called
-<a class="reference" href="#code-navigation-history">Code Navigation History</a>.</td>
+<a class="reference" href="#code-navigation-history">Code navigation history</a>.</td>
 </tr>
 <tr><td>Go to line</td>
 <td>Ctrl-L</td>
@@ -4282,7 +4282,7 @@ instead.</p>
 <p>Meta data can be used with all templates, but by default user set
 meta data is only used for the ChangeLog and File header templates.</p>
 <p>In the configuration dialog you can find a tab &quot;Templates&quot; (see
-<a class="reference" href="#template-tab-in-preferences-dialog">Template tab in preferences dialog</a>). You can define the
+<a class="reference" href="#template-preferences">Template preferences</a>). You can define the
 default values which will be inserted in the templates. You should
 restart Geany after making changes, because they are only read
 at startup.</p>
@@ -4443,7 +4443,7 @@ templates</td>
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a name="id10">[1]</a></td><td><em>(<a class="fn-backref" href="#id7">1</a>, <a class="fn-backref" href="#id8">2</a>, <a class="fn-backref" href="#id9">3</a>)</em> The format for the <tt class="docutils literal"><span class="pre">year</span></tt>, <tt class="docutils literal"><span class="pre">date</span></tt> and <tt class="docutils literal"><span class="pre">datetime</span></tt> wildcards can be changed
-in the preferences dialog, see <a class="reference" href="#template-tab-in-preferences-dialog">Template tab in preferences dialog</a>. You can
+in the preferences dialog, see <a class="reference" href="#template-preferences">Template preferences</a>. You can
 use any conversion specifiers which can be used with the ANSI C strftime function.
 For details please see <a class="reference" href="http://man.cx/strftime">http://man.cx/strftime</a>.</td></tr>
 </tbody>
@@ -5400,7 +5400,7 @@ USE OR PERFORMANCE OF THIS SOFTWARE.</p>
 <div class="footer">
 <hr class="footer" />
 <a class="reference" href="geany.txt">View document source</a>.
-Generated on: 2009-09-14 11:50 UTC.
+Generated on: 2009-09-22 14:49 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 
 </div>
