@@ -228,11 +228,15 @@ static void clear(void)
 }
 
 
+/* Reuses list to free each node, so list must be a variable */
+#define foreach_slist_free(node, list) \
+	for (node = list, list = NULL; g_slist_free_1(list), node != NULL; list = node, node = node->next)
+
 /* recreate the tree model from current_dir. */
 static void refresh(void)
 {
 	gchar *utf8_dir;
-	GSList *list;
+	GSList *list, *node;
 
 	/* don't clear when the new path doesn't exist */
 	if (! g_file_test(current_dir, G_FILE_TEST_EXISTS))
@@ -249,19 +253,13 @@ static void refresh(void)
 	list = utils_get_file_list(current_dir, NULL, NULL);
 	if (list != NULL)
 	{
-		GSList *node;
-
 		/* free filenames & nodes as we go through the list */
-		for (node = list; node != NULL;)
+		foreach_slist_free(node, list)
 		{
 			gchar *fname = node->data;
-			GSList *old;
 
 			add_item(fname);
 			g_free(fname);
-			old = node;
-			node = node->next;
-			g_slist_free_1(old);
 		}
 	}
 	gtk_entry_completion_set_model(entry_completion, GTK_TREE_MODEL(file_store));
