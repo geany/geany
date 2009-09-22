@@ -5,6 +5,8 @@
    Minor edits.
  * doc/geany.txt, doc/geany.html:
    Add 'Toolbar entries' section.
+ * doc/geany.txt, doc/geany.html:
+   Update 'Go to line' keybinding description.
 
 
 2009-09-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

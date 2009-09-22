@@ -2964,7 +2964,8 @@ Navigate back a location                                  Switches to the previo
                                                           navigation history. See the section called
                                                           `Code navigation history`_.
 
-Go to line                      Ctrl-L                    Opens the Go to line dialog.
+Go to line                      Ctrl-L                    Focuses the Go to Line entry (if visible) or
+                                                          shows the Go to line dialog.
 
 Goto matching brace             Ctrl-B                    If the cursor is ahead or behind a brace, then it
                                                           is moved to the brace which belongs to the current
