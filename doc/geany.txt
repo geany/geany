@@ -1022,6 +1022,21 @@ and the editor window's popup menu:
 \* These items are available from the editor window's popup menu, or by
 using a keyboard shortcut (see the section called `Keybindings`_).
 
+Toolbar entries
+^^^^^^^^^^^^^^^
+There are also two toolbar entries:
+
+* Search bar
+* Go to line entry
+
+There are keybindings to focus each of these - see Focus
+`keybindings`_. Pressing Escape will then focus the editor.
+
+Search bar
+``````````
+The quickest way to find some text is to use the search bar entry in
+the toolbar. This performs a case-insensitive search in the current
+document whilst you type. Pressing Enter will search again.
 
 Find
 ^^^^
