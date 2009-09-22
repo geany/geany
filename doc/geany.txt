@@ -500,7 +500,7 @@ combination to move between tabs, the order is determined by the tab
 order, not alphabetical as shown in the documents list (regardless
 of whether or not editor tabs are visible).
 
-See the *Notebook tabs* group in the `Keybindings`_ section for useful
+See the `Notebook tab keybindings`_ section for useful
 shortcuts including for Most-Recently-Used document switching.
 
 
@@ -811,9 +811,8 @@ You can execute a specified command on the current word near the
 cursor position or an available selection and this word is passed
 as an argument to this command. It can be used for example to open
 some API documentation in a browser window or open any other external
-program. To do this, there is an menu entry in the popup menu of the
-editor widget and also a keyboard shortcut(see the section called
-`Keybindings`_).
+program. To do this, there is a menu entry in the popup menu of the
+editor widget and also a keyboard shortcut (see `Editor keybindings`_).
 
 The command can be specified in the preferences dialog and additionally
 for each filetype (see "context_action_cmd" in the section called
@@ -843,7 +842,7 @@ tags and for all words in a document.
 The autocompletion list for symbols is presented when the first few
 characters of the symbol are typed (configurable, see `Editor Completions
 preferences`_, default 4) or when the *Complete word*
-keybinding is pressed (configurable, see `Configurable keybindings`_,
+keybinding is pressed (configurable, see `Editor keybindings`_,
 default Ctrl-Space).
 
 When the defined keybinding is typed and the *Autocomplete all words in
@@ -1020,7 +1019,7 @@ and the editor window's popup menu:
 * Go to line
 
 \* These items are available from the editor window's popup menu, or by
-using a keyboard shortcut (see the section called `Keybindings`_).
+using a keyboard shortcut (see `Search keybindings`_).
 
 Toolbar entries
 ^^^^^^^^^^^^^^^
@@ -1029,8 +1028,8 @@ There are also two toolbar entries:
 * Search bar
 * Go to line entry
 
-There are keybindings to focus each of these - see Focus
-`keybindings`_. Pressing Escape will then focus the editor.
+There are keybindings to focus each of these - see `Focus
+keybindings`_. Pressing Escape will then focus the editor.
 
 Search bar
 ``````````
@@ -2750,13 +2749,13 @@ execute menu_open by default *Ctrl-O* is set, but you can also define
 *Alt-O*, so that the file open dialog is shown by pressing either
 *Ctrl-O* or *Alt-O*.
 
-The following table lists all customizable keyboard shortcuts.
+The following tables list all customizable keyboard shortcuts.
 
-=============================== ========================= =========================================
+File keybindings
+````````````````
+=============================== ========================= ==================================================
 Action                          Default shortcut          Description
-=============================== ========================= =========================================
-**File**
-
+=============================== ========================= ==================================================
 New                             Ctrl-N                    Creates a new file.
 
 Open                            Ctrl-O                    Opens a file.
@@ -2775,9 +2774,14 @@ Reload file                     Ctrl-R                    Reloads the current fi
                                                           will be lost.
 
 Print                           Ctrl-P                    Prints the current file.
+=============================== ========================= ==================================================
 
-**Editor**
 
+Editor keybindings
+``````````````````
+=============================== ========================= ==================================================
+Action                          Default shortcut          Description
+=============================== ========================= ==================================================
 Undo                            Ctrl-Z                    Un-does the last action.
 
 Redo                            Ctrl-Y                    Re-does the last action.
@@ -2833,9 +2837,14 @@ Context Action                                            Executes a command and
 Move cursor in snippet                                    Jumps to the next defined cursor positions in a
                                                           completed snippets if multiple cursor positions
                                                           where defined.
+=============================== ========================= ==================================================
 
-**Clipboard**
 
+Clipboard keybindings
+`````````````````````
+=============================== ========================= ==================================================
+Action                          Default shortcut          Description
+=============================== ========================= ==================================================
 Cut                             Ctrl-X                    Cut the current selection to the clipboard.
 
 Copy                            Ctrl-C                    Copy the current selection to the clipboard.
@@ -2847,9 +2856,14 @@ Cut current line(s)             Ctrl-Shift-X              Cuts the current line 
 
 Copy current line(s)            Ctrl-Shift-C              Copies the current line (and any lines with a
                                                           selection) to the clipboard.
+=============================== ========================= ==================================================
 
-**Select**
 
+Select keybindings
+``````````````````
+=============================== ========================= ==================================================
+Action                          Default shortcut          Description
+=============================== ========================= ==================================================
 Select all                      Ctrl-A                    Makes a selection of all text in the current
                                                           document.
 
@@ -2860,18 +2874,28 @@ Select current paragraph        Alt-Shift-P               Selects the current pa
 
 Select current line(s)          Alt-Shift-L               Selects the current line under the cursor (and any
                                                           partially selected lines).
+=============================== ========================= ==================================================
 
-**Insert**
 
+Insert keybindings
+``````````````````
+=============================== ========================= ==================================================
+Action                          Default shortcut          Description
+=============================== ========================= ==================================================
 Insert date                     Shift-Alt-D               Inserts a customisable date.
 
 Insert alternative whitespace                             Inserts a tab character when spaces should
                                                           be used for indentation and inserts space
                                                           characters of the amount of a tab width when
                                                           tabs should be used for indentation.
+=============================== ========================= ==================================================
 
-**Format**
 
+Format keybindings
+``````````````````
+=============================== ========================= ==================================================
+Action                          Default shortcut          Description
+=============================== ========================= ==================================================
 Toggle case of selection        Ctrl-Alt-U                Changes the case of the selection. A lowercase
                                                           selection will be changed into uppercase and vice
                                                           versa. If the selection contains lower- and
@@ -2915,14 +2939,23 @@ Send Selection to Terminal                                Sends the current sele
 Reflow lines/block                                        Reformat selected lines or current
                                                           (indented) text block,
                                                           breaking lines at the long line marker.
+=============================== ========================= ==================================================
 
 
-**Settings**
-
+Settings keybindings
+````````````````````
+=============================== ========================= ==================================================
+Action                          Default shortcut          Description
+=============================== ========================= ==================================================
 Preferences                     Ctrl-Alt-P                Opens preferences dialog.
+=============================== ========================= ==================================================
 
-**Search**
 
+Search keybindings
+``````````````````
+=============================== ========================= ==================================================
+Action                          Default shortcut          Description
+=============================== ========================= ==================================================
 Find                            Ctrl-F                    Opens the Find dialog.
 
 Find Next                       Ctrl-G                    Finds next result.
@@ -2949,13 +2982,18 @@ Find Document Usage                                       Finds all occurrences 
                                                           document and displays them in the messages
                                                           window.
 
-Mark All                                                  Highlight all matches of the current
+Mark All                        Ctrl-Shift-M              Highlight all matches of the current
                                                           word/selection in the current document
                                                           with a colored box. If there's nothing to
                                                           find, highlighted matches will be cleared.
+=============================== ========================= ==================================================
 
-**Go to**
 
+Go to keybindings
+`````````````````
+=============================== ========================= ==================================================
+Action                          Default shortcut          Description
+=============================== ========================= ==================================================
 Navigate forward a location                               Switches to the next location in the navigation
                                                           history. See the section called `Code Navigation
                                                           History`_.
@@ -3007,9 +3045,13 @@ Go to End of Display Line       Alt-End                   Move the caret to the 
 Go to Previous Word Part        Ctrl-/                    Goto the previous part of the current word.
 
 Go to Next Word Part            Ctrl-\                    Goto the next part of the current word.
+=============================== ========================= ==================================================
 
-**View**
-
+View keybindings
+````````````````
+=============================== ========================= ==================================================
+Action                          Default shortcut          Description
+=============================== ========================= ==================================================
 Fullscreen                      F11                       Switches to fullscreen mode.
 
 Toggle Messages Window                                    Toggles the message window (status and compiler
@@ -3024,9 +3066,13 @@ Toggle all additional widgets                             Hide and show all addi
 Zoom In                         Ctrl-+                    Zooms in the text
 
 Zoom Out                        Ctrl--                    Zooms out the text
+=============================== ========================= ==================================================
 
-**Focus**
-
+Focus keybindings
+`````````````````
+=============================== ========================= ==================================================
+Action                          Default shortcut          Description
+=============================== ========================= ==================================================
 Switch to Editor                F2                        Switches to editor widget.
 
 Switch to Scribble              F6                        Switches to scribble widget.
@@ -3039,9 +3085,14 @@ Switch to Search Bar            F7                        Switches to the search
 Switch to Sidebar                                         Focus the Sidebar.
 
 Switch to Compiler                                        Focus the Compiler message window tab.
+=============================== ========================= ==================================================
 
-**Notebook tabs**
 
+Notebook tab keybindings
+````````````````````````
+=============================== ========================= ==================================================
+Action                          Default shortcut          Description
+=============================== ========================= ==================================================
 Switch to left document         Ctrl-PageUp               Switches to the previous open document.
 
 Switch to right document        Ctrl-PageDown             Switches to the next open document.
@@ -3063,9 +3114,14 @@ Move document right             Alt-PageDown              Changes the current do
 Move document first                                       Moves the current document to the first position.
 
 Move document last                                        Moves the current document to the last position.
+=============================== ========================= ==================================================
 
-**Document**
 
+Document keybindings
+````````````````````
+=============================== ========================= ==================================================
+Action                          Default shortcut          Description
+=============================== ========================= ==================================================
 Replace tabs by space                                     Replaces all tabs with the right amount of spaces.
 
 Replace spaces by tabs                                    Replaces all spaces with tab characters.
@@ -3082,9 +3138,14 @@ Toggle Line wrapping                                      Enables or disables wr
 
 Toggle Line breaking                                      Enables or disables automatic breaking of long
                                                           lines at a configurable column.
+=============================== ========================= ==================================================
 
-**Build**
 
+Build keybindings
+`````````````````
+=============================== ========================= ==================================================
+Action                          Default shortcut          Description
+=============================== ========================= ==================================================
 Compile                         F8                        Compiles the current file.
 
 Build                           F9                        Builds (compiles if necessary and links) the
@@ -3108,15 +3169,25 @@ Run                             F5                        Executes the current f
 Run (alternative command)                                 Executes the current file in a terminal emulation.
 
 Build options                                             Opens the build options dialog.
+=============================== ========================= ==================================================
 
-**Tools**
 
+Tools keybindings
+`````````````````
+=============================== ========================= ==================================================
+Action                          Default shortcut          Description
+=============================== ========================= ==================================================
 Show Color Chooser                                        Opens the Color Chooser dialog.
+=============================== ========================= ==================================================
 
-**Help**
 
+Help keybindings
+````````````````
+=============================== ========================= ==================================================
+Action                          Default shortcut          Description
+=============================== ========================= ==================================================
 Help                            F1                        Opens the manual.
-=============================== ========================= =========================================
+=============================== ========================= ==================================================
 
 
 
