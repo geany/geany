@@ -1703,6 +1703,9 @@ Icon Style
 Icon size
     Select the size of the icons you see (large, small or very small).
 
+Customize Toolbar
+    See `Customizing the toolbar`_.
+
 
 Editor Features preferences
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
