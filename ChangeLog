@@ -4,6 +4,8 @@
    Add "html_asp_default_language" pseudo style to filetypes.xml
    to allow setting the used language in embedded ASP code
    (patch by Ross McKay, thanks).
+ * src/filetypes.xml:
+   Update VBScrpt keywords (patch by Ross McKay, thanks).
 
 
 2009-09-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
