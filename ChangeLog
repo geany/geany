@@ -6,6 +6,10 @@
  * src/document.c:
    Fix showing the document before reload dialog when opening an
    already-open file.
+ * src/pluginprivate.h, src/plugins.c, doc/pluginsymbols.c:
+   Add plugin_configure_single() plugin symbol which is easier to
+   implement than plugin_configure() but won't support a
+   multiple-plugin configure dialog.
 
 
 2009-09-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

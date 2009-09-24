@@ -46,8 +46,9 @@ typedef struct GeanyPluginPrivate
 	GeanyPlugin		public;				/* fields the plugin can read */
 
 	void		(*init) (GeanyData *data);			/* Called when the plugin is enabled */
-	GtkWidget*	(*configure) (GtkDialog *dialog);	/* plugin configure dialog, optional */
-	void		(*help) (void);					/* Called when the plugin should show some help, optional */
+	GtkWidget*	(*configure) (GtkDialog *dialog);	/* plugins configure dialog, optional */
+	void		(*configure_single) (GtkWidget *parent); /* plugin configure dialog, optional */
+	void		(*help) (void);						/* Called when the plugin should show some help, optional */
 	void		(*cleanup) (void);					/* Called when the plugin is disabled or when Geany exits */
 
 	/* extra stuff */

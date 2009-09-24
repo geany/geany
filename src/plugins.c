@@ -527,6 +527,12 @@ plugin_init(Plugin *plugin)
 
 	/* store some function pointers for later use */
 	g_module_symbol(plugin->module, "plugin_configure", (void *) &plugin->configure);
+	g_module_symbol(plugin->module, "plugin_configure_single", (void *) &plugin->configure_single);
+	if (app->debug_mode && plugin->configure && plugin->configure_single)
+		g_warning("Plugin '%s' implements plugin_configure_single() unnecessarily - "
+			"only plugin_configure() will be used!",
+			plugin->info.name);
+
 	g_module_symbol(plugin->module, "plugin_help", (void *) &plugin->help);
 	g_module_symbol(plugin->module, "plugin_cleanup", (void *) &plugin->cleanup);
 	if (plugin->cleanup == NULL)
@@ -980,7 +986,18 @@ PluginManagerWidgets;
 static PluginManagerWidgets pm_widgets;
 
 
-void pm_selection_changed(GtkTreeSelection *selection, gpointer user_data)
+static void pm_update_buttons(Plugin *p)
+{
+	gboolean is_active;
+
+	is_active = is_active_plugin(p);
+	gtk_widget_set_sensitive(pm_widgets.configure_button,
+		(p->configure || p->configure_single) && is_active);
+	gtk_widget_set_sensitive(pm_widgets.help_button, p->help != NULL && is_active);
+}
+
+
+static void pm_selection_changed(GtkTreeSelection *selection, gpointer user_data)
 {
 	GtkTreeIter iter;
 	GtkTreeModel *model;
@@ -994,7 +1011,6 @@ void pm_selection_changed(GtkTreeSelection *selection, gpointer user_data)
 		{
 			gchar *text;
 			PluginInfo *pi;
-			gboolean is_active;
 
 			pi = &p->info;
 			text = g_strdup_printf(
@@ -1004,9 +1020,7 @@ void pm_selection_changed(GtkTreeSelection *selection, gpointer user_data)
 			geany_wrap_label_set_text(GTK_LABEL(pm_widgets.description_label), text);
 			g_free(text);
 
-			is_active = is_active_plugin(p);
-			gtk_widget_set_sensitive(pm_widgets.configure_button, p->configure != NULL && is_active);
-			gtk_widget_set_sensitive(pm_widgets.help_button, p->help != NULL && is_active);
+			pm_update_buttons(p);
 		}
 	}
 }
@@ -1015,7 +1029,6 @@ void pm_selection_changed(GtkTreeSelection *selection, gpointer user_data)
 static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer data)
 {
 	gboolean old_state, state;
-	gboolean is_active;
 	gchar *file_name;
 	GtkTreeIter iter;
 	GtkTreePath *path = gtk_tree_path_new_from_string(pth);
@@ -1057,9 +1070,7 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 			PLUGIN_COLUMN_PLUGIN, p, -1);
 
 		/* set again the sensitiveness of the configure and help buttons */
-		is_active = is_active_plugin(p);
-		gtk_widget_set_sensitive(pm_widgets.configure_button, p->configure != NULL && is_active);
-		gtk_widget_set_sensitive(pm_widgets.help_button, p->help != NULL && is_active);
+		pm_update_buttons(p);
 	}
 	g_free(file_name);
 }
@@ -1129,7 +1140,7 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
 }
 
 
-static void configure_plugin(Plugin *p)
+static void configure_plugins(Plugin *p)
 {
 	GtkWidget *parent = pm_widgets.dialog;
 	GtkWidget *prefs_page, *dialog, *vbox;
@@ -1162,7 +1173,7 @@ static void configure_plugin(Plugin *p)
 }
 
 
-void pm_on_plugin_button_clicked(GtkButton *button, gpointer user_data)
+static void pm_on_plugin_button_clicked(GtkButton *button, gpointer user_data)
 {
 	GtkTreeModel *model;
 	GtkTreeSelection *selection;
@@ -1177,7 +1188,15 @@ void pm_on_plugin_button_clicked(GtkButton *button, gpointer user_data)
 		if (p != NULL)
 		{
 			if (GPOINTER_TO_INT(user_data) == PM_BUTTON_CONFIGURE)
-				configure_plugin(p);
+			{
+				if (p->configure)
+					configure_plugins(p);
+				else
+				{
+					g_return_if_fail(p->configure_single);
+					p->configure_single(main_widgets.window);
+				}
+			}
 			else if (GPOINTER_TO_INT(user_data) == PM_BUTTON_HELP && p->help != NULL)
 				p->help();
 		}
