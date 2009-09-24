@@ -2058,13 +2058,9 @@ static void join_lines(GeanyEditor *editor)
 }
 
 
-static void split_lines(GeanyEditor *editor)
+static void split_lines(GeanyEditor *editor, gint column)
 {
 	gint start, indent, linescount, i;
-
-	/* do nothing if long line marker is disabled */
-	if (editor_prefs.long_line_type == 2)
-		return;
 
 	start = sci_get_line_from_position(editor->sci,
 		sci_get_selection_start(editor->sci));
@@ -2079,8 +2075,7 @@ static void split_lines(GeanyEditor *editor)
 	/*
 	 * If this line is short enough, just return
 	 */
-	if (editor_prefs.long_line_column >
-		sci_get_line_end_position(editor->sci, start) -
+	if (column > sci_get_line_end_position(editor->sci, start) -
 		sci_get_position_from_line(editor->sci, start))
 	{
 		return;
@@ -2110,8 +2105,7 @@ static void split_lines(GeanyEditor *editor)
 	sci_target_from_selection(editor->sci);
 	linescount = sci_get_line_count(editor->sci);
 	sci_lines_split(editor->sci,
-		(editor_prefs.long_line_column - indent) *
-		sci_text_width(editor->sci, STYLE_DEFAULT, " "));
+		(column - indent) *	sci_text_width(editor->sci, STYLE_DEFAULT, " "));
 	linescount = sci_get_line_count(editor->sci) - linescount;
 
 	/* Fix indentation. */
@@ -2124,7 +2118,24 @@ static void reflow_paragraph(GeanyEditor *editor)
 {
 	ScintillaObject *sci = editor->sci;
 	gboolean sel;
+	gint column = -1;
 
+	if (editor->line_breaking)
+	{
+		/* use line break column if enabled */
+		column = editor_prefs.line_break_column;
+	}
+	else if (editor_prefs.long_line_type != 2)
+	{
+		/* use long line if enabled */
+		column = editor_prefs.long_line_column;
+	}
+	else
+	{
+		/* do nothing if no column is defined */
+		utils_beep();
+		return;
+	}
 	sci_start_undo_action(sci);
 	sel = sci_has_selection(sci);
 	if (!sel)
@@ -2142,9 +2153,10 @@ static void reflow_paragraph(GeanyEditor *editor)
 			sci_set_selection_end(sci, pos);
 		}
 	}
-	split_lines(editor);
+	split_lines(editor, column);
 	if (!sel)
 		sci_set_anchor(sci, -1);
+
 	sci_end_undo_action(sci);
 }
 

@@ -1,3 +1,10 @@
+2009-09-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c, THANKS:
+   Apply patch from Lex Trotman to make 'Reflow block/lines(s)'
+   keybinding use line breaking column when enabled.
+
+
 2009-09-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * doc/geany.txt, doc/geany.html:
