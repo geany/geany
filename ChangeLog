@@ -10,6 +10,8 @@
    Add plugin_configure_single() plugin symbol which is easier to
    implement than plugin_configure() but won't support a
    multiple-plugin configure dialog.
+ * src/plugins.c:
+   Show multiple plugins in the 'Configure Plugins' dialog.
 
 
 2009-09-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

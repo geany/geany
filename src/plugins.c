@@ -1140,12 +1140,14 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
 }
 
 
-static void configure_plugins(Plugin *p)
+static void configure_plugins(Plugin *current_plugin)
 {
 	GtkWidget *parent = pm_widgets.dialog;
-	GtkWidget *prefs_page, *dialog, *vbox;
+	GtkWidget *dialog, *vbox, *nb;
+	GList *node;
+	gint cur_page = -1;
 
-	dialog = gtk_dialog_new_with_buttons(p->info.name,
+	dialog = gtk_dialog_new_with_buttons(_("Configure Plugins"),
 		GTK_WINDOW(parent), GTK_DIALOG_DESTROY_WITH_PARENT,
 		GTK_STOCK_APPLY, GTK_RESPONSE_APPLY,
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -1153,19 +1155,37 @@ static void configure_plugins(Plugin *p)
 	gtk_widget_set_name(dialog, "GeanyDialog");
 
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
-	gtk_widget_show(vbox);
+	nb = gtk_notebook_new();
+	gtk_container_add(GTK_CONTAINER(vbox), nb);
 
-	prefs_page = p->configure(GTK_DIALOG(dialog));
-
-	if (! GTK_IS_WIDGET(prefs_page))
+	foreach_list(node, active_plugin_list)
 	{
-		geany_debug("Invalid widget returned from plugin_configure() in plugin \"%s\"!",
-			p->info.name);
+		Plugin *p = node->data;
+		GtkWidget *page;
+
+		if (!p->configure)
+			continue;
+		page = p->configure(GTK_DIALOG(dialog));
+
+		if (! GTK_IS_WIDGET(page))
+		{
+			geany_debug("Invalid widget returned from plugin_configure() in plugin \"%s\"!",
+				p->info.name);
+		}
+		else
+		{
+			GtkWidget *label = gtk_label_new(p->info.name);
+			gint n = gtk_notebook_append_page(GTK_NOTEBOOK(nb), page, label);
+
+			if (p == current_plugin)
+				cur_page = n;
+		}
 	}
-	else
+	if (cur_page >= 0)
 	{
-		gtk_container_add(GTK_CONTAINER(vbox), prefs_page);
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(nb), cur_page);
 
+		gtk_widget_show_all(vbox);
 		/* run the dialog */
 		while (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_APPLY);
 	}
