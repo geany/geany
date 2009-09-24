@@ -3,6 +3,9 @@
  * src/keybindings.c, THANKS:
    Apply patch from Lex Trotman to make 'Reflow block/lines(s)'
    keybinding use line breaking column when enabled.
+ * src/document.c:
+   Fix showing the document before reload dialog when opening an
+   already-open file.
 
 
 2009-09-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

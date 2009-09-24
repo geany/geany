@@ -1231,6 +1231,10 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		if (doc != NULL)
 		{
 			ui_add_recent_file(utf8_filename);	/* either add or reorder recent item */
+			/* show the doc before reload dialog */
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
+				gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
+				(GtkWidget*) doc->editor->sci));
 			document_check_disk_status(doc, TRUE);	/* force a file changed check */
 		}
 	}
