@@ -85,7 +85,7 @@ static const gchar *contributors =
 "Elias Pschernig, Eric Forgeot, Eugene Arshinov, Felipe Pena, François Cami, "
 "Giuseppe Torelli, Guillaume de Rorthais, Guillaume Hoffmann, Herbert Voss, Jason Oster, Jean-François Wauthy, Jeff Pohlmeyer, "
 "Jesse Mayes, John Gabriele, Jon Strait, Josef Whiter, Kevin Ellwood, Kristoffer A. Tjernås, Marko Peric, Matti Mårds, Moritz Barsnick, "
-"Peter Strand, Philipp Gildein, Pierre Joye, Rob van der Linde, Robert McGinley, Roland Baudin, S Jagannathan, Saleem Abdulrasool, "
+"Peter Strand, Philipp Gildein, Pierre Joye, Rob van der Linde, Robert McGinley, Roland Baudin, Ross McKay, S Jagannathan, Saleem Abdulrasool, "
 "Sebastian Kraft, Shiv, Slava Semushin, Stefan Oltmanns, Tamim, Thomas Martitz, Tomás Vírseda, "
 "Tyler Mulligan, Walery Studennikov, Yura Siamashka";
 
