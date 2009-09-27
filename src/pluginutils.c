@@ -28,6 +28,8 @@
 
 #include "geany.h"
 
+#ifdef HAVE_PLUGINS
+
 #include "pluginutils.h"
 #include "pluginprivate.h"
 
@@ -146,3 +148,4 @@ GeanyKeyGroup *plugin_set_key_group(GeanyPlugin *plugin,
 }
 
 
+#endif

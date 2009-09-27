@@ -13,6 +13,8 @@
    multiple-configure dialog as a page with a configure button on it.
    Add padding for multiple-configure dialog.
    Make the multiple-configure dialog notebook tabs scrollable.
+ * src/pluginutils.c, src/pluginutils.h:
+   Don't build pluginutils.o if HAVE_PLUGINS is not defined.
 
 
 2009-09-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
@@ -22,7 +24,7 @@
    to allow setting the used language in embedded ASP code
    (patch by Ross McKay, thanks).
  * src/filetypes.xml:
-   Update VBScrpt keywords (patch by Ross McKay, thanks).
+   Update VBScript keywords (patch by Ross McKay, thanks).
 
 
 2009-09-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

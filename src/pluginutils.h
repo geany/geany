@@ -26,6 +26,8 @@
 #ifndef PLUGINUTILS_H
 #define PLUGINUTILS_H
 
+#ifdef HAVE_PLUGINS
+
 #include "plugindata.h"		/* GeanyPlugin */
 #include "keybindings.h"	/* GeanyKeyGroupCallback */
 
@@ -41,4 +43,5 @@ void plugin_signal_connect(GeanyPlugin *plugin,
 struct GeanyKeyGroup *plugin_set_key_group(GeanyPlugin *plugin,
 		const gchar *section_name, gsize count, GeanyKeyGroupCallback callback);
 
+#endif /* HAVE_PLUGINS */
 #endif /* PLUGINUTILS_H */
