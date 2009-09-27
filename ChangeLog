@@ -7,6 +7,9 @@
    Add new images referenced in the documentation.
  * doc/geany.html, doc/geany.txt:
    Several documentation improvements (patch by Lex Trotman, thanks).
+ * src/pluginutils.c:
+   Fix setting the appropriate page of the combined plugins
+   preferences dialog.
 
 
 2009-09-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

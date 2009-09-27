@@ -230,9 +230,9 @@ static void configure_plugins(Plugin *current_plugin)
 	}
 	if (cur_page >= 0)
 	{
+		gtk_widget_show_all(vbox);
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(nb), cur_page);
 
-		gtk_widget_show_all(vbox);
 		/* run the dialog */
 		while (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_APPLY);
 	}
