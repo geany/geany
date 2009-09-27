@@ -88,7 +88,8 @@ GtkWidget *plugin_configure(GtkDialog *dialog);
 
 /** Called when a plugin should show a preferences dialog, if plugin_configure() has not been
  * implemented.
- * @note It's better to implement plugin_configure() instead, but this is simpler.
+ * @warning It's better to implement plugin_configure() instead, but this is simpler.
+ * This does not integrate as well with the multiple-plugin dialog.
  * @param parent Pass this as the parent widget if showing a dialog.
  * @see plugin_configure(). */
 void plugin_configure_single(GtkWidget *parent);
