@@ -62,7 +62,8 @@
 #include "pluginutils.h"
 #include "pluginprivate.h"
 
-typedef GeanyPluginPrivate Plugin;	/* shorter alias */
+
+GList *active_plugin_list = NULL; /* list of only actually loaded plugins, always valid */
 
 
 static gboolean want_plugins = FALSE;
@@ -70,7 +71,6 @@ static gboolean want_plugins = FALSE;
 /* list of all available, loadable plugins, only valid as long as the plugin manager dialog is
  * opened, afterwards it will be destroyed */
 static GList *plugin_list = NULL;
-static GList *active_plugin_list = NULL; /* list of only actually loaded plugins, always valid */
 static gchar **active_plugins_pref = NULL; 	/* list of plugin filenames to load at startup */
 static GList *failed_plugins_list = NULL;	/* plugins the user wants active but can't be used */
 
@@ -83,7 +83,8 @@ static PluginFuncs plugin_funcs = {
 	&plugin_add_toolbar_item,
 	&plugin_module_make_resident,
 	&plugin_signal_connect,
-	&plugin_set_key_group
+	&plugin_set_key_group,
+	&plugin_show_configure
 };
 
 static DocumentFuncs doc_funcs = {
@@ -1140,97 +1141,6 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
 }
 
 
-static void on_pref_btn_clicked(gpointer btn, Plugin *p)
-{
-	p->configure_single(main_widgets.window);
-}
-
-
-static GtkWidget *create_pref_page(Plugin *p, GtkWidget *dialog)
-{
-	GtkWidget *page = NULL;	/* some plugins don't have prefs */
-
-	if (p->configure)
-	{
-		page = p->configure(GTK_DIALOG(dialog));
-
-		if (! GTK_IS_WIDGET(page))
-		{
-			geany_debug("Invalid widget returned from plugin_configure() in plugin \"%s\"!",
-				p->info.name);
-			return NULL;
-		}
-		else
-		{
-			GtkWidget *align = gtk_alignment_new(0.5, 0.5, 1, 1);
-
-			gtk_alignment_set_padding(GTK_ALIGNMENT(align), 6, 6, 6, 6);
-			gtk_container_add(GTK_CONTAINER(align), page);
-			page = align;
-		}
-	}
-	else if (p->configure_single)
-	{
-		GtkWidget *align = gtk_alignment_new(0.5, 0.5, 0, 0);
-		GtkWidget *btn;
-
-		gtk_alignment_set_padding(GTK_ALIGNMENT(align), 6, 6, 6, 6);
-
-		btn = gtk_button_new_from_stock(GTK_STOCK_PREFERENCES);
-		g_signal_connect(btn, "clicked", G_CALLBACK(on_pref_btn_clicked), p);
-		gtk_container_add(GTK_CONTAINER(align), btn);
-		page = align;
-	}
-	return page;
-}
-
-
-/* multiple plugin configure dialog */
-static void configure_plugins(Plugin *current_plugin)
-{
-	GtkWidget *parent = pm_widgets.dialog;
-	GtkWidget *dialog, *vbox, *nb;
-	GList *node;
-	gint cur_page = -1;
-
-	dialog = gtk_dialog_new_with_buttons(_("Configure Plugins"),
-		GTK_WINDOW(parent), GTK_DIALOG_DESTROY_WITH_PARENT,
-		GTK_STOCK_APPLY, GTK_RESPONSE_APPLY,
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-		GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
-	gtk_widget_set_name(dialog, "GeanyDialog");
-
-	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
-	nb = gtk_notebook_new();
-	gtk_notebook_set_scrollable(GTK_NOTEBOOK(nb), TRUE);
-	gtk_container_add(GTK_CONTAINER(vbox), nb);
-
-	foreach_list(node, active_plugin_list)
-	{
-		Plugin *p = node->data;
-		GtkWidget *page = create_pref_page(p, dialog);
-
-		if (page)
-		{
-			GtkWidget *label = gtk_label_new(p->info.name);
-			gint n = gtk_notebook_append_page(GTK_NOTEBOOK(nb), page, label);
-
-			if (p == current_plugin)
-				cur_page = n;
-		}
-	}
-	if (cur_page >= 0)
-	{
-		gtk_notebook_set_current_page(GTK_NOTEBOOK(nb), cur_page);
-
-		gtk_widget_show_all(vbox);
-		/* run the dialog */
-		while (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_APPLY);
-	}
-	gtk_widget_destroy(dialog);
-}
-
-
 static void pm_on_plugin_button_clicked(GtkButton *button, gpointer user_data)
 {
 	GtkTreeModel *model;
@@ -1246,15 +1156,7 @@ static void pm_on_plugin_button_clicked(GtkButton *button, gpointer user_data)
 		if (p != NULL)
 		{
 			if (GPOINTER_TO_INT(user_data) == PM_BUTTON_CONFIGURE)
-			{
-				if (p->configure)
-					configure_plugins(p);
-				else
-				{
-					g_return_if_fail(p->configure_single);
-					p->configure_single(main_widgets.window);
-				}
-			}
+				plugin_show_configure(&p->public);
 			else if (GPOINTER_TO_INT(user_data) == PM_BUTTON_HELP && p->help != NULL)
 				p->help();
 		}

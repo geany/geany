@@ -28,6 +28,9 @@
 
 #ifdef HAVE_PLUGINS
 
+extern GList *active_plugin_list;
+
+
 void plugins_init(void);
 
 void plugins_finalize(void);

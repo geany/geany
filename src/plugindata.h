@@ -50,7 +50,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 157,
+	GEANY_API_VERSION = 158,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -572,6 +572,7 @@ typedef struct PluginFuncs
 		GCallback callback, gpointer user_data);
 	struct GeanyKeyGroup* (*set_key_group)(GeanyPlugin *plugin,
 		const gchar *section_name, gsize count, _GeanyKeyGroupCallback callback);
+	void	(*show_configure)(GeanyPlugin *plugin);
 }
 PluginFuncs;
 

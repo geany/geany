@@ -546,6 +546,12 @@ static void on_hide_sidebar(void)
 }
 
 
+static void on_show_preferences(void)
+{
+	plugin_show_configure(geany_plugin);
+}
+
+
 static GtkWidget *create_popup_menu(void)
 {
 	GtkWidget *item, *menu;
@@ -578,6 +584,15 @@ static GtkWidget *create_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_hidden_files_clicked), NULL);
+
+	item = gtk_separator_menu_item_new();
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+
+	item = gtk_image_menu_item_new_from_stock(GTK_STOCK_PREFERENCES, NULL);
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect(item, "activate", G_CALLBACK(on_show_preferences), NULL);
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);

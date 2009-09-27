@@ -15,6 +15,11 @@
    Make the multiple-configure dialog notebook tabs scrollable.
  * src/pluginutils.c, src/pluginutils.h:
    Don't build pluginutils.o if HAVE_PLUGINS is not defined.
+ * src/pluginprivate.h, src/plugindata.h, src/pluginutils.c,
+   src/plugins.c, src/pluginutils.h, src/plugins.h, po/POTFILES.in,
+   plugins/geanyfunctions.h, plugins/filebrowser.c:
+   Add plugin_show_configure() API utility function.
+   Add File Browser popup menu 'Preferences' item.
 
 
 2009-09-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

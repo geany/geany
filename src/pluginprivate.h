@@ -59,5 +59,7 @@ typedef struct GeanyPluginPrivate
 }
 GeanyPluginPrivate;
 
+typedef GeanyPluginPrivate Plugin;	/* shorter alias */
+
 
 #endif /* PLUGINPRIVATE_H */

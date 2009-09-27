@@ -43,5 +43,7 @@ void plugin_signal_connect(GeanyPlugin *plugin,
 struct GeanyKeyGroup *plugin_set_key_group(GeanyPlugin *plugin,
 		const gchar *section_name, gsize count, GeanyKeyGroupCallback callback);
 
+void plugin_show_configure(GeanyPlugin *plugin);
+
 #endif /* HAVE_PLUGINS */
 #endif /* PLUGINUTILS_H */

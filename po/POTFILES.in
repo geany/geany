@@ -23,6 +23,7 @@ src/msgwindow.c
 src/navqueue.c
 src/notebook.c
 src/plugins.c
+src/pluginutils.c
 src/prefs.c
 src/printing.c
 src/project.c
