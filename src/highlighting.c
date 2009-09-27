@@ -88,18 +88,15 @@ enum	/* Geany common styling */
 	GCS_MAX
 };
 
-typedef struct
-{
-	/* can take values 1 or 2 (or 3) */
-	guint marker:2;
-	guint lines:2;
-	guint draw_line:3;
-} FoldingStyle;
-
 static struct
 {
 	GeanyLexerStyle	 styling[GCS_MAX];
-	FoldingStyle	 folding_style;
+
+	/* can take values 1 or 2 (or 3) */
+	gint fold_marker;
+	gint fold_lines;
+	gint fold_draw_line;
+
 	gchar			*wordchars;
 } common_style_set;
 
@@ -353,7 +350,8 @@ static void get_keyfile_hex(GKeyFile *config, GKeyFile *configh,
 }
 
 
-/* FIXME: is not safe for badly formed key e.g. "key=" */
+/* Get first and second integer numbers, store in foreground and background fields of @a style.
+ * FIXME: is not safe for badly formed key e.g. "key=" */
 static void get_keyfile_int(GKeyFile *config, GKeyFile *configh, const gchar *section,
 							const gchar *key, gint fdefault_val, gint sdefault_val,
 							GeanyLexerStyle *style)
@@ -387,6 +385,22 @@ static void get_keyfile_int(GKeyFile *config, GKeyFile *configh, const gchar *se
 		style->background = sdefault_val;
 
 	g_strfreev(list);
+}
+
+
+/* first or second can be NULL. */
+static void get_keyfile_ints(GKeyFile *config, GKeyFile *configh, const gchar *section,
+							const gchar *key,
+							gint fdefault_val, gint sdefault_val,
+							gint *first, gint *second)
+{
+	GeanyLexerStyle tmp_style;
+
+	get_keyfile_int(config, configh, section, key, fdefault_val, sdefault_val, &tmp_style);
+	if (first)
+		*first = tmp_style.foreground;
+	if (second)
+		*second = tmp_style.background;
 }
 
 
@@ -557,40 +571,23 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 	get_keyfile_hex(config, config_home, "marker_line", 0x000000, 0xffff00, FALSE, &common_style_set.styling[GCS_MARKER_LINE]);
 	get_keyfile_hex(config, config_home, "marker_search", 0x000000, 0x00007f, FALSE, &common_style_set.styling[GCS_MARKER_SEARCH]);
 	get_keyfile_hex(config, config_home, "marker_mark", 0x000000, 0xb8f4b8, FALSE, &common_style_set.styling[GCS_MARKER_MARK]);
-	{
-		/* hack because get_keyfile_int uses a Style struct */
-		GeanyLexerStyle tmp_style;
-		get_keyfile_int(config, config_home, "styling", "folding_style",
-			1, 1, &tmp_style);
-		common_style_set.folding_style.marker = tmp_style.foreground;
-		common_style_set.folding_style.lines = tmp_style.background;
-		get_keyfile_int(config, config_home, "styling", "folding_horiz_line",
-			2, 0, &tmp_style);
-		common_style_set.folding_style.draw_line = tmp_style.foreground;
-		get_keyfile_int(config, config_home, "styling", "caret_width",
-			1, 0, &tmp_style);
-		common_style_set.styling[GCS_CARET].background = tmp_style.foreground;
-		get_keyfile_int(config, config_home, "styling", "line_wrap_visuals",
-			3, 0, &tmp_style);
-		common_style_set.styling[GCS_LINE_WRAP_VISUALS].foreground = tmp_style.foreground;
-		common_style_set.styling[GCS_LINE_WRAP_VISUALS].background = tmp_style.background;
-		get_keyfile_int(config, config_home, "styling", "line_wrap_indent",
-			0, 0, &tmp_style);
-		common_style_set.styling[GCS_LINE_WRAP_INDENT].foreground = tmp_style.foreground;
-		common_style_set.styling[GCS_LINE_WRAP_INDENT].background = tmp_style.background;
-		get_keyfile_int(config, config_home, "styling", "translucency",
-			256, 256, &tmp_style);
-		common_style_set.styling[GCS_TRANSLUCENCY].foreground = tmp_style.foreground;
-		common_style_set.styling[GCS_TRANSLUCENCY].background = tmp_style.background;
-		get_keyfile_int(config, config_home, "styling", "marker_translucency",
-			256, 256, &tmp_style);
-		common_style_set.styling[GCS_MARKER_TRANSLUCENCY].foreground = tmp_style.foreground;
-		common_style_set.styling[GCS_MARKER_TRANSLUCENCY].background = tmp_style.background;
-		get_keyfile_int(config, config_home, "styling", "line_height",
-			0, 0, &tmp_style);
-		common_style_set.styling[GCS_LINE_HEIGHT].foreground = tmp_style.foreground;
-		common_style_set.styling[GCS_LINE_HEIGHT].background = tmp_style.background;
-	}
+
+	get_keyfile_ints(config, config_home, "styling", "folding_style",
+		1, 1, &common_style_set.fold_marker, &common_style_set.fold_lines);
+	get_keyfile_ints(config, config_home, "styling", "folding_horiz_line",
+		2, 0, &common_style_set.fold_draw_line, NULL);
+	get_keyfile_ints(config, config_home, "styling", "caret_width",
+		1, 0, &common_style_set.styling[GCS_CARET].background, NULL); /* caret.foreground used earlier */
+	get_keyfile_int(config, config_home, "styling", "line_wrap_visuals",
+		3, 0, &common_style_set.styling[GCS_LINE_WRAP_VISUALS]);
+	get_keyfile_int(config, config_home, "styling", "line_wrap_indent",
+		0, 0, &common_style_set.styling[GCS_LINE_WRAP_INDENT]);
+	get_keyfile_int(config, config_home, "styling", "translucency",
+		256, 256, &common_style_set.styling[GCS_TRANSLUCENCY]);
+	get_keyfile_int(config, config_home, "styling", "marker_translucency",
+		256, 256, &common_style_set.styling[GCS_MARKER_TRANSLUCENCY]);
+	get_keyfile_int(config, config_home, "styling", "line_height",
+		0, 0, &common_style_set.styling[GCS_LINE_HEIGHT]);
 
 	get_keyfile_wordchars(config, config_home, &common_style_set.wordchars);
 	whitespace_chars = get_keyfile_whitespace_chars(config, config_home);
@@ -663,7 +660,7 @@ static void styleset_common(ScintillaObject *sci, filetype_id ft_id)
 	SSM(sci, SCI_SETMARGINMASKN, 2, SC_MASK_FOLDERS);
 
 	/* drawing a horizontal line when text if folded */
-	switch (common_style_set.folding_style.draw_line)
+	switch (common_style_set.fold_draw_line)
 	{
 		case 1:
 		{
@@ -683,7 +680,7 @@ static void styleset_common(ScintillaObject *sci, filetype_id ft_id)
 	}
 
 	/* choose the folding style - boxes or circles, I prefer boxes, so it is default ;-) */
-	switch (common_style_set.folding_style.marker)
+	switch (common_style_set.fold_marker)
 	{
 		case 2:
 		{
@@ -704,7 +701,7 @@ static void styleset_common(ScintillaObject *sci, filetype_id ft_id)
 	}
 
 	/* choose the folding style - straight or curved, I prefer straight, so it is default ;-) */
-	switch (common_style_set.folding_style.lines)
+	switch (common_style_set.fold_lines)
 	{
 		case 2:
 		{

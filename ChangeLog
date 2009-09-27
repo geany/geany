@@ -20,6 +20,8 @@
    plugins/geanyfunctions.h, plugins/filebrowser.c:
    Add plugin_show_configure() API utility function.
    Add File Browser popup menu 'Preferences' item.
+ * src/highlighting.c:
+   Add get_keyfile_ints() instead of using tmp_style hack.
 
 
 2009-09-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
