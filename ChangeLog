@@ -1,3 +1,10 @@
+2009-09-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c:
+   Only focus toolbar goto line entry when pressing keybinding if it's
+   visible (patch by Eugene Arshinov, thanks).
+
+
 2009-09-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * THANKS, src/about.c, src/highlighting.c, data/filetypes.xml:

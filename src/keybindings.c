@@ -1834,13 +1834,18 @@ static void cb_func_goto_action(guint key_id)
 			return;
 		case GEANY_KEYS_GOTO_LINE:
 		{
-			GtkWidget *wid = toolbar_get_widget_child_by_name("GotoEntry");
+			if (toolbar_prefs.visible)
+			{
+				GtkWidget *wid = toolbar_get_widget_child_by_name("GotoEntry");
 
-			/* use toolbar item if shown */
-			if (wid)
-				gtk_widget_grab_focus(wid);
-			else
-				on_go_to_line_activate(NULL, NULL);
+				/* use toolbar item if shown */
+				if (wid)
+				{
+					gtk_widget_grab_focus(wid);
+					return;
+				}
+			}
+			on_go_to_line_activate(NULL, NULL);
 			return;
 		}
 		case GEANY_KEYS_GOTO_MATCHINGBRACE:
