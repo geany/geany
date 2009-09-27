@@ -1370,8 +1370,8 @@ static void styleset_markup_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 	get_keyfile_hex(config, config_home, "jscript_symbols", 0x301010, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[53]);
 	get_keyfile_hex(config, config_home, "jscript_stringeol", 0x000000, 0xe0c0e0, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[54]);
 	get_keyfile_hex(config, config_home, "jscript_regex", 0x105090, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[55]);
-	/* custom hack for asp.default.language setting, uses foreground only */
-	get_keyfile_hex(config, config_home, "html_asp_default_language", 0x000001, 0x000000, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[56]);
+
+	get_keyfile_int(config, config_home, "styling", "html_asp_default_language", 1, 0, &style_sets[GEANY_FILETYPES_XML].styling[56]);
 
 	style_sets[GEANY_FILETYPES_XML].keywords = g_new(gchar*, 7);
 	get_keyfile_keywords(config, config_home, "html", GEANY_FILETYPES_XML, 0, "a abbr acronym address applet area b base basefont bdo big blockquote body br button caption center cite code col colgroup dd del dfn dir div dl dt em embed fieldset font form frame frameset h1 h2 h3 h4 h5 h6 head hr html i iframe img input ins isindex kbd label legend li link map menu meta noframes noscript object ol optgroup option p param pre q quality s samp script select small span strike strong style sub sup table tbody td textarea tfoot th thead title tr tt u ul var xmlns leftmargin topmargin abbr accept-charset accept accesskey action align alink alt archive axis background bgcolor border cellpadding cellspacing char charoff charset checked cite class classid clear codebase codetype color cols colspan compact content coords data datafld dataformatas datapagesize datasrc datetime declare defer dir disabled enctype face for frame frameborder selected headers height href hreflang hspace http-equiv id ismap label lang language link longdesc marginwidth marginheight maxlength media framespacing method multiple name nohref noresize noshade nowrap object onblur onchange onclick ondblclick onfocus onkeydown onkeypress onkeyup onload onmousedown onmousemove onmouseover onmouseout onmouseup onreset onselect onsubmit onunload profile prompt pluginspage readonly rel rev rows rowspan rules scheme scope scrolling shape size span src standby start style summary tabindex target text title type usemap valign value valuetype version vlink vspace width text password checkbox radio submit reset file hidden image public doctype xml xml:lang");
@@ -1387,7 +1387,6 @@ static void styleset_markup_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 static void styleset_markup(ScintillaObject *sci, gboolean set_keywords)
 {
 	guint i;
-	gint asp_default_language;
 	const gchar *keywords;
 
 	/* Used by several filetypes */
@@ -1539,14 +1538,14 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords)
 	SSM(sci, SCI_SETPROPERTY, (uptr_t) "fold.html", (sptr_t) "1");
 	SSM(sci, SCI_SETPROPERTY, (uptr_t) "fold.html.preprocessor", (sptr_t) "0");
 
-	/* hack to check for asp.default.language setting in filetypes.xml file */
-	asp_default_language = style_sets[GEANY_FILETYPES_XML].styling[56].foreground;
-	asp_default_language >>= 16; /* encodeded as BBGGRR, grab just BB */
-	if (asp_default_language > 1)
 	{
-		gchar *asp_default_lang = g_strdup_printf("%d", asp_default_language);
-		SSM(sci, SCI_SETPROPERTY, (uptr_t) "asp.default.language", (sptr_t) &asp_default_lang[0]);
-		g_free(asp_default_lang);
+		gint asp_default_language;
+		gchar *str;
+
+		asp_default_language = style_sets[GEANY_FILETYPES_XML].styling[56].foreground;
+		str = g_strdup_printf("%d", asp_default_language);
+		SSM(sci, SCI_SETPROPERTY, (uptr_t) "asp.default.language", (sptr_t) &str[0]);
+		g_free(str);
 	}
 }
 

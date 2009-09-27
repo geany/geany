@@ -72,10 +72,10 @@ jscript_regex=0x105090;0xffffff;false;false
 # filetypes.python are used
 
 # default scripting language for ASP
-# 0x000001 = JavaScript (or leave blank for default)
-# 0x000002 = VBScript
-# 0x000003 = Python
-#html_asp_default_language=0x000002
+# 1 = JavaScript (or leave blank for default)
+# 2 = VBScript
+# 3 = Python
+#html_asp_default_language=2
 
 
 [keywords]
