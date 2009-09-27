@@ -36,8 +36,8 @@ About Geany
 
 Geany is a small and lightweight Integrated Development Environment. It
 was developed to provide a small and fast IDE, which has only a few
-dependencies from other packages. Another goal was to be as independent
-as possible from a special Desktop Environment like KDE or GNOME -
+dependencies on other packages. Another goal was to be as independent
+as possible from a particular Desktop Environment like KDE or GNOME -
 Geany only requires the GTK2 runtime libraries.
 
 Some basic features of Geany:
@@ -62,7 +62,7 @@ Where to get it
 ---------------
 
 You can obtain Geany from http://www.geany.org/ or perhaps also from
-your distributor. For a list of available packages, please see
+your distribution. For a list of available packages, please see
 http://www.geany.org/Download/ThirdPartyPackages.
 
 
@@ -103,7 +103,7 @@ Requirements
 You will need the GTK (>= 2.8.0) libraries and their dependencies
 (Pango, GLib and ATK). Your distro should provide packages for these,
 usually installed by default. For Windows, you can download an installer
-which bundles these libraries from the website.
+from the website which bundles these libraries.
 
 
 Binary packages
@@ -144,15 +144,15 @@ Then as root::
 Waf based build system
 ^^^^^^^^^^^^^^^^^^^^^^
 
-The Waf build system is still quite young and under heavy development but already in an
-usable state. In contrary to the Autotools, Waf needs Python. So before using Waf, you need
+The Waf build system is still quite young and under heavy development but already in a
+usable state. In contrast to the Autotools system, Waf needs Python. So before using Waf, you need
 to install Python on your system.
 The advantage of the Waf build system over the Autotools based build system is that the whole
-build process might be a bit faster. Especially when you use the Waf cache feature repetitive
-builds (e.g. when changing only a few source files to test something) will become much faster
-since Waf will cache and re-use the unchanged built files and only compile the changed code
-again. See `Waf Cache`_ for details.
-To build Geany with Waf as usual run::
+build process might be a bit faster. Especially when you use the Waf
+cache feature for repetitive builds (e.g. when changing only a few source files
+to test something) will become much faster since Waf will cache and re-use the
+unchanged built files and only compile the changed code again. See `Waf Cache`_ for details.
+To build Geany with Waf as run::
 
     $ ./waf configure
     $ ./waf build
@@ -164,9 +164,9 @@ Then as root::
 Waf Cache
 `````````
 
-The Waf build system has a nice and interesting feature which can help a lot to avoid
-unnecessary rebuilding of unchanged code. This often happens when developing new features
-or trying to debug something.
+The Waf build system has a nice and interesting feature which can help  to avoid
+a lot of unnecessary rebuilding of unchanged code. This often happens when developing new features
+or trying to debug something in Geany.
 Waf is able to store and retrieve the object files from a cache. This cache is declared
 using the environment variable ``WAFCACHE``.
 A possible location of the cache directory could be ``~/.cache/waf``. In order to make use of
@@ -186,8 +186,9 @@ http://code.google.com/p/waf/wiki/CacheObjectFiles.
 
 Cleaning the Cache
 ******************
-You should take care about the size of the cache directory as it may grow rapidly by time.
-Waf doesn't do any cleaning or other house-keeping of the cache yet so you need to keep it
+You should be careful about the size of the cache directory as it may
+grow rapidly over time.
+Waf doesn't do any cleaning or other house-keeping of the cache yet, so you need to keep it
 clean by yourself.
 An easy way to keep it clean is to run the following command regularly to remove old
 cached files::
@@ -216,28 +217,29 @@ options.
 
 * See also `Compile-time options`_.
 
-Dynamic linking loader support
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Dynamic linking loader support and VTE
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 In the case that your system lacks dynamic linking loader support, you
 probably want to pass the option ``--disable-vte`` to the ``configure``
 script. This prevents compiling Geany with dynamic linking loader
-support to automatically load ``libvte.so.4`` if available.
+support for automatically loading ``libvte.so.4`` if available.
 
 Build problems
 ^^^^^^^^^^^^^^
 If there are any errors during compilation, check your build
 environment and try to find the error, otherwise contact the mailing
 list or one the authors. Sometimes you might need to ask for specific
-help from your distro.
+help from your distribution.
 
 
 Installation prefix
 -------------------
 If you want to edit any of Geany's system configuration files after
 installation you will need to know the installation prefix.  Usually this
-is not necessary as you can just use user configuration files.
+is not necessary as you can just use per user configuration files and
+you will not need root permissions.
 
-Use the ``--print-prefix`` option to check - see `Command line
+Use the ``--print-prefix`` option to Geany to check - see `Command line
 options`_. The first path is the prefix.
 
 This is commonly ``/usr`` if you installed from a binary package, or
@@ -266,7 +268,39 @@ You can start Geany in the following ways:
 
       % geany
 
+The Geany workspace
+-------------------
 
+The Geany window is shown in the following figure:
+
+.. image:: ./images/main_window.png
+
+The workspace has the following parts:
+
+* The menu.
+* An optional toolbar.
+* An optional sidebar that can show the following tabs:
+
+  * Documents - A document list, and
+  * Symbols - A list of symbols in your code.
+
+* The main editor window.
+* An optional message window which can show the following tabs:
+
+  * Status - A list of status messages.
+  * Compiler - The output of compiling or building programs.
+  * Messages - Results of 'Find Usage', 'Find Usage' 'Find in Files' and other actions
+  * Scribble - A text scratchpad for any use.
+  * Terminal - An optional terminal window.
+
+* A status bar
+
+Additional tabs may be added to the sidebar and message window by plugins.
+
+The position of the tabs can be selected in the interface preferences.
+
+The sizes of the sidebar and message window can be adjusted by
+dragging the dividers.
 
 Command line options
 --------------------
@@ -281,9 +315,10 @@ Short option  Long option              Function
 
 *none*        --column                 Set initial column number for the first opened file.
 
--c dir_name   --config=directory_name  Use an alternate configuration directory. Default
-                                       configuration directory is ``~/.config/geany/`` and there
-                                       resides ``geany.conf`` and other configuration files.
+-c dir_name   --config=directory_name  Use an alternate configuration directory. The default
+                                       configuration directory is ``~/.config/geany/`` and that
+                                       is where ``geany.conf`` and other configuration files
+                                       reside.
 
 *none*        --ft-names               Print a list of Geany's internal filetype names (useful
                                        for snippets configuration).
@@ -309,7 +344,7 @@ Short option  Long option              Function
 
 *none*        --print-prefix           Print installation prefix, the data directory, the lib
                                        directory and the locale directory (in this order) to
-                                       stdout, each per line. This is mainly intended for plugin
+                                       stdout, one line each. This is mainly intended for plugin
                                        authors to detect installation paths.
 
 -s            --no-session             Do not load the previous session's files.
@@ -367,7 +402,7 @@ launched. You can disable this feature in the preferences dialog
 files on the command line, only these files will be opened, but you
 can find the files from the last session in the file menu under the
 "Recent files" item. By default this contains the last 10 recently
-opened files. You can change the amount of recently opened files in
+opened files. You can change the number of recently opened files in
 the preferences dialog.
 
 You can start several instances of Geany, but only the first will
@@ -379,8 +414,8 @@ files in a running instance using the appropriate command line option.
 Opening files from the command-line in a running instance
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Geany detects an already running instance of itself and opens files
-from the command-line in the already running instance. So, Geany can
+Geany detects if there is an an instance of itself already running and opens files
+from the command-line in that instance. So, Geany can
 be used to view and edit files by opening them from other programs
 such as a file manager.
 
@@ -399,7 +434,7 @@ called `Command line options`_.
 Virtual terminal emulator widget (VTE)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you have installed ``libvte.so`` in your system, it is loaded
+If you have installed ``libvte.so`` on your system, it is loaded
 automatically by Geany, and you will have a terminal widget in the
 notebook at the bottom.
 
@@ -409,10 +444,10 @@ this file in order to run Geany. Additionally, you can disable the use
 of the terminal widget by command line option, for more information
 see the section called `Command line options`_.
 
-You can use this terminal (from now on called VTE) nearly as an usual
-terminal program like xterm. There is basic clipboard support. You
+You can use this terminal (from now on called VTE) much as you would
+a terminal program like xterm. There is basic clipboard support. You
 can paste the contents of the clipboard by pressing the right mouse
-button to open the popup menu and choosing Paste. To copy text from
+button to open the popup menu, and choosing Paste. To copy text from
 the VTE, just select the desired text and then press the right mouse
 button and choose Copy from the popup menu. On systems running the
 X Window System you can paste the last selected text by pressing the
@@ -428,11 +463,11 @@ you can use the argument ``--login``.
 .. note::
     Geany tries to load ``libvte.so``. If this fails, it tries to load
     some other filenames. If this fails too, you should check whether you
-    installed libvte correctly. Again, Geany also runs without this
+    installed libvte correctly. Again note, Geany will run without this
     library.
 
 It could be, that the library is called something else than
-``libvte.so`` (e.g. on FreeBSD 6.0 it is called ``libvte.so.8``). So
+``libvte.so`` (e.g. on FreeBSD 6.0 it is called ``libvte.so.8``). If so
 please set a link to the correct file (as root)::
 
     # ln -s /usr/lib/libvte.so.X /usr/lib/libvte.so
@@ -454,12 +489,12 @@ do this, just edit your ``.gtkrc-2.0`` (usually found in your home
 directory on UNIX-like systems and in the etc subdirectory of your
 Geany installation on Windows).
 
-To get a defined style get noticed by Geany you must it assign to
-one of Geany's widgets. To do so, use the following line::
+To have a defined style used by Geany you must assign it to
+at least one of Geany's widgets. For example use the following line::
 
     widget "Geany*" style "geanyStyle"
 
-This would assign your already defined style "geany_style" to all Geany
+This would assign your style "geany_style" to all Geany
 widgets. You can also assign styles only to specific widgets. At the
 moment you can use the following widgets:
 
@@ -473,7 +508,7 @@ moment you can use the following widgets:
 * GeanyMenubar
 * GeanyToolbar
 
-Example of a simple ``.gtkrc-2.0``::
+An example of a simple ``.gtkrc-2.0``::
 
     style "geanyStyle"
     {
@@ -497,8 +532,11 @@ Switching between documents
 The documents list and the editor tabs are two different ways
 to switch between documents using the mouse. When you hit the key
 combination to move between tabs, the order is determined by the tab
-order, not alphabetical as shown in the documents list (regardless
-of whether or not editor tabs are visible).
+order. Its is not alphabetical as shown in the documents list
+(regardless of whether or not editor tabs are visible).
+
+The tabs can be positioned at the top, bottom, left, or right of the
+main editing window, by a selection in the interface preferences.
 
 See the `Notebook tab keybindings`_ section for useful
 shortcuts including for Most-Recently-Used document switching.
@@ -512,27 +550,27 @@ Using character sets
 ^^^^^^^^^^^^^^^^^^^^
 
 Geany provides support for detecting and converting character sets. So
-you can open and save files in different character sets and even
-can convert a file from a character set to another one. To do this,
-Geany uses the character conversion capabilities of the GLib.
+you can open and save files in different character sets, and even
+convert a file from one character set to another. To do this,
+Geany uses the character conversion capabilities of the GLib library.
 
 Only text files are supported, i.e. opening files which contain
 NULL-bytes may fail. Geany will try to open the file anyway but it is
-likely that the file will be truncated because it can only opened up
+likely that the file will be truncated because it can only be read up
 to the first occurrence of a NULL-byte. All characters after this
 position are lost and are not written when you save the file.
 
-Geany tries to detect the encoding of a file while opening it. It
-might be that the encoding of a file cannot be detected correctly so
-you have to set manually the encoding of the file in order to display
-it correctly. You can this in the file open dialog by selecting
-an encoding in the drop down box or by reloading the file with the
+Geany tries to detect the encoding of a file while opening it, but
+auto-detecting the encoding of a file is not easy and sometimes an
+encoding might not be detected correctly. In this case you have to
+set the encoding of the file manually in order to display it
+correctly. You can this in the file open dialog by selecting an
+encoding in the drop down box or by reloading the file with the
 file menu item "Reload as". The auto-detection works well for most
-encodings but there are also some encodings known where auto-detection
-has its problems. Auto-detecting the encoding of a file is not easy
-and sometimes an encoding might be detected not correctly.
+encodings but there are also some encodings where it is known that
+auto-detection has problems.
 
-There are different ways to use different encodings in Geany:
+There are different ways to set different encodings in Geany:
 
 * Using the file open dialog
 
@@ -545,11 +583,11 @@ There are different ways to use different encodings in Geany:
 * Using the "Reload as" menu item
 
   This item reloads the current file with the specified encoding. It can
-  help if you opened a file and found out that a wrong encoding was used.
+  help if you opened a file and found out that the wrong encoding was used.
 
 * Using the "Set encoding" menu item
 
-  In contrary to the above two options, this will not change or reload
+  Contrary to the above two options, this will not change or reload
   the current file unless you save it. It is useful when you want to
   change the encoding of the file.
 
@@ -557,8 +595,9 @@ There are different ways to use different encodings in Geany:
 
   As mentioned above, auto-detecting the encoding of a file may fail on
   some encodings. If you know that Geany doesn't open a certain file,
-  you can add a special line to the beginning of the file to force an
-  encoding when opening the file (for details see below).
+  you can add the specification line, described in the next section,
+  to the beginning of the file to force Geany to use a specific
+  encoding when opening the file.
 
 
 In-file encoding specification
@@ -569,7 +608,7 @@ like::
 
     <meta http-equiv="content-type" content="text/html; charset=ISO-8859-15" />
 
-and the found charset is used when opening the file. This is useful if the
+and the specified charset is used when opening the file. This is useful if the
 encoding of the file cannot be detected properly.
 For non-HTML files you can also define a line like::
 
@@ -579,8 +618,8 @@ or::
 
     # geany_encoding=ISO-8859-15 #
 
-to force an encoding to be used. The used #, /\* and \*/ are only examples
-for filetype-specific comment characters. It doesn't matter which
+to force an encoding to be used. The #, /\* and \*/ are examples
+of filetype-specific comment characters. It doesn't matter which
 characters are around the string " geany_encoding=ISO-8859-15 " as long
 as there is at least one whitespace character before and after this
 string. Whitespace characters are in this case a space or tab character.
@@ -589,7 +628,15 @@ encoding but Geany constantly detects the file encoding as ISO-8859-1.
 Then you simply add such a line to the file and Geany will open it
 correctly the next time.
 
-Since Geany 0.15 you can also use lines like::
+Since Geany 0.15 you can also use lines which match the
+regular expression used to find the encoding string:
+``coding[\t ]*[:=][\t ]*([a-z0-9-]+)[\t ]*``
+
+.. note::
+    These specifications must be in the first 512 bytes of the file.
+    Anything after the first 512 bytes will not be recognized.
+
+Some examples are::
 
     # encoding = ISO-8859-15
 
@@ -597,18 +644,10 @@ or::
 
     # coding: ISO-8859-15
 
-The used regular expression to find the encoding string is:
-``coding[\t ]*[:=][\t ]*([a-z0-9-]+)[\t ]*``
-
-.. note::
-    These specifications must be in the first 512 bytes of the file.
-    Anything after the first 512 bytes will not be recognized.
-
-
 Special encoding "None"
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-There is a special encoding "None" which is actually no real
+There is a special encoding "None" which uses no
 encoding. It is useful when you know that Geany cannot auto-detect
 the encoding of a file and it is not displayed correctly. Especially
 when the file contains NULL-bytes this can be useful to skip auto
@@ -620,16 +659,19 @@ without any character conversion.
 Unicode Byte-Order-Mark (BOM)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Furthermore, Geany detects an Unicode Byte Order Mark (see
+Furthermore, Geany detects a Unicode Byte Order Mark (see
 http://en.wikipedia.org/wiki/Byte_Order_Mark for details). Of course,
-this feature is only available if the opened file is in an Unicode
+this feature is only available if the opened file is in a Unicode
 encoding. The Byte Order Mark helps to detect the encoding of a file,
 e.g. whether it is UTF-16LE or UTF-16BE and so on. On Unix-like systems
-using a Byte Order Mark could cause some problems, e.g. the gcc stops
+using a Byte Order Mark could cause some problems for programs not
+expecting it, e.g. the compiler gcc stops
 with stray errors, PHP does not parse a script containing a BOM and
 script files starting with a she-bang maybe cannot be started. In the
 status bar you can easily see whether the file starts with a BOM or
-not. If you want to set a BOM for a file or if you want to remove it
+not.
+
+If you want to set a BOM for a file or if you want to remove it
 from a file, just use the document menu and toggle the checkbox.
 
 .. note::
@@ -649,8 +691,9 @@ Folding
 Geany provides basic code folding support. Folding means the ability to
 show and hide parts of the text in the current file. You can hide
 unimportant code sections and concentrate on the parts you are working on
-and later you can show these sections again. In the editor window there is
-a small grey margin on the left side with some [+] and [-] symbols. By
+and later you can show hidden sections again. In the editor window there is
+a small grey margin on the left side with [+] and [-] symbols which
+show hidden parts and hide parts of the file respectively. By
 clicking on these icons you can simply show and hide sections which are
 marked by vertical lines within this margin. For many filetypes nested
 folding is supported, so there may be several fold points within other
@@ -666,7 +709,7 @@ folded (when clicking on a [+] symbol).
 When clicking on a [-] symbol, Geany will fold all nested fold points
 below the current one if they are unfolded.
 
-The usage of this option can be instantly inverted by pressing the Shift
+This option can be inverted by pressing the Shift
 key while clicking on a fold symbol. That means, if the "Fold/Unfold all
 children of a fold point" option is enabled, pressing Shift will disable
 it for this click and vice versa.
@@ -725,7 +768,7 @@ When enabled, auto-indentation happens when pressing *Enter* in the
 Editor. It adds a certain amount of indentation to the new line so the
 user doesn't always have to indent each line manually.
 
-Geany knows four types of auto-indentation:
+Geany has four types of auto-indentation:
 
 None
     Disables auto-indentation completely.
@@ -749,7 +792,7 @@ or more lines in a document, and return the cursor to them using a
 key combination.
 
 To place a mark on a line, either left-mouse-click in the left margin
-of the editor window, or else use Ctrl-m. Either way, this will
+of the editor window, or else use Ctrl-m. This will
 produce a small green plus symbol in the margin. You can have as many
 marks in a document as you like. Click again (or use Ctrl-m again)
 to remove the bookmark. To remove all the marks in a given document,
@@ -784,12 +827,14 @@ location". This makes it easier to navigate in e.g.  foreign code
 and between different files.
 
 
-Send text through definable commands
+Sending text through custom commands
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You can define several custom commands in Geany and send the current
-selection to one of these commands. The output of the command will be
-used to replace the current selection. So, it is possible to use text
+selection to one of these commands using the "Edit->Format->Send
+Selection to" menu or keybindings.
+The output of the command will be
+used to replace the current selection. This makes it possible to use text
 formatting tools with Geany in a general way. The selected text will
 be sent to the standard input of the executed command, so the command
 should be able to read from it and it should print all results to its
@@ -807,22 +852,25 @@ entry and press OK. It will be deleted automatically.
 Context actions
 ^^^^^^^^^^^^^^^
 
-You can execute a specified command on the current word near the
-cursor position or an available selection and this word is passed
-as an argument to this command. It can be used for example to open
-some API documentation in a browser window or open any other external
-program. To do this, there is a menu entry in the popup menu of the
-editor widget and also a keyboard shortcut (see `Editor keybindings`_).
+You can execute the context action command on the current word at the
+cursor position or the available selection.  This word or selection
+can be used as an argument to the command.
+The context action is invoked by a menu entry in the popup menu of the
+editor and also a keyboard shortcut (see the section called
+`Keybindings`_).
 
-The command can be specified in the preferences dialog and additionally
-for each filetype (see "context_action_cmd" in the section called
-`Format`_). At executing, the filetype specific command is used if
-available otherwise the command specified in the preferences dialog
-is executed.
+The command can be specified in the preferences dialog and also for
+each filetype (see "context_action_cmd" in the section called
+`Format`_). When the context action is invoked, the filetype
+specific command is used if available, otherwise the command
+specified in the preferences dialog is executed.
 
-The passed word can be referred with the wildcard "%s" everywhere
-in the command, before executing it will be replaced by the current
-word. For example, the command to open the PHP API documentation
+The current word or selection can be referred with the wildcard "%s"
+in the command, it will be replaced by the current word or
+selection before the command is executed.
+
+For example a context action can be used to open API documentation
+in a browser window, the command to open the PHP API documentation
 would be::
 
     firefox "http://www.php.net/%s"
@@ -887,10 +935,20 @@ User-definable snippets
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 Snippets are small strings or code constructs which can be replaced or
-completed to a more complex string. So you can save a lot of time by
-not typing often used strings and letting Geany do the work for you.
+completed to a more complex string. So you can save a lot of time when
+typing common strings and letting Geany do the work for you.
 To know what to complete or replace Geany reads a configuration file
 called ``snippets.conf`` at startup.
+
+Maybe you need to often type your name, so define a snippet like this::
+
+    [Default]
+    myname=Enrico Tröger
+
+Every time you write ``myname`` <TAB> in Geany, it will replace "myname"
+with "Enrico Tröger". The key to start autocompletion can be changed
+in the preferences dialog, by default it is TAB. The corresponding keybinding
+is called ``Complete snippet``.
 
 The system-wide configuration file can be found in
 ``$prefix/share/geany``, where ``$prefix`` is the path where Geany is
@@ -904,30 +962,33 @@ For example::
 
     % cp /usr/local/share/geany/snippets.conf /home/username/.config/geany/
 
-Then you can edit the file and the changes are also available
+Then you can edit the file and the changes will remain available
 after an update of Geany because the file resides in your
 configuration directory. Alternatively, you can create a file
 ``~/.config/geany/snippets.conf`` and add only these settings you want
 to change. All missing settings will be read from the global snippets
 file in ``$prefix/share/geany``.
 
-The file ``snippets.conf`` may contain several sections for each
-filetype. It also contains two additional sections "Default" and
-"Special". Default contains all snippets which are available
-for every filetype. You may define another section for a certain
-filetype(e.g. C++) containing the same snippets. Then when using
-such a snippet in a C++ file the snippet defined in the C++ section will
-be used. In any other file the snippet defined in the Default section will
-be used unless a section for the current filetype exists and the used
-snippet is defined in this section. The section "Special" contains special
-snippets which can only be used in other snippets. So you can define often
-used parts of snippets and just use the special snippet as a placeholder
-(see the ``snippets.conf`` for details).
+The file ``snippets.conf`` contains sections defining snippets that
+are available for particular filetypes and in general.
 
-To define snippets you can use several special characters which
+The two sections "Default" and "Special" apply to all filetypes.
+"Default" contains all snippets which are available for every
+filetype and "Special" contains snippets which can only be used in
+other snippets. So you can define often used parts of snippets and
+just use the special snippet as a placeholder (see the
+``snippets.conf`` for details).
+
+You can define sections with the name of a filetype eg "C++".  The
+snippets in that section are only available for use in files with that
+filetype.  Snippets in filetype sections will hide snippets with the
+same name in the "Default" section when used in a file of that
+filetype.
+
+To define snippets you can use several special character sequences which
 will be replaced when using the snippet:
 
-**Wildcards for snippets**
+**Substitution Sequences for snippets**
 
 ================  =========================================================
 \\n or %newline%  Insert a new line (it will be replaced by the used EOL
@@ -947,7 +1008,7 @@ will be replaced when using the snippet:
 
 %...%             "..." means the name of a key in the "Special" section.
                   If you have defined a key "brace_open" in the "Special"
-                  section you can use %brace_open" in any other snippet.
+                  section you can use %brace_open% in any other snippet.
 ================  =========================================================
 
 Snippet names must not contain spaces otherwise they won't
@@ -955,16 +1016,6 @@ work correctly. But beside that you can define almost any
 string as a snippet and use it later in Geany. It is not limited
 to existing contructs of certain programming languages(like ``if``,
 ``for``, ``switch``). Define whatever you need.
-
-Maybe you need to often type your name, so define a snippet like this::
-
-    [Default]
-    myname=Enrico Tröger
-
-Every time you write ``myname`` <TAB> in Geany, it will replace "myname"
-with "Enrico Tröger". The key to start autocompletion can be changed
-in the preferences dialog, by default it is TAB. The corresponding keybinding
-is called ``Complete snippet``.
 
 Since Geany 0.15 you can also use most of the available templates wildcards
 listed in `Template wildcards`_. All wildcards which are listed as
@@ -976,8 +1027,9 @@ listed in `Template wildcards`_. All wildcards which are listed as
 this will replace ``myname`` with "My name is " and the value of the template
 preference ``developer``.
 
-You may change the behaviour Geany recognizes the word to complete,
-i.e. where define the start and end of a word. The section "Special" may
+You can change the way Geany recognizes the word to complete,
+that is how the start and end of a word is recognised when the
+snippet completion is requested. The section "Special" may
 contain a key "wordchars" which lists all characters a string may contain
 to be recognized as a word for completion. Leave it commented to use
 default characters or define it to add or remove characters to fit your
@@ -987,7 +1039,7 @@ needs.
 Inserting Unicode characters
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-With GTK 2.10 and above, you can hit Ctrl-Shift-u, then still holding
+With GTK 2.10 and above, you can insert Unicode code points by hitting Ctrl-Shift-u, then still holding
 Ctrl-Shift, type some hex digits representing the code point for the
 character you want, then let go of Ctrl-Shift and hit a key such as
 the right arrow.
@@ -1081,10 +1133,10 @@ Change font in search dialog text fields
 
 All search related dialogs use a Monospace for the text input fields to
 increase the readability of input text. This is useful when you are
-typing e.g. regular expressions with spaces, periods and commas which
+typing input such as regular expressions with spaces, periods and commas which
 might it hard to read with a proportional font.
 
-If you want to change the font for some reason, you can do this easily
+If you want to change the font, you can do this easily
 by inserting the following style into your ``.gtkrc-2.0``
 (usually found in your home directory on UNIX-like systems and in the
 etc subdirectory of your Geany installation on Windows)::
@@ -1095,7 +1147,7 @@ etc subdirectory of your Geany installation on Windows)::
     }
     widget "GeanyDialogSearch.*.GtkEntry" style:highest "search_style"
 
-Please note the addition ":highest" in the last line which sets the priority
+Please note the addition of ":highest" in the last line which sets the priority
 of this style to the highest available. Otherwise, the style is ignored
 for the search dialogs.
 
@@ -1104,7 +1156,7 @@ Find usage
 ^^^^^^^^^^
 
 Find usage searches all open files. It is similar to the Find All In
-Session Find dialog command.
+Session option in the Find dialog.
 
 If there is a selection, then it is used as the search text; otherwise
 the current word is used. The current word is either taken from the
@@ -1125,8 +1177,8 @@ utility. GNU Grep is recommended.
 
 
 The Encoding combo box can be used to define the encoding of the files
-to be searched. The chosen encoding is used to convert the entered search
-text into and to convert the search results back to UTF-8.
+to be searched. The entered search text is converted to the chosen encoding
+and the search results are converted back to UTF-8.
 The Extra options field is used to pass any additional arguments to
 the grep tool.
 
@@ -1156,12 +1208,11 @@ documents.
 .. image:: ./images/replace_dialog.png
 
 The Replace dialog has the same options for matching text as the Find
-dialog. See the section called `Matching options`_.
+dialog. See the section `Matching options`_.
 
-The *Use regular expressions* option applies both to the search string
-and to the replacement text; for the latter back references can be
-used -- see the entry for '\\n' in `Regular expressions`_.
-
+The *Use regular expressions* option allows regular expressions to
+be used in the search string and back references in the replacement
+text -- see the entry for '\\n' in `Regular expressions`_.
 
 Replace all
 ```````````
@@ -1185,7 +1236,7 @@ Go to tag definition
 If the current word is the name of a tag definition (like a function
 body) and the file containing the tag definition is open, this command
 will switch to that file and go to the corresponding line number. The
-current word is either taken from the word nearest the edit cursor,
+current word is either the word nearest the edit cursor,
 or the word underneath the popup menu click position when the popup
 menu is used.
 
@@ -1293,6 +1344,9 @@ $       This matches the end of a line.
 Tags
 ----
 
+Tags are information that relates symbols in a program with the
+source file location of the declaration and definition.
+
 Geany has built-in functionality for generating tag information (aka
 "workspace tags") for supported filetypes when you open a file.  You
 can also have Geany automatically load external tag files (aka "global
@@ -1366,7 +1420,7 @@ Global tags files can have two different formats:
 
 The first line of global tags files should be a comment, introduced
 by ``#`` followed by a space and a string like ``format=pipe``
-respectively ``format=tagmanager`` (case-sensitive).
+or ``format=tagmanager`` respectively, these are case-sensitive.
 This helps Geany to read the file properly. If this line
 is missing, Geany tries to auto-detect the used format but this
 might fail.
@@ -1536,11 +1590,11 @@ Project files
     Path to start in when opening project files.
 
 Extra plugin path
-	Geany looks by default in the global installation path and in the
-	configuration directory. The path entered here will be searched additionally
+	By default Geany looks in the global installation path and in the
+	configuration directory. In addition the path entered here will be searched
 	for plugins. Usually you do not need to set an additional path to search for
 	plugins. It might be useful when Geany is installed on a multi-user machine
-	and additional plugins should be available in a custom location for all users.
+	and additional plugins are available in a common location for all users.
 	Leave blank to not set an additional lookup path.
 
 
@@ -1578,7 +1632,7 @@ Always wrap search and hide the Find dialog
 
 Use the current word under the cursor for Find dialogs
     Use current word under the cursor when opening the Find, Find in Files or Replace dialog and
-    there is no selection. When this option is disabled, the search term of the last use of the
+    there is no selection. When this option is disabled, the search term last used in the
     appropriate Find dialog is used.
 
 Use the current file's directory for Find in Files
@@ -1598,9 +1652,9 @@ Store project file inside the project base directory
     When creating new projects, the default path for the project file contains
     the project base path. Without this option enabled, the default project file
     path is one level above the project base path.
-    In any case, you can easily set the final project file path in the
-    *New Project* dialog. This option is just for your convenience to get
-    a proper default path.
+    In either case, you can easily set the final project file path in the
+    *New Project* dialog. This option provides the more common
+    defaults automatically for convenience.
 
 
 Interface preferences
@@ -1805,7 +1859,7 @@ Tab key indents
 
     .. note::
         There are also separate configurable keybindings for indent &
-        unindent, but this pref allows the tab key to have different
+        unindent, but this preference allows the tab key to have different
         meanings in different contexts - e.g. for snippet completion.
 
 Editor Completions preferences
@@ -1877,16 +1931,16 @@ Parenthesis ( )
     Auto-close parenthesis when typing an opening one
 
 Curly brackets { }
-    Auto-close parenthesis when typing an opening one
+    Auto-close curly brackets (braces) when typing an opening one
 
 Square brackets [ ]
-    Auto-close parenthesis when typing an opening one
+    Auto-close square brackets when typing an opening one
 
 Single quotes ' '
-    Auto-close parenthesis when typing an opening one
+    Auto-close single quotes when typing an opening one
 
 Double quotes " "
-    Auto-close parenthesis when typing an opening one
+    Auto-close double quotes when typing an opening one
 
 
 Editor Display preferences
@@ -1982,8 +2036,8 @@ Default end of line characters
 
 Saving files
 ````````````
-Perform special formatting operations when a document is saved. These
-can each be undone with the Undo command as usual.
+Perform formatting operations when a document is saved. These
+can each be undone with the Undo command.
 
 Ensure newline at file end
     Add a newline at the end of the document if one is missing.
@@ -2100,11 +2154,11 @@ Keybinding preferences
 
 .. image:: ./images/pref_dialog_keys.png
 
-There are some handy commands in here that are not, by default,
+There are some commands listed in the keybinding dialog that are not, by default,
 bound to a key combination, and may not be available as a menu item.
 
 .. note::
-    For more information see the section called `Keybindings`_.
+    For more information see the section `Keybindings`_.
 
 
 Printing preferences
@@ -2277,7 +2331,8 @@ interpret, run etc.  As Geany supports many languages each with a different
 approach to such operations, and as there are also many language independant
 software building systems, Geany does not have a built in build system, nor
 does it limit which system you can use.  Instead the build menu provides
-a configurable and flexible means of running any external commands.
+a configurable and flexible means of running any external commands to
+execute your preferred build system.
 
 This section provides a description of the default configuration of the
 build menu and then covers how to configure it, and where the defaults fit in.
@@ -2312,7 +2367,7 @@ dialog.
 
 Default Build Menu Items
 ^^^^^^^^^^^^^^^^^^^^^^^^
-Depending on the current file's filetype, the Build menu will contain
+Depending on the current file's filetype, the default Build menu will contain
 the following items:
 
 * Compile
@@ -2332,7 +2387,7 @@ Compile
 The Compile command has different uses for different kinds of files.
 
 For compilable languages such as C and C++, the Compile command is
-setup to compile the current source file into a binary object file.
+set up to compile the current source file into a binary object file.
 
 Java source files will be compiled to class file bytecode.
 
@@ -2522,7 +2577,7 @@ is shown in the following table.
 
 The following notes on the table reference cells by coordinate as (group,source):
 
-* General - for filetype.xxx substitute the appropriate extension for the
+* General - for filetype.xxx substitute the filetype name of the
   current document for xxx.
 
 * System Filetypes - Labels loaded from these sources are locale sensitive
@@ -2562,7 +2617,7 @@ The dialog is divided into three sections:
 
 * Execute menu items.
 
-The filetype and non-filetype sections also contain a field for the regular
+The filetype and non-filetype sections also contains a field for the regular
 expression used for parsing command output for error and warning messages.
 
 The columns in the first three sections allow setting of the label, command,
@@ -2636,23 +2691,25 @@ older format configuration files.
 Printing support
 ----------------
 
-Since Geany 0.13 there is full printing support using GTK's printing API.
+Since Geany 0.13 there has been printing support using GTK's printing API.
 The printed page(s) will look nearly the same as on your screen in Geany.
-Additionally, there are some options to modify the printed page(s). You
-can define whether to print line numbers, page numbers at the bottom of
+Additionally, there are some options to modify the printed page(s).
+
+You can define whether to print line numbers, page numbers at the bottom of
 each page and whether to print a page header on each page. This header
 contains the filename of the printed document, the current page number and
 the date and time of printing. By default, the file name of the document
-is added with full path information to the header. If you prefer to add
+with full path information is added to the header. If you prefer to add
 only the basename of the file(without any path information) you can set it
 in the preferences dialog. You can also adjust the format of the date and
 time added to the page header. The available conversion specifiers are the
 same as the ones which can be used with the ANSI C strftime function.
+
 All of these settings can also be changed in the print dialog just before
 actual printing is done.
 On Unix-like systems the provided print dialog offers a print preview. The
 preview file is opened with a PDF viewer and by default GTK uses ``evince``
-for print preview. If you don't have installed evince or just want to use
+for print preview. If you have not installed evince or just want to use
 another PDF viewer, you can change the program to use in the file
 ``.gtkrc-2.0`` (usually found in your home directory). Simply add a line
 like::
@@ -2677,7 +2734,7 @@ will not show errors from the command itself, so you should make
 sure that it works before(e.g. by trying to execute it from the
 command line).
 
-A nicer example, which I prefer is::
+A nicer example, which many prefer is::
 
     % a2ps -1 --medium=A4 -o - %f | xfprint4
 
@@ -2741,9 +2798,10 @@ Configurable keybindings
 
 For all actions listed below you can define your own keybindings. Open
 the Preferences dialog, select the desired action and click on
-change. In the opening dialog you can press any key combination you
-want and it will be saved when you press OK. You can define only one
-key combination for one action.
+change. In the resulting dialog you can press the key combination you
+want to assign to the action and it will be saved when you press OK.
+You can define only one key combination for each action and each key
+combination can only be defined for one action.
 
 Some of the default key combinations cannot be changed, e.g. menu_new
 or menu_open. These are set by GTK and should be kept, but you can
@@ -2932,7 +2990,7 @@ Smart line indent                                         Indents the current li
 Send to Custom Command 1 (2,3)  Ctrl-1 (2,3)              Passes the current selection to a configured
                                                           external command (available for the first
                                                           three configured commands, see
-                                                          `Send text through definable commands`_ for
+                                                          `Sending text through custom commands`_ for
                                                           details).
 
 Send Selection to Terminal                                Sends the current selection or the current
@@ -3169,9 +3227,7 @@ Previous error                                            Jumps to the line with
 
 Run                             F5                        Executes the current file in a terminal emulation.
 
-Run (alternative command)                                 Executes the current file in a terminal emulation.
-
-Build options                                             Opens the build options dialog.
+Set Build Commands                                        Opens the build commands dialog.
 =============================== ========================= ==================================================
 
 
@@ -3223,10 +3279,10 @@ item is also necessary to update syntax highlighting colors.
 Global configuration file
 -------------------------
 
-You can use a global configuration file for Geany which will be used if
-the user starts Geany for the first time and an user's configuration
-file was not yet created or in case an user deleted the configuration
-file to use default values.
+There is a global configuration file for Geany which will be used for
+any settings not defined in the users local configuration file.
+Settings present in the local configuration file override those in the global
+file.
 
 The global configuration file is read from
 ``$prefix/share/geany/geany.conf`` (where ``$prefix`` is the path where
@@ -3238,7 +3294,7 @@ does not have to contain all settings.
 .. note::
     This feature is mainly intended for package maintainers or system
     admins who want to set up Geany in a multi user environment and
-    set some sane default values for this environment. Usual users won't
+    set some sane default values for this environment. Usually users won't
     need to do that.
 
 
@@ -3260,7 +3316,7 @@ exception: ``filetypes.common`` -- this file is for general settings,
 which are not specific to a certain filetype.
 
 .. warning::
-    It is not recommended for users to edit the system-wide files,
+    It is not recommended that users edit the system-wide files,
     because they will be overridden when Geany is updated.
 
 To change the settings, copy a file from ``$prefix/share/geany`` to
@@ -3299,7 +3355,7 @@ case-insensitive, but it is a good idea to use small letters. Bold
 and italic are flags and should only be "true" or "false". If their
 value is something other than "true" or "false", "false" is assumed.
 
-You can omit fields to use the ``"default"`` named style.
+You can omit fields to use the values from the style named ``"default"``.
 
 E.g. ``key=0xff0000;;true``
 
@@ -3394,9 +3450,13 @@ comment_use_indent
     *Example:* ``comment_use_indent=true``
 
 context_action_cmd
-    A command which can be executed on a certain word or the current
-    selection. Example usage: Open the API documentation for the
-    current function call at the cursor position. The command can
+    A command which can be executed on the current word or the current
+    selection.
+
+    Example usage: Open the API documentation for the
+    current function call at the cursor position.
+
+    The command can
     be set for every filetype or if not set, a global command will
     be used. The command itself can be specified without the full
     path, then it is searched in $PATH. But for security reasons,
@@ -3414,6 +3474,7 @@ context_action_cmd
 ````````````````````````
 
 As of Geany v0.19 this section is supplemented by the `[build-menu] Section`_.
+Values that are set in the [build-menu] section will override those in this section.
 
 error_regex
     This is a GNU-style extended regular expression to parse a filename
@@ -3750,7 +3811,7 @@ as they are overwritten by Geany.
 Hidden preferences
 ^^^^^^^^^^^^^^^^^^
 
-There are some uncommon preferences that are not shown in the Preferences
+There are some rarely used preferences that are not shown in the Preferences
 dialog. These can be set by editing the preferences file, then
 restarting Geany. Search for the key name, then edit the value. Example:
 
@@ -4102,7 +4163,7 @@ Redo               Redo the last modification
 NavBack            Navigate back a location
 NavFor             Navigate forward a location
 Compile            Compile the current file
-Build              Build the current file, includes also a submenu for Make commands. Geany
+Build              Build the current file, includes a submenu for Make commands. Geany
                    remembers the last chosen action from the submenu and uses this as default
                    action when the button itself is clicked.
 Run                Run or view the current file
@@ -4126,9 +4187,11 @@ Quit               Quit Geany
 Plugin documentation
 ====================
 
+Save Actions
+------------
 
 Instant Save
-------------
+^^^^^^^^^^^^
 This plugin sets on every new file (File->New or File-> New (with template))
 a randomly chosen filename and set its filetype appropriate to the used template
 or when no template was used, to a configurable default filetype.
@@ -4139,7 +4202,7 @@ similar.
 
 
 Backup Copy
------------
+^^^^^^^^^^^
 
 This plugin creates a backup copy of the current file in Geany when it is
 saved. You can specify the directory where the backup copy is saved and

@@ -5,6 +5,8 @@
  * doc/images/build_menu_commands_dialog.png,
    doc/images/main_window.png:
    Add new images referenced in the documentation.
+ * doc/geany.html, doc/geany.txt:
+   Several documentation improvements (patch by Lex Trotman, thanks).
 
 
 2009-09-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
