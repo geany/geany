@@ -2,6 +2,9 @@
 
  * scripts/create_py_tags.py:
    Make the code a bit more pythonic.
+ * doc/images/build_menu_commands_dialog.png,
+   doc/images/main_window.png:
+   Add new images referenced in the documentation.
 
 
 2009-09-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
