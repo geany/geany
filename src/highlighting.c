@@ -350,15 +350,24 @@ static void get_keyfile_hex(GKeyFile *config, GKeyFile *configh,
 }
 
 
-/* Get first and second integer numbers, store in foreground and background fields of @a style.
- * FIXME: is not safe for badly formed key e.g. "key=" */
+static void convert_int(const gchar *int_str, gint *val)
+{
+	gchar *end;
+	gint v = strtol(int_str, &end, 10);
+
+	if (int_str != end)
+		*val = v;
+}
+
+
+/* Get first and second integer numbers, store in foreground and background fields of @a style. */
 static void get_keyfile_int(GKeyFile *config, GKeyFile *configh, const gchar *section,
 							const gchar *key, gint fdefault_val, gint sdefault_val,
 							GeanyLexerStyle *style)
 {
 	gchar **list;
-	gchar *end1, *end2;
 	gsize len;
+	GeanyLexerStyle def = {fdefault_val, sdefault_val, FALSE, FALSE};
 
 	g_return_if_fail(config);
 	g_return_if_fail(configh);
@@ -369,21 +378,18 @@ static void get_keyfile_int(GKeyFile *config, GKeyFile *configh, const gchar *se
 	if (list == NULL)
 		list = g_key_file_get_string_list(config, section, key, &len, NULL);
 
-	if (G_LIKELY(list != NULL) && G_LIKELY(list[0] != NULL))
-		style->foreground = strtol(list[0], &end1, 10);
-	else
-		style->foreground = fdefault_val;
-	if (G_LIKELY(list != NULL) && G_LIKELY(list[1] != NULL))
-		style->background = strtol(list[1], &end2, 10);
-	else
-		style->background = sdefault_val;
+	*style = def;
+	if (!list)
+		return;
 
-	/* if there was an error, strtol() returns 0 and end is list[x], so then we use default_val */
-	if (G_UNLIKELY(list == NULL) || G_UNLIKELY(list[0] == end1))
-		style->foreground = fdefault_val;
-	if (G_UNLIKELY(list == NULL) || G_UNLIKELY(list[1] == end2))
-		style->background = sdefault_val;
-
+	if (list[0])
+	{
+		convert_int(list[0], &style->foreground);
+		if (list[1])
+		{
+			convert_int(list[1], &style->background);
+		}
+	}
 	g_strfreev(list);
 }
 

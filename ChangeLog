@@ -26,6 +26,8 @@
    Change new html_asp_default_language markup pref to use integer,
    not hex in config file.
    Fix minor issue with changing pref back to 0.
+ * src/highlighting.c:
+   Fix possible segfault in get_keyfile_int() if key value is malformed.
 
 
 2009-09-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
