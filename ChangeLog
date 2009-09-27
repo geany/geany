@@ -8,6 +8,11 @@
  * configure.in:
    Use AC_PATH_PROG instead of which for portability (patch by Erik
    Southworth, thanks).
+ * src/plugins.c:
+   Show plugins that only implement plugin_configure_single() in the
+   multiple-configure dialog as a page with a configure button on it.
+   Add padding for multiple-configure dialog.
+   Make the multiple-configure dialog notebook tabs scrollable.
 
 
 2009-09-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

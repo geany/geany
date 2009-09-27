@@ -1140,6 +1140,52 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
 }
 
 
+static void on_pref_btn_clicked(gpointer btn, Plugin *p)
+{
+	p->configure_single(main_widgets.window);
+}
+
+
+static GtkWidget *create_pref_page(Plugin *p, GtkWidget *dialog)
+{
+	GtkWidget *page = NULL;	/* some plugins don't have prefs */
+
+	if (p->configure)
+	{
+		page = p->configure(GTK_DIALOG(dialog));
+
+		if (! GTK_IS_WIDGET(page))
+		{
+			geany_debug("Invalid widget returned from plugin_configure() in plugin \"%s\"!",
+				p->info.name);
+			return NULL;
+		}
+		else
+		{
+			GtkWidget *align = gtk_alignment_new(0.5, 0.5, 1, 1);
+
+			gtk_alignment_set_padding(GTK_ALIGNMENT(align), 6, 6, 6, 6);
+			gtk_container_add(GTK_CONTAINER(align), page);
+			page = align;
+		}
+	}
+	else if (p->configure_single)
+	{
+		GtkWidget *align = gtk_alignment_new(0.5, 0.5, 0, 0);
+		GtkWidget *btn;
+
+		gtk_alignment_set_padding(GTK_ALIGNMENT(align), 6, 6, 6, 6);
+
+		btn = gtk_button_new_from_stock(GTK_STOCK_PREFERENCES);
+		g_signal_connect(btn, "clicked", G_CALLBACK(on_pref_btn_clicked), p);
+		gtk_container_add(GTK_CONTAINER(align), btn);
+		page = align;
+	}
+	return page;
+}
+
+
+/* multiple plugin configure dialog */
 static void configure_plugins(Plugin *current_plugin)
 {
 	GtkWidget *parent = pm_widgets.dialog;
@@ -1156,23 +1202,15 @@ static void configure_plugins(Plugin *current_plugin)
 
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	nb = gtk_notebook_new();
+	gtk_notebook_set_scrollable(GTK_NOTEBOOK(nb), TRUE);
 	gtk_container_add(GTK_CONTAINER(vbox), nb);
 
 	foreach_list(node, active_plugin_list)
 	{
 		Plugin *p = node->data;
-		GtkWidget *page;
+		GtkWidget *page = create_pref_page(p, dialog);
 
-		if (!p->configure)
-			continue;
-		page = p->configure(GTK_DIALOG(dialog));
-
-		if (! GTK_IS_WIDGET(page))
-		{
-			geany_debug("Invalid widget returned from plugin_configure() in plugin \"%s\"!",
-				p->info.name);
-		}
-		else
+		if (page)
 		{
 			GtkWidget *label = gtk_label_new(p->info.name);
 			gint n = gtk_notebook_append_page(GTK_NOTEBOOK(nb), page, label);
