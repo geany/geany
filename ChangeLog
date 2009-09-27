@@ -3,6 +3,8 @@
  * src/keybindings.c:
    Only focus toolbar goto line entry when pressing keybinding if it's
    visible (patch by Eugene Arshinov, thanks).
+ * src/callbacks.c:
+   Focus editor after entering a number in the goto line toolbar entry.
 
 
 2009-09-24  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

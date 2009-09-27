@@ -1279,6 +1279,8 @@ on_toolbutton_goto_entry_activate(GtkAction *action, const gchar *text, gpointer
 
 	if (! editor_goto_line(doc->editor, atoi(text) - 1))
 		utils_beep();
+	else
+		keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
 }
 
 
