@@ -1,5 +1,5 @@
 /*
- *      treeviews.h - this file is part of Geany, a fast and lightweight IDE
+ *      sidebar.h - this file is part of Geany, a fast and lightweight IDE
  *
  *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
  *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
@@ -23,8 +23,8 @@
 
 
 
-#ifndef GEANY_TREEVIEWS_H
-#define GEANY_TREEVIEWS_H 1
+#ifndef GEANY_SIDEBAR_H
+#define GEANY_SIDEBAR_H 1
 
 
 typedef struct SidebarTreeviews
@@ -46,21 +46,21 @@ enum
 	SYMBOLS_N_COLUMNS
 };
 
-void treeviews_init(void);
+void sidebar_init(void);
 
-void treeviews_finalize(void);
+void sidebar_finalize(void);
 
-void treeviews_update_tag_list(GeanyDocument *doc, gboolean update);
+void sidebar_update_tag_list(GeanyDocument *doc, gboolean update);
 
-void treeviews_openfiles_add(GeanyDocument *doc);
+void sidebar_openfiles_add(GeanyDocument *doc);
 
-void treeviews_openfiles_update(GeanyDocument *doc);
+void sidebar_openfiles_update(GeanyDocument *doc);
 
-void treeviews_openfiles_update_all(void);
+void sidebar_openfiles_update_all(void);
 
-void treeviews_select_openfiles_item(GeanyDocument *doc);
+void sidebar_select_openfiles_item(GeanyDocument *doc);
 
-void treeviews_remove_document(GeanyDocument *doc);
+void sidebar_remove_document(GeanyDocument *doc);
 
 void sidebar_add_common_menu_items(GtkMenu *menu);
 

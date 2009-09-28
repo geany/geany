@@ -31,7 +31,7 @@
 #include "editor.h"
 #include "documentprivate.h"
 #include "ui_utils.h"
-#include "treeviews.h"
+#include "sidebar.h"
 #include "support.h"
 #include "callbacks.h"
 #include "utils.h"
@@ -332,7 +332,7 @@ notebook_page_reordered_cb(GtkNotebook *notebook, GtkWidget *child, guint page_n
 {
 	/* Not necessary to update open files treeview if it's sorted.
 	 * Note: if enabled, it's best to move the item instead of recreating all items. */
-	/*treeviews_openfiles_update_all();*/
+	/*sidebar_openfiles_update_all();*/
 }
 
 

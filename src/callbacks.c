@@ -52,7 +52,7 @@
 #include "build.h"
 #include "prefs.h"
 #include "templates.h"
-#include "treeviews.h"
+#include "sidebar.h"
 #include "keybindings.h"
 #include "encodings.h"
 #include "search.h"
@@ -219,7 +219,7 @@ on_save_all1_activate                  (GtkMenuItem     *menuitem,
 		else
 			document_save_file(doc, FALSE);
 	}
-	treeviews_update_tag_list(cur_doc, TRUE);
+	sidebar_update_tag_list(cur_doc, TRUE);
 	ui_set_window_title(cur_doc);
 }
 
@@ -739,12 +739,12 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
 
 	if (doc != NULL)
 	{
-		treeviews_select_openfiles_item(doc);
+		sidebar_select_openfiles_item(doc);
 		document_set_text_changed(doc, doc->changed);	/* also sets window title and status bar */
 		ui_update_popup_reundo_items(doc);
 		ui_document_show_hide(doc); /* update the document menu */
 		build_menu_update(doc);
-		treeviews_update_tag_list(doc, FALSE);
+		sidebar_update_tag_list(doc, FALSE);
 
 		/* We delay the check to avoid weird fast, unintended switching of notebook pages when
 		 * the 'file has changed' dialog is shown while the switch event is not yet completely

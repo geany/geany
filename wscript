@@ -111,7 +111,7 @@ geany_sources = [
 	'src/plugins.c', 'src/pluginutils.c', 'src/prefix.c', 'src/prefs.c', 'src/printing.c', 'src/project.c',
 	'src/sciwrappers.c', 'src/search.c', 'src/socket.c', 'src/stash.c',
 	'src/symbols.c',
-	'src/templates.c', 'src/toolbar.c', 'src/tools.c', 'src/treeviews.c',
+	'src/templates.c', 'src/toolbar.c', 'src/tools.c', 'src/sidebar.c',
 	'src/ui_utils.c', 'src/utils.c' ]
 
 

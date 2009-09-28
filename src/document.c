@@ -66,7 +66,7 @@
 #include "dialogs.h"
 #include "msgwindow.h"
 #include "templates.h"
-#include "treeviews.h"
+#include "sidebar.h"
 #include "ui_utils.h"
 #include "utils.h"
 #include "encodings.h"
@@ -568,7 +568,7 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 
 	editor_apply_update_prefs(doc->editor);
 
-	treeviews_openfiles_add(doc);	/* sets doc->iter */
+	sidebar_openfiles_add(doc);	/* sets doc->iter */
 
 	notebook_new_tab(doc);
 
@@ -637,7 +637,7 @@ gboolean document_remove_page(guint page_num)
 	doc->is_valid = FALSE;
 
 	notebook_remove_page(page_num);
-	treeviews_remove_document(doc);
+	sidebar_remove_document(doc);
 	navqueue_remove_file(doc->file_name);
 	msgwin_status_add(_("File %s closed."), DOC_FILENAME(doc));
 	g_free(doc->encoding);
@@ -662,7 +662,7 @@ gboolean document_remove_page(guint page_num)
 
 	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0)
 	{
-		treeviews_update_tag_list(NULL, FALSE);
+		sidebar_update_tag_list(NULL, FALSE);
 		/*on_notebook1_switch_page(GTK_NOTEBOOK(main_widgets.notebook), NULL, 0, NULL);*/
 		ui_set_window_title(NULL);
 		ui_save_buttons_toggle(FALSE);
@@ -1177,7 +1177,7 @@ static gboolean auto_update_tag_list(gpointer data)
 		return TRUE;
 
 	if (update_tags_from_buffer(doc))
-		treeviews_update_tag_list(doc, TRUE);
+		sidebar_update_tag_list(doc, TRUE);
 
 	return TRUE;
 }
@@ -2307,7 +2307,7 @@ static gboolean update_tags_from_buffer(GeanyDocument *doc)
 
 void document_update_tag_list(GeanyDocument *doc, gboolean update)
 {
-	/* We must call treeviews_update_tag_list() before returning,
+	/* We must call sidebar_update_tag_list() before returning,
 	 * to ensure that the symbol list is always updated properly (e.g.
 	 * when creating a new document with a partial filename set. */
 	gboolean success = FALSE;
@@ -2317,7 +2317,7 @@ void document_update_tag_list(GeanyDocument *doc, gboolean update)
 		! filetype_has_tags(doc->file_type) || ! doc->file_name)
 	{
 		/* set the default (empty) tag list */
-		treeviews_update_tag_list(doc, FALSE);
+		sidebar_update_tag_list(doc, FALSE);
 		return;
 	}
 
@@ -2349,7 +2349,7 @@ void document_update_tag_list(GeanyDocument *doc, gboolean update)
 		if (G_UNLIKELY(! success))
 			geany_debug("tag list updating failed");
 	}
-	treeviews_update_tag_list(doc, success);
+	sidebar_update_tag_list(doc, success);
 }
 
 

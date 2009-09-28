@@ -1,3 +1,13 @@
+2009-09-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c, src/sidebar.c, src/sidebar.h,
+   src/makefile.win32, src/project.c, src/prefs.c, src/treeviews.c,
+   src/callbacks.c, src/notebook.c, src/treeviews.h, src/document.c,
+   src/main.c, src/symbols.c, src/Makefile.am, src/ui_utils.c,
+   po/POTFILES.in, wscript:
+   Rename treeviews.[hc] -> sidebar.[hc].
+
+
 2009-09-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * scripts/create_py_tags.py:

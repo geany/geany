@@ -48,7 +48,7 @@
 #include "interface.h"
 #include "editor.h"
 #include "stash.h"
-#include "treeviews.h"
+#include "sidebar.h"
 #include "filetypes.h"
 
 
@@ -318,7 +318,7 @@ static void update_ui(void)
 {
 	ui_set_window_title(NULL);
 	build_menu_update(NULL);
-	treeviews_openfiles_update_all();
+	sidebar_openfiles_update_all();
 }
 
 

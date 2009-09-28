@@ -49,7 +49,7 @@
 #include "symbols.h"
 #include "vte.h"
 #include "toolbar.h"
-#include "treeviews.h"
+#include "sidebar.h"
 #include "geanywraplabel.h"
 #include "main.h"
 #include "search.h"

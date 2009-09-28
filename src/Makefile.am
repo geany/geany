@@ -45,7 +45,7 @@ SRCS = \
 	templates.c templates.h \
 	toolbar.c toolbar.h \
 	tools.c tools.h \
-	treeviews.c treeviews.h \
+	sidebar.c sidebar.h \
 	ui_utils.c ui_utils.h \
 	utils.c utils.h
 

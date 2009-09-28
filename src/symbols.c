@@ -44,7 +44,7 @@
 #include "documentprivate.h"
 #include "support.h"
 #include "msgwindow.h"
-#include "treeviews.h"
+#include "sidebar.h"
 #include "main.h"
 #include "navqueue.h"
 #include "ui_utils.h"

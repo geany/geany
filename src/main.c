@@ -59,7 +59,7 @@
 #include "dialogs.h"
 #include "templates.h"
 #include "encodings.h"
-#include "treeviews.h"
+#include "sidebar.h"
 #include "notebook.h"
 #include "keybindings.h"
 #include "editor.h"
@@ -933,7 +933,7 @@ gint main(gint argc, gchar **argv)
 #ifdef HAVE_PLUGINS
 	plugins_init();
 #endif
-	treeviews_init();
+	sidebar_init();
 	load_settings();	/* load keyfile */
 
 	msgwin_init();
@@ -1003,9 +1003,9 @@ gint main(gint argc, gchar **argv)
 
 	doc = document_get_current();
 	gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
-	treeviews_select_openfiles_item(doc);
+	sidebar_select_openfiles_item(doc);
 	build_menu_update(doc);
-	treeviews_update_tag_list(doc, FALSE);
+	sidebar_update_tag_list(doc, FALSE);
 
 #ifdef G_OS_WIN32
 	/* Manually realise the main window to be able to set the position but don't show it.
@@ -1083,7 +1083,7 @@ void main_quit()
 	editor_snippets_free();
 	encodings_finalize();
 	toolbar_finalize();
-	treeviews_finalize();
+	sidebar_finalize();
 	configuration_finalize();
 	filetypes_free_types();
 	log_finalize();

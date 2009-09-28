@@ -41,7 +41,7 @@
 #include "callbacks.h"
 #include "encodings.h"
 #include "images.c"
-#include "treeviews.h"
+#include "sidebar.h"
 #include "win32.h"
 #include "project.h"
 #include "editor.h"
@@ -1442,7 +1442,7 @@ void ui_update_tab_status(GeanyDocument *doc)
 	gtk_widget_modify_fg(doc->priv->tab_label, GTK_STATE_NORMAL, color);
 	gtk_widget_modify_fg(doc->priv->tab_label, GTK_STATE_ACTIVE, color);
 
-	treeviews_openfiles_update(doc);
+	sidebar_openfiles_update(doc);
 }
 
 

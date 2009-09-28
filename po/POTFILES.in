@@ -34,7 +34,7 @@ src/symbols.c
 src/templates.c
 src/toolbar.c
 src/tools.c
-src/treeviews.c
+src/sidebar.c
 src/ui_utils.c
 src/utils.c
 src/vte.c

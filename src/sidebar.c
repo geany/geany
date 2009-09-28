@@ -1,5 +1,5 @@
 /*
- *      treeviews.c - this file is part of Geany, a fast and lightweight IDE
+ *      sidebar.c - this file is part of Geany, a fast and lightweight IDE
  *
  *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
  *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
@@ -30,7 +30,7 @@
 #include "geany.h"
 #include "support.h"
 #include "callbacks.h"
-#include "treeviews.h"
+#include "sidebar.h"
 #include "document.h"
 #include "editor.h"
 #include "documentprivate.h"
@@ -91,9 +91,9 @@ static GtkWidget *tag_window;	/* scrolled window that holds the symbol list GtkT
 static gboolean on_openfiles_tree_selection_changed(GtkTreeSelection *selection);
 static void on_openfiles_document_action(GtkMenuItem *menuitem, gpointer user_data);
 static gboolean on_taglist_tree_selection_changed(GtkTreeSelection *selection);
-static gboolean treeviews_button_press_cb(GtkWidget *widget, GdkEventButton *event,
+static gboolean sidebar_button_press_cb(GtkWidget *widget, GdkEventButton *event,
 		gpointer user_data);
-static gboolean treeviews_key_press_cb(GtkWidget *widget, GdkEventKey *event,
+static gboolean sidebar_key_press_cb(GtkWidget *widget, GdkEventKey *event,
 		gpointer user_data);
 static void on_list_document_activate(GtkCheckMenuItem *item, gpointer user_data);
 static void on_list_symbol_activate(GtkCheckMenuItem *item, gpointer user_data);
@@ -129,9 +129,9 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 	g_object_unref(store);
 
 	g_signal_connect(tree, "button-press-event",
-		G_CALLBACK(treeviews_button_press_cb), NULL);
+		G_CALLBACK(sidebar_button_press_cb), NULL);
 	g_signal_connect(tree, "key-press-event",
-		G_CALLBACK(treeviews_key_press_cb), NULL);
+		G_CALLBACK(sidebar_key_press_cb), NULL);
 
 	if (gtk_check_version(2, 12, 0) == NULL)
 	{
@@ -185,7 +185,7 @@ static void create_default_tag_tree(void)
 
 
 /* update = rescan the tags for doc->filename */
-void treeviews_update_tag_list(GeanyDocument *doc, gboolean update)
+void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 {
 	if (gtk_bin_get_child(GTK_BIN(tag_window)))
 		gtk_container_remove(GTK_CONTAINER(tag_window), gtk_bin_get_child(GTK_BIN(tag_window)));
@@ -280,9 +280,9 @@ static void prepare_openfiles(void)
 	g_object_unref(store_openfiles);
 
 	g_signal_connect(GTK_TREE_VIEW(tv.tree_openfiles), "button-press-event",
-		G_CALLBACK(treeviews_button_press_cb), NULL);
+		G_CALLBACK(sidebar_button_press_cb), NULL);
 	g_signal_connect(GTK_TREE_VIEW(tv.tree_openfiles), "key-press-event",
-		G_CALLBACK(treeviews_key_press_cb), NULL);
+		G_CALLBACK(sidebar_key_press_cb), NULL);
 }
 
 
@@ -368,8 +368,8 @@ static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 
 
 /* Also sets doc->priv->iter.
- * This is called recursively in treeviews_openfiles_update_all(). */
-void treeviews_openfiles_add(GeanyDocument *doc)
+ * This is called recursively in sidebar_openfiles_update_all(). */
+void sidebar_openfiles_add(GeanyDocument *doc)
 {
 	GtkTreeIter *iter = &doc->priv->iter;
 	GtkTreeIter *parent = get_doc_parent(doc);
@@ -409,7 +409,7 @@ static void openfiles_remove(GeanyDocument *doc)
 }
 
 
-void treeviews_openfiles_update(GeanyDocument *doc)
+void sidebar_openfiles_update(GeanyDocument *doc)
 {
 	GtkTreeIter *iter = &doc->priv->iter;
 	gchar *fname;
@@ -433,7 +433,7 @@ void treeviews_openfiles_update(GeanyDocument *doc)
 		sel = gtk_tree_selection_iter_is_selected(treesel, &doc->priv->iter);
 		openfiles_remove(doc);
 
-		treeviews_openfiles_add(doc);
+		sidebar_openfiles_add(doc);
 		if (sel)
 			gtk_tree_selection_select_iter(treesel, &doc->priv->iter);
 	}
@@ -441,7 +441,7 @@ void treeviews_openfiles_update(GeanyDocument *doc)
 }
 
 
-void treeviews_openfiles_update_all()
+void sidebar_openfiles_update_all()
 {
 	guint i, page_count;
 	GeanyDocument *doc;
@@ -454,12 +454,12 @@ void treeviews_openfiles_update_all()
 		if (G_UNLIKELY(doc == NULL))
 			continue;
 
-		treeviews_openfiles_add(doc);
+		sidebar_openfiles_add(doc);
 	}
 }
 
 
-void treeviews_remove_document(GeanyDocument *doc)
+void sidebar_remove_document(GeanyDocument *doc)
 {
 	openfiles_remove(doc);
 
@@ -468,7 +468,7 @@ void treeviews_remove_document(GeanyDocument *doc)
 		gtk_widget_destroy(doc->priv->tag_tree);
 		if (GTK_IS_TREE_VIEW(doc->priv->tag_tree))
 		{
-			/* Because it was ref'd in treeviews_update_tag_list, it needs unref'ing */
+			/* Because it was ref'd in sidebar_update_tag_list, it needs unref'ing */
 			g_object_unref((gpointer)doc->priv->tag_tree);
 		}
 		doc->priv->tag_tree = NULL;
@@ -535,7 +535,7 @@ void sidebar_add_common_menu_items(GtkMenu *menu)
 static void on_openfiles_show_paths_activate(GtkCheckMenuItem *item, gpointer user_data)
 {
 	documents_show_paths = gtk_check_menu_item_get_active(item);
-	treeviews_openfiles_update_all();
+	sidebar_openfiles_update_all();
 }
 
 
@@ -636,7 +636,7 @@ static gboolean tree_model_find_node(GtkTreeModel *model, GtkTreePath *path,
 }
 
 
-void treeviews_select_openfiles_item(GeanyDocument *doc)
+void sidebar_select_openfiles_item(GeanyDocument *doc)
 {
 	gtk_tree_model_foreach(GTK_TREE_MODEL(store_openfiles), tree_model_find_node, doc);
 }
@@ -765,7 +765,7 @@ static gboolean on_taglist_tree_selection_changed(GtkTreeSelection *selection)
 }
 
 
-static gboolean treeviews_key_press_cb(GtkWidget *widget, GdkEventKey *event,
+static gboolean sidebar_key_press_cb(GtkWidget *widget, GdkEventKey *event,
 											 gpointer user_data)
 {
 	may_steal_focus = FALSE;
@@ -787,7 +787,7 @@ static gboolean treeviews_key_press_cb(GtkWidget *widget, GdkEventKey *event,
 }
 
 
-static gboolean treeviews_button_press_cb(GtkWidget *widget, GdkEventButton *event,
+static gboolean sidebar_button_press_cb(GtkWidget *widget, GdkEventButton *event,
 		G_GNUC_UNUSED gpointer user_data)
 {
 	GtkTreeSelection *selection;
@@ -895,7 +895,7 @@ static void on_save_settings(void)
 }
 
 
-void treeviews_init(void)
+void sidebar_init(void)
 {
 	GeanyPrefGroup *group;
 
@@ -914,7 +914,7 @@ void treeviews_init(void)
 
 #define WIDGET(w) w && GTK_IS_WIDGET(w)
 
-void treeviews_finalize(void)
+void sidebar_finalize(void)
 {
 	if (WIDGET(tv.default_tag_tree))
 	{
