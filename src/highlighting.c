@@ -723,6 +723,12 @@ static void styleset_common(ScintillaObject *sci, filetype_id ft_id)
 }
 
 
+static void sci_set_keywords(ScintillaObject *sci, gint idx, const gchar *words)
+{
+	SSM(sci, SCI_SETKEYWORDS, idx, (sptr_t) words);
+}
+
+
 /* Assign global typedefs and user secondary keywords */
 static void assign_global_and_user_keywords(ScintillaObject *sci,
 											const gchar *user_words, gint lang)
@@ -737,7 +743,7 @@ static void assign_global_and_user_keywords(ScintillaObject *sci,
 
 	g_string_append(s, user_words);
 
-	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) s->str);
+	sci_set_keywords(sci, 1, s->str);
 	g_string_free(s, TRUE);
 }
 
@@ -872,8 +878,8 @@ static void styleset_c(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_CPP, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_C].keywords[0]);
-	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_C].keywords[2]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_C].keywords[0]);
+	sci_set_keywords(sci, 2, style_sets[GEANY_FILETYPES_C].keywords[2]);
 
 	/* assign global types, merge them with user defined keywords and set them */
 	assign_global_and_user_keywords(sci, style_sets[GEANY_FILETYPES_C].keywords[1],
@@ -911,9 +917,9 @@ static void styleset_cpp(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_CPP, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_CPP].keywords[0]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_CPP].keywords[0]);
 	/* for SCI_SETKEYWORDS = 1, see below*/
-	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_CPP].keywords[2]);
+	sci_set_keywords(sci, 2, style_sets[GEANY_FILETYPES_CPP].keywords[2]);
 
 	/* assign global types, merge them with user defined keywords and set them */
 	assign_global_and_user_keywords(sci, style_sets[GEANY_FILETYPES_CPP].keywords[1],
@@ -951,9 +957,9 @@ static void styleset_glsl(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_CPP, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_GLSL].keywords[0]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_GLSL].keywords[0]);
 	/* for SCI_SETKEYWORDS = 1, see below*/
-	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_GLSL].keywords[2]);
+	sci_set_keywords(sci, 2, style_sets[GEANY_FILETYPES_GLSL].keywords[2]);
 
 	/* assign global types, merge them with user defined keywords and set them */
 	assign_global_and_user_keywords(sci, style_sets[GEANY_FILETYPES_GLSL].keywords[1],
@@ -991,8 +997,8 @@ static void styleset_cs(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_CPP, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[ft_id].keywords[0]);
-	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[ft_id].keywords[2]);
+	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
+	sci_set_keywords(sci, 2, style_sets[ft_id].keywords[2]);
 
 	/* assign global types, merge them with user defined keywords and set them */
 	assign_global_and_user_keywords(sci, style_sets[ft_id].keywords[1], filetypes[ft_id]->lang);
@@ -1025,8 +1031,8 @@ static void styleset_vala(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_CPP, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[ft_id].keywords[0]);
-	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[ft_id].keywords[2]);
+	sci_set_keywords(sci, 0, style_sets[ft_id].keywords[0]);
+	sci_set_keywords(sci, 2, style_sets[ft_id].keywords[2]);
 
 	/* assign global types, merge them with user defined keywords and set them */
 	assign_global_and_user_keywords(sci, style_sets[ft_id].keywords[1], filetypes[ft_id]->lang);
@@ -1069,7 +1075,7 @@ static void styleset_pascal(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_PASCAL, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_PASCAL].keywords[0]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_PASCAL].keywords[0]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_PASCAL, 0);
 	set_sci_style(sci, SCE_PAS_DEFAULT, GEANY_FILETYPES_PASCAL, 0);
@@ -1179,7 +1185,7 @@ static void styleset_latex(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_LATEX, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_LATEX].keywords[0]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_LATEX].keywords[0]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_LATEX, 0);
 	set_sci_style(sci, SCE_L_DEFAULT, GEANY_FILETYPES_LATEX, 0);
@@ -1321,9 +1327,9 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords)
 	for (i = 0; i < 5; i++)
 	{
 		keywords = (set_keywords) ? style_sets[GEANY_FILETYPES_XML].keywords[i] : "";
-		SSM(sci, SCI_SETKEYWORDS, i, (sptr_t) keywords);
+		sci_set_keywords(sci, i, keywords);
 	}
-	SSM(sci, SCI_SETKEYWORDS, 5, (sptr_t) style_sets[GEANY_FILETYPES_XML].keywords[5]);
+	sci_set_keywords(sci, 5, style_sets[GEANY_FILETYPES_XML].keywords[5]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_XML, 0);
 	set_sci_style(sci, SCE_H_DEFAULT, GEANY_FILETYPES_XML, 0);
@@ -1490,10 +1496,10 @@ static void styleset_java(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_CPP, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_JAVA].keywords[0]);
-	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_JAVA].keywords[1]);
-	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_JAVA].keywords[2]);
-	SSM(sci, SCI_SETKEYWORDS, 4, (sptr_t) style_sets[GEANY_FILETYPES_JAVA].keywords[3]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_JAVA].keywords[0]);
+	sci_set_keywords(sci, 1, style_sets[GEANY_FILETYPES_JAVA].keywords[1]);
+	sci_set_keywords(sci, 2, style_sets[GEANY_FILETYPES_JAVA].keywords[2]);
+	sci_set_keywords(sci, 4, style_sets[GEANY_FILETYPES_JAVA].keywords[3]);
 
 	styleset_c_like(sci, GEANY_FILETYPES_JAVA);
 }
@@ -1553,7 +1559,7 @@ static void styleset_perl(ScintillaObject *sci)
 
 	SSM(sci, SCI_SETPROPERTY, (uptr_t) "styling.within.preprocessor", (sptr_t) "1");
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_PERL].keywords[0]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_PERL].keywords[0]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_PERL, 0);
 	set_sci_style(sci, SCE_PL_DEFAULT, GEANY_FILETYPES_PERL, 0);
@@ -1627,8 +1633,8 @@ static void styleset_python(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_PYTHON, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_PYTHON].keywords[0]);
-	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_PYTHON].keywords[1]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_PYTHON].keywords[0]);
+	sci_set_keywords(sci, 1, style_sets[GEANY_FILETYPES_PYTHON].keywords[1]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_PYTHON, 0);
 	set_sci_style(sci, SCE_P_DEFAULT, GEANY_FILETYPES_PYTHON, 0);
@@ -1686,9 +1692,9 @@ static void styleset_cmake(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_CMAKE, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_CMAKE].keywords[0]);
-	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_CMAKE].keywords[1]);
-	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_CMAKE].keywords[2]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_CMAKE].keywords[0]);
+	sci_set_keywords(sci, 1, style_sets[GEANY_FILETYPES_CMAKE].keywords[1]);
+	sci_set_keywords(sci, 2, style_sets[GEANY_FILETYPES_CMAKE].keywords[2]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_CMAKE, 0);
 	set_sci_style(sci, SCE_CMAKE_DEFAULT, GEANY_FILETYPES_CMAKE, 0);
@@ -1740,9 +1746,9 @@ static void styleset_r(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_R, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_R].keywords[0]);
-	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_R].keywords[1]);
-	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_R].keywords[2]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_R].keywords[0]);
+	sci_set_keywords(sci, 1, style_sets[GEANY_FILETYPES_R].keywords[1]);
+	sci_set_keywords(sci, 2, style_sets[GEANY_FILETYPES_R].keywords[2]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_R, 0);
 	set_sci_style(sci, SCE_R_DEFAULT, GEANY_FILETYPES_R, 0);
@@ -1811,7 +1817,7 @@ static void styleset_ruby(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_RUBY, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_RUBY].keywords[0]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_RUBY].keywords[0]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_RUBY, 0);
 	set_sci_style(sci, SCE_RB_DEFAULT, GEANY_FILETYPES_RUBY, 0);
@@ -1882,7 +1888,7 @@ static void styleset_sh(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_BASH, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_SH].keywords[0]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_SH].keywords[0]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_SH, 0);
 	set_sci_style(sci, SCE_SH_DEFAULT, GEANY_FILETYPES_SH, 0);
@@ -1959,8 +1965,8 @@ static void styleset_docbook(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_XML, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_DOCBOOK].keywords[0]);
-	SSM(sci, SCI_SETKEYWORDS, 5, (sptr_t) style_sets[GEANY_FILETYPES_DOCBOOK].keywords[1]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_DOCBOOK].keywords[0]);
+	sci_set_keywords(sci, 5, style_sets[GEANY_FILETYPES_DOCBOOK].keywords[1]);
 
 	/* Unknown tags and attributes are highlighed in red.
 	 * If a tag is actually OK, it should be added in lower case to the htmlKeyWords string. */
@@ -2061,7 +2067,7 @@ static void styleset_css(ScintillaObject *sci)
 
 	for (i = 0; i < 8; i++)
 	{
-		SSM(sci, SCI_SETKEYWORDS, i, (sptr_t) style_sets[GEANY_FILETYPES_CSS].keywords[i]);
+		sci_set_keywords(sci, i, style_sets[GEANY_FILETYPES_CSS].keywords[i]);
 	}
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_CSS, 0);
@@ -2128,10 +2134,10 @@ static void styleset_nsis(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_NSIS, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_NSIS].keywords[0]);
-	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_NSIS].keywords[1]);
-	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_NSIS].keywords[2]);
-	SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) style_sets[GEANY_FILETYPES_NSIS].keywords[3]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_NSIS].keywords[0]);
+	sci_set_keywords(sci, 1, style_sets[GEANY_FILETYPES_NSIS].keywords[1]);
+	sci_set_keywords(sci, 2, style_sets[GEANY_FILETYPES_NSIS].keywords[2]);
+	sci_set_keywords(sci, 3, style_sets[GEANY_FILETYPES_NSIS].keywords[3]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_NSIS, 0);
 	set_sci_style(sci, SCE_NSIS_DEFAULT, GEANY_FILETYPES_NSIS, 0);
@@ -2260,11 +2266,11 @@ static void styleset_asm(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_ASM, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_ASM].keywords[0]);
-	/*SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_ASM].keywords[0]);*/
-	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_ASM].keywords[1]);
-	SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) style_sets[GEANY_FILETYPES_ASM].keywords[2]);
-	/*SSM(sci, SCI_SETKEYWORDS, 5, (sptr_t) style_sets[GEANY_FILETYPES_ASM].keywords[0]);*/
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_ASM].keywords[0]);
+	/*sci_set_keywords(sci, 1, style_sets[GEANY_FILETYPES_ASM].keywords[0]);*/
+	sci_set_keywords(sci, 2, style_sets[GEANY_FILETYPES_ASM].keywords[1]);
+	sci_set_keywords(sci, 3, style_sets[GEANY_FILETYPES_ASM].keywords[2]);
+	/*sci_set_keywords(sci, 5, style_sets[GEANY_FILETYPES_ASM].keywords[0]);*/
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_ASM, 0);
 	set_sci_style(sci, SCE_ASM_DEFAULT, GEANY_FILETYPES_ASM, 0);
@@ -2318,9 +2324,9 @@ static void styleset_f77(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_F77, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_F77].keywords[0]);
-	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_F77].keywords[1]);
-	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_F77].keywords[2]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_F77].keywords[0]);
+	sci_set_keywords(sci, 1, style_sets[GEANY_FILETYPES_F77].keywords[1]);
+	sci_set_keywords(sci, 2, style_sets[GEANY_FILETYPES_F77].keywords[2]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_F77, 0);
 	set_sci_style(sci, SCE_F_DEFAULT, GEANY_FILETYPES_F77, 0);
@@ -2374,9 +2380,9 @@ static void styleset_fortran(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_FORTRAN, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_FORTRAN].keywords[0]);
-	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_FORTRAN].keywords[1]);
-	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_FORTRAN].keywords[2]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_FORTRAN].keywords[0]);
+	sci_set_keywords(sci, 1, style_sets[GEANY_FILETYPES_FORTRAN].keywords[1]);
+	sci_set_keywords(sci, 2, style_sets[GEANY_FILETYPES_FORTRAN].keywords[2]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_FORTRAN, 0);
 	set_sci_style(sci, SCE_F_DEFAULT, GEANY_FILETYPES_FORTRAN, 0);
@@ -2428,7 +2434,7 @@ static void styleset_sql(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_SQL, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_SQL].keywords[0]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_SQL].keywords[0]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_SQL, 0);
 	set_sci_style(sci, SCE_SQL_DEFAULT, GEANY_FILETYPES_SQL, 0);
@@ -2541,7 +2547,7 @@ static void styleset_haskell(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_HASKELL, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_HASKELL].keywords[0]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_HASKELL].keywords[0]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_HASKELL, 0);
 	set_sci_style(sci, SCE_HA_DEFAULT, GEANY_FILETYPES_HASKELL, 0);
@@ -2596,8 +2602,8 @@ static void styleset_caml(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_CAML, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_CAML].keywords[0]);
-	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_CAML].keywords[1]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_CAML].keywords[0]);
+	sci_set_keywords(sci, 1, style_sets[GEANY_FILETYPES_CAML].keywords[1]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_CAML, 0);
 	set_sci_style(sci, SCE_CAML_DEFAULT, GEANY_FILETYPES_CAML, 0);
@@ -2653,11 +2659,11 @@ static void styleset_tcl(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_TCL, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_TCL].keywords[0]);
-	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_TCL].keywords[1]);
-	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_TCL].keywords[2]);
-	SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) style_sets[GEANY_FILETYPES_TCL].keywords[3]);
-	SSM(sci, SCI_SETKEYWORDS, 4, (sptr_t) style_sets[GEANY_FILETYPES_TCL].keywords[4]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_TCL].keywords[0]);
+	sci_set_keywords(sci, 1, style_sets[GEANY_FILETYPES_TCL].keywords[1]);
+	sci_set_keywords(sci, 2, style_sets[GEANY_FILETYPES_TCL].keywords[2]);
+	sci_set_keywords(sci, 3, style_sets[GEANY_FILETYPES_TCL].keywords[3]);
+	sci_set_keywords(sci, 4, style_sets[GEANY_FILETYPES_TCL].keywords[4]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_TCL, 0);
 	set_sci_style(sci, SCE_TCL_DEFAULT, GEANY_FILETYPES_TCL, 0);
@@ -2704,7 +2710,7 @@ static void styleset_matlab(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_MATLAB, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_MATLAB].keywords[0]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_MATLAB].keywords[0]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_MATLAB, 0);
 	set_sci_style(sci, SCE_MATLAB_DEFAULT, GEANY_FILETYPES_MATLAB, 0);
@@ -2757,10 +2763,10 @@ static void styleset_d(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_D, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_D].keywords[0]);
-	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_D].keywords[1]);
-	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_D].keywords[2]);
-	SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) style_sets[GEANY_FILETYPES_D].keywords[3]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_D].keywords[0]);
+	sci_set_keywords(sci, 1, style_sets[GEANY_FILETYPES_D].keywords[1]);
+	sci_set_keywords(sci, 2, style_sets[GEANY_FILETYPES_D].keywords[2]);
+	sci_set_keywords(sci, 3, style_sets[GEANY_FILETYPES_D].keywords[3]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_D, 0);
 	set_sci_style(sci, SCE_D_DEFAULT, GEANY_FILETYPES_D, 0);
@@ -2807,9 +2813,9 @@ static void styleset_ferite(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_CPP, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_FERITE].keywords[0]);
-	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_FERITE].keywords[1]);
-	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_FERITE].keywords[2]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_FERITE].keywords[0]);
+	sci_set_keywords(sci, 1, style_sets[GEANY_FILETYPES_FERITE].keywords[1]);
+	sci_set_keywords(sci, 2, style_sets[GEANY_FILETYPES_FERITE].keywords[2]);
 
 	styleset_c_like(sci, GEANY_FILETYPES_FERITE);
 }
@@ -2853,13 +2859,13 @@ static void styleset_vhdl(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_VHDL, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_VHDL].keywords[0]);
-	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_VHDL].keywords[1]);
-	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_VHDL].keywords[2]);
-	SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) style_sets[GEANY_FILETYPES_VHDL].keywords[3]);
-	SSM(sci, SCI_SETKEYWORDS, 4, (sptr_t) style_sets[GEANY_FILETYPES_VHDL].keywords[4]);
-	SSM(sci, SCI_SETKEYWORDS, 5, (sptr_t) style_sets[GEANY_FILETYPES_VHDL].keywords[5]);
-	SSM(sci, SCI_SETKEYWORDS, 6, (sptr_t) style_sets[GEANY_FILETYPES_VHDL].keywords[6]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_VHDL].keywords[0]);
+	sci_set_keywords(sci, 1, style_sets[GEANY_FILETYPES_VHDL].keywords[1]);
+	sci_set_keywords(sci, 2, style_sets[GEANY_FILETYPES_VHDL].keywords[2]);
+	sci_set_keywords(sci, 3, style_sets[GEANY_FILETYPES_VHDL].keywords[3]);
+	sci_set_keywords(sci, 4, style_sets[GEANY_FILETYPES_VHDL].keywords[4]);
+	sci_set_keywords(sci, 5, style_sets[GEANY_FILETYPES_VHDL].keywords[5]);
+	sci_set_keywords(sci, 6, style_sets[GEANY_FILETYPES_VHDL].keywords[6]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_VHDL, 0);
 	set_sci_style(sci, SCE_VHDL_DEFAULT, GEANY_FILETYPES_VHDL, 0);
@@ -2907,7 +2913,7 @@ static void styleset_yaml(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_YAML, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_YAML].keywords[0]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_YAML].keywords[0]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_YAML, 0);
 	set_sci_style(sci, SCE_YAML_DEFAULT, GEANY_FILETYPES_YAML, 0);
@@ -2940,7 +2946,7 @@ static void styleset_js(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_CPP, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_JS].keywords[0]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_JS].keywords[0]);
 
 	styleset_c_like(sci, GEANY_FILETYPES_JS);
 }
@@ -2990,14 +2996,14 @@ static void styleset_lua(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_LUA, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_LUA].keywords[0]);
-	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_LUA].keywords[1]);
-	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_LUA].keywords[2]);
-	SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) style_sets[GEANY_FILETYPES_LUA].keywords[3]);
-	SSM(sci, SCI_SETKEYWORDS, 4, (sptr_t) style_sets[GEANY_FILETYPES_LUA].keywords[4]);
-	SSM(sci, SCI_SETKEYWORDS, 5, (sptr_t) style_sets[GEANY_FILETYPES_LUA].keywords[5]);
-	SSM(sci, SCI_SETKEYWORDS, 6, (sptr_t) style_sets[GEANY_FILETYPES_LUA].keywords[6]);
-	SSM(sci, SCI_SETKEYWORDS, 7, (sptr_t) style_sets[GEANY_FILETYPES_LUA].keywords[7]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_LUA].keywords[0]);
+	sci_set_keywords(sci, 1, style_sets[GEANY_FILETYPES_LUA].keywords[1]);
+	sci_set_keywords(sci, 2, style_sets[GEANY_FILETYPES_LUA].keywords[2]);
+	sci_set_keywords(sci, 3, style_sets[GEANY_FILETYPES_LUA].keywords[3]);
+	sci_set_keywords(sci, 4, style_sets[GEANY_FILETYPES_LUA].keywords[4]);
+	sci_set_keywords(sci, 5, style_sets[GEANY_FILETYPES_LUA].keywords[5]);
+	sci_set_keywords(sci, 6, style_sets[GEANY_FILETYPES_LUA].keywords[6]);
+	sci_set_keywords(sci, 7, style_sets[GEANY_FILETYPES_LUA].keywords[7]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_LUA, 0);
 	set_sci_style(sci, SCE_LUA_DEFAULT, GEANY_FILETYPES_LUA, 0);
@@ -3062,10 +3068,10 @@ static void styleset_basic(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_FREEBASIC, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_BASIC].keywords[0]);
-	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_BASIC].keywords[1]);
-	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_BASIC].keywords[2]);
-	SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) style_sets[GEANY_FILETYPES_BASIC].keywords[3]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_BASIC].keywords[0]);
+	sci_set_keywords(sci, 1, style_sets[GEANY_FILETYPES_BASIC].keywords[1]);
+	sci_set_keywords(sci, 2, style_sets[GEANY_FILETYPES_BASIC].keywords[2]);
+	sci_set_keywords(sci, 3, style_sets[GEANY_FILETYPES_BASIC].keywords[3]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_BASIC, 0);
 	set_sci_style(sci, SCE_B_DEFAULT, GEANY_FILETYPES_BASIC, 0);
@@ -3108,9 +3114,9 @@ static void styleset_actionscript(ScintillaObject *sci)
 {
 	apply_filetype_properties(sci, SCLEX_CPP, GEANY_FILETYPES_AS);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_AS].keywords[0]);
-	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_AS].keywords[2]);
-	SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) style_sets[GEANY_FILETYPES_AS].keywords[1]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_AS].keywords[0]);
+	sci_set_keywords(sci, 1, style_sets[GEANY_FILETYPES_AS].keywords[2]);
+	sci_set_keywords(sci, 3, style_sets[GEANY_FILETYPES_AS].keywords[1]);
 
 	styleset_c_like(sci, GEANY_FILETYPES_AS);
 }
@@ -3137,9 +3143,9 @@ static void styleset_haxe(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_CPP, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_HAXE].keywords[0]);
-	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_HAXE].keywords[1]);
-	SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) style_sets[GEANY_FILETYPES_HAXE].keywords[2]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_HAXE].keywords[0]);
+	sci_set_keywords(sci, 1, style_sets[GEANY_FILETYPES_HAXE].keywords[1]);
+	sci_set_keywords(sci, 3, style_sets[GEANY_FILETYPES_HAXE].keywords[2]);
 
 	styleset_c_like(sci, GEANY_FILETYPES_HAXE);
 }
@@ -3174,7 +3180,7 @@ static void styleset_ada(ScintillaObject *sci)
 
 	apply_filetype_properties(sci, SCLEX_ADA, ft_id);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_ADA].keywords[0]);
+	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_ADA].keywords[0]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_ADA, 0);
 	set_sci_style(sci, SCE_ADA_DEFAULT, GEANY_FILETYPES_ADA, 0);
