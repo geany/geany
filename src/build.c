@@ -1025,7 +1025,7 @@ static void show_build_result_message(gboolean failure)
 	if (failure)
 	{
 		msg = _("Compilation failed.");
-		msgwin_compiler_add_string(COLOR_DARK_RED, msg);
+		msgwin_compiler_add_string(COLOR_BLUE, msg);
 		/* If msgwindow is hidden, user will want to display it to see the error */
 		if (! ui_prefs.msgwindow_visible)
 		{
