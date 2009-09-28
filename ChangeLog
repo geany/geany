@@ -8,6 +8,10 @@
    Rename treeviews.[hc] -> sidebar.[hc].
  * data/filetypes.common:
    Remove unused [styling] arguments.
+ * src/highlighting.c, data/filetypes.markdown,
+   data/filetypes.restructuredtext:
+   Remove style defaults from the code - just read them from
+   configuration files.
 
 
 2009-09-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

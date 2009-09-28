@@ -101,21 +101,12 @@ static struct
 } common_style_set;
 
 
-/* used for default styles */
-typedef struct
-{
-	gchar			*name;
-	gchar			*named_style;
-	GeanyLexerStyle	*style;
-} StyleEntry;
-
-
 /* For filetypes.common [named_styles] section.
  * 0xBBGGRR format.
  * e.g. "comment" => &GeanyLexerStyle{0x0000d0, 0xffffff, FALSE, FALSE} */
 static GHashTable *named_style_hash = NULL;
 
-/* 0xBBGGRR format. */
+/* 0xBBGGRR format, set by "default" named style. */
 static GeanyLexerStyle gsd_default = {0x000000, 0xffffff, FALSE, FALSE};
 
 
@@ -282,7 +273,7 @@ static void parse_keyfile_style(gchar **list,
 
 
 static void get_keyfile_style(GKeyFile *config, GKeyFile *configh,
-		const gchar *key_name, const GeanyLexerStyle *default_style, GeanyLexerStyle *style)
+		const gchar *key_name, GeanyLexerStyle *style)
 {
 	gchar **list;
 	gsize len;
@@ -290,25 +281,14 @@ static void get_keyfile_style(GKeyFile *config, GKeyFile *configh,
 	g_return_if_fail(config);
 	g_return_if_fail(configh);
 	g_return_if_fail(key_name);
-	g_return_if_fail(default_style);
 	g_return_if_fail(style);
 
 	list = g_key_file_get_string_list(configh, "styling", key_name, &len, NULL);
 	if (list == NULL)
 		list = g_key_file_get_string_list(config, "styling", key_name, &len, NULL);
 
-	parse_keyfile_style(list, default_style, style);
+	parse_keyfile_style(list, &gsd_default, style);
 	g_strfreev(list);
-}
-
-
-static void get_keyfile_named_style(GKeyFile *config, GKeyFile *configh,
-		const gchar *key_name, gchar *named_style, GeanyLexerStyle *style)
-{
-	GeanyLexerStyle def;
-
-	read_named_style(named_style, &def);
-	get_keyfile_style(config, configh, key_name, &def, style);
 }
 
 
@@ -318,35 +298,6 @@ static gint rotate_rgb(gint color)
 	return ((color & 0xFF0000) >> 16) +
 		(color & 0x00FF00) +
 		((color & 0x0000FF) << 16);
-}
-
-
-/* Convert a hard-coded style to scintilla format, allowing -1 to use the default color. */
-static void convert_hex_style(GeanyLexerStyle *style)
-{
-
-	if (style->foreground == -1)
-		style->foreground = gsd_default.foreground;
-	else
-		style->foreground = rotate_rgb(style->foreground);
-
-	if (style->background == -1)
-		style->background = gsd_default.background;
-	else
-		style->background = rotate_rgb(style->background);
-}
-
-
-/* foreground and background are in 0xRRGGBB format */
-static void get_keyfile_hex(GKeyFile *config, GKeyFile *configh,
-				const gchar *key,
-				gint foreground, gint background, gboolean bold,
-				GeanyLexerStyle *style)
-{
-	GeanyLexerStyle def = {foreground, background, bold, FALSE};
-
-	convert_hex_style(&def);
-	get_keyfile_style(config, configh, key, &def, style);
 }
 
 
@@ -564,19 +515,19 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 	/* home overrides any system named style */
 	get_named_styles(config_home);
 
-	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &common_style_set.styling[GCS_DEFAULT]);
-	get_keyfile_hex(config, config_home, "selection", 0xc0c0c0, 0x7f0000, FALSE, &common_style_set.styling[GCS_SELECTION]);
-	get_keyfile_hex(config, config_home, "brace_good", 0x000000, 0xffffff, FALSE, &common_style_set.styling[GCS_BRACE_GOOD]);
-	get_keyfile_hex(config, config_home, "brace_bad", 0xff0000, 0xffffff, FALSE, &common_style_set.styling[GCS_BRACE_BAD]);
-	get_keyfile_hex(config, config_home, "margin_linenumber", 0x000000, 0xd0d0d0, FALSE, &common_style_set.styling[GCS_MARGIN_LINENUMBER]);
-	get_keyfile_hex(config, config_home, "margin_folding", 0x000000, 0xdfdfdf, FALSE, &common_style_set.styling[GCS_MARGIN_FOLDING]);
-	get_keyfile_hex(config, config_home, "current_line", 0x000000, 0xe5e5e5, TRUE, &common_style_set.styling[GCS_CURRENT_LINE]);
-	get_keyfile_hex(config, config_home, "caret", 0x000000, 0x000000, FALSE, &common_style_set.styling[GCS_CARET]);
-	get_keyfile_hex(config, config_home, "indent_guide", 0xc0c0c0, 0xffffff, FALSE, &common_style_set.styling[GCS_INDENT_GUIDE]);
-	get_keyfile_hex(config, config_home, "white_space", 0xc0c0c0, 0xffffff, TRUE, &common_style_set.styling[GCS_WHITE_SPACE]);
-	get_keyfile_hex(config, config_home, "marker_line", 0x000000, 0xffff00, FALSE, &common_style_set.styling[GCS_MARKER_LINE]);
-	get_keyfile_hex(config, config_home, "marker_search", 0x000000, 0x00007f, FALSE, &common_style_set.styling[GCS_MARKER_SEARCH]);
-	get_keyfile_hex(config, config_home, "marker_mark", 0x000000, 0xb8f4b8, FALSE, &common_style_set.styling[GCS_MARKER_MARK]);
+	get_keyfile_style(config, config_home, "default", &common_style_set.styling[GCS_DEFAULT]);
+	get_keyfile_style(config, config_home, "selection", &common_style_set.styling[GCS_SELECTION]);
+	get_keyfile_style(config, config_home, "brace_good", &common_style_set.styling[GCS_BRACE_GOOD]);
+	get_keyfile_style(config, config_home, "brace_bad", &common_style_set.styling[GCS_BRACE_BAD]);
+	get_keyfile_style(config, config_home, "margin_linenumber", &common_style_set.styling[GCS_MARGIN_LINENUMBER]);
+	get_keyfile_style(config, config_home, "margin_folding", &common_style_set.styling[GCS_MARGIN_FOLDING]);
+	get_keyfile_style(config, config_home, "current_line", &common_style_set.styling[GCS_CURRENT_LINE]);
+	get_keyfile_style(config, config_home, "caret", &common_style_set.styling[GCS_CARET]);
+	get_keyfile_style(config, config_home, "indent_guide", &common_style_set.styling[GCS_INDENT_GUIDE]);
+	get_keyfile_style(config, config_home, "white_space", &common_style_set.styling[GCS_WHITE_SPACE]);
+	get_keyfile_style(config, config_home, "marker_line", &common_style_set.styling[GCS_MARKER_LINE]);
+	get_keyfile_style(config, config_home, "marker_search", &common_style_set.styling[GCS_MARKER_SEARCH]);
+	get_keyfile_style(config, config_home, "marker_mark", &common_style_set.styling[GCS_MARKER_MARK]);
 
 	get_keyfile_ints(config, config_home, "styling", "folding_style",
 		1, 1, &common_style_set.fold_marker, &common_style_set.fold_lines);
@@ -805,28 +756,19 @@ apply_filetype_properties(ScintillaObject *sci, gint lexer, filetype_id ft_id)
 #define foreach_range(i, size) \
 		for (i = 0; i < size; i++)
 
-/* entries contains the default styles for the filetype.
+/* entries contains the default style names for the filetype.
  * If used, entries[n].style should have foreground and background in 0xRRGGBB format, or -1. */
 static void load_style_entries(GKeyFile *config, GKeyFile *config_home, gint filetype_idx,
-		StyleEntry *entries, gsize entries_len)
+		const gchar **entries, gsize entries_len)
 {
 	guint i;
 
 	foreach_range(i, entries_len)
 	{
-		StyleEntry *entry = &entries[i];
+		const gchar *name = entries[i];
 		GeanyLexerStyle *style = &style_sets[filetype_idx].styling[i];
 
-		if (entry->named_style)
-			get_keyfile_named_style(config, config_home, entry->name, entry->named_style, style);
-		else
-		if (entry->style)
-		{
-			GeanyLexerStyle *def = entry->style;
-
-			convert_hex_style(def);
-			get_keyfile_style(config, config_home, entry->name, def, style);
-		}
+		get_keyfile_style(config, config_home, name, style);
 	}
 }
 
@@ -835,31 +777,28 @@ static void load_style_entries(GKeyFile *config, GKeyFile *config_home, gint fil
 static void
 styleset_c_like_init(GKeyFile *config, GKeyFile *config_home, gint filetype_idx)
 {
-	static GeanyLexerStyle uuid = {0x404080, -1, FALSE, FALSE};
-	static GeanyLexerStyle verbatim = {0x301010, -1, FALSE, FALSE};
-	static GeanyLexerStyle regex = {0x105090, -1, FALSE, FALSE};
-	StyleEntry entries[] =
+	const gchar *entries[] =
  	{
-		{"default",		"default", NULL},
-		{"comment",		"comment", NULL},
-		{"commentline",	"comment", NULL},
-		{"commentdoc",	"commentdoc", NULL},
-		{"number",		"number", NULL},
-		{"word",		"word", NULL},
-		{"word2",		"word2", NULL},
-		{"string",		"string", NULL},
-		{"character",	"string", NULL},
-		{"uuid",		NULL, &uuid},
-		{"preprocessor","preprocessor", NULL},
-		{"operator",	"operator", NULL},
-		{"identifier",	"default", NULL},
-		{"stringeol",	"stringeol", NULL},
-		{"verbatim",	NULL, &verbatim},
-		{"regex",		NULL, &regex},
-		{"commentlinedoc",	"commentdoc,bold", NULL},
-		{"commentdockeyword",	"commentdoc,bold,italic", NULL},
-		{"commentdockeyworderror",	"commentdoc", NULL},
-		{"globalclass",	"type", NULL}
+		"default",
+		"comment",
+		"commentline",
+		"commentdoc",
+		"number",
+		"word",
+		"word2",
+		"string",
+		"character",
+		"uuid",
+		"preprocessor",
+		"operator",
+		"identifier",
+		"stringeol",
+		"verbatim",
+		"regex",
+		"commentlinedoc",
+		"commentdockeyword",
+		"commentdockeyworderror",
+		"globalclass"
 	};
 
 	load_style_entries(config, config_home, filetype_idx, entries, G_N_ELEMENTS(entries));
@@ -1125,21 +1064,21 @@ static void styleset_vala(ScintillaObject *sci)
 static void styleset_pascal_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_styleset(GEANY_FILETYPES_PASCAL, 15);
-	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PASCAL].styling[0]);
-	get_keyfile_hex(config, config_home, "identifier", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PASCAL].styling[1]);
-	get_keyfile_hex(config, config_home, "comment", 0xd00000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PASCAL].styling[2]);
-	get_keyfile_hex(config, config_home, "comment2", 0x3f5fbf, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PASCAL].styling[3]);
-	get_keyfile_hex(config, config_home, "commentline", 0xd00000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PASCAL].styling[4]);
-	get_keyfile_hex(config, config_home, "preprocessor", 0x007f7f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PASCAL].styling[5]);
-	get_keyfile_hex(config, config_home, "preprocessor2", 0x007f7f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PASCAL].styling[6]);
-	get_keyfile_hex(config, config_home, "number", 0x007F00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PASCAL].styling[7]);
-	get_keyfile_hex(config, config_home, "hexnumber", 0x007F00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PASCAL].styling[8]);
-	get_keyfile_hex(config, config_home, "word", 0x111199, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_PASCAL].styling[9]);
-	get_keyfile_hex(config, config_home, "string", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PASCAL].styling[10]);
-	get_keyfile_hex(config, config_home, "stringeol", 0x000000, 0xe0c0e0, FALSE, &style_sets[GEANY_FILETYPES_PASCAL].styling[11]);
-	get_keyfile_hex(config, config_home, "character", 0x404000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PASCAL].styling[12]);
-	get_keyfile_hex(config, config_home, "operator", 0x301010, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PASCAL].styling[13]);
-	get_keyfile_hex(config, config_home, "asm", 0x804080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PASCAL].styling[14]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_PASCAL].styling[0]);
+	get_keyfile_style(config, config_home, "identifier", &style_sets[GEANY_FILETYPES_PASCAL].styling[1]);
+	get_keyfile_style(config, config_home, "comment", &style_sets[GEANY_FILETYPES_PASCAL].styling[2]);
+	get_keyfile_style(config, config_home, "comment2", &style_sets[GEANY_FILETYPES_PASCAL].styling[3]);
+	get_keyfile_style(config, config_home, "commentline", &style_sets[GEANY_FILETYPES_PASCAL].styling[4]);
+	get_keyfile_style(config, config_home, "preprocessor", &style_sets[GEANY_FILETYPES_PASCAL].styling[5]);
+	get_keyfile_style(config, config_home, "preprocessor2", &style_sets[GEANY_FILETYPES_PASCAL].styling[6]);
+	get_keyfile_style(config, config_home, "number", &style_sets[GEANY_FILETYPES_PASCAL].styling[7]);
+	get_keyfile_style(config, config_home, "hexnumber", &style_sets[GEANY_FILETYPES_PASCAL].styling[8]);
+	get_keyfile_style(config, config_home, "word", &style_sets[GEANY_FILETYPES_PASCAL].styling[9]);
+	get_keyfile_style(config, config_home, "string", &style_sets[GEANY_FILETYPES_PASCAL].styling[10]);
+	get_keyfile_style(config, config_home, "stringeol", &style_sets[GEANY_FILETYPES_PASCAL].styling[11]);
+	get_keyfile_style(config, config_home, "character", &style_sets[GEANY_FILETYPES_PASCAL].styling[12]);
+	get_keyfile_style(config, config_home, "operator", &style_sets[GEANY_FILETYPES_PASCAL].styling[13]);
+	get_keyfile_style(config, config_home, "asm", &style_sets[GEANY_FILETYPES_PASCAL].styling[14]);
 
 	style_sets[GEANY_FILETYPES_PASCAL].keywords = g_new(gchar*, 2);
 	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_PASCAL, 0,
@@ -1181,13 +1120,13 @@ static void styleset_pascal(ScintillaObject *sci)
 static void styleset_makefile_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_styleset(GEANY_FILETYPES_MAKE, 7);
-	get_keyfile_hex(config, config_home, "default", 0x00002f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MAKE].styling[0]);
-	get_keyfile_named_style(config, config_home, "comment", "comment", &style_sets[GEANY_FILETYPES_MAKE].styling[1]);
-	get_keyfile_hex(config, config_home, "preprocessor", 0x007f7f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MAKE].styling[2]);
-	get_keyfile_hex(config, config_home, "identifier", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MAKE].styling[3]);
-	get_keyfile_hex(config, config_home, "operator", 0x301010, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MAKE].styling[4]);
-	get_keyfile_hex(config, config_home, "target", 0x0000ff, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MAKE].styling[5]);
-	get_keyfile_hex(config, config_home, "ideol", 0x008000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MAKE].styling[6]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_MAKE].styling[0]);
+	get_keyfile_style(config, config_home, "comment", &style_sets[GEANY_FILETYPES_MAKE].styling[1]);
+	get_keyfile_style(config, config_home, "preprocessor", &style_sets[GEANY_FILETYPES_MAKE].styling[2]);
+	get_keyfile_style(config, config_home, "identifier", &style_sets[GEANY_FILETYPES_MAKE].styling[3]);
+	get_keyfile_style(config, config_home, "operator", &style_sets[GEANY_FILETYPES_MAKE].styling[4]);
+	get_keyfile_style(config, config_home, "target", &style_sets[GEANY_FILETYPES_MAKE].styling[5]);
+	get_keyfile_style(config, config_home, "ideol", &style_sets[GEANY_FILETYPES_MAKE].styling[6]);
 
 	style_sets[GEANY_FILETYPES_MAKE].keywords = NULL;
 }
@@ -1213,14 +1152,14 @@ static void styleset_makefile(ScintillaObject *sci)
 static void styleset_diff_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_styleset(GEANY_FILETYPES_DIFF, 8);
-	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DIFF].styling[0]);
-	get_keyfile_hex(config, config_home, "comment", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DIFF].styling[1]);
-	get_keyfile_hex(config, config_home, "command", 0x7f7f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DIFF].styling[2]);
-	get_keyfile_hex(config, config_home, "header", 0x7f0000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DIFF].styling[3]);
-	get_keyfile_hex(config, config_home, "position", 0x00007f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DIFF].styling[4]);
-	get_keyfile_hex(config, config_home, "deleted", 0xff2727, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DIFF].styling[5]);
-	get_keyfile_hex(config, config_home, "added", 0x34b034, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DIFF].styling[6]);
-	get_keyfile_hex(config, config_home, "changed", 0x7f007f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DIFF].styling[7]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_DIFF].styling[0]);
+	get_keyfile_style(config, config_home, "comment", &style_sets[GEANY_FILETYPES_DIFF].styling[1]);
+	get_keyfile_style(config, config_home, "command", &style_sets[GEANY_FILETYPES_DIFF].styling[2]);
+	get_keyfile_style(config, config_home, "header", &style_sets[GEANY_FILETYPES_DIFF].styling[3]);
+	get_keyfile_style(config, config_home, "position", &style_sets[GEANY_FILETYPES_DIFF].styling[4]);
+	get_keyfile_style(config, config_home, "deleted", &style_sets[GEANY_FILETYPES_DIFF].styling[5]);
+	get_keyfile_style(config, config_home, "added", &style_sets[GEANY_FILETYPES_DIFF].styling[6]);
+	get_keyfile_style(config, config_home, "changed", &style_sets[GEANY_FILETYPES_DIFF].styling[7]);
 
 	style_sets[GEANY_FILETYPES_DIFF].keywords = NULL;
 }
@@ -1247,11 +1186,11 @@ static void styleset_diff(ScintillaObject *sci)
 static void styleset_latex_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_styleset(GEANY_FILETYPES_LATEX, 5);
-	get_keyfile_hex(config, config_home, "default", 0x00002f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_LATEX].styling[0]);
-	get_keyfile_hex(config, config_home, "command", 0xff0000, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_LATEX].styling[1]);
-	get_keyfile_hex(config, config_home, "tag", 0x007f7f, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_LATEX].styling[2]);
-	get_keyfile_hex(config, config_home, "math", 0x00007f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_LATEX].styling[3]);
-	get_keyfile_hex(config, config_home, "comment", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_LATEX].styling[4]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_LATEX].styling[0]);
+	get_keyfile_style(config, config_home, "command", &style_sets[GEANY_FILETYPES_LATEX].styling[1]);
+	get_keyfile_style(config, config_home, "tag", &style_sets[GEANY_FILETYPES_LATEX].styling[2]);
+	get_keyfile_style(config, config_home, "math", &style_sets[GEANY_FILETYPES_LATEX].styling[3]);
+	get_keyfile_style(config, config_home, "comment", &style_sets[GEANY_FILETYPES_LATEX].styling[4]);
 
 	style_sets[GEANY_FILETYPES_LATEX].keywords = g_new(gchar*, 2);
 	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_LATEX, 0, "section subsection begin item");
@@ -1317,65 +1256,65 @@ static void styleset_html(ScintillaObject *sci)
 static void styleset_markup_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_styleset(GEANY_FILETYPES_XML, 57);
-	get_keyfile_hex(config, config_home, "html_default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[0]);
-	get_keyfile_hex(config, config_home, "html_tag", 0x000099, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[1]);
-	get_keyfile_hex(config, config_home, "html_tagunknown", 0xff0000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[2]);
-	get_keyfile_hex(config, config_home, "html_attribute", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[3]);
-	get_keyfile_hex(config, config_home, "html_attributeunknown", 0xff0000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[4]);
-	get_keyfile_hex(config, config_home, "html_number", 0x800080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[5]);
-	get_keyfile_hex(config, config_home, "html_doublestring", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[6]);
-	get_keyfile_hex(config, config_home, "html_singlestring", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[7]);
-	get_keyfile_hex(config, config_home, "html_other", 0x800080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[8]);
-	get_keyfile_hex(config, config_home, "html_comment", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[9]);
-	get_keyfile_hex(config, config_home, "html_entity", 0x800080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[10]);
-	get_keyfile_hex(config, config_home, "html_tagend", 0x000080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[11]);
-	get_keyfile_hex(config, config_home, "html_xmlstart", 0x000099, 0xf0f0f0, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[12]);
-	get_keyfile_hex(config, config_home, "html_xmlend", 0x000099, 0xf0f0f0, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[13]);
-	get_keyfile_hex(config, config_home, "html_script", 0x000080, 0xf0f0f0, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[14]);
-	get_keyfile_hex(config, config_home, "html_asp", 0x004f4f, 0xf0f0f0, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[15]);
-	get_keyfile_hex(config, config_home, "html_aspat", 0x004f4f, 0xf0f0f0, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[16]);
-	get_keyfile_hex(config, config_home, "html_cdata", 0x660099, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[17]);
-	get_keyfile_hex(config, config_home, "html_question", 0x0000ff, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[18]);
-	get_keyfile_hex(config, config_home, "html_value", 0x660099, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[19]);
-	get_keyfile_hex(config, config_home, "html_xccomment", 0x660099, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[20]);
+	get_keyfile_style(config, config_home, "html_default", &style_sets[GEANY_FILETYPES_XML].styling[0]);
+	get_keyfile_style(config, config_home, "html_tag", &style_sets[GEANY_FILETYPES_XML].styling[1]);
+	get_keyfile_style(config, config_home, "html_tagunknown", &style_sets[GEANY_FILETYPES_XML].styling[2]);
+	get_keyfile_style(config, config_home, "html_attribute", &style_sets[GEANY_FILETYPES_XML].styling[3]);
+	get_keyfile_style(config, config_home, "html_attributeunknown", &style_sets[GEANY_FILETYPES_XML].styling[4]);
+	get_keyfile_style(config, config_home, "html_number", &style_sets[GEANY_FILETYPES_XML].styling[5]);
+	get_keyfile_style(config, config_home, "html_doublestring", &style_sets[GEANY_FILETYPES_XML].styling[6]);
+	get_keyfile_style(config, config_home, "html_singlestring", &style_sets[GEANY_FILETYPES_XML].styling[7]);
+	get_keyfile_style(config, config_home, "html_other", &style_sets[GEANY_FILETYPES_XML].styling[8]);
+	get_keyfile_style(config, config_home, "html_comment", &style_sets[GEANY_FILETYPES_XML].styling[9]);
+	get_keyfile_style(config, config_home, "html_entity", &style_sets[GEANY_FILETYPES_XML].styling[10]);
+	get_keyfile_style(config, config_home, "html_tagend", &style_sets[GEANY_FILETYPES_XML].styling[11]);
+	get_keyfile_style(config, config_home, "html_xmlstart", &style_sets[GEANY_FILETYPES_XML].styling[12]);
+	get_keyfile_style(config, config_home, "html_xmlend", &style_sets[GEANY_FILETYPES_XML].styling[13]);
+	get_keyfile_style(config, config_home, "html_script", &style_sets[GEANY_FILETYPES_XML].styling[14]);
+	get_keyfile_style(config, config_home, "html_asp", &style_sets[GEANY_FILETYPES_XML].styling[15]);
+	get_keyfile_style(config, config_home, "html_aspat", &style_sets[GEANY_FILETYPES_XML].styling[16]);
+	get_keyfile_style(config, config_home, "html_cdata", &style_sets[GEANY_FILETYPES_XML].styling[17]);
+	get_keyfile_style(config, config_home, "html_question", &style_sets[GEANY_FILETYPES_XML].styling[18]);
+	get_keyfile_style(config, config_home, "html_value", &style_sets[GEANY_FILETYPES_XML].styling[19]);
+	get_keyfile_style(config, config_home, "html_xccomment", &style_sets[GEANY_FILETYPES_XML].styling[20]);
 
-	get_keyfile_hex(config, config_home, "sgml_default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[21]);
-	get_keyfile_hex(config, config_home, "sgml_comment", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[22]);
-	get_keyfile_hex(config, config_home, "sgml_special", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[23]);
-	get_keyfile_hex(config, config_home, "sgml_command", 0x111199, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_XML].styling[24]);
-	get_keyfile_hex(config, config_home, "sgml_doublestring", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[25]);
-	get_keyfile_hex(config, config_home, "sgml_simplestring", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[26]);
-	get_keyfile_hex(config, config_home, "sgml_1st_param", 0x404080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[27]);
-	get_keyfile_hex(config, config_home, "sgml_entity", 0x301010, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[28]);
-	get_keyfile_hex(config, config_home, "sgml_block_default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[29]);
-	get_keyfile_hex(config, config_home, "sgml_1st_param_comment", 0x406090, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[30]);
-	get_keyfile_hex(config, config_home, "sgml_error", 0xff0000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[31]);
+	get_keyfile_style(config, config_home, "sgml_default", &style_sets[GEANY_FILETYPES_XML].styling[21]);
+	get_keyfile_style(config, config_home, "sgml_comment", &style_sets[GEANY_FILETYPES_XML].styling[22]);
+	get_keyfile_style(config, config_home, "sgml_special", &style_sets[GEANY_FILETYPES_XML].styling[23]);
+	get_keyfile_style(config, config_home, "sgml_command", &style_sets[GEANY_FILETYPES_XML].styling[24]);
+	get_keyfile_style(config, config_home, "sgml_doublestring", &style_sets[GEANY_FILETYPES_XML].styling[25]);
+	get_keyfile_style(config, config_home, "sgml_simplestring", &style_sets[GEANY_FILETYPES_XML].styling[26]);
+	get_keyfile_style(config, config_home, "sgml_1st_param", &style_sets[GEANY_FILETYPES_XML].styling[27]);
+	get_keyfile_style(config, config_home, "sgml_entity", &style_sets[GEANY_FILETYPES_XML].styling[28]);
+	get_keyfile_style(config, config_home, "sgml_block_default", &style_sets[GEANY_FILETYPES_XML].styling[29]);
+	get_keyfile_style(config, config_home, "sgml_1st_param_comment", &style_sets[GEANY_FILETYPES_XML].styling[30]);
+	get_keyfile_style(config, config_home, "sgml_error", &style_sets[GEANY_FILETYPES_XML].styling[31]);
 
-	get_keyfile_hex(config, config_home, "php_default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[32]);
-	get_keyfile_hex(config, config_home, "php_simplestring", 0x008000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[33]);
-	get_keyfile_hex(config, config_home, "php_hstring", 0x008000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[34]);
-	get_keyfile_hex(config, config_home, "php_number", 0x606000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[35]);
-	get_keyfile_hex(config, config_home, "php_word", 0x000099, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[36]);
-	get_keyfile_hex(config, config_home, "php_variable", 0x7f0000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[37]);
-	get_keyfile_hex(config, config_home, "php_comment", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[38]);
-	get_keyfile_hex(config, config_home, "php_commentline", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[39]);
-	get_keyfile_hex(config, config_home, "php_operator", 0x102060, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[40]);
-	get_keyfile_hex(config, config_home, "php_hstring_variable", 0x101060, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[41]);
-	get_keyfile_hex(config, config_home, "php_complex_variable", 0x105010, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[42]);
+	get_keyfile_style(config, config_home, "php_default", &style_sets[GEANY_FILETYPES_XML].styling[32]);
+	get_keyfile_style(config, config_home, "php_simplestring", &style_sets[GEANY_FILETYPES_XML].styling[33]);
+	get_keyfile_style(config, config_home, "php_hstring", &style_sets[GEANY_FILETYPES_XML].styling[34]);
+	get_keyfile_style(config, config_home, "php_number", &style_sets[GEANY_FILETYPES_XML].styling[35]);
+	get_keyfile_style(config, config_home, "php_word", &style_sets[GEANY_FILETYPES_XML].styling[36]);
+	get_keyfile_style(config, config_home, "php_variable", &style_sets[GEANY_FILETYPES_XML].styling[37]);
+	get_keyfile_style(config, config_home, "php_comment", &style_sets[GEANY_FILETYPES_XML].styling[38]);
+	get_keyfile_style(config, config_home, "php_commentline", &style_sets[GEANY_FILETYPES_XML].styling[39]);
+	get_keyfile_style(config, config_home, "php_operator", &style_sets[GEANY_FILETYPES_XML].styling[40]);
+	get_keyfile_style(config, config_home, "php_hstring_variable", &style_sets[GEANY_FILETYPES_XML].styling[41]);
+	get_keyfile_style(config, config_home, "php_complex_variable", &style_sets[GEANY_FILETYPES_XML].styling[42]);
 
-	get_keyfile_hex(config, config_home, "jscript_start", 0x008080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[43]);
-	get_keyfile_hex(config, config_home, "jscript_default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[44]);
-	get_keyfile_hex(config, config_home, "jscript_comment", 0xd00000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[45]);
-	get_keyfile_hex(config, config_home, "jscript_commentline", 0xd00000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[46]);
-	get_keyfile_hex(config, config_home, "jscript_commentdoc", 0x3f5fbf, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_XML].styling[47]);
-	get_keyfile_hex(config, config_home, "jscript_number", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[48]);
-	get_keyfile_hex(config, config_home, "jscript_word", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[49]);
-	get_keyfile_hex(config, config_home, "jscript_keyword", 0x00007f, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_XML].styling[50]);
-	get_keyfile_hex(config, config_home, "jscript_doublestring", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[51]);
-	get_keyfile_hex(config, config_home, "jscript_singlestring", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[52]);
-	get_keyfile_hex(config, config_home, "jscript_symbols", 0x301010, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[53]);
-	get_keyfile_hex(config, config_home, "jscript_stringeol", 0x000000, 0xe0c0e0, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[54]);
-	get_keyfile_hex(config, config_home, "jscript_regex", 0x105090, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_XML].styling[55]);
+	get_keyfile_style(config, config_home, "jscript_start", &style_sets[GEANY_FILETYPES_XML].styling[43]);
+	get_keyfile_style(config, config_home, "jscript_default", &style_sets[GEANY_FILETYPES_XML].styling[44]);
+	get_keyfile_style(config, config_home, "jscript_comment", &style_sets[GEANY_FILETYPES_XML].styling[45]);
+	get_keyfile_style(config, config_home, "jscript_commentline", &style_sets[GEANY_FILETYPES_XML].styling[46]);
+	get_keyfile_style(config, config_home, "jscript_commentdoc", &style_sets[GEANY_FILETYPES_XML].styling[47]);
+	get_keyfile_style(config, config_home, "jscript_number", &style_sets[GEANY_FILETYPES_XML].styling[48]);
+	get_keyfile_style(config, config_home, "jscript_word", &style_sets[GEANY_FILETYPES_XML].styling[49]);
+	get_keyfile_style(config, config_home, "jscript_keyword", &style_sets[GEANY_FILETYPES_XML].styling[50]);
+	get_keyfile_style(config, config_home, "jscript_doublestring", &style_sets[GEANY_FILETYPES_XML].styling[51]);
+	get_keyfile_style(config, config_home, "jscript_singlestring", &style_sets[GEANY_FILETYPES_XML].styling[52]);
+	get_keyfile_style(config, config_home, "jscript_symbols", &style_sets[GEANY_FILETYPES_XML].styling[53]);
+	get_keyfile_style(config, config_home, "jscript_stringeol", &style_sets[GEANY_FILETYPES_XML].styling[54]);
+	get_keyfile_style(config, config_home, "jscript_regex", &style_sets[GEANY_FILETYPES_XML].styling[55]);
 
 	get_keyfile_int(config, config_home, "styling", "html_asp_default_language", 1, 0, &style_sets[GEANY_FILETYPES_XML].styling[56]);
 
@@ -1594,41 +1533,41 @@ static void styleset_java(ScintillaObject *sci)
 static void styleset_perl_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_styleset(GEANY_FILETYPES_PERL, 35);
-	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[0]);
-	get_keyfile_hex(config, config_home, "error", 0xff0000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[1]);
-	get_keyfile_named_style(config, config_home, "commentline", "comment", &style_sets[GEANY_FILETYPES_PERL].styling[2]);
-	get_keyfile_hex(config, config_home, "number", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[3]);
-	get_keyfile_hex(config, config_home, "word", 0x111199, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_PERL].styling[4]);
-	get_keyfile_hex(config, config_home, "string", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[5]);
-	get_keyfile_hex(config, config_home, "character", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[6]);
-	get_keyfile_hex(config, config_home, "preprocessor", 0x007f7f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[7]);
-	get_keyfile_hex(config, config_home, "operator", 0x301010, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[8]);
-	get_keyfile_hex(config, config_home, "identifier", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[9]);
-	get_keyfile_hex(config, config_home, "scalar", 0x7f0000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[10]);
-	get_keyfile_hex(config, config_home, "pod", 0x035650, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[11]);
-	get_keyfile_hex(config, config_home, "regex", 0x105090, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[12]);
-	get_keyfile_hex(config, config_home, "array", 0x105090, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[13]);
-	get_keyfile_hex(config, config_home, "hash", 0x105090, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[14]);
-	get_keyfile_hex(config, config_home, "symboltable", 0x105090, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[15]);
-	get_keyfile_hex(config, config_home, "backticks", 0x000000, 0xe0c0e0, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[16]);
-	get_keyfile_hex(config, config_home, "pod_verbatim", 0x004000, 0xc0ffc0, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[17]);
-	get_keyfile_hex(config, config_home, "reg_subst", 0x000000, 0xf0e080, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[18]);
-	get_keyfile_hex(config, config_home, "datasection", 0x600000, 0xfff0d8, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[19]);
-	get_keyfile_hex(config, config_home, "here_delim", 0x000000, 0xddd0dd, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[20]);
-	get_keyfile_hex(config, config_home, "here_q", 0x7f007f, 0xddd0dd, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[21]);
-	get_keyfile_hex(config, config_home, "here_qq", 0x7f007f, 0xddd0dd, TRUE, &style_sets[GEANY_FILETYPES_PERL].styling[22]);
-	get_keyfile_hex(config, config_home, "here_qx", 0x7f007f, 0xddd0dd, TRUE, &style_sets[GEANY_FILETYPES_PERL].styling[23]);
-	get_keyfile_hex(config, config_home, "string_q", 0x7f007f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[24]);
-	get_keyfile_hex(config, config_home, "string_qq", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[25]);
-	get_keyfile_hex(config, config_home, "string_qx", 0x000000, 0xe0c0e0, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[26]);
-	get_keyfile_hex(config, config_home, "string_qr", 0x105090, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[27]);
-	get_keyfile_hex(config, config_home, "string_qw", 0x105090, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[28]);
-	get_keyfile_hex(config, config_home, "variable_indexer", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[29]);
-	get_keyfile_hex(config, config_home, "punctuation", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[30]);
-	get_keyfile_hex(config, config_home, "longquote", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[31]);
-	get_keyfile_hex(config, config_home, "sub_prototype", 0x301010, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[32]);
-	get_keyfile_hex(config, config_home, "format_ident", 0xc000c0, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_PERL].styling[33]);
-	get_keyfile_hex(config, config_home, "format", 0xc000c0, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PERL].styling[34]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_PERL].styling[0]);
+	get_keyfile_style(config, config_home, "error", &style_sets[GEANY_FILETYPES_PERL].styling[1]);
+	get_keyfile_style(config, config_home, "commentline", &style_sets[GEANY_FILETYPES_PERL].styling[2]);
+	get_keyfile_style(config, config_home, "number", &style_sets[GEANY_FILETYPES_PERL].styling[3]);
+	get_keyfile_style(config, config_home, "word", &style_sets[GEANY_FILETYPES_PERL].styling[4]);
+	get_keyfile_style(config, config_home, "string", &style_sets[GEANY_FILETYPES_PERL].styling[5]);
+	get_keyfile_style(config, config_home, "character", &style_sets[GEANY_FILETYPES_PERL].styling[6]);
+	get_keyfile_style(config, config_home, "preprocessor", &style_sets[GEANY_FILETYPES_PERL].styling[7]);
+	get_keyfile_style(config, config_home, "operator", &style_sets[GEANY_FILETYPES_PERL].styling[8]);
+	get_keyfile_style(config, config_home, "identifier", &style_sets[GEANY_FILETYPES_PERL].styling[9]);
+	get_keyfile_style(config, config_home, "scalar", &style_sets[GEANY_FILETYPES_PERL].styling[10]);
+	get_keyfile_style(config, config_home, "pod", &style_sets[GEANY_FILETYPES_PERL].styling[11]);
+	get_keyfile_style(config, config_home, "regex", &style_sets[GEANY_FILETYPES_PERL].styling[12]);
+	get_keyfile_style(config, config_home, "array", &style_sets[GEANY_FILETYPES_PERL].styling[13]);
+	get_keyfile_style(config, config_home, "hash", &style_sets[GEANY_FILETYPES_PERL].styling[14]);
+	get_keyfile_style(config, config_home, "symboltable", &style_sets[GEANY_FILETYPES_PERL].styling[15]);
+	get_keyfile_style(config, config_home, "backticks", &style_sets[GEANY_FILETYPES_PERL].styling[16]);
+	get_keyfile_style(config, config_home, "pod_verbatim", &style_sets[GEANY_FILETYPES_PERL].styling[17]);
+	get_keyfile_style(config, config_home, "reg_subst", &style_sets[GEANY_FILETYPES_PERL].styling[18]);
+	get_keyfile_style(config, config_home, "datasection", &style_sets[GEANY_FILETYPES_PERL].styling[19]);
+	get_keyfile_style(config, config_home, "here_delim", &style_sets[GEANY_FILETYPES_PERL].styling[20]);
+	get_keyfile_style(config, config_home, "here_q", &style_sets[GEANY_FILETYPES_PERL].styling[21]);
+	get_keyfile_style(config, config_home, "here_qq", &style_sets[GEANY_FILETYPES_PERL].styling[22]);
+	get_keyfile_style(config, config_home, "here_qx", &style_sets[GEANY_FILETYPES_PERL].styling[23]);
+	get_keyfile_style(config, config_home, "string_q", &style_sets[GEANY_FILETYPES_PERL].styling[24]);
+	get_keyfile_style(config, config_home, "string_qq", &style_sets[GEANY_FILETYPES_PERL].styling[25]);
+	get_keyfile_style(config, config_home, "string_qx", &style_sets[GEANY_FILETYPES_PERL].styling[26]);
+	get_keyfile_style(config, config_home, "string_qr", &style_sets[GEANY_FILETYPES_PERL].styling[27]);
+	get_keyfile_style(config, config_home, "string_qw", &style_sets[GEANY_FILETYPES_PERL].styling[28]);
+	get_keyfile_style(config, config_home, "variable_indexer", &style_sets[GEANY_FILETYPES_PERL].styling[29]);
+	get_keyfile_style(config, config_home, "punctuation", &style_sets[GEANY_FILETYPES_PERL].styling[30]);
+	get_keyfile_style(config, config_home, "longquote", &style_sets[GEANY_FILETYPES_PERL].styling[31]);
+	get_keyfile_style(config, config_home, "sub_prototype", &style_sets[GEANY_FILETYPES_PERL].styling[32]);
+	get_keyfile_style(config, config_home, "format_ident", &style_sets[GEANY_FILETYPES_PERL].styling[33]);
+	get_keyfile_style(config, config_home, "format", &style_sets[GEANY_FILETYPES_PERL].styling[34]);
 
 
 	style_sets[GEANY_FILETYPES_PERL].keywords = g_new(gchar*, 2);
@@ -1716,22 +1655,22 @@ static void styleset_perl(ScintillaObject *sci)
 static void styleset_python_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_styleset(GEANY_FILETYPES_PYTHON, 16);
-	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PYTHON].styling[0]);
-	get_keyfile_hex(config, config_home, "commentline", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PYTHON].styling[1]);
-	get_keyfile_hex(config, config_home, "number", 0x400080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PYTHON].styling[2]);
-	get_keyfile_hex(config, config_home, "string", 0x008000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PYTHON].styling[3]);
-	get_keyfile_hex(config, config_home, "character", 0x008000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PYTHON].styling[4]);
-	get_keyfile_hex(config, config_home, "word", 0x600080, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_PYTHON].styling[5]);
-	get_keyfile_hex(config, config_home, "triple", 0x008020, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PYTHON].styling[6]);
-	get_keyfile_hex(config, config_home, "tripledouble", 0x404000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PYTHON].styling[7]);
-	get_keyfile_hex(config, config_home, "classname", 0x003030, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PYTHON].styling[8]);
-	get_keyfile_hex(config, config_home, "defname", 0x000080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PYTHON].styling[9]);
-	get_keyfile_hex(config, config_home, "operator", 0x300080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PYTHON].styling[10]);
-	get_keyfile_hex(config, config_home, "identifier", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PYTHON].styling[11]);
-	get_keyfile_hex(config, config_home, "commentblock", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PYTHON].styling[12]);
-	get_keyfile_hex(config, config_home, "stringeol", 0x000000, 0xe0c0e0, FALSE, &style_sets[GEANY_FILETYPES_PYTHON].styling[13]);
-	get_keyfile_hex(config, config_home, "word2", 0xdd00a6, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_PYTHON].styling[14]);
-	get_keyfile_hex(config, config_home, "decorator", 0x808000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PYTHON].styling[15]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_PYTHON].styling[0]);
+	get_keyfile_style(config, config_home, "commentline", &style_sets[GEANY_FILETYPES_PYTHON].styling[1]);
+	get_keyfile_style(config, config_home, "number", &style_sets[GEANY_FILETYPES_PYTHON].styling[2]);
+	get_keyfile_style(config, config_home, "string", &style_sets[GEANY_FILETYPES_PYTHON].styling[3]);
+	get_keyfile_style(config, config_home, "character", &style_sets[GEANY_FILETYPES_PYTHON].styling[4]);
+	get_keyfile_style(config, config_home, "word", &style_sets[GEANY_FILETYPES_PYTHON].styling[5]);
+	get_keyfile_style(config, config_home, "triple", &style_sets[GEANY_FILETYPES_PYTHON].styling[6]);
+	get_keyfile_style(config, config_home, "tripledouble", &style_sets[GEANY_FILETYPES_PYTHON].styling[7]);
+	get_keyfile_style(config, config_home, "classname", &style_sets[GEANY_FILETYPES_PYTHON].styling[8]);
+	get_keyfile_style(config, config_home, "defname", &style_sets[GEANY_FILETYPES_PYTHON].styling[9]);
+	get_keyfile_style(config, config_home, "operator", &style_sets[GEANY_FILETYPES_PYTHON].styling[10]);
+	get_keyfile_style(config, config_home, "identifier", &style_sets[GEANY_FILETYPES_PYTHON].styling[11]);
+	get_keyfile_style(config, config_home, "commentblock", &style_sets[GEANY_FILETYPES_PYTHON].styling[12]);
+	get_keyfile_style(config, config_home, "stringeol", &style_sets[GEANY_FILETYPES_PYTHON].styling[13]);
+	get_keyfile_style(config, config_home, "word2", &style_sets[GEANY_FILETYPES_PYTHON].styling[14]);
+	get_keyfile_style(config, config_home, "decorator", &style_sets[GEANY_FILETYPES_PYTHON].styling[15]);
 
 	style_sets[GEANY_FILETYPES_PYTHON].keywords = g_new(gchar*, 3);
 	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_PYTHON, 0, "and as assert break class continue def del elif else except exec finally for from global if import in is lambda not or pass print raise return try while with yield False None True");
@@ -1775,21 +1714,21 @@ static void styleset_python(ScintillaObject *sci)
 static void styleset_cmake_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_styleset(GEANY_FILETYPES_CMAKE, 15);
-	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CMAKE].styling[0]);
-	get_keyfile_hex(config, config_home, "comment", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CMAKE].styling[1]);
-	get_keyfile_hex(config, config_home, "stringdq", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CMAKE].styling[2]);
-	get_keyfile_hex(config, config_home, "stringlq", 0x008000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CMAKE].styling[3]);
-	get_keyfile_hex(config, config_home, "stringrq", 0x008000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CMAKE].styling[4]);
-	get_keyfile_hex(config, config_home, "command", 0x00007f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CMAKE].styling[5]);
-	get_keyfile_hex(config, config_home, "parameters", 0x991111, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CMAKE].styling[6]);
-	get_keyfile_hex(config, config_home, "variable", 0x007f7f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CMAKE].styling[7]);
-	get_keyfile_hex(config, config_home, "userdefined", 0x0000d0, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_CMAKE].styling[8]);
-	get_keyfile_hex(config, config_home, "whiledef", 0x00007f, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_CMAKE].styling[9]);
-	get_keyfile_hex(config, config_home, "foreachdef", 0x00007f, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_CMAKE].styling[10]);
-	get_keyfile_hex(config, config_home, "ifdefinedef", 0x00007f, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_CMAKE].styling[11]);
-	get_keyfile_hex(config, config_home, "macrodef", 0x00007f, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_CMAKE].styling[12]);
-	get_keyfile_hex(config, config_home, "stringvar", 0x007f7f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CMAKE].styling[13]);
-	get_keyfile_hex(config, config_home, "number", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CMAKE].styling[14]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_CMAKE].styling[0]);
+	get_keyfile_style(config, config_home, "comment", &style_sets[GEANY_FILETYPES_CMAKE].styling[1]);
+	get_keyfile_style(config, config_home, "stringdq", &style_sets[GEANY_FILETYPES_CMAKE].styling[2]);
+	get_keyfile_style(config, config_home, "stringlq", &style_sets[GEANY_FILETYPES_CMAKE].styling[3]);
+	get_keyfile_style(config, config_home, "stringrq", &style_sets[GEANY_FILETYPES_CMAKE].styling[4]);
+	get_keyfile_style(config, config_home, "command", &style_sets[GEANY_FILETYPES_CMAKE].styling[5]);
+	get_keyfile_style(config, config_home, "parameters", &style_sets[GEANY_FILETYPES_CMAKE].styling[6]);
+	get_keyfile_style(config, config_home, "variable", &style_sets[GEANY_FILETYPES_CMAKE].styling[7]);
+	get_keyfile_style(config, config_home, "userdefined", &style_sets[GEANY_FILETYPES_CMAKE].styling[8]);
+	get_keyfile_style(config, config_home, "whiledef", &style_sets[GEANY_FILETYPES_CMAKE].styling[9]);
+	get_keyfile_style(config, config_home, "foreachdef", &style_sets[GEANY_FILETYPES_CMAKE].styling[10]);
+	get_keyfile_style(config, config_home, "ifdefinedef", &style_sets[GEANY_FILETYPES_CMAKE].styling[11]);
+	get_keyfile_style(config, config_home, "macrodef", &style_sets[GEANY_FILETYPES_CMAKE].styling[12]);
+	get_keyfile_style(config, config_home, "stringvar", &style_sets[GEANY_FILETYPES_CMAKE].styling[13]);
+	get_keyfile_style(config, config_home, "number", &style_sets[GEANY_FILETYPES_CMAKE].styling[14]);
 
 	style_sets[GEANY_FILETYPES_CMAKE].keywords = g_new(gchar*, 4);
 	get_keyfile_keywords(config, config_home, "commands", GEANY_FILETYPES_CMAKE, 0, "");
@@ -1832,18 +1771,18 @@ static void styleset_r_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_styleset(GEANY_FILETYPES_R, 12);
 
-	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_R].styling[0]);
-	get_keyfile_hex(config, config_home, "comment", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_R].styling[1]);
-	get_keyfile_hex(config, config_home, "kword", 0x00007f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_R].styling[2]);
-	get_keyfile_hex(config, config_home, "operator", 0x301010, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_R].styling[3]);
-	get_keyfile_hex(config, config_home, "basekword", 0x991111, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_R].styling[4]);
-	get_keyfile_hex(config, config_home, "otherkword", 0x991111, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_R].styling[5]);
-	get_keyfile_hex(config, config_home, "number", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_R].styling[6]);
-	get_keyfile_hex(config, config_home, "string", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_R].styling[7]);
-	get_keyfile_hex(config, config_home, "string2", 0x008000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_R].styling[8]);
-	get_keyfile_hex(config, config_home, "identifier", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_R].styling[9]);
-	get_keyfile_hex(config, config_home, "infix", 0x008000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_R].styling[10]);
-	get_keyfile_hex(config, config_home, "infixeol", 0x000000, 0xe0c0e0, FALSE, &style_sets[GEANY_FILETYPES_R].styling[11]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_R].styling[0]);
+	get_keyfile_style(config, config_home, "comment", &style_sets[GEANY_FILETYPES_R].styling[1]);
+	get_keyfile_style(config, config_home, "kword", &style_sets[GEANY_FILETYPES_R].styling[2]);
+	get_keyfile_style(config, config_home, "operator", &style_sets[GEANY_FILETYPES_R].styling[3]);
+	get_keyfile_style(config, config_home, "basekword", &style_sets[GEANY_FILETYPES_R].styling[4]);
+	get_keyfile_style(config, config_home, "otherkword", &style_sets[GEANY_FILETYPES_R].styling[5]);
+	get_keyfile_style(config, config_home, "number", &style_sets[GEANY_FILETYPES_R].styling[6]);
+	get_keyfile_style(config, config_home, "string", &style_sets[GEANY_FILETYPES_R].styling[7]);
+	get_keyfile_style(config, config_home, "string2", &style_sets[GEANY_FILETYPES_R].styling[8]);
+	get_keyfile_style(config, config_home, "identifier", &style_sets[GEANY_FILETYPES_R].styling[9]);
+	get_keyfile_style(config, config_home, "infix", &style_sets[GEANY_FILETYPES_R].styling[10]);
+	get_keyfile_style(config, config_home, "infixeol", &style_sets[GEANY_FILETYPES_R].styling[11]);
 
 	style_sets[GEANY_FILETYPES_R].keywords = g_new(gchar*, 4);
 	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_R, 0, "abs array data.frame diag for function if matrix NCOL NROW print read.table require return solve source sqrt sum while");
@@ -1882,41 +1821,41 @@ static void styleset_r(ScintillaObject *sci)
 static void styleset_ruby_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_styleset(GEANY_FILETYPES_RUBY, 35);
-	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[0]);
-	get_keyfile_named_style(config, config_home, "commentline", "comment", &style_sets[GEANY_FILETYPES_RUBY].styling[1]);
-	get_keyfile_hex(config, config_home, "number", 0x400080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[2]);
-	get_keyfile_hex(config, config_home, "string", 0x008000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[3]);
-	get_keyfile_hex(config, config_home, "character", 0x008000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[4]);
-	get_keyfile_hex(config, config_home, "word", 0x111199, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_RUBY].styling[5]);
-	get_keyfile_hex(config, config_home, "global", 0x111199, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[6]);
-	get_keyfile_hex(config, config_home, "symbol", 0x008020, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[7]);
-	get_keyfile_hex(config, config_home, "classname", 0x7f0000, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_RUBY].styling[8]);
-	get_keyfile_hex(config, config_home, "defname", 0x7f0000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[9]);
-	get_keyfile_hex(config, config_home, "operator", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[10]);
-	get_keyfile_hex(config, config_home, "identifier", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[11]);
-	get_keyfile_hex(config, config_home, "modulename", 0x111199, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_RUBY].styling[12]);
-	get_keyfile_hex(config, config_home, "backticks", 0x000000, 0xe0c0e0, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[13]);
-	get_keyfile_hex(config, config_home, "instancevar", 0x000000, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_RUBY].styling[14]);
-	get_keyfile_hex(config, config_home, "classvar", 0x000000, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_RUBY].styling[15]);
-	get_keyfile_hex(config, config_home, "datasection", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[16]);
-	get_keyfile_hex(config, config_home, "heredelim", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[17]);
-	get_keyfile_hex(config, config_home, "worddemoted", 0x111199, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[18]);
-	get_keyfile_hex(config, config_home, "stdin", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[19]);
-	get_keyfile_hex(config, config_home, "stdout", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[20]);
-	get_keyfile_hex(config, config_home, "stderr", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[21]);
-	get_keyfile_hex(config, config_home, "datasection", 0x600000, 0xfff0d8, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[22]);
-	get_keyfile_hex(config, config_home, "regex", 0x105090, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[23]);
-	get_keyfile_hex(config, config_home, "here_q", 0x7f007f, 0xddd0dd, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[24]);
-	get_keyfile_hex(config, config_home, "here_qq", 0x7f007f, 0xddd0dd, TRUE, &style_sets[GEANY_FILETYPES_RUBY].styling[25]);
-	get_keyfile_hex(config, config_home, "here_qx", 0x7f007f, 0xddd0dd, TRUE, &style_sets[GEANY_FILETYPES_RUBY].styling[26]);
-	get_keyfile_hex(config, config_home, "string_q", 0x7f007f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[27]);
-	get_keyfile_hex(config, config_home, "string_qq", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[28]);
-	get_keyfile_hex(config, config_home, "string_qx", 0x000000, 0xe0c0e0, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[29]);
-	get_keyfile_hex(config, config_home, "string_qr", 0x105090, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[30]);
-	get_keyfile_hex(config, config_home, "string_qw", 0x105090, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[31]);
-	get_keyfile_hex(config, config_home, "upper_bound", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[32]);
-	get_keyfile_hex(config, config_home, "error", 0xe500cc, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[33]);
-	get_keyfile_hex(config, config_home, "pod", 0x035650, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_RUBY].styling[34]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_RUBY].styling[0]);
+	get_keyfile_style(config, config_home, "commentline", &style_sets[GEANY_FILETYPES_RUBY].styling[1]);
+	get_keyfile_style(config, config_home, "number", &style_sets[GEANY_FILETYPES_RUBY].styling[2]);
+	get_keyfile_style(config, config_home, "string", &style_sets[GEANY_FILETYPES_RUBY].styling[3]);
+	get_keyfile_style(config, config_home, "character", &style_sets[GEANY_FILETYPES_RUBY].styling[4]);
+	get_keyfile_style(config, config_home, "word", &style_sets[GEANY_FILETYPES_RUBY].styling[5]);
+	get_keyfile_style(config, config_home, "global", &style_sets[GEANY_FILETYPES_RUBY].styling[6]);
+	get_keyfile_style(config, config_home, "symbol", &style_sets[GEANY_FILETYPES_RUBY].styling[7]);
+	get_keyfile_style(config, config_home, "classname", &style_sets[GEANY_FILETYPES_RUBY].styling[8]);
+	get_keyfile_style(config, config_home, "defname", &style_sets[GEANY_FILETYPES_RUBY].styling[9]);
+	get_keyfile_style(config, config_home, "operator", &style_sets[GEANY_FILETYPES_RUBY].styling[10]);
+	get_keyfile_style(config, config_home, "identifier", &style_sets[GEANY_FILETYPES_RUBY].styling[11]);
+	get_keyfile_style(config, config_home, "modulename", &style_sets[GEANY_FILETYPES_RUBY].styling[12]);
+	get_keyfile_style(config, config_home, "backticks", &style_sets[GEANY_FILETYPES_RUBY].styling[13]);
+	get_keyfile_style(config, config_home, "instancevar", &style_sets[GEANY_FILETYPES_RUBY].styling[14]);
+	get_keyfile_style(config, config_home, "classvar", &style_sets[GEANY_FILETYPES_RUBY].styling[15]);
+	get_keyfile_style(config, config_home, "datasection", &style_sets[GEANY_FILETYPES_RUBY].styling[16]);
+	get_keyfile_style(config, config_home, "heredelim", &style_sets[GEANY_FILETYPES_RUBY].styling[17]);
+	get_keyfile_style(config, config_home, "worddemoted", &style_sets[GEANY_FILETYPES_RUBY].styling[18]);
+	get_keyfile_style(config, config_home, "stdin", &style_sets[GEANY_FILETYPES_RUBY].styling[19]);
+	get_keyfile_style(config, config_home, "stdout", &style_sets[GEANY_FILETYPES_RUBY].styling[20]);
+	get_keyfile_style(config, config_home, "stderr", &style_sets[GEANY_FILETYPES_RUBY].styling[21]);
+	get_keyfile_style(config, config_home, "datasection", &style_sets[GEANY_FILETYPES_RUBY].styling[22]);
+	get_keyfile_style(config, config_home, "regex", &style_sets[GEANY_FILETYPES_RUBY].styling[23]);
+	get_keyfile_style(config, config_home, "here_q", &style_sets[GEANY_FILETYPES_RUBY].styling[24]);
+	get_keyfile_style(config, config_home, "here_qq", &style_sets[GEANY_FILETYPES_RUBY].styling[25]);
+	get_keyfile_style(config, config_home, "here_qx", &style_sets[GEANY_FILETYPES_RUBY].styling[26]);
+	get_keyfile_style(config, config_home, "string_q", &style_sets[GEANY_FILETYPES_RUBY].styling[27]);
+	get_keyfile_style(config, config_home, "string_qq", &style_sets[GEANY_FILETYPES_RUBY].styling[28]);
+	get_keyfile_style(config, config_home, "string_qx", &style_sets[GEANY_FILETYPES_RUBY].styling[29]);
+	get_keyfile_style(config, config_home, "string_qr", &style_sets[GEANY_FILETYPES_RUBY].styling[30]);
+	get_keyfile_style(config, config_home, "string_qw", &style_sets[GEANY_FILETYPES_RUBY].styling[31]);
+	get_keyfile_style(config, config_home, "upper_bound", &style_sets[GEANY_FILETYPES_RUBY].styling[32]);
+	get_keyfile_style(config, config_home, "error", &style_sets[GEANY_FILETYPES_RUBY].styling[33]);
+	get_keyfile_style(config, config_home, "pod", &style_sets[GEANY_FILETYPES_RUBY].styling[34]);
 
 	style_sets[GEANY_FILETYPES_RUBY].keywords = g_new(gchar*, 2);
 	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_RUBY, 0, "load define_method attr_accessor attr_writer attr_reader include __FILE__ and def end in or self unless __LINE__ begin defined? ensure module redo super until BEGIN break do false next rescue then when END case else for nil require retry true while alias class elsif if not return undef yield");
@@ -1974,20 +1913,20 @@ static void styleset_ruby(ScintillaObject *sci)
 static void styleset_sh_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_styleset(GEANY_FILETYPES_SH, 14);
-	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_SH].styling[0]);
-	get_keyfile_named_style(config, config_home, "commentline", "comment", &style_sets[GEANY_FILETYPES_SH].styling[1]);
-	get_keyfile_hex(config, config_home, "number", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_SH].styling[2]);
-	get_keyfile_hex(config, config_home, "word", 0x119911, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_SH].styling[3]);
-	get_keyfile_hex(config, config_home, "string", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_SH].styling[4]);
-	get_keyfile_hex(config, config_home, "character", 0x404000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_SH].styling[5]);
-	get_keyfile_hex(config, config_home, "operator", 0x301010, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_SH].styling[6]);
-	get_keyfile_hex(config, config_home, "identifier", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_SH].styling[7]);
-	get_keyfile_hex(config, config_home, "backticks", 0x000000, 0xe0c0e0, FALSE, &style_sets[GEANY_FILETYPES_SH].styling[8]);
-	get_keyfile_hex(config, config_home, "param", 0x9f0000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_SH].styling[9]);
-	get_keyfile_hex(config, config_home, "scalar", 0x105090, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_SH].styling[10]);
-	get_keyfile_hex(config, config_home, "error", 0xff0000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_SH].styling[11]);
-	get_keyfile_hex(config, config_home, "here_delim", 0x000000, 0xddd0dd, FALSE, &style_sets[GEANY_FILETYPES_SH].styling[12]);
-	get_keyfile_hex(config, config_home, "here_q", 0x7f007f, 0xddd0dd, FALSE, &style_sets[GEANY_FILETYPES_SH].styling[13]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_SH].styling[0]);
+	get_keyfile_style(config, config_home, "commentline", &style_sets[GEANY_FILETYPES_SH].styling[1]);
+	get_keyfile_style(config, config_home, "number", &style_sets[GEANY_FILETYPES_SH].styling[2]);
+	get_keyfile_style(config, config_home, "word", &style_sets[GEANY_FILETYPES_SH].styling[3]);
+	get_keyfile_style(config, config_home, "string", &style_sets[GEANY_FILETYPES_SH].styling[4]);
+	get_keyfile_style(config, config_home, "character", &style_sets[GEANY_FILETYPES_SH].styling[5]);
+	get_keyfile_style(config, config_home, "operator", &style_sets[GEANY_FILETYPES_SH].styling[6]);
+	get_keyfile_style(config, config_home, "identifier", &style_sets[GEANY_FILETYPES_SH].styling[7]);
+	get_keyfile_style(config, config_home, "backticks", &style_sets[GEANY_FILETYPES_SH].styling[8]);
+	get_keyfile_style(config, config_home, "param", &style_sets[GEANY_FILETYPES_SH].styling[9]);
+	get_keyfile_style(config, config_home, "scalar", &style_sets[GEANY_FILETYPES_SH].styling[10]);
+	get_keyfile_style(config, config_home, "error", &style_sets[GEANY_FILETYPES_SH].styling[11]);
+	get_keyfile_style(config, config_home, "here_delim", &style_sets[GEANY_FILETYPES_SH].styling[12]);
+	get_keyfile_style(config, config_home, "here_q", &style_sets[GEANY_FILETYPES_SH].styling[13]);
 
 	style_sets[GEANY_FILETYPES_SH].keywords = g_new(gchar*, 2);
 	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_SH, 0, "break case continue do done elif else esac eval exit export fi for goto if in integer return set shift then until while");
@@ -2035,35 +1974,35 @@ static void styleset_xml(ScintillaObject *sci)
 static void styleset_docbook_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_styleset(GEANY_FILETYPES_DOCBOOK, 29);
-	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[0]);
-	get_keyfile_hex(config, config_home, "tag", 0x000099, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[1]);
-	get_keyfile_hex(config, config_home, "tagunknown", 0xff0000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[2]);
-	get_keyfile_hex(config, config_home, "attribute", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[3]);
-	get_keyfile_hex(config, config_home, "attributeunknown", 0xff0000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[4]);
-	get_keyfile_hex(config, config_home, "number", 0x800080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[5]);
-	get_keyfile_hex(config, config_home, "doublestring", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[6]);
-	get_keyfile_hex(config, config_home, "singlestring", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[7]);
-	get_keyfile_hex(config, config_home, "other", 0x800080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[8]);
-	get_keyfile_hex(config, config_home, "comment", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[9]);
-	get_keyfile_hex(config, config_home, "entity", 0x800080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[10]);
-	get_keyfile_hex(config, config_home, "tagend", 0x000099, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[11]);
-	get_keyfile_hex(config, config_home, "xmlstart", 0x000099, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[12]);
-	get_keyfile_hex(config, config_home, "xmlend", 0x000099, 0xf0f0f0, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[13]);
-	get_keyfile_hex(config, config_home, "cdata", 0x660099, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[14]);
-	get_keyfile_hex(config, config_home, "question", 0x0000ff, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[15]);
-	get_keyfile_hex(config, config_home, "value", 0x660099, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[16]);
-	get_keyfile_hex(config, config_home, "xccomment", 0x660099, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[17]);
-	get_keyfile_hex(config, config_home, "sgml_default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[18]);
-	get_keyfile_hex(config, config_home, "sgml_comment", 0x303030, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[19]);
-	get_keyfile_hex(config, config_home, "sgml_special", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[20]);
-	get_keyfile_hex(config, config_home, "sgml_command", 0x111199, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[21]);
-	get_keyfile_hex(config, config_home, "sgml_doublestring", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[22]);
-	get_keyfile_hex(config, config_home, "sgml_simplestring", 0x404000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[23]);
-	get_keyfile_hex(config, config_home, "sgml_1st_param", 0x404080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[24]);
-	get_keyfile_hex(config, config_home, "sgml_entity", 0x301010, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[25]);
-	get_keyfile_hex(config, config_home, "sgml_block_default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[26]);
-	get_keyfile_hex(config, config_home, "sgml_1st_param_comment", 0x406090, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[27]);
-	get_keyfile_hex(config, config_home, "sgml_error", 0xff0000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_DOCBOOK].styling[28]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[0]);
+	get_keyfile_style(config, config_home, "tag", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[1]);
+	get_keyfile_style(config, config_home, "tagunknown", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[2]);
+	get_keyfile_style(config, config_home, "attribute", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[3]);
+	get_keyfile_style(config, config_home, "attributeunknown", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[4]);
+	get_keyfile_style(config, config_home, "number", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[5]);
+	get_keyfile_style(config, config_home, "doublestring", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[6]);
+	get_keyfile_style(config, config_home, "singlestring", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[7]);
+	get_keyfile_style(config, config_home, "other", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[8]);
+	get_keyfile_style(config, config_home, "comment", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[9]);
+	get_keyfile_style(config, config_home, "entity", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[10]);
+	get_keyfile_style(config, config_home, "tagend", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[11]);
+	get_keyfile_style(config, config_home, "xmlstart", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[12]);
+	get_keyfile_style(config, config_home, "xmlend", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[13]);
+	get_keyfile_style(config, config_home, "cdata", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[14]);
+	get_keyfile_style(config, config_home, "question", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[15]);
+	get_keyfile_style(config, config_home, "value", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[16]);
+	get_keyfile_style(config, config_home, "xccomment", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[17]);
+	get_keyfile_style(config, config_home, "sgml_default", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[18]);
+	get_keyfile_style(config, config_home, "sgml_comment", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[19]);
+	get_keyfile_style(config, config_home, "sgml_special", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[20]);
+	get_keyfile_style(config, config_home, "sgml_command", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[21]);
+	get_keyfile_style(config, config_home, "sgml_doublestring", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[22]);
+	get_keyfile_style(config, config_home, "sgml_simplestring", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[23]);
+	get_keyfile_style(config, config_home, "sgml_1st_param", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[24]);
+	get_keyfile_style(config, config_home, "sgml_entity", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[25]);
+	get_keyfile_style(config, config_home, "sgml_block_default", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[26]);
+	get_keyfile_style(config, config_home, "sgml_1st_param_comment", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[27]);
+	get_keyfile_style(config, config_home, "sgml_error", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[28]);
 
 	style_sets[GEANY_FILETYPES_DOCBOOK].keywords = g_new(gchar*, 3);
 	get_keyfile_keywords(config, config_home, "elements", GEANY_FILETYPES_DOCBOOK, 0,
@@ -2190,28 +2129,28 @@ static void styleset_default(ScintillaObject *sci, gint ft_id)
 static void styleset_css_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_styleset(GEANY_FILETYPES_CSS, 22);
-	get_keyfile_hex(config, config_home, "default", 0x003399, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CSS].styling[0]);
-	get_keyfile_hex(config, config_home, "comment", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CSS].styling[1]);
-	get_keyfile_hex(config, config_home, "tag", 0x2166a4, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_CSS].styling[2]);
-	get_keyfile_hex(config, config_home, "class", 0x007f00, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_CSS].styling[3]);
-	get_keyfile_hex(config, config_home, "pseudoclass", 0x660010, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_CSS].styling[4]);
-	get_keyfile_hex(config, config_home, "unknown_pseudoclass", 0xff0099, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CSS].styling[5]);
-	get_keyfile_hex(config, config_home, "unknown_identifier", 0xff0099, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CSS].styling[6]);
-	get_keyfile_hex(config, config_home, "operator", 0x301010, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CSS].styling[7]);
-	get_keyfile_hex(config, config_home, "identifier", 0x000099, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_CSS].styling[8]);
-	get_keyfile_hex(config, config_home, "doublestring", 0x330066, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CSS].styling[9]);
-	get_keyfile_hex(config, config_home, "singlestring", 0x330066, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CSS].styling[10]);
-	get_keyfile_hex(config, config_home, "attribute", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CSS].styling[11]);
-	get_keyfile_hex(config, config_home, "value", 0x303030, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CSS].styling[12]);
-	get_keyfile_hex(config, config_home, "id", 0xff9000, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_CSS].styling[13]);
-	get_keyfile_hex(config, config_home, "identifier2", 0x6b6bff, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_CSS].styling[14]);
-	get_keyfile_hex(config, config_home, "important", 0x990000, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_CSS].styling[15]);
-	get_keyfile_hex(config, config_home, "directive", 0x006bff, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CSS].styling[16]);
-	get_keyfile_hex(config, config_home, "identifier3", 0x00c8ff, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_CSS].styling[17]);
-	get_keyfile_hex(config, config_home, "pseudoelement", 0x666610, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_CSS].styling[18]);
-	get_keyfile_hex(config, config_home, "extended_identifier", 0x9090a0, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_CSS].styling[19]);
-	get_keyfile_hex(config, config_home, "extended_pseudoclass", 0x907080, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_CSS].styling[20]);
-	get_keyfile_hex(config, config_home, "extended_pseudoelement", 0x909080, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_CSS].styling[21]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_CSS].styling[0]);
+	get_keyfile_style(config, config_home, "comment", &style_sets[GEANY_FILETYPES_CSS].styling[1]);
+	get_keyfile_style(config, config_home, "tag", &style_sets[GEANY_FILETYPES_CSS].styling[2]);
+	get_keyfile_style(config, config_home, "class", &style_sets[GEANY_FILETYPES_CSS].styling[3]);
+	get_keyfile_style(config, config_home, "pseudoclass", &style_sets[GEANY_FILETYPES_CSS].styling[4]);
+	get_keyfile_style(config, config_home, "unknown_pseudoclass", &style_sets[GEANY_FILETYPES_CSS].styling[5]);
+	get_keyfile_style(config, config_home, "unknown_identifier", &style_sets[GEANY_FILETYPES_CSS].styling[6]);
+	get_keyfile_style(config, config_home, "operator", &style_sets[GEANY_FILETYPES_CSS].styling[7]);
+	get_keyfile_style(config, config_home, "identifier", &style_sets[GEANY_FILETYPES_CSS].styling[8]);
+	get_keyfile_style(config, config_home, "doublestring", &style_sets[GEANY_FILETYPES_CSS].styling[9]);
+	get_keyfile_style(config, config_home, "singlestring", &style_sets[GEANY_FILETYPES_CSS].styling[10]);
+	get_keyfile_style(config, config_home, "attribute", &style_sets[GEANY_FILETYPES_CSS].styling[11]);
+	get_keyfile_style(config, config_home, "value", &style_sets[GEANY_FILETYPES_CSS].styling[12]);
+	get_keyfile_style(config, config_home, "id", &style_sets[GEANY_FILETYPES_CSS].styling[13]);
+	get_keyfile_style(config, config_home, "identifier2", &style_sets[GEANY_FILETYPES_CSS].styling[14]);
+	get_keyfile_style(config, config_home, "important", &style_sets[GEANY_FILETYPES_CSS].styling[15]);
+	get_keyfile_style(config, config_home, "directive", &style_sets[GEANY_FILETYPES_CSS].styling[16]);
+	get_keyfile_style(config, config_home, "identifier3", &style_sets[GEANY_FILETYPES_CSS].styling[17]);
+	get_keyfile_style(config, config_home, "pseudoelement", &style_sets[GEANY_FILETYPES_CSS].styling[18]);
+	get_keyfile_style(config, config_home, "extended_identifier", &style_sets[GEANY_FILETYPES_CSS].styling[19]);
+	get_keyfile_style(config, config_home, "extended_pseudoclass", &style_sets[GEANY_FILETYPES_CSS].styling[20]);
+	get_keyfile_style(config, config_home, "extended_pseudoelement", &style_sets[GEANY_FILETYPES_CSS].styling[21]);
 
 	style_sets[GEANY_FILETYPES_CSS].keywords = g_new(gchar*, 9);
 	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_CSS, 0, "");
@@ -2267,25 +2206,25 @@ static void styleset_css(ScintillaObject *sci)
 static void styleset_nsis_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_styleset(GEANY_FILETYPES_NSIS, 19);
-	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_NSIS].styling[0]);
-	get_keyfile_hex(config, config_home, "comment", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_NSIS].styling[1]);
-	get_keyfile_hex(config, config_home, "stringdq", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_NSIS].styling[2]);
-	get_keyfile_hex(config, config_home, "stringlq", 0x008000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_NSIS].styling[3]);
-	get_keyfile_hex(config, config_home, "stringrq", 0x008000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_NSIS].styling[4]);
-	get_keyfile_hex(config, config_home, "function", 0x00007f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_NSIS].styling[5]);
-	get_keyfile_hex(config, config_home, "variable", 0x991111, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_NSIS].styling[6]);
-	get_keyfile_hex(config, config_home, "label", 0x007f7f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_NSIS].styling[7]);
-	get_keyfile_hex(config, config_home, "userdefined", 0x0000d0, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_NSIS].styling[8]);
-	get_keyfile_hex(config, config_home, "sectiondef", 0x00007f, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_NSIS].styling[9]);
-	get_keyfile_hex(config, config_home, "subsectiondef", 0x00007f, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_NSIS].styling[10]);
-	get_keyfile_hex(config, config_home, "ifdefinedef", 0x00007f, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_NSIS].styling[11]);
-	get_keyfile_hex(config, config_home, "macrodef", 0x00007f, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_NSIS].styling[12]);
-	get_keyfile_hex(config, config_home, "stringvar", 0x991111, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_NSIS].styling[13]);
-	get_keyfile_hex(config, config_home, "number", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_NSIS].styling[14]);
-	get_keyfile_hex(config, config_home, "sectiongroup", 0x00007f, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_NSIS].styling[15]);
-	get_keyfile_hex(config, config_home, "pageex", 0x00007f, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_NSIS].styling[16]);
-	get_keyfile_hex(config, config_home, "functiondef", 0x00007f, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_NSIS].styling[17]);
-	get_keyfile_hex(config, config_home, "commentbox", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_NSIS].styling[18]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_NSIS].styling[0]);
+	get_keyfile_style(config, config_home, "comment", &style_sets[GEANY_FILETYPES_NSIS].styling[1]);
+	get_keyfile_style(config, config_home, "stringdq", &style_sets[GEANY_FILETYPES_NSIS].styling[2]);
+	get_keyfile_style(config, config_home, "stringlq", &style_sets[GEANY_FILETYPES_NSIS].styling[3]);
+	get_keyfile_style(config, config_home, "stringrq", &style_sets[GEANY_FILETYPES_NSIS].styling[4]);
+	get_keyfile_style(config, config_home, "function", &style_sets[GEANY_FILETYPES_NSIS].styling[5]);
+	get_keyfile_style(config, config_home, "variable", &style_sets[GEANY_FILETYPES_NSIS].styling[6]);
+	get_keyfile_style(config, config_home, "label", &style_sets[GEANY_FILETYPES_NSIS].styling[7]);
+	get_keyfile_style(config, config_home, "userdefined", &style_sets[GEANY_FILETYPES_NSIS].styling[8]);
+	get_keyfile_style(config, config_home, "sectiondef", &style_sets[GEANY_FILETYPES_NSIS].styling[9]);
+	get_keyfile_style(config, config_home, "subsectiondef", &style_sets[GEANY_FILETYPES_NSIS].styling[10]);
+	get_keyfile_style(config, config_home, "ifdefinedef", &style_sets[GEANY_FILETYPES_NSIS].styling[11]);
+	get_keyfile_style(config, config_home, "macrodef", &style_sets[GEANY_FILETYPES_NSIS].styling[12]);
+	get_keyfile_style(config, config_home, "stringvar", &style_sets[GEANY_FILETYPES_NSIS].styling[13]);
+	get_keyfile_style(config, config_home, "number", &style_sets[GEANY_FILETYPES_NSIS].styling[14]);
+	get_keyfile_style(config, config_home, "sectiongroup", &style_sets[GEANY_FILETYPES_NSIS].styling[15]);
+	get_keyfile_style(config, config_home, "pageex", &style_sets[GEANY_FILETYPES_NSIS].styling[16]);
+	get_keyfile_style(config, config_home, "functiondef", &style_sets[GEANY_FILETYPES_NSIS].styling[17]);
+	get_keyfile_style(config, config_home, "commentbox", &style_sets[GEANY_FILETYPES_NSIS].styling[18]);
 
 	style_sets[GEANY_FILETYPES_NSIS].keywords = g_new(gchar*, 5);
 	get_keyfile_keywords(config, config_home, "functions", GEANY_FILETYPES_NSIS, 0, "");
@@ -2336,15 +2275,15 @@ static void styleset_nsis(ScintillaObject *sci)
 static void styleset_po_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_styleset(GEANY_FILETYPES_PO, 9);
-	get_keyfile_hex(config, config_home, "default", 0x7f0000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PO].styling[0]);
-	get_keyfile_hex(config, config_home, "comment", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PO].styling[1]);
-	get_keyfile_hex(config, config_home, "msgid", 0x00007f, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_PO].styling[2]);
-	get_keyfile_hex(config, config_home, "msgid_text", 0x00007f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PO].styling[3]);
-	get_keyfile_hex(config, config_home, "msgstr", 0x7f0000, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_PO].styling[4]);
-	get_keyfile_hex(config, config_home, "msgstr_text", 0x7f0000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PO].styling[5]);
-	get_keyfile_hex(config, config_home, "msgctxt", 0x007f00, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_PO].styling[6]);
-	get_keyfile_hex(config, config_home, "msgctxt_text", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_PO].styling[7]);
-	get_keyfile_hex(config, config_home, "fuzzy", 0xffa500, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_PO].styling[8]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_PO].styling[0]);
+	get_keyfile_style(config, config_home, "comment", &style_sets[GEANY_FILETYPES_PO].styling[1]);
+	get_keyfile_style(config, config_home, "msgid", &style_sets[GEANY_FILETYPES_PO].styling[2]);
+	get_keyfile_style(config, config_home, "msgid_text", &style_sets[GEANY_FILETYPES_PO].styling[3]);
+	get_keyfile_style(config, config_home, "msgstr", &style_sets[GEANY_FILETYPES_PO].styling[4]);
+	get_keyfile_style(config, config_home, "msgstr_text", &style_sets[GEANY_FILETYPES_PO].styling[5]);
+	get_keyfile_style(config, config_home, "msgctxt", &style_sets[GEANY_FILETYPES_PO].styling[6]);
+	get_keyfile_style(config, config_home, "msgctxt_text", &style_sets[GEANY_FILETYPES_PO].styling[7]);
+	get_keyfile_style(config, config_home, "fuzzy", &style_sets[GEANY_FILETYPES_PO].styling[8]);
 
 	style_sets[GEANY_FILETYPES_PO].keywords = NULL;
 }
@@ -2372,12 +2311,12 @@ static void styleset_po(ScintillaObject *sci)
 static void styleset_conf_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_styleset(GEANY_FILETYPES_CONF, 6);
-	get_keyfile_hex(config, config_home, "default", 0x7f0000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CONF].styling[0]);
-	get_keyfile_hex(config, config_home, "comment", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CONF].styling[1]);
-	get_keyfile_hex(config, config_home, "section", 0x000090, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_CONF].styling[2]);
-	get_keyfile_hex(config, config_home, "key", 0x00007f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CONF].styling[3]);
-	get_keyfile_hex(config, config_home, "assignment", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CONF].styling[4]);
-	get_keyfile_hex(config, config_home, "defval", 0x00007f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CONF].styling[5]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_CONF].styling[0]);
+	get_keyfile_style(config, config_home, "comment", &style_sets[GEANY_FILETYPES_CONF].styling[1]);
+	get_keyfile_style(config, config_home, "section", &style_sets[GEANY_FILETYPES_CONF].styling[2]);
+	get_keyfile_style(config, config_home, "key", &style_sets[GEANY_FILETYPES_CONF].styling[3]);
+	get_keyfile_style(config, config_home, "assignment", &style_sets[GEANY_FILETYPES_CONF].styling[4]);
+	get_keyfile_style(config, config_home, "defval", &style_sets[GEANY_FILETYPES_CONF].styling[5]);
 
 	style_sets[GEANY_FILETYPES_CONF].keywords = NULL;
 }
@@ -2404,21 +2343,21 @@ static void styleset_conf(ScintillaObject *sci)
 static void styleset_asm_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_styleset(GEANY_FILETYPES_ASM, 15);
-	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_ASM].styling[0]);
-	get_keyfile_hex(config, config_home, "comment", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_ASM].styling[1]);
-	get_keyfile_hex(config, config_home, "number", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_ASM].styling[2]);
-	get_keyfile_hex(config, config_home, "string", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_ASM].styling[3]);
-	get_keyfile_hex(config, config_home, "operator", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_ASM].styling[4]);
-	get_keyfile_hex(config, config_home, "identifier", 0x880000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_ASM].styling[5]);
-	get_keyfile_hex(config, config_home, "cpuinstruction", 0x111199, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_ASM].styling[6]);
-	get_keyfile_hex(config, config_home, "mathinstruction", 0x7f0000, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_ASM].styling[7]);
-	get_keyfile_hex(config, config_home, "register", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_ASM].styling[8]);
-	get_keyfile_hex(config, config_home, "directive", 0x3d670f, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_ASM].styling[9]);
-	get_keyfile_hex(config, config_home, "directiveoperand", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_ASM].styling[10]);
-	get_keyfile_hex(config, config_home, "commentblock", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_ASM].styling[11]);
-	get_keyfile_hex(config, config_home, "character", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_ASM].styling[12]);
-	get_keyfile_hex(config, config_home, "stringeol", 0x000000, 0xe0c0e0, FALSE, &style_sets[GEANY_FILETYPES_ASM].styling[13]);
-	get_keyfile_hex(config, config_home, "extinstruction", 0x007f7f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_ASM].styling[14]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_ASM].styling[0]);
+	get_keyfile_style(config, config_home, "comment", &style_sets[GEANY_FILETYPES_ASM].styling[1]);
+	get_keyfile_style(config, config_home, "number", &style_sets[GEANY_FILETYPES_ASM].styling[2]);
+	get_keyfile_style(config, config_home, "string", &style_sets[GEANY_FILETYPES_ASM].styling[3]);
+	get_keyfile_style(config, config_home, "operator", &style_sets[GEANY_FILETYPES_ASM].styling[4]);
+	get_keyfile_style(config, config_home, "identifier", &style_sets[GEANY_FILETYPES_ASM].styling[5]);
+	get_keyfile_style(config, config_home, "cpuinstruction", &style_sets[GEANY_FILETYPES_ASM].styling[6]);
+	get_keyfile_style(config, config_home, "mathinstruction", &style_sets[GEANY_FILETYPES_ASM].styling[7]);
+	get_keyfile_style(config, config_home, "register", &style_sets[GEANY_FILETYPES_ASM].styling[8]);
+	get_keyfile_style(config, config_home, "directive", &style_sets[GEANY_FILETYPES_ASM].styling[9]);
+	get_keyfile_style(config, config_home, "directiveoperand", &style_sets[GEANY_FILETYPES_ASM].styling[10]);
+	get_keyfile_style(config, config_home, "commentblock", &style_sets[GEANY_FILETYPES_ASM].styling[11]);
+	get_keyfile_style(config, config_home, "character", &style_sets[GEANY_FILETYPES_ASM].styling[12]);
+	get_keyfile_style(config, config_home, "stringeol", &style_sets[GEANY_FILETYPES_ASM].styling[13]);
+	get_keyfile_style(config, config_home, "extinstruction", &style_sets[GEANY_FILETYPES_ASM].styling[14]);
 
 	style_sets[GEANY_FILETYPES_ASM].keywords = g_new(gchar*, 4);
 	get_keyfile_keywords(config, config_home, "instructions", GEANY_FILETYPES_ASM, 0, "HLT LAD SPI ADD SUB MUL DIV JMP JEZ JGZ JLZ SWAP JSR RET PUSHAC POPAC ADDST SUBST MULST DIVST LSA LDS PUSH POP CLI LDI INK LIA DEK LDX");
@@ -2462,21 +2401,21 @@ static void styleset_asm(ScintillaObject *sci)
 static void styleset_f77_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_styleset(GEANY_FILETYPES_F77, 15);
-	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_F77].styling[0]);
-	get_keyfile_hex(config, config_home, "comment", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_F77].styling[1]);
-	get_keyfile_hex(config, config_home, "number", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_F77].styling[2]);
-	get_keyfile_hex(config, config_home, "string", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_F77].styling[3]);
-	get_keyfile_hex(config, config_home, "operator", 0x301010, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_F77].styling[4]);
-	get_keyfile_hex(config, config_home, "identifier", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_F77].styling[5]);
-	get_keyfile_hex(config, config_home, "string2", 0x111199, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_F77].styling[6]);
-	get_keyfile_hex(config, config_home, "word", 0x7f0000, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_F77].styling[7]);
-	get_keyfile_hex(config, config_home, "word2", 0x000099, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_F77].styling[8]);
-	get_keyfile_hex(config, config_home, "word3", 0x3d670f, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_F77].styling[9]);
-	get_keyfile_hex(config, config_home, "preprocessor", 0x007f7f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_F77].styling[10]);
-	get_keyfile_hex(config, config_home, "operator2", 0x301010, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_F77].styling[11]);
-	get_keyfile_hex(config, config_home, "continuation", 0x000000, 0xf0e080, FALSE, &style_sets[GEANY_FILETYPES_F77].styling[12]);
-	get_keyfile_hex(config, config_home, "stringeol", 0x000000, 0xe0c0e0, FALSE, &style_sets[GEANY_FILETYPES_F77].styling[13]);
-	get_keyfile_hex(config, config_home, "label", 0xa861a8, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_F77].styling[14]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_F77].styling[0]);
+	get_keyfile_style(config, config_home, "comment", &style_sets[GEANY_FILETYPES_F77].styling[1]);
+	get_keyfile_style(config, config_home, "number", &style_sets[GEANY_FILETYPES_F77].styling[2]);
+	get_keyfile_style(config, config_home, "string", &style_sets[GEANY_FILETYPES_F77].styling[3]);
+	get_keyfile_style(config, config_home, "operator", &style_sets[GEANY_FILETYPES_F77].styling[4]);
+	get_keyfile_style(config, config_home, "identifier", &style_sets[GEANY_FILETYPES_F77].styling[5]);
+	get_keyfile_style(config, config_home, "string2", &style_sets[GEANY_FILETYPES_F77].styling[6]);
+	get_keyfile_style(config, config_home, "word", &style_sets[GEANY_FILETYPES_F77].styling[7]);
+	get_keyfile_style(config, config_home, "word2", &style_sets[GEANY_FILETYPES_F77].styling[8]);
+	get_keyfile_style(config, config_home, "word3", &style_sets[GEANY_FILETYPES_F77].styling[9]);
+	get_keyfile_style(config, config_home, "preprocessor", &style_sets[GEANY_FILETYPES_F77].styling[10]);
+	get_keyfile_style(config, config_home, "operator2", &style_sets[GEANY_FILETYPES_F77].styling[11]);
+	get_keyfile_style(config, config_home, "continuation", &style_sets[GEANY_FILETYPES_F77].styling[12]);
+	get_keyfile_style(config, config_home, "stringeol", &style_sets[GEANY_FILETYPES_F77].styling[13]);
+	get_keyfile_style(config, config_home, "label", &style_sets[GEANY_FILETYPES_F77].styling[14]);
 
 	style_sets[GEANY_FILETYPES_F77].keywords = g_new(gchar*, 4);
 	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_F77, 0, "");
@@ -2518,21 +2457,21 @@ static void styleset_f77(ScintillaObject *sci)
 static void styleset_fortran_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_styleset(GEANY_FILETYPES_FORTRAN, 15);
-	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_FORTRAN].styling[0]);
-	get_keyfile_hex(config, config_home, "comment", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_FORTRAN].styling[1]);
-	get_keyfile_hex(config, config_home, "number", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_FORTRAN].styling[2]);
-	get_keyfile_hex(config, config_home, "string", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_FORTRAN].styling[3]);
-	get_keyfile_hex(config, config_home, "operator", 0x301010, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_FORTRAN].styling[4]);
-	get_keyfile_hex(config, config_home, "identifier", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_FORTRAN].styling[5]);
-	get_keyfile_hex(config, config_home, "string2", 0x111199, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_FORTRAN].styling[6]);
-	get_keyfile_hex(config, config_home, "word", 0x7f0000, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_FORTRAN].styling[7]);
-	get_keyfile_hex(config, config_home, "word2", 0x000099, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_FORTRAN].styling[8]);
-	get_keyfile_hex(config, config_home, "word3", 0x3d670f, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_FORTRAN].styling[9]);
-	get_keyfile_hex(config, config_home, "preprocessor", 0x007f7f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_FORTRAN].styling[10]);
-	get_keyfile_hex(config, config_home, "operator2", 0x301010, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_FORTRAN].styling[11]);
-	get_keyfile_hex(config, config_home, "continuation", 0x000000, 0xf0e080, FALSE, &style_sets[GEANY_FILETYPES_FORTRAN].styling[12]);
-	get_keyfile_hex(config, config_home, "stringeol", 0x000000, 0xe0c0e0, FALSE, &style_sets[GEANY_FILETYPES_FORTRAN].styling[13]);
-	get_keyfile_hex(config, config_home, "label", 0xa861a8, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_FORTRAN].styling[14]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_FORTRAN].styling[0]);
+	get_keyfile_style(config, config_home, "comment", &style_sets[GEANY_FILETYPES_FORTRAN].styling[1]);
+	get_keyfile_style(config, config_home, "number", &style_sets[GEANY_FILETYPES_FORTRAN].styling[2]);
+	get_keyfile_style(config, config_home, "string", &style_sets[GEANY_FILETYPES_FORTRAN].styling[3]);
+	get_keyfile_style(config, config_home, "operator", &style_sets[GEANY_FILETYPES_FORTRAN].styling[4]);
+	get_keyfile_style(config, config_home, "identifier", &style_sets[GEANY_FILETYPES_FORTRAN].styling[5]);
+	get_keyfile_style(config, config_home, "string2", &style_sets[GEANY_FILETYPES_FORTRAN].styling[6]);
+	get_keyfile_style(config, config_home, "word", &style_sets[GEANY_FILETYPES_FORTRAN].styling[7]);
+	get_keyfile_style(config, config_home, "word2", &style_sets[GEANY_FILETYPES_FORTRAN].styling[8]);
+	get_keyfile_style(config, config_home, "word3", &style_sets[GEANY_FILETYPES_FORTRAN].styling[9]);
+	get_keyfile_style(config, config_home, "preprocessor", &style_sets[GEANY_FILETYPES_FORTRAN].styling[10]);
+	get_keyfile_style(config, config_home, "operator2", &style_sets[GEANY_FILETYPES_FORTRAN].styling[11]);
+	get_keyfile_style(config, config_home, "continuation", &style_sets[GEANY_FILETYPES_FORTRAN].styling[12]);
+	get_keyfile_style(config, config_home, "stringeol", &style_sets[GEANY_FILETYPES_FORTRAN].styling[13]);
+	get_keyfile_style(config, config_home, "label", &style_sets[GEANY_FILETYPES_FORTRAN].styling[14]);
 
 	style_sets[GEANY_FILETYPES_FORTRAN].keywords = g_new(gchar*, 4);
 	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_FORTRAN, 0, "");
@@ -2574,21 +2513,21 @@ static void styleset_fortran(ScintillaObject *sci)
 static void styleset_sql_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_styleset(GEANY_FILETYPES_SQL, 15);
-	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_SQL].styling[0]);
-	get_keyfile_hex(config, config_home, "comment", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_SQL].styling[1]);
-	get_keyfile_hex(config, config_home, "commentline", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_SQL].styling[2]);
-	get_keyfile_hex(config, config_home, "commentdoc", 0x3f5fbf, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_SQL].styling[3]);
-	get_keyfile_hex(config, config_home, "number", 0x7f7f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_SQL].styling[4]);
-	get_keyfile_hex(config, config_home, "word", 0x001a7f, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_SQL].styling[5]);
-	get_keyfile_hex(config, config_home, "word2", 0x7f0000, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_SQL].styling[6]);
-	get_keyfile_hex(config, config_home, "string", 0x7f007f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_SQL].styling[7]);
-	get_keyfile_hex(config, config_home, "character", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_SQL].styling[8]);
-	get_keyfile_hex(config, config_home, "operator", 0x000000, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_SQL].styling[9]);
-	get_keyfile_hex(config, config_home, "identifier", 0x111199, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_SQL].styling[10]);
-	get_keyfile_hex(config, config_home, "sqlplus", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_SQL].styling[11]);
-	get_keyfile_hex(config, config_home, "sqlplus_prompt", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_SQL].styling[12]);
-	get_keyfile_hex(config, config_home, "sqlplus_comment", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_SQL].styling[13]);
-	get_keyfile_hex(config, config_home, "quotedidentifier", 0x111199, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_SQL].styling[14]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_SQL].styling[0]);
+	get_keyfile_style(config, config_home, "comment", &style_sets[GEANY_FILETYPES_SQL].styling[1]);
+	get_keyfile_style(config, config_home, "commentline", &style_sets[GEANY_FILETYPES_SQL].styling[2]);
+	get_keyfile_style(config, config_home, "commentdoc", &style_sets[GEANY_FILETYPES_SQL].styling[3]);
+	get_keyfile_style(config, config_home, "number", &style_sets[GEANY_FILETYPES_SQL].styling[4]);
+	get_keyfile_style(config, config_home, "word", &style_sets[GEANY_FILETYPES_SQL].styling[5]);
+	get_keyfile_style(config, config_home, "word2", &style_sets[GEANY_FILETYPES_SQL].styling[6]);
+	get_keyfile_style(config, config_home, "string", &style_sets[GEANY_FILETYPES_SQL].styling[7]);
+	get_keyfile_style(config, config_home, "character", &style_sets[GEANY_FILETYPES_SQL].styling[8]);
+	get_keyfile_style(config, config_home, "operator", &style_sets[GEANY_FILETYPES_SQL].styling[9]);
+	get_keyfile_style(config, config_home, "identifier", &style_sets[GEANY_FILETYPES_SQL].styling[10]);
+	get_keyfile_style(config, config_home, "sqlplus", &style_sets[GEANY_FILETYPES_SQL].styling[11]);
+	get_keyfile_style(config, config_home, "sqlplus_prompt", &style_sets[GEANY_FILETYPES_SQL].styling[12]);
+	get_keyfile_style(config, config_home, "sqlplus_comment", &style_sets[GEANY_FILETYPES_SQL].styling[13]);
+	get_keyfile_style(config, config_home, "quotedidentifier", &style_sets[GEANY_FILETYPES_SQL].styling[14]);
 
 	style_sets[GEANY_FILETYPES_SQL].keywords = g_new(gchar*, 2);
 	get_keyfile_keywords(config, config_home, "keywords", GEANY_FILETYPES_SQL, 0,
@@ -2654,23 +2593,23 @@ static void styleset_markdown_init(gint ft_id, GKeyFile *config, GKeyFile *confi
 {
 	new_styleset(GEANY_FILETYPES_MARKDOWN, 17);
 
-	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[0]);
-	get_keyfile_hex(config, config_home, "strong", 0xff0000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[1]);
-	get_keyfile_hex(config, config_home, "emphasis", 0xff0000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[2]);
-	get_keyfile_hex(config, config_home, "header1", 0x0000bb, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[3]);
-	get_keyfile_hex(config, config_home, "header2", 0x0000bb, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[4]);
-	get_keyfile_hex(config, config_home, "header3", 0x0000bb, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[5]);
-	get_keyfile_hex(config, config_home, "header4", 0x0000bb, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[6]);
-	get_keyfile_hex(config, config_home, "header5", 0x0000bb, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[7]);
-	get_keyfile_hex(config, config_home, "header6", 0x0000bb, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[8]);
-	get_keyfile_hex(config, config_home, "ulist_item", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[9]);
-	get_keyfile_hex(config, config_home, "olist_item", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[10]);
-	get_keyfile_hex(config, config_home, "blockquote", 0xff0000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[11]);
-	get_keyfile_hex(config, config_home, "strikeout", 0xaa00ff, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[12]);
-	get_keyfile_hex(config, config_home, "hrule", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[13]);
-	get_keyfile_hex(config, config_home, "link", 0x0000ff, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[14]);
-	get_keyfile_hex(config, config_home, "code", 0x009f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[15]);
-	get_keyfile_hex(config, config_home, "codebk", 0x005f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MARKDOWN].styling[16]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_MARKDOWN].styling[0]);
+	get_keyfile_style(config, config_home, "strong", &style_sets[GEANY_FILETYPES_MARKDOWN].styling[1]);
+	get_keyfile_style(config, config_home, "emphasis", &style_sets[GEANY_FILETYPES_MARKDOWN].styling[2]);
+	get_keyfile_style(config, config_home, "header1", &style_sets[GEANY_FILETYPES_MARKDOWN].styling[3]);
+	get_keyfile_style(config, config_home, "header2", &style_sets[GEANY_FILETYPES_MARKDOWN].styling[4]);
+	get_keyfile_style(config, config_home, "header3", &style_sets[GEANY_FILETYPES_MARKDOWN].styling[5]);
+	get_keyfile_style(config, config_home, "header4", &style_sets[GEANY_FILETYPES_MARKDOWN].styling[6]);
+	get_keyfile_style(config, config_home, "header5", &style_sets[GEANY_FILETYPES_MARKDOWN].styling[7]);
+	get_keyfile_style(config, config_home, "header6", &style_sets[GEANY_FILETYPES_MARKDOWN].styling[8]);
+	get_keyfile_style(config, config_home, "ulist_item", &style_sets[GEANY_FILETYPES_MARKDOWN].styling[9]);
+	get_keyfile_style(config, config_home, "olist_item", &style_sets[GEANY_FILETYPES_MARKDOWN].styling[10]);
+	get_keyfile_style(config, config_home, "blockquote", &style_sets[GEANY_FILETYPES_MARKDOWN].styling[11]);
+	get_keyfile_style(config, config_home, "strikeout", &style_sets[GEANY_FILETYPES_MARKDOWN].styling[12]);
+	get_keyfile_style(config, config_home, "hrule", &style_sets[GEANY_FILETYPES_MARKDOWN].styling[13]);
+	get_keyfile_style(config, config_home, "link", &style_sets[GEANY_FILETYPES_MARKDOWN].styling[14]);
+	get_keyfile_style(config, config_home, "code", &style_sets[GEANY_FILETYPES_MARKDOWN].styling[15]);
+	get_keyfile_style(config, config_home, "codebk", &style_sets[GEANY_FILETYPES_MARKDOWN].styling[16]);
 
 	style_sets[GEANY_FILETYPES_MARKDOWN].keywords = NULL;
 }
@@ -2712,23 +2651,23 @@ static void styleset_haskell_init(gint ft_id, GKeyFile *config, GKeyFile *config
 {
 	new_styleset(GEANY_FILETYPES_HASKELL, 17);
 
-	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_HASKELL].styling[0]);
-	get_keyfile_hex(config, config_home, "commentline", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_HASKELL].styling[1]);
-	get_keyfile_hex(config, config_home, "commentblock", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_HASKELL].styling[2]);
-	get_keyfile_hex(config, config_home, "commentblock2", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_HASKELL].styling[3]);
-	get_keyfile_hex(config, config_home, "commentblock3", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_HASKELL].styling[4]);
-	get_keyfile_hex(config, config_home, "number", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_HASKELL].styling[5]);
-	get_keyfile_hex(config, config_home, "keyword", 0x00007f, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_HASKELL].styling[6]);
-	get_keyfile_hex(config, config_home, "import", 0x991111, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_HASKELL].styling[7]);
-	get_keyfile_hex(config, config_home, "string", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_HASKELL].styling[8]);
-	get_keyfile_hex(config, config_home, "character", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_HASKELL].styling[9]);
-	get_keyfile_hex(config, config_home, "class", 0x0000d0, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_HASKELL].styling[10]);
-	get_keyfile_hex(config, config_home, "operator", 0x301010, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_HASKELL].styling[11]);
-	get_keyfile_hex(config, config_home, "identifier", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_HASKELL].styling[12]);
-	get_keyfile_hex(config, config_home, "instance", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_HASKELL].styling[13]);
-	get_keyfile_hex(config, config_home, "capital", 0x635b00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_HASKELL].styling[14]);
-	get_keyfile_hex(config, config_home, "module", 0x007f7f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_HASKELL].styling[15]);
-	get_keyfile_hex(config, config_home, "data", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_HASKELL].styling[16]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_HASKELL].styling[0]);
+	get_keyfile_style(config, config_home, "commentline", &style_sets[GEANY_FILETYPES_HASKELL].styling[1]);
+	get_keyfile_style(config, config_home, "commentblock", &style_sets[GEANY_FILETYPES_HASKELL].styling[2]);
+	get_keyfile_style(config, config_home, "commentblock2", &style_sets[GEANY_FILETYPES_HASKELL].styling[3]);
+	get_keyfile_style(config, config_home, "commentblock3", &style_sets[GEANY_FILETYPES_HASKELL].styling[4]);
+	get_keyfile_style(config, config_home, "number", &style_sets[GEANY_FILETYPES_HASKELL].styling[5]);
+	get_keyfile_style(config, config_home, "keyword", &style_sets[GEANY_FILETYPES_HASKELL].styling[6]);
+	get_keyfile_style(config, config_home, "import", &style_sets[GEANY_FILETYPES_HASKELL].styling[7]);
+	get_keyfile_style(config, config_home, "string", &style_sets[GEANY_FILETYPES_HASKELL].styling[8]);
+	get_keyfile_style(config, config_home, "character", &style_sets[GEANY_FILETYPES_HASKELL].styling[9]);
+	get_keyfile_style(config, config_home, "class", &style_sets[GEANY_FILETYPES_HASKELL].styling[10]);
+	get_keyfile_style(config, config_home, "operator", &style_sets[GEANY_FILETYPES_HASKELL].styling[11]);
+	get_keyfile_style(config, config_home, "identifier", &style_sets[GEANY_FILETYPES_HASKELL].styling[12]);
+	get_keyfile_style(config, config_home, "instance", &style_sets[GEANY_FILETYPES_HASKELL].styling[13]);
+	get_keyfile_style(config, config_home, "capital", &style_sets[GEANY_FILETYPES_HASKELL].styling[14]);
+	get_keyfile_style(config, config_home, "module", &style_sets[GEANY_FILETYPES_HASKELL].styling[15]);
+	get_keyfile_style(config, config_home, "data", &style_sets[GEANY_FILETYPES_HASKELL].styling[16]);
 
 	style_sets[GEANY_FILETYPES_HASKELL].keywords = g_new(gchar*, 2);
 	get_keyfile_keywords(config, config_home, "keywords", GEANY_FILETYPES_HASKELL, 0,
@@ -2770,20 +2709,20 @@ static void styleset_caml_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 {
 	new_styleset(GEANY_FILETYPES_CAML, 14);
 
-	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CAML].styling[0]);
-	get_keyfile_hex(config, config_home, "comment", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CAML].styling[1]);
-	get_keyfile_hex(config, config_home, "comment1", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CAML].styling[2]);
-	get_keyfile_hex(config, config_home, "comment2", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CAML].styling[3]);
-	get_keyfile_hex(config, config_home, "comment3", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CAML].styling[4]);
-	get_keyfile_hex(config, config_home, "number", 0x7f7f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CAML].styling[5]);
-	get_keyfile_hex(config, config_home, "keyword", 0x001a7f, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_CAML].styling[6]);
-	get_keyfile_hex(config, config_home, "keyword2", 0x7f0000, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_CAML].styling[7]);
-	get_keyfile_hex(config, config_home, "string", 0x7f007f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CAML].styling[8]);
-	get_keyfile_hex(config, config_home, "char", 0x7f007f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CAML].styling[9]);
-	get_keyfile_hex(config, config_home, "operator", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CAML].styling[10]);
-	get_keyfile_hex(config, config_home, "identifier", 0x111199, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_CAML].styling[11]);
-	get_keyfile_hex(config, config_home, "tagname", 0x000000, 0xffe0ff, TRUE, &style_sets[GEANY_FILETYPES_CAML].styling[12]);
-	get_keyfile_hex(config, config_home, "linenum", 0x000000, 0xc0c0c0, FALSE, &style_sets[GEANY_FILETYPES_CAML].styling[13]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_CAML].styling[0]);
+	get_keyfile_style(config, config_home, "comment", &style_sets[GEANY_FILETYPES_CAML].styling[1]);
+	get_keyfile_style(config, config_home, "comment1", &style_sets[GEANY_FILETYPES_CAML].styling[2]);
+	get_keyfile_style(config, config_home, "comment2", &style_sets[GEANY_FILETYPES_CAML].styling[3]);
+	get_keyfile_style(config, config_home, "comment3", &style_sets[GEANY_FILETYPES_CAML].styling[4]);
+	get_keyfile_style(config, config_home, "number", &style_sets[GEANY_FILETYPES_CAML].styling[5]);
+	get_keyfile_style(config, config_home, "keyword", &style_sets[GEANY_FILETYPES_CAML].styling[6]);
+	get_keyfile_style(config, config_home, "keyword2", &style_sets[GEANY_FILETYPES_CAML].styling[7]);
+	get_keyfile_style(config, config_home, "string", &style_sets[GEANY_FILETYPES_CAML].styling[8]);
+	get_keyfile_style(config, config_home, "char", &style_sets[GEANY_FILETYPES_CAML].styling[9]);
+	get_keyfile_style(config, config_home, "operator", &style_sets[GEANY_FILETYPES_CAML].styling[10]);
+	get_keyfile_style(config, config_home, "identifier", &style_sets[GEANY_FILETYPES_CAML].styling[11]);
+	get_keyfile_style(config, config_home, "tagname", &style_sets[GEANY_FILETYPES_CAML].styling[12]);
+	get_keyfile_style(config, config_home, "linenum", &style_sets[GEANY_FILETYPES_CAML].styling[13]);
 
 	style_sets[GEANY_FILETYPES_CAML].keywords = g_new(gchar*, 3);
 	get_keyfile_keywords(config, config_home, "keywords", GEANY_FILETYPES_CAML, 0,
@@ -2826,22 +2765,22 @@ static void styleset_caml(ScintillaObject *sci)
 static void styleset_tcl_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_styleset(GEANY_FILETYPES_TCL, 16);
-	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_TCL].styling[0]);
-	get_keyfile_named_style(config, config_home, "comment", "comment", &style_sets[GEANY_FILETYPES_TCL].styling[1]);
-	get_keyfile_named_style(config, config_home, "commentline", "comment", &style_sets[GEANY_FILETYPES_TCL].styling[2]);
-	get_keyfile_hex(config, config_home, "number", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_TCL].styling[3]);
-	get_keyfile_hex(config, config_home, "operator", 0x301010, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_TCL].styling[4]);
-	get_keyfile_hex(config, config_home, "identifier", 0xa20000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_TCL].styling[5]);
-	get_keyfile_hex(config, config_home, "wordinquote", 0x7f007f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_TCL].styling[6]);
-	get_keyfile_hex(config, config_home, "inquote", 0x7f007f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_TCL].styling[7]);
-	get_keyfile_hex(config, config_home, "substitution", 0x111199, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_TCL].styling[8]);
-	get_keyfile_hex(config, config_home, "modifier", 0x7f007f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_TCL].styling[9]);
-	get_keyfile_hex(config, config_home, "expand", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_TCL].styling[10]);
-	get_keyfile_hex(config, config_home, "wordtcl", 0x111199, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_TCL].styling[11]);
-	get_keyfile_hex(config, config_home, "wordtk", 0x7f0000, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_TCL].styling[12]);
-	get_keyfile_hex(config, config_home, "worditcl", 0x111199, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_TCL].styling[13]);
-	get_keyfile_hex(config, config_home, "wordtkcmds", 0x7f0000, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_TCL].styling[14]);
-	get_keyfile_hex(config, config_home, "wordexpand", 0x7f0000, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_TCL].styling[15]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_TCL].styling[0]);
+	get_keyfile_style(config, config_home, "comment", &style_sets[GEANY_FILETYPES_TCL].styling[1]);
+	get_keyfile_style(config, config_home, "commentline", &style_sets[GEANY_FILETYPES_TCL].styling[2]);
+	get_keyfile_style(config, config_home, "number", &style_sets[GEANY_FILETYPES_TCL].styling[3]);
+	get_keyfile_style(config, config_home, "operator", &style_sets[GEANY_FILETYPES_TCL].styling[4]);
+	get_keyfile_style(config, config_home, "identifier", &style_sets[GEANY_FILETYPES_TCL].styling[5]);
+	get_keyfile_style(config, config_home, "wordinquote", &style_sets[GEANY_FILETYPES_TCL].styling[6]);
+	get_keyfile_style(config, config_home, "inquote", &style_sets[GEANY_FILETYPES_TCL].styling[7]);
+	get_keyfile_style(config, config_home, "substitution", &style_sets[GEANY_FILETYPES_TCL].styling[8]);
+	get_keyfile_style(config, config_home, "modifier", &style_sets[GEANY_FILETYPES_TCL].styling[9]);
+	get_keyfile_style(config, config_home, "expand", &style_sets[GEANY_FILETYPES_TCL].styling[10]);
+	get_keyfile_style(config, config_home, "wordtcl", &style_sets[GEANY_FILETYPES_TCL].styling[11]);
+	get_keyfile_style(config, config_home, "wordtk", &style_sets[GEANY_FILETYPES_TCL].styling[12]);
+	get_keyfile_style(config, config_home, "worditcl", &style_sets[GEANY_FILETYPES_TCL].styling[13]);
+	get_keyfile_style(config, config_home, "wordtkcmds", &style_sets[GEANY_FILETYPES_TCL].styling[14]);
+	get_keyfile_style(config, config_home, "wordexpand", &style_sets[GEANY_FILETYPES_TCL].styling[15]);
 
 	style_sets[GEANY_FILETYPES_TCL].keywords = g_new(gchar*, 6);
 	get_keyfile_keywords(config, config_home, "tcl", GEANY_FILETYPES_TCL, 0, "");
@@ -2888,15 +2827,15 @@ static void styleset_tcl(ScintillaObject *sci)
 static void styleset_matlab_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_styleset(GEANY_FILETYPES_MATLAB, 9);
-	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MATLAB].styling[0]);
-	get_keyfile_hex(config, config_home, "comment", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MATLAB].styling[1]);
-	get_keyfile_hex(config, config_home, "command", 0x111199, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_MATLAB].styling[2]);
-	get_keyfile_hex(config, config_home, "number", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MATLAB].styling[3]);
-	get_keyfile_hex(config, config_home, "keyword", 0x001a7f, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_MATLAB].styling[4]);
-	get_keyfile_hex(config, config_home, "string", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MATLAB].styling[5]);
-	get_keyfile_hex(config, config_home, "operator", 0x301010, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MATLAB].styling[6]);
-	get_keyfile_hex(config, config_home, "identifier", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MATLAB].styling[7]);
-	get_keyfile_hex(config, config_home, "doublequotedstring", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_MATLAB].styling[8]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_MATLAB].styling[0]);
+	get_keyfile_style(config, config_home, "comment", &style_sets[GEANY_FILETYPES_MATLAB].styling[1]);
+	get_keyfile_style(config, config_home, "command", &style_sets[GEANY_FILETYPES_MATLAB].styling[2]);
+	get_keyfile_style(config, config_home, "number", &style_sets[GEANY_FILETYPES_MATLAB].styling[3]);
+	get_keyfile_style(config, config_home, "keyword", &style_sets[GEANY_FILETYPES_MATLAB].styling[4]);
+	get_keyfile_style(config, config_home, "string", &style_sets[GEANY_FILETYPES_MATLAB].styling[5]);
+	get_keyfile_style(config, config_home, "operator", &style_sets[GEANY_FILETYPES_MATLAB].styling[6]);
+	get_keyfile_style(config, config_home, "identifier", &style_sets[GEANY_FILETYPES_MATLAB].styling[7]);
+	get_keyfile_style(config, config_home, "doublequotedstring", &style_sets[GEANY_FILETYPES_MATLAB].styling[8]);
 
 	style_sets[GEANY_FILETYPES_MATLAB].keywords = g_new(gchar*, 2);
 	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_MATLAB, 0, "break case catch continue else elseif end for function global if otherwise persistent return switch try while");
@@ -2929,24 +2868,24 @@ static void styleset_d_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
 	new_styleset(GEANY_FILETYPES_D, 18);
 
-	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_D].styling[0]);
-	get_keyfile_hex(config, config_home, "comment", 0xd00000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_D].styling[1]);
-	get_keyfile_hex(config, config_home, "commentline", 0xd00000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_D].styling[2]);
-	get_keyfile_hex(config, config_home, "commentdoc", 0x3f5fbf, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_D].styling[3]);
-	get_keyfile_hex(config, config_home, "commentdocnested", 0x3f5fbf, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_D].styling[4]);
-	get_keyfile_hex(config, config_home, "number", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_D].styling[5]);
-	get_keyfile_hex(config, config_home, "word", 0x00007f, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_D].styling[6]);
-	get_keyfile_hex(config, config_home, "word2", 0x991111, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_D].styling[7]);
-	get_keyfile_hex(config, config_home, "word3", 0x991111, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_D].styling[8]);
-	get_keyfile_hex(config, config_home, "typedef", 0x0000d0, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_D].styling[9]);
-	get_keyfile_hex(config, config_home, "string", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_D].styling[10]);
-	get_keyfile_hex(config, config_home, "stringeol", 0x000000, 0xe0c0e0, FALSE, &style_sets[GEANY_FILETYPES_D].styling[11]);
-	get_keyfile_hex(config, config_home, "character", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_D].styling[12]);
-	get_keyfile_hex(config, config_home, "operator", 0x301010, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_D].styling[13]);
-	get_keyfile_hex(config, config_home, "identifier", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_D].styling[14]);
-	get_keyfile_hex(config, config_home, "commentlinedoc", 0x3f5fbf, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_D].styling[15]);
-	get_keyfile_hex(config, config_home, "commentdockeyword", 0x3f5fbf, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_D].styling[16]);
-	get_keyfile_hex(config, config_home, "commentdockeyworderror", 0x3f5fbf, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_D].styling[17]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_D].styling[0]);
+	get_keyfile_style(config, config_home, "comment", &style_sets[GEANY_FILETYPES_D].styling[1]);
+	get_keyfile_style(config, config_home, "commentline", &style_sets[GEANY_FILETYPES_D].styling[2]);
+	get_keyfile_style(config, config_home, "commentdoc", &style_sets[GEANY_FILETYPES_D].styling[3]);
+	get_keyfile_style(config, config_home, "commentdocnested", &style_sets[GEANY_FILETYPES_D].styling[4]);
+	get_keyfile_style(config, config_home, "number", &style_sets[GEANY_FILETYPES_D].styling[5]);
+	get_keyfile_style(config, config_home, "word", &style_sets[GEANY_FILETYPES_D].styling[6]);
+	get_keyfile_style(config, config_home, "word2", &style_sets[GEANY_FILETYPES_D].styling[7]);
+	get_keyfile_style(config, config_home, "word3", &style_sets[GEANY_FILETYPES_D].styling[8]);
+	get_keyfile_style(config, config_home, "typedef", &style_sets[GEANY_FILETYPES_D].styling[9]);
+	get_keyfile_style(config, config_home, "string", &style_sets[GEANY_FILETYPES_D].styling[10]);
+	get_keyfile_style(config, config_home, "stringeol", &style_sets[GEANY_FILETYPES_D].styling[11]);
+	get_keyfile_style(config, config_home, "character", &style_sets[GEANY_FILETYPES_D].styling[12]);
+	get_keyfile_style(config, config_home, "operator", &style_sets[GEANY_FILETYPES_D].styling[13]);
+	get_keyfile_style(config, config_home, "identifier", &style_sets[GEANY_FILETYPES_D].styling[14]);
+	get_keyfile_style(config, config_home, "commentlinedoc", &style_sets[GEANY_FILETYPES_D].styling[15]);
+	get_keyfile_style(config, config_home, "commentdockeyword", &style_sets[GEANY_FILETYPES_D].styling[16]);
+	get_keyfile_style(config, config_home, "commentdockeyworderror", &style_sets[GEANY_FILETYPES_D].styling[17]);
 
 	style_sets[GEANY_FILETYPES_D].keywords = g_new(gchar*, 5);
 	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_D, 0,
@@ -3037,21 +2976,21 @@ static void styleset_vhdl_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 {
 	new_styleset(GEANY_FILETYPES_VHDL, 15);
 
-	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_VHDL].styling[0]);
-	get_keyfile_hex(config, config_home, "comment", 0xd00000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_VHDL].styling[1]);
-	get_keyfile_hex(config, config_home, "comment_line_bang", 0x3f5fbf, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_VHDL].styling[2]);
-	get_keyfile_hex(config, config_home, "number", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_VHDL].styling[3]);
-	get_keyfile_hex(config, config_home, "string", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_VHDL].styling[4]);
-	get_keyfile_hex(config, config_home, "operator", 0x301010, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_VHDL].styling[5]);
-	get_keyfile_hex(config, config_home, "identifier", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_VHDL].styling[6]);
-	get_keyfile_hex(config, config_home, "stringeol", 0x000000, 0xe0c0e0, FALSE, &style_sets[GEANY_FILETYPES_VHDL].styling[7]);
-	get_keyfile_hex(config, config_home, "keyword", 0x001a7f, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_VHDL].styling[8]);
-	get_keyfile_hex(config, config_home, "stdoperator", 0x007f7f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_VHDL].styling[9]);
-	get_keyfile_hex(config, config_home, "attribute", 0x804020, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_VHDL].styling[10]);
-	get_keyfile_hex(config, config_home, "stdfunction", 0x808020, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_VHDL].styling[11]);
-	get_keyfile_hex(config, config_home, "stdpackage", 0x208020, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_VHDL].styling[12]);
-	get_keyfile_hex(config, config_home, "stdtype", 0x208080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_VHDL].styling[13]);
-	get_keyfile_hex(config, config_home, "userword", 0x804020, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_VHDL].styling[14]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_VHDL].styling[0]);
+	get_keyfile_style(config, config_home, "comment", &style_sets[GEANY_FILETYPES_VHDL].styling[1]);
+	get_keyfile_style(config, config_home, "comment_line_bang", &style_sets[GEANY_FILETYPES_VHDL].styling[2]);
+	get_keyfile_style(config, config_home, "number", &style_sets[GEANY_FILETYPES_VHDL].styling[3]);
+	get_keyfile_style(config, config_home, "string", &style_sets[GEANY_FILETYPES_VHDL].styling[4]);
+	get_keyfile_style(config, config_home, "operator", &style_sets[GEANY_FILETYPES_VHDL].styling[5]);
+	get_keyfile_style(config, config_home, "identifier", &style_sets[GEANY_FILETYPES_VHDL].styling[6]);
+	get_keyfile_style(config, config_home, "stringeol", &style_sets[GEANY_FILETYPES_VHDL].styling[7]);
+	get_keyfile_style(config, config_home, "keyword", &style_sets[GEANY_FILETYPES_VHDL].styling[8]);
+	get_keyfile_style(config, config_home, "stdoperator", &style_sets[GEANY_FILETYPES_VHDL].styling[9]);
+	get_keyfile_style(config, config_home, "attribute", &style_sets[GEANY_FILETYPES_VHDL].styling[10]);
+	get_keyfile_style(config, config_home, "stdfunction", &style_sets[GEANY_FILETYPES_VHDL].styling[11]);
+	get_keyfile_style(config, config_home, "stdpackage", &style_sets[GEANY_FILETYPES_VHDL].styling[12]);
+	get_keyfile_style(config, config_home, "stdtype", &style_sets[GEANY_FILETYPES_VHDL].styling[13]);
+	get_keyfile_style(config, config_home, "userword", &style_sets[GEANY_FILETYPES_VHDL].styling[14]);
 
 	style_sets[GEANY_FILETYPES_VHDL].keywords = g_new(gchar*, 8);
 	get_keyfile_keywords(config, config_home, "keywords", GEANY_FILETYPES_VHDL, 0,
@@ -3123,16 +3062,16 @@ static void styleset_yaml_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 {
 	new_styleset(GEANY_FILETYPES_YAML, 10);
 
-	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_YAML].styling[0]);
-	get_keyfile_hex(config, config_home, "comment", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_YAML].styling[1]);
-	get_keyfile_hex(config, config_home, "identifier", 0x000088, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_YAML].styling[2]);
-	get_keyfile_hex(config, config_home, "keyword", 0x991111, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_YAML].styling[3]);
-	get_keyfile_hex(config, config_home, "number", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_YAML].styling[4]);
-	get_keyfile_hex(config, config_home, "reference", 0x008888, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_YAML].styling[5]);
-	get_keyfile_hex(config, config_home, "document", 0x000088, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_YAML].styling[6]);
-	get_keyfile_hex(config, config_home, "text", 0x333366, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_YAML].styling[7]);
-	get_keyfile_hex(config, config_home, "error", 0xff0000, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_YAML].styling[8]);
-	get_keyfile_hex(config, config_home, "operator", 0x301010, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_YAML].styling[9]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_YAML].styling[0]);
+	get_keyfile_style(config, config_home, "comment", &style_sets[GEANY_FILETYPES_YAML].styling[1]);
+	get_keyfile_style(config, config_home, "identifier", &style_sets[GEANY_FILETYPES_YAML].styling[2]);
+	get_keyfile_style(config, config_home, "keyword", &style_sets[GEANY_FILETYPES_YAML].styling[3]);
+	get_keyfile_style(config, config_home, "number", &style_sets[GEANY_FILETYPES_YAML].styling[4]);
+	get_keyfile_style(config, config_home, "reference", &style_sets[GEANY_FILETYPES_YAML].styling[5]);
+	get_keyfile_style(config, config_home, "document", &style_sets[GEANY_FILETYPES_YAML].styling[6]);
+	get_keyfile_style(config, config_home, "text", &style_sets[GEANY_FILETYPES_YAML].styling[7]);
+	get_keyfile_style(config, config_home, "error", &style_sets[GEANY_FILETYPES_YAML].styling[8]);
+	get_keyfile_style(config, config_home, "operator", &style_sets[GEANY_FILETYPES_YAML].styling[9]);
 
 	style_sets[GEANY_FILETYPES_YAML].keywords = g_new(gchar*, 2);
 	get_keyfile_keywords(config, config_home, "keywords", GEANY_FILETYPES_YAML, 0, "true false yes no");
@@ -3202,26 +3141,26 @@ static void styleset_lua_init(gint ft_id, GKeyFile *config, GKeyFile *config_hom
 {
 	new_styleset(GEANY_FILETYPES_LUA, 20);
 
-	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_LUA].styling[0]);
-	get_keyfile_hex(config, config_home, "comment", 0xd00000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_LUA].styling[1]);
-	get_keyfile_hex(config, config_home, "commentline", 0xd00000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_LUA].styling[2]);
-	get_keyfile_hex(config, config_home, "commentdoc", 0x3f5fbf, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_LUA].styling[3]);
-	get_keyfile_hex(config, config_home, "number", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_LUA].styling[4]);
-	get_keyfile_hex(config, config_home, "word", 0x00007f, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_LUA].styling[5]);
-	get_keyfile_hex(config, config_home, "string", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_LUA].styling[6]);
-	get_keyfile_hex(config, config_home, "character", 0x008000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_LUA].styling[7]);
-	get_keyfile_hex(config, config_home, "literalstring", 0x008020, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_LUA].styling[8]);
-	get_keyfile_hex(config, config_home, "preprocessor", 0x007f7f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_LUA].styling[9]);
-	get_keyfile_hex(config, config_home, "operator", 0x301010, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_LUA].styling[10]);
-	get_keyfile_hex(config, config_home, "identifier", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_LUA].styling[11]);
-	get_keyfile_hex(config, config_home, "stringeol", 0x000000, 0xe0c0e0, FALSE, &style_sets[GEANY_FILETYPES_LUA].styling[12]);
-	get_keyfile_hex(config, config_home, "function_basic", 0x991111, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_LUA].styling[13]);
-	get_keyfile_hex(config, config_home, "function_other", 0x690000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_LUA].styling[14]);
-	get_keyfile_hex(config, config_home, "coroutines", 0x66005c, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_LUA].styling[15]);
-	get_keyfile_hex(config, config_home, "word5", 0x7979ff, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_LUA].styling[16]);
-	get_keyfile_hex(config, config_home, "word6", 0xad00ff, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_LUA].styling[17]);
-	get_keyfile_hex(config, config_home, "word7", 0x03D000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_LUA].styling[18]);
-	get_keyfile_hex(config, config_home, "word8", 0xff7600, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_LUA].styling[19]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_LUA].styling[0]);
+	get_keyfile_style(config, config_home, "comment", &style_sets[GEANY_FILETYPES_LUA].styling[1]);
+	get_keyfile_style(config, config_home, "commentline", &style_sets[GEANY_FILETYPES_LUA].styling[2]);
+	get_keyfile_style(config, config_home, "commentdoc", &style_sets[GEANY_FILETYPES_LUA].styling[3]);
+	get_keyfile_style(config, config_home, "number", &style_sets[GEANY_FILETYPES_LUA].styling[4]);
+	get_keyfile_style(config, config_home, "word", &style_sets[GEANY_FILETYPES_LUA].styling[5]);
+	get_keyfile_style(config, config_home, "string", &style_sets[GEANY_FILETYPES_LUA].styling[6]);
+	get_keyfile_style(config, config_home, "character", &style_sets[GEANY_FILETYPES_LUA].styling[7]);
+	get_keyfile_style(config, config_home, "literalstring", &style_sets[GEANY_FILETYPES_LUA].styling[8]);
+	get_keyfile_style(config, config_home, "preprocessor", &style_sets[GEANY_FILETYPES_LUA].styling[9]);
+	get_keyfile_style(config, config_home, "operator", &style_sets[GEANY_FILETYPES_LUA].styling[10]);
+	get_keyfile_style(config, config_home, "identifier", &style_sets[GEANY_FILETYPES_LUA].styling[11]);
+	get_keyfile_style(config, config_home, "stringeol", &style_sets[GEANY_FILETYPES_LUA].styling[12]);
+	get_keyfile_style(config, config_home, "function_basic", &style_sets[GEANY_FILETYPES_LUA].styling[13]);
+	get_keyfile_style(config, config_home, "function_other", &style_sets[GEANY_FILETYPES_LUA].styling[14]);
+	get_keyfile_style(config, config_home, "coroutines", &style_sets[GEANY_FILETYPES_LUA].styling[15]);
+	get_keyfile_style(config, config_home, "word5", &style_sets[GEANY_FILETYPES_LUA].styling[16]);
+	get_keyfile_style(config, config_home, "word6", &style_sets[GEANY_FILETYPES_LUA].styling[17]);
+	get_keyfile_style(config, config_home, "word7", &style_sets[GEANY_FILETYPES_LUA].styling[18]);
+	get_keyfile_style(config, config_home, "word8", &style_sets[GEANY_FILETYPES_LUA].styling[19]);
 
 	style_sets[GEANY_FILETYPES_LUA].keywords = g_new(gchar*, 9);
 	get_keyfile_keywords(config, config_home, "keywords", GEANY_FILETYPES_LUA, 0,
@@ -3306,25 +3245,25 @@ static void styleset_basic_init(gint ft_id, GKeyFile *config, GKeyFile *config_h
 {
 	new_styleset(GEANY_FILETYPES_BASIC, 19);
 
-	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_BASIC].styling[0]);
-	get_keyfile_hex(config, config_home, "comment", 0x808080, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_BASIC].styling[1]);
-	get_keyfile_hex(config, config_home, "number", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_BASIC].styling[2]);
-	get_keyfile_hex(config, config_home, "word", 0x00007f, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_BASIC].styling[3]);
-	get_keyfile_hex(config, config_home, "string", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_BASIC].styling[4]);
-	get_keyfile_hex(config, config_home, "preprocessor", 0x007f7f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_BASIC].styling[5]);
-	get_keyfile_hex(config, config_home, "operator", 0x301010, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_BASIC].styling[6]);
-	get_keyfile_hex(config, config_home, "identifier", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_BASIC].styling[7]);
-	get_keyfile_hex(config, config_home, "date", 0x1a6500, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_BASIC].styling[8]);
-	get_keyfile_hex(config, config_home, "stringeol", 0x000000, 0xe0c0e0, FALSE, &style_sets[GEANY_FILETYPES_BASIC].styling[9]);
-	get_keyfile_hex(config, config_home, "word2", 0x007f7f, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_BASIC].styling[10]);
-	get_keyfile_hex(config, config_home, "word3", 0x991111, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_BASIC].styling[11]);
-	get_keyfile_hex(config, config_home, "word4", 0x0000d0, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_BASIC].styling[12]);
-	get_keyfile_hex(config, config_home, "constant", 0x007f7f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_BASIC].styling[13]);
-	get_keyfile_hex(config, config_home, "asm", 0x105090, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_BASIC].styling[14]);
-	get_keyfile_hex(config, config_home, "label", 0x007f7f, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_BASIC].styling[15]);
-	get_keyfile_hex(config, config_home, "error", 0xd00000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_BASIC].styling[16]);
-	get_keyfile_hex(config, config_home, "hexnumber", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_BASIC].styling[17]);
-	get_keyfile_hex(config, config_home, "binnumber", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_BASIC].styling[18]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_BASIC].styling[0]);
+	get_keyfile_style(config, config_home, "comment", &style_sets[GEANY_FILETYPES_BASIC].styling[1]);
+	get_keyfile_style(config, config_home, "number", &style_sets[GEANY_FILETYPES_BASIC].styling[2]);
+	get_keyfile_style(config, config_home, "word", &style_sets[GEANY_FILETYPES_BASIC].styling[3]);
+	get_keyfile_style(config, config_home, "string", &style_sets[GEANY_FILETYPES_BASIC].styling[4]);
+	get_keyfile_style(config, config_home, "preprocessor", &style_sets[GEANY_FILETYPES_BASIC].styling[5]);
+	get_keyfile_style(config, config_home, "operator", &style_sets[GEANY_FILETYPES_BASIC].styling[6]);
+	get_keyfile_style(config, config_home, "identifier", &style_sets[GEANY_FILETYPES_BASIC].styling[7]);
+	get_keyfile_style(config, config_home, "date", &style_sets[GEANY_FILETYPES_BASIC].styling[8]);
+	get_keyfile_style(config, config_home, "stringeol", &style_sets[GEANY_FILETYPES_BASIC].styling[9]);
+	get_keyfile_style(config, config_home, "word2", &style_sets[GEANY_FILETYPES_BASIC].styling[10]);
+	get_keyfile_style(config, config_home, "word3", &style_sets[GEANY_FILETYPES_BASIC].styling[11]);
+	get_keyfile_style(config, config_home, "word4", &style_sets[GEANY_FILETYPES_BASIC].styling[12]);
+	get_keyfile_style(config, config_home, "constant", &style_sets[GEANY_FILETYPES_BASIC].styling[13]);
+	get_keyfile_style(config, config_home, "asm", &style_sets[GEANY_FILETYPES_BASIC].styling[14]);
+	get_keyfile_style(config, config_home, "label", &style_sets[GEANY_FILETYPES_BASIC].styling[15]);
+	get_keyfile_style(config, config_home, "error", &style_sets[GEANY_FILETYPES_BASIC].styling[16]);
+	get_keyfile_style(config, config_home, "hexnumber", &style_sets[GEANY_FILETYPES_BASIC].styling[17]);
+	get_keyfile_style(config, config_home, "binnumber", &style_sets[GEANY_FILETYPES_BASIC].styling[18]);
 
 	style_sets[GEANY_FILETYPES_BASIC].keywords = g_new(gchar*, 5);
 	get_keyfile_keywords(config, config_home, "keywords", GEANY_FILETYPES_BASIC, 0,
@@ -3454,18 +3393,18 @@ static void styleset_ada_init(gint ft_id, GKeyFile *config, GKeyFile *config_hom
 {
 	new_styleset(GEANY_FILETYPES_ADA, 12);
 
-	get_keyfile_hex(config, config_home, "default", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_ADA].styling[0]);
-	get_keyfile_hex(config, config_home, "word", 0x00007f, 0xffffff, TRUE, &style_sets[GEANY_FILETYPES_ADA].styling[1]);
-	get_keyfile_hex(config, config_home, "identifier", 0x000000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_ADA].styling[2]);
-	get_keyfile_hex(config, config_home, "number", 0x007f00, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_ADA].styling[3]);
-	get_keyfile_hex(config, config_home, "delimiter", 0x301010, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_ADA].styling[4]);
-	get_keyfile_hex(config, config_home, "character", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_ADA].styling[5]);
-	get_keyfile_hex(config, config_home, "charactereol", 0x000000, 0xe0c0e0, FALSE, &style_sets[GEANY_FILETYPES_ADA].styling[6]);
-	get_keyfile_hex(config, config_home, "string", 0xff901e, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_ADA].styling[7]);
-	get_keyfile_hex(config, config_home, "stringeol", 0x000000, 0xe0c0e0, FALSE, &style_sets[GEANY_FILETYPES_ADA].styling[8]);
-	get_keyfile_hex(config, config_home, "label", 0xaaaaaa, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_ADA].styling[9]);
-	get_keyfile_hex(config, config_home, "commentline", 0xd00000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_ADA].styling[10]);
-	get_keyfile_hex(config, config_home, "illegal", 0xff0000, 0xffffff, FALSE, &style_sets[GEANY_FILETYPES_ADA].styling[11]);
+	get_keyfile_style(config, config_home, "default", &style_sets[GEANY_FILETYPES_ADA].styling[0]);
+	get_keyfile_style(config, config_home, "word", &style_sets[GEANY_FILETYPES_ADA].styling[1]);
+	get_keyfile_style(config, config_home, "identifier", &style_sets[GEANY_FILETYPES_ADA].styling[2]);
+	get_keyfile_style(config, config_home, "number", &style_sets[GEANY_FILETYPES_ADA].styling[3]);
+	get_keyfile_style(config, config_home, "delimiter", &style_sets[GEANY_FILETYPES_ADA].styling[4]);
+	get_keyfile_style(config, config_home, "character", &style_sets[GEANY_FILETYPES_ADA].styling[5]);
+	get_keyfile_style(config, config_home, "charactereol", &style_sets[GEANY_FILETYPES_ADA].styling[6]);
+	get_keyfile_style(config, config_home, "string", &style_sets[GEANY_FILETYPES_ADA].styling[7]);
+	get_keyfile_style(config, config_home, "stringeol", &style_sets[GEANY_FILETYPES_ADA].styling[8]);
+	get_keyfile_style(config, config_home, "label", &style_sets[GEANY_FILETYPES_ADA].styling[9]);
+	get_keyfile_style(config, config_home, "commentline", &style_sets[GEANY_FILETYPES_ADA].styling[10]);
+	get_keyfile_style(config, config_home, "illegal", &style_sets[GEANY_FILETYPES_ADA].styling[11]);
 
 	style_sets[GEANY_FILETYPES_ADA].keywords = g_new(gchar*, 2);
 	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_ADA, 0, "abort abs abstract accept access aliased all and array at begin body case constant declare delay delta digits do else elsif end entry exception exit for function generic goto if in interface is limited loop mod new not null of or others out overriding package pragma private procedure protected raise range record rem renames requeue return reverse select separate subtype synchronized tagged task terminate then type until use when while with xor");
