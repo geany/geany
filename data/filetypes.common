@@ -15,72 +15,66 @@ brace_good=0x0000ff;0xFFFFFF;true;false
 brace_bad=0xff0000;0xFFFFFF;true;false
 
 # the following settings define the colours of the margins on the left side
-margin_linenumber=0x000000;0xd0d0d0;false;false
-margin_folding=0x000000;0xdfdfdf;false;false
+margin_linenumber=0x000000;0xd0d0d0;
+margin_folding=0x000000;0xdfdfdf;
 
 # background colour of the current line, only the second and third argument is interpreted
 # use the third argument to enable or disable the highlighting of the current line (has to be true/false)
-current_line=0x000000;0xf0f0f0;true;false
+current_line=0x000000;0xf0f0f0;true;
 
 # translucency for the current line(first argument) and the selection (second argument)
 # values between 0 and 256 are accepted. Note for Windows 95, 98 and ME users:
 # keep this value at 256 to disable translucency otherwise Geany might crash
-# only the first and second argument is interpreted
-translucency=256;256;false;false
+translucency=256;256
 
 # style for a highlighted line (e.g when using Goto line or goto tag)
-# only the first and second argument is interpreted
-marker_line=0x000000;0xffff00;false;false
+marker_line=0x000000;0xffff00;
 
 # style for a marked search results (when using "Mark" in Search dialogs)
 # the second argument sets the background colour for the drawn rectangle
 # only the second argument is interpreted
-marker_search=0x000000;0x0000f0;false;false
+marker_search=0x000000;0x0000f0;
 
 # style for a marked line (e.g when using the "Toggle Marker" keybinding (Ctrl-M))
-# only the first and second argument is interpreted
-marker_mark=0x000000;0xb8f4b8;false;false
+marker_mark=0x000000;0xb8f4b8;
 
 # translucency for the line marker(first argument) and the search marker (second argument)
-# only the first and second argument is interpreted
-marker_translucency=256;256;false;false
+marker_translucency=256;256
 
 # colour of the caret(the blinking cursor), only first and third argument is interpreted
 # set the third argument to true to change the caret into a block caret
-caret=0x000000;0x000000;false;false
+caret=0x000000;0x000000;false;
 
-# width of the caret(the blinking cursor), only first argument is interpreted
+# width of the caret(the blinking cursor)
 # width in pixels, use 0 to make it invisible, maximum width is 3
-caret_width=1;0;false;false
+caret_width=1
 
 # set foreground and background colour of indentation guides
-indent_guide=0xc0c0c0;;false;false
+indent_guide=0xc0c0c0;;
 
 # third argument: if true, use this foreground color. If false, use the default value defined by the filetypes.
 # fourth argument: if true, use this background color. If false, use the default value defined by the filetypes.
 white_space=0xc0c0c0;0xffffff;true;false
 
-# style of folding icons, only first and second arguments are used, valid values are:
+# style of folding icons, valid values are:
 # first argument:  1 for boxes, 2 for circles
 # second argument: 1 for straight lines, 2 for curved lines
-folding_style=1;1;false;false
+folding_style=1;1;
 
-# should an horizontal line be drawn at the line where text is folded (only first argument is interpreted)
+# should an horizontal line be drawn at the line where text is folded
 # 0 to disable
 # 1 to draw the line above folded text
 # 2 to draw the line below folded text
-folding_horiz_line=2;0;false;false
+folding_horiz_line=2
 
-# only first and second argument is interpreted
 # first argument: drawing of visual flags to indicate a line is wrapped. This is a bitmask of the
 # values: 0 - No visual flags, 1 - Visual flag at end of subline of a wrapped line, 2 - Visual flag
 # at begin of subline of a wrapped line, Subline is indented by at least 1 to make room for the flag.
-# second argument: wether the visual flags to indicate a line is wrapped are drawn near the border
+# second argument: whether the visual flags to indicate a line is wrapped are drawn near the border
 # or near the text. This is a bitmask of the values: 0 - Visual flags drawn near border,
 # 1 - Visual flag at end of subline drawn near text, 2 - Visual flag at begin of subline drawn near text
-line_wrap_visuals=3;0;false;false
+line_wrap_visuals=3;0;
 
-# only first and second argument is interpreted
 # first argument: sets the size of indentation of sublines for wrapped lines in terms of
 # the width of a space, only used when the second argument is 0
 # second argument: wrapped sublines can be indented to the position of their first subline or
@@ -88,12 +82,11 @@ line_wrap_visuals=3;0;false;false
 # 0 - Wrapped sublines aligned to left of window plus amount set by the first argument
 # 1 - Wrapped sublines are aligned to first subline indent (use the same indentation)
 # 2 - Wrapped sublines are aligned to first subline indent plus one more level of indentation
-line_wrap_indent=0;1;false;false
+line_wrap_indent=0;1;
 
-# only first and second argument is interpreted
 # first argument: amount of space to be drawn above the line's baseline
 # second argument: amount of space to be drawn below the line's baseline
-line_height=0;0;false;false
+line_height=0;0;
 
 [settings]
 # which characters should be skipped when moving (or included when deleting) to word boundaries
