@@ -14,6 +14,9 @@
    configuration files.
  * src/highlighting.c, HACKING:
    Add apply_style_entries() to simplify implementing styleset_foo().
+ * src/highlighting.c:
+   Remove filetype keyword defaults from the code - just read them from
+   configuration files.
 
 
 2009-09-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

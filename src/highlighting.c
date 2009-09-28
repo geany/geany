@@ -135,10 +135,11 @@ static void free_styleset(gint file_type_id)
 
 
 static void get_keyfile_keywords(GKeyFile *config, GKeyFile *configh,
-				const gchar *key, gint ft_id, gint pos, const gchar *default_value)
+				const gchar *key, gint ft_id, gint pos)
 {
 	const gchar section[] = "keywords";
 	gchar *result;
+	const gchar *default_value = "";
 
 	if (config == NULL || configh == NULL)
 	{
@@ -858,9 +859,9 @@ static void styleset_c_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 		1, 0, &style_sets[GEANY_FILETYPES_C].styling[20]);
 
 	style_sets[GEANY_FILETYPES_C].keywords = g_new(gchar*, 4);
-	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_C, 0, "if const struct char int float double void long for while do case switch return");
-	get_keyfile_keywords(config, config_home, "secondary", GEANY_FILETYPES_C, 1, "");
-	get_keyfile_keywords(config, config_home, "docComment", GEANY_FILETYPES_C, 2, "TODO FIXME");
+	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_C, 0);
+	get_keyfile_keywords(config, config_home, "secondary", GEANY_FILETYPES_C, 1);
+	get_keyfile_keywords(config, config_home, "docComment", GEANY_FILETYPES_C, 2);
 	style_sets[GEANY_FILETYPES_C].keywords[3] = NULL;
 }
 
@@ -897,9 +898,9 @@ static void styleset_cpp_init(gint ft_id, GKeyFile *config, GKeyFile *config_hom
 		1, 0, &style_sets[GEANY_FILETYPES_CPP].styling[20]);
 
 	style_sets[GEANY_FILETYPES_CPP].keywords = g_new(gchar*, 4);
-	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_CPP, 0, "and and_eq asm auto bitand bitor bool break case catch char class compl const const_cast continue default delete do double dynamic_cast else enum explicit export extern false float for friend goto if inline int long mutable namespace new not not_eq operator or or_eq private protected public register reinterpret_cast return short signed sizeof static static_cast struct switch template this throw true try typedef typeid typename union unsigned using virtual void volatile wchar_t while xor xor_eq");
-	get_keyfile_keywords(config, config_home, "secondary", GEANY_FILETYPES_CPP, 1, "");
-	get_keyfile_keywords(config, config_home, "docComment", GEANY_FILETYPES_CPP, 2, "TODO FIXME");
+	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_CPP, 0);
+	get_keyfile_keywords(config, config_home, "secondary", GEANY_FILETYPES_CPP, 1);
+	get_keyfile_keywords(config, config_home, "docComment", GEANY_FILETYPES_CPP, 2);
 	style_sets[GEANY_FILETYPES_CPP].keywords[3] = NULL;
 }
 
@@ -937,20 +938,9 @@ static void styleset_glsl_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 		1, 0, &style_sets[GEANY_FILETYPES_GLSL].styling[20]);
 
 	style_sets[GEANY_FILETYPES_GLSL].keywords = g_new(gchar*, 4);
-	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_GLSL, 0,
-			"if else switch case default for while do discard return break"
-			"continue true false struct void bool int uint float vec2 vec3"
-			"vec4 ivec2 ivec3 ivec4 bvec2 bvec3 bvec4 uvec2 uvec3 uvec4 mat2"
-			"mat3 mat4 mat2x2 mat2x3 mat2x4 mat3x2 mat3x3 mat3x4 mat4x2 mat4x3"
-			"mat4x4 sampler1D sampler2D sampler3D samplerCube sampler1DShadow"
-			"sampler2DShadow sampler1DArray sampler2DArray sampler1DArrayShadow"
-			"sampler2DArrayShadow isampler1D isampler2D isampler3D isamplerCube"
-			"isampler1DArray isampler2DArray usampler1D usampler2D usampler3D"
-			"usamplerCube usampler1DArray usampler2DArray const invariant"
-			"centroid in out inout attribute uniform varying smooth flat"
-			"noperspective highp mediump lowp");
-	get_keyfile_keywords(config, config_home, "secondary", GEANY_FILETYPES_GLSL, 1, "");
-	get_keyfile_keywords(config, config_home, "docComment", GEANY_FILETYPES_GLSL, 2, "TODO FIXME");
+	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_GLSL, 0);
+	get_keyfile_keywords(config, config_home, "secondary", GEANY_FILETYPES_GLSL, 1);
+	get_keyfile_keywords(config, config_home, "docComment", GEANY_FILETYPES_GLSL, 2);
 	style_sets[GEANY_FILETYPES_GLSL].keywords[3] = NULL;
 }
 
@@ -988,17 +978,9 @@ static void styleset_cs_init(gint ft_id, GKeyFile *config, GKeyFile *config_home
 		1, 0, &style_sets[GEANY_FILETYPES_CS].styling[20]);
 
 	style_sets[GEANY_FILETYPES_CS].keywords = g_new(gchar*, 4);
-	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_CS, 0, "\
-			abstract as base bool break byte case catch char checked class \
-			const continue decimal default delegate do double else enum \
-			event explicit extern false finally fixed float for foreach goto if \
-			implicit in int interface internal is lock long namespace new null \
-			object operator out override params private protected public \
-			readonly ref return sbyte sealed short sizeof stackalloc static \
-			string struct switch this throw true try typeof uint ulong \
-			unchecked unsafe ushort using virtual void volatile while");
-	get_keyfile_keywords(config, config_home, "secondary", GEANY_FILETYPES_CS, 1, "");
-	get_keyfile_keywords(config, config_home, "docComment", GEANY_FILETYPES_CS, 2, "");
+	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_CS, 0);
+	get_keyfile_keywords(config, config_home, "secondary", GEANY_FILETYPES_CS, 1);
+	get_keyfile_keywords(config, config_home, "docComment", GEANY_FILETYPES_CS, 2);
 	style_sets[GEANY_FILETYPES_CS].keywords[3] = NULL;
 }
 
@@ -1030,32 +1012,9 @@ static void styleset_vala_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 		1, 0, &style_sets[GEANY_FILETYPES_VALA].styling[20]);
 
 	style_sets[GEANY_FILETYPES_VALA].keywords = g_new(gchar*, 4);
-	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_VALA, 0,
-			"else if switch case default break continue return for foreach in do while is "
-			"try catch finally throw "
-			"namespace interface class struct enum signal errordomain "
-			"construct callback get set base "
-			"const static var weak "
-			"virtual abstract override inline extern "
-			"public protected private delegate "
-			"out ref "
-
-			"lock using "
-
-			"true false null "
-
-			"generic new delete base this value typeof sizeof "
-			"throws requires ensures "
-
-			"void bool char uchar int uint short ushort long ulong size_t ssize_t "
-			"int8 uint8 int16 uint16 int32 uint32 int64 uint64 float double unichar string "
-
-			/* these types are not referenced by the reference manual but are in glib.vapi
-			 * as simple types */
-			/*"constpointer time_t "*/
-			);
-	get_keyfile_keywords(config, config_home, "secondary", GEANY_FILETYPES_VALA, 1, "");
-	get_keyfile_keywords(config, config_home, "docComment", GEANY_FILETYPES_VALA, 2, "");
+	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_VALA, 0);
+	get_keyfile_keywords(config, config_home, "secondary", GEANY_FILETYPES_VALA, 1);
+	get_keyfile_keywords(config, config_home, "docComment", GEANY_FILETYPES_VALA, 2);
 	style_sets[GEANY_FILETYPES_VALA].keywords[3] = NULL;
 }
 
@@ -1099,9 +1058,7 @@ static void styleset_pascal_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 	get_keyfile_style(config, config_home, "asm", &style_sets[GEANY_FILETYPES_PASCAL].styling[14]);
 
 	style_sets[GEANY_FILETYPES_PASCAL].keywords = g_new(gchar*, 2);
-	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_PASCAL, 0,
-		"asm begin byte case char class do else end for function if implementation integer \
-		 interface object procedure program real repeat string then to try unit until uses var word");
+	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_PASCAL, 0);
 	style_sets[GEANY_FILETYPES_PASCAL].keywords[1] = NULL;
 }
 
@@ -1211,7 +1168,7 @@ static void styleset_latex_init(gint ft_id, GKeyFile *config, GKeyFile *config_h
 	get_keyfile_style(config, config_home, "comment", &style_sets[GEANY_FILETYPES_LATEX].styling[4]);
 
 	style_sets[GEANY_FILETYPES_LATEX].keywords = g_new(gchar*, 2);
-	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_LATEX, 0, "section subsection begin item");
+	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_LATEX, 0);
 	style_sets[GEANY_FILETYPES_LATEX].keywords[1] = NULL;
 }
 
@@ -1337,12 +1294,12 @@ static void styleset_markup_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 	get_keyfile_int(config, config_home, "styling", "html_asp_default_language", 1, 0, &style_sets[GEANY_FILETYPES_XML].styling[56]);
 
 	style_sets[GEANY_FILETYPES_XML].keywords = g_new(gchar*, 7);
-	get_keyfile_keywords(config, config_home, "html", GEANY_FILETYPES_XML, 0, "a abbr acronym address applet area b base basefont bdo big blockquote body br button caption center cite code col colgroup dd del dfn dir div dl dt em embed fieldset font form frame frameset h1 h2 h3 h4 h5 h6 head hr html i iframe img input ins isindex kbd label legend li link map menu meta noframes noscript object ol optgroup option p param pre q quality s samp script select small span strike strong style sub sup table tbody td textarea tfoot th thead title tr tt u ul var xmlns leftmargin topmargin abbr accept-charset accept accesskey action align alink alt archive axis background bgcolor border cellpadding cellspacing char charoff charset checked cite class classid clear codebase codetype color cols colspan compact content coords data datafld dataformatas datapagesize datasrc datetime declare defer dir disabled enctype face for frame frameborder selected headers height href hreflang hspace http-equiv id ismap label lang language link longdesc marginwidth marginheight maxlength media framespacing method multiple name nohref noresize noshade nowrap object onblur onchange onclick ondblclick onfocus onkeydown onkeypress onkeyup onload onmousedown onmousemove onmouseover onmouseout onmouseup onreset onselect onsubmit onunload profile prompt pluginspage readonly rel rev rows rowspan rules scheme scope scrolling shape size span src standby start style summary tabindex target text title type usemap valign value valuetype version vlink vspace width text password checkbox radio submit reset file hidden image public doctype xml xml:lang");
-	get_keyfile_keywords(config, config_home, "javascript", GEANY_FILETYPES_XML, 1, "abs abstract acos anchor asin atan atan2 big bold boolean break byte case catch ceil char charAt charCodeAt class concat const continue cos Date debugger default delete do double else enum escape eval exp export extends false final finally fixed float floor fontcolor fontsize for fromCharCode function goto if implements import in indexOf Infinity instanceof int interface isFinite isNaN italics join lastIndexOf length link log long Math max MAX_VALUE min MIN_VALUE NaN native NEGATIVE_INFINITY new null Number package parseFloat parseInt pop POSITIVE_INFINITY pow private protected public push random return reverse round shift short sin slice small sort splice split sqrt static strike string String sub substr substring sup super switch synchronized tan this throw throws toLowerCase toString toUpperCase transient true try typeof undefined unescape unshift valueOf var void volatile while with");
-	get_keyfile_keywords(config, config_home, "vbscript", GEANY_FILETYPES_XML, 2, "and as byref byval case call const continue dim do each else elseif end error exit false for function global goto if in loop me new next not nothing on optional or private public redim rem resume select set sub then to true type while with boolean byte currency date double integer long object single string type variant");
-	get_keyfile_keywords(config, config_home, "python", GEANY_FILETYPES_XML, 3, "and as assert break class continue def del elif else except exec finally for from global if import in is lambda not or pass print raise return try while with yield False None True");
-	get_keyfile_keywords(config, config_home, "php", GEANY_FILETYPES_XML, 4, "abstract and array as bool boolean break case catch cfunction __class__ class clone const continue declare default die __dir__ directory do double echo else elseif empty enddeclare endfor endforeach endif endswitch endwhile eval exception exit extends false __file__ final float for foreach __function__ function goto global if implements include include_once int integer interface isset __line__ list __method__ namespace __namespace__ new null object old_function or parent php_user_filter print private protected public real require require_once resource return __sleep static stdclass string switch this throw true try unset use var __wakeup while xor");
-	get_keyfile_keywords(config, config_home, "sgml", GEANY_FILETYPES_XML, 5, "ELEMENT DOCTYPE ATTLIST ENTITY NOTATION");
+	get_keyfile_keywords(config, config_home, "html", GEANY_FILETYPES_XML, 0);
+	get_keyfile_keywords(config, config_home, "javascript", GEANY_FILETYPES_XML, 1);
+	get_keyfile_keywords(config, config_home, "vbscript", GEANY_FILETYPES_XML, 2);
+	get_keyfile_keywords(config, config_home, "python", GEANY_FILETYPES_XML, 3);
+	get_keyfile_keywords(config, config_home, "php", GEANY_FILETYPES_XML, 4);
+	get_keyfile_keywords(config, config_home, "sgml", GEANY_FILETYPES_XML, 5);
 	style_sets[GEANY_FILETYPES_XML].keywords[6] = NULL;
 }
 
@@ -1519,16 +1476,10 @@ static void styleset_java_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 	styleset_c_like_init(config, config_home, GEANY_FILETYPES_JAVA);
 
 	style_sets[GEANY_FILETYPES_JAVA].keywords = g_new(gchar*, 5);
-	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_JAVA, 0, "\
-										abstract assert break case catch class \
-										const continue default do else extends final finally for future \
-										generic goto if implements import inner instanceof interface \
-										native new outer package private protected public rest \
-										return static super switch synchronized this throw throws \
-										transient try var volatile while true false null");
-	get_keyfile_keywords(config, config_home, "secondary", GEANY_FILETYPES_JAVA, 1, "boolean byte char double float int long null short void");
-	get_keyfile_keywords(config, config_home, "doccomment", GEANY_FILETYPES_JAVA, 2, "return param author throws");
-	get_keyfile_keywords(config, config_home, "typedefs", GEANY_FILETYPES_JAVA, 3, "");
+	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_JAVA, 0);
+	get_keyfile_keywords(config, config_home, "secondary", GEANY_FILETYPES_JAVA, 1);
+	get_keyfile_keywords(config, config_home, "doccomment", GEANY_FILETYPES_JAVA, 2);
+	get_keyfile_keywords(config, config_home, "typedefs", GEANY_FILETYPES_JAVA, 3);
 	style_sets[GEANY_FILETYPES_JAVA].keywords[4] = NULL;
 }
 
@@ -1589,34 +1540,7 @@ static void styleset_perl_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 
 
 	style_sets[GEANY_FILETYPES_PERL].keywords = g_new(gchar*, 2);
-	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_PERL, 0, "\
-									NULL __FILE__ __LINE__ __PACKAGE__ __DATA__ __END__ AUTOLOAD \
-									BEGIN CORE DESTROY END EQ GE GT INIT LE LT NE CHECK abs accept \
-									alarm and atan2 bind binmode bless caller chdir chmod chomp chop \
-									chown chr chroot close closedir cmp connect continue cos crypt \
-									dbmclose dbmopen defined delete die do dump each else elsif endgrent \
-									endhostent endnetent endprotoent endpwent endservent eof eq eval \
-									exec exists exit exp fcntl fileno flock for foreach fork format \
-									formline ge getc getgrent getgrgid getgrnam gethostbyaddr gethostbyname \
-									gethostent getlogin getnetbyaddr getnetbyname getnetent getpeername \
-									getpgrp getppid getpriority getprotobyname getprotobynumber getprotoent \
-									getpwent getpwnam getpwuid getservbyname getservbyport getservent \
-									getsockname getsockopt glob gmtime goto grep gt hex if index \
-									int ioctl join keys kill last lc lcfirst le length link listen \
-									local localtime lock log lstat lt m map mkdir msgctl msgget msgrcv \
-									msgsnd my ne next no not oct open opendir or ord our pack package \
-									pipe pop pos print printf prototype push q qq qr quotemeta qu \
-									qw qx rand read readdir readline readlink readpipe recv redo \
-									ref rename require reset return reverse rewinddir rindex rmdir \
-									s scalar seek seekdir select semctl semget semop send setgrent \
-									sethostent setnetent setpgrp setpriority setprotoent setpwent \
-									setservent setsockopt shift shmctl shmget shmread shmwrite shutdown \
-									sin sleep socket socketpair sort splice split sprintf sqrt srand \
-									stat study sub substr symlink syscall sysopen sysread sysseek \
-									system syswrite tell telldir tie tied time times tr truncate \
-									uc ucfirst umask undef unless unlink unpack unshift untie until \
-									use utime values vec wait waitpid wantarray warn while write \
-									x xor y");
+	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_PERL, 0);
 	style_sets[GEANY_FILETYPES_PERL].keywords[1] = NULL;
 }
 
@@ -1691,8 +1615,8 @@ static void styleset_python_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 	get_keyfile_style(config, config_home, "decorator", &style_sets[GEANY_FILETYPES_PYTHON].styling[15]);
 
 	style_sets[GEANY_FILETYPES_PYTHON].keywords = g_new(gchar*, 3);
-	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_PYTHON, 0, "and as assert break class continue def del elif else except exec finally for from global if import in is lambda not or pass print raise return try while with yield False None True");
-	get_keyfile_keywords(config, config_home, "identifiers", GEANY_FILETYPES_PYTHON, 1, "");
+	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_PYTHON, 0);
+	get_keyfile_keywords(config, config_home, "identifiers", GEANY_FILETYPES_PYTHON, 1);
 	style_sets[GEANY_FILETYPES_PYTHON].keywords[2] = NULL;
 }
 
@@ -1749,9 +1673,9 @@ static void styleset_cmake_init(gint ft_id, GKeyFile *config, GKeyFile *config_h
 	get_keyfile_style(config, config_home, "number", &style_sets[GEANY_FILETYPES_CMAKE].styling[14]);
 
 	style_sets[GEANY_FILETYPES_CMAKE].keywords = g_new(gchar*, 4);
-	get_keyfile_keywords(config, config_home, "commands", GEANY_FILETYPES_CMAKE, 0, "");
-	get_keyfile_keywords(config, config_home, "parameters", GEANY_FILETYPES_CMAKE, 1, "");
-	get_keyfile_keywords(config, config_home, "userdefined", GEANY_FILETYPES_CMAKE, 2, "");
+	get_keyfile_keywords(config, config_home, "commands", GEANY_FILETYPES_CMAKE, 0);
+	get_keyfile_keywords(config, config_home, "parameters", GEANY_FILETYPES_CMAKE, 1);
+	get_keyfile_keywords(config, config_home, "userdefined", GEANY_FILETYPES_CMAKE, 2);
 	style_sets[GEANY_FILETYPES_CMAKE].keywords[3] = NULL;
 }
 
@@ -1803,9 +1727,9 @@ static void styleset_r_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 	get_keyfile_style(config, config_home, "infixeol", &style_sets[GEANY_FILETYPES_R].styling[11]);
 
 	style_sets[GEANY_FILETYPES_R].keywords = g_new(gchar*, 4);
-	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_R, 0, "abs array data.frame diag for function if matrix NCOL NROW print read.table require return solve source sqrt sum while");
-	get_keyfile_keywords(config, config_home, "package", GEANY_FILETYPES_R, 1, NULL);
-	get_keyfile_keywords(config, config_home, "package_other", GEANY_FILETYPES_R, 2, NULL);
+	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_R, 0);
+	get_keyfile_keywords(config, config_home, "package", GEANY_FILETYPES_R, 1);
+	get_keyfile_keywords(config, config_home, "package_other", GEANY_FILETYPES_R, 2);
 	style_sets[GEANY_FILETYPES_R].keywords[3] = NULL;
 }
 
@@ -1876,7 +1800,7 @@ static void styleset_ruby_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 	get_keyfile_style(config, config_home, "pod", &style_sets[GEANY_FILETYPES_RUBY].styling[34]);
 
 	style_sets[GEANY_FILETYPES_RUBY].keywords = g_new(gchar*, 2);
-	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_RUBY, 0, "load define_method attr_accessor attr_writer attr_reader include __FILE__ and def end in or self unless __LINE__ begin defined? ensure module redo super until BEGIN break do false next rescue then when END case else for nil require retry true while alias class elsif if not return undef yield");
+	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_RUBY, 0);
 	style_sets[GEANY_FILETYPES_RUBY].keywords[1] = NULL;
 }
 
@@ -1947,7 +1871,7 @@ static void styleset_sh_init(gint ft_id, GKeyFile *config, GKeyFile *config_home
 	get_keyfile_style(config, config_home, "here_q", &style_sets[GEANY_FILETYPES_SH].styling[13]);
 
 	style_sets[GEANY_FILETYPES_SH].keywords = g_new(gchar*, 2);
-	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_SH, 0, "break case continue do done elif else esac eval exit export fi for goto if in integer return set shift then until while");
+	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_SH, 0);
 	style_sets[GEANY_FILETYPES_SH].keywords[1] = NULL;
 }
 
@@ -2023,63 +1947,8 @@ static void styleset_docbook_init(gint ft_id, GKeyFile *config, GKeyFile *config
 	get_keyfile_style(config, config_home, "sgml_error", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[28]);
 
 	style_sets[GEANY_FILETYPES_DOCBOOK].keywords = g_new(gchar*, 3);
-	get_keyfile_keywords(config, config_home, "elements", GEANY_FILETYPES_DOCBOOK, 0,
-		   "abbrev abstract accel ackno acronym action address affiliation alt anchor \
-			answer appendix appendixinfo application area areaset areaspec arg article \
-			articleinfo artpagenums attribution audiodata audioobject author authorblurb \
-			authorgroup authorinitials beginpage bibliocoverage bibliodiv biblioentry \
-			bibliography bibliographyinfo biblioid bibliomisc bibliomixed bibliomset \
-			bibliorelation biblioset bibliosource blockinfo blockquote book bookinfo \
-			bridgehead callout calloutlist caption caution chapter chapterinfo citation \
-			citebiblioid citerefentry citetitle city classname classsynopsis classsynopsisinfo \
-			cmdsynopsis co collab collabname colophon nameend namest colname colspec command computeroutput \
-			confdates confgroup confnum confsponsor conftitle constant constraint \
-			constraintdef constructorsynopsis contractnum contractsponsor contrib \
-			copyright coref corpauthor corpname country database date dedication \
-			destructorsynopsis edition editor email emphasis entry entrytbl envar \
-			epigraph equation errorcode errorname errortext errortype example \
-			exceptionname fax fieldsynopsis figure filename fileref firstname firstterm \
-			footnote footnoteref foreignphrase formalpara frame funcdef funcparams \
-			funcprototype funcsynopsis funcsynopsisinfo function glossary glossaryinfo \
-			glossdef glossdiv glossentry glosslist glosssee glossseealso glossterm \
-			graphic graphicco group guibutton guiicon guilabel guimenu guimenuitem \
-			guisubmenu hardware highlights holder honorific htm imagedata imageobject \
-			imageobjectco important index indexdiv indexentry indexinfo indexterm \
-			informalequation informalexample informalfigure informaltable initializer \
-			inlineequation inlinegraphic inlinemediaobject interface interfacename \
-			invpartnumber isbn issn issuenum itemizedlist itermset jobtitle keycap \
-			keycode keycombo keysym keyword keywordset label legalnotice lhs lineage \
-			lineannotation link listitem iteral literallayout lot lotentry manvolnum \
-			markup medialabel mediaobject mediaobjectco member menuchoice methodname \
-			methodparam methodsynopsis mm modespec modifier ousebutton msg msgaud \
-			msgentry msgexplan msginfo msglevel msgmain msgorig msgrel msgset msgsub \
-			msgtext nonterminal note objectinfo olink ooclass ooexception oointerface \
-			option optional orderedlist orgdiv orgname otheraddr othercredit othername \
-			pagenums para paramdef parameter part partinfo partintro personblurb \
-			personname phone phrase pob postcode preface prefaceinfo primary primaryie \
-			printhistory procedure production productionrecap productionset productname \
-			productnumber programlisting programlistingco prompt property pubdate publisher \
-			publishername pubsnumber qandadiv qandaentry qandaset question quote refclass \
-			refdescriptor refentry refentryinfo refentrytitle reference referenceinfo \
-			refmeta refmiscinfo refname refnamediv refpurpose refsect1 refsect1info refsect2 \
-			refsect2info refsect3 refsect3info refsection refsectioninfo refsynopsisdiv \
-			refsynopsisdivinfo releaseinfo remark replaceable returnvalue revdescription \
-			revhistory revision revnumber revremark rhs row sbr screen screenco screeninfo \
-			screenshot secondary secondaryie sect1 sect1info sect2 sect2info sect3 sect3info \
-			sect4 sect4info sect5 sect5info section sectioninfo see seealso seealsoie \
-			seeie seg seglistitem segmentedlist segtitle seriesvolnums set setindex \
-			setindexinfo setinfo sgmltag shortaffil shortcut sidebar sidebarinfo simpara \
-			simplelist simplemsgentry simplesect spanspec state step street structfield \
-			structname subject subjectset subjectterm subscript substeps subtitle \
-			superscript surname sv symbol synopfragment synopfragmentref synopsis \
-			systemitem table tbody term tertiary tertiaryie textdata textobject tfoot \
-			tgroup thead tip title titleabbrev toc tocback tocchap tocentry tocfront \
-			toclevel1 toclevel2 toclevel3 toclevel4 toclevel5 tocpart token trademark \
-			type ulink userinput varargs variablelist varlistentry varname videodata \
-			videoobject void volumenum warning wordasword xref year cols colnum align spanname\
-			arch condition conformance id lang os remap role revision revisionflag security \
-			userlevel url vendor xreflabel status label endterm linkend space width");
-	get_keyfile_keywords(config, config_home, "dtd", GEANY_FILETYPES_DOCBOOK, 1, "ELEMENT DOCTYPE ATTLIST ENTITY NOTATION");
+	get_keyfile_keywords(config, config_home, "elements", GEANY_FILETYPES_DOCBOOK, 0);
+	get_keyfile_keywords(config, config_home, "dtd", GEANY_FILETYPES_DOCBOOK, 1);
 	style_sets[GEANY_FILETYPES_DOCBOOK].keywords[2] = NULL;
 }
 
@@ -2171,14 +2040,14 @@ static void styleset_css_init(gint ft_id, GKeyFile *config, GKeyFile *config_hom
 	get_keyfile_style(config, config_home, "extended_pseudoelement", &style_sets[GEANY_FILETYPES_CSS].styling[21]);
 
 	style_sets[GEANY_FILETYPES_CSS].keywords = g_new(gchar*, 9);
-	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_CSS, 0, "");
-	get_keyfile_keywords(config, config_home, "pseudoclasses", GEANY_FILETYPES_CSS, 1, "");
-	get_keyfile_keywords(config, config_home, "secondary", GEANY_FILETYPES_CSS, 2, "");
-	get_keyfile_keywords(config, config_home, "css3_properties", GEANY_FILETYPES_CSS, 3, "");
-	get_keyfile_keywords(config, config_home, "pseudo_elements", GEANY_FILETYPES_CSS, 4, "");
-	get_keyfile_keywords(config, config_home, "browser_css_properties", GEANY_FILETYPES_CSS, 5, "");
-	get_keyfile_keywords(config, config_home, "browser_pseudo_classes", GEANY_FILETYPES_CSS, 6, "");
-	get_keyfile_keywords(config, config_home, "browser_pseudo_elements", GEANY_FILETYPES_CSS, 7, "");
+	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_CSS, 0);
+	get_keyfile_keywords(config, config_home, "pseudoclasses", GEANY_FILETYPES_CSS, 1);
+	get_keyfile_keywords(config, config_home, "secondary", GEANY_FILETYPES_CSS, 2);
+	get_keyfile_keywords(config, config_home, "css3_properties", GEANY_FILETYPES_CSS, 3);
+	get_keyfile_keywords(config, config_home, "pseudo_elements", GEANY_FILETYPES_CSS, 4);
+	get_keyfile_keywords(config, config_home, "browser_css_properties", GEANY_FILETYPES_CSS, 5);
+	get_keyfile_keywords(config, config_home, "browser_pseudo_classes", GEANY_FILETYPES_CSS, 6);
+	get_keyfile_keywords(config, config_home, "browser_pseudo_elements", GEANY_FILETYPES_CSS, 7);
 	style_sets[GEANY_FILETYPES_CSS].keywords[8] = NULL;
 }
 
@@ -2245,10 +2114,10 @@ static void styleset_nsis_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 	get_keyfile_style(config, config_home, "commentbox", &style_sets[GEANY_FILETYPES_NSIS].styling[18]);
 
 	style_sets[GEANY_FILETYPES_NSIS].keywords = g_new(gchar*, 5);
-	get_keyfile_keywords(config, config_home, "functions", GEANY_FILETYPES_NSIS, 0, "");
-	get_keyfile_keywords(config, config_home, "variables", GEANY_FILETYPES_NSIS, 1, "");
-	get_keyfile_keywords(config, config_home, "lables", GEANY_FILETYPES_NSIS, 2, "");
-	get_keyfile_keywords(config, config_home, "userdefined", GEANY_FILETYPES_NSIS, 3, "");
+	get_keyfile_keywords(config, config_home, "functions", GEANY_FILETYPES_NSIS, 0);
+	get_keyfile_keywords(config, config_home, "variables", GEANY_FILETYPES_NSIS, 1);
+	get_keyfile_keywords(config, config_home, "lables", GEANY_FILETYPES_NSIS, 2);
+	get_keyfile_keywords(config, config_home, "userdefined", GEANY_FILETYPES_NSIS, 3);
 	style_sets[GEANY_FILETYPES_NSIS].keywords[4] = NULL;
 }
 
@@ -2378,9 +2247,9 @@ static void styleset_asm_init(gint ft_id, GKeyFile *config, GKeyFile *config_hom
 	get_keyfile_style(config, config_home, "extinstruction", &style_sets[GEANY_FILETYPES_ASM].styling[14]);
 
 	style_sets[GEANY_FILETYPES_ASM].keywords = g_new(gchar*, 4);
-	get_keyfile_keywords(config, config_home, "instructions", GEANY_FILETYPES_ASM, 0, "HLT LAD SPI ADD SUB MUL DIV JMP JEZ JGZ JLZ SWAP JSR RET PUSHAC POPAC ADDST SUBST MULST DIVST LSA LDS PUSH POP CLI LDI INK LIA DEK LDX");
-	get_keyfile_keywords(config, config_home, "registers", GEANY_FILETYPES_ASM, 1, "");
-	get_keyfile_keywords(config, config_home, "directives", GEANY_FILETYPES_ASM, 2, "ORG LIST NOLIST PAGE EQUIVALENT WORD TEXT");
+	get_keyfile_keywords(config, config_home, "instructions", GEANY_FILETYPES_ASM, 0);
+	get_keyfile_keywords(config, config_home, "registers", GEANY_FILETYPES_ASM, 1);
+	get_keyfile_keywords(config, config_home, "directives", GEANY_FILETYPES_ASM, 2);
 	style_sets[GEANY_FILETYPES_ASM].keywords[3] = NULL;
 }
 
@@ -2436,9 +2305,9 @@ static void styleset_f77_init(gint ft_id, GKeyFile *config, GKeyFile *config_hom
 	get_keyfile_style(config, config_home, "label", &style_sets[GEANY_FILETYPES_F77].styling[14]);
 
 	style_sets[GEANY_FILETYPES_F77].keywords = g_new(gchar*, 4);
-	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_F77, 0, "");
-	get_keyfile_keywords(config, config_home, "intrinsic_functions", GEANY_FILETYPES_F77, 1, "");
-	get_keyfile_keywords(config, config_home, "user_functions", GEANY_FILETYPES_F77, 2, "");
+	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_F77, 0);
+	get_keyfile_keywords(config, config_home, "intrinsic_functions", GEANY_FILETYPES_F77, 1);
+	get_keyfile_keywords(config, config_home, "user_functions", GEANY_FILETYPES_F77, 2);
 	style_sets[GEANY_FILETYPES_F77].keywords[3] = NULL;
 }
 
@@ -2492,9 +2361,9 @@ static void styleset_fortran_init(gint ft_id, GKeyFile *config, GKeyFile *config
 	get_keyfile_style(config, config_home, "label", &style_sets[GEANY_FILETYPES_FORTRAN].styling[14]);
 
 	style_sets[GEANY_FILETYPES_FORTRAN].keywords = g_new(gchar*, 4);
-	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_FORTRAN, 0, "");
-	get_keyfile_keywords(config, config_home, "intrinsic_functions", GEANY_FILETYPES_FORTRAN, 1, "");
-	get_keyfile_keywords(config, config_home, "user_functions", GEANY_FILETYPES_FORTRAN, 2, "");
+	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_FORTRAN, 0);
+	get_keyfile_keywords(config, config_home, "intrinsic_functions", GEANY_FILETYPES_FORTRAN, 1);
+	get_keyfile_keywords(config, config_home, "user_functions", GEANY_FILETYPES_FORTRAN, 2);
 	style_sets[GEANY_FILETYPES_FORTRAN].keywords[3] = NULL;
 }
 
@@ -2548,34 +2417,7 @@ static void styleset_sql_init(gint ft_id, GKeyFile *config, GKeyFile *config_hom
 	get_keyfile_style(config, config_home, "quotedidentifier", &style_sets[GEANY_FILETYPES_SQL].styling[14]);
 
 	style_sets[GEANY_FILETYPES_SQL].keywords = g_new(gchar*, 2);
-	get_keyfile_keywords(config, config_home, "keywords", GEANY_FILETYPES_SQL, 0,
-						"absolute action add admin after aggregate \
-						alias all allocate alter and any are array as asc \
-						assertion at authorization before begin bfile bigint binary bit blob bool boolean both breadth by \
-						call cascade cascaded case cast catalog char character check class clob close cluster collate \
-						collation column commit completion connect connection constraint constraints \
-						constructor continue corresponding create cross cube current \
-						current_date current_path current_role current_time current_timestamp \
-						current_user cursor cycle data date day deallocate dec decimal declare default \
-						deferrable deferred delete depth deref desc describe descriptor destroy destructor \
-						deterministic diagnostics dictionary dimension disconnect diskgroup distinct domain double drop dynamic \
-						each else end end-exec equals escape every except exception exec execute exists explain external \
-						false fetch first fixed flashback float for foreign found from free full function general get global \
-						go goto grant group grouping having host hour identity if ignore immediate in index indextype indicator \
-						initialize initially inner inout input insert int integer intersect interval \
-						into is isolation iterate join key language large last lateral leading left less level like \
-						limit local localtime localtimestamp locator long map match materialized mediumblob mediumint mediumtext \
-						merge middleint minus minute modifies modify module month names national natural nchar nclob new next no noaudit \
-						none not null numeric nvarchar2 object of off old on only open operation option or order ordinality out outer \
-						output package pad parameter parameters partial path postfix precision prefix preorder prepare preserve primary \
-						prior privileges procedure profile public purge read reads real recursive ref references referencing regexp regexp_like \
-						relative rename restrict result return returning returns revoke right role rollback rollup routine row rows \
-						savepoint schema scroll scope search second section select sequence session session_user set sets size \
-						smallint some space specific specifictype sql sqlexception sqlstate sqlwarning start state statement static \
-						structure synonym system_user table tablespace temporary terminate than then time timestamp \
-						timezone_hour timezone_minute tinyint to trailing transaction translation  treat trigger true truncate \
-						type under union unique unknown unnest update usage user using value values varchar varchar2 variable varying \
-						view when whenever where with without work write year zone");
+	get_keyfile_keywords(config, config_home, "keywords", GEANY_FILETYPES_SQL, 0);
 	style_sets[GEANY_FILETYPES_SQL].keywords[1] = NULL;
 }
 
@@ -2688,8 +2530,7 @@ static void styleset_haskell_init(gint ft_id, GKeyFile *config, GKeyFile *config
 	get_keyfile_style(config, config_home, "data", &style_sets[GEANY_FILETYPES_HASKELL].styling[16]);
 
 	style_sets[GEANY_FILETYPES_HASKELL].keywords = g_new(gchar*, 2);
-	get_keyfile_keywords(config, config_home, "keywords", GEANY_FILETYPES_HASKELL, 0,
-			"as case class data deriving do else if import in infixl infixr instance let module of primitive qualified then type where");
+	get_keyfile_keywords(config, config_home, "keywords", GEANY_FILETYPES_HASKELL, 0);
 	style_sets[GEANY_FILETYPES_HASKELL].keywords[1] = NULL;
 }
 
@@ -2743,12 +2584,8 @@ static void styleset_caml_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 	get_keyfile_style(config, config_home, "linenum", &style_sets[GEANY_FILETYPES_CAML].styling[13]);
 
 	style_sets[GEANY_FILETYPES_CAML].keywords = g_new(gchar*, 3);
-	get_keyfile_keywords(config, config_home, "keywords", GEANY_FILETYPES_CAML, 0,
-			"and as assert asr begin class constraint do \
-			done downto else end exception external false for fun function functor if in include inherit \
-			initializer land lazy let lor lsl lsr lxor match method mod module mutable new object of open \
-			or private rec sig struct then to true try type val virtual when while with");
-	get_keyfile_keywords(config, config_home, "keywords_optional", GEANY_FILETYPES_CAML, 1, "option Some None ignore ref");
+	get_keyfile_keywords(config, config_home, "keywords", GEANY_FILETYPES_CAML, 0);
+	get_keyfile_keywords(config, config_home, "keywords_optional", GEANY_FILETYPES_CAML, 1);
 	style_sets[GEANY_FILETYPES_CAML].keywords[2] = NULL;
 }
 
@@ -2801,11 +2638,11 @@ static void styleset_tcl_init(gint ft_id, GKeyFile *config, GKeyFile *config_hom
 	get_keyfile_style(config, config_home, "wordexpand", &style_sets[GEANY_FILETYPES_TCL].styling[15]);
 
 	style_sets[GEANY_FILETYPES_TCL].keywords = g_new(gchar*, 6);
-	get_keyfile_keywords(config, config_home, "tcl", GEANY_FILETYPES_TCL, 0, "");
-	get_keyfile_keywords(config, config_home, "tk", GEANY_FILETYPES_TCL, 1, "");
-	get_keyfile_keywords(config, config_home, "itcl", GEANY_FILETYPES_TCL, 2, "");
-	get_keyfile_keywords(config, config_home, "tkcommands", GEANY_FILETYPES_TCL, 3, "");
-	get_keyfile_keywords(config, config_home, "expand", GEANY_FILETYPES_TCL, 4, "");
+	get_keyfile_keywords(config, config_home, "tcl", GEANY_FILETYPES_TCL, 0);
+	get_keyfile_keywords(config, config_home, "tk", GEANY_FILETYPES_TCL, 1);
+	get_keyfile_keywords(config, config_home, "itcl", GEANY_FILETYPES_TCL, 2);
+	get_keyfile_keywords(config, config_home, "tkcommands", GEANY_FILETYPES_TCL, 3);
+	get_keyfile_keywords(config, config_home, "expand", GEANY_FILETYPES_TCL, 4);
 	style_sets[GEANY_FILETYPES_TCL].keywords[5] = NULL;
 }
 
@@ -2856,7 +2693,7 @@ static void styleset_matlab_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 	get_keyfile_style(config, config_home, "doublequotedstring", &style_sets[GEANY_FILETYPES_MATLAB].styling[8]);
 
 	style_sets[GEANY_FILETYPES_MATLAB].keywords = g_new(gchar*, 2);
-	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_MATLAB, 0, "break case catch continue else elseif end for function global if otherwise persistent return switch try while");
+	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_MATLAB, 0);
 	style_sets[GEANY_FILETYPES_MATLAB].keywords[1] = NULL;
 }
 
@@ -2906,22 +2743,10 @@ static void styleset_d_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 	get_keyfile_style(config, config_home, "commentdockeyworderror", &style_sets[GEANY_FILETYPES_D].styling[17]);
 
 	style_sets[GEANY_FILETYPES_D].keywords = g_new(gchar*, 5);
-	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_D, 0,
-			"__FILE__ __LINE__ __DATA__ __TIME__ __TIMESTAMP__ abstract alias align asm assert auto \
-			 body bool break byte case cast catch cdouble cent cfloat char class const continue creal \
-			 dchar debug default delegate delete deprecated do double else enum export extern false \
-			 final finally float for foreach function goto idouble if ifloat import in inout int \
-			 interface invariant ireal is long mixin module new null out override package pragma \
-			 private protected public real return scope short static struct super switch \
-			 synchronized template this throw true try typedef typeof ubyte ucent uint ulong union \
-			 unittest ushort version void volatile wchar while with");
-	get_keyfile_keywords(config, config_home, "secondary", GEANY_FILETYPES_D, 1,
-			"");
-	get_keyfile_keywords(config, config_home, "docComment", GEANY_FILETYPES_D, 2,
-			"Authors Bugs Copyright Date Deprecated Examples History License Macros Params Returns \
-			 See_Also Standards Throws Version");
-	get_keyfile_keywords(config, config_home, "types", GEANY_FILETYPES_D, 3,
-			"");
+	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_D, 0);
+	get_keyfile_keywords(config, config_home, "secondary", GEANY_FILETYPES_D, 1);
+	get_keyfile_keywords(config, config_home, "docComment", GEANY_FILETYPES_D, 2);
+	get_keyfile_keywords(config, config_home, "types", GEANY_FILETYPES_D, 3);
 	style_sets[GEANY_FILETYPES_D].keywords[4] = NULL;
 }
 
@@ -2969,9 +2794,9 @@ static void styleset_ferite_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 	styleset_c_like_init(config, config_home, GEANY_FILETYPES_FERITE);
 
 	style_sets[GEANY_FILETYPES_FERITE].keywords = g_new(gchar*, 4);
-	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_FERITE, 0, "false null self super true abstract alias and arguments attribute_missing break case class closure conformsToProtocol constructor continue default deliver destructor diliver directive do else extends eval final fix for function global handle if iferr implements include instanceof isa method_missing modifies monitor namespace new or private protected protocol public raise recipient rename return static switch uses using while");
-	get_keyfile_keywords(config, config_home, "types", GEANY_FILETYPES_FERITE, 1, "boolean string number array object void");
-	get_keyfile_keywords(config, config_home, "docComment", GEANY_FILETYPES_FERITE, 2, "brief class declaration description end example extends function group implements modifies module namespace param protocol return return static type variable warning");
+	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_FERITE, 0);
+	get_keyfile_keywords(config, config_home, "types", GEANY_FILETYPES_FERITE, 1);
+	get_keyfile_keywords(config, config_home, "docComment", GEANY_FILETYPES_FERITE, 2);
 	style_sets[GEANY_FILETYPES_FERITE].keywords[3] = NULL;
 }
 
@@ -3011,34 +2836,13 @@ static void styleset_vhdl_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 	get_keyfile_style(config, config_home, "userword", &style_sets[GEANY_FILETYPES_VHDL].styling[14]);
 
 	style_sets[GEANY_FILETYPES_VHDL].keywords = g_new(gchar*, 8);
-	get_keyfile_keywords(config, config_home, "keywords", GEANY_FILETYPES_VHDL, 0,
-			"access after alias all architecture array assert attribute begin block \
-			 body buffer bus case component configuration constant disconnect downto else elsif \
-			 end entity exit file for function generate generic group guarded if impure in inertial \
-			 inout is label library linkage literal loop map new next null of on open others out \
-			 package port postponed procedure process pure range record register reject report \
-			 return select severity shared signal subtype then to transport type unaffected units \
-			 until use variable wait when while with");
-	get_keyfile_keywords(config, config_home, "operators", GEANY_FILETYPES_VHDL, 1,
-			"abs and mod nand nor not or rem rol ror sla sll sra srl xnor xor");
-	get_keyfile_keywords(config, config_home, "attributes", GEANY_FILETYPES_VHDL, 2,
-			"left right low high ascending image value pos val succ pred leftof rightof base range \
-			 reverse_range length delayed stable quiet transaction event active last_event last_active \
-			 last_value driving driving_value simple_name path_name instance_name");
-	get_keyfile_keywords(config, config_home, "std_functions", GEANY_FILETYPES_VHDL, 3,
-			"now readline read writeline write endfile resolved to_bit to_bitvector to_stdulogic \
-			 to_stdlogicvector to_stdulogicvector to_x01 to_x01z to_UX01 rising_edge falling_edge \
-			 is_x shift_left shift_right rotate_left rotate_right resize to_integer to_unsigned \
-			 to_signed std_match to_01");
-	get_keyfile_keywords(config, config_home, "std_packages", GEANY_FILETYPES_VHDL, 4,
-			"std ieee work standard textio std_logic_1164 std_logic_arith std_logic_misc \
-			 std_logic_signed std_logic_textio std_logic_unsigned numeric_bit numeric_std \
-			 math_complex math_real vital_primitives vital_timing");
-	get_keyfile_keywords(config, config_home, "std_types", GEANY_FILETYPES_VHDL, 5,
-			"boolean bit character severity_level integer real time delay_length natural positive \
-			 string bit_vector file_open_kind file_open_status line text side width std_ulogic \
-			 std_ulogic_vector std_logic std_logic_vector X01 X01Z UX01 UX01Z unsigned signed");
-	get_keyfile_keywords(config, config_home, "userwords", GEANY_FILETYPES_VHDL, 6, "");
+	get_keyfile_keywords(config, config_home, "keywords", GEANY_FILETYPES_VHDL, 0);
+	get_keyfile_keywords(config, config_home, "operators", GEANY_FILETYPES_VHDL, 1);
+	get_keyfile_keywords(config, config_home, "attributes", GEANY_FILETYPES_VHDL, 2);
+	get_keyfile_keywords(config, config_home, "std_functions", GEANY_FILETYPES_VHDL, 3);
+	get_keyfile_keywords(config, config_home, "std_packages", GEANY_FILETYPES_VHDL, 4);
+	get_keyfile_keywords(config, config_home, "std_types", GEANY_FILETYPES_VHDL, 5);
+	get_keyfile_keywords(config, config_home, "userwords", GEANY_FILETYPES_VHDL, 6);
 	style_sets[GEANY_FILETYPES_VHDL].keywords[7] = NULL;
 }
 
@@ -3092,7 +2896,7 @@ static void styleset_yaml_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 	get_keyfile_style(config, config_home, "operator", &style_sets[GEANY_FILETYPES_YAML].styling[9]);
 
 	style_sets[GEANY_FILETYPES_YAML].keywords = g_new(gchar*, 2);
-	get_keyfile_keywords(config, config_home, "keywords", GEANY_FILETYPES_YAML, 0, "true false yes no");
+	get_keyfile_keywords(config, config_home, "keywords", GEANY_FILETYPES_YAML, 0);
 	style_sets[GEANY_FILETYPES_YAML].keywords[1] = NULL;
 }
 
@@ -3125,20 +2929,7 @@ static void styleset_js_init(gint ft_id, GKeyFile *config, GKeyFile *config_home
 	styleset_c_like_init(config, config_home, GEANY_FILETYPES_JS);
 
 	style_sets[GEANY_FILETYPES_JS].keywords = g_new(gchar*, 2);
-	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_JS, 0, "\
-			abs abstract acos anchor asin atan atan2 big bold boolean break byte \
-			case catch ceil char charAt charCodeAt class concat const continue cos \
-			Date debugger default delete do double else enum escape eval exp export \
-			extends false final finally fixed float floor fontcolor fontsize for \
-			fromCharCode function goto if implements import in indexOf Infinity \
-			instanceof int interface isFinite isNaN italics join lastIndexOf length \
-			link log long Math max MAX_VALUE min MIN_VALUE NaN native NEGATIVE_INFINITY \
-			new null Number package parseFloat parseInt pop POSITIVE_INFINITY pow private \
-			protected public push random return reverse round shift short sin slice small \
-			sort splice split sqrt static strike string String sub substr substring sup \
-			super switch synchronized tan this throw throws toLowerCase toString \
-			toUpperCase transient true try typeof undefined unescape unshift valueOf \
-			var void volatile while with");
+	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_JS, 0);
 	style_sets[GEANY_FILETYPES_JS].keywords[1] = NULL;
 }
 
@@ -3181,41 +2972,14 @@ static void styleset_lua_init(gint ft_id, GKeyFile *config, GKeyFile *config_hom
 	get_keyfile_style(config, config_home, "word8", &style_sets[GEANY_FILETYPES_LUA].styling[19]);
 
 	style_sets[GEANY_FILETYPES_LUA].keywords = g_new(gchar*, 9);
-	get_keyfile_keywords(config, config_home, "keywords", GEANY_FILETYPES_LUA, 0,
-			"and break do else elseif end false for function if \
-			 in local nil not or repeat return then true until while");
-	get_keyfile_keywords(config, config_home, "function_basic", GEANY_FILETYPES_LUA, 1,
-			"_VERSION assert collectgarbage dofile error gcinfo loadfile loadstring \
-			 print rawget rawset require tonumber tostring type unpack \
-			 _ALERT _ERRORMESSAGE _INPUT _PROMPT _OUTPUT \
-			 _STDERR _STDIN _STDOUT call dostring foreach foreachi getn globals newtype \
-			 sort tinsert tremove _G getfenv getmetatable ipairs loadlib next pairs pcall \
-			 rawequal setfenv setmetatable xpcall string table math coroutine io os debug \
-			 load module select");
-	get_keyfile_keywords(config, config_home, "function_other", GEANY_FILETYPES_LUA, 2,
-			"abs acos asin atan atan2 ceil cos deg exp \
-			 floor format frexp gsub ldexp log log10 max min mod rad random randomseed \
-			 sin sqrt strbyte strchar strfind strlen strlower strrep strsub strupper tan \
-			 string.byte string.char string.dump string.find string.len \
-			 string.lower string.rep string.sub string.upper string.format string.gfind string.gsub \
-			 table.concat table.foreach table.foreachi table.getn table.sort table.insert table.remove table.setn \
-			 math.abs math.acos math.asin math.atan math.atan2 math.ceil math.cos math.deg math.exp \
-			 math.floor math.frexp math.ldexp math.log math.log10 math.max math.min math.mod \
-			 math.pi math.pow math.rad math.random math.randomseed math.sin math.sqrt math.tan \
-			 string.gmatch string.match string.reverse table.maxn \
-			 math.cosh math.fmod math.modf math.sinh math.tanh math.huge");
-	get_keyfile_keywords(config, config_home, "coroutines", GEANY_FILETYPES_LUA, 3,
-			"openfile closefile readfrom writeto appendto remove rename flush seek tmpfile tmpname \
-			 read write clock date difftime execute exit getenv setlocale time coroutine.create \
-			 coroutine.resume coroutine.status coroutine.wrap coroutine.yield io.close io.flush \
-			 io.input io.lines io.open io.output io.read io.tmpfile io.type io.write io.stdin \
-			 io.stdout io.stderr os.clock os.date os.difftime os.execute os.exit os.getenv \
-			 os.remove os.rename os.setlocale os.time os.tmpname coroutine.running package.cpath \
-			 package.loaded package.loadlib package.path package.preload package.seeall io.popen");
-	get_keyfile_keywords(config, config_home, "user1", GEANY_FILETYPES_LUA, 4, "");
-	get_keyfile_keywords(config, config_home, "user2", GEANY_FILETYPES_LUA, 5, "");
-	get_keyfile_keywords(config, config_home, "user3", GEANY_FILETYPES_LUA, 6, "");
-	get_keyfile_keywords(config, config_home, "user4", GEANY_FILETYPES_LUA, 7, "");
+	get_keyfile_keywords(config, config_home, "keywords", GEANY_FILETYPES_LUA, 0);
+	get_keyfile_keywords(config, config_home, "function_basic", GEANY_FILETYPES_LUA, 1);
+	get_keyfile_keywords(config, config_home, "function_other", GEANY_FILETYPES_LUA, 2);
+	get_keyfile_keywords(config, config_home, "coroutines", GEANY_FILETYPES_LUA, 3);
+	get_keyfile_keywords(config, config_home, "user1", GEANY_FILETYPES_LUA, 4);
+	get_keyfile_keywords(config, config_home, "user2", GEANY_FILETYPES_LUA, 5);
+	get_keyfile_keywords(config, config_home, "user3", GEANY_FILETYPES_LUA, 6);
+	get_keyfile_keywords(config, config_home, "user4", GEANY_FILETYPES_LUA, 7);
 	style_sets[GEANY_FILETYPES_LUA].keywords[8] = NULL;
 }
 
@@ -3284,22 +3048,10 @@ static void styleset_basic_init(gint ft_id, GKeyFile *config, GKeyFile *config_h
 	get_keyfile_style(config, config_home, "binnumber", &style_sets[GEANY_FILETYPES_BASIC].styling[18]);
 
 	style_sets[GEANY_FILETYPES_BASIC].keywords = g_new(gchar*, 5);
-	get_keyfile_keywords(config, config_home, "keywords", GEANY_FILETYPES_BASIC, 0,
-			"as asm bit bitreset bitset byte case cint close cls color const \
-			 continue cshort csign csng cubyte cuint culngint custom data \
-			 dim do double  else elseif end enum environ eof err error exec exit exp \
-			 export extern field fix for function get gosub goto hex hibyte hiword if iif imp \
-			 input instr int integer is kill left len let lobyte loc local locate lof log long \
-			 longint loop loword lset mklongint mks mkshort mod next not on once open or out \
-			 pointer pos preserve preset private public put read redim rem reset restore return \
-			 sizeof sleep space static step stop str string sub then time timer to type ubound \
-			 ubyte ucase uinteger ulongint union unsigned until ushort using val val64 valint \
-			 wait while with xor");
-	get_keyfile_keywords(config, config_home, "preprocessor", GEANY_FILETYPES_BASIC, 1,
-			"#define defined #dynamic #else #endif #endmacro #error #if #ifdef #ifndef #inclib #include \
-			 #libpath #line #macro #print #undef");
-	get_keyfile_keywords(config, config_home, "user1", GEANY_FILETYPES_BASIC, 2, "");
-	get_keyfile_keywords(config, config_home, "user2", GEANY_FILETYPES_BASIC, 3, "");
+	get_keyfile_keywords(config, config_home, "keywords", GEANY_FILETYPES_BASIC, 0);
+	get_keyfile_keywords(config, config_home, "preprocessor", GEANY_FILETYPES_BASIC, 1);
+	get_keyfile_keywords(config, config_home, "user1", GEANY_FILETYPES_BASIC, 2);
+	get_keyfile_keywords(config, config_home, "user2", GEANY_FILETYPES_BASIC, 3);
 	style_sets[GEANY_FILETYPES_BASIC].keywords[4] = NULL;
 }
 
@@ -3345,9 +3097,9 @@ static void styleset_actionscript_init(gint ft_id, GKeyFile *config, GKeyFile *c
 
 	style_sets[GEANY_FILETYPES_AS].keywords = g_new(gchar *, 4);
 
-	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_AS, 0, "");
-	get_keyfile_keywords(config, config_home, "secondary", GEANY_FILETYPES_AS, 1, "");
-	get_keyfile_keywords(config, config_home, "classes", GEANY_FILETYPES_AS, 2, "");
+	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_AS, 0);
+	get_keyfile_keywords(config, config_home, "secondary", GEANY_FILETYPES_AS, 1);
+	get_keyfile_keywords(config, config_home, "classes", GEANY_FILETYPES_AS, 2);
 	style_sets[GEANY_FILETYPES_AS].keywords[3] = NULL;
 }
 
@@ -3371,23 +3123,9 @@ static void styleset_haxe_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 
 	style_sets[GEANY_FILETYPES_HAXE].keywords = g_new(gchar*, 4);
 
-	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_HAXE, 0, "\
-			abstract break case catch class \
-			continue default do else enum external extends \
-			finally float for function goto if implements import in \
-			interface new package protected public \
-			return static super switch this throw throws \
-			try type var while");
-
-	get_keyfile_keywords(config, config_home, "secondary", GEANY_FILETYPES_HAXE, 1, "\
-			Bool Enum Float Int Null Void Dynamic String");
-
-	get_keyfile_keywords(config, config_home, "classes", GEANY_FILETYPES_HAXE, 2, "\
-			Array ArrayAccess Class Date DateTools \
-			EReg Enum Hash IntHash IntIter \
-			Iterable Iterator Lambda List Math Protected \
-			Reflect Std  StringBuf StringTools Type \
-			UInt ValueType Void Xml XmlType");
+	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_HAXE, 0);
+	get_keyfile_keywords(config, config_home, "secondary", GEANY_FILETYPES_HAXE, 1);
+	get_keyfile_keywords(config, config_home, "classes", GEANY_FILETYPES_HAXE, 2);
 
 	style_sets[GEANY_FILETYPES_HAXE].keywords[3] = NULL;
 }
@@ -3425,7 +3163,7 @@ static void styleset_ada_init(gint ft_id, GKeyFile *config, GKeyFile *config_hom
 	get_keyfile_style(config, config_home, "illegal", &style_sets[GEANY_FILETYPES_ADA].styling[11]);
 
 	style_sets[GEANY_FILETYPES_ADA].keywords = g_new(gchar*, 2);
-	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_ADA, 0, "abort abs abstract accept access aliased all and array at begin body case constant declare delay delta digits do else elsif end entry exception exit for function generic goto if in interface is limited loop mod new not null of or others out overriding package pragma private procedure protected raise range record rem renames requeue return reverse select separate subtype synchronized tagged task terminate then type until use when while with xor");
+	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_ADA, 0);
 	style_sets[GEANY_FILETYPES_ADA].keywords[1] = NULL;
 }
 
