@@ -756,20 +756,35 @@ apply_filetype_properties(ScintillaObject *sci, gint lexer, filetype_id ft_id)
 #define foreach_range(i, size) \
 		for (i = 0; i < size; i++)
 
-/* entries contains the default style names for the filetype.
- * If used, entries[n].style should have foreground and background in 0xRRGGBB format, or -1. */
+/* names: the style names for the filetype. */
 static void load_style_entries(GKeyFile *config, GKeyFile *config_home, gint filetype_idx,
-		const gchar **entries, gsize entries_len)
+		const gchar **names, gsize names_len)
 {
 	guint i;
 
-	foreach_range(i, entries_len)
+	foreach_range(i, names_len)
 	{
-		const gchar *name = entries[i];
+		const gchar *name = names[i];
 		GeanyLexerStyle *style = &style_sets[filetype_idx].styling[i];
 
 		get_keyfile_style(config, config_home, name, style);
 	}
+}
+
+
+/* styles: the style IDs for the filetype.
+ * STYLE_DEFAULT will be set to match the first style. */
+static void apply_style_entries(ScintillaObject *sci, gint filetype_idx,
+		gint *styles, gsize styles_len)
+{
+	guint i;
+
+	g_return_if_fail(styles_len > 0);
+
+	set_sci_style(sci, STYLE_DEFAULT, filetype_idx, 0);
+
+	foreach_range(i, styles_len)
+		set_sci_style(sci, styles[i], filetype_idx, i);
 }
 
 
@@ -807,28 +822,31 @@ styleset_c_like_init(GKeyFile *config, GKeyFile *config_home, gint filetype_idx)
 
 static void styleset_c_like(ScintillaObject *sci, gint filetype_idx)
 {
-	set_sci_style(sci, STYLE_DEFAULT, filetype_idx, 0);
-	set_sci_style(sci, SCE_C_DEFAULT, filetype_idx, 0);
-	set_sci_style(sci, SCE_C_COMMENT, filetype_idx, 1);
-	set_sci_style(sci, SCE_C_COMMENTLINE, filetype_idx, 2);
-	set_sci_style(sci, SCE_C_COMMENTDOC, filetype_idx, 3);
-	set_sci_style(sci, SCE_C_NUMBER, filetype_idx, 4);
-	set_sci_style(sci, SCE_C_WORD, filetype_idx, 5);
-	set_sci_style(sci, SCE_C_WORD2, filetype_idx, 6);
-	set_sci_style(sci, SCE_C_STRING, filetype_idx, 7);
-	set_sci_style(sci, SCE_C_CHARACTER, filetype_idx, 8);
-	set_sci_style(sci, SCE_C_UUID, filetype_idx, 9);
-	set_sci_style(sci, SCE_C_PREPROCESSOR, filetype_idx, 10);
-	set_sci_style(sci, SCE_C_OPERATOR, filetype_idx, 11);
-	set_sci_style(sci, SCE_C_IDENTIFIER, filetype_idx, 12);
-	set_sci_style(sci, SCE_C_STRINGEOL, filetype_idx, 13);
-	set_sci_style(sci, SCE_C_VERBATIM, filetype_idx, 14);
-	set_sci_style(sci, SCE_C_REGEX, filetype_idx, 15);
-	set_sci_style(sci, SCE_C_COMMENTLINEDOC, filetype_idx, 16);
-	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORD, filetype_idx, 17);
-	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORDERROR, filetype_idx, 18);
-	/* is used for local structs and typedefs */
-	set_sci_style(sci, SCE_C_GLOBALCLASS, filetype_idx, 19);
+	gint styles[] = {
+		SCE_C_DEFAULT,
+		SCE_C_COMMENT,
+		SCE_C_COMMENTLINE,
+		SCE_C_COMMENTDOC,
+		SCE_C_NUMBER,
+		SCE_C_WORD,
+		SCE_C_WORD2,
+		SCE_C_STRING,
+		SCE_C_CHARACTER,
+		SCE_C_UUID,
+		SCE_C_PREPROCESSOR,
+		SCE_C_OPERATOR,
+		SCE_C_IDENTIFIER,
+		SCE_C_STRINGEOL,
+		SCE_C_VERBATIM,
+		SCE_C_REGEX,
+		SCE_C_COMMENTLINEDOC,
+		SCE_C_COMMENTDOCKEYWORD,
+		SCE_C_COMMENTDOCKEYWORDERROR,
+		/* used for local structs and typedefs */
+		SCE_C_GLOBALCLASS
+	};
+
+	apply_style_entries(sci, filetype_idx, styles, G_N_ELEMENTS(styles));
 }
 
 

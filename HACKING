@@ -305,11 +305,10 @@ the following things:
 1. Write styleset_foo_init() to setup lexer styles and load style
    settings from the filetypes.foo configuration file. You should probably
    start by copying and adapting another filetype's initialization, such
-   as styleset_tcl_init(). Another way is to use load_style_entries()
-   to make style initialization simpler - see styleset_c_like_init().
+   as styleset_tcl_init(). You may want to use load_style_entries().
 2. Write styleset_foo() to apply styles when a new scintilla widget
    is created. Again you could copy and adapt a function like
-   styleset_tcl().
+   styleset_tcl(). You may want to use apply_style_entries().
 3. In highlighting_init_styles(), add
    ``init_styleset_case(GEANY_FILETYPES_FOO, styleset_foo_init);``.
 4. In highlighting_set_styles(), add
