@@ -529,9 +529,18 @@ static gboolean add_custom_template_items(GtkWidget *toolbar_new_file_menu)
 {
 	gchar *path = g_build_path(G_DIR_SEPARATOR_S, app->configdir, GEANY_TEMPLATES_SUBDIR,
 		"files", NULL);
-	GSList *list = utils_get_file_list(path, NULL, NULL);
+	GSList *list = NULL;
+	GDir *dir;
+	const gchar *fname;
 
-	if (list == NULL)
+	dir = g_dir_open(path, 0, NULL);
+	if (dir)
+	{
+		foreach_dir(fname, dir)
+			list = g_slist_append(list, g_strdup(fname));
+		g_dir_close(dir);
+	}
+	if (!dir || !list)
 	{
 		utils_mkdir(path, FALSE);
 		return FALSE;
