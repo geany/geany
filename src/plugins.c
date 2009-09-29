@@ -201,7 +201,8 @@ static UtilsFuncs utils_funcs = {
 	&utils_open_browser,
 	&utils_string_replace_first,
 	&utils_str_middle_truncate,
-	&utils_str_remove_chars
+	&utils_str_remove_chars,
+	&utils_get_file_list_full
 };
 
 static UIUtilsFuncs uiutils_funcs = {

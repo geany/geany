@@ -1341,7 +1341,7 @@ gint utils_mkdir(const gchar *path, gboolean create_parent_dirs)
 }
 
 
-/*
+/**
  * Gets a list of files from the specified directory.
  * Locale encoding is expected for @a path and used for the file list. The list and the data
  * in the list should be freed after use, e.g.:

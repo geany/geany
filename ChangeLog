@@ -7,6 +7,8 @@
  * src/templates.c, src/utils.c, src/utils.h, src/symbols.c:
    Add utils_get_file_list_full() which can optionally sort or include
    a full path for each list item.
+ * src/utils.c, src/plugindata.h, src/plugins.c:
+   Add utils_get_file_list_full() to API.
 
 
 2009-09-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
