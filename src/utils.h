@@ -215,4 +215,6 @@ gchar *utils_str_middle_truncate(const gchar *string, guint truncate_length);
 
 gchar *utils_str_remove_chars(gchar *string, const gchar *chars);
 
+GSList *utils_get_file_list_full(const gchar *path, gboolean full_path, gboolean sort, GError **error);
+
 #endif

@@ -4,6 +4,9 @@
    Change Perl tag parser to ctags SVN r601. This removes support for
    buggy local/my/our but it parses constant/format/labels and should
    be less buggy overall (closes #2861232).
+ * src/templates.c, src/utils.c, src/utils.h, src/symbols.c:
+   Add utils_get_file_list_full() which can optionally sort or include
+   a full path for each list item.
 
 
 2009-09-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

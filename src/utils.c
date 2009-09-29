@@ -1341,36 +1341,35 @@ gint utils_mkdir(const gchar *path, gboolean create_parent_dirs)
 }
 
 
-/**
- * Gets a sorted list of files from the specified directory.
+/*
+ * Gets a list of files from the specified directory.
  * Locale encoding is expected for @a path and used for the file list. The list and the data
  * in the list should be freed after use, e.g.:
  * @code
  * g_slist_foreach(list, (GFunc) g_free, NULL);
  * g_slist_free(list); @endcode
  *
- * @note If you don't want sorted filenames you should use the foreach_dir() macro instead -
- * it's more efficient and perhaps easier to use than freeing the list and its contents.
+ * @note If you don't need a list you should use the foreach_dir() macro instead -
+ * it's more efficient.
  *
  * @param path The path of the directory to scan, in locale encoding.
- * @param length The location to store the number of non-@c NULL data items in the list,
- *               unless @c NULL.
+ * @param full_path Whether to include the full path for each filename in the list. Obviously this
+ * will use more memory.
+ * @param sort Whether to sort alphabetically (UTF-8 safe).
  * @param error The location for storing a possible error, or @c NULL.
  *
- * @return A newly allocated list or @c NULL if no files found. The list and its data should be
- *         freed when no longer needed.
+ * @return A newly allocated list or @c NULL if no files were found. The list and its data should be
+ * freed when no longer needed.
+ * @see utils_get_file_list().
  **/
-GSList *utils_get_file_list(const gchar *path, guint *length, GError **error)
+GSList *utils_get_file_list_full(const gchar *path, gboolean full_path, gboolean sort, GError **error)
 {
 	GSList *list = NULL;
-	guint len = 0;
 	GDir *dir;
 	const gchar *filename;
 
 	if (error)
 		*error = NULL;
-	if (length)
-		*length = 0;
 	g_return_val_if_fail(path != NULL, NULL);
 
 	dir = g_dir_open(path, 0, error);
@@ -1379,15 +1378,40 @@ GSList *utils_get_file_list(const gchar *path, guint *length, GError **error)
 
 	foreach_dir(filename, dir)
 	{
-		list = g_slist_append(list, g_strdup(filename));
-		len++;
+		list = g_slist_append(list, full_path ?
+			g_build_path(G_DIR_SEPARATOR_S, path, filename, NULL) : g_strdup(filename));
 	}
 	g_dir_close(dir);
 	/* sorting last is quicker than on insertion */
-	list = g_slist_sort(list, (GCompareFunc) utils_str_casecmp);
+	if (sort)
+		list = g_slist_sort(list, (GCompareFunc) utils_str_casecmp);
+	return list;
+}
+
+
+/**
+ * Gets a sorted list of files from the specified directory.
+ * Locale encoding is expected for @a path and used for the file list. The list and the data
+ * in the list should be freed after use, e.g.:
+ * @code
+ * g_slist_foreach(list, (GFunc) g_free, NULL);
+ * g_slist_free(list); @endcode
+ *
+ * @param path The path of the directory to scan, in locale encoding.
+ * @param length The location to store the number of non-@c NULL data items in the list,
+ *               unless @c NULL.
+ * @param error The location for storing a possible error, or @c NULL.
+ *
+ * @return A newly allocated list or @c NULL if no files were found. The list and its data should be
+ *         freed when no longer needed.
+ * @see utils_get_file_list_full().
+ **/
+GSList *utils_get_file_list(const gchar *path, guint *length, GError **error)
+{
+	GSList *list = utils_get_file_list_full(path, FALSE, TRUE, error);
 
 	if (length)
-		*length = len;
+		*length = g_slist_length(list);
 	return list;
 }
 

@@ -1444,18 +1444,6 @@ static GHashTable *get_tagfile_hash(const GSList *file_list)
 }
 
 
-static void utils_slist_add_path(GSList *list, const gchar *path)
-{
-	GSList *node;
-
-	for (node = list; node != NULL; node = g_slist_next(node))
-	{
-		setptr(node->data,
-			g_build_path(G_DIR_SEPARATOR_S, path, node->data, NULL));
-	}
-}
-
-
 static GHashTable *init_user_tags(void)
 {
 	GSList *file_list = NULL, *list = NULL;
@@ -1468,12 +1456,10 @@ static GHashTable *init_user_tags(void)
 	{
 		utils_mkdir(dir, FALSE);
 	}
-	file_list = utils_get_file_list(dir, NULL, NULL);
-	utils_slist_add_path(file_list, dir);
+	file_list = utils_get_file_list_full(dir, TRUE, TRUE, NULL);
 
 	dir = utils_build_path(app->datadir, "tags", NULL);
-	list = utils_get_file_list(dir, NULL, NULL);
-	utils_slist_add_path(list, dir);
+	list =  utils_get_file_list_full(dir, TRUE, TRUE, NULL);
 	file_list = g_slist_concat(file_list, list);
 
 	lang_hash = get_tagfile_hash(file_list);

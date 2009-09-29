@@ -529,24 +529,15 @@ static gboolean add_custom_template_items(void)
 {
 	gchar *path = g_build_path(G_DIR_SEPARATOR_S, app->configdir, GEANY_TEMPLATES_SUBDIR,
 		"files", NULL);
-	GSList *list = NULL;
-	GDir *dir;
-	const gchar *fname;
+	GSList *list = utils_get_file_list_full(path, FALSE, FALSE, NULL);
 
-	dir = g_dir_open(path, 0, NULL);
-	if (dir)
-	{
-		foreach_dir(fname, dir)
-			list = g_slist_append(list, g_strdup(fname));
-		g_dir_close(dir);
-	}
-	if (!dir || !list)
+	if (!list)
 	{
 		utils_mkdir(path, FALSE);
 		return FALSE;
 	}
 	list = g_slist_sort(list, compare_filenames_by_filetype);
-	g_slist_foreach(list, add_file_item, toolbar_new_file_menu);
+	g_slist_foreach(list, add_file_item, NULL);
 	g_slist_foreach(list, (GFunc) g_free, NULL);
 	g_slist_free(list);
 	g_free(path);
@@ -563,14 +554,14 @@ static void create_file_template_menus(void)
 	/* we hold our own ref on the menu in case it is not used in the toolbar */
 	g_object_ref(toolbar_new_file_menu);
 
-	create_new_menu_items(toolbar_new_file_menu);
+	create_new_menu_items();
 
 	sep1 = gtk_separator_menu_item_new();
 	gtk_container_add(GTK_CONTAINER(new_with_template_menu), sep1);
 	sep2 = gtk_separator_menu_item_new();
 	gtk_container_add(GTK_CONTAINER(toolbar_new_file_menu), sep2);
 
-	if (add_custom_template_items(toolbar_new_file_menu))
+	if (add_custom_template_items())
 	{
 		gtk_widget_show(sep1);
 		gtk_widget_show(sep2);
