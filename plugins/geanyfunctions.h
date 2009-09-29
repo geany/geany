@@ -216,6 +216,8 @@
 	geany_functions->p_utils->str_middle_truncate
 #define utils_str_remove_chars \
 	geany_functions->p_utils->str_remove_chars
+#define utils_get_file_list_full \
+	geany_functions->p_utils->get_file_list_full
 #define ui_dialog_vbox_new \
 	geany_functions->p_ui->dialog_vbox_new
 #define ui_frame_new_with_alignment \
