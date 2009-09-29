@@ -44,6 +44,7 @@
 GeanyTemplatePrefs template_prefs;
 
 static GtkWidget *new_with_template_menu = NULL;	/* File menu submenu */
+static GtkWidget *toolbar_new_file_menu = NULL;
 
 
 /* default templates, only for initial tempate file creation on first start of Geany */
@@ -404,7 +405,7 @@ on_new_with_template                   (GtkMenuItem     *menuitem,
 
 
 /* template items for the new file menu */
-static void create_new_menu_items(GtkWidget *toolbar_new_file_menu)
+static void create_new_menu_items(void)
 {
 	GSList *node;
 
@@ -484,7 +485,6 @@ on_new_with_file_template(GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer user_dat
 static void add_file_item(gpointer data, gpointer user_data)
 {
 	GtkWidget *tmp_menu, *tmp_button;
-	GtkWidget *toolbar_new_file_menu = user_data;
 	gchar *label;
 
 	g_return_if_fail(data);
@@ -525,7 +525,7 @@ static gint compare_filenames_by_filetype(gconstpointer a, gconstpointer b)
 }
 
 
-static gboolean add_custom_template_items(GtkWidget *toolbar_new_file_menu)
+static gboolean add_custom_template_items(void)
 {
 	gchar *path = g_build_path(G_DIR_SEPARATOR_S, app->configdir, GEANY_TEMPLATES_SUBDIR,
 		"files", NULL);
@@ -557,7 +557,6 @@ static gboolean add_custom_template_items(GtkWidget *toolbar_new_file_menu)
 static void create_file_template_menus(void)
 {
 	GtkWidget *sep1, *sep2 = NULL;
-	GtkWidget *toolbar_new_file_menu = NULL;
 
 	new_with_template_menu = ui_lookup_widget(main_widgets.window, "menu_new_with_template1_menu");
 	toolbar_new_file_menu = gtk_menu_new();
@@ -786,8 +785,6 @@ void templates_free_templates(void)
 {
 	gint i;
 	GList *children, *item;
-	GtkWidget *toolbar_new_file_menu = geany_menu_button_action_get_menu(
-					GEANY_MENU_BUTTON_ACTION(toolbar_get_action_by_name("New")));
 
 	for (i = 0; i < GEANY_MAX_TEMPLATES; i++)
 	{
