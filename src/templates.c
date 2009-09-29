@@ -534,6 +534,7 @@ static gboolean add_custom_template_items(void)
 	if (!list)
 	{
 		utils_mkdir(path, FALSE);
+		g_free(path);
 		return FALSE;
 	}
 	list = g_slist_sort(list, compare_filenames_by_filetype);
