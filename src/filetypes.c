@@ -708,6 +708,7 @@ static void add_custom_filetype(const gchar *filename)
 static void init_custom_filetypes(const gchar *path)
 {
 	GDir *dir;
+	const gchar *filename;
 
 	g_return_if_fail(path);
 
@@ -715,13 +716,9 @@ static void init_custom_filetypes(const gchar *path)
 	if (dir == NULL)
 		return;
 
-	while (1)
+	foreach_dir(filename, dir)
 	{
 		const gchar prefix[] = "filetypes.";
-		const gchar *filename = g_dir_read_name(dir);
-
-		if (filename == NULL)
-			break;
 
 		if (g_str_has_prefix(filename, prefix) &&
 			g_str_has_suffix(filename + strlen(prefix), ".conf"))
