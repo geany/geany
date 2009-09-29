@@ -1,3 +1,11 @@
+2009-09-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/symbols.c, tagmanager/perl.c:
+   Change Perl tag parser to ctags SVN r601. This removes support for
+   buggy local/my/our but it parses constant/format/labels and should
+   be less buggy overall (closes #2861232).
+
+
 2009-09-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keybindings.c, src/sidebar.c, src/sidebar.h,

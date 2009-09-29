@@ -650,15 +650,12 @@ static void add_top_level_items(GeanyDocument *doc)
 		case GEANY_FILETYPES_PERL:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_class), _("Package"), NULL,
+				&(tv_iters.tag_namespace), _("Package"), "classviewer-namespace",
 				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
-				&(tv_iters.tag_member), _("My"), NULL,
-				&(tv_iters.tag_macro), _("Local"), NULL,
-				&(tv_iters.tag_variable), _("Our"), NULL,
+				&(tv_iters.tag_macro), _("Labels"), NULL,
+				&(tv_iters.tag_type), _("Constants"), NULL,
+				&(tv_iters.tag_other), _("Other"), NULL,
 				NULL);
-				/*&(tv_iters.tag_struct), _("Label"), NULL,*/
-				/*&(tv_iters.tag_namespace), _("Begin"), NULL,*/
-				/*&(tv_iters.tag_other), _("Other"), NULL, NULL);*/
 			break;
 		}
 		case GEANY_FILETYPES_PHP:
