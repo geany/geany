@@ -1329,6 +1329,7 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords)
 		keywords = (set_keywords) ? style_sets[GEANY_FILETYPES_XML].keywords[i] : "";
 		sci_set_keywords(sci, i, keywords);
 	}
+	/* always set SGML keywords */
 	sci_set_keywords(sci, 5, style_sets[GEANY_FILETYPES_XML].keywords[5]);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_XML, 0);

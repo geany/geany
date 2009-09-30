@@ -26,10 +26,10 @@ globalclass=type
 
 [keywords]
 # all items must be in one line
-#primary=
+primary=else if switch case default break continue return for foreach in do while is try catch finally throw namespace interface class struct enum signal errordomain construct callback get set base const static var weak virtual abstract override inline extern public protected private delegate out ref lock using true false null generic new delete base this value typeof sizeof throws requires ensures void bool char uchar int uint short ushort long ulong size_t ssize_t int8 uint8 int16 uint16 int32 uint32 int64 uint64 float double unichar string constpointer time_t
 #secondary=
 # these are some doxygen keywords (incomplete)
-#docComment=attention author brief bug class code date def enum example exception file fn namespace note param remarks return see since struct throw todo typedef var version warning union
+docComment=attention author brief bug class code date def enum example exception file fn namespace note param remarks return see since struct throw todo typedef var version warning union
 
 [settings]
 # default extension used when saving files
