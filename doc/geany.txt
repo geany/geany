@@ -2999,7 +2999,9 @@ Send Selection to Terminal                                Sends the current sele
 
 Reflow lines/block                                        Reformat selected lines or current
                                                           (indented) text block,
-                                                          breaking lines at the long line marker.
+                                                          breaking lines at the long line marker or the
+                                                          line breaking column if line breaking is
+                                                          enabled for the current document.
 =============================== ========================= ==================================================
 
 
