@@ -22,7 +22,8 @@ SYS_DATA_FILES = \
 	$(srcdir)/data/filetypes.* \
 	data/filetype_extensions.conf \
 	data/snippets.conf \
-	data/ui_toolbar.xml
+	data/ui_toolbar.xml \
+	$(srcdir)/data/templates/files/*
 
 EXTRA_DIST = \
 	autogen.sh \
@@ -66,6 +67,13 @@ install-data-local:
 	for file in $(srcdir)/data/*; do \
 	  if test -f $$file; then \
 	    $(INSTALL_DATA) $$file $(DESTDIR)$(pkgdatadir)/; \
+	  fi \
+	done
+	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/templates;
+	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/templates/files;
+	for file in $(srcdir)/data/templates/files/*; do \
+	  if test -f $$file; then \
+	    $(INSTALL_DATA) $$file $(DESTDIR)$(pkgdatadir)/templates/files/; \
 	  fi \
 	done
 

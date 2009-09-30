@@ -503,6 +503,7 @@ def build(bld):
 	bld.install_files('${DATADIR}/%s' % dir, 'data/*.tags')
 	bld.install_files('${DATADIR}/%s' % dir, 'data/snippets.conf')
 	bld.install_files('${DATADIR}/%s' % dir, 'data/ui_toolbar.xml')
+	bld.install_files('${DATADIR}/%s/templates/files' % dir, 'data/templates/files/*.*')
 	bld.install_as('${DATADIR}/%s/GPL-2' % dir, 'COPYING')
 	# Icons
 	bld.install_files('${PREFIX}/share/icons'

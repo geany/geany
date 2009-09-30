@@ -47,6 +47,8 @@ static GtkWidget *new_with_template_menu = NULL;	/* File menu submenu */
 static GtkWidget *toolbar_new_file_menu = NULL;
 
 
+/* TODO: implement custom insertion templates, put these into files in data/templates */
+
 /* default templates, only for initial tempate file creation on first start of Geany */
 static const gchar templates_gpl_notice[] = "\
 This program is free software; you can redistribute it and/or modify\n\
@@ -118,133 +120,13 @@ static const gchar templates_changelog[] = "\
 \n\
  * \n\n\n";
 
+/* Used when starting a new file normally */
 static const gchar templates_filetype_none[] = "";
-
-static const gchar templates_filetype_c[] = "{fileheader}\n\n\
-#include <stdio.h>\n\
-\n\
-int main(int argc, char** argv)\n\
-{\n\
-	\n\
-	return 0;\n\
-}\n\
-";
-
-static const gchar templates_filetype_cpp[] = "{fileheader}\n\n\
-#include <iostream>\n\
-\n\
-int main(int argc, char** argv)\n\
-{\n\
-	\n\
-	return 0;\n\
-}\n\
-";
-
-static const gchar templates_filetype_d[] = "{fileheader}\n\n\
-import std.stdio;\n\
-\n\
-int main(char[][] args)\n\
-{\n\
-	\n\
-	return 0;\n\
-}\n\
-";
-
-static const gchar templates_filetype_php[] = "\
-<?php\n\
-{fileheader}\
-?>\n\n\
-<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\
-  \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n\
-<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n\
-\n\
-<head>\n\
-	<title>{untitled}</title>\n\
-	<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\" />\n\
-	<meta name=\"generator\" content=\"{geanyversion}\" />\n\
-</head>\n\
-\n\
-<body>\n\
-	\n\
-</body>\n\
-</html>\n\
-";
-
-static const gchar templates_filetype_html[] = "{fileheader}\n\
-<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\
-  \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n\
-<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n\
-\n\
-<head>\n\
-	<title>{untitled}</title>\n\
-	<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\" />\n\
-	<meta name=\"generator\" content=\"{geanyversion}\" />\n\
-</head>\n\
-\n\
-<body>\n\
-	\n\
-</body>\n\
-</html>\n\
-";
-
-static const gchar templates_filetype_pascal[] = "{fileheader}\n\n\
-program {untitled};\n\
-\n\
-uses crt;\n\
-var i : byte;\n\
-\n\
-BEGIN\n\
-	\n\
-	\n\
-END.\n\
-";
-
-static const gchar templates_filetype_java[] = "{fileheader}\n\n\
-public class {untitled} {\n\
-\n\
-	public static void main (String args[]) {\
-		\n\
-		\n\
-	}\n\
-}\n\
-";
-
-static const gchar templates_filetype_ruby[] = "{fileheader}\n\n\
-class StdClass\n\
-	def initialize\n\
-		\n\
-	end\n\
-end\n\
-\n\
-x = StdClass.new\n\
-";
-
-static const gchar templates_filetype_python[] = "#!/usr/bin/env python\n\
-# -*- coding: utf-8 -*-\n#\n\
-{fileheader}\n\n\
-\n\
-def main():\n\
-	\n\
-	return 0\n\
-\n\
-if __name__ == '__main__':\n\
-	main()\n\
-";
-
-static const gchar templates_filetype_latex[] = "\
-\\documentclass[a4paper]{article}\n\
-\\usepackage[T1]{fontenc}\n\
-\\usepackage[utf8]{inputenc}\n\
-\\usepackage{lmodern}\n\
-\\usepackage{babel}\n\
-\\begin{document}\n\
-\n\
-\\end{document}\n\
-";
 
 static gchar *templates[GEANY_MAX_TEMPLATES];
 
-/* TODO: remove filetype templates, use custom file templates instead. */
+/* We should probably remove filetype templates support soon - users can use custom
+ * file templates instead. */
 static gchar *ft_templates[GEANY_MAX_BUILT_IN_FILETYPES] = {NULL};
 
 
@@ -335,6 +217,7 @@ static void init_general_templates(const gchar *year, const gchar *date, const g
 }
 
 
+/* Users should use custom filetypes instead, except for filetype none template */
 static void init_ft_templates(const gchar *year, const gchar *date, const gchar *datetime)
 {
 	filetype_id ft_id;
@@ -350,37 +233,8 @@ static void init_ft_templates(const gchar *year, const gchar *date, const gchar 
 			case GEANY_FILETYPES_NONE:
 				create_template_file_if_necessary(fname, templates_filetype_none);
 				break;
-			case GEANY_FILETYPES_C:
-				create_template_file_if_necessary(fname, templates_filetype_c);
+			default:
 				break;
-			case GEANY_FILETYPES_CPP:
-				create_template_file_if_necessary(fname, templates_filetype_cpp);
-				break;
-			case GEANY_FILETYPES_D:
-				create_template_file_if_necessary(fname, templates_filetype_d);
-				break;
-			case GEANY_FILETYPES_JAVA:
-				create_template_file_if_necessary(fname, templates_filetype_java);
-				break;
-			case GEANY_FILETYPES_PASCAL:
-				create_template_file_if_necessary(fname, templates_filetype_pascal);
-				break;
-			case GEANY_FILETYPES_PHP:
-				create_template_file_if_necessary(fname, templates_filetype_php);
-				break;
-			case GEANY_FILETYPES_HTML:
-				create_template_file_if_necessary(fname, templates_filetype_html);
-				break;
-			case GEANY_FILETYPES_RUBY:
-				create_template_file_if_necessary(fname, templates_filetype_ruby);
-				break;
-			case GEANY_FILETYPES_PYTHON:
-				create_template_file_if_necessary(fname, templates_filetype_python);
-				break;
-			case GEANY_FILETYPES_LATEX:
-				create_template_file_if_necessary(fname, templates_filetype_latex);
-				break;
-			default: break;
 		}
 		TEMPLATES_READ_FILE(fname, &ft_templates[ft_id]);
 		ft_templates[ft_id] = replace_all(ft_templates[ft_id], year, date, datetime);

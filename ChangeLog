@@ -5,6 +5,14 @@
  * src/templates.c, doc/geany.txt, doc/geany.html:
    Read custom file templates from $prefix/share/geany/templates/files as
    well as user dir.
+ * src/templates.c, data/templates, data/templates/files,
+   data/templates/files/file.rb, data/templates/files/file.html,
+   data/templates/files/main.java, data/templates/files/main.c,
+   data/templates/files/main.cxx, data/templates/files/file.php,
+   data/templates/files/main.d, data/templates/files/program.pas,
+   data/templates/files/main.py, data/templates/files/file.tex,
+   wscript, Makefile.am:
+   Move filetype template defaults into custom file template files.
 
 
 2009-09-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
