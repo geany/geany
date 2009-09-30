@@ -4000,15 +4000,17 @@ followed by a blank line.
 Custom file templates
 `````````````````````
 
-These are read from the ``~/.config/geany/templates/files`` directory
-(created the first time Geany is started). The filetype to use is
-detected from the template file's extension, if any. For example, creating
-a file ``main.c`` would add a menu item which created a new document with
-the filetype set to 'C'.
+These are read from the ``$prefix/share/geany/templates/files``
+directory (see `Installation prefix`_) and the
+``~/.config/geany/templates/files`` directory (created the first time
+Geany is started). The filetype to use is detected from the template
+file's extension, if any. For example, creating a file ``main.c``
+would add a menu item which created a new document with the filetype
+set to 'C'.
 
 The template file is read from disk when the corresponding menu item is
 clicked, so you don't need to restart Geany after editing a custom file
-template.
+template, only after adding a new one.
 
 Filetype templates
 ``````````````````

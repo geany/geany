@@ -2,6 +2,9 @@
 
  * src/highlighting.c, data/filetypes.vala:
    Add Vala keywords to conf file.
+ * src/templates.c, doc/geany.txt, doc/geany.html:
+   Read custom file templates from $prefix/share/geany/templates/files as
+   well as user dir.
 
 
 2009-09-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

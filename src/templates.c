@@ -454,8 +454,9 @@ static gchar *get_template_from_file(const gchar *locale_fname, const gchar *doc
 		utils_string_replace_all(template, "{fileheader}", file_header);
 
 		utils_free_pointers(5, year, date, datetime, file_header, content, NULL);
+		return g_string_free(template, FALSE);
 	}
-	return g_string_free(template, FALSE);
+	return NULL;
 }
 
 
@@ -465,15 +466,25 @@ on_new_with_file_template(GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer user_dat
 	gchar *fname = ui_menu_item_get_text(menuitem);
 	GeanyFiletype *ft;
 	gchar *template;
-	gchar *extension = strrchr(fname, '.'); /* easy way to get the file extension */
+	const gchar *extension = strrchr(fname, '.'); /* easy way to get the file extension */
 	gchar *new_filename = g_strconcat(GEANY_STRING_UNTITLED, extension, NULL);
+	gchar *path;
 
 	ft = filetypes_detect_from_extension(fname);
 	setptr(fname, utils_get_locale_from_utf8(fname));
+
 	/* fname is just the basename from the menu item, so prepend the custom files path */
-	setptr(fname, g_build_path(G_DIR_SEPARATOR_S, app->configdir, GEANY_TEMPLATES_SUBDIR,
-		"files", fname, NULL));
-	template = get_template_from_file(fname, new_filename, ft);
+	path = g_build_path(G_DIR_SEPARATOR_S, app->configdir, GEANY_TEMPLATES_SUBDIR,
+		"files", fname, NULL);
+	template = get_template_from_file(path, new_filename, ft);
+	if (!template)
+	{
+		/* try the system path */
+		path = g_build_path(G_DIR_SEPARATOR_S, app->datadir, GEANY_TEMPLATES_SUBDIR,
+			"files", fname, NULL);
+		template = get_template_from_file(path, new_filename, ft);
+	}
+	g_free(path);
 	g_free(fname);
 
 	document_new_file(new_filename, ft, template);
@@ -525,24 +536,49 @@ static gint compare_filenames_by_filetype(gconstpointer a, gconstpointer b)
 }
 
 
+static void utils_slist_remove_next(GSList *node)
+{
+	GSList *old = node->next;
+
+	g_return_if_fail(old);
+
+	node->next = old->next;
+	g_slist_free_1(old);
+}
+
+
 static gboolean add_custom_template_items(void)
 {
 	gchar *path = g_build_path(G_DIR_SEPARATOR_S, app->configdir, GEANY_TEMPLATES_SUBDIR,
 		"files", NULL);
 	GSList *list = utils_get_file_list_full(path, FALSE, FALSE, NULL);
+	GSList *syslist, *node;
 
 	if (!list)
 	{
 		utils_mkdir(path, FALSE);
-		g_free(path);
-		return FALSE;
 	}
+	setptr(path, g_build_path(G_DIR_SEPARATOR_S, app->datadir, GEANY_TEMPLATES_SUBDIR,
+		"files", NULL));
+	syslist = utils_get_file_list_full(path, FALSE, FALSE, NULL);
+	/* merge lists */
+	list = g_slist_concat(list, syslist);
+
 	list = g_slist_sort(list, compare_filenames_by_filetype);
+	/* remove duplicates (next to each other after sorting) */
+	foreach_slist(node, list)
+	{
+		if (node->next && utils_str_equal(node->next->data, node->data))
+		{
+			g_free(node->next->data);
+			utils_slist_remove_next(node);
+		}
+	}
 	g_slist_foreach(list, add_file_item, NULL);
 	g_slist_foreach(list, (GFunc) g_free, NULL);
 	g_slist_free(list);
 	g_free(path);
-	return TRUE;
+	return list != NULL;
 }
 
 
