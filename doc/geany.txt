@@ -3952,7 +3952,7 @@ Geany supports the following templates:
 * Function description
 * Short GPL notice
 * Short BSD notice
-* Filetype template
+* File templates
 
 To use these templates, just open the Edit menu or open the popup menu
 by right-clicking in the editor widget, and choose "Insert Comments"
@@ -3990,25 +3990,27 @@ File templates are templates used as the basis of a new file. To
 use them, choose the *New (with Template)* menu item from the *File*
 menu.
 
-By default, templates are created for some filetypes. Custom file
-templates can be added by creating the appropriate template file and
-restarting Geany. You can also edit the default filetype templates.
+By default, file templates are installed for some filetypes. Custom
+file templates can be added by creating the appropriate template file
+and restarting Geany. You can also edit the default file templates.
 
-The file's contents are just the text to place in the document,
-except for the optional ``{fileheader}`` template wildcard. This can
-be placed anywhere, but is usually on the first line of the file,
-followed by a blank line.
+The file's contents are just the text to place in the document, with
+optional template wildcards like ``{fileheader}``. The fileheader
+wildcard can be placed anywhere, but it's usually put on the first
+line of the file, followed by a blank line.
 
 Custom file templates
 `````````````````````
 
-These are read from the ``$prefix/share/geany/templates/files``
-directory (see `Installation prefix`_) and the
-``~/.config/geany/templates/files`` directory (created the first time
-Geany is started). The filetype to use is detected from the template
-file's extension, if any. For example, creating a file ``main.c``
-would add a menu item which created a new document with the filetype
-set to 'C'.
+These are read from the following directories:
+
+* ``$prefix/share/geany/templates/files`` (see `Installation prefix`_)
+* ``~/.config/geany/templates/files`` (created the first time
+  Geany is started).
+
+The filetype to use is detected from the template file's extension, if
+any. For example, creating a file ``module.c`` would add a menu item
+which created a new document with the filetype set to 'C'.
 
 The template file is read from disk when the corresponding menu item is
 clicked, so you don't need to restart Geany after editing a custom file
@@ -4016,6 +4018,9 @@ template, only after adding a new one.
 
 Filetype templates
 ``````````````````
+
+.. note::
+    It's recommended to use custom file templates instead.
 
 Filetype template files are read from the ``~/.config/geany/templates``
 directory, and are named "filetype." followed by the filetype
