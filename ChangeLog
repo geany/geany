@@ -5,6 +5,10 @@
    filetypes.
  * src/highlighting.c:
    Use jscript_keyword for SCE_HB[A]_WORD markup styles.
+ * src/templates.c:
+   Group 'New with template' items by filetype submenu (currently only for
+   toolbar menu).
+   Show custom file template items before filetype template items.
 
 
 2009-09-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

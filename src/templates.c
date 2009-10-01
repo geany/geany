@@ -258,9 +258,10 @@ on_new_with_filetype_template(GtkMenuItem *menuitem, gpointer user_data)
 
 
 /* template items for the new file menu */
-static void create_new_filetype_items(void)
+static gboolean create_new_filetype_items(void)
 {
 	GSList *node;
+	gboolean ret = FALSE;
 
 	foreach_slist(node, filetypes_by_title)
 	{
@@ -280,7 +281,10 @@ static void create_new_filetype_items(void)
 		gtk_widget_show(tmp_button);
 		gtk_container_add(GTK_CONTAINER(toolbar_new_file_menu), tmp_button);
 		g_signal_connect(tmp_button, "activate", G_CALLBACK(on_new_with_filetype_template), ft);
+
+		ret = TRUE;
 	}
+	return ret;
 }
 
 
@@ -346,14 +350,15 @@ on_new_with_file_template(GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer user_dat
 }
 
 
-static void add_file_item(gpointer data, gpointer user_data)
+static void add_file_item(const gchar *fname, GtkWidget *menu)
 {
 	GtkWidget *tmp_menu, *tmp_button;
 	gchar *label;
 
-	g_return_if_fail(data);
+	g_return_if_fail(fname);
+	g_return_if_fail(menu);
 
-	label = utils_get_utf8_from_locale(data);
+	label = utils_get_utf8_from_locale(fname);
 
 	tmp_menu = gtk_menu_item_new_with_label(label);
 	gtk_widget_show(tmp_menu);
@@ -362,10 +367,39 @@ static void add_file_item(gpointer data, gpointer user_data)
 
 	tmp_button = gtk_menu_item_new_with_label(label);
 	gtk_widget_show(tmp_button);
-	gtk_container_add(GTK_CONTAINER(toolbar_new_file_menu), tmp_button);
+	gtk_container_add(GTK_CONTAINER(menu), tmp_button);
 	g_signal_connect(tmp_button, "activate", G_CALLBACK(on_new_with_file_template), NULL);
 
 	g_free(label);
+}
+
+
+static void add_file_items(GSList *list)
+{
+	GSList *node;
+	gsize size = sizeof(GtkWidget*) * filetypes_array->len;
+	GtkWidget **menus = g_alloca(size);
+
+	memset(menus, 0, size);	/* if only we had g_newa0() */
+
+	foreach_slist(node, list)
+	{
+		const gchar *fname = node->data;
+		GeanyFiletype *ft = filetypes_detect_from_extension(fname);
+		GtkWidget *menu = menus[ft->id];
+		GtkWidget *item;
+
+		if (!menu)
+		{
+			item = gtk_menu_item_new_with_label(ft->name);
+			menu = gtk_menu_new();
+			gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), menu);
+			gtk_widget_show_all(item);
+			gtk_container_add(GTK_CONTAINER(toolbar_new_file_menu), item);
+			menus[ft->id] = menu;
+		}
+		add_file_item(fname, menu);
+	}
 }
 
 
@@ -427,7 +461,7 @@ static gboolean add_custom_template_items(void)
 			utils_slist_remove_next(node);
 		}
 	}
-	g_slist_foreach(list, add_file_item, NULL);
+	add_file_items(list);
 	g_slist_foreach(list, (GFunc) g_free, NULL);
 	g_slist_free(list);
 	g_free(path);
@@ -437,26 +471,25 @@ static gboolean add_custom_template_items(void)
 
 static void create_file_template_menus(void)
 {
-	GtkWidget *sep1, *sep2 = NULL;
+	GtkWidget *sep1 = NULL, *sep2 = NULL;
 
 	new_with_template_menu = ui_lookup_widget(main_widgets.window, "menu_new_with_template1_menu");
 	toolbar_new_file_menu = gtk_menu_new();
 	/* we hold our own ref on the menu in case it is not used in the toolbar */
 	g_object_ref(toolbar_new_file_menu);
 
-	create_new_filetype_items();
-
-	sep1 = gtk_separator_menu_item_new();
-	gtk_container_add(GTK_CONTAINER(new_with_template_menu), sep1);
-	sep2 = gtk_separator_menu_item_new();
-	gtk_container_add(GTK_CONTAINER(toolbar_new_file_menu), sep2);
-
 	if (add_custom_template_items())
+	{
+		sep1 = gtk_separator_menu_item_new();
+		gtk_container_add(GTK_CONTAINER(new_with_template_menu), sep1);
+		sep2 = gtk_separator_menu_item_new();
+		gtk_container_add(GTK_CONTAINER(toolbar_new_file_menu), sep2);
+	}
+	if (create_new_filetype_items() && sep1)
 	{
 		gtk_widget_show(sep1);
 		gtk_widget_show(sep2);
 	}
-
 	geany_menu_button_action_set_menu(GEANY_MENU_BUTTON_ACTION(
 		toolbar_get_action_by_name("New")), toolbar_new_file_menu);
 }
