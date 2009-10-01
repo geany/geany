@@ -119,9 +119,6 @@ static const gchar templates_changelog[] = "\
 \n\
  * \n\n\n";
 
-/* Used when starting a new file normally */
-static const gchar templates_filetype_none[] = "";
-
 static gchar *templates[GEANY_MAX_TEMPLATES];
 
 /* We should probably remove filetype templates support soon - users can use custom
@@ -216,7 +213,6 @@ static void init_general_templates(const gchar *year, const gchar *date, const g
 }
 
 
-/* Users should use custom filetypes instead, except for filetype none template */
 static void init_ft_templates(const gchar *year, const gchar *date, const gchar *datetime)
 {
 	filetype_id ft_id;
@@ -227,14 +223,6 @@ static void init_ft_templates(const gchar *year, const gchar *date, const gchar 
 		gchar *shortname = g_strconcat("filetype.", ext, NULL);
 		gchar *fname = TEMPLATES_GET_FILENAME(shortname);
 
-		switch (ft_id)
-		{
-			case GEANY_FILETYPES_NONE:
-				create_template_file_if_necessary(fname, templates_filetype_none);
-				break;
-			default:
-				break;
-		}
 		TEMPLATES_READ_FILE(fname, &ft_templates[ft_id]);
 		ft_templates[ft_id] = replace_all(ft_templates[ft_id], year, date, datetime);
 
