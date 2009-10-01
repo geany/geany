@@ -503,9 +503,9 @@ void templates_init(void)
 	g_object_ref(new_with_template_menu);
 	{
 		GtkWidget *item = ui_lookup_widget(main_widgets.window, "file1");
-		/* reparent the menu as needed */
-		g_signal_connect(item, "activate", G_CALLBACK(on_menu_new_with_template1_show), NULL);
+		/* reparent the template menu as needed */
 		item = gtk_menu_item_get_submenu(GTK_MENU_ITEM(item));
+		g_signal_connect(item, "show", G_CALLBACK(on_menu_new_with_template1_show), NULL);
 		g_signal_connect(item, "hide", G_CALLBACK(on_menu_new_with_template1_hide), NULL);
 	}
 }
