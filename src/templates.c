@@ -43,8 +43,7 @@
 
 GeanyTemplatePrefs template_prefs;
 
-static GtkWidget *new_with_template_menu = NULL;	/* File menu submenu */
-static GtkWidget *toolbar_new_file_menu = NULL;
+static GtkWidget *new_with_template_menu = NULL;	/* submenu used for both file menu and toolbar */
 
 
 /* TODO: implement custom insertion templates, put these into files in data/templates */
@@ -266,7 +265,7 @@ static gboolean create_new_filetype_items(void)
 	foreach_slist(node, filetypes_by_title)
 	{
 		GeanyFiletype *ft = node->data;
-		GtkWidget *tmp_menu, *tmp_button;
+		GtkWidget *tmp_menu;
 		const gchar *label = ft->title;
 
 		if (ft->id >= GEANY_MAX_BUILT_IN_FILETYPES || ft_templates[ft->id] == NULL)
@@ -276,11 +275,6 @@ static gboolean create_new_filetype_items(void)
 		gtk_widget_show(tmp_menu);
 		gtk_container_add(GTK_CONTAINER(new_with_template_menu), tmp_menu);
 		g_signal_connect(tmp_menu, "activate", G_CALLBACK(on_new_with_filetype_template), ft);
-
-		tmp_button = gtk_menu_item_new_with_label(label);
-		gtk_widget_show(tmp_button);
-		gtk_container_add(GTK_CONTAINER(toolbar_new_file_menu), tmp_button);
-		g_signal_connect(tmp_button, "activate", G_CALLBACK(on_new_with_filetype_template), ft);
 
 		ret = TRUE;
 	}
@@ -352,18 +346,13 @@ on_new_with_file_template(GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer user_dat
 
 static void add_file_item(const gchar *fname, GtkWidget *menu)
 {
-	GtkWidget *tmp_menu, *tmp_button;
+	GtkWidget *tmp_button;
 	gchar *label;
 
 	g_return_if_fail(fname);
 	g_return_if_fail(menu);
 
 	label = utils_get_utf8_from_locale(fname);
-
-	tmp_menu = gtk_menu_item_new_with_label(label);
-	gtk_widget_show(tmp_menu);
-	gtk_container_add(GTK_CONTAINER(new_with_template_menu), tmp_menu);
-	g_signal_connect(tmp_menu, "activate", G_CALLBACK(on_new_with_file_template), NULL);
 
 	tmp_button = gtk_menu_item_new_with_label(label);
 	gtk_widget_show(tmp_button);
@@ -395,7 +384,7 @@ static void add_file_items(GSList *list)
 			menu = gtk_menu_new();
 			gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), menu);
 			gtk_widget_show_all(item);
-			gtk_container_add(GTK_CONTAINER(toolbar_new_file_menu), item);
+			gtk_container_add(GTK_CONTAINER(new_with_template_menu), item);
 			menus[ft->id] = menu;
 		}
 		add_file_item(fname, menu);
@@ -469,29 +458,42 @@ static gboolean add_custom_template_items(void)
 }
 
 
-static void create_file_template_menus(void)
+static void create_file_template_menu(void)
 {
-	GtkWidget *sep1 = NULL, *sep2 = NULL;
+	GtkWidget *sep = NULL;
 
-	new_with_template_menu = ui_lookup_widget(main_widgets.window, "menu_new_with_template1_menu");
-	toolbar_new_file_menu = gtk_menu_new();
-	/* we hold our own ref on the menu in case it is not used in the toolbar */
-	g_object_ref(toolbar_new_file_menu);
+	new_with_template_menu = gtk_menu_new();
 
 	if (add_custom_template_items())
 	{
-		sep1 = gtk_separator_menu_item_new();
-		gtk_container_add(GTK_CONTAINER(new_with_template_menu), sep1);
-		sep2 = gtk_separator_menu_item_new();
-		gtk_container_add(GTK_CONTAINER(toolbar_new_file_menu), sep2);
+		sep = gtk_separator_menu_item_new();
+		gtk_container_add(GTK_CONTAINER(new_with_template_menu), sep);
 	}
-	if (create_new_filetype_items() && sep1)
+	if (create_new_filetype_items() && sep)
 	{
-		gtk_widget_show(sep1);
-		gtk_widget_show(sep2);
+		gtk_widget_show(sep);
 	}
+	/* unless the file menu is showing, menu should be in the toolbar widget */
 	geany_menu_button_action_set_menu(GEANY_MENU_BUTTON_ACTION(
-		toolbar_get_action_by_name("New")), toolbar_new_file_menu);
+		toolbar_get_action_by_name("New")), new_with_template_menu);
+}
+
+
+static void on_menu_new_with_template1_show(GtkWidget *item)
+{
+	geany_menu_button_action_set_menu(
+		GEANY_MENU_BUTTON_ACTION(toolbar_get_action_by_name("New")), NULL);
+	item = ui_lookup_widget(main_widgets.window, "menu_new_with_template1");
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), new_with_template_menu);
+}
+
+
+static void on_menu_new_with_template1_hide(GtkWidget *item)
+{
+	item = ui_lookup_widget(main_widgets.window, "menu_new_with_template1");
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), NULL);
+	geany_menu_button_action_set_menu(
+		GEANY_MENU_BUTTON_ACTION(toolbar_get_action_by_name("New")), new_with_template_menu);
 }
 
 
@@ -508,7 +510,16 @@ void templates_init(void)
 	g_free(datetime);
 	g_free(year);
 
-	create_file_template_menus();
+	create_file_template_menu();
+	/* we hold our own ref on the menu as it has no parent whilst being moved */
+	g_object_ref(new_with_template_menu);
+	{
+		GtkWidget *item = ui_lookup_widget(main_widgets.window, "file1");
+		/* reparent the menu as needed */
+		g_signal_connect(item, "activate", G_CALLBACK(on_menu_new_with_template1_show), NULL);
+		item = gtk_menu_item_get_submenu(GTK_MENU_ITEM(item));
+		g_signal_connect(item, "hide", G_CALLBACK(on_menu_new_with_template1_hide), NULL);
+	}
 }
 
 
@@ -713,17 +724,14 @@ void templates_free_templates(void)
 		g_free(ft_templates[i]);
 	}
 	/* destroy "New with template" sub menu items (in case we want to reload the templates) */
-	children = gtk_container_get_children(GTK_CONTAINER(toolbar_new_file_menu));
-	foreach_list(item, children)
-	{
-		gtk_widget_destroy(GTK_WIDGET(item->data));
-	}
-	g_object_unref(toolbar_new_file_menu);
 	children = gtk_container_get_children(GTK_CONTAINER(new_with_template_menu));
 	foreach_list(item, children)
 	{
 		gtk_widget_destroy(GTK_WIDGET(item->data));
 	}
+	/* Shouldn't unrefing destroy children anyway? */
+	g_object_unref(new_with_template_menu);
+	new_with_template_menu = NULL;
 }
 
 

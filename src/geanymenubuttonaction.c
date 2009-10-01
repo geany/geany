@@ -132,7 +132,6 @@ void geany_menu_button_action_set_menu(GeanyMenubuttonAction *action, GtkWidget 
 	GSList *l;
 
 	g_return_if_fail(action != NULL);
-	g_return_if_fail(menu != NULL);
 
 	priv = GEANY_MENU_BUTTON_ACTION_GET_PRIVATE(action);
 

@@ -9,6 +9,9 @@
    Group 'New with template' items by filetype submenu (currently only for
    toolbar menu).
    Show custom file template items before filetype template items.
+ * src/templates.c, src/interface.c, src/geanymenubuttonaction.c,
+   geany.glade:
+   Only use one 'New with template' submenu - reparent as needed.
 
 
 2009-09-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

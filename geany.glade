@@ -67,7 +67,7 @@
 			  <property name="use_underline">True</property>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image2854">
+			    <widget class="GtkImage" id="image2880">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-new</property>
 			      <property name="icon_size">1</property>
@@ -75,19 +75,6 @@
 			      <property name="yalign">0.5</property>
 			      <property name="xpad">0</property>
 			      <property name="ypad">0</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenu" id="menu_new_with_template1_menu">
-
-			      <child>
-				<widget class="GtkMenuItem" id="invisible2">
-				  <property name="tooltip" translatable="yes">dummy tooltip, don't translate this.</property>
-				  <property name="label" translatable="yes">invisible</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
 			    </widget>
 			  </child>
 			</widget>
@@ -157,7 +144,7 @@
 			  <signal name="activate" handler="on_save_all1_activate" last_modification_time="Thu, 02 Jun 2005 14:15:30 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image2855">
+			    <widget class="GtkImage" id="image2881">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-save</property>
 			      <property name="icon_size">1</property>
@@ -178,7 +165,7 @@
 			  <signal name="activate" handler="on_toolbutton_reload_clicked" last_modification_time="Mon, 01 Sep 2008 16:57:06 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image2856">
+			    <widget class="GtkImage" id="image2882">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-revert-to-saved</property>
 			      <property name="icon_size">1</property>
@@ -198,7 +185,7 @@
 			  <property name="use_underline">True</property>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image2857">
+			    <widget class="GtkImage" id="image2883">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-revert-to-saved</property>
 			      <property name="icon_size">1</property>
@@ -285,7 +272,7 @@
 			  <signal name="activate" handler="on_close_other_documents1_activate" last_modification_time="Fri, 27 Jun 2008 15:19:28 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image2858">
+			    <widget class="GtkImage" id="image2884">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-close</property>
 			      <property name="icon_size">1</property>
@@ -306,7 +293,7 @@
 			  <signal name="activate" handler="on_close_all1_activate" last_modification_time="Thu, 02 Jun 2005 14:15:30 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image2859">
+			    <widget class="GtkImage" id="image2885">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-close</property>
 			      <property name="icon_size">1</property>
@@ -503,7 +490,7 @@
 				  <signal name="activate" handler="on_menu_increase_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:28:54 GMT"/>
 
 				  <child internal-child="image">
-				    <widget class="GtkImage" id="image2860">
+				    <widget class="GtkImage" id="image2886">
 				      <property name="visible">True</property>
 				      <property name="stock">gtk-indent</property>
 				      <property name="icon_size">1</property>
@@ -524,7 +511,7 @@
 				  <signal name="activate" handler="on_menu_decrease_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:28:54 GMT"/>
 
 				  <child internal-child="image">
-				    <widget class="GtkImage" id="image2861">
+				    <widget class="GtkImage" id="image2887">
 				      <property name="visible">True</property>
 				      <property name="stock">gtk-unindent</property>
 				      <property name="icon_size">1</property>
@@ -589,7 +576,7 @@
 			  <property name="use_underline">True</property>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image2862">
+			    <widget class="GtkImage" id="image2888">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-add</property>
 			      <property name="icon_size">1</property>
@@ -668,7 +655,7 @@
 			  <property name="use_underline">True</property>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image2863">
+			    <widget class="GtkImage" id="image2889">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-add</property>
 			      <property name="icon_size">1</property>
@@ -700,7 +687,7 @@
 			  <property name="use_underline">True</property>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image2864">
+			    <widget class="GtkImage" id="image2890">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-add</property>
 			      <property name="icon_size">1</property>
@@ -739,7 +726,7 @@
 			  <signal name="activate" handler="on_preferences1_activate" last_modification_time="Wed, 08 Jun 2005 11:35:19 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image2865">
+			    <widget class="GtkImage" id="image2891">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-preferences</property>
 			      <property name="icon_size">1</property>
@@ -810,7 +797,7 @@
 			  <signal name="activate" handler="on_replace1_activate" last_modification_time="Sun, 23 Oct 2005 13:22:36 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image2866">
+			    <widget class="GtkImage" id="image2892">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-find-and-replace</property>
 			      <property name="icon_size">1</property>
@@ -885,7 +872,7 @@
 			  <signal name="activate" handler="on_go_to_line_activate" last_modification_time="Sat, 06 Dec 2008 17:41:21 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image2867">
+			    <widget class="GtkImage" id="image2893">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-jump-to</property>
 			      <property name="icon_size">1</property>
@@ -919,7 +906,7 @@
 			  <signal name="activate" handler="on_change_font1_activate" last_modification_time="Fri, 22 Apr 2005 18:58:45 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image2868">
+			    <widget class="GtkImage" id="image2894">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-select-font</property>
 			      <property name="icon_size">1</property>
@@ -1391,7 +1378,7 @@
 			  <signal name="activate" handler="on_project_new1_activate" last_modification_time="Thu, 18 Jan 2007 22:16:24 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image2869">
+			    <widget class="GtkImage" id="image2895">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-new</property>
 			      <property name="icon_size">1</property>
@@ -1412,7 +1399,7 @@
 			  <signal name="activate" handler="on_project_open1_activate" last_modification_time="Mon, 15 Jan 2007 17:34:17 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image2870">
+			    <widget class="GtkImage" id="image2896">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-open</property>
 			      <property name="icon_size">1</property>
@@ -1441,7 +1428,7 @@
 			  <signal name="activate" handler="on_project_close1_activate" last_modification_time="Mon, 15 Jan 2007 17:34:17 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image2871">
+			    <widget class="GtkImage" id="image2897">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-close</property>
 			      <property name="icon_size">1</property>
@@ -1498,7 +1485,7 @@
 			  <signal name="activate" handler="on_show_color_chooser1_activate" last_modification_time="Wed, 22 Jun 2005 18:10:21 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image2872">
+			    <widget class="GtkImage" id="image2898">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-select-color</property>
 			      <property name="icon_size">1</property>
@@ -1537,7 +1524,7 @@
 			  <signal name="activate" handler="on_menu_reload_configuration1_activate" last_modification_time="Mon, 30 Jun 2008 16:19:40 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image2873">
+			    <widget class="GtkImage" id="image2899">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-refresh</property>
 			      <property name="icon_size">1</property>
@@ -1571,7 +1558,7 @@
 			  <signal name="activate" handler="on_help1_activate" last_modification_time="Sun, 24 Jul 2005 15:23:11 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image2874">
+			    <widget class="GtkImage" id="image2900">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-help</property>
 			      <property name="icon_size">1</property>
