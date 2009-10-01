@@ -1390,7 +1390,7 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords)
 	set_sci_style(sci, SCE_HB_DEFAULT, GEANY_FILETYPES_XML, 44);
 	set_sci_style(sci, SCE_HB_COMMENTLINE, GEANY_FILETYPES_XML, 46);
 	set_sci_style(sci, SCE_HB_NUMBER, GEANY_FILETYPES_XML, 48);
-	set_sci_style(sci, SCE_HB_WORD, GEANY_FILETYPES_XML, 49);
+	set_sci_style(sci, SCE_HB_WORD, GEANY_FILETYPES_XML, 50);	/* keywords */
 	set_sci_style(sci, SCE_HB_STRING, GEANY_FILETYPES_XML, 51);
 	set_sci_style(sci, SCE_HB_IDENTIFIER, GEANY_FILETYPES_XML, 53);
 	set_sci_style(sci, SCE_HB_STRINGEOL, GEANY_FILETYPES_XML, 54);
@@ -1400,7 +1400,7 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords)
 	set_sci_style(sci, SCE_HBA_DEFAULT, GEANY_FILETYPES_XML, 44);
 	set_sci_style(sci, SCE_HBA_COMMENTLINE, GEANY_FILETYPES_XML, 46);
 	set_sci_style(sci, SCE_HBA_NUMBER, GEANY_FILETYPES_XML, 48);
-	set_sci_style(sci, SCE_HBA_WORD, GEANY_FILETYPES_XML, 49);
+	set_sci_style(sci, SCE_HBA_WORD, GEANY_FILETYPES_XML, 50);	/* keywords */
 	set_sci_style(sci, SCE_HBA_STRING, GEANY_FILETYPES_XML, 51);
 	set_sci_style(sci, SCE_HBA_IDENTIFIER, GEANY_FILETYPES_XML, 53);
 	set_sci_style(sci, SCE_HBA_STRINGEOL, GEANY_FILETYPES_XML, 54);
