@@ -247,8 +247,7 @@ static void init_ft_templates(const gchar *year, const gchar *date, const gchar 
 
 
 static void
-on_new_with_template                   (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+on_new_with_filetype_template(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GeanyFiletype *ft = user_data;
 	gchar *template = templates_get_template_new_file(ft);
@@ -259,7 +258,7 @@ on_new_with_template                   (GtkMenuItem     *menuitem,
 
 
 /* template items for the new file menu */
-static void create_new_menu_items(void)
+static void create_new_filetype_items(void)
 {
 	GSList *node;
 
@@ -269,18 +268,18 @@ static void create_new_menu_items(void)
 		GtkWidget *tmp_menu, *tmp_button;
 		const gchar *label = ft->title;
 
-		if (ft_templates[ft->id] == NULL)
+		if (ft->id >= GEANY_MAX_BUILT_IN_FILETYPES || ft_templates[ft->id] == NULL)
 			continue;
 
 		tmp_menu = gtk_menu_item_new_with_label(label);
 		gtk_widget_show(tmp_menu);
 		gtk_container_add(GTK_CONTAINER(new_with_template_menu), tmp_menu);
-		g_signal_connect(tmp_menu, "activate", G_CALLBACK(on_new_with_template), ft);
+		g_signal_connect(tmp_menu, "activate", G_CALLBACK(on_new_with_filetype_template), ft);
 
 		tmp_button = gtk_menu_item_new_with_label(label);
 		gtk_widget_show(tmp_button);
 		gtk_container_add(GTK_CONTAINER(toolbar_new_file_menu), tmp_button);
-		g_signal_connect(tmp_button, "activate", G_CALLBACK(on_new_with_template), ft);
+		g_signal_connect(tmp_button, "activate", G_CALLBACK(on_new_with_filetype_template), ft);
 	}
 }
 
@@ -445,7 +444,7 @@ static void create_file_template_menus(void)
 	/* we hold our own ref on the menu in case it is not used in the toolbar */
 	g_object_ref(toolbar_new_file_menu);
 
-	create_new_menu_items();
+	create_new_filetype_items();
 
 	sep1 = gtk_separator_menu_item_new();
 	gtk_container_add(GTK_CONTAINER(new_with_template_menu), sep1);
@@ -605,6 +604,8 @@ static gchar *get_file_template(GeanyFiletype *ft)
 {
 	filetype_id ft_id = FILETYPE_ID(ft);
 
+	g_return_val_if_fail(ft_id < GEANY_MAX_BUILT_IN_FILETYPES, NULL);
+
 	return g_strdup(ft_templates[ft_id]);
 }
 
@@ -613,6 +614,8 @@ gchar *templates_get_template_new_file(GeanyFiletype *ft)
 {
 	gchar *ft_template = NULL;
 	gchar *file_header = NULL;
+
+	g_return_val_if_fail(ft->id < GEANY_MAX_BUILT_IN_FILETYPES, NULL);
 
 	if (FILETYPE_ID(ft) == GEANY_FILETYPES_NONE)
 		return get_file_template(ft);
