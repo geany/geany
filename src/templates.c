@@ -319,6 +319,7 @@ on_new_with_file_template(GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer user_dat
 	if (!template)
 	{
 		/* try the system path */
+		g_free(path);
 		path = g_build_path(G_DIR_SEPARATOR_S, app->datadir, GEANY_TEMPLATES_SUBDIR,
 			"files", fname, NULL);
 		template = get_template_from_file(path, new_filename, ft);
