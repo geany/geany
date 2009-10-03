@@ -1502,6 +1502,9 @@ static void styleset_java(ScintillaObject *sci)
 	sci_set_keywords(sci, 2, style_sets[GEANY_FILETYPES_JAVA].keywords[2]);
 	sci_set_keywords(sci, 4, style_sets[GEANY_FILETYPES_JAVA].keywords[3]);
 
+	/* assign global types, merge them with user defined keywords and set them */
+	assign_global_and_user_keywords(sci, style_sets[ft_id].keywords[1], filetypes[ft_id]->lang);
+
 	styleset_c_like(sci, GEANY_FILETYPES_JAVA);
 }
 

@@ -6,6 +6,9 @@
  * src/printing.c:
    Enable embedded page setup properties in the (Unix) Print dialog
    on newer GTK versions (closes #2870596).
+ * src/highlighting.c:
+   Map global types (read from tags files) to keyword style for
+   filetype Java.
 
 
 2009-10-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
