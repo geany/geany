@@ -3,6 +3,9 @@
  * doc/geany.txt, doc/geany.html:
    Improve information about predefined keybindings which are
    commonly used across applications (patch by Lex Trotman, thanks).
+ * src/printing.c:
+   Enable embedded page setup properties in the (Unix) Print dialog
+   on newer GTK versions (closes #2870596).
 
 
 2009-10-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
