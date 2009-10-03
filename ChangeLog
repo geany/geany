@@ -1,3 +1,10 @@
+2009-10-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * doc/geany.txt, doc/geany.html:
+   Improve information about predefined keybindings which are
+   commonly used across applications (patch by Lex Trotman, thanks).
+
+
 2009-10-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/templates.c:

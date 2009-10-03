@@ -2803,25 +2803,28 @@ want to assign to the action and it will be saved when you press OK.
 You can define only one key combination for each action and each key
 combination can only be defined for one action.
 
-Some of the default key combinations cannot be changed, e.g. menu_new
-or menu_open. These are set by GTK and should be kept, but you can
-still add other key combinations for these actions. For example to
-execute menu_open by default *Ctrl-O* is set, but you can also define
-*Alt-O*, so that the file open dialog is shown by pressing either
-*Ctrl-O* or *Alt-O*.
+Some of the default key combinations are common across many
+applications, for example *Ctrl-N* for New and *Ctrl-O* for Open.
+Because they are so common it is not advisable to change these, but
+you can add other key combinations for these actions. For example
+*Ctrl-O* is set to execute menu_open by default, but you can also
+define *Alt-O*, so that the file open dialog is shown by pressing
+either *Ctrl-O* or *Alt-O*.
 
-The following tables list all customizable keyboard shortcuts.
+The following tables list all customizable keyboard shortcuts, those
+which are common to many applications are marked with (C) after the
+shortcut.
 
 File keybindings
 ````````````````
 =============================== ========================= ==================================================
 Action                          Default shortcut          Description
 =============================== ========================= ==================================================
-New                             Ctrl-N                    Creates a new file.
+New                             Ctrl-N  (C)               Creates a new file.
 
-Open                            Ctrl-O                    Opens a file.
+Open                            Ctrl-O  (C)               Opens a file.
 
-Save                            Ctrl-S                    Saves the current file.
+Save                            Ctrl-S  (C)               Saves the current file.
 
 Save As                                                   Saves the current file under a new name.
 
@@ -2829,12 +2832,12 @@ Save all                        Ctrl-Shift-S              Saves all open files.
 
 Close all                       Ctrl-Shift-W              Closes all open files.
 
-Close                           Ctrl-W                    Closes the current file.
+Close                           Ctrl-W  (C)               Closes the current file.
 
-Reload file                     Ctrl-R                    Reloads the current file. All unsaved changes
+Reload file                     Ctrl-R  (C)               Reloads the current file. All unsaved changes
                                                           will be lost.
 
-Print                           Ctrl-P                    Prints the current file.
+Print                           Ctrl-P  (C)               Prints the current file.
 =============================== ========================= ==================================================
 
 
@@ -2843,7 +2846,7 @@ Editor keybindings
 =============================== ========================= ==================================================
 Action                          Default shortcut          Description
 =============================== ========================= ==================================================
-Undo                            Ctrl-Z                    Un-does the last action.
+Undo                            Ctrl-Z  (C)               Un-does the last action.
 
 Redo                            Ctrl-Y                    Re-does the last action.
 
@@ -2906,11 +2909,11 @@ Clipboard keybindings
 =============================== ========================= ==================================================
 Action                          Default shortcut          Description
 =============================== ========================= ==================================================
-Cut                             Ctrl-X                    Cut the current selection to the clipboard.
+Cut                             Ctrl-X  (C)               Cut the current selection to the clipboard.
 
-Copy                            Ctrl-C                    Copy the current selection to the clipboard.
+Copy                            Ctrl-C  (C)               Copy the current selection to the clipboard.
 
-Paste                           Ctrl-V                    Paste the clipboard text into the current document.
+Paste                           Ctrl-V  (C)               Paste the clipboard text into the current document.
 
 Cut current line(s)             Ctrl-Shift-X              Cuts the current line (and any lines with a
                                                           selection) to the clipboard.
@@ -2925,7 +2928,7 @@ Select keybindings
 =============================== ========================= ==================================================
 Action                          Default shortcut          Description
 =============================== ========================= ==================================================
-Select all                      Ctrl-A                    Makes a selection of all text in the current
+Select all                      Ctrl-A  (C)               Makes a selection of all text in the current
                                                           document.
 
 Select current word             Alt-Shift-W               Selects the current word under the cursor.
@@ -3019,13 +3022,13 @@ Search keybindings
 =============================== ========================= ==================================================
 Action                          Default shortcut          Description
 =============================== ========================= ==================================================
-Find                            Ctrl-F                    Opens the Find dialog.
+Find                            Ctrl-F  (C)               Opens the Find dialog.
 
 Find Next                       Ctrl-G                    Finds next result.
 
 Find Previous                   Ctrl-Shift-G              Finds previous result.
 
-Replace                         Ctrl-H                    Opens the Replace dialog.
+Replace                         Ctrl-H  (C)               Opens the Replace dialog.
 
 Find in files                   Ctrl-Shift-F              Opens the Find in files dialog.
 
@@ -3115,7 +3118,7 @@ View keybindings
 =============================== ========================= ==================================================
 Action                          Default shortcut          Description
 =============================== ========================= ==================================================
-Fullscreen                      F11                       Switches to fullscreen mode.
+Fullscreen                      F11  (C)                  Switches to fullscreen mode.
 
 Toggle Messages Window                                    Toggles the message window (status and compiler
                                                           messages) on and off.
@@ -3126,9 +3129,9 @@ Toggle all additional widgets                             Hide and show all addi
                                                           notebook tabs, the toolbar, the messages window
                                                           and the statusbar.
 
-Zoom In                         Ctrl-+                    Zooms in the text
+Zoom In                         Ctrl-+  (C)               Zooms in the text
 
-Zoom Out                        Ctrl--                    Zooms out the text
+Zoom Out                        Ctrl--  (C)               Zooms out the text
 =============================== ========================= ==================================================
 
 Focus keybindings
@@ -3156,9 +3159,9 @@ Notebook tab keybindings
 =============================== ========================= ==================================================
 Action                          Default shortcut          Description
 =============================== ========================= ==================================================
-Switch to left document         Ctrl-PageUp               Switches to the previous open document.
+Switch to left document         Ctrl-PageUp   (C)         Switches to the previous open document.
 
-Switch to right document        Ctrl-PageDown             Switches to the next open document.
+Switch to right document        Ctrl-PageDown (C)         Switches to the next open document.
 
 Switch to last used document    Ctrl-Tab                  Switches to the previously shown document (if it's
                                                           still open).
@@ -3247,7 +3250,7 @@ Help keybindings
 =============================== ========================= ==================================================
 Action                          Default shortcut          Description
 =============================== ========================= ==================================================
-Help                            F1                        Opens the manual.
+Help                            F1 (C)                       Opens the manual.
 =============================== ========================= ==================================================
 
 
