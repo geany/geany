@@ -829,11 +829,16 @@ styleset_c_like_init(GKeyFile *config, GKeyFile *config_home, gint filetype_idx)
 		"globalclass"
 	};
 
+	new_styleset(filetype_idx, 21);
 	load_style_entries(config, config_home, filetype_idx, entries, G_N_ELEMENTS(entries));
+	get_keyfile_int(config, config_home, "styling", "styling_within_preprocessor",
+		1, 0, &style_sets[filetype_idx].styling[20]);
 }
 
 
-static void styleset_c_like(ScintillaObject *sci, gint filetype_idx)
+/* preprocess_ifdef: C#, Vala have a reduced preprocessor-like syntax without #ifdef */
+static void styleset_c_like(ScintillaObject *sci, gint filetype_idx,
+		gboolean preprocessor, gboolean preprocess_ifdef)
 {
 	gint styles[] = {
 		SCE_C_DEFAULT,
@@ -860,15 +865,22 @@ static void styleset_c_like(ScintillaObject *sci, gint filetype_idx)
 	};
 
 	apply_style_entries(sci, filetype_idx, styles, G_N_ELEMENTS(styles));
+	if (preprocessor)
+	{
+		if (style_sets[filetype_idx].styling[20].foreground == 1)
+			sci_set_property(sci, "styling.within.preprocessor", "1");
+		sci_set_property(sci, "preprocessor.symbol.$(file.patterns.cpp)", "#");
+		sci_set_property(sci, "preprocessor.start.$(file.patterns.cpp)",
+			preprocess_ifdef ? "if ifdef ifndef" : "if");
+		sci_set_property(sci, "preprocessor.middle.$(file.patterns.cpp)", "else elif");
+		sci_set_property(sci, "preprocessor.end.$(file.patterns.cpp)", "endif");
+	}
 }
 
 
 static void styleset_c_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_styleset(GEANY_FILETYPES_C, 21);
 	styleset_c_like_init(config, config_home, GEANY_FILETYPES_C);
-	get_keyfile_int(config, config_home, "styling", "styling_within_preprocessor",
-		1, 0, &style_sets[GEANY_FILETYPES_C].styling[20]);
 
 	style_sets[GEANY_FILETYPES_C].keywords = g_new(gchar*, 4);
 	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_C, 0);
@@ -891,23 +903,13 @@ static void styleset_c(ScintillaObject *sci)
 	assign_global_and_user_keywords(sci, style_sets[GEANY_FILETYPES_C].keywords[1],
 		filetypes[ft_id]->lang);
 
-	styleset_c_like(sci, GEANY_FILETYPES_C);
-
-	if (style_sets[GEANY_FILETYPES_C].styling[20].foreground == 1)
-		sci_set_property(sci, "styling.within.preprocessor", "1");
-	sci_set_property(sci, "preprocessor.symbol.$(file.patterns.cpp)", "#");
-	sci_set_property(sci, "preprocessor.start.$(file.patterns.cpp)", "if ifdef ifndef");
-	sci_set_property(sci, "preprocessor.middle.$(file.patterns.cpp)", "else elif");
-	sci_set_property(sci, "preprocessor.end.$(file.patterns.cpp)", "endif");
+	styleset_c_like(sci, GEANY_FILETYPES_C, TRUE, TRUE);
 }
 
 
 static void styleset_cpp_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_styleset(GEANY_FILETYPES_CPP, 21);
 	styleset_c_like_init(config, config_home, GEANY_FILETYPES_CPP);
-	get_keyfile_int(config, config_home, "styling", "styling_within_preprocessor",
-		1, 0, &style_sets[GEANY_FILETYPES_CPP].styling[20]);
 
 	style_sets[GEANY_FILETYPES_CPP].keywords = g_new(gchar*, 4);
 	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_CPP, 0);
@@ -931,23 +933,13 @@ static void styleset_cpp(ScintillaObject *sci)
 	assign_global_and_user_keywords(sci, style_sets[GEANY_FILETYPES_CPP].keywords[1],
 		filetypes[ft_id]->lang);
 
-	styleset_c_like(sci, GEANY_FILETYPES_CPP);
-
-	if (style_sets[GEANY_FILETYPES_CPP].styling[20].foreground == 1)
-		sci_set_property(sci, "styling.within.preprocessor", "1");
-	sci_set_property(sci, "preprocessor.symbol.$(file.patterns.cpp)", "#");
-	sci_set_property(sci, "preprocessor.start.$(file.patterns.cpp)", "if ifdef ifndef");
-	sci_set_property(sci, "preprocessor.middle.$(file.patterns.cpp)", "else elif");
-	sci_set_property(sci, "preprocessor.end.$(file.patterns.cpp)", "endif");
+	styleset_c_like(sci, GEANY_FILETYPES_CPP, TRUE, TRUE);
 }
 
 
 static void styleset_glsl_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_styleset(GEANY_FILETYPES_GLSL, 21);
 	styleset_c_like_init(config, config_home, GEANY_FILETYPES_GLSL);
-	get_keyfile_int(config, config_home, "styling", "styling_within_preprocessor",
-		1, 0, &style_sets[GEANY_FILETYPES_GLSL].styling[20]);
 
 	style_sets[GEANY_FILETYPES_GLSL].keywords = g_new(gchar*, 4);
 	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_GLSL, 0);
@@ -971,23 +963,13 @@ static void styleset_glsl(ScintillaObject *sci)
 	assign_global_and_user_keywords(sci, style_sets[GEANY_FILETYPES_GLSL].keywords[1],
 		filetypes[ft_id]->lang);
 
-	styleset_c_like(sci, GEANY_FILETYPES_GLSL);
-
-	if (style_sets[GEANY_FILETYPES_GLSL].styling[20].foreground == 1)
-		sci_set_property(sci, "styling.within.preprocessor", "1");
-	sci_set_property(sci, "preprocessor.symbol.$(file.patterns.cpp)", "#");
-	sci_set_property(sci, "preprocessor.start.$(file.patterns.cpp)", "if ifdef ifndef");
-	sci_set_property(sci, "preprocessor.middle.$(file.patterns.cpp)", "else elif");
-	sci_set_property(sci, "preprocessor.end.$(file.patterns.cpp)", "endif");
+	styleset_c_like(sci, GEANY_FILETYPES_GLSL, TRUE, TRUE);
 }
 
 
 static void styleset_cs_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_styleset(GEANY_FILETYPES_CS, 21);
 	styleset_c_like_init(config, config_home, GEANY_FILETYPES_CS);
-	get_keyfile_int(config, config_home, "styling", "styling_within_preprocessor",
-		1, 0, &style_sets[GEANY_FILETYPES_CS].styling[20]);
 
 	style_sets[GEANY_FILETYPES_CS].keywords = g_new(gchar*, 4);
 	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_CS, 0);
@@ -1009,19 +991,13 @@ static void styleset_cs(ScintillaObject *sci)
 	/* assign global types, merge them with user defined keywords and set them */
 	assign_global_and_user_keywords(sci, style_sets[ft_id].keywords[1], filetypes[ft_id]->lang);
 
-	styleset_c_like(sci, ft_id);
-
-	if (style_sets[ft_id].styling[20].foreground == 1)
-		sci_set_property(sci, "styling.within.preprocessor", "1");
+	styleset_c_like(sci, ft_id, TRUE, FALSE);
 }
 
 
 static void styleset_vala_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_styleset(GEANY_FILETYPES_VALA, 21);
 	styleset_c_like_init(config, config_home, GEANY_FILETYPES_VALA);
-	get_keyfile_int(config, config_home, "styling", "styling_within_preprocessor",
-		1, 0, &style_sets[GEANY_FILETYPES_VALA].styling[20]);
 
 	style_sets[GEANY_FILETYPES_VALA].keywords = g_new(gchar*, 4);
 	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_VALA, 0);
@@ -1043,10 +1019,7 @@ static void styleset_vala(ScintillaObject *sci)
 	/* assign global types, merge them with user defined keywords and set them */
 	assign_global_and_user_keywords(sci, style_sets[ft_id].keywords[1], filetypes[ft_id]->lang);
 
-	styleset_c_like(sci, ft_id);
-
-	if (style_sets[ft_id].styling[20].foreground == 1)
-		sci_set_property(sci, "styling.within.preprocessor", "1");
+	styleset_c_like(sci, ft_id, TRUE, FALSE);
 }
 
 
@@ -1485,7 +1458,6 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords)
 
 static void styleset_java_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_styleset(GEANY_FILETYPES_JAVA, 20);
 	styleset_c_like_init(config, config_home, GEANY_FILETYPES_JAVA);
 
 	style_sets[GEANY_FILETYPES_JAVA].keywords = g_new(gchar*, 5);
@@ -1511,7 +1483,7 @@ static void styleset_java(ScintillaObject *sci)
 	/* assign global types, merge them with user defined keywords and set them */
 	assign_global_and_user_keywords(sci, style_sets[ft_id].keywords[1], filetypes[ft_id]->lang);
 
-	styleset_c_like(sci, GEANY_FILETYPES_JAVA);
+	styleset_c_like(sci, GEANY_FILETYPES_JAVA, FALSE, FALSE);
 }
 
 
@@ -2806,7 +2778,6 @@ static void styleset_d(ScintillaObject *sci)
 
 static void styleset_ferite_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_styleset(GEANY_FILETYPES_FERITE, 20);
 	styleset_c_like_init(config, config_home, GEANY_FILETYPES_FERITE);
 
 	style_sets[GEANY_FILETYPES_FERITE].keywords = g_new(gchar*, 4);
@@ -2827,7 +2798,7 @@ static void styleset_ferite(ScintillaObject *sci)
 	sci_set_keywords(sci, 1, style_sets[GEANY_FILETYPES_FERITE].keywords[1]);
 	sci_set_keywords(sci, 2, style_sets[GEANY_FILETYPES_FERITE].keywords[2]);
 
-	styleset_c_like(sci, GEANY_FILETYPES_FERITE);
+	styleset_c_like(sci, GEANY_FILETYPES_FERITE, FALSE, FALSE);
 }
 
 
@@ -2941,7 +2912,6 @@ static void styleset_yaml(ScintillaObject *sci)
 
 static void styleset_js_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_styleset(GEANY_FILETYPES_JS, 20);
 	styleset_c_like_init(config, config_home, GEANY_FILETYPES_JS);
 
 	style_sets[GEANY_FILETYPES_JS].keywords = g_new(gchar*, 2);
@@ -2958,7 +2928,7 @@ static void styleset_js(ScintillaObject *sci)
 
 	sci_set_keywords(sci, 0, style_sets[GEANY_FILETYPES_JS].keywords[0]);
 
-	styleset_c_like(sci, GEANY_FILETYPES_JS);
+	styleset_c_like(sci, GEANY_FILETYPES_JS, FALSE, FALSE);
 }
 
 
@@ -3108,11 +3078,9 @@ static void styleset_basic(ScintillaObject *sci)
 
 static void styleset_actionscript_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_styleset(GEANY_FILETYPES_AS, 20);
 	styleset_c_like_init(config, config_home, GEANY_FILETYPES_AS);
 
 	style_sets[GEANY_FILETYPES_AS].keywords = g_new(gchar *, 4);
-
 	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_AS, 0);
 	get_keyfile_keywords(config, config_home, "secondary", GEANY_FILETYPES_AS, 1);
 	get_keyfile_keywords(config, config_home, "classes", GEANY_FILETYPES_AS, 2);
@@ -3128,21 +3096,18 @@ static void styleset_actionscript(ScintillaObject *sci)
 	sci_set_keywords(sci, 1, style_sets[GEANY_FILETYPES_AS].keywords[2]);
 	sci_set_keywords(sci, 3, style_sets[GEANY_FILETYPES_AS].keywords[1]);
 
-	styleset_c_like(sci, GEANY_FILETYPES_AS);
+	styleset_c_like(sci, GEANY_FILETYPES_AS, FALSE, FALSE);
 }
 
 
 static void styleset_haxe_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_styleset(GEANY_FILETYPES_HAXE, 20);
 	styleset_c_like_init(config, config_home, GEANY_FILETYPES_HAXE);
 
 	style_sets[GEANY_FILETYPES_HAXE].keywords = g_new(gchar*, 4);
-
 	get_keyfile_keywords(config, config_home, "primary", GEANY_FILETYPES_HAXE, 0);
 	get_keyfile_keywords(config, config_home, "secondary", GEANY_FILETYPES_HAXE, 1);
 	get_keyfile_keywords(config, config_home, "classes", GEANY_FILETYPES_HAXE, 2);
-
 	style_sets[GEANY_FILETYPES_HAXE].keywords[3] = NULL;
 }
 
@@ -3157,7 +3122,7 @@ static void styleset_haxe(ScintillaObject *sci)
 	sci_set_keywords(sci, 1, style_sets[GEANY_FILETYPES_HAXE].keywords[1]);
 	sci_set_keywords(sci, 3, style_sets[GEANY_FILETYPES_HAXE].keywords[2]);
 
-	styleset_c_like(sci, GEANY_FILETYPES_HAXE);
+	styleset_c_like(sci, GEANY_FILETYPES_HAXE, FALSE, FALSE);
 }
 
 
