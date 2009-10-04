@@ -42,9 +42,6 @@
 #include "utils.h"
 
 
-/* Note: Avoid using SSM in files not related to scintilla, use sciwrappers.h instead. */
-#define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
-
 /* Whitespace has to be set after setting wordchars. */
 #define GEANY_WHITESPACE_CHARS " \t" "!\"#$%&'()*+,-./:;<=>?@[\\]^`{|}~"
 
@@ -109,6 +106,9 @@ static GHashTable *named_style_hash = NULL;
 /* 0xBBGGRR format, set by "default" named style. */
 static GeanyLexerStyle gsd_default = {0x000000, 0xffffff, FALSE, FALSE};
 
+
+/* Note: Avoid using SSM in files not related to scintilla, use sciwrappers.h instead. */
+#define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
 
 static void sci_set_property(ScintillaObject *sci, const gchar *name, const gchar *value)
 {
@@ -1012,7 +1012,7 @@ static void styleset_cs(ScintillaObject *sci)
 	styleset_c_like(sci, ft_id);
 
 	if (style_sets[ft_id].styling[20].foreground == 1)
-		SSM(sci, ft_id, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
+		sci_set_property(sci, "styling.within.preprocessor", "1");
 }
 
 
@@ -1046,7 +1046,7 @@ static void styleset_vala(ScintillaObject *sci)
 	styleset_c_like(sci, ft_id);
 
 	if (style_sets[ft_id].styling[20].foreground == 1)
-		SSM(sci, ft_id, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
+		sci_set_property(sci, "styling.within.preprocessor", "1");
 }
 
 
