@@ -7204,7 +7204,7 @@ Match braces</property>
 			  <child>
 			    <widget class="GtkLabel" id="label_open_encoding">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Default encoding (existing files):</property>
+			      <property name="label" translatable="yes">Default encoding (existing non-Unicode files):</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -7232,7 +7232,7 @@ Match braces</property>
 			  <child>
 			    <widget class="GtkEventBox" id="eventbox3">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Sets the default encoding for opening existing files</property>
+			      <property name="tooltip" translatable="yes">Sets the default encoding for opening existing non-Unicode files</property>
 			      <property name="visible_window">True</property>
 			      <property name="above_child">False</property>
 
@@ -7257,9 +7257,9 @@ Match braces</property>
 			  <child>
 			    <widget class="GtkCheckButton" id="check_open_encoding">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">This option disables the automatic detection of the file encoding when opening files and opens the file with the specified encoding (usually not needed)</property>
+			      <property name="tooltip" translatable="yes">This option disables the automatic detection of the file encoding when opening non-Unicode files and opens the file with the specified encoding (usually not needed)</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Use fixed encoding when opening files</property>
+			      <property name="label" translatable="yes">Use fixed encoding when opening non-Unicode files</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">True</property>

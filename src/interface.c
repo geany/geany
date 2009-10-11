@@ -3985,7 +3985,7 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (0), 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label153), 0, 0.5);
 
-  label_open_encoding = gtk_label_new (_("Default encoding (existing files):"));
+  label_open_encoding = gtk_label_new (_("Default encoding (existing non-Unicode files):"));
   gtk_widget_show (label_open_encoding);
   gtk_table_attach (GTK_TABLE (table5), label_open_encoding, 0, 1, 2, 3,
                     (GtkAttachOptions) (GTK_FILL),
@@ -3997,18 +3997,18 @@ create_prefs_dialog (void)
   gtk_table_attach (GTK_TABLE (table5), eventbox3, 1, 2, 2, 3,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
-  gtk_tooltips_set_tip (tooltips, eventbox3, _("Sets the default encoding for opening existing files"), NULL);
+  gtk_tooltips_set_tip (tooltips, eventbox3, _("Sets the default encoding for opening existing non-Unicode files"), NULL);
 
   combo_open_encoding = gtk_combo_box_new_text ();
   gtk_widget_show (combo_open_encoding);
   gtk_container_add (GTK_CONTAINER (eventbox3), combo_open_encoding);
 
-  check_open_encoding = gtk_check_button_new_with_mnemonic (_("Use fixed encoding when opening files"));
+  check_open_encoding = gtk_check_button_new_with_mnemonic (_("Use fixed encoding when opening non-Unicode files"));
   gtk_widget_show (check_open_encoding);
   gtk_table_attach (GTK_TABLE (table5), check_open_encoding, 0, 2, 1, 2,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
-  gtk_tooltips_set_tip (tooltips, check_open_encoding, _("This option disables the automatic detection of the file encoding when opening files and opens the file with the specified encoding (usually not needed)"), NULL);
+  gtk_tooltips_set_tip (tooltips, check_open_encoding, _("This option disables the automatic detection of the file encoding when opening non-Unicode files and opens the file with the specified encoding (usually not needed)"), NULL);
 
   label219 = gtk_label_new (_("<b>Encodings</b>"));
   gtk_widget_show (label219);

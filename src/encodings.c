@@ -527,7 +527,7 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 	gchar *utf8_content;
 	gboolean check_regex = FALSE;
 	gboolean check_locale = FALSE;
-	gint i, len;
+	gint i, len, preferred_charset;
 
 	if ((gint)size == -1)
 	{
@@ -547,22 +547,40 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 	/* current locale is not UTF-8, we have to check this charset */
 	check_locale = ! g_get_charset((const gchar**) &charset);
 
-	for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
+	/* First check for preferred charset, if specified */
+	preferred_charset = file_prefs.default_open_encoding;
+
+	if (preferred_charset == encodings[GEANY_ENCODING_NONE].idx || preferred_charset < 0 || preferred_charset >= GEANY_ENCODINGS_MAX)
+		preferred_charset = -1;
+
+	/* -1 means "Preferred charset" */
+	for (i = -1; i < GEANY_ENCODINGS_MAX; i++)
 	{
-		if (G_UNLIKELY(i == encodings[GEANY_ENCODING_NONE].idx) || G_UNLIKELY(i == -1))
+		if (G_UNLIKELY(i == encodings[GEANY_ENCODING_NONE].idx) || G_UNLIKELY(i == -2))
 			continue;
 
-		if (check_regex)
+		if (i == -1)
+		{
+			if (preferred_charset != -1)
+			{
+				charset = encodings[preferred_charset].charset;
+				geany_debug("Preferred charset: %s", charset);
+				i = -2;
+			}
+			else
+				continue;
+		}
+		else if (check_regex)
 		{
 			check_regex = FALSE;
 			charset = regex_charset;
-			i = -1;
+			i = -2;
 		}
 		else if (check_locale)
 		{
 			check_locale = FALSE;
 			charset = locale_charset;
-			i = -1;
+			i = -2;
 		}
 		else
 			charset = encodings[i].charset;

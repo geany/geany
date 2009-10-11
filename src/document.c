@@ -1242,10 +1242,6 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 	{	/* doc possibly changed */
 		display_filename = utils_str_middle_truncate(utf8_filename, 100);
 
-		/* if default encoding for opening files is set, use it if no forced encoding is set */
-		if (file_prefs.default_open_encoding >= 0 && forced_enc == NULL)
-			forced_enc = encodings[file_prefs.default_open_encoding].charset;
-
 		if (! load_text_file(locale_filename, display_filename, &filedata, forced_enc))
 		{
 			g_free(display_filename);

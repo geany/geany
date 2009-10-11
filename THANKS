@@ -70,6 +70,7 @@ Jon Strait <jstrait(at)moonloop(dot)net> - Markdown filetype patch
 Forgeot Eric <eforgeot(at)yahoo(dot)fr> - Txt2Tags filetype patch
 Lex Trotman <elextr<at>gmail<dot>com> - Build commands configuration improvements, and more
 Ross McKay <rosko<at>zeta<dot>org<dot>au> - ASP preferred language option
+Alexey Antipov <1a_antipov(at)mail(dot)ru> - Apply file open encoding only to non-Unicode files
 
 Translators:
 ------------
