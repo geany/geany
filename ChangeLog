@@ -1,3 +1,9 @@
+2009-10-12  Lex Trotman  <elextr(at)gmail(dot)com>
+
+ * build.c
+   Ensure that old style build config is not loaded if it does not exist.
+
+
 2009-10-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * geany.glade, THANKS, src/about.c, src/document.c, src/encodings.c,

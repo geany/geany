@@ -2174,7 +2174,7 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 	GeanyProject  	*pj;
 	gchar 			**ftlist;
 	gchar 			*value, *basedir, *makebasedir;
-	gboolean 		 bvalue;
+	gboolean 		 bvalue=FALSE;
 
 	if (g_key_file_has_group(config, build_grp_name))
 	{
@@ -2256,16 +2256,27 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 	{
 		case GEANY_BCS_FT:
 			ft = (GeanyFiletype*)p;
-			if (ft->filecmds == NULL)
-				ft->filecmds = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_FT]);
 			value = g_key_file_get_string(config, "build_settings", "compiler", NULL);
-			ASSIGNIF(ft->filecmds, GEANY_GBO_COMPILE, "_Compile", value);
+			if (value != NULL)
+			{
+				if (ft->filecmds == NULL)
+					ft->filecmds = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_FT]);
+				ASSIGNIF(ft->filecmds, GEANY_GBO_COMPILE, "_Compile", value);
+			}
 			value = g_key_file_get_string(config, "build_settings", "linker", NULL);
-			ASSIGNIF(ft->filecmds, GEANY_GBO_BUILD, "_Build", value);
-			if (ft->execcmds == NULL)
-				ft->execcmds = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_EXEC]);
+			if (value != NULL)
+			{
+				if (ft->filecmds == NULL)
+					ft->filecmds = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_FT]);
+				ASSIGNIF(ft->filecmds, GEANY_GBO_BUILD, "_Build", value);
+			}
 			value = g_key_file_get_string(config, "build_settings", "run_cmd", NULL);
-			ASSIGNIF(ft->execcmds, GEANY_GBO_EXEC, "_Execute", value);
+			if (value != NULL)
+			{
+				if (ft->execcmds == NULL)
+					ft->execcmds = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_EXEC]);
+				ASSIGNIF(ft->execcmds, GEANY_GBO_EXEC, "_Execute", value);
+			}
 			if (ft->error_regex_string == NULL)
 				ft->error_regex_string = g_key_file_get_string(config, "build_settings", "error_regex", NULL);
 			break;
@@ -2304,14 +2315,17 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 			g_free(basedir);
 			break;
 		case GEANY_BCS_PREF:
-			if (non_ft_pref == NULL)
-				non_ft_pref = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_NON_FT]);
 			value = g_key_file_get_string(config, "tools", "make_cmd", NULL);
-			ASSIGNIF(non_ft_pref, GEANY_GBO_CUSTOM, "Make Custom _Target",
-					g_strdup_printf("%s ", value));
-			ASSIGNIF(non_ft_pref, GEANY_GBO_MAKE_OBJECT, "Make _Object",
-					g_strdup_printf("%s %%e.o",value));
-			ASSIGNIF(non_ft_pref, GEANY_GBO_MAKE_ALL, "_Make", value);
+			if (value != NULL)
+			{
+				if (non_ft_pref == NULL )
+					non_ft_pref = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_NON_FT]);
+				ASSIGNIF(non_ft_pref, GEANY_GBO_CUSTOM, "Make Custom _Target",
+						g_strdup_printf("%s ", value));
+				ASSIGNIF(non_ft_pref, GEANY_GBO_MAKE_OBJECT, "Make _Object",
+						g_strdup_printf("%s %%e.o",value));
+				ASSIGNIF(non_ft_pref, GEANY_GBO_MAKE_ALL, "_Make", value);
+			}
 			break;
 		default:
 			break;
