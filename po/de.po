@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-03 10:44+0200\n"
+"POT-Creation-Date: 2009-10-12 00:59+0200\n"
 "PO-Revision-Date: 2009-10-03 09:40+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
@@ -237,7 +237,7 @@ msgstr "Kein Dateityp"
 
 #: ../src/build.c:1814 ../src/build.c:1849
 msgid "Error Regular Expression:"
-msgstr "Fehler im regulären Ausdruck:"
+msgstr "Regulärer Ausdruck für Fehlermeldungen:"
 
 #: ../src/build.c:1842
 msgid "Non-Filetype Commands"
@@ -303,7 +303,7 @@ msgstr "Kommandos zum Erstellen konfigurieren"
 msgid "Do you really want to quit?"
 msgstr "Soll Geany wirklich beendet werden?"
 
-#: ../src/callbacks.c:471 ../src/document.c:2914 ../src/interface.c:328
+#: ../src/callbacks.c:471 ../src/document.c:2910 ../src/interface.c:328
 #: ../src/sidebar.c:580
 msgid "_Reload"
 msgstr "_Neu laden"
@@ -620,7 +620,7 @@ msgstr "Datei »%s« wurde geschlossen."
 msgid "New file \"%s\" opened."
 msgstr "Neue Datei »%s« geöffnet."
 
-#: ../src/document.c:940 ../src/document.c:1454
+#: ../src/document.c:940 ../src/document.c:1450
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Konnte Datei »%s« nicht öffnen (%s)."
@@ -677,7 +677,7 @@ msgstr "Setze Einrückungsmodus %s für »%s«."
 msgid "Invalid filename"
 msgstr "Ungültiger Dateiname"
 
-#: ../src/document.c:1332
+#: ../src/document.c:1328
 #, c-format
 msgid "File %s reloaded."
 msgstr "Datei »%s« neu geladen."
@@ -685,20 +685,20 @@ msgstr "Datei »%s« neu geladen."
 #. For translators: this is the status window message for opening a file. %d is the number
 #. * of the newly opened file, %s indicates whether the file is opened read-only
 #. * (it is replaced with the string ", read-only").
-#: ../src/document.c:1337
+#: ../src/document.c:1333
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "Datei »%s« geöffnet (%d%s)."
 
-#: ../src/document.c:1339
+#: ../src/document.c:1335
 msgid ", read-only"
 msgstr ", schreibgeschützt"
 
-#: ../src/document.c:1549
+#: ../src/document.c:1545
 msgid "Error renaming file."
 msgstr "Fehler beim Umbenennen der Datei."
 
-#: ../src/document.c:1624
+#: ../src/document.c:1620
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -707,7 +707,7 @@ msgstr ""
 "Beim Konvertieren der Datei von UTF-8 nach »%s« ist ein Fehler aufgetreten. "
 "Die Datei wird <i>nicht</i> gespeichert."
 
-#: ../src/document.c:1646
+#: ../src/document.c:1642
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -716,52 +716,52 @@ msgstr ""
 "Fehlermeldung: %s\n"
 "Der Fehler trat bei »%s« (Zeile: %d, Spalte: %d) auf."
 
-#: ../src/document.c:1651
+#: ../src/document.c:1647
 #, c-format
 msgid "Error message: %s."
 msgstr "Fehlermeldung: %s."
 
-#: ../src/document.c:1754 ../src/document.c:1817
+#: ../src/document.c:1750 ../src/document.c:1813
 msgid "Error saving file."
 msgstr "Fehler beim Speichern der Datei."
 
-#: ../src/document.c:1816
+#: ../src/document.c:1812
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Fehler beim Speichern der Datei (%s)."
 
-#: ../src/document.c:1841
+#: ../src/document.c:1837
 #, c-format
 msgid "File %s saved."
 msgstr "Datei »%s« wurde gespeichert."
 
-#: ../src/document.c:1909 ../src/document.c:1966 ../src/document.c:1974
+#: ../src/document.c:1905 ../src/document.c:1962 ../src/document.c:1970
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "»%s« wurde nicht gefunden."
 
-#: ../src/document.c:1974
+#: ../src/document.c:1970
 msgid "Wrap search and find again?"
 msgstr "Suche vom Dokumentanfang bzw. -ende neu beginnen?"
 
-#: ../src/document.c:2053 ../src/search.c:1085 ../src/search.c:1659
+#: ../src/document.c:2049 ../src/search.c:1085 ../src/search.c:1659
 #: ../src/search.c:1660
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Keine Treffer für »%s« gefunden."
 
-#: ../src/document.c:2064 ../src/document.c:2073
+#: ../src/document.c:2060 ../src/document.c:2069
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] "%s: %d mal wurde »%s« mit »%s« ersetzt."
 msgstr[1] "%s: %d mal wurde »%s« mit »%s« ersetzt."
 
-#: ../src/document.c:2915
+#: ../src/document.c:2911
 msgid "Do you want to reload it?"
 msgstr "Möchten Sie die Datei neu laden?"
 
-#: ../src/document.c:2916
+#: ../src/document.c:2912
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
@@ -770,11 +770,11 @@ msgstr ""
 "Die Datei »%s« auf dem Datenträger ist aktueller als die momentan geöffnete "
 "Version."
 
-#: ../src/document.c:2937
+#: ../src/document.c:2933
 msgid "Try to resave the file?"
 msgstr "Versuchen die Datei erneut zu speichern?"
 
-#: ../src/document.c:2938
+#: ../src/document.c:2934
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "»%s« wurde nicht auf dem Datenträger gefunden."
@@ -2330,22 +2330,26 @@ msgid "Default encoding (new files):"
 msgstr "Standardzeichenkodierung (neue Dateien):"
 
 #: ../src/interface.c:3988
-msgid "Default encoding (existing files):"
+#, fuzzy
+msgid "Default encoding (existing non-Unicode files):"
 msgstr "Standardzeichenkodierung (existierende Dateien):"
 
 #: ../src/interface.c:4000
-msgid "Sets the default encoding for opening existing files"
+#, fuzzy
+msgid "Sets the default encoding for opening existing non-Unicode files"
 msgstr "Setzt die Standardzeichenkodierung für zu öffnende Dateien"
 
 #: ../src/interface.c:4006
-msgid "Use fixed encoding when opening files"
+#, fuzzy
+msgid "Use fixed encoding when opening non-Unicode files"
 msgstr "Benutze feststehende Zeichenkodierung beim Öffnen neuer Dateien"
 
 #: ../src/interface.c:4011
+#, fuzzy
 msgid ""
 "This option disables the automatic detection of the file encoding when "
-"opening files and opens the file with the specified encoding (usually not "
-"needed)"
+"opening non-Unicode files and opens the file with the specified encoding "
+"(usually not needed)"
 msgstr ""
 "Diese Option deaktiviert die automatische Erkennung der Zeichenkodierung und "
 "öffnet die ausgewählten Dateien mit der angegebenen Kodierung. (Wird nur in "
@@ -3510,22 +3514,22 @@ msgstr "Seite %d von %d"
 msgid "Printing of file %s was cancelled."
 msgstr "Drucken der Datei »%s« wurde abgebrochen."
 
-#: ../src/printing.c:783 ../src/printing.c:902
+#: ../src/printing.c:783 ../src/printing.c:905
 #, c-format
 msgid "File %s printed."
 msgstr "Datei »%s« wurde gedruckt."
 
-#: ../src/printing.c:832
+#: ../src/printing.c:835
 #, c-format
 msgid "Printing of %s failed (%s)."
 msgstr "Drucken der Datei »%s« ist fehlgeschlagen (%s)."
 
-#: ../src/printing.c:872
+#: ../src/printing.c:875
 msgid "Please set a print command in the preferences dialog first."
 msgstr ""
 "Bitte geben Sie zuerst einen Befehl zum Drucken in den Einstellungen an."
 
-#: ../src/printing.c:880
+#: ../src/printing.c:883
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -3536,7 +3540,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/printing.c:896
+#: ../src/printing.c:899
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
 msgstr "Drucken der Datei »%s« ist fehlgeschlagen (Rückgabewert: %s)."
