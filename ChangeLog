@@ -24,6 +24,12 @@
    Ensure that old style build config is not loaded if it does not exist.
 
 
+2009-10-12  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * THANKS, src/about.c, po/LINGUAS, po/gl.po:
+   Added Galician translation. Thanks to José Manuel Castroagudín Silva.
+
+
 2009-10-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * geany.glade, THANKS, src/about.c, src/document.c, src/encodings.c,
