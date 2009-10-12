@@ -3,6 +3,9 @@
  * src/templates.c:
    Don't use filetype submenus for templates (slower to navigate, often
    only 1 per-filetype anyway).
+ * src/templates.c:
+   Put old filetype template menu items in 'Old' submenu as they should
+   be removed after the 0.19 release.
 
 
 2009-10-12  Lex Trotman  <elextr(at)gmail(dot)com>

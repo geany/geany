@@ -244,26 +244,33 @@ on_new_with_filetype_template(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
-/* template items for the new file menu */
+/* TODO: remove filetype template support after 0.19 */
 static gboolean create_new_filetype_items(void)
 {
 	GSList *node;
 	gboolean ret = FALSE;
+	GtkWidget *menu = NULL;
 
 	foreach_slist(node, filetypes_by_title)
 	{
 		GeanyFiletype *ft = node->data;
-		GtkWidget *tmp_menu;
-		const gchar *label = ft->title;
+		GtkWidget *item;
 
 		if (ft->id >= GEANY_MAX_BUILT_IN_FILETYPES || ft_templates[ft->id] == NULL)
 			continue;
 
-		tmp_menu = gtk_menu_item_new_with_label(label);
-		gtk_widget_show(tmp_menu);
-		gtk_container_add(GTK_CONTAINER(new_with_template_menu), tmp_menu);
-		g_signal_connect(tmp_menu, "activate", G_CALLBACK(on_new_with_filetype_template), ft);
-
+		if (!menu)
+		{
+			item = gtk_menu_item_new_with_label(_("Old"));
+			menu = gtk_menu_new();
+			gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), menu);
+			gtk_widget_show_all(item);
+			gtk_container_add(GTK_CONTAINER(new_with_template_menu), item);
+		}
+		item = gtk_menu_item_new_with_label(ft->title);
+		gtk_widget_show(item);
+		gtk_container_add(GTK_CONTAINER(menu), item);
+		g_signal_connect(item, "activate", G_CALLBACK(on_new_with_filetype_template), ft);
 		ret = TRUE;
 	}
 	return ret;
