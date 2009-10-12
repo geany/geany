@@ -1,3 +1,9 @@
+2009-10-13  Lex Trotman  <elextr(at)gmail(dot)com>
+
+ * src/build.c:
+   Fix sensitivity settings for compile and build toolbar items.
+
+
 2009-10-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/templates.c:

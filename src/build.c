@@ -1381,7 +1381,7 @@ void build_menu_update(GeanyDocument *doc)
 	gint i, cmdcount, cmd, grp;
 	gboolean vis = FALSE;
 	gboolean have_path, build_running, exec_running, have_errors, cmd_sensitivity;
-	gboolean can_compile, can_make, run_sensitivity = FALSE, run_running = FALSE;
+	gboolean can_compile, can_build, can_make, run_sensitivity = FALSE, run_running = FALSE;
 	GeanyBuildCommand *bc;
 
 	if (menu_items.menu == NULL)
@@ -1481,10 +1481,10 @@ void build_menu_update(GeanyDocument *doc)
 		}
 	}
 
-	can_compile = get_build_cmd(doc, GEANY_GBG_FT, GBO_TO_CMD(GEANY_GBO_BUILD), NULL) != NULL
+	can_build = get_build_cmd(doc, GEANY_GBG_FT, GBO_TO_CMD(GEANY_GBO_BUILD), NULL) != NULL
 					&& have_path && ! build_running;
 	if (widgets.toolitem_build != NULL)
-		gtk_widget_set_sensitive(widgets.toolitem_build, can_compile);
+		gtk_widget_set_sensitive(widgets.toolitem_build, can_build);
 	can_make = FALSE;
 	if (widgets.toolitem_make_all != NULL)
 		gtk_widget_set_sensitive(widgets.toolitem_make_all,
@@ -1501,6 +1501,8 @@ void build_menu_update(GeanyDocument *doc)
 	if (widgets.toolitem_set_args != NULL)
 		gtk_widget_set_sensitive(widgets.toolitem_set_args, TRUE);
 
+	can_compile = get_build_cmd(doc, GEANY_GBG_FT, GBO_TO_CMD(GEANY_GBO_COMPILE), NULL) != NULL
+					&& have_path && ! build_running;
 	gtk_action_set_sensitive(widgets.compile_action, can_compile);
 	gtk_action_set_sensitive(widgets.build_action, can_make);
 	gtk_action_set_sensitive(widgets.run_action, run_sensitivity);
