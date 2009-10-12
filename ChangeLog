@@ -6,6 +6,12 @@
  * src/templates.c:
    Put old filetype template menu items in 'Old' submenu as they should
    be removed after the 0.19 release.
+ * src/keybindings.c, src/keybindings.h, src/pluginutils.c:
+   Add GeanyKeyGroup callback support, which allow keybinding callbacks
+   to be ignored if inappropriate so a later keybinding with the same
+   key combination can intercept it. (Also group callbacks are usually
+   tidier than separate callbacks).
+   Remove special handling for GEANY_KEYS_EDIT_COMPLETESNIPPET.
 
 
 2009-10-12  Lex Trotman  <elextr(at)gmail(dot)com>

@@ -136,7 +136,7 @@ void plugin_signal_connect(GeanyPlugin *plugin,
  * @param plugin Must be @ref geany_plugin.
  * @param section_name Name used in the configuration file, such as @c "html_chars".
  * @param count Number of keybindings for the group.
- * @param callback Unused, must be @c NULL.
+ * @param callback Group callback, or @c NULL if you only want individual keybinding callbacks.
  * @return The plugin's keybinding group.
  * @since 0.19. */
 GeanyKeyGroup *plugin_set_key_group(GeanyPlugin *plugin,
