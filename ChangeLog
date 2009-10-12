@@ -12,6 +12,10 @@
    key combination can intercept it. (Also group callbacks are usually
    tidier than separate callbacks).
    Remove special handling for GEANY_KEYS_EDIT_COMPLETESNIPPET.
+ * src/templates.c, src/build.c, src/utils.c, src/utils.h,
+   src/project.c, src/search.c, src/editor.c, src/ui_utils.c,
+   plugins/classbuilder.c:
+   Make utils_free_pointers() take 4 arguments, add to API.
 
 
 2009-10-12  Lex Trotman  <elextr(at)gmail(dot)com>

@@ -735,7 +735,7 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, 
 	{
 		ui_set_statusbar(TRUE, _("Failed to change the working directory to \"%s\""),
 				NZV(working_dir) ? working_dir : "<NULL>" );
-		utils_free_pointers(2, cmd_string, working_dir, NULL);
+		utils_free_pointers(cmd_string, working_dir, NULL, NULL);
 		return NULL;
 	}
 
@@ -747,7 +747,7 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, 
 			if (vte_cmd_nonscript != NULL)
 				*vte_cmd_nonscript = cmd_string;
 
-			utils_free_pointers(2, executable, locale_filename, NULL);
+			utils_free_pointers(executable, locale_filename, NULL, NULL);
 			return working_dir;
 		}
 		else
@@ -766,7 +766,7 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, 
 			NZV(cmd_string) ? cmd_string : NULL);
 	}
 
-	utils_free_pointers(4, cmd_string, tmp, executable, locale_filename, NULL);
+	utils_free_pointers(cmd_string, tmp, executable, locale_filename);
 
 	if (result)
 		return working_dir;

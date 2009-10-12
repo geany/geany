@@ -299,7 +299,8 @@ static gchar *get_template_from_file(const gchar *locale_fname, const gchar *doc
 		utils_string_replace_all(template, "{filename}", doc_filename);
 		utils_string_replace_all(template, "{fileheader}", file_header);
 
-		utils_free_pointers(5, year, date, datetime, file_header, content, NULL);
+		utils_free_pointers(year, date, datetime, file_header);
+		g_free(content);
 		return g_string_free(template, FALSE);
 	}
 	return NULL;
@@ -551,7 +552,7 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 	else
 		result = g_strconcat(tmp, frame_end, NULL);
 
-	utils_free_pointers(4, prefix, tmp, frame_start, frame_end, NULL);
+	utils_free_pointers(prefix, tmp, frame_start, frame_end);
 	g_strfreev(lines);
 	return result;
 }

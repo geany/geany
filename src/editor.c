@@ -2064,7 +2064,7 @@ static void snippets_replace_wildcards(GeanyEditor *editor, GString *text)
 	templates_replace_all(text, year, date, datetime);
 	utils_string_replace_all(text, "{filename}", basename);
 
-	utils_free_pointers(4, year, date, datetime, basename, NULL);
+	utils_free_pointers(year, date, datetime, basename);
 }
 
 
