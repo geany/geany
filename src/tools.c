@@ -343,22 +343,20 @@ static void cc_show_dialog_custom_commands(void)
 	{
 		/* get all hboxes which contain a label and an entry element */
 		GList *children = gtk_container_get_children(GTK_CONTAINER(cc.box));
-		GList *tmp;
+		GList *node, *list;
 		GSList *result_list = NULL;
 		gint j = 0;
 		gint len = 0;
 		gchar **result = NULL;
 		const gchar *text;
 
-		while (children != NULL)
+		foreach_list(node, children)
 		{
 			/* get the contents of each hbox */
-			tmp = gtk_container_get_children(GTK_CONTAINER(children->data));
+			list = gtk_container_get_children(GTK_CONTAINER(node->data));
 
 			/* first element of the list is the label, so skip it and get the entry element */
-			tmp = tmp->next;
-
-			text = gtk_entry_get_text(GTK_ENTRY(tmp->data));
+			text = gtk_entry_get_text(GTK_ENTRY(list->next->data));
 
 			/* if the content of the entry is non-empty, add it to the result array */
 			if (text[0] != '\0')
@@ -366,7 +364,7 @@ static void cc_show_dialog_custom_commands(void)
 				result_list = g_slist_append(result_list, g_strdup(text));
 				len++;
 			}
-			children = children->next;
+			g_list_free(list);
 		}
 		/* create a new null-terminated array but only if there any commands defined */
 		if (len > 0)
@@ -400,7 +398,7 @@ static void cc_on_custom_command_menu_activate(GtkMenuItem *menuitem, gpointer u
 	GeanyDocument *doc = document_get_current();
 	gint i, len;
 	gboolean enable;
-	GList *children;
+	GList *children, *node;
 
 	g_return_if_fail(doc != NULL);
 
@@ -409,15 +407,15 @@ static void cc_on_custom_command_menu_activate(GtkMenuItem *menuitem, gpointer u
 	children = gtk_container_get_children(GTK_CONTAINER(user_data));
 	len = g_list_length(children);
 	i = 0;
-	while (children != NULL)
+	foreach_list(node, children)
 	{
 		if (i == (len - 2))
 			break; /* stop before the last two elements (the seperator and the set entry) */
 
-		gtk_widget_set_sensitive(GTK_WIDGET(children->data), enable);
-		children = children->next;
+		gtk_widget_set_sensitive(GTK_WIDGET(node->data), enable);
 		i++;
 	}
+	g_list_free(children);
 }
 
 
@@ -484,22 +482,19 @@ void tools_create_insert_custom_command_menu_items(void)
 	GtkMenu *menu_edit = GTK_MENU(ui_lookup_widget(main_widgets.window, "send_selection_to2_menu"));
 	GtkMenu *menu_popup = GTK_MENU(ui_lookup_widget(main_widgets.editor_menu, "send_selection_to1_menu"));
 	GtkWidget *item;
-	GList *me_children;
+	GList *me_children, *node;
 	GList *mp_children;
 	static gboolean signal_set = FALSE;
 
 	/* first clean the menus to be able to rebuild them */
 	me_children = gtk_container_get_children(GTK_CONTAINER(menu_edit));
 	mp_children = gtk_container_get_children(GTK_CONTAINER(menu_popup));
-	while (me_children != NULL)
-	{
-		gtk_widget_destroy(GTK_WIDGET(me_children->data));
-		gtk_widget_destroy(GTK_WIDGET(mp_children->data));
-
-		me_children = me_children->next;
-		mp_children = mp_children->next;
-	}
-
+	foreach_list(node, me_children)
+		gtk_widget_destroy(GTK_WIDGET(node->data));
+	foreach_list(node, mp_children)
+		gtk_widget_destroy(GTK_WIDGET(node->data));
+	g_list_free(me_children);
+	g_list_free(mp_children);
 
 	if (ui_prefs.custom_commands == NULL || g_strv_length(ui_prefs.custom_commands) == 0)
 	{

@@ -1109,6 +1109,7 @@ static void recent_file_loaded(const gchar *utf8_filename, GeanyRecentFiles *grf
 	item = g_list_find_custom(children, utf8_filename, (GCompareFunc) find_recent_file_item);
 	if (item != NULL)
 		gtk_widget_destroy(GTK_WIDGET(item->data));
+	g_list_free(children);
 
 	if (grf->toolbar != NULL)
 	{
@@ -1116,6 +1117,7 @@ static void recent_file_loaded(const gchar *utf8_filename, GeanyRecentFiles *grf
 		item = g_list_find_custom(children, utf8_filename, (GCompareFunc) find_recent_file_item);
 		if (item != NULL)
 			gtk_widget_destroy(GTK_WIDGET(item->data));
+		g_list_free(children);
 	}
 	/* now prepend a new menuitem for the filename,
 	 * first for the recent files menu in the menu bar */
@@ -1158,6 +1160,8 @@ static void update_recent_menu(GeanyRecentFiles *grf)
 			item = g_list_next(item);
 		}
 	}
+	g_list_free(children);
+
 	/* create item for the menu bar menu */
 	tmp = gtk_menu_item_new_with_label(filename);
 	gtk_widget_show(tmp);
@@ -1178,6 +1182,8 @@ static void update_recent_menu(GeanyRecentFiles *grf)
 				item = g_list_next(item);
 			}
 		}
+		g_list_free(children);
+
 		/* create item for the tool bar menu */
 		tmp = gtk_menu_item_new_with_label(filename);
 		gtk_widget_show(tmp);

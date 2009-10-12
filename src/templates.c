@@ -687,6 +687,8 @@ void templates_free_templates(void)
 	{
 		gtk_widget_destroy(GTK_WIDGET(item->data));
 	}
+	g_list_free(children);
+
 	/* Shouldn't unrefing destroy children anyway? */
 	g_object_unref(new_with_template_menu);
 	new_with_template_menu = NULL;

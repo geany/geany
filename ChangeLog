@@ -16,11 +16,13 @@
    src/project.c, src/search.c, src/editor.c, src/ui_utils.c,
    plugins/classbuilder.c:
    Make utils_free_pointers() take 4 arguments, add to API.
+ * src/templates.c, src/tools.c, src/ui_utils.c:
+   Fix memory leaks with gtk_container_get_children().
 
 
 2009-10-12  Lex Trotman  <elextr(at)gmail(dot)com>
 
- * build.c:
+ * src/build.c:
    Ensure that old style build config is not loaded if it does not exist.
 
 
