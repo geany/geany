@@ -357,55 +357,6 @@ static void add_file_item(const gchar *fname, GtkWidget *menu)
 }
 
 
-static void add_file_items(GSList *list)
-{
-	GSList *node;
-	gsize size = sizeof(GtkWidget*) * filetypes_array->len;
-	GtkWidget **menus = g_alloca(size);
-
-	memset(menus, 0, size);	/* if only we had g_newa0() */
-
-	foreach_slist(node, list)
-	{
-		const gchar *fname = node->data;
-		GeanyFiletype *ft = filetypes_detect_from_extension(fname);
-		GtkWidget *menu = menus[ft->id];
-		GtkWidget *item;
-
-		if (!menu)
-		{
-			item = gtk_menu_item_new_with_label(ft->name);
-			menu = gtk_menu_new();
-			gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), menu);
-			gtk_widget_show_all(item);
-			gtk_container_add(GTK_CONTAINER(new_with_template_menu), item);
-			menus[ft->id] = menu;
-		}
-		add_file_item(fname, menu);
-	}
-}
-
-
-static gint compare_filenames_by_filetype(gconstpointer a, gconstpointer b)
-{
-	GeanyFiletype *ft_a = filetypes_detect_from_extension(a);
-	GeanyFiletype *ft_b = filetypes_detect_from_extension(b);
-
-	/* sort by filetype name first */
-	if (G_LIKELY(ft_a != ft_b))
-	{
-		/* None filetypes should come first */
-		if (G_UNLIKELY(ft_a->id == GEANY_FILETYPES_NONE))
-			return -1;
-		if (G_UNLIKELY(ft_b->id == GEANY_FILETYPES_NONE))
-			return 1;
-
-		return utils_str_casecmp(ft_a->name, ft_b->name);
-	}
-	return utils_str_casecmp(a, b);
-}
-
-
 static void utils_slist_remove_next(GSList *node)
 {
 	GSList *old = node->next;
@@ -434,7 +385,7 @@ static gboolean add_custom_template_items(void)
 	/* merge lists */
 	list = g_slist_concat(list, syslist);
 
-	list = g_slist_sort(list, compare_filenames_by_filetype);
+	list = g_slist_sort(list, (GCompareFunc) utils_str_casecmp);
 	/* remove duplicates (next to each other after sorting) */
 	foreach_slist(node, list)
 	{
@@ -444,8 +395,13 @@ static gboolean add_custom_template_items(void)
 			utils_slist_remove_next(node);
 		}
 	}
-	add_file_items(list);
-	g_slist_foreach(list, (GFunc) g_free, NULL);
+	foreach_slist(node, list)
+	{
+		gchar *fname = node->data;
+
+		add_file_item(fname, new_with_template_menu);
+		g_free(fname);
+	}
 	g_slist_free(list);
 	g_free(path);
 	return list != NULL;

@@ -1,6 +1,13 @@
+2009-10-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/templates.c:
+   Don't use filetype submenus for templates (slower to navigate, often
+   only 1 per-filetype anyway).
+
+
 2009-10-12  Lex Trotman  <elextr(at)gmail(dot)com>
 
- * build.c
+ * build.c:
    Ensure that old style build config is not loaded if it does not exist.
 
 
