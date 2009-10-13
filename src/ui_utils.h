@@ -216,6 +216,8 @@ void ui_init_stock_items(void);
 void ui_add_config_file_menu_item(const gchar *real_path, const gchar *label,
 		GtkContainer *parent);
 
+void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback callback);
+
 
 void ui_set_statusbar(gboolean log, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
 

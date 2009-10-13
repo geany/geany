@@ -50,7 +50,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 159,
+	GEANY_API_VERSION = 160,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -408,10 +408,7 @@ typedef struct UIUtilsFuncs
 {
 	GtkWidget*	(*dialog_vbox_new) (GtkDialog *dialog);
 	GtkWidget*	(*frame_new_with_alignment) (const gchar *label_text, GtkWidget **alignment);
-
-	/* set_statusbar() also appends to the message window status tab if log is TRUE. */
 	void		(*set_statusbar) (gboolean log, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
-
 	void		(*table_add_row) (GtkTable *table, gint row, ...) G_GNUC_NULL_TERMINATED;
 	GtkWidget*	(*path_box_new) (const gchar *title, GtkFileChooserAction action, GtkEntry *entry);
 	GtkWidget*	(*button_new_with_image) (const gchar *stock_id, const gchar *text);
@@ -422,6 +419,8 @@ typedef struct UIUtilsFuncs
 	void		(*progress_bar_start) (const gchar *text);
 	void		(*progress_bar_stop) (void);
 	void		(*entry_add_clear_icon) (GtkEntry *entry);
+	void		(*menu_add_document_items) (GtkMenu *menu, struct GeanyDocument *active,
+				GCallback callback);
 }
 UIUtilsFuncs;
 

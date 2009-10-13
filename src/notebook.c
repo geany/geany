@@ -192,45 +192,20 @@ static void tab_bar_menu_activate_cb(GtkMenuItem *menuitem, gpointer data)
 }
 
 
-static GtkMenu *get_tab_bar_popup_menu(void)
+static void show_tab_bar_popup_menu(GdkEventButton *event)
 {
+	GtkWidget *menu_item;
 	static GtkWidget *menu = NULL;
-	GtkWidget *menu_item, *menu_item_label;
-	const GdkColor *color;
-	GeanyDocument *doc;
-	guint i, len;
-	gchar *base_name;
-	GeanyDocument *current_doc = document_get_current();
 
-	if (G_UNLIKELY(menu == NULL))
+	if (menu == NULL)
 		menu = gtk_menu_new();
 
 	/* clear the old menu items */
 	gtk_container_foreach(GTK_CONTAINER(menu), (GtkCallback) gtk_widget_destroy, NULL);
 
-	len = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
-	for (i = 0; i < len; i++)
-	{
-		doc = document_get_from_page(i);
-		if (! DOC_VALID(doc))
-			continue;
+	ui_menu_add_document_items(GTK_MENU(menu), document_get_current(),
+		G_CALLBACK(tab_bar_menu_activate_cb));
 
-		base_name = g_path_get_basename(DOC_FILENAME(doc));
-		menu_item = gtk_menu_item_new_with_label(base_name);
-		gtk_widget_show(menu_item);
-		gtk_container_add(GTK_CONTAINER(menu), menu_item);
-		g_signal_connect(menu_item, "activate", G_CALLBACK(tab_bar_menu_activate_cb), doc);
-
-		color = document_get_status_color(doc);
-		menu_item_label = gtk_bin_get_child(GTK_BIN(menu_item));
-		gtk_widget_modify_fg(menu_item_label, GTK_STATE_NORMAL, color);
-		gtk_widget_modify_fg(menu_item_label, GTK_STATE_ACTIVE, color);
-
-		if (doc == current_doc)
-			ui_label_set_markup(GTK_LABEL(menu_item_label), "<b>%s</b>", base_name);
-
-		g_free(base_name);
-	}
 	menu_item = gtk_separator_menu_item_new();
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
@@ -245,7 +220,7 @@ static GtkMenu *get_tab_bar_popup_menu(void)
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 	g_signal_connect(menu_item, "activate", G_CALLBACK(on_close_all1_activate), NULL);
 
-	return GTK_MENU(menu);
+	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, event->button, event->time);
 }
 
 
@@ -267,8 +242,7 @@ static gboolean notebook_tab_bar_click_cb(GtkWidget *widget, GdkEventButton *eve
 	}
 	else if (event->button == 3)
 	{
-		gtk_menu_popup(get_tab_bar_popup_menu(), NULL, NULL,
-			NULL, NULL, event->button, event->time);
+		show_tab_bar_popup_menu(event);
 	}
 	return FALSE;
 }

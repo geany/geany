@@ -218,7 +218,8 @@ static UIUtilsFuncs uiutils_funcs = {
 	&ui_lookup_widget,
 	&ui_progress_bar_start,
 	&ui_progress_bar_stop,
-	&ui_entry_add_clear_icon
+	&ui_entry_add_clear_icon,
+	&ui_menu_add_document_items
 };
 
 static DialogFuncs dialog_funcs = {

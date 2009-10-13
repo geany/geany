@@ -263,6 +263,23 @@ static void on_refresh(void)
 }
 
 
+static void on_doc_menu_item_clicked(gpointer item, GeanyDocument *doc)
+{
+	if (doc->is_valid)
+		set_editor(&edit_window, doc->editor);
+}
+
+
+static void on_doc_menu_show(GtkMenu *menu)
+{
+	/* clear the old menu items */
+	gtk_container_foreach(GTK_CONTAINER(menu), (GtkCallback) gtk_widget_destroy, NULL);
+
+	ui_menu_add_document_items(menu, edit_window.editor->document,
+		G_CALLBACK(on_doc_menu_item_clicked));
+}
+
+
 static GtkWidget *create_toolbar(void)
 {
 	GtkWidget *toolbar, *item;
@@ -272,10 +289,16 @@ static GtkWidget *create_toolbar(void)
 	gtk_toolbar_set_icon_size(GTK_TOOLBAR(toolbar), GTK_ICON_SIZE_MENU);
 	gtk_toolbar_set_style(GTK_TOOLBAR(toolbar), GTK_TOOLBAR_ICONS);
 
-	item = ui_tool_button_new(GTK_STOCK_JUMP_TO, "",
-		_("Show the current document"));
+	tool_item = gtk_menu_tool_button_new(NULL, NULL);
+	gtk_tool_button_set_stock_id(GTK_TOOL_BUTTON(tool_item), GTK_STOCK_JUMP_TO);
+	item = (GtkWidget*)tool_item;
+	ui_widget_set_tooltip_text(item, _("Show the current document"));
 	gtk_container_add(GTK_CONTAINER(toolbar), item);
 	g_signal_connect(item, "clicked", G_CALLBACK(on_refresh), NULL);
+
+	item = gtk_menu_new();
+	gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(tool_item), item);
+	g_signal_connect(item, "show", G_CALLBACK(on_doc_menu_show), NULL);
 
 	tool_item = gtk_tool_item_new();
 	gtk_tool_item_set_expand(tool_item, TRUE);

@@ -1,3 +1,12 @@
+2009-10-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/notebook.c, src/plugindata.h, src/plugins.c, src/ui_utils.c,
+   src/ui_utils.h, plugins/geanyfunctions.h, plugins/splitwindow.c:
+   Make Split Window 'Show current document' button have a drop-down menu
+   to select the other documents.
+   Add new API function ui_menu_add_document_items().
+
+
 2009-10-13  Lex Trotman  <elextr(at)gmail(dot)com>
 
  * src/build.c:

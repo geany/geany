@@ -2108,3 +2108,43 @@ GtkWidget *ui_label_set_markup(GtkLabel *label, const gchar *format, ...)
 }
 
 
+/** Add a list of document items to @a menu.
+ * @param menu Menu.
+ * @param active Which document to highlight, or @c NULL.
+ * @param callback is used for each menu item's @c "activate" signal and will be passed
+ * the corresponding document pointer as @c user_data.
+ * @warning You should check @c doc->is_valid in the callback. */
+void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback callback)
+{
+	GtkWidget *menu_item, *menu_item_label;
+	const GdkColor *color;
+	GeanyDocument *doc;
+	guint i, len;
+	gchar *base_name;
+
+	len = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+	for (i = 0; i < len; i++)
+	{
+		doc = document_get_from_page(i);
+		if (! DOC_VALID(doc))
+			continue;
+
+		base_name = g_path_get_basename(DOC_FILENAME(doc));
+		menu_item = gtk_menu_item_new_with_label(base_name);
+		gtk_widget_show(menu_item);
+		gtk_container_add(GTK_CONTAINER(menu), menu_item);
+		g_signal_connect(menu_item, "activate", callback, doc);
+
+		color = document_get_status_color(doc);
+		menu_item_label = gtk_bin_get_child(GTK_BIN(menu_item));
+		gtk_widget_modify_fg(menu_item_label, GTK_STATE_NORMAL, color);
+		gtk_widget_modify_fg(menu_item_label, GTK_STATE_ACTIVE, color);
+
+		if (doc == active)
+			ui_label_set_markup(GTK_LABEL(menu_item_label), "<b>%s</b>", base_name);
+
+		g_free(base_name);
+	}
+}
+
+
