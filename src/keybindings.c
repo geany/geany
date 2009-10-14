@@ -2086,7 +2086,14 @@ static void join_lines(GeanyEditor *editor)
 
 static void split_lines(GeanyEditor *editor, gint column)
 {
-	gint start, indent, linescount, i;
+	gint start, indent, linescount, i, end;
+	gchar c;
+	ScintillaObject *sci = editor->sci;
+
+	/* don't include trailing newlines */
+	end = sci_get_selection_end(sci);
+	while ((c = sci_get_char_at(sci, end - 1)) == '\n' || c == '\r') end--;
+	sci_set_selection_end(sci, end);
 
 	start = sci_get_line_from_position(editor->sci,
 		sci_get_selection_start(editor->sci));
