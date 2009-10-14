@@ -787,20 +787,17 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 	switch (nt->nmhdr.code)
 	{
 		case SCN_SAVEPOINTLEFT:
-		{
 			document_set_text_changed(doc, TRUE);
 			break;
-		}
+
 		case SCN_SAVEPOINTREACHED:
-		{
 			document_set_text_changed(doc, FALSE);
 			break;
-		}
+
 		case SCN_MODIFYATTEMPTRO:
-		{
 			utils_beep();
 			break;
-		}
+
 		case SCN_MARGINCLICK:
 			on_margin_click(sci, nt);
 			break;
@@ -810,13 +807,11 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			break;
 
  		case SCN_MODIFIED:
-		{
 			if (editor_prefs.show_linenumber_margin && (nt->modificationType & (SC_MOD_INSERTTEXT | SC_MOD_DELETETEXT)) && nt->linesAdded)
 			{
 				/* automatically adjust Scintilla's line numbers margin width */
 				auto_update_margin_width(editor);
 			}
-
 			if (nt->modificationType & SC_STARTACTION && ! ignore_callback)
 			{
 				/* get notified about undo changes */
@@ -828,19 +823,18 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 				fold_changed(sci, nt->line, nt->foldLevelNow, nt->foldLevelPrev);
 			}
 			break;
-		}
+
 		case SCN_CHARADDED:
 			on_char_added(editor, nt);
 			break;
 
 		case SCN_USERLISTSELECTION:
-		{
 			if (nt->listType == 1)
 			{
-				SSM(sci, SCI_ADDTEXT, strlen(nt->text), (sptr_t) nt->text);
+				sci_add_text(sci, nt->text);
 			}
 			break;
-		}
+
 		case SCN_AUTOCSELECTION:
 			if (g_str_equal(nt->text, "..."))
 			{
@@ -850,34 +844,28 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			}
 			/* fall through */
 		case SCN_AUTOCCANCELLED:
-		{
 			/* now that autocomplete is finishing or was cancelled, reshow calltips
 			 * if they were showing */
 			request_reshowing_calltip(nt);
 			break;
-		}
+
 #ifdef GEANY_DEBUG
 		case SCN_STYLENEEDED:
-		{
 			geany_debug("style");
 			break;
-		}
 #endif
 		case SCN_NEEDSHOWN:
-		{
 			ensure_range_visible(sci, nt->position, nt->position + nt->length, FALSE);
 			break;
-		}
+
 		case SCN_URIDROPPED:
-		{
 			if (nt->text != NULL)
 			{
 				document_open_file_list(nt->text, -1);
 			}
 			break;
-		}
+
 		case SCN_CALLTIPCLICK:
-		{
 			if (nt->position > 0)
 			{
 				switch (nt->position)
@@ -892,7 +880,6 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 				editor_show_calltip(editor, -1);
 			}
 			break;
-		}
 	}
 	/* we always return FALSE here to let plugins handle the event too */
 	return FALSE;
