@@ -846,7 +846,6 @@ void search_show_find_in_files_dialog(const gchar *dir)
 {
 	GtkWidget *entry; /* for child GtkEntry of a GtkComboBoxEntry */
 	GeanyDocument *doc = document_get_current();
-	GeanyEditor *editor = doc ? doc->editor : NULL;
 	gchar *sel = NULL;
 	gchar *cur_dir = NULL;
 	GeanyEncodingIndex enc_idx = GEANY_ENCODING_UTF_8;
@@ -855,13 +854,14 @@ void search_show_find_in_files_dialog(const gchar *dir)
 	{
 		create_fif_dialog();
 		gtk_widget_show_all(fif_dlg.dialog);
-		sel = editor_get_default_selection(editor, search_prefs.use_current_word, NULL);
+		if (doc)
+			sel = editor_get_default_selection(doc->editor, search_prefs.use_current_word, NULL);
 	}
 	stash_group_display(fif_prefs, fif_dlg.dialog);
 
 	/* only set selection if the dialog is not already visible, or has just been created */
-	if (! sel && ! GTK_WIDGET_VISIBLE(fif_dlg.dialog))
-		sel = editor_get_default_selection(editor, search_prefs.use_current_word, NULL);
+	if (doc && ! sel && ! GTK_WIDGET_VISIBLE(fif_dlg.dialog))
+		sel = editor_get_default_selection(doc->editor, search_prefs.use_current_word, NULL);
 
 	entry = GTK_BIN(fif_dlg.search_combo)->child;
 	if (sel)

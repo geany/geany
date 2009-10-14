@@ -12,6 +12,9 @@
    Fix wrong escaping (patch by dmaphy, thanks - closes #2878138).
  * src/interface.c, src/ui_utils.c, geany.glade:
    Move Tools configuration items to top of menu.
+ * src/keybindings.c, src/search.c:
+   Fix warning when using Find in Files with no documents open; make
+   keybinding work in this case.
 
 
 2009-10-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -1320,6 +1320,11 @@ static gboolean cb_func_search_action(guint key_id)
 	GeanyDocument *doc = document_get_current();
 	ScintillaObject *sci;
 
+	if (key_id == GEANY_KEYS_SEARCH_FINDINFILES)
+	{
+		on_find_in_files1_activate(NULL, NULL);	/* works without docs too */
+		return TRUE;
+	}
 	if (!doc)
 		return TRUE;
 	sci = doc->editor->sci;
@@ -1338,8 +1343,6 @@ static gboolean cb_func_search_action(guint key_id)
 			on_find_nextsel1_activate(NULL, NULL); break;
 		case GEANY_KEYS_SEARCH_REPLACE:
 			on_replace1_activate(NULL, NULL); break;
-		case GEANY_KEYS_SEARCH_FINDINFILES:
-			on_find_in_files1_activate(NULL, NULL); break;
 		case GEANY_KEYS_SEARCH_NEXTMESSAGE:
 			on_next_message1_activate(NULL, NULL); break;
 		case GEANY_KEYS_SEARCH_PREVIOUSMESSAGE:
