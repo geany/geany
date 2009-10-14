@@ -2113,7 +2113,8 @@ GtkWidget *ui_label_set_markup(GtkLabel *label, const gchar *format, ...)
  * @param active Which document to highlight, or @c NULL.
  * @param callback is used for each menu item's @c "activate" signal and will be passed
  * the corresponding document pointer as @c user_data.
- * @warning You should check @c doc->is_valid in the callback. */
+ * @warning You should check @c doc->is_valid in the callback.
+ * @since 0.19 */
 void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback callback)
 {
 	GtkWidget *menu_item, *menu_item_label;

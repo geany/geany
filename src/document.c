@@ -222,7 +222,10 @@ GeanyDocument *document_find_by_sci(ScintillaObject *sci)
 }
 
 
-/* returns the index of the notebook page for the document. */
+/** Get the notebook page index for a document.
+ * @param doc The document.
+ * @return The index.
+ * @since 0.19 */
 gint document_get_notebook_page(GeanyDocument *doc)
 {
 	g_return_val_if_fail(doc != NULL, -1);
@@ -2760,13 +2763,13 @@ static void document_redo_add(GeanyDocument *doc, guint type, gpointer data)
 
 
 /**
- *  Gets the status colour of the document, or @c NULL if default widget colouring should be used.
- *  Returned colours are red if the document has changes, green is the document is read-only
+ *  Gets the status color of the document, or @c NULL if default widget coloring should be used.
+ *  Returned colors are red if the document has changes, green if the document is read-only
  *  or simply @c NULL if the document is unmodified but writable.
  *
  *  @param doc The document to use.
  *
- *  @return The colour for the document or @c NULL if the default colour should be used. The colour
+ *  @return The color for the document or @c NULL if the default color should be used. The color
  *          object is owned by Geany and should not be modified or freed.
  *
  *  @since 0.16

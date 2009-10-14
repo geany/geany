@@ -4,6 +4,10 @@
    Don't include trailing newlines when using reflow command.
  * src/notebook.c:
    Add stock close buttons to notebook tab popup menu.
+ * src/plugindata.h, src/document.c, src/plugins.c, src/ui_utils.c,
+   plugins/geanyfunctions.h:
+   Add document_get_notebook_page() to API.
+   Minor edits of dox.
 
 
 2009-10-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

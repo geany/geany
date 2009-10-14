@@ -64,6 +64,8 @@
 	geany_functions->p_document->get_status_color
 #define document_get_basename_for_display \
 	geany_functions->p_document->get_basename_for_display
+#define document_get_notebook_page \
+	geany_functions->p_document->get_notebook_page
 #define editor_get_indent_prefs \
 	geany_functions->p_editor->get_indent_prefs
 #define editor_create_widget \

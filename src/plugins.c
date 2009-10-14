@@ -106,7 +106,8 @@ static DocumentFuncs doc_funcs = {
 	&document_save_file_as,
 	&document_rename_file,
 	&document_get_status_color,
-	&document_get_basename_for_display
+	&document_get_basename_for_display,
+	&document_get_notebook_page
 };
 
 static EditorFuncs editor_funcs = {

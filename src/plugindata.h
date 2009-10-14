@@ -50,7 +50,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 160,
+	GEANY_API_VERSION = 161,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -270,6 +270,7 @@ typedef struct DocumentFuncs
 	void		(*rename_file) (struct GeanyDocument *doc, const gchar *new_filename);
 	const GdkColor*	(*get_status_color) (struct GeanyDocument *doc);
 	gchar*		(*get_basename_for_display) (struct GeanyDocument *doc, gint length);
+	gint		(*get_notebook_page) (struct GeanyDocument *doc);
 }
 DocumentFuncs;
 
