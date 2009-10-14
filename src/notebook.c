@@ -210,12 +210,12 @@ static void show_tab_bar_popup_menu(GdkEventButton *event)
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 
-	menu_item = gtk_menu_item_new_with_mnemonic(_("Close Ot_her Documents"));
+	menu_item = ui_image_menu_item_new(GTK_STOCK_CLOSE, _("Close Ot_her Documents"));
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 	g_signal_connect(menu_item, "activate", G_CALLBACK(on_close_other_documents1_activate), NULL);
 
-	menu_item = gtk_menu_item_new_with_mnemonic(_("C_lose All"));
+	menu_item = ui_image_menu_item_new(GTK_STOCK_CLOSE, _("C_lose All"));
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 	g_signal_connect(menu_item, "activate", G_CALLBACK(on_close_all1_activate), NULL);

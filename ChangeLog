@@ -2,6 +2,8 @@
 
  * src/keybindings.c:
    Don't include trailing newlines when using reflow command.
+ * src/notebook.c:
+   Add stock close buttons to notebook tab popup menu.
 
 
 2009-10-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
