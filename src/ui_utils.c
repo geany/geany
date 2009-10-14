@@ -1767,10 +1767,8 @@ static void create_config_files_menu(void)
 
 	widgets.config_files_menu = menu = gtk_menu_new();
 
-	item = ui_image_menu_item_new(GTK_STOCK_FILE, _("C_onfiguration Files"));
-	gtk_widget_show(item);
+	item = ui_lookup_widget(main_widgets.window, "configuration_files1");
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), menu);
-	gtk_container_add(GTK_CONTAINER(main_widgets.tools_menu), item);
 
 	/* sort menu after all items added */
 	g_idle_add(sort_menu, widgets.config_files_menu);
