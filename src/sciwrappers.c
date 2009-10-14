@@ -49,12 +49,12 @@ void sci_set_line_numbers(ScintillaObject *sci, gboolean set, gint extra_width)
 
 		g_snprintf(tmp_str, 15, "_%d%d", len, extra_width);
 		width = sci_text_width(sci, STYLE_LINENUMBER, tmp_str);
-		SSM (sci, SCI_SETMARGINWIDTHN, 0, width);
-		SSM (sci, SCI_SETMARGINSENSITIVEN, 0, FALSE); /* use default behaviour */
+		SSM(sci, SCI_SETMARGINWIDTHN, 0, width);
+		SSM(sci, SCI_SETMARGINSENSITIVEN, 0, FALSE); /* use default behaviour */
 	}
 	else
 	{
-		SSM (sci, SCI_SETMARGINWIDTHN, 0, 0);
+		SSM(sci, SCI_SETMARGINWIDTHN, 0, 0);
 	}
 }
 
@@ -96,7 +96,7 @@ void sci_set_symbol_margin(ScintillaObject *sci, gboolean set)
 	}
 	else
 	{
-		SSM (sci, SCI_SETMARGINWIDTHN, 1, 0);
+		SSM(sci, SCI_SETMARGINWIDTHN, 1, 0);
 		SSM(sci, SCI_SETMARGINSENSITIVEN, 1, FALSE);
 	}
 }
@@ -842,7 +842,7 @@ void sci_assign_cmdkey(ScintillaObject *sci, gint key, gint command)
 
 void sci_clear_cmdkey(ScintillaObject *sci, gint key)
 {
-	SSM (sci, SCI_CLEARCMDKEY, key, 0);
+	SSM(sci, SCI_CLEARCMDKEY, key, 0);
 }
 
 

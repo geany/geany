@@ -61,7 +61,8 @@
 #include "projectprivate.h"
 
 
-/* Note: Avoid using SSM in files not related to scintilla, use sciwrappers.h instead. */
+/* Note: use sciwrappers.h instead where possible.
+ * Do not use SSM in files unrelated to scintilla. */
 #define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
 
 
@@ -274,7 +275,7 @@ static void fold_symbol_click(ScintillaObject *sci, SCNotification *nt)
 {
 	gint line = sci_get_line_from_position(sci, nt->position);
 
-	SSM(sci, SCI_TOGGLEFOLD, line, 0);
+	sci_toggle_fold(sci, line);
 	/* extra toggling of child fold points
 	 * use when editor_prefs.unfold_all_children is set and Shift is NOT pressed or when
 	 * editor_prefs.unfold_all_children is NOT set but Shift is pressed */
@@ -284,13 +285,13 @@ static void fold_symbol_click(ScintillaObject *sci, SCNotification *nt)
 		gint last_line = SSM(sci, SCI_GETLASTCHILD, line, -1);
 		gint i;
 
-		if (SSM(sci, SCI_GETLINEVISIBLE, line + 1, 0))
+		if (sci_get_line_is_visible(sci, line + 1))
 		{	/* unfold all children of the current fold point */
 			for (i = line; i < last_line; i++)
 			{
-				if (! SSM(sci, SCI_GETLINEVISIBLE, i, 0))
+				if (! sci_get_line_is_visible(sci, i))
 				{
-					SSM(sci, SCI_TOGGLEFOLD, SSM(sci, SCI_GETFOLDPARENT, i, 0), 0);
+					sci_toggle_fold(sci, sci_get_fold_parent(sci, i));
 				}
 			}
 		}
@@ -301,8 +302,8 @@ static void fold_symbol_click(ScintillaObject *sci, SCNotification *nt)
 				gint level = sci_get_fold_level(sci, i);
 				if (level & SC_FOLDLEVELHEADERFLAG)
 				{
-					if (SSM(sci, SCI_GETFOLDEXPANDED, i, 0))
-						SSM(sci, SCI_TOGGLEFOLD, i, 0);
+					if (sci_get_fold_expanded(sci, i))
+						sci_toggle_fold(sci, i);
 				}
 			}
 		}
@@ -677,7 +678,7 @@ static void expand(ScintillaObject *sci, gint *line, gboolean doExpand,
 			{
 				if (doExpand)
 				{
-					if (!SSM(sci, SCI_GETFOLDEXPANDED, *line, 0))
+					if (!sci_get_fold_expanded(sci, *line))
 						SSM(sci, SCI_SETFOLDEXPANDED, *line, 1);
 					expand(sci, line, TRUE, force, visLevels - 1, -1);
 				}
@@ -708,7 +709,7 @@ static void fold_changed(ScintillaObject *sci, gint line, gint levelNow, gint le
 	}
 	else if (levelPrev & SC_FOLDLEVELHEADERFLAG)
 	{
-		if (! SSM(sci, SCI_GETFOLDEXPANDED, line, 0))
+		if (! sci_get_fold_expanded(sci, line))
 		{	/* Removing the fold from one that has been contracted so should expand
 			 * otherwise lines are left invisible with no way to make them visible */
 			SSM(sci, SCI_SETFOLDEXPANDED, line, 1);
@@ -719,13 +720,13 @@ static void fold_changed(ScintillaObject *sci, gint line, gint levelNow, gint le
 			((levelPrev & SC_FOLDLEVELNUMBERMASK) > (levelNow & SC_FOLDLEVELNUMBERMASK)))
 	{
 		/* See if should still be hidden */
-		gint parentLine = SSM(sci, SCI_GETFOLDPARENT, line, 0);
+		gint parentLine = sci_get_fold_parent(sci, line);
 		if (parentLine < 0)
 		{
 			SSM(sci, SCI_SHOWLINES, line, line);
 		}
-		else if (SSM(sci, SCI_GETFOLDEXPANDED, parentLine, 0) &&
-				SSM(sci, SCI_GETLINEVISIBLE, parentLine, 0))
+		else if (sci_get_fold_expanded(sci, parentLine) &&
+				sci_get_line_is_visible(sci, parentLine))
 		{
 			SSM(sci, SCI_SHOWLINES, line, line);
 		}
@@ -1002,7 +1003,7 @@ static void on_new_line_added(GeanyEditor *editor)
 
 static gboolean lexer_has_braces(ScintillaObject *sci)
 {
-	gint lexer = SSM(sci, SCI_GETLEXER, 0, 0);
+	gint lexer = sci_get_lexer(sci);
 
 	switch (lexer)
 	{
@@ -1252,7 +1253,7 @@ static void close_block(GeanyEditor *editor, gint pos)
 	line = sci_get_line_from_position(sci, pos);
 	line_len = sci_get_line_length(sci, line);
 	/* set eol_char_len to 0 if on last line, because there is no EOL char */
-	eol_char_len = (line == (SSM(sci, SCI_GETLINECOUNT, 0, 0) - 1)) ? 0 :
+	eol_char_len = (line == (sci_get_line_count(sci) - 1)) ? 0 :
 								editor_get_eol_char_len(editor);
 
 	/* check that the line is empty, to not kill text in the line */
@@ -1283,7 +1284,7 @@ static void close_block(GeanyEditor *editor, gint pos)
 			text = g_strconcat(ind, "}", NULL);
 			line_start = sci_get_position_from_line(sci, line);
 			sci_set_anchor(sci, line_start);
-			SSM(sci, SCI_REPLACESEL, 0, (sptr_t) text);
+			sci_replace_sel(sci, text);
 			g_free(text);
 			g_free(ind);
 			return;
@@ -1412,10 +1413,10 @@ static gint find_previous_brace(ScintillaObject *sci, gint pos)
 	gchar c;
 	gint orig_pos = pos;
 
-	c = SSM(sci, SCI_GETCHARAT, pos, 0);
+	c = sci_get_char_at(sci, pos);
 	while (pos >= 0 && pos > orig_pos - 300)
 	{
-		c = SSM(sci, SCI_GETCHARAT, pos, 0);
+		c = sci_get_char_at(sci, pos);
 		pos--;
 		if (utils_is_opening_brace(c, editor_prefs.brace_match_ltgt))
 			return pos;
@@ -1430,10 +1431,10 @@ static gint find_start_bracket(ScintillaObject *sci, gint pos)
 	gint brackets = 0;
 	gint orig_pos = pos;
 
-	c = SSM(sci, SCI_GETCHARAT, pos, 0);
+	c = sci_get_char_at(sci, pos);
 	while (pos > 0 && pos > orig_pos - 300)
 	{
-		c = SSM(sci, SCI_GETCHARAT, pos, 0);
+		c = sci_get_char_at(sci, pos);
 		if (c == ')') brackets++;
 		else if (c == '(') brackets--;
 		pos--;
@@ -1590,12 +1591,12 @@ gboolean editor_show_calltip(GeanyEditor *editor, gint pos)
 
 	sci = editor->sci;
 
-	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
+	lexer = sci_get_lexer(sci);
 
 	if (pos == -1)
 	{
 		/* position of '(' is unknown, so go backwards from current position to find it */
-		pos = SSM(sci, SCI_GETCURRENTPOS, 0, 0);
+		pos = sci_get_current_position(sci);
 		pos--;
 		orig_pos = pos;
 		pos = (lexer == SCLEX_LATEX) ? find_previous_brace(sci, pos) :
@@ -1605,7 +1606,7 @@ gboolean editor_show_calltip(GeanyEditor *editor, gint pos)
 	}
 
 	/* the style 1 before the brace (which may be highlighted) */
-	style = SSM(sci, SCI_GETSTYLEAT, pos - 1, 0);
+	style = sci_get_style_at(sci, pos - 1);
 	if (! is_code_style(lexer, style))
 		return FALSE;
 
@@ -1828,8 +1829,8 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 	line_pos = pos - line_start - 1;
 	current = pos - line_start;
 	startword = current;
-	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
-	style = SSM(sci, SCI_GETSTYLEAT, pos - 2, 0);
+	lexer = sci_get_lexer(sci);
+	style = sci_get_style_at(sci, pos - 2);
 
 	/* don't autocomplete in comments and strings */
 	if (!force && !is_code_style(lexer, style))
@@ -2322,8 +2323,8 @@ gboolean editor_complete_snippet(GeanyEditor *editor, gint pos)
 		! editor_prefs.complete_snippets_whilst_editing && ! at_eol(sci, pos))
 		return FALSE;
 
-	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
-	style = SSM(sci, SCI_GETSTYLEAT, pos - 2, 0);
+	lexer = sci_get_lexer(sci);
+	style = sci_get_style_at(sci, pos - 2);
 
 	wc = snippets_find_completion_by_name("Special", "wordchars");
 	word = editor_read_word_stem(editor, pos, wc);
@@ -2336,7 +2337,7 @@ gboolean editor_complete_snippet(GeanyEditor *editor, gint pos)
 		result = snippets_complete_constructs(editor, pos, word);
 		sci_end_undo_action(sci);
 		if (result)
-			SSM(sci, SCI_CANCEL, 0, 0);	/* cancel any autocompletion list, etc */
+			sci_cancel(sci);	/* cancel any autocompletion list, etc */
 	}
 
 	g_free(wc);
@@ -2399,7 +2400,7 @@ static void insert_closing_tag(GeanyEditor *editor, gint pos, gchar ch, const gc
 static gboolean handle_xml(GeanyEditor *editor, gint pos, gchar ch)
 {
 	ScintillaObject *sci = editor->sci;
-	gint lexer = SSM(sci, SCI_GETLEXER, 0, 0);
+	gint lexer = sci_get_lexer(sci);
 	gint min, style;
 	gchar *str_found, sel[512];
 	gboolean result = FALSE;
@@ -2490,7 +2491,7 @@ static void auto_table(GeanyEditor *editor, gint pos)
 	gint indent_pos;
 	const gchar *indent_str;
 
-	if (SSM(sci, SCI_GETLEXER, 0, 0) != SCLEX_HTML) return;
+	if (sci_get_lexer(sci) != SCLEX_HTML) return;
 
 	read_indent(editor, pos);
 	indent_pos = sci_get_line_indent_position(sci, sci_get_line_from_position(sci, pos));
@@ -2591,7 +2592,7 @@ static void real_uncomment_multiline(GeanyEditor *editor)
 
 static gint get_multiline_comment_style(GeanyEditor *editor, gint line_start)
 {
-	gint lexer = SSM(editor->sci, SCI_GETLEXER, 0, 0);
+	gint lexer = sci_get_lexer(editor->sci);
 	gint style_comment;
 
 	/* List only those lexers which support multi line comments */
@@ -2672,7 +2673,7 @@ gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 	if (co_len == 0)
 		return 0;
 
-	SSM(editor->sci, SCI_BEGINUNDOACTION, 0, 0);
+	sci_start_undo_action(editor->sci);
 
 	for (i = first_line; (i <= last_line) && (! break_loop); i++)
 	{
@@ -2736,7 +2737,7 @@ gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 			}
 		}
 	}
-	SSM(editor->sci, SCI_ENDUNDOACTION, 0, 0);
+	sci_end_undo_action(editor->sci);
 
 	/* restore selection if there is one
 	 * but don't touch the selection if caller is editor_do_comment_toggle */
@@ -2803,7 +2804,7 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 	if (co_len == 0)
 		return;
 
-	SSM(editor->sci, SCI_BEGINUNDOACTION, 0, 0);
+	sci_start_undo_action(editor->sci);
 
 	for (i = first_line; (i <= last_line) && (! break_loop); i++)
 	{
@@ -2870,7 +2871,7 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 		}
 	}
 
-	SSM(editor->sci, SCI_ENDUNDOACTION, 0, 0);
+	sci_end_undo_action(editor->sci);
 
 	co_len += tm_len;
 
@@ -2960,7 +2961,7 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 	if (co_len == 0)
 		return;
 
-	SSM(editor->sci, SCI_BEGINUNDOACTION, 0, 0);
+	sci_start_undo_action(editor->sci);
 
 	for (i = first_line; (i <= last_line) && (! break_loop); i++)
 	{
@@ -3017,7 +3018,7 @@ void editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 			}
 		}
 	}
-	SSM(editor->sci, SCI_ENDUNDOACTION, 0, 0);
+	sci_end_undo_action(editor->sci);
 
 	/* restore selection if there is one
 	 * but don't touch the selection if caller is editor_do_comment_toggle */
@@ -3828,7 +3829,7 @@ void editor_smart_line_indentation(GeanyEditor *editor, gint pos)
 	if (pos == -1)
 		pos = first_sel_start;
 
-	SSM(sci, SCI_BEGINUNDOACTION, 0, 0);
+	sci_start_undo_action(sci);
 
 	smart_line_indentation(editor, first_line, last_line);
 
@@ -3847,7 +3848,7 @@ void editor_smart_line_indentation(GeanyEditor *editor, gint pos)
 		sci_set_selection_end(sci, sci_get_position_from_line(sci, last_line + 1));
 	}
 
-	SSM(sci, SCI_ENDUNDOACTION, 0, 0);
+	sci_end_undo_action(sci);
 }
 
 
@@ -3870,7 +3871,7 @@ void editor_indentation_by_one_space(GeanyEditor *editor, gint pos, gboolean dec
 	if (pos == -1)
 		pos = sel_start;
 
-	SSM(editor->sci, SCI_BEGINUNDOACTION, 0, 0);
+	sci_start_undo_action(editor->sci);
 
 	for (i = first_line; i <= last_line; i++)
 	{
@@ -3914,7 +3915,7 @@ void editor_indentation_by_one_space(GeanyEditor *editor, gint pos, gboolean dec
 	else
 		sci_set_current_position(editor->sci, pos + count, FALSE);
 
-	SSM(editor->sci, SCI_ENDUNDOACTION, 0, 0);
+	sci_end_undo_action(editor->sci);
 }
 
 
@@ -4189,6 +4190,7 @@ static void fold_all(GeanyEditor *editor, gboolean want_fold)
 	for (i = 0; i < lines; i++)
 	{
 		gint level = sci_get_fold_level(editor->sci, i);
+
 		if (level & SC_FOLDLEVELHEADERFLAG)
 		{
 			if (sci_get_fold_expanded(editor->sci, i) == want_fold)
