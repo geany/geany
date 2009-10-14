@@ -520,7 +520,7 @@ static gboolean reshow_calltip(gpointer data)
 			sci_set_selection_start(calltip.sci, cri->pos);
 			sci_set_selection_end(calltip.sci, pos);
 			sci_replace_sel(calltip.sci, "");	/* clear root of word */
-			SSM(calltip.sci, SCI_INSERTTEXT, cri->pos, (sptr_t) cri->text);
+			sci_insert_text(calltip.sci, cri->pos, cri->text);
 			sci_goto_pos(calltip.sci, cri->pos + strlen(cri->text), FALSE);
 		}
 	}
@@ -1993,7 +1993,7 @@ static void editor_auto_latex(GeanyEditor *editor, gint pos)
 
 			construct = g_strdup_printf("%s\\end%s{%s}", eol, full_cmd, env);
 
-			SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
+			sci_insert_text(sci, pos, construct);
 			sci_goto_pos(sci, pos, TRUE);
 			g_free(construct);
 			g_free(eol);
