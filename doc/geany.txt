@@ -905,12 +905,22 @@ with the characters typed so far. If no symbols begin with the sequence,
 the autocompletion window is closed.
 
 The up and down arrows will move the selected item. The highlighted
-item on the autocompletion list can be chosen from the list by Tab or
+item on the autocompletion list can be chosen from the list by pressing
 Enter/Return. You can also double-click to select an item. The sequence
 will be completed to match the chosen item, and if the *Drop rest of
 word on completion* preference is set (in `Editor Completions
 preferences`_) then any characters after the cursor that match
 a symbol or word are deleted.
+
+Pressing Tab will complete by word part of the selected item, useful e.g.
+for adding the prefix ``gtk_combo_box_entry_`` without typing it
+manually:
+
+* gtk_com<TAB>
+* gtk_combo_<TAB>
+* gtk_combo_box_<e><TAB>
+* gtk_combo_box_entry_<s><ENTER>
+* gtk_combo_box_entry_set_text_column
 
 Scope autocompletion
 ````````````````````

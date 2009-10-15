@@ -106,6 +106,14 @@
 #define foreach_dir(filename, dir)\
 	for ((filename) = g_dir_read_name(dir); (filename) != NULL; (filename) = g_dir_read_name(dir))
 
+/** Iterates through each character in @a string.
+ * @param char_ptr Pointer to character.
+ * @param string String to traverse.
+ * @warning Doesn't include null terminating character.
+ * @since Geany 0.19. */
+#define foreach_str(char_ptr, string) \
+	for (char_ptr = string; *char_ptr; char_ptr++)
+
 
 void utils_open_browser(const gchar *uri);
 

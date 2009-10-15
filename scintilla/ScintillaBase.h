@@ -75,7 +75,7 @@ protected:
 	int AutoCompleteGetCurrent();
 	void AutoCompleteCharacterAdded(char ch);
 	void AutoCompleteCharacterDeleted();
-	void AutoCompleteCompleted();
+	void AutoCompleteCompleted(char key = '\0');
 	void AutoCompleteMoveToCurrentWord();
 	static void AutoCompleteDoubleClick(void* p);
 

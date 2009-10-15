@@ -1773,10 +1773,6 @@ void utils_tidy_path(gchar *filename)
 }
 
 
-/* @warning Doesn't include null terminating character. */
-#define foreach_str(char_ptr, string) \
-	for (char_ptr = string; *char_ptr; char_ptr++)
-
 /**
  *  Replace or remove characters from a string in place.
  *

@@ -102,6 +102,8 @@ static void auto_table(GeanyEditor *editor, gint pos);
 static void close_block(GeanyEditor *editor, gint pos);
 static void editor_highlight_braces(GeanyEditor *editor, gint cur_pos);
 static void editor_auto_latex(GeanyEditor *editor, gint pos);
+static void read_current_word(GeanyEditor *editor, gint pos, gchar *word, size_t wordlen,
+		const gchar *wc, gboolean stem);
 
 
 void editor_snippets_free(void)
@@ -765,6 +767,62 @@ static void auto_update_margin_width(GeanyEditor *editor)
 }
 
 
+static gboolean delay_autocomplete(gpointer data)
+{
+	keybindings_send_command(GEANY_KEY_GROUP_EDITOR, GEANY_KEYS_EDITOR_AUTOCOMPLETE);
+	return FALSE;
+}
+
+
+static void partial_complete(ScintillaObject *sci, const gchar *text)
+{
+	gint pos = sci_get_current_position(sci);
+
+	sci_insert_text(sci, pos, text);
+	sci_set_current_position(sci, pos + strlen(text), TRUE);
+	sci_cancel(sci);	/* cancel full AC */
+	/* a timeout of 0 means the AC box doesn't flicker */
+	g_timeout_add(0, delay_autocomplete, NULL);
+}
+
+
+/* Complete the next word part from @a entry */
+static void check_partial_completion(GeanyEditor *editor, const gchar *entry)
+{
+	gchar *stem, *ptr, *text = utils_strdupa(entry);
+
+	read_current_word(editor, -1, current_word, sizeof current_word, NULL, TRUE);
+	stem = current_word;
+	if (strstr(text, stem) != text)
+		return;	/* shouldn't happen */
+	if (strlen(text) <= strlen(stem))
+		return;
+
+	text += strlen(stem); /* skip stem */
+	ptr = strstr(text + 1, "_");
+	if (ptr)
+	{
+		ptr[1] = '\0';
+		partial_complete(editor->sci, text);
+	}
+	else
+	{
+		/* CamelCase */
+		foreach_str(ptr, text + 1)
+		{
+			if (!ptr[0])
+				break;
+			if (g_ascii_isupper(*ptr))
+			{
+				ptr[0] = '\0';
+				partial_complete(editor->sci, text);
+				break;
+			}
+		}
+	}
+}
+
+
 /* Callback for the "sci-notify" signal to emit a "editor-notify" signal.
  * Plugins can connect to the "editor-notify" signal. */
 void editor_sci_notify_cb(G_GNUC_UNUSED GtkWidget *widget, G_GNUC_UNUSED gint scn,
@@ -842,6 +900,10 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 				sci_cancel(sci);
 				utils_beep();
 				break;
+			}
+			if (nt->ch == '\t')
+			{
+				check_partial_completion(editor, nt->text);
 			}
 			/* fall through */
 		case SCN_AUTOCCANCELLED:
@@ -1309,7 +1371,7 @@ static void close_block(GeanyEditor *editor, gint pos)
  * position can be -1, then the current position is used.
  * wc are the wordchars to use, if NULL, GEANY_WORDCHARS will be used */
 static void read_current_word(GeanyEditor *editor, gint pos, gchar *word, size_t wordlen,
-							  const gchar *wc, gboolean stem)
+		const gchar *wc, gboolean stem)
 {
 	gint line, line_start, startword, endword;
 	gchar *chunk;

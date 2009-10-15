@@ -895,7 +895,7 @@ void sci_selection_duplicate(ScintillaObject *sci)
 
 /** Insert text.
  * @param sci Scintilla widget.
- * @param pos Position.
+ * @param pos Position, or -1 for current.
  * @param text Text. */
 void sci_insert_text(ScintillaObject *sci, gint pos, const gchar *text)
 {

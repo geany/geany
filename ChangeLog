@@ -1,3 +1,15 @@
+2009-10-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * scintilla/ScintillaBase.h, scintilla/ScintillaBase.cxx, src/utils.c,
+   src/utils.h, src/sciwrappers.c, src/editor.c, doc/geany.txt,
+   doc/geany.html:
+   Add word part autocompletion for the current selected item when
+   pressing Tab - Enter still completes normally.
+   Add foreach_str() API macro.
+   Temporarily modify scintilla to say if tab was used for
+   autocompletion.
+
+
 2009-10-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keybindings.c:
