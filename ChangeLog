@@ -8,6 +8,10 @@
    Add foreach_str() API macro.
    Temporarily modify scintilla to say if tab was used for
    autocompletion.
+ * src/templates.c, src/build.c, src/utils.c, src/utils.h,
+   src/project.c, src/search.c, src/editor.c, src/ui_utils.c,
+   plugins/classbuilder.c:
+   Revert r4301 - utils_free_pointers() taking 4 arguments.
 
 
 2009-10-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -1259,6 +1259,27 @@ gchar *utils_get_utf8_from_locale(const gchar *locale_text)
 }
 
 
+/* Pass pointers to free after arg_count.
+ * The last argument must be NULL as an extra check that arg_count is correct. */
+void utils_free_pointers(gsize arg_count, ...)
+{
+	va_list a;
+	gsize i;
+	gpointer ptr;
+
+	va_start(a, arg_count);
+	for (i = 0; i < arg_count; i++)
+	{
+		ptr = va_arg(a, gpointer);
+		g_free(ptr);
+	}
+	ptr = va_arg(a, gpointer);
+	if (ptr)
+		g_warning("Wrong arg_count!");
+	va_end(a);
+}
+
+
 /* Creates a string array deep copy of a series of non-NULL strings.
  * The first argument is nothing special.
  * The list must be ended with NULL.

@@ -57,13 +57,6 @@
 #define utils_strdupa(str) \
 	strcpy(g_alloca(strlen(str) + 1), str)
 
-/** Free up to four pointers. */
-#define utils_free_pointers(one, two, three, four)\
-	g_free(one);\
-	g_free(two);\
-	g_free(three);\
-	g_free(four);
-
 /** Iterates all the items in @a array using pointers.
  * @param item pointer to an item in @a array.
  * @param array C array to traverse.
@@ -194,6 +187,8 @@ gboolean utils_wrap_string(gchar *string, gint wrapstart);
 gchar *utils_get_locale_from_utf8(const gchar *utf8_text);
 
 gchar *utils_get_utf8_from_locale(const gchar *locale_text);
+
+void utils_free_pointers(gsize arg_count, ...) G_GNUC_NULL_TERMINATED;
 
 gchar **utils_strv_new(const gchar *first, ...) G_GNUC_NULL_TERMINATED;
 

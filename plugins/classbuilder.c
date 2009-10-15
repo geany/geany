@@ -188,6 +188,27 @@ static void cc_dlg_on_base_name_entry_changed(GtkWidget *entry, CreateClassDialo
 static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg);
 
 
+/* The list must be ended with NULL as an extra check that arg_count is correct. */
+static void
+free_pointers(gsize arg_count, ...)
+{
+	va_list a;
+	gsize i;
+	gpointer ptr;
+
+	va_start(a, arg_count);
+	for (i = 0; i < arg_count; i++)
+	{
+		ptr = va_arg(a, gpointer);
+		g_free(ptr);
+	}
+	ptr = va_arg(a, gpointer);
+	if (ptr)
+		g_warning("Wrong arg_count!");
+	va_end(a);
+}
+
+
 static gchar*
 get_template_class_header(ClassInfo *class_info)
 {
@@ -688,12 +709,12 @@ static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg)
 		g_free(text);
 	}
 
-	utils_free_pointers(tmp, class_info->class_name, class_info->class_name_up, NULL);
-	utils_free_pointers(class_info->base_name, class_info->class_name_low, class_info->base_include, NULL);
-	utils_free_pointers(class_info->header, class_info->header_guard, class_info->source, NULL);
-	utils_free_pointers(class_info->base_decl, class_info->constructor_decl, class_info->constructor_impl, NULL);
-	utils_free_pointers(class_info->gtk_destructor_registration, class_info->destructor_decl, NULL, NULL);
-	utils_free_pointers(class_info->destructor_impl, class_info->base_gtype, class_info, NULL);
+	free_pointers(17, tmp, class_info->class_name, class_info->class_name_up,
+		class_info->base_name, class_info->class_name_low, class_info->base_include,
+		class_info->header, class_info->header_guard, class_info->source, class_info->base_decl,
+		class_info->constructor_decl, class_info->constructor_impl,
+		class_info->gtk_destructor_registration, class_info->destructor_decl,
+		class_info->destructor_impl, class_info->base_gtype, class_info, NULL);
 }
 
 

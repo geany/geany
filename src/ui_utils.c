@@ -1721,7 +1721,7 @@ static void on_config_file_clicked(GtkWidget *widget, gpointer user_data)
 			g_file_get_contents(global_file, &global_content, NULL, NULL);
 
 		document_new_file(utf8, ft, global_content);
-		utils_free_pointers(utf8, base_name, global_file, global_content);
+		utils_free_pointers(4, utf8, base_name, global_file, global_content, NULL);
 	}
 }
 
