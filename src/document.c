@@ -569,8 +569,6 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 
 	doc->editor = editor_create(doc);
 
-	editor_apply_update_prefs(doc->editor);
-
 	sidebar_openfiles_add(doc);	/* sets doc->iter */
 
 	notebook_new_tab(doc);

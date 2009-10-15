@@ -87,14 +87,15 @@ static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data);
 
 
 /* line numbers visibility */
-static void set_line_numbers(ScintillaObject * sci, gboolean set, gint extra_width)
+static void set_line_numbers(ScintillaObject * sci, gboolean set)
 {
 	if (set)
 	{
 		gchar tmp_str[15];
 		gint len = scintilla_send_message(sci, SCI_GETLINECOUNT, 0, 0);
 		gint width;
-		g_snprintf(tmp_str, 15, "_%d%d", len, extra_width);
+
+		g_snprintf(tmp_str, 15, "_%d", len);
 		width = scintilla_send_message(sci, SCI_TEXTWIDTH, STYLE_LINENUMBER, (sptr_t) tmp_str);
 		scintilla_send_message(sci, SCI_SETMARGINWIDTHN, 0, width);
 		scintilla_send_message(sci, SCI_SETMARGINSENSITIVEN, 0, FALSE); /* use default behaviour */
@@ -109,16 +110,20 @@ static void set_line_numbers(ScintillaObject * sci, gboolean set, gint extra_wid
 static void sync_to_current(ScintillaObject *sci, ScintillaObject *current)
 {
 	gpointer sdoc;
+	gint pos;
 
 	/* set the new sci widget to view the existing Scintilla document */
 	sdoc = (gpointer) scintilla_send_message(current, SCI_GETDOCPOINTER, 0, 0);
 	scintilla_send_message(sci, SCI_SETDOCPOINTER, 0, (sptr_t) sdoc);
 
 	highlighting_set_styles(sci, edit_window.editor->document->file_type);
+	pos = sci_get_current_position(current);
+	sci_set_current_position(sci, pos, TRUE);
 
 	/* override some defaults */
-	set_line_numbers(sci, TRUE, 0);
-	scintilla_send_message(sci, SCI_SETMARGINWIDTHN, 1, 0 ); /* hide marker margin */
+	set_line_numbers(sci, geany->editor_prefs->show_linenumber_margin);
+	scintilla_send_message(sci, SCI_SETMARGINWIDTHN, 1, 0 ); /* hide marker margin (no commands) */
+	scintilla_send_message(sci, SCI_SETMARGINWIDTHN, 2, 0 ); /* hide fold margin (no toggle callback) */
 }
 
 

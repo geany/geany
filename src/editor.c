@@ -4693,6 +4693,7 @@ ScintillaObject *editor_create_widget(GeanyEditor *editor)
 
 	editor_set_indent_type(editor, iprefs->type);
 	editor_set_font(editor, interface_prefs.editor_font);
+	editor_apply_update_prefs(editor);
 
 	/* if editor already had a widget, restore it */
 	if (old)

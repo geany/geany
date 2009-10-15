@@ -19,6 +19,10 @@
    filetypes.common settings get set too.
    Make highlighting_set_styles() take GeanyFiletype pointer instead of
    filetype id.
+ * src/document.c, src/editor.c, plugins/splitwindow.c:
+   Call editor_apply_update_prefs() from editor_create_widget() so
+   correct tab width and other settings are applied for Split Window
+   plugin.
 
 
 2009-10-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
