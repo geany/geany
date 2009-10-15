@@ -12,6 +12,13 @@
    src/project.c, src/search.c, src/editor.c, src/ui_utils.c,
    plugins/classbuilder.c:
    Revert r4301 - utils_free_pointers() taking 4 arguments.
+ * src/highlighting.c, src/highlighting.h, src/plugindata.h,
+   src/document.c, src/plugins.c, plugins/geanyfunctions.h,
+   plugins/splitwindow.c:
+   Add highlighting_set_styles() to API, use for Split Window plugin so
+   filetypes.common settings get set too.
+   Make highlighting_set_styles() take GeanyFiletype pointer instead of
+   filetype id.
 
 
 2009-10-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

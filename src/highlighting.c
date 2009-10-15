@@ -3233,18 +3233,21 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 /* lang_name is the name used for the styleset_foo function, e.g. foo. */
 #define styleset_case(ft_id, styleset_func) \
 	case (ft_id): \
-		styleset_func (sci); \
+		styleset_func(sci); \
 		break
 
-void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
+/** Setup highlighting and other visual settings.
+ * @param sci Scintilla widget.
+ * @param ft Filetype settings to use. */
+void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 {
-	filetypes_load_config(filetype_idx, FALSE);	/* load filetypes.ext */
+	filetypes_load_config(ft->id, FALSE);	/* load filetypes.ext */
 
 	/* load tags files (some lexers highlight global typenames) */
-	if (filetype_idx != GEANY_FILETYPES_NONE)
-		symbols_global_tags_loaded(filetype_idx);
+	if (ft->id != GEANY_FILETYPES_NONE)
+		symbols_global_tags_loaded(ft->id);
 
-	switch (filetype_idx)
+	switch (ft->id)
 	{
 		styleset_case(GEANY_FILETYPES_ADA,		styleset_ada);
 		styleset_case(GEANY_FILETYPES_ASM,		styleset_asm);
@@ -3291,7 +3294,7 @@ void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 		styleset_case(GEANY_FILETYPES_YAML,		styleset_yaml);
 		case GEANY_FILETYPES_NONE:
 		default:
-			styleset_default(sci, filetype_idx);
+			styleset_default(sci, ft->id);
 	}
 }
 

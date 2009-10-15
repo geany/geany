@@ -294,6 +294,8 @@
 	geany_functions->p_search->show_find_in_files_dialog
 #define highlighting_get_style \
 	geany_functions->p_highlighting->get_style
+#define highlighting_set_styles \
+	geany_functions->p_highlighting->set_styles
 #define filetypes_detect_from_file \
 	geany_functions->p_filetypes->detect_from_file
 #define filetypes_lookup_by_name \

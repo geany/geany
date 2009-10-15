@@ -2469,7 +2469,7 @@ static void document_load_config(GeanyDocument *doc, GeanyFiletype *type,
 			tm_workspace_remove_object(doc->tm_file, TRUE, TRUE);
 			doc->tm_file = NULL;
 		}
-		highlighting_set_styles(doc->editor->sci, type->id);
+		highlighting_set_styles(doc->editor->sci, type);
 		editor_set_indentation_guides(doc->editor);
 		build_menu_update(doc);
 		queue_colourise(doc);

@@ -272,7 +272,8 @@ static SearchFuncs search_funcs = {
 };
 
 static HighlightingFuncs highlighting_funcs = {
-	&highlighting_get_style
+	&highlighting_get_style,
+	&highlighting_set_styles
 };
 
 static FiletypeFuncs filetype_funcs = {

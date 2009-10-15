@@ -50,7 +50,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 161,
+	GEANY_API_VERSION = 162,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -493,6 +493,7 @@ KeybindingFuncs;
 typedef struct HighlightingFuncs
 {
 	const struct GeanyLexerStyle* (*get_style) (gint ft_id, gint style_id);
+	void		(*set_styles) (struct _ScintillaObject *sci, struct GeanyFiletype *ft);
 }
 HighlightingFuncs;
 

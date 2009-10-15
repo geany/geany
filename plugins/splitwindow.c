@@ -86,54 +86,6 @@ static EditWindow edit_window = {NULL, NULL, NULL, NULL};
 static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data);
 
 
-static gint sci_get_value(ScintillaObject *sci, gint message_id, gint param)
-{
-	return scintilla_send_message(sci, message_id, param, 0);
-}
-
-
-static void set_styles(ScintillaObject *oldsci, ScintillaObject *newsci)
-{
-	gint style_id;
-	gint val;
-
-	for (style_id = 0; style_id <= 127; style_id++)
-	{
-		val = sci_get_value(oldsci, SCI_STYLEGETFORE, style_id);
-		scintilla_send_message(newsci, SCI_STYLESETFORE, style_id, val);
-		val = sci_get_value(oldsci, SCI_STYLEGETBACK, style_id);
-		scintilla_send_message(newsci, SCI_STYLESETBACK, style_id, val);
-		val = sci_get_value(oldsci, SCI_STYLEGETBOLD, style_id);
-		scintilla_send_message(newsci, SCI_STYLESETBOLD, style_id, val);
-		val = sci_get_value(oldsci, SCI_STYLEGETITALIC, style_id);
-		scintilla_send_message(newsci, SCI_STYLESETITALIC, style_id, val);
-	}
-	val = sci_get_value(oldsci, SCI_GETCARETFORE, 0);
-	scintilla_send_message(newsci, SCI_SETCARETFORE, val, 0);
-}
-
-
-static void update_font(ScintillaObject *current, ScintillaObject *sci)
-{
-	gint style_id;
-	gint size;
-	gchar font_name[1024]; /* should be big enough */
-
-	scintilla_send_message(current, SCI_STYLEGETFONT, 0, (sptr_t)font_name);
-	size = sci_get_value(current, SCI_STYLEGETSIZE, 0);
-
-	for (style_id = 0; style_id <= 127; style_id++)
-	{
-		sci_set_font(sci, style_id, font_name, size);
-	}
-
-	/* line number and braces */
-	sci_set_font(sci, STYLE_LINENUMBER, font_name, size);
-	sci_set_font(sci, STYLE_BRACELIGHT, font_name, size);
-	sci_set_font(sci, STYLE_BRACEBAD, font_name, size);
-}
-
-
 /* line numbers visibility */
 static void set_line_numbers(ScintillaObject * sci, gboolean set, gint extra_width)
 {
@@ -157,20 +109,12 @@ static void set_line_numbers(ScintillaObject * sci, gboolean set, gint extra_wid
 static void sync_to_current(ScintillaObject *sci, ScintillaObject *current)
 {
 	gpointer sdoc;
-	gint lexer;
-	gint pos;
 
 	/* set the new sci widget to view the existing Scintilla document */
 	sdoc = (gpointer) scintilla_send_message(current, SCI_GETDOCPOINTER, 0, 0);
 	scintilla_send_message(sci, SCI_SETDOCPOINTER, 0, (sptr_t) sdoc);
 
-	update_font(current, sci);
-	lexer = scintilla_send_message(current, SCI_GETLEXER, 0, 0);
-	scintilla_send_message(sci, SCI_SETLEXER, lexer, 0);
-	set_styles(current, sci);
-
-	pos = sci_get_current_position(current);
-	sci_set_current_position(sci, pos, TRUE);
+	highlighting_set_styles(sci, edit_window.editor->document->file_type);
 
 	/* override some defaults */
 	set_line_numbers(sci, TRUE, 0);
