@@ -166,7 +166,7 @@ int ScintillaBase::KeyCommand(unsigned int iMessage) {
 			EnsureCaretVisible();
 			return 0;
 		case SCI_TAB:
-			AutoCompleteCompleted('\t');
+			AutoCompleteCompleted();
 			return 0;
 		case SCI_NEWLINE:
 			AutoCompleteCompleted();
@@ -336,7 +336,7 @@ void ScintillaBase::AutoCompleteCharacterDeleted() {
 	NotifyParent(scn);
 }
 
-void ScintillaBase::AutoCompleteCompleted(char key) {
+void ScintillaBase::AutoCompleteCompleted() {
 	int item = ac.lb->GetSelection();
 	char selected[1000];
 	selected[0] = '\0';
@@ -357,7 +357,6 @@ void ScintillaBase::AutoCompleteCompleted(char key) {
 	scn.listType = listType;
 	Position firstPos = ac.posStart - ac.startLen;
 	scn.lParam = firstPos;
-	scn.ch = key;
 	scn.text = listSelected.c_str();
 	NotifyParent(scn);
 
