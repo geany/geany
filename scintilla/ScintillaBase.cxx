@@ -392,6 +392,23 @@ int ScintillaBase::AutoCompleteGetCurrent() {
 	return ac.lb->GetSelection();
 }
 
+int ScintillaBase::AutoCompleteGetCurrentText(char *buffer) {
+	if (ac.Active()) {
+		int item = ac.lb->GetSelection();
+		char selected[1000];
+		selected[0] = '\0';
+		if (item != -1) {
+			ac.lb->GetValue(item, selected, sizeof(selected));
+			if (buffer != NULL)
+				strcpy(buffer, selected);
+			return strlen(selected);
+		}
+	}
+	if (buffer != NULL)
+		*buffer = '\0';
+	return 0;
+}
+
 void ScintillaBase::CallTipShow(Point pt, const char *defn) {
 	ac.Cancel();
 	pt.y += vs.lineHeight;
@@ -563,6 +580,9 @@ sptr_t ScintillaBase::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lPara
 
 	case SCI_AUTOCGETCURRENT:
 		return AutoCompleteGetCurrent();
+
+	case SCI_AUTOCGETCURRENTTEXT:
+		return AutoCompleteGetCurrentText(reinterpret_cast<char *>(lParam));
 
 	case SCI_AUTOCSETCANCELATSTART:
 		ac.cancelAtStartPos = wParam != 0;

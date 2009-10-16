@@ -767,22 +767,12 @@ static void auto_update_margin_width(GeanyEditor *editor)
 }
 
 
-static gboolean delay_autocomplete(gpointer data)
-{
-	keybindings_send_command(GEANY_KEY_GROUP_EDITOR, GEANY_KEYS_EDITOR_AUTOCOMPLETE);
-	return FALSE;
-}
-
-
 static void partial_complete(ScintillaObject *sci, const gchar *text)
 {
 	gint pos = sci_get_current_position(sci);
 
 	sci_insert_text(sci, pos, text);
 	sci_set_current_position(sci, pos + strlen(text), TRUE);
-	sci_cancel(sci);	/* cancel full AC */
-	/* a timeout of 0 means the AC box doesn't flicker */
-	g_timeout_add(0, delay_autocomplete, NULL);
 }
 
 
@@ -804,6 +794,7 @@ static void check_partial_completion(GeanyEditor *editor, const gchar *entry)
 	{
 		ptr[1] = '\0';
 		partial_complete(editor->sci, text);
+		return;
 	}
 	else
 	{
@@ -816,10 +807,12 @@ static void check_partial_completion(GeanyEditor *editor, const gchar *entry)
 			{
 				ptr[0] = '\0';
 				partial_complete(editor->sci, text);
-				break;
+				return;
 			}
 		}
 	}
+	/* no word part, complete normally */
+	SSM(editor->sci, SCI_AUTOCCOMPLETE, 0, 0);
 }
 
 
@@ -900,10 +893,6 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 				sci_cancel(sci);
 				utils_beep();
 				break;
-			}
-			if (nt->ch == '\t')
-			{
-				check_partial_completion(editor, nt->text);
 			}
 			/* fall through */
 		case SCN_AUTOCCANCELLED:
@@ -4741,6 +4730,36 @@ static void on_document_save(GObject *obj, GeanyDocument *doc)
 }
 
 
+/* safe way to read Scintilla string into a buffer */
+static gchar *sci_get_string(ScintillaObject *sci, gint msg)
+{
+	gint size = SSM(sci, msg, 0, 0) + 1;
+	gchar *str = g_malloc(size);
+
+	SSM(sci, msg, 0, (sptr_t)str);
+	return str;
+}
+
+
+static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+{
+	GeanyDocument *doc;
+	gchar *entry;
+
+	if (event->state || event->keyval != GDK_Tab)
+		return FALSE;
+
+	doc = document_get_current();
+	if (!doc || !SSM(doc->editor->sci, SCI_AUTOCACTIVE, 0, 0))
+		return FALSE;
+
+	entry = sci_get_string(doc->editor->sci, SCI_AUTOCGETCURRENTTEXT);
+	check_partial_completion(doc->editor, entry);
+	g_free(entry);
+	return TRUE;
+}
+
+
 void editor_init(void)
 {
 	static GeanyIndentPrefs indent_prefs;
@@ -4752,6 +4771,8 @@ void editor_init(void)
 	/* use g_signal_connect_after() to allow plugins connecting to the signal before the default
 	 * handler (on_editor_notify) is called */
 	g_signal_connect_after(geany_object, "editor-notify", G_CALLBACK(on_editor_notify), NULL);
+
+	g_signal_connect(main_widgets.window, "key-press-event", G_CALLBACK(on_key_press_event), NULL);
 
 	ui_add_config_file_menu_item(utils_build_path(app->configdir, "snippets.conf", NULL),
 		NULL, NULL);

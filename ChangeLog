@@ -2,6 +2,13 @@
 
  * src/sciwrappers.c:
    Remove unnecessary line number margin padding.
+ * scintilla/include/Scintilla.h, scintilla/include/Scintilla.iface,
+   scintilla/ScintillaBase.h, scintilla/ScintillaBase.cxx,
+   src/editor.c:
+   Improve word part autocompletion so AC list is not cancelled and
+   reshown (this also stops the selection changing).
+   Add SCI_AUTOCGETCURRENTTEXT message (will be sent upstream).
+   Merge Scintilla.h, Scintilla.iface from upstream.
 
 
 2009-10-16  Lex Trotman  <elextr(at)gmail(dot)com>
