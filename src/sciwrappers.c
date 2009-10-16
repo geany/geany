@@ -47,8 +47,13 @@ void sci_set_line_numbers(ScintillaObject *sci, gboolean set, gint extra_width)
 		gint len = SSM(sci, SCI_GETLINECOUNT, 0, 0);
 		gint width;
 
-		g_snprintf(tmp_str, 15, "_%d%d", len, extra_width);
+		g_snprintf(tmp_str, 15, "_%d", len);
 		width = sci_text_width(sci, STYLE_LINENUMBER, tmp_str);
+		if (extra_width)
+		{
+			g_snprintf(tmp_str, 15, "%d", extra_width);
+			width += sci_text_width(sci, STYLE_LINENUMBER, tmp_str);
+		}
 		SSM(sci, SCI_SETMARGINWIDTHN, 0, width);
 		SSM(sci, SCI_SETMARGINSENSITIVEN, 0, FALSE); /* use default behaviour */
 	}
