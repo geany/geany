@@ -10,6 +10,8 @@
    Add SCI_AUTOCGETCURRENTTEXT message (will be sent upstream).
  * src/editor.c:
    Improve CamelCase word part autocompletion for runs of capital letters.
+ * src/editor.c:
+   Don't complete snippets if there's a selection.
 
 
 2009-10-16  Lex Trotman  <elextr(at)gmail(dot)com>

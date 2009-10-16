@@ -2368,6 +2368,8 @@ gboolean editor_complete_snippet(GeanyEditor *editor, gint pos)
 	g_return_val_if_fail(editor != NULL, FALSE);
 
 	sci = editor->sci;
+	if (sci_has_selection(sci))
+		return FALSE;
 	/* return if we are editing an existing line (chars on right of cursor) */
 	if (keybindings_lookup_item(GEANY_KEY_GROUP_EDITOR,
 			GEANY_KEYS_EDITOR_COMPLETESNIPPET)->key == GDK_space &&
