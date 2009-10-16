@@ -803,7 +803,7 @@ static void check_partial_completion(GeanyEditor *editor, const gchar *entry)
 		{
 			if (!ptr[0])
 				break;
-			if (g_ascii_isupper(*ptr))
+			if (g_ascii_isupper(*ptr) && g_ascii_islower(ptr[1]))
 			{
 				ptr[0] = '\0';
 				partial_complete(editor->sci, text);

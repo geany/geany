@@ -8,6 +8,8 @@
    Improve word part autocompletion so AC list is not cancelled and
    reshown (this also stops the selection changing).
    Add SCI_AUTOCGETCURRENTTEXT message (will be sent upstream).
+ * src/editor.c:
+   Improve CamelCase word part autocompletion for runs of capital letters.
 
 
 2009-10-16  Lex Trotman  <elextr(at)gmail(dot)com>
