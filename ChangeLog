@@ -1,3 +1,9 @@
+2009-10-16  Lex Trotman  <elextr(at)gmail(dot)com>
+
+ * src/build.c:
+   Fix crash opening project when Geany started with no geany.conf.
+
+
 2009-10-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * scintilla/ScintillaBase.h, scintilla/ScintillaBase.cxx, src/utils.c,

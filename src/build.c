@@ -2283,8 +2283,8 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 				ft->error_regex_string = g_key_file_get_string(config, "build_settings", "error_regex", NULL);
 			break;
 		case GEANY_BCS_PROJ:
-			if (non_ft_proj == NULL)
-				non_ft_proj = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_NON_FT]);
+			if (non_ft_pref == NULL)
+				non_ft_pref = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_NON_FT]);
 			basedir = project_get_base_path();
 			if (basedir == NULL)
 				basedir = g_strdup("%d");
