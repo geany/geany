@@ -1,3 +1,10 @@
+2009-10-19  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * THANKS, src/about.c:
+   Add Xhacker Liu for his work at zh_CN translation to long list of
+   translators.
+
+
 2009-10-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/sciwrappers.c:
