@@ -72,6 +72,9 @@ sub parse($)
 			# no space on inside of brackets
 			$line =~ s/\(\s+/(/g;
 			$line =~ s/(\S)\s+\)/$1)/g;
+
+			# enforce 'fn(void);' in prototypes
+			$line =~ s/^(\w.+\w\()\);$/$1void);/;
 		}
 		# strip trailing space again (e.g. a trailing operator now has space afterwards)
 		$line =~ s/\s+$//g;
