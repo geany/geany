@@ -207,7 +207,7 @@ void sci_undo(ScintillaObject *sci)
 
 void sci_redo(ScintillaObject *sci)
 {
-	if (sci_can_redo(sci) )
+	if (sci_can_redo(sci))
 		SSM(sci, SCI_REDO, 0, 0);
 }
 

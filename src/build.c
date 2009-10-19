@@ -2176,7 +2176,7 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 	GeanyProject  	*pj;
 	gchar 			**ftlist;
 	gchar 			*value, *basedir, *makebasedir;
-	gboolean 		 bvalue=FALSE;
+	gboolean 		 bvalue = FALSE;
 
 	if (g_key_file_has_group(config, build_grp_name))
 	{
@@ -2320,7 +2320,7 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 			value = g_key_file_get_string(config, "tools", "make_cmd", NULL);
 			if (value != NULL)
 			{
-				if (non_ft_pref == NULL )
+				if (non_ft_pref == NULL)
 					non_ft_pref = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_NON_FT]);
 				ASSIGNIF(non_ft_pref, GEANY_GBO_CUSTOM, "Make Custom _Target",
 						g_strdup_printf("%s ", value));
