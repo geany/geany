@@ -1235,10 +1235,18 @@ static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
 		filetypes[ft_id]->context_action_cmd = result;
 	}
 
+	result = utils_get_setting_string(configh, "settings", "tag_parser", NULL);
+	if (!result)
+		result = utils_get_setting_string(config, "settings", "tag_parser", NULL);
+	if (result)
+	{
+		ft->lang = tm_source_file_get_named_lang(result);
+		g_free(result);
+	}
+
 	/* read build settings */
 	build_load_menu(config, GEANY_BCS_FT, (gpointer)ft);
 	build_load_menu(configh, GEANY_BCS_HOME_FT, (gpointer)ft);
-
 }
 
 

@@ -323,3 +323,15 @@ const gchar *tm_source_file_get_lang_name(gint lang)
 	return getLanguageName(lang);
 }
 
+gint tm_source_file_get_named_lang(const gchar *name)
+{
+	if (NULL == LanguageTable)
+	{
+		initializeParsing();
+		installLanguageMapDefaults();
+		if (NULL == TagEntryFunction)
+			TagEntryFunction = tm_source_file_tags;
+	}
+	return getNamedLanguage(name);
+}
+

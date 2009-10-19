@@ -2,6 +2,12 @@
 
  * doc/geany.txt, doc/geany.html:
    Add 'Custom filetypes' section.
+ * src/filetypes.c, src/filetypes.h, src/document.c,
+   doc/geany.txt, doc/geany.html, tagmanager/tm_source_file.c,
+   tagmanager/include/tm_source_file.h:
+   Add filetype "tag_parser" key so custom filetypes can use an existing
+   tag parser.
+   Add tm_source_file_get_named_lang().
 
 
 2009-10-19  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

@@ -109,7 +109,7 @@ struct GeanyFiletype
 	/** Represents the langType of tagmanager (see the table
 	 * in tagmanager/parsers.h), -1 represents all, -2 none. */
 	langType 		  lang;
-	gchar			 *name;				/**< Used as name for tagmanager. E.g. "C". */
+	gchar			 *name;				/**< Short name, e.g. "C". */
 	gchar			 *title;			/**< Shown in the file open dialog. E.g. "C source file". */
 	gchar			 *extension;		/**< Default file extension for new files, or @c NULL. */
 	gchar			**pattern;			/**< Array of filename-matching wildcard strings. */

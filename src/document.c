@@ -2321,8 +2321,11 @@ void document_update_tag_list(GeanyDocument *doc, gboolean update)
 	if (doc->tm_file == NULL)
 	{
 		gchar *locale_filename = utils_get_locale_from_utf8(doc->file_name);
+		const gchar *name;
 
-		doc->tm_file = tm_source_file_new(locale_filename, FALSE, doc->file_type->name);
+		/* lookup the name rather than using filetype name to support custom filetypes */
+		name = tm_source_file_get_lang_name(doc->file_type->lang);
+		doc->tm_file = tm_source_file_new(locale_filename, FALSE, name);
 		g_free(locale_filename);
 
 		if (doc->tm_file)
