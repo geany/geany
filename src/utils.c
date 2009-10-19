@@ -806,15 +806,13 @@ gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gc
 								const gchar *default_value)
 {
 	gchar *tmp;
-	GError *error = NULL;
 
 	if (G_UNLIKELY(config == NULL))
 		return g_strdup(default_value);
 
-	tmp = g_key_file_get_string(config, section, key, &error);
-	if (G_UNLIKELY(error))
+	tmp = g_key_file_get_string(config, section, key, NULL);
+	if (G_UNLIKELY(!tmp))
 	{
-		g_error_free(error);
 		return g_strdup(default_value);
 	}
 	return tmp;
