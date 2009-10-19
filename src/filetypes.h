@@ -119,6 +119,7 @@ struct GeanyFiletype
 	gboolean		  comment_use_indent;
 	GeanyFiletypeGroupID group;
 	gchar			 *error_regex_string;
+	GeanyFiletype	 *lexer_filetype;
 
 	struct GeanyFiletypePrivate	*priv;	/* must be last, append fields before this item */
 #ifdef GEANY_PRIVATE

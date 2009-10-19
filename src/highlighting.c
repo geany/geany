@@ -3243,6 +3243,13 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 {
 	filetypes_load_config(ft->id, FALSE);	/* load filetypes.ext */
 
+	/* now settings are loaded, check lexer_filetype */
+	if (ft->lexer_filetype)
+	{
+		highlighting_set_styles(sci, ft->lexer_filetype);
+		return;
+	}
+
 	/* load tags files (some lexers highlight global typenames) */
 	if (ft->id != GEANY_FILETYPES_NONE)
 		symbols_global_tags_loaded(ft->id);

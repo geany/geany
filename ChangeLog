@@ -8,6 +8,10 @@
    Add filetype "tag_parser" key so custom filetypes can use an existing
    tag parser.
    Add tm_source_file_get_named_lang().
+ * src/highlighting.c, src/filetypes.c, src/filetypes.h, doc/geany.txt,
+   doc/geany.html:
+   Add filetype "lexer_filetype" key so custom filetypes can use an
+   existing lexer.
 
 
 2009-10-19  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

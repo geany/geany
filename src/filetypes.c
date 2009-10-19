@@ -1244,6 +1244,15 @@ static void load_settings(gint ft_id, GKeyFile *config, GKeyFile *configh)
 		g_free(result);
 	}
 
+	result = utils_get_setting_string(configh, "settings", "lexer_filetype", NULL);
+	if (!result)
+		result = utils_get_setting_string(config, "settings", "lexer_filetype", NULL);
+	if (result)
+	{
+		ft->lexer_filetype = filetypes_lookup_by_name(result);
+		g_free(result);
+	}
+
 	/* read build settings */
 	build_load_menu(config, GEANY_BCS_FT, (gpointer)ft);
 	build_load_menu(configh, GEANY_BCS_HOME_FT, (gpointer)ft);

@@ -3334,8 +3334,9 @@ have been implemented:
 * Recognizing and setting the filetype (after the user has manually edited
   ``filetype_extensions.conf``).
 * Filetype settings in the [settings] section (see `Format`_).
+    * Using existing tag parsing (``tag_parser`` key).
+    * Using existing syntax highlighting (``lexer_filetype`` key).
 * Build commands.
-* Tag parsing (``tag_parser`` key).
 
 System files
 ^^^^^^^^^^^^
@@ -3505,6 +3506,9 @@ context_action_cmd
 
 tag_parser
     The TagManager language name, e.g. "C".
+
+lexer_filetype
+    A filetype name to setup syntax highlighting from another filetype.
 
 
 [build_settings] Section
