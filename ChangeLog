@@ -1,3 +1,9 @@
+2009-10-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * doc/geany.txt, doc/geany.html:
+   Add 'Custom filetypes' section.
+
+
 2009-10-19  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * THANKS, src/about.c:

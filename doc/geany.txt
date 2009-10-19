@@ -3322,6 +3322,22 @@ stored in the filetype definition files. Those settings are colors
 for syntax highlighting, general settings like comment characters or
 word delimiter characters as well as compiler and linker settings.
 
+Custom filetypes
+^^^^^^^^^^^^^^^^
+At startup Geany looks for ``filetypes.*.conf`` files in the system and
+user filetype paths, adding any filetypes found with the name matching
+the '``*``' wildcard.
+
+Custom filetypes are not as powerful as built-in filetypes. The following
+have been implemented:
+
+* Recognizing and setting the filetype (after the user has manually edited
+  ``filetype_extensions.conf``).
+* Filetype settings in the [settings] section (see `Format`_).
+* Build commands.
+
+System files
+^^^^^^^^^^^^
 The system-wide configuration files can be found in
 ``$prefix/share/geany`` and are called ``filetypes.$ext``,
 where ``$prefix`` is the path where Geany is installed (see
@@ -3334,6 +3350,8 @@ which are not specific to a certain filetype.
     It is not recommended that users edit the system-wide files,
     because they will be overridden when Geany is updated.
 
+User files
+^^^^^^^^^^
 To change the settings, copy a file from ``$prefix/share/geany`` to
 the subdirectory filedefs in your configuration directory (usually
 ``~/.config/geany/``).
