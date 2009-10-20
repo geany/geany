@@ -3175,6 +3175,8 @@ Switch to Search Bar            F7                        Switches to the search
 Switch to Sidebar                                         Focus the Sidebar.
 
 Switch to Compiler                                        Focus the Compiler message window tab.
+
+Switch to Messages                                        Focus the Messages message window tab.
 =============================== ========================= ==================================================
 
 

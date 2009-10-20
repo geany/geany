@@ -10,6 +10,8 @@
    like before.
  * src/keybindings.c, src/keybindings.h, doc/geany.txt, doc/geany.html:
    Add 'Select to previous/next word part' keybindings.
+ * src/keybindings.c, src/keybindings.h, doc/geany.txt, doc/geany.html:
+   Add 'Switch to Messages' focus keybinding.
 
 
 2009-10-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

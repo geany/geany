@@ -460,6 +460,8 @@ static void init_default_kb(void)
 		0, 0, "switch_sidebar", _("Switch to Sidebar"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_FOCUS_COMPILER, NULL,
 		0, 0, "switch_compiler", _("Switch to Compiler"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_FOCUS_MESSAGES, NULL,
+		0, 0, "switch_messages", _("Switch to Messages"), NULL);
 
 	group = ADD_KB_GROUP(NOTEBOOK, _("Notebook tab"), NULL);
 
@@ -1563,6 +1565,9 @@ static gboolean cb_func_switch_action(guint key_id)
 			break;
 		case GEANY_KEYS_FOCUS_COMPILER:
 			msgwin_switch_tab(MSG_COMPILER, TRUE);
+			break;
+		case GEANY_KEYS_FOCUS_MESSAGES:
+			msgwin_switch_tab(MSG_MESSAGE, TRUE);
 			break;
 	}
 	return TRUE;
