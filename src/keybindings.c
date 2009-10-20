@@ -420,9 +420,9 @@ static void init_default_kb(void)
 		GDK_End, 0, "edit_gotolineend", _("Go to End of Line"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_GOTO_LINEENDVISUAL, NULL,
 		GDK_End, GDK_MOD1_MASK, "edit_gotolineendvisual", _("Go to End of Display Line"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_GOTO_PREVWORDSTART, NULL,
+	keybindings_set_item(group, GEANY_KEYS_GOTO_PREVWORDPART, NULL,
 		GDK_slash, GDK_CONTROL_MASK, "edit_prevwordstart", _("Go to Previous Word Part"), NULL);
-	keybindings_set_item(group, GEANY_KEYS_GOTO_NEXTWORDSTART, NULL,
+	keybindings_set_item(group, GEANY_KEYS_GOTO_NEXTWORDPART, NULL,
 		GDK_backslash, GDK_CONTROL_MASK, "edit_nextwordstart", _("Go to Next Word Part"), NULL);
 
 	group = ADD_KB_GROUP(VIEW, _("View"), cb_func_view_action);
@@ -1922,10 +1922,10 @@ static gboolean cb_func_goto_action(guint key_id)
 		case GEANY_KEYS_GOTO_LINEENDVISUAL:
 			sci_send_command(doc->editor->sci, SCI_LINEENDDISPLAY);
 			break;
-		case GEANY_KEYS_GOTO_PREVWORDSTART:
+		case GEANY_KEYS_GOTO_PREVWORDPART:
 			sci_send_command(doc->editor->sci, SCI_WORDPARTLEFT);
 			break;
-		case GEANY_KEYS_GOTO_NEXTWORDSTART:
+		case GEANY_KEYS_GOTO_NEXTWORDPART:
 			sci_send_command(doc->editor->sci, SCI_WORDPARTRIGHT);
 			break;
 	}
