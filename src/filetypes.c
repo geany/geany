@@ -1420,7 +1420,8 @@ GtkFileFilter *filetypes_create_file_filter(const GeanyFiletype *ft)
 }
 
 
-/* Indicates whether there is a tag parser for the filetype or not. */
+/* Indicates whether there is a tag parser for the filetype or not.
+ * Only works for custom filetypes if the filetype settings have been loaded. */
 gboolean filetype_has_tags(GeanyFiletype *ft)
 {
 	g_return_val_if_fail(ft != NULL, FALSE);

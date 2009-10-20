@@ -172,6 +172,9 @@ void symbols_global_tags_loaded(gint file_type_idx)
 	if (cl_options.ignore_global_tags || app->tm_workspace == NULL)
 		return;
 
+	/* load config in case of custom filetypes */
+	filetypes_load_config(file_type_idx, FALSE);
+
 	load_user_tags(file_type_idx);
 
 	switch (file_type_idx)
@@ -1299,10 +1302,6 @@ static GeanyFiletype *detect_global_tags_filetype(const gchar *utf8_filename)
 		ft = filetypes_detect_from_extension(shortname);
 	}
 	g_free(shortname);
-
-	if (ft == NULL || ! filetype_has_tags(ft))
-		return NULL;
-
 	return ft;
 }
 

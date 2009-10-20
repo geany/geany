@@ -1,3 +1,10 @@
+2009-10-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/highlighting.c, src/filetypes.c, src/document.c, src/symbols.c,
+   doc/geany.txt, doc/geany.html:
+   Support loading global tags files for custom filetypes.
+
+
 2009-10-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * doc/geany.txt, doc/geany.html:

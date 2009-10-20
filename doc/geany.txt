@@ -3328,7 +3328,7 @@ At startup Geany looks for ``filetypes.*.conf`` files in the system and
 user filetype paths, adding any filetypes found with the name matching
 the '``*``' wildcard.
 
-Custom filetypes are not as powerful as built-in filetypes. The following
+Custom filetypes are not as powerful as built-in filetypes, but the following
 have been implemented:
 
 * Recognizing and setting the filetype (after the user has manually edited
@@ -3337,6 +3337,8 @@ have been implemented:
     * Using existing tag parsing (``tag_parser`` key).
     * Using existing syntax highlighting (``lexer_filetype`` key).
 * Build commands.
+* Loading global tags files (namespace will be shared with tag_parser
+  type).
 
 System files
 ^^^^^^^^^^^^

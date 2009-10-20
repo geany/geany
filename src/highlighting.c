@@ -3250,10 +3250,6 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		return;
 	}
 
-	/* load tags files (some lexers highlight global typenames) */
-	if (ft->id != GEANY_FILETYPES_NONE)
-		symbols_global_tags_loaded(ft->id);
-
 	switch (ft->id)
 	{
 		styleset_case(GEANY_FILETYPES_ADA,		styleset_ada);
