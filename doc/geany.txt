@@ -2958,6 +2958,10 @@ Select current paragraph        Alt-Shift-P               Selects the current pa
 
 Select current line(s)          Alt-Shift-L               Selects the current line under the cursor (and any
                                                           partially selected lines).
+
+Select to previous word part                              (Extend) selection to previous word part boundary.
+
+Select to next word part                                  (Extend) selection to next word part boundary.
 =============================== ========================= ==================================================
 
 

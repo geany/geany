@@ -8,6 +8,8 @@
    Add 'Word part completion' keybinding so keys other than Tab can be
    used, or to clear/change the combination so Tab does full completion
    like before.
+ * src/keybindings.c, src/keybindings.h, doc/geany.txt, doc/geany.html:
+   Add 'Select to previous/next word part' keybindings.
 
 
 2009-10-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

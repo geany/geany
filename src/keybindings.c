@@ -311,6 +311,10 @@ static void init_default_kb(void)
 		GDK_l, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectline", _("Select current line(s)"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_SELECT_PARAGRAPH, NULL,
 		GDK_p, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectparagraph", _("Select current paragraph"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_SELECT_WORDPARTLEFT, NULL,
+		0, 0, "edit_selectwordpartleft", _("Select to previous word part"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_SELECT_WORDPARTRIGHT, NULL,
+		0, 0, "edit_selectwordpartright", _("Select to next word part"), NULL);
 
 	group = ADD_KB_GROUP(FORMAT, _("Format"), cb_func_format_action);
 
@@ -2267,6 +2271,7 @@ static gboolean cb_func_format_action(guint key_id)
 static gboolean cb_func_select_action(guint key_id)
 {
 	GeanyDocument *doc;
+	ScintillaObject *sci;
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 	static GtkWidget *scribble_widget = NULL;
 
@@ -2283,6 +2288,7 @@ static gboolean cb_func_select_action(guint key_id)
 	/* keybindings only valid when scintilla widget has focus */
 	if (doc == NULL || focusw != GTK_WIDGET(doc->editor->sci))
 		return TRUE;
+	sci = doc->editor->sci;
 
 	switch (key_id)
 	{
@@ -2297,6 +2303,12 @@ static gboolean cb_func_select_action(guint key_id)
 			break;
 		case GEANY_KEYS_SELECT_PARAGRAPH:
 			editor_select_paragraph(doc->editor);
+			break;
+		case GEANY_KEYS_SELECT_WORDPARTLEFT:
+			sci_send_command(sci, SCI_WORDPARTLEFTEXTEND);
+			break;
+		case GEANY_KEYS_SELECT_WORDPARTRIGHT:
+			sci_send_command(sci, SCI_WORDPARTRIGHTEXTEND);
 			break;
 	}
 	return TRUE;
