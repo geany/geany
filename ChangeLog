@@ -3,6 +3,11 @@
  * src/highlighting.c, src/filetypes.c, src/document.c, src/symbols.c,
    doc/geany.txt, doc/geany.html:
    Support loading global tags files for custom filetypes.
+ * src/keybindings.c, src/keybindings.h, src/editor.c, src/editor.h,
+   doc/geany.txt, doc/geany.html:
+   Add 'Word part completion' keybinding so keys other than Tab can be
+   used, or to clear/change the combination so Tab does full completion
+   like before.
 
 
 2009-10-19  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

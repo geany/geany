@@ -173,6 +173,8 @@ void editor_sci_notify_cb(GtkWidget *widget, gint scn, gpointer scnt, gpointer d
 
 gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean force);
 
+gboolean editor_complete_word_part(GeanyEditor *editor);
+
 void editor_goto_next_snippet_cursor(GeanyEditor *editor);
 
 gboolean editor_complete_snippet(GeanyEditor *editor, gint pos);

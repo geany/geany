@@ -912,8 +912,10 @@ word on completion* preference is set (in `Editor Completions
 preferences`_) then any characters after the cursor that match
 a symbol or word are deleted.
 
-Pressing Tab will complete by word part of the selected item, useful e.g.
-for adding the prefix ``gtk_combo_box_entry_`` without typing it
+Word part completion
+````````````````````
+By default, pressing Tab will complete the selected item by word part;
+useful e.g. for adding the prefix ``gtk_combo_box_entry_`` without typing it
 manually:
 
 * gtk_com<TAB>
@@ -921,6 +923,10 @@ manually:
 * gtk_combo_box_<e><TAB>
 * gtk_combo_box_entry_<s><ENTER>
 * gtk_combo_box_entry_set_text_column
+
+The key combination can be changed from Tab - See `Editor keybindings`_.
+If you clear/change the key combination for word part completion, Tab
+will complete the whole word instead, like Enter.
 
 Scope autocompletion
 ````````````````````
@@ -2911,6 +2917,10 @@ Context Action                                            Executes a command and
 Move cursor in snippet                                    Jumps to the next defined cursor positions in a
                                                           completed snippets if multiple cursor positions
                                                           where defined.
+
+Word part completion            Tab                       When the autocompletion list is visible, complete
+                                                          the currently selected item up to the next word
+                                                          part.
 =============================== ========================= ==================================================
 
 

@@ -4743,20 +4743,17 @@ static gchar *sci_get_string(ScintillaObject *sci, gint msg)
 }
 
 
-static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+gboolean editor_complete_word_part(GeanyEditor *editor)
 {
-	GeanyDocument *doc;
 	gchar *entry;
 
-	if (event->state || event->keyval != GDK_Tab)
+	g_return_val_if_fail(editor, FALSE);
+
+	if (!SSM(editor->sci, SCI_AUTOCACTIVE, 0, 0))
 		return FALSE;
 
-	doc = document_get_current();
-	if (!doc || !SSM(doc->editor->sci, SCI_AUTOCACTIVE, 0, 0))
-		return FALSE;
-
-	entry = sci_get_string(doc->editor->sci, SCI_AUTOCGETCURRENTTEXT);
-	check_partial_completion(doc->editor, entry);
+	entry = sci_get_string(editor->sci, SCI_AUTOCGETCURRENTTEXT);
+	check_partial_completion(editor, entry);
 	g_free(entry);
 	return TRUE;
 }
@@ -4773,8 +4770,6 @@ void editor_init(void)
 	/* use g_signal_connect_after() to allow plugins connecting to the signal before the default
 	 * handler (on_editor_notify) is called */
 	g_signal_connect_after(geany_object, "editor-notify", G_CALLBACK(on_editor_notify), NULL);
-
-	g_signal_connect(main_widgets.window, "key-press-event", G_CALLBACK(on_key_press_event), NULL);
 
 	ui_add_config_file_menu_item(utils_build_path(app->configdir, "snippets.conf", NULL),
 		NULL, NULL);
