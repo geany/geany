@@ -478,6 +478,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 
 	if (doc != NULL) ft = doc->file_type;
 	build_table = build_commands_table(doc, GEANY_BCS_PROJ, &(e->build_properties), ft);
+	gtk_container_set_border_width(GTK_CONTAINER(build_table), 6);
 	label = gtk_label_new(_("Build"));
 	notebook = ui_lookup_widget(e->dialog, "project_notebook");
 	gtk_notebook_insert_page(GTK_NOTEBOOK(notebook), build_table, label, 2);
