@@ -482,7 +482,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	notebook = ui_lookup_widget(e->dialog, "project_notebook");
 	gtk_notebook_insert_page(GTK_NOTEBOOK(notebook), build_table, label, 2);
 
-	label = gtk_label_new(_("Set the non-filetype working directories on build tab to use base path:"));
+	label = gtk_label_new(_("Set the Build non-filetype working directories to use base path:"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 
 	button = gtk_button_new_with_label(_("Set"));
