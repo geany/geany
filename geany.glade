@@ -9518,6 +9518,29 @@ Match braces</property>
 	      </child>
 
 	      <child>
+		<widget class="GtkCheckButton" id="check_detect_indent">
+		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Whether to detect the indentation type from file contents when a file is opened</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">Detect from file</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <property name="active">False</property>
+		  <property name="inconsistent">False</property>
+		  <property name="draw_indicator">True</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">1</property>
+		  <property name="right_attach">2</property>
+		  <property name="top_attach">5</property>
+		  <property name="bottom_attach">6</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
 		<widget class="GtkAlignment" id="alignment44">
 		  <property name="visible">True</property>
 		  <property name="xalign">0.5</property>
@@ -9588,29 +9611,7 @@ Match braces</property>
 		  <property name="top_attach">4</property>
 		  <property name="bottom_attach">5</property>
 		  <property name="x_options">fill</property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkCheckButton" id="check_detect_indent">
-		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Whether to detect the indentation type from file contents when a file is opened</property>
-		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Detect from file</property>
-		  <property name="use_underline">True</property>
-		  <property name="relief">GTK_RELIEF_NORMAL</property>
-		  <property name="focus_on_click">True</property>
-		  <property name="active">False</property>
-		  <property name="inconsistent">False</property>
-		  <property name="draw_indicator">True</property>
-		</widget>
-		<packing>
-		  <property name="left_attach">1</property>
-		  <property name="right_attach">2</property>
-		  <property name="top_attach">5</property>
-		  <property name="bottom_attach">6</property>
-		  <property name="x_options">fill</property>
-		  <property name="y_options"></property>
+		  <property name="y_options">fill</property>
 		</packing>
 	      </child>
 	    </widget>
