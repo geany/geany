@@ -4,8 +4,16 @@
    Include code for project filetype execute commands and fix bug in
    saving project filetypes list.
  * src/project.c, src/build.c:
-   Make non-project execute configuration save to filetypes not geany.conf. 
+   Make non-project execute configuration save to filetypes not geany.conf.
    Fix closing of project failing to remove build commands dialog entry.
+
+
+2009-10-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/project.c, src/ui_utils.c:
+   Set border width for project properties build table.
+ * geany.glade, src/interface.c:
+   Don't expand hard tab width alignment.
 
 
 2009-10-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
