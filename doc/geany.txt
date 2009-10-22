@@ -2276,7 +2276,7 @@ in the *Project* group of the `Preferences`_ dialog.
 
 As long as a project is open, the Build menu will use
 the items defined in project's settings, instead of the defaults.
-See `Build Menu Configuration` for information on configuring the menu.
+See `Build Menu Configuration`_ for information on configuring the menu.
 
 The current project's settings are saved when it is closed, or when
 Geany is shutdown. When restarting Geany, the previously opened project
@@ -2367,7 +2367,7 @@ warnings or errors are marked in the source, see `Indicators`_ below.
 .. tip::
     If Geany's default error message parsing does not parse errors for
     the tool you're using, you can set a custom regex in the Build Commands
-    Dialog, see `Build Menu Configuration`
+    Dialog, see `Build Menu Configuration`_
 
 Indicators
 ^^^^^^^^^^
@@ -2542,7 +2542,7 @@ behaviors:
   commands dialog
 
 The maximum numbers of items in each of the configurable groups can be
-configured when Geany starts using hidden settings(see `Preferences File Format`).
+configured when Geany starts using hidden settings(see `Preferences File Format`_).
 Even though the maximum number of items may have been increased, only
 those menu items that have values configured are shown in the menu.
 
@@ -2611,7 +2611,7 @@ The following notes on the table reference cells by coordinate as (group,source)
 
 * (Execute, Project File) and (Execute, Preferences) - the project filetype based execute
   configuration and preferences non-filetype based execute can only be set by hand editing the
-  appropriate file, see `Preferences File Format` and `Project File Format`.
+  appropriate file, see `Preferences File Format`_ and `Project File Format`_.
 
 Build Menu Commands Dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3951,7 +3951,7 @@ number_exec_menu_items            The maximum number of menu items in the      2
 The [build-menu] section contains the configuration of the build menu.
 This section can occur in filetype, preferences and project files and
 always has the format described here.  Different menu items are loaded
-from different files, see the table in the `Build Menu Configuration`
+from different files, see the table in the `Build Menu Configuration`_
 section for details.  All the settings can be configured from the dialogs
 except the execute command in filetype files and filetype definitions in
 the project file, so these are the only ones which need hand editing.
@@ -3998,7 +3998,7 @@ The ``filetypes`` entry is a list of the filetypes which exist in the
 project file.
 
 For each filetype the entries for that filetype have the format defined in
-`[build-menu] Section` but the key is prefixed by the name of the filetype
+`[build-menu] Section`_ but the key is prefixed by the name of the filetype
 as it appears in the ``filetypes`` entry, eg the entry for the label of
 filetype menu item 0 for the C filetype would be
 
