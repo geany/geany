@@ -287,6 +287,10 @@ static void init_default_kb(void)
 		GDK_Return, GDK_CONTROL_MASK, "edit_macrolist", _("Show macro list"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_WORDPARTCOMPLETION, NULL,
 		GDK_Tab, 0, "edit_wordpartcompletion", _("Word part completion"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_EDITOR_MOVELINEUP, NULL,
+		0, 0, "edit_movelineup", _("Move line(s) up"), NULL);
+	keybindings_set_item(group, GEANY_KEYS_EDITOR_MOVELINEDOWN, NULL,
+		0, 0, "edit_movelinedown", _("Move line(s) down"), NULL);
 
 	group = ADD_KB_GROUP(CLIPBOARD, _("Clipboard"), cb_func_clipboard_action);
 
@@ -1963,6 +1967,37 @@ static void delete_lines(GeanyEditor *editor)
 }
 
 
+static void move_lines(GeanyEditor *editor, gboolean down)
+{
+	ScintillaObject *sci = editor->sci;
+	gchar *text;
+	gint pos, line, len;
+
+	sci_start_undo_action(sci);
+	editor_select_lines(editor, TRUE);
+	len = sci_get_selected_text_length(sci);
+
+	pos = sci_get_selection_start(sci);
+	line = sci_get_line_from_position(sci, pos);
+	if (down)
+		line++;
+	else
+		line--;
+
+	text = sci_get_selection_contents(sci);
+	sci_clear(sci);
+
+	pos = sci_get_position_from_line(sci, line);
+	sci_insert_text(sci, pos, text);
+	g_free(text);
+
+	sci_set_current_position(sci, pos, TRUE);
+	sci_set_selection_end(sci, pos + len - 2);
+
+	sci_end_undo_action(sci);
+}
+
+
 /* common function for editor keybindings, only valid when scintilla has focus. */
 static gboolean cb_func_editor_action(guint key_id)
 {
@@ -2043,6 +2078,13 @@ static gboolean cb_func_editor_action(guint key_id)
 		}
 		case GEANY_KEYS_EDITOR_WORDPARTCOMPLETION:
 			return editor_complete_word_part(doc->editor);
+
+		case GEANY_KEYS_EDITOR_MOVELINEUP:
+			move_lines(doc->editor, FALSE);
+			break;
+		case GEANY_KEYS_EDITOR_MOVELINEDOWN:
+			move_lines(doc->editor, TRUE);
+			break;
 	}
 	return TRUE;
 }

@@ -2609,8 +2609,8 @@ The following notes on the table reference cells by coordinate as (group,source)
   non-filetype commands in a filetype file, this provides the ability to
   define filetype dependent default menu items.
 
-* (Execute, Project File) and (Execute, Preferences) - the project filetype based execute 
-  configuration and preferences non-filetype based execute can only be set by hand editing the 
+* (Execute, Project File) and (Execute, Preferences) - the project filetype based execute
+  configuration and preferences non-filetype based execute can only be set by hand editing the
   appropriate file, see `Preferences File Format` and `Project File Format`.
 
 Build Menu Commands Dialog
@@ -2921,6 +2921,12 @@ Move cursor in snippet                                    Jumps to the next defi
 Word part completion            Tab                       When the autocompletion list is visible, complete
                                                           the currently selected item up to the next word
                                                           part.
+
+Move line(s) up                                           Move the current line or selected lines up by
+                                                          one line.
+
+Move line(s) down                                         Move the current line or selected lines down by
+                                                          one line.
 =============================== ========================= ==================================================
 
 
