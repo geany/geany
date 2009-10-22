@@ -130,6 +130,7 @@ struct GeanyFiletype
 	GeanyBuildCommand *homefilecmds;
 	GeanyBuildCommand *homeexeccmds;
 	GeanyBuildCommand *projfilecmds;
+	GeanyBuildCommand *projexeccmds;
 	gint			 project_list_entry;
 	gchar			 *projerror_regex_string;
 	gchar			 *homeerror_regex_string;

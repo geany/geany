@@ -1,3 +1,10 @@
+2009-10-22  Lex Trotman  <elextr.at.gmail.dot.com>
+
+ * src/build.c, src/build.h, src/filetypes.h:
+   Include code for project filetype execute commands and fix bug in
+   saving project filetypes list.
+
+
 2009-10-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/highlighting.c, src/filetypes.c, src/document.c, src/symbols.c,

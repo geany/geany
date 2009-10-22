@@ -103,6 +103,7 @@ typedef enum
 	GEANY_BCS_FT,		/**< System filetype values. */
 	GEANY_BCS_HOME_FT,	/**< Filetypes in ~/.config/geany/filedefs */
 	GEANY_BCS_PREF,		/**< Preferences file ~/.config/geany/geany.conf */
+	GEANY_BCS_PROJ_FT,	/**< Project file filetype command */
 	GEANY_BCS_PROJ,		/**< Project file if open. */
 	GEANY_BCS_COUNT		/**< Count of sources. */
 } GeanyBuildSource;
@@ -134,7 +135,7 @@ typedef struct GeanyBuildCommand
 {
  	/** Pointers to g_string values of the command entries.
 	 * Must be freed if the pointer is changed. */
-	gchar *entries[GEANY_BC_CMDENTRIES_COUNT];
+	gchar 		*entries[GEANY_BC_CMDENTRIES_COUNT];
 	gboolean	 exists;					/**< If the entries have valid values. */
 	gboolean	 changed;					/**< Save on exit if @c changed, remove if not @c exist. */
 	gboolean	 old;						/**< Converted from old format. */
