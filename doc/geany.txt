@@ -2587,8 +2587,8 @@ is shown in the following table.
 |              |                     | ~/.config/geany/filedefs | Saves To: as user |                               |
 |              | Saves To:           |                          | preferences left  |                               |
 |              | project file        | Saves To:                |                   |                               |
-|              |                     | geany.conf file in       |                   |                               |
-|              |                     | ~/.config/geany          |                   |                               |
+|              |                     | filetype.xxx file in     |                   |                               |
+|              |                     | ~/.config/geany/filedefs |                   |                               |
 +--------------+---------------------+--------------------------+-------------------+-------------------------------+
 
 The following notes on the table reference cells by coordinate as (group,source):
@@ -2609,9 +2609,9 @@ The following notes on the table reference cells by coordinate as (group,source)
   non-filetype commands in a filetype file, this provides the ability to
   define filetype dependent default menu items.
 
-* (Execute, Project File) and (Execute, Preferences) - the filetype based execute
-  configuration can only be set by hand editing the appropriate file, see
-  `Preferences File Format` and `Project File Format`.
+* (Execute, Project File) and (Execute, Preferences) - the project filetype based execute 
+  configuration and preferences non-filetype based execute can only be set by hand editing the 
+  appropriate file, see `Preferences File Format` and `Project File Format`.
 
 Build Menu Commands Dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

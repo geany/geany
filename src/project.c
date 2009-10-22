@@ -328,6 +328,7 @@ static void remove_foreach_project_filetype(gpointer data, gpointer user_data)
 	if (ft != NULL)
 	{
 		setptr(ft->projfilecmds, NULL);
+		setptr(ft->projexeccmds, NULL);
 		setptr(ft->projerror_regex_string, NULL);
 		ft->project_list_entry = -1;
 	}

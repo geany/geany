@@ -2061,16 +2061,17 @@ static void show_build_commands_dialog(void)
 	response = gtk_dialog_run(GTK_DIALOG(dialog));
 
 	prefdsts.dst[GEANY_GBG_NON_FT] = &non_ft_pref;
-	prefdsts.dst[GEANY_GBG_EXEC] = &exec_pref;
 	if (ft != NULL)
 	{
 		prefdsts.dst[GEANY_GBG_FT] = &(ft->homefilecmds);
 		prefdsts.fileregexstr = &(ft->homeerror_regex_string);
+		prefdsts.dst[GEANY_GBG_EXEC] = &(ft->homeexeccmds);
 	}
 	else
 	{
 		prefdsts.dst[GEANY_GBG_FT] = NULL;
 		prefdsts.fileregexstr = NULL;
+		prefdsts.dst[GEANY_GBG_EXEC] = NULL;
 	}
 	prefdsts.nonfileregexstr = &regex_pref;
 	if (build_read_commands(&prefdsts, table_data, response) && ft != NULL)
