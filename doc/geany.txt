@@ -1690,6 +1690,9 @@ Show documents list
     change between documents (see `Switching between documents`_) and
     to perform some common operations such as saving, closing and reloading.
 
+Position
+    Whether to place the sidebar on the left or right of the editor window.
+
 Fonts
 `````
 

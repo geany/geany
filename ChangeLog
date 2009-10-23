@@ -1,3 +1,11 @@
+2009-10-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, src/ui_utils.h, src/prefs.c, src/keyfile.c,
+   src/main.c, src/ui_utils.c, doc/geany.txt, doc/geany.html,
+   geany.glade:
+   Add sidebar position interface pref.
+
+
 2009-10-23  Lex Trotman  <elextr.at.gmail.dot.com>
 
  * doc/geany.txt, doc/geany.html:

@@ -52,6 +52,7 @@ typedef struct GeanyInterfacePrefs
 	gboolean		show_symbol_list_expanders;
 	gboolean		notebook_double_click_hides_widgets;
 	gboolean		highlighting_invert_all;
+	gint			sidebar_pos;
 }
 GeanyInterfacePrefs;
 
@@ -296,5 +297,7 @@ void ui_update_view_editor_menu_items(void);
 void ui_progress_bar_start(const gchar *text);
 
 void ui_progress_bar_stop(void);
+
+void ui_swap_sidebar_pos(void);
 
 #endif

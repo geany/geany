@@ -741,12 +741,16 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		guint i;
 		guint autoclose_brackets[5];
 		gboolean old_invert_all = interface_prefs.highlighting_invert_all;
+		gboolean old_sidebar_pos = interface_prefs.sidebar_pos;
 
 		/* Synchronize Stash settings */
 		prefs_action(PREF_UPDATE);
 
 		if (interface_prefs.highlighting_invert_all != old_invert_all)
 			filetypes_reload();
+
+		if (interface_prefs.sidebar_pos != old_sidebar_pos)
+			ui_swap_sidebar_pos();
 
 		/* General settings */
 		/* startup */

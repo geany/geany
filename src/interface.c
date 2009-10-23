@@ -2356,6 +2356,11 @@ create_prefs_dialog (void)
   GtkWidget *vbox11;
   GtkWidget *check_list_symbol;
   GtkWidget *check_list_openfiles;
+  GtkWidget *hbox17;
+  GtkWidget *label237;
+  GtkWidget *radio_sidebar_left;
+  GSList *radio_sidebar_left_group = NULL;
+  GtkWidget *radio_sidebar_right;
   GtkWidget *label146;
   GtkWidget *frame4;
   GtkWidget *alignment5;
@@ -2989,6 +2994,27 @@ create_prefs_dialog (void)
   gtk_widget_show (check_list_openfiles);
   gtk_box_pack_start (GTK_BOX (vbox11), check_list_openfiles, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_list_openfiles, _("Toggle the documents list on and off"), NULL);
+
+  hbox17 = gtk_hbox_new (FALSE, 12);
+  gtk_widget_show (hbox17);
+  gtk_box_pack_start (GTK_BOX (vbox11), hbox17, TRUE, TRUE, 0);
+
+  label237 = gtk_label_new (_("Position:"));
+  gtk_widget_show (label237);
+  gtk_box_pack_start (GTK_BOX (hbox17), label237, FALSE, FALSE, 0);
+
+  radio_sidebar_left = gtk_radio_button_new_with_mnemonic (NULL, _("Left"));
+  gtk_widget_show (radio_sidebar_left);
+  gtk_box_pack_start (GTK_BOX (hbox17), radio_sidebar_left, FALSE, FALSE, 0);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_sidebar_left), radio_sidebar_left_group);
+  radio_sidebar_left_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_sidebar_left));
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio_sidebar_left), TRUE);
+
+  radio_sidebar_right = gtk_radio_button_new_with_mnemonic (NULL, _("Right"));
+  gtk_widget_show (radio_sidebar_right);
+  gtk_box_pack_start (GTK_BOX (hbox17), radio_sidebar_right, FALSE, FALSE, 0);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_sidebar_right), radio_sidebar_left_group);
+  radio_sidebar_left_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_sidebar_right));
 
   label146 = gtk_label_new (_("<b>Sidebar</b>"));
   gtk_widget_show (label146);
@@ -4683,6 +4709,10 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox11, "vbox11");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_list_symbol, "check_list_symbol");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_list_openfiles, "check_list_openfiles");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox17, "hbox17");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label237, "label237");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_sidebar_left, "radio_sidebar_left");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_sidebar_right, "radio_sidebar_right");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label146, "label146");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame4, "frame4");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment5, "alignment5");

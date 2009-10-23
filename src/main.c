@@ -212,6 +212,9 @@ static void apply_settings(void)
 	gtk_widget_hide(ui_lookup_widget(main_widgets.window, "send_selection_to_vte1"));
 	gtk_widget_hide(ui_lookup_widget(main_widgets.editor_menu, "send_selection_to_vte2"));
 #endif
+
+	if (interface_prefs.sidebar_pos != GTK_POS_LEFT)
+		ui_swap_sidebar_pos();
 }
 
 

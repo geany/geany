@@ -1812,6 +1812,24 @@ void ui_init_toolbar_widgets(void)
 }
 
 
+void ui_swap_sidebar_pos(void)
+{
+	GtkWidget *pane = ui_lookup_widget(main_widgets.window, "hpaned1");
+	GtkWidget *left = gtk_paned_get_child1(GTK_PANED(pane));
+	GtkWidget *right = gtk_paned_get_child2(GTK_PANED(pane));
+	GtkWidget *box = ui_lookup_widget(main_widgets.window, "vbox1");
+
+	/* reparenting avoids scintilla problem with middle click paste */
+	gtk_widget_reparent(left, box);
+	gtk_widget_reparent(right, box);
+	gtk_widget_reparent(right, pane);
+	gtk_widget_reparent(left, pane);
+
+	gtk_paned_set_position(GTK_PANED(pane), pane->allocation.width
+		- gtk_paned_get_position(GTK_PANED(pane)));
+}
+
+
 static void init_recent_files(void)
 {
 	GtkWidget *toolbar_recent_files_menu;

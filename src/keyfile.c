@@ -122,7 +122,13 @@ static void init_pref_groups(void)
 	stash_group_add_toggle_button(group, &interface_prefs.notebook_double_click_hides_widgets,
 		"notebook_double_click_hides_widgets", FALSE, "check_double_click_hides_widgets");
 	stash_group_add_integer(group, &interface_prefs.tab_pos_sidebar, "tab_pos_sidebar", GTK_POS_TOP);
+	stash_group_add_radio_buttons(group, &interface_prefs.sidebar_pos,
+		"sidebar_pos", GTK_POS_LEFT,
+		"radio_sidebar_left", GTK_POS_LEFT,
+		"radio_sidebar_right", GTK_POS_RIGHT,
+		NULL);
 
+	/* editor display */
 	stash_group_add_toggle_button(group, &interface_prefs.highlighting_invert_all,
 		"highlighting_invert_all", FALSE, "check_highlighting_invert");
 
