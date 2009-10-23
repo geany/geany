@@ -1,6 +1,6 @@
 2009-10-23  Lex Trotman  <elextr.at.gmail.dot.com>
 
- * doc/geany.txt
+ * doc/geany.txt, doc/geany.html:
    Add missing underscores to links.
 
 
@@ -15,7 +15,7 @@
  * src/build.c, src/build.h, src/filetypes.h:
    Include code for project filetype execute commands and fix bug in
    saving project filetypes list.
- * src/project.c, src/build.c:
+ * src/project.c, src/build.c, doc/geany.txt:
    Make non-project execute configuration save to filetypes not geany.conf.
    Fix closing of project failing to remove build commands dialog entry.
 
