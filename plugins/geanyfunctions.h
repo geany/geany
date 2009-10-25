@@ -178,6 +178,8 @@
 	geany_functions->p_sci->delete_marker_at_line
 #define sci_is_marker_set_at_line \
 	geany_functions->p_sci->is_marker_set_at_line
+#define sci_goto_line \
+	geany_functions->p_sci->goto_line
 #define templates_get_template_fileheader \
 	geany_functions->p_templates->get_template_fileheader
 #define utils_str_equal \

@@ -809,6 +809,13 @@ void sci_set_font(ScintillaObject *sci, gint style, const gchar *font, gint size
 }
 
 
+/** Jump to the specified line in the document.
+ * If @a unfold is set and @a line is hidden by a fold, it is unfolded
+ * first to ensure it is visible.
+ * @param sci Scintilla widget.
+ * @param line Line.
+ * @param unfold Whether to unfold first.
+ */
 void sci_goto_line(ScintillaObject *sci, gint line, gboolean unfold)
 {
 	if (unfold) SSM(sci, SCI_ENSUREVISIBLE, line, 0);
