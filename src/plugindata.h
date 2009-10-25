@@ -50,7 +50,7 @@
 enum {
 	/** The Application Programming Interface (API) version, incremented
 	 * whenever any plugin data types are modified or appended to. */
-	GEANY_API_VERSION = 162,
+	GEANY_API_VERSION = 163,
 
 	/** The Application Binary Interface (ABI) version, incremented whenever
 	 * existing fields in the plugin data types have to be changed or reordered. */
@@ -422,6 +422,7 @@ typedef struct UIUtilsFuncs
 	void		(*entry_add_clear_icon) (GtkEntry *entry);
 	void		(*menu_add_document_items) (GtkMenu *menu, struct GeanyDocument *active,
 				GCallback callback);
+	void		(*widget_modify_font_from_string) (GtkWidget *widget, const gchar *str);
 }
 UIUtilsFuncs;
 

@@ -220,7 +220,8 @@ static UIUtilsFuncs uiutils_funcs = {
 	&ui_progress_bar_start,
 	&ui_progress_bar_stop,
 	&ui_entry_add_clear_icon,
-	&ui_menu_add_document_items
+	&ui_menu_add_document_items,
+	&ui_widget_modify_font_from_string
 };
 
 static DialogFuncs dialog_funcs = {

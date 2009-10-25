@@ -248,6 +248,8 @@
 	geany_functions->p_ui->entry_add_clear_icon
 #define ui_menu_add_document_items \
 	geany_functions->p_ui->menu_add_document_items
+#define ui_widget_modify_font_from_string \
+	geany_functions->p_ui->widget_modify_font_from_string
 #define dialogs_show_question \
 	geany_functions->p_dialogs->show_question
 #define dialogs_show_msgbox \

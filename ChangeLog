@@ -9,6 +9,8 @@
    opening of files like "test:0".
  * src/sidebar.c:
    Rename "select" variables into "selection" to avoid shadowed names.
+ * plugins/geanyfunctions.h, src/plugins.c, src/plugindata.h:
+   Add ui_widget_modify_font_from_string() to the plugin API.
 
 
 2009-10-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
