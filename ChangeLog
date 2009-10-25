@@ -1,3 +1,10 @@
+2009-10-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * plugins/saveactions.c:
+   Fix adding the filetype's default extension when using the
+   Instant Save plugin (2885142).
+
+
 2009-10-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/interface.c, src/ui_utils.h, src/prefs.c, src/keyfile.c,
