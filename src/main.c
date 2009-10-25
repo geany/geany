@@ -318,6 +318,10 @@ static void get_line_and_column_from_filename(gchar *filename, gint *line, gint 
 	if (! NZV(filename))
 		return;
 
+	/* allow to open files like "test:0" */
+	if (g_file_test(filename, G_FILE_TEST_EXISTS))
+		return;
+
 	len = strlen(filename);
 	for (i = len - 1; i >= 1; i--)
 	{

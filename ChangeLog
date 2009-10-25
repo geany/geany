@@ -2,7 +2,11 @@
 
  * plugins/saveactions.c:
    Fix adding the filetype's default extension when using the
-   Instant Save plugin (2885142).
+   Instant Save plugin (closes #2885142).
+ * src/main.c:
+   Before looking for line and column numbers specified as part
+   of a filename, ensure the file doesn't exist on disk. This allows
+   opening of files like "test:0".
 
 
 2009-10-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
