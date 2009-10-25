@@ -35,7 +35,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(131)
+PLUGIN_VERSION_CHECK(163)
 
 PLUGIN_SET_INFO(_("File Browser"), _("Adds a file browser tab to the sidebar."), VERSION,
 	_("The Geany developer team"))
@@ -732,8 +732,7 @@ static void prepare_file_view(void)
 {
 	GtkCellRenderer *text_renderer, *icon_renderer;
 	GtkTreeViewColumn *column;
-	GtkTreeSelection *select;
-	PangoFontDescription *pfd;
+	GtkTreeSelection *selection;
 
 	file_store = gtk_list_store_new(FILEVIEW_N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
 
@@ -753,20 +752,18 @@ static void prepare_file_view(void)
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(file_view), TRUE);
 	gtk_tree_view_set_search_column(GTK_TREE_VIEW(file_view), FILEVIEW_COLUMN_NAME);
 
-	pfd = pango_font_description_from_string(geany->interface_prefs->tagbar_font);
-	gtk_widget_modify_font(file_view, pfd);
-	pango_font_description_free(pfd);
+	ui_widget_modify_font_from_string(file_view, geany->interface_prefs->tagbar_font);
 
 	/* GTK 2.12 tooltips */
 	if (gtk_check_version(2, 12, 0) == NULL)
 		g_object_set(file_view, "has-tooltip", TRUE, "tooltip-column", FILEVIEW_COLUMN_FILENAME, NULL);
 
 	/* selection handling */
-	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(file_view));
-	gtk_tree_selection_set_mode(select, GTK_SELECTION_MULTIPLE);
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(file_view));
+	gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
 
 	g_signal_connect(file_view, "realize", G_CALLBACK(on_current_path), NULL);
-	g_signal_connect(select, "changed", G_CALLBACK(on_tree_selection_changed), NULL);
+	g_signal_connect(selection, "changed", G_CALLBACK(on_tree_selection_changed), NULL);
 	g_signal_connect(file_view, "button-press-event", G_CALLBACK(on_button_press), NULL);
 	g_signal_connect(file_view, "key-press-event", G_CALLBACK(on_key_press), NULL);
 }

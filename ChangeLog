@@ -11,6 +11,9 @@
    Rename "select" variables into "selection" to avoid shadowed names.
  * plugins/geanyfunctions.h, src/plugins.c, src/plugindata.h:
    Add ui_widget_modify_font_from_string() to the plugin API.
+ * plugins/filebrowser.c:
+   Rename "select" variables into "selection" to avoid shadowed names.
+   Make use of ui_widget_modify_font_from_string().
 
 
 2009-10-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
