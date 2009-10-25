@@ -1522,12 +1522,18 @@ gboolean ui_tree_view_find_previous(GtkTreeView *treeview, TVMatchCallback cb)
 }
 
 
-void ui_widget_modify_font_from_string(GtkWidget *wid, const gchar *str)
+/**
+ * Modifies the font of a widget using gtk_widget_modify_font().
+ *
+ * @param widget The widget.
+ * @param str The font name as expected by pango_font_description_from_string().
+ */
+void ui_widget_modify_font_from_string(GtkWidget *widget, const gchar *str)
 {
 	PangoFontDescription *pfd;
 
 	pfd = pango_font_description_from_string(str);
-	gtk_widget_modify_font(wid, pfd);
+	gtk_widget_modify_font(widget, pfd);
 	pango_font_description_free(pfd);
 }
 
