@@ -430,9 +430,9 @@ static GeanyBuildCommand *get_build_group(GeanyBuildSource src, GeanyBuildGroup 
 			switch (src)
 			{
 				case GEANY_BCS_DEF:	 return exec_def;
-				case GEANY_BCS_FT:	  return ft? ft->execcmds: NULL;
-				case GEANY_BCS_HOME_FT: return ft? ft->homeexeccmds: NULL;
-				case GEANY_BCS_PROJ_FT: return ft? ft->projexeccmds: NULL;
+				case GEANY_BCS_FT:	  return ft ? ft->execcmds: NULL;
+				case GEANY_BCS_HOME_FT: return ft ? ft->homeexeccmds: NULL;
+				case GEANY_BCS_PROJ_FT: return ft ? ft->projexeccmds: NULL;
 				case GEANY_BCS_PREF:	return exec_pref;
 				case GEANY_BCS_PROJ:	return exec_proj;
 				default: return NULL;
