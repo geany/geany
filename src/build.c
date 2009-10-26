@@ -201,7 +201,7 @@ gchar *regex_proj = NULL;
 gboolean printbuildcmds = PRINTBUILDCMDS;
 
 static GeanyBuildCommand **cl[GEANY_GBG_COUNT][GEANY_BCS_COUNT] = {
-	/* 	GEANY_BCS_DEF, GEANY_BCS_FT, GEANY_BCS_HOME_FT, GEANY_BCS_PREF, 
+	/* 	GEANY_BCS_DEF, GEANY_BCS_FT, GEANY_BCS_HOME_FT, GEANY_BCS_PREF,
 	 *  GEANY_BCS_FT_PROJ, GEANY_BCS_PROJ */
 	{ &ft_def, NULL, NULL, NULL, NULL, NULL },
 	{ &non_ft_def, NULL, NULL, &non_ft_pref, NULL, &non_ft_proj },
@@ -306,7 +306,7 @@ static GeanyBuildCommand *get_next_build_cmd(GeanyDocument *doc, gint cmdgrp, gi
 											 gint below, gint *from)
 {
 	/* Note: parameter below used in macros above */
-	
+
 	GeanyFiletype		*ft = NULL;
 	gint				 sink, *fr = &sink;
 
@@ -444,7 +444,23 @@ static GeanyBuildCommand *get_build_group(GeanyBuildSource src, GeanyBuildGroup 
 }
 
 
-/* remove the specified command, cmd < 0 remove whole group */
+/** Remove the specified Build menu item.
+ *
+ * Makes the specified menu item configuration no longer exist. This
+ * is different to setting fields to blank because the menu item
+ * will be deleted from the configuration file on saving
+ * (except the system filetypes settings @see Build Menu Configuration
+ * section of the Manual).
+ *
+ * @param src the source of the menu item to remove.
+ * @param grp the group of the command to remove.
+ * @param cmd the index (from 0) of the command within the group. A negative
+ *        value will remove the whole group.
+ *
+ * If any parameter is out of range does nothing.
+ *
+ * @see build_menu_update
+ **/
 void build_remove_menu_item(GeanyBuildSource src, GeanyBuildGroup grp, gint cmd)
 {
 	GeanyBuildCommand *bc;
@@ -462,7 +478,20 @@ void build_remove_menu_item(GeanyBuildSource src, GeanyBuildGroup grp, gint cmd)
 }
 
 
-/* get the build build command for the specified menu item */
+/** Get the @a GeanyBuildCommand structure for the specified Build menu item.
+ *
+ * Get the command for any menu item specified by @a src, @a grp and @a cmd even if it is
+ * hidden by higher priority commands.
+ *
+ * @param src the source of the specified menu item.
+ * @param grp the group of the specified menu item.
+ * @param cmd the index of the command within the group.
+ *
+ * @return a pointer to the @a GeanyBuildCommand structure or @a NULL if it doesn't exist.
+ *         This is a pointer to an internal structure and must not be freed.
+ *
+ * @see build_menu_update
+ **/
 GeanyBuildCommand *build_get_menu_item(GeanyBuildSource src, GeanyBuildGroup grp, gint cmd)
 {
 	GeanyBuildCommand *bc;
@@ -475,6 +504,21 @@ GeanyBuildCommand *build_get_menu_item(GeanyBuildSource src, GeanyBuildGroup grp
 }
 
 
+/** Get the @a GeanyBuildCommand structure for the menu item.
+ *
+ * Get the current highest priority command specified by @a grp and @a cmd.  This is the one
+ * that the menu item will use if activated.
+ *
+ * @param grp the group of the specified menu item.
+ * @param cmd the index of the command within the group.
+ * @param src pointer to @a gint to return which source provided the command. Ignored if @a NULL.
+ *        Values are one of @a GeanyBuildSource but returns a signed type not the enum.
+ *
+ * @return a pointer to the @a GeanyBuildCommand structure or @a NULL if it doesn't exist.
+ *         This is a pointer to an internal structure and must not be freed.
+ *
+ * @see build_menu_update
+ **/
 /* parameter checked version of get_build_cmd for external interface */
 GeanyBuildCommand *build_get_current_menu_item(GeanyBuildGroup grp, gint cmd, gint *src)
 {
@@ -1373,8 +1417,20 @@ static void geany_menu_item_set_label(GtkWidget *w, gchar *label)
 }
 
 
-/* Call this whenever build menu items need to be enabled/disabled.
- * Uses current document (if there is one) when doc == NULL */
+/** Update the build menu to reflect changes in configuration or status.
+ *
+ * Sets the labels and number of visible items to match the highest
+ * priority configured commands.  Also sets sensitivity if build commands are
+ * running and switches executes to stop when commands are running.
+ *
+ * @param doc The current document, if available, to save looking it up.
+ *        If @c NULL it will be looked up.
+ *
+ * Call this after modifying any fields of a GeanyBuildCommand structure.
+ *
+ * @see Build Menu Configuration section of the Manual.
+ *
+ **/
 void build_menu_update(GeanyDocument *doc)
 {
 	gint i, cmdcount, cmd, grp;
