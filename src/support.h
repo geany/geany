@@ -21,6 +21,13 @@
  * $Id$
  */
 
+/**
+ * @file support.h
+ * Defines internationalization macros.
+ * @see GLib's @c gi18n-lib.h.
+ **/
+
+
 #include "geany.h"
 
 #ifdef GETTEXT_PACKAGE

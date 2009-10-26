@@ -21,6 +21,11 @@
  * $Id$
  */
 
+/**
+ * @file search.h
+ * Search (prefs).
+ **/
+
 
 #ifndef GEANY_SEARCH_H
 #define GEANY_SEARCH_H 1
@@ -40,10 +45,11 @@ GeanySearchData;
 extern GeanySearchData search_data;
 
 
+/** Search preferences */
 typedef struct GeanySearchPrefs
 {
 	gboolean	suppress_dialogs;
-	gboolean	use_current_word;
+	gboolean	use_current_word;		/**< Use current word for default search text */
 	gboolean	use_current_file_dir;	/* find in files directory to use on showing dialog */
 }
 GeanySearchPrefs;

@@ -21,6 +21,12 @@
  * $Id$
  */
 
+/**
+ * @file templates.h
+ * Templates (prefs).
+ **/
+
+
 #ifndef GEANY_TEMPLATES_H
 #define GEANY_TEMPLATES_H 1
 
@@ -35,13 +41,14 @@ enum
 };
 
 
+/** Template preferences. */
 typedef struct GeanyTemplatePrefs
 {
-	gchar			*developer;
-	gchar			*company;
-	gchar			*mail;
-	gchar			*initials;
-	gchar			*version;
+	gchar			*developer;	/**< Name */
+	gchar			*company;	/**< Company */
+	gchar			*mail;		/**< Email */
+	gchar			*initials;	/**< Initials */
+	gchar			*version;	/**< Initial version */
 	gchar			*year_format;
 	gchar			*date_format;
 	gchar			*datetime_format;

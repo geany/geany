@@ -21,15 +21,21 @@
  * $Id$
  */
 
+/**
+ * @file toolbar.h
+ * Toolbar (prefs).
+ **/
+
+
 #ifndef GEANY_TOOLBAR_H
 #define GEANY_TOOLBAR_H
 
-
+/** Toolbar settings. */
 typedef struct GeanyToolbarPrefs
 {
 	gboolean		visible;
 	GtkIconSize		icon_size;
-	gint			icon_style;
+	GtkToolbarStyle	icon_style;	/**< Icon style. */
 	gboolean		append_to_menu;
 }
 GeanyToolbarPrefs;

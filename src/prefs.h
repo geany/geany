@@ -20,22 +20,27 @@
  *
  */
 
+/**
+ * @file prefs.h
+ * Preferences dialog.
+ **/
+
 
 #ifndef GEANY_PREFS_H
 #define GEANY_PREFS_H 1
 
-/* General Preferences dialog settings. */
+/** General Preferences dialog settings. */
 typedef struct GeanyPrefs
 {
 	gboolean		load_session;
 	gboolean		load_plugins;
 	gboolean		save_winpos;
 	gboolean		confirm_exit;
-	gboolean		beep_on_errors;
+	gboolean		beep_on_errors;		/* use utils_beep() instead */
 	gboolean		suppress_status_messages;
 	gboolean		switch_to_status;
 	gboolean		auto_focus;
-	gchar			*default_open_path;
+	gchar			*default_open_path;	/**< Default path to look for files when no other path is appropriate. */
 	gchar			*custom_plugin_path;
 }
 GeanyPrefs;
