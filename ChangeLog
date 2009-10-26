@@ -16,6 +16,9 @@
  * plugins/filebrowser.c:
    Fix packing configure widgets equally.
    Use spacing multiples of 6 as recommended by Gnome HIG.
+ * src/prefs.c, src/ui_utils.c, doc/geany.txt, doc/geany.html:
+   Disable switching the sidebar to the right on Windows as it will
+   probably fail like the Split Window plugin.
 
 
 2009-10-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

@@ -1636,6 +1636,9 @@ void prefs_show_dialog(void)
 				"toggled", G_CALLBACK(on_open_encoding_toggled), NULL);
 	}
 
+#ifdef G_OS_WIN32
+	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "radio_sidebar_right"), FALSE);
+#endif
 	prefs_init_dialog();
 	gtk_window_present(GTK_WINDOW(ui_widgets.prefs_dialog));
 }
