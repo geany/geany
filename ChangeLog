@@ -13,6 +13,9 @@
    these functions are still not in the API.
  * HACKING:
    Add 'Doc-comments' plugin API subsection.
+ * plugins/filebrowser.c:
+   Fix packing configure widgets equally.
+   Use spacing multiples of 6 as recommended by Gnome HIG.
 
 
 2009-10-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
