@@ -11,6 +11,8 @@
  * src/build.c, src/build.h:
    Move function doc-comments to build.c so they stay in sync. Note:
    these functions are still not in the API.
+ * HACKING:
+   Add 'Doc-comments' plugin API subsection.
 
 
 2009-10-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
