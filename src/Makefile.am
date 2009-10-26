@@ -51,29 +51,26 @@ SRCS = \
 
 
 geany_includedir = $(includedir)/geany
+
+# only install headers that define types or macros, not just functions
 geany_include_HEADERS = \
-	dialogs.h \
 	document.h \
 	editor.h \
 	encodings.h \
 	filetypes.h \
+	geany.h \
 	highlighting.h \
 	keybindings.h \
-	geany.h \
-	main.h \
 	msgwindow.h \
-	plugins.h \
 	plugindata.h \
 	prefs.h \
 	project.h \
-	sciwrappers.h \
 	search.h \
 	support.h \
 	templates.h \
 	toolbar.h \
 	ui_utils.h \
-	utils.h \
-	build.h
+	utils.h
 
 
 INCLUDES = -I$(top_srcdir) -I$(srcdir)/../scintilla/include -I$(srcdir)/../tagmanager/include \

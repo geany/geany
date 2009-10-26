@@ -3,6 +3,11 @@
  * src/prefs.h, src/search.h, src/support.h, src/templates.h,
    src/toolbar.c, src/toolbar.h:
    Add missing dox for types/files in the API.
+ * src/filetypes.h, src/Makefile.am, plugins/geanyplugin.h:
+   Don't install unnecessary headers: dialogs.h, main.h, plugins.h,
+   sciwrappers.h, build.h. (This helps to get compiler warnings for uses
+   of functions not in the API).
+   Warning: any plugins that include these headers should remove them.
 
 
 2009-10-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

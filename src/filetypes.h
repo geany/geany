@@ -27,7 +27,10 @@
 
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
+
+#ifdef GEANY_PRIVATE
 #include "build.h"
+#endif
 
 
 typedef enum
