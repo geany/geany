@@ -2,6 +2,10 @@
 
  * src/build.c:
    Fix a compiler warning about an uninitialised variable.
+ * wscript:
+   Don't install unnecessary headers: dialogs.h, main.h, plugins.h,
+   sciwrappers.h, build.h (for the Waf build system,
+   accordingly to r4366).
 
 
 2009-10-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
