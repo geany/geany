@@ -396,7 +396,7 @@ gchar **build_get_regex(GeanyBuildGroup grp, GeanyFiletype *ft, gint *from)
 static GeanyBuildCommand *get_build_group(GeanyBuildSource src, GeanyBuildGroup grp)
 {
 	GeanyDocument *doc;
-	GeanyFiletype *ft;
+	GeanyFiletype *ft = NULL;
 
 	switch (grp)
 	{

@@ -1,3 +1,9 @@
+2009-10-26  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/build.c:
+   Fix a compiler warning about an uninitialised variable.
+
+
 2009-10-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/prefs.h, src/search.h, src/support.h, src/templates.h,
