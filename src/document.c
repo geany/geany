@@ -1097,6 +1097,11 @@ static GeanyIndentType detect_indent_type(GeanyEditor *editor)
 		gint pos = sci_get_position_from_line(sci, line);
 		gchar c;
 
+		/* most code will have indent total <= 24, otherwise it's more likely to be
+		 * alignment than indentation */
+		if (sci_get_line_indentation(sci, line) > 24)
+			continue;
+
 		c = sci_get_char_at(sci, pos);
 		if (c == '\t')
 			tabs++;

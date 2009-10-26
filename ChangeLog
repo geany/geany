@@ -19,6 +19,10 @@
  * src/prefs.c, src/ui_utils.c, doc/geany.txt, doc/geany.html:
    Disable switching the sidebar to the right on Windows as it will
    probably fail like the Split Window plugin.
+ * src/document.c:
+   Improve 'Detect from file' indentation pref by ignoring lines with
+   indentation wider than 24 characters as this is more likely to be
+   alignment than indentation.
 
 
 2009-10-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
