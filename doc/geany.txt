@@ -1693,9 +1693,6 @@ Show documents list
 Position
     Whether to place the sidebar on the left or right of the editor window.
 
-    .. note::
-        This option is not available on Windows.
-
 Fonts
 `````
 
