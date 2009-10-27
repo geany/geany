@@ -1776,15 +1776,13 @@ static gboolean autocomplete_check_for_html(gint ft_id, gint style)
 
 
 /* Algorithm based on based on Scite's StartAutoCompleteWord() */
-static gboolean autocomplete_doc_word(GeanyEditor *editor, gchar *root, gsize rootlen)
+static GString *get_doc_words(ScintillaObject *sci, gchar *root, gsize rootlen)
 {
-	ScintillaObject *sci = editor->sci;
 	gchar *word;
 	gint len, current, word_end;
 	gint pos_find, flags;
 	guint word_length;
 	gsize nmatches = 0;
-	gboolean ret = FALSE;
 	GString *words;
 	struct Sci_TextToFind ttf;
 
@@ -1841,14 +1839,54 @@ static gboolean autocomplete_doc_word(GeanyEditor *editor, gchar *root, gsize ro
 	{
 		g_strdelimit(words->str, " ", '\n');
 		words->str[words->len - 1] = '\0'; /* remove the trailing '\n' */
-		show_autocomplete(sci, rootlen, words->str + 1);
-		ret = TRUE;
+		return words;
 	}
-	else
-		scintilla_send_message(sci, SCI_AUTOCCANCEL, 0, 0);
-
 	g_string_free(words, TRUE);
-	return ret;
+	return NULL;
+}
+
+
+static gboolean autocomplete_doc_word(GeanyEditor *editor, gchar *root, gsize rootlen)
+{
+	ScintillaObject *sci = editor->sci;
+	GString *words;
+	GString *str;
+	gchar *ptr;
+	GSList *node, *list = NULL;
+
+	words = get_doc_words(sci, root, rootlen);
+	if (!words)
+	{
+		scintilla_send_message(sci, SCI_AUTOCCANCEL, 0, 0);
+		return FALSE;
+	}
+
+	/* words are unsorted, make list of words */
+	foreach_str(ptr, words->str)
+	{
+		if (*ptr == '\n')
+		{
+			list = g_slist_prepend(list, ptr + 1);
+			/* terminate previous string in list */
+			ptr[0] = 0x0;
+			ptr++;
+		}
+	}
+	list = g_slist_sort(list, (GCompareFunc)utils_str_casecmp);
+
+	str = g_string_sized_new(256);
+	foreach_slist(node, list)
+	{
+		g_string_append(str, node->data);
+		if (node->next)
+			g_string_append_c(str, '\n');
+	}
+	g_slist_free(list);
+	g_string_free(words, TRUE);
+
+	show_autocomplete(sci, rootlen, str->str);
+	g_string_free(str, TRUE);
+	return TRUE;
 }
 
 
