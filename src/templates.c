@@ -436,7 +436,7 @@ static void create_file_template_menu(void)
 }
 
 
-static void on_menu_new_with_template1_show(GtkWidget *item)
+static void on_file_menu_show(GtkWidget *item)
 {
 	geany_menu_button_action_set_menu(
 		GEANY_MENU_BUTTON_ACTION(toolbar_get_action_by_name("New")), NULL);
@@ -445,7 +445,7 @@ static void on_menu_new_with_template1_show(GtkWidget *item)
 }
 
 
-static void on_menu_new_with_template1_hide(GtkWidget *item)
+static void on_file_menu_hide(GtkWidget *item)
 {
 	item = ui_lookup_widget(main_widgets.window, "menu_new_with_template1");
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), NULL);
@@ -459,6 +459,7 @@ void templates_init(void)
 	gchar *year = utils_get_date_time(template_prefs.year_format, NULL);
 	gchar *date = utils_get_date_time(template_prefs.date_format, NULL);
 	gchar *datetime = utils_get_date_time(template_prefs.datetime_format, NULL);
+	GtkWidget *item;
 
 	init_general_templates(year, date, datetime);
 	init_ft_templates(year, date, datetime);
@@ -468,15 +469,14 @@ void templates_init(void)
 	g_free(year);
 
 	create_file_template_menu();
-	/* we hold our own ref on the menu as it has no parent whilst being moved */
+	/* we hold our own ref for the menu as it has no parent whilst being moved */
 	g_object_ref(new_with_template_menu);
-	{
-		GtkWidget *item = ui_lookup_widget(main_widgets.window, "file1");
-		/* reparent the template menu as needed */
-		item = gtk_menu_item_get_submenu(GTK_MENU_ITEM(item));
-		g_signal_connect(item, "show", G_CALLBACK(on_menu_new_with_template1_show), NULL);
-		g_signal_connect(item, "hide", G_CALLBACK(on_menu_new_with_template1_hide), NULL);
-	}
+
+	/* reparent the template menu as needed */
+	item = ui_lookup_widget(main_widgets.window, "file1");
+	item = gtk_menu_item_get_submenu(GTK_MENU_ITEM(item));
+	g_signal_connect(item, "show", G_CALLBACK(on_file_menu_show), NULL);
+	g_signal_connect(item, "hide", G_CALLBACK(on_file_menu_hide), NULL);
 }
 
 

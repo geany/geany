@@ -70,6 +70,7 @@ static struct
 	GtkWidget	*undo_items[3];
 	GtkWidget	*save_buttons[4];
 	GtkWidget	*config_files_menu;
+	GtkWidget	*commands_menu;
 }
 widgets;
 
@@ -1854,8 +1855,37 @@ static void init_recent_files(void)
 }
 
 
+static void ui_menu_move(GtkWidget *menu, GtkWidget *old, GtkWidget *new)
+{
+	g_object_ref(menu);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(old), NULL);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(new), menu);
+	g_object_unref(menu);
+}
+
+
+static void on_edit_menu_show(GtkWidget *item)
+{
+	GtkWidget *popup = ui_lookup_widget(main_widgets.editor_menu, "commands1");
+	GtkWidget *bar = ui_lookup_widget(main_widgets.window, "commands2");
+
+	ui_menu_move(widgets.commands_menu, popup, bar);
+}
+
+
+static void on_edit_menu_hide(GtkWidget *item)
+{
+	GtkWidget *popup = ui_lookup_widget(main_widgets.editor_menu, "commands1");
+	GtkWidget *bar = ui_lookup_widget(main_widgets.window, "commands2");
+
+	ui_menu_move(widgets.commands_menu, bar, popup);
+}
+
+
 void ui_init(void)
 {
+	GtkWidget *item;
+
 	init_recent_files();
 
 	ui_widgets.statusbar = ui_lookup_widget(main_widgets.window, "statusbar");
@@ -1881,6 +1911,15 @@ void ui_init(void)
 	widgets.redo_items[1] = ui_lookup_widget(main_widgets.window, "menu_redo2");
 	widgets.undo_items[0] = ui_lookup_widget(main_widgets.editor_menu, "undo1");
 	widgets.undo_items[1] = ui_lookup_widget(main_widgets.window, "menu_undo2");
+
+	item = ui_lookup_widget(main_widgets.editor_menu, "commands1");
+	widgets.commands_menu = gtk_menu_item_get_submenu(GTK_MENU_ITEM(item));
+
+	/* reparent edit submenus as needed */
+	item = ui_lookup_widget(main_widgets.window, "edit1");
+	item = gtk_menu_item_get_submenu(GTK_MENU_ITEM(item));
+	g_signal_connect(item, "show", G_CALLBACK(on_edit_menu_show), NULL);
+	g_signal_connect(item, "hide", G_CALLBACK(on_edit_menu_hide), NULL);
 
 	ui_init_toolbar_widgets();
 	init_document_widgets();
