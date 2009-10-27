@@ -416,10 +416,6 @@ on_menu_uncomment_line1_activate       (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_menu_duplicate_line1_activate       (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
 on_menu_increase_indent1_activate      (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
@@ -613,4 +609,42 @@ on_customize_toolbar1_activate         (GtkMenuItem     *menuitem,
 
 void
 on_button_customize_toolbar_clicked    (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+on_cut_current_line_s_1_activate       (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_copy_current_line_s_1_activate      (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_delete_current_line_s_1_activate    (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_duplicate_line_or_selection1_activate
+                                        (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_select_current_line_s_1_activate    (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_select_current_paragraph1_activate  (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_insert_alternative_white_space1_activate
+                                        (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_go_to_next_marker1_activate         (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_go_to_previous_marker1_activate     (GtkMenuItem     *menuitem,
                                         gpointer         user_data);

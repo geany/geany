@@ -1713,14 +1713,6 @@ on_menu_toggle_line_commentation1_activate
 
 
 void
-on_menu_duplicate_line1_activate       (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	keybindings_send_command(GEANY_KEY_GROUP_EDITOR, GEANY_KEYS_EDITOR_DUPLICATELINE);
-}
-
-
-void
 on_menu_increase_indent1_activate      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
@@ -2273,5 +2265,79 @@ on_button_customize_toolbar_clicked    (GtkButton       *button,
                                         gpointer         user_data)
 {
 	toolbar_configure();
+}
+
+
+void
+on_cut_current_line_s_1_activate       (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	keybindings_send_command(GEANY_KEY_GROUP_CLIPBOARD, GEANY_KEYS_CLIPBOARD_CUTLINE);
+}
+
+
+void
+on_copy_current_line_s_1_activate      (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	keybindings_send_command(GEANY_KEY_GROUP_CLIPBOARD, GEANY_KEYS_CLIPBOARD_COPYLINE);
+}
+
+
+void
+on_delete_current_line_s_1_activate    (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	keybindings_send_command(GEANY_KEY_GROUP_EDITOR, GEANY_KEYS_EDITOR_DELETELINE);
+}
+
+
+void
+on_duplicate_line_or_selection1_activate
+                                        (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	keybindings_send_command(GEANY_KEY_GROUP_EDITOR, GEANY_KEYS_EDITOR_DUPLICATELINE);
+}
+
+
+void
+on_select_current_line_s_1_activate    (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	keybindings_send_command(GEANY_KEY_GROUP_SELECT, GEANY_KEYS_SELECT_LINE);
+}
+
+
+void
+on_select_current_paragraph1_activate  (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	keybindings_send_command(GEANY_KEY_GROUP_SELECT, GEANY_KEYS_SELECT_PARAGRAPH);
+}
+
+
+void
+on_insert_alternative_white_space1_activate
+                                        (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	keybindings_send_command(GEANY_KEY_GROUP_INSERT, GEANY_KEYS_INSERT_ALTWHITESPACE);
+}
+
+
+void
+on_go_to_next_marker1_activate         (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	keybindings_send_command(GEANY_KEY_GROUP_GOTO, GEANY_KEYS_GOTO_NEXTMARKER);
+}
+
+
+void
+on_go_to_previous_marker1_activate     (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	keybindings_send_command(GEANY_KEY_GROUP_GOTO, GEANY_KEYS_GOTO_PREVIOUSMARKER);
 }
 
