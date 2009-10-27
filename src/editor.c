@@ -777,16 +777,16 @@ static void partial_complete(ScintillaObject *sci, const gchar *text)
 
 
 /* Complete the next word part from @a entry */
-static void check_partial_completion(GeanyEditor *editor, const gchar *entry)
+static gboolean check_partial_completion(GeanyEditor *editor, const gchar *entry)
 {
 	gchar *stem, *ptr, *text = utils_strdupa(entry);
 
 	read_current_word(editor, -1, current_word, sizeof current_word, NULL, TRUE);
 	stem = current_word;
 	if (strstr(text, stem) != text)
-		return;	/* shouldn't happen */
+		return FALSE;	/* shouldn't happen */
 	if (strlen(text) <= strlen(stem))
-		return;
+		return FALSE;
 
 	text += strlen(stem); /* skip stem */
 	ptr = strstr(text + 1, "_");
@@ -794,7 +794,7 @@ static void check_partial_completion(GeanyEditor *editor, const gchar *entry)
 	{
 		ptr[1] = '\0';
 		partial_complete(editor->sci, text);
-		return;
+		return TRUE;
 	}
 	else
 	{
@@ -807,12 +807,11 @@ static void check_partial_completion(GeanyEditor *editor, const gchar *entry)
 			{
 				ptr[0] = '\0';
 				partial_complete(editor->sci, text);
-				return;
+				return TRUE;
 			}
 		}
 	}
-	/* no word part, complete normally */
-	SSM(editor->sci, SCI_AUTOCCOMPLETE, 0, 0);
+	return FALSE;
 }
 
 
@@ -4791,7 +4790,11 @@ gboolean editor_complete_word_part(GeanyEditor *editor)
 		return FALSE;
 
 	entry = sci_get_string(editor->sci, SCI_AUTOCGETCURRENTTEXT);
-	check_partial_completion(editor, entry);
+
+	/* if no word part, complete normally */
+	if (!check_partial_completion(editor, entry))
+		SSM(editor->sci, SCI_AUTOCCOMPLETE, 0, 0);
+
 	g_free(entry);
 	return TRUE;
 }
