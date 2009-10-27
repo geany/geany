@@ -97,6 +97,21 @@ create_window1 (void)
   GtkWidget *send_selection_to2_menu;
   GtkWidget *invisible13;
   GtkWidget *commands2;
+  GtkWidget *commands1_menu;
+  GtkWidget *cut_current_line_s_1;
+  GtkWidget *image3013;
+  GtkWidget *copy_current_line_s_1;
+  GtkWidget *image3014;
+  GtkWidget *delete_current_line_s_1;
+  GtkWidget *duplicate_line_or_selection1;
+  GtkWidget *separator49;
+  GtkWidget *select_current_line_s_1;
+  GtkWidget *select_current_paragraph1;
+  GtkWidget *separator50;
+  GtkWidget *insert_alternative_white_space1;
+  GtkWidget *separator51;
+  GtkWidget *go_to_next_marker1;
+  GtkWidget *go_to_previous_marker1;
   GtkWidget *separator18;
   GtkWidget *add_comments1;
   GtkWidget *image3029;
@@ -527,6 +542,68 @@ create_window1 (void)
   commands2 = gtk_menu_item_new_with_mnemonic (_("_Commands"));
   gtk_widget_show (commands2);
   gtk_container_add (GTK_CONTAINER (edit1_menu), commands2);
+
+  commands1_menu = gtk_menu_new ();
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (commands2), commands1_menu);
+
+  cut_current_line_s_1 = gtk_image_menu_item_new_with_mnemonic (_("Cut current line(s)"));
+  gtk_widget_show (cut_current_line_s_1);
+  gtk_container_add (GTK_CONTAINER (commands1_menu), cut_current_line_s_1);
+
+  image3013 = gtk_image_new_from_stock ("gtk-cut", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image3013);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (cut_current_line_s_1), image3013);
+
+  copy_current_line_s_1 = gtk_image_menu_item_new_with_mnemonic (_("Copy current line(s)"));
+  gtk_widget_show (copy_current_line_s_1);
+  gtk_container_add (GTK_CONTAINER (commands1_menu), copy_current_line_s_1);
+
+  image3014 = gtk_image_new_from_stock ("gtk-copy", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image3014);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (copy_current_line_s_1), image3014);
+
+  delete_current_line_s_1 = gtk_menu_item_new_with_mnemonic (_("Delete current line(s)"));
+  gtk_widget_show (delete_current_line_s_1);
+  gtk_container_add (GTK_CONTAINER (commands1_menu), delete_current_line_s_1);
+
+  duplicate_line_or_selection1 = gtk_menu_item_new_with_mnemonic (_("Duplicate line or selection"));
+  gtk_widget_show (duplicate_line_or_selection1);
+  gtk_container_add (GTK_CONTAINER (commands1_menu), duplicate_line_or_selection1);
+
+  separator49 = gtk_separator_menu_item_new ();
+  gtk_widget_show (separator49);
+  gtk_container_add (GTK_CONTAINER (commands1_menu), separator49);
+  gtk_widget_set_sensitive (separator49, FALSE);
+
+  select_current_line_s_1 = gtk_menu_item_new_with_mnemonic (_("Select current line(s)"));
+  gtk_widget_show (select_current_line_s_1);
+  gtk_container_add (GTK_CONTAINER (commands1_menu), select_current_line_s_1);
+
+  select_current_paragraph1 = gtk_menu_item_new_with_mnemonic (_("Select current paragraph"));
+  gtk_widget_show (select_current_paragraph1);
+  gtk_container_add (GTK_CONTAINER (commands1_menu), select_current_paragraph1);
+
+  separator50 = gtk_separator_menu_item_new ();
+  gtk_widget_show (separator50);
+  gtk_container_add (GTK_CONTAINER (commands1_menu), separator50);
+  gtk_widget_set_sensitive (separator50, FALSE);
+
+  insert_alternative_white_space1 = gtk_menu_item_new_with_mnemonic (_("Insert alternative white space"));
+  gtk_widget_show (insert_alternative_white_space1);
+  gtk_container_add (GTK_CONTAINER (commands1_menu), insert_alternative_white_space1);
+
+  separator51 = gtk_separator_menu_item_new ();
+  gtk_widget_show (separator51);
+  gtk_container_add (GTK_CONTAINER (commands1_menu), separator51);
+  gtk_widget_set_sensitive (separator51, FALSE);
+
+  go_to_next_marker1 = gtk_menu_item_new_with_mnemonic (_("Go to next marker"));
+  gtk_widget_show (go_to_next_marker1);
+  gtk_container_add (GTK_CONTAINER (commands1_menu), go_to_next_marker1);
+
+  go_to_previous_marker1 = gtk_menu_item_new_with_mnemonic (_("Go to previous marker"));
+  gtk_widget_show (go_to_previous_marker1);
+  gtk_container_add (GTK_CONTAINER (commands1_menu), go_to_previous_marker1);
 
   separator18 = gtk_separator_menu_item_new ();
   gtk_widget_show (separator18);
@@ -1268,6 +1345,33 @@ create_window1 (void)
   g_signal_connect ((gpointer) send_selection_to_vte1, "activate",
                     G_CALLBACK (on_send_selection_to_vte1_activate),
                     NULL);
+  g_signal_connect ((gpointer) cut_current_line_s_1, "activate",
+                    G_CALLBACK (on_cut_current_line_s_1_activate),
+                    NULL);
+  g_signal_connect ((gpointer) copy_current_line_s_1, "activate",
+                    G_CALLBACK (on_copy_current_line_s_1_activate),
+                    NULL);
+  g_signal_connect ((gpointer) delete_current_line_s_1, "activate",
+                    G_CALLBACK (on_delete_current_line_s_1_activate),
+                    NULL);
+  g_signal_connect ((gpointer) duplicate_line_or_selection1, "activate",
+                    G_CALLBACK (on_duplicate_line_or_selection1_activate),
+                    NULL);
+  g_signal_connect ((gpointer) select_current_line_s_1, "activate",
+                    G_CALLBACK (on_select_current_line_s_1_activate),
+                    NULL);
+  g_signal_connect ((gpointer) select_current_paragraph1, "activate",
+                    G_CALLBACK (on_select_current_paragraph1_activate),
+                    NULL);
+  g_signal_connect ((gpointer) insert_alternative_white_space1, "activate",
+                    G_CALLBACK (on_insert_alternative_white_space1_activate),
+                    NULL);
+  g_signal_connect ((gpointer) go_to_next_marker1, "activate",
+                    G_CALLBACK (on_go_to_next_marker1_activate),
+                    NULL);
+  g_signal_connect ((gpointer) go_to_previous_marker1, "activate",
+                    G_CALLBACK (on_go_to_previous_marker1_activate),
+                    NULL);
   g_signal_connect ((gpointer) menu_add_changelog_entry1, "activate",
                     G_CALLBACK (on_comments_changelog_activate),
                     NULL);
@@ -1545,6 +1649,21 @@ create_window1 (void)
   GLADE_HOOKUP_OBJECT (window1, send_selection_to2_menu, "send_selection_to2_menu");
   GLADE_HOOKUP_OBJECT (window1, invisible13, "invisible13");
   GLADE_HOOKUP_OBJECT (window1, commands2, "commands2");
+  GLADE_HOOKUP_OBJECT (window1, commands1_menu, "commands1_menu");
+  GLADE_HOOKUP_OBJECT (window1, cut_current_line_s_1, "cut_current_line_s_1");
+  GLADE_HOOKUP_OBJECT (window1, image3013, "image3013");
+  GLADE_HOOKUP_OBJECT (window1, copy_current_line_s_1, "copy_current_line_s_1");
+  GLADE_HOOKUP_OBJECT (window1, image3014, "image3014");
+  GLADE_HOOKUP_OBJECT (window1, delete_current_line_s_1, "delete_current_line_s_1");
+  GLADE_HOOKUP_OBJECT (window1, duplicate_line_or_selection1, "duplicate_line_or_selection1");
+  GLADE_HOOKUP_OBJECT (window1, separator49, "separator49");
+  GLADE_HOOKUP_OBJECT (window1, select_current_line_s_1, "select_current_line_s_1");
+  GLADE_HOOKUP_OBJECT (window1, select_current_paragraph1, "select_current_paragraph1");
+  GLADE_HOOKUP_OBJECT (window1, separator50, "separator50");
+  GLADE_HOOKUP_OBJECT (window1, insert_alternative_white_space1, "insert_alternative_white_space1");
+  GLADE_HOOKUP_OBJECT (window1, separator51, "separator51");
+  GLADE_HOOKUP_OBJECT (window1, go_to_next_marker1, "go_to_next_marker1");
+  GLADE_HOOKUP_OBJECT (window1, go_to_previous_marker1, "go_to_previous_marker1");
   GLADE_HOOKUP_OBJECT (window1, separator18, "separator18");
   GLADE_HOOKUP_OBJECT (window1, add_comments1, "add_comments1");
   GLADE_HOOKUP_OBJECT (window1, image3029, "image3029");
@@ -1860,21 +1979,6 @@ create_edit_menu1 (void)
   GtkWidget *send_selection_to1_menu;
   GtkWidget *invisible12;
   GtkWidget *commands1;
-  GtkWidget *commands1_menu;
-  GtkWidget *cut_current_line_s_1;
-  GtkWidget *image3013;
-  GtkWidget *copy_current_line_s_1;
-  GtkWidget *image3014;
-  GtkWidget *delete_current_line_s_1;
-  GtkWidget *duplicate_line_or_selection1;
-  GtkWidget *separator49;
-  GtkWidget *select_current_line_s_1;
-  GtkWidget *select_current_paragraph1;
-  GtkWidget *separator50;
-  GtkWidget *insert_alternative_white_space1;
-  GtkWidget *separator51;
-  GtkWidget *go_to_next_marker1;
-  GtkWidget *go_to_previous_marker1;
   GtkWidget *separator17;
   GtkWidget *comments;
   GtkWidget *image3015;
@@ -2033,68 +2137,6 @@ create_edit_menu1 (void)
   commands1 = gtk_menu_item_new_with_mnemonic (_("_Commands"));
   gtk_widget_show (commands1);
   gtk_container_add (GTK_CONTAINER (edit_menu1), commands1);
-
-  commands1_menu = gtk_menu_new ();
-  gtk_menu_item_set_submenu (GTK_MENU_ITEM (commands1), commands1_menu);
-
-  cut_current_line_s_1 = gtk_image_menu_item_new_with_mnemonic (_("Cut current line(s)"));
-  gtk_widget_show (cut_current_line_s_1);
-  gtk_container_add (GTK_CONTAINER (commands1_menu), cut_current_line_s_1);
-
-  image3013 = gtk_image_new_from_stock ("gtk-cut", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image3013);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (cut_current_line_s_1), image3013);
-
-  copy_current_line_s_1 = gtk_image_menu_item_new_with_mnemonic (_("Copy current line(s)"));
-  gtk_widget_show (copy_current_line_s_1);
-  gtk_container_add (GTK_CONTAINER (commands1_menu), copy_current_line_s_1);
-
-  image3014 = gtk_image_new_from_stock ("gtk-copy", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image3014);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (copy_current_line_s_1), image3014);
-
-  delete_current_line_s_1 = gtk_menu_item_new_with_mnemonic (_("Delete current line(s)"));
-  gtk_widget_show (delete_current_line_s_1);
-  gtk_container_add (GTK_CONTAINER (commands1_menu), delete_current_line_s_1);
-
-  duplicate_line_or_selection1 = gtk_menu_item_new_with_mnemonic (_("Duplicate line or selection"));
-  gtk_widget_show (duplicate_line_or_selection1);
-  gtk_container_add (GTK_CONTAINER (commands1_menu), duplicate_line_or_selection1);
-
-  separator49 = gtk_separator_menu_item_new ();
-  gtk_widget_show (separator49);
-  gtk_container_add (GTK_CONTAINER (commands1_menu), separator49);
-  gtk_widget_set_sensitive (separator49, FALSE);
-
-  select_current_line_s_1 = gtk_menu_item_new_with_mnemonic (_("Select current line(s)"));
-  gtk_widget_show (select_current_line_s_1);
-  gtk_container_add (GTK_CONTAINER (commands1_menu), select_current_line_s_1);
-
-  select_current_paragraph1 = gtk_menu_item_new_with_mnemonic (_("Select current paragraph"));
-  gtk_widget_show (select_current_paragraph1);
-  gtk_container_add (GTK_CONTAINER (commands1_menu), select_current_paragraph1);
-
-  separator50 = gtk_separator_menu_item_new ();
-  gtk_widget_show (separator50);
-  gtk_container_add (GTK_CONTAINER (commands1_menu), separator50);
-  gtk_widget_set_sensitive (separator50, FALSE);
-
-  insert_alternative_white_space1 = gtk_menu_item_new_with_mnemonic (_("Insert alternative white space"));
-  gtk_widget_show (insert_alternative_white_space1);
-  gtk_container_add (GTK_CONTAINER (commands1_menu), insert_alternative_white_space1);
-
-  separator51 = gtk_separator_menu_item_new ();
-  gtk_widget_show (separator51);
-  gtk_container_add (GTK_CONTAINER (commands1_menu), separator51);
-  gtk_widget_set_sensitive (separator51, FALSE);
-
-  go_to_next_marker1 = gtk_menu_item_new_with_mnemonic (_("Go to next marker"));
-  gtk_widget_show (go_to_next_marker1);
-  gtk_container_add (GTK_CONTAINER (commands1_menu), go_to_next_marker1);
-
-  go_to_previous_marker1 = gtk_menu_item_new_with_mnemonic (_("Go to previous marker"));
-  gtk_widget_show (go_to_previous_marker1);
-  gtk_container_add (GTK_CONTAINER (commands1_menu), go_to_previous_marker1);
 
   separator17 = gtk_separator_menu_item_new ();
   gtk_widget_show (separator17);
@@ -2255,33 +2297,6 @@ create_edit_menu1 (void)
   g_signal_connect ((gpointer) send_selection_to_vte2, "activate",
                     G_CALLBACK (on_send_selection_to_vte1_activate),
                     NULL);
-  g_signal_connect ((gpointer) cut_current_line_s_1, "activate",
-                    G_CALLBACK (on_cut_current_line_s_1_activate),
-                    NULL);
-  g_signal_connect ((gpointer) copy_current_line_s_1, "activate",
-                    G_CALLBACK (on_copy_current_line_s_1_activate),
-                    NULL);
-  g_signal_connect ((gpointer) delete_current_line_s_1, "activate",
-                    G_CALLBACK (on_delete_current_line_s_1_activate),
-                    NULL);
-  g_signal_connect ((gpointer) duplicate_line_or_selection1, "activate",
-                    G_CALLBACK (on_duplicate_line_or_selection1_activate),
-                    NULL);
-  g_signal_connect ((gpointer) select_current_line_s_1, "activate",
-                    G_CALLBACK (on_select_current_line_s_1_activate),
-                    NULL);
-  g_signal_connect ((gpointer) select_current_paragraph1, "activate",
-                    G_CALLBACK (on_select_current_paragraph1_activate),
-                    NULL);
-  g_signal_connect ((gpointer) insert_alternative_white_space1, "activate",
-                    G_CALLBACK (on_insert_alternative_white_space1_activate),
-                    NULL);
-  g_signal_connect ((gpointer) go_to_next_marker1, "activate",
-                    G_CALLBACK (on_go_to_next_marker1_activate),
-                    NULL);
-  g_signal_connect ((gpointer) go_to_previous_marker1, "activate",
-                    G_CALLBACK (on_go_to_previous_marker1_activate),
-                    NULL);
   g_signal_connect ((gpointer) add_changelog_entry2, "activate",
                     G_CALLBACK (on_comments_changelog_activate),
                     NULL);
@@ -2351,21 +2366,6 @@ create_edit_menu1 (void)
   GLADE_HOOKUP_OBJECT (edit_menu1, send_selection_to1_menu, "send_selection_to1_menu");
   GLADE_HOOKUP_OBJECT (edit_menu1, invisible12, "invisible12");
   GLADE_HOOKUP_OBJECT (edit_menu1, commands1, "commands1");
-  GLADE_HOOKUP_OBJECT (edit_menu1, commands1_menu, "commands1_menu");
-  GLADE_HOOKUP_OBJECT (edit_menu1, cut_current_line_s_1, "cut_current_line_s_1");
-  GLADE_HOOKUP_OBJECT (edit_menu1, image3013, "image3013");
-  GLADE_HOOKUP_OBJECT (edit_menu1, copy_current_line_s_1, "copy_current_line_s_1");
-  GLADE_HOOKUP_OBJECT (edit_menu1, image3014, "image3014");
-  GLADE_HOOKUP_OBJECT (edit_menu1, delete_current_line_s_1, "delete_current_line_s_1");
-  GLADE_HOOKUP_OBJECT (edit_menu1, duplicate_line_or_selection1, "duplicate_line_or_selection1");
-  GLADE_HOOKUP_OBJECT (edit_menu1, separator49, "separator49");
-  GLADE_HOOKUP_OBJECT (edit_menu1, select_current_line_s_1, "select_current_line_s_1");
-  GLADE_HOOKUP_OBJECT (edit_menu1, select_current_paragraph1, "select_current_paragraph1");
-  GLADE_HOOKUP_OBJECT (edit_menu1, separator50, "separator50");
-  GLADE_HOOKUP_OBJECT (edit_menu1, insert_alternative_white_space1, "insert_alternative_white_space1");
-  GLADE_HOOKUP_OBJECT (edit_menu1, separator51, "separator51");
-  GLADE_HOOKUP_OBJECT (edit_menu1, go_to_next_marker1, "go_to_next_marker1");
-  GLADE_HOOKUP_OBJECT (edit_menu1, go_to_previous_marker1, "go_to_previous_marker1");
   GLADE_HOOKUP_OBJECT (edit_menu1, separator17, "separator17");
   GLADE_HOOKUP_OBJECT (edit_menu1, comments, "comments");
   GLADE_HOOKUP_OBJECT (edit_menu1, image3015, "image3015");

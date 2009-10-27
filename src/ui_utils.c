@@ -1864,21 +1864,21 @@ static void ui_menu_move(GtkWidget *menu, GtkWidget *old, GtkWidget *new)
 }
 
 
-static void on_edit_menu_show(GtkWidget *item)
-{
-	GtkWidget *popup = ui_lookup_widget(main_widgets.editor_menu, "commands1");
-	GtkWidget *bar = ui_lookup_widget(main_widgets.window, "commands2");
-
-	ui_menu_move(widgets.commands_menu, popup, bar);
-}
-
-
-static void on_edit_menu_hide(GtkWidget *item)
+static void on_editor_menu_show(GtkWidget *item)
 {
 	GtkWidget *popup = ui_lookup_widget(main_widgets.editor_menu, "commands1");
 	GtkWidget *bar = ui_lookup_widget(main_widgets.window, "commands2");
 
 	ui_menu_move(widgets.commands_menu, bar, popup);
+}
+
+
+static void on_editor_menu_hide(GtkWidget *item)
+{
+	GtkWidget *popup = ui_lookup_widget(main_widgets.editor_menu, "commands1");
+	GtkWidget *bar = ui_lookup_widget(main_widgets.window, "commands2");
+
+	ui_menu_move(widgets.commands_menu, popup, bar);
 }
 
 
@@ -1912,14 +1912,13 @@ void ui_init(void)
 	widgets.undo_items[0] = ui_lookup_widget(main_widgets.editor_menu, "undo1");
 	widgets.undo_items[1] = ui_lookup_widget(main_widgets.window, "menu_undo2");
 
-	item = ui_lookup_widget(main_widgets.editor_menu, "commands1");
+	item = ui_lookup_widget(main_widgets.window, "commands2");
 	widgets.commands_menu = gtk_menu_item_get_submenu(GTK_MENU_ITEM(item));
 
 	/* reparent edit submenus as needed */
-	item = ui_lookup_widget(main_widgets.window, "edit1");
-	item = gtk_menu_item_get_submenu(GTK_MENU_ITEM(item));
-	g_signal_connect(item, "show", G_CALLBACK(on_edit_menu_show), NULL);
-	g_signal_connect(item, "hide", G_CALLBACK(on_edit_menu_hide), NULL);
+	item = main_widgets.editor_menu;
+	g_signal_connect(item, "show", G_CALLBACK(on_editor_menu_show), NULL);
+	g_signal_connect(item, "hide", G_CALLBACK(on_editor_menu_hide), NULL);
 
 	ui_init_toolbar_widgets();
 	init_document_widgets();

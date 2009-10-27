@@ -559,6 +559,134 @@
 			  <property name="visible">True</property>
 			  <property name="label" translatable="yes">_Commands</property>
 			  <property name="use_underline">True</property>
+
+			  <child>
+			    <widget class="GtkMenu" id="commands1_menu">
+
+			      <child>
+				<widget class="GtkImageMenuItem" id="cut_current_line(s)1">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">Cut current line(s)</property>
+				  <property name="use_underline">True</property>
+				  <signal name="activate" handler="on_cut_current_line(s)1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
+
+				  <child internal-child="image">
+				    <widget class="GtkImage" id="image3013">
+				      <property name="visible">True</property>
+				      <property name="stock">gtk-cut</property>
+				      <property name="icon_size">1</property>
+				      <property name="xalign">0.5</property>
+				      <property name="yalign">0.5</property>
+				      <property name="xpad">0</property>
+				      <property name="ypad">0</property>
+				    </widget>
+				  </child>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkImageMenuItem" id="copy_current_line(s)1">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">Copy current line(s)</property>
+				  <property name="use_underline">True</property>
+				  <signal name="activate" handler="on_copy_current_line(s)1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
+
+				  <child internal-child="image">
+				    <widget class="GtkImage" id="image3014">
+				      <property name="visible">True</property>
+				      <property name="stock">gtk-copy</property>
+				      <property name="icon_size">1</property>
+				      <property name="xalign">0.5</property>
+				      <property name="yalign">0.5</property>
+				      <property name="xpad">0</property>
+				      <property name="ypad">0</property>
+				    </widget>
+				  </child>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkMenuItem" id="delete_current_line(s)1">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">Delete current line(s)</property>
+				  <property name="use_underline">True</property>
+				  <signal name="activate" handler="on_delete_current_line(s)1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkMenuItem" id="duplicate_line_or_selection1">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">Duplicate line or selection</property>
+				  <property name="use_underline">True</property>
+				  <signal name="activate" handler="on_duplicate_line_or_selection1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkSeparatorMenuItem" id="separator49">
+				  <property name="visible">True</property>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkMenuItem" id="select_current_line(s)1">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">Select current line(s)</property>
+				  <property name="use_underline">True</property>
+				  <signal name="activate" handler="on_select_current_line(s)1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkMenuItem" id="select_current_paragraph1">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">Select current paragraph</property>
+				  <property name="use_underline">True</property>
+				  <signal name="activate" handler="on_select_current_paragraph1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkSeparatorMenuItem" id="separator50">
+				  <property name="visible">True</property>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkMenuItem" id="insert_alternative_white_space1">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">Insert alternative white space</property>
+				  <property name="use_underline">True</property>
+				  <signal name="activate" handler="on_insert_alternative_white_space1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkSeparatorMenuItem" id="separator51">
+				  <property name="visible">True</property>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkMenuItem" id="go_to_next_marker1">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">Go to next marker</property>
+				  <property name="use_underline">True</property>
+				  <signal name="activate" handler="on_go_to_next_marker1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkMenuItem" id="go_to_previous_marker1">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">Go to previous marker</property>
+				  <property name="use_underline">True</property>
+				  <signal name="activate" handler="on_go_to_previous_marker1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
+				</widget>
+			      </child>
+			    </widget>
+			  </child>
 			</widget>
 		      </child>
 
@@ -2464,134 +2592,6 @@
       <property name="visible">True</property>
       <property name="label" translatable="yes">_Commands</property>
       <property name="use_underline">True</property>
-
-      <child>
-	<widget class="GtkMenu" id="commands1_menu">
-
-	  <child>
-	    <widget class="GtkImageMenuItem" id="cut_current_line(s)1">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Cut current line(s)</property>
-	      <property name="use_underline">True</property>
-	      <signal name="activate" handler="on_cut_current_line(s)1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
-
-	      <child internal-child="image">
-		<widget class="GtkImage" id="image3013">
-		  <property name="visible">True</property>
-		  <property name="stock">gtk-cut</property>
-		  <property name="icon_size">1</property>
-		  <property name="xalign">0.5</property>
-		  <property name="yalign">0.5</property>
-		  <property name="xpad">0</property>
-		  <property name="ypad">0</property>
-		</widget>
-	      </child>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkImageMenuItem" id="copy_current_line(s)1">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Copy current line(s)</property>
-	      <property name="use_underline">True</property>
-	      <signal name="activate" handler="on_copy_current_line(s)1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
-
-	      <child internal-child="image">
-		<widget class="GtkImage" id="image3014">
-		  <property name="visible">True</property>
-		  <property name="stock">gtk-copy</property>
-		  <property name="icon_size">1</property>
-		  <property name="xalign">0.5</property>
-		  <property name="yalign">0.5</property>
-		  <property name="xpad">0</property>
-		  <property name="ypad">0</property>
-		</widget>
-	      </child>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkMenuItem" id="delete_current_line(s)1">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Delete current line(s)</property>
-	      <property name="use_underline">True</property>
-	      <signal name="activate" handler="on_delete_current_line(s)1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkMenuItem" id="duplicate_line_or_selection1">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Duplicate line or selection</property>
-	      <property name="use_underline">True</property>
-	      <signal name="activate" handler="on_duplicate_line_or_selection1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkSeparatorMenuItem" id="separator49">
-	      <property name="visible">True</property>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkMenuItem" id="select_current_line(s)1">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Select current line(s)</property>
-	      <property name="use_underline">True</property>
-	      <signal name="activate" handler="on_select_current_line(s)1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkMenuItem" id="select_current_paragraph1">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Select current paragraph</property>
-	      <property name="use_underline">True</property>
-	      <signal name="activate" handler="on_select_current_paragraph1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkSeparatorMenuItem" id="separator50">
-	      <property name="visible">True</property>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkMenuItem" id="insert_alternative_white_space1">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Insert alternative white space</property>
-	      <property name="use_underline">True</property>
-	      <signal name="activate" handler="on_insert_alternative_white_space1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkSeparatorMenuItem" id="separator51">
-	      <property name="visible">True</property>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkMenuItem" id="go_to_next_marker1">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Go to next marker</property>
-	      <property name="use_underline">True</property>
-	      <signal name="activate" handler="on_go_to_next_marker1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkMenuItem" id="go_to_previous_marker1">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Go to previous marker</property>
-	      <property name="use_underline">True</property>
-	      <signal name="activate" handler="on_go_to_previous_marker1_activate" last_modification_time="Mon, 26 Oct 2009 17:34:30 GMT"/>
-	    </widget>
-	  </child>
-	</widget>
-      </child>
     </widget>
   </child>
 
