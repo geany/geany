@@ -721,16 +721,8 @@ static void add_popup_menu_accels(void)
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_GOTO_TAGDEFINITION, goto_tag_definition1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_GOTO_TAGDECLARATION, goto_tag_declaration1);
 
-	group = g_ptr_array_index(keybinding_groups, GEANY_KEY_GROUP_FORMAT);
-	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_FORMAT_TOGGLECASE, toggle_case1);
-	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_FORMAT_COMMENTLINE, menu_comment_line2);
-	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_FORMAT_UNCOMMENTLINE, menu_uncomment_line2);
-	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_FORMAT_COMMENTLINETOGGLE, menu_toggle_line_commentation2);
-	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_FORMAT_INCREASEINDENT, menu_increase_indent2);
-	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_FORMAT_DECREASEINDENT, menu_decrease_indent2);
-	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_FORMAT_SENDTOVTE, send_selection_to_vte2);
-
-	/* the build menu items are set if the build menus are created */
+	/* Format and Commands share the menu bar submenus */
+	/* Build menu items are set if the build menus are created */
 }
 
 

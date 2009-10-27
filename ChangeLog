@@ -18,6 +18,9 @@
  * src/interface.c, src/keybindings.c, src/ui_utils.c, geany.glade:
    Change editor popup Commands submenu to start as child of menubar Edit
    menu, as this is more usual e.g. for keybindings initialization.
+ * src/interface.c, src/keybindings.c, src/tools.c, src/ui_utils.c,
+   geany.glade:
+   Share a single Format submenu for menubar Edit and popup menu.
 
 
 2009-10-26  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
