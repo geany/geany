@@ -527,18 +527,26 @@ gint sci_get_line_length(ScintillaObject *sci, gint line)
 }
 
 
+/* safe way to read Scintilla string into new memory.
+ * works with any string buffer messages that follow the Windows message convention. */
+gchar *sci_get_string(ScintillaObject *sci, gint msg, gulong wParam)
+{
+	gint size = SSM(sci, msg, wParam, 0) + 1;
+	gchar *str = g_malloc(size);
+
+	SSM(sci, msg, wParam, (sptr_t)str);
+	str[size - 1] = '\0';	/* ensure termination, needed for SCI_GETLINE */
+	return str;
+}
+
+
 /** Get line contents.
  * @param sci Scintilla widget.
  * @param line_num Line number.
  * @return A @c NULL-terminated copy of the line text. */
 gchar *sci_get_line(ScintillaObject *sci, gint line_num)
 {
-	gint len = sci_get_line_length(sci, line_num);
-	gchar *linebuf = g_malloc(len + 1);
-
-	SSM(sci, SCI_GETLINE, line_num, (sptr_t) linebuf);
-	linebuf[len] = '\0';
-	return linebuf;
+	return sci_get_string(sci, SCI_GETLINE, line_num);
 }
 
 
@@ -593,12 +601,7 @@ void sci_get_selected_text(ScintillaObject *sci, gchar *text)
  */
 gchar *sci_get_selection_contents(ScintillaObject *sci)
 {
-	gint len = sci_get_selected_text_length(sci);
-	gchar *selection = g_malloc(len + 1);
-
-	SSM(sci, SCI_GETSELTEXT, 0, (sptr_t) selection);
-
-	return selection;
+	return sci_get_string(sci, SCI_GETSELTEXT, 0);
 }
 
 

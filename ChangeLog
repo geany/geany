@@ -5,6 +5,9 @@
  * src/interface.c, src/keybindings.c, src/callbacks.c,
    src/callbacks.h, geany.glade:
    Add 'Reflow, Transpose, Smart line indent' Edit->Format menu items.
+ * src/sciwrappers.c, src/sciwrappers.h, src/editor.c:
+   Add general function sci_get_string() that works with any string
+   buffer messages that follow the Windows message convention.
 
 
 2009-10-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

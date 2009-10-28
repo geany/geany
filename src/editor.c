@@ -4769,17 +4769,6 @@ static void on_document_save(GObject *obj, GeanyDocument *doc)
 }
 
 
-/* safe way to read Scintilla string into a buffer */
-static gchar *sci_get_string(ScintillaObject *sci, gint msg)
-{
-	gint size = SSM(sci, msg, 0, 0) + 1;
-	gchar *str = g_malloc(size);
-
-	SSM(sci, msg, 0, (sptr_t)str);
-	return str;
-}
-
-
 gboolean editor_complete_word_part(GeanyEditor *editor)
 {
 	gchar *entry;
@@ -4789,7 +4778,7 @@ gboolean editor_complete_word_part(GeanyEditor *editor)
 	if (!SSM(editor->sci, SCI_AUTOCACTIVE, 0, 0))
 		return FALSE;
 
-	entry = sci_get_string(editor->sci, SCI_AUTOCGETCURRENTTEXT);
+	entry = sci_get_string(editor->sci, SCI_AUTOCGETCURRENTTEXT, 0);
 
 	/* if no word part, complete normally */
 	if (!check_partial_completion(editor, entry))
