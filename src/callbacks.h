@@ -648,3 +648,15 @@ on_go_to_next_marker1_activate         (GtkMenuItem     *menuitem,
 void
 on_go_to_previous_marker1_activate     (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
+
+void
+on_reflow_lines_block1_activate        (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_transpose_current_line1_activate    (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_smart_line_indent1_activate         (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);

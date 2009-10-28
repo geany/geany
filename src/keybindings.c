@@ -264,8 +264,10 @@ static void init_default_kb(void)
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_DELETELINETOEND, NULL,
 		GDK_Delete, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_deletelinetoend",
 		_("Delete to line end"), NULL);
+	/* transpose may fit better in format group */
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_TRANSPOSELINE, NULL,
-		GDK_t, GDK_CONTROL_MASK, "edit_transposeline", _("Transpose current line"), NULL);
+		GDK_t, GDK_CONTROL_MASK, "edit_transposeline", _("Transpose Current Line"),
+		LW(transpose_current_line1));
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_SCROLLTOLINE, NULL,
 		GDK_l, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_scrolltoline", _("Scroll to current line"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_EDITOR_SCROLLLINEUP, NULL,
@@ -348,7 +350,7 @@ static void init_default_kb(void)
 	keybindings_set_item(group, GEANY_KEYS_FORMAT_DECREASEINDENTBYSPACE, NULL,
 		0, 0, "edit_decreaseindentbyspace", _("Decrease indent by one space"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_FORMAT_AUTOINDENT, NULL,
-		0, 0, "edit_autoindent", _("Smart line indent"), NULL);
+		0, 0, "edit_autoindent", _("Smart Line Indent"), LW(smart_line_indent1));
 	keybindings_set_item(group, GEANY_KEYS_FORMAT_SENDTOCMD1, NULL,
 		GDK_1, GDK_CONTROL_MASK, "edit_sendtocmd1", _("Send to Custom Command 1"), NULL);
 	keybindings_set_item(group, GEANY_KEYS_FORMAT_SENDTOCMD2, NULL,
@@ -358,7 +360,8 @@ static void init_default_kb(void)
 	keybindings_set_item(group, GEANY_KEYS_FORMAT_SENDTOVTE, NULL,
 		0, 0, "edit_sendtovte", _("Send Selection to Terminal"), LW(send_selection_to_vte1));
 	keybindings_set_item(group, GEANY_KEYS_FORMAT_REFLOWPARAGRAPH, NULL,
-		GDK_j, GDK_CONTROL_MASK, "format_reflowparagraph", _("Reflow lines/block"), NULL);
+		GDK_j, GDK_CONTROL_MASK, "format_reflowparagraph", _("Reflow Lines/Block"),
+		LW(reflow_lines_block1));
 
 	group = ADD_KB_GROUP(INSERT, _("Insert"), cb_func_insert_action);
 
